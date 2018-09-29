@@ -1,0 +1,396 @@
+const string sGemScreen = "SCOD_GEMCUTTING";
+const string xmlGemFile = "scod_gemcutting_window.xml";
+const string gemstoneBox = "plc_chest_gemstonegeneration";
+
+const int GEMSTONE_SKILL_ID = SKILL_APPRAISE; //currently rolls appraise, could roll something else
+
+//Checks whether this is a new gemstone
+int GetIsGemstone(object oItem);
+
+//Makes sure box is ready to go!
+void InitializeGemstoneBox();
+
+//Replaces TakeNumItems
+void TakeNumCraftingMaterials(object oPC, string sTag, int nNum) {
+    int nCount = 0;
+	int iStack;
+	int bCheckAgain = FALSE;
+	object oCont;
+	
+    object oItem = GetFirstItemInInventory(oPC);
+    while (GetIsObjectValid(oItem) == TRUE && nCount < nNum)
+    {
+        if (GetTag(oItem) == sTag)
+        {
+            iStack = GetItemStackSize(oItem);
+			if (iStack > 1)
+			{
+				SetItemStackSize(oItem, iStack - 1, TRUE);
+				bCheckAgain = TRUE;
+			}
+			else
+			{
+				DestroyObject(oItem);
+			}
+            nCount++;
+        }
+		// Basically, only move onto next item if it isn't currently on a stack with more than 1 item in it.
+		// Therefore it will check same item again if more need taking. If the count has reached the number required then it will exit anyway.
+		if (bCheckAgain == TRUE)
+			bCheckAgain = FALSE;
+		else
+			oItem = GetNextItemInInventory(oPC);
+    }
+
+   return;
+}
+
+int GetNumberOfGemstonesOfColor(string sColor) {
+
+	object oChest = GetObjectByTag(gemstoneBox);
+	return GetLocalInt(oChest, sColor+"_Num");
+}
+
+string GetGemstoneColor(object oGem) {
+	return GetLocalString(oGem, "Color");
+}
+
+string GetGemstoneMineral(object oGem) {
+	return GetLocalString(oGem, "Mineral");
+}
+
+string GetGemstoneDescription(object oGem) {
+	string sDesc1 = GetLocalString(oGem, "GemDescription");
+	string sDesc2 = GetLocalString(oGem, "MineralDescription");
+	
+	if (sDesc1 != "")
+		return sDesc1+"\n\n"+sDesc2;
+	else
+		return sDesc2;
+}
+
+string GetGemstoneFullDescription(object oGem) {
+
+	if (FindSubString(GetTag(oGem), "gemstone_rough") >= 0) {
+		return "This is a rough gemstone, just waiting to be identified. The value will be clearer with identification and polishing.";
+	}
+
+	string sResult = "Mineral: "+GetGemstoneMineral(oGem)+"\n";
+	sResult += "Color: "+GetGemstoneColor(oGem)+"\n\n";
+	sResult += GetGemstoneDescription(oGem);
+	return sResult;
+	
+}
+
+string RollGemstoneOfColor(string sColor) {
+
+	object oChest = GetObjectByTag(gemstoneBox);
+	int nNum = GetNumberOfGemstonesOfColor(sColor);
+	//SpeakString("number of "+sColor+" gemstones: "+IntToString(nNum), TALKVOLUME_SHOUT);
+	if (nNum <= 0) {
+		InitializeGemstoneBox();
+		return RollGemstoneOfColor(sColor);
+	}
+	int nRand = Random(nNum);
+	
+	string sVar = sColor+"_"+IntToString(nRand);
+	//SpeakString("gemstone index chosen: "+sVar, TALKVOLUME_SHOUT);
+	string sResult = GetLocalString(oChest, sColor+"_"+IntToString(nRand));
+	//SpeakString("rolled: "+sResult, TALKVOLUME_SHOUT);
+	return sResult;
+
+}
+
+//Returns the tag of the identified gemstone
+string RollGemstoneType(object oRough) {
+
+	string sTag = GetTag(oRough);
+	int qualityIndex = FindSubString(sTag, "_q");
+	sTag = GetSubString(sTag, 0, qualityIndex);
+	
+	if (sTag == "gemstone_rough_red") {
+		return RollGemstoneOfColor("Red");
+	} else if (sTag == "gemstone_rough_blue") {
+		return RollGemstoneOfColor("Blue");
+	} else if (sTag == "gemstone_rough_green") {
+		return RollGemstoneOfColor("Green");
+	} else if (sTag == "gemstone_rough_yellow") {
+		return RollGemstoneOfColor("Yellow");
+	} else if (sTag == "gemstone_rough_black") {
+		return RollGemstoneOfColor("Black");
+	} else if (sTag == "gemstone_rough_pearl") {
+		return RollGemstoneOfColor("Pearl");
+	} else {
+		return RollGemstoneOfColor("White");
+	}
+
+}
+
+int IsGemRough(object oGem) {
+	int isRough = FindSubString(GetTag(oGem), "_rough");
+	if (isRough < 0)
+		return FALSE;
+	return TRUE;
+}
+
+int IsGemIdentified(object oGem) {
+	string sTag = GetTag(oGem);
+	int nIndex = FindSubString(sTag, "gemstone_rough", 0);
+	if (nIndex >= 0)
+		return FALSE;
+	return TRUE;
+}
+
+//Get the base tag string from tag string
+//Good for creating new identical gems!
+string GetBaseGemTagFromString(string sTag) {
+	int qualityIndex = FindSubString(sTag, "_q");
+	if (FindSubString(sTag, "_rough") >= 0)
+		qualityIndex = FindSubString(sTag, "_rough");
+	return GetSubString(sTag, 0, qualityIndex);
+}
+
+//Wrapper for GetBaseGemTagFromString which takes
+// an object instead of string
+string GetBaseGemTag(object oGem) {
+
+	return GetBaseGemTagFromString(GetTag(oGem));
+		
+}
+
+//Returns the appropriate quality string
+string GetQualityString(int nQ) {
+	switch (nQ) {
+		case 0: return "Flawed";
+		case 1: return "";
+		case 2: return "Flawless";
+		default: return "Flawed";
+	}
+	return "Flawed";
+}
+
+//Get Carat Weight of Rough Gemstone
+int GetCaratWeight(object oGem) {
+
+ 	int carobIndex = FindSubString(GetTag(oGem), "_c");
+	if (carobIndex < 0)
+		return 1;
+	int length = GetStringLength(GetTag(oGem))-carobIndex;
+	string sCarob = GetSubString(GetTag(oGem), carobIndex+2, length-2);
+	return StringToInt(sCarob);
+}
+
+//Get Gem Quality of Rough Gemstone
+int GetGemQuality(object oGem) {
+
+ 	int qualityIndex = FindSubString(GetTag(oGem), "_q");
+	if (qualityIndex < 0)
+		return 0;
+	string sQuality = GetSubString(GetTag(oGem), qualityIndex+2, 1);
+	return StringToInt(sQuality);
+}
+
+string GetBaseGemName(object oGem) {
+	
+	int baseIndex = FindSubString(GetName(oGem), " - <C");
+	int nQ = GetGemQuality(oGem);
+	int nStart = 0;
+	if (IsGemRough(oGem)) {
+		nStart = 6;
+	} else {
+		string qString = GetQualityString(nQ);
+		if (FindSubString(GetName(oGem), qString) >= 0)
+			nStart = GetStringLength(qString)+1;
+	}
+	string sBaseName = GetSubString(GetName(oGem), nStart, baseIndex-5);
+	return sBaseName;
+}
+
+void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_INVALID) {
+	string sBaseName = GetBaseGemName(oGem);
+	string sBaseTag = GetBaseGemTag(oGem);
+	if (IsGemRough(oGem)) {
+		SetTag(oGem, sBaseTag+"_rough_q"+IntToString(nQ)+"_c"+IntToString(nSize));
+		SetFirstName(oGem, "Rough "+sBaseName+" - <Color=Gray><i>"+IntToString(nSize)+" carats</i></Color>");
+	} else {
+		SetTag(oGem, sBaseTag+"_q"+IntToString(nQ)+"_c"+IntToString(nSize));
+		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" - <Color=Gray><i>"+IntToString(nSize)+" carats</i></Color>");
+	}
+}
+
+void SetQualityOfGemstone(object oGem, int nQ) {
+	int nSize = GetCaratWeight(oGem);
+	SetDetailsOfGemstone(oGem, nQ, nSize);
+}
+
+void SetCaratOfGemstone(object oGem, int nSize) {
+	int nQ = GetGemQuality(oGem);
+	SetDetailsOfGemstone(oGem, nQ, nSize);
+}
+
+//Sorts gemstones so that we can spawn in new gemstones!
+void InitializeGemstoneBox() {
+	
+	object oChest = GetObjectByTag(gemstoneBox);
+	if (GetLocalInt(oChest, "Initialized") > 0)
+		return;
+	
+	int nCount = 0;
+	object oGem = GetFirstItemInInventory(oChest);
+	while (GetIsObjectValid(oGem)) {
+	
+		//Iterate for gemstone color list
+		string sColor = GetGemstoneColor(oGem);
+		int nNum = GetLocalInt(oChest, sColor+"_Num");
+		SetLocalString(oChest, sColor+"_"+IntToString(nNum), GetTag(oGem));
+		SetLocalInt(oChest, sColor+"_Num", nNum+1);
+		
+		//Iterate for full gemstone list
+		//AssignCommand(oChest, ActionSpeakString("setting Gemstone_"+IntToString(nCount)+" to "+GetTag(oGem), TALKVOLUME_SHOUT));
+		SetLocalString(oChest, "Gemstone_"+IntToString(nCount), GetTag(oGem));
+		nCount++;
+		
+		oGem = GetNextItemInInventory(oChest);
+	}
+	SetLocalInt(oChest,  "Gemstone_Num", nCount);
+	SetLocalInt(oChest, "Initialized", 1);
+	
+}
+
+//Gets a random gemstone from the gemstone box
+string GetRandomGemstoneToSpawn() {
+
+	InitializeGemstoneBox();
+
+	object oChest = GetNearestObjectByTag(gemstoneBox);
+	int nAll = GetLocalInt(oChest, "Gemstone_Num"); 
+	//AssignCommand(oChest, ActionSpeakString("found "+IntToString(nAll)+" gemstones", TALKVOLUME_SHOUT));
+	
+	int nRand = Random(nAll);
+	//SpeakString("chosen number "+IntToString(nRand), TALKVOLUME_SHOUT);
+	string sChosenTag = GetLocalString(oChest, "Gemstone_"+IntToString(nRand));
+	//SpeakString("chosen "+sChosenTag, TALKVOLUME_SHOUT);
+	
+	if (sChosenTag == "") {
+		sChosenTag = "gemstone_vfx_andar";
+	}
+	
+	return sChosenTag;
+	
+}
+
+void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
+
+	string sBaseTag = GetRandomGemstoneToSpawn();
+	object oGem = CreateItemOnObject(sBaseTag, oTarget, 1);
+	
+	if (GetIsGemstone(oGem)) {
+		int nSize = 1;
+		int nQuality = 0;
+		
+		int nRand = d100();
+		if (nLootLevel == 2) {
+			if (nRand < 10) {
+				nQuality = Random(2);
+			} else if (nRand < 20) {
+				nSize = d20();
+			}
+		} else if (nLootLevel == 3) {
+			if (nRand < 20) {
+				nQuality = Random(2);
+			} else if (nRand < 40) {
+				nSize = d20()+5;
+			}
+		} else if (nLootLevel == 4) {
+			if (nRand < 20) {
+				nQuality = Random(3);
+			} else if (nRand < 40) {
+				nSize = d20(2)+5;
+			}
+		}
+		
+		SetDetailsOfGemstone(oGem, nQuality, nSize, oTarget);
+	}
+}
+
+int GetHasRoughGemstone(object oPC) {
+	object oItem = GetFirstItemInInventory(oPC);
+	while (GetIsObjectValid(oItem)) {
+	
+		if (GetBaseItemType(oItem) != BASE_ITEM_GEM)
+			continue;
+		string sTag = GetTag(oItem);
+		if (FindSubString(sTag, "gemstone_rough") >= 0) //is a rough gemstone
+			return TRUE;
+	
+		oItem = GetNextItemInInventory(oPC);
+	}
+	
+	return FALSE;
+}
+
+int GetIsGemstone(object oItem) {
+	if (GetBaseItemType(oItem) != BASE_ITEM_GEM)
+		return FALSE;
+	string sTag = GetTag(oItem);
+	if (FindSubString(sTag, "gemstone") >= 0) //is a new gemstone
+		return TRUE;
+	return FALSE;
+}
+
+//GUI Regenerate Gem Listbox
+void RegenerateGemList(object oPC) {
+	object oGem = GetFirstItemInInventory(oPC);
+	int nCount = 0;
+	ClearListBox(oPC, sGemScreen, "SCOD_GEM_INVENTORY");
+	while (GetIsObjectValid(oGem)) {
+	
+		if (GetBaseItemType(oGem) == BASE_ITEM_GEM) {
+			if (GetTag(oGem) != "gemstone_gravel" && GetIsGemstone(oGem)) { //May change later
+				int iconIndex = GetItemIcon(oGem);
+				string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
+				SetLocalObject(oPC, "gemrow_"+IntToString(nCount), oGem);
+				AddListBoxRow(oPC, sGemScreen, "SCOD_GEM_INVENTORY", "GEMROW_"+IntToString(nCount), "GemEntryName="+GetName(oGem)+";", "GemEntryIcon="+sIcon+".tga;", "5=" + IntToString(nCount), "");
+				nCount++;
+			}
+		}
+		oGem = GetNextItemInInventory(oPC);
+		
+	}
+}
+
+//GUI Updates Gem Selected Screen
+void UpdateSelectedGem(object oPC) {
+	object oGem = GetLocalObject(oPC, "selected_gem");
+	if (GetTag(oGem) == "gemstone_gravel") {
+		SetGUITexture(oPC, sGemScreen, "MAINGEM_ICON", "");
+		SetGUIObjectText(oPC, sGemScreen, "MAINGEM_NAME", -1, "");
+		SetGUIObjectText(oPC, sGemScreen, "MAINGEM_DESCRIPTION", -1, "The gem has been destroyed. You can do nothing further with it.");
+		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", TRUE);
+		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
+		return;
+	} else if (GetBaseItemType(oGem) == BASE_ITEM_MISCSMALL) { //for gems with special effects
+		int iconIndex = GetItemIcon(oGem);
+		string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
+		SetGUITexture(oPC, sGemScreen, "MAINGEM_ICON", sIcon+".tga");
+		SetGUIObjectText(oPC, sGemScreen, "MAINGEM_NAME", -1, GetName(oGem));
+		SetGUIObjectText(oPC, sGemScreen, "MAINGEM_DESCRIPTION", -1, "You can do nothing further to this gem.\n\n"+GetGemstoneFullDescription(oGem));
+		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", TRUE);
+		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
+		return;
+	}
+	
+	if (IsGemIdentified(oGem)) {
+		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", TRUE);
+		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", FALSE);
+	} else {
+		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", FALSE);
+		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
+	}
+	int iconIndex = GetItemIcon(oGem);
+	string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
+	SetGUITexture(oPC, sGemScreen, "MAINGEM_ICON", sIcon+".tga");
+	SetGUIObjectText(oPC, sGemScreen, "MAINGEM_NAME", -1, GetName(oGem));
+	SetGUIObjectText(oPC, sGemScreen, "MAINGEM_DESCRIPTION", -1, GetGemstoneFullDescription(oGem));
+	
+}

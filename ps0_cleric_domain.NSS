@@ -1,0 +1,124 @@
+/* Feat created by Ceremorph 11/25/15
+Spell-like abilities granted by race or racial PrC  */
+
+#include "x2_inc_spellhook"
+#include "ps0_cleric_domain_inc"
+#include "aaa_constants"
+#include "ps_inc_functions"
+
+
+void main()
+{
+	if (!X2PreSpellCastCode())
+    {	return;	}
+
+    object oPC 			= OBJECT_SELF;
+	int nSpell 			= GetSpellId();
+	object oTarget		= GetSpellTargetObject();
+	location lTarget	= GetSpellTargetLocation();
+	int iLevel;
+	
+	switch (nSpell)
+	{
+		case 629 :		//Balance Domain - Insightful Defense Feat
+			PS_Balance_InsightfulDefense(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 630 :		//Balance Domain - Negate Concealment
+			PS_Spell_NegateConcealment(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 631 :		//Balance Domain - Mass Sanctuary
+			PS_Spell_MassSanctuary(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 632 :		//Balance Domain - Weighed in the Balance
+			PS_Spell_WeighedInTheBalance(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1476 :		//Wrath Domain - Retributive Strike
+			PS_Wrath_RetributiveStrike(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1477 :		//Entropy Domain - Entropic Bolt
+			PS_Entropy_EntropicBolt(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1478 :		//Wrath Domain - Radiant Shield
+			PS_Spell_RadiantShield(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1479 :		//Wrath Domain - Vengeance Halo
+			PS_Spell_VengeanceHalo(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1480 :		//Wrath Domain - Last Judgment
+			PS_Spell_LastJudgment(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1481 :		//Entropy Domain - Ray of Exhaustion
+			PS_Spell_RayOfExhaustion(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1482 :		//Entropy Domain - Scintillating Pattern
+			PS_Spell_ScintillatingPattern(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1603 :		//Demonic Domain - Demonflesh
+			PS_Spell_Demonflesh(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1604 :		//Diabolic Domain - Hellfire
+			PS_Spell_Hellfire(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1605 :		//Diabolic Domain - Hellfire Storm
+			PS_Spell_HellfireStorm(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1606 :		//Planar Domains - Planar Call
+			PS_Spell_PlanarCall(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1607 :		//Celestial Domain - Celestial Glory Feat
+			PS_Celestial_CelestialGlory(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1608 :		//Arboreal Domain - Whirling Fury Feat
+			PS_Arboreal_WhirlingFury(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1609 :		//Demonic Domain - Abyssal Frenzy Feat
+			PS_Demonic_AbyssalFrenzy(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1610 :		//Diabolic Domain - Infernal Deceit Feat
+			PS_Diabolic_InfernalDeceit(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1611 :		//Demonic Domain - Wretched Blight
+			PS_Spell_WretchedBlight(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1612 :		//Arboreal Domain - Ghaele Ray
+			PS_Spell_GhaeleRay(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1613 :		//Arboreal Domain - Storm of Shards
+			PS_Spell_StormOfShards(oPC, lTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1614 :		//Celestial Domain - Heavenly Lightning
+			PS_Spell_HeavenlyLightning(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1615 :		//Celestial Domain - Heavenly Lightning Storm
+			PS_Spell_HeavenlyLightningStorm(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1619 :		//Dragon Domain - Dragon Ally
+			PS_Spell_DragonAlly(oPC, oTarget, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+	}
+}

@@ -1,0 +1,9 @@
+/////////////////////////////////////////////////////////
+// Auto-Close Door / Lock Door
+/////////////////////////////////////////////////////////
+void main()
+{
+	DelayCommand(180.0f,ActionCloseDoor(OBJECT_SELF));
+	DelayCommand(180.5f,SetLocked(OBJECT_SELF,TRUE));
+}
+// End

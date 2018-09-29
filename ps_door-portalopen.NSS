@@ -1,0 +1,57 @@
+/*
+ps_door-portalopen
+by Ceremorph 10/26/2015
+
+This script generates a portal in a doorway after the door is opened. This portal can be activated if a party
+member of the door opener possesses the proper portal key. If the "Key" string variable is left blank, the
+portal opens when the door does.
+
+This works best with the moongate VFX, developed by MokahTGS. These are:
+	moongate_black
+	moongate_blue 
+	moongate_red
+	moongate_silver
+Other VFX with a more "flat" appearance should also work well.
+*/
+#include "NW_I0_TOOL"
+
+void main()
+
+{
+	//	Get the float for the duration of the time to pass before the door is closed and locked
+	string sPortal		= GetLocalString(OBJECT_SELF, "Portal");	//Tag of portal
+	string sKey			= GetLocalString(OBJECT_SELF, "Key");		//Portal key (if any)
+	string sFX			= GetLocalString(OBJECT_SELF, "VFX");		//Visual effect to apply
+	int iLocked			= GetLocalInt(OBJECT_SELF, "Locked");		//1 for locked door, 2 for unlocked
+	float fDelay		= GetLocalFloat(OBJECT_SELF, "Delay");		//Delay (in seconds) to close door
+	location lPortal	= GetLocation(OBJECT_SELF);					//Door's location
+
+	object oEnter		= GetLastOpenedBy();						//Player who opened the door
+	
+	string SPAWNED 		= "nSpawned";
+
+	if (!GetIsPC(oEnter) && !GetIsDM(oEnter) && !GetIsDMPossessed(oEnter)) return;
+	
+	if(sKey != 	"")
+	{
+		if(CheckPartyForItem(oEnter, sKey)) 						//Check for portal key
+		{
+			CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
+			object oPortal	= GetNearestObjectByTag(sPortal, OBJECT_SELF, 1);
+			SetPlotFlag(oPortal,TRUE);								//Mark the portal as non-plot
+			CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);	//Generate the portal visual effect
+			SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);				//Mark the portal as spawned
+			DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));		//Close the door after fDelay seconds	
+		}
+	}
+	else
+	{
+		CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);		//Create the portal
+		object oPortal	= GetNearestObjectByTag(sPortal, OBJECT_SELF, 1);
+		SetPlotFlag(oPortal,TRUE);									//Mark the portal as non-plot
+		CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);		//Generate the portal visual effect
+		SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);					//Mark the portal as spawned
+		DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));			//Close the door after fDelay seconds	
+	}	
+}
+// End
