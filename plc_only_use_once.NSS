@@ -33,7 +33,7 @@ void ActionCreateObject(string sCreateWeaponPLC, string sCreateWeaponIT, locatio
 		SetLocalString(oWeapon, "item_resref", sCreateWeaponIT);
 		// mise à l'échelle
 		float fEchelle = GetLocalFloat(oSELF, "fScale");
-		if (fEchelle == 0f) fEchelle = 1.0;
+		if (fEchelle == 0.0f) fEchelle = 1.0f;
 		SetScale(oWeapon, GetScale(oSELF, SCALE_X)*fEchelle, GetScale(oSELF, SCALE_Y)*fEchelle, GetScale(oSELF, SCALE_Z)*fEchelle);
 	}
 }
