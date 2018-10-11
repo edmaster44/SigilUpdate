@@ -92,6 +92,8 @@ void main (int nAction, int nDC) {
 				AddJournalQuestEntry("ps_quest_brokengears", 2, oPC, 0, 0, 0);
 			}
 		
+		} else {
+			GenerateTreasure(oPC);
 		}
 	} else if (nAction == 3) {
 		if (GetIsTrainingSkillSuccessful(oPC, SKILL_DISABLE_TRAP, nDC)) {
