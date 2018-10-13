@@ -9,6 +9,13 @@
 #include "ginc_item"
 #include "ps_inc_wingtail"
 
+void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
+void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
+void PS_ApplyMovanicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
+void PS_ApplyHoundWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
+void PS_ApplyExaltedWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
+void PS_ApplyEladrinWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
+void PS_ApplyEvilWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
 
 void PS_Ability_GiantStride(object oPC, int iLevel, int iClass, int nSpell)
 {
@@ -59,61 +66,61 @@ void PS_Ability_AstralDevaWeapon(object oPC, int nSpell)
 {	
 	float fDuration = RoundsToSeconds(50);
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyOnHitProps(IP_CONST_ONHIT_STUN, IP_CONST_ONHIT_SAVEDC_20, IP_CONST_ONHIT_DURATION_25_PERCENT_3_ROUNDS);
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
-			itemproperty ipClas = ItemPropertyLimitUseByClass(87);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}	}
+	{
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;	
+	}
+	
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyAstralDevaWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyAstralDevaWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
+}
 
 void PS_Ability_MonadicDevaWeapon(object oPC, int nSpell)
 {	
 	float fDuration = RoundsToSeconds(50);
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyKeen();
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
-			itemproperty ipClas = ItemPropertyLimitUseByClass(88);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}	}
+	{	
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;	
+	}
+		
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyMonadicWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyMonadicWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
+}
 
 void PS_Ability_MovanicDevaWeapon(object oPC, int nSpell)
 {	
 	float fDuration = RoundsToSeconds(50);
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_POSITIVE, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);
-			itemproperty ipClas = ItemPropertyLimitUseByClass(89);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}	}
+	{	
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;	
+	}
+		
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyMovanicWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyMovanicWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
+}
 				
 void PS_Ability_DeliveranceFromDeath(object oPC)
 {
@@ -446,24 +453,24 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell) //also to be tweak
 
 void PS_Ability_MarqCambAlignedStrike(object oPC, int nSpell)
 {	
-	float fDuration = RoundsToSeconds(50);
+	float fDuration = RoundsToSeconds(50);	
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
-			itemproperty ipClas = ItemPropertyLimitUseByClass(99);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}	
+	{	
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;	
+	}
+	
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyEvilWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyEvilWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
 }
+
 
 void PS_Ability_DriderAffinities(object oPC, int nSpell)
 {
@@ -481,29 +488,27 @@ void PS_Ability_HezrouStench(object oPC, int nSpell)
 	float fDur = RoundsToSeconds(GetTotalLevels(OBJECT_SELF, TRUE));
 	
     effect eAOE = ExtraordinaryEffect(EffectAreaOfEffect( 72 ));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, fDur );
-	
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, fDur );	
 }
 
 void PS_Ability_HezrouAlignedStrike(object oPC, int nSpell)
 {	
-	float fDuration = RoundsToSeconds(50);
+	float fDuration = RoundsToSeconds(50);	
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
-			itemproperty ipClas = ItemPropertyLimitUseByClass(126);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}	
+	{	
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;	
+	}
+	
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyEvilWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyEvilWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
 }
 
 void PS_Ability_FamiliarRegeneration(object oPC, int nSpell)
@@ -733,23 +738,20 @@ void PS_Ability_HoundWeapon(object oPC, int nSpell)
 {	
 	float fDuration = RoundsToSeconds(50);
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
-		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff3 = ItemPropertyKeen();
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
-			itemproperty ipClas = ItemPropertyLimitUseByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff3, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}	
+	{
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;
+	}
+		
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyHoundWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyHoundWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
 }
 
 void PS_Ability_ArchonAura(object oPC, int nSpell)
@@ -825,7 +827,9 @@ void PS_Ability_BralaniWhirlBlast(object oPC, object oTarget, int nSpell)
 			effect eVis = EffectNWN2SpecialEffectFile("fx_air_elemental_atk1", oTarget);
 		    effect eLink = EffectLinkEffects(eDam, eVis);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);		}
-}	}	}
+		}
+	}
+}
 
 void PS_Ability_EladrinDR(object oPC, int nSpell)
 {
@@ -872,27 +876,22 @@ void PS_Ability_EladrinDR(object oPC, int nSpell)
 
 void PS_Ability_EladrinTransStrike(object oPC, int nSpell)
 {
-	float fDuration = RoundsToSeconds(50);
+	float fDuration = RoundsToSeconds(50);	
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectNWN2SpecialEffectFile("fx_feat_rescue_hit01", oPC);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
-			itemproperty ipClasB = ItemPropertyLimitUseByClass(CLASS_TYPE_BRALANI_PRC);
-			itemproperty ipClasF = ItemPropertyLimitUseByClass(CLASS_TYPE_FIRRE_PRC);
-			itemproperty ipClasG = ItemPropertyLimitUseByClass(CLASS_TYPE_GHAELE_PRC);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClasB, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClasF, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClasG, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}
+	{
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;
+	}
+		
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyEladrinWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyEladrinWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
 }
 
 void PS_Ability_FirreFlamingSlam(object oPC, object oTarget, int nSpell)
@@ -1079,23 +1078,20 @@ void PS_Ability_ExaltedWeapon(object oPC, int nSpell)
 {
 	float fDuration = RoundsToSeconds(30);
 	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);
-		return;	}
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oWeapon))
-    {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
-		effect eCast = EffectNWN2SpecialEffectFile("sp_divination_hit", oPC);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
-			itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d4);
-			itemproperty ipGlow = ItemPropertyLight(IP_CONST_LIGHTBRIGHTNESS_LOW, IP_CONST_LIGHTCOLOR_WHITE);
-			itemproperty ipClasT = ItemPropertyLimitUseByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC);
-			itemproperty ipClasW = ItemPropertyLimitUseByClass(CLASS_TYPE_WORD_ARCHON_PRC);
-				IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClasT, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-				IPSafeAddItemProperty(oWeapon, ipClasW, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	}
+	{	
+		RemoveSpellEffects(nSpell, oPC, oPC);
+		return;
+	}
+		
+	object oWeaponRight = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oWeaponLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	// Apply the weapon properties to both weapons.
+	if (GetIsObjectValid(oWeaponRight))
+		PS_ApplyExaltedWeaponProperties(oWeaponRight, oPC, nSpell, fDuration);
+	if (GetIsObjectValid(oWeaponLeft) && 
+		!GetIsShield(oWeaponLeft))
+		PS_ApplyExaltedWeaponProperties(oWeaponLeft, oPC, nSpell, fDuration);
 }
 
 void PS_Ability_YTHBChameleonPower(object oPC, int nSpell)
@@ -1187,7 +1183,6 @@ void PS_Ability_Austerities(object oPC)
 	{	int nWis = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
 		if(GetHasFeat(3205, oPC))
 		{
-			
 			effect eRes = EffectDamageResistance(DAMAGE_TYPE_COLD, 10, 0);
 			effect eSave = EffectSavingThrowIncrease(SAVING_THROW_WILL, nWis, SAVING_THROW_TYPE_ALL, FALSE);
 			eRes = SupernaturalEffect(eRes);
@@ -1198,7 +1193,6 @@ void PS_Ability_Austerities(object oPC)
 		}
 		if(GetHasFeat(3206, oPC))
 		{
-			
 			effect eRes = EffectDamageResistance(DAMAGE_TYPE_FIRE, 10, 0);
 			effect eSave = EffectSavingThrowIncrease(SAVING_THROW_FORT, nWis, SAVING_THROW_TYPE_ALL, FALSE);
 			eRes = SupernaturalEffect(eRes);
@@ -1209,7 +1203,6 @@ void PS_Ability_Austerities(object oPC)
 		}
 		if(GetHasFeat(3207, oPC))
 		{
-			
 			effect eRes = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, 10, 0);
 			effect eSave = EffectSavingThrowIncrease(SAVING_THROW_REFLEX, nWis, SAVING_THROW_TYPE_ALL, FALSE);
 			eRes = SupernaturalEffect(eRes);
@@ -1217,7 +1210,10 @@ void PS_Ability_Austerities(object oPC)
 			
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
-		}	}	}
+		}
+	}
+}
+		
 void PS_Ability_Austerity_Truth(object oPC)
 {
 	if (!GetHasSpellEffect(GetSpellId(), oPC))
@@ -1228,54 +1224,47 @@ void PS_Ability_Austerity_Truth(object oPC)
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTruth, oPC);
 	}
 }
+
 void PS_Ability_Rakshasa_SR(object oPC)
 {
-
 		int nHD = GetHitDice(oPC);
 		int nSR = 11 + nHD;
 		
 		if(GetLevelByClass(213, oPC)> 7)
-		{
 			nSR = 20 + nHD;
-		}
 		if(GetLevelByClass(214, oPC)> 7)
-		{
 			nSR = 20 + nHD;
-		}
+			
 		effect eSR = EffectSpellResistanceIncrease(nSR, -1);
 		eSR = SupernaturalEffect(eSR);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oPC);
-	
 }
+
 void PS_Ability_Reincarnate(object oPC)
 {
  	object oItem  = GetItemPossessedBy(oPC,"ps_essence");
  	int nContingency	= GetLocalInt(oPC, "Contingency");
  	if(nContingency == 0)
- 	{
    		SetLocalInt(oPC, "Contingency", 1);
- 	}	
 }
 void PS_Ability_Austere_AC(object oPC, int nSpell)
 {
-	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);}
+	if (GetHasSpellEffect(nSpell,oPC))
+		RemoveSpellEffects(nSpell, oPC, oPC);
 
-		int nAC;
-		if(GetLevelByClass(214, oPC)> 3)
+	int nAC;
+	if(GetLevelByClass(214, oPC) > 3)
+	{
+		nAC = 1;			
+		if(GetLevelByClass(214, oPC) > 8)
 		{
-			nAC = 1;
-			if(GetLevelByClass(214, oPC)> 8)
-			{
-				nAC = 2;
-			}
-			
-		}
-		effect eAC = EffectACIncrease(nAC, AC_DODGE_BONUS);
-		eAC = ExtraordinaryEffect(eAC);
-			 
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
-
+			nAC = 2;
+		}			
+	}
+	
+	effect eAC = EffectACIncrease(nAC, AC_DODGE_BONUS);
+	eAC = ExtraordinaryEffect(eAC);			 
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
 }
 
 // Elan Resilience created by SyntheticRose
@@ -1300,3 +1289,170 @@ void PS_Ability_ElanResilience(object oPC, int nSpell)
 	//After all copies of eResilience have been removed, reapply it.
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eResilience, oPC);
 }
+
+// Helper method to apply the Weapon Properties for
+// Marquis Cambion and Hezrou's Aligned Strike.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyEvilWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+		
+	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
+	itemproperty ipClas = ItemPropertyLimitUseByClass(99);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+
+// Helper method to apply the Weapon Properties for
+// Eladrin's Transcendent Strike.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyEladrinWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectNWN2SpecialEffectFile("fx_feat_rescue_hit01", oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+		
+	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
+	itemproperty ipClasB = ItemPropertyLimitUseByClass(CLASS_TYPE_BRALANI_PRC);
+	itemproperty ipClasF = ItemPropertyLimitUseByClass(CLASS_TYPE_FIRRE_PRC);
+	itemproperty ipClasG = ItemPropertyLimitUseByClass(CLASS_TYPE_GHAELE_PRC);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClasB, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClasF, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClasG, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+
+// Helper method to apply the Weapon Properties for
+// Word Archon's Exalted Weapon.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyExaltedWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectNWN2SpecialEffectFile("sp_divination_hit", oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	
+	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipGlow = ItemPropertyLight(IP_CONST_LIGHTBRIGHTNESS_LOW, IP_CONST_LIGHTCOLOR_WHITE);
+	itemproperty ipClasT = ItemPropertyLimitUseByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC);
+	itemproperty ipClasW = ItemPropertyLimitUseByClass(CLASS_TYPE_WORD_ARCHON_PRC);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClasT, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClasW, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+
+// Helper method to apply the Weapon Properties for 
+// Hound Archon's Sanctified Weapon.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyHoundWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+	
+	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, IP_CONST_DAMAGETYPE_MAGICAL, 
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff3 = ItemPropertyKeen();
+	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
+	itemproperty ipClas = ItemPropertyLimitUseByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff3, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+
+// Helper method to apply the Weapon Properties for 
+// Movanic Deva's Flaming Weapon.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyMovanicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	
+	itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_POSITIVE, IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);
+	itemproperty ipClas = ItemPropertyLimitUseByClass(89);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+
+// Helper method to apply the Weapon Properties for 
+// Monadic Deva's Weapon of Smiting.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	
+	itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyKeen();
+	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
+	itemproperty ipClas = ItemPropertyLimitUseByClass(88);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+
+// Helper method to apply the Weapon Properties for 
+// Astral Deva's Angelic Weapon.
+// This is called for both the left and right hands.
+// Created by rapsam2003 on 7/26/2018.
+void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration)
+{
+	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
+	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	
+	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL,
+		IP_CONST_DAMAGEBONUS_1d4);
+	itemproperty ipEff2 = ItemPropertyOnHitProps(IP_CONST_ONHIT_STUN, IP_CONST_ONHIT_SAVEDC_20, 
+		IP_CONST_ONHIT_DURATION_25_PERCENT_3_ROUNDS);
+	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
+	itemproperty ipClas = ItemPropertyLimitUseByClass(87);
+	
+	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+}
+				
+				
