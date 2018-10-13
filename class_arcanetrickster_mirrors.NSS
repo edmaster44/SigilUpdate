@@ -17,7 +17,7 @@ void main()
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvisible, OBJECT_SELF, 1.0f);
 	
 	int i;
-	for (i = 1; i <= 6; ++i)
+	for (i = 1; i <= 4; ++i)
 	{
 		object oClone = CreateClone(OBJECT_SELF, lLocation);
 		DelayCommand(0.2f, SetCommandable(TRUE, oClone));

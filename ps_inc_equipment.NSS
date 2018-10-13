@@ -11,6 +11,9 @@
 #include "nw_i0_spells"
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
+#include "ps_meditative_strikes"
+
+
 
 
 
@@ -491,6 +494,11 @@ void DrunkMasterImprovised(object oPC, int nRIGHT)
 	ApplyEquipmentEffect(oPC, eFX);
 }
 
+
+
+
+
+
 //Con Drain Protection in OOC rooms.
 void ConDrainProtection(object oItem, object oPC)
 {	
@@ -536,12 +544,16 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	if (nEQUIP == TRUE)
 	{
 		CheckForTempProperties(oITEM, oPC);
+	
+		if (GetMonkWeapon(oITEM))DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
+
 		if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
-		else
+		
+	
 		{
 			if (MonkeyGripAbuse(oPC, oITEM, nITEM) == TRUE) return;
 			if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
-			if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return;
+			if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return; 
 			IajaitsuMaster(oPC, oITEM, nITEM);
 		}
 	}
@@ -550,5 +562,5 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 		ConDrainProtection(oITEM, oPC);
 		if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
 	}
-	DelayCommand(0.0f, EquipmentEffects(oPC));
+	DelayCommand(0.1f, EquipmentEffects(oPC));
 }

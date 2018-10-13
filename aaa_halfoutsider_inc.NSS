@@ -208,7 +208,7 @@ void PS_HOM_UnholyBlight(object oPC, int nSpell, location lTarget)
     effect eDam, eVis, eLink, eSick, eEvil;
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
     	{	if (nSpell == 1475)
             {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
