@@ -3,6 +3,9 @@
 	*** This script lists all constants used in the racial PrC system.				***
 	*** Include this script in all associated system scripts.						***
 	***********************************************************************************	*/
+/*
+rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
+*/
 
 // List of all PrC-ready subraces
 const int RACIAL_SUBTYPE_NIGHT_HAG				= 53;
@@ -339,6 +342,31 @@ const int FEAT_ARMOR_OF_NATURE 					= 5017;
 const int FEAT_OVERGROWTH 						= 5018;
 const int FEAT_TOUGH_ROOTS 						= 5019;
 const int FEAT_ANIMATE_TREES 					= 5020;
+
+// These feats are automatically granted in ps_givespellfeat,
+// at the appropriate spellcaster levels.
+const int FEAT_SPELL_WIZARD_I					= 21440;
+const int FEAT_SPELL_WIZARD_II					= 21441;
+const int FEAT_SPELL_WIZARD_III					= 21442;
+const int FEAT_SPELL_WIZARD_IV					= 21443;
+const int FEAT_SPELL_CLERDRU_I					= 21444;
+const int FEAT_SPELL_CLERDRU_II					= 21445;
+const int FEAT_SPELL_CLERDRU_III				= 21446;
+const int FEAT_SPELL_CLERDRU_IV					= 21447;
+const int FEAT_SPELL_BARD_I						= 21448;
+const int FEAT_SPELL_BARD_II					= 21449;
+const int FEAT_SPELL_BARD_III					= 21450;
+const int FEAT_SPELL_BARD_IV					= 21451;
+const int FEAT_SPELL_PALRANG_I					= 21452;
+const int FEAT_SPELL_PALRANG_II					= 21453;
+const int FEAT_SPELL_PALRANG_III				= 21454;
+const int FEAT_SPELL_PALRANG_IV					= 21455;
+const int FEAT_SPELL_SORCFAVSHAMAN_I			= 21456;
+const int FEAT_SPELL_SORCFAVSHAMAN_II			= 21457;
+const int FEAT_SPELL_SORCFAVSHAMAN_III			= 21458;
+const int FEAT_SPELL_SORCFAVSHAMAN_IV			= 21459;
+const int FEAT_INVOCATIONS_WARLOCK_I			= 21460;
+const int FEAT_INVOCATIONS_WARLOCK_II			= 21461;
 
 // Polymorph Forms
 const int POLYMORPH_TYPE_HA_HOUND				= 50;

@@ -6,6 +6,7 @@
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_adjust_sneakattack"
+#include "ps_givespellfeat"
 
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
@@ -298,4 +299,5 @@ void main()
 	DoPsiProgression(oPC);
 	GiveDragonFeats(oPC);
 	PS_AdjustSneakAttack(oPC);
+	PS_GiveSpellFeat(oPC);
 }
