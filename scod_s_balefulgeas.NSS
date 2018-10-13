@@ -41,7 +41,7 @@ void main()
     effect eGeas = EffectDominated();
     eGeas = GetScaledEffect(eGeas, oTarget);
     effect eDur = EffectVisualEffect(VFX_HIT_SPELL_INFLICT_6);
-	int nDrainDice = d4(2);
+	int nGeasDice = d4(2);
 	
 	//Link domination and persistant VFX
     effect eLink = EffectLinkEffects(eDur, eGeas);
@@ -49,17 +49,22 @@ void main()
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
     int nDuration = 3 + nCasterLevel/2;
 	
-	if (GetHasFeat(2907, OBJECT_SELF)) {
-		nDrainDice = d4(3);
-		nDuration = 3 + (nCasterLevel*2);
+	if (GetHasFeat(2907, OBJECT_SELF)) 
+	{
+		nGeasDice += 2;
+		nDuration += 3 + (nCasterLevel*2);
 	}
-	else if (GetHasFeat(2904, OBJECT_SELF)) {
-		nDrainDice = d4(3);
-		nDuration = 3 + nCasterLevel;
+	else if (GetHasFeat(2904, OBJECT_SELF)) 
+	{
+		nGeasDice += 2;
+		nDuration += 3 + nCasterLevel;
 	}
 	
 	// rapsam2003: For Baleful Geas, these feats
 	// increase the strength of the NPC.
+	// With Fellblade's Curse: Baleful Geas
+	// and Cursemaster, the total strength increase 
+	// of the of the dominated should be 2d4+2.
 	int nHexerBuff = 0;
 	
 	if (GetHasFeat(2901, OBJECT_SELF))
@@ -71,27 +76,29 @@ void main()
 
 	effect eAbilityChange;
 	
+	// rapsam2003: Add hexer and Geas increases.
+	nHexerBuff += nGeasDice;
+	
 	if (nHexerBuff > 0)
 		eAbilityChange = EffectAbilityIncrease(ABILITY_STRENGTH, nHexerBuff);
 	else
-		eAbilityChange = EffectAbilityDecrease(ABILITY_STRENGTH, nDrainDice);
+		eAbilityChange = EffectAbilityDecrease(ABILITY_STRENGTH, nGeasDice);
 	
     nDuration = GetScaledDuration(nDuration, oTarget);
-    //Fire cast spell at event for the specified target
+	
+    //Signal spell cast at event.
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1374, FALSE));
-    //Make sure the target is a monster
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{
-		//Make SR Check
-		if (GetHasFeat(2907, OBJECT_SELF) || !DoWarlockMyResistSpell(OBJECT_SELF, oTarget))
-		{
-			//Make a Will Save
-     		if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
-  			{                    
-				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAbilityChange, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
-				SendMessageToPC(oCaster, "The curse dominates the affected enemy.");
-			}
+	
+	// Spell Resist check.
+    if (!DoWarlockMyResistSpell(oCaster, oTarget) || GetHasFeat(2907, oCaster))
+    {
+		// Do NOT want this cast on PCs.
+		// Make a Will save, for balance.
+   		if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
+		{                    
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAbilityChange, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
+			SendMessageToPC(oCaster, "The curse dominates the affected enemy.");
 		}
-	}
+	}	
 }

@@ -40,10 +40,9 @@ void main()
       check x2_inc_spellhook.nss to find out more
 
     */
-
     if (!X2PreSpellCastCode())
     {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+    	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 
@@ -58,11 +57,11 @@ void main()
 	else if (GetHasFeat(2903, oCaster)) 
 		nMod = 4;
 	
-	object		oTarget			=	GetSpellTargetObject();
-	effect		eAttackPenalty 	=	EffectAttackDecrease(nMod);
-	effect		eMovePenalty	=	EffectMovementSpeedDecrease(nMod*10);
-	effect		eLink			=	EffectLinkEffects(eAttackPenalty, eMovePenalty);
-	float		fDuration		=	RoundsToSeconds(nMod);
+	object oTarget = GetSpellTargetObject();
+	effect eAttackPenalty =	EffectAttackDecrease(nMod);
+	effect eMovePenalty	= EffectMovementSpeedDecrease(nMod*10);
+	effect eLink = EffectLinkEffects(eAttackPenalty, eMovePenalty);
+	float fDuration	= RoundsToSeconds(nMod);
 	int nMissChance = 0;
 	
 	//metamagic
@@ -83,16 +82,32 @@ void main()
 		eLink = EffectLinkEffects(eMissChance, eLink);
 	}	
 	
-	if (GetIsObjectValid(oTarget))
-	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
-		{	
-			if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC() /*+ nDCBonus*/))
-			{
-				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-				SendMessageToPC(oCaster, "The curse causes the affected enemy to have trouble hitting you.");
-			}
+	//Signal spell cast at event.
+	SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
+	
+	// Spell resist check.
+	if (!DoWarlockMyResistSpell(oCaster, oTarget) || GetHasFeat(2907, oCaster))
+    {
+		//Get the spell target location as opposed to the spell target.
+		location locTarget = GetSpellTargetLocation();
+		oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
+		    
+		while (GetIsObjectValid(oTarget))
+		{			    
+			// Fortitude Save for PCs.
+		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
+		    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			else // No save for monsters.
+		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			
+			// If no Cursemaster feat, set oTarget to 
+			// OBJECT_TYPE_INVALID and cause exit of while loop.
+			if (!GetHasFeat(2907, oCaster))
+				oTarget = OBJECT_TYPE_INVALID;
+			else //Select the next target within the spell shape.
+		    	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
 		}
+		    
+		SendMessageToPC(oCaster, "The curse causes the affected enemies to have trouble hitting you.");
 	}
 }
