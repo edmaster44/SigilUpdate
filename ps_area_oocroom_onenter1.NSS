@@ -53,11 +53,12 @@ void main()
 
   //To re-enable Krampus, remember to change lines in ps_styx_* scripts to 
   //add all exp to your dm pool
-  if(GetObjectByTag("ps_npc_seasonalkrampus") == OBJECT_INVALID)  {
+  /*if(GetObjectByTag("ps_npc_seasonalkrampus") == OBJECT_INVALID)  {
 	   object oWP = GetWaypointByTag("wp_ooc_krampus");
    	   location lSpawnpoint = GetLocation(oWP);  
 	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalkrampus", lSpawnpoint);    
-  }  
+  }  */
+  
   SetGlobalInt("OOCEnterLock", 0);
  }
  
