@@ -60,9 +60,8 @@ void LogSpawnFailure(object oTrigger, string sTemplate)
 	WriteTimestampedLogEntry(sText);
 }
 
-void SpawnMonster(object oTrigger, string toSpawn, object oWP, float avg, int iEliteChance, string mod) {
-	
-	location lSpawnpoint = GetLocation(oWP);	
+void SpawnMonsterAtLocation(object oTrigger, string toSpawn, location lSpawnpoint, float avg, int iEliteChance, string mod) {
+		
 	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, toSpawn+mod, lSpawnpoint); 
 	if (oSpawn == OBJECT_INVALID)
 		LogSpawnFailure(oTrigger, "Gradual Spawn Failure:"+toSpawn+mod);
@@ -78,6 +77,10 @@ void SpawnMonster(object oTrigger, string toSpawn, object oWP, float avg, int iE
 		SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
    	} 
 	
+}
+
+void SpawnMonster(object oTrigger, string toSpawn, object oWP, float avg, int iEliteChance, string mod) {
+	SpawnMonsterAtLocation(oTrigger, toSpawn, GetLocation(oWP), avg, iEliteChance, mod);
 }
 
 void PlayVFX(object oTrigger, object oWP) {

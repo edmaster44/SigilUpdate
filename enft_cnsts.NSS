@@ -5,6 +5,7 @@ float saltTime = HoursToSeconds(1);  // One game hour
 float warmDistance = 5.0f;  // Distance to get warmed by object
 float coolDistance = 5.0f;
 float hydrateDistance = 5.0f;  // Distance to get cooled by object
+float slagsTime = 60.0f;
 
 // 10 ResRef slots for equiped items that protects on from extreme heat or cold.
 // Only items that provide inherent, physical protection from the elements
@@ -42,4 +43,17 @@ int TimeStampT()
 	int iCurrentTime = GetTimeHour() * 60 * 60 + GetTimeMinute() * 60 + GetTimeSecond();
 	
 	return iCurrentTime;
+}
+
+//Sanity check to make sure the script doesn't run too many times on the same PC
+int CanRunEnvironmentLoop(string sTime, float timeDelay) {
+	
+	int lastRun = GetLocalInt(OBJECT_SELF, sTime);
+	float diff = IntToFloat(abs(TimeStampT()-lastRun));
+	if (diff < timeDelay)
+		return FALSE;
+	else
+		SetLocalInt(OBJECT_SELF, sTime, TimeStampT());
+		
+	return TRUE;
 }
