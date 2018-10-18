@@ -26,7 +26,7 @@ void startEngine(object oEnterer)
         }
 		if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 5)
         {
-            DelayCommand(magmaTime, ExecuteScript("enft_slags_ftg", oEnterer));
+            DelayCommand(slagsTime, ExecuteScript("enft_slags_ftg", oEnterer));
         }
     }
 }

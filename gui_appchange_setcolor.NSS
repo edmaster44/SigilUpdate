@@ -35,14 +35,15 @@ struct strTint XPCraft_HLSToTintStruct(int iHue, int iLum, int iSat)
 {
 	struct strTint strMyTint;
 	
-	float T;
-	float L;
-	float fS;
-	T = IntToFloat(iHue);
-	L = iLum / 100.0;
-	fS = iSat / 100.0;
+	float T = IntToFloat(iHue);
+	float L = iLum / 100.0;
+	float fS = iSat / 100.0;
 	
-	float R,G,B, q1,q2;
+	float fR;
+	float fG;
+	float fB;
+	float q1;
+	float q2;
 	
 	if(L <= 0.5) q2 = L * (1.0 + fS);
 	else 		 q2 = L + fS - (L * fS);
@@ -51,20 +52,20 @@ struct strTint XPCraft_HLSToTintStruct(int iHue, int iLum, int iSat)
 	
 	if(fS == 0.0)
 	{
-		R = L;
-		G = L;
-		B = L;
+		fR = L;
+		fG = L;
+		fB = L;
 	}
 	else
 	{
-		R = XPCraft_QqhToRgb(q1,q2,T+120.0);
-		G = XPCraft_QqhToRgb(q1,q2,T);
-		B = XPCraft_QqhToRgb(q1,q2,T-120.0);
+		fR = XPCraft_QqhToRgb(q1,q2,T+120.0);
+		fG = XPCraft_QqhToRgb(q1,q2,T);
+		fB = XPCraft_QqhToRgb(q1,q2,T-120.0);
 	}
 
-	strMyTint.iRed = FloatToInt(R*255.0);
-	strMyTint.iGreen = FloatToInt(G*255.0);
-	strMyTint.iBlue = FloatToInt(B*255.0);
+	strMyTint.iRed = FloatToInt(fR*255.0);
+	strMyTint.iGreen = FloatToInt(fG*255.0);
+	strMyTint.iBlue = FloatToInt(fB*255.0);
 	strMyTint.iAlpha = 255;
 	
 	gRed = strMyTint.iRed;

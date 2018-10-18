@@ -29,6 +29,7 @@ rapsam2003 03/16/2018: Remove save against NPCs
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_metmag"
+#include "srcalc"
 
 
 void main()
@@ -86,8 +87,7 @@ void main()
 	SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 	
 	// Spell resist check.
-	if (!DoWarlockMyResistSpell(oCaster, oTarget) || GetHasFeat(2907, oCaster))
-    {
+	if (!DoWarlockMyResistSpell(oCaster, oTarget) || GetHasFeat(2907, oCaster)) {
 		//Get the spell target location as opposed to the spell target.
 		location locTarget = GetSpellTargetLocation();
 		oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -103,7 +103,7 @@ void main()
 			// If no Cursemaster feat, set oTarget to 
 			// OBJECT_TYPE_INVALID and cause exit of while loop.
 			if (!GetHasFeat(2907, oCaster))
-				oTarget = OBJECT_TYPE_INVALID;
+				break;
 			else //Select the next target within the spell shape.
 		    	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
 		}

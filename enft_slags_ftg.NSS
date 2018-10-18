@@ -123,16 +123,20 @@ void VargouilleSwarm(object oPC) {
 
 void main () {
 
+	SendMessageToPC(OBJECT_SELF, "Slags loop running");
+
 	if (!CanRunEnvironmentLoop("slags_timestamp", slagsTime))
 		return;
 	
 	if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 5) {
+		SendMessageToPC(OBJECT_SELF, "You have left the slags. You are safe.");
         SetLocalInt(OBJECT_SELF, "KadyxCount", 0);
 		return;
 	}
 	
 	int nKadyx = GetLocalInt(OBJECT_SELF, "KadyxCount");
 	int nKadyxComes = GetLocalInt(OBJECT_SELF, "KadyxComing");
+	SendMessageToPC(OBJECT_SELF, IntToString(nKadyx)+" vs. "+IntToString(nKadyxComes));
 	if (nKadyx == nKadyxComes) {
 		KadyxArrives(OBJECT_SELF);
 	} else if (nKadyx == (nKadyxComes-1) || nKadyx == (nKadyxComes-3) || nKadyx == (nKadyxComes-5)) {
