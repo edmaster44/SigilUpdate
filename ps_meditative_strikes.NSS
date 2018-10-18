@@ -1,32 +1,22 @@
-//Meditative Strike
+#include "x2_inc_itemprop"
 #include "ps_inc_equipment"
-
 //Applies Wisdom damage as magical damage on too both gloves and Flurry-ready Monk weapons
-void main ()
-{ 
-object oSelf =  OBJECT_SELF;
-object oPC = GetPCItemLastEquippedBy();
-object oWeapon = GetPCItemLastEquipped();
-//Get Damage based on Wisdom Modifer
-int nWisdomBounus = GetAbilityModifier(ABILITY_WISDOM, oPC);
-float fDuration = 9999.9f;
- int nDUR = DURATION_TYPE_TEMPORARY;
-//Comes from Wisdom
-int nDamage = IPGetDamageBonusConstantFromNumber(nWisdomBounus);
-//Magical Damage constant 
-int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
-//Name of Property 
-itemproperty ipAdd =  ItemPropertyDamageBonus(nDamageType, nDamage) ; 
-//adds the property if it is correct weapon
- if(GetHasFeat(2840, oPC, TRUE ) && GetMonkWeapon(oWeapon) == TRUE)
+const int FEAT_EPIC_MEDITATIVE_STRIKES = 2840;
+//Gets the Property from wisdom, converts into Magical Damage
+void ApplyMeditativeStrikes(object oPC,object oItem)
 {
 
-AddItemProperty(DURATION_TYPE_TEMPORARY,ipAdd,oWeapon,fDuration);
-}
-else
-//Removes the property 
-{RemoveItemProperty(oWeapon,ipAdd);
+int nDur = DURATION_TYPE_PERMANENT;
+float fDUR = 9999.9f;
+int nWis = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
+if (nWis < 1) return;
+int nDamage = IPGetDamageBonusConstantFromNumber(nWis);
+itemproperty ipAdd =  ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nWis) ; 
+if(GetHasFeat(FEAT_EPIC_MEDITATIVE_STRIKES, oPC, TRUE ))
 
-}
+{
 
+AddItemProperty(nDur,ipAdd,oItem,fDUR);
+}
+return;
 }
