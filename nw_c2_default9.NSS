@@ -71,14 +71,6 @@ void SpecialDrop(string sAREA, object oSPAWN)
 			case 1: sSPECIAL = "ps_crft_ing_au"; break;
 		}	
 	}
-	else if(TestStringAgainstPattern("**demiplane**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_crft_formamb"; break;
-			case 1: sSPECIAL = "ps_crft_reggear"; break;			
-		}	
-	}
 	else if(TestStringAgainstPattern("**astral**", sAREA))
 	{
 		sSPECIAL = "ps_crft_ing_ms";
