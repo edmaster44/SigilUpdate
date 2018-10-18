@@ -85,7 +85,7 @@ if (iDamage>=iMaxHP || GetLocked(oDoor)==0) {
         DelayCommand(120.0, fResetDoor());
     }
 	
-	if (nExp > 0)
+	if (nExp > 0 && GetHitDice(oPC) <= 5)
 		GiveXPToCreature(oPC, nExp);
 }
 //Assigns the values to the below formula.
