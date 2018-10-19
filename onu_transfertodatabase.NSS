@@ -7,7 +7,7 @@ void main () {
 
 	SQLExecDirect("TRUNCATE TABLE gemstones");
 
-	object oChest = GetObjectByTag(gemstoneBox);
+	object oChest = GetObjectByTag("plc_chest_gemstonegeneration_2");
 	object oItem = GetFirstItemInInventory(oChest);
 	int n = 0;
     while (GetIsObjectValid(oItem)) {
@@ -25,7 +25,7 @@ void main () {
 		string sColor = GetLocalString(oItem, "Color");
 		string sDescription = GetLocalString(oItem, "GemDescription")+"\n\n"+GetLocalString(oItem, "MineralDescription");
 	
-		string sQuery = "INSERT INTO gemstones SET gem_id='"+IntToString(n)+"', name='"+sName+"', resref='"+sResref+"', icon='"+IntToString(nIcon)+"', color='"+sColor+"', description='"+sDescription+"'";
+		string sQuery = "INSERT INTO gemstones SET gem_id='"+IntToString(n)+"', name='"+sName+"', tag='"+sTag+"', resref='"+sResref+"', icon='"+IntToString(nIcon)+"', color='"+sColor+"', description='"+sDescription+"', frequency='1'";
 		SendMessageToPC(oPC, sQuery);
 		SQLExecDirect(sQuery);
 		
