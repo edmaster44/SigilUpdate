@@ -1,5 +1,4 @@
 #include "x2_inc_itemprop"
-#include "ps_inc_equipment"
 //Applies Wisdom damage as magical damage on too both gloves and Flurry-ready Monk weapons
 const int FEAT_EPIC_MEDITATIVE_STRIKES = 2840;
 //Gets the Property from wisdom, converts into Magical Damage
