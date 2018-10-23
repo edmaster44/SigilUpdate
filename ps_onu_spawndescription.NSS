@@ -38,6 +38,7 @@ int GetRandomIcon(object oPC, string sPartial) {
 
 void CreateBookOnTarget(object oPC) {
 
+	SendMessageToPC(oPC, "creating a story. . ");
 	struct character char1 = DetailCharacter(2); //usually protagonist
 	int nGender = (char1.gender==GENDER_MALE?GENDER_MALE:GENDER_FEMALE); //gender of character 2 (usually love interest) is the opposite of character 1
 	struct character char2 = DetailCharacter(nGender);
@@ -57,10 +58,13 @@ void CreateBookOnTarget(object oPC) {
 		sTitle = GenerateLegendTitle(char1, char3); //title based on hero and villain
 		sStory = GenerateLegend("", char1, char2, char3, char4, char5);
 	}
+	SendMessageToPC(oPC, sTitle);
+	SendMessageToPC(oPC, sStory);
 	
 	object oBook = CreateItemOnObject("ps_crft_basebook", oPC);
 	SetFirstName(oBook, sTitle);
 	SetDescription(oBook, sStory);
+	SendMessageToPC(oPC, "getting icon");
 	int nIcon = GetRandomIcon(oPC, "book");
 	SetItemIcon(oBook, nIcon);
 }
@@ -73,26 +77,32 @@ void CreatePaperJunkOnTarget(object oPC) {
 
 	int nRandom = d100();
 	if (nRandom <= 15) {
+		SendMessageToPC(oPC, "Generating grocery list");
 		sTitle = "Grocery List";
 		sContent = GenerateGroceryList();
 		nIcon = GetRandomIcon(oPC, "it_qi_smugglerdocs");
 	} else if (nRandom <= 30) {
+		SendMessageToPC(oPC, "Generating alchemical recipe");
 		sTitle = "Alchemical Recipe";
 		sContent = GenerateRecipeText();
 		nIcon = GetRandomIcon(oPC, "it_qi_smugglerdocs");
 	} else if (nRandom <= 45) {
+		SendMessageToPC(oPC, "Generating old wanted poster");
 		sTitle = "Old Wanted Poster";
 		sContent = GenerateWantedPoster();
 		nIcon = GetRandomIcon(oPC, "it_blankscroll");
 	} else if (nRandom <= 60) {
+		SendMessageToPC(oPC, "Generating love letter");
 		sTitle = "Love Letter";
 		sContent = GenerateLoveLetterText();
 		nIcon = GetRandomIcon(oPC, "it_qi_issanidoc");
 	} else {
+		SendMessageToPC(oPC, "Generating book");
 		CreateBookOnTarget(oPC);
 		return;
 	}
 	
+	SendMessageToPC(oPC, "creating the object");
 	object oPaper = CreateItemOnObject("ps_crft_basemisc", oPC);
 	SetFirstName(oPaper, sTitle);
 	SetDescription(oPaper, sContent);
@@ -459,7 +469,7 @@ void CreateTrinketOnTarget(object oPC) {
 void main() {
 
 	object oPC = GetLastUsedBy();
-	SendMessageToPC(oPC, "Generating Paper");
+	SendMessageToPC(oPC, "Generating paper");
 	CreatePaperJunkOnTarget(oPC);
 	//CreateExperimentalPotionOnTarget(oPC, d3());
 	//CreateExperimentalScrollOnTarget(oPC, d3());
