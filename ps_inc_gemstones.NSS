@@ -1,3 +1,4 @@
+#include "nwnx_sql"
 const string sGemScreen = "SCOD_GEMCUTTING";
 const string xmlGemFile = "scod_gemcutting_window.xml";
 const string gemstoneBox = "plc_chest_gemstonegeneration";
@@ -82,23 +83,38 @@ string GetGemstoneFullDescription(object oGem) {
 	
 }
 
+//The database should tell us how many entries there are, since nwn2 doesn't understand arrays
+//or counting arrays. . .
+int InitializeGemstoneNumber(string sColor) {
+	SpeakString("initializing "+sColor+" gemstones", TALKVOLUME_SHOUT);
+	int nCount = 0;
+	SQLExecDirect("SELECT COUNT(*) FROM gemstones WHERE color='"+sColor+"'");
+	if (SQLFetch() != SQL_ERROR) { 
+		nCount = StringToInt(SQLGetData(1));
+	} else {
+		nCount = 0;
+	}
+	SpeakString("found "+IntToString(nCount)+" "+sColor+" gemstones", TALKVOLUME_SHOUT);
+	return nCount;
+}
+
 string RollGemstoneOfColor(string sColor) {
 
+	string sResult = "";
 	object oChest = GetObjectByTag(gemstoneBox);
-	int nNum = GetNumberOfGemstonesOfColor(sColor);
-	//SpeakString("number of "+sColor+" gemstones: "+IntToString(nNum), TALKVOLUME_SHOUT);
+	int nNum = GetLocalInt(oChest, sColor+"_num");
 	if (nNum <= 0) {
-		InitializeGemstoneBox();
-		return RollGemstoneOfColor(sColor);
+		nNum = InitializeGemstoneNumber(sColor);
 	}
+	SetLocalInt(oChest, sColor+"_num", nNum);
 	int nRand = Random(nNum);
-	
-	string sVar = sColor+"_"+IntToString(nRand);
-	//SpeakString("gemstone index chosen: "+sVar, TALKVOLUME_SHOUT);
-	string sResult = GetLocalString(oChest, sColor+"_"+IntToString(nRand));
-	//SpeakString("rolled: "+sResult, TALKVOLUME_SHOUT);
+	SQLExecDirect("SELECT tag FROM gemstones WHERE color='"+sColor+"' LIMIT "+IntToString(nRand)+", 1");
+	if (SQLFetch() != SQL_ERROR) { 
+		sResult = SQLGetData(1);
+	} else {
+		sResult = "";
+	}
 	return sResult;
-
 }
 
 //Returns the tag of the identified gemstone
@@ -169,6 +185,17 @@ string GetQualityString(int nQ) {
 	return "Flawed";
 }
 
+//Returns the appropriate size string
+string GetSizeString(int nS) {
+	switch (nS) {
+		case 0: return "Small";
+		case 1: return "";
+		case 2: return "Large";
+		default: return "";
+	}
+	return "";
+}
+
 //Get Carat Weight of Rough Gemstone
 int GetCaratWeight(object oGem) {
 
@@ -211,10 +238,10 @@ void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_IN
 	string sBaseTag = GetBaseGemTag(oGem);
 	if (IsGemRough(oGem)) {
 		SetTag(oGem, sBaseTag+"_rough_q"+IntToString(nQ)+"_c"+IntToString(nSize));
-		SetFirstName(oGem, "Rough "+sBaseName+" - <Color=Gray><i>"+IntToString(nSize)+" carats</i></Color>");
+		SetFirstName(oGem, "Rough "+sBaseName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 	} else {
 		SetTag(oGem, sBaseTag+"_q"+IntToString(nQ)+"_c"+IntToString(nSize));
-		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" - <Color=Gray><i>"+IntToString(nSize)+" carats</i></Color>");
+		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 	}
 }
 
@@ -293,19 +320,19 @@ void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
 			if (nRand < 10) {
 				nQuality = Random(2);
 			} else if (nRand < 20) {
-				nSize = d20();
+				nSize = Random(2);
 			}
 		} else if (nLootLevel == 3) {
 			if (nRand < 20) {
 				nQuality = Random(2);
 			} else if (nRand < 40) {
-				nSize = d20()+5;
+				nSize = Random(2);
 			}
 		} else if (nLootLevel == 4) {
 			if (nRand < 20) {
 				nQuality = Random(3);
 			} else if (nRand < 40) {
-				nSize = d20(2)+5;
+				nSize = Random(2)+1;
 			}
 		}
 		
@@ -346,7 +373,7 @@ void RegenerateGemList(object oPC) {
 	while (GetIsObjectValid(oGem)) {
 	
 		if (GetBaseItemType(oGem) == BASE_ITEM_GEM) {
-			if (GetTag(oGem) != "gemstone_gravel" && GetIsGemstone(oGem)) { //May change later
+			if (GetTag(oGem) != "gemstone_gravel" && GetIsGemstone(oGem) && IsGemRough(oGem)) { 
 				int iconIndex = GetItemIcon(oGem);
 				string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
 				SetLocalObject(oPC, "gemrow_"+IntToString(nCount), oGem);

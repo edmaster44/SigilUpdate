@@ -1,36 +1,38 @@
 #include "ps_inc_functions"
+#include "ps_inc_gemstones"
 
 int GenerateGemSize() {
 	
-	int nRand = Random(100)+1;
-	if (nRand <= 1) //1% chance for a gem up to 100 carats
-		return (Random(100)+1); 
-	else if (nRand <= 6) //5% chance for a gem up to 50 carats
-		return (Random(50)+1);
+	int nRand = d100();
+	if (nRand <= 5) //5% chance for a large gemstone
+		return 2; 
+	else if (nRand <= 15) //10% chance for a medium gemstone
+		return 1;
 	else
-		return (Random(25)+1); //generally gems up to 25 carats
+		return 0;
 }
 
 int GenerateGemQuality() {
 
-	int nRand = Random(100)+1;
+	int nRand = d100();
 	if (nRand <= 5) //5% chance for flawless quality gem
-		return 3;
-	else if (nRand <= 25) //20% chance for regular quality gem
 		return 2;
-	else	//75% chance for flawed gem
+	else if (nRand <= 25) //20% chance for regular quality gem
 		return 1;
+	else	//75% chance for flawed gem
+		return 0;
 }
 
 void CreateGemstoneOnPC(object oPC, string sGem) {
-	int nSize =GenerateGemSize();
+	int nSize = GenerateGemSize();
 	int nQuality = GenerateGemQuality();
 	object oItem = CreateItemOnObject(sGem, oPC, 1, sGem+"_q"+IntToString(nQuality)+"_c"+IntToString(nSize), TRUE);
+	SendMessageToPC(oPC, "creating: "+sGem+"_q"+IntToString(nQuality)+"_c"+IntToString(nSize));
 	string sName = GetName(oItem);
-	SetFirstName(oItem, sName+" - <Color=Gray><i>"+IntToString(nSize)+" carats</i></Color>");
+	SetFirstName(oItem, sName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 }
 
-int GetIsGemstone(string sTag) {
+int GetIsGemstoneString(string sTag) {
 	if (FindSubString(sTag, "gemstone_rough", 0) >= 0)
 		return TRUE;
 	return FALSE;
@@ -46,7 +48,7 @@ void GiveMinedItem(object oPC) {
 	int nRand = Random(nSpawns)+1;
 	
 	string sSpawn = GetLocalString(OBJECT_SELF, "item_"+IntToString(nRand));
-	if (GetIsGemstone(sSpawn)) {
+	if (GetIsGemstoneString(sSpawn)) {
 		CreateGemstoneOnPC(oPC, sSpawn);
 	} else {
 		CreateItemOnObject(sSpawn, oPC, 1);

@@ -7,14 +7,15 @@ void main () {
 	int okRoll = 15;
 	int goodRoll = 20;
 	int excellentRoll = 25;
-	int epicRoll = 30;
+	int fantasticRoll = 30;
+	int epicRoll = 35;
 	location lEffect = GetLocation(GetWaypointByTag("wp_gembench_effect"));
 	string sEffect = "fx_hit_spark_stand";
 	
 
 	object oPC = OBJECT_SELF;
 	object oGem = GetLocalObject(oPC, "selected_gem");
-	if (!GetIsObjectValid(oGem) || !GetIsGemstone(oGem)) {
+	if (!GetIsObjectValid(oGem) || !GetIsGemstone(oGem) || !IsGemRough(oGem)) {
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 		return;
 	}
@@ -24,6 +25,8 @@ void main () {
 	
 	//SendMessageToPC(oPC, "cut the gem: "+GetName(oGem));
 	int nSize = GetCaratWeight(oGem);
+	if (nSize > 2) //randomly update size if its an older gemstone
+		nSize = d3()-1;
 	int nQuality = GetGemQuality(oGem);
 	
 	int nRank = GetSkillRank(GEMSTONE_SKILL_ID, oPC, FALSE);
@@ -35,71 +38,78 @@ void main () {
 		oGem = CreateItemOnObject("gemstone_gravel", oPC);
 		sEffect = "fx_wooden_explosion";
 	} else if (nRoll < okRoll) {
-		SendMessageToPC(oPC, "Cutting failure. Gemstone size reduced. Try again.");
-		nSize -= d20();
-		if (nSize < 1) 
-			nSize = 1;
-		SetDetailsOfGemstone(oGem, nQuality, nSize, oPC);
-		sEffect = "fx_hit_spark_stand";
-	} else  {
-		SendMessageToPC(oPC, "Cutting success.");
-		int nQ = nQuality;
-		int nS = nSize;
-		object oNewGem;
-		if (!IsGemRough(oGem)) {
-			if (nSize <= 1 || nQuality == 2) {
-				SendMessageToPC(oPC, "You cannot cut this gem any further");
-				sEffect = "";
-			} else {
-				nS = nSize-d20();
-				if (nS <= 0)
-					nS = d3();
-					
-				if (nRoll >= epicRoll) {
-					nQ++;
-					sEffect = "fx_hit_spark_parry";
-				} else if (nQ == 0 &&nRoll >= excellentRoll) {
-					nQ++;
-					sEffect = "fx_hit_spark_crit";
-				} else {
-					SendMessageToPC(oPC, "You were not able to further improve the gem.");
-				}
-			}
-			SetDetailsOfGemstone(oGem, nQ, nS, oPC);
-		} else {
-			if (nSize > 75) {
-				if (nRoll >= epicRoll) {
-					oNewGem = CreateItemOnObject(sBaseTag, oPC, 1);
-					nQ = d3()-1;
-					nS = 25-d20();
-					SetDetailsOfGemstone(oNewGem, nQ, nS, oPC);
-					sEffect = "fx_hit_spark_parry";
-				}  
-			} if (nSize > 50) {
-				if (nRoll >= excellentRoll) {
-					sEffect = "fx_hit_spark_crit";
-					object oNewGem; 
-					nQ = d3()-2;
-					nS = 23-d20();
-					if (nQ < 0) {
-						CreateItemOnObject("gemstone_gravel", oPC);
-					} else {
-						oNewGem	= CreateItemOnObject(sBaseTag, oPC, 1);
-						SetDetailsOfGemstone(oNewGem, nQ, nS, oPC);
-					}
-				}
-			}
-			
-			nQ = 0;
-			nS = nSize-d20();
-			if (nS <= 0)
-				nS = d6();
-				
+		if (nSize > 0) { //if the gemstone is large enough, you can afford a failure
+			SendMessageToPC(oPC, "Cutting failure. Gemstone size reduced. Try again.");
+			nSize -= 1;
+			SetDetailsOfGemstone(oGem, nQuality, nSize, oPC);
+			sEffect = "fx_hit_spark_stand";
+		} else { //otherwise, gemstone is destroyed
+			SendMessageToPC(oPC, "Cutting failure. Gemstone reduced to rubble.");
 			TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
-			oGem = CreateItemOnObject(sBaseTag, oPC, 1);
-			SetDetailsOfGemstone(oGem, nQ, nS, oPC);
+			oGem = CreateItemOnObject("gemstone_gravel", oPC);
+			sEffect = "fx_wooden_explosion";
 		}
-		
+	} else if (nRoll < goodRoll) {
+		SendMessageToPC(oPC, "Cutting success. You have cut a flawed gemstone.");
+		TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
+		oGem = CreateItemOnObject(sBaseTag, oPC, 1);
+		SetDetailsOfGemstone(oGem, 0, 1, oPC);
+		sEffect = "fx_hit_spark_parry";
+	} else if (nRoll < excellentRoll) {
+		if (nQuality == 2) //we can't do flawless yet
+			nQuality = 1;
+		SendMessageToPC(oPC, "Cutting success. You have cut a "+GetQualityString(nQuality)+" gemstone.");
+		TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
+		oGem = CreateItemOnObject(sBaseTag, oPC, 1);
+		SetDetailsOfGemstone(oGem, nQuality, 1, oPC);
+		sEffect = "fx_hit_spark_parry";
+	} else if (nRoll < fantasticRoll) {
+		SendMessageToPC(oPC, "Cutting success. You have cut a "+GetQualityString(nQuality)+" gemstone.");
+		if (nSize > 1) {
+			SendMessageToPC(oPC, "You have also cut a flawed gemstone.");
+			object oExtraGem = CreateItemOnObject(sBaseTag, oPC, 1);
+			SetDetailsOfGemstone(oExtraGem, 0, 1, oPC);
+			sEffect = "fx_hit_spark_crit";
+		} else {
+			sEffect = "fx_hit_spark_parry";
+		}
+		TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
+		oGem = CreateItemOnObject(sBaseTag, oPC, 1);
+		SetDetailsOfGemstone(oGem, nQuality, 1, oPC);
+	} else if (nRoll < epicRoll) { //can cut up to two gems
+		SendMessageToPC(oPC, "Cutting success. You have cut a "+GetQualityString(nQuality)+" gemstone.");
+		if (nSize > 0) {
+			int nQ = 0;
+			if (nQuality == 2) 
+				nQ = 1;
+			SendMessageToPC(oPC, "You have also cut a "+GetQualityString(nQ)+" gemstone.");
+			object oExtraGem = CreateItemOnObject(sBaseTag, oPC, 1);
+			SetDetailsOfGemstone(oExtraGem, nQ, 1, oPC);
+			sEffect = "fx_hit_spark_crit";
+		} else {
+			sEffect = "fx_hit_spark_parry";
+		}
+		TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
+		oGem = CreateItemOnObject(sBaseTag, oPC, 1);
+		SetDetailsOfGemstone(oGem, nQuality, 1, oPC);
+	} else { //can cut up to three gems if you have a large flawless gem
+		SendMessageToPC(oPC, "Cutting success. You have cut a "+GetQualityString(nQuality)+" gemstone.");
+		if (nSize > 1) {
+			int nQ = 0;
+			if (nQuality == 2) 
+				nQ = 1;
+			SendMessageToPC(oPC, "You have also cut a "+GetQualityString(nQ)+" gemstone.");
+			object oExtraGem = CreateItemOnObject(sBaseTag, oPC, 1);
+			SetDetailsOfGemstone(oExtraGem, nQ, 1, oPC);
+		} if (nSize > 0) {
+			SendMessageToPC(oPC, "You have also cut a flawed gemstone.");
+			object oExtraGem = CreateItemOnObject(sBaseTag, oPC, 1);
+			SetDetailsOfGemstone(oExtraGem, 0, 1, oPC);
+		}
+		TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
+		oGem = CreateItemOnObject(sBaseTag, oPC, 1);
+		SetDetailsOfGemstone(oGem, nQuality, 1, oPC);
+		sEffect = "fx_hit_spark_crit";
 	}
 	
 	SetLocalObject(oPC, "selected_gem", oGem);
