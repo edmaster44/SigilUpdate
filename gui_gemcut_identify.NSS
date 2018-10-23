@@ -31,7 +31,7 @@ void main () {
 	} else {
 		SetTag(oItem, sNewTag);
 		string sName = GetName(oItem);
-		SetFirstName(oItem, "Rough "+sName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");	
+		SetFirstName(oItem, "Rough "+sName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");	
 	}
 	
 	SetItemIcon(oItem, GetItemIcon(oGem));

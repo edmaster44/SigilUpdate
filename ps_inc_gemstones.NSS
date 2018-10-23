@@ -188,9 +188,9 @@ string GetQualityString(int nQ) {
 //Returns the appropriate size string
 string GetSizeString(int nS) {
 	switch (nS) {
-		case 0: return "Small";
+		case 0: return "- Small";
 		case 1: return "";
-		case 2: return "Large";
+		case 2: return "- Large";
 		default: return "";
 	}
 	return "";
@@ -238,10 +238,10 @@ void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_IN
 	string sBaseTag = GetBaseGemTag(oGem);
 	if (IsGemRough(oGem)) {
 		SetTag(oGem, sBaseTag+"_rough_q"+IntToString(nQ)+"_c"+IntToString(nSize));
-		SetFirstName(oGem, "Rough "+sBaseName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");
+		SetFirstName(oGem, "Rough "+sBaseName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 	} else {
 		SetTag(oGem, sBaseTag+"_q"+IntToString(nQ)+"_c"+IntToString(nSize));
-		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");
+		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 	}
 }
 
@@ -409,7 +409,10 @@ void UpdateSelectedGem(object oPC) {
 	
 	if (IsGemIdentified(oGem)) {
 		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", TRUE);
-		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", FALSE);
+		if (IsGemRough(oGem))
+			SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", FALSE);
+		else
+			SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 	} else {
 		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", FALSE);
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);

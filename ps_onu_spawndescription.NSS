@@ -470,8 +470,8 @@ void main() {
 
 	object oPC = GetLastUsedBy();
 	SendMessageToPC(oPC, "Generating paper");
-	CreatePaperJunkOnTarget(oPC);
-	//CreateExperimentalPotionOnTarget(oPC, d3());
-	//CreateExperimentalScrollOnTarget(oPC, d3());
-	//CreateTrinketOnTarget(oPC);
+	//CreatePaperJunkOnTarget(oPC);
+	CreateExperimentalPotionOnTarget(oPC, d3());
+	CreateExperimentalScrollOnTarget(oPC, d3());
+	CreateTrinketOnTarget(oPC);
 }
