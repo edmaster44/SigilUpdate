@@ -208,7 +208,7 @@ void PS_HOM_UnholyBlight(object oPC, int nSpell, location lTarget)
     effect eDam, eVis, eLink, eSick, eEvil;
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
     	{	if (nSpell == 1475)
             {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
@@ -236,7 +236,7 @@ void PS_HOM_UnholyBlight(object oPC, int nSpell, location lTarget)
                     else
 					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_DISEASE))
-						{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSick, oTarget, RoundsToSeconds(d4(1))));	}
+						{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSick, oTarget, RoundsToSeconds((1))));	}
 					}
 				}
 			}
@@ -341,7 +341,7 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRupture, oTarget);
 				if (nSave == 0)
 				{	SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
-					DelayCommand(6.0f, PS_RunRuptureOngoing(oTarget, nCasterLevel));	}
+					DelayCommand(1.0f, PS_RunRuptureOngoing(oTarget, nCasterLevel));	}
 
             }
         }

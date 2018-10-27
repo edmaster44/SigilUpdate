@@ -11,7 +11,11 @@
 #include "nw_i0_spells"
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
-#include "ps_meditative_strikes"
+
+
+
+
+
 
 const int SIGIL_EQUIP_FX = -9444;
 

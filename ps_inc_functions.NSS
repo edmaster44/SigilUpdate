@@ -5,6 +5,7 @@
 #include "x0_i0_petrify"
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
+#include "ps_inc_equipment"
 
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
@@ -28,6 +29,7 @@ const int FEAT_SUCCUBUS_SPELLCASTING_WARLOCK 			= 2821;
 const int FEAT_HEAVY_ARMOR_OPTIMIZATION 				= 2836;
 const int FEAT_HEAVY_ARMOR_OPTIMIZATION_GREATER 		= 2837;
 const int FEAT_HEAVY_ARMOR_OPTIMIZATION_EPIC			= 2838;
+const int FEAT_SUCCUBUS_SPELLCASTING_BARD 				= 2841;
 
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION			= 1833;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER	= 1834;
@@ -1507,6 +1509,7 @@ int GetBardicClassLevelForUses(object oPC)
 	nBARD = nBARD + GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC); //FloatToInt(IntToFloat(nBrachina)*0.8f)
 	if (GetHasFeat(2787, oPC, TRUE) == TRUE) nBARD = nBARD + (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_BRACHINA, oPC))*0.8f));
 	if (GetHasFeat(2678, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
+	if (GetHasFeat(2841, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
 	if (GetHasFeat(2572, oPC, TRUE) == TRUE) nBARD = nBARD + (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC))*0.8));
 	return nBARD;
 }
@@ -1517,6 +1520,8 @@ int GetBardicClassLevelForSongs(object oPC)
 	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
 	nBARD = nBARD + GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);
 	if (GetHasFeat(2678, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
+	return nBARD;
+	if (GetHasFeat(2841, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
 	return nBARD;
 }
 

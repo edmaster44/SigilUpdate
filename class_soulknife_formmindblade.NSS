@@ -21,8 +21,11 @@ void main()
 		
 	int size = GetCreatureSize(oPC);	
 	int soulknifeLevels = GetLevelByClass(SOULKNIFE_ID, oPC);
+	int nDex =  GetAbilityModifier(ABILITY_DEXTERITY, oPC);
+	int nStr = GetAbilityModifier(ABILITY_STRENGTH,oPC);
 	
 	int spellID = GetSpellId();
+	
 	
 	string template;
 	
@@ -36,7 +39,7 @@ void main()
 				template = MINDBLADE_TWOHANDEDSWORD_TEMPLATE;
 			break;
 		case FORM_MINDBLADE_SINGLE :
-			if (size == CREATURE_SIZE_SMALL || GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
+			if (size == CREATURE_SIZE_SMALL || nDex > nStr)
 				template = MINDBLADE_SHORTSWORD_TEMPLATE;
 			else
 				template = MINDBLADE_LONGSWORD_TEMPLATE;
