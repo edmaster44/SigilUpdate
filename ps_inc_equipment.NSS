@@ -12,11 +12,6 @@
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
 
-
-
-
-
-
 const int SIGIL_EQUIP_FX = -9444;
 
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 174

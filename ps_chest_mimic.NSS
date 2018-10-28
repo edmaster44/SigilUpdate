@@ -161,14 +161,18 @@ void main()
 		if(iChestWait == 0)
 			iChestWait = cChestWait;
 					
-		if(GetSQLTime()<GetLocalInt(oChest,"TS"))
+		int lastStamped = GetLocalInt(oChest,"TS");
+		int currentTime = GetSQLTime();
+		SpeakString("last stamped: "+IntToString(lastStamped)+" vs. now "+IntToString(currentTime)+" vs. wait: "+IntToString(iChestWait), TALKVOLUME_SHOUT);
+		if(currentTime<lastStamped)
 			TimeStampSQL(oChest,"TS");
 	
 		if(GetLocalString(oChest,"LASTOPENER")==GetPCPublicCDKey(oPC))
 			return;
 						
-		if(GetSQLTime()-GetLocalInt(oChest,"TS") > iChestWait)
+		if(currentTime-lastStamped > iChestWait)
 		{
+			SpeakString("creating treasure", TALKVOLUME_SHOUT);
 			SetLocalString(oChest,"LASTOPENER", GetPCPublicCDKey(oPC));	
 		
 			TimeStampSQL(oChest,"TS");

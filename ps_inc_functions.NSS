@@ -5,7 +5,6 @@
 #include "x0_i0_petrify"
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
-#include "ps_inc_equipment"
 
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
