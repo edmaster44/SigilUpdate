@@ -2,9 +2,8 @@
 
 void main () {
 
-	InitializeGemstoneBox();
 	object oPC = GetLastUsedBy();
-	
+	SendMessageToPC(oPC, "found gem!");
 	CreateRandomGemstoneOnSpawnOrChest(oPC, d4());
 	
 }

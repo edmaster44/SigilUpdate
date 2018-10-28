@@ -6,6 +6,7 @@
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
 
+
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest level in group

@@ -284,32 +284,61 @@ void InitializeGemstoneBox() {
 	
 }
 
-//Gets a random gemstone from the gemstone box
-string GetRandomGemstoneToSpawn() {
-
-	InitializeGemstoneBox();
-
-	object oChest = GetNearestObjectByTag(gemstoneBox);
-	int nAll = GetLocalInt(oChest, "Gemstone_Num"); 
-	//AssignCommand(oChest, ActionSpeakString("found "+IntToString(nAll)+" gemstones", TALKVOLUME_SHOUT));
+//Randomly picks a color to sort by
+string PickRandomGemColor() {
+	string sColor = "White";
 	
-	int nRand = Random(nAll);
-	//SpeakString("chosen number "+IntToString(nRand), TALKVOLUME_SHOUT);
-	string sChosenTag = GetLocalString(oChest, "Gemstone_"+IntToString(nRand));
-	//SpeakString("chosen "+sChosenTag, TALKVOLUME_SHOUT);
-	
-	if (sChosenTag == "") {
-		sChosenTag = "gemstone_vfx_andar";
+	int nRand = Random(9);
+	switch(nRand) {
+		case 0: sColor = "Red"; break;
+		case 1: sColor = "Blue"; break;
+		case 2: sColor = "Green"; break;
+		case 3: sColor = "Yellow"; break;
+		case 4: sColor = "Black"; break;
+		case 5: sColor = "Black"; break;
+		case 6: sColor = "Pearl"; break;
+		case 7: sColor = "White"; break;
+		case 8: sColor = "White"; break;
 	}
 	
-	return sChosenTag;
+	return sColor;
+}
+
+//Gets a random gemstone from the gemstone box
+object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
+
+	object oChest = GetObjectByTag(gemstoneBox);
+	if (sColor == "")
+		sColor = PickRandomGemColor();
+
+	int nNum = GetLocalInt(oChest, sColor+"_num");
+	if (nNum <= 0) {
+		nNum = InitializeGemstoneNumber(sColor);
+	}
+	SetLocalInt(oChest, sColor+"_num", nNum);
 	
+	int nRand = Random(nNum);
+	object oGem;
+	SQLExecDirect("SELECT name, tag, resref, icon, description FROM gemstones WHERE color='"+sColor+"' LIMIT "+IntToString(nRand)+", 1");
+	if (SQLFetch() != SQL_ERROR) { 
+		string sName = SQLGetData(1);
+		string sTag = SQLGetData(2);
+		string sResref = SQLGetData(3);
+		int nIcon = StringToInt(SQLGetData(4));
+		string sDescrip = SQLGetData(5);
+		oGem = CreateItemOnObject(sResref, oTarget, 1);
+		SetFirstName(oGem, sName);
+		SetTag(oGem, sTag);
+		SetItemIcon(oGem, nIcon);
+		SetDescription(oGem, sDescrip);
+	}
+	return oGem;
+
 }
 
 void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
 
-	string sBaseTag = GetRandomGemstoneToSpawn();
-	object oGem = CreateItemOnObject(sBaseTag, oTarget, 1);
+	object oGem = GetRandomGemstoneToSpawn(oTarget);
 	
 	if (GetIsGemstone(oGem)) {
 		int nSize = 1;
