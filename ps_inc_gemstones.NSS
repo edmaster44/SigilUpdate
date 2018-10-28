@@ -326,11 +326,19 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 		string sResref = SQLGetData(3);
 		int nIcon = StringToInt(SQLGetData(4));
 		string sDescrip = SQLGetData(5);
-		oGem = CreateItemOnObject(sResref, oTarget, 1);
-		SetFirstName(oGem, sName);
-		SetTag(oGem, sTag);
-		SetItemIcon(oGem, nIcon);
-		SetDescription(oGem, sDescrip);
+		if (sTag == "gemstone_vfx_chardalyn") {
+			oGem = CreateItemOnObject(sTag, oTarget, 1);
+		} else {
+			oGem = CreateItemOnObject(sResref, oTarget, 1);
+			SetFirstName(oGem, sName);
+			if (sTag == "gemstone_amber_1" || sTag == "gemstone_amber_2") {
+				SetTag(oGem, "ps_summoner");
+			} else {
+				SetTag(oGem, sTag);
+			}
+			SetItemIcon(oGem, nIcon);
+			SetDescription(oGem, sDescrip);
+		}
 	}
 	return oGem;
 

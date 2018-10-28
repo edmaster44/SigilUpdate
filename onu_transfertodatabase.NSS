@@ -13,7 +13,9 @@ void main () {
     while (GetIsObjectValid(oItem)) {
 	
 		string sResref = "gemstone_value_low";
-		if (GetGoldPieceValue(oItem) >= 299) {
+		if (!GetIsGemstone(oItem)) {
+			sResref = "gemstone_value_vfx";
+		} else if (GetGoldPieceValue(oItem) >= 299) {
 			sResref = "gemstone_value_high";
 		} else if (GetGoldPieceValue(oItem) >= 99) {
 			sResref = "gemstone_value_medium";

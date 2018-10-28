@@ -24,6 +24,7 @@ string KadyxMessage() {
 //Kadyx Warning Message
 void KadyxApproachMessage(object oPC, int nKadyx) {
 	string sMessage = KadyxMessage();
+	FloatingTextStringOnCreature(sMessage, oPC);
 	object oPlayer = GetFirstFactionMember(oPC, TRUE);
 	while (GetIsObjectValid(oPlayer)) {
 		if (GetLocalInt(GetArea(oPlayer), "ENV_FATIGUE_AREA") == 5) { //Is in the slags
@@ -95,6 +96,7 @@ void Earthquake(object oPC) {
 }
 
 void VargouilleSwarm(object oPC) {
+	SendMessageToPC(oPC, "<C=Gray>A group of vargouilles appears; apparently you have invaded their territory.");
 	float fLow = 6.0f;
 	float fHigh = 10.0f;
 
@@ -143,7 +145,7 @@ void main () {
 	
 	int nKadyx = GetLocalInt(OBJECT_SELF, "KadyxCount");
 	int nKadyxComes = GetLocalInt(OBJECT_SELF, "KadyxComing");
-	SendMessageToPC(OBJECT_SELF, IntToString(nKadyx)+" vs. "+IntToString(nKadyxComes));
+	//SendMessageToPC(OBJECT_SELF, IntToString(nKadyx)+" vs. "+IntToString(nKadyxComes));
 	if (nKadyx == nKadyxComes) {
 		KadyxArrives(OBJECT_SELF);
 	} else if (nKadyx == (nKadyxComes-1) || nKadyx == (nKadyxComes-3) || nKadyx == (nKadyxComes-5)) {
