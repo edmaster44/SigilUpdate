@@ -7,6 +7,7 @@ const int cChestWait = 915;
 
 void FillGold(object oChest)
 {
+	SpeakString("filling gold", TALKVOLUME_SHOUT);
 	int iGolddice = GetLocalInt(oChest,"GOLDDICE");
 	int iGoldnr = GetLocalInt(oChest,"GOLDNR");
 	int iGoldcons = GetLocalInt(oChest,"GOLDCONS");
@@ -60,18 +61,13 @@ void FillSpecificItem(object oChest, string sTreasure, int nType = 1)
 
 void FillItems(object oChest)
 {
+	SpeakString("filling items", TALKVOLUME_SHOUT);
 	string sItem;
 	int nAmount=0;
 	int i=0;
 	sItem = GetLocalString(oChest,"TAG");
 	if ( sItem != "" ) {
 		dbCreateItemOnObject(sItem, oChest, 1);
-	}
-	
-	if (GetTag(oChest) == "ps_githint_chest") {
-		if(d100() > 70) {
-			CreateItemOnObject("astral_quest_obj", oChest);
-		}
 	}
 	
 	if (Random(200) < 1) CardsCreateCardOnSpawnOrChest(oChest);
@@ -117,6 +113,7 @@ void TimeStampSQL(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 
 void CleanChest(object oChest)
 {
+	SpeakString("cleaning chest", TALKVOLUME_SHOUT);
 	object oItem = GetFirstItemInInventory(oChest);
 	if(GetIsObjectValid(oItem)) {
 	    while(GetIsObjectValid(oItem))  {
@@ -133,6 +130,7 @@ void main()
 	int iChestWait = GetLocalInt(oChest,"RESPAWN");
 	int iMimic = GetLocalInt(oChest, "MIMIC_CHANCE");
 	object oPC = GetLastOpenedBy();
+	SpeakString("opening chest", TALKVOLUME_SHOUT);
 	
 	if (d100() < iMimic) {
 		string sMimic = GetLocalString(oChest, "MIMIC_TAG");
@@ -140,6 +138,7 @@ void main()
 		float nMimicHigh = IntToFloat(GetLocalInt(oChest, "MIMIC_HIGH_CR"));
   		float avg = PS_GetAvgPartylevel(oPC,PS_GetMaxPartylevel(oPC));
 		int iDiff = PS_GetDifficulty(oPC);
+		SpeakString("spawning mimic "+sMimic, TALKVOLUME_SHOUT);
 		
 		string mod = "";
 		if(nMimicLow==0.0f || nMimicHigh==0.0f || iDiff == DIFFLOW)
@@ -158,6 +157,7 @@ void main()
 		SpawnMonster(OBJECT_SELF, sMimic, OBJECT_SELF, avg, iEliteChance, mod);
 		DestroyObject(OBJECT_SELF, 0.1f);
 	} else {
+		SpeakString("spawning treasure", TALKVOLUME_SHOUT);
 		if(iChestWait == 0)
 			iChestWait = cChestWait;
 					
@@ -170,15 +170,14 @@ void main()
 		if(GetLocalString(oChest,"LASTOPENER")==GetPCPublicCDKey(oPC))
 			return;
 						
-		if(currentTime-lastStamped > iChestWait)
-		{
+		if(currentTime-lastStamped > iChestWait) {
+		
 			SpeakString("creating treasure", TALKVOLUME_SHOUT);
 			SetLocalString(oChest,"LASTOPENER", GetPCPublicCDKey(oPC));	
 		
 			TimeStampSQL(oChest,"TS");
 			object oItem = GetFirstItemInInventory(oChest);
-			if( GetIsObjectValid(oItem) )
-			{
+			if( GetIsObjectValid(oItem) ) {
 				CleanChest(oChest);
 			}
 	

@@ -39,6 +39,11 @@ void KadyxApproachMessage(object oPC, int nKadyx) {
 //Kadyx eating effect
 void KadyxEats(object oPC) {
 
+	int eaten = GetLocalInt(oPC, "Kadyx_Eaten");
+	if (eaten > 0)
+		return;
+	SetLocalInt(oPC, "Kadyx_Eaten", 1);
+
 	object oWP = GetWaypointByTag("ps_death_respawn_wp");
 	effect eKnock = EffectKnockdown();
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 2.0f);
@@ -58,11 +63,15 @@ void KadyxEats(object oPC) {
 void KadyxArrives(object oPC) {
 	location lLoc = GetLocation(oPC);
 	object oPlayer = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, lLoc, TRUE);
+	int nCount = 0;
 	while(GetIsObjectValid(oPlayer)) {
+		if (nCount > 20)
+			return;
 		if (GetIsPC(oPlayer)) {
 			if (GetLocalInt(GetArea(oPlayer), "ENV_FATIGUE_AREA") == 5) //Only happens in the Slags
 				KadyxEats(oPlayer);
 		}
+		nCount++;
 		oPlayer = GetNextObjectInShape(SHAPE_SPHERE, 20.0f, lLoc, TRUE);
 	}
 }
