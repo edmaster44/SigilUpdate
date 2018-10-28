@@ -7,7 +7,6 @@ const int cChestWait = 915;
 
 void FillGold(object oChest)
 {
-	SpeakString("filling gold", TALKVOLUME_SHOUT);
 	int iGolddice = GetLocalInt(oChest,"GOLDDICE");
 	int iGoldnr = GetLocalInt(oChest,"GOLDNR");
 	int iGoldcons = GetLocalInt(oChest,"GOLDCONS");
@@ -61,7 +60,6 @@ void FillSpecificItem(object oChest, string sTreasure, int nType = 1)
 
 void FillItems(object oChest)
 {
-	SpeakString("filling items", TALKVOLUME_SHOUT);
 	string sItem;
 	int nAmount=0;
 	int i=0;
@@ -113,7 +111,6 @@ void TimeStampSQL(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 
 void CleanChest(object oChest)
 {
-	SpeakString("cleaning chest", TALKVOLUME_SHOUT);
 	object oItem = GetFirstItemInInventory(oChest);
 	if(GetIsObjectValid(oItem)) {
 	    while(GetIsObjectValid(oItem))  {
@@ -130,7 +127,6 @@ void main()
 	int iChestWait = GetLocalInt(oChest,"RESPAWN");
 	int iMimic = GetLocalInt(oChest, "MIMIC_CHANCE");
 	object oPC = GetLastOpenedBy();
-	SpeakString("opening chest", TALKVOLUME_SHOUT);
 	
 	if (d100() < iMimic) {
 		string sMimic = GetLocalString(oChest, "MIMIC_TAG");
@@ -138,7 +134,6 @@ void main()
 		float nMimicHigh = IntToFloat(GetLocalInt(oChest, "MIMIC_HIGH_CR"));
   		float avg = PS_GetAvgPartylevel(oPC,PS_GetMaxPartylevel(oPC));
 		int iDiff = PS_GetDifficulty(oPC);
-		SpeakString("spawning mimic "+sMimic, TALKVOLUME_SHOUT);
 		
 		string mod = "";
 		if(nMimicLow==0.0f || nMimicHigh==0.0f || iDiff == DIFFLOW)
@@ -157,13 +152,11 @@ void main()
 		SpawnMonster(OBJECT_SELF, sMimic, OBJECT_SELF, avg, iEliteChance, mod);
 		DestroyObject(OBJECT_SELF, 0.1f);
 	} else {
-		SpeakString("spawning treasure", TALKVOLUME_SHOUT);
 		if(iChestWait == 0)
 			iChestWait = cChestWait;
 					
 		int lastStamped = GetLocalInt(oChest,"TS");
 		int currentTime = GetSQLTime();
-		SpeakString("last stamped: "+IntToString(lastStamped)+" vs. now "+IntToString(currentTime)+" vs. wait: "+IntToString(iChestWait), TALKVOLUME_SHOUT);
 		if(currentTime<lastStamped)
 			TimeStampSQL(oChest,"TS");
 	
@@ -172,7 +165,6 @@ void main()
 						
 		if(currentTime-lastStamped > iChestWait) {
 		
-			SpeakString("creating treasure", TALKVOLUME_SHOUT);
 			SetLocalString(oChest,"LASTOPENER", GetPCPublicCDKey(oPC));	
 		
 			TimeStampSQL(oChest,"TS");

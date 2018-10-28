@@ -45,8 +45,8 @@ void KadyxEats(object oPC) {
 	SetLocalInt(oPC, "Kadyx_Eaten", 1);
 
 	object oWP = GetWaypointByTag("ps_death_respawn_wp");
-	effect eKnock = EffectKnockdown();
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 2.0f);
+	//effect eKnock = EffectKnockdown();
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 2.0f);
 	int nDam = FloatToInt(IntToFloat(GetCurrentHitPoints(oPC))*0.8f);
 	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
 	
@@ -131,8 +131,6 @@ void VargouilleSwarm(object oPC) {
 }
 
 void main () {
-
-	SendMessageToPC(OBJECT_SELF, "Slags loop running");
 
 	if (!CanRunEnvironmentLoop("slags_timestamp", slagsTime))
 		return;
