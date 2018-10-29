@@ -86,7 +86,6 @@ string GetGemstoneFullDescription(object oGem) {
 //The database should tell us how many entries there are, since nwn2 doesn't understand arrays
 //or counting arrays. . .
 int InitializeGemstoneNumber(string sColor) {
-	SpeakString("initializing "+sColor+" gemstones", TALKVOLUME_SHOUT);
 	int nCount = 0;
 	SQLExecDirect("SELECT COUNT(*) FROM gemstones WHERE color='"+sColor+"'");
 	if (SQLFetch() != SQL_ERROR) { 
@@ -94,7 +93,6 @@ int InitializeGemstoneNumber(string sColor) {
 	} else {
 		nCount = 0;
 	}
-	SpeakString("found "+IntToString(nCount)+" "+sColor+" gemstones", TALKVOLUME_SHOUT);
 	return nCount;
 }
 
@@ -319,13 +317,15 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 	
 	int nRand = Random(nNum);
 	object oGem;
-	SQLExecDirect("SELECT name, tag, resref, icon, description FROM gemstones WHERE color='"+sColor+"' LIMIT "+IntToString(nRand)+", 1");
+	SQLExecDirect("SELECT name, tag, resref, icon, description, vfx, duration FROM gemstones WHERE color='"+sColor+"' LIMIT "+IntToString(nRand)+", 1");
 	if (SQLFetch() != SQL_ERROR) { 
 		string sName = SQLGetData(1);
 		string sTag = SQLGetData(2);
 		string sResref = SQLGetData(3);
 		int nIcon = StringToInt(SQLGetData(4));
 		string sDescrip = SQLGetData(5);
+		string sVFX = SQLGetData(6);
+		float fDur = StringToFloat(SQLGetData(7));
 		if (sTag == "gemstone_vfx_chardalyn") {
 			oGem = CreateItemOnObject(sTag, oTarget, 1);
 		} else {
@@ -338,6 +338,8 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 			}
 			SetItemIcon(oGem, nIcon);
 			SetDescription(oGem, sDescrip);
+			SetLocalString(oGem, "VFX", sVFX);
+			SetLocalFloat(oGem, "Duration", fDur);
 		}
 	}
 	return oGem;

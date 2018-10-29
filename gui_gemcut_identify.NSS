@@ -22,7 +22,7 @@ void main () {
 	int nSize = GetCaratWeight(oGem);
 	int nQuality = GetGemQuality(oGem);
 	string sType = RollGemstoneType(oGem);
-	SendMessageToPC(oPC, "Debug: creating "+sType+" from "+GetTag(oGem));
+	//SendMessageToPC(oPC, "Debug: creating "+sType+" from "+GetTag(oGem));
 	 
 	object oItem = CreateItemOnObject(sType, oPC, 1);
 	string sNewTag = sType+"_rough_q"+IntToString(nQuality)+"_c"+IntToString(nSize);

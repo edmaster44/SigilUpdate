@@ -3,7 +3,6 @@
 void main () {
 
 	object oPC = GetLastUsedBy();
-	SendMessageToPC(oPC, "found gem!");
 	CreateRandomGemstoneOnSpawnOrChest(oPC, d4());
 	
 }

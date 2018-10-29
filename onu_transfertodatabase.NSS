@@ -26,8 +26,10 @@ void main () {
 		int nIcon = GetItemIcon(oItem);
 		string sColor = GetLocalString(oItem, "Color");
 		string sDescription = GetLocalString(oItem, "GemDescription")+"\n\n"+GetLocalString(oItem, "MineralDescription");
+		string sVFX = GetLocalString(oItem, "VFX");
+		float fDur = GetLocalFloat(oItem, "Duration");
 	
-		string sQuery = "INSERT INTO gemstones SET gem_id='"+IntToString(n)+"', name='"+sName+"', tag='"+sTag+"', resref='"+sResref+"', icon='"+IntToString(nIcon)+"', color='"+sColor+"', description='"+sDescription+"', frequency='1'";
+		string sQuery = "INSERT INTO gemstones SET gem_id='"+IntToString(n)+"', name='"+sName+"', tag='"+sTag+"', resref='"+sResref+"', icon='"+IntToString(nIcon)+"', color='"+sColor+"', description='"+sDescription+"', frequency='1', vfx='"+sVFX+"', duration='"+FloatToString(fDur)+"'";
 		SendMessageToPC(oPC, sQuery);
 		SQLExecDirect(sQuery);
 		

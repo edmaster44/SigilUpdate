@@ -27,7 +27,6 @@ void CreateGemstoneOnPC(object oPC, string sGem) {
 	int nSize = GenerateGemSize();
 	int nQuality = GenerateGemQuality();
 	object oItem = CreateItemOnObject(sGem, oPC, 1, sGem+"_q"+IntToString(nQuality)+"_c"+IntToString(nSize), TRUE);
-	SendMessageToPC(oPC, "creating: "+sGem+"_q"+IntToString(nQuality)+"_c"+IntToString(nSize));
 	string sName = GetName(oItem);
 	SetFirstName(oItem, sName+" - <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 }
