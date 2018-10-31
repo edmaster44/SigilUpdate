@@ -277,10 +277,14 @@ void main () {
 	
 	SendMessageToPC(oPC, "generationg a "+IntToString(nLevel)+" weapon of "+IntToString(nPoints)+" points");
 	
-	object oItem = CreateRandomItemOfType(oPC, "W");
+	object oItem;
+	int nRand = Random(3);
+	switch (nRand) {
+		case 0: oItem = CreateRandomItemOfType(oPC, "W"); break;
+		case 1: oItem = CreateRandomItemOfType(oPC, "A"); break;
+		case 2: oItem = CreateRandomItemOfType(oPC, "M"); break;
+	}
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
-	//CreateRandomItemOfType(oPC, "A");
-	//CreateRandomItemOfType(oPC, "M");
 
 }

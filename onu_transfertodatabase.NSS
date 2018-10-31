@@ -137,13 +137,13 @@ void LoadEnchantmentsIntoDatabase(object oPC) {
 
 void LoadEnchantmentNamesIntoDatabase(object oPC) {
 
-	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'recipes_names' LIMIT 1");
+	/*SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'recipes_names' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
 		SendMessageToPC(oPC, "Creating new table");
 		SQLExecDirect("CREATE TABLE recipes_names (enchantment_id INT, prefix VARCHAR(255), suffix VARCHAR(255), arcane VARCHAR(255)");
 	} else {
 		SendMessageToPC(oPC, "Table already exists");
-	}
+	}*/
 
 	SQLExecDirect("TRUNCATE TABLE recipes_names");
 	
