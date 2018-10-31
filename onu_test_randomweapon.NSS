@@ -20,7 +20,6 @@ void SaveInformationAboutItems() {
 	
 	while (nIndex < nMax) {
 		string sType = GetItemType(nIndex);
-		SpeakString("found :"+sType, TALKVOLUME_SHOUT);
 		if (sType == "W") {
 			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumW), nIndex);
 			nNumW++;
@@ -72,7 +71,6 @@ int GetNumberofEnchantmentsAvailable(object oObj, int value) {
 
 	string sSQL = "SELECT COUNT(*) FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
 	sSQL += GetEnchantmentItemRestriction(oObj, FALSE);
-	SpeakString(sSQL, TALKVOLUME_SHOUT);
 	SQLExecDirect(sSQL);
 	if (SQLFetch() != SQL_ERROR) { 
 		nMax = StringToInt(SQLGetData(1));
@@ -89,15 +87,15 @@ struct enchantment GetRandomEnchantmentOfValue(object oObj, int value) {
 
 	int nMax = GetNumberofEnchantmentsAvailable(oObj, value);
 	int nRand = Random(nMax);
-	SpeakString("enchantments of value "+IntToString(value)+": "+IntToString(nMax)+", chosen "+IntToString(nRand), TALKVOLUME_SHOUT);
 
 	string sSQL = "SELECT Recipe_Id FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
 	sSQL += GetEnchantmentItemRestriction(oObj, FALSE)+" LIMIT "+IntToString(nRand)+", 1";
-	SpeakString(sSQL, TALKVOLUME_SHOUT);
+	SpeakString("enchantment search sql: "+sSQL, TALKVOLUME_SHOUT);
 	
 	int recipe_id = 0;
 	if (SQLFetch() != SQL_ERROR) { 
 		recipe_id = StringToInt(SQLGetData(1));
+		SpeakString("Found enchantment id: "+IntToString(recipe_id)+" of "+IntToString(nMax)+" available", TALKVOLUME_SHOUT);
 	}
 	return LoadEnchantment(recipe_id);
 }
@@ -130,12 +128,90 @@ void GiveItemRandomEnchantments(object oItem, int nPoints) {
 	SetLocalInt(oItem, "enchantment_num", nCount);
 }
 
-object CreateRandomItemOfType(object oPC, string sType = "W") {
+object CreateRandomItemOfType(object oPC, string sType = "W", int matTier = 0) {
+	
 	struct baseitem i = GetRandomBaseItem(oPC, sType);
-	struct material m1 = GetRandomMaterial(i.matlist_1);
-	struct material m2 = GetRandomMaterial(i.matlist_2);
-	struct material m3 = GetRandomMaterial(i.matlist_3);
-	SendMessageToPC(oPC, "creating "+m1.label+", "+m2.label+", "+m3.label+", resref="+i.resref);
+	struct material m1 = LoadMaterial(0, i.matlist_1);
+	struct material m2 = LoadMaterial(0, i.matlist_2);
+	struct material m3 = LoadMaterial(0, i.matlist_3);
+	
+	if (i.matlist_1 == "SCOD_CRAFT_METAL") {
+		if (matTier == 1) {
+			int nRand = Random(2);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(23, i.matlist_1); //Cold Iron
+				case 1: m1 = LoadMaterial(24, i.matlist_1); //Silver
+			}
+		} else if (matTier == 2) {
+			int nRand = Random(6);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, i.matlist_1); //Abyssal Bloodiron
+				case 1: m1 = LoadMaterial(2, i.matlist_1); //Alchemic Platinum
+				case 2: m1 = LoadMaterial(7, i.matlist_1); //Glassteel
+				case 3: m1 = LoadMaterial(10, i.matlist_1); //Mindsilver
+				case 4: m1 = LoadMaterial(12, i.matlist_1); //Oerthblood
+				case 5: m1 = LoadMaterial(14, i.matlist_1); //Riverine
+			}
+		} else if (matTier == 3) {
+			int nRand = Random(4);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(5, i.matlist_1); //Bloodglass
+				case 1: m1 = LoadMaterial(6, i.matlist_1); //Byeshk
+				case 2: m1 = LoadMaterial(7, i.matlist_1); //Tantulhor
+				case 3: m1 = LoadMaterial(8, i.matlist_1); //Metalline
+			}
+		} else if (matTier == 4) {
+			int nRand = Random(4);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(4, i.matlist_1); //Axiomatic Brass
+				case 1: m1 = LoadMaterial(11, i.matlist_1); //Morguth-Iron
+				case 2: m1 = LoadMaterial(13, i.matlist_1); //Pandemonic Silver
+				case 3: m1 = LoadMaterial(15, i.matlist_1); //Solanian Truesteel
+			}
+		} else if (matTier > 4) {
+			int nRand = Random(2);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(9, i.matlist_1); //Meteoric Iron
+				case 1: m1 = LoadMaterial(3, i.matlist_1); //Aurorum
+			}
+		} else if (d100() < 10) {
+			int nRand = Random(6);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(17, i.matlist_1); //Copper
+				case 1: m1 = LoadMaterial(18, i.matlist_1); //Electrum
+				case 2: m1 = LoadMaterial(19, i.matlist_1); //Gold
+				case 3: m1 = LoadMaterial(20, i.matlist_1); //Platinum
+				case 4: m1 = LoadMaterial(21, i.matlist_1); //Silver
+				case 5: m1 = LoadMaterial(22, i.matlist_1); //White Gold
+			}
+		}
+	} else if (i.matlist_1 == "SCOD_CRAFT_LEATHER") {
+		if (matTier > 1) {
+			int nRand = Random(9);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, i.matlist_1); //Dragon Hide Black
+				case 1: m1 = LoadMaterial(2, i.matlist_1); //Dragon Hide Blue
+				case 2: m1 = LoadMaterial(3, i.matlist_1); //Dragon Hide Red
+				case 3: m1 = LoadMaterial(4, i.matlist_1); //Dragon Hide White
+				case 4: m1 = LoadMaterial(5, i.matlist_1); //Dragon Hide Green
+				case 5: m1 = LoadMaterial(6, i.matlist_1); //Celestial Plumes
+				case 6: m1 = LoadMaterial(7, i.matlist_1); //Demonscale
+				case 7: m1 = LoadMaterial(8, i.matlist_1); //Devilscale
+				case 8: m1 = LoadMaterial(9, i.matlist_1); //Ophidian Hide
+			}
+		}
+	} else if (i.matlist_1 == "SCOD_CRAFT_WOOD") {
+		if (matTier > 1) {
+			int nRand = Random(4);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, i.matlist_1); //Arboreal Oak
+				case 1: m1 = LoadMaterial(2, i.matlist_1); //Dragon Bone
+				case 2: m1 = LoadMaterial(3, i.matlist_1); //Formic Amber
+				case 3: m1 = LoadMaterial(4, i.matlist_1); //Twelvetrees Bark
+			}
+		}
+	}
+	
 	object obj = CreateCraftedItem(oPC, i, m1, m2, m3);
 	SetFirstName(obj, GetCraftingItemName(i, m1, m2, m3));
 	SetLocalString(obj, "material_name", m1.label);
@@ -230,7 +306,6 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 	}
 	
 	sName = RANDOM_DROP_COLOR+sName+"</C>";
-	SpeakString("name: "+sName, TALKVOLUME_SHOUT);
 	SetFirstName(oItem, sName);
 	
 	string sDescription = "";
@@ -274,15 +349,22 @@ void main () {
 	object oPC = GetLastUsedBy();
 	int nLevel = Random(30)+1;
 	int nPoints = GetPointValueForCR(nLevel);
+	int nMatLevel = nPoints-2;
+	if (nMatLevel <= 0)
+		nMatLevel = 0;
+	else
+		nMatLevel = Random(nMatLevel)+1;
 	
-	SendMessageToPC(oPC, "generationg a "+IntToString(nLevel)+" weapon of "+IntToString(nPoints)+" points");
+	SendMessageToPC(oPC, "generationg a level "+IntToString(nLevel)+" item of "+IntToString(nPoints)+" points");
 	
 	object oItem;
-	int nRand = Random(3);
+	int nRand = Random(5);
 	switch (nRand) {
-		case 0: oItem = CreateRandomItemOfType(oPC, "W"); break;
-		case 1: oItem = CreateRandomItemOfType(oPC, "A"); break;
-		case 2: oItem = CreateRandomItemOfType(oPC, "M"); break;
+		case 0: oItem = CreateRandomItemOfType(oPC, "W", nMatLevel); break;
+		case 1: oItem = CreateRandomItemOfType(oPC, "W", 0); break;
+		case 2: oItem = CreateRandomItemOfType(oPC, "A", nMatLevel); break;
+		case 3: oItem = CreateRandomItemOfType(oPC, "A", 0); break;
+		case 4: oItem = CreateRandomItemOfType(oPC, "M", 0); break;
 	}
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
