@@ -114,7 +114,7 @@ int EstimateItemPropertyPointValue(itemproperty ip);
 int GetItemPropertyPointValue(itemproperty ip);
 
 //Get the sql string to filter out inappropriate enchantments by item type
-string GetEnchantmentItemRestriction(object oItem);
+string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow);
 
 //************************************************
 //Structure to hold enchantment values
@@ -382,7 +382,7 @@ int IPGetIsInstrument(object oItem) {
 }
 
 //Get the sql string to filter out inappropriate enchantments by item type
-string GetEnchantmentItemRestriction(object oItem) {
+string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE) {
 	string sQuery = "";
 	if (IPGetIsInstrument(oItem)) sQuery = "Instrument='1'";
 	else if (IPGetIsMeleeWeapon(oItem)) sQuery = "Melee='1'";
@@ -404,7 +404,8 @@ string GetEnchantmentItemRestriction(object oItem) {
 	else if (GetBaseItemType(oItem) == 66) sQuery = "Container='1'";
 	else  sQuery = "Misc='1'";
 	
-	sQuery += " AND Can_Enchant='1'";
+	if (isEnchantWindow > 0)
+		sQuery += " AND Can_Enchant='1'";
 	
 	return sQuery;
 }
@@ -415,7 +416,7 @@ void GenerateEnchantmentTypeList(object oPC) {
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST");
 	
 	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
-	string sRestrict = GetEnchantmentItemRestriction(oItem);
+	string sRestrict = GetEnchantmentItemRestriction(oItem, TRUE);
 	
 	string sQuery = "SELECT Recipe_Id FROM recipes WHERE "+sRestrict;
 	//SendMessageToPC(oPC, "Debug: "+sQuery);
@@ -479,7 +480,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 	int nType = enchant.type;
 	int nSubType = enchant.subtype;
 	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
-	string sRestrict = GetEnchantmentItemRestriction(oItem);
+	string sRestrict = GetEnchantmentItemRestriction(oItem, TRUE);
 	
 	string sQuery = "SELECT Recipe_Id FROM recipes WHERE Type='"+IntToString(nType)+"' AND Subtype='"+IntToString(nSubType)+"' AND "+sRestrict;
 	//SendMessageToPC(oPC, "Debug: "+sQuery);

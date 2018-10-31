@@ -1759,3 +1759,35 @@ string GenerateLoveLetterText() {
 	return sText;
 
 }
+
+string CapitalizeFirstLetter(string s) {
+	string c = GetStringLeft(s, 1);
+	string rest = GetStringRight(s, GetStringLength(s)-1);
+	if (c == "a") 		return "A"+rest;
+	else if (c == "b") 	return "B"+rest;
+	else if (c == "c")	return "C"+rest;
+	else if (c == "d") 	return "D"+rest;
+	else if (c == "e") 	return "E"+rest;
+	else if (c == "f") 	return "F"+rest;
+	else if (c == "g") 	return "G"+rest;
+	else if (c == "h") 	return "H"+rest;
+	else if (c == "i") 	return "I"+rest;
+	else if (c == "j") 	return "J"+rest;
+	else if (c == "k") 	return "K"+rest;
+	else if (c == "l") 	return "L"+rest;
+	else if (c == "m") 	return "M"+rest;
+	else if (c == "n") 	return "N"+rest;
+	else if (c == "o") 	return "O"+rest;
+	else if (c == "p") 	return "P"+rest;
+	else if (c == "q") 	return "Q"+rest;
+	else if (c == "r") 	return "R"+rest;
+	else if (c == "s") 	return "S"+rest;
+	else if (c == "t") 	return "T"+rest;
+	else if (c == "u") 	return "U"+rest;
+	else if (c == "v") 	return "V"+rest;
+	else if (c == "w") 	return "W"+rest;
+	else if (c == "x") 	return "X"+rest;
+	else if (c == "y") 	return "Y"+rest;
+	else if (c == "z") 	return "Z"+rest;
+	return s;
+}
