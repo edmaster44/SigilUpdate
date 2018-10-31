@@ -90,6 +90,7 @@ struct enchantment GetRandomEnchantmentOfValue(object oObj, int value) {
 
 	string sSQL = "SELECT Recipe_Id FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
 	sSQL += GetEnchantmentItemRestriction(oObj, FALSE)+" LIMIT "+IntToString(nRand)+", 1";
+	SQLExecDirect(sSQL);
 	SpeakString("enchantment search sql: "+sSQL, TALKVOLUME_SHOUT);
 	
 	int recipe_id = 0;
