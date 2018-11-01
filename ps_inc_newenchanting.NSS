@@ -783,6 +783,8 @@ string DisplaySpecialRequirement(string sReq) {
 		line = "Must be Wizard, Sorcerer, or Bard.";
 	} else if (sReq == "CL_NATURE") {
 		line = "Must be Druid, Ranger, or Spirit Shaman.";
+	} else if (sReq == "CL_BARD") {
+		line = "Must be Bard.";
 	}
 	return line;
 }
@@ -813,6 +815,11 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq) {
 		} else {
 			return FALSE;
 		}
+	} else if (sReq == "CL_BARD") {
+		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0)
+			return TRUE;
+		else
+			return FALSE;
 	}
 	
 	return TRUE; //no special req, return true
