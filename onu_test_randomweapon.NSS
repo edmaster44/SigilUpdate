@@ -278,6 +278,15 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 		int n;
 		for (n = 0; n < GetLocalInt(oItem, "enchantment_num"); n++) {
 			int nId = GetLocalInt(oItem, "enchantment_"+IntToString(n));
+			if (n > 0) {
+				int d = d100();
+				if (d < 5)
+					sName += "'";
+				else if (d < 10)
+					sName += "-";
+				else if (d < 10)
+					sName += " ";
+			}
 			sName += GetItemNamePart(nId, "arcane");
 		}
 		if (GetStringLength(sName) < 4)
@@ -302,7 +311,7 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 		sName += " "+sBaseItem;
 		if (GetLocalInt(oItem, "enchantment_1") > 0) {
 			int nId = GetLocalInt(oItem, "enchantment_1");
-			sName += GetItemNamePart(nId, "suffix");
+			sName += " "+GetItemNamePart(nId, "suffix");
 		}
 	}
 	
