@@ -203,6 +203,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	else
 		nPoints = d3()+2;
 	
+	SendMessageToPC(oTarget, "generating trinket of "+IntToString(nPoints)+" points");
 	//Create Name base from the icon in question
 	switch (nIcon) {
 		case 174: sName = "Feather"; break;
@@ -382,6 +383,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	}
 	
 	struct enchantment e = GetRandomTrinketEnchantment(nPoints);
+	SendMessageToPC(oTarget, "enchantment id: "+IntToString(e.id));
 	int nMainSpell = e.subtype;
 	switch (nMainSpell) {
 		case 169: sName = "Blessed "+sName; break;
@@ -441,6 +443,8 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	if (d100() < 20) {
 		sName = owner.firstname+"'s "+sName;
 	}
+	SendMessageToPC(oTarget, sName);
+	SendMessageToPC(oTarget, sDescrip);
 	
 	object oObject = CreateItemOnObject(sBase, oTarget);
 	SetItemCharges(oObject, d10(2));
