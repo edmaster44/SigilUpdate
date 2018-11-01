@@ -49,11 +49,8 @@ struct baseitem GetRandomBaseItem(object oPC, string sType = "W") {
 	SaveInformationAboutItems();
 
 	int max = GetNumberOfBaseItemTypes(sType);
-	SendMessageToPC(oPC, "Number of "+sType+": "+IntToString(max));
 	int nChosen = Random(max);
-	SendMessageToPC(oPC, "Chose: "+IntToString(nChosen)+", checking "+"Item_"+sType+"_"+IntToString(nChosen));
 	int nIndex = GetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nChosen));
-	SendMessageToPC(oPC, "found index: "+IntToString(nIndex));
 	return LoadBaseItem(nIndex);
 }
 
@@ -91,12 +88,10 @@ struct enchantment GetRandomEnchantmentOfValue(object oObj, int value) {
 	string sSQL = "SELECT Recipe_Id FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
 	sSQL += GetEnchantmentItemRestriction(oObj, FALSE)+" LIMIT "+IntToString(nRand)+", 1";
 	SQLExecDirect(sSQL);
-	SpeakString("enchantment search sql: "+sSQL, TALKVOLUME_SHOUT);
 	
 	int recipe_id = 0;
 	if (SQLFetch() != SQL_ERROR) { 
 		recipe_id = StringToInt(SQLGetData(1));
-		SpeakString("Found enchantment id: "+IntToString(recipe_id)+" of "+IntToString(nMax)+" available", TALKVOLUME_SHOUT);
 	}
 	return LoadEnchantment(recipe_id);
 }
@@ -120,7 +115,6 @@ void GiveItemRandomEnchantments(object oItem, int nPoints) {
 		if (nValue > 5)
 			nValue = 5;
 		struct enchantment e = GetRandomEnchantmentOfValue(oItem, nValue);
-		SpeakString("adding enchantment "+IntToString(e.id), TALKVOLUME_SHOUT);
 		EnchantItem(oItem, e);
 		SetLocalInt(oItem, "enchantment_"+IntToString(nCount), e.id);
 		nCount++;
@@ -187,7 +181,7 @@ object CreateRandomItemOfType(object oPC, string sType = "W", int matTier = 0) {
 			}
 		}
 	} else if (i.matlist_1 == "SCOD_CRAFT_LEATHER") {
-		if (matTier > 1) {
+		if (matTier > 2) {
 			int nRand = Random(9);
 			switch (nRand) {
 				case 0: m1 = LoadMaterial(1, i.matlist_1); //Dragon Hide Black
@@ -200,15 +194,33 @@ object CreateRandomItemOfType(object oPC, string sType = "W", int matTier = 0) {
 				case 7: m1 = LoadMaterial(8, i.matlist_1); //Devilscale
 				case 8: m1 = LoadMaterial(9, i.matlist_1); //Ophidian Hide
 			}
+		} else if (matTier > 1) {
+			int nRand = Random(8);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, i.matlist_1); //Dragon Hide Black
+				case 1: m1 = LoadMaterial(2, i.matlist_1); //Dragon Hide Blue
+				case 2: m1 = LoadMaterial(3, i.matlist_1); //Dragon Hide Red
+				case 3: m1 = LoadMaterial(4, i.matlist_1); //Dragon Hide White
+				case 4: m1 = LoadMaterial(5, i.matlist_1); //Dragon Hide Green
+				case 5: m1 = LoadMaterial(6, i.matlist_1); //Celestial Plumes
+				case 6: m1 = LoadMaterial(7, i.matlist_1); //Demonscale
+				case 7: m1 = LoadMaterial(8, i.matlist_1); //Devilscale
+			}
 		}
 	} else if (i.matlist_1 == "SCOD_CRAFT_WOOD") {
-		if (matTier > 1) {
+		if (matTier > 2) {
 			int nRand = Random(4);
 			switch (nRand) {
 				case 0: m1 = LoadMaterial(1, i.matlist_1); //Arboreal Oak
 				case 1: m1 = LoadMaterial(2, i.matlist_1); //Dragon Bone
 				case 2: m1 = LoadMaterial(3, i.matlist_1); //Formic Amber
 				case 3: m1 = LoadMaterial(4, i.matlist_1); //Twelvetrees Bark
+			}
+		} else if (matTier > 1) {
+			int nRand = Random(2);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(2, i.matlist_1); //Dragon Bone
+				case 1: m1 = LoadMaterial(3, i.matlist_1); //Formic Amber
 			}
 		}
 	}
@@ -378,5 +390,5 @@ void main () {
 	}
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
-
+	SetFirstName(oItem, GetName(oItem)+" (Level "+IntToString(nLevel)+")");
 }
