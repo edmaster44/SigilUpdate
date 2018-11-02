@@ -1,5 +1,6 @@
 #include "nwnx_sql"
 #include "ps_inc_gemstones"
+#include "ps_inc_treasuregeneration"
 
 void LoadGemstonesIntoDatabase (object oPC) {
 
@@ -168,6 +169,46 @@ void LoadEnchantmentNamesIntoDatabase(object oPC) {
 	}
 }
 
+void LoadPotionsToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_potions' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_potions (item_id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_potions");
+	
+	int n = 1;
+	while (n < 33) {
+		string sPot = RandomPotion(oPC, n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_potions", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 19) {
+		string sPot = RandomPotion(oPC, n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_potions", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 4) {
+		string sPot = RandomPotion(oPC, n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_potions", oPC, 3);
+		n++;
+	}
+}
+
 void main () {
 	object oPC = GetLastUsedBy();
 	int nType = GetLocalInt(OBJECT_SELF, "load_type");
@@ -177,4 +218,6 @@ void main () {
 		LoadGemstonesIntoDatabase(oPC);
 	else if (nType == 3)
 		LoadEnchantmentNamesIntoDatabase(oPC);
+	else if (nType == 4)
+		LoadPotionsToDatabase(oPC);
 }

@@ -6,6 +6,16 @@
 const int SPECIAL_BOOK_CHANCE = 10;
 const string QUEST_ITEM_COLOR = "<C=DarkGoldenRod>";
 
+//***************************************************
+//Utility
+//***************************************************
+//Adds in debug messages for treasure generation
+object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1, string sNewTag="", int bDisplayFeedback=TRUE) {
+	object oObj = CreateTreasureItemOnTarget(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
+	PrintString ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
+	return oObj;   
+}
+
 //Gets a random icon for your random item!
 int GetRandomIcon(string sPartial) {
 	
@@ -63,7 +73,7 @@ void CreateRandomBookOnTarget(object oTarget) {
 		sStory = GenerateLegend("", char1, char2, char3, char4, char5);
 	}
 	
-	object oBook = CreateItemOnObject("ps_crft_basebook", oTarget);
+	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
 	if (d100() < SPECIAL_BOOK_CHANCE) {
 		sTitle = QUEST_ITEM_COLOR+sTitle+"</C>";
 		sStory = QUEST_ITEM_COLOR+"For what it is, this book really isn't too bad. You could even say it wass well written. Perhaps someone has a use for it.</C>\n\n"+sStory;
@@ -99,7 +109,7 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 	sDescrip += "The label indicates that this is a "+sName+" and should last about "+IntToString(nLevel*30)+" minutes.";
 	
 	int nIcon = GetRandomIcon("it_pot");
-	object oPot = CreateItemOnObject("ps_crft_basepotion", oTarget, 1, "experimentalpotion");
+	object oPot = CreateTreasureItemOnTarget("ps_crft_basepotion", oTarget, 1, "experimentalpotion");
 	SetLocalInt(oPot, "Item_Level", nLevel);
 	SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
 	SetLocalInt(oPot, "Item_Effect_Harmful", nBad);
@@ -117,6 +127,7 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 	int nBad = Random(EXPERIMENTAL_SPELLEFFECTS_BAD)+1;
 	int nType = d4();
 	if (nLevel == 1) nType = 1; //everything is simple at level 1
+	if (nLevel > 3) nLevel = 3;
 	
 	// Level word + base name
 	string sName = "Scroll of ";
@@ -143,7 +154,7 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 		case 4: sDescrip += "The spell links the target to the caster, bestowing a blessing on the caster, and a curse on the target. The target also shares in any damage the caster takes for the duration of the spell."; break;
 	}
 	
-	object oScroll = CreateItemOnObject("ps_crft_basescroll", oTarget, 1, "experimentalscroll");
+	object oScroll = CreateTreasureItemOnTarget("ps_crft_basescroll", oTarget, 1, "experimentalscroll");
 	SetLocalInt(oScroll, "Item_Level", nLevel);
 	SetLocalInt(oScroll, "Item_Effect_Helpful", nGood);
 	SetLocalInt(oScroll, "Item_Effect_Harmful", nBad);
@@ -193,6 +204,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	string sName = "";
 	string sDescrip = "";
 	string sBase = "ps_crft_basemisc";
+	SendMessageToPC(oTarget, "about to generate icon");
 	int nIcon = GetRandomIcon("it_qi");
 	
 	int nPoints = 1;
@@ -345,6 +357,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 		case 2109: sName = "Fragment"; break;
 		default: sName = "Trinket"; break;
 	}
+	object oObject = CreateTreasureItemOnTarget(sBase, oTarget);
 	
 	struct character owner = DetailCharacter(d2());
 	int nTotal = 4;
@@ -446,7 +459,6 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	SendMessageToPC(oTarget, sName);
 	SendMessageToPC(oTarget, sDescrip);
 	
-	object oObject = CreateItemOnObject(sBase, oTarget);
 	SetItemCharges(oObject, d10(2));
 	EnchantItem(oObject, e);
 	SetFirstName(oObject, sName);

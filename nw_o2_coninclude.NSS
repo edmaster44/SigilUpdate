@@ -73,6 +73,7 @@ const float LOW_MOD_GOLD = 0.5;   const float MEDIUM_MOD_GOLD = 1.0; const float
 const int    TREASURE_LOW = 1;
 const int    TREASURE_MEDIUM = 2;
 const int    TREASURE_HIGH = 3;
+const int    TREASURE_EPIC = 4;
 const int    TREASURE_BOSS = 4;
 const int    TREASURE_BOOK = 5;
 
