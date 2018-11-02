@@ -1,5 +1,4 @@
 #include "ps_inc_randomitems"
-
 void main() {
 
 	object oPC = GetLastUsedBy();

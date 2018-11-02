@@ -4,12 +4,18 @@
 //***************************************************
 #include "ginc_debug"
 #include "ps_inc_randomitems"
+#include "ps_inc_gemstones"
 //***************************************************
 //Loot Levels
 const int TREASURE_LOW = 1;
 const int TREASURE_MEDIUM = 2;
 const int TREASURE_HIGH = 3;
 const int TREASURE_EPIC = 4;
+//Gold Levels
+const float LOW_MOD_GOLD = 0.5;   
+const float MEDIUM_MOD_GOLD = 1.0; 
+const float HIGH_MOD_GOLD = 3.0;
+const float EPIC_MOD_GOLD = 5.0;
 //Categories:
 //Paper Products (non-equipable)
 //Alchemy (consumable, non-equipable)
@@ -29,11 +35,14 @@ int GetChallengeRatingOfTarget(object oTarget) {
 	}
 }
 //Database upload
-void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTreasureLevel) {
+void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTreasureLevel, string sSpecial = "") {
 	object oItem = CreateItemOnObject(sItem, oTarget);
 	string sTag = GetTag(oItem);
 	string sName = GetName(oItem);
 	string sQuery = "INSERT INTO "+sTable+" SET name='"+sName+"', resref='"+sTag+"', treasure_level='"+IntToString(nTreasureLevel)+"'";
+	if (sSpecial != "") {
+		sQuery += ", special='"+sSpecial+"'";
+	}
 	SendMessageToPC(oTarget, sQuery);
 	SQLExecDirect(sQuery);
 	DestroyObject(oItem, 0.1f);
@@ -212,70 +221,67 @@ void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) 
 	}
 }
 //***************************************************
+//Junk Items Generation
+//***************************************************
+//***************************************************
 //Alchemy Generation
 //***************************************************
-
-//Old potion list; for database upload only
-//remove later
-string RandomPotion(object oTarget, int nRandom, int nTreasureType = TREASURE_LOW) {
-
-	string sPotion = "";
+//***************************************************
+//Gems Generation
+//***************************************************
+void CreateGemOnTarget(object oTarget, int nTreasureType)
+{
+	string sGem = "nw_it_gem001";
 	if (nTreasureType == TREASURE_LOW) {
-        switch (nRandom) {
-			case 1: sPotion = "ps_potions1_01"; break;
-			case 2: sPotion = "ps_potions1_02"; break;
-			case 3: sPotion = "ps_potions1_03"; break;
-			case 4: sPotion = "ps_potions1_04"; break;
-			case 7: sPotion = "ps_potions1_05"; break;
-			case 10: sPotion = "ps_potions1_06"; break;
-			case 11: sPotion = "ps_potions1_07"; break;
-			case 12: sPotion = "ps_potions1_08"; break;
-			case 13: sPotion = "ps_potions1_09"; break;
-			case 14: sPotion = "ps_potions2_01"; break;
-			case 16: sPotion = "ps_potions2_02"; break;
-			case 17: sPotion = "ps_potions2_03"; break;
-			case 18: sPotion = "ps_potions2_04"; break;
-			case 19: sPotion = "ps_potions2_05"; break;
-			case 22: sPotion = "ps_potions2_06"; break;
-			case 23: sPotion = "ps_potions2_07"; break;
-			case 24: sPotion = "ps_potions2_08"; break;
-			case 25: sPotion = "ps_potions2_09"; break;
-			case 26: sPotion = "ps_potions2_10"; break;
-			case 27: sPotion = "ps_potions2_11"; break;
-			case 29: sPotion = "ps_potions2_12"; break;
-			case 30: sPotion = "ps_potions2_13"; break;
-			case 31: sPotion = "ps_potions2_14"; break;
-			case 32: sPotion = "ps_potion_lessersequencer"; break;
-			default: sPotion = ""; break;
-		}
-		return sPotion;
+		CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
 	} else if (nTreasureType == TREASURE_MEDIUM) {
-        switch (nRandom) {
-			case 1: sPotion = "ps_potions3_01"; break;
-			case 2: sPotion = "ps_potions3_02"; break;
-			case 3: sPotion = "ps_potions3_03"; break;
-			case 4: sPotion = "ps_potions3_04"; break;
-			case 5: sPotion = "ps_potions3_05"; break;
-			case 6: sPotion = "ps_potions3_06"; break;
-			case 7: sPotion = "ps_potions3_07"; break;
-			case 8: sPotion = "ps_potions3_08"; break;
-			case 9: sPotion = "ps_potions3_09"; break;
-			case 10: sPotion = "ps_potions4_01"; break;
-			case 11: sPotion = "ps_potions4_02"; break;
-			case 12: sPotion = "ps_potions4_03"; break;
-			case 13: sPotion = "ps_potions4_04"; break;
-			case 14: sPotion = "ps_potions4_05"; break;
-			case 15: sPotion = "ps_potions4_06"; break;
-			case 16: sPotion = "ps_potion_lessersequencer"; break;
-			case 17: sPotion = "ps_potion_jhuild"; break;
-			case 18: sPotion = "ps_potion_sequencer"; break;
+		int nRand = d100();
+		if (nRand < 80) {
+			CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
+		} else if (nRand < 90) {
+			sGem = "ps_golem_brass";
+		}  else  {
+			sGem = "ps_golem_quartz";
 		}
-	} else if (nTreasureType == TREASURE_HIGH) {
-        switch (nRandom) {
-			case 1: sPotion = "ps_potions5_01"; break;
-			case 2: sPotion = "ps_potions5_02"; break;
-			case 3: sPotion = "ps_potion_greatersequencer"; break;
+	} else if (nTreasureType == TREASURE_HIGH || nTreasureType == TREASURE_EPIC) {
+		
+		int nRand = d100();
+		if (nRand < 88) {
+			CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
+		} else  {
+			sGem = "ps_golem_mithral";
 		}
-    }
-	return sPotion;
+	}
+		
+	CreateTreasureItemOnTarget(sGem, oTarget, 1);
+	  
+}
+//***************************************************
+//Gold Generation
+//***************************************************
+void CreateGoldOnTarget(object oTarget, int nTreasureType) {
+	int nHD = GetChallengeRatingOfTarget(oTarget);
+	if (nHD <= 0) {
+		nHD = 6*nTreasureType;
+	}
+	int nAmount = 0;
+
+	if (nHD <= 3) nAmount = d12(2);
+	else if (nHD <= 6) nAmount = d20(2);
+	else if (nHD <= 9) nAmount = d20(3);
+	else if (nHD <= 12) nAmount = d20(5);
+	else if (nHD <= 15) nAmount = d20(8);
+	else nAmount = d20(10);
+		
+	float nMod = 0.0;
+	if (nTreasureType == TREASURE_LOW) nMod = LOW_MOD_GOLD;
+	else if (nTreasureType == TREASURE_MEDIUM) nMod = MEDIUM_MOD_GOLD;
+	else if (nTreasureType == TREASURE_HIGH) nMod = HIGH_MOD_GOLD;
+	else if (nTreasureType == TREASURE_EPIC) nMod = EPIC_MOD_GOLD;
+
+	// * always at least 1gp is created
+	nAmount = FloatToInt(nAmount * nMod);
+	if (nAmount <= 0) nAmount = 1;
+		
+	CreateTreasureItemOnTarget("NW_IT_GOLD001", oTarget, nAmount);
 }

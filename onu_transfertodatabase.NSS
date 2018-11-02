@@ -1,6 +1,7 @@
 #include "nwnx_sql"
 #include "ps_inc_gemstones"
 #include "ps_inc_treasuregeneration"
+#include "ps_inc_oldloottables"
 
 void LoadGemstonesIntoDatabase (object oPC) {
 
@@ -169,11 +170,137 @@ void LoadEnchantmentNamesIntoDatabase(object oPC) {
 	}
 }
 
+void LoadJunkToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_junk' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_junk (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT, special = VARCHAR(255)");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_junk");
+	int n = 1;
+	while (n < 11) {
+		string sPot = GetFromJunkList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 8) {
+		string sPot = GetFromCoinList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "coin");
+		n++;
+	}
+	n = 1;
+	while (n < 14) {
+		string sPot = GetFromGrenadeList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "grenade");
+		n++;
+	}
+	n = 1;
+	while (n < 15) {
+		string sPot = GetFromGrenadeList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 2, "grenade");
+		n++;
+	}
+	n = 1;
+	while (n < 6) {
+		string sPot = GetFromPaintingList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "painting");
+		n++;
+	}
+	n = 1;
+	while (n < 97) {
+		string sPot = GetFromRuneList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "rune");
+		n++;
+	}
+	n = 1;
+	while (n < 24) {
+		string sPot = GetFromValMiscList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "valmisc");
+		n++;
+	}
+	n = 1;
+	while (n < 11) {
+		string sPot = GetFromDrugList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "drug");
+		n++;
+	}
+	n = 1;
+	while (n < 8) {
+		string sPot = GetOrdinaryJewelryFromList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 18) {
+		string sPot = GetKitsFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 27) {
+		string sPot = GetKitsFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 2);
+		n++;
+	}
+	string sQuery = "UPDATE treasure_junk SET special='healingkit' WHERE resref LIKE '%medkit%'";
+	SQLExecDirect(sQuery);
+	sQuery = "UPDATE treasure_junk SET special='thieveskit' WHERE resref LIKE '%picks%'";
+	SQLExecDirect(sQuery);
+	sQuery = "UPDATE treasure_junk SET special='trapkit' WHERE resref LIKE '%trap%'";
+	SQLExecDirect(sQuery);
+	n = 1;
+	while (n < 65) {
+		string sPot = GetAmmoFromList(n);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "ammo");
+		n++;
+	}
+}
+
 void LoadPotionsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_potions' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
 		SendMessageToPC(oPC, "Creating new table");
-		SQLExecDirect("CREATE TABLE treasure_potions (item_id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		SQLExecDirect("CREATE TABLE treasure_potions (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
 		
 	} else {
 		SendMessageToPC(oPC, "Table already exists");
@@ -182,7 +309,7 @@ void LoadPotionsToDatabase(object oPC) {
 	
 	int n = 1;
 	while (n < 33) {
-		string sPot = RandomPotion(oPC, n, 1);
+		string sPot = GetPotionFromList(oPC, n, 1);
 		if (sPot == "") {
 			n++; continue;
 		}
@@ -191,7 +318,7 @@ void LoadPotionsToDatabase(object oPC) {
 	}
 	n = 1;
 	while (n < 19) {
-		string sPot = RandomPotion(oPC, n, 2);
+		string sPot = GetPotionFromList(oPC, n, 2);
 		if (sPot == "") {
 			n++; continue;
 		}
@@ -200,11 +327,371 @@ void LoadPotionsToDatabase(object oPC) {
 	}
 	n = 1;
 	while (n < 4) {
-		string sPot = RandomPotion(oPC, n, 3);
+		string sPot = GetPotionFromList(oPC, n, 3);
 		if (sPot == "") {
 			n++; continue;
 		}
 		UploadItemToDatabase(sPot, "treasure_potions", oPC, 3);
+		n++;
+	}
+}
+
+void LoadArmorToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_armor' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_armor (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_armor");
+	
+	int n = 1;
+	while (n < 91) {
+		string sPot = GetArmorFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_armor", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 84) {
+		string sPot = GetArmorFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_armor", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 54) {
+		string sPot = GetArmorFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_armor", oPC, 3);
+		n++;
+	}
+}
+
+void LoadBootsToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_boots' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_boots (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_boots");
+	
+	int n = 1;
+	while (n < 21) {
+		string sPot = GetBootsFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_boots", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 15) {
+		string sPot = GetBootsFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_boots", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 11) {
+		string sPot = GetBootsFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_boots", oPC, 3);
+		n++;
+	}
+}
+
+void LoadCloaksToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_cloaks' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_cloaks (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_cloaks");
+	
+	int n = 1;
+	while (n < 19) {
+		string sPot = GetCloaksFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_cloaks", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 18) {
+		string sPot = GetCloaksFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_cloaks", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 19) {
+		string sPot = GetCloaksFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_cloaks", oPC, 3);
+		n++;
+	}
+}
+
+void LoadBracersToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_bracers' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_bracers (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_bracers");
+	
+	int n = 1;
+	while (n < 34) {
+		string sPot = GetBracersFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_bracers", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 28) {
+		string sPot = GetBracersFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_bracers", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 29) {
+		string sPot = GetBracersFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_bracers", oPC, 3);
+		n++;
+	}
+}
+
+void LoadBeltsToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_belts' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_belts (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_belts");
+	
+	int n = 1;
+	while (n < 13) {
+		string sPot = GetBeltsFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_belts", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 11) {
+		string sPot = GetBeltsFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_belts", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 16) {
+		string sPot = GetBeltsFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_belts", oPC, 3);
+		n++;
+	}
+}
+
+void LoadHelmetsToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_helmets' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_helmets (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_helmets");
+	
+	int n = 1;
+	while (n < 18) {
+		string sPot = GetHelmetsFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_helmets", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 15) {
+		string sPot = GetHelmetsFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_helmets", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 14) {
+		string sPot = GetHelmetsFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_helmets", oPC, 3);
+		n++;
+	}
+}
+
+void LoadShieldsToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_shields' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_shields (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_shields");
+	
+	int n = 1;
+	while (n < 38) {
+		string sPot = GetShieldsFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_shields", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 24) {
+		string sPot = GetShieldsFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_shields", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 14) {
+		string sPot = GetShieldsFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_shields", oPC, 3);
+		n++;
+	}
+}
+
+void LoadMagicalJewelryToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_jewelry' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_jewelry (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_jewelry");
+	
+	int n = 1;
+	while (n < 71) {
+		string sPot = GetMagicJewelryFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_jewelry", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 56) {
+		string sPot = GetMagicJewelryFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_jewelry", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 47) {
+		string sPot = GetMagicJewelryFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_jewelry", oPC, 3);
+		n++;
+	}
+}
+
+void LoadMiscellaneousToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_miscellaneous' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_miscellaneous (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_miscellaneous");
+	
+	int n = 1;
+	while (n < 37) {
+		string sPot = GetMiscFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_miscellaneous", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 14) {
+		string sPot = GetMiscFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_miscellaneous", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 18) {
+		string sPot = GetMiscFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_miscellaneous", oPC, 3);
 		n++;
 	}
 }
@@ -220,4 +707,24 @@ void main () {
 		LoadEnchantmentNamesIntoDatabase(oPC);
 	else if (nType == 4)
 		LoadPotionsToDatabase(oPC);
+	else if (nType == 5)
+		LoadJunkToDatabase(oPC);
+	else if (nType == 6)
+		LoadArmorToDatabase(oPC);
+	else if (nType == 7)
+		LoadBeltsToDatabase(oPC);
+	else if (nType == 8)
+		LoadBootsToDatabase(oPC);
+	else if (nType == 9)
+		LoadBracersToDatabase(oPC);
+	else if (nType == 10)
+		LoadCloaksToDatabase(oPC);
+	else if (nType == 11)
+		LoadHelmetsToDatabase(oPC);
+	else if (nType == 12)
+		LoadMagicalJewelryToDatabase(oPC);
+	else if (nType == 13)
+		LoadMiscellaneousToDatabase(oPC);
+	else if (nType == 14)
+		LoadShieldsToDatabase(oPC);
 }
