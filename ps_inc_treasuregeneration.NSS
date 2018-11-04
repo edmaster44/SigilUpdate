@@ -74,6 +74,10 @@ int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTab
 //do not use nCombineLevels on large pools like weapons
 string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
 	int nMax = GetMaxItemsInDatabaseTable(sTable, nTreasureLevel, sSubTable, nCombineLevels);
+	if (nMax == 0 && nTreasureLevel == TREASURE_EPIC) { //don't have epic tables for too many things yet
+		nTreasureLevel = TREASURE_HIGH;
+		nMax = GetMaxItemsInDatabaseTable(sTable, nTreasureLevel, sSubTable, nCombineLevels);
+	}
 	int nRandom = Random(nMax);
 	
 	string sQuery = "SELECT resref FROM "+sTable+" WHERE ";
