@@ -235,15 +235,6 @@ void LoadJunkToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 25) {
-		string sPot = GetFromValMiscList(n);
-		if (sPot == "") {
-			n++; continue;
-		}
-		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "valmisc");
-		n++;
-	}
-	n = 1;
 	while (n < 11) {
 		string sPot = GetFromDrugList(n);
 		if (sPot == "") {
@@ -286,7 +277,7 @@ void LoadJunkToDatabase(object oPC) {
 	sQuery = "UPDATE treasure_junk SET special='trapkit' WHERE resref LIKE '%trap%'";
 	SQLExecDirect(sQuery);
 	n = 1;
-	while (n < 94) {
+	while (n < 97) {
 		string sPot = GetAmmoFromList(n);
 		if (sPot == "") {
 			n++; continue;

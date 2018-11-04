@@ -1,35 +1,3 @@
-//Max 24
-string GetFromValMiscList(int nRandom) {
-	string sItem = "";
-	switch (nRandom) {
-		case 1: sItem="ps_valmisc_enigmabottle"; break;
-		case 2: sItem="ps_valmisc_gnomishminestock"; break;
-		case 3: sItem="ps_valmisc_spirithawkfeather"; break;
-		case 4: sItem="ps_valmisc_kutunuoleaves"; break;
-		case 5: sItem="ps_valmisc_hellfirepowder"; break;
-		case 6: sItem="ps_valmisc_goldtrophy"; break;
-		case 7: sItem="ps_valmisc_mithrilscepter"; break;
-		case 8: sItem="ps_valmisc_smallmirror"; break;	
-		case 9: sItem="ps_valmisc_armoroil"; break;	
-		case 10: sItem="ps_valmisc_bagofwind"; break;				
-		case 11: sItem="ps_valmisc_beginnersalembic"; break;				
-		case 12: sItem="ps_valmisc_beginnersdecensor"; break;				
-		case 13: sItem="ps_valmisc_beginnersretort"; break;				
-		case 14: sItem="ps_valmisc_bottledpest"; break;				
-		case 15: sItem="ps_valmisc_disrupt"; break;				
-		case 16: sItem="ps_valmisc_glyph"; break;				
-		case 17: sItem="ps_valmisc_healingmushrooms"; break;				
-		case 18: sItem="ps_valmisc_oilweapon"; break;				
-		case 19: sItem="ps_valmisc_sandblindness"; break;				
-		case 20: sItem="ps_valmisc_skeletonkey"; break;				
-		case 21: sItem="ps_valmisc_webcannister"; break;				
-		case 22: sItem="ps_valmisc_embalming"; break;				
-		case 23: sItem="ps_valmisc_unbinding"; break;							
-		case 24: sItem="ps_valmisc_dragonslayers"; break;				
-	}		
-	return sItem;		
-}
-
 //Max 96
 string GetFromRuneList(int nRandom) {
 	int nRandom = Random(96) + 1;
@@ -321,6 +289,9 @@ string GetAmmoFromList(int nRandom) {
                 case 91: sAmmo = "nx2_shuri_adam";     break;
                 case 92: sAmmo = "nx2_shuri_silver";     break;
                 case 93: sAmmo = "nx2_shuri_ciron";     break;
+                case 94: sAmmo = "ps_dart_teleport";     break;
+                case 95: sAmmo = "ps_shuriken_teleport";     break;
+                case 96: sAmmo = "ps_throwingaxe_teleport";     break;
             }
 		return sAmmo;
 }
@@ -1302,6 +1273,29 @@ string GetMiscFromList(int nRandom, int nTreasureLevel) {
 			case 34: sItem = "X0_IT_MTHNMISC21";  break;
 			case 35: sItem = "ps_scripture_unbinding";  break;
 			case 36: sItem = "ps_rock-cursed-1";  break;
+			case 37: sItem="ps_valmisc_enigmabottle"; break;
+			case 38: sItem="ps_valmisc_gnomishminestock"; break;
+			case 39: sItem="ps_valmisc_spirithawkfeather"; break;
+			case 40: sItem="ps_valmisc_kutunuoleaves"; break;
+			case 41: sItem="ps_valmisc_hellfirepowder"; break;
+			case 42: sItem="ps_valmisc_goldtrophy"; break;
+			case 43: sItem="ps_valmisc_mithrilscepter"; break;
+			case 44: sItem="ps_valmisc_smallmirror"; break;	
+			case 45: sItem="ps_valmisc_armoroil"; break;	
+			case 46: sItem="ps_valmisc_bagofwind"; break;				
+			case 47: sItem="ps_valmisc_beginnersalembic"; break;				
+			case 48: sItem="ps_valmisc_beginnersdecensor"; break;				
+			case 49: sItem="ps_valmisc_beginnersretort"; break;				
+			case 50: sItem="ps_valmisc_bottledpest"; break;				
+			case 51: sItem="ps_valmisc_disrupt"; break;				
+			case 52: sItem="ps_valmisc_glyph"; break;				
+			case 53: sItem="ps_valmisc_healingmushrooms"; break;				
+			case 54: sItem="ps_valmisc_oilweapon"; break;				
+			case 55: sItem="ps_valmisc_sandblindness"; break;				
+			case 56: sItem="ps_valmisc_skeletonkey"; break;				
+			case 57: sItem="ps_valmisc_webcannister"; break;				
+			case 58: sItem="ps_valmisc_embalming"; break;				
+			case 59: sItem="ps_valmisc_unbinding"; break;		
 		}
 	} else if (nTreasureLevel <= 2) {
 		switch (nRandom) {
@@ -1317,7 +1311,8 @@ string GetMiscFromList(int nRandom, int nTreasureLevel) {
 			case 10: sItem = "NW_IT_MSMLMISC05";  break;
 			case 11: sItem = "ps_misc_magickeenscabbard"; break;
 			case 12: sItem = "ps_book_otherwordly"; break; 
-			case 13: sItem = "ps_misc_gemofshrapnels"; break; 
+			case 13: sItem = "ps_misc_gemofshrapnels"; break;					
+			case 14: sItem="ps_valmisc_dragonslayers"; break;	 
 		}
 	} else {
 		switch (nRandom) {
