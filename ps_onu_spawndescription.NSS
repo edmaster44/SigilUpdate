@@ -3,7 +3,8 @@ void main() {
 
 	object oPC = GetLastUsedBy();
 	int nType = GetLocalInt(OBJECT_SELF, "type");
-	SendMessageToPC(oPC, "Generating a thing");
+	SpeakString("generating an item of type: "+IntToString(nType), TALKVOLUME_SHOUT);
+	
 	if (nType == 1)
 		CreateExperimentalPotionOnTarget(oPC, d3());
 	else if (nType == 2)

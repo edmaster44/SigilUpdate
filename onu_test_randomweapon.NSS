@@ -4,7 +4,9 @@ void main () {
 
 	object oPC = GetLastUsedBy();
 	int nLootLevel = d4();
-	SendMessageToPC(oPC, "Generating loot of "+IntToString(nLootLevel)+" treasure level");
+	
+	SpeakString("Generating loot of "+IntToString(nLootLevel)+" treasure level", TALKVOLUME_SHOUT);
+	
 	GenerateTreasureItemOnTarget(oPC, nLootLevel);
 	/*int nLevel = Random(30)+1;
 	int nPoints = GetPointValueForCR(nLevel);

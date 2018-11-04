@@ -4,7 +4,8 @@ void PlayCustomAnimationWrapper(object oTarget, string sAnim, int bLoop, float s
 
 void main()
 {
-	object oTarget = OBJECT_SELF;
+	object oPC = GetItemActivator();
+	SendMessageToPC(oPC, "Smoking kills.");
 	ClearAllActions();
 
 	// Slow the Animation down to half speed..
@@ -13,5 +14,5 @@ void main()
 	effect eSmoke = EffectNWN2SpecialEffectFile("fx_smoking_exhale");
 
 	// Wait the "puff" keyframe is about 2 seconds in
-    DelayCommand(2.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, oTarget, 0.5f));
+    DelayCommand(2.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, oPC, 0.5f));
 }
