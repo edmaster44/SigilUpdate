@@ -1,13 +1,73 @@
-#include "ps_inc_treasuregeneration"
+//#include "ps_inc_treasuregeneration"
+#include "nwnx_sql"
+
+//Max items code
+int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
+	object oHolder = GetModule();
+	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
+	if (nMax > 0)
+		return nMax;
+		
+	string sQuery = "SELECT COUNT(*) FROM "+sTable+" WHERE ";
+	if (nCombineLevels) 
+		sQuery += "treasure_level <= "+IntToString(nTreasureLevel);
+	else
+		sQuery += "treasure_level = "+IntToString(nTreasureLevel);
+	if (sSubTable != "") 
+		sQuery += " AND special='"+sSubTable+"'";
+	
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		nMax = StringToInt(SQLGetData(1));
+	}
+	
+	SetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel), nMax);
+	return nMax;
+}
+
+//Testing pick item from database code
+string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
+	int nMax = GetMaxItemsInDatabaseTable(sTable, nTreasureLevel, sSubTable, nCombineLevels);
+	int nRandom = Random(nMax);
+	
+	string sQuery = "SELECT resref FROM "+sTable+" WHERE ";
+	if (nCombineLevels) 
+		sQuery += "treasure_level <= "+IntToString(nTreasureLevel);
+	else
+		sQuery += "treasure_level = "+IntToString(nTreasureLevel);
+	if (sSubTable != "") 
+		sQuery += " AND special='"+sSubTable+"'";
+	sQuery += " LIMIT "+IntToString(nRandom)+", 1";
+		
+	SQLExecDirect(sQuery);
+	string sItem = "ps_utility_error";
+	if (SQLFetch() != SQL_ERROR) { 
+		sItem = SQLGetData(1);
+	}
+	return sItem;
+	
+}
+
+//Adds in debug messages for treasure generation
+object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1, string sNewTag="", int bDisplayFeedback=TRUE) {
+	object oObj = CreateTreasureItemOnTarget(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
+	PrintString ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
+	return oObj;   
+}
+
 void main () {
 
 	SpeakString("here we are", TALKVOLUME_SHOUT);
 	object oPC = GetLastUsedBy();
+	SendMessageToPC(oPC, "here we are");
 	int nLootLevel = d4();
 	
 	SpeakString("Generating loot of "+IntToString(nLootLevel)+" treasure level", TALKVOLUME_SHOUT);
 	
-	GenerateTreasureItemOnTarget(oPC, nLootLevel);
+	string sResref = PickItemFromDatabase("treasure_weapons", nLootLevel);
+	CreateTreasureItemOnTarget(sResref, oPC, 1);
+	
+	//GenerateTreasureItemOnTarget(oPC, nLootLevel);
 	/*int nLevel = Random(30)+1;
 	int nPoints = GetPointValueForCR(nLevel);
 	int nMatLevel = nPoints-2;
