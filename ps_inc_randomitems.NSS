@@ -5,10 +5,19 @@
 
 const int SPECIAL_BOOK_CHANCE = 10;
 const string QUEST_ITEM_COLOR = "<C=DarkGoldenRod>";
+const string RANDOM_DROP_COLOR = "<C=SteelBlue>";
 
 //***************************************************
 //Utility
 //***************************************************
+//Grabs the CR of the creature, or the saved int CR on the placeable
+int GetChallengeRatingOfTarget(object oTarget) {
+	if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE) {
+		return FloatToInt(GetChallengeRating(oTarget));
+	} else {
+		return GetLocalInt(oTarget, "CR");
+	}
+}
 //Adds in debug messages for treasure generation
 object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1, string sNewTag="", int bDisplayFeedback=TRUE) {
 	object oObj = CreateTreasureItemOnTarget(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
@@ -46,10 +55,12 @@ int GetRandomIcon(string sPartial) {
 	nMax = GetLocalInt(oHolder, sPartial+"_max");
 	int nRandom = Random(nMax);
 	int nIcon = GetLocalInt(oHolder, sPartial+"_"+IntToString(nRandom));
-	//SendMessageToPC(oPC, "Chosen "+IntToString(nRandom)+" out of "+IntToString(nMax)+" = "+IntToString(nIcon));
 	return nIcon;
 } 
 
+//***************************************************
+//Paper Randomness
+//***************************************************
 //Creates a random junk book
 void CreateRandomBookOnTarget(object oTarget) {
 
@@ -86,42 +97,9 @@ void CreateRandomBookOnTarget(object oTarget) {
 	SetItemIcon(oBook, nIcon);
 }
 
-//Creates a wonky potion on the target
-void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
-
-	int nGood = Random(EXPERIMENTAL_EFFECTS_GOOD)+1; 
-	int nBad = Random(EXPERIMENTAL_EFFECTS_BAD)+1; 
-	
-	// Level word + base name
-	string sName = "Potion of ";
-	switch (nLevel) {
-		case 1: sName = "Weak "+sName; break;
-		case 2: break;
-		case 3: sName = "Strong "+sName; break;
-	}
-	
-	sName += GetExperimentalEffectName(nGood, nBad);
-	
-	//Generic description
-	string sDescrip = "<i>A vial filled with a strange liquid. What harm could it do?</i>\n\n";
-	sDescrip += "Experimental alchemical mixtures are those concoctions which never quite caught on in the wider adventuring community due to either an overly specific or overly dangerous effect.";
-	sDescrip += " But if one is willing to brave the ill effect, experimental potions can also have very potent beneficial effects.\n\n";
-	sDescrip += "The label indicates that this is a "+sName+" and should last about "+IntToString(nLevel*30)+" minutes.";
-	
-	int nIcon = GetRandomIcon("it_pot");
-	object oPot = CreateTreasureItemOnTarget("ps_crft_basepotion", oTarget, 1, "experimentalpotion");
-	SetLocalInt(oPot, "Item_Level", nLevel);
-	SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
-	SetLocalInt(oPot, "Item_Effect_Harmful", nBad);
-	
-	SetFirstName(oPot, sName);
-	SetDescription(oPot, sDescrip);
-	SetItemIcon(oPot, nIcon);
-
-}
-
 //creates a wonky scroll on the target
 void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
+	SendMessageToPC(oTarget, "creating experimental scroll");
 
 	int nGood = Random(EXPERIMENTAL_SPELLEFFECTS_GOOD)+1;
 	int nBad = Random(EXPERIMENTAL_SPELLEFFECTS_BAD)+1;
@@ -165,6 +143,47 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 
 }
 
+//***************************************************
+//Potion Randomness
+//***************************************************
+//Creates a wonky potion on the target
+void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
+	SendMessageToPC(oTarget, "creating experimental potion");
+
+	int nGood = Random(EXPERIMENTAL_EFFECTS_GOOD)+1; 
+	int nBad = Random(EXPERIMENTAL_EFFECTS_BAD)+1; 
+	
+	// Level word + base name
+	string sName = "Potion of ";
+	switch (nLevel) {
+		case 1: sName = "Weak "+sName; break;
+		case 2: break;
+		case 3: sName = "Strong "+sName; break;
+	}
+	
+	sName += GetExperimentalEffectName(nGood, nBad);
+	
+	//Generic description
+	string sDescrip = "<i>A vial filled with a strange liquid. What harm could it do?</i>\n\n";
+	sDescrip += "Experimental alchemical mixtures are those concoctions which never quite caught on in the wider adventuring community due to either an overly specific or overly dangerous effect.";
+	sDescrip += " But if one is willing to brave the ill effect, experimental potions can also have very potent beneficial effects.\n\n";
+	sDescrip += "The label indicates that this is a "+sName+" and should last about "+IntToString(nLevel*30)+" minutes.";
+	
+	int nIcon = GetRandomIcon("it_pot");
+	object oPot = CreateTreasureItemOnTarget("ps_crft_basepotion", oTarget, 1, "experimentalpotion");
+	SetLocalInt(oPot, "Item_Level", nLevel);
+	SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
+	SetLocalInt(oPot, "Item_Effect_Harmful", nBad);
+	
+	SetFirstName(oPot, sName);
+	SetDescription(oPot, sDescrip);
+	SetItemIcon(oPot, nIcon);
+
+}
+
+//***************************************************
+//Trinket Randomness
+//***************************************************
 //Gets number of enchantments available of x point value for miscellaneous items
 //for random trinket generation
 int GetNumberOfTrinketEnchantmentsAvailable(int nValue) {
@@ -200,6 +219,7 @@ struct enchantment GetRandomTrinketEnchantment(int nValue) {
 }
 
 void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
+	SendMessageToPC(oTarget, "creating experimental trinket");
 
 	string sName = "";
 	string sDescrip = "";
@@ -464,4 +484,426 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	SetFirstName(oObject, sName);
 	SetDescription(oObject, sDescrip);
 	SetItemIcon(oObject, nIcon);
+}
+
+//***************************************************
+//Wearable Items Randomness
+//***************************************************
+void SaveInformationAboutItems() {
+	object oHolder = OBJECT_SELF;
+	
+	if (GetLocalInt(oHolder, "Items_Initialized") > 0)
+		return;
+	SetLocalInt(oHolder, "Items_Initialized", 1);
+	
+	int nNumA = 0;
+	int nNumW = 0;
+	int nNumM = 0;
+	
+	int nIndex = 0;
+	int nMax = GetNum2DARows("scod_craft_baseitems");
+	
+	while (nIndex < nMax) {
+		string sType = GetItemType(nIndex);
+		if (sType == "W") {
+			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumW), nIndex);
+			nNumW++;
+		} else if (sType == "A") {
+			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumA), nIndex);
+			nNumA++;
+		} else {
+			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumM), nIndex);
+			nNumM++;
+		}
+		nIndex++;
+	}
+	
+	SetLocalInt(oHolder, "Item_A_Max", nNumA);
+	SetLocalInt(oHolder, "Item_W_Max", nNumW);
+	SetLocalInt(oHolder, "Item_M_Max", nNumM);
+}
+
+int GetNumberOfBaseItemTypes(string sType = "W") {
+	object oHolder = OBJECT_SELF;
+	return GetLocalInt(oHolder, "Item_"+sType+"_Max");
+}
+
+struct baseitem GetRandomBaseItem(object oPC, string sType = "W") {
+
+	object oHolder = OBJECT_SELF;
+	SaveInformationAboutItems();
+
+	int max = GetNumberOfBaseItemTypes(sType);
+	int nChosen = Random(max);
+	int nIndex = GetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nChosen));
+	return LoadBaseItem(nIndex);
+}
+
+struct material GetRandomMaterial(string s2da) {
+	int nMax = GetNum2DARows(s2da);
+	int nChosen = Random(nMax);
+	return LoadMaterial(nChosen, s2da);
+}
+
+int GetNumberofEnchantmentsAvailable(object oObj, int value) {
+	object oHolder = OBJECT_SELF;
+	int nMax = GetLocalInt(oHolder, "MaxEnchants_"+IntToString(GetBaseItemType(oObj))+"_"+IntToString(value));
+	if (nMax > 0)
+		return nMax;
+
+	string sSQL = "SELECT COUNT(*) FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
+	sSQL += GetEnchantmentItemRestriction(oObj, FALSE);
+	SQLExecDirect(sSQL);
+	if (SQLFetch() != SQL_ERROR) { 
+		nMax = StringToInt(SQLGetData(1));
+	} else {
+		nMax = 0;
+	}
+	SetLocalInt(oHolder, "MaxEnchants_"+IntToString(GetBaseItemType(oObj))+"_"+IntToString(value), nMax);
+	return nMax;
+	
+}
+
+//Gets a random enchantment which can go on oObj of a given point value
+struct enchantment GetRandomEnchantmentOfValue(object oObj, int value) {
+
+	int nMax = GetNumberofEnchantmentsAvailable(oObj, value);
+	int nRand = Random(nMax);
+
+	string sSQL = "SELECT Recipe_Id FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
+	sSQL += GetEnchantmentItemRestriction(oObj, FALSE)+" LIMIT "+IntToString(nRand)+", 1";
+	SQLExecDirect(sSQL);
+	
+	int recipe_id = 0;
+	if (SQLFetch() != SQL_ERROR) { 
+		recipe_id = StringToInt(SQLGetData(1));
+	}
+	return LoadEnchantment(recipe_id);
+}
+
+int GetPointValueForCR(int nCR) {
+	int result = (nCR/4)+1;
+	if (nCR >= 30)
+		return 10;
+	else if (nCR >= 28)
+		return 9;
+	else 
+		return result;
+}
+
+void GiveItemRandomEnchantments(object oItem, int nPoints) {
+
+	int nRemaining = nPoints;
+	int nCount = 0;
+	while (nRemaining > 0) {
+		int nValue = Random(nRemaining)+1;
+		if (nValue > 5)
+			nValue = 5;
+		struct enchantment e = GetRandomEnchantmentOfValue(oItem, nValue);
+		EnchantItem(oItem, e);
+		SetLocalInt(oItem, "enchantment_"+IntToString(nCount), e.id);
+		nCount++;
+		nRemaining -= nValue;
+	}
+	SetLocalInt(oItem, "enchantment_num", nCount);
+}
+
+//Get Material for random item of tier = matTier
+struct material GetRandomMaterialOfTier(string sList, int matTier) {
+	struct material m1 = LoadMaterial(0, sList);
+	if (sList == "SCOD_CRAFT_METAL") {
+		if (matTier == 1) {
+			int nRand = Random(2);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(23, sList); //Cold Iron
+				case 1: m1 = LoadMaterial(24, sList); //Silver
+			}
+		} else if (matTier == 2) {
+			int nRand = Random(6);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, sList); //Abyssal Bloodiron
+				case 1: m1 = LoadMaterial(2, sList); //Alchemic Platinum
+				case 2: m1 = LoadMaterial(7, sList); //Glassteel
+				case 3: m1 = LoadMaterial(10, sList); //Mindsilver
+				case 4: m1 = LoadMaterial(12, sList); //Oerthblood
+				case 5: m1 = LoadMaterial(14, sList); //Riverine
+			}
+		} else if (matTier == 3) {
+			int nRand = Random(4);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(5, sList); //Bloodglass
+				case 1: m1 = LoadMaterial(6, sList); //Byeshk
+				case 2: m1 = LoadMaterial(7, sList); //Tantulhor
+				case 3: m1 = LoadMaterial(8, sList); //Metalline
+			}
+		} else if (matTier == 4) {
+			int nRand = Random(4);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(4, sList); //Axiomatic Brass
+				case 1: m1 = LoadMaterial(11, sList); //Morguth-Iron
+				case 2: m1 = LoadMaterial(13, sList); //Pandemonic Silver
+				case 3: m1 = LoadMaterial(15, sList); //Solanian Truesteel
+			}
+		} else if (matTier > 4) {
+			int nRand = Random(2);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(9, sList); //Meteoric Iron
+				case 1: m1 = LoadMaterial(3, sList); //Aurorum
+			}
+		} else if (d100() < 10) {
+			int nRand = Random(6);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(17, sList); //Copper
+				case 1: m1 = LoadMaterial(18, sList); //Electrum
+				case 2: m1 = LoadMaterial(19, sList); //Gold
+				case 3: m1 = LoadMaterial(20, sList); //Platinum
+				case 4: m1 = LoadMaterial(21, sList); //Silver
+				case 5: m1 = LoadMaterial(22, sList); //White Gold
+			}
+		}
+	} else if (sList == "SCOD_CRAFT_LEATHER") {
+		if (matTier > 2) {
+			int nRand = Random(9);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, sList); //Dragon Hide Black
+				case 1: m1 = LoadMaterial(2, sList); //Dragon Hide Blue
+				case 2: m1 = LoadMaterial(3, sList); //Dragon Hide Red
+				case 3: m1 = LoadMaterial(4, sList); //Dragon Hide White
+				case 4: m1 = LoadMaterial(5, sList); //Dragon Hide Green
+				case 5: m1 = LoadMaterial(6, sList); //Celestial Plumes
+				case 6: m1 = LoadMaterial(7, sList); //Demonscale
+				case 7: m1 = LoadMaterial(8, sList); //Devilscale
+				case 8: m1 = LoadMaterial(9, sList); //Ophidian Hide
+			}
+		} else if (matTier > 1) {
+			int nRand = Random(8);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, sList); //Dragon Hide Black
+				case 1: m1 = LoadMaterial(2, sList); //Dragon Hide Blue
+				case 2: m1 = LoadMaterial(3, sList); //Dragon Hide Red
+				case 3: m1 = LoadMaterial(4, sList); //Dragon Hide White
+				case 4: m1 = LoadMaterial(5, sList); //Dragon Hide Green
+				case 5: m1 = LoadMaterial(6, sList); //Celestial Plumes
+				case 6: m1 = LoadMaterial(7, sList); //Demonscale
+				case 7: m1 = LoadMaterial(8, sList); //Devilscale
+			}
+		}
+	} else if (sList == "SCOD_CRAFT_WOOD") {
+		if (matTier > 2) {
+			int nRand = Random(4);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(1, sList); //Arboreal Oak
+				case 1: m1 = LoadMaterial(2, sList); //Dragon Bone
+				case 2: m1 = LoadMaterial(3, sList); //Formic Amber
+				case 3: m1 = LoadMaterial(4, sList); //Twelvetrees Bark
+			}
+		} else if (matTier > 1) {
+			int nRand = Random(2);
+			switch (nRand) {
+				case 0: m1 = LoadMaterial(2, sList); //Dragon Bone
+				case 1: m1 = LoadMaterial(3, sList); //Formic Amber
+			}
+		}
+	}
+	return m1;
+}
+
+object CreateRandomItemFromBaseType(object oPC, struct baseitem i, int matTier = 0) {
+	
+	struct material m1 = GetRandomMaterialOfTier(i.matlist_1, matTier);
+	struct material m2 = LoadMaterial(0, i.matlist_2);
+	struct material m3 = LoadMaterial(0, i.matlist_3);
+	
+	object obj = CreateCraftedItem(oPC, i, m1, m2, m3);
+	SetFirstName(obj, GetCraftingItemName(i, m1, m2, m3));
+	SetLocalString(obj, "material_name", m1.label);
+	SetLocalString(obj, "base_name", i.label);
+	return obj;
+}
+
+object CreateRandomItemOfCategory(object oPC, string sType, int matTier = 0) {
+
+	struct baseitem i = GetRandomBaseItem(oPC, sType);
+	return CreateRandomItemFromBaseType(oPC, i, matTier);
+}
+
+object CreateRandomItemOfType(object oPC, int nIndex, int matTier = 0) {
+
+	struct baseitem i = LoadBaseItem(nIndex);
+	return CreateRandomItemFromBaseType(oPC, i, matTier);
+}
+
+//Gets the appropriate enchantment name part
+string GetItemNamePart(int enchantment_id, string sPart) {
+	string sResult = "";
+	SQLExecDirect("SELECT "+sPart+" FROM recipes_names WHERE enchantment_id='"+IntToString(enchantment_id)+"'");
+	if (SQLFetch() != SQL_ERROR) { 
+		sResult = SQLGetData(1);
+	} else {
+		sResult = "";
+	}
+	return sResult;
+}
+
+string GenerateGobbledegook() {
+	int nRand = Random(26);
+	switch (nRand) {
+		case 0: return "aa";
+		case 1: return "ba";
+		case 2: return "cir";
+		case 3: return "de";
+		case 4: return "ey";
+		case 5: return "fae";
+		case 6: return "go";
+		case 7: return "hee";
+		case 8: return "ii";
+		case 9: return "ju";
+		case 10: return "ko";
+		case 11: return "la";
+		case 12: return "mn";
+		case 13: return "na";
+		case 14: return "o";
+		case 15: return "pe";
+		case 16: return "qu";
+		case 17: return "rs";
+		case 18: return "see";
+		case 19: return "ti";
+		case 20: return "uu";
+		case 21: return "ve";
+		case 22: return "w";
+		case 23: return "xi";
+		case 24: return "ya";
+		case 25: return "ze";
+	}
+	return "";
+}
+
+//Creates a new random name for item
+void GenerateRandomNameAndDescriptionForItem(object oItem) {
+
+	string sName = "";
+	struct character owner = DetailCharacter(2);
+	struct character antagonist = DetailCharacter(2);
+	string sBaseItem = GetLocalString(oItem, "base_name");
+	
+	int nRandom = d100();
+	if (nRandom < 25) {
+		int n;
+		for (n = 0; n < GetLocalInt(oItem, "enchantment_num"); n++) {
+			int nId = GetLocalInt(oItem, "enchantment_"+IntToString(n));
+			if (n > 0) {
+				int d = d100();
+				if (d < 5)
+					sName += "'";
+				else if (d < 10)
+					sName += "-";
+				else if (d < 10)
+					sName += " ";
+			}
+			sName += GetItemNamePart(nId, "arcane");
+		}
+		if (GetStringLength(sName) < 4)
+			sName += GenerateGobbledegook();
+		sName = CapitalizeFirstLetter(sName);
+	} else if (nRandom < 40) {
+		int nRand = Random(5);
+		switch(nRand) {
+			case 0: sName = owner.firstname+"'s "+sBaseItem; break;
+			case 1: sName = owner.lastname+"'s "+sBaseItem; break;
+			case 2: sName = owner.firstname+" "+owner.lastname+"'s "+sBaseItem; break;
+			case 3: sName = antagonist.firstname+"'s Bane"; break;
+			case 4: sName = sBaseItem+" of "+owner.nickname; break;
+		}
+	} else {
+		if (GetLocalInt(oItem, "enchantment_0") > 0) {
+			int nId = GetLocalInt(oItem, "enchantment_0");
+			sName += GetItemNamePart(nId, "prefix");
+		} else {
+			sName += GetLocalString(oItem, "material_name");
+		}
+		sName += " "+sBaseItem;
+		if (GetLocalInt(oItem, "enchantment_1") > 0) {
+			int nId = GetLocalInt(oItem, "enchantment_1");
+			sName += " "+GetItemNamePart(nId, "suffix");
+		}
+	}
+	
+	sName = RANDOM_DROP_COLOR+sName+"</C>";
+	SetFirstName(oItem, sName);
+	
+	string sDescription = "";
+	int nRand = Random(8);
+	switch (nRand) {
+		case 0: sDescription += "This "+sBaseItem+" was forged by "+IntroduceCharacter(owner); break;
+		case 1: sDescription += "The known history of this "+sBaseItem+" begins when it fell into the hands of "+IntroduceCharacter(owner); break;
+		case 2: sDescription += "This "+sBaseItem+" was created for "+IntroduceCharacter(owner); break;
+		case 3: sDescription += "A "+GetLocalString(oItem, "material_name")+" "+sBaseItem+", this item was first wielded by "+IntroduceCharacter(owner); break;
+		case 4: sDescription += "Used in the wars against "+antagonist.firstname+" "+antagonist.lastname+", this "+sBaseItem+" the property of "+IntroduceCharacter(owner); break;
+		case 5: sDescription += "Forged of "+GetLocalString(oItem, "material_name")+", this "+sBaseItem+" was the property of "+IntroduceCharacter(owner); break;
+		case 6: sDescription += "Created in "+RandomString_GeneratePlanarLocation()+" to defeat "+antagonist.firstname+" "+antagonist.nickname+", this "+sBaseItem+" was used by "+IntroduceCharacter(owner); break;
+		case 7: sDescription += sName+" was forged by the great smith "+IntroduceCharacter(owner); break;
+	}
+	
+	if (d2() == 1) {
+		nRand = Random(5);
+		switch (nRand) {
+			case 0: sDescription += "\n\n"+owner.firstname+" used the "+sName+" to defeat the hordes of "+IntroduceCharacter(antagonist); break;
+			case 1: sDescription += "\n\n"+owner.firstname+" is best known for thwarting the evil plans of "+IntroduceCharacter(antagonist); break;
+			case 2: sDescription += "\n\n"+sName+" was used to subjugate a kingdom in "+RandomString_GeneratePrimeLocation()+" by "+antagonist.firstname+" "+antagonist.nickname+", before it was stolen from them by "+owner.firstname; break;
+			case 3: sDescription += "\n\n"+owner.firstname+" is best known for carrying out a series of heists against "+antagonist.firstname+" "+antagonist.nickname; break;
+			case 4: sDescription += "\n\n"+owner.firstname+" began "+owner.possessivePronoun+" career by slaying a "+RandomString_GenerateRace()+" in the service of "+IntroduceCharacter(antagonist); break;
+		}
+	}
+	
+	nRand = Random(4);
+	switch (nRand) {
+		case 0: sDescription += "\n\nThe "+sBaseItem+" vanished from history after "+owner.firstname+" suffered "+RandomString_HurdleGenerator()+"."; break;
+		case 1: sDescription += "\n\n"+owner.firstname+" lost "+sName+" after "+owner.pronoun+" experienced "+RandomString_HurdleGenerator()+"."; break;
+		case 2: sDescription += "\n\n"+sName+" left the hands of "+owner.lastname+" when "+owner.pronoun+" died in the year "+IntToString(Random(100) + 20) + " of Hashkar's Reign."; break;
+		case 3: sDescription += "\n\n"+owner.firstname+" died at the ripe age of " + IntToString(Random(50) + 50) + " after retiring to "+RandomString_GeneratePrimeLocation()+"."; break;
+	}
+	
+	SetDescription(oItem, sDescription);
+	
+}
+
+//Creates a random item of a given category, and enchants it 
+//enchantment points are based on the CR of the target
+//Or the CR local int stored on the target
+//Acceptable types are W, A, and M (weapon, armor, and miscellaneous)
+void CreateRandomItemOfCategoryOnTarget(object oTarget, string sType) {
+	int nLevel = GetChallengeRatingOfTarget(oTarget);
+	int nPoints = GetPointValueForCR(nLevel);
+	int nMatLevel = nPoints-2;
+	if (nMatLevel <= 0)
+		nMatLevel = 0;
+	else
+		nMatLevel = Random(nMatLevel)+1;
+	nPoints -= nMatLevel;
+	SendMessageToPC(oTarget, "creating an "+IntToString(nLevel)+" level item of "+IntToString(nPoints)+" points and "+IntToString(nMatLevel)+" material level");
+	object oItem = CreateRandomItemOfCategory(oTarget, sType, nMatLevel);
+	GiveItemRandomEnchantments(oItem, nPoints);
+	GenerateRandomNameAndDescriptionForItem(oItem);
+	SetFirstName(oItem, GetName(oItem)+" (Level "+IntToString(nLevel)+")");
+}
+
+//Creates a random item of a given category, and enchants it 
+//enchantment points are based on the CR of the target
+//Or the CR local int stored on the target
+//nIndex is the index of the item in scod_craft_baseitems
+//Note this is not the same as the BASE_ITEM_* constants
+void CreateRandomItemOfTypeOnTarget(object oTarget, int nIndex) {
+	int nLevel = GetChallengeRatingOfTarget(oTarget);
+	int nPoints = GetPointValueForCR(nLevel);
+	int nMatLevel = nPoints-2;
+	if (nMatLevel <= 0)
+		nMatLevel = 0;
+	else
+		nMatLevel = Random(nMatLevel)+1;
+	nPoints -= nMatLevel;
+	SendMessageToPC(oTarget, "creating an "+IntToString(nLevel)+" level item of "+IntToString(nPoints)+" points and "+IntToString(nMatLevel)+" material level");
+	object oItem = CreateRandomItemOfType(oTarget, nIndex, nMatLevel);
+	GiveItemRandomEnchantments(oItem, nPoints);
+	GenerateRandomNameAndDescriptionForItem(oItem);
+	SetFirstName(oItem, GetName(oItem)+" (Level "+IntToString(nLevel)+")");
 }

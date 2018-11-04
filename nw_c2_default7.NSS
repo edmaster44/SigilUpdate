@@ -58,26 +58,4 @@ void main()
 	if (!GetIsSpirit(OBJECT_SELF))
     	craft_drop_items(oKiller);
 	
-	//New Craft Drop
-	CreateCreatureDrop();
-	
-}
-
-void CreateCreatureDrop() {
-
-	int nChance = GetLocalInt(OBJECT_SELF, "creature_drop_chance");
-	string sItem = GetLocalString(OBJECT_SELF, "creature_drop");
-	
-	if (d100() < nChance) {
-		if (sItem == "Pearl") { //special case to handle pearls (gemstones)
-			object oGem = CreateItemOnObject("gemstone_rough_pearl", OBJECT_SELF);
-			int nQuality = d2();
-			int nSize = d20()+5;
-			SetDetailsOfGemstone(oGem, nQuality, nSize, OBJECT_SELF);
-			
-		} else {
-			CreateItemOnObject(sItem, OBJECT_SELF);
-		}
-	}
-
 }

@@ -3,6 +3,58 @@
 #include "ps_inc_treasuregeneration"
 #include "ps_inc_oldloottables"
 
+void LoadGemstonesIntoDatabase (object oPC);
+void LoadEnchantmentsIntoDatabase(object oPC);
+void LoadEnchantmentNamesIntoDatabase(object oPC);
+void LoadJunkToDatabase(object oPC);
+void LoadPotionsToDatabase(object oPC);
+void LoadArmorToDatabase(object oPC);
+void LoadBootsToDatabase(object oPC);
+void LoadCloaksToDatabase(object oPC);
+void LoadBracersToDatabase(object oPC);
+void LoadBeltsToDatabase(object oPC);
+void LoadHelmetsToDatabase(object oPC);
+void LoadShieldsToDatabase(object oPC);
+void LoadMagicalJewelryToDatabase(object oPC);
+void LoadMiscellaneousToDatabase(object oPC);
+void LoadWeaponsToDatabase(object oPC);
+
+void main () {
+	object oPC = GetLastUsedBy();
+	int nType = GetLocalInt(OBJECT_SELF, "load_type");
+	if (nType == 1)
+		LoadEnchantmentsIntoDatabase(oPC);
+	else if (nType == 2)
+		LoadGemstonesIntoDatabase(oPC);
+	else if (nType == 3)
+		LoadEnchantmentNamesIntoDatabase(oPC);
+	else if (nType == 4)
+		LoadPotionsToDatabase(oPC);
+	else if (nType == 5)
+		LoadJunkToDatabase(oPC);
+	else if (nType == 6)
+		LoadArmorToDatabase(oPC);
+	else if (nType == 7)
+		LoadBeltsToDatabase(oPC);
+	else if (nType == 8)
+		LoadBootsToDatabase(oPC);
+	else if (nType == 9)
+		LoadBracersToDatabase(oPC);
+	else if (nType == 10)
+		LoadCloaksToDatabase(oPC);
+	else if (nType == 11)
+		LoadHelmetsToDatabase(oPC);
+	else if (nType == 12)
+		LoadMagicalJewelryToDatabase(oPC);
+	else if (nType == 13)
+		LoadMiscellaneousToDatabase(oPC);
+	else if (nType == 14)
+		LoadShieldsToDatabase(oPC);
+	else if (nType == 15)
+		LoadWeaponsToDatabase(oPC);
+}
+
+//Gemstone transfer to database
 void LoadGemstonesIntoDatabase (object oPC) {
 
 	SQLExecDirect("TRUNCATE TABLE gemstones");
@@ -40,6 +92,7 @@ void LoadGemstonesIntoDatabase (object oPC) {
 
 }
 
+//Load Enchantment table from 2da to database
 void LoadEnchantmentsIntoDatabase(object oPC) {
 
 	SQLExecDirect("TRUNCATE TABLE recipes");
@@ -137,6 +190,7 @@ void LoadEnchantmentsIntoDatabase(object oPC) {
 	}
 }
 
+//Load enchantment names table to database
 void LoadEnchantmentNamesIntoDatabase(object oPC) {
 
 	/*SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'recipes_names' LIMIT 1");
@@ -170,6 +224,7 @@ void LoadEnchantmentNamesIntoDatabase(object oPC) {
 	}
 }
 
+//Old Junk tables
 void LoadJunkToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_junk' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -190,14 +245,33 @@ void LoadJunkToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 8) {
-		string sPot = GetFromCoinList(n);
+	while (n < 9) {
+		string sPot = GetFromCoinList(n, 1);
 		if (sPot == "") {
 			n++; continue;
 		}
 		UploadItemToDatabase(sPot, "treasure_junk", oPC, 1, "coin");
 		n++;
 	}
+	n = 1;
+	while (n < 4) {
+		string sPot = GetFromCoinList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 2, "coin");
+		n++;
+	}
+	n = 1;
+	while (n < 4) {
+		string sPot = GetFromCoinList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_junk", oPC, 3, "coin");
+		n++;
+	}
+	UploadItemToDatabase(GetFromCoinList(1, 4), "treasure_junk", oPC, 4, "coin");
 	n = 1;
 	while (n < 14) {
 		string sPot = GetFromGrenadeList(n, 1);
@@ -287,6 +361,7 @@ void LoadJunkToDatabase(object oPC) {
 	}
 }
 
+//Old Potions table
 void LoadPotionsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_potions' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -327,6 +402,7 @@ void LoadPotionsToDatabase(object oPC) {
 	}
 }
 
+//Old armor table
 void LoadArmorToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_armor' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -367,6 +443,7 @@ void LoadArmorToDatabase(object oPC) {
 	}
 }
 
+//Old boots table
 void LoadBootsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_boots' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -407,6 +484,7 @@ void LoadBootsToDatabase(object oPC) {
 	}
 }
 
+//Load cloaks
 void LoadCloaksToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_cloaks' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -447,6 +525,7 @@ void LoadCloaksToDatabase(object oPC) {
 	}
 }
 
+//Load bracers to table
 void LoadBracersToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_bracers' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -487,6 +566,7 @@ void LoadBracersToDatabase(object oPC) {
 	}
 }
 
+//Old belts table
 void LoadBeltsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_belts' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -527,6 +607,7 @@ void LoadBeltsToDatabase(object oPC) {
 	}
 }
 
+//Old helmets table
 void LoadHelmetsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_helmets' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -567,6 +648,7 @@ void LoadHelmetsToDatabase(object oPC) {
 	}
 }
 
+//Load shields to database
 void LoadShieldsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_shields' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -607,6 +689,7 @@ void LoadShieldsToDatabase(object oPC) {
 	}
 }
 
+//Old jewelry table
 void LoadMagicalJewelryToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_jewelry' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -647,6 +730,7 @@ void LoadMagicalJewelryToDatabase(object oPC) {
 	}
 }
 
+//Miscellaneous Table - used to be under wearables
 void LoadMiscellaneousToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_miscellaneous' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -687,6 +771,7 @@ void LoadMiscellaneousToDatabase(object oPC) {
 	}
 }
 
+//Old weapons table
 void LoadWeaponsToDatabase(object oPC) {
 	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_weapons' LIMIT 1");
 	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
@@ -725,39 +810,4 @@ void LoadWeaponsToDatabase(object oPC) {
 		UploadItemToDatabase(sPot, "treasure_weapons", oPC, 3);
 		n++;
 	}
-}
-
-void main () {
-	object oPC = GetLastUsedBy();
-	int nType = GetLocalInt(OBJECT_SELF, "load_type");
-	if (nType == 1)
-		LoadEnchantmentsIntoDatabase(oPC);
-	else if (nType == 2)
-		LoadGemstonesIntoDatabase(oPC);
-	else if (nType == 3)
-		LoadEnchantmentNamesIntoDatabase(oPC);
-	else if (nType == 4)
-		LoadPotionsToDatabase(oPC);
-	else if (nType == 5)
-		LoadJunkToDatabase(oPC);
-	else if (nType == 6)
-		LoadArmorToDatabase(oPC);
-	else if (nType == 7)
-		LoadBeltsToDatabase(oPC);
-	else if (nType == 8)
-		LoadBootsToDatabase(oPC);
-	else if (nType == 9)
-		LoadBracersToDatabase(oPC);
-	else if (nType == 10)
-		LoadCloaksToDatabase(oPC);
-	else if (nType == 11)
-		LoadHelmetsToDatabase(oPC);
-	else if (nType == 12)
-		LoadMagicalJewelryToDatabase(oPC);
-	else if (nType == 13)
-		LoadMiscellaneousToDatabase(oPC);
-	else if (nType == 14)
-		LoadShieldsToDatabase(oPC);
-	else if (nType == 15)
-		LoadWeaponsToDatabase(oPC);
 }

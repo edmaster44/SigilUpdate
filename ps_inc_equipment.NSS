@@ -13,11 +13,6 @@
 #include "class_monk_shatteringblows"
 #include "ps_meditative_strikes"
 
-
-
-
-
-
 const int SIGIL_EQUIP_FX = -9444;
 
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 174
@@ -546,7 +541,8 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		CheckForTempProperties(oITEM, oPC);
 	
-		if (GetMonkWeapon(oITEM))DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
+		if (GetMonkWeapon(oITEM))
+			DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
 
 
 		if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);

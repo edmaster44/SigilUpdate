@@ -65,16 +65,33 @@ string GetFromGrenadeList(int nRandom, int nTreasureLevel) {
 }
 
 //Max 7
-string GetFromCoinList(int nRandom) {
+string GetFromCoinList(int nRandom, int nTreasureLevel) {
 	string sRes = "";
-	switch (nRandom) {
-		case 1: sRes = "ps_miscstack_coinage-torus"; break; //ale
-		case 2: sRes = "ps_miscstack_coinage-lodestone"; break; // wine
-		case 3: sRes = "ps_miscstack_coinage-glitterglas"; break; // spirits
-		case 4: sRes = "ps_miscstack_coinage-cogcoin"; break; //torch
-		case 5: sRes = "ps_miscstack_coinage-achsteel";  break;
-		case 6: sRes = "ps_misc_coinage-rainbow";  break;
-		case 7: sRes = "ps_misc_coinage-pinecoin";  break;
+	if (nTreasureLevel <= 1) { // < 100
+		switch (nRandom) {
+			case 1: sRes = "ps_miscstack_coinage-torus"; break; 
+			case 2: sRes = "ps_miscstack_coinage-lodestone"; break; 
+			case 3: sRes = "ps_miscstack_coinage-glitterglas"; break; 
+			case 4: sRes = "ps_miscstack_coinage-cogcoin"; break; 
+			case 5: sRes = "ps_miscstack_coinage-achsteel";  break;
+			case 6: sRes = "ps_misc_coinage-rainbow";  break;
+			case 7: sRes = "ps_misc_coinage-pinecoin";  break;
+			case 8: sRes = "ps_miscstack_coinage-bloodcoin";  break;
+		}
+	} else if (nTreasureLevel <= 2) { //< 500
+		switch (nRandom) {
+			case 1: sRes = "ps_misc_coinage-bellcoin"; break;
+			case 2: sRes = "ps_misc_coinage-xaosfish"; break;
+			case 3: sRes = "ps_miscstack_coinage-mobius"; break;
+		}
+	} else if (nTreasureLevel <= 3) { //<= 1000
+		switch (nRandom) {
+			case 1: sRes = "ps_misc_coinage-soulprism"; break;
+			case 2: sRes = "ps_misc_coinage-xaosparrot"; break;
+			case 3: sRes = "ps_miscstack_coinage-pcogcoin"; break;
+		}
+	} else {
+		sRes = "ps_misc_coinage-xaosturd";
 	}
 	return sRes;
 }

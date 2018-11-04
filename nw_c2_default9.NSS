@@ -19,173 +19,7 @@
 #include "x0_i0_anims"
 #include "x2_inc_switches"
 #include "ps_monstersrbugfix"
-#include "ps_random_item_spawn"
-#include "ps_inc_cards"
-#include "nw_o2_coninclude"
-#include "ps_inc_gemstones"
-
-void SpecialDrop(string sAREA, object oSPAWN)
-{
-	string sSPECIAL;
-	if(TestStringAgainstPattern("**abyss**", sAREA))
-	{
-		switch (Random(4))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_pd"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_bi"; break;
-			case 2: sSPECIAL = "ps_crft_demonscale"; break;
-			case 3: sSPECIAL = "ps_crft_plk_tb"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**beastland**", sAREA))
-	{
-		switch (Random(7))
-		{
-			case 0: sSPECIAL = "ps_crft_dragonhide_blk"; break;
-			case 1: sSPECIAL = "ps_crft_dragonhide_blu"; break;
-			case 2: sSPECIAL = "ps_crft_plk_db"; break;
-			case 3: sSPECIAL = "ps_crft_drgsnw"; break;
-			case 4: sSPECIAL = "ps_crft_dragonhide_grn"; break;
-			case 5: sSPECIAL = "ps_crft_dragonhide_red"; break;
-			case 6: sSPECIAL = "ps_crft_dragonhide_wht"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**plateau**", sAREA))
-	{
-		switch (Random(7))
-		{
-			case 0: sSPECIAL = "ps_crft_dragonhide_blk"; break;
-			case 1: sSPECIAL = "ps_crft_dragonhide_blu"; break;
-			case 2: sSPECIAL = "ps_crft_plk_db"; break;
-			case 3: sSPECIAL = "ps_crft_drgsnw"; break;
-			case 4: sSPECIAL = "ps_crft_dragonhide_grn"; break;
-			case 5: sSPECIAL = "ps_crft_dragonhide_red"; break;
-			case 6: sSPECIAL = "ps_crft_dragonhide_wht"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**carceri**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_mi"; break;
-			case 1: sSPECIAL = "ps_crft_ing_au"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**astral**", sAREA))
-	{
-		sSPECIAL = "ps_crft_ing_ms";
-	}
-	else if(TestStringAgainstPattern("**eearth**", sAREA))
-	{
-		switch (Random(3))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_bg"; break;
-			case 1: sSPECIAL = "ps_crft_ing_gs"; break;
-			case 2: sSPECIAL = "ps_crft_ing_rv"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**epicgraywaste**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_mi"; break;
-			case 1: sSPECIAL = "ps_crft_plk_ao"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**Niflheim**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_mi"; break;
-			case 1: sSPECIAL = "ps_crft_plk_ao"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**graywaste**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_by"; break;
-			case 1: sSPECIAL = "ps_crft_ing_ap"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**ice-**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_crft_ing_rv"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_bg"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**mercuria**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_st"; break;
-			case 1: sSPECIAL = "ps_crft_celestplume"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**minauros**", sAREA))
-	{
-		switch (Random(3))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_gm"; break;
-			case 1: sSPECIAL = "ps_crft_devilscale"; break;
-			case 2: sSPECIAL = "ps_cfrt_ing_tt"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**ruins**", sAREA))
-	{
-		switch (Random(3))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_by"; break;
-			case 1: sSPECIAL = "ps_crft_ophidian"; break;
-			case 2: sSPECIAL = "ps_crft_neufly"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**maldom**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_tt"; break;
-			case 1: sSPECIAL = "ps_crft_ing_ap"; break;
-		}	
-	}
-	else if(TestStringAgainstPattern("**clangor**", sAREA))
-	{
-		switch (Random(3))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_ab"; break;
-			case 1: sSPECIAL = "ps_crft_ing_ob"; break;
-			case 2: sSPECIAL = "ps_crft_ing_gs"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**fire**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_crft_ophidian"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_ml"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**eearth**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_crft_ing_ob"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_ml"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**limbo**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_cfrt_ing_pd"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_ml"; break;
-		}
-	}
-	else return;	
-	dbCreateItemOnObject(sSPECIAL, oSPAWN);
-}
+#include "ps_inc_treasuregeneration"
 
 void main()
 {
@@ -254,8 +88,8 @@ void main()
 	// Create a small amount of treasure on the creature
 	int nNODROP = GetLocalInt(GetModule(), "X2_L_NOTREASURE");
 	nNODROP = GetLocalInt(oSPAWN, "X2_L_NOTREASURE");
+	
 	int nRACE = GetRacialType(oSPAWN);
-	int nOTHER = FALSE;
 	switch (nRACE)
 	{
 		case RACIAL_TYPE_ANIMAL:
@@ -264,27 +98,46 @@ void main()
 		case RACIAL_TYPE_ELEMENTAL:
 		case RACIAL_TYPE_VERMIN:
 		nNODROP = TRUE;
-		nOTHER = TRUE;
 	}
 	
-	if (nNODROP == FALSE)
-	{
-		if (Random(2000) < 10) SpecialDrop(GetTag(GetArea(oSPAWN)), oSPAWN); /* remove again later, or redo chance */
-		if (Random(2000) < 10) CreateRandomDropItem(oSPAWN);
-		if (Random(2000) < 10) CardsCreateCardOnSpawnOrChest(oSPAWN);
-		float fCHALLENGE = GetChallengeRating(oSPAWN);
-		int nLOOT = 1; //TREASURE_TYPE_LOW
-		if (fCHALLENGE >= 20.0) nLOOT = 3; //TREASURE_TYPE_HIGH
-		else if (fCHALLENGE >= 10.0) nLOOT = 2; //TREASURE_TYPE_MED
-		if (Random(2000) < 400) GenerateTreasure(nLOOT, oSPAWN, oSPAWN);
+	//Not all creatures are eligible to drop loot!
+	//But if they are. . . 
+	if (nNODROP == FALSE) {
+	
+		float fChallenge = GetChallengeRating(oSPAWN);
+		int nLOOT = 0;
+		int nLOOTCHANCE = 20;
+		if (fChallenge < 10.0f) {
+			nLOOT = 1;  //TREASURE_TYPE_LOW
+			nLOOTCHANCE = 33;
+		} else if (fChallenge < 15.0f) {
+			nLOOT = 2; //TREASURE_TYPE_MEDIUM
+			nLOOTCHANCE = 25;
+		} else if (fChallenge < 20.0f) {
+			nLOOT = 2; //TREASURE_TYPE_MEDIUM
+			nLOOTCHANCE = 20;
+		} else if (fChallenge <= 25.0f) {
+			nLOOT = 3;  //TREASURE_TYPE_HIGH
+			nLOOTCHANCE = 20;
+		} else {
+			nLOOT = 4;  //TREASURE_TYPE_EPIC
+			nLOOTCHANCE = 20;
+		}
 		
-		if (fCHALLENGE > 25.0) nLOOT = 4; //TREASURE_TYPE_EPIC (only used for gems right now)
-		if (Random(1000) < 10) CreateRandomGemstoneOnSpawnOrChest(oSPAWN, nLOOT);
+		//0.5% to spawn special material depending on area
+		if (Random(2000) < 10) SpecialDrop(GetTag(GetArea(oSPAWN)), oSPAWN); 
+		
+		//Generate general loot!
+		if (d100() <= nLOOTCHANCE){
+			GenerateTreasureItemOnTarget(oSPAWN, nLOOT);
+		}
 	}
-	else if (nOTHER == TRUE)
-	{
-		//This can be eventually used for a separate loot table for animals, beasts, constructs, elementals and vermins.
-	}
+	
+	//Creature specific drop
+	//depends on two variables set on the creature: 
+	//creature_drop = item resref
+	//creature_drop_chance = drop chance
+	CreateCreatureDrop(OBJECT_SELF);
 
 	// Encounter creatures use ambient animations
 	if (GetIsEncounterCreature()) SetSpawnInCondition(NW_FLAG_AMBIENT_ANIMATIONS, TRUE);
@@ -305,4 +158,19 @@ void main()
 	//DBR 2/03/06 - added option for a spawn script (ease of AI hookup)
 	string sSpawnScript=GetLocalString(oSPAWN, "SpawnScript");
 	if (sSpawnScript!="") ExecuteScript(sSpawnScript, oSPAWN);
+}
+
+void OldLoot() {
+		//Old Loot Code
+		/*if (Random(2000) < 10) SpecialDrop(GetTag(GetArea(oSPAWN)), oSPAWN); 
+		if (Random(2000) < 10) CreateRandomDropItem(oSPAWN);
+		if (Random(2000) < 10) CardsCreateCardOnSpawnOrChest(oSPAWN);
+		float fCHALLENGE = GetChallengeRating(oSPAWN);
+		int nLOOT = 1; //TREASURE_TYPE_LOW
+		if (fCHALLENGE >= 20.0) nLOOT = 3; //TREASURE_TYPE_HIGH
+		else if (fCHALLENGE >= 10.0) nLOOT = 2; //TREASURE_TYPE_MED
+		if (Random(2000) < 400) GenerateTreasure(nLOOT, oSPAWN, oSPAWN);
+		
+		if (fCHALLENGE > 25.0) nLOOT = 4; //TREASURE_TYPE_EPIC (only used for gems right now)
+		if (Random(1000) < 10) CreateRandomGemstoneOnSpawnOrChest(oSPAWN, nLOOT);*/
 }
