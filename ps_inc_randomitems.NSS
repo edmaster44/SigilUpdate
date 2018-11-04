@@ -42,8 +42,10 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 		
 			string sLabel = Get2DAString("nwn2_icons", "ICON", index);
 			if (FindSubString(sLabel, sPartial) >= 0) {
-				if (index >= 1955 && index <= 1961) //golem + corpse stuff
+				if (index >= 1955 && index <= 1961) {//golem + corpse stuff	
+					count++;
 					continue;
+				}
 				if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "found = "+IntToString(index));
 				SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
 				count++;
