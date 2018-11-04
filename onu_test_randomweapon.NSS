@@ -1,9 +1,9 @@
-//#include "ps_inc_treasuregeneration"
+#include "ps_inc_treasuregeneration"
 #include "nwnx_sql"
-string sHolder = "ps_utility_itemvariableholder";
+//string sHolder = "ps_utility_itemvariableholder";
 
 //Max items code
-int GetMaxItemsInDatabaseTable(string sTable = "", int nTreasureLevel = 1, string sSubTable = "", int nCombineLevels = FALSE) {
+/*int GetMaxItemsInDatabaseTable(string sTable = "", int nTreasureLevel = 1, string sSubTable = "", int nCombineLevels = FALSE) {
 	object oHolder = GetObjectByTag(sHolder);
 	AssignCommand(oHolder, ActionSpeakString("found holder", TALKVOLUME_SHOUT));
 	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
@@ -62,7 +62,7 @@ object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1
 	object oObj = CreateItemOnObject(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
 	PrintString ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
 	return oObj;   
-}
+}*/
 
 void main () {
 

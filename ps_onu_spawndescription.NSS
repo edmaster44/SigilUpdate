@@ -1,4 +1,4 @@
-//#include "ps_inc_randomitems"
+#include "ps_inc_randomitems"
 void main() {
 
 	SpeakString("here we are", TALKVOLUME_SHOUT);
@@ -6,12 +6,12 @@ void main() {
 	int nType = GetLocalInt(OBJECT_SELF, "type");
 	AssignCommand(OBJECT_SELF, SpeakString("generating an item of type: "+IntToString(nType), TALKVOLUME_SHOUT));
 	
-	/*if (nType == 1)
+	if (nType == 1)
 		CreateExperimentalPotionOnTarget(oPC, d3());
 	else if (nType == 2)
 		CreateExperimentalScrollOnTarget(oPC, d3());
 	else if (nType == 3)
-		CreateTrinketOnTarget(oPC, d3());*/
+		CreateTrinketOnTarget(oPC, d3());
 }
 
 /*void CreatePaperJunkOnTarget(object oPC) {
