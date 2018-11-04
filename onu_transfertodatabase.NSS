@@ -235,7 +235,7 @@ void LoadJunkToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 24) {
+	while (n < 25) {
 		string sPot = GetFromValMiscList(n);
 		if (sPot == "") {
 			n++; continue;
@@ -286,7 +286,7 @@ void LoadJunkToDatabase(object oPC) {
 	sQuery = "UPDATE treasure_junk SET special='trapkit' WHERE resref LIKE '%trap%'";
 	SQLExecDirect(sQuery);
 	n = 1;
-	while (n < 65) {
+	while (n < 94) {
 		string sPot = GetAmmoFromList(n);
 		if (sPot == "") {
 			n++; continue;
@@ -357,7 +357,7 @@ void LoadArmorToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 84) {
+	while (n < 85) {
 		string sPot = GetArmorFromList(n, 2);
 		if (sPot == "") {
 			n++; continue;
@@ -557,7 +557,7 @@ void LoadHelmetsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 15) {
+	while (n < 16) {
 		string sPot = GetHelmetsFromList(n, 2);
 		if (sPot == "") {
 			n++; continue;
@@ -637,7 +637,7 @@ void LoadMagicalJewelryToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 56) {
+	while (n < 57) {
 		string sPot = GetMagicJewelryFromList(n, 2);
 		if (sPot == "") {
 			n++; continue;
@@ -686,12 +686,52 @@ void LoadMiscellaneousToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 18) {
+	while (n < 9) {
 		string sPot = GetMiscFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
 		}
 		UploadItemToDatabase(sPot, "treasure_miscellaneous", oPC, 3);
+		n++;
+	}
+}
+
+void LoadWeaponsToDatabase(object oPC) {
+	SQLExecDirect("SELECT * FROM information_schema.tables WHERE table_name = 'treasure_weapons' LIMIT 1");
+	if (SQLFetch() == SQL_ERROR || SQLGetData(1) == "") { 
+		SendMessageToPC(oPC, "Creating new table");
+		SQLExecDirect("CREATE TABLE treasure_weapons (item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), resref VARCHAR(255), treasure_level INT");
+		
+	} else {
+		SendMessageToPC(oPC, "Table already exists");
+	}
+	SQLExecDirect("TRUNCATE TABLE treasure_weapons");
+	
+	int n = 1;
+	while (n < 463) {
+		string sPot = GetWeaponFromList(n, 1);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_weapons", oPC, 1);
+		n++;
+	}
+	n = 1;
+	while (n < 224) {
+		string sPot = GetWeaponFromList(n, 2);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_weapons", oPC, 2);
+		n++;
+	}
+	n = 1;
+	while (n < 232) {
+		string sPot = GetWeaponFromList(n, 3);
+		if (sPot == "") {
+			n++; continue;
+		}
+		UploadItemToDatabase(sPot, "treasure_weapons", oPC, 3);
 		n++;
 	}
 }
@@ -727,4 +767,6 @@ void main () {
 		LoadMiscellaneousToDatabase(oPC);
 	else if (nType == 14)
 		LoadShieldsToDatabase(oPC);
+	else if (nType == 15)
+		LoadWeaponsToDatabase(oPC);
 }
