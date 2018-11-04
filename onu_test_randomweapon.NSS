@@ -73,10 +73,10 @@ void main () {
 	
 	SpeakString("Generating loot of "+IntToString(nLootLevel)+" treasure level", TALKVOLUME_SHOUT);
 	
-	string sResref = PickItemFromDatabase("treasure_weapons", nLootLevel);
-	CreateTreasureItemOnTarget(sResref, oPC, 1);
+	//string sResref = PickItemFromDatabase("treasure_weapons", nLootLevel);
+	//CreateTreasureItemOnTarget(sResref, oPC, 1);
 	
-	//GenerateTreasureItemOnTarget(oPC, nLootLevel);
+	GenerateTreasureItemOnTarget(oPC, nLootLevel);
 	/*int nLevel = Random(30)+1;
 	int nPoints = GetPointValueForCR(nLevel);
 	int nMatLevel = nPoints-2;
