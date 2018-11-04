@@ -1,12 +1,15 @@
 //#include "ps_inc_treasuregeneration"
 #include "nwnx_sql"
+string sHolder = "ps_utility_itemvariableholder";
 
 //Max items code
-int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
-	object oHolder = GetModule();
+int GetMaxItemsInDatabaseTable(string sTable = "", int nTreasureLevel = 1, string sSubTable = "", int nCombineLevels = FALSE) {
+	object oHolder = GetObjectByTag(sHolder);
+	AssignCommand(oHolder, ActionSpeakString("found holder", TALKVOLUME_SHOUT));
 	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
 	if (nMax > 0)
 		return nMax;
+	AssignCommand(oHolder, ActionSpeakString("initializing max items in "+sTable, TALKVOLUME_SHOUT));
 		
 	string sQuery = "SELECT COUNT(*) FROM "+sTable+" WHERE ";
 	if (nCombineLevels) 
@@ -16,19 +19,23 @@ int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTab
 	if (sSubTable != "") 
 		sQuery += " AND special='"+sSubTable+"'";
 	
+	AssignCommand(oHolder, ActionSpeakString(sQuery, TALKVOLUME_SHOUT));
 	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
 		nMax = StringToInt(SQLGetData(1));
 	}
 	
+	AssignCommand(oHolder, ActionSpeakString("found: "+IntToString(nMax), TALKVOLUME_SHOUT));
 	SetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel), nMax);
 	return nMax;
 }
 
 //Testing pick item from database code
 string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
+	object oHolder = GetObjectByTag(sHolder);
 	int nMax = GetMaxItemsInDatabaseTable(sTable, nTreasureLevel, sSubTable, nCombineLevels);
 	int nRandom = Random(nMax);
+	AssignCommand(oHolder, ActionSpeakString("picked: "+IntToString(nRandom), TALKVOLUME_SHOUT));
 	
 	string sQuery = "SELECT resref FROM "+sTable+" WHERE ";
 	if (nCombineLevels) 
@@ -39,18 +46,20 @@ string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable 
 		sQuery += " AND special='"+sSubTable+"'";
 	sQuery += " LIMIT "+IntToString(nRandom)+", 1";
 		
+	AssignCommand(oHolder, ActionSpeakString(sQuery, TALKVOLUME_SHOUT));
 	SQLExecDirect(sQuery);
 	string sItem = "ps_utility_error";
 	if (SQLFetch() != SQL_ERROR) { 
 		sItem = SQLGetData(1);
 	}
+	AssignCommand(oHolder, ActionSpeakString("returning: "+sItem, TALKVOLUME_SHOUT));
 	return sItem;
 	
 }
 
 //Adds in debug messages for treasure generation
 object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1, string sNewTag="", int bDisplayFeedback=TRUE) {
-	object oObj = CreateTreasureItemOnTarget(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
+	object oObj = CreateItemOnObject(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
 	PrintString ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
 	return oObj;   
 }

@@ -1,14 +1,17 @@
-#include "nw_o2_coninclude"
 #include "ps_inc_functions"
 
+//Difficulty levels
 const int DIFFLOW = 1;
 const int DIFFNORM = 2;
 const int DIFFHIGH = 3;
 const int DIFFVERY = 4;
 
+//time constants
 const int cMidnight = 86400;
 const int cSpawnWait = 300;
 
+//Get the difficulty constant this pc / party
+//is playing on.
 int PS_GetDifficulty(object oPC)
 {
 	//diff 1 = low
@@ -36,6 +39,8 @@ int PS_GetDifficulty(object oPC)
 	return iDiff;
 }
 
+//Get the tag of the nearest monster
+//for double checking whether we should spawn a new thing
 string sNearestMonster(location lSpawnpoint)
 {
   object oTempMonster = GetNearestObjectToLocation(OBJECT_TYPE_CREATURE,lSpawnpoint);
@@ -45,6 +50,7 @@ string sNearestMonster(location lSpawnpoint)
   return "";
 }
 
+//Log the spawn failure to the server logs
 void LogSpawnFailure(object oTrigger, string sTemplate)
 {
 	string sWPName = GetLocalString(oTrigger, "WP");
@@ -60,6 +66,8 @@ void LogSpawnFailure(object oTrigger, string sTemplate)
 	WriteTimestampedLogEntry(sText);
 }
 
+//Create monster of correct mod at location
+//includes chance to make monster elite
 void SpawnMonsterAtLocation(object oTrigger, string toSpawn, location lSpawnpoint, float avg, int iEliteChance, string mod) {
 		
 	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, toSpawn+mod, lSpawnpoint); 
