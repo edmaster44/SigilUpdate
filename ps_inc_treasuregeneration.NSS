@@ -89,6 +89,8 @@ string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable 
 	string sItem = "ps_utility_error";
 	if (SQLFetch() != SQL_ERROR) { 
 		sItem = SQLGetData(1);
+	} else {
+		WriteTimestampedLogEntry(sQuery+" returned an error");
 	}
 	return sItem;
 	

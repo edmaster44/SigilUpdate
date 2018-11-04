@@ -22,7 +22,7 @@ int GetChallengeRatingOfTarget(object oTarget) {
 //Adds in debug messages for treasure generation
 object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1, string sNewTag="", int bDisplayFeedback=TRUE) {
 	object oObj = CreateItemOnObject(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
-	PrintString ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
+	WriteTimestampedLogEntry ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
 	return oObj;   
 }
 
