@@ -44,11 +44,11 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 			if (FindSubString(sLabel, sPartial) >= 0) {
 				if (index >= 1955 && index <= 1961) {//golem + corpse stuff	
 					count++;
-					continue;
+				} else {
+					if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "found = "+IntToString(index));
+					SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
+					count++;
 				}
-				if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "found = "+IntToString(index));
-				SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
-				count++;
 			}
 			index++;	
 			
