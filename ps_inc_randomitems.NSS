@@ -6,6 +6,7 @@
 const int SPECIAL_BOOK_CHANCE = 10;
 const string QUEST_ITEM_COLOR = "<C=DarkGoldenRod>";
 const string RANDOM_DROP_COLOR = "<C=SteelBlue>";
+string sHolder = "ps_utility_itemvariableholder";
 
 //***************************************************
 //Utility
@@ -26,12 +27,13 @@ object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1
 }
 
 //Gets a random icon for your random item!
-int GetRandomIcon(string sPartial) {
+int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 	
-	object oHolder = GetModule();
+	object oHolder = GetObjectByTag(sHolder);
 	
 	//If this list hasn't been saved yet; save it for later!
 	int nMax = GetLocalInt(oHolder, sPartial+"_max");
+	if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "max icon of "+sPartial+" = "+IntToString(nMax));
 	if (nMax <= 0) {
 		int index = 0;
 		int count = 0;
@@ -42,6 +44,7 @@ int GetRandomIcon(string sPartial) {
 			if (FindSubString(sLabel, sPartial) >= 0) {
 				if (index >= 1955 && index <= 1961) //golem + corpse stuff
 					continue;
+				if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "found = "+IntToString(index));
 				SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
 				count++;
 			}
@@ -50,11 +53,13 @@ int GetRandomIcon(string sPartial) {
 		}
 		SetLocalInt(oHolder, sPartial+"_max", count);
 	} 
+	if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "done cycling");
 	
 	//We have the list; go!	
 	nMax = GetLocalInt(oHolder, sPartial+"_max");
 	int nRandom = Random(nMax);
 	int nIcon = GetLocalInt(oHolder, sPartial+"_"+IntToString(nRandom));
+	if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "chosen: "+IntToString(nIcon));
 	return nIcon;
 } 
 
