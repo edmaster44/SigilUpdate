@@ -1,7 +1,3 @@
-void PlayCustomAnimationWrapper(object oTarget, string sAnim, int bLoop, float speed) {
-	PlayCustomAnimation(oTarget,sAnim, bLoop, speed);
-}
-
 void main()
 {
 	object oPC = GetItemActivator();
@@ -9,7 +5,7 @@ void main()
 	ClearAllActions();
 
 	// Slow the Animation down to half speed..
-	PlayCustomAnimationWrapper(OBJECT_SELF, "smoking", 0, 0.5f);
+	PlayCustomAnimation(oPC, "smoking", FALSE, 0.5f);
 	
 	effect eSmoke = EffectNWN2SpecialEffectFile("fx_smoking_exhale");
 

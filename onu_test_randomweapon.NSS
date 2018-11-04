@@ -1,7 +1,7 @@
 #include "ps_inc_treasuregeneration"
-
 void main () {
 
+	SpeakString("here we are", TALKVOLUME_SHOUT);
 	object oPC = GetLastUsedBy();
 	int nLootLevel = d4();
 	

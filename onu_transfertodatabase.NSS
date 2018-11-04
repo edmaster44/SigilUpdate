@@ -59,7 +59,7 @@ void LoadGemstonesIntoDatabase (object oPC) {
 
 	SQLExecDirect("TRUNCATE TABLE gemstones");
 
-	object oChest = GetObjectByTag("plc_chest_gemstonegeneration_2");
+	object oChest = GetObjectByTag(gemstoneBox);
 	object oItem = GetFirstItemInInventory(oChest);
 	int n = 0;
     while (GetIsObjectValid(oItem)) {
@@ -73,11 +73,11 @@ void LoadGemstonesIntoDatabase (object oPC) {
 			sResref = "gemstone_value_medium";
 		}
 		
-		string sName = GetName(oItem);
+		string sName = SQLEncodeSpecialChars(GetName(oItem));
 		string sTag = GetTag(oItem);
 		int nIcon = GetItemIcon(oItem);
 		string sColor = GetLocalString(oItem, "Color");
-		string sDescription = GetLocalString(oItem, "GemDescription")+"\n\n"+GetLocalString(oItem, "MineralDescription");
+		string sDescription = SQLEncodeSpecialChars(GetLocalString(oItem, "GemDescription")+"\n\n"+GetLocalString(oItem, "MineralDescription"));
 		string sVFX = GetLocalString(oItem, "VFX");
 		float fDur = GetLocalFloat(oItem, "Duration");
 	

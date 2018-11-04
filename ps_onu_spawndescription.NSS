@@ -1,9 +1,10 @@
 #include "ps_inc_randomitems"
 void main() {
 
+	SpeakString("here we are", TALKVOLUME_SHOUT);
 	object oPC = GetLastUsedBy();
 	int nType = GetLocalInt(OBJECT_SELF, "type");
-	SpeakString("generating an item of type: "+IntToString(nType), TALKVOLUME_SHOUT);
+	AssignCommand(OBJECT_SELF, SpeakString("generating an item of type: "+IntToString(nType), TALKVOLUME_SHOUT));
 	
 	if (nType == 1)
 		CreateExperimentalPotionOnTarget(oPC, d3());
