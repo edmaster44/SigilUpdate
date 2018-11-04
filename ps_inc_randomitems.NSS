@@ -230,7 +230,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	string sDescrip = "";
 	string sBase = "ps_crft_basemisc";
 	SendMessageToPC(oTarget, "about to generate icon");
-	int nIcon = GetRandomIcon("it_qi");
+	int nIcon = GetRandomIcon("it_qi", oTarget);
 	
 	int nPoints = 1;
 	if (nLevel == 1)
