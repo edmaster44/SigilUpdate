@@ -419,9 +419,9 @@ void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 	}
 	int nStackSize = 1;
 	if (nRandom == 11) { //Ammunition, generate stack
-		nStackSize = Random(180) + 1;
+		nStackSize = d10(4);
 	} else if (nRandom == 4) { //Coinage; generate a few
-		nStackSize = Random(5) + 1;
+		nStackSize = d4();
 	}
 	CreateTreasureItemOnTarget(sResref, oTarget, nStackSize);
 }

@@ -1,4 +1,3 @@
-
 void main()
 {
 	object oChest = OBJECT_SELF;
