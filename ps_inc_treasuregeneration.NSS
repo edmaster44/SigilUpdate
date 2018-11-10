@@ -388,7 +388,6 @@ void CreateScrollOnTarget(object oTarget, int nTreasureLevel = TREASURE_LOW) {
 //Does not actually use the TREASURE constants for 
 //anything but experimental scrolls
 void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) {
-	SendMessageToPC(oTarget, "Generating paper");
 	int nRand = Random(100)+1;
 	if (nRand < 80) {
 		CreateScrollOnTarget(oTarget, nTreasureType);
@@ -400,7 +399,7 @@ void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) 
 //Junk Generation
 //***************************************************
 void CreateJunkOnTarget(object oTarget, int nTreasureType) {
-	SendMessageToPC(oTarget, "Generating junk");
+
 	string sResref = "";
 	int nRandom = Random(13)+1;
 	switch (nRandom) {
@@ -429,7 +428,7 @@ void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 //Alchemy Generation
 //***************************************************
 void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
-	SendMessageToPC(oTarget, "Generating a potion");
+
 	if (d100() < 10) {
 		CreateExperimentalScrollOnTarget(oTarget, nTreasureLevel);
 	} else {
@@ -441,7 +440,7 @@ void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 //Gems Generation
 //***************************************************
 void CreateGemOnTarget(object oTarget, int nTreasureType) {
-	SendMessageToPC(oTarget, "Generating a gem");
+
 	string sGem = "nw_it_gem001";
 	if (nTreasureType == TREASURE_LOW) {
 		CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
@@ -471,7 +470,7 @@ void CreateGemOnTarget(object oTarget, int nTreasureType) {
 //Gold Generation
 //***************************************************
 void CreateGoldOnTarget(object oTarget, int nTreasureLevel) {
-	SendMessageToPC(oTarget, "Generating gold");
+
 	int nHD = GetChallengeRatingOfTarget(oTarget);
 	if (nHD <= 0) {
 		nHD = 6*nTreasureLevel;

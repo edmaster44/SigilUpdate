@@ -33,7 +33,6 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 	
 	//If this list hasn't been saved yet; save it for later!
 	int nMax = GetLocalInt(oHolder, sPartial+"_max");
-	if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "max icon of "+sPartial+" = "+IntToString(nMax));
 	if (nMax <= 0) {
 		int index = 0;
 		int count = 0;
@@ -45,7 +44,6 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 				if (index >= 1955 && index <= 1961) {//golem + corpse stuff	
 					count++;
 				} else {
-					if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "found = "+IntToString(index));
 					SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
 					count++;
 				}
@@ -55,13 +53,11 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 		}
 		SetLocalInt(oHolder, sPartial+"_max", count);
 	} 
-	if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "done cycling");
 	
 	//We have the list; go!	
 	nMax = GetLocalInt(oHolder, sPartial+"_max");
 	int nRandom = Random(nMax);
 	int nIcon = GetLocalInt(oHolder, sPartial+"_"+IntToString(nRandom));
-	if (GetIsObjectValid(oTarget)) SendMessageToPC(oTarget, "chosen: "+IntToString(nIcon));
 	return nIcon;
 } 
 
@@ -106,7 +102,6 @@ void CreateRandomBookOnTarget(object oTarget) {
 
 //creates a wonky scroll on the target
 void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
-	SendMessageToPC(oTarget, "creating experimental scroll");
 
 	int nGood = Random(EXPERIMENTAL_SPELLEFFECTS_GOOD)+1;
 	int nBad = Random(EXPERIMENTAL_SPELLEFFECTS_BAD)+1;
@@ -155,7 +150,6 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 //***************************************************
 //Creates a wonky potion on the target
 void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
-	SendMessageToPC(oTarget, "creating experimental potion");
 
 	int nGood = Random(EXPERIMENTAL_EFFECTS_GOOD)+1; 
 	int nBad = Random(EXPERIMENTAL_EFFECTS_BAD)+1; 
@@ -582,11 +576,11 @@ void CreateRandomItemOfCategoryOnTarget(object oTarget, string sType) {
 	else
 		nMatLevel = Random(nMatLevel)+1;
 	nPoints -= nMatLevel;
-	SendMessageToPC(oTarget, "creating an "+IntToString(nLevel)+" level item of "+IntToString(nPoints)+" points and "+IntToString(nMatLevel)+" material level");
+	
 	object oItem = CreateRandomItemOfCategory(oTarget, sType, nMatLevel);
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
-	SetFirstName(oItem, GetName(oItem)+" (Level "+IntToString(nLevel)+")");
+	SetFirstName(oItem, GetName(oItem));
 }
 
 //Creates a random item of a given category, and enchants it 
@@ -603,7 +597,7 @@ void CreateRandomItemOfTypeOnTarget(object oTarget, int nIndex) {
 	else
 		nMatLevel = Random(nMatLevel)+1;
 	nPoints -= nMatLevel;
-	SendMessageToPC(oTarget, "creating an "+IntToString(nLevel)+" level item of "+IntToString(nPoints)+" points and "+IntToString(nMatLevel)+" material level");
+	
 	object oItem = CreateRandomItemOfType(oTarget, nIndex, nMatLevel);
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
@@ -662,7 +656,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	else if (nLevel == 3)
 		nPoints = d3()+1;
 	else
-		nPoints = d3()+2;
+		nPoints = d4()+2;
 		
 	//Create Name base from the icon in question
 	switch (nIcon) {

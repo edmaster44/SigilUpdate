@@ -1,7 +1,8 @@
 void main()
 {
 	object oPC = GetItemActivator();
-	SendMessageToPC(oPC, "Smoking kills.");
+	//SendMessageToPC(oPC, "Smoking kills.");
+   	SetCollision(oPC, FALSE);
 	ClearAllActions();
 
 	// Slow the Animation down to half speed..
