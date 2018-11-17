@@ -5,6 +5,7 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
+
  int iLock = GetGlobalInt("usigilwereratEnterLock");
  if ( iLock == 0 )
  {

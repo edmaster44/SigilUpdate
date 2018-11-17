@@ -68,4 +68,3 @@ void main()
 		 
 	DelayCommand(fProcessDelay, DeleteLocalInt(OBJECT_SELF, sBusyFlag));
 }
-
