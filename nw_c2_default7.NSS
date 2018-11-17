@@ -19,12 +19,6 @@
 #include "x2_inc_compon"
 #include "x0_i0_spawncond"
 #include "ps_inc_scriptcall"
-#include "ps_inc_gemstones"
-
-//Creates an item on the creature defined by the variables
-//creature_drop (the resref to spawn) and creature_drop_chance 
-//(percentage change to drop)
-void CreateCreatureDrop();
 
 void main()
 {
