@@ -113,7 +113,7 @@ void main()
                 {
                     if(PRCMyResistPower(oManifester, oTarget, nPen))
                     {
-                        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
+                        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS) && !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS))
                         {
                             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDur);
