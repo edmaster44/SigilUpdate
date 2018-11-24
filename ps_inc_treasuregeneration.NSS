@@ -430,9 +430,9 @@ void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 
 	if (d100() < 10) {
-		CreateExperimentalScrollOnTarget(oTarget, nTreasureLevel);
+		CreateExperimentalPotionOnTarget(oTarget, nTreasureLevel);
 	} else {
-		string sRes = PickItemFromDatabase("treasure_potions", nTreasureLevel);
+		string sRes = PickItemFromDatabase("treasure_potions", nTreasureLevel, "", TRUE);
 		CreateTreasureItemOnTarget(sRes, oTarget, 1);
 	}
 }

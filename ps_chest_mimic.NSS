@@ -9,9 +9,10 @@ void main()
 	object oChest = OBJECT_SELF;
 	int iChestWait = GetLocalInt(oChest,"RESPAWN");
 	int iMimic = GetLocalInt(oChest, "MIMIC_CHANCE");
+	int nNoMimic = GetLocalInt(oChest, "NO_MIMIC");
 	object oPC = GetLastOpenedBy();
 	
-	if (d100() < iMimic) {
+	if (d100() < iMimic && nNoMimic == 0) {
 		string sMimic = GetLocalString(oChest, "MIMIC_TAG");
 		float nMimicLow = IntToFloat(GetLocalInt(oChest, "MIMIC_LOW_CR"));
 		float nMimicHigh = IntToFloat(GetLocalInt(oChest, "MIMIC_HIGH_CR"));
@@ -35,6 +36,10 @@ void main()
 		SpawnMonster(OBJECT_SELF, sMimic, OBJECT_SELF, avg, iEliteChance, mod);
 		DestroyObject(OBJECT_SELF, 0.1f);
 	} else {
+		//Rolled for no mimic; make sure mimic doesn't spawn for 10 minutes
+		SetLocalInt(oChest, "NO_MIMIC", 1);
+		DelayCommand(600.0f, DeleteLocalInt(oChest, "NO_MIMIC"));
+		
 		if(iChestWait == 0)
 			iChestWait = cChestWait;
 					

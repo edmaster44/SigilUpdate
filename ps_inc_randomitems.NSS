@@ -14,9 +14,14 @@ string sHolder = "ps_utility_itemvariableholder";
 //Grabs the CR of the creature, or the saved int CR on the placeable
 int GetChallengeRatingOfTarget(object oTarget) {
 	if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE) {
+		AssignCommand(oTarget, ActionSpeakString("CR: "+FloatToString(GetChallengeRating(oTarget)), TALKVOLUME_SHOUT));
 		return FloatToInt(GetChallengeRating(oTarget));
 	} else {
-		return GetLocalInt(oTarget, "CR");
+		AssignCommand(oTarget, ActionSpeakString("CR: "+IntToString(GetLocalInt(oTarget, "CR")), TALKVOLUME_SHOUT));
+		if (GetLocalInt(oTarget, "CR") > 0)
+			return GetLocalInt(oTarget, "CR");
+		else 
+			return Random(10)+1;
 	}
 }
 //Adds in debug messages for treasure generation
@@ -570,17 +575,19 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 void CreateRandomItemOfCategoryOnTarget(object oTarget, string sType) {
 	int nLevel = GetChallengeRatingOfTarget(oTarget);
 	int nPoints = GetPointValueForCR(nLevel);
-	int nMatLevel = nPoints-2;
-	if (nMatLevel <= 0)
-		nMatLevel = 0;
-	else
-		nMatLevel = Random(nMatLevel)+1;
-	nPoints -= nMatLevel;
+	int nMatLevel = 0;
+	if (sType != "M") {
+		int nMatLevel = nPoints-2;
+		if (nMatLevel <= 0)
+			nMatLevel = 0;
+		else
+			nMatLevel = Random(nMatLevel)+1;
+		nPoints -= nMatLevel;
+	}
 	
 	object oItem = CreateRandomItemOfCategory(oTarget, sType, nMatLevel);
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
-	SetFirstName(oItem, GetName(oItem));
 }
 
 //Creates a random item of a given category, and enchants it 
@@ -601,7 +608,6 @@ void CreateRandomItemOfTypeOnTarget(object oTarget, int nIndex) {
 	object oItem = CreateRandomItemOfType(oTarget, nIndex, nMatLevel);
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
-	SetFirstName(oItem, GetName(oItem)+" (Level "+IntToString(nLevel)+")");
 }
 
 //***************************************************

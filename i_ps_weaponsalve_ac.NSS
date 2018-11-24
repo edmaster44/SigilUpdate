@@ -28,8 +28,9 @@ void main () {
 	object oTarget = GetItemActivatedTarget();
 	
 	if (GetObjectType(oTarget) != OBJECT_TYPE_ITEM ||
-		GetWeaponType(oTarget) != WEAPON_TYPE_NONE) {
+		GetWeaponType(oTarget) == WEAPON_TYPE_NONE) {
 		SendMessageToPC(oPC, "Target must be a weapon.");
+		return;
 	}
 	
 	int RuinFeat = GetLocalInt(oItem, "ruin_feat_id");

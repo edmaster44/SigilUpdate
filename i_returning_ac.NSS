@@ -55,7 +55,7 @@ void main()
 	if (iItemType == ITEM_TYPE_RETURNING_BOLTS) { sThrownTemplate = TEMPLATE_BOLT; }
 	if (iItemType == ITEM_TYPE_RETURNING_BULLETS) { sThrownTemplate = TEMPLATE_BULLET; }
 	
-	object oCreated = CreateItemOnObject(sThrownTemplate, oPC, 99, "returnthrown", FALSE);
+	object oCreated = CreateItemOnObject(sThrownTemplate, oPC, 500, "returnthrown", FALSE);
 	
 	// Tag the set and throwers.
 	id = Random(99999);
@@ -85,7 +85,7 @@ void main()
 	}
 	
 	if (matType > 0) {
-		SendMessageToPC(oPC, "Debug: Material Type "+IntToString(matType));  
+		//SendMessageToPC(oPC, "Debug: Material Type "+IntToString(matType));  
 		SetItemBaseMaterialType(oCreated, matType);
 	}
 	
