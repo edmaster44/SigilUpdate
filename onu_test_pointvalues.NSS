@@ -2,6 +2,7 @@
 
 void TestPointValue(object oPC, object oItem) {
 
+	SendMessageToPC(oPC, "********************************");
 	SendMessageToPC(oPC, "Item: "+GetName(oItem));
 	itemproperty ip = GetFirstItemProperty(oItem);
 	int nPoints = 0;
@@ -50,6 +51,8 @@ void main () {
 	for (n = 0; n < NUM_INVENTORY_SLOTS; n++) {
 		object oItem = GetItemInSlot(n, oPC);
 		if (GetIsObjectValid(oItem)) {
+			int nMax = GetItemTotalPointsAllowed(oItem, oPC);
+			SendMessageToPC(oPC, "max points allowed: "+IntToString(nMax));
 			TestPointValue(oPC, oItem);
 		}
 	}

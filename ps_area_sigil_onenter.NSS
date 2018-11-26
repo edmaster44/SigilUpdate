@@ -274,6 +274,13 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_noobstore", lSpawnpoint);    
   }
+  //Peddler
+  if(GetObjectByTag("ps_npc_bazaarpeddler") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("WP_ps_npc_bazaarpeddler");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_bazaarpeddler", lSpawnpoint);    
+  }
   
   SetGlobalInt("SigilEnterLock", 0);
  }
