@@ -70,7 +70,7 @@ int GetItemTotalPoints(object oItem);
 int IsPowerfulMaterial(itemproperty ip);
 
 //Max number of enchantment points
-int GetItemTotalPointsAllowed(object oItem);
+int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID);
 
 //************************************************
 //2da data fetch classes
@@ -1002,7 +1002,7 @@ int IsPowerfulMaterial(itemproperty ip) {
 }
 
 //Max number of enchantment points
-int GetItemTotalPointsAllowed(object oItem) {
+int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID) {
 
 	int nBase = 10; //later we can add higher point base for suboptimal items
 	if (GetWeaponType(oItem) != WEAPON_TYPE_NONE) //Weapons start at 8 points
@@ -1010,12 +1010,19 @@ int GetItemTotalPointsAllowed(object oItem) {
 	int nNumMaterials = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)) {
-		if (GetItemPropertyType(ip) == 100 && IsPowerfulMaterial(ip)) { //find Made Of property and check value
+	
+		if (GetIsObjectValid(oPC)) 
+			SendMessageToPC(oPC, "Property type: "+IntToString(GetItemPropertyType(ip))+", sub type: "+IntToString(GetItemPropertySubType(ip)));
+		
+		if (GetItemPropertyType(ip) == 100 && IsPowerfulMaterial(ip))  //find Made Of property and check value
 			nNumMaterials++;
-		}
+		
 		ip = GetNextItemProperty(oItem);
 	}
 	
+	if (GetIsObjectValid(oPC)) 
+		SendMessageToPC(oPC, "number of materials: "+IntToString(nNumMaterials));
+
 	if (nNumMaterials > 0)
 		nNumMaterials -= 1;
 	return nBase+nNumMaterials;
