@@ -112,6 +112,13 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", lSpawnpoint);  
   }
+
+  if(GetObjectByTag("ps_npc_clerkspeddler") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_npc_clerkspeddler");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_clerkspeddler", lSpawnpoint);    
+  }
   
   SetGlobalInt("SigilEnterLock", 0);
  }
