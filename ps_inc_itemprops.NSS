@@ -52,7 +52,7 @@ object GetObjectFromDMArea(string sTag)
 		oObj = GetNextObjectInArea(oDMArea);
 	}
 	
-	return oStore;
+	return oObj;
 }
 
 itemproperty ItemPropertySpecialMaterial(int nMat) {
