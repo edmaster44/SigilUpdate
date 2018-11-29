@@ -132,7 +132,7 @@ void PS_Lycan_ScaledWeapons(object oPC)
 // Helper feat for adding multiattack in animal form
 void PS_Lycan_Multiattack(object oPC)
 {
-	itemproperty ipMA	= ItemPropertyBonusFeat(1315);
+	itemproperty ipMA	= ItemPropertyBonusFeat(1784);
 	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
 	
 	IPSafeAddItemProperty(oSkin, ipMA, HoursToSeconds(24));
