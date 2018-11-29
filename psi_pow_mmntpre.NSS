@@ -19,7 +19,7 @@
     Power Points: 13
     Metapsionics: Extend
 
-    You add a bonus equal to your manifester level (max +25) to attack, armour
+    You add a bonus of six to attack, armour
     class, saves, or skills for the duration of the power.
 
     Manifesting the power is a swift action, like manifesting a quickened power,
@@ -58,7 +58,7 @@ void main()
 
     if(manif.bCanManifest)
     {
-        int nBonus      = max(manif.nManifesterLevel, 25);
+        int nBonus      = 6
         effect eLink    = EffectVisualEffect(VFX_DUR_GLOBE_MINOR);
         float fDuration = 6.0f;
         if(manif.bExtend) fDuration *= 2;
