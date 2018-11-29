@@ -169,15 +169,24 @@ void main()
 
     }
 	
+	//Set object id for store area
 	object oStoreArea = GetFirstArea();
-	
-	while (GetTag(oStoreArea) != "ps_store_area" && oStoreArea != OBJECT_INVALID)
-	{
+	while (GetTag(oStoreArea) != "ps_store_area" && oStoreArea != OBJECT_INVALID) {
 		oStoreArea = GetNextArea();
 	}
 	
 	int iStoreArea = ObjectToInt(oStoreArea);
 	SetGlobalInt("STORE_AREA", iStoreArea);
+	
+	
+	//set object id for dm area
+	object oDMArea = GetFirstArea();
+	while (GetTag(oDMArea) != "ps_area_dmlair" && oDMArea != OBJECT_INVALID) {
+		oDMArea = GetNextArea();
+	}
+	
+	int iDMArea = ObjectToInt(oDMArea);
+	SetGlobalInt("DM_AREA", iDMArea);
 	
 	//For xp_craft mod
 	ExecuteScript("nwnx_craft_set_constants",oMod);

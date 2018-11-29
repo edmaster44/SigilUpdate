@@ -41,9 +41,23 @@ const int SPECIAL_MAT_LEATHER = 39;
 const int SPECIAL_MAT_WOOD = 40;
 const int SPECIAL_MAT_COLD_IRON = 41;
 
+//Cycles through objects in the DM area until it finds the correct one
+object GetObjectFromDMArea(string sTag)
+{
+	int iDMArea = GetGlobalInt("DM_AREA");
+	object oDMArea = IntToObject(iDMArea);
+	
+	object oObj = GetFirstObjectInArea(oDMArea);
+	while (GetTag(oObj) != sTag && oObj != OBJECT_INVALID) {
+		oObj = GetNextObjectInArea(oDMArea);
+	}
+	
+	return oObj;
+}
+
 itemproperty ItemPropertySpecialMaterial(int nMat) {
 
-	object oChest = GetNearestObjectByTag("pc_utility_ipchest");
+	object oChest = GetObjectFromDMArea("pc_utility_ipchest");
 	string sItem = "";
 	
 	switch (nMat) {
