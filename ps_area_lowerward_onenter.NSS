@@ -197,6 +197,13 @@ void main()
    oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_lowerlizard", lSpawnpoint, FALSE, "ps_npc_lowerlizard2"); 
   }
   
+  if(GetObjectByTag("ps_npc_lowerwardpeddler") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_npc_lowerwardpeddler");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_lowerwardpeddler", lSpawnpoint);    
+  }
+  
   SetGlobalInt("LowerwardEnterLock", 0);
  }
 }

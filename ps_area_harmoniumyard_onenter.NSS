@@ -7,6 +7,13 @@ void main()
  {
   SetGlobalInt("HarmYardEnterLock", 1); // Only allows one clean up at a time.
 
+  if(GetObjectByTag("ps_peddler_harmonium") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_peddler_harmonium");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_peddler_harmonium", lSpawnpoint);    
+  }
+
   if(GetObjectByTag("ps_npc_harmoniumyardguard1") == OBJECT_INVALID)
   {
    object oWP = GetWaypointByTag("ps_npcspawnpoint_yardguard1");

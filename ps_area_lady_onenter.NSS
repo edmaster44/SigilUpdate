@@ -10,6 +10,13 @@ void main()
  {
   SetGlobalInt("LadyEnterLock", 1); // Only allows one clean up at a time.
 
+  if(GetObjectByTag("ps_peddler_ladysward") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_peddler_ladysward");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_peddler_ladysward", lSpawnpoint);    
+  }
+
   if(GetObjectByTag("ps_npc_mercykiller") == OBJECT_INVALID)
   {
    object oWP = GetWaypointByTag("wp_lady_merc1");

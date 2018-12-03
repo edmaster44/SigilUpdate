@@ -26,6 +26,13 @@ void main()
   	SetLocalInt(OBJECT_SELF, "XaosPicked", 1);
   }
 
+  if(GetObjectByTag("ps_npc_hivepeddler") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_npc_hivepeddler");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hivepeddler", lSpawnpoint);    
+  }
+
   if(GetObjectByTag("ps_commoner_hiveward1") == OBJECT_INVALID)
   {
    object oWP = GetWaypointByTag("ps_hivespawn_rustygolem");
