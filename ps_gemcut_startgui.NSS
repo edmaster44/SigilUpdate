@@ -10,7 +10,6 @@ void main () {
 
 	object oPC = GetLastUsedBy();
 	ClearAllActions();
-	InitializeGemstoneBox();
 	
 	DisplayGuiScreen(oPC, sGemScreen, TRUE, xmlGemFile);
 	
@@ -20,6 +19,5 @@ void main () {
 	DelayCommand(0.5f, PlayWorkAnimation(oPC));
 	
 	RegenerateGemList(oPC);
-	InitializeGemstoneBox();
 
 }

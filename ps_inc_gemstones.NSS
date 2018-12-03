@@ -421,7 +421,10 @@ void RegenerateGemList(object oPC) {
 			}
 		}
 		oGem = GetNextItemInInventory(oPC);
-		
+	}
+	if (nCount <= 0) {
+		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", TRUE);
+		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 	}
 }
 
