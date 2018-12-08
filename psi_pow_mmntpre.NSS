@@ -58,7 +58,6 @@ void main()
 
     if(manif.bCanManifest)
     {
-        int nBonus      = 6
         effect eLink    = EffectVisualEffect(VFX_DUR_GLOBE_MINOR);
         float fDuration = 6.0f;
         if(manif.bExtend) fDuration *= 2;
@@ -66,16 +65,16 @@ void main()
         switch(manif.nSpellID)
         {
             case 14644:
-                eLink = EffectLinkEffects(eLink, EffectAttackIncrease(nBonus));
+                eLink = EffectLinkEffects(eLink, EffectAttackIncrease(6));
                 break;
             case 14645:
-                eLink = EffectLinkEffects(eLink, EffectACIncrease(nBonus));
+                eLink = EffectLinkEffects(eLink, EffectACIncrease(6));
                 break;
             case 14646:
-                eLink = EffectLinkEffects(eLink, EffectSavingThrowIncrease(SAVING_THROW_ALL, nBonus));
+                eLink = EffectLinkEffects(eLink, EffectSavingThrowIncrease(SAVING_THROW_ALL, 6));
                 break;
             case 14647:
-                eLink = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_ALL_SKILLS, nBonus));
+                eLink = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_ALL_SKILLS, 6));
                 break;
 
             default:{
