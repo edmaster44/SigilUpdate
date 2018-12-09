@@ -87,7 +87,7 @@ void main()
         {
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-            GoInvis(manif, oTarget);
+            //GoInvis(manif, oTarget);
         }// end if - The target can move extradimensionally
     }// end if - Successfull manifestation
 }
