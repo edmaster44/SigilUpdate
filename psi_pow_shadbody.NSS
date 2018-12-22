@@ -66,7 +66,7 @@ void main()
 
     if(manif.bCanManifest)
     {
-        effect eLink =                          EffectDamageReduction(10, DAMAGE_POWER_PLUS_ONE);
+        effect eLink =                          EffectDamageReduction(10, GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL );
                eLink = EffectLinkEffects(eLink, EffectUltravision());
                eLink = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT));
                eLink = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE));
