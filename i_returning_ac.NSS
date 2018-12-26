@@ -37,6 +37,15 @@ void main()
 	object iEquipped = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	if (GetLocalInt(iEquipped, "returningthrownid") == id) {
 		DestroyObject(iEquipped, 0.0f, FALSE); }
+	iEquipped = GetItemInSlot(INVENTORY_SLOT_ARROWS, oPC);
+	if (GetLocalInt(iEquipped, "returningthrownid") == id) {
+		DestroyObject(iEquipped, 0.0f, FALSE); }
+	iEquipped = GetItemInSlot(INVENTORY_SLOT_BOLTS, oPC);
+	if (GetLocalInt(iEquipped, "returningthrownid") == id) {
+		DestroyObject(iEquipped, 0.0f, FALSE); }
+	iEquipped = GetItemInSlot(INVENTORY_SLOT_BULLETS, oPC);
+	if (GetLocalInt(iEquipped, "returningthrownid") == id) {
+		DestroyObject(iEquipped, 0.0f, FALSE); }
 		
 	object iInventory = GetFirstItemInInventory(oPC);
 	while (GetIsObjectValid(iInventory))
@@ -65,6 +74,7 @@ void main()
 	
 	// Set the throwers as unsellable
 	SetStolenFlag(oCreated, TRUE);
+	SetPlotFlag(oCreated, TRUE);
 	
 	// Transfer the item properties.
 	itemproperty prop = GetFirstItemProperty(oItem);
