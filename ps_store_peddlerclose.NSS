@@ -4,7 +4,7 @@
 //12-2-18 - added delay in case you change your mind about an item
 void main () {
 
-	int nWaitTime = 600; //10 minute delay
+	int nWaitTime = 3600; //60 minute delay
 	object oItem = GetFirstItemInInventory(OBJECT_SELF);
 	while (GetIsObjectValid(oItem)) {
 	
