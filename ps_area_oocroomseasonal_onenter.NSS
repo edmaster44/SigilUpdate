@@ -89,5 +89,4 @@ void main()
     
   SetGlobalInt("OOCEnterLock", 0);
  }
- ExecuteScript("onenter_antimagic",OBJECT_SELF);
 }
