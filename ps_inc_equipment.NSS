@@ -402,13 +402,13 @@ void ED_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	
 	if(oItem == oSlotR || oItem == oSlotL)
 	{	if(oItem == oSlotR && iDiff > 0)
-		{	PS_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
+		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
 			itemproperty ipBoostR = ItemPropertyAttackBonus(iDiff);
 			IPSafeAddItemProperty(oItem, ipBoostR, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING ,FALSE, FALSE);
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied.");	}
 		else if(oItem == oSlotL && iDiff > 0)
-		{	PS_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
+		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
 			itemproperty ipBoostL = ItemPropertyAttackBonus(iDiff);
 			SendMessageToPC(oPC, "Bonus of +" + IntToString(iDiff) + " applied to weapon in hand: " + IntToString(iHand));
 			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING ,FALSE, FALSE);	}

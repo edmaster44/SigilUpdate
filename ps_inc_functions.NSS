@@ -1269,10 +1269,10 @@ int PS_GetSpellIdFromImmunityValue(int ImmunityValue, object Module)
 	return GetLocalInt(Module, "IPI_" + IntToString(ImmunityValue));
 }
 
-void PS_ManageItemImmunities(object Item, object EquippedTo, int Equipping)
+void PS_ManageItemImmunities(object oItem, object EquippedTo, int Equipping)
 {
 	object Module = GetModule();
-	itemproperty ip = GetFirstItemProperty(Item);
+	itemproperty ip = GetFirstItemProperty(oItem);
 	int RefDelta = (Equipping ? 1 : -1);
 
 	//
@@ -1303,7 +1303,7 @@ void PS_ManageItemImmunities(object Item, object EquippedTo, int Equipping)
 //			WriteTimestampedLogEntry("PS_ManageItemImmunities: Set " + SpellImmunityName + " from " + IntToString(RefCount) + " to " + IntToString(RefCount + RefDelta));
 		}
 
-		ip = GetNextItemProperty(Item);
+		ip = GetNextItemProperty(oItem);
 	}
 }
 

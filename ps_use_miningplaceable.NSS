@@ -4,9 +4,9 @@
 int GenerateGemSize() {
 	
 	int nRand = d100();
-	if (nRand <= 5) //5% chance for a large gemstone
+	if (nRand <= 10) //5% chance for a large gemstone
 		return 2; 
-	else if (nRand <= 15) //10% chance for a medium gemstone
+	else if (nRand <= 30) //10% chance for a medium gemstone
 		return 1;
 	else
 		return 0;
