@@ -15,11 +15,11 @@ int GenerateGemSize() {
 int GenerateGemQuality() {
 
 	int nRand = d100();
-	if (nRand <= 5) //5% chance for flawless quality gem
+	if (nRand <= 20) //20% chance for flawless quality gem
 		return 2;
-	else if (nRand <= 25) //20% chance for regular quality gem
+	else if (nRand <= 60) //40% chance for regular quality gem
 		return 1;
-	else	//75% chance for flawed gem
+	else	//40% chance for flawed gem
 		return 0;
 }
 

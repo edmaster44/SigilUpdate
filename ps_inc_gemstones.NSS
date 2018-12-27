@@ -351,30 +351,8 @@ void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
 	object oGem = GetRandomGemstoneToSpawn(oTarget);
 	
 	if (GetIsGemstone(oGem)) {
-		int nSize = 1;
-		int nQuality = 0;
-		
-		int nRand = d100();
-		if (nLootLevel == 2) {
-			if (nRand < 10) {
-				nQuality = Random(2);
-			} else if (nRand < 20) {
-				nSize = Random(2);
-			}
-		} else if (nLootLevel == 3) {
-			if (nRand < 20) {
-				nQuality = Random(2);
-			} else if (nRand < 40) {
-				nSize = Random(2);
-			}
-		} else if (nLootLevel == 4) {
-			if (nRand < 20) {
-				nQuality = Random(3);
-			} else if (nRand < 40) {
-				nSize = Random(2)+1;
-			}
-		}
-		
+		int nSize = 0;
+		int nQuality = Random(3);
 		SetDetailsOfGemstone(oGem, nQuality, nSize, oTarget);
 	}
 }
