@@ -14,7 +14,7 @@
 
 // JLR - OEI 08/23/05 -- Permanency & Metamagic changes
 #include "nwn2_inc_spells"
-
+#include "ps_inc_functions"
 
 #include "x2_inc_spellhook" 
 
@@ -53,7 +53,7 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLINDSIGHT, FALSE));
 
-    float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
+    float fDuration = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);

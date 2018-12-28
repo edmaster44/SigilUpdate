@@ -24,7 +24,7 @@ bugfix by Kovi 2002.07.23
 
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
-
+#include "ps_inc_functions"
 
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
@@ -51,7 +51,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     float fDuration = TurnsToSeconds(nCasterLvl * 10);
 
     //effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);

@@ -23,7 +23,7 @@
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_metmag"
-
+#include "ps_inc_functions"
 void main()
 {
     /*
@@ -45,7 +45,7 @@ void main()
 //Declare major variables
 	object	oTarget		=	GetSpellTargetObject();
 	object	oCaster		=	OBJECT_SELF;
-	int		nCasterLev	=	GetCasterLevel(oCaster);
+	int		nCasterLev	=	PS_GetCasterLevel(oCaster);
 	int		nDex		=	GetAbilityScore(oTarget, ABILITY_DEXTERITY);
 	int		nDam;
 	int		nKODur;

@@ -688,8 +688,8 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	
 		if (GetMonkWeapon(oITEM))
 			DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
-			if (nITEM == ED_GetIsFinessable(oITEM)) 
-			DelayCommand(0.1f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
+			if (ED_GetIsFinessable(oITEM))
+			 DelayCommand(0.1f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
 			if (GetSubRace(oPC) == 243) ED_ApplySpecialWeaponFinesse(oPC, oITEM);
 
 

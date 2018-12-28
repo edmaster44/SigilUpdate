@@ -23,7 +23,7 @@
 //:: Created By: Patrick Mills
 //:: Created On: Oct 20, 2006
 //:://////////////////////////////////////////////
-
+#include "ps_inc_functions"
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 #include "x2_i0_spells"
@@ -57,9 +57,9 @@ void main()
 	effect	eVis			=	EffectVisualEffect(VFX_SPELL_DUR_COCOON);
 	effect 	eFailure			=	EffectSpellFailure(100);
 	float	fDuration		=	12.0;
-	int		nDRLimit		=	10*GetCasterLevel(oCaster);
+	int		nDRLimit		=	10*PS_GetCasterLevel(oCaster);
 	effect	eDR				=	EffectDamageReduction(10, 0, nDRLimit, DR_TYPE_NONE); 
-	int		nRegen			=	GetCasterLevel(oCaster);
+	int		nRegen			=	PS_GetCasterLevel(oCaster);
 	effect	eRegen;
 	
 //Determine duration

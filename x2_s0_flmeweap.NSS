@@ -27,7 +27,7 @@
 
 #include "nw_i0_spells"
 #include "x2_i0_spells"
-
+#include "ps_inc_functions"
 #include "x2_inc_spellhook"
 
 
@@ -39,7 +39,7 @@ void main()
         return;
     }
 
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_EXTEND)
