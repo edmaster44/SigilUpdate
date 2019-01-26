@@ -56,11 +56,11 @@ void PS_NatArmor_Deva(object oPC)
 	else {iPRCLvl = 0;}
 //Determine AC bonus granted based on PRC class level
 	if (iPRCLvl >= 10) 		//+6 bonus at 10th level
-	{	iBonus = 7;		} 
-	else if (iPRCLvl >= 7)	//+4 bonus at 7th level
 	{	iBonus = 5;		} 
-	else if (iPRCLvl >= 4) 	//+2 bonus at 4rd level
+	else if (iPRCLvl >= 7)	//+4 bonus at 7th level
 	{	iBonus = 3;		} 
+	else if (iPRCLvl >= 4) 	//+2 bonus at 4rd level
+	{	iBonus = 2;		} 
 	else					//no bonus at 1st level
 	{	iBonus = 0;		}
 	
@@ -194,15 +194,15 @@ void PS_NatArmor_Hezrou(object oPC)
 	iPRCLvl	= GetLevelByClass(CLASS_TYPE_HEZROU, oPC);
 //Determine AC bonus granted based on PRC class level
 	if (iPRCLvl >= 9) 		//+10 bonus at 9th level
-	{	iBonus = 10;		} 
+	{	iBonus = 5;		} 
 	else if (iPRCLvl >= 7)	//+8 bonus at 7th level
-	{	iBonus = 8;		} 
+	{	iBonus = 4;		} 
 	else if (iPRCLvl >= 5) 	//+6 bonus at 5th level
-	{	iBonus = 6;		}
+	{	iBonus = 3;		}
 	else if (iPRCLvl >= 3) 	//+4 bonus at 3th level
-	{	iBonus = 4;		}
-	else if (iPRCLvl >= 1) 	//+2 bonus at 1st level
 	{	iBonus = 2;		}
+	else if (iPRCLvl >= 1) 	//+2 bonus at 1st level
+	{	iBonus = 1;		}
 	else					//no bonus
 	{	iBonus = 0;		}
 	
@@ -222,7 +222,7 @@ void PS_NatArmor_Archon(object oPC)
 	iPRCLvl	= GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC, oPC);
 //Determine AC bonus granted based on PRC class level
 	if (iPRCLvl >= 6) 		//+7 bonus at 6th level
-	{	iBonus = 7;		} 
+	{	iBonus = 6;		} 
 	else if (iPRCLvl >= 5)	//+5 bonus at 5th level
 	{	iBonus = 5;		} 
 	else if (iPRCLvl >= 4) 	//+4 bonus at 4th level
@@ -251,10 +251,10 @@ void PS_NatArmor_ArchonPRC(object oPC)
 	iTALevel	= GetLevelByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC, oPC);
 	iWALevel	= GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC);
 //Determine AC bonus granted based on PRC class level
-	if (iTALevel >= 2) 		//+1 bonus per level starting at 2
-	{	iBonus = (iTALevel - 1);	} 
-	if (iWALevel >= 2)		//+1 bonus per level starting at 2
-	{	iBonus = (iWALevel - 1);	}
+	if (iTALevel >= 2) 		//NA bonus = half of the Archon's level
+	{	iBonus = (iTALevel / 2);	} 
+	if (iWALevel >= 2)		//NA bonus = half of the Archon's level
+	{	iBonus = (iWALevel / 2);	}
 	
 	if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	//Calculate and apply AC bonus
@@ -277,7 +277,7 @@ void PS_NatArmor_Eladrin(object oPC)
 	{	iPRCLvl = GetLevelByClass(CLASS_TYPE_GHAELE_PRC, oPC);}
 	else {iPRCLvl = 0;}
 //Determine AC bonus granted based on PRC class level
-	iBonus = iPRCLvl - 1;
+	iBonus = iPRCLvl / 2;
 	if	(iBonus < 0)
 	{	iBonus = 0;	}
 	

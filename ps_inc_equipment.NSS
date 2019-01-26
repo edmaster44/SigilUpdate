@@ -22,6 +22,19 @@ int GetIsCreatureWeapon(int nTYPE)
 	if (nTYPE > 174) return FALSE;
 	return TRUE;
 }
+
+//A Wrapper for to Ignore Exsisting Finesse
+int GetExistingFinesse(object oItem)
+{
+	if ((GetBaseItemType(oItem) == BASE_ITEM_DAGGER) || (GetBaseItemType(oItem) ==BASE_ITEM_GLOVES )
+	 ||(GetBaseItemType(oItem) == BASE_ITEM_KAMA ) ||(GetBaseItemType(oItem) == BASE_ITEM_SHORTSWORD)||(GetBaseItemType(oItem) ==BASE_ITEM_SICKLE)
+	||(GetBaseItemType(oItem) ==BASE_ITEM_HANDAXE)||(GetBaseItemType(oItem) ==BASE_ITEM_LIGHTHAMMER)||
+	(GetBaseItemType(oItem) ==BASE_ITEM_MACE)||(GetBaseItemType(oItem) ==BASE_ITEM_RAPIER)) return TRUE;
+else
+return FALSE;
+
+
+}
 //A Wrapper for Get Monk Weapon Functions
 int GetMonkWeapon(object oItem)
 
@@ -404,14 +417,14 @@ void ED_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	{	if(oItem == oSlotR && iDiff > 0)
 		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
 			itemproperty ipBoostR = ItemPropertyAttackBonus(iDiff);
-			IPSafeAddItemProperty(oItem, ipBoostR, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING ,FALSE, FALSE);
+			IPSafeAddItemProperty(oItem, ipBoostR, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_REPLACE_EXISTING  ,FALSE, FALSE);
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied.");	}
 		else if(oItem == oSlotL && iDiff > 0)
 		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
 			itemproperty ipBoostL = ItemPropertyAttackBonus(iDiff);
 			SendMessageToPC(oPC, "Bonus of +" + IntToString(iDiff) + " applied to weapon in hand: " + IntToString(iHand));
-			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING ,FALSE, FALSE);	}
+			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_REPLACE_EXISTING  ,FALSE, FALSE);	}
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied."); }	
 }
@@ -665,9 +678,6 @@ void EquipmentEffects(object oPC)
 	ShieldRangedConceal(oPC, nLEFT);
 	SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
 	HeavyArmorOptimizations(oPC, oCHEST);
-//	SpecialWeaponFinesse(oPC, nRIGHT);
-//	SpecialWeaponFinesse(oPC, nLEFT);
-//	ED_ApplySpecialWeaponFinesse(oPC, oItem);
 	UnearthlyGrace(oPC, oCHEST);
 	SacredFirstPenalty(oPC, nRIGHT, nLEFT);
 	TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
@@ -686,11 +696,13 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		CheckForTempProperties(oITEM, oPC);
 	
-		if (GetMonkWeapon(oITEM))
-			DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
-			if (ED_GetIsFinessable(oITEM))
-			 DelayCommand(0.1f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
-			if (GetSubRace(oPC) == 243) ED_ApplySpecialWeaponFinesse(oPC, oITEM);
+		if (GetMonkWeapon(oITEM)) ApplyMeditativeStrikes(oPC,oITEM);
+		
+			if (ED_GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
+			 ED_ApplySpecialWeaponFinesse(oPC, oITEM);
+			 
+			if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
+			ED_ApplySpecialWeaponFinesse(oPC, oITEM);
 
 
 		
