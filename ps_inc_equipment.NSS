@@ -417,14 +417,14 @@ void ED_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	{	if(oItem == oSlotR && iDiff > 0)
 		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
 			itemproperty ipBoostR = ItemPropertyAttackBonus(iDiff);
-			IPSafeAddItemProperty(oItem, ipBoostR, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING  ,FALSE, FALSE);
+			IPSafeAddItemProperty(oItem, ipBoostR, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_REPLACE_EXISTING  ,FALSE, FALSE);
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied.");	}
 		else if(oItem == oSlotL && iDiff > 0)
 		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
 			itemproperty ipBoostL = ItemPropertyAttackBonus(iDiff);
 			SendMessageToPC(oPC, "Bonus of +" + IntToString(iDiff) + " applied to weapon in hand: " + IntToString(iHand));
-			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING  ,FALSE, FALSE);	}
+			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_REPLACE_EXISTING  ,FALSE, FALSE);	}
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied."); }	
 }
@@ -700,10 +700,9 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 		
 			if (ED_GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
 			 ED_ApplySpecialWeaponFinesse(oPC, oITEM);
-
+			 
 			if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
-			DelayCommand(0.02f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
-
+			ED_ApplySpecialWeaponFinesse(oPC, oITEM);
 
 
 		
@@ -720,9 +719,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	else
 	{
 		ConDrainProtection(oITEM, oPC);
-		PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
 		if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
-		
 	}
 	DelayCommand(0.1f, EquipmentEffects(oPC));
 }
