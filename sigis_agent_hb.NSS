@@ -26,7 +26,7 @@ void main()
 			SpeakString("Get yer latest copy of SIGIS here! Scandals, politiks, latest flayings!", TALKVOLUME_TALK);
 		}
 	}
-	else if (iRandom == 2)
+	else if (iRandom == 0)// Set to 0 to stop him from talking until the delay is increased.
 	{
 		string sTime = SigisDate(GetRealTime(), TRUE);
 		SpeakString("The time and date, sponsored by the Guvners, is " + sTime, TALKVOLUME_TALK);
