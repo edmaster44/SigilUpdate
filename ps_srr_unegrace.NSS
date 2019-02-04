@@ -1,4 +1,4 @@
-// Unearthly grace feat for Nymphs. CHA bonus to Saves and Dodge AC.
+// Unearthly grace feat for Nymphs. CHA bonus to Saves and Deflection AC.
 
 //#include "nw_i0_spells"
 #include "x2_inc_spellhook"
@@ -17,9 +17,13 @@ void main()
 	
 	if (iBonus < 1) return;
 	
-	if (GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST, oTarget)) > ARMOR_RANK_LIGHT)
+	if (GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST, oTarget)) > ARMOR_RANK_NONE)
 	{
-		SendMessageToPC(oTarget, "<color=red>Unearthly Grace will not work when wearing armour greater than light");
+		SendMessageToPC(oTarget, "<color=red>Unearthly Grace will not work when wearing armour");
+	}
+	else if (GetAlignmentLawChaos(oTarget) == ALIGNMENT_LAWFUL)
+	{
+		SendMessageToPC(oTarget, "<color=red>Unearthly Grace does not work with lawful alignments");
 	}
 	else if (!GetHasSpellEffect(GetSpellId(), oTarget))
 	{
