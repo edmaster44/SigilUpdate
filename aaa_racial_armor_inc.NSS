@@ -136,15 +136,15 @@ void PS_NatArmor_Succubus(object oPC)
 	iPRCLvl	= GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
 //Determine AC bonus granted based on PRC class level
 	if (iPRCLvl >= 10) 		//+9 bonus at 10th level
-	{	iBonus = 4;		} 
+	{	iBonus = 5;		} 
 	else if (iPRCLvl >= 8)	//+7 bonus at 8th level
-	{	iBonus = 3;		} 
+	{	iBonus = 4;		} 
 	else if (iPRCLvl >= 6) 	//+5 bonus at 6th level
-	{	iBonus = 2;		}
+	{	iBonus = 3;		}
 	else if (iPRCLvl >= 4) 	//+3 bonus at 4th level
-	{	iBonus = 1;		}
+	{	iBonus = 2;		}
 	else if (iPRCLvl >= 1) 	//+1 bonus at 1st level
-	{	iBonus = 0;		}
+	{	iBonus = 1;		}
 	else					//no bonus
 	{	iBonus = 0;		}
 	
