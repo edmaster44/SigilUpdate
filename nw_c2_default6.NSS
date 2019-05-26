@@ -219,11 +219,15 @@ if (nFireDmg > 4 && nFireDmg > (GetMaxHitPoints(OBJECT_SELF) / 4))
 }
 }
 
-void main()
-{
-//SpeakDebug("start of script");
-ApplySpecialElementalEffects();
-//SpeakDebug("end of script");
+void main() {
+
+	//Script hook
+	string sDamageScript = GetLocalString(OBJECT_SELF, "DamagedScript");
+	if (sDamageScript != "")
+		ExecuteScript(sDamageScript, OBJECT_SELF);
+
+	//Special elemental effects
+	ApplySpecialElementalEffects();
 
     int iFocused = GetIsFocused();
 

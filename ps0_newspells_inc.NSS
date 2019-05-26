@@ -8,6 +8,7 @@
 #include "x2_inc_itemprop"
 #include "x2_inc_toollib"
 #include "nwn2_inc_metmag"
+#include "ps_inc_advscript"
 
 /*	This is the include file for new spells for Bards, Clerics, Druids, Paladins, Rangers, and Wizards.
 
@@ -87,4 +88,167 @@ void PS_Spell_FreezingFog(object oPC, location lTarget, int nSpell)
 
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eFog, lTarget, fDuration);
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eRime, lTarget, fDuration);
+}
+
+//Checks whether the target is blind
+int GetIsBlind(object oTarget) {
+	effect eEffect = GetFirstEffect(oTarget);
+	while (GetIsEffectValid(eEffect)) {
+		if (GetEffectType(eEffect) == EFFECT_TYPE_BLINDNESS)
+			return TRUE;
+		eEffect = GetNextEffect(oTarget);
+	}
+	return FALSE;
+}
+
+//Gets the effect which matches the spell id
+effect GetEffectBySpellID(object oTarget, int nSpell) {
+	effect eEffect = GetFirstEffect(oTarget);
+	while (GetIsEffectValid(eEffect)) {
+		if (GetEffectSpellId(eEffect) == nSpell)
+			return eEffect;
+		eEffect = GetNextEffect(oTarget);
+	}
+	
+	effect eNull;
+	return eNull;
+}
+
+//Causes the actor to wander around playing dance animations
+void ActionDanceWander() {
+	int nRandom = d100();
+	if (nRandom < 50) {
+		ClearAllActions();
+		PlayCustomAnimation(OBJECT_SELF, "dance01", TRUE);
+	} else {
+		ClearAllActions();
+		PlayCustomAnimation(OBJECT_SELF, "dance02", TRUE);
+	}
+}
+
+//Do the dance. Dance dance dance!
+void PS_Spell_IrresistibleDance(object oTarget) {
+	if (!GetHasSpellEffect(SPELL_IRRESISTIBLE_DANCE, oTarget)){
+		SpeakString("No more dance!", TALKVOLUME_SHOUT);
+		SetCutsceneMode(oTarget, FALSE);
+		return;
+	}
+		
+	SetCutsceneMode(oTarget, TRUE);
+	SpeakString("Dance! Dance!", TALKVOLUME_SHOUT);
+	AssignCommand(oTarget, ActionDanceWander());
+	DelayCommand(2.0f, PS_Spell_IrresistibleDance(oTarget));
+}
+
+//Daze effect, plus -4 to listen / spot 
+//properly speaking, it should go away on being damaged
+//use this > scod_s_creature_distracted
+effect EffectFascinate() {
+	effect eFascinate = EffectDazed();
+	effect eSkill = EffectSkillDecrease(SKILL_ALL_SKILLS, 4);
+	eFascinate = EffectLinkEffects(eSkill, eFascinate);
+	
+	effect eMind = EffectNWN2SpecialEffectFile("fx_fascinate");
+	return EffectLinkEffects(eMind, eFascinate);
+}
+
+//harvested from class_arcanetrickster_mirrors and adjusted for the purposes of new illusion spells
+//oCreature = creature to copy from
+//sTemplate = the base template to pull the illusion from
+//lLocation = location to spawn at
+//Any additional vfx or domination / party adding effects are handled outside of this function
+object CreateIllusoryClone(object oCreature, string sTemplate, location lLocation) {
+
+ 	object oClone = CreateObject(OBJECT_TYPE_CREATURE, sTemplate, lLocation);
+	
+	// Sets apperance
+	SetCreatureAppearanceType(oClone, GetAppearanceType(oCreature));
+	PS_SetCreatureCoreAppearance(oClone, PS_GetCreatureCoreAppearance(oCreature));
+	
+	effect eEffect = GetFirstEffect(oCreature);
+	
+	// Applies all visual effects from the user to the clone
+	while (GetIsEffectValid(eEffect) == TRUE)
+	{
+		if (GetEffectType(eEffect) == EFFECT_TYPE_VISUALEFFECT)
+		{
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oClone); 
+		}
+		
+		eEffect = GetNextEffect(oCreature);
+	}
+	
+	SetFirstName(oClone, GetFirstName(oCreature));
+	SetLastName(oClone, GetLastName(oCreature));
+	
+	// Loop through inventory
+	int iSlot;
+	for (iSlot = INVENTORY_SLOT_CHEST; iSlot <= INVENTORY_SLOT_CARMOUR; ++iSlot)
+	{
+		object oItem = GetItemInSlot(iSlot ,oCreature);
+		
+		if (GetIsObjectValid(oItem) && GetObjectType(oItem) == OBJECT_TYPE_ITEM)
+		{
+			object oItemCopy = CopyItem(oItem, oClone, FALSE);
+			SetDroppableFlag(oItemCopy, FALSE);
+			// Remove any equiping restrictions on the item
+			itemproperty prop = GetFirstItemProperty(oItemCopy);
+			while (GetIsItemPropertyValid(prop))
+			{
+				if (GetItemPropertyType(prop) == ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP
+				|| GetItemPropertyType(prop) == ITEM_PROPERTY_USE_LIMITATION_CLASS
+				|| GetItemPropertyType(prop) == ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE
+				|| GetItemPropertyType(prop) == ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT)
+					RemoveItemProperty(oItemCopy, prop);
+					
+				prop = GetNextItemProperty(oItemCopy);
+			}
+
+			AssignCommand(oClone, ActionEquipItem(oItemCopy, iSlot));
+		}
+	}
+	
+	return oClone;
+}
+
+//Gets the attention of hostile creatures and draws them to attack the caller
+//Don't call constantly
+void GetAttentionOfHostiles(object oCaller, float fRadius, int nSpellID = -1, string sImmuneMarker = "") {
+	location lTarget = GetLocation(oCaller);
+	
+	//Marking that the target is effected by this spell
+	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
+	if (nSpellID >= 0) {
+		SetEffectSpellId(eVis, nSpellID);
+	}
+							
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+    while (GetIsObjectValid(oTarget)) {
+		
+		//This is for npcs only
+		if (!GetIsPC(oTarget)) {
+			//Only works on hostiles
+			if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaller)) {
+				//Only call if you're not already doing the desired behavior
+				if (GetAttackTarget(oTarget) != oCaller) {
+					//Only works on creatures who haven't seen through the illusion already
+					if (sImmuneMarker != "" && GetLocalInt(oTarget, sImmuneMarker) > 0) {
+						AssignCommand(oTarget, ActionSpeakString("pursuing the glamer!", TALKVOLUME_SHOUT));
+						AssignCommand(oTarget, ClearActions());
+						AssignCommand(oTarget, ActionAttack(oCaller));
+						if (nSpellID >= 0) {
+							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 9.1f);
+						}
+					}
+				} else {
+					AssignCommand(oTarget, ActionSpeakString("already attacking glamer!", TALKVOLUME_SHOUT));
+					if (nSpellID >= 0) {
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 9.1f);
+					}
+				}
+			}
+		}
+		
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, fRadius, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+	}
 }
