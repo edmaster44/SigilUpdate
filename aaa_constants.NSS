@@ -443,3 +443,15 @@ const string ITEM_LYCAN_TIGER_CLAW_L01			= "s3_w_weretigerclaw_01";
 const string ITEM_LYCAN_TIGER_CLAW_L08			= "s3_w_weretigerclaw_08";
 const string ITEM_LYCAN_TIGER_CLAW_L16			= "s3_w_weretigerclaw_16";
 const string ITEM_LYCAN_TIGER_CLAW_L24			= "s3_w_weretigerclaw_24";
+
+// New Spells
+const int SPELL_IRRESISTIBLE_DANCE				= 1950;
+const int SPELL_MASS_HIDEOUS_LAUGHTER			= 1951;
+const int SPELL_RAINBOW_DWEOMER					= 1952;
+const int SPELL_ICE_SIMULACRUM					= 1953;
+const int SPELL_MISLEAD							= 1954;
+const int SPELL_FAERIE_FIRE						= 1955;
+const int SPELL_GLAMER							= 1956;
+const int SPELL_HALLUCINATORY_TERRAIN			= 1957;
+const int VFX_PER_HALLUCINATORY_TERRAIN 		= 95;
+const int SPELL_HYPNOTISM						= 1958;
