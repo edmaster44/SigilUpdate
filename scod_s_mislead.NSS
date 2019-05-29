@@ -32,7 +32,6 @@ void CreateGlamer(object oCaster, location lLoc) {
 	
 	GetAttentionOfHostiles(oClone, RADIUS_SIZE_SMALL, SPELL_MISLEAD, sImmune);
 	
-	SpeakString("glamer: "+GetName(oClone), TALKVOLUME_SHOUT);
 	DestroyObject(oClone, RoundsToSeconds(3));
 }
 
@@ -42,7 +41,7 @@ void main() {
 		return;
 	}
 	
-	object oCaster = GetLastSpellCaster();
+	object oCaster = OBJECT_SELF;
 	SendMessageToPC(oCaster, "Casting Mislead");
 	
 	location lTarget = GetSpellTargetLocation();

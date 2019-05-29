@@ -31,7 +31,6 @@ void main () {
 	DelayCommand(3.0f, AssignCommand(OBJECT_SELF, ActionRandomWalk()));
 	string immunityString = GetLocalString(OBJECT_SELF, "Immunity_String");
 	int nSpellID = GetLocalInt(OBJECT_SELF, "Spell_ID");
-	SpeakString(immunityString+", "+IntToString(nSpellID), TALKVOLUME_SHOUT);
 	
 	GetAttentionOfHostiles(OBJECT_SELF, RADIUS_SIZE_COLOSSAL, nSpellID, immunityString);
 }

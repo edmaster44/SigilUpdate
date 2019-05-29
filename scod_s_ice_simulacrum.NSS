@@ -22,7 +22,7 @@ void main() {
     }
 
 	//debug code to make sure we got here
-	object oCaster = GetLastSpellCaster();
+	object oCaster = OBJECT_SELF;
 	SendMessageToPC(oCaster, "Ice Simulacrum script");
 	
     //Declare major variables
@@ -55,10 +55,3 @@ void main() {
 	//Remove the template
 	DestroyObject(oClone, 1.0f);
 }
-//***********************************
-	//fx_spell_creeping_cold
-	//sp_flamingaura_cold
-	//fx_b_shadow_of_void
-	//fx_shadow_reaver_form 
-	//fx_shadow_open
-//***********************************

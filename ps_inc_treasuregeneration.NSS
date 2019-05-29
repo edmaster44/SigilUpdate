@@ -326,8 +326,8 @@ int GetScrollMaxID(int nLevel)
         case 2: nMax = 64; break;
         case 3: nMax = 58; break;
         case 4: nMax = 47; break;
-        case 5: nMax = 36; break;
-        case 6: nMax = 42; break;
+        case 5: nMax = 37; break;
+        case 6: nMax = 43; break;
         case 7: nMax = 28; break;
         case 8: nMax = 28; break;
         case 9: nMax = 25; break;

@@ -32,7 +32,6 @@ void CreateGlamer(object oCaster, location lLoc, float fDur) {
 	AssignCommand(oClone, ActionRandomWalk());
 	
 	GetAttentionOfHostiles(oClone, RADIUS_SIZE_COLOSSAL, SPELL_GLAMER, sImmune);
-	SetCustomHeartbeat(oClone, 9);
 	
 	DestroyObject(oClone, fDur);
 }
@@ -43,7 +42,7 @@ void main() {
 		return;
 	}
 	
-	object oCaster = GetLastSpellCaster();
+	object oCaster = OBJECT_SELF;
 	SendMessageToPC(oCaster, "Casting Glamer");
 	
 	object oGlamer = GetLocalObject(oCaster, "Glamer");

@@ -70,7 +70,8 @@ void main() {
 		
 		eVFX = EffectNWN2SpecialEffectFile(sFX);
 		SetEffectSpellId(eVFX, SPELL_HALLUCINATORY_TERRAIN);
-		location lRand = GetRandomLocation(GetArea(oCaster), oCaster, RADIUS_SIZE_COLOSSAL);
+		float fDis = IntToFloat(Random(7))+3.0f;
+		location lRand = GetRandomLocation(GetArea(oCaster), oCaster, fDis);
 		SpeakString("Spawning: "+sFX+" at "+LocationToString(lRand), TALKVOLUME_SHOUT);
 		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVFX, lRand, fDur);
 	}
