@@ -21,8 +21,6 @@ void main() {
 
 	//debug code to make sure we got here
 	object oCaster = OBJECT_SELF;
-	SendMessageToPC(oCaster, "Hallucinatory Terrain Script");
-	SpeakString("Hallucinatory Terrain Script", TALKVOLUME_SHOUT);
 	
 	//Checking that we don't have one already
 	if (GetLocalString(oCaster, "HallucinatoryTerrainTag") != "") {
@@ -72,7 +70,6 @@ void main() {
 		SetEffectSpellId(eVFX, SPELL_HALLUCINATORY_TERRAIN);
 		float fDis = IntToFloat(Random(7))+3.0f;
 		location lRand = GetRandomLocation(GetArea(oCaster), oCaster, fDis);
-		SpeakString("Spawning: "+sFX+" at "+LocationToString(lRand), TALKVOLUME_SHOUT);
 		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVFX, lRand, fDur);
 	}
 	

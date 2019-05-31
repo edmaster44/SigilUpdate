@@ -57,15 +57,17 @@ void main () {
 	//Remove me if there is no caster
 	object oCaster = GetLocalObject(OBJECT_SELF, "Caster");
 	if (!GetIsObjectValid(oCaster)) {
+		RemoveHenchman(oCaster, OBJECT_SELF);
 		DestroyObject(OBJECT_SELF, 0.1f);
 	}
 	
 	//Remove me if the duration has run out
 	int nDuration = GetLocalInt(OBJECT_SELF, "Duration");
 	float fDur = RoundsToSeconds(nDuration);
-	/*if (PS_GetTimestamp_Age_Seconds(OBJECT_SELF, "Rainbow_Timestamp") >= FloatToInt(fDur)) {
+	if (PS_GetTimestamp_Age_Seconds(OBJECT_SELF, "Rainbow_Timestamp") >= FloatToInt(fDur)) {
+		RemoveHenchman(oCaster, OBJECT_SELF);
 		DestroyObject(OBJECT_SELF, 0.1f);
-	}*/
+	}
 	
 	//Set DC
 	int nSaveDC = GetLocalInt(OBJECT_SELF, "SaveDC");

@@ -19,7 +19,6 @@ void CreateGlamer(object oCaster, location lLoc, float fDur) {
 	effect eShadow = EffectNWN2SpecialEffectFile("fx_shadowfiend_2");
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
-	AssignCommand(oClone, ActionSpeakString("clone is here!", TALKVOLUME_SHOUT));
 	string sImmune = "Immunity_"+IntToString(Random(10000));
 	SetLocalString(oClone, "Immunity_String", sImmune);
 	SetLocalFloat(oClone, "Duration", fDur);
@@ -43,7 +42,6 @@ void main() {
 	}
 	
 	object oCaster = OBJECT_SELF;
-	SendMessageToPC(oCaster, "Casting Glamer");
 	
 	object oGlamer = GetLocalObject(oCaster, "Glamer");
 	if (GetIsObjectValid(oGlamer)) {

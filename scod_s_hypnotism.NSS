@@ -18,13 +18,7 @@ void main() {
         return;
     }
 	
-	//Debug message
-	object oCaster = GetLastSpellCaster();
-	SpeakString("casting hypnotism", TALKVOLUME_SHOUT);
-	if (!GetIsObjectValid(oCaster))
-		oCaster = GetSpellTargetObject();
-		
-	SpeakString("Caster: "+GetName(oCaster), TALKVOLUME_SHOUT);
+	object oCaster = OBJECT_SELF;
 
     location lTarget = GetLocation(oCaster);
     int nMetaMagic = GetMetaMagicFeat();
@@ -40,7 +34,6 @@ void main() {
 	if (maxCreatures <= 1)
 		onlyOne = TRUE;
 		
-	SpeakString("max creatures: "+IntToString(maxCreatures), TALKVOLUME_SHOUT);
 	int nDC = GetSpellSaveDC();
 	
 	//Explosion effect
@@ -54,8 +47,6 @@ void main() {
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetLocation(oCaster), TRUE, OBJECT_TYPE_CREATURE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget)) {
-	
-		SpeakString("found creature: "+GetName(oTarget));
 	
 		if (maxCreatures <= 0)
 			return;
@@ -82,7 +73,6 @@ void main() {
 						effect eFasc = EffectFascinate();
 						SetEffectSpellId(eFasc, SPELL_HYPNOTISM);
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
-						SpeakString("applied to creature: "+GetName(oTarget), TALKVOLUME_SHOUT);
 					
 						//Make sure being damaged breaks the spell
 						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
@@ -92,9 +82,7 @@ void main() {
 					
 	            } 
 	        }
-	    } else {
-			SpeakString("not applied to creature: "+GetName(oTarget), TALKVOLUME_SHOUT);
-		}
+	    } 
 		
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}

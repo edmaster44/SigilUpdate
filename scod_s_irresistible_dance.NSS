@@ -19,8 +19,7 @@ void main() {
     }
 
 	//debug code to make sure we got here
-	object oCaster = GetLastSpellCaster();
-	SpeakString("Otto's Irresistible Dance script", TALKVOLUME_SHOUT);
+	object oCaster = OBJECT_SELF;
 	
     //Declare major variables
     object oTarget = GetSpellTargetObject();
@@ -32,14 +31,12 @@ void main() {
     if (nMetaMagic == METAMAGIC_EXTEND) {
         nDuration = d4(2)+2;
     }
-	SpeakString("Duration: "+IntToString(nDuration), TALKVOLUME_SHOUT);
 	
 	//-4 AC
     effect eDanceEffects = EffectACDecrease(4);
 	
 	//No AC from shield
 	int nShieldAC = GetACProvidedByShield(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oTarget));
-	SpeakString("Has "+IntToString(nShieldAC)+" shield AC", TALKVOLUME_SHOUT);
 	if (nShieldAC > 0) {
 		effect eShieldRemove = EffectACDecrease(nShieldAC, AC_SHIELD_ENCHANTMENT_BONUS);
 		eDanceEffects = EffectLinkEffects(eShieldRemove, eDanceEffects);

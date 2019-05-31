@@ -129,13 +129,11 @@ void ActionDanceWander() {
 //Do the dance. Dance dance dance!
 void PS_Spell_IrresistibleDance(object oTarget) {
 	if (!GetHasSpellEffect(SPELL_IRRESISTIBLE_DANCE, oTarget)){
-		SpeakString("No more dance!", TALKVOLUME_SHOUT);
 		SetCutsceneMode(oTarget, FALSE);
 		return;
 	}
 		
 	SetCutsceneMode(oTarget, TRUE);
-	SpeakString("Dance! Dance!", TALKVOLUME_SHOUT);
 	AssignCommand(oTarget, ActionDanceWander());
 	DelayCommand(2.0f, PS_Spell_IrresistibleDance(oTarget));
 }

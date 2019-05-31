@@ -14,7 +14,6 @@ void main() {
 
 	//debug code to make sure we got here
 	object oCaster = GetAreaOfEffectCreator();
-	SendMessageToPC(oCaster, "Hallucinatory Terrain on exit");
 	
 	//Remove the aoe if the caster isn't present
 	if (!GetIsObjectValid(oCaster)) {

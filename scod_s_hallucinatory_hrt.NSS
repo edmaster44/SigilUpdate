@@ -14,8 +14,5 @@ void main() {
 
 	//debug code to make sure we got here
 	object oCaster = GetAreaOfEffectCreator();
-	
-	if (d100() < 50) {
-	
-	}
+
 }

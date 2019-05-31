@@ -15,13 +15,13 @@
 const string GLAMER_TEMPLATE = "ps_summon_glamer";
 
 void CreateGlamer(object oCaster, location lLoc) {
-	SpeakString("Creating glamer", TALKVOLUME_SHOUT);
+
 	object oClone = CreateIllusoryClone(oCaster, GLAMER_TEMPLATE, lLoc);
 	effect eShadow = EffectNWN2SpecialEffectFile("fx_shadowfiend_2");
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
 	AssignCommand(oClone, ActionMoveAwayFromObject(oCaster, TRUE, 100.0f));
-	AssignCommand(oClone, ActionSpeakString("clone is here!", TALKVOLUME_SHOUT));
+	
 	string sImmune = "Immunity_"+IntToString(Random(10000));
 	SetLocalString(oClone, "Immunity_String", sImmune);
 	SetLocalFloat(oClone, "Duration", RoundsToSeconds(3));
@@ -42,7 +42,6 @@ void main() {
 	}
 	
 	object oCaster = OBJECT_SELF;
-	SendMessageToPC(oCaster, "Casting Mislead");
 	
 	location lTarget = GetSpellTargetLocation();
 	location lCaster = GetLocation(oCaster);

@@ -27,20 +27,17 @@ void main() {
 	int nSpellID = GetAreaOfEffectSpellId();
 	
 	object oTarget = GetEnteringObject();
-	SpeakString("Hallucinatory Terrain on enter: "+GetName(oTarget), TALKVOLUME_SHOUT);
 	if (GetIsEnemy(oTarget, oCaster)) {
-		effect eSlow = EffectMovementSpeedDecrease(50);
+		effect eSlow = EffectMovementSpeedDecrease(85);
 		effect eVis = EffectVisualEffect(VFX_IMP_SLOW);
 		eSlow = EffectLinkEffects(eVis, eSlow);
 		SetEffectSpellId(eSlow, nSpellID);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
-		SpeakString("target is enemy, slow effect!", TALKVOLUME_SHOUT);
 	} else {
 		effect eProtection = EffectACIncrease(4);
 		effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SHIELD);
 		eProtection = EffectLinkEffects(eVis, eProtection);
 		SetEffectSpellId(eProtection, nSpellID);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProtection, oTarget);
-		SpeakString("target is enemy, ac effect!", TALKVOLUME_SHOUT);
 	}
 }

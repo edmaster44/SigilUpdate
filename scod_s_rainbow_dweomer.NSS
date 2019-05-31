@@ -20,7 +20,6 @@ void main() {
 
 	//debug code to make sure we got here
 	object oCaster = OBJECT_SELF;
-	SpeakString("Rainbow Dweomer Script", TALKVOLUME_SHOUT);
 	
     //Declare major variables
     location lTarget = GetSpellTargetLocation();
@@ -50,12 +49,6 @@ void main() {
 	PS_Timestamp_UNIX(oRainbow, "Rainbow_Timestamp");
 	SetLocalInt(oRainbow, "Duration", nDuration);
 	SetLocalInt(oRainbow, "SaveDC", GetSpellSaveDC());
-	SpeakString("Rainbow is here! "+GetName(oRainbow), TALKVOLUME_SHOUT);
 	
-	//Put rainbow under the caster's control
-	effect eDominate = EffectDominated();
-    eDominate = GetScaledEffect(eDominate, oRainbow);
-	SetEffectSpellId(eDominate, SPELL_RAINBOW_DWEOMER);
-	
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDominate, oRainbow);
+	AddHenchman(oCaster, oRainbow);
 }
