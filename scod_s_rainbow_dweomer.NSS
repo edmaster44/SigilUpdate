@@ -53,8 +53,9 @@ void main() {
 	object oOldHench= GetHenchman(oCaster);
 	if (GetIsObjectValid(oOldHench)) {
 		SendMessageToPC(oCaster, "The Rainbow Dweomer acts as a henchman. You cannot have more than one henchman active.");
-		DestroyObject(oOldHench);
+		RemoveHenchman(oCaster, oOldHench);
+		DestroyObject(oOldHench, 0.1f);
 	}
 	
-	AddHenchman(oCaster, oRainbow);
+	DelayCommand(0.3f, AddHenchman(oCaster, oRainbow));
 }

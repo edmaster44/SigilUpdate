@@ -24,7 +24,14 @@ void CreateSimulacrum(object oCaster, location lLoc, float fDur) {
 	SetLocalFloat(oClone, "Duration", fDur);
 	PS_Timestamp_UNIX(oClone, "Simulacrum_Timestamp");
 	
-	AddHenchman(oCaster, oClone);
+	object oOldHench= GetHenchman(oCaster);
+	if (GetIsObjectValid(oOldHench)) {
+		SendMessageToPC(oCaster, "The Ice Simulacrum acts as a henchman. You cannot have more than one henchman active.");
+		RemoveHenchman(oCaster, oOldHench);
+		DestroyObject(oOldHench, 0.1f);
+	}
+	
+	DelayCommand(0.3f, AddHenchman(oCaster, oClone));
 }
 
 void main() {
