@@ -65,7 +65,6 @@ void main()
 	//Remove me if there is no caster
 	object oCaster = GetLocalObject(OBJECT_SELF, "Caster");
 	if (!GetIsObjectValid(oCaster)) {
-		RemoveHenchman(oCaster, OBJECT_SELF);
 		DestroyObject(OBJECT_SELF, 0.1f);
 	}
 	
@@ -94,7 +93,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget)) {
 	
-		if (oTarget == OBJECT_SELF) {
+		if (oTarget == OBJECT_SELF || oTarget == oCaster) {
 			//cannot fascinate self
 		} else if (GetHasSpellEffect(SPELL_RAINBOW_DWEOMER, oTarget)) {
 		
