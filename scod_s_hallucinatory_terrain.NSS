@@ -46,10 +46,9 @@ void main() {
     }
 	float fDur = HoursToSeconds(nDuration);
 	
-	effect eVFX = EffectNWN2SpecialEffectFile("fx_okku_den_fog");
+	effect eVFX;
 	
 	effect eAOE = EffectAreaOfEffect(VFX_PER_HALLUCINATORY_TERRAIN, "scod_s_hallucinatory_one", "", "scod_s_hallucinatory_onex", sHallucinatoryTag);
-	eAOE = EffectLinkEffects(eVFX, eAOE);
 	
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, fDur);
 	

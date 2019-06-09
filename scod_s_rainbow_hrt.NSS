@@ -24,7 +24,6 @@ const float dweomer_closeness = 5.0f;
 
 //The victims should move to stay in the radius
 void MoveTargetToSpell(object oTarget, location lLocation) {
-	AssignCommand(oTarget, ActionSpeakString("moving to the dweomer", TALKVOLUME_SHOUT));
 	location lLoc = CalcSafeLocation(oTarget, lLocation, dweomer_closeness, TRUE, TRUE);
 	AssignCommand(oTarget, ActionMoveToLocation(lLoc, FALSE));
 }
@@ -95,7 +94,9 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget)) {
 	
-		if (GetHasSpellEffect(SPELL_RAINBOW_DWEOMER, oTarget)) {
+		if (oTarget == OBJECT_SELF) {
+			//cannot fascinate self
+		} else if (GetHasSpellEffect(SPELL_RAINBOW_DWEOMER, oTarget)) {
 		
 			if (GetDistanceBetween(OBJECT_SELF, oTarget) > dweomer_closeness)
 				MoveTargetToSpell(oTarget, lTarget);
@@ -215,25 +216,6 @@ void main()
         return;
     }
 
-    if (!GetAssociateState(NW_ASC_MODE_STAND_GROUND) && !GetAssociateState(NW_ASC_MODE_PUPPET))
-    {
-        if (HenchCheckHeartbeatCombat())
-        {
-            HenchResetCombatRound();
-        }
-        if (!GetHenchOption(HENCH_OPTION_DISABLE_HB_DETECTION) && HenchGetIsEnemyPerceived(GetHenchOption(HENCH_OPTION_DISABLE_HB_HEARING)))
-        {
-            HenchDetermineCombatRound();
-            return;
-        }
-        if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
-        {
-            HenchDetermineCombatRound();
-            return;
-        }
-    }
-    HenchResetCombatRound();
-
 	// do not interrupt player queued actions
     if (GetHasPlayerQueuedAction(OBJECT_SELF))
     {
@@ -254,118 +236,6 @@ void main()
 
     CleanCombatVars();
     SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
-
-    if (GetLocalInt(OBJECT_SELF, henchHealCountStr))
-    {
-//        Jug_Debug(GetName(OBJECT_SELF) + " HB checking heal count " + IntToString(GetLocalInt(OBJECT_SELF, henchHealCountStr)));
-        ActionDoCommand(ActionWait(2.5));
-        ActionDoCommand(ExecuteScript("hench_o0_heal", OBJECT_SELF));
-        return;
-    }
-
-        //25% chance that..
-    if ((d4() == 1) &&
-        !GetAssociateState(NW_ASC_MODE_PUPPET) &&
-        (GetLocalInt(OBJECT_SELF, sHenchStopCasting) != 10) &&
-        !GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
-        // if we're not excluding the ability to use feats and abilities
-        !GetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY))
-    {
-        //and if we have the summon familiar feat
-        if (GetHenchPartyState(HENCH_PARTY_SUMMON_FAMILIARS) && (GetHasFeat(FEAT_SUMMON_FAMILIAR, OBJECT_SELF) || GetHasSpell(SPELLABILITY_SUMMON_FAMILIAR, OBJECT_SELF)))
-        {
-            object oAssociate = GetAssociate(ASSOCIATE_TYPE_FAMILIAR, OBJECT_SELF);
-            // with no current familiar stat
-            if (!GetIsObjectValid(oAssociate))
-            {
-                // summon my familiar and decrement use
-                SummonFamiliar();
-                DecrementRemainingFeatUses(OBJECT_SELF, FEAT_SUMMON_FAMILIAR);
-            }
-        }
-        // or if we have the animal companion feat
-        else if (GetHenchPartyState(HENCH_PARTY_SUMMON_COMPANIONS) && (GetHasFeat(FEAT_ANIMAL_COMPANION, OBJECT_SELF) || GetHasSpell(SPELLABILITY_SUMMON_ANIMAL_COMPANION, OBJECT_SELF)))
-        {
-            object oAssociate = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, OBJECT_SELF);
-            // and no current companion
-            if (!GetIsObjectValid(oAssociate))
-            {
-                //summon companion and decrement us
-                SummonAnimalCompanion();
-                DecrementRemainingFeatUses(OBJECT_SELF, FEAT_ANIMAL_COMPANION);
-            }
-        }
-    }
-    // TODO add auto cure????   if (NonCombatCureEffects())
-
-    if (!GetHenchAssociateState(HENCH_ASC_DISABLE_INFINITE_BUFF) &&
-        !GetAssociateState(NW_ASC_MODE_PUPPET) &&
-        (GetLocalInt(OBJECT_SELF, sHenchStopCasting) != 10) &&
-        !GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
-        (GetDistanceToObject(oRealMaster) <= 10.0) &&
-		!GetIsOverlandMap(GetArea(OBJECT_SELF)))
-    {
-        if (GetLevelByClass(CLASS_TYPE_WARLOCK))
-        {
-            if (!(GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_SPELL))
-            {
-                if (TryCastWarlockBuffSpells(FALSE))
-                {
-                    return;
-                }
-            }
-            else
-            {
-                gbFoundInfiniteBuffSpell = TRUE;
-            }
-        }
-        if (GetLevelByClass(CLASS_TYPE_BARD) &&
-            !(GetCreatureNegEffects(OBJECT_SELF) & HENCH_EFFECT_TYPE_SILENCE))
-        {
-            if (!(GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_ABILITY))
-            {
-                if (TryCastBardBuffSpells())
-                {
-                    return;
-                }
-            }
-            else
-            {
-                gbFoundInfiniteBuffSpell = TRUE;
-            }
-        }
-
-        if (!gbFoundInfiniteBuffSpell)
-        {
-            // didn't find anything, don't keep looking
-            SetHenchAssociateState(HENCH_ASC_DISABLE_INFINITE_BUFF, TRUE, OBJECT_SELF);
-        }
-    }
-
-    if (HenchCheckArea())
-    {
-        return;
-    }
-
-    ClearWeaponStates();
-
-    if (GetLocalInt(OBJECT_SELF, HENCH_AI_COMBAT_EQUIP))
-    {
-        DeleteLocalInt(OBJECT_SELF, HENCH_AI_COMBAT_EQUIP);
-        if (!GetHenchAssociateState(HENCH_ASC_DISABLE_AUTO_WEAPON_SWITCH) && !GetAssociateState(NW_ASC_MODE_PUPPET))
-        {
-            ClearAllActions();
-            if (GetHenchPartyState(HENCH_PARTY_UNEQUIP_WEAPONS))
-            {
-                UnequipWeapons();
-            }
-            else
-            {
-				HenchEquipDefaultWeapons();
-            }
-            return;
-        }
-    }
 
     int bIsScouting = GetLocalInt(OBJECT_SELF, sHenchScoutingFlag);
     if (bIsScouting)

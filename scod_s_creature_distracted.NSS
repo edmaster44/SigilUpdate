@@ -11,7 +11,6 @@
 void main () {
 
 	int nDamage = GetTotalDamageDealt();
-	SpeakString("Total damage recieved: "+IntToString(nDamage), TALKVOLUME_SHOUT);
 	if (nDamage <= 0)
 		return;
 
@@ -19,8 +18,8 @@ void main () {
 	while (GetIsEffectValid(eEffect)) {
 		if (GetEffectType(eEffect) == EFFECT_TYPE_DAZED || 
 		GetEffectSpellId(eEffect) == SPELL_RAINBOW_DWEOMER || 
-		GetEffectSpellId(eEffect) == SPELL_HYPNOTISM) {
-			SpeakString("distraction removed!", TALKVOLUME_SHOUT);
+		GetEffectSpellId(eEffect) == SPELL_HYPNOTISM || 
+		GetEffectSpellId(eEffect) == SPELL_GLAMER) {
 			RemoveEffect(OBJECT_SELF, eEffect);
 		}
 			

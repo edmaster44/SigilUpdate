@@ -33,29 +33,23 @@ void main() {
         nDuration *= 2;
     }
 	
-	object oRainbow = GetLocalObject(oCaster, "rainbow_dweomer");
-	if (GetIsObjectValid(oRainbow)) {
-		SendMessageToPC(oCaster, "You may not have more than one Rainbow Dweomer active at a time!");
-		return;
-	}
-	
-	effect eVis = EffectNWN2SpecialEffectFile("fx_magical_explosion");
-	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, lTarget, 1.0f);
-	
-	//Set up object and variables
-	oRainbow = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_rainbow", lTarget);
-	SetLocalObject(oCaster, "rainbow_dweomer", oRainbow);
-	SetLocalObject(oRainbow, "Caster", oCaster);
-	PS_Timestamp_UNIX(oRainbow, "Rainbow_Timestamp");
-	SetLocalInt(oRainbow, "Duration", nDuration);
-	SetLocalInt(oRainbow, "SaveDC", GetSpellSaveDC());
-	
 	object oOldHench= GetHenchman(oCaster);
 	if (GetIsObjectValid(oOldHench)) {
 		SendMessageToPC(oCaster, "The Rainbow Dweomer acts as a henchman. You cannot have more than one henchman active.");
 		RemoveHenchman(oCaster, oOldHench);
 		DestroyObject(oOldHench, 0.1f);
 	}
+	
+	effect eVis = EffectNWN2SpecialEffectFile("fx_magical_explosion");
+	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, lTarget, 1.0f);
+	
+	//Set up object and variables
+	object oRainbow = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_rainbow", lTarget);
+	SetLocalObject(oCaster, "rainbow_dweomer", oRainbow);
+	SetLocalObject(oRainbow, "Caster", oCaster);
+	PS_Timestamp_UNIX(oRainbow, "Rainbow_Timestamp");
+	SetLocalInt(oRainbow, "Duration", nDuration);
+	SetLocalInt(oRainbow, "SaveDC", GetSpellSaveDC());
 	
 	DelayCommand(0.3f, AddHenchman(oCaster, oRainbow));
 }

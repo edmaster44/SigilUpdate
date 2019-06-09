@@ -215,7 +215,7 @@ void GetAttentionOfHostiles(object oCaller, float fRadius, int nSpellID = -1, st
 	location lTarget = GetLocation(oCaller);
 	
 	//Marking that the target is effected by this spell
-	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
+	effect eVis = EffectNWN2SpecialEffectFile("fx_distract");
 	if (nSpellID >= 0) {
 		SetEffectSpellId(eVis, nSpellID);
 	}
@@ -234,12 +234,12 @@ void GetAttentionOfHostiles(object oCaller, float fRadius, int nSpellID = -1, st
 						AssignCommand(oTarget, ClearActions());
 						AssignCommand(oTarget, ActionAttack(oCaller));
 						if (nSpellID >= 0) {
-							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 9.1f);
+							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 6.1f);
 						}
 					}
 				} else {
 					if (nSpellID >= 0) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 9.1f);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 6.1f);
 					}
 				}
 			}

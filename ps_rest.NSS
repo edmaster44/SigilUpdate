@@ -5,6 +5,22 @@
 
 const int cSaveWait = 300;
 
+void DismissSpellHenchmen(object oPC) {
+	if (GetIsObjectValid(GetLocalObject(oPC, "simulacrum"))) {
+	
+		object oSim = GetLocalObject(oPC, "simulacrum");
+		RemoveHenchman(oPC, oSim);
+		DestroyObject(oSim, 0.1f);
+		
+	} if (GetIsObjectValid(GetLocalObject(oPC, "rainbow_dweomer"))) {
+	
+		object oRain = GetLocalObject(oPC, "rainbow_dweomer");
+		RemoveHenchman(oPC, oRain);
+		DestroyObject(oRain, 0.1f);
+		
+	}
+}
+
 int HasToWipeAbilities(object oPC, object oEssence)
 {
 	int nORDER = GetAlignmentLawChaos(oPC);
@@ -161,6 +177,8 @@ void RestStart(object oPC)
 		FinesseRestFix(oPC, oRIGHT);
 		FinesseRestFix(oPC, oLEFT);
 	}
+	
+	DismissSpellHenchmen(oPC);
 }
 
 void RestFinish(object oPC)

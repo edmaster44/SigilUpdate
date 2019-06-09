@@ -46,7 +46,7 @@ void main() {
 	object oGlamer = GetLocalObject(oCaster, "Glamer");
 	if (GetIsObjectValid(oGlamer)) {
 		SendMessageToPC(oCaster, "You may not have more than one Glamer active at a time!");
-		return;
+		DestroyObject(oGlamer);
 	}
 	
 	location lTarget = GetSpellTargetLocation();
