@@ -43,7 +43,6 @@ void main() {
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget)) {
 	
-		SpeakString("effecting: "+GetName(oTarget), TALKVOLUME_SHOUT);
 	   	//Fire cast spell at event for the specified target
 	   	SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_FAERIE_FIRE));
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFaerie, oTarget, fDuration);
