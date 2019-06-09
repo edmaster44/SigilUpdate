@@ -20,7 +20,6 @@ void main() {
 	
 	//Debug message
 	object oCaster = GetLastSpellCaster();
-	SpeakString("casting mass hideous laughter", TALKVOLUME_SHOUT);
 
     location lTarget = GetSpellTargetLocation();
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
