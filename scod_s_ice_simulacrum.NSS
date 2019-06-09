@@ -15,6 +15,16 @@
 
 const string SIMULACRUM_TEMPLATE = "ps_summon_simulacrum";
 
+void BuffSimulacrum(object oClone) {
+
+	AssignCommand(oClone, ActionCastSpellAtObject(SPELL_BLADEWEAVE, oClone, METAMAGIC_EXTEND, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	AssignCommand(oClone, ActionCastSpellAtObject(SPELL_MIRROR_IMAGE, oClone, METAMAGIC_EXTEND, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	AssignCommand(oClone, ActionCastSpellAtObject(SPELL_DISPLACEMENT, oClone, METAMAGIC_EXTEND, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	AssignCommand(oClone, ActionCastSpellAtObject(SPELL_GREATER_INVISIBILITY, oClone, METAMAGIC_EXTEND, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	AssignCommand(oClone, ActionCastSpellAtObject(SPELL_SHADOW_SHIELD, oClone, METAMAGIC_EXTEND, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+
+}
+
 void CreateSimulacrum(object oCaster, location lLoc, float fDur) {
 
 	object oClone = CreateIllusoryClone(oCaster, SIMULACRUM_TEMPLATE, lLoc);
@@ -25,8 +35,6 @@ void CreateSimulacrum(object oCaster, location lLoc, float fDur) {
 	SetLocalFloat(oClone, "Duration", fDur);
 	PS_Timestamp_UNIX(oClone, "Simulacrum_Timestamp");
 	
-	ForceRest(oClone);
-	
 	object oOldHench= GetHenchman(oCaster);
 	if (GetIsObjectValid(oOldHench)) {
 		SendMessageToPC(oCaster, "The Ice Simulacrum acts as a henchman. You cannot have more than one henchman active.");
@@ -35,6 +43,10 @@ void CreateSimulacrum(object oCaster, location lLoc, float fDur) {
 	}
 	
 	DelayCommand(0.3f, AddHenchman(oCaster, oClone));
+	
+	DelayCommand(0.5f, ForceRest(oClone));
+	
+	DelayCommand(0.6f, BuffSimulacrum(oClone));
 }
 
 void main() {

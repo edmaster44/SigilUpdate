@@ -28,7 +28,7 @@ void main() {
 	
 	object oTarget = GetEnteringObject();
 	if (GetIsEnemy(oTarget, oCaster)) {
-		effect eSlow = EffectMovementSpeedDecrease(85);
+		effect eSlow = EffectMovementSpeedDecrease(65);
 		effect eVis = EffectVisualEffect(VFX_IMP_SLOW);
 		eSlow = EffectLinkEffects(eVis, eSlow);
 		SetEffectSpellId(eSlow, nSpellID);
