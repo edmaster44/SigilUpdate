@@ -1,17 +1,22 @@
 //***************************************************
 //Handles new loot generation
 //Created 11-2-18 - Mimi Fearthegn
+//Modified 6/18/19 - Mimi Fearthegn (added epic quest pools)
 //***************************************************
 #include "ginc_debug"
 #include "ps_inc_randomitems"
 #include "ps_inc_gemstones"
 #include "ps_inc_cards"
+#include "ps_inc_treasurepool"
 //***************************************************
 //Loot Levels
 const int TREASURE_LOW = 1;
 const int TREASURE_MEDIUM = 2;
 const int TREASURE_HIGH = 3;
 const int TREASURE_EPIC = 4;
+const int TREASURE_QUEST_LOW = 5; //epic quest pool #1
+const int TREASURE_QUEST_MED = 6; //epic quest pool #2
+const int TREASURE_QUEST_HIGH = 7; //epic quest pool #3
 //Gold Levels
 const float LOW_MOD_GOLD = 0.5;   
 const float MEDIUM_MOD_GOLD = 1.0; 
@@ -510,6 +515,13 @@ void CreateArmorOnTarget(object oTarget, int nTreasureLevel) {
 	}
 }
 
+//Creates random armor on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomArmorOnTarget(object oTarget) {
+	CreateRandomItemOfCategoryOnTarget(oTarget, "A");
+}
+
 //Creates a weapon from the database on the target
 //or 25% to generate a completely randomized weapon
 void CreateWeaponOnTarget(object oTarget, int nTreasureLevel) {
@@ -519,6 +531,13 @@ void CreateWeaponOnTarget(object oTarget, int nTreasureLevel) {
 	} else {
 		CreateRandomItemOfCategoryOnTarget(oTarget, "W");
 	}
+}
+
+//Creates random armor on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomWeaponOnTarget(object oTarget) {
+	CreateRandomItemOfCategoryOnTarget(oTarget, "W");
 }
 
 //Creates an wearable item from the database on the target
@@ -537,6 +556,20 @@ void CreateWearableOnTarget(object oTarget, string sTable, int nBaseType, int nT
 	}
 }
 
+//Creates a random shield (light, heavy, tower) on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomShieldOnTarget(object oTarget) {
+
+	int nRandom = Random(3)+1;
+	switch (nRandom) {
+		case 1: CreateRandomItemOfTypeOnTarget(oTarget, 55); break; //shield, heavy
+		case 2: CreateRandomItemOfTypeOnTarget(oTarget, 56); break; //shield, light
+		case 3: CreateRandomItemOfTypeOnTarget(oTarget, 57); break; //shield, tower
+		default: CreateRandomItemOfTypeOnTarget(oTarget, 57); break; //shield, tower
+	}
+}
+
 //Creates a shield from the database on the target
 //or 25% to generate a completely randomized shield (light, heavy, tower)
 void CreateShieldOnTarget(object oTarget, int nTreasureLevel) {
@@ -544,13 +577,20 @@ void CreateShieldOnTarget(object oTarget, int nTreasureLevel) {
 		string sResref = PickItemFromDatabase("treasure_shields", nTreasureLevel);
 		CreateTreasureItemOnTarget(sResref, oTarget, 1);
 	} else {
-		int nRandom = Random(3)+1;
-		switch (nRandom) {
-			case 1: CreateRandomItemOfTypeOnTarget(oTarget, 55); break; //shield, heavy
-			case 2: CreateRandomItemOfTypeOnTarget(oTarget, 56); break; //shield, light
-			case 3: CreateRandomItemOfTypeOnTarget(oTarget, 57); break; //shield, tower
-			default: CreateRandomItemOfTypeOnTarget(oTarget, 57); break; //shield, tower
-		}
+		CreateRandomShieldOnTarget(oTarget);
+	}
+}
+
+//Creates random gloves or bracers on target (50/50)
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomGlovesOnTarget(object oTarget) {
+
+	int nRandom = d2();
+	switch (nRandom) {
+		case 1: CreateRandomItemOfTypeOnTarget(oTarget, 7); break; //bracers
+		case 2: CreateRandomItemOfTypeOnTarget(oTarget, 27); break; //gloves
+		default: CreateRandomItemOfTypeOnTarget(oTarget, 7); break; //bracers
 	}
 }
 
@@ -561,13 +601,22 @@ void CreateGlovesOnTarget(object oTarget, int nTreasureLevel) {
 		string sResref = PickItemFromDatabase("treasure_shields", nTreasureLevel);
 		CreateTreasureItemOnTarget(sResref, oTarget, 1);
 	} else {
-		int nRandom = d2();
-		switch (nRandom) {
-			case 1: CreateRandomItemOfTypeOnTarget(oTarget, 7); break; //bracers
-			case 2: CreateRandomItemOfTypeOnTarget(oTarget, 27); break; //gloves
-			default: CreateRandomItemOfTypeOnTarget(oTarget, 7); break; //bracers
-		}
+		CreateRandomGlovesOnTarget(oTarget);
 	}
+}
+
+//Creates random piece of jewelry (ring, amulet) on target (50/50)
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomJewelryOnTarget(object oTarget) {
+
+	int nRandom = d2();
+	switch (nRandom) {
+		case 1: CreateRandomItemOfTypeOnTarget(oTarget, 0); break; //amulet
+		case 2: CreateRandomItemOfTypeOnTarget(oTarget, 51); break; //ring
+		default: CreateRandomItemOfTypeOnTarget(oTarget, 51); break; //ring
+	}
+	
 }
 
 //Creates a ring or necklace from the database on the target
@@ -577,13 +626,36 @@ void CreateJewelryOnTarget(object oTarget, int nTreasureLevel) {
 		string sResref = PickItemFromDatabase("treasure_shields", nTreasureLevel);
 		CreateTreasureItemOnTarget(sResref, oTarget, 1);
 	} else {
-		int nRandom = d2();
-		switch (nRandom) {
-			case 1: CreateRandomItemOfTypeOnTarget(oTarget, 0); break; //amulet
-			case 2: CreateRandomItemOfTypeOnTarget(oTarget, 51); break; //ring
-			default: CreateRandomItemOfTypeOnTarget(oTarget, 51); break; //ring
-		}
+		CreateRandomJewelryOnTarget(oTarget);
 	}
+}
+
+//Creates random helmet on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomHelmetOnTarget(object oTarget) {
+	CreateRandomItemOfTypeOnTarget(oTarget, 35);
+}
+
+//Creates random belt on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomBeltOnTarget(object oTarget) {
+	CreateRandomItemOfTypeOnTarget(oTarget, 5);
+}
+
+//Creates random cloak on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomCloakOnTarget(object oTarget) {
+	CreateRandomItemOfTypeOnTarget(oTarget, 12);
+}
+
+//Creates random boots on target
+//Uses the creature CR to judge power level
+//Override: local int QUEST_CR on creatures, local int CR on chests
+void CreateRandomBootsOnTarget(object oTarget) {
+	CreateRandomItemOfTypeOnTarget(oTarget, 71);
 }
 
 //The main treasure generation script. It creates one item on the target.
@@ -619,4 +691,67 @@ void GenerateTreasureItemOnTarget(object oTarget, int nTreasureLevel) {
 			CardsCreateCardOnSpawnOrChest(oTarget); //Cards
 		}
 	}
+}
+
+//Translate treasure level to CR
+//For cases in which the target's CR shouldn't matter
+int PickCRFromTreasureLevel(int nTreasureLevel) {
+	if (nTreasureLevel == TREASURE_LOW) {
+		return Random(9)+1;
+	} else if (nTreasureLevel == TREASURE_MEDIUM) {
+		return Random(10)+10;
+	} else if (nTreasureLevel == TREASURE_HIGH) {
+		return Random(6)+20;
+	} else if (nTreasureLevel == TREASURE_EPIC) {
+		return Random(6)+25;
+	} else if (nTreasureLevel == TREASURE_QUEST_LOW) {
+		return Random(6)+28;
+	} else if (nTreasureLevel == TREASURE_QUEST_MED) {
+		return Random(6)+29;
+	} else if (nTreasureLevel == TREASURE_QUEST_HIGH) {
+		return Random(6)+30;
+	}
+	
+	return 1;
+}
+
+//Creates quest reward
+//Uses standard item generation on TREASURE_LOW-TREASURE_EPIC
+//Picks from the Epic level reward pools for TREASURE_QUEST_LOW+
+//allowRandom - only matters for TREASURE_QUEST_* levels
+//0 = no random items, only pulled from the epic pools
+//1 = randomized items allowed 50/50 chance
+void GenerateQuestRewardOnTarget(object oTarget, int nTreasureLevel, int allowRandom = FALSE) {
+
+	int nCR = PickCRFromTreasureLevel(nTreasureLevel);
+	SetLocalInt(oTarget, "QUEST_CR", nCR);
+
+	//Default to standard system for lower level quests
+	if (nTreasureLevel <= TREASURE_EPIC) {
+		GenerateTreasureItemOnTarget(oTarget, nTreasureLevel);
+		return;
+	} 
+	
+	//Otherwise, pick from the epic treasure pool
+	if (allowRandom && d100() < 50) {
+		int nRandom = Random(10)+1;
+		switch (nRandom) {
+			case 1: CreateRandomArmorOnTarget(oTarget); break; // armor
+			case 2: case 10: CreateRandomWeaponOnTarget(oTarget); break; // weapon; slightly higher chance for weapons
+			case 3: CreateRandomBootsOnTarget(oTarget); break; //boots
+			case 4: CreateRandomCloakOnTarget(oTarget); break; //cloaks
+			case 5: CreateRandomGlovesOnTarget(oTarget); break; //gloves
+			case 6: CreateRandomBeltOnTarget(oTarget); break; //belts
+			case 7: CreateRandomHelmetOnTarget(oTarget); break; //hats
+			case 8: CreateRandomShieldOnTarget(oTarget); break;  //shields
+			case 9: CreateRandomJewelryOnTarget(oTarget); break;  //jewelry
+		}
+	} else {
+		string sItem = PickEpicLevelReward(nTreasureLevel);
+		if (sItem != "")
+			CreateTreasureItemOnTarget(sItem, oTarget, 1);
+	}
+	
+	DelayCommand(0.2f, DeleteLocalInt(oTarget, "QUEST_CR"));
+
 }

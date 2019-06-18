@@ -14,7 +14,10 @@ string sHolder = "ps_utility_itemvariableholder";
 //Grabs the CR of the creature, or the saved int CR on the placeable
 int GetChallengeRatingOfTarget(object oTarget) {
 	if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE) {
-		return FloatToInt(GetChallengeRating(oTarget));
+		if (GetLocalInt(oTarget, "QUEST_CR") > 0)
+			return GetLocalInt(oTarget, "QUEST_CR");
+		else
+			return FloatToInt(GetChallengeRating(oTarget));
 	} else {
 		if (GetLocalInt(oTarget, "CR") > 0)
 			return GetLocalInt(oTarget, "CR");
