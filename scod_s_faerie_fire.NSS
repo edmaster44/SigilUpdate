@@ -19,7 +19,6 @@ void main() {
 	
 	//Debug message
 	object oCaster = OBJECT_SELF;
-	SpeakString("casting faerie fire", TALKVOLUME_SHOUT);
 
     location lTarget = GetSpellTargetLocation();
     int nCasterLvl = GetCasterLevel(oCaster);
