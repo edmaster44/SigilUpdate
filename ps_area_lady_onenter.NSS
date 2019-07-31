@@ -109,7 +109,7 @@ void main()
    		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_ladysonya", lSpawnpoint);    
   	}
 	if(GetObjectByTag("ps_npc_ladyblackmarian") == OBJECT_INVALID) {
-   		object oWP = GetWaypointByTag("wp_ps_npc_ladyblackmarian");
+   		object oWP = GetWaypointByTag("wp_ps_npc_blackmarian");
    		location lSpawnpoint = GetLocation(oWP);  
    		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_ladyblackmarian", lSpawnpoint);    
   	}
