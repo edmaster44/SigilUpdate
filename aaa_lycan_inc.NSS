@@ -191,10 +191,10 @@ void PS_Lycan_DR(object oPC, int nSpell)
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{	int nLevel	= GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC);
 		int nAmount		= 5;
-		if (nLevel >= 5)
+		if (nLevel >= 5 ) 
 		{	nAmount 	= 10;	}
 		
-		effect eDR		= EffectDamageReduction(nAmount, DR_TYPE_GMATERIAL, 0, GMATERIAL_METAL_ALCHEMICAL_SILVER);
+		effect eDR		= EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
 			eDR			= ExtraordinaryEffect(eDR);
 			eDR			= SetEffectSpellId(eDR, nSpell);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);

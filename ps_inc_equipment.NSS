@@ -11,7 +11,7 @@
 #include "nw_i0_spells"
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
-#include "ps_meditative_strikes"
+
 
 const int SIGIL_EQUIP_FX = -9444;
 
@@ -35,15 +35,9 @@ return FALSE;
 
 
 }
-//A Wrapper for Get Monk Weapon Functions
-int GetMonkWeapon(object oItem)
 
-{
-	if ((GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN) || (GetBaseItemType(oItem) ==BASE_ITEM_GLOVES ) ||(GetBaseItemType(oItem) == BASE_ITEM_KAMA ) ||(GetBaseItemType(oItem) == BASE_ITEM_QUARTERSTAFF))return TRUE;
-else
-return FALSE;
 
-}
+
 
 //Wrapper to equip effects from equipment in the proper manner.
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT)
@@ -451,6 +445,18 @@ int ED_GetIsFinessable(object oItem)
 	return iFinesse;
 }
 
+//This gets the weapons that qualify for Meditative Strikes
+int GetMonkWeapon(object oItem)
+
+{	int iBaseItem = GetBaseItemType(oItem);
+	object oPC = GetItemPossessor(oItem);
+	int IMeditative;
+	if (iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||
+	iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF)
+	{IMeditative = TRUE;}
+	return IMeditative;
+	}
+	
 
 
 
@@ -464,6 +470,18 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	effect eFX = EffectSavingThrowIncrease(SAVING_THROW_ALL, nCHA);
 	eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
 	ApplyEquipmentEffect(oPC, eFX);
+}
+
+//Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
+void ApplyMeditativeStrikes(object oPC, object oItem)
+ {	
+	if(GetHasFeat(2840,oPC, TRUE) == FALSE) return;
+	int nDUR = DURATION_TYPE_INSTANT;
+	int nWIS = GetAbilityModifier(ABILITY_WISDOM, oPC);
+	if (nWIS <1) return;
+	effect eFX = EffectDamageIncrease(nWIS,DAMAGE_TYPE_MAGICAL);
+	eFX = SupernaturalEffect(eFX);
+	ApplyEffectToObject(nDUR,eFX,oItem);
 }
 
 //Fixes the Spell Resistance bug from items.
@@ -531,6 +549,9 @@ void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
 	ApplyEquipmentEffect(oPC, eFX);
 }
 
+
+
+
 //Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword in off hand.
 void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
 {
@@ -549,6 +570,8 @@ void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
 	eFX = EffectLinkEffects(eFX, EffectDamageIncrease(nBONUS, nDMG_TYPE));
 	ApplyEquipmentEffect(oPC, eFX);
 }
+
+
 
 //When a Samurai draws their weapon (a katana or longsword) foes can be frightened by it.
 void FrightfulPresence(object oPC)
@@ -647,6 +670,11 @@ void DrunkMasterImprovised(object oPC, int nRIGHT)
 	ApplyEquipmentEffect(oPC, eFX);
 }
 
+
+
+
+
+
 //Con Drain Protection in OOC rooms.
 void ConDrainProtection(object oItem, object oPC)
 {	
@@ -655,28 +683,6 @@ void ConDrainProtection(object oItem, object oPC)
 	{	
 		if (IPGetItemHasItemAbilityBonusPropertySubType(oItem, ABILITY_CONSTITUTION)) ForceRest(oPC);
 	}	
-}
-
-//Gets the AC provided by the equipped shield
-//oShield should be the item equipped in the left hand
-int GetACProvidedByShield(object oShield) {
-	if (!GetIsObjectValid(oShield))
-		return 0;
-		
-	int nIndex = GetArmorRulesType(oShield);
-	int nAC = StringToInt(Get2DAString("armorrulestats", "ACBONUS", nIndex));
-	
-	//we have the base AC, now to check enchantment bonus
-	itemproperty ip = GetFirstItemProperty(oShield);
-	while (GetIsItemPropertyValid(ip)) {
-		if (GetItemPropertyType(ip) == ITEM_PROPERTY_AC_BONUS) {
-			nAC += GetItemPropertyCostTableValue(ip);
-			break;
-		}
-		ip = GetNextItemProperty(oShield);
-	}
-	
-	return nAC;
 }
 
 //When all is said and done, the various custom effects dependant on equipment are applied.
@@ -713,13 +719,14 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		CheckForTempProperties(oITEM, oPC);
 	
-		if (GetMonkWeapon(oITEM)) ApplyMeditativeStrikes(oPC,oITEM);
+		if (GetMonkWeapon(oITEM) && GetHasFeat(2840,oPC))
+		 DelayCommand(0.1f,ApplyMeditativeStrikes( oPC, oITEM));
 		
 			if (ED_GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
 			 ED_ApplySpecialWeaponFinesse(oPC, oITEM);
 
 			if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
-			DelayCommand(0.02f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
+			DelayCommand(0.05f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
 
 
 
