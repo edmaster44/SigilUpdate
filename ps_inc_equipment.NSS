@@ -671,9 +671,27 @@ void DrunkMasterImprovised(object oPC, int nRIGHT)
 }
 
 
-
-
-
+//Gets the AC provided by the equipped shield
+//oShield should be the item equipped in the left hand
+int GetACProvidedByShield(object oShield) {
+	if (!GetIsObjectValid(oShield))
+		return 0;
+		
+	int nIndex = GetArmorRulesType(oShield);
+	int nAC = StringToInt(Get2DAString("armorrulestats", "ACBONUS", nIndex));
+	
+	//we have the base AC, now to check enchantment bonus
+	itemproperty ip = GetFirstItemProperty(oShield);
+	while (GetIsItemPropertyValid(ip)) {
+		if (GetItemPropertyType(ip) == ITEM_PROPERTY_AC_BONUS) {
+			nAC += GetItemPropertyCostTableValue(ip);
+			break;
+		}
+		ip = GetNextItemProperty(oShield);
+	}
+	
+	return nAC;
+}
 
 //Con Drain Protection in OOC rooms.
 void ConDrainProtection(object oItem, object oPC)

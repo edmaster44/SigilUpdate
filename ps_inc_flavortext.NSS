@@ -1102,7 +1102,7 @@ string RandomString_GenerateBackstory() {
 //after x suffered or overcame or survived. . . 
 string RandomString_HurdleGenerator() {
 
-	int total = 13;
+	int total = 19;
 	switch (Random(total)) {
 		case 0: return "a blow to the head";
 		case 1: return "an encounter with a banana peel";
@@ -1117,6 +1117,12 @@ string RandomString_HurdleGenerator() {
 		case 10: return "a test of courage";
 		case 11: return "a horrible illness";
 		case 12: return "a mysterious curse";
+		case 13: return "a betrayal by a friend";
+		case 14: return "unpaid taxes";
+		case 15: return "a very zealous Harmonium checkpoint";
+		case 16: return "an encounter with a Justicar";
+		case 17: return "a spontaneous Sensate party";
+		case 18: return "a riot in the streets";
 	}
 	
 	return "a sudden blow to the head";
@@ -1319,11 +1325,63 @@ string RandomString_GenerateCrime() {
 		case 40: sCrime += "Burglary"; break;
 	}
 	
-	if (d10() <= 3) {
+	/*if (d10() <= 3) {
 		sCrime += ", "+RandomString_GenerateCrime();
-	}
+	}*/
 	
 	return sCrime;
+}
+
+string RandomString_LastWordsGenerator(struct character char) {
+
+	switch (Random(23)) {
+		case 0: return "I hate you all!";
+		case 1: return "I am innocent of everything! Especially "+char.crime+"!";
+		case 2: return "If someone doesn't shut that pig's mouth, I'll shut it for him!";
+		case 3: return "Please, I have a child . . .";
+		case 4: return "I have never been an anarchist! Its false, I tell you!";
+		case 5: return "I couldn't help it, I faced "+RandomString_HurdleGenerator()+"!";
+		case 6: return "Greased pigs, the lot of you!";
+		case 7: return "Do you know who I am?! I am "+char.firstname+" "+char.lastname+" "+IntroduceCharacter(char)+"!";
+		case 8: return "Please, I'll do anything!";
+		case 9: return "Go hug razorvine, all of you!";
+		case 10: return "I didn't do it!";
+		case 11: return "I didn't do it! Please, you have to believe me!";
+		case 12: return "Wait, what's the Wyrm?";
+		case 13: return "You'll all go to the mazes for this!";
+		case 14: return "Not again. . .";
+		case 15: return "Fine! Since you've all rejected me, death is better anyway!";
+		case 16: return "You don't understand, it was my only option! I don't deserve to die!";
+		case 17: return "Where's the mercy? Don't you lot have MERCY in your FACTION NAME?!";
+		case 18: return "Just. . please make it quick. . .";
+		case 19: return "I was framed. You have to believe me!";
+		case 20: return "I just need a little more time. My cousin can clear my name. Please, not today!";
+		case 21: return "Let's get it over with already. . .";
+		case 22: return "*sobs quietly*";
+	}
+
+	return "";
+}
+
+string RandomString_RandomBusinessGenerator() {
+
+	switch (Random(14)) {
+		case 0: return "The Twelve Factols' Tavern";
+		case 1: return "The Fat Candle";
+		case 2: return "Chirpers'";
+		case 3: return "Lazz's School of Vivid Unpleasantness";
+		case 4: return "Tensar's Employment Service";
+		case 5: return "The Fortune's Wheel";
+		case 6: return "Traban's Forge";
+		case 7: return "The Green Mill";
+		case 8: return "Zak's Corpse Curing";
+		case 9: return "Green Stone Stables";
+		case 10: return "the Bottle & Jug";
+		case 11: return "Imel's Happy Tongue";
+		case 12: return "the Yawning Rat";
+		case 13: return "Bandur's Soap";
+	}
+	return "";
 }
 
 //***************************************************************************
