@@ -51,7 +51,7 @@ void SpawnColothysExitPortal() {
 	string sPortal = "ps_plac_port_colothysout";
 	
 	object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, GetLocation(oWP));
-	SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
+	//SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
 	DestroyObject(oPortal, 60.0f);
 	
 	object oDoor = GetNearestObjectByTag("gardentemple_in");
@@ -64,21 +64,21 @@ void SpawnColothysExitPortal() {
 void SpawnColothysCarceriPortals() {
 
 	object oArea = GetArea(OBJECT_SELF);
-	SpeakString("Current area: "+GetTag(oArea), TALKVOLUME_SHOUT);
+	//SpeakString("Current area: "+GetTag(oArea), TALKVOLUME_SHOUT);
 	if (GetTag(oArea) == "ps_area_carceri_garden") {
 
 		object oWP = GetWaypointByTag("wp_plac_port_colothysout");
 		string sPortal = "ps_plac_port_colothys-minethys";
 		
 		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, GetLocation(oWP));
-		SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
+		//SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
 		DestroyObject(oPortal, 60.0f);
 		
 		oWP = GetWaypointByTag("wp_plac_port_colothyscarceri");
 		sPortal = "ps_plac_port_colothys-porphatys";
 		
 		oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, GetLocation(oWP));
-		SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
+		//SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
 		DestroyObject(oPortal, 60.0f);
 	
 		object oDoor = GetNearestObjectByTag("gardentemple_in");
@@ -91,7 +91,7 @@ void SpawnColothysCarceriPortals() {
 		string sPortal = "ps_plac_port_colothysin";
 		
 		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, GetLocation(oWP));
-		SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
+		//SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
 		DestroyObject(oPortal, 60.0f);
 		
 	} else if (GetTag(oArea) == "ps_area_carceri_minethys_desert") {
@@ -100,7 +100,7 @@ void SpawnColothysCarceriPortals() {
 		string sPortal = "ps_plac_port_colothysin";
 		
 		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, GetLocation(oWP));
-		SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
+		//SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
 		DestroyObject(oPortal, 60.0f);
 		
 	}

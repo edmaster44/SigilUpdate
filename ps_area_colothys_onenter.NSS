@@ -16,8 +16,9 @@ void main () {
 	
 	  SetGlobalInt("ColothysEnterLock", 1);
 	  
-	  //Injured Hound
-	  if(GetObjectByTag("c_colothys_portallistener") == OBJECT_INVALID)
+	  //Portal Listener
+	  object oListener = GetObjectByTag("c_colothys_portallistener");
+	  if(oListener == OBJECT_INVALID || GetArea(oListener) != GetArea(OBJECT_SELF))
 	  {
 		   object oWP = GetWaypointByTag("wp_colothys_portallistener");
 		   location lSpawnpoint = GetLocation(oWP);  

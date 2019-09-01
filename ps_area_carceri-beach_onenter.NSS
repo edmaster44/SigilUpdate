@@ -69,7 +69,8 @@ void main () {
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_porphatys_oldpriest", lSpawnpoint);    
 		}
 		
-		if(GetObjectByTag("c_porphatys_portallistener") == OBJECT_INVALID) {
+	  object oListener = GetObjectByTag("c_porphatys_portallistener");
+	  if(oListener == OBJECT_INVALID || GetArea(oListener) != GetArea(OBJECT_SELF)) {
 			object oWP = GetWaypointByTag("ps_porphatys_portallistener");
 			location lSpawnpoint = GetLocation(oWP);  
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "c_colothys_portallistener", lSpawnpoint, FALSE, "c_porphatys_portallistener");  
