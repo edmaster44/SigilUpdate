@@ -5,6 +5,7 @@
 #include "ps_inc_functions"
 
 const int cMidnight = 86400;
+// CSpawnWait is the default respawn timer if the trigger does not have a RESPAWN value. (5 minutes)
 const int cSpawnWait = 300;
 
 /*
