@@ -14,25 +14,16 @@
 #include "hench_i0_ai"
 
 
-void main() {
-
+void main()
+{
+//  Jug_Debug(GetName(OBJECT_SELF) + " faction leader " + GetName(GetFactionLeader(OBJECT_SELF)));
+    // * if not running normal or better AI then exit for performance reasons
     if (GetAILevel() == AI_LEVEL_VERY_LOW) return;
-	
-	//For the purposes of scene orchestration - NPC will walk towards DestinationWaypoint no matter what.
-	if (GetLocalString(OBJECT_SELF, "DestinationWaypoint") != "") {
-		string sWP = GetLocalString(OBJECT_SELF, "DestinationWaypoint");
-		object oWP = GetWaypointByTag(sWP);
-		if (GetIsObjectValid(oWP)) {
-			 ActionMoveToLocation(GetLocation(oWP));
-			 return;
-		}
-	}
-	
-	if (GetLocalString(OBJECT_SELF, "ANIMATION") != "") {
-		PlayCustomAnimation(OBJECT_SELF, GetLocalString(OBJECT_SELF, "ANIMATION"), TRUE);
-		return;
-	}
-	
+
+//    if (GetIsObjectValid(GetNearestCreature(CREATURE_TYPE_PLAYER_CHAR,PLAYER_CHAR_IS_PC, OBJECT_SELF, 1, CREATURE_TYPE_PERCEPTION,  PERCEPTION_HEARD)))
+//    {
+//      Jug_Debug("*****" + GetName(OBJECT_SELF) + " heartbeat action " + IntToString(GetCurrentAction()));
+//    }
 
     if (GetSpawnInCondition(NW_FLAG_FAST_BUFF_ENEMY))
     {
