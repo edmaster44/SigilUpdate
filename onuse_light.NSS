@@ -113,6 +113,12 @@ void main()
 		iLightEffect=VFX_DUR_LIGHT_ORANGE_20;
 		}
 		
+	else if (GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="snowfall")
+		{
+		FX_SEF="fx_snowfall";
+		iLightEffect=VFX_DUR_LIGHT_BLUE_10;
+		}
+		
 		//other flame types here
 	else
 		{
