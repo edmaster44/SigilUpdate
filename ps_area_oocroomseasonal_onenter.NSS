@@ -86,6 +86,12 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer5", lSpawnpoint);    
   }
+  
+  if(GetObjectByTag("ps_npc_seasonalkrampus") == OBJECT_INVALID)  {
+	   object oWP = GetWaypointByTag("wp_ooc_krampus_seasonal");
+   	   location lSpawnpoint = GetLocation(oWP);  
+	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalkrampus", lSpawnpoint);    
+  }
     
   SetGlobalInt("OOCEnterLock", 0);
  }
