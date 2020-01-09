@@ -281,6 +281,13 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_bazaarpeddler", lSpawnpoint);    
   }
+  //Vernon (Spider-spider Quest)
+    if(GetObjectByTag("ps_quest_spiderspider") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_quest_littlespiders");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_quest_spiderspider", lSpawnpoint);    
+  }
   
   SetGlobalInt("SigilEnterLock", 0);
  }
