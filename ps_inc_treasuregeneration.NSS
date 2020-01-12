@@ -446,29 +446,7 @@ void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 //***************************************************
 void CreateGemOnTarget(object oTarget, int nTreasureType) {
 
-	string sGem = "nw_it_gem001";
-	if (nTreasureType == TREASURE_LOW) {
-		CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
-	} else if (nTreasureType == TREASURE_MEDIUM) {
-		int nRand = d100();
-		if (nRand < 80) {
-			CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
-		} else if (nRand < 90) {
-			sGem = "ps_golem_brass";
-		}  else  {
-			sGem = "ps_golem_quartz";
-		}
-	} else if (nTreasureType == TREASURE_HIGH || nTreasureType == TREASURE_EPIC) {
-		
-		int nRand = d100();
-		if (nRand < 88) {
-			CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
-		} else  {
-			sGem = "ps_golem_mithral";
-		}
-	}
-		
-	CreateTreasureItemOnTarget(sGem, oTarget, 1);
+	CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
 	  
 }
 //***************************************************
