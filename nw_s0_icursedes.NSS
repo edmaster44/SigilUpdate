@@ -72,6 +72,13 @@ void main()
 		    
 		while (GetIsObjectValid(oTarget))
 		{	
+		
+				//If The Targets are Friendly, it will not do nothing
+				if (GetIsReactionTypeFriendly(oTarget,oCaster))
+				{
+				return;
+				}
+			else
 			// Will Save for PCs.
         	if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))
          	{
@@ -82,6 +89,7 @@ void main()
          	}			
 			else // No save for monsters.
 			{
+			
          		eCurse = EffectCurse(nMod, nMod, nMod, nMod, nMod, nMod);
 	
 				if (nACDebuff > 0)
