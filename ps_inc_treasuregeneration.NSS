@@ -601,7 +601,7 @@ void CreateRandomJewelryOnTarget(object oTarget) {
 //or 25% to generate a completely randomized ring or necklace
 void CreateJewelryOnTarget(object oTarget, int nTreasureLevel) {
 	if (d100() < 75) { //Default spawning from database
-		string sResref = PickItemFromDatabase("treasure_shields", nTreasureLevel);
+		string sResref = PickItemFromDatabase("treasure_jewelry", nTreasureLevel);
 		CreateTreasureItemOnTarget(sResref, oTarget, 1);
 	} else {
 		CreateRandomJewelryOnTarget(oTarget);
