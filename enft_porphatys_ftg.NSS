@@ -15,6 +15,7 @@ int carceriRelief(object oPC) {
 void main() {
 
 	int nAcidThrows = GetLocalInt(OBJECT_SELF, "CarceriAcid");
+	float carceriTime = 60.0f;
 	
 	int lastRun = GetLocalInt(OBJECT_SELF, "porphatys_timestamp");
 	float diff = IntToFloat(abs(TimeStampT()-lastRun));
