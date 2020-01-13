@@ -11,6 +11,9 @@ int GetIsGemstone(object oItem);
 //Makes sure box is ready to go!
 void InitializeGemstoneBox();
 
+//Get the enchantments this gemstone can be used in
+string GetGemstoneUses(object oTarget, string sTag, int nQ);
+
 //Replaces TakeNumItems
 void TakeNumCraftingMaterials(object oPC, string sTag, int nNum) {
     int nCount = 0;
@@ -240,6 +243,10 @@ void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_IN
 	} else {
 		SetTag(oGem, sBaseTag+"_q"+IntToString(nQ)+"_c"+IntToString(nSize));
 		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");
+		
+		string sDescrip = GetDescription(oGem);
+		string sExtra = GetGemstoneUses(oPC, sBaseTag, nQ);
+		SetDescription(oGem, sDescrip+sExtra);
 	}
 }
 
@@ -300,6 +307,37 @@ string PickRandomGemColor() {
 	}
 	
 	return sColor;
+}
+
+//Get the enchantments this gemstone is used in
+string GetGemstoneUses(object oTarget, string sTag, int nQuality) {
+
+	string sGemTag = sTag+"_q"+IntToString(nQuality);
+	string sQuery = "SELECT Label FROM recipes WHERE Gemstone = '"+sGemTag+"'";
+	string sResult = "";
+	
+	//Debug
+	SendMessageToPC(oTarget, sQuery);
+	
+	SQLExecDirect(sQuery);
+	while (SQLFetch() != SQL_ERROR) { 
+		string sName = SQLGetData(1);
+		if (sName != "") {
+			if (sResult != "") 
+				sResult += ", "+sName;
+			else
+				sResult += sName;
+		}
+		
+		//Debug
+		SendMessageToPC(oTarget, sResult);
+	}
+	
+	if (sResult != "")
+		return "\n\nKnown uses: "+sResult;
+	else 
+		return "";
+
 }
 
 //Gets a random gemstone from the gemstone box

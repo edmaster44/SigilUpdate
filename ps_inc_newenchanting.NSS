@@ -72,6 +72,16 @@ int IsPowerfulMaterial(itemproperty ip);
 //Max number of enchantment points
 int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID);
 
+//Grabs all the enchantments for the given db column
+//Valid columns are: Melee, Ranged, Ammo, Thrown, Armor, Glove
+//Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
+//Misc, Belt, Cloak
+//used by the crafting manual script
+string GenerateEnchantmentManualFor(string sColumn);
+
+//Takes an enchantment and returns a string describing its recipe
+string GenerateEnchantmentDescription(struct enchantment enchant);
+
 //************************************************
 //2da data fetch classes
 //************************************************
@@ -604,6 +614,70 @@ int HasSimilarProperty(object oPC, object oItem, struct enchantment enchant) {
 		ip = GetNextItemProperty(oItem);
 	}
 	return 0;
+	
+}
+
+//Takes an enchantment and returns a string describing its recipe
+string GenerateEnchantmentDescription(struct enchantment enchant) {
+
+	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"<b>\n\n";
+	
+	//Points
+	int nPoints = enchant.points;
+	sResult += "Point Value: "+IntToString(nPoints)+"\n";
+	
+	//Caster Level
+	int nCasterLevel = nPoints*3; //need CL 3x that of point value, AT LEAST
+	sResult += "Caster Level: "+IntToString(nCasterLevel)+"\n";
+	
+	//Gold Requirement
+	int nGold = enchant.gold;
+	sResult += "Gold: "+IntToString(nGold)+"gp \n";
+	
+	//Gemstone
+	string sGem = enchant.gemstone;
+	if (sGem != "") {
+		sResult += "Gemstone: "+TranslateGemstoneTagToName(sGem)+"\n";
+	}
+	
+	//Essence
+	string sEssence = enchant.essence;
+	if (sEssence != "") {
+		sResult += "Essence: "+TranslateItemTagToName(sEssence)+"\n";
+	}
+	
+	//Special requirements
+	string sReq = enchant.special_req;
+	if (sReq != "") {
+		sResult += DisplaySpecialRequirement(sReq)+"\n";
+	}
+	
+	return sResult;
+
+}
+
+
+
+
+//Grabs all the enchantments for the given db column
+//Valid columns are: Melee, Ranged, Ammo, Thrown, Armor, Glove
+//Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
+//Misc, Belt, Cloak
+//used by the crafting manual script
+string GenerateEnchantmentManualFor(string sColumn) {
+
+	//Book contents
+	string sResult = "";
+
+	SQLExecDirect("SELECT Recipe_Id FROM recipes WHERE "+sColumn+" = 1");
+	while (SQLFetch() != SQL_ERROR) {
+		int recipeID = StringToInt(SQLGetData(1));
+		struct enchantment e = LoadEnchantment(recipeID);
+		sResult += GenerateEnchantmentDescription(e);
+		sResult += "\n";
+	}
+	
+	return sResult;
 	
 }
 

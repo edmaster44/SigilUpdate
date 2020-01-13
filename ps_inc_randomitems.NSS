@@ -4,6 +4,7 @@
 #include "ps_inc_newenchanting"
 
 const int SPECIAL_BOOK_CHANCE = 10;
+const string MANUAL_COLOR = "<C=DarkSlateBlue>";
 const string QUEST_ITEM_COLOR = "<C=DarkGoldenRod>";
 const string RANDOM_DROP_COLOR = "<C=SteelBlue>";
 string sHolder = "ps_utility_itemvariableholder";
@@ -70,6 +71,49 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 //***************************************************
 //Paper Randomness
 //***************************************************
+//Creates an enchantment manual on target
+//Melee, Ranged, Ammo, Thrown, Armor, Glove
+//Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
+//Misc, Belt, Cloak
+void CreateEnchantmentManualOnTarget(object oTarget) {
+
+	string sColumn = "Melee";
+	string sName = "Treatise on Weapons";
+
+	int nRandom = Random(16)+1;
+	switch (nRandom) {
+		case 1: sColumn = "Melee"; sName = "Treatise on Weapons"; break;
+		case 2: sColumn = "Ranged"; sName = "Manual of Ranged Weapon Enchantments"; break;
+		case 3: sColumn = "Ammo"; sName = "Crafting Ammunition - A Brief Guide"; break;
+		case 4: sColumn = "Thrown"; sName = "Throwing Weapons & You"; break;
+		case 5: sColumn = "Armor"; sName = "Enchanting Armor - The Definitive Work"; break;
+		case 6: sColumn = "Glove"; sName = "Manual of Enchantments - Gloves"; break;
+		case 7: sColumn = "Bracer"; sName = "Enchanting Bracers"; break;
+		case 8: sColumn = "Helm"; sName = "Helmets, Hoods, and Tiaras"; break;
+		case 9: sColumn = "Amulet"; sName = "Amulets - Blessings and Enchantments"; break;
+		case 10: sColumn = "Ring"; sName = "The Magical Properties of Rings"; break;
+		case 11: sColumn = "Boots"; sName = "Treatise on Footwear"; break;
+		case 12: sColumn = "Container"; sName = "Bags of Holding, and their Lesser Incarnations"; break;
+		case 13: sColumn = "Instrument"; sName = "Instruments - the Weapons of Bards"; break;
+		case 14: sColumn = "Misc"; sName = "Miscellaneous Enchantments"; break;
+		case 15: sColumn = "Belt"; sName = "Enchanting Belts"; break;
+		case 16: sColumn = "Cloak"; sName = "Keeping You Warm & More!"; break;
+	}
+	
+	sName = MANUAL_COLOR+sName+"</C>";
+	string sDescrip = "<i>This appears to be a manual on enchanting magic items.</i>\n\n"+GenerateEnchantmentManualFor(sColumn);
+	
+	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
+	
+	//Icon
+	int nIcon = GetRandomIcon("book");
+	SetItemIcon(oBook, nIcon);
+	
+	//Name & Description
+	SetFirstName(oBook, sName);
+	SetDescription(oBook, sDescrip);
+}
+
 //Creates a random junk book
 void CreateRandomBookOnTarget(object oTarget) {
 
@@ -96,7 +140,7 @@ void CreateRandomBookOnTarget(object oTarget) {
 	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
 	if (d100() < SPECIAL_BOOK_CHANCE) {
 		sTitle = QUEST_ITEM_COLOR+sTitle+"</C>";
-		sStory = QUEST_ITEM_COLOR+"For what it is, this book really isn't too bad. You could even say it wass well written. Perhaps someone has a use for it.</C>\n\n"+sStory;
+		sStory = QUEST_ITEM_COLOR+"For what it is, this book really isn't too bad. You could even say it was well written. Perhaps someone has a use for it.</C>\n\n"+sStory;
 		SetTag(oBook, "ps_book_special");
 	}
 	

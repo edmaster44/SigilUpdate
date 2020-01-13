@@ -1,4 +1,4 @@
-#include "ps_inc_newenchanting"
+#include "ps_inc_treasuregeneration"
 
 void TestPointValue(object oPC, object oItem) {
 
@@ -46,6 +46,24 @@ void TestPointValue(object oPC, object oItem) {
 void main () {
 
 	object oPC = GetLastUsedBy();
+	
+	SendMessageToPC(oPC, "Creating manuals: ");
+	CreateEnchantmentManualOnTarget(oPC);
+	CreateEnchantmentManualOnTarget(oPC);
+	CreateEnchantmentManualOnTarget(oPC);
+	CreateEnchantmentManualOnTarget(oPC);
+	CreateEnchantmentManualOnTarget(oPC);
+	
+	SendMessageToPC(oPC, "Creating gemstones: ");
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
+	CreateGemOnTarget(oPC, TREASURE_LOW);
 	
 	int n = 0;
 	for (n = 0; n < NUM_INVENTORY_SLOTS; n++) {

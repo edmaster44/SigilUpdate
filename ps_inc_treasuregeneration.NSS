@@ -313,8 +313,10 @@ void CreateSigilBookOnTarget(object oTarget) {
 //Creates a lore book or random book on target
 void CreateBookOnTarget(object oTarget) {
 	int nRand = Random(100)+1;
-	if (nRand < 90) {
+	if (nRand < 75) {
 		CreateSigilBookOnTarget(oTarget);
+	} else if (nRand < 90) {
+		CreateEnchantmentManualOnTarget(oTarget);
 	} else {
 		CreateRandomBookOnTarget(oTarget); //novels and such
 	}
