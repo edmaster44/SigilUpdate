@@ -670,7 +670,7 @@ string GenerateEnchantmentManualFor(string sColumn) {
 	string sResult = "";
 
 	SQLExecDirect("SELECT Recipe_Id FROM recipes WHERE "+sColumn+" = 1");
-	while (SQLFetch() != SQL_ERROR) {
+	while (SQLFetch("NEXT") != SQL_ERROR) {
 		int recipeID = StringToInt(SQLGetData(1));
 		struct enchantment e = LoadEnchantment(recipeID);
 		sResult += GenerateEnchantmentDescription(e);

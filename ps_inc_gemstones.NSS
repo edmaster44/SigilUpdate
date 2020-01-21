@@ -14,6 +14,9 @@ void InitializeGemstoneBox();
 //Get the enchantments this gemstone can be used in
 string GetGemstoneUses(object oTarget, string sTag, int nQ);
 
+//get base tag of gemstone
+string GetBaseGemTag(object oGem);
+
 //Replaces TakeNumItems
 void TakeNumCraftingMaterials(object oPC, string sTag, int nNum) {
     int nCount = 0;
@@ -64,13 +67,12 @@ string GetGemstoneMineral(object oGem) {
 }
 
 string GetGemstoneDescription(object oGem) {
-	string sDesc1 = GetLocalString(oGem, "GemDescription");
-	string sDesc2 = GetLocalString(oGem, "MineralDescription");
-	
-	if (sDesc1 != "")
-		return sDesc1+"\n\n"+sDesc2;
-	else
-		return sDesc2;
+	string sBaseTag = GetBaseGemTag(oGem);
+	SQLExecDirect("SELECT description FROM gemstones WHERE tag='"+sBaseTag+"'");
+	if (SQLFetch() != SQL_ERROR) { 
+		return SQLGetData(1);
+	}
+	return "";
 }
 
 string GetGemstoneFullDescription(object oGem) {
@@ -244,7 +246,7 @@ void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_IN
 		SetTag(oGem, sBaseTag+"_q"+IntToString(nQ)+"_c"+IntToString(nSize));
 		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 		
-		string sDescrip = GetDescription(oGem);
+		string sDescrip = GetGemstoneDescription(oGem);
 		string sExtra = GetGemstoneUses(oPC, sBaseTag, nQ);
 		SetDescription(oGem, sDescrip+sExtra);
 	}
@@ -316,11 +318,8 @@ string GetGemstoneUses(object oTarget, string sTag, int nQuality) {
 	string sQuery = "SELECT Label FROM recipes WHERE Gemstone = '"+sGemTag+"'";
 	string sResult = "";
 	
-	//Debug
-	SendMessageToPC(oTarget, sQuery);
-	
 	SQLExecDirect(sQuery);
-	while (SQLFetch() != SQL_ERROR) { 
+	while (SQLFetch("NEXT") != SQL_ERROR) { 
 		string sName = SQLGetData(1);
 		if (sName != "") {
 			if (sResult != "") 
@@ -328,9 +327,6 @@ string GetGemstoneUses(object oTarget, string sTag, int nQuality) {
 			else
 				sResult += sName;
 		}
-		
-		//Debug
-		SendMessageToPC(oTarget, sResult);
 	}
 	
 	if (sResult != "")

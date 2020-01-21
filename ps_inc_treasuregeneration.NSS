@@ -402,13 +402,30 @@ void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) 
 		CreateBookOnTarget(oTarget);
 	}
 }
+
 //***************************************************
 //Junk Generation
 //***************************************************
+//creates one of the mirror items on the target for the upcoming campaign
+//Called in CreateJunkOnTarget()
+void CreateCampaignItemOnTarget(object oTarget) {
+	int nRandom = Random(11)+1;
+	switch (nRandom) {
+		case 1: case 8:CreateTreasureItemOnTarget("mirror_mirrorimage", oTarget, 1); break;
+		case 2: case 9: CreateTreasureItemOnTarget("mirror_glamer", oTarget, 1); break;
+		case 3: CreateTreasureItemOnTarget("mirror_icesimulacrum", oTarget, 1); break;
+		case 4: CreateTreasureItemOnTarget("mirror_mislead", oTarget, 1); break;
+		case 5: CreateTreasureItemOnTarget("mirror_falsebadge", oTarget, 1); break;
+		case 6: CreateTreasureItemOnTarget("mirror_troopmovements", oTarget, 1); break;
+		case 7: case 10: case 11: CreateTreasureItemOnTarget("ps_valmisc_smallmirror", oTarget, 1); break;
+	}
+}
+
+//General junk creation script
 void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 
 	string sResref = "";
-	int nRandom = Random(13)+1;
+	int nRandom = Random(15)+1;
 	switch (nRandom) {
 		case 1: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "rune", TRUE); break; //runes
 		case 2: case 13: case 14: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "", TRUE); break; //Default Junk
@@ -422,6 +439,7 @@ void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 		case 10: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "trapkit", TRUE); break; //trap kits
 		case 11: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "ammo", TRUE); break; //ammunition
 		case 12: CreateTrinketOnTarget(oTarget, nTreasureType); return; //random trinket
+		case 15: CreateCampaignItemOnTarget(oTarget); return; //random MIRROR CAMPAIGN item; remove or change later if it becomes irrelevant
 	}
 	int nStackSize = 1;
 	if (nRandom == 11) { //Ammunition, generate stack

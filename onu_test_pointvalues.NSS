@@ -65,7 +65,15 @@ void main () {
 	CreateGemOnTarget(oPC, TREASURE_LOW);
 	CreateGemOnTarget(oPC, TREASURE_LOW);
 	
-	int n = 0;
+	SendMessageToPC(oPC, "Creating mirrors: ");
+	CreateItemOnObject("mirror_mirrorimage", oPC);
+	CreateItemOnObject("mirror_glamer", oPC);
+	CreateItemOnObject("mirror_icesimulacrum", oPC);
+	CreateItemOnObject("mirror_mislead", oPC);
+	CreateItemOnObject("mirror_falsebadge", oPC);
+	CreateItemOnObject("mirror_troopmovements", oPC);
+	
+	/*int n = 0;
 	for (n = 0; n < NUM_INVENTORY_SLOTS; n++) {
 		object oItem = GetItemInSlot(n, oPC);
 		if (GetIsObjectValid(oItem)) {
@@ -73,6 +81,6 @@ void main () {
 			SendMessageToPC(oPC, "max points allowed: "+IntToString(nMax));
 			TestPointValue(oPC, oItem);
 		}
-	}
+	}*/
 
 }
