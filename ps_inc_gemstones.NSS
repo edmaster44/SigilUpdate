@@ -384,6 +384,43 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 
 }
 
+//Create a gemstone of the specified tag, quality, and size
+object CreateGemstoneOfType(string sTag, int nQuality = 0, int nSize = 0, object oTarget = OBJECT_INVALID) {
+
+	object oGem;
+	SQLExecDirect("SELECT name, tag, resref, icon, description, vfx, duration FROM gemstones WHERE tag='"+sTag+"'");
+	if (SQLFetch() != SQL_ERROR) { 
+		string sName = SQLGetData(1);
+		string sTag = SQLGetData(2);
+		string sResref = SQLGetData(3);
+		int nIcon = StringToInt(SQLGetData(4));
+		string sDescrip = SQLGetData(5);
+		string sVFX = SQLGetData(6);
+		float fDur = StringToFloat(SQLGetData(7));
+		if (sTag == "gemstone_vfx_chardalyn") {
+			oGem = CreateItemOnObject(sTag, oTarget, 1);
+		} else {
+			oGem = CreateItemOnObject(sResref, oTarget, 1);
+			SetFirstName(oGem, sName);
+			if (sTag == "gemstone_amber_1" || sTag == "gemstone_amber_2") {
+				SetTag(oGem, "ps_summoner");
+			} else {
+				SetTag(oGem, sTag);
+			}
+			SetItemIcon(oGem, nIcon);
+			SetDescription(oGem, sDescrip);
+			SetLocalString(oGem, "VFX", sVFX);
+			SetLocalFloat(oGem, "Duration", fDur);
+		}
+	}
+	
+	if (GetIsGemstone(oGem)) {
+		SetDetailsOfGemstone(oGem, nQuality, nSize, oTarget);
+	}
+	
+	return oGem;
+}
+
 void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
 
 	object oGem = GetRandomGemstoneToSpawn(oTarget);
