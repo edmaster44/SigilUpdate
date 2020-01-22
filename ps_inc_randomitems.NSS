@@ -79,31 +79,32 @@ void CreateEnchantmentManualOnTarget(object oTarget) {
 
 	string sColumn = "Melee";
 	string sName = "Treatise on Weapons";
+	string sKind = "melee weapons";
 
 	int nRandom = Random(16)+1;
 	switch (nRandom) {
-		case 1: sColumn = "Melee"; sName = "Treatise on Weapons"; break;
-		case 2: sColumn = "Ranged"; sName = "Manual of Ranged Weapon Enchantments"; break;
-		case 3: sColumn = "Ammo"; sName = "Crafting Ammunition - A Brief Guide"; break;
-		case 4: sColumn = "Thrown"; sName = "Throwing Weapons & You"; break;
-		case 5: sColumn = "Armor"; sName = "Enchanting Armor - The Definitive Work"; break;
-		case 6: sColumn = "Glove"; sName = "Manual of Enchantments - Gloves"; break;
-		case 7: sColumn = "Bracer"; sName = "Enchanting Bracers"; break;
-		case 8: sColumn = "Helm"; sName = "Helmets, Hoods, and Tiaras"; break;
-		case 9: sColumn = "Amulet"; sName = "Amulets - Blessings and Enchantments"; break;
-		case 10: sColumn = "Ring"; sName = "The Magical Properties of Rings"; break;
-		case 11: sColumn = "Boots"; sName = "Treatise on Footwear"; break;
-		case 12: sColumn = "Container"; sName = "Bags of Holding, and their Lesser Incarnations"; break;
-		case 13: sColumn = "Instrument"; sName = "Instruments - the Weapons of Bards"; break;
-		case 14: sColumn = "Misc"; sName = "Miscellaneous Enchantments"; break;
-		case 15: sColumn = "Belt"; sName = "Enchanting Belts"; break;
-		case 16: sColumn = "Cloak"; sName = "Keeping You Warm & More!"; break;
+		case 1: sColumn = "Melee"; sKind = "melee weapons"; sName = "Treatise on Weapons"; break;
+		case 2: sColumn = "Ranged"; sKind = "ranged weapons"; sName = "Manual of Ranged Weapon Enchantments"; break;
+		case 3: sColumn = "Ammo"; sKind = "ammunition"; sName = "Crafting Ammunition - A Brief Guide"; break;
+		case 4: sColumn = "Thrown"; sKind = "throwing weapons"; sName = "Throwing Weapons & You"; break;
+		case 5: sColumn = "Armor"; sKind = "armor"; sName = "Enchanting Armor - The Definitive Work"; break;
+		case 6: sColumn = "Glove"; sKind = "gloves"; sName = "Manual of Enchantments - Gloves"; break;
+		case 7: sColumn = "Bracer"; sKind = "bracers"; sName = "Enchanting Bracers"; break;
+		case 8: sColumn = "Helm"; sKind = "headgear"; sName = "Helmets, Hoods, and Tiaras"; break;
+		case 9: sColumn = "Amulet"; sKind = "amulets"; sName = "Amulets - Blessings and Enchantments"; break;
+		case 10: sColumn = "Ring"; sKind = "rings"; sName = "The Magical Properties of Rings"; break;
+		case 11: sColumn = "Boots"; sKind = "boots"; sName = "Treatise on Footwear"; break;
+		case 12: sColumn = "Container"; sKind = "containers"; sName = "Bags of Holding, and their Lesser Incarnations"; break;
+		case 13: sColumn = "Instrument"; sKind = "instruments"; sName = "Instruments - the Weapons of Bards"; break;
+		case 14: sColumn = "Misc"; sKind = "usable items"; sName = "Miscellaneous Enchantments"; break;
+		case 15: sColumn = "Belt"; sKind = "belts"; sName = "Enchanting Belts"; break;
+		case 16: sColumn = "Cloak"; sKind = "cloaks"; sName = "Cloaks: Keeping You Warm & More!"; break;
 	}
 	
 	sName = MANUAL_COLOR+sName+"</C>";
 	
 	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
-	string sDescrip = "<i>This appears to be a manual on enchanting magic items.</i>\n\n"+GenerateEnchantmentManualFor(oBook, sColumn);
+	string sDescrip = "<i>This appears to be a manual on enchanting magical "+sKind+".</i>\n\n"+GenerateEnchantmentManualFor(oBook, sColumn);
 	
 	//Icon
 	int nIcon = GetRandomIcon("book");

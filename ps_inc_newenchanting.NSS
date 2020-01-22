@@ -620,7 +620,7 @@ int HasSimilarProperty(object oPC, object oItem, struct enchantment enchant) {
 //Takes an enchantment and returns a string describing its recipe
 string GenerateEnchantmentDescription(struct enchantment enchant) {
 
-	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"<b>\n\n";
+	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"</b>\n";
 	
 	//Points
 	int nPoints = enchant.points;
@@ -670,18 +670,21 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 	string sResult = "";
 
 	int nIndex = 1;
-	SQLExecDirect("SELECT Recipe_Id FROM recipes WHERE "+sColumn+" = 1");
+	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE "+sColumn+" = 1");
 	while (SQLFetch() != SQL_ERROR) {
-		int recipeID = StringToInt(SQLGetData(1));
-		SetLocalInt(oTarget, "RecipeID_"+IntToString(nIndex), recipeID);
-		nIndex++;
-	}
-	
-	int n;
-	for (n = 1; n < nIndex; n++) {
-		int recipeID = GetLocalInt(oTarget, "RecipeID_"+IntToString(n));
-		struct enchantment e = LoadEnchantment(recipeID);
-		sResult += GenerateEnchantmentDescription(e);
+    	struct enchantment enchant;
+		enchant.id = StringToInt(SQLGetData(1));
+		enchant.type = StringToInt(SQLGetData(2));
+		enchant.subtype = StringToInt(SQLGetData(3));
+		enchant.numerical = StringToInt(SQLGetData(4));
+		enchant.special = StringToInt(SQLGetData(5));
+		enchant.points = StringToInt(SQLGetData(6));
+		enchant.gold =StringToInt(SQLGetData(7));
+		enchant.essence = SQLGetData(8);
+		enchant.gemstone = SQLGetData(9);
+		enchant.special_req = SQLGetData(10);
+		
+		sResult += GenerateEnchantmentDescription(enchant);
 		sResult += "\n";
 	}
 	
@@ -692,7 +695,7 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 //Get the list of enchantment requirements for the GUI
 void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant, object oItem) {
 
-	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"<b>\n\n";
+	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"</b>\n\n";
 	
 	int nPoints = enchant.points;
 	int nCasterLevel = nPoints*3; //need CL 3x that of point value, AT LEAST
