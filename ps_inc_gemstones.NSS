@@ -226,7 +226,11 @@ string GetBaseGemName(object oGem) {
 	int nQ = GetGemQuality(oGem);
 	int nStart = 0;
 	if (IsGemRough(oGem)) {
-		nStart = 6;
+		if (TestStringAgainstPattern("**pearl**", GetTag(oGem))) {
+			nStart = 13;
+		} else {
+			nStart = 6;
+		}
 	} else {
 		string qString = GetQualityString(nQ);
 		if (FindSubString(GetName(oGem), qString) >= 0)

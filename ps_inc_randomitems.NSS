@@ -185,7 +185,7 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 		case 4: sDescrip += "The spell links the target to the caster, bestowing a blessing on the caster, and a curse on the target. The target also shares in any damage the caster takes for the duration of the spell."; break;
 	}
 	
-	object oScroll = CreateTreasureItemOnTarget("ps_crft_basescroll", oTarget, 1, "experimentalscroll");
+	object oScroll = CreateTreasureItemOnTarget("ps_crft_basemisc", oTarget, 1, "experimentalscroll");
 	SetLocalInt(oScroll, "Item_Level", nLevel);
 	SetLocalInt(oScroll, "Item_Effect_Helpful", nGood);
 	SetLocalInt(oScroll, "Item_Effect_Harmful", nBad);
@@ -222,7 +222,7 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 	sDescrip += "The label indicates that this is a "+sName+" and should last about "+IntToString(nLevel*30)+" minutes.";
 	
 	int nIcon = GetRandomIcon("it_pot");
-	object oPot = CreateTreasureItemOnTarget("ps_crft_basepotion", oTarget, 1, "experimentalpotion");
+	object oPot = CreateTreasureItemOnTarget("ps_crft_basemisc", oTarget, 1, "experimentalpotion");
 	SetLocalInt(oPot, "Item_Level", nLevel);
 	SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
 	SetLocalInt(oPot, "Item_Effect_Harmful", nBad);
