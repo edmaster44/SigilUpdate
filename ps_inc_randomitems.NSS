@@ -101,9 +101,9 @@ void CreateEnchantmentManualOnTarget(object oTarget) {
 	}
 	
 	sName = MANUAL_COLOR+sName+"</C>";
-	string sDescrip = "<i>This appears to be a manual on enchanting magic items.</i>\n\n"+GenerateEnchantmentManualFor(sColumn);
 	
 	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
+	string sDescrip = "<i>This appears to be a manual on enchanting magic items.</i>\n\n"+GenerateEnchantmentManualFor(oBook, sColumn);
 	
 	//Icon
 	int nIcon = GetRandomIcon("book");

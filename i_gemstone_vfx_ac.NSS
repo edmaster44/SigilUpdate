@@ -23,6 +23,8 @@ void main () {
 	}
 	
 	DestroyObject(oItem);
-	CreateItemOnObject("gemstone_gravel", oPC);
+	
+	//removing this because gemstone gravel now has a purpose
+	//CreateItemOnObject("gemstone_gravel", oPC);
 
 }

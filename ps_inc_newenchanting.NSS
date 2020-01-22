@@ -77,7 +77,7 @@ int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID);
 //Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
 //Misc, Belt, Cloak
 //used by the crafting manual script
-string GenerateEnchantmentManualFor(string sColumn);
+string GenerateEnchantmentManualFor(object oTarget, string sColumn);
 
 //Takes an enchantment and returns a string describing its recipe
 string GenerateEnchantmentDescription(struct enchantment enchant);
@@ -664,14 +664,22 @@ string GenerateEnchantmentDescription(struct enchantment enchant) {
 //Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
 //Misc, Belt, Cloak
 //used by the crafting manual script
-string GenerateEnchantmentManualFor(string sColumn) {
+string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 
 	//Book contents
 	string sResult = "";
 
+	int nIndex = 1;
 	SQLExecDirect("SELECT Recipe_Id FROM recipes WHERE "+sColumn+" = 1");
-	while (SQLFetch("NEXT") != SQL_ERROR) {
+	while (SQLFetch() != SQL_ERROR) {
 		int recipeID = StringToInt(SQLGetData(1));
+		SetLocalInt(oTarget, "RecipeID_"+IntToString(nIndex), recipeID);
+		nIndex++;
+	}
+	
+	int n;
+	for (n = 1; n < nIndex; n++) {
+		int recipeID = GetLocalInt(oTarget, "RecipeID_"+IntToString(n));
 		struct enchantment e = LoadEnchantment(recipeID);
 		sResult += GenerateEnchantmentDescription(e);
 		sResult += "\n";

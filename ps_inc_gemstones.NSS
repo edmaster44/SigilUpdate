@@ -319,7 +319,7 @@ string GetGemstoneUses(object oTarget, string sTag, int nQuality) {
 	string sResult = "";
 	
 	SQLExecDirect(sQuery);
-	while (SQLFetch("NEXT") != SQL_ERROR) { 
+	while (SQLFetch() != SQL_ERROR) { 
 		string sName = SQLGetData(1);
 		if (sName != "") {
 			if (sResult != "") 
