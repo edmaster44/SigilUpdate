@@ -122,6 +122,14 @@ void main()
 	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_gfcommoner12", lSpawnpoint);    
   }
   
+  //Gemstone Shard taker
+  if(GetObjectByTag("ps_npc_gflaoxim") == OBJECT_INVALID)
+  {
+	   object oWP = GetWaypointByTag("wp_npc_gflaoxim");
+	   location lSpawnpoint = GetLocation(oWP);  
+	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_gflaoxim", lSpawnpoint);    
+  }
+  
   //Injured Hound
   if(GetObjectByTag("ps_npc_gfcommoner3") == OBJECT_INVALID)
   {

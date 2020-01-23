@@ -313,8 +313,10 @@ void CreateSigilBookOnTarget(object oTarget) {
 //Creates a lore book or random book on target
 void CreateBookOnTarget(object oTarget) {
 	int nRand = Random(100)+1;
-	if (nRand < 90) {
+	if (nRand < 75) {
 		CreateSigilBookOnTarget(oTarget);
+	} else if (nRand < 90) {
+		CreateEnchantmentManualOnTarget(oTarget);
 	} else {
 		CreateRandomBookOnTarget(oTarget); //novels and such
 	}
@@ -400,13 +402,30 @@ void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) 
 		CreateBookOnTarget(oTarget);
 	}
 }
+
 //***************************************************
 //Junk Generation
 //***************************************************
+//creates one of the mirror items on the target for the upcoming campaign
+//Called in CreateJunkOnTarget()
+void CreateCampaignItemOnTarget(object oTarget) {
+	int nRandom = Random(11)+1;
+	switch (nRandom) {
+		case 1: case 8:CreateTreasureItemOnTarget("mirror_mirrorimage", oTarget, 1); break;
+		case 2: case 9: CreateTreasureItemOnTarget("mirror_glamer", oTarget, 1); break;
+		case 3: CreateTreasureItemOnTarget("mirror_icesimulacrum", oTarget, 1); break;
+		case 4: CreateTreasureItemOnTarget("mirror_mislead", oTarget, 1); break;
+		case 5: CreateTreasureItemOnTarget("mirror_falsebadge", oTarget, 1); break;
+		case 6: CreateTreasureItemOnTarget("mirror_troopmovements", oTarget, 1); break;
+		case 7: case 10: case 11: CreateTreasureItemOnTarget("ps_valmisc_smallmirror", oTarget, 1); break;
+	}
+}
+
+//General junk creation script
 void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 
 	string sResref = "";
-	int nRandom = Random(13)+1;
+	int nRandom = Random(15)+1;
 	switch (nRandom) {
 		case 1: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "rune", TRUE); break; //runes
 		case 2: case 13: case 14: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "", TRUE); break; //Default Junk
@@ -420,6 +439,7 @@ void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 		case 10: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "trapkit", TRUE); break; //trap kits
 		case 11: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "ammo", TRUE); break; //ammunition
 		case 12: CreateTrinketOnTarget(oTarget, nTreasureType); return; //random trinket
+		case 15: CreateCampaignItemOnTarget(oTarget); return; //random MIRROR CAMPAIGN item; remove or change later if it becomes irrelevant
 	}
 	int nStackSize = 1;
 	if (nRandom == 11) { //Ammunition, generate stack
@@ -446,29 +466,7 @@ void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 //***************************************************
 void CreateGemOnTarget(object oTarget, int nTreasureType) {
 
-	string sGem = "nw_it_gem001";
-	if (nTreasureType == TREASURE_LOW) {
-		CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
-	} else if (nTreasureType == TREASURE_MEDIUM) {
-		int nRand = d100();
-		if (nRand < 80) {
-			CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
-		} else if (nRand < 90) {
-			sGem = "ps_golem_brass";
-		}  else  {
-			sGem = "ps_golem_quartz";
-		}
-	} else if (nTreasureType == TREASURE_HIGH || nTreasureType == TREASURE_EPIC) {
-		
-		int nRand = d100();
-		if (nRand < 88) {
-			CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
-		} else  {
-			sGem = "ps_golem_mithral";
-		}
-	}
-		
-	CreateTreasureItemOnTarget(sGem, oTarget, 1);
+	CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
 	  
 }
 //***************************************************
@@ -623,7 +621,7 @@ void CreateRandomJewelryOnTarget(object oTarget) {
 //or 25% to generate a completely randomized ring or necklace
 void CreateJewelryOnTarget(object oTarget, int nTreasureLevel) {
 	if (d100() < 75) { //Default spawning from database
-		string sResref = PickItemFromDatabase("treasure_shields", nTreasureLevel);
+		string sResref = PickItemFromDatabase("treasure_jewelry", nTreasureLevel);
 		CreateTreasureItemOnTarget(sResref, oTarget, 1);
 	} else {
 		CreateRandomJewelryOnTarget(oTarget);

@@ -4,6 +4,7 @@
 #include "ps_inc_newenchanting"
 
 const int SPECIAL_BOOK_CHANCE = 10;
+const string MANUAL_COLOR = "<C=DarkSlateBlue>";
 const string QUEST_ITEM_COLOR = "<C=DarkGoldenRod>";
 const string RANDOM_DROP_COLOR = "<C=SteelBlue>";
 string sHolder = "ps_utility_itemvariableholder";
@@ -70,6 +71,50 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 //***************************************************
 //Paper Randomness
 //***************************************************
+//Creates an enchantment manual on target
+//Melee, Ranged, Ammo, Thrown, Armor, Glove
+//Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
+//Misc, Belt, Cloak
+void CreateEnchantmentManualOnTarget(object oTarget) {
+
+	string sColumn = "Melee";
+	string sName = "Treatise on Weapons";
+	string sKind = "melee weapons";
+
+	int nRandom = Random(16)+1;
+	switch (nRandom) {
+		case 1: sColumn = "Melee"; sKind = "melee weapons"; sName = "Treatise on Weapons"; break;
+		case 2: sColumn = "Ranged"; sKind = "ranged weapons"; sName = "Manual of Ranged Weapon Enchantments"; break;
+		case 3: sColumn = "Ammo"; sKind = "ammunition"; sName = "Crafting Ammunition - A Brief Guide"; break;
+		case 4: sColumn = "Thrown"; sKind = "throwing weapons"; sName = "Throwing Weapons & You"; break;
+		case 5: sColumn = "Armor"; sKind = "armor"; sName = "Enchanting Armor - The Definitive Work"; break;
+		case 6: sColumn = "Glove"; sKind = "gloves"; sName = "Manual of Enchantments - Gloves"; break;
+		case 7: sColumn = "Bracer"; sKind = "bracers"; sName = "Enchanting Bracers"; break;
+		case 8: sColumn = "Helm"; sKind = "headgear"; sName = "Helmets, Hoods, and Tiaras"; break;
+		case 9: sColumn = "Amulet"; sKind = "amulets"; sName = "Amulets - Blessings and Enchantments"; break;
+		case 10: sColumn = "Ring"; sKind = "rings"; sName = "The Magical Properties of Rings"; break;
+		case 11: sColumn = "Boots"; sKind = "boots"; sName = "Treatise on Footwear"; break;
+		case 12: sColumn = "Container"; sKind = "containers"; sName = "Bags of Holding, and their Lesser Incarnations"; break;
+		case 13: sColumn = "Instrument"; sKind = "instruments"; sName = "Instruments - the Weapons of Bards"; break;
+		case 14: sColumn = "Misc"; sKind = "usable items"; sName = "Miscellaneous Enchantments"; break;
+		case 15: sColumn = "Belt"; sKind = "belts"; sName = "Enchanting Belts"; break;
+		case 16: sColumn = "Cloak"; sKind = "cloaks"; sName = "Cloaks: Keeping You Warm & More!"; break;
+	}
+	
+	sName = MANUAL_COLOR+sName+"</C>";
+	
+	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
+	string sDescrip = "<i>This appears to be a manual on enchanting magical "+sKind+".</i>\n\n"+GenerateEnchantmentManualFor(oBook, sColumn);
+	
+	//Icon
+	int nIcon = GetRandomIcon("book");
+	SetItemIcon(oBook, nIcon);
+	
+	//Name & Description
+	SetFirstName(oBook, sName);
+	SetDescription(oBook, sDescrip);
+}
+
 //Creates a random junk book
 void CreateRandomBookOnTarget(object oTarget) {
 
@@ -96,7 +141,7 @@ void CreateRandomBookOnTarget(object oTarget) {
 	object oBook = CreateTreasureItemOnTarget("ps_crft_basebook", oTarget);
 	if (d100() < SPECIAL_BOOK_CHANCE) {
 		sTitle = QUEST_ITEM_COLOR+sTitle+"</C>";
-		sStory = QUEST_ITEM_COLOR+"For what it is, this book really isn't too bad. You could even say it wass well written. Perhaps someone has a use for it.</C>\n\n"+sStory;
+		sStory = QUEST_ITEM_COLOR+"For what it is, this book really isn't too bad. You could even say it was well written. Perhaps someone has a use for it.</C>\n\n"+sStory;
 		SetTag(oBook, "ps_book_special");
 	}
 	
@@ -140,7 +185,7 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 		case 4: sDescrip += "The spell links the target to the caster, bestowing a blessing on the caster, and a curse on the target. The target also shares in any damage the caster takes for the duration of the spell."; break;
 	}
 	
-	object oScroll = CreateTreasureItemOnTarget("ps_crft_basescroll", oTarget, 1, "experimentalscroll");
+	object oScroll = CreateTreasureItemOnTarget("ps_crft_basemisc", oTarget, 1, "experimentalscroll");
 	SetLocalInt(oScroll, "Item_Level", nLevel);
 	SetLocalInt(oScroll, "Item_Effect_Helpful", nGood);
 	SetLocalInt(oScroll, "Item_Effect_Harmful", nBad);
@@ -177,7 +222,7 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 	sDescrip += "The label indicates that this is a "+sName+" and should last about "+IntToString(nLevel*30)+" minutes.";
 	
 	int nIcon = GetRandomIcon("it_pot");
-	object oPot = CreateTreasureItemOnTarget("ps_crft_basepotion", oTarget, 1, "experimentalpotion");
+	object oPot = CreateTreasureItemOnTarget("ps_crft_basemisc", oTarget, 1, "experimentalpotion");
 	SetLocalInt(oPot, "Item_Level", nLevel);
 	SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
 	SetLocalInt(oPot, "Item_Effect_Harmful", nBad);

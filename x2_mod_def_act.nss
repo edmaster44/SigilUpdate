@@ -16,12 +16,12 @@
 #include "kinc_crafting"
 void main()
 {
-     object oItem = GetItemActivated();
-	 object oPC = GetItemActivator();
+    object oItem = GetItemActivated();
+	object oPC = GetItemActivator();
 
-	if(GetBaseItemType(oItem) == 145) //Recipes are itemtype 145
+	string sTag = GetTag(oItem);
+	if(GetBaseItemType(oItem) == 145 && GetTag(oItem) != "sigisedition") //Recipes are itemtype 145
  	{ 
-		string sTag = GetTag(oItem);
 		if(TestStringAgainstPattern("**_r_g_**", sTag) ||
 			TestStringAgainstPattern("**_r_poi_**", sTag) ||
 			TestStringAgainstPattern("**_r_pot_**", sTag) ||
@@ -78,22 +78,16 @@ void main()
 	//*********************************************************
 	//Adding partial tag activation - Mimi Fearthegn
 	//*********************************************************
-	string sTag = GetTag(oItem);
-	if (GetSubString(sTag, 0, 4) == "serv")
-	{
+	if (GetSubString(sTag, 0, 4) == "serv") {
 		ExecuteScript("i_slave_houseservant_ac", oPC);
 		return;
-	}
-	if (GetSubString(sTag, 0, 4) == "slav")
-	{
+	} else if (GetSubString(sTag, 0, 4) == "slav") {
 		ExecuteScript("i_slave_combat_ac", oPC);
 		return;
-	}
-	if (GetSubString(sTag, 0, 12) == "gemstone_vfx")
-	{
+	} else if (GetSubString(sTag, 0, 12) == "gemstone_vfx") {
 		ExecuteScript("i_gemstone_vfx_ac", oPC);
 		return;
-	}
+	} 
 	//*********************************************************
 	
      // * Generic Item Script Execution Code

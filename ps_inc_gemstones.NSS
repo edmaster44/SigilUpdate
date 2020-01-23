@@ -11,6 +11,12 @@ int GetIsGemstone(object oItem);
 //Makes sure box is ready to go!
 void InitializeGemstoneBox();
 
+//Get the enchantments this gemstone can be used in
+string GetGemstoneUses(object oTarget, string sTag, int nQ);
+
+//get base tag of gemstone
+string GetBaseGemTag(object oGem);
+
 //Replaces TakeNumItems
 void TakeNumCraftingMaterials(object oPC, string sTag, int nNum) {
     int nCount = 0;
@@ -61,13 +67,12 @@ string GetGemstoneMineral(object oGem) {
 }
 
 string GetGemstoneDescription(object oGem) {
-	string sDesc1 = GetLocalString(oGem, "GemDescription");
-	string sDesc2 = GetLocalString(oGem, "MineralDescription");
-	
-	if (sDesc1 != "")
-		return sDesc1+"\n\n"+sDesc2;
-	else
-		return sDesc2;
+	string sBaseTag = GetBaseGemTag(oGem);
+	SQLExecDirect("SELECT description FROM gemstones WHERE tag='"+sBaseTag+"'");
+	if (SQLFetch() != SQL_ERROR) { 
+		return SQLGetData(1);
+	}
+	return "";
 }
 
 string GetGemstoneFullDescription(object oGem) {
@@ -221,7 +226,11 @@ string GetBaseGemName(object oGem) {
 	int nQ = GetGemQuality(oGem);
 	int nStart = 0;
 	if (IsGemRough(oGem)) {
-		nStart = 6;
+		if (TestStringAgainstPattern("**pearl**", GetTag(oGem))) {
+			nStart = 13;
+		} else {
+			nStart = 6;
+		}
 	} else {
 		string qString = GetQualityString(nQ);
 		if (FindSubString(GetName(oGem), qString) >= 0)
@@ -240,6 +249,10 @@ void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_IN
 	} else {
 		SetTag(oGem, sBaseTag+"_q"+IntToString(nQ)+"_c"+IntToString(nSize));
 		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");
+		
+		string sDescrip = GetGemstoneDescription(oGem);
+		string sExtra = GetGemstoneUses(oPC, sBaseTag, nQ);
+		SetDescription(oGem, sDescrip+sExtra);
 	}
 }
 
@@ -302,6 +315,31 @@ string PickRandomGemColor() {
 	return sColor;
 }
 
+//Get the enchantments this gemstone is used in
+string GetGemstoneUses(object oTarget, string sTag, int nQuality) {
+
+	string sGemTag = sTag+"_q"+IntToString(nQuality);
+	string sQuery = "SELECT Label FROM recipes WHERE Gemstone = '"+sGemTag+"'";
+	string sResult = "";
+	
+	SQLExecDirect(sQuery);
+	while (SQLFetch() != SQL_ERROR) { 
+		string sName = SQLGetData(1);
+		if (sName != "") {
+			if (sResult != "") 
+				sResult += ", "+sName;
+			else
+				sResult += sName;
+		}
+	}
+	
+	if (sResult != "")
+		return "\n\nKnown uses: "+sResult;
+	else 
+		return "";
+
+}
+
 //Gets a random gemstone from the gemstone box
 object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 
@@ -344,6 +382,43 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 	}
 	return oGem;
 
+}
+
+//Create a gemstone of the specified tag, quality, and size
+object CreateGemstoneOfType(string sTag, int nQuality = 0, int nSize = 0, object oTarget = OBJECT_INVALID) {
+
+	object oGem;
+	SQLExecDirect("SELECT name, tag, resref, icon, description, vfx, duration FROM gemstones WHERE tag='"+sTag+"'");
+	if (SQLFetch() != SQL_ERROR) { 
+		string sName = SQLGetData(1);
+		string sTag = SQLGetData(2);
+		string sResref = SQLGetData(3);
+		int nIcon = StringToInt(SQLGetData(4));
+		string sDescrip = SQLGetData(5);
+		string sVFX = SQLGetData(6);
+		float fDur = StringToFloat(SQLGetData(7));
+		if (sTag == "gemstone_vfx_chardalyn") {
+			oGem = CreateItemOnObject(sTag, oTarget, 1);
+		} else {
+			oGem = CreateItemOnObject(sResref, oTarget, 1);
+			SetFirstName(oGem, sName);
+			if (sTag == "gemstone_amber_1" || sTag == "gemstone_amber_2") {
+				SetTag(oGem, "ps_summoner");
+			} else {
+				SetTag(oGem, sTag);
+			}
+			SetItemIcon(oGem, nIcon);
+			SetDescription(oGem, sDescrip);
+			SetLocalString(oGem, "VFX", sVFX);
+			SetLocalFloat(oGem, "Duration", fDur);
+		}
+	}
+	
+	if (GetIsGemstone(oGem)) {
+		SetDetailsOfGemstone(oGem, nQuality, nSize, oTarget);
+	}
+	
+	return oGem;
 }
 
 void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {

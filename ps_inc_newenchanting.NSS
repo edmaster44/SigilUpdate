@@ -72,6 +72,16 @@ int IsPowerfulMaterial(itemproperty ip);
 //Max number of enchantment points
 int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID);
 
+//Grabs all the enchantments for the given db column
+//Valid columns are: Melee, Ranged, Ammo, Thrown, Armor, Glove
+//Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
+//Misc, Belt, Cloak
+//used by the crafting manual script
+string GenerateEnchantmentManualFor(object oTarget, string sColumn);
+
+//Takes an enchantment and returns a string describing its recipe
+string GenerateEnchantmentDescription(struct enchantment enchant);
+
 //************************************************
 //2da data fetch classes
 //************************************************
@@ -607,10 +617,85 @@ int HasSimilarProperty(object oPC, object oItem, struct enchantment enchant) {
 	
 }
 
+//Takes an enchantment and returns a string describing its recipe
+string GenerateEnchantmentDescription(struct enchantment enchant) {
+
+	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"</b>\n";
+	
+	//Points
+	int nPoints = enchant.points;
+	sResult += "Point Value: "+IntToString(nPoints)+"\n";
+	
+	//Caster Level
+	int nCasterLevel = nPoints*3; //need CL 3x that of point value, AT LEAST
+	sResult += "Caster Level: "+IntToString(nCasterLevel)+"\n";
+	
+	//Gold Requirement
+	int nGold = enchant.gold;
+	sResult += "Gold: "+IntToString(nGold)+"gp \n";
+	
+	//Gemstone
+	string sGem = enchant.gemstone;
+	if (sGem != "") {
+		sResult += "Gemstone: "+TranslateGemstoneTagToName(sGem)+"\n";
+	}
+	
+	//Essence
+	string sEssence = enchant.essence;
+	if (sEssence != "") {
+		sResult += "Essence: "+TranslateItemTagToName(sEssence)+"\n";
+	}
+	
+	//Special requirements
+	string sReq = enchant.special_req;
+	if (sReq != "") {
+		sResult += DisplaySpecialRequirement(sReq)+"\n";
+	}
+	
+	return sResult;
+
+}
+
+
+
+
+//Grabs all the enchantments for the given db column
+//Valid columns are: Melee, Ranged, Ammo, Thrown, Armor, Glove
+//Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
+//Misc, Belt, Cloak
+//used by the crafting manual script
+string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
+
+	//Book contents
+	string sResult = "";
+
+	int nIndex = 1;
+	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE "+sColumn+" = 1");
+	while (SQLFetch() != SQL_ERROR) {
+    	struct enchantment enchant;
+		enchant.id = StringToInt(SQLGetData(1));
+		enchant.type = StringToInt(SQLGetData(2));
+		enchant.subtype = StringToInt(SQLGetData(3));
+		enchant.numerical = StringToInt(SQLGetData(4));
+		enchant.special = StringToInt(SQLGetData(5));
+		enchant.points = StringToInt(SQLGetData(6));
+		enchant.gold =StringToInt(SQLGetData(7));
+		enchant.essence = SQLGetData(8);
+		enchant.gemstone = SQLGetData(9);
+		enchant.special_req = SQLGetData(10);
+		
+		sResult += GenerateEnchantmentDescription(enchant);
+		sResult += "\n";
+	}
+	
+	return sResult;
+	
+}
+
 //Get the list of enchantment requirements for the GUI
 void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant, object oItem) {
 
-	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"<b>\n\n";
+	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"</b>\n\n";
 	
 	int nPoints = enchant.points;
 	int nCasterLevel = nPoints*3; //need CL 3x that of point value, AT LEAST
