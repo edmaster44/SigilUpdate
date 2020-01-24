@@ -16,7 +16,7 @@ void TestPointValue(object oPC, object oItem) {
 	while (GetIsItemPropertyValid(ip)) {
 		//Debugging sql info
 		string sProp = GetItemPropertyString(ip);
-		int nOfficialValue = GetItemPropertyPointValue(ip);
+		int nOfficialValue = GetItemPropertyPointValue(ip, itemType);
 		
 		int nType = GetItemPropertyType(ip);
 		int nSubType = GetItemPropertySubType(ip);
