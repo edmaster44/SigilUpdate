@@ -23,10 +23,11 @@ const float MEDIUM_MOD_GOLD = 1.0;
 const float HIGH_MOD_GOLD = 3.0;
 const float EPIC_MOD_GOLD = 5.0;
 //Categories / Probabilities
-const int EQUIPPABLE_CHANCE = 25; //chance to get something you can wear
-const int UNEQUIPPABLE_ALCHEMY_CHANCE = 42;
-const int UNEQUIPPABLE_JUNK_CHANCE = 30;
-const int UNEQUIPPABLE_SCROLL_CHANCE = 25;
+const int EQUIPPABLE_CHANCE = 30; //chance to get something you can wear
+//Unequipable percentages - everything below this line should tally to 100
+const int UNEQUIPPABLE_ALCHEMY_CHANCE = 37;
+const int UNEQUIPPABLE_JUNK_CHANCE = 40;
+const int UNEQUIPPABLE_SCROLL_CHANCE = 20;
 const int UNEQUIPPABLE_GOLD_CHANCE = 0;
 const int UNEQUIPPABLE_GEM_CHANCE = 2;
 const int UNEQUIPPABLE_CARD_CHANCE = 1;

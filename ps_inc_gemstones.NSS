@@ -12,7 +12,7 @@ int GetIsGemstone(object oItem);
 void InitializeGemstoneBox();
 
 //Get the enchantments this gemstone can be used in
-string GetGemstoneUses(object oTarget, string sTag, int nQ);
+string GetGemstoneUses(string sTag, int nQ);
 
 //get base tag of gemstone
 string GetBaseGemTag(object oGem);
@@ -251,7 +251,7 @@ void SetDetailsOfGemstone(object oGem, int nQ, int nSize, object oPC = OBJECT_IN
 		SetFirstName(oGem, GetQualityString(nQ)+" "+sBaseName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");
 		
 		string sDescrip = GetGemstoneDescription(oGem);
-		string sExtra = GetGemstoneUses(oPC, sBaseTag, nQ);
+		string sExtra = GetGemstoneUses(sBaseTag, nQ);
 		SetDescription(oGem, sDescrip+sExtra);
 	}
 }
@@ -316,10 +316,10 @@ string PickRandomGemColor() {
 }
 
 //Get the enchantments this gemstone is used in
-string GetGemstoneUses(object oTarget, string sTag, int nQuality) {
+string GetGemstoneUses(string sTag, int nQuality) {
 
-	string sGemTag = sTag+"_q"+IntToString(nQuality);
-	string sQuery = "SELECT Label FROM recipes WHERE Gemstone = '"+sGemTag+"'";
+	string sGemTag = sTag+"_q"+IntToString(nQuality+1);
+	string sQuery = "SELECT Label FROM recipes WHERE gemstone = '"+sGemTag+"'";
 	string sResult = "";
 	
 	SQLExecDirect(sQuery);
@@ -388,7 +388,9 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 object CreateGemstoneOfType(string sTag, int nQuality = 0, int nSize = 0, object oTarget = OBJECT_INVALID) {
 
 	object oGem;
-	SQLExecDirect("SELECT name, tag, resref, icon, description, vfx, duration FROM gemstones WHERE tag='"+sTag+"'");
+	string sQuery = "SELECT name, tag, resref, icon, description, vfx, duration FROM gemstones WHERE tag='"+sTag+"'";
+	
+	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
 		string sName = SQLGetData(1);
 		string sTag = SQLGetData(2);

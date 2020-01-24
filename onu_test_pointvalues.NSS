@@ -2,6 +2,13 @@
 
 void TestPointValue(object oPC, object oItem) {
 
+	string itemType = "";
+	if (GetBaseItemType(oItem) == BASE_ITEM_ARMOR || 
+	GetBaseItemType(oItem) == BASE_ITEM_SMALLSHIELD || 
+	GetBaseItemType(oItem) == BASE_ITEM_LARGESHIELD || 
+	GetBaseItemType(oItem) == BASE_ITEM_TOWERSHIELD) 
+		itemType = "Armor";
+
 	SendMessageToPC(oPC, "********************************");
 	SendMessageToPC(oPC, "Item: "+GetName(oItem));
 	itemproperty ip = GetFirstItemProperty(oItem);
@@ -24,7 +31,12 @@ void TestPointValue(object oPC, object oItem) {
 		if (nNumerical >= 0 && nNumerical < 255)
 			sQuery += " AND Numerical='"+IntToString(nNumerical)+"'";
 		if (nSpecial >= 0 && nSpecial < 255)
-			sQuery += "AND Special='"+IntToString(nSpecial)+"'"; 	
+			sQuery += "AND Special='"+IntToString(nSpecial)+"'"; 
+			
+		//Is this armor? Because if so, enchanting AC is supposed to be cheaper, so check for armor recipe!
+		if (itemType == "Armor" && nType == 1) {
+			sQuery += " AND Armor='1'";
+		}	
 			
 		SQLExecDirect(sQuery);	
 		SendMessageToPC(oPC, "SQL Debug: "+sQuery);
@@ -49,31 +61,13 @@ void main () {
 	
 	SendMessageToPC(oPC, "Creating manuals: ");
 	CreateEnchantmentManualOnTarget(oPC);
-	CreateEnchantmentManualOnTarget(oPC);
-	CreateEnchantmentManualOnTarget(oPC);
-	CreateEnchantmentManualOnTarget(oPC);
-	CreateEnchantmentManualOnTarget(oPC);
 	
 	SendMessageToPC(oPC, "Creating gemstones: ");
 	CreateGemOnTarget(oPC, TREASURE_LOW);
 	CreateGemOnTarget(oPC, TREASURE_LOW);
 	CreateGemOnTarget(oPC, TREASURE_LOW);
-	CreateGemOnTarget(oPC, TREASURE_LOW);
-	CreateGemOnTarget(oPC, TREASURE_LOW);
-	CreateGemOnTarget(oPC, TREASURE_LOW);
-	CreateGemOnTarget(oPC, TREASURE_LOW);
-	CreateGemOnTarget(oPC, TREASURE_LOW);
-	CreateGemOnTarget(oPC, TREASURE_LOW);
 	
-	SendMessageToPC(oPC, "Creating mirrors: ");
-	CreateItemOnObject("mirror_mirrorimage", oPC);
-	CreateItemOnObject("mirror_glamer", oPC);
-	CreateItemOnObject("mirror_icesimulacrum", oPC);
-	CreateItemOnObject("mirror_mislead", oPC);
-	CreateItemOnObject("mirror_falsebadge", oPC);
-	CreateItemOnObject("mirror_troopmovements", oPC);
-	
-	/*int n = 0;
+	int n = 0;
 	for (n = 0; n < NUM_INVENTORY_SLOTS; n++) {
 		object oItem = GetItemInSlot(n, oPC);
 		if (GetIsObjectValid(oItem)) {
@@ -81,6 +75,6 @@ void main () {
 			SendMessageToPC(oPC, "max points allowed: "+IntToString(nMax));
 			TestPointValue(oPC, oItem);
 		}
-	}*/
+	}
 
 }

@@ -121,7 +121,7 @@ int EstimateItemPropertyPointValue(itemproperty ip);
 //Check the database for the correct item point value
 //for this item property; fallback on EstimateItemPropertyPointValue
 //if entry not found
-int GetItemPropertyPointValue(itemproperty ip);
+int GetItemPropertyPointValue(itemproperty ip, string itemType = "");
 
 //Get the sql string to filter out inappropriate enchantments by item type
 string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow);
@@ -1063,11 +1063,18 @@ void EnchantItem(object oItem, struct enchantment enchant) {
 }
 
 int GetItemTotalPoints(object oItem) {
+
+	string itemType = "";
+	if (GetBaseItemType(oItem) == BASE_ITEM_ARMOR || 
+	GetBaseItemType(oItem) == BASE_ITEM_SMALLSHIELD || 
+	GetBaseItemType(oItem) == BASE_ITEM_LARGESHIELD || 
+	GetBaseItemType(oItem) == BASE_ITEM_TOWERSHIELD) 
+		itemType = "Armor";
 	
 	int nTotal = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)) {
-		nTotal += GetItemPropertyPointValue(ip);
+		nTotal += GetItemPropertyPointValue(ip, itemType);
 		ip = GetNextItemProperty(oItem);
 	}
 	return nTotal;
@@ -1114,7 +1121,7 @@ int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID) {
 }
 
 //get the point value for item property
-int GetItemPropertyPointValue(itemproperty ip) {
+int GetItemPropertyPointValue(itemproperty ip, string itemType = "") {
 
 	int nType = GetItemPropertyType(ip);
 	int nSubType = GetItemPropertySubType(ip);
@@ -1129,7 +1136,13 @@ int GetItemPropertyPointValue(itemproperty ip) {
 	if (nNumerical >= 0 && nNumerical < 255)
 		sQuery += " AND Numerical='"+IntToString(nNumerical)+"'";
 	if (nSpecial >= 0 && nSpecial < 255)
-		sQuery += "AND Special='"+IntToString(nSpecial)+"'"; 	
+		sQuery += " AND Special='"+IntToString(nSpecial)+"'"; 
+			
+	//Is this armor? Because if so, enchanting AC is supposed to be cheaper, so check for armor recipe!
+	if (itemType == "Armor" && nType == 1) {
+		sQuery += " AND Armor='1'";
+	}
+	
 	SQLExecDirect(sQuery);
 	while (SQLFetch() != SQL_ERROR) {
 		int Point = StringToInt(SQLGetData(1));
