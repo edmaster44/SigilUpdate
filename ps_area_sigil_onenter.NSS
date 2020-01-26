@@ -288,6 +288,20 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_quest_spiderspider1", lSpawnpoint);    
   }
+    //Herman (Tier 2 Merchant)
+   if(GetObjectByTag("ps_npc_tier2gear") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_npc_tier2gear");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_tier2gear", lSpawnpoint);    
+  }
+      //Bormaek (Tier 2 Merchant)
+   if(GetObjectByTag("ps_npc_tier1gear") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_npc_tier1gear");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_tier1gear", lSpawnpoint);    
+  }
   
   SetGlobalInt("SigilEnterLock", 0);
  }
