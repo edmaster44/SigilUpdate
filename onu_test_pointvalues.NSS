@@ -67,6 +67,24 @@ void main () {
 	CreateGemOnTarget(oPC, TREASURE_LOW);
 	CreateGemOnTarget(oPC, TREASURE_LOW);
 	
+	SendMessageToPC(oPC, "giving shards");
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	CreateItemOnObject("gemstone_gravel", oPC);
+	
 	int n = 0;
 	for (n = 0; n < NUM_INVENTORY_SLOTS; n++) {
 		object oItem = GetItemInSlot(n, oPC);
