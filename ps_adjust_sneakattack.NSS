@@ -34,6 +34,12 @@ const int SNEAKATTACK18 = 1039;
 const int SNEAKATTACK19 = 1040;
 const int SNEAKATTACK20 = 1041;
 
+const int DEATHATTACK1 = 455;
+const int DEATHATTACK2 = 456;
+const int DEATHATTACK3 = 457;
+const int DEATHATTACK4 = 458;
+const int DEATHATTACK5 = 459;
+
 const int BLACKGUARDSNEAKATTACK1 = 460;
 const int BLACKGUARDSNEAKATTACK2 = 461;
 const int BLACKGUARDSNEAKATTACK3 = 462;
@@ -163,6 +169,6 @@ void AddSneakDice(object oPC)
 	sTotal += ((GetLevelByClass(CLASS_INVISIBLE_BLADE, oPC) + 1) /2);
 	if (GetHasFeat(FEAT_FRANTIC_REACTIONS, oPC)) {
 		sTotal += 2 ;}
-	if (sTotal >= 5) {
+	if (sTotal >= 5||GetHasFeat(DEATHATTACK5)) {
 		FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
 }
