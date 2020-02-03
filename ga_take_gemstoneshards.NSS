@@ -51,7 +51,7 @@ void main() {
 	
 	numGems = FloatToInt(fGem);
 	goldPercen = fGem-IntToFloat(numGems); //make sure leftovers turn into gold
-	SendMessageToPC(oPC, FloatToString(numShards)+" shards = "+IntToString(numGems)+" gems and "+FloatToString(GPAWARD*goldPercen)+" gold");
+	//SendMessageToPC(oPC, FloatToString(numShards)+" shards = "+IntToString(numGems)+" gems and "+FloatToString(GPAWARD*goldPercen)+" gold");
 	
 	if (goldPercen > 0.0f) {
 		int goldAmount = FloatToInt(GPAWARD*goldPercen);

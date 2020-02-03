@@ -416,9 +416,9 @@ void CreateCampaignItemOnTarget(object oTarget) {
 		case 2: case 9: CreateTreasureItemOnTarget("mirror_glamer", oTarget, 1); break;
 		case 3: CreateTreasureItemOnTarget("mirror_icesimulacrum", oTarget, 1); break;
 		case 4: CreateTreasureItemOnTarget("mirror_mislead", oTarget, 1); break;
-		case 5: CreateTreasureItemOnTarget("mirror_falsebadge", oTarget, 1); break;
-		case 6: CreateTreasureItemOnTarget("mirror_troopmovements", oTarget, 1); break;
-		case 7: case 10: case 11: CreateTreasureItemOnTarget("ps_valmisc_smallmirror", oTarget, 1); break;
+		//case 5: CreateTreasureItemOnTarget("mirror_falsebadge", oTarget, 1); break;
+		//case 6: CreateTreasureItemOnTarget("mirror_troopmovements", oTarget, 1); break;
+		case 5: case 6: case 7: CreateTreasureItemOnTarget("ps_valmisc_smallmirror", oTarget, 1); break;
 	}
 }
 
