@@ -193,7 +193,9 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 	
 	SetFirstName(oScroll, sName);
 	SetDescription(oScroll, sDescrip);
-
+	
+	itemproperty ip = ItemPropertyCastSpell(IP_CONST_CASTSPELL_UNIQUE_POWER, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
+	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oScroll);
 }
 
 //***************************************************
@@ -231,6 +233,8 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 	SetDescription(oPot, sDescrip);
 	SetItemIcon(oPot, nIcon);
 
+	itemproperty ip = ItemPropertyCastSpell(IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
+	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oPot);
 }
 
 //***************************************************
