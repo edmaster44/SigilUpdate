@@ -37,7 +37,7 @@ const int UNEQUIPPABLE_CARD_CHANCE = 1;
 //Database upload
 void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTreasureLevel, string sSpecial = "") {
 	object oItem = CreateItemOnObject(sItem, oTarget);
-	string sTag = GetTag(oItem);
+	string sTag = GetResRef(oItem);
 	string sName = SQLEncodeSpecialChars(GetName(oItem));
 	string sQuery = "INSERT INTO "+sTable+" SET name='"+sName+"', resref='"+sTag+"', treasure_level='"+IntToString(nTreasureLevel)+"'";
 	if (sSpecial != "") {
