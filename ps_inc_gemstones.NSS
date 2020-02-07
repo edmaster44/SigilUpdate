@@ -441,8 +441,13 @@ int GetHasRoughGemstone(object oPC) {
 		if (GetBaseItemType(oItem) != BASE_ITEM_GEM)
 			continue;
 		string sTag = GetTag(oItem);
-		if (FindSubString(sTag, "gemstone_rough") >= 0) //is a rough gemstone
+		SendMessageToPC(oPC, "checking: "+sTag);
+		if (FindSubString(sTag, "gemstone_rough") >= 0) { //is a rough gemstone
+			SendMessageToPC(oPC, sTag+" is a rough gemstone.");
 			return TRUE;
+		} else {
+			SendMessageToPC(oPC, sTag+" is not a rough gemstone.");
+		}
 	
 		oItem = GetNextItemInInventory(oPC);
 	}

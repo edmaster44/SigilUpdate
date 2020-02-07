@@ -65,5 +65,7 @@ void main() {
 		CreateRandomGemstoneOnSpawnOrChest(oPC, lootLevel);
 		numGems--;
 	}
+	
+	TakeNumItems(oPC, "gemstone_gravel", FloatToInt(numShards));
 
 }
