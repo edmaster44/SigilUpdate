@@ -1,5 +1,5 @@
-//For NPCs with a CR (or CR variable) which corresponds with the "challenge level" of this conversation/quest
-//For a standard skill roll with exp, use gc_training_
+//Performs skill check and gives exp if you should succeed on 
+//a skill appropriate challenge.
 
 #include "ps_inc_training"
 
