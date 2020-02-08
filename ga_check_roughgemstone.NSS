@@ -2,11 +2,13 @@
 //This can be kind of a heavy function, hence its inclusion as an action
 //instead of a conditional
 
-#include "ps_inc_gemstones"
 void main()
 {
 	object oPC = GetPCSpeaker();
+	if (oPC == OBJECT_INVALID)
+		SpeakString("No PC found!!!", TALKVOLUME_SHOUT);
 	DeleteLocalInt(oPC, "hasrough");
+	SendMessageToPC(oPC, "Here we go! Checking for gemstones");
 	
 	object oItem = GetFirstItemInInventory(oPC);
 	while (GetIsObjectValid(oItem)) {
