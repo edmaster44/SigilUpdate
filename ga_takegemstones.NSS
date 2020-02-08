@@ -1,7 +1,7 @@
 const int XPAWARD = 75;
 const int GPAWARD = 150;
 
-void main (int max) {
+void main () {
 
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	
@@ -11,17 +11,19 @@ void main (int max) {
 	object oItem = GetFirstItemInInventory(oPC);
     while(GetIsObjectValid(oItem))
     {
-		if (GetBaseItemType(oItem) != BASE_ITEM_GEM)
-			continue;
-			
-		if (FindSubString(GetTag(oItem), "gemstone_rough") >= 0) {
 		
-		 	DestroyObject(oItem);
+		if (GetBaseItemType(oItem) == BASE_ITEM_GEM) {
 			
-			iGold += GPAWARD;
-			iXp += XPAWARD;
-	
-	    }
+			if (FindSubString(GetTag(oItem), "gemstone_rough") >= 0) {
+			
+			 	DestroyObject(oItem);
+				
+				iGold += GPAWARD;
+				iXp += XPAWARD;
+		
+		    }
+			
+		}
 		
      	oItem = GetNextItemInInventory(oPC);
     }

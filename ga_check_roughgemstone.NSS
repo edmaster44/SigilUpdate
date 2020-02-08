@@ -5,29 +5,20 @@
 void main()
 {
 	object oPC = GetPCSpeaker();
-	if (oPC == OBJECT_INVALID)
-		SpeakString("No PC found!!!", TALKVOLUME_SHOUT);
 	DeleteLocalInt(oPC, "hasrough");
-	SendMessageToPC(oPC, "Here we go! Checking for gemstones");
 	
 	object oItem = GetFirstItemInInventory(oPC);
 	while (GetIsObjectValid(oItem)) {
 	
-		if (GetBaseItemType(oItem) != BASE_ITEM_GEM)
-			continue;
-		string sTag = GetTag(oItem);
-		SendMessageToPC(oPC, "checking: "+sTag);
-		if (FindSubString(sTag, "gemstone_rough") >= 0) { //is a rough gemstone
-			SendMessageToPC(oPC, sTag+" is a rough gemstone.");
-			SetLocalInt(oPC, "hasrough", 1);
-			break;
-		} else {
-			SendMessageToPC(oPC, sTag+" is not a rough gemstone.");
+		if (GetBaseItemType(oItem) == BASE_ITEM_GEM) {
+			string sTag = GetTag(oItem);
+			if (FindSubString(sTag, "gemstone_rough") >= 0) { //is a rough gemstone
+				SetLocalInt(oPC, "hasrough", 1);
+				break;
+			}
 		}
 	
 		oItem = GetNextItemInInventory(oPC);
 	}
-	
-	SendMessageToPC(oPC, "Has a rough gemstone? "+IntToString(GetLocalInt(oPC, "hasrough")));
 	
 }
