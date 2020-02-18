@@ -57,6 +57,7 @@
 // civhalflings		43	-- all halfling subraces, save ghostwise
 // civorcs			44	-- all orc subraces
 // civgenie			45  -- all genies, past and present
+// undead			46  -- all undead
 // 
 //
 // EPF 6/16/05
@@ -238,6 +239,10 @@ int StartingConditional(string sRace)
 	else if(sRace == "civgenie" || nRace == 45)
 	{
 		return (nRacialType == 121 || nRacialType == 122 || nRacialType == 123 || nRacialType == 184 || nRacialType == 242 || nRacialType == 243);
+	}
+	else if(sRace == "undead" || nRace == 46)
+	{
+		return (nRacialType == RACIAL_SUBTYPE_UNDEAD || nRacialType == RACIAL_SUBTYPE_INCORPOREAL);
 	}
 
 	return (nRacialType == nCheck);

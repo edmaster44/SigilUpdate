@@ -1015,6 +1015,30 @@ string RandomString_GenerateTrait() {
 	return "blood red hair";
 }
 
+string RandomString_GeneratePrimeLocationObscure() {
+
+	int total = 16;
+	switch (Random(total)) {
+		case 0: return "Greenmeadows";
+		case 1: return "Sunviel";
+		case 2: return "Golden Moor";
+		case 3: return "Vandor";
+		case 4: return "Riverfern";
+		case 5: return "Karenlynn";
+		case 6: return "Astrid";
+		case 7: return "Lutfield";
+		case 8: return "Silver Spire";
+		case 9: return "Solumgard";
+		case 10: return "Bridgold";
+		case 11: return "Golden Vale";
+		case 12: return "Vinnish";
+		case 13: return "Faith";
+		case 14: return "Hebetude";
+		case 15: return "Lillyholm";
+	}
+	return "Greenmeadows";
+}
+
 string RandomString_GeneratePrimeLocation() {
 
 	int total = 24;
