@@ -58,6 +58,7 @@
 // civorcs			44	-- all orc subraces
 // civgenie			45  -- all genies, past and present
 // undead			46  -- all undead
+// outsider			47  -- all outsiders
 // 
 //
 // EPF 6/16/05
@@ -243,6 +244,10 @@ int StartingConditional(string sRace)
 	else if(sRace == "undead" || nRace == 46)
 	{
 		return (nRacialType == RACIAL_SUBTYPE_UNDEAD || nRacialType == RACIAL_SUBTYPE_INCORPOREAL);
+	}
+	else if(sRace == "outsider" || nRace == 47)
+	{
+		return (nRacialType == RACIAL_SUBTYPE_OUTSIDER);
 	}
 
 	return (nRacialType == nCheck);

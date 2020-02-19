@@ -4,6 +4,10 @@
 void main (float fCR) {
 	object oPC = GetLastSpeaker();
 	
+	if (fCR <= 0.0f) {
+		fCR = IntToFloat(GetLocalInt(OBJECT_SELF, "QUEST_CR"));
+	}
+	
 	int BASEQUESTXP = 100;
 	int iMAX = PS_GetMaxPartylevel(oPC);
 	float fAVG = PS_GetAvgPartylevel(oPC, iMAX);	
