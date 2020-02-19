@@ -12,21 +12,13 @@ int StartingConditional(int nSkill, int maxExp = 100)
 
 	object oPC = GetPCSpeaker();
 	int nMod = GetSkillRank(nSkill, oPC, TRUE);
-	int diff = nDC-nMod;
+	int nDifficulty = GetDifficultyOfCheck(nDC, nMod);
+	
 	int noExp = FALSE;
-	int nDifficulty = TRAINING_DIFFICULTY_NORMAL;
-	if (diff <= 0) 
+	if (nDifficulty < 0) {
 		noExp = TRUE;
-	else if (diff <= 5)
 		nDifficulty = TRAINING_DIFFICULTY_VERY_EASY;
-	else if (diff <= 10) 
-		nDifficulty = TRAINING_DIFFICULTY_EASY;
-	else if (diff <= 15)
-		nDifficulty = TRAINING_DIFFICULTY_NORMAL;
-	else if (diff <= 19)
-		nDifficulty = TRAINING_DIFFICULTY_HARD;
-	else
-		nDifficulty = TRAINING_DIFFICULTY_IMPOSSIBLE;
+	}
 		
 	int nExp = GetXPForSkillTrainingQuest(oPC, nSkill, nDifficulty);
 	if (nExp > maxExp)

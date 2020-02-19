@@ -381,6 +381,26 @@ int GetIsTrainingAbilitySuccessful(object oPC, int nAbility, int nDC) {
 
 }
 
+//Takes the DC and the PC's modifier (usually skill bonus)
+//and returns the TRAINING_DIFFICULTY_* int
+int GetDifficultyOfCheck(int nDC, int nMod) {
+	int diff = nDC-nMod;
+	int nDifficulty = TRAINING_DIFFICULTY_NORMAL;
+	if (diff <= 0) 
+		return -1;
+	else if (diff <= 5)
+		nDifficulty = TRAINING_DIFFICULTY_VERY_EASY;
+	else if (diff <= 10) 
+		nDifficulty = TRAINING_DIFFICULTY_EASY;
+	else if (diff <= 15)
+		nDifficulty = TRAINING_DIFFICULTY_NORMAL;
+	else if (diff <= 19)
+		nDifficulty = TRAINING_DIFFICULTY_HARD;
+	else
+		nDifficulty = TRAINING_DIFFICULTY_IMPOSSIBLE;
+	return nDifficulty;
+}
+
 /* Makes a saving throw. If successful, it awards exp
 Based on the difficulty of the check, and the synergy of that ability
 To the PC's build. Returns results of check
