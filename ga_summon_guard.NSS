@@ -83,6 +83,20 @@ void ApprehendPC(object oPC, object oGuard) {
 
 }
 
+void GuardExit(object oNPC, object oGuard) {
+	
+	SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
+
+	if (IsInConversation(oGuard)) {
+		DelayCommand(6.0f, GuardExit(oNPC, oGuard));
+		return;
+	}
+
+	AssignCommand(oGuard, ActionMoveAwayFromObject(oNPC, FALSE, 30.0f));
+	DestroyObject(oGuard, 6.0f);
+	
+}
+
 void main(string sCause) {
 
 	object oPC = GetPCSpeaker();
@@ -107,5 +121,6 @@ void main(string sCause) {
 	DelayCommand(1.0f, ApprehendPC(oPC, oGuard));
 	DelayCommand(13.0f, ApprehendPC(oPC, oGuard));
 	DelayCommand(25.0f, ApprehendPC(oPC, oGuard));
+	DelayCommand(37.0f, GuardExit(OBJECT_SELF, oGuard));
 	
 }

@@ -42,7 +42,7 @@ void main() {
 		case 13: CreateJunkOnTarget(oPC, TREASURE_LEVEL); break; //trinket spawn
 		case 14: CreateGemOnTarget(oPC, TREASURE_LEVEL); break; //gem spawn
 		case 15: CreateGemOnTarget(oPC, TREASURE_LEVEL); break; //gem spawn
-		default: GiveGoldToCreature(oPC, d20(2)); break; //default gold reward, 2-40
+		default: GiveGoldToCreature(oPC, d20(3)); break; //default gold reward, 3-60
 	}
 
 }
