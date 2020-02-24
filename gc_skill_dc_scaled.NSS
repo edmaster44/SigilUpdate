@@ -5,10 +5,17 @@
 #include "ps_inc_training"
 #include "ps_inc_randomitems"
 
-int StartingConditional(int nSkill, int maxExp = 100)
+int StartingConditional(int nSkill, int maxExp = 100, int nDifficulty = ENCOUNTER_DIFFICULTY_NORMAL)
 {
+	int nBase = 10;
+	
+	if (nDifficulty >= ENCOUNTER_DIFFICULTY_HARD)
+		nBase = 15;
+	else if (nDifficulty >= ENCOUNTER_DIFFICULTY_IMPOSSIBLE)
+		nBase = 20;
+	
 	int nCR = GetChallengeRatingOfTarget(OBJECT_SELF);
-	int nDC = nCR+10+(d10());
+	int nDC = nCR+nBase+(d10());
 
 	object oPC = GetPCSpeaker();
 	int nMod = GetSkillRank(nSkill, oPC, TRUE);
