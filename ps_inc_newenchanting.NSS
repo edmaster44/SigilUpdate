@@ -670,7 +670,7 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 	string sResult = "";
 
 	int nIndex = 1;
-	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE "+sColumn+" = 1");
+	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE "+sColumn+" = 1 AND Can_Enchant = 1");
 	while (SQLFetch() != SQL_ERROR) {
     	struct enchantment enchant;
 		enchant.id = StringToInt(SQLGetData(1));
