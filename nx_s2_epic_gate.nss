@@ -53,7 +53,7 @@ void main()
     }
 
 
-    float fDuration = RoundsToSeconds(40);	// Fixed 40 round duration
+    float fDuration = RoundsToSeconds(300);	// Fixed 300 round duration
 	location lSpellTargetLocation = GetSpellTargetLocation();
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_EPIC_GATE);
 	effect eVis = EffectVisualEffect(VFX_INVOCATION_BRIMSTONE_DOOM);

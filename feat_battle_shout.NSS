@@ -36,14 +36,14 @@ void main()
 	int nDC = 5 + GetSkillRank(SKILL_TAUNT, oPC);
 	int nDEFEND = GetLevelByClass(180, oPC);
 	if (nDEFEND >= 9) fRADIUS = RADIUS_SIZE_TREMENDOUS;
-	effect eHP = EffectTemporaryHitpoints(10 + 2 * nCON);
+	effect eHP = EffectTemporaryHitpoints(5 + 1 * nCON);
 	eHP = EffectLinkEffects(eHP, EffectVisualEffect(VFX_DUR_SPELL_AID));
 	eHP = ExtraordinaryEffect(eHP);
 	
 	effect ePEN = EffectSkillDecrease(SKILL_HIDE, 50);	
 	ePEN = EffectLinkEffects(ePEN, EffectSkillDecrease(SKILL_MOVE_SILENTLY, 50));
 	ePEN = ExtraordinaryEffect(ePEN);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePEN, oPC, 30.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePEN, oPC, 18.0);
 	
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, fRADIUS, lPC, TRUE);
 	while (oTARGET != OBJECT_INVALID)
@@ -58,7 +58,7 @@ void main()
 				}
 			}	
 		}
-		else if (nDEFEND >= 3) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, 30.0);
+		else if (nDEFEND >= 3) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, 18.0);
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, fRADIUS, lPC, TRUE);
 	}
 }
