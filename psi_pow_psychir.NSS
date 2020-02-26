@@ -125,11 +125,6 @@ void main()
             {
                     RemoveEffect(oTarget, eTest);
             }
-			
-			if(nSpellId == 14219 || 14224 || 14249)
-			{
-					RemoveEffect(oTarget, eTest);
-			}
 
             eTest = GetNextEffect(oTarget);
         }// end while - Effect loop

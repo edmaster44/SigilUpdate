@@ -52,20 +52,10 @@ void main()
 
     // * the pool is the number of hit dice of creatures that can be banished
     int nPool = 2* nCasterLevel;
-	effect eExhaust;
 
     while(GetIsObjectValid(oTarget))
     {	//Is this a half-outsider in Fiendform?
 		nTargetHD = GetHitDice(oTarget);
-		if (GetHasSpellEffect(1657, oTarget) || nPool >= nTargetHD)
-		{	eExhaust = EffectExhausted();
-			if (oTarget != OBJECT_SELF)
-			{	RemoveAnySpellEffects(1657, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eExhaust, oTarget, RoundsToSeconds(nCasterLevel));
-				oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget);
-			}
-		}
 		
 		//does the creature have a master.
         oMaster = GetMaster(oTarget);
