@@ -47,12 +47,14 @@ void main() {
 
 	object oPC = GetEnteringObject();
 	
+	SendMessageToPC(oPC, "Hello PC");
+	
 	int lastDone = CheckTimeStamp();
 	
 	if (!GetIsPC(oPC))
 		return;
 	
-	if (lastDone < 1800) //happens once per 30 minutes
+	if (lastDone < 10) //happens once per 10 seconds
 		return;
 	TimeStamp();
 	

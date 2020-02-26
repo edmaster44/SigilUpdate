@@ -193,6 +193,8 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 	
 	SetFirstName(oScroll, sName);
 	SetDescription(oScroll, sDescrip);
+	int nIcon = GetRandomIcon("scroll");
+	SetItemIcon(oScroll, nIcon);
 	
 	itemproperty ip = ItemPropertyCastSpell(IP_CONST_CASTSPELL_UNIQUE_POWER, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
 	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oScroll);
