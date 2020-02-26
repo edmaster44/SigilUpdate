@@ -701,7 +701,7 @@ void DevotedSpirit3(object oCaller) // your weapon(s) gains vamp regen +7 for 2 
 	{
 		IPSafeAddItemProperty(oRightHand, healing, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	}
-	if(GetIsObjectValid(oGloves))
+	 if (GetBaseItemType(oGloves) == BASE_ITEM_GLOVES)
 	{
 		IPSafeAddItemProperty(oGloves, healing, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	}

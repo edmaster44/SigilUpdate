@@ -1174,7 +1174,7 @@ int PS_GetHasSoul(object oTarget)
 
 void PS_Cast_MOTC_SoulBind(object oPC, object oTarget, int nSpell)
 {
-	object oPrism = GetItemPossessedBy(oPC, "ps_misc_coinage_gsoulprism");
+	object oPrism = GetItemPossessedBy(oPC, "ps_misc_coinage-gsoulprism");
 	if (!GetIsObjectValid(oPrism))
 	{	SendMessageToPC(oPC, "You must have a soul prism in your inventory to use this ability.");
 		return;	}
