@@ -18,8 +18,8 @@ int GetAppropriateSkill(object oPC) {
 		unSkilled = SKILL_SEARCH;
 	}
 	
-	int unSkilledRank = GetSkillRank(unSkilled, oPC, TRUE);
-	int skilledRank = GetSkillRank(SKILL_SURVIVAL, oPC, TRUE);
+	int unSkilledRank = GetSkillRank(unSkilled, oPC, FALSE)-5;
+	int skilledRank = GetSkillRank(SKILL_SURVIVAL, oPC, FALSE);
 	
 	if (unSkilledRank > skilledRank)
 		return unSkilled;
@@ -47,33 +47,28 @@ void main() {
 
 	object oPC = GetEnteringObject();
 	
-	SendMessageToPC(oPC, "Hello PC");
-	
 	int lastDone = CheckTimeStamp();
 	
 	if (!GetIsPC(oPC))
 		return;
 	
-	if (lastDone < 10) //happens once per 10 seconds
+	if (lastDone < 60) //happens once per 60 seconds
 		return;
 	TimeStamp();
-	
-	SendMessageToPC(oPC, "Made it here");
 		
 	if (d100() < 50) //don't have all triggers fire all the time, randomize
 		return;
-	
-	SendMessageToPC(oPC, "Passed the cull");
 		
 	string sPlant = GetLocalString(OBJECT_SELF, "PlantToSpawn");
 	object nearbyPlant = GetNearestObjectByTag(sPlant);
 	if (GetIsObjectValid(nearbyPlant) && GetDistanceBetween(OBJECT_SELF, nearbyPlant) < 20.0f) //another plant too close!
 		return;
-	
-	SendMessageToPC(oPC, "No other plants nearby; rolling skill");
 
 	int nSkill = GetAppropriateSkill(oPC);
 	int nDC = GetLocalInt(OBJECT_SELF, "DC");
+	
+	if (nSkill != SKILL_SURVIVAL) //Spot checks have a higher DC
+		nDC += 5;
 	
 	if (GetIsTrainingSkillSuccessful(oPC, nSkill, nDC)) {
 		SpawnPlant(OBJECT_SELF, oPC);

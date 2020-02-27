@@ -6,8 +6,15 @@
 
 void CreateHerb(object oPC, string sToGive) {
 
-	CreateItemOnObject(sToGive, oPC);
+	if (GetDistanceBetween(oPC, OBJECT_SELF) < 1.0f) {
+		CreateItemOnObject(sToGive, oPC);
+		DestroyObject(OBJECT_SELF, 0.25f);
+	}
 
+}
+
+void PlayAnimationDelayed(object oPC, string sAnim) {
+	PlayCustomAnimation(oPC, sAnim, FALSE);
 }
 
 void main() {
@@ -22,10 +29,11 @@ void main() {
 
 	string sToGive = GetLocalString(OBJECT_SELF, "ItemToGive");
 	
-	PlayCustomAnimation(oPC, "getground", FALSE);
+	AssignCommand(oPC, ActionMoveToObject(OBJECT_SELF));
 	
-	DelayCommand(0.5f, CreateHerb(oPC, sToGive));
+	DelayCommand(0.5f, PlayAnimationDelayed(oPC, "getground"));
 	
-	DestroyObject(OBJECT_SELF, 0.75f);
+	DelayCommand(0.75f, CreateHerb(oPC, sToGive));
+	
 
 }
