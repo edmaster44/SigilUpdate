@@ -2,6 +2,8 @@
 
 void SpawnWyvern(object oTrigger, location lTarget);
 
+int GetEbolakhanAlive();
+
 void main () {
 
 	int nStage = GetLocalInt(OBJECT_SELF, "stage");
@@ -61,30 +63,32 @@ void main () {
 		SetLocalInt(OBJECT_SELF, "stage", nStage+1);
 		DelayCommand(12.0f, ExecuteScript("colothys_bossfight", OBJECT_SELF));
 	
-	} else if (GetObjectByTag("c_colothys_ebolakhan") != OBJECT_INVALID ||
-			   GetObjectByTag("c_colothys_ebolakhan2") != OBJECT_INVALID ||
-			   GetObjectByTag("c_colothys_ebolakhan3") != OBJECT_INVALID) {
+	} else if (GetEbolakhanAlive()) {
 	
-		oWP = GetWaypointByTag("wp_gardenboss_guardian1");
-		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardianm");
-			
-		oWP = GetWaypointByTag("wp_gardenboss_guardian2");
-		SpawnWyvern(OBJECT_SELF, GetLocation(oWP));
-		
-		oWP = GetWaypointByTag("wp_gardenboss_guardian3");
-		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardianm");
-			
-		oWP = GetWaypointByTag("wp_gardenboss_guardian4");
-		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardian");
+		if (nStage < 10) { //Sanity check!
+	
+			oWP = GetWaypointByTag("wp_gardenboss_guardian1");
+			SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardianm");
 				
-		oWP = GetWaypointByTag("wp_gardenboss_guardian5");
-		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardian");
+			oWP = GetWaypointByTag("wp_gardenboss_guardian2");
+			SpawnWyvern(OBJECT_SELF, GetLocation(oWP));
 			
-		oWP = GetWaypointByTag("wp_gardenboss_vine1");
-		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_greenvise");
+			oWP = GetWaypointByTag("wp_gardenboss_guardian3");
+			SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardianm");
+				
+			oWP = GetWaypointByTag("wp_gardenboss_guardian4");
+			SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardian");
+					
+			oWP = GetWaypointByTag("wp_gardenboss_guardian5");
+			SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_guardian");
+				
+			oWP = GetWaypointByTag("wp_gardenboss_vine1");
+			SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_greenvise");
+				
+			oWP = GetWaypointByTag("wp_gardenboss_vine2");
+			SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_assassinvine");
 			
-		oWP = GetWaypointByTag("wp_gardenboss_vine2");
-		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_assassinvine");
+		}
 		
 		SetLocalInt(OBJECT_SELF, "stage", nStage+1);
 		DelayCommand(12.0f, ExecuteScript("colothys_bossfight", OBJECT_SELF));
@@ -97,6 +101,24 @@ void main () {
 		SetLocalInt(oFruit1, "reward", 1);
 		SetLocalInt(oFruit2, "reward", 1);
 	}
+}
+
+int GetEbolakhanAlive() {
+
+	object oBoss = GetObjectByTag("c_colothys_ebolakhan");
+	if (!GetIsObjectValid(oBoss))
+		oBoss = GetObjectByTag("c_colothys_ebolakhan2");
+	if (!GetIsObjectValid(oBoss))
+		oBoss = GetObjectByTag("c_colothys_ebolakhan3");
+			
+	if (!GetIsObjectValid(oBoss))
+		return FALSE;
+	
+	if (GetIsDead(oBoss))
+		return FALSE;
+		
+	return TRUE;
+
 }
 
 location RandomSource(object oTrigger) {
