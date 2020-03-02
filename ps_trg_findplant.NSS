@@ -52,11 +52,11 @@ void main() {
 	if (!GetIsPC(oPC))
 		return;
 	
-	if (lastDone < 60) //happens once per 60 seconds
+	if (lastDone < 1800) //happens once per 30 minutes
 		return;
 	TimeStamp();
 		
-	if (d100() < 50) //don't have all triggers fire all the time, randomize
+	if (d100() < 75) //don't have all triggers fire all the time, randomize
 		return;
 		
 	string sPlant = GetLocalString(OBJECT_SELF, "PlantToSpawn");
