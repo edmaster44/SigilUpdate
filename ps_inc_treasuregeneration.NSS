@@ -410,15 +410,17 @@ void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) 
 //creates one of the mirror items on the target for the upcoming campaign
 //Called in CreateJunkOnTarget()
 void CreateCampaignItemOnTarget(object oTarget) {
-	int nRandom = Random(11)+1;
+	int nRandom = Random(13)+1;
 	switch (nRandom) {
-		case 1: case 8:CreateTreasureItemOnTarget("mirror_mirrorimage", oTarget, 1); break;
-		case 2: case 9: CreateTreasureItemOnTarget("mirror_glamer", oTarget, 1); break;
+		case 1: case 12:CreateTreasureItemOnTarget("mirror_mirrorimage", oTarget, 1); break;
+		case 2: case 13: CreateTreasureItemOnTarget("mirror_glamer", oTarget, 1); break;
 		case 3: CreateTreasureItemOnTarget("mirror_icesimulacrum", oTarget, 1); break;
 		case 4: CreateTreasureItemOnTarget("mirror_mislead", oTarget, 1); break;
-		//case 5: CreateTreasureItemOnTarget("mirror_falsebadge", oTarget, 1); break;
-		//case 6: CreateTreasureItemOnTarget("mirror_troopmovements", oTarget, 1); break;
-		case 5: case 6: case 7: CreateTreasureItemOnTarget("ps_valmisc_smallmirror", oTarget, 1); break;
+		case 5: CreateTreasureItemOnTarget("mirror_falsebadge", oTarget, 1); break;
+		case 6: CreateTreasureItemOnTarget("mirror_troopmovements", oTarget, 1); break;
+		case 7: case 8: case 9: CreateTreasureItemOnTarget("ps_valmisc_smallmirror", oTarget, 1); break;
+		case 10: CreateTreasureItemOnTarget("ps_lorebook_102", oTarget, 1); break;
+		case 11: CreateTreasureItemOnTarget("ps_lorebook_103", oTarget, 1); break;
 	}
 }
 
