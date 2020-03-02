@@ -556,7 +556,7 @@ void LoadBracersToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 29) {
+	while (n < 30) {
 		string sPot = GetBracersFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
@@ -679,7 +679,7 @@ void LoadShieldsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 14) {
+	while (n < 16) {
 		string sPot = GetShieldsFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
@@ -802,7 +802,7 @@ void LoadWeaponsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 232) {
+	while (n < 252) {
 		string sPot = GetWeaponFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;

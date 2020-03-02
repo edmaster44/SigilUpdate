@@ -753,7 +753,7 @@ string GetCloaksFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 33 / 27 / 28
+//Max 33 / 27 / 29
 string GetBracersFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
@@ -852,6 +852,7 @@ string GetBracersFromList(int nRandom, int nTreasureLevel) {
 			case 26: sItem = "ps_bracer_magus2"; break; 
 			case 27: sItem = "ps_bracer_shields"; break;
 			case 28: sItem = "ps_bracer_blinddevotion"; break; 
+			case 29: sItem = "ps_gad_force_gauntlets"; break; 
 		}
 	}
 	return sItem;
@@ -971,7 +972,7 @@ string GetHelmetsFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 37 / 23 / 13
+//Max 37 / 23 / 15
 string GetShieldsFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
@@ -1055,6 +1056,8 @@ string GetShieldsFromList(int nRandom, int nTreasureLevel) {
 			case 11: sItem = "X0_ASHMTO002";  break;
 			case 12: sItem = "X0_ASHMTO001";  break;
 			case 13: sItem = "ps_heavyshield_nullifier"; break;
+			case 14: sItem = "ps_gad_epic_sorcerers_focus"; break;
+			case 15: sItem = "ps_gad_epic_wizards_focus"; break;
 		}
 	}
 	return sItem;
@@ -1346,7 +1349,7 @@ string GetMiscFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 462 / 223 / 231
+//Max 462 / 223 / 251
 string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
@@ -2073,64 +2076,64 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 29: sItem = "X0_WAXMGR002";  break;
 			case 30: sItem = "X0_WAXMGR001";  break;
 			case 31: sItem = "nx1_greataxe01";  break;
-			case 32: case 232: sItem = "N2_WAXMHN001";  break;
-			case 33: case 233: sItem = "X0_WAXMBT001";  break;
-			case 34: case 234: sItem = "X0_WAXMBT002";  break;
+			case 32: sItem = "N2_WAXMHN001";  break;
+			case 33: sItem = "X0_WAXMBT001";  break;
+			case 34: sItem = "X0_WAXMBT002";  break;
 			case 35: sItem = "X2_WMDWRAXE005";  break;
 			case 36: sItem = "X2_WMDWRAXE006";  break;
-			case 37: case 235: sItem = "X0_WAXMHN001";  break;
-			case 38: case 236: sItem = "X0_WAXMHN002";  break;
+			case 37: sItem = "X0_WAXMHN001";  break;
+			case 38: sItem = "X0_WAXMHN002";  break;
 			case 39: sItem = "n2_unw_clb3";  break;
 			case 40: sItem = "X0_WSWMBS001";  break;
 			case 41: sItem = "X0_WSWMBS002";  break;
-			case 42: case 237: sItem = "X0_WSWMGS002";  break;
-			case 43: case 238: sItem = "X0_WSWMGS001";  break;
-			case 44: case 239: sItem = "X0_WSWMGS001";  break;
-			case 45: case 240: sItem = "X0_WSWMGS002";  break;
-			case 46: case 241: sItem = "X0_WSPMSC002";  break;
-			case 47: case 242: sItem = "X0_WSPMSC001";  break;
-			case 48: case 243: sItem = "X0_WSPMKU002";  break;
-			case 49: case 244: sItem = "X0_WSPMKU001";  break;
+			case 42: sItem = "X0_WSWMGS002";  break;
+			case 43: sItem = "X0_WSWMGS001";  break;
+			case 44: sItem = "X0_WSWMGS001";  break;
+			case 45: sItem = "X0_WSWMGS002";  break;
+			case 46: sItem = "X0_WSPMSC002";  break;
+			case 47: sItem = "X0_WSPMSC001";  break;
+			case 48: sItem = "X0_WSPMKU002";  break;
+			case 49: sItem = "X0_WSPMKU001";  break;
 			case 50: sItem = "NW_WSWMDG005";  break;
 			case 51: sItem = "N2_WSPMKU001";  break;
-			case 52: case 245: sItem = "X0_WSPMKA002";  break;
-			case 53: case 246: sItem = "X0_WSPMKA001";  break;
-			case 54: case 247: sItem = "X0_WSWMDG002";  break;
-			case 55: case 248: sItem = "X0_WSWMDG001";  break;
+			case 52: sItem = "X0_WSPMKA002";  break;
+			case 53: sItem = "X0_WSPMKA001";  break;
+			case 54: sItem = "X0_WSWMDG002";  break;
+			case 55: sItem = "X0_WSWMDG001";  break;
 			case 56: sItem = "X1_WSWMLS002";  break;
-			case 57: case 249: sItem = "X0_WSWMSS002";  break;
-			case 58: case 250: sItem = "X0_WSWMSS001";  break;
+			case 57: sItem = "X0_WSWMSS002";  break;
+			case 58: sItem = "X0_WSWMSS001";  break;
 			case 59: sItem = "N2_WSWMSS003";  break;
 			case 60: sItem = "N2_WSWMFL004";  break;
 			case 61: sItem = "N2_WSWMFL005";  break;
 			case 62: sItem = "N2_WSWMRP001";  break;
 			case 63: sItem = "X2_IT_CREMUMKAT2";  break; //fixed version
-			case 64: case 251: sItem = "X0_WSWMKA002";  break;
-			case 65: case 252: sItem = "X0_WSWMKA001";  break;
-			case 66: case 253: sItem = "X0_WSWMRP002";  break;
-			case 67: case 254: sItem = "X0_WSWMRP001";  break;
-			case 68: case 255: sItem = "X0_WSWMSC002";  break;
-			case 69: case 256: sItem = "X0_WSWMSC001";  break;
+			case 64: sItem = "X0_WSWMKA002";  break;
+			case 65: sItem = "X0_WSWMKA001";  break;
+			case 66: sItem = "X0_WSWMRP002";  break;
+			case 67: sItem = "X0_WSWMRP001";  break;
+			case 68: sItem = "X0_WSWMSC002";  break;
+			case 69: sItem = "X0_WSWMSC001";  break;
 			case 70: sItem = "NW_WSWMKA009";  break;
-			case 71: case 257: sItem = "X0_WBLMCL001";  break;
-			case 72: case 258: sItem = "X0_WBLMCL002";  break;
-			case 73: case 259: sItem = "X0_WBLMFL002";  break;
-			case 74: case 260: sItem = "X0_WBLMFL001";  break;
+			case 71: sItem = "X0_WBLMCL001";  break;
+			case 72: sItem = "X0_WBLMCL002";  break;
+			case 73: sItem = "X0_WBLMFL002";  break;
+			case 74: sItem = "X0_WBLMFL001";  break;
 			case 75: sItem = "NW_WBLMFL009";  break;
 			case 76: sItem = "NW_WBLMHW004";  break;
 			case 77: sItem = "N2_WBLMHL001";  break;
-			case 78: case 261: sItem = "X0_WBLMHL002";  break;
-			case 79: case 262: sItem = "X0_WBLMHL001";  break;
-			case 80: case 263: sItem = "X0_WBLMHW002";  break;
-			case 81: case 264: sItem = "X0_WBLMHW001";  break;
-			case 82: case 265: sItem = "X0_WDBMMA002";  break;
-			case 83: case 266: sItem = "X0_WBLMML002";  break;
-			case 84: case 267: sItem = "X0_WBLMML001";  break;
-			case 85: case 268: sItem = "X0_WBLMMS002";  break;
-			case 86: case 269: sItem = "X0_WBLMMS001";  break;
+			case 78: sItem = "X0_WBLMHL002";  break;
+			case 79: sItem = "X0_WBLMHL001";  break;
+			case 80: sItem = "X0_WBLMHW002";  break;
+			case 81: sItem = "X0_WBLMHW001";  break;
+			case 82: sItem = "X0_WDBMMA002";  break;
+			case 83: sItem = "X0_WBLMML002";  break;
+			case 84: sItem = "X0_WBLMML001";  break;
+			case 85: sItem = "X0_WBLMMS002";  break;
+			case 86: sItem = "X0_WBLMMS001";  break;
 			case 87: sItem = "NW_WBLMMS009";  break;
-			case 88: case 282: sItem = "X0_WDBMQS002";  break;
-			case 89: case 283: sItem = "X0_WDBMQS001";  break;
+			case 88: sItem = "X0_WDBMQS002";  break;
+			case 89: sItem = "X0_WDBMQS001";  break;
 			case 90: sItem = "n2_wmgst001";  break;
 			case 91: sItem = "NW_WMGST003";  break;
 			case 92: sItem = "ps_staff_greatermages";  break;
@@ -2142,24 +2145,24 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 98: sItem = "nw_wmgst00301";  break;
 			case 99: sItem = "nw_wmgst00300";  break;
 			case 100: sItem = "nw_wmgst0030000";  break;
-			case 101: case 270: sItem = "X0_WPLMSS002";  break;
-			case 102: case 271: sItem = "X0_WPLMSS001";  break;
-			case 103: case 272: sItem = "X0_WPLMSC002";  break;
-			case 104: case 273: sItem = "X0_WPLMSC001";  break;
+			case 101: sItem = "X0_WPLMSS002";  break;
+			case 102: sItem = "X0_WPLMSS001";  break;
+			case 103: sItem = "X0_WPLMSC002";  break;
+			case 104: sItem = "X0_WPLMSC001";  break;
 			case 105: sItem = "NW_WPLMHB009";  break;
 			case 106: sItem = "NW_WPLMSS004";  break;
-			case 107: case 274: sItem = "X0_WPLMHB002";  break;
-			case 108: case 275: sItem = "X0_WPLMHB001";  break;
+			case 107: sItem = "X0_WPLMHB002";  break;
+			case 108: sItem = "X0_WPLMHB001";  break;
 			case 109: sItem = "nx1_spear001";  break;
 			case 110: sItem = "NW_WPLMSC004";  break;
 			case 111: sItem = "NW_WPLMHB006";  break;
 			case 112: sItem = "nx1_lightcrossbow01";  break;
-			case 113: case 276: sItem = "X0_WBWMLN004";  break;
-			case 114: case 277: sItem = "X0_WBWMLN003";  break;
-			case 115: case 278: sItem = "X0_WBWMLN002";  break;
-			case 116: case 279: sItem = "X0_WBWMSH004";  break;
-			case 117: case 280: sItem = "X0_WBWMSH003";  break;
-			case 118: case 281: sItem = "X0_WBWMSH002";  break;
+			case 113: sItem = "X0_WBWMLN004";  break;
+			case 114: sItem = "X0_WBWMLN003";  break;
+			case 115: sItem = "X0_WBWMLN002";  break;
+			case 116: sItem = "X0_WBWMSH004";  break;
+			case 117: sItem = "X0_WBWMSH003";  break;
+			case 118: sItem = "X0_WBWMSH002";  break;
 			case 119: sItem = "nx1_longbow01";  break;
 			case 120: sItem = "ps_handaxe_abyssalaxe";  break;
 			case 121: sItem = "ps_battleaxe_death";  break;
@@ -2273,6 +2276,26 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 229: sItem = "ps_baxe_cowardice"; break; 
 			case 230: sItem = "ps_bsword_hurtful"; break; 
 			case 231: sItem = "ps_wmace_greatretirement"; break; 
+			case 232: sItem = "ps_gad_battery"; break; 
+			case 233: sItem = "ps_gad_excalibur"; break; 
+			case 234: sItem = "ps_gad_dazzling_sling"; break; 
+			case 235: sItem = "ps_gad_dreadaxe"; break; 
+			case 236: sItem = "ps_gad_ironbreakers_axe"; break; 
+			case 237: sItem = "ps_gad_locustbattlestaff"; break; 
+			case 238: sItem = "ps_gad_prickshot"; break; 
+			case 239: sItem = "ps_gad_serene"; break; 
+			case 240: sItem = "ps_gad_slayer"; break; 
+			case 241: sItem = "ps_gad_stormlance"; break; 
+			case 242: sItem = "ps_gad_the_stupefyer"; break; 
+			case 243: sItem = "ps_gad_warder_bow"; break; 
+			case 244: sItem = "ps_gad_forbidden_sun"; break; 
+			case 245: sItem = "ps_gad_dusttodust"; break; 
+			case 246: sItem = "ps_gad_huskrender"; break; 
+			case 247: sItem = "ps_gad_grandblade"; break; 
+			case 248: sItem = "ps_gad_shadowstitch"; break; 
+			case 249: sItem = "ps_gad_rippintear"; break; 
+			case 250: sItem = "ps_gad_caustic_coil"; break; 
+			case 251: sItem = "ps_gad_ballandchain"; break;  
 		}
 	}
 	return sItem;
