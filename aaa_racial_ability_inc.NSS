@@ -1,4 +1,5 @@
-#include "x2_inc_spellhook"
+			
+				#include "x2_inc_spellhook"
 #include "aaa_constants"
 #include "X0_I0_SPELLS"
 #include "nw_i0_spells"
@@ -1165,18 +1166,21 @@ void PS_Ability_MOTCCraftHeartstone(object oPC, object oTarget)
 {
     string sCrafter = (GetFirstName(oPC) + " " + GetLastName(oPC));
     object oTarget = GetItemPossessedBy(oPC,"ps_misc_coinage-gsoulprism");
-    if (GetTag(oTarget) !=  "ps_misc_coinage-gsoulprism")
-    {    SendMessageToPC(oPC, "You may only create your heartstone from a greater soul prism.");
-        return;    }
-    if (GetItemStackSize(oTarget) > 1)
-    {    SendMessageToPC(oPC, "You may only use an indivudal greater soul prism to create your heartstone.");
-        return;    }
-    
-    DestroyObject(oTarget, 0.0f, TRUE);
-    object oHeartstone = CreateItemOnObject("ps_motc_heartstone", oPC);
-    SetLocalString(oHeartstone, "Creator", sCrafter);
-}
+	string sAmulet = "ps_misc_coinage-gsoulprism";
 
+  	if (GetItemStackSize(oTarget) > 1)
+    	{    SendMessageToPC(oPC, "You may only use an indivudal greater soul prism to create your heartstone.");
+        	return;    }
+		
+	if (oTarget != OBJECT_INVALID)
+	 
+	 	{
+ 		DestroyObject(oTarget, 0.0f, TRUE);
+   		object oHeartstone = CreateItemOnObject("ps_motc_heartstone", oPC);
+    	SetLocalString(oHeartstone, "Creator", sCrafter);
+		}
+
+}
 
 void PS_Ability_Austerities(object oPC)
 {
@@ -1456,4 +1460,4 @@ void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, 
 	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 }
 				
-				
+	
