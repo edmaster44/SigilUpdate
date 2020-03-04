@@ -24,9 +24,9 @@ void main () {
 	object oPC = GetLastUsedBy();
 	
 	string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
-	object oWP = GetWaypointByTag(sWP+"_a");
+	object oWP = GetWaypointByTag("monstertest_a");
 	
-	object oMonster = CreateObject(OBJECT_TYPE_CREATURE, "de_archer_1", GetLocation(oWP));
+	object oMonster = CreateObject(OBJECT_TYPE_CREATURE, "ps_faction_npc_12_rp2", GetLocation(oWP));
 	SendMessageToPC(oPC, "Monster created; race is. . "+IntToString(GetSubRace(oMonster)));
 	PS_SetSubRacialType(oMonster, RACIAL_SUBTYPE_UNDEAD);
 	SendMessageToPC(oPC, "Monster race is now. . "+IntToString(GetSubRace(oMonster)));
