@@ -159,6 +159,9 @@ object CreateIllusoryClone(object oCreature, string sTemplate, location lLocatio
 
  	object oClone = CreateObject(OBJECT_TYPE_CREATURE, sTemplate, lLocation);
 	
+	if (!GetIsObjectValid(oClone))
+		return oClone;
+	
 	// Sets apperance
 	SetCreatureAppearanceType(oClone, GetAppearanceType(oCreature));
 	PS_SetCreatureCoreAppearance(oClone, PS_GetCreatureCoreAppearance(oCreature));
@@ -187,6 +190,10 @@ object CreateIllusoryClone(object oCreature, string sTemplate, location lLocatio
 		
 		if (GetIsObjectValid(oItem) && GetObjectType(oItem) == OBJECT_TYPE_ITEM)
 		{
+			
+			if (!GetIsObjectValid(oClone))
+				return oClone;
+		
 			object oItemCopy = CopyItem(oItem, oClone, FALSE);
 			SetDroppableFlag(oItemCopy, FALSE);
 			// Remove any equiping restrictions on the item
