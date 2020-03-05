@@ -30,6 +30,11 @@ void main () {
 	SendMessageToPC(oPC, "Monster created; race is. . "+IntToString(GetSubRace(oMonster)));
 	PS_SetSubRacialType(oMonster, RACIAL_SUBTYPE_UNDEAD);
 	SendMessageToPC(oPC, "Monster race is now. . "+IntToString(GetSubRace(oMonster)));
+	
+	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oMonster);
+	app.HeadVariation = 1;
+	app.HairVariation = 1;
+	PS_SetCreatureCoreAppearance(oMonster, app);
 
 
 }
