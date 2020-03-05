@@ -159,13 +159,16 @@ void SpecialDrop(string sAREA, object oSPAWN)
 	{
 		sSPECIAL = "ps_crft_ing_ms";
 	}
-	else if(TestStringAgainstPattern("**eearth**", sAREA))
+	else if(TestStringAgainstPattern("**eearth**", sAREA) ||
+	TestStringAgainstPattern("**efire**", sAREA))
 	{
-		switch (Random(3))
+		switch (Random(5))
 		{
 			case 0: sSPECIAL = "ps_cfrt_ing_bg"; break;
 			case 1: sSPECIAL = "ps_crft_ing_gs"; break;
 			case 2: sSPECIAL = "ps_crft_ing_rv"; break;
+			case 3: sSPECIAL = "ps_crft_ophidian"; break;
+			case 4: sSPECIAL = "ps_cfrt_ing_ml"; break;
 		}	
 	}
 	else if(TestStringAgainstPattern("**epicgraywaste**", sAREA))
@@ -241,22 +244,6 @@ void SpecialDrop(string sAREA, object oSPAWN)
 			case 0: sSPECIAL = "ps_cfrt_ing_ab"; break;
 			case 1: sSPECIAL = "ps_crft_ing_ob"; break;
 			case 2: sSPECIAL = "ps_crft_ing_gs"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**fire**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_crft_ophidian"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_ml"; break;
-		}
-	}
-	else if(TestStringAgainstPattern("**eearth**", sAREA))
-	{
-		switch (Random(2))
-		{
-			case 0: sSPECIAL = "ps_crft_ing_ob"; break;
-			case 1: sSPECIAL = "ps_cfrt_ing_ml"; break;
 		}
 	}
 	else if(TestStringAgainstPattern("**limbo**", sAREA))
