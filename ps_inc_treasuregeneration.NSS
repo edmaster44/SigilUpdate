@@ -586,7 +586,7 @@ void CreateRandomGlovesOnTarget(object oTarget) {
 //or 25% to generate a completely randomized set of gloves (or bracers)
 void CreateGlovesOnTarget(object oTarget, int nTreasureLevel) {
 	if (d100() < 75) { //Default spawning from database
-		string sResref = PickItemFromDatabase("treasure_shields", nTreasureLevel);
+		string sResref = PickItemFromDatabase("treasure_bracers", nTreasureLevel);
 		CreateTreasureItemOnTarget(sResref, oTarget, 1);
 	} else {
 		CreateRandomGlovesOnTarget(oTarget);

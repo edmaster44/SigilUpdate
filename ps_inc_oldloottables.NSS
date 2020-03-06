@@ -622,7 +622,7 @@ string GetArmorFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 20 / 14 / 10
+//Max 20 / 14 / 11
 string GetBootsFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
@@ -679,6 +679,7 @@ string GetBootsFromList(int nRandom, int nTreasureLevel) {
 			case 8: sItem = "ps_itemset_brazen4";  break;
 			case 9: sItem = "ps_itemset_fallshad1";  break;
 			case 10: sItem = "ps_itemset_slaadskin1";  break;
+			case 11: sItem = "nx2_boots_hardy_05"; break;
 		}
 	}
 	return sItem;

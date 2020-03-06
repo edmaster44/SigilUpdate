@@ -474,7 +474,7 @@ void LoadBootsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 11) {
+	while (n < 12) {
 		string sPot = GetBootsFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
