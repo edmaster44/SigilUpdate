@@ -15,36 +15,36 @@
 
 //Add DR at level 10+ (if necessary for concept)
 #include "ps_inc_advscript"
+#include "ps_inc_dynamicencounters"
 
-
-object SpawnSomeBerk();
+object SpawnSomeBerk(object oWP, object oPC);
 
 void main () {
 
 	object oPC = GetLastUsedBy();
 	
-	string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
+	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
 	object oWP = GetWaypointByTag("monstertest_a");
+	object oBerk = SpawnSomeBerk(oWP, oPC);
 	
-	object oMonster = CreateObject(OBJECT_TYPE_CREATURE, "ps_faction_npc_12_rp2", GetLocation(oWP));
-	SendMessageToPC(oPC, "Monster created; race is. . "+IntToString(GetSubRace(oMonster)));
-	PS_SetSubRacialType(oMonster, RACIAL_SUBTYPE_UNDEAD);
-	SendMessageToPC(oPC, "Monster race is now. . "+IntToString(GetSubRace(oMonster)));
-	
-	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oMonster);
-	app.HeadVariation = 1;
-	app.HairVariation = 1;
-	PS_SetCreatureCoreAppearance(oMonster, app);
-
 
 }
 
-/*object SpawnSomeBerk() {
+object SpawnSomeBerk(object oWP, object oPC) {
 
-	string toSpawn
+	int nLevel = GetHitDice(oPC);
+
+	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, CLASS_TYPE_FIGHTER, STANDARD_FACTION_COMMONER);
+	SetConversation(oBerk, "_someberkconvo_");
+
 	int nRand = Random(4)+1;
 	switch(nRand) {
-		case 1: 
+		case 1: SetLocalString(oBerk, "Berk_Type", "Clueless_1"); break;
+		case 2: SetLocalString(oBerk, "Berk_Type", "Clueless_2"); break;
+		case 3: SetLocalString(oBerk, "Berk_Type", "Clueless_3"); break;
+		case 4: SetLocalString(oBerk, "Berk_Type", "Clueless_4"); break;
 	}
+	
+	return oBerk;
 
-}*/
+}

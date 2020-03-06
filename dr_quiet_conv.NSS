@@ -1,17 +1,9 @@
 //:://////////////////////////////////////////////////
-//:: NW_C2_DEFAULT4
+//:: dr_quiet_conv
 /*
-  Default OnConversation event handler for NPCs.
-
+  Starts up only private / quiet conversations
  */
 //:://////////////////////////////////////////////////
-//:: Copyright (c) 2002 Floodgate Entertainment
-//:: Created By: Naomi Novik
-//:: Created On: 12/22/2002
-//:://////////////////////////////////////////////////
-// ChazM - 4/21/05 modified so NPC's can stay focused
-// ChazM 1/6/06 set local int to notify WalkWayPoints it should kickstart immediately.
-// DBR 5/30/06 Added check to GetIsValidRetaliationTarget() as a fix for force attacking quest-giving NPC's
 
 
 #include "nw_i0_generic"
@@ -34,6 +26,9 @@ void main()
 
     // notify walkwaypoints that we've been stopped and need to restart.
     SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
+	
+	//Gets any conversation set as variable previously
+	string sConversation = GetLocalString(OBJECT_SELF, "DEFAULT_CONVERSATION");
 
     // See if what we just 'heard' matches any of our
     // predefined patterns
@@ -47,7 +42,7 @@ void main()
         if (GetCommandable(OBJECT_SELF))
         {
             ClearActions(CLEAR_NW_C2_DEFAULT4_29);
-            ActionStartConversation(GetLastSpeaker(), "", TRUE, TRUE, FALSE, FALSE);
+            ActionStartConversation(GetLastSpeaker(), sConversation, TRUE, TRUE, FALSE, FALSE);
         }
         else
         // * July 31 2004
@@ -57,7 +52,7 @@ void main()
         if (GetHasEffect(EFFECT_TYPE_CHARMED) == TRUE)
         {
             ClearActions(CLEAR_NW_C2_DEFAULT4_29);
-			ActionStartConversation(GetLastSpeaker(), "", TRUE, TRUE, FALSE, FALSE);
+			ActionStartConversation(GetLastSpeaker(), sConversation, TRUE, TRUE, FALSE, FALSE);
         }
     }   
     // Respond to shouts from friendly non-PCs only

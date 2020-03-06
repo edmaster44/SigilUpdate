@@ -32,6 +32,9 @@ void main()
 
     // notify walkwaypoints that we've been stopped and need to restart.
     SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
+	
+	//Gets any conversation set as variable previously
+	string sConversation = GetLocalString(OBJECT_SELF, "DEFAULT_CONVERSATION");
 
     int nMatch = GetListenPatternNumber();
     object oShouter = GetLastSpeaker();
@@ -47,7 +50,7 @@ void main()
 		  //
         if (GetIsPC(oShouter) && GetLocalInt(OBJECT_SELF, "PS_CONV_PRIVATE") != FALSE)
 		  {
-				ActionStartConversation(oShouter, "", TRUE);
+				ActionStartConversation(oShouter, sConversation, TRUE);
 				return;
 		  }
 
@@ -57,11 +60,11 @@ void main()
 			// hack to detect SoZ
 			if (GetStringLength(GetGlobalString("co_beluethHangOut")) > 1)
 			{
-            	BeginConversation("", OBJECT_INVALID, TRUE);
+            	BeginConversation(sConversation, OBJECT_INVALID, TRUE);
 			}
 			else
 			{
-            	BeginConversation();
+            	BeginConversation(sConversation);
 			}
         }
         else
@@ -75,11 +78,11 @@ void main()
 			// hack to detect SoZ
 			if (GetStringLength(GetGlobalString("co_beluethHangOut")) > 1)
 			{
-            	BeginConversation("", OBJECT_INVALID, TRUE);
+            	BeginConversation(sConversation, OBJECT_INVALID, TRUE);
 			}
 			else
 			{
-            	BeginConversation();
+            	BeginConversation(sConversation);
 			}
         }
 
