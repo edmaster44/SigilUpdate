@@ -25,6 +25,9 @@ void main()
 	//Found in the bottom of "ps_inc_equipment.nss"
 	SigilEquipment(oPC, oItem, FALSE);
 
+	//This Removes Meditative Strikes
+	RemoveMeditativeStrikes(oPC,oItem);
+	
 	//Not everything was included in it, however. This is what I left out.
 	PS_ManageItemImmunities(oItem, oPC, FALSE);
 	 

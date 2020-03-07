@@ -21,7 +21,9 @@ void main()
     object oItem = GetPCItemLastEquipped();
     object oPC   = GetPCItemLastEquippedBy();
 
-
+	//This Applies Meditative Strikes
+	ApplyMeditativeStrikes(oPC,oItem);
+	
 
 	
 	
