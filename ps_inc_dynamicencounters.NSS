@@ -41,6 +41,12 @@ int GetNearestCreatureLevelAvailable(int nLevel, int classType);
 //Sets the creature's conversation
 void SetConversation(object oCreature, string sConversation);
 
+//Gets the resref of a suitable set of clothing
+string GetClothing(object oCreature);
+
+//Gets the resref of a suitable set of armor
+string GetArmor(object oCreature);
+
 //*******************************************
 //ACTUAL CODE
 //*******************************************
@@ -110,5 +116,14 @@ int GetNearestCreatureLevelAvailable(int nLevel, int classType = CLASS_TYPE_FIGH
 void SetConversation(object oCreature, string sConversation) {
 
 	SetLocalString(oCreature, "DEFAULT_CONVERSATION", sConversation);
+
+}
+
+string GetClothing(object oCreature) {
+
+	int nRand = Random(4)+1;
+	switch(nRand) {
+		case 1: return "";
+	}
 
 }
