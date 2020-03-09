@@ -90,6 +90,31 @@ const int RANKS_TRANSCENDENT_ORDER_MAX = 4;
 const string RANKS_XAOSITECTS = "irregular berk|Boss|Big Boss|";
 const int RANKS_XAOSITECTS_MAX = 3;
 
+//returns the faction name from the faction ID
+string FactionIdToName(int nFactionID) {
+
+	switch (nFactionID) {
+		case 2: return "Free League";
+		case 3: return "Athar";
+		case 4: return "Believers of the Source";
+		case 5: return "Bleak Cabal";
+		case 6: return "Doomguard";
+		case 7: return "Dustmen";
+		case 8: return "Fated";
+		case 9: return "Fraternity of Order";
+		case 10: return "Harmonium";
+		case 11: return "Mercykillers";
+		case 12: return "Revolutionary League";
+		case 13: return "Sign of One";
+		case 14: return "Society of Sensation";
+		case 15: return "Transcendent Order";
+		case 16: return "Xaositects";
+	}
+	
+	return "None";
+
+}
+
 // Just a small routine to determine if a character has a badge.
 int HasFactionBadge(object oPC)
 {

@@ -1,21 +1,6 @@
-//AC metrics
-//Levels 1-5 standard armor
-//Levels 5-10 armor +1-5
-//Levels 10-15 amulet of nat armor +1-5
-//Levels 15-20 boots of dodge +1-5
-//Levels 20-25 ring +1-5
-//Levels 25-30 armor +6-10
-
-//Weapon metrics
-//Levels 1-5 standard weapons (sometimes silver or cold iron)
-//Levels 5-10 weapons 1-3 points
-//Levels 10-15 weapons 3-6 points
-//Levels 15-20 weapons 6-9 points
-//Levels 20+ weapons 9-10 points
-
-//Add DR at level 10+ (if necessary for concept)
 #include "ps_inc_advscript"
 #include "ps_inc_dynamicencounters"
+#include "ps_inc_functions"
 
 //Spawn some berk
 object SpawnSomeBerk(object oWP, object oPC);
@@ -23,7 +8,7 @@ object SpawnSomeBerk(object oWP, object oPC);
 //Randomize Berk appearance
 void DetailBerk(object oBerk);
 
-//Give berk an outfit! And appropriate gear
+//Give a berk an outfit! And appropriate gear
 void EquipBerk(object oBerk);
 
 void main () {
@@ -40,7 +25,7 @@ void main () {
 
 object SpawnSomeBerk(object oWP, object oPC) {
 
-	int nLevel = GetHitDice(oPC);
+	int nLevel = StringToInt(PS_GetEssenceECL(oPC));
 	
 	int nClass = CLASS_TYPE_FIGHTER;
 	int nClassRoll = Random(4)+1;
@@ -57,6 +42,7 @@ object SpawnSomeBerk(object oWP, object oPC) {
 	SetConversation(oBerk, "_someberkconvo_");
 
 	int nRand = Random(4)+1;
+	nRand = 1; //hardcoding this for testing right now
 	switch(nRand) {
 		case 1: SetLocalString(oBerk, "Berk_Type", "Clueless_1"); break;
 		case 2: SetLocalString(oBerk, "Berk_Type", "Clueless_2"); break;
@@ -111,4 +97,15 @@ void DetailBerk(object oBerk) {
 
 void EquipBerk(object oBerk) {
 
+	string berkType = GetLocalString(oBerk, "Berk_Type");
+	
+	if (berkType == "Clueless_3") {
+		assignProtectiveItems(oBerk, TRUE);
+		assignWeaponToCreature(oBerk, TRUE);
+	} else {
+		assignProtectiveItems(oBerk, FALSE);
+		assignWeaponToCreature(oBerk, FALSE);
+	}
+	
+	makeInventoryUndroppable(oBerk);
 }

@@ -461,6 +461,31 @@ struct material GetRandomMaterialOfTier(string sList, int matTier) {
 	return m1;
 }
 
+//Runs through scod_craft_baseitems and returns the crafting index
+//of the supplied BASE_ITEM_* constant (because the 2da already saves this!)
+//Caches result on the module for later (speed concern)
+int GetCraftingItemIndexByBaseItemType(int standardIndex) {
+
+	object oHolder = GetObjectByTag(sHolder);
+	if (GetLocalInt(oHolder, "BASE_ITEM_CACHE") > 0) {
+		return GetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex));
+	}
+
+	//No info already available - time to load 2da!
+	int nIndex = 0;
+	int nMax = GetNum2DARows("scod_craft_baseitems");
+	while (nIndex < nMax) {
+	
+		int baseID = GetBaseID(nIndex);
+		SetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex), baseID);
+		nIndex++;
+	}
+	
+	SetLocalInt(oHolder, "BASE_ITEM_CACHE", 1);
+	return GetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex));
+
+}
+
 object CreateRandomItemFromBaseType(object oPC, struct baseitem i, int matTier = 0) {
 	
 	struct material m1 = GetRandomMaterialOfTier(i.matlist_1, matTier);
