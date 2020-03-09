@@ -27,6 +27,8 @@ object SpawnSomeBerk(object oWP, object oPC) {
 
 	int nLevel = StringToInt(PS_GetEssenceECL(oPC));
 	
+	SpeakString("PC level: "+IntToString(nLevel), TALKVOLUME_SHOUT);
+	
 	int nClass = CLASS_TYPE_FIGHTER;
 	int nClassRoll = Random(4)+1;
 	
@@ -37,9 +39,13 @@ object SpawnSomeBerk(object oWP, object oPC) {
 		case 3: nClass = CLASS_TYPE_ROGUE; break;
 		case 4: nClass = CLASS_TYPE_MONK; break;
 	}
+	
+	SpeakString("Class chosen: "+IntToString(nClass), TALKVOLUME_SHOUT);
 
 	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, nClass, STANDARD_FACTION_COMMONER);
 	SetConversation(oBerk, "_someberkconvo_");
+	
+	SpeakString("berk is found: "+GetName(oBerk), TALKVOLUME_SHOUT);
 
 	int nRand = Random(4)+1;
 	nRand = 1; //hardcoding this for testing right now
@@ -64,16 +70,16 @@ void DetailBerk(object oBerk) {
 		
 	int nHead = Random(7);
 	int nHair = Random(26);
+	
+	SpeakString("Detailing berk: Gender = "+IntToString(nGender)+", head = "+IntToString(nHead)+", hair = "+IntToString(nHair), TALKVOLUME_SHOUT);
 
 	struct CreatureCoreAppearance currentAppearance = PS_GetCreatureCoreAppearance(oBerk);
 	currentAppearance.Gender = nGender;
 	currentAppearance.HeadVariation = nHead;
 	currentAppearance.HairVariation = nHair;
-	if (d100() < 25)
-		currentAppearance.SkinColor -= 10;
-	else if (d100() < 50)
-		currentAppearance.SkinColor += 10;
 	PS_SetCreatureCoreAppearance(oBerk, currentAppearance);
+	
+	SpeakString("Post berk detailing.", TALKVOLUME_SHOUT);
 	
 	string sName = "Some Berk";
 	string sDescription = "A lost human - likely just fell through some portal. Cagestruck as they come.";

@@ -91,12 +91,16 @@ object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int fa
 
 	int blueprintID = GetNearestCreatureLevelAvailable(nLevel, classType);
 	string sBlueprint = GetBlueprintStringFromClass(classType)+IntToString(blueprintID);
+	SpeakString("Going to generate: "+sBlueprint, TALKVOLUME_SHOUT);
 	
 	//make sure we have a waypoint
-	if (!GetIsObjectValid(oWP))
+	if (!GetIsObjectValid(oWP)) {
+		SpeakString("No waypoint found!!!", TALKVOLUME_SHOUT);
 		return oWP;
+	}
 		
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, GetLocation(oWP));
+	SpeakString("Created creature: "+GetName(oCreature), TALKVOLUME_SHOUT);
 	ChangeToStandardFaction(oCreature, faction);
 	
 	return oCreature;
