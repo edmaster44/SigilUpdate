@@ -18,8 +18,11 @@ void main () {
 	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
 	object oWP = GetWaypointByTag("monstertest_a");
 	object oBerk = SpawnSomeBerk(oWP, oPC);
-	DetailBerk(oBerk);
-	EquipBerk(oBerk);
+	
+	if (GetIsObjectValid(oBerk)) {
+		DetailBerk(oBerk);
+		EquipBerk(oBerk);
+	}
 
 }
 
@@ -43,6 +46,11 @@ object SpawnSomeBerk(object oWP, object oPC) {
 	SpeakString("Class chosen: "+IntToString(nClass), TALKVOLUME_SHOUT);
 
 	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, nClass, STANDARD_FACTION_COMMONER);
+	if (!GetIsObjectValid(oBerk)) {
+		SpeakString("Creature not spawned.", TALKVOLUME_SHOUT);
+		return oBerk;
+	}
+	
 	SetConversation(oBerk, "_someberkconvo_");
 	
 	SpeakString("berk is found: "+GetName(oBerk), TALKVOLUME_SHOUT);
