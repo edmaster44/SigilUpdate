@@ -11,9 +11,43 @@ void DetailBerk(object oBerk);
 //Give a berk an outfit! And appropriate gear
 void EquipBerk(object oBerk);
 
+int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
+
+	string sDebtorQuest = "ps_quest_debtorspole";
+	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
+	
+	//Don't ALWAYS give us the right berk
+	if (d100() < 25)
+		return FALSE;
+	
+	if (nHasDebtorQuest <= 0)
+		return FALSE;
+	if (nHasDebtorQuest >= 5)
+		return FALSE;
+		
+	int nDebtor = 0;
+	if (GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_1_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
+		nDebtor = 1;
+	if (GetLocalInt(oPC, "DEBTOR_2_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_2_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
+		nDebtor = 2;
+	if (GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_3_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
+		nDebtor = 3;
+		
+	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetGender(oBerk))
+		return nDebtor;
+	else
+		return FALSE;
+
+}
+
 void main () {
 
 	object oPC = GetLastUsedBy();
+	
+	object myBerk = GetLocalObject(OBJECT_SELF, "BERK_SPAWNED");
+	if (GetIsObjectValid(myBerk)) {
+		SpeakString("Already has a berk! But we'll create another one anyway", TALKVOLUME_SHOUT);
+	}
 	
 	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
 	object oWP = GetWaypointByTag("monstertest_a");
@@ -22,13 +56,26 @@ void main () {
 	if (GetIsObjectValid(oBerk)) {
 		DetailBerk(oBerk);
 		EquipBerk(oBerk);
+		
+		int debtorIndex = ShouldTriggerDebtorQuest(oPC, oBerk); //returns 1, 2, or 3 if this should trigger a debtor berk
+		if (debtorIndex > 0) {
+			SetLocalInt(oBerk, "IS_DEBTOR", 1);
+			SetLocalInt(oBerk, "DEBTOR_INDEX", debtorIndex);
+			SetLocalObject(oBerk, "DEBT_HOLDER", oPC);
+			SetFirstName(oBerk, "Suspicious Berk");
+			SetLastName(oBerk, "");
+			SetConversation(oBerk, "_somedebtorconvo_");
+		}
 	}
+	
+	SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk);
 
 }
 
 object SpawnSomeBerk(object oWP, object oPC) {
 
-	int nLevel = StringToInt(PS_GetEssenceECL(oPC));
+	int iMAX = PS_GetMaxPartylevel(oPC);
+	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));	
 	
 	SpeakString("PC level: "+IntToString(nLevel), TALKVOLUME_SHOUT);
 	
@@ -56,13 +103,14 @@ object SpawnSomeBerk(object oWP, object oPC) {
 	SpeakString("berk is found: "+GetName(oBerk), TALKVOLUME_SHOUT);
 
 	int nRand = Random(4)+1;
-	nRand = 1; //hardcoding this for testing right now
 	switch(nRand) {
 		case 1: SetLocalString(oBerk, "Berk_Type", "Clueless_1"); break;
 		case 2: SetLocalString(oBerk, "Berk_Type", "Clueless_2"); break;
 		case 3: SetLocalString(oBerk, "Berk_Type", "Clueless_3"); break;
 		case 4: SetLocalString(oBerk, "Berk_Type", "Clueless_4"); break;
 	}
+	
+	SetLocalInt(oBerk, "QUEST_CR", nLevel);
 	
 	return oBerk;
 

@@ -19,7 +19,7 @@ void main(string sCreatureTag = "", int shouldRun = FALSE) {
 	
 	location lLoc = FindHenchSpawnPoint(oPC);
 	
-	DelayCommand(0.25f, AssignCommand(oCreature, ActionMoveToLocation(lLoc, shouldRun)));
+	DelayCommand(0.25f, AssignCommand(oCreature, ActionForceMoveToLocation(lLoc, shouldRun)));
 	
 	DestroyObject(oCreature, 1.25f);
 

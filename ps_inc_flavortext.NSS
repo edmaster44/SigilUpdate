@@ -979,7 +979,7 @@ string RandomString_GenerateHair() {
 //Returns a random distinguishing trait or feature
 //Bob, a human with or who had x
 string RandomString_GenerateTrait() {
-	int total = 29;
+	int total = 30;
 	switch (Random(total)) {
 		case 0: return "long spiralled horns";
 		case 1: return "curved goat horns";
@@ -1010,6 +1010,7 @@ string RandomString_GenerateTrait() {
 		case 26: return "a round face";
 		case 27: return "perfectly symmetrical features";
 		case 28: return "a large nose";
+		case 29: return "an air of chaos";
 	}
 	
 	return "blood red hair";
