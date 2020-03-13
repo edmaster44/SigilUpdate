@@ -102,7 +102,12 @@ void main () {
 		   location lSpawnpoint = GetLocation(oWP);  
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_fw_wheelspinner", lSpawnpoint);    
 		 }
-		  
+		 if(GetObjectByTag("ps_fw_itemlottery") == OBJECT_INVALID)
+		 {
+		   object oWP = GetWaypointByTag("wp_fw_itemgambling");
+		   location lSpawnpoint = GetLocation(oWP);  
+		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_fw_itemlottery", lSpawnpoint);    
+		 }
 		 SetGlobalInt("FortunesWheelLock", 0);
 	}	
 }

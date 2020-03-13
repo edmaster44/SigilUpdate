@@ -2,8 +2,14 @@
 // SCoD Random Loot Generator (SRLG)
 //
 // - Creates random level-appropriate items
-// 
+//
 // HISTORY:
+// March 2020 (pelhikano)
+//   - add some more general wrappers
+//   - Don't use the global variable to count remaining points,
+//     this could lead to problems if we fire the script
+//     from two different places (essentially like multithreading).
+//
 // v0.6, August 21st (pelhikano)
 //   - added weapon properties to (monk) gloves except regeneration since this counts as a trinket
 //
@@ -14,10 +20,10 @@
 //
 // v0.4, August 1st (pelhikano)
 //   - tried OnHit effects but they don't show up
-//   - make sure that there's some sort of enhancement on any item (randomly chosen), for example a level 
+//   - make sure that there's some sort of enhancement on any item (randomly chosen), for example a level
 //     30 char will get a +1 to +5 enchantment with 1 in 5 chance
 //   - if nothing at all was chosen anyway, put a random light on the item
-//   - added a clean-up phase where redundant powers like +1 AC vs undead are removed 
+//   - added a clean-up phase where redundant powers like +1 AC vs undead are removed
 //     when the item is already at least +1 general AC
 //   - a random cost of up to 50 gold is added to random item buys, just for slighly less predictability
 //
@@ -178,16 +184,16 @@ const int SRLG_COST_ENHANCEMENT_5 = 2000;
 const int SRLG_WEAPON_COST_ELEMENTAL_DMG_1D4 = 200;
 const int SRLG_WEAPON_COST_ELEMENTAL_DMG_1D6 = 500;
 
-const int SRLG_WEAPON_COST_ATTACKBONUS_1 = 50; 
-const int SRLG_WEAPON_COST_ATTACKBONUS_2 = 200; 
-const int SRLG_WEAPON_COST_ATTACKBONUS_3 = 400; 
-const int SRLG_WEAPON_COST_ATTACKBONUS_4 = 600; 
-const int SRLG_WEAPON_COST_ATTACKBONUS_5 = 800; 
+const int SRLG_WEAPON_COST_ATTACKBONUS_1 = 50;
+const int SRLG_WEAPON_COST_ATTACKBONUS_2 = 200;
+const int SRLG_WEAPON_COST_ATTACKBONUS_3 = 400;
+const int SRLG_WEAPON_COST_ATTACKBONUS_4 = 600;
+const int SRLG_WEAPON_COST_ATTACKBONUS_5 = 800;
 
-const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_1 = 12; 
-const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_2 = 50; 
-const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_3 = 100; 
-const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_4 = 150; 
+const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_1 = 12;
+const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_2 = 50;
+const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_3 = 100;
+const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_4 = 150;
 const int SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_5 = 200;
 
 const int SRLG_WEAPON_COST_ATTACKBONUSRACE_1 = 12;
@@ -293,32 +299,26 @@ const int	SRLG_ITEMTYPE_BRACERS	=	56	;
 //---------------------------------------------------------------------
 // GIVE PC A RANDOM ITEM OF SPECIFIC TYPE
 
+object SRLG_ApplyRandomProperties(object oItem, int itemType, int points);
+object SRLG_GiveRandomItem(object oPC, int itemType, int points);
 object SRLG_GiveRandomLeveledItem(object oPC, int itemType);
 
 //---------------------------------------------------------------------
 // FUNCTIONS FOR SPECIFIC MINOR TASKS
 
-// Get the number of loot points of this PC 
+// Get the number of loot points
+int GetPointEquivalentForLevel(int level);
 int GetPointEquivalent(object oPC);
 
 // Put totalPoints worth of properties on the oItem
-void AddRandomWeaponProperties(object oItem, int totalPoints); 
-void AddRandomBowWeaponProperties(object oItem, int totalPoints); 
-void AddRandomSlingWeaponProperties(object oItem, int totalPoints); 
-void AddRandomArmorProperties(object oItem, int totalPoints); 
-void AddRandomTrinketProperties(object oItem, int totalPoints); 
-void AddRandomBootsProperties(object oItem, int totalPoints); 
-void AddRandomJewelryProperties(object oItem, int totalPoints); 
-void AddRandomGlovesProperties(object oItem, int totalPoints); 
-
-///////////////////////////////////////////////////////////////////////
-// GLOBAL VARIABLES
-
-// current total points available for item properties
-int globalTotalPoints;
-
-// for counting how many properties have been assigned already
-int totalPropertiesAssigned;
+void AddRandomWeaponProperties(object oItem, int totalPoints);
+void AddRandomBowWeaponProperties(object oItem, int totalPoints);
+void AddRandomSlingWeaponProperties(object oItem, int totalPoints);
+void AddRandomArmorProperties(object oItem, int totalPoints);
+void AddRandomTrinketProperties(object oItem, int totalPoints);
+void AddRandomBootsProperties(object oItem, int totalPoints);
+void AddRandomJewelryProperties(object oItem, int totalPoints);
+void AddRandomGlovesProperties(object oItem, int totalPoints);
 
 ///////////////////////////////////////////////////////////////////////
 // DECLARATIONS OF PRIVATE FUNCTIONS
@@ -332,7 +332,7 @@ void AddRandomBowWeaponProperties_(object oItem);
 void AddRandomSlingWeaponProperties_(object oItem);
 void AddRandomBootsProperties_(object oItem);
 void AddRandomJewelryProperties_(object oItem);
-void AddRandomGlovesProperties_(object oItem); 
+void AddRandomGlovesProperties_(object oItem);
 string ChooseRandomWeaponMaterial(string sIron, string sDarksteel, string sColdiron, string sSilver);
 string GetRandomBaseitemTag(int itemType);
 void AddRandomProperties(object oItem, int itemType, int points);
@@ -342,20 +342,38 @@ void CleanItemProperties(object oItem);
 // DEFINITIONS OF INTERFACE FUNCTIONS
 
 //---------------------------------------------------------------------
-object SRLG_GiveRandomLeveledItem(object oPC, int itemType)
+// Apply points worth of random properties to an oItem of itemType
+object SRLG_ApplyRandomProperties(object oItem, int itemType, int points)
+{
+	AddRandomProperties(oItem, itemType, points);
+	CleanItemProperties(oItem); // remove any redundant properties (+1 vs X when already +1 or greater)
+	SetLocalInt(oItem, "ISGAMBLED", 1);
+	return oItem;
+}
+
+//---------------------------------------------------------------------
+// Give PC random item of type and with points worth of properties
+object SRLG_GiveRandomItem(object oPC, int itemType, int points)
 {
 	string itemTag = GetRandomBaseitemTag(itemType);
 	object oItem = CreateItemOnObject(itemTag, oPC);
 	if (oItem == OBJECT_INVALID)
 	{
-		RandomLootGeneratorError(oPC, "SRLG_GiveRandomLeveledItem() could not create item");
+		RandomLootGeneratorError(oPC, "SRLG_GiveRandomItem() could not create item");
 		return OBJECT_INVALID;
 	}
-	int points = GetPointEquivalent(oPC);
-	AddRandomProperties(oItem, itemType, points);
-	CleanItemProperties(oItem); // remove any redundant properties (+1 vs X when already +1 or greater)
-	return oItem;
+	return SRLG_ApplyRandomProperties(oItem, itemType, points);
 }
+
+//---------------------------------------------------------------------
+// Generate an item appropriate for PCs level in their inventory
+object SRLG_GiveRandomLeveledItem(object oPC, int itemType)
+{
+	return SRLG_GiveRandomItem(oPC, itemType, GetPointEquivalent(oPC));
+}
+
+///////////////////////////////////////////////////////////////////////
+// DEFINITIONS OF INTERNAL FUNCTIONS
 
 //---------------------------------------------------------------------
 int GetEnhancementBonus(object oItem)
@@ -426,7 +444,7 @@ void RemoveItemPropertyIfWeaker(object oItem, itemproperty ip, int propertyType,
 void CleanItemProperties(object oItem)
 {
 	int enhancementBonus = GetEnhancementBonus(oItem);
-	
+
 	if (enhancementBonus >= 1)
 	{
 		// Get the first itemproperty
@@ -445,7 +463,7 @@ void CleanItemProperties(object oItem)
 			ipLoop = GetNextItemProperty(oItem);
 		}
 	}
-	
+
 	int armorBonus = GetArmorEnhancementBonus(oItem);
 	if (armorBonus >= 1)
 	{
@@ -465,11 +483,19 @@ void CleanItemProperties(object oItem)
 }
 
 //---------------------------------------------------------------------
+// Get points to use for this level
+int GetPointEquivalentForLevel(int level)
+{
+	return level * SRLG_POINTS_PER_LEVEL;
+}
+
+//---------------------------------------------------------------------
+// Get points to use for this PCs level
 int GetPointEquivalent(object oPC)
 {
 	int pcLevel;
 	int usedLevel;
-	
+
 	if (GetIsPC(oPC))
 	{
 		pcLevel = GetTotalLevels(oPC, 0);
@@ -477,71 +503,90 @@ int GetPointEquivalent(object oPC)
 	else
 	{
 		pcLevel = FloatToInt(GetChallengeRating(oPC));
-		if (pcLevel > 30) pcLevel = 30;	
+		if (pcLevel > 30) pcLevel = 30;
 	}
-	
-	usedLevel = pcLevel;
-	return usedLevel * SRLG_POINTS_PER_LEVEL;
 
-	// Randomization: the level used is a random one between 1 and the actual PC level.
-	// This ensures that a level 30 character does not always get the full allotment of points,
-	// but rather can get an item appropriate for a character *between* 1 and 30.
-	// int usedLevel = Random(pcLevel) + 1;
+	return GetPointEquivalentForLevel(pcLevel);
+}
+
+//---------------------------------------------------------------------
+// current total points available for item properties
+int GetTotalPoints(object oItem)
+{
+	return GetLocalInt(oItem, "totalPoints");
+}
+
+// current total points available for item properties
+void SetTotalPoints(object oItem, int points)
+{
+	SetLocalInt(oItem, "totalPoints", points);
+}
+
+// for counting how many properties have been assigned already
+int GetTotalProperties(object oItem)
+{
+	return GetLocalInt(oItem, "totalProperties");
+}
+
+// for counting how many properties have been assigned already
+void SetTotalProperties(object oItem, int properties)
+{
+	SetLocalInt(oItem, "totalProperties", properties);
 }
 
 //---------------------------------------------------------------------
 void AddRandomWeaponProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomWeaponProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomBowWeaponProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomBowWeaponProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomSlingWeaponProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomSlingWeaponProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomArmorProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomArmorProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomTrinketProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomTrinketProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomBootsProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomBootsProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomJewelryProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomJewelryProperties_(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomGlovesProperties(object oItem, int totalPoints)
 {
-	globalTotalPoints = totalPoints;
+	SetTotalPoints(oItem, totalPoints);
 	AddRandomGlovesProperties_(oItem);
 }
 
@@ -558,8 +603,8 @@ void RandomLootGeneratorError(object oPC, string errormsg)
 //---------------------------------------------------------------------
 void AddRandomProperties(object oItem, int itemType, int points)
 {
-	switch(itemType)					
-	{					
+	switch(itemType)
+	{
 		case 	SRLG_ITEMTYPE_CLOTHING	: 	AddRandomArmorProperties(oItem, points);	break;
 		case 	SRLG_ITEMTYPE_PADDEDARMOR	: 	AddRandomArmorProperties(oItem, points);	break;
 		case 	SRLG_ITEMTYPE_LEATHERARMOR	: 	AddRandomArmorProperties(oItem, points);	break;
@@ -616,14 +661,14 @@ void AddRandomProperties(object oItem, int itemType, int points)
 		case 	SRLG_ITEMTYPE_RING	: 	AddRandomJewelryProperties(oItem, points);	break;
 		case 	SRLG_ITEMTYPE_AMULET	: 	AddRandomJewelryProperties(oItem, points);	break;
 		case 	SRLG_ITEMTYPE_BRACERS	: 	AddRandomTrinketProperties(oItem, points);	break;
-	}					
+	}
 }
 
 //---------------------------------------------------------------------
 string GetRandomBaseitemTag(int itemType)
 {
-switch(itemType)    
-{    
+switch(itemType)
+{
 case  SRLG_ITEMTYPE_CLOTHING :   return "NW_CLOTH022";  break;
 case  SRLG_ITEMTYPE_PADDEDARMOR :  return "NW_AARCL009"; break;
 case  SRLG_ITEMTYPE_LEATHERARMOR :  return "NW_AARCL001"; break;
@@ -697,7 +742,7 @@ string ChooseRandomWeaponMaterial(string sIron, string sDarksteel, string sColdi
 	string sItemtag = "";
 	if ( nRandom < SRLG_WEAPON_IRON ) //iron
 	{
-        return sIron;
+		return sIron;
 	}
 	else if ( nRandom < SRLG_WEAPON_DARKSTEEL ) //darksteel
 	{
@@ -717,20 +762,11 @@ string ChooseRandomWeaponMaterial(string sIron, string sDarksteel, string sColdi
 // Will not replace existing properties of the same kind.
 void AddPropertyIfEnoughPoints(object oItem, int nCost, itemproperty ip)
 {
-	DebugMsg("AddPropertyIfEnoughPoints: globalTotalPoints = " + IntToString(globalTotalPoints));
-	DebugMsg("AddPropertyIfEnoughPoints: nCost = " + IntToString(nCost));
-
-	if (nCost <= globalTotalPoints)
+	if (nCost <= GetTotalPoints(oItem))
 	{
-		globalTotalPoints -= nCost;
+		SetTotalPoints(oItem, GetTotalPoints(oItem) - nCost);
 		IPSafeAddItemProperty(oItem, ip, 0.0f, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);
-		totalPropertiesAssigned++;
-		
-		DebugMsg("AddPropertyIfEnoughPoints: property added, new globalTotalPoints = " + IntToString(globalTotalPoints));
-	}
-	else
-	{
-		DebugMsg("AddPropertyIfEnoughPoints: cost too high, no property added");
+		SetTotalProperties(oItem, GetTotalProperties(oItem) + 1);
 	}
 }
 
@@ -741,9 +777,9 @@ void AddRandomEnhancementBonusIfEnoughPoints(object oItem)
 	switch (nPropertyRoll)
 	{
 		case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_1, ItemPropertyEnhancementBonus(1)); break;
-   		case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
-    	case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_3, ItemPropertyEnhancementBonus(3)); break;
-    	case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_4, ItemPropertyEnhancementBonus(4)); break;
+		case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
+		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_3, ItemPropertyEnhancementBonus(3)); break;
+		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_4, ItemPropertyEnhancementBonus(4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_5, ItemPropertyEnhancementBonus(5)); break;
 	}
 }
@@ -792,13 +828,13 @@ void AddRandomElementalDamageIfEnoughPoints(object oItem)
 	{
 		case 1: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D4, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d4)); break;
 		case 2: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D6, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d6)); break;
-	
+
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D4, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_1d4)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D6, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_1d6)); break;
-			
+
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D4, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_1d4)); break;
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D6, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_1d6)); break;
-			
+
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D4, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_1d4)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ELEMENTAL_DMG_1D6, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_1d6)); break;
 
@@ -840,21 +876,21 @@ void AddRandomAttackBonusVsAlignIfEnoughPoints(object oItem)
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_3, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_4, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_5, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 5)); break;
-			
+
 		// ATTACK BONUS VS ALIGNMENT (GOOD)
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_1, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_2, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_3, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_4, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_5, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 5)); break;
-			
+
 		// ATTACK BONUS VS ALIGNMENT (LAWFUL)
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_1, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_2, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_3, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_4, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_5, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 5)); break;
-	
+
 		// ATTACK BONUS VS ALIGNMENT (NEUTRAL)
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_1, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_NEUTRAL, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSALIGNMENT_2, ItemPropertyAttackBonusVsAlign(IP_CONST_ALIGNMENTGROUP_NEUTRAL, 2)); break;
@@ -883,21 +919,21 @@ void AddRandomACBonusVsAlignIfEnoughPoints(object oItem)
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_3, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_4, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_5, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 5)); break;
-			
+
 		// BONUS VS ALIGNMENT (GOOD)
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_1, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_2, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_3, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_4, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_5, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 5)); break;
-			
+
 		// BONUS VS ALIGNMENT (LAWFUL)
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_1, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_2, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_3, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_4, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_5, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 5)); break;
-	
+
 		// BONUS VS ALIGNMENT (NEUTRAL)
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_1, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_NEUTRAL, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACBONUSALIGNMENT_2, ItemPropertyACBonusVsAlign(IP_CONST_ALIGNMENTGROUP_NEUTRAL, 2)); break;
@@ -919,139 +955,139 @@ void AddRandomAttackBonusVsRaceIfEnoughPoints(object oItem)
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 3)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 5)); break;
-		
+
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 1)); break;
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 2)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 5)); break;
-		
+
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 5)); break;
-		
+
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 5)); break;
-		
+
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 2)); break;
 		case 23: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 3)); break;
 		case 24: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 4)); break;
 		case 25: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 5)); break;
-		
+
 		case 26: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 1)); break;
 		case 27: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 2)); break;
 		case 28: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 3)); break;
 		case 29: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 4)); break;
 		case 30: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 5)); break;
-		
+
 		case 31: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 1)); break;
 		case 32: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 2)); break;
 		case 33: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 3)); break;
 		case 34: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 4)); break;
 		case 35: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 5)); break;
-		
+
 		case 36: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELF, 1)); break;
 		case 37: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELF, 2)); break;
 		case 38: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELF, 3)); break;
 		case 39: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELF, 4)); break;
 		case 40: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_ELF, 5)); break;
-		
+
 		case 41: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_FEY, 1)); break;
 		case 42: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_FEY, 2)); break;
 		case 43: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_FEY, 3)); break;
 		case 44: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_FEY, 4)); break;
 		case 45: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_FEY, 5)); break;
-		
+
 		case 46: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 1)); break;
 		case 47: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 2)); break;
 		case 48: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 3)); break;
 		case 49: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 4)); break;
 		case 50: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 5)); break;
-		
+
 		case 51: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 1)); break;
 		case 52: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 2)); break;
 		case 53: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 3)); break;
 		case 54: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 4)); break;
 		case 55: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 5)); break;
-		
+
 		case 56: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 1)); break;
 		case 57: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 2)); break;
 		case 58: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 3)); break;
 		case 59: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 4)); break;
 		case 60: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 5)); break;
-		
+
 		case 61: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 1)); break;
 		case 62: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 2)); break;
 		case 63: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 3)); break;
 		case 64: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 4)); break;
 		case 65: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 5)); break;
-		
+
 		case 66: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 1)); break;
 		case 67: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 2)); break;
 		case 68: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 3)); break;
 		case 69: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 4)); break;
 		case 70: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 5)); break;
-		
+
 		case 71: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 1)); break;
 		case 72: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 2)); break;
 		case 73: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 3)); break;
 		case 74: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 4)); break;
 		case 75: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 5)); break;
-		
+
 		case 76: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 1)); break;
 		case 77: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 2)); break;
 		case 78: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 3)); break;
 		case 79: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 4)); break;
 		case 80: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 5)); break;
-		
+
 		case 81: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 1)); break;
 		case 82: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 2)); break;
 		case 83: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 3)); break;
 		case 84: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 4)); break;
 		case 85: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 5)); break;
-		
+
 		case 86: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 1)); break;
 		case 87: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 2)); break;
 		case 88: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 3)); break;
 		case 89: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 4)); break;
 		case 90: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 5)); break;
-		
+
 		case 91: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 1)); break;
 		case 92: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 2)); break;
 		case 93: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 3)); break;
 		case 94: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 4)); break;
 		case 95: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 5)); break;
-		
+
 		case 96: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 1)); break;
 		case 97: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 2)); break;
 		case 98: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 3)); break;
 		case 99: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 4)); break;
 		case 100: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 5)); break;
-		
+
 		case 101: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 1)); break;
 		case 102: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 2)); break;
 		case 103: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 3)); break;
 		case 104: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 4)); break;
 		case 105: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 5)); break;
-		
+
 		case 106: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 1)); break;
 		case 107: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 2)); break;
 		case 108: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 3)); break;
 		case 109: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 4)); break;
 		case 110: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 5)); break;
-		
+
 		case 111: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 1)); break;
 		case 112: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 2)); break;
 		case 113: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 3)); break;
 		case 114: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_4, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 4)); break;
 		case 115: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_5, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 5)); break;
-		
+
 		case 116: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_1, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 1)); break;
 		case 117: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_2, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 2)); break;
 		case 118: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ATTACKBONUSRACE_3, ItemPropertyAttackBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 3)); break;
@@ -1230,139 +1266,139 @@ void AddRandomEnhancementBonusVsRaceIfEnoughPoints(object oItem)
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 3)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 5)); break;
-		
+
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 1)); break;
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 2)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 5)); break;
-		
+
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 5)); break;
-		
+
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 5)); break;
-		
+
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 2)); break;
 		case 23: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 3)); break;
 		case 24: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 4)); break;
 		case 25: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 5)); break;
-		
+
 		case 26: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 1)); break;
 		case 27: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 2)); break;
 		case 28: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 3)); break;
 		case 29: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 4)); break;
 		case 30: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 5)); break;
-		
+
 		case 31: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 1)); break;
 		case 32: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 2)); break;
 		case 33: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 3)); break;
 		case 34: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 4)); break;
 		case 35: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 5)); break;
-		
+
 		case 36: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELF, 1)); break;
 		case 37: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELF, 2)); break;
 		case 38: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELF, 3)); break;
 		case 39: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELF, 4)); break;
 		case 40: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_ELF, 5)); break;
-		
+
 		case 41: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_FEY, 1)); break;
 		case 42: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_FEY, 2)); break;
 		case 43: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_FEY, 3)); break;
 		case 44: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_FEY, 4)); break;
 		case 45: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_FEY, 5)); break;
-		
+
 		case 46: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 1)); break;
 		case 47: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 2)); break;
 		case 48: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 3)); break;
 		case 49: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 4)); break;
 		case 50: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 5)); break;
-		
+
 		case 51: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 1)); break;
 		case 52: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 2)); break;
 		case 53: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 3)); break;
 		case 54: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 4)); break;
 		case 55: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 5)); break;
-		
+
 		case 56: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 1)); break;
 		case 57: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 2)); break;
 		case 58: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 3)); break;
 		case 59: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 4)); break;
 		case 60: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 5)); break;
-		
+
 		case 61: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 1)); break;
 		case 62: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 2)); break;
 		case 63: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 3)); break;
 		case 64: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 4)); break;
 		case 65: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 5)); break;
-		
+
 		case 66: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 1)); break;
 		case 67: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 2)); break;
 		case 68: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 3)); break;
 		case 69: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 4)); break;
 		case 70: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 5)); break;
-		
+
 		case 71: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 1)); break;
 		case 72: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 2)); break;
 		case 73: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 3)); break;
 		case 74: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 4)); break;
 		case 75: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 5)); break;
-		
+
 		case 76: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 1)); break;
 		case 77: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 2)); break;
 		case 78: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 3)); break;
 		case 79: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 4)); break;
 		case 80: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 5)); break;
-		
+
 		case 81: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 1)); break;
 		case 82: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 2)); break;
 		case 83: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 3)); break;
 		case 84: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 4)); break;
 		case 85: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 5)); break;
-		
+
 		case 86: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 1)); break;
 		case 87: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 2)); break;
 		case 88: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 3)); break;
 		case 89: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 4)); break;
 		case 90: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 5)); break;
-		
+
 		case 91: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 1)); break;
 		case 92: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 2)); break;
 		case 93: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 3)); break;
 		case 94: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 4)); break;
 		case 95: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 5)); break;
-		
+
 		case 96: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 1)); break;
 		case 97: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 2)); break;
 		case 98: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 3)); break;
 		case 99: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 4)); break;
 		case 100: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 5)); break;
-		
+
 		case 101: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 1)); break;
 		case 102: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 2)); break;
 		case 103: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 3)); break;
 		case 104: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 4)); break;
 		case 105: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 5)); break;
-		
+
 		case 106: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 1)); break;
 		case 107: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 2)); break;
 		case 108: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 3)); break;
 		case 109: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 4)); break;
 		case 110: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 5)); break;
-		
+
 		case 111: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 1)); break;
 		case 112: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 2)); break;
 		case 113: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 3)); break;
 		case 114: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_4, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 4)); break;
 		case 115: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_5, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 5)); break;
-		
+
 		case 116: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_1, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 1)); break;
 		case 117: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_2, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 2)); break;
 		case 118: AddPropertyIfEnoughPoints(oItem, SRLG_WEAPON_COST_ENHANCEMENTRACE_3, ItemPropertyEnhancementBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 3)); break;
@@ -1383,139 +1419,139 @@ void AddRandomACBonusVsRaceIfEnoughPoints(object oItem)
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 3)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ABERRATION, 5)); break;
-		
+
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 1)); break;
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 2)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ANIMAL, 5)); break;
-		
+
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_BEAST, 5)); break;
-		
+
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_CONSTRUCT, 5)); break;
-		
+
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 2)); break;
 		case 23: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 3)); break;
 		case 24: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 4)); break;
 		case 25: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DRAGON, 5)); break;
-		
+
 		case 26: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 1)); break;
 		case 27: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 2)); break;
 		case 28: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 3)); break;
 		case 29: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 4)); break;
 		case 30: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_DWARF, 5)); break;
-		
+
 		case 31: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 1)); break;
 		case 32: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 2)); break;
 		case 33: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 3)); break;
 		case 34: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 4)); break;
 		case 35: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELEMENTAL, 5)); break;
-		
+
 		case 36: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELF, 1)); break;
 		case 37: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELF, 2)); break;
 		case 38: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELF, 3)); break;
 		case 39: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELF, 4)); break;
 		case 40: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_ELF, 5)); break;
-		
+
 		case 41: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_FEY, 1)); break;
 		case 42: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_FEY, 2)); break;
 		case 43: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_FEY, 3)); break;
 		case 44: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_FEY, 4)); break;
 		case 45: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_FEY, 5)); break;
-		
+
 		case 46: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 1)); break;
 		case 47: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 2)); break;
 		case 48: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 3)); break;
 		case 49: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 4)); break;
 		case 50: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GIANT, 5)); break;
-		
+
 		case 51: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 1)); break;
 		case 52: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 2)); break;
 		case 53: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 3)); break;
 		case 54: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 4)); break;
 		case 55: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_GNOME, 5)); break;
-		
+
 		case 56: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 1)); break;
 		case 57: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 2)); break;
 		case 58: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 3)); break;
 		case 59: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 4)); break;
 		case 60: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFELF, 5)); break;
-		
+
 		case 61: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 1)); break;
 		case 62: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 2)); break;
 		case 63: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 3)); break;
 		case 64: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 4)); break;
 		case 65: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFLING, 5)); break;
-		
+
 		case 66: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 1)); break;
 		case 67: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 2)); break;
 		case 68: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 3)); break;
 		case 69: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 4)); break;
 		case 70: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HALFORC, 5)); break;
-		
+
 		case 71: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 1)); break;
 		case 72: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 2)); break;
 		case 73: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 3)); break;
 		case 74: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 4)); break;
 		case 75: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMAN, 5)); break;
-		
+
 		case 76: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 1)); break;
 		case 77: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 2)); break;
 		case 78: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 3)); break;
 		case 79: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 4)); break;
 		case 80: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID, 5)); break;
-		
+
 		case 81: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 1)); break;
 		case 82: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 2)); break;
 		case 83: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 3)); break;
 		case 84: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 4)); break;
 		case 85: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS, 5)); break;
-		
+
 		case 86: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 1)); break;
 		case 87: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 2)); break;
 		case 88: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 3)); break;
 		case 89: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 4)); break;
 		case 90: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_ORC, 5)); break;
-		
+
 		case 91: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 1)); break;
 		case 92: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 2)); break;
 		case 93: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 3)); break;
 		case 94: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 4)); break;
 		case 95: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN, 5)); break;
-		
+
 		case 96: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 1)); break;
 		case 97: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 2)); break;
 		case 98: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 3)); break;
 		case 99: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 4)); break;
 		case 100: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_MAGICAL_BEAST, 5)); break;
-		
+
 		case 101: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 1)); break;
 		case 102: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 2)); break;
 		case 103: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 3)); break;
 		case 104: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 4)); break;
 		case 105: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_OUTSIDER, 5)); break;
-		
+
 		case 106: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 1)); break;
 		case 107: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 2)); break;
 		case 108: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 3)); break;
 		case 109: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 4)); break;
 		case 110: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_SHAPECHANGER, 5)); break;
-		
+
 		case 111: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 1)); break;
 		case 112: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 2)); break;
 		case 113: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 3)); break;
 		case 114: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_4, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 4)); break;
 		case 115: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_5, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_UNDEAD, 5)); break;
-		
+
 		case 116: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_1, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 1)); break;
 		case 117: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_2, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 2)); break;
 		case 118: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ARMOR_ACVSRACE_3, ItemPropertyACBonusVsRace(IP_CONST_RACIALTYPE_VERMIN, 3)); break;
@@ -1604,12 +1640,12 @@ void AddRandomBonusLevelSpellIfEnoughPoints(object oItem)
 		case 29: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_2, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_PALADIN, 2)); break;
 		case 30: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_3, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_PALADIN, 3)); break;
 		case 31: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_4, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_PALADIN, 4)); break;
-		
+
 		case 32: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_1, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_RANGER, 1)); break;
 		case 33: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_2, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_RANGER, 2)); break;
 		case 34: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_3, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_RANGER, 3)); break;
 		case 35: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_4, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_RANGER, 4)); break;
-		
+
 		case 36: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_0, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_SORCERER, 0)); break;
 		case 37: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_1, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_SORCERER, 1)); break;
 		case 38: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSSPELL_2, ItemPropertyBonusLevelSpell(IP_CONST_CLASS_SORCERER, 2)); break;
@@ -1645,7 +1681,7 @@ void AddRandomBonusSavingThrowIfEnoughPoints(object oItem)
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROW_3, ItemPropertyBonusSavingThrow(IP_CONST_SAVEBASETYPE_FORTITUDE, 3)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROW_4, ItemPropertyBonusSavingThrow(IP_CONST_SAVEBASETYPE_FORTITUDE, 4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROW_5, ItemPropertyBonusSavingThrow(IP_CONST_SAVEBASETYPE_FORTITUDE, 5)); break;
-		
+
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROW_1, ItemPropertyBonusSavingThrow(IP_CONST_SAVEBASETYPE_REFLEX, 1)); break;
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROW_2, ItemPropertyBonusSavingThrow(IP_CONST_SAVEBASETYPE_REFLEX, 2)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROW_3, ItemPropertyBonusSavingThrow(IP_CONST_SAVEBASETYPE_REFLEX, 3)); break;
@@ -1671,73 +1707,73 @@ void AddRandomBonusSavingThrowVsXIfEnoughPoints(object oItem)
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ACID, 3)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ACID, 4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ACID, 5)); break;
-		
+
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_COLD, 1)); break;
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_COLD, 2)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_COLD, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_COLD, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_COLD, 5)); break;
-		
+
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DEATH, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DEATH, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DEATH, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DEATH, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DEATH, 5)); break;
-		
+
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DISEASE, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DISEASE, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DISEASE, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DISEASE, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DISEASE, 5)); break;
-		
+
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DIVINE, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DIVINE, 2)); break;
 		case 23: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DIVINE, 3)); break;
 		case 24: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DIVINE, 4)); break;
 		case 25: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_DIVINE, 5)); break;
-		
+
 		case 26: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ELECTRICAL, 1)); break;
 		case 27: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ELECTRICAL, 2)); break;
 		case 28: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ELECTRICAL, 3)); break;
 		case 29: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ELECTRICAL, 4)); break;
 		case 30: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_ELECTRICAL, 5)); break;
-		
+
 		case 31: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FEAR, 1)); break;
 		case 32: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FEAR, 2)); break;
 		case 33: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FEAR, 3)); break;
 		case 34: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FEAR, 4)); break;
 		case 35: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FEAR, 5)); break;
-		
+
 		case 36: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FIRE, 1)); break;
 		case 37: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FIRE, 2)); break;
 		case 38: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FIRE, 3)); break;
 		case 39: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FIRE, 4)); break;
 		case 40: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_FIRE, 5)); break;
-		
+
 		case 41: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_MINDAFFECTING, 1)); break;
 		case 42: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_MINDAFFECTING, 2)); break;
 		case 43: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_MINDAFFECTING, 3)); break;
 		case 44: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_MINDAFFECTING, 4)); break;
 		case 45: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_MINDAFFECTING, 5)); break;
-		
+
 		case 46: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_NEGATIVE, 1)); break;
 		case 47: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_NEGATIVE, 2)); break;
 		case 48: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_NEGATIVE, 3)); break;
 		case 49: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_NEGATIVE, 4)); break;
 		case 50: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_NEGATIVE, 5)); break;
-		
+
 		case 51: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POISON, 1)); break;
 		case 52: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POISON, 2)); break;
 		case 53: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POISON, 3)); break;
 		case 54: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POISON, 4)); break;
 		case 55: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POISON, 5)); break;
-		
+
 		case 56: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POSITIVE, 1)); break;
 		case 57: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POSITIVE, 2)); break;
 		case 58: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POSITIVE, 3)); break;
 		case 59: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_4, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POSITIVE, 4)); break;
 		case 60: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_5, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_POSITIVE, 5)); break;
-		
+
 		case 61: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_1, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_SONIC, 1)); break;
 		case 62: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_2, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_SONIC, 2)); break;
 		case 63: AddPropertyIfEnoughPoints(oItem, SRLG_COST_SAVINGTHROWVSX_3, ItemPropertyBonusSavingThrowVsX(IP_CONST_SAVEVS_SONIC, 3)); break;
@@ -1807,7 +1843,7 @@ void AddRandomOnHitIfEnoughPoints(object oItem)
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_ABILITYDRAIN, SRLG_ONHIT_DC, IP_CONST_ABILITY_INT)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_ABILITYDRAIN, SRLG_ONHIT_DC, IP_CONST_ABILITY_WIS)); break;
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_ABILITYDRAIN, SRLG_ONHIT_DC, IP_CONST_ABILITY_CHA)); break;
-		
+
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_BLINDNESS, SRLG_ONHIT_DC, SRLG_ONHIT_DURATION)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_CONFUSION, SRLG_ONHIT_DC, SRLG_ONHIT_DURATION)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, SRLG_ONHIT_DC, SRLG_ONHIT_DURATION)); break;
@@ -1819,14 +1855,14 @@ void AddRandomOnHitIfEnoughPoints(object oItem)
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_SLEEP, SRLG_ONHIT_DC, SRLG_ONHIT_DURATION)); break;
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_SLOW, SRLG_ONHIT_DC, SRLG_ONHIT_DURATION)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_STUN, SRLG_ONHIT_DC, SRLG_ONHIT_DURATION)); break;
-		
+
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DISEASE, SRLG_ONHIT_POISONDISEASE_DC, DISEASE_BLINDING_SICKNESS)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DISEASE, SRLG_ONHIT_POISONDISEASE_DC, DISEASE_CACKLE_FEVER)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DISEASE, SRLG_ONHIT_POISONDISEASE_DC, DISEASE_MINDFIRE)); break;
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DISEASE, SRLG_ONHIT_POISONDISEASE_DC, DISEASE_RED_ACHE)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DISEASE, SRLG_ONHIT_POISONDISEASE_DC, DISEASE_SHAKES)); break;
 		case 23: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_DISEASE, SRLG_ONHIT_POISONDISEASE_DC, DISEASE_SLIMY_DOOM)); break;
-		
+
 		case 24: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, SRLG_ONHIT_POISONDISEASE_DC, IP_CONST_POISON_1D2_STRDAMAGE)); break;
 		case 25: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, SRLG_ONHIT_POISONDISEASE_DC, IP_CONST_POISON_1D2_DEXDAMAGE)); break;
 		case 26: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ONHITPROPERTY, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, SRLG_ONHIT_POISONDISEASE_DC, IP_CONST_POISON_1D2_CONDAMAGE)); break;
@@ -1892,25 +1928,25 @@ void AddRandomAbilityBonusIfEnoughPoints(object oItem)
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_3, ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, 3)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_4, ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, 4)); break;
 		case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_5, ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, 5)); break;
-		
+
 		case 6: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_1, ItemPropertyAbilityBonus(IP_CONST_ABILITY_DEX, 1)); break;
 		case 7: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_2, ItemPropertyAbilityBonus(IP_CONST_ABILITY_DEX, 2)); break;
 		case 8: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_3, ItemPropertyAbilityBonus(IP_CONST_ABILITY_DEX, 3)); break;
 		case 9: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_4, ItemPropertyAbilityBonus(IP_CONST_ABILITY_DEX, 4)); break;
 		case 10: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_5, ItemPropertyAbilityBonus(IP_CONST_ABILITY_DEX, 5)); break;
-		
+
 		case 11: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_1, ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, 1)); break;
 		case 12: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_2, ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, 2)); break;
 		case 13: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_3, ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, 3)); break;
 		case 14: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_4, ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, 4)); break;
 		case 15: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_5, ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, 5)); break;
-		
+
 		case 16: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_1, ItemPropertyAbilityBonus(IP_CONST_ABILITY_INT, 1)); break;
 		case 17: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_2, ItemPropertyAbilityBonus(IP_CONST_ABILITY_INT, 2)); break;
 		case 18: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_3, ItemPropertyAbilityBonus(IP_CONST_ABILITY_INT, 3)); break;
 		case 19: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_4, ItemPropertyAbilityBonus(IP_CONST_ABILITY_INT, 4)); break;
 		case 20: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_5, ItemPropertyAbilityBonus(IP_CONST_ABILITY_INT, 5)); break;
-		
+
 		case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_1, ItemPropertyAbilityBonus(IP_CONST_ABILITY_WIS, 1)); break;
 		case 22: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_2, ItemPropertyAbilityBonus(IP_CONST_ABILITY_WIS, 2)); break;
 		case 23: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ABILITYBONUS_3, ItemPropertyAbilityBonus(IP_CONST_ABILITY_WIS, 3)); break;
@@ -2160,49 +2196,50 @@ void AddRandomCastSpellIfEnoughPoints(object oItem)
 // Choose a random enhancement bonus depending on the total points, this function is called before the main loop.
 void AddGuaranteedEnhancementBonus(object oItem)
 {
-	if (globalTotalPoints >= SRLG_COST_ENHANCEMENT_1 && globalTotalPoints < SRLG_COST_ENHANCEMENT_2)
+	int totalPoints = GetTotalPoints(oItem);
+	if (totalPoints >= SRLG_COST_ENHANCEMENT_1 && totalPoints < SRLG_COST_ENHANCEMENT_2)
 	{
 		// max +1 enchantment possible
-		
+
 		// special case: 50/50 chance that this is a +1 weapon
 		int nPropertyRoll = Random(2) + 1;
 		switch (nPropertyRoll)
 		{
 			case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_1, ItemPropertyEnhancementBonus(1)); break;
-   			case 2: break;
+			case 2: break;
 		}
 	}
-	else if (globalTotalPoints >= SRLG_COST_ENHANCEMENT_2 && globalTotalPoints < SRLG_COST_ENHANCEMENT_3)
+	else if (totalPoints >= SRLG_COST_ENHANCEMENT_2 && totalPoints < SRLG_COST_ENHANCEMENT_3)
 	{
 		// max +2 enchantment possible
 		int nPropertyRoll = Random(2) + 1;
 		switch (nPropertyRoll)
 		{
 			case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_1, ItemPropertyEnhancementBonus(1)); break;
-   			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
+			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
 		}
 	}
-	else if (globalTotalPoints >= SRLG_COST_ENHANCEMENT_3 && globalTotalPoints < SRLG_COST_ENHANCEMENT_4)
+	else if (totalPoints >= SRLG_COST_ENHANCEMENT_3 && totalPoints < SRLG_COST_ENHANCEMENT_4)
 	{
 		// max +3 enchantment possible
 		int nPropertyRoll = Random(3) + 1;
 		switch (nPropertyRoll)
 		{
 			case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_1, ItemPropertyEnhancementBonus(1)); break;
-   			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
+			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
 	    	case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_3, ItemPropertyEnhancementBonus(3)); break;
 		}
 	}
-	else if (globalTotalPoints >= SRLG_COST_ENHANCEMENT_4 && globalTotalPoints < SRLG_COST_ENHANCEMENT_5)
+	else if (totalPoints >= SRLG_COST_ENHANCEMENT_4 && totalPoints < SRLG_COST_ENHANCEMENT_5)
 	{
 		// max +4 enchantment possible
 		int nPropertyRoll = Random(4) + 1;
 		switch (nPropertyRoll)
 		{
 			case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_1, ItemPropertyEnhancementBonus(1)); break;
-   			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
+			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
 	    	case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_3, ItemPropertyEnhancementBonus(3)); break;
-    		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_4, ItemPropertyEnhancementBonus(4)); break;
+			case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_4, ItemPropertyEnhancementBonus(4)); break;
 		}
 	}
 	else
@@ -2212,9 +2249,9 @@ void AddGuaranteedEnhancementBonus(object oItem)
 		switch (nPropertyRoll)
 		{
 			case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_1, ItemPropertyEnhancementBonus(1)); break;
-   			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
+			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_2, ItemPropertyEnhancementBonus(2)); break;
 	    	case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_3, ItemPropertyEnhancementBonus(3)); break;
-    		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_4, ItemPropertyEnhancementBonus(4)); break;
+			case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_4, ItemPropertyEnhancementBonus(4)); break;
 			case 5: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ENHANCEMENT_5, ItemPropertyEnhancementBonus(5)); break;
 		}
 	}
@@ -2224,10 +2261,11 @@ void AddGuaranteedEnhancementBonus(object oItem)
 // Choose a random enhancement bonus depending on the total points, this function is called before the main loop.
 void AddGuaranteedArmorEnhancementBonus(object oItem)
 {
-	if (globalTotalPoints >= SRLG_COST_ACBONUS_1 && globalTotalPoints < SRLG_COST_ACBONUS_1)
+	int totalPoints = GetTotalPoints(oItem);
+	if (totalPoints >= SRLG_COST_ACBONUS_1 && totalPoints < SRLG_COST_ACBONUS_1)
 	{
 		// max +1 enchantment possible
-		
+
 		// special case: 50/50 chance that this is +1
 		int nPropertyRoll = Random(2) + 1;
 		switch (nPropertyRoll)
@@ -2236,7 +2274,7 @@ void AddGuaranteedArmorEnhancementBonus(object oItem)
 			case 2: break;
 		}
 	}
-	else if (globalTotalPoints >= SRLG_COST_ACBONUS_2 && globalTotalPoints < SRLG_COST_ACBONUS_3)
+	else if (totalPoints >= SRLG_COST_ACBONUS_2 && totalPoints < SRLG_COST_ACBONUS_3)
 	{
 		// max +2 enchantment possible
 		int nPropertyRoll = Random(2) + 1;
@@ -2246,7 +2284,7 @@ void AddGuaranteedArmorEnhancementBonus(object oItem)
 			case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ACBONUS_2, ItemPropertyACBonus(2)); break;
 		}
 	}
-	else if (globalTotalPoints >= SRLG_COST_ACBONUS_3 && globalTotalPoints < SRLG_COST_ACBONUS_4)
+	else if (totalPoints >= SRLG_COST_ACBONUS_3 && totalPoints < SRLG_COST_ACBONUS_4)
 	{
 		// max +3 enchantment possible
 		int nPropertyRoll = Random(3) + 1;
@@ -2257,7 +2295,7 @@ void AddGuaranteedArmorEnhancementBonus(object oItem)
 			case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_ACBONUS_3, ItemPropertyACBonus(3)); break;
 		}
 	}
-	else if (globalTotalPoints >= SRLG_COST_ACBONUS_4 && globalTotalPoints < SRLG_COST_ACBONUS_5)
+	else if (totalPoints >= SRLG_COST_ACBONUS_4 && totalPoints < SRLG_COST_ACBONUS_5)
 	{
 		// max +4 enchantment possible
 		int nPropertyRoll = Random(4) + 1;
@@ -2285,27 +2323,27 @@ void AddGuaranteedArmorEnhancementBonus(object oItem)
 }
 
 //---------------------------------------------------------------------
-// add random properties to a weapon, max points are set in globalTotalPoints
+// add random properties to a weapon
 void AddRandomWeaponProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
-	
+	SetTotalProperties(oItem, 0);
+
 	// Put a random enhancement bonus on the weapon first
 	AddGuaranteedEnhancementBonus(oItem);
-	
+
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(21) + 1;
 		// nPropertyRoll = 20;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomElementalDamageIfEnoughPoints(oItem); break;
 			case 2: AddRandomAttackBonusIfEnoughPoints(oItem); break;
 			case 3: AddRandomAttackBonusVsAlignIfEnoughPoints(oItem); break;
@@ -2330,32 +2368,32 @@ void AddRandomWeaponProperties_(object oItem)
 			case 20: AddRandomCastSpellIfEnoughPoints(oItem); break;
 			case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_REGENERATION_1, ItemPropertyRegeneration(1)); break;
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomGlovesProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
+	SetTotalProperties(oItem, 0);
 	AddGuaranteedEnhancementBonus(oItem);
-	
+
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(20) + 1;
 		// nPropertyRoll = 20;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomElementalDamageIfEnoughPoints(oItem); break;
 			case 2: AddRandomAttackBonusIfEnoughPoints(oItem); break;
 			case 3: AddRandomAttackBonusVsAlignIfEnoughPoints(oItem); break;
@@ -2379,34 +2417,34 @@ void AddRandomGlovesProperties_(object oItem)
 			// case 20: AddRandomLightIfEnoughPoints(oItem); break;
 			case 20: AddRandomCastSpellIfEnoughPoints(oItem); break;
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
-// add random properties to an armor, max points are set in globalTotalPoints
+// add random properties to an armor
 void AddRandomArmorProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
+	SetTotalProperties(oItem, 0);
 
 	// Put a random AC bonus on the item first.
 	AddGuaranteedArmorEnhancementBonus(oItem);
-	
+
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(14) + 1;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomBonusLevelSpellIfEnoughPoints(oItem); break;
 			case 2: AddRandomBonusSavingThrowIfEnoughPoints(oItem); break;
 			case 3: AddRandomBonusSavingThrowVsXIfEnoughPoints(oItem); break;
@@ -2423,33 +2461,33 @@ void AddRandomArmorProperties_(object oItem)
 			case 13: AddRandomACBonusVsRaceIfEnoughPoints(oItem); break;
 			case 14: AddRandomBonusFeatIfEnoughPoints(oItem); break;
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomBowWeaponProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
-	
+	SetTotalProperties(oItem, 0);
+
 	// Put a random enhancement bonus on the weapon first
 	AddGuaranteedEnhancementBonus(oItem);
-	
+
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(22) + 1;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomElementalDamageIfEnoughPoints(oItem); break;
 			case 2: AddRandomAttackBonusIfEnoughPoints(oItem); break;
 			case 3: AddRandomAttackBonusVsAlignIfEnoughPoints(oItem); break;
@@ -2474,35 +2512,35 @@ void AddRandomBowWeaponProperties_(object oItem)
 			case 20: AddRandomCastSpellIfEnoughPoints(oItem); break;
 			case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_REGENERATION_1, ItemPropertyRegeneration(1)); break;
 			case 22: AddRandomMaxRangeStrengthModIfEnoughPoints(oItem); break;
-			
+
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomSlingWeaponProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
-	
+	SetTotalProperties(oItem, 0);
+
 	// Put a random enhancement bonus on the weapon first
 	AddGuaranteedEnhancementBonus(oItem);
-	
+
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(21) + 1;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomElementalDamageIfEnoughPoints(oItem); break;
 			case 2: AddRandomAttackBonusIfEnoughPoints(oItem); break;
 			case 3: AddRandomAttackBonusVsAlignIfEnoughPoints(oItem); break;
@@ -2526,32 +2564,32 @@ void AddRandomSlingWeaponProperties_(object oItem)
 			// case 20: AddRandomLightIfEnoughPoints(oItem); break;
 			case 23: AddRandomCastSpellIfEnoughPoints(oItem); break;
 			case 21: AddPropertyIfEnoughPoints(oItem, SRLG_COST_REGENERATION_1, ItemPropertyRegeneration(1)); break;
-			
+
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomTrinketProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
+	SetTotalProperties(oItem, 0);
 
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(12) + 1;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomBonusLevelSpellIfEnoughPoints(oItem); break;
 			case 2: AddRandomBonusSavingThrowIfEnoughPoints(oItem); break;
 			case 3: AddRandomBonusSavingThrowVsXIfEnoughPoints(oItem); break;
@@ -2567,30 +2605,30 @@ void AddRandomTrinketProperties_(object oItem)
 			case 11: AddRandomACBonusVsAlignIfEnoughPoints(oItem); break;
 			case 12: AddRandomACBonusVsRaceIfEnoughPoints(oItem); break;
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomBootsProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
+	SetTotalProperties(oItem, 0);
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(14) + 1;
 		// nPropertyRoll = 11;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomBootsACBonusIfEnoughPoints(oItem); break;
 			case 2: AddRandomBonusLevelSpellIfEnoughPoints(oItem); break;
 			case 3: AddRandomBonusSavingThrowIfEnoughPoints(oItem); break;
@@ -2607,30 +2645,30 @@ void AddRandomBootsProperties_(object oItem)
 			case 13: AddRandomACBonusVsRaceIfEnoughPoints(oItem); break;
 			case 14: AddRandomBonusFeatIfEnoughPoints(oItem); break;
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }
 
 //---------------------------------------------------------------------
 void AddRandomJewelryProperties_(object oItem)
 {
-	totalPropertiesAssigned = 0;
+	SetTotalProperties(oItem, 0);
 
 	int propertyIdx;
 	for (propertyIdx = 0; propertyIdx < SRLG_PROPERTY_RETRIES; propertyIdx++)
 	{
-		if (globalTotalPoints == 0)
+		if (GetTotalPoints(oItem) == 0)
 			break;
-			
-		if (totalPropertiesAssigned >= SRLG_MAX_PROPERTIES)
+
+		if (GetTotalProperties(oItem) >= SRLG_MAX_PROPERTIES)
 			break;
-			
+
 		int nPropertyRoll = Random(13) + 1;
-    	switch (nPropertyRoll)
-    	{
+		switch (nPropertyRoll)
+		{
 			case 1: AddRandomBonusLevelSpellIfEnoughPoints(oItem); break;
 			case 2: AddRandomBonusSavingThrowIfEnoughPoints(oItem); break;
 			case 3: AddRandomBonusSavingThrowVsXIfEnoughPoints(oItem); break;
@@ -2647,9 +2685,9 @@ void AddRandomJewelryProperties_(object oItem)
 			case 12: AddRandomACBonusVsRaceIfEnoughPoints(oItem); break;
 			case 13: AddRandomBonusFeatIfEnoughPoints(oItem); break;
 			default: break;
- 		}
+		}
 	}
-	
-	if (totalPropertiesAssigned == 0)
+
+	if (GetTotalProperties(oItem) == 0)
 		AddOneCertainRandomProperty(oItem);
 }

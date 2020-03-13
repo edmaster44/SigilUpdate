@@ -101,12 +101,12 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_randomitemmerchant", lSpawnpoint);    
   }  
   
-  if(GetObjectByTag("ps_randomitemmerchant") == OBJECT_INVALID)
+  if(GetObjectByTag("ps_timequests_spadix") == OBJECT_INVALID)
   {
-   object oWP = GetWaypointByTag("ps_wp_shadymerchant");
+   object oWP = GetWaypointByTag("ps_wp_spadix");
    location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_randomitemmerchant", lSpawnpoint);    
-  }
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_timequests_spadix", lSpawnpoint);    
+  }  
   
   if(GetObjectByTag("npc_sigis_editor") == OBJECT_INVALID)
   {
