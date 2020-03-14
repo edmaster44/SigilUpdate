@@ -1,5 +1,5 @@
-//On Use Script for the Debtors Pole
-//Gives you the quest, and the descriptions
+//Conversation script for the Debtors Pole
+//Sets up the variables and pretty text
 //3-12-20, Mimi Fearthegn
 #include "ps_inc_flavortext"
 
@@ -85,7 +85,7 @@ string PrintPrettyWantedPost(object oPC, int nDebtor) {
 
 void main() {
 
-	object oPC = GetLastUsedBy();
+	object oPC = GetPCSpeaker();
 	string sQuestTag = "ps_quest_debtorspole";
 	int nQuestStage = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
 	
