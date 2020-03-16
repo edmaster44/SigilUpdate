@@ -1,5 +1,5 @@
 			
-				#include "x2_inc_spellhook"
+#include "x2_inc_spellhook"
 #include "aaa_constants"
 #include "X0_I0_SPELLS"
 #include "nw_i0_spells"
