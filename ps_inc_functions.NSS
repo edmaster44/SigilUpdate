@@ -17,6 +17,7 @@ const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
+const int CLASS_TYPE_MISTRESS_OF_THE_CAULDRON			= 64;
 const int CLASS_TYPE_FELLBLADE 							= 80;
 const int CLASS_TYPE_ARCANE_ARCHER2 					= 81;
 const int CLASS_TYPE_PALEMASTER_W 						= 82;
@@ -30,7 +31,8 @@ const int FEAT_HEAVY_ARMOR_OPTIMIZATION 				= 2836;
 const int FEAT_HEAVY_ARMOR_OPTIMIZATION_GREATER 		= 2837;
 const int FEAT_HEAVY_ARMOR_OPTIMIZATION_EPIC			= 2838;
 const int FEAT_SUCCUBUS_SPELLCASTING_BARD 				= 2841;
-
+const int FEAT_MOTC_SPELLCASTING_WARLOCK				= 2570;
+const int FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK			= 4011;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION			= 1833;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER	= 1834;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
@@ -480,6 +482,14 @@ int GetWarlockCasterLevel(object oPC)
 	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
 	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
+	int nNightHag = GetLevelByClass(CLASS_TYPE_MISTRESS_OF_THE_CAULDRON,oPC);
+	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
+
+	if (nGraySlaad >0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))
+	{	nGraySlaad = 0;	}
+						
+	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC) )
+	{ 	nNightHag = 0; 			}
 	
 	if (nMysticTheurge > 0 && !GetHasFeat(FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK, oPC) )
 	{	nMysticTheurge = 0;		}
@@ -515,7 +525,7 @@ int GetWarlockCasterLevel(object oPC)
 	if (nGMaster > 0 && !GetHasFeat(2813, oPC) )//golem master spellcasting warlock feat
 	{	nGMaster = 0;		}
 		
-	nMyCasterLevel += nMysticTheurge + nPalemaster + nFellblade + nArcher + nLich + nSuccubus + nBrachina + nTrickster + nGMaster;
+	nMyCasterLevel += nMysticTheurge + nPalemaster + nFellblade + nArcher + nLich + nSuccubus + nBrachina + nTrickster + nGMaster + nNightHag +nGraySlaad;
 	//********************************
 	
 	if (GetHasFeat(FEAT_FIENDISH_POWER, oPC, TRUE))
@@ -536,7 +546,7 @@ void StackEldBlast (object oPC)
 {
 
 	int nWarlock = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC);
-	int nMysticTheurge = GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
+	int nMysticTheurge = GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC); // Warlock Mystic Theurge
 	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
 		nPalemaster = FloatToInt(IntToFloat(nPalemaster)*0.5f); //warlock Pale Master
 	int nFellblade = GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC);
@@ -548,13 +558,17 @@ void StackEldBlast (object oPC)
 		nTrickster = GetLevelByClass(83, oPC); //warlock Arcane Trickster
 	int nLichlock = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
 		nLichlock = FloatToInt(IntToFloat(nLichlock)*0.9f);
-	int nGMaster = GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
+	int nGMaster = GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC); // Golem Master Warlock
 		nGMaster = FloatToInt(IntToFloat(nGMaster)*0.4f);
 	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
 		nBrachina = FloatToInt(IntToFloat(nBrachina)*0.8f);
-	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
+	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC); //Incubus/Succubus Warlock
 		nSuccubus = FloatToInt(IntToFloat(nSuccubus)*0.9f);
-	int nVampMal = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
+	int nNightHag = GetLevelByClass(CLASS_TYPE_MISTRESS_OF_THE_CAULDRON); // Night Hag Warlock
+		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.7f);
+	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC); // Greyslaad Warlock
+		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f);	
+	int nVampMal = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC); // Vampire Warlock
 		nVampMal = FloatToInt(IntToFloat(nVampMal)*0.8f);
 			
 	if (nMysticTheurge > 0 && !GetHasFeat(FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK, oPC) )
@@ -580,10 +594,16 @@ void StackEldBlast (object oPC)
 	if (nSuccubus > 0 && !GetHasFeat(FEAT_SUCCUBUS_SPELLCASTING_WARLOCK, oPC) ) //Succubus spellcasting warlock feat
 	{	nSuccubus = 0;			}
 	
+	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC)) // NightHag Spellcasting Feat
+	{ nNightHag = 0; }
+	
+	if (nGraySlaad > 0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))//Gray Slaad Spell Casting Feat
+	{ nGraySlaad = 0;}
+	
 	if (nVampMal > 0 && !GetHasFeat(2580, oPC) )
 	{	nVampMal = 0;			}
 				
-	int nTotal = nWarlock + nMysticTheurge + nPalemaster + nFellblade + nArcher + nTrickster + nLichlock + nGMaster + nBrachina + nSuccubus + nVampMal;
+	int nTotal = nWarlock + nMysticTheurge + nPalemaster + nFellblade + nArcher + nTrickster + nLichlock + nGMaster + nBrachina + nSuccubus + nVampMal+nNightHag + nGraySlaad;
 	
 	//if Hellfire Warlock is needed
 	int nHfW = GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC);
@@ -1507,6 +1527,7 @@ int GetBardicClassLevelForUses(object oPC)
 {
 	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
 	nBARD = nBARD + GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC); //FloatToInt(IntToFloat(nBrachina)*0.8f)
+	if (GetHasFeat(2481, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_FIRRE,oPC));
 	if (GetHasFeat(2787, oPC, TRUE) == TRUE) nBARD = nBARD + (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_BRACHINA, oPC))*0.8f));
 	if (GetHasFeat(2678, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
 	if (GetHasFeat(2841, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
