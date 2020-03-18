@@ -16,14 +16,22 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 	string sDebtorQuest = "ps_quest_debtorspole";
 	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
 	
+	SpeakString("Rolling for randomness. . ", TALKVOLUME_SHOUT);
+	
 	//Don't ALWAYS give us the right berk
 	if (d100() < 25)
 		return FALSE;
+		
+	SpeakString("Checking if we have the quest: Stage #"+IntToString(nHasDebtorQuest), TALKVOLUME_SHOUT);
 	
 	if (nHasDebtorQuest <= 0)
 		return FALSE;
 	if (nHasDebtorQuest >= 5)
 		return FALSE;
+		
+	SpeakString("We have the quest! Getting Debtor index. Should be in location: "+GetLocalString(oPC, "DEBTOR_1_LOCATION")+", "+GetLocalString(oPC, "DEBTOR_2_LOCATION")+", or "+GetLocalString(oPC, "DEBTOR_3_LOCATION"), TALKVOLUME_SHOUT);
+	SpeakString("Current area: "+GetTag(GetArea(oPC)), TALKVOLUME_SHOUT);
+	SpeakString("Finished status: 1: "+IntToString(GetLocalInt(oPC, "DEBTOR_1_DONE"))+", 2: "+IntToString(GetLocalInt(oPC, "DEBTOR_2_DONE"))+", 3: "+IntToString(GetLocalInt(oPC, "DEBTOR_3_DONE")), TALKVOLUME_SHOUT);
 		
 	int nDebtor = 0;
 	if (GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_1_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
@@ -33,10 +41,14 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 	if (GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_3_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
 		nDebtor = 3;
 		
-	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetGender(oBerk))
+	SpeakString("Debtor index: "+IntToString(nDebtor), TALKVOLUME_SHOUT);
+		
+	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetGender(oBerk)) {
+		SpeakString("Gender match! "+IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER"))+" vs. "+IntToString(GetGender(oBerk)), TALKVOLUME_SHOUT);
 		return nDebtor;
-	else
+	} else {
 		return FALSE;
+	}
 
 }
 
