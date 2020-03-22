@@ -67,7 +67,7 @@ int IPGetIsThrownWeapon(object oItem);
 int GetItemTotalPoints(object oItem);
 
 //Get whether this Made Of material is powerful enough to give an extra point
-int IsPowerfulMaterial(itemproperty ip);
+int IsPowerfulMaterial(itemproperty ip, int countSilver = FALSE);
 
 //Max number of enchantment points
 int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID);
@@ -1082,12 +1082,14 @@ int GetItemTotalPoints(object oItem) {
 }
 
 //Get whether this subtype is powerful enough to give an extra point
-int IsPowerfulMaterial(itemproperty ip) {
+int IsPowerfulMaterial(itemproperty ip, int countSilver = FALSE) {
 
 	int nSubType = GetItemPropertySubType(ip);
 	if (nSubType >= 0 && nSubType <= 15) {
 		return TRUE;
 	} else if (nSubType >= 22 && nSubType <= 37) {
+		return TRUE;
+	} else if (countSilver && (nSubType == 41 || nSubType == 20)) { //Allowing Cold Iron / Silver to add to points, because sometimes you want a weapon with full points and no existing property!
 		return TRUE;
 	}
 	return FALSE;
@@ -1096,9 +1098,13 @@ int IsPowerfulMaterial(itemproperty ip) {
 //Max number of enchantment points
 int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID) {
 
+	int countSilver = FALSE;
 	int nBase = 10; //later we can add higher point base for suboptimal items
-	if (GetWeaponType(oItem) != WEAPON_TYPE_NONE) //Weapons start at 8 points
+	if (GetWeaponType(oItem) != WEAPON_TYPE_NONE || (GetBaseItemType(oItem) >= 93 && GetBaseItemType(oItem) <= 95)) { //Weapons/Quivers start at 8 points
 		nBase = 8;
+		countSilver = TRUE;
+	}
+	
 	int nNumMaterials = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)) {
@@ -1106,7 +1112,7 @@ int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID) {
 		if (GetIsObjectValid(oPC)) 
 			SendMessageToPC(oPC, "Property type: "+IntToString(GetItemPropertyType(ip))+", sub type: "+IntToString(GetItemPropertySubType(ip)));
 		
-		if (GetItemPropertyType(ip) == 100 && IsPowerfulMaterial(ip))  //find Made Of property and check value
+		if (GetItemPropertyType(ip) == 100 && IsPowerfulMaterial(ip, countSilver))  //find Made Of property and check value
 			nNumMaterials++;
 		
 		ip = GetNextItemProperty(oItem);
