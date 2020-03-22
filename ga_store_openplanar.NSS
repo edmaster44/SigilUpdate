@@ -8,7 +8,11 @@
 
 void main(string sStoreTag) {
 
-	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
+	object oPC = GetPCSpeaker();
+	object oMerchant = OBJECT_SELF;
+	
+	SpeakString("Here we are!", TALKVOLUME_SHOUT); 
+	
 	object oStore = GetStoreFromStoreArea(sStoreTag);
 	
 	SendMessageToPC(oPC, "Opening planar store!");
