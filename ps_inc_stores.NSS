@@ -94,8 +94,6 @@ void PopulateGemstoneStore(object oStore) {
 
 void AddMustHaveItems(object oStore) {
 
-	SpeakString("Adding must-haves", TALKVOLUME_SHOUT); 
-
 	int nMax = GetLocalInt(oStore, "MustHaveNum");
 	int nCount = 0;
 	while (nCount < nMax) {
@@ -128,8 +126,6 @@ int GetStoreAppropriateEnchantmentIndex(string sType, object oStore) {
 }
 
 void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
-
-	SpeakString("Creating store items", TALKVOLUME_SHOUT); 
 
 	int nLevel = GetChallengeRatingOfTarget(oStore);
 	int nPoints = GetPointValueForCR(nLevel); //Just for determining material level

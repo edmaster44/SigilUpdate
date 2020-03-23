@@ -11,11 +11,7 @@ void main(string sStoreTag) {
 	object oPC = GetPCSpeaker();
 	object oMerchant = OBJECT_SELF;
 	
-	SpeakString("Here we are!", TALKVOLUME_SHOUT); 
-	
 	object oStore = GetStoreFromStoreArea(sStoreTag);
-	
-	SendMessageToPC(oPC, "Opening planar store!");
 	
 	int nCurrentTime = PS_GetTime();
 	int nTimestamp = GetLocalInt(oStore, "LastPopulated");
@@ -28,7 +24,7 @@ void main(string sStoreTag) {
 		AddMustHaveItems(oStore);
 		
 		int n = 0;
-		int nItemNum = 2; //Random(10)+10;
+		int nItemNum = Random(10)+20;
 		while (n < nItemNum) {
 			CreateItemForStore(oStore, oPC);
 			n++;
