@@ -10,9 +10,10 @@ void main()
 {
 	object oTarget = GetFirstInPersistentObject();
 	object oCaster = GetAreaOfEffectCreator();
+	object oSummoner = GetLocalObject(oCaster, "SUMMONER");
 	
 	//debug
-	FloatingTextStringOnCreature("object: oCaster",oCaster);
+	//FloatingTextStringOnCreature("object: oCaster",oCaster);
 	//FloatingTextStringOnCreature("object: oTarget",oCaster);
 	
 	
@@ -36,8 +37,9 @@ void main()
 	
 	while(GetIsObjectValid(oTarget))
 	{
-		if (GetTag(oTarget) == GetTag(oCaster))
-		{
+		if (GetIsObjectValid(oSummoner) && oTarget == oSummoner) {
+			//do nothing : Don't kill summoner!
+		} else if (GetTag(oTarget) == GetTag(oCaster)) {
 			//do nothing : Don't kill self or similiar swarms
 		}
 		else if(sIgnore != "" && GetTag(oTarget) == sIgnore)

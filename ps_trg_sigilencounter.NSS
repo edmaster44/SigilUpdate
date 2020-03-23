@@ -42,12 +42,13 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 		nDebtor = 3;
 		
 	SpeakString("Debtor index: "+IntToString(nDebtor), TALKVOLUME_SHOUT);
+	SpeakString("Gender match? "+IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER"))+" vs. "+IntToString(GetGender(oBerk)), TALKVOLUME_SHOUT);
 		
 	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetGender(oBerk)) {
-		SpeakString("Gender match! "+IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER"))+" vs. "+IntToString(GetGender(oBerk)), TALKVOLUME_SHOUT);
+		SpeakString("Gender match!", TALKVOLUME_SHOUT);
 		return nDebtor;
 	} else {
-		return FALSE;
+		return nDebtor;
 	}
 
 }

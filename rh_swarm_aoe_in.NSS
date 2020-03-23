@@ -12,8 +12,11 @@ void main()
 	object oTarget 	= 	GetEnteringObject();
 	string sIgnore	=	GetLocalString(oCaster, "swarm_ignore");
 	string sSummon	=	GetLocalString(oTarget, "swarm_summoner"); //if swarm is created by a spell
+	object oSummoner = GetLocalObject(oCaster, "SUMMONER");
 	
-		if (GetTag(oTarget) == GetTag(oCaster))
+		if (GetIsObjectValid(oSummoner) && oTarget == oSummoner) {
+			//do nothing : Don't kill summoner!
+		} else if (GetTag(oTarget) == GetTag(oCaster))
 		{
 			//do nothing : Don't kill self or similiar swarms
 		}

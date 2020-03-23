@@ -43,6 +43,7 @@ while (GetIsObjectValid(oBad))
 	
 //	Create the new henchman as an object
 	object oHench	= CreateObject(OBJECT_TYPE_CREATURE, sCritter, oLoc);
+	SetLocalObject(oHench, "SUMMONER", oPC);
 		
 //	Add the created creature as a henchman and apply the "henchman" script set
 	object oFeather = CreateItemOnObject("ps_unsummoner", oPC);
