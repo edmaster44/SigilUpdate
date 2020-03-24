@@ -37,6 +37,8 @@ void ApprehendPC(object oPC, object oGuard) {
 	if (GetLocalInt(oGuard, "HAS_APPREHENDED") > 0)
 		return;
 		
+	AssignCommand(oGuard, ActionSpeakString("Apprehending PC", TALKVOLUME_SHOUT));
+		
 	int nCR = GetChallengeRatingOfTarget(oGuard);
 	int nDC = nCR+10+(d10());
 
@@ -56,6 +58,8 @@ void ApprehendPC(object oPC, object oGuard) {
 		
 	if (GetActionMode(oPC, ACTION_MODE_STEALTH)) { //we are in stealth!
 	
+		AssignCommand(oGuard, ActionSpeakString("PC is hiding", TALKVOLUME_SHOUT));
+	
 		if (GetIsSkillSuccessful(oPC, SKILL_HIDE, nDC, TRUE)) {
 	 		if (!noExp)
 				GiveXPToCreature(oPC, nExp);
@@ -69,12 +73,15 @@ void ApprehendPC(object oPC, object oGuard) {
 	
 	if (GetDistanceBetween(oPC, oGuard) > 4.0f) { //PC is too far away
 	
+		AssignCommand(oGuard, ActionSpeakString("PC is too far away", TALKVOLUME_SHOUT));
+	
 		AssignCommand(oGuard, ActionMoveToLocation(GetLocation(oPC), TRUE));
 		AssignCommand(oGuard, ActionSpeakString("Stop! In the name of the law!"));
 		DelayCommand(1.0f, ApprehendPC(oPC, oGuard));
 		return;
 		
 	} else {
+		AssignCommand(oGuard, ActionSpeakString("Apprehended!", TALKVOLUME_SHOUT));
 	
 		SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
 		AssignCommand(oGuard, ActionStartConversation(oPC, "conv_harmoniumarrest", TRUE, FALSE, TRUE));
@@ -84,6 +91,8 @@ void ApprehendPC(object oPC, object oGuard) {
 }
 
 void GuardExit(object oNPC, object oGuard) {
+
+	AssignCommand(oGuard, ActionSpeakString("Guard leaving", TALKVOLUME_SHOUT));
 	
 	SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
 
@@ -106,6 +115,8 @@ void main(string sCause) {
 
 	//Summon the Harmonium
 	object oGuard = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard", FindHenchSpawnPoint(oPC));
+	
+	AssignCommand(oGuard, ActionSpeakString("Guard created!", TALKVOLUME_SHOUT));
 
 	//Set the appropriate variables
 	SetLocalObject(oGuard, "CRIMINAL", oPC);

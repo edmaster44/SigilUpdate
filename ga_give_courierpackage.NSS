@@ -24,20 +24,20 @@ void main() {
 	
 	//Make sure factioneers take it home!
 	if (sLocation == "Hall of Records" && GetFaction(oPC) == 8) { //Fated
-		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
+		sDescription += " You had better take it to Aram Oakwright at the "+sLocation+".";
 		sTag = "ps_package_fated";
 	} else if (sLocation == "Civic Festhall" && GetFaction(oPC) == 14) { //Sensate
 		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
 		sTag = "ps_package_sensates";
 	} else if (sLocation == "Shattered Temple" && GetFaction(oPC) == 3) { //Athar
-		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
+		sDescription += " You had better take it to Hobard at the "+sLocation+".";
 		sTag = "ps_package_athar";
 	} else if (sLocation == "Mortuary" && GetFaction(oPC) == 7) { //Dustman
-		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
+		sDescription += " You had better take it to Factotum Lor at the "+sLocation+".";
 		sTag = "ps_package_dustmen";
 	} else if (sLocation == "Armory" && GetFaction(oPC) == 6) { //Doomguard
 		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
-		sTag = "ps_package_dustmen";
+		sTag = "ps_package_doomguard";
 	}
 	
 	//Other checks; defaults to "take it to fated"
@@ -53,7 +53,7 @@ void main() {
 			sTag = "ps_package_fated";
 		} else if (GetFaction(oPC) == 3 && sLocation == "Temple of the Abyss") { //Athar want to mess with a temple
 			sDescription += " Perhaps your fellow factioneers at the Shattered Temple would be interested? You should take the package to Hobard.";
-			sTag = "ps_package_fated";
+			sTag = "ps_package_athar";
 		} else {
 			sDescription += " Perhaps the Fated would be interested? You should take it to Aram Oakwright, in the Hall of Records.";
 			sTag = "ps_package_fated";

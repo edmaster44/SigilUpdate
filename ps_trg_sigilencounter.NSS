@@ -42,9 +42,9 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 		nDebtor = 3;
 		
 	SpeakString("Debtor index: "+IntToString(nDebtor), TALKVOLUME_SHOUT);
-	SpeakString("Gender match? "+IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER"))+" vs. "+IntToString(GetGender(oBerk)), TALKVOLUME_SHOUT);
+	SpeakString("Gender match? "+IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER"))+" vs. "+IntToString(GetLocalInt(oBerk, "GENDER")), TALKVOLUME_SHOUT);
 		
-	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetGender(oBerk)) {
+	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetLocalInt(oBerk, "GENDER")) {
 		SpeakString("Gender match!", TALKVOLUME_SHOUT);
 		return nDebtor;
 	} else {
@@ -136,6 +136,7 @@ void DetailBerk(object oBerk) {
 	int nGender = Random(2);
 	if (berkType == "Clueless_3")
 		nGender = GENDER_MALE;
+	SetLocalInt(oBerk, "GENDER", nGender);
 		
 	int nHead = Random(7);
 	int nHair = Random(26);
