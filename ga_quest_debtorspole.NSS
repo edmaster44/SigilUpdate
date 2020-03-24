@@ -72,10 +72,10 @@ string PrintPrettyWantedPost(object oPC, int nDebtor) {
 	int nRand = Random(5)+1;
 	switch(nRand) {
 		case 1: sResult = "Offering a reward of "+sBounty+" jink to the cutter who finds "+sName+" and makes 'em return what's owed to me. - "+sOwedTo; break;
-		case 2: sResult = "Let it be known to the merchants of the Great Bazaar that "+sName+" has defaulted on debts of "+sAmount+" to "+sOwedTo+". "+sBounty+" to the blood who collects."; break;
-		case 3: sResult = "The scoundrel "+sName+" owes me "+sAmount+". "+sBounty+" jink to the cutter who gets me my money. - "+sOwedTo; break; 
+		case 2: sResult = "Let it be known to the merchants of the Great Bazaar that "+sName+" has defaulted on debts of "+sAmount+" jink to "+sOwedTo+". "+sBounty+" jink to the blood who collects."; break;
+		case 3: sResult = "The scoundrel "+sName+" owes me "+sAmount+" jink. "+sBounty+" jink to the cutter who gets me my money. - "+sOwedTo; break; 
 		case 4: sResult = "Wanted: "+sName+", or "+sAmount+" jink, owed to me for services rendered. - "+sOwedTo; break; 
-		case 5: sResult = "A pox on "+sName+" for cheating me out of "+sAmount+" jink. "+sBounty+" to the blood who gets me my money. - "+sOwedTo; break; 
+		case 5: sResult = "A pox on "+sName+" for cheating me out of "+sAmount+" jink. "+sBounty+" jink to the blood who gets me my money. - "+sOwedTo; break; 
 	}
 	
 	sResult += "\n<i>The chant has it that "+sName+" was last seen in "+sLastSeen+"</i>\n\n";

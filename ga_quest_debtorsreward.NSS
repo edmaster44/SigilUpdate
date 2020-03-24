@@ -13,7 +13,9 @@ void main() {
 	int nAmount = nBounty*3;
 	string sOwedTo = GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO");
 	
-	if (GetLocalInt(OBJECT_SELF, "DEBTOR_EXCHANGE") > 0) {
+	if (GetLocalInt(OBJECT_SELF, "DEBTOR_FAIL") > 0) {
+		SendMessageToPC(oPC, "You recovered none of the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", and so collect no bounty.");
+	} else if (GetLocalInt(OBJECT_SELF, "DEBTOR_EXCHANGE") > 0) {
 		SendMessageToPC(oPC, "You return the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", collect the bounty, and keep the magical item.");
 		TakeGoldFromCreature(nAmount-nBounty, oPC, TRUE);
 	} else if (GetLocalInt(OBJECT_SELF, "DEBTOR_PARTIAL") > 0) {

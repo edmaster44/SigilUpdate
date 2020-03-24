@@ -181,8 +181,14 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 		SendMessageToPC(oPC, "Enchantment chosen: "+IntToString(e.id));
 	}
 	EnchantItem(oItem, e);
+	
+	string sMat = GetLocalString(oItem, "material_name");
+	if (sMat == "Leather" || sMat == "Iron" || sMat == "Wood")
+		sMat = "";
+	else
+		sMat += " ";
 
-	string sItemName = GetItemNamePart(e.id, "prefix")+" "+GetLocalString(oItem, "material_name")+" "+GetLocalString(oItem, "base_name");
+	string sItemName = GetItemNamePart(e.id, "prefix")+" "+sMat+GetLocalString(oItem, "base_name");
 	SetFirstName(oItem, sItemName);
 	
 	string sDescription = "This "+GetLocalString(oItem, "base_name")+" "+GetLocalString(oStore, "Item_Description");
