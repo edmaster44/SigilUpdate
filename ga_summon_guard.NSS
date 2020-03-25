@@ -84,7 +84,11 @@ void ApprehendPC(object oPC, object oGuard) {
 		AssignCommand(oGuard, ActionSpeakString("Apprehended!", TALKVOLUME_SHOUT));
 	
 		SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
-		AssignCommand(oGuard, ActionStartConversation(oPC, "conv_harmoniumarrest", TRUE, FALSE, TRUE));
+		if (IsInConversation(oPC)) {
+			BeginConversation("conv_harmoniumarrest", oGuard);
+		} else {
+			AssignCommand(oGuard, ActionStartConversation(oPC, "conv_harmoniumarrest", TRUE, FALSE, TRUE));
+		}
 	
 	}
 
@@ -103,6 +107,7 @@ void GuardExit(object oNPC, object oGuard) {
 
 	AssignCommand(oGuard, ActionMoveAwayFromObject(oNPC, FALSE, 30.0f));
 	DestroyObject(oGuard, 6.0f);
+	DestroyObject(OBJECT_SELF, 6.0f);
 	
 }
 
