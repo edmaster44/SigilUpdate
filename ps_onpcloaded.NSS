@@ -59,6 +59,26 @@ int CheckIfNameExploiting(object oPC)
 	return TRUE;
 }
 
+//Should only be called after checking that the character doesn't exist
+//returns the character id, or FALSE on failure
+int AddCharacterToDatabase(object oPC) {
+
+	string sAccount = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	string sName = SQLEncodeSpecialChars(GetName(oPC));
+	
+	SQLExecDirect("INSERT INTO characterdata (account,name,dm_pool,rp_pool) VALUES ('"+sAccount+"','"+sName+"',1000,1000)");
+	
+	string sQuery = "SELECT id FROM characterdata WHERE account='"+sAccount+"' AND name='"+sName+"'";
+	SQLExecDirect(sQuery);
+	
+	if (SQLFetch() != SQL_ERROR) {	
+		int nID = StringToInt(SQLGetData(1));
+		return nID;
+	}
+	
+	return FALSE;
+}
+
 int prepChar(object oPC)
 {
 	//should be moved to first time entry after every char is fixed
@@ -72,24 +92,23 @@ int prepChar(object oPC)
 	string sKey = GetPCPublicCDKey(oPC);
 	string sIP = GetPCIPAddress(oPC);
 		
-	if(oItem != oINVALID)
-	{			
-		if (nID == 0)
-		{	
+	if(oItem != oINVALID) {		
+		
+		if (nID == 0) {	
+		
 			sAccount = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 			sName = SQLEncodeSpecialChars(GetName(oPC));
 			
 			SQLExecDirect("SELECT id FROM characterdata WHERE account='"+sAccount+"' AND name='"+sName+"'");
-			if (SQLFetch() != SQL_ERROR)
-			{	
+			if (SQLFetch() != SQL_ERROR) {	
 				nID = StringToInt(SQLGetData(1));
-				SetLocalInt(oItem,"ID",nID);
-				SetLocalInt(oPC,"ID",nID);
 			}
-			else SQLExecDirect("INSERT INTO characterdata (account,name) VALUES ('"+sAccount+"','"+sName+"')");
-		}
-		else //Make sure it's not some asshat bypassing bioware servers
-		{	
+			else {
+				nID = AddCharacterToDatabase(oPC);
+			}
+			
+		} else { //Make sure it's not some asshat bypassing bioware servers 	
+		
 			SQLExecDirect("SELECT ifnull(publickey,''),ifnull(ip,'') FROM characterdata WHERE id=" + IntToString(nID));
 			if (SQLFetch() != SQL_ERROR)
 			{
@@ -102,18 +121,21 @@ int prepChar(object oPC)
 					return TRUE;
 				}
 			}
+			
 		}
+		
 	}
 		
-	SetLocalInt(oPC, "ID", nID);
+	SetLocalInt(oItem,"ID",nID);
+	SetLocalInt(oPC,"ID",nID);
+			
 	string sDay = GetLocalString(oItem, "XPDay");
 	DebugMessageToPC(oPC, "id:" + IntToString(nID));
 	DebugMessageToPC(oPC, "last day xp given:" + sDay);
 
 	SQLExecDirect("SELECT id,dm_pool,rp_pool,Day(Now()) FROM characterdata WHERE id=" + IntToString(nID));
-	if (SQLFetch() != SQL_ERROR) 
-	{	
-		//nID = StringToInt(SQLGetData(1));
+	if (SQLFetch() != SQL_ERROR)  {	
+	
 		int dm_pool = StringToInt(SQLGetData(2));
 		int rp_pool = StringToInt(SQLGetData(3));
 		int availableXP = dm_pool+rp_pool;
@@ -121,21 +143,21 @@ int prepChar(object oPC)
 		DebugMessageToPC(oPC, "rp pool xp: "+IntToString(rp_pool));
 		DebugMessageToPC(oPC, "combined xp: "+IntToString(availableXP));
 						
-		if ( sDay != SQLGetData(4) && dm_pool > 0 )
-		{	
+		//if ( sDay != SQLGetData(4) && availableXP > 0 ) {
+			
 			SetLocalString(oItem,"XPDay",SQLGetData(4));
 			DebugMessageToPC(oPC,"xpday:" + GetLocalString(oItem,"XPDay"));
 				
 			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * GetHitDice(oPC)) * PS_GetXPModifier(StringToInt(sECL)));
 			if (dm_pool > nModifiedXP)
 			{	
-				DebugMessageToPC(oPC, "Pulling from DM Pool");
+				SendMessageToPC(oPC, "Pulling from DM Pool");
 				GiveXPToCreature(oPC, nModifiedXP);
 				dm_pool -= nModifiedXP;
 			}
 			else if (availableXP > nModifiedXP)
 			{	
-				DebugMessageToPC(oPC, "Pulling from both pools");
+				SendMessageToPC(oPC, "Pulling from both pools");
 				int givenXP = nModifiedXP;
 				GiveXPToCreature(oPC, givenXP);
 				givenXP -= dm_pool;
@@ -144,7 +166,7 @@ int prepChar(object oPC)
 			}
 			else 
 			{	
-				DebugMessageToPC(oPC, "Exhausting pools");
+				SendMessageToPC(oPC, "Exhausting pools");
 				nModifiedXP = availableXP;
 				GiveXPToCreature(oPC, availableXP);
 				dm_pool = 0;
@@ -154,15 +176,14 @@ int prepChar(object oPC)
 					
 			DelayCommand(10.0, SendMessageToPC(oPC,"Your character has been awarded " + IntToString(nModifiedXP) + " XP for previous roleplay (or from removing xp with Styx)"));
 			SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ", rp_pool=" + IntToString(rp_pool) + " WHERE id=" + IntToString(nID));
-		}
+			
+		//}
+		
 	}
 	else
 	{	
 		//existing char not in database (precrash)
-		sAccount = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-		sName = SQLEncodeSpecialChars(GetName(oPC));
-			
-		SQLExecDirect("INSERT INTO characterdata (id,account,name,dm_pool,rp_pool) VALUES ("+IntToString(nID)+",'"+sAccount+"','"+sName+"',1000,1000)");
+		nID = AddCharacterToDatabase(oPC);
 		DelayCommand(10.0, SendMessageToPC(oPC,"Character restored to database."));
 	}
 		

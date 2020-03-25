@@ -3,24 +3,35 @@
 #include "nwnx_sql"
 #include "ps_inc_functions"
 
+void GiveXPTick(object oPC) {
+
+	int baseTick = 10;
+	baseTick += d20();
+
+	SendMessageToPC(oPC, "Experience awarded for RP:");
+	GiveXPToCreature(oPC, baseTick);
+
+}
+
 void awardXP(object oPC, int XPamount)
 {
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
 	
+	float fRand = IntToFloat(Random(6));
+	DelayCommand(fRand, GiveXPTick(oPC));
+	
 	if( GetIsObjectValid(oItem) )
 	{
-		int nID = GetLocalInt(oItem,"ID");
-		if (nID == 0)
-			return;
+		string sID = PS_GetCharID(oPC);
 		
-		SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + IntToString(nID));
+		SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
 
 		if (SQLFetch() != SQL_ERROR) { 
 			int nECL = StringToInt(GetLocalString(oItem,"ECL"));
 			int nRPpool = StringToInt(SQLGetData(1));
 
 			nRPpool += FloatToInt(XPamount*PS_GetXPModifier(nECL));
-			SQLExecDirect("UPDATE characterdata set rp_pool=" + IntToString(nRPpool) + " WHERE id=" + IntToString(nID));		
+			SQLExecDirect("UPDATE characterdata set rp_pool=" + IntToString(nRPpool) + " WHERE id=" + sID);		
 		}
 		
 	}
@@ -71,7 +82,7 @@ string ExpandMessage(object oSender, string sMessage)
 
 void ApplyRPXP(object oSender, object oTarget, int nChannel, string sMessage)
 {
-	if(d100() < 90)
+	if(d100() < 75)
 		return; //award randomly
 			
 	if (GetStringLeft(sMessage, 1) == " " || GetStringRight(sMessage, 1) == " " ||
