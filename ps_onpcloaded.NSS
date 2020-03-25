@@ -130,8 +130,8 @@ int prepChar(object oPC)
 	SetLocalInt(oPC,"ID",nID);
 			
 	string sDay = GetLocalString(oItem, "XPDay");
-	DebugMessageToPC(oPC, "id:" + IntToString(nID));
-	DebugMessageToPC(oPC, "last day xp given:" + sDay);
+	//DebugMessageToPC(oPC, "id:" + IntToString(nID));
+	//DebugMessageToPC(oPC, "last day xp given:" + sDay);
 
 	SQLExecDirect("SELECT id,dm_pool,rp_pool,Day(Now()) FROM characterdata WHERE id=" + IntToString(nID));
 	if (SQLFetch() != SQL_ERROR)  {	
@@ -139,25 +139,25 @@ int prepChar(object oPC)
 		int dm_pool = StringToInt(SQLGetData(2));
 		int rp_pool = StringToInt(SQLGetData(3));
 		int availableXP = dm_pool+rp_pool;
-		DebugMessageToPC(oPC, "dm pool xp: "+IntToString(dm_pool));
-		DebugMessageToPC(oPC, "rp pool xp: "+IntToString(rp_pool));
-		DebugMessageToPC(oPC, "combined xp: "+IntToString(availableXP));
+		//DebugMessageToPC(oPC, "dm pool xp: "+IntToString(dm_pool));
+		//DebugMessageToPC(oPC, "rp pool xp: "+IntToString(rp_pool));
+		//DebugMessageToPC(oPC, "combined xp: "+IntToString(availableXP));
 						
-		//if ( sDay != SQLGetData(4) && availableXP > 0 ) {
+		if ( sDay != SQLGetData(4) && availableXP > 0 ) {
 			
 			SetLocalString(oItem,"XPDay",SQLGetData(4));
-			DebugMessageToPC(oPC,"xpday:" + GetLocalString(oItem,"XPDay"));
+			//DebugMessageToPC(oPC,"xpday:" + GetLocalString(oItem,"XPDay"));
 				
 			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * GetHitDice(oPC)) * PS_GetXPModifier(StringToInt(sECL)));
 			if (dm_pool > nModifiedXP)
 			{	
-				SendMessageToPC(oPC, "Pulling from DM Pool");
+				//SendMessageToPC(oPC, "Pulling from DM Pool");
 				GiveXPToCreature(oPC, nModifiedXP);
 				dm_pool -= nModifiedXP;
 			}
 			else if (availableXP > nModifiedXP)
 			{	
-				SendMessageToPC(oPC, "Pulling from both pools");
+				//SendMessageToPC(oPC, "Pulling from both pools");
 				int givenXP = nModifiedXP;
 				GiveXPToCreature(oPC, givenXP);
 				givenXP -= dm_pool;
@@ -166,7 +166,7 @@ int prepChar(object oPC)
 			}
 			else 
 			{	
-				SendMessageToPC(oPC, "Exhausting pools");
+				//SendMessageToPC(oPC, "Exhausting pools");
 				nModifiedXP = availableXP;
 				GiveXPToCreature(oPC, availableXP);
 				dm_pool = 0;
@@ -177,7 +177,7 @@ int prepChar(object oPC)
 			DelayCommand(10.0, SendMessageToPC(oPC,"Your character has been awarded " + IntToString(nModifiedXP) + " XP for previous roleplay (or from removing xp with Styx)"));
 			SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ", rp_pool=" + IntToString(rp_pool) + " WHERE id=" + IntToString(nID));
 			
-		//}
+		}
 		
 	}
 	else

@@ -5,6 +5,11 @@
 
 void GiveXPTick(object oPC) {
 
+	int lastDone = CheckTimeStamp(oPC, "RP_EXP_AWARDED_LAST");
+	if (lastDone < 900‬) //happens once per 15 minutes, max
+		return;
+	TimeStamp(oPC, "RP_EXP_AWARDED_LAST");
+
 	int baseTick = 10;
 	baseTick += d20();
 
@@ -17,8 +22,7 @@ void awardXP(object oPC, int XPamount)
 {
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
 	
-	float fRand = IntToFloat(Random(6));
-	DelayCommand(fRand, GiveXPTick(oPC));
+	DelayCommand(1.0f, GiveXPTick(oPC));
 	
 	if( GetIsObjectValid(oItem) )
 	{
@@ -82,7 +86,7 @@ string ExpandMessage(object oSender, string sMessage)
 
 void ApplyRPXP(object oSender, object oTarget, int nChannel, string sMessage)
 {
-	if(d100() < 75)
+	if(d100() < 85)
 		return; //award randomly
 			
 	if (GetStringLeft(sMessage, 1) == " " || GetStringRight(sMessage, 1) == " " ||
