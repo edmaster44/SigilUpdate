@@ -162,6 +162,14 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_sensatef2", lSpawnpoint);    
   } 
   
+  //festhallnpc_annaliwebspinner
+  if(GetObjectByTag("festhallnpc_annaliwebspinner") == OBJECT_INVALID) {
+   //Faction greeter; non-mobile
+   object oWP = GetWaypointByTag("wp_festhallnpc_annaliwebspinner");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_annaliwebspinner", lSpawnpoint);    
+  } 
+  
   SetGlobalInt("CivicEnterLock", 0);
  }
 }

@@ -25,38 +25,38 @@ void main() {
 	//Make sure factioneers take it home!
 	if (sLocation == "Hall of Records" && GetFaction(oPC) == 8) { //Fated
 		sDescription += " You had better take it to Aram Oakwright at the "+sLocation+".";
-		sTag = "ps_package_fated";
+		sTag = "ps_package_fated"; //added
 	} else if (sLocation == "Civic Festhall" && GetFaction(oPC) == 14) { //Sensate
-		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
-		sTag = "ps_package_sensates";
+		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+". Perhaps Annali Webspinner will know what to do with it.";
+		sTag = "ps_package_sensates"; //added
 	} else if (sLocation == "Shattered Temple" && GetFaction(oPC) == 3) { //Athar
 		sDescription += " You had better take it to Hobard at the "+sLocation+".";
-		sTag = "ps_package_athar";
+		sTag = "ps_package_athar"; //added
 	} else if (sLocation == "Mortuary" && GetFaction(oPC) == 7) { //Dustman
 		sDescription += " You had better take it to Factotum Lor at the "+sLocation+".";
-		sTag = "ps_package_dustmen";
+		sTag = "ps_package_dustmen"; //added
 	} else if (sLocation == "Armory" && GetFaction(oPC) == 6) { //Doomguard
-		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+".";
-		sTag = "ps_package_doomguard";
+		sDescription += " You had better take it to your fellow factioneers at the "+sLocation+". Perhaps Spragg will know what to do with it.";
+		sTag = "ps_package_doomguard"; //added
 	}
 	
 	//Other checks; defaults to "take it to fated"
 	else {
 		if (GetFaction(oPC) >= 9 && GetFaction(oPC) <= 11) {
-			sDescription += " But it might also be a danger in the wrong hands. You should take it to your faction headquarters.";
-			sTag = "ps_package_triad";
+			sDescription += " But it might also be a danger in the wrong hands. You should take it to the Harmonium Barracks.";
+			sTag = "ps_package_triad"; //added
 		} else if (GetFaction(oPC) == 14) { //Sensates are sneaky and like information
-			sDescription += " Perhaps one of your fellow Senates at the Civic Festhall may be interested?";
-			sTag = "ps_package_sensates";
+			sDescription += " Perhaps one of your fellow Senates at the Civic Festhall may be interested? You should take it to Annali Webspinner.";
+			sTag = "ps_package_sensates"; //added
 		} else if (GetFaction(oPC) == 14) { //So are fated
 			sDescription += " Perhaps one of your fellow Fated at the Hall of Records may be interested? You should take it to Aram Oakwright.";
-			sTag = "ps_package_fated";
+			sTag = "ps_package_fated"; //added
 		} else if (GetFaction(oPC) == 3 && sLocation == "Temple of the Abyss") { //Athar want to mess with a temple
 			sDescription += " Perhaps your fellow factioneers at the Shattered Temple would be interested? You should take the package to Hobard.";
-			sTag = "ps_package_athar";
+			sTag = "ps_package_athar"; //added
 		} else {
 			sDescription += " Perhaps the Fated would be interested? You should take it to Aram Oakwright, in the Hall of Records.";
-			sTag = "ps_package_fated";
+			sTag = "ps_package_fated"; //added
 		}
 	}
 	
