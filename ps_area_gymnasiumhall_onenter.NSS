@@ -70,6 +70,13 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_gwaraff", lSpawnpoint);    
   }  
   
+   if(GetObjectByTag("ps_npc_varonswordbreaker") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("ps_npcwp_gym_varon");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_varonswordbreaker", lSpawnpoint);    
+  }  
+  
   SetGlobalInt("GymnasiumEnterLock", 0);
  }
 }
