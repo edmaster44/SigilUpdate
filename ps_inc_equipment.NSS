@@ -272,52 +272,7 @@ int GetIsSpecialFinessable(int nTYPE)
 	return FALSE;
 }
 
-// Weapon Finesse for custom or creature weapons
-//void SpecialWeaponFinesse(object oPC, int nWeaponHand)
-//{
-//if (GetIsSpecialFinessable(nWeaponHand) == TRUE)
-  //  {
-      //  switch (nWeaponHand)
-	//	{
-		//	case BASE_ITEM_TORCH:
-	//		case BASE_ITEM_SMALLSHIELD:
-	//		case BASE_ITEM_LARGESHIELD:
-		//	case BASE_ITEM_TOWERSHIELD:
-		//	case BASE_ITEM_INVALID:
-		//		break;
-		//	default:
-	//			return;
-	//	}
-//	}
-	
-//	if (GetHasFeat(FEAT_WEAPON_FINESSE, oPC, TRUE) == FALSE)
-//	{
-//		if (GetSubRace(oPC) != 243) return;
-//	}
-//if (GetIsSpecialFinessable(nWeaponHand) && GetHasFeat(FEAT_WEAPON_FINESSE, oPC, TRUE) == FALSE)
-	//	{ switch (nWeaponHand)
-	//	{	case BASE_ITEM_TORCH:
-	//		case BASE_ITEM_SMALLSHIELD:
-	//		case BASE_ITEM_LARGESHIELD:
-	//		case BASE_ITEM_TOWERSHIELD:
-	//		case BASE_ITEM_INVALID:
-	//			break;
-	//		default:
-	//			return;
-	//			}
-	//			}
-//{
-	
-//	int nSTR = GetAbilityModifier(ABILITY_STRENGTH, oPC);
-//	int nDEX = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
-//	int nDIFF = nDEX - nSTR;
-//	if (nDIFF < 1) return;
-//	effect eFX = EffectAttackIncrease(nDIFF);
-//	ApplyEquipmentEffect(oPC, eFX);
-//	}
-//	return;
-	
-//}
+
 
 //New and Improved Custom Finesse
 void ED_ApplyEnhancementToFinesse(object oPC, object oItem, int iDiff)
@@ -475,12 +430,12 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
     
     if(nWis <= 0){
     
-        SendMessageToPC(oPC, "Wisdom modifier is lower or equal to 0");
+    //    SendMessageToPC(oPC, "Wisdom modifier is lower or equal to 0");
         return;
     }
     else if(!GetMonkWeapon(oItem)){
     
-        SendMessageToPC(oPC, "Weapon is not a monk weapon");
+      //  SendMessageToPC(oPC, "Weapon is not a monk weapon");
         return;
     }
 	itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
