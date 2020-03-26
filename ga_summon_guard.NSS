@@ -83,10 +83,10 @@ void ApprehendPC(object oPC, object oGuard) {
 	} else {
 		AssignCommand(oGuard, ActionSpeakString("Apprehended!", TALKVOLUME_SHOUT));
 	
-		SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
 		if (IsInConversation(oPC)) {
-			BeginConversation("conv_harmoniumarrest", oGuard);
+			AssignCommand(oPC, ClearAllActions());
 		} else {
+			SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
 			AssignCommand(oGuard, ActionStartConversation(oPC, "conv_harmoniumarrest", TRUE, FALSE, TRUE));
 		}
 	
