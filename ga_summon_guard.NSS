@@ -10,107 +10,6 @@
 //sCause = Pickpocket
 /*********************************************************/
 
-string GetRandomGuardSpeak(object oPC, object oGuard) {
-
-	string sPronoun = (GetGender(oPC) == GENDER_MALE) ? "he" : "she";
-
-	int nRand = Random(3)+1;
-	
-	if (nRand == 1) {
-		if (GetLocalString(oGuard, "CRIME") == "Pickpocket")
-			return "Now then. . where's that pickpocket got to. .";
-		else
-			return "Now then. . which way did "+sPronoun+" go?";
-	} else if (nRand == 2) {
-		return "Show yourself, miscreant!";
-	} else {
-		return "Which way did "+sPronoun+" go?";
-	}
-	
-	return "Which way did "+sPronoun+" go?";
-
-}
-
-void ApprehendPC(object oPC, object oGuard) {
-
-	//If we've already apprehended the pc, skip this
-	if (GetLocalInt(oGuard, "HAS_APPREHENDED") > 0)
-		return;
-		
-	AssignCommand(oGuard, ActionSpeakString("Apprehending PC", TALKVOLUME_SHOUT));
-		
-	int nCR = GetChallengeRatingOfTarget(oGuard);
-	int nDC = nCR+10+(d10());
-
-	object oPC = GetPCSpeaker();
-	int nMod = GetSkillRank(SKILL_HIDE, oPC, TRUE);
-	int nDifficulty = GetDifficultyOfCheck(nDC, nMod);
-	int noExp = FALSE;
-	if (nDifficulty < 0) {
-		noExp = TRUE;
-		nDifficulty = TRAINING_DIFFICULTY_VERY_EASY;
-	}
-	
-	int maxExp = 150; 
-	int nExp = GetXPForSkillTrainingQuest(oPC, SKILL_HIDE, nDifficulty);
-	if (nExp > maxExp)
-		nExp = maxExp;
-		
-	if (GetActionMode(oPC, ACTION_MODE_STEALTH)) { //we are in stealth!
-	
-		AssignCommand(oGuard, ActionSpeakString("PC is hiding", TALKVOLUME_SHOUT));
-	
-		if (GetIsSkillSuccessful(oPC, SKILL_HIDE, nDC, TRUE)) {
-	 		if (!noExp)
-				GiveXPToCreature(oPC, nExp);
-				
-			string sMessage = GetRandomGuardSpeak(oPC, oGuard);
-			AssignCommand(oGuard, ActionSpeakString(sMessage));
-			return;
-		}
-		
-	} 
-	
-	if (GetDistanceBetween(oPC, oGuard) > 4.0f) { //PC is too far away
-	
-		AssignCommand(oGuard, ActionSpeakString("PC is too far away", TALKVOLUME_SHOUT));
-	
-		AssignCommand(oGuard, ActionMoveToLocation(GetLocation(oPC), TRUE));
-		AssignCommand(oGuard, ActionSpeakString("Stop! In the name of the law!"));
-		DelayCommand(1.0f, ApprehendPC(oPC, oGuard));
-		return;
-		
-	} else {
-		AssignCommand(oGuard, ActionSpeakString("Apprehended!", TALKVOLUME_SHOUT));
-	
-		if (IsInConversation(oPC)) {
-			AssignCommand(oPC, ClearAllActions());
-		} else {
-			SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
-			AssignCommand(oGuard, ActionStartConversation(oPC, "conv_harmoniumarrest", TRUE, FALSE, TRUE));
-		}
-	
-	}
-
-}
-
-void GuardExit(object oNPC, object oGuard) {
-
-	AssignCommand(oGuard, ActionSpeakString("Guard leaving", TALKVOLUME_SHOUT));
-	
-	SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
-
-	if (IsInConversation(oGuard)) {
-		DelayCommand(6.0f, GuardExit(oNPC, oGuard));
-		return;
-	}
-
-	AssignCommand(oGuard, ActionMoveAwayFromObject(oNPC, FALSE, 30.0f));
-	DestroyObject(oGuard, 6.0f);
-	DestroyObject(OBJECT_SELF, 6.0f);
-	
-}
-
 void main(string sCause) {
 
 	object oPC = GetPCSpeaker();
@@ -124,6 +23,8 @@ void main(string sCause) {
 	AssignCommand(oGuard, ActionSpeakString("Guard created!", TALKVOLUME_SHOUT));
 
 	//Set the appropriate variables
+	SetLocalInt(oPC, "HARMONIUM_PURSUIT", 0);
+	SetLocalObject(oPC, "HARMONIUM", oGuard);
 	SetLocalObject(oGuard, "CRIMINAL", oPC);
 	SetLocalString(oGuard, "CRIME", sCause);
 	SetLocalInt(oGuard, "QUEST_CR", nCR); //pass CR to guard npc
@@ -134,9 +35,7 @@ void main(string sCause) {
 	DelayCommand(0.2f, AssignCommand(oGuard, ActionMoveToLocation(GetLocation(oPC), TRUE)));
 	
 	//Now apprehending!
-	DelayCommand(1.0f, ApprehendPC(oPC, oGuard));
-	DelayCommand(13.0f, ApprehendPC(oPC, oGuard));
-	DelayCommand(25.0f, ApprehendPC(oPC, oGuard));
-	DelayCommand(37.0f, GuardExit(OBJECT_SELF, oGuard));
+	DelayCommand(1.0f, ExecuteScript("ps_harmonium_apprehend", oPC));
+	DestroyObject(OBJECT_SELF, 30.0f);
 	
 }
