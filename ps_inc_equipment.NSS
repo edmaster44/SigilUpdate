@@ -465,9 +465,7 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
 
         SendMessageToPC(oPC, "Wisdom Damage bonus of " + IntToString(nWis) + " applied to your Monk Weapon");
     }
-    else{
-        SendMessageToPC(oPC, "Missing feat 2840");
-    }
+
 }
 
 void RemoveMeditativeStrikes(object oPC,object oItem)
