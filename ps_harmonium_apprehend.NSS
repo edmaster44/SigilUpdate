@@ -101,7 +101,7 @@ void ApprehendPC(object oPC, object oGuard) {
 		AssignCommand(oGuard, ActionSpeakString("Apprehended! Should start conversation. . ", TALKVOLUME_SHOUT));
 	
 		if (!IsInConversation(oPC)) {
-			AssignCommand(oGuard, ActionStartConversation(oPC, "conv_harmoniumarrest", TRUE, FALSE, TRUE));
+			ActionStartConversation(oGuard, "conv_harmoniumarrest", TRUE, FALSE, TRUE);
 		} else {
 			ClearAllActions();
 			BeginConversation("conv_harmoniumarrest", oGuard);
@@ -112,6 +112,12 @@ void ApprehendPC(object oPC, object oGuard) {
 }
 
 void GuardExit(object oPC, object oGuard) {
+
+	if (GetLocalInt(oGuard, "HAS_APPREHENDED") == 0 && IsInConversation(oPC)) {
+		//you're probably cheating to avoid being fined, so just fine you anyway
+		SendMessageToPC(oPC, "The Harmonium fine you 100 jink for pickpocketing.");
+		TakeGoldFromCreature(100, oPC, TRUE);
+	}
 
 	AssignCommand(oGuard, ActionSpeakString("Guard leaving", TALKVOLUME_SHOUT));
 	
