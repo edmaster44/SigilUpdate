@@ -232,13 +232,13 @@ int PS_GetFeatWingType(object oPC)
 		{	nWing = PS_GetWing_HalfDragon(oPC);		}	}
 	
 	if (GetHasFeat(2179, oPC))
-	{	if (GetLevelByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC, oPC) != 0)
+	{	if (GetLevelByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC, oPC) >= 1)
 		{	if (GetGender(oPC) == GENDER_FEMALE)
 			{	nWing = WING_TYPE_HEZEBEL_F;	}
 			else
 			{	nWing = WING_TYPE_HEZEBEL_M;	}	}
 			
-		if (GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC) != 0)
+		if (GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC) >= 1)
 		{	if (GetGender(oPC) == GENDER_FEMALE)
 			{	nWing = WING_TYPE_HEZEBEL_F;	}
 			else
