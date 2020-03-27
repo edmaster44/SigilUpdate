@@ -26,7 +26,7 @@ void main(string sStoreTag) {
 		int n = 0;
 		int nItemNum = Random(10)+20;
 		while (n < nItemNum) {
-			CreateItemForStore(oStore, oPC);
+			CreateItemForStore(oStore);
 			n++;
 		}
 		
