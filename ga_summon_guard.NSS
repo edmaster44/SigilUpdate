@@ -1,6 +1,7 @@
 #include "ps_inc_faction"
 #include "ps_inc_randomitems"
 #include "ps_inc_training"
+#include "ps_inc_dynamicencounters"
 /**********************************************************
 * Summons a Harmonium to pursue the PC					  *
 * sCause should be the reason why the guard was summoned  *
@@ -18,7 +19,8 @@ void main(string sCause) {
 	int nCR = GetChallengeRatingOfTarget(OBJECT_SELF);
 
 	//Summon the Harmonium
-	object oGuard = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard", FindHenchSpawnPoint(oPC));
+	object oGuard = CreateObject(OBJECT_TYPE_CREATURE, "ps_harmonium_paladin2", FindHenchSpawnPoint(oPC));
+	SetConversation(oGuard, "conv_harmoniumarrest");
 	
 	AssignCommand(oGuard, ActionSpeakString("Guard created!", TALKVOLUME_SHOUT));
 
