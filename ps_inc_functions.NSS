@@ -1525,8 +1525,7 @@ string PS_ColorizeChatMessage(string Text)
 //For simple uses/day
 int GetBardicClassLevelForUses(object oPC)
 {
-	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-	nBARD = nBARD + GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC); //FloatToInt(IntToFloat(nBrachina)*0.8f)
+	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC); //FloatToInt(IntToFloat(nBrachina)*0.8f)
 	if (GetHasFeat(2481, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_FIRRE_PRC,oPC));
 	if (GetHasFeat(2787, oPC, TRUE) == TRUE) nBARD = nBARD + (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_BRACHINA, oPC))*0.8f));
 	if (GetHasFeat(2678, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
