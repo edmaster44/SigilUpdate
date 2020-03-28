@@ -108,7 +108,7 @@ void IncrementModuleFactionQuest(object oPC, int nFaction, int numberOfPoints = 
 	if (numberOfPoints == 0)
 		numberOfPoints = 1;
 
-	SendMessageToPC(oPC, "<i>You have spread your faction's influence in the city.</i>");
+	//SendMessageToPC(oPC, "<i>You have spread your faction's influence in the city.</i>");
 
 	int currentValue = GetModuleFactionQuestStatus(nFaction);
 	int newValue = currentValue+numberOfPoints;
@@ -116,6 +116,6 @@ void IncrementModuleFactionQuest(object oPC, int nFaction, int numberOfPoints = 
 		newValue = 0;
 	
 	string sQuery = "UPDATE serverquests SET current_value = '"+IntToString(newValue)+"' WHERE sigil_faction_id = '"+IntToString(nFaction)+"'";
-	SendMessageToPC(oPC, sQuery);
+	//SendMessageToPC(oPC, sQuery);
 	SQLExecDirect(sQuery);
 }
