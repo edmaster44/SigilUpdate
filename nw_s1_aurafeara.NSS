@@ -11,7 +11,7 @@
 //:://////////////////////////////////////////////
 //:: Created By: Preston Watamaniuk
 //:: Created On: May 25, 2001
-//:: Modified By: Constant Gaw - OEI 7/31/06
+//:: Modified By: Constant Gaw - OEI 7/31/06; Protoss119 3/22/20
 //:://////////////////////////////////////////////
 #include "NW_I0_SPELLS"
 
@@ -35,11 +35,9 @@ void main()
 
     int nHD = GetHitDice(GetAreaOfEffectCreator());
 //  int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/3;
-    int nDC = 10 + GetHitDice(GetAreaOfEffectCreator());
-    int nDuration = d4(2);
-	
-	effect eImm = EffectSpellImmunity(198);
-	eImm = ExtraordinaryEffect(eImm);
+//  int nDC = 10 + GetHitDice(GetAreaOfEffectCreator());
+    int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/2;
+    int nDuration = GetScaledDuration(nHD, oTarget);
 		
 	if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
 	{
@@ -66,9 +64,5 @@ void main()
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
 			}	
         }
-		else 
-		{		
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImm, oTarget, RoundsToSeconds(10));
-		}
     }
 }

@@ -16,22 +16,14 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 	string sDebtorQuest = "ps_quest_debtorspole";
 	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
 	
-	SpeakString("Rolling for randomness. . ", TALKVOLUME_SHOUT);
-	
 	//Don't ALWAYS give us the right berk
-	if (d100() < 25)
+	if (d100() < 50)
 		return FALSE;
-		
-	SpeakString("Checking if we have the quest: Stage #"+IntToString(nHasDebtorQuest), TALKVOLUME_SHOUT);
 	
 	if (nHasDebtorQuest <= 0)
 		return FALSE;
 	if (nHasDebtorQuest >= 5)
 		return FALSE;
-		
-	SpeakString("We have the quest! Getting Debtor index. Should be in location: "+GetLocalString(oPC, "DEBTOR_1_LOCATION")+", "+GetLocalString(oPC, "DEBTOR_2_LOCATION")+", or "+GetLocalString(oPC, "DEBTOR_3_LOCATION"), TALKVOLUME_SHOUT);
-	SpeakString("Current area: "+GetTag(GetArea(oPC)), TALKVOLUME_SHOUT);
-	SpeakString("Finished status: 1: "+IntToString(GetLocalInt(oPC, "DEBTOR_1_DONE"))+", 2: "+IntToString(GetLocalInt(oPC, "DEBTOR_2_DONE"))+", 3: "+IntToString(GetLocalInt(oPC, "DEBTOR_3_DONE")), TALKVOLUME_SHOUT);
 		
 	int nDebtor = 0;
 	if (GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_1_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
@@ -41,29 +33,44 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 	if (GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_3_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
 		nDebtor = 3;
 		
-	SpeakString("Debtor index: "+IntToString(nDebtor), TALKVOLUME_SHOUT);
-	SpeakString("Gender match? "+IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER"))+" vs. "+IntToString(GetLocalInt(oBerk, "GENDER")), TALKVOLUME_SHOUT);
-		
 	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetLocalInt(oBerk, "GENDER")) {
-		SpeakString("Gender match!", TALKVOLUME_SHOUT);
 		return nDebtor;
 	} else {
-		return nDebtor;
+		return FALSE;
 	}
 
 }
 
 void main () {
 
-	object oPC = GetLastUsedBy();
+	object oPC = GetEnteringObject();
+	
+	SendMessageToPC(oPC, "Crossing some berk trigger.");
+	
+	if (!GetIsPC(oPC))
+		return;
 	
 	object myBerk = GetLocalObject(OBJECT_SELF, "BERK_SPAWNED");
 	if (GetIsObjectValid(myBerk)) {
-		SpeakString("Already has a berk! But we'll create another one anyway", TALKVOLUME_SHOUT);
+		return;
 	}
 	
-	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
-	object oWP = GetWaypointByTag("monstertest_a");
+	int lastDone = CheckTimeStamp();
+	if (lastDone < 600) //happens once per 10 minutes
+		return;
+	TimeStamp();
+	
+	if (d100() < 75)
+		return;
+		
+	SendMessageToPC(oPC, "Spawning some berk encounter. . .");
+	
+	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
+	if (!GetIsObjectValid(oWP)) {
+		SendMessageToPC(oPC, "Waypoint not valid: wp_"+GetTag(OBJECT_SELF));
+		return;
+	}
+	
 	object oBerk = SpawnSomeBerk(oWP, oPC);
 	
 	if (GetIsObjectValid(oBerk)) {
@@ -90,8 +97,6 @@ object SpawnSomeBerk(object oWP, object oPC) {
 	int iMAX = PS_GetMaxPartylevel(oPC);
 	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));	
 	
-	SpeakString("PC level: "+IntToString(nLevel), TALKVOLUME_SHOUT);
-	
 	int nClass = CLASS_TYPE_FIGHTER;
 	int nClassRoll = Random(4)+1;
 	
@@ -102,18 +107,13 @@ object SpawnSomeBerk(object oWP, object oPC) {
 		case 3: nClass = CLASS_TYPE_ROGUE; break;
 		case 4: nClass = CLASS_TYPE_MONK; break;
 	}
-	
-	SpeakString("Class chosen: "+IntToString(nClass), TALKVOLUME_SHOUT);
 
 	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, nClass, STANDARD_FACTION_COMMONER);
 	if (!GetIsObjectValid(oBerk)) {
-		SpeakString("Creature not spawned.", TALKVOLUME_SHOUT);
 		return oBerk;
 	}
 	
 	SetConversation(oBerk, "_someberkconvo_");
-	
-	SpeakString("berk is found: "+GetName(oBerk), TALKVOLUME_SHOUT);
 
 	int nRand = Random(4)+1;
 	switch(nRand) {
@@ -141,19 +141,15 @@ void DetailBerk(object oBerk) {
 	int nHead = Random(7);
 	int nHair = Random(26);
 	
-	SpeakString("Detailing berk: Gender = "+IntToString(nGender)+", head = "+IntToString(nHead)+", hair = "+IntToString(nHair), TALKVOLUME_SHOUT);
-
 	struct CreatureCoreAppearance currentAppearance = PS_GetCreatureCoreAppearance(oBerk);
 	currentAppearance.Gender = nGender;
 	currentAppearance.HeadVariation = nHead;
 	currentAppearance.HairVariation = nHair;
 	PS_SetCreatureCoreAppearance(oBerk, currentAppearance);
 	
-	SpeakString("Post berk detailing.", TALKVOLUME_SHOUT);
-	
 	string sName = "Some Berk";
 	string sDescription = "A lost human - likely just fell through some portal. Cagestruck as they come.";
-	int nRand = Random(9)+1;
+	int nRand = Random(10)+1;
 	switch(nRand) {
 		case 1: sName = "Lost Clueless"; break;
 		case 2: sName = "Cagestruck Cutter"; break;
@@ -164,6 +160,7 @@ void DetailBerk(object oBerk) {
 		case 7: sName = "Some Primer"; break;
 		case 8: sName = "Clueless Cony"; break;
 		case 9: sName = "Some Berk"; break;
+		case 10: sName = "Addled Clueless"; break;
 	}
 	
 	SetFirstName(oBerk, sName);
@@ -178,6 +175,7 @@ void EquipBerk(object oBerk) {
 	if (berkType == "Clueless_3") {
 		assignProtectiveItems(oBerk, TRUE);
 		assignWeaponToCreature(oBerk, TRUE);
+		DelayCommand(1.0f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
 	} else {
 		assignProtectiveItems(oBerk, FALSE);
 		assignWeaponToCreature(oBerk, FALSE);
