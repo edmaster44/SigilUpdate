@@ -258,9 +258,17 @@ void PS_SlaadDiminution_Gray(object oPC, object oItem, int nSpell)
 
 void PS_SlaadChaoticCrafting(object oPC, object oItem, int nSpell)
 {
+	int iHasBonus	= GetLocalInt(oItem, "SGC1");
+
+	if (iHasBonus == 1)
+	{	return;		}
+		else
+{
 	AddScriptParameterString("START");
 	AddScriptParameterString("");
-	ExecuteScriptEnhanced("gui_extra_choices", oPC);
+	ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
+	
+	SetLocalInt(oItem, "SGC1", 1);
 }
 
 void PS_SlaadApotheosis(object oPC, object oItem, int nSpell)
