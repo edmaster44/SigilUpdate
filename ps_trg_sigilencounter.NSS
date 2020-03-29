@@ -16,9 +16,9 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 	string sDebtorQuest = "ps_quest_debtorspole";
 	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
 	
-	//Don't ALWAYS give us the right berk
-	if (d100() < 50)
-		return FALSE;
+	//Making it prioritize suspicious berk over standard berk, because testing
+	//if (d100() < 50)
+	//	return FALSE;
 	
 	if (nHasDebtorQuest <= 0)
 		return FALSE;
@@ -26,11 +26,11 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 		return FALSE;
 		
 	int nDebtor = 0;
-	if (GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_1_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
+	if (GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_1_LOCATION"))) 
 		nDebtor = 1;
-	if (GetLocalInt(oPC, "DEBTOR_2_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_2_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
+	if (GetLocalInt(oPC, "DEBTOR_2_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_2_LOCATION"))) 
 		nDebtor = 2;
-	if (GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_3_LOCATION") || GetTag(GetArea(oPC)) == "ps_area_dmlair")) 
+	if (GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_3_LOCATION"))) 
 		nDebtor = 3;
 		
 	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetLocalInt(oBerk, "GENDER")) {

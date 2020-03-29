@@ -28,7 +28,7 @@ void main() {
   			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "mk_prison_halforc", GetLocation(GetWaypointByTag("wp_mk_prison_halforc_2")));    
   		}
 		
-  		if(GetObjectByTag("mk_prison_mshooter") == OBJECT_INVALID) {
+  		if(GetObjectByTag("mk_prisonmain_shooter1") == OBJECT_INVALID) {
    			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "mk_prison_mshooter", GetLocation(GetWaypointByTag("wp_mk_prison_mshooter_1")), FALSE, "mk_prisonmain_shooter1");    
    			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "mk_prison_mshooter", GetLocation(GetWaypointByTag("wp_mk_prison_mshooter_2")), FALSE, "mk_prisonmain_shooter2");  
   			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "mk_prison_mshooter", GetLocation(GetWaypointByTag("wp_mk_prison_mshooter_3")), FALSE, "mk_prisonmain_shooter3"); 
