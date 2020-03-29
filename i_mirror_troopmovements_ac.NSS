@@ -25,7 +25,7 @@ void main()
 	string sDate = SigisDate(GetRealTime());
 	
 	string sResult = "A plainly bound book, filled part-way with hand written notes. The individual pages fade in and out, and the content changes day by day.\n\n"+sDate+":\n";
-	int nRand = Random(17)+1;
+	int nRand = Random(23)+1;
 	switch(nRand) {
 		case 1: sResult += "Measure Mauric’s unit reported in. They are holding position at the old Chirper’s inn balcony by the Bazaar crater."; break;
 		case 2: sResult += "Measure Takan’s unit confirmed capture and slaying of the renegade Quinn. Atheon head office has been informed."; break;
@@ -44,6 +44,18 @@ void main()
 		case 15: sResult += "Athaon Hobard has submitted an official complaint about the actions of the Sign of One Factotum Sankar. There is confusion on jurisdiction; please advise.";
 		case 16: sResult += "I personally believe that Factor Nirmala is well qualified to be high priest of Aoskar, though of course I bow to the wisdom of the god.";
 		case 17: sResult += "Factotum Sankar strongly believes that Athaon Hobard is not acting in the best interests of the current order. His evidence has been forwarded to the Barracks.";
+		case 18: sResult += "Package received. Residence Building CW-4056 lock down confirmed. All civilians cleared. Zone is ready for Signer agents to begin rift working. \n\nPS: I understand that Caex is Mover Reina's favorite pet, but the next time I catch him trying to reach for a ration pouch, I am going to skin him and turn him into a new boot..."; break;
+		case 19: sResult += "Measure Tsarov reported in earlier today. He confirmed the presence of known terror agent Katherine Clearwater around the old Infirmary, formally part of the Hive before the Great Push last year. I hereby request a formal warrant to bring in the proprietors for questioning."; break;
+		case 20: sResult += "By order of Fated Inquisitor Katani, your unit is ordered to move in on the Sunnyside Primary School, over on the edge of Hive Sector AV-21. All civilians- adult or child- are to be held until the arrival of Katani. Likewise, all possessions are to be confiscated for full auditing. Command suspects one of the children's parents to be an agent of the Terror Cells, but lacks intel on which one, so do not let a single one of them out of your sight."; break;
+		case 21: sResult += "Earlier today, the Office of Civic and Social Affairs declared their final ruling on the matter of clothing deemed to be too revealing. According to superintendant Lance Maserby, it was 'A tough question. I mean, I like the sight of a tiefer lass's behind with nothing but a wee string to cover up same as any man, but I know that some berks are concerned about it  being too shocking, or in some cases, vulgar. In the end, I think we can reach a compromise.'"+
+							"\n\nThat compromise, it seems, is to create a strict guideline on when or where it will be allowed. Thus, as of today, the following rules on revealing clothing will be enforced:"+
+							"\n1)  Clothing that reveals bare skin above the knee and bellow the kneck is permitted only in the case of female elves and tieflings. Some human females may apply for exceptions."+
+							"\n2) Non-humanoid sentients are strictly prohibited from wearing revealing clothing. "+
+							"\n3) Giants are likewise prohibited, as are Paelyreons. "+
+							"\n4) Dances performed with such articles may only be enacted in the presence of Superintendant Maserby. "+
+							"'I think,' he continued, 'That it is in everyone's best interest to follow these new guidelines. I know for sure that I will personally feel much better going forward!'"; break;
+		case 22: sResult += "All units be on the alert. As you know, tonight Superintendant Maserby of the Office of Civic and Social Affairs will be hosting his annual Gala event in the Lady's Ward at his estate. As you are also aware, his role in public communications since his promotion in the former Civic Festhall has made him a  primary target in the eyes of the Terror Cells. Praetor Factol Pentar does not suspect any special danger tonight, but all the same, keep sharp."; break;
+		case 23: sResult += "Confirmation just came in earlier; Notary Tavia engaged and eliminated the Terror Agent Sharon Raynsford. Unfortunately, the Notary was unable to apprehend Raynsford's fey slave, though her unit suspects it has fled into one of the Beastland portals. Command does not feel the need to pursue at this time. Nonetheless, all units are advised to keep on the lookout, and capture the creature alive if possible. The slave is described as having blue hair, a face of elven appearance, and somewhat short in height."; break;
 	}
 	
 	sResult += "\n\n//OOC: Use the book to see today's page.";

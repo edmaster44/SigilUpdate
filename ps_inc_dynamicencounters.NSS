@@ -165,6 +165,9 @@ string GetArmor(object oCreature) {
 	int nClass = GetClassByPosition(1, oCreature);
 	int nDexMod = GetAbilityModifier(ABILITY_DEXTERITY, oCreature); 
 	
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0)
+		return "ps_darkharmonium_plate";
+	
 	string sArmorType = "heavy";
 	if (nClass == CLASS_TYPE_ROGUE || nClass == CLASS_TYPE_RANGER || nClass == CLASS_TYPE_DRUID || nDexMod >= 4) {
 		sArmorType == "light";
@@ -239,7 +242,14 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 	int nLevel = GetChallengeRatingOfTarget(oCreature);
 	
 	object oWeapon;
-	if (typePreference < 0) {
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
+		int nRand = Random(3)+1;
+		switch(nRand) {
+			case 1: oWeapon = CreateItemOnObject("ps_darkharmonium_spic", oCreature); break;
+			case 2: oWeapon = CreateItemOnObject("ps_darkharmonium_kop", oCreature); break;
+			case 3: oWeapon = CreateItemOnObject("ps_darkharmonium_glad", oCreature); break;
+		}
+	} else if (typePreference < 0) {
 		oWeapon = CreateRandomItemOfCategory(oCreature, "W");
 	} else {
 		int nCraftingIndex = GetCraftingItemIndexByBaseItemType(typePreference);
@@ -363,6 +373,12 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 		
 		SetDroppableFlag(oRing, FALSE);
 		AssignCommand(oCreature, ActionEquipItem(oRing, INVENTORY_SLOT_RIGHTRING));
+	}
+	
+	//Give harmonium their shields
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
+		object oShield = CreateItemOnObject("ps_darkharmonium_shield", oCreature);
+		AssignCommand(oCreature, ActionEquipItem(oShield, INVENTORY_SLOT_LEFTHAND));
 	}
 
 }

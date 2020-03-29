@@ -477,7 +477,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_HHM_LE_HELM", "#1#2#3#4#5#30#40#41#99#150#" );
 	SetLocalString( oModule, "XC_P_HHM_LS_BOOTS", "#1#" );
 	SetLocalString( oModule, "XC_P_HHM_LS_GLOVES", "#1#2#" );
-	SetLocalString( oModule, "XC_P_HHM_MP_BODY", "#1#2#5#6#7#8#9#10#11#14#16#17#21#28#29#" );
+	SetLocalString( oModule, "XC_P_HHM_MP_BODY", "#1#2#5#7#8#9#10#11#14#16#17#21#28#29#" );
 	SetLocalString( oModule, "XC_P_HHM_MP_GLOVES", "#1#5#29#" );
 	SetLocalString( oModule, "XC_P_HHM_MP_BOOTS", "#1#5#9#10#" );
 	SetLocalString( oModule, "XC_P_HHM_MP_HELM", "#6#9#11#17#20#31#" );
