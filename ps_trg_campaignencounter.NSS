@@ -1,0 +1,82 @@
+//Uses the Dynamic Encounter system to create an encounter of the 
+//correct CR for the entering PC
+//Currently being used for campaign things; expand more later
+#include "ps_inc_dynamicencounters"
+#include "ps_inc_functions"
+
+void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID);
+
+void main() {
+
+	object oPC = GetEnteringObject();
+	
+	SendMessageToPC(oPC, "Crossing encounter trigger");
+	
+	if (!GetIsPC(oPC))
+		return;
+	
+	object oEncounter = GetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED");
+	if (GetIsObjectValid(oEncounter)) {
+		return;
+	}
+	
+	int lastDone = CheckTimeStamp();
+	if (lastDone < 600) //happens once per 10 minutes
+		return;
+	TimeStamp();
+	
+	//Get party average level
+	int iMAX = PS_GetMaxPartylevel(oPC);
+	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));
+	nLevel -= 2; //lower slightly because we don't want max challenge
+	if (nLevel < 10) //don't kill the lowbie!
+		return;
+	
+	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
+	
+	int nNum = d3()+2;
+	int nCount = 0;
+	while (nCount < nNum) {
+		SpawnHarmoniumEncounter(oWP, nLevel, oPC);
+		nCount++;
+	}
+	
+}
+
+void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
+
+	int nClass = CLASS_TYPE_FIGHTER;
+	int nClassRoll = Random(4)+1;
+	
+	if (GetIsObjectValid(oPC)) {
+		SendMessageToPC(oPC, "creating encounter");
+	}
+	
+	//Switch between class types
+	switch(nClassRoll) {
+		case 1: nClass = CLASS_TYPE_FIGHTER; break;
+		case 2: nClass = CLASS_TYPE_FIGHTER; break;
+		case 3: nClass = CLASS_TYPE_CLERIC; break; 
+		case 4: nClass = CLASS_TYPE_ARCANE_ARCHER; break; //Archer!
+	}
+	
+	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, nClass, STANDARD_FACTION_HOSTILE);
+	if (!GetIsObjectValid(oBerk)) {
+		return;
+	}
+	
+	SetFirstName(oBerk, "Harmonium Patroller");
+	SetLastName(oBerk, "");
+	SetDescription(oBerk, "The red armor marks this patrol as Harmonium. . . but they definitely aren't wearing the current Harmonium uniform that you know.");
+	SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1); //have this give them the correct armor/weapon once we have it
+	SetTag(oBerk, "dark_harmonium_patrol");
+	
+	//Have to have the right alignment!
+	AdjustAlignment(oBerk, ALIGNMENT_EVIL, 100);
+	AdjustAlignment(oBerk, ALIGNMENT_LAWFUL, 100);
+	
+	assignProtectiveItems(oBerk, TRUE);
+	assignWeaponToCreature(oBerk, TRUE);
+	makeInventoryUndroppable(oBerk);
+
+}
