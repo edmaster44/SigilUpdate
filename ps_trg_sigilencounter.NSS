@@ -60,7 +60,8 @@ void main () {
 		return;
 	TimeStamp();
 	
-	if (d100() < 75)
+	//Skip spawning a berk 10% of the time
+	if (d100() < 10)
 		return;
 		
 	SendMessageToPC(oPC, "Spawning some berk encounter. . .");
