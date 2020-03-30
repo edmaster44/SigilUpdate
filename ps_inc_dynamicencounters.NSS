@@ -260,6 +260,7 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 		return;
 
 	SetDroppableFlag(oWeapon, FALSE);
+	SetIdentified(oWeapon, TRUE);
 	
 	int nPoints = 1;
 	if (nLevel > 25)
@@ -312,10 +313,12 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 		AddItemProperty(DURATION_TYPE_PERMANENT, ItemPropertyEnhancementBonus(1), oArmor);
 		
 	SetDroppableFlag(oArmor, FALSE);
+	SetIdentified(oArmor, TRUE);
 	AssignCommand(oCreature, ActionEquipItem(oArmor, INVENTORY_SLOT_CHEST));
 	
 	object oProf = CreateItemOnObject("de_ringofproficiency", oCreature);
 	SetDroppableFlag(oProf, FALSE);
+	SetIdentified(oProf, TRUE);
 	AssignCommand(oCreature, ActionEquipItem(oProf, INVENTORY_SLOT_LEFTRING));
 	
 	if (nLevel >= 10) {
@@ -334,6 +337,7 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 			
 		
 		SetDroppableFlag(oAmulet, FALSE);
+		SetIdentified(oAmulet, TRUE);
 		AssignCommand(oCreature, ActionEquipItem(oAmulet, INVENTORY_SLOT_NECK));
 	}
 	
@@ -353,6 +357,7 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 			
 		
 		SetDroppableFlag(oBoots, FALSE);
+		SetIdentified(oBoots, TRUE);
 		AssignCommand(oCreature, ActionEquipItem(oBoots, INVENTORY_SLOT_BOOTS));
 	}
 	
@@ -372,6 +377,7 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 			
 		
 		SetDroppableFlag(oRing, FALSE);
+		SetIdentified(oRing, TRUE);
 		AssignCommand(oCreature, ActionEquipItem(oRing, INVENTORY_SLOT_RIGHTRING));
 	}
 	

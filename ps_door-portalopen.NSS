@@ -19,36 +19,41 @@ void main()
 
 {
 	//	Get the float for the duration of the time to pass before the door is closed and locked
-	string sPortal		= GetLocalString(OBJECT_SELF, "Portal");	//Tag of portal
-	string sKey			= GetLocalString(OBJECT_SELF, "Key");		//Portal key (if any)
-	string sFX			= GetLocalString(OBJECT_SELF, "VFX");		//Visual effect to apply
-	int iLocked			= GetLocalInt(OBJECT_SELF, "Locked");		//1 for locked door, 2 for unlocked
-	float fDelay		= GetLocalFloat(OBJECT_SELF, "Delay");		//Delay (in seconds) to close door
-	location lPortal	= GetLocation(OBJECT_SELF);					//Door's location
+	string sPortal		= GetLocalString(OBJECT_SELF, "Portal");		//Tag of portal
+	string sKey			= GetLocalString(OBJECT_SELF, "Key");			//Portal key (if any)
+	string sFX			= GetLocalString(OBJECT_SELF, "VFX");			//Visual effect to apply
+	int iLocked			= GetLocalInt(OBJECT_SELF, "Locked");			//1 for locked door, 2 for unlocked
+	float fDelay		= GetLocalFloat(OBJECT_SELF, "Delay");			//Delay (in seconds) to close door
+	
+	object oWP			= GetWaypointByTag("wp_"+GetTag(OBJECT_SELF)); 	//spawn portal at the waypoint which matches wp_+DoorTag
+	location lPortal	= GetLocation(oWP);								//Door's location
 
-	object oEnter		= GetLastOpenedBy();						//Player who opened the door
+	object oPC			= GetLastOpenedBy();							//Player who opened the door
+	SendMessageToPC(oPC, "opening door. . .");
 	
 	string SPAWNED 		= "nSpawned";
 
-	if (!GetIsPC(oEnter) && !GetIsDM(oEnter) && !GetIsDMPossessed(oEnter)) return;
+	if (!GetIsPC(oPC) && !GetIsDM(oPC) && !GetIsDMPossessed(oPC)) return;
 	
-	if(sKey != 	"")
+	if(sKey != "")
 	{
-		if(CheckPartyForItem(oEnter, sKey)) 						//Check for portal key
-		{
-			CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
-			object oPortal	= GetNearestObjectByTag(sPortal, OBJECT_SELF, 1);
-			SetPlotFlag(oPortal,TRUE);								//Mark the portal as non-plot
+		SendMessageToPC(oPC, "You need a key: "+sKey);
+		if(GetItemPossessedBy(oPC, sKey) != OBJECT_INVALID)  {
+			SendMessageToPC(oPC, "should create portal: "+sPortal);
+			object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
+			SendMessageToPC(oPC, "Created portal: "+GetName(oPortal));
+			SetPlotFlag(oPortal,TRUE);								//Mark the portal as plot
 			CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);	//Generate the portal visual effect
 			SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);				//Mark the portal as spawned
 			DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));		//Close the door after fDelay seconds	
 		}
-	}
-	else
-	{
-		CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);		//Create the portal
-		object oPortal	= GetNearestObjectByTag(sPortal, OBJECT_SELF, 1);
-		SetPlotFlag(oPortal,TRUE);									//Mark the portal as non-plot
+		
+	} else {
+		SendMessageToPC(oPC, "opening door. . .");
+		SendMessageToPC(oPC, "should create portal: "+sPortal);
+		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);		//Create the portal
+		SendMessageToPC(oPC, "Created portal: "+GetName(oPortal));
+		SetPlotFlag(oPortal,TRUE);									//Mark the portal as plot
 		CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);		//Generate the portal visual effect
 		SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);					//Mark the portal as spawned
 		DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));			//Close the door after fDelay seconds	

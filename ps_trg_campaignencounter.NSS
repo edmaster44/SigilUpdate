@@ -34,7 +34,7 @@ void main() {
 	
 	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
 	
-	int nNum = d3()+2;
+	int nNum = d2()+1;
 	int nCount = 0;
 	while (nCount < nNum) {
 		SpawnHarmoniumEncounter(oWP, nLevel, oPC);
@@ -78,5 +78,8 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 	assignProtectiveItems(oBerk, TRUE);
 	assignWeaponToCreature(oBerk, TRUE);
 	makeInventoryUndroppable(oBerk);
+	
+	DelayCommand(0.1f, AssignCommand(oBerk, ActionEquipMostEffectiveArmor()));
+	DelayCommand(0.2f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
 
 }
