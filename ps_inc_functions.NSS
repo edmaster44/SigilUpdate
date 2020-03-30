@@ -17,7 +17,6 @@ const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
-const int CLASS_TYPE_MISTRESS_OF_THE_CAULDRON			= 64;
 const int CLASS_TYPE_FELLBLADE 							= 80;
 const int CLASS_TYPE_ARCANE_ARCHER2 					= 81;
 const int CLASS_TYPE_PALEMASTER_W 						= 82;
@@ -482,13 +481,13 @@ int GetWarlockCasterLevel(object oPC)
 	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
 	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
-	int nNightHag = GetLevelByClass(CLASS_TYPE_MISTRESS_OF_THE_CAULDRON,oPC);
+	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC);
 	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
 
 	if (nGraySlaad >0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))
 	{	nGraySlaad = 0;	}
 						
-	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC) )
+	if (nNightHag > 0 && !GetHasFeat(CLASS_TYPE_MISSCAULDRON,oPC) )
 	{ 	nNightHag = 0; 			}
 	
 	if (nMysticTheurge > 0 && !GetHasFeat(FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK, oPC) )
@@ -564,8 +563,8 @@ void StackEldBlast (object oPC)
 		nBrachina = FloatToInt(IntToFloat(nBrachina)*0.8f);
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC); //Incubus/Succubus Warlock
 		nSuccubus = FloatToInt(IntToFloat(nSuccubus)*0.9f);
-	int nNightHag = GetLevelByClass(CLASS_TYPE_MISTRESS_OF_THE_CAULDRON); // Night Hag Warlock
-		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.7f);
+	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON); // Night Hag Warlock
+		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.6f);
 	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC); // Greyslaad Warlock
 		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f);	
 	int nVampMal = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC); // Vampire Warlock
@@ -603,7 +602,7 @@ void StackEldBlast (object oPC)
 	if (nVampMal > 0 && !GetHasFeat(2580, oPC) )
 	{	nVampMal = 0;			}
 				
-	int nTotal = nWarlock + nMysticTheurge + nPalemaster + nFellblade + nArcher + nTrickster + nLichlock + nGMaster + nBrachina + nSuccubus + nVampMal+nNightHag + nGraySlaad;
+	int nTotal = nWarlock + nMysticTheurge + nPalemaster + nFellblade + nArcher + nTrickster + nLichlock + nGMaster + nBrachina + nSuccubus + nVampMal+ nNightHag + nGraySlaad;
 	
 	//if Hellfire Warlock is needed
 	int nHfW = GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC);
