@@ -481,8 +481,8 @@ int GetWarlockCasterLevel(object oPC)
 	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
 	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
-	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC);
-	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
+//	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC);
+//	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
 
 	if (nGraySlaad >0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))
 	{	nGraySlaad = 0;	}
