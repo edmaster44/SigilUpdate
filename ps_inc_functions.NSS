@@ -481,14 +481,8 @@ int GetWarlockCasterLevel(object oPC)
 	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
 	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
-	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC);
-	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
-	if (nGraySlaad >0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))
-	{	nGraySlaad = 0;	}
-						
-	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC) )
-	{ 	nNightHag = 0; 			}
-	
+
+		
 	if (nMysticTheurge > 0 && !GetHasFeat(FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK, oPC) )
 	{	nMysticTheurge = 0;		}
 
@@ -503,8 +497,11 @@ int GetWarlockCasterLevel(object oPC)
 	if (nSuccubus > 0 && !GetHasFeat (FEAT_SUCCUBUS_SPELLCASTING_WARLOCK, oPC) )
 	{	nSuccubus = 0;			}
 	
-	//Fellblade, Arcane Archer and Lich
-
+	//Fellblade, Arcane Archer, Night Hag and Gray Slaad
+	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC);
+		nNightHag = FloatToInt(IntToFloat(nNightHag)*0.6f);
+	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
+		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f);
 	int nFellblade = GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC);
 		nFellblade = FloatToInt(IntToFloat(nFellblade)*0.8f);
 	int nArcher = GetLevelByClass(CLASS_TYPE_ARCANE_ARCHER2, oPC);
@@ -514,6 +511,12 @@ int GetWarlockCasterLevel(object oPC)
 	int nTrickster = GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER_W, oPC);
 	int nGMaster = GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
 		nGMaster = FloatToInt(IntToFloat(nGMaster)*0.4f);
+		
+	if (nGraySlaad >0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))
+	{	nGraySlaad = 0;	}
+						
+	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC) )
+	{ 	nNightHag = 0; 	}
 	
 	if (nArcher > 0 && !GetHasFeat(2703, oPC) ) //arcane archer spellcasting warlock feat
 	{	nArcher = 0;	}
