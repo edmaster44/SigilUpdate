@@ -46,7 +46,7 @@ void main() {
 void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 
 	int nClass = CLASS_TYPE_FIGHTER;
-	int nClassRoll = Random(4)+1;
+	int nClassRoll = Random(3)+1;
 	
 	if (GetIsObjectValid(oPC)) {
 		SendMessageToPC(oPC, "creating encounter");
@@ -57,7 +57,6 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 		case 1: nClass = CLASS_TYPE_FIGHTER; break;
 		case 2: nClass = CLASS_TYPE_FIGHTER; break;
 		case 3: nClass = CLASS_TYPE_CLERIC; break; 
-		case 4: nClass = CLASS_TYPE_ARCANE_ARCHER; break; //Archer!
 	}
 	
 	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, nClass, STANDARD_FACTION_HOSTILE);
@@ -69,7 +68,6 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 	SetLastName(oBerk, "");
 	SetDescription(oBerk, "The red armor marks this patrol as Harmonium. . . but they definitely aren't wearing the current Harmonium uniform that you know.");
 	SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1); //have this give them the correct armor/weapon once we have it
-	SetTag(oBerk, "dark_harmonium_patrol");
 	
 	//Have to have the right alignment!
 	AdjustAlignment(oBerk, ALIGNMENT_EVIL, 100);
@@ -79,7 +77,9 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 	assignWeaponToCreature(oBerk, TRUE);
 	makeInventoryUndroppable(oBerk);
 	
-	DelayCommand(0.1f, AssignCommand(oBerk, ActionEquipMostEffectiveArmor()));
-	DelayCommand(0.2f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
+	DelayCommand(0.2f, AssignCommand(oBerk, ActionEquipMostEffectiveArmor()));
+	DelayCommand(0.6f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
+	
+	DelayCommand(1.5f, SetTag(oBerk, "dark_harmonium_patrol"));
 
 }

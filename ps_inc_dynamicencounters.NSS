@@ -314,12 +314,12 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 		
 	SetDroppableFlag(oArmor, FALSE);
 	SetIdentified(oArmor, TRUE);
-	AssignCommand(oCreature, ActionEquipItem(oArmor, INVENTORY_SLOT_CHEST));
+	DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oArmor, INVENTORY_SLOT_CHEST)));
 	
 	object oProf = CreateItemOnObject("de_ringofproficiency", oCreature);
 	SetDroppableFlag(oProf, FALSE);
 	SetIdentified(oProf, TRUE);
-	AssignCommand(oCreature, ActionEquipItem(oProf, INVENTORY_SLOT_LEFTRING));
+	DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oProf, INVENTORY_SLOT_LEFTRING)));
 	
 	if (nLevel >= 10) {
 		object oAmulet;
@@ -338,7 +338,7 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 		
 		SetDroppableFlag(oAmulet, FALSE);
 		SetIdentified(oAmulet, TRUE);
-		AssignCommand(oCreature, ActionEquipItem(oAmulet, INVENTORY_SLOT_NECK));
+		DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oAmulet, INVENTORY_SLOT_NECK)));
 	}
 	
 	if (nLevel >= 15) {
@@ -358,7 +358,7 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 		
 		SetDroppableFlag(oBoots, FALSE);
 		SetIdentified(oBoots, TRUE);
-		AssignCommand(oCreature, ActionEquipItem(oBoots, INVENTORY_SLOT_BOOTS));
+		DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oBoots, INVENTORY_SLOT_BOOTS)));
 	}
 	
 	if (nLevel >= 20) {
@@ -378,13 +378,13 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 		
 		SetDroppableFlag(oRing, FALSE);
 		SetIdentified(oRing, TRUE);
-		AssignCommand(oCreature, ActionEquipItem(oRing, INVENTORY_SLOT_RIGHTRING));
+		DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oRing, INVENTORY_SLOT_RIGHTRING)));
 	}
 	
 	//Give harmonium their shields
 	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
 		object oShield = CreateItemOnObject("ps_darkharmonium_shield", oCreature);
-		AssignCommand(oCreature, ActionEquipItem(oShield, INVENTORY_SLOT_LEFTHAND));
+		DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oShield, INVENTORY_SLOT_LEFTHAND)));
 	}
 
 }

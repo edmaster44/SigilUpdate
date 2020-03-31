@@ -29,7 +29,6 @@ void main()
 	location lPortal	= GetLocation(oWP);								//Door's location
 
 	object oPC			= GetLastOpenedBy();							//Player who opened the door
-	SendMessageToPC(oPC, "opening door. . .");
 	
 	string SPAWNED 		= "nSpawned";
 
@@ -37,11 +36,8 @@ void main()
 	
 	if(sKey != "")
 	{
-		SendMessageToPC(oPC, "You need a key: "+sKey);
 		if(GetItemPossessedBy(oPC, sKey) != OBJECT_INVALID)  {
-			SendMessageToPC(oPC, "should create portal: "+sPortal);
 			object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
-			SendMessageToPC(oPC, "Created portal: "+GetName(oPortal));
 			SetPlotFlag(oPortal,TRUE);								//Mark the portal as plot
 			CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);	//Generate the portal visual effect
 			SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);				//Mark the portal as spawned
@@ -49,10 +45,7 @@ void main()
 		}
 		
 	} else {
-		SendMessageToPC(oPC, "opening door. . .");
-		SendMessageToPC(oPC, "should create portal: "+sPortal);
 		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);		//Create the portal
-		SendMessageToPC(oPC, "Created portal: "+GetName(oPortal));
 		SetPlotFlag(oPortal,TRUE);									//Mark the portal as plot
 		CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);		//Generate the portal visual effect
 		SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);					//Mark the portal as spawned
