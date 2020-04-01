@@ -79,8 +79,8 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 	DelayCommand(0.2f, AssignCommand(oBerk, ActionEquipMostEffectiveArmor()));
 	DelayCommand(0.6f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
 	
-	DelayCommand(1.5f, SetTag(oBerk, "dark_harmonium_patrol"));
+	DelayCommand(1.0f, SetTag(oBerk, "dark_harmonium_patrol"));
 	
-	DelayCommand(2.0, WalkWayPoints(FALSE, "spawn"));
+	DelayCommand(2.0, ExecuteScript("nw_c2_default9", oBerk));
 
 }
