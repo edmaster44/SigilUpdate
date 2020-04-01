@@ -45,8 +45,6 @@ void main () {
 
 	object oPC = GetEnteringObject();
 	
-	SendMessageToPC(oPC, "Crossing some berk trigger.");
-	
 	if (!GetIsPC(oPC))
 		return;
 	
@@ -63,8 +61,6 @@ void main () {
 	//Skip spawning a berk 10% of the time
 	if (d100() < 10)
 		return;
-		
-	SendMessageToPC(oPC, "Spawning some berk encounter. . .");
 	
 	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
 	if (!GetIsObjectValid(oWP)) {

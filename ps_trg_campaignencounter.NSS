@@ -3,14 +3,13 @@
 //Currently being used for campaign things; expand more later
 #include "ps_inc_dynamicencounters"
 #include "ps_inc_functions"
+#include "x0_i0_anims"
 
 void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID);
 
 void main() {
 
 	object oPC = GetEnteringObject();
-	
-	SendMessageToPC(oPC, "Crossing encounter trigger");
 	
 	if (!GetIsPC(oPC))
 		return;
@@ -28,16 +27,16 @@ void main() {
 	//Get party average level
 	int iMAX = PS_GetMaxPartylevel(oPC);
 	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));
-	nLevel -= 2; //lower slightly because we don't want max challenge
-	if (nLevel < 10) //don't kill the lowbie!
+	nLevel -= 5; //lower slightly because we don't want max challenge
+	if (nLevel < 6) //don't kill the lowbie!
 		return;
 	
 	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
 	
-	int nNum = d2()+1;
+	int nNum = d2();
 	int nCount = 0;
 	while (nCount < nNum) {
-		SpawnHarmoniumEncounter(oWP, nLevel, oPC);
+		SpawnHarmoniumEncounter(oWP, nLevel);
 		nCount++;
 	}
 	
@@ -81,5 +80,7 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 	DelayCommand(0.6f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
 	
 	DelayCommand(1.5f, SetTag(oBerk, "dark_harmonium_patrol"));
+	
+	DelayCommand(2.0, WalkWayPoints(FALSE, "spawn"));
 
 }
