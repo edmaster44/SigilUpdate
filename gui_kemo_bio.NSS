@@ -68,13 +68,13 @@ void main(string sAction, string sType, string sEntry)
 			DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
 			//SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you.</C>");
 		}
-		WriteTimestampedLogEntry(GetName(oPC) + " is displaying a bio/portrait: " + sPortrait);
+		//WriteTimestampedLogEntry(GetName(oPC) + " is displaying a bio/portrait: " + sPortrait);
 		
 		return;
 	}
 	if (sAction == "edit")
 	{
-		WriteTimestampedLogEntry(GetName(oPC) + " is editing a bio/portrait.");
+		//WriteTimestampedLogEntry(GetName(oPC) + " is editing a bio/portrait.");
 		sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
 			"_" + GetSubString(GetFirstName(oPC), 0, 6) +
 			"_" + GetSubString(GetLastName(oPC), 0, 9);
@@ -91,7 +91,7 @@ void main(string sAction, string sType, string sEntry)
 	}
 	if (sAction == "save")
 	{
-		WriteTimestampedLogEntry(GetName(oPC) + " is saving a bio/portrait.");
+		//WriteTimestampedLogEntry(GetName(oPC) + " is saving a bio/portrait.");
 		sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
 			"_" + GetSubString(GetFirstName(oPC), 0, 6) +
 			"_" + GetSubString(GetLastName(oPC), 0, 9);

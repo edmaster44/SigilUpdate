@@ -92,6 +92,8 @@ void main()
 		if (GetLevelByPosition(2, oPC) < 1) return;
 	}
 	
+	WriteTimestampedLogEntry(GetName(oPC)+" is releveling! All levels are about to be removed.");
+	
 	ForceRest(oPC);
 	
 	if (iRacelevels > 0) PS_set_level(oPC, iRacelevels);

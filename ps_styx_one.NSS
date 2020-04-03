@@ -74,6 +74,8 @@ void main()
 	
 	ForceRest(oPC);
 	
+	WriteTimestampedLogEntry(GetName(oPC)+" is releveling! One level is about to be removed.");
+	
 	PS_lose_one_level(oPC);
 	
 	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0) StackEldBlast(oPC);
