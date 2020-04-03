@@ -68,6 +68,7 @@ void main () {
 		return;
 	}
 	
+	WriteTimestampedLogEntry("Creating some berk in "+GetTag(GetArea(oPC)));
 	object oBerk = SpawnSomeBerk(oWP, oPC);
 	
 	if (GetIsObjectValid(oBerk)) {

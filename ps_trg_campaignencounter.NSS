@@ -44,6 +44,8 @@ void main() {
 
 void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 
+	WriteTimestampedLogEntry("Creating some campaign encounter in "+GetTag(GetArea(oWP)));
+
 	int nClass = CLASS_TYPE_FIGHTER;
 	int nClassRoll = Random(3)+1;
 	
