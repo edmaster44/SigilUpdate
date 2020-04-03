@@ -32,6 +32,7 @@ const int FEAT_HEAVY_ARMOR_OPTIMIZATION_EPIC			= 2838;
 const int FEAT_SUCCUBUS_SPELLCASTING_BARD 				= 2841;
 const int FEAT_MOTC_SPELLCASTING_WARLOCK				= 2570;
 const int FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK			= 4011;
+const int FEAT_EPIC_ELDRITCH_ADEPT						= 3621;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION			= 1833;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER	= 1834;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
@@ -539,7 +540,12 @@ int GetWarlockCasterLevel(object oPC)
     if (GetHasFeat(FEAT_GREATER_SPELL_PENETRATION, oPC, TRUE))
     {	nMyCasterLevel = nMyCasterLevel +2;		}
     if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +2;		}   
+    {	nMyCasterLevel = nMyCasterLevel +2;		} 
+	
+	if (nMyCasterLevel >= 16)
+	{FeatAdd(oPC,FEAT_EPIC_ELDRITCH_ADEPT,FALSE,FALSE,TRUE);
+	
+	}  
 	
 	return nMyCasterLevel;
 }
