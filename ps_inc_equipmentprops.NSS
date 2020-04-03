@@ -85,4 +85,3 @@ DeleteItemPropertyReference(
     DeleteLocalInt (Obj, IPR_SUBTYPE + Name);
     DeleteLocalInt (Obj, IPR_EXISTS + Name);
 }
-
