@@ -161,7 +161,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
 	
 	if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
 	
-	if (GetArmorRank(oITEM) != ARMOR_RANK_NONE)
+	if (GetArmorRank(oITEM) > ARMOR_RANK_NONE)
 	{
 		SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection then any armor could. You may only wear clothes.");
 		AssignCommand(oPC, ClearAllActions(TRUE));
@@ -180,7 +180,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
 			return TRUE;
 		}
 	}
-	else if (GetIsCreatureWeapon(nITEM) == FALSE)
+	else if (GetIsCreatureWeapon(nITEM) == FALSE && GetArmorRank(oITEM) != ARMOR_RANK_NONE)
 	{
 		SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
 		AssignCommand(oPC, ClearAllActions());
