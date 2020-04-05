@@ -233,7 +233,7 @@ int PS_GetGolemCasterLevel(object oPC)
 	int iFist = GetLevelByClass(45, oPC);
 		iFist = FloatToInt(IntToFloat(iFist)*0.8f);
 	int iWarp = GetLevelByClass(51, oPC);
-		iWarp = FloatToInt(IntToFloat(iWarp)*0.5f);
+		iWarp = FloatToInt(IntToFloat(iWarp)*0.8f);
 	int iSham = GetLevelByClass(55, oPC);
 	int iStor = GetLevelByClass(56, oPC);
 	int iFavo = GetLevelByClass(58, oPC);
