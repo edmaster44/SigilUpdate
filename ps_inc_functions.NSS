@@ -32,6 +32,7 @@ const int FEAT_HEAVY_ARMOR_OPTIMIZATION_EPIC			= 2838;
 const int FEAT_SUCCUBUS_SPELLCASTING_BARD 				= 2841;
 const int FEAT_MOTC_SPELLCASTING_WARLOCK				= 2570;
 const int FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK			= 4011;
+const int FEAT_EPIC_ELDRITCH_ADEPT						= 3621;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION			= 1833;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER	= 1834;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
@@ -232,7 +233,7 @@ int PS_GetGolemCasterLevel(object oPC)
 	int iFist = GetLevelByClass(45, oPC);
 		iFist = FloatToInt(IntToFloat(iFist)*0.8f);
 	int iWarp = GetLevelByClass(51, oPC);
-		iWarp = FloatToInt(IntToFloat(iWarp)*0.5f);
+		iWarp = FloatToInt(IntToFloat(iWarp)*0.8f);
 	int iSham = GetLevelByClass(55, oPC);
 	int iStor = GetLevelByClass(56, oPC);
 	int iFavo = GetLevelByClass(58, oPC);
@@ -539,7 +540,12 @@ int GetWarlockCasterLevel(object oPC)
     if (GetHasFeat(FEAT_GREATER_SPELL_PENETRATION, oPC, TRUE))
     {	nMyCasterLevel = nMyCasterLevel +2;		}
     if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +2;		}   
+    {	nMyCasterLevel = nMyCasterLevel +2;		} 
+	
+	if (nMyCasterLevel >= 16)
+	{FeatAdd(oPC,FEAT_EPIC_ELDRITCH_ADEPT,FALSE,FALSE,TRUE);
+	
+	}  
 	
 	return nMyCasterLevel;
 }
@@ -567,9 +573,9 @@ void StackEldBlast (object oPC)
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC); //Incubus/Succubus Warlock
 		nSuccubus = FloatToInt(IntToFloat(nSuccubus)*0.9f);
 	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON); // Night Hag Warlock
-		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.6f);
+		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.6f + 0.2f);
 	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC); // Greyslaad Warlock
-		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f);	
+		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f + 0.8f);	
 	int nVampMal = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC); // Vampire Warlock
 		nVampMal = FloatToInt(IntToFloat(nVampMal)*0.8f);
 			
