@@ -1,5 +1,5 @@
 NDB V1.0
-0000054 0000015 0002536 0000296 0001284
+0000054 0000015 0002556 0000296 0001284
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -336,6 +336,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_SCALED_HUNTER_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_HALFDRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_HALFOUTSIDER_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_MISSCAULDRON
+f ffffffff ffffffff 000 i CLASS_TYPE_ELEMENTAL_WARRIOR
 f ffffffff ffffffff 000 i CLASS_TYPE_HOUNDARCH_HERO_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_TRUMPET_ARCHON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_WORD_ARCHON_PRC
@@ -686,6 +687,11 @@ f ffffffff ffffffff 000 i SPELL_GLAMER
 f ffffffff ffffffff 000 i SPELL_HALLUCINATORY_TERRAIN
 f ffffffff ffffffff 000 i VFX_PER_HALLUCINATORY_TERRAIN
 f ffffffff ffffffff 000 i SPELL_HYPNOTISM
+f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_AIR
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_EARTH
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_FIRE
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_WATER
 f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_R
 f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_G
 f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_B
@@ -4820,6 +4826,14 @@ fp s
 fp s
 f ffffffff ffffffff 001 s SQLEncodeSpecialChars
 fp s
+f ffffffff ffffffff 001 i GetDamageBonusInt
+fp i
+f ffffffff ffffffff 001 i GetDamageBonusDie
+fp i
+f ffffffff ffffffff 001 i GetDamageBonusType
+fp i
+f ffffffff ffffffff 001 v BattleCry
+fp o
 f ffffffff ffffffff 004 v PS_CustomAnimation
 fp o
 fp s
@@ -4831,12 +4845,23 @@ f ffffffff ffffffff 001 i SneakAttackCount
 fp o
 f ffffffff ffffffff 001 i ConcealmentCheck
 fp o
+f ffffffff ffffffff 001 i InvisibilityCheck
+fp o
+f ffffffff ffffffff 002 i GetIsImprovedRangerFavored
+fp o
+fp o
 f ffffffff ffffffff 002 i GetIsRangerFavored
 fp o
 fp o
 f ffffffff ffffffff 001 i CalculateRangerBonus
 fp o
+f ffffffff ffffffff 002 i CalculateRangerTotal
+fp o
+fp o
 f ffffffff ffffffff 002 i ApplyFeatsToWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i ApplyDamageFeatsToWeapon
 fp o
 fp o
 f ffffffff ffffffff 002 i GetWeaponThreatRange
@@ -4856,6 +4881,23 @@ fp o
 f ffffffff ffffffff 002 i CountDualWieldingFeats
 fp o
 fp o
+f ffffffff ffffffff 001 e0 GetDamageBonusEffects
+fp o
+f ffffffff ffffffff 002 e0 GetWeaponDamageEnchantments
+fp o
+fp o
+f ffffffff ffffffff 002 i WeaponMasterCritCheck
+fp o
+fp o
+f ffffffff ffffffff 001 e0 GetDamageFeatBonuses
+fp o
+f ffffffff ffffffff 006 e0 GetWeaponDamageTotal
+fp o
+fp o
+fp o
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 i AttackerABPenalties
 fp o
 fp o
@@ -4869,6 +4911,9 @@ fp o
 fp s
 fp i
 fp s
+fp i
+f ffffffff ffffffff 002 v AttemptTauntAroundPlayer
+fp o
 fp i
 f ffffffff ffffffff 003 v PS_Lycan_Affliction
 fp o

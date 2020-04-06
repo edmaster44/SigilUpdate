@@ -422,6 +422,58 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
 	ApplyEquipmentEffect(oPC, eFX);
 }
+//Elemental Weapon
+void AppleElementalWeapon(object oPC, object oItem)
+{
+	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
+	int nItemVisual;
+	int DamageType;		
+	itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR))
+	{	
+		DamageType = DAMAGE_TYPE_ELECTRICAL;
+		nItemVisual = ITEM_VISUAL_ELECTRICAL;
+	}
+	else
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH))
+	{	
+		DamageType = DAMAGE_TYPE_ACID;
+		nItemVisual = ITEM_VISUAL_ACID;				
+	}
+	else
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE))
+	{
+		DamageType = DAMAGE_TYPE_FIRE;
+		nItemVisual = ITEM_VISUAL_FIRE;			
+	}
+	else
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER))
+	{
+		DamageType = DAMAGE_TYPE_COLD;
+		nItemVisual = ITEM_VISUAL_COLD;	
+	}
+	int nDamageConstant = DAMAGE_BONUS_1d6;
+				if (nLevel >= 5 ) 
+		{	nDamageConstant 	= DAMAGE_BONUS_1d6 * 3;	}
+	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamageConstant);
+    float fDUR = 9999.9f;   
+	object oWeapon1 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,OBJECT_SELF);
+	if (GetIsObjectValid(oItem))
+	    { 
+		IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+		IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+		}
+	object oWeapon2 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,OBJECT_SELF);
+	if (GetIsObjectValid(oItem))
+	{
+	if (IPGetIsMeleeWeapon(oItem))
+			{
+			IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+			IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+			}
+	
+    }
+}
 
 //Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
 void ApplyMeditativeStrikes(object oPC,object oItem)
@@ -625,6 +677,7 @@ void TatooedMonk(object oPC, int nRIGHT, int nLEFT)
 	if (GetLevelByClass(998, oPC) < 1) return;
 	
 }
+
 
 //Drunk Masters get bonuses with improvised weapons.
 //Not implemented yet
