@@ -35,15 +35,18 @@ int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	}
 	else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER))
-	{
-		eLink =	EffectDamageReduction(3, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
+	{		
+			if (nLevel >= 5 ) 
+		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;	}
+		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_ELECTRICAL);
+		eLink = EffectDamageShield(0,0,EFFECT_TYPE_SLOW);
 	}
 		
     effect eDur = EffectVisualEffect(VFX_DUR_ELEMENTAL_SHIELD);	
 	eLink = EffectLinkEffects(eDur, eLink);	
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpellID);
-		
+
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(10)));
 		
 }
