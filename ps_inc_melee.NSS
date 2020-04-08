@@ -1,4 +1,4 @@
-// Script created by comeandsee 11/1/2016
+	// Script created by comeandsee 11/1/2016
 // Converted for SCoD by Ceremorph 11/6/2016
 // Note: A complete list of animations for use in this script can be found at
 // nwn2.wikia.com/wiki/PlayCustomAnimation:_List_of_animations
