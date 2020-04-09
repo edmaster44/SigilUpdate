@@ -542,7 +542,7 @@ int GetWarlockCasterLevel(object oPC)
     if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE))
     {	nMyCasterLevel = nMyCasterLevel +2;		} 
 	
-	if (nMyCasterLevel >= 16)
+	if (nMyCasterLevel >= 16 && !GetHasFeat(FEAT_EPIC_ELDRITCH_ADEPT,oPC))
 	{FeatAdd(oPC,FEAT_EPIC_ELDRITCH_ADEPT,FALSE,FALSE,TRUE);
 	
 	}  
