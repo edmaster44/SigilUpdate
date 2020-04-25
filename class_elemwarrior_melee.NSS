@@ -24,8 +24,29 @@ void ElementalStrike(object oPC, object oTarget, int nSpellID)
     
     int flatfoot = FlatFooted(oPC,oTarget);
     if(flatfoot) FloatingTextStringOnCreature("*Elemental Strike (sneak attack)*", oPC, TRUE, 3.0f);
-    
-    effect eHurt = EffectLinkEffects(GetWeaponDamageTotal(oPC,oTarget,oWeapon,iHit,1,flatfoot), EffectDamage(nDmg, DAMAGE_TYPE_MAGICAL));    
+
+	if (GetHasFeat(FEAT_ELEM_AFFINITY_AIR,oPC))
+		{
+		nType= DAMAGE_TYPE_ELECTRICAL;
+		}    
+	else if(GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC))
+			{
+			nType= DAMAGE_TYPE_ACID;
+			}
+	else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
+		{
+		
+		nType= DAMAGE_TYPE_FIRE;
+		
+		}
+		
+	else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
+	{
+	
+		nType=DAMAGE_TYPE_COLD;
+	}	
+	
+    effect eHurt = EffectLinkEffects(GetWeaponDamageTotal(oPC,oTarget,oWeapon,iHit,1,flatfoot), EffectDamage(nDmg, nType));    
     eHurt = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_darkness_hit"),eHurt);
     
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eHurt, oTarget);
