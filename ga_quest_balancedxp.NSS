@@ -56,39 +56,29 @@ void main (float fCR) {
 				fTooLow = fTooLow * (30 - iMemberlevel) / 6;
 			}
 			
-			//20110625: new xp fix, calculate a leven that the party is considered as
 			float fPartylevel = IntToFloat(iMAX) - (log(IntToFloat(iMAX)-fAVG+1.0) * 1.5);
 			
-			//**if(fCR>=fAVG) //For higher CR creatures give a xp bonus
-			//***if(fCR>=IntToFloat(iMAX))
-			if(fCR>=fPartylevel)
-			{
-				//**fFinalXP = (BASEQUESTXP+(BASEQUESTXP*(fCR-fAVG)*CRBONUS)) * fTooLow * fPartyXPB;
-				//***fFinalXP = (BASEQUESTXP+(BASEQUESTXP*(fCR-IntToFloat(iMAX))*CRBONUS)) * fTooLow * fPartyXPB;
+			if(fCR>=fPartylevel) {
 				fFinalXP = (BASEQUESTXP+(BASEQUESTXP*(fCR-fPartylevel)*CRBONUS)) * fTooLow * fPartyXPB;
 			}
-			else //For lower CR give xp penalty
-			{
-				//**fFinalXP = BASEQUESTXP * fTooLow * fPartyXPB / (fAVG - fCR + 1.0);
+			else  {
 				fFinalXP = BASEQUESTXP * fTooLow * fPartyXPB / (fPartylevel - fCR + 1.0);
 			}
 			
 			if( iECL > 0)
 				fFinalXP=fFinalXP*PS_GetXPModifier(iECL);
 															
-			if(fFinalXP>MAXMONSTERXP) //In case someone manages to find a loophole that
-				fFinalXP=MAXMONSTERXP;//gives alot of xp this limits the max xp awarded
+			if(fFinalXP>MAXMONSTERXP)
+				fFinalXP=MAXMONSTERXP;
 			
 			nFinalXP = FloatToInt(fFinalXP);
 				
 			if(nFinalXP > 0)
 			{
 				sID = PS_GetCharID(oPartyMember);
-				//SendMessageToPC(oPartyMember,"id:" + sID);
 				SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
 				if (SQLFetch() != SQL_ERROR) { 
 					rp_pool = StringToInt(SQLGetData(1));
-					//SendMessageToPC(oPartyMember,"rp_pool:" + IntToString(rp_pool));
 					if ( rp_pool > nFinalXP )
 					{
 						rp_pool -= nFinalXP;
@@ -105,11 +95,6 @@ void main (float fCR) {
 				GiveXPToCreature(oPartyMember, nFinalXP);
 			}	
 		}
-			
-		//ugly debuginfo	
-		//SendMessageToPC(oPC,GetName(oPC)+"'s XP Base: "+IntToString(BASEQUESTXP)+" CR: "
-		//	+FloatToString(fCR)+" Low Level Penalty "+FloatToString(fTooLow)+" Party Bonus: "
-		//	+FloatToString(fPartyXPB)+" Avg Level: "+FloatToString(fAVG));
 		
         oPartyMember = GetNextFactionMember(oPC, TRUE);
     }

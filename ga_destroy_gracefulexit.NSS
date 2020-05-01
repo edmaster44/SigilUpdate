@@ -21,6 +21,6 @@ void main(string sCreatureTag = "", int shouldRun = FALSE) {
 	
 	DelayCommand(0.25f, AssignCommand(oCreature, ActionForceMoveToLocation(lLoc, shouldRun)));
 	
-	DestroyObject(oCreature, 1.25f);
+	DestroyObject(oCreature, 2.25f);
 
 }

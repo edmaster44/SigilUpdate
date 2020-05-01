@@ -2748,3 +2748,14 @@ void DebugMessageToPC(object oPC, string sMessage)
 
 	SendMessageToPC(oPC, sMessage);
 }
+
+//wrapper for the standard exp script, makes sure you don't keep getting exp past level 30
+int PS_GiveXPReward(object oPC, int nXP) {
+
+	if (PS_GetLevel(oPC) >= 30)
+		return FALSE;
+		
+	GiveXPToCreature(oPC, nXP);
+	return TRUE;
+
+}

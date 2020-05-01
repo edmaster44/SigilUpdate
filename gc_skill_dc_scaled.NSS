@@ -15,7 +15,7 @@ int StartingConditional(int nSkill, int maxExp = 100, int nDifficulty = ENCOUNTE
 		nBase = 20;
 	
 	int nCR = GetChallengeRatingOfTarget(OBJECT_SELF);
-	int nDC = nCR+nBase+(d10());
+	int nDC = nCR+nBase+(d4());
 
 	object oPC = GetPCSpeaker();
 	int nMod = GetSkillRank(nSkill, oPC, TRUE);

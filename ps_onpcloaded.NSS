@@ -66,7 +66,7 @@ int AddCharacterToDatabase(object oPC) {
 	string sAccount = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 	string sName = SQLEncodeSpecialChars(GetName(oPC));
 	
-	SQLExecDirect("INSERT INTO characterdata (account,name,dm_pool,rp_pool) VALUES ('"+sAccount+"','"+sName+"',1000,1000)");
+	SQLExecDirect("INSERT INTO characterdata (account,name,dm_pool,rp_pool) VALUES ('"+sAccount+"','"+sName+"',0,0)");
 	
 	string sQuery = "SELECT id FROM characterdata WHERE account='"+sAccount+"' AND name='"+sName+"'";
 	SQLExecDirect(sQuery);
@@ -142,6 +142,7 @@ int prepChar(object oPC)
 		//DebugMessageToPC(oPC, "dm pool xp: "+IntToString(dm_pool));
 		//DebugMessageToPC(oPC, "rp pool xp: "+IntToString(rp_pool));
 		//DebugMessageToPC(oPC, "combined xp: "+IntToString(availableXP));
+		int xpGiven = FALSE;
 						
 		if ( sDay != SQLGetData(4) && availableXP > 0 ) {
 			
@@ -152,31 +153,38 @@ int prepChar(object oPC)
 			if (dm_pool > nModifiedXP)
 			{	
 				//SendMessageToPC(oPC, "Pulling from DM Pool");
-				GiveXPToCreature(oPC, nModifiedXP);
+				xpGiven = PS_GiveXPReward(oPC, nModifiedXP);
+				
 				dm_pool -= nModifiedXP;
 			}
 			else if (availableXP > nModifiedXP)
 			{	
 				//SendMessageToPC(oPC, "Pulling from both pools");
 				int givenXP = nModifiedXP;
-				GiveXPToCreature(oPC, givenXP);
+				xpGiven = PS_GiveXPReward(oPC, givenXP);
+					
 				givenXP -= dm_pool;
 				dm_pool = 0;
-				rp_pool -= givenXP;		
+				rp_pool -= givenXP;	
 			}
 			else 
 			{	
 				//SendMessageToPC(oPC, "Exhausting pools");
 				nModifiedXP = availableXP;
-				GiveXPToCreature(oPC, availableXP);
+				xpGiven = PS_GiveXPReward(oPC, availableXP);
+				
 				dm_pool = 0;
 				rp_pool = 0;
-				DelayCommand(11.0, SendMessageToPC(oPC,"Your pool is now empty."));	
+				
+				if (xpGiven) {
+					DelayCommand(11.0, SendMessageToPC(oPC,"Your pool is now empty."));	
+				}
 			}
-					
-			DelayCommand(10.0, SendMessageToPC(oPC,"Your character has been awarded " + IntToString(nModifiedXP) + " XP for previous roleplay (or from removing xp with Styx)"));
-			SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ", rp_pool=" + IntToString(rp_pool) + " WHERE id=" + IntToString(nID));
-			
+				
+			if (xpGiven) {	
+				DelayCommand(10.0, SendMessageToPC(oPC,"Your character has been awarded " + IntToString(nModifiedXP) + " XP for previous roleplay (or from removing xp with Styx)"));
+				SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ", rp_pool=" + IntToString(rp_pool) + " WHERE id=" + IntToString(nID));
+			}
 		}
 		
 	}

@@ -5,6 +5,9 @@
 
 void GiveXPTick(object oPC) {
 
+	if (PS_GetLevel(oPC) >= 30)
+		return;
+
 	int lastDone = CheckTimeStamp(oPC, "RP_EXP_AWARDED_LAST");
 	if (lastDone < 900‬) //happens once per 15 minutes, max
 		return;
@@ -14,7 +17,7 @@ void GiveXPTick(object oPC) {
 	baseTick += d20();
 
 	SendMessageToPC(oPC, "Experience awarded for RP:");
-	GiveXPToCreature(oPC, baseTick);
+	PS_GiveXPReward(oPC, baseTick);
 
 }
 

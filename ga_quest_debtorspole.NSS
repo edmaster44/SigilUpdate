@@ -55,7 +55,10 @@ string GetMoneyOwedTo() {
 
 int GetGoldReward(object oPC) {
 
-	int nHD = GetHitDice(oPC);
+	int nHD = GetHitDice(oPC)-d6();
+	if (nHD < 3)
+		nHD = 3;
+		
 	return d100(nHD);
 
 }
