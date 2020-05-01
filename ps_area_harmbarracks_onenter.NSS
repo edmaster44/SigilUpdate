@@ -24,11 +24,11 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_harmoniumsmith", lSpawnpoint);    
   }
 
-  if(GetObjectByTag("ps_npc_harmonium4") == OBJECT_INVALID)
+  if(GetObjectByTag("ps_c_harm_diana") == OBJECT_INVALID)
   {
    object oWP = GetWaypointByTag("ps_wp_harm3");
    location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_harmonium4", lSpawnpoint);    
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harm_diana", lSpawnpoint);    
   }
   
   if(GetObjectByTag("h_guard_walk") == OBJECT_INVALID)
