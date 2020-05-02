@@ -19,7 +19,7 @@ Created On: 08/30/02
 
 //Tags of special condition locations
 // Funny, tags remove "-" from strings, so take care.
-const string LOC_ARENA = "ps_area_sigilgymnasiumarena";
+const string LOC_ARENA = "ps_area_s_cw_gymnasium_arena";
 const string LOC_OOC = "spawnroom";
 const string LOC_MORTUARY = "ps_area_hivemortuary";
 const string LOC_APPERANCE_CHANGER = "appearance_changer_room";
