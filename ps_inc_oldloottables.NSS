@@ -749,6 +749,8 @@ string GetCloaksFromList(int nRandom, int nTreasureLevel) {
 			case 16: sItem = "ps_itemset_iggwilv1";  break;
 			case 17: sItem = "ps_itemset_slaadskin2";  break;
 			case 18: sItem = "ps_cloak_blades"; break; 
+			case 19: sItem = "ps_gad_cloakofdevotion"; break; 
+			case 20: sItem = "ps_gad_cloakofendurance"; break; 
 		}
 	}
 	return sItem;
@@ -854,6 +856,7 @@ string GetBracersFromList(int nRandom, int nTreasureLevel) {
 			case 27: sItem = "ps_bracer_shields"; break;
 			case 28: sItem = "ps_bracer_blinddevotion"; break; 
 			case 29: sItem = "ps_gad_force_gauntlets"; break; 
+			case 30: sItem = "ps_gad_bracersoftheland"; break; 
 		}
 	}
 	return sItem;
@@ -1059,6 +1062,11 @@ string GetShieldsFromList(int nRandom, int nTreasureLevel) {
 			case 13: sItem = "ps_heavyshield_nullifier"; break;
 			case 14: sItem = "ps_gad_epic_sorcerers_focus"; break;
 			case 15: sItem = "ps_gad_epic_wizards_focus"; break;
+			case 16: sItem = "ps_gad_eldritch_shield"; break;
+			case 17: sItem = "ps_gad_mighty_bulwark"; break;
+			case 18: sItem = "ps_gad_spellward_heavy"; break;
+			case 19: sItem = "ps_gad_spellward_light"; break;
+			case 20: sItem = "ps_gad_spellward_tower"; break;
 		}
 	}
 	return sItem;
@@ -2297,6 +2305,8 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 249: sItem = "ps_gad_rippintear"; break; 
 			case 250: sItem = "ps_gad_caustic_coil"; break; 
 			case 251: sItem = "ps_gad_ballandchain"; break;  
+			case 252: sItem = "ps_gad_outlaws_axe"; break;   
+			case 253: sItem = "ps_gad_stygianrimeblade"; break;  
 		}
 	}
 	return sItem;
