@@ -28,7 +28,7 @@ void DesertWind1(object oCaller) // Applies a Haste effect to the caller for 2 r
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
 	
 	// apply effect
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectHaste(), oCaller, 12.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectHaste(), oCaller, 60.0f);
 	
 	// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -41,28 +41,10 @@ void DesertWind1(object oCaller) // Applies a Haste effect to the caller for 2 r
 void DesertWind2(object oCaller) // Gives the equiped weapons or gloves fire damage for one round.
 {
 	SendMessageToPC(oCaller, "Using <i>Burning Blade.</i>");
-	object oRightHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oCaller);
-	object oLeftHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oCaller);
-	object oGloves = GetItemInSlot(INVENTORY_SLOT_ARMS, oCaller);
-	itemproperty fireDamage = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, DAMAGE_BONUS_4);
-	
-	// adds damage to weapons
-	if(GetIsObjectValid(oLeftHand) && GetMeleeWeapon(oLeftHand))
-	{	
-		IPSafeAddItemProperty(oLeftHand, fireDamage, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-	}
-	if(GetIsObjectValid(oRightHand) && (GetMeleeWeapon(oRightHand) || GetIsRangedWeapon(oRightHand)))
-	{
-		IPSafeAddItemProperty(oRightHand, fireDamage, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-	}
-	if(GetIsObjectValid(oGloves))
-	{
-		IPSafeAddItemProperty(oGloves, fireDamage, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-	}
-	
+
 	// adds damage to character (to make it irresistable)
-	effect fireDamage2 = EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_FIRE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fireDamage2, oCaller, 12.0f);
+	effect fireDamage2 = EffectDamageIncrease(DAMAGE_BONUS_8, DAMAGE_TYPE_FIRE);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fireDamage2, oCaller, 18.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
@@ -79,7 +61,7 @@ void DesertWind2(object oCaller) // Gives the equiped weapons or gloves fire dam
 void DesertWind3(object oCaller, object oTarget) // Throws a ball of fire at the target.
 {
 	SendMessageToPC(oCaller, "Using <i>Fan the Flames.</i>");
-	int numberOfDice = GetTotalLevels(oCaller, TRUE) /2;
+	int numberOfDice = GetTotalLevels(oCaller, TRUE) ;
 	int touchAttackResult = TouchAttackRanged(oTarget, TRUE, 0);
 	
 	if (touchAttackResult == TOUCH_ATTACK_RESULT_MISS)
@@ -99,7 +81,7 @@ void DiamondMind1(object oCaller, object oTarget) // If concentration check succ
 {
 	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2913))
 	{
-		SendMessageToPC(oCaller, "Using <i>Sapphire Nightmae Blade.</i>");
+		SendMessageToPC(oCaller, "Using <i>Sapphire Nightmare Blade.</i>");
 		// Success if concentration VS target's AC
 		if (GetIsSkillSuccessful(oCaller, SKILL_CONCENTRATION, GetAC(oTarget), TRUE))
 		{
@@ -107,7 +89,7 @@ void DiamondMind1(object oCaller, object oTarget) // If concentration check succ
 			if (ACpen < 3)
 				ACpen = 3;
 			effect ACdecrease = EffectACDecrease(ACpen);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oTarget, 12.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oTarget, 24.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_REGENERATION);
@@ -137,15 +119,15 @@ void DiamondMind2(object oCaller) // Increases all base saves to the value of th
 	
 	if ((concentration - reflex) > 0)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, reflexBoost, oCaller, 12.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, reflexBoost, oCaller, 30.0f);
 	}
 		if ((concentration - fortitude) > 0)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fortBoost, oCaller, 12.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fortBoost, oCaller, 30.0f);
 	}
 		if ((concentration - will) > 0)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, willBoost, oCaller, 12.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, willBoost, oCaller, 30.0f);
 	}
 	
 		// Apply a vfx
@@ -169,7 +151,7 @@ void DiamondMind3(object oCaller) // Increases damage by 1/5 of a concentration 
 		damageBonus = damageBonus + 10;
 	}
 	effect damageIncrease = EffectDamageIncrease(damageBonus, DAMAGE_TYPE_MAGICAL); // Set to magical so it will bypass DR
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 12.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 24.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
@@ -189,8 +171,8 @@ void IronHeart1(object oCaller) // +4 AB, -1 AC for 2 rounds.
 	effect attackBonus = EffectAttackIncrease(4);
 	effect ACdecrease = EffectACDecrease(1);
 	
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, attackBonus, oCaller, 12.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oCaller, 12.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, attackBonus, oCaller, 24.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oCaller, 24.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
@@ -214,8 +196,8 @@ void IronHeart2(object oCaller, object oTarget) //  Give the target -4 damage an
 		if (touchAttackResult)
 		{
 			effect damageReduced = EffectDamageDecrease(4, DAMAGE_TYPE_ALL);
-			effect ABdecrease = EffectAttackDecrease(2);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(ABdecrease, damageReduced), oTarget, 24.0f);
+			effect ABdecrease = EffectAttackDecrease(4);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(ABdecrease, damageReduced), oTarget, 30.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
@@ -506,7 +488,7 @@ void ShadowHand1(object oCaller, object oTarget) // on a touch attack, gives the
 			effect visualEffect = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);
 			effect missChance = EffectMissChance(50, MISS_CHANCE_TYPE_NORMAL);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, visualEffect, oTarget, 0.0f);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, missChance, oTarget, 12.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, missChance, oTarget, 18.0f);
 		}
 	}
 	
@@ -523,7 +505,10 @@ void ShadowHand2(object oCaller) // User becomes invisible for 4 round
 	SendMessageToPC(oCaller, "Using <i>Cloak of Deception.</i>");
 	effect eVis = EffectVisualEffect( VFX_DUR_INVISIBILITY );
 	effect invisibility = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(invisibility, eVis), oCaller, 24.0f);
+	effect conceal = EffectConcealment(50);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(invisibility, eVis), oCaller, 30.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, conceal, oCaller, 30.0f);
+	
 	
 		// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -570,7 +555,7 @@ void StoneDragon1(object oCaller, object oTarget) // on a touch attack, opponent
 	
 		if (touchAttackResult)
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDamageReductionNegated(), oTarget, 18.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDamageReductionNegated(), oTarget, 24.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
@@ -590,7 +575,7 @@ void StoneDragon2(object oCaller) // DR 15/- for 3 rounds.
 {		
 	SendMessageToPC(oCaller, "Using <i>Stone Bones.</i>");
 	effect dr = EffectDamageReduction(15, DAMAGE_POWER_NORMAL, 0, DR_TYPE_NONE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, dr, oCaller, 18.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, dr, oCaller, 24.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_DEFENSE);
@@ -613,7 +598,7 @@ void StoneDragon3(object oCaller, object oTarget) // on a touch attack, root and
 	
 		if (touchAttackResult)
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(EffectEntangle(), EffectSlow()), oTarget, 18.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(EffectEntangle(), EffectSlow()), oTarget, 24.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
@@ -634,8 +619,8 @@ void DevotedSpirit1(object oCaller, object oTarget) // ennemy gets -4AB, you get
 	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2925))
 	{
 		SendMessageToPC(oCaller, "Using <i>Iron Guard's Glare.</i>");
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectACDecrease(1, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL), oCaller, 18.0f);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(4, ATTACK_BONUS_MISC), oTarget, 18.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(1, ATTACK_BONUS_MISC), oCaller, 18.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(6, ATTACK_BONUS_MISC), oTarget, 18.0f);
 		
 		// Apply a vfx
 		effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
@@ -655,13 +640,13 @@ void DevotedSpirit2(object oCaller) // All nearby allies get +X AC for two round
 	SendMessageToPC(oCaller, "Using <i>Shield Block.</i>");
 	int shieldAC = GetItemACValue(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oCaller)); //Gets the AC bonus of the user's shield
 
-	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 10.0f, GetLocation(oCaller));
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 15.0f, GetLocation(oCaller));
 	
 	while (GetIsObjectValid(oTarget))
 	{
 		if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && GetIsFriend(oTarget, oCaller) && oTarget != oCaller)
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectACIncrease(shieldAC), oTarget, 12.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectACIncrease(shieldAC), oTarget, 30.0f);
 		
 			// Sends a message to the target to inform it.
 			string hisher = "his";
@@ -673,7 +658,7 @@ void DevotedSpirit2(object oCaller) // All nearby allies get +X AC for two round
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 		}
 		
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, GetLocation(oCaller));
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, 15.0f, GetLocation(oCaller));
 	}
 	
 		// Initiates an attack against current target
@@ -695,15 +680,15 @@ void DevotedSpirit3(object oCaller) // your weapon(s) gains vamp regen +7 for 2 
 	
 	if(GetIsObjectValid(oLeftHand) && GetMeleeWeapon(oLeftHand))
 	{	
-		IPSafeAddItemProperty(oLeftHand, healing, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+		IPSafeAddItemProperty(oLeftHand, healing, RoundsToSeconds(3), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	}
 	if(GetIsObjectValid(oRightHand) && GetMeleeWeapon(oRightHand))
 	{
-		IPSafeAddItemProperty(oRightHand, healing, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+		IPSafeAddItemProperty(oRightHand, healing, RoundsToSeconds(3), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	}
-	 if (GetBaseItemType(oGloves) == BASE_ITEM_GLOVES)
+	if(GetIsObjectValid(oGloves))
 	{
-		IPSafeAddItemProperty(oGloves, healing, RoundsToSeconds(2), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+		IPSafeAddItemProperty(oGloves, healing, RoundsToSeconds(3), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	}
 	
 		// Initiates an attack against current target
