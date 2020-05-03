@@ -326,7 +326,11 @@ string GetSecondaryParamName(struct enchantment enchant) {
 	
 	int nNumIndex = enchant.numerical;  
 	int nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
-	return GetStringByStrRef(nParam);
+	string sParam = GetStringByStrRef(nParam);
+	if (GetStringLowerCase(sParam) == "bad strref" || GetStringLowerCase(sParam) == "bad_strref")
+		return "";
+	else
+		return sParam;
 }
 
 //Is this a thrown weapon?
@@ -549,8 +553,11 @@ string TranslateItemTagToName(string sString) {
 //to find out the desired quality of the gemstone
 string TranslateGemstoneTagToName(string sString) {
 
+	SpeakString("Translating gemstone tag: "+sString, TALKVOLUME_SHOUT);
 	string sBase = GetBaseGemTagFromString(sString);
+	SpeakString("Gemstone base: "+sBase, TALKVOLUME_SHOUT);
 	string sResult = TranslateItemTagToName(sBase);
+	SpeakString("Gemstone name: "+sResult, TALKVOLUME_SHOUT);
 	string sEnd = GetSubString(sString, GetStringLength(sString)-1, 1);
 	int nQ = StringToInt(sEnd);
 	string sQuality = GetQualityString(nQ-1);
@@ -670,7 +677,7 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 	string sResult = "";
 
 	int nIndex = 1;
-	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE "+sColumn+" = 1 AND Can_Enchant = 1");
+	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement, Can_Enchant FROM recipes WHERE "+sColumn+" = 1 AND Can_Enchant = 1");
 	while (SQLFetch() != SQL_ERROR) {
     	struct enchantment enchant;
 		enchant.id = StringToInt(SQLGetData(1));
@@ -684,8 +691,11 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 		enchant.gemstone = SQLGetData(9);
 		enchant.special_req = SQLGetData(10);
 		
-		sResult += GenerateEnchantmentDescription(enchant);
-		sResult += "\n";
+		int canEnchant = StringToInt(SQLGetData(11));
+		if (canEnchant) {
+			sResult += GenerateEnchantmentDescription(enchant);
+			sResult += "\n";
+		}
 	}
 	
 	return sResult;
