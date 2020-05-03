@@ -73,7 +73,9 @@ void SpawnCommonerEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID)
 	
 	SetFirstName(oCommoner, "Hiver");
 	SetLastName(oCommoner, "");
-	SetDescription(oCommoner, "This looks like a Cager of lower middle class status. They're a bit furtive as they go about their daily business, however.");
+	SetDescription(oCommoner, "This looks like a Cager of lower middle class status; better than you'd normally expect in the Hive. They're a bit furtive as they go about their daily business, however.");
+	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(100), oCommoner));
+	
 }
 
 void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
