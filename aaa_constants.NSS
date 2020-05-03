@@ -458,8 +458,8 @@ const int VFX_PER_HALLUCINATORY_TERRAIN 		= 95;
 const int SPELL_HYPNOTISM						= 1958;
 
 //New Spell Like Abilities
-const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1920;//Place Holder for now
-const int ELEMENTAL_WARRIOR_IMMUNITY			= 1919;
+const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1921;//Place Holder for now
+const int ELEMENTAL_WARRIOR_IMMUNITY			= 1920;
 //Elemental Warrior Feats
 const int FEAT_ELEMWAR_AFFINITY_AIR				= 2992;
 const int FEAT_ELEMWAR_AFFINITY_EARTH			= 2993;
