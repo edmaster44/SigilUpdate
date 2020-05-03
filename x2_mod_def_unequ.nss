@@ -34,7 +34,7 @@ void main()
 	PS_ManageItemImmunities(oItem, oPC, FALSE);
 	
     // -------------------------------------------------------------------------
-    //  Combat Mode Fix
+    //  Combat Mode Fix (so you can't enabled something like combat expertise from an item and swap)
     // -------------------------------------------------------------------------
 	if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE)) {
 		SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
