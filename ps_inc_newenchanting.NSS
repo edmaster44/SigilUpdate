@@ -328,7 +328,7 @@ string GetSecondaryParamName(struct enchantment enchant) {
 	int nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
 	string sParam = GetStringByStrRef(nParam);
 	if (GetStringLowerCase(sParam) == "bad strref" || GetStringLowerCase(sParam) == "bad_strref")
-		return "";
+		return "Click for Details";
 	else
 		return sParam;
 }
@@ -553,11 +553,11 @@ string TranslateItemTagToName(string sString) {
 //to find out the desired quality of the gemstone
 string TranslateGemstoneTagToName(string sString) {
 
-	SpeakString("Translating gemstone tag: "+sString, TALKVOLUME_SHOUT);
+	//SpeakString("Translating gemstone tag: "+sString, TALKVOLUME_SHOUT);
 	string sBase = GetBaseGemTagFromString(sString);
-	SpeakString("Gemstone base: "+sBase, TALKVOLUME_SHOUT);
+	//SpeakString("Gemstone base: "+sBase, TALKVOLUME_SHOUT);
 	string sResult = TranslateItemTagToName(sBase);
-	SpeakString("Gemstone name: "+sResult, TALKVOLUME_SHOUT);
+	//SpeakString("Gemstone name: "+sResult, TALKVOLUME_SHOUT);
 	string sEnd = GetSubString(sString, GetStringLength(sString)-1, 1);
 	int nQ = StringToInt(sEnd);
 	string sQuality = GetQualityString(nQ-1);
@@ -823,8 +823,8 @@ itemproperty EnchantmentIndexToItemProp(struct enchantment enchant) {
 		case 37: return ItemPropertyImmunityMisc(nSub);
 		case 38: return ItemPropertyImprovedEvasion();
 		case 39: return ItemPropertyBonusSpellResistance(nParam);
-		case 40: return ItemPropertyBonusSavingThrow(nSub, nParam);
-		case 41: return ItemPropertyBonusSavingThrowVsX(nSub, nParam);
+		case 40: return ItemPropertyBonusSavingThrowVsX(nSub, nParam);
+		case 41: return ItemPropertyBonusSavingThrow(nSub, nParam);
 		case 43: return ItemPropertyKeen();
 		case 44: return ItemPropertyLight(nSub, nParam);
 		case 45: return ItemPropertyMaxRangeStrengthMod(nParam);
