@@ -4,8 +4,14 @@
 #include "ps_inc_dynamicencounters"
 #include "ps_inc_functions"
 #include "x0_i0_anims"
+#include "ps_inc_advscript"
+
+//CAMPAIGN_SPAWN_TYPE
+//0 = Harmonium
+//1 = Fleeing Townsfolk
 
 void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID);
+void SpawnCommonerEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID);
 
 void main() {
 
@@ -32,19 +38,47 @@ void main() {
 		return;
 	
 	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
+	int nSpawnType = GetLocalInt(OBJECT_SELF, "CAMPAIGN_SPAWN_TYPE");
 	
-	int nNum = d2();
-	int nCount = 0;
-	while (nCount < nNum) {
+	if (nSpawnType == 1) {
+		SpawnCommonerEncounter(oWP, nLevel);
+	} else {
 		SpawnHarmoniumEncounter(oWP, nLevel);
-		nCount++;
 	}
 	
 }
 
+void SpawnCommonerEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
+
+	WriteTimestampedLogEntry("Creating commoner campaign encounter in "+GetTag(GetArea(oWP)));
+	
+	if (GetIsObjectValid(oPC)) {
+		SendMessageToPC(oPC, "creating encounter");
+	}
+	
+	object oCommoner = CreateObject(OBJECT_TYPE_CREATURE, "de_commoner_1", GetLocation(oWP));
+	
+	int nGender = Random(2);
+	int nHead = Random(7);
+	int nHair = Random(26);
+	
+	struct CreatureCoreAppearance currentAppearance = PS_GetCreatureCoreAppearance(oCommoner);
+	currentAppearance.Gender = nGender;
+	currentAppearance.HeadVariation = nHead;
+	currentAppearance.HairVariation = nHair;
+	PS_SetCreatureCoreAppearance(oCommoner, currentAppearance);
+	
+	assignProtectiveItems(oCommoner, FALSE);
+	makeInventoryUndroppable(oCommoner);
+	
+	SetFirstName(oCommoner, "Hiver");
+	SetLastName(oCommoner, "");
+	SetDescription(oCommoner, "This looks like a Cager of lower middle class status. They're a bit furtive as they go about their daily business, however.");
+}
+
 void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 
-	WriteTimestampedLogEntry("Creating some campaign encounter in "+GetTag(GetArea(oWP)));
+	WriteTimestampedLogEntry("Creating harmonium campaign encounter in "+GetTag(GetArea(oWP)));
 
 	int nClass = CLASS_TYPE_FIGHTER;
 	int nClassRoll = Random(3)+1;
