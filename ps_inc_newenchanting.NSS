@@ -328,7 +328,7 @@ string GetSecondaryParamName(struct enchantment enchant) {
 	int nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
 	string sParam = GetStringByStrRef(nParam);
 	if (GetStringLowerCase(sParam) == "bad strref" || GetStringLowerCase(sParam) == "bad_strref")
-		return "Click for Details";
+		return "";
 	else
 		return sParam;
 }
@@ -521,6 +521,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 		int sub = e.subtype;
 		if (nType == type && nSubType == sub) {
 			string sName = GetSecondaryParamName(e);
+			if (sName == "") sName = "Click for Details";
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST", "ENCHANTPROW_"+IntToString(n), "ParamTypeName="+sName+";", "", "5="+IntToString(n), "");
 			/*if (!CanEnchantItem(oPC, oItem, e, FALSE)) {
 				SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANTPROW_"+IntToString(n), TRUE);
@@ -941,6 +942,34 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					return TRUE;
 				}
 			} 
+			//backwards compatibility with old quartz
+			else if (sGemReq == "gemstone_kuartz_green") {
+				if (FindSubString(sTag, "gemstone_quartz_green") >= 0) {
+					int nQuality = GetGemQuality(oItem);
+					if (nQReq == nQuality) {
+						SetLocalObject(oPC, "GemstoneToTake", oItem);
+						return TRUE;
+					}
+				}
+			}
+			else if (sGemReq == "gemstone_kuartz_purple") {
+				if (FindSubString(sTag, "gemstone_quartz_purple") >= 0) {
+					int nQuality = GetGemQuality(oItem);
+					if (nQReq == nQuality) {
+						SetLocalObject(oPC, "GemstoneToTake", oItem);
+						return TRUE;
+					}
+				}
+			}
+			else if (sGemReq == "gemstone_kuartz_white") {
+				if (FindSubString(sTag, "gemstone_quartz_white") >= 0) {
+					int nQuality = GetGemQuality(oItem);
+					if (nQReq == nQuality) {
+						SetLocalObject(oPC, "GemstoneToTake", oItem);
+						return TRUE;
+					}
+				}
+			}
 		}
 		oItem = GetNextItemInInventory(oPC);
 	}

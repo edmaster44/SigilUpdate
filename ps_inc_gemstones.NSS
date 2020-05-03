@@ -210,10 +210,10 @@ int GetCaratWeight(object oGem) {
 	return StringToInt(sCarob);
 }
 
-//Get Gem Quality of Rough Gemstone
+//Get Gem Quality of Gemstone
 int GetGemQuality(object oGem) {
 
- 	int qualityIndex = FindSubString(GetTag(oGem), "_q");
+ 	int qualityIndex = FindSubString(GetTag(oGem), "_q", 12); //start 12 slots in, because quality never comes before that
 	if (qualityIndex < 0)
 		return 0;
 	string sQuality = GetSubString(GetTag(oGem), qualityIndex+2, 1);
