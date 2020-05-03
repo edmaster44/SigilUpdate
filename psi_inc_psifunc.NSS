@@ -388,8 +388,16 @@ int GetAbilityScoreOfClass(object oManifester, int nClass)
     return GetAbilityScore(oManifester, GetAbilityOfClass(nClass));
 }
 
-int GetAbilityOfClass(int nClass){
+int GetAbilityOfClass(int nClass)
+{
+	switch(nClass)
+	{
+	case GetLevelByClass(90,OBJECT_SELF):
+	case GetLevelByClass(100,OBJECT_SELF):
+	case GetLevelByClass(152,OBJECT_SELF):
+	case GetLevelByClass(128,OBJECT_SELF):
     return ABILITY_INTELLIGENCE;
+	}
 }
 
 int GetPowerDiscipline(int nSpellID)
