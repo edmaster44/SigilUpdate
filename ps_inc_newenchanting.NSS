@@ -929,42 +929,47 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 
 	object oItem = GetFirstItemInInventory(oPC);
 	string sGemReq = GetBaseGemTagFromString(sReq);
+	SpeakString("Required Gemstone Base: "+sGemReq, TALKVOLUME_SHOUT);
 	int nQReq = StringToInt(GetSubString(sReq, GetStringLength(sReq)-1, 1));
 	nQReq = nQReq-1;
 	
 	while (GetIsObjectValid(oItem)) {
 		if (GetBaseItemType(oItem) == BASE_ITEM_GEM) {
 			string sTag = GetTag(oItem);
-			if (FindSubString(sTag, sGemReq) >= 0) {
+			if (FindSubString(sTag, sGemReq) >= 0 && !IsGemRough(oItem)) {
 				int nQuality = GetGemQuality(oItem);
 				if (nQReq == nQuality) {
+					SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
 					SetLocalObject(oPC, "GemstoneToTake", oItem);
 					return TRUE;
 				}
 			} 
 			//backwards compatibility with old quartz
-			else if (sGemReq == "gemstone_kuartz_green") {
+			else if (sGemReq == "gemstone_kuartz_green" && !IsGemRough(oItem)) {
 				if (FindSubString(sTag, "gemstone_quartz_green") >= 0) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
+						SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
 						SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
 			}
-			else if (sGemReq == "gemstone_kuartz_purple") {
+			else if (sGemReq == "gemstone_kuartz_purple" && !IsGemRough(oItem)) {
 				if (FindSubString(sTag, "gemstone_quartz_purple") >= 0) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
+						SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
 						SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
 			}
-			else if (sGemReq == "gemstone_kuartz_white") {
+			else if (sGemReq == "gemstone_kuartz_white" && !IsGemRough(oItem)) {
 				if (FindSubString(sTag, "gemstone_quartz_white") >= 0) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
+						SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
 						SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
