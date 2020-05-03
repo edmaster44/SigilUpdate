@@ -43,6 +43,9 @@ while (GetIsObjectValid(oBad))
 	
 //	Create the new henchman as an object
 	object oHench	= CreateObject(OBJECT_TYPE_CREATURE, sCritter, oLoc);
+	ChangeToStandardFaction(oHench, STANDARD_FACTION_DEFENDER);
+	AssignCommand(oHench, ClearAllActions());
+	
 	SetLocalObject(oHench, "SUMMONER", oPC);
 		
 //	Add the created creature as a henchman and apply the "henchman" script set
