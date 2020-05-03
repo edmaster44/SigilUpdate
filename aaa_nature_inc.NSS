@@ -119,22 +119,22 @@ void Blink()
 		eDisplace = SupernaturalEffect(eDisplace);
 	
 	// New "Blinking" movement added by Ceremorph
-	float fOrient = GetFacing(oSelf);
-	float fx = IntToFloat(Random(15));
-	float fy = IntToFloat(Random(15));
-	float fz = IntToFloat(Random(15));
+//	float fOrient = GetFacing(oSelf);
+//	float fx = IntToFloat(Random(15));
+//	float fy = IntToFloat(Random(15));
+//	float fz = IntToFloat(Random(15));
 	location lStart = GetLocation(oSelf);
-	location lDestination = Location(GetAreaFromLocation(lStart), Vector(fx, fy, fz), fOrient);
-	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLINK);
-	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lDestination, TRUE, OBJECT_TYPE_CREATURE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oSelf);
-	DelayCommand(0.1f, ActionJumpToLocation(lDestination));
+//	location lDestination = Location(GetAreaFromLocation(lStart), Vector(fx, fy, fz), fOrient);
+//	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLINK);
+//	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lDestination, TRUE, OBJECT_TYPE_CREATURE);
+//	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oSelf);
+//	DelayCommand(0.1f, ActionJumpToLocation(lDestination));
 	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDisplace, oSelf, RoundsToSeconds(2)));
-	while (GetIsObjectValid(oTarget))
-	{	if (GetIsEnemy(oTarget, oSelf))
-		{	DelayCommand(0.3f, ActionAttack(oTarget));	}
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lDestination, TRUE, OBJECT_TYPE_CREATURE);
-	}
+//	while (GetIsObjectValid(oTarget))
+//	{	if (GetIsEnemy(oTarget, oSelf))
+//		{	DelayCommand(0.3f, ActionAttack(oTarget));	}
+//		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lDestination, TRUE, OBJECT_TYPE_CREATURE);
+//	}
 }
 
 void DimensionDoor(object oSelf)
