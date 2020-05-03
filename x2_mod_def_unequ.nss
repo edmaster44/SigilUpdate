@@ -26,14 +26,27 @@ void main()
 	SigilEquipment(oPC, oItem, FALSE);
 
 	//This Removes Meditative Strikes
-	if (GetMonkWeapon(oItem))
-	{
-	RemoveMeditativeStrikes(oPC,oItem);
-	
+	if (GetMonkWeapon(oItem)) {
+		RemoveMeditativeStrikes(oPC,oItem);
 	}
 	
 	//Not everything was included in it, however. This is what I left out.
 	PS_ManageItemImmunities(oItem, oPC, FALSE);
+	
+    // -------------------------------------------------------------------------
+    //  Combat Mode Fix
+    // -------------------------------------------------------------------------
+	if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE)) {
+		SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
+	} if (GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)) {
+		SetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE, FALSE);
+	} if (GetActionMode(oPC, ACTION_MODE_IMPROVED_POWER_ATTACK)) {
+		SetActionMode(oPC, ACTION_MODE_IMPROVED_POWER_ATTACK, FALSE);
+	} if (GetActionMode(oPC, ACTION_MODE_POWER_ATTACK)) {
+		SetActionMode(oPC, ACTION_MODE_POWER_ATTACK, FALSE);
+	} if (GetActionMode(oPC, ACTION_MODE_RAPID_SHOT)) {
+		SetActionMode(oPC, ACTION_MODE_RAPID_SHOT, FALSE);
+	}
 	 
     // -------------------------------------------------------------------------
     //  Intelligent Weapon System
