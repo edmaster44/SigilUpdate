@@ -2,6 +2,7 @@
 //gives exp if druid or ranger
 
 #include "ps_inc_training"
+#include "ps_inc_functions"
 
 int StartingConditional(int nDC, int maxExp = 100)
 {
@@ -32,7 +33,7 @@ int StartingConditional(int nDC, int maxExp = 100)
 	
 	if (nRoll >= nDC) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;

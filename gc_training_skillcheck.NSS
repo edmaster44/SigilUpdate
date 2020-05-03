@@ -2,6 +2,7 @@
 //For a standard skill roll with exp, use gc_training_
 
 #include "ps_inc_training"
+#include "ps_inc_functions"
 
 int StartingConditional(int nSkill, int nDC, int maxExp = 100)
 {
@@ -30,7 +31,7 @@ int StartingConditional(int nSkill, int nDC, int maxExp = 100)
 	
 	if (GetIsSkillSuccessful(oPC, nSkill, nDC, TRUE)) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;

@@ -4,6 +4,7 @@
 //Refer to the SKILL_* constants for the correct SKILL int to use
 #include "ps_inc_training"
 #include "ps_inc_randomitems"
+#include "ps_inc_functions"
 
 int StartingConditional(int nSkill, int maxExp = 100, int nDifficulty = ENCOUNTER_DIFFICULTY_NORMAL)
 {
@@ -33,7 +34,7 @@ int StartingConditional(int nSkill, int maxExp = 100, int nDifficulty = ENCOUNTE
 	
 	if (GetIsSkillSuccessful(oPC, nSkill, nDC, TRUE)) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;

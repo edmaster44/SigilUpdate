@@ -2,6 +2,7 @@
 //a level appropriate challenge.
 
 #include "ps_inc_training"
+#include "ps_inc_functions"
 
 int StartingConditional(int nSave, int nDC, int maxExp = 100)
 {
@@ -42,7 +43,7 @@ int StartingConditional(int nSave, int nDC, int maxExp = 100)
 	
 	if (nSuccess > 0) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;

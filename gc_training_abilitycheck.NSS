@@ -2,6 +2,7 @@
 //a skill appropriate challenge.
 
 #include "ps_inc_training"
+#include "ps_inc_functions"
 
 int StartingConditional(int nAbility, int nDC, int maxExp = 100)
 {
@@ -32,7 +33,7 @@ int StartingConditional(int nAbility, int nDC, int maxExp = 100)
 	
 	if (nRoll >= nDC) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;
