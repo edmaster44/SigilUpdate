@@ -43,15 +43,23 @@
 
 void RemoveEffectsNPF(object oObject)
 {
+    object oCaster = GetAreaOfEffectCreator();
     effect eEff = GetFirstEffect(oObject);
+    int nEffID;
     while(GetIsEffectValid(eEff))
     {
-        if(GetEffectType(eEff) == EFFECT_TYPE_SPELL_FAILURE || EFFECT_TYPE_SPELL_IMMUNITY)
-            RemoveEffect(oObject, eEff);
+        if(GetEffectCreator(eEff) == oCaster)
+        {
+            nEffID = GetEffectSpellId(eEff);
+            if(nEffID == EFFECT_TYPE_SPELL_FAILURE 
+            || nEffID == EFFECT_TYPE_SPELL_IMMUNITY)
+            {
+                RemoveEffect(oObject, eEff);
+            }
+        }
         eEff = GetNextEffect(oObject);
     }
 }
-
 void main()
 {
     object oExit = GetExitingObject();
