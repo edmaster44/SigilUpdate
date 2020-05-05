@@ -572,7 +572,7 @@ void StackEldBlast (object oPC)
 		nBrachina = FloatToInt(IntToFloat(nBrachina)*0.8f);
 	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC); //Incubus/Succubus Warlock
 		nSuccubus = FloatToInt(IntToFloat(nSuccubus)*0.9f);
-	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON); // Night Hag Warlock
+	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC); // Night Hag Warlock
 		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.6f + 0.2f);
 	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC); // Greyslaad Warlock
 		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f + 0.8f);	
