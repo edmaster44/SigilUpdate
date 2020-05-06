@@ -423,8 +423,12 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	ApplyEquipmentEffect(oPC, eFX);
 }
 //Elemental Weapon
-void AppleElementalWeapon(object oPC, object oItem)
+void ApplyElementalWeapon(object oPC, object oItem)
 {
+		itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
+		if (GetIsItemPropertyValid(Prop) != FALSE) {
+    	SendMessageToPC(oPC, "Elemental Weapon already active.");
+    	return;
 	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	int nItemVisual;
 	int DamageType;		
@@ -474,6 +478,23 @@ void AppleElementalWeapon(object oPC, object oItem)
 	
     }
 }
+}
+
+//Removes Elemental Weapon
+void RemoveElementalWeapon(object oPC,object oItem)
+{
+  if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE)){
+itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
+if (GetIsItemPropertyValid(Prop) == TRUE) {
+    SendMessageToPC(oPC, "Removing Elemental Weapon");
+    return;
+	
+	DeleteItemPropertyReference(oItem, "ElementalWeapon");
+
+}
+}
+}
+
 
 //Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
 void ApplyMeditativeStrikes(object oPC,object oItem)

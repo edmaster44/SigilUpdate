@@ -2,6 +2,7 @@
 #include "x2_inc_itemprop"
 #include "x2_inc_spellhook"
 #include "aaa_constants"
+#include "nwn2_inc_spells"
 
 
 void ElementalStrike(object oPC, object oTarget, int nSpellID)

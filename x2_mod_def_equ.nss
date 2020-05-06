@@ -24,6 +24,8 @@ void main()
 	//This Applies Meditative Strikes
 	ApplyMeditativeStrikes(oPC,oItem);
 	
+	//This Applies Elemental Weapon
+	ApplyElementalWeapon(oPC,oItem);
 
 	
 	
