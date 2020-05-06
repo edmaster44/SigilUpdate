@@ -715,9 +715,11 @@ void main() {
 	SetLocalString( oModule, "XC_c_lizman_PF_BODY", "#1#2#3#" );
 	SetLocalString( oModule, "XC_c_lizman_HD_BODY", "#1#2#3#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_BODY", "#1#2#" );
+	SetLocalString( oModule, "XC_c_kobold_CH_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_kobold_LE_BODY", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_PF_BODY", "#1#" );
+	SetLocalString( oModule, "XC_c_kobold_LE_HELM", "#1#2#" );
 	SetLocalString( oModule, "XC_c_kobold_NK_BODY", "#1#" );
+	SetLocalString( oModule, "XC_c_kobold_PF_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_skel_CL_BODY", "#1#2#" );
 	SetLocalString( oModule, "XC_c_skel_CH_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_skel_PH_BODY", "#1#" );
@@ -732,10 +734,6 @@ void main() {
 	SetLocalString( oModule, "XC_c_hillgiant_LE_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_hillgiant_HD_BODY", "#1#2#" );
 	SetLocalString( oModule, "XC_c_hillgiant_NK_BODY", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_CL_BODY", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_LE_BODY", "#1#2#" );
-	SetLocalString( oModule, "XC_c_kobold_CH_BODY", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_LE_HELM", "#1#2#" );
 	SetLocalString( oModule, "XC_c_ogre_CL_BODY", "#1#2#" );
 
   /*--------------------------------------------------------------------------*\
