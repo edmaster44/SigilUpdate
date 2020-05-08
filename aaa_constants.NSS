@@ -458,8 +458,9 @@ const int VFX_PER_HALLUCINATORY_TERRAIN 		= 95;
 const int SPELL_HYPNOTISM						= 1958;
 
 //New Spell Like Abilities for Elemental Warrior
-const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1921;
 const int ELEMENTAL_WARRIOR_IMMUNITY			= 1920;
+const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1921;
+const int SPELLABILITY_ELEMWAR_STRIKE			= 1922;
 //Elemental Warrior Feats
 const int FEAT_ELEMWAR_WEAPON					= 2997;
 const int FEAT_ELEMWAR_AFFINITY_AIR				= 2992;

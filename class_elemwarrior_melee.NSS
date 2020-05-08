@@ -5,14 +5,15 @@
 #include "nwn2_inc_spells"
 
 
-void ElementalStrike(object oPC, object oTarget, int nSpellID)
+void ElementalStrike(object oPC, object oTarget, int nSpellID = GetSpellId())
 {
+		nSpellID = SPELLABILITY_ELEMWAR_STRIKE;
 	//Elemental Warrior
 	int nElemWar = GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC);
 	//Weapon in hand
     object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
     //Air Electrical 
-	if (GetHasFeat(FEAT_ELEM_AFFINITY_AIR,oPC))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
 		{
 		nType= DAMAGE_TYPE_ELECTRICAL;
 		nSaveType = SAVING_THROW_TYPE_ALL;

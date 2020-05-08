@@ -456,9 +456,12 @@ void ApplyElementalWeapon(object oPC, object oItem)
 		DamageType = DAMAGE_TYPE_COLD;
 		nItemVisual = ITEM_VISUAL_COLD;	
 	}
-	int nDamageConstant = DAMAGE_BONUS_1d6;
+	int nDamage = DAMAGE_BONUS_1d6;
 				if (nLevel >= 5 ) 
-		{	nDamageConstant 	= DAMAGE_BONUS_1d6 * 3;	}
+		{	nDamage 	= DAMAGE_BONUS_1d6 * 3;	}
+	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))	
+{		
+	int	nDamageConstant = IPGetDamageBonusConstantFromNumber(nDamage);
 	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamageConstant);
     float fDUR = 9999.9f;   
 	object oWeapon1 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,OBJECT_SELF);
@@ -477,6 +480,7 @@ void ApplyElementalWeapon(object oPC, object oItem)
 			}
 	
     }
+	}
 }
 }
 
