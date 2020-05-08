@@ -234,15 +234,15 @@ int PS_GetFeatWingType(object oPC)
 	if (GetHasFeat(2179, oPC))
 	{	if (GetLevelByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC, oPC) >= 1)
 		{	if (GetGender(oPC) == GENDER_FEMALE)
-			{	nWing = WING_TYPE_WORDARCHON_F;	}
+			{	nWing = WING_TYPE_HEZEBEL_F;	}
 			else
-			{	nWing = WING_TYPE_WORDARCHON_M;	}	}
+			{	nWing = WING_TYPE_HEZEBEL_M;	}	}
 			
 		if (GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC) >= 1)
 		{	if (GetGender(oPC) == GENDER_FEMALE)
-			{	nWing = WING_TYPE_WORDARCHON_F;	}
+			{	nWing = WING_TYPE_HEZEBEL_F;	}
 			else
-			{	nWing = WING_TYPE_WORDARCHON_M;	}	}	}
+			{	nWing = WING_TYPE_HEZEBEL_M;	}	}	}
 	
 	if (GetHasFeat(2781, oPC))
 		if (GetLevelByClass(CLASS_TYPE_BRACHINA, oPC) != 0)
