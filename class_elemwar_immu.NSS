@@ -5,21 +5,16 @@
 void main()
 {
 object oPC = OBJECT_SELF;
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
+	
 	int nElemWar = GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC);
 	int nAmount = 10 *nElemWar ;
-	int nSpellId = ELEMENTAL_WARRIOR_IMMUNITY;
-
+	int nSpellId = GetSpellId();
+	nSpellId=	ELEMENTAL_WARRIOR_IMMUNITY;
 
 	
-	if (GetHasSpellEffect(nSpellId,OBJECT_SELF))
+	if (!GetHasSpellEffect(nSpellId,OBJECT_SELF))
 	{
-		RemoveSpellEffects(nSpellId, OBJECT_SELF, OBJECT_SELF);
-	}	
+
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
 		
 	{	
@@ -43,8 +38,9 @@ object oPC = OBJECT_SELF;
 	effect eDR = EffectDamageResistance(DAMAGE_TYPE_COLD, nAmount);
 	}	 	
 	effect eDR;
-	eDR = SetEffectSpellId(eDR,nSpellId);
 	eDR = SupernaturalEffect(eDR);
+	eDR = SetEffectSpellId(eDR,nSpellId);
 	
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, OBJECT_SELF));	
-}      
+} 
+}     

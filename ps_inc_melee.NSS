@@ -7,6 +7,66 @@
 #include "nwnx_sql"
 #include "X0_I0_SPELLS"
 
+void WhirlWindAnim(object oPC)
+{
+	PlayCustomAnimation(oPC,"*whirlwind",0);
+}
+
+void CleaveAnim(object oPC)
+{
+	PlayCustomAnimation(oPC,"*cleave",0);
+}
+
+void ArrowShower(object oPC)
+{
+	PlayCustomAnimation(oPC,"*multiattack01",0,1.5f);
+}
+
+int GetHighestModifier(object oPC, int divineorarcane)
+{
+	int INT; int DEX;
+
+	if(GetHasFeat(42,oPC,TRUE)) DEX = (GetAbilityScore(oPC,ABILITY_DEXTERITY) - 10 ) / 2; //Weapon Finesse	
+	if(GetHasFeat(1958,oPC,TRUE)) INT = (GetAbilityScore(oPC,ABILITY_INTELLIGENCE) - 10 ) / 2; //Combat Insight
+	int STR = (GetAbilityScore(oPC,ABILITY_STRENGTH) - 10 ) / 2;
+		
+	if(divineorarcane == 1)
+	{
+		int WIS = (GetAbilityScore(oPC,ABILITY_WISDOM) - 10 ) / 2;
+		int CHA = (GetAbilityScore(oPC,ABILITY_CHARISMA) - 10 ) / 2;	
+	
+		if(WIS > STR && WIS > DEX && (WIS - STR) > 0 && (WIS - DEX) > 0) return WIS;		
+		if(CHA > STR && CHA > DEX && (CHA - STR) > 0 && (CHA - DEX) > 0) return CHA;		
+	}
+	else if(divineorarcane == 2)
+	{
+		INT = (GetAbilityScore(oPC,ABILITY_INTELLIGENCE) - 10 ) / 2;
+		int CHA = (GetAbilityScore(oPC,ABILITY_CHARISMA) - 10 ) / 2;	
+	
+		if(INT > STR && INT > DEX && (INT - STR) > 0 && (INT - DEX) > 0) return INT;		
+		if(CHA > STR && CHA > DEX && (CHA - STR) > 0 && (CHA - DEX) > 0) return CHA;		
+	}	
+
+	if(INT > STR && INT > DEX && (INT - STR) > 0 && (INT - DEX) > 0) return INT;		
+	else if(DEX > STR && (DEX - STR) > 0) return DEX;
+	else return STR;	
+}
+
+
+
+int GetHighestRangedModifier(object oPC)
+{
+	int WIS;
+	
+	int DEX = (GetAbilityScore(oPC,ABILITY_DEXTERITY) - 10 ) / 2;
+	if(GetHasFeat(412,oPC,TRUE)) WIS = (GetAbilityScore(oPC,ABILITY_WISDOM) - 10 ) / 2; //Zen Archery
+
+	if(WIS > DEX) return WIS;
+	
+	return DEX;
+}
+
+
 int GetDamageBonusInt(int nBonus)
 {
 	if(nBonus <= 5) return nBonus;

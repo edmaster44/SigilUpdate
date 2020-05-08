@@ -5,9 +5,15 @@
 #include "nwn2_inc_spells"
 
 
-void ElementalStrike(object oPC, object oTarget, int nSpellID = GetSpellId())
+void ElementalStrike(object oPC, object oTarget, int nSpellID )
 {
+		nSpellID = GetSpellId();
 		nSpellID = SPELLABILITY_ELEMWAR_STRIKE;
+		int nType;
+		int nSaveType;
+		int nVFXHit;
+		effect eStatusEffect;
+		int nDamageType;
 	//Elemental Warrior
 	int nElemWar = GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC);
 	//Weapon in hand
@@ -48,18 +54,18 @@ void ElementalStrike(object oPC, object oTarget, int nSpellID = GetSpellId())
 		eStatusEffect = EffectDazed();	
 		nType=DAMAGE_TYPE_COLD;
 	}	
-	
+	SendMessageToPC(oPC,"Let it rip");
     if(GetWeaponRanged(oWeapon) || !GetIsObjectValid(oWeapon))
     {
     SendMessageToPC(oPC,"You require a melee weapon to use this");
     return;
     }
 
-    int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"ElementalStrike",1, "*2attack01", 0, nSpellID);
+    int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"ElementalStrikes",1, "*2attack01", 0);
         
     if(iHit > 0)
     {
-    int nDmg = d3(GetHighestModifier(oPC)); 
+    int nDmg = d3(GetHighestModifier(oPC,1)); 
     if(iHit == 2) nDmg = FloatToInt(nDmg * 1.5);
     
     int flatfoot = FlatFooted(oPC,oTarget);
