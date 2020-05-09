@@ -295,7 +295,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 	effect eDamage;
 
 	if (nIsAnimal == 1)
-	{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0);
+	{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0,nSpell);
 		if (nAttack == 2)
 		{	nDamage = d10(2);
 			if (GetHasFeat(2390, oPC) && GetHasFeat(883))
@@ -329,7 +329,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 	}
 	else if (nIsHybrid == 1)
 	{	if (sWeapon == "s3_w")
-		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0);
+		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0,nSpell);
 			if (nAttack == 2)
 			{	if (nLevel >= 24) nDamage = d10(4) + d10(2);
 				else if (nLevel >= 16) nDamage = d8(4) + d8(2);
@@ -444,7 +444,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 	effect eDamage, eRake, eRake2;
 
 	if (nIsAnimal == 1)
-	{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0);
+	{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0,nSpell);
 		if (nAttack == 2)
 		{	nDamage = d8(4);
 			nDamage = (nDamage + (nStr * 2));
@@ -479,7 +479,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 	}
 	else if (nIsHybrid == 1)
 	{	if (sWeapon == "s3_w")
-		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0);
+		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0,nSpell);
 			if (nAttack == 2)
 			{	if (nLevel >= 24)
 				{	nDamage = d10(4) + d10(2);

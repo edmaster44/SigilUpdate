@@ -423,64 +423,57 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	ApplyEquipmentEffect(oPC, eFX);
 }
 //Elemental Weapon
-void ApplyElementalWeapon(object oPC, object oItem)
+void EApplyElementalWeapon(object oPC, object oItem)
 {
-		itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
+		if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))	
+{
+
+	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
+	itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
 		if (GetIsItemPropertyValid(Prop) != FALSE) {
     	SendMessageToPC(oPC, "Elemental Weapon already active.");
     	return;
-	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
+int nDamage = IP_CONST_DAMAGEBONUS_1d6;
+				if (nLevel >= 5 ) 
+		{	nDamage = IP_CONST_DAMAGEBONUS_3d6;	}
+		
+
+	
 	int nItemVisual;
 	int DamageType;		
 	itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
 	{	
 		DamageType = DAMAGE_TYPE_ELECTRICAL;
 		nItemVisual = ITEM_VISUAL_ELECTRICAL;
 	}
 	else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC))
 	{	
 		DamageType = DAMAGE_TYPE_ACID;
 		nItemVisual = ITEM_VISUAL_ACID;				
 	}
 	else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
 	{
 		DamageType = DAMAGE_TYPE_FIRE;
 		nItemVisual = ITEM_VISUAL_FIRE;			
 	}
 	else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
 	{
 		DamageType = DAMAGE_TYPE_COLD;
 		nItemVisual = ITEM_VISUAL_COLD;	
 	}
-	int nDamage = DAMAGE_BONUS_1d6;
-				if (nLevel >= 5 ) 
-		{	nDamage 	= DAMAGE_BONUS_1d6 * 3;	}
-	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))	
-{		
-	int	nDamageConstant = IPGetDamageBonusConstantFromNumber(nDamage);
-	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamageConstant);
+		
+	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
-	object oWeapon1 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,OBJECT_SELF);
-	if (GetIsObjectValid(oItem))
-	    { 
-		IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-		IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-		}
-	object oWeapon2 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,OBJECT_SELF);
-	if (GetIsObjectValid(oItem))
-	{
-	if (IPGetIsMeleeWeapon(oItem))
-			{
-			IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-			IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-			}
-	
-    }
-	}
+	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
+    SendMessageToPC(oPC, "Elemental Damage bonus of " + IntToString(nDamage) + " applied to your  Weapon");
+
+}
 }
 }
 

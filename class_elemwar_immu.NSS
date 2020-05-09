@@ -2,45 +2,34 @@
 #include "aaa_constants"
 #include "X0_I0_SPELLS"
 #include "nw_i0_spells"
+#include "class_elemwar_immu_inc"
+
 void main()
 {
-object oPC = OBJECT_SELF;
+	if (!X2PreSpellCastCode()) return;
+    object oPC = OBJECT_SELF;
+	int nSpell = GetSpellId();
+	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell); //It has to be done in any case
+	//Commands are delayed to make sure the spell effect is removed before it's reapplied.
+	//Spell ID is reapplied within the commands to make sure it's not lost by the delay.
 	
-	int nElemWar = GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC);
-	int nAmount = 10 *nElemWar ;
-	int nSpellId = GetSpellId();
-	nSpellId=	ELEMENTAL_WARRIOR_IMMUNITY;
-
-	
-	if (!GetHasSpellEffect(nSpellId,OBJECT_SELF))
+	switch (nSpell)
 	{
+	case 1920:	//Air - Electrical 
+		DelayCommand(0.0f, ElemWar_ImmunityAir(oPC, nSpell));
+		break;
+	
+	case 1923 :		//Earth-Acid	
+			DelayCommand(0.0f, ElemWar_ImmunityEarth(oPC, nSpell));
+		break;
 
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
+			case 1924 :		//Earth-Acid	
+			DelayCommand(0.0f, ElemWar_ImmunityFire(oPC, nSpell));
+		break;
 		
-	{	
-		effect eDR = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, nAmount);
-		}    
-	else if(GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC))
-			{
-			
-			effect eDR = EffectDamageResistance(DAMAGE_TYPE_ACID, nAmount);
+			case 1925 :		//Earth-Acid	
+			DelayCommand(0.0f, ElemWar_ImmunityWater(oPC, nSpell));
+		break;
+		
 			}
-	else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
-		{
-		
-	effect eDR = EffectDamageResistance(DAMAGE_TYPE_FIRE, nAmount);
-		
-		}
-		
-	else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
-	{
-	
-	effect eDR = EffectDamageResistance(DAMAGE_TYPE_COLD, nAmount);
-	}	 	
-	effect eDR;
-	eDR = SupernaturalEffect(eDR);
-	eDR = SetEffectSpellId(eDR,nSpellId);
-	
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, OBJECT_SELF));	
-} 
-}     
+			}
