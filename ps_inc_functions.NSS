@@ -7,6 +7,7 @@
 #include "ps_inc_ecl"
 
 
+
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest level in group
@@ -67,7 +68,15 @@ int PS_IsEquippableCW(object oItem);
 int PS_GetCasterLevel(object oPC);
 
 int PS_GetGolemCasterLevel(object oPC);
+
+int GetIsHighBabClass(int classid);
+
+int MonkLevels(object oPC, int BAB = 0);
 						
+int MonkUnarmedDamage(object oPC, int iMonk);
+
+int IncreasedUnarmedDamageBonus(object oPC, object oItem);
+
 string PS_GetEssenceECL(object oPC);
 
 int PS_GetLevel(object oPC);
@@ -149,6 +158,69 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem);
 void DebugMessageToPC(object oPC, string sMessage);
 
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
+
+
+
+
+
+//Calculates Monk Unarmed Damage Based on Monk Class +PRC
+int MonkUnarmedDamage(object oPC, int iMonk)
+{				
+	if(iMonk >= 30) return 16;
+	else if(iMonk >= 24) return 13;
+	else if(iMonk >= 20) return 11;
+	else if(iMonk >= 16) return 9;
+	else if(iMonk >= 12) return 7;
+	else if(iMonk >= 8) return 6;
+	else if(iMonk >= 4) return 5;
+	else if(iMonk >= 1) return 4;	
+	else return 0;
+}
+//Increasess
+int IncreasedUnarmedDamageBonus(object oPC, object oItem)
+{
+	int iDmgAvg = 2;
+	int iMonk = MonkLevels(oPC);
+
+	int iBonus;
+	
+	if(iMonk >= 28) iBonus = 10;
+	else if(iMonk >= 24) iBonus = 8;
+	else if(iMonk >= 20) iBonus = 6;
+	else if(iMonk >= 16) iBonus = 5;
+	else if(iMonk >= 12) iBonus = 4;											
+	else if(iMonk >= 8) iBonus = 3;
+	else iBonus = 2;
+	
+	return iBonus + iDmgAvg + MonkUnarmedDamage(oPC,iMonk);
+}
+
+//Checks if the Class is a High BAB One
+int GetIsHighBabClass(int classid)
+{
+	if(Get2DAString("classes","AttackBonusTable",classid) == "CLS_ATK_1") return TRUE;
+	else return FALSE;
+}
+
+
+int MonkLevels(object oPC, int BAB = 0)
+{
+	int iMonk = GetLevelByClass(5,oPC); //Monk
+	
+	if(GetHasFeat(1556,oPC,TRUE))
+	{
+		if(BAB == 0 || BAB == 1 && !GetIsHighBabClass(45))	iMonk = iMonk + GetLevelByClass(45,oPC); //Sacred Fist
+	}
+	
+	if (GetHasFeat(3209,oPC,TRUE))
+	{
+	
+		if(BAB == 0 || BAB == 1 && !GetIsHighBabClass(214))	iMonk = iMonk + GetLevelByClass(214,oPC); // Austere One
+	}
+
+	return iMonk;
+}
+
 
 // used to check for if new creature weapon as designed by Cere.
 int PS_IsEquippableCW(object oItem)

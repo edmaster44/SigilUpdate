@@ -425,8 +425,8 @@ void UnearthlyGrace(object oPC, object oCHEST)
 //Elemental Weapon
 void ApplyElementalWeapon(object oPC, object oItem)
 {
-		if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))	
-{
+			
+
 
 	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
@@ -465,17 +465,24 @@ int nDamage = IP_CONST_DAMAGEBONUS_1d6;
 		DamageType = DAMAGE_TYPE_COLD;
 		nItemVisual = ITEM_VISUAL_COLD;	
 	}
-		
+	
 	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
+	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
+	{	if(!GetIsItemPropertyValid(ipAdd)){
+        
+            SendMessageToPC(oPC, "Itemproperty was not valid");
+            return;
+        }
+	SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
 	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
     SendMessageToPC(oPC, "Elemental Damage bonus of " + IntToString(nDamage) + " applied to your  Weapon");
+}
+}
+}
 
-}
-}
-}
 
 //Removes Elemental Weapon
 void RemoveElementalWeapon(object oPC,object oItem)

@@ -6,11 +6,10 @@
 
 #include "nwnx_sql"
 #include "X0_I0_SPELLS"
-
+#include "x0_i0_spells"
+#include "x2_inc_spellhook"
 
 // Determines if the PC is stealthed or invisible and not perceived by the target
-
-
 void WhirlWindAnim(object oPC)
 {
 	PlayCustomAnimation(oPC,"*whirlwind",0);
