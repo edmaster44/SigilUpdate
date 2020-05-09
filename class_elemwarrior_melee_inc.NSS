@@ -11,7 +11,6 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 		int nType;
 		int nSaveType;
 		effect nVFXHit;
-		effect eDamage;
 		effect eStatusEffect;
 		int nDmg;
 		int nDamageType;
@@ -57,12 +56,6 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 		nType=DAMAGE_TYPE_COLD;
 	}	
 	SendMessageToPC(oPC, "Attempting Melee Strike");	 
-    int flatfoot = FlatFooted(oPC,oTarget);
-    if(flatfoot)
-	{
-	 FloatingTextStringOnCreature("*Elemental Strike (sneak attack)*", oPC, TRUE, 3.0f);
-	 nDmg = d6(6)*2;
-    }
 	
 	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
 	
@@ -71,25 +64,25 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 	SendMessageToPC(oPC,"You require a melee weapon to use this");
 	return;
 	}
-    int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"ElementalStrikes",1, "*whirlwind", 0,nSpell);
+    int iHit = TouchAttackMelee(oTarget);
     
     if(iHit >0)
     {
 
    	int nDmg = d6(6);
-	eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, FALSE);
+	if(iHit == 2) nDmg = FloatToInt(nDmg * 1.5);
+	int flatfoot = FlatFooted(oPC,oTarget);
+	if(flatfoot) FloatingTextStringOnCreature("*Double Attack (sneak attack)*", oPC, TRUE, 3.0f);
+	effect		eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, FALSE);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, nVFXHit, oTarget);
-	}
-    if(iHit == 2)
-	{
-	nDmg = d6(8);
-	eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, TRUE);
+
 	int nDC = 15 + nElemWar+GetAbilityModifier(ABILITY_CONSTITUTION) ;
 	if  (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nSaveType))
-	{	 ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStatusEffect, oTarget, 6.0f);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, nVFXHit, oTarget);
+	{	if (nDamageType != DAMAGE_TYPE_FIRE)
+	 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStatusEffect, oTarget, 6.0f);
+		else 
+		DelayCommand(6.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStatusEffect, oTarget));
 	 }
 	 }	
 }

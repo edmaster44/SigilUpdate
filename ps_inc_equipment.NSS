@@ -423,7 +423,7 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	ApplyEquipmentEffect(oPC, eFX);
 }
 //Elemental Weapon
-void EApplyElementalWeapon(object oPC, object oItem)
+void ApplyElementalWeapon(object oPC, object oItem)
 {
 		if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))	
 {
