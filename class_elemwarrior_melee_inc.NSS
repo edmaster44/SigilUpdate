@@ -4,9 +4,33 @@
 #include "aaa_constants"
 #include "nwn2_inc_spells"
 
+
+
+
+	// Use this to fix infinite range for instant feats.
+int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
+{
+	if (GetDistanceBetween(oCaller, oTarget) > 3.5f) // Melee range seems to be around a little less then 3.0f, so picked a number
+	{                                                // a little higher to give some loose.
+		SendMessageToPC(oCaller, "Target out of range.");
+		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
+		return FALSE;
+	}	
+	return TRUE;
+}
+
+
+
+
 //Elemental Strike
 void ElementalStrike(object oPC, object oTarget, int nSpell )
 {
+
+
+	if (!CancelIfNotInMeleeRange(oPC, oTarget, 1922))
+		return;
+	 
+
 
 		int nType;
 		int nSaveType;
@@ -64,6 +88,9 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 	SendMessageToPC(oPC,"You require a melee weapon to use this");
 	return;
 	}
+	
+
+
     int iHit = TouchAttackMelee(oTarget);
     
     if(iHit >0)

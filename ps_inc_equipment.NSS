@@ -424,48 +424,40 @@ void UnearthlyGrace(object oPC, object oCHEST)
 }
 //Elemental Weapon
 void ApplyElementalWeapon(object oPC, object oItem)
-{
-			
+{	
 
 
 	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
-		if (GetIsItemPropertyValid(Prop) != FALSE) {
-    	SendMessageToPC(oPC, "Elemental Weapon already active.");
-    	return;
-int nDamage = IP_CONST_DAMAGEBONUS_1d6;
-				if (nLevel >= 5 ) 
+	int nDamage = IP_CONST_DAMAGEBONUS_1d6;
+		if (nLevel >= 5 ) 
 		{	nDamage = IP_CONST_DAMAGEBONUS_3d6;	}
-		
-
-	
-	int nItemVisual;
+//	int nItemVisual;
 	int DamageType;		
-	itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
+//	itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
 	{	
-		DamageType = DAMAGE_TYPE_ELECTRICAL;
-		nItemVisual = ITEM_VISUAL_ELECTRICAL;
+		DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
+	//	nItemVisual = ITEM_VISUAL_ELECTRICAL;
 	}
-	else
+		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC))
 	{	
-		DamageType = DAMAGE_TYPE_ACID;
-		nItemVisual = ITEM_VISUAL_ACID;				
+		DamageType = IP_CONST_DAMAGETYPE_ACID;
+	//	nItemVisual = ITEM_VISUAL_ACID;				
 	}
-	else
+		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
 	{
-		DamageType = DAMAGE_TYPE_FIRE;
-		nItemVisual = ITEM_VISUAL_FIRE;			
+		DamageType = IP_CONST_DAMAGETYPE_FIRE;
+	//	nItemVisual = ITEM_VISUAL_FIRE;			
 	}
-	else
+		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
 	{
-		DamageType = DAMAGE_TYPE_COLD;
-		nItemVisual = ITEM_VISUAL_COLD;	
+		DamageType = IP_CONST_DAMAGETYPE_COLD;
+	//	nItemVisual = ITEM_VISUAL_COLD;	
 	}
-	
 	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
 	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
@@ -474,12 +466,11 @@ int nDamage = IP_CONST_DAMAGEBONUS_1d6;
             SendMessageToPC(oPC, "Itemproperty was not valid");
             return;
         }
-	SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
+	//SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
 	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+//	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
-    SendMessageToPC(oPC, "Elemental Damage bonus of " + IntToString(nDamage) + " applied to your  Weapon");
-}
+    SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 }
 }
 
