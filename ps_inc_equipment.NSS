@@ -466,7 +466,7 @@ void ApplyElementalWeapon(object oPC, object oItem)
             SendMessageToPC(oPC, "Itemproperty was not valid");
             return;
         }
-	SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
+  
 	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
