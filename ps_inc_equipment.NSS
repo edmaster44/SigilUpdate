@@ -422,7 +422,7 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
 	ApplyEquipmentEffect(oPC, eFX);
 }
-//Elemental Weapon
+//Elemental Weapon - Applies Elemental Damage based on feat.
 void ApplyElementalWeapon(object oPC, object oItem)
 {	
 
@@ -432,31 +432,31 @@ void ApplyElementalWeapon(object oPC, object oItem)
 	int nDamage = IP_CONST_DAMAGEBONUS_1d6;
 		if (nLevel >= 5 ) 
 		{	nDamage = IP_CONST_DAMAGEBONUS_3d6;	}
-//	int nItemVisual;
+	int nItemVisual;
 	int DamageType;		
-//	itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
+    itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
 	{	
 		DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
-	//	nItemVisual = ITEM_VISUAL_ELECTRICAL;
+		nItemVisual = ITEM_VISUAL_ELECTRICAL;
 	}
 		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC))
 	{	
 		DamageType = IP_CONST_DAMAGETYPE_ACID;
-	//	nItemVisual = ITEM_VISUAL_ACID;				
+		nItemVisual = ITEM_VISUAL_ACID;				
 	}
 		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
 	{
 		DamageType = IP_CONST_DAMAGETYPE_FIRE;
-	//	nItemVisual = ITEM_VISUAL_FIRE;			
+		nItemVisual = ITEM_VISUAL_FIRE;			
 	}
 		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
 	{
 		DamageType = IP_CONST_DAMAGETYPE_COLD;
-	//	nItemVisual = ITEM_VISUAL_COLD;	
+		nItemVisual = ITEM_VISUAL_COLD;	
 	}
 	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
@@ -466,9 +466,9 @@ void ApplyElementalWeapon(object oPC, object oItem)
             SendMessageToPC(oPC, "Itemproperty was not valid");
             return;
         }
-	//SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
+	SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
 	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-//	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
     SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 }
