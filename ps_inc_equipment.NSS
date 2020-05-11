@@ -435,25 +435,25 @@ void ApplyElementalWeapon(object oPC, object oItem)
 	int nItemVisual;
 	int DamageType;		
     itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC,TRUE))
 	{	
 		DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
 		nItemVisual = ITEM_VISUAL_ELECTRICAL;
 	}
 		else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC,TRUE))
 	{	
 		DamageType = IP_CONST_DAMAGETYPE_ACID;
 		nItemVisual = ITEM_VISUAL_ACID;				
 	}
 		else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC,TRUE))
 	{
 		DamageType = IP_CONST_DAMAGETYPE_FIRE;
 		nItemVisual = ITEM_VISUAL_FIRE;			
 	}
 		else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC,TRUE))
 	{
 		DamageType = IP_CONST_DAMAGETYPE_COLD;
 		nItemVisual = ITEM_VISUAL_COLD;	
@@ -803,7 +803,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		CheckForTempProperties(oITEM, oPC);
 	
-
+		ApplyElementalWeapon(oPC,oITEM);
 		
 			if (ED_GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
 			 ED_ApplySpecialWeaponFinesse(oPC, oITEM);
