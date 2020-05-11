@@ -160,6 +160,17 @@ void DebugMessageToPC(object oPC, string sMessage);
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 
 
+//Progresses Barbarian 
+int BarbarianLevels(object oPC)
+{
+	int iBarb = GetLevelByClass(0, oPC);
+	int iBralani = GetLevelByClass(97,oPC);
+	
+	int iTotal = iBarb + iBralani;
+	//if(GetHasFeat(3127,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(97,oPC); //Future Barbarian PRC.
+	
+	return iTotal;	
+}
 
 
 
