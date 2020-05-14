@@ -85,25 +85,25 @@ void UpgradeCreatureWeapons(object oPC)
 	}
 }
 
-//Correct warlock blast damage
+//Correct warlock blast damage- no longer needed 
 //Needed to calculate blast damage for multi warlocks
-void StackEldritchBlast(object oPC)
-{
-	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) < 1) return;
-	int nSTACK;
-	if (GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_ARCANE_ARCHER2, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER_W, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_BRACHINA, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC) > 0) nSTACK = TRUE;
-	else if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) nSTACK = TRUE;
-	if (nSTACK == TRUE) StackEldBlast(oPC);
-}
+//void GetWarlockCasterLevel(object oPC)
+//{
+//	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) < 1) return;
+//	int nSTACK;
+//	if (GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_ARCANE_ARCHER2, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER_W, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_BRACHINA, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC) > 0) nSTACK = TRUE;
+//	else if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) nSTACK = TRUE;
+//	if (nSTACK == TRUE) StackEldBlast(oPC);
+//}
 
 //Progression for Psionic classes.
 void DoPsiProgression(object oPC)
@@ -291,7 +291,7 @@ void main()
 	if (GetLevelByClass(CLASS_TYPE_RONIN, oPC) > 0) AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, 100);
 	
 	// various class and race related checks	
-	StackEldritchBlast(oPC);
+	GetWarlockCasterLevel(oPC);
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
 	UpgradeCreatureWeapons(oPC);

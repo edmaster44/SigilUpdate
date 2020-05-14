@@ -93,7 +93,11 @@ int PS_GetXPForLevel(int iLevel);
 
 int GetWarlockCasterLevel(object oPC);
 
-void StackEldBlast(object oPC);	
+//void StackEldBlast(object oPC);	
+
+int GetClassBspLevel(object oPC, int nClass);
+
+int GetHasWarlockProgression(object oPC, int iClass);
 
 void DoPsiDeLevelCheck(object oPC);
 
@@ -205,6 +209,37 @@ int IncreasedUnarmedDamageBonus(object oPC, object oItem)
 	
 	return iBonus + iDmgAvg + MonkUnarmedDamage(oPC,iMonk);
 }
+//Counts Spellcasting Progression from bsplvl file
+int GetClassBspLevel(object oPC, int nClass)
+{
+	//Counts spellcasting progression from bsplvl file.
+	string BspLevelTable = Get2DAString("classes","BonusSpellCasterLevelTable",nClass);
+	
+//	SendMessageToPC(oPC,"Debug BSP level table name "+BspLevelTable);	
+	
+	int iMax = GetLevelByClass(nClass,oPC);
+	int iTotal; int iLoop; int iBSP;
+	
+	if(iMax == 1) iTotal = StringToInt(Get2DAString(BspLevelTable,"GrantsBonusSpellcasterLevel",1));	
+	else
+	{
+		while(iMax > iLoop)
+		{
+			iBSP = StringToInt(Get2DAString(BspLevelTable,"GrantsBonusSpellcasterLevel",iLoop));
+			if(iBSP == 1)
+			{
+				iTotal++;
+				SendMessageToPC(oPC,"BspLevel "+IntToString(iTotal)+" gained at level "+IntToString(iLoop));	
+			}
+			iLoop++;
+		}
+	}
+	
+	SendMessageToPC(oPC,"Debug cleric: BSPlevel progression of class ID "+IntToString(nClass)+" came to "+IntToString(iTotal)+".");
+	
+	return iTotal;
+}
+
 
 //Checks if the Class is a High BAB One
 int GetIsHighBabClass(int classid)
@@ -232,7 +267,104 @@ int MonkLevels(object oPC, int BAB = 0)
 	return iMonk;
 }
 
+int GetHasWarlockProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+	SendMessageToPC(oPC,"Debug Warlock: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",39)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
 
+int GetWarlockAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_WARLOCK || GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+	}
+	
+	return iTotal;
+}
+
+//Gets Warlock Caster Levels with Feats included 
+int GetWarlockCasterLevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_WARLOCK,oPC) == 0) return 0;
+	
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_WARLOCK) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_FIENDISH_POWER,oPC,TRUE)) iTotal = iTotal + 1;
+	if(GetHasFeat(FEAT_SPELL_PENETRATION,oPC,TRUE)) iTotal = iTotal + 2;
+	if(GetHasFeat(FEAT_GREATER_SPELL_PENETRATION,oPC,TRUE)) iTotal = iTotal + 2;
+	if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE)) iTotal = iTotal +2;
+	SendMessageToPC(oPC,"Debug Warlock: Total Caster Level "+IntToString(iTotal));
+	
+	
+		if (iTotal > 30)
+		iTotal = 30;
+	
+	int nDice;
+	int nCount;	
+	
+	//1411-1419 1-9
+	//1948-1952 10-14
+		
+	if (iTotal > 20) //10-14
+	{	nDice = (iTotal - 20) / 2;
+		for (nCount = 0; nCount < nDice; nCount++)
+		{	FeatAdd(oPC, nCount + 1948, FALSE);		}		
+		FeatAdd(oPC, 1411, FALSE);
+		FeatAdd(oPC, 1412, FALSE);	
+		FeatAdd(oPC, 1413, FALSE);	
+		FeatAdd(oPC, 1414, FALSE);	
+		FeatAdd(oPC, 1415, FALSE);	
+		FeatAdd(oPC, 1416, FALSE);	
+		FeatAdd(oPC, 1417, FALSE);	
+		FeatAdd(oPC, 1418, FALSE);	
+		FeatAdd(oPC, 1419, FALSE);				
+	}
+	else
+	if (iTotal > 11) //7-9
+	{	nDice = (iTotal - 11) / 3;
+		for (nCount = 0; nCount < nDice; nCount++)
+		{	FeatAdd(oPC, nCount + 1417, FALSE);		}	
+		FeatAdd(oPC, 1411, FALSE);
+		FeatAdd(oPC, 1412, FALSE);	
+		FeatAdd(oPC, 1413, FALSE);	
+		FeatAdd(oPC, 1414, FALSE);	
+		FeatAdd(oPC, 1415, FALSE);	
+		FeatAdd(oPC, 1416, FALSE);										
+	}
+	else //1-6
+	{	nDice = (iTotal + 1) / 2;
+		for (nCount = 0; nCount < nDice; nCount++)
+		{	FeatAdd(oPC, nCount + 1411, FALSE);		}
+	}
+	
+	return iTotal;
+}
 // used to check for if new creature weapon as designed by Cere.
 int PS_IsEquippableCW(object oItem)
 {
@@ -557,191 +689,6 @@ int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 	}
 }
 
-int GetWarlockCasterLevel(object oPC)
-{
-    int nMyCasterLevel = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) + GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC);    
-    
-	int nMysticTheurge = GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
-	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
-	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
-	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
-	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC);
-	int nNightHag  = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC);
-
-		
-	if (nMysticTheurge > 0 && !GetHasFeat(FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK, oPC) )
-	{	nMysticTheurge = 0;		}
-
-	if (nPalemaster > 0 && !GetHasFeat(FEAT_PALE_MASTER_SPELLCASTING_WARLOCK, oPC) )
-	{	nPalemaster = 0;		}
-	else
-	{	nPalemaster = (nPalemaster+1) / 2;	}
-		
-	if (nBrachina > 0 && !GetHasFeat (FEAT_BRACHINA_SPELLCASTING_WARLOCK, oPC) )
-	{	nBrachina = 0;			}
-		
-	if (nSuccubus > 0 && !GetHasFeat (FEAT_SUCCUBUS_SPELLCASTING_WARLOCK, oPC) )
-	{	nSuccubus = 0;			}
-		
-	if (nGraySlaad >0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))
-	{	nGraySlaad = 0;	}
-						
-	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC))
-	{ 	nNightHag = 0; 	}
-	
-	
-	//Fellblade, Arcane Archer, Golem Master and Lich
-	int nFellblade = GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC);
-		nFellblade = FloatToInt(IntToFloat(nFellblade)*0.8f);
-	int nArcher = GetLevelByClass(CLASS_TYPE_ARCANE_ARCHER2, oPC);
-		nArcher = FloatToInt(IntToFloat(nArcher)*0.7f);
-	int nLich = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
-		nLich = FloatToInt(IntToFloat(nLich)*0.9f);
-	int nTrickster = GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER_W, oPC);
-	int nGMaster = GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
-		nGMaster = FloatToInt(IntToFloat(nGMaster)*0.4f);
-		
-	
-	if (nArcher > 0 && !GetHasFeat(2703, oPC) ) //arcane archer spellcasting warlock feat
-	{	nArcher = 0;	}
-	if (nLich > 0 && !GetHasFeat(2687, oPC) ) //lich spellcasting warlock feat
-	{	nLich = 0;		}
-	if (nTrickster > 0 && !GetHasFeat(1677, oPC) ) //trickster spellcasting warlock feat
-	{	nTrickster = 0;		}
-	if (nGMaster > 0 && !GetHasFeat(2813, oPC) )//golem master spellcasting warlock feat
-	{	nGMaster = 0;		}
-		
-	nMyCasterLevel += nMysticTheurge + nPalemaster + nFellblade + nArcher + nLich + nSuccubus + nBrachina + nTrickster + nGMaster + nNightHag + nGraySlaad ;
-	//********************************
-	
-	if (GetHasFeat(FEAT_FIENDISH_POWER, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +1;   	}
-    if (GetHasFeat(FEAT_FEY_POWER, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +1;  	}         
-    if (GetHasFeat(FEAT_SPELL_PENETRATION, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +2;		}
-    if (GetHasFeat(FEAT_GREATER_SPELL_PENETRATION, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +2;		}
-    if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE))
-    {	nMyCasterLevel = nMyCasterLevel +2;		} 
-	
-	if (nMyCasterLevel >= 16 && !GetHasFeat(FEAT_EPIC_ELDRITCH_ADEPT,oPC))
-	{FeatAdd(oPC,FEAT_EPIC_ELDRITCH_ADEPT,FALSE,FALSE,TRUE);
-	
-	}  
-	
-	return nMyCasterLevel;
-}
-
-void StackEldBlast (object oPC)
-{
-
-	int nWarlock = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC);
-	int nMysticTheurge = GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC); // Warlock Mystic Theurge
-	int nPalemaster = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);
-		nPalemaster = FloatToInt(IntToFloat(nPalemaster)*0.5f); //warlock Pale Master
-	int nFellblade = GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC);
-		nFellblade = FloatToInt(IntToFloat(nFellblade)*0.8f);
-	int nArcher = GetLevelByClass(CLASS_TYPE_ARCANE_ARCHER2, oPC);
-		nArcher = FloatToInt(IntToFloat(nArcher)*0.7f);
-	int nTrickster = GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER_W, oPC);
-	if (nTrickster == 0)
-		nTrickster = GetLevelByClass(83, oPC); //warlock Arcane Trickster
-	int nLichlock = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
-		nLichlock = FloatToInt(IntToFloat(nLichlock)*0.9f);
-	int nGMaster = GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC); // Golem Master Warlock
-		nGMaster = FloatToInt(IntToFloat(nGMaster)*0.4f);
-	int nBrachina = GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
-		nBrachina = FloatToInt(IntToFloat(nBrachina)*0.8f);
-	int nSuccubus = GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC); //Incubus/Succubus Warlock
-		nSuccubus = FloatToInt(IntToFloat(nSuccubus)*0.9f);
-	int nNightHag = GetLevelByClass(CLASS_TYPE_MISSCAULDRON,oPC); // Night Hag Warlock
-		nNightHag =	FloatToInt(IntToFloat(nNightHag)*0.6f + 0.2f);
-	int nGraySlaad = GetLevelByClass(CLASS_TYPE_GRAY_SLAAD,oPC); // Greyslaad Warlock
-		nGraySlaad = FloatToInt(IntToFloat(nGraySlaad)*0.8f + 0.8f);	
-	int nVampMal = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC); // Vampire Warlock
-		nVampMal = FloatToInt(IntToFloat(nVampMal)*0.8f);
-			
-	if (nMysticTheurge > 0 && !GetHasFeat(FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK, oPC) )
-	{	nMysticTheurge = 0;		}
-
-	if (nPalemaster > 0 && !GetHasFeat(FEAT_PALE_MASTER_SPELLCASTING_WARLOCK, oPC) )
-	{	nPalemaster = 0;		}
-	else
-	{	nPalemaster = (nPalemaster+1) / 2;		}
-		
-	if (nTrickster > 0 && !GetHasFeat(FEAT_ARCANE_TRICKSTER_SPELLCASTING_WARLOCK, oPC) )
-	{	nTrickster = 0;			}
-		
-	if (nArcher > 0 && !GetHasFeat(2703, oPC) ) //Arcane Archer Warlock Spellcasting
-	{	nArcher = 0;			}
-
-	if (nGMaster > 0 && !GetHasFeat(2813, oPC) ) //golem master spellcasting warlock feat
-	{	nGMaster = 0;			}
-		
-	if (nBrachina > 0 && !GetHasFeat(FEAT_BRACHINA_SPELLCASTING_WARLOCK, oPC) ) //Brachina spellcasting warlock feat
-	{	nBrachina = 0;			}
-		
-	if (nSuccubus > 0 && !GetHasFeat(FEAT_SUCCUBUS_SPELLCASTING_WARLOCK, oPC) ) //Succubus spellcasting warlock feat
-	{	nSuccubus = 0;			}
-	
-	if (nNightHag > 0 && !GetHasFeat(FEAT_MOTC_SPELLCASTING_WARLOCK,oPC)) // NightHag Spellcasting Feat
-	{ nNightHag = 0; }
-	
-	if (nGraySlaad > 0 && !GetHasFeat(FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK,oPC))//Gray Slaad Spell Casting Feat
-	{ nGraySlaad = 0;}
-	
-	if (nVampMal > 0 && !GetHasFeat(2580, oPC) )
-	{	nVampMal = 0;			}
-				
-	int nTotal = nWarlock + nMysticTheurge + nPalemaster + nFellblade + nArcher + nTrickster + nLichlock + nGMaster + nBrachina + nSuccubus + nVampMal+ nNightHag + nGraySlaad ;
-	
-	//if Hellfire Warlock is needed
-	int nHfW = GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC);
-	nTotal += nHfW; 
-	
-		
-	if (nTotal > 30)
-		nTotal = 30;
-	
-	int nDice;
-	int nCount;	
-	
-	//1411-1419 1-9
-	//1948-1952 10-14
-		
-	if (nTotal > 20) //10-14
-	{	nDice = (nTotal - 20) / 2;
-		for (nCount = 0; nCount < nDice; nCount++)
-		{	FeatAdd(oPC, nCount + 1948, FALSE);		}		
-		FeatAdd(oPC, 1411, FALSE);
-		FeatAdd(oPC, 1412, FALSE);	
-		FeatAdd(oPC, 1413, FALSE);	
-		FeatAdd(oPC, 1414, FALSE);	
-		FeatAdd(oPC, 1415, FALSE);	
-		FeatAdd(oPC, 1416, FALSE);	
-		FeatAdd(oPC, 1417, FALSE);	
-		FeatAdd(oPC, 1418, FALSE);	
-		FeatAdd(oPC, 1419, FALSE);				
-	}
-	else
-	if (nTotal > 11) //7-9
-	{	nDice = (nTotal - 11) / 3;
-		for (nCount = 0; nCount < nDice; nCount++)
-		{	FeatAdd(oPC, nCount + 1417, FALSE);		}	
-		FeatAdd(oPC, 1411, FALSE);
-		FeatAdd(oPC, 1412, FALSE);	
-		FeatAdd(oPC, 1413, FALSE);	
-		FeatAdd(oPC, 1414, FALSE);	
-		FeatAdd(oPC, 1415, FALSE);	
-		FeatAdd(oPC, 1416, FALSE);										
-	}
-	else //1-6
-	{	nDice = (nTotal + 1) / 2;
-		for (nCount = 0; nCount < nDice; nCount++)
-		{	FeatAdd(oPC, nCount + 1411, FALSE);		}
-	}
-}
 
 void DoPsiDeLevelCheck(object oPC)
 {

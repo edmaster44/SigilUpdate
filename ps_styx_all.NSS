@@ -99,7 +99,7 @@ void main()
 	if (iRacelevels > 0) PS_set_level(oPC, iRacelevels);
 	else PS_set_level(oPC, 1);
 	
-	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0) StackEldBlast(oPC);
+	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0) GetWarlockCasterLevel(oPC);
 
 	// Remove any temporary appearance changes
 	PS_RestoreOriginalAppearance(oPC);

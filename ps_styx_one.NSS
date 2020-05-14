@@ -78,7 +78,7 @@ void main()
 	
 	PS_lose_one_level(oPC);
 	
-	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0) StackEldBlast(oPC);
+	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0) GetWarlockCasterLevel(oPC);
 	
 	// Remove any temporary appearance changes
 	PS_RestoreOriginalAppearance(oPC);
