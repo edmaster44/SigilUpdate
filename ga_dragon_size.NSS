@@ -22,9 +22,9 @@ void main(int iParam)
 			SendMessageToPC(oPC, "You have chosen to be of large size.");
 			DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 		break;	
-	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~HUGE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */		
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~HUGE(disabled)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */		
 		case 1:
-			PS_Dragon_Huge(oPC);
+			PS_Dragon_Large(oPC);
 			SendMessageToPC(oPC, "You have chosen to be of huge size.");
 		    DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 		break;
