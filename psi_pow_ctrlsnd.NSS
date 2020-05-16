@@ -66,7 +66,7 @@ void main()
 
         // Friendly targets are considered willing. They do not get SR / save and the power is not considered hostile towards them
         if(GetIsFriend(oTarget))
-        {
+        {	SignalEvent(oTarget,EventSpellCastAt(oTarget,AOE_MOB_SILENCE,FALSE));
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDuration);
         }
         else

@@ -1,35 +1,30 @@
  /*
    ----------------
-   Iron Body, Psionic
+`	Cheat Fate
 
-   psi_pow_ironbody
+   psi_pow_cheatfate
    ----------------
 
    25/2/04 by Stratovarius
 */ /** @file
 
-    Iron Body, Psionic
+Clairsentience
 
-    Metacreativity (Creation)
-    Level: Psion/wilder 8
-    Manifesting Time: 1 standard action
-    Range: Personal
-    Target: You
-    Duration: 1 min./level
-    Power Points: 15
-    Metapsionics: Extend
+Level: Psion 9
 
-    This power transforms your body into living iron, which grants you several
-    powerful resistances and abilities.
+Range: Personal
 
-    You gain damage reduction 15/+5. You are immune to blindness, critical hits,
-    ability score damage, deafness, disease, drowning, electricity, poison, and
-    stunning. You take only half damage from acid and fire of all kinds.
+Duration: 1 minute/manifester level
 
-    You gain a +6 enhancement bonus to your Strength score, but you take a �6
-    penalty to Dexterity as well (to a minimum Dexterity score of 1), and your
-    speed is reduced to half normal. You have an arcane spell failure chance of
-    50%, just as if you were clad in full plate armor.
+Saving Throw: Will partial (see text)
+
+Power Resistance: No
+
+Power Points: 17
+
+Metapsionics: None
+
+In manifesting this power, the psion is able to fix the time of their death to a specific point in the near future. By fixing the time of their own death, the laws of cause and effect, as well as those forces playing on time itself work against any attempt to bring the manifesters death about before its newly appointed time. This grants the psion a +8 bonus to their dodge AC, and immunity to death magic, level/ability drain, and critical hits for the duration of the power.
 */
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"

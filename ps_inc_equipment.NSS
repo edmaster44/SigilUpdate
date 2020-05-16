@@ -434,29 +434,29 @@ void ApplyElementalWeapon(object oPC, object oItem)
 		{	nDamage = IP_CONST_DAMAGEBONUS_3d6;	}
 	int nItemVisual;
 	int DamageType;		
-    itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
+    itemproperty iGlow;
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC,TRUE))
 	{	
 		DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
-		nItemVisual = ITEM_VISUAL_ELECTRICAL;
+		iGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ELECTRICAL);
 	}
 		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC,TRUE))
 	{	
 		DamageType = IP_CONST_DAMAGETYPE_ACID;
-		nItemVisual = ITEM_VISUAL_ACID;				
+		iGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ACID);				
 	}
 		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC,TRUE))
 	{
 		DamageType = IP_CONST_DAMAGETYPE_FIRE;
-		nItemVisual = ITEM_VISUAL_FIRE;			
+		iGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);			
 	}
 		else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC,TRUE))
 	{
 		DamageType = IP_CONST_DAMAGETYPE_COLD;
-		nItemVisual = ITEM_VISUAL_COLD;	
+		iGlow =  ItemPropertyVisualEffect(ITEM_VISUAL_COLD);	
 	}
 	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   

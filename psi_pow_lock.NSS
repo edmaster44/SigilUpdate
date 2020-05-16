@@ -2,25 +2,26 @@
    ----------------
    Knock, Psionic
 
-   psi_pow_knock
+   psi_pow_lock
    ----------------
 
    7//11/04 by Stratovarius
+   5/15/2020 - Fixed Spell
 */ /** @file
 
-    Knock, Psionic
+    Psionic Lock
 
     Psychoportation
     Level: Psion/wilder 2
     Manifesting Time: 1 standard action
-    Area: 50m -radius burst centered on you
-    Duration: Instantaneous; see text
+    Range: Touch
+    Target: Door or chest touched
+    Duration: Permanent
     Saving Throw: None
     Power Resistance: No
     Power Points: 3
-    Metapsionics: Widen
 
-   When you manifest this power, you open all locks in the area.
+   A psionic lock manifested upon a door, chest, or portal psionically locks it.
 */
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
@@ -53,28 +54,13 @@ void main()
 
     if(manif.bCanManifest)
     {
-        int nResistFlag;
-        effect eVis      = EffectVisualEffect(VFX_IMP_KNOCK);
-        float fDelay;
-        float fRadius    = 50.0f;
-		if (manif.bWiden)
-			fRadius *= 2;
-        location lTarget = GetSpellTargetLocation();
-
-        object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, lTarget, FALSE, OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-        while(GetIsObjectValid(oTarget))
+        if(GetLockLockable(oTarget) && !GetPlotFlag(oTarget))
         {
-            // Let the AI know
-            SignalEvent(oTarget, EventSpellCastAt(oManifester, SPELL_KNOCK));
-            fDelay = GetRandomDelay(0.5, 2.5);
-
-            if(!GetPlotFlag(oTarget) && GetLocked(oTarget))
-    	    {
-    	        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-    	        AssignCommand(oTarget, ActionUnlockObject(oTarget));
-    	    }// end if - Target is locked and not plot
-    	    oTarget = GetNextObjectInShape(SHAPE_SPHERE,fRadius, lTarget, FALSE, OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-
-        }// end while - Target loop
+        	SetLocked(oTarget, TRUE);
+        }
+        else
+        {
+        	SendMessageToPC(oManifester, "This item is cannot be locked"); // "This item is cannot be locked"
+        }
     }// end if - Successfull manifestation
 }
