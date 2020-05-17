@@ -231,7 +231,7 @@ int PS_GetFeatWingType(object oPC)
 	{	if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) >= 6)
 		{	nWing = PS_GetWing_HalfDragon(oPC);		}	}
 	
-	if (GetHasFeat(2179, oPC))
+	if (GetHasFeat(2781, oPC))
 	{	if (GetLevelByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC, oPC) >= 1)
 		{	if (GetGender(oPC) == GENDER_FEMALE)
 			{	nWing = WING_TYPE_WORDARCHON_F;	}
