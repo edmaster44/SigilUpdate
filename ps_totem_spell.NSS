@@ -20,7 +20,7 @@ void main()
 	int spellId = GetSpellId();
 	int totemType = GetTotemType(spellId);
 
-	if(GetLastSpellCastClass() != CLASS_TYPE_SPIRIT_SHAMAN) {
+	if(spellId != SPELL_ID_ANCESTRAL_TOTEM && GetLastSpellCastClass() != CLASS_TYPE_SPIRIT_SHAMAN) {
 		SendMessageToPC(OBJECT_SELF, "Spellcasting failed: totem spells only work if cast from a Shaman spell slot!");
 		return;
 	}

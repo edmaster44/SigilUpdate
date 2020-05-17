@@ -20,6 +20,8 @@ void main()
 			case SPELL_ID_TOTEM_NAUSEA:
 			case SPELL_ID_TOTEM_SWIFTNESS:
 			case SPELL_ID_TOTEM_SERENITY:
+			case SPELL_ID_TOTEM_PARALYSIS:
+			case SPELL_ID_TOTEM_PETRIFICATION:
 				RemoveEffect(oTarget, eAOE);
 				break;
 			}
