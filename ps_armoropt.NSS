@@ -7,6 +7,7 @@ void main()
 	object oItem			= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	int iBaseItemType 		= GetBaseItemType(oItem);
 	int iBonus;
+	float fDuration = 9999.9f;
 	int iACBonus;
 	int nSpellID; 
 	
@@ -49,7 +50,7 @@ void main()
 			eLink		= SetEffectSpellId(eLink, nSpellID);
 			eLink 		= SupernaturalEffect(eLink);
 		
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDuration);
 		SendMessageToPC(oPC, "+" + IntToString(iACCheck) + " bonus added to armor check dependent feats.");
 		SendMessageToPC(oPC, "+" + IntToString(iACBonus) + " bonus Dodge AC added.");
 }	}
