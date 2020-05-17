@@ -168,11 +168,299 @@ int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 int BarbarianLevels(object oPC)
 {
 	int iBarb = GetLevelByClass(0, oPC);
-	int iBralani = GetLevelByClass(97,oPC);
-	
-	int iTotal = iBarb + iBralani;
+	int iBralani = GetLevelByClass(97,oPC);//Bralani
+	int iSavage = GetLevelByClass(94,oPC);//Savage Marauder
+	int iFrost = GetLevelByClass(86,oPC);//Frost Giant PRC
+	int iFrenzy = GetLevelByClass(43,oPC);//Frenized Berserker.
+	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy;
 	//if(GetHasFeat(3127,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(97,oPC); //Future Barbarian PRC.
 	
+	if (iTotal > 1)
+	{ if (!GetHasFeat(293,oPC,TRUE))
+		FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	}else if (iTotal >2)
+	{ if (!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);		
+	}else if (iTotal>3)
+	{if (!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	}else if(iTotal>4)
+	{if (!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	}else if (iTotal>5)//Level 5 Barbarian Total
+	{if (!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	}else if (iTotal>11)//Level 11 Barbarian Total
+	{if(!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1388,oPC,TRUE))
+		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(196,oPC,TRUE))
+		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(327,oPC,TRUE))
+		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1389,oPC,TRUE))
+		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(332,oPC,TRUE))
+		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(328,oPC,TRUE))
+		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4	level 11
+	}else if (iTotal>14)	
+	{if(!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1388,oPC,TRUE))
+		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(196,oPC,TRUE))
+		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(327,oPC,TRUE))
+		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1389,oPC,TRUE))
+		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(332,oPC,TRUE))
+		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(328,oPC,TRUE))
+		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
+	if (!GetHasFeat(329,oPC,TRUE))
+		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
+	if (!GetHasFeat(333,oPC,TRUE))
+		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
+	if (!GetHasFeat(1398,oPC,TRUE))
+		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
+}else if(iTotal>19)
+{
+if(!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1388,oPC,TRUE))
+		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(196,oPC,TRUE))
+		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(327,oPC,TRUE))
+		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1389,oPC,TRUE))
+		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(332,oPC,TRUE))
+		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(328,oPC,TRUE))
+		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
+	if (!GetHasFeat(329,oPC,TRUE))
+		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
+	if (!GetHasFeat(333,oPC,TRUE))
+		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
+	if (!GetHasFeat(1398,oPC,TRUE))
+		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
+	if (!GetHasFeat(1391,oPC,TRUE))
+		FeatAdd(oPC,1391,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
+	if (!GetHasFeat(334,oPC,TRUE))
+		FeatAdd(oPC,334,FALSE,FALSE,FALSE);//Barb 16 - Damage Reduction 4
+	if (!GetHasFeat(1769,oPC,TRUE))
+		FeatAdd(oPC,1769,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
+	if (!GetHasFeat(1392,oPC,TRUE))
+		FeatAdd(oPC,1392,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
+	if (!GetHasFeat(1386,oPC,TRUE))
+		FeatAdd(oPC,1386,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
+		}else if (iTotal>22){
+	if(!GetHasFeat(293,oPC,TRUE))
+	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1388,oPC,TRUE))
+		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(196,oPC,TRUE))
+		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(327,oPC,TRUE))
+		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1389,oPC,TRUE))
+		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(332,oPC,TRUE))
+		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(328,oPC,TRUE))
+		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
+	if (!GetHasFeat(329,oPC,TRUE))
+		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
+	if (!GetHasFeat(333,oPC,TRUE))
+		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
+	if (!GetHasFeat(1398,oPC,TRUE))
+		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
+	if (!GetHasFeat(1391,oPC,TRUE))
+		FeatAdd(oPC,1391,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
+	if (!GetHasFeat(334,oPC,TRUE))
+		FeatAdd(oPC,334,FALSE,FALSE,FALSE);//Barb 16 - Damage Reduction 4
+	if (!GetHasFeat(1769,oPC,TRUE))
+		FeatAdd(oPC,1769,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
+	if (!GetHasFeat(1392,oPC,TRUE))
+		FeatAdd(oPC,1392,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
+	if (!GetHasFeat(1386,oPC,TRUE))
+		FeatAdd(oPC,1386,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
+	if (!GetHasFeat(869,oPC,TRUE))
+		FeatAdd(oPC,869,FALSE,FALSE,FALSE);//Barb 20-Mighty Rage
+	if (!GetHasFeat(1864,oPC,TRUE))
+		FeatAdd(oPC,1864,FALSE,FALSE,FALSE);//Barb 21-Trap Sense 7
+	if 	(!GetHasFeat(1861,oPC,TRUE))
+		FeatAdd(oPC,1861,FALSE,FALSE,FALSE);//Barb 22-Damage Reudction 6
+	}else if (iTotal>25)// If ITotal is greater than 25
+	{
+	
+	if(!GetHasFeat(293,oPC,TRUE))
+		FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+		FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1388,oPC,TRUE))
+		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(196,oPC,TRUE))
+		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(327,oPC,TRUE))
+		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1389,oPC,TRUE))
+		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(332,oPC,TRUE))
+		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(328,oPC,TRUE))
+		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
+	if (!GetHasFeat(329,oPC,TRUE))
+		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
+	if (!GetHasFeat(333,oPC,TRUE))
+		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
+	if (!GetHasFeat(1398,oPC,TRUE))
+		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
+	if (!GetHasFeat(1391,oPC,TRUE))
+		FeatAdd(oPC,1391,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
+	if (!GetHasFeat(334,oPC,TRUE))
+		FeatAdd(oPC,334,FALSE,FALSE,FALSE);//Barb 16 - Damage Reduction 4
+	if (!GetHasFeat(1769,oPC,TRUE))
+		FeatAdd(oPC,1769,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
+	if (!GetHasFeat(1392,oPC,TRUE))
+		FeatAdd(oPC,1392,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
+	if (!GetHasFeat(1386,oPC,TRUE))
+		FeatAdd(oPC,1386,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
+	if (!GetHasFeat(869,oPC,TRUE))
+		FeatAdd(oPC,869,FALSE,FALSE,FALSE);//Barb 20-Mighty Rage
+	if (!GetHasFeat(1864,oPC,TRUE))
+		FeatAdd(oPC,1864,FALSE,FALSE,FALSE);//Barb 21-Trap Sense 7
+	if 	(!GetHasFeat(1861,oPC,TRUE))
+		FeatAdd(oPC,1861,FALSE,FALSE,FALSE);//Barb 22-Damage Reudction 6
+	if (!GetHasFeat(1865,oPC,TRUE))
+		FeatAdd(oPC,1865,FALSE,FALSE,FALSE);//Barb 24 Trap Sense 8
+	if (!GetHasFeat(331,oPC,TRUE))
+		FeatAdd(oPC,331,FALSE,FALSE,FALSE);//Barb 24 Rage 7
+	if (!GetHasFeat(1862,oPC,TRUE))
+		FeatAdd(oPC,1862,FALSE,FALSE,FALSE);//Barb 25 Damage Reduction
+	}else if (iTotal > 27)
+	{
+	
+		if(!GetHasFeat(293,oPC,TRUE))
+		FeatAdd(oPC,293,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(195,oPC,TRUE))
+		FeatAdd(oPC,195,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1387,oPC,TRUE))
+		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(326,oPC,TRUE))
+		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1394,oPC,TRUE))
+		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1388,oPC,TRUE))
+		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(196,oPC,TRUE))
+		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(327,oPC,TRUE))
+		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(1389,oPC,TRUE))
+		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(332,oPC,TRUE))
+		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(328,oPC,TRUE))
+		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
+	if (!GetHasFeat(329,oPC,TRUE))
+		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
+	if (!GetHasFeat(333,oPC,TRUE))
+		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
+	if (!GetHasFeat(1398,oPC,TRUE))
+		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
+	if (!GetHasFeat(1391,oPC,TRUE))
+		FeatAdd(oPC,1391,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
+	if (!GetHasFeat(334,oPC,TRUE))
+		FeatAdd(oPC,334,FALSE,FALSE,FALSE);//Barb 16 - Damage Reduction 4
+	if (!GetHasFeat(1769,oPC,TRUE))
+		FeatAdd(oPC,1769,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
+	if (!GetHasFeat(1392,oPC,TRUE))
+		FeatAdd(oPC,1392,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
+	if (!GetHasFeat(1386,oPC,TRUE))
+		FeatAdd(oPC,1386,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
+	if (!GetHasFeat(869,oPC,TRUE))
+		FeatAdd(oPC,869,FALSE,FALSE,FALSE);//Barb 20-Mighty Rage
+	if (!GetHasFeat(1864,oPC,TRUE))
+		FeatAdd(oPC,1864,FALSE,FALSE,FALSE);//Barb 21-Trap Sense 7
+	if 	(!GetHasFeat(1861,oPC,TRUE))
+		FeatAdd(oPC,1861,FALSE,FALSE,FALSE);//Barb 22-Damage Reudction 6
+	if (!GetHasFeat(1865,oPC,TRUE))
+		FeatAdd(oPC,1865,FALSE,FALSE,FALSE);//Barb 24 Trap Sense 8
+	if (!GetHasFeat(331,oPC,TRUE))
+		FeatAdd(oPC,331,FALSE,FALSE,FALSE);//Barb 24 Rage 7
+	if (!GetHasFeat(1862,oPC,TRUE))
+		FeatAdd(oPC,1862,FALSE,FALSE,FALSE);//Barb 25 Damage Reduction
+	if (!GetHasFeat(1866,oPC,TRUE))//Barb 27 Trap Sense 9
+		FeatAdd(oPC,1866,FALSE,FALSE,FALSE);	
+	if (!GetHasFeat(1863,oPC,TRUE))
+		FeatAdd(oPC,1863,FALSE,FALSE,FALSE);//Barb Level 28 Damage reduction((Now 27 to account for special races)
+		
+	}
+	
+
 	return iTotal;	
 }
 
