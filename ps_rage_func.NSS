@@ -2,6 +2,7 @@
 // New Rage feats for Barbarians.
 
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 
 // iType is 1 for Blazing, 2 for Frozen, 3 for Both
 effect ApplyBlazingOrFrozenShield(int iType)
@@ -131,7 +132,7 @@ effect ApplyNaturalACRage()
 
 effect ApplyAncestorRage()
 {
-	int iBarbLevels = GetLevelByClass(CLASS_TYPE_BARBARIAN, OBJECT_SELF);
+	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
 	int iConceal = (iBarbLevels / 5) + 1;
 	effect eSpirit = EffectDetectSpirits();
 	eSpirit = EffectLinkEffects(eSpirit, EffectConcealment(iConceal));
@@ -158,7 +159,7 @@ effect ApplyABRage()
 effect ApplyRegenRage()
 {
 	int iAmount;
-	int iBarbLevels = GetLevelByClass(CLASS_TYPE_BARBARIAN, OBJECT_SELF);
+	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
 	if (iBarbLevels < 11) iAmount = 1;
 	else if (iBarbLevels < 21) iAmount = 2;
 	else iAmount = 3;
@@ -184,7 +185,7 @@ void DestroyAncestralWeapon(object oWeapon)
 
 void ApplyAncestralProperties(object oPC, object oWeapon, float fDuration)
 {
-	int iBarbLevels			= GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC);
+	int iBarbLevels			= BarbarianLevels(OBJECT_SELF);
 	int iDamageBonus		= 10; //IP_CONST_DAMAGEBONUS_2d6
 	int iDC					= 0; //IP_CONST_ONHIT_SAVEDC_14
 	int iDur				= 7; //IP_CONST_ONHIT_DURATION_5_PERCENT_3_ROUNDS
