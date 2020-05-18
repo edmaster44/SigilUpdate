@@ -987,7 +987,7 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker);
 	if(GetIsObjectValid(oWeapon) && GetBaseItemType(oWeapon) == 202) fDistance = 4.75;
 	
-	if(CheckIsExploitingSpellCastingSpecialAttacker(oAttacker,nSpellID) && givefeedback == 1) return 0;
+//	if(CheckIsExploitingSpellCastingSpecialAttacker(oAttacker,nSpellID) && givefeedback == 1) return 0;
 	
 	if(GetDistanceBetween(oAttacker,oTarget) >= 4.0 && ranged == 0)
 	{
@@ -1007,10 +1007,10 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 		return 0;
 	}
 	
-	if(givefeedback == 1 && nSpellID > 0)
-	{
+//	if(givefeedback == 1 && nSpellID > 0)
+//	{
 //	int iTime = GetLocalInt(oAttacker,"GCDOWN"); int uTime = GetUNIXTime();
-	{	
+//	{	
 		//SendMessageToPC(oAttacker,"Debug GCD: "+IntToString(iTime));
 		//SendMessageToPC(oAttacker,"Time: "+IntToString(uTime));	
 		//SendMessageToPC(oAttacker,"Debug SpellID: "+IntToString(nSpellID));	
@@ -1023,11 +1023,11 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 //		SendMessageToPC(oAttacker,"FeatID: "+IntToString(featid));
 	
 	//		DelayCommand(IntToFloat(result),ResetFeatUses(oAttacker,featid,TRUE,TRUE));
-			return 0;
+//			return 0;
 	//	}
-	}
+///	}
 //	SetLocalInt(oAttacker,"GCDOWN",GetUNIXTime());
-	}
+//	}
 	
 	int conceal = ConcealmentCheck(oTarget); int imiss;
 	
