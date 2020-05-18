@@ -618,7 +618,11 @@ int GetWarlockCasterLevel(object oPC)
 	
 	//1411-1419 1-9
 	//1948-1952 10-14
-		
+	if (iTotal >= 16)
+	{
+		if (!GetHasFeat(FEAT_EPIC_ELDRITCH_ADEPT,oPC,TRUE))
+		FeatAdd(oPC,FEAT_EPIC_ELDRITCH_ADEPT,FALSE,FALSE,FALSE);
+	}	
 	if (iTotal > 20) //10-14
 	{	nDice = (iTotal - 20) / 2;
 		for (nCount = 0; nCount < nDice; nCount++)
