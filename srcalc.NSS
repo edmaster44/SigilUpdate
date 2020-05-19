@@ -16,7 +16,7 @@ int DoWarlockMyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
     effect eGlobe = EffectVisualEffect( VFX_DUR_SPELL_GLOBE_INV_LESS );
     effect eMantle = EffectVisualEffect( VFX_DUR_SPELL_SPELL_MANTLE );
     int nTargetSR = GetSpellResistance(oTarget);
-    int nMyCasterLevel = GetWarlockCasterLevel(oCaster);
+    int nMyCasterLevel = GetWarlockAndPRCClassLevels(oCaster);
 	
 	int needsAnotherRoll = 0;
         switch(ResistSpell(oCaster, oTarget))

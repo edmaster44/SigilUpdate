@@ -581,7 +581,10 @@ int GetWarlockAndPRCClassLevels(object oPC)
 			
 		if(iClass == CLASS_TYPE_WARLOCK || GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
 	}
-	
+		if(GetHasFeat(FEAT_FIENDISH_POWER,oPC,TRUE)) iTotal = iTotal + 1;
+	if(GetHasFeat(FEAT_SPELL_PENETRATION,oPC,TRUE)) iTotal = iTotal + 2;
+	if(GetHasFeat(FEAT_GREATER_SPELL_PENETRATION,oPC,TRUE)) iTotal = iTotal + 2;
+	if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE)) iTotal = iTotal +2;
 	return iTotal;
 }
 
@@ -603,10 +606,7 @@ int GetWarlockCasterLevel(object oPC)
 		else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
 	}
 	
-	if(GetHasFeat(FEAT_FIENDISH_POWER,oPC,TRUE)) iTotal = iTotal + 1;
-	if(GetHasFeat(FEAT_SPELL_PENETRATION,oPC,TRUE)) iTotal = iTotal + 2;
-	if(GetHasFeat(FEAT_GREATER_SPELL_PENETRATION,oPC,TRUE)) iTotal = iTotal + 2;
-	if (GetHasFeat(FEAT_EPIC_SPELL_PENETRATION, oPC, TRUE)) iTotal = iTotal +2;
+
 	SendMessageToPC(oPC,"Debug Warlock: Total Caster Level "+IntToString(iTotal));
 	
 	
