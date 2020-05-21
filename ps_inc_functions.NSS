@@ -87,6 +87,8 @@ int PS_GetNumPC(object oPC);
 
 float PS_GetAvgPartylevel(object oPC, int iMAX);
 
+int BarbarianLevels(object oPC);
+
 float PS_GetXPModifier(int iECL);
 
 int PS_GetXPForLevel(int iLevel);
@@ -170,9 +172,11 @@ int BarbarianLevels(object oPC)
 	int iBarb = GetLevelByClass(0, oPC);
 	int iBralani = GetLevelByClass(97,oPC);//Bralani
 	int iSavage = GetLevelByClass(94,oPC);//Savage Marauder
+	int iScaly = GetLevelByClass(47,oPC);//Scaled Hunter
+	int iHilly = GetLevelByClass(84,oPC);//Hill Giant
 	int iFrost = GetLevelByClass(86,oPC);//Frost Giant PRC
 	int iFrenzy = GetLevelByClass(43,oPC);//Frenized Berserker.
-	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy;
+	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy +iScaly + iHilly;
 	//if(GetHasFeat(3127,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(97,oPC); //Future Barbarian PRC.
 	
 	if (iTotal >= 1)

@@ -56,6 +56,7 @@ void DelayedFixes(object oPC, object oItem, int nSTEP)
 		case 5: DoPsiDeLevelCheck(oPC); break;
 		case 6: PS_Template_DelevelFix(oPC, oItem); break;
 		case 7: ExportSingleCharacter(oPC); break;
+		case 8: BarbarianLevels(oPC); break;
 		default: return;
 	}
 	DelayCommand(0.0f, DelayedFixes(oPC, oItem, nSTEP + 1));
