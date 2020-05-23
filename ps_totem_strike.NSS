@@ -23,7 +23,21 @@ int GetTotemStrikePower(int nShamanLvl)
 	return DAMAGE_POWER_PLUS_ONE;
 }
 
-void TotemStrikeAttack( object oTarget )
+int ScaleDmgByTotemFocus( int nFocus, int nDam )
+{
+	// 10% per feat
+	return FloatToInt(nDam * (1.0 + 0.1 * nFocus));
+}
+
+// returns at least 1
+int GetDamageDicePerShamanLevel( int nShamanLvl, int nDivide )
+{
+	int nDmgDice = nShamanLvl / nDivide;
+	nDmgDice = (nDmgDice == 0) ? 1 : nDmgDice;
+	return nDmgDice;
+}
+
+void TotemStrikeAttack( object oTarget, int nElemDmgType )
 {
 	object oCaster = OBJECT_SELF;
 
@@ -31,18 +45,52 @@ void TotemStrikeAttack( object oTarget )
 	int nRoll = TouchAttackRanged( oTarget, TRUE, nBonus );
 	if(nRoll) {
 		int nShamanLvl = GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oCaster);
-		int nDmgDice = nShamanLvl / 2;
+		int nDmgDice = GetDamageDicePerShamanLevel( nShamanLvl, 3 );
+
+		// Focus power
+		int nFocus = GetFocusPower(oCaster);
+
+		// Twin Totem Strike
+		int bTwin = GetHasFeat(FEAT_TWIN_TOTEM_STRIKE, oCaster, TRUE) && (d20(1) <= 2);
+		nDmgDice *= bTwin ? 2 : 1;
+
+		// Piercing Totem Strike
+		int bPiercing = GetHasFeat(FEAT_PIERCING_TOTEM_STRIKE, oCaster, TRUE) && (d20(1) <= 2);
+
 		int nDam = d6(nDmgDice);
+
+		// Totem Focus
+		nDam = ScaleDmgByTotemFocus( nFocus, nDam );
+
 		// Confirm crit
 		if(nRoll == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT)) {
 			if(TouchAttackRanged( oTarget, FALSE, nBonus) > 0) {
-				nDam *= 2;
+				// Devastating Totem Strike
+				int nCritMulti = GetHasFeat(FEAT_DEVAST_TOTEM_STRIKE, oCaster, TRUE) ? 3 : 2;
+				nDam *= nCritMulti;
 			}
 		}
 
+		// Damage magic power
+		int nPower = GetTotemStrikePower(nShamanLvl);
+
 		effect eVis = EffectVisualEffect(VFX_HIT_SPELL_INFLICT_1);
-		effect eHurt = EffectDamage( nDam, DAMAGE_TYPE_PIERCING | DAMAGE_TYPE_SLASHING, GetTotemStrikePower(nShamanLvl) );
+		effect eHurt = EffectDamage( nDam, DAMAGE_TYPE_PIERCING | DAMAGE_TYPE_SLASHING, nPower, bPiercing );
 		effect eLink = EffectLinkEffects(eVis, eHurt);
+
+		// Elemental Totem Strike
+		effect eElem;
+		if (GetHasFeat(FEAT_ELEM_TOTEM_STRIKE, oCaster, TRUE)) {
+			int nElemDmgDice = GetDamageDicePerShamanLevel( nShamanLvl, 5 );
+			nElemDmgDice *= bTwin ? 2 : 1;
+
+			int nElemDam = d6(nElemDmgDice);
+			// Totem Focus
+			nElemDam = ScaleDmgByTotemFocus( nFocus, nElemDam );
+			eElem = EffectDamage( nElemDam, nElemDmgType, nPower, bPiercing );
+			eLink = EffectLinkEffects(eLink, eElem);
+		}
+
 		ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget );
 	}
 }
@@ -58,9 +106,19 @@ void RunTotemStrike(object oTotem)
 	ApplyEffectAtLocation( DURATION_TYPE_INSTANT, eVis, lTotemLoc );
 
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
+
+	int nElemDmgType = 0;
+	switch(Random(5)) {
+	case 0: nElemDmgType = DAMAGE_TYPE_ACID; break;
+	case 1: nElemDmgType = DAMAGE_TYPE_COLD; break;
+	case 2: nElemDmgType = DAMAGE_TYPE_ELECTRICAL; break;
+	case 3: nElemDmgType = DAMAGE_TYPE_FIRE; break;
+	case 4: nElemDmgType = DAMAGE_TYPE_SONIC; break;
+	}
+
 	while(GetIsObjectValid(oTarget)) {
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)) {
-			TotemStrikeAttack( oTarget );
+			TotemStrikeAttack( oTarget, nElemDmgType );
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
 	}

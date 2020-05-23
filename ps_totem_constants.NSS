@@ -41,6 +41,29 @@ const int TOTEM_TYPE_DEBUFF = 1;
 const int TOTEM_DURATION_ROUNDS = 10;
 const int TOTEM_EXT_DURATION_ROUNDS = 20;
 
+const int FEAT_TOTEM_FOCUS = 14002;
+const int FEAT_GREATER_TOTEM_FOCUS = 14003;
+const int FEAT_SUPREME_TOTEM_FOCUS = 14004;
+const int FEAT_DEVAST_TOTEM_STRIKE = 14005;
+const int FEAT_ELEM_TOTEM_STRIKE = 14006;
+const int FEAT_TWIN_TOTEM_STRIKE = 14007;
+const int FEAT_PIERCING_TOTEM_STRIKE = 14008;
+
+// Return one of 0 (no focus), 1 (focus), 2 (greater), 3 (supreme)
+int GetFocusPower(object oCreator)
+{
+	if (GetHasFeat(FEAT_SUPREME_TOTEM_FOCUS, oCreator, TRUE)) {
+		return 3;
+	}
+	if (GetHasFeat(FEAT_GREATER_TOTEM_FOCUS, oCreator, TRUE)) {
+		return 2;
+	}
+	if (GetHasFeat(FEAT_TOTEM_FOCUS, oCreator, TRUE)) {
+		return 1;
+	}
+	return 0;
+}
+
 int IsTotemSpell(int spellId)
 {
 	switch(spellId) {
@@ -122,9 +145,11 @@ int GetTotemAoeEffectId(int spellId)
 }
 
 // Return the value or the caster's WIS bonus, whichever is lower. Returns at least 0.
+// Focus feats increase the limit by 1-3
 int LimitToWisBonus(object oCreator, int n)
 {
 	int maxn = GetAbilityModifier(ABILITY_WISDOM, oCreator);
+	maxn += GetFocusPower(oCreator);
 	if(n > maxn)
 		n = maxn;
 	if(n < 0)
@@ -197,6 +222,8 @@ void ApplyTotemSpell(
 	int nMetaMagic
 	)
 {
+	nSaveDC += GetFocusPower(oCreator);
+
 	switch(nAoeSpellId) {
 	case SPELL_ID_ANCESTRAL_TOTEM:
 		break;
@@ -512,7 +539,6 @@ void ApplyTotemSpell(
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCreator) && !TotemEffectActive(oTarget, oCreator, nAoeSpellId)) {
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_ID_TOTEM_PARALYSIS, TRUE));
 			if(!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)) {
-				int nAmount = GetTotemScaledEffect(oCreator, nCasterLevel);
 				effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_WILL, FALSE);
 				effect eHit = EffectVisualEffect( VFX_DUR_SPELL_HOLD_MONSTER );
 				effect eLink = EffectLinkEffects( eParal, eHit );
