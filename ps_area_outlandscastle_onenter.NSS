@@ -43,9 +43,9 @@ void main() {
 		}
 		if(GetObjectByTag("ps_outcamp_sensateguard") == OBJECT_INVALID) { 
 			object oWP = GetWaypointByTag("wp_outcamp_sensate1");
-			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_groundlevelguardm", GetLocation(oWP), FALSE, "ps_outcamp_sensateguard");    
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_groundlevelguardf0", GetLocation(oWP), FALSE, "ps_outcamp_sensateguard");    
 			oWP = GetWaypointByTag("wp_outcamp_sensate2");
-			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_groundlevelguardf", GetLocation(oWP), FALSE, "ps_outcamp_sensateguard");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_groundlevelguardf0", GetLocation(oWP), FALSE, "ps_outcamp_sensateguard");  
 		}
 		if(GetObjectByTag("ps_outcamp_sensategeneral") == OBJECT_INVALID) { 
 			object oWP = GetWaypointByTag("wp_outcamp_sensate3");
@@ -96,12 +96,14 @@ void main() {
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "harmonium_traineef", GetLocation(oWP), FALSE, "ps_outcamp_npc1");  
 			SetFirstName(oSpawn, "Harmonium Recruit");
 			SetLastName(oSpawn, "");
+			SetLocalInt(oSpawn, "X2_L_SPAWN_USE_AMBIENT", 1);
 		}
 		if(GetObjectByTag("ps_outcamp_npc2") == OBJECT_INVALID) { 
 			object oWP = GetWaypointByTag("wp_outcamp_npc2");
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_groundlevelguardf", GetLocation(oWP), FALSE, "ps_outcamp_npc2");  
 			SetFirstName(oSpawn, "Planeswalker");
 			SetLastName(oSpawn, "");
+			SetLocalInt(oSpawn, "X2_L_SPAWN_USE_AMBIENT", 1);
 		}
 		   
 		SetGlobalInt("OutlandsCastleEnterLock", 0);
