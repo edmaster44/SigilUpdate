@@ -8,21 +8,22 @@
 void main()
 {
 object oPC = OBJECT_SELF;
+object oChest =  GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 int nShieldDamage = DAMAGE_BONUS_1d6;
 int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 
 	int nSpellID = SPELLABILITY_ELEMWAR_MANIFESTATION;
 	object oTarget	= GetSpellTargetObject();	
 	effect eHaste = EffectHaste();
-	effect eSlow = EffectSlow();
+	itemproperty eSlow = ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_SLOW,nLevel*2);
 	
     RemoveSpellEffects(nSpellID, OBJECT_SELF, OBJECT_SELF);
 	
 	effect eLink;
 	
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
 	{
-		eLink = EffectConcealment(20, MISS_CHANCE_TYPE_NORMAL);
+		eLink = EffectConcealment(10 * nLevel , MISS_CHANCE_TYPE_NORMAL);
 	}
 	else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH))
@@ -30,18 +31,18 @@ int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 		eLink =	EffectDamageReduction(15,GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL);
 	}
 	else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
 	{	
 			if (nLevel >= 5 ) 
 		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;	}
 		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_FIRE);
 	}
 	else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER))
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
 	{	
 		
-		 ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(10));
-		 ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eSlow,oTarget, RoundsToSeconds(10));
+		 ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(25));
+		 AddItemProperty(DURATION_TYPE_TEMPORARY,eSlow,oChest,25.0f);
 			if (nLevel >= 5 ) 
 		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;	}
 		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_ELECTRICAL);
@@ -53,13 +54,12 @@ int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpellID);
 
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(10)));
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER))
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(25)));
+	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
 	{
-	
-	 	 DelayCommand(0.1f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(10)));
-		 DelayCommand(0.1f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eSlow,oTarget, RoundsToSeconds(10)));
+			 AddItemProperty(DURATION_TYPE_TEMPORARY,eSlow,oChest,25.0f);
 	
 	}
-		
+	
+
 }
