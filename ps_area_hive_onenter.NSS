@@ -130,6 +130,20 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hivespawn_merchant", lSpawnpoint);    
   }   
+   
+  if(GetObjectByTag("ps_c_hivepatrolguard1") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_hive_patrolguard1");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", lSpawnpoint, FALSE, "ps_c_hivepatrolguard1");    
+  }  
+   
+  if(GetObjectByTag("ps_c_hivepatrolguard2") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_hive_patrolguard2");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", lSpawnpoint, FALSE, "ps_c_hivepatrolguard2");    
+  }  
   
 	//Generates Fensir bouncers
 	if(GetObjectByTag("ps_bjevent_fensir0") == OBJECT_INVALID)

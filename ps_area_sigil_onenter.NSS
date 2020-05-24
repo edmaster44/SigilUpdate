@@ -143,9 +143,12 @@ void main()
   //Patrolers
   if(GetObjectByTag("ps_c_harmoniumpatrolguard") == OBJECT_INVALID)
   {
-   object oWP = GetWaypointByTag("wp_sigilmainpatrolguard1");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard", lSpawnpoint);      
+   	object oWP = GetWaypointByTag("wp_bazaar_harmonium3");
+   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard", GetLocation(oWP));  
+   	oWP = GetWaypointByTag("wp_bazaar_harmonium2");
+   	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard", GetLocation(oWP), FALSE, "ps_c_bazaarguard1");   
+   	oWP = GetWaypointByTag("wp_bazaar_harmonium1");
+   	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard", GetLocation(oWP), FALSE, "ps_c_bazaarguard2");      
   } 
   if(GetObjectByTag("ps_npc_dabus") == OBJECT_INVALID)
   {
