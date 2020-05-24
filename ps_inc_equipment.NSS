@@ -672,8 +672,8 @@ void FrightfulPresence(object oPC)
 void IajaitsuMaster(object oPC, object oITEM, int nITEM)
 {
 	if ((nITEM != BASE_ITEM_KATANA) && (nITEM != BASE_ITEM_LONGSWORD)) return;
-	if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND) != oITEM) return;
-	if (GetHasFeat(2414, oPC, TRUE) == TRUE)
+	if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC) != oITEM) return;
+	if (GetHasFeat(2414, oPC, TRUE))
 	{
 		int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
 		float fDUR = RoundsToSeconds(1);
