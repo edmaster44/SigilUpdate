@@ -91,16 +91,13 @@ object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int fa
 
 	int blueprintID = GetNearestCreatureLevelAvailable(nLevel, classType);
 	string sBlueprint = GetBlueprintStringFromClass(classType)+IntToString(blueprintID);
-	SpeakString("Going to generate: "+sBlueprint, TALKVOLUME_SHOUT);
 	
 	//make sure we have a waypoint
 	if (!GetIsObjectValid(oWP)) {
-		SpeakString("No waypoint found!!!", TALKVOLUME_SHOUT);
 		return oWP;
 	}
 		
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, GetLocation(oWP));
-	SpeakString("Created creature: "+GetName(oCreature), TALKVOLUME_SHOUT);
 	ChangeToStandardFaction(oCreature, faction);
 	
 	return oCreature;
@@ -165,8 +162,11 @@ string GetArmor(object oCreature) {
 	int nClass = GetClassByPosition(1, oCreature);
 	int nDexMod = GetAbilityModifier(ABILITY_DEXTERITY, oCreature); 
 	
-	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0)
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
 		return "ps_darkharmonium_plate";
+	} else if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM_SCOUT") > 0) {
+		return "ps_darkharmonium_chain";
+	}
 	
 	string sArmorType = "heavy";
 	if (nClass == CLASS_TYPE_ROGUE || nClass == CLASS_TYPE_RANGER || nClass == CLASS_TYPE_DRUID || nDexMod >= 4) {
@@ -242,7 +242,18 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 	int nLevel = GetChallengeRatingOfTarget(oCreature);
 	
 	object oWeapon;
-	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM_SCOUT") > 0) {
+	
+		 object oMelee = CreateItemOnObject("ps_darkharmonium_glad", oCreature);
+		 object oRanged = CreateItemOnObject("ps_darkharmonium_bow", oCreature);
+		 SetIdentified(oMelee, TRUE);
+		 SetIdentified(oRanged, TRUE);
+		 if (d100() < 50) 
+		 	oWeapon = oMelee;
+		 else
+		 	oWeapon = oRanged;
+	
+	} else if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
 		int nRand = Random(3)+1;
 		switch(nRand) {
 			case 1: oWeapon = CreateItemOnObject("ps_darkharmonium_spic", oCreature); break;
