@@ -521,13 +521,13 @@ int GetClassBspLevel(object oPC, int nClass)
 			if(iBSP == 1)
 			{
 				iTotal++;
-				SendMessageToPC(oPC,"BspLevel "+IntToString(iTotal)+" gained at level "+IntToString(iLoop));	
+			//	SendMessageToPC(oPC,"BspLevel "+IntToString(iTotal)+" gained at level "+IntToString(iLoop));	
 			}
 			iLoop++;
 		}
 	}
 	
-	SendMessageToPC(oPC,"Debug cleric: BSPlevel progression of class ID "+IntToString(nClass)+" came to "+IntToString(iTotal)+".");
+//	SendMessageToPC(oPC,"Debug cleric: BSPlevel progression of class ID "+IntToString(nClass)+" came to "+IntToString(iTotal)+".");
 	
 	return iTotal;
 }
@@ -564,7 +564,7 @@ int GetHasWarlockProgression(object oPC, int iClass)
 	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
 	if(BspCasterFeat == "") return FALSE;
 	
-	SendMessageToPC(oPC,"Debug Warlock: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+//	SendMessageToPC(oPC,"Debug Warlock: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
 	
 	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",39)),oPC,TRUE)) return TRUE;
 	else return FALSE;
@@ -611,7 +611,7 @@ int GetWarlockCasterLevel(object oPC)
 	}
 	
 
-	SendMessageToPC(oPC,"Debug Warlock: Total Caster Level "+IntToString(iTotal));
+//	SendMessageToPC(oPC,"Debug Warlock: Total Caster Level "+IntToString(iTotal));
 	
 	
 		if (iTotal > 30)
