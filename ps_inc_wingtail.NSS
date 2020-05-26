@@ -87,11 +87,13 @@ int PS_Get_WingRace(object oPC)
 		case 31: return WING_VARIATION_HUMAN;
 		case 32: return WING_VARIATION_ORC;
 		case 33: return WING_VARIATION_HUMAN;
+		case 208: return WING_VARIATION_HUMAN;
 	}
 	switch (nSubrace)
 	{
 		case 47: return WING_VARIATION_HUMAN;
 		case 61: return WING_VARIATION_HUMAN;
+		case 74: return WING_VARIATION_HUMAN;
 	}
 	return -1;
 }
