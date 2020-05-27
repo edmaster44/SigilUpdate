@@ -324,7 +324,7 @@ void ApplyTotemSpell(
 			int nMulti = nCasterLevel / 5;
 			nMulti = LimitToWisBonus(oCreator, nMulti);
 			int nResistance = 5 + nMulti * 5;
-			effect eStone = EffectDamageReduction(nResistance, GMATERIAL_METAL_ADAMANTINE);
+			effect eStone = EffectDamageReduction(nResistance, GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL);
 		    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_STONEBODY);
 			effect eLinked = EffectLinkEffects(eStone, eVis);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
