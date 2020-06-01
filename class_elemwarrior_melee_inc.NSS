@@ -102,7 +102,7 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 	if(flatfoot) FloatingTextStringOnCreature("*Double Attack (sneak attack)*", oPC, TRUE, 3.0f);
 	effect		eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, FALSE);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, nVFXHit, oTarget);
+	DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_INSTANT, nVFXHit, oTarget));
 
 	int nDC = 15 + nElemWar+GetAbilityModifier(ABILITY_CONSTITUTION) ;
 	if  (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nSaveType))
