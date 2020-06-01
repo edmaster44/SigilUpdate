@@ -177,6 +177,9 @@ int BarbarianLevels(object oPC)
 	int iFrost = GetLevelByClass(86,oPC);//Frost Giant PRC
 	int iFrenzy = GetLevelByClass(43,oPC);//Frenized Berserker.
 	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy +iScaly + iHilly;
+	if (iBarb < 1)
+	{ (iTotal = 0);}
+	
 	//if(GetHasFeat(3127,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(97,oPC); //Future Barbarian PRC.
 	
 	if (iTotal >= 1)
