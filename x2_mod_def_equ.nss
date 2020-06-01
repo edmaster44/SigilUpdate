@@ -25,7 +25,7 @@ void main()
 	ApplyMeditativeStrikes(oPC,oItem);
 	
 	//This Applies Elemental Weapon based on feats
-	ApplyElementalWeapon(oPC,oItem);
+//	ApplyElementalWeapon(oPC,oItem);
 
 	
 	

@@ -25,7 +25,7 @@ void main()
 	//Found in the bottom of "ps_inc_equipment.nss"
 	SigilEquipment(oPC, oItem, FALSE);
 //Removes Elemental Weapon
-RemoveElementalWeapon(oPC, oItem);	
+//RemoveElementalWeapon(oPC, oItem);	
 	
 	//This Removes Meditative Strikes
 	if (GetMonkWeapon(oItem)) {
