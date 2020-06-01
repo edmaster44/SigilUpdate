@@ -52,6 +52,11 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
 
+				//If The Targets are Friendly, it will not do nothing
+		if (GetIsReactionTypeFriendly(oTarget,oCreator))
+			{
+				return;
+				}
     	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
     	{
 			// Let the AI know

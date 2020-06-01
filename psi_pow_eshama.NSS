@@ -48,7 +48,12 @@ void main()
     effect eDamage =                            EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
            eDamage = EffectLinkEffects(eDamage, EffectVisualEffect(VFX_IMP_HEAD_MIND));
     effect eBlind  = EffectBlindness();
-
+	
+				//If The Targets are Friendly, it will not do nothing
+		if (GetIsReactionTypeFriendly(oTarget,oAoE))
+			{
+				return;
+				}
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
     {
