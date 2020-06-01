@@ -107,9 +107,9 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 	int nDC = 15 + nElemWar+GetAbilityModifier(ABILITY_CONSTITUTION) ;
 	if  (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nSaveType))
 	{	if (nDamageType != DAMAGE_TYPE_FIRE)
-	 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStatusEffect, oTarget, 6.0f);
+	DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStatusEffect, oTarget, 6.0f));
 		else 
-		DelayCommand(6.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStatusEffect, oTarget));
+		DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStatusEffect, oTarget));
 	 }
 	 }	
 }
