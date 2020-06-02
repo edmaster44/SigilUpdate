@@ -722,6 +722,7 @@ int PS_GetGolemCasterLevel(object oPC)
 		iHarp = FloatToInt(IntToFloat(iHarp)*0.8f);
 	int iPale = GetLevelByClass(34, oPC);
 		iPale = FloatToInt(IntToFloat(iPale)*0.5f);
+	int iWarl = GetLevelByClass(39,oPC);	
 	int iTric = GetLevelByClass(40, oPC);
 	int iTheu = GetLevelByClass(44, oPC);
 	int iEldr = GetLevelByClass(52, oPC);
@@ -754,7 +755,7 @@ int PS_GetGolemCasterLevel(object oPC)
 	int iDoom = GetLevelByClass(60, oPC);
 	
 	// And now the math...
-	int iArcane = iBard + iSorc + iWiza + iHarp + iPale + iTric + iTheu + iEldr + iRedw + iArca + iBrac + iSucc + iDemo + iLich;
+	int iArcane = iBard + iSorc + iWiza + iHarp + iPale + iWarl + iTric + iTheu + iEldr + iRedw + iArca + iBrac + iSucc + iDemo + iLich;
 	int iDivine = iCler + iDrui + iPala + iRang + iHarp + iEnvo + iTheu + iFist + iWarp + iSham + iStor + iFavo + iDoom +iSucc + iLich;
 	
 	int iLevel;
