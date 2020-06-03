@@ -47,6 +47,7 @@ const int RACIAL_TYPE_PLANT						= 22;
 const int RACIAL_TYPE_HUMANOID_OTHER			= 26;
 const int RACIAL_TYPE_OUTSIDER_NATIVE			= 33;
 
+
 // List of PC-compliant wing types
 const int WING_TYPE_NONE						= 0;		
 const int WING_TYPE_ANGEL_M						= 25;
