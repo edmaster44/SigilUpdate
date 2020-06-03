@@ -41,7 +41,7 @@ void main()
     //Declare major variables
 	object oManifester = OBJECT_SELF;
 	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oManifester);
-	int nDC = 20 + nInt;
+	int nDC = 25 + nInt;
     object oTarget;
     effect eDeath = EffectDeath(TRUE, TRUE, TRUE);
 	effect eSlow = EffectSlow();

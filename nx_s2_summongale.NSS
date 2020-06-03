@@ -98,7 +98,8 @@ void main()
 			 	iAppearanceType == APPEARANCE_TYPE_ELEMENTAL_AIR_ELDER || 
 				iAppearanceType == 554 || 
 				iAppearanceType == 555 || 
-				GetSubRace(oTarget) == RACIAL_SUBTYPE_AIR_GENASI)
+				GetSubRace(oTarget) == RACIAL_SUBTYPE_AIR_GENASI ||
+				GetLevelByClass(CLASS_TYPE_BRALANI_PRC, oTarget) > 0)
 					nDC = 10;
 					
 			 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))

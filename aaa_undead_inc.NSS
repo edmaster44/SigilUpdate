@@ -439,38 +439,29 @@ void PS_LichImmunity(object oPC, int nSpell)
 void PS_LichDR(object oPC, int nSpell)
 {
     if (!X2PreSpellCastCode())
-    {	return;	}
-	
-	int iLevel = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
+    {    return;    }
+    
+    int iLevel = 0;
+    if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
+    {    iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);    }
 
-	int iDR;
-	int iPower;
-	
+    int iDR;
+    
     if (!GetHasSpellEffect(nSpell, oPC))
-	{	if (iLevel >= 10)
-		{	iDR = 15;
-			iPower = DAMAGE_POWER_PLUS_THREE;	}
-		else if (iLevel >= 7)
-		{	iDR = 10;
-			iPower = DAMAGE_POWER_PLUS_TWO;	}
-		else
-		{	iDR = 5;
-			iPower = DAMAGE_POWER_PLUS_ONE; }	}
-			
-	effect eMagic	= EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
-	effect eBludg	= EffectDamageReduction(iDR, DAMAGE_TYPE_BLUDGEONING, 0, DR_TYPE_DMGTYPE);
-	effect eLink	= EffectLinkEffects(eMagic, eBludg);
-		eLink		= ExtraordinaryEffect(eLink);
-		
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/bludgeoning and +" + IntToString(iPower) + " applied.");
-}
+    {    if (iLevel >= 10)
+        {    iDR = 10;   }
+        else if (iLevel >= 7)
+        {    iDR = 7;    }
+        else
+        {    iDR = 3;    }    }
+            
+    effect eGood    = EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
+	
+	 {  eGood = ExtraordinaryEffect(eGood);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+        SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
+        
+}}
 
 // Are you scared yet? You will be after the Lich unleashes his Fear Aura!
 void PS_LichFearAura(object oPC, int nSpell)
@@ -528,7 +519,7 @@ void PS_DKAbyssalBlast(object oPC, int iLevel, int nSpell)
         {	fDelay 			= GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
-            {	nDamage 	= (d6(iLevel)/2);
+            {	nDamage 	= (d6(iLevel));
 				nFDam 	= GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_FIRE);
 				nDDam 	= GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_DIVINE);
 				if (nFDam > 0)
@@ -577,7 +568,7 @@ void PS_DKNegativeWeapon(object oPC, int nSpell)
 	int iSaveDC		= IP_CONST_ONHIT_SAVEDC_22;
 	if (iLevel == 10)
 	{	iSaveDC		= IP_CONST_ONHIT_SAVEDC_26;	}
-	float fDuration = RoundsToSeconds(10 + iLevel);
+	float fDuration = RoundsToSeconds(600 + iLevel);
 	if (GetHasSpellEffect(nSpell,oPC))	
 	{	RemoveSpellEffects(nSpell, oPC, oPC);
 		return;	}
@@ -600,34 +591,29 @@ void PS_DKNegativeWeapon(object oPC, int nSpell)
 void PS_DKDamageReduction(object oPC, int nSpell)
 {
     if (!X2PreSpellCastCode())
-    {	return;	}
-	
-	int iLevel = 0;
-	if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
+    {    return;    }
+    
+    int iLevel = 0;
+    if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
+    {    iLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);    }
 
-	int iDR;
-	int iPower;
-	
+    int iDR;
+    
     if (!GetHasSpellEffect(nSpell, oPC))
-	{	if (iLevel >= 10)
-		{	iDR = 15;
-			iPower = DAMAGE_POWER_PLUS_THREE;	}
-		else if (iLevel >= 7)
-		{	iDR = 10;
-			iPower = DAMAGE_POWER_PLUS_TWO;	}
-		else
-		{	iDR = 5;
-			iPower = DAMAGE_POWER_PLUS_ONE; }	}
-			
-	effect eMagic	= EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
-	effect eBludg	= EffectDamageReduction(iDR, DAMAGE_TYPE_BLUDGEONING, 0, DR_TYPE_DMGTYPE);
-	effect eLink	= EffectLinkEffects(eMagic, eBludg);
-		eLink		= ExtraordinaryEffect(eLink);
-		
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/bludgeoning and +" + IntToString(iPower) + " applied.");
-}
+    {    if (iLevel >= 10)
+        {    iDR = 10;   }
+        else if (iLevel >= 7)
+        {    iDR = 7;    }
+        else
+        {    iDR = 3;    }    }
+            
+    effect eGood    = EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
+	
+	 {  eGood = ExtraordinaryEffect(eGood);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+        SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
+        
+}}
 
 void PS_DKSymbolOfPain(object oPC, int nSpell)
 {
@@ -677,7 +663,7 @@ void PS_DKFearAura(object oPC, int nSpell)
     {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
-            if (GetHitDice(oTarget) <= 10)
+            if (GetHitDice(oTarget) <= 100)
 			{	if(!MyResistSpell(oPC, oTarget, fDelay))
             	{	//Make a saving throw check
 	            	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))

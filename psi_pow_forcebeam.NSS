@@ -81,9 +81,9 @@ void main()
 		if (manif.bAugment)
 			nDC += 1;
         int nPen             = GetPsiPenetration(oManifester);
-        int nNumberOfDice    = 10;
+        int nNumberOfDice    = 7;
 		if (manif.bAugment)
-			nNumberOfDice += 4;
+			nNumberOfDice += 3;
         int nDieSize         = 6;
         int nDamage;
         location lManifester = GetLocation(oManifester);
@@ -131,8 +131,7 @@ void main()
 							nDamage = nDamage + (nDamage/2);
 						}
 
-                            // Adjust damage according to Reflex Save, Evasion or Improved Evasion
-                        nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_SPELL);
+
 
                         if(nDamage > 0)
                         {

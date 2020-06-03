@@ -41,7 +41,7 @@ void main()
     object oTarget;
     
 	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oManifester);
-	int nDC = 20 + nInt;
+	int nDC = 25 + nInt;
     //Declare major variables
     object oCaster = OBJECT_SELF;
     
@@ -66,7 +66,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 14354));
             
 			
-				nDamage = d8(20);
+				nDamage = d6(30);
 				
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_NONE);
 				/*int nSave = ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, OBJECT_SELF);

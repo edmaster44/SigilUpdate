@@ -87,13 +87,13 @@ int PS_CalculateTemplateECL(object oPC)
 	
 	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) >= 1)				// Divine Lich
 	{	SendMessageToPC(oPC, "Lich (divine) template class: LA +3");
-		nValue = nValue +3;		}
+		nValue = nValue +2;		}
 	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) >= 1)					// Arcane Lich
 	{	SendMessageToPC(oPC, "Lich (arcane) template class: LA +3");
-		nValue = nValue +3;		}
+		nValue = nValue +2;		}
 	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) >= 1)				// Warlock Lich
 	{	SendMessageToPC(oPC, "Lich (warlock) template class: LA +3");
-		nValue = nValue +3;		}
+		nValue = nValue +2;		}
 	if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) >= 1)			// Death Knight
 	{	SendMessageToPC(oPC, "Death Knight template class: LA +3");
 		nValue = nValue +3;		}
