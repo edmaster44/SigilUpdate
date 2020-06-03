@@ -274,131 +274,6 @@ int GetIsSpecialFinessable(int nTYPE)
 
 
 
-//New and Improved Custom Finesse
-void ED_ApplyEnhancementToFinesse(object oPC, object oItem, int iDiff)
-{
-	if( GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS))
-	{	int iAttBonus 		= IPGetWeaponAttackBonus(oItem, ITEM_PROPERTY_ATTACK_BONUS);
-		iAttBonus			= iAttBonus + iDiff;
-		itemproperty ipAB	= ItemPropertyAttackBonus(iAttBonus);
-		IPRemoveMatchingItemProperties(oItem, ITEM_PROPERTY_ATTACK_BONUS, DURATION_TYPE_TEMPORARY);
-		IPSafeAddItemProperty(oItem, ipAB, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iAttBonus) + " applied to stack with attack bonus");	}
-	
-	if(	GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP))
-	{	int iAttBonusA		= IPGetWeaponAttackBonus(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP);
-		int iSubtypeA		= IPGetWeaponAttackBonusSubtype(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP);
-		iAttBonusA			= iAttBonusA + iDiff;
-		itemproperty ipABA	= ItemPropertyAttackBonusVsAlign(iSubtypeA, iAttBonusA);
-		IPSafeAddItemProperty(oItem, ipABA, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iAttBonusA) + " vs. alignment group applied to stack with attack bonus vs. alignment group");	}
-
-	if( GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP))
-	{	int iAttBonusR 		= IPGetWeaponAttackBonus(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP);
-		int iSubtypeR		= IPGetWeaponAttackBonusSubtype(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP);
-		iAttBonusR			= iAttBonusR + iDiff;
-		itemproperty ipABR	= ItemPropertyAttackBonusVsRace(iSubtypeR, iAttBonusR);
-		IPSafeAddItemProperty(oItem, ipABR, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iAttBonusR) + " vs. racial type applied to stack with attack bonus vs. racial group");	}
-
-	if(	GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT))
-	{	int iAttBonusS		= IPGetWeaponAttackBonus(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT);
-		int iSubtypeS		= IPGetWeaponAttackBonusSubtype(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT);
-		iAttBonusS			= iAttBonusS + iDiff;
-		itemproperty ipABS	= ItemPropertyAttackBonusVsSAlign(iSubtypeS, iAttBonusS);
-		IPSafeAddItemProperty(oItem, ipABS, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iAttBonusS) + " vs. specific alignment applied to stack with attack bonus vs. specific alignment");	}
-		
-	if( GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS))
-	{	int iEnhBonus 		= IPGetWeaponEnhancementBonus(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS);
-		iEnhBonus			= iEnhBonus + iDiff;
-		itemproperty ipEB	= ItemPropertyAttackBonus(iEnhBonus);
-		IPRemoveMatchingItemProperties(oItem, ITEM_PROPERTY_ATTACK_BONUS, DURATION_TYPE_TEMPORARY);
-		IPSafeAddItemProperty(oItem, ipEB, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iEnhBonus) + " applied to stack with enhancement bonus");  }
-	
-	if(	GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP))
-	{	int iEnhBonusA		= IPGetWeaponEnhancementBonus(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP);
-		int iESubtypeA		= IPGetWeaponEnhancementBonusSubtype(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP);
-		iEnhBonusA			= iEnhBonusA + iDiff;
-		itemproperty ipEBA	= ItemPropertyAttackBonusVsAlign(iESubtypeA, iEnhBonusA);
-		IPSafeAddItemProperty(oItem, ipEBA, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iEnhBonusA) + " vs. alignment group applied to stack with enhancement bonus vs. alignment group");	}
-
-	if( GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP))
-	{	int iEnhBonusR 		= IPGetWeaponEnhancementBonus(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP);
-		int iESubtypeR		= IPGetWeaponEnhancementBonusSubtype(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP);
-		iEnhBonusR			= iEnhBonusR + iDiff;
-		itemproperty ipEBR	= ItemPropertyAttackBonusVsRace(iESubtypeR, iEnhBonusR);
-		IPSafeAddItemProperty(oItem, ipEBR, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iEnhBonusR) + " vs. racial type applied to stack with enhancement bonus vs. racial group");	}
-
-	if(	GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT))
-	{	int iEnhBonusS		= IPGetWeaponEnhancementBonus(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT);
-		int iESubtypeS		= IPGetWeaponEnhancementBonusSubtype(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT);
-		iEnhBonusS			= iEnhBonusS + iDiff;
-		itemproperty ipEBS	= ItemPropertyAttackBonusVsSAlign(iESubtypeS, iEnhBonusS);
-		IPSafeAddItemProperty(oItem, ipEBS, HoursToSeconds(36), X2_IP_ADDPROP_POLICY_IGNORE_EXISTING, FALSE, FALSE);
-		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iEnhBonusS) + " vs. specific alignment applied to stack with enhancement bonus vs. specific alignment");	}
-}
-//This applies the Custom Finesse!
-void ED_ApplySpecialWeaponFinesse(object oPC, object oItem)
-{
-	int iStrScore		= GetAbilityScore(oPC, ABILITY_STRENGTH, FALSE);
-	SendMessageToPC(oPC, "STR score: " + IntToString(iStrScore));
-	int iStrMod			= FloatToInt((IntToFloat(iStrScore) / 2) - 5);
-	SendMessageToPC(oPC, "STR modifier: " + IntToString(iStrMod));
-	int iDexScore		= GetAbilityScore(oPC, ABILITY_DEXTERITY, FALSE);
-	SendMessageToPC(oPC, "DEX bonus: " + IntToString(iDexScore));
-	int iDexMod			= FloatToInt((IntToFloat(iDexScore) / 2) - 5);
-	SendMessageToPC(oPC, "DEX modifier: " + IntToString(iDexMod));
-	int iDiff			= (iDexMod - iStrMod);
-	SendMessageToPC(oPC, "Difference in modifiers: " + IntToString(iDiff));
-	if(iDiff <= 0)
-	{	iDiff = 0;	}
-	object oSlotR		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	SendMessageToPC(oPC, "Item in right hand: " + GetName(oSlotR));
-	object oSlotL		= GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	SendMessageToPC(oPC, "Item in left hand: " + GetName(oSlotL));
-	int iHand;
-	
-	if(oItem == oSlotR || oItem == oSlotL)
-	{	if(oItem == oSlotR && iDiff > 0)
-		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
-			itemproperty ipBoostR = ItemPropertyAttackBonus(iDiff);
-			IPSafeAddItemProperty(oItem, ipBoostR, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING  ,FALSE, FALSE);
-			SetLocalInt(oItem, "S_Finesse", iDiff);
-			SendMessageToPC(oPC, "Weapon finesse applied.");	}
-		else if(oItem == oSlotL && iDiff > 0)
-		{	ED_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
-			itemproperty ipBoostL = ItemPropertyAttackBonus(iDiff);
-			SendMessageToPC(oPC, "Bonus of +" + IntToString(iDiff) + " applied to weapon in hand: " + IntToString(iHand));
-			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING  ,FALSE, FALSE);	}
-			SetLocalInt(oItem, "S_Finesse", iDiff);
-			SendMessageToPC(oPC, "Weapon finesse applied."); }	
-}
-
-//This gets the list of Finessable weapons!
-int ED_GetIsFinessable(object oItem)
-{
-	int iBaseItem		= GetBaseItemType(oItem);
-	object oPC			= GetItemPossessor(oItem);
-	int iFinesse;
-	if(	iBaseItem == BASE_ITEM_CREQ_SLASH_L				|| iBaseItem == BASE_ITEM_CREQ_BLUDGEON_L 			|| 
-		iBaseItem == BASE_ITEM_CREQ_PIERCE_L			|| iBaseItem == BASE_ITEM_CREQ_SLASH_M				||
-		iBaseItem == BASE_ITEM_CREQ_BLUDGEON_M	 		|| iBaseItem == BASE_ITEM_CREQ_PIERCE_M				||
-		iBaseItem == BASE_ITEM_CREQ_SLASH_S				|| iBaseItem == BASE_ITEM_CREQ_BLUDGEON_S			||
-		iBaseItem == BASE_ITEM_CREQ_PIERCE_S			|| iBaseItem == BASE_ITEM_CREQ_PIERCE_BLUDGEON_L	||
-		iBaseItem == BASE_ITEM_CREQ_PIERCE_BLUDGEON_M	|| iBaseItem == BASE_ITEM_CREQ_PIERCE_BLUDGEON_S	||
-		iBaseItem == BASE_ITEM_CREQ_PIERCE_SLASH_L		|| iBaseItem == BASE_ITEM_CREQ_PIERCE_SLASH_M		|| 
-		iBaseItem == BASE_ITEM_CREQ_PIERCE_SLASH_S		|| iBaseItem == BASE_ITEM_WHIP_SCOD					||
-		iBaseItem == BASE_ITEM_WHIP						|| iBaseItem == BASE_ITEM_CSLASHWEAPON				||
-		iBaseItem == BASE_ITEM_CPIERCWEAPON				|| iBaseItem == BASE_ITEM_CBLUDGWEAPON				||
-		iBaseItem == BASE_ITEM_CSLSHPRCWEAP)
-	{	iFinesse = TRUE;
-		SendMessageToPC(oPC, "This weapon qualifies for Weapon Finesse.");	}
-	return iFinesse;
-}
 
 //This gets the weapons that qualify for Meditative Strikes
 int GetMonkWeapon(object oItem)
@@ -805,11 +680,11 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	
 		ApplyElementalWeapon(oPC,oITEM);
 		
-			if (ED_GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
-			 ED_ApplySpecialWeaponFinesse(oPC, oITEM);
+			if (GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
+			 PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
 			if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
-			DelayCommand(0.05f,ED_ApplySpecialWeaponFinesse(oPC, oITEM));
+			DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
 
 
