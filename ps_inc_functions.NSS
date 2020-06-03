@@ -89,6 +89,8 @@ float PS_GetAvgPartylevel(object oPC, int iMAX);
 
 int BarbarianLevels(object oPC);
 
+void StackBarbarianFeats(object oPC);
+
 float PS_GetXPModifier(int iECL);
 
 int PS_GetXPForLevel(int iLevel);
@@ -181,23 +183,33 @@ int BarbarianLevels(object oPC)
 	{ (iTotal = 0);}
 	
 	//if(GetHasFeat(3127,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(97,oPC); //Future Barbarian PRC.
+return iTotal;
+}
+
+//Stacks Barbarian Feats based on Levels 
+void StackBarbarianFeats(object oPC)
+{
+int	nBarbTotal = BarbarianLevels(oPC);
+int	nBarb 	= GetLevelByClass(0,oPC);
 	
-	if (iTotal > 1)
+	if (nBarbTotal > nBarb)
+{
+	if (nBarbTotal > 1)
 	{ if (!GetHasFeat(293,oPC,TRUE))
 		FeatAdd(oPC,293,FALSE,FALSE,FALSE);
-	}else if (iTotal >2)
+	}else if (nBarbTotal >2)
 	{ if (!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
 	FeatAdd(oPC,195,FALSE,FALSE,FALSE);		
-	}else if (iTotal  > 3)
+	}else if (nBarbTotal  > 3)
 	{if (!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
 	FeatAdd(oPC,195,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(1387,oPC,TRUE))
 		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
-	}else if(iTotal > 4)
+	}else if(nBarbTotal > 4)
 	{if (!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
@@ -206,7 +218,7 @@ int BarbarianLevels(object oPC)
 		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(326,oPC,TRUE))
 		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
-	}else if (iTotal > 5)//Level 5 Barbarian Total
+	}else if (nBarbTotal > 5)//Level 5 Barbarian Total
 	{if (!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
@@ -217,7 +229,7 @@ int BarbarianLevels(object oPC)
 		FeatAdd(oPC,326,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(1394,oPC,TRUE))
 		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);
-	}else if (iTotal > 11)//Level 11 Barbarian Total
+	}else if (nBarbTotal > 11)//Level 11 Barbarian Total
 	{if(!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
@@ -240,7 +252,7 @@ int BarbarianLevels(object oPC)
 		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(328,oPC,TRUE))
 		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4	level 11
-	}else if (iTotal > 14)	
+	}else if (nBarbTotal > 14)	
 	{if(!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
@@ -269,7 +281,7 @@ int BarbarianLevels(object oPC)
 		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
 	if (!GetHasFeat(1398,oPC,TRUE))
 		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
-}else if(iTotal > 19)
+}else if(nBarbTotal > 19)
 {
 if(!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
@@ -309,7 +321,8 @@ if(!GetHasFeat(293,oPC,TRUE))
 		FeatAdd(oPC,1392,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
 	if (!GetHasFeat(1386,oPC,TRUE))
 		FeatAdd(oPC,1386,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
-		}else if (iTotal > 22){
+		}
+else if (nBarbTotal > 22){
 	if(!GetHasFeat(293,oPC,TRUE))
 	FeatAdd(oPC,293,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(195,oPC,TRUE))
@@ -354,7 +367,7 @@ if(!GetHasFeat(293,oPC,TRUE))
 		FeatAdd(oPC,1864,FALSE,FALSE,FALSE);//Barb 21-Trap Sense 7
 	if 	(!GetHasFeat(1861,oPC,TRUE))
 		FeatAdd(oPC,1861,FALSE,FALSE,FALSE);//Barb 22-Damage Reudction 6
-	}else if (iTotal >=25)// If ITotal is greater than 25
+	}else if (nBarbTotal > 25)// If ITotal is greater than 25
 	{
 	
 	if(!GetHasFeat(293,oPC,TRUE))
@@ -407,7 +420,7 @@ if(!GetHasFeat(293,oPC,TRUE))
 		FeatAdd(oPC,331,FALSE,FALSE,FALSE);//Barb 24 Rage 7
 	if (!GetHasFeat(1862,oPC,TRUE))
 		FeatAdd(oPC,1862,FALSE,FALSE,FALSE);//Barb 25 Damage Reduction
-	}else if (iTotal > 27)
+	}else if (nBarbTotal > 27)
 	{
 	
 		if(!GetHasFeat(293,oPC,TRUE))
@@ -468,10 +481,10 @@ if(!GetHasFeat(293,oPC,TRUE))
 	}
 	
 
-	return iTotal;	
+
 }
 
-
+}
 
 //Calculates Monk Unarmed Damage Based on Monk Class +PRC
 int MonkUnarmedDamage(object oPC, int iMonk)
