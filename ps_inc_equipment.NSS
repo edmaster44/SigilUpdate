@@ -703,6 +703,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		ConDrainProtection(oITEM, oPC);
 		PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
+		RemoveElementalWeapon(oPC, oITEM);
 		if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
 		
 	}
