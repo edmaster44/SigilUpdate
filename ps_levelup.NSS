@@ -174,64 +174,68 @@ if (nBarbTotal == 0)
 
 
 	if (nBarbTotal >= 1)
-	{ if (!GetHasFeat(293,oPC,TRUE))
-		FeatAdd(oPC,293,FALSE,FALSE,FALSE);}
+	{ if (!GetHasFeat(FEAT_BARBARIAN_RAGE,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE,FALSE,FALSE,FALSE);}
 		
 	else if (nBarbTotal >=  2)
-{ 	if (!GetHasFeat(195,oPC,TRUE))
-	FeatAdd(oPC,195,FALSE,FALSE,FALSE);		
+{ 	if (!GetHasFeat(FEAT_UNCANNY_DODGE,oPC,TRUE))
+	FeatAdd(oPC,FEAT_UNCANNY_DODGE,FALSE,FALSE,FALSE);		
 	}
 	else if (nBarbTotal  >= 3)
-	{if (!GetHasFeat(1387,oPC,TRUE))
-		FeatAdd(oPC,1387,FALSE,FALSE,FALSE);}
+	{if (!GetHasFeat(FEAT_TRAP_SENSE_1,oPC,TRUE))
+		FeatAdd(oPC,FEAT_TRAP_SENSE_1,FALSE,FALSE,FALSE);}
 		else if(nBarbTotal >= 4)
-	{if (!GetHasFeat(326,oPC,TRUE))
-		FeatAdd(oPC,326,FALSE,FALSE,FALSE);}
+	{if (!GetHasFeat(FEAT_BARBARIAN_RAGE_2,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE_2,FALSE,FALSE,FALSE);}
 		else if (nBarbTotal >= 5)//Level 5 Barbarian Total
 	
-{	if (!GetHasFeat(1394,oPC,TRUE))
-		FeatAdd(oPC,1394,FALSE,FALSE,FALSE);}
+{	if (!GetHasFeat(FEAT_TRAP_SENSE_2,oPC,TRUE))
+		FeatAdd(oPC,FEAT_TRAP_SENSE_2,FALSE,FALSE,FALSE);}
 	else if (nBarbTotal >= 11)//Level 11 Barbarian Total
 	{
-	if (!GetHasFeat(1388,oPC,TRUE))
-		FeatAdd(oPC,1388,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(196,oPC,TRUE))
-		FeatAdd(oPC,196,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(327,oPC,TRUE))
-		FeatAdd(oPC,327,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(FEAT_TRAP_SENSE_2,oPC,TRUE))
+		FeatAdd(oPC,FEAT_TRAP_SENSE_2,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(FEAT_DAMAGE_REDUCTION,oPC,TRUE))
+		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(FEAT_BARBARIAN_RAGE3,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE3,FALSE,FALSE,FALSE);
 	if (!GetHasFeat(1389,oPC,TRUE))
 		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(332,oPC,TRUE))
-		FeatAdd(oPC,332,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(328,oPC,TRUE))
-		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4	level 11
+	if (!GetHasFeat(FEAT_DAMAGE_REDUCTION2,oPC,TRUE))
+		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION2,FALSE,FALSE,FALSE);
+	if (!GetHasFeat(FEAT_BARBARIAN_RAGE4,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE4,FALSE,FALSE,FALSE);	// Barbarian Rage 4	level 11
 	}else if (nBarbTotal >= 14)	
 	{
-	if (!GetHasFeat(328,oPC,TRUE))
-		FeatAdd(oPC,328,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
+	if (!GetHasFeat(FEAT_BARBARIAN_RAGE4,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE4,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
 	if (!GetHasFeat(329,oPC,TRUE))
 		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
 	if (!GetHasFeat(333,oPC,TRUE))
 		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
-	if (!GetHasFeat(1398,oPC,TRUE))
-		FeatAdd(oPC,1398,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
+	if (!GetHasFeat(FEAT_INDOMITABLE_WILL,oPC,TRUE))
+		FeatAdd(oPC,FEAT_INDOMITABLE_WILL,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
 }else if(nBarbTotal >= 19)
 {
 
-	if (!GetHasFeat(1391,oPC,TRUE))
-		FeatAdd(oPC,1391,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
+	if (!GetHasFeat(FEAT_TRAP_SENSE_5,oPC,TRUE))
+		FeatAdd(oPC,FEAT_TRAP_SENSE_5,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
 	if (!GetHasFeat(334,oPC,TRUE))
 		FeatAdd(oPC,334,FALSE,FALSE,FALSE);//Barb 16 - Damage Reduction 4
-	if (!GetHasFeat(1769,oPC,TRUE))
-		FeatAdd(oPC,1769,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
-	if (!GetHasFeat(1392,oPC,TRUE))
-		FeatAdd(oPC,1392,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
-	if (!GetHasFeat(1386,oPC,TRUE))
-		FeatAdd(oPC,1386,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
+	if (!GetHasFeat(FEAT_TIRELESS_RAGE,oPC,TRUE))
+		FeatAdd(oPC,FEAT_TIRELESS_RAGE,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
+	if (!GetHasFeat(FEAT_TRAP_SENSE_6,oPC,TRUE))
+		FeatAdd(oPC,FEAT_TRAP_SENSE_6,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
+	if (!GetHasFeat(FEAT_DAMAGE_REDUCTION5,oPC,TRUE))
+		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION5,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
 		}
+else if (nBarbTotal >20 )
+{
+FeatAdd(oPC,FEAT_EPIC_BARBARIAN,FALSE,FALSE,FALSE);
+}		
 else if (nBarbTotal >= 22){
-	
-		FeatAdd(oPC,869,FALSE,FALSE,FALSE);//Barb 20-Mighty Rage
+	if 	(!GetHasFeat(FEAT_BARBARIAN_RAGE7,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE7,FALSE,FALSE,FALSE);//Barb 20- Rage 7
 	if (!GetHasFeat(1864,oPC,TRUE))
 		FeatAdd(oPC,1864,FALSE,FALSE,FALSE);//Barb 21-Trap Sense 7
 	if 	(!GetHasFeat(1861,oPC,TRUE))
@@ -241,8 +245,8 @@ else if (nBarbTotal >= 22){
 	
 	if (!GetHasFeat(1865,oPC,TRUE))
 		FeatAdd(oPC,1865,FALSE,FALSE,FALSE);//Barb 24 Trap Sense 8
-	if (!GetHasFeat(331,oPC,TRUE))
-		FeatAdd(oPC,331,FALSE,FALSE,FALSE);//Barb 24 Rage 7
+	if (!GetHasFeat(FEAT_BARBARIAN_RAGE7,oPC,TRUE))
+		FeatAdd(oPC,FEAT_BARBARIAN_RAGE7,FALSE,FALSE,FALSE);//Barb 24 Rage 7
 	if (!GetHasFeat(1862,oPC,TRUE))
 		FeatAdd(oPC,1862,FALSE,FALSE,FALSE);//Barb 25 Damage Reduction
 	}else if (nBarbTotal >= 27)

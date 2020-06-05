@@ -470,3 +470,33 @@ const int FEAT_ELEMWAR_AFFINITY_FIRE 			= 2994;
 const int FEAT_ELEMWAR_AFFINITY_WATER			= 2995;
 
 //Barbarian Feats
+//const int FEAT_BARBARIAN_ENDURANCE 			= 194; // Barb level 1
+//const int FEAT_UNCANNY_DODGE					= 195;//barb level 2
+//const int FEAT_TRAP_SENSE_1					= 1387;//barb level 3
+const int FEAT_BARBARIAN_RAGE_2					= 326;//Barb Level 3
+//const int FEAT_IMPROVED_UNCANNY_DODGE			= 1394;//barb level 5
+//const int FEAT_TRAP_SENSE_2					= 1394;//Barb Level 6
+//const int FEAT_DAMAGE_REDUCTION				= 196;//Barb level 7
+const int FEAT_BARBARIAN_RAGE3					= 327;//Barb Level 8
+//const int FEAT_TRAP_SENSE_3					= 1389;//Trap sense 9
+const int FEAT_DAMAGE_REDUCTION2				= 332;//Damage Reduction 2 barb level 10
+//const int FEAT_GREATER_RAGE					= 1396; Barb 11
+const int FEAT_BARBARIAN_RAGE_4					=328;//Barbarian Rage 4 Usage Barb level 12
+const int FEAT_DAMAGE_REDUCTION3				=333;//Barbarian level 13
+//const int FEAT_INDOMITABLE_WILL				=1398;//Barbrian Level 14
+//const int FEAT_TRAP_SENSE_5					=1391;//Barbarian Level 15
+const int FEAT_DAMAGE_REDUCTION4				=334;//Barbarian Level 16
+const int FEAT_BARBARIAN_RAGE_6					=330;//Barbarian 16
+//const int FEAT_TIRELESS_RAGE					=1769; Barbarian 17
+//const int FEAT_TRAP_SENSE_6					=1392; Barbarian 18
+//const int FEAT_DAMAGE_REDUCTION5				=1386;//Barbarian 20
+//const int FEAT_BARBARIAN_RAGE7				=331;//Barbarian Rage 7
+//const int FEAT_EPIC_BARBARIAN					=967;//Barbarian 21
+//const int FEAT_EPIC_BARBARIAN_RAGE			=869;//Barbarian Epic 21+
+//const int FEAT_EPIC_BARBARIAN					=967;//Epic Barbarian damage Reduction
+//const int FEAT_DAMAGE_REDUCTION_6				=1861;//Level 22 Barbarian Damage Reduction
+const int FEAT_TRAP_SENSE_8						=1865;//Barbarian level 24
+const int FEAT_DAMAGE_REDUCTION7				=1862;//Barbarian Level 25, Damage Reduction
+const int FEAT_TRAP_SENSE9						=1866;//Trap Sense 9
+const int FEAT_DAMAGE_REDUCTION8				=1863;//Damage Reduction 8 Barbarian Level 27+
+
