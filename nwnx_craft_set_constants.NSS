@@ -515,7 +515,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_HHM_SC_HELM", "#1#" );
 	SetLocalString( oModule, "XC_P_HHM_SCOD_BODY", "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#24#25#27#28#29#30#32#33#34#" );
 	SetLocalString( oModule, "XC_P_HHM_SCOD_BOOTS", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_HHF_SCOD_GLOVES", "#2#3#4#" );
+	SetLocalString( oModule, "XC_P_HHM_SCOD_GLOVES", "#2#3#4#" );
 	SetLocalString( oModule, "XC_P_HHM_SCOD_HELM", "#1#2#3#4#5#6#7#8#9#10#11#" );
 	SetLocalString( oModule, "XC_P_GGF_ACME_BELT", "#1#2#3#13#14#15#20#22#24#" );
 	SetLocalString( oModule, "XC_P_GGF_ACME_BODY", "#1#2#3#" );
