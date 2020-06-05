@@ -491,7 +491,7 @@ void PS_LichFearAura(object oPC, int nSpell)
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
-            if (GetHitDice(oTarget) <= 10)
+            if (GetHitDice(oTarget) <= 100)
 			{	if(!MyResistSpell(oPC, oTarget, fDelay))
             	{	//Make a saving throw check
 	            	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
