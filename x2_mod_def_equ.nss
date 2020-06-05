@@ -22,7 +22,7 @@ void main()
     object oPC   = GetPCItemLastEquippedBy();
 
 	//This Applies Meditative Strikes
-	ApplyMeditativeStrikes(oPC,oItem);
+//	ApplyMeditativeStrikes(oPC,oItem);
 	
 	//This Applies Elemental Weapon based on feats
 //	ApplyElementalWeapon(oPC,oItem);

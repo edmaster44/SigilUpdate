@@ -28,9 +28,9 @@ void main()
 //RemoveElementalWeapon(oPC, oItem);	
 	
 	//This Removes Meditative Strikes
-	if (GetMonkWeapon(oItem)) {
-		RemoveMeditativeStrikes(oPC,oItem);
-	}
+//	if (GetMonkWeapon(oItem)) {
+//		RemoveMeditativeStrikes(oPC,oItem);
+//	}
 	
 	//Not everything was included in it, however. This is what I left out.
 	PS_ManageItemImmunities(oItem, oPC, FALSE);
