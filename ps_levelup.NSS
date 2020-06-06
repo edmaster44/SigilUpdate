@@ -163,105 +163,6 @@ void DoPsiProgression(object oPC)
 		}
 	}
 }
-//Stacks Barbarian Feats based on Levels 
-void StackBarbarianFeats(object oPC)
-{
-int	nBarbTotal = BarbarianLevels(oPC);
-
-	
-if (nBarbTotal == 0) 
-	return;
-
-
-	if (nBarbTotal >= 1)
-	{ if (!GetHasFeat(FEAT_BARBARIAN_RAGE,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE,FALSE,FALSE,FALSE);}
-		
-	else if (nBarbTotal >=  2)
-{ 	if (!GetHasFeat(FEAT_UNCANNY_DODGE,oPC,TRUE))
-	FeatAdd(oPC,FEAT_UNCANNY_DODGE,FALSE,FALSE,FALSE);		
-	}
-	else if (nBarbTotal  >= 3)
-	{if (!GetHasFeat(FEAT_TRAP_SENSE_1,oPC,TRUE))
-		FeatAdd(oPC,FEAT_TRAP_SENSE_1,FALSE,FALSE,FALSE);}
-		else if(nBarbTotal >= 4)
-	{if (!GetHasFeat(FEAT_BARBARIAN_RAGE_2,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE_2,FALSE,FALSE,FALSE);}
-		else if (nBarbTotal >= 5)//Level 5 Barbarian Total
-	
-{	if (!GetHasFeat(FEAT_TRAP_SENSE_2,oPC,TRUE))
-		FeatAdd(oPC,FEAT_TRAP_SENSE_2,FALSE,FALSE,FALSE);}
-	else if (nBarbTotal >= 11)//Level 11 Barbarian Total
-	{
-	if (!GetHasFeat(FEAT_TRAP_SENSE_2,oPC,TRUE))
-		FeatAdd(oPC,FEAT_TRAP_SENSE_2,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(FEAT_DAMAGE_REDUCTION,oPC,TRUE))
-		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(FEAT_BARBARIAN_RAGE3,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE3,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(1389,oPC,TRUE))
-		FeatAdd(oPC,1389,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(FEAT_DAMAGE_REDUCTION2,oPC,TRUE))
-		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION2,FALSE,FALSE,FALSE);
-	if (!GetHasFeat(FEAT_BARBARIAN_RAGE4,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE4,FALSE,FALSE,FALSE);	// Barbarian Rage 4	level 11
-	}else if (nBarbTotal >= 14)	
-	{
-	if (!GetHasFeat(FEAT_BARBARIAN_RAGE4,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE4,FALSE,FALSE,FALSE);	// Barbarian Rage 4 level 11	
-	if (!GetHasFeat(329,oPC,TRUE))
-		FeatAdd(oPC,329,FALSE,FALSE,FALSE);//Barbarian Rage 5 level 12
-	if (!GetHasFeat(333,oPC,TRUE))
-		FeatAdd(oPC,333,FALSE,FALSE,FALSE);//Barbarian Level 13 Damage Reduction 3
-	if (!GetHasFeat(FEAT_INDOMITABLE_WILL,oPC,TRUE))
-		FeatAdd(oPC,FEAT_INDOMITABLE_WILL,FALSE,FALSE,FALSE);//Barbarian Level 14, Indomitable Will	
-}else if(nBarbTotal >= 19)
-{
-
-	if (!GetHasFeat(FEAT_TRAP_SENSE_5,oPC,TRUE))
-		FeatAdd(oPC,FEAT_TRAP_SENSE_5,FALSE,FALSE,FALSE);//Barb 15, Trap Sense 5
-	if (!GetHasFeat(334,oPC,TRUE))
-		FeatAdd(oPC,334,FALSE,FALSE,FALSE);//Barb 16 - Damage Reduction 4
-	if (!GetHasFeat(FEAT_TIRELESS_RAGE,oPC,TRUE))
-		FeatAdd(oPC,FEAT_TIRELESS_RAGE,FALSE,FALSE,FALSE);//barb 17 - Tireless Rage
-	if (!GetHasFeat(FEAT_TRAP_SENSE_6,oPC,TRUE))
-		FeatAdd(oPC,FEAT_TRAP_SENSE_6,FALSE,FALSE,FALSE);//Barb 18, Trap Sense
-	if (!GetHasFeat(FEAT_DAMAGE_REDUCTION5,oPC,TRUE))
-		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION5,FALSE,FALSE,FALSE);//Barb 19, Damage Reduction 
-		}
-else if (nBarbTotal >20 )
-{
-FeatAdd(oPC,FEAT_EPIC_BARBARIAN,FALSE,FALSE,FALSE);
-}		
-else if (nBarbTotal >= 22){
-	if 	(!GetHasFeat(FEAT_BARBARIAN_RAGE7,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE7,FALSE,FALSE,FALSE);//Barb 20- Rage 7
-	if (!GetHasFeat(1864,oPC,TRUE))
-		FeatAdd(oPC,1864,FALSE,FALSE,FALSE);//Barb 21-Trap Sense 7
-	if 	(!GetHasFeat(1861,oPC,TRUE))
-		FeatAdd(oPC,1861,FALSE,FALSE,FALSE);//Barb 22-Damage Reudction 6
-	}else if (nBarbTotal > 25)// If ITotal is greater than 25
-	{
-	
-	if (!GetHasFeat(1865,oPC,TRUE))
-		FeatAdd(oPC,1865,FALSE,FALSE,FALSE);//Barb 24 Trap Sense 8
-	if (!GetHasFeat(FEAT_BARBARIAN_RAGE7,oPC,TRUE))
-		FeatAdd(oPC,FEAT_BARBARIAN_RAGE7,FALSE,FALSE,FALSE);//Barb 24 Rage 7
-	if (!GetHasFeat(1862,oPC,TRUE))
-		FeatAdd(oPC,1862,FALSE,FALSE,FALSE);//Barb 25 Damage Reduction
-	}else if (nBarbTotal >= 27)
-	{
-	if (!GetHasFeat(1866,oPC,TRUE))//Barb 27 Trap Sense 9
-		FeatAdd(oPC,1866,FALSE,FALSE,FALSE);	
-	if (!GetHasFeat(1863,oPC,TRUE))
-		FeatAdd(oPC,1863,FALSE,FALSE,FALSE);//Barb Level 28 Damage reduction((Now 27 to account for special races)
-		
-	}
-	
-
-
-}
-
 
 
 
@@ -395,7 +296,7 @@ void main()
 	GetWarlockCasterLevel(oPC);
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
-	StackBarbarianFeats(oPC);
+	BarbarianLevels(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);

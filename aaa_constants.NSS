@@ -499,4 +499,3 @@ const int FEAT_TRAP_SENSE_8						=1865;//Barbarian level 24
 const int FEAT_DAMAGE_REDUCTION7				=1862;//Barbarian Level 25, Damage Reduction
 const int FEAT_TRAP_SENSE9						=1866;//Trap Sense 9
 const int FEAT_DAMAGE_REDUCTION8				=1863;//Damage Reduction 8 Barbarian Level 27+
-
