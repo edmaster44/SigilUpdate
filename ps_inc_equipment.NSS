@@ -301,6 +301,9 @@ void UnearthlyGrace(object oPC, object oCHEST)
 void ApplyElementalWeapon(object oPC, object oItem)
 {	
 
+if (GetWeaponRanged(oItem)==TRUE) 
+{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");
+return; }
 
 	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
