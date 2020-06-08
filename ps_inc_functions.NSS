@@ -169,13 +169,13 @@ int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 //Progresses Barbarian 
 int BarbarianLevels(object oPC)
 {
-	int iBarb = GetLevelByClass(0, oPC);
-	int iBralani = GetLevelByClass(97,oPC);//Bralani
-	int iSavage = GetLevelByClass(94,oPC);//Savage Marauder
-	int iScaly = GetLevelByClass(47,oPC);//Scaled Hunter
-	int iHilly = GetLevelByClass(84,oPC);//Hill Giant
-	int iFrost = GetLevelByClass(86,oPC);//Frost Giant PRC
-	int iFrenzy = GetLevelByClass(43,oPC);//Frenized Berserker.
+	int iBarb = GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC);
+	int iBralani = GetLevelByClass(CLASS_TYPE_BRALANI_PRC,oPC);//Bralani
+	int iSavage = GetLevelByClass(CLASS_TYPE_SAVAGE_MARAUDER_PRC,oPC);//Savage Marauder
+	int iScaly = GetLevelByClass(CLASS_TYPE_SCALED_HUNTER_PRC,oPC);//Scaled Hunter
+	int iHilly = GetLevelByClass(CLASS_TYPE_HILL_GIANT_PRC,oPC);//Hill Giant
+	int iFrost = GetLevelByClass(CLASS_TYPE_FROST_GIANT_PRC,oPC);//Frost Giant PRC
+	int iFrenzy = GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER,oPC);//Frenized Berserker.
 	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy +iScaly + iHilly;
 	if (iBarb < 1)
 	{ (iTotal = 0);}
@@ -186,65 +186,89 @@ int BarbarianLevels(object oPC)
 
 	if (iTotal >= 1)
 	
-		{FeatAdd(oPC,FEAT_BARBARIAN_RAGE,FALSE,FALSE,FALSE);}
+		{FeatAdd(oPC,FEAT_BARBARIAN_RAGE,FALSE,FALSE,FALSE);
+		return iTotal;}
 		
 	 if (iTotal >=  2)
 { 	FeatAdd(oPC,FEAT_UNCANNY_DODGE,FALSE,FALSE,FALSE);		
-	}
+			return iTotal;}
 	 if (iTotal  >= 3)
-		{FeatAdd(oPC,FEAT_TRAP_SENSE_1,FALSE,FALSE,FALSE);}
+		{FeatAdd(oPC,FEAT_TRAP_SENSE_1,FALSE,FALSE,FALSE);
+		return iTotal;}
 		 if(iTotal >= 4)
-		{FeatAdd(oPC,FEAT_BARBARIAN_RAGE_2,FALSE,FALSE,FALSE);}		 
+		{FeatAdd(oPC,FEAT_BARBARIAN_RAGE_2,FALSE,FALSE,FALSE);
+		return iTotal;}		 
 		if (iTotal >= 5)
-		{FeatAdd(oPC,FEAT_IMPROVED_UNCANNY_DODGE,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_IMPROVED_UNCANNY_DODGE,FALSE,FALSE,FALSE);
+		return iTotal;}	
 		if (iTotal >= 6)
-		{FeatAdd(oPC,FEAT_TRAP_SENSE_2,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_TRAP_SENSE_2,FALSE,FALSE,FALSE);
+		return iTotal;}	
 		
 	if (iTotal >= 7)
-		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION,FALSE,FALSE,FALSE);
+		return iTotal;}	
 			if (iTotal >= 8)
-		{FeatAdd(oPC,FEAT_BARBARIAN_RAGE3,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_BARBARIAN_RAGE3,FALSE,FALSE,FALSE);
+		return iTotal;}	
 			if (iTotal >= 9)
-		{FeatAdd(oPC,FEAT_TRAP_SENSE_3,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_TRAP_SENSE_3,FALSE,FALSE,FALSE);
+		return iTotal;}	
 			if (iTotal >= 10)
-		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION2,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION2,FALSE,FALSE,FALSE);
+		return iTotal;}	
 		
 	if (iTotal >= 11)
-		{FeatAdd(oPC,FEAT_GREATER_RAGE,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_GREATER_RAGE,FALSE,FALSE,FALSE);
+		return iTotal;}	
 	if (iTotal >= 12)
-		{{FeatAdd(oPC,FEAT_BARBARIAN_RAGE_4,FALSE,FALSE,FALSE);}	
+		{{FeatAdd(oPC,FEAT_BARBARIAN_RAGE_4,FALSE,FALSE,FALSE);
+		return iTotal;}	
 	if (iTotal >= 13)
-		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION3,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION3,FALSE,FALSE,FALSE);
+		return iTotal;}	
 	if (iTotal >= 14)
-		{FeatAdd(oPC,FEAT_INDOMITABLE_WILL,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_INDOMITABLE_WILL,FALSE,FALSE,FALSE);
+		return iTotal;}	
 	if (iTotal >= 15)
-		{FeatAdd(oPC,FEAT_TRAP_SENSE_5,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_TRAP_SENSE_5,FALSE,FALSE,FALSE);
+		return iTotal;}	
 			if (iTotal >= 16)
 		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION4,FALSE,FALSE,FALSE);
 		FeatAdd(oPC,FEAT_BARBARIAN_RAGE_6,FALSE,FALSE,FALSE);
+		return iTotal;
 		}
 			
 			if (iTotal >= 17)
-		{{FeatAdd(oPC,FEAT_TIRELESS_RAGE,FALSE,FALSE,FALSE);}	}
+		{{FeatAdd(oPC,FEAT_TIRELESS_RAGE,FALSE,FALSE,FALSE);}
+		return iTotal;	}
 			if (iTotal >= 18)
-		{{FeatAdd(oPC,FEAT_TRAP_SENSE_6,FALSE,FALSE,FALSE);}	}
+		{{FeatAdd(oPC,FEAT_TRAP_SENSE_6,FALSE,FALSE,FALSE);}
+		return iTotal;	}
 			if (iTotal >= 20)
 		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION5,FALSE,FALSE,FALSE);
 		FeatAdd(oPC,FEAT_BARBARIAN_RAGE7,FALSE,FALSE,FALSE);
+		return iTotal;
 		}
 			
 			if (iTotal >= 21)
-		{FeatAdd(oPC,FEAT_EPIC_BARBARIAN,FALSE,FALSE,FALSE);}	
-			FeatAdd(oPC,FEAT_EPIC_BARBARIAN_RAGE,FALSE,FALSE,FALSE);}
+		{FeatAdd(oPC,FEAT_EPIC_BARBARIAN,FALSE,FALSE,FALSE);
+		return iTotal;}	
+			FeatAdd(oPC,FEAT_EPIC_BARBARIAN_RAGE,FALSE,FALSE,FALSE);
+			return iTotal;}
 			if (iTotal >= 22)
-		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION_6,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION_6,FALSE,FALSE,FALSE);
+		return iTotal;}	
 		if (iTotal >= 24)
-		{FeatAdd(oPC,FEAT_TRAP_SENSE_8,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_TRAP_SENSE_8,FALSE,FALSE,FALSE);
+		return iTotal;}	
 			if (iTotal >= 25)
 		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION7,FALSE,FALSE,FALSE);
-		{FeatAdd(oPC,FEAT_TRAP_SENSE9,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_TRAP_SENSE9,FALSE,FALSE,FALSE);
+		return iTotal;}	
 			if (iTotal >= 27)
-		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION8,FALSE,FALSE,FALSE);}	
+		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION8,FALSE,FALSE,FALSE);
+		return iTotal;	}	
 	
 		
 
