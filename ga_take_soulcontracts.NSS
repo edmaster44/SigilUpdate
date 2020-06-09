@@ -4,6 +4,7 @@
 
 #include "ps_inc_treasuregeneration"
 #include "nw_i0_plot"
+#include "ps_inc_functions"
 
 const int GPAWARD = 1000;
 const int XPAWARD = 100;
@@ -42,7 +43,7 @@ void main(int nRewardType) {
 		
     }
 	
-	GiveXPToCreature(oPC, iXp);
+	PS_GiveXPReward(oPC, iXp);
 	
 	if (nRewardType == 1) {
 		GiveGoldToCreature(oPC, iGold);
