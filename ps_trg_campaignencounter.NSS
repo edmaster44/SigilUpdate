@@ -35,9 +35,10 @@ void main() {
 	//Get party average level
 	int iMAX = PS_GetMaxPartylevel(oPC);
 	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));
-	nLevel -= 5; //lower slightly because we don't want max challenge
-	if (nLevel < 6) //don't kill the lowbie!
+	if (nLevel < 5) //don't kill the lowbie!
 		return;
+		
+	nLevel -= 2; //lower slightly because we don't want max challenge
 	
 	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
 	int nSpawnType = GetLocalInt(OBJECT_SELF, "CAMPAIGN_SPAWN_TYPE");
@@ -64,6 +65,10 @@ void SpawnTreasureChest(object oWP, int nLevel) {
 	object oChest;
 	if (!GetIsObjectValid(GetNearestObjectByTag("chest_"+GetTag(OBJECT_SELF)))) {
 		oChest = CreateObject(OBJECT_TYPE_PLACEABLE, toGen, GetLocation(oWP), FALSE, "chest_"+GetTag(OBJECT_SELF));
+		
+		if (d100() < 33) {
+			CreateItemOnObject("mirror_cdcorrespondance", oChest);
+		}
 	}
 }
 
@@ -102,7 +107,7 @@ void SpawnHarmoniumScout(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 	WriteTimestampedLogEntry("Creating harmonium campaign encounter in "+GetTag(GetArea(oWP)));
 
 	int nClass = CLASS_TYPE_RANGER;
-	int nClassRoll = Random(5)+1;
+	int nClassRoll = Random(7)+1;
 	
 	if (GetIsObjectValid(oPC)) {
 		SendMessageToPC(oPC, "creating encounter");
@@ -114,7 +119,9 @@ void SpawnHarmoniumScout(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 		case 2: nClass = CLASS_TYPE_ARCANE_ARCHER; break;
 		case 3: nClass = CLASS_TYPE_ROGUE; break; 
 		case 4: nClass = CLASS_TYPE_FIGHTER; break;
-		case 5: nClass = CLASS_TYPE_WARLOCK; break;
+		case 5: nClass = CLASS_TYPE_FIGHTER; break; 
+		case 6: nClass = CLASS_TYPE_FIGHTER; break;
+		case 7: nClass = CLASS_TYPE_WARLOCK; break;
 	}
 	
 	object oBerk = CreateScaledCreatureofClass(oWP, nLevel, nClass, STANDARD_FACTION_HOSTILE);
@@ -122,7 +129,7 @@ void SpawnHarmoniumScout(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 		return;
 	}
 	
-	SetFirstName(oBerk, "Harmonium Scout");
+	SetFirstName(oBerk, "Crimson Dawn Scout");
 	SetLastName(oBerk, "");
 	SetDescription(oBerk, "The red armor marks this scout as Harmonium. . . but they definitely aren't wearing the current Harmonium uniform that you know.");
 	
@@ -132,7 +139,10 @@ void SpawnHarmoniumScout(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 		SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM_SCOUT", 1); //have this give them the correct armor/weapon once we have it
 	
 	//Have to have the right alignment!
-	AdjustAlignment(oBerk, ALIGNMENT_EVIL, 100);
+	if (d100() > 50)
+		AdjustAlignment(oBerk, ALIGNMENT_EVIL, 100);
+	else
+		AdjustAlignment(oBerk, ALIGNMENT_NEUTRAL, 50);
 	AdjustAlignment(oBerk, ALIGNMENT_LAWFUL, 100);
 	
 	assignProtectiveItems(oBerk, TRUE);
@@ -173,13 +183,16 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 		return;
 	}
 	
-	SetFirstName(oBerk, "Harmonium Patroller");
+	SetFirstName(oBerk, "Crimson Dawn Patroller");
 	SetLastName(oBerk, "");
 	SetDescription(oBerk, "The red armor marks this patrol as Harmonium. . . but they definitely aren't wearing the current Harmonium uniform that you know.");
 	SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1); //have this give them the correct armor/weapon once we have it
 	
 	//Have to have the right alignment!
-	AdjustAlignment(oBerk, ALIGNMENT_EVIL, 100);
+	if (d100() > 50)
+		AdjustAlignment(oBerk, ALIGNMENT_EVIL, 100);
+	else
+		AdjustAlignment(oBerk, ALIGNMENT_NEUTRAL, 50);
 	AdjustAlignment(oBerk, ALIGNMENT_LAWFUL, 100);
 	
 	assignProtectiveItems(oBerk, TRUE);
