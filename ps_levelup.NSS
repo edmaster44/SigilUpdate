@@ -7,6 +7,7 @@
 #include "ps_inc_wingtail"
 #include "ps_adjust_sneakattack"
 #include "ps_givespellfeat"
+#include "ps_adjust_barbarian"
 
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
@@ -296,7 +297,7 @@ void main()
 	GetWarlockCasterLevel(oPC);
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
-	BarbarianLevels(oPC);
+	PS_BarbarianLevels(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
