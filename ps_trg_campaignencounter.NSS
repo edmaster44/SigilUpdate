@@ -66,7 +66,7 @@ void SpawnTreasureChest(object oWP, int nLevel) {
 	if (!GetIsObjectValid(GetNearestObjectByTag("chest_"+GetTag(OBJECT_SELF)))) {
 		oChest = CreateObject(OBJECT_TYPE_PLACEABLE, toGen, GetLocation(oWP), FALSE, "chest_"+GetTag(OBJECT_SELF));
 		SetLocalString(oChest, "TAG", "mirror_cdcorrespondance");
-		SetLocalInt(oChest, "TAGCHANCE", 100);
+		SetLocalInt(oChest, "TAGCHANCE", 33);
 	}
 }
 
