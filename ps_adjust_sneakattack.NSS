@@ -55,6 +55,7 @@ const int SHADOWTHIEFSNEAKATTACK2 = 1563;
 const int SHADOWTHIEFSNEAKATTACK3 = 1564;
 
 const int CLASS_ROGUE = 8;
+const int CLASS_SHADOWDANCER = 27;
 const int CLASS_BLACKGUARD = 31;
 const int CLASS_ARCANETRICKSTER = 40;
 const int CLASS_SHADOWTHIEF = 46;
@@ -137,6 +138,7 @@ void AddSneakDice(object oPC)
 	sneakDice += (GetLevelByClass(CLASS_SHADOWTHIEF, oPC) + 1) / 2;
 	sneakDice += GetLevelByClass(CLASS_RONIN, oPC) / 3;
 	sneakDice += GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC) / 2;
+	sneakDice += GetLevelByClass(CLASS_SHADOWDANCER,oPC) / 3;
 	sneakDice += GetLevelByClass(CLASS_ARCANETRICKSTER2, oPC) / 2;
 	sneakDice += GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION, oPC) / 2;
 	sneakDice += GetLevelByClass(CLASS_SHIFTING_INFILTRATOR, oPC) / 2;
