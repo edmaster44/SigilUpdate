@@ -95,8 +95,9 @@ void PS_BarbarianLevels(object oPC)
 			
 			if (iTotal >= 21)
 		{FeatAdd(oPC,FEAT_EPIC_BARBARIAN,FALSE,FALSE,FALSE);
+		FeatAdd(oPC,FEAT_EPIC_BARBARIAN_RAGE,FALSE,FALSE,FALSE);
 		}	
-			FeatAdd(oPC,FEAT_EPIC_BARBARIAN_RAGE,FALSE,FALSE,FALSE);
+			
 			}
 			if (iTotal >= 22)
 		{FeatAdd(oPC,FEAT_DAMAGE_REDUCTION_6,FALSE,FALSE,FALSE);
