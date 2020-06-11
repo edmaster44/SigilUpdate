@@ -418,7 +418,7 @@ void RemoveMeditativeStrikes(object oPC,object oItem)
 {
   if(GetHasFeat(2840,oPC, TRUE)){
 itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
-if (GetIsItemPropertyValid(Prop) == FALSE) {
+if (GetIsItemPropertyValid(Prop) != FALSE) {
     SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
     return;
 }
