@@ -39,7 +39,9 @@ void main()
 		case RACIAL_SUBTYPE_EARTH_GENASI: sAnim = sChairType + "hum"; break;
 		case RACIAL_SUBTYPE_FIRE_GENASI: sAnim = sChairType + "hum"; break;
 		case RACIAL_SUBTYPE_WATER_GENASI: sAnim = sChairType + "hum"; break;
+		case 74: sAnim = sChairType + "hum"; break;
 		// changes for new special races.
+ 
 		case 120: sAnim = sChairType + "dwf"; break;
 		case 123:
 		case 127:
