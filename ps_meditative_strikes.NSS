@@ -1,16 +1,75 @@
 #include "x2_inc_itemprop"
-//Applies Wisdom damage as magical damage on too both gloves and Flurry-ready Monk weapons
-const int FEAT_EPIC_MEDITATIVE_STRIKES = 2840;
-//Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
-object oPC = OBJECT_SELF;
-void ApplyMeditativeStrikes(object oPC, object oItem) {
-	int nDur = DURATION_TYPE_INSTANT;
-	float fDUR = 9999.9f;
-	int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
-	int nDamage = IPGetDamageBonusConstantFromNumber(nWis);
-	effect eDamage = EffectDamageIncrease(nDamage,DAMAGE_TYPE_MAGICAL);
-	eDamage = SupernaturalEffect(eDamage);
-	if(GetHasFeat(FEAT_EPIC_MEDITATIVE_STRIKES,oPC))
-	ApplyEffectToObject(nDur,eDamage,oItem,fDUR);
+#include "ps_inc_equipmentprops"
 
+
+
+//This gets the weapons that qualify for Meditative Strikes
+int GetMonkWeapon(object oItem)
+{ 
+       int iBaseItem = GetBaseItemType(oItem);
+    return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
+}
+
+
+
+
+
+//Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
+void ApplyMeditativeStrikes(object oPC,object oItem)
+{    
+    int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
+    
+    if(nWis <= 0){
+    
+    //    SendMessageToPC(oPC, "Wisdom modifier is lower or equal to 0");
+        return;
+    }
+    else if(!GetMonkWeapon(oItem)){
+    
+      //  SendMessageToPC(oPC, "Weapon is not a monk weapon");
+        return;
+    }
+	itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
+		if (GetIsItemPropertyValid(Prop) != FALSE) {
+    	SendMessageToPC(oPC, "Meditative strikes already active.");
+    	return;
+}
+
+
+    
+    int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
+    int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
+    float fDUR = 9999.9f;    
+    itemproperty ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
+    
+    if(GetHasFeat(2840,oPC, TRUE))
+    {
+        if(!GetIsItemPropertyValid(ipAdd)){
+        
+            SendMessageToPC(oPC, "Itemproperty was not valid");
+            return;
+        }
+    
+        SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamageConstant));    
+        IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+		SaveItemPropertyReference(oItem, "MeditativeStrikes", ipAdd);
+
+        SendMessageToPC(oPC, "Wisdom Damage bonus of " + IntToString(nWis) + " applied to your Monk Weapon");
+    }
+
+}
+
+
+void RemoveMeditativeStrikes(object oPC,object oItem)
+{
+  if(GetHasFeat(2840,oPC, TRUE)){
+itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
+if (GetIsItemPropertyValid(Prop) != FALSE) {
+    SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
+    return;
+}
+
+DeleteItemPropertyReference(oItem, "MeditativeStrikes");
+
+}
 }

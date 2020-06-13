@@ -11,7 +11,9 @@
 #include "nw_i0_spells"
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
+#include "ps_meditative_strikes"
 #include "ps_inc_equipmentprops"
+#include "class_elemwar_weapon"
 
 const int SIGIL_EQUIP_FX = -9444;
 
@@ -273,19 +275,6 @@ int GetIsSpecialFinessable(int nTYPE)
 }
 
 
-
-
-//This gets the weapons that qualify for Meditative Strikes
-int GetMonkWeapon(object oItem)
-{ 
-       int iBaseItem = GetBaseItemType(oItem);
-    return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
-}
-
-
-
-
-
 // Unearthly grace feat for Nymphs. CHA bonus to Saves and Dodge AC.
 void UnearthlyGrace(object oPC, object oCHEST)
 {
@@ -297,136 +286,7 @@ void UnearthlyGrace(object oPC, object oCHEST)
 	eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
 	ApplyEquipmentEffect(oPC, eFX);
 }
-//Elemental Weapon - Applies Elemental Damage based on feat.
-void ApplyElementalWeapon(object oPC, object oItem)
-{	
 
-if (GetWeaponRanged(oItem)==TRUE) 
-{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");
-return; }
-
-	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
-	itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
-	int nDamage = IP_CONST_DAMAGEBONUS_1d6;
-		if (nLevel >= 5 ) 
-		{	nDamage = IP_CONST_DAMAGEBONUS_3d6;	}
-	int nItemVisual;
-	int DamageType;		
-    itemproperty iGlow;
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC,TRUE))
-	{	
-		DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
-		iGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ELECTRICAL);
-	}
-		else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC,TRUE))
-	{	
-		DamageType = IP_CONST_DAMAGETYPE_ACID;
-		iGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ACID);				
-	}
-		else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC,TRUE))
-	{
-		DamageType = IP_CONST_DAMAGETYPE_FIRE;
-		iGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);			
-	}
-		else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC,TRUE))
-	{
-		DamageType = IP_CONST_DAMAGETYPE_COLD;
-		iGlow =  ItemPropertyVisualEffect(ITEM_VISUAL_COLD);	
-	}
-	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
-    float fDUR = 9999.9f;   
-	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
-	{	if(!GetIsItemPropertyValid(ipAdd)){
-        
-            SendMessageToPC(oPC, "Itemproperty was not valid");
-            return;
-        }
-  
-	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
-    SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
-}
-}
-
-
-//Removes Elemental Weapon
-void RemoveElementalWeapon(object oPC,object oItem)
-{
-  if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE)){
-itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
-if (GetIsItemPropertyValid(Prop) == TRUE) {
-    SendMessageToPC(oPC, "Removing Elemental Weapon");
-    return;
-	
-	DeleteItemPropertyReference(oItem, "ElementalWeapon");
-
-}
-}
-}
-
-
-//Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
-void ApplyMeditativeStrikes(object oPC,object oItem)
-{    
-    int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
-    
-    if(nWis <= 0){
-    
-    //    SendMessageToPC(oPC, "Wisdom modifier is lower or equal to 0");
-        return;
-    }
-    else if(!GetMonkWeapon(oItem)){
-    
-      //  SendMessageToPC(oPC, "Weapon is not a monk weapon");
-        return;
-    }
-	itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
-		if (GetIsItemPropertyValid(Prop) != FALSE) {
-    	SendMessageToPC(oPC, "Meditative strikes already active.");
-    	return;
-}
-
-
-    
-    int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
-    int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
-    float fDUR = 9999.9f;    
-    itemproperty ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
-    
-    if(GetHasFeat(2840,oPC, TRUE))
-    {
-        if(!GetIsItemPropertyValid(ipAdd)){
-        
-            SendMessageToPC(oPC, "Itemproperty was not valid");
-            return;
-        }
-    
-        SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamageConstant));    
-        IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-		SaveItemPropertyReference(oItem, "MeditativeStrikes", ipAdd);
-
-        SendMessageToPC(oPC, "Wisdom Damage bonus of " + IntToString(nWis) + " applied to your Monk Weapon");
-    }
-
-}
-
-void RemoveMeditativeStrikes(object oPC,object oItem)
-{
-  if(GetHasFeat(2840,oPC, TRUE)){
-itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
-if (GetIsItemPropertyValid(Prop) != FALSE) {
-    SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
-    return;
-}
-
-DeleteItemPropertyReference(oItem, "MeditativeStrikes");
-
-}
-}
 //Fixes the Spell Resistance bug from items.
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value")
 {
