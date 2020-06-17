@@ -7,7 +7,7 @@
 // iType is 1 for Blazing, 2 for Frozen, 3 for Both
 effect ApplyBlazingOrFrozenShield(int iType)
 {
-	int iAmount = GetLevelByClass(CLASS_TYPE_BARBARIAN, OBJECT_SELF) / 5;
+	int iAmount = BarbarianLevels(OBJECT_SELF) / 5;
 	int iRandom = DAMAGE_BONUS_1;
 	
     effect eDur = EffectVisualEffect(VFX_DUR_ELEMENTAL_SHIELD);
@@ -76,7 +76,7 @@ effect ApplyFearlessRage()
 
 void ApplyVigorousRage()
 {
-	int iBarbLevels = GetLevelByClass(CLASS_TYPE_BARBARIAN, OBJECT_SELF);
+	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
 	int iConMod = GetAbilityModifier(ABILITY_CONSTITUTION, OBJECT_SELF);
 
 	int iHeal = iBarbLevels + iConMod;
@@ -98,7 +98,7 @@ effect ApplyScentRage()
 
 effect ApplySuperstitiousRage()
 {
-	int iBarbLevels = GetLevelByClass(CLASS_TYPE_BARBARIAN, OBJECT_SELF);
+	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
 	// let's be sure we can't divide by zero if there is some error here...
 	if (iBarbLevels < 1) iBarbLevels = 1;
 	int iBonus = (iBarbLevels / 4);
