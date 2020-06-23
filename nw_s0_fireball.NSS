@@ -17,6 +17,7 @@
 //:: Last Updated By: Preston Watamaniuk, On: April 6, 2001
 //:: Last Updated By: AidanScanlan, On: April 11, 2001
 //:: Last Updated By: Preston Watamaniuk, On: May 25, 2001
+//::Mymothersmeatloaf 6/20/2020 - Upped scaling to 20'th caster level
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
@@ -36,6 +37,16 @@ void main()
     //Declare major variables
     object oCaster = OBJECT_SELF;
     int nCasterLvl = GetCasterLevel(oCaster);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -48,9 +59,9 @@ void main()
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
-    if (nCasterLvl > 10)
+    if (nCasterLvl > 20)
     {
-        nCasterLvl = 10;
+        nCasterLvl = 20;
     }
     
     //Apply the fireball explosion at the location captured above.
@@ -73,11 +84,11 @@ void main()
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {
                     //Roll damage for each target
-                    nDamage = d6(nCasterLvl);
+                    nDamage = d6(nCasterLvl)+CasterModifier;
                     //Resolve metamagic
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = 6 * nCasterLvl;
+                        nDamage = (6 * nCasterLvl)+CasterModifier;
                     }
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

@@ -13,6 +13,8 @@
 //:://////////////////////////////////////////////
 //:: VFX Pass By: Preston W, On: June 20, 2001
 //:: Update Pass By: Preston W, On: Aug 1, 2001
+//:: Mymothersmeatloaf: 6/20/2020: changed to cap at 10d8
+//:: 
 
 // JLR - OEI 08/23/05 -- Metamagic changes
 #include "nwn2_inc_spells"
@@ -44,10 +46,20 @@ void main()
     //Declare major variables
     object oCaster = OBJECT_SELF;
     int nCasterLvl = GetCasterLevel(oCaster);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nMaxLvl;
-    if ( nCasterLvl > 5 )
+    if ( nCasterLvl > 10 )
     {
-        nMaxLvl = 5;
+        nMaxLvl = 10;
     }
     else
     {
@@ -74,8 +86,8 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 			
-				nDamage = d8(nMaxLvl);
-				nDamage = ApplyMetamagicVariableMods(nDamage, nMaxLvl * 8);
+				nDamage = d8(nMaxLvl)+CasterModifier;
+				nDamage = ApplyMetamagicVariableMods(nDamage, (nMaxLvl * 8)+CasterModifier);
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
 				/*int nSave = ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, OBJECT_SELF);
 				

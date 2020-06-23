@@ -37,6 +37,16 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nCasterLvl = GetCasterLevel(oCaster);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nDamage2, nDamage3;
@@ -59,14 +69,14 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {
                 //Roll damage for each target
-                nDamage = d6(3);
-                nDamage2 = d6(2);
+                nDamage = d6(3)+CasterModifier;
+                nDamage2 = d6(2)+CasterModifier;
                 nDamage3 = d6(nVariable);
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 18;
-                    nDamage2 = 12;
+                    nDamage = 18+CasterModifier;
+                    nDamage2 = 12+CasterModifier;
                     nDamage3 = 6 * nVariable;
                 }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)

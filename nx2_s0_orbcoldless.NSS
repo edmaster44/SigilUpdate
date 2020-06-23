@@ -23,7 +23,7 @@
 //:://////////////////////////////////////////////
 //:: RPGplayer1 12/22/2008: Added support for critical hits
 //:: RPGplayer1 12/22/2008: Removed secondary effect
-
+//:: Mymothersmeatloaf 6/20/20: Uncapped spell to 10d8 at 19'th level.
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "ps_inc_functions"
@@ -42,7 +42,17 @@ void main()
 	int nDice = 1;
 	int nDamage = 0;
 	// Calculate damage.
-	if (nCasterLevel >= 9)
+ 	 if (nCasterLevel >= 19)
+		nDice = 10;
+	else if (nCasterLevel >= 17)
+		nDice = 9;
+	else if (nCasterLevel >= 15)
+		nDice = 8;
+	else if (nCasterLevel >= 13)
+		nDice = 7;
+	else if (nCasterLevel >= 11)
+		nDice = 6;
+	else if (nCasterLevel >= 9)
 		nDice = 5;
 	else if (nCasterLevel >= 7)
 		nDice = 4;

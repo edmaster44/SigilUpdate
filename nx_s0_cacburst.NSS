@@ -53,6 +53,15 @@ void main()
 
 //Declare major variables
 	object oCaster = OBJECT_SELF;
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 	location lTarget = GetSpellTargetLocation();
 	int nDamage;
 	int nCasterLvl = GetCasterLevel(oCaster);
@@ -61,12 +70,12 @@ void main()
 	effect eDam;
 	
 //determine unmodded damage	
-	if (nCasterLvl > 15)
+	if (nCasterLvl > 20)
 	{
-		nCasterLvl = 15;
+		nCasterLvl = 20;
 	}
 
-	nDamage = d6(nCasterLvl);
+	nDamage = d6(nCasterLvl)+CasterModifier;
 	nDamage = ApplyMetamagicVariableMods(nDamage, 6*nCasterLvl);
 
 //target discrimination and application of effects
@@ -77,8 +86,8 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
 		{
 			
-			nDamage = d6(nCasterLvl);
-			nDamage = ApplyMetamagicVariableMods(nDamage, 6*nCasterLvl);
+			nDamage = d6(nCasterLvl) + CasterModifier;
+			nDamage = ApplyMetamagicVariableMods(nDamage, (6*nCasterLvl)+CasterModifier);
 		
 			//Signal spell cast at event
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1016));

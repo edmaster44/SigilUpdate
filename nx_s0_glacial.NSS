@@ -86,11 +86,21 @@ void main()
 	float		fDuration;
 	float 		fDist;
 	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
 //determine duration of freeze + metmagic
-	if (nCasterLvl > 25)
+	/*if (nCasterLvl > 25)
 	{
 		nCasterLvl	=	25;
-	}
+	}*/
 	if (nFreezeLvl > 10)
 	{
 		nFreezeLvl	=	10;
@@ -118,8 +128,8 @@ void main()
 			if (!ResistSpell(oCaster, oTarget))
 			{
 				//determine damage + metamagic
-				nDam	=	d6(nCasterLvl);
-				nDam	=	ApplyMetamagicVariableMods(nDam, 150);
+				nDam	=	d8(nCasterLvl)+(CasterModifier*3);
+				nDam	=	ApplyMetamagicVariableMods(nDam, (nCasterLvl*8)+(CasterModifier*3));
 				
 				if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD, oCaster))
 				{

@@ -65,6 +65,16 @@ void HandleTargetLocation( location lSpellTargetLocation )
 	float fTravelTime;
 	float fRadiusSize;
 	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, lSpellTargetLocation );	
 	
     while ( GetIsObjectValid(oTarget) )
@@ -101,12 +111,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
 					{
 						//Roll damage
-						nDamage = d6(12);
+						nDamage = d6(12)+(CasterModifier*4);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
 						{
-							nDamage = 72;//Damage is at max
+							nDamage = 72+(CasterModifier*4);//Damage is at max
 						}
 						
 						if ( nMetaMagic == METAMAGIC_EMPOWER )
@@ -118,12 +128,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 					else
 					{
 						//Roll damage
-						nDamage = d6(6);
+						nDamage = d6(6)+(CasterModifier*4);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
 						{
-							nDamage = 36;//Damage is at max
+							nDamage = 36+(CasterModifier*4);//Damage is at max
 						}
 						if ( nMetaMagic == METAMAGIC_EMPOWER )
 						{

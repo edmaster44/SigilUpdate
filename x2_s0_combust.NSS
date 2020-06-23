@@ -25,6 +25,7 @@
 //:://////////////////////////////////////////////
 // Modified: 8/16/06 - BDF-OEI: updated the target validity check 
 //:://////////////////////////////////////////////
+//:Mymothersmeatloaf: 6/20/2020 - Uncapped the +1 damage and set dice to 5d6 instead of 2d6
 
 #include "x2_I0_SPELLS"
 #include "x2_inc_toollib"
@@ -56,24 +57,34 @@ void main()
     //--------------------------------------------------------------------------
     int nDC = GetSpellSaveDC();
     int nLevel = GetCasterLevel(OBJECT_SELF);
-
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 
     //--------------------------------------------------------------------------
     // Calculate the damage, 2d6 + casterlevel, capped at +10
     //--------------------------------------------------------------------------
     int nDamage = GetCasterLevel(OBJECT_SELF);
-    if (nDamage > 10)
+	//uncap +1 damage
+   /* if (nDamage > 10)
     {
         nDamage = 10;
-    }
+    }*/
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDamage += 12;//Damage is at max
+        nDamage += 30+CasterModifier;//Damage is at max
     }
     else
     {
-        nDamage  += d6(2);
+		//Changed dice to 5d6
+        nDamage  += d6(5)+CasterModifier;
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
             nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%
@@ -170,12 +181,13 @@ void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic
         {
             //------------------------------------------------------------------
             // Calculate the damage, 1d6 + casterlevel, capped at +10
+			// Changed cap to caster level
             //------------------------------------------------------------------
             int nDamage = nLevel;
-            if (nDamage > 10)
+          /*  if (nDamage > 10)
             {
                 nDamage = 10;
-            }
+            }*/
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
                 nDamage += 6;

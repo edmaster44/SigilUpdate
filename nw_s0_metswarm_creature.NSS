@@ -57,20 +57,28 @@ int DetermineFireDamageForTargetCreature(object oTarget, int nTouchAttackRanged)
 {
 	int nDamage;
 	int nMetaMagic;
-	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d6(6);	
+	nDamage = d6(6)+(CasterModifier*2);	
 
 	if (nTouchAttackRanged == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
-		nDamage = d6(12);	
+		nDamage = d6(12)+(CasterModifier*2);	
 	}
 			
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-		nDamage = 36;//Damage is at max
+		nDamage = 36+CasterModifier;//Damage is at max
 	}
 	
 	if (nMetaMagic == METAMAGIC_EMPOWER)
@@ -91,6 +99,16 @@ int DetermineBluntDamageForTargetCreature(object oTarget, int nTouchAttackRanged
 	int nTouchAttack;
 	int nBluntDamage;
 	int nMetaMagic;
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
 	
 	switch(nTouchAttackRanged)
 	{
@@ -98,21 +116,21 @@ int DetermineBluntDamageForTargetCreature(object oTarget, int nTouchAttackRanged
 			nBluntDamage = 0;	
 			break;	
 		case 2:
-			nBluntDamage = d6(4);
+			nBluntDamage = d6(4)+(CasterModifier*2);
 			if (!GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 				break;
 		case 1:
-			nBluntDamage = d6(2);
+			nBluntDamage = d6(2)+(CasterModifier*2);
 			break;
 	}
 				
 	if ((nMetaMagic == METAMAGIC_MAXIMIZE) && (nTouchAttackRanged = 3))
 	{
-		nBluntDamage = 24;//Damage is at max for a critical
+		nBluntDamage = 24+CasterModifier;//Damage is at max for a critical
 	}
 	else if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-		nBluntDamage = 12;
+		nBluntDamage = 12+CasterModifier;
 	}
 	
 	if (nMetaMagic == METAMAGIC_EMPOWER)

@@ -31,7 +31,17 @@ void main()
     effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
     effect eLink = EffectLinkEffects(eDur, eParal);
     effect eDam;
-
+	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     int nAC;
@@ -52,7 +62,7 @@ void main()
             for (nHits = d4(); nHits > 0; nHits--)
             {
                 fDelay = GetRandomDelay(0.75, 1.5);
-                nRoll = 5 + d20();
+                nRoll = (5 + d20())+CasterModifier;
 				
                 if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
                 {

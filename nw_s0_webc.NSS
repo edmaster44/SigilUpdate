@@ -44,8 +44,8 @@ void main()
                 //Fire cast spell at event for the specified target
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_WEB));
 
-                if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
-                {
+               // if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
+               // {
                     //Make a Fortitude Save to avoid the effects of the entangle.
                     if(!/*Reflex Save*/ MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC()))
                     {
@@ -53,7 +53,7 @@ void main()
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWeb, oTarget, RoundsToSeconds(1));
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(1));
                     }
-                }
+               // }
             }
         }
         oTarget = GetNextInPersistentObject();

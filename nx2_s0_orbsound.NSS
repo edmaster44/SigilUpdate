@@ -42,8 +42,8 @@ void main()
 	int nDice = nCasterLevel;
 	int nDamage = 0;
 	// Calculate max damage.
-	if (nCasterLevel > 15)
-		nDice = 15;
+	if (nCasterLevel > 25)
+		nDice = 25;
 		
 	int nTouch = TouchAttackRanged(oTarget);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))

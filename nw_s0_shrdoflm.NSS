@@ -46,16 +46,27 @@ int DamageShroudTarget( object oTarget, object oCaster, int nSpellSaveDC, int nM
 	// Returns: 2 if the target was immune to the save type specified
     int nSave = ReflexSave( oTarget, nSpellSaveDC, SAVING_THROW_TYPE_FIRE, oCaster );
 	int nDidDamage = FALSE;
+	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster) > GetAbilityModifier(ABILITY_CHARISMA,oCaster)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,oCaster);
+	}
+	
     if ( nSave == 0 )
     {
-        int nDamage = d6(2);
-		int nMaxVal = 2 * 6; // 2d6
+        int nDamage = d6(2) + CasterModifier;
+		int nMaxVal = (2 * 6)+CasterModifier; // 2d6
 
         //Resolve metamagic
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );               
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nMaxVal;
+            nDamage = nMaxVal+CasterModifier;
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
@@ -77,16 +88,24 @@ int DamageShroudTarget( object oTarget, object oCaster, int nSpellSaveDC, int nM
 void DamageOther( object oOther, object oCaster, int nSpellSaveDC, int nMetaMagic  )
 {
     int nSave = ReflexSave( oOther, nSpellSaveDC, SAVING_THROW_TYPE_FIRE, oCaster );
-
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster) > GetAbilityModifier(ABILITY_CHARISMA,oCaster)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,oCaster);
+	}
     if ( nSave == 0 )
     {
-        int nDamage = d4(1);
-		int nMaxVal = 1 * 4; // 1d4
+        int nDamage = (d4(1))+CasterModifier;
+		int nMaxVal = (1 * 4)+CasterModifier; // 1d4
    
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );           
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nMaxVal;
+            nDamage = nMaxVal+CasterModifier;
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {

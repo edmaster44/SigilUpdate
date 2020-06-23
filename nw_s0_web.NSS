@@ -15,7 +15,6 @@
 //:: Created By: Preston Watamaniuk
 //:: Created On: Aug 8, 2001
 //:://////////////////////////////////////////////
-
 #include "x2_inc_spellhook" 
 
 void main()

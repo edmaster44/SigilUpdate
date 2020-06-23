@@ -11,6 +11,7 @@
 //:: Created On:  March 8, 2001
 //:://////////////////////////////////////////////
 //:: Last Updated By: Preston Watamaniuk, On: May 2, 2001
+//:: Mymothersmeatloaf 6/20/2020: Upped scalling to 20'th level and changed damage dice to d10
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
@@ -39,9 +40,9 @@ void main()
     //Declare major variables
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
     //Limit caster level
-    if (nCasterLevel > 10)
+    if (nCasterLevel > 20)
     {
-        nCasterLevel = 10;
+        nCasterLevel = 20;
     }
     int nDamage;
     int nMetaMagic = GetMetaMagicFeat();
@@ -89,11 +90,11 @@ void main()
                    if (!MyResistSpell(OBJECT_SELF, oTarget))
         	       {
                         //Roll damage
-                        nDamage =  d6(nCasterLevel);
+                        nDamage =  d10(nCasterLevel);
         		        //Enter Metamagic conditions
         		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
         		        {
-        			         nDamage = 6 * nCasterLevel;//Damage is at max
+        			         nDamage = 10 * nCasterLevel;//Damage is at max
                         }
         		        if (nMetaMagic == METAMAGIC_EMPOWER)
         		        {

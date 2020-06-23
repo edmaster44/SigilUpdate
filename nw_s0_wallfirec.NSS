@@ -13,7 +13,7 @@
 //:://////////////////////////////////////////////
 
 // (Update JLR - OEI 07/19/05) -- Changed Dmg to 2d6 + lvl (max 20), double dmg to Undead
-
+//Mymothersmeatloaf 6/21/2020: Uncapped damage
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
@@ -66,10 +66,6 @@ void main()
                      nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
                 }
 
-                if ( nCasterLvl > 20 )
-                {
-                    nCasterLvl = 20;
-                }
                 nDamage += nCasterLvl;  // JLR - OEI 07/19/05
                 if ( GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD )
                 {

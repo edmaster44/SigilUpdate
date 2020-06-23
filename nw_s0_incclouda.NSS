@@ -18,7 +18,17 @@ void main()
 {
 
     //Declare major variables
-    int nMetaMagic = GetMetaMagicFeat();
+	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    //Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     effect eDam;
     object oTarget;
@@ -37,11 +47,11 @@ void main()
       //  {
             fDelay = GetRandomDelay(0.5, 2.0);
             //Roll damage.
-            nDamage = d6(4);
+            nDamage = d6(4)+CasterModifier;
             //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                   nDamage = 24;//Damage is at max
+                   nDamage = 24+CasterModifier;//Damage is at max
                 }
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

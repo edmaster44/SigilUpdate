@@ -48,6 +48,7 @@ void main()
 
 	location	lTarget		=	GetSpellTargetLocation();
 	object		oCaster		=	OBJECT_SELF;
+	int         nCasterLvl  =   GetCasterLevel(OBJECT_SELF);
 	object		oTarget		=	GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	int			nDam;
 	float		fDuration;
@@ -59,6 +60,21 @@ void main()
 	effect		eStun		=	EffectStunned();
 	effect		eLink;
 	
+	if (nCasterLvl > 20)
+    {
+    	nCasterLvl = 20;
+    }
+	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
 	while(GetIsObjectValid(oTarget))
 	{
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
@@ -67,10 +83,10 @@ void main()
 			if (oTarget != oCaster)
 			{
 				//determine duration and damage + metamagic
-				nDam		=	d6(10);
+				nDam		=	d6(nCasterLvl)+CasterModifier;
 				fDuration	=	RoundsToSeconds(d6(4));
 				
-				nDam		=	ApplyMetamagicVariableMods(nDam, 60);
+				nDam		=	ApplyMetamagicVariableMods(nDam, 120+CasterModifier);
 				fDuration	=	ApplyMetamagicDurationMods(fDuration);
 				fStun		=	ApplyMetamagicDurationMods(fStun);
 				

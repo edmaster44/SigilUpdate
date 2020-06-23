@@ -39,6 +39,16 @@ void main()
 	location lSourceLoc = GetLocation(OBJECT_SELF);
 	location lTargetLoc = GetLocation(oTarget);
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nDamage = 0;
     int nMetaMagic = GetMetaMagicFeat();
     int nCnt;
@@ -98,11 +108,11 @@ void main()
             if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage
-                nDamage = d6(4) + 1;
+                nDamage = (d6(4) + 1)+CasterModifier;
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                      nDamage = 24;//Damage is at max
+                      nDamage = 24+CasterModifier;//Damage is at max
                 }
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

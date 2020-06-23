@@ -21,6 +21,7 @@
 
 
 // JLR - OEI 08/23/05 -- Metamagic changes
+//Mymothersmeatloaf 6/20/2020: Uncapped magic missiles
 #include "nwn2_inc_spells"
 
 
@@ -51,7 +52,10 @@ void main()
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
     int nMissiles = (nCasterLvl + 1)/2;
-    //effect eMissile = EffectVisualEffect(VFX_IMP_MIRV);	// handled by SpawnSpellProjectile()
+	//Casting modifier
+	int CasterModifier = 0;
+     int nMetaMagic = GetMetaMagicFeat();
+	//effect eMissile = EffectVisualEffect(VFX_IMP_MIRV);	// handled by SpawnSpellProjectile()
     effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);
     float fDelay, fTime, fTime2;
 	int nSpell = GetSpellId();
@@ -60,6 +64,14 @@ void main()
 	location lTarget = GetLocation( oTarget );
     int nCnt;
 	float fTravelTime;
+	
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 	
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
     {
@@ -108,10 +120,18 @@ void main()
 	        if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 		  	{
                 //Roll damage
-                int nDam = d4(1) + 1;
-     	          //Enter Metamagic conditions
-                nDam = ApplyMetamagicVariableMods(nDam, 5);
-
+				
+                int nDam = d4(1) + 1 + (CasterModifier/2);
+     	        //Enter Metamagic conditions
+             	 if (nMetaMagic == METAMAGIC_MAXIMIZE)
+                {
+                    nDam = 5 + CasterModifier/2;
+                }
+                else if (nMetaMagic == METAMAGIC_EMPOWER)
+                {
+                    nDam = nDam + nDam / 2;
+                }
+				
                 //Set damage effect
                 effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);
                 //Apply the MIRV and damage effect

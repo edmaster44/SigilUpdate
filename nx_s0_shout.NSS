@@ -18,7 +18,7 @@
 //:: Created On: 12.12.06
 //:://////////////////////////////////////////////
 //:: AFW-OEI 07/17/2007: NX1 VFX
-
+//Mymothersmeatloaf 6/20/2020: Increased damage based on casting stat, increased deafened rounds based on half casting stat
 #include "nw_i0_spells"
 #include "x2_inc_spellhook"  
 #include "nwn2_inc_metmag"
@@ -55,6 +55,16 @@ void main()
 	effect		eCone		=	EffectVisualEffect(VFX_DUR_CONE_SONIC);	
 	effect		eLink;
 	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
 	while(GetIsObjectValid(oTarget))
 	{
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
@@ -63,10 +73,10 @@ void main()
 			if (oTarget != oCaster)
 			{
 				//determine duration and damage + metamagic
-				nDam		=	d6(5);
+				nDam		=	d6(10)+CasterModifier;
 				fDuration	=	RoundsToSeconds(d6(2));
 				
-				nDam		=	ApplyMetamagicVariableMods(nDam, 30);
+				nDam		=	ApplyMetamagicVariableMods(nDam, 30+CasterModifier);
 				fDuration	=	ApplyMetamagicDurationMods(fDuration);
 				
 								

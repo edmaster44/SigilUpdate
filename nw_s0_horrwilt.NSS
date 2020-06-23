@@ -45,6 +45,15 @@ void main()
     //Declare major variables
     object oCaster = OBJECT_SELF;
     int nCasterLvl = GetCasterLevel(oCaster);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -53,10 +62,10 @@ void main()
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
-    if (nCasterLvl > 20)
+    /*if (nCasterLvl > 20)
     {
         nCasterLvl = 20;
-    }
+    }*/
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget);
     //Cycle through the targets within the spell shape until an invalid object is captured.
@@ -74,11 +83,11 @@ void main()
                 if(GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage for each target
-                    nDamage = d6(nCasterLvl);	// JLR - OEI 07/22/05 -- 3.5 Change
+                    nDamage = d8(nCasterLvl)+(CasterModifier*2);	// JLR - OEI 07/22/05 -- 3.5 Change
                     //Resolve metamagic
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = 6 * nCasterLvl;
+                        nDamage = (8 * nCasterLvl)+(CasterModifier*2);
                     }
                     else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

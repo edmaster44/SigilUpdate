@@ -13,7 +13,7 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 //:: RPGplayer1 08/29/2008: Will ignore SR check, in case of Acid Bomb (won't work otherwise)
-
+// Mymothersmeatloaf 6/21/2020 - Removed SR
 #include "X0_I0_SPELLS"
 
 void main()
@@ -26,7 +26,17 @@ void main()
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
     object oTarget;
     float fDelay;
-
+	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nIgnoreSR = FALSE;
     if (GetTag(OBJECT_SELF) == "AOE_ACID_BOMB")
     {
@@ -56,12 +66,12 @@ void main()
                  nDamage = d6();
             }*/
 
-            nDamage = d6(2);
+            nDamage = d6(2)+CasterModifier;
 
         //Enter Metamagic conditions
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = 12;//Damage is at max
+            nDamage = 12+CasterModifier;//Damage is at max
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
@@ -76,13 +86,13 @@ void main()
             //Fire cast spell at event for the affected target
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_ACID_FOG));
             //Spell resistance check
-            if(nIgnoreSR || !MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
-            {
+           // if(nIgnoreSR || !MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
+            //{
                //Apply damage and visuals
                 //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-            }
+           // }
         }
         //Get next target.
         oTarget = GetNextInPersistentObject(OBJECT_SELF);

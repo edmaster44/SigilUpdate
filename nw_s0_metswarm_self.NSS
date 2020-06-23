@@ -52,6 +52,17 @@ void HandleTargetSelf()
 	effect eBump = EffectVisualEffect( VFX_FNF_SCREEN_BUMP );		
     //Get first object in the spell area
 	location lSourceLoc = GetLocation( OBJECT_SELF );
+	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
 	location lTargetLoc;
     int nPathType = PROJECTILE_PATH_TYPE_DEFAULT;
 	int nCounter = 0;
@@ -76,12 +87,12 @@ void HandleTargetSelf()
             		fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 								
                     //Roll damage
-                    nDamage = d6(6);
+                    nDamage = d6(6)+(CasterModifier*3);
 
     		        //Enter Metamagic conditions
     		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
     		        {
-    			       nDamage = 36;//Damage is at max
+    			       nDamage = 36+(CasterModifier*3);//Damage is at max
     		        }
     		        if (nMetaMagic == METAMAGIC_EMPOWER)
     		        {

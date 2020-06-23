@@ -51,13 +51,22 @@ void main()
 
     //Declare major variables
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
     //Limit caster level
     // June 2/04 - Bugfix: Cap the level BEFORE the damage calculation, not after. Doh.
-    if (nCasterLevel > 20)
+   /* if (nCasterLevel > 20)
     {
         nCasterLevel = 20;
-    }
-    int nDamage = d6(nCasterLevel);
+    }*/
+    int nDamage = d6(nCasterLevel)+CasterModifier;
     int nDamStrike;
     int nNumAffected = 0;
     int nMetaMagic = GetMetaMagicFeat();
@@ -72,7 +81,7 @@ void main()
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDamage = 6 * nCasterLevel;//Damage is at max
+        nDamage = (6 * nCasterLevel)+CasterModifier;//Damage is at max
     }
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {
@@ -131,11 +140,11 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 
-                nDamage = d6(nCasterLevel) ;
+                nDamage = d6(nCasterLevel)+CasterModifier ;
 
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 6 * nCasterLevel;//Damage is at max
+                    nDamage = (6 * nCasterLevel)+CasterModifier;//Damage is at max
                 }
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

@@ -13,7 +13,7 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 //:: RPGplayer1 08/29/2008: Will ignore SR check, in case of Acid Bomb (won't work otherwise)
-
+// Mymothersmeatloaf 6/21/2020 - Removed SR
 #include "X0_I0_SPELLS"
 
 void main()
@@ -27,7 +27,16 @@ void main()
     effect eSlow = EffectMovementSpeedDecrease(50);
     object oTarget = GetEnteringObject();
     float fDelay = GetRandomDelay(1.0, 2.2);
-
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nIgnoreSR = FALSE;
     if (GetTag(OBJECT_SELF) == "AOE_ACID_BOMB")
     {
@@ -39,14 +48,14 @@ void main()
         //Fire cast spell at event for the target
         SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_ACID_FOG));
         //Spell resistance check
-        if(nIgnoreSR || !MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
-        {
+       // if(nIgnoreSR || !MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
+       // {
             //Roll Damage
             //Enter Metamagic conditions
-            nDamage = d6(4);
+            nDamage = d6(4)+CasterModifier;
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage = 24;//Damage is at max
+                nDamage = 24+CasterModifier;//Damage is at max
             }
             else if (nMetaMagic == METAMAGIC_EMPOWER)
             {
@@ -65,6 +74,6 @@ void main()
             //Apply damage and visuals
             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-        }
+       // }
     }
 }

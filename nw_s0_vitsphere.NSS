@@ -47,6 +47,15 @@ const float DELAY_ONE_ROUND     = 6.0f;
 
 void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, int nMetaMagic )
 {
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster) > GetAbilityModifier(ABILITY_CHARISMA,oCaster)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,oCaster);
+	}
 	// Returns: 0 if the saving throw roll failed
 	// Returns: 1 if the saving throw roll succeeded
 	// Returns: 2 if the target was immune to the save type specified
@@ -56,9 +65,9 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
 
     if ( nSave != 2 )
     {
-        int nDamage = d4(nDice);
+        int nDamage = d6(nDice) + CasterModifier;
 
-		int nMaxVal = nDice * 4; // nDice * d4
+		int nMaxVal = (nDice * 6) + CasterModifier; // nDice * d4
 
         //Resolve metamagic
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );   		
@@ -125,9 +134,9 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 	}
 	*/
 	
-	if (nCasterLevel > 15)
+	if (nCasterLevel > 20)
 	{
-		nDice = 15;
+		nDice = 20;
 	}
 	else
 	{

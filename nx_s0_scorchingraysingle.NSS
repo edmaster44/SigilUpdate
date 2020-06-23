@@ -47,6 +47,15 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 	effect eRay;
 	
 	int nNumRays = 0;
@@ -114,12 +123,12 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(4);
-					nDamage = ApplyMetamagicVariableMods(nDamage, 24);
+					int nDamage = d6(4)+CasterModifier;
+					nDamage = ApplyMetamagicVariableMods(nDamage, 24+CasterModifier);
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{
-						nDamage = d6(8);
-						nDamage = ApplyMetamagicVariableMods(nDamage, 48);
+						nDamage = d6(8)+CasterModifier;
+						nDamage = ApplyMetamagicVariableMods(nDamage, 48+CasterModifier);
 					}
 				
 					//Enter Metamagic conditions

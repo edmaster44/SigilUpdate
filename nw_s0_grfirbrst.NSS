@@ -16,6 +16,7 @@
 
 // JLR - OEI 08/23/05 -- Metamagic changes
 // MDiekmann 7/25/07 - Modified to pass GetSpellId() for CastAtEvent.
+// Mymothersmeatloaf 6/21/2020 - Increased spellcaster level scaling
 #include "nwn2_inc_spells"
 
 
@@ -45,15 +46,25 @@ void main()
     //Declare major variables
     object oCaster = OBJECT_SELF;
     int nCasterLvl = GetCasterLevel(oCaster);
-    int nMaxLvl;
-    if ( nCasterLvl > 15 )
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+    int nMaxLvl = nCasterLvl;
+   /* if ( nCasterLvl > 15 )
     {
         nMaxLvl = 15;
     }
     else
     {
         nMaxLvl = nCasterLvl;
-    }
+    }*/
+	
     int nDamage;
     float fDelay;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
@@ -73,9 +84,9 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage for each target
-                nDamage = d8(nMaxLvl);
+                nDamage = d8(nMaxLvl)+CasterModifier;
                 //Resolve metamagic
-                nDamage = ApplyMetamagicVariableMods(nDamage, nMaxLvl * 8);
+                nDamage = ApplyMetamagicVariableMods(nDamage, (nMaxLvl * 8)+CasterModifier);
 
                 nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
                 if ( nDamage > 0 )

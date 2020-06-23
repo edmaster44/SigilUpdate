@@ -24,6 +24,8 @@
 //:://////////////////////////////////////////////
 //:: RPGplayer1 12/22/2008: Added support for critical hits
 //:: RPGplayer1 12/22/2008: Fixed Maximized damage
+//:: Mymothersmeatloaf 6/21/2020: Uncapped to 25d6
+
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
@@ -43,8 +45,8 @@ void main()
 	int nDice = nCasterLevel;
 	int nDamage = 0;
 	// Calculate max damage.
-	if (nCasterLevel > 15)
-		nDice = 15;
+	if (nCasterLevel > 25)
+		nDice = 25;
 		
 	int nTouch = TouchAttackRanged(oTarget);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))

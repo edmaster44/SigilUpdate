@@ -49,8 +49,8 @@ void main()
             //Fire cast spell at event for the target
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_WEB));
             //Spell resistance check
-            if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
-            {
+            //if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
+            //{
                 //Make a Fortitude Save to avoid the effects of the entangle.
                 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC()))
                 {
@@ -60,6 +60,6 @@ void main()
                 //Slow down the creature within the Web
                 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
             }
-        }
+       // }
     }
 }

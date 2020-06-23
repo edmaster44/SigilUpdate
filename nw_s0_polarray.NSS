@@ -12,7 +12,6 @@
 //:: Created By: Andrew Woo (AFW-OEI)
 //:: Created On: 06/06/2006
 //:://////////////////////////////////////////////
-
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
@@ -29,6 +28,16 @@ void main()
     object oTarget	 	= GetSpellTargetObject();
 	int    nCasterLevel = GetCasterLevel(OBJECT_SELF);
 	int nTouch      = TouchAttackRanged(oTarget);
+	
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 	
 	if (nCasterLevel > 25)	// Cap caster level
 		nCasterLevel = 25;
@@ -51,11 +60,11 @@ void main()
 	        if(!MyResistSpell(OBJECT_SELF, oTarget))
 	        {
 	            //Enter Metamagic conditions
-	 			int nDam = d6(nCasterLevel);
+	 			int nDam = d6(nCasterLevel)+(CasterModifier*5);
 	    		int nMetaMagic = GetMetaMagicFeat();
 	            if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	            {
-	                nDam = 6 * nCasterLevel ;//Damage is at max
+	                nDam = (6 * nCasterLevel) + (CasterModifier*5);//Damage is at max
 	            }
 	            else if (nMetaMagic == METAMAGIC_EMPOWER)
 	            {

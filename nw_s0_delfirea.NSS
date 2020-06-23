@@ -16,7 +16,7 @@
 //:: Created On: July 27, 2001
 //:://////////////////////////////////////////////
 //:: RPGplayer1 04/09/2008: Only enemies will trigger explosion
-
+//:: Mymothersmeatloaf: 6/21/2020 - uncapped the spells damage.
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 
@@ -30,12 +30,22 @@ void main()
     int nDamage;
     int nMetaMagic = GetMetaMagicFeat();
     int nCasterLevel = GetCasterLevel(oCaster);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nFire = GetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL");
-    //Limit caster level
+    /*Limit caster level
     if (nCasterLevel > 20)
     {
         nCasterLevel = 20;
-    }
+    }*/
     effect eDam;
     effect eExplode = EffectVisualEffect(VFX_FNF_FIREBALL);
     effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
@@ -58,11 +68,11 @@ void main()
                     //Make SR check
                     if (!MyResistSpell(oCaster, oTarget))
                     {
-                        nDamage = d6(nCasterLevel);
+                        nDamage = d8(nCasterLevel)+CasterModifier;
                         //Enter Metamagic conditions
                         if (nMetaMagic == METAMAGIC_MAXIMIZE)
                         {
-                            nDamage = 6 * nCasterLevel;//Damage is at max
+                            nDamage = (8 * nCasterLevel)+CasterModifier;//Damage is at max
                         }
                         else if (nMetaMagic == METAMAGIC_EMPOWER)
                         {
