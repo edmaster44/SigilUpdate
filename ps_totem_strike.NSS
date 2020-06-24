@@ -105,8 +105,6 @@ void RunTotemStrike(object oTotem)
 	effect eVis = EffectVisualEffect( VFX_HIT_TOTEM_STRIKE );
 	ApplyEffectAtLocation( DURATION_TYPE_INSTANT, eVis, lTotemLoc );
 
-	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
-
 	int nElemDmgType = 0;
 	switch(Random(5)) {
 	case 0: nElemDmgType = DAMAGE_TYPE_ACID; break;
@@ -116,11 +114,13 @@ void RunTotemStrike(object oTotem)
 	case 4: nElemDmgType = DAMAGE_TYPE_SONIC; break;
 	}
 
+	float strikeRadius = RADIUS_SIZE_LARGE * 1.25;
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, strikeRadius, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
 	while(GetIsObjectValid(oTarget)) {
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)) {
 			TotemStrikeAttack( oTarget, nElemDmgType );
 		}
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, strikeRadius, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
 	}
 }
 
