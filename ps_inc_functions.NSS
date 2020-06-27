@@ -16,6 +16,7 @@ const float MAXMONSTERXP = 500.0; //The absolute maximum xp any monster can yiel
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							//CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
 
+							
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
 const int CLASS_TYPE_FELLBLADE 							= 80;
@@ -34,6 +35,7 @@ const int FEAT_SUCCUBUS_SPELLCASTING_BARD 				= 2841;
 const int FEAT_MOTC_SPELLCASTING_WARLOCK				= 2570;
 const int FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK			= 4011;
 const int FEAT_EPIC_ELDRITCH_ADEPT						= 3621;
+const int FEAT_PRACTICED_INVOKER						= 2842;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION			= 1833;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER	= 1834;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
@@ -337,6 +339,7 @@ int GetWarlockCasterLevel(object oPC)
 	
 	//1411-1419 1-9
 	//1948-1952 10-14
+	if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
 	if (iTotal >= 16)
 	{
 		if (!GetHasFeat(FEAT_EPIC_ELDRITCH_ADEPT,oPC,TRUE))
