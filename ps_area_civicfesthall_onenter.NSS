@@ -10,36 +10,33 @@ void main()
  {
   SetGlobalInt("CivicEnterLock", 1); // Only allows one clean up at a time.
 
-  if(GetObjectByTag("npc_itemcloner") == OBJECT_INVALID)
-  {
-   //Change Room Merchant; non-motile
-   object oWP = GetWaypointByTag("wp_civic_cloner");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "npc_itemcloner", lSpawnpoint);    
+  //Item Cloner Guy
+  if(GetObjectByTag("festhallnpc_itemcloner") == OBJECT_INVALID) {
+	object oWP = GetWaypointByTag("wp_festhallnpc_itemcloner");
+   	location lSpawnpoint = GetLocation(oWP);  
+   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_itemcloner", lSpawnpoint);    
   }
   
-  if(GetObjectByTag("ps_npc_civicmerchant") == OBJECT_INVALID)
-  {
-   //Change Room Merchant; non-motile
-   object oWP = GetWaypointByTag("wp_civic_cionell");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_civicmerchant", lSpawnpoint);    
+  //Cionell
+  if(GetObjectByTag("festhallnpc_civicmerchant") == OBJECT_INVALID) {
+   	object oWP = GetWaypointByTag("wp_festhallnpc_civicmerchant");
+   	location lSpawnpoint = GetLocation(oWP);  
+   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_civicmerchant", lSpawnpoint);    
   }
- 
-  if(GetObjectByTag("lyria") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("wp_civic_lyria");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "lyria", lSpawnpoint);    
-  }
+    
+  //Spice Rack barkeep - Tasha
+  if(GetObjectByTag("festhallnpc_tasha") == OBJECT_INVALID) {
+   	object oWP = GetWaypointByTag("wp_festhallnpc_tasha");
+   	location lSpawnpoint = GetLocation(oWP);  
+   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_tasha", lSpawnpoint);    
+  } 
   
-  if(GetObjectByTag("filos") == OBJECT_INVALID)
-  {
-   //Non-motile NPC
-   object oWP = GetWaypointByTag("wp_civic_filos");
+  //Spice Rack barkeep - Mishka
+  if(GetObjectByTag("festhallnpc_mishka") == OBJECT_INVALID) {
+   object oWP = GetWaypointByTag("wp_festhallnpc_mishka");
    location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "filos", lSpawnpoint);    
-  }
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_mishka", lSpawnpoint);    
+  } 
   
   if(GetObjectByTag("ps_npc_sens_com1") == OBJECT_INVALID)
   {
@@ -109,39 +106,6 @@ void main()
    object oWP = GetWaypointByTag("ps_wp_sensate10");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_sens_com10", lSpawnpoint);    
-  } 
-   
-  if(GetObjectByTag("Iceander") == OBJECT_INVALID)
-  {
-   //non-motile NPC
-   object oWP = GetWaypointByTag("ps_wp_sensate11");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "Iceander", lSpawnpoint);    
-  } 
-    
-  if(GetObjectByTag("lilya") == OBJECT_INVALID)
-  {
-   //non-motile NPC
-   object oWP = GetWaypointByTag("ps_wp_sensate12");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "lilya", lSpawnpoint);    
-  } 
-    
-  if(GetObjectByTag("tasha") == OBJECT_INVALID)
-  {
-   //Spike Rack Bartender; non-motile
-   object oWP = GetWaypointByTag("wp_tasha");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "tasha", lSpawnpoint);    
-  } 
-  
-  //festhallnpc_mishka
-  if(GetObjectByTag("festhallnpc_mishka") == OBJECT_INVALID)
-  {
-   //Spike Rack Bartender; non-motile
-   object oWP = GetWaypointByTag("wp_festhallnpc_mishka");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_mishka", lSpawnpoint);    
   } 
   
   //festhallnpc_GroundlevelGuardM

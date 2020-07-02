@@ -10,8 +10,11 @@ The randomizer and variables allow for multiple responses to be given if desired
 maximum of five different responses.
 */
 
-void main()
-{
+void main() {
+
+    object oSpeaker  = GetLastSpeaker();
+	if (!GetIsPC(oSpeaker))
+		return;
 
 	//	Determine how many responses will be available to this NPC.
 	int iResponses	= GetLocalInt(OBJECT_SELF, "responses");
@@ -21,31 +24,28 @@ void main()
 	string sSay4	= GetLocalString(OBJECT_SELF, "say4");
 	string sSay5	= GetLocalString(OBJECT_SELF, "say5");
 
-{
-switch (Random(iResponses))
-	{
-	case 0:
-		DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay1)));
-		break;
-			
-	case 1:
-		DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay2)));
-		break;
-		
-	case 2: 
-		DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay3)));
-		break;
-		
-	case 3:
-		DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay4)));
-		break;
+	switch (Random(iResponses)) {
 	
-	case 4:
-		DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay5)));
-		break;
-					
+		case 0:
+			DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay1)));
+			break;
+				
+		case 1:
+			DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay2)));
+			break;
+			
+		case 2: 
+			DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay3)));
+			break;
+			
+		case 3:
+			DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay4)));
+			break;
+		
+		case 4:
+			DelayCommand(0.3, AssignCommand(OBJECT_SELF, ActionSpeakString(sSay5)));
+			break;
+						
 	}
-
-}
 
 }
