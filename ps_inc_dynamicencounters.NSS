@@ -84,6 +84,15 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE);
 //Levels 25+ weapons 10-13 points
 void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1);
 
+//Pick one of the human-like appearances - for variety!
+int GetHumanoidRace(object oCreature);
+
+//Pick a workable head based on new appearance type
+int GetHeadByRace(int nGender, int nRace);
+
+//Pick a workable hair based on new appearance type
+int GetHairByRace(int nGender, int nRace);
+
 //*******************************************
 //ACTUAL CODE
 //*******************************************
@@ -205,7 +214,7 @@ string GetArmor(object oCreature) {
 
 string GetClothing(object oCreature) {
 
-	int nRand = Random(12)+1;
+	int nRand = Random(19)+1;
 	switch(nRand) {
 		case 1: return "de_basicclothing_01";
 		case 2: return "de_basicclothing_02";
@@ -219,9 +228,205 @@ string GetClothing(object oCreature) {
 		case 10: return "de_basicclothing_10";
 		case 11: return "de_basicclothing_11";
 		case 12: return "de_basicclothing_12";
+		case 13: return "de_cagerfashion_1b"; 
+		case 14: return "de_cagerfashion_2b";
+		case 15: return "de_cagerfashion_3b";
+		case 16: return "de_cagerfashion_4b";
+		case 17: return "de_cagerfashion_5b";
+		case 18: return "de_cagerfashion_6b";
+		case 19: return "de_cagerfashion_8b";
 	}
 	return "de_basicclothing_01";
 	
+}
+
+int GetHumanoidRace(object oCreature) {
+
+	int nRand = Random(10)+1;
+	switch(nRand) {
+		case 1: return APPEARANCE_TYPE_ELF;
+		case 2: return APPEARANCE_TYPE_HALFLING;
+		case 3: return APPEARANCE_TYPE_HALF_ELF;
+		case 4: return APPEARANCE_TYPE_HUMAN;
+		case 5: return 563; //Aasimar
+		case 6: return 564; //Tiefling
+		case 7: return 1037; //Genasi
+		case 8: return 1038; //Genasi
+		case 9: return 1039; //Genasi
+		case 10: return 1040; //Genasi
+	}
+	return APPEARANCE_TYPE_HUMAN;
+}
+
+int GetHairByRace(int nGender, int nRace) {
+
+	if (nRace == APPEARANCE_TYPE_ELF) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(28);
+		} else {
+			return Random(27);
+		}
+	}
+
+	if (nRace == APPEARANCE_TYPE_HALFLING) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(18);
+		} else {
+			return Random(20);
+		}
+	}
+
+	if (nRace == APPEARANCE_TYPE_HALF_ELF) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(30);
+		} else {
+			return Random(26);
+		}
+	}
+
+	if (nRace == APPEARANCE_TYPE_HUMAN) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(30);
+		} else {
+			return Random(26);
+		}
+	}
+
+	if (nRace == 563) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(30);
+		} else {
+			return Random(26);
+		}
+	}
+
+	if (nRace == 564) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(30);
+		} else {
+			return Random(26);
+		}
+	}
+
+	if (nRace == 1037) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(4);
+		} else {
+			return Random(4);
+		}
+	}
+
+	if (nRace == 1038) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(4);
+		} else {
+			return Random(4);
+		}
+	}
+
+	if (nRace == 1039) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(4);
+		} else {
+			return Random(4);
+		}
+	}
+
+	if (nRace == 1040) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(4);
+		} else {
+			return Random(4);
+		}
+	}
+	
+	return 1;
+}
+
+int GetHeadByRace(int nGender, int nRace) {
+
+	if (nRace == APPEARANCE_TYPE_ELF) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(11);
+		} else {
+			return Random(8);
+		}
+	}
+	
+	if (nRace == APPEARANCE_TYPE_HALFLING) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(12);
+		} else {
+			return Random(15);
+		}
+	}
+	
+	if (nRace == APPEARANCE_TYPE_HALF_ELF) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(7);
+		} else {
+			return Random(8);
+		}
+	}
+	
+	if (nRace == APPEARANCE_TYPE_HUMAN) {
+		if (nGender == GENDER_FEMALE) {
+			return Random(16);
+		} else {
+			return Random(43);
+		}
+	}
+	
+	if (nRace == 563) { //aasimar
+		if (nGender == GENDER_FEMALE) {
+			return Random(16);
+		} else {
+			return Random(16);
+		}
+	}
+	
+	if (nRace == 564) { //tiefling
+		if (nGender == GENDER_FEMALE) {
+			return Random(36);
+		} else {
+			return Random(26);
+		}
+	}
+	
+	if (nRace == 1037) { //earth
+		if (nGender == GENDER_FEMALE) {
+			return Random(13);
+		} else {
+			return Random(11);
+		}
+	}
+	
+	if (nRace == 1038) { //fire
+		if (nGender == GENDER_FEMALE) {
+			return Random(13);
+		} else {
+			return Random(11);
+		}
+	}
+	
+	if (nRace == 1039) { //air
+		if (nGender == GENDER_FEMALE) {
+			return Random(13);
+		} else {
+			return Random(11);
+		}
+	}
+	
+	if (nRace == 1040) { //water
+		if (nGender == GENDER_FEMALE) {
+			return Random(13);
+		} else {
+			return Random(11);
+		}
+	}
+	
+	return 1;
+
 }
 
 void makeInventoryUndroppable(object oCreature) {
