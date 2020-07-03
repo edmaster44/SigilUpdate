@@ -27,6 +27,13 @@ const string BEASTLANDS = "Beastlands";
 const string ARBOREA = "Arborea";
 const string ASTRAL = "Astral";
 const string CITYOFBRASS = "City of Brass";
+const string ELEMENTAL_AIR = "Elemental Plane of Air";
+const string ELEMENTAL_FIRE = "Elemental Plane of Fire";
+const string ELEMENTAL_WATER = "Elemental Plane of Water";
+const string ELEMENTAL_EARTH = "Elemental Plane of Earth";
+const string ELEMENTAL_MAGMA = "Elemental Plane of Magma";
+const string ELEMENTAL_ICE = "Elemental Plane of Ice";
+const string ELEMENTAL_OOZE = "Elemental Plane of Ooze";
 
 int GetPlanarAlignmentLawChaos(string plane) {
 	if (plane == YSGARD) 
@@ -60,7 +67,7 @@ int GetPlanarAlignmentGoodEvil(string plane) {
 	if (plane == HADES) 
 		return STRONG_EVIL;
 	if (plane == GEHENNA) 
-		return MILD_EVIL; //CITYOFBRASS
+		return MILD_EVIL;
 	if (plane == BAATOR) 
 		return MILD_EVIL;
 	if (plane == CITYOFBRASS) 

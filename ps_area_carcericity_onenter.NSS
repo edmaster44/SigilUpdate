@@ -1,10 +1,15 @@
+#include "ps_inc_planarlocations"
 void main() {
 
  	object oPC = GetEnteringObject();
  
  	if (!GetIsPC(oPC) && !GetIsDM(oPC))
   		return;
-  
+ 
+	string sPlane = "Carceri";
+	string sDescrip = "";
+	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
+	
  	int iLock = GetGlobalInt("MinethysCityLock");
 	if ( iLock == 0 ) {
 	

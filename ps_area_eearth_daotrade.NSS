@@ -1,6 +1,11 @@
+#include "ps_inc_planarlocations"
 void main()
 {
  object oPC = GetEnteringObject();
+	
+	string sPlane = "Elemental Plane of Earth";
+ 	string sDescrip = "";
+ 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
   
  int iLock = GetGlobalInt("DaoTradeLock");
  if ( iLock == 0 )
