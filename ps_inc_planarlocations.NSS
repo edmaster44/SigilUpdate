@@ -31,9 +31,9 @@ const string ELEMENTAL_AIR = "Elemental Plane of Air";
 const string ELEMENTAL_FIRE = "Elemental Plane of Fire";
 const string ELEMENTAL_WATER = "Elemental Plane of Water";
 const string ELEMENTAL_EARTH = "Elemental Plane of Earth";
-const string ELEMENTAL_MAGMA = "Elemental Plane of Magma";
-const string ELEMENTAL_ICE = "Elemental Plane of Ice";
-const string ELEMENTAL_OOZE = "Elemental Plane of Ooze";
+const string ELEMENTAL_MAGMA = "Para-Elemental Plane of Magma";
+const string ELEMENTAL_ICE = "Para-Elemental Plane of Ice";
+const string ELEMENTAL_OOZE = "Para-Elemental Plane of Ooze";
 
 int GetPlanarAlignmentLawChaos(string plane) {
 	if (plane == YSGARD) 

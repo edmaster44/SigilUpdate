@@ -1,9 +1,14 @@
-
+#include "ps_inc_planarlocations"
 void main()
 {
  object oPC = GetEnteringObject();
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
+
+	string sPlane = "Hades";
+ 	string sDescrip = "";
+ 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
+	
   
  int iLock = GetGlobalInt("GWtunnel2EnterLock");
  if ( iLock == 0 )
