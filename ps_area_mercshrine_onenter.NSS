@@ -1,9 +1,12 @@
-
+#include "enft_startengine"
+#include "ps_inc_planarlocations"
 void main()
 {
- object oPC = GetEnteringObject();
-// if (!GetIsPC(oPC) && !GetIsDM(oPC))
-//  return;
+ 	object oPC = GetEnteringObject();
+	string sPlane = "Celestia";
+ 	string sDescrip = "";
+ 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
+	
   
  int iLock = GetGlobalInt("MercShrineEnterLock");
  if ( iLock == 0 )
