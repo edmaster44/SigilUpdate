@@ -95,6 +95,7 @@ object CreateRandomSensate(object oWP) {
 	if (!GetIsObjectValid(oNPC)) {
 		return oNPC;
 	}
+	ChangeToStandardFaction(oNPC, STANDARD_FACTION_COMMONER);
 	
 	int nGender = Random(2);
 	int nRace = GetHumanoidRace(oNPC);
