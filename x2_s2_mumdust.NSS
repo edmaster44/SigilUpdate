@@ -7,8 +7,8 @@ void main()
     float fDuration = HoursToSeconds(24);
 	location lSpellTargetLocation = GetSpellTargetLocation();
     effect eSummon = EffectSummonCreature("ps_mumdust");
-	effect eDur = EffectVisualEffect(VFX_AOE_CRADLE_OF_RIME);
-    effect eVis = EffectVisualEffect(VFX_FNF_SCREEN_SHAKE);
+	effect eDur = EffectVisualEffect(VFX_DUR_SHADOW_CLOAK);
+    effect eVis = EffectVisualEffect(VFX_DUR_DARKNESS);
 	
 
 
