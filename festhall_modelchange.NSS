@@ -6,7 +6,7 @@ void main() {
 
 	object oModel = GetEnteringObject();
 	
-	SpeakString("Object entered", TALKVOLUME_SHOUT);
+	AssignCommand(oModel, ActionSpeakString("Object entered", TALKVOLUME_SHOUT));
 
 	if (GetTag(oModel) != "festhallnpc_model_female") 
 		return;
@@ -14,12 +14,14 @@ void main() {
 	string newClothes = GetClothing();
 	if (newClothes != "") {
 	
-		SpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT);
+		AssignCommand(oModel, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
 		object oOutfit =	CreateItemOnObject(newClothes, oModel);
 		object oldOutfit = GetItemInSlot(INVENTORY_SLOT_CHEST, oModel);
 		DestroyObject(oldOutfit);
 		ClearAllActions();
 		DelayCommand(0.1f, ActionEquipMostEffectiveArmor());
+	} else {
+		AssignCommand(oModel, ActionSpeakString("No new clothes :( ", TALKVOLUME_SHOUT));
 	}
 
 }
