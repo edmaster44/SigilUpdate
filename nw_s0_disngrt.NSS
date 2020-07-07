@@ -93,7 +93,7 @@ void main()
                 }
                 else if ( nSave == 1 ) // Saving Throw succeeded
                 {
-					nDice = 5;
+					nDice = 20;
                  }
                 else if ( nSave == 2 )  // Target is immune
                 {
