@@ -40,19 +40,19 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
     int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
     int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
     float fDUR = 9999.9f;    
-    itemproperty ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
+    Prop  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
     
     if(GetHasFeat(2840,oPC, TRUE))
     {
-        if(!GetIsItemPropertyValid(ipAdd)){
+        if(!GetIsItemPropertyValid(Prop)){
         
             SendMessageToPC(oPC, "Itemproperty was not valid");
             return;
         }
     
         SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamageConstant));    
-        IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-		SaveItemPropertyReference(oItem, "MeditativeStrikes", ipAdd);
+        IPSafeAddItemProperty(oItem, Prop, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+		SaveItemPropertyReference(oItem, "MeditativeStrikes", Prop);
 
         SendMessageToPC(oPC, "Wisdom Damage bonus of " + IntToString(nWis) + " applied to your Monk Weapon");
     }

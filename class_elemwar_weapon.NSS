@@ -41,18 +41,18 @@ return; }
 		DamageType = IP_CONST_DAMAGETYPE_COLD;
 		iGlow =  ItemPropertyVisualEffect(ITEM_VISUAL_COLD);	
 	}
-	itemproperty ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
+	Prop =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
 	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
-	{	if(!GetIsItemPropertyValid(ipAdd)){
+	{	if(!GetIsItemPropertyValid(Prop)){
         
             SendMessageToPC(oPC, "Itemproperty was not valid");
             return;
         }
   
-	IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+	IPSafeAddItemProperty(oItem,Prop,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-	SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
+	SaveItemPropertyReference(oItem, "ElementalWeapon", Prop);
     SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 }
 }

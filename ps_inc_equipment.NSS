@@ -568,13 +568,11 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		ConDrainProtection(oITEM, oPC);
 		PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
+		RemoveElementalWeapon(oPC, oITEM);
+		RemoveMeditativeStrikes(oPC,oITEM);
 		if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
 		
 	}
- if (nEQUIP == FALSE)
-{
-		RemoveElementalWeapon(oPC, oITEM);
-		RemoveMeditativeStrikes(oPC,oITEM);
-}
+
 	DelayCommand(0.1f, EquipmentEffects(oPC));
 }
