@@ -7,15 +7,19 @@ void main() {
 	object oModel = GetEnteringObject();
 	
 	AssignCommand(oModel, ActionSpeakString("Object entered", TALKVOLUME_SHOUT));
+	SendMessageToPC(oModel, "Object entered");
 
 	if (GetTag(oModel) != "festhallnpc_model_female") 
 		return;
+		
+	SendMessageToPC(oModel, "Object is model :D");
+	AssignCommand(oModel, ActionSpeakString("Object is model :D", TALKVOLUME_SHOUT));
 		
 	string newClothes = GetClothing();
 	if (newClothes != "") {
 	
 		AssignCommand(oModel, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
-		object oOutfit =	CreateItemOnObject(newClothes, oModel);
+		object oOutfit = CreateItemOnObject(newClothes, oModel);
 		object oldOutfit = GetItemInSlot(INVENTORY_SLOT_CHEST, oModel);
 		DestroyObject(oldOutfit);
 		ClearAllActions();

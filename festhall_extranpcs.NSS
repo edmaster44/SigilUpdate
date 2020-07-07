@@ -45,7 +45,7 @@ void main() {
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc4");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "kemo_sit_3i");
+		SetLocalString(oSensate, "ANIMATION", "sitgroundidle");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc5");
 		oSensate = CreateRandomSensate(oWP);
@@ -58,7 +58,7 @@ void main() {
 	if (nSector == 2) {
 		object oWP = GetWaypointByTag("wp_festhall_sector2_npc1");
 		object oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "craft01");
+		SetLocalString(oSensate, "ANIMATION", "cooking02");
 		SetFirstName(oSensate, "Painter");
 		
 		//Save that we did this
@@ -114,7 +114,8 @@ object CreateRandomSensate(object oWP) {
 	
 	SetFirstName(oNPC, "Sensate");
 	SetLastName(oNPC, "");
-	SetDescription(oNPC, "A member of the Society of Sensation, enjoying themselves in the Festhall.");
+	//SetDescription(oNPC, "A member of the Society of Sensation, enjoying themselves in the Festhall.");
+	SetDescription(oNPC, "AppearanceType: "+IntToString(nRace)+"\nHead: "+IntToString(nHead)+"\nHair: "+IntToString(nHair));
 	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(100), oNPC));
 
 	//give them animations and the conversation script
@@ -131,7 +132,7 @@ object CreateRandomSensate(object oWP) {
 
 string GenerateRandomComments() {
 
-	int nRand = Random(10)+1;
+	int nRand = Random(20)+1;
 	switch (nRand) {
 		case 1: return "Lady's Grace, Cutter.";
 		case 2: return "What should I indulge in tonight? Any suggestions?";
@@ -143,6 +144,16 @@ string GenerateRandomComments() {
 		case 8: return "If you want the very best fruit in the city, go to the market in front of the Temple of Hermes first thing in the morning.";
 		case 9: return "If you haven't already, you simply must catch a show at Ren Hall. The magic shows especially are spectacular.";
 		case 10: return "Watch the Spire.";
+		case 11: return "Now is what matters. <i>Right</i> now, this moment, this experience. . . ";
+		case 12: return "There's truth in everything. Pleasure, pain. Good and evil. Don't limit your experience. <i>Know</i>.";
+		case 13: return "Keep an open mind - try something new!";
+		case 14: return "Allow yourself to relax, let your inhibitions go. We can open up new worlds for you.";
+		case 15: return "Relax, have a little fun. Pleasure is the balm that keeps the fevered rage at bay.";
+		case 16: return "Have you ever been to Arborea? <i>Such</i> a lovely place.";
+		case 17: return "And you simply must try the roasted crickets at the Fat Candle. They're so nutty and crunchy!";
+		case 18: return "Stay a while, tell us your story.";
+		case 19: return "Stop. Close your eyes. Take a breath. Just let yourself <i>experience</i> the moment.";
+		case 20: return "Mmm. . . do you hear it? The music wafting down from the theaters. Entrancing.";
 	}
 	
 	return "Lady's Grace, Cutter.";
