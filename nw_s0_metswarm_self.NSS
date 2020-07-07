@@ -53,6 +53,7 @@ void HandleTargetSelf()
     //Get first object in the spell area
 	location lSourceLoc = GetLocation( OBJECT_SELF );
 	
+	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
 	//Casting modifier
 	int CasterModifier = 0;
 	//Determine Caster modifier
@@ -87,12 +88,12 @@ void HandleTargetSelf()
             		fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 								
                     //Roll damage
-                    nDamage = d6(6)+(CasterModifier*3);
+                    nDamage = d10(nCasterLvl)+(CasterModifier*2);
 
     		        //Enter Metamagic conditions
     		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
     		        {
-    			       nDamage = 36+(CasterModifier*3);//Damage is at max
+    			       nDamage = (nCasterLvl*10)+(CasterModifier*2);//Damage is at max
     		        }
     		        if (nMetaMagic == METAMAGIC_EMPOWER)
     		        {

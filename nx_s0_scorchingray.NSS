@@ -54,7 +54,21 @@ void main()
 	effect eRay;
 	
 	int nNumRays = 0;
-	if (nCasterLvl >= 11)
+	if (nCasterLvl >= 39)
+		nNumRays = 10;			// 3 Rays @ lvl 39
+	else if (nCasterLvl >= 35)
+		nNumRays = 9;			// 3 Rays @ lvl 35
+	else if (nCasterLvl >= 31)
+		nNumRays = 8;			// 3 Rays @ lvl 31
+	else if (nCasterLvl >= 27)
+		nNumRays = 7;			// 3 Rays @ lvl 27
+	else if (nCasterLvl >= 23)
+		nNumRays = 6;			// 3 Rays @ lvl 23
+	else if (nCasterLvl >= 19)
+		nNumRays = 5;			// 3 Rays @ lvl 19
+	else if (nCasterLvl >= 15)
+		nNumRays = 4;			// 3 Rays @ lvl 15
+	else if (nCasterLvl >= 11)
 		nNumRays = 3;			// 3 Rays @ lvl 11
 	else if (nCasterLvl >= 7)
 		nNumRays = 2;			// 2 Rays @ lvl 7*/
@@ -84,13 +98,13 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(4)+CasterModifier;
+					int nDamage = d6(5)+CasterModifier;
 				
 					//Enter Metamagic conditions
 	    			int nMetaMagic = GetMetaMagicFeat();
 	                if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	                {
-	                    nDamage = (6*4) + CasterModifier;
+	                    nDamage = (6*5) + CasterModifier;
 	                }
 	                if (nMetaMagic == METAMAGIC_EMPOWER)
 	                {

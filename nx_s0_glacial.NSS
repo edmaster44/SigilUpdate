@@ -128,8 +128,8 @@ void main()
 			if (!ResistSpell(oCaster, oTarget))
 			{
 				//determine damage + metamagic
-				nDam	=	d8(nCasterLvl)+(CasterModifier*3);
-				nDam	=	ApplyMetamagicVariableMods(nDam, (nCasterLvl*8)+(CasterModifier*3));
+				nDam	=	d10(nCasterLvl)+(CasterModifier*5);
+				nDam	=	ApplyMetamagicVariableMods(nDam, (nCasterLvl*10)+(CasterModifier*6));
 				
 				if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD, oCaster))
 				{

@@ -59,12 +59,27 @@ void main()
 	effect eRay;
 	
 	int nNumRays = 0;
-	if (nCasterLvl >= 11)
+	if (nCasterLvl >= 39)
+		nNumRays = 10;			// 3 Rays @ lvl 39
+	else if (nCasterLvl >= 35)
+		nNumRays = 9;			// 3 Rays @ lvl 35
+	else if (nCasterLvl >= 31)
+		nNumRays = 8;			// 3 Rays @ lvl 31
+	else if (nCasterLvl >= 27)
+		nNumRays = 7;			// 3 Rays @ lvl 27
+	else if (nCasterLvl >= 23)
+		nNumRays = 6;			// 3 Rays @ lvl 23
+	else if (nCasterLvl >= 19)
+		nNumRays = 5;			// 3 Rays @ lvl 19
+	else if (nCasterLvl >= 15)
+		nNumRays = 4;			// 3 Rays @ lvl 15
+	else if (nCasterLvl >= 11)
 		nNumRays = 3;			// 3 Rays @ lvl 11
 	else if (nCasterLvl >= 7)
-		nNumRays = 2;			// 2 Rays @ lvl 7
-	else if (nCasterLvl >= 3)
+		nNumRays = 2;			// 2 Rays @ lvl 7*/
+	else if (nCasterLvl >= 3) {
 		nNumRays = 1;			// 1 Ray  @ lvl 3
+	}
 		
 	if (nNumRays == 0)
 		return;
@@ -123,12 +138,12 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(4)+CasterModifier;
-					nDamage = ApplyMetamagicVariableMods(nDamage, 24+CasterModifier);
+					int nDamage = d6(5)+CasterModifier;
+					nDamage = ApplyMetamagicVariableMods(nDamage, 30+CasterModifier);
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{
-						nDamage = d6(8)+CasterModifier;
-						nDamage = ApplyMetamagicVariableMods(nDamage, 48+CasterModifier);
+						nDamage = d6(10)+CasterModifier;
+						nDamage = ApplyMetamagicVariableMods(nDamage, 60+CasterModifier);
 					}
 				
 					//Enter Metamagic conditions

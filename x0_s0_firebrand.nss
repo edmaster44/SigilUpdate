@@ -42,8 +42,8 @@ void main()
 
 
     int nDamageDice =  GetCasterLevel(OBJECT_SELF);
-    if (nDamageDice > 25)
-        nDamageDice = 25;
+    if (nDamageDice > 20)
+        nDamageDice = 20;
 
-    DoMissileStorm(nDamageDice, 25, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 2);
+    DoMissileStorm(nDamageDice, 20, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 2);
 }

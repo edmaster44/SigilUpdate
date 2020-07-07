@@ -153,7 +153,7 @@ void main()
                 //Adjust damage via Reflex Save or Evasion or Improved Evasion
                 nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY);
                 //Apply the damage and VFX impact to the current target
-                eDamage = EffectDamage(nDamStrike /2, DAMAGE_TYPE_ELECTRICAL);
+                eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_ELECTRICAL);
                 if(nDamStrike > 0) //age > 0)
                 {
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));

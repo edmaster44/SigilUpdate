@@ -57,6 +57,7 @@ int DetermineFireDamageForTargetCreature(object oTarget, int nTouchAttackRanged)
 {
 	int nDamage;
 	int nMetaMagic;
+	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
 	//Casting modifier
 	int CasterModifier = 0;
 	//Determine Caster modifier
@@ -69,16 +70,16 @@ int DetermineFireDamageForTargetCreature(object oTarget, int nTouchAttackRanged)
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d6(6)+(CasterModifier*2);	
+	nDamage = d10(nCasterLvl)+(CasterModifier*3);	
 
 	if (nTouchAttackRanged == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
-		nDamage = d6(12)+(CasterModifier*2);	
+		nDamage = d10(nCasterLvl*2)+(CasterModifier*3);	
 	}
 			
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-		nDamage = 36+CasterModifier;//Damage is at max
+		nDamage = (nCasterLvl*10)+(CasterModifier*3);//Damage is at max
 	}
 	
 	if (nMetaMagic == METAMAGIC_EMPOWER)
@@ -99,6 +100,7 @@ int DetermineBluntDamageForTargetCreature(object oTarget, int nTouchAttackRanged
 	int nTouchAttack;
 	int nBluntDamage;
 	int nMetaMagic;
+	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
 	//Casting modifier
 	int CasterModifier = 0;
 	//Determine Caster modifier
@@ -116,21 +118,21 @@ int DetermineBluntDamageForTargetCreature(object oTarget, int nTouchAttackRanged
 			nBluntDamage = 0;	
 			break;	
 		case 2:
-			nBluntDamage = d6(4)+(CasterModifier*2);
+			nBluntDamage = d6((nCasterLvl/2)*2)+(CasterModifier*3);
 			if (!GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 				break;
 		case 1:
-			nBluntDamage = d6(2)+(CasterModifier*2);
+			nBluntDamage = d6(nCasterLvl/2)+(CasterModifier*3);
 			break;
 	}
 				
 	if ((nMetaMagic == METAMAGIC_MAXIMIZE) && (nTouchAttackRanged = 3))
 	{
-		nBluntDamage = 24+CasterModifier;//Damage is at max for a critical
+		nBluntDamage = ((nCasterLvl/2*6)*2)+CasterModifier;//Damage is at max for a critical
 	}
 	else if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-		nBluntDamage = 12+CasterModifier;
+		nBluntDamage = ((nCasterLvl/2)*6)+CasterModifier;
 	}
 	
 	if (nMetaMagic == METAMAGIC_EMPOWER)
@@ -145,14 +147,24 @@ int DetermineDamageForBlastCreature(object oTarget)
 {
 	int nDamage;
 	int nMetaMagic;
+	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d6(6);	
+	nDamage = d6(nCasterLvl/3);	
 					
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-		nDamage = 36;//Damage is at max
+		nDamage = ((nCasterLvl/3)*6);//Damage is at max
 	}
 	
 	if (nMetaMagic == METAMAGIC_EMPOWER)

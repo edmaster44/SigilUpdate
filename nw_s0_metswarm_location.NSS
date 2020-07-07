@@ -65,6 +65,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 	float fTravelTime;
 	float fRadiusSize;
 	
+	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
 	//Casting modifier
 	int CasterModifier = 0;
 	//Determine Caster modifier
@@ -111,12 +112,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
 					{
 						//Roll damage
-						nDamage = d6(12)+(CasterModifier*4);
+						nDamage = d10(nCasterLvl)+(CasterModifier*5);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
 						{
-							nDamage = 72+(CasterModifier*4);//Damage is at max
+							nDamage = nCasterLvl*10+(CasterModifier*5);//Damage is at max
 						}
 						
 						if ( nMetaMagic == METAMAGIC_EMPOWER )
@@ -128,12 +129,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 					else
 					{
 						//Roll damage
-						nDamage = d6(6)+(CasterModifier*4);
+						nDamage = d10(nCasterLvl/2)+(CasterModifier*5);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
 						{
-							nDamage = 36+(CasterModifier*4);//Damage is at max
+							nDamage = ((nCasterLvl/2)*10)+(CasterModifier*4);//Damage is at max
 						}
 						if ( nMetaMagic == METAMAGIC_EMPOWER )
 						{

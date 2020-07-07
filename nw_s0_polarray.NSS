@@ -39,10 +39,10 @@ void main()
 		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
 	}
 	
-	if (nCasterLevel > 25)	// Cap caster level
+	/*if (nCasterLevel > 25)	// Cap caster level
 		nCasterLevel = 25;
 	else if (nCasterLevel <= 0)
-		nCasterLevel = 1;
+		nCasterLevel = 1;*/
 	
 	//PKM-OEI: 05.28.07: Do critical hit damage before capping caster level
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -60,11 +60,11 @@ void main()
 	        if(!MyResistSpell(OBJECT_SELF, oTarget))
 	        {
 	            //Enter Metamagic conditions
-	 			int nDam = d6(nCasterLevel)+(CasterModifier*5);
+	 			int nDam = d8(nCasterLevel)+(CasterModifier*5);
 	    		int nMetaMagic = GetMetaMagicFeat();
 	            if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	            {
-	                nDam = (6 * nCasterLevel) + (CasterModifier*5);//Damage is at max
+	                nDam = (8 * nCasterLevel) + (CasterModifier*5);//Damage is at max
 	            }
 	            else if (nMetaMagic == METAMAGIC_EMPOWER)
 	            {
