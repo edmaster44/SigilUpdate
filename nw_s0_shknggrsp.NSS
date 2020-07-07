@@ -48,16 +48,6 @@ void main()
 	effect eRay = EffectBeam(VFX_BEAM_SHOCKING_GRASP, OBJECT_SELF, BODY_NODE_HAND);
     effect eDam;
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
-	
     if (nTouch != FALSE)  //GZ: Fixed boolean check to work in NWScript. 1 or 2 are valid return numbers from TouchAttackMelee
     {
     	  if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
@@ -72,18 +62,18 @@ void main()
                 {
                     nMaxLvl = 5;
                 }
-                nDamage = d6(nMaxLvl)+CasterModifier;
+                nDamage = d6(nMaxLvl);
 				//PKM-OEI: 05.28.07: Do critical hit damage
 				if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 				{
-					nDamage = d6(nMaxLvl * 2)+CasterModifier;
+					nDamage = d6(nMaxLvl * 2);
 					//Check for metamagic
-                	nDamage = ApplyMetamagicVariableMods(nDamage, ((nMaxLvl*2) * 6)+CasterModifier);
+                	nDamage = ApplyMetamagicVariableMods(nDamage, (nMaxLvl*2) * 6);
 				}
 				else if (nTouch >= 1)
 				{
                 	//Check for metamagic
-                	nDamage = ApplyMetamagicVariableMods(nDamage, (nMaxLvl*6)+CasterModifier);
+                	nDamage = ApplyMetamagicVariableMods(nDamage, nMaxLvl*6);
 				}
 				
 				
