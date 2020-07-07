@@ -88,12 +88,12 @@ void HandleTargetSelf()
             		fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 								
                     //Roll damage
-                    nDamage = d10(nCasterLvl)+(CasterModifier*2);
+                    nDamage = d6(nCasterLvl)+(CasterModifier*2);
 
     		        //Enter Metamagic conditions
     		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
     		        {
-    			       nDamage = (nCasterLvl*10)+(CasterModifier*2);//Damage is at max
+    			       nDamage = (nCasterLvl*6)+(CasterModifier*2);//Damage is at max
     		        }
     		        if (nMetaMagic == METAMAGIC_EMPOWER)
     		        {

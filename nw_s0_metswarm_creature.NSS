@@ -70,11 +70,11 @@ int DetermineFireDamageForTargetCreature(object oTarget, int nTouchAttackRanged)
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d10(nCasterLvl)+(CasterModifier*3);	
+	nDamage = d6(nCasterLvl)+(CasterModifier*3);	
 
 	if (nTouchAttackRanged == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
-		nDamage = d10(nCasterLvl*2)+(CasterModifier*3);	
+		nDamage = d6(nCasterLvl*2)+(CasterModifier*3);	
 	}
 			
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
