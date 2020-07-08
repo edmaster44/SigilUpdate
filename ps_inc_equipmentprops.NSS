@@ -9,12 +9,7 @@ const string IPR_EXISTS = "IPR_EXISTS";
 
 
 //Saves the Item Property Reference using a set of Local Integers
-void
-SaveItemPropertyReference(
-    object Obj,
-    string Name,
-    itemproperty Prop
-    )
+void SaveItemPropertyReference(object Obj,string Name,itemproperty Prop)
 {
     SetLocalInt (Obj, IPR_EXISTS + Name, TRUE);
     SetLocalInt (Obj, IPR_TYPE + Name, GetItemPropertyType (Prop));
@@ -26,11 +21,7 @@ SaveItemPropertyReference(
 }
 //Gets the Item Property by Reference, and usage as well as the Object itself
 
-itemproperty
-GetItemPropertyReference(
-    object Obj,
-    string Name
-    )
+itemproperty GetItemPropertyReference(object Obj, string Name)
 {
     int i;
     itemproperty Prop;
@@ -62,11 +53,7 @@ GetItemPropertyReference(
 }
 
 //Removes the Item Property by name and reference 
-void
-DeleteItemPropertyReference(
-    object Obj,
-    string Name
-    )
+void DeleteItemPropertyReference(object Obj,string Name)
 {
     itemproperty Prop;
 
