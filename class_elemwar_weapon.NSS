@@ -58,17 +58,3 @@ return; }
 }
 
 
-
-void RemoveElementalWeapon(object oPC,object oItem)
-{
-  if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE)){
-itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
-if (GetIsItemPropertyValid(Prop) == TRUE) {
-    SendMessageToPC(oPC, "Removing Elemental Weapon");
-    return;
-	
-	DeleteItemPropertyReference(oItem, "ElementalWeapon");
-
-}
-}
-}
