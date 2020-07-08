@@ -99,7 +99,7 @@ void main()
   if(GetObjectByTag("festhallnpc_model_female") == OBJECT_INVALID) {
    	object oWP = GetWaypointByTag("wp_festhallnpc_model_female");
    	location lSpawnpoint = GetLocation(oWP);  
-   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_model_female", lSpawnpoint);    
+   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_model_female", lSpawnpoint, FALSE, "festhallnpc_model");    
   } 
   
   SetGlobalInt("CivicEnterLock", 0);

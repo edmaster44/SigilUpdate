@@ -7,7 +7,6 @@ void PlayPrettyAnimations();
 void main() {
 
 	object oModel = OBJECT_SELF;
-	SetCustomHeartbeat(oModel, 5000);
 	
 	int nWP = GetLocalInt(oModel, "Current_Waypoint");
 	if (nWP <= 0 || nWP >= 11) //clamp value
