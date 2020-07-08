@@ -262,81 +262,81 @@ int GetHairByRace(int nGender, int nRace) {
 
 	if (nRace == APPEARANCE_TYPE_ELF) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(28);
+			return Random(27)+1;
 		} else {
-			return Random(27);
+			return Random(26)+1;
 		}
 	}
 
 	if (nRace == APPEARANCE_TYPE_HALFLING) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(18);
+			return Random(17)+1;
 		} else {
-			return Random(20);
+			return Random(19)+1;
 		}
 	}
 
 	if (nRace == APPEARANCE_TYPE_HALF_ELF) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(30);
+			return Random(29)+1;
 		} else {
-			return Random(26);
+			return Random(25)+1;
 		}
 	}
 
 	if (nRace == APPEARANCE_TYPE_HUMAN) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(30);
+			return Random(29)+1;
 		} else {
-			return Random(26);
+			return Random(25)+1;
 		}
 	}
 
 	if (nRace == 563) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(30);
+			return Random(29)+1;
 		} else {
-			return Random(26);
+			return Random(25)+1;
 		}
 	}
 
 	if (nRace == 564) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(30);
+			return Random(29)+1;
 		} else {
-			return Random(26);
+			return Random(25)+1;
 		}
 	}
 
 	if (nRace == 1037) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(4);
+			return Random(3)+1;
 		} else {
-			return Random(4);
+			return Random(3)+1;
 		}
 	}
 
 	if (nRace == 1038) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(4);
+			return Random(3)+1;
 		} else {
-			return Random(4);
+			return Random(3)+1;
 		}
 	}
 
 	if (nRace == 1039) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(4);
+			return Random(3)+1;
 		} else {
-			return Random(4);
+			return Random(3)+1;
 		}
 	}
 
 	if (nRace == 1040) {
 		if (nGender == GENDER_FEMALE) {
-			return Random(4);
+			return Random(3)+1;
 		} else {
-			return Random(4);
+			return Random(3)+1;
 		}
 	}
 	
