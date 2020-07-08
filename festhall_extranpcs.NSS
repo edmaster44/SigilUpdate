@@ -6,7 +6,7 @@
 #include "ps_inc_advscript"
 
 string GenerateRandomComments();
-object CreateRandomSensate(object oWP);
+object CreateRandomSensate(object oWP, object oPC = OBJECT_INVALID);
 
 void main() {
 
@@ -75,7 +75,7 @@ void main() {
 
 }
 
-object CreateRandomSensate(object oWP) {
+object CreateRandomSensate(object oWP, object oPC = OBJECT_INVALID) {
 
 	WriteTimestampedLogEntry("Creating random npc in "+GetTag(GetArea(oWP)));
 
@@ -112,10 +112,15 @@ object CreateRandomSensate(object oWP) {
 	assignProtectiveItems(oNPC, FALSE);
 	makeInventoryUndroppable(oNPC);
 	
+	if (GetIsObjectValid(oPC)) {
+		SendMessageToPC(oPC, "Spawning at: "+GetTag(oWP));
+		SendMessageToPC(oPC, "AppearanceType: "+IntToString(nRace)+"\nHead: "+IntToString(nHead)+"\nHair: "+IntToString(nHair));
+	}
+	
 	SetFirstName(oNPC, "Sensate");
 	SetLastName(oNPC, "");
-	//SetDescription(oNPC, "A member of the Society of Sensation, enjoying themselves in the Festhall.");
-	SetDescription(oNPC, "AppearanceType: "+IntToString(nRace)+"\nHead: "+IntToString(nHead)+"\nHair: "+IntToString(nHair));
+	SetDescription(oNPC, "A member of the Society of Sensation, enjoying themselves in the Festhall.");
+	//SetDescription(oNPC, "AppearanceType: "+IntToString(nRace)+"\nHead: "+IntToString(nHead)+"\nHair: "+IntToString(nHair));
 	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(100), oNPC));
 
 	//give them animations and the conversation script

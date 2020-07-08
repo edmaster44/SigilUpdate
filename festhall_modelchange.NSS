@@ -12,8 +12,10 @@ void main() {
 	if (nWP <= 0 || nWP >= 11) //clamp value
 		nWP = 1;
 		
-	if (nWP = 1) {
+	if (nWP == 1) {
 		ChangeClothing();
+	} else {
+		WalkToWaypoint(nWP);
 	}
 		
 	nWP++;
@@ -30,10 +32,12 @@ void WalkToWaypoint(int nIndex) {
 		sWP = "WP_festhallnpc_model_female_"+IntToString(nIndex);
 		
 	object oWP = GetWaypointByTag(sWP);
-	AssignCommand(OBJECT_SELF, ActionMoveToObject(oWP));
-	
-	if (nIndex >= 5 && nIndex <= 7) {
-		DelayCommand(3.5f, PlayPrettyAnimations());
+	if (GetIsObjectValid(oWP)) {
+		AssignCommand(OBJECT_SELF, ActionMoveToObject(oWP));
+		
+		if (nIndex >= 5 && nIndex <= 7) {
+			DelayCommand(3.5f, PlayPrettyAnimations());
+		}
 	}
 }
 
@@ -51,10 +55,14 @@ void ChangeClothing() {
 	if (newClothes != "") {
 		AssignCommand(OBJECT_SELF, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
 		object oOutfit = CreateItemOnObject(newClothes, OBJECT_SELF);
+		SetDroppableFlag(oOutfit, FALSE);
+		SetIdentified(oOutfit, TRUE);
+		
 		object oldOutfit = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
 		DestroyObject(oldOutfit);
-		ClearAllActions();
-		DelayCommand(0.1f, ActionEquipMostEffectiveArmor());
+		
+		DelayCommand(0.1f, AssignCommand(OBJECT_SELF, ActionEquipItem(oOutfit, INVENTORY_SLOT_CHEST)));
+		DelayCommand(0.2f, ActionEquipMostEffectiveArmor());
 	} else {
 		AssignCommand(OBJECT_SELF, ActionSpeakString("No new clothes :( ", TALKVOLUME_SHOUT));
 	}
