@@ -395,33 +395,57 @@ int GetHeadByRace(int nGender, int nRace) {
 	
 	if (nRace == 1037) { //earth
 		if (nGender == GENDER_FEMALE) {
-			return Random(13);
+			int nHead = Random(13);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		} else {
-			return Random(11);
+			int nHead = Random(11);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		}
 	}
 	
 	if (nRace == 1038) { //fire
 		if (nGender == GENDER_FEMALE) {
-			return Random(13);
+			int nHead = Random(13);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		} else {
-			return Random(11);
+			int nHead = Random(11);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		}
 	}
 	
 	if (nRace == 1039) { //air
 		if (nGender == GENDER_FEMALE) {
-			return Random(13);
+			int nHead = Random(13);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		} else {
-			return Random(11);
+			int nHead = Random(11);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		}
 	}
 	
 	if (nRace == 1040) { //water
 		if (nGender == GENDER_FEMALE) {
-			return Random(13);
+			int nHead = Random(13);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		} else {
-			return Random(11);
+			int nHead = Random(11);
+			if (nHead == 5)
+				return 4;
+			return nHead;
 		}
 	}
 	
