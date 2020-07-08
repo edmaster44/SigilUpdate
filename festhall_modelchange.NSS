@@ -1,6 +1,6 @@
 //Swap out the model's clothes every time she goes to the back
 string GetClothing();
-void ChangeClothing();
+void ChangeClothing(object oModel);
 void WalkToWaypoint(int nIndex);
 void PlayPrettyAnimations();
 
@@ -13,7 +13,7 @@ void main() {
 		nWP = 1;
 		
 	if (nWP == 1) {
-		ChangeClothing();
+		ChangeClothing(oModel);
 	} else {
 		WalkToWaypoint(nWP);
 	}
@@ -35,36 +35,36 @@ void WalkToWaypoint(int nIndex) {
 	if (GetIsObjectValid(oWP)) {
 		AssignCommand(OBJECT_SELF, ActionMoveToObject(oWP));
 		
-		if (nIndex >= 5 && nIndex <= 7) {
-			DelayCommand(3.5f, PlayPrettyAnimations());
+		if (nIndex == 6) {
+			DelayCommand(4.5f, PlayPrettyAnimations());
 		}
 	}
 }
 
 void PlayPrettyAnimations() {
-	switch(Random(3)+1) {
+	switch(Random(2)+1) {
 		case 1: PlayCustomAnimation(OBJECT_SELF, "flirt", FALSE); break;
 		case 2: PlayCustomAnimation(OBJECT_SELF, "liftswordup", FALSE); break;
-		case 3: PlayCustomAnimation(OBJECT_SELF, "gen_conjure", FALSE); break;
 	}
 }
 
-void ChangeClothing() {
+void ChangeClothing(object oModel) {
 	
 	string newClothes = GetClothing();
 	if (newClothes != "") {
-		AssignCommand(OBJECT_SELF, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
-		object oOutfit = CreateItemOnObject(newClothes, OBJECT_SELF);
+		AssignCommand(oModel, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
+		object oOutfit = CreateItemOnObject(newClothes, oModel);
 		SetDroppableFlag(oOutfit, FALSE);
 		SetIdentified(oOutfit, TRUE);
 		
-		object oldOutfit = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
-		DestroyObject(oldOutfit);
+		object oldOutfit = GetItemInSlot(INVENTORY_SLOT_CHEST, oModel);
+		if (GetIsObjectValid(oldOutfit))
+			DestroyObject(oldOutfit);
 		
-		DelayCommand(0.1f, AssignCommand(OBJECT_SELF, ActionEquipItem(oOutfit, INVENTORY_SLOT_CHEST)));
+		DelayCommand(0.1f, AssignCommand(oModel, ActionEquipItem(oOutfit, INVENTORY_SLOT_CHEST)));
 		DelayCommand(0.2f, ActionEquipMostEffectiveArmor());
 	} else {
-		AssignCommand(OBJECT_SELF, ActionSpeakString("No new clothes :( ", TALKVOLUME_SHOUT));
+		AssignCommand(oModel, ActionSpeakString("No new clothes :( ", TALKVOLUME_SHOUT));
 	}
 		
 }

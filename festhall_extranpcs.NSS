@@ -29,35 +29,35 @@ void main() {
 	
 	if (nSector == 1) {
 		object oWP = GetWaypointByTag("wp_festhall_sector1_npc1");
-		object oSensate = CreateRandomSensate(oWP);
+		object oSensate = CreateRandomSensate(oWP, oPC);
 		SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		//Save that we did this
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_1", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc2");
-		oSensate = CreateRandomSensate(oWP);
+		oSensate = CreateRandomSensate(oWP, oPC);;
 		SetLocalString(oSensate, "ANIMATION", "talkcheer");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc3");
-		oSensate = CreateRandomSensate(oWP);
+		oSensate = CreateRandomSensate(oWP, oPC);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc4");
-		oSensate = CreateRandomSensate(oWP);
+		oSensate = CreateRandomSensate(oWP, oPC);
 		SetLocalString(oSensate, "ANIMATION", "sitgroundidle");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc5");
-		oSensate = CreateRandomSensate(oWP);
+		oSensate = CreateRandomSensate(oWP, oPC);
 		SetLocalString(oSensate, "ANIMATION", "sitgroundidle");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc6");
-		oSensate = CreateRandomSensate(oWP);
+		oSensate = CreateRandomSensate(oWP, oPC);
 		SetLocalString(oSensate, "ANIMATION", "talknormal02");
 	}
 	if (nSector == 2) {
 		object oWP = GetWaypointByTag("wp_festhall_sector2_npc1");
-		object oSensate = CreateRandomSensate(oWP);
+		object oSensate = CreateRandomSensate(oWP, oPC);;
 		SetLocalString(oSensate, "ANIMATION", "cooking02");
 		SetFirstName(oSensate, "Painter");
 		
@@ -65,11 +65,11 @@ void main() {
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_2", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc2");
-		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "listen");
+		oSensate = CreateRandomSensate(oWP, oPC);
+		SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc3");
-		oSensate = CreateRandomSensate(oWP);
+		oSensate = CreateRandomSensate(oWP, oPC);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 
