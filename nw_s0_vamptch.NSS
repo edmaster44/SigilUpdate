@@ -58,6 +58,16 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
 
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+	else {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	}
+	
     int nDDice = nCasterLevel /2;
 	int nTouch      = TouchAttackMelee(oTarget, GetSpellCastItem() == OBJECT_INVALID);
 	
@@ -68,9 +78,9 @@ void main()
     //--------------------------------------------------------------------------
     // GZ: Cap according to the book
     //--------------------------------------------------------------------------
-    else if (nDDice>10)
+    else if (nDDice>40)
     {
-        nDDice = 10;
+        nDDice = 40;
     }
 
 	//PKM-OEI: 05.28.07: Do critical hit damage
@@ -79,13 +89,13 @@ void main()
 		nDDice = nDDice * 2;
 	}
 
-    int nDamage = d6(nDDice);  // JLR - OEI 07/19/05
+    int nDamage = d6(nDDice)+CasterModifier;  // JLR - OEI 07/19/05
 
     //--------------------------------------------------------------------------
     //Enter Metamagic conditions
     //--------------------------------------------------------------------------
 
-    nDamage = MaximizeOrEmpower(6,nDDice,nMetaMagic);  // JLR - OEI 07/19/05
+    nDamage = MaximizeOrEmpower(6,nDDice,nMetaMagic,CasterModifier);  // JLR - OEI 07/19/05
     int nDuration = nCasterLevel/2;
 
     if (nMetaMagic == METAMAGIC_EXTEND)
