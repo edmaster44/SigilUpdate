@@ -7,6 +7,7 @@ void PlayPrettyAnimations();
 void main() {
 
 	object oModel = OBJECT_SELF;
+	SetCustomHeartbeat(oModel, 5);
 	
 	int nWP = GetLocalInt(oModel, "Current_Waypoint");
 	if (nWP <= 0 || nWP >= 11) //clamp value
@@ -35,16 +36,19 @@ void WalkToWaypoint(int nIndex) {
 	if (GetIsObjectValid(oWP)) {
 		AssignCommand(OBJECT_SELF, ActionMoveToObject(oWP));
 		
-		if (nIndex == 6) {
-			DelayCommand(4.5f, PlayPrettyAnimations());
+		if (nIndex == 5) {
+			DelayCommand(3.5f, PlayPrettyAnimations());
 		}
 	}
 }
 
 void PlayPrettyAnimations() {
-	switch(Random(2)+1) {
+	switch(Random(5)+1) {
 		case 1: PlayCustomAnimation(OBJECT_SELF, "flirt", FALSE); break;
-		case 2: PlayCustomAnimation(OBJECT_SELF, "liftswordup", FALSE); break;
+		case 2: PlayCustomAnimation(OBJECT_SELF, "lookright", FALSE); break;
+		case 3: PlayCustomAnimation(OBJECT_SELF, "lookleft", FALSE); break;
+		case 4: PlayCustomAnimation(OBJECT_SELF, "touchheart", FALSE); break;//bardsong
+		case 5: PlayCustomAnimation(OBJECT_SELF, "bardsong", FALSE); break;
 	}
 }
 
