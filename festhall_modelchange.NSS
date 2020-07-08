@@ -7,11 +7,13 @@ void PlayPrettyAnimations();
 void main() {
 
 	object oModel = OBJECT_SELF;
-	SetCustomHeartbeat(oModel, 5);
+	SetCustomHeartbeat(oModel, 5000);
 	
 	int nWP = GetLocalInt(oModel, "Current_Waypoint");
 	if (nWP <= 0 || nWP >= 11) //clamp value
 		nWP = 1;
+		
+	AssignCommand(oModel, ActionSpeakString("nWP: "+IntToString(nWP), TALKVOLUME_SHOUT));
 		
 	if (nWP == 1) {
 		ChangeClothing(oModel);
@@ -36,13 +38,16 @@ void WalkToWaypoint(int nIndex) {
 	if (GetIsObjectValid(oWP)) {
 		AssignCommand(OBJECT_SELF, ActionMoveToObject(oWP));
 		
-		if (nIndex == 5) {
+		if (nIndex >= 5 && nIndex <= 8) {
 			DelayCommand(3.5f, PlayPrettyAnimations());
 		}
 	}
 }
 
 void PlayPrettyAnimations() {
+	if (d100() < 75)
+		return;
+		
 	switch(Random(5)+1) {
 		case 1: PlayCustomAnimation(OBJECT_SELF, "flirt", FALSE); break;
 		case 2: PlayCustomAnimation(OBJECT_SELF, "lookright", FALSE); break;
