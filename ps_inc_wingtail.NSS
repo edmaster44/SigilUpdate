@@ -82,7 +82,7 @@ int PS_Get_WingRace(object oPC)
 		case 4:	return WING_VARIATION_HUMAN;
 		case 5: return WING_VARIATION_ORC;
 		case 6: return WING_VARIATION_HUMAN;
-		case 14: return WING_VARIATION_ORC;
+		case 14: return WING_VARIATION_HUMAN;
 		case 21: return WING_VARIATION_HUMAN;
 		case 31: return WING_VARIATION_HUMAN;
 		case 32: return WING_VARIATION_ORC;
