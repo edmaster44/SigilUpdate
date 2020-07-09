@@ -14,7 +14,6 @@
 #include "x2_inc_intweapon"
 #include "ps_inc_functions"
 #include "ps_inc_equipment"
-#include "ps_inc_removeprops"
 
 void main()
 {
@@ -26,12 +25,12 @@ void main()
 	//Found in the bottom of "ps_inc_equipment.nss"
 	SigilEquipment(oPC, oItem, FALSE);
 //Removes Elemental Weapon
-RemoveElementalWeapon(oPC, oItem);	
+//RemoveElementalWeapon(oPC, oItem);	
 	
 	//This Removes Meditative Strikes
-	if (GetMonkWeapon(oItem)) {
-		RemoveMeditativeStrikes(oPC,oItem);
-	}
+//	if (GetMonkWeapon(oItem)) {
+//		RemoveMeditativeStrikes(oPC,oItem);
+//	}
 	
 	//Not everything was included in it, however. This is what I left out.
 	PS_ManageItemImmunities(oItem, oPC, FALSE);

@@ -1,5 +1,5 @@
 NDB V1.0
-0000009 0000003 0000828 0000022 0000102
+0000009 0000003 0000840 0000022 0000102
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -590,6 +590,17 @@ f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_AIR
 f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_EARTH
 f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_FIRE
 f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_WATER
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_2
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE3
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION2
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_4
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION3
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION4
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_6
+f ffffffff ffffffff 000 i FEAT_TRAP_SENSE_8
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION7
+f ffffffff ffffffff 000 i FEAT_TRAP_SENSE9
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION8
 f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_R
 f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_G
 f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_B
@@ -1067,6 +1078,7 @@ f ffffffff ffffffff 000 i FEAT_SUCCUBUS_SPELLCASTING_BARD
 f ffffffff ffffffff 000 i FEAT_MOTC_SPELLCASTING_WARLOCK
 f ffffffff ffffffff 000 i FEAT_GRAY_SLAAD_SPELLCASTING_WARLOCK
 f ffffffff ffffffff 000 i FEAT_EPIC_ELDRITCH_ADEPT
+f ffffffff ffffffff 000 i FEAT_PRACTICED_INVOKER
 f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION
 f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER
 f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC
@@ -1116,9 +1128,19 @@ fp o
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
+f ffffffff ffffffff 001 i BarbarianLevels
+fp o
 f ffffffff ffffffff 001 f PS_GetXPModifier
 fp i
 f ffffffff ffffffff 001 i PS_GetXPForLevel
+fp i
+f ffffffff ffffffff 001 i GetWarlockCasterLevel
+fp o
+f ffffffff ffffffff 002 i GetClassBspLevel
+fp o
+fp i
+f ffffffff ffffffff 002 i GetHasWarlockProgression
+fp o
 fp i
 f ffffffff ffffffff 001 v DoPsiDeLevelCheck
 fp o
@@ -1204,6 +1226,8 @@ fp o
 f ffffffff ffffffff 002 v DebugMessageToPC
 fp o
 fp s
+f ffffffff ffffffff 001 i GetWarlockAndPRCClassLevels
+fp o
 f ffffffff ffffffff 001 s PS_GetScryStatus
 fp o
 f ffffffff ffffffff 001 s PS_GetCharID
@@ -1215,18 +1239,6 @@ fp s
 f 00000305 000003df 002 i CheckTimeStamp
 fp o
 fp s
-f ffffffff ffffffff 002 i GetClassBspLevel
-fp o
-fp i
-f ffffffff ffffffff 002 i GetHasWarlockProgression
-fp o
-fp i
-f ffffffff ffffffff 001 i GetWarlockAndPRCClassLevels
-fp o
-f ffffffff ffffffff 001 i GetWarlockTRUECasterlevel
-fp o
-f ffffffff ffffffff 001 i GetTrueWarlockCasterLevelWithoutFeats
-fp o
 f ffffffff ffffffff 000 i PROB_DEFENDER
 f ffffffff ffffffff 000 i PROB_AMBUSHER
 f ffffffff ffffffff 000 i PROB_ARCHER
@@ -1378,7 +1390,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000160 0000002c 00000048
+l02 0000168 0000002c 00000048
 l08 0000120 0000005a 0000005f
 l08 0000121 0000005f 0000006c
 l08 0000123 0000006c 00000098
@@ -1399,22 +1411,22 @@ l08 0000148 0000027d 000002a2
 l08 0000149 000002a8 000002aa
 l08 0000150 000002aa 000002f7
 l08 0000153 00000303 00000305
-l02 0000535 00000305 00000313
-l02 0000536 00000319 0000033c
-l02 0000538 0000033c 00000351
-l02 0000539 00000351 00000359
-l02 0000541 00000359 0000036b
-l02 0000542 00000371 00000387
-l02 0000543 00000387 000003a3
-l02 0000544 000003a9 000003ab
-l02 0000545 000003ab 000003d1
-l02 0000547 000003d7 000003df
-l02 0000522 000003df 00000416
-l02 0000523 00000416 00000418
-l02 0000527 00000418 00000426
-l02 0000528 0000042c 0000044f
-l02 0000530 0000044f 0000046c
-l02 0000531 0000046c 00000474
+l02 0000693 00000305 00000313
+l02 0000694 00000319 0000033c
+l02 0000696 0000033c 00000351
+l02 0000697 00000351 00000359
+l02 0000699 00000359 0000036b
+l02 0000700 00000371 00000387
+l02 0000701 00000387 000003a3
+l02 0000702 000003a9 000003ab
+l02 0000703 000003ab 000003d1
+l02 0000705 000003d7 000003df
+l02 0000680 000003df 00000416
+l02 0000681 00000416 00000418
+l02 0000685 00000418 00000426
+l02 0000686 0000042c 0000044f
+l02 0000688 0000044f 0000046c
+l02 0000689 0000046c 00000474
 l08 0000113 00000474 000004c0
 l08 0000114 000004c0 000004e3
 l08 0000115 000004e3 000004e5

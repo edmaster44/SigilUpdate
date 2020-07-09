@@ -14,7 +14,7 @@
 #include "ps_meditative_strikes"
 #include "ps_inc_equipmentprops"
 #include "class_elemwar_weapon"
-
+#include "ps_inc_removeprops"
 
 const int SIGIL_EQUIP_FX = -9444;
 
@@ -569,6 +569,8 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 	{
 		ConDrainProtection(oITEM, oPC);
 		PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
+		RemoveElementalWeapon(oPC, oITEM);
+		RemoveMeditativeStrikes(oPC,oITEM);
 		if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
 		
 	}
