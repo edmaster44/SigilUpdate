@@ -60,6 +60,12 @@ void main()
    	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_harlequinguard", GetLocation(oWP)); 
    	oWP = GetWaypointByTag("wp_festhallnpc_harlequinguard_3");
    	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_harlequinguard", GetLocation(oWP)); 
+   	oWP = GetWaypointByTag("wp_festhallnpc_harlequinguard_4");
+   	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_harlequinguard", GetLocation(oWP)); 
+   	oWP = GetWaypointByTag("wp_festhallnpc_harlequinguard_5");
+   	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_harlequinguard", GetLocation(oWP)); 
+   	oWP = GetWaypointByTag("wp_festhallnpc_harlequinguard_6");
+   	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_harlequinguard", GetLocation(oWP)); 
   }
   
   //Public Sensorium

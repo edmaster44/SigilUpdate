@@ -9,13 +9,15 @@ void main() {
 	object oModel = OBJECT_SELF;
 	
 	int nWP = GetLocalInt(oModel, "Current_Waypoint");
-	if (nWP <= 0 || nWP >= 11) //clamp value
+	if (nWP <= 0 || nWP >= 9) //clamp value
 		nWP = 1;
 		
-	AssignCommand(oModel, ActionSpeakString("nWP: "+IntToString(nWP), TALKVOLUME_SHOUT));
+	//AssignCommand(oModel, ActionSpeakString("nWP: "+IntToString(nWP), TALKVOLUME_SHOUT));
 		
 	if (nWP == 1) {
 		ChangeClothing(oModel);
+	} else if (nWP == 6) {
+		PlayPrettyAnimations();
 	} else {
 		WalkToWaypoint(nWP);
 	}
@@ -36,17 +38,10 @@ void WalkToWaypoint(int nIndex) {
 	object oWP = GetWaypointByTag(sWP);
 	if (GetIsObjectValid(oWP)) {
 		AssignCommand(OBJECT_SELF, ActionMoveToObject(oWP));
-		
-		if (nIndex >= 5 && nIndex <= 8) {
-			DelayCommand(3.5f, PlayPrettyAnimations());
-		}
 	}
 }
 
 void PlayPrettyAnimations() {
-	if (d100() < 75)
-		return;
-		
 	switch(Random(5)+1) {
 		case 1: PlayCustomAnimation(OBJECT_SELF, "flirt", FALSE); break;
 		case 2: PlayCustomAnimation(OBJECT_SELF, "lookright", FALSE); break;
@@ -60,7 +55,7 @@ void ChangeClothing(object oModel) {
 	
 	string newClothes = GetClothing();
 	if (newClothes != "") {
-		AssignCommand(oModel, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
+		//AssignCommand(oModel, ActionSpeakString("Creating new outfit: "+newClothes, TALKVOLUME_SHOUT));
 		object oOutfit = CreateItemOnObject(newClothes, oModel);
 		SetDroppableFlag(oOutfit, FALSE);
 		SetIdentified(oOutfit, TRUE);
@@ -72,7 +67,7 @@ void ChangeClothing(object oModel) {
 		DelayCommand(0.1f, AssignCommand(oModel, ActionEquipItem(oOutfit, INVENTORY_SLOT_CHEST)));
 		DelayCommand(0.2f, ActionEquipMostEffectiveArmor());
 	} else {
-		AssignCommand(oModel, ActionSpeakString("No new clothes :( ", TALKVOLUME_SHOUT));
+		//AssignCommand(oModel, ActionSpeakString("No new clothes :( ", TALKVOLUME_SHOUT));
 	}
 		
 }
