@@ -80,8 +80,8 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 		nType=DAMAGE_TYPE_COLD;
 	}	
 	SendMessageToPC(oPC, "Attempting Melee Strike");	 
-	
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
+	int nValid = INVENTORY_SLOT_RIGHTHAND||INVENTORY_SLOT_ARMS;
+	object oWeapon = GetItemInSlot(nValid,oPC);
 	
 	if(GetWeaponRanged(oWeapon) || !GetIsObjectValid(oWeapon))
 	{
