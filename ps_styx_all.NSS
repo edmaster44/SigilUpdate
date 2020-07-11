@@ -28,6 +28,13 @@ void PS_lose_one_level(object oPC)
 	int nextlvl = 1000;
 	int totalxp = 1;
 	
+		if (GetDisallowedLevelDownPRC(oPC) == TRUE)
+	{
+	SendMessageToPC(oPC,"Error, A Racial Template PRC has been detected, please rebuild from Character Screen, Thank you!");
+	return;
+	
+	}
+	
 	while (1) 
 	{	
 		totalxp = totalxp + nextlvl;
