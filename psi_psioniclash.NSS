@@ -90,10 +90,39 @@ void main()
 	// Calculate damage	dice.
 	nDamage = d4(nDice);
 	
+	// Calculate item-based bonuses to psionic lash
+	int i = 1;
+	for(i = 0; i < NUM_INVENTORY_SLOTS; i++)
+	{
+		object oEquipedItem = GetItemInSlot(i, OBJECT_SELF);
+		       
+		if(GetResRef(oEquipedItem) == "ps_staff_mindsilver1")
+		{
+			nDamage = nDamage +1;
+		}
+		if(GetResRef(oEquipedItem) == "ps_staff_mindsilver2")
+		{
+			nDamage = nDamage +2;
+		}
+		if(GetResRef(oEquipedItem) == "ps_staff_mindsilver3")
+		{
+			nDamage = nDamage +3;
+		}
+		if(GetResRef(oEquipedItem) == "ps_staff_mindsilver4")
+		{
+			nDamage = nDamage +4;
+		}
+		if(GetResRef(oEquipedItem) == "ps_staff_mindsilver5")
+		{
+			nDamage = nDamage +5;
+		}
+				
+	 }
+	
 	if (GetHasFeat(21382, OBJECT_SELF) == TRUE)
 	{
 		nSaveDC = nSaveDC + 1;
-		nDamage = d4(nDice + 1);
+		nDice = nDice + 1;
 		eVis2 = EffectNWN2SpecialEffectFile("psi_imppsionic_lash_imp", oTarget);
 		//Boost DC by 1 and number of damage dice by 1 if psion has 'Improved Psionic Lash' feat.
 	}

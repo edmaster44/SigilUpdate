@@ -38,6 +38,7 @@ void main()
 	    if (!GetHasSpellEffect(GetSpellId(), oTarget) && !GetIsInCombat(OBJECT_SELF))
 		{
 			int nPP = GetLocalInt(OBJECT_SELF, "PSI_PP");
+			int i = 1;
 			object oPC = OBJECT_SELF;
 			//Defines the local variable that will represent power points.
 			int nPsion = GetLevelByClass(90, OBJECT_SELF);
@@ -56,7 +57,32 @@ void main()
 				nPPBonus = nPPBonus + 4;
 				//Psionic Heritage gateway feat grants a bonus of 4 power points.
 			}
-			
+			//Checking for items that provide bonus power points when equipped.
+			for(i = 0; i < NUM_INVENTORY_SLOTS; i++)
+		    {
+		        object oEquipedItem = GetItemInSlot(i, oPC);
+		       
+		        if(GetResRef(oEquipedItem) == "ps_staff_mindsilver1")
+				{
+					nPPBonus = nPPBonus +10;
+				}
+				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver2")
+				{
+					nPPBonus = nPPBonus +20;
+				}
+				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver3")
+				{
+					nPPBonus = nPPBonus +30;
+				}
+				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver4")
+				{
+					nPPBonus = nPPBonus +40;
+				}
+				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver5")
+				{
+					nPPBonus = nPPBonus +50;
+				}
+		    }
 			
 			switch (nPsion)
 			{
