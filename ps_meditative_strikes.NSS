@@ -58,4 +58,3 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
     }
 
 }
-

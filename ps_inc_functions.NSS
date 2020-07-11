@@ -135,6 +135,8 @@ int GetBardicClassLevelForUses(object oPC);
 
 int GetBardicClassLevelForSongs(object oPC);
 
+int GetDisallowedLevelDownPRC(object oPC);
+
 void StackBardicUses(object oPC);
 
 void StackBardMusicUses(object oPC);
@@ -275,6 +277,22 @@ int MonkLevels(object oPC, int BAB = 0)
 
 	return iMonk;
 }
+
+//Prevents people from using the Remove Level Function on Styx
+int GetDisallowedLevelDownPRC(object oPC)
+{ 
+int nClassType = CLASS_TYPE_HALFOUTSIDER_PRC||CLASS_TYPE_HALFDRAGON_PRC||CLASS_TYPE_VAMPIRE_DRA_PRC||CLASS_TYPE_VAMPIRE_LUP_PRC||CLASS_TYPE_VAMPIRE_MAL_PRC||CLASS_TYPE_LICH_D_PRC||CLASS_TYPE_LICH_PRC
+||CLASS_TYPE_LICH_W_PRC;
+return GetLevelByClass(nClassType,oPC);
+
+
+}
+
+
+
+
+
+
 
 int GetHasWarlockProgression(object oPC, int iClass)
 {
