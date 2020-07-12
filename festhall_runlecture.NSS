@@ -46,6 +46,8 @@ void PlayNextPart(object oLecture, object oPC = OBJECT_INVALID) {
 		case 1: nDone = PlayLectureTooMuch(nStage, oPC); break;
 		case 2: nDone = PlayLectureSensoryStone(nStage, oPC); break;
 	}
+	
+	SetLocalInt(oLecture, "LECTURE_STAGE", nStage+1);
 
 	if (nDone) {
 		DelayCommand(300.0f, SetLocalInt(oLecture, "LECTURE_STAGE", 0)); //reset lecture stage

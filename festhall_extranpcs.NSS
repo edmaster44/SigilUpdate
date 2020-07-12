@@ -148,7 +148,7 @@ void main() {
 		
 		oWP = GetWaypointByTag("wp_operasensate_3");
 		oSensate = CreateRandomSensate(oWP, oPC);
-		SetLocalString(oSensate, "ANIMATION", "sittalk01");
+		SetLocalString(oSensate, "ANIMATION", "kemo_lapsit_4i");
 		
 		oWP = GetWaypointByTag("wp_operasensate_4");
 		oSensate = CreateRandomSensate(oWP, oPC);
