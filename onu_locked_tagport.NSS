@@ -13,6 +13,7 @@ void main() {
   if (GetLocked(OBJECT_SELF)) {
   
   	if (GetItemPossessedBy(oPC, sKey) != OBJECT_INVALID) {
+		SendMessageToPC(oPC, "<i>You go through the secret door.</i>");
 		SetLocked(OBJECT_SELF, FALSE);
   		TransportToWaypoint(oPC, oWP);
 		DelayCommand(60.0f, SetLocked(OBJECT_SELF, TRUE));
