@@ -32,39 +32,39 @@ void main() {
 	object oSensate;
 	if (nSector == 1) {
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc1");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		//Save that we did this
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_1", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc2");
-		oSensate = CreateRandomSensate(oWP, oPC);;
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talkcheer");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc3");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 	if (nSector == 2) {
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc4");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "sittalk01");
 		
 		//Save that we did this
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_2", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc5");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "sitgroundidle");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc6");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talknormal");
 	}
 	if (nSector == 3) {
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc1");
-		oSensate = CreateRandomSensate(oWP, oPC);;
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "cooking02");
 		SetFirstName(oSensate, "Painter");
 		
@@ -72,27 +72,27 @@ void main() {
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_3", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc2");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc3");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 	if (nSector == 4) {
 		oWP = GetWaypointByTag("wp_festhall_sector4_npc1");
-		oSensate = CreateRandomSensate(oWP, oPC);;
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 		
 		//Save that we did this
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_4", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector4_npc2");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector4_npc3");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "playflute");
 		
 		effect eFlute = EffectNWN2SpecialEffectFile("fx_hss_flutea");
@@ -101,23 +101,23 @@ void main() {
 	}
 	if (nSector == 5) {
 		oWP = GetWaypointByTag("wp_festhall_sector5_npc1");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "idle");
 		
 		//Save that we did this
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_5", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector5_npc2");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector5_npc3");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 	if (nSector == 6) {
 		oWP = GetWaypointByTag("wp_festhall_sector6_npc1");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "playguitar");
 		
 		effect eFlute = EffectNWN2SpecialEffectFile("fx_hss_mandolina");
@@ -133,7 +133,7 @@ void main() {
 	}
 	if (nSector == 7) {
 		oWP = GetWaypointByTag("wp_operasensate_1");
-		oSensate = CreateRandomSensate(oWP, oPC);;
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "drinkbeerfidget");
 		
 		effect eDrink = EffectNWN2SpecialEffectFile("fx_handr_stein");
@@ -143,15 +143,15 @@ void main() {
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_7", oSensate);
 		
 		oWP = GetWaypointByTag("wp_operasensate_2");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talklaugh");
 		
 		oWP = GetWaypointByTag("wp_operasensate_3");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "kemo_lapsit_4i");
 		
 		oWP = GetWaypointByTag("wp_operasensate_4");
-		oSensate = CreateRandomSensate(oWP, oPC);
+		oSensate = CreateRandomSensate(oWP);
 		SetLocalString(oSensate, "ANIMATION", "talkplead");
 	}
 

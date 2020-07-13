@@ -23,7 +23,7 @@ void main () {
 		return;
 	}
 
-	DelayCommand(1.0f, PlayNextPart(oLecture, oPC));
+	DelayCommand(1.0f, PlayNextPart(oLecture));
 }
 
 void PlayNextPart(object oLecture, object oPC = OBJECT_INVALID) {
@@ -69,12 +69,12 @@ void MarkListeners(int nMax = 1, int nFinal = FALSE) {
 		
 			int nListened = GetLocalInt(oListener, "LECTURE_LISTENED");
 			SendMessageToPC(oListener, "Incrementing listening to "+IntToString(nListened+1));
-			SetLocalInt(oListener, "LECTURE_LISTENED", nListened++);
+			SetLocalInt(oListener, "LECTURE_LISTENED", nListened+1);
 			
 			if (nFinal && GetLocalInt(oListener, "LECTURE_LISTENED") == nMax && 
 				GetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture)) <= 0) {
 				
-				SendMessageToPC(oListener, "Exp given for listening to lecture:");
+				SendMessageToPC(oListener, "Experience given for listening to lecture:");
 				PS_GiveXPReward(oListener, 100);
 				SetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture), 1);
 				DelayCommand(300.0f, SetLocalInt(oListener, "LECTURE_LISTENED", 0));
