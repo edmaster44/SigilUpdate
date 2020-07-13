@@ -11,7 +11,6 @@ if (GetWeaponRanged(oItem)==TRUE)
 return; }
 
 	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
-	itemproperty Prop = GetItemPropertyReference(oItem, "ElementalWeapon");
 	int nDamage = IP_CONST_DAMAGEBONUS_1d6;
 		if (nLevel >= 5 ) 
 		{	nDamage = IP_CONST_DAMAGEBONUS_3d6;	}
@@ -41,7 +40,7 @@ return; }
 		DamageType = IP_CONST_DAMAGETYPE_COLD;
 		iGlow =  ItemPropertyVisualEffect(ITEM_VISUAL_COLD);	
 	}
-	Prop =ItemPropertyDamageBonus(DamageType,nDamage);
+itemproperty Prop =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
 	if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
 	{	if(!GetIsItemPropertyValid(Prop)){
@@ -52,9 +51,33 @@ return; }
   
 	IPSafeAddItemProperty(oItem,Prop,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 	IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-	SaveItemPropertyReference(oItem, "ElementalWeapon", Prop);
+	SetLocalInt(oItem, "ElementalWeapon", GetItemPropertyHash(Prop));
     SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 }
 }
 
+//Removes Elemental Weapon Property 
+void RemoveElementalWeapon(object oItem)
+{
 
+    int hash = GetLocalInt(oItem, "MeditativeStrikes");
+
+    if(hash == 0){
+        return;
+    }
+    
+    DeleteLocalInt(oItem, "ElementalWeapon");
+    
+    int n=0;
+    itemproperty ip = GetItemPropertyByHash(oItem, hash, n++);
+    while(GetIsItemPropertyValid(ip)){
+    
+        if(GetItemPropertyDurationType(ip) == DURATION_TYPE_TEMPORARY){
+            
+            RemoveItemProperty(oItem, ip);
+            return;
+        }
+    
+        ip = GetItemPropertyByHash(oItem, hash, n++);
+    }
+}

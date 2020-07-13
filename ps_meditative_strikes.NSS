@@ -29,18 +29,11 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
       //  SendMessageToPC(oPC, "Weapon is not a monk weapon");
         return;
     }
-	itemproperty Prop = GetItemPropertyReference(oItem, "MeditativeStrikes");
-		if (GetIsItemPropertyValid(Prop) != FALSE) {
-    	SendMessageToPC(oPC, "Meditative strikes already active.");
-    	return;
-}
-
-
     
     int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
     int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
     float fDUR = 9999.9f;    
-    Prop  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
+itemproperty Prop  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
     
     if(GetHasFeat(2840,oPC, TRUE))
     {
@@ -52,9 +45,32 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
     
         SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamageConstant));    
         IPSafeAddItemProperty(oItem, Prop, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-		SaveItemPropertyReference(oItem, "MeditativeStrikes", Prop);
-
+		SetLocalInt(oItem, "MeditativeStrikes", GetItemPropertyHash(Prop));
         SendMessageToPC(oPC, "Wisdom Damage bonus of " + IntToString(nWis) + " applied to your Monk Weapon");
     }
 
+}
+
+void RemoveMeditativeStrikes(object oItem){
+
+    int hash = GetLocalInt(oItem, "MeditativeStrikes");
+
+    if(hash == 0){
+        return;
+    }
+    
+    DeleteLocalInt(oItem, "MeditativeStrikes");
+    
+    int n=0;
+    itemproperty ip = GetItemPropertyByHash(oItem, hash, n++);
+    while(GetIsItemPropertyValid(ip)){
+    
+        if(GetItemPropertyDurationType(ip) == DURATION_TYPE_TEMPORARY){
+            
+            RemoveItemProperty(oItem, ip);
+            return;
+        }
+    
+        ip = GetItemPropertyByHash(oItem, hash, n++);
+    }
 }
