@@ -2,6 +2,7 @@
 #include "ps_inc_time"
 
 const int cChestWait = 915;
+const float cChestDistance = 15.0f; //the distance monsters must be from chest for chest to spawn loot
 
 //Creates gold on chest
 //details depend on variables
@@ -25,6 +26,23 @@ void FillChestWithGold(object oChest) {
 	if ( iGoldAmount > 0 )
 		CreateTreasureItemOnTarget("NW_IT_GOLD001", oChest, iGoldAmount);
 		
+}
+
+//Makes sure there are no monsters nearby before you can loot
+int CheckIfHostilesNearby(object oChest, object oPC) {
+
+	//GetIsEnemy
+	object oCreature = GetFirstObjectInShape(SHAPE_SPHERE, cChestDistance, GetLocation(oChest), TRUE, OBJECT_TYPE_CREATURE);
+	while (GetIsObjectValid(oCreature)) {
+		
+		if (GetIsEnemy(oPC, oCreature))
+			return TRUE;
+	
+		oCreature = GetNextObjectInShape(SHAPE_SPHERE, cChestDistance, GetLocation(oChest), TRUE, OBJECT_TYPE_CREATURE);
+	} 
+	
+	return FALSE;
+
 }
 
 //Create item of a particular type on the chest

@@ -18,6 +18,11 @@ void main()
 
 	if(GetLocalString(oChest,"LASTOPENER")==GetPCPublicCDKey(oPC))
 		return;
+		
+	if (CheckIfHostilesNearby(OBJECT_SELF, oPC)) {
+		SendMessageToPC(oPC, "You cannot loot while hostiles are near!");
+		return;
+	}
 	
 	nTimestamp = GetLocalInt(oChest,"TS");
 	if((PS_GetTime()-nTimestamp) > iChestWait)
