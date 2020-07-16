@@ -80,17 +80,14 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 		nType=DAMAGE_TYPE_COLD;
 	}	
 	SendMessageToPC(oPC, "Attempting Melee Strike");	 
-	int nValid = INVENTORY_SLOT_RIGHTHAND||INVENTORY_SLOT_ARMS;
-	object oWeapon = GetItemInSlot(nValid,oPC);
 	
-	if(GetWeaponRanged(oWeapon) || !GetIsObjectValid(oWeapon))
+	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
+	
+	if(GetWeaponRanged(oWeapon))
 	{
 	SendMessageToPC(oPC,"You require a melee weapon to use this");
 	return;
 	}
-	
-
-
     int iHit = TouchAttackMelee(oTarget);
     
     if(iHit >0)

@@ -687,9 +687,9 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
     {
         CheckForTempProperties(oITEM, oPC);
         
-    //  ApplyMeditativeStrikes(oPC,oITEM);
+      ApplyMeditativeStrikes(oPC,oITEM);
     
-    //  ApplyElementalWeapon(oPC,oITEM);
+      ApplyElementalWeapon(oPC,oITEM);
         
             if (GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
              PS_ApplySpecialWeaponFinesse(oPC, oITEM);
