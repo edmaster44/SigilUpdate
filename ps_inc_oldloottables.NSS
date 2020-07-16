@@ -756,7 +756,7 @@ string GetCloaksFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 33 / 27 / 29
+//Max 33 / 27 / 27
 string GetBracersFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
@@ -855,8 +855,7 @@ string GetBracersFromList(int nRandom, int nTreasureLevel) {
 			case 26: sItem = "ps_bracer_magus2"; break; 
 			case 27: sItem = "ps_bracer_shields"; break;
 			case 28: sItem = "ps_bracer_blinddevotion"; break; 
-			case 29: sItem = "ps_gad_force_gauntlets"; break; 
-			case 30: sItem = "ps_gad_bracersoftheland"; break; 
+			case 29: sItem = "ps_gad_bracersoftheland"; break; 
 		}
 	}
 	return sItem;

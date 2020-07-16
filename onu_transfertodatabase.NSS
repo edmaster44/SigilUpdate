@@ -556,7 +556,7 @@ void LoadBracersToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 31) {
+	while (n < 30) {
 		string sPot = GetBracersFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
