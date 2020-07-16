@@ -8,6 +8,42 @@ const string IPR_SUBTYPE = "IPR_SUBTYPE";
 const string IPR_EXISTS = "IPR_EXISTS";
 
 
+//Gets Item Properties by Hash
+int GetItemPropertyHash(itemproperty ip){
+
+    int type = GetItemPropertyType(ip);
+    int hash = 0xAAAAAA;
+    
+    hash ^= GetItemPropertyCostTable(ip);
+    hash ^= GetItemPropertyCostTableValue(ip);
+    hash ^= GetItemPropertyParam1(ip);
+    hash ^= GetItemPropertyParam1Value(ip);
+    hash ^= GetItemPropertySubType(ip);
+    
+    hash &= 0x00FFFFFF;
+    hash |= (type << 24);
+    
+    return hash;
+}
+
+itemproperty GetItemPropertyByHash(object oItem, int nHash, int nNtn=0){
+
+    int n=0;
+    itemproperty ip = GetFirstItemProperty(oItem);
+    while(GetIsItemPropertyValid(ip)){
+    
+        if(GetItemPropertyHash(ip) == nHash && n++ == nNtn){
+        
+            return ip;
+        }
+    
+        ip = GetNextItemProperty(oItem);
+    }
+    
+    return ip;
+}
+
+
 //Saves the Item Property Reference using a set of Local Integers
 void SaveItemPropertyReference(object Obj,string Name,itemproperty Prop)
 {

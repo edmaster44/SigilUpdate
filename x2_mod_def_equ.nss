@@ -21,14 +21,6 @@ void main()
     object oItem = GetPCItemLastEquipped();
     object oPC   = GetPCItemLastEquippedBy();
 
-	//This Applies Meditative Strikes
-//	ApplyMeditativeStrikes(oPC,oItem);
-	
-	//This Applies Elemental Weapon based on feats
-//	ApplyElementalWeapon(oPC,oItem);
-
-	
-	
 	//This is the new subroutine that handles almost everything that happens in Sigil concerning equipment.
 	//Found in the bottom of "ps_inc_equipment.nss"
 	SigilEquipment(oPC, oItem, TRUE);

@@ -178,24 +178,24 @@ void PS_Feat_BG_FiendishServant(object oPC, int nSpell)
 
 void PS_Feat_SHD_ShadowJump(object oPC, location lTarget, int nSpell)
 {
-	if (!X2PreSpellCastCode())
-	{	return;		}
+    if (!X2PreSpellCastCode())
+    {    return;        }
 
-	SendMessageToPC(oPC, "Casting Shadow Jump");
-	AssignCommand(oPC, ClearAllActions());
-	location lCaster = GetLocation(oPC);
-	effect eVis = EffectNWN2SpecialEffectFile("fx_kos_teleport_small.sef");
-	effect eVis2 = EffectNWN2SpecialEffectFile("fx_shadowjump.sef");
+    SendMessageToPC(oPC, "Casting Shadow Jump");
+    AssignCommand(oPC, ClearAllActions());
+    location lCaster = GetLocation(oPC);
+    effect eVis = EffectNWN2SpecialEffectFile("fx_kos_teleport_small.sef");
+    effect eVis2 = EffectNWN2SpecialEffectFile("fx_shadowjump.sef");
+    effect eConceal = EffectConcealment(80);
 
-	
-	if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
-	if (GetLocalInt(oPC, "DIMENSIONAL_ACHORED"))
-	{	SendMessageToPC(oPC, "A Dimensional Anchor makes it impossible to teleport.");
-		return;		}
-	AssignCommand(oPC, ActionJumpToLocation(lTarget));
+    if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
+    if (GetLocalInt(oPC, "DIMENSIONAL_ACHORED"))
+    {    SendMessageToPC(oPC, "A Dimensional Anchor makes it impossible to teleport.");
+        return;        }
+    AssignCommand(oPC, ActionJumpToLocation(lTarget));
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis2, lTarget, RoundsToSeconds(6));
-	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, lCaster, RoundsToSeconds(4));
-
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,  eConceal, oPC, 6.0f);
+    ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, lCaster, RoundsToSeconds(4));
 }
 
 void PS_Feat_GC_FindPortal(object oPC, int nSpell)
