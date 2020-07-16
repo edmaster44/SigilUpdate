@@ -21,6 +21,7 @@ void main()
 		
 	if (CheckIfHostilesNearby(OBJECT_SELF, oPC)) {
 		SendMessageToPC(oPC, "You cannot loot while hostiles are near!");
+		SetLocalInt(OBJECT_SELF, "LOOT_CANCELED", 1);
 		return;
 	}
 	

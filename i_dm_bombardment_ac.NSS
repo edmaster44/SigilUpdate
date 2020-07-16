@@ -42,7 +42,7 @@ void main()
 		}
 		
 		effect eDam = EffectDamage(nBlud, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
-		eDam = EffectLinkEffects(EffectDamage(nFire, IP_CONST_DAMAGETYPE_FIRE), eDam);
+		eDam = EffectLinkEffects(EffectDamage(nFire, DAMAGE_TYPE_FIRE), eDam);
 		DelayCommand(fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oCreature));
 	
 		oCreature = GetNextObjectInShape(SHAPE_SPHERE, fDistance, lTarget, TRUE, OBJECT_TYPE_CREATURE);
