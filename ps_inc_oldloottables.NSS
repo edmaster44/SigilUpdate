@@ -1823,6 +1823,8 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 460: sItem = "mst_plhb_drk_3";  break;
 			case 461: sItem = "mst_plsc_cld_3";  break;
 			case 462: sItem = "mst_plhb_cld_3";  break;	
+			case 463: sItem = "ps_staff_mindsilver1";  break;	
+			case 464: sItem = "ps_staff_mindsilver2";  break;	
 		}			
 	} else if (nTreasureLevel <= 2) {
 		switch (nRandom)
@@ -2050,6 +2052,9 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 221: sItem = "X0_WBWMSL001";  break;
 			case 222: sItem = "ps_gsword_lightningrod";  break;
 			case 223: sItem = "ps_haxe_illusiongold";  break;
+			case 224: sItem = "ps_staff_mindsilver2";  break;	
+			case 225: sItem = "ps_staff_mindsilver3";  break;
+			case 226: sItem = "ps_staff_mindsilver4";  break;		
 		}
 	} else {
 		switch (nRandom) {
@@ -2306,6 +2311,8 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 251: sItem = "ps_gad_ballandchain"; break;  
 			case 252: sItem = "ps_gad_outlaws_axe"; break;   
 			case 253: sItem = "ps_gad_stygianrimeblade"; break;  
+			case 254: sItem = "ps_staff_mindsilver4";  break;
+			case 255: sItem = "ps_staff_mindsilver5";  break;	
 		}
 	}
 	return sItem;

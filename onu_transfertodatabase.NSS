@@ -784,7 +784,7 @@ void LoadWeaponsToDatabase(object oPC) {
 	SQLExecDirect("TRUNCATE TABLE treasure_weapons");
 	
 	int n = 1;
-	while (n < 463) {
+	while (n < 465) {
 		string sPot = GetWeaponFromList(n, 1);
 		if (sPot == "") {
 			n++; continue;
@@ -793,7 +793,7 @@ void LoadWeaponsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 224) {
+	while (n < 226) {
 		string sPot = GetWeaponFromList(n, 2);
 		if (sPot == "") {
 			n++; continue;
@@ -802,7 +802,7 @@ void LoadWeaponsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 254) {
+	while (n < 256) {
 		string sPot = GetWeaponFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
