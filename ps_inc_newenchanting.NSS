@@ -229,6 +229,8 @@ int GetBenchIsValidForEnchanting(object oPC, object oBench) {
 			{
 				return TRUE;
 			}
+		} else {
+			SendMessageToPC(oPC, "There must be no obstructions between you and the workbench.");
 		}
 	}
 	return FALSE;

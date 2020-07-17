@@ -2,7 +2,7 @@
 #include "ps_inc_time"
 
 const int cChestWait = 915;
-const float cChestDistance = 15.0f; //the distance monsters must be from chest for chest to spawn loot
+const float cChestDistance = 8.0f; //the distance monsters must be from chest for chest to spawn loot
 
 //Creates gold on chest
 //details depend on variables
