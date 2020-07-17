@@ -223,15 +223,14 @@ string GetEssenceRequirement(int index) {
 int GetBenchIsValidForEnchanting(object oPC, object oBench) {
 	if(GetIsObjectValid(oBench)) 
 	{
-		if(LineOfSightObject(oPC, oBench))
-		{
+		//if(LineOfSightObject(oPC, oBench)) {
 			if(GetDistanceBetween(oPC, oBench) <= ENCHANTING_DISTANCE)
 			{
 				return TRUE;
 			}
-		} else {
+		/*} else {
 			SendMessageToPC(oPC, "There must be no obstructions between you and the workbench.");
-		}
+		}*/
 	}
 	return FALSE;
 }
