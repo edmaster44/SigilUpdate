@@ -74,7 +74,7 @@ void ChangeClothing(object oModel) {
 
 string GetClothing() {
 
-	int nRand = Random(12)+1;
+	int nRand = Random(15)+1;
 	switch(nRand) {
 		case 1: return "de_cagerfashion_1f";
 		case 2: return "de_cagerfashion_2f";
@@ -88,6 +88,9 @@ string GetClothing() {
 		case 10: return "de_cagerfashion_7b";
 		case 11: return "de_cagerfashion_8b";
 		case 12: return "de_cagerfashion_9b";
+		case 13: return "de_cagerfashion_4f";
+		case 14: return "de_cagerfashion_5f";
+		case 15: return "de_cagerfashion_6f";
 	}
 	return "de_cagerfashion_1f";
 	
