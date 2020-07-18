@@ -996,6 +996,7 @@ void PS_HD_Dragonflight(object oPC, object oItem)
 		case 31: if (iSub == 47) iWingF = 56; iWingM = 55; break; //Yuan-ti Pureblood
 		case 32: iWingF = 48; iWingM = 47; break; // Grey Orc
 		case 33: iWingF = 56; iWingM = 55; break; // Native Outsider
+		case 251: iWingF =56; iWingM = 55; break; //Dragonborn
 		default: //Race doesn't get wings so give the Remain Wingless feat!
 		{	FeatAdd(oPC, 220, FALSE); 
 			SendMessageToPC(oPC, "Your appearance does not support wings, thus you remain wingless.");

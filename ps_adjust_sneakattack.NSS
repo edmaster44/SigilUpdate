@@ -136,7 +136,7 @@ void AddSneakDice(object oPC)
 	sneakDice += (GetLevelByClass(CLASS_BLACKGUARD, oPC) - 1) / 3;	
 	sneakDice += GetLevelByClass(CLASS_ARCANETRICKSTER, oPC) / 2;
 	sneakDice += (GetLevelByClass(CLASS_SHADOWTHIEF, oPC) + 1) / 2;
-	sneakDice += GetLevelByClass(CLASS_RONIN, oPC) / 3;
+	sneakDice += (GetLevelByClass(CLASS_RONIN, oPC) +1 ) / 2 ;
 	sneakDice += GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC) / 2;
 	sneakDice += GetLevelByClass(CLASS_SHADOWDANCER,oPC) / 3;
 	sneakDice += GetLevelByClass(CLASS_ARCANETRICKSTER2, oPC) / 2;
