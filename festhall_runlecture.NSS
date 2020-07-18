@@ -68,10 +68,10 @@ void MarkListeners(int nMax = 1, int nFinal = FALSE) {
 		if (GetIsPC(oListener)) {
 		
 			int nListened = GetLocalInt(oListener, "LECTURE_LISTENED");
-			SendMessageToPC(oListener, "Incrementing listening to "+IntToString(nListened+1));
+			//SendMessageToPC(oListener, "Incrementing listening to "+IntToString(nListened+1));
 			SetLocalInt(oListener, "LECTURE_LISTENED", nListened+1);
 			
-			if (nFinal && GetLocalInt(oListener, "LECTURE_LISTENED") == nMax && 
+			if (nFinal && GetLocalInt(oListener, "LECTURE_LISTENED") >= nMax && 
 				GetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture)) <= 0) {
 				
 				SendMessageToPC(oListener, "Experience given for listening to lecture:");
