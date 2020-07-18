@@ -34,7 +34,9 @@ void main()
 		    iEliteChance = 90;
 		   
 		SpawnMonster(OBJECT_SELF, sMimic, OBJECT_SELF, avg, iEliteChance, mod);
-		DestroyObject(OBJECT_SELF, 0.1f);
+		
+		SetPlotFlag(OBJECT_SELF, FALSE);
+		DestroyObject(OBJECT_SELF, 0.2f);
 	} else {
 		//Rolled for no mimic; make sure mimic doesn't spawn for 10 minutes
 		SetLocalInt(oChest, "NO_MIMIC", 1);
@@ -49,6 +51,12 @@ void main()
 	
 		if(GetLocalString(oChest,"LASTOPENER")==GetPCPublicCDKey(oPC))
 			return;
+		
+		if (CheckIfHostilesNearby(OBJECT_SELF, oPC)) {
+			SendMessageToPC(oPC, "You cannot loot while hostiles are near!");
+			SetLocalInt(OBJECT_SELF, "LOOT_CANCELED", 1);
+			return;
+		}
 		
 		nTimestamp = GetLocalInt(oChest,"TS");
 		if((PS_GetTime()-nTimestamp) > iChestWait)

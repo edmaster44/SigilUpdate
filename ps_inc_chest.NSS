@@ -35,7 +35,7 @@ int CheckIfHostilesNearby(object oChest, object oPC) {
 	object oCreature = GetFirstObjectInShape(SHAPE_SPHERE, cChestDistance, GetLocation(oChest), TRUE, OBJECT_TYPE_CREATURE);
 	while (GetIsObjectValid(oCreature)) {
 		
-		if (GetIsEnemy(oPC, oCreature))
+		if (GetIsEnemy(oPC, oCreature) && !GetIsDead(oCreature))
 			return TRUE;
 	
 		oCreature = GetNextObjectInShape(SHAPE_SPHERE, cChestDistance, GetLocation(oChest), TRUE, OBJECT_TYPE_CREATURE);
