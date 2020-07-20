@@ -72,7 +72,6 @@ int PS_Get_WingRace(object oPC)
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
 	int nRace		= GetLocalInt(oEssence, "OldRace");
 	int nSubrace	= GetLocalInt(oEssence, "OldSubrace");
-	//Gives Wings based on race, information can be found in racialtypes
 	switch (nRace)
 	{	
 		case 0: return WING_VARIATION_DWARF;
@@ -83,13 +82,11 @@ int PS_Get_WingRace(object oPC)
 		case 5: return WING_VARIATION_ORC;
 		case 6: return WING_VARIATION_HUMAN;
 		case 14: return WING_VARIATION_ORC;
+		case 15: return WING_VARIATION_HUMAN;
 		case 21: return WING_VARIATION_HUMAN;
 		case 31: return WING_VARIATION_HUMAN;
 		case 32: return WING_VARIATION_ORC;
 		case 33: return WING_VARIATION_HUMAN;
-		case 74: return WING_VARIATION_HUMAN;
-		case 208: return WING_VARIATION_HUMAN;
-		case 251: return WING_VARIATION_HUMAN;
 	}
 	switch (nSubrace)
 	{
@@ -231,6 +228,7 @@ int PS_GetWing_Template(object oPC)
 int PS_GetFeatWingType(object oPC)
 {
 	int nWing = 0;
+	
 	
 	if (GetHasFeat(288, oPC))
 	{	if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) >= 6)
