@@ -1,8 +1,8 @@
-#include "nwn2_inc_spells"
 #include "x2_inc_spellhook"
-#include "ps_inc_functions"
+#include "aaa_constants"
 #include "X0_I0_SPELLS"
 #include "nw_i0_spells"
+#include "class_dervish"
 
 void main()
 {
@@ -15,20 +15,21 @@ void main()
 	
 	
 		
-//	switch (nSpell)
-//	{
+	switch (nSpell)
+	{
 //	case 9999:	//Speed Bonus
 		//DelayCommand(0.0f, Dervish_Speed(oPC, nSpell));
 	//	break;
 	
-//	case 9999 :		//AC BOnus	
-		//	DelayCommand(0.0f, Dervish_AC_Bonus(oPC, nSpell));
-	//	break;
+	case 1926 :		//AC Bonus	
+			DelayCommand(0.0f, Dervish_AC_Bonus(oPC, nSpell));
+		break;
 
 	//		case 9999:		//Dervish-Slash	
 //		//	DelayCommand(0.0f, Dervish_Slash(oPC, nSpell));
 	//	break;
 		
 	//	
-			}
-	//		}
+		}
+		}
+			

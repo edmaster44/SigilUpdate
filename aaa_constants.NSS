@@ -97,6 +97,7 @@ const int CLASS_TYPE_ERINYES					= 96;
 const int CLASS_TYPE_BRACHINA					= 97;
 const int CLASS_TYPE_SUCCUBUS_INCUBUS			= 98;
 const int CLASS_TYPE_MARQUIS_CAMBION			= 99;
+const int CLASS_DERVISH							=9999;
 const int CLASS_TYPE_ILLITHID_MENTALIST_PRC		= 100;
 const int CLASS_TYPE_BRALANI_PRC				= 101;
 const int CLASS_TYPE_FIRRE_PRC					= 102;
@@ -458,6 +459,15 @@ const int SPELL_HALLUCINATORY_TERRAIN			= 1957;
 const int VFX_PER_HALLUCINATORY_TERRAIN 		= 95;
 const int SPELL_HYPNOTISM						= 1958;
 
+//New Spell Like Abilities for Dervish
+const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
+
+//Dervish Feats 
+const int FEAT_DERVISH_AC_BONUS					= 2999;
+const int FEAT_DERVISH_DERVISH_DANCE			= 3000;
+const int FEAT_DERVISH_DANCE_DEATH				= 3001;
+const int FEAT_DERVISH_TIRELESS_DANCE			= 3003;
+const int FEAT_DERVISH_THOUSAND_CUTS			= 3004;
 //New Spell Like Abilities for Elemental Warrior
 const int ELEMENTAL_WARRIOR_IMMUNITY			= 1920;
 const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1921;
