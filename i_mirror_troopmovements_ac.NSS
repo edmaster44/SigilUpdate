@@ -25,7 +25,7 @@ void main()
 	string sDate = SigisDate(GetRealTime());
 	
 	string sResult = "A plainly bound book, filled part-way with hand written notes. The individual pages fade in and out, and the content changes day by day.\n\n"+sDate+":\n";
-	int nRand = Random(23)+1;
+	int nRand = Random(27)+1;
 	switch(nRand) {
 		case 1: sResult += "Measure Mauric’s unit reported in. They are holding position at the old Chirper’s inn balcony by the Bazaar crater."; break;
 		case 2: sResult += "Measure Takan’s unit confirmed capture and slaying of the renegade Quinn. Atheon head office has been informed."; break;
@@ -56,6 +56,11 @@ void main()
 							"'I think,' he continued, 'That it is in everyone's best interest to follow these new guidelines. I know for sure that I will personally feel much better going forward!'"; break;
 		case 22: sResult += "All units be on the alert. As you know, tonight Superintendant Maserby of the Office of Civic and Social Affairs will be hosting his annual Gala event in the Lady's Ward at his estate. As you are also aware, his role in public communications since his promotion in the former Civic Festhall has made him a  primary target in the eyes of the Terror Cells. Praetor Factol Pentar does not suspect any special danger tonight, but all the same, keep sharp."; break;
 		case 23: sResult += "Confirmation just came in earlier; Notary Tavia engaged and eliminated the Terror Agent Sharon Raynsford. Unfortunately, the Notary was unable to apprehend Raynsford's fey slave, though her unit suspects it has fled into one of the Beastland portals. Command does not feel the need to pursue at this time. Nonetheless, all units are advised to keep on the lookout, and capture the creature alive if possible. The slave is described as having blue hair, a face of elven appearance, and somewhat short in height."; break;
+		case 24: sResult += "Notify all units, that if any of the following wyrms are found, they are to be terminated immediately. They are a failed experiment. Names following:"+
+							"\n- Sartorixfaeisthiliar \n- Kilitariax \n- Xujja \n- Ephimerra \n- Kregorothax \n- Fiirkronsshtra";break;
+	 	case 25: sResult += "Keep an eye out for a small masked dark elf, who goes by the name Miniasen. She is not of our side, but the Seer wishes to see her."; break;
+		case 26: sResult += "Our intelligence informs us that Inquisitor Aidan is dead; the bastards killed him, probably for sport. Inquisitor Havaal will be taking over his duties permanently. We can only hope that Mover Reina does not meet the same fate."; break;
+		case 27: sResult += "Given the increased enemy presence in the old Market Ward, I suggest an increase in guards; particularly ones with true seeing. Furthermore, I await clearance for an assault on their Bazaar. I believe that if we send in a small team of our best we will be able to do great damage without repeating the mistakes of the first assault. \n-Measure Belladonna Goldworthy"; break;
 	}
 	
 	sResult += "\n\n//OOC: Use the book to see today's page.";
