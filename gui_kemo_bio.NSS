@@ -37,7 +37,35 @@ void main(string sAction, string sType, string sEntry)
 	object oTarget = GetPlayerCurrentTarget(oPC);
 	string sDB; string sBio; string sPortrait; string sPortraitTGA;
 	
-	
+	if (sAction == "preview")
+	{
+	sDB = GetSubString(GetPCPlayerName(oTarget), 0, 12) +
+			"_" + GetSubString(GetFirstName(oTarget), 0, 6) +
+			"_" + GetSubString(GetLastName(oTarget), 0, 9);
+		sBio = GetCampaignString(sDB,"Bio");
+		sPortrait = GetCampaignString(sDB,"Portrait");
+			if (GetStringLength(sPortrait) < 2) sPortrait = "bg_60_alpha";
+		
+		if (FindSubString(sPortrait,"pack") > -1)
+		{	sPortrait = GetPackPortrait(sPortrait);
+			DisplayGuiScreen(oPC,"KEMO_BIO_DISPLAY",FALSE,"kemo_bio_display.xml");
+			SetGUIObjectText(oPC,"KEMO_BIO_DISPLAY","INPUT_BIOTEXT",-1,sBio);
+			SetGUITexture(oPC,"KEMO_BIO_DISPLAY","KEMO_PORTRAIT",sPortrait);
+			DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
+			
+		}
+		else
+		{	sPortrait = sPortrait + ".tga";
+			DisplayGuiScreen(oPC,"KEMO_BIO_DISPLAY",FALSE,"kemo_bio_display.xml");
+			SetGUIObjectText(oPC,"KEMO_BIO_DISPLAY","INPUT_BIOTEXT",-1,sBio);
+			SetGUITexture(oPC,"KEMO_BIO_DISPLAY","KEMO_PORTRAIT",sPortrait);
+			DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
+			
+		}
+		
+		
+		return;
+	}
 	if (sAction == "display")
 	{
 		sDB = GetSubString(GetPCPlayerName(oTarget), 0, 12) +
@@ -89,6 +117,7 @@ void main(string sAction, string sType, string sEntry)
 		DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
 		return;
 	}
+
 	if (sAction == "save")
 	{
 		//WriteTimestampedLogEntry(GetName(oPC) + " is saving a bio/portrait.");
