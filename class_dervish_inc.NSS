@@ -25,8 +25,8 @@ void main()
 			DelayCommand(0.0f, Dervish_AC_Bonus(oPC, nSpell));
 		break;
 
-	//		case 9999:		//Dervish-Slash	
-//		//	DelayCommand(0.0f, Dervish_Slash(oPC, nSpell));
+	//		case 9999:		//A Thousand Cuts Ability(2d6 Slash bonus on attacks)
+//		//	DelayCommand(0.0f, A_Thousand_Cuts(oPC, nSpell));
 	//	break;
 		
 	//	

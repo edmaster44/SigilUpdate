@@ -78,7 +78,7 @@ void DoBattleHowl()
 	eFear = EffectLinkEffects (eFear, eVisFear);
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eLOS, oPC);
 	int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
-	int nSpellSaveDC = 20 + nCHA;
+	int nSpellSaveDC = 10 + GetHitDice(oPC) + nCHA;
 	if (nCHA < 1) nCHA = 1; //Let's set a minimum duration to make sure it does something no matter how low CHA is.
 	
     //Determine enemies in the radius around the bard

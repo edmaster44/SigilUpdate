@@ -22,11 +22,48 @@ int GetMonkWeapon(object oItem)
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
 }
 
+int GetDervishWeapon(object oItem)
+
+{
+int iBaseItem = GetBaseItemType(oItem);
+return iBaseItem == BASE_ITEM_SCIMITAR || iBaseItem == BASE_ITEM_SICKLE||iBaseItem == BASE_ITEM_LONGSWORD || iBaseItem == BASE_ITEM_GREATSWORD ||iBaseItem == BASE_ITEM_HANDAXE ||iBaseItem ==  BASE_ITEM_BATTLEAXE ||iBaseItem == BASE_ITEM_GREATAXE
+||iBaseItem == BASE_ITEM_HALBERD ||iBaseItem == BASE_ITEM_KAMA ||iBaseItem == BASE_ITEM_KUKRI ||iBaseItem ==  BASE_ITEM_KATANA || iBaseItem == BASE_ITEM_BASTARDSWORD ||iBaseItem == BASE_ITEM_DWARVENWARAXE||iBaseItem == BASE_ITEM_SCYTHE;
 
 
+}
 
+int nDervishValid (object oPC)
+{
 
-//Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
+object oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+		
+	int bArmor = FALSE;
+	int nArmorRank = ARMOR_RANK_NONE;
+ 	if (GetIsObjectValid(oItem))
+		nArmorRank = GetArmorRank(oItem);
+	if (nArmorRank == ARMOR_RANK_NONE || nArmorRank == ARMOR_RANK_LIGHT)
+		bArmor = TRUE;
+	else
+		bArmor = FALSE;	
+		
+	int bShield = FALSE;		
+	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);	
+ 	if (GetIsObjectValid(oItem))
+	{
+		int nBaseItemType = GetBaseItemType(oItem);
+		if (nBaseItemType == BASE_ITEM_SMALLSHIELD || 
+		nBaseItemType == BASE_ITEM_TOWERSHIELD ||
+		nBaseItemType == BASE_ITEM_LARGESHIELD)
+			bShield = TRUE;
+	}
+	
+	int bSlashing = GetDervishWeapon(oItem);
+	if (bSlashing && !bShield && bArmor)
+		return TRUE;
+	else
+		return FALSE;
+}
+
 
 //Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
 void ApplyMeditativeStrikes(object oPC,object oItem)

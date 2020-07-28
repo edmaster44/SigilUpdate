@@ -8,6 +8,7 @@
 
 
 
+
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest level in group
@@ -64,6 +65,7 @@ const int BASE_ITEM_WHIP_SCOD							= 202;
 const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
+
 
 int PS_IsEquippableCW(object oItem);
 
@@ -168,7 +170,6 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem);
 void DebugMessageToPC(object oPC, string sMessage);
 
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
-
 
 //Progresses Barbarian 
 int BarbarianLevels(object oPC)
