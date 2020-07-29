@@ -16,14 +16,23 @@
 
 void main()
 {
-//  Jug_Debug(GetName(OBJECT_SELF) + " faction leader " + GetName(GetFactionLeader(OBJECT_SELF)));
-    // * if not running normal or better AI then exit for performance reasons
     if (GetAILevel() == AI_LEVEL_VERY_LOW) return;
 
-//    if (GetIsObjectValid(GetNearestCreature(CREATURE_TYPE_PLAYER_CHAR,PLAYER_CHAR_IS_PC, OBJECT_SELF, 1, CREATURE_TYPE_PERCEPTION,  PERCEPTION_HEARD)))
-//    {
-//      Jug_Debug("*****" + GetName(OBJECT_SELF) + " heartbeat action " + IntToString(GetCurrentAction()));
-//    }
+	//Check if we've been commanded to follow someone (i.e. fake summon)
+	//If so, then make sure we stay in the same area
+	//Should allow enough freedom that they can go fight; unlike with mimi_npc_heartbeat setup
+	object playerTag = GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
+	if (GetIsObjectValid(playerTag))
+	{
+		if (GetArea(playerTag) != GetArea(OBJECT_SELF)) {
+			ClearAllActions();
+			AssignCommand(OBJECT_SELF, ActionJumpToObject(playerTag));
+		} else if (GetDistanceToObject(playerTag) > 30.0f) {
+			ClearAllActions();
+			ActionForceFollowObject(playerTag);
+		}
+		return;
+	}	
 
     if (GetSpawnInCondition(NW_FLAG_FAST_BUFF_ENEMY))
     {
