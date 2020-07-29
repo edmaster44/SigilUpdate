@@ -17,19 +17,19 @@ void main()
 		
 	switch (nSpell)
 	{
-//	case 9999:	//Speed Bonus
-		//DelayCommand(0.0f, Dervish_Speed(oPC, nSpell));
-	//	break;
+	case 1929:	//Defensive Parry
+		DelayCommand(0.0f, Dervish_Defensive_Parry(oPC, nSpell));
+		break;
 	
 	case 1926 :		//AC Bonus	
 			DelayCommand(0.0f, Dervish_AC_Bonus(oPC, nSpell));
 		break;
 
-	//		case 9999:		//A Thousand Cuts Ability(2d6 Slash bonus on attacks)
-//		//	DelayCommand(0.0f, A_Thousand_Cuts(oPC, nSpell));
-	//	break;
+			case 1928:		//A Thousand Cuts Ability(2d6 Slash bonus on attacks)
+			DelayCommand(0.0f, A_Thousand_Cuts(oPC, nSpell));
+		break;
 		
-	//	
+		
 		}
 		}
 			

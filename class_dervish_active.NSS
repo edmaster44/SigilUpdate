@@ -19,18 +19,19 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		eLink = SetEffectSpellId(eLink, SPELLABILITY_DERVISH_DANCE );
 		
     	RemoveEffectsFromSpell(OBJECT_SELF, SPELLABILITY_DERVISH_DANCE);
-		
-		object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);				
+	//Dance of Death	
+	object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CARMOUR,OBJECT_SELF);				
 		if (nLevel > 9)
 		{
 			itemproperty iBonusFeat1 = ItemPropertyBonusFeat(IP_CONST_FEAT_CLEAVE);  //Cleave
 			itemproperty iBonusFeat2 = ItemPropertyBonusFeat(45);	//Great Cleave
 			if (oArmorNew == OBJECT_INVALID)
 			{
-				
+				oArmorNew = CreateItemOnObject("x2_it_emptyskin", OBJECT_SELF, 1, "", FALSE);
 				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat1,oArmorNew,fDuration);
 				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat2,oArmorNew,fDuration);
-						
+				DelayCommand(fDuration, DestroyObject(oArmorNew,0.0f,FALSE));
+				ActionEquipItem(oArmorNew,INVENTORY_SLOT_CARMOUR);		
 			}
 			else
 			{
@@ -44,8 +45,10 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 			itemproperty iBonusFeat1 = ItemPropertyBonusFeat(IP_CONST_FEAT_CLEAVE);  //Cleave
 			if (oArmorNew == OBJECT_INVALID)
 			{
-
-				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat1,oArmorNew,fDuration);	
+				oArmorNew = CreateItemOnObject("x2_it_emptyskin", OBJECT_SELF, 1, "", FALSE);
+				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat1,oArmorNew,fDuration);
+				DelayCommand(fDuration, DestroyObject(oArmorNew,0.0f,FALSE));
+				ActionEquipItem(oArmorNew,INVENTORY_SLOT_CARMOUR);		
 			}
 			else
 			{

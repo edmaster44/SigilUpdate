@@ -462,11 +462,14 @@ const int SPELL_HYPNOTISM						= 1958;
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
 const int SPELLABILITY_DERVISH_DANCE			= 1927;
+const int SPELLABILITY_THOUSAND_CUTS			= 1928;
+const int SPELLABILITY_DERVISH_DEFENSIVE_PARRY			= 1929;
 
 //Dervish Feats 
 const int FEAT_DERVISH_AC_BONUS					= 2999;
 const int FEAT_DERVISH_DERVISH_DANCE			= 3000;
 const int FEAT_DERVISH_DANCE_DEATH				= 3001;
+const int FEAT_DERVISH_DEFENSIVE_PARRY			= 3002;
 const int FEAT_DERVISH_TIRELESS_DANCE			= 3003;
 const int FEAT_DERVISH_THOUSAND_CUTS			= 3004;
 //New Spell Like Abilities for Elemental Warrior
