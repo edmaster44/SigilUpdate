@@ -74,7 +74,7 @@ void SpawnInSummon(object oPC, string sResRef) {
 
 string GetCreatureResref(object oPC, int nHD) {
 
-	string sPlane = GetPlanarArea(oPC);
+	string sPlane = GetAreaValue(oPC);
 	
 	if (nHD <= 2)
 		nHD = 1;
