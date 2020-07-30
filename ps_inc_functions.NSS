@@ -66,6 +66,17 @@ const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
+int GetHasSpiritShamanProgression(object oPC, int iClass);
+
+int GetSpiritShamanTRUECasterlevel(object oPC);
+
+int GetHasPaladinProgression(object oPC, int iClass);
+
+int GetPaladinAndPRCClassLevels(object oPC);
+
+int GetHasRangerProgression(object oPC, int iClass);
+
+int GetRangerAndPRCClassLevels(object oPC);
 
 int PS_IsEquippableCW(object oItem);
 
