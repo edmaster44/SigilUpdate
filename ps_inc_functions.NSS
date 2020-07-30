@@ -393,40 +393,144 @@ int PS_IsEquippableCW(object oItem)
 	else
 	{	return FALSE;	}
 }
+int GetHasSpiritShamanProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",55)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetSpiritShamanTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_SPIRIT_SHAMAN)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasSpiritShamanProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(2003,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
 
 // Used in any spell scripts for Ranger/Paladin spells instead of GetCasterLevel in order that those spells get full caster level for Ranger/Paladin.
+
+int GetHasPaladinProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",6)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetPaladinAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_PALADIN || GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+	}
+	
+	return iTotal;
+}
+
+
+
+int GetHasRangerProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",7)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetRangerAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_RANGER, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_RANGER || GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+	}
+	
+	return iTotal;
+}
+
+
+
+
 int PS_GetCasterLevel(object oPC)
 {
-    int iClass = GetLastSpellCastClass();
-    int iLevel;
 
-    // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
-    // practiced caster can also increase by +4.
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
 
-    if (iClass == CLASS_TYPE_RANGER)
-    {	iLevel = GetLevelByClass(CLASS_TYPE_RANGER, oPC);
-        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER, oPC, TRUE)) iLevel += 4;
-        if (GetHasFeat(1548, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
-        if (GetHasFeat(1552, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
-        if (GetHasFeat(1583, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
-        if (GetHasFeat(1811, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
-        if (GetHasFeat(2036, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
-        if (GetHasFeat(2254, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide	
-    }
-    else if (iClass == CLASS_TYPE_PALADIN)
-    {	iLevel = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);
-        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN, oPC, TRUE)) iLevel += 4;
-        if (GetHasFeat(1547, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
-        if (GetHasFeat(1551, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
-        if (GetHasFeat(1582, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
-        if (GetHasFeat(1810, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
-        if (GetHasFeat(2035, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
-        if (GetHasFeat(2250, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide
-    }
-    else
-    {	iLevel = GetCasterLevel(oPC);	}
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+	
+	
 
-    return iLevel;
+	if(GetLevelByClass(CLASS_TYPE_RANGER, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_RANGER)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+	
+	
 }
 
 /* 	Used to calculate full caster level for golem masters. Combines all arcane or all divine caster level classes
