@@ -213,11 +213,6 @@ void SetAreaValue(object oPC, string plane) {
 	SetLocalString(oArea, "Plane", plane);
 }
 
-string GetAreaValue(object oPC) {
-	object oArea = GetArea(oPC);
- 	return	GetLocalString(oArea, "Plane");
-}
-
 void ApplyPlanarAlignmentEffects(object oPC, string plane, string description) {
 
 	SetAreaValue(oPC, plane);

@@ -10,7 +10,9 @@
 //:: of the multiverse.  You gain a +6 bonus on all lore
 //:: and spellcraft checks for 24 hours.
 //:://////////////////////////////////////////////
-//:: Mimi Fearthegn 7/26/20 - Adding scaling based on level + boost to search
+//:: Created By: ??
+//:: Created On: ??
+//:://////////////////////////////////////////////
 
 
 
@@ -29,18 +31,24 @@ void main()
 	
     //Declare major variables
 	object oCaster = OBJECT_SELF;
-	int nCasterLevel = GetWarlockCasterLevel(oCaster);
-	int nSkillBuff = (nCasterLevel/2) + 5;
 	
     //Fire cast spell at event for the specified target
     SignalEvent(oCaster, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
  	float fDuration = 60.0*60.0*24.0;  // 24 hours
+						
+	//Enter Metamagic conditions
+ 	int nMetaMagic = GetMetaMagicFeat();
+    if (nMetaMagic == METAMAGIC_EXTEND)
+	{
+		fDuration = fDuration + (fDuration / 2.0);
+	}
 	
-    effect eLore = EffectSkillIncrease(SKILL_LORE, nSkillBuff);
-	effect eSpellCraft = EffectSkillIncrease(SKILL_SPELLCRAFT, nSkillBuff);
-	effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nSkillBuff);
+    effect eLore = EffectSkillIncrease(SKILL_LORE, 6);
+	effect eSpellCraft = EffectSkillIncrease(SKILL_SPELLCRAFT, 6);
     effect eLink = EffectLinkEffects(eLore, eSpellCraft);
-	eLink = EffectLinkEffects(eLink, eSearch);
+
+	//effect eVis = EffectVisualEffect(VFX_DUR_CONE_SONIC);	// replace with whisper effect
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 1.5f);
 
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }

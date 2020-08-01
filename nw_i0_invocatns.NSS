@@ -587,27 +587,33 @@ int DoEssenceDrainingBlast(object oCaster, object oTarget, int bCalledFromShape,
 
 int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
-	int nCasterLevel = GetWarlockCasterLevel(oCaster);
-	
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_FRIGHTFUL_RAY) )
     {
         // Additional Effects: (Cause Fear Effect)
-        if ((GetHitDice(oTarget) <= nCasterLevel) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+        if ((GetHitDice(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR))
             {
                 float fDuration = RoundsToSeconds(10);
 
                 effect eScare = EffectFrightened();
+                effect eSave = EffectSavingThrowDecrease(SAVING_THROW_WILL, 2, SAVING_THROW_TYPE_MIND_SPELLS);
                 effect eMind = EffectVisualEffect( VFX_DUR_SPELL_FEAR );
+                //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);	// handled by VFX_DUR_SPELL_FEAR
+                effect eDamagePenalty = EffectDamageDecrease(2);
+                effect eAttackPenalty = EffectAttackDecrease(2);
                 effect eLink = EffectLinkEffects(eMind, eScare);
+                effect eLink2 = EffectLinkEffects(eSave, eDamagePenalty);
+                eLink2 = EffectLinkEffects(eLink2, eAttackPenalty);
+                eLink2 = EffectLinkEffects(eLink2, eLink);
 
                 // Spell Effects not allowed to stack...
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply linked effects and VFX impact
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
                 return TRUE;
             }
         }

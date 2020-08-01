@@ -39,11 +39,13 @@ void A_Thousand_Cuts(object oPC, int nSpell)
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
 	eSlash = SetEffectSpellId(eSlash, SPELLABILITY_THOUSAND_CUTS );	
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC));		
+	float fDuration = RoundsToSeconds(10);
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlash, oPC, fDuration));		
 }
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
+if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC) == TRUE){
 
 if (GetHasSpellEffect(nSpell,oPC))
 			RemoveSpellEffects(nSpell, oPC, oPC);	
@@ -52,10 +54,8 @@ if (GetHasSpellEffect(nSpell,oPC))
 	effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);
 	eAC = SetEffectSpellId(eAC,nSpell);
 	eAC = SupernaturalEffect(eAC);
-	if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) == TRUE)
-	{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC)); }
-	 else if (GetActionMode(oCreature, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
-	{
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC));
-		}
-	}
+int nMode = ACTION_MODE_COMBAT_EXPERTISE || ACTION_MODE_IMPROVED_COMBAT_EXPERTISE; 
+	if (GetActionMode(oPC, nMode) == TRUE)
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, HoursToSeconds(48)));
+}
+}
