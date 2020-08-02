@@ -26,7 +26,7 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 		eAC = SetEffectSpellId(eAC,nSpellId);
 		eAC = SupernaturalEffect(eAC);
 							
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, HoursToSeconds(48)));
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC, HoursToSeconds(48)));
 	}
 	else
 		SendMessageToPC(oPC, "Dervish only gain an AC bonus when wearing no armor or light armor.");
@@ -40,7 +40,7 @@ void A_Thousand_Cuts(object oPC, int nSpell)
 	eSlash = SupernaturalEffect(eSlash);
 	eSlash = SetEffectSpellId(eSlash, SPELLABILITY_THOUSAND_CUTS );	
 	float fDuration = RoundsToSeconds(10);
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlash, oPC, fDuration));		
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC));		
 }
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
@@ -55,7 +55,9 @@ if (GetHasSpellEffect(nSpell,oPC))
 	eAC = SetEffectSpellId(eAC,nSpell);
 	eAC = SupernaturalEffect(eAC);
 int nMode = ACTION_MODE_COMBAT_EXPERTISE || ACTION_MODE_IMPROVED_COMBAT_EXPERTISE; 
-	if (GetActionMode(oPC, nMode) == TRUE)
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, HoursToSeconds(48)));
+	if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) == TRUE)
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC));
+	else if 	(GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC));
 }
 }
