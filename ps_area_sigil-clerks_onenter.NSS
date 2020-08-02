@@ -112,18 +112,6 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", lSpawnpoint);  
   }
-  
-  //CAMPAIGN
-  //Harmonium guards
-  if(GetObjectByTag("ps_cw_campaign_harmonium") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("wp_cw_campaign_harmonium1");
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", GetLocation(oWP), FALSE, "ps_cw_campaign_harmonium"); 
-   oWP = GetWaypointByTag("wp_cw_campaign_harmonium2");
-   oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", GetLocation(oWP), FALSE, "ps_cw_campaign_harmonium");
-   oWP = GetWaypointByTag("wp_cw_campaign_harmonium3");
-   oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", GetLocation(oWP), FALSE, "ps_cw_campaign_harmonium"); 
-  }
 
   if(GetObjectByTag("ps_npc_clerkspeddler") == OBJECT_INVALID)
   {

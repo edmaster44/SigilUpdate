@@ -415,7 +415,7 @@ void CreateCampaignItemOnTarget(object oTarget) {
 void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 
 	string sResref = "";
-	int nRandom = Random(15)+1;
+	int nRandom = Random(14)+1;
 	switch (nRandom) {
 		case 1: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "rune", TRUE); break; //runes
 		case 2: case 13: case 14: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "", TRUE); break; //Default Junk
@@ -429,7 +429,7 @@ void CreateJunkOnTarget(object oTarget, int nTreasureType) {
 		case 10: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "trapkit", TRUE); break; //trap kits
 		case 11: sResref = PickItemFromDatabase("treasure_junk", nTreasureType, "ammo", TRUE); break; //ammunition
 		case 12: CreateTrinketOnTarget(oTarget, nTreasureType); return; //random trinket
-		case 15: CreateCampaignItemOnTarget(oTarget); return; //random MIRROR CAMPAIGN item; remove or change later if it becomes irrelevant
+		//case 15: CreateCampaignItemOnTarget(oTarget); return; //random TWIN CAGES CAMPAIGN item; remove or change later if it becomes irrelevant
 	}
 	int nStackSize = 1;
 	if (nRandom == 11) { //Ammunition, generate stack
