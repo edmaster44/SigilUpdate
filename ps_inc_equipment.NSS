@@ -141,31 +141,31 @@ return; }
     int nDamage = IP_CONST_DAMAGEBONUS_1d6;
         if (nLevel >= 5 ) 
         {   nDamage = IP_CONST_DAMAGEBONUS_3d6; }
-    int nItemVisual;
+   // int nItemVisual;
     int DamageType;     
-    itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
+    //itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
     if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC,TRUE))
     {   
         DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
-        nItemVisual = ITEM_VISUAL_ELECTRICAL;
+       // nItemVisual = ITEM_VISUAL_ELECTRICAL;
     }
         else
     if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC,TRUE))
     {   
         DamageType = IP_CONST_DAMAGETYPE_ACID;
-        nItemVisual = ITEM_VISUAL_ACID;             
+       // nItemVisual = ITEM_VISUAL_ACID;             
     }
         else
     if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC,TRUE))
     {
         DamageType = IP_CONST_DAMAGETYPE_FIRE;
-        nItemVisual = ITEM_VISUAL_FIRE;         
+      //  nItemVisual = ITEM_VISUAL_FIRE;         
     }
         else
     if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC,TRUE))
     {
         DamageType = IP_CONST_DAMAGETYPE_COLD;
-        nItemVisual = ITEM_VISUAL_COLD; 
+      //  nItemVisual = ITEM_VISUAL_COLD; 
     }
     ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
@@ -177,7 +177,7 @@ return; }
         }
     SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
     IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-    IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+    //IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
     SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
     SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 }
@@ -470,23 +470,6 @@ void UnearthlyGrace(object oPC, object oCHEST)
     ApplyEquipmentEffect(oPC, eFX);
 }
 
-void DervishArmor(object oPC, object oCHEST)
-{
-if (GetHasFeat(FEAT_DERVISH_AC_BONUS, oPC, TRUE) == FALSE) return;
-if (GetArmorRank(oCHEST) > ARMOR_RANK_LIGHT) return;
-	int nAmount = 1;			
-		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
-		if (nLevel >= 9 ) 
-        {   nAmount = 2; }
-	
-		
-		effect eFX = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
-		 ApplyEquipmentEffect(oPC, eFX);
-
-
-}
-
-
 //Fixes the Spell Resistance bug from items.
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value")
 {
@@ -724,7 +707,6 @@ void EquipmentEffects(object oPC)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
-	DervishArmor(oPC,oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
