@@ -53,9 +53,9 @@ if (GetHasSpellEffect(nSpell,oPC))
 	eAC = SetEffectSpellId(eAC,nSpell);
 	eAC = SupernaturalEffect(eAC);
 	if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) == TRUE)
-	{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC)); }
-	 else if (GetActionMode(oCreature, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
+	{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC)); }
+	 else if (GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
 	{
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC));
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC));
 		}
 	}

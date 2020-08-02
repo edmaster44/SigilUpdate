@@ -131,6 +131,17 @@ void PS_Immunity_Giant(object oPC, int nSpell)
 		nELEMENT = DAMAGE_TYPE_COLD;
 		sTXT = "Frost Giant - 50% Cold Immunity applied.";
 	}
+		if (iSubrace == RACIAL_SUBTYPE_FIRE_GIANT_NEW)
+	{
+		nELEMENT = DAMAGE_TYPE_FIRE;
+		sTXT = "Fire Giant - 50% Fire Immunity applied.";
+	}
+	else if (iSubrace == RACIAL_SUBTYPE_FROST_GIANT_NEW	)
+	{
+		nELEMENT = DAMAGE_TYPE_COLD;
+		sTXT = "Frost Giant - 50% Cold Immunity applied.";
+	}
+	
 	effect eFX = EffectDamageImmunityIncrease(nELEMENT, 50);
 	//Determine class level of prestige classes which use this feat
 	if (GetLevelByClass(CLASS_TYPE_FIRE_GIANT_PRC, oPC) >= 4)

@@ -469,6 +469,23 @@ void UnearthlyGrace(object oPC, object oCHEST)
     eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
     ApplyEquipmentEffect(oPC, eFX);
 }
+//Dervish AC bonus
+void DervishArmor(object oPC, object oCHEST)
+{
+if (GetHasFeat(FEAT_DERVISH_AC_BONUS, oPC, TRUE) == FALSE) return;
+if (GetArmorRank(oCHEST) > ARMOR_RANK_LIGHT) return;
+	int nAmount = 1;			
+		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
+		if (nLevel >= 9 ) 
+        {   nAmount = 2; }
+
+
+		effect eFX = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
+		 ApplyEquipmentEffect(oPC, eFX);
+
+
+}
+
 
 //Fixes the Spell Resistance bug from items.
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value")
@@ -707,6 +724,7 @@ void EquipmentEffects(object oPC)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
+	DervishArmor(oPC,oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
