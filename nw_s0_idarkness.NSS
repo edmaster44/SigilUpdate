@@ -3,8 +3,7 @@
 //:: NW_S0_IDarkness.nss
 //:://////////////////////////////////////////////
 /*
-    Creates a globe of darkness around those in the area
-    of effect.
+    Summons a series of creatures to help the caster fight enemies
 */
 //:://////////////////////////////////////////////
 //:: Created By: Jesse Reynolds (JLR - OEI)
@@ -27,6 +26,9 @@ void SpawnInSummon(object oPC, string sResRef);
 //Defines the summon appearance (randomizes animal type + gives vfx)
 void SetSummonAppearance(object oPC, object oSummon);
 
+//Remember how many creatures we have around! And renumber if necessary
+void CheckNumberOfBeasts(object oPC);
+
 void main() {
 
 	/* 
@@ -45,12 +47,23 @@ void main() {
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	
 	int nCreatures = 1+(nCasterLevel/5);
-	int nHD = 1+(nCasterLevel/3);
+	int nHD = 1+(nCasterLevel/2);
 	
 	SendMessageToPC(oCaster, "Summoning "+IntToString(nCreatures)+" creatures of "+IntToString(nHD)+" HD");
 	
 	string sCreature = GetCreatureResref(oCaster, nHD);
 	SendMessageToPC(oCaster, "Chosen creature: "+sCreature);
+
+	//Sanity checker
+	CheckNumberOfBeasts(oCaster);
+
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	if (nNumberCalled >= nCreatures) {
+		SendMessageToPC(oPC, "You have already called "+IntToString(nNumberCalled)+" beasts. You will recieve no more aid at this time.");
+		return;
+	} else {
+		nCreatures -= nNumberCalled;
+	}
 	
 	float fDelay = 0.0f;
 	int nSpawned = 0;
@@ -60,6 +73,36 @@ void main() {
 		fDelay += 0.5f;
 	}
 	
+}
+
+void CheckNumberOfBeasts(object oPC) {
+	
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	int currentNumber = 0;
+
+	int n;
+	for(n = 0; n <= nNumberCalled; n++) {
+		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
+			currentNumber++;
+		}
+	}
+
+	SetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED", currentNumber);
+
+	int newCount = 0;
+	if (currentNumber != nNumberCalled) {
+		for(n = 0; n <= nNumberCalled; n++) {
+			object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+			if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
+				SetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(newCount), oSummon);
+				newCount++;
+			} else {
+				DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+			}
+		}
+	}
+
 }
 
 void SpawnInSummon(object oPC, string sResRef) {
@@ -74,6 +117,10 @@ void SpawnInSummon(object oPC, string sResRef) {
 	SetLocalObject(oCreature, abilityCaster, oPC);
 	SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
 	SetSummonAppearance(oPC, oCreature);
+
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	SetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(nNumberCalled), oCreature);
+	SetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED", nNumberCalled+1);
 }
 
 void SetSummonAppearance(object oPC, object oSummon) {
@@ -128,7 +175,7 @@ string GetCreatureResref(object oPC, int nHD) {
 		nHD = 2;
 	else if (nHD <= 8)
 		nHD = 3;
-	else if (nHD <= 15)
+	else if (nHD <= 11)
 		nHD = 4;
 	else
 		nHD = 5;

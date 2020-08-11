@@ -12,7 +12,7 @@
 //:: VFX Pass By: Preston W, On: June 20, 2001
 //:: AFW-OEI 11/20/2006: Change from Darkvision -> Ultravision.  TTP #20413
 //:: JLR - OEI 08/24/05 -- Metamagic changes
-//:: Mimi Fearthegn 7/26/20 - Redoing this spell entirely
+//:: Mimi Fearthegn 7/26/20 - Redoing this spell entirely, now Eldritch Shield
 
 #include "nwn2_inc_spells"
 #include "nw_i0_spells"
