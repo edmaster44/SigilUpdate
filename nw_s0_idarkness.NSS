@@ -24,6 +24,9 @@ string GetCreatureResref(object oPC, int nHD);
 //Spawns in the actual creature and assigns variables
 void SpawnInSummon(object oPC, string sResRef);
 
+//Defines the summon appearance (randomizes animal type + gives vfx)
+void SetSummonAppearance(object oPC, object oSummon);
+
 void main() {
 
 	/* 
@@ -70,11 +73,54 @@ void SpawnInSummon(object oPC, string sResRef) {
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, lTarget);
 	SetLocalObject(oCreature, abilityCaster, oPC);
 	SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
+	SetSummonAppearance(oPC, oCreature);
+}
+
+void SetSummonAppearance(object oPC, object oSummon) {
+	
+	effect eVFX;
+	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL || GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+		eVFX = EffectNWN2SpecialEffectFile("fx_animus");
+	else
+		eVFX = EffectNWN2SpecialEffectFile("fx_telthor_s");
+		
+	int nAppearance = APPEARANCE_TYPE_BADGER;
+	
+	if (GetHitDice(oSummon) < 3) {
+		//small critter set
+		int nRand = Random(8)+1;
+		switch(nRand) {
+			case 1: nAppearance = APPEARANCE_TYPE_BADGER;  break;
+			case 2: nAppearance = APPEARANCE_TYPE_BAT;  break;
+			case 3: nAppearance = APPEARANCE_TYPE_DEER;  break;
+			case 4: nAppearance = APPEARANCE_TYPE_DOG;  break;
+			case 5: nAppearance = APPEARANCE_TYPE_RAT_DIRE;  break;
+			case 6: nAppearance = 2307;  break;
+			case 7: nAppearance = 1502;  break;
+			case 8: nAppearance = 1504;  break;
+		}
+	} else {
+		//large critter set
+		int nRand = Random(10)+1;
+		switch(nRand) {
+			case 1: nAppearance = APPEARANCE_TYPE_BEAR_BROWN;  break;
+			case 2: nAppearance = APPEARANCE_TYPE_BOAR;  break;
+			case 3: nAppearance = APPEARANCE_TYPE_BEETLE_STAG;  break;
+			case 4: nAppearance = APPEARANCE_TYPE_CAT_PANTHER;  break;
+			case 5: nAppearance = APPEARANCE_TYPE_DOG_WOLF;  break;
+			case 6: nAppearance = 2322;  break;
+			case 7: nAppearance = 2324;  break;
+			case 8: nAppearance = 2325;  break;
+			case 9: nAppearance = 2326;  break;
+			case 10: nAppearance = 2327;  break;
+		}
+	}
+		
+	SetCreatureAppearanceType(oSummon, nAppearance);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, oSummon);
 }
 
 string GetCreatureResref(object oPC, int nHD) {
-
-	string sPlane = GetAreaValue(oPC);
 	
 	if (nHD <= 2)
 		nHD = 1;
@@ -82,29 +128,14 @@ string GetCreatureResref(object oPC, int nHD) {
 		nHD = 2;
 	else if (nHD <= 8)
 		nHD = 3;
-	else
+	else if (nHD <= 15)
 		nHD = 4;
+	else
+		nHD = 5;
 	
-	string sRealHD = IntToString(nHD);
-	
-	if (sPlane == ELEMENTAL_AIR)
-		return "ps_summon_cob_air"+sRealHD;
-	else if (sPlane == ELEMENTAL_FIRE || sPlane == ELEMENTAL_MAGMA)
-		return "ps_summon_cob_fire"+sRealHD;
-	else if (sPlane == ELEMENTAL_WATER || sPlane == ELEMENTAL_ICE)
-		return "ps_summon_cob_water"+sRealHD;
-	else if (sPlane == ELEMENTAL_EARTH || sPlane == ELEMENTAL_OOZE)
-		return "ps_summon_cob_earth"+sRealHD;
-		
-	else if (GetPlanarAlignmentLawChaos(sPlane) == STRONG_CHAOS || GetPlanarAlignmentGoodEvil(sPlane) == MILD_CHAOS)
-		return "ps_summon_cob_chaos"+sRealHD;
-	else if (GetPlanarAlignmentLawChaos(sPlane) == STRONG_LAW || GetPlanarAlignmentGoodEvil(sPlane) == MILD_LAW)
-		return "ps_summon_cob_law"+sRealHD;
-	else if (GetPlanarAlignmentGoodEvil(sPlane) == STRONG_EVIL || GetPlanarAlignmentGoodEvil(sPlane) == MILD_EVIL)
-		return "ps_summon_cob_evil"+sRealHD;
-	else if (GetPlanarAlignmentGoodEvil(sPlane) == STRONG_GOOD || GetPlanarAlignmentGoodEvil(sPlane) == MILD_GOOD)
-		return "ps_summon_cob_good"+sRealHD;
-
-	return "ps_summon_cob_fey"+sRealHD;
+	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL || GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+		return "ps_summon_warlockfiend_"+IntToString(nHD);
+	else
+		return "ps_summon_warlockfey_"+IntToString(nHD);
 
 }
