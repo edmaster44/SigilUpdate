@@ -440,7 +440,9 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
     // FIX: moved to essence code, to prevent losing effects if target saves from new attack
     //RemoveEffectsFromSpell(oTarget, GetSpellId());
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) == TRUE)
+	//Allows utterdark to heal undead, but only for half damage
+    if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) == TRUE ||
+	(nDmgType == DAMAGE_TYPE_NEGATIVE && GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD))
     {
         SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 
@@ -457,13 +459,16 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 			// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 			nDmg += PS_AddSneakDmgToSpell(oCaster, oTarget, nDmgType);
 				
-			
             effect eDam = EffectDamage(nDmg, nDmgType);
             effect eVis = EffectVisualEffect( nHitVFX );
             effect eDamageHellfire;
 			if (nDmgType == DAMAGE_TYPE_NEGATIVE && GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 			{
-				eDam = EffectHeal(nDmg);
+				eDam = EffectHeal(nDmg/2);
+				
+			} else if (nDmgType == DAMAGE_TYPE_FIRE) { //Making Brimstone half fire/half magic
+				eDam = EffectDamage(nDmg/2, nDmgType);
+				eDam = EffectLinkEffects(eDam, EffectDamage(nDmg/2, DAMAGE_TYPE_MAGICAL));
 			}
 			
 			if (IsHellfireBlastActive())

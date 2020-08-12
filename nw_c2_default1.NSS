@@ -27,7 +27,7 @@ void main()
 		if (GetArea(playerTag) != GetArea(OBJECT_SELF)) {
 			ClearAllActions();
 			AssignCommand(OBJECT_SELF, ActionJumpToObject(playerTag));
-		} else if (GetDistanceToObject(playerTag) > 30.0f) {
+		} else if (GetDistanceToObject(playerTag) > 15.0f) {
 			ClearAllActions();
 			ActionForceFollowObject(playerTag);
 		}

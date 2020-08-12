@@ -43,7 +43,10 @@ void main() {
     object oTarget = OBJECT_SELF;
 	int nCasterLevel = GetWarlockCasterLevel(OBJECT_SELF);
     float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
-	int nSkillBuff = (nCasterLevel/4)+3;
+	int nSkillBuff = (nCasterLevel/4);
+	if (nSkillBuff < 1)
+		nSkillBuff = 1;
+	nSkillBuff = nSkillBuff+3;
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));

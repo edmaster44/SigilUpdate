@@ -57,9 +57,9 @@ void main() {
 	//Sanity checker
 	CheckNumberOfBeasts(oCaster);
 
-	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_ANIMALS_CALLED");
 	if (nNumberCalled >= nCreatures) {
-		SendMessageToPC(oPC, "You have already called "+IntToString(nNumberCalled)+" beasts. You will recieve no more aid at this time.");
+		SendMessageToPC(oCaster, "You have already called "+IntToString(nNumberCalled)+" beasts. You will recieve no more aid at this time.");
 		return;
 	} else {
 		nCreatures -= nNumberCalled;
