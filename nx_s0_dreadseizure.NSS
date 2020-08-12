@@ -24,6 +24,7 @@
 rapsam2003 03/16/2018: Remove save against NPCs
 	and Hexer feats increase the miss chance 
 	of the target.
+MimiFearthegn 8/11/2020: fixed some bugs with how cursemaster was handled
 */
 
 #include "nw_i0_spells"
@@ -86,10 +87,9 @@ void main()
 	//Signal spell cast at event.
 	SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 	
-	// Spell resist check.
-	if (!DoWarlockMyResistSpell(oCaster, oTarget) || GetHasFeat(2907, oCaster)) {
-		//Get the spell target location as opposed to the spell target.
-		location locTarget = GetSpellTargetLocation();
+	//Cursemaster feat makes this an AoE
+	if (GetHasFeat(2907, oCaster)) {
+		location locTarget = GetLocation(oTarget);
 		oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
 		    
 		while (GetIsObjectValid(oTarget))
@@ -100,14 +100,18 @@ void main()
 			else // No save for monsters.
 		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			
-			// If no Cursemaster feat, set oTarget to 
-			// OBJECT_TYPE_INVALID and cause exit of while loop.
-			if (!GetHasFeat(2907, oCaster))
-				break;
-			else //Select the next target within the spell shape.
-		    	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
 		}
-		    
-		SendMessageToPC(oCaster, "The curse causes the affected enemies to have trouble hitting you.");
+		
+	} else {
+	
+		if (!DoWarlockMyResistSpell(oCaster, oTarget)) {
+			// Fortitude Save for PCs.
+		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
+		    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			else // No save for monsters.
+		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+		}
+		
 	}
 }

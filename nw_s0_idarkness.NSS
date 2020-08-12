@@ -14,7 +14,6 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook" 
-#include "ps_inc_planarlocations"
 #include "ps_inc_onhit"
 
 //picks out the right creature resref for area / hd
@@ -125,11 +124,15 @@ void SpawnInSummon(object oPC, string sResRef) {
 
 void SetSummonAppearance(object oPC, object oSummon) {
 	
+	string sTemplate = "Fiendish ";
 	effect eVFX;
-	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL || GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL || GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL) {		
 		eVFX = EffectNWN2SpecialEffectFile("fx_animus");
-	else
+		sTemplate = "Fiendish ";
+	} else {
 		eVFX = EffectNWN2SpecialEffectFile("fx_telthor_s");
+		sTemplate = "Fey ";
+	}
 		
 	int nAppearance = APPEARANCE_TYPE_BADGER;
 	
@@ -137,29 +140,29 @@ void SetSummonAppearance(object oPC, object oSummon) {
 		//small critter set
 		int nRand = Random(8)+1;
 		switch(nRand) {
-			case 1: nAppearance = APPEARANCE_TYPE_BADGER;  break;
-			case 2: nAppearance = APPEARANCE_TYPE_BAT;  break;
-			case 3: nAppearance = APPEARANCE_TYPE_DEER;  break;
-			case 4: nAppearance = APPEARANCE_TYPE_DOG;  break;
-			case 5: nAppearance = APPEARANCE_TYPE_RAT_DIRE;  break;
-			case 6: nAppearance = 2307;  break;
-			case 7: nAppearance = 1502;  break;
-			case 8: nAppearance = 1504;  break;
+			case 1: nAppearance = APPEARANCE_TYPE_BADGER; SetFirstName(oSummon, sTemplate+"Badger"); break;
+			case 2: nAppearance = APPEARANCE_TYPE_BAT; SetFirstName(oSummon, sTemplate+"Bat");  break;
+			case 3: nAppearance = APPEARANCE_TYPE_DEER; SetFirstName(oSummon, sTemplate+"Deer");  break;
+			case 4: nAppearance = APPEARANCE_TYPE_DOG; SetFirstName(oSummon, sTemplate+"Hound");  break;
+			case 5: nAppearance = APPEARANCE_TYPE_RAT_DIRE; SetFirstName(oSummon, sTemplate+"Rat");  break;
+			case 6: nAppearance = 2307; SetFirstName(oSummon, sTemplate+"Badger");  break;
+			case 7: nAppearance = 1502; SetFirstName(oSummon, sTemplate+"Snake");  break;
+			case 8: nAppearance = 1504; SetFirstName(oSummon, sTemplate+"Stirge");  break;
 		}
 	} else {
 		//large critter set
 		int nRand = Random(10)+1;
 		switch(nRand) {
-			case 1: nAppearance = APPEARANCE_TYPE_BEAR_BROWN;  break;
-			case 2: nAppearance = APPEARANCE_TYPE_BOAR;  break;
-			case 3: nAppearance = APPEARANCE_TYPE_BEETLE_STAG;  break;
-			case 4: nAppearance = APPEARANCE_TYPE_CAT_PANTHER;  break;
-			case 5: nAppearance = APPEARANCE_TYPE_DOG_WOLF;  break;
-			case 6: nAppearance = 2322;  break;
-			case 7: nAppearance = 2324;  break;
-			case 8: nAppearance = 2325;  break;
-			case 9: nAppearance = 2326;  break;
-			case 10: nAppearance = 2327;  break;
+			case 1: nAppearance = APPEARANCE_TYPE_BEAR_BROWN; SetFirstName(oSummon, sTemplate+"Bear"); break;
+			case 2: nAppearance = APPEARANCE_TYPE_BOAR; SetFirstName(oSummon, sTemplate+"Boar"); break;
+			case 3: nAppearance = APPEARANCE_TYPE_BEETLE_STAG; SetFirstName(oSummon, sTemplate+"Beetle"); break;
+			case 4: nAppearance = APPEARANCE_TYPE_CAT_PANTHER; SetFirstName(oSummon, sTemplate+"Panther"); break;
+			case 5: nAppearance = APPEARANCE_TYPE_DOG_WOLF; SetFirstName(oSummon, sTemplate+"Wolf"); break;
+			case 6: nAppearance = 2322; SetFirstName(oSummon, sTemplate+"Dinosaur"); break;
+			case 7: nAppearance = 2324; SetFirstName(oSummon, sTemplate+"Tiger"); break;
+			case 8: nAppearance = 2325; SetFirstName(oSummon, sTemplate+"Lion"); break;
+			case 9: nAppearance = 2326; SetFirstName(oSummon, sTemplate+"Lion"); break;
+			case 10: nAppearance = 2327; SetFirstName(oSummon, sTemplate+"Manticore"); break;
 		}
 	}
 		

@@ -284,17 +284,6 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
 		int nBonusDice = 0; // default
         nDmg = d6(nDmgDice + BonusDamageDice);
 		
-		// JWR-OEI 06/18/2008: Hellfire Warlock can modify this into "Hellfire Blast"
-		//Now will be calculating damage separately
-		//SpeakString("Checking to add Hellfire Damage:");
-		/*if (IsHellfireBlastActive(oCaster))
-		{ 
-			nBonusDice = GetHellfireBlastDiceBonus();
-			PrintHellfireBonusMsg(nBonusDice);			
-			nDmg=d6(nDmgDice+nBonusDice);
-		}
-		*/
-		
 		//Critical hit
 		if (nTouch == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 		{
@@ -319,9 +308,17 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
         }
         
         // Some Invocations allow chance to halve the damage
-        if ( nAllowReflexSave )
-        {
-            nDmg = GetReflexAdjustedDamage(nDmg, oTarget, GetSpellSaveDC());
+        if ( nAllowReflexSave ) {
+		
+			int nMetaMagic = GetMetaMagicFeat();
+			if ( nMetaMagic & METAMAGIC_INVOC_HELLRIME_BLAST ) {
+				SendMessageToPC(oCaster, "Hellrime turned reflex save to fortitude");
+				if (FortitudeSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oCaster)) {
+					nDmg = nDmg/2;
+				}
+			} else {
+            	nDmg = GetReflexAdjustedDamage(nDmg, oTarget, GetSpellSaveDC());
+			}
         }
     }
 
@@ -367,46 +364,12 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
     else if ( nMetaMagic & METAMAGIC_INVOC_BINDING_BLAST )     { nHitVFX = VFX_INVOCATION_BINDING_HIT; }
 
     effect eBeam = EffectBeam(nVFX, oCaster, BODY_NODE_HAND);
-
-	// JWR-OEI 06/18/2008: Hellfire Warlock can modify this into "Hellfire Blast"
-	//	SpeakString("Checking to do Con Damage");
-	// if (IsHellfireBlastActive() && 
-	// (GetObjectType(oTarget)==OBJECT_TYPE_CREATURE && 
-	// oTarget != OBJECT_SELF && 
-	// GetIsReactionTypeHostile(oTarget)))
-	// {
-		//effect eConst = EffectAbilityDecrease(ABILITY_CONSTITUTION, 1);
-		//eConst = SetEffectSpellId(eConst, -1); // set to invalid spell ID for stacking
 		
-		//_________________________________________________________________
-		// pelhikano fix: apply a little later for death ward removal to work
-		//DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConst, oCaster));
-		//_________________________________________________________________
+	if (!bCalledFromShape) // Only the unmodified blast will deal hellfire damage here, because the shapes will each call the damage on their own.
+	{
+		DoHellfireDamage();
+	}
 		
-		// replacement damage effect instead of CON damage
-		// This part moved to DoHellfireDamage() - Electrohydra
-		// int iDmg = GetHitDice(oCaster) / 2; // 0.5HP / level is equal to 1 point of CON damage.
-		// effect eDmg = EffectDamage(iDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE); // hopefully this will bypass resistances.
-		// DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oCaster));
-		
-		if (!bCalledFromShape) // Only the unmodified blast will deal hellfire damage here, because the shapes will each call the damage on their own.
-		{
-			DoHellfireDamage();
-		}
-		
-		/*if (!bCalledFromShape)
-		{
-			// we're not called from a shape so this is just a regular eldritch blast
-			nHellfireConDmg = 1;
-			HellfireShieldFeedbackMsg(nHellfireConDmg, STRREF_HELLFIRE_BLAST_NAME, oCaster);
-		}
-		else
-		{
-			// we are called from a shape, so we're gonna display output later.
-			// SpeakString("Incrementing Con Counter ("+IntToString(nHellfireConDmg)+") Name: "+GetName(oTarget));
-			nHellfireConDmg++;
-		}*/
-	// }
     if(bDoTouchTest)
     {
         // AFW-OEI 02/20/2007: Eldritch Master adds +2 to the attack roll.
@@ -745,7 +708,7 @@ int DoEssenceBrimstoneBlast(object oCaster, object oTarget, int bCalledFromShape
 int DoEssenceHellrimeBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
     // First, do Base Effects:
-    if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_COLD, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_HELLRIME_RAY) )
+    if (DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_COLD, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_HELLRIME_RAY) )
     {
         // Additional Effects: (Dex Penalty)
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)

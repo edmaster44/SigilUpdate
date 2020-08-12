@@ -24,14 +24,11 @@
 
 */
 //: PKM-OEI 07.08.06: VFX pass, changed abjuration hit to eldritch hit
+//: MimiFearthegn 8/11/2020 - upped the CL cap to 20
+
 #include "x0_i0_spells"
 #include "x2_inc_spellhook"
 #include "nwn2_inc_spells"
-
-
-
-
-
 
 void main()
 {
@@ -63,11 +60,11 @@ void main()
 	int 	  nSpellID     = GetSpellId();
 	
     //--------------------------------------------------------------------------
-    // Dispel Magic is capped at caster level 10
+    // Voracious Dispelling is capped at caster level 20
     //--------------------------------------------------------------------------
-    if(nCasterLevel > 10)
+    if(nCasterLevel > 20)
     {
-        nCasterLevel = 10;
+        nCasterLevel = 20;
     }
 
     if ( GetIsObjectValid(oTarget) )

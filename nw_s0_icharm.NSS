@@ -6,19 +6,7 @@
 //:: Created By: Brock Heinz
 //:: Created On: 08/12/05
 //::////////////////////////////////////////////////
-/*
-        Charm
-        Complete Arcane, pg. 132
-        Spell Level:	4
-        Class: 		Misc
-
-        You can beguile a creature within 60 feet. If the target fails a Will 
-        save theysuffer the effects of the Charm Monster spell (4th level wizard) 
-        except only one target can be affected at a given time.
-
-        [Rules Note] In the rules this is a language dependent ability, but 
-        there is no concept of languages in NWN2.
-*/
+//:: Mimi Fearthegn 8/11/20 - Turned this into Hungry Darkness
 
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
@@ -31,67 +19,29 @@ void main()
 	`// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
-
-
-
-    //Declare major variables
-    object oTarget  = GetSpellTargetObject();
-    int nRacial     = GetRacialType(oTarget);
-    effect eVis;     //= EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
-    effect eCharm   = GetScaledEffect( EffectCharmed(), oTarget);
-    //effect eMind  = EffectVisualEffect(VFX_DUR_MIND_AFFECTING_NEGATIVE);	// NWN1 VFX
-    //effect eDur     = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);	// NWN1 VFX
 	
-	// The eVis VFX will depend on the racial type of oTarget
-	if ( nRacial == RACIAL_TYPE_DWARF ||
-		 nRacial == RACIAL_TYPE_ELF ||
-		 nRacial == RACIAL_TYPE_GNOME ||
-		 nRacial == RACIAL_TYPE_HALFELF ||
-		 nRacial == RACIAL_TYPE_HALFLING ||
-		 nRacial == RACIAL_TYPE_HALFORC ||
-		 nRacial == RACIAL_TYPE_HUMAN ||
-		 nRacial == RACIAL_TYPE_HUMANOID_GOBLINOID ||
-		 nRacial == RACIAL_TYPE_HUMANOID_MONSTROUS ||
-		 nRacial == RACIAL_TYPE_HUMANOID_ORC ||
-		 nRacial == RACIAL_TYPE_HUMANOID_REPTILIAN )
-	{
-		eVis = EffectVisualEffect( VFX_DUR_SPELL_CHARM_PERSON );
+    //Declare major variables
+	object oCaster = OBJECT_SELF;
+	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	float fDur = RoundsToSeconds(nCasterLevel);
+	
+	if (GetLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE") > 0) {
+		SendMessageToPC(oCaster, "You have cast Hungry Darkness within the last 60 seconds. Please wait before casting again.");
+		return;
 	}
-	else eVis = EffectVisualEffect( VFX_DUR_SPELL_CHARM_MONSTER );
-		 
-		 
-
-    //Link effects
-    effect eLink = EffectLinkEffects(eVis, eCharm);
-    //eLink = EffectLinkEffects(eLink, eDur);	 // NWN1 VFX
-
-    int nMetaMagic      = GetMetaMagicFeat();
-    int nCasterLevel    = GetCasterLevel(OBJECT_SELF);
-    int nDuration       = 3 + nCasterLevel/2;
-    nDuration = GetScaledDuration(nDuration, oTarget);
-
-
-    //Metamagic extend check
-    if (nMetaMagic == METAMAGIC_EXTEND)
-    {
-        nDuration = nDuration * 2;
-    }
-
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{
-        //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CHARM_MONSTER, FALSE));
-        // Make SR Check
-        if (!MyResistSpell(OBJECT_SELF, oTarget))
-    	{
-            // Make Will save vs Mind-Affecting
-            if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
-            {
-                //Apply impact and linked effect
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget); 	// NWN1 VFX
-            }
-        }
-    }
+	
+	location lLoc = GetSpellTargetLocation();
+    effect eAOE = EffectAreaOfEffect(96); //Hungry Darkness VFX + details, swap out for better darkness vfx later
+	
+    object oTarget = GetSpellTargetObject();
+	if (GetIsObjectValid(oTarget))
+		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
+	
+    //Create an instance of the AOE Object using the Apply Effect function
+    ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lLoc, fDur);
+	
+	//Make sure we only have one hungry darkness active at a time
+	SetLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE", 1);
+	DelayCommand(60.0f, DeleteLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE"));
 
 }
