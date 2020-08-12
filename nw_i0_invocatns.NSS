@@ -432,6 +432,19 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 			} else if (nDmgType == DAMAGE_TYPE_FIRE) { //Making Brimstone half fire/half magic
 				eDam = EffectDamage(nDmg/2, nDmgType);
 				eDam = EffectLinkEffects(eDam, EffectDamage(nDmg/2, DAMAGE_TYPE_MAGICAL));
+				
+				//If we do over 1/5th of max hit points in damage, then fear effect! (will save allowed)
+				//This is similiar to the already existing burn damage system, but should take place sliiightly faster
+				//And includes the magic damage total in the calculation
+				if (nDmg > (GetMaxHitPoints(oTarget)/5)) {
+					if (!WillSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR, oCaster)) {
+						effect eFear = EffectFrightened();
+						int nDur = (GetWarlockCasterLevel(oCaster)/5);
+						if (nDur <= 0) nDur = 1;
+						float fDur = RoundsToSeconds(nDur);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget);
+					}
+				}
 			}
 			
 			if (IsHellfireBlastActive())

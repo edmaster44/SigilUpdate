@@ -51,7 +51,7 @@ void main()
 	object 	  oCaster	   = OBJECT_SELF;
     object    oTarget      = GetSpellTargetObject();
     location  lLocal       = GetSpellTargetLocation();
-    int       nCasterLevel = GetCasterLevel(oCaster);
+    int       nCasterLevel = GetWarlockCasterLevel(oCaster);
     //effect    eVis         = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);// Changing this to eldritch hit to remain 
 																		  //consistant with the other VFX being used here
 	effect    eVis         = EffectVisualEffect(VFX_INVOCATION_ELDRITCH_HIT);

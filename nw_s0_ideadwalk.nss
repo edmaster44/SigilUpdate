@@ -40,8 +40,8 @@ void main()
 	//counts Spellcaster levels and Palemaster levels
 
 	int iMetaMagic = GetMetaMagicFeat();
-	int iCasterlevel = PS_GetCasterLevel(OBJECT_SELF);
-    int iDuration = PS_GetCasterLevel(OBJECT_SELF);
+	int iCasterlevel = GetWarlockCasterLevel(OBJECT_SELF);
+    int iDuration = GetWarlockCasterLevel(OBJECT_SELF);
 	
 	// Duration 	
 	if (iMetaMagic == METAMAGIC_EXTEND)
