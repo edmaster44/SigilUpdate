@@ -32,7 +32,9 @@ void main()
 			ActionForceFollowObject(playerTag);
 		}
 		return;
-	}	
+	} else if (GetLocalInt(OBJECT_SELF, "IS_SUMMONED") > 0) {
+		DestroyObject(OBJECT_SELF, 0.2f);
+	}
 
     if (GetSpawnInCondition(NW_FLAG_FAST_BUFF_ENEMY))
     {

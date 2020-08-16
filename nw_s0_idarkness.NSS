@@ -115,6 +115,7 @@ void SpawnInSummon(object oPC, string sResRef) {
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, lTarget);
 	SetLocalObject(oCreature, abilityCaster, oPC);
 	SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
+	SetLocalInt(oCreature, "IS_SUMMONED", 1);
 	SetSummonAppearance(oPC, oCreature);
 
 	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");

@@ -22,7 +22,7 @@ void main() {
 	object oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget)) {	
 	
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) {
+		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster) {
 		
 			effect eDamage = EffectDamage(d6(2));
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);

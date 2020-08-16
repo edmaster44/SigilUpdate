@@ -31,10 +31,11 @@ void main()
 
     int nDuration = GetCasterLevel(OBJECT_SELF);
     object oTarget = GetEnteringObject();
+	object oCaster =  GetAreaOfEffectCreator();
 	
     if(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator())) {
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster) {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 			
 			//If you're an enemy, you get blinded!
