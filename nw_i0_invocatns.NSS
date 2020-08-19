@@ -921,24 +921,17 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
     return FALSE;
 }
 
+//Now Blackbolt
 int DoEssenceHinderingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
     // First, do Base Effects:
-    if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_HINDERING_RAY) )
+    if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_ELECTRICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_HINDERING_RAY) )
     {
-        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))
-        {
-            effect eVis = EffectVisualEffect( VFX_DUR_SPELL_SLOW );
-            effect eSlow = EffectSlow();
-            eSlow = SupernaturalEffect(eSlow);
-			effect eLink = EffectLinkEffects( eSlow, eVis );
-
-            // Spell Effects not allowed to stack...
-            RemoveEffectsFromSpell(oTarget, GetSpellId());
-
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
-            return TRUE;
-        }
+        int nChance = d100();
+		if (nChance < 20) { //20% chance of knockdown
+			effect eFX = EffectKnockdown();
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTarget, 6.0f);
+		}
     }
     return FALSE;
 }

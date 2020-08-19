@@ -34,6 +34,8 @@ void main()
 	//SpawnScriptDebugger();
 
     object oCaster = GetAreaOfEffectCreator();
+	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	int nCHAMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
     object oTarget = GetEnteringObject();
 	int nSaveDC = GetSpellSaveDC();
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
@@ -47,7 +49,7 @@ void main()
     int nHits = d4();
     int nRoll;
     float fDelay;
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE,oCaster))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt( oCaster, SPELL_I_CHILLING_TENTACLES));
@@ -58,16 +60,17 @@ void main()
         for (nCounter = 1; nCounter <= nHits; nCounter++)
         {
             fDelay = GetRandomDelay(1.0, 2.2);
-			//fDelay = IntToFloat( nCounter ) * fDelta;
-            nRoll = 5 + d20();
 			
-            if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
+			int n20 = d20();
+            nRoll = nCasterLevel + nCHAMod + n20; //AB is Caster Level + CHA
+			
+            if( ((nRoll >= nAC) || (n20 == 20)) && (n20 != 1) ) //auto-success on 20, failure on 1
             {
-                nDamage = d6() + 4;
+                nDamage = d6() + nCHAMod; //Add charisma to damage
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 6 + 4;//Damage is at max
+                    nDamage = 6 + nCHAMod;//Damage is at max
                 }
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
@@ -87,7 +90,15 @@ void main()
         // Apply Cold Damage regardless of whether or not any tentacles struck the target.... 
         fDelay  = GetRandomDelay(0.4, 0.8);
         nDamage = d6(2);
-        nDamage = ApplyMetamagicVariableMods( nDamage, 2*6 );
+		if (nCasterLevel > 28) {
+			nDamage = d6(4);
+        	nDamage = ApplyMetamagicVariableMods( nDamage, 4*6 );
+		} else if (nCasterLevel > 21) {
+			nDamage = d6(3);
+        	nDamage = ApplyMetamagicVariableMods( nDamage, 3*6 );
+		} else {
+        	nDamage = ApplyMetamagicVariableMods( nDamage, 2*6 );
+		}
         eDam = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
     }

@@ -37,6 +37,12 @@ void main()
 	    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
+	
+	object oCaster = OBJECT_SELF;
+	if (GetLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE") > 0) {
+		SendMessageToPC(oCaster, "You have cast Chilling Tentacles within the last 60 seconds. Please wait before casting again.");
+		return;
+	}
 
 	//SpawnScriptDebugger();
 
@@ -60,5 +66,9 @@ void main()
 
     //Create an instance of the AOE Object using the Apply Effect function
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
+	
+	//Make sure we only have one chiling tentacles active at a time
+	SetLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE", 1);
+	DelayCommand(60.0f, DeleteLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE"));
 
 }

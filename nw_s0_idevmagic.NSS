@@ -30,6 +30,7 @@
 
 */
 //: RPGplayer1 04/09/2008: Added gaining temporary HP from dispelling AoE
+// MimiFearthegn 8/18/2020 - removed CL cap
 
 #include "x0_i0_spells"
 #include "x2_inc_spellhook"
@@ -65,14 +66,6 @@ void main()
     effect    eImpact; // vfx now handled by spells.2da (ImpactSEF column), but this effect required for
 						// DispelMagic* function
 	int 	  nSpellID     = GetSpellId();
-	
-    //--------------------------------------------------------------------------
-    // Greater Dispel Magic is capped at caster level 15
-    //--------------------------------------------------------------------------
-    if(nCasterLevel > 15)
-    {
-        nCasterLevel = 15;
-    }
 
     if ( GetIsObjectValid(oTarget) )
     {

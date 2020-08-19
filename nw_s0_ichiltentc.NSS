@@ -35,6 +35,8 @@ void main()
 	//SpawnScriptDebugger();
 
     object oCaster = GetAreaOfEffectCreator();
+	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	int nCHAMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
     object oTarget;
 	int nSaveDC =  GetSpellSaveDC();
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
@@ -70,11 +72,11 @@ void main()
 				
                 if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
                 {
-                    nDamage = d6() + 4;
+                    nDamage = d6() + nCHAMod;
                     //Enter Metamagic conditions
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = 6 + 4;//Damage is at max
+                        nDamage = 6 + nCHAMod;//Damage is at max
                     }
                     else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {
