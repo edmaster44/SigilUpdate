@@ -1228,7 +1228,7 @@ int DoShapeEldritchChain()
     return TRUE;
 }
 
-
+//Updating to burst shape
 int DoShapeEldritchCone()
 {
 	//SpawnScriptDebugger();
@@ -1237,27 +1237,27 @@ int DoShapeEldritchCone()
     object oTarget;
     float fMaxDelay = 1.0;
     int nMetaMagic = GetMetaMagicFeat();
-	int nConeVFX = VFX_INVOCATION_ELDRITCH_CONE;	// default cone is Eldritch
+	int nConeVFX = VFX_INVOCATION_ELDRITCH_AOE;	// default cone is Eldritch
 
 	// adjust the VFX according to the essence
-    if ( nMetaMagic & METAMAGIC_INVOC_DRAINING_BLAST )         { nConeVFX = VFX_INVOCATION_DRAINING_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_FRIGHTFUL_BLAST )   { nConeVFX = VFX_INVOCATION_FRIGHTFUL_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BESHADOWED_BLAST )  { nConeVFX = VFX_INVOCATION_BESHADOWED_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BRIMSTONE_BLAST )   { nConeVFX = VFX_INVOCATION_BRIMSTONE_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_HELLRIME_BLAST )    { nConeVFX = VFX_INVOCATION_HELLRIME_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BEWITCHING_BLAST )  { nConeVFX = VFX_INVOCATION_BEWITCHING_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_NOXIOUS_BLAST )     { nConeVFX = VFX_INVOCATION_NOXIOUS_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_VITRIOLIC_BLAST )   { nConeVFX = VFX_INVOCATION_VITRIOLIC_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_UTTERDARK_BLAST )   { nConeVFX = VFX_INVOCATION_UTTERDARK_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_HINDERING_BLAST )   { nConeVFX = VFX_INVOCATION_HINDERING_CONE; }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BINDING_BLAST )     { nConeVFX = VFX_INVOCATION_BINDING_CONE; }
+    if ( nMetaMagic & METAMAGIC_INVOC_DRAINING_BLAST )         { nConeVFX = VFX_INVOCATION_DRAINING_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_FRIGHTFUL_BLAST )   { nConeVFX = VFX_INVOCATION_FRIGHTFUL_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_BESHADOWED_BLAST )  { nConeVFX = VFX_INVOCATION_BESHADOWED_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_BRIMSTONE_BLAST )   { nConeVFX = VFX_INVOCATION_BRIMSTONE_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_HELLRIME_BLAST )    { nConeVFX = VFX_INVOCATION_HELLRIME_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_BEWITCHING_BLAST )  { nConeVFX = VFX_INVOCATION_BEWITCHING_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_NOXIOUS_BLAST )     { nConeVFX = VFX_INVOCATION_NOXIOUS_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_VITRIOLIC_BLAST )   { nConeVFX = VFX_INVOCATION_VITRIOLIC_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_UTTERDARK_BLAST )   { nConeVFX = VFX_INVOCATION_UTTERDARK_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_HINDERING_BLAST )   { nConeVFX = VFX_INVOCATION_HINDERING_DOOM; }
+    else if ( nMetaMagic & METAMAGIC_INVOC_BINDING_BLAST )     { nConeVFX = VFX_INVOCATION_BINDING_DOOM; }
 
 	effect eCone = EffectVisualEffect( nConeVFX );
-	if (IsHellfireBlastActive()) eCone = EffectVisualEffect( VFX_INVOCATION_BRIMSTONE_CONE );
+	if (IsHellfireBlastActive()) eCone = EffectVisualEffect( VFX_INVOCATION_BRIMSTONE_DOOM );
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 	
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
-    oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+    oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 7.0, GetLocation(OBJECT_SELF), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while(GetIsObjectValid(oTarget))
     {
@@ -1268,7 +1268,7 @@ int DoShapeEldritchCone()
         }
 
         //Select the next target within the spell shape.
-        oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+        oTarget = GetNextObjectInShape(SHAPE_SPHERE, 7.0, GetLocation(OBJECT_SELF), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     }
 	if (IsHellfireBlastActive() && nHellfireConDmg > 0)
 	{

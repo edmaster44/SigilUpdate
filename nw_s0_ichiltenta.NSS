@@ -90,10 +90,10 @@ void main()
         // Apply Cold Damage regardless of whether or not any tentacles struck the target.... 
         fDelay  = GetRandomDelay(0.4, 0.8);
         nDamage = d6(2);
-		if (nCasterLevel > 28) {
+		if (nCasterLevel >= 28) {
 			nDamage = d6(4);
         	nDamage = ApplyMetamagicVariableMods( nDamage, 4*6 );
-		} else if (nCasterLevel > 21) {
+		} else if (nCasterLevel >= 21) {
 			nDamage = d6(3);
         	nDamage = ApplyMetamagicVariableMods( nDamage, 3*6 );
 		} else {
