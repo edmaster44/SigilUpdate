@@ -7,14 +7,18 @@
 void main()
 {
 	object oKiller = GetLastKiller();
-	if (GetIsObjectValid(GetLocalObject(OBJECT_SELF, abilityCaster))) 
+	if (GetIsObjectValid(GetLocalObject(OBJECT_SELF, abilityCaster)))  {
 		oKiller = GetLocalObject(OBJECT_SELF, abilityCaster);
-	
+	}
+	if (GetIsObjectValid(GetLocalObject(oKiller, abilityCaster)))  {
+		oKiller = GetLocalObject(oKiller, abilityCaster);
+	}
 	
 	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF)
 	{
 		return;
 	}
+	
 	object oArea = GetArea(oKiller);
 	while (GetIsObjectValid(GetMaster(oKiller)))
    	{
