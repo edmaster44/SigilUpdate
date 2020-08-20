@@ -45,13 +45,11 @@ void main()
     RemoveEffectsFromSpell(oTarget, GetSpellId());
 
     //Declare major variables
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = GetWarlockCasterLevel(OBJECT_SELF);
     int nLimit = nDuration * 10;
 	if ( nLimit > 150 )	nLimit = 150;
     int nMetaMagic = GetMetaMagicFeat();
-    //effect eStone = EffectDamageReduction(30, DAMAGE_POWER_PLUS_FIVE, nLimit);	// 3.0 DR rules
-    effect eStone = EffectDamageReduction( 10, GMATERIAL_METAL_ALCHEMICAL_SILVER, nLimit, DR_TYPE_GMATERIAL );		// 3.5 DR approximation
-    //effect eVis = EffectVisualEffect(VFX_DUR_PROT_PREMONITION);	// NWN1 VFX
+    effect eStone = EffectDamageReduction( 20, GMATERIAL_METAL_ALCHEMICAL_SILVER, nLimit, DR_TYPE_GMATERIAL );		// 3.5 DR approximation
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_PREMONITION );	// NWN2 VFX
     
     //Link the visual and the damage reduction effect

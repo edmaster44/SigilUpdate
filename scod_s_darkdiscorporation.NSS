@@ -1,43 +1,44 @@
 //:://///////////////////////////////////////////////
-//:: Warlock Dark Invocation: Word of Changing
-//:: nw_s0_iwordchng.nss
-//:: Copyright (c) 2005 Obsidian Entertainment Inc.
+//:: Warlock Dark Invocation: Dark Discorporation
+//:: scod_s_darkdiscorporation.nss
 //::////////////////////////////////////////////////
-//:: Created By: Brock Heinz
-//:: Created On: 12/08/05
-//::////////////////////////////////////////////////
-/*
-        Word of Changing    Complete Arcane, pg. 136
-        Spell Level:        2
-        Class: 	            Misc
-
-        This invocation is the equivalent of the 
-        shapechange spell (9th level wizard).
-
-        [Rules Note] In the rules this invocation is 
-        the equivalent of the baleful polymorph spell. 
-        That spell isn't in NWN2, so shapechange is used 
-        instead.
-*/
-
+//:: Rewritten by MimiFearthegn on 8/20/2020
+//:: May want to make sure that it cannot be used with eldritch shield
 
 #include "x2_inc_spellhook"
 #include "nwn2_inc_metmag"
+#include "ps_inc_functions"
+#include "nwn2_inc_spells"
+#include "ginc_debug"
+#include "nw_i0_spells"
 
-void main()
-{
+void main() {
 
-
-    if (!X2PreSpellCastCode())
-    {
-        // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+    if (!X2PreSpellCastCode()) {
         return;
     }
-
+	
+	//Prevent stacking + prevent its use with eldritch shield
+	//Will also need to prevent use with Word of Changing
+	//811 = Eldritch Shield
+	int nID = GetSpellId();
+	if ( GetHasSpellEffect(nID) || GetHasSpellEffect(811) )
+	{
+		effect eEffect = GetFirstEffect( OBJECT_SELF );
+		while ( GetIsEffectValid(eEffect) )
+		{
+			if ( GetEffectSpellId(eEffect) == nID || GetEffectSpellId(eEffect) == 811 )
+			{
+				RemoveEffect( OBJECT_SELF, eEffect );
+			}
+			
+			eEffect = GetNextEffect( OBJECT_SELF );
+		}
+	}
 
     //Declare major variables
-    int nSpell = GetSpellId();
-    object oTarget = GetSpellTargetObject();
+    object oCaster = OBJECT_SELF;
+    int nCasterLvl = GetWarlockCasterLevel(oCaster);
     effect eVis = EffectNWN2SpecialEffectFile("fx_kos_teleport");
     effect ePoly;
     int nPoly;
@@ -47,31 +48,15 @@ void main()
 	float fDuration = TurnsToSeconds( GetCasterLevel(OBJECT_SELF ) );
     fDuration = ApplyMetamagicDurationMods( fDuration );
 	
-
-    //Determine Polymorph subradial type
-    if(nSpell == 1375) 
-    {
-        nPoly = 402;
-    }
-    else
-    {
-        // Whoops!
-        nPoly = POLYMORPH_TYPE_COW;
-    }
-
-    ePoly = EffectPolymorph(nPoly, FALSE, FALSE);
-    ePoly = EffectLinkEffects(ePoly, eVis);
-    //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
-
-    //Apply the VFX impact and effects
-    //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
-    AssignCommand(oTarget, ClearAllActions()); // prevents an exploit
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, fDuration);
+	effect eBuff = EffectMovementSpeedIncrease(99); //x2 speed
+	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_SNEAK_ATTACK), eBuff); //being discorporated means undead like immunities
+	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT), eBuff); //being discorporated means undead like immunities
+	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN), eBuff); //being discorporated means undead like immunities
+	eBuff = EffectLinkEffects(EffectConcealment(50), eBuff); //50% concealment
 	
-	
-	
-	
+	SetEffectSpellId(eBuff, nID);
+	//Add vfx here
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, fDuration);
 }
 	
 	
