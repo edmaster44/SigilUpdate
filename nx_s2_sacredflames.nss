@@ -13,6 +13,9 @@
 	not subject to effects that reduce fire damage. The sacred
 	flames last 1 minute and can be invoked once per day. At 8th
 	level, a sacred fist can invoke sacred flames twice per day.
+	//8/31/2020
+	made into a Permanent Buff, removed the Flame VFX.
+	
 */
 //:://////////////////////////////////////////////
 //:: Created By: Andrew Woo (AFW-OEI)
@@ -38,7 +41,7 @@ void main()
 		nTotalDamage += nWisdomBonus;
 	}
 	
-	int nDivineDamage = nTotalDamage/2;					// Half of bonus (rounded down) is divine damage.
+	int nDivineDamage = nTotalDamage/4;					// Half of bonus (rounded down) is divine damage.
 	int nFireDamage   = nTotalDamage - nDivineDamage;	// The rest (half rounded up) is fire damage.
 	
 	int fDuration = 9999.9f;
@@ -47,8 +50,8 @@ void main()
     effect eFireDamage   = EffectDamageIncrease(IPGetDamageBonusConstantFromNumber(nFireDamage), DAMAGE_TYPE_FIRE);
 	effect eFists		 = EffectVisualEffect(VFX_DUR_SACRED_FLAMES);
 	
-    effect eLink = EffectLinkEffects(eDivineDamage, eFireDamage);
-	eLink = EffectLinkEffects(eLink, eFists);
+    //effect eLink = EffectLinkEffects(eDivineDamage, eFireDamage);
+	eLink = EffectLinkEffects(eLink);
 
     // Spell does not stack
     if (GetHasSpellEffect(GetSpellId(),OBJECT_SELF))
