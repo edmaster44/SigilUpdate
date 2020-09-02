@@ -39,30 +39,30 @@ void main()
 			RemoveLeastProperties(twohanding, twoweapons, weapon1, weapon2);
 			if (!twohanding)
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d4));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			else
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d6));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_3d6));
 			}
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d4));
+				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			return;
 		case COLD_INTELLECT :
 			RemoveLeastProperties(twohanding, twoweapons, weapon1, weapon2);
 				if (!twohanding)
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_1d4));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			else
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_1d6));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_3d6));
 			}
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_1d4));
+				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_COLD, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			return;
 		case MINDSILVER_BLADE :
@@ -93,30 +93,30 @@ void main()
 			RemoveLesserProperties(twohanding, twoweapons, weapon1, weapon2);
 			if (!twohanding)
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_5));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			else
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_8));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_3d6));
 			}
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_5));
+				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			return;
 		case ELECTRIC_INSPIRATION :
 			RemoveLesserProperties(twohanding, twoweapons, weapon1, weapon2);
 			if (!twohanding)
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_1d10));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			else
 			{
-				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_2d8));
+				ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_3d6));
 			}
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_1d10));
+				ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ELECTRICAL, IP_CONST_DAMAGEBONUS_2d6));
 			}
 			return;
 		case MORAL_BLADE :
@@ -125,57 +125,57 @@ void main()
 			{
 				if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_GOOD)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_EVIL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_LAWFUL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				else if (GetAlignmentLawChaos(OBJECT_SELF) ==ALIGNMENT_CHAOTIC)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 			}
 			else
 			{
 				if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_GOOD)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 0, IP_CONST_DAMAGEBONUS_2));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 0, IP_CONST_DAMAGEBONUS_3d6));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_EVIL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 0, IP_CONST_DAMAGEBONUS_2));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 0, IP_CONST_DAMAGEBONUS_3d6));
 				}
 				if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_LAWFUL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, 0, IP_CONST_DAMAGEBONUS_2));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, 0, IP_CONST_DAMAGEBONUS_3d6));
 				}
 				else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_CHAOTIC)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 0, IP_CONST_DAMAGEBONUS_2));
+					ApplyProperty(weapon1, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 0, IP_CONST_DAMAGEBONUS_3d6));
 				}
 			}
 			if (twoweapons)
 			{
 				if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_GOOD)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_EVIL)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_LAWFUL)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_CHAOTIC, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_CHAOTIC)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 0, IP_CONST_DAMAGEBONUS_1));
+					ApplyProperty(weapon2, ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, 0, IP_CONST_DAMAGEBONUS_2d6));
 				}
 			}
 			return;
@@ -189,10 +189,10 @@ void main()
 			return;
 		case MINDVENOM :
 			RemoveLesserProperties(twohanding, twoweapons, weapon1, weapon2);
-			ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_20, IP_CONST_POISON_1D2_CONDAMAGE));
+			ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_POISON_2D4_CONDAMAGE));
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_20, IP_CONST_POISON_1D2_CONDAMAGE));
+				ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_POISON_2D4_CONDAMAGE));
 			}
 			return;
 		case STRENGTH_OF_MORALITY :
@@ -201,45 +201,45 @@ void main()
 			{
 				if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_GOOD)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d6));
+					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_POSITIVE, IP_CONST_DAMAGEBONUS_1d8));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_EVIL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_1d6));
+					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_1d8));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d6));
+					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d8));
 				}
 			}
 			else
 			{
 				if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_GOOD)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_2d4));
+					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_POSITIVE, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_EVIL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_2d4));
+					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_2d6));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 				{
-					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_2d4));
+					ApplyProperty(weapon1, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_2d6));
 				}
 			}
 			if (twoweapons)
 			{
 				if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_GOOD)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d6));
+					ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_POSITIVE, IP_CONST_DAMAGEBONUS_1d8));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_EVIL)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_1d6));
+					ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_1d8));
 				}
 				else if (GetAlignmentGoodEvil(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 				{
-					ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, IP_CONST_DAMAGEBONUS_1d6));
+					ApplyProperty(weapon2, ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d8));
 				}
 			}
 			return;
@@ -247,29 +247,29 @@ void main()
 			RemoveGreaterProperties(twohanding, twoweapons, weapon1, weapon2);
 			if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_LAWFUL)
 			{
-				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_SLOW, IP_CONST_ONHIT_SAVEDC_26, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
+				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_SLOW, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
 			}
 			else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_CHAOTIC)
 			{
-				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_CONFUSION, IP_CONST_ONHIT_SAVEDC_26, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
+				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_CONFUSION, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
 			}
 			else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 			{
-				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_26, IP_CONST_ONHIT_DURATION_50_PERCENT_2_ROUNDS));
+				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_75_PERCENT_2_ROUNDS));
 			}
 			if (twoweapons)
 			{
 				if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_LAWFUL)
 				{
-					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_SLOW, IP_CONST_ONHIT_SAVEDC_26, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
+					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_SLOW, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
 				}
 				else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_CHAOTIC)
 				{
-					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_CONFUSION, IP_CONST_ONHIT_SAVEDC_26, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
+					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_CONFUSION, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_100_PERCENT_2_ROUND));
 				}
 				else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 				{
-					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_26, IP_CONST_ONHIT_DURATION_50_PERCENT_2_ROUNDS));
+					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_75_PERCENT_2_ROUNDS));
 				}
 			}
 			return;
@@ -277,15 +277,15 @@ void main()
 			RemoveGreaterProperties(twohanding, twoweapons, weapon1, weapon2);
 			if (!twohanding)
 			{
-				ApplyProperty(weapon1, ItemPropertyVampiricRegeneration(2));
+				ApplyProperty(weapon1, ItemPropertyVampiricRegeneration(3));
 			}
 			else
 			{
-				ApplyProperty(weapon1, ItemPropertyVampiricRegeneration(3));
+				ApplyProperty(weapon1, ItemPropertyVampiricRegeneration(5));
 			}
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyVampiricRegeneration(2));
+				ApplyProperty(weapon2, ItemPropertyVampiricRegeneration(3));
 			}
 			return;
 		default :

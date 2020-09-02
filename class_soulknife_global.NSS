@@ -103,7 +103,7 @@ int GetPsychicStrikeDice(object oPC)
 	int levels = GetLevelByClass(SOULKNIFE_ID);
 	int dice = (levels + 1) / 4;
 	if (GetHasFeat(FEAT_POWERFUL_STRIKES, oPC))
-		dice = dice + 1;
+		dice = dice + 2;
 		
 	return dice;
 }
@@ -113,6 +113,7 @@ int ApplyKTTS(object oPC, object oTarget, int dice)
 {
 	int kkts = GetLocalInt(oPC, VAR_KNIFE_TO_THE_SOUL);
 	int ability = 0;
+	int dice =  GetPsychicStrikeDice(oPC);
 	switch (kkts)
 	{
 		case KTTS_INT :
@@ -161,7 +162,7 @@ int ApplyPsychicStrike(object oPC, object oTarget)
 	if (mindSpellImmunity)
 	{
 		if (GetHasFeat(FEAT_SPINAL_TAP, oPC))
-			dice = (dice + 1) / 2;
+			dice = (dice);
 		else
 			return FALSE;
 	}

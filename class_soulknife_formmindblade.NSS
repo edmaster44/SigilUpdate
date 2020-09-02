@@ -42,7 +42,7 @@ void main()
 			if (size == CREATURE_SIZE_SMALL || nDex > nStr)
 				template = MINDBLADE_SHORTSWORD_TEMPLATE;
 			else
-				template = MINDBLADE_LONGSWORD_TEMPLATE;
+				template = MINDBLADE_SHORTSWORD_TEMPLATE;
 			break;
 		case FORM_MINDBLADE_TWIN :
 			if (size == CREATURE_SIZE_SMALL)
