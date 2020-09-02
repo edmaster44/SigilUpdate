@@ -18,11 +18,17 @@ void main() {
         return;
     }
 	
-	//Prevent stacking + prevent its use with eldritch shield
+	//Prevent stacking + disable Eldritch Shield
 	//Will also need to prevent use with Word of Changing
 	//811 = Eldritch Shield
+	//843 = Word of Changing
 	int nID = GetSpellId();
-	if ( GetHasSpellEffect(nID) || GetHasSpellEffect(811) )
+	if (GetHasSpellEffect(843)) { 
+		SendMessageToPC(OBJECT_SELF, "You may not discorporate while Word of Changing is active.");
+		return;
+	}
+	
+	if ( GetHasSpellEffect(nID) || GetHasSpellEffect(811))
 	{
 		effect eEffect = GetFirstEffect( OBJECT_SELF );
 		while ( GetIsEffectValid(eEffect) )
@@ -57,6 +63,11 @@ void main() {
 	SetEffectSpellId(eBuff, nID);
 	//Add vfx here
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, fDuration);
+	
+	
+	effect eAOE = EffectAreaOfEffect(97);
+	SignalEvent(oCaster, EventSpellCastAt(oCaster, nID, FALSE));
+	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oCaster, fDuration));
 }
 	
 	

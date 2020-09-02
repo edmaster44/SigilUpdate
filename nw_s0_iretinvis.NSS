@@ -113,11 +113,9 @@ void main()
 	object oCaster = OBJECT_SELF;
 	int nSaveDC = GetSpellSaveDC();
 	float fDuration = RoundsToSeconds(3);	// JLR-OEI 05/08/06: Adjusted duration: PKM-OEI 08.25.06 adjusted duration again
-    //fDuration = ApplyMetamagicDurationMods( fDuration );
 
     //Declare major variables
     object oTarget = GetSpellTargetObject(); // should be the caster
-    //effect eImpact = EffectVisualEffect(VFX_IMP_HEAD_MIND);
 
     effect eInvis = EffectInvisibility(INVISIBILITY_TYPE_IMPROVED);
 
@@ -136,8 +134,5 @@ void main()
 
  
     //Apply the VFX impact and effects
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
-
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget,fDuration);
-//    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvisLink, oTarget, fDuration);
 }

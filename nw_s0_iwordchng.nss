@@ -23,6 +23,11 @@
 
 #include "x2_inc_spellhook"
 #include "nwn2_inc_metmag"
+#include "aaa_changeself_inc"
+#include "ps_inc_functions"
+#include "ps_inc_advscript"
+
+void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance);
 
 void main()
 {
@@ -37,7 +42,7 @@ void main()
 
     //Declare major variables
     int nSpell = GetSpellId();
-    object oTarget = GetSpellTargetObject();
+    object oCaster = OBJECT_SELF;
     effect eVis = EffectVisualEffect(VFX_INVOCATION_WORD_OF_CHANGING);
     effect ePoly;
     int nPoly;
@@ -45,33 +50,63 @@ void main()
     //Enter Metamagic conditions
 	float fDuration = TurnsToSeconds( GetCasterLevel(OBJECT_SELF ) );
     fDuration = ApplyMetamagicDurationMods( fDuration );
-	object oPC = OBJECT_SELF;
-    //Determine Polymorph subradial type
-    if(nSpell == SPELL_I_WORD_OF_CHANGING) 
-    {
-		int iLC = GetAlignmentLawChaos(oPC);
-		int iGE = GetAlignmentGoodEvil(oPC);
-		if (iLC == ALIGNMENT_LAWFUL || iLC == ALIGNMENT_NEUTRAL)
-        	nPoly = POLYMORPH_TYPE_HORNED_DEVIL;
-		else if (iGE == ALIGNMENT_EVIL)
-			nPoly = 117; // hezrou
-		else
-			nPoly = 118; // ragewalker
+	
+	//No polymorphing while discorporated
+	if (GetHasSpellEffect(1375)) {
+		SendMessageToPC(oCaster, "You may not use Word of Changing while discorporated.");
+		return; 
+	}
+	
+	//843 = Word of changing base spell
+	//Remove current spell effects
+	if ( GetHasSpellEffect(843) ) {
+		effect eEffect = GetFirstEffect( OBJECT_SELF );
+		while ( GetIsEffectValid(eEffect) ) {
 		
-    }
-    else
-    {
-        // Whoops!
-        nPoly = POLYMORPH_TYPE_COW;
-    }
+			if ( GetEffectSpellId(eEffect) == 843){
+				RemoveEffect( OBJECT_SELF, eEffect );
+			}
+				
+			eEffect = GetNextEffect( OBJECT_SELF );
+		}
+	}
+	
+	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
+	if (nSpell == 1721) { //Fiend
+	
+	} else if (nSpell == 1722) { //Beast
+	
+	}  else if (nSpell == 1723) { //Ragewalker
+	
+	}  else if (nSpell == 1724) { //Fey
+		struct CreatureCoreAppearance Appearance;
+		
+		AssumeGivenAppearance(oCaster, Appearance);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_HumForm_DragonUE(oCaster);
+		
+	}  else if (nSpell == 1725) { //Unshift
+		
+		PS_RestoreOriginalAppearance(oCaster);
+		
+		//General useful things for shifting back
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_DragForm_DragonUE(oCaster);
+		DelayCommand(1.0f, AssignCommand(oCaster, ActionRest()));
+	
+	} 
+}
 
-    ePoly = EffectPolymorph(nPoly);
-    ePoly = EffectLinkEffects(ePoly, eVis);
-    //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
+void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance) {
 
-    //Apply the VFX impact and effects
-    //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
-    DelayCommand(0.4, AssignCommand(oTarget, ClearAllActions())); // prevents an exploit
-    DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, fDuration));
+	if (!GetIsPC(oCaster)) {
+		SendMessageToPC(oCaster, "NPC support not included.");
+		return;
+	}
+
+	object oEssence = GetItemPossessedBy(oCaster, "ps_essence");
+	struct CreatureCoreAppearance Appearance = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
+	PS_SetCreatureCoreAppearance(oCaster, Appearance);
+	PS_RefreshAppearance(oCaster);
+	SetLocalInt(oEssence, "TempChange", 1);
 }
