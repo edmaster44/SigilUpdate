@@ -2,6 +2,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "nwn2_inc_metmag"
+#include "ps_inc_functions"
 
 void DoMagicDamageOnWaking(object oTarget);
 
@@ -22,7 +23,7 @@ void main() {
     effect 		eDur 		= 	EffectVisualEffect(VFX_DUR_SPELL_HISS_OF_SLEEP);
 	effect		eSleep		=	EffectSleep();
 	effect		eLink		=	EffectLinkEffects(eSleep, eDur);
-	float		fDuration	=	RoundsToSeconds(GetCasterLevel(oCaster));
+	float		fDuration	=	RoundsToSeconds(GetWarlockCasterLevel(oCaster));
 	
 	fDuration		=	ApplyMetamagicDurationMods(fDuration);
 
