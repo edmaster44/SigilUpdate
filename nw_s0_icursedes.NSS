@@ -35,7 +35,8 @@ void main()
         return;
     }
 	
-	object oTarget = GetSpellTargetObject();
+	object oTarget = OBJECT_SELF; //caster
+	SendMessageToPC(oTarget, "casting dreadful aura");
 
 	// Strip any Auras first
 	effect eTest = GetFirstEffect(oTarget);
@@ -49,7 +50,6 @@ void main()
 	}
 	
 	// strip any extra aura objects, but not from other blackguards
-	
 	object o = GetFirstObjectInArea(GetArea(oTarget));
 	while(GetIsObjectValid(o))
 	{
@@ -68,6 +68,8 @@ void main()
 	
 	
 	effect eAOE = EffectAreaOfEffect(AOE_PER_AURA_OF_DESPAIR);
+	SetEffectSpellId(eAOE, SPELLABLILITY_AURA_OF_DESPAIR);
+	
 	//Create an instance of the AOE Object using the Apply Effect function
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABLILITY_AURA_OF_DESPAIR, FALSE));
 	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));

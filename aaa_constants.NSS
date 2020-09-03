@@ -460,6 +460,7 @@ const int SPELL_GLAMER							= 1956;
 const int SPELL_HALLUCINATORY_TERRAIN			= 1957;
 const int VFX_PER_HALLUCINATORY_TERRAIN 		= 95;
 const int SPELL_HYPNOTISM						= 1958;
+const int SPELL_SLEEP_OF_AGES					= 1499;
 
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
