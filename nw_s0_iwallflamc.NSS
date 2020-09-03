@@ -23,6 +23,8 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 
+void DoBurningDamage(object oTarget, int nCounter);
+
 void main()
 {
 
@@ -101,6 +103,11 @@ void main()
                     eDam = EffectDamage(nFireDamage, DAMAGE_TYPE_FIRE);
                     DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
                     DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisFire, oTarget, 1.0) );
+				
+					if (GetLocalInt(oTarget, "WALL_FIRE") <= 0) {//We don't want to catch fire multiple times!
+						SetLocalInt(oTarget, "WALL_FIRE", 1);
+						DelayCommand(6.0f, DoBurningDamage(oTarget, 3));
+					}
                 }
 
             }
@@ -108,4 +115,25 @@ void main()
         //Select the next target within the spell shape.
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     }
+}
+
+void DoBurningDamage(object oTarget, int nCounter)
+{
+    if (GetIsDead(oTarget))
+		return;
+	
+  	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
+  	ApplyEffectToObject (DURATION_TYPE_INSTANT, eVis, oTarget);
+ 
+  	int nDamage = d6();
+    effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
+	eDam = EffectLinkEffects(eDam, EffectDamage(nDamage));
+	
+  	ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
+ 
+  	// do damage in next round
+  	if (nCounter > 1)
+          DelayCommand(6.0f, DoBurningDamage(oTarget, nCounter - 1));		  
+	else
+		SetLocalInt(oTarget, "WALL_FIRE", 0);
 }
