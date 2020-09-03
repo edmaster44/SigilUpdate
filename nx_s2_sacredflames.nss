@@ -44,14 +44,14 @@ void main()
 	int nDivineDamage = nTotalDamage/4;					// Half of bonus (rounded down) is divine damage.
 	int nFireDamage   = nTotalDamage - nDivineDamage;	// The rest (half rounded up) is fire damage.
 	
-	int fDuration = 9999.9f;
+	float fDuration = 9999.9f;
 	
     effect eDivineDamage = EffectDamageIncrease(IPGetDamageBonusConstantFromNumber(nDivineDamage), DAMAGE_TYPE_DIVINE);
     effect eFireDamage   = EffectDamageIncrease(IPGetDamageBonusConstantFromNumber(nFireDamage), DAMAGE_TYPE_FIRE);
 	effect eFists		 = EffectVisualEffect(VFX_DUR_SACRED_FLAMES);
 	
-    //effect eLink = EffectLinkEffects(eDivineDamage, eFireDamage);
-	eLink = EffectLinkEffects(eLink);
+    effect eLink = EffectLinkEffects(eDivineDamage, eFireDamage);
+	eLink = EffectLinkEffects(eLink, eFists);
 
     // Spell does not stack
     if (GetHasSpellEffect(GetSpellId(),OBJECT_SELF))

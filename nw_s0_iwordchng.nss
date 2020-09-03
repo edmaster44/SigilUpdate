@@ -29,6 +29,8 @@
 
 void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance);
 
+struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID);
+
 void main()
 {
 
@@ -109,4 +111,18 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 	PS_SetCreatureCoreAppearance(oCaster, Appearance);
 	PS_RefreshAppearance(oCaster);
 	SetLocalInt(oEssence, "TempChange", 1);
+}
+
+struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID) {
+
+ 	object oWP = GetWaypointByTag("WP_APPEARANCE_SPAWNER");
+	if (GetIsObjectValid(oPC)) {
+		SendMessageToPC(oPC, "Found oWP = "+GetFirstName(oWP));
+	} else {
+		SendMessageToPC(oPC, "Failed to find WP");
+	}
+	
+	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
+	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
+	return app;
 }

@@ -189,10 +189,10 @@ void main()
 			return;
 		case MINDVENOM :
 			RemoveLesserProperties(twohanding, twoweapons, weapon1, weapon2);
-			ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_POISON_2D4_CONDAMAGE));
+			ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_POISON_1D2_CONDAMAGE));
 			if (twoweapons)
 			{
-				ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_POISON_2D4_CONDAMAGE));
+				ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_ITEMPOISON, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_POISON_1D2_CONDAMAGE));
 			}
 			return;
 		case STRENGTH_OF_MORALITY :
@@ -255,7 +255,7 @@ void main()
 			}
 			else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 			{
-				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_75_PERCENT_2_ROUNDS));
+				ApplyProperty(weapon1, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_75_PERCENT_2_ROUND));
 			}
 			if (twoweapons)
 			{
@@ -269,7 +269,7 @@ void main()
 				}
 				else if (GetAlignmentLawChaos(OBJECT_SELF) == ALIGNMENT_NEUTRAL)
 				{
-					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_75_PERCENT_2_ROUNDS));
+					ApplyProperty(weapon2, ItemPropertyOnHitProps(IP_CONST_ONHIT_DAZE, IP_CONST_ONHIT_SAVEDC_30, IP_CONST_ONHIT_DURATION_75_PERCENT_2_ROUND));
 				}
 			}
 			return;
