@@ -19,8 +19,6 @@
         That spell isn't in NWN2, so shapechange is used 
         instead.
 */
-
-
 #include "x2_inc_spellhook"
 #include "nwn2_inc_metmag"
 #include "aaa_changeself_inc"
@@ -31,16 +29,13 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 
 struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID);
 
-void main()
-{
-
+void main() {
 
     if (!X2PreSpellCastCode())
     {
         // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
-
 
     //Declare major variables
     int nSpell = GetSpellId();
@@ -73,15 +68,71 @@ void main()
 		}
 	}
 	
+	if (nSpell != 1725) {
+		effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
+		eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
+		eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
+		eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
+		
+		int nSR = GetSpellResistance(oCaster);
+		int nBoost = 26-nSR;
+		if (nBoost > 0) {
+			eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
+		}
+		
+		SetEffectSpellId(eBoost, nSpell);
+		eBoost = SupernaturalEffect(eBoost);
+		
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
+	}
+	
+	int nGender = GetGender(oCaster);
+	
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1721) { //Fiend
 	
-	} else if (nSpell == 1722) { //Beast
+		SendMessageToPC(oCaster, "Turning you into a demon!");
+		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oCaster);
+		Appearance.Gender = nGender;
+		if (nGender == GENDER_FEMALE){
+			Appearance.HairVariation = 100; //Different hair
+			Appearance.WingVariation = 42; //bat wings!
+			Appearance.TailVariation = 9; //Tail switch
+		}
+		
+		AssumeGivenAppearance(oCaster, Appearance);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_HumForm_DragonUE(oCaster);
 	
-	}  else if (nSpell == 1723) { //Ragewalker
+	} else if (nSpell == 1722) { //Devil
+	
+		SendMessageToPC(oCaster, "Turning you into a devil!");
+		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdevil", oCaster);
+		Appearance.Gender = nGender;
+		if (nGender == GENDER_FEMALE){
+			Appearance.HairVariation = 157; //Different hair
+			Appearance.HeadVariation = 24; //Different head
+			Appearance.WingVariation = 66; //bat wings!
+		}
+		
+		AssumeGivenAppearance(oCaster, Appearance);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_HumForm_DragonUE(oCaster);
+	
+	}  else if (nSpell == 1723) { //Abomination
+	
+		SendMessageToPC(oCaster, "Turning you into an eldritch abomination!");
+		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockeldritch", oCaster);
+		
+		AssumeGivenAppearance(oCaster, Appearance);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_HumForm_DragonUE(oCaster);
 	
 	}  else if (nSpell == 1724) { //Fey
-		struct CreatureCoreAppearance Appearance;
+	
+		SendMessageToPC(oCaster, "Turning you into a beast!");
+		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockbear", oCaster);
+		
 		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
@@ -97,6 +148,7 @@ void main()
 		DelayCommand(1.0f, AssignCommand(oCaster, ActionRest()));
 	
 	} 
+	
 }
 
 void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance) {
@@ -124,5 +176,7 @@ struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC 
 	
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
+	
+	DestroyObject(oCreature, 0.2f);
 	return app;
 }
