@@ -89,6 +89,7 @@ void main()
                 DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisFire, oTarget, 1.0) );
 				
 				if (GetLocalInt(oTarget, "WALL_FIRE") <= 0) {
+					AssignCommand(oTarget, ActionSpeakString("I should burn!"));
 					SetLocalInt(oTarget, "WALL_FIRE", 1);
 					DelayCommand(6.0f, DoBurningDamage(oTarget, 3));
 				}
@@ -102,6 +103,8 @@ void DoBurningDamage(object oTarget, int nCounter)
 {
     if (GetIsDead(oTarget))
 		return;
+		
+	AssignCommand(oTarget, ActionSpeakString("I'm burning!"));
 	
   	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
   	ApplyEffectToObject (DURATION_TYPE_INSTANT, eVis, oTarget);
