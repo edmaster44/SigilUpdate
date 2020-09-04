@@ -1,7 +1,5 @@
-#include "x2_inc_spellhook"
+#include "nwn2_inc_spells"
 #include "aaa_constants"
-#include "X0_I0_SPELLS"
-#include "nw_i0_spells"
 #include "ps_inc_equipment"
 
 
@@ -18,9 +16,9 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		effect eSlash = EffectDamageIncrease(nBonus, DAMAGE_TYPE_SLASHING);
 		effect eLink = EffectLinkEffects(eAB, eSlash);
 		eLink = SupernaturalEffect(eLink);
-		eLink = SetEffectSpellId(eLink, nSpell );
+		eLink = SetEffectSpellId(eLink, SPELLABILITY_DERVISH_DANCE );
 		
-    	RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+    	RemoveEffectsFromSpell(OBJECT_SELF, SPELLABILITY_DERVISH_DANCE);
 	//Dance of Death	
 	object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CARMOUR,OBJECT_SELF);				
 		if (nLevel > 9)
