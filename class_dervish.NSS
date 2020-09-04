@@ -1,5 +1,8 @@
-#include "nwn2_inc_spells"
+#include "x2_inc_spellhook"
 #include "aaa_constants"
+#include "X0_I0_SPELLS"
+#include "nw_i0_spells"
+
 
 //Made by edmaster44(DM_Odin) for the Dervish Class PRC
 
@@ -10,10 +13,7 @@ object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 
 if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oArmor == OBJECT_INVALID)
 	{
-		int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
 		
-		if (GetHasSpellEffect(nSpellId,oPC))
-			RemoveSpellEffects(nSpellId, oPC, oPC);	
 				
 //Ac bonus
 	int nAmount = 1;			
@@ -23,7 +23,7 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 	
 		float fDuration = 9999.99f;
 		effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
-		eAC = SetEffectSpellId(eAC,nSpellId);
+		eAC = SetEffectSpellId(eAC,nSpell);
 		eAC = SupernaturalEffect(eAC);
 							
 		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, fDuration));
@@ -36,28 +36,23 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 //A thousand cuts Feat for Dervish
 void A_Thousand_Cuts(object oPC, int nSpell)
 {	
-
-	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
-	
-	if (GetHasSpellEffect(nSpellId,oPC))
-		RemoveSpellEffects(nSpellId, oPC, oPC);	
 	float fDuration = 9999.99f;
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
-	eSlash = SetEffectSpellId(eSlash, nSpellId );	
+	eSlash = SetEffectSpellId(eSlash, nSpell);	
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration));		
 }
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
-if (GetLevelByClass(CLASS_DERVISH, oPC) > 0)
+if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY, oPC))
 		{
 			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)  )
 			{
-				if (!GetHasSpellEffect(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
+				if (!GetHasSpellEffect(nSpell,oPC))
 				{
 						effect eDefParry = EffectACIncrease(4);
-						eDefParry = SetEffectSpellId(eDefParry, FEAT_DERVISH_DEFENSIVE_PARRY);
+						eDefParry = SetEffectSpellId(eDefParry, nSpell);
 						eDefParry = SupernaturalEffect(eDefParry);
 						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
 						SendMessageToPC(oPC, "Defensive Parry enabled.");						
@@ -65,9 +60,9 @@ if (GetLevelByClass(CLASS_DERVISH, oPC) > 0)
 			}
 			else
 			{
-				if (GetHasSpellEffect(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
+				if (GetHasSpellEffect(nSpell,oPC))
 				{
-					RemoveSpellEffects(FEAT_DERVISH_DEFENSIVE_PARRY, OBJECT_SELF, oPC);
+					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);
 					SendMessageToPC(oPC, "Defensive Parry disabled.");						
 				}
 	}
