@@ -21,12 +21,12 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 		if (nLevel >= 9 ) 
         {   nAmount = 2; }
 	
-		
+		float fDuration = 9999.99f;
 		effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
 		eAC = SetEffectSpellId(eAC,nSpellId);
 		eAC = SupernaturalEffect(eAC);
 							
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, HoursToSeconds(48)));
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, fDuration));
 	}
 	else
 		SendMessageToPC(oPC, "Dervish only gain an AC bonus when wearing no armor or light armor.");
@@ -35,11 +35,17 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 }
 //A thousand cuts Feat for Dervish
 void A_Thousand_Cuts(object oPC, int nSpell)
-{
+{	
+
+	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
+	
+	if (GetHasSpellEffect(nSpellId,oPC))
+		RemoveSpellEffects(nSpellId, oPC, oPC);	
+	float fDuration = 9999.99f;
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
-	eSlash = SetEffectSpellId(eSlash, SPELLABILITY_THOUSAND_CUTS );	
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC));		
+	eSlash = SetEffectSpellId(eSlash, nSpellId );	
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration));		
 }
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
@@ -52,10 +58,11 @@ if (GetHasSpellEffect(nSpell,oPC))
 	effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);
 	eAC = SetEffectSpellId(eAC,nSpell);
 	eAC = SupernaturalEffect(eAC);
+		float fDuration = 9999.99f;
 	if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) == TRUE)
-	{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC)); }
-	 else if (GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
+	{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC)); }
+	 if (GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
 	{
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC));
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC));
 		}
 	}
