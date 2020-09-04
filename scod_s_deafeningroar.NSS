@@ -47,7 +47,7 @@ void main() {
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE);
 	while(GetIsObjectValid(oTarget)) {
 	
-	    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster)
 	    {
 	        if(!DoWarlockMyResistSpell(OBJECT_SELF, oTarget))
 	        {

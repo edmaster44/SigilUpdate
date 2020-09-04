@@ -28,6 +28,9 @@ void SetSummonAppearance(object oPC, object oSummon);
 //Remember how many creatures we have around! And renumber if necessary
 void CheckNumberOfBeasts(object oPC);
 
+//Pull all beasts to the caster
+void PullBeastsToMe(object oPC);
+
 void main() {
 
 	/* 
@@ -57,6 +60,11 @@ void main() {
 	CheckNumberOfBeasts(oCaster);
 
 	int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_ANIMALS_CALLED");
+	
+	if (nNumberCalled > 0) {
+		PullBeastsToMe(oCaster);
+	}
+	
 	if (nNumberCalled >= nCreatures) {
 		SendMessageToPC(oCaster, "You have already called "+IntToString(nNumberCalled)+" beasts. You will recieve no more aid at this time.");
 		return;
@@ -70,6 +78,19 @@ void main() {
 	for (nSpawned = 0; nSpawned < nCreatures; nSpawned++) {
 		DelayCommand(fDelay, SpawnInSummon(oCaster, sCreature));
 		fDelay += 0.5f;
+	}
+	
+}
+
+void PullBeastsToMe(object oPC) {
+
+	int n;
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	for(n = 0; n <= nNumberCalled; n++) {
+		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
+			AssignCommand(oSummon, ActionJumpToLocation(GetLocation(oPC)));
+		}
 	}
 	
 }
