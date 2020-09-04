@@ -50,6 +50,7 @@ void main() {
 	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT), eBuff); //being discorporated means undead like immunities
 	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN), eBuff); //being discorporated means undead like immunities
 	eBuff = EffectLinkEffects(EffectConcealment(50), eBuff); //50% concealment
+	eBuff = EffectLinkEffects(EffectNWN2SpecialEffectFile("fx_dark_discorporation"), eBuff);
 	
 	SetEffectSpellId(eBuff, nID);
 	//Add vfx here

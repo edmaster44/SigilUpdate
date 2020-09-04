@@ -40,7 +40,7 @@ void main() {
     int nMetaMagic = GetMetaMagicFeat();
 	
 	location lTargetLocation = GetSpellTargetLocation();
-    effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SHOUT);
+    effect eVis = EffectNWN2SpecialEffectFile("fx_deafeningroar");
     effect eDeaf = EffectDeaf();
 	float fDelay = 0.2f;
 	
@@ -59,6 +59,7 @@ void main() {
 				
 				int nDamage = GetEldritchBlastDmg(oCaster, oTarget, FALSE, FALSE, TRUE, 1);
 				effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
+				
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	
 	            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SONIC)) {
@@ -69,12 +70,13 @@ void main() {
 					//Secondary higher level effect - might knockdown
 					if (nCasterLvl > 15) {
 						effect eTrip = EffectKnockdown();
+						effect eKnockVis = EffectVisualEffect( VFX_HIT_SPELL_BALAGARN_IRON_HORN );
+						
 		                // * DO a strength check vs. Strength 20
 		                if (d20() + GetAbilityScore(oTarget, ABILITY_STRENGTH) <= 20 + d20() ) {
 							//Knockdown!
-							effect eKnockVis = EffectVisualEffect( VFX_HIT_SPELL_BALAGARN_IRON_HORN );
-		                    DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 6.0));
-                    		DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		                    DelayCommand(0.8f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 6.0));
+                    		DelayCommand(0.8f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		                }
 		                else {
 							//Failure message

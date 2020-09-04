@@ -20,12 +20,15 @@ void main() {
     location 	lTarget 	= 	GetSpellTargetLocation();
 	object 		oCaster 	=	OBJECT_SELF;
     object 		oTarget 	= 	GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE,OBJECT_TYPE_CREATURE);
-    effect 		eDur 		= 	EffectVisualEffect(VFX_DUR_SPELL_HISS_OF_SLEEP);
+    effect 		eDur 		= 	EffectNWN2SpecialEffectFile("sp_sleep_hit");
 	effect		eSleep		=	EffectSleep();
 	effect		eLink		=	EffectLinkEffects(eSleep, eDur);
 	float		fDuration	=	RoundsToSeconds(GetWarlockCasterLevel(oCaster));
 	
 	fDuration		=	ApplyMetamagicDurationMods(fDuration);
+	
+	effect eFX = EffectNWN2SpecialEffectFile("sp_abjuration_aoe");
+	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFX, lTarget);
 
     while (GetIsObjectValid(oTarget))
     {
