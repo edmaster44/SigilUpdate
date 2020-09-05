@@ -14,9 +14,6 @@
 //:: JLR - OEI 08/24/05 -- Metamagic changes
 //:: Mimi Fearthegn 7/26/20 - Redoing this spell entirely, now Eldritch Shield
 
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
-#include "x2_inc_spellhook" 
 #include "nw_i0_invocatns"
 
 void main() {
@@ -67,6 +64,7 @@ void main() {
 	effect eSpecial;
 	
     int nMetaMagic = GetMetaMagicFeat();
+	SendMessageToPC(oCaster, "Metamagic: "+IntToString(nMetaMagic));
 	if (nMetaMagic) {
 		hasSpecial = TRUE;
 		if (METAMAGIC_INVOC_DRAINING_BLAST) {
