@@ -28,9 +28,17 @@ void main() {
 		return;
 	}
 	
-	if (GetHasSpellEffect(811)) { 
-		SendMessageToPC(OBJECT_SELF, "You may not discorporate while Eldritch Shield is active");
-		return;
+	//Remove Eldritch Shield effects if discorporating
+	if ( GetHasSpellEffect(811) ) { //811 = Eldritch Shield
+		effect eEffect = GetFirstEffect( OBJECT_SELF );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == 811){
+				RemoveEffect( OBJECT_SELF, eEffect );
+			}
+				
+			eEffect = GetNextEffect( OBJECT_SELF );
+		}
 	}
 
     //Declare major variables

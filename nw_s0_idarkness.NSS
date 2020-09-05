@@ -89,7 +89,9 @@ void PullBeastsToMe(object oPC) {
 	for(n = 0; n <= nNumberCalled; n++) {
 		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
-			AssignCommand(oSummon, ActionJumpToLocation(GetLocation(oPC)));
+			SendMessageToPC(oPC, "Snagging beast "+GetFirstName(oSummon));
+		    AssignCommand(oSummon, ClearAllActions());
+		    AssignCommand(oSummon, JumpToLocation(GetLocation(oPC)));
 		}
 	}
 	
