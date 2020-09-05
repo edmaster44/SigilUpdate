@@ -80,8 +80,7 @@ void main() {
 			eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
 		}
 		
-		SetEffectSpellId(eBoost, nSpell);
-		eBoost = SupernaturalEffect(eBoost);
+		SetEffectSpellId(eBoost, 843);
 		
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
 	}
@@ -175,8 +174,10 @@ struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC 
 	}
 	
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
+	SendMessageToPC(oPC, "Creature: "+GetFirstName(oCreature));
+	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
 	
-	DestroyObject(oCreature, 0.2f);
+	//DestroyObject(oCreature, 0.2f);
 	return app;
 }
