@@ -9,7 +9,7 @@ void DarkForesight(object oPC)
     int nDuration = GetWarlockCasterLevel(oPC);
     int nLimit = nDuration * 10;
 	if ( nLimit > 150 )	nLimit = 150;
-    effect eStone = EffectDamageReduction( 10, GMATERIAL_METAL_ALCHEMICAL_SILVER, nLimit, DR_TYPE_GMATERIAL );		// 3.5 DR approximation
+    effect eStone = EffectDamageReduction( 20, GMATERIAL_METAL_ALCHEMICAL_SILVER, nLimit, DR_TYPE_GMATERIAL );		// 3.5 DR approximation
 	eStone = SetEffectSpellId(eStone, SPELL_I_DARK_FORESIGHT);
    
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_PREMONITION, FALSE));

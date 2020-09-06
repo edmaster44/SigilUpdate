@@ -21,20 +21,20 @@ void FleeTheScene(object oCaster)
     object oTarget = GetFirstFactionMember(oCaster, FALSE); 
 
 	
-	while (GetIsObjectValid(oTarget) && GetArea(oTarget) == GetArea(oCaster)) 
-	{
- 		   if (GetHasSpellEffect(SPELL_HASTE, oTarget) == TRUE)
- 		   {
+	while (GetIsObjectValid(oTarget))  {
+	
+		if (GetArea(oTarget) == GetArea(oCaster)) {
+ 		   if (GetHasSpellEffect(SPELL_HASTE, oTarget) == TRUE) {
  		       RemoveSpellEffects(SPELL_HASTE, oCaster, oTarget);
  		   }
-		    if (GetHasSpellEffect(SPELL_EXPEDITIOUS_RETREAT, oTarget) == TRUE)
-		    {
+		   if (GetHasSpellEffect(SPELL_EXPEDITIOUS_RETREAT, oTarget) == TRUE) {
  		       RemoveSpellEffects(SPELL_EXPEDITIOUS_RETREAT, oCaster, oTarget);
 		   }
 		   
  		   SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_I_FLEE_THE_SCENE, FALSE));
 
-   		DoHasteEffects( oCaster, oTarget );
+   			DoHasteEffects( oCaster, oTarget );
+		}
 
 		oTarget = GetNextFactionMember(oCaster, FALSE);
 	}
