@@ -158,7 +158,7 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 	}
 
 	object oEssence = GetItemPossessedBy(oCaster, "ps_essence");
-	struct CreatureCoreAppearance Appearance = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
+	
 	PS_SetCreatureCoreAppearance(oCaster, Appearance);
 	PS_RefreshAppearance(oCaster);
 	SetLocalInt(oEssence, "TempChange", 1);
@@ -174,7 +174,7 @@ struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC 
 	}
 	
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oPC));
-	SendMessageToPC(oPC, "Creature: "+GetFirstName(oCreature));
+	SendMessageToPC(oPC, "Creature: "+GetName(oCreature));
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
 	SendMessageToPC(oPC, "New head: "+IntToString(app.HeadVariation));
