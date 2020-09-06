@@ -51,10 +51,10 @@ void main() {
 	int nCreatures = 1+(nCasterLevel/5);
 	int nHD = 1+(nCasterLevel/2);
 	
-	SendMessageToPC(oCaster, "Summoning "+IntToString(nCreatures)+" creatures of "+IntToString(nHD)+" HD");
+	//SendMessageToPC(oCaster, "Summoning "+IntToString(nCreatures)+" creatures of "+IntToString(nHD)+" HD");
 	
 	string sCreature = GetCreatureResref(oCaster, nHD);
-	SendMessageToPC(oCaster, "Chosen creature: "+sCreature);
+	//SendMessageToPC(oCaster, "Chosen creature: "+sCreature);
 
 	//Sanity checker
 	CheckNumberOfBeasts(oCaster);
@@ -89,7 +89,7 @@ void PullBeastsToMe(object oPC) {
 	for(n = 0; n <= nNumberCalled; n++) {
 		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
-			SendMessageToPC(oPC, "Snagging beast "+GetFirstName(oSummon));
+			//SendMessageToPC(oPC, "Snagging beast "+GetFirstName(oSummon));
 		    AssignCommand(oSummon, ClearAllActions());
 		    AssignCommand(oSummon, JumpToLocation(GetLocation(oPC)));
 		}
@@ -129,7 +129,7 @@ void CheckNumberOfBeasts(object oPC) {
 
 void SpawnInSummon(object oPC, string sResRef) {
 
-	SendMessageToPC(oPC, "Creating "+sResRef);
+	//SendMessageToPC(oPC, "Creating "+sResRef);
 
 	location lTarget = CalcSafeLocation(oPC, GetLocation(oPC), 8.0f, TRUE, FALSE);
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_teleport_new");
