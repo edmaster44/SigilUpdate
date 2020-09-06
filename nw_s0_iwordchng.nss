@@ -173,10 +173,11 @@ struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC 
 		SendMessageToPC(oPC, "Failed to find WP");
 	}
 	
-	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
+	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oPC));
 	SendMessageToPC(oPC, "Creature: "+GetFirstName(oCreature));
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
+	SendMessageToPC(oPC, "New head: "+IntToString(app.HeadVariation));
 	
 	//DestroyObject(oCreature, 0.2f);
 	return app;
