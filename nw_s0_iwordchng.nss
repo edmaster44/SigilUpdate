@@ -29,6 +29,8 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 
 struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID);
 
+void AddPolymorphBoni(object oCaster);
+
 void main() {
 
     if (!X2PreSpellCastCode())
@@ -68,30 +70,14 @@ void main() {
 		}
 	}
 	
-	if (nSpell != 1725) {
-		effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
-		eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
-		eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
-		eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
-		
-		int nSR = GetSpellResistance(oCaster);
-		int nBoost = 26-nSR;
-		if (nBoost > 0) {
-			eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
-		}
-		
-		SetEffectSpellId(eBoost, 843);
-		
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
-	}
-	
 	int nGender = GetGender(oCaster);
 	
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1721) { //Fiend
 	
-		SendMessageToPC(oCaster, "Turning you into a demon!");
+		AddPolymorphBoni(oCaster);
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oCaster);
+		
 		Appearance.Gender = nGender;
 		if (nGender == GENDER_FEMALE){
 			Appearance.HairVariation = 100; //Different hair
@@ -105,7 +91,7 @@ void main() {
 	
 	} else if (nSpell == 1722) { //Devil
 	
-		SendMessageToPC(oCaster, "Turning you into a devil!");
+		AddPolymorphBoni(oCaster);
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdevil", oCaster);
 		Appearance.Gender = nGender;
 		if (nGender == GENDER_FEMALE){
@@ -120,7 +106,7 @@ void main() {
 	
 	}  else if (nSpell == 1723) { //Abomination
 	
-		SendMessageToPC(oCaster, "Turning you into an eldritch abomination!");
+		AddPolymorphBoni(oCaster);
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockeldritch", oCaster);
 		
 		AssumeGivenAppearance(oCaster, Appearance);
@@ -129,7 +115,7 @@ void main() {
 	
 	}  else if (nSpell == 1724) { //Fey
 	
-		SendMessageToPC(oCaster, "Turning you into a beast!");
+		AddPolymorphBoni(oCaster);
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockbear", oCaster);
 		
 		
@@ -150,6 +136,23 @@ void main() {
 	
 }
 
+void AddPolymorphBoni(object oCaster) {
+	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
+	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
+	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
+	eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
+		
+	int nSR = GetSpellResistance(oCaster);
+	int nBoost = 26-nSR;
+	if (nBoost > 0) {
+		eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
+	}
+		
+	SetEffectSpellId(eBoost, 843);
+		
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
+}
+
 void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance) {
 
 	if (!GetIsPC(oCaster)) {
@@ -160,6 +163,10 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 	object oEssence = GetItemPossessedBy(oCaster, "ps_essence");
 	struct CreatureCoreAppearance originalApp = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
 	SendMessageToPC(oCaster, "Original Appearance type: "+IntToString(originalApp.AppearanceType)); //checking what we even have saved here
+	
+	Appearance.Tint_Mask = PS_CCA_TINT_ALL;
+	Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
+	Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
 	
 	PS_SetCreatureCoreAppearance(oCaster, Appearance);
 	PS_RefreshAppearance(oCaster);
@@ -175,12 +182,12 @@ struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC 
 		SendMessageToPC(oPC, "Failed to find WP");
 	}
 	
-	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oPC));
-	SendMessageToPC(oPC, "Creature: "+GetName(oCreature));
+	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
+	//SendMessageToPC(oPC, "Creature: "+GetName(oCreature));
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
-	SendMessageToPC(oPC, "New head: "+IntToString(app.HeadVariation));
+	//SendMessageToPC(oPC, "New head: "+IntToString(app.HeadVariation));
 	
-	//DestroyObject(oCreature, 0.2f);
+	DestroyObject(oCreature, 1.0f);
 	return app;
 }
