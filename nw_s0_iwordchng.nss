@@ -158,6 +158,8 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 	}
 
 	object oEssence = GetItemPossessedBy(oCaster, "ps_essence");
+	struct CreatureCoreAppearance originalApp = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
+	SendMessageToPC(oCaster, "Original Appearance type: "+IntToString(originalApp.AppearanceType)); //checking what we even have saved here
 	
 	PS_SetCreatureCoreAppearance(oCaster, Appearance);
 	PS_RefreshAppearance(oCaster);
