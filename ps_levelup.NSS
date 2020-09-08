@@ -281,6 +281,7 @@ void main()
 			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
 		}
 	}
+	
 	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
