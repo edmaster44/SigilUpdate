@@ -505,41 +505,36 @@ int GetRangerAndPRCClassLevels(object oPC)
 
 int PS_GetCasterLevel(object oPC)
 {
+    int iClass = GetLastSpellCastClass();
+    int iLevel;
 
-	int iSlotNumber; int iClass;
-	int iTotal; int iTrue;
+    // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
+    // practiced caster can also increase by +4.
 
-	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
-		
-	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
-	{
-		iClass = GetClassByPosition( iSlotNumber, oPC);
-		
-		if ( iClass == 255 ) break;
-			
-		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
-		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
-	}
-	
-	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
-	return iTotal;
-	
-	
+    if (iClass == CLASS_TYPE_RANGER)
+    {	iLevel = GetLevelByClass(CLASS_TYPE_RANGER, oPC);
+        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER, oPC, TRUE)) iLevel += 4;
+        if (GetHasFeat(1548, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
+        if (GetHasFeat(1552, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
+        if (GetHasFeat(1583, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
+        if (GetHasFeat(1811, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
+        if (GetHasFeat(2036, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
+        if (GetHasFeat(2254, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide	
+    }
+    else if (iClass == CLASS_TYPE_PALADIN)
+    {	iLevel = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);
+        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN, oPC, TRUE)) iLevel += 4;
+        if (GetHasFeat(1547, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
+        if (GetHasFeat(1551, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
+        if (GetHasFeat(1582, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
+        if (GetHasFeat(1810, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
+        if (GetHasFeat(2035, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
+        if (GetHasFeat(2250, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide
+    }
+    else
+    {	iLevel = GetCasterLevel(oPC);	}
 
-	if(GetLevelByClass(CLASS_TYPE_RANGER, oPC) == 0) return 0;	
-		
-	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
-	{
-		iClass = GetClassByPosition( iSlotNumber, oPC);
-		
-		if ( iClass == 255 ) break;
-			
-		if(iClass == CLASS_TYPE_RANGER)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
-		else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
-	}
-	
-	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
-	return iTotal;
+    return iLevel;
 	
 	
 }
