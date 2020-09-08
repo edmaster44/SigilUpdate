@@ -14,6 +14,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	if (nValid )
 	{effect eAB = EffectAttackIncrease(nBonus);
 		effect eSlash = EffectDamageIncrease(nBonus, DAMAGE_TYPE_SLASHING);
+		effect eFatigue = EffectFatigue ();
 		effect eLink = EffectLinkEffects(eAB, eSlash);
 		eLink = SupernaturalEffect(eLink);
 		eLink = SetEffectSpellId(eLink, SPELLABILITY_DERVISH_DANCE );
@@ -59,7 +60,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		if (nLevel < 9)	
 		{	
 			if (!GetHasFeat(FEAT_DERVISH_TIRELESS_DANCE,oPC))				
-					DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));
+					DelayCommand(fDuration, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, OBJECT_SELF, RoundsToSeconds(10)));
 		}
 		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));	
 		}	
