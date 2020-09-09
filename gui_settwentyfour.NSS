@@ -10,7 +10,6 @@ void main(string status)
 		GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK, oPC)>0 ||
 		GetHasSpell(SPELL_I_BEGUILING_INFLUENCE, oPC)>0 ||
 		GetHasSpell(SPELL_I_ENTROPIC_WARDING, oPC)>0 ||
-		GetHasSpell(SPELL_I_DEVILS_SIGHT, oPC)>0 ||
 		GetHasSpell(SPELL_I_LEAPS_AND_BOUNDS, oPC)>0 ||
 		GetHasSpell(SPELL_I_SEE_THE_UNSEEN, oPC)>0 ||
 		GetHasSpell(SPELL_I_OTHERWORLDLY_WHISPERS, oPC)>0
@@ -24,7 +23,6 @@ void main(string status)
 		SetLocalInt(oPC,"TwentyFour",FALSE);
 		RemoveEffectsFromSpell(oPC, SPELL_I_BEGUILING_INFLUENCE);
 		RemoveEffectsFromSpell(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
-		RemoveEffectsFromSpell(oPC, SPELL_I_DEVILS_SIGHT);
 		RemoveEffectsFromSpell(oPC, SPELL_I_ENTROPIC_WARDING);
 		RemoveEffectsFromSpell(oPC, SPELL_I_LEAPS_AND_BOUNDS);
 		RemoveEffectsFromSpell(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);

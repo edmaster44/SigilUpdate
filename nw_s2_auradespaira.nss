@@ -26,20 +26,20 @@ void main()
 	effect eSavePenalty = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2);
 	
 	// Hexer 1-3 feats
-	if (GetHasFeat(2907, OBJECT_SELF)) { //Curse Master
+	if (GetHasFeat(2907, oCaster)) { //Curse Master
 		eSavePenalty = EffectLinkEffects(EffectACDecrease(4), eSavePenalty);
 	} 
-	else if (GetHasFeat(2901, OBJECT_SELF)) { //Hexer 3
+	else if (GetHasFeat(2901, oCaster)) { //Hexer 3
 		eSavePenalty = EffectLinkEffects(EffectACDecrease(3), eSavePenalty);
 	}
-	else if (GetHasFeat(2900, OBJECT_SELF)) { //Hexer 2
+	else if (GetHasFeat(2900, oCaster)) { //Hexer 2
 		eSavePenalty = EffectLinkEffects(EffectACDecrease(2), eSavePenalty);
 	}
-	else if (GetHasFeat(2908, OBJECT_SELF)) { //Hexer 1
+	else if (GetHasFeat(2908, oCaster)) { //Hexer 1
 		eSavePenalty = EffectLinkEffects(EffectACDecrease(1), eSavePenalty);
 	}
 	
-	if (GetHasFeat(2902, OBJECT_SELF)) { //Dreadful Aura Curse
+	if (GetHasFeat(2902, oCaster)) { //Dreadful Aura Curse
 		eSavePenalty = EffectLinkEffects(EffectDamageImmunityDecrease(DAMAGE_TYPE_ACID, 15), eSavePenalty);
 		eSavePenalty = EffectLinkEffects(EffectDamageImmunityDecrease(DAMAGE_TYPE_COLD, 15), eSavePenalty);
 		eSavePenalty = EffectLinkEffects(EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, 15), eSavePenalty);
@@ -48,6 +48,7 @@ void main()
 	}
 	
 	eSavePenalty		= SupernaturalEffect(eSavePenalty);
+	eSavePenalty		= SetEffectSpellId(eSavePenalty, SPELLABLILITY_AURA_OF_DESPAIR);
 	
 	// Doesn't work on self
 	if (oTarget != oCaster)

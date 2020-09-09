@@ -7,10 +7,13 @@ const int SPELL_I_OTHERWORLDLY_WHISPERS = 1059;
 void DoBeguilingInfluence(object oPC)
 {
     RemoveEffectsFromSpell(oPC, SPELL_I_BEGUILING_INFLUENCE);
+	
+	int nCasterLevel = GetWarlockCasterLevel(oPC);
+	int nSkillBuff = (nCasterLevel/2) + 5;
 
-	effect eBluff = EffectSkillIncrease(SKILL_BLUFF, 6);
-    effect eDiplomacy = EffectSkillIncrease(SKILL_DIPLOMACY, 6);
-    effect eIntimidate = EffectSkillIncrease(SKILL_INTIMIDATE, 6);
+	effect eBluff = EffectSkillIncrease(SKILL_BLUFF, nSkillBuff);
+    effect eDiplomacy = EffectSkillIncrease(SKILL_DIPLOMACY, nSkillBuff);
+    effect eIntimidate = EffectSkillIncrease(SKILL_INTIMIDATE, nSkillBuff);
     effect eLink = EffectLinkEffects(eBluff, eDiplomacy);
     eLink = EffectLinkEffects(eLink, eIntimidate);
     eLink = SetEffectSpellId(eLink, SPELL_I_BEGUILING_INFLUENCE);
@@ -33,27 +36,19 @@ void DoDarkOnesLuck(object oPC)
     if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
 }
 
-void DoDevilsSight(object oPC)
-{
-    RemoveEffectsFromSpell(oPC, SPELL_I_DEVILS_SIGHT);
-
-	effect eDark = EffectDarkVision();
-    effect eUltra = EffectUltravision();	
-    effect eLink = EffectLinkEffects(eDark, eUltra);
-	eLink = SetEffectSpellId(eLink, SPELL_I_DEVILS_SIGHT);
-	
-	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_DEVILS_SIGHT, FALSE));
-
-    if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-}
-
 void DoEntropicWarding(object oPC)
 {
 	RemoveEffectsFromSpell(oPC, SPELL_I_ENTROPIC_WARDING);
+	
+	int nCasterLevel = GetWarlockCasterLevel(oPC);
+	int nSkillBuff = (nCasterLevel/4);
+	if (nSkillBuff < 1)
+		nSkillBuff = 1;
+	nSkillBuff = nSkillBuff+3;
 
     effect eShield =  EffectConcealment(20, MISS_CHANCE_TYPE_VS_RANGED);
-    effect eMoveSilently = EffectSkillIncrease(SKILL_MOVE_SILENTLY, 4);
-    effect eHide = EffectSkillIncrease(SKILL_HIDE, 4);
+    effect eMoveSilently = EffectSkillIncrease(SKILL_MOVE_SILENTLY, nSkillBuff);
+    effect eHide = EffectSkillIncrease(SKILL_HIDE, nSkillBuff);
     effect eLink = EffectLinkEffects(eShield, eMoveSilently);
     eLink = EffectLinkEffects(eLink, eHide);
 	eLink = SetEffectSpellId(eLink, SPELL_I_ENTROPIC_WARDING);
@@ -66,9 +61,16 @@ void DoEntropicWarding(object oPC)
 void DoLeapsAndBounds(object oPC)
 {
 	RemoveEffectsFromSpell(oPC, SPELL_I_LEAPS_AND_BOUNDS);
+	
+	int nCasterLevel = GetWarlockCasterLevel(oPC);
+	int nSkillBuff = (nCasterLevel/2) + 5;
+	
+	int nDex = 4;
+	if (nCasterLevel > 5) //Dexterity boost doesn't become 6 until you hit caster level 6
+		nDex = 6;
 
-    effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY, 4);
-    effect eTumble = EffectSkillIncrease(SKILL_TUMBLE, 4);
+    effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY, nDex);
+    effect eTumble = EffectSkillIncrease(SKILL_TUMBLE, nSkillBuff);
     effect eLink = EffectLinkEffects(eDex, eTumble);
     eLink = SetEffectSpellId(eLink, SPELL_I_LEAPS_AND_BOUNDS);
 
@@ -80,10 +82,15 @@ void DoLeapsAndBounds(object oPC)
 void DoOtherworldlyWhispers(object oPC)
 {
 	RemoveEffectsFromSpell(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);
+	
+	int nCasterLevel = GetWarlockCasterLevel(oPC);
+	int nSkillBuff = (nCasterLevel/2) + 5;
 
-    effect eLore = EffectSkillIncrease(SKILL_LORE, 6);
-	effect eSpellCraft = EffectSkillIncrease(SKILL_SPELLCRAFT, 6);
+    effect eLore = EffectSkillIncrease(SKILL_LORE, nSkillBuff);
+	effect eSpellCraft = EffectSkillIncrease(SKILL_SPELLCRAFT, nSkillBuff);
+	effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nSkillBuff);
     effect eLink = EffectLinkEffects(eLore, eSpellCraft);
+	eLink = EffectLinkEffects(eLink, eSearch);
 	eLink = SetEffectSpellId(eLink, SPELL_I_OTHERWORLDLY_WHISPERS);
 
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_OTHERWORLDLY_WHISPERS, FALSE));
@@ -113,8 +120,6 @@ void TwentyFour(object oPC)
 		DoBeguilingInfluence(oPC);
 	if ((GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK,oPC))&&(!GetHasSpellEffect(SPELL_I_DARK_ONES_OWN_LUCK,oPC)))
 		DoDarkOnesLuck(oPC);
-	if ((GetHasSpell(SPELL_I_DEVILS_SIGHT,oPC))&&(!GetHasSpellEffect(SPELL_I_DEVILS_SIGHT,oPC)))
-		DoDevilsSight(oPC);
 	if ((GetHasSpell(SPELL_I_ENTROPIC_WARDING,oPC))&&(!GetHasSpellEffect(SPELL_I_ENTROPIC_WARDING,oPC)))
 		DoEntropicWarding(oPC);
 	if ((GetHasSpell(SPELL_I_OTHERWORLDLY_WHISPERS,oPC))&&(!GetHasSpellEffect(SPELL_I_OTHERWORLDLY_WHISPERS,oPC)))
