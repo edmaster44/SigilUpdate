@@ -50,14 +50,14 @@ void A_Thousand_Cuts(object oPC, int nSpell)
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
-if (GetLevelByClass(CLASS_DERVISH, oPC) > 0)
+if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
 		{
-			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)  )
+			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE))
 			{
-				if (!GetHasSpellEffect(SPELLABILITY_DERVISH_DEFENSIVE_PARRY,oPC))
+				if (!GetHasSpellEffect(nSpell,oPC))
 				{
 						effect eDefParry = EffectACIncrease(4);
-						eDefParry = SetEffectSpellId(eDefParry, SPELLABILITY_DERVISH_DEFENSIVE_PARRY);
+						eDefParry = SetEffectSpellId(eDefParry, nSpell);
 						eDefParry = SupernaturalEffect(eDefParry);
 						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
 						SendMessageToPC(oPC, "Defensive Parry enabled.");						
@@ -65,9 +65,9 @@ if (GetLevelByClass(CLASS_DERVISH, oPC) > 0)
 			}
 			else
 			{
-				if (GetHasSpellEffect(SPELLABILITY_DERVISH_DEFENSIVE_PARRY,oPC))
+				if (GetHasSpellEffect(nSpell,oPC))
 				{
-					RemoveSpellEffects(SPELLABILITY_DERVISH_DEFENSIVE_PARRY, OBJECT_SELF, oPC);
+					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);
 					SendMessageToPC(oPC, "Defensive Parry disabled.");						
 				}
 	}
