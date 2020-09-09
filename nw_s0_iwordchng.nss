@@ -29,7 +29,7 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 
 struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID);
 
-void AddPolymorphBoni(object oCaster);
+void AddPolymorphBoni(object oCaster, string sVFX = "");
 
 void main() {
 
@@ -75,7 +75,7 @@ void main() {
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1721) { //Fiend
 	
-		AddPolymorphBoni(oCaster);
+		AddPolymorphBoni(oCaster, "fx_f_beetle_eyes");
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oCaster);
 		
 		Appearance.Gender = nGender;
@@ -91,13 +91,13 @@ void main() {
 	
 	} else if (nSpell == 1722) { //Devil
 	
-		AddPolymorphBoni(oCaster);
+		AddPolymorphBoni(oCaster, "fx_f_beetle_eyes");
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdevil", oCaster);
 		Appearance.Gender = nGender;
 		if (nGender == GENDER_FEMALE){
 			Appearance.HairVariation = 157; //Different hair
 			Appearance.HeadVariation = 24; //Different head
-			Appearance.WingVariation = 66; //bat wings!
+			Appearance.WingVariation = 66; //raven wings!
 		}
 		
 		AssumeGivenAppearance(oCaster, Appearance);
@@ -118,7 +118,6 @@ void main() {
 		AddPolymorphBoni(oCaster);
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockbear", oCaster);
 		
-		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_HumForm_DragonUE(oCaster);
@@ -130,13 +129,12 @@ void main() {
 		//General useful things for shifting back
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_DragForm_DragonUE(oCaster);
-		DelayCommand(1.0f, AssignCommand(oCaster, ActionRest()));
 	
 	} 
 	
 }
 
-void AddPolymorphBoni(object oCaster) {
+void AddPolymorphBoni(object oCaster, string sVFX = "") {
 	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
@@ -147,8 +145,13 @@ void AddPolymorphBoni(object oCaster) {
 	if (nBoost > 0) {
 		eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
 	}
+	
+	if (sVFX != "") {
+		eBoost = EffectLinkEffects(eBoost, EffectNWN2SpecialEffectFile(sVFX));
+	}
 		
-	SetEffectSpellId(eBoost, 843);
+	eBoost = SetEffectSpellId(eBoost, 843);
+	eBoost = SupernaturalEffect(eBoost);
 		
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
 }
