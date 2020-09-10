@@ -229,6 +229,10 @@ int PS_GetFeatWingType(object oPC)
 {
 	int nWing = 0;
 	
+	if (GetHasFeat(3008, oPC)) {
+		if (GetGender(oPC) == GENDER_MALE) nWing = 79;
+		else nWing = 78;
+	}
 	
 	if (GetHasFeat(288, oPC))
 	{	if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) >= 6)

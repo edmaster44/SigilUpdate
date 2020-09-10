@@ -1,6 +1,7 @@
 #include "aaa_constants"
 #include "ps_inc_advscript"
 #include "ps_inc_functions"
+#include "ps_inc_wingtail"
 
 int CheckEpiteth(int nCLASS, object oPC)
 {
@@ -8,6 +9,13 @@ int CheckEpiteth(int nCLASS, object oPC)
 	
 	switch(nCLASS)
 	{
+		case 17:    if (GetHasFeat(2178)==TRUE) return TRUE;
+					else if (GetHasFeat(3008)==TRUE) return TRUE;
+					else if (GetHasFeat(3009)==TRUE) return TRUE;
+					else if (GetHasFeat(3010)==TRUE) return TRUE;
+					else if (GetHasFeat(3011)==TRUE) return TRUE;
+					else if (GetHasFeat(3012)==TRUE) return TRUE;
+					else break; //Fey
 		case 42:	if (GetHasFeat(2629)==TRUE) return TRUE;
 					else if (GetHasFeat(2630)==TRUE) return TRUE;
 					else if (GetHasFeat(2631)==TRUE) return TRUE;
@@ -53,8 +61,8 @@ int CheckEpiteth(int nCLASS, object oPC)
 	return FALSE;
 }
 
-int GetRelevantClass(object oPC)
-{
+int GetRelevantClass(object oPC) {
+
 	if ((GetLevelByClass(42, oPC) > 0) && (CheckEpiteth(42, oPC) == FALSE)) return 42; //Celestial Envoy
 	if ((GetLevelByClass(49, oPC) > 0) && (CheckEpiteth(49, oPC) == FALSE)) return 49; //Draconic Heritage
 	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend Wings/Eyes
@@ -63,6 +71,7 @@ int GetRelevantClass(object oPC)
 	if ((GetLevelByClass(108, oPC) >= 6)) return 108; //Gray Slaad Chaotic Crafting
 	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial Wings/Eyes
 	if ((GetLevelByClass(49, oPC) >= 6) && (CheckEpiteth(499, oPC) == FALSE)) return 499; //Half-Dragon Wings
+	if (GetRacialType(oPC) == RACIAL_TYPE_FEY && GetHasFeat(2843, oPC) && (CheckEpiteth(CLASS_TYPE_FEY, oPC) == FALSE)) return CLASS_TYPE_FEY;
 	else return -1;
 }
 
@@ -70,6 +79,15 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 {
 	switch(nCLASS)
 	{
+		case CLASS_TYPE_FEY: switch(nCOUNT) //Fey Trait
+		{
+			case 1: return 2178;
+			case 2: return 3008;
+			case 3: return 3009;
+			case 4: return 3010;
+			case 5: return 3011;
+			case 6: return 3012;
+		} break;
 		case 42: switch(nCOUNT) //Celestial Envoy
 		{
 			case 1: return 2629;
@@ -154,6 +172,7 @@ string GetClassSubtitle(int nCLASS)
 {
 	switch(nCLASS)
 	{
+		case CLASS_TYPE_FEY: return "You must select which fey trait you want. Keep in mind - Fey Trait: Hypnotism will add butterfly wings, and the Scent feat will add a tail.";
 		case 42: return "You must select which member of the Hebdomad to serve. This selection determines the bonus feats gained at levels 2, 3 and 5. "; //Celestial Envoy
 		case 49: return "You must select your draconic heritage. This selection determines your breath weapon, immunities, and draconic magic."; //Draconic Heritage
 		case 62: return "You must select either fiendish wings or supernatural sight."; //Half-Fiend
@@ -170,6 +189,7 @@ int GetTitle(int nCLASS)
 {
 	switch(nCLASS)
 	{
+		case CLASS_TYPE_FEY: return 16780659; //Fey Trait
 		case 42: return 16780035; //Celestial Envoy
 		case 49: return 16779948; //Draconic Heritage
 		case 62: return 16780074; //Outsider Apotheosis
@@ -218,6 +238,26 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 	
 }
 
+void AddEpithetFeat(object oPC, int nFeat) {
+
+	//Special fey feat double additions
+	if (GetRacialType(oPC) == RACIAL_TYPE_FEY) {
+		if (nFeat == 2178) { //Huldre Tail!
+			if (GetGender(oPC) == GENDER_MALE) PS_SetTailNumber(oPC, 27);
+			else  PS_SetTailNumber(oPC, 26);
+			PS_ApplyPCTail(oPC);
+		} else if (nFeat == 3008) {
+			FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //Wings feat!
+			
+			if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 79);
+			else  PS_SetWingNumber(oPC, 78);
+			PS_ApplyPCWings(oPC);
+		}
+	}
+	
+	FeatAdd(oPC, nFeat, FALSE, FALSE, TRUE);
+}
+
 void main(string sCOMMAND, string sFEAT)
 {
 	object oPC = OBJECT_SELF;
@@ -247,7 +287,7 @@ void main(string sCOMMAND, string sFEAT)
 	{
 		int nADD = GetLocalInt(oPC, "EXTRA_CHOICES_ADD");
 		CloseGUIScreen(oPC, sSCREEN);
-		FeatAdd(oPC, nADD, FALSE, FALSE, TRUE);
+		AddEpithetFeat(oPC, nADD);
 		DeleteLocalInt(oPC, "EXTRA_UI_PAGE");
 	}
 	else if (sCOMMAND == "PREV")

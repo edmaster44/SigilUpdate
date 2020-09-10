@@ -84,6 +84,6 @@ void main() {
 	        }
 	    } 
 		
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetLocation(oCaster), TRUE, OBJECT_TYPE_CREATURE);
 	}
 }
