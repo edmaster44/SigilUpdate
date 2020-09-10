@@ -752,7 +752,9 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
-
+			if (GetDervishWeapon(oITEM) && GetLevelByClass(CLASS_DERVISH,oPC)>5)
+			
+					PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
         
         if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
