@@ -36,7 +36,10 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 //A thousand cuts Feat for Dervish
 void A_Thousand_Cuts(object oPC, int nSpell)
 {	
+object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 
+if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oArmor == OBJECT_INVALID)
+	{
 	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
 	
 	if (GetHasSpellEffect(nSpellId,oPC))
@@ -45,7 +48,9 @@ void A_Thousand_Cuts(object oPC, int nSpell)
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
 	eSlash = SetEffectSpellId(eSlash, nSpellId );	
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration));		
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); }	
+		else
+		SendMessageToPC(oPC, "A Thousand Cuts only works when wearing no armor or light armor.");	
 }
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
