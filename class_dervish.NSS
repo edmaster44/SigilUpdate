@@ -52,7 +52,7 @@ void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
 if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
 		{
-			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE))
+			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
 			{
 				if (!GetHasSpellEffect(nSpell,oPC))
 				{
