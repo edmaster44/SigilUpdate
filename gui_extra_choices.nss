@@ -272,9 +272,15 @@ void AddEpithetFeat(object oPC, int nFeat) {
 		} else if (nFeat == 3008) {
 			FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //Wings feat!
 			
-			if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 78);
-			else  PS_SetWingNumber(oPC, 79);
+			if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 79);
+			else  PS_SetWingNumber(oPC, 78);
 			PS_ApplyPCWings(oPC);
+		} else if (nFeat == 3009) {
+			FeatAdd(oPC, 3013, FALSE, FALSE, TRUE);
+			FeatAdd(oPC, 3014, FALSE, FALSE, TRUE);
+		} else if (nFeat == 3010) {
+			FeatAdd(oPC, 3015, FALSE, FALSE, TRUE);
+			FeatAdd(oPC, 3016, FALSE, FALSE, TRUE);
 		}
 	}
 	

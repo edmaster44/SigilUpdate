@@ -73,7 +73,7 @@ void main() {
 	int nGender = GetGender(oCaster);
 	
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
-	if (nSpell == 1721) { //Fiend
+	if (nSpell == 1721) { //Demon
 	
 		AddPolymorphBoni(oCaster, "fx_f_beetle_eyes");
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oCaster);
@@ -81,6 +81,7 @@ void main() {
 		Appearance.Gender = nGender;
 		if (nGender == GENDER_FEMALE){
 			Appearance.HairVariation = 100; //Different hair
+			Appearance.HeadVariation = 11;
 			Appearance.WingVariation = 42; //bat wings!
 			Appearance.TailVariation = 9; //Tail switch
 		}
