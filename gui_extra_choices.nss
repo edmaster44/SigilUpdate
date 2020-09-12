@@ -81,12 +81,12 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 	{
 		case CLASS_TYPE_FEY: switch(nCOUNT) //Fey Trait
 		{
-			case 1: return 2178;
-			case 2: return 3008;
-			case 3: return 3009;
-			case 4: return 3010;
-			case 5: return 3011;
-			case 6: return 3012;
+			case 1: return 3008;
+			case 2: return 3009;
+			case 3: return 3010;
+			case 4: return 3011;
+			case 5: return 3012;
+			case 6: return 2178;
 		} break;
 		case 42: switch(nCOUNT) //Celestial Envoy
 		{
@@ -202,12 +202,35 @@ int GetTitle(int nCLASS)
 	return -1;
 }
 
+string GetEpitethName(int nFeat) {
+
+	//Scent feat w/ tail
+	if (nFeat == 2178) {
+		return "Fey Senses";
+	}
+	
+	int nNAME = StringToInt(Get2DAString("feat", "FEAT", nFeat));
+	return GetStringByStrRef(nNAME);
+}
+
+string GetEpitethDescription(int nFeat) {
+	
+	//Scent feat w/ tail
+	if (nFeat == 2178) {
+		return "You gain the Scent feat, and a tail.";
+	}
+	
+	int nDESC = StringToInt(Get2DAString("feat", "DESCRIPTION", nFeat));
+	return GetStringByStrRef(nDESC);
+
+}
+
 void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 {
 	if (nPAGE <= 0) SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_PREV", TRUE);
 	else SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_PREV", FALSE);
 	string sICON;
-	int nNAME;
+	string sNAME;
 	int nEPITETH;
 	int nCOUNT = 1;
 	while (nCOUNT <= 10)
@@ -229,9 +252,9 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 		else SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_NEXT", FALSE);
 		SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE_"+IntToString(nCOUNT), FALSE);
 		sICON = Get2DAString("feat", "ICON", nEPITETH) + ".tga";
-		nNAME = StringToInt(Get2DAString("feat", "FEAT", nEPITETH));
+		sNAME = GetEpitethName(nEPITETH);
 		SetGUITexture(oPC, sSCREEN, "CHOICE_ICON_"+IntToString(nCOUNT), sICON);
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), nNAME, "");
+		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), -1, sNAME);
 		SetLocalGUIVariable(oPC, sSCREEN, nCOUNT, IntToString(nEPITETH));
 		nCOUNT = nCOUNT + 1;
 	}
@@ -249,8 +272,8 @@ void AddEpithetFeat(object oPC, int nFeat) {
 		} else if (nFeat == 3008) {
 			FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //Wings feat!
 			
-			if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 79);
-			else  PS_SetWingNumber(oPC, 78);
+			if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 78);
+			else  PS_SetWingNumber(oPC, 79);
 			PS_ApplyPCWings(oPC);
 		}
 	}
@@ -278,8 +301,8 @@ void main(string sCOMMAND, string sFEAT)
 	else if (sCOMMAND == "SELECT")
 	{
 		int nFEAT = StringToInt(sFEAT);
-		int nDESC = StringToInt(Get2DAString("feat", "DESCRIPTION", nFEAT));
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_DESCRIPTION", nDESC, "");
+		string sDESC = GetEpitethDescription(nFEAT);
+		SetGUIObjectText(oPC, sSCREEN, "CHOICE_DESCRIPTION", -1, sDESC);
 		SetLocalInt(oPC, "EXTRA_CHOICES_ADD", nFEAT);
 		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", FALSE);
 	}

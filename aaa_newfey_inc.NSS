@@ -62,10 +62,10 @@ void PS_Fey_FeyHypnotism(object oPC) {
 		int nMod = 0;
 		if (onlyOne) nMod = -2;
 	
-	    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)) {
+	    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC) {
 		
 	        //Fire cast spell at event for the specified target
-	        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HYPNOTISM));
+	        SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_HYPNOTISM));
 	
 			//You need a mind to be effected
 	        if (spellsIsMindless(oTarget) == FALSE) {
@@ -74,9 +74,9 @@ void PS_Fey_FeyHypnotism(object oPC) {
 					nMod = 2;
 				}
 			
-	            if (!MyResistSpell(OBJECT_SELF, oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nDC-nMod, SAVING_THROW_TYPE_MIND_SPELLS)) {
+	            if (!MyResistSpell(oPC, oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nDC-nMod, SAVING_THROW_TYPE_MIND_SPELLS)) {
 	                
-					if ( !GetIsImmune(oTarget,IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF )) {
+					if ( !GetIsImmune(oTarget,IMMUNITY_TYPE_MIND_SPELLS, oPC )) {
 					
 						effect eFasc = EffectFascinate();
 						SetEffectSpellId(eFasc, SPELL_HYPNOTISM);
@@ -115,7 +115,7 @@ void PS_Fey_FeySleep(object oPC, location lTarget) {
     {
 		if (GetHitDice(oTarget) < nMaxLevel) 
 		{
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && oTarget != oPC)
 	        {
 				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oCaster))
 				{
@@ -149,7 +149,7 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
     {
 		if (GetHitDice(oTarget) < nCasterLevel) 
 		{
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC)
 	    	{
 	            fDelay = GetRandomDelay();
 	            //Fire cast spell at event for the specified target
@@ -158,7 +158,7 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
 	            if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 	            {
 	                //Make a will save
-	                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, OBJECT_SELF, fDelay))
+	                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oPC, fDelay))
 	                {
 	                    //Apply the linked effects and the VFX impact
 	                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));
@@ -330,7 +330,7 @@ void PS_Fey_Kiss(object oPC, object oTarget) {
 	}
 }
 
-//Fey Sleep spell
+//Fey Aspect of Seasons spell
 void PS_Fey_SeasonalAspect(object oPC) {
 
 	int currentSeason = GetLocalInt(oPC, "currentSeason") + 1;
@@ -340,18 +340,6 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	
 	//temporary
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-	
-	SendMessageToPC(oPC,"Hair color 0 " + IntToString(app.HairTint_Color0));
-	SendMessageToPC(oPC,"Hair color 1 " + IntToString(app.HairTint_Color1));
-	SendMessageToPC(oPC,"Hair color 2 " + IntToString(app.HairTint_Color2));
-	SendMessageToPC(oPC,"Head color 0 " + IntToString(app.HeadTint_Color0));
-	SendMessageToPC(oPC,"Head color 1 " + IntToString(app.HeadTint_Color1));
-	SendMessageToPC(oPC,"Head color 2 " + IntToString(app.HeadTint_Color2));
-	SendMessageToPC(oPC,"Tattoo color 1 " + IntToString(app.TattooColor1));
-	SendMessageToPC(oPC,"Tattoo color 2 " + IntToString(app.TattooColor1));
-	SendMessageToPC(oPC,"Tint color 0 " + IntToString(app.Tint_Color0));
-	SendMessageToPC(oPC,"Tint color 1 " + IntToString(app.Tint_Color1));
-	SendMessageToPC(oPC,"Tint color 2 " + IntToString(app.Tint_Color2));
 
 	//Remove Effects
 	effect currentEffect = GetFirstEffect(oPC);
@@ -378,20 +366,24 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	//Add Effects
 	if (currentSeason == SEASON_SUMMER)
 	{
+		SendMessageToPC(oPC, "You call upon the power of Summer.");
 		effect summer = SupernaturalEffect(EffectAttackIncrease(1));
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, summer, oPC, 0.0f);
 	}
 	else if (currentSeason == SEASON_FALL)
 	{
+		SendMessageToPC(oPC, "You call upon the power of Autumn.");
 		FeatAdd(oPC, FEAT_AURA_DESPAIR, FALSE);
 	}
 	else if (currentSeason == SEASON_WINTER)
 	{
+		SendMessageToPC(oPC, "You call upon the power of Winter.");
 		effect winter = SupernaturalEffect(EffectACIncrease(1));
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, winter, oPC, 0.0f);
 	}
 	else if (currentSeason == SEASON_SPRING)
 	{
+		SendMessageToPC(oPC, "You call upon the power of Spring.");
 		FeatAdd(oPC, FEAT_AURA_OF_COURAGE, FALSE);
 	}
 
