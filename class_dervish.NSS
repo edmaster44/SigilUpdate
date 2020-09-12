@@ -20,6 +20,8 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		if (nLevel >= 9 ) 
         {   nAmount = 2; }
+		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
+		{ nAmount = 5;}
 	
 		float fDuration = 9999.99f;
 		effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
@@ -53,29 +55,29 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 		SendMessageToPC(oPC, "A Thousand Cuts only works when wearing no armor or light armor.");	
 }
 //Defensive Parry.
-void Dervish_Defensive_Parry(object oPC, int nSpell)
-{
-int nSpell = SPELLABILITY_DERVISH_AC_BONUS;
+//void Dervish_Defensive_Parry(object oPC, int nSpell)
+//{
+//int nSpell = SPELLABILITY_DERVISH_AC_BONUS;
 
-		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
-			{
-			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
-			{
-				
-						effect eDefParry = EffectACIncrease(4);
-						eDefParry = SetEffectSpellId(eDefParry, nSpell);
-						eDefParry = SupernaturalEffect(eDefParry);
-						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
-						SendMessageToPC(oPC, "Defensive Parry enabled.");						
-				}
-			
-		else if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == FALSE)
-			{if (GetHasSpellEffect(nSpell,oPC))
-				{
-					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);	
-					SendMessageToPC(oPC, "Defensive Parry disabled.");				
-				}
-				}
-	}
-	}
+//		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
+//			{
+//			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
+//			{
+//				
+//						effect eDefParry = EffectACIncrease(4);
+//						eDefParry = SetEffectSpellId(eDefParry, nSpell);
+//						eDefParry = SupernaturalEffect(eDefParry);
+//						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
+//						SendMessageToPC(oPC, "Defensive Parry enabled.");						
+//				}
+//			
+//		else if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == FALSE)
+//			{if (GetHasSpellEffect(nSpell,oPC))
+//				{
+//					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);	
+//					SendMessageToPC(oPC, "Defensive Parry disabled.");				
+//				}
+//				}
+//	}
+//	}
 	
