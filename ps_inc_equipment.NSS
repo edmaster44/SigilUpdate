@@ -27,7 +27,8 @@ int GetDervishWeapon(object oItem)
 {
 int iBaseItem = GetBaseItemType(oItem);
 return iBaseItem == BASE_ITEM_SCIMITAR || iBaseItem == BASE_ITEM_SICKLE||iBaseItem == BASE_ITEM_LONGSWORD || iBaseItem == BASE_ITEM_GREATSWORD ||iBaseItem == BASE_ITEM_HANDAXE ||iBaseItem ==  BASE_ITEM_BATTLEAXE ||iBaseItem == BASE_ITEM_GREATAXE
-||iBaseItem == BASE_ITEM_HALBERD ||iBaseItem == BASE_ITEM_KAMA ||iBaseItem == BASE_ITEM_KUKRI ||iBaseItem ==  BASE_ITEM_KATANA || iBaseItem == BASE_ITEM_BASTARDSWORD ||iBaseItem == BASE_ITEM_DWARVENWARAXE||iBaseItem == BASE_ITEM_SCYTHE;
+||iBaseItem == BASE_ITEM_HALBERD ||iBaseItem == BASE_ITEM_KAMA ||iBaseItem == BASE_ITEM_KUKRI ||iBaseItem ==  BASE_ITEM_KATANA || iBaseItem == BASE_ITEM_BASTARDSWORD ||iBaseItem == BASE_ITEM_DWARVENWARAXE||iBaseItem == BASE_ITEM_SCYTHE||iBaseItem == BASE_ITEM_FALCHION
+||iBaseItem == BASE_ITEM_CREEQ_SLASH_L||iBaseItem == BASE_ITEM_CREEQ_SLASH_M||iBaseItem == BASE_ITEM_CREEQ_SLASH_S||iBaseItem == 150 || iBaseItem == 151 ;
 
 
 }
@@ -752,7 +753,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
-			if (GetDervishWeapon(oITEM) && GetLevelByClass(CLASS_DERVISH,oPC)>5)
+			if (GetDervishWeapon(oITEM) && GetLevelByClass(CLASS_DERVISH,oPC)>4)
 			
 					PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
