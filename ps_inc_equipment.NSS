@@ -25,44 +25,34 @@ int GetMonkWeapon(object oItem)
 int GetDervishWeapon(object oItem)
 
 {
-int iBaseItem = GetBaseItemType(oItem);
-return iBaseItem == BASE_ITEM_SCIMITAR || iBaseItem == BASE_ITEM_SICKLE||iBaseItem == BASE_ITEM_LONGSWORD || iBaseItem == BASE_ITEM_GREATSWORD ||iBaseItem == BASE_ITEM_HANDAXE ||iBaseItem ==  BASE_ITEM_BATTLEAXE ||iBaseItem == BASE_ITEM_GREATAXE
-||iBaseItem == BASE_ITEM_HALBERD ||iBaseItem == BASE_ITEM_KAMA ||iBaseItem == BASE_ITEM_KUKRI ||iBaseItem ==  BASE_ITEM_KATANA || iBaseItem == BASE_ITEM_BASTARDSWORD ||iBaseItem == BASE_ITEM_DWARVENWARAXE||iBaseItem == BASE_ITEM_SCYTHE||iBaseItem == BASE_ITEM_FALCHION
-||iBaseItem == BASE_ITEM_CREEQ_SLASH_L||iBaseItem == BASE_ITEM_CREEQ_SLASH_M||iBaseItem == BASE_ITEM_CREEQ_SLASH_S||iBaseItem == 150 || iBaseItem == 151 ;
-
-
+if(!GetIsObjectValid(oItem)) return FALSE;
+		
+	int iType = GetBaseItemType(oItem);
+	if(Get2DAString("baseitems","WeaponType",iType) != "3")
+	return FALSE;
+				
+	return TRUE;
 }
 
 int nDervishValid (object oPC)
 {
 
-object oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-		
-	int bArmor = FALSE;
-	int nArmorRank = ARMOR_RANK_NONE;
- 	if (GetIsObjectValid(oItem))
-		nArmorRank = GetArmorRank(oItem);
-	if (nArmorRank == ARMOR_RANK_NONE || nArmorRank == ARMOR_RANK_LIGHT)
-		bArmor = TRUE;
-	else
-		bArmor = FALSE;	
-		
-	int bShield = FALSE;		
-	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);	
- 	if (GetIsObjectValid(oItem))
-	{
-		int nBaseItemType = GetBaseItemType(oItem);
-		if (nBaseItemType == BASE_ITEM_SMALLSHIELD || 
-		nBaseItemType == BASE_ITEM_TOWERSHIELD ||
-		nBaseItemType == BASE_ITEM_LARGESHIELD)
-			bShield = TRUE;
-	}
+int chest = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC));
+	if(chest == 3 || chest == 2) return FALSE;
+
+//	SendMessageToPC(oPC,"DEBUG: Armor check is good!");	
 	
-	int bSlashing = GetDervishWeapon(oItem);
-	if (bSlashing && !bShield && bArmor)
-		return TRUE;
-	else
-		return FALSE;
+	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+	if (oShield == OBJECT_INVALID) return TRUE;
+
+//	SendMessageToPC(oPC,"DEBUG: Shield check is good!");	
+		
+	int shield = GetBaseItemType(oShield);
+	if(shield == 56 || shield == 14 || shield == 57) return FALSE;	
+
+//	SendMessageToPC(oPC,"DEBUG: Shield type check is good!");	
+		
+	return TRUE;
 }
 
 
@@ -406,6 +396,28 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
     ApplyEquipmentEffect(oPC, eFX);
 }
 
+void SlashingBlades(object oPC, int nSpellID)
+{
+	//At 1st level, a dervish treats the scimitar as a light weapon for all purposes, including fighting with two weapons.
+	RemoveAnySpellEffects(nSpellID, oPC);
+	
+	if(!nDervishValid(oPC)) return;
+	
+	object oWeaponRightHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
+	object oWeaponLeftHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+		
+	if(!GetDervishWeapon(oWeaponRightHand) || !GetDervishWeapon(oWeaponLeftHand)) return;
+	int eABIncrease;
+
+	if(GetLevelByClass(72,oPC) >= 7) eABIncrease = 2;
+	else eABIncrease = 1;	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, ExtraordinaryEffect(SetEffectSpellId(EffectAttackIncrease(eABIncrease), nSpellID)), oPC);
+}
+
+
+
+
+
 // Heavy Armor Optimization Feats
 void HeavyArmorOptimizations(object oPC, object oARMOR)
 {
@@ -469,22 +481,6 @@ void UnearthlyGrace(object oPC, object oCHEST)
     effect eFX = EffectSavingThrowIncrease(SAVING_THROW_ALL, nCHA);
     eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
     ApplyEquipmentEffect(oPC, eFX);
-}
-//Dervish AC bonus
-void DervishArmor(object oPC, object oCHEST)
-{
-if (GetHasFeat(FEAT_DERVISH_AC_BONUS, oPC, TRUE) == FALSE) return;
-if (GetArmorRank(oCHEST) > ARMOR_RANK_LIGHT) return;
-	int nAmount = 1;			
-		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
-		if (nLevel >= 9 ) 
-        {   nAmount = 2; }
-
-
-		effect eFX = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
-		 ApplyEquipmentEffect(oPC, eFX);
-
-
 }
 
 
@@ -725,7 +721,6 @@ void EquipmentEffects(object oPC)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
-	DervishArmor(oPC,oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
@@ -755,7 +750,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 
 			if (GetDervishWeapon(oITEM) && GetLevelByClass(CLASS_DERVISH,oPC)>4)
 			
-					PS_ApplySpecialWeaponFinesse(oPC, oITEM);
+				PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
         
         if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);

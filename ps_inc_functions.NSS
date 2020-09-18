@@ -232,6 +232,8 @@ int IncreasedUnarmedDamageBonus(object oPC, object oItem)
 	
 	return iBonus + iDmgAvg + MonkUnarmedDamage(oPC,iMonk);
 }
+//Counts Monk Levels.
+
 //Counts Spellcasting Progression from bsplvl file
 int GetClassBspLevel(object oPC, int nClass)
 {
@@ -282,10 +284,8 @@ int MonkLevels(object oPC, int BAB = 0)
 	}
 	
 	if (GetHasFeat(3209,oPC,TRUE))
-	{
+	iMonk = iMonk + GetLevelByClass(214,oPC); // Austere One
 	
-		if(BAB == 0 || BAB == 1 && !GetIsHighBabClass(214))	iMonk = iMonk + GetLevelByClass(214,oPC); // Austere One
-	}
 
 	return iMonk;
 }
@@ -2478,6 +2478,9 @@ void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	SendMessageToPC(oPC, "Difference in modifiers: " + IntToString(iDiff));
 	if(iDiff <= 0)
 	{	iDiff = 0;	}
+	
+		if (GetLevelByClass(CLASS_DERVISH,oPC) > 4 )
+	{ iDiff = iDiff +2;}
 	object oSlotR		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	SendMessageToPC(oPC, "Item in right hand: " + GetName(oSlotR));
 	object oSlotL		= GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
