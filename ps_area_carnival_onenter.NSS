@@ -80,12 +80,13 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_carnmercyguard", lSpawnpoint, FALSE, "ps_npc_carnmercyguard2");    
   }
   
-  if(GetObjectByTag("ps_npc_carnmercy") == OBJECT_INVALID)
+  //MK arrested her this year
+  /*if(GetObjectByTag("ps_npc_carnmercy") == OBJECT_INVALID)
   {
    object oWP = GetWaypointByTag("wp_npc_carnmercy");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_carnmercy", lSpawnpoint);    
-  }
+  }*/
   
   if(GetObjectByTag("ps_npc_carnbleak") == OBJECT_INVALID)
   {
