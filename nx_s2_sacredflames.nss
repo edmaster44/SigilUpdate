@@ -41,8 +41,8 @@ void main()
 		nTotalDamage += nWisdomBonus;
 	}
 	
-	int nDivineDamage = nTotalDamage;					// Half of bonus (rounded down) is divine damage.
-	int nFireDamage   = nTotalDamage/2 - nDivineDamage/2;	// The rest (half rounded up) is fire damage.
+	int nDivineDamage = nTotalDamage/2;					// Half of bonus (rounded down) is divine damage.
+	int nFireDamage   = nTotalDamage + nDivineDamage;	// The rest (half rounded up) is fire damage.
 	
 	float fDuration = 9999.9f;
 	
