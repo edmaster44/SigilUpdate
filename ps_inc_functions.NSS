@@ -324,6 +324,93 @@ int GetWarlockAndPRCClassLevels(object oPC)
 	return iTotal;
 }
 
+//Breaking this out for clarity
+void GiveEssenceBlastShapes(object oPC) {
+
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_DRAINING);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_FRIGHTFUL);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_BSHADOWED);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_BRIMSTONE);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_HELLRIME);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_BWITCHING);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_NOXIOUS);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_VITRIOLIC);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_UTTERDARK);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_BLACKBOLT);
+	FeatRemove(oPC, FEAT_WARLOCK_SPEAR_BINDING);
+
+	//Beshadowed
+	if (GetSpellKnown(oPC,SPELL_I_BESHADOWED_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_BSHADOWED,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Bewitching
+	if (GetSpellKnown(oPC,SPELL_I_BEWITCHING_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_BWITCHING,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Blackbolt
+	if (GetSpellKnown(oPC,SPELL_I_BLACKBOLT_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_BLACKBOLT,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Brimstone
+	if (GetSpellKnown(oPC,SPELL_I_BRIMSTONE_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_BRIMSTONE,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Draining
+	if (GetSpellKnown(oPC,SPELL_I_DRAINING_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_DRAINING,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Frightful
+	if (GetSpellKnown(oPC,SPELL_I_FRIGHTFUL_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_FRIGHTFUL,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Hellrime
+	if (GetSpellKnown(oPC,SPELL_I_HELLRIME_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_HELLRIME,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Noxious
+	if (GetSpellKnown(oPC,SPELL_I_NOXIOUS_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_NOXIOUS,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Utterdark
+	if (GetSpellKnown(oPC,SPELL_I_UTTERDARK_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_UTTERDARK,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Vitriolic
+	if (GetSpellKnown(oPC,SPELL_I_VITRIOLIC_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_VITRIOLIC,FALSE,FALSE,FALSE);
+		}
+	}
+	
+}
+
 //Gets Warlock Caster Levels with Feats included 
 int GetWarlockCasterLevel(object oPC)
 {
@@ -342,15 +429,17 @@ int GetWarlockCasterLevel(object oPC)
 		else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
 	}
 	
-
-//	SendMessageToPC(oPC,"Debug Warlock: Total Caster Level "+IntToString(iTotal));
-	
-	
-		if (iTotal > 30)
-		iTotal = 30;
+	if (iTotal > 30)
+	iTotal = 30;
 	
 	int nDice;
 	int nCount;	
+	
+	if (iTotal >= 1) {	
+		FeatAdd(oPC, FEAT_WARLOCK_SPEAR_ELDRTICH, FALSE);
+	}
+	
+	GiveEssenceBlastShapes(oPC);
 	
 	//1411-1419 1-9
 	//1948-1952 10-14
@@ -394,6 +483,7 @@ int GetWarlockCasterLevel(object oPC)
 	
 	return iTotal;
 }
+
 // used to check for if new creature weapon as designed by Cere.
 int PS_IsEquippableCW(object oItem)
 {

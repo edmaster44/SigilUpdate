@@ -516,3 +516,17 @@ const int FEAT_TRAP_SENSE_8						=1865;//Barbarian level 24
 const int FEAT_DAMAGE_REDUCTION7				=1862;//Barbarian Level 25, Damage Reduction
 const int FEAT_TRAP_SENSE9						=1866;//Trap Sense 9
 const int FEAT_DAMAGE_REDUCTION8				=1863;//Damage Reduction 8 Barbarian Level 27+
+
+const int SPELL_I_BLACKBOLT_BLAST 				= 1130;
+const int FEAT_WARLOCK_SPEAR_ELDRTICH 			= 3299;
+const int FEAT_WARLOCK_SPEAR_DRAINING 			= 3300;
+const int FEAT_WARLOCK_SPEAR_FRIGHTFUL 			= 3301;
+const int FEAT_WARLOCK_SPEAR_BSHADOWED 			= 3302;
+const int FEAT_WARLOCK_SPEAR_BRIMSTONE 			= 3303;
+const int FEAT_WARLOCK_SPEAR_HELLRIME 			= 3304;
+const int FEAT_WARLOCK_SPEAR_BWITCHING 			= 3305;
+const int FEAT_WARLOCK_SPEAR_NOXIOUS 			= 3306;
+const int FEAT_WARLOCK_SPEAR_VITRIOLIC 			= 3307;
+const int FEAT_WARLOCK_SPEAR_UTTERDARK 			= 3308;
+const int FEAT_WARLOCK_SPEAR_BLACKBOLT 			= 3309;
+const int FEAT_WARLOCK_SPEAR_BINDING 			= 3310;
