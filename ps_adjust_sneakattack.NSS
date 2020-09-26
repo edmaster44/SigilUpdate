@@ -171,6 +171,9 @@ void AddSneakDice(object oPC)
 	sTotal += ((GetLevelByClass(CLASS_INVISIBLE_BLADE, oPC) + 1) /2);
 	if (GetHasFeat(FEAT_FRANTIC_REACTIONS, oPC)) {
 		sTotal += 2 ;}
+		if (GetHasFeat(DEATHATTACK5))
+		{FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
+
 	if (sTotal >= 5||GetHasFeat(DEATHATTACK5)) {
 		FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
 }
