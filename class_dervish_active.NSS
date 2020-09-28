@@ -7,6 +7,8 @@
 
 void Dervish_Dance(object oPC,int nSpell)
 {
+
+
 int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	int nBonus = (nLevel +1) / 2;
 	float fDuration = RoundsToSeconds(10);
