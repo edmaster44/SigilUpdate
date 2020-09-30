@@ -36,7 +36,7 @@ void main() {
 	int nID = GetSpellId();
 	
 	switch (nID) {
-		case 813: DoEldritchBlast( OBJECT_SELF, oTarget, FALSE, TRUE ); break; //vanilla spear
+		case 813: DoShapeEldritchSpear(); break; //vanilla spear
 		case 2200: DoEssenceDrainingBlast( OBJECT_SELF, oTarget, FALSE, TRUE ); break; //draining spear
 		case 2201: DoEssenceFrightfulBlast( OBJECT_SELF, oTarget, FALSE, TRUE ); break; //frightful spear
 		case 2202: DoEssenceBeshadowedBlast( OBJECT_SELF, oTarget, FALSE, TRUE ); break; //beshadowed spear

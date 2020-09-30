@@ -24,11 +24,9 @@ void DoHideousBlow(object oPC)
 	if (GetLocalInt(oPC,"HideousBlow")==FALSE) return;
 	
 	//Declare major variables
-//	int nMetaMagic = GetMetaMagicFeat();
 	int nMetaMagic = GetLocalInt(oPC,"HideousMeta");
- //   object oTarget = GetSpellTargetObject();
+	
 	int nDurVFX = VFX_INVOCATION_HIDEOUS_BLOW;
-    //Enter Metamagic conditions
 	
     effect eHidBlow = EffectHideousBlow( nMetaMagic );
 	
@@ -47,18 +45,6 @@ void DoHideousBlow(object oPC)
     effect eDur = EffectVisualEffect( nDurVFX );
     effect eLink = EffectLinkEffects(eHidBlow, eDur);
 	eLink = SetEffectSpellId(eLink, SPELL_I_HIDEOUS_BLOW);
-	
-	// Checks to see if the warlock still has a blow readied. If he does, don't do hellfire damage -Electrohydra
-	/*if (!GetHasSpellEffect(SPELL_I_HIDEOUS_BLOW, OBJECT_SELF))
-	{
-		int iHellfireActive = GetActionMode(oPC, ACTION_MODE_HELLFIRE_BLAST);
-		if (iHellfireActive == TRUE)
-		{
-			int iDmg = GetHitDice(oPC) / 2; // 0.5HP / level is equal to 1 point of CON damage.
-			effect eDmg = EffectDamage(iDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE); // hopefully this will bypass resistances.
-			DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oPC));
-		}
-	}*/
 	
 	RemoveEffectsFromSpell(oPC, SPELL_I_HIDEOUS_BLOW);
     //Fire cast spell at event for the specified target

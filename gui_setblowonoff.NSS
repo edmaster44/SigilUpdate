@@ -4,7 +4,7 @@ void main(string status)
 {
 	object oPC = OBJECT_SELF;
 
-	if (status=="On" && GetHasSpell(SPELL_I_HIDEOUS_BLOW, oPC))
+	if (status=="On" && (GetHasSpell(SPELL_I_HIDEOUS_BLOW, oPC) || GetHasFeat(FEAT_WARLOCK_BLOW_ELDRTICH, oPC, TRUE)))
 	{
 		SetLocalInt(oPC,"HideousBlow",TRUE);
 		if (!GetIsInCombat()) ExecuteScript("nw_s0_ihideousb1",oPC);

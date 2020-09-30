@@ -1,3 +1,5 @@
+#include "aaa_constants"
+
 const int SPELL_I_HINDERING_BLAST=1130;
 const int SPELL_I_BINDING_BLAST=1131;
 const int SPELL_I_OTHERWORLDLY_WHISPERS = 1059;
@@ -7,7 +9,7 @@ void main()
 {
 	object oPC = OBJECT_SELF;
 
-	if (GetHasSpell(SPELL_I_HIDEOUS_BLOW, oPC)) 
+	if (GetHasSpell(SPELL_I_HIDEOUS_BLOW, oPC) || GetHasFeat(FEAT_WARLOCK_BLOW_ELDRTICH, oPC, TRUE)) 
 	{
 		SetGUIObjectDisabled(oPC,"SCREEN_WARLOCK","HideousBlow",FALSE); 
 	
