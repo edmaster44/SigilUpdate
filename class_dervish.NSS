@@ -8,6 +8,12 @@ void Dervish_AC_Bonus(object oPC, int nSpell)
 {
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 
+
+if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
+{ SendMessageToPC(oPC, "Your Armor Bonus will not stack with Stalwart Defender");
+	return;}
+
+
 if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oArmor == OBJECT_INVALID)
 	{
 		int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
@@ -38,6 +44,11 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 //A thousand cuts Feat for Dervish
 void A_Thousand_Cuts(object oPC, int nSpell)
 {	
+
+if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
+{ SendMessageToPC(oPC, "A thousand Cuts will not stack with Stalwart Defender");
+	return;}
+
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 
 if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oArmor == OBJECT_INVALID)
@@ -57,7 +68,7 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 //Defensive Parry.
 //void Dervish_Defensive_Parry(object oPC, int nSpell)
 //{
-//int nSpell = SPELLABILITY_DERVISH_AC_BONUS;
+//int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
 
 //		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
 //			{
