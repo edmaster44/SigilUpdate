@@ -117,6 +117,7 @@ const int CLASS_TYPE_DRAGON_PRC					= 127;
 const int CLASS_TYPE_DRAGON_PSION				= 128;
 const int CLASS_TYPE_PACK_LEADER 				= 210;
 const int CLASS_TYPE_PLANTPC 					= 211;
+const int CLASS_TYPE_AUSTERE_ONE				= 214;
 
 // List of specific feats
 const int FEAT_GIANT_ROCK_THROW					= 2371;

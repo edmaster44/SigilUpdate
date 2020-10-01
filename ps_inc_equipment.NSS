@@ -28,7 +28,9 @@ int GetDervishWeapon(object oItem)
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponType",iType) != "3")
+	if(Get2DAString("baseitems","WeaponType",iType) != "3"
+	&& Get2DAString("baseitems","WeaponSize",iType) != "3"
+	&& Get2DAString("baseitems","WeaponSize",iType) != "4")
 	return FALSE;
 				
 	return TRUE;
@@ -157,7 +159,7 @@ void ApplyAustereStrikes(object oPC,object oItem)
         IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
         SaveItemPropertyReference(oItem, "AustereStrikes", ipAdd);
 
-        SendMessageToPC(oPC, "Slashing Damage bonus of " + nDamageConstant + " applied to your Gloves");
+        SendMessageToPC(oPC, "Slashing Damage bonus of " +IntToString(nDamageConstant) + " applied to your Gloves");
     }
 
 }
