@@ -6,7 +6,7 @@ void main()
 	
 	while (oTarget != OBJECT_INVALID)
 	{
-		applyShackle(oTarget, 75 - GetSkillRank(SKILL_CONCENTRATION, oTarget, FALSE));
+		applyShackle(oTarget, 100);
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetSpellTargetLocation());
 	}
 }

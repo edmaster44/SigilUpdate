@@ -28,9 +28,7 @@ int GetDervishWeapon(object oItem)
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponType",iType) != "3"
-	&& Get2DAString("baseitems","WeaponType",iType) != "3"
-	&& Get2DAString("baseitems","WeaponType",iType) != "4")
+	if(Get2DAString("baseitems","WeaponType",iType) != "3")
 	return FALSE;
 				
 	return TRUE;
@@ -114,6 +112,67 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 }
 
 DeleteItemPropertyReference(oItem, "MeditativeStrikes");
+
+}
+
+}
+
+//Adds Austere One levels as flat Slashing Damage to gloves
+void ApplyAustereStrikes(object oPC,object oItem)
+{    
+    int nRak = GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC);
+    
+    if(nRak <= 0){
+    
+    //    SendMessageToPC(oPC, "Austere One PRC levels = 0");
+        return;
+    }
+    else if(!GetBaseItemType(oItem) == BASE_ITEM_GLOVES){                 
+    
+      //  SendMessageToPC(oPC, "PC is using a weapon, not unarmed");
+        return;
+    }
+    itemproperty ipAdd = GetItemPropertyReference(oItem, "AustereStrikes");
+        if (GetIsItemPropertyValid(ipAdd) != FALSE) {
+        SendMessageToPC(oPC, "Austere Strikes already active.");
+        return;
+}
+
+
+    
+    int nDamageConstant = GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC);    
+    int nDamageType = IP_CONST_DAMAGETYPE_SLASHING;
+    float fDUR = 9999.9f;    
+    ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_SLASHING, nDamageConstant);
+    
+    if(GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC)> 0)
+    {
+        if(!GetIsItemPropertyValid(ipAdd)){
+        
+            SendMessageToPC(oPC, "Item property was not valid");
+            return;
+        }
+    
+        SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamageConstant));    
+        IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+        SaveItemPropertyReference(oItem, "AustereStrikes", ipAdd);
+
+        SendMessageToPC(oPC, "Slashing Damage bonus of " + nDamageConstant + " applied to your Gloves");
+    }
+
+}
+
+//Removes Austere Strikes off propertry
+void RemoveAustereStrikes(object oPC,object oItem)
+{
+  if(GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC)> 0){
+itemproperty ipAdd = GetItemPropertyReference(oItem, "AustereStrikes");
+if (GetIsItemPropertyValid(ipAdd) == FALSE) {
+    SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
+    return;
+}
+
+DeleteItemPropertyReference(oItem, "AustereStrikes");
 
 }
 
@@ -741,6 +800,8 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
         CheckForTempProperties(oITEM, oPC);
         
       DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
+	  
+	  DelayCommand(0.1f,ApplyAustereStrikes(oPC,oITEM));
     
       DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
         
@@ -772,6 +833,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
             RemoveElementalWeapon(oPC,oITEM);
             RemoveMeditativeStrikes(oPC,oITEM);
+			RemoveAustereStrikes(oPC,oITEM);
         
     }
 
