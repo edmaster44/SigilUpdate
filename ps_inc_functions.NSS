@@ -2730,7 +2730,7 @@ void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	if(iDiff <= 0)
 	{	iDiff = 0;	}
 	
-		if (GetLevelByClass(CLASS_DERVISH,oPC) > 4 )
+		if (GetLevelByClass(CLASS_DERVISH,oPC) > 4)
 	{ iDiff = iDiff +2;}
 	object oSlotR		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	SendMessageToPC(oPC, "Item in right hand: " + GetName(oSlotR));
