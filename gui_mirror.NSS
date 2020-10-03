@@ -87,10 +87,13 @@ void InitializeItem(object oPC, int bStore, int iInventorySlot, string sRoadMap)
 			SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", oItemToCraft);
 			object oSavedItem = CopyItem(oItemToCraft,GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER"),TRUE);
 			SetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC),oSavedItem);
+			
 			//cryptc: Added "timestamp" variable to be unique identifier accepting that its same item to be modified.
 			string tso = ClangStamp();
 			SetLocalString(oPC,"TSO",tso);
 			SetLocalString(oItemToCraft,"TSO",tso);
+			SendMessageToPC(oPC, "Item stamp set.");
+			
 			// Figure out which armor pieces are part of this items armor set in case
 			// we were to edit it.
 			XPCraft_InitArmorSetMask(oPC);
@@ -125,7 +128,12 @@ void CraftAction(object oPC, int iAction, int iAvtValue)
 	object oItemToCraft = GetItemInSlot(iInventorySlot,oPC);
 
 	//cryptc: this is where to check for identical TSO.
-	if(	GetLocalString(oPC,"TSO") != GetLocalString(oItemToCraft,"TSO")) return;
+	if(	GetLocalString(oPC,"TSO") != GetLocalString(oItemToCraft,"TSO")) {
+		//XPCraft_Debug(oPC,"No Item In Slot : " + IntToString(iInventorySlot)+ "- restoring last unchanged Item");
+		SendMessageToPC(oPC, "Not the same item!");
+		XPCraft_ActionCancelChanges(oPC);		
+		return;
+	}//END
 			
 	if((oItemToCraft==OBJECT_INVALID) && (iAction!=XP_CRAFT_ACTION_EXIT))
 	{
