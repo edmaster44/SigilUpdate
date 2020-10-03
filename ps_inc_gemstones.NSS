@@ -124,7 +124,7 @@ string RollGemstoneOfColor(string sColor) {
 string RollGemstoneType(object oRough) {
 
 	string sTag = GetTag(oRough);
-	int qualityIndex = FindSubString(sTag, "_q");
+	int qualityIndex = FindSubString(sTag, "_q", 12);
 	sTag = GetSubString(sTag, 0, qualityIndex);
 	
 	if (sTag == "gemstone_rough_red") {
@@ -163,7 +163,7 @@ int IsGemIdentified(object oGem) {
 //Get the base tag string from tag string
 //Good for creating new identical gems!
 string GetBaseGemTagFromString(string sTag) {
-	int qualityIndex = FindSubString(sTag, "_q");
+	int qualityIndex = FindSubString(sTag, "_q", 12);
 	if (FindSubString(sTag, "_rough") >= 0)
 		qualityIndex = FindSubString(sTag, "_rough");
 	return GetSubString(sTag, 0, qualityIndex);

@@ -1,6 +1,8 @@
 #include "ps_inc_gemstones"
 #include "nw_i0_plot"
 
+void PrintGemstoneQualities(object oPC, object oGem);
+
 void main () {
 
 	int failureRoll = 10;
@@ -15,6 +17,7 @@ void main () {
 
 	object oPC = OBJECT_SELF;
 	object oGem = GetLocalObject(oPC, "selected_gem");
+	
 	if (!GetIsObjectValid(oGem) || !GetIsGemstone(oGem) || !IsGemRough(oGem)) {
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 		return;
@@ -121,4 +124,10 @@ void main () {
 	DelayCommand(0.5f, RegenerateGemList(oPC));
 	DelayCommand(0.6f, UpdateSelectedGem(oPC));
 
+}
+
+void PrintGemstoneQualities(object oPC, object oGem) {
+	
+	int nSize = GetCaratWeight(oGem);
+	int nQuality = GetGemQuality(oGem);
 }
