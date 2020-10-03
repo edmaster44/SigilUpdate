@@ -34,7 +34,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat1,oArmorNew,fDuration);
 				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat2,oArmorNew,fDuration);
 				DelayCommand(fDuration, DestroyObject(oArmorNew,0.0f,FALSE));
-				ActionEquipItem(oArmorNew,INVENTORY_SLOT_CARMOUR);		
+				DelayCommand(0.1,ActionEquipItem(oArmorNew,INVENTORY_SLOT_CARMOUR));		
 			}
 			else
 			{
@@ -51,7 +51,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 				oArmorNew = CreateItemOnObject("x2_it_emptyskin", OBJECT_SELF, 1, "", FALSE);
 				AddItemProperty(DURATION_TYPE_TEMPORARY,iBonusFeat1,oArmorNew,fDuration);
 				DelayCommand(fDuration, DestroyObject(oArmorNew,0.0f,FALSE));
-				ActionEquipItem(oArmorNew,INVENTORY_SLOT_CARMOUR);		
+			DelayCommand(0.1,ActionEquipItem(oArmorNew,INVENTORY_SLOT_CARMOUR));		
 			}
 			else
 			{
