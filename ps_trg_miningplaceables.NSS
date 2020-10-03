@@ -1,5 +1,4 @@
 #include "ps_inc_training"
-#include "ps_inc_functions"
 
 void CreateMiningPlaceable(object oPC, string sPlac, int nDC, object oLoc, string sSuccess) {
 

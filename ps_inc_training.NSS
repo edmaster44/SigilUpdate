@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 const int TRAINING_DIFFICULTY_VERY_EASY = 0;
 const int TRAINING_DIFFICULTY_EASY = 1;
 const int TRAINING_DIFFICULTY_NORMAL = 2;
@@ -336,7 +338,7 @@ int GetIsTrainingSkillSuccessful(object oPC, int nSkill, int nDC) {
 	
 	if (GetIsSkillSuccessful(oPC, nSkill, nDC, TRUE)) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;
