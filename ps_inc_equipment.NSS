@@ -782,7 +782,7 @@ void EquipmentEffects(object oPC)
     SpellResistFix(oPC);
     ShieldRangedConceal(oPC, nLEFT);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
-    HeavyArmorOptimizations(oPC, oCHEST);
+    //HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);

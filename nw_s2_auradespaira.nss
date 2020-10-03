@@ -58,8 +58,8 @@ void main()
 		SignalEvent (oTarget, EventSpellCastAt(oCaster, SPELLABLILITY_AURA_OF_DESPAIR, FALSE));		
 
 	    //Faction Check
-		if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
-		{
+		if (!GetIsDead(oTarget) && GetIsEnemy(oTarget, oCaster)) {
+		
 			//SpeakString("nw_s2_auradespairA.ns: On Enter: target is enemy");
 	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavePenalty, oTarget);			
 		}

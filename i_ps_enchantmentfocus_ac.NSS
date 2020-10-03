@@ -12,6 +12,8 @@ void main () {
 	object oItem = GetItemActivated();
 	object oTarget = GetItemActivatedTarget();
 	
+	CloseGUIScreen(oPC, sEnchantingScreen);
+	
 	//Clear enchanting focus before we start the GUI
 	DeleteLocalObject(oPC, "ObjectToEnchant");
 	DeleteLocalInt(oPC, "EnchantmentToApply");
@@ -48,6 +50,7 @@ void main () {
 	SendMessageToPC(oPC, "Starting enchanting. . .");
 	
 	SetLocalObject(oPC, "ObjectToEnchant", oTarget);
+	
 	DisplayGuiScreen(oPC, sEnchantingScreen, TRUE, xmlEnchantingFile);
 	
 	DisplayItemDescription(oPC, oTarget);

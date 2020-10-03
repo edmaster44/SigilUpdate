@@ -51,6 +51,7 @@ void main()
 			eLink 		= SupernaturalEffect(eLink);
 		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDuration);
+		
 		SendMessageToPC(oPC, "+" + IntToString(iACCheck) + " bonus added to armor check dependent feats.");
 		SendMessageToPC(oPC, "+" + IntToString(iACBonus) + " bonus Dodge AC added.");
 }	}

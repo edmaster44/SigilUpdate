@@ -36,7 +36,6 @@ void main()
     }
 	
 	object oTarget = OBJECT_SELF; //caster
-	SendMessageToPC(oTarget, "casting dreadful aura");
 
 	// Strip any Auras first
 	effect eTest = GetFirstEffect(oTarget);
