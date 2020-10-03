@@ -141,7 +141,8 @@ void AddSneakDice(object oPC)
 	sneakDice += GetLevelByClass(CLASS_SHADOWDANCER,oPC) / 3;
 	sneakDice += GetLevelByClass(CLASS_ARCANETRICKSTER2, oPC) / 2;
 	sneakDice += GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION, oPC) / 2;
-	sneakDice += GetLevelByClass(CLASS_SHIFTING_INFILTRATOR, oPC) / 2;
+	sneakDice += (GetLevelByClass(CLASS_SHIFTING_INFILTRATOR, oPC) + 1) / 2;
+	
 	
 	// then we add the proper sneak attack feats
 	if (sneakDice == 0)
@@ -171,9 +172,6 @@ void AddSneakDice(object oPC)
 	sTotal += ((GetLevelByClass(CLASS_INVISIBLE_BLADE, oPC) + 1) /2);
 	if (GetHasFeat(FEAT_FRANTIC_REACTIONS, oPC)) {
 		sTotal += 2 ;}
-		if (GetHasFeat(DEATHATTACK5))
-		{FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
-
 	if (sTotal >= 5||GetHasFeat(DEATHATTACK5)) {
 		FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
 }

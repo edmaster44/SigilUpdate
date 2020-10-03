@@ -2,12 +2,16 @@ void applyShackle(object oTarget, int FailureAmount);
 
 void main()
 {
-	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetSpellTargetLocation());
+	SendMessageToPC(OBJECT_SELF, "Searching for shackle targets..");
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(OBJECT_SELF));
 	
 	while (oTarget != OBJECT_INVALID)
-	{
+	{   
+		SendMessageToPC(OBJECT_SELF, "apply shackle on " + GetName(oTarget));
 		applyShackle(oTarget, 100);
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetSpellTargetLocation());
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(OBJECT_SELF));
+		
+	
 	}
 }
 
