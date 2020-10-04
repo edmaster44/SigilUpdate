@@ -16,7 +16,7 @@ void main()
 {
 	object oPC = GetPCSpeaker();
 	
-	SendMessageToPC(oPC, "Current ID: "+PS_GetCharID(oPC));
+	//SendMessageToPC(oPC, "Current ID: "+PS_GetCharID(oPC));
 	
 	if (GetHasMultipleEntries(oPC)) {
 		RemoveExtraEntries(oPC);
@@ -25,7 +25,7 @@ void main()
 	//If we removed the old id, time to update!
 	UpdatePCID(oPC);
 	
-	SendMessageToPC(oPC, "New ID: "+PS_GetCharID(oPC));
+	//SendMessageToPC(oPC, "New ID: "+PS_GetCharID(oPC));
 	
 	string sID = PS_GetCharID(oPC);
 	
@@ -57,13 +57,13 @@ int GetHasMultipleEntries(object oPC) {
 
 	string sQuery = "SELECT COUNT(*) FROM characterdata WHERE account='" + sAccount+"' AND name='"+sName+"'";
 	
-	SendMessageToPC(oPC, "Checking number of entries: "+sQuery);
+	//SendMessageToPC(oPC, "Checking number of entries: "+sQuery);
 	
 	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) {
 		int nCount = StringToInt(SQLGetData(1));
 		
-		SendMessageToPC(oPC, "Entries found: "+IntToString(nCount));
+		//SendMessageToPC(oPC, "Entries found: "+IntToString(nCount));
 		
 		return (nCount > 1);
 	}
@@ -78,7 +78,7 @@ void RemoveExtraEntries(object oPC) {
 
 	string sQuery = "SELECT id, rp_pool, dm_pool FROM characterdata WHERE account='" + sAccount+"' AND name='"+sName+"'";
 	
-	SendMessageToPC(oPC, "Finding 'low' entry: "+sQuery);
+	//SendMessageToPC(oPC, "Finding 'low' entry: "+sQuery);
 	
 	int nRPXP = 0;
 	int nDMXP = 0;
@@ -90,7 +90,7 @@ void RemoveExtraEntries(object oPC) {
 		int thisRPXP = StringToInt(SQLGetData(2));
 		int thisDMXP = StringToInt(SQLGetData(3));
 		
-		SendMessageToPC(oPC, "Entry: "+IntToString(thisRPXP)+", "+IntToString(thisDMXP)+", ID - "+id);
+		//SendMessageToPC(oPC, "Entry: "+IntToString(thisRPXP)+", "+IntToString(thisDMXP)+", ID - "+id);
 		
 		if (thisRPXP < nRPXP || sID == "") {
 			nRPXP = thisRPXP;
@@ -99,13 +99,13 @@ void RemoveExtraEntries(object oPC) {
 		}
 	}
 	
-	SendMessageToPC(oPC, "'Low' entry found: "+sID);
+	//SendMessageToPC(oPC, "'Low' entry found: "+sID);
 	
 	if (sID != "") {
 		sQuery = "DELETE FROM characterdata WHERE id='" + sID + "'";
 		SQLExecDirect(sQuery);
 		
-		SendMessageToPC(oPC, "Removing extra entry.");
+		//SendMessageToPC(oPC, "Removing extra entry.");
 	}
 }
 

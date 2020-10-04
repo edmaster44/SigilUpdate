@@ -39,16 +39,27 @@ void main() {
 	}
 	
 	//Remove previous versions of this spell
-	if ( GetHasSpellEffect(811) ) { //811 = Eldritch Shield
-		effect eEffect = GetFirstEffect( OBJECT_SELF );
-		while ( GetIsEffectValid(eEffect) ) {
+	effect eEffect = GetFirstEffect( OBJECT_SELF );
+	while ( GetIsEffectValid(eEffect) ) {
 		
-			if ( GetEffectSpellId(eEffect) == 811){
+		SendMessageToPC(oCaster, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
+			
+		if (GetEffectSpellId(eEffect) == 811 ||
+			GetEffectSpellId(eEffect) == 2222 ||
+			GetEffectSpellId(eEffect) == 2223 ||
+			GetEffectSpellId(eEffect) == 2224 ||
+			GetEffectSpellId(eEffect) == 2225 ||
+			GetEffectSpellId(eEffect) == 2226 ||
+			GetEffectSpellId(eEffect) == 2227 ||
+			GetEffectSpellId(eEffect) == 2228 ||
+			GetEffectSpellId(eEffect) == 2229 ||
+			GetEffectSpellId(eEffect) == 2230 ||
+			GetEffectSpellId(eEffect) == 2231 ||
+			GetEffectSpellId(eEffect) == 2232) {
 				RemoveEffect( OBJECT_SELF, eEffect );
 			}
 				
-			eEffect = GetNextEffect( OBJECT_SELF );
-		}
+		eEffect = GetNextEffect( OBJECT_SELF );
 	}
 	
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);

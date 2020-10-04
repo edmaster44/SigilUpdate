@@ -22,9 +22,33 @@ void DoHideousBlow(object oPC)
 	
 	//Declare major variables
 	int nMetaMagic = GetLocalInt(oPC,"HideousMeta");
-	SendMessageToPC(oPC, "Executing hideous blow: "+IntToString(nMetaMagic));
+	//SendMessageToPC(oPC, "Executing hideous blow: "+IntToString(nMetaMagic));
 	
 	int nDurVFX = VFX_INVOCATION_HIDEOUS_BLOW;
+
+	//Remove previous versions of this spell
+	effect eEffect = GetFirstEffect( oPC );
+	while ( GetIsEffectValid(eEffect) ) {
+		
+		SendMessageToPC(oPC, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
+			
+		if (GetEffectSpellId(eEffect) == 816 ||
+			GetEffectSpellId(eEffect) == 2211 ||
+			GetEffectSpellId(eEffect) == 2212 ||
+			GetEffectSpellId(eEffect) == 2213 ||
+			GetEffectSpellId(eEffect) == 2214 ||
+			GetEffectSpellId(eEffect) == 2215 ||
+			GetEffectSpellId(eEffect) == 2216 ||
+			GetEffectSpellId(eEffect) == 2217 ||
+			GetEffectSpellId(eEffect) == 2218 ||
+			GetEffectSpellId(eEffect) == 2219 ||
+			GetEffectSpellId(eEffect) == 2220 ||
+			GetEffectSpellId(eEffect) == 2221) {
+				RemoveEffect( oPC, eEffect );
+			}
+				
+		eEffect = GetNextEffect( oPC );
+	}
 	
     effect eHidBlow = EffectHideousBlow( nMetaMagic );
 	

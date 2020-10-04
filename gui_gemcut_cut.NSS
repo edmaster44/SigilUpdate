@@ -25,8 +25,8 @@ void main () {
 	
 	PlayCustomAnimation(oPC, "forge01", FALSE, 1.0f);
 	string sBaseTag = GetBaseGemTag(oGem);
+	SendMessageToPC(oPC, "base tag: "+sBaseTag+" vs. "+GetTag(oGem));
 	
-	//SendMessageToPC(oPC, "cut the gem: "+GetName(oGem));
 	int nSize = GetCaratWeight(oGem);
 	if (nSize > 2) //randomly update size if its an older gemstone
 		nSize = d3()-1;

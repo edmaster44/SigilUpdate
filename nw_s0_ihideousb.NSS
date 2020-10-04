@@ -35,6 +35,31 @@ void main()
 
     object oTarget = GetSpellTargetObject();
 	int nDurVFX = VFX_INVOCATION_HIDEOUS_BLOW;
+	object oCaster = OBJECT_SELF;
+	
+	//Remove previous versions of this spell
+	effect eEffect = GetFirstEffect( oCaster );
+	while ( GetIsEffectValid(eEffect) ) {
+		
+		SendMessageToPC(oCaster, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
+			
+		if (GetEffectSpellId(eEffect) == 816 ||
+			GetEffectSpellId(eEffect) == 2211 ||
+			GetEffectSpellId(eEffect) == 2212 ||
+			GetEffectSpellId(eEffect) == 2213 ||
+			GetEffectSpellId(eEffect) == 2214 ||
+			GetEffectSpellId(eEffect) == 2215 ||
+			GetEffectSpellId(eEffect) == 2216 ||
+			GetEffectSpellId(eEffect) == 2217 ||
+			GetEffectSpellId(eEffect) == 2218 ||
+			GetEffectSpellId(eEffect) == 2219 ||
+			GetEffectSpellId(eEffect) == 2220 ||
+			GetEffectSpellId(eEffect) == 2221) {
+				RemoveEffect( oCaster, eEffect );
+			}
+				
+		eEffect = GetNextEffect( oCaster );
+	}
 	
 	int nMetaMagic;
 	int nID = GetSpellId();
