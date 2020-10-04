@@ -41,7 +41,7 @@ void main()
 	effect eEffect = GetFirstEffect( oCaster );
 	while ( GetIsEffectValid(eEffect) ) {
 		
-		SendMessageToPC(oCaster, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
+		//SendMessageToPC(oCaster, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
 			
 		if (GetEffectSpellId(eEffect) == 816 ||
 			GetEffectSpellId(eEffect) == 2211 ||

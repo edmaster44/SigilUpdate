@@ -166,7 +166,16 @@ string GetBaseGemTagFromString(string sTag) {
 	int qualityIndex = FindSubString(sTag, "_q", 12);
 	if (FindSubString(sTag, "_rough") >= 0)
 		qualityIndex = FindSubString(sTag, "_rough");
-	return GetSubString(sTag, 0, qualityIndex);
+	string sResult = GetSubString(sTag, 0, qualityIndex);
+	
+	if (sResult == "gemstone_quartz_purple")
+		return "gemstone_kuartz_purple";
+	if (sResult == "gemstone_quartz_white")
+		return "gemstone_kuartz_white";
+	if (sResult == "gemstone_quartz_green")
+		return "gemstone_kuartz_green";
+		
+	return sResult;
 }
 
 //Wrapper for GetBaseGemTagFromString which takes

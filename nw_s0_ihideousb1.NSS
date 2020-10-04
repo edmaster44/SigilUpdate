@@ -30,7 +30,7 @@ void DoHideousBlow(object oPC)
 	effect eEffect = GetFirstEffect( oPC );
 	while ( GetIsEffectValid(eEffect) ) {
 		
-		SendMessageToPC(oPC, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
+		//SendMessageToPC(oPC, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
 			
 		if (GetEffectSpellId(eEffect) == 816 ||
 			GetEffectSpellId(eEffect) == 2211 ||
