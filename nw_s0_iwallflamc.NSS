@@ -60,8 +60,7 @@ void main()
     //Declare the spell shape, size and the location.
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-        {
+    	if (GetIsEnemy(oTarget, oCreator)) {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_WALL_OF_FIRE));
             //Make SR check, and appropriate saving throw(s).

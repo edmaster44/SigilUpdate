@@ -49,8 +49,8 @@ void main()
 		case 2217: nMetaMagic = METAMAGIC_INVOC_NOXIOUS_BLAST; nDurVFX = VFX_INVOCATION_NOXIOUS_BLOW; break; //noxious spear
 		case 2218: nMetaMagic = METAMAGIC_INVOC_VITRIOLIC_BLAST; nDurVFX = VFX_INVOCATION_VITRIOLIC_BLOW; break; //vitriolic spear
 		case 2219: nMetaMagic = METAMAGIC_INVOC_UTTERDARK_BLAST; nDurVFX = VFX_INVOCATION_UTTERDARK_BLOW; break; //utterdark spear
-		case 2220: nMetaMagic = METAMAGIC_INVOC_BINDING_BLAST; nDurVFX = VFX_INVOCATION_BINDING_BLOW; break; //hindering spear
-		case 2221: nMetaMagic = METAMAGIC_INVOC_HINDERING_BLAST; nDurVFX = VFX_INVOCATION_HINDERING_BLOW; break; //binding spear
+		case 2220: nMetaMagic = METAMAGIC_INVOC_HINDERING_BLAST; nDurVFX = VFX_INVOCATION_HINDERING_BLOW; break; //hindering spear
+		case 2221: nMetaMagic = METAMAGIC_INVOC_BINDING_BLAST; nDurVFX = VFX_INVOCATION_BINDING_BLOW; break; //binding spear
 	}
 
     effect eHidBlow = EffectHideousBlow( nMetaMagic );
@@ -58,10 +58,12 @@ void main()
     effect eDur = EffectVisualEffect( nDurVFX );
     effect eLink = EffectLinkEffects(eHidBlow, eDur);
 	
-    RemoveEffectsFromSpell(OBJECT_SELF, GetSpellId());
+	SetEffectSpellId(eLink, SPELL_I_HIDEOUS_BLOW);
+	
+    RemoveEffectsFromSpell(OBJECT_SELF, SPELL_I_HIDEOUS_BLOW);
 
     //Fire cast spell at event for the specified target
-    SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+    SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_I_HIDEOUS_BLOW, FALSE));
 
     //Apply the VFX impact and effects
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);

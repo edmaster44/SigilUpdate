@@ -35,7 +35,7 @@ void main()
 	
     if(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster) {
+        if (GetIsEnemy(oTarget, oCaster)) {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 			
 			//If you're an enemy, you get blinded!

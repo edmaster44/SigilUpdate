@@ -49,8 +49,7 @@ void main()
     int nHits = d4();
     int nRoll;
     float fDelay;
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE,oCaster))
-    {
+    if (GetIsEnemy(oTarget, oCaster)) {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt( oCaster, SPELL_I_CHILLING_TENTACLES));
 		nHits = d4();

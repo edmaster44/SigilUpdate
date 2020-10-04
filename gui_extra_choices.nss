@@ -9,12 +9,12 @@ int CheckEpiteth(int nCLASS, object oPC)
 	
 	switch(nCLASS)
 	{
-		case 17:    if (GetHasFeat(2178)==TRUE) return TRUE;
-					else if (GetHasFeat(3008)==TRUE) return TRUE;
-					else if (GetHasFeat(3009)==TRUE) return TRUE;
-					else if (GetHasFeat(3010)==TRUE) return TRUE;
-					else if (GetHasFeat(3011)==TRUE) return TRUE;
-					else if (GetHasFeat(3012)==TRUE) return TRUE;
+		case 17:    if (GetHasFeat(2178, oPC, TRUE)==TRUE) return TRUE;
+					else if (GetHasFeat(3008, oPC, TRUE)==TRUE) return TRUE;
+					else if (GetHasFeat(3009, oPC, TRUE)==TRUE) return TRUE;
+					else if (GetHasFeat(3010, oPC, TRUE)==TRUE) return TRUE;
+					else if (GetHasFeat(3011, oPC, TRUE)==TRUE) return TRUE;
+					else if (GetHasFeat(3012, oPC, TRUE)==TRUE) return TRUE;
 					else break; //Fey
 		case 42:	if (GetHasFeat(2629)==TRUE) return TRUE;
 					else if (GetHasFeat(2630)==TRUE) return TRUE;

@@ -1,3 +1,4 @@
+#include "aaa_constants"
 
 const int SPELL_I_HINDERING_BLAST=1130;
 const int SPELL_I_BINDING_BLAST=1131;
@@ -7,7 +8,7 @@ void main(int nMetaMagic)
 {
 	object oPC = OBJECT_SELF;
 
-	if (GetHasSpell(SPELL_I_HIDEOUS_BLOW, oPC)) 
+	if (GetHasSpell(SPELL_I_HIDEOUS_BLOW, oPC) || GetHasFeat(FEAT_WARLOCK_BLOW_ELDRTICH, oPC, TRUE)) 
 	{
 		
 		if (GetHasSpell(SPELL_I_BRIMSTONE_BLAST, oPC)==0 && nMetaMagic==METAMAGIC_INVOC_BRIMSTONE_BLAST)
@@ -44,6 +45,8 @@ void main(int nMetaMagic)
 			return;
 
 		SetLocalInt(oPC,"HideousMeta",nMetaMagic);
+		SendMessageToPC(oPC, "Setting hideous blow to: "+IntToString(nMetaMagic));
+		
 		ExecuteScript("nw_s0_ihideousb1",oPC);
 	}
 }

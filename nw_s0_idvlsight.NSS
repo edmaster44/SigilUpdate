@@ -163,9 +163,7 @@ void main() {
 		eShield = EffectLinkEffects(eShield, EffectNWN2SpecialEffectFile("sp_eldritch_shield"));
 	}
 	
-	SetEffectSpellId(eShield, GetSpellId());
-	
-    RemoveEffectsFromSpell(oCaster, GetSpellId());
+	SetEffectSpellId(eShield, 811);
 	
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oCaster, fDuration);
 	

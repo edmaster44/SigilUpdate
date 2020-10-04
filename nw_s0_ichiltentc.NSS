@@ -55,8 +55,7 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
         nDamage = 0;
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-        {
+        if (GetIsEnemy(oTarget, oCaster)) {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_I_CHILLING_TENTACLES));
             nDamage = 0;

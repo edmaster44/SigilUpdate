@@ -12,6 +12,7 @@
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
 #include "ps_inc_equipmentprops"
+#include "nw_i0_spells"
 
 
 const int SIGIL_EQUIP_FX = -9444;
@@ -498,6 +499,11 @@ void SlashingBlades(object oPC, int nSpellID)
 // Heavy Armor Optimization Feats
 void HeavyArmorOptimizations(object oPC, object oARMOR)
 {
+	
+	RemoveSpellEffects(SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION, oPC, oPC);
+	RemoveSpellEffects(SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER, oPC, oPC);
+	RemoveSpellEffects(SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC, oPC, oPC);
+	
     if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
     int nAC;
     int nSKILL;
@@ -796,7 +802,7 @@ void EquipmentEffects(object oPC)
     SpellResistFix(oPC);
     ShieldRangedConceal(oPC, nLEFT);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
-    //HeavyArmorOptimizations(oPC, oCHEST);
+    HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
