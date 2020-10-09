@@ -82,8 +82,8 @@ void PS_Spell_FreezingFog(object oPC, location lTarget, int nSpell)
 	if (!X2PreSpellCastCode())
     {	return;		}
 
-    effect eFog 		= EffectAreaOfEffect(fx_crystal_fog);
-	effect eRime		= EffectAreaOfEffect(psi_entangling_ectoplasm);
+    effect eFog 		= EffectAreaOfEffect(AOE_PER_FREEZINGFOG);
+	effect eRime		= EffectAreaOfEffect(AOE_PER_GREASE);
 	float fDuration		= TurnsToSeconds(GetCasterLevel(oPC));
 
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eFog, lTarget, fDuration);
