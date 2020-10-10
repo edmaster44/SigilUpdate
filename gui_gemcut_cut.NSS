@@ -22,6 +22,8 @@ void main () {
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 		return;
 	}
+
+	WriteTimestampedLogEntry(GetName(oPC)+" is cutting a gem "+GetTag(oGem));
 	
 	PlayCustomAnimation(oPC, "forge01", FALSE, 1.0f);
 	string sBaseTag = GetBaseGemTag(oGem);

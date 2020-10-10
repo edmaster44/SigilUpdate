@@ -53,6 +53,8 @@ void main() {
 	
 	//SendMessageToPC(oCaster, "Summoning "+IntToString(nCreatures)+" creatures of "+IntToString(nHD)+" HD");
 	
+	WriteTimestampedLogEntry(GetName(oCaster)+" is casting Call of the Beast.");
+	
 	string sCreature = GetCreatureResref(oCaster, nHD);
 	//SendMessageToPC(oCaster, "Chosen creature: "+sCreature);
 
