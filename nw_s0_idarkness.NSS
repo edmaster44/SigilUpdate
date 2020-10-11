@@ -134,6 +134,11 @@ void SpawnInSummon(object oPC, string sResRef) {
 	//SendMessageToPC(oPC, "Creating "+sResRef);
 
 	location lTarget = CalcSafeLocation(oPC, GetLocation(oPC), 8.0f, TRUE, FALSE);
+	if (!GetIsLocationValid(lTarget)) {
+		SendMessageToPC(oPC, "Nearby location not found to spawn one of the beasts. Cast the spell in a more open location.");
+		return;
+	}
+	
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_teleport_new");
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVFX, lTarget);
 	
@@ -169,28 +174,28 @@ void SetSummonAppearance(object oPC, object oSummon) {
 			case 1: nAppearance = APPEARANCE_TYPE_BADGER; SetFirstName(oSummon, sTemplate+"Badger"); break;
 			case 2: nAppearance = APPEARANCE_TYPE_BAT; SetFirstName(oSummon, sTemplate+"Bat");  break;
 			case 3: nAppearance = APPEARANCE_TYPE_DEER; SetFirstName(oSummon, sTemplate+"Deer");  break;
-			case 4: nAppearance = APPEARANCE_TYPE_DOG; SetFirstName(oSummon, sTemplate+"Hound");  break;
-			case 5: nAppearance = APPEARANCE_TYPE_RAT_DIRE; SetFirstName(oSummon, sTemplate+"Rat");  break;
-			case 6: nAppearance = 2307; SetFirstName(oSummon, sTemplate+"Badger");  break;
-			case 7: nAppearance = 1502; SetFirstName(oSummon, sTemplate+"Snake");  break;
-			case 8: nAppearance = 1504; SetFirstName(oSummon, sTemplate+"Stirge");  break;
+			case 4: nAppearance = APPEARANCE_TYPE_RAT_DIRE; SetFirstName(oSummon, sTemplate+"Rat");  break;
+			case 5: nAppearance = 2307; SetFirstName(oSummon, sTemplate+"Badger");  break;
+			case 6: nAppearance = 1502; SetFirstName(oSummon, sTemplate+"Snake");  break;
+			case 7: nAppearance = 1504; SetFirstName(oSummon, sTemplate+"Stirge");  break;
 		}
 	} else {
 		//large critter set
-		int nRand = Random(10)+1;
+		int nRand = Random(9)+1;
 		switch(nRand) {
 			case 1: nAppearance = APPEARANCE_TYPE_BEAR_BROWN; SetFirstName(oSummon, sTemplate+"Bear"); break;
 			case 2: nAppearance = APPEARANCE_TYPE_BOAR; SetFirstName(oSummon, sTemplate+"Boar"); break;
 			case 3: nAppearance = APPEARANCE_TYPE_BEETLE_STAG; SetFirstName(oSummon, sTemplate+"Beetle"); break;
-			case 4: nAppearance = APPEARANCE_TYPE_CAT_PANTHER; SetFirstName(oSummon, sTemplate+"Panther"); break;
-			case 5: nAppearance = APPEARANCE_TYPE_DOG_WOLF; SetFirstName(oSummon, sTemplate+"Wolf"); break;
-			case 6: nAppearance = 2322; SetFirstName(oSummon, sTemplate+"Dinosaur"); break;
-			case 7: nAppearance = 2324; SetFirstName(oSummon, sTemplate+"Tiger"); break;
-			case 8: nAppearance = 2325; SetFirstName(oSummon, sTemplate+"Lion"); break;
-			case 9: nAppearance = 2326; SetFirstName(oSummon, sTemplate+"Lion"); break;
-			case 10: nAppearance = 2327; SetFirstName(oSummon, sTemplate+"Manticore"); break;
+			case 4: nAppearance = APPEARANCE_TYPE_DOG_WOLF; SetFirstName(oSummon, sTemplate+"Wolf"); break;
+			case 5: nAppearance = 2322; SetFirstName(oSummon, sTemplate+"Dinosaur"); break;
+			case 6: nAppearance = 2324; SetFirstName(oSummon, sTemplate+"Tiger"); break;
+			case 7: nAppearance = 2325; SetFirstName(oSummon, sTemplate+"Lion"); break;
+			case 8: nAppearance = 2326; SetFirstName(oSummon, sTemplate+"Lion"); break;
+			case 9: nAppearance = 2327; SetFirstName(oSummon, sTemplate+"Manticore"); break;
 		}
 	}
+	
+	WriteTimestampedLogEntry("Call of the beast appearance set to "+IntToString(nAppearance));
 		
 	SetCreatureAppearanceType(oSummon, nAppearance);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, oSummon);
