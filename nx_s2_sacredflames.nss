@@ -41,14 +41,14 @@ void main()
 		nTotalDamage += nWisdomBonus;
 	}
 	
-	int nDivineDamage = (nTotalDamage)/2;					// Half of bonus (rounded down) is divine damage.
-	int nFireDamage   = (nTotalDamage + nDivineDamage)/2;	// The rest (half rounded up) is fire damage.
+	int nDivineDamage = (nTotalDamage)/4;	// Half of bonus (rounded down) is divine damage.
+	int nFireDamage   = (nTotalDamage)/2;	// The rest (half rounded up) is fire damage.
 	
 	float fDuration = 9999.9f;
 	
     effect eDivineDamage = EffectDamageIncrease(IPGetDamageBonusConstantFromNumber(nDivineDamage), DAMAGE_TYPE_DIVINE);
     effect eFireDamage   = EffectDamageIncrease(IPGetDamageBonusConstantFromNumber(nFireDamage), DAMAGE_TYPE_FIRE);
-	effect eFists		 = EffectVisualEffect(VFX_DUR_SACRED_FLAMES);
+//	effect eFists		 = EffectVisualEffect(VFX_DUR_SACRED_FLAMES);
 	
     effect eLink = EffectLinkEffects(eDivineDamage, eFireDamage);
 	eLink = EffectLinkEffects(eLink, eFists);
