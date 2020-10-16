@@ -69,7 +69,11 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
 int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
-
+	if (GetHasSpellEffect(nSpell,oPC))
+				{
+					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);	
+					SendMessageToPC(oPC, "Defensive Parry disabled.");
+					}
 		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
 			{
 			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
@@ -81,14 +85,5 @@ int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
 						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
 						SendMessageToPC(oPC, "Defensive Parry enabled.");						
 				}
-			
-		else if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == FALSE)
-			{if (GetHasSpellEffect(nSpell,oPC))
-				{
-					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);	
-					SendMessageToPC(oPC, "Defensive Parry disabled.");				
-				}
-				}
-	}
-	}
-	
+}
+}
