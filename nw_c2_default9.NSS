@@ -124,8 +124,8 @@ void main()
 			nLOOTCHANCE = 20;
 		}
 		
-		//0.5% to spawn special material depending on area
-		if (Random(2000) < 10) SpecialDrop(GetTag(GetArea(oSPAWN)), oSPAWN); 
+		//1% to spawn special material depending on area
+		if (Random(1000) < 10) SpecialDrop(GetTag(GetArea(oSPAWN)), oSPAWN); 
 		
 		//Generate general loot!
 		if (d100() <= nLOOTCHANCE){

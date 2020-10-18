@@ -179,7 +179,7 @@ void SpecialDrop(string sAREA, object oSPAWN)
 			case 1: sSPECIAL = "ps_crft_plk_ao"; break;
 		}	
 	}
-	else if(TestStringAgainstPattern("**Niflheim**", sAREA))
+	else if(TestStringAgainstPattern("**niflheim**", sAREA))
 	{
 		switch (Random(2))
 		{
