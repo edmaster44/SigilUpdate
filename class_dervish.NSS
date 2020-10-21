@@ -69,6 +69,7 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
 int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
+int nAction = GetCurrentAction(oPC);
 	if (GetHasSpellEffect(nSpell,oPC))
 				{
 					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);	
@@ -76,7 +77,7 @@ int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
 					}
 		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
 			{
-			if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
+			if (nAction == ACTION_MODE_COMBAT_EXPERTISE || nAction== ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)
 			{
 				
 						effect eDefParry = EffectACIncrease(4);
