@@ -89,16 +89,16 @@ void PS_Feat_SHD_ShadowEvade(object oPC, int nSpell)
     if (nLevel <10) 
     {	switch (nLevel)
         {	case 4:
-            case 5: nConceal = 5; nDRAmount = 5; nDRType = DR_TYPE_MAGICBONUS; nMatType = DAMAGE_POWER_PLUS_ONE; nAC = 1; break;
+            case 5: nConceal = 30; nDRAmount = 5; nDRType = DR_TYPE_MAGICBONUS; nMatType = DAMAGE_POWER_PLUS_ONE; nAC = 1; break;
             case 6:
-            case 7: nConceal = 10; nDRAmount = 5; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ALCHEMICAL_SILVER; nAC = 2; break;
+            case 7: nConceal = 35; nDRAmount = 5; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ALCHEMICAL_SILVER; nAC = 2; break;
             case 8:
-            case 9:  nConceal = 15; nDRAmount = 10; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ALCHEMICAL_SILVER; nAC = 3; break;
-            case 10: nConceal = 20; nDRAmount = 10; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ADAMANTINE; nAC = 4; break;
+            case 9:  nConceal = 40; nDRAmount = 10; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ALCHEMICAL_SILVER; nAC = 3; break;
+            case 10: nConceal = 50; nDRAmount = 10; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ADAMANTINE; nAC = 4; break;
         }
       }
       else
-	{	nConceal = 20; nDRAmount = 10; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ADAMANTINE; nAC = 4;	}
+	{	nConceal = 50; nDRAmount = 10; nDRType = DR_TYPE_GMATERIAL; nMatType = GMATERIAL_METAL_ADAMANTINE; nAC = 4;	}
 
     effect eConceal = EffectConcealment(nConceal);
 	int nLimit 		= 0;

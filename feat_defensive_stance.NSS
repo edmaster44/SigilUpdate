@@ -13,13 +13,9 @@ void main()
 	{
 		effect eKNOCK = EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN);
 		effect eAC = EffectACIncrease(4);
-		effect eSAVE = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2);
-		effect eSTILL = EffectCutsceneImmobilize();
-		effect eVFX = EffectVisualEffect(VFX_DUR_IOUN_STONE_CON);
+		effect eSTILL = EffectAttackDecrease(4);
 		effect eLINK = EffectLinkEffects(eKNOCK, eAC);
-		eLINK = EffectLinkEffects(eLINK, eSAVE);
 		eLINK = EffectLinkEffects(eLINK, eSTILL);
-		eLINK = EffectLinkEffects(eLINK, eVFX);
 		eLINK = ExtraordinaryEffect(eLINK);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLINK, oPC);
 		FloatingTextStringOnCreature("*Defensive Stance ON*", oPC, FALSE);

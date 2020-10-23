@@ -44,7 +44,7 @@ void main()
 
 
     int nMetaMagic = GetMetaMagicFeat();
-    int nRaise = PS_GetCasterLevel(OBJECT_SELF) / 2;
+    int nRaise = PS_GetCasterLevel(OBJECT_SELF) / 3;
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 
     if (nMetaMagic == METAMAGIC_EXTEND)

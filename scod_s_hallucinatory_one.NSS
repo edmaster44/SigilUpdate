@@ -34,7 +34,7 @@ void main() {
 		SetEffectSpellId(eSlow, nSpellID);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
 	} else {
-		effect eProtection = EffectACIncrease(4);
+		effect eProtection = EffectConcealment(50, MISS_CHANCE_TYPE_NORMAL);
 		effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SHIELD);
 		eProtection = EffectLinkEffects(eVis, eProtection);
 		SetEffectSpellId(eProtection, nSpellID);

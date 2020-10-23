@@ -78,12 +78,7 @@ int HasToWipeAbilities(object oPC, object oEssence)
 	
 	if (nMORAL != ALIGNMENT_EVIL)
 	{
-		if (GetLevelByClass(CLASS_TYPE_ASSASSIN, oPC) > 0)
-	   	{	
-			SendMessageToPC(oPC, "You have gained a conscience.");
-	    	SendMessageToPC(oPC, "You must rid yourself of weakness or leave your ways behind.");
-			return TRUE;	
-		}	
+			
 		if (GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) > 0)
 	   	{	
 			SendMessageToPC(oPC, "You have changed your evil ways.");
@@ -205,6 +200,18 @@ void RestFinish(object oPC)
 		DelayCommand(0.0f, ExportSingleCharacter(oPC));	
 	}
 }	
+
+
+void GiveDruidMonkPenaltyFeat (object oPC)
+{
+	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) > 0 &&
+       GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0 &&
+       GetHasFeat(4727, oPC, TRUE) == FALSE)
+	   FeatAdd (oPC, 4727, FALSE, FALSE, FALSE );
+
+	}
+
+
 
 void main()
 {

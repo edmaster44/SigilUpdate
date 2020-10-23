@@ -49,7 +49,7 @@ void main()
     int nHP         = 4 * nLevel;
     object oTarget  = GetSpellTargetObject();
 
-    effect eAC     = ExtraordinaryEffect( EffectACIncrease(nAC, AC_DODGE_BONUS) );
+    effect eAC     = ExtraordinaryEffect( EffectAttackIncrease(nAC, ATTACK_BONUS_MISC) );
     effect eSave   = ExtraordinaryEffect( EffectSavingThrowIncrease(SAVING_THROW_ALL, nSave) );
     effect eHP     = ExtraordinaryEffect( EffectTemporaryHitpoints(nHP) );
     effect eDur    = ExtraordinaryEffect( EffectVisualEffect(VFX_HIT_BARD_INS_HEROICS) );

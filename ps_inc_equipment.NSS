@@ -12,7 +12,6 @@
 #include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
 #include "ps_inc_equipmentprops"
-#include "nw_i0_spells"
 
 
 const int SIGIL_EQUIP_FX = -9444;
@@ -23,29 +22,13 @@ int GetMonkWeapon(object oItem)
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
 }
 
-int GetSmallWeapons(object oItem)
-{
-if(!GetIsObjectValid(oItem)) return FALSE;
-int iType = GetBaseItemType(oItem);
-if (Get2DAString("baseitems","WeaponSize",iType) != "1")
-return FALSE;
-
-return TRUE;
-}
-
-
-
-
-
 int GetDervishWeapon(object oItem)
 
 {
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponType",iType) != "3"
-	&& Get2DAString("baseitems","WeaponSize",iType) != "3"
-	&& Get2DAString("baseitems","WeaponSize",iType) != "4")
+	if(Get2DAString("baseitems","WeaponType",iType) != "3")
 	return FALSE;
 				
 	return TRUE;
@@ -174,7 +157,7 @@ void ApplyAustereStrikes(object oPC,object oItem)
         IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
         SaveItemPropertyReference(oItem, "AustereStrikes", ipAdd);
 
-        SendMessageToPC(oPC, "Slashing Damage bonus of " +IntToString(nDamageConstant) + " applied to your Gloves");
+        SendMessageToPC(oPC, "Slashing Damage bonus of " + nDamageConstant + " applied to your Gloves");
     }
 
 }
@@ -499,11 +482,6 @@ void SlashingBlades(object oPC, int nSpellID)
 // Heavy Armor Optimization Feats
 void HeavyArmorOptimizations(object oPC, object oARMOR)
 {
-	
-	RemoveSpellEffects(SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION, oPC, oPC);
-	RemoveSpellEffects(SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER, oPC, oPC);
-	RemoveSpellEffects(SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC, oPC, oPC);
-	
     if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
     int nAC;
     int nSKILL;
@@ -565,6 +543,20 @@ void UnearthlyGrace(object oPC, object oCHEST)
     eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
     ApplyEquipmentEffect(oPC, eFX);
 }
+
+
+// Keep monk AC from affecting druids
+void MonkDruidPenalty(object oPC, object oCHEST)
+{
+    if (GetHasFeat(4727, oPC, TRUE) == FALSE) return;
+	int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
+    effect eFX = EffectACDecrease(nWis, AC_SHIELD_BONUS);
+    ApplyEquipmentEffect(oPC, eFX);
+	SendMessageToPC(oPC, "Both Druid and Monk levels detected. Applying AC penalty based on WIS mod");
+}
+
+
+
 
 
 //Fixes the Spell Resistance bug from items.
@@ -833,7 +825,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
-			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4) && !GetSmallWeapons(oITEM))
+			if (GetDervishWeapon(oITEM) && GetLevelByClass(CLASS_DERVISH,oPC)>4)
 			
 				PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
