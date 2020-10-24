@@ -60,8 +60,8 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SPIDERSKIN, FALSE));
 
     int nLvlBonus;
-    if ( nCasterLvl < 12 ) { nLvlBonus = nCasterLvl / 3; }
-    else                   { nLvlBonus = 4; }
+    if ( nCasterLvl < 12 ) { nLvlBonus = nCasterLvl / 5; }
+  
 
     int nACBonus = 1 + nLvlBonus;
     int nPoisonSaveBonus = 1 + nLvlBonus;

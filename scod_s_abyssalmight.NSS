@@ -18,12 +18,13 @@ void main()
         return;
     }
 
+
 	// Get necessary objects
 	object oTarget			= GetSpellTargetObject();
 	object oCaster			= OBJECT_SELF;
 	int nCasterLevel		= PS_GetCasterLevel(oCaster);
 	// Spell Duration
-	float fDuration			= TurnsToSeconds(nCasterLevel)* 10;
+	float fDuration			= TurnsToSeconds(nCasterLevel * 10);
 	fDuration			= ApplyMetamagicDurationMods(fDuration);
 	// Effects
 	effect eStrength 		= EffectAbilityIncrease(ABILITY_STRENGTH, 2);

@@ -12,6 +12,7 @@
 
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
+#include "nwn2_inc_spells"
 #include "aaa_constants"
 void main()
 {
