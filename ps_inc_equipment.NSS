@@ -22,13 +22,35 @@ int GetMonkWeapon(object oItem)
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
 }
 
+
+
+int GetSmallWeapons(object oItem)
+{
+if(!GetIsObjectValid(oItem)) return FALSE;
+int iType = GetBaseItemType(oItem);
+if (Get2DAString("baseitems","WeaponSize",iType) != "1")
+return FALSE;
+
+return TRUE;
+}
+
+
+
+
+
+
+
+
+
 int GetDervishWeapon(object oItem)
 
 {
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponType",iType) != "3")
+	if(Get2DAString("baseitems","WeaponType",iType) != "3"
+	&& Get2DAString("baseitems","WeaponSize",iType) != "3"
+	&& Get2DAString("baseitems","WeaponSize",iType) != "4")
 	return FALSE;
 				
 	return TRUE;
@@ -825,7 +847,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
-			if (GetDervishWeapon(oITEM) && GetLevelByClass(CLASS_DERVISH,oPC)>4)
+			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4) && !GetSmallWeapons(oITEM))
 			
 				PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
