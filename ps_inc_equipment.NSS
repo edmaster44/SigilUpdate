@@ -179,7 +179,7 @@ void ApplyAustereStrikes(object oPC,object oItem)
         IPSafeAddItemProperty(oItem, ipAdd, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
         SaveItemPropertyReference(oItem, "AustereStrikes", ipAdd);
 
-        SendMessageToPC(oPC, "Slashing Damage bonus of " + nDamageConstant + " applied to your Gloves");
+        SendMessageToPC(oPC, "Slashing Damage bonus of " + IntToString(nDamageConstant) + " applied to your Gloves");
     }
 
 }
@@ -572,7 +572,7 @@ void MonkDruidPenalty(object oPC, object oCHEST)
 {
     if (GetHasFeat(4727, oPC, TRUE) == FALSE) return;
 	int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
-    effect eFX = EffectACDecrease(nWis, AC_SHIELD_BONUS);
+    effect eFX = EffectACDecrease(nWis, AC_SHIELD_ENCHANTMENT_BONUS);
     ApplyEquipmentEffect(oPC, eFX);
 	SendMessageToPC(oPC, "Both Druid and Monk levels detected. Applying AC penalty based on WIS mod");
 }
