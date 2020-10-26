@@ -46,8 +46,9 @@ void main()
 
 
     object oPC = OBJECT_SELF;
+	int nCasterLevel = PS_GetCasterLevel(oPC);
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_FAVOR);
-    float fDuration = TurnsToSeconds(1); 
+    float fDuration = TurnsToSeconds(nCasterLevel); 
     int nScale = (PS_GetCasterLevel(OBJECT_SELF) /10);
 	 if (nScale < 1)
         nScale = 1;
@@ -59,7 +60,7 @@ void main()
 	effect eHarm = EffectDamage(nScale * 10 ,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,TRUE);
 	effect eLink = 	EffectLinkEffects(eSkills,eSaves);
 	eLink = EffectLinkEffects(eLink,eAttack);
-	eLink =EffectLinkEffects(eLink,eDamage);
+	eLink = EffectLinkEffects(eLink,eDamage);
 	eLink = EffectLinkEffects(eLink,eHarm);
 	
 	

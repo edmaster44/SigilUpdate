@@ -471,6 +471,12 @@ const int SPELL_DEMON_FLESH						= 1502;
 const int SPELL_DEMONHIDE						= 1503;
 const int SPELL_DIVINE_SACRIFICE				= 1504;
 const int SPELL_HELLSPOWER						= 1505;
+const int SPELL_MASOCHISM						= 1506;
+const int SPELL_UNHOLY_STORM					= 1507;
+const int SPELL_BLEED							= 1508;
+const int SPELL_BLADE_OF_BLOOD					= 1509;
+const int SPELL_BLADE_OF_FEAR					= 1510;
+
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
 const int SPELLABILITY_DERVISH_DANCE			= 1927;
