@@ -246,23 +246,23 @@ return; }
     if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
     {   if(!GetIsItemPropertyValid(ipAdd)){
         
-            SendMessageToPC(oPC, "Itemproperty was not valid");
+           // SendMessageToPC(oPC, "Itemproperty was not valid");
             return;
         }
-    SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
+   // SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
     IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
     //IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
     SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
-    SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
+  //  SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 }
 }
 //Removes Elemental Weapon Property off Weapon
 void RemoveElementalWeapon(object oPC,object oItem)
 {
-  if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE)){
+  if(GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC)>=0 ){
 itemproperty ipAdd = GetItemPropertyReference(oItem, "ElementalWeapon");
 if (GetIsItemPropertyValid(ipAdd) == FALSE) {
-    SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
+    //SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
     return;
 }
     DeleteItemPropertyReference(oItem, "ElementalWeapon");

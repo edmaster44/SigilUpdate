@@ -476,7 +476,7 @@ const int SPELL_UNHOLY_STORM					= 1507;
 const int SPELL_BLEED							= 1508;
 const int SPELL_BLADE_OF_BLOOD					= 1509;
 const int SPELL_BLADE_OF_FEAR					= 1510;
-
+const int SPELLABILITY_DIVINE_RETRIBUTION		= 1931;
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
 const int SPELLABILITY_DERVISH_DANCE			= 1927;
