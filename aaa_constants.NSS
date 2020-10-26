@@ -469,6 +469,8 @@ const int SPELL_VEIL_OF_SHADOW					= 1500;
 const int SPELL_ABYSSAL_MIGHT					= 1501;
 const int SPELL_DEMON_FLESH						= 1502;
 const int SPELL_DEMONHIDE						= 1503;
+const int SPELL_DIVINE_SACRIFICE				= 1504;
+const int SPELL_HELLSPOWER						= 1505;
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
 const int SPELLABILITY_DERVISH_DANCE			= 1927;
