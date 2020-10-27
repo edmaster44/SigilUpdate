@@ -9,7 +9,7 @@ void main() {
 
 		if(GetObjectByTag("ps_mortuary_zombie") == OBJECT_INVALID) {
 			object oWP = GetWaypointByTag("ps_mortuary_zombie_a");
-   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_zombie", GetLocation(oWP));  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_zombie_2", GetLocation(oWP));  
 			oWP = GetWaypointByTag("ps_mortuary_zombie_b");  
 			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_zombie", GetLocation(oWP));  
 			oWP = GetWaypointByTag("ps_mortuary_zombie_c");  
@@ -22,20 +22,23 @@ void main() {
 			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_zombie", GetLocation(oWP));   
   		}
 
-	  	if(GetObjectByTag("ps_commoner_mortuary1") == OBJECT_INVALID) {
+	  	if(GetObjectByTag("ps_mortuary_dustman1") == OBJECT_INVALID) {
 			object oWP = GetWaypointByTag("wp_mortuarydustman_a");
-	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_mortuary1", GetLocation(oWP)); 
-			oWP = GetWaypointByTag("wp_mortuarydustman_c");  
-			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_mortuary1", GetLocation(oWP));   
+	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_dustman1", GetLocation(oWP)); 
 			oWP = GetWaypointByTag("wp_mortuarydustman_e");  
-			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_mortuary1", GetLocation(oWP));   
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_dustman1", GetLocation(oWP));   
 	  	}
 
-  		if(GetObjectByTag("ps_commoner_mortuary2") == OBJECT_INVALID) {
+  		if(GetObjectByTag("ps_mortuary_dustman2") == OBJECT_INVALID) {
 			object oWP = GetWaypointByTag("wp_mortuarydustman_b");
-   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_mortuary2", GetLocation(oWP));    
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_dustman2", GetLocation(oWP));    
 			oWP = GetWaypointByTag("wp_mortuarydustman_d");  
-			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_mortuary2", GetLocation(oWP));   
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_dustman2", GetLocation(oWP));   
+  		}
+
+  		if(GetObjectByTag("ps_mortuary_dustman3") == OBJECT_INVALID) {
+			object oWP = GetWaypointByTag("wp_mortuarydustman_c");
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_dustman3", GetLocation(oWP));   
   		}
 
   		if(GetObjectByTag("ps_mortuary_lor") == OBJECT_INVALID) {
@@ -68,6 +71,32 @@ void main() {
   		if(GetObjectByTag("ps_mortuary_vampire") == OBJECT_INVALID) {
 			object oWP = GetWaypointByTag("wp_mortuary_vampire");
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_vampire", GetLocation(oWP));      
+  		}
+
+  		if(GetObjectByTag("ps_mortuary_mvampire") == OBJECT_INVALID) {
+			object oWP = GetWaypointByTag("wp_mortuary_mvampire_a");
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_mvampire", GetLocation(oWP));    
+			oWP = GetWaypointByTag("wp_mortuary_mvampire_b");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_mvampire", GetLocation(oWP));     
+			oWP = GetWaypointByTag("wp_mortuary_mvampire_c");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_mvampire", GetLocation(oWP));   
+  		}
+
+  		if(GetObjectByTag("ps_mortuary_skeletonguard") == OBJECT_INVALID) {
+			object oWP = GetWaypointByTag("wp_mortuary_skeletonguard_a");
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));    
+			oWP = GetWaypointByTag("wp_mortuary_skeletonguard_b");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));     
+			oWP = GetWaypointByTag("wp_mortuary_skeletonguard_c");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));    
+			oWP = GetWaypointByTag("wp_mortuary_skeletonguard_d");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));    
+			oWP = GetWaypointByTag("wp_mortuary_skeletonguard_e");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));     
+			oWP = GetWaypointByTag("wp_mortuary_skeletonguard_f");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));    
+			oWP = GetWaypointByTag("wp_mortuary_skeletonguard_g");  
+			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));     
   		}
     
   		SetGlobalInt("MortuaryEnterLock", 0);
