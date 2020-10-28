@@ -4,11 +4,11 @@
 
 #include "aaa_constants"
 
-void PS_BarbarianLevels(object oPC);
+void PS_MonkLevels(object oPC);
 
 
 
-void PS_BarbarianLevels(object oPC)
+void PS_MonkLevels(object oPC)
 {
 	int iMonk = GetLevelByClass(CLASS_TYPE_MONK, oPC);
 	int iAustereOne = GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC);//Rakshasa
