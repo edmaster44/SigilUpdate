@@ -133,4 +133,23 @@ void PS_KnightLevels(object oPC)
 	  		FeatAdd(oPC,FEAT_REMOVE_DISEASE,FALSE,FALSE,FALSE);// Remove Disease, Paladin Path
 	  
 	  }
+	  	else if (iTotal >= 7 && GetHasFeat(FEAT_PALADIN,oPC))
+	  
+	  {
+	  		FeatAdd(oPC,2836,FALSE,FALSE,FALSE);// Armor Optimizaiton, Paladin Path
+	  
+	  }
+	  
+	  	else if (iTotal >= 14 && GetHasFeat(FEAT_PALADIN,oPC))
+	  
+	  {
+	  		FeatAdd(oPC,2837,FALSE,FALSE,FALSE);// Greater Armor Optimization, Paladin Path
+	  
+	  }
+	  	else if (iTotal >= 21 && GetHasFeat(FEAT_PALADIN,oPC))
+	  
+	  {
+	  		FeatAdd(oPC,2838,FALSE,FALSE,FALSE);// Epic Armor Optimization, Paladin Path
+	  
+	  }
 	  }
