@@ -7,6 +7,14 @@
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
 
+//Background Feats
+
+const int FEAT_OUTSIDER_BLOODLINE_FIENDISH = 81; 
+const int FEAT_OUTSIDER_BLOODLINE_CELESTIAL = 86;
+
+
+
+
 // List of all PrC-ready subraces
 const int RACIAL_SUBTYPE_NIGHT_HAG				= 53;
 const int RACIAL_SUBTYPE_TROGLODYTE				= 59;
@@ -477,6 +485,7 @@ const int SPELL_BLEED							= 1508;
 const int SPELL_BLADE_OF_BLOOD					= 1509;
 const int SPELL_BLADE_OF_FEAR					= 1510;
 const int SPELLABILITY_DIVINE_RETRIBUTION		= 1931;
+
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;
 const int SPELLABILITY_DERVISH_DANCE			= 1927;
@@ -500,6 +509,12 @@ const int FEAT_ELEMWAR_AFFINITY_AIR				= 2992;
 const int FEAT_ELEMWAR_AFFINITY_EARTH			= 2993;
 const int FEAT_ELEMWAR_AFFINITY_FIRE 			= 2994;
 const int FEAT_ELEMWAR_AFFINITY_WATER			= 2995;
+
+//Knight Related Feats
+const int FEAT_PALADIN 							= 3017;
+const int FEAT_KNIGHT							= 3018;
+const int FEAT_BLACKGUARD						= 3019;
+const int FEAT_DIVINE_RETRIBUTION				= 3020;
 
 //Barbarian Feats
 //const int FEAT_BARBARIAN_ENDURANCE 			= 194; // Barb level 1

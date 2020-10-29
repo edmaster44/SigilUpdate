@@ -1,5 +1,5 @@
 //This Script adds Base Barbarian Feats
-//Based on iTotal,very adjustable, scritp wise 
+//Based on iTotal,very adjustable
 //
 
 #include "aaa_constants"
