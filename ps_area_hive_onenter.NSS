@@ -53,20 +53,6 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_hiveward3", lSpawnpoint);    
   }
-  
-  if(GetObjectByTag("ps_commoner_hiveward4") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_hivespawn_thug1");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_hiveward4", lSpawnpoint);    
-  }
-
-  if(GetObjectByTag("ps_commoner_hiveward5") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_hivespawn_thug2");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_commoner_hiveward5", lSpawnpoint);    
-  }  
  
   if(GetObjectByTag("ps_commoner_hiveward6") == OBJECT_INVALID)
   {
@@ -122,13 +108,6 @@ void main()
    object oWP = GetWaypointByTag("wp_hivespawn_basher");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hivespawn_basher", lSpawnpoint);    
-  }   
-   
-  if(GetObjectByTag("ps_hivespawn_merchant") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_hivespawn_merchant1");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hivespawn_merchant", lSpawnpoint);    
   }   
    
   if(GetObjectByTag("ps_c_hivepatrolguard1") == OBJECT_INVALID)
