@@ -49,7 +49,7 @@ void main()
     SpeakString("NW_ATTACK_MY_TARGET", TALKVOLUME_SILENT_TALK);
 	
 	//Old Craft Drop - remove later?
-	if (!GetIsSpirit(OBJECT_SELF))
-    	craft_drop_items(oKiller);
+	//if (!GetIsSpirit(OBJECT_SELF))
+    //	craft_drop_items(oKiller);
 	
 }
