@@ -124,6 +124,14 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_c_harmoniumpatrolguard2", lSpawnpoint, FALSE, "ps_c_hivepatrolguard2");    
   }  
   
+  //ps_hiveward_tout
+  if(GetObjectByTag("ps_hiveward_tout") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("ps_hiveward_tout");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hiveward_tout", lSpawnpoint);    
+  } 
+  
 	//Generates Fensir bouncers
 	if(GetObjectByTag("ps_bjevent_fensir0") == OBJECT_INVALID)
 	{
