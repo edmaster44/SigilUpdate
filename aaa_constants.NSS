@@ -14,7 +14,6 @@ const int FEAT_OUTSIDER_BLOODLINE_CELESTIAL = 86;
 
 
 
-
 // List of all PrC-ready subraces
 const int RACIAL_SUBTYPE_NIGHT_HAG				= 53;
 const int RACIAL_SUBTYPE_TROGLODYTE				= 59;

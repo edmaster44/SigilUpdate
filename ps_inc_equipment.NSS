@@ -507,17 +507,17 @@ void HeavyArmorOptimizations(object oPC, object oARMOR)
     if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
     int nAC;
     int nSKILL;
-    if (GetHasFeat(FEAT_HEAVY_ARMOR_OPTIMIZATION_EPIC, oPC, TRUE) == TRUE)
+    if (GetHasFeat(2838, oPC, TRUE) == TRUE)
     {
         nAC = 4;
         nSKILL = 5;
     }
-    else if (GetHasFeat(FEAT_HEAVY_ARMOR_OPTIMIZATION_GREATER, oPC, TRUE) == TRUE)
+    else if (GetHasFeat(2837, oPC, TRUE) == TRUE)
     {
         nAC = 2;
         nSKILL = 3;
     }
-    else if (GetHasFeat(FEAT_HEAVY_ARMOR_OPTIMIZATION, oPC, TRUE) == TRUE)
+    else if (GetHasFeat(2836, oPC, TRUE) == TRUE)
     {
         nAC = 1;
         nSKILL = 1;
@@ -819,6 +819,7 @@ void EquipmentEffects(object oPC)
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
+	MonkDruidPenalty(oPC,oCHEST);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
