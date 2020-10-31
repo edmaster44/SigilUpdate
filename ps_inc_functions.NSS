@@ -851,6 +851,15 @@ int PS_GetCasterLevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
+	if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+	
+	{ FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);}
+		else if (iTotal >= 2 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
+		{ FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);}
+			else if (iTotal >= 2 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
+		{ FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);}
+		
+		
 	return iTotal;
     }
  //   else
