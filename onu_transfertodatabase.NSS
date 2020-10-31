@@ -620,7 +620,7 @@ void LoadHelmetsToDatabase(object oPC) {
 	SQLExecDirect("TRUNCATE TABLE treasure_helmets");
 	
 	int n = 1;
-	while (n < 18) {
+	while (n < 17) {
 		string sPot = GetHelmetsFromList(n, 1);
 		if (sPot == "") {
 			n++; continue;
@@ -638,7 +638,7 @@ void LoadHelmetsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 14) {
+	while (n < 15) {
 		string sPot = GetHelmetsFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;

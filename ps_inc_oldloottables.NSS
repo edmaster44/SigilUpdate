@@ -914,12 +914,12 @@ string GetBeltsFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 17 / 14 / 13
+//Max 16 / 14 / 14
 string GetHelmetsFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
 		switch (nRandom) {
-			case 1: sItem = "ps_helmet_blindsight";  break;
+			case 1: sItem = "ps_helmet_cursed-2";  break;
 			case 2: sItem = "ps_helmet_goldencirclet";  break;
 			case 3: sItem = "x2_it_adahelm";  break;
 			case 4: sItem = "NW_ARMHE012";  break;
@@ -935,7 +935,6 @@ string GetHelmetsFromList(int nRandom, int nTreasureLevel) {
 			case 14: sItem = "ps_helm_terror";  break;
 			case 15: sItem = "ps_helmfarseeing";  break;
 			case 16: sItem = "ps_helmet_cursed-1";  break;
-			case 17: sItem = "ps_helmet_cursed-2";  break;
 		}
 	} else if (nTreasureLevel <= 2) {
 		switch (nRandom) {
@@ -970,6 +969,7 @@ string GetHelmetsFromList(int nRandom, int nTreasureLevel) {
 			case 11: sItem = "ps_helmet_eye"; break;
 			case 12: sItem = "ps_helm_chromatic"; break;
 			case 13: sItem = "ps_helm_coven"; break; 
+			case 14: sItem = "ps_helmet_blindsight"; break; 
 		}
 	}
 	return sItem;
