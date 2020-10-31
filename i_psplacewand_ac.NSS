@@ -24,7 +24,11 @@ void main()
 		object oPlayers = GetFirstPC();
 		while (oPlayers != OBJECT_INVALID)
 		{
-			if (GetName(oPlayers) == sOwner) iPlayerFound = 1;
+			if (GetName(oPlayers) == sOwner &&
+				GetArea(oPlayers) == GetArea(oPC)) {
+				iPlayerFound = 1;
+			}
+			
 			oPlayers = GetNextPC();
 		}
 		if (iPlayerFound == 1)
