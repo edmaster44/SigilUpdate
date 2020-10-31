@@ -1,4 +1,5 @@
 #include "ps_inc_gemstones"
+#include "ps_inc_functions"
 
 void main () {
 
@@ -8,6 +9,13 @@ void main () {
 	
 	string sEffect = "gem_identify_effect";
 	location lEffect = GetLocation(GetWaypointByTag("wp_gembench_effect"));
+	
+	int lastDone = CheckTimeStamp(oPC, "Last_Gem_Identified");
+	if (lastDone < 1) {
+		SendMessageToPC(oPC, "Please wait a second before identifying another gem.");
+		return;
+	}
+	TimeStamp(oPC, "Last_Gem_Identified");
 	
 	if (!GetIsObjectValid(oGem)) {
 		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", TRUE);

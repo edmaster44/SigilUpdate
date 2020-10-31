@@ -1,5 +1,6 @@
 #include "ps_inc_gemstones"
 #include "nw_i0_plot"
+#include "ps_inc_functions"
 
 void PrintGemstoneQualities(object oPC, object oGem);
 
@@ -17,6 +18,13 @@ void main () {
 
 	object oPC = OBJECT_SELF;
 	object oGem = GetLocalObject(oPC, "selected_gem");
+	
+	int lastDone = CheckTimeStamp(oPC, "Last_Gem_Cut");
+	if (lastDone < 1) {
+		SendMessageToPC(oPC, "Please wait a moment before cutting another gem.");
+		return;
+	}
+	TimeStamp(oPC, "Last_Gem_Cut");
 	
 	if (!GetIsObjectValid(oGem) || !GetIsGemstone(oGem) || !IsGemRough(oGem)) {
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
