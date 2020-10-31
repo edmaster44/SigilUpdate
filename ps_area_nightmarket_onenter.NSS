@@ -32,7 +32,7 @@ void main() {
    
   if(GetObjectByTag("ps_hivespawn_merchant2") == OBJECT_INVALID)
   {
-   object oWP = GetWaypointByTag("ps_hivespawn_merchant2");
+   object oWP = GetWaypointByTag("wp_ps_hivespawn_merchant2");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hivespawn_merchant2", lSpawnpoint);    
   }   

@@ -127,7 +127,7 @@ void main()
   //ps_hiveward_tout
   if(GetObjectByTag("ps_hiveward_tout") == OBJECT_INVALID)
   {
-   object oWP = GetWaypointByTag("ps_hiveward_tout");
+   object oWP = GetWaypointByTag("wp_ps_hiveward_tout");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hiveward_tout", lSpawnpoint);    
   } 
