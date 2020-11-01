@@ -7,7 +7,6 @@
 
 
 
-	
 void main()
 {
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell

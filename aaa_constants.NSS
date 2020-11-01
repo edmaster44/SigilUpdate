@@ -14,7 +14,6 @@ const int FEAT_OUTSIDER_BLOODLINE_CELESTIAL = 86;
 
 
 
-
 // List of all PrC-ready subraces
 const int RACIAL_SUBTYPE_NIGHT_HAG				= 53;
 const int RACIAL_SUBTYPE_TROGLODYTE				= 59;
@@ -515,6 +514,7 @@ const int FEAT_PALADIN 							= 3017;
 const int FEAT_KNIGHT							= 3018;
 const int FEAT_BLACKGUARD						= 3019;
 const int FEAT_DIVINE_RETRIBUTION				= 3020;
+const int FEAT_KNIGHTS_AURA						= 2928;
 
 //Barbarian Feats
 //const int FEAT_BARBARIAN_ENDURANCE 			= 194; // Barb level 1

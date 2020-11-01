@@ -10,7 +10,9 @@ void main()
         SpeakStringByStrRef(STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS);
    }
    else
-   if(GetHasFeatEffect(413) == FALSE)
+   
+   
+   if(GetHasFeatEffect(FEAT_DIVINE_RETRIBUTION) == FALSE)
    {
         //Declare major variables
         object oTarget = GetSpellTargetObject();
