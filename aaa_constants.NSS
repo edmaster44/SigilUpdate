@@ -514,6 +514,7 @@ const int FEAT_PALADIN 							= 3017;
 const int FEAT_KNIGHT							= 3018;
 const int FEAT_BLACKGUARD						= 3019;
 const int FEAT_DIVINE_RETRIBUTION				= 3020;
+const int FEAT_KNIGHTS_AURA						= 2928;
 
 //Barbarian Feats
 //const int FEAT_BARBARIAN_ENDURANCE 			= 194; // Barb level 1
