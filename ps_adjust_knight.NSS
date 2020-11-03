@@ -191,5 +191,9 @@ void PS_KnightLevels(object oPC)
 		{ FeatAdd(oPC,1761,FALSE,FALSE,FALSE);//Smite Infidel , Knight Path
 		
 		}
-	  
+	  if (iTotal > 21 && GetHasFeat(FEAT_KNIGHT,oPC))
+		
+		{ FeatAdd(oPC,1990,FALSE,FALSE,FALSE);//Rescue Feat , Knight Path
+		
+		}
 	  }
