@@ -8,6 +8,7 @@
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"
 #include "ps_adjust_monk"
+#include "ps_adjust_knight"
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
 void CheckDragonBreath(object oPC, object oItem)
@@ -303,6 +304,8 @@ void main()
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
 	GiveDragonFeats(oPC);
+	PS_GetCasterLevel(oPC);
 	PS_AdjustSneakAttack(oPC);
+	PS_KnightLevels(oPC);
 	PS_GiveSpellFeat(oPC);
 }

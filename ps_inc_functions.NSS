@@ -862,8 +862,8 @@ int PS_GetCasterLevel(object oPC)
 		
 	return iTotal;
     }
- //   else
-   // {	iLevel = GetCasterLevel(oPC);	}
+    else
+    {	iLevel = GetCasterLevel(oPC);	}
 
     return iLevel;
 	
