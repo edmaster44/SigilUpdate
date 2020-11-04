@@ -35,14 +35,15 @@ void main()
     effect eSearch = EffectSkillDecrease(SKILL_SEARCH,4);
     effect eAttack = EffectAttackDecrease(4);
     effect eVisElec = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
-	effect	eLinks = EffectLinkEffects(eListen,eSpot);
-	eLinks = EffectLinkEffects(eLinks,eSearch);
-	eLinks = EffectLinkEffects(eLinks,eAttack);
-
 	effect eDamage = EffectDamage(eDice,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,FALSE);
+	effect	eLinks;
+	eLinks = EffectLinkEffects(eListen,eSpot);
+	eLinks = EffectLinkEffects(eSearch,eAttack);
+	eLinks = EffectLinkEffects(eDamage,eVisElec);
+
 
 	location lTarget = GetSpellTargetLocation();
-	 object oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
+	  object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	 while(GetIsObjectValid(oTarget))
 	 {	if (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
 		{ eDice = (eDice)* 2 ;
@@ -51,6 +52,7 @@ void main()
 		fDelay = GetRandomDelay(0.5, 2.0);
 
 	 	if (spellsIsTarget(oTarget,SPELL_TARGET_SELECTIVEHOSTILE,GetAreaOfEffectCreator()));
+		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_UNHOLY_STORM));
 			//This fires a cast spell event for the specified target
 			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_UNHOLY_STORM));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget));
