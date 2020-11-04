@@ -1,21 +1,21 @@
 #include "ps_inc_functions"
-
+#include "aaa_constants"
 
 
 void main()
 {
 int nType;
 	object oTARGET = GetSpellTargetObject();
-	if (GetAlignmentGoodEvil(oTARGET) == ALIGNMENT_EVIL)
+	if (GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
 	{nType = DAMAGE_TYPE_NEGATIVE;
 	
 	}
-	else if (GetAlignmentGoodEvil(oTARGET) == ALIGNMENT_GOOD)
+	else if (GetHasFeat(FEAT_PALADIN,OBJECT_SELF)) 
 	{
 	nType = DAMAGE_TYPE_DIVINE;
 	
 	}
-	else if (GetAlignmentGoodEvil(oTARGET) == ALIGNMENT_NEUTRAL)
+	else if (GetHasFeat(FEAT_KNIGHT,OBJECT_SELF)) 
 	{
 	
 		nType = DAMAGE_TYPE_MAGICAL;
