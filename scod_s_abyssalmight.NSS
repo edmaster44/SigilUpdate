@@ -6,7 +6,6 @@
 //Abyssal Might
 //The caster summons evil energy from the Abyss and imbues himself with its might.
 //The caster gains a +2 enhancement bonus to Strength, Constitution, and Dexterity.
-//The caster's existing spell resistance improves by +2.
 //Duration 10 Minutes/Level
 
 

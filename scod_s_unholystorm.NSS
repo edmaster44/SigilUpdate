@@ -27,7 +27,7 @@ After the spell's duration expires, the water disappears.
 
 void main()
 {
-	int eDice = DAMAGE_BONUS_2d6;
+	int eDice = d6(2);
     //Declare major variables
 	float fDelay;
     effect eListen = EffectSkillDecrease(SKILL_LISTEN,4);

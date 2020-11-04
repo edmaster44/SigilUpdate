@@ -49,7 +49,7 @@ void main()
     int nScale = (PS_GetCasterLevel(OBJECT_SELF) /5);
 	 if (nScale < 1)
         nScale = 1;
-	  effect eDamage = EffectDamageIncrease(nScale * DAMAGE_BONUS_1d6, DAMAGE_TYPE_MAGICAL);
+	  effect eDamage = EffectDamageIncrease(d6(nScale)  , DAMAGE_TYPE_MAGICAL);
 	  effect eHarm = EffectDamage(nScale * 2 ,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,TRUE);
 	  effect eLink = EffectLinkEffects(eDamage, eHarm);
 	  int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
