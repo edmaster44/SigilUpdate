@@ -46,14 +46,16 @@ void main()
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
     
-    int nValue = 2 + (nCasterLvl)/6;
+    int nValue = 3 + (nCasterLvl)/14;
     if (nValue > 5)
      nValue = 5; // * Max of 5
     
-    effect eAC = EffectACIncrease(nValue, AC_DEFLECTION_BONUS);
+    effect eDEF = EffectACIncrease(nValue, AC_DEFLECTION_BONUS);
+	effect eSHI = EffectACIncrease(nValue, AC_SHIELD_ENCHANTMENT_BONUS);
+	effect eARM = EffectACIncrease(nValue, AC_ARMOUR_ENCHANTMENT_BONUS);
 
-    effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SHIELD_OF_FAITH);
-    effect eLink = EffectLinkEffects(eAC, eDur);
+    effect eLink1 = EffectLinkEffects(eDEF, eSHI);
+	effect eLink2 = EffectLinkEffects(eLink1, eARM);
 
     float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF)); // * Duration 1 turn/level
     fDuration = ApplyMetamagicDurationMods(fDuration);
@@ -63,6 +65,6 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 421, FALSE));
     //Apply VFX impact and bonus effects
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
 
 }
