@@ -81,11 +81,11 @@ int CheckCloneItemsAreEqualType()
 	int iFirstType = GetBaseItemType(oFirst);
 	int iSecondType = GetBaseItemType(oSecond);
 	
-	if (iFirstType != BASE_ITEM_ARMOR || iSecondType != BASE_ITEM_ARMOR)
+	/*if (iFirstType != BASE_ITEM_ARMOR || iSecondType != BASE_ITEM_ARMOR)
 	{
 		iReturn = FALSE;
 	}
-	else if (iFirst == iSecond)
+	else*/ if (iFirst == iSecond)
 	{
 		iReturn = TRUE;
 	}
