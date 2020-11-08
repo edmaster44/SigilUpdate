@@ -92,7 +92,7 @@ void InitializeItem(object oPC, int bStore, int iInventorySlot, string sRoadMap)
 			string tso = ClangStamp();
 			SetLocalString(oPC,"TSO",tso);
 			SetLocalString(oItemToCraft,"TSO",tso);
-			SendMessageToPC(oPC, "Item stamp set.");
+			//SendMessageToPC(oPC, "Item stamp set.");
 			
 			// Figure out which armor pieces are part of this items armor set in case
 			// we were to edit it.
@@ -130,7 +130,7 @@ void CraftAction(object oPC, int iAction, int iAvtValue)
 	//cryptc: this is where to check for identical TSO.
 	if(	GetLocalString(oPC,"TSO") != GetLocalString(oItemToCraft,"TSO")) {
 		//XPCraft_Debug(oPC,"No Item In Slot : " + IntToString(iInventorySlot)+ "- restoring last unchanged Item");
-		SendMessageToPC(oPC, "Not the same item!");
+		//SendMessageToPC(oPC, "Not the same item!");
 		XPCraft_ActionCancelChanges(oPC);		
 		return;
 	}//END
