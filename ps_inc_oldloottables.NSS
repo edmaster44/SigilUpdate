@@ -1357,7 +1357,7 @@ string GetMiscFromList(int nRandom, int nTreasureLevel) {
 	return sItem;
 }
 
-//Max 462 / 223 / 251
+//Max 462 / 227 / 256
 string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 	string sItem = "";
 	if (nTreasureLevel <= 1) {
@@ -2054,7 +2054,8 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 223: sItem = "ps_haxe_illusiongold";  break;
 			case 224: sItem = "ps_staff_mindsilver2";  break;	
 			case 225: sItem = "ps_staff_mindsilver3";  break;
-			case 226: sItem = "ps_staff_mindsilver4";  break;		
+			case 226: sItem = "ps_staff_mindsilver4";  break;	
+			case 227: sItem = "ps_whip_razorvine";  break;		
 		}
 	} else {
 		switch (nRandom) {
@@ -2313,6 +2314,7 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 253: sItem = "ps_gad_stygianrimeblade"; break;  
 			case 254: sItem = "ps_staff_mindsilver4";  break;
 			case 255: sItem = "ps_staff_mindsilver5";  break;	
+			case 256: sItem = "ps_whip_razorvine";  break;	
 		}
 	}
 	return sItem;

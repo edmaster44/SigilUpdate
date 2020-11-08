@@ -91,7 +91,6 @@ void SpawnColothysCarceriPortals() {
 		string sPortal = "ps_plac_port_colothysin";
 		
 		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, GetLocation(oWP));
-		//SpeakString("Creating portal! "+GetName(oPortal), TALKVOLUME_SHOUT);
 		DestroyObject(oPortal, 60.0f);
 		
 	} else if (GetTag(oArea) == "ps_area_carceri_minethys_desert") {

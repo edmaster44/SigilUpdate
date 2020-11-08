@@ -793,7 +793,7 @@ void LoadWeaponsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 226) {
+	while (n < 228) {
 		string sPot = GetWeaponFromList(n, 2);
 		if (sPot == "") {
 			n++; continue;
@@ -802,7 +802,7 @@ void LoadWeaponsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 256) {
+	while (n < 257) {
 		string sPot = GetWeaponFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;
