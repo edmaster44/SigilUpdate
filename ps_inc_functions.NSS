@@ -767,23 +767,23 @@ int GetSpiritShamanTRUECasterlevel(object oPC)
 
 // Used in any spell scripts for Ranger/Paladin spells instead of GetCasterLevel in order that those spells get full caster level for Ranger/Paladin.
 
-int GetHasKnightProgression(object oPC, int iClass)
+int GetHasPaladinProgression(object oPC, int iClass)
 {
 	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
 	if(BspCasterFeat == "") return FALSE;
 	
 //	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
 	
-	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",109)),oPC,TRUE)) return TRUE;
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",6)),oPC,TRUE)) return TRUE;
 	else return FALSE;
 }
 
-int GetKnightAndPRCClassLevels(object oPC)
+int GetPaladinAndPRCClassLevels(object oPC)
 {
 	int iSlotNumber; int iClass;
 	int iTotal; int iTrue;
 
-	if(GetLevelByClass(109, oPC) == 0) return 0;		
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;		
 		
 	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
 	{
@@ -791,11 +791,12 @@ int GetKnightAndPRCClassLevels(object oPC)
 		
 		if ( iClass == 255 ) break;
 			
-		if(iClass == CLASS_KNIGHT || GetHasKnightProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		if(iClass == CLASS_TYPE_PALADIN || GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
 	}
 	
 	return iTotal;
 }
+
 
 
 
@@ -830,12 +831,12 @@ int GetRangerAndPRCClassLevels(object oPC)
 }
 
 
-int GetKnightTRUECasterlevel(object oPC)
+int GetPaladinTRUECasterlevel(object oPC)
 {
 	int iSlotNumber; int iClass;
 	int iTotal; int iTrue;
 
-	if(GetLevelByClass(109, oPC) == 0) return 0;	
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
 		
 	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
 	{
@@ -843,22 +844,13 @@ int GetKnightTRUECasterlevel(object oPC)
 		
 		if ( iClass == 255 ) break;
 			
-		if(iClass == CLASS_KNIGHT) iTotal = iTotal + GetLevelByClass(iClass,oPC);
-		else if (GetHasKnightProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
-	if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
-	
-	{ FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);}
-		else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
-		{ FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);}
-			else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
-		{ FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);}
-		
 	return iTotal;
 }
-
 
 int PS_GetCasterLevel(object oPC)
 {
