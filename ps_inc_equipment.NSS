@@ -48,10 +48,8 @@ int GetDervishWeapon(object oItem)
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponType",iType) != "3"
-	&& Get2DAString("baseitems","WeaponSize",iType) != "3"
-	&& Get2DAString("baseitems","WeaponSize",iType) != "4")
-	return FALSE;
+	if(Get2DAString("baseitems","WeaponSize",iType) != "3"
+	&& Get2DAString("baseitems","WeaponType",iType) != "3") return FALSE;
 				
 	return TRUE;
 }
@@ -848,7 +846,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
-			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4) && !GetSmallWeapons(oITEM))
+			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
 			
 				PS_ApplySpecialWeaponFinesse(oPC, oITEM);
 
