@@ -66,6 +66,20 @@ int CheckItemValidForCloning(object oContainer)
 }
 */
 
+
+
+int CheckCloneItemIsValidType(object oItem) {
+
+	if (GetBaseItemType(oItem) == BASE_ITEM_ARMOR ||
+	GetBaseItemType(oItem) == BASE_ITEM_BOOTS ||
+	GetBaseItemType(oItem) == BASE_ITEM_GLOVES ||
+	GetBaseItemType(oItem) == BASE_ITEM_HELMET)
+	return TRUE;
+	
+	return FALSE;
+
+}
+
 int CheckCloneItemsAreEqualType()
 {
 	int iFirst;
@@ -78,14 +92,11 @@ int CheckCloneItemsAreEqualType()
 	iFirst = SafeGetArmorRulesType(oFirst);
 	iSecond = SafeGetArmorRulesType(oSecond);
 	
-	int iFirstType = GetBaseItemType(oFirst);
-	int iSecondType = GetBaseItemType(oSecond);
-	
-	/*if (iFirstType != BASE_ITEM_ARMOR || iSecondType != BASE_ITEM_ARMOR)
+	if (!CheckCloneItemIsValidType(oFirst) || !CheckCloneItemIsValidType(oSecond))
 	{
 		iReturn = FALSE;
 	}
-	else*/ if (iFirst == iSecond)
+	else if (iFirst == iSecond)
 	{
 		iReturn = TRUE;
 	}
