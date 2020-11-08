@@ -45,7 +45,7 @@ void main(int nMetaMagic)
 			return;
 
 		SetLocalInt(oPC,"HideousMeta",nMetaMagic);
-		SendMessageToPC(oPC, "Setting hideous blow to: "+IntToString(nMetaMagic));
+		//SendMessageToPC(oPC, "Setting hideous blow to: "+IntToString(nMetaMagic));
 		
 		ExecuteScript("nw_s0_ihideousb1",oPC);
 	}

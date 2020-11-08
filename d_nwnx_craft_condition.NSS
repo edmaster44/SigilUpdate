@@ -96,6 +96,8 @@ int StartingConditional(int iCondition, int iInventorySlot, int iVisualType)
 				}
 				else if(XP_CRAFT_AVT_LIGHT_AGAINST_METAL==1)
 				{//group "light" material appearanes against "metal-like" appearances
+					SendMessageToPC(oPC, "List name: "+GetLocalString(oPC,"XC_AVT_LISTNAME"));
+					SendMessageToPC(oPC, "List value: "+GetLocalString(oPC,"XC_AVT_VALUE"));
 					int iAVT_CurrentValue = GetLocalInt(oPC,"XC_AVT_VALUE");
 					switch(iAVT_CurrentValue)
 					{
