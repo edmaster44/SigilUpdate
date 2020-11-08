@@ -550,6 +550,7 @@ const int FEAT_DAMAGE_REDUCTION8				=1863;//Damage Reduction 8 Barbarian Level 2
 
 const int SPELL_I_ELDRICH_SHIELD 				= 811;
 const int SPELL_I_BLACKBOLT_BLAST 				= 1130;
+const int SPELL_I_BINDING_BLAST 				= 1131;
 const int FEAT_WARLOCK_SPEAR_ELDRTICH 			= 3299;
 const int FEAT_WARLOCK_SPEAR_DRAINING 			= 3300;
 const int FEAT_WARLOCK_SPEAR_FRIGHTFUL 			= 3301;
