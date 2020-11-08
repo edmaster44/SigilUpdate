@@ -17,7 +17,7 @@ void main () {
 	  SetGlobalInt("ColothysEnterLock", 1);
 	  
 	  //Portal Listener
-	  object oListener = GetObjectByTag("c_colothys_portallistener");
+	  /*object oListener = GetObjectByTag("c_colothys_portallistener");
 	  if(oListener == OBJECT_INVALID || GetArea(oListener) != GetArea(OBJECT_SELF))
 	  {
 		   object oWP = GetWaypointByTag("wp_colothys_portallistener");
@@ -26,7 +26,7 @@ void main () {
 		   oWP = GetWaypointByTag("wp_colothys_portallistener2");
 		   lSpawnpoint = GetLocation(oWP);  
 		   oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "c_colothys_portallistener", lSpawnpoint);   
-	  }
+	  }*/
 	  
   	  SetGlobalInt("ColothysEnterLock", 0);
 	  
