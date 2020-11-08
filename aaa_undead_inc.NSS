@@ -748,16 +748,21 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
                 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, HoursToSeconds(1));	}
 }	}	}
 
-void PS_VampDrainBlood(object oPC, object oTarget, int nSpell)
-{
-	int nTouch	= TouchAttackMelee(oTarget);
+void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
+
+	if (GetObjectType(oTarget) != OBJECT_TYPE_CREATURE) {
+		SendMessageToPC(oPC, "Don't bite "+GetName(oTarget)+"s. They don't taste good.");
+		return;
+	}
+
+	int nTouch			= TouchAttackMelee(oTarget);
 	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
 	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
 	int iLevel			= iPRCLvl_Mal;
 	int iLevelV			= iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal;
-	int iVBAB	= GetBaseAttackBonus(oPC) + GetAbilityModifier(ABILITY_STRENGTH, oPC);
-	int iTBAB	= GetBaseAttackBonus(oTarget);
+	int iVBAB			= GetBaseAttackBonus(oPC) + GetAbilityModifier(ABILITY_STRENGTH, oPC);
+	int iTBAB			= GetBaseAttackBonus(oTarget);
 
 	iTBAB = iTBAB + (4 * GetCreatureSize(oTarget) - 4 * GetCreatureSize(oPC));
 	
