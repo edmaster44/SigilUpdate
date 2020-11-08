@@ -17,7 +17,7 @@ It falls in a fixed area once created.
 The storm reduces hearing and visibility, resulting in a -4 penalty on Listen, Spot, and Search checks.
 It also applies a -4 penalty on all ranged attacks made into, out of, or through the storm.
 The rain damages good creatures, dealing 2d6 points of damage per round (good outsiders take double damage).
-In addition, each round, a blast of fire strikes a randomly selected good outsider within the spell's area, dealing 5d6 points of fire damage.
+In addition, each round, a blast of fire strikes a randomly selected good outsider within the spell's area, dealing 5d6 points of magic damage.
 After the spell's duration expires, the water disappears.
 */
 
@@ -27,7 +27,7 @@ After the spell's duration expires, the water disappears.
 
 void main()
 {
-	int eDice = d6(2);
+	int eDice;
     //Declare major variables
 	float fDelay;
     effect eListen = EffectSkillDecrease(SKILL_LISTEN,4);
@@ -37,6 +37,7 @@ void main()
     effect eVisElec = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
 	effect eDamage = EffectDamage(eDice,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,FALSE);
 	effect	eLinks;
+	int eEnemyOutSider;
 	eLinks = EffectLinkEffects(eListen,eSpot);
 	eLinks = EffectLinkEffects(eSearch,eAttack);
 	eLinks = EffectLinkEffects(eDamage,eVisElec);
@@ -44,14 +45,19 @@ void main()
 
 	location lTarget = GetSpellTargetLocation();
 	  object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-	 while(GetIsObjectValid(oTarget))
-	 {	if (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
-		{ eDice = (eDice)* 2 ;
-		
-		}
-		fDelay = GetRandomDelay(0.5, 2.0);
+	 while (GetIsObjectValid(oTarget))
+   
+	{
 
 	 	if (spellsIsTarget(oTarget,SPELL_TARGET_SELECTIVEHOSTILE,GetAreaOfEffectCreator()));
+		
+			if(GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
+			{
+				eDice = eDice * 2; // outsiders take double damage
+			}
+		eDice = d6(2);
+		
+		fDelay = GetRandomDelay(0.5, 2.0);
 		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_UNHOLY_STORM));
 			//This fires a cast spell event for the specified target
 			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_UNHOLY_STORM));

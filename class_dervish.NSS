@@ -1,5 +1,6 @@
 #include "nwn2_inc_spells"
 #include "aaa_constants"
+#include "ps_inc_equipment"
 
 //Made by edmaster44(DM_Odin) for the Dervish Class PRC
 
@@ -45,9 +46,15 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 void A_Thousand_Cuts(object oPC, int nSpell)
 {	
 
+
+
 if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
 { SendMessageToPC(oPC, "A thousand Cuts will not stack with Stalwart Defender");
 	return;}
+	
+if (!GetDervishWeapon(oPC))
+{ SendMessageToPC(oPC, "A Thousand Cuts will not apply on Non Slashing Weapons");
+return;}
 
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 

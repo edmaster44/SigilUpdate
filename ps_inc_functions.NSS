@@ -854,9 +854,9 @@ int PS_GetCasterLevel(object oPC)
 	if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
 	
 	{ FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);}
-		else if (iTotal >= 2 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
+		else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
 		{ FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);}
-			else if (iTotal >= 2 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
+			else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
 		{ FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);}
 		
 		
@@ -2625,7 +2625,7 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 // Remove racial bonuses to if the character delevels to no longer have a template class.
 // New template class local variables from the essence will need to be added to this script to function.
 // oPC is the creature (PC) for the fix to apply to; oItem should be the ps_essence item.
-// Do not call this directly! Use PS_Template_DelevelFix
+// Do not call this directly! Use 	
 // - Ceremorph 4/12/16
 void PS_RemoveTemplateClassAbilityFix(object oPC, object oItem)
 {
