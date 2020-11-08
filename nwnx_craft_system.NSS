@@ -341,7 +341,7 @@ int XPCraft_GetNewArmorPartValue(object oPC, string sRoadMap, int iAction)
  	
 	string sListName = XPCraft_GetArmorPart_ListName(oPC, sRoadMap);
 	
-	SendMessageToPC(oPC, "armor part list name: "+sListName);
+	//SendMessageToPC(oPC, "armor part list name: "+sListName);
 	
 	string sArmorPartList = GetLocalString(GetModule(), sListName);
 	if(sArmorPartList=="")
@@ -389,7 +389,7 @@ int XPCraft_GetNewModelPartValue(object oPC, int iBaseItemType, int iModelPartID
 	
 	string sListName =  XPCraft_GetModelPart_ListName(oPC, iBaseItemType, iModelPartID);
 	
-	SendMessageToPC(oPC, "model part list name: "+sListName);
+	//SendMessageToPC(oPC, "model part list name: "+sListName);
 	
 	string sModelPartList = GetLocalString(GetModule(), sListName);
 	
@@ -463,7 +463,7 @@ string XPCraft_GetVariation_ListName(object oPC, int iArmorVisualType, int iBase
 				sRaceGroup = GetStringLeft(Get2DAString("appearance","NWN2_Model_Body",GetAppearanceType(oPC)),4);
 		}
 	
-		SendMessageToPC(oPC, "race group: "+sRaceGroup);
+		//SendMessageToPC(oPC, "race group: "+sRaceGroup);
 	//}
 	
 	if((XP_CRAFT_USE_SEXED_VARIATION) && (GetGender(oPC) == GENDER_FEMALE))
@@ -507,7 +507,7 @@ string XPCraft_GetVariation_ListName(object oPC, int iArmorVisualType, int iBase
 		case BASE_ITEM_HELMET : sListName +="_HELM"; break; 
 	}
 		
-	SendMessageToPC(oPC, "final list name: "+sListName);
+	//SendMessageToPC(oPC, "final list name: "+sListName);
 	
 	return sListName;
 }
@@ -715,8 +715,8 @@ object XPCraft_ActionChangeArmorVisualType(object oPC, object oItemToCraft, int 
 	string sDatafileName = XPCraft_GetDatafileName(oPC);	
 	string sPieceName    = GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 
-	SendMessageToPC(oPC, "list value: "+IntToString(GetLocalInt(oPC,"XC_AVT_VALUE")));
-	SendMessageToPC(oPC, "list element: "+IntToString(GetLocalInt(oPC,"XC_AVT_ELEMENT_ID")));
+	//SendMessageToPC(oPC, "list value: "+IntToString(GetLocalInt(oPC,"XC_AVT_VALUE")));
+	//SendMessageToPC(oPC, "list element: "+IntToString(GetLocalInt(oPC,"XC_AVT_ELEMENT_ID")));
 	//a Little check to ensure we really got something to change
 	if(iNewArmorVisualTypeValue == GetLocalInt(oPC,"XC_AVT_VALUE"))
 	{
@@ -774,7 +774,7 @@ object  XPCraft_ActionChangeArmorPart(object oPC, object oItemToCraft, int iActi
 {
 	string sRoadMap = GetLocalString(oPC,"XC_ROAD_MAP");
 	
-	SendMessageToPC(oPC, "roadmap: "+sRoadMap);
+	//SendMessageToPC(oPC, "roadmap: "+sRoadMap);
 	
 	//Get The New  Value
 	int iNewItemPartValue = XPCraft_GetNewArmorPartValue(oPC, sRoadMap, iAction);

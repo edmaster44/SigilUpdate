@@ -1,5 +1,7 @@
 #include "nwnx_craft_system"
-
+//************************************************
+//THIS IS THE REAL APPEARANCE CHANGER CODE
+//************************************************
 //Timestamp
 string ClangStamp()
 {

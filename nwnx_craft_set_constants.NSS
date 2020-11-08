@@ -738,7 +738,6 @@ void main() {
 	SetLocalString( oModule, "XC_c_kobold_CL_BELT", "#2#" );
 	SetLocalString( oModule, "XC_c_kobold_CH_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_kobold_LE_BODY", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_LE_HELM", "#1#2#" );
 	SetLocalString( oModule, "XC_c_kobold_NK_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_kobold_PF_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_kobold_PF_BELT", "#1#" );
@@ -986,7 +985,7 @@ void main() {
 	SetLocalString( oModule, "XC_A_lizman_ACRtLeg", "#0#7#" );
 	SetLocalString( oModule, "XC_A_lizman_ACLtShin", "#0#4#" );
 	SetLocalString( oModule, "XC_A_lizman_ACRtShin", "#0#4#" );
-	SetLocalString( oModule, "XC_A_kobold_ACLtShoulder", "#0#3#4#5#93#" );
+	SetLocalString( oModule, "XC_A_kobold_ACLtShoulder", "#0#3#5#93#" );
 	SetLocalString( oModule, "XC_A_kobold_ACRtShoulder", "#0#3#4#5#93#" );
 	SetLocalString( oModule, "XC_A_kobold_ACLtBracer", "#0#5#6#" );
 	SetLocalString( oModule, "XC_A_kobold_ACRtBracer", "#0#5#6#" );
@@ -998,8 +997,8 @@ void main() {
 	SetLocalString( oModule, "XC_A_kobold_ACRtShin", "#0#2#3#" );
 	SetLocalString( oModule, "XC_A_small_ACLtShoulder", "#0#1#2#3#4#93#" );
 	SetLocalString( oModule, "XC_A_small_ACRtShoulder", "#0#1#2#3#4#93#" );
-	SetLocalString( oModule, "XC_A_small_ACLtBracer", "#0#1#2#3#" );
-	SetLocalString( oModule, "XC_A_small_ACRtBracer", "#0#1#2#3#" );
+	SetLocalString( oModule, "XC_A_small_ACLtBracer", "#0#2#3#" );
+	SetLocalString( oModule, "XC_A_small_ACRtBracer", "#0#2#3#" );
 	SetLocalString( oModule, "XC_A_small_ACLtArm", "#0#1#3#4#5#6#" );
 	SetLocalString( oModule, "XC_A_small_ACRtArm", "#0#1#3#4#5#" );
 	SetLocalString( oModule, "XC_A_small_ACRtLeg", "#0#1#2#" );
