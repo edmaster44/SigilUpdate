@@ -53,12 +53,6 @@ int HasToWipeAbilities(object oPC, object oEssence)
 	    	SendMessageToPC(oPC, "You must regain your freedom or leave your ways behind.");
 	   		return TRUE;
 		}
-		if (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) > 0 && nMORAL != ALIGNMENT_GOOD)
-	   	{	
-			SendMessageToPC(oPC, "You are a fallen paladin, without the blessing of your god.");
-	   		SendMessageToPC(oPC, "You must be redeemed or leave your ways behind.");
-			return TRUE;
-		}
 	}
 	else
 	{		
@@ -68,12 +62,7 @@ int HasToWipeAbilities(object oPC, object oEssence)
 	   		SendMessageToPC(oPC, "You must relearn the discipline necessary or leave your ways behind.");
 			return TRUE;
 		}
-		if (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) > 0)
-	   	{	
-			SendMessageToPC(oPC, "You are a fallen paladin, without the blessing of your god.");
-	   		SendMessageToPC(oPC, "You must be redeemed or leave your ways behind.");
-			return TRUE;
-		}
+		
 	}
 	
 	if (nMORAL != ALIGNMENT_EVIL)

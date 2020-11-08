@@ -85,7 +85,6 @@ const int WING_TYPE_WORDARCHON_M				= 73;
 const int CLASS_TYPE_ELEMENTAL_WARRIOR			= 68;
 const int CLASS_DERVISH							= 72;
 const int CLASS_STALWART_DEFENDER 				= 180;
-const int CLASS_KNIGHT							= 109;
 // List of all racial prestige classes
 const int CLASS_TYPE_SCALED_HUNTER_PRC			= 48;
 const int CLASS_TYPE_HALFDRAGON_PRC				= 49;
