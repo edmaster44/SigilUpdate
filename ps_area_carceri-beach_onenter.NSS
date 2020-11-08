@@ -56,12 +56,12 @@ void main () {
 		   location lSpawnpoint = GetLocation(oWP);  
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_porphatys_gadov", lSpawnpoint);    
 		}
-		if(GetObjectByTag("ps_porphatys_mithrii") == OBJECT_INVALID)
+		/*if(GetObjectByTag("ps_porphatys_mithrii") == OBJECT_INVALID)
 		{
 		   object oWP = GetWaypointByTag("wp_porphatys_mithrii");
 		   location lSpawnpoint = GetLocation(oWP);  
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_porphatys_mithrii", lSpawnpoint);    
-		}
+		}*/
 		if(GetObjectByTag("ps_porphatys_oldpriest") == OBJECT_INVALID)
 		{
 		   object oWP = GetWaypointByTag("wp_porphatys_oldpriest");
@@ -69,13 +69,13 @@ void main () {
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_porphatys_oldpriest", lSpawnpoint);    
 		}
 		
-	  object oListener = GetObjectByTag("c_porphatys_portallistener");
-	  if(oListener == OBJECT_INVALID || GetArea(oListener) != GetArea(OBJECT_SELF)) {
+	 	/*object oListener = GetObjectByTag("c_porphatys_portallistener");
+	  	if(oListener == OBJECT_INVALID || GetArea(oListener) != GetArea(OBJECT_SELF)) {
 			object oWP = GetWaypointByTag("ps_porphatys_portallistener");
 			location lSpawnpoint = GetLocation(oWP);  
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "c_colothys_portallistener", lSpawnpoint, FALSE, "c_porphatys_portallistener");  
 			SpeakString("portal listener: "+GetTag(oSpawn), TALKVOLUME_SHOUT);
-	    }
+	    }*/
 		
 	}
 	

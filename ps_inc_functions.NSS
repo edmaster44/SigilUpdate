@@ -6,9 +6,6 @@
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
 
-
-
-
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest level in group
@@ -16,7 +13,6 @@ const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest 
 const float MAXMONSTERXP = 500.0; //The absolute maximum xp any monster can yield
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							//CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
-
 							
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
@@ -616,6 +612,28 @@ void GiveEssenceBlastShapes(object oPC) {
 		} 
 		if (GetHasFeat(FEAT_WARLOCK_DOOM_ELDRITCH, oPC, TRUE)) {
 			FeatAdd(oPC, FEAT_WARLOCK_DOOM_VITRIOLIC,FALSE,FALSE,FALSE);
+		}
+	}
+
+	//Binding
+	if (GetSpellKnown(oPC,SPELL_I_BINDING_BLAST)) {
+		if (GetHasFeat(FEAT_WARLOCK_SPEAR_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SPEAR_BINDING,FALSE,FALSE,FALSE);
+		}
+		if (GetHasFeat(FEAT_WARLOCK_BLOW_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_BLOW_BINDING,FALSE,FALSE,FALSE);
+		} 
+		if (GetHasFeat(FEAT_WARLOCK_SHIELD_ELDRTICH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_SHIELD_BINDING,FALSE,FALSE,FALSE);
+		} 
+		if (GetHasFeat(FEAT_WARLOCK_CHAIN_ELDRITCH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_CHAIN_BINDING,FALSE,FALSE,FALSE);
+		} 
+		if (GetHasFeat(FEAT_WARLOCK_BURST_ELDRITCH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_BURST_BINDING,FALSE,FALSE,FALSE);
+		} 
+		if (GetHasFeat(FEAT_WARLOCK_DOOM_ELDRITCH, oPC, TRUE)) {
+			FeatAdd(oPC, FEAT_WARLOCK_DOOM_BINDING,FALSE,FALSE,FALSE);
 		}
 	}
 	
