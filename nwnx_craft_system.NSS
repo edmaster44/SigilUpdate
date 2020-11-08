@@ -572,16 +572,28 @@ string XPCraft_GetArmorPart_ListName(object oPC, string sRoadMap)
 {
 	string sRaceGroup = "HH";
 	string sGender = "M_";	
+		
+	//So we can tell if this is a creature type
+	string body = Get2DAString("appearance","NWN2_Model_Body",GetAppearanceType(oPC));
 	
 	//if(XP_CRAFT_USE_RACED_ARMOR_PART)
 	//{
-		sRaceGroup = GetSubString(Get2DAString("appearance","NWN2_AccessoryType",GetAppearanceType(oPC)),0,2);
+		string sfullRace = Get2DAString("appearance","NWN2_AccessoryType",GetAppearanceType(oPC));
+		string partialRace = GetSubString(sfullRace,0,2);
+		
+		if (GetSubString(body, 0, 1) == "c")
+			sRaceGroup = sfullRace;
+		else
+			sRaceGroup = partialRace;
 	//}
 	
 	if((XP_CRAFT_USE_SEXED_ARMOR_PART) && (GetGender(oPC) == GENDER_FEMALE))
 	{
 		sGender = "F_";
 	}	
+	
+	if (GetSubString(body, 0, 1) == "c")
+		sGender = "_";	
 	
 	return "XC_A_" + sRaceGroup + sGender + sRoadMap;
 }
