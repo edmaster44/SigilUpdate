@@ -7,6 +7,7 @@
 
 void main()
 {
+	float fDur = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 	object oTarget	= GetSpellTargetObject();
 	
 	 if (GetHasSpellEffect(SPELL_BLADE_OF_BLOOD, oTarget))
@@ -19,5 +20,5 @@ void main()
 	
 	effect eDam = EffectDamageOverTime(6,6.0,DAMAGE_TYPE_MAGICAL,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_BLADEWEAVE));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur);
 }
