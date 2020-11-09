@@ -67,10 +67,10 @@ void main()
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget,fDuration);
 			
 
-	
-	}
-
 	//Select the next target within the spell shape.
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+	}
+
+
 	   
 	}
