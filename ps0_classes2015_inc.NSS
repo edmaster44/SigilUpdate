@@ -20,6 +20,7 @@
 const int CLASS_TYPE_SLAYER_OF_DOMIEL	= 41;
 const int CLASS_TYPE_DEMONOLOGIST		= 69;
 const int CLASS_TYPE_GOLEM_MASTER		= 77;
+const int CLASS_TYPE_CELESTIAL_ENVOY 	= 42;
 
 
 void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell)
