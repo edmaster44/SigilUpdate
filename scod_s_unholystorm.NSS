@@ -60,16 +60,17 @@ void main()
 			}
 		eDice = d6(2);
 		
-		//fDelay = GetRandomDelay(0.5, 2.0);
+		fDelay = GetRandomDelay(0.5, 2.0);
 			//This fires a cast spell event for the specified target
-			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_UNHOLY_STORM));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget,fDuration));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget,fDuration));
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget,fDuration);
-		
 			
-}
-       oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+
 	
 	}
-	
+
+	//Select the next target within the spell shape.
+       oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+	   
+	}
