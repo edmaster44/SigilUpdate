@@ -1,4 +1,3 @@
-
 void main()
 {
  object oPC = GetEnteringObject();
@@ -117,12 +116,15 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_esmerelda", lSpawnpoint);    
   } 
+  
+  //Carceri Lady
   if(GetObjectByTag("ps_porphatys_mithrii") == OBJECT_INVALID)
   {
 	object oWP = GetWaypointByTag("wp_porphatys_mithrii");
 	location lSpawnpoint = GetLocation(oWP);  
 	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_porphatys_mithrii", lSpawnpoint);    
   }
+  
   //Bria Tomay
   if(GetObjectByTag("ps_mw_briatomay") == OBJECT_INVALID)
   {
