@@ -2,10 +2,11 @@
 
 
 #include "aaa_constants"
-#include "ps0_classes2015_inc"
+
 
 
 void PS_KnightLevels(object oPC);
+int KnightLevels(object oPC);
 
 void PS_KnightLevels(object oPC)
 {
@@ -15,7 +16,7 @@ void PS_KnightLevels(object oPC)
 	int iWarPriest = GetLevelByClass(CLASS_TYPE_WARPRIEST,oPC);//Warpriest	
 	int iHalfCelestial = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Celestial
 	int	iDivine = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC);//Divine Champion
-	int iEnvoy = GetLevelByClass(CLASS_TYPE_CELESTIAL_ENVOY,oPC); //Celestial Envoy	
+	int iEnvoy = GetLevelByClass(42,oPC); //Celestial Envoy	
 	int iHound = GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); // Hound Archon
 	int iAstral = GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);//Astral Deva PRC
 	int iMovanic = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);//Movanic Deva
@@ -203,3 +204,31 @@ void PS_KnightLevels(object oPC)
 		
 		}
 	  }
+	  
+int KnightLevels(object oPC)
+{
+	int iPally = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);//Paladin, aka, Knight
+	int iWarPriest = GetLevelByClass(CLASS_TYPE_WARPRIEST,oPC);//Warpriest	
+	int iHalfCelestial = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Celestial
+	int	iDivine = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC);//Divine Champion
+	int iEnvoy = GetLevelByClass(42,oPC); //Celestial Envoy	
+	int iHound = GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); // Hound Archon
+	int iAstral = GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);//Astral Deva PRC
+	int iMovanic = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);//Movanic Deva
+	int iMarquis = GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC);//Marquis Cambion
+	int iDeath = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC);//Death Knight
+	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
+	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
+int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden;
+	   if (iPally <1 )
+	   { (iTotal = 0);}
+	   
+	   
+	   return iTotal;
+	   
+	  
+	
+
+
+}

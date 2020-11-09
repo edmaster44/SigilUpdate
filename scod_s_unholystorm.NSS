@@ -24,12 +24,14 @@ After the spell's duration expires, the water disappears.
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "aaa_constants"
+#include "ps_inc_functions"
 
 void main()
 {
 	int eDice;
     //Declare major variables
 	float fDelay;
+	float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
     effect eListen = EffectSkillDecrease(SKILL_LISTEN,4);
     effect eSpot = EffectSkillDecrease(SKILL_SPOT,4);
     effect eSearch = EffectSkillDecrease(SKILL_SEARCH,4);
@@ -61,9 +63,9 @@ void main()
 		//fDelay = GetRandomDelay(0.5, 2.0);
 			//This fires a cast spell event for the specified target
 			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_UNHOLY_STORM));
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget));
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget);
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget,fDuration));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget,fDuration));
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget,fDuration);
 		
 			
 }

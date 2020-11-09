@@ -16,6 +16,7 @@ const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
+
 const int CLASS_TYPE_FELLBLADE 							= 80;
 const int CLASS_TYPE_ARCANE_ARCHER2 					= 81;
 const int CLASS_TYPE_PALEMASTER_W 						= 82;
@@ -177,6 +178,7 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem);
 void DebugMessageToPC(object oPC, string sMessage);
 
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
+
 
 //Progresses Barbarian 
 int BarbarianLevels(object oPC)

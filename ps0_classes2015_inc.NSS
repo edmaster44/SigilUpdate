@@ -18,7 +18,6 @@
 	//////////////////////////////////////////////////////////////////////////////////////////	*/
 	
 const int CLASS_TYPE_SLAYER_OF_DOMIEL	= 41;
-const int CLASS_TYPE_CELESTIAL_ENVOY	= 42;
 const int CLASS_TYPE_DEMONOLOGIST		= 69;
 const int CLASS_TYPE_GOLEM_MASTER		= 77;
 
