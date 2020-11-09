@@ -26,16 +26,21 @@ void PS_KnightLevels(object oPC)
 	  
 	  
 	  int iTotal = iPally + iWarPriest;
+/*	  if(GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal +iDeath + iMarquis;
+	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal + iHalfFiend ;
+	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)) iTotal = iTotal + iHalfCelestial;
+	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden;
+	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iHound + iAstral + iMovanic + iEnvoy;*/
+	  if (iPally <1 ) return;
+	  
+	  else 
+	 
+	    int iTotal = iPally + iWarPriest;
 	  if(GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal +iDeath + iMarquis;
 	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal + iHalfFiend ;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)) iTotal = iTotal + iHalfCelestial;
 	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iHound + iAstral + iMovanic + iEnvoy;
-	  if (iPally <1 ) return;
-	  
-	  else 
-	 
-	  
 		if (iTotal >= 1  && GetHasFeat(FEAT_BLACKGUARD,oPC))
 			{FeatAdd(oPC,FEAT_USE_POISON,FALSE,FALSE,FALSE);//Use Poison, BG Path
 			FeatAdd(oPC,FEAT_SMITE_GOOD,FALSE,FALSE,FALSE);//Smite Evil, BG Path
@@ -97,7 +102,7 @@ void PS_KnightLevels(object oPC)
 
 
 	  }
-	  	   	  else if (iTotal >= 21 && GetHasFeat(FEAT_BLACKGUARD,oPC))
+	  	   	   if (iTotal >= 21 && GetHasFeat(FEAT_BLACKGUARD,oPC))
 		{
 		FeatAdd(oPC,1970,FALSE,FALSE,FALSE);//Expose Weakness , BG Path
 

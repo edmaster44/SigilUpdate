@@ -39,8 +39,8 @@ void main()
 	effect	eLinks;
 	int eEnemyOutSider;
 	eLinks = EffectLinkEffects(eListen,eSpot);
-	eLinks = EffectLinkEffects(eSearch,eAttack);
-	eLinks = EffectLinkEffects(eDamage,eVisElec);
+	eLinks = EffectLinkEffects(eLinks,eAttack);
+	eLinks = EffectLinkEffects(eLinks,eSearch);
 
 
 	location lTarget = GetSpellTargetLocation();
@@ -50,6 +50,7 @@ void main()
 	{
 
 	 	if (spellsIsTarget(oTarget,SPELL_TARGET_SELECTIVEHOSTILE,GetAreaOfEffectCreator()));
+				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_UNHOLY_STORM));
 		
 			if(GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
 			{
@@ -57,15 +58,16 @@ void main()
 			}
 		eDice = d6(2);
 		
-		fDelay = GetRandomDelay(0.5, 2.0);
-		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_UNHOLY_STORM));
+		//fDelay = GetRandomDelay(0.5, 2.0);
 			//This fires a cast spell event for the specified target
 			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_UNHOLY_STORM));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget);
 		
 			
 }
-  oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
+       oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	
 	}
+	
