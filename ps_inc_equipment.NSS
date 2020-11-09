@@ -23,21 +23,25 @@ int GetMonkWeapon(object oItem)
 }
 
 
-
-int GetSmallWeapons(object oItem)
+int NoHeavyArmorOrShield(object oPC)
 {
-if(!GetIsObjectValid(oItem)) return FALSE;
-int iType = GetBaseItemType(oItem);
-if (Get2DAString("baseitems","WeaponSize",iType) != "1")
-return FALSE;
+	int chest = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC));
+	if(chest == 3 || chest == 2) return FALSE;
 
-return TRUE;
+//	SendMessageToPC(oPC,"DEBUG: Armor check is good!");	
+	
+	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+	if (oShield == OBJECT_INVALID) return TRUE;
+
+//	SendMessageToPC(oPC,"DEBUG: Shield check is good!");	
+		
+	int shield = GetBaseItemType(oShield);
+	if(shield == 56 || shield == 14 || shield == 57) return FALSE;	
+
+//	SendMessageToPC(oPC,"DEBUG: Shield type check is good!");	
+		
+	return TRUE;
 }
-
-
-
-
-
 
 
 
@@ -477,23 +481,6 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
     ApplyEquipmentEffect(oPC, eFX);
 }
 
-void SlashingBlades(object oPC, int nSpellID)
-{
-	//At 1st level, a dervish treats the scimitar as a light weapon for all purposes, including fighting with two weapons.
-	RemoveAnySpellEffects(nSpellID, oPC);
-	
-	if(!nDervishValid(oPC)) return;
-	
-	object oWeaponRightHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
-	object oWeaponLeftHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
-		
-	if(!GetDervishWeapon(oWeaponRightHand) || !GetDervishWeapon(oWeaponLeftHand)) return;
-	int eABIncrease;
-
-	if(GetLevelByClass(72,oPC) >= 7) eABIncrease = 2;
-	else eABIncrease = 1;	
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, ExtraordinaryEffect(SetEffectSpellId(EffectAttackIncrease(eABIncrease), nSpellID)), oPC);
-}
 
 
 

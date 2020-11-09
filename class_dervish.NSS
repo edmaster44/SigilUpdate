@@ -15,8 +15,9 @@ if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
 	return;}
 
 
-if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oArmor == OBJECT_INVALID)
-	{
+if (!NoHeavyArmorOrShield(oPC))
+{ SendMessageToPC(oPC,"Your Dervish AC Bonus will not function in Armor Heavier than Light");}
+	
 		int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
 		
 		if (GetHasSpellEffect(nSpellId,oPC))
@@ -37,11 +38,10 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 							
 		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, fDuration));
 	}
-	else
-		SendMessageToPC(oPC, "Dervish only gain an AC bonus when wearing no armor or light armor.");
+	
 
 
-}
+
 //A thousand cuts Feat for Dervish
 void A_Thousand_Cuts(object oPC, int nSpell)
 {	
@@ -52,14 +52,15 @@ if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
 { SendMessageToPC(oPC, "A thousand Cuts will not stack with Stalwart Defender");
 	return;}
 	
-if (!GetDervishWeapon(oPC))
-{ SendMessageToPC(oPC, "A Thousand Cuts will not apply on Non Slashing Weapons");
-return;}
+if (GetDervishWeapon(oPC))
+{
 
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 
-if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oArmor == OBJECT_INVALID)
-	{
+if (!NoHeavyArmorOrShield(oPC))
+{ SendMessageToPC(oPC,"A Thousand Cuts only works when wearing no armor or light armor.");}
+	
+	
 	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
 	
 	if (GetHasSpellEffect(nSpellId,oPC))
@@ -68,9 +69,10 @@ if ((oArmor != OBJECT_INVALID && GetArmorRank(oArmor) == ARMOR_RANK_NONE) ||  oA
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
 	eSlash = SetEffectSpellId(eSlash, nSpellId );	
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); }	
-		else
-		SendMessageToPC(oPC, "A Thousand Cuts only works when wearing no armor or light armor.");	
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); 
+	
+	}	
+		
 }
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
