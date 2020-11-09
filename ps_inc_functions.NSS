@@ -800,6 +800,28 @@ int GetPaladinAndPRCClassLevels(object oPC)
 }
 
 
+int GetPaladinTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
+	
+	return iTotal;
+}
+
 
 
 int GetHasRangerProgression(object oPC, int iClass)
@@ -832,28 +854,6 @@ int GetRangerAndPRCClassLevels(object oPC)
 	return iTotal;
 }
 
-
-int GetPaladinTRUECasterlevel(object oPC)
-{
-	int iSlotNumber; int iClass;
-	int iTotal; int iTrue;
-
-	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
-		
-	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
-	{
-		iClass = GetClassByPosition( iSlotNumber, oPC);
-		
-		if ( iClass == 255 ) break;
-			
-		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
-		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
-	}
-	
-	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
-	
-	return iTotal;
-}
 
 int PS_GetCasterLevel(object oPC)
 {
