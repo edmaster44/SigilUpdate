@@ -10,12 +10,12 @@ int nType;
 	{nType = DAMAGE_TYPE_NEGATIVE;
 	
 	}
-	else if (GetHasFeat(FEAT_PALADIN,OBJECT_SELF)) 
+	 if (GetHasFeat(FEAT_PALADIN,OBJECT_SELF)) 
 	{
 	nType = DAMAGE_TYPE_DIVINE;
 	
 	}
-	else if (GetHasFeat(FEAT_KNIGHT,OBJECT_SELF)) 
+	if (GetHasFeat(FEAT_KNIGHT,OBJECT_SELF)) 
 	{
 	
 		nType = DAMAGE_TYPE_MAGICAL;
