@@ -16,6 +16,7 @@ const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
+
 const int CLASS_TYPE_FELLBLADE 							= 80;
 const int CLASS_TYPE_ARCANE_ARCHER2 					= 81;
 const int CLASS_TYPE_PALEMASTER_W 						= 82;
@@ -177,6 +178,7 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem);
 void DebugMessageToPC(object oPC, string sMessage);
 
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
+
 
 //Progresses Barbarian 
 int BarbarianLevels(object oPC)
@@ -798,6 +800,28 @@ int GetPaladinAndPRCClassLevels(object oPC)
 }
 
 
+int GetPaladinTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
+	
+	return iTotal;
+}
+
 
 
 int GetHasRangerProgression(object oPC, int iClass)
@@ -831,35 +855,6 @@ int GetRangerAndPRCClassLevels(object oPC)
 }
 
 
-int GetPaladinTRUECasterlevel(object oPC)
-{
-	int iSlotNumber; int iClass;
-	int iTotal; int iTrue;
-
-	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
-		
-	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
-	{
-		iClass = GetClassByPosition( iSlotNumber, oPC);
-		
-		if ( iClass == 255 ) break;
-			
-		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
-		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
-	}
-	
-	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
-	
-if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
-	{ FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);}
-		else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
-		{ FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);}
-			else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
-		{ FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);}
-		
-	return iTotal;
-}
-
 int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
@@ -889,16 +884,6 @@ int PS_GetCasterLevel(object oPC)
         if (GetHasFeat(2250, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide
     }
     
-	 else if (iClass == 109)
-    {	iLevel = GetLevelByClass(109, oPC);
-        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN, oPC, TRUE)) iLevel += 4;
-        if (GetHasFeat(1547, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
-        if (GetHasFeat(1551, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
-        if (GetHasFeat(1582, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
-        if (GetHasFeat(1810, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
-        if (GetHasFeat(2035, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
-        if (GetHasFeat(2250, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide
-    }
 	else
     {	iLevel = GetCasterLevel(oPC);	}
 

@@ -34,7 +34,7 @@
 //::  Turning failed message will not show for creatures that can't be turned
 
 #include "x0_i0_spells"
-#include "ps_inc_functions"
+#include "ps_adjust_knight"
 #include "aaa_constants"
 
 //const int STRREF_TURNING_CHECK 		= 0;
@@ -55,7 +55,8 @@ void PrintTurningDamage( int n2d6, int nChrMod, int nClassLevel );
 void PrintTurningResult( object oTarget, int nClassLevel, int nTurnLevel, int nHDRemaining, int nResult = TURN_RESULT_FAILURE );
 
 void main()
-{
+{	
+  object oPC = OBJECT_SELF;
 
     int nClericLevel = GetLevelByClass(CLASS_TYPE_CLERIC);
     int nPaladinLevel = GetLevelByClass(CLASS_TYPE_PALADIN);
@@ -63,6 +64,7 @@ void main()
     int nDoomguideLevel = GetLevelByClass(CLASS_TYPE_DOOMGUIDE);
 	int nWarPriestLevel = GetLevelByClass(CLASS_TYPE_WARPRIEST);
 	int nLichLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC);
+	int nGhaele 	= GetLevelByClass(CLASS_TYPE_GHAELE_PRC);
     int nTotalLevel =  GetHitDice(OBJECT_SELF);
 	
     int nTurnLevel = nClericLevel;
@@ -94,6 +96,20 @@ void main()
 		nClassLevel += nWarPriestLevel;
         nTurnLevel  += nWarPriestLevel;
 	}
+	
+	if (KnightLevels(oPC) > 0)
+	{
+		nClassLevel += KnightLevels(oPC);
+		nTurnLevel += KnightLevels(oPC);
+	
+	}
+	
+	if (nGhaele > 0)
+	{
+		nClassLevel += nGhaele;
+		nTurnLevel += nGhaele;
+	
+	}	
     
     // Should this stack with Paladin/Blackguard/Cleric/Doomguide multi class?
     // Why are you leveling that combination anyways?!

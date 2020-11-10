@@ -3,10 +3,14 @@
 
 #include "x0_i0_spells"
 
-
+//This is the Item Property for Blade of Blood, Bleed damage is based on Caster Level divided by 5
 
 void main()
 {
+
+	int nAmount = PS_GetCasterLevel(OBJECT_SELF)/5 ;
+
+	float fDur = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 	object oTarget	= GetSpellTargetObject();
 	
 	 if (GetHasSpellEffect(SPELL_BLADE_OF_BLOOD, oTarget))
@@ -17,7 +21,7 @@ void main()
 	{return ;}
 	
 	
-	effect eDam = EffectDamageOverTime(6,6.0,DAMAGE_TYPE_MAGICAL,TRUE);  
+	effect eDam = EffectDamageOverTime(nAmount,6.0,DAMAGE_TYPE_MAGICAL,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_BLADEWEAVE));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur);
 }

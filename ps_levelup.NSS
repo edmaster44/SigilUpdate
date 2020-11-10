@@ -304,7 +304,7 @@ void main()
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
 	GiveDragonFeats(oPC);
-	GetPaladinTRUECasterlevel(oPC);
+	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
 	PS_GiveSpellFeat(oPC);
