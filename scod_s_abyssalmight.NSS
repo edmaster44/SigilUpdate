@@ -22,13 +22,14 @@ void main()
 	object oTarget			= GetSpellTargetObject();
 	object oCaster			= OBJECT_SELF;
 	int nCasterLevel		= PS_GetCasterLevel(oCaster);
+	int nAmount 			= nCasterLevel/5;
 	// Spell Duration
 	float fDuration			= TurnsToSeconds(nCasterLevel * 10);
 	fDuration			= ApplyMetamagicDurationMods(fDuration);
 	// Effects
-	effect eStrength 		= EffectAbilityIncrease(ABILITY_STRENGTH, 2);
-	effect eDexterity		= EffectAbilityIncrease(ABILITY_DEXTERITY, 2);
-	effect eConstitution	= EffectAbilityIncrease(ABILITY_CONSTITUTION, 2);
+	effect eStrength 		= EffectAbilityIncrease(ABILITY_STRENGTH, nAmount);
+	effect eDexterity		= EffectAbilityIncrease(ABILITY_DEXTERITY, nAmount);
+	effect eConstitution	= EffectAbilityIncrease(ABILITY_CONSTITUTION, nAmount);
 	effect eVisual			= EffectVisualEffect(VFX_INVOCATION_BESHADOWED_DOOM);
 	effect eLink = EffectLinkEffects(eStrength, eDexterity);
 	eLink =  EffectLinkEffects(eLink, eConstitution);
