@@ -10,7 +10,7 @@ void main () {
 		
 	SetLocalObject(oFruit1, "TriggeredBy", oPC);
 	
-	if (GetLocalInt(OBJECT_SELF, "reward") > 0) {
+	if (GetLocalInt(OBJECT_SELF, "reward") > 0 && GetLocalInt(oPC, "gardenboss") == 0) {
 		SendMessageToPC(oPC, "<i>The vines whither away from your touch after the defeat of their guardian. . showing the remains of those who tried before you and failed. You find an item of interest.</i>");
 		
 		GenerateQuestRewardOnTarget(oPC, TREASURE_QUEST_LOW, TRUE);
