@@ -200,7 +200,13 @@ void CastConeCold()
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while(GetIsObjectValid(oTarget))
-    {
+    { 
+					//If The Targets are Friendly, it will not do nothing
+		if (GetIsReactionTypeFriendly(oTarget,GetAreaOfEffectCreator(OBJECT_SELF)))
+			{
+				return;
+				}
+	
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
     	{
                 // SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CONE_OF_COLD));
@@ -217,6 +223,7 @@ void CastConeCold()
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCold, oTarget));
         }
+		
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     }
 	fMaxDelay += 1.5f;
