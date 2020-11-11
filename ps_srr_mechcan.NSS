@@ -21,7 +21,6 @@ void main()
 	int iEnemyAlignLC;
     float fDelay;
 	
-	int iDC = 10 + iLevel/2 + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	
     /* Brock H. - OEI 03/03/06 -- Handled by the ImpactSEF column in the spells.2da
     effect eExplode = EffectVisualEffect(VFX_FNF_FIREBALL); */
@@ -64,7 +63,7 @@ void main()
 				iDamage = iDamage * 2; // outsiders take double damage
 			}
 			
-			iDamage = GetReflexAdjustedDamage(iDamage, oTarget, iDC, SAVING_THROW_TYPE_LAW);
+			
 			
 			eDam = EffectDamage(iDamage, DAMAGE_TYPE_MAGICAL);
             
