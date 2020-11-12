@@ -629,7 +629,7 @@ void LoadHelmetsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 16) {
+	while (n < 17) {
 		string sPot = GetHelmetsFromList(n, 2);
 		if (sPot == "") {
 			n++; continue;
@@ -638,7 +638,7 @@ void LoadHelmetsToDatabase(object oPC) {
 		n++;
 	}
 	n = 1;
-	while (n < 15) {
+	while (n < 16) {
 		string sPot = GetHelmetsFromList(n, 3);
 		if (sPot == "") {
 			n++; continue;

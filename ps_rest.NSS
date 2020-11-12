@@ -143,6 +143,16 @@ void RemoveBuffs(object oPC)
 	}
 }
 
+void GiveDruidMonkPenaltyFeat (object oPC)
+{
+	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) > 0 &&
+       GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0 &&
+       GetHasFeat(4727, oPC, TRUE) == FALSE) {	   
+	   FeatAdd (oPC, 4727, FALSE, FALSE, FALSE );
+	}
+
+}
+
 void FinesseRestFix(object oPC, object oWEAPON)
 {
 	if (GetLocalInt(oWEAPON , "S_Finesse") == 0) return;
@@ -182,6 +192,8 @@ void RestFinish(object oPC)
 	
 	PS_CalculateECL(oPC);
 	
+	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
+	
 	if (CheckTimeStamp(oPC, "REST") > cSaveWait)
 	{	
 		TimeStamp(oPC, "REST");
@@ -189,16 +201,6 @@ void RestFinish(object oPC)
 		DelayCommand(0.0f, ExportSingleCharacter(oPC));	
 	}
 }	
-
-
-void GiveDruidMonkPenaltyFeat (object oPC)
-{
-	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) > 0 &&
-       GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0 &&
-       GetHasFeat(4727, oPC, TRUE) == FALSE)
-	   FeatAdd (oPC, 4727, FALSE, FALSE, FALSE );
-
-	}
 
 
 
