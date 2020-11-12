@@ -483,23 +483,25 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
 
 
 // Heavy Armor Optimization Feats
-void HeavyArmorOptimizations(object oPC, object oARMOR)
-{
-	//if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR) return;
-    if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
-	
+void HeavyArmorOptimizations(object oPC, object oARMOR) {
+
+	SendMessageToPC(oPC, "Armor optimization: ");
 	//Remove previous optimization effect
 	if ( GetHasSpellEffect(SIGIL_ARMOR_OPTIMIZATION_FX, oPC) ) {
 		effect eEffect = GetFirstEffect( oPC );
 		while ( GetIsEffectValid(eEffect) ) {
 		
 			if ( GetEffectSpellId(eEffect) == SIGIL_ARMOR_OPTIMIZATION_FX){
+				SendMessageToPC(oPC, "Removing old copy.");
 				RemoveEffect( oPC, eEffect );
 			}
 				
 			eEffect = GetNextEffect( oPC );
 		}
 	}
+	
+	if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR) return;
+    if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
 	
 	//On to calculations
     int nAC;
@@ -532,9 +534,11 @@ void HeavyArmorOptimizations(object oPC, object oARMOR)
         eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_MOVE_SILENTLY, nSKILL));
     }
 	
+	
+	SendMessageToPC(oPC, "Adding new optimization: "+IntToString(nAC));
     eFX = SupernaturalEffect(eFX);
     eFX = SetEffectSpellId(eFX, SIGIL_ARMOR_OPTIMIZATION_FX);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oPC);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
 // Check if the weapon is finessable. Custom finessables from 160 to 174 and 202.
