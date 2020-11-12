@@ -58,15 +58,15 @@ void main() {
 	
 	//843 = Word of changing base spell
 	//Remove current spell effects
-	if ( GetHasSpellEffect(843) ) {
-		effect eEffect = GetFirstEffect( OBJECT_SELF );
+	if ( GetHasSpellEffect(843, oCaster) ) {
+		effect eEffect = GetFirstEffect( oCaster );
 		while ( GetIsEffectValid(eEffect) ) {
 		
 			if ( GetEffectSpellId(eEffect) == 843){
-				RemoveEffect( OBJECT_SELF, eEffect );
+				RemoveEffect( oCaster, eEffect );
 			}
 				
-			eEffect = GetNextEffect( OBJECT_SELF );
+			eEffect = GetNextEffect( oCaster );
 		}
 	}
 	

@@ -15,6 +15,8 @@
 
 
 const int SIGIL_EQUIP_FX = -9444;
+const int SIGIL_ARMOR_OPTIMIZATION_FX = -9544;
+
 //This gets the weapons that qualify for Meditative Strikes
 int GetMonkWeapon(object oItem)
 { 
@@ -297,9 +299,6 @@ return FALSE;
 
 }
 
-
-
-
 //Wrapper to equip effects from equipment in the proper manner.
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT)
 {
@@ -482,14 +481,26 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
 }
 
 
-
-
-
-
 // Heavy Armor Optimization Feats
 void HeavyArmorOptimizations(object oPC, object oARMOR)
 {
+	//if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR) return;
     if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
+	
+	//Remove previous optimization effect
+	if ( GetHasSpellEffect(SIGIL_ARMOR_OPTIMIZATION_FX, oPC) ) {
+		effect eEffect = GetFirstEffect( oPC );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == SIGIL_ARMOR_OPTIMIZATION_FX){
+				RemoveEffect( oPC, eEffect );
+			}
+				
+			eEffect = GetNextEffect( oPC );
+		}
+	}
+	
+	//On to calculations
     int nAC;
     int nSKILL;
     if (GetHasFeat(2838, oPC, TRUE) == TRUE)
@@ -518,7 +529,10 @@ void HeavyArmorOptimizations(object oPC, object oARMOR)
         eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HIDE, nSKILL));
         eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_MOVE_SILENTLY, nSKILL));
     }
-    ApplyEquipmentEffect(oPC, eFX);
+	
+    eFX = SupernaturalEffect(eFX);
+    eFX = SetEffectSpellId(eFX, SIGIL_ARMOR_OPTIMIZATION_FX);
+    ApplyEffectToObject(nDUR, eFX, oPC);
 }
 
 // Check if the weapon is finessable. Custom finessables from 160 to 174 and 202.
