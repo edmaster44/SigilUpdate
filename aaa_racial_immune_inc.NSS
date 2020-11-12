@@ -59,6 +59,7 @@ void ApplyCoreDevaImmunities(object oPC, int iImmCore, int nSpell)
 	effect ePar3 = EffectSpellImmunity(SPELLABILITY_BREATH_PETRIFY);
 	effect ePar4 = EffectSpellImmunity(SPELLABILITY_GAZE_PETRIFY);
 	effect ePar5 = EffectSpellImmunity(SPELLABILITY_TOUCH_PETRIFY);
+	effect ePar6 = EffectSpellImmunity(EFFECT_TYPE_PETRIFY);
 	effect eAcid = EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID, iImmCore);
 	effect eCold = EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, iImmCore);
 	if (iImmCore == 100)
@@ -70,6 +71,7 @@ void ApplyCoreDevaImmunities(object oPC, int iImmCore, int nSpell)
 	eCore = EffectLinkEffects(eCore, ePar3);
 	eCore = EffectLinkEffects(eCore, ePar4);
 	eCore = EffectLinkEffects(eCore, ePar5);
+	eCore = EffectLinkEffects(eCore,ePar6);
 	eCore = EffectLinkEffects(eCore, eAcid);
 	eCore = EffectLinkEffects(eCore, eCold);
 	eCore = ExtraordinaryEffect(eCore);
