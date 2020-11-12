@@ -52,8 +52,7 @@ if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
 { SendMessageToPC(oPC, "A thousand Cuts will not stack with Stalwart Defender");
 	return;}
 	
-if (GetDervishWeapon(oPC))
-{
+
 
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
 
@@ -71,7 +70,7 @@ if (!NoHeavyArmorOrShield(oPC))
 	eSlash = SetEffectSpellId(eSlash, nSpellId );	
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); 
 	
-	}	
+		
 		
 }
 //Defensive Parry.
