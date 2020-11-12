@@ -54,10 +54,11 @@ int GetDervishWeapon(object oItem)
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponSize",iType) != "3"
-	&& Get2DAString("baseitems","WeaponType",iType) != "3") return FALSE;
-				
-	return TRUE;
+	if(Get2DAString("baseitems","WeaponSize",iType) == "3" 	&& Get2DAString("baseitems","WeaponSize",iType) == "4"
+	&& Get2DAString("baseitems","WeaponType",iType) == "3") return TRUE;
+		
+	else			
+	return FALSE;
 }
 
 int nDervishValid (object oPC)
@@ -502,6 +503,7 @@ void HeavyArmorOptimizations(object oPC, object oARMOR)
 	
 	//On to calculations
     int nAC;
+	int nDUR = DURATION_TYPE_PERMANENT;
     int nSKILL;
     if (GetHasFeat(2838, oPC, TRUE) == TRUE)
     {
@@ -532,7 +534,7 @@ void HeavyArmorOptimizations(object oPC, object oARMOR)
 	
     eFX = SupernaturalEffect(eFX);
     eFX = SetEffectSpellId(eFX, SIGIL_ARMOR_OPTIMIZATION_FX);
-    ApplyEffectToObject(nDUR, eFX, oPC);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oPC);
 }
 
 // Check if the weapon is finessable. Custom finessables from 160 to 174 and 202.
