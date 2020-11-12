@@ -6,6 +6,7 @@
 #include "nwn2_inc_spells"
 #include "ps_inc_faction"
 #include "x2_inc_itemprop"
+#include "ps_adjust_knight"
 #include "x2_inc_toollib"
 #include "nwn2_inc_metmag"
 #include "ps_inc_golem"
@@ -119,9 +120,23 @@ void PS_Feat_SHD_ShadowEvade(object oPC, int nSpell)
 void PS_Feat_BG_CreateUndead(object oPC, int nSpell)
 {
     int nLevel	= GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC);
-	int nDK		= GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);
+	int nKnight	 = KnightLevels(oPC);
+	int nDK		= GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	
     effect eSummon;
     float fDelay = 3.0;
+	
+	if (KnightLevels(oPC) > 1)
+	{
+		nLevel += KnightLevels(oPC);
+	
+	}
+	
+	if (nDK > 1)
+	{
+	nLevel += nDK;
+	}
+	
+	
     if (nLevel >= 7 && nDK >= 1)
 	{	eSummon = EffectSummonCreature("c_skeleton_dk", VFX_FNF_SUMMON_UNDEAD);	}
 	else if (nLevel >= 7)
@@ -135,7 +150,7 @@ void PS_Feat_BG_CreateUndead(object oPC, int nSpell)
 
 void PS_Feat_BG_FiendishServant(object oPC, int nSpell)
 {
-	int nLevel 			= GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC);
+	int nLevel 			= GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) ||KnightLevels(oPC);
     int nCharLevel 		= GetTotalLevels(oPC,0);
 	object oItem		= GetItemPossessedBy(oPC,"ps_essence");
 	string sLA 			= GetLocalString(oItem, "ECL");

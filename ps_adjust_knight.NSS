@@ -17,6 +17,7 @@ void PS_KnightLevels(object oPC)
 	int iHalfCelestial = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Celestial
 	int	iDivine = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC);//Divine Champion
 	int iEnvoy = GetLevelByClass(42,oPC); //Celestial Envoy	
+	int iDoomg  = GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC);//Doomguide
 	int iHound = GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); // Hound Archon
 	int iAstral = GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);//Astral Deva PRC
 	int iMovanic = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);//Movanic Deva
@@ -30,7 +31,7 @@ void PS_KnightLevels(object oPC)
 	  if(GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal +iDeath + iMarquis;
 	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal + iHalfFiend ;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)) iTotal = iTotal + iHalfCelestial;
-	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden;
+	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden + iDoomg;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iHound + iAstral + iMovanic + iEnvoy;
 	  if (iPally <1 ) return;
 	  
@@ -212,6 +213,7 @@ int KnightLevels(object oPC)
 	int iEnvoy = GetLevelByClass(42,oPC); //Celestial Envoy	
 	int iHound = GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); // Hound Archon
 	int iAstral = GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);//Astral Deva PRC
+	int iDoomg  = GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC);
 	int iMovanic = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);//Movanic Deva
 	int iMarquis = GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC);//Marquis Cambion
 	int iDeath = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC);//Death Knight
