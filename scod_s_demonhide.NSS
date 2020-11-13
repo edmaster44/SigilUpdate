@@ -4,6 +4,7 @@
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 
+
 void main()
 {
 
@@ -22,11 +23,13 @@ void main()
     }
 // End of Spell Cast Hook
 
+	if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
+	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
+	return;
+	}
+	
 
     //Declare major variables
-    effect eVis1 = EffectVisualEffect( VFX_DUR_SPELL_STONESKIN );
-    //effect eVis2 = EffectVisualEffect( VFX_DUR_SPELL_STONESKIN );
-
     object oTarget = GetSpellTargetObject();
     int nAmount = GetCasterLevel(OBJECT_SELF) * 10;
     float fDuration = HoursToSeconds(GetCasterLevel(OBJECT_SELF));
@@ -42,9 +45,10 @@ void main()
 //Damage Reduction good. 
     effect eDR = EffectDamageReduction(5, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);	// JLR-OEI 02/14/06: NWN2 3.5 -- New Damage Reduction Rules
 	effect eDRColdIron = EffectDamageReduction(5, DR_TYPE_GMATERIAL, 0, GMATERIAL_METAL_COLD_IRON);
-	eDR = EffectLinkEffects( eDR, eVis1 );
+	effect eVis1 = EffectVisualEffect( VFX_DUR_SPELL_SPIDERSKIN );
 	effect eLink = EffectLinkEffects(eDR,eDRColdIron);
-	eLink =ExtraordinaryEffect(eLink);
+	eLink = EffectLinkEffects(eLink,eVis1);
+	
 
     RemoveEffectsFromSpell(oTarget, SPELL_DEMONHIDE);
 

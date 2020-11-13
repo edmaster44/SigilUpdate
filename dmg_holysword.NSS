@@ -6,24 +6,17 @@ void main()
 {
 int nType;
 	object oTARGET = GetSpellTargetObject();
-	if (GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
-	{nType = DAMAGE_TYPE_NEGATIVE;
-	
-	}
-	 if (GetHasFeat(FEAT_PALADIN,OBJECT_SELF)) 
-	{
-	nType = DAMAGE_TYPE_DIVINE;
-	
-	}
-	if (GetHasFeat(FEAT_KNIGHT,OBJECT_SELF)) 
-	{
-	
-		nType = DAMAGE_TYPE_MAGICAL;
-	
-	}
+	if (GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF)) nType = DAMAGE_TYPE_NEGATIVE;
 	
 	
-	effect eDMG = EffectDamage(d6(2), nType);
+	 else if (GetHasFeat(FEAT_PALADIN,OBJECT_SELF))nType = DAMAGE_TYPE_DIVINE;
+	
+	else if (GetHasFeat(FEAT_KNIGHT,OBJECT_SELF)) nType = DAMAGE_TYPE_MAGICAL;
+	
+	
+	
+	
+	effect eDMG = EffectDamage(d6(2), nType,DAMAGE_POWER_NORMAL,TRUE);
 	eDMG = EffectLinkEffects(eDMG, EffectVisualEffect(VFX_HIT_SPELL_HOLY));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
 }

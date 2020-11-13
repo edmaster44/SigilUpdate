@@ -15,6 +15,7 @@
 #include "ps_inc_functions"
 #include "x2_inc_itemprop"
 #include "x2_inc_spellhook"
+#include "ps_adjust_knight"
 #include "x2_inc_toollib"
 
 const int IP_CONST_ONHIT_CASTSPELL_HOLYSWORD = 146;
@@ -49,9 +50,12 @@ void main()
 	//Run the spell if target is a valid a weapon
     if (GetIsObjectValid(oWEAPON) == FALSE) FloatingTextStrRefOnCreature(83615, oPC);
 	else
-    {
+    {	
 		int nLVL = PS_GetCasterLevel(oPC);
+		int nKnight = KnightLevels(oPC);
 		float fDUR = RoundsToSeconds(nLVL);
+		if (nKnight > 1)
+		{ nLVL = nKnight ; }
 		if (GetLastSpellCastClass() == CLASS_TYPE_PALADIN) fDUR = fDUR * 10.0;
 		if (GetMetaMagicFeat() == METAMAGIC_EXTEND) fDUR = fDUR * 2.0;
 		object oTARGET = GetSpellTargetObject();

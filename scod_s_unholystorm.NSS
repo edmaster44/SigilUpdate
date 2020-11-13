@@ -28,7 +28,14 @@ After the spell's duration expires, the water disappears.
 
 void main()
 {
-	int eDice;
+
+	if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
+	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
+	return;
+	}
+	
+
+	int eDice =  d6(2);
     //Declare major variables
 	float fDelay;
 	float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
@@ -43,6 +50,7 @@ void main()
 	eLinks = EffectLinkEffects(eListen,eSpot);
 	eLinks = EffectLinkEffects(eLinks,eAttack);
 	eLinks = EffectLinkEffects(eLinks,eSearch);
+	eLinks = EffectLinkEffects(eLinks,eDamage);
 
 
 	location lTarget = GetSpellTargetLocation();
@@ -58,13 +66,13 @@ void main()
 			{
 				eDice = eDice * 2; // outsiders take double damage
 			}
-		eDice = d6(2);
+
 		
 		fDelay = GetRandomDelay(0.5, 2.0);
 			//This fires a cast spell event for the specified target
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget,fDuration));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget,fDuration));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget,fDuration);
+			DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget));
 			
 
 	//Select the next target within the spell shape.
