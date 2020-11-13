@@ -28,6 +28,12 @@ void main()
 
 // End of Spell Cast Hook
 
+	if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
+	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
+	return;
+	}
+	
+
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();

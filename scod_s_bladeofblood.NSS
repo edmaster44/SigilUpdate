@@ -29,6 +29,12 @@ const int IP_CONST_ONHIT_CASTSPELL_BLADE_OF_BLOOD = 147;
 	
 void main()
 {
+	if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
+	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
+	return;
+	}
+	
+
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
     if (!X2PreSpellCastCode()) return;
 	

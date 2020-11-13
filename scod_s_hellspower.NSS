@@ -44,6 +44,10 @@ void main()
         return;
     }
 
+		if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
+	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
+	return;
+	}
 	
 	  object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);

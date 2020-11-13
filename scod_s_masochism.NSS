@@ -43,18 +43,22 @@ void main()
 
 
 
-
+	if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
+	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
+	return;
+	}
+	
 
     object oPC = OBJECT_SELF;
 	int nCasterLevel = PS_GetCasterLevel(oPC);
-    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_FAVOR);
+    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DOOM);
     float fDuration = TurnsToSeconds(nCasterLevel); 
     int nScale = (PS_GetCasterLevel(OBJECT_SELF) /10);
 	 if (nScale < 1)
         nScale = 1;
 		
-	effect eSkills = EffectSavingThrowIncrease(SAVING_THROW_ALL, nScale);
-	effect eSaves = EffectSkillIncrease(SKILL_ALL_SKILLS, nScale);
+	effect eSaves = EffectSavingThrowIncrease(SAVING_THROW_ALL, nScale);
+	effect eSkills = EffectSkillIncrease(SKILL_ALL_SKILLS, nScale);
 	effect eAttack = EffectAttackIncrease(nScale);	
 	effect	eDamage = EffectDamageIncrease(nScale);
 	effect eHarm = EffectDamage(nScale * 10 ,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,TRUE);
