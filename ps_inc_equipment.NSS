@@ -572,10 +572,9 @@ void UnearthlyGrace(object oPC, object oCHEST)
 // Keep monk AC from affecting druids
 void MonkDruidPenalty(object oPC)
 {
-	SendMessageToPC(oPC, "Monk Druid Penalty");
+
     if (!GetHasFeat(4727, oPC, TRUE)) return;
 	
-	SendMessageToPC(oPC, "Applying Monk Druid Penalty");
 	int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
     effect eFX = EffectACDecrease(nWis, AC_SHIELD_ENCHANTMENT_BONUS);
     ApplyEquipmentEffect(oPC, eFX);
