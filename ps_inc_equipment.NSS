@@ -485,14 +485,12 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
 // Heavy Armor Optimization Feats
 void HeavyArmorOptimizations(object oPC, object oARMOR) {
 
-	SendMessageToPC(oPC, "Armor optimization: ");
 	//Remove previous optimization effect
 	if ( GetHasSpellEffect(SIGIL_ARMOR_OPTIMIZATION_FX, oPC) ) {
 		effect eEffect = GetFirstEffect( oPC );
 		while ( GetIsEffectValid(eEffect) ) {
 		
 			if ( GetEffectSpellId(eEffect) == SIGIL_ARMOR_OPTIMIZATION_FX){
-				SendMessageToPC(oPC, "Removing old copy.");
 				RemoveEffect( oPC, eEffect );
 			}
 				
@@ -535,7 +533,6 @@ void HeavyArmorOptimizations(object oPC, object oARMOR) {
     }
 	
 	
-	SendMessageToPC(oPC, "Adding new optimization: "+IntToString(nAC));
     eFX = SupernaturalEffect(eFX);
     eFX = SetEffectSpellId(eFX, SIGIL_ARMOR_OPTIMIZATION_FX);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
@@ -573,9 +570,12 @@ void UnearthlyGrace(object oPC, object oCHEST)
 
 
 // Keep monk AC from affecting druids
-void MonkDruidPenalty(object oPC, object oCHEST)
+void MonkDruidPenalty(object oPC)
 {
-    if (GetHasFeat(4727, oPC, TRUE) == FALSE) return;
+	SendMessageToPC(oPC, "Monk Druid Penalty");
+    if (!GetHasFeat(4727, oPC, TRUE)) return;
+	
+	SendMessageToPC(oPC, "Applying Monk Druid Penalty");
 	int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
     effect eFX = EffectACDecrease(nWis, AC_SHIELD_ENCHANTMENT_BONUS);
     ApplyEquipmentEffect(oPC, eFX);
@@ -824,7 +824,7 @@ void EquipmentEffects(object oPC)
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
     SacredFirstPenalty(oPC, nRIGHT, nLEFT);
-	MonkDruidPenalty(oPC,oCHEST);
+	MonkDruidPenalty(oPC, oCHEST);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
