@@ -2,6 +2,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "ps_totem_constants"
+#include "ps_inc_functions"
 
 int GetTotemStrikePower(int nShamanLvl)
 {
@@ -37,14 +38,13 @@ int GetDamageDicePerShamanLevel( int nShamanLvl, int nDivide )
 	return nDmgDice;
 }
 
-void TotemStrikeAttack( object oTarget, int nElemDmgType )
+void TotemStrikeAttack( object oTarget, int nShamanLvl, int nElemDmgType, float fDmgMulti )
 {
 	object oCaster = OBJECT_SELF;
 
 	int nBonus = 0;
 	int nRoll = TouchAttackRanged( oTarget, TRUE, nBonus );
 	if(nRoll) {
-		int nShamanLvl = GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oCaster);
 		int nDmgDice = GetDamageDicePerShamanLevel( nShamanLvl, 3 );
 
 		// Focus power
@@ -52,15 +52,24 @@ void TotemStrikeAttack( object oTarget, int nElemDmgType )
 
 		// Twin Totem Strike
 		int bTwin = GetHasFeat(FEAT_TWIN_TOTEM_STRIKE, oCaster, TRUE) && (d20(1) <= 2);
+		if(bTwin) {
+			SendMessageToPC(oCaster, "Twin Totem Strike!");
+		}
 		nDmgDice *= bTwin ? 2 : 1;
 
 		// Piercing Totem Strike
 		int bPiercing = GetHasFeat(FEAT_PIERCING_TOTEM_STRIKE, oCaster, TRUE) && (d20(1) <= 2);
+		if(bPiercing) {
+			SendMessageToPC(oCaster, "Piercing Totem Strike!");
+		}
 
 		int nDam = d6(nDmgDice);
 
 		// Totem Focus
 		nDam = ScaleDmgByTotemFocus( nFocus, nDam );
+
+		// Damage multi
+		nDam = FloatToInt(nDam * fDmgMulti);
 
 		// Confirm crit
 		if(nRoll == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT)) {
@@ -87,6 +96,10 @@ void TotemStrikeAttack( object oTarget, int nElemDmgType )
 			int nElemDam = d6(nElemDmgDice);
 			// Totem Focus
 			nElemDam = ScaleDmgByTotemFocus( nFocus, nElemDam );
+
+			// Damage multi
+			nElemDam = FloatToInt(nElemDam * fDmgMulti);
+
 			eElem = EffectDamage( nElemDam, nElemDmgType, nPower, bPiercing );
 			eLink = EffectLinkEffects(eLink, eElem);
 		}
@@ -95,11 +108,9 @@ void TotemStrikeAttack( object oTarget, int nElemDmgType )
 	}
 }
 
-void RunTotemStrike(object oTotem)
+void RunTotemStrike(object oTotem, int nShamanLvl, float fDmgMulti)
 {
 	object   oCaster    = OBJECT_SELF;
-	int nShamanLvl = GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oCaster);
-
 	location lTotemLoc = GetLocation(oTotem);
 
 	effect eVis = EffectVisualEffect( VFX_HIT_TOTEM_STRIKE );
@@ -114,13 +125,80 @@ void RunTotemStrike(object oTotem)
 	case 4: nElemDmgType = DAMAGE_TYPE_SONIC; break;
 	}
 
-	float strikeRadius = RADIUS_SIZE_LARGE * 1.25;
+	float strikeRadius = RADIUS_SIZE_LARGE * 1.5;
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, strikeRadius, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
 	while(GetIsObjectValid(oTarget)) {
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)) {
-			TotemStrikeAttack( oTarget, nElemDmgType );
+			TotemStrikeAttack( oTarget, nShamanLvl, nElemDmgType, fDmgMulti );
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, strikeRadius, lTotemLoc, FALSE, OBJECT_TYPE_CREATURE);
+	}
+}
+
+void TriggerNearbyTotems(object oCaster, location lStartLoc)
+{
+	// Find all active totems of the caster in activation range
+	int nCount = 0;
+	float fActivationRange = RADIUS_SIZE_LARGE * 5;
+
+	object totem_1 = OBJECT_INVALID;
+	object totem_2 = OBJECT_INVALID;
+	object totem_3 = OBJECT_INVALID;
+	object totem_4 = OBJECT_INVALID;
+	object totem_5 = OBJECT_INVALID;
+	object totem_6 = OBJECT_INVALID;
+	object totem_7 = OBJECT_INVALID;
+	object totem_8 = OBJECT_INVALID;
+	int nMaxCount = 8;
+
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fActivationRange, lStartLoc, FALSE, OBJECT_TYPE_AREA_OF_EFFECT);
+	while(GetIsObjectValid(oTarget)) {
+		object oCreator = GetAreaOfEffectCreator(oTarget);
+		int nAoeSpellId = GetAreaOfEffectSpellId(oTarget);
+		if(oCreator == oCaster && IsTotemSpell(nAoeSpellId)) {
+			++nCount;
+			switch(nCount) {
+				case 1: totem_1 = oTarget; break;
+				case 2: totem_2 = oTarget; break;
+				case 3: totem_3 = oTarget; break;
+				case 4: totem_4 = oTarget; break;
+				case 5: totem_5 = oTarget; break;
+				case 6: totem_6 = oTarget; break;
+				case 7: totem_7 = oTarget; break;
+				case 8: totem_8 = oTarget; break;
+				default: break;
+			}
+			if(nCount == nMaxCount) {
+				break;
+			}
+		}
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, fActivationRange, lStartLoc, FALSE, OBJECT_TYPE_AREA_OF_EFFECT);
+	}
+
+	int nCasterLevel = GetSpiritShamanTRUECasterlevel(oCaster);
+	float fMultiIncPerCount = 0.4;
+	float fDmgMulti = 1.0 + (nCount - 1) * fMultiIncPerCount;
+	float fMaxMulti = 3.0;
+	if(fDmgMulti > fMaxMulti) {
+		fDmgMulti = fMaxMulti;
+	}
+	if(nCount > 0) {
+		SendMessageToPC(oCaster, "Totem Strike caster level "
+			+ IntToString(nCasterLevel)
+			+ ", damage multiplier " + IntToString( FloatToInt(fDmgMulti * 100.0) ) + "%" );
+	}
+
+	// Run strike for each active totem
+	switch(nCount) {
+		case 8: RunTotemStrike(totem_8, nCasterLevel, fDmgMulti);
+		case 7: RunTotemStrike(totem_7, nCasterLevel, fDmgMulti);
+		case 6: RunTotemStrike(totem_6, nCasterLevel, fDmgMulti);
+		case 5: RunTotemStrike(totem_5, nCasterLevel, fDmgMulti);
+		case 4: RunTotemStrike(totem_4, nCasterLevel, fDmgMulti);
+		case 3: RunTotemStrike(totem_3, nCasterLevel, fDmgMulti);
+		case 2: RunTotemStrike(totem_2, nCasterLevel, fDmgMulti);
+		case 1: RunTotemStrike(totem_1, nCasterLevel, fDmgMulti);
+		default:
 	}
 }
 
@@ -133,29 +211,5 @@ void main()
 	
 	//Declare major variables
 	object   oCaster    = OBJECT_SELF;
-	location lCasterLoc = GetLocation(oCaster);
-	
-	// Find nearest totem of this caster
-	float fActivationRange = RADIUS_SIZE_LARGE;
-	object oNearTotem;
-	float fMinDist = fActivationRange + 1;
-	int iFound = 0;
-	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fActivationRange, lCasterLoc, FALSE, OBJECT_TYPE_AREA_OF_EFFECT);
-	while(GetIsObjectValid(oTarget)) {
-		object oCreator = GetAreaOfEffectCreator(oTarget);
-		int nAoeSpellId = GetAreaOfEffectSpellId(oTarget);
-		if(oCreator == oCaster && IsTotemSpell(nAoeSpellId)) {
-			float fDist = GetDistanceBetween(oCaster, oTarget);
-			if(fDist < fMinDist) {
-				fMinDist = fDist;
-				oNearTotem = oTarget;
-				iFound = 1;
-			}
-		}
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, fActivationRange, lCasterLoc, FALSE, OBJECT_TYPE_AREA_OF_EFFECT);
-	}
-
-	if(iFound) {
-		RunTotemStrike(oNearTotem);
-	}
+	TriggerNearbyTotems(oCaster, GetLocation(oCaster));
 }
