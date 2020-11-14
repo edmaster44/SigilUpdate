@@ -4,7 +4,7 @@
 
 void DarkForesight(object oPC)
 {
-    RemoveEffectsFromSpell(oPC, SPELL_I_DARK_FORESIGHT);
+    //RemoveEffectsFromSpell(oPC, SPELL_I_DARK_FORESIGHT);
 
     int nDuration = GetWarlockCasterLevel(oPC);
     int nLimit = nDuration * 10;
