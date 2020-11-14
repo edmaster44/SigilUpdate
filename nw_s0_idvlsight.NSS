@@ -39,7 +39,7 @@ void main() {
 	}
 	
 	//Remove previous versions of this spell
-	effect eEffect = GetFirstEffect( OBJECT_SELF );
+	effect eEffect = GetFirstEffect( oCaster );
 	while ( GetIsEffectValid(eEffect) ) {
 		
 		//SendMessageToPC(oCaster, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
@@ -55,10 +55,12 @@ void main() {
 			GetEffectSpellId(eEffect) == 2230 ||
 			GetEffectSpellId(eEffect) == 2231 ||
 			GetEffectSpellId(eEffect) == 2232) {
-				RemoveEffect( OBJECT_SELF, eEffect );
+				SendMessageToPC(oCaster, "Removing "+IntToString(GetEffectSpellId(eEffect)));
+				RemoveEffect( oCaster, eEffect );
+				eEffect = GetFirstEffect( oCaster ); //start again from the beginning
 			}
 				
-		eEffect = GetNextEffect( OBJECT_SELF );
+		eEffect = GetNextEffect( oCaster );
 	}
 	
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);

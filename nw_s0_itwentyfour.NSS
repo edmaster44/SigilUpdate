@@ -6,7 +6,7 @@ const int SPELL_I_OTHERWORLDLY_WHISPERS = 1059;
 
 void DoBeguilingInfluence(object oPC)
 {
-    //RemoveEffectsFromSpell(oPC, SPELL_I_BEGUILING_INFLUENCE);
+    RemoveEffectsFromSpell(oPC, SPELL_I_BEGUILING_INFLUENCE);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
 	int nSkillBuff = (nCasterLevel/2) + 5;
@@ -25,7 +25,7 @@ void DoBeguilingInfluence(object oPC)
 
 void DoDarkOnesLuck(object oPC)
 {
-    //RemoveEffectsFromSpell(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
+    RemoveEffectsFromSpell(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
 
 	int nBonus = GetAbilityModifier(ABILITY_CHARISMA, oPC);
     effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, nBonus, SAVING_THROW_TYPE_ALL);
@@ -38,7 +38,7 @@ void DoDarkOnesLuck(object oPC)
 
 void DoEntropicWarding(object oPC)
 {
-	//RemoveEffectsFromSpell(oPC, SPELL_I_ENTROPIC_WARDING);
+	RemoveEffectsFromSpell(oPC, SPELL_I_ENTROPIC_WARDING);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
 	int nSkillBuff = (nCasterLevel/4);
@@ -60,7 +60,7 @@ void DoEntropicWarding(object oPC)
 
 void DoLeapsAndBounds(object oPC)
 {
-	//RemoveEffectsFromSpell(oPC, SPELL_I_LEAPS_AND_BOUNDS);
+	RemoveEffectsFromSpell(oPC, SPELL_I_LEAPS_AND_BOUNDS);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
 	int nSkillBuff = (nCasterLevel/2) + 5;
@@ -81,7 +81,7 @@ void DoLeapsAndBounds(object oPC)
 
 void DoOtherworldlyWhispers(object oPC)
 {
-	//RemoveEffectsFromSpell(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);
+	RemoveEffectsFromSpell(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
 	int nSkillBuff = (nCasterLevel/2) + 5;
@@ -100,7 +100,7 @@ void DoOtherworldlyWhispers(object oPC)
 
 void DoSeeTheUnseen(object oPC)
 {
-	//RemoveEffectsFromSpell(oPC, SPELL_I_SEE_THE_UNSEEN);
+	RemoveEffectsFromSpell(oPC, SPELL_I_SEE_THE_UNSEEN);
 
     effect eSight = EffectSeeInvisible();
     effect eUltra = EffectDarkVision();

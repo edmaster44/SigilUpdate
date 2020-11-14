@@ -800,6 +800,7 @@ void RemoveEffectsFromSpell(object oTarget, int SpellID)
 	{
     	if (GetEffectSpellId(eLook) == SpellID)
 		{
+			SendMessageToPC(oTarget, "Removing "+IntToString(SpellID));
       		RemoveEffect(oTarget, eLook);
 			eLook = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
 		}
