@@ -135,5 +135,5 @@ void main()
 {
 	object oPC = OBJECT_SELF;
 
-	TwentyFour(oPC);
+	//TwentyFour(oPC);
 }
