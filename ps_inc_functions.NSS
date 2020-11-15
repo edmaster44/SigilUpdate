@@ -294,8 +294,6 @@ int GetHasWarlockProgression(object oPC, int iClass)
 	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
 	if(BspCasterFeat == "") return FALSE;
 	
-//	SendMessageToPC(oPC,"Debug Warlock: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
-	
 	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",39)),oPC,TRUE)) return TRUE;
 	else return FALSE;
 }
@@ -641,11 +639,9 @@ void GiveEssenceBlastShapes(object oPC) {
 	
 }
 
-//Gets Warlock Caster Levels with Feats included 
-int GetWarlockCasterLevel(object oPC)
-{
+int GetWarlockCasterLevelBase(object oPC) {
 	int iSlotNumber; int iClass;
-	int iTotal; int iTrue;
+	int iTotal; 
 	
 	if(GetLevelByClass(CLASS_TYPE_WARLOCK,oPC) == 0) return 0;
 	
@@ -662,25 +658,21 @@ int GetWarlockCasterLevel(object oPC)
 	if (iTotal > 30)
 	iTotal = 30;
 	
+	return iTotal;
+}
+
+//Gets Warlock Caster Levels with Feats included 
+int GetWarlockCasterLevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_WARLOCK,oPC) == 0) return 0;
+	
+	iTotal = GetWarlockCasterLevelBase(oPC);
+	
 	int nDice;
 	int nCount;	
-	
-	//Adding blast shapes
-	if (iTotal >= 2) {	
-		FeatAdd(oPC, FEAT_WARLOCK_SPEAR_ELDRTICH, FALSE);
-	} if (iTotal >= 4) {	
-		FeatAdd(oPC, FEAT_WARLOCK_BLOW_ELDRTICH, FALSE);
-	} if (iTotal >= 6) {	
-		FeatAdd(oPC, FEAT_WARLOCK_SHIELD_ELDRTICH, FALSE);
-	} if (iTotal >= 8) {	
-		FeatAdd(oPC, FEAT_WARLOCK_CHAIN_ELDRITCH, FALSE);
-	} if (iTotal >= 12) {	
-		FeatAdd(oPC, FEAT_WARLOCK_BURST_ELDRITCH, FALSE);
-	} if (iTotal >= 16) {	
-		FeatAdd(oPC, FEAT_WARLOCK_DOOM_ELDRITCH, FALSE);
-	}
-	
-	GiveEssenceBlastShapes(oPC);
 	
 	//1411-1419 1-9
 	//1948-1952 10-14

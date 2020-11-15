@@ -227,6 +227,28 @@ void GiveDragonFeats(object oPC)
 	}
 }
 
+void GiveWarlockBlastShapes(object oPC) {
+
+	int iTotal = GetWarlockCasterLevelBase(oPC);
+	
+	//Adding blast shapes
+	if (iTotal >= 2) {	
+		FeatAdd(oPC, FEAT_WARLOCK_SPEAR_ELDRTICH, FALSE);
+	} if (iTotal >= 4) {	
+		FeatAdd(oPC, FEAT_WARLOCK_BLOW_ELDRTICH, FALSE);
+	} if (iTotal >= 6) {	
+		FeatAdd(oPC, FEAT_WARLOCK_SHIELD_ELDRTICH, FALSE);
+	} if (iTotal >= 8) {	
+		FeatAdd(oPC, FEAT_WARLOCK_CHAIN_ELDRITCH, FALSE);
+	} if (iTotal >= 12) {	
+		FeatAdd(oPC, FEAT_WARLOCK_BURST_ELDRITCH, FALSE);
+	} if (iTotal >= 16) {	
+		FeatAdd(oPC, FEAT_WARLOCK_DOOM_ELDRITCH, FALSE);
+	}
+	
+	GiveEssenceBlastShapes(oPC);
+}
+
 void main()
 {
 	object oPC = GetPCLevellingUp();
