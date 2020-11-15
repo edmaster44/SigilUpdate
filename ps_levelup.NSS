@@ -86,26 +86,6 @@ void UpgradeCreatureWeapons(object oPC)
 	}
 }
 
-//Correct warlock blast damage- no longer needed 
-//Needed to calculate blast damage for multi warlocks
-//void GetWarlockCasterLevel(object oPC)
-//{
-//	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) < 1) return;
-//	int nSTACK;
-//	if (GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_ARCANE_ARCHER2, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER_W, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_BRACHINA, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC) > 0) nSTACK = TRUE;
-//	else if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) nSTACK = TRUE;
-//	if (nSTACK == TRUE) StackEldBlast(oPC);
-//}
-
 //Progression for Psionic classes.
 void DoPsiProgression(object oPC)
 {
@@ -164,8 +144,6 @@ void DoPsiProgression(object oPC)
 		}
 	}
 }
-
-
 
 //Bardic music stacks
 void CheckBardicSongs(object oPC)
@@ -318,6 +296,7 @@ void main()
 	
 	// various class and race related checks	
 	GetWarlockCasterLevel(oPC);
+	GiveWarlockBlastShapes(oPC);
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
 	PS_BarbarianLevels(oPC);
