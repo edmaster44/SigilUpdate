@@ -118,7 +118,7 @@ void TwentyFour(object oPC)
 	
 	if ((GetHasSpell(SPELL_I_BEGUILING_INFLUENCE,oPC))&&(!GetHasSpellEffect(SPELL_I_BEGUILING_INFLUENCE,oPC)))
 		DoBeguilingInfluence(oPC);
-	if ((GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK,oPC))&&(!GetHasSpellEffect(SPELL_I_DARK_ONES_OWN_LUCK,oPC)))
+	/*if ((GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK,oPC))&&(!GetHasSpellEffect(SPELL_I_DARK_ONES_OWN_LUCK,oPC)))
 		DoDarkOnesLuck(oPC);
 	if ((GetHasSpell(SPELL_I_ENTROPIC_WARDING,oPC))&&(!GetHasSpellEffect(SPELL_I_ENTROPIC_WARDING,oPC)))
 		DoEntropicWarding(oPC);
@@ -127,7 +127,7 @@ void TwentyFour(object oPC)
 	if ((GetHasSpell(SPELL_I_LEAPS_AND_BOUNDS,oPC))&&(!GetHasSpellEffect(SPELL_I_LEAPS_AND_BOUNDS,oPC)))
 		DoLeapsAndBounds(oPC);
 	if ((GetHasSpell(SPELL_I_SEE_THE_UNSEEN,oPC))&&(!GetHasSpellEffect(SPELL_I_SEE_THE_UNSEEN,oPC)))
-		DoSeeTheUnseen(oPC);
+		DoSeeTheUnseen(oPC);*/
 	DelayCommand(6.0, TwentyFour(oPC));
 }
 
@@ -135,5 +135,5 @@ void main()
 {
 	object oPC = OBJECT_SELF;
 
-	//TwentyFour(oPC);
+	TwentyFour(oPC);
 }
