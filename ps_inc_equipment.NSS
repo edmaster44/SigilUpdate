@@ -56,7 +56,8 @@ int GetDervishWeapon(object oItem)
 {  int iBaseItem = GetBaseItemType(oItem);
     return iBaseItem ==  BASE_ITEM_GREATSWORD ||  iBaseItem == BASE_ITEM_SCYTHE || iBaseItem == BASE_ITEM_SCIMITAR
 	||BASE_ITEM_KATANA||iBaseItem == BASE_ITEM_HALBERD||iBaseItem == BASE_ITEM_BASTARDSWORD || iBaseItem == BASE_ITEM_BATTLEAXE || iBaseItem == BASE_ITEM_LONGSWORD||
-	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP; 
+	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP;
+
 
 /*
 if(!GetIsObjectValid(oItem)) return FALSE;
@@ -856,15 +857,14 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
     
       DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
         
-            if (GetIsFinessable(oITEM)  && GetHasFeat(FEAT_WEAPON_FINESSE, oPC))
-             PS_ApplySpecialWeaponFinesse(oPC, oITEM);
+        	if (GetIsFinessable(oITEM))
+			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
 			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
-			
-				PS_ApplySpecialWeaponFinesse(oPC, oITEM);
+				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
         
         if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
