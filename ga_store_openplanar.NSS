@@ -23,10 +23,13 @@ void main(string sStoreTag) {
 	
 		AddMustHaveItems(oStore);
 		
+		float fDelay = 0.01f;
+		
 		int n = 0;
 		int nItemNum = Random(10)+20;
 		while (n < nItemNum) {
-			CreateItemForStore(oStore);
+			DelayCommand(fDelay, CreateItemForStore(oStore));
+			fDelay += 0.01f;
 			n++;
 		}
 		
@@ -42,6 +45,6 @@ void main(string sStoreTag) {
 	int nMarkDown = MAX_MARKDOWN + iPCAppraise;
 	if (nMarkDown > MIN_MARKDOWN) nMarkDown = MIN_MARKDOWN;
 	
-	OpenStore(oStore, oPC, nMarkUp, nMarkDown);
+	DelayCommand(0.5f, OpenStore(oStore, oPC, nMarkUp, nMarkDown));
 	
 }
