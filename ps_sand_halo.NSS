@@ -46,7 +46,7 @@ void main()
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
     
-    int nValue = 3 + (nCasterLvl)/14;
+    int nValue = 3 + (nCasterLvl)/10;
     if (nValue > 5)
      nValue = 5; // * Max of 5
     
