@@ -13,6 +13,11 @@ const int FEAT_OUTSIDER_BLOODLINE_FIENDISH = 81;
 const int FEAT_OUTSIDER_BLOODLINE_CELESTIAL = 86;
 
 
+//new half-outsider feats
+const int FEAT_HALFOUTSIDER_PATH_OF_GUILE  		= 3033;
+const int FEAT_HALFOUTSIDER_PATH_OF_STRENGTH	= 3034;
+
+
 
 // List of all PrC-ready subraces
 const int RACIAL_SUBTYPE_NIGHT_HAG				= 53;
@@ -77,6 +82,7 @@ const int WING_TYPE_RAVEN_M						= 65;
 const int WING_TYPE_RAVEN_F						= 66;
 const int WING_TYPE_LILITU_M					= 67;
 const int WING_TYPE_LILITU_F					= 68;
+const int WING_TYPE_MEZZOLOTH					= 62;
 const int WING_TYPE_WORDARCHON_F				= 72;
 const int WING_TYPE_WORDARCHON_M				= 73;
 

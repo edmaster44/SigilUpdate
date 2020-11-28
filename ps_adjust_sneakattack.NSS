@@ -132,6 +132,13 @@ void AddSneakDice(object oPC)
 	// First we find out how man dice the character should have. Careful with rounding with integers!
 	int sneakDice = 0;
 	
+	
+	if (GetHasFeat(FEAT_HALFOUTSIDER_PATH_OF_GUILE,oPC))
+		{
+	sneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) / 2;	
+	
+	}
+	
 	if (GetHasFeat(FEAT_BLACKGUARD,oPC))
 	{
 	sneakDice += (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) - 1) / 3;	
