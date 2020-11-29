@@ -119,6 +119,9 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 		{
 			case 1: return 2781; //Dark Flight
 			case 2: return 2556; //Supernatural Sight
+			case 3: return 3021;//Mezzoloth wings
+			case 4:return 3022;//Erinyes Wings
+			case 5:return 3032; //Tattered Fiend Wings
 		}	break;
 		case 104: switch(nCOUNT) //Lycan Affliction
 		{
@@ -158,6 +161,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 		{
 			case 1: return 2179; //Bright Flight
 			case 2: return 2556; //Supernatural Sight
+			case 3: return 3024; //New Celestial Wings
 		}	break;
 		case 499: switch(nCOUNT) //Half-Dragon Wings
 		{
