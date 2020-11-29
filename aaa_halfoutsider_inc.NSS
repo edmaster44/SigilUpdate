@@ -9,6 +9,17 @@
 #include "nwn2_inc_spells"
 #include "x2_inc_itemprop"
 
+
+int PS_OutsiderLevels(object oPC)
+{
+	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);//Half-Outsider
+	int iHalfOutsiderMagic = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Magic
+	int iTotal = iHalfOutsider + iHalfOutsiderMagic;
+	return iTotal;
+
+
+}
+
 void PS_OutsiderBloodlineFiendish(object oPC, int nSpell)
 {
 	effect eProfane		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
@@ -37,7 +48,7 @@ void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 	int iNewECL;
 	string sNewECL;
 	
-	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) > 0)
+	if (PS_OutsiderLevels(oPC) > 0)
 	{	iOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);	}
 	SetLocalString(oItem, "Planar", "HalfFiend");
 
@@ -60,7 +71,7 @@ void PS_HO_PlanarHeritageCelestial(object oPC, object oItem)
 	int iNewECL;
 	string sNewECL;
 	
-	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) > 0)
+	if (PS_OutsiderLevels(oPC) > 0)
 	{	iOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);	}
 	SetLocalString(oItem, "Planar", "HalfCelestial");
 
@@ -91,7 +102,7 @@ void PS_HO_Immunity(object oPC, int nSpell)
 void PS_HO_Resistance(object oPC, int nSpell)
 {
 	int nResist = 5;
-	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 6)
+	if (PS_OutsiderLevels(oPC) >= 6)
 	{	nResist = 10;	}
 	effect eAcid = EffectDamageResistance(DAMAGE_TYPE_ACID, nResist);
 	effect eFire = EffectDamageResistance(DAMAGE_TYPE_FIRE, nResist);
@@ -110,7 +121,7 @@ void PS_HO_DR(object oPC, int nSpell)
 	int nReduct = 5;
 	int nDamagePower = DAMAGE_POWER_PLUS_ONE;
 	
-	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 6)
+	if (PS_OutsiderLevels(oPC) >= 6)
 	{	nReduct = 10;
 		if (GetHitDice(oPC) >= 15)
 		{	nDamagePower = DAMAGE_POWER_PLUS_TWO;	}
@@ -127,7 +138,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 {
     string sHeritage; 
 	int nType;
-	int nLevel = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
+	int nLevel = PS_OutsiderLevels(oPC);
 	int nOrigin = GetRacialType(oPC);
 	int nOriSub = GetSubRace(oPC);
 	int iWings = GetLocalInt(oItem, "DarkFlight");
