@@ -16,6 +16,10 @@ const int FEAT_OUTSIDER_BLOODLINE_CELESTIAL = 86;
 //new half-outsider feats
 const int FEAT_HALFOUTSIDER_PATH_OF_GUILE  		= 3033;
 const int FEAT_HALFOUTSIDER_PATH_OF_STRENGTH	= 3034;
+const int FEAT_ERINYES_WINGS					= 3022;
+const int FEAT_MEZZOWINGS						= 3021;
+const int FEAT_TATTERED_WINGS					= 3023;
+const int FEAT_NEW_CELESTIAL_WINGS				= 3024;
 
 
 

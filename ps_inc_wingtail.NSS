@@ -106,7 +106,7 @@ int PS_GetWing_Fiend(object oPC)
 	if (GetHasFeat(2556, oPC)) // If they select the "supernatural sight" feat instead of wings...
 	{	return 0;	}
 	
-	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
+	if (GetHasFeat(FEAT_ERINYES_WINGS,oPC))
 	{	if (GetGender(oPC) == GENDER_FEMALE)
 		{	switch (nWingRace)
 			{	case WING_VARIATION_DWARF: return 36;
@@ -228,6 +228,10 @@ int PS_GetWing_Template(object oPC)
 int PS_GetFeatWingType(object oPC)
 {
 	int nWing = 0;
+	
+	if (GetHasFeat(FEAT_MEZZOWINGS,oPC))
+		{ nWing = 62;}
+	
 	
 	if (GetHasFeat(3008, oPC)) {
 		if (GetGender(oPC) == GENDER_MALE) nWing = 79;
