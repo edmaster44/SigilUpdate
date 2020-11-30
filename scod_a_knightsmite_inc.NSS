@@ -59,7 +59,7 @@ return;}
 		else if (nAttack == 1)
 		{	nDmg = nKnight;	
 			eDamage = EffectDamage(nDmg, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 6.0);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
 			DelayCommand(0.1,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 		}
 		else 
