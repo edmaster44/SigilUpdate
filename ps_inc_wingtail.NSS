@@ -231,6 +231,17 @@ int PS_GetFeatWingType(object oPC)
 	
 	if (GetHasFeat(FEAT_MEZZOWINGS,oPC))
 		{ nWing = 62;}
+		if (GetHasFeat(FEAT_NEW_CELESTIAL_WINGS, oPC)) {
+		if (GetGender(oPC) == GENDER_MALE) nWing = 3;
+		else nWing = 4;
+	}
+	
+	
+	
+		if (GetHasFeat(FEAT_TATTERED_WINGS, oPC)) {
+		if (GetGender(oPC) == GENDER_MALE) nWing = 5;
+		else nWing = 6;
+	}
 	
 	
 	if (GetHasFeat(3008, oPC)) {
