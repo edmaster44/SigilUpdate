@@ -106,6 +106,45 @@ int PS_GetWing_Fiend(object oPC)
 	if (GetHasFeat(2556, oPC)) // If they select the "supernatural sight" feat instead of wings...
 	{	return 0;	}
 	
+	
+	
+	if (GetHasFeat(FEAT_TATTERED_WINGS,oPC))
+	{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	switch (nWingRace)
+			{	case WING_VARIATION_DWARF: return 87;
+				case WING_VARIATION_GNOME: return 89;
+				case WING_VARIATION_HUMAN: return 6;
+				case WING_VARIATION_ORC: return 91;
+			}}
+		else
+		{	switch (nWingRace)
+			{	case WING_VARIATION_DWARF: return 86;
+				case WING_VARIATION_GNOME: return 88;
+				case WING_VARIATION_HUMAN: return 5;
+				case WING_VARIATION_ORC: return 90;
+			}}} 
+	
+	
+			if (GetHasFeat(FEAT_MEZZOWINGS,oPC))
+	{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	switch (nWingRace)
+			{	case WING_VARIATION_DWARF: return 62;
+				case WING_VARIATION_GNOME: return 62;
+				case WING_VARIATION_HUMAN: return 62;
+				case WING_VARIATION_ORC: return 62;
+			}}
+		else
+		{	switch (nWingRace)
+			{	case WING_VARIATION_DWARF: return 62;
+				case WING_VARIATION_GNOME: return 62;
+				case WING_VARIATION_HUMAN: return 62;
+				case WING_VARIATION_ORC: return 62;
+			}}} 
+	
+			
+			
+	
+	
 	if (GetHasFeat(FEAT_ERINYES_WINGS,oPC))
 	{	if (GetGender(oPC) == GENDER_FEMALE)
 		{	switch (nWingRace)
@@ -147,6 +186,26 @@ int PS_GetWing_Celestial(object oPC)
 	if (GetHasFeat(2556, oPC)) // If they select the "supernatural sight" feat instead of wings...
 	{	return 0;	}
 
+	
+	
+	if (GetHasFeat(FEAT_NEW_CELESTIAL_WINGS,oPC))
+	{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	switch (nWingRace)
+			{	case WING_VARIATION_DWARF: return 81;
+				case WING_VARIATION_GNOME: return 83;
+				case WING_VARIATION_HUMAN: return 4;
+				case WING_VARIATION_ORC: return 85;
+			}}
+		else
+		{	switch (nWingRace)
+			{	case WING_VARIATION_DWARF: return 80;
+				case WING_VARIATION_GNOME: return 82;
+				case WING_VARIATION_HUMAN: return 3;
+				case WING_VARIATION_ORC: return 90;
+			}}} 
+	
+	
+	
 	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
 	{	if (GetGender(oPC) == GENDER_FEMALE)
 		{	switch (nWingRace)
@@ -229,21 +288,6 @@ int PS_GetFeatWingType(object oPC)
 {
 	int nWing = 0;
 	
-	if (GetHasFeat(FEAT_MEZZOWINGS,oPC))
-		{ nWing = 62;}
-		if (GetHasFeat(FEAT_NEW_CELESTIAL_WINGS, oPC)) {
-		if (GetGender(oPC) == GENDER_MALE) nWing = 3;
-		else nWing = 4;
-	}
-	
-	
-	
-		if (GetHasFeat(FEAT_TATTERED_WINGS, oPC)) {
-		if (GetGender(oPC) == GENDER_MALE) nWing = 5;
-		else nWing = 6;
-	}
-	
-	
 	if (GetHasFeat(3008, oPC)) {
 		if (GetGender(oPC) == GENDER_MALE) nWing = 79;
 		else nWing = 78;
@@ -290,6 +334,17 @@ int PS_GetFeatWingType(object oPC)
 				{	nWing = WING_TYPE_BAT_F;	}
 				else
 				{	nWing = WING_TYPE_BAT_M;	}	}	}
+				
+			if (GetHasFeat(FEAT_ERINYES_WINGS,oPC))
+				{	nWing = PS_GetWing_Fiend(oPC); }
+					if (GetHasFeat(FEAT_MEZZOWINGS,oPC))
+				{	nWing = PS_GetWing_Fiend(oPC); }
+					if (GetHasFeat(FEAT_TATTERED_WINGS,oPC))
+				{	nWing = PS_GetWing_Fiend(oPC); }
+				
+					if (GetHasFeat(FEAT_NEW_CELESTIAL_WINGS,oPC))
+				{	nWing = PS_GetWing_Celestial(oPC); }
+	
 	
 		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 6)
 		{	if (GetHasFeat(2537, oPC) && GetHasFeat(2781, oPC))
