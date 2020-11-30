@@ -26,18 +26,11 @@ void main()
     if(!GetHasFeatEffect(FEAT_FRENZY_1))
     {
         //Declare major variables
-        int nLevel = GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER);
+        int nLevel = GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) ;
         int nIncrease;
         int nSave;
 
-        if (GetHasFeat(FEAT_GREATER_FRENZY, OBJECT_SELF, TRUE))
-        {
-            nIncrease = 10;
-        }
-        else
-        {
-            nIncrease = 6;
-        }
+       nIncrease = 6 + (nLevel / 2);
 
         PlayVoiceChat(VOICE_CHAT_BATTLECRY1);
         //Determine the duration by getting the con modifier after being modified
@@ -51,15 +44,17 @@ void main()
 	
 
         effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH, nIncrease);
-        effect eAC = EffectACDecrease(4, AC_DODGE_BONUS);
-        effect eDot = EffectDamageOverTime(6, RoundsToSeconds(1), DAMAGE_TYPE_ALL);	// 6 points of damage per round
         effect eDur = EffectVisualEffect( VFX_DUR_SPELL_RAGE );
         effect eAttackMod = EffectModifyAttacks(1);
-
-        effect eLink = EffectLinkEffects(eStr, eAC);
-        eLink = EffectLinkEffects(eLink, eDot);
-        eLink = EffectLinkEffects(eLink, eDur);
-        eLink = EffectLinkEffects(eLink, eAttackMod);
+		effect eHaste = EffectHaste();
+		effect eCritImm = EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
+        effect eLink = EffectLinkEffects(eStr, eDur);
+       	eLink = EffectLinkEffects(eLink, eAttackMod);
+			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) > 7)
+			{
+				eLink = EffectLinkEffects(eLink, eHaste);
+			}
+			
         SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
         //Make effect extraordinary
         eLink = ExtraordinaryEffect(eLink);
@@ -71,6 +66,10 @@ void main()
 		
             //Apply the VFX impact and effects
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration);
+			
+			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) >= 6) {
+  ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCritImm, OBJECT_SELF, RoundsToSeconds(4));
+}
 			
 			if (GetHasFeat(FEAT_DEATHLESS_FRENZY) && !GetIsImmune(OBJECT_SELF, IMMUNITY_TYPE_DEATH)) //Deathless frenzy check
 			{
