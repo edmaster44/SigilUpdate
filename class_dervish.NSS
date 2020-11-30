@@ -74,7 +74,7 @@ if (!NoHeavyArmorOrShield(oPC))
 		
 }
 //Defensive Parry.
-void Dervish_Defensive_Parry(object oPC, int nSpell)
+/* void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
 int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
 int nAction = GetCurrentAction(oPC);
@@ -95,4 +95,4 @@ int nAction = GetCurrentAction(oPC);
 						SendMessageToPC(oPC, "Defensive Parry enabled.");						
 				}
 }
-}
+} */

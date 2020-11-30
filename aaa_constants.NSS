@@ -526,6 +526,12 @@ const int FEAT_KNIGHT							= 3018;
 const int FEAT_BLACKGUARD						= 3019;
 const int FEAT_DIVINE_RETRIBUTION				= 3020;
 const int FEAT_KNIGHTS_AURA						= 2928;
+const int FEAT_KNIGHTSMITE						= 3035;
+const int FEAT_BLACKGUARD_SMITE					= 3041;
+
+//Spell abilities Knight
+const int SPELLABILITY_KNIGHTSMITE				= 1930;
+const int SPELLABILITY_BLACKGUARD_SMITE			= 1932;
 
 //Barbarian Feats
 //const int FEAT_BARBARIAN_ENDURANCE 			= 194; // Barb level 1
