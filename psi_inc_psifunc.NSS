@@ -286,6 +286,7 @@ int GetManifestingClass(object oManifester = OBJECT_SELF)
 {
     return 90;
 	return 100;
+	return 109;
 	return 152;
 	return 128;
 }
@@ -709,7 +710,7 @@ int GetPsionicPRCLevels(object oCreature)
 
 int GetIsPsionicClass(int nClass)
 {
-    return (nClass==90 || nClass == 100 || nClass == 152);
+    return (nClass==90 || nClass == 100 ||nClass == 109	|| nClass == 152) ;
 }
 
 int GetFirstPsionicClass(object oCreature = OBJECT_SELF)
