@@ -250,10 +250,26 @@ void PS_SlaadDiminution_Gray(object oPC, object oItem, int nSpell)
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = nAppVar;
+		
+		
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "Diminution", 1);
-	PS_RefreshAppearance(oPC);
 	DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
+	
+	// Refresh appearance
+	object gloves = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
+	if (!GetIsObjectValid(gloves))
+	{
+		object newGloves = CreateItemOnObject("ps_srlg_gloves", oPC);
+		ActionEquipItem(newGloves, INVENTORY_SLOT_ARMS);
+		DelayCommand(1.0f, DestroyObject(newGloves));
+	}
+	else
+	{
+		ActionUnequipItem(gloves);
+		DelayCommand(1.0f, ActionEquipItem(gloves, INVENTORY_SLOT_ARMS));
+	}
+
 }
 
 void PS_SlaadChaoticCrafting(object oPC, object oItem, int nSpell)
