@@ -374,7 +374,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    effect eVis = EffectNWN2SpecialEffectFile("sp_beshadowed_doom", oPC);
+    effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
     effect eFiend;
     int nFiend;
 	int nLevel = GetHitDice(oPC);
@@ -382,26 +382,52 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 
 	if (nLevel >= 23)
 	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
-    	{	nFiend = 96;	}	//Greater Baatezu
+    	{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_baatezu", oPC);
+			  Assumenewform(oPC, Appearance);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+				PS_HumForm_DragonUE(oPC);}	//Greater Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC)
-		{	nFiend = 97;	}	//Greater Tanar'ri
+		{	FiendformBoni(oPC,"fx_f_beetle_eyes");
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_tanarri", oPC);
+			  Assumenewform(oPC, Appearance);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+				PS_HumForm_DragonUE(oPC);}	//Greater Tanar'ri
 		else
-		{	nFiend = 98;	}	//Greater Yugoloth
+		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoloth", oPC);
+			  Assumenewform(oPC, Appearance);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+				PS_HumForm_DragonUE(oPC);}	//Greater Yugoloth
     }
     else
 	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
-		{	nFiend = 99;	}	//Lesser Baatezu
+		{	FiendformBoni(oPC,"fx_f_beetle_eyes");
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_baatles", oPC);
+			Assumenewform(oPC, Appearance);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			PS_HumForm_DragonUE(oPC);}	//Lesser Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC)
-		{	nFiend = 100;	}	//Lesser Tanar'ri
+		{	FiendformBoni(oPC,"fx_f_beetle_eyes");
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_baatles", oPC);
+				  Assumenewform(oPC, Appearance);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+				PS_HumForm_DragonUE(oPC);		}	//Lesser Tanar'ri
 		else
-		{	nFiend = 101;	}	//Lesser Yugoloth
+		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoles", oPC)	;
+			   Assumenewform(oPC, Appearance);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+				PS_HumForm_DragonUE(oPC);}	//Lesser Yugoloth
+		if (nSpell == 1726)
+		{PS_RestoreOriginalAppearance(oPC);
+		
+		//General useful things for shifting back
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+		PS_DragForm_DragonUE(oPC);}
+				
 	}
-    eFiend = EffectPolymorph(nFiend, FALSE, TRUE);
 
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_POLYMORPH_SELF, FALSE));
-    AssignCommand(oTarget, ClearAllActions()); // prevents an exploit
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFiend, oTarget, RoundsToSeconds(nDuration));
 }
 
 void PS_HOM_RadiantShield(object oPC, int nSpell)
@@ -578,7 +604,7 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	{	nSpell4  = 2544;		//Fiendish Smiting
 		nSpell6  = 2546;		//Unholy Blight
 		nSpell10 = 2548;		//Rapture of Rupture
-		nSpell15 = 2550;		//Fiendform
+		nSpell15 = 2550 && 2847 ;//Fiendform
 		nSpell20 = 2552;		//Summon Fiend
 		nSpell25 = 2554;	}	//Gutwrench	
 	else if (sHeritage == "HalfCelestial")

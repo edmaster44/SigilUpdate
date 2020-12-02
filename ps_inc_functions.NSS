@@ -127,6 +127,10 @@ int PS_AddSneakDmgToSpell(object oCaster, object oTarget, int iDamageType);
 
 string ParseTellDescription(string sDesc);
 
+struct CreatureCoreAppearance GetNewFormAppearance(string sResRef, object oPC = OBJECT_INVALID);
+
+void Assumenewform(object oCaster, struct CreatureCoreAppearance Appearance) ;
+
 int PS_GetPCFlags(object PCObject);
 
 void PS_SetPCFlags(object PCObject, int PCFlags);
@@ -3265,3 +3269,58 @@ int PS_GiveXPReward(object oPC, int nXP) {
 	return TRUE;
 
 }
+
+struct CreatureCoreAppearance GetNewFormAppearance(string sResRef, object oPC = OBJECT_INVALID) {
+
+     object oWP = GetWaypointByTag("WP_APPEARANCE_SPAWNER");
+    if (GetIsObjectValid(oPC)) {
+        SendMessageToPC(oPC, "Found oWP = "+GetFirstName(oWP));
+    } else {
+        SendMessageToPC(oPC, "Failed to find WP");
+    }
+    
+    object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
+    
+    struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
+    
+    DestroyObject(oCreature, 1.0f);
+    return app;
+}
+
+
+
+void Assumenewform(object oPC, struct CreatureCoreAppearance Appearance) {
+
+    if (!GetIsPC(oPC)) {
+        SendMessageToPC(oPC, "NPC support not included.");
+        return;
+    }
+
+    object oEssence = GetItemPossessedBy(oPC, "ps_essence");
+    struct CreatureCoreAppearance originalApp = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
+    SendMessageToPC(oPC, "Original Appearance type: "+IntToString(originalApp.AppearanceType)); //checking what we even have saved here
+    
+    Appearance.Tint_Mask = PS_CCA_TINT_ALL;
+    Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
+    Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
+    
+    PS_SetCreatureCoreAppearance(oPC, Appearance);
+    PS_RefreshAppearance(oPC);
+    SetLocalInt(oEssence, "TempChange", 1);
+}
+void FiendformBoni(object oPC, string sVFX = "") {
+	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
+	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
+	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
+	eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
+		
+	
+	if (sVFX != "") {
+		eBoost = EffectLinkEffects(eBoost, EffectNWN2SpecialEffectFile(sVFX));
+	}
+		
+	eBoost = SetEffectSpellId(eBoost, 1657);
+	eBoost = SupernaturalEffect(eBoost);
+		
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oPC);
+}	

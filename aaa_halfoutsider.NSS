@@ -1,6 +1,7 @@
 #include "x2_inc_spellhook"
 #include "aaa_halfoutsider_inc"
 #include "aaa_constants"
+#include "ps_inc_advscript"
 
 void main()
 {
