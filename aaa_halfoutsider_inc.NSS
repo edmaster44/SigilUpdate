@@ -20,6 +20,8 @@ int PS_OutsiderLevels(object oPC)
 
 }
 
+
+
 void PS_OutsiderBloodlineFiendish(object oPC, int nSpell)
 {
 	effect eProfane		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
@@ -49,8 +51,8 @@ void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 	string sNewECL;
 	
 	if (PS_OutsiderLevels(oPC) > 0)
-	{	iOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);	}
-	SetLocalString(oItem, "Planar", "HalfFiend");
+	{	iOutsider = PS_OutsiderLevels(oPC);	}
+{	SetLocalString(oItem, "Planar", "HalfFiend"); }
 
 	//if (sFiend != "HalfFiend")
 	//{	if (iOutsider != 0)
@@ -72,7 +74,7 @@ void PS_HO_PlanarHeritageCelestial(object oPC, object oItem)
 	string sNewECL;
 	
 	if (PS_OutsiderLevels(oPC) > 0)
-	{	iOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);	}
+	{	iOutsider = PS_OutsiderLevels(oPC);	}
 	SetLocalString(oItem, "Planar", "HalfCelestial");
 
 	//if (sCelest != "HalfCelestial")
