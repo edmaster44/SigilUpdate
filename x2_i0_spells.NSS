@@ -327,7 +327,7 @@ void ApplyThunderingRagePropertiesToWeapon(object oWeapon, int nRounds)
 void CheckAndApplyThunderingRage(int nRounds)
 {
     if (GetHasFeat(FEAT_EPIC_THUNDERING_RAGE, OBJECT_SELF))
-    {
+    {			SendMessageToPC(OBJECT_SELF,"Applying Thundering rage");
         object oWeapon =  GetItemInSlot(INVENTORY_SLOT_RIGHTHAND);
         if (GetIsObjectValid(oWeapon))
         {
@@ -373,6 +373,7 @@ void CheckAndApplyTerrifyingRage(int nRounds)
     {
         effect eAOE = EffectAreaOfEffect(AOE_MOB_FEAR,"x2_s2_terrage_A", "","");
         eAOE = ExtraordinaryEffect(eAOE);
+		SendMessageToPC(OBJECT_SELF,"Applying Terrifying rage");
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eAOE,OBJECT_SELF,RoundsToSeconds(nRounds));
     }
 }
