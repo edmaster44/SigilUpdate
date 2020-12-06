@@ -153,6 +153,8 @@ void main()
 	        // 2003-07-08, Georg: Rage Epic Feat Handling
 			CheckAndApplyRageFeats(nRageDuration);
 	        CheckAndApplyEpicRageFeats(nRageDuration);
+			CheckAndApplyThunderingRage(nRageDuration);
+			CheckAndApplyTerrifyingRage(nRageDuration);
 
 			// Unless you have Tireless Rage, you're going to feel it in the morning
 			if (!GetHasFeat(FEAT_TIRELESS_RAGE, OBJECT_SELF, TRUE))
