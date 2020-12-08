@@ -1,4 +1,6 @@
-// v1.01
+/* v1.01
+12/8/2020 added Psyhic Knight Check
+Removed Alingment change for Thug for exploit reason */ 
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "aaa_constants"
@@ -95,7 +97,8 @@ void DoPsiProgression(object oPC)
 	int nIlMentalist = GetLevelByClass(100, oPC) - 1;
 	if (nIlMentalist < 0) nIlMentalist = 0;
 	int nCerebremancer = GetLevelByClass(152, oPC);
-	int nGemDragon = GetLevelByClass(128, oPC) / 2;
+	int nPknight	   = GetLevelByClass(109, oPC) - 1;
+	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int nLEVEL = nPsion + nIlMentalist + nCerebremancer + nGemDragon;
 	
 	if (nLEVEL > 16)
@@ -292,7 +295,7 @@ void main()
 	// change alignment upon becoming Ronin. 
 	// needs to be note of class description and appropriate feats that using relevel mechanic
 	// to make things like Paladin/Bard will be frowned upon.
-	if (GetLevelByClass(CLASS_TYPE_RONIN, oPC) > 0) AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, 100);
+//	if (GetLevelByClass(CLASS_TYPE_RONIN, oPC) > 0) AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, 100);
 	
 	// various class and race related checks	
 	GetWarlockCasterLevel(oPC);
