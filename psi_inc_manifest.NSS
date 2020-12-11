@@ -11,6 +11,11 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     {
         nManifesterLevel = nManifesterLevel + GetLevelByClass(100, oManifester);
     }
+		if(GetLevelByClass(109, oManifester) > 0)
+	{
+        nManifesterLevel = nManifesterLevel + GetLevelByClass(109, oManifester);
+    }
+	
 	if(GetLevelByClass(152, oManifester) > 0)
 	{
         nManifesterLevel = nManifesterLevel + GetLevelByClass(152, oManifester);
