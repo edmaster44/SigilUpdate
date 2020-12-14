@@ -688,6 +688,7 @@ int GetPsionicPRCLevels(object oCreature)
     int nLevel = 0;
 	nLevel +=  GetLevelByClass(100, oCreature);
 	nLevel +=  GetLevelByClass(152, oCreature);
+	nLevel += GetLevelByClass(109, oCreature);
 	nLevel +=  GetLevelByClass(128, oCreature);
     // Cerebremancer and Psychic Theurge add manifester levels on each level
     //nLevel += GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
