@@ -590,9 +590,9 @@ void PS_HO_SupernaturalSight(object oPC, int nSpell)
 
 void PS_HO_OutsiderMagic(object oPC, object oItem)
 {
-	int nSpell4, nSpell6, nSpell10, nSpell15, nSpell20, nSpell25;
+	int nSpell4, nSpell6, nSpell10, nSpell15, nSpell20, nSpell15_1, nSpell25;
 	string sHeritage;
-	int nClass	= GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
+	int nClass	= PS_OutsiderLevels(oPC);
 	int nLevel	= GetHitDice(oPC);
 	
 	if(GetIsObjectValid(oItem))
@@ -604,7 +604,8 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	{	nSpell4  = 2544;		//Fiendish Smiting
 		nSpell6  = 2546;		//Unholy Blight
 		nSpell10 = 2548;		//Rapture of Rupture
-		nSpell15 = 2550 && 2847 ;//Fiendform
+		nSpell15 = 2550;
+		nSpell15_1 = 2847;//Fiendform
 		nSpell20 = 2552;		//Summon Fiend
 		nSpell25 = 2554;	}	//Gutwrench	
 	else if (sHeritage == "HalfCelestial")
@@ -622,6 +623,8 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	{	FeatAdd(oPC, nSpell4, FALSE, TRUE, FALSE);		}
 	if (nClass >= 6 && !GetHasFeat(nSpell6, oPC, TRUE))
 	{	FeatAdd(oPC, nSpell6, FALSE, TRUE, FALSE);		}
+	if (nClass >= 6 && !GetHasFeat(nSpell15_1, oPC, TRUE))
+	{	FeatAdd(oPC, nSpell15_1, FALSE, TRUE, FALSE); }
 	if (nClass >= 6 && nLevel >= 10 && !GetHasFeat(nSpell10, oPC, TRUE))
 	{	FeatAdd(oPC, nSpell10, FALSE, TRUE, FALSE);		}
 	if (nClass >= 6 && nLevel >= 15 && !GetHasFeat(nSpell15, oPC, TRUE))
