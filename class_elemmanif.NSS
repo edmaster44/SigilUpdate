@@ -10,6 +10,7 @@ void main()
 object oPC = OBJECT_SELF;
 int nShieldDamage = DAMAGE_BONUS_1d6;
 int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
+int nDuration = (nLevel-1)*10;
 
 	int nSpellID = SPELLABILITY_ELEMWAR_MANIFESTATION;
 	object oTarget	= GetSpellTargetObject();	
@@ -34,18 +35,17 @@ int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
 	{	
 			if (nLevel >= 5 ) 
-		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;	}
+		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(nDuration)); }
 		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_FIRE);
 	}
 	else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
 	{	
-		
-		 ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(25));
 			if (nLevel >= 5 ) 
 		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eCleanse,oPC, RoundsToSeconds(25));	}
-		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_ELECTRICAL);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eCleanse,oPC, RoundsToSeconds(nDuration));	}
+		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_COLD);
 		}
 
 		
@@ -54,7 +54,7 @@ int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpellID);
 
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(25)));
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration)));
 	
 	
 
