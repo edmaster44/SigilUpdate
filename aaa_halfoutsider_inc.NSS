@@ -144,6 +144,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	int nOrigin = GetRacialType(oPC);
 	int nOriSub = GetSubRace(oPC);
 	int iWings = GetLocalInt(oItem, "DarkFlight");
+	int iHasBonus = GetLocalInt(oItem, "HO1");
 	
 	if(GetIsObjectValid(oItem))
 	{	sHeritage = GetLocalString(oItem, "Planar");	}
@@ -167,8 +168,18 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 			SetLocalInt(oItem, "TemplateFix", 0);
 			PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);
 			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_OUTSIDER);	}	}
+			
+	if (iHasBonus == 1)
+	{	return;		}
+		else
+{
+	AddScriptParameterString("START");
+	AddScriptParameterString("");
+	ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
-	if (iWings == 1 && !GetHasFeat(2120, oPC))
+	SetLocalInt(oItem, "HO1", 1);
+	
+/*	if (iWings == 1 && !GetHasFeat(2120, oPC))
 	{	FeatAdd(oPC, 2120, FALSE);	}		
 	
 	if (iWings != 1 && !GetHasFeat(2556, oPC))
@@ -177,7 +188,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
 	if (GetHasFeat(2556, oPC))
-	{	SetLocalInt(oItem, "SupSight", 1);	}
+	{	SetLocalInt(oItem, "SupSight", 1);	} */
 }
 
 void PS_HOM_FiendishSmiting(object oPC, int nSpell)
@@ -213,7 +224,7 @@ void PS_HOM_UnholyBlight(object oPC, int nSpell, location lTarget)
     if (!X2PreSpellCastCode())
     {	return;	}
     int nDamage;
-	int nLevel = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
+	int nLevel = PS_OutsiderLevels(oPC);
 	int nCasterLvl = (nLevel * 2);
 	int nChaBonus = GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDC = 20;
@@ -262,7 +273,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
     if (!X2PreSpellCastCode())
     {	return;	}
     int nDamage;
-	int nLevel = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
+	int nLevel = PS_OutsiderLevels(oPC);
 	int nCasterLvl = (nLevel * 2);
 	int nChaBonus = GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDC = 20;
@@ -311,6 +322,7 @@ void PS_RunRuptureOngoing(object oTarget, int nCasterLevel)
 {
 	int nHP				= GetCurrentHitPoints(oTarget);
 	int nRuptureHP		= GetLocalInt(oTarget, "RuptureHP");
+	
 	int nOngoing		= d6(1);
 	int nSaveDC			= 10 + nCasterLevel;
 	effect eSecondary	= EffectNWN2SpecialEffectFile("sp_inflict_moderate", oTarget);
