@@ -17,6 +17,17 @@ int PS_GetWing_Template(object oPC);
 int PS_Get_WingRace(object oPC);
 void PS_WingTailSetup(object oPC);
 
+
+
+int PS_OutsiderLevels(object oPC)
+{
+	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);//Half-Outsider
+	int iHalfOutsiderMagic = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Magic
+	int iTotal = iHalfOutsider + iHalfOutsiderMagic;
+	return iTotal;
+
+
+}
 // Sets the essence variable PC_Wing
 // nVar = numeric wing variation, or WING_TYPE_*
 void PS_SetWingNumber(object oPC, int nVar)
@@ -346,7 +357,7 @@ int PS_GetFeatWingType(object oPC)
 				{	nWing = PS_GetWing_Celestial(oPC); }
 	
 	
-		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 6)
+		if (PS_OutsiderLevels(oPC) >= 6)
 		{	if (GetHasFeat(2537, oPC) && GetHasFeat(2781, oPC))
 			{	nWing = PS_GetWing_Fiend(oPC);		}
 			if (GetHasFeat(2538, oPC) && GetHasFeat(2179, oPC))
