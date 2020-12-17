@@ -119,6 +119,10 @@ int PS_CalculateTemplateECL(object oPC)
 	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 1)			// Half-Outsider
 	{	SendMessageToPC(oPC, "Half-Outsider template class: LA +2");
 		nValue = nValue +2;		}
+		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC, oPC) >= 1)			// Half-Outsider
+	{	SendMessageToPC(oPC, "Half-Outsider template class: LA +2");
+		nValue = nValue +2;		}
+		
 	
 		return nValue;
 }
