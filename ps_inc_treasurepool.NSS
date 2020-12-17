@@ -32,7 +32,7 @@ string PickEpicLevelReward(int nPool) {
 //Replace / modify list as needed
 string PickFromQuestTreasureLow() {
 
-	int numOfItems = 171; //number of items in the list below
+	int numOfItems = 170; //number of items in the list below
 	
 	switch(Random(numOfItems)+1) {
 	
@@ -42,7 +42,7 @@ string PickFromQuestTreasureLow() {
 		case 4: return "ps_morg_item4";
 		case 5: return "ps_morg_item5";
 		case 6: return "ps_morg_item6";
-		case 7: return "ps_morg_item7";
+		case 7: return "nw_maarcl0370";
 		case 8: return "ps_morg_item8";
 		case 9: return "ps_morg_item9";
 		case 10: return "ps_morg_item10";
@@ -206,7 +206,6 @@ string PickFromQuestTreasureLow() {
 		case 168: return "nw_it_mring0290";
 		case 169: return "ps_gauntlet_spikedknuckles";
 		case 170: return "n2_pca_archer";
-		case 171: return "nw_maarcl0370";
 	}
 	
 	return "";
