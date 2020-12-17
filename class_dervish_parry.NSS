@@ -5,7 +5,6 @@ void main()
 {
 object oPC = OBJECT_SELF;
 int nSpell = GetSpellId();
-int nAction = GetCurrentAction(oPC);
 	if (GetHasSpellEffect(nSpell,oPC))
 	{
 		RemoveEffectsFromSpell(oPC, nSpell);
@@ -13,7 +12,7 @@ int nAction = GetCurrentAction(oPC);
 	}
 		else
 	
-		if (nAction == ACTION_MODE_COMBAT_EXPERTISE || nAction== ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)
+		if (GetActionMode(oPC,ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE))
 		{	effect eDefParry = EffectACIncrease(4);
 			eDefParry = SetEffectSpellId(eDefParry, nSpell);
 			eDefParry = SupernaturalEffect(eDefParry);
