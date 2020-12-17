@@ -12,7 +12,7 @@ int nSpell = GetSpellId();
 	}
 		else
 	
-		if (GetActionMode(oPC,ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE))
+		if (GetActionMode(oPC,ACTION_MODE_COMBAT_EXPERTISE) == TRUE || GetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)== TRUE)
 		{	effect eDefParry = EffectACIncrease(4);
 			eDefParry = SetEffectSpellId(eDefParry, nSpell);
 			eDefParry = SupernaturalEffect(eDefParry);
