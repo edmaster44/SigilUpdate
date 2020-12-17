@@ -186,8 +186,8 @@ void AddSneakDice(object oPC)
 	if (GetHasFeat(FEAT_FRANTIC_REACTIONS, oPC)) {
 		sTotal += 2 ;}
 		
-		if (GetHasFeat(DEATHATTACK5))
+		if (GetHasFeat(DEATHATTACK5,oPC))
 		{FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
-	if (sTotal >= 5) {
+	if (sTotal >= 5 ) {
 		FeatAdd(oPC, FEAT_EPIC_PRECISION, FALSE, FALSE, TRUE);}
 }
