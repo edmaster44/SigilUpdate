@@ -425,21 +425,29 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 				  Assumenewform(oPC, Appearance);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 				PS_HumForm_DragonUE(oPC);		}	//Lesser Tanar'ri
-		else
-		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
+		else 
+		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	 //Lesser Yugoloth
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoles", oPC)	;
 			   Assumenewform(oPC, Appearance);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC);}	//Lesser Yugoloth
-		if (nSpell == 1726)
+				PS_HumForm_DragonUE(oPC);
+				}	
+											
+}
+}
+											
+void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
+	{
+	
+	 if (!X2PreSpellCastCode())
+    {	return;		}
+	
+    effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
 		{PS_RestoreOriginalAppearance(oPC);
 		
 		//General useful things for shifting back
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		PS_DragForm_DragonUE(oPC);}
-				
-	}
-
 }
 
 void PS_HOM_RadiantShield(object oPC, int nSpell)
@@ -617,7 +625,7 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 		nSpell6  = 2546;		//Unholy Blight
 		nSpell10 = 2548;		//Rapture of Rupture
 		nSpell15 = 2550;
-		nSpell15_1 = 2847;//Fiendform
+		nSpell15_1 = 2847;		//Fiendform
 		nSpell20 = 2552;		//Summon Fiend
 		nSpell25 = 2554;	}	//Gutwrench	
 	else if (sHeritage == "HalfCelestial")
@@ -635,12 +643,12 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	{	FeatAdd(oPC, nSpell4, FALSE, TRUE, FALSE);		}
 	if (nClass >= 6 && !GetHasFeat(nSpell6, oPC, TRUE))
 	{	FeatAdd(oPC, nSpell6, FALSE, TRUE, FALSE);		}
-	if (nClass >= 6 && !GetHasFeat(nSpell15_1, oPC, TRUE))
-	{	FeatAdd(oPC, nSpell15_1, FALSE, TRUE, FALSE); }
 	if (nClass >= 6 && nLevel >= 10 && !GetHasFeat(nSpell10, oPC, TRUE))
 	{	FeatAdd(oPC, nSpell10, FALSE, TRUE, FALSE);		}
 	if (nClass >= 6 && nLevel >= 15 && !GetHasFeat(nSpell15, oPC, TRUE))
 	{	FeatAdd(oPC, nSpell15, FALSE, TRUE, FALSE);		}
+	if (nClass >= 6 &&  nLevel >= 15 && !GetHasFeat(nSpell15_1, oPC, TRUE))
+	{	FeatAdd(oPC, nSpell15_1, FALSE, TRUE, FALSE); }
 	if (nClass >= 6 && nLevel >= 20 && !GetHasFeat(nSpell20, oPC, TRUE))
 	{	FeatAdd(oPC, nSpell20, FALSE, TRUE, FALSE);		}
 	if (nClass >= 6 && nLevel >= 25 && !GetHasFeat(nSpell25, oPC, TRUE))
