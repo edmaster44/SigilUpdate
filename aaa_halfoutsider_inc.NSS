@@ -624,8 +624,8 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	{	nSpell4  = 2544;		//Fiendish Smiting
 		nSpell6  = 2546;		//Unholy Blight
 		nSpell10 = 2548;		//Rapture of Rupture
-		nSpell15 = 2550;
-		nSpell15_1 = 2847;		//Fiendform
+		nSpell15 = 2550;		//Fiendform
+		nSpell15_1 = 2847;		//Fiendform - Unshift
 		nSpell20 = 2552;		//Summon Fiend
 		nSpell25 = 2554;	}	//Gutwrench	
 	else if (sHeritage == "HalfCelestial")
