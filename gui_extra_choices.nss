@@ -83,7 +83,7 @@ int GetRelevantClass(object oPC) {
 	if ((GetLevelByClass(49, oPC) > 0) && (CheckEpiteth(49, oPC) == FALSE)) return 49; //Draconic Heritage
 	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend Wings/Eyes
 	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial Wings/Eyes, Magic
-	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Fiend(magic path) Wings/Eyes, Magic
+	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend(magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial(Magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
 	if ((GetLevelByClass(106, oPC) >= 5)) return 106; //VampMal L5 Bonus Feat
