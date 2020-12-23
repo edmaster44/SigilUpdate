@@ -391,7 +391,52 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
     int nFiend;
 	int nLevel = GetHitDice(oPC);
     int nDuration = nLevel * 5;
-
+	
+		if (GetHasSpellEffect(1375)) {
+		SendMessageToPC(oPC, "You may not use Fiendform while discorporated.");
+		return; 
+	}
+	
+	
+		if (GetHasSpellEffect(1721)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		return; 
+	}
+		if (GetHasSpellEffect(1722)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		return; 
+	}
+		if (GetHasSpellEffect(1723)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		return; 
+	}
+		if (GetHasSpellEffect(1724)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		return; 
+	}
+		if ( GetHasSpellEffect(843, oPC) ) {
+		effect eEffect = GetFirstEffect( oPC );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == 843){
+				RemoveEffect( oPC, eEffect );
+			}
+				
+			eEffect = GetNextEffect( oPC );
+		}
+	}
+	
+	if ( GetHasSpellEffect(1657, oPC) ) {
+		effect eEffect = GetFirstEffect( oPC );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == 1657){
+				RemoveEffect( oPC, eEffect );
+			}
+				
+			eEffect = GetNextEffect( oPC );
+		}
+	}
 	if (nLevel >= 23)
 	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
     	{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
@@ -405,7 +450,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			  Assumenewform(oPC, Appearance);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 				PS_HumForm_DragonUE(oPC);}	//Greater Tanar'ri
-		else
+		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
 		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoloth", oPC);
 			  Assumenewform(oPC, Appearance);
@@ -425,18 +470,25 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 				  Assumenewform(oPC, Appearance);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 				PS_HumForm_DragonUE(oPC);		}	//Lesser Tanar'ri
-		else 
+		else if(GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
 		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	 //Lesser Yugoloth
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoles", oPC)	;
 			   Assumenewform(oPC, Appearance);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC);
+				PS_HumForm_DragonUE(oPC); }
+	else if (nSpell == 1726) { //Unshift
+		
+		PS_RestoreOriginalAppearance(oPC);
+		
+		//General useful things for shifting back
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+		PS_DragForm_DragonUE(oPC);} 			
 				}	
 											
 }
-}
+
 											
-void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
+/*void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 	{
 	
 	 if (!X2PreSpellCastCode())
@@ -448,7 +500,7 @@ void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 		//General useful things for shifting back
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		PS_DragForm_DragonUE(oPC);}
-}
+}*/
 
 void PS_HOM_RadiantShield(object oPC, int nSpell)
 {

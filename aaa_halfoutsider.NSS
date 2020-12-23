@@ -108,9 +108,9 @@ void main()
 			PS_HOM_Gutwrench(oPC, nSpell, oTarget);
 		break;
 		
-		case 1726 : //Outsider Magic - Fiendform Unshift
+	/*	case 1726 : //Outsider Magic - Fiendform Unshift
 			PS_HOM_FIENDFORM_UNSHIFT(oPC, oTarget, nSpell);
-		break ;
+		break ; */
 ///////////////////////////////////////////////////////////////////////////////////
 	}
 }
