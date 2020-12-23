@@ -46,7 +46,7 @@ int nDuration = (nLevel-1)*10;
 			if (nLevel >= 5 ) 
 		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eCleanse,oPC, RoundsToSeconds(nDuration));
-			IPSafeAddItemProperty(oSkin, eSlow, nDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	}
+			IPSafeAddItemProperty(oSkin, eSlow, RoundsToSeconds(nDuration), X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	}
 		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_COLD);
 		}
 
