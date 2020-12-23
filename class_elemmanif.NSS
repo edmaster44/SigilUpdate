@@ -17,6 +17,7 @@ int nDuration = (nLevel-1)*10;
 	effect eHaste = EffectHaste();
 	effect eCleanse = EffectRegenerate(3,1.0f);
 	itemproperty eSlow = ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_SLOW,nLevel*2);
+	object oSkin = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	
     RemoveSpellEffects(nSpellID, OBJECT_SELF, OBJECT_SELF);
 	
@@ -44,7 +45,8 @@ int nDuration = (nLevel-1)*10;
 	{	
 			if (nLevel >= 5 ) 
 		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eCleanse,oPC, RoundsToSeconds(nDuration));	}
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eCleanse,oPC, RoundsToSeconds(nDuration));
+			IPSafeAddItemProperty(oSkin, eSlow, nDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	}
 		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_COLD);
 		}
 
