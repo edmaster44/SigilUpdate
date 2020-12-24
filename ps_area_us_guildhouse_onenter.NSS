@@ -26,6 +26,72 @@ void main() {
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_timequests_spadix", lSpawnpoint);    
   		}  
+  
+  		if(GetObjectByTag("ps_us_gwzombie") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_gwzombie");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwzombie", lSpawnpoint);    
+  		} 
+		
+  		if(GetObjectByTag("ps_us_gwhellhound") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_gwhellhound");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwhellhound", lSpawnpoint);    
+  		} 
+		
+  		if(GetObjectByTag("ps_us_gwkobold") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_gwkobold1");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwkobold", lSpawnpoint);  
+			oWP = GetWaypointByTag("wp_ps_us_gwkobold2");
+   			lSpawnpoint = GetLocation(oWP);  
+   			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwkobold", lSpawnpoint);     
+  		} 
+		
+  		if(GetObjectByTag("ps_us_gwcultist") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_gwcultist");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwcultist", lSpawnpoint);    
+  		} 
+		
+  		if(GetObjectByTag("ps_us_druggedperson1") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_druggedperson1");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_druggedperson1", lSpawnpoint);    
+  		} 
+		
+  		if(GetObjectByTag("ps_us_druggedperson2") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_druggedperson2");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_druggedperson2", lSpawnpoint);    
+  		} 
+		
+  		if(GetObjectByTag("ps_us_druggedperson3") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_druggedperson3");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_druggedperson3", lSpawnpoint);    
+  		}
+		
+  		if(GetObjectByTag("ps_us_druggedperson4") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_druggedperson4");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_druggedperson4", lSpawnpoint);    
+  		}
+		
+  		if(GetObjectByTag("ps_us_drugdealer") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_drugdealer");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_drugdealer", lSpawnpoint);    
+  		}
 	
   		SetGlobalInt("UndersigilGuildhouseLock", 1); // Only allows one clean up at a time.
 		
