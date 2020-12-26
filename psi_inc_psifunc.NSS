@@ -421,12 +421,21 @@ int GetManifesterDC(object oManifester = OBJECT_SELF)
 	{
 		nDC++;
 	}
-	if (GetManifestingClass(oManifester) >= 21)
+	if (GetManifestingClass(oManifester) >= 23)
 	{
 		nDC++;
 	
 	}
+		if (GetManifestingClass(oManifester) >= 26)
+	{
+		nDC++;
 	
+	}
+		if (GetManifestingClass(oManifester) >= 29)
+	{
+		nDC++;
+	
+	}
 	int nSpellID = GetSpellId();
 	object oTarget = GetSpellTargetObject();
 	int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
