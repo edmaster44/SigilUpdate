@@ -160,7 +160,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	{	nType = 2;	}
 	
 	if (GetRacialType(oPC) != RACIAL_TYPE_OUTSIDER)
-	{	if (nLevel == 6)
+	{	if (nLevel >= 6)
 		{	SetLocalString(oItem, "Template", "HalfOutsider");
 			SetLocalInt(oItem, "OldRace", nOrigin);
 			SetLocalInt(oItem, "OldSubrace", nOriSub);
@@ -221,52 +221,39 @@ void PS_HOM_CelestialSmiting(object oPC, int nSpell)
 
 void PS_HOM_UnholyBlight(object oPC, int nSpell, location lTarget)
 {
-    if (!X2PreSpellCastCode())
-    {	return;	}
-    int nDamage;
+   if (!X2PreSpellCastCode())
+    {    return;	}
+    int nDamage, nFDam, nDDam;
+    float fDelay;
+    effect eVisF			= EffectVisualEffect(VFX_HIT_SPELL_FIRE);
+	effect eVisE 			= EffectVisualEffect(VFX_HIT_SPELL_EVIL);
+    effect eFDam, eDDam;
 	int nLevel = PS_OutsiderLevels(oPC);
 	int nCasterLvl = (nLevel * 2);
-	int nChaBonus = GetAbilityModifier(ABILITY_CHARISMA, oPC);
-	int nDC = 20;
-    float fDelay;
-    effect eDam, eVis, eLink, eSick, eEvil;
-    object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+	int nDC 				= (20 + nCasterLvl + GetAbilityModifier(ABILITY_CHARISMA));
+    location lTarget 		= GetLocation(oPC);
+    object oTarget 			= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
-    	{	if (nSpell == 1475)
-            {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-                fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
-                if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
-        	    {	if ((GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD) && (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER))
-					{	nDamage = d6(nCasterLvl);	}
-					else if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)
-					{	nDamage = d6(nLevel);	}
-					else if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_NEUTRAL)
-					{	nDamage = d6(nLevel) / 2;
-						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_EVIL))
-						{	nDamage = nDamage / 2;	}	}
-					else
-					{	nDamage = 0;	}
-                    eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
-    				eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
-					eLink = EffectLinkEffects(eDam, eVis);
-					eSick = EffectSickened();
-					eEvil = EffectVisualEffect(VFX_IMP_HEAD_EVIL);
-				
-					if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
-					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eEvil, oTarget));	}
-					else if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_NEUTRAL)
-					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));	}
-                    else
-					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_DISEASE))
-						{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSick, oTarget, RoundsToSeconds((1))));	}
-					}
-				}
-			}
-		}
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
-}	}
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
+        {	fDelay 			= GetDistanceToObject(oTarget)/10;
+            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+            if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
+            {	nDamage 	= (d6(nLevel));
+				nFDam 	= GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_FIRE);
+				nDDam 	= GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_NEGATIVE);
+				if (nFDam > 0)
+                {	eFDam 	= EffectDamage(nFDam, DAMAGE_TYPE_FIRE);
+					eFDam	= EffectLinkEffects(eFDam, eVisF);
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFDam, oTarget));	}
+				if (nDDam > 0)
+				{	eDDam	= EffectDamage(nDDam, DAMAGE_TYPE_NEGATIVE);
+					eDDam	= EffectLinkEffects(eDDam, eVisE);
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDDam, oTarget));	}
+       	}	}
+       oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+    }
+}
 
 void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 {
@@ -476,19 +463,13 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			   Assumenewform(oPC, Appearance);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 				PS_HumForm_DragonUE(oPC); }
-	else if (nSpell == 1726) { //Unshift
-		
-		PS_RestoreOriginalAppearance(oPC);
-		
-		//General useful things for shifting back
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-		PS_DragForm_DragonUE(oPC);} 			
+
 				}	
 											
 }
 
 											
-/*void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
+void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 	{
 	
 	 if (!X2PreSpellCastCode())
@@ -500,7 +481,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		//General useful things for shifting back
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		PS_DragForm_DragonUE(oPC);}
-}*/
+}
 
 void PS_HOM_RadiantShield(object oPC, int nSpell)
 {
