@@ -5,7 +5,7 @@ void main() {
 	if (!GetIsPC(oPC))
 		return;
 		
-	SendMessageToPC(oPC, "Should be teleporting something.");
+	//SendMessageToPC(oPC, "Should be teleporting something.");
 
 	string sWP = GetLocalString(OBJECT_SELF, "Teleport_Waypoint");
 	string sMonster = GetLocalString(OBJECT_SELF, "Teleport_Monster");
@@ -21,7 +21,7 @@ void main() {
 	object oMonster = GetNearestObjectByTag(sMonster);
 	if (GetIsObjectValid(oMonster) && GetLocalInt(oMonster, "Teleported") == 0) {
 		
-		SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
+		//SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
 		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oMonster, 3.0f);
 		AssignCommand(oMonster, ActionJumpToLocation(lWP));
@@ -33,7 +33,7 @@ void main() {
 	oMonster = GetNearestObjectByTag(sMonster+"2");
 	if (GetIsObjectValid(oMonster) && GetLocalInt(oMonster, "Teleported") == 0) {
 	
-		SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
+		//SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
 		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oMonster, 3.0f);
 		AssignCommand(oMonster, ActionJumpToLocation(lWP));

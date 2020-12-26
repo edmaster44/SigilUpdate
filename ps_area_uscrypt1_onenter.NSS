@@ -23,9 +23,11 @@ void main() {
    		if(GetObjectByTag("ps_prop_statuemorrigan") == OBJECT_INVALID) {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_prop_statuemorrigan", GetLocation(GetWaypointByTag("wp_prop_statuemorrigan")));
 		}
-   		if(GetObjectByTag("ps_undersigil_imtiyaz") == OBJECT_INVALID) {
-  			CreateObject(OBJECT_TYPE_CREATURE, "ps_undersigil_imtiyaz", GetLocation(GetWaypointByTag("wp_undersigil_imtiyaz")));
+		
+   		if(GetObjectByTag("ps_us_imtiyaz") == OBJECT_INVALID) {
+  			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_imtiyaz", GetLocation(GetWaypointByTag("wp_undersigil_imtiyaz")));
 		}
+		
 		SetGlobalInt("crypt1EnterLock", 0);
  	}
 	
