@@ -30,6 +30,12 @@ void main()
 
     object oLastPerceived = GetLastPerceived();
     int bSeen = GetLastPerceptionSeen();
+	
+	//Script hook
+	string sPercievedScript = GetLocalString(OBJECT_SELF, "PercievedScript");
+	if (sPercievedScript != "")
+		ExecuteScript(sPercievedScript, OBJECT_SELF);
+	
     if (iFocused <= FOCUSED_STANDARD)
     {
         //This is the equivalent of a force conversation bubble, should only be used if you want an NPC
