@@ -2517,6 +2517,7 @@ int PS_NeedsTemplateClassAbilityFix(object oPC)
 {
 	if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) >= 6) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 6) return TRUE;
+	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC, oPC) >= 7) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0) return TRUE;
