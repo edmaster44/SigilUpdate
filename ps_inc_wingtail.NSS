@@ -139,17 +139,17 @@ int PS_GetWing_Fiend(object oPC)
 			if (GetHasFeat(FEAT_MEZZOWINGS,oPC))
 	{	if (GetGender(oPC) == GENDER_FEMALE)
 		{	switch (nWingRace)
-			{	case WING_VARIATION_DWARF: return 62;
-				case WING_VARIATION_GNOME: return 62;
-				case WING_VARIATION_HUMAN: return 62;
-				case WING_VARIATION_ORC: return 62;
+			{	case WING_VARIATION_DWARF: return 97;
+				case WING_VARIATION_GNOME: return 95;
+				case WING_VARIATION_HUMAN: return 2;
+				case WING_VARIATION_ORC: return 93;
 			}}
 		else
 		{	switch (nWingRace)
-			{	case WING_VARIATION_DWARF: return 62;
-				case WING_VARIATION_GNOME: return 62;
+			{	case WING_VARIATION_DWARF: return 96;
+				case WING_VARIATION_GNOME: return 94;
 				case WING_VARIATION_HUMAN: return 62;
-				case WING_VARIATION_ORC: return 62;
+				case WING_VARIATION_ORC: return 92;
 			}}} 
 	
 			
