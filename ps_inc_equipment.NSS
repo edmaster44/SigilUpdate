@@ -28,7 +28,6 @@ int GetMonkWeapon(object oItem)
 
 
 
-
 int NoHeavyArmorOrShield(object oPC)
 {
 	int chest = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC));
@@ -56,7 +55,7 @@ int GetDervishWeapon(object oItem)
 {  int iBaseItem = GetBaseItemType(oItem);
     return iBaseItem ==  BASE_ITEM_GREATSWORD ||  iBaseItem == BASE_ITEM_SCYTHE || iBaseItem == BASE_ITEM_SCIMITAR
 	||BASE_ITEM_KATANA||iBaseItem == BASE_ITEM_HALBERD||iBaseItem == BASE_ITEM_BASTARDSWORD || iBaseItem == BASE_ITEM_BATTLEAXE || iBaseItem == BASE_ITEM_LONGSWORD||
-	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP;
+	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP||iBaseItem == 176 ||iBaseItem == 179 ;
 
 
 /*
@@ -294,9 +293,18 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 int GetIsCreatureWeapon(int nTYPE)
 {
     if (nTYPE < 160) return FALSE;
-    if (nTYPE > 174) return FALSE;
+    if (nTYPE > 184) return FALSE;
     return TRUE;
 }
+
+int GetCreatureWeapons(object oItem)
+{ 
+       int iBaseItem = GetBaseItemType(oItem);
+    return iBaseItem ==  GetIsCreatureWeapon(iBaseItem); 
+}
+
+
+
 
 //A Wrapper for to Ignore Exsisting Finesse
 int GetExistingFinesse(object oItem)

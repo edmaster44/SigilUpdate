@@ -18,6 +18,30 @@ void main() {
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_bleaker", lSpawnpoint);    
   		}
+
+  		if(GetObjectByTag("ps_us_smuggler1") == OBJECT_INVALID) {
+   			object oWP = GetWaypointByTag("wp_us_smuggler1");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_smuggler1", lSpawnpoint);    
+  		}
+
+  		if(GetObjectByTag("ps_us_smuggler2") == OBJECT_INVALID) {
+   			object oWP = GetWaypointByTag("wp_us_smuggler2");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_smuggler2", lSpawnpoint);    
+  		}
+
+  		if(GetObjectByTag("ps_us_smuggler3") == OBJECT_INVALID) {
+   			object oWP = GetWaypointByTag("wp_us_smuggler3");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_smuggler3", lSpawnpoint);    
+  		}
+
+  		if(GetObjectByTag("ps_us_tout_smuggler") == OBJECT_INVALID) {
+   			object oWP = GetWaypointByTag("wp_us_tout_smuggler");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_tout_smuggler", lSpawnpoint);    
+  		}
     
   		SetGlobalInt("USigilEnterLock", 0);
  	}

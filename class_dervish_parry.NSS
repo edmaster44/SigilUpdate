@@ -4,19 +4,31 @@
 void main()
 {
 object oPC = OBJECT_SELF;
-int nSpell = GetSpellId();
+int eDefParryID = -3213;
 effect eDefParry = EffectACIncrease(4);
-eDefParry = SetEffectSpellId(eDefParry, nSpell);
+eDefParry = SetEffectSpellId(eDefParry, eDefParryID);
 eDefParry = SupernaturalEffect(eDefParry);
-	if (GetHasSpellEffect(nSpell,oPC))
-	{
-		RemoveEffectsFromSpell(oPC, nSpell);
-		SendMessageToPC(oPC, "Defensive Parry disabled.");
-	}
-		else
-	
-		if (GetActionMode(oPC,ACTION_MODE_COMBAT_EXPERTISE) == TRUE || GetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)== TRUE)
-		{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
-			SendMessageToPC(oPC, "Defensive Parry enabled.");						
-			}
+
+effect eEffect = GetFirstEffect(oPC);
+
+while(GetIsEffectValid(eEffect))
+{
+if(GetEffectSpellId(eEffect) == eDefParryID)
+{
+RemoveEffect(oPC, eEffect);
+break;
 }
+eEffect = GetNextEffect(oPC);
+}
+
+	if 	 (GetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE) == TRUE)
+	{	 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24));			
+		SendMessageToPC(oPC, "Defensive Parry enabled.");						
+	}
+		
+		
+	else if(GetActionMode(oPC,ACTION_MODE_COMBAT_EXPERTISE) == TRUE)
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24));			
+		SendMessageToPC(oPC, "Defensive Parry enabled.");						
+	}
+	}

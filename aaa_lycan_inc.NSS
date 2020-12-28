@@ -1,6 +1,7 @@
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
 #include "ps_inc_functions"
+#include "ps_inc_equipment"
 #include "ps_inc_advscript"
 #include "aaa_constants"
 #include "nw_i0_spells"
@@ -328,7 +329,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 		}
 	}
 	else if (nIsHybrid == 1)
-	{	if (sWeapon == "s3_w")
+	{	if ( GetCreatureWeapons(oItem))
 		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0,nSpell);
 			if (nAttack == 2)
 			{	if (nLevel >= 24) nDamage = d10(4) + d10(2);
@@ -394,8 +395,8 @@ void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 	{	oWeapR = GetItemInSlot(INVENTORY_SLOT_CWEAPON_R, oPC);
 		oWeapL = GetItemInSlot(INVENTORY_SLOT_CWEAPON_L, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
-		IPSafeAddItemProperty(oWeapR, ipDam, 60.0f);
-		IPSafeAddItemProperty(oWeapL, ipDam, 60.0f);
+		IPSafeAddItemProperty(oItem, ipDam, 60.0f);
+		IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 	}
 	else if (nIsHybrid == 1)
 	{	oWeapR = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
@@ -404,17 +405,17 @@ void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 		oWeapL = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 		sWeapL = GetTag(oWeapL);
 			sWeapR	= GetStringLeft(sWeapR, 4);
-		if (sWeapL != "s3_w" || sWeapR  != "s3_w")
+		if (GetCreatureWeapons(oItem))
 		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
 			SendMessageToPC(oPC, "Damage bonus not applied unless creature weapon(s) are equipped!");
 		}
 		else
 		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
-			if (sWeapR == "s3_w")
-			{	IPSafeAddItemProperty(oWeapR, ipDam, 60.0f);
+			if (GetCreatureWeapons(oItem))
+			{	IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 				SendMessageToPC(oPC, "Damage bonus applied to right tusk!");	}
-			if (sWeapL == "s3_w")
-			{	IPSafeAddItemProperty(oWeapL, ipDam, 60.0f);
+			if (GetCreatureWeapons(oItem))
+			{	IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 				SendMessageToPC(oPC, "Damage Bonus applied to left tusk!");	}
 		}
 	}
@@ -478,7 +479,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 		}
 	}
 	else if (nIsHybrid == 1)
-	{	if (sWeapon == "s3_w")
+	{	if ( GetCreatureWeapons(oItem))
 		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0,nSpell);
 			if (nAttack == 2)
 			{	if (nLevel >= 24)

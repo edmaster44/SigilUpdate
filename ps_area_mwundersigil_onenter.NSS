@@ -21,30 +21,13 @@ void main () {
 			
 		}
 		
+	  	if(GetObjectByTag("ps_us_tout_marketward") == OBJECT_INVALID) {
 		
-		/*if (GetObjectByTag("bzr_barricade") == OBJECT_INVALID) {
-		
-			object oWP = GetWaypointByTag("wp_bzr_barricade_1");
+	   		object oWP = GetWaypointByTag("wp_ps_us_tout_marketward");
 	   		location lSpawnpoint = GetLocation(oWP);  
-	   		object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_barricade", lSpawnpoint); 
+	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_tout_marketward", lSpawnpoint);    
 			
-			oWP = GetWaypointByTag("wp_bzr_barricade_2");
-			lSpawnpoint = GetLocation(oWP); 
-			oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_barricade", lSpawnpoint);  
-			
-			oWP = GetWaypointByTag("wp_bzr_barricade_3");
-			lSpawnpoint = GetLocation(oWP); 
-			oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_barricade", lSpawnpoint);  
-			
-			oWP = GetWaypointByTag("wp_bzr_barricade_4");
-			lSpawnpoint = GetLocation(oWP); 
-			oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_barricade", lSpawnpoint);  
-			
-			oWP = GetWaypointByTag("wp_bzr_barricade_5");
-			lSpawnpoint = GetLocation(oWP); 
-			oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_barricade", lSpawnpoint); 
-			 
-		}*/
+	  	}
 		
   		SetGlobalInt("MWTUNNELLOCK", 0);
 	}
