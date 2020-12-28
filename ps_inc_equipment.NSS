@@ -28,7 +28,6 @@ int GetMonkWeapon(object oItem)
 
 
 
-
 int NoHeavyArmorOrShield(object oPC)
 {
 	int chest = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC));
@@ -297,6 +296,15 @@ int GetIsCreatureWeapon(int nTYPE)
     if (nTYPE > 184) return FALSE;
     return TRUE;
 }
+
+int GetCreatureWeapons(object oItem)
+{ 
+       int iBaseItem = GetBaseItemType(oItem);
+    return iBaseItem ==  GetIsCreatureWeapon(iBaseItem); 
+}
+
+
+
 
 //A Wrapper for to Ignore Exsisting Finesse
 int GetExistingFinesse(object oItem)
