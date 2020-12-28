@@ -35,4 +35,10 @@ void main () {
 		
 	}
 	
+	//Adding an event that can fire after all the creatures are done spawning
+	string sAfterSpawnScript = GetLocalString(OBJECT_SELF, "AfterSpawnScript");
+	if (sAfterSpawnScript != "") {
+		DelayCommand(fDelay, ExecuteScript(sAfterSpawnScript, OBJECT_SELF));
+	}
+	
 }
