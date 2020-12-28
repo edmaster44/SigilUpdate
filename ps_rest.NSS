@@ -202,13 +202,55 @@ void RestFinish(object oPC)
 	}
 }	
 
+//Allows you to designate spaces in a "non-rest" area as safe to rest
+int IsInSafeRestZone(object oPC) {  
 
+	//Check if we're in a limited rest zone
+	object oArea = GetArea(oPC);
+	int nLimitedRest = GetLocalInt(oArea, "LIMITED_REST");
+	if (!nLimitedRest)
+		return TRUE;
+
+	//If so, check to see if we're in a designated safe area
+    object oSafeTrigger = GetNearestObjectByTag("X0_SAFEREST", oPC);
+    int bPCInTrigger = FALSE;
+
+    if (GetIsObjectValid(oSafeTrigger)) {
+	
+        if (GetObjectType(oSafeTrigger) == OBJECT_TYPE_TRIGGER) {
+		
+            // * cycle through trigger looking for oPC
+            object oInTrig = GetFirstInPersistentObject(oSafeTrigger, OBJECT_TYPE_ALL);
+            while (GetIsObjectValid(oInTrig) == TRUE) {
+                // * rester is in trigger!
+                if (oPC == oInTrig) {
+                    bPCInTrigger = TRUE;
+					break;
+                }
+                oInTrig = GetNextInPersistentObject(oSafeTrigger, OBJECT_TYPE_ALL);
+            }
+        }
+		
+    }
+	
+    return bPCInTrigger;
+}
 
 void main()
 {
 	object oPC = GetLastPCRested();
 	int nREST = GetLastRestEventType();
+	
+	//Raise if DM rests you???
 	if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
+	
+	//If this is a limited rest area and you're not in a safe trigger. . don't let you rest
+	if (!IsInSafeRestZone(oPC)) {
+		AssignCommand(oPC, ClearAllActions());
+		FloatingTextStrRefOnCreature(40156, oPC);
+	}
+	
+	//Rest Events
 	if (nREST == REST_EVENTTYPE_REST_STARTED) DelayCommand(0.0f, RestStart(oPC));
 	else if (nREST == REST_EVENTTYPE_REST_FINISHED) DelayCommand(0.0f, RestFinish(oPC));	
 }
