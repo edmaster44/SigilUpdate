@@ -48,7 +48,9 @@ void main(string sWINDOW)
 		case 4: //Auxiliary Bars
 			nPSION = GetLevelByClass(90, oPC);
 			nPOLY = CheckPoly(oPC);
+			nBARB = GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC);
 			if (nPSION > 0) DisplayGuiScreen(oPC,"SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
+			if (nBARB > 0) DisplayGuiScreen(OBJECT_SELF, "SCREEN_FURYBAR_BARB", FALSE, "furyscreen.xml");
 			if (nPOLY==TRUE) DisplayGuiScreen(oPC,"POLYMORPH_HOTBAR", FALSE, "polybar.xml");
 			if ((nPSION<=0)&&(nPOLY==FALSE)) FloatingTextStringOnCreature("Auxiliary Bars are only for Psions or Polymorphed Characters.", oPC, FALSE);
 			break;
