@@ -656,7 +656,7 @@ void ShieldRangedConceal(object oPC, int nSHIELD)
 }
 
 //Sacred fists get a -8AB penalty if they are wielding non-creature weapons.
-void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
+/*void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
 {
     if (GetHasFeat(2852, oPC, TRUE) == FALSE) return;
     int nRETURN = 0;
@@ -668,7 +668,7 @@ void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
     effect eFX = EffectAttackDecrease(8);
     ApplyEquipmentEffect(oPC, eFX);
 }
-
+*/ //No longer needed
 
 
 
@@ -818,7 +818,7 @@ int GetACProvidedByShield(object oShield) {
 void ConDrainProtection(object oItem, object oPC)
 {   
     string sArea = GetTag(GetArea(oPC));
-    if (sArea == "appearance_changer_room" || sArea == "ps_area_clerks-festhallchanging")
+    if (sArea == "ooc_appearance_changer_room" || sArea == "ps_area_s_cw_festhall-changing")
     {   
         if (IPGetItemHasItemAbilityBonusPropertySubType(oItem, ABILITY_CONSTITUTION)) ForceRest(oPC);
     }   
