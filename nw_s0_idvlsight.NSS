@@ -55,7 +55,7 @@ void main() {
 			GetEffectSpellId(eEffect) == 2230 ||
 			GetEffectSpellId(eEffect) == 2231 ||
 			GetEffectSpellId(eEffect) == 2232) {
-				SendMessageToPC(oCaster, "Removing "+IntToString(GetEffectSpellId(eEffect)));
+				//SendMessageToPC(oCaster, "Removing "+IntToString(GetEffectSpellId(eEffect)));
 				RemoveEffect( oCaster, eEffect );
 				eEffect = GetFirstEffect( oCaster ); //start again from the beginning
 			}

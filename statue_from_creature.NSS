@@ -8,6 +8,7 @@ the creature to prevent player movement through the object.
 */
 // RJH 11sep10
 const string COLLISION_BALL_TAG = "plc_collbox";
+const int FREEZE_SPELL_ID = -2999;
 void main()
 {
 	float fDelay = GetLocalFloat(OBJECT_SELF, "ANIMATION_DELAY");
@@ -15,6 +16,8 @@ void main()
 		fDelay = 0.75;
 		
 	effect eFreeze = SupernaturalEffect(EffectVisualEffect( VFX_DUR_FREEZE_ANIMATION ));
+	SetEffectSpellId(eFreeze, FREEZE_SPELL_ID);
+	
 	DelayCommand(fDelay, ApplyEffectToObject( DURATION_TYPE_PERMANENT, eFreeze, OBJECT_SELF ));
 	DelayCommand(fDelay, SetLocalInt(OBJECT_SELF, "STOP_ANIMATION", 1));
 
