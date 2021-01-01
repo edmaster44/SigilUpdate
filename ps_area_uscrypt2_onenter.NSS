@@ -10,6 +10,9 @@ void main() {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_crypt2_ghostgirl", GetLocation(GetWaypointByTag("wp_us_crypt2_ghostgirl2")));
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_crypt2_ghostgirl", GetLocation(GetWaypointByTag("wp_us_crypt2_ghostgirl3")));
 		}
+   		if(GetObjectByTag("ps_us_crypt2_ghostgirl2") == OBJECT_INVALID) {
+  			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_crypt2_ghostgirl2", GetLocation(GetWaypointByTag("wp_us_crypt2_boss")));
+		}
 		
 		SetGlobalInt("crypt1EnterLock", 0);
  	}
