@@ -841,7 +841,7 @@ void EquipmentEffects(object oPC)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
-    SacredFirstPenalty(oPC, nRIGHT, nLEFT);
+   // SacredFirstPenalty(oPC, nRIGHT, nLEFT);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
@@ -871,7 +871,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
-			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
+			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4) && !GetExistingFinesse(oITEM))
 				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
         
