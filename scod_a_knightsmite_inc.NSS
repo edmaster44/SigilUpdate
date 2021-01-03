@@ -44,7 +44,10 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 //		 nVFXHit =EffectVisualEffect(VFX_HIT_SPELL_INFLICT_1);
 //			}	**//
 
-if (GetAlignmentGoodEvil(oTarget) != ALIGNMENT_EVIL ||  ALIGNMENT_GOOD)
+if (GetAlignmentGoodEvil(oTarget) != ALIGNMENT_EVIL)
+{ SendMessageToPC(oPC,"You cannot smite a Neutral Target");
+return;}
+if (GetAlignmentGoodEvil(oTarget) != ALIGNMENT_GOOD)
 { SendMessageToPC(oPC,"You cannot smite a Neutral Target");
 return;}
 

@@ -841,7 +841,7 @@ void EquipmentEffects(object oPC)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
-    SacredFirstPenalty(oPC, nRIGHT, nLEFT);
+   // SacredFirstPenalty(oPC, nRIGHT, nLEFT);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
