@@ -4,7 +4,7 @@
 void main()
 {
 object oPC = OBJECT_SELF;
-int eDefParryID = FEAT_DERVISH_DEFENSIVE_PARRY;
+int eDefParryID = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
 effect eDefParry = EffectACIncrease(4);
 eDefParry = SetEffectSpellId(eDefParry, eDefParryID);
 eDefParry = SupernaturalEffect(eDefParry);
