@@ -16,7 +16,8 @@ if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
 
 
 if (!NoHeavyArmorOrShield(oPC))
-{ SendMessageToPC(oPC,"Your Dervish AC Bonus will not function in Armor Heavier than Light");}
+{ SendMessageToPC(oPC,"Your Dervish AC Bonus will not function in Armor Heavier than Light");
+return;}
 	
 		int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
 		
