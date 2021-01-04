@@ -20,7 +20,7 @@ void main()
 		{
 			//do nothing : Don't kill self or similiar swarms
 		}
-		else if(sIgnore != "" && GetTag(oTarget) == sIgnore)
+		else if(sIgnore != "" && (GetTag(oTarget) == sIgnore || GetTag(oTarget) == sIgnore+"2" || GetTag(oTarget) == sIgnore+"3"))
 		{
 			//do nothing : Ignore creature in swarm
 		}
