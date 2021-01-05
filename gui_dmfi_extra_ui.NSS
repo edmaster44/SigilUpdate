@@ -11,6 +11,7 @@ int CheckPoly(object oPC)
 	{
 		nTYPE = GetEffectType(eFX);
 		if (nTYPE == EFFECT_TYPE_POLYMORPH) return TRUE;
+		if (nTYPE == 1657) return TRUE;
 		eFX = GetNextEffect(oPC);
 	}
 	return FALSE;
