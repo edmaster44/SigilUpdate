@@ -850,13 +850,41 @@ int GetRangerAndPRCClassLevels(object oPC)
 	return iTotal;
 }
 
+int GetRangerTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_RANGER, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_RANGER)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
 
 int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
     int iLevel;
-
-    // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
+	
+	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
+		else
+    {	iLevel = GetCasterLevel(oPC);	}
+	
+	return iLevel;
+	
+	
+   /* // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
     // practiced caster can also increase by +4.
 
     if (iClass == CLASS_TYPE_RANGER)
@@ -883,7 +911,7 @@ int PS_GetCasterLevel(object oPC)
 	else
     {	iLevel = GetCasterLevel(oPC);	}
 
-    return iLevel;
+    return iLevel; */
 	
 }
 
