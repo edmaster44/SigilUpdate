@@ -635,9 +635,11 @@ void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "V
         }
         nEQUIP = nEQUIP + 1;
     }
-    if (nMAX < 1) return;
+    if (nMAX > 0)
+	{
     effect eFX = EffectSpellResistanceIncrease(nMAX);
     ApplyEquipmentEffect(oPC, eFX);
+	}	
 }
 
 //Shields provide concealment against ranged attacks.
@@ -654,6 +656,15 @@ void ShieldRangedConceal(object oPC, int nSHIELD)
     effect eFX = EffectConcealment(nCONCEAL, MISS_CHANCE_TYPE_VS_RANGED);
     ApplyEquipmentEffect(oPC, eFX);
 }
+
+void FIX_BLINDFIGHT(object oPC)
+{
+	if (GetHasFeat(FEAT_BLIND_FIGHT,oPC, TRUE) == FALSE) return;
+	effect eFX = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
+	ApplyEquipmentEffect(oPC, eFX);
+}
+
+
 
 //Sacred fists get a -8AB penalty if they are wielding non-creature weapons.
 /*void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
@@ -838,6 +849,7 @@ void EquipmentEffects(object oPC)
     int nRIGHT = GetBaseItemType(oRHAND);   
     SpellResistFix(oPC);
     ShieldRangedConceal(oPC, nLEFT);
+	FIX_BLINDFIGHT(oPC);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
