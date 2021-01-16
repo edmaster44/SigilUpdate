@@ -7,6 +7,10 @@ void main() {
 	if (!GetIsPC(oPC))
 		return;
 		
+	//make me a normal npc!
+	SetCreatureScriptsToSet(OBJECT_SELF, 9); //get the default npc scripts
+	ClearAllActions();
+		
 	//Removing freeze effect
 	effect eEffect = GetFirstEffect( OBJECT_SELF );
 	while ( GetIsEffectValid(eEffect) ) {
@@ -16,16 +20,12 @@ void main() {
 		eEffect = GetNextEffect( OBJECT_SELF );
 	}
 		
-	SendMessageToPC(oPC, "On percieved fired for "+GetName(OBJECT_SELF));
-		
-	//make me a normal npc!
-	SetCreatureScriptsToSet(OBJECT_SELF, 9); //get the default npc scripts
+	//SendMessageToPC(oPC, "On percieved fired for "+GetName(OBJECT_SELF));
 	
-	ClearAllActions();
 	string sAnim = GetLocalString(OBJECT_SELF, "TransitionAnimation");
 	float fSpeed = GetLocalFloat(OBJECT_SELF, "TransitionAnimationSpeed");
 	
-	SendMessageToPC(oPC, sAnim+", "+FloatToString(fSpeed));
+	//SendMessageToPC(oPC, sAnim+", "+FloatToString(fSpeed));
 	
 	if (sAnim != "") {
 		if (fSpeed == 0.0f)

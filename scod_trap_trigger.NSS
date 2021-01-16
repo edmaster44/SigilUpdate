@@ -42,6 +42,10 @@ void main () {
 	object oTrap = GetNearestObjectByTag(sTrapTag);
 	object oDisarm = GetNearestObjectByTag(sDisarmTag);
 	
+	if (!GetIsObjectValid(oDisarm)) {
+		SendMessageToPC(oPC, "DEBUG: There is no disarm option on this trap.");
+	}
+	
 	int nInactive = GetLocalInt(oTrap, "TRAP_INACTIVE");
 	if (nInactive) 
 		return;

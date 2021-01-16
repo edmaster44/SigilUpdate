@@ -2,6 +2,7 @@
 void main() {
 
 	object oTrigger = OBJECT_SELF;
+	SpeakString("Running after spawn", TALKVOLUME_SHOUT);
 	
 	int lastDone = PS_GetTimestamp_Age_Seconds(oTrigger, "afterspawn_check");
 	float timeInterval = 6.0f;

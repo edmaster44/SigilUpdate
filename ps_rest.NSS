@@ -247,7 +247,10 @@ void main()
 	//If this is a limited rest area and you're not in a safe trigger. . don't let you rest
 	if (!IsInSafeRestZone(oPC)) {
 		AssignCommand(oPC, ClearAllActions());
-		FloatingTextStrRefOnCreature(40156, oPC);
+		
+		//Only show floating text once
+		if (nREST == REST_EVENTTYPE_REST_STARTED)
+			FloatingTextStrRefOnCreature(40156, oPC);
 	}
 	
 	//Rest Events
