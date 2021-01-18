@@ -2841,6 +2841,20 @@ void PS_ApplyEnhancementToFinesse(object oPC, object oItem, int iDiff)
 		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iEnhBonusS) + " vs. specific alignment applied to stack with enhancement bonus vs. specific alignment");	}
 }
 
+//A Wrapper for to Ignore Exsisting Finesse
+int InvalidWeapon(object oItem)
+{
+    if ((GetBaseItemType(oItem) == BASE_ITEM_DAGGER) || (GetBaseItemType(oItem) ==BASE_ITEM_GLOVES )
+     ||(GetBaseItemType(oItem) == BASE_ITEM_KAMA ) ||(GetBaseItemType(oItem) == BASE_ITEM_SHORTSWORD)||(GetBaseItemType(oItem) ==BASE_ITEM_SICKLE)
+    ||(GetBaseItemType(oItem) ==BASE_ITEM_HANDAXE)||(GetBaseItemType(oItem) ==BASE_ITEM_LIGHTHAMMER)||
+    (GetBaseItemType(oItem) ==BASE_ITEM_MACE)||(GetBaseItemType(oItem) ==BASE_ITEM_RAPIER)) return TRUE;
+else
+return FALSE;
+
+
+}
+
+
 void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 {
 	int iStrScore		= GetAbilityScore(oPC, ABILITY_STRENGTH, FALSE);
@@ -2858,12 +2872,13 @@ void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	
 		if (GetLevelByClass(CLASS_DERVISH,oPC) > 4)
 	{ iDiff = iDiff +2;}
+	
+	if (InvalidWeapon(oItem)) return;
 	object oSlotR		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	SendMessageToPC(oPC, "Item in right hand: " + GetName(oSlotR));
 	object oSlotL		= GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	SendMessageToPC(oPC, "Item in left hand: " + GetName(oSlotL));
 	int iHand;
-	
 	if(oItem == oSlotR || oItem == oSlotL)
 	{	if(oItem == oSlotR && iDiff > 0)
 		{	PS_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
@@ -2878,6 +2893,7 @@ void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING ,FALSE, FALSE);	}
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied."); }	
+			
 }
 
 int GetIsFinessable(object oItem)
