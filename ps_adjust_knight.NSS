@@ -33,11 +33,14 @@ void PS_KnightLevels(object oPC)
 	  int iTotal = iPally + iWarPriest;
 	  if(GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal +iDeath + iMarquis + iErinyes;
 	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal + iHalfFiend ;
-	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal + iHalfFiend_M ;
+	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC) && GetHasFeat(3036,oPC))iTotal = iTotal + iHalfFiend_M ;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)) iTotal = iTotal + iHalfCelestial;
-	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)) iTotal = iTotal + iHalfCelestial_M;
+	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)&& GetHasFeat(3036,oPC)) iTotal = iTotal + iHalfCelestial_M;
 	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden + iDoomg;
-	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iHound + iAstral + iMovanic + iEnvoy;
+	  if (GetHasFeat(FEAT_KNIGHT,oPC) && GetHasFeat(2455)) iTotal = iTotal + iHound;
+	  if (GetHasFeat(FEAT_KNIGHT,oPC) && GetHasFeat(2673)) iTotal = iTotal + iAstral;
+	  if (GetHasFeat(FEAT_KNIGHT,oPC) && GetHasFeat(2635)) iTotal = iTotal + iEnvoy;
+	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iMovanic;
 	  if (iPally <1 ) return;
 	  
 	  else
