@@ -50,8 +50,7 @@ void blackguardsmite(object oPC, object oTarget, int nSpell )
 if (GetAlignmentGoodEvil(oTarget) !=  ALIGNMENT_GOOD)
 { SendMessageToPC(oPC,"You cannot smite a target that isn't good");
 return;}
-
-	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
+	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
 		{	nDmg = nKnight * 2;
 			
