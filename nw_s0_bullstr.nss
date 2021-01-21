@@ -12,7 +12,7 @@
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 #include "ps_inc_functions"
-
+#include "ps_adjust_knight"
 #include "x2_inc_spellhook"
 #include "nw_i0_spells"
  
@@ -37,14 +37,17 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     effect eStr;
+	object oPC = OBJECT_SELF;
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BULL_STRENGTH);
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	
 	// AFW-OEI 08/07/2007: Use Blackguard level if casting as a Blackguard.
 	if (GetSpellId() == SPELLABILITY_BG_BULLS_STRENGTH)
-	{
+	{	
 		nCasterLvl = GetLevelByClass(CLASS_TYPE_BLACKGUARD);
+		nCasterLvl = KnightLevels(oPC);
+		
 	}
 	
     int nModify = 4;
