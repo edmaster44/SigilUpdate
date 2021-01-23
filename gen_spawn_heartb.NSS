@@ -68,4 +68,3 @@ void main()
                                //    combat.
     GenerateNPCTreasure();     //* Use this to create a small amount of treasure on the creature
 }
-

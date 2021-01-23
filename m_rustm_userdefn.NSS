@@ -92,7 +92,7 @@ int EquipMetal(object oTarget)
 void AttackTarget(object oTarget)
 {
   ClearAllActions();
-  SetIsTemporaryEnemy(oTarget, OBJECT_SELF, TRUE, 60.0);
+  ChangeToStandardFaction(OBJECT_SELF, STANDARD_FACTION_HOSTILE);
   ActionDoCommand(ActionAttack(oTarget));
 }
 
@@ -152,4 +152,3 @@ void main()
     }
   }
 }
-

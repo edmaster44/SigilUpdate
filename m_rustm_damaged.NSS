@@ -14,6 +14,8 @@
 
 #include "NW_I0_GENERIC"
 
+const int RUST_MONSTER_DC = 18;
+
 int IsItemMetal(object oItem)
 {
   int nReturnVal=0;
@@ -45,7 +47,7 @@ void main()
           if (!GetWeaponRanged(oWeapon) && (IsItemMetal(oWeapon)>0))
           {
             string sWeapon = GetName(oWeapon);
-            if(ReflexSave(oPC,20))// saved
+            if(ReflexSave(oPC,RUST_MONSTER_DC))// saved
             {
               if (GetIsPC(oPC))
               {
@@ -71,7 +73,7 @@ void main()
             if (IsItemMetal(oWeapon)>0)
             {
               string sWeapon = GetName(oWeapon);
-              if(ReflexSave(oPC,20))// saved
+              if(ReflexSave(oPC,RUST_MONSTER_DC))// saved
               {
                 if (GetIsPC(oPC))
                 {
