@@ -51,7 +51,7 @@ void main()
 //	effect eFists		 = EffectVisualEffect(VFX_DUR_SACRED_FLAMES);
 	
     effect eLink = EffectLinkEffects(eDivineDamage, eFireDamage);
-//	eLink = EffectLinkEffects(eLink);
+	eLink = SupernaturalEffect(eLink);
 
     // Spell does not stack
     if (GetHasSpellEffect(GetSpellId(),OBJECT_SELF))
