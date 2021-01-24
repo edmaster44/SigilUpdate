@@ -12,6 +12,54 @@ string PickFromQuestTreasureLow();
 string PickFromQuestTreasureMed();
 string PickFromQuestTreasureHigh();
 
+//The "essential item" pool - it only contains "most needed items" by level range
+//AC items mostly; returns an electrifier as the default
+//nCR = the ideal PC's level (under 5, under 10, etc)
+string PickEssentialItemReward(int nCR) {
+
+	if (nCR < 5) {
+	
+		int nRand = Random(13)+1;
+		switch(nRand) {
+			case 1: return "nw_it_mneck001"; //natural armor +1
+			case 2: return "nw_it_mneck001"; //natural armor +1
+			case 3: return "nw_it_mneck012"; //natural armor +2
+			case 4: return "ps_adventurer_boots1"; //dodge boots +1
+			case 5: return "ps_adventurer_boots1"; //dodge boots +1
+			case 6: return "nx2_cloat_prot_01"; //deflection cloak +1
+			case 7: return "nx2_cloak_prot_02"; //deflection cloak +2
+			case 8: return "nx2_ring_prot_01"; //deflection ring +1
+			case 9: return "nx2_ring_prot_02"; //deflection ring +2
+			case 10: return "ps_universal_coldironsword"; //cold iron sword
+			case 11: return "ps_universal_silversword"; //silver sword
+			case 12: return "it_quest_inviscloak"; //cloak of invisibility
+			case 13: return "nw_it_mbracer002"; //bracers +1
+		}
+		
+	} else { /*if (nCR < 10) {*/
+	
+		int nRand = Random(13)+1;
+		switch(nRand) {
+			case 1: return "nw_it_mneck012"; //natural armor +2
+			case 2: return "nw_it_mneck013"; //natural armor +3
+			case 3: return "nw_it_mneck013"; //natural armor +3
+			case 4: return "ps_adventurer_boots2"; //dodge boots +2
+			case 5: return "ps_adventurer_boots2"; //dodge boots +2
+			case 6: return "nx2_cloat_prot_03"; //deflection cloak +3
+			case 7: return "nx2_ring_prot_03"; //deflection ring +3
+			case 8: return "ps_universal_coldironsword"; //cold iron sword
+			case 9: return "ps_universal_silversword"; //silver sword
+			case 10: return "it_quest_inviscloak"; //cloak of invisibility
+			case 11: return "ps_misc_magicelectrifier"; //electrifier
+			case 12: return "nw_it_mbracer007"; //bracers +2
+			case 13: return "nw_it_mbracer008"; //bracers +3
+		}
+	}
+	
+	return "ps_misc_magicelectrifier";
+
+}
+
 //picks out item from the treasure pools
 //nPool can equal
 //TREASURE_QUEST_LOW
