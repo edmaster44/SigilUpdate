@@ -52,13 +52,13 @@ int NoHeavyArmorOrShield(object oPC)
 
 
 int GetDervishWeapon(object oItem)
-{  int iBaseItem = GetBaseItemType(oItem);
+{  /*int iBaseItem = GetBaseItemType(oItem);
     return iBaseItem ==  BASE_ITEM_GREATSWORD ||  iBaseItem == BASE_ITEM_SCYTHE || iBaseItem == BASE_ITEM_SCIMITAR
 	||BASE_ITEM_KATANA||iBaseItem == BASE_ITEM_HALBERD||iBaseItem == BASE_ITEM_BASTARDSWORD || iBaseItem == BASE_ITEM_BATTLEAXE || iBaseItem == BASE_ITEM_LONGSWORD||
 	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP||iBaseItem == 176 ||iBaseItem == 179 ;
 
+*/
 
-/*
 if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
@@ -68,7 +68,7 @@ if(!GetIsObjectValid(oItem)) return FALSE;
 	else			
 	return FALSE;
 
-*/
+
 
 }
 int nDervishValid (object oPC)
