@@ -635,7 +635,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
     if (nSpellID == SPELLABILITY_BG_INFLICT_SERIOUS_WOUNDS || nSpellID == SPELLABILITY_BG_INFLICT_CRITICAL_WOUNDS)
     {
         nExtraDamage = GetLevelByClass(CLASS_TYPE_BLACKGUARD);
-		nExtraDamage = KnightLevels(oPC);
+		nExtraDamage = KnightLevels(OBJECT_SELF);
     }
 
     if (nExtraDamage > nMaxExtraDamage)

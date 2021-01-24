@@ -1449,7 +1449,7 @@ void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, 
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL,
 		IP_CONST_DAMAGEBONUS_1d4);
-	itemproperty ipEff2 = ItemPropertyOnHitProps(IP_CONST_ONHIT_STUN, IP_CONST_ONHIT_SAVEDC_20, 
+	itemproperty ipEff2 = ItemPropertyOnHitProps(IP_CONST_ONHIT_STUN, IP_CONST_ONHIT_SAVEDC_26, 
 		IP_CONST_ONHIT_DURATION_25_PERCENT_3_ROUNDS);
 	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
 	itemproperty ipClas = ItemPropertyLimitUseByClass(87);
