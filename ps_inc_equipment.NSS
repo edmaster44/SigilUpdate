@@ -881,7 +881,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
-
+				
 			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
 				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
