@@ -52,14 +52,14 @@ int NoHeavyArmorOrShield(object oPC)
 
 
 int GetDervishWeapon(object oItem)
-{  /*int iBaseItem = GetBaseItemType(oItem);
+{  int iBaseItem = GetBaseItemType(oItem);
     return iBaseItem ==  BASE_ITEM_GREATSWORD ||  iBaseItem == BASE_ITEM_SCYTHE || iBaseItem == BASE_ITEM_SCIMITAR
 	||BASE_ITEM_KATANA||iBaseItem == BASE_ITEM_HALBERD||iBaseItem == BASE_ITEM_BASTARDSWORD || iBaseItem == BASE_ITEM_BATTLEAXE || iBaseItem == BASE_ITEM_LONGSWORD||
 	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP||iBaseItem == 176 ||iBaseItem == 179 ;
 
-*/
 
-if(!GetIsObjectValid(oItem)) return FALSE;
+
+/*if(!GetIsObjectValid(oItem)) return FALSE;
 		
 	int iType = GetBaseItemType(oItem);
 	if(Get2DAString("baseitems","WeaponSize",iType) == "3" 	&& Get2DAString("baseitems","WeaponSize",iType) == "4"
@@ -68,7 +68,7 @@ if(!GetIsObjectValid(oItem)) return FALSE;
 	else			
 	return FALSE;
 
-
+*/
 
 }
 int nDervishValid (object oPC)
@@ -659,8 +659,10 @@ void ShieldRangedConceal(object oPC, int nSHIELD)
 void FIX_BLINDFIGHT(object oPC)
 {
 	if (GetHasFeat(FEAT_BLIND_FIGHT,oPC, TRUE) == FALSE) return;
-	effect eFX = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
-	ApplyEquipmentEffect(oPC, eFX);
+	effect eEBLIND = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
+	eEBLIND = SupernaturalEffect(eEBLIND);
+	eEBLIND = SetEffectSpellId(eEBLIND, 9005);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEBLIND, oPC);
 }
 
 
