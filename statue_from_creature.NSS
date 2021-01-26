@@ -16,7 +16,7 @@ void main()
 		fDelay = 0.75;
 		
 	effect eFreeze = SupernaturalEffect(EffectVisualEffect( VFX_DUR_FREEZE_ANIMATION ));
-	SetEffectSpellId(eFreeze, FREEZE_SPELL_ID);
+	eFreeze = SetEffectSpellId(eFreeze, FREEZE_SPELL_ID);
 	
 	DelayCommand(fDelay, ApplyEffectToObject( DURATION_TYPE_PERMANENT, eFreeze, OBJECT_SELF ));
 	DelayCommand(fDelay, SetLocalInt(OBJECT_SELF, "STOP_ANIMATION", 1));
