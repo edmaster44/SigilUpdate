@@ -7,13 +7,13 @@
 */
 // Sean Claypool aka "Publilius_Syrus" 10/08/09
 
-void main()
-	{
+void main() {
+
     object oDoor = OBJECT_SELF;
     ClearAllActions();
 	effect eHeal = EffectHeal(GetMaxHitPoints()-GetCurrentHitPoints());
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDoor);
-    ActionWait(120.0);
+    ActionWait(360.0);
     ActionCloseDoor(OBJECT_SELF);
 
-    }
+}
