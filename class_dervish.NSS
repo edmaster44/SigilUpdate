@@ -63,18 +63,11 @@ if (!NoHeavyArmorOrShield(oPC))
 	
 	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
 	
-if ( GetHasSpellEffect(SPELLABILITY_THOUSAND_CUTS, oPC) ) {
-		effect eEffect = GetFirstEffect( oPC );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == SPELLABILITY_THOUSAND_CUTS){
-				RemoveEffect( oPC, eEffect );
-			}
-			}
-
-			if (!GetDervishWeapon(oPC)) return;
+	
+		if (GetHasSpellEffect(nSpellId,oPC))
+			RemoveSpellEffects(nSpellId, oPC, oPC);
 				
-			eEffect = GetNextEffect( oPC );	
+
 	float fDuration = 9999.99f;
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
@@ -83,7 +76,7 @@ if ( GetHasSpellEffect(SPELLABILITY_THOUSAND_CUTS, oPC) ) {
 	
 		
 }	
-}
+
 //Defensive Parry.
 /* void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
