@@ -52,24 +52,14 @@ int NoHeavyArmorOrShield(object oPC)
 
 
 int GetDervishWeapon(object oItem)
-{  int iBaseItem = GetBaseItemType(oItem);
-    return iBaseItem ==  BASE_ITEM_GREATSWORD ||  iBaseItem == BASE_ITEM_SCYTHE || iBaseItem == BASE_ITEM_SCIMITAR
-	||BASE_ITEM_KATANA||iBaseItem == BASE_ITEM_HALBERD||iBaseItem == BASE_ITEM_BASTARDSWORD || iBaseItem == BASE_ITEM_BATTLEAXE || iBaseItem == BASE_ITEM_LONGSWORD||
-	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP||iBaseItem == 176 ||iBaseItem == 179 ;
-
-
-
-/*if(!GetIsObjectValid(oItem)) return FALSE;
-		
-	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponSize",iType) == "3" 	&& Get2DAString("baseitems","WeaponSize",iType) == "4"
-	&& Get2DAString("baseitems","WeaponType",iType) == "3") return TRUE;
-		
-	else			
-	return FALSE;
-
-*/
-
+{  
+if(!GetIsObjectValid(oItem)) return FALSE;
+        
+int iType = GetBaseItemType(oItem);
+    if(Get2DAString("baseitems","WeaponType",iType) == "3" && Get2DAString("baseitems","WeaponSize",iType) == "3"
+    || Get2DAString("baseitems","WeaponType",iType) == "3" && Get2DAString("baseitems","WeaponSize",iType) == "4") return TRUE;
+    else            
+    return FALSE;
 }
 int nDervishValid (object oPC)
 {
