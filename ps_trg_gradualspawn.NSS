@@ -8,6 +8,8 @@ void main () {
 	object oPC = GetEnteringObject();
 	if (!GetIsPC(oPC)) return;
 	
+	SetLocalObject(OBJECT_SELF, "SAVED_PC", oPC);
+	
 	//Respawn figures
 	int iSpawnWait = GetLocalInt(OBJECT_SELF,"RESPAWN");
 	if(iSpawnWait == 0)
