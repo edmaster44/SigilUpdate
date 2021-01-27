@@ -19,7 +19,7 @@ string PickEssentialItemReward(int nCR) {
 
 	if (nCR < 5) {
 	
-		int nRand = Random(13)+1;
+		int nRand = Random(15)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck001"; //natural armor +1
 			case 2: return "nw_it_mneck001"; //natural armor +1
@@ -34,11 +34,13 @@ string PickEssentialItemReward(int nCR) {
 			case 11: return "ps_universal_silversword"; //silver sword
 			case 12: return "it_quest_inviscloak"; //cloak of invisibility
 			case 13: return "nw_it_mbracer002"; //bracers +1
+			case 14: return "ps_ring_acidresistancelesser"; //lesser ring of resistance
+			case 15: return "ps_ring_fireresistancelesser"; //lesser ring of resistance
 		}
 		
 	} else { /*if (nCR < 10) {*/
 	
-		int nRand = Random(13)+1;
+		int nRand = Random(14)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck012"; //natural armor +2
 			case 2: return "nw_it_mneck013"; //natural armor +3
@@ -53,6 +55,7 @@ string PickEssentialItemReward(int nCR) {
 			case 11: return "ps_misc_magicelectrifier"; //electrifier
 			case 12: return "nw_it_mbracer007"; //bracers +2
 			case 13: return "nw_it_mbracer008"; //bracers +3
+			case 14: return "ps_ring_energyresist"; //ring of resistance
 		}
 	}
 	

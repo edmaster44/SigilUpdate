@@ -33,7 +33,9 @@ void main() {
 		PlayCustomAnimation(OBJECT_SELF, sAnim, FALSE, fSpeed);
 	}
 	
+	DeleteLocalInt(OBJECT_SELF, "ANIMATION");
 	DeleteLocalInt(OBJECT_SELF, "STOP_ANIMATION");
+	ClearAllActions();
 	
 	DelayCommand(1.0f, ChangeToStandardFaction(OBJECT_SELF, STANDARD_FACTION_HOSTILE));
 
