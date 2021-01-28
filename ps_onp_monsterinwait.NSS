@@ -19,6 +19,14 @@ void main() {
 		}
 		eEffect = GetNextEffect( OBJECT_SELF );
 	}
+	
+	//re-applying vfx, just in case
+	string sVFX = GetLocalString(OBJECT_SELF, "PERMANENT_VFX");
+	if (sVFX != "") {
+		effect eVFX = EffectNWN2SpecialEffectFile(sVFX);
+		eVFX = SupernaturalEffect(eVFX);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, OBJECT_SELF);
+	}
 		
 	//SendMessageToPC(oPC, "On percieved fired for "+GetName(OBJECT_SELF));
 	
@@ -38,5 +46,6 @@ void main() {
 	ClearAllActions();
 	
 	DelayCommand(1.0f, ChangeToStandardFaction(OBJECT_SELF, STANDARD_FACTION_HOSTILE));
+	DelayCommand(1.0f, DeleteLocalString(OBJECT_SELF, "PercievedScript"));
 
 }
