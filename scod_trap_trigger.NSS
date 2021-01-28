@@ -71,7 +71,9 @@ void main () {
 				SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
 			}
 		} else {
-			if (GetIsTrainingSkillSuccessful(oPC, SKILL_SPOT, nSpotDC+5)) {
+			//This used to be a spot check, but that was dumb;
+			//refactor later
+			if (GetIsTrainingSkillSuccessful(oPC, SKILL_SEARCH, nSpotDC)) {
 				SendMessageToPC(oPC, "You spot an oddity in the corridor ahead; probably a trap. With a bit of searching, you see a disarming mechanism on the wall. . . ");
 				SetUseableFlag(oDisarm, TRUE);
 				
@@ -147,6 +149,7 @@ void TriggerTrapOn(object oTrap, object oVic) {
 	
 	int nIsRocks = GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
 	if (nIsRocks) {
+		SendMessageToPC(oVic, "<i>You trip over a wire, and suddenly rocks start falling from the ceiling!</i>"); 
 		string sTrapTag = GetLocalString(OBJECT_SELF, "PLC_TRAP");
 		object oRockCaster = GetObjectByTag(sTrapTag);
 		if (GetIsObjectValid(oRockCaster)) {
