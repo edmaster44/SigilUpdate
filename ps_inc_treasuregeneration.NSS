@@ -273,6 +273,9 @@ void CreateCreatureDrop(object oCreature) {
 			int nQuality = Random(3);
 			int nSize = 0; //we don't split pearls!
 			SetDetailsOfGemstone(oGem, nQuality, nSize, oCreature);
+		} else if (sItem == "ESSENTIAL_ITEM") {
+			string sResRef = PickEssentialItemReward(GetHitDice(oCreature));
+			CreateItemOnObject(sResRef, oCreature);
 		} else {
 			CreateItemOnObject(sItem, oCreature);
 		}

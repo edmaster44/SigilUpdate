@@ -10,6 +10,16 @@ void main()
  {
   SetGlobalInt("HallofInformationLock", 1); // Only allows one clean up at a time.
 
+  if(GetObjectByTag("ps_npc_foul_kobold") == OBJECT_INVALID) {
+		object oWP = GetWaypointByTag("wp_npc_foul_kobold");
+		location lSpawnpoint = GetLocation(oWP);  
+		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_foul_kobold", lSpawnpoint);    
+  }
+  if(GetObjectByTag("ps_npc_thoughttaker") == OBJECT_INVALID) {
+		object oWP = GetWaypointByTag("wp_npc_thoughttaker");
+		location lSpawnpoint = GetLocation(oWP);  
+		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_thoughttaker", lSpawnpoint);    
+  }
   if(GetObjectByTag("ps_hoi_juwete") == OBJECT_INVALID)
   {
 	   object oWP = GetWaypointByTag("wp_hoi_juwete");

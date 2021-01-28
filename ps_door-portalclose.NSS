@@ -30,7 +30,7 @@ void main()
 		DestroyObject(oPortal,30.0f);								//Destroy the portal
 		SetLocalInt(OBJECT_SELF, SPAWNED, FALSE);					//Mark the portal as non-spawned
 	}
-	if (iLocked = 1)
+	if (iLocked == 1)
 	{
 		DelayCommand(0.2,SetLocked(OBJECT_SELF,TRUE));
 	}

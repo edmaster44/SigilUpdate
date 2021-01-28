@@ -31,7 +31,7 @@ void main()
 	else if(nHD >15)eDamage	=	EffectDamage(d6(4),DAMAGE_TYPE_PIERCING);
 	else if(nHD >10)eDamage	=	EffectDamage(d6(3),DAMAGE_TYPE_PIERCING);
 	else if(nHD >5)eDamage	=	EffectDamage(d6(2),DAMAGE_TYPE_PIERCING);
-	else eDamage			=	EffectDamage(d6(1),DAMAGE_TYPE_PIERCING);
+	else eDamage			=	EffectDamage(d3(1),DAMAGE_TYPE_PIERCING);
 	
 	eDamage	=	EffectLinkEffects(EffectVisualEffect(VFX_COM_BLOOD_REG_RED),eDamage);
 	
@@ -42,7 +42,7 @@ void main()
 		} else if (GetTag(oTarget) == GetTag(oCaster)) {
 			//do nothing : Don't kill self or similiar swarms
 		}
-		else if(sIgnore != "" && GetTag(oTarget) == sIgnore)
+		else if(sIgnore != "" && (GetTag(oTarget) == sIgnore || GetTag(oTarget) == sIgnore+"2" || GetTag(oTarget) == sIgnore+"3"))
 		{
 			//do nothing : Ignore creature in swarm
 		}

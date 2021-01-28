@@ -14,6 +14,8 @@
 
 #include "NW_I0_GENERIC"
 
+const int RUST_MONSTER_DC = 18;
+
 // this will check to see if the object is metal
 // or is partly metal - Returns 0 if no metal,
 // 1 if part metal, 2 if mostly metal
@@ -86,7 +88,7 @@ void main()
         // Normally only get a save for magical items.
         // But was lazy and didn't want to list 60+
         // instances of GetItemHasProperty.
-        if(ReflexSave(oPC,20))// saved
+        if(ReflexSave(oPC,RUST_MONSTER_DC))// saved
         {
           SendMessageToPC(oPC,"But the "+sItem+" resists the rust effects!");
         }else //didn't save
@@ -105,5 +107,4 @@ void main()
     SignalEvent(OBJECT_SELF, EventUserDefined(1003));
   }
 }
-
 

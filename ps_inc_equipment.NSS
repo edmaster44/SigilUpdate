@@ -52,24 +52,14 @@ int NoHeavyArmorOrShield(object oPC)
 
 
 int GetDervishWeapon(object oItem)
-{  int iBaseItem = GetBaseItemType(oItem);
-    return iBaseItem ==  BASE_ITEM_GREATSWORD ||  iBaseItem == BASE_ITEM_SCYTHE || iBaseItem == BASE_ITEM_SCIMITAR
-	||BASE_ITEM_KATANA||iBaseItem == BASE_ITEM_HALBERD||iBaseItem == BASE_ITEM_BASTARDSWORD || iBaseItem == BASE_ITEM_BATTLEAXE || iBaseItem == BASE_ITEM_LONGSWORD||
-	iBaseItem == BASE_ITEM_DWARVENWARAXE || iBaseItem == BASE_ITEM_WHIP||iBaseItem == 176 ||iBaseItem == 179 ;
-
-
-/*
+{  
 if(!GetIsObjectValid(oItem)) return FALSE;
-		
-	int iType = GetBaseItemType(oItem);
-	if(Get2DAString("baseitems","WeaponSize",iType) == "3" 	&& Get2DAString("baseitems","WeaponSize",iType) == "4"
-	&& Get2DAString("baseitems","WeaponType",iType) == "3") return TRUE;
-		
-	else			
-	return FALSE;
-
-*/
-
+        
+int iType = GetBaseItemType(oItem);
+    if(Get2DAString("baseitems","WeaponType",iType) == "3" && Get2DAString("baseitems","WeaponSize",iType) == "3"
+    || Get2DAString("baseitems","WeaponType",iType) == "3" && Get2DAString("baseitems","WeaponSize",iType) == "4") return TRUE;
+    else            
+    return FALSE;
 }
 int nDervishValid (object oPC)
 {
@@ -365,8 +355,7 @@ int FixARMOR(object oPC, object oARMOR)
 // Check for giant weapons and monkey grip abuse
 int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
 {
-    if (nITEM < 150) return FALSE;
-    if (nITEM > 152) return FALSE;
+    if (nITEM != 150 && nITEM != 151 && nITEM != 152 && nITEM != 179 && nITEM != 180) return FALSE;
     if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
     AssignCommand(oPC, ClearAllActions());
     AssignCommand(oPC, ActionUnequipItem(oITEM));
@@ -635,9 +624,11 @@ void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "V
         }
         nEQUIP = nEQUIP + 1;
     }
-    if (nMAX < 1) return;
+    if (nMAX > 0)
+	{
     effect eFX = EffectSpellResistanceIncrease(nMAX);
     ApplyEquipmentEffect(oPC, eFX);
+	}	
 }
 
 //Shields provide concealment against ranged attacks.
@@ -655,8 +646,19 @@ void ShieldRangedConceal(object oPC, int nSHIELD)
     ApplyEquipmentEffect(oPC, eFX);
 }
 
+void FIX_BLINDFIGHT(object oPC)
+{
+	if (GetHasFeat(FEAT_BLIND_FIGHT,oPC, TRUE) == FALSE) return;
+	effect eEBLIND = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
+	eEBLIND = SupernaturalEffect(eEBLIND);
+	eEBLIND = SetEffectSpellId(eEBLIND, 9005);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEBLIND, oPC);
+}
+
+
+
 //Sacred fists get a -8AB penalty if they are wielding non-creature weapons.
-void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
+/*void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
 {
     if (GetHasFeat(2852, oPC, TRUE) == FALSE) return;
     int nRETURN = 0;
@@ -668,7 +670,7 @@ void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
     effect eFX = EffectAttackDecrease(8);
     ApplyEquipmentEffect(oPC, eFX);
 }
-
+*/ //No longer needed
 
 
 
@@ -818,7 +820,7 @@ int GetACProvidedByShield(object oShield) {
 void ConDrainProtection(object oItem, object oPC)
 {   
     string sArea = GetTag(GetArea(oPC));
-    if (sArea == "appearance_changer_room" || sArea == "ps_area_clerks-festhallchanging")
+    if (sArea == "ooc_appearance_changer_room" || sArea == "ps_area_s_cw_festhall-changing")
     {   
         if (IPGetItemHasItemAbilityBonusPropertySubType(oItem, ABILITY_CONSTITUTION)) ForceRest(oPC);
     }   
@@ -838,10 +840,11 @@ void EquipmentEffects(object oPC)
     int nRIGHT = GetBaseItemType(oRHAND);   
     SpellResistFix(oPC);
     ShieldRangedConceal(oPC, nLEFT);
+	FIX_BLINDFIGHT(oPC);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
-    SacredFirstPenalty(oPC, nRIGHT, nLEFT);
+   // SacredFirstPenalty(oPC, nRIGHT, nLEFT);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
@@ -870,7 +873,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
-
+				
 			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
 				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 

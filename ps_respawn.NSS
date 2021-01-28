@@ -14,6 +14,7 @@ Created On: 08/30/02
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "ps_inc_ecl"
+#include "ps_inc_quests"
 
 //Uses some in game default scripts
 
@@ -136,6 +137,15 @@ void main() {
 	// IF THE oPC OBJECT IS STILL INVALID, THEN  gui_death_respawn_self  IS NOT BEING CALLED FOR SOME REASON
 	if (oPC == OBJECT_INVALID)
 	{	return;		}
+	
+	//Mark that you have died
+	//And record how many HD you had
+	string sID = PS_GetCharID(oPC);
+	if (GetPermanentInt(sID, "FirstDeath") == 0) {
+		int nHD = GetHitDice(oPC);
+		SetPermanentInt(sID, "FirstDeath", nHD);
+		SetLocalInt(oPC, "FirstDeath", 1);
+	}
 		
 	respawn(oPC);
 }

@@ -42,6 +42,12 @@ void main() {
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_tout_smuggler", lSpawnpoint);    
   		}
+
+  		if(GetObjectByTag("ps_us_smugglermerchant") == OBJECT_INVALID) {
+   			object oWP = GetWaypointByTag("wp_us_smugglermerchant");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_smugglermerchant", lSpawnpoint);    
+  		}
     
   		SetGlobalInt("USigilEnterLock", 0);
  	}

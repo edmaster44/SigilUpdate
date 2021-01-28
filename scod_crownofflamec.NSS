@@ -21,7 +21,10 @@ void main()
 	effect eImpact		= EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 		eImpact			= EffectLinkEffects(eImpact, EffectVisualEffect(VFX_HIT_SPELL_HOLY));
 	effect eDam			= EffectDamage(d8(2), DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);
+	if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
+	{eDam =  EffectDamage(d8(4), DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);}
 		eImpact			= EffectLinkEffects(eImpact, eDam);
+	effect eBlind 		= EffectBlindness();
 	
 	if (!GetIsObjectValid(oCaster))
     {	DestroyObject(OBJECT_SELF);
@@ -33,7 +36,10 @@ void main()
 		{	int nRace			= GetRacialType(oTarget);
 	
 			if (oTarget == oCaster) return;
-	
+			 if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
+			 {  SignalEvent(oTarget, EventSpellCastAt(oCaster, 1656, TRUE));
+			 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlind, oTarget); }
+			 															
 			if (nRace == RACIAL_TYPE_OUTSIDER || nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_FEY)
 			{	SignalEvent(oTarget, EventSpellCastAt(oCaster, 1656, TRUE));
         		ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);	}

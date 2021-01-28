@@ -19,8 +19,8 @@ void main()
 	string sSize	=	GetStringRight(sTag,3);
 	int nRange;
 	
-	if(sSize == "les")nRange =74; //Radius 3 meters
-	else if(sSize == "grt")nRange = 76; //Radius 10 meters
+	if(sSize == "les" || sSize == "es2" || sSize == "es3")nRange =74; //Radius 3 meters
+	else if(sSize == "grt" || sSize == "rt2" || sSize == "rt3")nRange = 76; //Radius 10 meters
 	else nRange = 75; //Radius 5 Meters
 	
 	effect eAura	=	SupernaturalEffect(EffectAreaOfEffect(nRange,"rh_swarm_aoe_in","rh_swarm_aoe_hb","rh_swarm_aoe_out"));

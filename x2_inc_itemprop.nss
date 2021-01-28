@@ -825,9 +825,11 @@ int IPGetIsMeleeWeapon(object oItem)
 	  (nItem == 151) ||
 	  (nItem == 152) || // these 3 are giant weapons.
 	  (nItem == 202) || 
-	  (nItem == 176) || // these 3 are creature weapons.
-	  (nItem == 177) || // these 3 are creature weapons.
-	  (nItem == 178)) // these 3 are creature weapons.
+	  (nItem == 176) || // these 5 are creature weapons.
+	  (nItem == 177) || // these 5 are creature weapons.
+	  (nItem == 178) || // these 5 are creature weapons.
+	  (nItem == 179) || // these 5 are creature weapons.
+	  (nItem == 180)) // these 5 are creature weapons.
    {
         return TRUE;
    }

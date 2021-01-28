@@ -56,7 +56,7 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_gymnasiumcommoner7", lSpawnpoint);    
   }  
   
-  if(GetObjectByTag("ps_npc_fangclawson") == OBJECT_INVALID)
+  /*if(GetObjectByTag("ps_npc_fangclawson") == OBJECT_INVALID)
   {
    object oWP = GetWaypointByTag("ps_npcwp_gym_fang");
    location lSpawnpoint = GetLocation(oWP);  
@@ -68,7 +68,7 @@ void main()
    object oWP = GetWaypointByTag("ps_npcwp_gym_gwhr");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_gwaraff", lSpawnpoint);    
-  }  
+  }  */
   
    if(GetObjectByTag("ps_npc_varonswordbreaker") == OBJECT_INVALID)
   {

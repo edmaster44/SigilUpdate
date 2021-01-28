@@ -34,6 +34,7 @@
 #include "NW_I0_SPELLS"
 #include "x0_i0_henchman"
 #include "ps_inc_functions"
+#include "ps_adjust_knight"
 
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_metmag"
@@ -634,6 +635,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
     if (nSpellID == SPELLABILITY_BG_INFLICT_SERIOUS_WOUNDS || nSpellID == SPELLABILITY_BG_INFLICT_CRITICAL_WOUNDS)
     {
         nExtraDamage = GetLevelByClass(CLASS_TYPE_BLACKGUARD);
+		nExtraDamage = KnightLevels(OBJECT_SELF);
     }
 
     if (nExtraDamage > nMaxExtraDamage)

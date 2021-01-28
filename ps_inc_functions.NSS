@@ -850,13 +850,411 @@ int GetRangerAndPRCClassLevels(object oPC)
 	return iTotal;
 }
 
+int GetRangerTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_RANGER, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_RANGER)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
+int GetHasWizardProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",10)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetWizardTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_WIZARD, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_WIZARD)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasWizardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_WIZARD,oPC,TRUE)) iTotal = iTotal + 4;
+	
+	int iRedWizard = GetLevelByClass(53,oPC);
+	if(iRedWizard > 0)
+	{
+		if(iRedWizard == 1) iTotal = iTotal + 1;
+		else iTotal = iTotal + (iRedWizard / 2);
+	}
+	
+	return iTotal;
+}
+
+int GetHasSorcererProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",9)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetSorcererTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_SORCERER, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_SORCERER)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasSorcererProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
+
+int GetSorcererAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_SORCERER, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_SORCERER || GetHasSorcererProgression(oPC,iClass))
+		{
+			iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		}
+	}
+	
+	return iTotal;
+}
+
+int GetHasBardProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",1)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetBardAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_BARD, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_BARD || GetHasBardProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+	}
+	
+	return iTotal;
+}
+
+int GetBardTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_BARD, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_BARD) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasBardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
+int GetHasDruidProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",3)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetDruidAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_DRUID, oPC) == 0) return 0;	
+	
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_DRUID || GetHasDruidProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+	}
+	
+	return iTotal;
+}
+
+int GetDruidTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_DRUID, oPC) == 0) return 0;		
+	
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_DRUID) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasDruidProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
+
+int GetHasFavoredSoulProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",58)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+
+int GetFavoredSoulAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_FAVORED_SOUL || GetHasFavoredSoulProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+	}
+	
+	return iTotal;
+}
+
+int GetFavoredSoulTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) == 0) return 0;	
+	
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_FAVORED_SOUL) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasFavoredSoulProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(2068,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
+int GetHasClericProgression(object oPC, int iClass)
+{
+	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
+	if(BspCasterFeat == "") return FALSE;
+	
+//	SendMessageToPC(oPC,"Debug cleric: checking if class "+IntToString(iClass)+" has feat "+Get2DAString(BspCasterFeat,"SpellcasterFeat",2)+".");
+	
+	if(GetHasFeat(StringToInt(Get2DAString(BspCasterFeat,"SpellcasterFeat",2)),oPC,TRUE)) return TRUE;
+	else return FALSE;
+}
+
+int GetTrueClericLevel(int nLevel)
+{
+	//Gets true spell casting level based on tallying up spellcasting progression feat + levels in cleric.
+	int nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel9",nLevel));
+	if(nSpellLevel > 0) return 9;
+
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel8",nLevel));
+	if(nSpellLevel > 0) return 8;
+	
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel7",nLevel));
+	if(nSpellLevel > 0) return 7;
+	
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel6",nLevel));
+	if(nSpellLevel > 0) return 6;
+	
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel5",nLevel));
+	if(nSpellLevel > 0) return 5;
+	
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel4",nLevel));
+	if(nSpellLevel > 0) return 4;
+	
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel3",nLevel));
+	if(nSpellLevel > 0) return 3;
+	
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel2",nLevel));
+	if(nSpellLevel > 0) return 2;
+
+	nSpellLevel = StringToInt(Get2DAString("cls_spgn_cler","SpellLevel1",nLevel));
+	if(nSpellLevel > 0) return 1;		
+	
+	return 0;	
+}
+
+int GetClericLevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_CLERIC, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_CLERIC)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasClericProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(iTotal > 0)
+	{
+//		SendMessageToPC(oPC,"Debug cleric: Caster levels tallied out to: "+IntToString(iTotal)+".");
+		iTrue = GetTrueClericLevel(iTotal);
+		return iTrue;
+//		SendMessageToPC(oPC,"Debug cleric:  Calculated Spell Level of Cleric Casting is: "+IntToString(iTrue)+".");
+	}
+	
+	return 0;
+}
+
+int GetClericTRUECasterlevel(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_CLERIC, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_CLERIC)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasClericProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE)) iTotal = iTotal + 4;
+	return iTotal;
+}
+
+int GetClericAndPRCClassLevels(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_CLERIC, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_CLERIC || GetHasClericProgression(oPC,iClass))
+		{
+			if(iClass == 71) iTotal = iTotal + (GetLevelByClass(iClass,oPC) / 2); //Dervish Bonus
+			else iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		}
+	}
+	
+	return iTotal;
+}
 
 int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
     int iLevel;
-
-    // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
+	
+	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_SPIRIT_SHAMAN)iLevel = GetSpiritShamanTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_WIZARD)iLevel = GetWizardTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_SORCERER)iLevel = GetSorcererTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_BARD)iLevel =GetBardTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_DRUID)iLevel = GetDruidTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_FAVORED_SOUL)iLevel =GetFavoredSoulTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
+	else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
+	
+		else
+    {	iLevel = GetCasterLevel(oPC);	}
+	
+	return iLevel;
+	
+	
+   /* // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
     // practiced caster can also increase by +4.
 
     if (iClass == CLASS_TYPE_RANGER)
@@ -883,7 +1281,7 @@ int PS_GetCasterLevel(object oPC)
 	else
     {	iLevel = GetCasterLevel(oPC);	}
 
-    return iLevel;
+    return iLevel; */
 	
 }
 
@@ -891,7 +1289,26 @@ int PS_GetCasterLevel(object oPC)
 	for the calculation, and selects whichever number is higher */
 int PS_GetGolemCasterLevel(object oPC)
 {
-    // Arcane
+ int iClass = GetLastSpellCastClass();
+    int iLevel;
+	
+	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_SPIRIT_SHAMAN)iLevel = GetSpiritShamanTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_WIZARD)iLevel = GetWizardTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_SORCERER)iLevel = GetSorcererTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_BARD)iLevel =GetBardTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_DRUID)iLevel = GetDruidTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_FAVORED_SOUL)iLevel =GetFavoredSoulTRUECasterlevel(oPC);
+	else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
+	else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
+	
+		else
+    {	iLevel = GetCasterLevel(oPC);	}
+	
+	return iLevel;
+	
+   /* // Arcane
 	int iBard = GetLevelByClass(1, oPC);
 	int iSorc = GetLevelByClass(9, oPC);
 	int iWiza = GetLevelByClass(10, oPC);
@@ -943,7 +1360,7 @@ int PS_GetGolemCasterLevel(object oPC)
 	else
 		{	iLevel = 0;	}
 		
-	return iLevel;
+	return iLevel; */
 }
 
 string PS_GetEssenceECL(object oPC)
@@ -2517,6 +2934,7 @@ int PS_NeedsTemplateClassAbilityFix(object oPC)
 {
 	if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) >= 6) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) >= 6) return TRUE;
+	if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC, oPC) >= 7) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0) return TRUE;
 	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0) return TRUE;
@@ -2812,6 +3230,20 @@ void PS_ApplyEnhancementToFinesse(object oPC, object oItem, int iDiff)
 		SendMessageToPC(oPC, "Attack bonus of +" + IntToString(iEnhBonusS) + " vs. specific alignment applied to stack with enhancement bonus vs. specific alignment");	}
 }
 
+//A Wrapper for to Ignore Exsisting Finesse
+int InvalidWeapon(object oItem)
+{
+    if ((GetBaseItemType(oItem) == BASE_ITEM_DAGGER) || (GetBaseItemType(oItem) ==BASE_ITEM_GLOVES )
+     ||(GetBaseItemType(oItem) == BASE_ITEM_KAMA ) ||(GetBaseItemType(oItem) == BASE_ITEM_SHORTSWORD)||(GetBaseItemType(oItem) ==BASE_ITEM_SICKLE)
+    ||(GetBaseItemType(oItem) ==BASE_ITEM_HANDAXE)||(GetBaseItemType(oItem) ==BASE_ITEM_LIGHTHAMMER)||
+    (GetBaseItemType(oItem) ==BASE_ITEM_MACE)||(GetBaseItemType(oItem) ==BASE_ITEM_RAPIER)) return TRUE;
+else
+return FALSE;
+
+
+}
+
+
 void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 {
 	int iStrScore		= GetAbilityScore(oPC, ABILITY_STRENGTH, FALSE);
@@ -2829,12 +3261,13 @@ void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 	
 		if (GetLevelByClass(CLASS_DERVISH,oPC) > 4)
 	{ iDiff = iDiff +2;}
+	
+	if (InvalidWeapon(oItem)) return;
 	object oSlotR		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	SendMessageToPC(oPC, "Item in right hand: " + GetName(oSlotR));
 	object oSlotL		= GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	SendMessageToPC(oPC, "Item in left hand: " + GetName(oSlotL));
 	int iHand;
-	
 	if(oItem == oSlotR || oItem == oSlotL)
 	{	if(oItem == oSlotR && iDiff > 0)
 		{	PS_ApplyEnhancementToFinesse(oPC, oItem, iDiff);
@@ -2849,6 +3282,7 @@ void PS_ApplySpecialWeaponFinesse(object oPC, object oItem)
 			IPSafeAddItemProperty(oItem, ipBoostL, HoursToSeconds(36),X2_IP_ADDPROP_POLICY_IGNORE_EXISTING ,FALSE, FALSE);	}
 			SetLocalInt(oItem, "S_Finesse", iDiff);
 			SendMessageToPC(oPC, "Weapon finesse applied."); }	
+			
 }
 
 int GetIsFinessable(object oItem)

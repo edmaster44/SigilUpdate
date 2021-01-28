@@ -1,6 +1,6 @@
-const int XPAWARD = 50;
-const int GPAWARD = 100;
-const int GPAWARD2 = 110;
+const int XPAWARD = 150;
+const int GPAWARD = 300;
+const int GPAWARD2 = 350;
 
 int GetFaction(object oPC)
 {

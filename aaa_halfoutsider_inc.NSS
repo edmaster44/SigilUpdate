@@ -365,6 +365,7 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
     int iDuration	= GetHitDice(oPC) * 5;
     effect eAOE		= EffectAreaOfEffect(VFX_MOB_CROWN_OF_FLAME);
 	
+	
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(iDuration));
 }
 
@@ -481,6 +482,17 @@ void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 		//General useful things for shifting back
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		PS_DragForm_DragonUE(oPC);}
+			if ( GetHasSpellEffect(1657, oPC) ) {
+		effect eEffect = GetFirstEffect( oPC );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == 1657){
+				RemoveEffect( oPC, eEffect );
+			}
+				
+			eEffect = GetNextEffect( oPC );
+		}
+	}
 }
 
 void PS_HOM_RadiantShield(object oPC, int nSpell)

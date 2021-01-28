@@ -18,6 +18,7 @@ void main () {
 	//2 == the damage trigger
 	//3 == the disarm object function
 	int nType = GetLocalInt(OBJECT_SELF, "TRAP_TRIGGER_TYPE");
+	int nIsRocks = GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
 
 	object oPC;
 	if (nType == 3) {
@@ -40,6 +41,10 @@ void main () {
 	
 	object oTrap = GetNearestObjectByTag(sTrapTag);
 	object oDisarm = GetNearestObjectByTag(sDisarmTag);
+	
+	if (!GetIsObjectValid(oDisarm)) {
+		SendMessageToPC(oPC, "DEBUG: There is no disarm option on this trap.");
+	}
 	
 	int nInactive = GetLocalInt(oTrap, "TRAP_INACTIVE");
 	if (nInactive) 
@@ -66,7 +71,9 @@ void main () {
 				SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
 			}
 		} else {
-			if (GetIsTrainingSkillSuccessful(oPC, SKILL_SPOT, nSpotDC+5)) {
+			//This used to be a spot check, but that was dumb;
+			//refactor later
+			if (GetIsTrainingSkillSuccessful(oPC, SKILL_SEARCH, nSpotDC)) {
 				SendMessageToPC(oPC, "You spot an oddity in the corridor ahead; probably a trap. With a bit of searching, you see a disarming mechanism on the wall. . . ");
 				SetUseableFlag(oDisarm, TRUE);
 				
@@ -84,7 +91,9 @@ void main () {
 	} else if (nType == 2) {
 	
 		SetLocalInt(oTrap, "TRAP_INACTIVE", 1);
-		AssignCommand(oTrap, ActionPlayAnimation(ANIMATION_PLACEABLE_OPEN));
+		
+		if (!nIsRocks)
+			AssignCommand(oTrap, ActionPlayAnimation(ANIMATION_PLACEABLE_OPEN));
 	
 		float fDelay = 0.1f;
 		if (fRadius > 0.0f) {
@@ -98,7 +107,9 @@ void main () {
 			DelayCommand(fDelay, TriggerTrapOn(OBJECT_SELF, oPC));
 		}
 		
-		DelayCommand(1.0f, AssignCommand(oTrap, ActionPlayAnimation(ANIMATION_PLACEABLE_CLOSE)));
+		if (!nIsRocks)
+			DelayCommand(1.0f, AssignCommand(oTrap, ActionPlayAnimation(ANIMATION_PLACEABLE_CLOSE)));
+			
 		DelayCommand(fReset, ResetTrap(OBJECT_SELF));
 		
 	} else if (nType == 3) {
@@ -134,15 +145,31 @@ void TriggerTrapOn(object oTrap, object oVic) {
 	int nDC = GetLocalInt(oTrap, "DC_REFLEX_TRAP");
 	int nDice = GetLocalInt(oTrap, "TRAP_DAMAGE_d6");
 	int nDamType = GetLocalInt(oTrap, "TRAP_DAMAGE_TYPE");
+	float fDelay = 0.0f;
+	
+	int nIsRocks = GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
+	if (nIsRocks) {
+		SendMessageToPC(oVic, "<i>You trip over a wire, and suddenly rocks start falling from the ceiling!</i>"); 
+		string sTrapTag = GetLocalString(OBJECT_SELF, "PLC_TRAP");
+		object oRockCaster = GetObjectByTag(sTrapTag);
+		if (GetIsObjectValid(oRockCaster)) {
+			effect eImpact	 = EffectNWN2SpecialEffectFile("fx_wooden_explosion_big");
+			fDelay 	= GetProjectileTravelTime(GetLocation(oRockCaster), GetLocation(oVic), PROJECTILE_PATH_TYPE_BALLISTIC_THROWN);
+			AssignCommand(oRockCaster, ActionCastFakeSpellAtLocation(9300, GetLocation(oVic), PROJECTILE_PATH_TYPE_DEFAULT));
+			DelayCommand(fDelay, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpact, GetLocation(oVic)));
+		} else {
+			return;
+		}
+	}
 	
 	int nDamage = d6(nDice);
 	
 	if (ReflexSave(oVic, nDC, SAVING_THROW_TYPE_TRAP, oTrap)) {
 		effect eDam = EffectDamage(nDamage/2, nDamType);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic);
+		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
 		//TransportToWaypoint(oVic, oEscape);
 	} else {
 		effect eDam = EffectDamage(nDamage, nDamType);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic);
+		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
 	}
 }
