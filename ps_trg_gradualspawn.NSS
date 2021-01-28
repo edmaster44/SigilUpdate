@@ -39,7 +39,7 @@ void main () {
 	
 	//Adding an event that can fire after all the creatures are done spawning
 	string sAfterSpawnScript = GetLocalString(OBJECT_SELF, "AfterSpawnScript");
-	SendMessageToPC(oPC, "Spawn script: "+sAfterSpawnScript+", delay: "+FloatToString(fDelay));
+	//SendMessageToPC(oPC, "Spawn script: "+sAfterSpawnScript+", delay: "+FloatToString(fDelay));
 	if (sAfterSpawnScript != "") {
 		DelayCommand(fDelay, ExecuteScript(sAfterSpawnScript, OBJECT_SELF));
 	}
