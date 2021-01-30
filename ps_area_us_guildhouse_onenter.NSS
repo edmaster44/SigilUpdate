@@ -5,11 +5,11 @@ void main() {
  	int iLock = GetGlobalInt("UndersigilGuildhouseLock");
  	if ( iLock == 0 ) {
   
-	  	if(GetObjectByTag("npc_sigis_editor") == OBJECT_INVALID) {
+	  	if(GetObjectByTag("ps_us_gwsigiseditor") == OBJECT_INVALID) {
 		
-	   		object oWP = GetWaypointByTag("wp_ps_us_sigis_editor");
+	   		object oWP = GetWaypointByTag("wp_us_gwsigiseditor");
 	   		location lSpawnpoint = GetLocation(oWP);  
-	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "npc_sigis_editor", lSpawnpoint);    
+	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwsigiseditor", lSpawnpoint);    
 			
 	  	}
 
@@ -20,11 +20,11 @@ void main() {
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_randomitemmerchant", lSpawnpoint);    
   		}  
   
-  		if(GetObjectByTag("ps_timequests_spadix") == OBJECT_INVALID) {
+  		if(GetObjectByTag("ps_us_gw_spadix") == OBJECT_INVALID) {
 		
-   			object oWP = GetWaypointByTag("wp_ps_us_spadix");
+   			object oWP = GetWaypointByTag("wp_us_gw_spadix");
    			location lSpawnpoint = GetLocation(oWP);  
-   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_timequests_spadix", lSpawnpoint);    
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gw_spadix", lSpawnpoint);    
   		}  
   
   		if(GetObjectByTag("ps_us_gwzombie") == OBJECT_INVALID) {
@@ -53,7 +53,7 @@ void main() {
 		
   		if(GetObjectByTag("ps_us_gwcultist") == OBJECT_INVALID) {
 		
-   			object oWP = GetWaypointByTag("wp_ps_us_gwcultist");
+   			object oWP = GetWaypointByTag("wp_us_gwcultist");
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwcultist", lSpawnpoint);    
   		} 
@@ -144,14 +144,14 @@ void main() {
 		
   		if(GetObjectByTag("ps_us_tout_sevendeeds1") == OBJECT_INVALID) {
 		
-   			object oWP = GetWaypointByTag("wp_ps_us_tout_sevendeeds1");
+   			object oWP = GetWaypointByTag("wp_us_tout_sevendeeds1");
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_tout_sevendeeds1", lSpawnpoint);    
   		}
 		
   		if(GetObjectByTag("ps_us_tout_sevendeeds2") == OBJECT_INVALID) {
 		
-   			object oWP = GetWaypointByTag("wp_ps_us_tout_sevendeeds2");
+   			object oWP = GetWaypointByTag("wp_us_tout_sevendeeds2");
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_tout_sevendeeds2", lSpawnpoint);    
   		}

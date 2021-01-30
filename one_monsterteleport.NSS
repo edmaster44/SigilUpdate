@@ -45,7 +45,7 @@ void main() {
 	oMonster = GetNearestObjectByTag(sMonster+"3");
 	if (GetIsObjectValid(oMonster) && GetLocalInt(oMonster, "Teleported") == 0) {
 	
-		SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
+		//SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
 		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oMonster, 3.0f);
 		AssignCommand(oMonster, ActionJumpToLocation(lWP));
