@@ -655,25 +655,6 @@ void FIX_BLINDFIGHT(object oPC)
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEBLIND, oPC);
 }
 
-
-
-//Sacred fists get a -8AB penalty if they are wielding non-creature weapons.
-/*void SacredFirstPenalty(object oPC, int nRIGHT, int nLEFT)
-{
-    if (GetHasFeat(2852, oPC, TRUE) == FALSE) return;
-    int nRETURN = 0;
-    if (nRIGHT == BASE_ITEM_INVALID) nRETURN = 1;
-    else if (GetIsCreatureWeapon(nRIGHT) == TRUE) nRETURN = 1;
-    if (nLEFT == BASE_ITEM_INVALID) nRETURN = nRETURN + 1;
-    else if (GetIsCreatureWeapon(nLEFT) == TRUE) nRETURN = nRETURN + 1;
-    if (nRETURN > 1) return;
-    effect eFX = EffectAttackDecrease(8);
-    ApplyEquipmentEffect(oPC, eFX);
-}
-*/ //No longer needed
-
-
-
 //Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword in off hand.
 void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
 {
@@ -690,7 +671,8 @@ void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
     else if (nSAMURAI >= 11) nBONUS = 2;
     effect eFX = EffectAttackIncrease(nBONUS);
     eFX = EffectLinkEffects(eFX, EffectDamageIncrease(nBONUS, nDMG_TYPE));
-    ApplyEquipmentEffect(oPC, eFX);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+   // ApplyEquipmentEffect(oPC, eFX);
 }
 
 
@@ -844,7 +826,6 @@ void EquipmentEffects(object oPC)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
     UnearthlyGrace(oPC, oCHEST);
-   // SacredFirstPenalty(oPC, nRIGHT, nLEFT);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
