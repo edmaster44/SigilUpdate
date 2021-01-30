@@ -13,9 +13,9 @@ void main()
 	float fDur = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 	object oTarget	= GetSpellTargetObject();
 	
-	 if (GetHasSpellEffect(SPELL_BLADE_OF_BLOOD, oTarget))
+/*	 if (GetHasSpellEffect(SPELL_BLADE_OF_BLOOD, oTarget))
     {
-        RemoveEffectsFromSpell(oTarget, SPELL_BLADE_OF_BLOOD);}
+        RemoveEffectsFromSpell(oTarget, SPELL_BLADE_OF_BLOOD);}*/
 		
 	if (GetAlignmentGoodEvil(OBJECT_SELF) != ALIGNMENT_EVIL)
 	{return ;}
@@ -23,5 +23,5 @@ void main()
 	
 	effect eDam = EffectDamageOverTime(nAmount,6.0,DAMAGE_TYPE_MAGICAL,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_BLADEWEAVE));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur);
+	DelayCommand(6.0,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur));
 }
