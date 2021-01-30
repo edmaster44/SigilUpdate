@@ -14,7 +14,7 @@ const float MAXMONSTERXP = 500.0; //The absolute maximum xp any monster can yiel
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							//CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
 							
-const int CLASS_TYPE_MYSTIC_THEURGE 					= 44;
+const int CLASS_TYPE_MYSTIC_THEURGE 					= 44; 
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
 
 const int CLASS_TYPE_FELLBLADE 							= 80;
