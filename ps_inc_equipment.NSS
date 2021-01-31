@@ -355,7 +355,7 @@ int FixARMOR(object oPC, object oARMOR)
 // Check for giant weapons and monkey grip abuse
 int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
 {
-    if (nITEM != 150 && nITEM != 151 && nITEM != 152 && nITEM != 179 && nITEM != 180) return FALSE;
+    if (nITEM != 150 && nITEM != 151 && nITEM != 152) return FALSE;
     if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
     AssignCommand(oPC, ClearAllActions());
     AssignCommand(oPC, ActionUnequipItem(oITEM));

@@ -53,6 +53,11 @@ const int BASE_ITEM_CREQ_PIERCE_SLASH_L					= 171;
 const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_M				= 172;
 const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_S				= 173;
 const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_L				= 174;
+const int BASE_ITEM_CREATURECLAW						= 176;
+const int BASE_ITEM_CREATUREBITE						= 177;
+const int BASE_ITEM_CREATURESLAM						= 178;
+const int BASE_ITEM_CREATURECLAW_LARGE					= 179;
+const int BASE_ITEM_CREATUREBITE_LARGE					= 180;
 const int BASE_ITEM_WHIP_SCOD							= 202;
 
 //
@@ -3299,6 +3304,9 @@ int GetIsFinessable(object oItem)
 		iBaseItem == BASE_ITEM_CREQ_PIERCE_SLASH_L		|| iBaseItem == BASE_ITEM_CREQ_PIERCE_SLASH_M		|| 
 		iBaseItem == BASE_ITEM_CREQ_PIERCE_SLASH_S		|| iBaseItem == BASE_ITEM_WHIP_SCOD					||
 		iBaseItem == BASE_ITEM_WHIP						|| iBaseItem == BASE_ITEM_CSLASHWEAPON				||
+		iBaseItem == BASE_ITEM_CREATURECLAW				|| iBaseItem ==BASE_ITEM_CREATUREBITE				||
+		iBaseItem == BASE_ITEM_CREATURESLAM				|| iBaseItem == BASE_ITEM_CREATURECLAW_LARGE		||
+		iBaseItem == BASE_ITEM_CREATUREBITE_LARGE 		||
 		iBaseItem == BASE_ITEM_CPIERCWEAPON				|| iBaseItem == BASE_ITEM_CBLUDGWEAPON				||
 		iBaseItem == BASE_ITEM_CSLSHPRCWEAP)
 	{	iFinesse = TRUE;
