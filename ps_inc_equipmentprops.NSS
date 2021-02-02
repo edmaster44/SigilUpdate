@@ -64,7 +64,7 @@ itemproperty GetItemPropertyReference(object Obj, string Name)
 
     if (GetLocalInt (Obj, IPR_EXISTS + Name) == FALSE)
     {
-        WriteTimestampedLogEntry ("GetItemPropertyReference: Attempted to remove nonexistant itemprop " + Name + " from object " + GetName (Obj) + ".");
+       // WriteTimestampedLogEntry ("GetItemPropertyReference: Attempted to remove nonexistant itemprop " + Name + " from object " + GetName (Obj) + ".");
         return Prop;
     }
 
