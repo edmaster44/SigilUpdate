@@ -10,20 +10,26 @@ void main () {
 		
 	SetLocalObject(oFruit1, "TriggeredBy", oPC);
 	
-	if (GetLocalInt(OBJECT_SELF, "reward") > 0 && GetLocalInt(oPC, "gardenboss") == 0) {
+	int nHasReward = GetPCActionRecorded(oFruit1, "gardenboss", oPC);
+	
+	if (GetLocalInt(OBJECT_SELF, "reward") > 0 && !nHasReward) {
 		SendMessageToPC(oPC, "<i>The vines whither away from your touch after the defeat of their guardian. . showing the remains of those who tried before you and failed. You find an item of interest.</i>");
 		
 		GenerateQuestRewardOnTarget(oPC, TREASURE_QUEST_LOW, TRUE);
+		RecordPCAction(oFruit1, "gardenboss", oPC);
 		SetLocalInt(oPC, "gardenboss", 1);
 		
 		//remove possibility of reward after a minute
 		DelayCommand(60.0f, DeleteLocalInt(OBJECT_SELF, "reward"));
+		DeleteLocalInt(oFruit1, "stage");
 		return;
-	} else if (GetLocalInt(oPC, "gardenboss") > 0) {
+	} else if (nHasReward > 0) {
 		SendMessageToPC(oPC, "<i>You find nothing further of interest.");
+		DeleteLocalInt(oFruit1, "stage");
 		return;
 	} else if (GetTime()-nTime < 360) {
 		SendMessageToPC(oPC, "<i>You find nothing further of interest.");
+		DeleteLocalInt(oFruit1, "stage");
 		return;
 	}
 		

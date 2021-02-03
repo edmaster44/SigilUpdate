@@ -3729,8 +3729,6 @@ struct CreatureCoreAppearance GetNewFormAppearance(string sResRef, object oPC = 
     return app;
 }
 
-
-
 void Assumenewform(object oPC, struct CreatureCoreAppearance Appearance) {
 
     if (!GetIsPC(oPC)) {
@@ -3750,6 +3748,7 @@ void Assumenewform(object oPC, struct CreatureCoreAppearance Appearance) {
     PS_RefreshAppearance(oPC);
     SetLocalInt(oEssence, "TempChange", 1);
 }
+
 void FiendformBoni(object oPC, string sVFX = "") {
 	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
@@ -3766,3 +3765,32 @@ void FiendformBoni(object oPC, string sVFX = "") {
 		
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oPC);
 }	
+
+//Saves the PC's name + CD key under the variable given
+//Can track multiple PCs - array like
+void RecordPCAction(object oTarget, string sVar, object oPC) {
+
+	string sName = GetPCPublicCDKey(oPC)+GetFirstName(oPC);
+	int nMax = GetLocalInt(oTarget, sVar+"_Num");
+	int nIndex = nMax+1;
+	SetLocalString(oTarget, sVar+"_"+IntToString(nIndex), sName);
+	SetLocalInt(oTarget, sVar+"_Num", nIndex);
+}
+
+//Get whether this PC has done this action (defined by variable given) this reset
+//Can track multiple PCs - array like
+int GetPCActionRecorded(object oTarget, string sVar, object oPC) {
+
+	string sName = GetPCPublicCDKey(oPC)+GetFirstName(oPC);
+	int nMax = GetLocalInt(oTarget, sVar+"_Num");
+	
+	int n = 0;
+	for(n = 1; n <= nMax; n++) {
+		string sFound = GetLocalString(oTarget, sVar+"_"+IntToString(n));
+		SendMessageToPC(oPC, "found: "+sFound);
+		if (sFound == sName) 
+			return TRUE;
+	}
+	
+	return FALSE;
+}
