@@ -11,6 +11,7 @@ Removed Alingment change for Thug for exploit reason */
 #include "ps_adjust_barbarian"
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
+#include "ps_inc_bgspellfix"
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
 void CheckDragonBreath(object oPC, object oItem)
@@ -298,6 +299,7 @@ void main()
 //	if (GetLevelByClass(CLASS_TYPE_RONIN, oPC) > 0) AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, 100);
 	
 	// various class and race related checks	
+	CountSpells(oPC,1);
 	GetWarlockCasterLevel(oPC);
 	GiveWarlockBlastShapes(oPC);
 	CheckDiashoWeapons(oPC, oItem);

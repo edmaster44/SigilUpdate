@@ -44,6 +44,7 @@
 #include "x2_inc_restsys"
 #include "ps_inc_functions"
 #include "ps_inc_time"
+#include "ps_inc_bgspellfix"
 
 void main()
 {
@@ -199,6 +200,8 @@ void main()
 	{
 		WriteTimestampedLogEntry("ps_mod_load:  Failed to initialize Sigil.Loader.  Ensure that xp_AuroraServerNWScript.dll is installed and that AllowManagedScripts=1 is set in AuroraServerNWScript.ini.");
 	}
+	
+	OnSeverLoadPopulateSpellSQL();
 	
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");

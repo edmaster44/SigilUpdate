@@ -11,6 +11,7 @@
 #include "ps_inc_time"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
+#include "ps_inc_bgspellfix"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -464,5 +465,8 @@ void main()
 		DelayCommand(5.0, SendMessageToPC(oPC, sNews));
 	}
 	
-	if (Booted == FALSE) PS_OnPCLoaded(oPC);
+	if (Booted == FALSE) {
+		CountSpells(oPC,0);
+		PS_OnPCLoaded(oPC);
+	}
 }
