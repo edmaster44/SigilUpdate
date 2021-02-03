@@ -3787,7 +3787,7 @@ int GetPCActionRecorded(object oTarget, string sVar, object oPC) {
 	int n = 0;
 	for(n = 1; n <= nMax; n++) {
 		string sFound = GetLocalString(oTarget, sVar+"_"+IntToString(n));
-		SendMessageToPC(oPC, "found: "+sFound);
+		//SendMessageToPC(oPC, "found: "+sFound);
 		if (sFound == sName) 
 			return TRUE;
 	}
