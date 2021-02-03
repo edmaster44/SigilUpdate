@@ -109,19 +109,12 @@ void main()
 		int nLOOTCHANCE = 20;
 		if (fChallenge < 10.0f) {
 			nLOOT = 1;  //TREASURE_TYPE_LOW
-			nLOOTCHANCE = 33;
-		} else if (fChallenge < 15.0f) {
-			nLOOT = 2; //TREASURE_TYPE_MEDIUM
-			nLOOTCHANCE = 25;
 		} else if (fChallenge < 20.0f) {
 			nLOOT = 2; //TREASURE_TYPE_MEDIUM
-			nLOOTCHANCE = 20;
 		} else if (fChallenge <= 25.0f) {
 			nLOOT = 3;  //TREASURE_TYPE_HIGH
-			nLOOTCHANCE = 20;
 		} else {
 			nLOOT = 4;  //TREASURE_TYPE_EPIC
-			nLOOTCHANCE = 20;
 		}
 		
 		//1% to spawn special material depending on area
