@@ -305,6 +305,7 @@ void main()
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
 	PS_BarbarianLevels(oPC);
+	PS_GetCasterLevel(oPC);
 	PS_MonkLevels(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);

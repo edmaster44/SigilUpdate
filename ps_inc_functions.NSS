@@ -686,6 +686,19 @@ int GetWarlockCasterLevel(object oPC)
 	//1411-1419 1-9
 	//1948-1952 10-14
 	if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
+	
+	if (iTotal >= 3)
+	{
+	if (!GetHasFeat(FEAT_INVOCATIONS_WARLOCK_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_INVOCATIONS_WARLOCK_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 6)
+	{
+		if (!GetHasFeat(FEAT_INVOCATIONS_WARLOCK_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_INVOCATIONS_WARLOCK_II,FALSE,FALSE,FALSE);
+	}
+	
+	
 	if (iTotal >= 16)
 	{
 		if (!GetHasFeat(FEAT_EPIC_ELDRITCH_ADEPT,oPC,TRUE))
@@ -765,6 +778,30 @@ int GetSpiritShamanTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(2003,oPC,TRUE)) iTotal = iTotal + 4;
+	if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 4)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
+	
 	return iTotal;
 }
 
@@ -820,6 +857,28 @@ int GetPaladinTRUECasterlevel(object oPC)
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
 	
+	
+		if (iTotal >= 6)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_I,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_II,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 12)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 15)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_IV,FALSE,FALSE,FALSE);
+	}
+	
 	return iTotal;
 }
 
@@ -873,6 +932,29 @@ int GetRangerTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
+	
+	if (iTotal >= 6)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_I,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_II,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 12)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 15)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
 	return iTotal;
 }
 int GetHasWizardProgression(object oPC, int iClass)
@@ -912,6 +994,27 @@ int GetWizardTRUECasterlevel(object oPC)
 		else iTotal = iTotal + (iRedWizard / 2);
 	}
 	
+		if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_WIZARD_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_WIZARD_I,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_WIZARD_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_WIZARD_II,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 5)
+	{
+	if (!GetHasFeat(FEAT_SPELL_WIZARD_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_WIZARD_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_WIZARD_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_WIZARD_IV,FALSE,FALSE,FALSE);
+	}
+	
 	return iTotal;
 }
 
@@ -944,6 +1047,29 @@ int GetSorcererTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE)) iTotal = iTotal + 4;
+	
+		if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 4)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+	}
+	
 	return iTotal;
 }
 
@@ -1017,6 +1143,32 @@ int GetBardTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE)) iTotal = iTotal + 4;
+	
+	
+	
+			if (iTotal >= 2)
+	{
+	if (!GetHasFeat(FEAT_SPELL_BARD_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_BARD_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >=4)
+	{
+	if (!GetHasFeat(FEAT_SPELL_BARD_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_BARD_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_BARD_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_BARD_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_BARD_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_BARD_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
 	return iTotal;
 }
 int GetHasDruidProgression(object oPC, int iClass)
@@ -1067,6 +1219,32 @@ int GetDruidTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)) iTotal = iTotal + 4;
+	
+	
+		if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >=3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 5)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
+	
 	return iTotal;
 }
 
@@ -1119,6 +1297,29 @@ int GetFavoredSoulTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(2068,oPC,TRUE)) iTotal = iTotal + 4;
+		if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 4)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
 	return iTotal;
 }
 int GetHasClericProgression(object oPC, int iClass)
@@ -1211,6 +1412,29 @@ int GetClericTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE)) iTotal = iTotal + 4;
+	if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >=3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 5)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
 	return iTotal;
 }
 
@@ -1227,12 +1451,8 @@ int GetClericAndPRCClassLevels(object oPC)
 		
 		if ( iClass == 255 ) break;
 			
-		if(iClass == CLASS_TYPE_CLERIC || GetHasClericProgression(oPC,iClass))
-		{
-			if(iClass == 71) iTotal = iTotal + (GetLevelByClass(iClass,oPC) / 2); //Dervish Bonus
-			else iTotal = iTotal + GetLevelByClass(iClass,oPC);
-		}
-	}
+		if(iClass == CLASS_TYPE_CLERIC || GetHasClericProgression(oPC,iClass)) iTotal = iTotal + GetLevelByClass(iClass,oPC);}
+
 	
 	return iTotal;
 }
