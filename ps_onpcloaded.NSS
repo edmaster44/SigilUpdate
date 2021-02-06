@@ -41,7 +41,7 @@ void RemoveAllItems(object oPC)
 		oITEM = GetNextItemInInventory();
 	}
 }
-
+ 
 int CheckIfNameExploiting(object oPC)
 {
 	string name = SQLEncodeSpecialChars(GetName(oPC));

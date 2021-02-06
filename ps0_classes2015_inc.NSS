@@ -27,7 +27,7 @@ const int CLASS_TYPE_CELESTIAL_ENVOY 	= 42;
 void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell)
 {
     effect eMind 	= EffectVisualEffect( VFX_DUR_SPELL_DAZE );
-    effect eDaze 	= EffectDazed();
+    effect eDaze 	= EffectDazed(); 
     effect eLink 	= EffectLinkEffects(eMind, eDaze);
     int nMetaMagic 	= GetMetaMagicFeat();
     int nDuration 	= 5;

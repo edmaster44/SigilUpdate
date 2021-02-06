@@ -15,16 +15,16 @@ Created On: 08/30/02
 #include "ps_class_inc"
 #include "ps_inc_ecl"
 #include "ps_inc_quests"
-
+ 
 //Uses some in game default scripts
 
 //Tags of special condition locations
 // Funny, tags remove "-" from strings, so take care.
 const string LOC_ARENA = "ps_area_s_cw_gymnasium_arena";
 const string LOC_OOC = "spawnroom";
-const string LOC_MORTUARY = "ps_area_hivemortuary";
+const string LOC_MORTUARY = "ps_area_s_hw_mortuary";
 const string LOC_APPERANCE_CHANGER = "appearance_changer_room";
-const string LOC_FESTHALL = "ps_area_sigil_festhall";
+const string LOC_FESTHALL = "ps_area_s_cw_festhallchanging";
 
 void ApplyRespawnPenalties(object oPC)
 {

@@ -368,11 +368,11 @@ void DMFI_Follow(object oPC)
     if (oFollow!=OBJECT_INVALID)
     {
         if (GetArea(oPC) != GetArea(oFollow) && 
-		GetTag(GetArea(oFollow)) != "ps_area_sigil-gymnasiumarena" && 
-		GetTag(GetArea(oPC)) != "ps_area_hive-mortuary" && 
+		GetTag(GetArea(oFollow)) != "ps_area_s_cw_gymnasium_arena" && 
+		GetTag(GetArea(oPC)) != "ps_area_s_hw_mortuary" &&  
 		GetTag(GetArea(oPC)) != "spawnroom" && 
 		GetTag(GetArea(oPC)) != "ps_area_oocroom" &&
-		GetTag(GetArea(oFollow)) != "ps_area_hive-mortuary" &&
+		GetTag(GetArea(oFollow)) != "ps_area_s_hw_mortuary" &&
 		GetTag(GetArea(oFollow)) != "")
         {
             AssignCommand(oPC,ClearAllActions(TRUE));
