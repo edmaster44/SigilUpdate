@@ -18,6 +18,11 @@ void main() {
 
     object oCaster = GetAreaOfEffectCreator();
 	
+	//Does not do damage if you're dead!
+	if (GetIsDead(oCaster)) {
+		return;
+	}
+	
 	//Does not do damage if you're invisible
 	if (GetActionMode(oCaster, ACTION_MODE_STEALTH) ||
 		GetHasSpellEffect(SPELL_I_WALK_UNSEEN, oCaster) ||
