@@ -229,14 +229,21 @@ void PS_Feat_GC_FindPortal(object oPC, int nSpell)
 	object oArea 			= GetArea(oPC);
     
     effect eDestroy = EffectDeath();
+	
+	//Don't work in the OOC room
+	if (GetTag(oArea) == "spawnroom") {
+		SendMessageToPC(OBJECT_SELF, "You were not able to locate a portal in this area.");
+		return;	
+	}
     
-    if (nRoll >= 35)
-	{	object oPortal = CreateObject(OBJECT_TYPE_CREATURE, "scod_s_unstableportal", GetSpellTargetLocation(), TRUE);
+    if (nRoll >= 35) {	
+		object oPortal = CreateObject(OBJECT_TYPE_CREATURE, "scod_s_unstableportal", GetSpellTargetLocation(), TRUE);
 		DelayCommand(fDelay, DestroyObject(oPortal));
-		SendMessageToPC(oPC, "You were able to locate and open a dormant, but highly unstable portal for a short time.");	}
-	else
-	{	SendMessageToPC(OBJECT_SELF, "You were not able to locate a portal in this area.");
-		return;	}
+		SendMessageToPC(oPC, "You were able to locate and open a dormant, but highly unstable portal for a short time.");	
+	} else {	
+		SendMessageToPC(OBJECT_SELF, "You were not able to locate a portal in this area.");
+		return;	
+	}
     
 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDestroy, oPortal)); 
 }
