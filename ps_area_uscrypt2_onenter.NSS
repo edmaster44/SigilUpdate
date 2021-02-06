@@ -12,6 +12,8 @@ void main() {
 		}
    		if(GetObjectByTag("ps_us_crypt2_ghostgirl2") == OBJECT_INVALID) {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_crypt2_ghostgirl2", GetLocation(GetWaypointByTag("wp_us_crypt2_boss")));
+		} else {
+			SetScriptHidden(GetObjectByTag("ps_us_crypt2_ghostgirl2"), FALSE);
 		}
 		
 		SetGlobalInt("crypt1EnterLock", 0);
