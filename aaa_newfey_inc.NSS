@@ -22,7 +22,7 @@ const int SPRING2 = 1501898496;
 //Fey trait choice on login
 void PS_Fey_FeyTrait(object oPC) {
 
-	SendMessageToPC(oPC, "choosing fey heritage:");
+	//SendMessageToPC(oPC, "choosing fey heritage:");
 
 	// Clangeddin UI script.
 	AddScriptParameterString("START");
