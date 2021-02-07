@@ -4,6 +4,8 @@ void main() {
   
  	int iLock = GetGlobalInt("UndersigilGuildhouseLock");
  	if ( iLock == 0 ) {
+	
+  		SetGlobalInt("UndersigilGuildhouseLock", 1); // Only allows one clean up at a time.
   
 	  	if(GetObjectByTag("ps_us_gwsigiseditor") == OBJECT_INVALID) {
 		
@@ -163,7 +165,7 @@ void main() {
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_gwtiefling", lSpawnpoint);    
   		}
 	
-  		SetGlobalInt("UndersigilGuildhouseLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("UndersigilGuildhouseLock", 0); // Only allows one clean up at a time.
 		
 	}
 	
