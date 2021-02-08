@@ -421,17 +421,17 @@ int GetManifesterDC(object oManifester = OBJECT_SELF)
 	{
 		nDC++;
 	}
-	if (GetManifestingClass(oManifester) >= 23)
+	if (GetManifestingClass(oManifester) >= 22)
 	{
 		nDC++;
 	
 	}
-		if (GetManifestingClass(oManifester) >= 26)
+		if (GetManifestingClass(oManifester) >= 25)
 	{
 		nDC++;
 	
 	}
-		if (GetManifestingClass(oManifester) >= 29)
+		if (GetManifestingClass(oManifester) >= 28)
 	{
 		nDC++;
 	
