@@ -11,6 +11,8 @@ void ResetTrap(object oTrap);
 
 void TriggerTrapOn(object oTrap, object oVic);
 
+void ToggleTrapTrigger(object oPC, object oTrigger, int on = FALSE);
+
 void main () {
 	
 	//The type of the trap trigger
@@ -55,34 +57,22 @@ void main () {
 		int nDone = GetLocalInt(oPC, "spot_"+sTrapTag);
 		if (nDone)
 			return;
-			
+	
 		if (!GetIsPC(oPC))
 			return;
-	
-		if (GetDetectMode(oPC)) {
-			if (GetIsTrainingSkillSuccessful(oPC, SKILL_SEARCH, nSpotDC)) {
-				SendMessageToPC(oPC, "You spot an oddity in the corridor ahead; probably a trap. With a bit of searching, you see a disarming mechanism on the wall. . . ");
-				SetUseableFlag(oDisarm, TRUE);
+		
+		if (GetIsTrainingSkillSuccessful(oPC, SKILL_SEARCH, nSpotDC)) {
+			SendMessageToPC(oPC, "You spot an oddity in the corridor ahead; probably a trap. With a bit of searching, you see a disarming mechanism on the wall. . . ");
+			
+			SetUseableFlag(oDisarm, TRUE);
 				
-				SetLocalString(oDisarm, "PLC_TRAP", sTrapTag);
-				SetLocalString(oDisarm, "PLC_TRAP_DISARM", sDisarmTag);
-				SetLocalInt(oDisarm, "DC_DISARM_TRAP", nDisarmDC);
-				SetLocalFloat(oDisarm, "TRAP_RESET_TIME", fReset);
-				SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
-			}
-		} else {
-			//This used to be a spot check, but that was dumb;
-			//refactor later
-			if (GetIsTrainingSkillSuccessful(oPC, SKILL_SEARCH, nSpotDC)) {
-				SendMessageToPC(oPC, "You spot an oddity in the corridor ahead; probably a trap. With a bit of searching, you see a disarming mechanism on the wall. . . ");
-				SetUseableFlag(oDisarm, TRUE);
-				
-				SetLocalString(oDisarm, "PLC_TRAP", sTrapTag);
-				SetLocalString(oDisarm, "PLC_TRAP_DISARM", sDisarmTag);
-				SetLocalInt(oDisarm, "DC_DISARM_TRAP", nDisarmDC);
-				SetLocalFloat(oDisarm, "TRAP_RESET_TIME", fReset);
-				SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
-			}
+			SetLocalString(oDisarm, "PLC_TRAP", sTrapTag);
+			SetLocalString(oDisarm, "PLC_TRAP_DISARM", sDisarmTag);
+			SetLocalInt(oDisarm, "DC_DISARM_TRAP", nDisarmDC);
+			SetLocalFloat(oDisarm, "TRAP_RESET_TIME", fReset);
+			SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
+			
+			ToggleTrapTrigger(oPC, OBJECT_SELF, TRUE);
 		}
 		
 		SetLocalInt(oPC, "spot_"+sTrapTag, 1);
@@ -171,5 +161,30 @@ void TriggerTrapOn(object oTrap, object oVic) {
 	} else {
 		effect eDam = EffectDamage(nDamage, nDamType);
 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
+	}
+}
+
+void ToggleTrapTrigger(object oPC, object oTrigger, int on = FALSE) {
+
+	SendMessageToPC(oPC, "Toggling trap trigger");
+	string sTrapTag = GetLocalString(oTrigger, "PLC_TRAP");
+	object oTrap = GetFirstObjectInShape(SHAPE_SPHERE, 5.0f, GetLocation(oTrigger), FALSE, OBJECT_TYPE_TRIGGER);
+	while (GetIsObjectValid(oTrap)) {
+	
+		SendMessageToPC(oPC, "Found trigger: "+GetTag(oTrap));
+		string sCompareTrapTag = GetLocalString(oTrap, "PLC_TRAP");
+		int nType = GetLocalInt(oTrap, "TRAP_TRIGGER_TYPE");
+		if (nType == 2 && sCompareTrapTag == sTrapTag) {
+			if (on) {
+				SetTrapDetectable(oTrap, TRUE);
+				SetTrapDetectedBy(oTrap, oPC);
+			} else {
+				SetTrapDetectable(oTrap, FALSE);
+			}
+			return;
+		}
+	
+		oTrap = GetNextObjectInShape(SHAPE_SPHERE, 5.0f, GetLocation(oTrigger), FALSE, OBJECT_TYPE_TRIGGER);
+		
 	}
 }

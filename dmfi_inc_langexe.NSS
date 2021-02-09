@@ -236,6 +236,11 @@ void DMFI_GiveDefaultLanguages(object oPC)
 	switch (iSRace)
 	{
 		case 3: /*Drow*/ DMFI_GrantLanguage(oPC, LNG_DROWSIGN); break; 
+		case RACIAL_SUBTYPE_AIR_GENASI: /*Air Genasi*/ DMFI_GrantLanguage(oPC, LNG_AURAN); break; 
+		case RACIAL_SUBTYPE_EARTH_GENASI: /*Earth Genasi*/ DMFI_GrantLanguage(oPC, LNG_TERRAN); break; 
+		case RACIAL_SUBTYPE_FIRE_GENASI: /*Fire Genasi*/ DMFI_GrantLanguage(oPC, LNG_IGNAN); break; 
+		case RACIAL_SUBTYPE_WATER_GENASI: /*Earth Genasi*/ DMFI_GrantLanguage(oPC, LNG_AQUAN); break; 
+		case RACIAL_SUBTYPE_ICEGENASI: /*Ice Genasi*/ DMFI_GrantLanguage(oPC, LNG_AURAN); DMFI_GrantLanguage(oPC, LNG_AQUAN); break; 
 		case 41: /* Githyanki */ DMFI_GrantLanguage(oPC, LNG_DRACONIC); break;
 		case 46: /* Half Celestial */ DMFI_GrantLanguage(oPC, LNG_CELESTIAL); break;
 		case 53: /* Night Hag */ 
