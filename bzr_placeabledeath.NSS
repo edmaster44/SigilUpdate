@@ -1,14 +1,18 @@
 #include "ps_inc_functions"
 #include "nwnx_sql"
 
-void RespawnSelf(object self) {
-	object thing = CreateObject(OBJECT_TYPE_PLACEABLE, GetTag(self), GetLocation(self));
-}
-
 void main()
 {
-	effect spawn = EffectNWN2SpecialEffectFile("fx_rockslide", OBJECT_SELF);
+	effect spawn = EffectNWN2SpecialEffectFile("fx_wooden_explosion_big", OBJECT_SELF);
 	ApplyEffectToObject(0, spawn, OBJECT_SELF);
+	
+	string sTrap = GetLocalString(OBJECT_SELF, "ASSOCIATED_TRAP");
+	if (sTrap != "") {
+		object oTrap = GetNearestObjectByTag(sTrap);
+		if (GetIsObjectValid(oTrap)) {
+			SetTrapActive(oTrap, FALSE);
+		}
+	}
 		
 	object oKiller = GetLastKiller();
 	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF)
@@ -126,5 +130,4 @@ void main()
         oPartyMember = GetNextFactionMember(oKiller, TRUE);
     }
 	
-	DelayCommand(5.0f, RespawnSelf(OBJECT_SELF)); 
 }

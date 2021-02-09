@@ -135,9 +135,8 @@ int StringTrapStrengthToInt(string sTrapStrength, object oPC = OBJECT_INVALID);
 
 
 
-void
-RespawnAreaDoorTraps(object oArea, object oPC, string sDoorTagToken="rtdoor")
-{
+void RespawnAreaDoorTraps(object oArea, object oPC, string sDoorTagToken="rtdoor") {
+
     if (oArea == OBJECT_INVALID)
         return; // fatal
 		
@@ -162,9 +161,8 @@ RespawnAreaDoorTraps(object oArea, object oPC, string sDoorTagToken="rtdoor")
         oDoor = GetNearestObject(OBJECT_TYPE_DOOR, oFirstObject, ++i);
     }
 }
-void
-RespawnAreaFloorTraps(object oArea, object oPC, string sFloorTagToken="rtfloor")
-{
+
+void RespawnAreaFloorTraps(object oArea, object oPC, string sFloorTagToken="rtfloor") {
 
     if (oArea == OBJECT_INVALID)
         return; // fatal
