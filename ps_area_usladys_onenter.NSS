@@ -21,23 +21,23 @@ void main() {
 		if(!GetPlaceableByTag("USLW_TRAP_ARROW_1")) {
 			object oWP = GetWaypointByTag("wp_uslw_ballista1");
 			object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "pl_undersigil_ballista", GetLocation(oWP), FALSE, "USLW_TRAP_ARROW_1"); 
-			SetLocalString(oSpawn, "ASSOCIATED_TRAP", "USLW_TRAP_ARROW_1");
+			/*SetLocalString(oSpawn, "ASSOCIATED_TRAP", "USLW_TRAP_ARROW_1");
 			
 			object oTrap = GetNearestObjectByTag("USLW_TRAP_ARROW_1");
 			if (GetIsObjectValid(oTrap)) {
 				SetTrapActive(oTrap, TRUE);
-			}
+			}*/
 		}
 		
 		if(!GetPlaceableByTag("USLW_TRAP_ARROW_2")) {
 			object oWP = GetWaypointByTag("wp_uslw_ballista2");
 			object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "pl_undersigil_ballista", GetLocation(oWP), FALSE, "USLW_TRAP_ARROW_2"); 
-			SetLocalString(oSpawn, "ASSOCIATED_TRAP", "USLW_TRAP_ARROW_2");
+			/*SetLocalString(oSpawn, "ASSOCIATED_TRAP", "USLW_TRAP_ARROW_2");
 			
 			object oTrap = GetNearestObjectByTag("USLW_TRAP_ARROW_2");
 			if (GetIsObjectValid(oTrap)) {
 				SetTrapActive(oTrap, TRUE);
-			}
+			}*/
 		}
 		
    		if(GetObjectByTag("ps_us_lwdabus") == OBJECT_INVALID) {

@@ -2,7 +2,7 @@
 
 void main() {
 
-	object oPC = GetClickingObject();
+	object oPC = GetLastUsedBy();
 	
 	string sFail = GetLocalString(OBJECT_SELF, "FAILMESSAGE");
 	string sLang = GetLocalString(OBJECT_SELF, "LANGUAGE");

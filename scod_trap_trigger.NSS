@@ -44,13 +44,19 @@ void main () {
 	object oTrap = GetNearestObjectByTag(sTrapTag);
 	object oDisarm = GetNearestObjectByTag(sDisarmTag);
 	
+	if (!GetIsObjectValid(oTrap)) {
+		SendMessageToPC(oPC, "DEBUG: There is no trap by this tag: "+sTrapTag);
+	}
+	
 	if (!GetIsObjectValid(oDisarm)) {
-		SendMessageToPC(oPC, "DEBUG: There is no disarm option on this trap.");
+		SendMessageToPC(oPC, "DEBUG: There is no override by this tag: "+sDisarmTag);
 	}
 	
 	int nInactive = GetLocalInt(oTrap, "TRAP_INACTIVE");
-	if (nInactive) 
+	if (nInactive) {
+		SendMessageToPC(oPC, "Trap is inactive.");
 		return;
+	}
 
 	if (nType == 1) {
 	
@@ -166,12 +172,12 @@ void TriggerTrapOn(object oTrap, object oVic) {
 
 void ToggleTrapTrigger(object oPC, object oTrigger, int on = FALSE) {
 
-	SendMessageToPC(oPC, "Toggling trap trigger");
+	//SendMessageToPC(oPC, "Toggling trap trigger");
 	string sTrapTag = GetLocalString(oTrigger, "PLC_TRAP");
 	object oTrap = GetFirstObjectInShape(SHAPE_SPHERE, 5.0f, GetLocation(oTrigger), FALSE, OBJECT_TYPE_TRIGGER);
 	while (GetIsObjectValid(oTrap)) {
 	
-		SendMessageToPC(oPC, "Found trigger: "+GetTag(oTrap));
+		//SendMessageToPC(oPC, "Found trigger: "+GetTag(oTrap));
 		string sCompareTrapTag = GetLocalString(oTrap, "PLC_TRAP");
 		int nType = GetLocalInt(oTrap, "TRAP_TRIGGER_TYPE");
 		if (nType == 2 && sCompareTrapTag == sTrapTag) {

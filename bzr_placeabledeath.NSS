@@ -6,13 +6,13 @@ void main()
 	effect spawn = EffectNWN2SpecialEffectFile("fx_wooden_explosion_big", OBJECT_SELF);
 	ApplyEffectToObject(0, spawn, OBJECT_SELF);
 	
-	string sTrap = GetLocalString(OBJECT_SELF, "ASSOCIATED_TRAP");
+	/*string sTrap = GetLocalString(OBJECT_SELF, "ASSOCIATED_TRAP");
 	if (sTrap != "") {
 		object oTrap = GetNearestObjectByTag(sTrap);
 		if (GetIsObjectValid(oTrap)) {
 			SetTrapActive(oTrap, FALSE);
 		}
-	}
+	}*/
 		
 	object oKiller = GetLastKiller();
 	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF)
