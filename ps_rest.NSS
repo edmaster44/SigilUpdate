@@ -179,7 +179,7 @@ void RestFinish(object oPC)
 {
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
 	if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
-	//DelayCommand(1.0f,ExecuteScript("ed_mode_includes",oPC));
+	DelayCommand(1.0f,ExecuteScript("ed_mode_includes",oPC));
 	
 	if (PS_NeedsTemplateClassAbilityFix(oPC) == TRUE) TemplateRacialAdjust(oPC, oESSENCE, FALSE);
 	else TemplateRacialAdjust(oPC, oESSENCE, TRUE);
