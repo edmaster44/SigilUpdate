@@ -264,23 +264,23 @@ void HandleBossEvents(object oSelf) {
 	float hpPercentage = IntToFloat(GetCurrentHitPoints(oSelf))/IntToFloat(GetMaxHitPoints(oSelf));
 	
 	if (hpPercentage <= 0.95f && sEvent1 != "" && !nEventDone1) {
-		SpeakString("Event 1", TALKVOLUME_SHOUT);
+		//SpeakString("Event 1", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent1, oSelf);
 		SetLocalInt(oSelf, "BossEvent_1Done", 1);
 	} else if (hpPercentage <= 0.75f && sEvent2 != "" && !nEventDone2) {
-		SpeakString("Event 2", TALKVOLUME_SHOUT);
+		//SpeakString("Event 2", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent2, oSelf);
 		SetLocalInt(oSelf, "BossEvent_2Done", 1);
 	} else if (hpPercentage <= 0.55f && sEvent3 != "" && !nEventDone3) {
-		SpeakString("Event 3", TALKVOLUME_SHOUT);
+		//SpeakString("Event 3", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent3, oSelf);
 		SetLocalInt(oSelf, "BossEvent_3Done", 1);
 	} else if (hpPercentage <= 0.35f && sEvent4 != "" && !nEventDone4) {
-		SpeakString("Event 4", TALKVOLUME_SHOUT);
+		//SpeakString("Event 4", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent4, oSelf);
 		SetLocalInt(oSelf, "BossEvent_4Done", 1);
 	} else if (hpPercentage <= 0.15f && sEvent5 != "" && !nEventDone5) {
-		SpeakString("Event 5", TALKVOLUME_SHOUT);
+		//SpeakString("Event 5", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent5, oSelf);
 		SetLocalInt(oSelf, "BossEvent_5Done", 1);
 	} 
