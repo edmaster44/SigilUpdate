@@ -48,13 +48,13 @@ void CheckStealthMode(object oPC, float count)
 			{
 				SendMessageToPC(oPC,"Applying Swift & Silent bonus.");
 				if (GetHasFeat(1772, oPC, TRUE) && !GetIsAreaInterior(GetArea(oPC))) return;
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(45), -4533), oPC, HoursToSeconds(1));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(45), -9998), oPC, HoursToSeconds(1));
 			}
 	else if(GetHasFeat(1500, oPC, TRUE))
 			{
 				SendMessageToPC(oPC,"Applying Swift & Silent bonus.");
 				if (GetHasFeat(1772, oPC, TRUE) && !GetIsAreaInterior(GetArea(oPC))) return;
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(99), -4532), oPC, HoursToSeconds(1));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(99), -9997), oPC, HoursToSeconds(1));
 			}		
 	}
 	}
@@ -64,7 +64,7 @@ void DervishParry(object oPC, float count)
 	int impcombexp = GetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE);
 	int enabled = GetLocalInt(oPC,"NODERVISHPARRY");
 		
-	if(combexp == 1 && enabled == 0 && !GetHasSpellEffect(1929,oPC) || impcombexp == 1 && enabled == 0 && !GetHasSpellEffect(-1929,oPC)) //Activated
+	if(combexp == 1 && enabled == 0 && !GetHasSpellEffect(-9996,oPC) || impcombexp == 1 && enabled == 0 && !GetHasSpellEffect(-9996,oPC)) //Activated
 	{
 		SetLocalInt(oPC,"NODERVISHPARRY", 1);
 		RemoveAnySpellEffects(3214,oPC);
@@ -73,7 +73,7 @@ void DervishParry(object oPC, float count)
 
 		
 		
-		DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,SetEffectSpellId(ExtraordinaryEffect(EffectACIncrease(iBonus)),1929),oPC, HoursToSeconds(1)));
+		DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,SetEffectSpellId(ExtraordinaryEffect(EffectACIncrease(iBonus)),-9996),oPC, HoursToSeconds(1)));
 	}
 	
 	if(combexp == 0 && impcombexp == 0)
