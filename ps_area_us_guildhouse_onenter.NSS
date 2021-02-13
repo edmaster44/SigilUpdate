@@ -171,6 +171,13 @@ void main() {
    			location lSpawnpoint = GetLocation(oWP);  
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_bittersymon", lSpawnpoint);    
   		}
+		
+  		if(GetObjectByTag("ps_us_spirithunter") == OBJECT_INVALID) {
+		
+   			object oWP = GetWaypointByTag("wp_ps_us_spirithunter");
+   			location lSpawnpoint = GetLocation(oWP);  
+   			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_spirithunter", lSpawnpoint);    
+  		}
 	
   		SetGlobalInt("UndersigilGuildhouseLock", 0); // Only allows one clean up at a time.
 		
