@@ -179,7 +179,7 @@ void RestFinish(object oPC)
 {
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
 	if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
-	DelayCommand(1.0f,ExecuteScript("ed_mode_includes",oPC));
+	
 	
 	if (PS_NeedsTemplateClassAbilityFix(oPC) == TRUE) TemplateRacialAdjust(oPC, oESSENCE, FALSE);
 	else TemplateRacialAdjust(oPC, oESSENCE, TRUE);
@@ -194,6 +194,7 @@ void RestFinish(object oPC)
 	PS_CalculateECL(oPC);
 	
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
+	DelayCommand(1.0f,ExecuteScript("ed_mode_includes",oPC));
 	
 	if (CheckTimeStamp(oPC, "REST") > cSaveWait)
 	{	
@@ -255,7 +256,9 @@ void main()
 	}
 	
 	//Rest Events
+
 	if (nREST == REST_EVENTTYPE_REST_STARTED) DelayCommand(0.0f, RestStart(oPC));
 	else if (nREST == REST_EVENTTYPE_REST_FINISHED) DelayCommand(0.0f, RestFinish(oPC));
+	
 		
 }

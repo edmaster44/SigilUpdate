@@ -357,13 +357,13 @@ int PS_GetFeatWingType(object oPC)
 				{	nWing = PS_GetWing_Celestial(oPC); }
 	
 	
-		if (CLASS_TYPE_HALFOUTSIDER_PRC(oPC) >= 6)
+		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC) >= 6)
 		{	if (GetHasFeat(2537, oPC) && GetHasFeat(2781, oPC))
 			{	nWing = PS_GetWing_Fiend(oPC);		}
 			if (GetHasFeat(2538, oPC) && GetHasFeat(2179, oPC))
 			{	nWing = PS_GetWing_Celestial(oPC);	}	}
 			
-		if (CLASS_TYPE_HALFOUTSIDERMAGE_PRC(oPC) >=7 )
+		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC) >=7 )
 		{	if (GetHasFeat(2537, oPC) && GetHasFeat(2781, oPC))
 			{	nWing = PS_GetWing_Fiend(oPC);		}
 			if (GetHasFeat(2538, oPC) && GetHasFeat(2179, oPC))
