@@ -59,8 +59,13 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SPIDERSKIN, FALSE));
 
-    int nLvlBonus;
-    if ( nCasterLvl < 12 ) { nLvlBonus = nCasterLvl / 5; }
+    int nLvlBonus = nCasterLvl /5;
+	
+	if (nLvlBonus > 6)
+		nLvlBonus = 5;
+	else if (nLvlBonus <= 0)
+		nLvlBonus = 1;
+    
   
 
     int nACBonus = 1 + nLvlBonus;
