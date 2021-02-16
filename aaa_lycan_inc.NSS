@@ -329,8 +329,8 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 		}
 	}
 	else if (nIsHybrid == 1)
-	{	if ( GetCreatureWeapons(oItem))
-		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0,nSpell);
+	{	
+			nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 0,nSpell);
 			if (nAttack == 2)
 			{	if (nLevel >= 24) nDamage = d10(4) + d10(2);
 				else if (nLevel >= 16) nDamage = d8(4) + d8(2);
@@ -368,10 +368,9 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 				SendMessageToPC(oTarget, GetName(oPC) + "'s trip attack was unsuccessful!");
 			}
 		}	
-		else
-		{	SendMessageToPC(oPC, "You must have your bite equipped as your primary weapon to use this attack.");
-		}
-	}
+		
+		
+	
 	else
 	{	SendMessageToPC(oPC, "This ability is only usable in Animal or Hybrid form.");	}
 }
@@ -405,7 +404,7 @@ void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 		oWeapL = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 		sWeapL = GetTag(oWeapL);
 			sWeapR	= GetStringLeft(sWeapR, 4);
-		if (GetCreatureWeapons(oItem))
+		if (!GetCreatureWeapons(oItem))
 		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
 			SendMessageToPC(oPC, "Damage bonus not applied unless creature weapon(s) are equipped!");
 		}
@@ -479,8 +478,8 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 		}
 	}
 	else if (nIsHybrid == 1)
-	{	if ( GetCreatureWeapons(oItem))
-		{	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0,nSpell);
+	{	
+			nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Rake", 1, "1attack01", 0,nSpell);
 			if (nAttack == 2)
 			{	if (nLevel >= 24)
 				{	nDamage = d10(4) + d10(2);
@@ -532,10 +531,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 				SendMessageToPC(oTarget, GetName(oPC) + " bites down and rakes you with their rear claws!");
 			}
 		}	
-		else
-		{	SendMessageToPC(oPC, "You must have your bite equipped as your primary weapon to use this attack.");
-		}
-	}
+	
 	else
 	{	SendMessageToPC(oPC, "This ability is only usable in Animal or Hybrid form.");	}
 }
