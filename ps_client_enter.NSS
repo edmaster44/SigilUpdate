@@ -32,7 +32,7 @@ void main()
 	while (SQLFetch() != SQL_ERROR) { 
 		int utc = StringToInt(SQLGetData(1));
 		struct TimeFields Tf = TimeToTimeFields(utc);
-		SendMessageToPC(GetFirstPC(), "Current hour: "+IntToString(Tf.Hour));
+		DelayCommand(22.0f, SendMessageToPC(oPC, "Current hour: "+IntToString(Tf.Hour)));
 	}
 
 	//
