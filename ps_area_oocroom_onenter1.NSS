@@ -59,6 +59,13 @@ void main()
 	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalkrampus", lSpawnpoint);    
   } */ 
   
+  if(GetObjectByTag("kemo_storage_teller") == OBJECT_INVALID)
+  {
+	object oWP = GetWaypointByTag("wp_kemo_storage_teller");
+   	location lSpawnpoint = GetLocation(oWP);  
+	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "kemo_storage_teller", lSpawnpoint);    
+  }
+  
   SetGlobalInt("OOCEnterLock", 0);
  }
  
