@@ -2,7 +2,7 @@
 
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
-#include "ps_inc_advscript"
+#include "ps_inc_time"
 
 void Reboot_ShutdownNwn2server()
 {
@@ -24,7 +24,7 @@ void main()
 {
     object oMod = GetModule();
 
-	 PS_OnPCLeave(GetExitingObject());
+	PS_OnPCLeave(GetExitingObject());
 	
 	if( GetLocalInt(oMod, "reboot") == 1 )
 	{
@@ -37,6 +37,8 @@ void main()
 	
 	while (SQLFetch() != SQL_ERROR) { 
 		int utc = StringToInt(SQLGetData(1));
+		struct TimeFields Tf = TimeToTimeFields(utc);
+		
 		int iDelay = GetLocalInt(oMod, "delaycount");
 		iDelay *= 60 * 60; // so we now check to see if a DM has delayed reboot with widget, 1 hour per delay.
 		if (utc > nBoottime + 86400 + iDelay)
