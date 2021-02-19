@@ -1,15 +1,15 @@
 NDB V1.0
-0000036 0000014 0001369 0000001 0000076
+0000036 0000015 0001370 0000001 0000083
 n00 ps_inc_advscript
-n01 ginc_debug
-n02 X0_I0_STRINGLIB
-n03 ginc_param_const
-n04 x0_i0_enemy
-n05 x0_inc_generic
-n06 nwn2_inc_talent
-n07 nw_i0_generic
-n08 ginc_time
-n09 ps_inc_time
+n01 ps_inc_time
+n02 ginc_debug
+n03 X0_I0_STRINGLIB
+n04 ginc_param_const
+n05 x0_i0_enemy
+n06 x0_inc_generic
+n07 nwn2_inc_talent
+n08 nw_i0_generic
+n09 ginc_time
 n10 ginc_actions
 n11 nw_i0_plot
 n12 ginc_effect
@@ -69,6 +69,14 @@ sf i HairTint_Color1
 sf i HairTint_Color2
 sf i HairTint_Mask
 sf i NeverDrawHelmet
+s 07 TimeFields
+sf i Year
+sf i Month
+sf i Day
+sf i Weekday
+sf i Hour
+sf i Minute
+sf i Second
 s 05 sStringTokenizer
 sf i nRemainingLen
 sf s sOrig
@@ -305,6 +313,8 @@ fp i
 f ffffffff ffffffff 003 i PS_GetHasTimePassed_Months
 fp o
 fp s
+fp i
+f ffffffff ffffffff 001 t0003 TimeToTimeFields
 fp i
 f ffffffff ffffffff 000 i POST_COLOR_RED
 f ffffffff ffffffff 000 i POST_COLOR_GREEN
@@ -595,15 +605,15 @@ fp o
 f ffffffff ffffffff 002 i HasGold
 fp i
 fp o
-f ffffffff ffffffff 002 t0003 GetStringTokenizer
+f ffffffff ffffffff 002 t0004 GetStringTokenizer
 fp s
 fp s
 f ffffffff ffffffff 001 i HasMoreTokens
-fp t0003
-f ffffffff ffffffff 001 t0003 AdvanceToNextToken
-fp t0003
+fp t0004
+f ffffffff ffffffff 001 t0004 AdvanceToNextToken
+fp t0004
 f ffffffff ffffffff 001 s GetNextToken
-fp t0003
+fp t0004
 f ffffffff ffffffff 002 i GetNumberTokens
 fp s
 fp s
@@ -611,7 +621,7 @@ f ffffffff ffffffff 003 s GetTokenByPosition
 fp s
 fp s
 fp i
-f ffffffff ffffffff 002 t0004 GetFirstAlpha
+f ffffffff ffffffff 002 t0005 GetFirstAlpha
 fp s
 fp s
 f ffffffff ffffffff 003 s RemoveListElement
@@ -704,7 +714,7 @@ f ffffffff ffffffff 001 i GetSkillConstant
 fp i
 f ffffffff ffffffff 001 o GetSoundObjectByTag
 fp s
-f ffffffff ffffffff 002 t0005 GetNameValuePairStruct
+f ffffffff ffffffff 002 t0006 GetNameValuePairStruct
 fp s
 fp s
 f ffffffff ffffffff 002 s GetNVPValue
@@ -1350,12 +1360,12 @@ fp i
 f ffffffff ffffffff 002 o GetNearestSeenFriend
 fp o
 fp i
-f ffffffff ffffffff 002 t0007 CountEnemiesAndAllies
+f ffffffff ffffffff 002 t0008 CountEnemiesAndAllies
 fp f
 fp o
-f ffffffff ffffffff 000 t0006 DetermineEnemies
+f ffffffff ffffffff 000 t0007 DetermineEnemies
 f ffffffff ffffffff 001 s GetMostDangerousClass
-fp t0006
+fp t0007
 f ffffffff ffffffff 001 i GetIsMeleeAttacker
 fp o
 f ffffffff ffffffff 001 i GetIsRangedAttacker
@@ -1736,7 +1746,7 @@ f ffffffff ffffffff 000 i GetCRMax
 f ffffffff ffffffff 002 i bkEvaluationSanityCheck
 fp o
 fp f
-f ffffffff ffffffff 002 t0008 TalentSpellFilter
+f ffffffff ffffffff 002 t0009 TalentSpellFilter
 fp e3
 fp o
 f ffffffff ffffffff 003 i TalentFilter
@@ -1814,10 +1824,10 @@ fp o
 f ffffffff ffffffff 002 e3 MyGetCreatureTalent
 fp i
 fp i
-f ffffffff ffffffff 002 t0009 GetBestEldritchAOETarget
+f ffffffff ffffffff 002 t0010 GetBestEldritchAOETarget
 fp i
 fp f
-f ffffffff ffffffff 001 t0010 GetBestEldritchShape
+f ffffffff ffffffff 001 t0011 GetBestEldritchShape
 fp o
 f ffffffff ffffffff 001 i GetInvocationSpellFromMetamagic
 fp i
@@ -2296,7 +2306,7 @@ f ffffffff ffffffff 001 i GetHPPercentage
 fp o
 f ffffffff ffffffff 001 i GetCastingMode
 fp i
-f ffffffff ffffffff 007 t0011 CreateTactics
+f ffffffff ffffffff 007 t0012 CreateTactics
 fp i
 fp i
 fp i
@@ -2308,20 +2318,20 @@ f ffffffff ffffffff 003 i TryClassTactic
 fp o
 fp i
 fp i
-f ffffffff ffffffff 004 t0011 CalculateTacticsByClass
-fp t0011
+f ffffffff ffffffff 004 t0012 CalculateTacticsByClass
+fp t0012
 fp o
 fp i
 fp i
-f ffffffff ffffffff 006 t0011 CalculateTactics
-fp t0011
+f ffffffff ffffffff 006 t0012 CalculateTactics
+fp t0012
 fp o
 fp f
 fp i
 fp i
 fp i
 f ffffffff ffffffff 007 i DetermineActionFromTactics
-fp t0011
+fp t0012
 fp o
 fp f
 fp i
@@ -2793,9 +2803,9 @@ f ffffffff ffffffff 000 s GUI_PLAYERMENU_CLOCK_BUTTON
 f ffffffff ffffffff 000 s SCREEN_OL_FRAME
 f ffffffff ffffffff 000 s OL_DETAIL_CLOCK
 f ffffffff ffffffff 000 i GetMinutesPerHour
-f ffffffff ffffffff 001 t0012 NormalizeCTimeDate
-fp t0012
-f ffffffff ffffffff 007 t0012 NewCTimeDate
+f ffffffff ffffffff 001 t0013 NormalizeCTimeDate
+fp t0013
+f ffffffff ffffffff 007 t0013 NewCTimeDate
 fp i
 fp i
 fp i
@@ -2803,7 +2813,7 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 007 t0012 GetCurrentCTimeDate
+f ffffffff ffffffff 007 t0013 GetCurrentCTimeDate
 fp i
 fp i
 fp i
@@ -2811,12 +2821,12 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 002 t0012 AddCTimeDate
-fp t0012
-fp t0012
+f ffffffff ffffffff 002 t0013 AddCTimeDate
+fp t0013
+fp t0013
 f ffffffff ffffffff 001 v SetCTimeDate
-fp t0012
-f ffffffff ffffffff 000 t0013 HasHourChanged
+fp t0013
+f ffffffff ffffffff 000 t0014 HasHourChanged
 f ffffffff ffffffff 000 i GetNumHoursPassed
 f ffffffff ffffffff 001 v NotifyRegisteredObject
 fp o
@@ -2829,7 +2839,7 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 000 t0013 CheckTime
+f ffffffff ffffffff 000 t0014 CheckTime
 f ffffffff ffffffff 001 v RegisterForTimeEvent
 fp o
 f ffffffff ffffffff 003 v SetClockOnForPlayer
@@ -2843,7 +2853,7 @@ f ffffffff ffffffff 001 v UpdateClockForPlayer
 fp o
 f ffffffff ffffffff 000 v UpdateClockForAllPlayers
 f ffffffff ffffffff 001 i GetFRSeason
-fp t0012
+fp t0013
 f ffffffff ffffffff 001 s GetFRSeasonName
 fp i
 f ffffffff ffffffff 001 s GetFRYearName
@@ -2853,16 +2863,16 @@ fp i
 f ffffffff ffffffff 001 s GetFRDayName
 fp i
 f ffffffff ffffffff 001 s GetFRDisplayDate
-fp t0012
+fp t0013
 f ffffffff ffffffff 001 s GetFRDisplayTime
-fp t0012
+fp t0013
 f ffffffff ffffffff 002 s GetClockDisplayDate
-fp t0012
+fp t0013
 fp i
 f ffffffff ffffffff 001 s GetClockDisplayTime
-fp t0012
+fp t0013
 f ffffffff ffffffff 002 s GetClockDisplay
-fp t0012
+fp t0013
 fp i
 f ffffffff ffffffff 002 i IsCurrentHourInRange
 fp i
@@ -2912,52 +2922,59 @@ l00 0000076 00000015 00000015
 l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
-l01 0000048 00000015 0000002c
-l02 0000021 0000002c 0000002c
-l02 0000022 0000002c 0000002c
-l02 0000023 0000002c 0000002c
-l02 0000024 0000002c 0000002c
-l02 0000025 0000002c 0000002c
-l02 0000031 0000002c 0000002c
-l02 0000032 0000002c 0000002c
-l03 0000055 0000002c 0000002c
-l03 0000056 0000002c 0000002c
-l04 0000040 0000002c 0000002c
-l04 0000041 0000002c 0000002c
-l04 0000042 0000002c 0000002c
-l04 0000043 0000002c 0000002c
-l04 0000044 0000002c 0000002c
-l04 0000045 0000002c 0000002c
-l04 0000046 0000002c 0000002c
-l04 0000047 0000002c 0000002c
-l04 0000048 0000002c 0000002c
-l04 0000049 0000002c 0000002c
+l01 0000169 00000015 00000015
+l01 0000170 00000015 00000015
+l01 0000171 00000015 00000015
+l01 0000172 00000015 00000015
+l01 0000173 00000015 00000015
+l01 0000174 00000015 00000015
+l01 0000175 00000015 00000015
+l02 0000048 00000015 0000002c
+l03 0000021 0000002c 0000002c
+l03 0000022 0000002c 0000002c
+l03 0000023 0000002c 0000002c
+l03 0000024 0000002c 0000002c
+l03 0000025 0000002c 0000002c
+l03 0000031 0000002c 0000002c
+l03 0000032 0000002c 0000002c
+l04 0000055 0000002c 0000002c
 l04 0000056 0000002c 0000002c
-l04 0000057 0000002c 0000002c
-l04 0000058 0000002c 0000002c
-l04 0000059 0000002c 0000002c
-l05 0000085 0000002c 0000002c
-l05 0000087 0000002c 0000002c
-l05 0000088 0000002c 0000002c
-l06 0000023 0000002c 0000002c
-l06 0000024 0000002c 0000002c
-l06 0000029 0000002c 0000002c
-l06 0000030 0000002c 0000002c
-l07 0000207 0000002c 0000002c
-l07 0000208 0000002c 0000002c
-l07 0000209 0000002c 0000002c
-l07 0000210 0000002c 0000002c
-l07 0000211 0000002c 0000002c
-l07 0000213 0000002c 0000002c
-l07 0000214 0000002c 0000002c
-l08 0000033 0000002c 0000002c
-l08 0000034 0000002c 0000002c
-l08 0000035 0000002c 0000002c
-l08 0000036 0000002c 0000002c
-l08 0000037 0000002c 0000002c
-l08 0000038 0000002c 0000002c
-l08 0000039 0000002c 0000002c
-l08 0000045 0000002c 0000002c
-l08 0000046 0000002c 0000002c
+l05 0000040 0000002c 0000002c
+l05 0000041 0000002c 0000002c
+l05 0000042 0000002c 0000002c
+l05 0000043 0000002c 0000002c
+l05 0000044 0000002c 0000002c
+l05 0000045 0000002c 0000002c
+l05 0000046 0000002c 0000002c
+l05 0000047 0000002c 0000002c
+l05 0000048 0000002c 0000002c
+l05 0000049 0000002c 0000002c
+l05 0000056 0000002c 0000002c
+l05 0000057 0000002c 0000002c
+l05 0000058 0000002c 0000002c
+l05 0000059 0000002c 0000002c
+l06 0000085 0000002c 0000002c
+l06 0000087 0000002c 0000002c
+l06 0000088 0000002c 0000002c
+l07 0000023 0000002c 0000002c
+l07 0000024 0000002c 0000002c
+l07 0000029 0000002c 0000002c
+l07 0000030 0000002c 0000002c
+l08 0000207 0000002c 0000002c
+l08 0000208 0000002c 0000002c
+l08 0000209 0000002c 0000002c
+l08 0000210 0000002c 0000002c
+l08 0000211 0000002c 0000002c
+l08 0000213 0000002c 0000002c
+l08 0000214 0000002c 0000002c
+l09 0000033 0000002c 0000002c
+l09 0000034 0000002c 0000002c
+l09 0000035 0000002c 0000002c
+l09 0000036 0000002c 0000002c
+l09 0000037 0000002c 0000002c
+l09 0000038 0000002c 0000002c
+l09 0000039 0000002c 0000002c
+l09 0000045 0000002c 0000002c
+l09 0000046 0000002c 0000002c
 l35 0000056 0000003e 0000007b
 l35 0000057 0000007b 0000007d

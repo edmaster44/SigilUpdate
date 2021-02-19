@@ -23,9 +23,9 @@ void PS_CalculateECL(object oPC)
 	int nECL			= 0;
 	
 	// Debug messages
-	SendMessageToPC(oPC, "Racial adjustment: LA +" + IntToString(nRacialECL));
-	SendMessageToPC(oPC, "Original racial adjustment: LA +" + IntToString(nOriginalECL));
-	SendMessageToPC(oPC, "Total template class adjustment: LA +" + IntToString(nTemplateECL));
+	//SendMessageToPC(oPC, "Racial adjustment: LA +" + IntToString(nRacialECL));
+	//SendMessageToPC(oPC, "Original racial adjustment: LA +" + IntToString(nOriginalECL));
+	//SendMessageToPC(oPC, "Total template class adjustment: LA +" + IntToString(nTemplateECL));
 	
 	if (nOriginalECL == nRacialECL)
 	{	nECL = nECL + nRacialECL + nTemplateECL;
@@ -44,7 +44,7 @@ void PS_CalculateECL(object oPC)
 	else
 	{	SetLocalString(oEssence, "ECL", sECL);
 		SetLocalString(oPC, "ECL", sECL);
-		SendMessageToPC(oPC, "Level adjustment of +" + sECL + " stored on Essence");
+		//SendMessageToPC(oPC, "Level adjustment of +" + sECL + " stored on Essence");
 	}
 }
 
