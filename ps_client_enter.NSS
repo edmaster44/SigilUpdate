@@ -6,10 +6,10 @@ rapsam2003 06/20/2018: Added a call to PS_GiveSpellFeat,
 
 #include "ps_wandofsort_inc"
 #include "ps_givespellfeat"
-
-#include "nwnx_sql"
 #include "nwnx_srvadmin"
 #include "ps_inc_time"
+
+int GetServerResetTime();
 
 void main()
 {
@@ -25,15 +25,7 @@ void main()
 	//
 	ResetSortObjectsOnPC(oPC);
 	
-	
-    
-	SQLExecDirect("SELECT UNIX_TIMESTAMP()");
-	
-	while (SQLFetch() != SQL_ERROR) { 
-		int utc = StringToInt(SQLGetData(1));
-		struct TimeFields Tf = TimeToTimeFields(utc);
-		DelayCommand(22.0f, SendMessageToPC(oPC, "Current hour: "+IntToString(Tf.Hour)));
-	}
+	GetIsServerResetTime(oPC);
 
 	//
 	// Send a warning to a player that logs in when a reset is pending so that

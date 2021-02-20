@@ -6,6 +6,7 @@
 	Inclusion script for all timestamping scripts
 */
 #include "ps_inc_advscript"
+#include "nwnx_sql"
 
 // -------------------------------------------------------------------------------------
 // Places a Unix timestamp (number of seconds since the start of 1970) on the object.
@@ -221,4 +222,42 @@ struct TimeFields TimeToTimeFields(int Time)
 	Tf.Weekday = (ed >= -4 ? (ed + 4) % 7 : (ed + 5) % 7 + 6);
 
 	return Tf;
+}
+
+//Checking if this is server reset time
+int GetIsServerResetTime(object oPC = OBJECT_INVALID) {
+
+    object oMod = GetModule();
+    int nBoottime = GetLocalInt(oMod, "boottime");
+	int nHour = 60*60;
+	
+	SQLExecDirect("SELECT UNIX_TIMESTAMP()");
+	
+	while (SQLFetch() != SQL_ERROR) { 
+		int utc = StringToInt(SQLGetData(1));
+		struct TimeFields timeStruct = TimeToTimeFields(utc);
+		DelayCommand(22.0f, SendMessageToPC(oPC, "Current hour: "+IntToString(timeStruct.Hour)));
+		
+		int iDelay = GetLocalInt(oMod, "delaycount");
+		iDelay *= nHour; // so we now check to see if a DM has delayed reboot with widget, 1 hour per delay.
+		
+		if (timeStruct.Hour >= 2 && timeStruct.Hour <= 4) {
+			if (utc > (nBoottime + (nHour * 3) + iDelay)) {
+				DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(utc)+" > "+IntToString(nBoottime + (nHour * 3) + iDelay)));
+				return TRUE;
+			} else {
+				DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(utc)+" <= "+IntToString(nBoottime + (nHour * 3) + iDelay)));
+				return FALSE;
+			}
+		}
+		
+		if (utc > nBoottime + 86400 + iDelay) {
+			DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(utc)+" <= "+IntToString(nBoottime + 86400 + iDelay)));
+			return TRUE;
+		}
+		
+	}
+	
+	return FALSE;
+
 }
