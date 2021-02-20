@@ -301,6 +301,15 @@ void main()
 	// various class and race related checks	
 	CountSpells(oPC,1);
 	GetWarlockCasterLevel(oPC);
+	GetSpiritShamanTRUECasterlevel(oPC);
+	GetPaladinTRUECasterlevel(oPC);
+	GetRangerTRUECasterlevel(oPC);
+	GetWizardTRUECasterlevel(oPC);
+	GetSorcererTRUECasterlevel(oPC);
+	GetBardTRUECasterlevel(oPC);
+	GetDruidTRUECasterlevel(oPC);
+	GetFavoredSoulTRUECasterlevel(oPC);
+	GetClericTRUECasterlevel(oPC);
 	GiveWarlockBlastShapes(oPC);
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
@@ -314,5 +323,5 @@ void main()
 	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
-	PS_GiveSpellFeat(oPC);
+	//PS_GiveSpellFeat(oPC);
 }
