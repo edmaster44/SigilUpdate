@@ -224,7 +224,9 @@ struct TimeFields TimeToTimeFields(int Time)
 	return Tf;
 }
 
+// ------------------------------------------------------------------------------------
 //Checking if this is server reset time
+// ------------------------------------------------------------------------------------
 int GetIsServerResetTime(object oPC = OBJECT_INVALID) {
 
     object oMod = GetModule();
@@ -242,17 +244,23 @@ int GetIsServerResetTime(object oPC = OBJECT_INVALID) {
 		iDelay *= nHour; // so we now check to see if a DM has delayed reboot with widget, 1 hour per delay.
 		
 		if (timeStruct.Hour >= 2 && timeStruct.Hour <= 4) {
+			int nextValidResetTime = (nBoottime + (nHour * 3) + iDelay);
+			struct TimeFields resetTime = TimeToTimeFields(nextValidResetTime);
+			
 			if (utc > (nBoottime + (nHour * 3) + iDelay)) {
-				DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(utc)+" > "+IntToString(nBoottime + (nHour * 3) + iDelay)));
+				DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(timeStruct.Hour)+" > "+IntToString(resetTime.Hour)));
 				return TRUE;
 			} else {
-				DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(utc)+" <= "+IntToString(nBoottime + (nHour * 3) + iDelay)));
+				DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(timeStruct.Hour)+" <= "+IntToString(resetTime.Hour)));
 				return FALSE;
 			}
 		}
 		
 		if (utc > nBoottime + 86400 + iDelay) {
-			DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(utc)+" <= "+IntToString(nBoottime + 86400 + iDelay)));
+			int nextValidResetTime = (nBoottime + 86400 + iDelay);
+			struct TimeFields resetTime = TimeToTimeFields(nextValidResetTime);
+			
+			DelayCommand(23.0f, SendMessageToPC(oPC, IntToString(timeStruct.Hour)+" > "+IntToString(resetTime.Hour)));
 			return TRUE;
 		}
 		
