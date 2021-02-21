@@ -1,5 +1,5 @@
 NDB V1.0
-0000022 0000011 0000745 0000127 0000344
+0000023 0000011 0001046 0000127 0000344
 n00 ps_inc_advscript
 n01 ps_inc_time
 n02 ps_inc_flavortext
@@ -20,8 +20,9 @@ n16 ps_inc_casterlevel
 n17 x0_i0_position
 n18 ginc_math
 n19 ginc_item
-n20 ps_inc_stores
-N21 ps_store_gemstoneopen
+n20 ps_inc_cards
+n21 ps_inc_stores
+N22 ps_store_gemstoneopen
 s 03 vector
 sf f x
 sf f y
@@ -597,6 +598,11 @@ f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_PRCSL_L
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_PRCBL_M
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_PRCBL_S
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_PRCBL_L
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_CLAW
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_SLAM
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_CLAW_LARGE
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE_LARGE
 f ffffffff ffffffff 004 v IPRemoveMatchingItemProperties
 fp o
 fp i
@@ -1093,9 +1099,10 @@ f ffffffff ffffffff 003 i GetHasRequiredGemstone
 fp o
 fp s
 fp i
-f ffffffff ffffffff 002 i GetFulfillsSpecialRequirement
+f ffffffff ffffffff 003 i GetFulfillsSpecialRequirement
 fp o
 fp s
+fp o
 f ffffffff ffffffff 001 s DisplaySpecialRequirement
 fp s
 f ffffffff ffffffff 003 i HasSimilarProperty
@@ -1853,6 +1860,551 @@ fp o
 f ffffffff ffffffff 000 i EquipRandomArmorFromInventory
 f ffffffff ffffffff 001 v RecreateItemsFromBlueprint
 fp o
+f ffffffff ffffffff 000 s CARD_GAME_NAME
+f ffffffff ffffffff 000 s CARD_GAME_FEEDBACK_COLOUR
+f ffffffff ffffffff 000 s CARD_PLAYER
+f ffffffff ffffffff 000 s CARD_PLAYER1
+f ffffffff ffffffff 000 s CARD_PLAYER2
+f ffffffff ffffffff 000 s CARD_OBSERVER
+f ffffffff ffffffff 000 i CARD_MAX_OBSERVERS
+f ffffffff ffffffff 000 i CARD_PLAYER_TYPE_PLAYER
+f ffffffff ffffffff 000 i CARD_PLAYER_TYPE_OBSERVER
+f ffffffff ffffffff 000 i CARD_PLAYER_1
+f ffffffff ffffffff 000 i CARD_PLAYER_2
+f ffffffff ffffffff 000 s SCORE_PLAYER1
+f ffffffff ffffffff 000 s SCORE_PLAYER2
+f ffffffff ffffffff 000 s CARD_PLAYER_NAME
+f ffffffff ffffffff 000 s CARD_OBSERVER_NAME
+f ffffffff ffffffff 000 s CARD_PLAYER_DECK
+f ffffffff ffffffff 000 s CARD_TABLE_OBJECT
+f ffffffff ffffffff 000 s CARD_TABLE_POSITION
+f ffffffff ffffffff 000 s LAST_PLAYER_CARDS_SELECTED
+f ffffffff ffffffff 000 f MAX_PLAYER_DISTANCE_FROM_BOARD
+f ffffffff ffffffff 000 f MAX_OBSERVER_DISTANCE_FROM_BOARD
+f ffffffff ffffffff 000 s CARD_2DA
+f ffffffff ffffffff 000 s CARD_2DA_COL_NAME
+f ffffffff ffffffff 000 s CARD_2DA_COL_IMAGE
+f ffffffff ffffffff 000 s CARD_2DA_COL_UP
+f ffffffff ffffffff 000 s CARD_2DA_COL_DOWN
+f ffffffff ffffffff 000 s CARD_2DA_COL_LEFT
+f ffffffff ffffffff 000 s CARD_2DA_COL_RIGHT
+f ffffffff ffffffff 000 i CARD_ITEM_TYPE_BASE
+f ffffffff ffffffff 000 i CARD_ITEM_TYPE_LOW
+f ffffffff ffffffff 000 i CARD_ITEM_TYPE_MED
+f ffffffff ffffffff 000 i CARD_ITEM_TYPE_HIGH
+f ffffffff ffffffff 000 i CARD_ITEM_TYPE_ULTRA
+f ffffffff ffffffff 000 i CARD_ITEM_TYPE_2DA_OFFSET
+f ffffffff ffffffff 000 i CARD_TYPE_BASE_MAX
+f ffffffff ffffffff 000 i CARD_TYPE_LOW_MAX
+f ffffffff ffffffff 000 i CARD_TYPE_MED_MAX
+f ffffffff ffffffff 000 i CARD_TYPE_HIGH_MAX
+f ffffffff ffffffff 000 i CARD_TYPE_ULTRA_MAX
+f ffffffff ffffffff 000 s CARD_TABLE_TAG
+f ffffffff ffffffff 000 s CARD_CARD_TAG
+f ffffffff ffffffff 000 s CARD_CARD_RESREF
+f ffffffff ffffffff 000 s CARD_DECK_TAG
+f ffffffff ffffffff 000 s CARD_PLACEABLE_BACK
+f ffffffff ffffffff 000 s CARD_PLACEABLE_BLUE
+f ffffffff ffffffff 000 s CARD_PLACEABLE_RED
+f ffffffff ffffffff 000 s CARD_CHAIR_BLUE
+f ffffffff ffffffff 000 s CARD_CHAIR_RED
+f ffffffff ffffffff 000 f CARDS_BLUE_CHAIR_ORIENT
+f ffffffff ffffffff 000 f CARDS_RED_CHAIR_ORIENT
+f ffffffff ffffffff 000 f CARDS_BLUE_CHAIR_X
+f ffffffff ffffffff 000 f CARDS_BLUE_ROW_X
+f ffffffff ffffffff 000 f CARDS_ROW1_X
+f ffffffff ffffffff 000 f CARDS_ROW2_X
+f ffffffff ffffffff 000 f CARDS_ROW3_X
+f ffffffff ffffffff 000 f CARDS_RED_ROW_X
+f ffffffff ffffffff 000 f CARDS_RED_CHAIR_X
+f ffffffff ffffffff 000 f CARDS_PLAYER_HAND_1_Y
+f ffffffff ffffffff 000 f CARDS_PLAYER_HAND_2_Y
+f ffffffff ffffffff 000 f CARDS_PLAYER_HAND_3_Y
+f ffffffff ffffffff 000 f CARDS_PLAYER_HAND_4_Y
+f ffffffff ffffffff 000 f CARDS_PLAYER_HAND_5_Y
+f ffffffff ffffffff 000 f CARDS_COL1_Y
+f ffffffff ffffffff 000 f CARDS_COL2_Y
+f ffffffff ffffffff 000 f CARDS_COL3_Y
+f ffffffff ffffffff 000 f CARDS_HEIGHT_Z
+f ffffffff ffffffff 000 f CARDS_ROTATION
+f ffffffff ffffffff 000 f CARD_BG_FLIP_TIME
+f ffffffff ffffffff 000 i CARD_BG_FLIP_NUMBER
+f ffffffff ffffffff 000 f CARD_BG_FLIP_TOTAL_TIME
+f ffffffff ffffffff 000 f CARD_RULE_DISPLAY_TIME
+f ffffffff ffffffff 000 s CARD_DECK_SIZE
+f ffffffff ffffffff 000 s RULE_BUTTON
+f ffffffff ffffffff 000 s RULE_OPEN
+f ffffffff ffffffff 000 s RULE_RANDOM
+f ffffffff ffffffff 000 s RULE_SAME
+f ffffffff ffffffff 000 s RULE_PLUS
+f ffffffff ffffffff 000 s RULE_WALL
+f ffffffff ffffffff 000 s RULE_COMBO
+f ffffffff ffffffff 000 s RULE_READY
+f ffffffff ffffffff 000 s CARDS_TEXT_SAME
+f ffffffff ffffffff 000 s CARDS_TEXT_PLUS
+f ffffffff ffffffff 000 s CARDS_TEXT_COMBO
+f ffffffff ffffffff 000 s CARDS_TEXT_WALL
+f ffffffff ffffffff 000 s CARDS_TEXT_BLANK
+f ffffffff ffffffff 000 s CARD_BG_PLAYER0
+f ffffffff ffffffff 000 s CARD_BG_PLAYER1
+f ffffffff ffffffff 000 s CARD_BG_PLAYER2
+f ffffffff ffffffff 000 s CARD_BORDER_SELECTED
+f ffffffff ffffffff 000 s CARD_BORDER_UNSELECTED
+f ffffffff ffffffff 000 s CARD_BLANK
+f ffffffff ffffffff 000 s CARD_HIDDEN
+f ffffffff ffffffff 000 s CARD
+f ffffffff ffffffff 000 s DECK
+f ffffffff ffffffff 000 s CARD_PANE
+f ffffffff ffffffff 000 s CARD_BORDER
+f ffffffff ffffffff 000 s CARD_PICTURE
+f ffffffff ffffffff 000 s CARD_BACKGROUND
+f ffffffff ffffffff 000 s CARD_NAME
+f ffffffff ffffffff 000 s CARD_VALUE_UP
+f ffffffff ffffffff 000 s CARD_VALUE_DOWN
+f ffffffff ffffffff 000 s CARD_VALUE_LEFT
+f ffffffff ffffffff 000 s CARD_VALUE_RIGHT
+f ffffffff ffffffff 000 s CARD_ID
+f ffffffff ffffffff 000 s CARD_P
+f ffffffff ffffffff 000 s _HAND_
+f ffffffff ffffffff 000 s CARD_P1_HAND_1
+f ffffffff ffffffff 000 s CARD_P1_HAND_2
+f ffffffff ffffffff 000 s CARD_P1_HAND_3
+f ffffffff ffffffff 000 s CARD_P1_HAND_4
+f ffffffff ffffffff 000 s CARD_P1_HAND_5
+f ffffffff ffffffff 000 s CARD_P2_HAND_1
+f ffffffff ffffffff 000 s CARD_P2_HAND_2
+f ffffffff ffffffff 000 s CARD_P2_HAND_3
+f ffffffff ffffffff 000 s CARD_P2_HAND_4
+f ffffffff ffffffff 000 s CARD_P2_HAND_5
+f ffffffff ffffffff 000 s BOARD_ROW
+f ffffffff ffffffff 000 s BOARD_COL
+f ffffffff ffffffff 000 s BOARD_R1_C1
+f ffffffff ffffffff 000 s BOARD_R1_C2
+f ffffffff ffffffff 000 s BOARD_R1_C3
+f ffffffff ffffffff 000 s BOARD_R2_C1
+f ffffffff ffffffff 000 s BOARD_R2_C2
+f ffffffff ffffffff 000 s BOARD_R2_C3
+f ffffffff ffffffff 000 s BOARD_R3_C1
+f ffffffff ffffffff 000 s BOARD_R3_C2
+f ffffffff ffffffff 000 s BOARD_R3_C3
+f ffffffff ffffffff 000 s PLACEABLE
+f ffffffff ffffffff 000 s CARD_OWNER
+f ffffffff ffffffff 000 s SELECTED_CARD
+f ffffffff ffffffff 000 i LEAVE_REASON_UNKNOWN
+f ffffffff ffffffff 000 i LEAVE_REASON_TOO_FAR_PLAYER1
+f ffffffff ffffffff 000 i LEAVE_REASON_TOO_FAR_PLAYER2
+f ffffffff ffffffff 000 i LEAVE_REASON_NOT_FOUND_PLAYER1
+f ffffffff ffffffff 000 i LEAVE_REASON_NOT_FOUND_PLAYER2
+f ffffffff ffffffff 000 i LEAVE_REASON_PLAYER1_QUIT
+f ffffffff ffffffff 000 i LEAVE_REASON_PLAYER2_QUIT
+f ffffffff ffffffff 000 i LEAVE_REASON_GAME_BOARD_DESTROYED
+f ffffffff ffffffff 000 i LEAVE_REASON_GAME_FINISHED
+f ffffffff ffffffff 000 s LEAVE_STRING_P1_TOO_FAR
+f ffffffff ffffffff 000 s LEAVE_STRING_P2_TOO_FAR
+f ffffffff ffffffff 000 s LEAVE_STRING_P1_QUIT_CLIENT
+f ffffffff ffffffff 000 s LEAVE_STRING_P2_QUIT_CLIENT
+f ffffffff ffffffff 000 s LEAVE_STRING_P1_QUIT_GAME
+f ffffffff ffffffff 000 s LEAVE_STRING_P2_QUIT_GAME
+f ffffffff ffffffff 000 s LEAVE_STRING_GAME_FINISHED
+f ffffffff ffffffff 000 s LEAVE_STRING_BOARD_DESTROYED
+f ffffffff ffffffff 000 s GAME_STATE
+f ffffffff ffffffff 000 s LAST_GAME_STATE
+f ffffffff ffffffff 000 i GAME_STATE_NO_PLAYERS
+f ffffffff ffffffff 000 i GAME_STATE_1_PLAYER
+f ffffffff ffffffff 000 i GAME_STATE_RULES_SELECTION
+f ffffffff ffffffff 000 i GAME_STATE_CARD_SELECTION_1
+f ffffffff ffffffff 000 i GAME_STATE_CARD_SELECTION_2
+f ffffffff ffffffff 000 i GAME_STATE_GAME_STARTING
+f ffffffff ffffffff 000 i GAME_STATE_GAME_IN_PROGRESS_TURN_P1
+f ffffffff ffffffff 000 i GAME_STATE_GAME_IN_PROGRESS_TURN_P2
+f ffffffff ffffffff 000 i GAME_STATE_GAME_IN_PROGRESS_PROCESSING_RULES
+f ffffffff ffffffff 000 i GAME_STATE_GAME_OVER
+f ffffffff ffffffff 000 s GAME_STATE_NO_PLAYERS_TEXT
+f ffffffff ffffffff 000 s GAME_STATE_1_PLAYER_TEXT
+f ffffffff ffffffff 000 s GAME_STATE_RULES_SELECTION_TEXT
+f ffffffff ffffffff 000 s GAME_STATE_CARD_SELECTION_TEXT
+f ffffffff ffffffff 000 s GAME_BOARD_STATUS_GAME_OVER
+f ffffffff ffffffff 000 s GAME_BOARD_STATUS_PLAYER_WINS
+f ffffffff ffffffff 000 s GAME_BOARD_STATUS_DRAW
+f ffffffff ffffffff 000 s GAME_BOARD_STATUS_PLAYERS_TURN
+f ffffffff ffffffff 000 s GAME_BOARD_STATUS_PLAYER_QUIT
+f ffffffff ffffffff 000 s GAME_BOARD_STATUS_PROCESSING_RULES
+f ffffffff ffffffff 000 s GAME_OWNER_NAME
+f ffffffff ffffffff 000 s GAME_OWNER_OBJECT
+f ffffffff ffffffff 000 s CARD_SCREEN_WAITING_XML
+f ffffffff ffffffff 000 s CARD_SCREEN_WAITING_SCENE
+f ffffffff ffffffff 000 s CARD_SCREEN_RULES_XML
+f ffffffff ffffffff 000 s CARD_SCREEN_RULES_SCENE
+f ffffffff ffffffff 000 s CARD_SCREEN_SELECTION_XML
+f ffffffff ffffffff 000 s CARD_SCREEN_SELECTION_SCENE
+f ffffffff ffffffff 000 s CARD_SCREEN_GAME_XML
+f ffffffff ffffffff 000 s CARD_SCREEN_GAME_SCENE
+f ffffffff ffffffff 000 s CARD_SCREEN_DECK_XML
+f ffffffff ffffffff 000 s CARD_SCREEN_DECK_SCENE
+f ffffffff ffffffff 000 s CARD_SCREEN_SINGLE_XML
+f ffffffff ffffffff 000 s CARD_SCREEN_SINGLE_SCENE
+f ffffffff ffffffff 000 i DECK_VIEW
+f ffffffff ffffffff 000 i DECK_SORT_ALPHA
+f ffffffff ffffffff 000 i DECK_SORT_POWER_INCREASE
+f ffffffff ffffffff 000 i DECK_SORT_POWER_DECREASE
+f ffffffff ffffffff 003 v CardsChangeGameState
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 v CardsDoRules
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 v CardsGUIFillDeckListBox
+fp o
+fp o
+fp s
+f ffffffff ffffffff 002 v CardsPlaceableRemoveCardFromPosition
+fp o
+fp s
+f ffffffff ffffffff 002 v CardsSetLastCardPlayedOwner
+fp o
+fp i
+f ffffffff ffffffff 001 i CardsGetLastCardPlayedOwner
+fp o
+f ffffffff ffffffff 002 v CardsSetBoardOnPlayer
+fp o
+fp o
+f ffffffff ffffffff 001 o CardsGetBoardFromPlayer
+fp o
+f ffffffff ffffffff 003 v CardsSetPlayer
+fp o
+fp i
+fp o
+f ffffffff ffffffff 002 o CardsGetPlayer
+fp o
+fp i
+f ffffffff ffffffff 002 s CardsGetObserverName
+fp o
+fp i
+f ffffffff ffffffff 003 v CardsSetObserverName
+fp o
+fp i
+fp o
+f ffffffff ffffffff 002 o CardsGetObserver
+fp o
+fp i
+f ffffffff ffffffff 003 v CardsSetObserver
+fp o
+fp i
+fp o
+f ffffffff ffffffff 002 s CardsGetPlayerNameFromBoard
+fp o
+fp i
+f ffffffff ffffffff 003 v CardsSetPlayerNameOnBoard
+fp o
+fp i
+fp o
+f ffffffff ffffffff 004 v CardsSendMessageToPlayers
+fp o
+fp s
+fp i
+fp i
+f ffffffff ffffffff 001 v CardsClearVarsOnPC
+fp o
+f ffffffff ffffffff 001 v CardsClearVarsOnBoard
+fp o
+f ffffffff ffffffff 001 v CardsClearVarsOnAllPlayers
+fp o
+f ffffffff ffffffff 002 i CardsGetObserverNumberFromBoard
+fp o
+fp o
+f ffffffff ffffffff 002 i CardsGetPlayerNumberFromBoard
+fp o
+fp o
+f ffffffff ffffffff 001 v CardsClearTablePlaceableOfCards
+fp o
+f ffffffff ffffffff 001 o GetPlayerDeck
+fp o
+f ffffffff ffffffff 001 i CardsGetDeckSize
+fp o
+f ffffffff ffffffff 002 v CardsSetDeckSize
+fp o
+fp i
+f ffffffff ffffffff 001 i CardsGetGameState
+fp o
+f ffffffff ffffffff 002 v CardsSetGameState
+fp o
+fp i
+f ffffffff ffffffff 002 i CardsGetFirstFreeCardSlotInHand
+fp o
+fp i
+f ffffffff ffffffff 003 i CardsIsCardSelectedForHand
+fp o
+fp i
+fp s
+f ffffffff ffffffff 007 v CardsSetGUITextPlayers
+fp o
+fp s
+fp s
+fp s
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 v CardsGUISetGameBoardTitleAllPlayers
+fp o
+fp s
+f ffffffff ffffffff 003 v CardsGUISetPlayerScoresAllPlayers
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 v CardsGUISetPlayerNamesAllPlayers
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 v CardsSetPlayerScores
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i CardsGetPlayerScore
+fp o
+fp i
+f ffffffff ffffffff 005 v CardsCloseGUIPlayers
+fp o
+fp s
+fp i
+fp i
+fp i
+f ffffffff ffffffff 001 i CardsDetermineWinner
+fp o
+f ffffffff ffffffff 001 v CardsDestroyBoard
+fp o
+f ffffffff ffffffff 002 v CardsGameOver
+fp o
+fp i
+f ffffffff ffffffff 003 i CardsParticipantInRange
+fp o
+fp o
+fp i
+f ffffffff ffffffff 001 v CardsGUIUpdateObserverList
+fp o
+f ffffffff ffffffff 001 v CardsCheckObservers
+fp o
+f ffffffff ffffffff 001 i CardsCheckParticipantsParticipatingNotifyIfGameOver
+fp o
+f ffffffff ffffffff 001 v CardsGUISetWaitingText
+fp o
+f ffffffff ffffffff 002 v GUI_Display_Card_Game_Rule_Selection_Player
+fp o
+fp i
+f ffffffff ffffffff 001 v GUI_Display_Card_Game_Rule_Selection
+fp o
+f ffffffff ffffffff 004 v CardsSetRule
+fp o
+fp s
+fp i
+fp s
+f ffffffff ffffffff 003 i CardsGetRule
+fp o
+fp s
+fp s
+f ffffffff ffffffff 002 v GUI_Display_Card_Board_Waiting
+fp o
+fp o
+f ffffffff ffffffff 003 v CardsMoveCardVariables
+fp o
+fp s
+fp s
+f ffffffff ffffffff 005 v CardsStoreSelectedCardOnBoard
+fp o
+fp o
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 v CardsSelectRandomCardsForPlayer
+fp o
+fp i
+f ffffffff ffffffff 001 v CardsSelectRandomCards
+fp o
+f ffffffff ffffffff 004 v SetGUITextureAddExtension
+fp o
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 v GUI_CardsSetSelected
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 v GUI_CardsSetBackgroundColour
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 v GUI_CardsSetBackgroundColourAllPlayers
+fp o
+fp s
+fp i
+f ffffffff ffffffff 002 v CardsPlaceableDisplayCardInPosition
+fp o
+fp s
+f ffffffff ffffffff 003 v CardsGUIClearCardInPosition
+fp o
+fp s
+fp s
+f ffffffff ffffffff 002 v CardsGUIClearPlayedCardInPositionAllInGame
+fp o
+fp s
+f ffffffff ffffffff 007 v CardsGUIDisplayCardInPositionFromDeck
+fp o
+fp o
+fp i
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 004 v CardsGUIDisplayCardInPositionFromBoard
+fp o
+fp o
+fp s
+fp i
+f ffffffff ffffffff 002 v CardsGUIDisplayPlayedCardInPositionAllInGame
+fp o
+fp s
+f ffffffff ffffffff 001 s CardsMakeRuleString
+fp o
+f ffffffff ffffffff 002 v GUI_Display_Card_Board_In_CurrentState
+fp o
+fp o
+f ffffffff ffffffff 001 v GUI_Display_Initial_Card_Board_To_All
+fp o
+f ffffffff ffffffff 002 v CardsSelectionSetScrollOffset
+fp o
+fp i
+f ffffffff ffffffff 001 i CardsSelectionGetScrollOffset
+fp o
+f ffffffff ffffffff 002 v CardsSelectionDisableScrollButtons
+fp o
+fp o
+f ffffffff ffffffff 002 v CardsSelectionDisplayDeckFromOffset
+fp o
+fp o
+f ffffffff ffffffff 003 v CardsDisplayCardSelectionScreen
+fp o
+fp o
+fp i
+f ffffffff ffffffff 002 v CardsGUIDisplaySingleCard
+fp o
+fp o
+f ffffffff ffffffff 002 v CardsGUIViewCards
+fp o
+fp o
+f ffffffff ffffffff 003 i CardsGetCardOnBoardValueFromPosition
+fp o
+fp s
+fp s
+f ffffffff ffffffff 002 i CardsGetCardOnBoardOwnerFromPosition
+fp o
+fp s
+f ffffffff ffffffff 002 v CardsToggleCardOwner
+fp o
+fp s
+f ffffffff ffffffff 001 i CardsGetIterationFlipsMax
+fp o
+f ffffffff ffffffff 001 v CardsResetIterationFlipsMax
+fp o
+f ffffffff ffffffff 002 v CardsSetIterationFlipsMax
+fp o
+fp i
+f ffffffff ffffffff 001 f CardsGetTotalDelay
+fp o
+f ffffffff ffffffff 001 v CardsUpdateScores
+fp o
+f ffffffff ffffffff 002 v CardsFlipPlaceableCard
+fp o
+fp s
+f ffffffff ffffffff 006 v CardsFlipCards
+fp o
+fp s
+fp s
+fp s
+fp s
+fp i
+f ffffffff ffffffff 006 i CardsDetermineIfCardPlayedBeatsTarget
+fp o
+fp i
+fp s
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 v CardsGUIDisplayRuleInEffectTextToAllPlayers
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 v GUI_Cards_Rule_Screen_Change
+fp o
+fp s
+fp s
+f ffffffff ffffffff 002 i CheckPlayerAlreadyIn
+fp o
+fp o
+f ffffffff ffffffff 002 i CheckGameSlotOpen
+fp o
+fp s
+f ffffffff ffffffff 002 v CardsLeaveGame
+fp o
+fp o
+f ffffffff ffffffff 003 v JoinPlayerToGame
+fp o
+fp i
+fp o
+f ffffffff ffffffff 002 i IsBoardOwner
+fp o
+fp o
+f ffffffff ffffffff 002 v CardsCreateBoard
+fp o
+fp e2
+f ffffffff ffffffff 001 v DestroyCardTable
+fp o
+f ffffffff ffffffff 002 i CardsCardExistsInDeck
+fp o
+fp o
+f ffffffff ffffffff 003 v CardsStoreCardInDeck
+fp o
+fp o
+fp o
+f ffffffff ffffffff 003 v CardsAddCardToDeck
+fp o
+fp o
+fp o
+f ffffffff ffffffff 001 s CardsStripUnderscore
+fp s
+f ffffffff ffffffff 002 o CardsCreateCard
+fp o
+fp i
+f ffffffff ffffffff 002 v CardsSetUpBaseDeck
+fp o
+fp o
+f ffffffff ffffffff 001 v CardsCreateCardOnSpawnOrChest
+fp o
+f ffffffff ffffffff 003 v CardsSwapCardValuesWithStrings
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 v CardsSwapCardsInDeckPositions
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 i CardsCompareAlpha
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i CardsCalcTotalValue
+fp o
+fp i
+f ffffffff ffffffff 003 i CardsComparePower
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 v CardsDeckSort
+fp o
+fp o
+fp i
+f ffffffff ffffffff 001 i CardsAllPositionsFilled
+fp o
 f ffffffff ffffffff 000 i MAX_MARKUP
 f ffffffff ffffffff 000 i MIN_MARKUP
 f ffffffff ffffffff 000 i MAX_MARKDOWN
@@ -1872,6 +2424,8 @@ fp s
 fp o
 f ffffffff ffffffff 002 v CreateItemForStore
 fp o
+fp o
+f ffffffff ffffffff 001 v PopulateCardStore
 fp o
 f 0000005f 00000246 002 v main
 fp i
@@ -2099,30 +2653,30 @@ l07 0000031 0000004d 0000004d
 l07 0000032 0000004d 0000004d
 l08 0000055 0000004d 0000004d
 l08 0000056 0000004d 0000004d
-l21 0000013 0000005f 00000083
-l21 0000014 00000083 000000a8
-l21 0000016 000000a8 000000b0
-l21 0000017 000000b0 000000ce
-l21 0000019 000000ce 00000108
-l21 0000020 0000010e 0000011c
-l21 0000021 00000122 00000124
-l21 0000022 00000124 00000132
-l21 0000023 00000132 00000158
-l21 0000026 00000158 00000183
-l21 0000028 00000183 000001a1
-l21 0000029 000001a1 000001b1
-l21 0000031 000001cb 000001e9
-l21 0000032 000001e9 000001f9
-l21 0000034 00000213 00000238
-l21 0000035 0000023e 00000246
-l20 0000037 00000246 00000259
-l20 0000038 00000259 00000266
-l20 0000040 00000266 00000273
-l20 0000042 00000273 000002b0
-l20 0000043 000002b0 000002cb
-l20 0000047 000002d1 000002e1
-l20 0000049 0000030f 0000032b
-l20 0000050 00000331 00000339
+l22 0000013 0000005f 00000083
+l22 0000014 00000083 000000a8
+l22 0000016 000000a8 000000b0
+l22 0000017 000000b0 000000ce
+l22 0000019 000000ce 00000108
+l22 0000020 0000010e 0000011c
+l22 0000021 00000122 00000124
+l22 0000022 00000124 00000132
+l22 0000023 00000132 00000158
+l22 0000026 00000158 00000183
+l22 0000028 00000183 000001a1
+l22 0000029 000001a1 000001b1
+l22 0000031 000001cb 000001e9
+l22 0000032 000001e9 000001f9
+l22 0000034 00000213 00000238
+l22 0000035 0000023e 00000246
+l21 0000038 00000246 00000259
+l21 0000039 00000259 00000266
+l21 0000041 00000266 00000273
+l21 0000043 00000273 000002b0
+l21 0000044 000002b0 000002cb
+l21 0000048 000002d1 000002e1
+l21 0000050 0000030f 0000032b
+l21 0000051 00000331 00000339
 l08 0000245 00000339 0000033f
 l08 0000248 0000033f 0000036c
 l08 0000251 00000388 00000398
@@ -2191,35 +2745,35 @@ l00 0000686 00000b7e 00000b8b
 l00 0000687 00000b8b 00000b98
 l00 0000688 00000b98 00000bd3
 l00 0000689 00000bd3 00000bdb
-l20 0000054 00000bdb 00000be6
-l20 0000055 00000be6 00000bf9
-l20 0000056 00000bf9 00000c12
-l20 0000059 00000c1e 00000c26
-l20 0000063 00000c26 00000c5b
-l20 0000064 00000c5b 00000c90
-l20 0000065 00000c90 00000cc5
-l20 0000066 00000cc5 00000d01
-l20 0000067 00000d01 00000d3d
-l20 0000068 00000d3d 00000d79
-l20 0000069 00000d79 00000db5
-l20 0000071 00000db5 00000dbb
-l20 0000072 00000dbb 00000dd1
-l20 0000074 00000dd1 00000de4
-l20 0000075 00000de4 00000efa
-l20 0000076 00000efa 00000efa
-l20 0000077 00000f3d 00000f3d
-l20 0000078 00000f82 00000f82
-l20 0000079 00000fc7 00000fc7
-l20 0000080 0000100c 0000100c
-l20 0000081 00001050 00001050
-l20 0000082 00001091 00001091
-l20 0000083 000010d0 000010d0
-l20 0000084 00001110 00001110
-l20 0000085 00001151 00001151
-l20 0000086 0000118c 0000118c
-l20 0000087 000011ce 000011ce
-l20 0000090 00001216 0000122a
-l20 0000093 0000123c 00001244
+l21 0000055 00000bdb 00000be6
+l21 0000056 00000be6 00000bf9
+l21 0000057 00000bf9 00000c12
+l21 0000060 00000c1e 00000c26
+l21 0000064 00000c26 00000c5b
+l21 0000065 00000c5b 00000c90
+l21 0000066 00000c90 00000cc5
+l21 0000067 00000cc5 00000d01
+l21 0000068 00000d01 00000d3d
+l21 0000069 00000d3d 00000d79
+l21 0000070 00000d79 00000db5
+l21 0000072 00000db5 00000dbb
+l21 0000073 00000dbb 00000dd1
+l21 0000075 00000dd1 00000de4
+l21 0000076 00000de4 00000efa
+l21 0000077 00000efa 00000efa
+l21 0000078 00000f3d 00000f3d
+l21 0000079 00000f82 00000f82
+l21 0000080 00000fc7 00000fc7
+l21 0000081 0000100c 0000100c
+l21 0000082 00001050 00001050
+l21 0000083 00001091 00001091
+l21 0000084 000010d0 000010d0
+l21 0000085 00001110 00001110
+l21 0000086 00001151 00001151
+l21 0000087 0000118c 0000118c
+l21 0000088 000011ce 000011ce
+l21 0000091 00001216 0000122a
+l21 0000094 0000123c 00001244
 l10 0000399 00001244 00001246
 l10 0000400 00001246 000012b0
 l10 0000402 000012b0 000012be

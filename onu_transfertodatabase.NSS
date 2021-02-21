@@ -236,7 +236,7 @@ void LoadJunkToDatabase(object oPC) {
 	}
 	SQLExecDirect("TRUNCATE TABLE treasure_junk");
 	int n = 1;
-	while (n < 11) {
+	while (n < 27) {
 		string sPot = GetFromJunkList(n);
 		if (sPot == "") {
 			n++; continue;

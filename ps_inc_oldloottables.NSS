@@ -96,7 +96,7 @@ string GetFromCoinList(int nRandom, int nTreasureLevel) {
 	return sRes;
 }
 
-//Max 17
+//Max 26
 string GetFromJunkList(int nRandom) {
 	string sRes = "";
 	switch (nRandom) {
