@@ -2657,6 +2657,7 @@ string CardsStripUnderscore(string sInput)
 	}
 	return sOutput;
 }
+
 object CardsCreateCard(object oTarget, int i2daRow)
 {
 	object oCard = CreateItemOnObject(CARD_CARD_RESREF, oTarget, 1, "", FALSE);

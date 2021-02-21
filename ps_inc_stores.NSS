@@ -2,6 +2,7 @@
 #include "ps_inc_randomitems"
 #include "ginc_param_const"
 #include "ginc_item"
+#include "ps_inc_cards"
 
 const int MAX_MARKUP = 30;
 const int MIN_MARKUP = 1;
@@ -90,6 +91,18 @@ void PopulateGemstoneStore(object oStore) {
 		gemCount++;
 	}
 
+}
+
+void PopulateCardStore(object oStore) {
+
+	int nMax = 20; //The number of cards to populate in the store
+
+	int n;
+	float fDelay = 0.01f;
+	for (n = 0; n < nMax; n++) {
+		DelayCommand(fDelay, CardsCreateCardOnSpawnOrChest(oStore));
+		fDelay += 0.01f;
+	}
 }
 
 void AddMustHaveItems(object oStore) {
