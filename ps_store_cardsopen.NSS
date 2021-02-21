@@ -13,13 +13,17 @@ void main(int nMarkUp, int nMarkDown)
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	object oStore = GetStoreFromStoreArea("store_cards");
 	
+	if (!GetIsObjectValid(oStore)) {
+		SendMessageToPC(oPC, "Debug: Store not found");
+	}
+	
 	int nCurrentTime = PS_GetTime();
 	int nTimestamp = GetLocalInt(oStore, "LastPopulated");
 	
 	if (nTimestamp > 0 && nCurrentTime-nTimestamp > CLEAN_TIME) {
 		ClearStore(oStore);
 	} else {
-		PopulateCardStore(oStore);
+		PopulateCardStore(oStore, oPC);
 		SetLocalInt(oStore, "LastPopulated", nCurrentTime);
 	}
 	

@@ -93,14 +93,14 @@ void PopulateGemstoneStore(object oStore) {
 
 }
 
-void PopulateCardStore(object oStore) {
+void PopulateCardStore(object oStore, object oPC = OBJECT_INVALID) {
 
 	int nMax = 20; //The number of cards to populate in the store
 
 	int n;
 	float fDelay = 0.01f;
 	for (n = 0; n < nMax; n++) {
-		DelayCommand(fDelay, CardsCreateCardOnSpawnOrChest(oStore));
+		DelayCommand(fDelay, CardsCreateCardOnSpawnOrChest(oStore, oPC));
 		fDelay += 0.01f;
 	}
 }

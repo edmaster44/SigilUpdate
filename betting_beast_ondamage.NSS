@@ -77,7 +77,6 @@ void main()
 	//***********************************************************
 	object controller = GetObjectByTag("ps_fw_beastmaster");
 	if (GetLocalInt(controller,"FIGHTING") == 0) {
-		SpeakString("We aren't in the right mode yet!");
 		return;
 	}
 

@@ -2694,7 +2694,7 @@ void CardsSetUpBaseDeck(object oPC, object oDeck)
 // chance of whether card will spawn in chest or on monster handled by ps_chest->FillItems() (for chests) or nw_c2_default9 (for monsters).
 // this function is then called to determine which card and which level. Chests use default values, monster drop changes are modified by CR of monster
 // giving greater chance of better cards with higher CR.
-void CardsCreateCardOnSpawnOrChest(object oTarget)
+void CardsCreateCardOnSpawnOrChest(object oTarget, object oPC = OBJECT_INVALID)
 {
 	int iMod=1;
 	int iCR;
@@ -2744,6 +2744,10 @@ void CardsCreateCardOnSpawnOrChest(object oTarget)
 	{
 		iSelected = Random(iMax) + 1 + (iType * CARD_ITEM_TYPE_2DA_OFFSET);
 		CardsCreateCard(oTarget, iSelected);
+		
+		if (GetIsObjectValid(oPC)) {
+			SendMessageToPC(oPC, "Debug: creating card ID "+IntToString(iSelected));
+		}
 	}
 }
 

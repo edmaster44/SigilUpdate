@@ -23,6 +23,8 @@ void main()
 	string sCritter	= GetLocalString(oItem, "summon");
 	location oLoc 	= GetItemActivatedTargetLocation();
 	object oBad		= GetFirstItemInInventory(oPC);
+	
+	SendMessageToPC(oPC, "spawning "+sCritter);
 
 /* 	Destroy any old unsummoner items the character may have in their inventory. This will only
 	be relevant in the event that a summonned henchman already exists when another is summonned; otherwise

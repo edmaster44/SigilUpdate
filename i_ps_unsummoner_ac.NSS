@@ -17,8 +17,8 @@ void main()
 	object oOldHench= GetHenchman(oPC);
 	
 	//then we lost it because of a crash or something
-	if (oOldHench == OBJECT_INVALID)
-	{
+	if (oOldHench == OBJECT_INVALID) {
+	
 		if (AllowRespawnHench(oItem) == TRUE)
 		{
 			SendMessageToPC(oPC, "Recalling lost cohort to serve you once again.");
@@ -29,11 +29,14 @@ void main()
 			SendMessageToPC(oPC, "Too much time has passed since you first called for your cohort, it will not server you again");
 			DestroyObject(oItem);
 		}
-	}
-	else
-	{
+		
+	} else {
+	
+		SendMessageToPC(oPC, "Found cohort: "+GetName(oOldHench));
+		
 		DestroyObject(oOldHench);
 		DestroyObject(oItem);
 		SendMessageToPC(oPC,"A cohort has been released from your service.");
+		
 	}
 }

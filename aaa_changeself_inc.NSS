@@ -19,7 +19,7 @@ void PS_ChangeSelf_AppearanceType(object oPC, int nAppVar)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Appearance type changed to " + IntToString(nAppVar) + ".");
+	//SendMessageToPC(oPC, "Appearance type changed to " + IntToString(nAppVar) + ".");
 }
 
 // Change character gender using GENDER_* values
@@ -33,7 +33,7 @@ void PS_ChangeSelf_Gender(object oPC, int nGender)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Gender changed to " + IntToString(nGender) + ".");
+	//SendMessageToPC(oPC, "Gender changed to " + IntToString(nGender) + ".");
 }
 
 // Change character head (appearance-specific) using values from .mdl files
@@ -47,7 +47,7 @@ void PS_ChangeSelf_HeadVariation(object oPC, int nHead)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Head variation changed to " + IntToString(nHead) + ".");
+	//SendMessageToPC(oPC, "Head variation changed to " + IntToString(nHead) + ".");
 }
 
 
@@ -62,7 +62,7 @@ void PS_ChangeSelf_TailVariation(object oPC, int nTail)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Tail variation changed to " + IntToString(nTail) + ".");
+	//SendMessageToPC(oPC, "Tail variation changed to " + IntToString(nTail) + ".");
 }
 
 // Change character's wing using values from wingmodel.2da or WING_TYPE_*
@@ -77,7 +77,7 @@ void PS_ChangeSelf_WingVariation(object oPC, int nWing)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Wing variation changed to " + IntToString(nWing) + ".");
+	//SendMessageToPC(oPC, "Wing variation changed to " + IntToString(nWing) + ".");
 }
 
 // Change character's hair (appearance-specific) using values from .mdl files
@@ -91,7 +91,7 @@ void PS_ChangeSelf_HairVariation(object oPC, int nHair)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Hair variation changed to " + IntToString(nHair) + ".");
+	//SendMessageToPC(oPC, "Hair variation changed to " + IntToString(nHair) + ".");
 }
 
 // Turn facial hair on and off using TRUE (1) or FALSE (0) values only
@@ -106,7 +106,7 @@ void PS_ChangeSelf_FacialHairVariation(object oPC, int nFacial)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Facial hair variation changed to " + IntToString(nFacial) + ".");
+	//SendMessageToPC(oPC, "Facial hair variation changed to " + IntToString(nFacial) + ".");
 }
 
 // Change the color of the character's hair accessory
@@ -122,7 +122,7 @@ void PS_ChangeSelf_HairTint_Accessory(object oPC, string sHairTint0)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Hair accessory tint changed to " + sHairTint0 + ".");
+	//SendMessageToPC(oPC, "Hair accessory tint changed to " + sHairTint0 + ".");
 }
 
 // Change the color of the character's primary haircolor
@@ -138,7 +138,7 @@ void PS_ChangeSelf_HairTint_Main(object oPC, string sHairTint1)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Hair tint changed to " + sHairTint1 + ".");
+	//SendMessageToPC(oPC, "Hair tint changed to " + sHairTint1 + ".");
 }
 
 // Change the color of the character's highlight haircolor
@@ -154,7 +154,7 @@ void PS_ChangeSelf_HairTint_Highlight(object oPC, string sHairTint2)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Hair highlight tint changed to " + sHairTint2 + ".");
+	//SendMessageToPC(oPC, "Hair highlight tint changed to " + sHairTint2 + ".");
 }
 
 // Change the color of the character's skin
@@ -170,7 +170,7 @@ void PS_ChangeSelf_HeadTint_Skin(object oPC, string sHeadTint0)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Skin tint changed to " + sHeadTint0 + ".");
+	//SendMessageToPC(oPC, "Skin tint changed to " + sHeadTint0 + ".");
 }
 
 // Change the color of the character's eyes
@@ -186,7 +186,7 @@ void PS_ChangeSelf_HeadTint_Eyes(object oPC, string sHeadTint1)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Eye tint changed to " + sHeadTint1 + ".");
+	//SendMessageToPC(oPC, "Eye tint changed to " + sHeadTint1 + ".");
 }
 
 // Change the color of the character's eyebrows
@@ -202,7 +202,7 @@ void PS_ChangeSelf_HeadTint_Eyebrows(object oPC, string sHeadTint2)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
-	SendMessageToPC(oPC, "Eyebrow tint changed to " + sHeadTint2 + ".");
+	//SendMessageToPC(oPC, "Eyebrow tint changed to " + sHeadTint2 + ".");
 }
 
 // Alternate Form ability: save alternate form

@@ -46,12 +46,9 @@ void main()
 		
 		SpeakString("The "+WINNER+" has won! Gather around to recieve your rewards!");
 
-		WINNER = GetLocalString(OBJECT_SELF, "Winner");
-
-		SpeakString("Did we successfully clear the winner? "+WINNER);
 		return;
 	} else if (sFighter1 == "" || sFighter2 == "") {
-		SpeakString("Picking the fighters and winners.");
+
 		sFighter1 = PickFighter(1);
 		sFighter2 = PickFighter(2);
 		SetLocalString(OBJECT_SELF, "MONSTER1", sFighter1);
@@ -63,7 +60,6 @@ void main()
     {
         if(GetLocalInt(OBJECT_SELF,"BAITING") < (TIMER * 20))
         {
-			SpeakString("Baiting time.");
         	SetLocalInt(OBJECT_SELF,"BAITING",
             GetLocalInt(OBJECT_SELF,"BAITING")+1);
             return;
@@ -115,15 +111,11 @@ void EndFight(string sWinner, float odds) {
 	object oPC = GetFirstPC();
 	while(GetIsObjectValid(oPC)) {
 	
-		SpeakString("Checking "+GetName(oPC)+" for winnings");
 		if (GetArea(oPC) != GetArea(OBJECT_SELF))
 			continue;
 
-		SpeakString("We are in the right area.");
 		
 		string betOn = GetLocalString(oPC, "BEAST_BET_ON");
-
-		SpeakString(GetName(oPC)+" bet on "+betOn+" vs. "+sWinner);
 
 		int nBet = FloatToInt(IntToFloat(GetLocalInt(oPC, "BEAST_BET"))*odds);
 		if (betOn == sWinner) {

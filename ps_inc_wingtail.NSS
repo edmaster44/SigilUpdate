@@ -417,7 +417,7 @@ void PS_ApplyPCWings(object oPC)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	PS_RefreshAppearance(oPC);
 	//DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));
-	SendMessageToPC(oPC, "Wing variation changed to " + IntToString(nWing) + ".");
+	//SendMessageToPC(oPC, "Wing variation changed to " + IntToString(nWing) + ".");
 }
 
 // Apply the proper tail to the PC based on data saved in the essence variable PC_Tail
@@ -436,7 +436,7 @@ void PS_ApplyPCTail(object oPC)
 	PS_SetCreatureCoreAppearance(oPC, app);
 	PS_RefreshAppearance(oPC);
 	//DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));
-	SendMessageToPC(oPC, "Tail variation changed to " + IntToString(nTail) + ".");
+	//SendMessageToPC(oPC, "Tail variation changed to " + IntToString(nTail) + ".");
 }
 
 void PS_DragonGlitchFix(object oPC)
