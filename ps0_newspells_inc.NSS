@@ -83,11 +83,9 @@ void PS_Spell_FreezingFog(object oPC, location lTarget, int nSpell)
     {	return;		}
 
     effect eFog 		= EffectAreaOfEffect(AOE_PER_FREEZINGFOG);
-	effect eRime		= EffectAreaOfEffect(AOE_PER_GREASE);
 	float fDuration		= TurnsToSeconds(GetCasterLevel(oPC));
 
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eFog, lTarget, fDuration);
-	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eRime, lTarget, fDuration);
 }
 
 //Checks whether the target is blind
