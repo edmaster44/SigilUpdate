@@ -96,7 +96,7 @@ string GetFromCoinList(int nRandom, int nTreasureLevel) {
 	return sRes;
 }
 
-//Max 10
+//Max 17
 string GetFromJunkList(int nRandom) {
 	string sRes = "";
 	switch (nRandom) {
@@ -110,6 +110,12 @@ string GetFromJunkList(int nRandom) {
 		case 8: sRes = "nw_it_mneck023";  break;
 		case 9: sRes = "nw_it_mneck021";  break;
 		case 10: sRes = "nw_it_mring023";  break;
+		case 12: sRes = "nw_it_torch002";  break;
+		case 13: sRes = "nw_it_torch003";  break;
+		case 14: sRes = "nw_it_torch004";  break;
+		case 15: sRes = "ps_torch_warding";  break;
+		case 16: sRes = "ps_torch_shielding";  break;
+		case 17: sRes = "ps_torch_blueflame";  break;
 	}
 	return sRes;
 }

@@ -61,6 +61,7 @@ const int    X2_IP_ADDPROP_POLICY_KEEP_EXISTING = 1;
 const int    X2_IP_ADDPROP_POLICY_IGNORE_EXISTING =2;
 
 // * Base Item Constants for Creature Equipped Weapons - Added by Ceremorph
+// * These are all the old creature weapons
 const int	BASE_ITEM_CREEQ_SLASH_M		= 160;
 const int	BASE_ITEM_CREEQ_PIERC_M		= 161;
 const int	BASE_ITEM_CREEQ_BLUDG_M		= 162;
@@ -76,6 +77,13 @@ const int 	BASE_ITEM_CREEQ_PRCSL_L		= 171;
 const int	BASE_ITEM_CREEQ_PRCBL_M		= 172;
 const int 	BASE_ITEM_CREEQ_PRCBL_S		= 173;
 const int 	BASE_ITEM_CREEQ_PRCBL_L		= 174;
+
+//New creature weapons
+const int 	BASE_ITEM_CREEQ_CLAW		= 176;
+const int 	BASE_ITEM_CREEQ_BITE		= 177;
+const int 	BASE_ITEM_CREEQ_SLAM		= 178;
+const int 	BASE_ITEM_CREEQ_CLAW_LARGE	= 179;
+const int 	BASE_ITEM_CREEQ_BITE_LARGE	= 180;
 
 // *  removes all itemproperties with matching nItemPropertyType and nItemPropertyDuration
 void  IPRemoveMatchingItemProperties( object oItem, int nItemPropertyType, int nItemPropertyDuration = DURATION_TYPE_TEMPORARY, int nItemPropertySubType = -1 );
@@ -825,11 +833,11 @@ int IPGetIsMeleeWeapon(object oItem)
 	  (nItem == 151) ||
 	  (nItem == 152) || // these 3 are giant weapons.
 	  (nItem == 202) || 
-	  (nItem == 176) || // these 5 are creature weapons.
-	  (nItem == 177) || // these 5 are creature weapons.
-	  (nItem == 178) || // these 5 are creature weapons.
-	  (nItem == 179) || // these 5 are creature weapons.
-	  (nItem == 180)) // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_CLAW) || // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_BITE) || // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_SLAM) || // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_CLAW_LARGE) || // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_BITE_LARGE)) // these 5 are creature weapons.
    {
         return TRUE;
    }
@@ -856,7 +864,12 @@ int IPGetIsCreatureEquippedWeapon(object oItem)
       (nItem == BASE_ITEM_CREEQ_PRCSL_S) ||
       (nItem == BASE_ITEM_CREEQ_SLASH_L) ||
       (nItem == BASE_ITEM_CREEQ_SLASH_M) ||
-      (nItem == BASE_ITEM_CREEQ_SLASH_S))
+      (nItem == BASE_ITEM_CREEQ_SLASH_S) ||
+      (nItem == BASE_ITEM_CREEQ_CLAW) ||
+      (nItem == BASE_ITEM_CREEQ_BITE) ||
+      (nItem == BASE_ITEM_CREEQ_SLAM) ||
+      (nItem == BASE_ITEM_CREEQ_CLAW_LARGE) ||
+      (nItem == BASE_ITEM_CREEQ_BITE_LARGE))
    {
         return TRUE;
    }

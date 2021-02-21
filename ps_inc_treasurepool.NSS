@@ -19,7 +19,7 @@ string PickEssentialItemReward(int nCR) {
 
 	if (nCR < 5) {
 	
-		int nRand = Random(15)+1;
+		int nRand = Random(17)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck001"; //natural armor +1
 			case 2: return "nw_it_mneck001"; //natural armor +1
@@ -36,11 +36,13 @@ string PickEssentialItemReward(int nCR) {
 			case 13: return "nw_it_mbracer002"; //bracers +1
 			case 14: return "ps_ring_acidresistancelesser"; //lesser ring of resistance
 			case 15: return "ps_ring_fireresistancelesser"; //lesser ring of resistance
+			case 16: return "ps_torch_warding"; //magic torch
+			case 17: return "ps_torch_shielding"; //magic torch
 		}
 		
 	} else { /*if (nCR < 10) {*/
 	
-		int nRand = Random(14)+1;
+		int nRand = Random(16)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck012"; //natural armor +2
 			case 2: return "nw_it_mneck013"; //natural armor +3
@@ -56,6 +58,8 @@ string PickEssentialItemReward(int nCR) {
 			case 12: return "nw_it_mbracer007"; //bracers +2
 			case 13: return "nw_it_mbracer008"; //bracers +3
 			case 14: return "ps_ring_energyresist"; //ring of resistance
+			case 15: return "ps_torch_warding"; //magic torch
+			case 16: return "ps_torch_shielding"; //magic torch
 		}
 	}
 	

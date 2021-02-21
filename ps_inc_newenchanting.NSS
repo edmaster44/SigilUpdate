@@ -43,7 +43,7 @@ int GetHasRequiredEssence(object oPC, string sReq, int giveFeedback = FALSE);
 int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE);
 
 //takes the Custom_Requirement field, and checks whether the PC fulfils it
-int GetFulfillsSpecialRequirement(object oPC, string sReq);
+int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID);
 
 //Returns the descriptive text for the special requirement
 //sReq should equal Custom_Requirement
@@ -745,10 +745,10 @@ void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant,
 	string sReq = enchant.special_req;
 	if (sReq != "") {
 		string sText = DisplaySpecialRequirement(sReq);
-		if (GetFulfillsSpecialRequirement(oPC, sReq))
+		if (GetFulfillsSpecialRequirement(oPC, sReq, oItem))
 			sResult += sText+"\n";
 		else
-			sResult += "<Color=FireBrick>Essence: "+sText+"</Color>\n";
+			sResult += "<Color=FireBrick>Special Requirement: "+sText+"</Color>\n";
 	}
 	
 	int nType = enchant.type;
@@ -882,12 +882,14 @@ string DisplaySpecialRequirement(string sReq) {
 		line = "Must be Druid, Ranger, or Spirit Shaman.";
 	} else if (sReq == "CL_BARD") {
 		line = "Must be Bard.";
+	} else if (sReq == "CREATURE") {
+		line = "On Creature weapons only.";
 	}
 	return line;
 }
 
 //Defines / Implements the custom requirements field
-int GetFulfillsSpecialRequirement(object oPC, string sReq) {
+int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID) {
 	if (sReq == "CL_DIVINE") {
 		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) ||
@@ -914,6 +916,11 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq) {
 		}
 	} else if (sReq == "CL_BARD") {
 		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0)
+			return TRUE;
+		else
+			return FALSE;
+	} else if (sReq == "CREATURE") {
+		if (IPGetIsCreatureEquippedWeapon(oItem))
 			return TRUE;
 		else
 			return FALSE;
@@ -1066,7 +1073,7 @@ int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int fee
 	GetHasRequiredGold(oPC, nGold, feedback) &&
 	GetHasRequiredEssence(oPC, sEssence, feedback) && 
 	GetHasRequiredGemstone(oPC, sGem, feedback) && 
-	GetFulfillsSpecialRequirement(oPC, sReq))
+	GetFulfillsSpecialRequirement(oPC, sReq, oItem))
 		return TRUE;
 	
 	return FALSE;
