@@ -59,6 +59,25 @@ const int RACIAL_SUBTYPE_DRAGBLACK				= 226;
 const int RACIAL_SUBTYPE_DRAGCOPPER				= 227;
 const int RACIAL_SUBTYPE_DRAGIRON 				= 228;
 
+//Other racial subtypes
+const int RACIAL_SUBTYPE_BEHOLDER				= 130;
+const int RACIAL_SUBTYPE_UMBER_HULK				= 158;
+const int RACIAL_SUBTYPE_ELAN					= 172;
+const int RACIAL_SUBTYPE_FIRE_MEPHIT			= 186;
+const int RACIAL_SUBTYPE_ICE_MEPHIT				= 187;
+const int RACIAL_SUBTYPE_EARTH_MEPHIT			= 188;
+const int RACIAL_SUBTYPE_DAO					= 184;
+const int RACIAL_SUBTYPE_MARID					= 185;
+const int RACIAL_SUBTYPE_DJINN					= 121;
+const int RACIAL_SUBTYPE_EFREET					= 122;
+const int RACIAL_SUBTYPE_JANN					= 242;
+const int RACIAL_SUBTYPE_KHAYAL					= 243;
+const int RACIAL_SUBTYPE_XEPH					= 53;
+const int RACIAL_SUBTYPE_KENKU					= 100;
+const int RACIAL_SUBTYPE_RAKSHASA				= 241;
+const int RACIAL_SUBTYPE_LUPINAL				= 191;
+const int RACIAL_SUBTYPE_ARCANALOTH				= 182;
+
 // List of Races not in existing lists
 const int RACIAL_TYPE_PLANETOUCHED				= 21;
 const int RACIAL_TYPE_PLANT						= 22;
