@@ -36,15 +36,22 @@ void main()
 	if (FIGHTING)
 		return;
 	else if (WINNER != "") {
-		SpeakString("The "+GetLocalString(OBJECT_SELF, "POTENTIAL_WINNER")+" has won! Gather around to recieve your rewards!");
+		
 		EndFight(WINNER, BEAST_ODDS);
+
 		DeleteLocalString(OBJECT_SELF, "Winner");
 		DeleteLocalString(OBJECT_SELF, "MONSTER1");
 		DeleteLocalString(OBJECT_SELF, "MONSTER2");
 		DeleteLocalString(OBJECT_SELF, "POTENTIAL_WINNER");
+		
+		SpeakString("The "+WINNER+" has won! Gather around to recieve your rewards!");
+
+		WINNER = GetLocalString(OBJECT_SELF, "Winner");
+
+		SpeakString("Did we successfully clear the winner? "+WINNER);
 		return;
-	}
-	else if (sFighter1 == "" || sFighter2 == "") {
+	} else if (sFighter1 == "" || sFighter2 == "") {
+		SpeakString("Picking the fighters and winners.");
 		sFighter1 = PickFighter(1);
 		sFighter2 = PickFighter(2);
 		SetLocalString(OBJECT_SELF, "MONSTER1", sFighter1);
@@ -56,6 +63,7 @@ void main()
     {
         if(GetLocalInt(OBJECT_SELF,"BAITING") < (TIMER * 20))
         {
+			SpeakString("Baiting time.");
         	SetLocalInt(OBJECT_SELF,"BAITING",
             GetLocalInt(OBJECT_SELF,"BAITING")+1);
             return;
@@ -107,17 +115,21 @@ void EndFight(string sWinner, float odds) {
 	object oPC = GetFirstPC();
 	while(GetIsObjectValid(oPC)) {
 	
+		SpeakString("Checking "+GetName(oPC)+" for winnings");
 		if (GetArea(oPC) != GetArea(OBJECT_SELF))
 			continue;
+
+		SpeakString("We are in the right area.");
 		
 		string betOn = GetLocalString(oPC, "BEAST_BET_ON");
+
+		SpeakString(GetName(oPC)+" bet on "+betOn+" vs. "+sWinner);
+
 		int nBet = FloatToInt(IntToFloat(GetLocalInt(oPC, "BEAST_BET"))*odds);
 		if (betOn == sWinner) {
-			//if (GetHouse() > 0) {
-				SpeakString("Congratulations, "+GetName(oPC)+", you've won "+IntToString(nBet)+"!");
-				SetLocalInt(oPC, "GAMBLE_WON", GetLocalInt(oPC, "GAMBLE_WON")+nBet);
-				GiveGoldToCreature(oPC, nBet);
-			//}
+			SpeakString("Congratulations, "+GetName(oPC)+", you've won "+IntToString(nBet)+"!");
+			SetLocalInt(oPC, "GAMBLE_WON", GetLocalInt(oPC, "GAMBLE_WON")+nBet);
+			GiveGoldToCreature(oPC, nBet);
 		}
 		
 		DeleteLocalString(oPC, "BEAST_BET_ON");

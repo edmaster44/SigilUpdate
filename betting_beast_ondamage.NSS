@@ -75,6 +75,12 @@ void main()
 	//***********************************************************
 	//Beast Special
 	//***********************************************************
+	object controller = GetObjectByTag("ps_fw_beastmaster");
+	if (GetLocalInt(controller,"FIGHTING") == 0) {
+		SpeakString("We aren't in the right mode yet!");
+		return;
+	}
+
 	int nDamage = GetLocalInt(OBJECT_SELF, "total_damage");
 	int damageDealt = GetTotalDamageDealt();
 	object oMonster1 = GetObjectByTag("ps_fw_monster1");
