@@ -116,6 +116,15 @@ string GetFromJunkList(int nRandom) {
 		case 15: sRes = "ps_torch_warding";  break;
 		case 16: sRes = "ps_torch_shielding";  break;
 		case 17: sRes = "ps_torch_blueflame";  break;
+		case 18: sRes = "ps_valmisc_rarehoney";  break;
+		case 19: sRes = "ps_valmisc_selfcleaning";  break;
+		case 20: sRes = "ps_valmisc_golddust";  break;
+		case 21: sRes = "ps_valmisc_whitegoldring";  break;
+		case 22: sRes = "ps_valmisc_elvenrope";  break;
+		case 23: sRes = "ps_valmisc_fryingpan";  break;
+		case 24: sRes = "ps_valmisc_wrench";  break;
+		case 25: sRes = "ps_valmisc_rollingpin";  break;
+		case 26: sRes = "ps_valmisc_animatedbroom";  break;
 	}
 	return sRes;
 }
