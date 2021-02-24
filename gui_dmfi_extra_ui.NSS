@@ -2,6 +2,7 @@
 //:: Created By: Clangeddin
 //:: Created On: 2015
 //:://////////////////////////////////////////////
+#include "ps_inc_time"
 
 int CheckPoly(object oPC)
 {
@@ -25,6 +26,9 @@ void main(string sWINDOW)
 	int nPSION;
 	int nPOLY;
 	int nWINDOW = StringToInt(sWINDOW);
+	
+	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination");
+	
 	switch (nWINDOW)
 	{
 		case 1: //UI options
@@ -55,6 +59,15 @@ void main(string sWINDOW)
 			break;
 		case 5: //Difficulty
 			DisplayGuiScreen(oPC,"SCREEN_DIFFICULTY_SIGIL", FALSE, "difficulty_sigil.xml");
+			break;	
+		case 6: //OOC Room Portal
+			SendMessageToPC(oPC, "It has been "+IntToString(PS_GetTimestamp_Age_Seconds(oPC, "LAST_OOC_PORTAL"))+" seconds since you last ported to the OOC room.");
+			PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
+			AssignCommand(oPC, JumpToObject(oOOCWP));
+			SetGUIObjectDisabled(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", TRUE);
+			break;	
+		case 7: //Achievements
+			DisplayGuiScreen(oPC,"SCOD_ACHIEVEMENTS", FALSE, "scod_achievement_window.xml");
 			break;	
 	}
 }
