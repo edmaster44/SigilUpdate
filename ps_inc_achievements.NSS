@@ -1,7 +1,7 @@
 #include "ps_inc_quests"
 #include "ps_inc_functions"
 //Include file for the achievements system
-const string sAchievementWindow = "SCOD_ACHIEVEMENT_LIST";
+const string sAchievementWindow = "SCOD_ACHIEVEMENTS";
 
 //List the achievements of a given PC
 //In the achievements UI
@@ -87,7 +87,7 @@ void AddAchievement(object oPC, int nIndex) {
 	string quest_name = Get2DAString("achievements", "Name", nIndex);
 	string quest_description = Get2DAString("achievements", "Description", nIndex);
 	int quest_icon = StringToInt(Get2DAString("achievements", "Icon", nIndex));
-	string sIcon = "";
+	string sIcon = "0";
 	if (quest_icon > 0) {
 		sIcon = IntToString(quest_icon);
 	}

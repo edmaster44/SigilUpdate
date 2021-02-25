@@ -25,7 +25,7 @@ void main()
 	//
 	ResetSortObjectsOnPC(oPC);
 	
-	GetIsServerResetTime(oPC);
+	//GetIsServerResetTime(oPC);
 
 	//
 	// Send a warning to a player that logs in when a reset is pending so that

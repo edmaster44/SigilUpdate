@@ -244,7 +244,8 @@ int GetIsServerResetTime(object oPC = OBJECT_INVALID) {
 		int iDelay = GetLocalInt(oMod, "delaycount");
 		iDelay *= nHour; // so we now check to see if a DM has delayed reboot with widget, 1 hour per delay.
 		
-		if (timeStruct.Hour >= 2 && timeStruct.Hour <= 4) {
+		//Reset should take place between 2-4AM EST
+		if (timeStruct.Hour >= 7 && timeStruct.Hour <= 9) {
 			int nextValidResetTime = (nBoottime + (nHour * 3) + iDelay);
 			struct TimeFields resetTime = TimeToTimeFields(nextValidResetTime);
 			
