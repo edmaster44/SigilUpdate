@@ -1,5 +1,17 @@
-#include "ps_inc_quests"
-#include "ps_inc_functions"
+#include "ps_inc_achievements"
+#include "ps_inc_faction"
+
+int GetFaction(object oPC)
+{
+	object oItem = GetItemPossessedBy(oPC,"ps_essence");
+    if(GetIsObjectValid(oItem))
+    {
+	 	int nFaction = GetLocalInt(oItem,"Faction");
+		return nFaction;
+    }
+	
+	return 0;
+}
 
 void main () {
 
@@ -20,6 +32,16 @@ void main () {
 	int nGehennaQuest = GetPermanentInt(sID, "ps_quest_gehenna_contracts");
 	if (nGehennaQuest > 0)
 		AddJournalQuestEntry("ps_quest_gehenna_contracts", 1, oPC);
+		
+	//Update Achievements
+	int nFaction = GetFaction(oPC);
+	if (nFaction > 1 & nFaction < 17)  {
+		AddAchievement(oPC, 2);
+	}
+	
+	if (GetHitDice(oPC) > 1) {
+		AddAchievement(oPC, 1);
+	}
 	
 	//Test server vs. production switch
 	string sVersion = GetLocalString(oModule, "serverVersion");

@@ -22,6 +22,7 @@
 */
 
 #include "ps_inc_faction"
+#include "ps_inc_achievements"
 
 void main(int nFaction)
 {
@@ -41,6 +42,7 @@ void main(int nFaction)
 		if (GetIsObjectValid(oBadge))
 		{
 			SetBadgeFaction(oBadge, nFaction);
+			AddAchievement(oPC, 2);
 		}
 		else
 		{
