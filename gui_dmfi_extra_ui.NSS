@@ -3,7 +3,9 @@
 //:: Created On: 2015
 //:://////////////////////////////////////////////
 #include "ps_inc_time"
-
+#include "ps_inc_achievements"
+const int OOC_PORTAL_TIMEOUT = 60;
+	
 int CheckPoly(object oPC)
 {
 	effect eFX = GetFirstEffect(oPC);
@@ -18,6 +20,20 @@ int CheckPoly(object oPC)
 	return FALSE;
 }
 
+void OOCRoomPortal(object oPC) {
+
+	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination");
+	int nMinutes = PS_GetTimestamp_Age_Minutes(oPC, "LAST_OOC_PORTAL");
+	if (nMinutes && nMinutes > OOC_PORTAL_TIMEOUT) {
+		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
+		AssignCommand(oPC, JumpToObject(oOOCWP));
+		SetGUIObjectDisabled(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", TRUE);
+	} else {
+		SendMessageToPC(oPC, "It has been "+IntToString(nMinutes)+" minutes since you last ported to the OOC room. You need to wait "+IntToString(OOC_PORTAL_TIMEOUT-nMinutes)+" minutes before you can do so again.");
+	}
+
+}
+
 void main(string sWINDOW)
 {
 	object oPC = OBJECT_SELF;
@@ -27,7 +43,12 @@ void main(string sWINDOW)
 	int nPOLY;
 	int nWINDOW = StringToInt(sWINDOW);
 	
-	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination");
+	
+	int nMinutes = PS_GetTimestamp_Age_Minutes(oPC, "LAST_OOC_PORTAL");
+	if (nMinutes && nMinutes > OOC_PORTAL_TIMEOUT) {
+		SetGUIObjectDisabled(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", FALSE);
+	}
+	
 	
 	switch (nWINDOW)
 	{
@@ -61,13 +82,11 @@ void main(string sWINDOW)
 			DisplayGuiScreen(oPC,"SCREEN_DIFFICULTY_SIGIL", FALSE, "difficulty_sigil.xml");
 			break;	
 		case 6: //OOC Room Portal
-			SendMessageToPC(oPC, "It has been "+IntToString(PS_GetTimestamp_Age_Seconds(oPC, "LAST_OOC_PORTAL"))+" seconds since you last ported to the OOC room.");
-			PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
-			AssignCommand(oPC, JumpToObject(oOOCWP));
-			SetGUIObjectDisabled(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", TRUE);
+			OOCRoomPortal(oPC);
 			break;	
 		case 7: //Achievements
 			DisplayGuiScreen(oPC,"SCOD_ACHIEVEMENTS", FALSE, "scod_achievement_window.xml");
+			ListAchievements(oPC);
 			break;	
 	}
 }
