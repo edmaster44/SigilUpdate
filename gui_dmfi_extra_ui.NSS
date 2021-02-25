@@ -24,7 +24,7 @@ void OOCRoomPortal(object oPC) {
 
 	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination");
 	int nMinutes = PS_GetTimestamp_Age_Minutes(oPC, "LAST_OOC_PORTAL");
-	if (nMinutes && nMinutes > OOC_PORTAL_TIMEOUT) {
+	if (nMinutes == 0 || nMinutes > OOC_PORTAL_TIMEOUT) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 		AssignCommand(oPC, JumpToObject(oOOCWP));
 		SetGUIObjectDisabled(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", TRUE);

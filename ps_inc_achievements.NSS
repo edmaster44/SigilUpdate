@@ -7,11 +7,6 @@ const string sAchievementWindow = "SCOD_ACHIEVEMENT_LIST";
 //In the achievements UI
 void ListAchievements(object oPC);
 
-//Fetch the list of achievements from the DB
-//And store them as local ints on the PC
-//For easy access from the GUI
-void FetchAllAchievements(object oPC);
-
 //Display the achievement text and description
 //in the achievement window
 void DisplayAchievement(object oPC, int nIndex);
@@ -29,10 +24,10 @@ int GetHasAchievement(object oPC, int nIndex);
 //Useful for counting number of times something has happened
 void IncrementAchievement(object oPC, int nIndex);
 
-void FetchAllAchievements(object oPC) {
+void ListAchievements(object oPC) {
 
 	string sID = PS_GetCharID(oPC);
-	string sQuery = "SELECT entry_id, quest_name, quest_icon, quest_description, quest_status FROM characterquests WHERE character_id='"+sID+"' AND isAchievement='1'";
+	string sQuery = "SELECT entry_id, quest_name, quest_icon, quest_description, quest_status FROM characterquests WHERE character_id="+sID+" AND isAchievement=1";
 	SendMessageToPC(oPC, sQuery);
 	
 	int nCount = 0;
@@ -48,39 +43,18 @@ void FetchAllAchievements(object oPC) {
 		int quest_status = StringToInt(SQLGetData(5));
 		
 		SendMessageToPC(oPC, "Found achievement: "+quest_name);
+			
+		AddListBoxRow(oPC, sAchievementWindow, "SCOD_ACHIEVEMENT_LIST", "ACHIEVEMENTROW_"+IntToString(nCount), "AchievementEntryName="+quest_name+";", "", "5="+IntToString(nCount), "");
 		
 		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ID", entry_id);
 		SetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_NAME", quest_name);
 		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ICON", quest_icon);
 		SetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_DESCRIPTION", quest_description);
-		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_STATUS", quest_status);
+		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_STATUS", quest_status);	
 		
 	}
 	
 	SetLocalInt(oPC, "ACHIEVEMENT_COUNT", nCount);
-
-}
-
-void ListAchievements(object oPC) {
-
-	FetchAllAchievements(oPC);
-	
-	ClearListBox(oPC, sAchievementWindow, "SCOD_ACHIEVEMENT_LIST");
-	
-	int nCount = GetLocalInt(oPC, "ACHIEVEMENT_COUNT");
-	
-	int n;
-	for(n=1; n <= nCount; n++) {
-		
-		int entry_id = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ID");
-		string quest_name = GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_NAME");
-		int quest_icon = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ICON");
-		string quest_description = GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_DESCRIPTION");
-		int quest_status = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_STATUS");
-		
-		AddListBoxRow(oPC, sAchievementWindow, "SCOD_ACHIEVEMENT_LIST", "ACHIEVEMENTROW_"+IntToString(n), "AchievementEntryName="+quest_name+";", "", "5="+IntToString(n), "");
-		
-	}
 
 }
 
@@ -112,9 +86,13 @@ void AddAchievement(object oPC, int nIndex) {
 	string sID = PS_GetCharID(oPC);
 	string quest_name = Get2DAString("achievements", "Name", nIndex);
 	string quest_description = Get2DAString("achievements", "Description", nIndex);
-	string quest_icon = Get2DAString("achievements", "Icon", nIndex);
+	int quest_icon = StringToInt(Get2DAString("achievements", "Icon", nIndex));
+	string sIcon = "";
+	if (quest_icon > 0) {
+		sIcon = IntToString(quest_icon);
+	}
 	
-	string sQuery = "INSERT INTO characterquests SET character_id='"+sID+"', quest_name='"+quest_name+"', quest_icon='"+quest_icon+"', quest_description='"+quest_description+"',isAchievement = '1', quest_status='1'"; 
+	string sQuery = "INSERT INTO characterquests SET character_id="+sID+", quest_name='"+quest_name+"', quest_icon="+sIcon+", quest_description='"+quest_description+"', isAchievement = 1, quest_status=1"; 
 	SendMessageToPC(oPC, sQuery);
 	SQLExecDirect(sQuery);
 }
