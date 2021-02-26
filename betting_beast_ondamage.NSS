@@ -76,9 +76,9 @@ void main()
 	//Beast Special
 	//***********************************************************
 	object controller = GetObjectByTag("ps_fw_beastmaster");
-	if (GetLocalInt(controller,"FIGHTING") == 0) {
+	/*if (GetLocalInt(controller,"FIGHTING") == 0) {
 		return;
-	}
+	}*/
 
 	int nDamage = GetLocalInt(OBJECT_SELF, "total_damage");
 	int damageDealt = GetTotalDamageDealt();
@@ -112,11 +112,12 @@ void EndFight(object oKiller) {
 	object oMonster1 = GetObjectByTag("ps_fw_monster1");
 	object oMonster2 = GetObjectByTag("ps_fw_monster2");
 	object controller = GetObjectByTag("ps_fw_beastmaster");
-    DeleteLocalInt(controller,"FIGHTING");
 	SetLocalString(controller, "Winner", GetLocalString(controller, "POTENTIAL_WINNER"));
 		
 	if (GetIsObjectValid(oMonster1))
 		DestroyObject(oMonster1, 2.0f);
 	if (GetIsObjectValid(oMonster2))
 		DestroyObject(oMonster2, 2.0f);
+		
+    DeleteLocalInt(controller,"FIGHTING");
 }

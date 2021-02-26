@@ -28,7 +28,7 @@ void ListAchievements(object oPC) {
 
 	string sID = PS_GetCharID(oPC);
 	string sQuery = "SELECT entry_id, quest_name, quest_icon, quest_description, quest_status FROM characterquests WHERE character_id="+sID+" AND isAchievement=1";
-	SendMessageToPC(oPC, sQuery);
+	//SendMessageToPC(oPC, sQuery);
 	
 	int nCount = 0;
 	SQLExecDirect(sQuery);
@@ -42,7 +42,7 @@ void ListAchievements(object oPC) {
 		string quest_description = SQLGetData(4);
 		int quest_status = StringToInt(SQLGetData(5));
 		
-		SendMessageToPC(oPC, "Found achievement: "+quest_name);
+		//SendMessageToPC(oPC, "Found achievement: "+quest_name);
 			
 		AddListBoxRow(oPC, sAchievementWindow, "SCOD_ACHIEVEMENT_LIST", "ACHIEVEMENTROW_"+IntToString(nCount), "AchievementEntryName="+quest_name+";", "", "5="+IntToString(nCount), "");
 		
@@ -61,7 +61,7 @@ void ListAchievements(object oPC) {
 
 void DisplayAchievement(object oPC, int nIndex) {
 
-	SendMessageToPC(oPC, "Displaying achievement #"+IntToString(nIndex));
+	//SendMessageToPC(oPC, "Displaying achievement #"+IntToString(nIndex));
 		
 	int entry_id = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_ID");
 	string quest_name = GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_NAME");
@@ -79,7 +79,7 @@ void AddAchievement(object oPC, int nIndex) {
 		return;
 
 	if (GetHasAchievement(oPC, nIndex)) {
-		SendMessageToPC(oPC, "you already have this achievement");
+		//SendMessageToPC(oPC, "you already have this achievement");
 		return;
 	}
 	
@@ -93,7 +93,7 @@ void AddAchievement(object oPC, int nIndex) {
 	}
 	
 	string sQuery = "INSERT INTO characterquests SET character_id="+sID+", quest_name='"+quest_name+"', quest_icon="+sIcon+", quest_description='"+quest_description+"', isAchievement = 1, quest_status=1"; 
-	SendMessageToPC(oPC, sQuery);
+	//SendMessageToPC(oPC, sQuery);
 	SQLExecDirect(sQuery);
 }
 
@@ -103,7 +103,7 @@ void IncrementAchievement(object oPC, int nIndex) {
 		return;
 
 	if (!GetHasAchievement(oPC, nIndex)) {
-		SendMessageToPC(oPC, "you don't already have this achievement");
+		//SendMessageToPC(oPC, "you don't already have this achievement");
 		AddAchievement(oPC, nIndex);
 		return;
 	}

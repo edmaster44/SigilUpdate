@@ -2743,10 +2743,11 @@ void CardsCreateCardOnSpawnOrChest(object oTarget, object oPC = OBJECT_INVALID)
 	if (iMax !=0) // just check to make sure we don't try and spawn an object that doesn't exist, although by time this is finished there will be always at least one card of each type
 	{
 		iSelected = Random(iMax) + 1 + (iType * CARD_ITEM_TYPE_2DA_OFFSET);
-		CardsCreateCard(oTarget, iSelected);
+		object oCard = CardsCreateCard(oTarget, iSelected);
 		
 		if (GetIsObjectValid(oPC)) {
 			SendMessageToPC(oPC, "Debug: creating card ID "+IntToString(iSelected));
+			SendMessageToPC(oPC, "Debug: found card "+GetName(oCard));
 		}
 	}
 }
