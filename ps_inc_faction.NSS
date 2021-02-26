@@ -32,6 +32,7 @@
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
 #include "ps_inc_placeable_signs"
+#include "ps_inc_time"
 
 const int HENCH_MAX_DURATION = 43200;
 
@@ -436,21 +437,6 @@ location FindHenchSpawnPoint(object oPC)
 // For the next few routines, oHenchObject is probably going to be either a faction badge
 // or a summoner feather (for Cere's cohort summoner script).
 // looks like 1 second = 1 in the returned INT.
-
-int GetRealTime()
-{
-	int utc;
-	
-	SQLExecDirect("SELECT UNIX_TIMESTAMP()");
-	
-	while (SQLFetch() != SQL_ERROR)
-	{
-		utc = StringToInt(SQLGetData(1));	
-	}
-	return utc;
-	
-	//return ((GetTimeHour() * 60 * 60) + (GetTimeMinute() * 60) + GetTimeSecond());
-}
 
 int AllowRespawnHench(object oHenchObject)
 {
@@ -1025,4 +1011,59 @@ void CreateFactionSignItem(object oPC)
 	{
 		SendMessageToPC(oPC, "Failed to create faction sign creator.  Please report a bug via the forums");
 	}
+}
+
+//Get if you are a factotum or higher in your chosen faction
+int GetIsFactotum(object oPC) {
+
+	int nFaction = GetLocalInt(GetFactionBadgeObject(oPC), "Faction");
+	int iRank = GetLocalInt(GetFactionBadgeObject(oPC), "FactionRank");
+	
+	if ((nFaction == 2 || nFaction == 6 || nFaction == 7 || nFaction == 11 || nFaction == 12 || nFaction == 15) && 
+	(iRank >= 2 && iRank <= 3)) //Free League / Doomguard / Dustmen / Mercykillers / Anarchists / Transcendent Order
+		return TRUE;
+	else if (nFaction == 3 && (iRank >= 2 && iRank <= 4)) //Athar 
+		return TRUE;
+	else if ((nFaction == 4 || nFaction == 5 || nFaction == 8 || nFaction == 13 || nFaction == 14 || nFaction == 16) 
+	&& iRank == 2) //Believers of the Source / Bleak Cabal / Fated
+		return TRUE;
+	else if (nFaction == 9 && (iRank >= 2 && iRank <= 11))
+		return TRUE;
+	else if (nFaction == 10 && (iRank >= 7 && iRank <= 11))
+		return TRUE;
+		
+	return FALSE;
+}
+
+//Get if you are a factotum or higher in your chosen faction
+int GetIsFactor(object oPC) {
+
+	int nFaction = GetLocalInt(GetFactionBadgeObject(oPC), "Faction");
+	int iRank = GetLocalInt(GetFactionBadgeObject(oPC), "FactionRank");
+
+	if (nFaction == 3 && iRank >= 5) //Athar
+		return TRUE;
+	else if (nFaction == 6 && iRank >= 6) //Doomguard
+		return TRUE;
+	else if (nFaction == 7 && iRank >= 7) //Dustmen
+		return TRUE;
+	else if (nFaction == 9 && iRank >= 12) //Guvner
+		return TRUE;
+	else if (nFaction == 10 && iRank >= 12) //HArmonium
+		return TRUE;
+	else if (nFaction == 11 && iRank >= 4) //Mercykillers
+		return TRUE;
+	else if (nFaction == 12 && iRank >= 4) //Revs
+		return TRUE;
+	else if (nFaction == 15 && iRank >= 4) //Cipher
+		return TRUE;
+	else if (nFaction == 1 || nFaction == 2 || nFaction == 4 || nFaction == 5 ||
+			nFaction == 8  || nFaction == 13 || nFaction == 14) {
+		if (iRank >= 3)
+			return TRUE;
+		else
+			return FALSE;
+	}	
+	
+	return FALSE;
 }

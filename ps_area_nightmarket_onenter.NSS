@@ -1,5 +1,9 @@
+#include "ps_inc_achievements"
+
 void main() {
  object oPC = GetEnteringObject();
+	
+ AddAchievement(oPC, 6);
   
  int iLock = GetGlobalInt("NightMarketEnterLock");
  if ( iLock == 0 )

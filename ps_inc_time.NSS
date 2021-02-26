@@ -162,6 +162,22 @@ int PS_GetHasTimePassed_Months(object oObject, string sVariable, int nPassing)
 	else return FALSE;
 }
 
+// ------------------------------------------------------------------------------------
+// Returns Unix Timestamp
+// ------------------------------------------------------------------------------------
+int GetRealTime()
+{
+	int utc;
+	
+	SQLExecDirect("SELECT UNIX_TIMESTAMP()");
+	
+	while (SQLFetch() != SQL_ERROR)
+	{
+		utc = StringToInt(SQLGetData(1));	
+	}
+	return utc;
+}
+
 
 // ------------------------------------------------------------------------------------
 // Time Structs, previously in ps_servertime

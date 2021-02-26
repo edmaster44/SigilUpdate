@@ -14,7 +14,7 @@ Created On: 08/30/02
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "ps_inc_ecl"
-#include "ps_inc_quests"
+#include "ps_inc_achievements"
  
 //Uses some in game default scripts
 
@@ -145,6 +145,7 @@ void main() {
 		int nHD = GetHitDice(oPC);
 		SetPermanentInt(sID, "FirstDeath", nHD);
 		SetLocalInt(oPC, "FirstDeath", 1);
+		AddAchievement(oPC, 9);
 	}
 		
 	respawn(oPC);

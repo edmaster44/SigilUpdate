@@ -4,6 +4,7 @@
 #include "x0_i0_transport"
 #include "ps_inc_spawns"
 #include "ps_inc_faction"
+#include "ps_inc_achievements"
 
 //Random warning message
 string KadyxMessage() {
@@ -58,6 +59,8 @@ void KadyxEats(object oPC) {
 	DelayCommand(0.8f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
 	DelayCommand(1.0f, SendMessageToPC(oPC, "<C=Gray>You wake up in the Mortuary, with grevious wounds."));
 	DelayCommand(1.1f, TransportToWaypoint(oPC, oWP));
+		
+	AddAchievement(oPC, 14);
 }
 
 //The Kadyx is here. You are being eaten.

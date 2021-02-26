@@ -55,6 +55,30 @@ int GetPermanentInt(string sID, string sQuestName) {
 
 }
 
+//Remove the entry from the database
+void DeletePermanentInt(string sID, string sQuestName) {
+
+	string sQuery = "DELETE FROM characterquests WHERE character_id='"+sID+"' AND quest_name='"+sQuestName+"'";
+	SQLExecDirect(sQuery);
+	
+}
+
+//Increment a permenent integer by numberOfPoints
+void IncrementPermanentInt(string sID, string sQuestName, int numberOfPoints) {
+
+	if (numberOfPoints == 0)
+		numberOfPoints = 1;
+
+	//SendMessageToPC(oPC, "<i>You have spread your faction's influence in the city.</i>");
+
+	int currentValue = GetPermanentInt(sID, sQuestName);
+	int newValue = currentValue+numberOfPoints;
+	if (newValue < 0)
+		newValue = 0;
+		
+	SetPermanentInt(sID, sQuestName, newValue);
+}
+
 //checks if the given faction id (as in, sigil faction id) exists
 int GetModuleFactionQuestExists(int nFaction) {
 

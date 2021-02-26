@@ -3,23 +3,11 @@
 
 #include "nwnx_sql"
 #include "ps_inc_functions"
+#include "ps_inc_time"
 
 const string SIGIS_EDITOR = "npc_sigis_editor";
 const string SIGIS_JOURNALIST = "npc_sigis_journalist";
 const int SIGIS_BACKDATE = 604800; // how far back in time should we go for fetching entries?
-
-int GetRealTime()
-{
-	int utc;
-	
-	SQLExecDirect("SELECT UNIX_TIMESTAMP()");
-	
-	while (SQLFetch() != SQL_ERROR)
-	{
-		utc = StringToInt(SQLGetData(1));	
-	}
-	return utc;
-}
 
 // Date function for newspaper
 // iDetailed means return hours and mins.

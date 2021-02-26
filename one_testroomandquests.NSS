@@ -37,10 +37,32 @@ void main () {
 	int nFaction = GetFaction(oPC);
 	if (nFaction > 1 & nFaction < 17)  {
 		AddAchievement(oPC, 2);
+		
+		if (GetIsFactotum(oPC)) {
+			AddAchievement(oPC, 16);
+		}
+		if (GetIsFactor(oPC)) {
+			AddAchievement(oPC, 17);
+		}
+	}
+	
+	//You've left or been kicked out of your faction
+	if (nFaction == 255) {
+		AddAchievement(oPC, 5);
 	}
 	
 	if (GetHitDice(oPC) > 1) {
 		AddAchievement(oPC, 1);
+	}
+	
+	if (GetPermanentInt(sID, "Twin Cities")) {
+		AddAchievement(oPC, 4);
+		DeletePermanentInt(sID, "Twin Cities");
+	}
+	
+	if (GetPermanentInt(sID, "beggar_charity") >= 100) {
+		AddAchievement(oPC, 15);
+		DeletePermanentInt(sID, "beggar_charity");
 	}
 	
 	//Test server vs. production switch

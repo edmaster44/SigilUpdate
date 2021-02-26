@@ -1,4 +1,5 @@
 #include "ps_inc_training"
+#include "ps_inc_achievements"
 
 void DecreaseSavingThrow(object oPC, int nStage) {
 
@@ -108,6 +109,8 @@ void DoConfusionEffect(object oPC) {
 	}
 	
 	SendMessageToPC(oPC, "<i>You see something in the shadows, beckoning to you. . it whispers secrets on the screaming winds. Suddenly, it all makes sense!</i>");		
+	AddAchievement(oPC, 18);
+	
 	effect eConfus = EffectConfused();
 	eConfus = ExtraordinaryEffect(eConfus);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfus, oPC, 6.0f);

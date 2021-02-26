@@ -2,6 +2,7 @@
 // If target is self, then it brings up the write screen, if target is the "editor" then it will be submitted (this all needs testing, maybe best all handled via convo really)
 
 #include "ps_sigis_inc"
+#include "ps_inc_achievements"
 
 void main()
 {
@@ -50,6 +51,7 @@ void main()
 			DestroyObject(oItem);
 			AssignCommand(oTarget, SpeakString("Cheers cutter, ill get this right to print.", TALKVOLUME_TALK));
 			SetGlobalString("LATEST_NEWS", sHeadline);
+			AddAchievement(oPC, 22);
 		}
 		else
 		{
