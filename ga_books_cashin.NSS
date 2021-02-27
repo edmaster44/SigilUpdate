@@ -13,12 +13,16 @@ void main()
 	object oItem = GetFirstItemInInventory(oPC);
     while(GetIsObjectValid(oItem))
     {
-	 if(TestStringAgainstPattern("ps_lorebook_**",GetTag(oItem)))
-	 {
+	 if(TestStringAgainstPattern("ps_lorebook_**",GetTag(oItem))) {
 	 	DestroyObject(oItem);
 		iGold += GPAWARD;
 		iXp += XPAWARD;
-     }
+     } else if (GetTag(oItem) == "ps_crft_basebook" || 
+	 	GetTag(oItem) == "ps_book_special") {
+	 	DestroyObject(oItem);
+		iGold += GPAWARD;
+		iXp += XPAWARD;
+	 }
      oItem = GetNextItemInInventory(oPC);
     }
 	
