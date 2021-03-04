@@ -32,7 +32,7 @@ void main() {
 		
 	} else {
 	
-		SendMessageToPC(oPC, "Monster not found.");
+		//SendMessageToPC(oPC, "Monster not found.");
 	
 	}
 
