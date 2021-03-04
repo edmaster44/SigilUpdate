@@ -19,12 +19,18 @@ void main(int nMarkUp, int nMarkDown)
 	
 	int nCurrentTime = PS_GetTime();
 	int nTimestamp = GetLocalInt(oStore, "LastPopulated");
+	int nPopulated = GetLocalInt(oStore, "IsPopulated");
 	
 	if (nTimestamp > 0 && nCurrentTime-nTimestamp > CLEAN_TIME) {
 		ClearStore(oStore);
-	} else {
-		PopulateCardStore(oStore, oPC);
+		SetLocalInt(oStore, "IsPopulated", 0);
+	} 
+	
+	nPopulated = GetLocalInt(oStore, "IsPopulated");
+	if (!nPopulated) {
+		PopulateCardStore(oStore);
 		SetLocalInt(oStore, "LastPopulated", nCurrentTime);
+		SetLocalInt(oStore, "IsPopulated", 1);
 	}
 	
 	int iPCAppraise = FloatToInt(IntToFloat(GetSkillRank(SKILL_APPRAISE, oPC)) / APPRAISE_DIVISOR);

@@ -68,6 +68,14 @@ void main () {
 		return;
 	}
 	
+	
+	//Random merchant appearance
+	if (d100() < 2) {
+		WriteTimestampedLogEntry("Creating the card dealer.");
+		object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_random_carddealer", GetLocation(oWP));
+		return;
+	}
+	
 	WriteTimestampedLogEntry("Creating some berk in "+GetTag(GetArea(oPC)));
 	object oBerk = SpawnSomeBerk(oWP, oPC);
 	
