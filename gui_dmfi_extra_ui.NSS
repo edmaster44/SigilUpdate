@@ -4,7 +4,7 @@
 //:://////////////////////////////////////////////
 #include "ps_inc_time"
 #include "ps_inc_achievements"
-const int OOC_PORTAL_TIMEOUT = 2;
+const int OOC_PORTAL_TIMEOUT = 60;
 	
 int CheckPoly(object oPC)
 {
@@ -31,7 +31,7 @@ void OOCRoomPortal(object oPC) {
 	if (nMinutes > OOC_PORTAL_TIMEOUT) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 		AssignCommand(oPC, JumpToObject(oOOCWP));
-		SetGUITexture(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", "dmfi_icon_oocportal_disabled");
+		SetGUITexture(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", "dmfi_icon_oocportal_disabled.tga");
 	} else {
 		SendMessageToPC(oPC, "It has been "+IntToString(nMinutes)+" minutes since you last ported to the OOC room. You need to wait "+IntToString(OOC_PORTAL_TIMEOUT-nMinutes)+" minutes before you can do so again.");
 	}
@@ -50,7 +50,7 @@ void main(string sWINDOW)
 	
 	int nMinutes = PS_GetTimestamp_Age_Minutes(oPC, "LAST_OOC_PORTAL");
 	if (nMinutes && nMinutes > OOC_PORTAL_TIMEOUT) {
-		SetGUITexture(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", "dmfi_icon_oocportal");
+		SetGUITexture(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", "dmfi_icon_oocportal.tga");
 	}
 	
 	
