@@ -46,7 +46,7 @@ void main()
         effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH, nIncrease);
         effect eDur = EffectVisualEffect( VFX_DUR_SPELL_RAGE );
         effect eAttackMod = EffectModifyAttacks(1);
-		effect eHaste = EffectHaste();
+		effect eHaste = EffectMovementSpeedIncrease(50);
 		effect eCritImm = EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
         effect eLink = EffectLinkEffects(eStr, eDur);
        	eLink = EffectLinkEffects(eLink, eAttackMod);
