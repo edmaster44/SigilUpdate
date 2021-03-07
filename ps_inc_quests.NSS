@@ -12,7 +12,7 @@ int GetPermanentEntry(string sID, string sQuestName) {
 	int nResult = 0;
 	string sQuery = "SELECT entry_id FROM characterquests WHERE character_id='"+sID+"' AND quest_name='"+sQuestName+"'";
 	
-	//SpeakString(sQuery, TALKVOLUME_SHOUT);
+	SpeakString(sQuery, TALKVOLUME_SHOUT);
 	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
 		nResult = StringToInt(SQLGetData(1));

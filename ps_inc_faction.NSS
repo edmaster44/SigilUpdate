@@ -1013,7 +1013,7 @@ void CreateFactionSignItem(object oPC)
 	}
 }
 
-//Get if you are a factotum or higher in your chosen faction
+//Get if you are a factotum in your chosen faction
 int GetIsFactotum(object oPC) {
 
 	int nFaction = GetLocalInt(GetFactionBadgeObject(oPC), "Faction");

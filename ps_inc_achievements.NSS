@@ -79,7 +79,7 @@ void AddAchievement(object oPC, int nIndex) {
 		return;
 
 	if (GetHasAchievement(oPC, nIndex)) {
-		//SendMessageToPC(oPC, "you already have this achievement");
+		SendMessageToPC(oPC, "you already have this achievement: "+IntToString(nIndex));
 		return;
 	}
 	

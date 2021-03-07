@@ -84,7 +84,8 @@ void CheckForAchievements(object oPC) {
 	} else if (nChecked == 5) {
 	
 		if (GetIsFactor(oPC)) {
-			AddAchievement(oPC, 17);
+			AddAchievement(oPC, 16);
+			DelayCommand(0.1f, AddAchievement(oPC, 17));
 		}
 		
 	} else if (nChecked == 6) {
@@ -95,8 +96,8 @@ void CheckForAchievements(object oPC) {
 		
 	} else if (nChecked == 7) {
 	
-		if (GetPermanentInt(sID, "Twin Cities")) {
-			DelayCommand(1.0f, AddAchievement(oPC, 4));
+		if (GetPermanentInt(sID, "Twin Cities") > 0) {
+			AddAchievement(oPC, 4);
 			DeletePermanentInt(sID, "Twin Cities");
 		}
 		
