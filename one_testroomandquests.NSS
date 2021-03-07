@@ -1,73 +1,21 @@
 #include "ps_inc_achievements"
 #include "ps_inc_faction"
 
-int GetFaction(object oPC)
-{
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
-}
+int GetFaction(object oPC);
+
+void CheckForAchievements(object oPC);
 
 void main () {
 
 	object oPC = GetEnteringObject();
 	object oModule = GetModule();
 	
-	//Fetching permanent quest statuses
-	string sID = PS_GetCharID(oPC);
-	
 	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
-	int nAbyssQuest = GetPermanentInt(sID, "ps_quest_abyss_contracts");
-	if (nAbyssQuest > 0)
-		AddJournalQuestEntry("ps_quest_abyss_contracts", 1, oPC);
-		
-	int nBaatorQuest = GetPermanentInt(sID, "ps_quest_baator_contracts");
-	if (nBaatorQuest > 0)
-		AddJournalQuestEntry("ps_quest_baator_contracts", 1, oPC);
-		
-	int nGehennaQuest = GetPermanentInt(sID, "ps_quest_gehenna_contracts");
-	if (nGehennaQuest > 0)
-		AddJournalQuestEntry("ps_quest_gehenna_contracts", 1, oPC);
-		
-	//Update Achievements
-	int nFaction = GetFaction(oPC);
-	if (nFaction > 1 & nFaction < 17)  {
-		DelayCommand(0.5f, AddAchievement(oPC, 2));
-		
-		if (GetIsFactotum(oPC)) {
-			DelayCommand(0.6f, AddAchievement(oPC, 16));
-		}
-		if (GetIsFactor(oPC)) {
-			DelayCommand(0.7f, AddAchievement(oPC, 17));
-		}
-	}
-	
-	//You've left or been kicked out of your faction
-	if (nFaction == 255) {
-		DelayCommand(0.8f, AddAchievement(oPC, 5));
-	}
-	
-	if (GetHitDice(oPC) > 1) {
-		DelayCommand(0.9f, AddAchievement(oPC, 1));
-	}
-	
-	if (GetPermanentInt(sID, "Twin Cities")) {
-		DelayCommand(1.0f, AddAchievement(oPC, 4));
-		DeletePermanentInt(sID, "Twin Cities");
-	}
-	
-	if (GetPermanentInt(sID, "beggar_charity") >= 100) {
-		DelayCommand(1.1f, AddAchievement(oPC, 15));
-		DeletePermanentInt(sID, "beggar_charity");
-	}
+	//check achievements
+	DelayCommand(0.5f, CheckForAchievements(oPC));
 	
 	//Test server vs. production switch
 	string sVersion = GetLocalString(oModule, "serverVersion");
@@ -91,4 +39,93 @@ void main () {
 		}
 	}
 
+}
+
+//check for achievments on delay
+void CheckForAchievements(object oPC) {
+
+	int nChecked = GetLocalInt(oPC, "ACHIEVEMENTS_CHECKED");
+	string sID = PS_GetCharID(oPC);
+	SendMessageToPC(oPC, "Checking for achievements");
+	
+	if (nChecked == 0) {
+	
+		int nAbyssQuest = GetPermanentInt(sID, "ps_quest_abyss_contracts");
+		if (nAbyssQuest > 0)
+			AddJournalQuestEntry("ps_quest_abyss_contracts", 1, oPC);
+			
+	} else if (nChecked == 1) {
+	
+		int nBaatorQuest = GetPermanentInt(sID, "ps_quest_baator_contracts");
+		if (nBaatorQuest > 0)
+			AddJournalQuestEntry("ps_quest_baator_contracts", 1, oPC);
+			
+	} else if (nChecked == 2) {
+	
+		int nGehennaQuest = GetPermanentInt(sID, "ps_quest_gehenna_contracts");
+		if (nGehennaQuest > 0)
+			AddJournalQuestEntry("ps_quest_gehenna_contracts", 1, oPC);
+		
+	} else if (nChecked == 3) {
+	
+		int nFaction = GetFaction(oPC);
+		if (nFaction > 1 & nFaction < 17)  {
+			AddAchievement(oPC, 2);
+		} else if (nFaction == 255) {
+			AddAchievement(oPC, 5);
+		}
+		
+	} else if (nChecked == 4) {
+		
+		if (GetIsFactotum(oPC)) {
+			AddAchievement(oPC, 16);
+		}
+		
+	} else if (nChecked == 5) {
+	
+		if (GetIsFactor(oPC)) {
+			AddAchievement(oPC, 17);
+		}
+		
+	} else if (nChecked == 6) {
+	
+		if (GetHitDice(oPC) > 1) {
+			AddAchievement(oPC, 1);
+		}
+		
+	} else if (nChecked == 7) {
+	
+		if (GetPermanentInt(sID, "Twin Cities")) {
+			DelayCommand(1.0f, AddAchievement(oPC, 4));
+			DeletePermanentInt(sID, "Twin Cities");
+		}
+		
+	} else if (nChecked == 8) {
+	
+		if (GetPermanentInt(sID, "beggar_charity") >= 50) {
+			DelayCommand(1.1f, AddAchievement(oPC, 15));
+			DeletePermanentInt(sID, "beggar_charity");
+		}
+		
+	} else {
+		return;
+	}
+	
+	SetLocalInt(oPC, "ACHIEVEMENTS_CHECKED", nChecked+1);
+	DelayCommand(0.5f, CheckForAchievements(oPC));
+
+}
+
+//Get faction
+//Refactor this later
+int GetFaction(object oPC) {
+
+	object oItem = GetItemPossessedBy(oPC,"ps_essence");
+    if(GetIsObjectValid(oItem))
+    {
+	 	int nFaction = GetLocalInt(oItem,"Faction");
+		return nFaction;
+    }
+	
+	return 0;
 }

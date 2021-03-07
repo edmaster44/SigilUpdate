@@ -93,8 +93,11 @@ void AddAchievement(object oPC, int nIndex) {
 	}
 	
 	string sQuery = "INSERT INTO characterquests SET character_id="+sID+", quest_name='"+quest_name+"', quest_icon="+sIcon+", quest_description='"+quest_description+"', isAchievement = 1, quest_status=1"; 
-	//SendMessageToPC(oPC, sQuery);
 	SQLExecDirect(sQuery);
+	
+	SendMessageToPC(oPC, "Achievement gained: "+quest_name);
+	PlaySound("gui_critical1", TRUE);
+	
 }
 
 void IncrementAchievement(object oPC, int nIndex) {
