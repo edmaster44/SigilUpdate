@@ -334,6 +334,9 @@ void DemoteInFaction(object oBadge, object oDM, object oTarget, string sTargetNa
 object GetFactionBadgeObject(object oPC)
 {
 	object oBadge = GetLocalObject(oPC, "FactionBadgeUsed");
+	if (!GetIsObjectValid(oBadge)) {
+		oBadge = GetItemPossessedBy(oPC, "ps_faction_badge");
+	}
 	return oBadge;
 }
 

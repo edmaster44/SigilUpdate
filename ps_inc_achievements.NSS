@@ -54,6 +54,9 @@ void ListAchievements(object oPC) {
 		
 	}
 	
+	if (nCount > 0)
+		DisplayAchievement(oPC, 1);
+		
 	SetLocalInt(oPC, "ACHIEVEMENT_COUNT", nCount);
 
 }

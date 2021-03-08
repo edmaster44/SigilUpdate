@@ -46,7 +46,7 @@ void CheckForAchievements(object oPC) {
 
 	int nChecked = GetLocalInt(oPC, "ACHIEVEMENTS_CHECKED");
 	string sID = PS_GetCharID(oPC);
-	SendMessageToPC(oPC, "Checking for achievements");
+	//SendMessageToPC(oPC, "Checking for achievements");
 	
 	if (nChecked == 0) {
 	
