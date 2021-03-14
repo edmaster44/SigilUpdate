@@ -6,7 +6,14 @@ void main () {
 	object oPC = GetLastUsedBy();
 	object oFruit1 = GetObjectByTag("pl_gardenfruit_1");
 	object oFruit2 = GetObjectByTag("pl_gardenfruit_2");
-	int nTime = GetLocalInt(OBJECT_SELF, "last_fired");
+	int nLastFired = GetLocalInt(OBJECT_SELF, "last_fired");
+	int nTime = PS_GetTime();
+	
+	int lastLooted = GetLocalInt(OBJECT_SELF, "lastlooted");
+	if (lastLooted != 0 && nTime-lastLooted > 60) {
+		DeleteLocalInt(oFruit1, "reward");
+		DeleteLocalInt(oFruit2, "reward");
+	}
 		
 	SetLocalObject(oFruit1, "TriggeredBy", oPC);
 	
@@ -19,21 +26,25 @@ void main () {
 		RecordPCAction(oFruit1, "gardenboss", oPC);
 		SetLocalInt(oPC, "gardenboss", 1);
 		
+		SetLocalInt(oFruit1, "lastlooted", nTime);
+		SetLocalInt(oFruit2, "lastlooted", nTime);
+		
 		//remove possibility of reward after a minute
-		DelayCommand(60.0f, DeleteLocalInt(OBJECT_SELF, "reward"));
+		DelayCommand(60.0f, DeleteLocalInt(oFruit1, "reward"));
+		DelayCommand(60.0f, DeleteLocalInt(oFruit2, "reward"));
 		DeleteLocalInt(oFruit1, "stage");
 		return;
 	} else if (nHasReward > 0) {
 		SendMessageToPC(oPC, "<i>You find nothing further of interest.");
 		DeleteLocalInt(oFruit1, "stage");
 		return;
-	} else if (GetTime()-nTime < 360) {
+	} else if (nTime-nLastFired < 360) {
 		SendMessageToPC(oPC, "<i>You find nothing further of interest.");
 		DeleteLocalInt(oFruit1, "stage");
 		return;
 	}
 		
-	SetLocalInt(OBJECT_SELF, "last_fired", GetTime());
+	SetLocalInt(OBJECT_SELF, "last_fired", nTime);
 	
 	SetUseableFlag(oFruit1, FALSE);
 	SetUseableFlag(oFruit2, FALSE);
