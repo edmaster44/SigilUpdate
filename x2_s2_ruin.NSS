@@ -47,7 +47,11 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
     //Roll damage
-    int nDam = d6(50);
+    int nDam = d6(100);
+
+	if (GetIsPC(oTarget)) {
+	nDam = d6(50);
+	}
     //Set damage effect
 
      if (GetIsPC(oTarget) == TRUE && MySavingThrow(SAVING_THROW_FORT,oTarget,nSpellDC,SAVING_THROW_TYPE_SPELL,OBJECT_SELF) != 0 )

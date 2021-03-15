@@ -59,8 +59,8 @@ void main()
     //effect eVisFire 	  = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 	//effect eVisSonic 	  = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
 
-    int nDamageAcid, nDamageElectrical, nDamageFire, nDamageSonic, nDamageCold, nDamageMagical, nDamageNegative;
-    effect eDamAcid, eDamElectrical, eDamFire, eDamSonic, eDamCold, eDamMagical, eDamNegative;
+    int nDamageAcid, nDamageElectrical, nDamageFire, nDamageSonic, nDamageCold, nDamageMagical, nDamageNegative, nDamagePositive;
+    effect eDamAcid, eDamElectrical, eDamFire, eDamSonic, eDamCold, eDamMagical, eDamNegative, eDamPositive;
 
     location lTarget = GetSpellTargetLocation();
 
@@ -75,13 +75,14 @@ void main()
 		    fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20 + 0.5f;
 			
 			//Roll damage for each target
-			nDamageAcid 	  = d6(10);
-			nDamageElectrical = d6(10);
-			nDamageFire 	  = d6(10);
-			nDamageSonic 	  = d6(10);
-			nDamageCold 	  = d6(10);
+			nDamageAcid 	  = d6(20);
+			nDamageElectrical = d6(20);
+			nDamageFire 	  = d6(20);
+			nDamageSonic 	  = d6(20);
+			nDamageCold 	  = d6(20);
 			nDamageMagical 	  = d6(10);
 			nDamageNegative	  = d6(10);
+			nDamagePositive   = d6(10);
 			
 			// No Evasion for Hellball
 			if (MySavingThrow(SAVING_THROW_REFLEX, oTarget, nSpellDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay) > 0)
@@ -93,9 +94,10 @@ void main()
 				nDamageCold 	  /= 2;
 				nDamageMagical 	  /= 2;
 				nDamageNegative	  /= 2;
+				nDamagePositive   /= 2;
 			}
 			
-			nTotalDamage = nDamageAcid + nDamageElectrical + nDamageFire + nDamageSonic + nDamageCold + nDamageMagical + nDamageNegative;
+			nTotalDamage = nDamageAcid + nDamageElectrical + nDamageFire + nDamageSonic + nDamageCold + nDamageMagical + nDamageNegative + nDamagePositive;
 			
 			//Set the damage effects
 			eDamAcid 	   = EffectDamage(nDamageAcid, 		 DAMAGE_TYPE_ACID);
@@ -105,6 +107,7 @@ void main()
 			eDamCold 	   = EffectDamage(nDamageCold,	 	 DAMAGE_TYPE_COLD);
 			eDamMagical    = EffectDamage(nDamageMagical, 	 DAMAGE_TYPE_MAGICAL);
 			eDamNegative   = EffectDamage(nDamageNegative,   DAMAGE_TYPE_NEGATIVE);
+			eDamPositive   = EffectDamage(nDamagePositive,   DAMAGE_TYPE_POSITIVE);
 			
 			if(nTotalDamage > 0)
 			{
@@ -116,6 +119,8 @@ void main()
 				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCold, 		oTarget));
 				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamMagical, 	oTarget));
 				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamNegative, 	oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamPositive, 	oTarget));
+				
 			
 			    //These visual effects are applied to the target object, not the location as above.
 			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVFX, oTarget));

@@ -295,37 +295,49 @@ void PS_Ability_DarkFlight(object oPC)
 
 void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 {
-	int nTouch	= TouchAttackRanged(oTarget);
-	int iLevel	= GetLevelByClass(CLASS_TYPE_ERINYES, oPC);
-	int iTBAB	= GetBaseAttackBonus(oTarget);
+
+	int AttackerCheck = 0;
+	int DefenderCheck = 0;
+	int SizeCheck = 0;
+	
 	if (GetCreatureSize(oTarget) == CREATURE_SIZE_LARGE)
-	{	iTBAB = iTBAB + 4;	}
+	{	SizeCheck = SizeCheck + 4;	}
 	if (GetCreatureSize(oTarget) == CREATURE_SIZE_HUGE)
-	{	iTBAB = iTBAB + 8;	}
-	int iTSMd	= GetAbilityModifier(ABILITY_STRENGTH, oTarget);
+	{	SizeCheck = SizeCheck + 8;	}
+
 	string sGend;
 	if (GetGender(oPC) == GENDER_FEMALE)
 	{	sGend = "her";	}
 	else {	sGend = "his";	}
-
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-    {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1884));
-		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
-		{	if (!MyResistSpell(OBJECT_SELF, oTarget))
-			{	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
-				{	effect eTrip = EffectKnockdown();	
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eTrip, oTarget);	}
-
-				int iCaster = d20(1) + (iLevel * 4);
-				int iTarget = d20(1) + iTBAB + iTSMd;
-				int nDur	= iLevel;
-				if (iCaster > iTarget)
+	
+	if (GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF) > GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF)) {
+		int AttackerCheck = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
+	}
+	else {
+		int AttackerCheck = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
+	}
+	
+	if (GetAbilityModifier(ABILITY_STRENGTH, oTarget) > GetAbilityModifier(ABILITY_DEXTERITY,oTarget)) {
+		int DefenderCheck = GetAbilityModifier(ABILITY_STRENGTH,oTarget);
+	}
+	else {
+		int DefenderCheck = GetAbilityModifier(ABILITY_DEXTERITY,oTarget);
+	}
+    
+				int iATotal = d20(1) + iAttackerCheck;
+				int iDTotal = d20(1) + iDefenderCheck + iSizeCheck;
+				int nDur	= 3;
+				if (iATotal > iDTotal)
 				{	effect eRoped	= EffectEntangle();
 	   	 			effect eVis		= EffectVisualEffect(VFX_DUR_PARALYZED);
+					effect eHidePen = EffectSkillDecrease(5, 100);
+					effect eMovePen = EffectSkillDecrease(8, 100);
 					effect eLink	= EffectLinkEffects(eRoped, eVis);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iLevel));
-					SpeakString(GetFirstName(oPC) + " flings " + sGend + " rope at " + GetFirstName(oTarget) + " and entangles them!");	}	}
-	}	}
+					effect eLink    = EffectLinkEffects(eLink, eHidePen);
+					effect eLink    = EffectLinkEffects(eLink, eMovePen);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
+					SpeakString(GetFirstName(oPC) + " flings " + sGend + " rope at " + GetFirstName(oTarget) + " and entangles them!");	}	
+		
     effect eRay = EffectBeam(VFX_BEAM_ABJURATION, OBJECT_SELF, BODY_NODE_HAND);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }
