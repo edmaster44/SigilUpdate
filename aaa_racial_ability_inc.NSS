@@ -324,8 +324,8 @@ void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 		int DefenderCheck = GetAbilityModifier(ABILITY_DEXTERITY,oTarget);
 	}
     
-				int iATotal = d20(1) + iAttackerCheck;
-				int iDTotal = d20(1) + iDefenderCheck + iSizeCheck;
+				int iATotal = d20(1) + AttackerCheck;
+				int iDTotal = d20(1) + DefenderCheck + SizeCheck;
 				int nDur	= 3;
 				if (iATotal > iDTotal)
 				{	effect eRoped	= EffectEntangle();
@@ -333,8 +333,8 @@ void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 					effect eHidePen = EffectSkillDecrease(5, 100);
 					effect eMovePen = EffectSkillDecrease(8, 100);
 					effect eLink	= EffectLinkEffects(eRoped, eVis);
-					effect eLink    = EffectLinkEffects(eLink, eHidePen);
-					effect eLink    = EffectLinkEffects(eLink, eMovePen);
+					 eLink    = EffectLinkEffects(eLink, eHidePen);
+					 eLink    = EffectLinkEffects(eLink, eMovePen);
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
 					SpeakString(GetFirstName(oPC) + " flings " + sGend + " rope at " + GetFirstName(oTarget) + " and entangles them!");	}	
 		
