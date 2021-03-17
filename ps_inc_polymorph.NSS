@@ -1,9 +1,10 @@
-#include "x0_i0_position"
+/*#include "x0_i0_position"
 #include "aaa_constants"
 #include "ps_inc_advscript"
 #include "x0_i0_match"
 #include "x0_i0_petrify"
 #include "ps_inc_functions"
+
 
 void PS_RemovePolymorphBonus(object oPC, object oEssence);
 
@@ -64,4 +65,4 @@ void PS_ApplyPolymorphBonus(object oPC, object oEssence)
 		SetLocalInt(oEssence, "WildCha", iChaBonus);
 		SendMessageToPC(oPC, "CHA bonus applied.");	}
 	SendMessageToPC(oPC, "Racial bonuses to mental abilities *if any* applied to polymorph shape.");
-}
+}* Disabled by edmaster44, not working */ 
