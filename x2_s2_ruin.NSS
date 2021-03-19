@@ -47,7 +47,7 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
     //Roll damage
-    int nDam = d6(100);
+    int nDam = d6(150);
 
 	if (GetIsPC(oTarget)) {
 	nDam = d6(50);

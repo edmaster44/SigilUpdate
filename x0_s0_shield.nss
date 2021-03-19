@@ -48,13 +48,13 @@ void main()
     object oTarget = OBJECT_SELF;
     //effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);
 
-    effect eArmor = EffectACIncrease(4, AC_SHIELD_ENCHANTMENT_BONUS);	// AFW-OEI 11/02/2006 change from Deflection to Shield bonus.
+    effect eArmor = EffectACIncrease(5, AC_SHIELD_ENCHANTMENT_BONUS);	// AFW-OEI 11/02/2006 change from Deflection to Shield bonus.
     effect eSpell = EffectSpellImmunity(SPELL_MAGIC_MISSILE);
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SHIELD);
 
 
-    effect eLink = EffectLinkEffects(eArmor, eDur);
-    eLink = EffectLinkEffects(eLink, eSpell);
+    effect eLink = EffectLinkEffects(eArmor, eSpell);
+  
 
     float fDuration = HoursToSeconds(GetCasterLevel(OBJECT_SELF)); // * Duration 1 turn
     fDuration = ApplyMetamagicDurationMods(fDuration);
