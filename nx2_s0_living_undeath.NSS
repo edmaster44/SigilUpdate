@@ -62,7 +62,6 @@ void main()
 	effect eVisual			= EffectVisualEffect(VFX_HIT_SPELL_LIVING_UNDEATH);
 	effect eFrame			= EffectVisualEffect(VFX_DUR_SPELL_LIVING_UNDEATH);
 	effect eLink 			= EffectLinkEffects(eImmuneSA, eImmuneCH);
-	eLink 					= EffectLinkEffects(eLink, eDecreaseChar);
 	eLink 					= EffectLinkEffects(eLink, eFrame);
 	 
 	// Make sure spell target is valid
