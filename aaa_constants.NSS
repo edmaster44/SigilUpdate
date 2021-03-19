@@ -109,10 +109,14 @@ const int WING_TYPE_MEZZOLOTH					= 62;
 const int WING_TYPE_WORDARCHON_F				= 72;
 const int WING_TYPE_WORDARCHON_M				= 73;
 
-
+//List of all new Base Classes
+const int CLASS_TYPE_PSION 						= 90;
+const int CLASS_PSYCHIC_WARRIOR					= 110;
 //List of All new PRCs
 const int CLASS_TYPE_ELEMENTAL_WARRIOR			= 68;
 const int CLASS_DERVISH							= 72;
+const int CLASS_PSYCHIC_KNIGHT					= 109;
+const int CLASS_TYPE_CEREBREMANCER				= 152;
 const int CLASS_STALWART_DEFENDER 				= 180;
 // List of all racial prestige classes
 const int CLASS_TYPE_SCALED_HUNTER_PRC			= 48;
