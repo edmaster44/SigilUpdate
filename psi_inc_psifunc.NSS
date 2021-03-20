@@ -275,6 +275,7 @@ int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDa
 #include "psi_inc_fillin"
 #include "psi_feat_const"
 #include "x2_inc_itemprop"
+#include "aaa_constants"
 #include "X0_I0_SPELLS"   
 
 
@@ -284,11 +285,12 @@ int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDa
 
 int GetManifestingClass(object oManifester = OBJECT_SELF)
 {
-    return 90;
-	return 100;
-	return 109;
-	return 152;
-	return 128;
+    return CLASS_TYPE_PSION;
+	return CLASS_TYPE_ILLITHID_MENTALIST_PRC;
+	return CLASS_TYPE_DRAGON_PSION;
+	return CLASS_TYPE_CEREBREMANCER;
+	return CLASS_PSYCHIC_WARRIOR;
+	return CLASS_PSYCHIC_KNIGHT;
 }
 
 int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVALID)
@@ -390,7 +392,20 @@ int GetAbilityScoreOfClass(object oManifester, int nClass)
 }
 
 int GetAbilityOfClass(int nClass) {
-    return ABILITY_INTELLIGENCE;
+    switch (nClass)
+	{
+	case CLASS_TYPE_PSION://Psion
+	case CLASS_TYPE_DRAGON_PSION://Gem Dragon
+	case CLASS_TYPE_ILLITHID_MENTALIST_PRC://Illithid Mentalist
+	case CLASS_PSYCHIC_KNIGHT://Psychic Knight
+	case CLASS_TYPE_CEREBREMANCER://Cerebremancer
+		return ABILITY_INTELLIGENCE;		
+	case CLASS_PSYCHIC_WARRIOR:	
+		return ABILITY_WISDOM;
+		}
+    // If there's no class, it's racial. Use Charisma
+    return ABILITY_CHARISMA;
+ 
 }
 
 int GetPowerDiscipline(int nSpellID)
@@ -687,7 +702,8 @@ int GetPsiPenetration(object oManifester = OBJECT_SELF)
 
 int GetIsPsionicCharacter(object oCreature)
 {
-    return (GetLevelByClass(90,          oCreature)
+    return (GetLevelByClass(CLASS_TYPE_PSION,          oCreature)||
+	GetLevelByClass(CLASS_PSYCHIC_WARRIOR,         oCreature)
               // Racial psionicity signifying feats go here
              );
 }
@@ -726,7 +742,8 @@ int GetPsionicPRCLevels(object oCreature)
 
 int GetIsPsionicClass(int nClass)
 {
-    return (nClass==90 || nClass == 100 ||nClass == 109	|| nClass == 152) ;
+    return (nClass==CLASS_TYPE_PSION || nClass == CLASS_PSYCHIC_KNIGHT ||nClass == CLASS_TYPE_CEREBREMANCER	|| nClass == CLASS_TYPE_DRAGON_PSION
+	);
 }
 
 int GetFirstPsionicClass(object oCreature = OBJECT_SELF)

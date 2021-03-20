@@ -15,6 +15,7 @@
 
 #include "x2_inc_craft"
 #include "x2_inc_spellhook"
+#include "aaa_constants"
 
 
 // This function holds all functions that are supposed to run before the actual
@@ -44,10 +45,12 @@ int PsiPrePowerCastCode()
 	string sShield = GetTag(oShield);
 	if (iArmorRank > 1 || (GetBaseItemType(oShield) == BASE_ITEM_SMALLSHIELD && sShield != "mwa_shlt_zal_3") ||
 						  GetBaseItemType(oShield) == BASE_ITEM_LARGESHIELD ||
-						  GetBaseItemType(oShield) == BASE_ITEM_TOWERSHIELD) 
+						  GetBaseItemType(oShield) == BASE_ITEM_TOWERSHIELD || !GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oManifester)>=1)
 	{
 		return (d100() > spellFailure);
 	}
+	
+	
 	//********************************************************************
 	//Catapsi Interference ((Handled better in psi_inc_manifest))
 	//********************************************************************
