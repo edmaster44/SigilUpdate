@@ -361,7 +361,7 @@ string PickFromQuestTreasureMed() {
 		case 10: return "ps_morg_item10";
 		case 11: return "ps_morg_item11";
 		case 12: return "ps_morg_item12";
-		case 13: return "ps_morg_item16";
+		case 13: return "ps_morg_item12";
 		case 14: return "ps_morg_item17";
 		case 15: return "ps_morg_item18";
 		case 16: return "ps_morg_item20";
@@ -552,7 +552,7 @@ string PickFromQuestTreasureHigh() {
 		case 10: return "ps_morg_item10";
 		case 11: return "ps_morg_item11";
 		case 12: return "ps_morg_item12";
-		case 13: return "ps_morg_item16";
+		case 13: return "ps_morg_item12";
 		case 14: return "ps_morg_item17";
 		case 15: return "ps_morg_item18";
 		case 16: return "ps_morg_item20";
