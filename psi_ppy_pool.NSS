@@ -34,12 +34,12 @@ void main()
     object oTarget = GetSpellTargetObject();
 	
 	
-	if (GetLocalInt(OBJECT_SELF, "PSI_PPY") == 0 || GetLocalInt(OBJECT_SELF, "PSI_PPY") != 0 && GetLastPCRested() == OBJECT_SELF)
+	if (GetLocalInt(OBJECT_SELF, "PSI_PP") == 0 || GetLocalInt(OBJECT_SELF, "PSI_PP") != 0 && GetLastPCRested() == OBJECT_SELF)
 	//This keeps the power point total from replenishing automatically on leveling. Done to prevent leveling during battle
 	//as an exploit to regain lost power points.
 	    if (!GetHasSpellEffect(GetSpellId(), oTarget) && !GetIsInCombat(OBJECT_SELF))
 		{
-			int nPP = GetLocalInt(OBJECT_SELF, "PSI_PPY");
+			int nPP = GetLocalInt(OBJECT_SELF, "PSI_PP");
 			int i = 1;
 			object oPC = OBJECT_SELF;
 			//Defines the local variable that will represent power points.
@@ -50,7 +50,7 @@ void main()
 			int nIntBonus = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
 			int nPPBonus = nIntBonus * (nPsion/2);
 			
-			//Calculates bonus power points based on Intelligence score. This is per
+			//Calculates bonus power points based on Wisdom score. This is per
 			//3.5 sourcebooks.
 			if (GetHasFeat(2862, OBJECT_SELF))
 			{

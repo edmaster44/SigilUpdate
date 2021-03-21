@@ -1,12 +1,27 @@
 #include "psi_inc_metapsi"
 #include "nwn2_inc_spells"
+#include "aaa_constants"
+
+
+int PS_PsionicClasses(object oPC)
+{
+	int iPsion = GetLevelByClass(CLASS_TYPE_PSION, oPC);
+	int iPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
+	int iTotal = iPsion + iPsywar;
+	return iTotal;
+
+
+}
 
 
 //*************************************************
 struct manifestation EvaluateManifestationNew(object oManifester, object oTarget, int spellID, int nMetaPsiFlags)
 {
+
+
+
     // Manifester-related stuff
-    int nManifesterLevel = GetLevelByClass(90, oManifester);
+     int nManifesterLevel = PS_PsionicClasses(oManifester);
 	if(GetLevelByClass(100, oManifester) > 0)
     {
         nManifesterLevel = nManifesterLevel + GetLevelByClass(100, oManifester);
