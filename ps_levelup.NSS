@@ -191,6 +191,11 @@ void DoPsyProgression(object oPC)
 				FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
 				FeatRemove(OBJECT_SELF,21468);
 			}
+			if (nLEVEL > 19 )
+			{
+			FeatRemove(OBJECT_SELF,21469);
+			}
+			
 		}
 
 //Bardic music stacks
