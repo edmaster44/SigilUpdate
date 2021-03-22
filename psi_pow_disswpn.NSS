@@ -22,7 +22,7 @@
     with your successful melee attack. Your weapon is charged with acid until
     you make a successful attack.
 
-    Augment: For every 2 additional power points you spend, this power�s damage
+    Augment: For every 2 additional power points you spend, this power’s damage
              increases by 1d6 points.
 
 
@@ -32,47 +32,62 @@
 //:://////////////////////////////////////////////
 //:://////////////////////////////////////////////
 
-//#include "psi_inc_onhit"
+
+#include "psi_inc_manifest"
 #include "psi_inc_psifunc"
+#include "psi_inc_pwresist"
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
 
-//Based on event system, needs to be reworked - Mimi
+
+
 void main()
 {
-	
-   if (!PsiPrePowerCastCode())
+/*
+  Spellcast Hook Code
+  Added 2004-11-02 by Stratovarius
+  If you want to make changes to all powers,
+  check psi_spellhook to find out more
+
+*/
+    if (!PsiPrePowerCastCode())
     {
     // If code within the PrePowerCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 
-// End of Spell Cast Hook
-
     object oManifester = OBJECT_SELF;
-    object oTarget     = GetSpellTargetObject();
+    object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_AUGMENT
+                              METAPSIONIC_EXTEND||METAPSIONIC_AUGMENT
                               );
 							  
-	if(manif.bCanManifest)
+
+    // Validity check
+    if(!GetIsObjectValid(oTarget))
     {
-		float fDur = 6.0f;
-		if (manif.bAugment)
-			fDur *= 2;
-			
-		object oWeapon = GetItemInSlot(4, oTarget);
-		if (!GetIsObjectValid(oWeapon)) {
-			SendMessageToPC(oManifester, "The target must have a weapon equipped in their right hand for the spell to work.");
-			return;
-		}
-			
-        effect eVis         = EffectVisualEffect(VFX_HIT_SPELL_ACID);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-		itemproperty ipAdd = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_ACID, IP_CONST_DAMAGEBONUS_4d6);
-        IPSafeAddItemProperty(oWeapon, ipAdd, fDur);
+        SendMessageToPC(oManifester, "Target must be a weapon or creature holding a weapon!"); // Item must be weapon or creature holding a weapon
+    	return;
+    }
+
+    if(manif.bCanManifest)
+    {
+        int nDamageType = GetWeaponType(oTarget);
+		int nDamage	= IP_CONST_DAMAGEBONUS_4d6;
+        effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
+        float fDuration = 600.0f * manif.nManifesterLevel;
+        if(manif.bExtend) {fDuration *= 2;}
+		if (manif.bAugment) 
+		{nDamage = IP_CONST_DAMAGEBONUS_5d6;}
+		int DamageType = IP_CONST_DAMAGETYPE_ACID;
+		itemproperty ipAdd = ItemPropertyDamageBonus(nDamageType,nDamage);
 		
-    }// end else - Running OnHit*/
+        {
+            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
+            IPSafeAddItemProperty(oTarget, ipAdd, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+        }
+    }
 }
+

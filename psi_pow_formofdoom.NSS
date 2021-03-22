@@ -114,7 +114,7 @@ void main()
                 return;
             eTest = GetNextEffect(oTarget);
         }
-		
+		//Feral Path
 		if (GetHasFeat(9999,oManifester))
 		{
 		  

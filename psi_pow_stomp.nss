@@ -59,7 +59,7 @@ void main()
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER | METAPSIONIC_MAXIMIZE | METAPSIONIC_TWIN | METAPSIONIC_WIDEN
+                                METAPSIONIC_EMPOWER | METAPSIONIC_MAXIMIZE | METAPSIONIC_TWIN | METAPSIONIC_WIDEN
                               );
 
 
@@ -67,6 +67,8 @@ void main()
     {
         int nDC           = GetManifesterDC(oManifester);
         int nNumberOfDice = 4;
+			if (manif.bTwin)
+		nNumberOfDice = 8;
         int nDieSize      = 2;
         int nDamage;
         effect eLink      = EffectLinkEffects(EffectKnockdown(),
@@ -98,7 +100,7 @@ void main()
                     if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                     {
                         // Roll damage
-                      //  nDamage = MetaPsionicsDamage(manif, nDieSize, nNumberOfDice, 0, 0, TRUE, FALSE);
+                        //nDamage = MetaPsionicsDamage(manif, nDieSize, nNumberOfDice, 0, 0, TRUE, FALSE);
                         // Target-specific stuff
                         nDamage = GetTargetSpecificChangesToDamage(oTarget, oManifester, nDamage, TRUE, FALSE);
                         // Create damage effect
