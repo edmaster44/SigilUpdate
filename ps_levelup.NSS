@@ -149,6 +149,48 @@ void DoPsiProgression(object oPC)
 	}
 }
 
+
+//Progression for Psychic Warrior and PRC
+void DoPsyProgression(object oPC)
+{
+	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	if (nPsywar < 1) return;
+	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
+	int nLEVEL = nPsywar + nGemDragon;
+	
+	if (nLEVEL <1) return;
+				if (!GetHasFeat(21464, oPC) && nPsywar > 0)
+			{
+				int nProgI = FeatAdd(OBJECT_SELF, 21464, TRUE, TRUE, FALSE);
+				nProgI == TRUE;
+			}
+			if (!GetHasFeat(21465, oPC) && nPsywar > 2)
+			{
+				int nProgII = FeatAdd(OBJECT_SELF, 21465, TRUE, TRUE, FALSE);
+				nProgII == TRUE;
+			}
+			if (!GetHasFeat(21466, oPC) && nPsywar > 6)
+			{
+				int nProgIII = FeatAdd(OBJECT_SELF, 21466, TRUE, TRUE, FALSE);
+				nProgIII == TRUE;
+			}
+			if (!GetHasFeat(21467, oPC) && nPsywar > 9)
+			{
+				int nProgIV = FeatAdd(OBJECT_SELF, 21467, TRUE, TRUE, FALSE);
+				nProgIV == TRUE;
+			}
+			if (!GetHasFeat(21468, oPC) && nPsywar > 12)
+			{
+				int nProgV = FeatAdd(OBJECT_SELF, 21468, TRUE, TRUE, FALSE);
+				nProgV == TRUE;
+			}
+			if (!GetHasFeat(21469, oPC) && nPsywar > 16)
+			{
+				int nProgVI = FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
+				nProgVI == TRUE;
+			}
+		}
+
 //Bardic music stacks
 void CheckBardicSongs(object oPC)
 {
