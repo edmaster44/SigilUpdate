@@ -159,35 +159,37 @@ void DoPsyProgression(object oPC)
 	int nLEVEL = nPsywar + nGemDragon;
 	
 	if (nLEVEL <1) return;
-				if (!GetHasFeat(21464, oPC) && nPsywar > 0)
+	else
+				if (!GetHasFeat(21464, oPC) && nLEVEL > 0)
 			{
-				int nProgI = FeatAdd(OBJECT_SELF, 21464, TRUE, TRUE, FALSE);
-				nProgI == TRUE;
+				FeatAdd(OBJECT_SELF, 21464, TRUE, TRUE, FALSE);
+				
 			}
-			if (!GetHasFeat(21465, oPC) && nPsywar > 2)
+			if (!GetHasFeat(21465, oPC) && nLEVEL > 2)
 			{
-				int nProgII = FeatAdd(OBJECT_SELF, 21465, TRUE, TRUE, FALSE);
-				nProgII == TRUE;
+				FeatAdd(OBJECT_SELF, 21465, TRUE, TRUE, FALSE);
+				FeatRemove(OBJECT_SELF,21464);
+				
 			}
-			if (!GetHasFeat(21466, oPC) && nPsywar > 6)
+			if (!GetHasFeat(21466, oPC) && nLEVEL > 5)
 			{
-				int nProgIII = FeatAdd(OBJECT_SELF, 21466, TRUE, TRUE, FALSE);
-				nProgIII == TRUE;
+				FeatAdd(OBJECT_SELF, 21466, TRUE, TRUE, FALSE);
+					FeatRemove(OBJECT_SELF,21465);
 			}
-			if (!GetHasFeat(21467, oPC) && nPsywar > 9)
+			if (!GetHasFeat(21467, oPC) && nLEVEL > 8)
 			{
-				int nProgIV = FeatAdd(OBJECT_SELF, 21467, TRUE, TRUE, FALSE);
-				nProgIV == TRUE;
+				FeatAdd(OBJECT_SELF, 21467, TRUE, TRUE, FALSE);
+			}	FeatRemove(OBJECT_SELF,21466);
+			
+			if (!GetHasFeat(21468, oPC) && nLEVEL > 11)
+			{
+				FeatAdd(OBJECT_SELF, 21468, TRUE, TRUE, FALSE);
+				FeatRemove(OBJECT_SELF,21467);
 			}
-			if (!GetHasFeat(21468, oPC) && nPsywar > 12)
+			if (!GetHasFeat(21469, oPC) && nLEVEL > 15)
 			{
-				int nProgV = FeatAdd(OBJECT_SELF, 21468, TRUE, TRUE, FALSE);
-				nProgV == TRUE;
-			}
-			if (!GetHasFeat(21469, oPC) && nPsywar > 16)
-			{
-				int nProgVI = FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
-				nProgVI == TRUE;
+				FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
+				FeatRemove(OBJECT_SELF,21468);
 			}
 		}
 
@@ -361,6 +363,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
+	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);
