@@ -43,9 +43,11 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
     int nPen = GetPsiPenetration(oManifester);
     int nDamage, nTouchAttack;
     int bHit = 0;
-
+	int nStr = 6;
+	if (manif.bAugment)
+	nStr = 8;
     effect eVis  = EffectVisualEffect(VFX_COM_HIT_NEGATIVE);
-    effect eLink =                          EffectAbilityIncrease(ABILITY_STRENGTH,     6);
+    effect eLink =                          EffectAbilityIncrease(ABILITY_STRENGTH,     nStr);
            eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PROTECTION_GOOD_MAJOR));
 
     //SPRaiseSpellCastAt(oTarget, TRUE, manif.nSpellID, oManifester);
@@ -108,6 +110,7 @@ void main()
     object oTarget     = GetSpellTargetObject();
 	int nPP = GetLocalInt(oManifester, "PSI_PP");
 	int nPPt = GetLocalInt(oTarget, "PSI_PP");
+	effect eVis  = EffectVisualEffect(VFX_COM_HIT_NEGATIVE);
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
@@ -119,10 +122,13 @@ void main()
 	    int nDamage, nTouchAttack;
 		int nPPAbsorb = nPPt;
 		int nPPFinal = nPP + nPPAbsorb;
+			int nStr = 6;
+	if (manif.bAugment)
+	nStr = 8;
 	    int bHit = 0;
-	
+	if (manif.bAugment)
 	       effect eVis  = EffectVisualEffect(VFX_COM_HIT_NEGATIVE);
-    effect eLink =                          EffectAbilityIncrease(ABILITY_STRENGTH,     6);
+    effect eLink =                          EffectAbilityIncrease(ABILITY_STRENGTH,     nStr);
            eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PROTECTION_GOOD_MAJOR));
 	
 	    int nRepeats = manif.bTwin ? 2 : 1;
