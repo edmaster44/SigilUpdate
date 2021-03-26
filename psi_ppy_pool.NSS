@@ -50,7 +50,7 @@ void main()
 			int nIntBonus = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
 			int nPPBonus = nIntBonus * (nPsion/2);
 			
-			//Calculates bonus power points based on Intelligence score. This is per
+			//Calculates bonus power points based on Wisdom score. This is per
 			//3.5 sourcebooks.
 			if (GetHasFeat(2862, OBJECT_SELF))
 			{
@@ -274,34 +274,34 @@ void main()
 			
 			
 			
-			if (!GetHasFeat(21425, oPC) && nPsion2 > 0)
+			if (!GetHasFeat(21464, oPC) && nPsion2 > 0)
 			{
-				int nProgI = FeatAdd(OBJECT_SELF, 21425, TRUE, TRUE, FALSE);
+				int nProgI = FeatAdd(OBJECT_SELF, 21464, TRUE, TRUE, FALSE);
 				nProgI == TRUE;
 			}
-			if (!GetHasFeat(21426, oPC) && nPsion2 > 2)
+			if (!GetHasFeat(21465, oPC) && nPsion2 > 2)
 			{
-				int nProgII = FeatAdd(OBJECT_SELF, 21426, TRUE, TRUE, FALSE);
+				int nProgII = FeatAdd(OBJECT_SELF, 21465, TRUE, TRUE, FALSE);
 				nProgII == TRUE;
 			}
-			if (!GetHasFeat(21427, oPC) && nPsion2 > 6)
+			if (!GetHasFeat(21466, oPC) && nPsion2 > 6)
 			{
-				int nProgIII = FeatAdd(OBJECT_SELF, 21427, TRUE, TRUE, FALSE);
+				int nProgIII = FeatAdd(OBJECT_SELF, 21466, TRUE, TRUE, FALSE);
 				nProgIII == TRUE;
 			}
-			if (!GetHasFeat(21428, oPC) && nPsion2 > 9)
+			if (!GetHasFeat(21467, oPC) && nPsion2 > 9)
 			{
-				int nProgIV = FeatAdd(OBJECT_SELF, 21428, TRUE, TRUE, FALSE);
+				int nProgIV = FeatAdd(OBJECT_SELF, 21467, TRUE, TRUE, FALSE);
 				nProgIV == TRUE;
 			}
-			if (!GetHasFeat(21429, oPC) && nPsion2 > 12)
+			if (!GetHasFeat(21468, oPC) && nPsion2 > 12)
 			{
-				int nProgV = FeatAdd(OBJECT_SELF, 21429, TRUE, TRUE, FALSE);
+				int nProgV = FeatAdd(OBJECT_SELF, 21468, TRUE, TRUE, FALSE);
 				nProgV == TRUE;
 			}
-			if (!GetHasFeat(21430, oPC) && nPsion2 > 16)
+			if (!GetHasFeat(21469, oPC) && nPsion2 > 16)
 			{
-				int nProgVI = FeatAdd(OBJECT_SELF, 21430, TRUE, TRUE, FALSE);
+				int nProgVI = FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
 				nProgVI == TRUE;
 			}
 		

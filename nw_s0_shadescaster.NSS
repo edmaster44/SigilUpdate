@@ -67,7 +67,7 @@ void main()
 		eLink = EffectLinkEffects(eLink, eSpell);
 		
 		//Shield
-		effect eMA_AC = EffectACIncrease(4, AC_SHIELD_ENCHANTMENT_BONUS);
+		effect eMA_AC = EffectACIncrease(5, AC_SHIELD_ENCHANTMENT_BONUS);
 		eLink = EffectLinkEffects(eMA_AC, eLink);
 
 		//Needed for dispels to see this as single spell
