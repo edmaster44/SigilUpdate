@@ -116,6 +116,7 @@ const int CLASS_PSYCHIC_WARRIOR					= 110;
 const int CLASS_TYPE_ELEMENTAL_WARRIOR			= 68;
 const int CLASS_DERVISH							= 72;
 const int CLASS_PSYCHIC_KNIGHT					= 109;
+const int CLASS_TYPE_WARMIND					= 111;
 const int CLASS_TYPE_CEREBREMANCER				= 152;
 const int CLASS_STALWART_DEFENDER 				= 180;
 // List of all racial prestige classes
@@ -542,7 +543,9 @@ const int FEAT_ELEMWAR_AFFINITY_AIR				= 2992;
 const int FEAT_ELEMWAR_AFFINITY_EARTH			= 2993;
 const int FEAT_ELEMWAR_AFFINITY_FIRE 			= 2994;
 const int FEAT_ELEMWAR_AFFINITY_WATER			= 2995;
-
+//Psychic Warrior Feat
+const int FEAT_PSYWAR_FERAL						= 21471;
+const int FEAT_PSYWAR_LURK						= 21470;
 //Knight Related Feats
 const int FEAT_PALADIN 							= 3017;
 const int FEAT_KNIGHT							= 3018;
@@ -551,6 +554,12 @@ const int FEAT_DIVINE_RETRIBUTION				= 3020;
 const int FEAT_KNIGHTS_AURA						= 2928;
 const int FEAT_KNIGHTSMITE						= 3035;
 const int FEAT_BLACKGUARD_SMITE					= 3041;
+//Warmind Feats
+const int FEAT_CHAIN_OF_OVERWHELMING_FORCE		= 21476;
+const int FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY		= 21473;
+const int FEAT_CHAIN_OF_DEFENSIVE_POSTURE		= 21474;
+//SpellLike Abilities
+const int SPELLABILITY_WARMIND_STRIKE			= 9999;
 
 //Spell abilities Knight
 const int SPELLABILITY_KNIGHTSMITE				= 1930;

@@ -57,6 +57,7 @@
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
+#include "aaa_constants"
 #include "x2_inc_itemprop"
 
 
@@ -97,9 +98,7 @@ void main()
                eLink    = EffectLinkEffects(eLink, EffectAbilityIncrease(ABILITY_STRENGTH, 4));
                eLink    = EffectLinkEffects(eLink, EffectMovementSpeedIncrease(33));
                //eLink    = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_INTIMIDATE, 10));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PROT_SHADOW_ARMOR));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_SHADOW_CLOAK));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_TENTACLE));
+               eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"));
         effect eTest;
         float fDuration = 6.0f * (manif.nManifesterLevel + (2 * manif.nManifesterLevel));
         if(manif.bExtend) fDuration *= 2;
@@ -115,7 +114,7 @@ void main()
             eTest = GetNextEffect(oTarget);
         }
 		//Feral Path
-		if (GetHasFeat(9999,oManifester))
+		if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester))
 		{
 		  
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, GetItemPossessor(oWeapon));

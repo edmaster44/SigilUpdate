@@ -1,0 +1,30 @@
+/*
+Chain of Defensive Posture (Ex)
+At 2nd level, a war mind learns the second principle of warfare for the individual combatant: 
+the ability to avoid the enemy’s counterattacks if that enemy is not immediately overwhelmed. 
+Calling upon inner reserves of knowledge and dedication, 
+a war mind can provide himself with a +2 insight bonus to Shield for up to 1 minute. A war mind can use this power three times per day.
+ Activating this power is a free action. At 8th level, the insight bonus to Shield  improves to +5.
+*/
+
+
+
+
+
+
+#include "ps_inc_melee"
+#include "x2_inc_itemprop"
+#include "x2_inc_spellhook"
+#include "aaa_constants"
+#include "nwn2_inc_spells"
+
+
+void main()
+{
+int nArmor = 2;
+if (GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF)>6) {nArmor =5;}
+effect eArmour = EffectACIncrease(nArmor,AC_SHIELD_ENCHANTMENT_BONUS,AC_VS_DAMAGE_TYPE_ALL,FALSE);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eArmour,OBJECT_SELF,60.0f);
+
+
+}

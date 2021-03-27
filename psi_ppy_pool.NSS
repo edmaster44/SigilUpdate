@@ -43,8 +43,10 @@ void main()
 			int i = 1;
 			object oPC = OBJECT_SELF;
 			//Defines the local variable that will represent power points.
-			int nPsion = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,OBJECT_SELF);;
-
+			int nPsion = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,OBJECT_SELF);
+			int nWarmind = GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF);
+			int nGem =	GetLevelByClass(CLASS_TYPE_DRAGON_PSION,OBJECT_SELF);
+			nPsion = nPsion + nWarmind + nGem;
 			//Determines level in psion class.
 			int nPPvalue;
 			int nIntBonus = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
