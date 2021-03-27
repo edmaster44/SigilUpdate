@@ -29,8 +29,7 @@ return;}
 		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		if (nLevel >= 9 ) 
         {   nAmount = 2; }
-		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
-		{ nAmount = 5;}
+		
 	
 		float fDuration = 9999.99f;
 		effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
@@ -78,25 +77,15 @@ if (!NoHeavyArmorOrShield(oPC))
 }	
 
 //Defensive Parry.
-/* void Dervish_Defensive_Parry(object oPC, int nSpell)
+ void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
+int nPercentage = GetSkillRank( SKILL_PARRY, oPC,FALSE);
+float fDuration = IntToFloat(nPercentage);
+if (nPercentage> 50)
+	{nPercentage = 50;}
 int nSpell = SPELLABILITY_DERVISH_DEFENSIVE_PARRY;
 int nAction = GetCurrentAction(oPC);
-	if (GetHasSpellEffect(nSpell,oPC))
-				{
-					RemoveSpellEffects(nSpell, OBJECT_SELF, oPC);	
-					SendMessageToPC(oPC, "Defensive Parry disabled.");
-					}
-		if (GetHasFeat(FEAT_DERVISH_DEFENSIVE_PARRY,oPC))
-			{
-			if (nAction == ACTION_MODE_COMBAT_EXPERTISE || nAction== ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)
-			{
-				
-						effect eDefParry = EffectACIncrease(4);
-						eDefParry = SetEffectSpellId(eDefParry, nSpell);
-						eDefParry = SupernaturalEffect(eDefParry);
-						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
-						SendMessageToPC(oPC, "Defensive Parry enabled.");						
-				}
+
+		effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, econceal, oPC, fDuration);
 }
-} */
