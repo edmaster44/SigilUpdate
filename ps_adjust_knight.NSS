@@ -178,7 +178,7 @@ void PS_KnightLevels(object oPC)
 	  
 	  }
 	  
-	   if (iTotal >= 2 && GetHasFeat(FEAT_KNIGHT,oPC))
+	   if (iTotal >= 4 && GetHasFeat(FEAT_KNIGHT,oPC))
 	  
 	  {
 	  		FeatAdd(oPC,FEAT_DIVINE_RETRIBUTION,FALSE,FALSE,FALSE);//Divine Retribution , Knight Path
