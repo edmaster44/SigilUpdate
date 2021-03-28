@@ -1,4 +1,4 @@
-
+#include "ps_inc_achievements"
 void main()
 {
  object oPC = GetEnteringObject();
@@ -184,7 +184,12 @@ void main()
 	   	location lSpawnpoint = GetLocation(oWP);  
 	   	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_ladycommon13", lSpawnpoint);    
 	}
+  
+  	string sID = PS_GetCharID(oPC);
+  	DelayCommand(6.0f, SetPermanentInt(sID, "Ladys_Ward", 1));
+  
+  	DelayCommand(7.0f, CheckToutAchievement(oPC));
 
-  SetGlobalInt("LadyEnterLock", 0);
+  	SetGlobalInt("LadyEnterLock", 0);
  }
 }

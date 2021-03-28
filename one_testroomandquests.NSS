@@ -51,20 +51,26 @@ void CheckForAchievements(object oPC) {
 	if (nChecked == 0) {
 	
 		int nAbyssQuest = GetPermanentInt(sID, "ps_quest_abyss_contracts");
-		if (nAbyssQuest > 0)
+		if (nAbyssQuest > 0) {
 			AddJournalQuestEntry("ps_quest_abyss_contracts", 1, oPC);
+			AddAchievement(oPC, 27);
+		}
 			
 	} else if (nChecked == 1) {
 	
 		int nBaatorQuest = GetPermanentInt(sID, "ps_quest_baator_contracts");
-		if (nBaatorQuest > 0)
+		if (nBaatorQuest > 0) {
 			AddJournalQuestEntry("ps_quest_baator_contracts", 1, oPC);
+			AddAchievement(oPC, 27);
+		}
 			
 	} else if (nChecked == 2) {
 	
 		int nGehennaQuest = GetPermanentInt(sID, "ps_quest_gehenna_contracts");
-		if (nGehennaQuest > 0)
+		if (nGehennaQuest > 0) {
 			AddJournalQuestEntry("ps_quest_gehenna_contracts", 1, oPC);
+			AddAchievement(oPC, 27);
+		}
 		
 	} else if (nChecked == 3) {
 	
@@ -85,7 +91,7 @@ void CheckForAchievements(object oPC) {
 	
 		if (GetIsFactor(oPC)) {
 			AddAchievement(oPC, 16);
-			DelayCommand(0.1f, AddAchievement(oPC, 17));
+			AddAchievement(oPC, 17);
 		}
 		
 	} else if (nChecked == 6) {
@@ -104,8 +110,33 @@ void CheckForAchievements(object oPC) {
 	} else if (nChecked == 8) {
 	
 		if (GetPermanentInt(sID, "beggar_charity") >= 50) {
-			DelayCommand(1.1f, AddAchievement(oPC, 15));
+			AddAchievement(oPC, 15);
 			DeletePermanentInt(sID, "beggar_charity");
+		}
+		
+	} else if (nChecked == 9) {
+	
+		if (GetPermanentInt(sID, "bloodwar_kill") >= 1000) {
+			AddAchievement(oPC, 8);
+		}
+		
+	} else if (nChecked == 10) {
+	
+		if (GetPermanentInt(sID, "Peeled a Berk") > 0 &&
+			GetPermanentInt(sID, "Helped a Berk") > 0) {
+			DeletePermanentInt(sID, "Helped a Berk");
+		}
+		
+	} else if (nChecked == 11) {
+	
+		if (GetPermanentInt(sID, "Bet Your Life - Victor") >= 10) {
+			AddAchievement(oPC, 64);
+		}
+		
+	} else if (nChecked == 12) {
+	
+		if (PS_GetLevel(oPC) >= 30) {
+			AddAchievement(oPC, 29);
 		}
 		
 	} else {

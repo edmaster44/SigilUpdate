@@ -7,6 +7,7 @@
 // Templates have category SCOD GUI|Triple Triad regardless of type.
 
 #include "ps_def_cards"
+#include "ps_inc_achievements"
 
 // prototypes where needed
 void CardsChangeGameState(object oBoard, int iNewGameState, int iExitCode=0);
@@ -527,6 +528,9 @@ void CardsGameOver(object oBoard, int iExitCode)
 		string sMessage;
 		string sName;
 		
+		AddAchievement(oPC1, 28);
+		AddAchievement(oPC2, 28);
+		
 		if (iWinner == 0) // its a draw
 		{
 			// sudden death option? Or that would activate under the gui script?
@@ -534,8 +538,14 @@ void CardsGameOver(object oBoard, int iExitCode)
 		}
 		else
 		{
-			if (iWinner == 1) sName = GetFirstName(oPC1);
-			else sName = GetFirstName(oPC2);
+			if (iWinner == 1) {
+				sName = GetFirstName(oPC1);
+				IncrementAchievement(oPC1, 63);
+			}
+			else {
+				sName = GetFirstName(oPC2);
+				IncrementAchievement(oPC2, 63);
+			}
 			
 			if (sName == "") sName = "ERROR GETTING PLAYER NAME - PLEASE REPORT";
 			

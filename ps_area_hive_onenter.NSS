@@ -1,4 +1,4 @@
-
+#include "ps_inc_achievements"
 void main()
 {
  object oPC = GetEnteringObject();
@@ -139,6 +139,11 @@ void main()
 	location lSpawnpoint = GetLocation(oWP);  
 		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_bjevent_fensir0", lSpawnpoint);    
 	}
+  
+  string sID = PS_GetCharID(oPC);
+  DelayCommand(6.0f, SetPermanentInt(sID, "Hive_Ward", 1));
+  
+  DelayCommand(7.0f, CheckToutAchievement(oPC));
   
   SetGlobalInt("HiveEnterLock", 0);
  }

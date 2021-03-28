@@ -61,7 +61,6 @@ void ListAchievements(object oPC) {
 
 }
 
-
 void DisplayAchievement(object oPC, int nIndex) {
 
 	//SendMessageToPC(oPC, "Displaying achievement #"+IntToString(nIndex));
@@ -133,4 +132,21 @@ int GetHasAchievement(object oPC, int nIndex) {
 	
 	return (nEntry > 0);
 
+}
+
+void CheckToutAchievement(object oPC) {
+
+	string sID = PS_GetCharID(oPC);
+	if (!GetPermanentInt(sID, "Clerks_Ward"))
+		return;
+	if (!GetPermanentInt(sID, "Hive_Ward"))
+		return;
+	if (!GetPermanentInt(sID, "Lower_Ward"))
+		return;
+	if (!GetPermanentInt(sID, "Ladys_Ward"))
+		return;
+	if (!GetPermanentInt(sID, "Market_Ward"))
+		return;
+		
+	AddAchievement(oPC, 23);
 }
