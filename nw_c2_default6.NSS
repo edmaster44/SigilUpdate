@@ -15,6 +15,7 @@
 
 #include "hench_i0_ai"
 #include "ginc_behavior"
+#include "ps_inc_achievements"
 
 string strVarnameBurning = "isburning";
 
@@ -37,6 +38,17 @@ void main() {
 	if (sDamageScript != "")
 		ExecuteScript(sDamageScript, OBJECT_SELF);
 	HandleBossEvents(OBJECT_SELF);
+	
+	object oPC = GetLastDamager();
+	
+	if (GetIsPC(oPC)) {
+		int nTotalDmg = GetTotalDamageDealt();
+		if (nTotalDmg > 100) {
+			AddAchievement(oPC, 35);
+		} else if (nTotalDmg > 300) {
+			AddAchievement(oPC, 73);
+		} 
+	}
 
 	//Special elemental effects
 	ApplySpecialElementalEffects();

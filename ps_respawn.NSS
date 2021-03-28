@@ -26,6 +26,37 @@ const string LOC_MORTUARY = "ps_area_s_hw_mortuary";
 const string LOC_APPERANCE_CHANGER = "appearance_changer_room";
 const string LOC_FESTHALL = "ps_area_s_cw_festhallchanging";
 
+//Checking for other participants in the arena for the achievement
+void CheckArenaFight(object oPC) {
+
+	object oArea = GetArea(oPC);
+	
+	//We aren't in the arena, skip this
+	if (GetTag(oArea) != LOC_ARENA)
+		return;
+
+	float fRadius = 15.0f;
+	int nCount = 0;
+	object oViewer = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
+	while (GetIsObjectValid(oViewer)) {
+	
+		//Sanity check
+		if (nCount > 20)
+			return;
+			
+		if (!GetIsPC(oViewer))
+			continue;
+			
+		if (GetLocalInt(oPC, "IN_ARENA") == 0)
+			continue;
+			
+		IncrementAchievement(oViewer, 45);
+	
+		nCount++;
+		oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
+	}
+}
+
 void ApplyRespawnPenalties(object oPC)
 {
 	//xp loss   
@@ -147,6 +178,8 @@ void main() {
 		SetLocalInt(oPC, "FirstDeath", 1);
 		AddAchievement(oPC, 9);
 	}
+	
+	CheckArenaFight(oPC);
 		
 	respawn(oPC);
 }

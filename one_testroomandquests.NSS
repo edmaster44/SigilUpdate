@@ -113,6 +113,11 @@ void CheckForAchievements(object oPC) {
 			AddAchievement(oPC, 15);
 			DeletePermanentInt(sID, "beggar_charity");
 		}
+		if (GetPermanentInt(sID, "beggar_kick") >= 50) {
+			AddAchievement(oPC, 43);
+			DeletePermanentInt(sID, "beggar_kick");
+			DeletePermanentInt(sID, "Charity Drive");
+		}
 		
 	} else if (nChecked == 9) {
 	
@@ -137,6 +142,53 @@ void CheckForAchievements(object oPC) {
 	
 		if (PS_GetLevel(oPC) >= 30) {
 			AddAchievement(oPC, 29);
+		}
+		
+	} else if (nChecked == 13) {
+	
+		int gamblingInt = GetPermanentInt(sID, "Gambled an Item");
+		if (gamblingInt >= 10) {
+			AddAchievement(oPC, 81);
+		}
+		if (gamblingInt >= 50) {
+			AddAchievement(oPC, 82);
+		}
+		
+	} else if (nChecked == 14) {
+	
+		int sigisInt = GetPermanentInt(sID, "Fit to Print");
+		if (sigisInt >= 10) {
+			AddAchievement(oPC, 41);
+		}
+		if (sigisInt >= 50) {
+			AddAchievement(oPC, 40);
+		}
+		
+	} else if (nChecked == 15) {
+		
+		if (GetPermanentInt(sID, "athar_1") > 0 &&
+			GetPermanentInt(sID, "athar_2") > 0 &&
+			GetPermanentInt(sID, "athar_3") > 0) {
+			AddAchievement(oPC, 42);
+		}
+	
+	} else if (nChecked == 16) {
+	
+		int sigisInt = GetPermanentInt(sID, "Sands of the Arena");
+		if (sigisInt >= 10) {
+			AddAchievement(oPC, 41);
+		}
+		if (sigisInt >= 50) {
+			AddAchievement(oPC, 47);
+		}
+		
+	} else if (nChecked == 17) {
+	
+		if (GetPermanentInt(sID, "FINISHED_LECTURE_1") > 0 &&
+			GetPermanentInt(sID, "FINISHED_LECTURE_2") > 0) {
+			AddAchievement(oPC, 56);
+			DeletePermanentInt(sID, "FINISHED_LECTURE_1");
+			DeletePermanentInt(sID, "FINISHED_LECTURE_2");
 		}
 		
 	} else {

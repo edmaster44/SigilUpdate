@@ -5,6 +5,7 @@
 //:://////////////////////////////////////////////
 
 #include "nwnx_sql"
+#include "ps_inc_achievements"
 
 void CheckSpells(int iSorceror, object oPC);
 int GetSpellCount(object oPC);
@@ -51,6 +52,8 @@ void RemoveSpells(object oPC, int iKnown)
    			iCount++;
    		}
    	}
+	
+	DelayCommand(1.0f, AddAchievement(oPC, 46));
    
    	UpdateSpellListing(oPC, iKnown - (iKnown - 250));   
 }

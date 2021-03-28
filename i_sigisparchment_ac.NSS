@@ -51,7 +51,7 @@ void main()
 			DestroyObject(oItem);
 			AssignCommand(oTarget, SpeakString("Cheers cutter, ill get this right to print.", TALKVOLUME_TALK));
 			SetGlobalString("LATEST_NEWS", sHeadline);
-			AddAchievement(oPC, 22);
+			IncrementAchievement(oPC, 22);
 		}
 		else
 		{

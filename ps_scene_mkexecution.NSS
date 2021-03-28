@@ -7,6 +7,7 @@
 //************************************************************
 #include "ps_inc_faction"
 #include "ps_inc_flavortext"
+#include "ps_inc_achievements"
 
 int GetExecutionType();
 
@@ -954,6 +955,7 @@ void AwardExperienceForScene() {
 	
 		if (GetArea(oPC) == GetArea(OBJECT_SELF)) {
 			SendMessageToPC(oPC, "<i>Experience awarded for viewing the execution.</i>");
+			AddAchievement(oPC, 54);
 			GiveXPToCreature(oPC, nExp);
 		}
 		oPC = GetNextPC();

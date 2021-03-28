@@ -1,4 +1,5 @@
 #include "ps_randomlootgenerator"
+#include "ps_inc_achievements"
 
 void main()
 {
@@ -31,6 +32,8 @@ void main()
 		// Rename the created item	
 		string newName = "Stolen " + GetFirstName(oItem);
 		SetFirstName(oItem, newName);
+			
+		IncrementAchievement(oPC, 34);
 
 		// Set as stolen so it can't be sold
 		SetStolenFlag(oItem, TRUE);

@@ -1,5 +1,6 @@
 //A script for playing the lectures in the Festhall
 #include "ps_inc_functions"
+#include "ps_inc_achievements"
 
 int PlayLectureTooMuch(int nStage, object oPC = OBJECT_INVALID);
 int PlayLectureSensoryStone(int nStage, object oPC = OBJECT_INVALID);
@@ -76,6 +77,12 @@ void MarkListeners(int nMax = 1, int nFinal = FALSE) {
 				
 				SendMessageToPC(oListener, "Experience given for listening to lecture:");
 				PS_GiveXPReward(oListener, 100);
+				
+				AddAchievement(oListener, 55);
+				
+				string sID = PS_GetCharID(oListener);
+				SetPermanentInt(sID, "FINISHED_LECTURE_"+IntToString(nLecture), 1);
+				
 				SetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture), 1);
 				DelayCommand(300.0f, SetLocalInt(oListener, "LECTURE_LISTENED", 0));
 				
