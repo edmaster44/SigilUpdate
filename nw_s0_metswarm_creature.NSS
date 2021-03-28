@@ -70,16 +70,16 @@ int DetermineFireDamageForTargetCreature(object oTarget, int nTouchAttackRanged)
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d4(nCasterLvl)+(CasterModifier*3);	
+	nDamage = d3(nCasterLvl)+(CasterModifier*2);	
 
 	if (nTouchAttackRanged == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
-		nDamage = d4(nCasterLvl*2)+(CasterModifier*3);	
+		nDamage = d3(nCasterLvl*2)+(CasterModifier*2);	
 	}
 			
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-		nDamage = (nCasterLvl*10)+(CasterModifier*3);//Damage is at max
+		nDamage = (nCasterLvl*2)+(CasterModifier*2);//Damage is at max
 	}
 	
 	if (nMetaMagic == METAMAGIC_EMPOWER)
@@ -118,11 +118,11 @@ int DetermineBluntDamageForTargetCreature(object oTarget, int nTouchAttackRanged
 			nBluntDamage = 0;	
 			break;	
 		case 2:
-			nBluntDamage = d4((nCasterLvl/2)*2)+(CasterModifier*3);
+			nBluntDamage = d3((nCasterLvl/2)*2)+(CasterModifier*2);
 			if (!GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 				break;
 		case 1:
-			nBluntDamage = d4(nCasterLvl/2)+(CasterModifier*3);
+			nBluntDamage = d3(nCasterLvl/2)+(CasterModifier*2);
 			break;
 	}
 				
@@ -160,7 +160,7 @@ int DetermineDamageForBlastCreature(object oTarget)
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d4(nCasterLvl/3);	
+	nDamage = d3(nCasterLvl/3);	
 					
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{

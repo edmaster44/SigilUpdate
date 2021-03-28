@@ -324,9 +324,10 @@ void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 		int DefenderCheck = GetAbilityModifier(ABILITY_DEXTERITY,oTarget);
 	}
     
-				int iATotal = d20(1) + AttackerCheck;
-				int iDTotal = d20(1) + DefenderCheck + SizeCheck;
-				int nDur	= 3;
+				int iATotal = d10(1) + AttackerCheck;
+				int iDTotal = d10(1) + DefenderCheck + SizeCheck;
+				int nDur	= 4;
+				
 				if (iATotal > iDTotal)
 				{	effect eRoped	= EffectEntangle();
 	   	 			effect eVis		= EffectVisualEffect(VFX_DUR_PARALYZED);
@@ -335,8 +336,13 @@ void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 					effect eLink	= EffectLinkEffects(eRoped, eVis);
 					 eLink    = EffectLinkEffects(eLink, eHidePen);
 					 eLink    = EffectLinkEffects(eLink, eMovePen);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
 					SpeakString(GetFirstName(oPC) + " flings " + sGend + " rope at " + GetFirstName(oTarget) + " and entangles them!");	}	
+					
+				else 
+				{	effect eFail = EffectMovementSpeedDecrease (50);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
+					SpeakString(GetFirstName(oTarget) + "broke free of the attempted ensnarement!"); }
 		
     effect eRay = EffectBeam(VFX_BEAM_ABJURATION, OBJECT_SELF, BODY_NODE_HAND);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);

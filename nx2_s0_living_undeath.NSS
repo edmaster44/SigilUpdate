@@ -45,7 +45,7 @@ void main()
 	
 	
 	// Spell Duration
-	float fDuration			= TurnsToSeconds(nCasterLevel);
+	float fDuration			= TurnsToSeconds(1);
 	fDuration			= ApplyMetamagicDurationMods(fDuration);
 
 	// Effects

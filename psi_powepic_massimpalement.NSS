@@ -66,7 +66,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 14354));
             
 			
-				nDamage = d6(70);
+				nDamage = d6(80);
 				
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_NONE);
 				/*int nSave = ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, OBJECT_SELF);
