@@ -82,12 +82,9 @@ void main()
 		if (manif.bAugment) 
 		{nDamage = IP_CONST_DAMAGEBONUS_5d6;}
 		int DamageType = IP_CONST_DAMAGETYPE_ACID;
-		itemproperty ipAdd = ItemPropertyDamageBonus(nDamageType,nDamage);
-		
-        {
-            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            IPSafeAddItemProperty(oTarget, ipAdd, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
-        }
+		itemproperty ipAdd = ItemPropertyDamageBonus(nDamageType,nDamage);  
+        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
+        IPSafeAddItemProperty(oTarget, ipAdd, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+        
     }
 }
-

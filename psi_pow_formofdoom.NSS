@@ -78,10 +78,8 @@ void main()
     }
 
 // End of Spell Cast Hook
-	itemproperty iBonusFeat1 = ItemPropertyBonusFeat(3369);
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
-	object oWeapon	   = IPGetTargetedOrEquippedMeleeWeapon();
     struct manifestation manif =
        EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
@@ -115,9 +113,10 @@ void main()
         }
 		//Feral Path
 		if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester))
-		{
-		  
+		{	itemproperty iBonusFeat1 = ItemPropertyBonusFeat(3369);
+			object oWeapon	   = IPGetTargetedOrEquippedMeleeWeapon();
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, GetItemPossessor(oWeapon));
+			
             IPSafeAddItemProperty(oTarget, iBonusFeat1, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
         }
 	else

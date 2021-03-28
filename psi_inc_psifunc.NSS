@@ -401,6 +401,7 @@ int GetAbilityOfClass(int nClass) {
 	case CLASS_TYPE_CEREBREMANCER://Cerebremancer
 		return ABILITY_INTELLIGENCE;		
 	case CLASS_PSYCHIC_WARRIOR:	
+	case CLASS_TYPE_WARMIND:
 		return ABILITY_WISDOM;
 		}
     // If there's no class, it's racial. Use Charisma
