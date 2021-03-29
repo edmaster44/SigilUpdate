@@ -166,25 +166,6 @@ int GetTimePassed(int iBegin, int iEnd)
    }
 }
 
-//TimeStamp(object)  self explanatory no?
-//the variable will be called <objecttag>_timestamp
-void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
-{
-  if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-   SetLocalInt(oObject, sTimeStampVariable, GetSQLTime());
-}
-
-//CheckTimeStamp(object)  self explanatory no?
-//returns the difference in time between NOW and the last timestamp
-//the variable will be called <objecttag>_timestamp
-int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
-{
-  if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-  int iOld = GetLocalInt(oObject, sTimeStampVariable);
-  int iNew = GetSQLTime();
-  return GetTimePassed(iOld, iNew);
-}
-
 void CleanChest(object oChest)
 {
 object oItem = GetFirstItemInInventory(oChest);

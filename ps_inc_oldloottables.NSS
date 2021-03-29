@@ -2220,10 +2220,10 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 142: sItem = "ps_magistaff006";  break;
 			case 143: sItem = "ps_magistaff007";  break;
 			case 144: sItem = "ps_katana_arrowcutter";  break;
-			case 145: sItem = "ps_katana_momentum";  break;
+			case 145: sItem = "ps_katana_momentum2";  break;
 			case 146: sItem = "ps_falchion_outsiderhunter";  break;
 			case 147: sItem = "ps_falchion_deepdrinker";  break;
-			case 148: sItem = "ps_longsword_wideblade";  break;
+			case 148: sItem = "ps_longsword_wideblade2";  break;
 			case 149: sItem = "ps_longsword_frostshard";  break;
 			case 150: sItem = "ps_rapier_dancing";  break;
 			case 151: sItem = "ps_rapier_minutepower";  break;
@@ -2232,7 +2232,7 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 154: sItem = "ps_longsword_electricshard";  break;
 			case 155: sItem = "ps_longbow_flamevolley";  break;
 			case 156: sItem = "ps_xbow_blamblazer";  break;
-			case 157: sItem = "ps_xbow_chokuno";  break;
+			case 157: sItem = "ps_xbow_chokuno2";  break;
 			case 158: sItem = "ps_xbow_demonstalker";  break;
 			case 159: sItem = "ps_xbow_monsterscourge";  break;
 			case 160: sItem = "n2_unw_rap3";  break;
@@ -2246,10 +2246,10 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 168: sItem = "ps_scythe_blessedofnerull";  break;
 			case 169: sItem = "ps_bsword_swordofbastard";  break;
 			case 170: sItem = "ps_flail_chainsofglory";  break;
-			case 171: sItem = "ps_wmace_cripplinghammer";  break;
+			case 171: sItem = "ps_wmace_cripplinghammer2";  break;
 			case 172: sItem = "ps_whammer_lawslongreach";  break;
 			case 173: sItem = "ps_sickle_crescentmoon";  break;
-			case 174: sItem = "ps_qstaff_philosophysolidified";  break;
+			case 174: sItem = "ps_qstaff_philosophysolidified2";  break;
 			case 175: sItem = "ps_mace_cross";  break;
 			case 176: sItem = "ps_mace_aceofmace";  break;
 			case 177: sItem = "ps_morningstar_warningscar";  break;
@@ -2294,7 +2294,7 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 216: sItem = "ps_holysword06"; break;
 			case 217: sItem = "ps_magicstaff_meleemagery"; break;
 			case 218: sItem = "ps_quarterstaff_twosidedblade"; break; 
-			case 219: sItem = "ps_ed_bloodcleaver"; break; 
+			case 219: sItem = "ps_ed_bloodcleaver2"; break; 
 			case 220: sItem = "ps_ed_boltblade"; break; 
 			case 221: sItem = "ps_ed_darkdisk"; break; 
 			case 222: sItem = "ps_ed_deceiver"; break; 
@@ -2310,11 +2310,11 @@ string GetWeaponFromList(int nRandom, int nTreasureLevel) {
 			case 232: sItem = "ps_gad_battery"; break; 
 			case 233: sItem = "ps_gad_excalibur"; break; 
 			case 234: sItem = "ps_gad_dazzling_sling"; break; 
-			case 235: sItem = "ps_gad_dreadaxe"; break; 
+			case 235: sItem = "ps_gad_dreadaxe2"; break; 
 			case 236: sItem = "ps_gad_ironbreakers_axe"; break; 
 			case 237: sItem = "ps_gad_locustbattlestaff"; break; 
 			case 238: sItem = "ps_gad_prickshot"; break; 
-			case 239: sItem = "ps_gad_serene"; break; 
+			case 239: sItem = "ps_gad_serene2"; break; 
 			case 240: sItem = "ps_gad_slayer"; break; 
 			case 241: sItem = "ps_gad_stormlance"; break; 
 			case 242: sItem = "ps_gad_the_stupefyer"; break; 

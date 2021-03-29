@@ -145,6 +145,36 @@ int iCheckitem(object oItem)
 	string sTag = GetTag(oItem);
 	if (FindSubString(sTag, "nwn2_it_shard", 0) != -1)
 		oImmun = 1;
+	if (sTag == "ps_luca_alchemical_gun")
+		oImmun = 1;
+	if (sTag == "ps_luca_clawofthebezekira")
+		oImmun = 1;
+	if (sTag == "ps_gad_force_gauntlets")
+		oImmun = 1;
+	if (sTag == "ps_gad_dreadaxe")
+		oImmun = 1;
+	if (sTag == "ps_xbow_chokuno")
+		oImmun = 1;
+	if (sTag == "ps_gad_serene")
+		oImmun = 1;
+	if (sTag == "ps_longsword_wideblade")
+		oImmun = 1;
+	if (sTag == "ps_katana_momentum")
+		oImmun = 1;
+	if (sTag == "ps_qstaff_philosophysolidified")
+		oImmun = 1;
+	if (sTag == "ps_ed_bloodcleaver")
+		oImmun = 1;
+	if (sTag == "ps_wmace_cripplinghammer")
+		oImmun = 1;
+	if (sTag == "ps_luca_rukus")
+		oImmun = 1;
+	if (sTag == "ps_luca_sunlightseeker")
+		oImmun = 1;
+	if (sTag == "ps_morg_item7")
+		oImmun = 1;
+	if (sTag == "ps_boots_avoidance")
+		oImmun = 1;
 		
 	return oImmun;
 }
