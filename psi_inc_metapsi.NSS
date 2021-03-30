@@ -10,6 +10,8 @@
 /*                 Constants                    */
 //////////////////////////////////////////////////
 
+
+
 /// No metapsionics
 const int METAPSIONIC_NONE          = 0x0;
 /// Chain Power
@@ -132,6 +134,24 @@ struct manifestation{
     int bAugment;
 };
 
+/**
+ * Calculates a power's damage based on the given dice and metapsionics.
+ *
+ * @param nDieSize            Size of the dice to use
+ * @param nNumberOfDice       Amount of dice to roll
+ * @param manif               The manifestation data related to this particular manifesation
+ * @param nBonus              A bonus amount of damage to add into the total once
+ * @param nBonusPerDie        A bonus amount of damage to add into the total for each die rolled
+ * @param bDoesHPDamage       Whether the power deals hit point damage, or some other form of point damage
+ * @param bIsRayOrRangedTouch Whether the power's use involves a ranged touch attack roll or not
+ * @return                    The amount of damage the power should deal
+ */
+int MetaPsionicsDamage(struct manifestation manif, int nDieSize, int nNumberOfDice, int nBonus = 0,
+                       int nBonusPerDie = 0, int bDoesHPDamage = FALSE, int bIsRayOrRangedTouch = FALSE);
+
+
+
+
 //////////////////////////////////////////////////
 /*             Function definitions             */
 //////////////////////////////////////////////////
@@ -178,3 +198,33 @@ struct manifestation EvaluateMetapsionicsNew(struct manifestation manif, int nMe
 
     return manif;
 }
+
+int MetaPsionicsDamage(struct manifestation manif, int nDieSize, int nNumberOfDice, int nBonus = 0,
+                       int nBonusPerDie = 0, int bDoesHPDamage = FALSE, int bIsRayOrRangedTouch = FALSE)
+{
+    int nBaseDamage  = 0,
+        nBonusDamage = nBonus + (nNumberOfDice * nBonusPerDie);
+
+    // Calculate the base damage
+    int i;
+    for (i = 0; i < nNumberOfDice; i++)
+        nBaseDamage += Random(nDieSize) + 1;
+		
+	if(bIsRayOrRangedTouch)
+	nBonusDamage += 2;
+
+    // Apply metapsionics
+    // Both empower & maximize
+    if(manif.bEmpower && manif.bMaximize)
+        nBaseDamage = nBaseDamage / 2 + nDieSize * nNumberOfDice;
+    // Just empower
+    else if(manif.bEmpower)
+        nBaseDamage += nBaseDamage / 2;
+    // Just maximize
+    else if(manif.bMaximize)
+        nBaseDamage = nDieSize * nNumberOfDice;
+
+
+    return nBaseDamage + nBonusDamage;
+
+	}

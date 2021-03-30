@@ -290,6 +290,7 @@ int GetManifestingClass(object oManifester = OBJECT_SELF)
 	return CLASS_TYPE_DRAGON_PSION;
 	return CLASS_TYPE_CEREBREMANCER;
 	return CLASS_PSYCHIC_WARRIOR;
+	return CLASS_TYPE_WARMIND;
 	return CLASS_PSYCHIC_KNIGHT;
 }
 
@@ -743,7 +744,8 @@ int GetPsionicPRCLevels(object oCreature)
 
 int GetIsPsionicClass(int nClass)
 {
-    return (nClass==CLASS_TYPE_PSION || nClass == CLASS_PSYCHIC_KNIGHT ||nClass == CLASS_TYPE_CEREBREMANCER	|| nClass == CLASS_TYPE_DRAGON_PSION
+    return (nClass==CLASS_TYPE_PSION || nClass == CLASS_PSYCHIC_KNIGHT ||nClass == CLASS_TYPE_CEREBREMANCER	|| nClass == CLASS_TYPE_DRAGON_PSION|| 
+	nClass == CLASS_PSYCHIC_WARRIOR || CLASS_TYPE_WARMIND
 	);
 }
 
