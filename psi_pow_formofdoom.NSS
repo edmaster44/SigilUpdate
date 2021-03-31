@@ -34,7 +34,7 @@
     mind-affecting fear effect.
 
     Your horrific form grants you a natural armor bonus of +5, damage reduction
-    5/-, and a +4 bonus to your Strength score. In addition, you gain +33% to
+    5/-, and a +6 bonus to your Strength score. In addition, you gain +33% to
     your land speed as well as a +10 bonus on Jump checks.
 
     A nest of violently flailing black tentacles sprout from your hair and back.
@@ -95,7 +95,7 @@ void main()
                eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_SLASHING,    5));
                eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_PIERCING,    5));
                eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_BLUDGEONING, 5));
-               eLink    = EffectLinkEffects(eLink, EffectAbilityIncrease(ABILITY_STRENGTH, 4));
+               eLink    = EffectLinkEffects(eLink, EffectAbilityIncrease(ABILITY_STRENGTH, 6));
                eLink    = EffectLinkEffects(eLink, EffectMovementSpeedIncrease(33));
                //eLink    = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_INTIMIDATE, 10));
                eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"));

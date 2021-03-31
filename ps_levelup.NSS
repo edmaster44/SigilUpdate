@@ -150,56 +150,6 @@ void DoPsiProgression(object oPC)
 	}
 }
 
-
-//Progression for Psychic Warrior and PRC
-/*void DoPsyProgression(object oPC)
-{
-	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	if (nPsywar < 1) return;
-	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
-	int nLEVEL = nPsywar + nGemDragon + nWarMind;
-	
-	if (nLEVEL <1) return;
-	else
-				if (!GetHasFeat(21464, oPC) && nLEVEL >= 0)
-			{
-				FeatAdd(OBJECT_SELF, 21464, TRUE, TRUE, FALSE);
-				
-			}
-			if (!GetHasFeat(21465, oPC) && nLEVEL >= 2)
-			{	FeatRemove(OBJECT_SELF,21464);
-				FeatAdd(OBJECT_SELF, 21465, TRUE, TRUE, FALSE);
-				//FeatRemove(OBJECT_SELF,21464);
-				
-			}
-			if (!GetHasFeat(21466, oPC) && nLEVEL >= 5)
-			{	FeatRemove(OBJECT_SELF,21465);
-				FeatAdd(OBJECT_SELF, 21466, TRUE, TRUE, FALSE);
-					//FeatRemove(OBJECT_SELF,21465);
-			}
-			if (!GetHasFeat(21467, oPC) && nLEVEL >= 8)
-			{	FeatRemove(OBJECT_SELF,21466);
-				FeatAdd(OBJECT_SELF, 21467, TRUE, TRUE, FALSE);
-			}	//FeatRemove(OBJECT_SELF,21466);
-			
-			if (!GetHasFeat(21468, oPC) && nLEVEL >= 11)
-			{	FeatRemove(OBJECT_SELF,21467);
-				FeatAdd(OBJECT_SELF, 21468, TRUE, TRUE, FALSE);
-				//FeatRemove(OBJECT_SELF,21467);
-			}
-			if (!GetHasFeat(21469, oPC) && nLEVEL >= 15)
-			{	FeatRemove(OBJECT_SELF,21468);
-				FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
-				//FeatRemove(OBJECT_SELF,21468);
-			}
-			if (nLEVEL >= 19 )
-			{
-			FeatRemove(OBJECT_SELF,21469);
-			}
-			
-		}*/
-
 //Bardic music stacks
 void CheckBardicSongs(object oPC)
 {
@@ -342,25 +292,10 @@ void main()
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
-	}
-	
-	// change alignment upon becoming Ronin. 
-	// needs to be note of class description and appropriate feats that using relevel mechanic
-	// to make things like Paladin/Bard will be frowned upon.
-//	if (GetLevelByClass(CLASS_TYPE_RONIN, oPC) > 0) AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, 100);
-	
+	}	
 	// various class and race related checks	
 	CountSpells(oPC,1);
 	GetWarlockCasterLevel(oPC);
-	GetSpiritShamanTRUECasterlevel(oPC);
-	GetPaladinTRUECasterlevel(oPC);
-	GetRangerTRUECasterlevel(oPC);
-	GetWizardTRUECasterlevel(oPC);
-	GetSorcererTRUECasterlevel(oPC);
-	GetBardTRUECasterlevel(oPC);
-	GetDruidTRUECasterlevel(oPC);
-	GetFavoredSoulTRUECasterlevel(oPC);
-	GetClericTRUECasterlevel(oPC);
 	GiveWarlockBlastShapes(oPC);
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
@@ -375,5 +310,4 @@ void main()
 	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
-	//PS_GiveSpellFeat(oPC);
 }
