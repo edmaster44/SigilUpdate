@@ -245,7 +245,8 @@ void PS_Feat_GC_FindPortal(object oPC, int nSpell)
 		return;	
 	}
     
-	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDestroy, oPortal)); 
+	DelayCommand(fDelay, SetPlotFlag(oPortal, FALSE));
+	DelayCommand(fDelay+0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDestroy, oPortal)); 
 }
 	
 void PS_Feat_DMN_BinderOfFiends(object oPC, int nSpell)

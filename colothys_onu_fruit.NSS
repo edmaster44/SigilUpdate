@@ -10,7 +10,7 @@ void main () {
 	int nTime = PS_GetTime();
 	
 	int lastLooted = GetLocalInt(OBJECT_SELF, "lastlooted");
-	if (lastLooted != 0 && nTime-lastLooted > 60) {
+	if (lastLooted != 0 && nTime-lastLooted > 120) {
 		DeleteLocalInt(oFruit1, "reward");
 		DeleteLocalInt(oFruit2, "reward");
 	}
@@ -30,8 +30,8 @@ void main () {
 		SetLocalInt(oFruit2, "lastlooted", nTime);
 		
 		//remove possibility of reward after a minute
-		DelayCommand(60.0f, DeleteLocalInt(oFruit1, "reward"));
-		DelayCommand(60.0f, DeleteLocalInt(oFruit2, "reward"));
+		DelayCommand(120.0f, DeleteLocalInt(oFruit1, "reward"));
+		DelayCommand(120.0f, DeleteLocalInt(oFruit2, "reward"));
 		DeleteLocalInt(oFruit1, "stage");
 		return;
 	} else if (nHasReward > 0) {

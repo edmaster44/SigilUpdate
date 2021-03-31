@@ -100,6 +100,10 @@ void main () {
 		SetUseableFlag(oFruit2, TRUE);
 		SetLocalInt(oFruit1, "reward", 1);
 		SetLocalInt(oFruit2, "reward", 1);
+		
+		int nTime = PS_GetTime();
+		SetLocalInt(oFruit1, "lastlooted", nTime);
+		SetLocalInt(oFruit2, "lastlooted", nTime);
 	}
 }
 

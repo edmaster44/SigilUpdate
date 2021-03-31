@@ -333,6 +333,10 @@ void main()
 	int Template = 0;
 	int Booted = FALSE;
 	
+	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
+		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
+	}
+	
 	if(GetIsPC(oPC) && !GetIsDM(oPC) && GetXP(oPC) == 0)
 	{	
 		//special race template

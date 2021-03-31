@@ -27,7 +27,11 @@ void OOCRoomPortal(object oPC) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
-	int nMinutes = PS_GetTimestamp_Age_Minutes(oPC, "LAST_OOC_PORTAL");
+	int nCurrentTime = GetRealTime();
+	int nLastCheck = GetLocalInt(oPC, "LAST_OOC_PORTAL");
+	int nDiff = nCurrentTime-nLastCheck;
+	int nMinutes = (nDiff/60);
+	
 	if (nMinutes > OOC_PORTAL_TIMEOUT) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 		AssignCommand(oPC, JumpToObject(oOOCWP));
