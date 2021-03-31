@@ -90,7 +90,7 @@ void main()
 
     if(manif.bCanManifest)
     {
-        effect eLink    =                          EffectAreaOfEffect(AOE_MOB_MENACE);
+        effect eLink    =                          EffectAreaOfEffect(AOE_MOB_MENACE,"psi_pow_frmdment");
                eLink    = EffectLinkEffects(eLink, EffectACIncrease(5, AC_NATURAL_BONUS));
                eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_SLASHING,    5));
                eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_PIERCING,    5));
