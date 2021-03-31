@@ -296,57 +296,49 @@ void PS_Ability_DarkFlight(object oPC)
 void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 {
 
-	int AttackerCheck = 0;
-	int DefenderCheck = 0;
-	int SizeCheck = 0;
-	
-	if (GetCreatureSize(oTarget) == CREATURE_SIZE_LARGE)
-	{	SizeCheck = SizeCheck + 4;	}
-	if (GetCreatureSize(oTarget) == CREATURE_SIZE_HUGE)
-	{	SizeCheck = SizeCheck + 8;	}
+int iAttackerStr = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
+int iAttackerDex = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
+int iDefenderStr = GetAbilityModifier(ABILITY_STRENGTH, oTarget);
+int iDefenderDex = GetAbilityModifier(ABILITY_DEXTERITY,oTarget);
 
-	string sGend;
-	if (GetGender(oPC) == GENDER_FEMALE)
-	{	sGend = "her";	}
-	else {	sGend = "his";	}
-	
-	if (GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF) > GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF)) {
-		int AttackerCheck = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
-	}
-	else {
-		int AttackerCheck = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
-	}
-	
-	if (GetAbilityModifier(ABILITY_STRENGTH, oTarget) > GetAbilityModifier(ABILITY_DEXTERITY,oTarget)) {
-		int DefenderCheck = GetAbilityModifier(ABILITY_STRENGTH,oTarget);
-	}
-	else {
-		int DefenderCheck = GetAbilityModifier(ABILITY_DEXTERITY,oTarget);
-	}
+int iAttackerCheck = iAttackerStr > iAttackerDex ? iAttackerStr : iAttackerDex;
+int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
+
+ int SizeCheck = 0;
     
-				int iATotal = d10(1) + AttackerCheck;
-				int iDTotal = d10(1) + DefenderCheck + SizeCheck;
-				int nDur	= 4;
-				
-				if (iATotal > iDTotal)
-				{	effect eRoped	= EffectEntangle();
-	   	 			effect eVis		= EffectVisualEffect(VFX_DUR_PARALYZED);
-					effect eHidePen = EffectSkillDecrease(5, 100);
-					effect eMovePen = EffectSkillDecrease(8, 100);
-					effect eLink	= EffectLinkEffects(eRoped, eVis);
-					 eLink    = EffectLinkEffects(eLink, eHidePen);
-					 eLink    = EffectLinkEffects(eLink, eMovePen);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
-					SpeakString(GetFirstName(oPC) + " flings " + sGend + " rope at " + GetFirstName(oTarget) + " and entangles them!");	}	
-					
-				else 
-				{	effect eFail = EffectMovementSpeedDecrease (50);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
-					SpeakString(GetFirstName(oTarget) + "broke free of the attempted ensnarement!"); }
-		
+    if (GetCreatureSize(oTarget) == CREATURE_SIZE_LARGE)
+    {    SizeCheck = SizeCheck + 4;    }
+    if (GetCreatureSize(oTarget) == CREATURE_SIZE_HUGE)
+    {    SizeCheck = SizeCheck + 8;    }
+
+   				int iATotal = d10(1) + AttackerCheck;
+                int iDTotal = d10(1) + DefenderCheck + SizeCheck;
+                int nDur    = 4;
+                SendMessageToPC(GetFirstPC(), "iATotal: " + IntToString(iATotal) + ", iDTotal: " + IntToString(iDTotal)); // HERE YOU LOG BOTH ROLLS
+                if (iATotal > iDTotal)
+                { 
+                    SendMessageToPC(GetFirstPC(), "SUCCESS!"); // here you log success
+                    effect eRoped    = EffectEntangle();
+                    effect eVis        = EffectVisualEffect(VFX_DUR_PARALYZED);
+                    effect eHidePen = EffectSkillDecrease(5, 100);
+                    effect eMovePen = EffectSkillDecrease(8, 100);
+                    effect eLink    = EffectLinkEffects(eRoped, eVis);
+                     eLink    = EffectLinkEffects(eLink, eHidePen);
+                     eLink    = EffectLinkEffects(eLink, eMovePen);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
+                    SpeakString(GetFirstName(oPC) + " flings their rope at " + GetFirstName(oTarget) + " and entangles them!");    }    
+                    
+                else 
+                {   effect eFail = EffectMovementSpeedDecrease (50);
+                    SendMessageToPC(GetFirstPC(), "FAILURE!"); // here you log failure
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
+                    SpeakString(GetFirstName(oTarget) + "broke free of the attempted ensnarement!"); }
+        
     effect eRay = EffectBeam(VFX_BEAM_ABJURATION, OBJECT_SELF, BODY_NODE_HAND);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
-}
+}  
+
+
 
 void PS_Ability_ErinyesDR(object oPC, int nSpell)
 {
