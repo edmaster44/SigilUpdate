@@ -311,8 +311,8 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
     if (GetCreatureSize(oTarget) == CREATURE_SIZE_HUGE)
     {    SizeCheck = SizeCheck + 8;    }
 
-   				int iATotal = d10(1) + AttackerCheck;
-                int iDTotal = d10(1) + DefenderCheck + SizeCheck;
+   				int iATotal = d10(1) + iAttackerCheck;
+                int iDTotal = d10(1) + iDefenderCheck + SizeCheck;
                 int nDur    = 4;
                 SendMessageToPC(GetFirstPC(), "iATotal: " + IntToString(iATotal) + ", iDTotal: " + IntToString(iDTotal)); // HERE YOU LOG BOTH ROLLS
                 if (iATotal > iDTotal)
