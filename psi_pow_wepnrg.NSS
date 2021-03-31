@@ -50,7 +50,7 @@ void main()
     object oManifester = OBJECT_SELF;
 int	nDamage = IP_CONST_DAMAGEBONUS_1d8;
 int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
-itemproperty ipAdd = ItemPropertyDamageBonus(DamageType,nDamage);
+itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
     object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
@@ -79,7 +79,7 @@ itemproperty ipAdd = ItemPropertyDamageBonus(DamageType,nDamage);
            
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            IPSafeAddItemProperty(oTarget, ipAdd, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+            IPSafeAddItemProperty(oTarget, ipWoE, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
         }
     }
 }

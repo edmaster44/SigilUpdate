@@ -52,6 +52,7 @@ void main()
         return;
     }
 
+    
 // End of Spell Cast Hook
 
     object oManifester = OBJECT_SELF;
