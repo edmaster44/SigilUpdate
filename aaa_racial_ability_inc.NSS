@@ -332,7 +332,7 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
                 {   effect eFail = EffectMovementSpeedDecrease (50);
                     SendMessageToPC(GetFirstPC(), "FAILURE!"); // here you log failure
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
-                    SpeakString(GetFirstName(oTarget) + "broke free of the attempted ensnarement!"); }
+                    SpeakString(GetFirstName(oTarget) + " broke free of the attempted ensnarement!"); }
         
     effect eRay = EffectBeam(VFX_BEAM_ABJURATION, OBJECT_SELF, BODY_NODE_HAND);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
