@@ -16,6 +16,83 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
+void StackingEquipmentBugFix(object oPC) {
+
+	//In case we are somewhere unsafe, make me ethereal
+	effect eSanctuary = EffectEthereal();
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSanctuary, oPC, 6.0f);
+	SendMessageToPC(oPC, "Re-equipping equipment for bugfix. Check the ground for any lost items before proceeding.");
+	
+	ClearAllActions();
+	
+	object oItem = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_ARMS)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_BELT, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BELT)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BOOTS)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_CHEST)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_CLOAK)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_HEAD, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_HEAD)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_LEFTHAND)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_LEFTRING)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_NECK, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_NECK)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTHAND)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTRING)));
+	}
+
+}
+
 void GiveStartingGold( object oPC, int nAmount )
 {
 	int nGold = GetGold(oPC);
@@ -454,6 +531,8 @@ void main()
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}
+	
+	StackingEquipmentBugFix(oPC);
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
