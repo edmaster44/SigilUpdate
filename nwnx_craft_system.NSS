@@ -493,6 +493,7 @@ string XPCraft_GetVariation_ListName(object oPC, int iArmorVisualType, int iBase
 		case 16: sListName +="DMCB"; break; //DMCB
 		case 17: sListName +="ACME"; break; //ACME	
 		case 18: sListName +="OPS"; break; //OPS	
+		case 20: sListName +="MPHA"; break; //MPHA	
 		case 21: sListName +="SCOD"; break; //SCoD	
 	}
 	
