@@ -178,14 +178,14 @@ void PS_KnightLevels(object oPC)
 	  
 	  }
 	  
-	   if (iTotal >= 4 && GetHasFeat(FEAT_KNIGHT,oPC))
+	   if (iTotal >= 3 && GetHasFeat(FEAT_KNIGHT,oPC))
 	  
 	  {
 	  		FeatAdd(oPC,FEAT_DIVINE_RETRIBUTION,FALSE,FALSE,FALSE);//Divine Retribution , Knight Path
 		
 	  
 	  }
-	  if (iTotal >= 4 && GetHasFeat(FEAT_KNIGHT,oPC))
+	  if (iTotal >= 3 && GetHasFeat(FEAT_KNIGHT,oPC))
 	  
 	  {
 	  			FeatAdd(oPC,FEAT_TURN_UNDEAD,FALSE,FALSE,FALSE);// Turn Undead, Knight Path
@@ -193,19 +193,19 @@ void PS_KnightLevels(object oPC)
 	  
 	  }
 	  
-	    if (iTotal >= 7 && GetHasFeat(FEAT_KNIGHT,oPC))
+	    if (iTotal >= 6 && GetHasFeat(FEAT_KNIGHT,oPC))
 	  
 	  {
 	  			FeatAdd(oPC,FEAT_KNIGHTS_AURA,FALSE,FALSE,FALSE);// Knight's Aura, Knight Path
 		FeatAdd(oPC,FEAT_PRACTICED_SPELLCASTER_PALADIN,FALSE,FALSE,FALSE);// Practiced Spell Caster, Knight Path
 	  
 	  }
-		if (iTotal > 14 && GetHasFeat(FEAT_KNIGHT,oPC))
+		if (iTotal > 13 && GetHasFeat(FEAT_KNIGHT,oPC))
 		
 		{ FeatAdd(oPC,FEAT_KNIGHTSMITE,FALSE,FALSE,FALSE);//New Smite , Knight Path
 		
 		}
-	  if (iTotal > 21 && GetHasFeat(FEAT_KNIGHT,oPC))
+	  if (iTotal > 20 && GetHasFeat(FEAT_KNIGHT,oPC))
 		
 		{ FeatAdd(oPC,1990,FALSE,FALSE,FALSE);//Rescue Feat , Knight Path
 		
