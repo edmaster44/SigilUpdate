@@ -34,9 +34,10 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 	int nDamageType;
 	if (GetHasFeat(FEAT_KNIGHT,oPC))
 		{	
-		nType = DAMAGE_TYPE_MAGICAL;
+		nDamageType = DAMAGE_TYPE_MAGICAL;
 		nVFXHit =EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
 		}
+
 		
 //**	else if(GetHasFeat(FEAT_BLACKGUARD,oPC))
 //			{
@@ -44,25 +45,19 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 //		 nVFXHit =EffectVisualEffect(VFX_HIT_SPELL_INFLICT_1);
 //			}	**//
 
-if (GetAlignmentGoodEvil(oTarget) != ALIGNMENT_EVIL)
-{ SendMessageToPC(oPC,"You cannot smite a Neutral Target");
-return;}
-if (GetAlignmentGoodEvil(oTarget) != ALIGNMENT_GOOD)
-{ SendMessageToPC(oPC,"You cannot smite a Neutral Target");
-return;}
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
 	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
 		{	nDmg = nKnight * 2;
 			
-			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, FALSE);
+			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, TRUE);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else if (nAttack == 1)
 		{	nDmg = nKnight;	
-			eDamage = EffectDamage(nDmg, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
+			eDamage = EffectDamage(nDmg, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, TRUE);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}

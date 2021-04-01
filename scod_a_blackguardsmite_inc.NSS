@@ -34,7 +34,7 @@ void blackguardsmite(object oPC, object oTarget, int nSpell )
 	int nSaveType;
 	effect nVFXHit;
 	int nDmg;
-	int nDamageType;
+	//int nDamageType;
 //*	if (GetHasFeat(FEAT_KNIGHT,oPC))
 //		{	
 //		nType = DAMAGE_TYPE_MAGICAL;
@@ -54,13 +54,13 @@ return;}
 		if (nAttack == 2)
 		{	nDmg = nKnight * 2;
 			
-			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, FALSE);
+			eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, TRUE);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
 			DelayCommand(0.1,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 		}
 		else if (nAttack == 1)
 		{	nDmg = nKnight;	
-			eDamage = EffectDamage(nDmg, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
+			eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, TRUE);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
 			DelayCommand(0.1,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 		}
