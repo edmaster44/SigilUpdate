@@ -139,7 +139,7 @@ void AddSneakDice(object oPC)
 	
 	}
 	
-	if (GetHasFeat (FEAT_PSYWAR_LURK))
+	if (GetHasFeat(FEAT_PSYWAR_LURK,oPC))
 	{
 		sneakDice += (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC)) / 3;	
 	}
