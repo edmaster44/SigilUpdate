@@ -49,8 +49,8 @@ void main()
 			nPsion = nPsion + nWarmind + nGem;
 			//Determines level in psion class.
 			int nPPvalue;
-			int nIntBonus = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
-			int nPPBonus = nIntBonus * (nPsion/2);
+			int nWisdomBonus = GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
+			int nPPBonus = nWisdomBonus * (nPsion)/2;
 			
 			//Calculates bonus power points based on Wisdom score. This is per
 			//3.5 sourcebooks.
@@ -88,153 +88,153 @@ void main()
 			
 			switch (nPsion)
 			{
-				case 1: 
+				case 0: 
 				{
 					nPPvalue = 0 + nPPBonus;
 					break;
 				}
-				case 2:
+				case 1:
 				{
 					nPPvalue = 1 + nPPBonus;
 					
 					break;
 				}
-				case 3:
+				case 2:
 				{
 					nPPvalue = 3 + nPPBonus;
 					break;
 				}
-				case 4:
+				case 3:
 				{
 					nPPvalue = 5 + nPPBonus;			
 					break;
 				}
-				case 5:
+				case 4:
 				{
 					nPPvalue = 7 + nPPBonus;
 					break;
 				}
-				case 6:
+				case 5:
 				{
 					nPPvalue = 11 + nPPBonus;
 					break;
 				}
-				case 7:
+				case 6:
 				{
 					nPPvalue = 15 + nPPBonus;
 					break;
 				}
-				case 8:
+				case 7:
 				{
 					nPPvalue = 19 + nPPBonus;
 					break;
 				}
-				case 9:
+				case 8:
 				{
 					nPPvalue = 23 + nPPBonus;
 					break;
 				}
-				case 10:
+				case 9:
 				{
 					nPPvalue = 27 + nPPBonus;
 					break;
 				}
-				case 11:
+				case 10:
 				{
 					nPPvalue = 35 + nPPBonus;
 					break;
 				}
-				case 12:
+				case 11:
 				{
 					nPPvalue = 43 + nPPBonus;
 					break;
 				}
-				case 13:
+				case 12:
 				{
 					nPPvalue = 51 + nPPBonus;
 					break;
 				}
-				case 14:
+				case 13:
 				{
 					nPPvalue = 59 + nPPBonus;
 					break;
 				}
-				case 15:
+				case 114:
 				{
 					nPPvalue = 67 + nPPBonus;
 					break;
 				}
-				case 16:
+				case 15:
 				{
 					nPPvalue = 79 + nPPBonus;
 					break;
 				}
-				case 17:
+				case 16:
 				{
 					nPPvalue = 91 + nPPBonus;
 					break;
 				}
-				case 18:
+				case 17:
 				{
 					nPPvalue = 103 + nPPBonus;
 					break;
 				}
-				case 19:
+				case 18:
 				{
 					nPPvalue = 115 + nPPBonus;
 					break;
 				}
-				case 20:
+				case 19:
 				{
 					nPPvalue = 127 + nPPBonus;
 					break;
 				}
-				case 21:
+				case 20:
 				{
 					nPPvalue = 139 + nPPBonus;
 					break;
 				}
-				case 22:
+				case 21:
 				{
 					nPPvalue = 151 + nPPBonus;
 					break;
 				}
-				case 23:
+				case 22:
 				{
 					nPPvalue = 163 + nPPBonus;
 					break;
 				}
-				case 24:
+				case 23:
 				{
 					nPPvalue = 175 + nPPBonus;
 					break;
 				}
-				case 25:
+				case 24:
 				{
 					nPPvalue = 187 + nPPBonus;
 					break;
 				}
-				case 26:
+				case 25:
 				{
 					nPPvalue = 199 + nPPBonus;
 					break;
 				}
-				case 27:
+				case 26:
 				{
 					nPPvalue = 211 + nPPBonus;
 					break;
 				}
-				case 28:
+				case 27:
 				{
 					nPPvalue = 223 + nPPBonus;
 					break;
 				}
-				case 29:
+				case 28:
 				{
 					nPPvalue = 235 + nPPBonus;
 					break;
 				}
-				case 30:
+				case 29:
 				{
 					nPPvalue = 247 + nPPBonus;
 					break;
