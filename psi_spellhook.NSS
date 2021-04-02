@@ -31,7 +31,7 @@ int PsiPrePowerCastCode();
 //------------------------------------------------------------------------------
 
 //Psychic Warrior Classes and PRC
-int nPsywar(object oPC)
+int nPsyicClasses(object oPC)
 {
     int nPsywar= GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
     int nWarmind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
@@ -55,18 +55,14 @@ int PsiPrePowerCastCode()
 	string sShield = GetTag(oShield);
 	if (iArmorRank > 1 || (GetBaseItemType(oShield) == BASE_ITEM_SMALLSHIELD && sShield != "mwa_shlt_zal_3") ||
 						  GetBaseItemType(oShield) == BASE_ITEM_LARGESHIELD ||
-						  GetBaseItemType(oShield) == BASE_ITEM_TOWERSHIELD || !GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oManifester)>=1)
-	{
-		return (d100() > spellFailure);
-	}
-	else
-	 if (nPsywar(oPC)>1)
+						  GetBaseItemType(oShield) == BASE_ITEM_TOWERSHIELD )
+	{ return (d100() > spellFailure); }
 
-    {
-        return (0 = spellFailure);
-
-    }
+    if (nPsyicClasses(oManifester)>1 )
+	{spellFailure = 0; } 
 	
+
+
 	
 	//********************************************************************
 	//Catapsi Interference ((Handled better in psi_inc_manifest))
