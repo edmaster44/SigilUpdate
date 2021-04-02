@@ -1,6 +1,9 @@
 //ps_styx_all v1.02
 #include "ps_inc_functions"
 #include "aaa_constants"
+#include "ps_adjust_psywar"
+#include "ps_adjust_knight"
+#include "ps_adjust_barbarian"
 #include "nwnx_sql"
 #include "aaa_racial_ability_inc"
 
@@ -80,10 +83,13 @@ void DelayedFixes(object oPC, object oItem, int nSTEP)
 		case 2: PS_HalfOutsiderRaceFix(oPC); break;
 		case 3: PS_VampMal_DelevelFix(oPC, oItem); break;
 		case 4: PS_ClassAppearanceDeleveling(oPC); break;
-		case 5: DoPsiDeLevelCheck(oPC); break;
+		case 5: DoPsiDeLevelCheck(oPC); break;		
 		case 6: PS_Template_DelevelFix(oPC, oItem); break;
 		case 7: ExportSingleCharacter(oPC); break;
 		case 8: BarbarianLevels(oPC); break;
+		case 9: DoPsyProgression(oPC); break;
+		case 10:PS_KnightLevels(oPC); break;
+		case 11:PS_BarbarianLevels(oPC); break;
 		default: return;
 	}
 	DelayCommand(0.0f, DelayedFixes(oPC, oItem, nSTEP + 1));

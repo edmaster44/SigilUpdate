@@ -687,7 +687,7 @@ int GetWarlockCasterLevel(object oPC)
 	//1948-1952 10-14
 	if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
 	
-	if (iTotal >= 2)
+	if (iTotal >= 0)
 	{
 	if (!GetHasFeat(FEAT_INVOCATIONS_WARLOCK_I,oPC,TRUE))
 		FeatAdd(oPC,FEAT_INVOCATIONS_WARLOCK_I,FALSE,FALSE,FALSE);
