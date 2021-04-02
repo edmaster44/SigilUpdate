@@ -88,153 +88,153 @@ void main()
 			
 			switch (nPsion)
 			{
-				case 0: 
+				case 1: 
 				{
-					nPPvalue = 0 + nPPBonus;
+					nPPvalue = 1 + nPPBonus;
 					break;
 				}
-				case 1:
+				case 2:
 				{
 					nPPvalue = 1 + nPPBonus;
 					
 					break;
 				}
-				case 2:
+				case 3:
 				{
 					nPPvalue = 3 + nPPBonus;
 					break;
 				}
-				case 3:
+				case 4:
 				{
 					nPPvalue = 5 + nPPBonus;			
 					break;
 				}
-				case 4:
+				case 5:
 				{
 					nPPvalue = 7 + nPPBonus;
 					break;
 				}
-				case 5:
+				case 6:
 				{
 					nPPvalue = 11 + nPPBonus;
 					break;
 				}
-				case 6:
+				case 7:
 				{
 					nPPvalue = 15 + nPPBonus;
 					break;
 				}
-				case 7:
+				case 8:
 				{
 					nPPvalue = 19 + nPPBonus;
 					break;
 				}
-				case 8:
+				case 9:
 				{
 					nPPvalue = 23 + nPPBonus;
 					break;
 				}
-				case 9:
+				case 10:
 				{
 					nPPvalue = 27 + nPPBonus;
 					break;
 				}
-				case 10:
+				case 11:
 				{
 					nPPvalue = 35 + nPPBonus;
 					break;
 				}
-				case 11:
+				case 12:
 				{
 					nPPvalue = 43 + nPPBonus;
 					break;
 				}
-				case 12:
+				case 13:
 				{
 					nPPvalue = 51 + nPPBonus;
 					break;
 				}
-				case 13:
+				case 14:
 				{
 					nPPvalue = 59 + nPPBonus;
 					break;
 				}
-				case 114:
+				case 15:
 				{
 					nPPvalue = 67 + nPPBonus;
 					break;
 				}
-				case 15:
+				case 16:
 				{
 					nPPvalue = 79 + nPPBonus;
 					break;
 				}
-				case 16:
+				case 17:
 				{
 					nPPvalue = 91 + nPPBonus;
 					break;
 				}
-				case 17:
+				case 18:
 				{
 					nPPvalue = 103 + nPPBonus;
 					break;
 				}
-				case 18:
+				case 19:
 				{
 					nPPvalue = 115 + nPPBonus;
 					break;
 				}
-				case 19:
+				case 20:
 				{
 					nPPvalue = 127 + nPPBonus;
 					break;
 				}
-				case 20:
+				case 21:
 				{
 					nPPvalue = 139 + nPPBonus;
 					break;
 				}
-				case 21:
+				case 22:
 				{
 					nPPvalue = 151 + nPPBonus;
 					break;
 				}
-				case 22:
+				case 23:
 				{
 					nPPvalue = 163 + nPPBonus;
 					break;
 				}
-				case 23:
+				case 24:
 				{
 					nPPvalue = 175 + nPPBonus;
 					break;
 				}
-				case 24:
+				case 25:
 				{
 					nPPvalue = 187 + nPPBonus;
 					break;
 				}
-				case 25:
+				case 26:
 				{
 					nPPvalue = 199 + nPPBonus;
 					break;
 				}
-				case 26:
+				case 27:
 				{
 					nPPvalue = 211 + nPPBonus;
 					break;
 				}
-				case 27:
+				case 28:
 				{
 					nPPvalue = 223 + nPPBonus;
 					break;
 				}
-				case 28:
+				case 29:
 				{
 					nPPvalue = 235 + nPPBonus;
 					break;
 				}
-				case 29:
+				case 30:
 				{
 					nPPvalue = 247 + nPPBonus;
 					break;

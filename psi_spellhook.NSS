@@ -29,6 +29,16 @@ int PsiPrePowerCastCode();
 // the order in which the functions are called here DOES MATTER, changing it
 // WILL break the crafting subsystems
 //------------------------------------------------------------------------------
+
+//Psychic Warrior Classes and PRC
+int nPsywar(object oPC)
+{
+    int nPsywar= GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
+    int nWarmind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+	int nDragon =GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oPC);
+    int iTotal = nPsywar +nWarmind + nDragon;
+    return iTotal;
+}
 int PsiPrePowerCastCode()
 {
 	object oManifester = OBJECT_SELF;
@@ -49,6 +59,13 @@ int PsiPrePowerCastCode()
 	{
 		return (d100() > spellFailure);
 	}
+	else
+	 if (nPsywar(oPC)>1)
+
+    {
+        return (0 = spellFailure);
+
+    }
 	
 	
 	//********************************************************************
