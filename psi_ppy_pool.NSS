@@ -272,10 +272,10 @@ void main()
      			nPowerEpPen = TRUE;
 			}
 			//Manifester Tier
-			int nPsion2 = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, OBJECT_SELF);
+			//int nPsion2 = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, OBJECT_SELF);
 			
 			
-			
+			/*
 			if (!GetHasFeat(21464, oPC) && nPsion2 > 0)
 			{
 				int nProgI = FeatAdd(OBJECT_SELF, 21464, TRUE, TRUE, FALSE);
@@ -306,7 +306,7 @@ void main()
 				int nProgVI = FeatAdd(OBJECT_SELF, 21469, TRUE, TRUE, FALSE);
 				nProgVI == TRUE;
 			}
-		
+			*/
 			
 			
 			//
