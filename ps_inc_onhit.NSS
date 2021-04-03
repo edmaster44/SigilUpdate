@@ -25,7 +25,7 @@ int GetArcherCasterLevel(object oCaster)
 	/// If someone want to spend two hours of making it accurate, feel free. Alersia    						      ///
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	int nCasterLevel = FloatToInt(IntToFloat(GetTotalLevels(oCaster, TRUE)) * 0.9);
+	int nCasterLevel = PS_GetCasterLevel(oCaster);
 
 	/*
 	int nCasterLevel = GetLevelByClass(81, oCaster); //arcane archer level
