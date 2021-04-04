@@ -300,7 +300,15 @@ void main()
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
 	PS_BarbarianLevels(oPC);
-	PS_GetCasterLevel(oPC);
+	GetClericTRUECasterlevel(oPC)
+	GetDruidTRUECasterlevel(oPC);
+	GetBardTRUECasterlevel(oPC);
+	GetSorcererTRUECasterlevel(oPC);
+	GetWizardTRUECasterlevel(oPC);
+	GetRangerTRUECasterlevel(oPC);
+	GetPaladinTRUECasterlevel(oPC);
+	GetSpiritShamanTRUECasterlevel(oPC);
+	GetFavoredSoulTRUECasterlevel(oPC);
 	PS_MonkLevels(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
