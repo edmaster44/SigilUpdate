@@ -34,36 +34,27 @@ void CheckArenaFight(object oPC) {
 	//We aren't in the arena, skip this
 	if (GetTag(oArea) != LOC_ARENA)
 		return;
-		
-	SendMessageToPC(oPC, "checking for achievement");
 
 	float fRadius = 15.0f;
 	int nCount = 0;
 	object oViewer = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 	while (GetIsObjectValid(oViewer)) {
-			
-		SendMessageToPC(oPC, "Checking "+GetName(oViewer));
 		
 		//Sanity check
 		if (nCount > 20)
 			return;
 		nCount++;
 			
-		SendMessageToPC(oPC, "Still under count.");
 			
 		if (!GetIsPC(oViewer)) {
 			oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 			continue;
 		}
-		
-		SendMessageToPC(oPC, "Is PC");
 			
 		if (GetLocalInt(oPC, "IN_ARENA") == 0) {
 			oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 			continue;
 		}
-			
-		SendMessageToPC(oPC, "Giving "+GetName(oViewer)+" the achievement.");
 			
 		IncrementAchievement(oViewer, 45);
 	
