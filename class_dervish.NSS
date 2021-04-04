@@ -62,11 +62,6 @@ if (!NoHeavyArmorOrShield(oPC))
 	
 	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
 	
-	
-		if (GetHasSpellEffect(nSpellId,oPC))
-			RemoveSpellEffects(nSpellId, oPC, oPC);
-				
-
 	float fDuration = 9999.99f;
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
