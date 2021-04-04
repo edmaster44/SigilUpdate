@@ -858,7 +858,7 @@ int GetPaladinTRUECasterlevel(object oPC)
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
 	
 	
-		if (iTotal >= 1)
+		if (iTotal >= 0)
 	{
 	if (!GetHasFeat(FEAT_SPELL_PALRANG_I,oPC,TRUE))
 		FeatAdd(oPC,FEAT_SPELL_PALRANG_I,FALSE,FALSE,FALSE);
@@ -993,7 +993,7 @@ int GetWizardTRUECasterlevel(object oPC)
 		else iTotal = iTotal + (iRedWizard / 2);
 	}
 	
-		if (iTotal >= 1)
+		if (iTotal >= 0)
 	{
 	if (!GetHasFeat(FEAT_SPELL_WIZARD_I,oPC,TRUE))
 		FeatAdd(oPC,FEAT_SPELL_WIZARD_I,FALSE,FALSE,FALSE);
@@ -1220,7 +1220,7 @@ int GetDruidTRUECasterlevel(object oPC)
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)) iTotal = iTotal + 4;
 	
 	
-		if (iTotal >= 1)
+		if (iTotal >= 0)
 	{
 	if (!GetHasFeat(FEAT_SPELL_CLERDRU_I,oPC,TRUE))
 		FeatAdd(oPC,FEAT_SPELL_CLERDRU_I,FALSE,FALSE,FALSE);
@@ -1411,7 +1411,7 @@ int GetClericTRUECasterlevel(object oPC)
 	}
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE)) iTotal = iTotal + 4;
-	if (iTotal >= 1)
+	if (iTotal >= 0)
 	{
 	if (!GetHasFeat(FEAT_SPELL_CLERDRU_I,oPC,TRUE))
 		FeatAdd(oPC,FEAT_SPELL_CLERDRU_I,FALSE,FALSE,FALSE);
