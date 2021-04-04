@@ -47,22 +47,26 @@ void CheckArenaFight(object oPC) {
 		//Sanity check
 		if (nCount > 20)
 			return;
+		nCount++;
 			
 		SendMessageToPC(oPC, "Still under count.");
 			
-		if (!GetIsPC(oViewer))
+		if (!GetIsPC(oViewer)) {
+			oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 			continue;
+		}
 		
 		SendMessageToPC(oPC, "Is PC");
 			
-		if (GetLocalInt(oPC, "IN_ARENA") == 0)
+		if (GetLocalInt(oPC, "IN_ARENA") == 0) {
+			oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 			continue;
+		}
 			
 		SendMessageToPC(oPC, "Giving "+GetName(oViewer)+" the achievement.");
 			
 		IncrementAchievement(oViewer, 45);
 	
-		nCount++;
 		oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 	}
 }
