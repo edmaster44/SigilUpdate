@@ -79,7 +79,7 @@ itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
            
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            IPSafeAddItemProperty(oTarget, ipWoE, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+            AddItemProperty(DURATION_TYPE_TEMPORARY, ipWoE, oTarget, fDuration)
         }
     }
 }
