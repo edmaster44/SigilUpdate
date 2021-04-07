@@ -18,9 +18,13 @@ const int nDailyXPlevel = 100;
 
 void StackingEquipmentBugFix(object oPC) {
 
-	//In case we are somewhere unsafe, make me ethereal
+	//In case we are somewhere unsafe, make me ethereal. Also give temporary stat boosts while gear is being removed
 	effect eSanctuary = EffectEthereal();
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSanctuary, oPC, 6.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSanctuary, oPC, 8.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_WISDOM, 12), oPC, 8.0f);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_INTELLIGENCE, 12), oPC, 8.0f);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_CHARISMA, 12), oPC, 8.0f);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_STRENGTH, 12), oPC, 8.0f);
 	SendMessageToPC(oPC, "Re-equipping equipment for bugfix. Check the ground for any lost items before proceeding.");
 	
 	ClearAllActions();
