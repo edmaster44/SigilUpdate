@@ -84,7 +84,7 @@ void main()
 		itemproperty ipAcid = ItemPropertyDamageBonus(DamageType,nDamage);  
         {
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-        IPSafeAddItemProperty(oTarget, ipAcid, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);}
+        AddItemProperty(DURATI, ipAcid, oTarget, fDuration);}
         
     }
 }
