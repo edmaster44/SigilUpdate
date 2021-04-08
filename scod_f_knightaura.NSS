@@ -18,7 +18,7 @@ object oPC = OBJECT_SELF;
 	object oTarget = GetEnteringObject();
 	object oCaster = GetAreaOfEffectCreator();
 	
-	effect eSaves  = EffectSavingThrowDecrease(SAVING_THROW_ALL, cScale);
+	effect eSaves  = EffectSavingThrowIncrease(SAVING_THROW_ALL, cScale,SAVING_THROW_TYPE_ALL,FALSE);
 	effect eAB =	EffectAttackIncrease(cScale,ATTACK_BONUS_MISC);
 	
 effect	eBuffs = EffectLinkEffects(eSaves,eAB);
@@ -26,19 +26,15 @@ effect	eBuffs = EffectLinkEffects(eSaves,eAB);
 
 
 
-
-
-	// Doesn't work on self
-	if (oTarget != oCaster)
-	{
 		//SpeakString("nw_s2_auradespairA.nss: On Enter: target is not the same as the creator");
 
-		SignalEvent (oTarget, EventSpellCastAt(oCaster, SPELLABLILITY_AURA_OF_DESPAIR, FALSE));		
+		SignalEvent (oTarget, EventSpellCastAt(oCaster, SPELLABILITY_KNIGHT_AURA, FALSE));		
 
 	    //Faction Check
 		if (!GetIsDead(oTarget) && GetIsEnemy(oTarget, oCaster)) {
 		
-	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oTarget);			
+	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oTarget);
+	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oPC);				
 		}
-	}
+	
 }

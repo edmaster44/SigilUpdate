@@ -300,7 +300,7 @@ void main()
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
 	PS_BarbarianLevels(oPC);
-	GetClericTRUECasterlevel(oPC)
+	GetClericTRUECasterlevel(oPC);
 	GetDruidTRUECasterlevel(oPC);
 	GetBardTRUECasterlevel(oPC);
 	GetSorcererTRUECasterlevel(oPC);

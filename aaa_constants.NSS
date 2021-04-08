@@ -569,6 +569,8 @@ const int SPELLABILITY_WARMIND_STRIKE			= 9999;
 
 //Spell abilities Knight
 const int SPELLABILITY_KNIGHTSMITE				= 1930;
+const int SPELLABILITY_KNIGHT_AURA				= 1511;
+
 const int SPELLABILITY_BLACKGUARD_SMITE			= 1932;
 
 //Barbarian Feats

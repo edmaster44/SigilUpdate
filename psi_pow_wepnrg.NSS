@@ -79,7 +79,7 @@ itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
            
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            AddItemProperty(DURATION_TYPE_TEMPORARY, ipWoE, oTarget, fDuration)
+            AddItemProperty(DURATION_TYPE_TEMPORARY, ipWoE, oTarget, fDuration);
         }
     }
 }
