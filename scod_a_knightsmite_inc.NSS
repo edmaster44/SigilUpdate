@@ -49,14 +49,14 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
 	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
-		{	nDmg = nKnight * 2;
+		{	nDmg = nKnight * iChaBonus;
 			
 			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, TRUE);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else if (nAttack == 1)
-		{	nDmg = nKnight;	
+		{	nDmg = nKnight + iChaBonus;	
 			eDamage = EffectDamage(nDmg, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, TRUE);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
