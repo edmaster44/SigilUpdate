@@ -21,9 +21,11 @@ a war mind can provide himself with a +2 insight bonus to Dodge for up to 1 minu
 
 void main()
 {
+int nSpell = GetSpellId();
 int nArmor = 2;
 if (GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF)>7) {nArmor =5;}
 effect eArmour = EffectACIncrease(nArmor,AC_DODGE_BONUS,AC_VS_DAMAGE_TYPE_ALL,FALSE);
+if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eArmour,OBJECT_SELF,60.0f);
 
 
