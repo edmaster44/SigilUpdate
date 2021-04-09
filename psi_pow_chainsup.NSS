@@ -21,8 +21,8 @@ void main()
 object oPC = OBJECT_SELF;
 int nStrength = ABILITY_CONSTITUTION;
 int nCon = ABILITY_STRENGTH;
-int nLevel =+ 2;
-if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >6) nLevel += 4;
+int nLevel = 4;
+if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >6) nLevel = 4;
 
 
 effect eStr =EffectAbilityIncrease(nStrength,nLevel);
