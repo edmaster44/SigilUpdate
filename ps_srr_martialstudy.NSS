@@ -89,7 +89,7 @@ void DiamondMind1(object oCaller, object oTarget) // If concentration check succ
 			if (ACpen < 3)
 				ACpen = 3;
 			effect ACdecrease = EffectACDecrease(ACpen);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oTarget, 30.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oTarget, 24.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_REGENERATION);
@@ -151,7 +151,7 @@ void DiamondMind3(object oCaller) // Increases damage by 1/5 of a concentration 
 		damageBonus = damageBonus + 10;
 	}
 	effect damageIncrease = EffectDamageIncrease(damageBonus, DAMAGE_TYPE_MAGICAL); // Set to magical so it will bypass DR
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 30.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 24.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
