@@ -377,7 +377,7 @@ void PS_Ability_BrachinaDR(object oPC, int nSpell)
     {	return;	}
 	
 	int iLevel 		= GetLevelByClass(CLASS_TYPE_BRACHINA, oPC);
-	int iDR 		= 5;
+	int iDR 		= 10;
 	effect eSilver	= EffectDamageReduction(iDR, DR_TYPE_GMATERIAL, 0, GMATERIAL_METAL_ALCHEMICAL_SILVER); 
 	effect eGood	= EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
 		eGood		= EffectLinkEffects(eGood, eSilver);
