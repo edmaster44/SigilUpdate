@@ -52,6 +52,12 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
         nManifesterLevel = nManifesterLevel + GetLevelByClass(109, oManifester);
     }
 	
+	if (GetLevelByClass(CLASS_TYPE_WARMIND,oManifester) > 0 )
+	{
+		nManifesterLevel = nManifesterLevel + GetLevelByClass(CLASS_TYPE_WARMIND,oManifester);
+
+	}
+
 	if(GetLevelByClass(152, oManifester) > 0)
 	{
         nManifesterLevel = nManifesterLevel + GetLevelByClass(152, oManifester);

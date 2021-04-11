@@ -241,7 +241,48 @@ void main()
 				}
 				//Power point totals based on psion level. Power point total plateaus at level 20.
 			}
-			
+	 if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >0 )
+	{
+		   nPPBonus= nPPBonus +2 ;
+	}
+
+		       if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >1)
+		    {
+		    	nPPBonus= nPPBonus + 5;
+		    }
+   			if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >2)
+		    {
+		    	nPPBonus= nPPBonus +9 ;
+		    }
+   if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >3)
+		    {
+		    	nPPBonus= nPPBonus +14;
+		    }
+   if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >4)
+		    {
+		    	nPPBonus= nPPBonus +20 ;
+		    }
+   if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >5)
+		    {
+		    	nPPBonus= nPPBonus +28;
+		    }
+   if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >6)
+		    {
+		    	nPPBonus= nPPBonus +37 ;
+		    }
+   if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >7 )
+		    {
+		    	nPPBonus= nPPBonus +47;
+		    }
+   if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) >8 )
+	{
+		    	nPPBonus= nPPBonus +58;
+	   }
+
+		if (GetLevelByClass(CLASS_TYPE_WARMIND, OBJECT_SELF) > 9 )
+		    {
+		    	nPPBonus= nPPBonus +70;
+		    }			
 			if (GetHasFeat(21417, OBJECT_SELF))
 			{
 				int nPPExpand = nPPvalue/10;
