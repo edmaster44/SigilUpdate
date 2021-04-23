@@ -536,7 +536,7 @@ void main()
 		PS_ApplyPCWings(oPC);
 	}
 	
-	StackingEquipmentBugFix(oPC);
+	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
