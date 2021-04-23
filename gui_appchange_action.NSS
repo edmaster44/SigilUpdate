@@ -9,7 +9,7 @@ void PS_ChangeSelf_HairVariation_Barbershop(object oPC, int nHair)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.HairVariation = nHair;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 }
 
 void PS_ChangeSelf_FacialHairVariation_Barbershop(object oPC, int nFacial)
@@ -17,7 +17,7 @@ void PS_ChangeSelf_FacialHairVariation_Barbershop(object oPC, int nFacial)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.FacialHairVariation = nFacial;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 }
 
 void PS_ChangeSelf_HairTint_Accessory_Barbershop(object oPC, string sHairTint0)
@@ -27,7 +27,7 @@ void PS_ChangeSelf_HairTint_Accessory_Barbershop(object oPC, string sHairTint0)
 	app.HairTint_Color0 = iTint0;
 	app.HairTint_Mask = PS_CCA_TINT_COLOR0;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 }
 
 void PS_ChangeSelf_HairTint_Main_Barbershop(object oPC, string sHairTint1)
@@ -37,7 +37,7 @@ void PS_ChangeSelf_HairTint_Main_Barbershop(object oPC, string sHairTint1)
 	app.HairTint_Color1 = iTint1;
 	app.HairTint_Mask = PS_CCA_TINT_COLOR1;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 }
 
 void PS_ChangeSelf_HairTint_Highlight_Barbershop(object oPC, string sHairTint2)
@@ -47,7 +47,7 @@ void PS_ChangeSelf_HairTint_Highlight_Barbershop(object oPC, string sHairTint2)
 	app.HairTint_Color2 = iTint2;
 	app.HairTint_Mask = PS_CCA_TINT_COLOR2;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 }
 
 void PS_ChangeSelf_HeadTint_Eyebrows_Barbershop(object oPC, string sHeadTint2)
@@ -57,7 +57,7 @@ void PS_ChangeSelf_HeadTint_Eyebrows_Barbershop(object oPC, string sHeadTint2)
 	app.HeadTint_Color2 = iHTint2;
 	app.HeadTint_Mask = PS_CCA_TINT_COLOR2;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 }
 
 void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWingsID, int nHairID, int nFacialHairID, string sAccessory, string sHairColor, string sHairHighlight, string sSkinColor, string sEyeColor, string sEyebrowColor, string sScaleX, string sScaleY, string sScaleZ)

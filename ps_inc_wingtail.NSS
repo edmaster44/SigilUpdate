@@ -416,7 +416,7 @@ void PS_ApplyPCWings(object oPC)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.WingVariation = nWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	//DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));
 	//SendMessageToPC(oPC, "Wing variation changed to " + IntToString(nWing) + ".");
 }
@@ -435,7 +435,7 @@ void PS_ApplyPCTail(object oPC)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.TailVariation = nTail;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	//DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));
 	//SendMessageToPC(oPC, "Tail variation changed to " + IntToString(nTail) + ".");
 }
@@ -450,6 +450,6 @@ void PS_DragonGlitchFix(object oPC)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.AppearanceType = nAppVar;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	PS_SaveOriginalAppearance(oPC);
 }

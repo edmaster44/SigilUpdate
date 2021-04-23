@@ -2,6 +2,7 @@
 #include "aaa_constants"
 #include "ps_inc_advscript"
 #include "x0_i0_match"
+#include "serverexts"
 #include "x0_i0_petrify"
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
@@ -3070,7 +3071,7 @@ void PS_RestoreOriginalAppearance(object oPC)
 	struct CreatureCoreAppearance Appearance = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
 	PS_SetCreatureCoreAppearance(oPC, Appearance);
 	SendMessageToPC(oPC, "Original appearance restored");
-	PS_RefreshAppearance(oPC);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	SetLocalInt(oEssence, "TempChange", 0);
 }
 
@@ -3084,7 +3085,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = 0;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
+		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		DelayCommand(0.1f, DeleteLocalInt(oItem, "DarkFlight"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 
@@ -3092,7 +3093,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = 0;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
+		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		DelayCommand(0.1f, DeleteLocalInt(oItem, "DragonFlight"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 	
@@ -3104,7 +3105,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = 0;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
+		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		FeatRemove(oPC, FEAT_LILITUS_GIFT);
 		DelayCommand(0.1f, DeleteLocalInt(oItem, "UnholyApothesis"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
@@ -3114,7 +3115,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = iAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
+		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));		}
 		
 	if ((GetLocalInt(oItem, "Diminution") != 0) && (!GetHasFeat(4012, oPC)))
@@ -3122,7 +3123,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = iAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
+		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		DelayCommand(0.1f, DeleteLocalInt(oItem, "Diminution"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 }
@@ -3964,7 +3965,7 @@ void Assumenewform(object oPC, struct CreatureCoreAppearance Appearance) {
     Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
     
     PS_SetCreatureCoreAppearance(oPC, Appearance);
-    PS_RefreshAppearance(oPC);
+    ServerExts_RefreshCreatureAppearance(oPC,oPC);
     SetLocalInt(oEssence, "TempChange", 1);
 }
 
