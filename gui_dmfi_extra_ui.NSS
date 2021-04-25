@@ -81,10 +81,12 @@ void main(string sWINDOW)
 			break;
 		case 4: //Auxiliary Bars
 			nPSION = GetLevelByClass(90, oPC);
+			nPsyWar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
 			nPOLY = CheckPoly(oPC);
 			if (nPSION > 0) DisplayGuiScreen(oPC,"SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
+			if (nPsyWar > 0) DisplayGuiScreen(oPC,"SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
 			if (nPOLY==TRUE) DisplayGuiScreen(oPC,"POLYMORPH_HOTBAR", FALSE, "polybar.xml");
-			if ((nPSION<=0)&&(nPOLY==FALSE)) FloatingTextStringOnCreature("Auxiliary Bars are only for Psions or Polymorphed Characters.", oPC, FALSE);
+			if ((nPSION<=0)&&(nPsyWar<= 0)&&(nPOLY==FALSE)) FloatingTextStringOnCreature("Auxiliary Bars are only for Psions or Polymorphed Characters.", oPC, FALSE);
 			break;
 		case 5: //Difficulty
 			DisplayGuiScreen(oPC,"SCREEN_DIFFICULTY_SIGIL", FALSE, "difficulty_sigil.xml");

@@ -18,44 +18,44 @@ void DoPsyProgression(object oPC)
 	if (nPsywar < 1) return;
 	
 	else
-				if (nLEVEL >= 0)
+				if (nLEVEL >= 1)
 			{
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, TRUE, TRUE, FALSE);
 				
 			}
-			if (nLEVEL >= 2)
+			if (nLEVEL >= 3)
 			{	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, TRUE, TRUE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 				
 				//FeatRemove(OBJECT_SELF,21464);
 				
 			}
-			if (nLEVEL >= 5)
+			if (nLEVEL >= 6)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, TRUE, TRUE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
 				
 					//FeatRemove(OBJECT_SELF,21465);
 			}
-			if (nLEVEL >= 8)
+			if (nLEVEL >= 9)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, TRUE, TRUE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
 			}	//FeatRemove(OBJECT_SELF,21466);
 			
-			if (nLEVEL >= 11)
+			if (nLEVEL >= 12)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, TRUE, TRUE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
 				//FeatRemove(OBJECT_SELF,21467);
 			}
-			if (nLEVEL >= 15)
+			if (nLEVEL >= 16)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, TRUE, TRUE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
 				//FeatRemove(OBJECT_SELF,21468);
 			}
-			if (nLEVEL >= 19 )
+			if (nLEVEL >= 20 )
 			{
 			FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
 			}
