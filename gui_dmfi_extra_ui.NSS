@@ -3,6 +3,7 @@
 //:: Created On: 2015
 //:://////////////////////////////////////////////
 #include "ps_inc_time"
+#include "aaa_constants"
 #include "ps_inc_achievements"
 const int OOC_PORTAL_TIMEOUT = 60;
 	
@@ -48,6 +49,7 @@ void main(string sWINDOW)
 	object oASS;
 	int nTYPE = 1;
 	int nPSION;
+	int nPSYWAR;
 	int nPOLY;
 	int nWINDOW = StringToInt(sWINDOW);
 	
@@ -81,12 +83,12 @@ void main(string sWINDOW)
 			break;
 		case 4: //Auxiliary Bars
 			nPSION = GetLevelByClass(90, oPC);
-			nPsyWar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
+			nPSYWAR = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
 			nPOLY = CheckPoly(oPC);
 			if (nPSION > 0) DisplayGuiScreen(oPC,"SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
-			if (nPsyWar > 0) DisplayGuiScreen(oPC,"SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
+			if (nPSYWAR > 0) DisplayGuiScreen(oPC,"SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
 			if (nPOLY==TRUE) DisplayGuiScreen(oPC,"POLYMORPH_HOTBAR", FALSE, "polybar.xml");
-			if ((nPSION<=0)&&(nPsyWar<= 0)&&(nPOLY==FALSE)) FloatingTextStringOnCreature("Auxiliary Bars are only for Psions or Polymorphed Characters.", oPC, FALSE);
+			if ((nPSION<=0)&&(nPSYWAR<= 0)&&(nPOLY==FALSE)) FloatingTextStringOnCreature("Auxiliary Bars are only for Psions or Polymorphed Characters.", oPC, FALSE);
 			break;
 		case 5: //Difficulty
 			DisplayGuiScreen(oPC,"SCREEN_DIFFICULTY_SIGIL", FALSE, "difficulty_sigil.xml");
