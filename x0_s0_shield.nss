@@ -56,7 +56,7 @@ void main()
     effect eLink = EffectLinkEffects(eArmor, eSpell);
   
 
-    float fDuration = HoursToSeconds(GetCasterLevel(OBJECT_SELF)); // * Duration 1 turn
+    float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF)); // * Duration 1 turn
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 

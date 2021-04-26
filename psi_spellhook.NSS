@@ -49,7 +49,7 @@ int PsiPrePowerCastCode()
 	//********************************************************************
 	//Arcane Spell Failure
 	//********************************************************************
-	int spellFailure = GetArcaneSpellFailure(oManifester);
+/*	int spellFailure = GetArcaneSpellFailure(oManifester);
 	int iArmorRank = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST, oManifester));
 	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oManifester);
 	string sShield = GetTag(oShield);
@@ -59,7 +59,7 @@ int PsiPrePowerCastCode()
 	{ return (d100() > spellFailure); }
 
     if (nPsyicClasses(oManifester)>1 )
-	{spellFailure = 0; } 
+	{spellFailure = 0; }  - removed on 4/26/2021*/ 
 	
 
 

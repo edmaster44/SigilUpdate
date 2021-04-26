@@ -35,7 +35,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 
     if (MyResistSpell(OBJECT_SELF,oTarget) <1)
     {
