@@ -8,6 +8,7 @@
 
 //This determines the Psychic warrior Progression feat they receive during leveling up
 void DoPsyProgression(object oPC);
+
 //Progression for Psychic Warrior and PRC
 void DoPsyProgression(object oPC)
 {
@@ -20,7 +21,9 @@ void DoPsyProgression(object oPC)
 	else
 				if (nLEVEL >= 0)
 
-			{
+			{	AddScriptParameterString("START");
+				AddScriptParameterString("");
+				ExecuteScriptEnhanced("gui_extra_choices", oPC);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 				
 			}

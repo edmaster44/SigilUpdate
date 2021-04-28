@@ -91,7 +91,7 @@ int GetRelevantClass(object oPC) {
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
 	if ((GetLevelByClass(106, oPC) >= 5)) return 106; //VampMal L5 Bonus Feat
 	if ((GetLevelByClass(108, oPC) >= 6)) return 108; //Gray Slaad Chaotic Crafting
-	if ((GetLevelByClass(110,oPC)>=0 )) return 110;
+	if ((GetLevelByClass(110,oPC)>=0 )&& (CheckEpiteth(110, oPC) == FALSE)) return 110;//Psychic Warrior
 	if ((GetLevelByClass(49, oPC) >= 6) && (CheckEpiteth(499, oPC) == FALSE)) return 499; //Half-Dragon Wings
 	if (GetRacialType(oPC) == RACIAL_TYPE_FEY && GetHasFeat(2843, oPC) && (CheckEpiteth(CLASS_TYPE_FEY, oPC) == FALSE)) return CLASS_TYPE_FEY;
 	else return -1;
@@ -184,6 +184,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 		{
 			case 1: return 21470; // Lurk Path
 			case 2: return 21471; // Feral Path
+			break;
 		}
 		case 621: switch(nCOUNT) //Half-Celestial Wings/Eyes
 		{
@@ -211,7 +212,7 @@ string GetClassSubtitle(int nCLASS)
 		case 104: return "You must select your lycanthropic affliction."; //Lycanthrope
 		case 106: return "You must select your bonus feat."; //VampMal
 		case 108: return "You must select your bonus crafting feat."; //Gray Slaad
-		case 110: return "You must Select Your Psychic Warrior Path";
+		case 110: return "You must Select Your Psychic Warrior Path";//Psychic Warrior
 		case 621: return "You must select either celestial wings or supernatural sight."; //Half-Celestial
 		case 499: return "Your draconic heritage allows you to select wings if you so choose. This choice is permanent."; //Half-Dragon Wings
 	}

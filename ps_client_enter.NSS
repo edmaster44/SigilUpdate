@@ -38,5 +38,4 @@ void main()
 		DelayCommand(20.2f, SendMessageToPC(oPC, "============================================"));
 	}	
 	
-	PS_GiveSpellFeat(oPC);
 }
