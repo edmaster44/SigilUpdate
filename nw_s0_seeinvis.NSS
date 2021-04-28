@@ -56,6 +56,7 @@ void main()
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     RemovePermanencySpells(oTarget);
+    
 
     //Apply the VFX impact and effects
 	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);

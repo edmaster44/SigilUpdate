@@ -1,22 +1,22 @@
 /*
    ----------------
-   Form of Doom
+   True Seeing, Psionic
 
-   psi_pow_formdoom
+   psi_pow_truesee
    ----------------
 
-   13/12/05 by Stratovarius
+   4/28/2021
 */ /** @file
 
     Form of Doom
 
     Psychometabolism
-    Level: Psychic warrior 6
+    Level: Psychic warrior 5
     Manifesting Time: 1 standard action
     Range: Personal; see text
     Target: You
     Duration: 1 round/level
-    Power Points: 11
+    Power Points: 10
     Metapsionics: Extend
 
     You wrench from your subconscious a terrifying visage of deadly hunger and
@@ -52,7 +52,6 @@
     Augment: For every additional power point you spend, this power’s duration
              increases by 2 rounds.
 */
-
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
@@ -77,59 +76,24 @@ void main()
         return;
     }
 
-// End of Spell Cast Hook
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
-	itemproperty iBonusFeat1 = ItemPropertyBonusFeat(3369);
-			object oWeapon	   = IPGetTargetedOrEquippedMeleeWeapon();
     struct manifestation manif =
        EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
                               METAPSIONIC_EXTEND
                               );
 
-    if(manif.bCanManifest)
+      if(manif.bCanManifest)
     {
-        effect eLink    =                          EffectAreaOfEffect(AOE_MOB_MENACE,"psi_pow_frmdment");
-               eLink    = EffectLinkEffects(eLink, EffectACIncrease(5, AC_NATURAL_BONUS));
-               eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_SLASHING,    5));
-               eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_PIERCING,    5));
-               eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_BLUDGEONING, 5));
-               eLink    = EffectLinkEffects(eLink, EffectAbilityIncrease(ABILITY_STRENGTH, 6));
-               eLink    = EffectLinkEffects(eLink, EffectMovementSpeedIncrease(33));
-               //eLink    = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_INTIMIDATE, 10));
-               eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"));
-        effect eTest;
-        float fDuration = 6.0f * (manif.nManifesterLevel + (2 * manif.nManifesterLevel));
+        effect eLink    =                          EffectVisualEffect(VFX_DUR_ULTRAVISION);
+               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT));
+               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE));
+        effect eTrueSee = EffectTrueSeeing();
+        float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 
-        // Will not work if under the effects of Polymorph. Also will not stack with itself
-        eTest = GetFirstEffect(oTarget);
-        while(GetIsEffectValid(eTest))
-        {
-            if(GetEffectType(eTest) == EFFECT_TYPE_POLYMORPH ||
-               GetEffectSpellId(eTest) == 14609
-               )
-                return;
-            eTest = GetNextEffect(oTarget);
-        }
-		//Feral Path
-		if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester))
-		{	
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, GetItemPossessor(oWeapon));
-			
-            IPSafeAddItemProperty(oWeapon, iBonusFeat1, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
-        }
-	else
-	
-        // Apply the effects
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration); 
-		
-		}
-       // string sResRef = "prc_fod_tent_";
-      //  sResRef += GetAffixForSize(PRCGetCreatureSize(oTarget));
-     //   AddNaturalSecondaryWeapon(oTarget, sResRef, 4);
-        // Start dispelling monitor and tentacles heartbeat
-        //DelayCommand(6.0f, 
-            //NaturalSecondaryWeaponTempCheck(oManifester, oTarget, manif.nSpellID, FloatToInt(fDuration) / 6, sResRef));
-    }// end if - Successfull manifestation
+          eLink = EffectLinkEffects(eLink, eTrueSee);
+
+          ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink  oTarget,fDuration);
+      }
