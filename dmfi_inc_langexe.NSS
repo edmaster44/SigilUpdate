@@ -335,8 +335,11 @@ string DMFI_GrantOutsider(object oPC)
 void DMFI_GrantChoosenLanguages(object oPC)
 {
 	object oTool;
-	int nMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
-	if (nMod>0)
+	int nScore = GetAbilityScore(oPC, ABILITY_INTELLIGENCE, TRUE);
+	int nMod = (nScore-10);
+	if (nMod != 0) {
+	nMod = nMod/2;
+	}
 	{
 		// clear old data
 		oTool=DMFI_GetTool(oPC);
