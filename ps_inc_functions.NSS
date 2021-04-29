@@ -2,7 +2,7 @@
 #include "aaa_constants"
 #include "ps_inc_advscript"
 #include "x0_i0_match"
-#include "serverexts"
+#include "ServerExts"
 #include "x0_i0_petrify"
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
@@ -3036,7 +3036,7 @@ struct CreatureCoreAppearance PS_RetrieveStoredCreatureCoreAppearance(object Obj
 
 void PS_RefreshAppearance(object oPC)
 {
-	object gloves = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
+	/*object gloves = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
 	if (!GetIsObjectValid(gloves))
 	{
 		object newGloves = CreateItemOnObject("ps_srlg_gloves", oPC);
@@ -3047,7 +3047,8 @@ void PS_RefreshAppearance(object oPC)
 	{
 		ActionUnequipItem(gloves);
 		DelayCommand(0.2f, ActionEquipItem(gloves, INVENTORY_SLOT_ARMS));
-	}
+	}*/
+	ServerExts_RefreshCreatureAppearance(oPC, oPC);
 }
 
 void PS_SaveOriginalAppearance(object oPC)

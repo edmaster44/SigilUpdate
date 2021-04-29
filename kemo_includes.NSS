@@ -1,4 +1,4 @@
-#include "serverexts"
+#include "ServerExts"
 // Determines the loop animation trigger delay based on PC's race/subrace; KEMO Emotes/Partners only
 float RacialDelay(object oTarget);
 
