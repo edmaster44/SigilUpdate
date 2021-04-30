@@ -17,6 +17,7 @@
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 #include "ginc_debug"
+#include "ps_inc_functions"
 #include "nw_i0_spells"
 
 
@@ -42,24 +43,14 @@ void main()
 // End of Spell Cast Hook
 
 	// Prevent stacking
-	int nID = GetSpellId();
-	if ( GetHasSpellEffect(nID) )
-	{
-		effect eEffect = GetFirstEffect( OBJECT_SELF );
-		while ( GetIsEffectValid(eEffect) )
-		{
-			if ( GetEffectSpellId(eEffect) == nID )
-			{
-				RemoveEffect( OBJECT_SELF, eEffect );
-			}
-			
-			eEffect = GetNextEffect( OBJECT_SELF );
-		}
-	}
+	int nID = 852;
+
+	if (GetHasSpellEffect(nID,oPC))	
+	{	RemoveSpellEffects(nID, oPC, oPC);	}
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	float fDuration = TurnsToSeconds(nCasterLvl);	
 
 	//Cap out caster level at 15 for purposes of AC bonus
@@ -111,6 +102,9 @@ void main()
 
         //Apply the VFX impact and effects
 //        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+ if (!GetHasSpellEffect(nID, oPC)){
+
+
         DelayCommand( fDelay, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration) );
 		fDelay += fSpin;		
     }
