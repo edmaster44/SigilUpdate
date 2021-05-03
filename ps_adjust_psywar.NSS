@@ -6,12 +6,6 @@
 
 
 
-//This determines the Psychic warrior Progression feat they receive during leveling up
-void PS_AdjustPsyWar(object oPC)
-{
-DoPsyProgression(oPC);
-
-}
 
 
 //Progression for Psychic Warrior and PRC
@@ -30,7 +24,7 @@ void DoPsyProgression(object oPC)
 			{	
 
 
-			int iHasBonus	= GetLocalInt(oItem, "PSYWAR1");
+			int iHasBonus	= GetLocalInt(oPC, "PSYWAR1");
 				if (iHasBonus == 1)
 				{	return;		}
 				else
@@ -38,7 +32,7 @@ void DoPsyProgression(object oPC)
 				{AddScriptParameterString("START");
 				AddScriptParameterString("");
 				ExecuteScriptEnhanced("gui_extra_choices", oPC);}
-				SetLocalInt(oItem, "PSYWAR1", 1);
+				SetLocalInt(oPC, "PSYWAR1", 1);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 				
 			}
@@ -98,3 +92,10 @@ void DoPsyProgression(object oPC)
 		{	SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");		}
 		}
+		
+//This determines the Psychic warrior Progression feat they receive during leveling up
+void PS_AdjustPsyWar(object oPC)
+{
+DoPsyProgression(oPC);
+
+}

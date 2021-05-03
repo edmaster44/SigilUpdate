@@ -45,13 +45,13 @@ void main()
 	// Prevent stacking
 	int nID = 852;
 
-	if (GetHasSpellEffect(nID,oPC))	
-	{	RemoveSpellEffects(nID, oPC, oPC);	}
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	float fDuration = TurnsToSeconds(nCasterLvl);	
+	if (GetHasSpellEffect(nID,oTarget))	
+	{	RemoveSpellEffects(nID, oTarget, oTarget);	}
 
 	//Cap out caster level at 15 for purposes of AC bonus
 	if (nCasterLvl > 15)
@@ -102,7 +102,7 @@ void main()
 
         //Apply the VFX impact and effects
 //        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
- if (!GetHasSpellEffect(nID, oPC)){
+ if (!GetHasSpellEffect(nID, oTarget)){
 
 
         DelayCommand( fDelay, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration) );
@@ -110,4 +110,5 @@ void main()
     }
 	
 	
+}
 }
