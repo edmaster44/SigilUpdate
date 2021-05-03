@@ -43,7 +43,7 @@ void PS_KnightLevels(object oPC)
 	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iMovanic;
 	  if (iPally <1 ) return;
 	  
-	  else
+	  
 	  
 	  
 	  

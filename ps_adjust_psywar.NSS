@@ -7,59 +7,77 @@
 
 
 //This determines the Psychic warrior Progression feat they receive during leveling up
-void DoPsyProgression(object oPC);
+void PS_AdjustPsyWar(object oPC)
+{
+DoPsyProgression(oPC);
+
+}
+
 
 //Progression for Psychic Warrior and PRC
 void DoPsyProgression(object oPC)
 {
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	if (nPsywar < 1) return;
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int nLEVEL = nPsywar + nGemDragon + nWarMind;
-	if (nPsywar < 1) return;
-	
-	else
-				if (nLEVEL >= 0)
 
-			{	AddScriptParameterString("START");
+	
+	
+		if (nLEVEL >= 1)
+
+			{	
+
+
+			int iHasBonus	= GetLocalInt(oItem, "PSYWAR1");
+				if (iHasBonus == 1)
+				{	return;		}
+				else
+				
+				{AddScriptParameterString("START");
 				AddScriptParameterString("");
-				ExecuteScriptEnhanced("gui_extra_choices", oPC);
+				ExecuteScriptEnhanced("gui_extra_choices", oPC);}
+				SetLocalInt(oItem, "PSYWAR1", 1);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 				
 			}
-			if (nLEVEL >= 3)
+
+
+
+			if (nLEVEL >= 4)
 			{	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 				
 				//FeatRemove(OBJECT_SELF,21464);
 				
 			}
-			if (nLEVEL >= 5)
+			if (nLEVEL >= 6)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
 				
 					//FeatRemove(OBJECT_SELF,21465);
 			}
-			if (nLEVEL >= 8)
+			if (nLEVEL >= 9)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
 			}	//FeatRemove(OBJECT_SELF,21466);
 			
-			if (nLEVEL >= 11)
+			if (nLEVEL >= 12)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
 				//FeatRemove(OBJECT_SELF,21467);
 			}
-			if (nLEVEL >= 15)
+			if (nLEVEL >= 16)
 			{	
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, TRUE, TRUE, FALSE);
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
 				//FeatRemove(OBJECT_SELF,21468);
 			}
-			if (nLEVEL >= 19 )
+			if (nLEVEL >= 21 )
 			{
 			FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
 			}

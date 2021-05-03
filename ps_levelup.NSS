@@ -313,7 +313,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
-	DoPsyProgression(oPC);
+	PS_AdjustPsyWar(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);

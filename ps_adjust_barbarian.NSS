@@ -19,7 +19,7 @@ void PS_BarbarianLevels(object oPC)
 	int iFrenzy = GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER,oPC);//Frenized Berserker.
 	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy +iScaly + iHilly;
 	if (iBarb < 1) return;
-	else
+
 	
 	
 	if(GetHasFeat(FEAT_LYCAN_BP_WEREBOAR,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(CLASS_TYPE_LYCAN_PRC,oPC);
