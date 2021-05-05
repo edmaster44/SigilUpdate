@@ -201,7 +201,7 @@ void PS_Ability_BaatezuBlindsight(object oPC, int nSpell)
 			eLink = ExtraordinaryEffect(eLink);
     	SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_BLINDSIGHT, FALSE));
     	float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
-		RemovePermanencySpells(oTarget);
+		//RemovePermanencySpells(oTarget);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, fDuration);	}
 }
 

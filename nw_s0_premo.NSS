@@ -14,10 +14,12 @@
 //:: Created On: March 16 , 2001
 //:://////////////////////////////////////////////
 //:: Last Updated By: Preston Watamaniuk, On: April 11, 2001
+//:: Updated on 5/5/2021, used the PS_GetCasterLevel Function
 
 // (Update CGaw - OEI 08/22/06) -- Changed Damage Reduction
 
 #include "nw_i0_spells"
+#include "ps_inc_functions"
 #include "x2_inc_spellhook"
 
 void main()
@@ -40,7 +42,7 @@ void main()
     object oTarget = GetSpellTargetObject();
 
     //Declare major variables
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nDamageLimit = nCasterLevel * 10;
     int nMetaMagic = GetMetaMagicFeat();
     effect eStone = EffectDamageReduction(30, GMATERIAL_METAL_ADAMANTINE, nDamageLimit, DR_TYPE_GMATERIAL);

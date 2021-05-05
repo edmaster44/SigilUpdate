@@ -25,6 +25,7 @@
 
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 #include "nwn2_inc_metmag"
 #include "nwn2_inc_spells"
 
@@ -55,7 +56,7 @@ void main()
     effect		eRegen		= 	EffectRegenerate(1, 6.0);
 	effect		eLink		= 	EffectLinkEffects( eRegen, eVis );
 	
-	int	nLvl = GetCasterLevel(oCaster);
+	int	nLvl = PS_GetCasterLevel(oCaster);
 	if (nLvl >= 15) {
 		nLvl = 15;
 	}
@@ -84,7 +85,7 @@ void main()
 			else
 			{
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-			    RemovePermanencySpells(oTarget);
+			    //RemovePermanencySpells(oTarget);
 				ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 			}
 		}
