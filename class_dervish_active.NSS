@@ -67,6 +67,15 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	else
 	{
 		SendMessageToPC(oPC, "You must be wearing light or no armor and wielding a slashing weapon (both must be slashing if two weapons are used).");
-	}	
-
+	}
+}
+//Defensive Parry.
+void Dervish_Defensive_Parry(object oPC, int nSpell)
+{
+int nPercentage = GetSkillRank( SKILL_PARRY, oPC,FALSE);
+float fDuration = IntToFloat(nPercentage);
+if (nPercentage> 50)
+	{nPercentage = 50;}
+effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, econceal, oPC, fDuration);
 }

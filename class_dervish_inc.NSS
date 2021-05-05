@@ -17,10 +17,7 @@ void main()
 		
 	switch (nSpell)
 	{
-	case 1929:	//Defensive Parry
-		DelayCommand(0.0f, Dervish_Defensive_Parry(oPC, nSpell));
-		break;
-	
+		
 	case 1926 :		//AC Bonus	
 			DelayCommand(0.0f, Dervish_AC_Bonus(oPC, nSpell));
 		break;

@@ -20,6 +20,10 @@ void main()
 		case 1927:	//Dervish Dance
 		DelayCommand(0.0f, Dervish_Dance(oPC, nSpell));
 		break;
+		
+		case 1929:	//Defensive Parry
+		DelayCommand(0.0f, Dervish_Defensive_Parry(oPC, nSpell));
+		break;
 	
 	
 	
