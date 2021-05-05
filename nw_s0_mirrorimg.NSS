@@ -43,16 +43,26 @@ void main()
 // End of Spell Cast Hook
 
 	// Prevent stacking
-	int nID = 852;
 
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	float fDuration = TurnsToSeconds(nCasterLvl);	
-	if (GetHasSpellEffect(nID,oTarget))	
-	{	RemoveSpellEffects(nID, oTarget, oTarget);	}
-
+		int nID = GetSpellId();
+	if ( GetHasSpellEffect(nID) )
+	{
+		effect eEffect = GetFirstEffect( OBJECT_SELF );
+		while ( GetIsEffectValid(eEffect) )
+		{
+			if ( GetEffectSpellId(eEffect) == nID )
+			{
+				RemoveEffect( OBJECT_SELF, eEffect );
+			}
+			
+			eEffect = GetNextEffect( OBJECT_SELF );
+		}
+	}
 	//Cap out caster level at 15 for purposes of AC bonus
 	if (nCasterLvl > 15)
 	{

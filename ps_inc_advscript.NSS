@@ -686,5 +686,6 @@ int PS_CallExtensionsScript(int Cmd, object Self, object P0, int P1, int P2, str
 	AddScriptParameterString(P3);
 	AddScriptParameterString(P4);
 	return ExecuteScriptEnhanced("Sigil.Extensions", Self, TRUE);
+	
 }
 
