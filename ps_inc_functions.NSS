@@ -180,6 +180,23 @@ int GetAbilityBonuses(object oPC, int iAbility);
 void PS_ApplySpecialWeaponFinesse(object oPC, object oItem);
 
 int GetIsFinessable(object oItem);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int GetClericWithoutFeat(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int	GetDruidWithoutFeat(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int GetBardWithoutFeat(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int	GetSorcererWithoutFeat(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int	GetRangerWithOutFeats(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int GetPaladinWithoutFeat(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int	GetSpiritShamanWithoutFeat(object oPC);
+//Gets the Classes without Practiced Spell caster, for Qualifer Feats
+int	GetFavoredSoulWithoutFeat(object oPC);
+
 
 void PS_RemoveSpecialWeaponFinesse(object oPC, object oItem);
 
@@ -805,7 +822,52 @@ int GetSpiritShamanTRUECasterlevel(object oPC)
 	
 	return iTotal;
 }
+int GetSpiritShamanWithoutFeat(object oPC)
+{
 
+int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_SPIRIT_SHAMAN)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasSpiritShamanProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 6)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 9)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
+	
+	return iTotal;
+
+
+}
 // Used in any spell scripts for Ranger/Paladin spells instead of GetCasterLevel in order that those spells get full caster level for Ranger/Paladin.
 
 int GetHasPaladinProgression(object oPC, int iClass)
@@ -883,6 +945,50 @@ int GetPaladinTRUECasterlevel(object oPC)
 	return iTotal;
 }
 
+int GetPaladinWithoutFeat(object oPC)
+{
+
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_PALADIN, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_PALADIN) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+	
+		if (iTotal >= 0)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_I,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_II,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 7)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 10)
+	{
+	if (!GetHasFeat(FEAT_SPELL_PALRANG_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_PALRANG_IV,FALSE,FALSE,FALSE);
+	}
+	
+	return iTotal;
+
+
+}
 
 
 int GetHasRangerProgression(object oPC, int iClass)
@@ -934,6 +1040,30 @@ int GetRangerTRUECasterlevel(object oPC)
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
 	
+	
+	return iTotal;
+}
+
+
+int GetRangerWithOutFeats(object oPC)
+{
+
+
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_RANGER, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_RANGER) iTotal = GetLevelByClass(CLASS_TYPE_RANGER,oPC);
+		else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
 	if (iTotal >= 1)
 	{
 	if (!GetHasFeat(FEAT_SPELL_PALRANG_I,oPC,TRUE))
@@ -954,9 +1084,11 @@ int GetRangerTRUECasterlevel(object oPC)
 	if (!GetHasFeat(FEAT_SPELL_PALRANG_IV,oPC,TRUE))
 		FeatAdd(oPC,FEAT_SPELL_PALRANG_IV,FALSE,FALSE,FALSE);
 	}
-	
 	return iTotal;
+
+
 }
+
 int GetHasWizardProgression(object oPC, int iClass)
 {
 	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
@@ -994,6 +1126,28 @@ int GetWizardTRUECasterlevel(object oPC)
 		else iTotal = iTotal + (iRedWizard / 2);
 	}
 	
+	
+	return iTotal;
+}
+
+int GetWizardWithoutFeat(object oPC)
+{
+
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_WIZARD, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_WIZARD)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasWizardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
 		if (iTotal >= 0)
 	{
 	if (!GetHasFeat(FEAT_SPELL_WIZARD_I,oPC,TRUE))
@@ -1014,7 +1168,7 @@ int GetWizardTRUECasterlevel(object oPC)
 	if (!GetHasFeat(FEAT_SPELL_WIZARD_IV,oPC,TRUE))
 		FeatAdd(oPC,FEAT_SPELL_WIZARD_IV,FALSE,FALSE,FALSE);
 	}
-	
+
 	return iTotal;
 }
 
@@ -1048,28 +1202,7 @@ int GetSorcererTRUECasterlevel(object oPC)
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE)) iTotal = iTotal + 4;
 	
-		if (iTotal >= 1)
-	{
-	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
-		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
-	}
-	if (iTotal >= 3)
-	{
-	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
-		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
-	}
-	
-	if (iTotal >= 6)
-	{
-	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
-		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
-	}
-		if (iTotal >= 9)
-	{
-	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
-		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
-	}
-	
+
 	return iTotal;
 }
 
@@ -1094,7 +1227,55 @@ int GetSorcererAndPRCClassLevels(object oPC)
 	
 	return iTotal;
 }
+int GetSorcererWithoutFeat(object oPC)
+{
 
+
+
+int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_SORCERER, oPC) == 0) return 0;		
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_SORCERER)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasSorcererProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+
+	
+		if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 6)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 9)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+	}
+	
+	return iTotal;
+
+
+
+}
 int GetHasBardProgression(object oPC, int iClass)
 {
 	string BspCasterFeat = Get2DAString("classes","BonusCasterFeatByClassMap",iClass);
@@ -1144,6 +1325,30 @@ int GetBardTRUECasterlevel(object oPC)
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE)) iTotal = iTotal + 4;
 	
+	return iTotal;
+}
+
+
+int GetBardWithoutFeat(object oPC)
+{
+
+
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_BARD, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_BARD) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasBardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+
 	
 	
 			if (iTotal >= 1)
@@ -1170,6 +1375,10 @@ int GetBardTRUECasterlevel(object oPC)
 	
 	
 	return iTotal;
+
+
+
+
 }
 int GetHasDruidProgression(object oPC, int iClass)
 {
@@ -1220,6 +1429,29 @@ int GetDruidTRUECasterlevel(object oPC)
 	
 	if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)) iTotal = iTotal + 4;
 	
+	return iTotal;
+}
+
+
+int GetDruidWithoutFeat(object oPC)
+{
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_DRUID, oPC) == 0) return 0;		
+	
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_DRUID) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasDruidProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+
+	
 	
 		if (iTotal >= 0)
 	{
@@ -1246,6 +1478,9 @@ int GetDruidTRUECasterlevel(object oPC)
 	
 	
 	return iTotal;
+
+
+
 }
 
 int GetHasFavoredSoulProgression(object oPC, int iClass)
@@ -1321,6 +1556,54 @@ int GetFavoredSoulTRUECasterlevel(object oPC)
 	
 	
 	return iTotal;
+}
+
+
+int GetFavoredSoulWithoutFeat(object oPC)
+{
+
+	int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+	
+	if(GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) == 0) return 0;	
+	
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_FAVORED_SOUL) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasFavoredSoulProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+		if (iTotal >= 1)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >= 3)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 6)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 9)
+	{
+	if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
+	return iTotal;
+
+
+
 }
 int GetHasClericProgression(object oPC, int iClass)
 {
@@ -1457,6 +1740,52 @@ int GetClericAndPRCClassLevels(object oPC)
 	return iTotal;
 }
 
+int GetClericWithoutFeat(object oPC)
+{
+
+int iSlotNumber; int iClass;
+	int iTotal; int iTrue;
+
+	if(GetLevelByClass(CLASS_TYPE_CLERIC, oPC) == 0) return 0;	
+		
+	for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
+	{
+		iClass = GetClassByPosition( iSlotNumber, oPC);
+		
+		if ( iClass == 255 ) break;
+			
+		if(iClass == CLASS_TYPE_CLERIC)	iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		else if (GetHasClericProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+	}
+	
+
+	if (iTotal >= 0)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_I,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_I,FALSE,FALSE,FALSE);
+	}
+	if (iTotal >=2)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_II,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_II,FALSE,FALSE,FALSE);
+	}
+	
+	if (iTotal >= 4)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_III,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_III,FALSE,FALSE,FALSE);
+	}
+		if (iTotal >= 6)
+	{
+	if (!GetHasFeat(FEAT_SPELL_CLERDRU_IV,oPC,TRUE))
+		FeatAdd(oPC,FEAT_SPELL_CLERDRU_IV,FALSE,FALSE,FALSE);
+	}
+	
+	
+	return iTotal;
+
+
+}
 int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
