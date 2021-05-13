@@ -300,15 +300,6 @@ void main()
 	CheckDiashoWeapons(oPC, oItem);
 	CheckDragonBreath(oPC, oItem);
 	PS_BarbarianLevels(oPC);
-	/*GetClericTRUECasterlevel(oPC);
-	GetDruidTRUECasterlevel(oPC);
-	GetBardTRUECasterlevel(oPC);
-	GetSorcererTRUECasterlevel(oPC);
-	GetWizardTRUECasterlevel(oPC);
-	GetRangerTRUECasterlevel(oPC);
-	GetPaladinTRUECasterlevel(oPC);
-	GetSpiritShamanTRUECasterlevel(oPC);
-	GetFavoredSoulTRUECasterlevel(oPC);*/
 	GetClericWithoutFeat(oPC);
 	GetDruidWithoutFeat(oPC);
 	GetBardWithoutFeat(oPC);
