@@ -93,9 +93,3 @@ void DoPsyProgression(object oPC)
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");		}
 		}
 		
-//This determines the Psychic warrior Progression feat they receive during leveling up
-void PS_AdjustPsyWar(object oPC)
-{
-DoPsyProgression(oPC);
-
-}
