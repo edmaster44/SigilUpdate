@@ -276,6 +276,9 @@ void CreateCreatureDrop(object oCreature) {
 		} else if (sItem == "ESSENTIAL_ITEM") {
 			string sResRef = PickEssentialItemReward(GetHitDice(oCreature));
 			CreateItemOnObject(sResRef, oCreature);
+		} else if (sItem == "EPIC_LOOT_1") {
+			string sResRef = PickFromQuestTreasureLow(); //special loot 1
+			CreateItemOnObject(sResRef, oCreature);
 		} else {
 			CreateItemOnObject(sItem, oCreature);
 		}
