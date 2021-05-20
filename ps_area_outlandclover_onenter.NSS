@@ -1,0 +1,36 @@
+#include "ps_inc_planarlocations"
+void main() {
+
+ 	object oPC = GetEnteringObject();
+	string sPlane = "Outlands";
+	string sDescrip = "";
+	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
+	
+	int iLock = GetGlobalInt("OutlandsCloverbrookEnterLock");
+	if ( iLock == 0 ) {
+		SetGlobalInt("OutlandsCloverbrookEnterLock", 1); // Only allows one clean up at a time.
+		
+		if(GetObjectByTag("ps_npc_dori") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_ps_npc_dori");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_dori", GetLocation(oWP));  
+		}
+		if(GetObjectByTag("cbvillager001") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_cbvillager001");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cbvillager001", GetLocation(oWP));  
+		}
+		if(GetObjectByTag("cbvillager002") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_cbvillager002");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cbvillager002", GetLocation(oWP));  
+		}
+		if(GetObjectByTag("cbvillager003") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_cbvillager003");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cbvillager003", GetLocation(oWP));  
+		}
+		if(GetObjectByTag("cbvillager004") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_cbvillager004");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cbvillager004", GetLocation(oWP));  
+		}
+		   
+		SetGlobalInt("OutlandsCloverbrookEnterLock", 0);
+	}
+}
