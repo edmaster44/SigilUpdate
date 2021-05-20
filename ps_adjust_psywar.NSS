@@ -15,11 +15,11 @@ void DoPsyProgression(object oPC)
 	if (nPsywar < 1) return;
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
-	int nLEVEL = nPsywar + nGemDragon + nWarMind;
+	int iTotal = nPsywar + nGemDragon + nWarMind;
 
 	
 	
-		if (nLEVEL >= 1)
+		if (iTotal < 1)
 
 			{	
 
@@ -33,45 +33,54 @@ void DoPsyProgression(object oPC)
 				AddScriptParameterString("");
 				ExecuteScriptEnhanced("gui_extra_choices", oPC);}
 				SetLocalInt(oPC, "PSYWAR1", 1);
-				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
+	
 				
 			}
 
+		if (iTotal >= 1)
+{
+FeatAdd(oPC,FEAT_PSYWAR_PROGRESSION_I,FALSE,FALSE,FALSE);
+}
 
-
-			if (nLEVEL >= 4)
-			{	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
+			if (iTotal >= 4)
+			{	
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
-				
+				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
 				//FeatRemove(OBJECT_SELF,21464);
 				
 			}
-			if (nLEVEL >= 6)
+			if (iTotal >= 6)
 			{	
-				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
-				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
 				
+				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
+				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
 					//FeatRemove(OBJECT_SELF,21465);
 			}
-			if (nLEVEL >= 9)
+			if (iTotal >= 9)
 			{	
-				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
+			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
+				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
+				
 			}	//FeatRemove(OBJECT_SELF,21466);
 			
-			if (nLEVEL >= 12)
+			if (iTotal >= 12)
 			{	
-				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
+			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
+				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
+				
 				//FeatRemove(OBJECT_SELF,21467);
 			}
-			if (nLEVEL >= 16)
+			if (iTotal >= 16)
 			{	
-				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, TRUE, TRUE, FALSE);
+			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
+				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, TRUE, TRUE, FALSE);
+				
 				//FeatRemove(OBJECT_SELF,21468);
 			}
-			if (nLEVEL >= 21 )
+			if (iTotal >= 21 )
 			{
 			FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
 			}
