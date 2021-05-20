@@ -13,7 +13,7 @@ void main()
 	{
 		effect eKNOCK = EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN);
 		effect eAC = EffectACIncrease(4);
-		effect eSTILL = EffectDamageDecrease(5);
+		effect eSTILL = EffectAttackDecrease(4);
 		effect eLINK = EffectLinkEffects(eKNOCK, eAC);
 		eLINK = EffectLinkEffects(eLINK, eSTILL);
 		eLINK = ExtraordinaryEffect(eLINK);
