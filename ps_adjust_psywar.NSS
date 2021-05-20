@@ -32,9 +32,7 @@ void DoPsyProgression(object oPC)
 				{AddScriptParameterString("START");
 				AddScriptParameterString("");
 				ExecuteScriptEnhanced("gui_extra_choices", oPC);}
-				SetLocalInt(oPC, "PSYWAR1", 1);
-	
-				
+				SetLocalInt(oPC, "PSYWAR1", 1);	
 			}
 
 		if (iTotal >= 1)
