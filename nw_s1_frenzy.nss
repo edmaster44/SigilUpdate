@@ -87,7 +87,9 @@ void main()
 			}
 			
 			// Start the fatigue logic half a second before the frenzy ends
-			DelayCommand(fDuration - 0.5f, ApplyFatigue(OBJECT_SELF, 5, 0.6f));	// Fatigue duration fixed to 5 rounds
-        }
+			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) <= 7)
+			{	DelayCommand(fDuration - 0.5f, ApplyFatigue(OBJECT_SELF, 5, 0.6f));	// Fatigue duration fixed to 5 rounds
+			}
+			        }
     }
 }
