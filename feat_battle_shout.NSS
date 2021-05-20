@@ -43,7 +43,7 @@ void main()
 	effect ePEN = EffectSkillDecrease(SKILL_HIDE, 50);	
 	ePEN = EffectLinkEffects(ePEN, EffectSkillDecrease(SKILL_MOVE_SILENTLY, 50));
 	ePEN = ExtraordinaryEffect(ePEN);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePEN, oPC, 24.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePEN, oPC, 18.0);
 	
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, fRADIUS, lPC, TRUE);
 	while (oTARGET != OBJECT_INVALID)
@@ -53,11 +53,11 @@ void main()
 			if (GetIsPC(oTARGET) == FALSE)
 			{
 				
-					RunTaunt(oPC, oTARGET, 12.0, FALSE, FALSE);
+					RunTaunt(oPC, oTARGET, 6.0, FALSE, FALSE);
 				
 			}	
 		}
-		else if (nDEFEND >= 3) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, 24.0);
+		else if (nDEFEND >= 3) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, 18.0);
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, fRADIUS, lPC, TRUE);
 	}
 }
