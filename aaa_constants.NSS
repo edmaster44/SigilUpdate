@@ -1,6 +1,6 @@
 /*	***********************************************************************************
 	*** aaa_constants by Ceremorph for the Sigil: City of Doors persistant world.	***
-	*** This script lists all constants used in the racial PrC system.				***
+	*** This script lists all constants used for our custom feats/spells/classes	***
 	*** Include this script in all associated system scripts.						***
 	***********************************************************************************	*/
 /*
@@ -679,3 +679,9 @@ const int FEAT_WARLOCK_DOOM_VITRIOLIC 			= 3367;
 const int FEAT_WARLOCK_DOOM_UTTERDARK 			= 3368;
 const int FEAT_WARLOCK_DOOM_BLACKBOLT 			= 3369;
 const int FEAT_WARLOCK_DOOM_BINDING 			= 3370;
+
+const int FEAT_FELLBLADE_BIND_WEAPON_1 			= 2930;
+const int FEAT_FELLBLADE_BIND_WEAPON_2 			= 2931;
+const int FEAT_FELLBLADE_BIND_WEAPON_3 			= 2932;
+const int FEAT_FELLBLADE_ARMOR_OF_SHADOWS 		= 2933;
+const int FEAT_FELLBLADE_THIRSTING_BLADE 		= 2934;

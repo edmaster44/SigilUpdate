@@ -14,7 +14,10 @@
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 #include "nw_i0_spells"
-#include "x2_inc_spellhook"                                             
+#include "x2_inc_spellhook"   
+
+const float HIDEOUS_DELAY = 6.0f;
+const float THIRSTING_DELAY = 3.0f;                                          
 
 void DoHideousBlow(object oPC)
 {
@@ -73,8 +76,11 @@ void DoHideousBlow(object oPC)
     //SignalEvent(oPC, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,6.1); // Added 0.1 seconds so that the effect can be checked for later -Electrohydra
-
+	if (GetHasFeat(FEAT_FELLBLADE_THIRSTING_BLADE, oPC, TRUE)) {
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, THIRSTING_DELAY+0.1f); // Added 0.1 seconds so that the effect can be checked for later -Electrohydra
+	} else {
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, HIDEOUS_DELAY+0.1f);
+	}
 }
 
 void RedoHideousBlow(object oPC)
@@ -85,8 +91,13 @@ void RedoHideousBlow(object oPC)
 	
 	DoHideousBlow(oPC);
 	
-	DelayCommand(5.9, SetLocalInt(oPC,"AllreadyRunning",FALSE));
-	DelayCommand(6.0, RedoHideousBlow(oPC));
+	if (GetHasFeat(FEAT_FELLBLADE_THIRSTING_BLADE, oPC, TRUE)) {
+		DelayCommand(THIRSTING_DELAY-0.1f, SetLocalInt(oPC,"AllreadyRunning",FALSE));
+		DelayCommand(THIRSTING_DELAY, RedoHideousBlow(oPC));
+	} else {
+		DelayCommand(HIDEOUS_DELAY-0.1f, SetLocalInt(oPC,"AllreadyRunning",FALSE));
+		DelayCommand(HIDEOUS_DELAY, RedoHideousBlow(oPC));
+	}
 }
 
 void main()
