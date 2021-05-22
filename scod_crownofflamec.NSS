@@ -25,6 +25,7 @@ void main()
 	{eDam =  EffectDamage(d8(4), DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);}
 		eImpact			= EffectLinkEffects(eImpact, eDam);
 	effect eBlind 		= EffectBlindness();
+	effect eLink = EffectLinkEffects(eImpact,eBlind);
 	
 	if (!GetIsObjectValid(oCaster))
     {	DestroyObject(OBJECT_SELF);
@@ -38,11 +39,11 @@ void main()
 			if (oTarget == oCaster) return;
 			 if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
 			 {  SignalEvent(oTarget, EventSpellCastAt(oCaster, 1656, TRUE));
-			 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlind, oTarget); }
+			 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget); }
 			 															
 			if (nRace == RACIAL_TYPE_OUTSIDER || nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_FEY)
 			{	SignalEvent(oTarget, EventSpellCastAt(oCaster, 1656, TRUE));
-        		ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);	}
+        		ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
 		}
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	}
