@@ -54,10 +54,18 @@ void main()
 	object oCaster = OBJECT_SELF;
 	int nMod = 3;
 	
-	if (GetHasFeat(2907, oCaster)) 
+	if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {		
+		nMissChance = 20;
 		nMod = 5;
-	else if (GetHasFeat(2903, oCaster)) 
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {		
+		nMissChance = 15;
+		nMod = 5;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nMissChance = 10;
 		nMod = 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nMissChance = 5;
+	}
 	
 	object oTarget = GetSpellTargetObject();
 	effect eAttackPenalty =	EffectAttackDecrease(nMod);
@@ -68,15 +76,6 @@ void main()
 	
 	//metamagic
 	fDuration	=	ApplyMetamagicDurationMods(fDuration);
-
-	// rapsam2003: For Dread Seizure, these feats
-	// increase the miss chance.
-	if (GetHasFeat(2901, oCaster))
-		nMissChance = 15;
-	else if (GetHasFeat(2900, oCaster))
-		nMissChance = 10;
-	else if (GetHasFeat(2908, oCaster))
-		nMissChance = 5;
 		
 	if (nMissChance > 0)
 	{
@@ -88,24 +87,26 @@ void main()
 	SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 	
 	//Cursemaster feat makes this an AoE
-	if (GetHasFeat(2907, oCaster)) {
+	if (GetHasFeat(FEAT_HEXEN_DREAD_SEIZURE, oCaster)) {
 		location locTarget = GetLocation(oTarget);
 		oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
 		    
 		while (GetIsObjectValid(oTarget))
-		{			    
-			// Fortitude Save for PCs.
-		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
-		    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-			else // No save for monsters.
-		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+		{	
+			if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {		    
+				// Fortitude Save for PCs.
+			    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
+			    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				else // No save for monsters.
+			        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			}
 			
 			oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
 		}
 		
 	} else {
 	
-		if (!DoWarlockMyResistSpell(oCaster, oTarget)) {
+		if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {	
 			// Fortitude Save for PCs.
 		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
 		    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);

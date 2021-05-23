@@ -16,16 +16,15 @@ rapsam2003 03/26/2018: Remove save against NPCs and
 #include "x2_inc_spellhook" 
 #include "srcalc"
  
-void main()
-{
+void main() {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
+	/* 
+	  Spellcast Hook Code 
+	  Added 2003-06-23 by GeorgZ
+	  If you want to make changes to all spells,
+	  check x2_inc_spellhook.nss to find out more
+	  
+	*/
 
     if (!X2PreSpellCastCode())
     {
@@ -49,17 +48,13 @@ void main()
 	effect	eCurse;
 	int nMod = 3;
 	int nTargetBABOriginal = GetTRUEBaseAttackBonus(oTarget);
-	int nTargetBABNew = 0;
-	
-	nTargetBABNew = nTargetBABOriginal;
+	int nTargetBABNew = nTargetBABOriginal;
 
-	// rapsam2003: For Baleful Polymorph, these feats
-	// decrease the BAB of the NPC.
-	if (GetHasFeat(2901, OBJECT_SELF))
+	if (GetHasFeat(FEAT_HEXEN_HEXER_3, OBJECT_SELF))
 		nTargetBABNew -= 6;
-	else if (GetHasFeat(2900, OBJECT_SELF))
+	else if (GetHasFeat(FEAT_HEXEN_HEXER_2, OBJECT_SELF))
 		nTargetBABNew -= 4;
-	else if (GetHasFeat(2908, OBJECT_SELF))
+	else if (GetHasFeat(FEAT_HEXEN_HEXER_1, OBJECT_SELF))
 		nTargetBABNew -= 2;
 	
 	// Adjust attacks per round.
@@ -80,9 +75,9 @@ void main()
 	}
 		
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	
     //Enter Metamagic conditions
-    if (nMetaMagic == METAMAGIC_EXTEND)
-    {
+    if (nMetaMagic == METAMAGIC_EXTEND) {
         nDuration = nDuration *2; //Duration is +100%
     }
 
@@ -110,10 +105,11 @@ void main()
     ePoly = EffectPolymorph(nPoly);
 	ePoly = EffectLinkEffects( ePoly, eVis );
 	
-	if (GetHasFeat(2907, OBJECT_SELF))
+	if (GetHasFeat(FEAT_HEXEN_HEXER_3, OBJECT_SELF))
 		nMod = 4;
-	if (GetHasFeat(2905, OBJECT_SELF))
+	if (GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, OBJECT_SELF))
 		nDuration = nDuration*2;
+		
 	eCurse   = EffectCurse(0, 0, 0, nMod, nMod, nMod);
 		
     //Fire cast spell at event for the specified target
@@ -124,21 +120,29 @@ void main()
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
         // Make SR Check
-        if (GetHasFeat(2907, OBJECT_SELF) || !DoWarlockMyResistSpell(OBJECT_SELF, oTarget))
+        if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, OBJECT_SELF) || !DoWarlockMyResistSpell(OBJECT_SELF, oTarget))
         {
 		 	// Make a Fort Save
-            if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
-    	    {
+            if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) {
+			
     				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration));
-					// Make a Will Save
-					if (GetHasFeat(2905, OBJECT_SELF) || 
-						(!GetIsPC(oTarget) && 
-						!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))) 
-					{
+					
+					if (GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, OBJECT_SELF) {
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed(), oTarget, TurnsToSeconds(nDuration));
+					}
+					
+					// Make a Will Save vs. the mental effects
+					if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC())) {
 						eCurse = SupernaturalEffect(eCurse);
             			ApplyEffectToObject(1, eCurse, oTarget, TurnsToSeconds(nDuration));
-						SendMessageToPC(oCaster, "The curse causes the affected enemy to be less effective in melee.");
 					}
+					
+			} else if (GetIsPC(oTarget) && GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, OBJECT_SELF)) {
+			
+				if (!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) {
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed(), oTarget, TurnsToSeconds(nDuration));
+				}
+					
 			}
 		}
 	}
