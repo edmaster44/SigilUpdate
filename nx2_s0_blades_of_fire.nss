@@ -42,13 +42,11 @@ void main()
 	object oTarget			= GetSpellTargetObject();
 	object oCaster			= OBJECT_SELF;
 	object oWEAPON = IPGetTargetedOrEquippedMeleeWeapon();
-	object oRightHand		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oTarget);
-	object oLeftHand		= GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oTarget);
 	// Spell Duration
 	float fDuration;
 	
 	if (GetLastSpellCastClass() == CLASS_TYPE_RANGER)
-		fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
+		fDuration = RoundsToSeconds(PS_GetCasterLevel(oCaster));
 	else
 		fDuration = RoundsToSeconds(2);
 	
@@ -68,18 +66,9 @@ void main()
 		// check to see if ally
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster)) 
 		{
-			// check to make sure right hand weapon is meleee and valid
-			if(GetIsObjectValid(oWEAPON) && IPGetIsMeleeWeapon(oWEAPON))
-			{
-				// fire it up, since it stacks with any energy damge no need for a safe add
+				//Adds the Fire Damage
 				IPSafeAddItemProperty(oWEAPON, ipFire, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-			}
-			// check to make sure left hand weapon is meleee and valid
-			if(GetIsObjectValid(oWEAPON) && IPGetIsMeleeWeapon(oWEAPON))
-			{
-				// fire it up, since it stacks with any energy damge no need for a safe add
-				IPSafeAddItemProperty(oWEAPON, ipFire, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
-			}
+
 			//Fire cast spell at event for the specified target
     		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 		}
