@@ -83,6 +83,11 @@ void main()
 				sTemplate1 = SCOD_EPICGATE_LAWFUL_NEUTRAL;
 				sTemplate2 = SCOD_GATE_LAWFUL_NEUTRAL;
 			}
+			else if (iAlignLC == ALIGNMENT_LAWFUL && iAlignGE == ALIGNMENT_EVIL) 
+			{
+				sTemplate1 = SCOD_EPICGATE_LAWFUL_NEUTRAL;
+				sTemplate2 = SCOD_GATE_LAWFUL_NEUTRAL;
+			}
 		else if (iAlignLC == ALIGNMENT_NEUTRAL && iAlignGE == ALIGNMENT_NEUTRAL) 
 			{
 				sTemplate1 = SCOD_EPICGATE_LAWFUL_NEUTRAL;
