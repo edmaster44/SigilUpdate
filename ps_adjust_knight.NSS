@@ -221,7 +221,7 @@ int KnightLevels(object oPC)
 	int iEnvoy = GetLevelByClass(42,oPC); //Celestial Envoy	
 	int iHound = GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); // Hound Archon
 	int iAstral = GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);//Astral Deva PRC
-	int iDoomg  = GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC);
+	int iDoomg  = GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC);//Doomguide
 	int iMovanic = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);//Movanic Deva
 	int iMarquis = GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC);//Marquis Cambion
 	int iDeath = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC);//Death Knight

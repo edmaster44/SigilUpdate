@@ -27,17 +27,17 @@ void main()
         //nChr = 0;
 		return;		// AFW-OEI 06/13/2006: Lay on Hands does nothing if you don't have a positive Cha mod. 
     }
-    int nLevel = GetLevelByClass(CLASS_TYPE_PALADIN);
+   // int nLevel = GetLevelByClass(CLASS_TYPE_PALADIN);
 	
 	
 
     //--------------------------------------------------------------------------
     // July 2003: Add Divine Champion levels to lay on hands ability
     //--------------------------------------------------------------------------
-    nLevel = nLevel + GetLevelByClass(CLASS_TYPE_DIVINECHAMPION);
+  //  nLevel = nLevel + GetLevelByClass(CLASS_TYPE_DIVINECHAMPION);
 	
 	//11/9/2020 - Knight Progression for Lay on Hands
-	  nLevel = nLevel + KnightLevels(OBJECT_SELF);
+	 int nLevel =KnightLevels(OBJECT_SELF);
 
     //--------------------------------------------------------------------------
     // Caluclate the amount to heal, min is 1 hp
