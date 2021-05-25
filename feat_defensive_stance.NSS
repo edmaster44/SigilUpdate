@@ -14,8 +14,10 @@ void main()
 		effect eKNOCK = EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN);
 		effect eAC = EffectACIncrease(4);
 		effect eSTILL = EffectAttackDecrease(4);
+		effect eSpellFail = EffectSpellFailure(20, SPELL_SCHOOL_GENERAL);
 		effect eLINK = EffectLinkEffects(eKNOCK, eAC);
 		eLINK = EffectLinkEffects(eLINK, eSTILL);
+		eLINK = EffectLinkEffects(eLINK, eSpellFail);
 		eLINK = ExtraordinaryEffect(eLINK);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLINK, oPC);
 		FloatingTextStringOnCreature("*Defensive Stance ON*", oPC, FALSE);
