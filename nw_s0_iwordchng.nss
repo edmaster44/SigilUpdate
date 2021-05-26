@@ -51,7 +51,7 @@ void main() {
     fDuration = ApplyMetamagicDurationMods( fDuration );
 	
 	//No polymorphing while discorporated
-	if (GetHasSpellEffect(1375)) {
+	if (GetHasSpellEffect(SPELL_I_DARK_DISCORPORATION)) {
 		SendMessageToPC(oCaster, "You may not use Word of Changing while discorporated.");
 		return; 
 	}

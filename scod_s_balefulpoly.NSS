@@ -19,17 +19,8 @@ rapsam2003 03/26/2018: Remove save against NPCs and
  
 void main() {
 
-	/* 
-	  Spellcast Hook Code 
-	  Added 2003-06-23 by GeorgZ
-	  If you want to make changes to all spells,
-	  check x2_inc_spellhook.nss to find out more
-	  
-	*/
-
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+    if (!X2PreSpellCastCode()) {
+		// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 
@@ -40,12 +31,13 @@ void main() {
 	if(nSpell<1680 || nSpell>1685)
 		nSpell=1680 + Random(5); // set default as random (instead of cow)
 	
-	object oCaster = OBJECT_SELF;
-    object oTarget = GetSpellTargetObject();
-    effect eVis = EffectVisualEffect( VFX_DUR_POLYMORPH );
-    int nPoly = POLYMORPH_TYPE_CHICKEN;
-    int nMetaMagic = GetMetaMagicFeat();
-	effect eConfuse = EffectConfused();
+	object 		oCaster 	= 	OBJECT_SELF;
+    object 		oTarget 	= 	GetSpellTargetObject();
+    effect 		eVis 		= 	EffectVisualEffect( VFX_DUR_POLYMORPH );
+    int 		nPoly 		= 	POLYMORPH_TYPE_CHICKEN;
+    int 		nMetaMagic 	= 	GetMetaMagicFeat();
+	effect 		eConfuse 	= 	EffectConfused();
+	int 		nDC			= 	GetSpellSaveDC();
 		
     int nDuration = PS_GetCasterLevel(oCaster);
 	
@@ -57,6 +49,16 @@ void main() {
     if (nMetaMagic == METAMAGIC_EXTEND) {
         nDuration = nDuration *2; //Duration is +100%
     }
+	
+	if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
 
     //Determine Polymorph subradial type
     if(nSpell == 1681) {
@@ -84,7 +86,7 @@ void main() {
         if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, OBJECT_SELF) || !DoWarlockMyResistSpell(OBJECT_SELF, oTarget))
         {
 		 	// Make a Fort Save
-            if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) {
+            if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) {
 			
     			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration));
 				

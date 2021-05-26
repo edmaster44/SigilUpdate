@@ -201,6 +201,26 @@ void DoGrappleTarget(object oUser)
 
 /*=========================================================================*/
 
+//Releases minions like the beasts of the warlock invocation Call of the Beast
+void ReleaseCalledCreatures(object oPC) {
+	
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	
+	if (nNumberCalled > 0) {
+		SendMessageToPC(oPC, "Releasing called beasts.");
+	}
+
+	int n;
+	for(n = 0; n <= nNumberCalled; n++) {
+		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		DestroyObject(oSummon, 0.1f);
+		DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+	}
+	
+	DeleteLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+
+}
+
 void DoReleaseSpells(object oPC)
 {
 	effect eBad = GetFirstEffect(oPC);
@@ -210,6 +230,9 @@ void DoReleaseSpells(object oPC)
 		SendMessageToPC(oPC, "You cannot release spells in combat.");
 		return;
 	}	
+	
+	ReleaseCalledCreatures(oPC);
+	
 	SendMessageToPC(oPC, "Releasing Spells");	
 	while(GetIsEffectValid(eBad))
 	{

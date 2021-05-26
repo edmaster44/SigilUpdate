@@ -50,22 +50,27 @@ void main()
 
 	// End of Spell Cast Hook
 
-	effect eMissChance;
-	object oCaster = OBJECT_SELF;
-	int nMod = 3;
-	int nMissChance = 0;
+	effect 		eMissChance;
+	object 		oCaster 	= 	OBJECT_SELF;
+	int 		nMod 		= 	3;
+	int 		nMissChance = 	0;
+	int 		nDC			= 	GetSpellSaveDC();
 	
 	if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {		
 		nMissChance = 20;
 		nMod = 5;
+		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {		
 		nMissChance = 15;
 		nMod = 5;
+		nDC += 3;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
 		nMissChance = 10;
 		nMod = 4;
+		nDC += 2;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
 		nMissChance = 5;
+		nDC += 1;
 	}
 	
 	object oTarget = GetSpellTargetObject();
@@ -95,7 +100,7 @@ void main()
 		{	
 			if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {		    
 				// Fortitude Save for PCs.
-			    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
+			    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
 			    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 				else // No save for monsters.
 			        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
@@ -108,7 +113,7 @@ void main()
 	
 		if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {	
 			// Fortitude Save for PCs.
-		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC())) 
+		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
 		    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			else // No save for monsters.
 		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);

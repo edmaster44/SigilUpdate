@@ -21,34 +21,20 @@
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
-
     if (!X2PreSpellCastCode())
     {
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 
-// End of Spell Cast Hook
-
-
 	//Declare major variables
     object oTarget = GetSpellTargetObject();
-    //effect eVis = EffectVisualEffect(VFX_DUR_ULTRAVISION);	// NWN1 VFX
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_BLINDSIGHT );	// NWN2 VFX
-    //effect eVis2 = EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT);	// NWN1 VFX
-    //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
     effect eSightInvis = EffectSeeInvisible();
     effect eSightDark = EffectUltravision();
     effect eLink = EffectLinkEffects(eVis, eSightInvis);
     eLink = EffectLinkEffects(eLink, eSightDark);
-    //eLink = EffectLinkEffects(eLink, eDur);	// NWN1 VFX
+    eLink = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_BLINDNESS));
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLINDSIGHT, FALSE));

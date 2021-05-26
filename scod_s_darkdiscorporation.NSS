@@ -29,7 +29,8 @@ void main() {
 	}
 	
 	//Remove Eldritch Shield effects if discorporating
-	if ( GetHasSpellEffect(811) ) { //811 = Eldritch Shield
+	//This never worked super well, so removing as of 5/26/21
+	/*if ( GetHasSpellEffect(811) ) { //811 = Eldritch Shield
 		effect eEffect = GetFirstEffect( OBJECT_SELF );
 		while ( GetIsEffectValid(eEffect) ) {
 		
@@ -39,7 +40,7 @@ void main() {
 				
 			eEffect = GetNextEffect( OBJECT_SELF );
 		}
-	}
+	}*/
 
     //Declare major variables
     object oCaster = OBJECT_SELF;

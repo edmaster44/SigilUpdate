@@ -537,13 +537,24 @@ void DoEldritchCombinedEffectsWrapper(object oTarget, int nAllowReflexSave=FALSE
 // Eldritch Essence Effects:
 int DoEssenceDrainingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
-    // First, do Base Effects:
+	int nDC = GetSpellSaveDC();
+    if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
+
+	// First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_DRAINING_RAY) )
     {
         // Additional Effects: (Slow Effect)
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))
+            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC))
             {
                 float fDuration = RoundsToSeconds(1);
 
@@ -570,13 +581,24 @@ int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape
 {
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	
+	int nDC = GetSpellSaveDC();
+    if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
+	
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_FRIGHTFUL_RAY) )
     {
         // Additional Effects: (Cause Fear Effect)
         if ((GetHitDice(oTarget) <= nCasterLevel) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR))
+            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
             {
                 float fDuration = RoundsToSeconds(10);
 
@@ -599,6 +621,17 @@ int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape
 
 int DoEssenceBeshadowedBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
+	int nDC = GetSpellSaveDC();
+    if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
+	
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_BESHADOWED_RAY) )
     {
@@ -606,7 +639,7 @@ int DoEssenceBeshadowedBlast(object oCaster, object oTarget, int bCalledFromShap
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             //Make Fort save
-            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
+            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
             {
                 float fDuration = RoundsToSeconds(1);
 				int nDex = GetAbilityScore( oTarget, ABILITY_DEXTERITY );
@@ -751,13 +784,24 @@ int DoEssenceHellrimeBlast(object oCaster, object oTarget, int bCalledFromShape,
 
 int DoEssenceBewitchingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
+	int nDC = GetSpellSaveDC();
+    if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
+	
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_BEWITCHING_RAY) )
     {
         // Additional Effects: (Confusion)
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
+            if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
             {
                 float fDuration = RoundsToSeconds(1);
 
@@ -785,13 +829,24 @@ int DoEssenceBewitchingBlast(object oCaster, object oTarget, int bCalledFromShap
 
 int DoEssenceNoxiousBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
+	int nDC = GetSpellSaveDC();
+    if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
+	
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_NOXIOUS_RAY) )
     {
         // Additional Effects: (Daze)
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            if (!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
+            if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
             {
                 float fDuration = RoundsToSeconds(10);
 
@@ -939,11 +994,21 @@ int DoEssenceHinderingBlast(object oCaster, object oTarget, int bCalledFromShape
 int DoEssenceBindingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
 	//SpeakString("nw_i0_invocatns: DoEssenceBindingBlast");
+	int nDC = GetSpellSaveDC();
+    if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
+		nDC += 4;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+		nDC += 3;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+		nDC += 2;
+	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+		nDC += 1;
+	}
 
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_BINDING_RAY) )
     {
-        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))
+        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC))
         {
             effect eVis = EffectVisualEffect( VFX_DUR_STUN );
             effect eStun = EffectStunned();

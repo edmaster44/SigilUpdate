@@ -33,9 +33,12 @@ void main() {
 	// End of Spell Cast Hook
 
     //Declare major variables
-	object oCaster = OBJECT_SELF;
-    object oTarget = GetSpellTargetObject();
-    effect eGeas = EffectDominated();
+	object 		oCaster 	= 	OBJECT_SELF;
+    object 		oTarget 	= 	GetSpellTargetObject();
+    effect 		eGeas 		= 	EffectDominated();
+	int 		nDC			= 	GetSpellSaveDC();
+	
+	
     eGeas = GetScaledEffect(eGeas, oTarget);
 	
     effect eDur = EffectVisualEffect(VFX_HIT_SPELL_INFLICT_6);
@@ -54,15 +57,19 @@ void main() {
 	if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, OBJECT_SELF)) {
 		nHexerBuff = d4(2);
 		nDuration += 3 + (nCasterLevel*2);
+		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, OBJECT_SELF)) {
 		nHexerBuff = d4(2);
 		nDuration += 3 + nCasterLevel;
+		nDC += 3;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, OBJECT_SELF)) {
 		nHexerBuff = d4(1)+1;
 		nDuration += 3 + nCasterLevel;
+		nDC += 2;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, OBJECT_SELF)) {
 		nHexerBuff = 2;
 		nDuration += 3 + nCasterLevel;
+		nDC += 1;
 	}
 
 	effect eAbilityChange;
@@ -89,7 +96,7 @@ void main() {
     {
 		// Do NOT want this cast on PCs.
 		// Make a Will save, for balance.
-   		if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
+   		if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
 		{                    
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAbilityChange, oTarget);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
@@ -101,7 +108,7 @@ void main() {
 				SetLocalString(oTarget, "DeathScript", "ps_ondeath_eldritchblast");
 				
 				SetLocalInt(oTarget, "EldritchBlast_Damage", nDamage);
-				SetLocalInt(oTarget, "EldritchBlast_DC", GetSpellSaveDC());
+				SetLocalInt(oTarget, "EldritchBlast_DC", nDC);
 				SetLocalObject(oTarget, "EldritchBlast_Caster", oCaster);
 			}
 			

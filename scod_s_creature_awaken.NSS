@@ -12,6 +12,10 @@ void main () {
 	int nDamage = GetTotalDamageDealt();
 	if (nDamage < 0)
 		return;
+		
+	int nAwake = GetLocalInt(OBJECT_SELF, "AWAKEN_DICE");
+	if (nAwake <= 2)
+		nAwake = 2;
 
 	effect eEffect = GetFirstEffect(OBJECT_SELF);
 	while (GetIsEffectValid(eEffect)) {
@@ -24,7 +28,7 @@ void main () {
 	}
 	
 	//Do the damage
-	effect eDamage = EffectDamage(d6(2));
+	effect eDamage = EffectDamage(d6(nAwake));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, OBJECT_SELF);
 
 	//Remove me after I've been called

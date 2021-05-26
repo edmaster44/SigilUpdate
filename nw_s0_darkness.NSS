@@ -62,6 +62,7 @@ void main()
     {
 	   nDuration = nDuration *2;	//Duration is +100%
     }
+	
     //Create an instance of the AOE Object using the Apply Effect function
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }
