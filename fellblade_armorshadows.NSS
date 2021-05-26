@@ -34,5 +34,5 @@ void main() {
     RemoveEffectsFromSpell(oTarget, SPELL_IMPROVED_MAGE_ARMOR);
     RemoveEffectsFromSpell(oTarget, SPELL_MAGE_ARMOR);	// 10/16/06 - BDF
 
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 }
