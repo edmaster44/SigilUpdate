@@ -310,6 +310,7 @@ void main()
 	GetSpiritShamanWithoutFeat(oPC);
 	GetFavoredSoulWithoutFeat(oPC);
 	PS_MonkLevels(oPC);
+	PsyWarProgression(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
