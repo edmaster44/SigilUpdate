@@ -10,28 +10,24 @@ int PsyWarProgression(object oPC)
 {
 
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	if (nPsywar < 1) return;
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int iTotal = nPsywar + nGemDragon + nWarMind;
-	
+	  if (nPsywar <1 )
+	   { (iTotal = 0);}
+	else
 
-	if (iTotal > 0)
-			{	
-
-
-			int iHasBonus	= GetLocalInt(oPC, "PSYWAR1");
-				if (iHasBonus == 1)
-				{	return;		}
-				else
+	if (iTotal >= 1)
+{	
+	int iHasBonus	= GetLocalInt(oPC, "PSYWAR1");
+	if (iHasBonus == 0)
 				
-				{AddScriptParameterString("START");
-				AddScriptParameterString("");
-				ExecuteScriptEnhanced("gui_extra_choices", oPC);}
-				SetLocalInt(oPC, "PSYWAR1", 1);	
-			}
+	{AddScriptParameterString("START");
+	AddScriptParameterString("");
+	ExecuteScriptEnhanced("gui_extra_choices", oPC);}
+	SetLocalInt(oPC, "PSYWAR1", 1);	}
 
-
+return iTotal;
 }
 
 
