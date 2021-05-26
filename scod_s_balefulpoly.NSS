@@ -127,7 +127,7 @@ void main() {
 			
     				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration));
 					
-					if (GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, OBJECT_SELF) {
+					if (GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, OBJECT_SELF)) {
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed(), oTarget, TurnsToSeconds(nDuration));
 					}
 					

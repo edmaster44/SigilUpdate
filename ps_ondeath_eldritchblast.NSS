@@ -7,7 +7,7 @@ void main() {
 	int nDC = GetLocalInt(OBJECT_SELF, "EldritchBlast_DC");
 	object oCaster = GetLocalObject(OBJECT_SELF, "EldritchBlast_Caster");
 	
-	object oObj = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(OBJECT_SELF));
+	object oObj = GetFirstObjectInShape(SHAPE_SPHERE, 10.0f, GetLocation(OBJECT_SELF));
 	while (GetIsObjectValid(oObj)) {
 	
 		if (GetIsEnemy(oObj, oCaster)) {
@@ -16,7 +16,7 @@ void main() {
 			DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
 		}
 	
-		oObj = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(OBJECT_SELF));
+		oObj = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, GetLocation(OBJECT_SELF));
 	}
 	
 

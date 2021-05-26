@@ -53,6 +53,7 @@ void main()
 	effect eMissChance;
 	object oCaster = OBJECT_SELF;
 	int nMod = 3;
+	int nMissChance = 0;
 	
 	if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {		
 		nMissChance = 20;
@@ -72,7 +73,6 @@ void main()
 	effect eMovePenalty	= EffectMovementSpeedDecrease(nMod*10);
 	effect eLink = EffectLinkEffects(eAttackPenalty, eMovePenalty);
 	float fDuration	= RoundsToSeconds(nMod);
-	int nMissChance = 0;
 	
 	//metamagic
 	fDuration	=	ApplyMetamagicDurationMods(fDuration);
