@@ -19,7 +19,7 @@ void main() {
     }
 
     //Declare major variables
-    object oTarget = GetSpellTargetObject();
+    object oTarget = OBJECT_SELF;
     float fDuration = HoursToSeconds(24);
 
     //Fire cast spell at event for the specified target
