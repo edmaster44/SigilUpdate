@@ -48,64 +48,67 @@ void main() {
 
     while (GetIsObjectValid(oTarget)) {
 	
-		if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {	
+		if (oTarget != oCaster) {
 		
-			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oCaster)) {
-				
-	            SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), TRUE));
-				eLink = EffectLinkEffects(eLink, EffectOnDispel(0.1f, DoMagicDamageOnWaking(oTarget))); //if dispelled, do magic damage
-				if (GetIsPC(oTarget)) {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-					DelayCommand((fDuration-0.1f), CheckAndDoMagicDamage(oTarget, nAwakeDice)); //for PCs, just check when the duration runs out
-				} else {
-					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-					SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
-					SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
-				}
-					
-			} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+			if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {	
 			
-				DoMagicDamageOnWaking(oTarget, nAwakeDice);
-				
-				//Dread Seizure effects
-				if (GetHasFeat(FEAT_HEXEN_PAINFUL_SLEEP, oCaster)) {
-				
-					int nMod = 3;
-					int nMissChance = 5;
+				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oCaster)) {
 					
-					if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {		
-						nMissChance = 20;
-						nMod = 5;
-					} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {		
-						nMissChance = 15;
-						nMod = 5;
-					} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
-						nMissChance = 10;
-						nMod = 4;
-					} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
-						nMissChance = 5;
-					}
-					
-					effect eAttackPenalty =	EffectAttackDecrease(nMod);
-					effect eMovePenalty	= EffectMovementSpeedDecrease(nMod*10);
-					effect eLink = EffectLinkEffects(eAttackPenalty, eMovePenalty);
-					
-					effect eMissChance = EffectMissChance(nMissChance);
-					eLink = EffectLinkEffects(eMissChance, eLink);
-					
+		            SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), TRUE));
+					eLink = EffectLinkEffects(eLink, EffectOnDispel(0.1f, DoMagicDamageOnWaking(oTarget))); //if dispelled, do magic damage
 					if (GetIsPC(oTarget)) {
-						if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) {
-				    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-						}
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+						DelayCommand((fDuration-0.1f), CheckAndDoMagicDamage(oTarget, nAwakeDice)); //for PCs, just check when the duration runs out
+					} else {
+						ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+						SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
+						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
 					}
-					else { // No save for monsters.
-				        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+						
+				} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
+				
+					DoMagicDamageOnWaking(oTarget, nAwakeDice);
+					
+					//Dread Seizure effects
+					if (GetHasFeat(FEAT_HEXEN_PAINFUL_SLEEP, oCaster)) {
+					
+						int nMod = 3;
+						int nMissChance = 5;
+						
+						if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {		
+							nMissChance = 20;
+							nMod = 5;
+						} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {		
+							nMissChance = 15;
+							nMod = 5;
+						} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
+							nMissChance = 10;
+							nMod = 4;
+						} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
+							nMissChance = 5;
+						}
+						
+						effect eAttackPenalty =	EffectAttackDecrease(nMod);
+						effect eMovePenalty	= EffectMovementSpeedDecrease(nMod*10);
+						effect eLink = EffectLinkEffects(eAttackPenalty, eMovePenalty);
+						
+						effect eMissChance = EffectMissChance(nMissChance);
+						eLink = EffectLinkEffects(eMissChance, eLink);
+						
+						if (GetIsPC(oTarget)) {
+							if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) {
+					    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+							}
+						}
+						else { // No save for monsters.
+					        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+						}
+					
 					}
 				
-				}
-			
-	        }
-			
+		        }
+				
+			}
 		}
 		
        //Select the next target within the spell shape.

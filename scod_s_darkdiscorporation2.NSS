@@ -12,7 +12,7 @@
 #include "ginc_debug"
 #include "nw_i0_spells"
 
-const float fDiscorpDuration = 180.0f;
+const float fDiscorpDuration = 6.0f;
 
 void DoDiscorporation(object oPC) {
 

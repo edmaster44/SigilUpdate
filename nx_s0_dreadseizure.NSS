@@ -98,12 +98,16 @@ void main()
 		    
 		while (GetIsObjectValid(oTarget))
 		{	
-			if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {		    
-				// Fortitude Save for PCs.
-			    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
-			    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-				else // No save for monsters.
-			        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			if (oTarget != oCaster) {
+				if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {		    
+					// Fortitude Save for PCs.
+				    if (GetIsPC(oTarget)) {
+						if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
+				    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					} else { // No save for monsters.
+				        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					}
+				}
 			}
 			
 			oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, locTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -113,10 +117,12 @@ void main()
 	
 		if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {	
 			// Fortitude Save for PCs.
-		    if (GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
-		    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-			else // No save for monsters.
+		    if (GetIsPC(oTarget)) {
+				if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
+		    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			} else { // No save for monsters.
 		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			}
 		}
 		
 	}
