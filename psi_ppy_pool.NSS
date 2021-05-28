@@ -95,148 +95,148 @@ void main()
 				}
 				case 2:
 				{
-					nPPvalue = 1 + nPPBonus;
+					nPPvalue = 2 + nPPBonus;
 					
 					break;
 				}
 				case 3:
 				{
-					nPPvalue = 3 + nPPBonus;
+					nPPvalue = 4 + nPPBonus;
 					break;
 				}
 				case 4:
 				{
-					nPPvalue = 5 + nPPBonus;			
+					nPPvalue = 6 + nPPBonus;			
 					break;
 				}
 				case 5:
 				{
-					nPPvalue = 7 + nPPBonus;
+					nPPvalue = 8 + nPPBonus;
 					break;
 				}
 				case 6:
 				{
-					nPPvalue = 11 + nPPBonus;
+					nPPvalue = 12 + nPPBonus;
 					break;
 				}
 				case 7:
 				{
-					nPPvalue = 15 + nPPBonus;
+					nPPvalue = 16 + nPPBonus;
 					break;
 				}
 				case 8:
 				{
-					nPPvalue = 19 + nPPBonus;
+					nPPvalue = 20 + nPPBonus;
 					break;
 				}
 				case 9:
 				{
-					nPPvalue = 23 + nPPBonus;
+					nPPvalue = 24 + nPPBonus;
 					break;
 				}
 				case 10:
 				{
-					nPPvalue = 27 + nPPBonus;
+					nPPvalue = 28 + nPPBonus;
 					break;
 				}
 				case 11:
 				{
-					nPPvalue = 35 + nPPBonus;
+					nPPvalue = 36 + nPPBonus;
 					break;
 				}
 				case 12:
 				{
-					nPPvalue = 43 + nPPBonus;
+					nPPvalue = 44 + nPPBonus;
 					break;
 				}
 				case 13:
 				{
-					nPPvalue = 51 + nPPBonus;
+					nPPvalue = 52 + nPPBonus;
 					break;
 				}
 				case 14:
 				{
-					nPPvalue = 59 + nPPBonus;
+					nPPvalue = 60 + nPPBonus;
 					break;
 				}
 				case 15:
 				{
-					nPPvalue = 67 + nPPBonus;
+					nPPvalue = 68 + nPPBonus;
 					break;
 				}
 				case 16:
 				{
-					nPPvalue = 79 + nPPBonus;
+					nPPvalue = 80 + nPPBonus;
 					break;
 				}
 				case 17:
 				{
-					nPPvalue = 91 + nPPBonus;
+					nPPvalue = 92 + nPPBonus;
 					break;
 				}
 				case 18:
 				{
-					nPPvalue = 103 + nPPBonus;
+					nPPvalue = 104 + nPPBonus;
 					break;
 				}
 				case 19:
 				{
-					nPPvalue = 115 + nPPBonus;
+					nPPvalue = 116 + nPPBonus;
 					break;
 				}
 				case 20:
 				{
-					nPPvalue = 127 + nPPBonus;
+					nPPvalue = 128 + nPPBonus;
 					break;
 				}
 				case 21:
 				{
-					nPPvalue = 139 + nPPBonus;
+					nPPvalue = 140 + nPPBonus;
 					break;
 				}
 				case 22:
 				{
-					nPPvalue = 151 + nPPBonus;
+					nPPvalue = 152 + nPPBonus;
 					break;
 				}
 				case 23:
 				{
-					nPPvalue = 163 + nPPBonus;
+					nPPvalue = 164 + nPPBonus;
 					break;
 				}
 				case 24:
 				{
-					nPPvalue = 175 + nPPBonus;
+					nPPvalue = 176 + nPPBonus;
 					break;
 				}
 				case 25:
 				{
-					nPPvalue = 187 + nPPBonus;
+					nPPvalue = 188 + nPPBonus;
 					break;
 				}
 				case 26:
 				{
-					nPPvalue = 199 + nPPBonus;
+					nPPvalue = 200 + nPPBonus;
 					break;
 				}
 				case 27:
 				{
-					nPPvalue = 211 + nPPBonus;
+					nPPvalue = 212 + nPPBonus;
 					break;
 				}
 				case 28:
 				{
-					nPPvalue = 223 + nPPBonus;
+					nPPvalue = 224 + nPPBonus;
 					break;
 				}
 				case 29:
 				{
-					nPPvalue = 235 + nPPBonus;
+					nPPvalue = 236 + nPPBonus;
 					break;
 				}
 				case 30:
 				{
-					nPPvalue = 247 + nPPBonus;
+					nPPvalue = 248 + nPPBonus;
 					break;
 				}
 				//Power point totals based on psion level. Power point total plateaus at level 20.
