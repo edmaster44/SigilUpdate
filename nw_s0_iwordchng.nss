@@ -116,8 +116,14 @@ void main() {
 	
 	}  else if (nSpell == 1724) { //Fey
 	
-		AddPolymorphBoni(oCaster);
-		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockbear", oCaster);
+		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockfey", oCaster);
+		if (nGender == GENDER_FEMALE){
+			Appearance.HairVariation = 158; //Different hair
+			Appearance.HeadVariation = 11; //Different head
+			AddPolymorphBoni(oCaster, "fx_green_eyes_leaves");
+		} else {
+			AddPolymorphBoni(oCaster, "fx_green_eyes");
+		}
 		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
