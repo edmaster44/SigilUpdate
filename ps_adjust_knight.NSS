@@ -30,7 +30,7 @@ void PS_KnightLevels(object oPC)
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	  
 	  
-	  int iTotal = iPally + iWarPriest;
+	  int iTotal = iPally + iWarPriest + iDivine;
 	  if(GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal +iDeath + iMarquis + iErinyes;
 	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC)) iTotal = iTotal + iHalfFiend ;
 	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC) && GetHasFeat(3036,oPC))iTotal = iTotal + iHalfFiend_M ;
