@@ -995,17 +995,25 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
 			
 			SendMessageToPC(oPC, "Monster is deeeead.");
 			
-			object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
-			SetLocalObject(oCreature, abilityCaster, oPC);
-			SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
-			SetLocalInt(oCreature, "IS_SUMMONED", 1);
-			SetSummonAppearance(oPC, oCreature);
-			
 			CheckNumberOfShadows(oPC);
 		
 			int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
-			SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
-			SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+			if (nNumberCalled < 10) {
+			
+				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
+				SetLocalObject(oCreature, abilityCaster, oPC);
+				SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
+				SetLocalInt(oCreature, "IS_SUMMONED", 1);
+				SetSummonAppearance(oPC, oCreature);
+				
+				SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
+				SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+				
+			} else {
+			
+				SendMessageToPC(oPC, "You may not raise any more shadows.");
+			
+			}
 		
 		}
 	
