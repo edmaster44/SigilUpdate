@@ -20,18 +20,16 @@ int PsyWarProgression(object oPC)
 	if (iTotal >= 1)
 {	
 	int iHasBonus	= GetLocalInt(oPC, "PSYWAR1");
-	if (iHasBonus == 0)
-				
+	if (iHasBonus == 1)
+	{ SendMessageToPC(oPC,"Psychic Warrior Path already aquired");   }
+		else	
 	{AddScriptParameterString("START");
 	AddScriptParameterString("");
-	ExecuteScriptEnhanced("gui_extra_choices", oPC);}
+	ExecuteScriptEnhanced("gui_extra_choices", oPC); }
 	SetLocalInt(oPC, "PSYWAR1", 1);	
 
-return iTotal;
 }
-}
-
-
+return iTotal;}
 
 //Progression for Psychic Warrior and PRC
 void DoPsyProgression(object oPC)
