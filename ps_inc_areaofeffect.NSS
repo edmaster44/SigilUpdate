@@ -53,8 +53,9 @@ int GetAOESInLedger(object oPC) {
 void AddAOEToLedger(object oPC, object oAoE) {
 
 	int nNumberCalled = GetAOESInLedger(oPC);
-	SetLocalObject(oPC, "WARLOCK_CAST_"+IntToString(nNumberCalled), oAoE);
-	SetLocalInt(oPC, "WARLOCK_CAST", nNumberCalled+1);
+	SendMessageToPC(oPC, "Currently in Ledger: "+IntToString(nNumberCalled));
+	SetLocalObject(oPC, "AOE_CAST_"+IntToString(nNumberCalled), oAoE);
+	SetLocalInt(oPC, "AOE_CAST", nNumberCalled+1);
 	
 	CheckNumberOfAOE(oPC);
 
