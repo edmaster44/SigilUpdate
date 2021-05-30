@@ -117,6 +117,7 @@ void main() {
 	}  else if (nSpell == 1724) { //Fey
 	
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockfey", oCaster);
+		Appearance.Gender = nGender;
 		if (nGender == GENDER_FEMALE){
 			Appearance.HairVariation = 158; //Different hair
 			Appearance.HeadVariation = 11; //Different head

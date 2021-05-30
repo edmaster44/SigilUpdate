@@ -984,16 +984,11 @@ void CheckNumberOfShadows(object oPC) {
 
 }
 
-
-int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
-{
-    // First, do Base Effects:
-    if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_NEGATIVE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_UTTERDARK_RAY) )
-    {
-		SendMessageToPC(oCaster, "Trying to extract wraith.");
+void DoWraithExtraction(object oCaster, object oTarget, location lTarget) {
 	
-		//If we just killed them, then we should get a shadow!
-		if (GetIsDead(oTarget)) {
+	SendMessageToPC(oCaster, "Trying to extract wraith.");
+	//If we just killed them, then we should get a shadow!
+	if (GetIsDead(oTarget)) {
 			
 			SendMessageToPC(oCaster, "Monster is deeeead.");
 			
@@ -1002,7 +997,7 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
 			int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
 			if (nNumberCalled < 10) {
 			
-				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", GetLocation(oTarget));
+				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
 				SetLocalObject(oCreature, abilityCaster, oCaster);
 				SetLocalObject(oCreature, "FOLLOW_MASTER", oCaster);
 				SetLocalInt(oCreature, "IS_SUMMONED", 1);
@@ -1017,6 +1012,17 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
 			}
 		
 		}
+}
+
+
+int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
+{
+	location lTarget = GetLocation(oTarget);
+    // First, do Base Effects:
+    if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_NEGATIVE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_UTTERDARK_RAY) )
+    {
+		DelayCommand(0.1f, DoWraithExtraction(oCaster, oTarget, lTarget));
+		
 	
         if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
         {

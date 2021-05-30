@@ -27,7 +27,6 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "nwn2_inc_spells"
-#include "ps_inc_areaofeffect"
 
 
 void main()
@@ -36,16 +35,6 @@ void main()
 	
 
     object oCaster = GetAreaOfEffectCreator();
-	
-	object oAoE = OBJECT_SELF;
-	SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
-	if (GetLocalInt(oAoE, "RECORDED") == 0) {
-		AddAOEToLedger(oCaster, oAoE);
-		SetLocalInt(oAoE, "RECORDED", 1);
-	}
-	SendMessageToPC(oCaster, "Tentacle AoE is: "+GetName(oAoE));
-	SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
-	
 	
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	int nCHAMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);

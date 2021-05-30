@@ -28,6 +28,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_areaofeffect"
 
 void main()
 {
@@ -35,6 +36,15 @@ void main()
 	//SpawnScriptDebugger();
 
     object oCaster = GetAreaOfEffectCreator();
+    
+    object oAoE = OBJECT_SELF;
+    SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
+    if (GetLocalInt(oAoE, "RECORDED") == 0) {
+        AddAOEToLedger(oCaster, oAoE);
+        SetLocalInt(oAoE, "RECORDED", 1);
+    }
+    SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
+
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	int nCHAMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
     object oTarget;

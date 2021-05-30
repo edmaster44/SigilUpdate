@@ -27,6 +27,7 @@
 
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
+#include "ps_inc_areaofeffect"
 
 void main()
 {
@@ -39,10 +40,10 @@ void main()
     }
 	
 	object oCaster = OBJECT_SELF;
-	/*if (GetLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE") > 0) {
-		SendMessageToPC(oCaster, "You have cast Chilling Tentacles within the last 60 seconds. Please wait before casting again.");
-		return;
-	}*/
+    if (CheckNumberOfAOE(oCaster) > 2) {
+        SendMessageToPC(oCaster, "You have 3 other AoE's active right now. That is the maximum number.");
+        return;
+    }
 
 	//SpawnScriptDebugger();
 
