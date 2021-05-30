@@ -25,9 +25,10 @@ int PsyWarProgression(object oPC)
 	{AddScriptParameterString("START");
 	AddScriptParameterString("");
 	ExecuteScriptEnhanced("gui_extra_choices", oPC);}
-	SetLocalInt(oPC, "PSYWAR1", 1);	}
+	SetLocalInt(oPC, "PSYWAR1", 1);	
 
 return iTotal;
+}
 }
 
 
