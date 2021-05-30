@@ -42,7 +42,9 @@
 #include "ginc_debug"
 #include "srcalc"
 #include "ps_inc_functions"
-#include "ps_inc_onhit"
+
+//#include "ps_inc_onhit"
+const string abilityCaster = "abilityCaster";
 
 const int STRREF_HELLFIRE_BONUS    		= 220796;  // Bonus Damage (Hellfire): ( in use )
 const int STRREF_HELLFIRE_SHIELD_NAME   = 220779;  // Hellfire Shield ( in use )
@@ -988,30 +990,29 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_NEGATIVE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_UTTERDARK_RAY) )
     {
-		SendMessageToPC(oPC, "Trying to extract wraith.");
+		SendMessageToPC(oCaster, "Trying to extract wraith.");
 	
 		//If we just killed them, then we should get a shadow!
 		if (GetIsDead(oTarget)) {
 			
-			SendMessageToPC(oPC, "Monster is deeeead.");
+			SendMessageToPC(oCaster, "Monster is deeeead.");
 			
-			CheckNumberOfShadows(oPC);
+			CheckNumberOfShadows(oCaster);
 		
-			int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+			int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
 			if (nNumberCalled < 10) {
 			
-				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
-				SetLocalObject(oCreature, abilityCaster, oPC);
-				SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
+				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", GetLocation(oTarget));
+				SetLocalObject(oCreature, abilityCaster, oCaster);
+				SetLocalObject(oCreature, "FOLLOW_MASTER", oCaster);
 				SetLocalInt(oCreature, "IS_SUMMONED", 1);
-				SetSummonAppearance(oPC, oCreature);
 				
-				SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
-				SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+				SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
+				SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
 				
 			} else {
 			
-				SendMessageToPC(oPC, "You may not raise any more shadows.");
+				SendMessageToPC(oCaster, "You may not raise any more shadows.");
 			
 			}
 		

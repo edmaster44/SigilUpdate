@@ -39,10 +39,10 @@ void main()
     }
 	
 	object oCaster = OBJECT_SELF;
-	if (GetLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE") > 0) {
+	/*if (GetLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE") > 0) {
 		SendMessageToPC(oCaster, "You have cast Chilling Tentacles within the last 60 seconds. Please wait before casting again.");
 		return;
-	}
+	}*/
 
 	//SpawnScriptDebugger();
 
@@ -53,8 +53,7 @@ void main()
     int         nMetaMagic  = GetMetaMagicFeat();
 
     //Make sure duration does no equal 0
-    if (nDuration < 1)
-    {
+    if (nDuration < 1) {
         nDuration = 1;
     }
 

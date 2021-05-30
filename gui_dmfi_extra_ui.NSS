@@ -5,7 +5,7 @@
 #include "ps_inc_time"
 #include "aaa_constants"
 #include "ps_inc_achievements"
-const int OOC_PORTAL_TIMEOUT = 60;
+const int OOC_PORTAL_TIMEOUT = 30;
 	
 int CheckPoly(object oPC)
 {
@@ -33,12 +33,16 @@ void OOCRoomPortal(object oPC) {
 	int nDiff = nCurrentTime-nLastCheck;
 	int nMinutes = (nDiff/60);
 	
+	string sMessage = "";
 	if (nMinutes > OOC_PORTAL_TIMEOUT) {
-		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
+		sMessage = "Do you want to return to the OOC Room?";
+		DisplayMessageBox(oPC, -1, sMessage, "gui_ooc_room_portal", "", TRUE, "SCREEN_MESSAGEBOX_DEFAULT", -1, "Yes", -1, "No");
+		/*PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 		AssignCommand(oPC, JumpToObject(oOOCWP));
-		SetGUITexture(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", "dmfi_icon_oocportal_disabled.tga");
+		SetGUITexture(oPC, "SCREEN_DMFI_PLAYER", "OOCPORTAL", "dmfi_icon_oocportal_disabled.tga");*/
 	} else {
-		SendMessageToPC(oPC, "It has been "+IntToString(nMinutes)+" minutes since you last ported to the OOC room. You need to wait "+IntToString(OOC_PORTAL_TIMEOUT-nMinutes)+" minutes before you can do so again.");
+		sMessage = "It has been "+IntToString(nMinutes)+" minutes since you last ported to the OOC room. You need to wait "+IntToString(OOC_PORTAL_TIMEOUT-nMinutes)+" minutes before you can do so again.";
+		DisplayMessageBox(oPC, -1, sMessage, "", "", FALSE, "SCREEN_MESSAGEBOX_DEFAULT", -1, "Ok");
 	}
 
 }
