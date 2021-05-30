@@ -40,13 +40,13 @@ void main()
     object oAoE = OBJECT_SELF;
     //SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
 	
-	SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
+	/*SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
     if (GetLocalInt(oAoE, "RECORDED") == 0) {
         AddAOEToLedger(oCaster, oAoE);
         SetLocalInt(oAoE, "RECORDED", 1);
-    }
+    }*/
 	
-	SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
+	//SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
     //SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
 
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);

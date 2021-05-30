@@ -40,11 +40,16 @@ void main()
     }
 	
 	object oCaster = OBJECT_SELF;
-	SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
+	/*SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
     if (GetAOESInLedger(oCaster) > 2) {
         SendMessageToPC(oCaster, "You have 3 other AoE's active right now. That is the maximum number.");
         return;
-    }
+    }*/
+	
+	if (GetLocalInt(oCaster, "CHILLING_TENTACLES_ACTIVE") > 0) {
+		SendMessageToPC(oCaster, "You have cast Chilling Tentacles within the last 60 seconds. Please wait before casting again.");
+		return;
+	}
 
 	//SpawnScriptDebugger();
 
