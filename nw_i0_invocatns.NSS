@@ -995,7 +995,7 @@ void DoWraithExtraction(object oCaster, object oTarget, location lTarget) {
 			CheckNumberOfShadows(oCaster);
 		
 			int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
-			if (nNumberCalled < 5) {
+			if (nNumberCalled < 8) {
 			
 				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
 				SetLocalObject(oCreature, abilityCaster, oCaster);
@@ -1004,6 +1004,8 @@ void DoWraithExtraction(object oCaster, object oTarget, location lTarget) {
 				
 				SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
 				SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+				
+				DestroyObject(oCreature, 360.0f); //Sanity destroy so you can keep summoning more
 				
 			} else {
 			

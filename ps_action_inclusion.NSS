@@ -225,7 +225,6 @@ void ReleaseCalledCreatures(object oPC) {
 		SendMessageToPC(oPC, "Releasing created undead.");
 	}
 
-	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
 		object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 		DestroyObject(oSummon, 0.1f);

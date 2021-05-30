@@ -52,8 +52,10 @@ int GetAOESInLedger(object oPC) {
 //Make note of this AOE so we can keep track of it
 void AddAOEToLedger(object oPC, object oAoE) {
 
-	int nNumberCalled = CheckNumberOfAOE(oPC);
+	int nNumberCalled = GetAOESInLedger(oPC);
 	SetLocalObject(oPC, "WARLOCK_CAST_"+IntToString(nNumberCalled), oAoE);
 	SetLocalInt(oPC, "WARLOCK_CAST", nNumberCalled+1);
+	
+	CheckNumberOfAOE(oPC);
 
 }

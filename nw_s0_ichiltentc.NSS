@@ -38,7 +38,7 @@ void main()
     object oCaster = GetAreaOfEffectCreator();
     
     object oAoE = OBJECT_SELF;
-    SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
+    //SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
 	
 	SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
     if (GetLocalInt(oAoE, "RECORDED") == 0) {
@@ -47,7 +47,7 @@ void main()
     }
 	
 	SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
-    SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
+    //SendMessageToPC(oCaster, "Is recorded: "+IntToString(GetLocalInt(oAoE, "RECORDED")));
 
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	int nCHAMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
