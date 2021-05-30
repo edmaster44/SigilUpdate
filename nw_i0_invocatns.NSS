@@ -986,16 +986,16 @@ void CheckNumberOfShadows(object oPC) {
 
 void DoWraithExtraction(object oCaster, object oTarget, location lTarget) {
 	
-	SendMessageToPC(oCaster, "Trying to extract wraith.");
+	//SendMessageToPC(oCaster, "Trying to extract wraith.");
 	//If we just killed them, then we should get a shadow!
 	if (GetIsDead(oTarget)) {
 			
-			SendMessageToPC(oCaster, "Monster is deeeead.");
+			//SendMessageToPC(oCaster, "Monster is deeeead.");
 			
 			CheckNumberOfShadows(oCaster);
 		
 			int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
-			if (nNumberCalled < 10) {
+			if (nNumberCalled < 5) {
 			
 				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
 				SetLocalObject(oCreature, abilityCaster, oCaster);
@@ -1021,7 +1021,9 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_NEGATIVE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_UTTERDARK_RAY) )
     {
-		DelayCommand(0.1f, DoWraithExtraction(oCaster, oTarget, lTarget));
+		if (d100() < 15) {
+			DelayCommand(0.1f, DoWraithExtraction(oCaster, oTarget, lTarget));
+		}
 		
 	
         if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))

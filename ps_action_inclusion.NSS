@@ -219,7 +219,7 @@ void ReleaseCalledCreatures(object oPC) {
 	
 	DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 	
-	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 	
 	if (nNumberCalled > 0) {
 		SendMessageToPC(oPC, "Releasing created undead.");

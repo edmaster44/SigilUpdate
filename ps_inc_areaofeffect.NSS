@@ -14,6 +14,7 @@ int CheckNumberOfAOE(object oPC) {
 	int nNumberCalled = GetLocalInt(oPC, "AOE_CAST");
 	int currentNumber = 0;
 
+	SendMessageToPC(oPC, "Currently in Ledger: "+IntToString(nNumberCalled));
 	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
 		object oSummon = GetLocalObject(oPC, "AOE_CAST_"+IntToString(n));
@@ -41,6 +42,11 @@ int CheckNumberOfAOE(object oPC) {
 	
 	return nNumberCalled;
 
+}
+
+//Basic get function; no extra figures
+int GetAOESInLedger(object oPC) {
+	return GetLocalInt(oPC, "AOE_CAST");
 }
 
 //Make note of this AOE so we can keep track of it

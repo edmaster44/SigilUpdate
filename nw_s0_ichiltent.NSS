@@ -40,7 +40,8 @@ void main()
     }
 	
 	object oCaster = OBJECT_SELF;
-    if (CheckNumberOfAOE(oCaster) > 2) {
+	SendMessageToPC(oCaster, "You have "+IntToString(GetAOESInLedger(oCaster))+" AoE's active.");
+    if (GetAOESInLedger(oCaster) > 2) {
         SendMessageToPC(oCaster, "You have 3 other AoE's active right now. That is the maximum number.");
         return;
     }
