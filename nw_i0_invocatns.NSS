@@ -42,6 +42,7 @@
 #include "ginc_debug"
 #include "srcalc"
 #include "ps_inc_functions"
+#include "ps_inc_onhit"
 
 const int STRREF_HELLFIRE_BONUS    		= 220796;  // Bonus Damage (Hellfire): ( in use )
 const int STRREF_HELLFIRE_SHIELD_NAME   = 220779;  // Hellfire Shield ( in use )
@@ -951,12 +952,63 @@ int DoEssenceVitriolicBlast(object oCaster, object oTarget, int bCalledFromShape
     return FALSE;
 }
 
+void CheckNumberOfShadows(object oPC) {
+	
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	int currentNumber = 0;
+
+	int n;
+	for(n = 0; n <= nNumberCalled; n++) {
+		object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
+			currentNumber++;
+		}
+	}
+
+	SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", currentNumber);
+
+	int newCount = 0;
+	if (currentNumber != nNumberCalled) {
+		for(n = 0; n <= nNumberCalled; n++) {
+			object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+			if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
+				SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(newCount), oSummon);
+				newCount++;
+			} else {
+				DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+			}
+		}
+	}
+
+}
+
 
 int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_NEGATIVE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_UTTERDARK_RAY) )
     {
+		SendMessageToPC(oPC, "Trying to extract wraith.");
+	
+		//If we just killed them, then we should get a shadow!
+		if (GetIsDead(oTarget)) {
+			
+			SendMessageToPC(oPC, "Monster is deeeead.");
+			
+			object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
+			SetLocalObject(oCreature, abilityCaster, oPC);
+			SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
+			SetLocalInt(oCreature, "IS_SUMMONED", 1);
+			SetSummonAppearance(oPC, oCreature);
+			
+			CheckNumberOfShadows(oPC);
+		
+			int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+			SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
+			SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+		
+		}
+	
         if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
         {
             effect eVis = EffectVisualEffect( VFX_DUR_SPELL_ENERGY_DRAIN );

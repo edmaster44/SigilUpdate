@@ -217,7 +217,22 @@ void ReleaseCalledCreatures(object oPC) {
 		DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 	}
 	
-	DeleteLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	
+	if (nNumberCalled > 0) {
+		SendMessageToPC(oPC, "Releasing created undead.");
+	}
+
+	int n;
+	for(n = 0; n <= nNumberCalled; n++) {
+		object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+		DestroyObject(oSummon, 0.1f);
+		DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+	}
+	
+	DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 
 }
 
