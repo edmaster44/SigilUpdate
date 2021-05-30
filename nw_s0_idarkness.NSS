@@ -15,6 +15,7 @@
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "ps_inc_onhit"
+//const string abilityCaster = "abilityCaster";
 
 //picks out the right creature resref for area / hd
 string GetCreatureResref(object oPC, int nHD);

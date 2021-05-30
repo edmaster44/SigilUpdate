@@ -5,7 +5,7 @@
 
 const string abilityID = "abilityID";
 const string abilityDC = "abilityDC";
-const string abilityCaster = "abilityCaster";
+//const string abilityCaster = "abilityCaster";
 
 const string casterColor = "Turquoise";
 const string reportColor = "DarkOrange";
