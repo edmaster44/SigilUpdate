@@ -18,7 +18,7 @@ int nPsion = GetLevelByClass(CLASS_TYPE_PSION,oPC);
 int nDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oPC);
 int nMentalist = GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC,oPC);
 int nCere	   = GetLevelByClass(CLASS_TYPE_CEREBREMANCER,oPC);
-int nPsyKnight =GetLevelByClass(CLASS_PSYCHIC_KNIGHT,oPC);
+int nPsyKnight = GetLevelByClass(CLASS_PSYCHIC_KNIGHT,oPC);
 int iTotal = nPsion + nDragon + nMentalist + nCere + nPsyKnight;
 return iTotal;
 
@@ -28,6 +28,7 @@ int nPsywar(object oPC)
 {
 int nPsywar= GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
 int nWarmind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+int nDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oPC);
 int iTotal = nPsywar +nWarmind;
 return iTotal;
 
@@ -94,9 +95,9 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     manif.nSpellID          = spellID;
 	int nCastMod;
     // Run an ability score check to see if the manifester can manifest the power at all
-	if (nPsion(oManifester)>1) 
+	if (nPsion(oManifester) > 0) 
 	{ nCastMod = ABILITY_INTELLIGENCE;}
-	if (nPsywar(oManifester)>1)
+	if (nPsywar(oManifester) > 0)
 	{ nCastMod = ABILITY_WISDOM; }
 	
     if(GetAbilityScore(oManifester, nCastMod, FALSE) - 10 < nPowerLevel)
