@@ -45,21 +45,21 @@ void DoPsyProgression(object oPC)
 			FeatAdd(oPC,FEAT_PSYWAR_PROGRESSION_I,FALSE,FALSE,FALSE);
 		}
 
-			if (iTotal >= 4)
+			if (iTotal >= 5)
 			{	
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
 				//FeatRemove(OBJECT_SELF,21464);
 				
 			}
-			if (iTotal >= 6)
+			if (iTotal >= 7)
 			{	
 				
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
 					//FeatRemove(OBJECT_SELF,21465);
 			}
-			if (iTotal >= 9)
+			if (iTotal >= 10)
 			{	
 			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
@@ -67,7 +67,7 @@ void DoPsyProgression(object oPC)
 				
 			}	//FeatRemove(OBJECT_SELF,21466);
 			
-			if (iTotal >= 12)
+			if (iTotal >= 13)
 			{	
 			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
