@@ -85,7 +85,7 @@ void main()
         int nRepeats = manif.bTwin ? 2 : 1;
         for(; nRepeats > 0; nRepeats--)
         {
-            oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, fRange, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+            oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fRange, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
                 if(oTarget != oManifester                                             && // Avoid the cone targeting bug
@@ -115,7 +115,7 @@ void main()
                 }// end if - Targeting check
 
                 // Get next target
-                oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, fRange, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+                oTarget = GetNextObjectInShape(SHAPE_SPHERE, fRange, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             }// end while - Target loop
         }// end for - Twin Power
     }// end if - Successfull manifestation
