@@ -25,20 +25,11 @@ void SetXPpools(object oPC, int nAmount)
 
 void PS_lose_one_level(object oPC)
 {	
-
-int nClassType = CLASS_TYPE_HALFOUTSIDER_PRC||CLASS_TYPE_HALFDRAGON_PRC||CLASS_TYPE_VAMPIRE_DRA_PRC||CLASS_TYPE_VAMPIRE_LUP_PRC||CLASS_TYPE_VAMPIRE_MAL_PRC||CLASS_TYPE_LICH_D_PRC||CLASS_TYPE_LICH_PRC
-	||CLASS_TYPE_LICH_W_PRC;
 	int xp = GetXP(oPC);
 	int currentXP = GetXP(oPC);
 	int nextlvl = 1000;
 	int totalxp = 1;
 	
-	if (GetLevelByClass(nClassType,oPC)== TRUE)
-	{
-	SendMessageToPC(oPC,"Error, A Racial Template PRC has been detected, please rebuild from Character Screen, Thank you!");
-	return;
-	
-	}
 	
 	
 	while (1)
