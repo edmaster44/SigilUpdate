@@ -10,14 +10,8 @@ int PsyWarProgression(object oPC)
 {
 
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
-	int iTotal = nPsywar + nGemDragon + nWarMind;
-	  if (nPsywar <1 )
-	   { (iTotal = 0);}
-	else
 
-	if (iTotal >= 1)
+	if (nPsywar >= 0)
 {	
 	int iHasBonus	= GetLocalInt(oPC, "PSYWAR1");
 	if (iHasBonus == 1)
@@ -29,7 +23,7 @@ int PsyWarProgression(object oPC)
 	SetLocalInt(oPC, "PSYWAR1", 1);	
 
 }
-return iTotal;}
+return nPsywar;}
 
 //Progression for Psychic Warrior and PRC
 void DoPsyProgression(object oPC)
