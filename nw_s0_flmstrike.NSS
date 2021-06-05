@@ -55,7 +55,10 @@ void main()
   effect eFire;
   effect eLink;
   //Limit caster level for the purposes of determining damage.
-
+  if (nCasterLvl > 15)
+  {
+    nCasterLvl = 15;
+  }
   
   location lTarget = GetSpellTargetLocation();
   ApplyEffectAtLocation( DURATION_TYPE_INSTANT, eColumn, lTarget );
@@ -73,10 +76,10 @@ void main()
            //Make SR check, and appropriate saving throw(s).
            if (!MyResistSpell(OBJECT_SELF, oTarget, 0.6))
     	   {
-    	        nDamage =  d4(nCasterLvl);
+    	        nDamage =  d6(nCasterLvl);
     		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                     nDamage = 4 * nCasterLvl;
+                     nDamage = 6 * nCasterLvl;
                 }
     		    if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

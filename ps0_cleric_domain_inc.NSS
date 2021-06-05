@@ -268,7 +268,8 @@ void PS_Spell_HellfireStorm(object oPC, location lTarget, int nSpell)
 	effect eDark 		= EffectVisualEffect(VFX_HIT_SPELL_EVIL);
     effect eDam;
 
-    
+    if (nCasterLvl > 20)
+    {	nCasterLvl = 20;	}
 
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     while (GetIsObjectValid(oTarget))
@@ -277,9 +278,9 @@ void PS_Spell_HellfireStorm(object oPC, location lTarget, int nSpell)
             {	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
                 if (!MyResistSpell(oPC, oTarget, fDelay))
-        	    {	nDamage = d4(nCasterLvl);
+        	    {	nDamage = d8(5) + nCasterLvl;
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                    {	nDamage = 4 * nCasterLvl;	}
+                    {	nDamage = 40 + d2(nCasterLvl);	}
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {	 nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -479,7 +480,9 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 
     int nCasterLevel 	= GetCasterLevel(oPC);
 	int nTouch      	= TouchAttackRanged(oTarget);
-	if (nCasterLevel <= 0)
+    if (nCasterLevel > 10)	 // Limit caster level
+        nCasterLevel = 10;
+	else if (nCasterLevel <= 0)
 		nCasterLevel = 1;
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
 	{   SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
@@ -488,19 +491,19 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 	        {	int nDamage;
 	            //Check for evil outsider
 	            if (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER && GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
-	            {	nDamage = d4(nCasterLevel);
+	            {	nDamage = d4(nCasterLevel * 2);
 					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*6);
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
-					{	nDamage = d4(nCasterLevel*2);
+					{	nDamage = d4(nCasterLevel * 4);
 						nDamage = ApplyMetamagicVariableMods(nDamage, (nCasterLevel*2)*8);
 					}					
 				}
 	            else
-	            {   
-	                nDamage = d4(nCasterLevel/2);
+	            {   nCasterLevel = nCasterLevel/2;
+	                nDamage = d4(nCasterLevel);
 					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*8);
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
-					{	nDamage = d4(nCasterLevel);
+					{	nDamage = d4(nCasterLevel * 2);
 						nDamage = ApplyMetamagicVariableMods(nDamage, (nCasterLevel*2)*8);
 					}					
 				}
@@ -536,9 +539,9 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
     	{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
-    	    {	nDamage = d8(nCasterLvl);
+    	    {	nDamage = d6(nCasterLvl);
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = 8 * nCasterLvl;	}
+                {	nDamage = 6 * nCasterLvl;	}
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage / 2);	}
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -635,7 +638,9 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     {	return;		}
 
     int nCasterLevel 	= GetCasterLevel(oPC);
-    int nDamage 		= d4(nCasterLevel);
+    if (nCasterLevel > 20)
+    {	nCasterLevel 	= 20;	}
+    int nDamage 		= (d8(5)) + (nCasterLevel);
     int nDamStrike;
     int nNumAffected 	= 0;
     int nMetaMagic 		= GetMetaMagicFeat();
@@ -648,7 +653,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     location lSpellLocation;
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
-    {	nDamage = (nCasterLevel*4);	}	//Damage is at max
+    {	nDamage = 40 + nCasterLevel;	}	//Damage is at max
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
     if (spellsIsTarget(oFirstTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))

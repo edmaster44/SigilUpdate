@@ -21,6 +21,7 @@
 //:: Created By: Michael Diekmann
 //:: Created On: 08/28/2007
 //:://////////////////////////////////////////////
+//:: RPGplayer1 11/22/2008: Added support for metamagic
 
 #include "nwn2_inc_spells"
 #include "x2_inc_spellhook"
@@ -51,6 +52,21 @@ void main()
 	// Get necessary objects
 	object oTarget		= GetSpellTargetObject();
 	object oCaster		= OBJECT_SELF;
+	//Casting modifier
+	int CasterModifier = 0;
+	//Determine Caster modifier
+	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) >= GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF) &&
+		GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) >= GetAbilityModifier(ABILITY_WISDOM,OBJECT_SELF)
+	) {
+		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+	}
+     else if (GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF) >= GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) &&
+			 GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF) >= GetAbilityModifier(ABILITY_WISDOM,OBJECT_SELF)) {
+		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	} else {
+		CasterModifier = GetAbilityModifier(ABILITY_WISDOM,OBJECT_SELF);
+	}
+	//SpeakString("Casting Stat num: " + IntToString(CasterModifier));
 	//Get random second target
 	object oTarget2 	= GetRandomCreature(oTarget);
 	// Get locations and positions
@@ -59,10 +75,10 @@ void main()
 	vector vTarget		= GetPositionFromLocation(lTarget);
 	// Caster level
 	int nCasterLevel 	= GetCasterLevel(oCaster);
-	if(nCasterLevel > 30)
-		nCasterLevel = 30;
+	if(nCasterLevel > 20)
+		nCasterLevel = 20;
 	// Effect placeholders
-	int nDamage 		= d4(nCasterLevel);
+	int nDamage 		= d6(nCasterLevel)+(CasterModifier*2);
 	effect eDamage		= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
 	effect eBeam		= EffectBeam(VFX_BEAM_LIGHTNING , oTarget2, BODY_NODE_CHEST);
 	effect eHit			= EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
@@ -70,7 +86,9 @@ void main()
 	// no matter what damage original target
 	if(GetIsObjectValid(oTarget))
 	{
-		nDamage = d4(nCasterLevel);
+		nDamage = d6(nCasterLevel)+(CasterModifier*2);
+		nDamage = ApplyMetamagicVariableMods(nDamage, (nCasterLevel * 6)+(CasterModifier*2));
+		//SpeakString("nDamage: " + IntToString(nDamage));
 		nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster); 
 		eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
@@ -92,7 +110,9 @@ void main()
 			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) 
 			{
 				// Get damage apply effects
-				nDamage = d4(nCasterLevel);
+				nDamage = d6(nCasterLevel)+(CasterModifier*2);
+				nDamage = ApplyMetamagicVariableMods(nDamage, (nCasterLevel * 6)+(CasterModifier*2));
+				//SpeakString("nDamage: " + IntToString(nDamage));
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster);
 				eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
