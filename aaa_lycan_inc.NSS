@@ -134,7 +134,7 @@ void PS_Lycan_ScaledWeapons(object oPC)
 void PS_Lycan_Multiattack(object oPC)
 {
 	itemproperty ipMA	= ItemPropertyBonusFeat(1784);
-	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	
 	IPSafeAddItemProperty(oSkin, ipMA, HoursToSeconds(24));
 }
@@ -173,7 +173,7 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 		SetLocalInt(oItem, "Hybrid", 0);
 		SetLocalInt(oItem, "TempChange", 0);
 		PS_Wererat_SneakRemove(oPC);
-		FeatRemove(oPC, 289);
+		//FeatRemove(oPC, 289);
 	}	
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -256,7 +256,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		SetLocalInt(oItem, "TempChange", 0);
 		PS_Wererat_SneakRemove(oPC);
 		PS_Lycan_Multiattack_No(oPC);
-		FeatRemove(oPC, 289);
+		//FeatRemove(oPC, 289);
 	}
 	else 
 	{	FeatAdd (oPC, 289, FALSE);
