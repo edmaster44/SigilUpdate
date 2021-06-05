@@ -55,10 +55,7 @@ void main()
     float fDelay;
     int nBlindLength = 3;
     //Limit caster level
-    if (nCasterLevel > 20)
-    {
-        nCasterLevel = 20;
-    }
+
     //Get the first target in the spell area
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation());
     while(GetIsObjectValid(oTarget))
@@ -76,16 +73,16 @@ void main()
                 if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage and save
-                    nDamage = d6(nCasterLevel);
-                    nMax = 6;
+                    nDamage = d8(nCasterLevel);
+                    nMax = 8;
                 }
                 else
                 {
                     //Roll damage and save
-                    nDamage = d6(4);
-                    nOrgDam = nDamage;
-                    nMax = 6;
-                    nCasterLevel = 4;
+                    nDamage = d4(nCasterLevel);
+            
+                    nMax = 4;
+                   
                     //Get the adjusted damage due to Reflex Save, Evasion or Improved Evasion
                 }
 

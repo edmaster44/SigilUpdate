@@ -54,8 +54,8 @@ void main()
 
     int nCasterLevel = GetCasterLevel(oCaster);
 	int nTouch      = TouchAttackRanged(oTarget);
-    if (nCasterLevel > 10)	 // Limit caster level
-        nCasterLevel = 10;
+    if (nCasterLevel > 13)	 // Limit caster level
+        nCasterLevel = 13;
 	else if (nCasterLevel <= 0)
 		nCasterLevel = 1;
 	
@@ -87,8 +87,8 @@ void main()
 	            //Check for racial type construct
 	            else if (GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT)
 	            {
-	                nCasterLevel /= 2;
-	                nDamage = d6(nCasterLevel);
+	                
+	                nDamage = (nCasterLevel);
 	                //nMax = 6;
 					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*6);
 					
@@ -101,15 +101,15 @@ void main()
 	            }
 	            else
 	            {
-	                nCasterLevel = nCasterLevel/2;
-	                nDamage = d8(nCasterLevel);
+	                
+	                nDamage = d2(nCasterLevel);
 	                //nMax = 8;
 					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*8);
 					
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{ 
-						nDamage = d8(nCasterLevel * 2);
-						nDamage = ApplyMetamagicVariableMods(nDamage, (nCasterLevel*2)*8);
+						nDamage = d2(nCasterLevel * 2);
+						nDamage = ApplyMetamagicVariableMods(nDamage, (nCasterLevel*2)*2);
 					}					
 					
 	            }

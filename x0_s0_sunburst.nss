@@ -60,10 +60,7 @@ void main()
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
-    /*if (nCasterLvl > 25)
-    {
-        nCasterLvl = 25;
-    }*/
+
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eLOS, GetSpellTargetLocation());
     int bDoNotDoDamage = FALSE;
@@ -87,11 +84,11 @@ void main()
                 if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage for each target
-                    nDamage = MaximizeOrEmpower(6, nCasterLvl, nMetaMagic);
+                    nDamage = MaximizeOrEmpower(8, nCasterLvl, nMetaMagic);
                 }
                 else
                 {
-                    nDamage = MaximizeOrEmpower(6, 6, nMetaMagic);
+                    nDamage = MaximizeOrEmpower(4, nCasterLvl, nMetaMagic);
                	}
 
                 //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.

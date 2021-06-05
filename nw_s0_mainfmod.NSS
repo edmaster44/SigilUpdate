@@ -59,9 +59,9 @@ void main()
     {
         fDelay = GetRandomDelay();
         //Roll damage
-        nDamage = d8(2) + nCasterLevel;
+        nDamage = d8(8) + nCasterLevel;
         //Make metamagic checks
-        nDamage = ApplyMetamagicVariableMods(nDamage, 16 + nCasterLevel);
+        nDamage = ApplyMetamagicVariableMods(nDamage, 64 + nCasterLevel);
 
         //If the target is an allied undead it is healed
         if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
