@@ -83,11 +83,11 @@ void main()
 		int nSpell = GetSpellId();
         int nDC              = GetManifesterDC(oManifester) + enAdj.nDCMod;
 		if (manif.bAugment)
-			nDC += 2;
+			nDC += 1;
         int nPen             = GetPsiPenetration(oManifester) + enAdj.nPenMod;
         int nNumberOfDice    = 5;
 		if (manif.bAugment)
-			nNumberOfDice += 5;
+			nNumberOfDice += 3;
         int nDieSize         = 6;
         int nDamage;
         location lManifester = GetLocation(oManifester);

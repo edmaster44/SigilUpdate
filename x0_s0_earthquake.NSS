@@ -62,7 +62,10 @@ void main()
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
-
+    if (nCasterLvl > 10)
+    {
+        nCasterLvl = 10;
+    }
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, OBJECT_SELF, RoundsToSeconds(6));
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eLink, lTarget, RoundsToSeconds(6));
 	

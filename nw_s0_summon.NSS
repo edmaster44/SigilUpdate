@@ -168,7 +168,7 @@ int SetSummonDuration(int nSpellID, object oPC)
 	{
 	case (SPELL_SUMMON_CREATURE_I):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 20;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_II):
@@ -178,42 +178,44 @@ int SetSummonDuration(int nSpellID, object oPC)
 	break;
 	case (SPELL_SUMMON_CREATURE_III):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 5;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_IV):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 4;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_V):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 3;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_VI):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 2;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_VII):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 2;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_VIII):
-	
-        {	
-			{nDuration = nDuration * 10;}				    	
+	// If the caster has the necromantic might feat, the duration is reduced due balancing.
+        {	if (GetHasFeat(3616, oPC, TRUE))
+            {nDuration = nDuration * 1;}			
+			else
+			{nDuration = nDuration * 2;}				    	
         }		
   	case (SPELL_SHADES_TARGET_GROUND):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 2;
         }
 	break;
 	case (SPELL_SUMMON_CREATURE_IX):
         {
-            nDuration = nDuration * 10;
+            nDuration = nDuration * 2;
         }
 	break;
 	}

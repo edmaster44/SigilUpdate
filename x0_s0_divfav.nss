@@ -55,8 +55,10 @@ void main()
     if (nScale > 3)
         nScale = 3;
     // * determine the damage bonus to apply
+    effect eAttack = EffectAttackIncrease(nScale);
     effect eDamage = EffectDamageIncrease(nScale, DAMAGE_TYPE_MAGICAL);
-    effect eLink = EffectLinkEffects(eVis, eDamage);
+    effect eLink = EffectLinkEffects(eAttack, eDamage);
+	eLink = EffectLinkEffects(eLink, eVis);
 
     float fDuration = TurnsToSeconds(1); // * Duration 1 turn
     fDuration = ApplyMetamagicDurationMods(fDuration);
