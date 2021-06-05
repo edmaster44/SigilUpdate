@@ -93,9 +93,9 @@ void CureObject( object oTarget, effect eVis, effect eVis2, int nCasterLvl, int 
              //Make SR check
              if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
              {
-                 nModify = d8(12) + nCasterLvl;
+                 nModify = d8(3) + nCasterLvl;
                  //Make metamagic check
-                 nModify = ApplyMetamagicVariableMods(nModify, 96 + nCasterLvl);
+                 nModify = ApplyMetamagicVariableMods(nModify, 24 + nCasterLvl);
 
                  //Make Fort save
                  if (MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF, fDelay))
@@ -119,9 +119,9 @@ void CureObject( object oTarget, effect eVis, effect eVis2, int nCasterLvl, int 
      	{
              //Fire cast spell at event for the specified target
              SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-             nModify = d8(12) + nCasterLvl;
+             nModify = d8(3);
              //Enter Metamagic conditions
-             nModify = ApplyMetamagicVariableMods(nModify, 96);
+             nModify = ApplyMetamagicVariableMods(nModify, 24);
 
              if ( GetHasFeat(FEAT_AUGMENT_HEALING) && !GetIsObjectValid(GetSpellCastItem()) )
              {

@@ -41,8 +41,8 @@ void main()
     //Declare major variables
     object oTarget;
     int nLevel = GetCasterLevel(OBJECT_SELF);
-    effect eAttack = EffectAttackIncrease(0);
-    effect eDamage = EffectDamageIncrease(3, DAMAGE_TYPE_SLASHING);
+    effect eAttack = EffectAttackIncrease(2);
+    effect eDamage = EffectDamageIncrease(2, DAMAGE_TYPE_SLASHING);
     effect eFear = EffectFrightened();
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
     effect eLOS = EffectVisualEffect(VFX_HIT_AOE_SONIC);
@@ -76,6 +76,6 @@ void main()
     //Apply bonus and VFX effects to bard.
     RemoveSpellEffects(GetSpellId(),OBJECT_SELF,OBJECT_SELF);
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF); //PMils OEI 07.08.06- NWN1 stuff, in NWN2 we're trying to not use the hit fx for buffs
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nLevel*2)));
+	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nLevel)));
     SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_WAR_CRY, FALSE));
 }

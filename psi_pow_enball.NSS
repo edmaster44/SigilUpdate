@@ -85,7 +85,7 @@ void main()
 		if (manif.bAugment)
 			nDC += 2;
         int nPen          = GetPsiPenetration(oManifester) + enAdj.nPenMod;
-        int nNumberOfDice = 10;
+        int nNumberOfDice = 7;
 		if (manif.bAugment)
 			nNumberOfDice += 3;
         int nDieSize      = 6;

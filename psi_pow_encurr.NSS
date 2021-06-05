@@ -80,7 +80,7 @@ void main()
 		nSpell=14564 + Random(4);
 
         int nPen             = GetPsiPenetration(oManifester);
-        int nNumberOfDice    = 13;
+        int nNumberOfDice    = 9;
 		int nDC           = GetManifesterDC(oManifester) + enAdj.nDCMod;
 		int nBonus;
 		object oFirstTarget = GetSpellTargetObject();

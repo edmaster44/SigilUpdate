@@ -16,7 +16,7 @@
 void ApplyDivinePowerProperly(object oPC, object oTARGET, int nID, int nMETA)
 {
 	int nLVL = GetTotalLevels(oPC, TRUE);
-    int nSPL = GetCasterLevel(oPC)*10;
+    int nSPL = GetCasterLevel(oPC);
 	int nBAB = GetTRUEBaseAttackBonus(oPC);
 	if (nSPL > nLVL) nSPL = nLVL;
     effect eVFX = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_POWER);
