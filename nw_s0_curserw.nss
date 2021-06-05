@@ -37,5 +37,5 @@ void main()
 // End of Spell Cast Hook
 
 
-  spellsCure(d8(3), 15, 24, VFX_IMP_SUNSTRIKE, VFX_IMP_HEALING_X, GetSpellId());
+  spellsCure(d8(6), 15, 63, VFX_IMP_SUNSTRIKE, VFX_IMP_HEALING_X, GetSpellId());
 }

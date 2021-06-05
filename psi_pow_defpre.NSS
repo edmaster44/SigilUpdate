@@ -61,13 +61,16 @@ void main()
     if(manif.bCanManifest)
     {
         int nBonus = 1;
-		if (manif.bAugment)
-			nBonus += 1;
+		
         effect eLink =                          EffectACIncrease(nBonus, AC_DODGE_BONUS);
                eLink = EffectLinkEffects(eLink, EffectSavingThrowIncrease(SAVING_THROW_ALL, nBonus));
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_GLOBE_MINOR));
         float fDur = 60.0 * manif.nManifesterLevel;
+
     	if(manif.bExtend) fDur *= 2;
+		
+		if (manif.bAugment)
+		fDur = fDur + (60.0 * manif.nManifesterLevel);
 		
 		if (!GetHasSpellEffect(GetSpellId(), oTarget))
 		{

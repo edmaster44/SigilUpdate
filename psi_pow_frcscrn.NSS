@@ -57,7 +57,7 @@ void main()
 
     if(manif.bCanManifest)
     {
-        int nAC         = 4;
+        int nAC         = 5;
 		if (manif.bAugment)
 			nAC += 1;
         effect eLink    =                          EffectACIncrease(nAC, AC_SHIELD_ENCHANTMENT_BONUS);

@@ -76,7 +76,7 @@ void main()
         if(manif.bExtend) fDuration *= 2;
 		int nMod = 2;
 		if (manif.bAugment)
-			nMod = 4;
+			nMod = 3;
 		effect eEdge;
 		if (spellID == 14600)
 		{

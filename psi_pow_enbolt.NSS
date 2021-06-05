@@ -81,11 +81,11 @@ void main()
                            VFX_BEAM_COLD, VFX_BEAM_LIGHTNING, VFX_BEAM_FIRE, VFX_BEAM_MIND);
         int nDC              = GetManifesterDC(oManifester) + enAdj.nDCMod;
 		if (manif.bAugment)
-			nDC += 1;
+			nDC += 2;
         int nPen             = GetPsiPenetration(oManifester) + enAdj.nPenMod;
         int nNumberOfDice    = 5;
 		if (manif.bAugment)
-			nNumberOfDice += 3;
+			nNumberOfDice += 5;
         int nDieSize         = 6;
         int nDamage;
         location lManifester = GetLocation(oManifester);

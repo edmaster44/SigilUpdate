@@ -81,7 +81,7 @@ void main()
         int nPen             = GetPsiPenetration(oManifester) + enAdj.nPenMod;
         int nNumberOfDice    = 13;
 		if (manif.bAugment)
-			nNumberOfDice += 6;
+			nNumberOfDice += 7;
         int nDamage;
         location lManifester = GetLocation(oManifester);
         location lTarget     = GetSpellTargetLocation();

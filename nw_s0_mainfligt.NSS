@@ -60,9 +60,9 @@ void main()
     effect eHeal;
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
     //Limit Caster Level
-    if(nCasterLevel > 20)
+    if(nCasterLevel > 30)
     {
-        nCasterLevel = 20;
+        nCasterLevel = 30;
     }
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
@@ -73,9 +73,9 @@ void main()
     {
         fDelay = GetRandomDelay();
         //Roll damage
-        nDamage = d8() + nCasterLevel;
+        nDamage = d8(4) + nCasterLevel;
         //Make metamagic checks
-        nDamage = ApplyMetamagicVariableMods(nDamage, 8 + nCasterLevel);
+        nDamage = ApplyMetamagicVariableMods(nDamage, 32 + nCasterLevel);
 
         //If the target is an allied undead it is healed
         if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD) 
