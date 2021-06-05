@@ -64,11 +64,11 @@ void main()
         int nBonus;
 		if (manif.bAugment)
 		{
-			nBonus = 4;
+			nBonus = 2;
 		}
 		else
 		{
-			nBonus = 2;
+			nBonus = 1;
 		}
         float fDuration = HoursToSeconds(manif.nManifesterLevel);
         if(manif.bExtend) fDuration *= 2;

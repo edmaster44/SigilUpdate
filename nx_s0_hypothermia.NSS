@@ -64,14 +64,11 @@ void main()
 	
 	
 //Cap caster level for purposes of limiting damage
-	if (nCasterLvl > 10)
-	{
-			nCasterLvl	=	10;
-	}
+
 
 //Determine damage
-			nDam		=	d6(nCasterLvl);
-			nDam		=	ApplyMetamagicVariableMods(nDam, 60);
+			nDam		=	d3(nCasterLvl);
+			nDam		=	ApplyMetamagicVariableMods(nDam, 90);
 			eDam		=	EffectDamage(nDam, DAMAGE_TYPE_COLD);
 			
 //Link up effects

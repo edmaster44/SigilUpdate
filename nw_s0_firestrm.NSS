@@ -42,10 +42,7 @@ void main()
     int nDamage;
     int nDamage2;
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-    if(nCasterLevel > 20)
-    {
-        nCasterLevel = 20;
-    }
+
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FLAMESTRIKE);
     float fDelay;
 	location lTarget = GetSpellTargetLocation();
@@ -66,7 +63,7 @@ void main()
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
                 {
                       //Roll Damage
-                      nDamage = d6(nCasterLevel);
+                      nDamage = d3(nCasterLevel*2);
                       //Enter Metamagic conditions
                       if (nMetaMagic == METAMAGIC_MAXIMIZE)
                       {
