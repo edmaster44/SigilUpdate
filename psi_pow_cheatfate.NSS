@@ -59,7 +59,7 @@ void main()
     if(manif.bCanManifest)
     {
         int nDC      = GetManifesterDC(oManifester);
-		effect eLink    = EffectACIncrease(8, AC_DODGE_BONUS);
+		effect eLink    = EffectACIncrease(1, AC_DODGE_BONUS);
                eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT));
                eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_DEATH));
                

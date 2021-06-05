@@ -44,16 +44,16 @@ void main()
 	int nLevel = GetBardicClassLevelForUses(OBJECT_SELF);
     int nDuration   = ApplySongDurationFeatMods( 5, OBJECT_SELF ); // Rounds
     float fDuration = RoundsToSeconds(nDuration);
-    int nAC         = 4;
+    int nDR         = 20;
     int nSave       = 4;
     int nHP         = 4 * nLevel;
     object oTarget  = GetSpellTargetObject();
 
-    effect eAC     = ExtraordinaryEffect( EffectAttackIncrease(nAC, ATTACK_BONUS_MISC) );
+    effect eDR     = ExtraordinaryEffect( EffectDamageImmunityIncrease(DAMAGE_TYPE_ALL, nDR) );
     effect eSave   = ExtraordinaryEffect( EffectSavingThrowIncrease(SAVING_THROW_ALL, nSave) );
     effect eHP     = ExtraordinaryEffect( EffectTemporaryHitpoints(nHP) );
     effect eDur    = ExtraordinaryEffect( EffectVisualEffect(VFX_HIT_BARD_INS_HEROICS) );
-    effect eLink   = ExtraordinaryEffect( EffectLinkEffects(eAC, eSave) );
+    effect eLink   = ExtraordinaryEffect( EffectLinkEffects(eDR, eSave) );
 //    eLink          = ExtraordinaryEffect( EffectLinkEffects(eLink, eHP) );
     eLink          = ExtraordinaryEffect( EffectLinkEffects(eLink, eDur) );
 

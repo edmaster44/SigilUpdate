@@ -72,22 +72,22 @@ void main()
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 48;
-        nAC = 7;
+        nAC = 2;
         nSkill = 18;
     }
     else if(nPerform >= 95 && nLevel >= 29)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 46;
-        nAC = 6;
+        nAC = 2;
         nSkill = 17;
     }
     else if(nPerform >= 90 && nLevel >= 28)
@@ -98,170 +98,170 @@ void main()
         nFort = 2;
         nReflex = 2;
         nHP = 44;
-        nAC = 6;
+        nAC = 2;
         nSkill = 16;
     }
     else if(nPerform >= 85 && nLevel >= 27)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 42;
-        nAC = 6;
+        nAC = 2;
         nSkill = 15;
     }
     else if(nPerform >= 80 && nLevel >= 26)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 40;
-        nAC = 6;
+        nAC = 2;
         nSkill = 14;
     }
     else if(nPerform >= 75 && nLevel >= 25)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 38;
-        nAC = 6;
+        nAC = 2;
         nSkill = 13;
     }
     else if(nPerform >= 70 && nLevel >= 24)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 36;
-        nAC = 5;
+        nAC = 2;
         nSkill = 12;
     }
     else if(nPerform >= 65 && nLevel >= 23)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 34;
-        nAC = 5;
+        nAC = 2;
         nSkill = 11;
     }
     else if(nPerform >= 60 && nLevel >= 22)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 32;
-        nAC = 5;
+        nAC = 2;
         nSkill = 10;
     }
     else if(nPerform >= 55 && nLevel >= 21)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 30;
-        nAC = 5;
+        nAC = 2;
         nSkill = 9;
     }
     else if(nPerform >= 50 && nLevel >= 20)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 28;
-        nAC = 5;
+        nAC = 2;
         nSkill = 8;
     }
     else if(nPerform >= 45 && nLevel >= 19)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 26;
-        nAC = 5;
+        nAC = 2;
         nSkill = 7;
     }
     else if(nPerform >= 40 && nLevel >= 18)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 24;
-        nAC = 5;
+        nAC = 2;
         nSkill = 6;
     }
     else if(nPerform >= 35 && nLevel >= 17)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 22;
-        nAC = 5;
+        nAC = 2;
         nSkill = 5;
     }
     else if(nPerform >= 30 && nLevel >= 16)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 3;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 20;
-        nAC = 5;
+        nAC = 2;
         nSkill = 4;
     }
     else if(nPerform >= 24 && nLevel >= 15)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 2;
-        nFort = 2;
-        nReflex = 2;
+        nWill = 5;
+        nFort = 5;
+        nReflex = 5;
         nHP = 16;
-        nAC = 4;
+        nAC = 2;
         nSkill = 3;
     }
     else if(nPerform >= 21 && nLevel >= 14)
     {
         nAttack = 2;
         nDamage = 3;
-        nWill = 1;
-        nFort = 1;
-        nReflex = 1;
+        nWill = 4;
+        nFort = 4;
+        nReflex = 4;
         nHP = 16;
-        nAC = 3;
+        nAC = 2;
         nSkill = 2;
     }
     else if(nPerform >= 18 && nLevel >= 12)
     {
         nAttack = 2;
         nDamage = 2;
-        nWill = 1;
-        nFort = 1;
-        nReflex = 1;
+        nWill = 3;
+        nFort = 3;
+        nReflex = 3;
         nHP = 8;
         nAC = 2;
         nSkill = 2;
@@ -270,9 +270,9 @@ void main()
     {
         nAttack = 2;
         nDamage = 2;
-        nWill = 1;
-        nFort = 1;
-        nReflex = 1;
+        nWill = 2;
+        nFort = 2;
+        nReflex = 2;
         nHP = 8;
         nAC = 0;
         nSkill = 1;
