@@ -46,11 +46,10 @@ void CheckStealthMode(object oPC, float count)
 		if(sTSetting > 0) StealthTimer(oPC, sTSetting);
 	
 			
-			 if(GetLevelByClass(CLASS_TYPE_SHADOWDANCER, oPC)>=5)
+			 if(GetHasFeat(1465, oPC, TRUE))
 			{
 				SendMessageToPC(oPC,"Applying Swift & Silent bonus.");
 				if (GetHasFeat(1772, oPC, TRUE) && !GetIsAreaInterior(GetArea(oPC))) return;
-				RemoveAnySpellEffects(2668, oPC);
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(45), 4532), oPC, HoursToSeconds(1));
 			}
 	}

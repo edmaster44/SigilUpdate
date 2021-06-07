@@ -246,6 +246,11 @@ void main()
 	//Raise if DM rests you???
 	if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 	
+
+		
+  	DelayCommand(1.0f,ExecuteScript("ed_mode_includes",oPC));
+
+
 	//If this is a limited rest area and you're not in a safe trigger. . don't let you rest
 	if (!IsInSafeRestZone(oPC)) {
 		AssignCommand(oPC, ClearAllActions());
