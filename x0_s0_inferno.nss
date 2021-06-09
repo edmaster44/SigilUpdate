@@ -21,6 +21,8 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "x2_i0_spells"
+#include "ps_inc_functions"
+
 
 void RunImpact(object oTarget, object oCaster, int nMetamagic);
 
@@ -106,7 +108,10 @@ void main()
 
 
 void RunImpact(object oTarget, object oCaster, int nMetaMagic)
-{
+{	
+	int nCaster = PS_GetCasterLevel(OBJECT_SELF);
+	nCaster = (nCaster);	
+
     //--------------------------------------------------------------------------
     // Check if the spell has expired (check also removes effects)
     //--------------------------------------------------------------------------
@@ -120,7 +125,7 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         //----------------------------------------------------------------------
         // Calculate Damage
         //----------------------------------------------------------------------
-        int nDamage = MaximizeOrEmpower(2,(GetCasterLevel)*2,nMetaMagic);
+        int nDamage = MaximizeOrEmpower(2,(nCaster)*2,nMetaMagic);
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
         eDam = EffectLinkEffects(eVis,eDam); // flare up

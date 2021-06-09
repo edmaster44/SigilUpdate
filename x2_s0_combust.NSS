@@ -70,7 +70,7 @@ void main()
     //--------------------------------------------------------------------------
     // Calculate the damage, 2d6 + casterlevel, capped at +10
     //--------------------------------------------------------------------------
-    int nDamage = GetCasterLevel(OBJECT_SELF);
+    int nDamage = PS_GetCasterLevel(OBJECT_SELF);
 	//uncap +1 damage
    /* if (nDamage > 10)
     {

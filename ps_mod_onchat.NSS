@@ -2,6 +2,30 @@
 //reward players roleplaying
 #include "nwnx_sql"
 #include "ps_inc_functions"
+#include "ServerExts"
+
+
+int IsAuthorizedToUseThisCmd(object oPC)
+{
+    if(GetIsDM(oPC))  return TRUE;
+    return FALSE;
+}
+
+
+void SendTellMessageToAllPlayersInArea(object oSender, string sMessage)
+{
+    object oTarget = GetFirstPC();
+    while (GetIsObjectValid(oTarget))
+    {
+    if (GetArea(oSender) == GetArea(oTarget))
+    {
+        ServerExts_SendChatMessage(oSender,oTarget,CHAT_MODE_SHOUT,sMessage,FALSE);
+    }
+        oTarget = GetNextPC();
+    }
+}
+
+
 
 void GiveXPTick(object oPC) {
 
@@ -205,6 +229,18 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 					SendMessageToPC(oSender, "<C=GOLD>Invalid use of autosave function. Use either <i>autosave</i> or <i>autosave on</i> to enable or <i>autosave off</i> to disable.");
 				}
 			}
+			
+			else if (GetStringLeft(sMessage, 9) == "areashout")
+			{		
+				if(!IsAuthorizedToUseThisCmd(oSender))
+				{
+					SendMessageToPC(oSender,"Sorry, This command isn't available to Players.");
+					
+				}
+				SetLocalInt(oSender, "areashout", 1);
+				SendTellMessageToAllPlayersInArea(oSender,"<I><C=yellow>Area Shout:</C></i> "+sMessage);    
+        		
+				}
 			else if (GetStringLeft(sMessage, 11) == "description")
 			{
 				// self description functions
