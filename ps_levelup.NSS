@@ -306,6 +306,7 @@ void main()
 	GetBardWithoutFeat(oPC);
 	GetSorcererWithoutFeat(oPC);
 	GetRangerWithOutFeats(oPC);
+	GetWizardWithoutFeat(oPC);
 	GetPaladinWithoutFeat(oPC);
 	GetSpiritShamanWithoutFeat(oPC);
 	GetFavoredSoulWithoutFeat(oPC);
