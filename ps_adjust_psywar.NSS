@@ -8,22 +8,22 @@
 //GUI Stuff
 int PsyWarProgression(object oPC)
 {
-
+	
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
 
-	if (nPsywar >= 0)
+	if (GetLevelByClass(nPsywar, oPC) >= 0)
 {	
-	int iHasBonus	= GetLocalInt(oPC, "PSYWAR1");
-	if (iHasBonus == 1)
-	{ SendMessageToPC(oPC,"Psychic Warrior Path already aquired");   }
-		else	
+	
+	if (!GetHasFeat(FEAT_PSYWAR_FERAL,oPC)||!GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+		
 	{AddScriptParameterString("START");
 	AddScriptParameterString("");
 	ExecuteScriptEnhanced("gui_extra_choices", oPC); }
-	SetLocalInt(oPC, "PSYWAR1", 1);	
+	
 
 }
-return nPsywar;}
+return nPsywar;
+}
 
 //Progression for Psychic Warrior and PRC
 void DoPsyProgression(object oPC)
@@ -34,12 +34,12 @@ void DoPsyProgression(object oPC)
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int iTotal = nPsywar + nGemDragon + nWarMind;
 
-		if (iTotal >= 1)
+		if (iTotal >= 0)
 		{
 			FeatAdd(oPC,FEAT_PSYWAR_PROGRESSION_I,FALSE,FALSE,FALSE);
 		}
 
-			if (iTotal >= 5)
+			if (iTotal >= 3)
 			{	
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
@@ -77,7 +77,7 @@ void DoPsyProgression(object oPC)
 				
 				//FeatRemove(OBJECT_SELF,21468);
 			}
-			if (iTotal >= 21 )
+			if (iTotal >= 20 )
 			{
 			FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
 			}
