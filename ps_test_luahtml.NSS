@@ -1,10 +1,20 @@
 #include "nwnx_lua"
 #include "ServerExts"
 #include "nwnx_sql"
+#include "nwnx_lua_gff"
+
+void TellMeTime(object oPC) {
+	
+	float fTime = TimerElapsed("LUA_TEST");
+	
+	SendMessageToPC(oPC, "Time elapsed: "+FloatToString(fTime));
+}
 
 void main() {
 
 	object oPC = GetLastUsedBy();
+	
+	TimerStart("LUA_TEST");
 	
 	SendMessageToPC(oPC, "You clicked!");
 	
@@ -19,5 +29,9 @@ void main() {
 	sErrors = GetLastLuaError();
 	
 	SendMessageToPC(oPC, "found errors? "+sErrors);
+	
+	DelayCommand(1.0f, TellMeTime(oPC));
+	
+	DelayCommand(1.5f, TimerDelete("LUA_TEST"));
 	
 }
