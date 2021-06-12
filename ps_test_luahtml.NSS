@@ -15,7 +15,8 @@ void main() {
 	object oPC = GetLastUsedBy();
 	
 	string sStart = GFFStart();
-	SendMessageToPC(oPC, "GFF Start? "+sStart);
+	SendMessageToPC(oPC, "GFF Start? 
+	"+sStart);
 	
 	TimerStart("LUA_TEST");
 	
