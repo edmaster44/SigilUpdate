@@ -45,15 +45,20 @@ void main()
 
         effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH, nIncrease);
         effect eDur = EffectVisualEffect( VFX_DUR_SPELL_RAGE );
-        effect eAttackMod = EffectModifyAttacks(2);
-		effect eHaste = EffectMovementSpeedIncrease(50);
+        effect eAttackMod = EffectModifyAttacks(1);
+		effect eHaste = EffectHaste();
 		effect eCritImm = EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
+		effect eMove = EffectImmunity(IMMUNITY_TYPE_MOVEMENT_SPEED_DECREASE);
         effect eLink = EffectLinkEffects(eStr, eDur);
        	eLink = EffectLinkEffects(eLink, eAttackMod);
+		
 			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) > 7)
 			{
 				eLink = EffectLinkEffects(eLink, eHaste);
 			}
+			
+ ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eMove, OBJECT_SELF, RoundsToSeconds(nCon + 1));
+ eMove = ExtraordinaryEffect(eMove);
 			
         SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
         //Make effect extraordinary
@@ -69,6 +74,7 @@ void main()
 			
 			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) >= 6) {
   ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCritImm, OBJECT_SELF, RoundsToSeconds(4));
+  eCritImm = ExtraordinaryEffect(eCritImm);
 }
 			
 			if (GetHasFeat(FEAT_DEATHLESS_FRENZY) && !GetIsImmune(OBJECT_SELF, IMMUNITY_TYPE_DEATH)) //Deathless frenzy check

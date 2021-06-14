@@ -79,7 +79,7 @@ void DoDamage(object oCaster, int nSpellId)
     }
     
     int nPerformSkill = GetSkillRank(SKILL_PERFORM, oCaster);
-    int nDamage = (2 * nPerformSkill) / nNumEnemies;    // Damage per target is (2*Perform)/Number of Enemies, capped at most 6 enemies.
+    int nDamage = ((GetLevelByClass(CLASS_TYPE_BARD)) + (nPerformSkill / 2) );    // Damage per target is (2*Perform)/Number of Enemies, capped at most 6 enemies.
     
     // Inflict Sonic damage.  No save.
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, locCaster );
@@ -132,7 +132,7 @@ void DoPartyHealing(object oCaster, int nSpellId)
     }
     
     int nPerformSkill = GetSkillRank(SKILL_PERFORM, oCaster);
-    int nHeal = (2 * nPerformSkill) / nNumPartyMembers;
+    int nHeal = (nPerformSkill) / 2;
     
     // Apply healing to party members
     oTarget = GetFirstFactionMember( oLeader, bPCOnly );

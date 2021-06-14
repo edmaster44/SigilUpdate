@@ -16,6 +16,8 @@
 	//////////					Let The Magic Begin!								//////////
 	//////////////////////////////////////////////////////////////////////////////////////////	*/
 
+
+	
 void PS_Balance_InsightfulDefense(object oPC, int nSpell)
 {
 	if (!X2PreSpellCastCode())
@@ -48,7 +50,8 @@ void PS_Spell_NegateConcealment(object oPC, location lTarget, int nSpell)
     {	return;	    }
 
 	object	oTarget		= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lTarget, FALSE, OBJECT_TYPE_CREATURE);
-	float fDuration		= RoundsToSeconds(PS_PS_GetCasterLevel(OBJECT_SELF));
+	int nGAD            = PS_GetCasterLevel(OBJECT_SELF);
+	float fDuration		= RoundsToSeconds(nGAD);
 	int	nDurType		= ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 	effect eNegate		= EffectConcealmentNegated();
 	effect eDur			= EffectNWN2SpecialEffectFile("sp_flamingaura_yellow", oTarget);
@@ -183,7 +186,7 @@ void PS_Spell_Demonflesh(object oPC, object oTarget, int nSpell)
 {   if (!X2PreSpellCastCode())
 	{	return;		}
 
-	int nCasterLevel	= PS_PS_GetCasterLevel(OBJECT_SELF);
+	int nCasterLevel	= PS_GetCasterLevel(OBJECT_SELF);
     int nBonus;
     float fDuration		= HoursToSeconds(nCasterLevel);
     effect eVis			= EffectNWN2SpecialEffectFile("sp_skin_102", oPC);

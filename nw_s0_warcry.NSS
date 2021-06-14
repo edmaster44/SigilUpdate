@@ -15,6 +15,7 @@
 
 #include "X2_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -40,9 +41,9 @@ void main()
 
     //Declare major variables
     object oTarget;
-    int nLevel = GetCasterLevel(OBJECT_SELF);
+    int nLevel = PS_GetCasterLevel(OBJECT_SELF);
     effect eAttack = EffectAttackIncrease(0);
-    effect eDamage = EffectDamageIncrease(3, DAMAGE_TYPE_SLASHING);
+    effect eDamage = EffectDamageIncrease(4, DAMAGE_TYPE_SLASHING);
     effect eFear = EffectFrightened();
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
     effect eLOS = EffectVisualEffect(VFX_HIT_AOE_SONIC);
