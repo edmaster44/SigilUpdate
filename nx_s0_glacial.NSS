@@ -41,7 +41,7 @@
 #include "nw_i0_spells" 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
-
+#include "ps_inc_functions"
 
 void FreezeDamage(int nDam, effect eFreeze, object oTarget, float fDuration);
 
@@ -71,8 +71,8 @@ void main()
 	object		oTarget		=	GetFirstObjectInShape(SHAPE_SPELLCONE, 15.0, lLocation, FALSE);
 	int			nDam;
 	int			nHP;
-	int			nCasterLvl	=	GetCasterLevel(oCaster);
-	int			nFreezeLvl	=	GetCasterLevel(oCaster)/2;
+	int			nCasterLvl	=	PS_GetCasterLevel(OBJECT_SELF);
+	int			nFreezeLvl	=	PS_GetCasterLevel(OBJECT_SELF)/2;
 	effect		eFreeze		=	EffectPetrify();
 	effect		eVis		=	EffectVisualEffect(VFX_HIT_SPELL_ICE);
 	effect 		eDur		=	EffectVisualEffect(VFX_DUR_SPELL_GLACIAL_WRATH);

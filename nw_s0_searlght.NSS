@@ -27,6 +27,7 @@
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_spells"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -52,7 +53,7 @@ void main()
     object oCaster = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
 
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int nTouch      = TouchAttackRanged(oTarget);
     if (nCasterLevel > 13)	 // Limit caster level
         nCasterLevel = 13;

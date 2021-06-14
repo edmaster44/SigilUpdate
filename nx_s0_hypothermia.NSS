@@ -32,6 +32,7 @@
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_metmag"
 #include "nwn2_inc_spells"
+#include "ps_inc_functions"
 
 
 void main()
@@ -55,7 +56,7 @@ void main()
 //Major variables
 	object 	oTarget 	= 	GetSpellTargetObject();
 	object 	oCaster 	= 	OBJECT_SELF;
-	int		nCasterLvl	=	GetCasterLevel(oCaster);
+	int		nCasterLvl	=	PS_GetCasterLevel(OBJECT_SELF);
 	int		nDam;
 	effect	eFatigue    =   EffectFatigue();  
 	effect	eDam;

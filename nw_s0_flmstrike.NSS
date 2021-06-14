@@ -22,6 +22,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -45,7 +46,7 @@ void main()
 
   //Declare major variables
   object oTarget;
-  int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+  int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
   int nDamage, nDamage2;
   int nMetaMagic = GetMetaMagicFeat();
   effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);	// NWN2 VFX

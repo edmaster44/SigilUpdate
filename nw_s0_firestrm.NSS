@@ -16,6 +16,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -41,7 +42,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     int nDamage2;
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FLAMESTRIKE);
     float fDelay;

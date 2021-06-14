@@ -13,6 +13,7 @@
 //:: VFX Pass By: Preston W, On: June 25, 2001
 
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 void main()
 {
      /*
@@ -34,7 +35,7 @@ void main()
 
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     effect eSummon = EffectSummonCreature("NW_S_diretiger");
     if(GetHasFeat(FEAT_ANIMAL_DOMAIN_POWER))
     {

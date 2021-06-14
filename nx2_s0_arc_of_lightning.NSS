@@ -24,6 +24,7 @@
 
 #include "nwn2_inc_spells"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 // Gets a random creature near target creature
 object GetRandomCreature(object oTarget)
@@ -58,7 +59,7 @@ void main()
 	location lTarget2	= GetLocation(oTarget2);
 	vector vTarget		= GetPositionFromLocation(lTarget);
 	// Caster level
-	int nCasterLevel 	= GetCasterLevel(oCaster);
+	int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
 	if(nCasterLevel > 30)
 		nCasterLevel = 30;
 	// Effect placeholders

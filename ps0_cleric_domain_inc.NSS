@@ -23,7 +23,7 @@ void PS_Balance_InsightfulDefense(object oPC, int nSpell)
 
 	int iBonus      	= GetAbilityModifier(ABILITY_WISDOM, oPC);
 	effect eArmor  		= EffectACIncrease(iBonus, AC_DODGE_BONUS);
-	float fDuration		= RoundsToSeconds(10 + GetCasterLevel(oPC));
+	float fDuration		= RoundsToSeconds(10 + PS_GetCasterLevel(OBJECT_SELF));
 		fDuration   	= ApplyMetamagicDurationMods(fDuration);
 	effect eDur			= EffectVisualEffect(VFX_DUR_INNER_ARMOR);
 	int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
@@ -48,7 +48,7 @@ void PS_Spell_NegateConcealment(object oPC, location lTarget, int nSpell)
     {	return;	    }
 
 	object	oTarget		= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lTarget, FALSE, OBJECT_TYPE_CREATURE);
-	float fDuration		= RoundsToSeconds(PS_GetCasterLevel(oPC));
+	float fDuration		= RoundsToSeconds(PS_PS_GetCasterLevel(OBJECT_SELF));
 	int	nDurType		= ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 	effect eNegate		= EffectConcealmentNegated();
 	effect eDur			= EffectNWN2SpecialEffectFile("sp_flamingaura_yellow", oTarget);
@@ -76,7 +76,7 @@ void PS_Spell_MassSanctuary(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;	    }
 
-    int nCasterLvl 		= GetCasterLevel(oPC);
+    int nCasterLvl 		= PS_GetCasterLevel(OBJECT_SELF);
     int nDuration 		= nCasterLvl;
     int nDurType 		= ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 	location lTarget 	= GetSpellTargetLocation();
@@ -114,7 +114,7 @@ void PS_Spell_WeighedInTheBalance(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;	    }
 	
-	int nCasterLevel	= GetCasterLevel(oPC);
+	int nCasterLevel	= PS_GetCasterLevel(OBJECT_SELF);
 	if (nCasterLevel > 20)
 	{	nCasterLevel 	= 20;	}
 	int nEdgeLevel		= nCasterLevel;
@@ -183,7 +183,7 @@ void PS_Spell_Demonflesh(object oPC, object oTarget, int nSpell)
 {   if (!X2PreSpellCastCode())
 	{	return;		}
 
-	int nCasterLevel	= PS_GetCasterLevel(oPC);
+	int nCasterLevel	= PS_PS_GetCasterLevel(OBJECT_SELF);
     int nBonus;
     float fDuration		= HoursToSeconds(nCasterLevel);
     effect eVis			= EffectNWN2SpecialEffectFile("sp_skin_102", oPC);
@@ -219,7 +219,7 @@ void PS_Spell_Hellfire(object oPC, location lTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLvl 		= GetCasterLevel(oPC);
+    int nCasterLvl 		= PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic 		= GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -260,7 +260,7 @@ void PS_Spell_HellfireStorm(object oPC, location lTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLvl 		= GetCasterLevel(oPC);
+    int nCasterLvl 		= PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic 		= GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -299,7 +299,7 @@ void PS_Spell_PlanarCall(object oPC, location lTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLevel	= GetCasterLevel(oPC);
+    int nCasterLevel	= PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic		= GetMetaMagicFeat();
     float fDuration		= IntToFloat(nCasterLevel)/2 * 30.0f;
     effect eSummon;
@@ -424,7 +424,7 @@ void PS_Spell_WretchedBlight(object oPC, location lTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLvl	= GetCasterLevel(oPC);
+    int nCasterLvl	= PS_GetCasterLevel(OBJECT_SELF);
 	if (nCasterLvl > 15)
 	{	nCasterLvl 	= 15;	}
 	int nMetaMagic 	= GetMetaMagicFeat();
@@ -477,7 +477,7 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLevel 	= GetCasterLevel(oPC);
+    int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
 	int nTouch      	= TouchAttackRanged(oTarget);
 	if (nCasterLevel <= 0)
 		nCasterLevel = 1;
@@ -521,7 +521,7 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLvl 		= GetCasterLevel(oPC);
+    int nCasterLvl 		= PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic 		= GetMetaMagicFeat();
     int nDamage;
     int nVariable 		= nCasterLvl/3;
@@ -563,7 +563,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLevel 	= GetCasterLevel(oPC);
+    int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
     if (nCasterLevel > 20)
     {	nCasterLevel 	= 20;	}
     int nDamage 		= (d8(3)) + (nCasterLevel);
@@ -634,7 +634,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nCasterLevel 	= GetCasterLevel(oPC);
+    int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
     int nDamage 		= d4(nCasterLevel);
     int nDamStrike;
     int nNumAffected 	= 0;
@@ -734,7 +734,7 @@ void PS_Wrath_RetributiveStrike(object oPC, int nSpell)
     {	return;		}
 	
 	object oTarget 		= GetLastDamager(oPC);
-	int nLevel			= (GetCasterLevel(oPC) + 1) / 2;
+	int nLevel			= (PS_GetCasterLevel(OBJECT_SELF) + 1) / 2;
 	int nDamage			= d8(nLevel);
 	effect eDamage		= EffectDamage(nDamage, DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);
 	effect eVis			= EffectNWN2SpecialEffectFile("sp_frightful_hit", oTarget);
@@ -794,8 +794,8 @@ void PS_Spell_RadiantShield(object oPC, int nSpell)
     effect eDur 		= EffectNWN2SpecialEffectFile("fx_aurora_chain_glow");
 	effect eLight		= EffectVisualEffect(VFX_DUR_LIGHT_YELLOW_20);
 		eDur			= EffectLinkEffects(eDur, eLight);
-    float fDuration		= TurnsToSeconds(GetCasterLevel(oPC));
-	int nDamage			= GetCasterLevel(oPC) / 2;
+    float fDuration		= TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
+	int nDamage			= PS_GetCasterLevel(OBJECT_SELF) / 2;
 	effect eRadiant		= EffectDamageShield(nDamage, DAMAGE_BONUS_1d6, DAMAGE_TYPE_ELECTRICAL);
 	effect eResist		= EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 50);
 	effect eLink		= EffectLinkEffects(eDur, eRadiant);
@@ -844,7 +844,7 @@ void PS_Spell_VengeanceHalo(object oPC, object oTarget, int nSpell)
 	
 	effect eHalo		= EffectNWN2SpecialEffectFile("vfx_rds_glowhead", oTarget);
 	int nStamp;
-	int nLevel			= GetCasterLevel(oPC);
+	int nLevel			= PS_GetCasterLevel(OBJECT_SELF);
 	if (nLevel >= 25)
 	{	nLevel = 25;	}
 	float fDuration		= TurnsToSeconds(nLevel);
@@ -925,7 +925,7 @@ void PS_Spell_RayOfExhaustion(object oPC, object oTarget, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-    int nDuration	= GetCasterLevel(oPC);
+    int nDuration	= PS_GetCasterLevel(OBJECT_SELF);
     effect eExhaust	= EffectExhausted();
 	effect eFatigue = EffectFatigue();
 	effect eVFX		= EffectNWN2SpecialEffectFile("fx_spell_fatigue02");
@@ -957,7 +957,7 @@ void PS_Spell_ScintillatingPattern(object oPC, location lTarget, int nSpell)
 	
 	effect ePattern		= EffectAreaOfEffect(AOE_MOB_SCINTILLATING_PATTERN);
 	effect eVFX			= EffectNWN2SpecialEffectFile("sp_scintillating_pattern"); 
-	float fDuration		= RoundsToSeconds(GetCasterLevel(oPC));
+	float fDuration		= RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVFX, lTarget, fDuration);
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, ePattern, lTarget, fDuration);

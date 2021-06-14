@@ -17,6 +17,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "ginc_math"
+#include "ps_inc_functions"
 
 void MyPlayCustomAnimation(object oCreature, string sAnim, int bLoop)
 {
@@ -46,7 +47,7 @@ void main()
 
     object oCaster = OBJECT_SELF;
 	
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;

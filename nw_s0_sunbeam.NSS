@@ -19,6 +19,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -48,7 +49,7 @@ void main()
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eLink = EffectLinkEffects(eBlind, eDur);
 
-    int nCasterLevel= GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel= PS_GetCasterLevel(OBJECT_SELF);
     int nDamage;
     int nOrgDam;
     int nMax;
