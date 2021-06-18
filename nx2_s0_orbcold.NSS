@@ -55,7 +55,7 @@ void main()
 	nDamage = d4(nDice);	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
-		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ORB_OF_ACID));
+		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ORB_OF_COLD));
 		 //if (TouchAttackRanged(oTarget) != TOUCH_ATTACK_RESULT_MISS)
 		 if (nTouch != TOUCH_ATTACK_RESULT_MISS)
 		 {

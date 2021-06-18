@@ -77,7 +77,7 @@ void main()
     	        nDamage =  d4(nCasterLvl);
     		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                     nDamage = 4 * nCasterLvl;
+                     nDamage = nDamage*2;
                 }
     		    if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

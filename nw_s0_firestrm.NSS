@@ -68,7 +68,7 @@ void main()
                       //Enter Metamagic conditions
                       if (nMetaMagic == METAMAGIC_MAXIMIZE)
                       {
-                         nDamage = 6 * nCasterLevel;//Damage is at max
+                         nDamage = nDamage*2;//Damage is at max
                       }
                       else if (nMetaMagic == METAMAGIC_EMPOWER)
                       {

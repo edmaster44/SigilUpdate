@@ -58,6 +58,7 @@ void main()
 	object 	oCaster 	= 	OBJECT_SELF;
 	int		nCasterLvl	=	PS_GetCasterLevel(OBJECT_SELF);
 	int		nDam;
+	int 	nMetaMagic = GetMetaMagicFeat();
 	effect	eFatigue    =   EffectFatigue();  
 	effect	eDam;
 	//effect 	eVis		=	EffectVisualEffect(VFX_HIT_SPELL_ICE);
@@ -69,8 +70,17 @@ void main()
 
 //Determine damage
 			nDam		=	d3(nCasterLvl);
-			nDam		=	ApplyMetamagicVariableMods(nDam, 90);
 			eDam		=	EffectDamage(nDam, DAMAGE_TYPE_COLD);
+			
+			if (nMetaMagic == METAMAGIC_MAXIMIZE)
+			{
+			nDam = (nDam*2);
+			}
+			else if (nMetaMagic == METAMAGIC_EMPOWER)
+			{
+			nDam = nDam + nDam / 2;
+			}
+			
 			
 //Link up effects
 			//eLink		=	EffectLinkEffects(eDam, eVis);

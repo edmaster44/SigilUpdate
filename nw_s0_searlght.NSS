@@ -55,6 +55,7 @@ void main()
 
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int nTouch      = TouchAttackRanged(oTarget);
+	int nMetaMagic = GetMetaMagicFeat();
     if (nCasterLevel > 13)	 // Limit caster level
         nCasterLevel = 13;
 	else if (nCasterLevel <= 0)
@@ -76,7 +77,15 @@ void main()
 	            {
 					nDamage = d6(nCasterLevel);
 	                //nMax = 8;
-					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*6);
+					//Resolve metamagic
+					if (nMetaMagic == METAMAGIC_MAXIMIZE)
+					{
+					nDamage = (nDamage*2);
+					}
+					else if (nMetaMagic == METAMAGIC_EMPOWER)
+					{
+					nDamage = nDamage + nDamage / 2;
+					}
 					
 				
 					/*if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL)
@@ -91,7 +100,15 @@ void main()
 	                
 	                nDamage = (nCasterLevel);
 	                //nMax = 6;
-					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*6);
+					//Resolve metamagic
+					if (nMetaMagic == METAMAGIC_MAXIMIZE)
+					{
+					nDamage = (nDamage*2);
+					}
+					else if (nMetaMagic == METAMAGIC_EMPOWER)
+					{
+					nDamage = nDamage + nDamage / 2;
+					}
 					
 					/*if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL)
 					{ 
@@ -105,7 +122,15 @@ void main()
 	                
 	                nDamage = d2(nCasterLevel);
 	                //nMax = 8;
-					nDamage = ApplyMetamagicVariableMods(nDamage, nCasterLevel*8);
+					//Resolve metamagic
+					if (nMetaMagic == METAMAGIC_MAXIMIZE)
+					{
+					nDamage = (nDamage*2);
+					}
+					else if (nMetaMagic == METAMAGIC_EMPOWER)
+					{
+					nDamage = nDamage + nDamage / 2;
+					}
 					
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{ 

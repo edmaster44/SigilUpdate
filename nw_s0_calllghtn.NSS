@@ -72,7 +72,7 @@ void main()
                 //Resolve metamagic
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 3 * nCasterLvl;
+                    nDamage = nCasterLvl*2;
                 }
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

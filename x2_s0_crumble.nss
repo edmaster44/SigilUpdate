@@ -72,7 +72,7 @@ void main()
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDam = 6*nCasterLvl;
+        nDam = nDam*2;
     }
 
     if (nMetaMagic == METAMAGIC_EMPOWER)

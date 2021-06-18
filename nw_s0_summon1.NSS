@@ -36,7 +36,7 @@ void main()
 
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF)*2;
     effect eSummon = EffectSummonCreature("NW_S_badgerdire");
     if(GetHasFeat(FEAT_ANIMAL_DOMAIN_POWER))
     {
