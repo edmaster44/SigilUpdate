@@ -17,6 +17,7 @@
 #include "x0_i0_spells"
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_spells"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -40,7 +41,8 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nDuration = 10;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+    int nDuration = 1 + (nCL/6);
     int nMetaMagic = GetMetaMagicFeat();
     //Check for metamagic extend
     if (nMetaMagic == METAMAGIC_EXTEND)	//Duration is +100%

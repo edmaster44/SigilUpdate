@@ -19,6 +19,7 @@
 #include "NW_I0_SPELLS"
 #include "x0_i0_spells"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -41,16 +42,8 @@ void main()
 
 
     //Declare major variables
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
+
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -59,10 +52,7 @@ void main()
     location lTargetLocation = GetSpellTargetLocation();
     object oTarget;
     //Limit Caster level for the purposes of damage.
-    if (nCasterLevel > 20)
-    {
-        nCasterLevel = 20;
-    }
+
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 10.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
@@ -83,11 +73,11 @@ void main()
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDelay)) //FIX: prevents caster from getting SR check against himself
             {
                 //Detemine damage
-                nDamage = d6(nCasterLevel)+CasterModifier;
+                nDamage = d4(nCasterLevel);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = (6 * nCasterLevel)+CasterModifier;//Damage is at max
+                    nDamage = (nDamage*2);//Damage is at max
                 }
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

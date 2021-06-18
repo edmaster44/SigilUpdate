@@ -14,6 +14,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -37,7 +38,7 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nDamage2, nDamage3;
     int nVariable = nCasterLvl/3;
@@ -61,26 +62,19 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {
                 //Roll damage for each target
-                nDamage = d8(4);
-                nDamage2 = d8(4);
-                nDamage3 = d8(nVariable);
+                nDamage = d6(nVariable);
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 32;
-                    nDamage2 = 32;
-                    nDamage3 = 8 * nVariable;
+                    nDamage = nDamage*2;
                 }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                    nDamage = nDamage + (nDamage / 2);
-                   nDamage2 = nDamage2 + (nDamage2 / 2);
-                   nDamage3 = nDamage3 + (nDamage3 / 2);
                 }
                 nDamage2 = nDamage2 + nDamage3;
                 //Set the damage effect
-                eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
-                eDam2 = EffectDamage(nDamage2, DAMAGE_TYPE_COLD);
+                eDam = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
                 // Apply effects to the currently selected target.
                 DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget));

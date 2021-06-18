@@ -21,6 +21,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -44,16 +45,8 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -83,11 +76,11 @@ void main()
                 if(GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage for each target
-                    nDamage = d8(nCasterLvl)+(CasterModifier*2);	// JLR - OEI 07/22/05 -- 3.5 Change
+                    nDamage = d8(nCasterLvl);	// JLR - OEI 07/22/05 -- 3.5 Change
                     //Resolve metamagic
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = (8 * nCasterLvl)+(CasterModifier*2);
+                        nDamage = nDamage*2;
                     }
                     else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

@@ -40,20 +40,20 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
 
-    if(nCasterLevel > 9)
+    if(nCasterLevel > 12)
     {
-        nCasterLevel = 9;
+        nCasterLevel = 12;
     }
-    nCasterLevel = (nCasterLevel + 1) / 2;
-    int nDamage = d6(nCasterLevel);
+
+    int nDamage = d4(nCasterLevel) + (nCasterLevel);
 
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-    	nDamage = 6 * nCasterLevel;//Damage is at max
+    	nDamage =  nDamage*2;//Damage is at max
     }
     else if (nMetaMagic == METAMAGIC_EMPOWER)
     {

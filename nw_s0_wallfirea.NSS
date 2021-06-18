@@ -13,17 +13,17 @@
 //:://////////////////////////////////////////////
 
 // (Update JLR - OEI 07/19/05) -- Changed Dmg to 2d6 + lvl (max 20), double dmg to Undead
-//Mymothersmeatloaf 6/21/2020: Uncapped damage
 
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
 
     //Declare major variables
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     effect eDam;
@@ -45,12 +45,13 @@ void main()
             //Enter Metamagic conditions
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage = 12;//Damage is at max  // JLR - OEI 07/19/05
+                nDamage = nDamage*2;//Damage is at max  // JLR - OEI 07/19/05
             }
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {
                 nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
             }
+
 
             nDamage += nCasterLvl;  // JLR - OEI 07/19/05
             if ( GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD )

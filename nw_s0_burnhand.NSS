@@ -20,9 +20,10 @@
 //:: VFX Pass By: Preston W, On: June 20, 2001
 //:: Update Pass By: Preston W, On: July 23, 2001
 //:: AFW-OEI 04/26/2006: Reduce range of spell to match PHB.  RADIUS_SIZE_LARGE ~15 ft.
-//:: Mymothersmeatloaf: 6/20/2020: Changed cap to 15d4
+
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -46,16 +47,7 @@ void main()
 
     //Declare major variables
     float fDist;
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     object oTarget;
@@ -66,9 +58,9 @@ void main()
 	effect eCone = EffectVisualEffect( VFX_DUR_SPELL_BURNING_HANDS );	// NWN2 VFX
 	float fMaxDelay = 0.0f; // Used to determine the duration of the flame cone.
     //Limit Maximum caster level to keep damage to spell specifications.
-    if (nCasterLevel > 15)
+    if (nCasterLevel > 12)
     {
-        nCasterLevel = 15;
+        nCasterLevel = 12;
     }
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_LARGE, GetSpellTargetLocation(), TRUE,
@@ -93,11 +85,11 @@ void main()
             //if(!MyResistSpell(OBJECT_SELF, oTarget, fDist) && oTarget != OBJECT_SELF)
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDist)) //FIX: prevents caster from getting SR check against himself
             {
-                nDamage = d4(nCasterLevel)+CasterModifier;
+                nDamage = d6(nCasterLevel);
     		    //Enter Metamagic conditions
     		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
     		    {
-    			     nDamage = (4 * nCasterLevel)+CasterModifier;//Damage is at max
+    			     nDamage =  nDamage*2;//Damage is at max
     		    }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
     		    {

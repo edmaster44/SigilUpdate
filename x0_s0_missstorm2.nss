@@ -17,6 +17,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -26,5 +27,5 @@ void main()
         return;
     }
 
-    DoMissileStorm(2, 40, SPELL_ISAACS_GREATER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 10);
+    DoMissileStorm(2, 60, SPELL_ISAACS_GREATER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 10);
 }

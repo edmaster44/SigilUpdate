@@ -56,16 +56,9 @@ void main()
     // Calculate the save DC
     //--------------------------------------------------------------------------
     int nDC = GetSpellSaveDC();
-    int nLevel = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nLevel = PS_GetCasterLevel(OBJECT_SELF);
+	
+
 
     //--------------------------------------------------------------------------
     // Calculate the damage, 2d6 + casterlevel, capped at +10
@@ -79,12 +72,12 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDamage += 30+CasterModifier;//Damage is at max
+        nDamage = nDamage*2;//Damage is at max
     }
     else
     {
-		//Changed dice to 5d6
-        nDamage  += d6(5)+CasterModifier;
+		//Changed dice to 8d6
+        nDamage  += d6(8);
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
             nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%
@@ -184,17 +177,14 @@ void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic
 			// Changed cap to caster level
             //------------------------------------------------------------------
             int nDamage = nLevel;
-          /*  if (nDamage > 10)
-            {
-                nDamage = 10;
-            }*/
+
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage += 6;
+                nDamage += 72;
             }
             else
             {
-                nDamage  += d6();
+                nDamage  += d6(12);
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                     nDamage = nDamage + (nDamage/2);

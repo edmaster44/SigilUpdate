@@ -20,6 +20,8 @@ float SpellDelay (object oTarget, int nShape);
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
+#include "ps0_newspells_inc"
 
 void main()
 {
@@ -42,16 +44,8 @@ void main()
 
 
     //Declare major variables
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
+
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -59,10 +53,7 @@ void main()
 	float fMaxDelay = 0.0f; // Used to determine duration of cold cone
     object oTarget;
     //Limit Caster level for the purposes of damage.
-    if (nCasterLevel > 25)
-    {
-        nCasterLevel = 25;
-    }
+
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
@@ -86,18 +77,19 @@ void main()
                 if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDelay)) //FIX: prevents caster from getting SR check against himself
                 {
                     //Detemine damage
-                    nDamage = d6(nCasterLevel)+CasterModifier;
+                    nDamage = d6(nCasterLevel);
         		    //Enter Metamagic conditions
         		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
         		    {
-        			     nDamage = (6 * nCasterLevel)+CasterModifier;//Damage is at max
+        			     nDamage = nDamage*2;//Damage is at max
         		    }
         		    else if (nMetaMagic == METAMAGIC_EMPOWER)
         		    {
         			     nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
                     }
-                    //Adjust damage according to Reflex Save, Evasion or Improved Evasion
-                    nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD);
+                    //Adjust damage according to Fortitude Save
+                    if (!MyResistSpell(OBJECT_SELF, oTarget) && MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD))
+					nDamage	=	nDamage / 2;;
 
                     // Apply effects to the currently selected target.
                     effect eCold = EffectDamage(nDamage, DAMAGE_TYPE_COLD);

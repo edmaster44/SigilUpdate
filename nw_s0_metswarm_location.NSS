@@ -13,7 +13,8 @@
 //::///////////////////////////////////////////////////////////////////////////
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_spells"
- 
+#include "ps_inc_functions"
+
 void HandleTargetLocation( location lSpellTargetLocation );
 
 void main()
@@ -65,16 +66,8 @@ void HandleTargetLocation( location lSpellTargetLocation )
 	float fTravelTime;
 	float fRadiusSize;
 	
-	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
 	
     object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, lSpellTargetLocation );	
 	
@@ -97,12 +90,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 				}
 				else if (GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)
 				{
-					i = 4;
+					i = 3;
 					eVis = EffectVisualEffect(VFX_HIT_SPELL_METEOR_SWARM_SML);	// makes use of NWN2 VFX
 				}
 				else	
 				{
-					i = 4;
+					i = 3;
 					eVis = EffectVisualEffect(VFX_HIT_SPELL_METEOR_SWARM);	// makes use of NWN2 VFX				 
 				}
 							
@@ -112,12 +105,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
 					{
 						//Roll damage
-						nDamage = d6(nCasterLvl)+(CasterModifier*5);
+						nDamage = d6(nCasterLvl*2);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
 						{
-							nDamage = nCasterLvl*6+(CasterModifier*5);//Damage is at max
+							nDamage = nCasterLvl*6;//Damage is at max
 						}
 						
 						if ( nMetaMagic == METAMAGIC_EMPOWER )
@@ -129,12 +122,12 @@ void HandleTargetLocation( location lSpellTargetLocation )
 					else
 					{
 						//Roll damage
-						nDamage = d6(nCasterLvl/2)+(CasterModifier*5);
+						nDamage = d6(nCasterLvl);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
 						{
-							nDamage = ((nCasterLvl/2)*6)+(CasterModifier*4);//Damage is at max
+							nDamage = ((nCasterLvl/2)*6);//Damage is at max
 						}
 						if ( nMetaMagic == METAMAGIC_EMPOWER )
 						{

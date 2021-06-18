@@ -19,6 +19,7 @@
 	
 #include "x0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -42,7 +43,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     effect eDam;
@@ -78,11 +79,11 @@ void main()
                  else
                  {
                     //Roll damage
-                    nDamage = d6(3) + nCasterLvl;
+                    nDamage = d4(nCasterLevel);
                     //Make metamagic checks
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = 18 + nCasterLvl;
+                        nDamage = nCasterLevel*2;
                     }
                     if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

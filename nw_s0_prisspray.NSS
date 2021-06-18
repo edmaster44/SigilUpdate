@@ -18,6 +18,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget);
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 const int PS_EFFECT_FIRE 			= 0;
 const int PS_EFFECT_ACID 			= 1;
@@ -136,6 +137,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
     effect	eLink;
     int 	nDamage = 0;
     int 	nVis 	= 0;
+	int 	nCL 	= PS_GetCasterLevel(OBJECT_SELF);
      float 	fDelay	= GetDelayForTarget( oTarget );
 
     //Based on the random number passed in, apply the appropriate effect and set the visual to
@@ -144,7 +146,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
     {
         case PS_EFFECT_FIRE://fire
 			{
-	            nDamage = 20;
+	            nDamage = d4(nCL*2);
 	            nVis = VFX_HIT_SPELL_FIRE;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_FIRE);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
@@ -154,7 +156,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 
         case PS_EFFECT_ACID: //Acid
 			{
-	            nDamage = 40;
+	            nDamage = d4(nCL*2);
 	            nVis = VFX_HIT_SPELL_ACID;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_ACID);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
@@ -164,7 +166,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 
         case PS_EFFECT_ELECTRICITY: //Electricity
 			{
-	            nDamage = 80;
+	            nDamage = d4(nCL*2);
 	            nVis = VFX_HIT_SPELL_LIGHTNING;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_ELECTRICITY);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);

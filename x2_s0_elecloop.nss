@@ -23,7 +23,7 @@
 
 #include "x2_I0_SPELLS"
 #include "x2_inc_spellhook"
-
+#include "ps_inc_functions"
 
 void main()
 {
@@ -52,26 +52,18 @@ void main()
     object   oLastValid;
     effect   eStun = EffectLinkEffects(EffectVisualEffect(VFX_IMP_STUN),EffectStunned());
 	
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
     //--------------------------------------------------------------------------
     // Calculate Damage Dice. 1d per 2 caster levels, max 5d
     //--------------------------------------------------------------------------
-    int nNumDice = GetCasterLevel(OBJECT_SELF)/2;
+    int nNumDice = PS_GetCasterLevel(OBJECT_SELF);
     if (nNumDice<1)
     {
         nNumDice = 1;
     }
-    else if (nNumDice >10)
+    else if (nNumDice >13)
     {
-        nNumDice = 10;
+        nNumDice = 13;
     }
 
     //--------------------------------------------------------------------------
@@ -113,8 +105,18 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 
-                nPotential = MaximizeOrEmpower(6, nNumDice, nMetaMagic);
-                nDamage    = GetReflexAdjustedDamage(nPotential, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY)+CasterModifier;
+                nPotential = d6(nNumDice);
+				
+				//Resolve metamagic
+				if (nMetaMagic == METAMAGIC_MAXIMIZE)
+				{
+				nPotential = (nPotential*2);
+				}
+				else if (nMetaMagic == METAMAGIC_EMPOWER)
+				{
+				nPotential = nPotential + nPotential / 2;
+				}
+                nDamage    = GetReflexAdjustedDamage(nPotential, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY);
 
                 //--------------------------------------------------------------
                 // If we failed the reflex save, we save vs will or are stunned

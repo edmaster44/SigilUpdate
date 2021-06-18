@@ -46,32 +46,16 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
+	
 	effect eRay;
 	
 	int nNumRays = 0;
-	if (nCasterLvl >= 39)
-		nNumRays = 10;			// 3 Rays @ lvl 39
-	else if (nCasterLvl >= 35)
-		nNumRays = 9;			// 3 Rays @ lvl 35
-	else if (nCasterLvl >= 31)
-		nNumRays = 8;			// 3 Rays @ lvl 31
-	else if (nCasterLvl >= 27)
-		nNumRays = 7;			// 3 Rays @ lvl 27
-	else if (nCasterLvl >= 23)
-		nNumRays = 6;			// 3 Rays @ lvl 23
-	else if (nCasterLvl >= 19)
-		nNumRays = 5;			// 3 Rays @ lvl 19
-	else if (nCasterLvl >= 15)
+	
+
+
+	if (nCasterLvl >= 15)
 		nNumRays = 4;			// 3 Rays @ lvl 15
 	else if (nCasterLvl >= 11)
 		nNumRays = 3;			// 3 Rays @ lvl 11
@@ -138,25 +122,25 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(5)+CasterModifier;
-					nDamage = ApplyMetamagicVariableMods(nDamage, 30+CasterModifier);
+					int nDamage = d6(4);
+					nDamage = ApplyMetamagicVariableMods(nDamage, 24);
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{
-						nDamage = d6(10)+CasterModifier;
-						nDamage = ApplyMetamagicVariableMods(nDamage, 60+CasterModifier);
+						nDamage = d6(8);
+
 					}
 				
 					//Enter Metamagic conditions
-	    			/*int nMetaMagic = GetMetaMagicFeat();
+	    			int nMetaMagic = GetMetaMagicFeat();
 	                if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	                {
-	                    nDamage = 6*4;
+	                    nDamage = nDamage*2;
 	                }
 	                if (nMetaMagic == METAMAGIC_EMPOWER)
 	                {
 	                     nDamage = nDamage + (nDamage/2);
 	                }
-					*/
+					
 					
 					// sneak can only apply to first ray.
 					if (ni == 0)

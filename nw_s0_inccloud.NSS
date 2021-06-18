@@ -13,6 +13,7 @@
 //:://////////////////////////////////////////////
 
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -38,7 +39,7 @@ void main()
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGFIRE);
     //Capture the spell target location so that the AoE object can be created.
     location lTarget = GetSpellTargetLocation();
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     if(nDuration < 1)
     {
         nDuration = 1;

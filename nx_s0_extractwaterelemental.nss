@@ -33,6 +33,7 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -44,7 +45,7 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
 	object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 
 	// Things that are not alive are immune to this spell.	
 	//if (GetIsImmune(oTarget,IMMUNITY_TYPE_DEATH))
@@ -69,8 +70,7 @@ void main()
        	else if (!MyResistSpell(OBJECT_SELF, oTarget))
        	{	
 			int nNumRolls = nCasterLvl;
-			if (nNumRolls >= 20)
-				nNumRolls = 20;
+
 			int nDamage = d6(nNumRolls);
 			float fSummonTime = RoundsToSeconds(10);
 						
@@ -78,7 +78,7 @@ void main()
    			int nMetaMagic = GetMetaMagicFeat();
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage = 6*nNumRolls;
+                nDamage = nDamage*2;
             }
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {
@@ -86,7 +86,7 @@ void main()
             }
 			if (nMetaMagic == METAMAGIC_EXTEND)
 			{
-				fSummonTime *= 1.5;
+				fSummonTime *= 2;
 			}
 			
            	if(MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))

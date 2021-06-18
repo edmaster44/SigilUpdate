@@ -20,6 +20,8 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
+
 
 void main()
 {
@@ -35,7 +37,7 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
 	int nAlign = GetAlignmentLawChaos(OBJECT_SELF);
@@ -48,11 +50,7 @@ void main()
     effect eDam;
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
-    //Limit Caster level for the purposes of damage
-    if (nCasterLvl > 10)
-    {
-        nCasterLvl = 10;
-    }
+
     
     //Apply the fireball explosion at the location captured above.
     /* Brock H. - OEI 03/03/06 -- Handled by the ImpactSEF column in the spells.2da
@@ -77,30 +75,40 @@ void main()
         		        //Enter Metamagic conditions
         		        if (nAlign == ALIGNMENT_LAWFUL)
 						{
-							nDamage = d3(30) + (nCasterLvl);
+							nDamage = d6(nCasterLvl);
 						}
 						if (nAlign == ALIGNMENT_NEUTRAL)
 						{
-							nDamage = (d3(30) + (nCasterLvl))/2;
+							nDamage = ((d6(nCasterLvl))/2);
 						}
 						if (nAlign == ALIGNMENT_CHAOTIC)
 						{
-							nDamage = (d3(30) + (nCasterLvl))/2;
+							nDamage = ((d6(nCasterLvl))/2);
 							nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_LAW);
 							
-							if (GetRacialType(oCaster) == RACIAL_TYPE_OUTSIDER)
-							{
-								oTarget = oCaster;
-							}
-						}
-						if(GetAlignmentLawChaos(oTarget) == ALIGNMENT_CHAOTIC)
+						//Resolve metamagic
+						if (nMetaMagic == METAMAGIC_MAXIMIZE)
 						{
-							nDamage = nDamage;
+						nDamage = (nDamage*2);
+						}
+						else if (nMetaMagic == METAMAGIC_EMPOWER)
+						{
+						nDamage = nDamage + nDamage / 2;
+						}
 							
-							if(GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
-							{
-								nDamage = nDamage * 2;
-							}
+							//if (GetRacialType(oCaster) == RACIAL_TYPE_OUTSIDER)
+							//{
+						//		oTarget = oCaster;
+						//	}
+					//	}
+					//	if(GetAlignmentLawChaos(oTarget) == ALIGNMENT_CHAOTIC)
+					//	{
+					//		nDamage = nDamage;
+							
+					//		if(GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
+					//		{
+					//			nDamage = nDamage * 2;
+					//		}
 						}
                         //Adjust damage based on Reflex Save, Evasion and Improved Evasion
                        

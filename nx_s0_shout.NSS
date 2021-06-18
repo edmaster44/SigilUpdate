@@ -22,6 +22,7 @@
 #include "nw_i0_spells"
 #include "x2_inc_spellhook"  
 #include "nwn2_inc_metmag"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -48,6 +49,8 @@ void main()
 	object		oCaster		=	OBJECT_SELF;
 	object		oTarget		=	GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	int			nDam;
+	int 		nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int			nMetaMagic = GetMetaMagicFeat();
 	float		fDuration;
 	effect		eDeaf		=	EffectDeaf();
 	effect		eDam;
@@ -55,15 +58,7 @@ void main()
 	effect		eCone		=	EffectVisualEffect(VFX_DUR_CONE_SONIC);	
 	effect		eLink;
 	
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
 	
 	while(GetIsObjectValid(oTarget))
 	{
@@ -73,10 +68,18 @@ void main()
 			if (oTarget != oCaster)
 			{
 				//determine duration and damage + metamagic
-				nDam		=	d6(10)+CasterModifier;
+				nDam		=	d4(nCasterLvl);
 				fDuration	=	RoundsToSeconds(d6(2));
 				
-				nDam		=	ApplyMetamagicVariableMods(nDam, 30+CasterModifier);
+				    if (nMetaMagic == METAMAGIC_MAXIMIZE)
+                    {
+                        nDam = (nCasterLvl*2);
+                    }
+        	        else if (nMetaMagic == METAMAGIC_EMPOWER)
+                    {
+                       nDam = nDam + nDam / 2;
+                    }
+				
 				fDuration	=	ApplyMetamagicDurationMods(fDuration);
 				
 								

@@ -21,6 +21,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -36,16 +37,8 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
+
 	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
@@ -59,10 +52,7 @@ void main()
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
-    if (nCasterLvl > 20)
-    {
-        nCasterLvl = 20;
-    }
+
     
     //Apply the fireball explosion at the location captured above.
     /* Brock H. - OEI 03/03/06 -- Handled by the ImpactSEF column in the spells.2da
@@ -84,11 +74,11 @@ void main()
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {
                     //Roll damage for each target
-                    nDamage = d6(nCasterLvl)+CasterModifier;
+                    nDamage = d3(nCasterLvl);
                     //Resolve metamagic
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = (6 * nCasterLvl)+CasterModifier;
+                        nDamage = (nDamage*2);
                     }
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

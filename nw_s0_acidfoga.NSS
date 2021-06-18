@@ -15,6 +15,7 @@
 //:: RPGplayer1 08/29/2008: Will ignore SR check, in case of Acid Bomb (won't work otherwise)
 // Mymothersmeatloaf 6/21/2020 - Removed SR
 #include "X0_I0_SPELLS"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -22,20 +23,13 @@ void main()
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
     effect eSlow = EffectMovementSpeedDecrease(50);
     object oTarget = GetEnteringObject();
     float fDelay = GetRandomDelay(1.0, 2.2);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
 	
     int nIgnoreSR = FALSE;
     if (GetTag(OBJECT_SELF) == "AOE_ACID_BOMB")
@@ -52,10 +46,10 @@ void main()
        // {
             //Roll Damage
             //Enter Metamagic conditions
-            nDamage = d6(4)+CasterModifier;
+            nDamage = d6(nCL/3);
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage = 24+CasterModifier;//Damage is at max
+                nDamage = nDamage*2;//Damage is at max
             }
             else if (nMetaMagic == METAMAGIC_EMPOWER)
             {

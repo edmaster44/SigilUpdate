@@ -32,6 +32,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "nwn2_inc_spells" 
+#include "ps_inc_functions"
 
 
 const float SPELL_EFFECT_RADIUS = 3.0f;
@@ -47,26 +48,18 @@ int DamageShroudTarget( object oTarget, object oCaster, int nSpellSaveDC, int nM
     int nSave = ReflexSave( oTarget, nSpellSaveDC, SAVING_THROW_TYPE_FIRE, oCaster );
 	int nDidDamage = FALSE;
 	
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster) > GetAbilityModifier(ABILITY_CHARISMA,oCaster)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,oCaster);
-	}
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+
 	
     if ( nSave == 0 )
     {
-        int nDamage = d6(2) + CasterModifier;
-		int nMaxVal = (2 * 6)+CasterModifier; // 2d6
+        int nDamage = d2(nCL*2);
 
         //Resolve metamagic
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );               
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nMaxVal+CasterModifier;
+            nDamage = nDamage*2;
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
@@ -88,24 +81,15 @@ int DamageShroudTarget( object oTarget, object oCaster, int nSpellSaveDC, int nM
 void DamageOther( object oOther, object oCaster, int nSpellSaveDC, int nMetaMagic  )
 {
     int nSave = ReflexSave( oOther, nSpellSaveDC, SAVING_THROW_TYPE_FIRE, oCaster );
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster) > GetAbilityModifier(ABILITY_CHARISMA,oCaster)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,oCaster);
-	}
-    if ( nSave == 0 )
-    {
-        int nDamage = (d4(1))+CasterModifier;
-		int nMaxVal = (1 * 4)+CasterModifier; // 1d4
+		
+		int nCL = PS_GetCasterLevel(OBJECT_SELF);
+        int nDamage = (d3(nCL));
+		
    
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );           
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nMaxVal+CasterModifier;
+            nDamage = nDamage*2;
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
@@ -120,7 +104,7 @@ void DamageOther( object oOther, object oCaster, int nSpellSaveDC, int nMetaMagi
         ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eVisual, oOther, fDuration );        
     }
 
-}
+
 
 void RunRecurringEffects( object oTarget, object oCaster, float fDuration, int nMetaMagic )
 {

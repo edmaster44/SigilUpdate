@@ -19,7 +19,7 @@
 // Mymothersmeatloaf 6/21/2020 - Increased spellcaster level scaling
 #include "nwn2_inc_spells"
 
-
+#include "ps_inc_functions"
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 
@@ -45,16 +45,8 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int nMetaMagic = GetMetaMagicFeat();
     int nMaxLvl = nCasterLvl;
    /* if ( nCasterLvl > 15 )
     {
@@ -84,12 +76,16 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage for each target
-                nDamage = d8(nMaxLvl)+CasterModifier;
-                //Resolve metamagic
-                nDamage = ApplyMetamagicVariableMods(nDamage, (nMaxLvl * 8)+CasterModifier);
-
-                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
-                if ( nDamage > 0 )
+                nDamage = d6(nMaxLvl) + (nMaxLvl);
+               //Resolve metamagic
+				if (nMetaMagic == METAMAGIC_MAXIMIZE)
+				{
+				nDamage = (nDamage*2);
+				}
+				else if (nMetaMagic == METAMAGIC_EMPOWER)
+				{
+				nDamage = nDamage + nDamage / 2;
+				}
                 {
                     //Set the damage effect
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);

@@ -20,6 +20,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -32,6 +33,8 @@ void main()
 
 */
 
+int nCL = PS_GetCasterLevel(OBJECT_SELF);
+
     if (!X2PreSpellCastCode())
     {
     // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
@@ -41,9 +44,8 @@ void main()
 // End of Spell Cast Hook
 
 
-    int nDamageDice =  GetCasterLevel(OBJECT_SELF);
-    if (nDamageDice > 20)
-        nDamageDice = 20;
+    int nDamageDice = nCL;
 
-    DoMissileStorm(nDamageDice, 20, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 2);
+
+    DoMissileStorm(nDamageDice, 60, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 1);
 }

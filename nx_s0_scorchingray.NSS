@@ -18,6 +18,7 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -41,32 +42,14 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
+	
 	effect eRay;
 	
 	int nNumRays = 0;
-	if (nCasterLvl >= 39)
-		nNumRays = 10;			// 3 Rays @ lvl 39
-	else if (nCasterLvl >= 35)
-		nNumRays = 9;			// 3 Rays @ lvl 35
-	else if (nCasterLvl >= 31)
-		nNumRays = 8;			// 3 Rays @ lvl 31
-	else if (nCasterLvl >= 27)
-		nNumRays = 7;			// 3 Rays @ lvl 27
-	else if (nCasterLvl >= 23)
-		nNumRays = 6;			// 3 Rays @ lvl 23
-	else if (nCasterLvl >= 19)
-		nNumRays = 5;			// 3 Rays @ lvl 19
-	else if (nCasterLvl >= 15)
+
+	if (nCasterLvl >= 15)
 		nNumRays = 4;			// 3 Rays @ lvl 15
 	else if (nCasterLvl >= 11)
 		nNumRays = 3;			// 3 Rays @ lvl 11
@@ -98,13 +81,13 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(5)+CasterModifier;
+					int nDamage = d6(4);
 				
 					//Enter Metamagic conditions
 	    			int nMetaMagic = GetMetaMagicFeat();
 	                if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	                {
-	                    nDamage = (6*5) + CasterModifier;
+	                    nDamage = (nDamage*2);
 	                }
 	                if (nMetaMagic == METAMAGIC_EMPOWER)
 	                {

@@ -85,15 +85,15 @@ void main()
 
                 if ( nSave == 0 ) // Saving Throw failed
                 {
-                    nDice = nCasterLvl * 2; // BCH 03/10/06 - changed to caster level * 2, to reflect
+                    nDice = nCasterLvl; // BCH 03/10/06 - changed to caster level * 2, to reflect
 												//	script comment that damage is 2d6 per caster level
 				
-                    if ( nDice > 40 ) nDice = 40;	// AFW-OEI 06/06/2007: Cap before doubling for crits.
+
 					
                 }
                 else if ( nSave == 1 ) // Saving Throw succeeded
                 {
-					nDice = 20;
+					nDice = nCasterLvl/2;
                  }
                 else if ( nSave == 2 )  // Target is immune
                 {
@@ -109,16 +109,16 @@ void main()
 				//if maximized 6 * ndice
 				if (nMeta == METAMAGIC_MAXIMIZE)
 				{
-					nDamage = 6 * nDice;
+					nDamage =  nDice*2;
 				}
 				else if (nMeta == METAMAGIC_EMPOWER)
 				{
-					nDamage = d6( nDice );
+					nDamage = d8( nDice );
 					nDamage = nDamage + nDamage / 2;
 				}
 				else
 				{
-					nDamage = d6( nDice );
+					nDamage = d8( nDice );
 				}
 				
 				// If we should damage the target, apply it now

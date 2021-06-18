@@ -14,6 +14,7 @@
 //:://////////////////////////////////////////////
 
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -39,7 +40,7 @@ void main()
     effect eAOE = EffectAreaOfEffect(AOE_PER_WALLFIRE);
     //Get the location where the wall is to be placed.
     location lTarget = GetSpellTargetLocation();
-    int nDuration = GetCasterLevel(OBJECT_SELF) / 2;
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF) / 2;
     if(nDuration == 0)
     {
         nDuration = 1;

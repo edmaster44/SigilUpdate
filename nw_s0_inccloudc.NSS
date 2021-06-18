@@ -13,21 +13,14 @@
 //:://////////////////////////////////////////////
 //:: Updated By: GeorgZ 2003-08-21: Now affects doors and placeables as well
 #include "X0_I0_SPELLS"
+#include "ps_inc_functions"
 
 void main()
 {
 
     //Declare major variables
-	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
 	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
@@ -62,11 +55,11 @@ void main()
             //{
                 SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
                 //Roll damage.
-                nDamage = d6(4)+CasterModifier;
+                nDamage = d8(nCasterLvl/3);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                   nDamage = 24+CasterModifier;//Damage is at max
+                   nDamage = nDamage*2;//Damage is at max
                 }
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

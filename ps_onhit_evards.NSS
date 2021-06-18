@@ -26,7 +26,7 @@ void main()
     effect eAOE = EffectAreaOfEffect(AOE_PER_EVARDS_BLACK_TENTACLES, "ps_onhit_evardsa", "ps_onhit_evardsc");
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     //Check Extend metamagic feat.
 	
     //Create an instance of the AOE Object using the Apply Effect function

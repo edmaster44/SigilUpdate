@@ -19,6 +19,7 @@
 //:: Mymothersmeatloaf: 6/21/2020 - uncapped the spells damage.
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -30,15 +31,7 @@ void main()
     int nDamage;
     int nMetaMagic = GetMetaMagicFeat();
     int nCasterLevel = GetCasterLevel(oCaster);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
 	
     int nFire = GetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL");
     /*Limit caster level
@@ -68,11 +61,11 @@ void main()
                     //Make SR check
                     if (!MyResistSpell(oCaster, oTarget))
                     {
-                        nDamage = d8(nCasterLevel)+CasterModifier;
+                        nDamage = d3(nCasterLevel*2);
                         //Enter Metamagic conditions
                         if (nMetaMagic == METAMAGIC_MAXIMIZE)
                         {
-                            nDamage = (8 * nCasterLevel)+CasterModifier;//Damage is at max
+                            nDamage = nDamage*2;//Damage is at max
                         }
                         else if (nMetaMagic == METAMAGIC_EMPOWER)
                         {

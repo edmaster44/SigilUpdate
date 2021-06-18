@@ -27,6 +27,7 @@
 #include "x0_i0_spells"
 #include "x2_inc_spellhook"
 #include "x2_i0_spells"
+#include "ps_inc_functions"
 
 
 int nSpellID = 462;	// GetSpellId() will do the job for us, NOT
@@ -47,11 +48,14 @@ void RunHandImpact(object oTarget, object oCaster, int nMetaMagic)
     int nCasterModifiers = GetCasterAbilityModifier(oCaster) + GetCasterLevel(oCaster);
     int nCasterRoll = d20(1) + nCasterModifiers + 11 + -1;
     int nTargetRoll = GetAC(oTarget);
+	int nMetaMagic = GetMetaMagicFeat();
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	
     if (nCasterRoll >= nTargetRoll)
     {
        	int nDC = GetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpellID));
 
-       	int nDam  = MaximizeOrEmpower(8, 1, nMetaMagic, 11);
+       	int nDam  = nCL;
        	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
        	//effect eVis = EffectVisualEffect(VFX_IMP_ACID_L);	// NWN1 VFX
        	effect eVis = EffectVisualEffect( 837 );	// NWN2 VFX: VFX_HIT_BIGBYS_CLENCHED_FIST
@@ -100,8 +104,8 @@ void main()
         FloatingTextStrRefOnCreature(100775,OBJECT_SELF,FALSE);
         return;
     }
-
-    int nDuration = 10;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+    int nDuration = (nCL / 6);
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_EXTEND)
     {

@@ -4,11 +4,13 @@
 //////////////////////////////////////////////
 
 #include "X0_I0_SPELLS"
+#include "ps_inc_functions"
 
 void main()
 {
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nSave;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
     effect eDam, eHalfDam, eSlow, eLink, eLink2;
     object oTarget;
     effect eVis = EffectNWN2SpecialEffectFile("sp_rayfrost_hit", oTarget);
@@ -25,9 +27,9 @@ void main()
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
         {	fDelay = GetRandomDelay(0.5, 2.0);
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
-            nDamage = d6(1);
+            nDamage = d4(nCL/3);
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
-            {	nDamage = 6;	}
+            {	nDamage = nDamage*2;	}
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {	nDamage = nDamage + (nDamage/2);	}
        		eDam 		= EffectDamage(nDamage, DAMAGE_TYPE_COLD);

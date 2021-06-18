@@ -28,6 +28,8 @@
 #include "x2_inc_spellhook"
 #include "x2_i0_spells"
 #include "nwn2_inc_spells"
+#include "ps_inc_functions"
+
 
 int nSpellID = 463;
 int RunGrappleHit( object oTarget );
@@ -61,8 +63,8 @@ void main()
         FloatingTextStrRefOnCreature(100775,OBJECT_SELF,FALSE);
         return;
     }
-
-    int nDuration = 10;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+    int nDuration = (nCL/3);
     int nMetaMagic = GetMetaMagicFeat();
 
     //Check for metamagic extend

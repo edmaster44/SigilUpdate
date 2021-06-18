@@ -13,7 +13,8 @@
 //::///////////////////////////////////////////////////////////////////////////
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_spells"
- 
+#include "ps_inc_functions"
+
 
 void HandleTargetSelf();
 
@@ -53,16 +54,8 @@ void HandleTargetSelf()
     //Get first object in the spell area
 	location lSourceLoc = GetLocation( OBJECT_SELF );
 	
-	int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
 	
 	location lTargetLoc;
     int nPathType = PROJECTILE_PATH_TYPE_DEFAULT;
@@ -88,12 +81,12 @@ void HandleTargetSelf()
             		fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 								
                     //Roll damage
-                    nDamage = d6(nCasterLvl)+(CasterModifier*2);
+                    nDamage = d3(nCasterLvl*4);
 
     		        //Enter Metamagic conditions
     		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
     		        {
-    			       nDamage = (nCasterLvl*6)+(CasterModifier*2);//Damage is at max
+    			       nDamage = (nDamage*2);//Damage is at max
     		        }
     		        if (nMetaMagic == METAMAGIC_EMPOWER)
     		        {

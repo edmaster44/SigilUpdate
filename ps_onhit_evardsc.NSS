@@ -22,6 +22,8 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "ps_inc_onhit" 
+#include "ps_inc_functions"
+
 
 void main()
 {
@@ -29,6 +31,7 @@ void main()
     object oTarget;
 	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
 	int nSaveDC = GetOnHitAbilityDC(OBJECT_SELF);
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
     effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
     effect eLink = EffectLinkEffects(eDur, eParal);
@@ -53,11 +56,11 @@ void main()
             for (nHits = d4(); nHits > 0; nHits--)
             {
                 fDelay = GetRandomDelay(0.75, 1.5);
-                nRoll = 5 + d20();
+                nRoll = 32 + d20();
 				
                 if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
                 {
-                    nDamage = d6() + 4;
+                    nDamage = d6() + (nCL/2);
 					
 					eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_PLUS_TWO);
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";

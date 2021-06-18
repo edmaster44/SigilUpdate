@@ -41,21 +41,15 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "x2_i0_spells"
+#include "ps_inc_functions"
+
 
 const float SPELL_EFFECT_RADIUS = 3.048;
 const float DELAY_ONE_ROUND     = 6.0f;
 
 void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, int nMetaMagic )
 {
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster) > GetAbilityModifier(ABILITY_CHARISMA,oCaster)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,oCaster);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,oCaster);
-	}
+	
 	// Returns: 0 if the saving throw roll failed
 	// Returns: 1 if the saving throw roll succeeded
 	// Returns: 2 if the target was immune to the save type specified
@@ -65,15 +59,15 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
 
     if ( nSave != 2 )
     {
-        int nDamage = d6(nDice) + CasterModifier;
+        int nDamage = d2(nDice*2);
 
-		int nMaxVal = (nDice * 6) + CasterModifier; // nDice * d4
+		int nMaxVal = (4*nDice) ; // nDice * d4
 
         //Resolve metamagic
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );   		
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nMaxVal;
+            nDamage = nDamage*2;
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
@@ -134,14 +128,7 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 	}
 	*/
 	
-	if (nCasterLevel > 20)
-	{
-		nDice = 20;
-	}
-	else
-	{
-		nDice = nCasterLevel;
-	}
+
 
 	if ( nDice == 0 )
 	{

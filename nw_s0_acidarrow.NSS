@@ -51,16 +51,13 @@ void main()
     // Calculate the duration
     //--------------------------------------------------------------------------
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = (GetCasterLevel(OBJECT_SELF)/3);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nDuration = (PS_GetCasterLevel(OBJECT_SELF)/3);
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	if (nCL > 13)
+    {
+        nCL = 13;
+    }
+
 
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
@@ -101,12 +98,12 @@ void main()
 	            //----------------------------------------------------------------------
 	            // Do the initial 3d6 points of damage
 	            //----------------------------------------------------------------------
-	            int nDamage = MaximizeOrEmpower(6,3,nMetaMagic)+CasterModifier;
+	            int nDamage = MaximizeOrEmpower(6,nCL,nMetaMagic);
 				
 				//PKM-OEI: 05.28.07: Do critical hit damage
 				if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 				{
-					 nDamage = MaximizeOrEmpower(6,6,nMetaMagic)+(CasterModifier*2);
+					 nDamage = MaximizeOrEmpower(6,(nCL*2),nMetaMagic);
 				}
 				
 				// If applicable adds any sneak damage to total to be inflicted and reports the damage.
@@ -156,15 +153,7 @@ void main()
 
 void RunImpact(object oTarget, object oCaster, int nMetaMagic)
 {
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+	
     //--------------------------------------------------------------------------
     // Check if the spell has expired (check also removes effects)
     //--------------------------------------------------------------------------
@@ -178,7 +167,7 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         //----------------------------------------------------------------------
         // Calculate Damage
         //----------------------------------------------------------------------
-        int nDamage = MaximizeOrEmpower(6,1,nMetaMagic)+CasterModifier;
+        int nDamage = MaximizeOrEmpower(6,2,nMetaMagic);
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
         eDam = EffectLinkEffects(eVis,eDam); // flare up

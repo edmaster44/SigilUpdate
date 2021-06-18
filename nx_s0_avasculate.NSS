@@ -30,6 +30,7 @@
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 #include "nwn2_inc_metmag"
+#include "ps_inc_functions"
 
 
 void main()
@@ -54,6 +55,7 @@ void main()
 	object 	oTarget 	= 	GetSpellTargetObject();
 	object 	oCaster 	= 	OBJECT_SELF;
 	int		nDam;
+	int 	nCL 		=   PS_GetCasterLevel(OBJECT_SELF);
 	effect	eStun		=	EffectStunned();
 	effect	eDam;
 	effect 	eVis		=	EffectVisualEffect(VFX_HIT_SPELL_AVASCULATE);
@@ -101,7 +103,8 @@ void main()
 						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 					}
 					else
-					{
+					{	
+						nDam = d4(nCL);
 						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkStun, oTarget, fDur);
 					}

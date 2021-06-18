@@ -31,6 +31,7 @@
 #include "nw_i0_spells" 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -53,30 +54,30 @@ void main()
 
 //Declare major variables
 	object oCaster = OBJECT_SELF;
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
 	location lTarget = GetSpellTargetLocation();
 	int nDamage;
 	int nCasterLvl = GetCasterLevel(oCaster);
+	int nMetaMagic = GetMetaMagicFeat();
 	float fDelay;
 	effect eImpactVis = EffectVisualEffect(VFX_COM_HIT_SONIC);
 	effect eDam;
 	
 //determine unmodded damage	
-	if (nCasterLvl > 20)
-	{
-		nCasterLvl = 20;
-	}
 
-	nDamage = d6(nCasterLvl)+CasterModifier;
-	nDamage = ApplyMetamagicVariableMods(nDamage, 6*nCasterLvl);
+
+	nDamage = d2(nCasterLvl*2);
+	
+
+	//Resolve metamagic
+	if (nMetaMagic == METAMAGIC_MAXIMIZE)
+	{
+	nDamage = (nDamage*2);
+	}
+	else if (nMetaMagic == METAMAGIC_EMPOWER)
+	{
+	nDamage = nDamage + nDamage / 2;
+	}
 
 //target discrimination and application of effects
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
@@ -86,8 +87,16 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
 		{
 			
-			nDamage = d6(nCasterLvl) + CasterModifier;
-			nDamage = ApplyMetamagicVariableMods(nDamage, (6*nCasterLvl)+CasterModifier);
+			nDamage = d2(nCasterLvl*2);
+			//Resolve metamagic
+			if (nMetaMagic == METAMAGIC_MAXIMIZE)
+			{
+			nDamage = (nDamage*2);
+			}
+			else if (nMetaMagic == METAMAGIC_EMPOWER)
+			{
+			nDamage = nDamage + nDamage / 2;
+			}
 		
 			//Signal spell cast at event
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1016));

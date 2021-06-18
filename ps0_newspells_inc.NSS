@@ -83,7 +83,7 @@ void PS_Spell_FreezingFog(object oPC, location lTarget, int nSpell)
     {	return;		}
 
     effect eFog 		= EffectAreaOfEffect(AOE_PER_FREEZINGFOG);
-	float fDuration		= TurnsToSeconds(GetCasterLevel(oPC));
+	float fDuration		= RoundsToSeconds(GetCasterLevel(oPC));
 
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eFog, lTarget, fDuration);
 }

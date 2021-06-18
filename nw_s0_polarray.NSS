@@ -26,18 +26,10 @@ void main()
 
     //Declare major variables
     object oTarget	 	= GetSpellTargetObject();
-	int    nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	int    nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int nTouch      = TouchAttackRanged(oTarget);
 	
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
 	
 	/*if (nCasterLevel > 25)	// Cap caster level
 		nCasterLevel = 25;
@@ -60,11 +52,11 @@ void main()
 	        if(!MyResistSpell(OBJECT_SELF, oTarget))
 	        {
 	            //Enter Metamagic conditions
-	 			int nDam = d8(nCasterLevel)+(CasterModifier*5);
+	 			int nDam = d8(nCasterLevel);
 	    		int nMetaMagic = GetMetaMagicFeat();
 	            if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	            {
-	                nDam = (8 * nCasterLevel) + (CasterModifier*5);//Damage is at max
+	                nDam = nDam*2;//Damage is at max
 	            }
 	            else if (nMetaMagic == METAMAGIC_EMPOWER)
 	            {

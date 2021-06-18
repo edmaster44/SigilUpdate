@@ -45,8 +45,7 @@ void main()
 	int nDice = nCasterLevel;
 	int nDamage = 0;
 	// Calculate max damage.
-	if (nCasterLevel > 25)
-		nDice = 25;
+
 		
 	int nTouch = TouchAttackRanged(oTarget);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -55,7 +54,7 @@ void main()
 	}
 
 	// calculate base damage	
-	nDamage = d6(nDice);	
+	nDamage = d4(nDice);	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ORB_OF_ACID));
@@ -67,7 +66,7 @@ void main()
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)
      	    {
       		   	// do MAXIMIZE 6 * nDice
-				nDamage = 6 * nDice;
+				nDamage = nDamage*2;
        	 	}
          	if (nMetaMagic == METAMAGIC_EMPOWER)
          	{

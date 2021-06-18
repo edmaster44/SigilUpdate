@@ -60,8 +60,7 @@ void main()
 	vector vTarget		= GetPositionFromLocation(lTarget);
 	// Caster level
 	int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
-	if(nCasterLevel > 30)
-		nCasterLevel = 30;
+
 	// Effect placeholders
 	int nDamage 		= d4(nCasterLevel);
 	effect eDamage		= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);

@@ -34,6 +34,7 @@ Georg 2003-09-11
 #include "x2_inc_spellhook"
 #include "ps_inc_functions"
 
+
 void main()
 {
 
@@ -57,31 +58,17 @@ void main()
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
 
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
+
 	
-    int nDDice = nCasterLevel /2;
+    int nDDice = nCasterLevel;
 	int nTouch      = TouchAttackMelee(oTarget, GetSpellCastItem() == OBJECT_INVALID);
 	
     if ((nDDice) == 0)
     {
         nDDice = 1;
     }
-    //--------------------------------------------------------------------------
-    // GZ: Cap according to the book
-    //--------------------------------------------------------------------------
-    else if (nDDice>40)
-    {
-        nDDice = 40;
-    }
+
 
 	//PKM-OEI: 05.28.07: Do critical hit damage
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -89,13 +76,13 @@ void main()
 		nDDice = nDDice * 2;
 	}
 
-    int nDamage = d6(nDDice)+CasterModifier;  // JLR - OEI 07/19/05
+    int nDamage = d3(nDDice);  // JLR - OEI 07/19/05
 
     //--------------------------------------------------------------------------
     //Enter Metamagic conditions
     //--------------------------------------------------------------------------
 
-    nDamage = MaximizeOrEmpower(6,nDDice,nMetaMagic,CasterModifier);  // JLR - OEI 07/19/05
+    nDamage = MaximizeOrEmpower(3,nDDice,nMetaMagic);  // JLR - OEI 07/19/05
     int nDuration = nCasterLevel/2;
 
     if (nMetaMagic == METAMAGIC_EXTEND)

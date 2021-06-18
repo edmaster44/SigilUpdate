@@ -17,6 +17,8 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
+
 
 // stubs for possible extensions to the targeting
 void HandleTargetSelf();

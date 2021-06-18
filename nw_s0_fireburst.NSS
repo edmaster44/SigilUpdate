@@ -19,7 +19,7 @@
 // JLR - OEI 08/23/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 
-
+#include "ps_inc_functions"
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 
@@ -45,21 +45,16 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
 	//Casting modifier
-	int CasterModifier = 0;
+
 	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+	
 	
     int nMaxLvl;
-    if ( nCasterLvl > 10 )
+    if ( nCasterLvl > 13 )
     {
-        nMaxLvl = 10;
+        nMaxLvl = 13;
     }
     else
     {
@@ -67,6 +62,7 @@ void main()
     }
     int nDamage;
 	int nDamage2;
+	int nMetaMagic = GetMetaMagicFeat();
     float fDelay;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
     effect eDam,eDam2, eDam3;
@@ -86,8 +82,17 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 			
-				nDamage = d8(nMaxLvl)+CasterModifier;
-				nDamage = ApplyMetamagicVariableMods(nDamage, (nMaxLvl * 8)+CasterModifier);
+				nDamage = d6(nMaxLvl);
+				//Resolve metamagic
+				if (nMetaMagic == METAMAGIC_MAXIMIZE)
+				{
+				nDamage = (nDamage*2);
+				}
+				else if (nMetaMagic == METAMAGIC_EMPOWER)
+				{
+				nDamage = nDamage + nDamage / 2;
+				}
+				
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
 				/*int nSave = ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, OBJECT_SELF);
 				

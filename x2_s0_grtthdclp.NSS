@@ -20,8 +20,9 @@
 
 #include "NW_I0_SPELLS"
 #include "x0_i0_spells"
-
+#include "ps_inc_functions"
 #include "x2_inc_spellhook"
+#include "nwn2_inc_metmag"
 
 void main()
 {
@@ -42,8 +43,12 @@ void main()
 
     // End of Spell Cast Hook
 
-    int nDamage = 0;
+    
     int nDC = GetSpellSaveDC();
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	object		oCaster		=	OBJECT_SELF;
+
+	int	nMetaMagic = GetMetaMagicFeat();
     float fDelay;
     effect eExplode = EffectVisualEffect(VFX_HIT_AOE_LIGHTNING);
     effect eVis  = EffectVisualEffect(VFX_IMP_SONIC);
@@ -53,6 +58,7 @@ void main()
     effect eKnock = EffectKnockdown();
     effect eStun = EffectStunned();
     effect eShake = EffectVisualEffect(356);
+	effect eDam;
 
     location lTarget = GetSpellTargetLocation();
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
@@ -82,8 +88,40 @@ void main()
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 6.0f));
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis3, oTarget,4.0f));
             }
-        }
+			
+			int nDam = d6(nCL);
+				eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
+			
+				
+		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
+                    {
+                        nDam = nDam*2;
+						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
+
+                    }
+        	        else if (nMetaMagic == METAMAGIC_EMPOWER)
+                    {
+                        nDam = nDam + nDam / 2;
+						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
+
+                    }
+				
+				
+								
+			if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SONIC, oCaster))
+				{
+					nDam	=	nDam/2;
+					eDam	=	EffectDamage(nDam, DAMAGE_TYPE_SONIC);
+				}
+			else
+				{
+					eDam	=	EffectDamage(nDam, DAMAGE_TYPE_SONIC);
+				}
+	
+					
+        
 
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, TRUE, OBJECT_TYPE_CREATURE);
-    }
+ 			}
+	     }
 }

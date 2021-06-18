@@ -16,6 +16,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "ginc_debug"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -38,12 +39,9 @@ void main()
 
 
     //Declare major variables
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     //Limit caster level
-    if (nCasterLevel > 20)
-    {
-        nCasterLevel = 20;
-    }
+
     int nDamage;
     int nMetaMagic = GetMetaMagicFeat();
     //Set the lightning stream to start at the caster's hands
@@ -90,11 +88,11 @@ void main()
                    if (!MyResistSpell(OBJECT_SELF, oTarget))
         	       {
                         //Roll damage
-                        nDamage =  d10(nCasterLevel);
+                        nDamage =  d4(nCasterLevel) + (nCasterLevel);
         		        //Enter Metamagic conditions
         		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
         		        {
-        			         nDamage = 10 * nCasterLevel;//Damage is at max
+        			         nDamage = nDamage *2;//Damage is at max
                         }
         		        if (nMetaMagic == METAMAGIC_EMPOWER)
         		        {

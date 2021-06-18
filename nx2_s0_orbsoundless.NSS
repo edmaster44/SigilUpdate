@@ -39,28 +39,14 @@ void main()
 
 		
 	object oTarget = GetSpellTargetObject();
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-	int nDice = 1;
-	int nDamage = 0;
-	// Calculate damage.
-		if (nCasterLevel >=19)
-		nDice = 10;
-	else if (nCasterLevel >= 17)
-		nDice = 9;
-	else if (nCasterLevel >= 15)
-		nDice = 8;
-	else if (nCasterLevel >= 13)
-		nDice = 7;
-	else if (nCasterLevel >= 11)
-		nDice = 6;
-	else if (nCasterLevel >= 9)
-		nDice = 5;
-	else if (nCasterLevel >= 7)
-		nDice = 4;
-	else if (nCasterLevel >= 5)
-		nDice = 3;
-	else if (nCasterLevel >= 3)
-		nDice = 2;
+    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
+    int nDice = 1;
+    int nDamage = 0;
+    // Calculate damage.
+    if (nCasterLevel >= 12)
+        nDice = 12;
+    else if (nCasterLevel <= 11)
+        nDice = nCasterLevel;
 		
 	int nTouch = TouchAttackRanged(oTarget);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -69,7 +55,7 @@ void main()
 	}
 
 	// calculate base damage	
-	nDamage = d6(nDice);	
+	nDamage = d4(nDice);	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LESSER_ORB_OF_SOUND));
@@ -81,7 +67,7 @@ void main()
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)
      	    {
       		   	// do MAXIMIZE 6 * nDice
-				nDamage = 6 * nDice;
+				nDamage =  nDamage*2;
        	 	}
          	if (nMetaMagic == METAMAGIC_EMPOWER)
          	{

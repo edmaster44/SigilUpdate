@@ -16,6 +16,7 @@
 
 #include "x0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -38,16 +39,8 @@ void main()
     object oTarget = GetSpellTargetObject();
 	location lSourceLoc = GetLocation(OBJECT_SELF);
 	location lTargetLoc = GetLocation(oTarget);
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+
 	
     int nDamage = 0;
     int nMetaMagic = GetMetaMagicFeat();
@@ -108,11 +101,11 @@ void main()
             if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage
-                nDamage = (d6(4) + 1)+CasterModifier;
+                nDamage = (d6(4) + 1);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                      nDamage = 24+CasterModifier;//Damage is at max
+                      nDamage = nDamage*2;//Damage is at max
                 }
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

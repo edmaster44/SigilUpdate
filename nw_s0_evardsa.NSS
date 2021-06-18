@@ -19,26 +19,20 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
 
     object oTarget = GetEnteringObject();
 	int nSaveDC = GetSpellSaveDC();
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
     effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
     effect eLink = EffectLinkEffects(eDur, eParal);
     effect eDam;
 	
-	//Casting modifier
-	int CasterModifier = 0;
-	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+
 	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
@@ -53,14 +47,14 @@ void main()
         for (nHits = d4(); nHits > 0; nHits--)
         {
             fDelay = GetRandomDelay(1.0, 2.2);
-            nRoll = (5 + d20())+CasterModifier;
+            nRoll = (32 + d20());
             if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
             {
-                nDamage = d6() + 4;
+                nDamage = d6() + (nCL/2);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 6 + 4;//Damage is at max
+                    nDamage = nDamage*2;//Damage is at max
                 }
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

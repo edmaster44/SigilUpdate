@@ -31,6 +31,7 @@ which the character drinks (and whose effects are subsumed by the spell effects)
 #include "x2_inc_itemprop"
 #include "x2_inc_shifter"
 #include "nwn2_inc_spells"
+#include "ps_inc_functions"
 
 //The following function tells you how many attacks you have given a Base Attack Bonus Value.
 int Attacks (int BAB) 
@@ -148,7 +149,7 @@ if (!X2PreSpellCastCode())
 
     //Declare effects
     effect eSpellFail = EffectSpellFailure(100, SPELL_SCHOOL_GENERAL);
-    effect eAttack = EffectAttackIncrease(nLevel/2);
+    effect eAttack = EffectAttackIncrease(nLevel/3);
     effect eSave = EffectSavingThrowIncrease(SAVING_THROW_FORT, 5);
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     effect eSwing = EffectModifyAttacks(AddAttacks);
