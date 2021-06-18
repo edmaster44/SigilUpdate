@@ -115,7 +115,7 @@ void main()
 		
 		//Feral Path
 		if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester))
-		{	itemproperty iBonusFeat1 = ItemPropertyBonusFeat(3369);
+		{	itemproperty iBonusFeat1 = ItemPropertyBonusFeat(1784);
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration); 
 			AddItemProperty(DURATION_TYPE_TEMPORARY, iBonusFeat1,oWeapon,fDuration);
         }
