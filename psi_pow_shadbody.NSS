@@ -40,6 +40,16 @@
 #include "psi_spellhook"
 #include "psi_inc_teleport"
 
+
+void GoInvis(struct manifestation manif, object oTarget)
+{
+    // Check for effect expiration
+    if(GetHasSpellEffect(manif.nSpellID, oTarget))
+    {
+        effect eConceal = EffectConcealment(10);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, 12.0f);
+    }
+}
 void main()
 {
 /*
@@ -76,7 +86,7 @@ void main()
                eLink = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID,       50));
                eLink = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 50));
                eLink = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE,       50));
-			   eLink = EffectLinkEffects(eLink, EffectConcealment(20));
+			//  eLink = EffectLinkEffects(eLink, EffectConcealment(20));
                eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_shadowfiend_2.sef"));
         effect eVis  = EffectVisualEffect(VFX_IMP_MAGIC_PROTECTION);
         float fDuration = 60.0f * manif.nManifesterLevel;
@@ -87,7 +97,7 @@ void main()
         {
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-            //GoInvis(manif, oTarget);
+            GoInvis(manif, oTarget);
         }// end if - The target can move extradimensionally
     }// end if - Successfull manifestation
 }
