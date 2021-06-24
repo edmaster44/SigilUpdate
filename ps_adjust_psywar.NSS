@@ -34,26 +34,22 @@ void DoPsyProgression(object oPC)
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int iTotal = nPsywar + nGemDragon + nWarMind;
 
-		if (iTotal >= 0)
-		{
-			FeatAdd(oPC,FEAT_PSYWAR_PROGRESSION_I,FALSE,FALSE,FALSE);
-		}
-
-			if (iTotal >= 3)
+		
+			if (iTotal >= 2)
 			{	
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
 				//FeatRemove(OBJECT_SELF,21464);
 				
 			}
-			if (iTotal >= 7)
+			if (iTotal >= 5)
 			{	
 				
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
 				FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
 					//FeatRemove(OBJECT_SELF,21465);
 			}
-			if (iTotal >= 10)
+			if (iTotal >= 9)
 			{	
 			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
@@ -61,7 +57,7 @@ void DoPsyProgression(object oPC)
 				
 			}	//FeatRemove(OBJECT_SELF,21466);
 			
-			if (iTotal >= 13)
+			if (iTotal >= 12)
 			{	
 			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
@@ -69,7 +65,7 @@ void DoPsyProgression(object oPC)
 				
 				//FeatRemove(OBJECT_SELF,21467);
 			}
-			if (iTotal >= 16)
+			if (iTotal >= 15)
 			{	
 			
 				FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
@@ -77,7 +73,7 @@ void DoPsyProgression(object oPC)
 				
 				//FeatRemove(OBJECT_SELF,21468);
 			}
-			if (iTotal >= 20 )
+			if (iTotal >= 19 )
 			{
 			FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
 			}
