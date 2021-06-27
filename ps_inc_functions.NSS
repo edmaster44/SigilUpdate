@@ -2144,13 +2144,16 @@ void DoPsiDeLevelCheck(object oPC)
 	{	int nIlMentalist = GetLevelByClass(100, oPC); 
 		int nPsion = GetLevelByClass(90, oPC);
 		int nCerebremancer = GetLevelByClass(152, oPC);
+		int nPsyKnight = GetLevelByClass(109, oPC);
 		int nGemDragon = GetLevelByClass(128, oPC);
 		if (nIlMentalist > 1)
 		{	nPsion = nPsion + (nIlMentalist - 1);	}
 		if (nCerebremancer > 1)
-		{	nPsion = nPsion + nCerebremancer;	}
+		{	nPsion = nPsion + nCerebremancer;	}		
+		if (nPsyKnight > 1)
+		{ nPsion = nPsion + (nPsyKnight - 1);}
 		if (nGemDragon > 1)
-		{	nPsion = nPsion + (nGemDragon/2);	}
+		{	nPsion = nPsion + (nGemDragon/2 + 1);	}
 		int n9FeatTotal = 0;
 		if(GetHasFeat(21331, oPC))
 		{	n9FeatTotal++;	}
