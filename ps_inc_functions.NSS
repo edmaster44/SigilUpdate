@@ -682,6 +682,8 @@ int GetWarlockCasterLevelBase(object oPC) {
 		else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
 	}
 	
+	
+	if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
 	if (iTotal > 30)
 	iTotal = 30;
 	
