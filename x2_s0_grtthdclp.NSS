@@ -99,7 +99,7 @@ void main()
 						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 
                     }
-        	        else if (nMetaMagic == METAMAGIC_EMPOWER)
+        	else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {
                         nDam = nDam + nDam / 2;
 						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);

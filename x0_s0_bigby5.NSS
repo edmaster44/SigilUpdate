@@ -64,7 +64,7 @@ void main()
         return;
     }
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-    int nDuration = (nCL/3);
+    int nDuration = (nCL);
     int nMetaMagic = GetMetaMagicFeat();
 
     //Check for metamagic extend

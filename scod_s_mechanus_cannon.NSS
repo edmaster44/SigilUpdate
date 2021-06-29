@@ -75,15 +75,15 @@ void main()
         		        //Enter Metamagic conditions
         		        if (nAlign == ALIGNMENT_LAWFUL)
 						{
-							nDamage = d6(nCasterLvl);
+							nDamage = d3(nCasterLvl) + (nCasterLvl);
 						}
 						if (nAlign == ALIGNMENT_NEUTRAL)
 						{
-							nDamage = ((d6(nCasterLvl))/2);
+							nDamage = ((d3(nCasterLvl))/2);
 						}
 						if (nAlign == ALIGNMENT_CHAOTIC)
 						{
-							nDamage = ((d6(nCasterLvl))/2);
+							nDamage = ((d3(nCasterLvl))/2);
 							nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_LAW);
 							
 						//Resolve metamagic

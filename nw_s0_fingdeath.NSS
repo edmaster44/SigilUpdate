@@ -79,11 +79,11 @@ void main()
                  else
                  {
                     //Roll damage
-                    nDamage = d4(nCasterLevel);
+                    nDamage = d3(nCasterLevel*2);
                     //Make metamagic checks
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = nCasterLevel*2;
+                        nDamage = nDamage*2;
                     }
                     if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

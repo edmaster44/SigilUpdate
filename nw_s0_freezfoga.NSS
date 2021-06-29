@@ -19,7 +19,7 @@ void main()
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
     {   SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1229));
             fDelay = GetRandomDelay(0.5, 2.0);
-            nDamage = d4(nCL/3);
+            nDamage = d3(nCL/3);
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {	nDamage = nDamage*2;	}
         if (nMetaMagic == METAMAGIC_EMPOWER)

@@ -32,7 +32,7 @@
 //:: AFW-OEI 06/26/2007: Removed SR checks.
 
 #include "nwn2_inc_spells"
-
+#include "ps_inc_functions"
 
 #include "x2_inc_spellhook" 
 
@@ -45,8 +45,14 @@ void main()
 
     // Declare major variables
 	object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetCasterLevel(oCaster);
-    float fDuration = RoundsToSeconds(nCasterLvl);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	float fDuration;
+
+	if (nCasterLvl <= 13)
+		{fDuration = RoundsToSeconds(nCasterLvl);}
+	else
+		{fDuration = TurnsToSeconds(nCasterLvl);}
+	
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 	location lTarget = GetLocation(oCaster);
@@ -67,7 +73,7 @@ void main()
 			//Fire cast spell at event for the specified target
     		SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
 			
-			int nBonus = 2;
+			int nBonus = 3;
 			if (GetStringLowerCase(GetDeity(oTarget)) == GetStringLowerCase(GetDeity(oCaster))) {
 				nBonus = 3;
 			}

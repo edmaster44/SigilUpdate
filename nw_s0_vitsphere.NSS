@@ -44,7 +44,6 @@
 #include "ps_inc_functions"
 
 
-const float SPELL_EFFECT_RADIUS = 3.048;
 const float DELAY_ONE_ROUND     = 6.0f;
 
 void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, int nMetaMagic )
@@ -137,7 +136,7 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 
     int nMetaMagic = GetMetaMagicFeat();
 
-    object oVictim = GetFirstObjectInShape(SHAPE_SPHERE, SPELL_EFFECT_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE );
+    object oVictim = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE );
 
     while ( GetIsObjectValid(oVictim) )
     {
@@ -169,7 +168,7 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 
         }
 
-        oVictim = GetNextObjectInShape(SHAPE_SPHERE, SPELL_EFFECT_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE );
+        oVictim = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE );
     }
 	
 
