@@ -71,6 +71,7 @@ void main()
 	object		oTarget		=	GetFirstObjectInShape(SHAPE_SPELLCONE, 15.0, lLocation, FALSE);
 	int			nDam;
 	int			nHP;
+	int 		PML 		= 	GetPureMageLevels(OBJECT_SELF);
 	int			nCasterLvl	=	PS_GetCasterLevel(OBJECT_SELF);
 	int			nFreezeLvl	=	PS_GetCasterLevel(OBJECT_SELF)/2;
 	effect		eFreeze		=	EffectPetrify();
@@ -115,7 +116,7 @@ void main()
 			if (!ResistSpell(oCaster, oTarget))
 			{
 				//determine damage + metamagic
-				nDam	=	d6(nCasterLvl*2);
+				nDam	=	d6(nCasterLvl*2) + d6((4*PML)/3);
 				nDam	=	ApplyMetamagicVariableMods(nDam, 360);
 				
 				if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD, oCaster))

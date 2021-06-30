@@ -49,6 +49,7 @@ void main()
 
 	location	lTarget		=	GetSpellTargetLocation();
 	object		oCaster		=	OBJECT_SELF;
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int         nCasterLvl  =   PS_GetCasterLevel(OBJECT_SELF);
     int 		nMetaMagic  =   GetMetaMagicFeat();
 	object		oTarget		=	GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
@@ -73,7 +74,7 @@ void main()
 			if (oTarget != oCaster)
 			
 				//determine duration and damage + metamagic
-				nDam		=	d8(nCasterLvl);
+				nDam		=	d8(nCasterLvl) + d8((2*PML)/3);
 				fDuration	=	RoundsToSeconds(d6(4));
 				
 				//Resolve metamagic

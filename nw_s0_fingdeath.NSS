@@ -44,6 +44,7 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     effect eDam;
@@ -79,7 +80,7 @@ void main()
                  else
                  {
                     //Roll damage
-                    nDamage = d3(nCasterLevel*2);
+                    nDamage = d3(nCasterLevel*2) + d3((4*PML)/3);
                     //Make metamagic checks
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {

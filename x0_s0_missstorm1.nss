@@ -16,6 +16,7 @@
 //Mymothersmeatloaf 6/21/2020: Added missiles damage from casting stat
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -33,9 +34,12 @@ void main()
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
-
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
+    int nDamageDice = (nCL/3) + (PML/6);
+	
 // End of Spell Cast Hook
 
    //SpawnScriptDebugger();
-    DoMissileStorm(1, 20, SPELL_ISAACS_LESSER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 10);
+    DoMissileStorm(nDamageDice, 30, SPELL_ISAACS_LESSER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 1);
 }

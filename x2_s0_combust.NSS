@@ -55,7 +55,8 @@ void main()
     //--------------------------------------------------------------------------
     // Calculate the save DC
     //--------------------------------------------------------------------------
-    int nDC = GetSpellSaveDC();
+	int PML = GetPureMageLevels(OBJECT_SELF);
+    int nDC = GetSpellSaveDC() + (PML/10);
     int nLevel = PS_GetCasterLevel(OBJECT_SELF);
 	
 

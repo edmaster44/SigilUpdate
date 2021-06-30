@@ -74,9 +74,9 @@ void main()
 		int spellID =  GetSpellId();
         float fDuration = manif.nManifesterLevel*600.0f;
         if(manif.bExtend) fDuration *= 2;
-		int nMod = 2;
+		int nMod = 3;
 		if (manif.bAugment)
-			nMod = 3;
+			nMod = 4;
 		effect eEdge;
 		if (spellID == 14600)
 		{

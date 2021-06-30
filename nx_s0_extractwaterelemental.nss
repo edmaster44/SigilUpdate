@@ -46,6 +46,7 @@ void main()
     object oTarget = GetSpellTargetObject();
 	object oCaster = OBJECT_SELF;
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
 	// Things that are not alive are immune to this spell.	
 	//if (GetIsImmune(oTarget,IMMUNITY_TYPE_DEATH))
@@ -71,7 +72,7 @@ void main()
        	{	
 			int nNumRolls = nCasterLvl;
 
-			int nDamage = d6(nNumRolls);
+			int nDamage = d6(nNumRolls) + d6((2*PML)/3);
 			float fSummonTime = RoundsToSeconds(10);
 						
 			//Enter Metamagic conditions

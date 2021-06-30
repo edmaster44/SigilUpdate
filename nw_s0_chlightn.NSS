@@ -58,7 +58,8 @@ void main()
         nCasterLevel = 20;
     }*/
 	int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
-    int nDamage = d6(nCasterLevel);
+	int PML = GetPureMageLevels(OBJECT_SELF);
+    int nDamage = d6(nCasterLevel) + d6((2*PML)/3);
     int nDamStrike;
     int nNumAffected = 0;
     int nMetaMagic = GetMetaMagicFeat();
@@ -132,7 +133,7 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 
-                nDamage = d6(nCasterLevel) ;
+                nDamage = d6(nCasterLevel) + d6((2*PML)/3);
 
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

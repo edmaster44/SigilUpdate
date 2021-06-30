@@ -63,6 +63,7 @@ void main()
         FloatingTextStrRefOnCreature(100775,OBJECT_SELF,FALSE);
         return;
     }
+
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
     int nDuration = (nCL);
     int nMetaMagic = GetMetaMagicFeat();
@@ -106,9 +107,11 @@ void main()
 int RunGrappleHit( object oTarget )
 {
 	int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterRoll = d20(1)
     	+ nCasterModifier
         + GetCasterLevel(OBJECT_SELF) + 12 + -1;
+		+ (PML/5);
     int nTargetRoll = GetAC(oTarget);
 
     // * grapple HIT succesful,

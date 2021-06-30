@@ -51,6 +51,7 @@ void main()
 	int			nDam;
 	int 		nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	int			nMetaMagic = GetMetaMagicFeat();
+	int		    PML = GetPureMageLevels(OBJECT_SELF);
 	float		fDuration;
 	effect		eDeaf		=	EffectDeaf();
 	effect		eDam;
@@ -68,12 +69,12 @@ void main()
 			if (oTarget != oCaster)
 			{
 				//determine duration and damage + metamagic
-				nDam		=	d4(nCasterLvl);
+				nDam		=	d4(nCasterLvl) + d4((2*PML)/3);
 				fDuration	=	RoundsToSeconds(d6(2));
 				
 				    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDam = (nCasterLvl*2);
+                        nDam = (nDam*2);
                     }
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

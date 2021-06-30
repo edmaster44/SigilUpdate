@@ -136,6 +136,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
     effect 	eDur 	= EffectVisualEffect( VFX_DUR_SPELL_PRISMATIC_SPRAY );
     effect	eLink;
     int 	nDamage = 0;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int 	nVis 	= 0;
 	int 	nCL 	= PS_GetCasterLevel(OBJECT_SELF);
      float 	fDelay	= GetDelayForTarget( oTarget );
@@ -146,7 +147,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
     {
         case PS_EFFECT_FIRE://fire
 			{
-	            nDamage = d4(nCL*2);
+	            nDamage = d4(nCL*2) + d4((4*PML)/3);
 	            nVis = VFX_HIT_SPELL_FIRE;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_FIRE);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
@@ -156,7 +157,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 
         case PS_EFFECT_ACID: //Acid
 			{
-	            nDamage = d4(nCL*2);
+	            nDamage = d4(nCL*2) + d4((4*PML)/3);
 	            nVis = VFX_HIT_SPELL_ACID;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_ACID);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
@@ -166,7 +167,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 
         case PS_EFFECT_ELECTRICITY: //Electricity
 			{
-	            nDamage = d4(nCL*2);
+	            nDamage = d4(nCL*2) + d4((4*PML)/3);
 	            nVis = VFX_HIT_SPELL_LIGHTNING;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_ELECTRICITY);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);

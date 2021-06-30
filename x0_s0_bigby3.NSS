@@ -60,6 +60,7 @@ void main()
     int nDuration = nCL;
     int nMetaMagic = GetMetaMagicFeat();
 
+
     //Check for metamagic extend
     if (nMetaMagic == METAMAGIC_EXTEND) //Duration is +100%
     {
@@ -99,9 +100,11 @@ void main()
 int RunGrappleHit( object oTarget )
 {
 	int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterRoll = d20(1)
     	+ nCasterModifier
-    	+ GetCasterLevel(OBJECT_SELF) + 10 + -1;
+    	+ GetCasterLevel(OBJECT_SELF) + 10 + -1
+		+ (PML /5);
 
     int nTargetRoll = GetAC(oTarget);
 

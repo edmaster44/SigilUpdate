@@ -44,9 +44,9 @@ void RunHandImpact(object oTarget, object oCaster, int nMetaMagic)
     {
         return;
     }
-	
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterModifiers = GetCasterAbilityModifier(oCaster) + GetCasterLevel(oCaster);
-    int nCasterRoll = d20(1) + nCasterModifiers + 11 + -1;
+    int nCasterRoll = d20(1) + nCasterModifiers + 11 + -1 + (PML/5);
     int nTargetRoll = GetAC(oTarget);
 	int nMetaMagic = GetMetaMagicFeat();
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
@@ -105,11 +105,11 @@ void main()
         return;
     }
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-    int nDuration = (nCL / 6);
+    int nDuration = 4;
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
-         nDuration = nDuration * 2;
+         nDuration = nDuration;
     }
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))

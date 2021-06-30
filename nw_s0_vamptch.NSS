@@ -57,6 +57,7 @@ void main()
 
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
@@ -76,7 +77,7 @@ void main()
 		nDDice = nDDice * 2;
 	}
 
-    int nDamage = d3(nDDice);  // JLR - OEI 07/19/05
+    int nDamage = d3(nDDice) + d3((2*PML)/3);  // JLR - OEI 07/19/05
 
     //--------------------------------------------------------------------------
     //Enter Metamagic conditions

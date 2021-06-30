@@ -111,6 +111,8 @@ float PS_GetXPModifier(int iECL);
 
 int PS_GetXPForLevel(int iLevel);
 
+int PS_GetPureMageLevels(int PML);
+
 int GetWarlockCasterLevel(object oPC);
 
 //void StackEldBlast(object oPC);	
@@ -4341,6 +4343,26 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
 	int nIndex = nMax+1;
 	SetLocalString(oTarget, sVar+"_"+IntToString(nIndex), sName);
 	SetLocalInt(oTarget, sVar+"_Num", nIndex);
+}
+
+//Counts levels in low bab arcane classes
+int GetPureMageLevels(object oPC)
+{
+	 
+int iWIZ =	GetLevelByClass(CLASS_TYPE_WIZARD, oPC);     
+int	iSOR =	GetLevelByClass(CLASS_TYPE_SORCERER, oPC);
+int iBRA =	GetLevelByClass(CLASS_TYPE_BRACHINA, oPC); 
+int iLIC =	GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
+int iSUC =	GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
+int iPAL =	GetLevelByClass(CLASS_TYPE_PALEMASTER, oPC);
+int iGOL =	GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
+int iARC =	GetLevelByClass(CLASS_TYPE_ARCANE_SCHOLAR, oPC);
+int iMYS =	GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
+int iRWZ = 	GetLevelByClass(CLASS_TYPE_RED_WIZARD, oPC);
+	
+int PML = (iWIZ + iSOR + iBRA + iLIC + iSUC + iPAL + iGOL + iARC + iMYS + iRWZ);
+
+return PML;
 }
 
 //Get whether this PC has done this action (defined by variable given) this reset

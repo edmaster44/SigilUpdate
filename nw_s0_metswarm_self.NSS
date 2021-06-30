@@ -55,7 +55,7 @@ void HandleTargetSelf()
 	location lSourceLoc = GetLocation( OBJECT_SELF );
 	
 	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	
 	location lTargetLoc;
     int nPathType = PROJECTILE_PATH_TYPE_DEFAULT;
@@ -81,7 +81,7 @@ void HandleTargetSelf()
             		fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 								
                     //Roll damage
-                    nDamage = d3(nCasterLvl*4);
+                    nDamage = d3(nCasterLvl*4) + d3((8*PML)/3);
 
     		        //Enter Metamagic conditions
     		        if (nMetaMagic == METAMAGIC_MAXIMIZE)

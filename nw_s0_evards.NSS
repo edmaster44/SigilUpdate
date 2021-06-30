@@ -46,6 +46,7 @@ void main()
     location lTarget = GetSpellTargetLocation();
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	
     /*	Spell description states that this spell lasts 1 round per caster level
 	//Make sure duration does no equal 0

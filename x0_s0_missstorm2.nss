@@ -26,6 +26,10 @@ void main()
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
-
-    DoMissileStorm(3, 60, SPELL_ISAACS_GREATER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 10);
+	
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
+    int nDamageDice = (2*nCL)/3;
+	
+    DoMissileStorm(nDamageDice, 30, SPELL_ISAACS_GREATER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 1);
 }

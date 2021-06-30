@@ -70,7 +70,7 @@ void main()
     	if(manif.bExtend) fDur *= 2;
 		
 		if (manif.bAugment)
-		fDur = fDur + (60.0 * manif.nManifesterLevel);
+		nBonus = 2;
 		
 		if (!GetHasSpellEffect(GetSpellId(), oTarget))
 		{

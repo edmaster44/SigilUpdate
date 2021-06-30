@@ -51,6 +51,7 @@ void main()
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMissiles = (nCasterLvl);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int nMetaMagic = GetMetaMagicFeat();
     //effect eMissile = EffectVisualEffect(VFX_IMP_MIRV);	// handled by SpawnSpellProjectile()
     effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);
@@ -109,7 +110,7 @@ void main()
 	        if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 		  	{
                 //Roll damage
-                int nDam = d3(1) + 1;
+                int nDam = d3(1) + 1 + (PML/13);
      	     //Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)
 				{

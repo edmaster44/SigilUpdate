@@ -39,6 +39,7 @@ void main()
 
 		
 	object oTarget = GetSpellTargetObject();
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nDice = 1;
     int nDamage = 0;
@@ -55,7 +56,7 @@ void main()
 	}
 
 	// calculate base damage	
-	nDamage = d4(nDice);	
+	nDamage = d4(nDice) + d3(PML/3);	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LESSER_ORB_OF_SOUND));

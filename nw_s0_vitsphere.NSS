@@ -53,12 +53,13 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
 	// Returns: 1 if the saving throw roll succeeded
 	// Returns: 2 if the target was immune to the save type specified
     int nSave = ReflexSave( oVictim, nSpellSaveDC, SAVING_THROW_TYPE_ACID, oCaster );
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
     SignalEvent(oVictim, EventSpellCastAt(oCaster, SPELL_VITRIOLIC_SPHERE));
 
     if ( nSave != 2 )
     {
-        int nDamage = d2(nDice*2);
+        int nDamage = d2(nDice*2) + d2((4*PML)/3);
 
 		int nMaxVal = (4*nDice) ; // nDice * d4
 

@@ -42,6 +42,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nDamage2, nDamage3;
     int nVariable = nCasterLvl/3;
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int nDuration = nCasterLvl;
     float fDelay;
     effect eVis = EffectNWN2SpecialEffectFile("sp_stygian_ice_storm_hit.sef");
@@ -62,7 +63,7 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {
                 //Roll damage for each target
-                nDamage = d6(nVariable);
+                nDamage = d6(nVariable) + d6((2*PML)/3);
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

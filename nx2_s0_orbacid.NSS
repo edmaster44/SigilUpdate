@@ -42,8 +42,10 @@ void main()
 		
 	object oTarget = GetSpellTargetObject();
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-	int nDice = nCasterLevel;
+	int PML = GetPureMageLevels(OBJECT_SELF);
+	int nDice = nCasterLevel + ((2*PML)/3);
 	int nDamage = 0;
+	
 	// Calculate max damage.
 
 		

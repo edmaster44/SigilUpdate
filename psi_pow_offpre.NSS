@@ -68,7 +68,7 @@ void main()
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 		if (manif.bAugment)
-			fDuration = fDuration + (60.0f * manif.nManifesterLevel);
+			nBonus = 2;
 
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
     }

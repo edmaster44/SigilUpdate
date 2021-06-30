@@ -52,6 +52,7 @@ void main()
 	
 	
     int nMaxLvl;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     if ( nCasterLvl > 13 )
     {
         nMaxLvl = 13;
@@ -82,7 +83,7 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 			
-				nDamage = d6(nMaxLvl);
+				nDamage = d6(nMaxLvl) + d2(PML/3);
 				//Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)
 				{

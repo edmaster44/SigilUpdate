@@ -38,16 +38,17 @@ void main()
     //Declare major variables
     object oCaster = OBJECT_SELF;
 	//Casting modifier
-	int CasterModifier = 0;
+//	int CasterModifier = 0;
 	//Determine Caster modifier
-	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
-		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
-	}
-	else {
-		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	}
+//	if (GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF) > GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF)) {
+//		CasterModifier = GetAbilityModifier(ABILITY_INTELLIGENCE,OBJECT_SELF);
+//	}
+//	else {
+//		CasterModifier = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+//	}
 	
     int nCasterLvl = GetCasterLevel(oCaster);
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nDamage2, nDamage3;
     int nVariable = nCasterLvl/3;
@@ -69,26 +70,22 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {
                 //Roll damage for each target
-                nDamage = d6(3)+CasterModifier;
-                nDamage2 = d6(2)+CasterModifier;
-                nDamage3 = d6(nVariable);
+                nDamage = d4(nVariable) + d4((2*PML)/3);
+
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = 18+CasterModifier;
-                    nDamage2 = 12+CasterModifier;
-                    nDamage3 = 6 * nVariable;
+                    nDamage = nDamage*2;
                 }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                    nDamage = nDamage + (nDamage / 2);
-                   nDamage2 = nDamage2 + (nDamage2 / 2);
-                   nDamage3 = nDamage3 + (nDamage3 / 2);
+                  
                 }
                 nDamage2 = nDamage2 + nDamage3;
                 //Set the damage effect
-                eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
-                eDam2 = EffectDamage(nDamage2, DAMAGE_TYPE_COLD);
+                
+                eDam = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
                 // Apply effects to the currently selected target.
                 DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget));

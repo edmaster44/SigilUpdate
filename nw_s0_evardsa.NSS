@@ -27,6 +27,7 @@ void main()
     object oTarget = GetEnteringObject();
 	int nSaveDC = GetSpellSaveDC();
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
     effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
     effect eLink = EffectLinkEffects(eDur, eParal);
@@ -47,7 +48,7 @@ void main()
         for (nHits = d4(); nHits > 0; nHits--)
         {
             fDelay = GetRandomDelay(1.0, 2.2);
-            nRoll = (32 + d20());
+            nRoll = (30 + d20() + (PML/5));
             if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
             {
                 nDamage = d6() + (nCL/2);
