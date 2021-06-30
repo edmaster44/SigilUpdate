@@ -33,7 +33,13 @@ void main()
 		
 	oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    {	
+			if (GetIsReactionTypeFriendly(oTarget,GetAreaOfEffectCreator(OBJECT_SELF)))
+			{
+				return;
+				}
+	
+			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
 		{	int nRace			= GetRacialType(oTarget);
 	
 			if (oTarget == oCaster) return;
