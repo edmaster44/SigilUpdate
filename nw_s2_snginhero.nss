@@ -49,14 +49,17 @@ void main()
     int nHP         = 4 * nLevel;
     object oTarget  = GetSpellTargetObject();
 
-    effect eDR     = ExtraordinaryEffect( EffectDamageImmunityIncrease(DAMAGE_TYPE_ALL, nDR) );
+    effect eDR     = ExtraordinaryEffect( EffectDamageImmunityIncrease(DAMAGE_TYPE_SLASHING, nDR) );
+	effect eDR2    = ExtraordinaryEffect( EffectDamageImmunityIncrease(DAMAGE_TYPE_PIERCING, nDR) );
+	effect eDR3    = ExtraordinaryEffect( EffectDamageImmunityIncrease(DAMAGE_TYPE_BLUDGEONING, nDR) );
     effect eSave   = ExtraordinaryEffect( EffectSavingThrowIncrease(SAVING_THROW_ALL, nSave) );
     effect eHP     = ExtraordinaryEffect( EffectTemporaryHitpoints(nHP) );
     effect eDur    = ExtraordinaryEffect( EffectVisualEffect(VFX_HIT_BARD_INS_HEROICS) );
     effect eLink   = ExtraordinaryEffect( EffectLinkEffects(eDR, eSave) );
 //    eLink          = ExtraordinaryEffect( EffectLinkEffects(eLink, eHP) );
     eLink          = ExtraordinaryEffect( EffectLinkEffects(eLink, eDur) );
-
+	eLink = ExtraordinaryEffect( EffectLinkEffects(eLink, eDR2) );
+	eLink = ExtraordinaryEffect( EffectLinkEffects(eLink, eDR3) );
     //FIX: should not cancel inspirations
     //if(AttemptNewSong(OBJECT_SELF))
     {
