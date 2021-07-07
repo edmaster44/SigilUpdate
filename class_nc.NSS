@@ -17,13 +17,26 @@ if(iNaturesWarrior == 5) nBonus = 3;
 
 void Claws_of_the_grizzly(object oPC, int nSpell)
 {
+
+effect eSlashing = EffectDamage(3,DAMAGE_TYPE_SLASHING,DAMAGE_POWER_NORMAL,FALSE);
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlashing, oPC));
+
+
+
 }
+
+
 
 
 
 void Earth_Resilience(object oPC, int nSpell)
 {
-		 int nBonus = 5;
+
+	if (!GetHasFeat(333,oPC))
+	FeatAdd(oPC,333,FALSE,FALSE,FALSE);
+
+
+		/* int nBonus = 5;
 		 effect eLink;
 		effect ePiercing = EffectDamageReduction(nBonus, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
 		effect eSlashing = EffectDamageReduction(nBonus, DAMAGE_TYPE_SLASHING, 0, DR_TYPE_DMGTYPE);
@@ -32,7 +45,7 @@ void Earth_Resilience(object oPC, int nSpell)
 		eLink = EffectLinkEffects(ePiercing, eLink);
 		eLink = EffectLinkEffects(eSlashing, eLink);
 		eLink = EffectLinkEffects(eBludgeoning, eLink);
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));*/
 
 }
 void Nature_Weapon(object oPC, int nSpell)
