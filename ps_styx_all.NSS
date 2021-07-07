@@ -78,7 +78,6 @@ void DelayedFixes(object oPC, object oItem, int nSTEP)
 		case 5: DoPsiDeLevelCheck(oPC); break;		
 		case 6: PS_Template_DelevelFix(oPC, oItem); break;
 		case 7: ExportSingleCharacter(oPC); break;
-		case 8: PS_PsyWarFix(oPC,oItem); break;
 //		case 9: DoPsyProgression(oPC); break;
 //		case 10:PS_KnightLevels(oPC); break;
 //		case 11:PS_BarbarianLevels(oPC); break;

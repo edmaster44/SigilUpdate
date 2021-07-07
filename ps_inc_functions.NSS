@@ -3725,16 +3725,6 @@ void PS_VampMal_DelevelFix(object oPC, object oItem)
 }
 
 
-void PS_PsyWarFix(object oPC, object oItem)
-{
-int iPsyWar = GetLocalInt(oItem, "PSYWAR1");
-
-if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) < 1 && iPsyWar == 1 )
-	{		
-		SetLocalInt(oItem, "PSYWAR1", 0);
-		DeleteLocalInt(oItem, "PSYWAR1");	}
-}
-
 
 void PS_ApplyEnhancementToFinesse(object oPC, object oItem, int iDiff)
 {

@@ -57,10 +57,9 @@ void DelayedFixes(object oPC, object oItem, int nSTEP)
 		case 2: PS_HalfOutsiderRaceFix(oPC); break;
 		case 3: PS_VampMal_DelevelFix(oPC, oItem); break;
 		case 4: PS_ClassAppearanceDeleveling(oPC); break;
-		case 5: DoPsiDeLevelCheck(oPC); break;
-		case 6: PS_Template_DelevelFix(oPC, oItem); break;
-		case 7: ExportSingleCharacter(oPC); break;
-		case 8: PS_PsyWarFix(oPC, oItem); break;
+		case 5: PS_Template_DelevelFix(oPC, oItem); break;
+		case 6: ExportSingleCharacter(oPC); break;
+		case 7: PS_PsyWarFix(oPC, oItem); break;
 		default: return;
 	}
 	DelayCommand(0.0f, DelayedFixes(oPC, oItem, nSTEP + 1));
