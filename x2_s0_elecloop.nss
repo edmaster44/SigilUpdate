@@ -48,6 +48,7 @@ void main()
     effect   eBeam;
     int      nDamage;
     int      nPotential;
+	int 	 PML = GetPureMageLevels(OBJECT_SELF);
     effect   eDam;
     object   oLastValid;
     effect   eStun = EffectLinkEffects(EffectVisualEffect(VFX_IMP_STUN),EffectStunned());
@@ -105,7 +106,7 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 
-                nPotential = d6(nNumDice);
+                nPotential = d6(nNumDice) + d2(PML/3);
 				
 				//Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)

@@ -53,6 +53,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     int nDuration = (PS_GetCasterLevel(OBJECT_SELF)/3);
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	if (nCL > 13)
     {
         nCL = 13;
@@ -98,7 +99,16 @@ void main()
 	            //----------------------------------------------------------------------
 	            // Do the initial 3d6 points of damage
 	            //----------------------------------------------------------------------
-	            int nDamage = MaximizeOrEmpower(6,nCL,nMetaMagic);
+	            int nDamage = d6(nCL) + d2(PML/3) ;
+				//Resolve metamagic
+				if (nMetaMagic == METAMAGIC_MAXIMIZE)
+				{
+				nDamage = (nDamage*2);
+				}
+				else if (nMetaMagic == METAMAGIC_EMPOWER)
+				{
+				nDamage = nDamage + nDamage / 2;
+				}
 				
 				//PKM-OEI: 05.28.07: Do critical hit damage
 				if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -167,7 +177,17 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         //----------------------------------------------------------------------
         // Calculate Damage
         //----------------------------------------------------------------------
-        int nDamage = MaximizeOrEmpower(6,2,nMetaMagic);
+        int PML = GetPureMageLevels(OBJECT_SELF);
+		int nDamage = d6(2) + d2(PML);
+		//Resolve metamagic
+		if (nMetaMagic == METAMAGIC_MAXIMIZE)
+		{
+		nDamage = (nDamage*2);
+		}
+		else if (nMetaMagic == METAMAGIC_EMPOWER)
+		{
+		nDamage = nDamage + nDamage / 2;
+		}
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
         eDam = EffectLinkEffects(eVis,eDam); // flare up

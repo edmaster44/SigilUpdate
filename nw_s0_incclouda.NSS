@@ -22,6 +22,7 @@ void main()
 	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 
 	int nMetaMagic = GetMetaMagicFeat();
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nDamage;
     effect eDam;
     object oTarget;
@@ -40,7 +41,7 @@ void main()
       //  {
             fDelay = GetRandomDelay(0.5, 2.0);
             //Roll damage.
-            nDamage = d8(nCasterLvl/2);
+            nDamage = d8(nCasterLvl/3) + (PML/9);
             //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

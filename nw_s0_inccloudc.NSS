@@ -20,6 +20,7 @@ void main()
 
     //Declare major variables
 	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
 	
     int nMetaMagic = GetMetaMagicFeat();
@@ -55,7 +56,7 @@ void main()
             //{
                 SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
                 //Roll damage.
-                nDamage = d8(nCasterLvl/3);
+                nDamage = d8(nCasterLvl/3) + (PML/9);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

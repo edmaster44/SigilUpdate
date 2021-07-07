@@ -26,6 +26,7 @@ void main()
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     effect eDam;
     object oTarget;
     //Declare and assign personal impact visual effect.
@@ -55,7 +56,7 @@ void main()
             if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
             {
                 //Roll damage.
-                nDamage = d6(2);  // JLR - OEI 07/19/05
+                nDamage = d6(2) + ((PML*2)/3);;  // JLR - OEI 07/19/05
 
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)

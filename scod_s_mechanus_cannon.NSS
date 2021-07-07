@@ -37,6 +37,7 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
@@ -75,15 +76,15 @@ void main()
         		        //Enter Metamagic conditions
         		        if (nAlign == ALIGNMENT_LAWFUL)
 						{
-							nDamage = d6(nCasterLvl);
+							nDamage = d3(nCasterLvl) + (nCasterLvl) + d3((2*PML)/3);
 						}
 						if (nAlign == ALIGNMENT_NEUTRAL)
 						{
-							nDamage = ((d6(nCasterLvl))/2);
+							nDamage = ((d3(nCasterLvl))/2);
 						}
 						if (nAlign == ALIGNMENT_CHAOTIC)
 						{
-							nDamage = ((d6(nCasterLvl))/2);
+							nDamage = ((d3(nCasterLvl))/2);
 							nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_LAW);
 							
 						//Resolve metamagic

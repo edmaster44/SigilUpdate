@@ -42,7 +42,8 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-    int nDuration = 1 + (nCL/6);
+	int PML = GetPureMageLevels(OBJECT_SELF);
+    int nDuration = 1 + (nCL/9) + (PML/9);
     int nMetaMagic = GetMetaMagicFeat();
     //Check for metamagic extend
     if (nMetaMagic == METAMAGIC_EXTEND)	//Duration is +100%

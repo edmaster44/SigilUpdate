@@ -43,15 +43,13 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	
 	effect eRay;
 	
 	int nNumRays = 0;
 
-	if (nCasterLvl >= 15)
-		nNumRays = 4;			// 3 Rays @ lvl 15
-	else if (nCasterLvl >= 11)
+	if (nCasterLvl >= 11)
 		nNumRays = 3;			// 3 Rays @ lvl 11
 	else if (nCasterLvl >= 7)
 		nNumRays = 2;			// 2 Rays @ lvl 7*/
@@ -81,7 +79,7 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(4);
+					int nDamage = d6(4) + (PML/3);
 				
 					//Enter Metamagic conditions
 	    			int nMetaMagic = GetMetaMagicFeat();

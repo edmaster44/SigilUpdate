@@ -43,7 +43,7 @@ void main()
 
     //Declare major variables
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
-
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;
@@ -73,7 +73,7 @@ void main()
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDelay)) //FIX: prevents caster from getting SR check against himself
             {
                 //Detemine damage
-                nDamage = d4(nCasterLevel);
+                nDamage = d4(nCasterLevel) + d4((2*PML)/3);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

@@ -38,7 +38,7 @@ void main()
     //Declare major variables
     object oCaster = OBJECT_SELF;
     int nCasterLvl = PS_GetCasterLevel(oCaster);
-
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
@@ -74,7 +74,7 @@ void main()
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {
                     //Roll damage for each target
-                    nDamage = d3(nCasterLvl);
+                    nDamage = d3(nCasterLvl) +d3((2*PML)/3);
                     //Resolve metamagic
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {

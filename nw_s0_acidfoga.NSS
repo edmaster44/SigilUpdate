@@ -24,6 +24,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
     effect eSlow = EffectMovementSpeedDecrease(50);
@@ -46,7 +47,7 @@ void main()
        // {
             //Roll Damage
             //Enter Metamagic conditions
-            nDamage = d6(nCL/3);
+            nDamage = d6(nCL/3) + d6(PML/9);
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
                 nDamage = nDamage*2;//Damage is at max

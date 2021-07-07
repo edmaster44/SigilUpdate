@@ -45,6 +45,7 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 
     int nMetaMagic = GetMetaMagicFeat();
@@ -76,7 +77,7 @@ void main()
                 if(GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage for each target
-                    nDamage = d8(nCasterLvl);	// JLR - OEI 07/22/05 -- 3.5 Change
+                    nDamage = d8(nCasterLvl) + d8((2*PML)/3);	// JLR - OEI 07/22/05 -- 3.5 Change
                     //Resolve metamagic
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {

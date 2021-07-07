@@ -10,6 +10,7 @@ void main()
 {
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nSave;
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
     effect eDam, eHalfDam, eSlow, eLink, eLink2;
     object oTarget;
@@ -27,7 +28,7 @@ void main()
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
         {	fDelay = GetRandomDelay(0.5, 2.0);
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
-            nDamage = d4(nCL/3);
+            nDamage = d3(nCL/3) + d3(PML/9);
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {	nDamage = nDamage*2;	}
             if (nMetaMagic == METAMAGIC_EMPOWER)

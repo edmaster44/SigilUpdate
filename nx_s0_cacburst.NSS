@@ -56,6 +56,7 @@ void main()
 	object oCaster = OBJECT_SELF;
 
 	location lTarget = GetSpellTargetLocation();
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int nDamage;
 	int nCasterLvl = GetCasterLevel(oCaster);
 	int nMetaMagic = GetMetaMagicFeat();
@@ -66,7 +67,7 @@ void main()
 //determine unmodded damage	
 
 
-	nDamage = d2(nCasterLvl*2);
+	nDamage = d2(nCasterLvl*2) + d2((4*PML)/3);
 	
 
 	//Resolve metamagic

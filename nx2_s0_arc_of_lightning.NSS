@@ -60,6 +60,7 @@ void main()
 	vector vTarget		= GetPositionFromLocation(lTarget);
 	// Caster level
 	int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
 	// Effect placeholders
 	int nDamage 		= d4(nCasterLevel);
@@ -70,7 +71,7 @@ void main()
 	// no matter what damage original target
 	if(GetIsObjectValid(oTarget))
 	{
-		nDamage = d4(nCasterLevel);
+		nDamage = d4(nCasterLevel) + d4((2*PML)/3);
 		nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster); 
 		eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);

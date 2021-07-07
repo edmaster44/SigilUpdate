@@ -42,13 +42,14 @@ void main()
     object oTarget = GetSpellTargetObject();
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
     if(nCasterLevel > 12)
     {
         nCasterLevel = 12;
     }
 
-    int nDamage = d4(nCasterLevel) + (nCasterLevel);
+    int nDamage = d4(nCasterLevel) + (nCasterLevel) + d2(PML/3);
 
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_MAXIMIZE)

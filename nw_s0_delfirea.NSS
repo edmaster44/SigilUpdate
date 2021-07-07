@@ -29,6 +29,7 @@ void main()
     object oCaster = GetAreaOfEffectCreator();
     location lTarget = GetLocation(OBJECT_SELF);
     int nDamage;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nCasterLevel = GetCasterLevel(oCaster);
 
@@ -61,7 +62,7 @@ void main()
                     //Make SR check
                     if (!MyResistSpell(oCaster, oTarget))
                     {
-                        nDamage = d3(nCasterLevel*2);
+                        nDamage = d3(nCasterLevel*2) + d3((4*PML)/3);
                         //Enter Metamagic conditions
                         if (nMetaMagic == METAMAGIC_MAXIMIZE)
                         {

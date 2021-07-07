@@ -56,6 +56,7 @@ void main()
     //effect eVis     = EffectVisualEffect(VFX_IMP_HARM);	//VFX_IMP_HARM	// NWN1 VFX
     effect eBeam    = EffectBeam( VFX_BEAM_TRANSMUTATION, oCaster, BODY_NODE_HAND );	// NWN2 VFX
     int nCasterLvl  = GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int nDamage;
 	int nSave		= 0;
 	int nDice;
@@ -85,7 +86,7 @@ void main()
 
                 if ( nSave == 0 ) // Saving Throw failed
                 {
-                    nDice = nCasterLvl; // BCH 03/10/06 - changed to caster level * 2, to reflect
+                    nDice = nCasterLvl + ((2*PML)/3); // BCH 03/10/06 - changed to caster level * 2, to reflect
 												//	script comment that damage is 2d6 per caster level
 				
 
@@ -93,7 +94,7 @@ void main()
                 }
                 else if ( nSave == 1 ) // Saving Throw succeeded
                 {
-					nDice = nCasterLvl/2;
+					nDice = ((nCasterLvl/2) + (PML/3));
                  }
                 else if ( nSave == 2 )  // Target is immune
                 {

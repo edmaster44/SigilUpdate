@@ -26,6 +26,7 @@ void main()
 
     //Declare major variables
     object oTarget	 	= GetSpellTargetObject();
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	int    nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int nTouch      = TouchAttackRanged(oTarget);
 	
@@ -52,7 +53,7 @@ void main()
 	        if(!MyResistSpell(OBJECT_SELF, oTarget))
 	        {
 	            //Enter Metamagic conditions
-	 			int nDam = d8(nCasterLevel);
+	 			int nDam = d10(nCasterLevel) + d10((2*PML)/3);
 	    		int nMetaMagic = GetMetaMagicFeat();
 	            if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	            {

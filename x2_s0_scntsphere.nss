@@ -49,6 +49,7 @@ void main()
 	
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     float fDelay;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
     effect eDam;
@@ -70,7 +71,7 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage for each target
-                nDamage = d3(nCasterLvl);
+                nDamage = d3(nCasterLvl) + d3((2*PML)/3);
                 //Resolve metamagic
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

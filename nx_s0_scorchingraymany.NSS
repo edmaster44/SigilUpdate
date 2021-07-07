@@ -53,7 +53,7 @@ void main()
 	location lTarget = GetSpellTargetLocation();
 	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	int nMetaMagic = GetMetaMagicFeat();
-	
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
 	
 	effect eRay = EffectBeam(VFX_BEAM_FIRE, OBJECT_SELF, BODY_NODE_HAND);
@@ -62,10 +62,8 @@ void main()
 	
 	int nNumRays = 0;
 
-	if (nCasterLvl >= 15)
-		nNumRays = 4;			// 3 Rays @ lvl 15
-	else if (nCasterLvl >= 11)
-		nNumRays = 3;			// 3 Rays @ lvl 11
+	if (nCasterLvl >= 11)
+		nNumRays = 3;			// 3 Rays @ lvl 15
 	else if (nCasterLvl >= 7)
 		nNumRays = 2;			// 2 Rays @ lvl 7*/
 	else if (nCasterLvl >= 3) {
@@ -164,14 +162,14 @@ void main()
 					{	//Make SR check
 			        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 			        	{	
-							int nDamage = d6(4);
+							int nDamage = d6(4)+(PML/3);
 	
 	
 							nDamage = ApplyMetamagicVariableMods(nDamage, 24);
 							
 							if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 							{
-								nDamage = d6(8);
+								nDamage = d6(8)+(PML/2);
 							
 							}
 			                

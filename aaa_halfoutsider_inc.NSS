@@ -510,6 +510,7 @@ void PS_HOM_RadiantShield(object oPC, int nSpell)
 	effect eLink		= EffectLinkEffects(eDur, eRadiant);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	
     if (GetHasSpellEffect(nSpell, oPC))
     {	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
@@ -639,18 +640,25 @@ void PS_HO_SupernaturalSight(object oPC, int nSpell)
     effect eEyes;
     effect eSight = EffectTrueSeeing();
 	
-	if (GetHasFeat(1639, oPC))
+	if (GetHasFeat(2537, oPC))
 	{	eEyes = EffectNWN2SpecialEffectFile("fx_deathknight_eyes", oPC);	}
-	if (GetHasFeat(1640, oPC))
+	if (GetHasFeat(2538, oPC))
 	{	eEyes = EffectNWN2SpecialEffectFile("fx_erinyes_eyes", oPC);	}
 	
     effect eLink = EffectLinkEffects(eEyes, eSight);
     	eLink = ExtraordinaryEffect(eLink);
 	
-    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    int nDuration = GetHitDice(oPC) * 5;
-
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDuration));
+	if(GetHasSpellEffect(nSpell, oPC))
+	{
+		RemoveEffectsFromSpell(oPC, nSpell);
+		SendMessageToPC(oPC, "Super natural Site deactivated ");	
+	}
+	else
+	{
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+		SendMessageToPC(oPC, "Super natural Site activated");
+	}
+	
 }
 
 void PS_HO_OutsiderMagic(object oPC, object oItem)

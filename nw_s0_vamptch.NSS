@@ -57,12 +57,13 @@ void main()
 
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
 	
     int nDDice = nCasterLevel;
-	int nTouch      = TouchAttackMelee(oTarget, GetSpellCastItem() == OBJECT_INVALID);
+	int nTouch      = TouchAttackMelee(oTarget, TRUE);
 	
     if ((nDDice) == 0)
     {
@@ -76,14 +77,22 @@ void main()
 		nDDice = nDDice * 2;
 	}
 
-    int nDamage = d3(nDDice);  // JLR - OEI 07/19/05
+    int nDamage = d3(nDDice) + d3((2*PML)/3);  // JLR - OEI 07/19/05
 
     //--------------------------------------------------------------------------
     //Enter Metamagic conditions
     //--------------------------------------------------------------------------
-
-    nDamage = MaximizeOrEmpower(3,nDDice,nMetaMagic);  // JLR - OEI 07/19/05
+		if (nMetaMagic == METAMAGIC_MAXIMIZE)
+		{
+		nDamage = (nDamage*2);
+		}
+		else if (nMetaMagic == METAMAGIC_EMPOWER)
+		{
+		nDamage = nDamage + nDamage / 2;
+		}
+		
     int nDuration = nCasterLevel/2;
+	
 
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
@@ -100,7 +109,7 @@ void main()
     }
 
 	// calcuate heal value before adding sneak damage
-    effect eHeal = EffectTemporaryHitpoints(nDamage);
+    effect eHeal = EffectTemporaryHitpoints(nDamage/4);
 
 	
     if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)

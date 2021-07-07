@@ -50,6 +50,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
     //Declare major variables
 	int nMetaMagic;
     int nDamage;
+	
     effect eFire;
 	effect eVis;
 	effect eBump = EffectVisualEffect( VFX_FNF_SCREEN_BUMP );
@@ -67,6 +68,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 	float fRadiusSize;
 	
 	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
 	
     object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, lSpellTargetLocation );	
@@ -105,7 +107,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
 					{
 						//Roll damage
-						nDamage = d6(nCasterLvl*2);
+						nDamage = d6(nCasterLvl*2) + d6((4*PML)/3);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
@@ -122,7 +124,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 					else
 					{
 						//Roll damage
-						nDamage = d6(nCasterLvl);
+						nDamage = d6(nCasterLvl*2) + d6((4*PML)/3);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )

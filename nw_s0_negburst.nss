@@ -42,6 +42,7 @@ void main()
     int nCasterLvl = PS_GetCasterLevel(oCaster);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     float fDelay;
     effect eExplode = EffectVisualEffect(VFX_FNF_LOS_EVIL_20); //Replace with Negative Pulse
     effect eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
@@ -72,7 +73,7 @@ void main()
        if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
        {
             //Roll damage for each target
-            nDamage = d3(nCasterLvl);
+            nDamage = d3(nCasterLvl) + d3((2*PML)/3);
             //Resolve metamagic
     	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {

@@ -27,22 +27,24 @@ void PS_StunningCroak(object oPC, int nSpell)
     effect eVis 		= EffectVisualEffect(VFX_HIT_AOE_SONIC);
     effect eStun		= EffectStunned();
 	location lCenter	= GetLocation(oPC);
+	float fDuration = 		IntToFloat(nEffLvl);
 	
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lCenter, TRUE, OBJECT_TYPE_CREATURE);
 	while (GetIsObjectValid(oTarget))
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (GetSubRace(oTarget) != 168)
-			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget,fDuration);
 				nSave = MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_CHAOS, oPC);
 				if (nSave == 0)
-				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun, oTarget));
+				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun, oTarget,fDuration));
                 } 
              }
         }
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lCenter, TRUE, OBJECT_TYPE_CREATURE);
     }
 }
+
 
 void PS_SlaadImmune(object oPC, int nSpell)
 {

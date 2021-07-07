@@ -46,6 +46,7 @@ void main()
     
     int nDC = GetSpellSaveDC();
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 	object		oCaster		=	OBJECT_SELF;
 
 	int	nMetaMagic = GetMetaMagicFeat();
@@ -89,7 +90,7 @@ void main()
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis3, oTarget,4.0f));
             }
 			
-			int nDam = d6(nCL);
+			int nDam = d6(nCL) + d6((2*PML)/3);
 				eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 			
 				
@@ -99,7 +100,7 @@ void main()
 						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 
                     }
-        	        else if (nMetaMagic == METAMAGIC_EMPOWER)
+        	else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {
                         nDam = nDam + nDam / 2;
 						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);

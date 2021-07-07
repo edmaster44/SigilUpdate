@@ -33,7 +33,7 @@ void main()
 
 */
 
-int nCL = PS_GetCasterLevel(OBJECT_SELF);
+
 
     if (!X2PreSpellCastCode())
     {
@@ -42,10 +42,12 @@ int nCL = PS_GetCasterLevel(OBJECT_SELF);
     }
 
 // End of Spell Cast Hook
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
+    int nDamageDice;
+	
+	
+	nDamageDice = (nCL + (PML/3));
 
-
-    int nDamageDice = nCL;
-
-
-    DoMissileStorm(nDamageDice, 60, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 1);
+    DoMissileStorm(nDamageDice, 30, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 1);
 }

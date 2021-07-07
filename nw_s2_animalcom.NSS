@@ -12,6 +12,11 @@
 //:://////////////////////////////////////////////
 
 const int FEAT_PACK_HUNTER = 2880;
+const int FEAT_ARMOR_OF_THE_CROCODILE = 2936;
+const int FEAT_CLAWS_OF_THE_GRIZZLY = 2938;
+const int FEAT_EARTH_RESILIENCE = 2939;
+const int FEAT_NATURES_WEAPON = 2940;
+const int FEAT_WILD_GROWTH = 2943;
 
 void main()
 {
@@ -20,10 +25,17 @@ void main()
 	
 	// No it's not. Adding Pack Hunter - Electrohydra.
 	object oPC = OBJECT_SELF;
+	object oCompanion = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPC);
+	
+	if (GetHasFeat(FEAT_ARMOR_OF_THE_CROCODILE,oPC)) FeatAdd(oCompanion, FEAT_ARMOR_OF_THE_CROCODILE, FALSE, FALSE, FALSE);
+	if (GetHasFeat(FEAT_CLAWS_OF_THE_GRIZZLY,oPC)) FeatAdd(oCompanion, FEAT_CLAWS_OF_THE_GRIZZLY, FALSE, FALSE, FALSE);
+	if (GetHasFeat(FEAT_EARTH_RESILIENCE,oPC)) FeatAdd(oCompanion, 333, FALSE, FALSE, FALSE);
+	if (GetHasFeat(FEAT_NATURES_WEAPON,oPC)) FeatAdd(oCompanion, FEAT_NATURES_WEAPON, FALSE, FALSE, FALSE);
+		if (GetHasFeat(FEAT_NATURES_WEAPON,oPC)) FeatAdd(oCompanion, FEAT_WILD_GROWTH, FALSE, FALSE, FALSE);
 	
 	if (GetHasFeat(FEAT_PACK_HUNTER, oPC))
 	{
-		object oCompanion = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPC);
+	
 		
 		int i;
 		int j;

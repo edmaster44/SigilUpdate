@@ -40,6 +40,7 @@ void main()
 	location lSourceLoc = GetLocation(OBJECT_SELF);
 	location lTargetLoc = GetLocation(oTarget);
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int PML = GetPureMageLevels(OBJECT_SELF);
 
 	
     int nDamage = 0;
@@ -47,7 +48,7 @@ void main()
     int nCnt;
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 
-    int nMissiles = (nCasterLvl)/4;
+    int nMissiles = (nCasterLvl)/4 + (PML/6);
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     //float fDelay = fDist/(3.0 * log(fDist) + 2.0);
 	float fTime;
