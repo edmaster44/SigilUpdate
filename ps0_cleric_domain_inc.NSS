@@ -238,7 +238,7 @@ void PS_Spell_Hellfire(object oPC, location lTarget, int nSpell)
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {	nDamage = d8(3) + nCasterLvl;
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                    {	nDamage = nDamage*1.75;	}
+                    {	nDamage = nDamage + ((3*nDamage)/4);;	}
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {	nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -277,7 +277,7 @@ void PS_Spell_HellfireStorm(object oPC, location lTarget, int nSpell)
                 if (!MyResistSpell(oPC, oTarget, fDelay))
         	    {	nDamage = d6(nCasterLvl);
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                    {	nDamage = nDamage*1.75;	}
+                    {	nDamage = nDamage + ((3*nDamage)/4);;	}
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {	 nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -444,7 +444,7 @@ void PS_Spell_WretchedBlight(object oPC, location lTarget, int nSpell)
             if (!MyResistSpell(oPC, oTarget, fDelay))
     	    {	nDamage = d8(nCasterLvl);
     	    	if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*1.75;;	 }
+                {	nDamage = nDamage + ((3*nDamage)/4);;;	 }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage / 2);	}
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -555,7 +555,7 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {	nDamage = d8(nCasterLvl);
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*1.75;	}
+                {	nDamage = nDamage + ((3*nDamage)/4);;	}
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage / 2);	}
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -595,7 +595,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
     location lSpellLocation;
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
-    {	nDamage = nDamage*1.75;	}	//Damage is at max
+    {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
     if (spellsIsTarget(oFirstTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
@@ -621,7 +621,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {   nDamage = (d8(3)) + (nCasterLevel) ;
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*1.75;	}	//Damage is at max
+                {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
                 nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
@@ -665,7 +665,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     location lSpellLocation;
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
-    {	nDamage = nDamage*1.75;	}	//Damage is at max
+    {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
     if (spellsIsTarget(oFirstTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
@@ -691,7 +691,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
             if (!MyResistSpell(oPC, oTarget, fDelay))
             {	nDamage = (d8(5)) + (nCasterLevel);
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*1.75;	}	//Damage is at max	
+                {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max	
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
                 nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
