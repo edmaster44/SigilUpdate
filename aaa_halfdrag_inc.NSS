@@ -876,9 +876,9 @@ void PS_HDM_ShieldGreater(object oPC, int nSpell)
 	int iArmor			= (GetHitDice(oPC))/10 + 5;
 	effect eArmor 		= EffectACIncrease(iArmor, AC_SHIELD_ENCHANTMENT_BONUS);
     effect eSpell 		= EffectSpellImmunity(SPELL_MAGIC_MISSILE);
-    effect eDur 		= EffectNWN2SpecialEffectFile("sp_shield_bk", oPC);
-    effect eLink		= EffectLinkEffects(eArmor, eDur);
-    	eLink 			= EffectLinkEffects(eLink, eSpell);
+//    effect eDur 		= EffectNWN2SpecialEffectFile("sp_shield_bk", oPC);
+    effect eLink		= EffectLinkEffects(eArmor, eSpell);
+//    	eLink 			= EffectLinkEffects(eLink, eDur);
     float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
