@@ -1320,12 +1320,11 @@ void PS_ApplyEvilWeaponProperties(object oWeapon, object oPC, int nSpell, float 
 	itemproperty ipEff2 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_MAGICAL, 
 		IP_CONST_DAMAGEBONUS_1d4);
 	itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
-	itemproperty ipClas = ItemPropertyLimitUseByClass(99);
 	
 	IPSafeAddItemProperty(oWeapon, ipEff1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	IPSafeAddItemProperty(oWeapon, ipEff2, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
-	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
+//	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 }
 
 // Helper method to apply the Weapon Properties for
