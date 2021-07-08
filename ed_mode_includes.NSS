@@ -49,8 +49,7 @@ void CheckStealthMode(object oPC, float count)
 			 if(GetHasFeat(1465, oPC, TRUE))
 			{
 				SendMessageToPC(oPC,"Applying Swift & Silent bonus.");
-				if (GetHasFeat(1772, oPC, TRUE) && !GetIsAreaInterior(GetArea(oPC))) return;
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(45), 4532), oPC, HoursToSeconds(1));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(50), 4532), oPC, HoursToSeconds(1));
 			}
 	}
 
