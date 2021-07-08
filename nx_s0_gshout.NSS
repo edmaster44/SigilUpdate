@@ -115,9 +115,10 @@ void main()
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, fStun);
 				}
 			}
-		}
+		
 		
 		oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+	}
 	
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
 }
