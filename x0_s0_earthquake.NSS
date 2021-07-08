@@ -83,16 +83,16 @@ void main()
             //Get the distance between the explosion and the target to calculate delay
             fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
 
+
+
+            
+
 // Earthquake does not allow spell resistance
 //            if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    
 			 nDamage = MaximizeOrEmpower(6, nCasterLvl,  GetMetaMagicFeat());
              //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion. (Don't bother for caster)
-			 if (nDao = 184)
-			 {
-			 	nDamage = 0;
-			 }
-             else if (oTarget != oCaster)
+			 if (oTarget != oCaster)
              {
                  nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ALL);
              }
@@ -106,7 +106,7 @@ void main()
 			 // EPF  - 8/28/06 - trying to match this spell with PHB, since without knockdown it's underpowered
 			 // Also put in a reflex save for the "falling into the fissure" aspect of the spell
 			 
-			 int nKnockdownSave = ReflexSave(oTarget, 15);
+			 int nKnockdownSave = ReflexSave(oTarget, nCasterLvl);
 			 
 			 if(nKnockdownSave == SAVING_THROW_CHECK_FAILED)
 			 {
