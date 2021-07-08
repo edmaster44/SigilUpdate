@@ -31,7 +31,7 @@ void main()
 	if (GetHasFeat(FEAT_CLAWS_OF_THE_GRIZZLY,oPC)) FeatAdd(oCompanion, FEAT_CLAWS_OF_THE_GRIZZLY, FALSE, FALSE, FALSE);
 	if (GetHasFeat(FEAT_EARTH_RESILIENCE,oPC)) FeatAdd(oCompanion, 333, FALSE, FALSE, FALSE);
 	if (GetHasFeat(FEAT_NATURES_WEAPON,oPC)) FeatAdd(oCompanion, FEAT_NATURES_WEAPON, FALSE, FALSE, FALSE);
-		if (GetHasFeat(FEAT_NATURES_WEAPON,oPC)) FeatAdd(oCompanion, FEAT_WILD_GROWTH, FALSE, FALSE, FALSE);
+		if (GetHasFeat(FEAT_WILD_GROWTH,oPC)) FeatAdd(oCompanion, FEAT_WILD_GROWTH, FALSE, FALSE, FALSE);
 	
 	if (GetHasFeat(FEAT_PACK_HUNTER, oPC))
 	{

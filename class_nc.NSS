@@ -66,12 +66,13 @@ else if (iNaturesWarrior == 3) nBonus = 2;
 void Wild_Growth(object oPC, int nSpell)
 {
 
-effect eLink;
+
 int iNaturesWarrior = GetLevelByClass(CLASS_TYPE_NATUREWARRIOR,oPC); int nBonus;
 
 if (iNaturesWarrior = 5) nBonus =3;
 else nBonus = 1;
-eLink = EffectLinkEffects(EffectRegenerate(nBonus,6.0f),eLink);
-DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
+effect eRegenerate = EffectRegenerate(nBonus,6.0f);
+SupernaturalEffect(eRegenerate);
+DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC));
 
 }
