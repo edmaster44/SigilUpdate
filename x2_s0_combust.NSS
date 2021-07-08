@@ -73,7 +73,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDamage = nDamage*2;//Damage is at max
+        nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
     }
     else
     {
@@ -181,11 +181,11 @@ void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic
 
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage += 72;
+                nDamage += 36;
             }
             else
             {
-                nDamage  += d6(12);
+                nDamage  += d6(5);
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                     nDamage = nDamage + (nDamage/2);

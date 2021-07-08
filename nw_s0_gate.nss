@@ -49,7 +49,7 @@ void main()
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
-    int nDuration = GetCasterLevel(OBJECT_SELF)*2 + 3;
+    int nDuration = GetCasterLevel(OBJECT_SELF);
     effect eVis = EffectVisualEffect( VFX_DUR_GATE );
 	effect eVis2 = EffectVisualEffect( VFX_INVOCATION_BRIMSTONE_DOOM );
     //Make metamagic extend check
@@ -69,7 +69,7 @@ void main()
 		else if (iAlignGE == ALIGNMENT_EVIL && iAlignLC == ALIGNMENT_CHAOTIC) sTemplate = SCOD_GATE_CHAOTIC_NEUTRAL;
 		else sTemplate = SCOD_GATE_NEUTRAL_EVIL;	
 		
-    float fSeconds = RoundsToSeconds(nDuration);
+    float fSeconds = TurnsToSeconds(nDuration);
     effect eSummon = EffectSummonCreature(sTemplate, VFX_INVOCATION_BRIMSTONE_DOOM, 3.0);
 	DelayCommand(3.0, ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eSummon, lSpellTargetLOC, fSeconds));
 	ApplyEffectAtLocation ( DURATION_TYPE_TEMPORARY, eVis, lSpellTargetLOC, 5.0);

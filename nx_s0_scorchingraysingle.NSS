@@ -120,7 +120,7 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(4)+(PML/3);
+					int nDamage = d6(4)+(PML/6);
 					nDamage = ApplyMetamagicVariableMods(nDamage, 24);
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{
@@ -132,7 +132,7 @@ void main()
 	    			int nMetaMagic = GetMetaMagicFeat();
 	                if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	                {
-	                    nDamage = nDamage*2;
+	                    nDamage = nDamage + ((3*nDamage)/4);
 	                }
 	                if (nMetaMagic == METAMAGIC_EMPOWER)
 	                {

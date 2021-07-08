@@ -72,14 +72,14 @@ void main()
        	{	
 			int nNumRolls = nCasterLvl;
 
-			int nDamage = d6(nNumRolls) + d6((2*PML)/3);
+			int nDamage = d6(nNumRolls) + d6(PML/3);
 			float fSummonTime = RoundsToSeconds(10);
 						
 			//Enter Metamagic conditions
    			int nMetaMagic = GetMetaMagicFeat();
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage = nDamage*2;
+                nDamage = nDamage + ((3*nDamage)/4);
             }
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {

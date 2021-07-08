@@ -106,7 +106,7 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 
-                nPotential = d6(nNumDice) + d2(PML/3);
+                nPotential = d6(nNumDice) + d2(PML/6);
 				
 				//Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)

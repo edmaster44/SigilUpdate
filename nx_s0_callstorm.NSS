@@ -22,6 +22,8 @@
 #include "nw_i0_spells" 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "ps_inc_functions"
+
 
 void main()
 {
@@ -56,10 +58,10 @@ void main()
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
-    if (nCasterLvl > 15)
-    {
-        nCasterLvl = 15;
-    }
+//    if (nCasterLvl > 15)
+//    {
+//       nCasterLvl = 15;
+//    }
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oCaster, 1.75);
@@ -75,9 +77,16 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage for each target
-                nDamage = d6(nCasterLvl);
+                nDamage = d2(nCasterLvl*2);
                 //Resolve metamagic
-				nDamage = ApplyMetamagicVariableMods(nDamage, 90);
+				if (nMetaMagic == METAMAGIC_MAXIMIZE)
+				{
+				nDamage = nDamage + ((3*nDamage)/4);
+				}
+				else if (nMetaMagic == METAMAGIC_EMPOWER)
+				{
+				nDamage = nDamage + nDamage / 2;
+				}
 				
                 //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.
                 nDamage = GetReflexAdjustedDamage(nDamage, oTarget, (GetSpellSaveDC()+4), SAVING_THROW_TYPE_ELECTRICITY);

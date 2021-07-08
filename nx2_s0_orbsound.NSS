@@ -40,7 +40,7 @@ void main()
 	object oTarget = GetSpellTargetObject();
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
-	int nDice = nCasterLevel + ((2*PML)/3);
+	int nDice = nCasterLevel + (PML/3);
 	int nDamage = 0;
 	
 	// Calculate max damage.
@@ -65,7 +65,7 @@ void main()
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)
      	    {
       		   	// do MAXIMIZE 6 * nDice
-				nDamage = nDamage*2;
+				nDamage = nDamage + ((3*nDamage)/4);
        	 	}
          	if (nMetaMagic == METAMAGIC_EMPOWER)
          	{

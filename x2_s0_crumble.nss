@@ -72,7 +72,7 @@ void main()
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDam = nDam*2;
+        nDam = nDam + ((3*nDam)/4);
     }
 
     if (nMetaMagic == METAMAGIC_EMPOWER)

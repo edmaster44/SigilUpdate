@@ -55,7 +55,7 @@ void main()
     // Calculate the duration
     //--------------------------------------------------------------------------
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = GetCasterLevel(OBJECT_SELF) /6;
+    int nDuration = (4);
 
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
@@ -125,7 +125,7 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         //----------------------------------------------------------------------
         // Calculate Damage
         //----------------------------------------------------------------------
-        int nDamage = MaximizeOrEmpower(2,(nCaster)*2,nMetaMagic);
+        int nDamage = nCaster;
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
         eDam = EffectLinkEffects(eVis,eDam); // flare up

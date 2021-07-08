@@ -71,10 +71,10 @@ void main()
     {
         int nDC                   = GetManifesterDC(oManifester);
         int nPen                  = GetPsiPenetration(oManifester);
-        int nNumberOfDice_Explode = 14;
+        int nNumberOfDice_Explode = 11;
 		if (manif.bAugment)
 			nNumberOfDice_Explode += 4;
-        int nNumberOfDice_Ball    = 8;
+        int nNumberOfDice_Ball    = 6;
         int nDamage, nTouchAttack;
         location lTarget          = GetSpellTargetLocation();
         effect eImpact            = EffectNWN2SpecialEffectFile("psi_crystal_hit.sef");

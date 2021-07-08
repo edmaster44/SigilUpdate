@@ -107,7 +107,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
 					{
 						//Roll damage
-						nDamage = d6(nCasterLvl*2) + d6((4*PML)/3);
+						nDamage = d6(nCasterLvl*2) + d6((2*PML)/3);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )
@@ -124,7 +124,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 					else
 					{
 						//Roll damage
-						nDamage = d6(nCasterLvl*2) + d6((4*PML)/3);
+						nDamage = d6(nCasterLvl*2) + d6((2*PML)/3);
 										
 						//Enter Metamagic conditions
 						if ( nMetaMagic == METAMAGIC_MAXIMIZE )

@@ -90,13 +90,13 @@ void main()
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis3, oTarget,4.0f));
             }
 			
-			int nDam = d6(nCL) + d6((2*PML)/3);
+			int nDam = d6(nCL) + d6(PML/3);
 				eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 			
 				
 		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDam = nDam*2;
+                        nDam = nDam + ((3*nDam)/4);
 						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 
                     }

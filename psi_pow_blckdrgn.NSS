@@ -63,7 +63,7 @@ void main()
     {
         int nDC           = GetManifesterDC(oManifester);
         int nPen          = GetPsiPenetration(oManifester);
-        int nNumberOfDice = 15;
+        int nNumberOfDice = 12;
 		if (manif.bAugment)
 		 	nNumberOfDice += 5;
         int nDamage;

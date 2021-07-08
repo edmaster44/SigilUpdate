@@ -76,7 +76,7 @@ void main()
         		        //Enter Metamagic conditions
         		        if (nAlign == ALIGNMENT_LAWFUL)
 						{
-							nDamage = d3(nCasterLvl) + (nCasterLvl) + d3((2*PML)/3);
+							nDamage = d3(nCasterLvl) + (nCasterLvl) + d3(PML/3);
 						}
 						if (nAlign == ALIGNMENT_NEUTRAL)
 						{
@@ -90,7 +90,7 @@ void main()
 						//Resolve metamagic
 						if (nMetaMagic == METAMAGIC_MAXIMIZE)
 						{
-						nDamage = (nDamage*2);
+						nDamage = nDamage + ((3*nDamage)/4);
 						}
 						else if (nMetaMagic == METAMAGIC_EMPOWER)
 						{

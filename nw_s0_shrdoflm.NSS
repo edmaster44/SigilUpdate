@@ -53,13 +53,13 @@ int DamageShroudTarget( object oTarget, object oCaster, int nSpellSaveDC, int nM
 	
     if ( nSave == 0 )
     {
-        int nDamage = d2(nCL*2) + d2((4*PML)/3);
+        int nDamage = d2(nCL*2) + d2((2*PML)/3);
 
         //Resolve metamagic
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );               
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nDamage*2;
+            nDamage = nDamage + ((3*nDamage)/4);;
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
@@ -84,13 +84,13 @@ void DamageOther( object oOther, object oCaster, int nSpellSaveDC, int nMetaMagi
 		
 		int nCL = PS_GetCasterLevel(OBJECT_SELF);
 		int PML = GetPureMageLevels(OBJECT_SELF);
-        int nDamage = d3(nCL) + d3((2*PML)/3);
+        int nDamage = d3(nCL) + d3(PML/3);
 		
    
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );           
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nDamage*2;
+            nDamage = nDamage + ((3*nDamage)/4);
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {

@@ -87,7 +87,7 @@ void main()
         int nPen             = GetPsiPenetration(oManifester) + enAdj.nPenMod;
         int nNumberOfDice    = 5;
 		if (manif.bAugment)
-			nNumberOfDice += 5;
+			nNumberOfDice += 3;
         int nDieSize         = 6;
         int nDamage;
         location lManifester = GetLocation(oManifester);

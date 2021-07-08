@@ -83,11 +83,11 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
 			
-				nDamage = d6(nMaxLvl) + d2(PML/3);
+				nDamage = d6(nMaxLvl) + d2(PML/6);
 				//Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)
 				{
-				nDamage = (nDamage*2);
+				nDamage = nDamage + ((3*nDamage)/4);
 				}
 				else if (nMetaMagic == METAMAGIC_EMPOWER)
 				{

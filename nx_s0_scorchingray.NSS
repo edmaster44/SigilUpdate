@@ -79,13 +79,13 @@ void main()
 			{	//Make SR check
 	        	if (!MyResistSpell(OBJECT_SELF, oTarget))
 	        	{	
-					int nDamage = d6(4) + (PML/3);
+					int nDamage = d6(4) + (PML/6);
 				
 					//Enter Metamagic conditions
 	    			int nMetaMagic = GetMetaMagicFeat();
 	                if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	                {
-	                    nDamage = (nDamage*2);
+	                    nDamage = nDamage + ((3*nDamage)/4);
 	                }
 	                if (nMetaMagic == METAMAGIC_EMPOWER)
 	                {

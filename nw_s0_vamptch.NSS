@@ -77,14 +77,14 @@ void main()
 		nDDice = nDDice * 2;
 	}
 
-    int nDamage = d3(nDDice) + d3((2*PML)/3);  // JLR - OEI 07/19/05
+    int nDamage = d3(nDDice) + d3(PML/3);  // JLR - OEI 07/19/05
 
     //--------------------------------------------------------------------------
     //Enter Metamagic conditions
     //--------------------------------------------------------------------------
 		if (nMetaMagic == METAMAGIC_MAXIMIZE)
 		{
-		nDamage = (nDamage*2);
+		nDamage = nDamage + ((3*nDamage)/4);
 		}
 		else if (nMetaMagic == METAMAGIC_EMPOWER)
 		{

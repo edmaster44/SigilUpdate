@@ -55,7 +55,7 @@ void RunHandImpact(object oTarget, object oCaster, int nMetaMagic)
     {
        	int nDC = GetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpellID));
 
-       	int nDam  = nCL;
+       	int nDam  = d2(nCL);
        	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
        	//effect eVis = EffectVisualEffect(VFX_IMP_ACID_L);	// NWN1 VFX
        	effect eVis = EffectVisualEffect( 837 );	// NWN2 VFX: VFX_HIT_BIGBYS_CLENCHED_FIST

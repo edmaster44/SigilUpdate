@@ -77,11 +77,11 @@ void main()
                 if(GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage for each target
-                    nDamage = d8(nCasterLvl) + d8((2*PML)/3);	// JLR - OEI 07/22/05 -- 3.5 Change
+                    nDamage = d8(nCasterLvl) + d8(PML/3);	// JLR - OEI 07/22/05 -- 3.5 Change
                     //Resolve metamagic
                     if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDamage = nDamage*2;
+                        nDamage = nDamage + ((3*nDamage)/4);
                     }
                     else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

@@ -41,6 +41,7 @@ void main()
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
 		nCasterLevel = nCasterLevel*2;
+		PML = PML*2;
 	}
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
@@ -53,11 +54,11 @@ void main()
 	        if(!MyResistSpell(OBJECT_SELF, oTarget))
 	        {
 	            //Enter Metamagic conditions
-	 			int nDam = d10(nCasterLevel) + d10((2*PML)/3);
+	 			int nDam = d10(nCasterLevel) + d10(PML/3);
 	    		int nMetaMagic = GetMetaMagicFeat();
 	            if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	            {
-	                nDam = nDam*2;//Damage is at max
+	                nDam = nDam + ((3*nDam)/4);//Damage is at max
 	            }
 	            else if (nMetaMagic == METAMAGIC_EMPOWER)
 	            {

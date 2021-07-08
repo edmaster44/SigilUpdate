@@ -30,7 +30,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
             nDamage = d3(nCL/3) + d3(PML/9);
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
-            {	nDamage = nDamage*2;	}
+            {	nDamage = nDamage + ((3*nDamage)/4);	}
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {	nDamage = nDamage + (nDamage/2);	}
        		eDam 		= EffectDamage(nDamage, DAMAGE_TYPE_COLD);

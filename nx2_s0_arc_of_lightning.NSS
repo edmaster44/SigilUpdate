@@ -71,7 +71,7 @@ void main()
 	// no matter what damage original target
 	if(GetIsObjectValid(oTarget))
 	{
-		nDamage = d4(nCasterLevel) + d4((2*PML)/3);
+		nDamage = d4(nCasterLevel) + d4(PML/3);
 		nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster); 
 		eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);

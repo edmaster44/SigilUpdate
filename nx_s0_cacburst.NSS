@@ -67,13 +67,13 @@ void main()
 //determine unmodded damage	
 
 
-	nDamage = d2(nCasterLvl*2) + d2((4*PML)/3);
+	nDamage = d2(nCasterLvl*2) + d2((2*PML)/3);
 	
 
 	//Resolve metamagic
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)
 	{
-	nDamage = (nDamage*2);
+	nDamage = nDamage + ((3*nDamage)/4);;
 	}
 	else if (nMetaMagic == METAMAGIC_EMPOWER)
 	{
@@ -92,7 +92,7 @@ void main()
 			//Resolve metamagic
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)
 			{
-			nDamage = (nDamage*2);
+			nDamage = nDamage + ((3*nDamage)/4);
 			}
 			else if (nMetaMagic == METAMAGIC_EMPOWER)
 			{

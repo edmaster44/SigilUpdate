@@ -22,7 +22,7 @@ void main()
             fDelay = GetRandomDelay(0.5, 2.0);
             nDamage = d3(nCL/3) + d3(PML/9);
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
-        {	nDamage = nDamage*2;	}
+        {	nDamage = nDamage + ((3*nDamage)/4);	}
         if (nMetaMagic == METAMAGIC_EMPOWER)
        	{	nDamage = nDamage + (nDamage/2);	}
         //Adjust damage for Reflex Save, Evasion and Improved Evasion

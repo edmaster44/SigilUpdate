@@ -56,7 +56,7 @@ void main()
 	}
 
 	// calculate base damage	
-	nDamage = d4(nDice) + d3(PML/3);	
+	nDamage = d4(nDice) + d3(PML/6);	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LESSER_ORB_OF_ACID));
@@ -68,7 +68,7 @@ void main()
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)
      	    {
       		   	// do MAXIMIZE 8 * nDice
-				nDamage = nDamage*2;
+				nDamage = nDamage + ((3*nDamage)/4);
        	 	}
          	if (nMetaMagic == METAMAGIC_EMPOWER)
          	{

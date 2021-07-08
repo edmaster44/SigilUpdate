@@ -99,11 +99,11 @@ void main()
 	            //----------------------------------------------------------------------
 	            // Do the initial 3d6 points of damage
 	            //----------------------------------------------------------------------
-	            int nDamage = d6(nCL) + d2(PML/3) ;
+	            int nDamage = d6(nCL) + d2(PML/6) ;
 				//Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)
 				{
-				nDamage = (nDamage*2);
+				nDamage = nDamage + ((3*nDamage)/4);;
 				}
 				else if (nMetaMagic == METAMAGIC_EMPOWER)
 				{
@@ -178,11 +178,11 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         // Calculate Damage
         //----------------------------------------------------------------------
         int PML = GetPureMageLevels(OBJECT_SELF);
-		int nDamage = d6(2) + d2(PML);
+		int nDamage = d6(2) + d2(PML/6);
 		//Resolve metamagic
 		if (nMetaMagic == METAMAGIC_MAXIMIZE)
 		{
-		nDamage = (nDamage*2);
+		nDamage = nDamage + ((3*nDamage)/4);
 		}
 		else if (nMetaMagic == METAMAGIC_EMPOWER)
 		{

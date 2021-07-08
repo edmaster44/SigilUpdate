@@ -105,7 +105,7 @@ void main()
 					}
 					else
 					{	
-						nDam = d4(nCL) + d4((2*PML)/3);
+						nDam = d4(nCL) + d4(PML/3);
 						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkStun, oTarget, fDur);
 					}

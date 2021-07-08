@@ -86,7 +86,7 @@ void main()
 
                 if ( nSave == 0 ) // Saving Throw failed
                 {
-                    nDice = nCasterLvl + ((2*PML)/3); // BCH 03/10/06 - changed to caster level * 2, to reflect
+                    nDice = nCasterLvl + (PML/3); // BCH 03/10/06 - changed to caster level * 2, to reflect
 												//	script comment that damage is 2d6 per caster level
 				
 

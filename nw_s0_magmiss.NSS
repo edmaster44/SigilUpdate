@@ -110,11 +110,11 @@ void main()
 	        if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 		  	{
                 //Roll damage
-                int nDam = d3(1) + 1 + (PML/13);
+                int nDam = d3(1) + 1 + (PML/26);
      	     //Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)
 				{
-				nDam = (nDam*2);
+				nDam = nDam + ((3*nDam)/4);
 				}
 				else if (nMetaMagic == METAMAGIC_EMPOWER)
 				{

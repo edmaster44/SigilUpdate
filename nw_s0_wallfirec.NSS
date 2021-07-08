@@ -61,7 +61,7 @@ void main()
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                   nDamage = nDamage*2;//Damage is at max  // JLR - OEI 07/19/05
+                   nDamage = nDamage + ((3*nDamage)/4);//Damage is at max  // JLR - OEI 07/19/05
                 }
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

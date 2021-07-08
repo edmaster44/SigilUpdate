@@ -69,12 +69,12 @@ void main()
 			if (oTarget != oCaster)
 			{
 				//determine duration and damage + metamagic
-				nDam		=	d4(nCasterLvl) + d4((2*PML)/3);
+				nDam		=	d4(nCasterLvl) + d4(PML/3);
 				fDuration	=	RoundsToSeconds(d6(2));
 				
 				    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {
-                        nDam = (nDam*2);
+                        nDam = nDam + ((3*nDam)/4);
                     }
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {

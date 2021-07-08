@@ -80,7 +80,7 @@ void main()
 					//Resolve metamagic
 					if (nMetaMagic == METAMAGIC_MAXIMIZE)
 					{
-					nDamage = (nDamage*2);
+					nDamage = nDamage + ((3*nDamage)/4);;
 					}
 					else if (nMetaMagic == METAMAGIC_EMPOWER)
 					{
@@ -103,7 +103,7 @@ void main()
 					//Resolve metamagic
 					if (nMetaMagic == METAMAGIC_MAXIMIZE)
 					{
-					nDamage = (nDamage*2);
+					nDamage = nDamage + ((3*nDamage)/4);;
 					}
 					else if (nMetaMagic == METAMAGIC_EMPOWER)
 					{
@@ -125,7 +125,7 @@ void main()
 					//Resolve metamagic
 					if (nMetaMagic == METAMAGIC_MAXIMIZE)
 					{
-					nDamage = (nDamage*2);
+					nDamage = nDamage + ((3*nDamage)/4);
 					}
 					else if (nMetaMagic == METAMAGIC_EMPOWER)
 					{

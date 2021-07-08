@@ -59,7 +59,7 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
 
     if ( nSave != 2 )
     {
-        int nDamage = d2(nDice*2) + d2((4*PML)/3);
+        int nDamage = d2(nDice*2) + d2((2*PML)/3);
 
 		int nMaxVal = (4*nDice) ; // nDice * d4
 
@@ -67,7 +67,7 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
         //nDamage = ApplyMetamagicVariableMods( nDamage, nMaxVal );   		
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {
-            nDamage = nDamage*2;
+            nDamage = nDamage + ((3*nDamage)/4);
         }
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {

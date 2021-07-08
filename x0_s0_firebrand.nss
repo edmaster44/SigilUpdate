@@ -47,7 +47,7 @@ void main()
     int nDamageDice;
 	
 	
-	nDamageDice = (nCL + (PML/3));
+	nDamageDice = (nCL + (PML/4));
 
     DoMissileStorm(nDamageDice, 30, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 1);
 }

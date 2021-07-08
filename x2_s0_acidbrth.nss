@@ -73,11 +73,11 @@ void main()
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDelay)) //FIX: prevents caster from getting SR check against himself
             {
                 //Detemine damage
-                nDamage = d4(nCasterLevel) + d4((2*PML)/3);
+                nDamage = d4(nCasterLevel) + d4(PML/3);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = (nDamage*2);//Damage is at max
+                    nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
                 }
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

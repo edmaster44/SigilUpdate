@@ -50,7 +50,7 @@ void main()
             nDamage = d6(nCL/3) + d6(PML/9);
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
-                nDamage = nDamage*2;//Damage is at max
+                nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
             }
             else if (nMetaMagic == METAMAGIC_EMPOWER)
             {

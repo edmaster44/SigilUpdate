@@ -238,7 +238,7 @@ void PS_Spell_Hellfire(object oPC, location lTarget, int nSpell)
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {	nDamage = d8(3) + nCasterLvl;
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                    {	nDamage = nDamage*2;	}
+                    {	nDamage = nDamage*1.75;	}
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {	nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -275,9 +275,9 @@ void PS_Spell_HellfireStorm(object oPC, location lTarget, int nSpell)
             {	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
                 if (!MyResistSpell(oPC, oTarget, fDelay))
-        	    {	nDamage = d4(nCasterLvl);
+        	    {	nDamage = d6(nCasterLvl);
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                    {	nDamage = nDamage*2;	}
+                    {	nDamage = nDamage*1.75;	}
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {	 nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -444,7 +444,7 @@ void PS_Spell_WretchedBlight(object oPC, location lTarget, int nSpell)
             if (!MyResistSpell(oPC, oTarget, fDelay))
     	    {	nDamage = d8(nCasterLvl);
     	    	if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage = nDamage*2;	 }
+                {	nDamage = nDamage*1.75;;	 }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage / 2);	}
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -494,7 +494,7 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 						//Resolve metamagic
 						if (nMetaMagic == METAMAGIC_MAXIMIZE)
 						{
-						nDamage = (nDamage*2);
+						nDamage = (nDamage*1.75);
 						}
 						else if (nMetaMagic == METAMAGIC_EMPOWER)
 						{
@@ -512,7 +512,7 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 						//Resolve metamagic
 						if (nMetaMagic == METAMAGIC_MAXIMIZE)
 						{
-						nDamage = (nDamage*2);
+						nDamage = (nDamage*1.75);
 						}
 						else if (nMetaMagic == METAMAGIC_EMPOWER)
 						{
@@ -555,7 +555,7 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {	nDamage = d8(nCasterLvl);
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*2;	}
+                {	nDamage = nDamage*1.75;	}
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage / 2);	}
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
@@ -595,7 +595,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
     location lSpellLocation;
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
-    {	nDamage = nDamage*2;	}	//Damage is at max
+    {	nDamage = nDamage*1.75;	}	//Damage is at max
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
     if (spellsIsTarget(oFirstTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
@@ -621,7 +621,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {   nDamage = (d8(3)) + (nCasterLevel) ;
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*2;	}	//Damage is at max
+                {	nDamage = nDamage*1.75;	}	//Damage is at max
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
                 nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
@@ -652,7 +652,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     {	return;		}
 
     int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
-    int nDamage 		= d4(nCasterLevel);
+    int nDamage 		= d6(nCasterLevel);
     int nDamStrike;
     int nNumAffected 	= 0;
     int nMetaMagic 		= GetMetaMagicFeat();
@@ -665,7 +665,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     location lSpellLocation;
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
-    {	nDamage = nDamage*2;	}	//Damage is at max
+    {	nDamage = nDamage*1.75;	}	//Damage is at max
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
     if (spellsIsTarget(oFirstTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
@@ -691,7 +691,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
             if (!MyResistSpell(oPC, oTarget, fDelay))
             {	nDamage = (d8(5)) + (nCasterLevel);
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {	nDamage = nDamage*2;	}	//Damage is at max	
+                {	nDamage = nDamage*1.75;	}	//Damage is at max	
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
                 nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);

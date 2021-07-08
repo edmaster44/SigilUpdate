@@ -49,7 +49,7 @@ void main()
         nCasterLevel = 12;
     }
 
-    int nDamage = d4(nCasterLevel) + (nCasterLevel) + d2(PML/3);
+    int nDamage = d4(nCasterLevel) + d2(PML/6);
 
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_MAXIMIZE)

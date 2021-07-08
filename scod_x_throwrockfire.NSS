@@ -46,7 +46,7 @@ void main()
 	int nTouch = TouchAttackRanged(oTarget);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
-		nDamage = nDamage*2;
+		nDamage = nDamage *2;
 	}
 
 	// calculate base damage	

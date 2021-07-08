@@ -51,7 +51,7 @@ void main()
 	int PML = GetPureMageLevels(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage, nDamage2, nDamage3;
-    int nVariable = nCasterLvl/3;
+    int nVariable = nCasterLvl;
     float fDelay;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
     effect eDam,eDam2, eDam3;
@@ -70,12 +70,12 @@ void main()
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {
                 //Roll damage for each target
-                nDamage = d4(nVariable) + d4((2*PML)/3);
+                nDamage = d4(nVariable) + d4(PML/3);
 
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
-                    nDamage = nDamage*2;
+                    nDamage = nDamage + ((3*nDamage)/4);
                 }
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {

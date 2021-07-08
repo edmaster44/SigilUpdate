@@ -86,7 +86,7 @@ void main()
             //if(!MyResistSpell(OBJECT_SELF, oTarget, fDist) && oTarget != OBJECT_SELF)
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDist)) //FIX: prevents caster from getting SR check against himself
             {
-                nDamage = d6(nCasterLevel) + d2(PML/3);
+                nDamage = d6(nCasterLevel) + d2(PML/6);
     		    //Enter Metamagic conditions
     		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
     		    {
