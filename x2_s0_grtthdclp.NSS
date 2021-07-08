@@ -109,7 +109,7 @@ void main()
 				
 				
 								
-			if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SONIC, oCaster))
+			if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SONIC))
 				{
 					nDam	=	nDam/2;
 					eDam	=	EffectDamage(nDam, DAMAGE_TYPE_SONIC);

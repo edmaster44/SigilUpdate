@@ -61,14 +61,15 @@ void main()
     if(manif.bCanManifest)
     {
         int nBonus      = 1;
+    	if (manif.bAugment)
+			nBonus += 1;
 		
         effect eLink    = EffectLinkEffects(EffectAttackIncrease(nBonus),
                                             EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE)
                                             );
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-		if (manif.bAugment)
-			nBonus = 2;
+		
 
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
     }
