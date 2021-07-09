@@ -9,8 +9,8 @@ if(iNaturesWarrior == 5) nBonus = 3;
 		else if(iNaturesWarrior >= 3) nBonus = 2;
 		else nBonus = 1;
 		
-	effect eLink = EffectLinkEffects(eLink,EffectACIncrease(nBonus,AC_DODGE_BONUS));
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
+	effect eArmor = EffectACIncrease(nBonus,AC_DODGE_BONUS);
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC));
 }
 
 
@@ -32,20 +32,8 @@ effect eSlashing = EffectDamage(3,DAMAGE_TYPE_SLASHING,DAMAGE_POWER_NORMAL,FALSE
 void Earth_Resilience(object oPC, int nSpell)
 {
 
-	if (!GetHasFeat(333,oPC))
-	FeatAdd(oPC,333,FALSE,FALSE,FALSE);
-
-
-		/* int nBonus = 5;
-		 effect eLink;
-		effect ePiercing = EffectDamageReduction(nBonus, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
-		effect eSlashing = EffectDamageReduction(nBonus, DAMAGE_TYPE_SLASHING, 0, DR_TYPE_DMGTYPE);
-		effect eBludgeoning = EffectDamageReduction(nBonus, DAMAGE_TYPE_BLUDGEONING, 0, DR_TYPE_DMGTYPE);
-		
-		eLink = EffectLinkEffects(ePiercing, eLink);
-		eLink = EffectLinkEffects(eSlashing, eLink);
-		eLink = EffectLinkEffects(eBludgeoning, eLink);
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));*/
+	if (!GetHasFeat(493,oPC))
+	FeatAdd(oPC,493,FALSE,FALSE,FALSE);
 
 }
 void Nature_Weapon(object oPC, int nSpell)
@@ -73,6 +61,6 @@ if (iNaturesWarrior = 5) nBonus =3;
 else nBonus = 1;
 effect eRegenerate = EffectRegenerate(nBonus,6.0f);
 SupernaturalEffect(eRegenerate);
-DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC));
+ ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC);
 
 }
