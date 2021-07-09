@@ -16,7 +16,7 @@
 void ApplyDivinePowerProperly(object oPC, object oTARGET, int nID, int nMETA)
 {
 	int nLVL = GetTotalLevels(oPC, TRUE);
-    int nSPL = GetCasterLevel(oPC)*10;
+    int nSPL = GetCasterLevel(oPC);
 	int nBAB = GetTRUEBaseAttackBonus(oPC);
 	if (nSPL > nLVL) nSPL = nLVL;
     effect eVFX = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_POWER);
@@ -38,8 +38,8 @@ void ApplyDivinePowerProperly(object oPC, object oTARGET, int nID, int nMETA)
     if (nMETA == METAMAGIC_EXTEND) nSPL = nSPL * 2;
 
     //Apply Link and VFX effects to the target
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLINK, oTARGET, RoundsToSeconds(nSPL));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, RoundsToSeconds(nSPL));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLINK, oTARGET, TurnsToSeconds(nSPL));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, TurnsToSeconds(nSPL));
 }
 
 void main()
