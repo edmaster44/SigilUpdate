@@ -10,13 +10,14 @@
 // (Update JLR - OEI 07/19/05) -- Changed STR Bonus to +6 instead of <Min 18>
 // Changed for Sigil: City of Doors
 
+#include "ps_inc_functions"
 #include "nw_i0_spells"
 #include "x2_inc_spellhook"
 
 void ApplyDivinePowerProperly(object oPC, object oTARGET, int nID, int nMETA)
 {
 	int nLVL = GetTotalLevels(oPC, TRUE);
-    int nSPL = GetCasterLevel(oPC);
+    int nSPL = PS_GetCasterLevel(oPC);
 	int nBAB = GetTRUEBaseAttackBonus(oPC);
 	if (nSPL > nLVL) nSPL = nLVL;
     effect eVFX = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_POWER);
