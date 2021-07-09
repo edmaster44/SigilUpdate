@@ -494,7 +494,7 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 						//Resolve metamagic
 						if (nMetaMagic == METAMAGIC_MAXIMIZE)
 						{
-						nDamage = (nDamage*1.75);
+						nDamage = nDamage + ((3*nDamage)/4);
 						}
 						else if (nMetaMagic == METAMAGIC_EMPOWER)
 						{
@@ -512,7 +512,7 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 						//Resolve metamagic
 						if (nMetaMagic == METAMAGIC_MAXIMIZE)
 						{
-						nDamage = (nDamage*1.75);
+						nDamage = nDamage + ((3*nDamage)/4);
 						}
 						else if (nMetaMagic == METAMAGIC_EMPOWER)
 						{
