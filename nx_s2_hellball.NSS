@@ -38,6 +38,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_i0_spells"
+#include "ps_inc_epicsave"
 #include "x2_inc_spellhook"
 
 
@@ -50,7 +51,7 @@ void main()
 
     float fDelay;
     int nTotalDamage;
-    int nSpellDC = GetSpellSaveDC() + 5;	// Epic Spells are DC +5
+    int nSpellDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;	// Epic Spells are DC +5
 	
     //effect eExplode 	  = EffectVisualEffect(VFX_HIT_HELLBALL_AOE);
 	effect eHitVFX		  = EffectVisualEffect(VFX_HIT_HELLBALL);

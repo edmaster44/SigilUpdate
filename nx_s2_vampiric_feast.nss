@@ -40,6 +40,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_i0_spells"
 #include "x2_inc_spellhook"
+#include "ps_inc_epicsave"
 
 
 void main()
@@ -49,7 +50,7 @@ void main()
 	    return;
 	}
 	
-	int nSaveDC = GetSpellSaveDC() + 5;
+	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
 	int nTotalDamage = 0;
 	int bSummonShadow = FALSE;
 	//int nHD, nCurrentHP, nDamage;

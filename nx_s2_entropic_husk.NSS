@@ -41,6 +41,7 @@
 
 #include "nw_i0_spells"
 #include "x2_inc_spellhook"
+#include "ps_inc_epicsave"
 #include "nwn2_inc_spells"
 
 
@@ -51,7 +52,7 @@ void main()
 		return;
 	}
 	
-	int nSaveDC = GetSpellSaveDC() + 5;
+	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
 	float fDuration = RoundsToSeconds(20);
 	
 	object oTarget = GetSpellTargetObject();

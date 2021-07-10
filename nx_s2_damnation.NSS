@@ -36,6 +36,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_i0_spells"
+#include "ps_inc_epicsave"
 #include "x2_inc_spellhook"
 
 
@@ -47,7 +48,7 @@ void main()
 	}
 
 	
-	int nSaveDC = GetSpellSaveDC() + 5;
+	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
 	int nDazeDuration = d6(1) + 1;
 	
 	object oTarget = GetSpellTargetObject();
