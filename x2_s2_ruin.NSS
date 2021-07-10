@@ -15,6 +15,7 @@
 #include "x2_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "x0_I0_SPELLS"
+#include "ps_inc_epicsave"
 void main()
 {
 
@@ -42,7 +43,7 @@ void main()
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
 
-    int nSpellDC = GetEpicSpellSaveDC(OBJECT_SELF);
+    int nSpellDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
