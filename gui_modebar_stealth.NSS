@@ -40,7 +40,7 @@ void CheckStealthMode(object oPC, float count)
 		SetLocalInt(oPC,"HIPSTIMER", 1);
 		SetLocalInt(oPC,"NOSTEALTHLOOP", 1);
 	
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,SetEffectSpellId(ExtraordinaryEffect(EffectNWN2SpecialEffectFile("fx_invisibility")),3213),oPC, HoursToSeconds(1));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,SetEffectSpellId(ExtraordinaryEffect(EffectNWN2SpecialEffectFile("fx_invisibility")),-9932),oPC, HoursToSeconds(1));
 	
 		int sTSetting = GetLocalInt(GetArea(oPC),"STEALTHSETTING");
 		if(sTSetting > 0) StealthTimer(oPC, sTSetting);
@@ -49,7 +49,7 @@ void CheckStealthMode(object oPC, float count)
 			 if(GetHasFeat(1465, oPC, TRUE))
 			{
 				SendMessageToPC(oPC,"Applying Swift & Silent bonus.");
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(50), 4532), oPC, HoursToSeconds(1));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, SetEffectSpellId(EffectMovementSpeedIncrease(50), -4532), oPC, HoursToSeconds(1));
 			}
 	}
 
