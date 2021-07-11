@@ -430,13 +430,13 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
-    if (GetArmorRank(oITEM) > ARMOR_RANK_NONE)
+   /* if (GetArmorRank(oITEM) > ARMOR_RANK_NONE)
     {
         SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection then any armor could. You may only wear clothes.");
         AssignCommand(oPC, ClearAllActions(TRUE));
         AssignCommand(oPC, ActionUnequipItem(oITEM));   
         return TRUE;
-    }
+    }*/
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1)
