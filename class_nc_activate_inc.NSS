@@ -15,15 +15,15 @@ void main()
 	switch (nSpell)
 {	
 
-	case SPELLABILITY_BLAZE_OF_POWER:		//Earth Resilience
+	case SPELLABILITY_BLAZE_OF_POWER:		//Blaze of Power
 			DelayCommand(0.0f, Blaze_Of_Power(oPC, nSpell));
 		break;
 		
-			case SPELLABILITY_ROBE_OF_CLOUDS:		//Nature's Weapon
+			case SPELLABILITY_ROBE_OF_CLOUDS:		//Robes of Clouds
 			DelayCommand(0.0f, Robe_Of_Clouds(oPC, nSpell));
 		break;
 	
-	case SPELLABILITY_SERPENTINE_COIL :		//Armor of the Crocidile	
+	case SPELLABILITY_SERPENTINE_COIL :		//Serpentine Coil
 			Serpentine_Coil(oPC,oTarget, nSpell);
 		break;
 	

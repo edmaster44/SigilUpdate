@@ -86,6 +86,8 @@ void main()
 	// Remove any temporary appearance changes
 	PS_RestoreOriginalAppearance(oPC);
 	
+	
+	
 	// Check for earlier wings, etc.
 	if (GetHasFeat(2781) && !GetLocalInt(oItem, "DarkFlight" )) PS_Ability_DarkFlight(oPC);
 	

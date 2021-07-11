@@ -15,13 +15,12 @@ void Robe_Of_Clouds(object oPC , int nSpell)
 
 
 RemoveSpellEffects(nSpell, OBJECT_SELF, OBJECT_SELF);
-effect eLink;
 int nLevel=GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oPC);
 int nDuration = (nLevel-1)*10;
 effect eConceal = EffectConcealment(10 * nLevel , MISS_CHANCE_TYPE_NORMAL);
 SupernaturalEffect(eConceal);
 
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration)));
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, OBJECT_SELF, RoundsToSeconds(nDuration)));
 }
 
 
@@ -70,4 +69,3 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
     effect eRay = EffectBeam(VFX_BEAM_GREEN_DRAGON_ACID, OBJECT_SELF, BODY_NODE_HAND);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }  
-

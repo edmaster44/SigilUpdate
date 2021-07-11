@@ -10,6 +10,7 @@ void main()
     object oPC = OBJECT_SELF;
 	object oTarget	= GetSpellTargetObject();
 	int nSpell = GetSpellId();
+	
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
 	
 	
