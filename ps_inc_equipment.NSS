@@ -279,11 +279,11 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 
 
 
-//Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 174
+//Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
     if (nTYPE < 160) return FALSE;
-    if (nTYPE > 184) return FALSE;
+    if (nTYPE > 180) return FALSE;
     return TRUE;
 }
 
