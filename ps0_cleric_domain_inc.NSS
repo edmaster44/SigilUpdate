@@ -620,7 +620,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
                 {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
-                nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
+                nDamStrike = nDamage;
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_DIVINE);
                 if(nDamStrike > 0) //age > 0)
                 {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
@@ -690,7 +690,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
                 {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max	
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
-                nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
+                nDamStrike = nDamage;
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_DIVINE);
                 if(nDamStrike > 0) //age > 0)
                 {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
