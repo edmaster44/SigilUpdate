@@ -83,20 +83,22 @@ void DervishParry(object oPC, float count)
 		
 		int iBonus;
 
-		
+		int BM = GetLevelByClass(72,oPC);
+		if(impcombexp == 1 && BM > 7) iBonus = 4;
+		if(combexp == 1 && BM > 7) iBonus = 4;
 
 
-		if(combexp == 1 || impcombexp == 1) iBonus = 4;
+	
 		
 		SendMessageToPC(oPC,"Defensive Fight: AC Bonus "+IntToString(iBonus)+".");
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,SetEffectSpellId(ExtraordinaryEffect(EffectAttackIncrease(iBonus)),9999),oPC, HoursToSeconds(1));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,SetEffectSpellId(ExtraordinaryEffect(EffectACIncrease(iBonus,AC_DODGE_BONUS)),9999),oPC, HoursToSeconds(1));
 	}
 	
-	if(combexp == 0 && impcombexp == 0 || !GetHasSpellEffect(3214,oPC))
+	if(combexp == 0 && impcombexp == 0 || !GetHasSpellEffect(9999,oPC))
 	{
 		DeleteLocalInt(oPC,"NODERVISHPARRY");
-		RemoveAnySpellEffects(3214, oPC);
+		RemoveAnySpellEffects(9999, oPC);
 		
 		SetActionMode(oPC,ACTION_MODE_COMBAT_EXPERTISE,FALSE);
 		SetActionMode(oPC,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE,FALSE);		
