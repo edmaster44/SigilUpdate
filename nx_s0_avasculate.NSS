@@ -56,7 +56,7 @@ void main()
 	object 	oCaster 	= 	OBJECT_SELF;
 	int		nDam;
 	int 	nCL 		=   PS_GetCasterLevel(OBJECT_SELF);
-	int PML = GetPureMageLevels(OBJECT_SELF);
+	int 	PML 		=   GetPureMageLevels(OBJECT_SELF);
 	effect	eStun		=	EffectStunned();
 	effect	eDam;
 	effect 	eVis		=	EffectVisualEffect(VFX_HIT_SPELL_AVASCULATE);
@@ -105,7 +105,6 @@ void main()
 					}
 					else
 					{	
-						nDam = d4(nCL) + d4(PML/3);
 						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkStun, oTarget, fDur);
 					}

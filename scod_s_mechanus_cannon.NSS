@@ -76,7 +76,10 @@ void main()
         		        //Enter Metamagic conditions
         		        if (nAlign == ALIGNMENT_LAWFUL)
 						{
-							nDamage = d3(nCasterLvl) + (nCasterLvl) + d3(PML/3);
+							nDamage = d6(nCasterLvl) + d6(PML/3);
+							if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+							nDamage = d6(20) + d6(PML/3);
+							} 
 						}
 						if (nAlign == ALIGNMENT_NEUTRAL)
 						{

@@ -81,43 +81,17 @@ void main()
             }
             if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
             {
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(1)));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(4)));
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
             }
             if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
             {
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 6.0f));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 24.0f));
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis3, oTarget,4.0f));
             }
 			
-			int nDam = d6(nCL) + d6(PML/3);
-				eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
-			
-				
-		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                    {
-                        nDam = nDam + ((3*nDam)/4);
-						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 
-                    }
-        	else if (nMetaMagic == METAMAGIC_EMPOWER)
-                    {
-                        nDam = nDam + nDam / 2;
-						eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
-
-                    }
 				
-				
-								
-			if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SONIC))
-				{
-					nDam	=	nDam/2;
-					eDam	=	EffectDamage(nDam, DAMAGE_TYPE_SONIC);
-				}
-			else
-				{
-					eDam	=	EffectDamage(nDam, DAMAGE_TYPE_SONIC);
-				}
 	
 					
         

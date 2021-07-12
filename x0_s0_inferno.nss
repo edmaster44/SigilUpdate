@@ -126,6 +126,9 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         // Calculate Damage
         //----------------------------------------------------------------------
         int nDamage = nCaster;
+		if (nCaster < 20 && !GetIsObjectValid(GetSpellCastItem())){
+		nDamage = 20;
+		} 
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
         eDam = EffectLinkEffects(eVis,eDam); // flare up

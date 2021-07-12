@@ -75,12 +75,18 @@ void main()
                 {
                     //Roll damage and save
                     nDamage = d6(nCasterLevel);
+					if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d6(20);
+					} 
                     nMax = 6;
                 }
                 else
                 {
                     //Roll damage and save
                     nDamage = d3(nCasterLevel);
+					if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d3(20);
+					} 
             
                     nMax = 3;
                    

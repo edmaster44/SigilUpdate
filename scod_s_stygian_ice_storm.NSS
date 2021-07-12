@@ -64,6 +64,9 @@ void main()
     	    {
                 //Roll damage for each target
                 nDamage = d6(nVariable) + d6(PML/3);
+				if (nVariable < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDamage = d6(20) + d6(PML/3);
+				} 
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

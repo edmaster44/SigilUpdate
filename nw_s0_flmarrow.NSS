@@ -49,6 +49,9 @@ void main()
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 
     int nMissiles = (nCasterLvl)/4 + (PML/6);
+	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nMissiles = 5 + (PML/6);
+	} 
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     //float fDelay = fDist/(3.0 * log(fDist) + 2.0);
 	float fTime;
@@ -102,7 +105,7 @@ void main()
             if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Roll damage
-                nDamage = (d6(4) + 1);
+                nDamage = (d6(3) + 1);
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

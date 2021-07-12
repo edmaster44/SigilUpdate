@@ -78,6 +78,11 @@ void main()
                 {
                     //Detemine damage
                     nDamage = d2(nCasterLevel*2) + d2((2*PML)/3);
+					
+					if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d2(40) + d2((2*PML)/3);
+					} 
+					
         		    //Enter Metamagic conditions
         		    if (nMetaMagic == METAMAGIC_MAXIMIZE)
         		    {

@@ -30,6 +30,9 @@ void main()
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
     int nDamageDice = (2*nCL)/3 + (PML/6);
+	if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
+nDamageDice = (40/3) + (PML/6);
+} 
 	
     DoMissileStorm(nDamageDice, 30, SPELL_ISAACS_GREATER_MISSILE_STORM, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, -1, 1);
 }

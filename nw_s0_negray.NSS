@@ -54,7 +54,7 @@ void main()
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-    	nDamage =  nDamage*2;//Damage is at max
+    	nDamage =  nDamage + ((3*nDamage)/4);;//Damage is at max
     }
     else if (nMetaMagic == METAMAGIC_EMPOWER)
     {
@@ -78,11 +78,7 @@ void main()
             eRay = EffectBeam(VFX_BEAM_EVIL, OBJECT_SELF, BODY_NODE_HAND);
             if (!MyResistSpell(OBJECT_SELF, oTarget))
             {
-                //Make a saving throw check
-                if(/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NEGATIVE))
-                {
-                    nDamage /= 2;
-                }
+               
                 //Apply the VFX impact and effects
                 //DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));

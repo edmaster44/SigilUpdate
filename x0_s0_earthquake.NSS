@@ -90,7 +90,21 @@ void main()
 // Earthquake does not allow spell resistance
 //            if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    
-			 nDamage = MaximizeOrEmpower(6, nCasterLvl,  GetMetaMagicFeat());
+			 nDamage = d8(nCasterLvl);
+			 if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+		      nDamage = d8(20);
+		      } 
+			//Resolve metamagic
+				if (nMetaMagic == METAMAGIC_MAXIMIZE)
+				{
+				nDamage = nDamage + ((3*nDamage)/4);
+				}
+				else if (nMetaMagic == METAMAGIC_EMPOWER)
+				{
+				nDamage = nDamage + nDamage / 2;
+				}
+			 
+			 
              //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion. (Don't bother for caster)
 			 if (oTarget != oCaster)
              {

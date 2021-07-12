@@ -71,6 +71,9 @@ void main()
     	    {
                 //Roll damage for each target
                 nDamage = d4(nVariable) + d4(PML/3);
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDamage = d4(20) + d4(PML/3);
+				} 
 
                 //Resolve metamagic
         	    if (nMetaMagic == METAMAGIC_MAXIMIZE)

@@ -80,6 +80,9 @@ void main()
 
                 //Roll damage for each target
                 nDamage = d8(nCasterLvl);
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDamage = d8(20);
+				} 
                 //Resolve metamagic
 				nDamage = ApplyMetamagicVariableMods( nDamage, (8 * nCasterLvl) );
 				nOrgDam = nDamage;

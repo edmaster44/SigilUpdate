@@ -82,6 +82,9 @@ void HandleTargetSelf()
 								
                     //Roll damage
                     nDamage = d6(nCasterLvl*2) + d6((2*PML)/3);
+					if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d6(40) + d6((2*PML)/3);
+					} 
 
     		        //Enter Metamagic conditions
     		        if (nMetaMagic == METAMAGIC_MAXIMIZE)

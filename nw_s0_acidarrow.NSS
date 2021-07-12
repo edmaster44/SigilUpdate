@@ -51,7 +51,7 @@ void main()
     // Calculate the duration
     //--------------------------------------------------------------------------
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = (PS_GetCasterLevel(OBJECT_SELF)/3);
+    int nDuration = (PS_GetCasterLevel(OBJECT_SELF)/6);
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
 	if (nCL > 13)

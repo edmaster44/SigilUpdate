@@ -68,6 +68,9 @@ void main()
 
 
 	nDamage = d2(nCasterLvl*2) + d2((2*PML)/3);
+	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDamage = d2(40) + d2((2*PML)/3);
+	} 
 	
 
 	//Resolve metamagic
@@ -88,7 +91,7 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
 		{
 			
-			nDamage = d2(nCasterLvl*2);
+			nDamage = d2(nCasterLvl*2) + d2((2*PML)/3);
 			//Resolve metamagic
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)
 			{

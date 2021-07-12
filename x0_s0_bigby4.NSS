@@ -105,6 +105,9 @@ void main()
         return;
     }
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nCL = 20;
+	} 
     int nDuration = 4;
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_EXTEND)

@@ -63,6 +63,9 @@ void main()
                     if (!MyResistSpell(oCaster, oTarget))
                     {
                         nDamage = d3(nCasterLevel*2) + d3((2*PML)/3);
+						if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						nDamage = d3(40) + d3((2*PML)/3);
+						} 
                         //Enter Metamagic conditions
                         if (nMetaMagic == METAMAGIC_MAXIMIZE)
                         {

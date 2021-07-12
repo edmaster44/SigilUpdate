@@ -78,6 +78,9 @@ void main()
             {
                 //Roll damage for each target
                 nDamage = d2(nCasterLvl*2);
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDamage = d2(40);
+				} 
                 //Resolve metamagic
 				if (nMetaMagic == METAMAGIC_MAXIMIZE)
 				{
@@ -89,7 +92,7 @@ void main()
 				}
 				
                 //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.
-                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, (GetSpellSaveDC()+4), SAVING_THROW_TYPE_ELECTRICITY);
+                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, (GetSpellSaveDC()), SAVING_THROW_TYPE_ELECTRICITY);
                 //Set the damage effect
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
                 if(nDamage > 0)

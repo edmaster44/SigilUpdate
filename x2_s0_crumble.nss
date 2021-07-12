@@ -69,6 +69,9 @@ void main()
     }
 
     int nDam = d6(nCasterLvl);
+	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDam = d6(20);
+	} 
 
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {

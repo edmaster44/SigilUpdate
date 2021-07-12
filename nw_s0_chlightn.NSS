@@ -60,6 +60,9 @@ void main()
 	int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
     int nDamage = d6(nCasterLevel) + d6(PML/3);
+	if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDamage = d6(20) + d6(PML/3);
+	} 
     int nDamStrike;
     int nNumAffected = 0;
     int nMetaMagic = GetMetaMagicFeat();
@@ -74,7 +77,7 @@ void main()
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
-        nDamage = nDamage + ((3*nDamage)/4);;//Damage is at max
+        nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
     }
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {
