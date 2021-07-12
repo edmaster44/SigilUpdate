@@ -1794,7 +1794,10 @@ int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
     int iLevel;
-	
+if(GetIsObjectValid(GetSpellCastItem())){
+return GetCasterLevel(oPC);
+}
+
 	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
 	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
 	else if (iClass == CLASS_TYPE_SPIRIT_SHAMAN)iLevel = GetSpiritShamanTRUECasterlevel(oPC);
