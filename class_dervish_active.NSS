@@ -3,6 +3,30 @@
 #include "ps_inc_equipment"
 
 
+int Ceil(float numb)
+{
+    int cast = FloatToInt(numb);
+    return numb > 0.0 ? ((numb - cast) > 0.0 ? cast + 1 : cast) : ((numb - cast) > 0.0 ? cast - 1 : cast);
+}
+
+
+
+void ApplyDervishFatigue(object oPC){
+int DervishLevel = GetLevelByClass(CLASS_DERVISH, oPC);
+	int iABPenalty = Ceil(5 - DervishLevel / 2.0);
+	if(iABPenalty <= 0) iABPenalty = 1;
+		
+	int iTotalLevels = GetTotalLevels(oPC, FALSE);
+	if(iTotalLevels < 15 && iABPenalty > 2) iABPenalty = 2;
+	
+	effect eAttack = EffectAttackDecrease(iABPenalty);
+	effect MoveDecrease = EffectMovementSpeedDecrease(10);
+		
+	effect eLink = EffectLinkEffects(eAttack,MoveDecrease);
+	eLink = ExtraordinaryEffect(eLink);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, 60.0f);
+}
+
 
 
 void Dervish_Dance(object oPC,int nSpell)
@@ -60,7 +84,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		if (nLevel < 9)	
 		{	
 			if (!GetHasFeat(FEAT_DERVISH_TIRELESS_DANCE,oPC))				
-					DelayCommand(fDuration, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, OBJECT_SELF, RoundsToSeconds(10)));
+					ApplyDervishFatigue(oPC);
 		}
 		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));	
 		}	

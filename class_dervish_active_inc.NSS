@@ -13,6 +13,7 @@ void main()
 	if (!X2PreSpellCastCode()) return;
     object oPC = OBJECT_SELF;
 	int nSpell = GetSpellId();
+	int DervishLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
 	
 	switch (nSpell)
