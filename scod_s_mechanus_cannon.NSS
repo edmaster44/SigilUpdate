@@ -83,11 +83,11 @@ void main()
 						}
 						if (nAlign == ALIGNMENT_NEUTRAL)
 						{
-							nDamage = ((d3(nCasterLvl))/2);
+							nDamage = ((d6(nCasterLvl))/2);
 						}
 						if (nAlign == ALIGNMENT_CHAOTIC)
 						{
-							nDamage = ((d3(nCasterLvl))/2);
+							nDamage = ((d6(nCasterLvl))/2);
 							nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_LAW);
 							
 						//Resolve metamagic
@@ -97,7 +97,7 @@ void main()
 						}
 						else if (nMetaMagic == METAMAGIC_EMPOWER)
 						{
-						nDamage = nDamage + nDamage / 2;
+						nDamage = nDamage + (nDamage / 2);
 						}
 							
 							//if (GetRacialType(oCaster) == RACIAL_TYPE_OUTSIDER)

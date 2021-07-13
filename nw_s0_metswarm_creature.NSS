@@ -65,9 +65,9 @@ int DetermineFireDamageForTargetCreature(object oTarget, int nTouchAttackRanged)
 	
 	//Roll Damage for Main Target
 	
-	nDamage = d2(nCasterLvl) + d2(PML/3);	
+	nDamage = d2(nCasterLvl) + d2(PML/3) + (nCasterLvl/7) + (PML/12);	
 	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
-	nDamage = d2(20) + d2(PML/3);
+	nDamage = d2(20) + d2(PML/3) + 2 + (PML/12);
 	} 
 
 	if (nTouchAttackRanged == 2 && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -152,10 +152,10 @@ int DetermineDamageForBlastCreature(object oTarget)
 	
 	//Roll Damage for Main Target
 	
-	nDamage = (nCasterLvl) + (PML/3);	
+	nDamage = (nCasterLvl) + (PML/3) + (nCasterLvl/7) + (PML/12);	
 	
 	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
-	nDamage = 20 + (PML/3);
+	nDamage = 20 + (PML/3) + 2 + (PML/12);
 	} 
 					
 	if (nMetaMagic == METAMAGIC_MAXIMIZE)

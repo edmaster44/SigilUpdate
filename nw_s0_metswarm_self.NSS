@@ -81,9 +81,9 @@ void HandleTargetSelf()
             		fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 								
                     //Roll damage
-                    nDamage = d6(nCasterLvl*2) + d6((2*PML)/3);
+                    nDamage = d6(nCasterLvl*2) + d6((2*PML)/3) + (nCasterLvl/2) + (PML/6);
 					if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
-					nDamage = d6(40) + d6((2*PML)/3);
+					nDamage = d6(40) + d6((2*PML)/3) + 10 + (PML/6);
 					} 
 
     		        //Enter Metamagic conditions

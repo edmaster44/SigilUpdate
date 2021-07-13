@@ -43,7 +43,7 @@
 #include "x2_i0_spells"
 #include "ps_inc_functions"
 
-const float SPELL_EFFECT_RADIUS = 6.069;
+const float SPELL_EFFECT_RADIUS = 3.048;
 const float DELAY_ONE_ROUND     = 6.0f;
 
 void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, int nMetaMagic )
@@ -52,7 +52,7 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
 	// Returns: 0 if the saving throw roll failed
 	// Returns: 1 if the saving throw roll succeeded
 	// Returns: 2 if the target was immune to the save type specified
-    int nSave = ReflexSave( oVictim, nSpellSaveDC, SAVING_THROW_TYPE_ACID, oCaster );
+    int nSave = FortitudeSave( oVictim, nSpellSaveDC, SAVING_THROW_TYPE_ACID, oCaster );
 	int PML = GetPureMageLevels(OBJECT_SELF);
 
     SignalEvent(oVictim, EventSpellCastAt(oCaster, SPELL_VITRIOLIC_SPHERE));
@@ -82,16 +82,16 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
 		if ( nSave == 1 )
 			nDamage = nDamage / 2;
 
-		if ((nDice > 6) && (nSave == 1))
-		{
-			if (GetHasFeat(FEAT_EVASION, oVictim) || GetHasFeat(FEAT_IMPROVED_EVASION, oVictim))
-				nDamage = 0;
-		}
-		if ((nDice > 6) && (nSave == 0))
-		{
-			if (GetHasFeat(FEAT_IMPROVED_EVASION, oVictim))
-				nDamage = nDamage / 2;
-		}
+//		if ((nDice > 6) && (nSave == 1))
+//		{
+//			if (GetHasFeat(FEAT_EVASION, oVictim) || GetHasFeat(FEAT_IMPROVED_EVASION, oVictim))
+//				nDamage = 0;
+//		}
+//		if ((nDice > 6) && (nSave == 0))
+//		{
+	//		if (GetHasFeat(FEAT_IMPROVED_EVASION, oVictim))
+	//			nDamage = nDamage / 2;
+	//	}
 
         if (nDamage > 0)
         {

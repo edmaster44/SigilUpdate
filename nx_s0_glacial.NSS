@@ -116,7 +116,7 @@ void main()
 			if (!ResistSpell(oCaster, oTarget))
 			{
 				//determine damage + metamagic
-				nDam	=	d6(nCasterLvl*2) + d6((2*PML)/3);
+				nDam	=	d6(nCasterLvl*2) + (nCasterLvl/2) + d6((2*PML)/3) + (PML/6);
 				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
 				nDam = d6(40);
 				} 
