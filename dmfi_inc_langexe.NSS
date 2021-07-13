@@ -340,6 +340,7 @@ void DMFI_GrantChoosenLanguages(object oPC)
 	if (nMod != 0) {
 	nMod = nMod/2;
 	}
+	if (nMod > 0)
 	{
 		// clear old data
 		oTool=DMFI_GetTool(oPC);
