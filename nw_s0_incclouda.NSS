@@ -41,7 +41,10 @@ void main()
       //  {
             fDelay = GetRandomDelay(0.5, 2.0);
             //Roll damage.
-            nDamage = d8(nCasterLvl/3) + (PML/9);
+            nDamage = d6(nCasterLvl/3) + d6(PML/9);
+			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			nDamage = d6(20/3) + d6(PML/9);
+			} 
             //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {
@@ -52,7 +55,10 @@ void main()
                      nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
                 }
             //Adjust damage for Reflex Save, Evasion and Improved Evasion
-            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator());
+            	if(MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator(), fDelay))
+         	    {
+                 nDamage = nDamage/2;
+        	    }
             // Apply effects to the currently selected target.
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
             if(nDamage > 0)

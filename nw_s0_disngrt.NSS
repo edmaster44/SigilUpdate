@@ -88,13 +88,18 @@ void main()
                 {
                     nDice = nCasterLvl + (PML/3); // BCH 03/10/06 - changed to caster level * 2, to reflect
 												//	script comment that damage is 2d6 per caster level
-				
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDice = (20) + (PML/3);
+				} 
 
 					
                 }
                 else if ( nSave == 1 ) // Saving Throw succeeded
                 {
-					nDice = ((nCasterLvl/2) + (PML/3));
+					nDice = ((nCasterLvl/2) + (PML/6));
+						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						nDice = (10) + (PML/6);
+				} 
                  }
                 else if ( nSave == 2 )  // Target is immune
                 {
@@ -104,13 +109,17 @@ void main()
 					//PKM-OEI: 05.28.07: Do critical hit damage
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{
-						nDice = nDice*2;
+						nDice = (nCasterLvl*2) + ((2*PML)/3);
+						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						nDice = (40) + ((2*PML)/3);
+				} 
 					}
 				
 				//if maximized 6 * ndice
 				if (nMeta == METAMAGIC_MAXIMIZE)
 				{
-					nDamage =  nDice*2;
+					nDamage =  d8(nDice);
+					nDamage = nDamage + ((3*nDamage)/4);
 				}
 				else if (nMeta == METAMAGIC_EMPOWER)
 				{

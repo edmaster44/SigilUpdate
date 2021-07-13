@@ -37,6 +37,9 @@ void main()
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
     int nDamageDice = (nCL/3) + (PML/6);
+	if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDamageDice = (20/3) + (PML/6);
+	} 
 	
 // End of Spell Cast Hook
 

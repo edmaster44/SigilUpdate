@@ -54,6 +54,9 @@ void main()
 
 	// calculate base damage	
 	nDamage = d4(nDice);	
+	if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDamage = d4(20) + d4(PML/3);
+	} 
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ORB_OF_SOUND));

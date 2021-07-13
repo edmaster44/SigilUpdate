@@ -61,6 +61,7 @@ void main()
 	// Caster level
 	int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
+	int nMetaMagic = GetMetaMagicFeat();
 
 	// Effect placeholders
 	int nDamage 		= d4(nCasterLevel);
@@ -72,6 +73,18 @@ void main()
 	if(GetIsObjectValid(oTarget))
 	{
 		nDamage = d4(nCasterLevel) + d4(PML/3);
+		if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+		nDamage = d4(20);
+		} 
+		//Resolve metamagic
+		if (nMetaMagic == METAMAGIC_MAXIMIZE)
+		{
+		nDamage = nDamage + ((3*nDamage)/4);
+		}
+		else if (nMetaMagic == METAMAGIC_EMPOWER)
+		{
+		nDamage = nDamage + nDamage / 2;
+		}
 		nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster); 
 		eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);

@@ -226,8 +226,6 @@ void PS_Spell_Hellfire(object oPC, location lTarget, int nSpell)
 	effect eDark 		= EffectVisualEffect(VFX_HIT_SPELL_EVIL);
     effect eDam;
     //Limit Caster level for the purposes of damage
-    if (nCasterLvl > 20)
-    {	nCasterLvl = 20;	}
     
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     while (GetIsObjectValid(oTarget))
@@ -581,8 +579,6 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
     {	return;		}
 
     int nCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
-    if (nCasterLevel > 20)
-    {	nCasterLevel 	= 20;	}
     int nDamage 		= (d8(3)) + (nCasterLevel);
     int nDamStrike;
     int nNumAffected 	= 0;
@@ -624,7 +620,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
                 {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
-                nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
+                nDamStrike = nDamage;
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_DIVINE);
                 if(nDamStrike > 0) //age > 0)
                 {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
@@ -689,12 +685,12 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_CHAIN_LIGHTNING));
             //Do an SR check
             if (!MyResistSpell(oPC, oTarget, fDelay))
-            {	nDamage = (d8(5)) + (nCasterLevel);
+            {	nDamage = (d6(nCasterLevel));
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {	nDamage = nDamage + ((3*nDamage)/4);;	}	//Damage is at max	
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {	nDamage = nDamage + (nDamage/2);	}	//Damage/is +50%
-                nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);
+                nDamStrike = nDamage;
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_DIVINE);
                 if(nDamStrike > 0) //age > 0)
                 {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));

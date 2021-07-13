@@ -56,9 +56,9 @@ void main()
     int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int nTouch      = TouchAttackRanged(oTarget);
 	int nMetaMagic = GetMetaMagicFeat();
-    if (nCasterLevel > 13)	 // Limit caster level
-        nCasterLevel = 13;
-	else if (nCasterLevel <= 0)
+//    if (nCasterLevel > 13)	 // Limit caster level
+//        nCasterLevel = 13;
+	 if (nCasterLevel <= 0)
 		nCasterLevel = 1;
 	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
@@ -75,7 +75,10 @@ void main()
 	            //Check for racial type undead
 	            if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 	            {
-					nDamage = d6(nCasterLevel);
+					nDamage = d3(nCasterLevel);
+					if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d3(20);
+					} 
 	                //nMax = 8;
 					//Resolve metamagic
 					if (nMetaMagic == METAMAGIC_MAXIMIZE)
@@ -99,6 +102,9 @@ void main()
 	            {
 	                
 	                nDamage = (nCasterLevel);
+					if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d3(20);
+					} 
 	                //nMax = 6;
 					//Resolve metamagic
 					if (nMetaMagic == METAMAGIC_MAXIMIZE)
@@ -121,6 +127,9 @@ void main()
 	            {
 	                
 	                nDamage = d2(nCasterLevel);
+					if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d3(20);
+					} 
 	                //nMax = 8;
 					//Resolve metamagic
 					if (nMetaMagic == METAMAGIC_MAXIMIZE)

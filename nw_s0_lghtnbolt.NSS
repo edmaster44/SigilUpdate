@@ -89,10 +89,13 @@ void main()
         	       {
                         //Roll damage
                         nDamage =  d4(nCasterLevel) +  d4(PML/3) ;
+						if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						nDamage = d4(20) + d4(PML/3);
+						} 
         		        //Enter Metamagic conditions
         		        if (nMetaMagic == METAMAGIC_MAXIMIZE)
         		        {
-        			         nDamage = nDamage *2;//Damage is at max
+        			         nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
                         }
         		        if (nMetaMagic == METAMAGIC_EMPOWER)
         		        {

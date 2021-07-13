@@ -70,6 +70,9 @@ void main()
 
 //Determine damage
 			nDam		=	d3(nCasterLvl);
+			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			nDam = d3(20);
+			} 
 			eDam		=	EffectDamage(nDam, DAMAGE_TYPE_COLD);
 			
 			if (nMetaMagic == METAMAGIC_MAXIMIZE)

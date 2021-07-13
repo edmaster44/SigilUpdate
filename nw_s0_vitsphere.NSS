@@ -43,7 +43,7 @@
 #include "x2_i0_spells"
 #include "ps_inc_functions"
 
-const float SPELL_EFFECT_RADIUS = 6.096;
+const float SPELL_EFFECT_RADIUS = 6.069;
 const float DELAY_ONE_ROUND     = 6.0f;
 
 void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, int nMetaMagic )
@@ -60,6 +60,10 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
     if ( nSave != 2 )
     {
         int nDamage = d2(nDice*2) + d2((2*PML)/3);
+		
+		if (nDice < 20 && !GetIsObjectValid(GetSpellCastItem())){
+		nDamage = d2(40) + d2((2*PML)/3);
+		} 
 
 		int nMaxVal = (4*nDice) ; // nDice * d4
 

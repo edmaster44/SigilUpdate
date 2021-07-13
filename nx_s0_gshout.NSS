@@ -75,6 +75,9 @@ void main()
 			
 				//determine duration and damage + metamagic
 				nDam		=	d8(nCasterLvl) + d8(PML/3);
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDam = d8(20) + d8(PML/3);
+				} 
 				fDuration	=	RoundsToSeconds(d6(4));
 				
 				//Resolve metamagic

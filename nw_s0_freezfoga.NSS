@@ -20,7 +20,10 @@ void main()
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
     {   SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1229));
             fDelay = GetRandomDelay(0.5, 2.0);
-            nDamage = d3(nCL/3) + d3(PML/9);
+            nDamage = d2(nCL/3) + d2(PML/9);
+			if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			nDamage = d2(20/3) + d2(PML/9);
+			}
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {	nDamage = nDamage + ((3*nDamage)/4);	}
         if (nMetaMagic == METAMAGIC_EMPOWER)

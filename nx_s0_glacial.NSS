@@ -117,7 +117,10 @@ void main()
 			{
 				//determine damage + metamagic
 				nDam	=	d6(nCasterLvl*2) + d6((2*PML)/3);
-				nDam	=	ApplyMetamagicVariableMods(nDam, 360);
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDam = d6(40);
+				} 
+				//nDam	=	ApplyMetamagicVariableMods(nDam, 360);
 				
 				if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD, oCaster))
 				{

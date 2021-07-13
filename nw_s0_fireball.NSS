@@ -74,7 +74,10 @@ void main()
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {
                     //Roll damage for each target
-                    nDamage = d3(nCasterLvl) +d3(PML/3);
+                    nDamage = d3(nCasterLvl) + d3(PML/3);
+					if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					nDamage = d3(20) + d3(PML/3);
+					} 
                     //Resolve metamagic
             	    if (nMetaMagic == METAMAGIC_MAXIMIZE)
                     {

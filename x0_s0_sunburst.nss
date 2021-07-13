@@ -52,6 +52,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage = 0;
     int nOrgDam = 0;
+	int PML = GetPureMageLevels(OBJECT_SELF);
     float fDelay;
     effect eExplode = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
@@ -85,11 +86,11 @@ void main()
                 if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
                 {
                     //Roll damage for each target
-                    nDamage = MaximizeOrEmpower(8, nCasterLvl, nMetaMagic);
+                    nDamage = MaximizeOrEmpower(8, (nCasterLvl+(PML/3)), nMetaMagic);
                 }
                 else
                 {
-                    nDamage = MaximizeOrEmpower(4, nCasterLvl, nMetaMagic);
+                    nDamage = MaximizeOrEmpower(4, (nCasterLvl+(PML/3)), nMetaMagic);
                	}
 
                 //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.

@@ -75,9 +75,14 @@ void main()
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{
 		nDDice = nDDice * 2;
+		PML = PML*2;
 	}
 
-    int nDamage = d3(nDDice) + d3(PML/3);  // JLR - OEI 07/19/05
+    int nDamage = d3(nDDice) + d3(PML/3);
+	if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDamage = d3(20); + d3(PML/3);
+	} 
+  // JLR - OEI 07/19/05
 
     //--------------------------------------------------------------------------
     //Enter Metamagic conditions

@@ -47,7 +47,10 @@ void main()
        // {
             //Roll Damage
             //Enter Metamagic conditions
-            nDamage = d6(nCL/3) + d6(PML/9);
+            nDamage = d4(nCL/3) + d4(PML/9);
+			if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			nDamage = d4(20/3) + d4(PML/9);
+			} 
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
                 nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
@@ -62,7 +65,14 @@ void main()
                 //slowing effect
                 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
                 // * BK: Removed this because it reduced damage, didn't make sense nDamage = d6();
+				
             }
+			
+			else if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ACID, GetAreaOfEffectCreator(), fDelay))
+			{
+				nDamage = nDamage/2;
+			}
+				
 
             //Set Damage Effect with the modified damage
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);

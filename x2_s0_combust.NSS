@@ -64,7 +64,7 @@ void main()
     //--------------------------------------------------------------------------
     // Calculate the damage, 2d6 + casterlevel, capped at +10
     //--------------------------------------------------------------------------
-    int nDamage = PS_GetCasterLevel(OBJECT_SELF);
+    int nDamage = d6(8);
 	//uncap +1 damage
    /* if (nDamage > 10)
     {
@@ -78,7 +78,7 @@ void main()
     else
     {
 		//Changed dice to 8d6
-        nDamage  += d6(8);
+        nDamage  = d6(8);
         if (nMetaMagic == METAMAGIC_EMPOWER)
         {
             nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%

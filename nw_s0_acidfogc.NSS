@@ -24,7 +24,10 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
-    int nDamage = d6(nCL/3) + d6(PML/9);
+    int nDamage = d4(nCL/3) + d4(PML/9);
+	if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	nDamage = d4(20/3) + d4(PML/9);
+	} 
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
     object oTarget;
@@ -56,13 +59,12 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
         {
-            /*if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ACID, GetAreaOfEffectCreator(), fDelay))
+            if(MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ACID, GetAreaOfEffectCreator(), fDelay))
             {
-                 nDamage = d6();
-            }*/
+                 nDamage = nDamage/2;
+            }
 
-         //   nDamage = d6(nCL/2);
-
+            
         //Enter Metamagic conditions
         if (nMetaMagic == METAMAGIC_MAXIMIZE)
         {

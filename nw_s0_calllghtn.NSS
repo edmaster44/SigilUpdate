@@ -69,6 +69,9 @@ void main()
             {
                 //Roll damage for each target
                 nDamage = d3(nCasterLvl);
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				nDamage = d3(20);
+				} 
                 //Resolve metamagic
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
                 {

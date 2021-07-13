@@ -72,7 +72,7 @@ void main()
         effect eAoE;
 		
         object oAoE;
-        float fDuration  = 60.0f * manif.nManifesterLevel;
+        float fDuration  = 6.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 
         // Handle Twin Power

@@ -56,7 +56,7 @@ void main()
             if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
             {
                 //Roll damage.
-                nDamage = d6(2) + ((PML*2)/3);;  // JLR - OEI 07/19/05
+                nDamage = d6(2) + (PML/3);;  // JLR - OEI 07/19/05
 
                 //Enter Metamagic conditions
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
