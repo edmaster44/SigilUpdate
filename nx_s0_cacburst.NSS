@@ -68,7 +68,7 @@ void main()
 
 
 	nDamage = d2(nCasterLvl*2) + d2((2*PML)/3);
-	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 	nDamage = d2(40) + d2((2*PML)/3);
 	} 
 	

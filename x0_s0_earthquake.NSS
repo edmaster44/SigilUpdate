@@ -91,7 +91,7 @@ void main()
 //            if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    
 			 nDamage = d8(nCasterLvl);
-			 if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			 if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 		      nDamage = d8(20);
 		      } 
 			//Resolve metamagic

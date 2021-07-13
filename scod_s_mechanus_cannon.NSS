@@ -77,7 +77,7 @@ void main()
         		        if (nAlign == ALIGNMENT_LAWFUL)
 						{
 							nDamage = d6(nCasterLvl) + d6(PML/3);
-							if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+							if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 							nDamage = d6(20) + d6(PML/3);
 							} 
 						}

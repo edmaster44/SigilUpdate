@@ -1094,7 +1094,7 @@ void PS_Cast_MOTC_MagicMissile(object oPC, int nSpell)
 
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = 12;
-    int nMissiles = 5;
+    int nMissiles = 12;
     effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);
     float fDelay, fTime, fTime2;
 	int nSpell = GetSpellId();
@@ -1125,10 +1125,10 @@ void PS_Cast_MOTC_MagicMissile(object oPC, int nSpell)
 	{	for (nCnt = 1; nCnt <= nMissiles; nCnt++)
 		{	fTravelTime = GetProjectileTravelTime( lSourceLoc, lTarget, nPathType );
 			if ( nCnt == 0 )	fDelay = 0.0f;
-			else				fDelay = GetRandomDelay( 0.1f, 0.5f ) + (0.5f * IntToFloat(nCnt));
+			else				fDelay = GetRandomDelay( 0.1f, 0.1f ) + (0.1f * IntToFloat(nCnt));
 
 	        if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
-		  	{	int nDam = d4(1) + 1;
+		  	{	int nDam = d3(1) + 1;
                 effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);
                 DelayCommand(fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 DelayCommand(fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget));

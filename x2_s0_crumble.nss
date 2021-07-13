@@ -69,7 +69,7 @@ void main()
     }
 
     int nDam = d6(nCasterLvl);
-	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 	nDam = d6(20);
 	} 
 

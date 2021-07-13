@@ -109,7 +109,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						//Roll damage
 						nDamage = d6(nCasterLvl) + d6(PML/3) + (nCasterLvl/4) + (PML/12);
 						
-						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 						nDamage = d6(20) + d6(PML/3) + (5) + (PML/12);
 						} 
 										
@@ -130,7 +130,7 @@ void HandleTargetLocation( location lSpellTargetLocation )
 						//Roll damage
 						nDamage = d6(nCasterLvl) + d6(PML/3);
 						
-						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 						nDamage = d6(20) + d6(PML/3);
 						}
 										

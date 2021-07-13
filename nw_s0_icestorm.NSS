@@ -71,7 +71,7 @@ void main()
     	    {
                 //Roll damage for each target
                 nDamage = d4(nVariable) + d4(PML/3);
-				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 				nDamage = d4(20) + d4(PML/3);
 				} 
 

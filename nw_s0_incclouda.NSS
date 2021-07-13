@@ -42,7 +42,7 @@ void main()
             fDelay = GetRandomDelay(0.5, 2.0);
             //Roll damage.
             nDamage = d6(nCasterLvl/3) + d6(PML/9);
-			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 			nDamage = d6(20/3) + d6(PML/9);
 			} 
             //Enter Metamagic conditions

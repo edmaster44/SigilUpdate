@@ -50,7 +50,7 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = GetHitDice(OBJECT_SELF);
-    int nMissiles = (nCasterLvl + 1)/2;
+    int nMissiles = (nCasterLvl);
     //effect eMissile = EffectVisualEffect(VFX_IMP_MIRV);	// handled by SpawnSpellProjectile()
     effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);
     float fDelay, fTime, fTime2;
@@ -66,10 +66,10 @@ void main()
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MAGIC_MISSILE));
         
-		//Limit missiles to five
-        if (nMissiles > 5)
+		//Limit missiles to twelve
+        if (nMissiles > 12)
         {
-            nMissiles = 5;
+            nMissiles = 12;
         }
 
 	effect eMantle = GetFirstEffect(oTarget);
@@ -97,7 +97,7 @@ void main()
 		{
 			fTravelTime = GetProjectileTravelTime( lSourceLoc, lTarget, nPathType );
 			if ( nCnt == 0 )	fDelay = 0.0f;
-			else				fDelay = GetRandomDelay( 0.1f, 0.5f ) + (0.5f * IntToFloat(nCnt));
+			else				fDelay = GetRandomDelay( 0.1f, 0.1f ) + (0.1f * IntToFloat(nCnt));
 			
 			/*
 			fTime = fDelay + ((nCnt - 1) * 0.25);
@@ -108,9 +108,9 @@ void main()
 	        if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 		  	{
                 //Roll damage
-                int nDam = d4(1) + 1;
+                int nDam = d3(1) + 1;
      	          //Enter Metamagic conditions
-                nDam = ApplyMetamagicVariableMods(nDam, 5);
+                nDam = ApplyMetamagicVariableMods(nDam, 4);
 
                 //Set damage effect
                 effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);

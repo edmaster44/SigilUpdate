@@ -88,7 +88,7 @@ void main()
                 {
                     nDice = nCasterLvl + (PML/3); // BCH 03/10/06 - changed to caster level * 2, to reflect
 												//	script comment that damage is 2d6 per caster level
-				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 				nDice = (20) + (PML/3);
 				} 
 
@@ -97,7 +97,7 @@ void main()
                 else if ( nSave == 1 ) // Saving Throw succeeded
                 {
 					nDice = ((nCasterLvl/2) + (PML/6));
-						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 						nDice = (10) + (PML/6);
 				} 
                  }
@@ -110,7 +110,7 @@ void main()
 					if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 					{
 						nDice = (nCasterLvl*2) + ((2*PML)/3);
-						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+						if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 						nDice = (40) + ((2*PML)/3);
 				} 
 					}

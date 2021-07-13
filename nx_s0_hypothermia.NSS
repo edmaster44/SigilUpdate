@@ -70,7 +70,7 @@ void main()
 
 //Determine damage
 			nDam		=	d3(nCasterLvl);
-			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 			nDam = d3(20);
 			} 
 			eDam		=	EffectDamage(nDam, DAMAGE_TYPE_COLD);

@@ -117,7 +117,7 @@ void main()
 			{
 				//determine damage + metamagic
 				nDam	=	d6(nCasterLvl*2) + (nCasterLvl/2) + d6((2*PML)/3) + (PML/6);
-				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 				nDam = d6(40);
 				} 
 				//nDam	=	ApplyMetamagicVariableMods(nDam, 360);

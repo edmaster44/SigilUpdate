@@ -73,7 +73,7 @@ void main()
 			int nNumRolls = nCasterLvl;
 
 			int nDamage = d6(nNumRolls) + d6(PML/3);
-			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 			nDamage = d6(20) + d6(PML/3);
 			} 
 			float fSummonTime = RoundsToSeconds(10);

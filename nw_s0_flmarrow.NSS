@@ -49,7 +49,7 @@ void main()
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 
     int nMissiles = (nCasterLvl)/4 + (PML/6);
-	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+	if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 	nMissiles = 5 + (PML/6);
 	} 
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);

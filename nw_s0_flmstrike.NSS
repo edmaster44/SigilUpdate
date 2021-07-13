@@ -75,7 +75,7 @@ void main()
            if (!MyResistSpell(OBJECT_SELF, oTarget, 0.6))
     	   {
     	        nDamage =  d4(nCasterLvl);
-				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 				nDamage = d4(20);
 				} 
     		    if (nMetaMagic == METAMAGIC_MAXIMIZE)

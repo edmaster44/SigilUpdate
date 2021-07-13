@@ -78,7 +78,7 @@ void main()
                 {
                     //Roll damage for each target
                     nDamage = d8(nCasterLvl) + d8(PML/3);	// JLR - OEI 07/22/05 -- 3.5 Change
-					if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem())){
+					if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
 					nDamage = d8(20) + d8(PML/3);
 					} 
                     //Resolve metamagic
