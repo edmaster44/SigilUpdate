@@ -30,6 +30,13 @@
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
 
+
+void  AddKeenEffectToWeapon(object oMyWeapon, float fDuration)
+{
+   IPSafeAddItemProperty(oMyWeapon,ItemPropertyKeen(), fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING ,TRUE,TRUE);
+   return;
+}
+
 void main()
 {
 /*
@@ -46,16 +53,16 @@ void main()
     }
 
     object oManifester = OBJECT_SELF;
-    object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
+    object oMyWeapon     = IPGetTargetedOrEquippedMeleeWeapon();
     struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
+        EvaluateManifestationNew(oManifester, oMyWeapon,
                               GetSpellId(),
                               METAPSIONIC_EXTEND
                               );
 							  
 
     // Validity check
-    if(!GetIsObjectValid(oTarget))
+    if(!GetIsObjectValid(oMyWeapon))
     {
         SendMessageToPC(oManifester, "Target must be a weapon or creature holding a weapon!"); // Item must be weapon or creature holding a weapon
     	return;
@@ -63,17 +70,18 @@ void main()
 
     if(manif.bCanManifest)
     {
-        int nDamageType = GetWeaponType(oTarget);
+        int nDamageType = GetWeaponType(oMyWeapon);
         effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
         float fDuration = 600.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-
-        if(nDamageType == DAMAGE_TYPE_PIERCING ||
-           nDamageType == DAMAGE_TYPE_SLASHING
+		int nWeaponType = GetWeaponType(oMyWeapon);
+        if(nWeaponType == WEAPON_TYPE_PIERCING ||
+			nWeaponType == WEAPON_TYPE_SLASHING ||
+			nWeaponType == WEAPON_TYPE_PIERCING_AND_SLASHING
            )
         {
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            IPSafeAddItemProperty(oTarget, ItemPropertyKeen(), fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));
+           	AddKeenEffectToWeapon(oMyWeapon, fDuration);
         }
     }
 }
