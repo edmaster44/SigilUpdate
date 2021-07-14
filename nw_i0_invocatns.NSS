@@ -984,7 +984,7 @@ void CheckNumberOfShadows(object oPC) {
 
 }
 
-void DoWraithExtraction(object oCaster, object oTarget, location lTarget) {
+void DoWraithExtraction(object oCaster, object oTarget, location lTarget, float fDuration = 360.0f) {
 	
 	//SendMessageToPC(oCaster, "Trying to extract wraith.");
 	//If we just killed them, then we should get a shadow!
@@ -1005,7 +1005,7 @@ void DoWraithExtraction(object oCaster, object oTarget, location lTarget) {
 				SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
 				SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
 				
-				DestroyObject(oCreature, 360.0f); //Sanity destroy so you can keep summoning more
+				DestroyObject(oCreature, fDuration); //Sanity destroy so you can keep summoning more
 				
 			} else {
 			

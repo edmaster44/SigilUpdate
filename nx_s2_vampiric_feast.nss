@@ -41,6 +41,7 @@
 #include "x2_i0_spells"
 #include "x2_inc_spellhook"
 #include "ps_inc_epicsave"
+#include "nw_i0_invocatns"
 
 
 void main()
@@ -52,7 +53,7 @@ void main()
 	
 	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
 	int nTotalDamage = 0;
-	int bSummonShadow = FALSE;
+	int bSummonShadow = 0;
 	//int nHD, nCurrentHP, nDamage;
 	int nCurrentHP, nDamage;
 	float fDelay;
@@ -61,6 +62,8 @@ void main()
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_VAMPIRIC_FEAST);
 	effect eShadow = EffectSummonCreature("c_greater_shadow", VFX_FNF_SUMMON_UNDEAD);
 	effect eDamage;
+	
+	float fShadowDuration = RoundsToSeconds(GetTotalLevels(OBJECT_SELF, TRUE));
 	
    	//Cycle through the targets within the spell shape until an invalid object is captured.
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lCaster, TRUE, OBJECT_TYPE_CREATURE);
@@ -80,7 +83,8 @@ void main()
 				if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
 				{	// Fail save, lose all your remaining HP
 					nDamage = nCurrentHP;
-					bSummonShadow = TRUE;	// We killed at least one person.
+					//bSummonShadow++;	// We killed at least one person.
+					DelayCommand(fDelay, DoWraithExtraction(OBJECT_SELF, oTarget, GetLocation(oTarget), fShadowDuration));
 				}
 				else
 				{	// Make save, lose half of remaining HP.
