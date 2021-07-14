@@ -263,7 +263,7 @@ void PS_HumForm_DragonUE(object oPC)
 		
 	if (GetHasFeat(3649, oPC, FALSE))
 	{	
-		FeatRemove(oPC, 1784);
+		FeatRemove(oPC, 1315);
 	}
 	
 }
@@ -298,6 +298,6 @@ void PS_DragForm_DragonUE(object oPC)
 		
 	if (GetHasFeat(3649, oPC, FALSE) && iDragon >= 6)
 	{	
-		FeatAdd(oPC, 1784, 0, 1, 1);
+		FeatAdd(oPC, 1315, 0, 1, 1);
 	}	
 }

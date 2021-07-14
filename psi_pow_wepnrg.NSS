@@ -32,6 +32,31 @@
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
 
+
+void ApplyWeaponProperty(object oTarget, float fDuration)
+{
+int	nDamage = IP_CONST_DAMAGEBONUS_1d8;
+int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
+itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
+IPSafeAddItemProperty(oTarget,ipWoE, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING ,TRUE,TRUE);
+return;
+
+
+}
+
+void ApplyWeaponPropertyAugmented(object oTarget, float fDuration)
+{
+int	nDamage = IP_CONST_DAMAGEBONUS_1d10;
+int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
+itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
+IPSafeAddItemProperty(oTarget,ipWoE, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING ,TRUE,TRUE);
+return;
+
+}
+
+
+
+
 void main()
 {
 /*
@@ -73,13 +98,13 @@ itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
         float fDuration = 600.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 
-        if(manif.bAugment)nDamage = IP_CONST_DAMAGEBONUS_1d10;
-		
-		
+        if(manif.bAugment)
+		{ApplyWeaponPropertyAugmented(oTarget,fDuration);}
+		else 
            
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            AddItemProperty(DURATION_TYPE_TEMPORARY, ipWoE, oTarget, fDuration);
+            ApplyWeaponProperty(oTarget,fDuration);
         }
     }
 }
