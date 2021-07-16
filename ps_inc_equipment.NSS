@@ -211,7 +211,7 @@ void ApplyElementalWeapon(object oPC, object oItem)
 {   
 
 if (GetWeaponRanged(oItem)==TRUE) 
-{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");
+{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");//
 return; }
 
 
