@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------------------------------------------------------
 
 void PS_ShieldArmor_Dragon(object oPC, int nSpell)
-{
+{	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
     if (!X2PreSpellCastCode())
     {	return;	}
 
@@ -46,7 +46,12 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell)
 		else 					//+7 bonus below 10th level
 			{	iShield = 7;		}									
 		}
-		
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humaniod Form.");
+			RemoveSpellEffects(nSpell,oPC,oPC);
+		}
+	else 		
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{	effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
 			eAC = ExtraordinaryEffect(eAC);
