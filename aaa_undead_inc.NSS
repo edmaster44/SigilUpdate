@@ -1026,9 +1026,10 @@ void PS_Vamp_BloodFrenzy(object oPC, int iLevel, int nSpell)
 
 void PS_VampMal_BonusFeat(object oPC, object oItem, int nSpell)
 {
+
 	int iHasBonus	= GetLocalInt(oItem, "VML5");
 
-	if (iHasBonus == 1)
+	if (iHasBonus != 0)
 	{	return;		}
 		else
 	{	// Clangeddin UI script.

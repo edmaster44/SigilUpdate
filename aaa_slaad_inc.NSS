@@ -278,7 +278,7 @@ void PS_SlaadChaoticCrafting(object oPC, object oItem, int nSpell)
 {
 	int iHasBonus	= GetLocalInt(oItem, "SGC1");
 
-	if (iHasBonus == 1)
+	if (iHasBonus != 0)
 	{	return;		}
 		else
 {
