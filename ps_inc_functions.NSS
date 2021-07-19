@@ -4352,8 +4352,10 @@ int iGOL =	GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
 int iARC =	GetLevelByClass(CLASS_TYPE_ARCANE_SCHOLAR, oPC);
 int iMYS =	GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
 int iRWZ = 	GetLevelByClass(CLASS_TYPE_RED_WIZARD, oPC);
+int iGSD =  GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
+int iRSC =  GetLevelByClass(CLASS_TYPE_RAKSHASA_SORCERER, oPC);
 	
-int PML = (iWIZ + iSOR + iBRA + iLIC + iSUC + iPAL + iGOL + iARC + iMYS + iRWZ);
+int PML = (iWIZ + iSOR + iBRA + iLIC + iSUC + iPAL + iGOL + iARC + iMYS + iRWZ + iRSC + iGSD);
 
 return PML;
 }
