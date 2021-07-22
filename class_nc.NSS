@@ -53,7 +53,8 @@ void Earth_Resilience(object oPC, int nSpell)
 		eLink = EffectLinkEffects(eBludgeoning, eLink);
 		
 		if(iNaturesWarrior == 5) eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN),eLink);
-	
+		
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
 
 }
 void Nature_Weapon(object oPC, int nSpell)
