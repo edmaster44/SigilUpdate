@@ -3,15 +3,13 @@
 //:: psi_pp_pool
 //:://////////////////////////////////////////////
 /*
-    A psion’s ability to manifest powers is limited by the power points he has available. 
+    A Psychic Warrior ability to manifest powers is limited by the power points he has available. 
 	This script determines how many power points a psion starts the day with (after resting)
-	while taking into account bonuses granted via feats and Intelligence score.
+	while taking into account bonuses granted via feats and Wisdom score.
 	
 	Future additions will likely include items which grant bonuses to power point pool, as 
 	well as possible small racial bonuses for Githyanki, Githzerai, Duergar, and Illithid.
 	
-	This script is for the 'psion' class only. If Psychic Warrior is implemented, it will 
-	have its own script.
 */
 //:://////////////////////////////////////////////
 //:: Created By: edmaster44

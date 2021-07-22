@@ -182,7 +182,22 @@ FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, TRUE, FALSE);
             }
 else if (iTotal >= 1){    
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, TRUE, FALSE);
-                
+ }
+ if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+		{	SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
+			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Augment Power");	}
+		if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+		{	SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
+			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Empower Power");	}
+		if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+		{	SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
+			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Extend Power");		}
+		if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
+		{	SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);	
+			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Maximize Power");	}
+		if (GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
+		{	SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
+			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");		}               
 }
 
 //Bardic music stacks
