@@ -143,6 +143,38 @@ void RemoveBuffs(object oPC)
 	}
 }
 
+void DoPsyProgression(object oPC)
+{
+	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
+	int iTotal = nPsywar + nWarMind + nGemDragon;
+	
+	if (iTotal >=20){
+	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
+	else if (iTotal >= 16 ) {
+FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
+  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, TRUE, FALSE);
+} else if (iTotal >= 12) {    
+  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
+  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, TRUE, FALSE);
+}
+else if (iTotal >= 9) {    
+	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
+	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, TRUE, FALSE);
+}
+else if (iTotal >= 6)
+{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
+                FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, TRUE, FALSE);}
+else if (iTotal >= 3){ 
+FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
+FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, TRUE, FALSE);
+            }
+else if (iTotal >= 0){    
+FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, TRUE, FALSE);
+ }
+ }
+
 void GiveDruidMonkPenaltyFeat (object oPC)
 {
 	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) > 0 &&
@@ -192,7 +224,7 @@ void RestFinish(object oPC)
 	}
 	
 	PS_CalculateECL(oPC);
-	
+	DoPsyProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
 	
