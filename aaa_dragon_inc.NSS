@@ -32,7 +32,9 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell)
 
 	int iHD = GetTotalLevels(oPC, TRUE);
 	int iShield;
-	
+	//Remove existing properties of these types
+	if (GetHasSpellEffect(nSpell,oPC))	
+	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
 	if (GetHasFeat(260, oPC))
 		{	
 			iShield = 4;  // +4 bonus if monk class is taken 						  
@@ -47,12 +49,13 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell)
 			{	iShield = 7;		}									
 		}
 	if (GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humaniod Form.");
-			RemoveSpellEffects(nSpell,oPC,oPC);
+		{	
+			
+			SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humanoid Form .");
+			return;
 		}
 	else 		
-	if (!GetHasSpellEffect(nSpell, oPC))
+
 	{	effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
 			eAC = ExtraordinaryEffect(eAC);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		

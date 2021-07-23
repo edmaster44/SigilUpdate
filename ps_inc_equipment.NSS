@@ -449,7 +449,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
             return TRUE;
         }
     }
-    else if (GetIsCreatureWeapon(nITEM) == FALSE && GetArmorRank(oITEM) != ARMOR_RANK_NONE)
+    else if (GetCreatureWeapons(oITEM) == FALSE)
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
