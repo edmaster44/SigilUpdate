@@ -96,7 +96,8 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {
-int nPercentage = GetSkillRank( SKILL_PARRY, oPC,FALSE);
+int nParry =GetHasSkill(SKILL_PARRY,oPC);
+int nPercentage = GetSkillRank( nParry, oPC,FALSE);
 float fDuration = 60.0f;
 if (nPercentage> 50)
 	{nPercentage = 50;}
