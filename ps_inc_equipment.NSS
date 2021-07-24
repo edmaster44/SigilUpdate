@@ -412,7 +412,7 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 // Creature weapons are 160-177. Others are not allowed unless "in humanoid form (=1)".
 int CheckDragonForms(object oPC, object oITEM, int nITEM)
 {
-    switch (nITEM)
+   /* switch (nITEM)
     {
         case BASE_ITEM_AMULET:
         case BASE_ITEM_ARROW:
@@ -426,17 +426,17 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
         case BASE_ITEM_HELMET:
         case BASE_ITEM_RING:
             return FALSE;
-    }
+    } */
     
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
-   /* if (GetArmorRank(oITEM) > ARMOR_RANK_NONE)
+/*    if (GetArmorRank(oITEM) > ARMOR_RANK_NONE)
     {
         SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection then any armor could. You may only wear clothes.");
         AssignCommand(oPC, ClearAllActions(TRUE));
         AssignCommand(oPC, ActionUnequipItem(oITEM));   
         return TRUE;
-    }*/
+    } */
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1)
@@ -449,7 +449,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
             return TRUE;
         }
     }
-    else if (GetCreatureWeapons(oITEM) == FALSE)
+    else if (GetIsCreatureWeapon(nITEM) == FALSE)
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());

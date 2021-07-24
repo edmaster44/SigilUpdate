@@ -4,9 +4,10 @@ Removed Alingment change for Thug for exploit reason */
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "aaa_constants"
-#include "ps_adjust_psywar"
+#include "gui_add_psywarfeat"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
+#include "ps_adjust_psywar"
 #include "ps_adjust_sneakattack"
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"
@@ -152,38 +153,7 @@ void DoPsiProgression(object oPC)
 }
 
 
-//Progression for Psychic Warrior and PRC
-void DoPsyProgression(object oPC)
-{
-	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
-	int iTotal = nPsywar + nWarMind + nGemDragon;
-	
-	if (iTotal >=21){
-	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
-	else if (iTotal >= 17 ) {
-FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
-  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, TRUE, FALSE);
-} else if (iTotal >= 13) {    
-  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
-  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, TRUE, FALSE);
-}
-else if (iTotal >= 10) {    
-	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
-	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, TRUE, FALSE);
-}
-else if (iTotal >= 7)
-{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
-                FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, TRUE, FALSE);}
-else if (iTotal >= 4){ 
-FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
-FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, TRUE, FALSE);
-            }
-else if (iTotal >= 0){    
-FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, TRUE, FALSE);
- }
- }
+
 
 //Bardic music stacks
 void CheckBardicSongs(object oPC)
@@ -346,6 +316,7 @@ void main()
 	GetFavoredSoulWithoutFeat(oPC);
 	PS_MonkLevels(oPC);
 	PsyWarProgression(oPC);
+	DoPsyProgression(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);

@@ -1,18 +1,38 @@
-
+#include "ps_inc_functions"
+#include "ps_class_inc"
 #include "aaa_constants"
 
 
-void DoPsyProgression(object oPC);
+int PsyWarProgression(object oPC);
+
+//GUI Stuff
+int PsyWarProgression(object oPC)
+{
+	
+	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+
+	if (GetLevelByClass(nPsywar, oPC) >= 0)
+{	
+	
+	if (!GetHasFeat(FEAT_PSYWAR_FERAL,oPC)||!GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+		
+	{AddScriptParameterString("START");
+	AddScriptParameterString("");
+	ExecuteScriptEnhanced("gui_extra_choices", oPC); }
+	
+
+}
+return nPsywar;
+}
 
 //Progression for Psychic Warrior and PRC
-void DoPsyProgression(object oPC)
+/*void DoPsyProgression(object oPC)
 {
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int iTotal = nPsywar + nGemDragon + nWarMind;
-
-
+	
 	if (iTotal >=20){
 	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
 	else if (iTotal >= 16 ) {
@@ -36,7 +56,5 @@ FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
 else if (iTotal >= 1){    
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
                 
-}
-else if (iTotal < 1){
-return; }
-}
+}*/
+
