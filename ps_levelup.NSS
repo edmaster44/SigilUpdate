@@ -316,7 +316,6 @@ void main()
 	GetFavoredSoulWithoutFeat(oPC);
 	PS_MonkLevels(oPC);
 	PsyWarProgression(oPC);
-	DoPsyProgression(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
