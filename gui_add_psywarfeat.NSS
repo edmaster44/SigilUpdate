@@ -57,4 +57,3 @@ else if (iTotal >= 1){
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
                 
 }*/
-
