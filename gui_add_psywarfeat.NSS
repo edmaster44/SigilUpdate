@@ -1,5 +1,4 @@
-#include "ps_inc_functions"
-#include "ps_class_inc"
+
 #include "aaa_constants"
 
 
@@ -57,4 +56,3 @@ else if (iTotal >= 1){
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
                 
 }*/
-
