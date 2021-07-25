@@ -195,7 +195,7 @@ string PickFromQuestTreasureLow() {
 		case 17: return "ps_amulet_weakness";
 		case 18: return "ps_armor_blessingofshar";
 		case 19: return "ps_armor_illusaryadventurer";
-		case 20: return "ps_armor_jacp";
+		case 20: return "ps_gad_dreadaxe2";
 		case 21: return "ps_armor_nasty";
 		case 22: return "ps_armor_otyugh";
 		case 23: return "ps_armor_sequencer";
@@ -287,7 +287,7 @@ string PickFromQuestTreasureLow() {
 		case 109: return "ps_luca_cat_staff";
 		case 110: return "ps_staff_ling";
 		case 111: return "ps_luca_holygavel";
-		case 112: return "ps_luca_rukus";
+		case 112: return "ps_luca_rukus2";
 		case 113: return "ps_wham_hanvil";
 		case 114: return "ps_whip_scource";
 		case 115: return "ps_whip_strike3";
@@ -320,7 +320,7 @@ string PickFromQuestTreasureLow() {
 		case 142: return "ps_cfrt_ing_tt";
 		case 143: return "ps_whammer_lawslongreach";
 		case 144: return "ps_gad_grandblade";
-		case 145: return "ps_qstaff_philosophysolidified";
+		case 145: return "ps_qstaff_philosophysolidified2";
 		case 146: return "nx2_boots_hardy_05";
 		case 147: return "nw_it_mring0290";
 		case 148: return "ps_gauntlet_spikedknuckles";
@@ -389,7 +389,7 @@ string PickFromQuestTreasureMed() {
 		case 38: return "ps_amulet_weakness";
 		case 39: return "ps_armor_blessingofshar";
 		case 40: return "ps_armor_illusaryadventurer";
-		case 41: return "ps_armor_jacp";
+		case 41: return "ps_gad_dreadaxe2";
 		case 42: return "ps_armor_nasty";
 		case 43: return "ps_armor_otyugh";
 		case 44: return "ps_armor_sequencer";
@@ -481,7 +481,7 @@ string PickFromQuestTreasureMed() {
 		case 130: return "ps_luca_cat_staff";
 		case 131: return "ps_staff_ling";
 		case 132: return "ps_luca_holygavel";
-		case 133: return "ps_luca_rukus";
+		case 133: return "ps_luca_rukus2";
 		case 134: return "ps_wham_hanvil";
 		case 135: return "ps_whip_scource";
 		case 136: return "ps_whip_strike3";
@@ -514,7 +514,7 @@ string PickFromQuestTreasureMed() {
 		case 163: return "ps_cfrt_ing_tt";
 		case 164: return "ps_whammer_lawslongreach";
 		case 165: return "ps_gad_grandblade";
-		case 166: return "ps_qstaff_philosophysolidified";
+		case 166: return "ps_qstaff_philosophysolidified2";
 		case 167: return "nx2_boots_hardy_05";
 		case 168: return "nw_it_mring0290";
 		case 169: return "ps_gauntlet_spikedknuckles";
@@ -580,7 +580,7 @@ string PickFromQuestTreasureHigh() {
 		case 38: return "ps_amulet_weakness";
 		case 39: return "ps_armor_blessingofshar";
 		case 40: return "ps_armor_illusaryadventurer";
-		case 41: return "ps_armor_jacp";
+		case 41: return "ps_gad_dreadaxe2";
 		case 42: return "ps_armor_nasty";
 		case 43: return "ps_armor_otyugh";
 		case 44: return "ps_armor_sequencer";
@@ -672,7 +672,7 @@ string PickFromQuestTreasureHigh() {
 		case 130: return "ps_luca_cat_staff";
 		case 131: return "ps_staff_ling";
 		case 132: return "ps_luca_holygavel";
-		case 133: return "ps_luca_rukus";
+		case 133: return "ps_luca_rukus2";
 		case 134: return "ps_wham_hanvil";
 		case 135: return "ps_whip_scource";
 		case 136: return "ps_whip_strike3";
@@ -705,7 +705,7 @@ string PickFromQuestTreasureHigh() {
 		case 163: return "ps_cfrt_ing_tt";
 		case 164: return "ps_whammer_lawslongreach";
 		case 165: return "ps_gad_grandblade";
-		case 166: return "ps_qstaff_philosophysolidified";
+		case 166: return "ps_qstaff_philosophysolidified2";
 		case 167: return "nx2_boots_hardy_05";
 		case 168: return "nw_it_mring0290";
 		case 169: return "ps_gauntlet_spikedknuckles";
