@@ -279,6 +279,8 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 
 
 
+
+
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
@@ -287,12 +289,12 @@ int GetIsCreatureWeapon(int nTYPE)
     return TRUE;
 }
 
+
 int GetCreatureWeapons(object oItem)
 { 
        int iBaseItem = GetBaseItemType(oItem);
-    return iBaseItem ==  GetIsCreatureWeapon(iBaseItem); 
+    return iBaseItem == GetIsCreatureWeapon(iBaseItem);
 }
-
 
 
 
@@ -409,10 +411,10 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 }
 
 // No Weapons and Shields for Dragons in Natural Form and no Armor in both forms (exept clothes)
-// Creature weapons are 160-177. Others are not allowed unless "in humanoid form (=1)".
+// Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
 int CheckDragonForms(object oPC, object oITEM, int nITEM)
 {
-   /* switch (nITEM)
+    switch (nITEM)
     {
         case BASE_ITEM_AMULET:
         case BASE_ITEM_ARROW:
@@ -425,18 +427,19 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
         case BASE_ITEM_GLOVES:
         case BASE_ITEM_HELMET:
         case BASE_ITEM_RING:
+		case BASE_ITEM_ARMOR:
             return FALSE;
-    } */
+    } 
     
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
-/*    if (GetArmorRank(oITEM) > ARMOR_RANK_NONE)
+    if (GetArmorRank(oITEM) != ARMOR_RANK_NONE||ARMOR_RANK_LIGHT||ARMOR_RANK_MEDIUM||ARMOR_RANK_HEAVY)
     {
         SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection then any armor could. You may only wear clothes.");
         AssignCommand(oPC, ClearAllActions(TRUE));
         AssignCommand(oPC, ActionUnequipItem(oITEM));   
         return TRUE;
-    } */
+    } 
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1)
