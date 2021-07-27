@@ -284,16 +284,15 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
-    if (nTYPE < 160) return FALSE;
-    if (nTYPE > 180) return FALSE;
-    return TRUE;
+   return nTYPE >= 160 && nTYPE <= 180;
+
 }
 
 
 int GetCreatureWeapons(object oItem)
 { 
        int iBaseItem = GetBaseItemType(oItem);
-    return iBaseItem == GetIsCreatureWeapon(iBaseItem);
+    return GetIsCreatureWeapon(iBaseItem);
 }
 
 
@@ -435,7 +434,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     
     if (GetArmorRank(oITEM) != ARMOR_RANK_NONE||ARMOR_RANK_LIGHT||ARMOR_RANK_MEDIUM||ARMOR_RANK_HEAVY)
     {
-        SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection then any armor could. You may only wear clothes.");
+        SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection than any armor could. You may only wear clothes.");
         AssignCommand(oPC, ClearAllActions(TRUE));
         AssignCommand(oPC, ActionUnequipItem(oITEM));   
         return TRUE;
