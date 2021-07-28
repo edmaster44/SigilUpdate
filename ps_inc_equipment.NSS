@@ -430,6 +430,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
             return FALSE;
     } 
     
+	if  (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC,oPC)>= 0) return FALSE;
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
     if (GetArmorRank(oITEM) != ARMOR_RANK_NONE||ARMOR_RANK_LIGHT||ARMOR_RANK_MEDIUM||ARMOR_RANK_HEAVY)
