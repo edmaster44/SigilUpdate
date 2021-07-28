@@ -12,7 +12,7 @@
 //:: Created On: Nov 20, 2001
 //:://////////////////////////////////////////////
 #include "NW_I0_SPELLS"
-
+#include "ps_inc_functions"
 #include "x2_inc_spellhook"
 
 void main()
@@ -26,7 +26,7 @@ void main()
     if(spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, GetAreaOfEffectCreator()))
     {
         //Declare major variables
-        int nDuration = GetCasterLevel(OBJECT_SELF);
+        int nDuration = PS_GetCasterLevel(OBJECT_SELF);
         //effect eVis = EffectVisualEffect(VFX_IMP_GOOD_HELP);
         effect eLink = CreateProtectionFromAlignmentLink(ALIGNMENT_EVIL);
 

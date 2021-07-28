@@ -11,6 +11,7 @@
 //:: Created On: Oct 29, 2001
 //:://////////////////////////////////////////////
 #include "X0_I0_SPELLS"
+#include "ps_inc_functions"
 
 #include "x2_inc_spellhook" 
 
@@ -48,7 +49,7 @@ void main()
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);	// NWN1 VFX
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_AURA_OF_VITALITY );	// NWN2 VFX
     eLink = EffectLinkEffects(eLink, eVis);
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     float fDelay;
     
     int nMetaMagic = GetMetaMagicFeat();

@@ -750,7 +750,7 @@ int GetDragonFearDC(int nAge)
 //------------------------------------------------------------------------------
 int CalcNumberOfAttacks()
 {
-  int n = GetCasterLevel(OBJECT_SELF);
+  int n = PS_GetCasterLevel(OBJECT_SELF);
   int nBAB1 = GetLevelByClass(CLASS_TYPE_RANGER)
    + GetLevelByClass(CLASS_TYPE_FIGHTER)
    + GetLevelByClass(CLASS_TYPE_PALADIN)

@@ -15,6 +15,7 @@
 //:://////////////////////////////////////////////
 
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -39,7 +40,7 @@ void main()
     //Declare major variables
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGKILL);
     location lTarget = GetSpellTargetLocation();
-    int nDuration = GetCasterLevel(OBJECT_SELF) / 2;
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF) / 2;
     //effect eImpact = EffectVisualEffect(258);	// no longer using NWN1 VFX
     //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpact, lTarget);	// no longer using NWN1 VFX
     if(nDuration < 1)

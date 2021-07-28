@@ -17,7 +17,7 @@
 // BDF - OEI 6/26/06 -- NWN2 VFX updates
 #include "nwn2_inc_spells"
 
-
+#include "ps_inc_functions"
 #include "x2_inc_spellhook" 
 
 void main()
@@ -52,7 +52,7 @@ void main()
     //eLink = EffectLinkEffects(eLink, eDur);	// NWN1 VFX
 
     object oTarget = GetSpellTargetObject();
-    float fDuration = RoundsToSeconds(GetCasterLevel(OBJECT_SELF));
+    float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
     
     //Meta-Magic checks
     fDuration = ApplyMetamagicDurationMods(fDuration);
