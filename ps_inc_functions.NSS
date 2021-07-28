@@ -1793,10 +1793,9 @@ int iSlotNumber; int iClass;
 int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
-    int iLevel;
-if(GetIsObjectValid(GetSpellCastItem())){
-return GetCasterLevel(oPC);
-}
+ int iCasterLevelTrue = GetCasterLevel(oPC);
+ int iLevel;
+if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 
 	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
 	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
@@ -1809,8 +1808,7 @@ return GetCasterLevel(oPC);
 	else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
 	else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
 	
-		else
-    {	iLevel = GetCasterLevel(oPC);	}
+	if(iCasterLevelTrue > iLevel) iLevel = iCasterLevelTrue;
 	
 	return iLevel;
 	
@@ -1851,7 +1849,9 @@ return GetCasterLevel(oPC);
 int PS_GetGolemCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
-    int iLevel;
+ int iCasterLevelTrue = GetCasterLevel(oPC);
+ int iLevel;
+if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 	
 	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
 	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
@@ -1864,11 +1864,9 @@ int PS_GetGolemCasterLevel(object oPC)
 	else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
 	else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
 	
-		else
-    {	iLevel = GetCasterLevel(oPC);	}
+		if(iCasterLevelTrue > iLevel) iLevel = iCasterLevelTrue;
 	
 	return iLevel;
-	
    /* // Arcane
 	int iBard = GetLevelByClass(1, oPC);
 	int iSorc = GetLevelByClass(9, oPC);
