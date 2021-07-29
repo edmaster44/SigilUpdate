@@ -9,9 +9,9 @@ void DoPsyProgression(object oPC)
 {	
 	int iTotal;	
 	
-	iTotal += GetLevelByClass(CLASS_PSYCHIC_WARRIOR, OBJECT_SELF);
-	iTotal += GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF);
-	iTotal +=  GetLevelByClass(128, OBJECT_SELF) / 2 + 1;
+	iTotal += GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	iTotal += GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+	iTotal +=  GetLevelByClass(128, oPC) / 2 + 1;
 /*	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, OBJECT_SELF);
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF);
 	int nGemDragon = GetLevelByClass(128, OBJECT_SELF) / 2 + 1;
@@ -19,7 +19,7 @@ void DoPsyProgression(object oPC)
 
 if (iTotal == 0 )
 	return; 
-	else   
+	else while ((iTotal < 22))   
 	{if (iTotal >=21){
 	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
 	else if (iTotal >= 17 ) {
