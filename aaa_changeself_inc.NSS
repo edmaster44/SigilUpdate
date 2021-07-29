@@ -243,14 +243,14 @@ void PS_HumForm_DragonUE(object oPC)
 	int iType7 = GetBaseItemType(oWpn7);	
 
 	if (GetHasFeat(3625, oPC, TRUE))
-	{	if (iType6 > 160 || iType6 < 177) // Unequipps creature weapons if PC changes into humanoid form. Dragon only.
+	{	if (iType6 > 160 || iType6 < 180) // Unequipps creature weapons if PC changes into humanoid form. Dragon only.
 		{	if (GetIsObjectValid(oWpn6))
 			{	AssignCommand(oPC, ActionUnequipItem(oWpn6));
 				SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form");
 			}
 		}
 				
-		if (iType7 > 160 || iType7 < 177) // Slot2
+		if (iType7 > 160 || iType7 < 180) // Slot2
 		{	if (GetIsObjectValid(oWpn7))
 			{	AssignCommand(oPC, ActionUnequipItem(oWpn7));
 				SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form");
@@ -278,14 +278,14 @@ void PS_DragForm_DragonUE(object oPC)
 	int iType7 = GetBaseItemType(oWpn7);
 
 	if (GetHasFeat(3625, oPC, TRUE))
-	{	if (iType6 < 160 || iType6 > 177) // Slot1: Unequipps every weapon except creature weapons.
+	{	if (iType6 < 160 || iType6 > 180) // Slot1: Unequipps every weapon except creature weapons.
 		{	if (GetIsObjectValid(oWpn6))
 			{	AssignCommand(oPC, ActionUnequipItem(oWpn6));
 				SendMessageToPC(oPC, "<c=red>You cannot wield humanoid weapons in your natural form.");
 			}
 		}
 				
-		if (iType7 < 160 || iType7 > 177) // Slot2
+		if (iType7 < 160 || iType7 > 180) // Slot2
 		{	if (GetIsObjectValid(oWpn7))
 			{	AssignCommand(oPC, ActionUnequipItem(oWpn7));
 				SendMessageToPC(oPC, "<c=red>You cannot wield humanoid weapons or shields in your natural form.");

@@ -50,7 +50,7 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell)
 		}
 	if (GetLocalInt(oItem, "TempChange") == 1)
 		{	
-			
+			ForceRest(oPC);
 			SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humanoid Form .");
 			return;
 		}

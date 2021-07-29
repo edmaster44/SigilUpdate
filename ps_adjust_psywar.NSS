@@ -2,15 +2,15 @@
 #include "aaa_constants"
 
 
-void DoPsyProgression(object oPC);
+int DoPsyProgression(object oPC);
 
 //Progression for Psychic Warrior and PRC
-void DoPsyProgression(object oPC)
+int DoPsyProgression(object oPC)
 {	
 	int iTotal;	
-	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
+	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, OBJECT_SELF);
+	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF);
+	int nGemDragon = GetLevelByClass(128, OBJECT_SELF) / 2 + 1;
 	iTotal = nPsywar + nGemDragon + nWarMind;
 
 
@@ -36,4 +36,6 @@ FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
             }
 else if (iTotal >= 1){    
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
+
+return iTotal;
 }
