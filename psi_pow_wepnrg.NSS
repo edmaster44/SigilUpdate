@@ -33,7 +33,7 @@
 #include "x2_inc_itemprop"
 
 
-void ApplyWeaponProperty(object oTarget, float fDuration)
+/*void ApplyWeaponProperty(object oTarget, float fDuration)
 {
 int	nDamage = IP_CONST_DAMAGEBONUS_1d8;
 int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
@@ -54,7 +54,7 @@ return;
 
 }
 
-
+*/
 
 
 void main()
@@ -99,12 +99,11 @@ itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
         if(manif.bExtend) fDuration *= 2;
 
         if(manif.bAugment)
-		{ApplyWeaponPropertyAugmented(oTarget,fDuration);}
+		{nDamage = IP_CONST_DAMAGEBONUS_1d10;}
 		else 
            
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-            ApplyWeaponProperty(oTarget,fDuration);
+        AddItemProperty(DURATION_TYPE_TEMPORARY, ipWoE, oTarget, fDuration);}
         }
     }
-}
