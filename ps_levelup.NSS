@@ -7,7 +7,6 @@ Removed Alingment change for Thug for exploit reason */
 #include "gui_add_psywarfeat"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
-#include "ps_adjust_psywar"
 #include "ps_adjust_sneakattack"
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"

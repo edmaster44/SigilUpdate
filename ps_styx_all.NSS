@@ -1,7 +1,6 @@
 //ps_styx_all v1.02
 #include "ps_inc_functions"
 #include "aaa_constants"
-#include "ps_adjust_psywar"
 #include "ps_adjust_knight"
 #include "ps_adjust_barbarian"
 #include "nwnx_sql"
