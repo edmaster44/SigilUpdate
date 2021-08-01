@@ -4349,17 +4349,15 @@ void DoPsyProgression(object oPC)
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF);
 	int nGemDragon = GetLevelByClass(128, OBJECT_SELF) / 2 + 1; 
 	iTotal = nPsywar + nWarMind + nGemDragon;
-
-if (iTotal == 0 )
-	return;  
-else	if (iTotal >=21 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC))
+ 
+if (iTotal >=21 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC))
 	{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
 	 else if (iTotal >= 17 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)) {
 		  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
-  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, TRUE, TRUE, FALSE);
+  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
 }else if (iTotal >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)) {    
   FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
-  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, TRUE, TRUE, FALSE);
+  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
 }
  else if (iTotal >= 11&& GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)) {    
 	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
