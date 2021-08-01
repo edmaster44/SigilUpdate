@@ -161,6 +161,8 @@ int GetDisallowedLevelDownPRC(object oPC);
 
 void DoPsyProgression(object oPC);
 
+int PsyWarLevels(object oPC);
+
 void StackBardicUses(object oPC);
 
 void StackBardMusicUses(object oPC);
@@ -4337,51 +4339,47 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
 	SetLocalString(oTarget, sVar+"_"+IntToString(nIndex), sName);
 	SetLocalInt(oTarget, sVar+"_Num", nIndex);
 }
+
+//Calculuates Psychic Warrior Levels
+
+int PsyWarLevels(object oPC)
+{
+	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1; 
+	int	iTotal = nPsywar + nWarMind + nGemDragon;
+	
+	return iTotal;	
+}
 //This Determines Psychic Warrior Progression
 void DoPsyProgression(object oPC)
 {	
-	int iTotal;	
-	
-/*	iTotal += GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	iTotal += GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	iTotal +=  GetLevelByClass(128, oPC) / 2 + 1;*/
-	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, OBJECT_SELF);
-	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,OBJECT_SELF);
-	int nGemDragon = GetLevelByClass(128, OBJECT_SELF) / 2 + 1; 
-	iTotal = nPsywar + nWarMind + nGemDragon;
- 
-if (iTotal >=21 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC))
+
+int iPsy = PsyWarLevels(oPC);
+if (iPsy >=21)
 	{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
-	 else if (iTotal >= 17 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)) {
+	 else if (iPsy >= 17 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
 		  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
-  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
-}else if (iTotal >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)) {    
+  		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);}
+else if (iPsy >= 14){    
   FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
   FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
 }
- else if (iTotal >= 11&& GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)) {    
+ else if (iPsy >= 11) {    
 	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
 	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
 }
- else if (iTotal >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC))
+ else if (iPsy >= 7)
 {FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
                 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);}
-else if (iTotal >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)){ 
+else if (iPsy >= 4){ 
 FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
             }
-else if (iTotal >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC)){    
+else if (iPsy >= 1 ){    
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
 
 }
-
-
-
-
-
-
-
-
 
 //Counts levels in low bab arcane classes
 int GetPureMageLevels(object oPC)
