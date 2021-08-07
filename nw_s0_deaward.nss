@@ -20,6 +20,7 @@
 #include "nwn2_inc_spells"
 #include "ps_inc_functions"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -45,7 +46,7 @@ void main()
     object oTarget = GetSpellTargetObject();
     effect eDeath = EffectImmunity(IMMUNITY_TYPE_DEATH);
     // JLR - OEI NWN2 3.5 Update: Merged from Negative Energy Protection
-    effect eNeg = EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE, 100);
+    effect eNeg = EffectDamageResistance(DAMAGE_TYPE_NEGATIVE, 9999);
     effect eLevel = EffectImmunity(IMMUNITY_TYPE_NEGATIVE_LEVEL);
     effect eAbil = EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE);
     //effect eVis = EffectVisualEffect(VFX_IMP_DEATH_WARD);	// no longer using NWN1 VFX
@@ -64,6 +65,8 @@ void main()
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+
+
 
     //Apply VFX impact and death immunity effect
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);

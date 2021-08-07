@@ -20,10 +20,9 @@
 
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
-
-
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -50,8 +49,8 @@ void main()
     //effect eVis2 = EffectVisualEffect( VFX_DUR_SPELL_STONESKIN );
 
     object oTarget = GetSpellTargetObject();
-    int nAmount = GetCasterLevel(OBJECT_SELF) * 10;
-    float fDuration = HoursToSeconds(GetCasterLevel(OBJECT_SELF));
+    int nAmount = PS_GetCasterLevel(OBJECT_SELF) * 10;
+    float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_STONESKIN, FALSE));

@@ -24,6 +24,7 @@
 #include "nw_i0_spells" 
 #include "nwn2_inc_spells"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -49,7 +50,7 @@ void main()
 	object oCaster = OBJECT_SELF;
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);;
 	effect eDeath = EffectImmunity(IMMUNITY_TYPE_DEATH);
-    effect eNeg = EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE, 100);
+    effect eNeg = EffectDamageResistance(DAMAGE_TYPE_NEGATIVE, 9999);
     effect eLevel = EffectImmunity(IMMUNITY_TYPE_NEGATIVE_LEVEL);
     effect eAbil = EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE);
 	effect eDur = EffectVisualEffect( VFX_DUR_SPELL_DEATH_WARD );
@@ -58,7 +59,7 @@ void main()
     eLink = EffectLinkEffects(eLink, eLevel);
     eLink = EffectLinkEffects(eLink, eAbil);
 	
-	float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
+	float fDuration = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 	
 	//Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
