@@ -186,18 +186,53 @@ int GetAttackBonusTotal(object oPC)
 
 int SneakAttackCount(object oPC)
 {
-	int featid; int sneak;
+
+
+
+	// First we find out how man dice the character should have. Careful with rounding with integers!
+	int sneakDice = 0;
 	
-	SQLExecDirect("SELECT `featid` FROM `featids` WHERE label LIKE '%sneak%';");
+	
+	if (GetHasFeat(FEAT_HALFOUTSIDER_PATH_OF_GUILE,oPC))
+		{
+	sneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) / 2;	
+	
+	}
+	
+	if (GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+	{
+		sneakDice += (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC)) / 3;	
+	}
+	
+	if (GetHasFeat(FEAT_BLACKGUARD,oPC))
+	{
+	sneakDice += (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) - 1) / 3;	
+	
+	}
+	
+	sneakDice += (GetLevelByClass(CLASS_TYPE_ROGUE, oPC) + 1) / 2;
+	sneakDice += (GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) - 1) / 3;	
+	sneakDice += GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER, oPC) / 2;
+	sneakDice += (GetLevelByClass(CLASS_TYPE_SHADOWTHIEFOFAMN, oPC) + 1) / 2;
+	sneakDice += (GetLevelByClass(67, oPC) +1 ) / 2 ;
+	sneakDice += GetLevelByClass(78, oPC) / 2;
+	sneakDice += GetLevelByClass(CLASS_TYPE_SHADOWDANCER,oPC) / 3;
+	sneakDice += GetLevelByClass(83, oPC) / 2;
+	sneakDice += GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION, oPC) / 2;
+	sneakDice += (GetLevelByClass(212, oPC) + 1) / 2;
+	
+	return sneakDice;
+//	int featid; int sneak;
+	
+/*	SQLExecDirect("SELECT `featid` FROM `featids` WHERE label LIKE '%sneak%';");
 	while(SQLFetch())
 	{
 	featid = StringToInt(SQLGetData(1));
 	if(GetHasFeat(featid, oPC)) sneak++;	
 	}
 
-	return sneak;
+	return sneak;*/
 }
-
 int ConcealmentCheck(object oTarget)
 {
 	int conceal;
