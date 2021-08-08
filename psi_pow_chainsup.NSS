@@ -3,6 +3,7 @@
 #include "x2_inc_spellhook"
 #include "aaa_constants"
 #include "nwn2_inc_spells"
+#include "ps_enchant_lib"
 
 /*
 
@@ -21,14 +22,18 @@ void main()
 object oPC = OBJECT_SELF;
 int nStrength = ABILITY_CONSTITUTION;
 int nCon = ABILITY_STRENGTH;
+object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
 int nLevel = 4;
-if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >6) nLevel = 4;
+if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >6) nLevel = 6;
 
 
 effect eStr =EffectAbilityIncrease(nStrength,nLevel);
 effect eCon=EffectAbilityIncrease(nCon,nLevel);
- effect eLink = EffectLinkEffects(eStr,eCon);
+effect eLink = EffectLinkEffects(eStr,eCon);
 
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oPC,60.0f);
+
+EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, nLevel), 0);
+EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, nLevel), 0);
 
 }

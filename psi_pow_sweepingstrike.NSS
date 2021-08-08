@@ -33,13 +33,13 @@ void main()
 	int nDamageType;
 	if (GetHasFeat(FEAT_CHAIN_OF_OVERWHELMING_FORCE,oPC))
 		{	
-		nType = DAMAGE_TYPE_MAGICAL;
+		nDamageType = DAMAGE_TYPE_MAGICAL;
 		nVFXHit =EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
 		}
 
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
-	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
+	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Sweeping Strike", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
 		{	nDmg = d10(6);
 			
