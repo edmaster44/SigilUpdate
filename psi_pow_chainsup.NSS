@@ -33,7 +33,7 @@ effect eLink = EffectLinkEffects(eStr,eCon);
 
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oPC,60.0f);
 
-EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, nLevel), 0);
-EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, nLevel), 0);
+/*EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, nLevel), 0);
+EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, nLevel), 0); Disabled for now */
 
 }

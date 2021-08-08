@@ -4358,25 +4358,25 @@ void DoPsyProgression(object oPC)
 int iPsy = PsyWarLevels(oPC);
 if (iPsy >=21)
 	{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
-	 else if (iPsy >= 17 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
+	 else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
 		  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
   		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);}
-else if (iPsy >= 14){    
+else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
   FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
   FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
 }
- else if (iPsy >= 11) {    
+ else if (iPsy >= 11 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {    
 	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
 	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
 }
- else if (iPsy >= 7)
+ else if (iPsy >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE))
 {FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
                 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);}
-else if (iPsy >= 4){ 
+else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
 FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
             }
-else if (iPsy >= 1 ){    
+else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
 
 }
