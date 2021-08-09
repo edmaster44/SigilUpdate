@@ -18,8 +18,12 @@ void main()
 		
 		if (touchAttackResult)
 		{
-			effect disruption = EffectCutsceneParalyze();
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, disruption, target, 20.1f);
+			effect disruption = EffectSpellFailure(100, SPELL_SCHOOL_GENERAL);
+			effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
+   			effect eDaze = EffectDazed();
+			effect eLink = EffectLinkEffects(eMind, eDaze);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, disruption, target, 6.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, target, 6.0f);
 		}
 	}
 }
