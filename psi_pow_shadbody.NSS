@@ -49,7 +49,7 @@ void GoInvis(struct manifestation manif, object oTarget)
          effect eInvis   = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
         effect eConceal = EffectConcealment(50);
         effect eLink    = EffectLinkEffects(eInvis, eConceal);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f, TRUE, manif.nSpellID, manif.nManifesterLevel);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f);
         DelayCommand(6.0f, GoInvis(manif, oTarget));
     }
     }

@@ -100,7 +100,6 @@ void Dervish_Defensive_Parry(object oPC, int nSpell)
 int nPercentage = GetSkillRank( SKILL_PARRY, oPC,FALSE);
 float fDuration = 60.0f;
 if (nPercentage > 50) nPercentage = 50;
-if (nPercentage < 0) nPercentage = 0;
-	effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, econceal, oPC, fDuration);
+effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
+ApplyEffectToObject(DURATION_TYPE_TEMPORARY, econceal, oPC, fDuration);
 }
