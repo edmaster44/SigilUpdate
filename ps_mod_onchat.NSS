@@ -230,7 +230,7 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 				}
 			}
 			
-			else if (FindSubString(sMessage,">areashout")== 0)
+			else if (GetStringLeft(sMessage,9)=="areashout")
 			{		
 				if(IsAuthorizedToUseThisCmd(oSender))
 				{
