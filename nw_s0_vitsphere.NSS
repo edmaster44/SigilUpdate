@@ -43,7 +43,7 @@
 #include "x2_i0_spells"
 #include "ps_inc_functions"
 
-const float SPELL_EFFECT_RADIUS = 3.048;
+const float SPELL_EFFECT_RADIUS = 6.069;
 const float DELAY_ONE_ROUND     = 6.0f;
 
 void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, int nMetaMagic )
@@ -132,7 +132,15 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 	}
 	*/
 	
-
+	if (nCasterLevel > 40)
+	{
+		nDice = 40;
+	}
+	else
+	{
+		nDice = nCasterLevel;
+	}
+	
 
 	if ( nDice == 0 )
 	{
