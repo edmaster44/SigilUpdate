@@ -73,7 +73,7 @@ void main()
     }
 
     object oManifester = OBJECT_SELF;
-int	nDamage = IP_CONST_DAMAGEBONUS_1d8;
+int	nDamage;
 int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
 itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
     object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
@@ -98,9 +98,9 @@ itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
         float fDuration = 600.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 
-        if(manif.bAugment)
-		{nDamage = IP_CONST_DAMAGEBONUS_1d10;}
+        if(manif.bAugment)nDamage = IP_CONST_DAMAGEBONUS_1d10;
 		else 
+		nDamage = IP_CONST_DAMAGEBONUS_1d8;
            
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
