@@ -107,9 +107,9 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
 
     
     int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
-    int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
+    int nDamageType = IP_CONST_DAMAGETYPE_DIVINE;
     float fDUR = 9999.9f;    
-    ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
+    ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, nDamageConstant);
     
     if(GetHasFeat(2840,oPC, TRUE))
     {
