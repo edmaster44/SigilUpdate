@@ -318,6 +318,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
+	DoPsyFeatProgression(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);

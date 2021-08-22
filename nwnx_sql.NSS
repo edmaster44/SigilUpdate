@@ -1,7 +1,9 @@
 // Name     : NWNX SQL include
+// Version  : 1.10-dev49
 // Purpose  : Scripting functions for NWNX SQL plugins
 // Author   : Ingmar Stieger
-// Modified : 09/12/2006
+// Author   : virusman
+// Modified : 16 Nov 2008
 // Copyright: This file is licensed under the terms of the
 //            GNU GENERAL PUBLIC LICENSE (GPL) Version 2
 //            Based on aps_include by Ingmar Stieger, Adam Colon, Josh Simon
@@ -18,7 +20,9 @@ const int SQL_SUCCESS = 1;
 /************************************/
 
 // Execute statement in sSQL
-void SQLExecDirect(string sSQL);
+// returns: SQL_SUCCESS if the query was successful
+//          SQL_ERROR if an error has occurred
+int SQLExecDirect(string sSQL);
 
 // Position cursor on next row of the resultset
 // Call this before using SQLGetData().
@@ -33,15 +37,26 @@ int SQLFetch(string mode = " ");
 // Maximum column size: 65KByte
 string SQLGetData(int iCol);
 
+int SQLGetDataInt(int iCol){        return StringToInt(SQLGetData(iCol));   }
+float SQLGetDataFloat(int iCol){    return StringToFloat(SQLGetData(iCol)); }
+
 // Deprecated.
 // Return value of column iCol in the current row of result set sResultSetName
 // Maximum column size: 65KByte
 // Only for compability reasons. Use SQLGetData instead.
 string SQLGetDataText(int iCol);
 
-// Return the number of rows that were affected by the last 
+// Return the number of rows that were affected by the last
 // INSERT, UPDATE, or DELETE operation.
 int SQLGetAffectedRows();
+
+// Return the error code for the most recently invoked API function that can succeed or fail.
+// A return value of zero means that no error occurred.
+// Client error message numbers are listed in nwnx_mysql_errors.nss
+int SQLGetErrno();
+
+// Return a string containing the error message for the most recently invoked API function that failed
+string SQLGetErrorMessage();
 
 // Return a string value when given a location
 string SQLLocationToString(location lLocation);
@@ -143,13 +158,22 @@ void DeletePersistentVariable(object oObject, string sVarName, string sTable = "
 // Replace special characters (like ') in a database compatible way
 string SQLEncodeSpecialChars(string sString);
 
+// Execute statement in sSQL using SCO/RCO
+void SQLSCORCOExec(string sSQL);
+
+//Store object in DB using SCO hook
+void SQLStoreObject(object oObject);
+
+//Retrieve object from DB using RCO hook
+object SQLRetrieveObject(location lLocation, object oOwner = OBJECT_INVALID, string sMode="-");
+
 /************************************/
 /* Implementation                   */
 /************************************/
 
-void SQLExecDirect(string sSQL)
+int SQLExecDirect(string sSQL)
 {
-    NWNXSetString("SQL", "EXEC", sSQL, 0, "");
+    return NWNXGetInt("SQL", "EXEC", sSQL, 0);
 }
 
 int SQLFetch(string mode = " ")
@@ -172,8 +196,33 @@ int SQLGetAffectedRows()
     return NWNXGetInt("SQL", "GET AFFECTED ROWS", "", 0);
 }
 
+int SQLGetErrno()
+{
+    return NWNXGetInt("SQL", "GET AFFECTED ROWS", "", 0);
+}
+
+string SQLGetErrorMessage()
+{
+    return NWNXGetString("SQL", "GET ERROR MESSAGE", "", 0);
+}
+
+void SQLSCORCOExec(string sSQL)
+{
+    NWNXSetString("SQL", "SETSCORCOSQL", sSQL, 0, "");
+}
+
+void SQLStoreObject(object oObject)
+{
+    StoreCampaignObject("NWNX", "-", oObject);
+}
+
+object SQLRetrieveObject(location lLocation, object oOwner = OBJECT_INVALID, string sMode="-")
+{
+    return RetrieveCampaignObject("NWNX", sMode, lLocation, oOwner);
+}
+
 // These functions deal with various data types. Ultimately, all NWN specific
-// information must be stored in the database as strings, and converted back to 
+// information must be stored in the database as strings, and converted back to
 // the proper form when retrieved.
 
 string SQLVectorToString(vector vVector)
@@ -371,7 +420,7 @@ int GetPersistentInt(object oObject, string sVarName, string sTable = "pwdata")
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
     SQLExecDirect(sSQL);
 
-	if (SQLFetch() == SQL_SUCCESS)
+    if (SQLFetch() == SQL_SUCCESS)
         return StringToInt(SQLGetData(1));
     else
         return 0;
@@ -405,7 +454,7 @@ float GetPersistentFloat(object oObject, string sVarName, string sTable = "pwdat
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
     SQLExecDirect(sSQL);
 
-	if (SQLFetch() == SQL_SUCCESS)
+    if (SQLFetch() == SQL_SUCCESS)
         return StringToFloat(SQLGetData(1));
     else
         return 0.0f;
@@ -460,16 +509,16 @@ void SetPersistentObject(object oOwner, string sVarName, object oObject, int iEx
         // row exists
         sSQL = "UPDATE " + sTable + " SET val=%s,expire=" + IntToString(iExpiration) +
             " WHERE player='" + sPlayer + "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-        SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
-        StoreCampaignObject ("NWNX", "-", oObject);
+        SQLSCORCOExec(sSQL);
+        SQLStoreObject (oObject);
     }
     else
     {
         // row doesn't exist
         sSQL = "INSERT INTO " + sTable + " (player,tag,name,val,expire) VALUES" +
             "('" + sPlayer + "','" + sTag + "','" + sVarName + "',%s," + IntToString(iExpiration) + ")";
-        SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
-        StoreCampaignObject ("NWNX", "-", oObject);
+        SQLSCORCOExec(sSQL);
+        SQLStoreObject(oObject);
     }
 }
 
@@ -493,11 +542,11 @@ object GetPersistentObject(object oObject, string sVarName, object oOwner = OBJE
 
     string sSQL = "SELECT val FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-    SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
+    SQLSCORCOExec(sSQL);
 
     if (!GetIsObjectValid(oOwner))
         oOwner = oObject;
-    return RetrieveCampaignObject ("NWNX", "-", GetLocation(oOwner), oOwner);
+    return SQLRetrieveObject(GetLocation(oOwner), oOwner);
 }
 
 void DeletePersistentVariable(object oObject, string sVarName, string sTable = "pwdata")
@@ -525,7 +574,6 @@ void DeletePersistentVariable(object oObject, string sVarName, string sTable = "
 // Problems can arise with SQL commands if variables or values have single quotes
 // in their names. This function encodes these quotes so the underlying database
 // can safely store them.
-
 string SQLEncodeSpecialChars(string sString)
 {
     return NWNXGetString("SQL", "GET ESCAPE STRING", sString, 0);

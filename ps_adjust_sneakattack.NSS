@@ -10,6 +10,7 @@
 
 #include "aaa_lycan_inc"
 #include "aaa_constants"
+#include "ps_inc_functions"
 
 const int SNEAKATTACK1 = 221;
 
@@ -141,7 +142,7 @@ void AddSneakDice(object oPC)
 	
 	if (GetHasFeat(FEAT_PSYWAR_LURK,oPC))
 	{
-		sneakDice += (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC)) / 3;	
+		sneakDice += PsyWarLevels(oPC) / 3;	
 	}
 	
 	if (GetHasFeat(FEAT_BLACKGUARD,oPC))
