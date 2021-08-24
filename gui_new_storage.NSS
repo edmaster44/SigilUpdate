@@ -1,5 +1,5 @@
 #include "nwnx_sql"
-
+#include "ps_inc_time"
 
 
 const string SCREENNAME = "STORAGE_NEW";
@@ -77,7 +77,7 @@ void PopulateGuildStorage(object oPC)
 	}
 	
 	
-//	if (iValid == 0) EnableButtons(oPC,1);
+	if (iValid == 0) EnableButtons(oPC,1);
 }
 
 void DoEverything(object oPC)
@@ -459,7 +459,7 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 	if(!GetIsObjectValid(oItem) || !GetIsObjectValid(oPC)) return;
 	
 	string timerid = IntToString(Random(5000));	
-//	TimerStart(timerid);
+	PS_Timestamp_UNIX(oPC,timerid);
 	
 	itemproperty iProp = GetFirstItemProperty(oItem);
 	while(GetIsItemPropertyValid(iProp))
@@ -489,13 +489,13 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 	if (FindSubString(sItemName,";") > -1)
 	{
 		SendMessageToPC(oPC,"You may not deposit items with semicolons in their names.");
-	//	TimerDelete(timerid); ClearForNextItem(oPC);
+		PS_Timestamp_UNIX(oPC,timerid); ClearForNextItem(oPC);
 		return;		
 	}
 	else if (!CheckTag(oItem) && iBox == 0) //checks for forbidden items, prevents listing
 	{
 		SendMessageToPC(oPC,"You may not deposit this item.");
-	//	TimerDelete(timerid); ClearForNextItem(oPC);
+		PS_Timestamp_UNIX(oPC,timerid); ClearForNextItem(oPC);
 		return;		
 	}
 	else
@@ -530,19 +530,19 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 	
 		SQLExecDirect(sQuery);	
 			
-		//int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = GetUNIXTime();
+		int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = GetRealTime();
 	
 		
 //		SendMessageToPC(oPC,"<I>Depositing the item took . . "+FloatToString(time / 1000.0)+" seconds.");
 		
-	//	TimerDelete(timerid);
-		
-	/*	if(time / 1000 > 2.0)
+		PS_Timestamp_UNIX(oPC,timerid);(timerid);
+	/*	int time = PS_GetTimestamp_Age_Seconds(oPC,timerid);
+		if(time / 1000 > 2.0)
 		{
 			SendMessageToPC(oPC,"<I>Lag detected on depositing... slowing down deposits...");
 			DelayCommand(5.0 + ((time / 1000) * 2.0),ClearForNextItem(oPC));
-		}
-		else DelayCommand(1.5 + (time / 1000),ClearForNextItem(oPC)); */
+		}*/
+	/*	else DelayCommand(1.5 + (time / 1000),*/(ClearForNextItem(oPC)); 
 		
 		GetRecentlyStoredItems(oPC);
 	}
@@ -584,7 +584,7 @@ void StoreBagItem(object oPC, object oItem, string sDB, string name, string play
 		int sCategory = GetBaseItemType(oItem);
 		
 		string timerid = IntToString(Random(5000));	
-	//	TimerStart(timerid);
+		PS_Timestamp_UNIX(oPC,timerid);
 		
 		string sQuery;
 			
@@ -675,7 +675,7 @@ void ProcessBag(object oPC, object oTarget)
 	
 		StoreBagItem(oPC,oItem,sDB,name,player,cdkey,ipaddress,guildmode,iCount,iMax);
 		
-	//	time = TimerElapsed(timerid);
+	//	timerid = PS_GetHasTimePassed_Seconds(oPC,timerid,TRUE);
 	/*	if(time / 1000 > 10.0) 
 		{
 			EnableButtons(oPC,1);
