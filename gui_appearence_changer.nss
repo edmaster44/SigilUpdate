@@ -290,7 +290,7 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 			SetGUIObjectHidden(oPC, sSCREEN, "MODEL_3", TRUE);
 			SetGUIObjectHidden(oPC, sSCREEN, "VARIATION", FALSE);
 			SetGUIObjectHidden(oPC, sSCREEN, "STYLE", FALSE);
-			DelayCommand(0.1, InitializeItem(oPC, 1, nSLOT, '""'));
+			DelayCommand(0.1, InitializeItem(oPC, 1, nSLOT, ""));
 			if (nSLOT == INVENTORY_SLOT_CHEST)
 			{
 				SetGUIObjectHidden(oPC, sSCREEN, "ARMOR_PARTS", FALSE);
@@ -309,7 +309,7 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 		case 3: //The Parts Pane
 			SetLocalInt(oPC, "APPEAR_DEFAULT_PANE", 0);
 			SetGUIObjectHidden(oPC, sSCREEN, "PARTS_PANE", FALSE);
-			DelayCommand(0.1, InitializeItem(oPC, 1, nSLOT, '""'));
+			DelayCommand(0.1, InitializeItem(oPC, 1, nSLOT, ""));
 			break;
 		case 4: //The Choice Pane of default pieces
 			SetGUIObjectHidden(oPC, sSCREEN, "DEFAULT_PIECES", TRUE);
