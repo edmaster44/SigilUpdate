@@ -111,21 +111,22 @@ void EndFight(string sWinner, float odds) {
 	object oPC = GetFirstPC();
 	while(GetIsObjectValid(oPC)) {
 	
-		if (GetArea(oPC) != GetArea(OBJECT_SELF))
-			continue;
-
+		if (GetArea(oPC) == GetArea(OBJECT_SELF))
+		{
 		
-		string betOn = GetLocalString(oPC, "BEAST_BET_ON");
+			string betOn = GetLocalString(oPC, "BEAST_BET_ON");
 
-		int nBet = FloatToInt(IntToFloat(GetLocalInt(oPC, "BEAST_BET"))*odds);
-		if (betOn == sWinner) {
-			SpeakString("Congratulations, "+GetName(oPC)+", you've won "+IntToString(nBet)+"!");
-			SetLocalInt(oPC, "GAMBLE_WON", GetLocalInt(oPC, "GAMBLE_WON")+nBet);
-			GiveGoldToCreature(oPC, nBet);
+			int nBet = FloatToInt(IntToFloat(GetLocalInt(oPC, "BEAST_BET"))*odds);
+			if (betOn == sWinner) {
+				SpeakString("Congratulations, "+GetName(oPC)+", you've won "+IntToString(nBet)+"!");
+				SetLocalInt(oPC, "GAMBLE_WON", GetLocalInt(oPC, "GAMBLE_WON")+nBet);
+				GiveGoldToCreature(oPC, nBet);
+			}
+			
+			DeleteLocalString(oPC, "BEAST_BET_ON");
+			DeleteLocalInt(oPC, "BEAST_BET");
 		}
-		
-		DeleteLocalString(oPC, "BEAST_BET_ON");
-		DeleteLocalInt(oPC, "BEAST_BET");
+
 		oPC = GetNextPC();
 		
 	}
