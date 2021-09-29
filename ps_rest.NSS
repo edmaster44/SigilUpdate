@@ -134,6 +134,7 @@ void RemoveBuffs(object oPC)
 				case EFFECT_TYPE_PARALYZE:
 				case EFFECT_TYPE_NEGATIVELEVEL:
 					eFX = GetNextEffect(oPC);
+					break;
 				default:
 					RemoveEffect(oPC, eFX);
 					eFX = GetFirstEffect(oPC);
