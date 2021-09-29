@@ -79,7 +79,10 @@ void main()
 		if (num > GetHitDice(OBJECT_SELF)) //don't target more people than we have levels, for sanity.
 			break;
 		if (!spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
+		{
+			oTarget = GetNextObjectInShape(SHAPE_SPHERE, 80.0f, lCaster, TRUE, OBJECT_TYPE_CREATURE);
 			continue;
+		}
 			
         lTarget = GetLocation( oTarget );
 		if ( i == 1 )
