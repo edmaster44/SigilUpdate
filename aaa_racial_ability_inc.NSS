@@ -225,9 +225,15 @@ void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
 		if (GetHasFeat(FEAT_STILL_SPELL, oPC))
 		{	iMetam = iMetam++;	}
 		int iBonus = iModif + iMetam;
-		effect eHP = EffectBonusHitpoints(iBonus);
+
+		if (iBonus > 0)
+		{	// Note: EffectBonusHitpoints is not well behaved in the nwscript.nss API when the
+			// input is not greater than 0.
+			effect eHP = EffectBonusHitpoints(iBonus);
 			eHP = ExtraordinaryEffect(eHP);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHP, oPC);		}
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHP, oPC);		
+		}
+	}
 }
 
 void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
