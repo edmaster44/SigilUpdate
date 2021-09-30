@@ -44,6 +44,7 @@ void EquipInstrument() {
 			SetCorrectMusicalAnimation(oItem);
 			return;
 		}
+		oItem = GetNextItemInInventory(OBJECT_SELF);
 	}	
 
 }
