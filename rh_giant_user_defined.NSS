@@ -189,9 +189,10 @@ void main()
 							SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 							break;
 						}
-					nNth++;
-					oLast = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, CREATURE_ALIVE_TRUE, OBJECT_SELF, nNth);
 					}
+					
+					nNth++;
+					oLast = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, CREATURE_ALIVE_TRUE, OBJECT_SELF, nNth);					
 				}
 				if(GetLocalInt(OBJECT_SELF,"boulder_attack") == 0)
 				{
