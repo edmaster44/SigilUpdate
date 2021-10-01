@@ -15,7 +15,7 @@ void main () {
 	}
 	
 	//check achievements
-	DelayCommand(0.5f, CheckForAchievements(oPC));
+	DelayCommand(1.0f, CheckForAchievements(oPC));
 	
 	//Test server vs. production switch
 	string sVersion = GetLocalString(oModule, "serverVersion");
