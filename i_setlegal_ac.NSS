@@ -46,14 +46,22 @@ void main()
 //SendMessageToPC(GetFirstPC(), "setting to false");		
 			SendMessageToPC(oPC,"Character " + GetName(oTarget) + " is now no longer legal");
 			SetLocalString(oItem,"LEGAL","");
-			SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + GetPCPlayerName(oPC) + "','" + GetName(oPC) + "','Following character set to be NO LONGER LEGAL: " + GetName(oTarget) + " (" + GetPCPlayerName(oTarget) + ")',104)");
+			SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
+				SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
+				SQLEncodeSpecialChars(GetName(oPC)) + "','Following character set to be NO LONGER LEGAL: " + 
+				SQLEncodeSpecialChars(GetName(oTarget)) + " (" + 
+				SQLEncodeSpecialChars(GetPCPlayerName(oTarget)) + ")',104)");
 		}
 		else
 		{
 //SendMessageToPC(GetFirstPC(), "setting to true");		
 			SendMessageToPC(oPC,"Character " + GetName(oTarget) + " is set legal");
 			SetLocalString(oItem,"LEGAL","TRUE");
-			SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + GetPCPlayerName(oPC) + "','" + GetName(oPC) + "','Following character set to LEGAL: " + GetName(oTarget) + " (" + GetPCPlayerName(oTarget) + ")',103)");
+			SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
+				SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
+				SQLEncodeSpecialChars(GetName(oPC)) + "','Following character set to LEGAL: " + 
+				SQLEncodeSpecialChars(GetName(oTarget)) + " (" + 
+				SQLEncodeSpecialChars(GetPCPlayerName(oTarget)) + ")',103)");
 		}
 		
 		return;
