@@ -19,6 +19,8 @@ void main(string sAction, string sTag, string arg0)
 	
 	SQLExecDirect("SET NAMES utf8");
 
+	arg0 = SQLEncodeSpecialChars(arg0);
+
 	if(sAction == "Init")
 	{
 		//Disable buttons until a book is selected
