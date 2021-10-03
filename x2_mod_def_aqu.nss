@@ -37,9 +37,11 @@ void ReportMuling(object oBY, object oFROM, object oITEM)
 	string sVAR_N1 = GetLocalString(oITEM, "N1");
 	string sVAR_N2 = GetLocalString(oITEM, "N2");
 	
-	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + sBY_PLAY + 
-	"','" + sBY_NAME + "','" + sIT_NAME + " (" + sIT_TAG + ") given from " + sVAR_A1 + "/" + sVAR_N1 + 
-	" and original owner: " + sVAR_A2 + "/" + sVAR_N2 + " (" + GetTag(oFROM) + ")',105)");
+	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + SQLEncodeSpecialChars(sBY_PLAY) + 
+	"','" + SQLEncodeSpecialChars(sBY_NAME) + "','" + SQLEncodeSpecialChars(sIT_NAME) + " (" + 
+	SQLEncodeSpecialChars(sIT_TAG) + ") given from " + SQLEncodeSpecialChars(sVAR_A1) + "/" + SQLEncodeSpecialChars(sVAR_N1) + 
+	" and original owner: " + SQLEncodeSpecialChars(sVAR_A2) + "/" + SQLEncodeSpecialChars(sVAR_N2) + " (" + 
+	SQLEncodeSpecialChars(GetTag(oFROM)) + ")',105)");
 	
 	SpeakString("<C=TOMATO>[POSSIBLE MULING] " + sVAR_A1 + "/" + sVAR_N1 + " just gave " + 
 	sBY_PLAY + "/" + sBY_NAME + " following: " + sIT_NAME + "/" + sIT_TAG + 
