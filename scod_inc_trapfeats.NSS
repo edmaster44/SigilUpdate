@@ -1,0 +1,15 @@
+//::///////////////////////////////////////////////
+//:: Trap Feat Include File
+//:: scod_inc_trapfeats.nss
+//:://////////////////////////////////////////////
+/*
+    Include file for constants and common functions related to the trap feats.
+*/
+//:://////////////////////////////////////////////
+//:: Created By: SingerFromTheMist
+//:: Created On: August 23, 2021
+//:://////////////////////////////////////////////
+
+int AOE_PER_SPIKETRAP = 81;
+
+int FEAT_SPIKE_TRAP = 3042;
