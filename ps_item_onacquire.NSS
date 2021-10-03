@@ -92,7 +92,17 @@ void main() {
 	if(GetLocalString(item,"A2") == GetPCPlayerName(acquirer) && GetLocalString(item,"N2") != GetName(acquirer) || 
 		(previousOwner == GetPCPlayerName(acquirer) && GetLocalString(item,"N1") != GetName(acquirer)))
 	{
-		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + GetPCPlayerName(acquirer) + "','" + GetName(acquirer) + "','" + GetName(item) + " (" + GetTag(item) + ") given from " + GetLocalString(item,"A1") + "/" + GetLocalString(item,"N1") + " and original owner: " + GetLocalString(item,"A2") + "/" + GetLocalString(item,"N2") + " (" + GetTag(aFrom) + ")',105)");
+		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
+			SQLEncodeSpecialChars(GetPCPlayerName(acquirer)) + "','" + 
+			SQLEncodeSpecialChars(GetName(acquirer)) + "','" + 
+			SQLEncodeSpecialChars(GetName(item)) + " (" + 
+			SQLEncodeSpecialChars(GetTag(item)) + ") given from " + 
+			SQLEncodeSpecialChars(GetLocalString(item,"A1")) + "/" + 
+			SQLEncodeSpecialChars(GetLocalString(item,"N1")) + " and original owner: " + 
+			SQLEncodeSpecialChars(GetLocalString(item,"A2")) + "/" + 
+			SQLEncodeSpecialChars(GetLocalString(item,"N2")) + " (" + 
+			SQLEncodeSpecialChars(GetTag(aFrom)) + ")',105)");
+
 		//SpeakString("Possible muling",TALKVOLUME_SILENT_SHOUT);
 		SpeakString("<C=TOMATO>[POSSIBLE MULING] " + GetLocalString(item,"A1") + "/" + GetLocalString(item,"N1") + " just gave " + GetPCPlayerName(acquirer) + "/" + GetName(acquirer) + " following: " + GetName(item) + "/" + GetTag(item) + ", which was last owned by: " + GetLocalString(item,"A2") + "/" + GetLocalString(item,"N2"),TALKVOLUME_SILENT_SHOUT);
 
