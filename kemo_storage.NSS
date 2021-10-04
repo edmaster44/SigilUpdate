@@ -9,7 +9,7 @@
 				+ "_" + GetSubString(GetFirstName(oPC), 0, 6)
 				+ "_" + GetSubString(GetLastName(oPC), 0, 9);
 }*/
-/*int CheckName(object oPC, string sGuild)
+int CheckName(object oPC, string sGuild)
 {
 	int nCount = 1;
 
@@ -101,18 +101,18 @@ void GuildStorage(object oPC)
 	SetLocalString(oPC, "kemo_storage_mode_guild","yes");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,"Please select which guild.");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","RetrieveButton",-1,"Select guild.");
-} */
+}
 void main()
 {
 	object oPC = GetPCSpeaker();
-	ExecuteScript("gui_kemo_storage_list",oPC);
 	DisplayGuiScreen(oPC,"STORAGE_NEW",FALSE,"storage_new.xml");
+
 	/*object oPC = GetPCSpeaker();
 	string sDB = GetPCID(oPC) + "_storage";
 	
 	if (d20() == 1) PackCampaignDatabase(sDB); // packs database 5% of the time
 
-	DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
-	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
-	ExecuteScript("gui_kemo_storage_list",oPC); */
+	//DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
+	//ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
+//	ExecuteScript("gui_kemo_storage_list",oPC); */
 }
