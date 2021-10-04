@@ -114,5 +114,5 @@ void main()
 
 	//DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
 	//ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
-//	ExecuteScript("gui_kemo_storage_list",oPC);
+//	ExecuteScript("gui_kemo_storage_list",oPC); */
 }
