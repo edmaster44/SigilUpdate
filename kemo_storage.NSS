@@ -14,7 +14,8 @@ void main()
 	
 	if (d20() == 1) PackCampaignDatabase(sDB); // packs database 5% of the time
 
-	DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
-	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
-	ExecuteScript("gui_kemo_storage_list",oPC);
+	//DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
+	DisplayGuiScreen(oPC,"STORAGE_NEW",FALSE,"storage_new.xml");
+	//ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
+//	ExecuteScript("gui_kemo_storage_list",oPC);
 }
