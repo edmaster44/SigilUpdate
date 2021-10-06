@@ -105,6 +105,7 @@ void GuildStorage(object oPC)
 void main()
 {
 	object oPC = GetPCSpeaker();
+	SendMessageToPC(oPC,"Opening Kemo Storage" )
 	DisplayGuiScreen(oPC,"STORAGE_NEW",FALSE,"storage_new.xml");
 
 	/*object oPC = GetPCSpeaker();
