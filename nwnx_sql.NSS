@@ -97,7 +97,7 @@ void SetPersistentVector(object oObject, string sVarName, vector vVector, int iE
 //   iExpiration: Number of days the persistent variable should be kept in database (default: 0=forever)
 //   sTable: Name of the table where variable should be stored (default: pwobjdata)
 void SetPersistentObject(object oObject, string sVarName, object oObject2, int iExpiration =
-                         0, string sTable = "pwobjdata");
+                         0, string sTable = "pwobjdata", int guildmode = 0);
 
 // Get oObject's persistent string variable sVarName
 // Optional parameters:
@@ -143,6 +143,15 @@ void DeletePersistentVariable(object oObject, string sVarName, string sTable = "
 // Replace special characters (like ') in a database compatible way
 string SQLEncodeSpecialChars(string sString);
 
+// Execute statement in sSQL using SCO/RCO
+void SQLSCORCOExec(string sSQL);
+
+//Store object in DB using SCO hook
+void SQLStoreObject(object oObject);
+
+//Retrieve object from DB using RCO hook
+object SQLRetrieveObject(location lLocation, object oOwner = OBJECT_INVALID, string sMode="-");
+
 /************************************/
 /* Implementation                   */
 /************************************/
@@ -170,6 +179,21 @@ string SQLGetDataText(int iCol)
 int SQLGetAffectedRows()
 {
     return NWNXGetInt("SQL", "GET AFFECTED ROWS", "", 0);
+}
+
+void SQLSCORCOExec(string sSQL)
+{
+    NWNXSetString("SQL", "SETSCORCOSQL", sSQL, 0, "");
+}
+
+void SQLStoreObject(object oObject)
+{
+    StoreCampaignObject("NWNX", "-", oObject);
+}
+
+object SQLRetrieveObject(location lLocation, object oOwner = OBJECT_INVALID, string sMode="-")
+{
+    return RetrieveCampaignObject("NWNX", sMode, lLocation, oOwner);
 }
 
 // These functions deal with various data types. Ultimately, all NWN specific
@@ -288,7 +312,7 @@ void SetPersistentString(object oObject, string sVarName, string sValue, int iEx
     string sSQL = "SELECT player FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
     SQLExecDirect(sSQL);
-
+    
     if (SQLFetch() == SQL_SUCCESS)
     {
         // row exists
@@ -327,6 +351,7 @@ string GetPersistentString(object oObject, string sVarName, string sTable = "pwd
 
     string sSQL = "SELECT val FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
+        
     SQLExecDirect(sSQL);
 
     if (SQLFetch() == SQL_SUCCESS)
@@ -371,7 +396,7 @@ int GetPersistentInt(object oObject, string sVarName, string sTable = "pwdata")
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
     SQLExecDirect(sSQL);
 
-	if (SQLFetch() == SQL_SUCCESS)
+    if (SQLFetch() == SQL_SUCCESS)
         return StringToInt(SQLGetData(1));
     else
         return 0;
@@ -405,7 +430,7 @@ float GetPersistentFloat(object oObject, string sVarName, string sTable = "pwdat
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
     SQLExecDirect(sSQL);
 
-	if (SQLFetch() == SQL_SUCCESS)
+    if (SQLFetch() == SQL_SUCCESS)
         return StringToFloat(SQLGetData(1));
     else
         return 0.0f;
@@ -434,12 +459,17 @@ vector GetPersistentVector(object oObject, string sVarName, string sTable = "pwd
 }
 
 void SetPersistentObject(object oOwner, string sVarName, object oObject, int iExpiration =
-                         0, string sTable = "pwobjdata")
+                         0, string sTable = "pwobjdata", int guildmode = 0)
 {
     string sPlayer;
     string sTag;
 
-    if (GetIsPC(oOwner))
+    if(guildmode == 1)
+    {
+        sPlayer = "~";
+        sTag = SQLEncodeSpecialChars(GetLocalString(oOwner,"ListingGuild"));
+    }
+    else if (GetIsPC(oOwner))
     {
         sPlayer = SQLEncodeSpecialChars(GetPCPlayerName(oOwner));
         sTag = SQLEncodeSpecialChars(GetName(oOwner));
@@ -460,16 +490,16 @@ void SetPersistentObject(object oOwner, string sVarName, object oObject, int iEx
         // row exists
         sSQL = "UPDATE " + sTable + " SET val=%s,expire=" + IntToString(iExpiration) +
             " WHERE player='" + sPlayer + "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-        SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
-        StoreCampaignObject ("NWNX", "-", oObject);
+        SQLSCORCOExec(sSQL);
+        SQLStoreObject (oObject);
     }
     else
     {
         // row doesn't exist
         sSQL = "INSERT INTO " + sTable + " (player,tag,name,val,expire) VALUES" +
             "('" + sPlayer + "','" + sTag + "','" + sVarName + "',%s," + IntToString(iExpiration) + ")";
-        SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
-        StoreCampaignObject ("NWNX", "-", oObject);
+        SQLSCORCOExec(sSQL);
+        SQLStoreObject (oObject);
     }
 }
 
@@ -493,11 +523,11 @@ object GetPersistentObject(object oObject, string sVarName, object oOwner = OBJE
 
     string sSQL = "SELECT val FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-    SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
+    SQLSCORCOExec(sSQL);
 
     if (!GetIsObjectValid(oOwner))
         oOwner = oObject;
-    return RetrieveCampaignObject ("NWNX", "-", GetLocation(oOwner), oOwner);
+    return SQLRetrieveObject (GetLocation(oOwner), oOwner);
 }
 
 void DeletePersistentVariable(object oObject, string sVarName, string sTable = "pwdata")
