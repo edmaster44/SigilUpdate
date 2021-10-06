@@ -149,8 +149,6 @@ void PS_LoadEssenceState(object PCObject, object EssenceItem);
 
 void PS_CopyIntVar(object To, string Var, object From);
 
-void DoPsyFeatProgression(object oPC);
-
 string PS_ExpandStringEnclosures(string Text, string FindOpen, string FindClose, string EncloseOpen, string EncloseClose);
 
 string PS_ColorizeChatMessage(string Text);
@@ -4383,35 +4381,6 @@ FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
 
 }
 
-void DoPsyFeatProgression(object oPC)
-{
-int iPsy = PsyWarLevels(oPC);
-if (iPsy >= 2 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,21027,FALSE,FALSE,FALSE);}
-if (iPsy >= 3 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,291,FALSE,FALSE,FALSE);}
-if (iPsy >= 3 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,289,FALSE,FALSE,FALSE);}
-if (iPsy >= 5 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,290,FALSE,FALSE,FALSE);}
-if (iPsy >= 8 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,292,FALSE,FALSE,FALSE);}
-if (iPsy >= 12 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,1157,FALSE,FALSE,FALSE);}
-if (iPsy >= 14 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,1383,FALSE,FALSE,FALSE);}
-if (iPsy >= 15 && GetHasFeat(FEAT_PSYWAR_FERAL,oPC,TRUE))
-{FeatAdd(oPC,1197,FALSE,FALSE,FALSE);}
-if (iPsy >= 2 && GetHasFeat(FEAT_PSYWAR_LURK,oPC,TRUE))
-{FeatAdd(oPC,21034,FALSE,FALSE,FALSE);}
-if (iPsy >= 2 && GetHasFeat(FEAT_PSYWAR_LURK,oPC,TRUE))
-{FeatAdd(oPC,21079,FALSE,FALSE,FALSE);}
-if (iPsy >= 2 && GetHasFeat(FEAT_PSYWAR_LURK,oPC,TRUE))
-{FeatAdd(oPC,21011,FALSE,FALSE,FALSE);}
-if (iPsy >= 10 && GetHasFeat(FEAT_PSYWAR_LURK,oPC,TRUE))
-{FeatAdd(oPC,21472,FALSE,FALSE,FALSE);}
-
-}
 //Counts levels in low bab arcane classes
 int GetPureMageLevels(object oPC)
 {
