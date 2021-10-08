@@ -21,11 +21,13 @@ int GetFaction(object oPC)
 	return 0;
 }
 
-void main(int numberOfPoints = 1) {
+void main(int numberOfPoints) {
 
 	object oPC = GetPCSpeaker();
 	int nFaction = GetFaction(oPC);
 	//string sID = PS_GetCharID(oPC); //we will want to credit by pc later
 	
+	if(numberOfPoints <= 0) numberOfPoints = 1;
+
 	IncrementModuleFactionQuest(oPC, nFaction, numberOfPoints);
 }
