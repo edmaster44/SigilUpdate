@@ -14,7 +14,7 @@ int GetAverageSkillPoints(object oPC);
 
 //Gets the average amount of BAB the PC
 //gains every level
-int GetAverageBABPerLevel(object oPC);
+float GetAverageBABPerLevel(object oPC);
 
 //Gets whether the skill specified is a class skill.
 //This is a slow function (lots of looping through 2das.
