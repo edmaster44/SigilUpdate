@@ -1918,7 +1918,7 @@ int HenchGetAoESpellInfo(object oAreaOfEffect)
 
 
 int gbHealingListInit;
-const string sHealingCurrentInfo;
+const string sHealingCurrentInfo = "AI_HealingCurrentInfo";
 const int iHealingNotNeeded = 100000;
 const float fAllyMeleeTouchRange = 7.5;
 float gbHealingAttackWeight;
