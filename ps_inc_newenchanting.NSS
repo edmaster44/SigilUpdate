@@ -124,7 +124,7 @@ int EstimateItemPropertyPointValue(itemproperty ip);
 int GetItemPropertyPointValue(itemproperty ip, string itemType = "");
 
 //Get the sql string to filter out inappropriate enchantments by item type
-string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow);
+string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE);
 
 //************************************************
 //Structure to hold enchantment values
