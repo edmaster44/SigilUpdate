@@ -5,8 +5,8 @@ void main(string sINPUT, string sOUTPUT, int nINPUT, int nOUTPUT)
 	object oINPUT = GetItemPossessedBy(oPC, sINPUT);
 	if (oINPUT == OBJECT_INVALID) return;
 
-	if(nINPUT < 0) 	nINPUT = 1;
-	if(nOUTPUT < 0) nOUTPUT = 1;
+	if(nINPUT < 1) 	nINPUT = 1;
+	if(nOUTPUT < 1) nOUTPUT = 1;
 
 	int nUSED = nINPUT;
 	int nSTACK = GetItemStackSize(oINPUT);
