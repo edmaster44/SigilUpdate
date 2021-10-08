@@ -30,55 +30,54 @@ void main()
 {
 
 	if (!GetHasFeat(FEAT_BLACKGUARD,OBJECT_SELF))
-	{ SendMessageToPC(OBJECT_SELF,"You do not walk the path of the Wicked for you to cast such a spell");
-	return;
+	{
+		SendMessageToPC(OBJECT_SELF,"You do not walk the path of the wicked for you to cast such a spell.");
+		return;
 	}
 	
 
 	int eDice =  d6(2);
-    //Declare major variables
+	//Declare major variables
 	float fDelay;
 	float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
-    effect eListen = EffectSkillDecrease(SKILL_LISTEN,4);
-    effect eSpot = EffectSkillDecrease(SKILL_SPOT,4);
-    effect eSearch = EffectSkillDecrease(SKILL_SEARCH,4);
-    effect eAttack = EffectAttackDecrease(4);
-    effect eVisElec = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
-	effect eDamage = EffectDamage(eDice,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,FALSE);
+	effect eListen = EffectSkillDecrease(SKILL_LISTEN, 4);
+	effect eSpot = EffectSkillDecrease(SKILL_SPOT, 4);
+	effect eSearch = EffectSkillDecrease(SKILL_SEARCH, 4);
+	effect eAttack = EffectAttackDecrease(4);
+	effect eVisElec = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
+	effect eDamage = EffectDamage(eDice, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, FALSE);
 	effect	eLinks;
 	int eEnemyOutSider;
-	eLinks = EffectLinkEffects(eListen,eSpot);
-	eLinks = EffectLinkEffects(eLinks,eAttack);
-	eLinks = EffectLinkEffects(eLinks,eSearch);
-	eLinks = EffectLinkEffects(eLinks,eDamage);
+	eLinks = EffectLinkEffects(eListen, eSpot);
+	eLinks = EffectLinkEffects(eLinks, eAttack);
+	eLinks = EffectLinkEffects(eLinks, eSearch);
+	eLinks = EffectLinkEffects(eLinks, eDamage);
 
 
 	location lTarget = GetSpellTargetLocation();
-	  object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-	 while (GetIsObjectValid(oTarget))
-   
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+	
+	while (GetIsObjectValid(oTarget))   
 	{
 
-	 	if (spellsIsTarget(oTarget,SPELL_TARGET_SELECTIVEHOSTILE,GetAreaOfEffectCreator()));
-				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_UNHOLY_STORM));
+		if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, GetAreaOfEffectCreator()))
+		{
+			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_UNHOLY_STORM));
 		
 			if(GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER)
 			{
 				eDice = eDice * 2; // outsiders take double damage
 			}
 
-		
-		fDelay = GetRandomDelay(0.5, 2.0);
+			fDelay = GetRandomDelay(0.5, 2.0);
 			//This fires a cast spell event for the specified target
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget,fDuration));
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget,fDuration));
-			DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget));
-			
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget, fDuration));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, fDuration));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget));
+		}
 
-	//Select the next target within the spell shape.
-       oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+		//Select the next target within the spell shape.
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}
 
-
-	   
-	}
+}
