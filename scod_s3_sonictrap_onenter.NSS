@@ -1,14 +1,15 @@
 //::///////////////////////////////////////////////
-//:: Spike Trap On Enter
-//:: scod_s3_spiketrap_onenter.nss
+//:: Sonic Trap - On Enter
+//:: scod_s3_sonictrap_onenter.nss
 //:://////////////////////////////////////////////
 /*
-    Creates a trapped area on the ground that will deal 5d6 + 1d6 per two ranks of craft trap damage to 
-	an enemy when triggered.
+    Creates a trapped area on the ground that produces a sonic burst. Deals 10d8 sonic damage and stuns
+	targets that fail a DC 25 will save. Damage and DC increased by craft trap (+1d8 damage and +1 DC 
+	per 4 Craft Trap rank)
 */
 //:://////////////////////////////////////////////
 //:: Created By: SingerFromTheMist
-//:: Created On: August 22, 2021
+//:: Created On: October 9, 2021
 //:://////////////////////////////////////////////
 
 #include "x2_I0_SPELLS"
@@ -27,46 +28,42 @@ void main()
 	
 	int nCraftTrap = GetSkillRank(SKILL_CRAFT_TRAP, oCaster,FALSE);
     int nDamage;
-	int nOrgDamage;
 	//Base Dice 5
-	int nDice = GetSkillAdjustedTrapDamageDice(5, nCraftTrap, 2);
+	int nDice = GetSkillAdjustedTrapDamageDice(10, nCraftTrap, 4);
 	//Base DC 15
-	int nDC = GetSkillAdjustedTrapDC(15, nCraftTrap, 4);
-	int nSlowDur = 5;
-    int nFire = GetLocalInt(OBJECT_SELF, "scod_spiketrap");
+	int nDC = GetSkillAdjustedTrapDC(25, nCraftTrap, 4);
+	int nStunDur = 5;
+    int nFire = GetLocalInt(OBJECT_SELF, "scod_sonictrap");
     
-	effect eSlow = ExtraordinaryEffect(EffectSlow());
-	effect eVis = EffectVisualEffect(VFX_IMP_SPIKE_TRAP);
-	effect eVis2 = EffectVisualEffect(VFX_DUR_SPELL_SLOW);
-	effect eLink = EffectLinkEffects(eSlow, eVis2);
+	effect eStun = ExtraordinaryEffect(EffectStunned());
+	effect eVis = EffectVisualEffect(VFX_HIT_AOE_SONIC);
+	effect eVis2 = EffectVisualEffect(VFX_DUR_STUN);
+	effect eLink = EffectLinkEffects(eStun, eVis2);
 	effect eDam;
     //Check the faction of the entering object to make sure the entering object is not in the casters faction
     if(nFire == 0)
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            SetLocalInt(OBJECT_SELF, "scod_spiketrap",TRUE);
+            SetLocalInt(OBJECT_SELF, "scod_sonictrap",TRUE);
             //Fire cast spell at event for the specified target
-            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SPIKE_TRAP));
+            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SONIC_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lTarget);
 			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.5f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)){
-					nDamage = d6(nDice);
-		            //Change damage according to Reflex, Evasion and Improved Evasion
-					nOrgDamage = nDamage;
-		            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_TRAP, GetAreaOfEffectCreator());
+					nDamage = d8(nDice);
 		            //Set up the damage effect
-		            eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
+		            eDam = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
 					//Trigger visual regardless of if damage is done            
 		            if(nDamage > 0)
 		            {
 		                //Apply damage effect
 		                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-						if (GetReflexFailed(oTarget, nOrgDamage, nDamage) && !GetIsImmune(oTarget, IMMUNITY_TYPE_SLOW)) {
-							 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nSlowDur)));
+						if (WillSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP, oCaster) == SAVING_THROW_CHECK_FAILED && !GetIsImmune(oTarget, IMMUNITY_TYPE_STUN))  {
+							 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nStunDur)));
 						}
 		            }
 				}

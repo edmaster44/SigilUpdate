@@ -1,14 +1,14 @@
 //::///////////////////////////////////////////////
-//:: Spike Trap
-//:: scod_s3_spiketrap.nss
+//:: Bee Trap
+//:: scod_s3_beetrap.nss
 //:://////////////////////////////////////////////
 /*
-    Creates a trapped area on the ground that will deal 5d6 + 1d6 per two ranks of craft trap damage to 
-	effected enemies when triggered.
+    Creates a trapped area on the ground that will deal 1d6 + 1d6 per four ranks of craft trap damage per round
+	to effected enemies. They must also make a will save or become confused. Lasts 5 rounds by default.
 */
 //:://////////////////////////////////////////////
 //:: Created By: SingerFromTheMist
-//:: Created On: August 22, 2021
+//:: Created On: October 9, 2021
 //:://////////////////////////////////////////////
 
 #include "scod_inc_trapfeats"
@@ -17,9 +17,9 @@ void main()
 {
 
    //Declare major variables including Area of Effect Object
-    effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_spiketrap_onenter");
+	effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_beetrapvisual_onenter");
 	object oCaster = OBJECT_SELF;
-	int nSetDC = 15;
+	int nSetDC = 20;
 	
     location lTarget = GetSpellTargetLocation();
     int nDuration = 5;

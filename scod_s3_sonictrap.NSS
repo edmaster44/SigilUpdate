@@ -1,14 +1,15 @@
 //::///////////////////////////////////////////////
-//:: Spike Trap
-//:: scod_s3_spiketrap.nss
+//:: Sonic Trap
+//:: scod_s3_sonictrap.nss
 //:://////////////////////////////////////////////
 /*
-    Creates a trapped area on the ground that will deal 5d6 + 1d6 per two ranks of craft trap damage to 
-	effected enemies when triggered.
+    Creates a trapped area on the ground that produces a sonic burst. Deals 10d8 sonic damage and stuns
+	targets that fail a DC 25 will save. Damage and DC increased by craft trap (+1d8 damage and +1 DC 
+	per 4 Craft Trap rank)
 */
 //:://////////////////////////////////////////////
 //:: Created By: SingerFromTheMist
-//:: Created On: August 22, 2021
+//:: Created On: October 9, 2021
 //:://////////////////////////////////////////////
 
 #include "scod_inc_trapfeats"
@@ -17,9 +18,9 @@ void main()
 {
 
    //Declare major variables including Area of Effect Object
-    effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_spiketrap_onenter");
+    effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_sonictrap_onenter");
 	object oCaster = OBJECT_SELF;
-	int nSetDC = 15;
+	int nSetDC = 30;
 	
     location lTarget = GetSpellTargetLocation();
     int nDuration = 5;

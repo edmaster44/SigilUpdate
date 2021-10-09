@@ -1,14 +1,15 @@
 //::///////////////////////////////////////////////
-//:: Spike Trap
-//:: scod_s3_spiketrap.nss
+//:: Flash Trap
+//:: scod_s3_flashtrap.nss
 //:://////////////////////////////////////////////
 /*
-    Creates a trapped area on the ground that will deal 5d6 + 1d6 per two ranks of craft trap damage to 
-	effected enemies when triggered.
+    Creates a trapped area on the ground that produces a bright explosion upon being triggered.
+	Enemies in the area of effect must succeed in a fortitude save or be blinded for five rounds.
+	The save and duration are increased by 1 per four ranks of craft trap.
 */
 //:://////////////////////////////////////////////
 //:: Created By: SingerFromTheMist
-//:: Created On: August 22, 2021
+//:: Created On: October 9, 2021
 //:://////////////////////////////////////////////
 
 #include "scod_inc_trapfeats"
@@ -17,9 +18,9 @@ void main()
 {
 
    //Declare major variables including Area of Effect Object
-    effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_spiketrap_onenter");
+    effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_flashtrap_onenter");
 	object oCaster = OBJECT_SELF;
-	int nSetDC = 15;
+	int nSetDC = 25;
 	
     location lTarget = GetSpellTargetLocation();
     int nDuration = 5;
