@@ -1,19 +1,9 @@
 #include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
+#include "ps_inc_time"
 
 
-string GetStorageItemIcon(object oItem)
-{
-	string sIcon = Get2DAString("nwn2_icons","ICON",GetItemIcon(oItem));
-	return sIcon == "" ? "temp0.tga" : sIcon + ".tga";
-}
 
-string GetPCID(object oPC)
-{
-	return GetSubString(GetPCPlayerName(oPC), 0, 12)
-				+ "_" + GetSubString(GetFirstName(oPC), 0, 6)
-				+ "_" + GetSubString(GetLastName(oPC), 0, 9);
-}
 
 object GetItemFromList(object oPC, string sItemNumber)
 {
@@ -134,7 +124,7 @@ void main (string sItemNumber)
 	
 		SQLExecDirect(sQuery);	
 			
-		int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = GetUNIXTime();
+		int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = PS_GetTimestamp_Age_Seconds(oPC,timerid);
 		if (uTime + 10 > iTime || iTime == 0)
 		{
 			ExportSingleCharacter(oPC);
@@ -145,16 +135,9 @@ void main (string sItemNumber)
 		//if (GetCampaignInt(sDB,"StorageListTotal") < iCounter) SetCampaignInt(sDB,"StorageListTotal",iCounter);
 		DelayCommand(1.0f,ExecuteScript("gui_kemo_storage_deposit",oPC));
 		
-		float time = PS_Timestamp_UNIX(oPC,timerid);
+		int time = PS_GetTimestamp_Age_Seconds(oPC,timerid);
 		
 		SendMessageToPC(oPC,"<I>Depositing the item took . . "+FloatToString(time / 1000.0)+" seconds.");
 		//TimerDelete(timerid);
-		
-		if(time / 1000 > 2.0)
-		{
-			SendMessageToPC(oPC,"<I>Lag detected on depositing... slowing down deposits...");
-			DelayCommand(5.0 + ((time / 1000) * 2.0),ClearForNextItem(oPC));
-		}
-		else DelayCommand(2.0 + (time / 1000),ClearForNextItem(oPC));
-	}
-}	
+}
+}
