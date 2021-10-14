@@ -14,9 +14,9 @@ void main()
 	object target = GetSpellTargetObject();
 	if (CancelIfNotInMeleeRange(OBJECT_SELF, target, GetSpellFeatId()))
 	{
-		int touchAttackResult = TouchAttackMelee(target, TRUE, 0);
+///	int touchAttackResult = TouchAttackMelee(target, TRUE, 0);
 		
-		if (touchAttackResult)
+//		if (touchAttackResult)
 		{
 			effect disruption = EffectSpellFailure(100, SPELL_SCHOOL_GENERAL);
 			effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );

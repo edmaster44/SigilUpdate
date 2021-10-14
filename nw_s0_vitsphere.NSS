@@ -134,11 +134,11 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 	
 	if (nCasterLevel > 40)
 	{
-		nDice = 40;
+		nDice = 13;
 	}
 	else
 	{
-		nDice = nCasterLevel;
+		nDice = (nCasterLevel/3);
 	}
 	
 
