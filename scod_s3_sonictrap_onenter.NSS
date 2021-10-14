@@ -30,8 +30,8 @@ void main()
     int nDamage;
 	//Base Dice 5
 	int nDice = GetSkillAdjustedTrapDamageDice(10, nCraftTrap, 4);
-	//Base DC 15
-	int nDC = GetSkillAdjustedTrapDC(25, nCraftTrap, 4);
+	//Base DC 21
+	int nDC = GetSkillAdjustedTrapDC(21, nCraftTrap, 4);
 	int nStunDur = 5;
     int nFire = GetLocalInt(OBJECT_SELF, "scod_sonictrap");
     
@@ -50,7 +50,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SONIC_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lTarget);
-			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.5f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.8f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)){

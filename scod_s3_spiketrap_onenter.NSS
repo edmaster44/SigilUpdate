@@ -50,7 +50,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SPIKE_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lTarget);
-			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.5f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.8f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)){
