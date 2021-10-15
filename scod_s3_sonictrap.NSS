@@ -20,7 +20,7 @@ void main()
    //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_sonictrap_onenter");
 	object oCaster = OBJECT_SELF;
-	int nSetDC = 30;
+	int nSetDC = 24;
 	
     location lTarget = GetSpellTargetLocation();
     int nDuration = 5;

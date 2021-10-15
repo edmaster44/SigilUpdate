@@ -21,7 +21,7 @@ void main()
    //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_corrosivetrap_onenter");
 	object oCaster = OBJECT_SELF;
-	int nSetDC = 35;
+	int nSetDC = 27;
 	
     location lTarget = GetSpellTargetLocation();
     int nDuration = 5;
