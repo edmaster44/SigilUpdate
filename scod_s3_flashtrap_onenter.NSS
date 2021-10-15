@@ -26,11 +26,10 @@ void main()
 	
 	location lTarget = GetLocation(OBJECT_SELF);
 	
-	int nCraftTrap = GetSkillRank(SKILL_CRAFT_TRAP, oCaster,FALSE);
 	//Base DC 19
-	int nDC = GetSkillAdjustedTrapDC(19, nCraftTrap, 4);
+	int nDC = GetSkillAdjustedTrapDC(19, oCaster, 4);
 	//Base duration 5
-	int nBlindDur = GetSkillAdjustedTrapDC(5, nCraftTrap, 4);
+	int nBlindDur = GetSkillAdjustedTrapDC(5, oCaster, 4);
     int nFire = GetLocalInt(OBJECT_SELF, "scod_flashtrap");
     
 	effect eBlind = ExtraordinaryEffect(EffectBlindness());
@@ -47,7 +46,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_FLASH_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eDetVis, lTarget);
-			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.8f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, TRAP_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS)){

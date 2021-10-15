@@ -27,12 +27,11 @@ void main()
 	
 	location lTarget = GetLocation(OBJECT_SELF);
 	
-	int nCraftTrap = GetSkillRank(SKILL_CRAFT_TRAP, oCaster,FALSE);
     int nDamage;
 	//Base Dice 5
-	int nDice = GetSkillAdjustedTrapDamageDice(10, nCraftTrap, 2);
+	int nDice = GetSkillAdjustedTrapDamageDice(10, oCaster, 2);
 	//Base DC 23
-	int nDC = GetSkillAdjustedTrapDC(23, nCraftTrap, 4);
+	int nDC = GetSkillAdjustedTrapDC(23, oCaster, 4);
 	int nParaDur = 5;
     int nFire = GetLocalInt(OBJECT_SELF, "scod_corrosivetrap");
     
@@ -52,7 +51,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CORROSIVE_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lTarget);
-			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.8f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, TRAP_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)){

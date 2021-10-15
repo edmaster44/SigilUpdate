@@ -25,13 +25,12 @@ void main()
 	
 	location lTarget = GetLocation(OBJECT_SELF);
 	
-	int nCraftTrap = GetSkillRank(SKILL_CRAFT_TRAP, oCaster,FALSE);
     int nDamage;
 	int nOrgDamage;
 	//Base Dice 5
-	int nDice = GetSkillAdjustedTrapDamageDice(5, nCraftTrap, 2);
+	int nDice = GetSkillAdjustedTrapDamageDice(5, oCaster, 2);
 	//Base DC 15
-	int nDC = GetSkillAdjustedTrapDC(15, nCraftTrap, 4);
+	int nDC = GetSkillAdjustedTrapDC(15, oCaster, 4);
 	int nSlowDur = 5;
     int nFire = GetLocalInt(OBJECT_SELF, "scod_spiketrap");
     
@@ -50,7 +49,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SPIKE_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lTarget);
-			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 2.8f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, TRAP_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster)){
