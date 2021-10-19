@@ -125,16 +125,16 @@ if(GetName(oStorageCopy) == "Veteran Token")
 	WriteTimestampedLogEntry(GetName(oPC) + " is retrieving " + GetName(oStorageCopy) + " at the storage banker.");
 
 	
-	if (guildname != "") sQuery = "INSERT INTO cmnsee_storage_guild_history VALUES (NOW(), 'withdrawn', '"+sDB+"', "+
+	if (guildname != "") sQuery = "INSERT INTO new_storage_guild_history VALUES (NOW(), 'withdrawn', '"+sDB+"', "+
 	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
-	else sQuery = "INSERT INTO cmnsee_storage_history VALUES (NOW(), 'withdrawn', '"+sDB+"', "+
+	else sQuery = "INSERT INTO new_storage_history VALUES (NOW(), 'withdrawn', '"+sDB+"', "+
 	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
 	
 	SQLExecDirect(sQuery);	
 	
 	//Remove the stored item from the slot
 	if (guildname != "") sQuery = "DELETE FROM new_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
-	else sQuery = "DELETE FROM cmnsee_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
+	else sQuery = "DELETE FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	
 	SQLExecDirect(sQuery);
 	
