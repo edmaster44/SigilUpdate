@@ -1,33 +1,7 @@
 #include "ginc_param_const"
+#include "nwnx_sql"
+#include "gui_kemo_storage_list_open"
 
-string GetPCID(object oPC)
-{
-	return GetSubString(GetPCPlayerName(oPC), 0, 12)
-				+ "_" + GetSubString(GetFirstName(oPC), 0, 6)
-				+ "_" + GetSubString(GetLastName(oPC), 0, 9);
-}
-
-// "compresses" the sale list number down to the highest existing item
-int GetStorageListTotal(string sDB)
-{
-	int iListTotal = GetCampaignInt(sDB,"StorageListTotal"); // length of sale item list
-	int iCounter = iListTotal; int iListTotalNew = iListTotal;
-	
-	string sKey; string sItem;
-	
-	while (iCounter >= 1)
-	{
-		sKey = "StorageParameters" + IntToString(iCounter);
-		sItem = GetCampaignString(sDB,sKey);
-		if (sItem != "")
-		{	iListTotalNew = iCounter;
-			iCounter = 0;
-		}
-		iCounter--;
-	}
-	SetCampaignInt(sDB,"StorageListTotal",iListTotalNew);
-	return iListTotalNew;
-}
 
 void main()
 {

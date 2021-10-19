@@ -1,3 +1,7 @@
+#include "nwnx_sql"
+#include "ginc_param_const"
+#include "ginc_2da"
+
 string GetStorageItemIcon(object oItem)
 {
 	string sIcon = Get2DAString("nwn2_icons","ICON",GetItemIcon(oItem));
