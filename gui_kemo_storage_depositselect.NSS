@@ -4,7 +4,6 @@
 
 
 
-
 object GetItemFromList(object oPC, string sItemNumber)
 {
 	string sStorageVar = "TempStorageObject" + sItemNumber;
@@ -46,7 +45,7 @@ void main (string sItemNumber)
 {
 	object oPC = OBJECT_SELF;
 	string sQuery;
-	//WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
+	WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
 
 	if(GetLocalInt(oPC,"DepositDelay") == 1)
 	{
