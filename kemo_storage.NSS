@@ -1,7 +1,7 @@
 // called from kemo_storage_conv
 #include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
-#include "gui_new_storage"
+
 
 
 
@@ -89,6 +89,9 @@ void GuildStorage(object oPC)
 		iCounter++;
 		iValid++;
 		}
+
+		if (SQLFetch() == SQL_ERROR)
+		{SendMessageToPC(oPC,"Missing Token");}
 	}
 	
 	DeleteLocalString(oPC, "kemo_temp_guildname");
@@ -109,7 +112,6 @@ void main()
 	object oPC = GetPCSpeaker();
 	SendMessageToPC(oPC,"Opening Kemo Storage" );
 	DisplayGuiScreen(oPC,"STORAGE_NEW",FALSE,"storage_new.xml");
-	GuildStorage(oPC);
 
 	/*object oPC = GetPCSpeaker();
 	string sDB = GetPCID(oPC) + "_storage";
