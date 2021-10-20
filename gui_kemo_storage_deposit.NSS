@@ -1,6 +1,3 @@
-#include "nwnx_sql"
-#include "ginc_param_const"
-#include "ginc_2da"
 
 string GetStorageItemIcon(object oItem)
 {
@@ -39,7 +36,7 @@ void main()
 	int iCounter = 0; string sCounter;
 
 	if (GetDistanceToObject(GetNearestObjectByTag("kemo_storage_teller")) > 3.0f)
-	{	SendMessageToPC(oPC,"You are too far away from teller.");
+	{	KEMONotify(oPC,"You are too far away from teller.");
 		return;
 	}
 

@@ -1,29 +1,9 @@
 // called from kemo_storage_conv
+
+#include "nwnx_clock"
 #include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
-
-
-
-/*string GetPCID(object oPC)
-{
-	return GetSubString(GetPCPlayerName(oPC), 0, 12)
-				+ "_" + GetSubString(GetFirstName(oPC), 0, 6)
-				+ "_" + GetSubString(GetLastName(oPC), 0, 9);
-}*/
-int CheckName(object oPC, string sGuild)
-{
-	int nCount = 1;
-
-	while (nCount < 10)
-	{
-	string gName = GetLocalString(oPC,"guildbank-name"+IntToString(nCount));
-	if(gName == sGuild) return FALSE;
-	nCount++;
-	}
-	
-	return TRUE;	
-}
 void GuildStorage(object oPC)
 {
 	int iValid = 0;
@@ -34,9 +14,6 @@ void GuildStorage(object oPC)
 	DeleteLocalString(oPC,"kemo_storage_mode_guild");
 	DeleteLocalString(oPC,"kemo_temp_guildname");
 	DeleteLocalString(oPC,"kemo_temp_accesslevel");
-	DeleteLocalInt(oPC,"DelayPage");
-	DeleteLocalInt(oPC,"DepositDelay");
-	DeleteLocalInt(oPC,"RetrieveDelay");
 	
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE",FALSE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveLabelPane",FALSE);
@@ -89,9 +66,6 @@ void GuildStorage(object oPC)
 		iCounter++;
 		iValid++;
 		}
-
-		if (SQLFetch() == SQL_ERROR)
-		{SendMessageToPC(oPC,"Missing Token");}
 	}
 	
 	DeleteLocalString(oPC, "kemo_temp_guildname");
@@ -107,18 +81,12 @@ void GuildStorage(object oPC)
 	SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,"Please select which guild.");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","RetrieveButton",-1,"Select guild.");
 }
+
 void main()
 {
 	object oPC = GetPCSpeaker();
-	SendMessageToPC(oPC,"Opening Kemo Storage" );
-	DisplayGuiScreen(oPC,"STORAGE_NEW",FALSE,"storage_new.xml");
 
-	/*object oPC = GetPCSpeaker();
-	string sDB = GetPCID(oPC) + "_storage";
-	
-	if (d20() == 1) PackCampaignDatabase(sDB); // packs database 5% of the time
-
-	//DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
-	//ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
-//	ExecuteScript("gui_kemo_storage_list",oPC); */
+	DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
+	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
+	GuildStorage(oPC);
 }

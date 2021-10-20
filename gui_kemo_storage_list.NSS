@@ -9,7 +9,11 @@ void main()
 	int iCounter = 0;
 	string sDB;
 	int accesslevel = 0;
-	string guildname = GetLocalString(oPC,"kemo_storage_mode_guildname");
+	
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	{
+	sDB = GetPCID(oPC);
+	}	
 	
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE",FALSE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveLabelPane",FALSE);
@@ -17,11 +21,9 @@ void main()
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","KEMO_STORAGE_DEPOSIT",TRUE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","ViewButton",FALSE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","ListButton",TRUE);
+	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",FALSE);	
 	
-	if(GetLocalInt(oPC,"RetrieveDelay") == 0) SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",FALSE);
-	else SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",TRUE);
-		
-	if (guildname != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",TRUE);
 	
@@ -29,7 +31,7 @@ void main()
 	string sGuildToken;
 	
 	SQLExecDirect("SELECT GuildToken, GuildAccess FROM guildstorage" +
-	             " WHERE StoreType = 'CRAFTBANK' AND Guild='"+SQLEncodeSpecialChars(GetLocalString(oPC,"kemo_storage_mode_guildname"))+"' ORDER BY GuildAccess DESC");
+	             " WHERE StoreType = 'CRAFTBANK' AND Guild='"+GetLocalString(oPC,"kemo_storage_mode_guildname")+"' ORDER BY GuildAccess DESC");
 
 	while (SQLFetch())
 	{
@@ -38,39 +40,27 @@ void main()
 	
 	if (GetItemPossessedBy(oPC,sGuildToken)!= OBJECT_INVALID && iGuildAccess >= 6)
 	{
-		if(GetLocalInt(oPC,"RetrieveDelay") == 0) SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",FALSE);
-		else SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",TRUE);
+	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",FALSE);
 	}
 	
 	}
-	
 	sDB = GetGuildID(oPC,GetLocalString(oPC,"kemo_storage_mode_guildname"));
 	}
-	else sDB = GetPCID(oPC);
 	
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonA",FALSE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonB",TRUE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","FilterPane",FALSE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","PagePane",FALSE);
 	SetGUIObjectText(oPC,"KEMO_STORAGE","RetrieveButton",-1,"Retrieve");
-	
-	if(GetLocalInt(oPC,"PageDelay") == 0)
-	{	
-		SetGUIObjectHidden(oPC,"KEMO_STORAGE","PageIncreaseButton",FALSE);
-		SetGUIObjectHidden(oPC,"KEMO_STORAGE","PageDecreaseButton",FALSE);
-	}
-	else
-	{	
-		SetGUIObjectHidden(oPC,"KEMO_STORAGE","PageIncreaseButton",TRUE);
-		SetGUIObjectHidden(oPC,"KEMO_STORAGE","PageDecreaseButton",TRUE);
-	}
+	SetGUIObjectHidden(oPC,"KEMO_STORAGE","PageIncreaseButton",FALSE);
+	SetGUIObjectHidden(oPC,"KEMO_STORAGE","PageDecreaseButton",FALSE);
 	
 	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
 	
 	int iListTotal = GetStorageListTotal(sDB, oPC);
 	string sQuery;
 	
-	if (GetLocalString(oPC, "kemo_storage_mode") != "retrieve" )
+	if ( GetLocalString(oPC, "kemo_storage_mode") != "retrieve" )
 	{
 		SetLocalInt(oPC, "kemo_storage_page", 1);
 		SetLocalString(oPC, "kemo_storage_mode", "retrieve");
@@ -86,38 +76,35 @@ void main()
 	int lastItem = page * 25; // last item in current page
 	int firstItem = lastItem - 25; // first item in current page
 
-	if (sFilter != "") sQuery="SELECT itemid, itemname, icon, stacksize FROM new_storage where storageid='"+sDB+"'"
-	+" and itemname LIKE '%"+SQLEncodeSpecialChars(sFilter)+"%' limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
-	else sQuery = "SELECT itemid, itemname, icon, stacksize FROM new_storage where storageid='"+sDB+"'"+
+	sQuery = "SELECT itemid, itemname, icon FROM new_storage where storageid='"+sDB+"'"+
 	" limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
 	
-	if (guildname != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
-		if (sFilter != "") sQuery="SELECT itemid, itemname, icon, stacksize FROM new_storage_guildstorage where storageid='"+sDB+"'"
-			+" and itemname LIKE '%"+SQLEncodeSpecialChars(sFilter)+"%' limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
-		else sQuery = "SELECT itemid, itemname, icon, stacksize FROM new_storage_guildstorage where storageid='"+sDB+"'"+
-			" limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
+	sQuery = "SELECT itemid, itemname, icon FROM new_storage_guildstorage where storageid='"+sDB+"'"+
+	" limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
 	}
 	
-		
+	if (sFilter != "") sQuery="SELECT itemid, itemname, icon FROM new_storage where storageid='"+sDB+"'"
+	+" and itemname LIKE '%"+SQLEncodeSpecialChars(sFilter)+"%' limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
+	
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	{
+	if (sFilter != "") sQuery="SELECT itemid, itemname, icon FROM cmnsee_storage_guildstorage where storageid='"+sDB+"'"
+	+" and itemname LIKE '%"+SQLEncodeSpecialChars(sFilter)+"%' limit "+IntToString(firstItem)+","+IntToString(lastItem)+";";
+	}
+	
 	SQLExecDirect(sQuery);
 
 	iCounter = 0;
 	
-	string itemname; string stacksize;
-	
 	while (SQLFetch())
 	{
-	itemname = SQLGetData(2);
-	stacksize = SQLGetData(4);
-	
-	if(StringToInt(stacksize) > 1) itemname = itemname + " ("+stacksize+")";
-	
 	AddListBoxRow( oPC,
 	"KEMO_STORAGE",
 	"KEMO_STORAGE_RETRIEVE",
 	"RetrieveRow"+IntToString(iCounter),
-	"RetrievePaneName="+itemname+";",
+	"RetrievePaneName="+SQLGetData(2)+";",
 	"RetrievePaneIcon="+SQLGetData(3)+";",
 	"5=" +SQLGetData(1),
 	"");

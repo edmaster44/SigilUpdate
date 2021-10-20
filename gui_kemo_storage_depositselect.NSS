@@ -1,8 +1,5 @@
 #include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
-#include "ps_inc_time"
-
-
 
 object GetItemFromList(object oPC, string sItemNumber)
 {
@@ -35,49 +32,39 @@ int CheckTag(object oItem)
 	else return TRUE;
 }
 
-void ClearForNextItem(object oPC)
-{
-	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonB",FALSE);
-	DeleteLocalInt(oPC,"DepositDelay");
-}
-
 void main (string sItemNumber)
 {
 	object oPC = OBJECT_SELF;
 	string sQuery;
 	WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
 
-	if(GetLocalInt(oPC,"DepositDelay") == 1)
-	{
-		SendMessageToPC(oPC,"You must wait before depositing the next item.");
-		return;
-	}
-	
-	SetLocalInt(oPC,"DepositDelay",1);
-	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonB",TRUE);
-
-	string timerid = IntToString(Random(5000));	
-	//TimerStart(timerid);
-		
 	object oItem = GetItemFromList(oPC, sItemNumber); //find the sale item from the list
 	if (!GetIsObjectValid(oItem)) return;
-	
-	itemproperty iProp = GetFirstItemProperty(oItem);
-	while(GetIsItemPropertyValid(iProp))
-	{
-	if(GetItemPropertyDurationType(iProp) == DURATION_TYPE_TEMPORARY)
-	{
-		RemoveItemProperty(oItem,iProp);
-		SendMessageToPC(oPC,"Removed temporary item property from that item!");
-	}
-	iProp = GetNextItemProperty(oItem);
-	}
-	
 	string sDB;
-	string guildname = GetLocalString(oPC,"kemo_storage_mode_guildname");
 
-	if (guildname == "") sDB = GetPCID(oPC);
-	else sDB = GetGuildID(oPC, guildname);
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	{
+	sDB = GetPCID(oPC);
+	sQuery="SELECT itemid + 1 available_id FROM new_storage t WHERE storageid='"+sDB+"'"+
+	" and NOT EXISTS(SELECT * FROM new_storage WHERE itemid = t.itemid + 1 and"+
+	" storageid = '"+sDB+"') ORDER BY itemid LIMIT 1";
+	}
+	
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	{
+	sDB = GetGuildID(oPC, GetLocalString(oPC,"kemo_storage_mode_guildname"));
+	sQuery="SELECT itemid + 1 available_id FROM new_storage_guildstorage t WHERE storageid='"+sDB+"'"+
+	" and NOT EXISTS(SELECT * FROM new_storage_guildstorage WHERE itemid = t.itemid + 1 and"+
+	" storageid = '"+sDB+"') ORDER BY itemid LIMIT 1";
+	}
+	
+	//find the first available sales slot
+	int iCounter = 1;
+
+	SQLExecDirect(sQuery); SQLFetch();
+	string availnum = SQLGetData(1);
+
+	if (availnum != "") iCounter = StringToInt(availnum);
 
 	string sItemName = GetName(oItem);
 
@@ -85,14 +72,18 @@ void main (string sItemNumber)
 	{
 		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit items with semicolons in their names.");
-		/*TimerDelete(timerid); */ClearForNextItem(oPC);
 		return;		
 	}
 	else if (!CheckTag(oItem)) //checks for forbidden items, prevents listing
 	{
 		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit this item.");
-		/*TimerDelete(timerid); */ ClearForNextItem(oPC);
+		return;		
+	}
+	else if (iCounter > 1000) //checks if storage full
+	{
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		SendMessageToPC(oPC,"Your storage is full. You can't store more.");
 		return;		
 	}
 	else
@@ -100,43 +91,41 @@ void main (string sItemNumber)
 		string sStackSize = IntToString(GetNumStackedItems(oItem));
 		string sIcon = GetStorageItemIcon(oItem);
 		int sCategory = GetBaseItemType(oItem);
+
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	{
+	sQuery = "INSERT INTO new_storage VALUES ('"+sDB+"', '"+IntToString(iCounter)+"', '"+SQLEncodeSpecialChars(sItemName)+"', "+
+	" '"+sStackSize+"', '"+sIcon+"', '"+SQLEncodeSpecialChars(IntToString(sCategory))+"', %s);";
+	}
 	
-		string name = SQLEncodeSpecialChars(GetName(oPC));
-		string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-		string cdkey = SQLEncodeSpecialChars(GetPCPublicCDKey(oPC));
-		string ipaddress = SQLEncodeSpecialChars(GetPCIPAddress(oPC));	
-			
-		if (guildname == "") sQuery = "INSERT INTO new_storage (`storageid`,`itemname`,`stacksize`,`icon`,`category`,`campaignstring`) VALUES ('"+sDB+"', '"+SQLEncodeSpecialChars(sItemName)+"', "+
-		" '"+sStackSize+"', '"+sIcon+"', '"+SQLEncodeSpecialChars(IntToString(sCategory))+"', %s);";
-		else sQuery = "INSERT INTO new_storage_guildstorage (`storageid`,`itemname`,`stacksize`,`icon`,`category`,`campaignstring`,`depositedby`,`act`,`cdkey`,`ipaddress`) VALUES ('"+sDB+"', '"+SQLEncodeSpecialChars(sItemName)+"', "+
-		" '"+sStackSize+"', '"+sIcon+"', '"+SQLEncodeSpecialChars(IntToString(sCategory))+"', %s, '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
-		
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+	string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	string cdkey = SQLEncodeSpecialChars(GetPCPublicCDKey(oPC));
+	string ipaddress = SQLEncodeSpecialChars(GetPCIPAddress(oPC));
+	
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	{
+	sQuery = "INSERT INTO new_storage_guildstorage VALUES ('"+sDB+"', '"+IntToString(iCounter)+"', '"+SQLEncodeSpecialChars(sItemName)+"', "+
+	" '"+sStackSize+"', '"+sIcon+"', '"+SQLEncodeSpecialChars(IntToString(sCategory))+"', %s, '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
+	}
+
 		SQLSCORCOExec(sQuery);
 		SQLStoreObject(oItem);
-		//BarcodeScan(oPC,oItem,"bankdeposited",sDB);
 		DestroyObject(oItem);
+		
+		sQuery = "INSERT INTO new_storage_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
+	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
 	
-		if (guildname != "") sQuery = "INSERT INTO new_storage_guild_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
-		" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
-		else sQuery = "INSERT INTO new_storage_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
-		" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	{
+		sQuery = "INSERT INTO new_storage_guild_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
+	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
+	}
 	
 		SQLExecDirect(sQuery);	
 			
-		int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = PS_GetTimestamp_Age_Seconds(oPC,timerid);
-		if (uTime + 10 > iTime || iTime == 0)
-		{
-			ExportSingleCharacter(oPC);
-			SetLocalInt(oPC,"STOREDELAY",uTime+10);
-		}
-			
 		// if a new last sales slot, add to the total number of sales slots
-		//if (GetCampaignInt(sDB,"StorageListTotal") < iCounter) SetCampaignInt(sDB,"StorageListTotal",iCounter);
+		if (GetCampaignInt(sDB,"StorageListTotal") < iCounter) SetCampaignInt(sDB,"StorageListTotal",iCounter);
 		DelayCommand(1.0f,ExecuteScript("gui_kemo_storage_deposit",oPC));
-		
-		int time = PS_GetTimestamp_Age_Seconds(oPC,timerid);
-		
-		SendMessageToPC(oPC,"<I>Depositing the item took . . "+FloatToString(time / 1000.0)+" seconds.");
-		//TimerDelete(timerid);
-}
-}
+	}
+}	

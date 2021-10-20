@@ -1,8 +1,6 @@
 #include "ginc_param_const"
 #include "nwnx_sql"
 
-
-
 string GetStorageItemIcon(object oItem)
 {
 	string sIcon = Get2DAString("nwn2_icons","ICON",GetItemIcon(oItem));
@@ -152,7 +150,7 @@ string GetGuildID(object oPC, string guild)
 int GetGuildAccessLevel(object oPC, string guild)
 {
 	SQLExecDirect("SELECT GuildToken, GuildAccess FROM guildstorage" +
-	             " WHERE StoreType = 'CRAFTBANK' AND Guild='"+SQLEncodeSpecialChars(guild)+"' ORDER BY GuildAccess DESC");
+	             " WHERE StoreType = 'CRAFTBANK' AND Guild='"+guild+"' ORDER BY GuildAccess DESC");
 	SQLFetch();
 	int iGuildAccess;
 	string sGuildToken;
