@@ -36,7 +36,7 @@ void main()
 	int iCounter = 0; string sCounter;
 
 	if (GetDistanceToObject(GetNearestObjectByTag("kemo_storage_teller")) > 3.0f)
-	{	KEMONotify(oPC,"You are too far away from teller.");
+	{	SendMessageToPC(oPC,"You are too far away from teller.");
 		return;
 	}
 
