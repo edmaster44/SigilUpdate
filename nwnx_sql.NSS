@@ -1,7 +1,9 @@
 // Name     : NWNX SQL include
+// Version  : 1.10-dev49
 // Purpose  : Scripting functions for NWNX SQL plugins
 // Author   : Ingmar Stieger
-// Modified : 09/12/2006
+// Author   : virusman
+// Modified : 16 Nov 2008
 // Copyright: This file is licensed under the terms of the
 //            GNU GENERAL PUBLIC LICENSE (GPL) Version 2
 //            Based on aps_include by Ingmar Stieger, Adam Colon, Josh Simon
@@ -17,8 +19,15 @@ const int SQL_SUCCESS = 1;
 /* Function prototypes              */
 /************************************/
 
+// Create the SQL tables required for the SetPersistentXXX and
+// GetPersistentXXX functions, if they don't already exist. You can call this
+// function in the OnModuleLoad script.
+void SQLCreateTables();
+
 // Execute statement in sSQL
-void SQLExecDirect(string sSQL);
+// returns: SQL_SUCCESS if the query was successful
+//          SQL_ERROR if an error has occurred
+int SQLExecDirect(string sSQL);
 
 // Position cursor on next row of the resultset
 // Call this before using SQLGetData().
@@ -33,15 +42,26 @@ int SQLFetch(string mode = " ");
 // Maximum column size: 65KByte
 string SQLGetData(int iCol);
 
+int SQLGetDataInt(int iCol){        return StringToInt(SQLGetData(iCol));   }
+float SQLGetDataFloat(int iCol){    return StringToFloat(SQLGetData(iCol)); }
+
 // Deprecated.
 // Return value of column iCol in the current row of result set sResultSetName
 // Maximum column size: 65KByte
 // Only for compability reasons. Use SQLGetData instead.
 string SQLGetDataText(int iCol);
 
-// Return the number of rows that were affected by the last 
+// Return the number of rows that were affected by the last
 // INSERT, UPDATE, or DELETE operation.
 int SQLGetAffectedRows();
+
+// Return the error code for the most recently invoked API function that can succeed or fail.
+// A return value of zero means that no error occurred.
+// Client error message numbers are listed in nwnx_mysql_errors.nss
+int SQLGetErrno();
+
+// Return a string containing the error message for the most recently invoked API function that failed
+string SQLGetErrorMessage();
 
 // Return a string value when given a location
 string SQLLocationToString(location lLocation);
@@ -97,7 +117,7 @@ void SetPersistentVector(object oObject, string sVarName, vector vVector, int iE
 //   iExpiration: Number of days the persistent variable should be kept in database (default: 0=forever)
 //   sTable: Name of the table where variable should be stored (default: pwobjdata)
 void SetPersistentObject(object oObject, string sVarName, object oObject2, int iExpiration =
-                         0, string sTable = "pwobjdata", int guildmode = 0);
+                         0, string sTable = "pwobjdata");
 
 // Get oObject's persistent string variable sVarName
 // Optional parameters:
@@ -156,9 +176,58 @@ object SQLRetrieveObject(location lLocation, object oOwner = OBJECT_INVALID, str
 /* Implementation                   */
 /************************************/
 
-void SQLExecDirect(string sSQL)
+void SQLCreateTables(){
+    string sSubClass = NWNXGetString("SQL", "GET SUBCLASS", "", 0);
+
+    if(sSubClass == "MySQL"){
+        SQLExecDirect("CREATE TABLE IF NOT EXISTS `pwdata` ("
+            + "  `player` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `tag` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `name` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `val` text DEFAULT NULL,"
+            + "  `expire` int(11) DEFAULT NULL,"
+            + "  `last` timestamp NOT NULL DEFAULT current_timestamp(),"
+            + "  PRIMARY KEY (`player`,`tag`,`name`)"
+            + ") ENGINE=MyISAM DEFAULT CHARSET=utf8"
+        );
+        SQLExecDirect("CREATE TABLE IF NOT EXISTS `pwobjdata` ("
+            + "  `player` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `tag` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `name` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `val` blob DEFAULT NULL,"
+            + "  `expire` int(11) DEFAULT NULL,"
+            + "  `last` timestamp NOT NULL DEFAULT current_timestamp(),"
+            + "  PRIMARY KEY (`player`,`tag`,`name`)"
+            + ") ENGINE=MyISAM DEFAULT CHARSET=utf8"
+        );
+    }
+    else if(sSubClass == "SQLite"){
+        SQLExecDirect("CREATE TABLE IF NOT EXISTS `pwdata` ("
+            + "  `player` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `tag` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `name` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `val` text DEFAULT NULL,"
+            + "  `expire` int(11) DEFAULT NULL,"
+            + "  `last` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+            + "  PRIMARY KEY (`player`,`tag`,`name`)"
+            + ")"
+        );
+        SQLExecDirect("CREATE TABLE IF NOT EXISTS `pwobjdata` ("
+            + "  `player` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `tag` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `name` varchar(64) NOT NULL DEFAULT '~',"
+            + "  `val` blob DEFAULT NULL,"
+            + "  `expire` int(11) DEFAULT NULL,"
+            + "  `last` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+            + "  PRIMARY KEY (`player`,`tag`,`name`)"
+            + ")"
+        );
+    }
+}
+
+int SQLExecDirect(string sSQL)
 {
-    NWNXSetString("SQL", "EXEC", sSQL, 0, "");
+    return NWNXGetInt("SQL", "EXEC", sSQL, 0);
 }
 
 int SQLFetch(string mode = " ")
@@ -181,6 +250,16 @@ int SQLGetAffectedRows()
     return NWNXGetInt("SQL", "GET AFFECTED ROWS", "", 0);
 }
 
+int SQLGetErrno()
+{
+    return NWNXGetInt("SQL", "GET AFFECTED ROWS", "", 0);
+}
+
+string SQLGetErrorMessage()
+{
+    return NWNXGetString("SQL", "GET ERROR MESSAGE", "", 0);
+}
+
 void SQLSCORCOExec(string sSQL)
 {
     NWNXSetString("SQL", "SETSCORCOSQL", sSQL, 0, "");
@@ -197,7 +276,7 @@ object SQLRetrieveObject(location lLocation, object oOwner = OBJECT_INVALID, str
 }
 
 // These functions deal with various data types. Ultimately, all NWN specific
-// information must be stored in the database as strings, and converted back to 
+// information must be stored in the database as strings, and converted back to
 // the proper form when retrieved.
 
 string SQLVectorToString(vector vVector)
@@ -312,7 +391,7 @@ void SetPersistentString(object oObject, string sVarName, string sValue, int iEx
     string sSQL = "SELECT player FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
     SQLExecDirect(sSQL);
-    
+
     if (SQLFetch() == SQL_SUCCESS)
     {
         // row exists
@@ -351,7 +430,6 @@ string GetPersistentString(object oObject, string sVarName, string sTable = "pwd
 
     string sSQL = "SELECT val FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-        
     SQLExecDirect(sSQL);
 
     if (SQLFetch() == SQL_SUCCESS)
@@ -459,17 +537,12 @@ vector GetPersistentVector(object oObject, string sVarName, string sTable = "pwd
 }
 
 void SetPersistentObject(object oOwner, string sVarName, object oObject, int iExpiration =
-                         0, string sTable = "pwobjdata", int guildmode = 0)
+                         0, string sTable = "pwobjdata")
 {
     string sPlayer;
     string sTag;
 
-    if(guildmode == 1)
-    {
-        sPlayer = "~";
-        sTag = SQLEncodeSpecialChars(GetLocalString(oOwner,"ListingGuild"));
-    }
-    else if (GetIsPC(oOwner))
+    if (GetIsPC(oOwner))
     {
         sPlayer = SQLEncodeSpecialChars(GetPCPlayerName(oOwner));
         sTag = SQLEncodeSpecialChars(GetName(oOwner));
@@ -499,7 +572,7 @@ void SetPersistentObject(object oOwner, string sVarName, object oObject, int iEx
         sSQL = "INSERT INTO " + sTable + " (player,tag,name,val,expire) VALUES" +
             "('" + sPlayer + "','" + sTag + "','" + sVarName + "',%s," + IntToString(iExpiration) + ")";
         SQLSCORCOExec(sSQL);
-        SQLStoreObject (oObject);
+        SQLStoreObject(oObject);
     }
 }
 
@@ -527,7 +600,7 @@ object GetPersistentObject(object oObject, string sVarName, object oOwner = OBJE
 
     if (!GetIsObjectValid(oOwner))
         oOwner = oObject;
-    return SQLRetrieveObject (GetLocation(oOwner), oOwner);
+    return SQLRetrieveObject(GetLocation(oOwner), oOwner);
 }
 
 void DeletePersistentVariable(object oObject, string sVarName, string sTable = "pwdata")
@@ -555,7 +628,6 @@ void DeletePersistentVariable(object oObject, string sVarName, string sTable = "
 // Problems can arise with SQL commands if variables or values have single quotes
 // in their names. This function encodes these quotes so the underlying database
 // can safely store them.
-
 string SQLEncodeSpecialChars(string sString)
 {
     return NWNXGetString("SQL", "GET ESCAPE STRING", sString, 0);
