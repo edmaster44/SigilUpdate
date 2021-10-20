@@ -9,7 +9,7 @@
 				+ "_" + GetSubString(GetFirstName(oPC), 0, 6)
 				+ "_" + GetSubString(GetLastName(oPC), 0, 9);
 }*/
-int CheckName(object oPC, string sGuild)
+/*int CheckName(object oPC, string sGuild)
 {
 	int nCount = 1;
 
@@ -101,7 +101,7 @@ void GuildStorage(object oPC)
 	SetLocalString(oPC, "kemo_storage_mode_guild","yes");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,"Please select which guild.");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","RetrieveButton",-1,"Select guild.");
-}
+}*/
 void main()
 {
 	object oPC = GetPCSpeaker();
