@@ -1,6 +1,8 @@
 // called from kemo_storage_conv
 #include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
+#include "gui_new_storage"
+
 
 
 /*string GetPCID(object oPC)
@@ -107,6 +109,7 @@ void main()
 	object oPC = GetPCSpeaker();
 	SendMessageToPC(oPC,"Opening Kemo Storage" );
 	DisplayGuiScreen(oPC,"STORAGE_NEW",FALSE,"storage_new.xml");
+	GuildStorage(oPC);
 
 	/*object oPC = GetPCSpeaker();
 	string sDB = GetPCID(oPC) + "_storage";
