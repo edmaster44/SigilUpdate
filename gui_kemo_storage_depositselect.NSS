@@ -37,13 +37,13 @@ void main (string sItemNumber)
 	string sQuery;
 	//WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
 
-	if(GetLocalInt(oPC,"DepositDelay") == 1)
+	/*if(GetLocalInt(oPC,"DepositDelay") == 1)
 	{
 		SendMessageToPC(oPC,"You must wait before depositing the next item.");
 		return;
 	}
 	
-	SetLocalInt(oPC,"DepositDelay",1);
+	SetLocalInt(oPC,"DepositDelay",1); */
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonB",TRUE);
 
 	object oItem = GetItemFromList(oPC, sItemNumber); //find the sale item from the list
