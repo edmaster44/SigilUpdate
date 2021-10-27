@@ -35,13 +35,8 @@ void main(string sItemNumber)
 	}
 	}
 	
-	if(GetLocalInt(oPC,"RetrieveDelay") == 1)
-	{
-		SendMessageToPC(oPC,"You must wait before retrieving the next item.");
-		return;
-	}
-	
-	SetLocalInt(oPC,"RetrieveDelay",1);
+
+
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",TRUE);	
 
 
@@ -49,7 +44,7 @@ void main(string sItemNumber)
 	if (guildname == "")
 	{	
 		sDB = GetPCID(oPC);
-		sQuery = "SELECT itemname FROM cmnsee_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
+		sQuery = "SELECT itemname FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 		SQLExecDirect(sQuery); SQLFetch();
 		stillexists = SQLGetData(1);
 	
@@ -59,12 +54,12 @@ void main(string sItemNumber)
 		ExecuteScript("gui_kemo_storage_list",oPC);		
 		return;
 	}
-	sQuery = "SELECT campaignstring FROM cmnsee_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
+	sQuery = "SELECT campaignstring FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	}
 	else
 	{
 		sDB = GetGuildID(oPC, guildname);
-		sQuery = "SELECT itemname FROM cmnsee_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
+		sQuery = "SELECT itemname FROM new_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 		SQLExecDirect(sQuery); SQLFetch();
 		stillexists = SQLGetData(1);
 	
@@ -74,7 +69,7 @@ void main(string sItemNumber)
 		ExecuteScript("gui_kemo_storage_list",oPC);		
 		return;
 	}	
-		sQuery = "SELECT campaignstring FROM cmnsee_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
+		sQuery = "SELECT campaignstring FROM new_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	}
 	
 	SQLSCORCOExec(sQuery);
@@ -90,18 +85,7 @@ void main(string sItemNumber)
 	
 	object oStorageCopy = CopyItem(oStorageItem,oPC,1);
 	
-	if(GetName(oStorageCopy) == "Veteran Token")
-	{
-		CreateItemOnObject("cmnsee_vet_tokens",oPC,StringToInt(sStackSize));
-		DestroyObject(oStorageCopy);
-	}
-	
-	if(GetName(oStorageCopy) == "Event Token")
-	{
-		CreateItemOnObject("cmnsee_event_token",oPC,StringToInt(sStackSize));
-		DestroyObject(oStorageCopy);
-	}	
-	
+
 	DestroyObject(oStorageItem);
 	
 	itemproperty iProp = GetFirstItemProperty(oStorageCopy);
