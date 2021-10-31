@@ -84,7 +84,7 @@ string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable 
 		nTreasureLevel = TREASURE_HIGH;
 		nMax = GetMaxItemsInDatabaseTable(sTable, nTreasureLevel, sSubTable, nCombineLevels);
 	}
-	int nRandom = Random(nMax) + 1;
+	int nRandom = Random(nMax);
 	
 	string sQuery = "SELECT resref FROM "+sTable+" WHERE ";
 	if (nCombineLevels) 
