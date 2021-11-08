@@ -1,4 +1,4 @@
-#include "nwnx_sql"
+/*#include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
 

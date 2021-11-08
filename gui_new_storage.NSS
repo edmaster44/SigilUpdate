@@ -1,4 +1,4 @@
-#include "nwnx_sql"
+/*#include "nwnx_sql"
 #include "ps_inc_time"
 
 
@@ -542,7 +542,7 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 			SendMessageToPC(oPC,"<I>Lag detected on depositing... slowing down deposits...");
 			DelayCommand(5.0 + ((time / 1000) * 2.0),ClearForNextItem(oPC));
 		}*/
-	/*	else DelayCommand(1.5 + (time / 1000),*/(ClearForNextItem(oPC)); 
+	/*	else DelayCommand(1.5 + (time / 1000),(ClearForNextItem(oPC)); 
 		
 		GetRecentlyStoredItems(oPC);
 	}
@@ -683,7 +683,7 @@ void ProcessBag(object oPC, object oTarget)
 			TimerDelete(timerid);		
 			ClearForNextItem(oPC,2);
 			return;
-		}*/
+		}
 		
 		iCount++;// TimerDelete(timerid);
 		oItem = GetNextItemInInventory(oTarget);
@@ -801,7 +801,7 @@ void AttemptToRetrieveObject(object oPC, object oStorageItem, string sDB, string
 	{
 		CreateItemOnObject("cmnsee_event_token",oPC,StringToInt(sStackSize));
 		DestroyObject(oStorageCopy);
-	}	*/
+	}	
 	
 	object oStorageCopyNew = CopyItem(oStorageCopy,oPC,1);
 	sItemName = GetName(oStorageCopyNew);
@@ -854,7 +854,7 @@ void AttemptToRetrieveObject(object oPC, object oStorageItem, string sDB, string
 	{
 		SendMessageToPC(oPC,"<I>Lag detected on retrieving... slowing down retrievals...");
 		DelayCommand(5.0 + ((time / 1000) * 2.0),ClearForNextItem(oPC,1));
-	} */
+	} 
 //	else DelayCommand(time / 1000,ClearForNextItem(oPC,1));
 	
 	RemoveListBoxRow(oPC,SCREENNAME,"TUTORIAL_LISTBOX",sRow);
