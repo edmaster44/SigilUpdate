@@ -194,6 +194,7 @@ void RestFinish(object oPC)
 	
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
+	DoPsyFeatProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
 	

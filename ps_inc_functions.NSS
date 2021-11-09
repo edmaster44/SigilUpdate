@@ -4429,7 +4429,10 @@ if (iPsy >= 15  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
 FeatAdd(oPC,1197,FALSE,FALSE,FALSE);//Greater Weapon Specialization, Creature
 
 }
-
+if (iPsy >= 20 )
+{
+FeatAdd(oPC,21477,FALSE,FALSE,FALSE);//Eternal Warrior
+}
 
 }
 
