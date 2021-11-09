@@ -38,6 +38,7 @@ int SPELL_ELEMENTAL_TRAP_LIGHTNING = 6005;
 
 float TRAP_RADIUS = 3.0f;
 int STURDY_TRAP_ADJUSTMENT = 2;
+int TRAP_DUR = 10;
 
 //Get the Craft Trap adjusted damage dice
 int GetSkillAdjustedTrapDamageDice(int nBaseDice, object oCaster, int nDivisor);

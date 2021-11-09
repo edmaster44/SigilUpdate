@@ -23,7 +23,7 @@ void main()
 	int nSetDC = 24;
 	
     location lTarget = GetSpellTargetLocation();
-    int nDuration = 5;
+    int nDuration = TRAP_DUR;
 	// Roll Set Trap Check
 	if (GetIsSkillSuccessful(oCaster, SKILL_SET_TRAP, nSetDC)) {
 	    //Create an instance of the AOE Object using the Apply Effect function
