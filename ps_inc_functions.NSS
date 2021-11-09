@@ -4381,6 +4381,58 @@ FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
 
 }
 
+void DoPsyFeatProgression(object oPC)
+{
+
+
+int iPsy = PsyWarLevels(oPC);
+if (iPsy >= 1  && GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+{FeatAdd(oPC,21079,FALSE,FALSE,FALSE);//Chameleon
+FeatAdd(oPC,21003,FALSE,FALSE,FALSE);//Coneal Thought
+FeatAdd(oPC,21011,FALSE,FALSE,FALSE);//Dissipating Touch
+}
+if (iPsy >= 9  && GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+{
+FeatAdd(oPC,21472,FALSE,FALSE,FALSE);//Shadow Play
+}
+
+
+
+if (iPsy >= 1  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,21027,FALSE,FALSE,FALSE);//Vigor
+}
+
+if (iPsy >= 3  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,289,FALSE,FALSE,FALSE);//Weapon Prof. Creature
+FeatAdd(oPC,291,FALSE,FALSE,FALSE);//Weapon Focus. Creature
+}
+
+if (iPsy >= 5  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,290,FALSE,FALSE,FALSE);//Weapon creature, Specialization
+
+}
+if (iPsy >= 7  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,1157,FALSE,FALSE,FALSE);//Greater Weapon Focus, Creature
+
+}
+if (iPsy >= 14  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,1383,FALSE,FALSE,FALSE);//Power Critical, Creature
+
+}
+if (iPsy >= 15  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,1197,FALSE,FALSE,FALSE);//Greater Weapon Specialization, Creature
+
+}
+
+
+}
+
 //Counts levels in low bab arcane classes
 int GetPureMageLevels(object oPC)
 {

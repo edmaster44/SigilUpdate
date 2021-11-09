@@ -320,6 +320,7 @@ void main()
 	DoPsiProgression(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
+	DoPsyFeatProgression(oPC);
 	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
