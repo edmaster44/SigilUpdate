@@ -67,7 +67,7 @@ void main()
 		            }
 				}
 				//Get next target in the sequence
-                oTarget = GetNextObjectInShape(SHAPE_SPHERE, 2.5f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+                oTarget = GetNextObjectInShape(SHAPE_SPHERE, TRAP_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 			}
             DestroyObject(OBJECT_SELF, 1.0);
         }

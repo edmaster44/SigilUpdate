@@ -46,7 +46,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_FLASH_TRAP));
 			
 			ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eDetVis, lTarget);
-			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, TRAP_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS)){
@@ -55,7 +55,7 @@ void main()
 					}
 				}
 				//Get next target in the sequence
-                oTarget = GetNextObjectInShape(SHAPE_SPHERE, 2.5f, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+                oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 			}
             DestroyObject(OBJECT_SELF, 1.0);
         }
