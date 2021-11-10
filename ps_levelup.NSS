@@ -62,6 +62,14 @@ void CheckDragonBreath(object oPC, object oItem)
 	FeatRemove(oPC, 964);
 }
 
+void AddEPForDeathDice(object oPC)
+{
+		if (GetHasFeat(459,oPC))
+		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
+
+
+}
+
 // "level up" of creature weapons.
 // initial thought was to this based off creature weapon as defined in racialsubtypes.2da
 // however, we have option of removing creature weapons, so we don't want this to happen if people
@@ -318,6 +326,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
+	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	DoPsyFeatProgression(oPC);

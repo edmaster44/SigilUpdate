@@ -20,6 +20,13 @@ void DismissSpellHenchmen(object oPC) {
 		
 	}
 }
+void AddEPForDeathDice(object oPC)
+{
+		if (GetHasFeat(459,oPC))
+		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
+
+
+}
 
 int HasToWipeAbilities(object oPC, object oEssence)
 {
@@ -191,7 +198,7 @@ void RestFinish(object oPC)
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}
-	
+	AddEPForDeathDice(oPC);
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
 	DoPsyFeatProgression(oPC);
