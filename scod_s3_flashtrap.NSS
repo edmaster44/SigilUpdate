@@ -20,7 +20,7 @@ void main()
    //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_TRAPVIS, "scod_s3_flashtrap_onenter");
 	object oCaster = OBJECT_SELF;
-	int nSetDC = 21;
+	int nSetDC = GetAdjustedSetDC(21, oCaster);
 	
     location lTarget = GetSpellTargetLocation();
     int nDuration = TRAP_DUR;
@@ -28,5 +28,6 @@ void main()
 	if (GetIsSkillSuccessful(oCaster, SKILL_SET_TRAP, nSetDC)) {
 	    //Create an instance of the AOE Object using the Apply Effect function
     	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
+		ApplyTrapInvisibility(oCaster, nSetDC);
 	}
 }

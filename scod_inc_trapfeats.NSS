@@ -55,6 +55,11 @@ int GetATTrapAbilityModifier(object oCaster);
 // Get the levels the caster has in either Arcane Trickster or Arcane Trickster-Warlock
 int GetArcaneTricksterLevels(object oCaster);
 
+// Get the DC to set the trap
+int GetAdjustedSetDC(int nBaseDC, object oCaster);
+
+void ApplyTrapInvisibility(object oCaster, int nDC);
+
 int GetSkillAdjustedTrapDamageDice(int nBaseDice, object oCaster, int nDivisor) {
 	int nCraftTrap = GetSkillRank(SKILL_CRAFT_TRAP, oCaster, FALSE);
 	return nBaseDice + (nCraftTrap / nDivisor);
@@ -96,4 +101,23 @@ int GetArcaneTricksterLevels(object oCaster) {
 		nLevels = GetLevelByClass(83, oCaster);
 	}
 	return nLevels;
+}
+
+int GetAdjustedSetDC(int nBaseDC, object oCaster) {
+	int nFinalDC = nBaseDC;
+	// If the caster has Skill Mastery, reduce the DC by 4
+	if (GetHasFeat(FEAT_SKILL_MASTERY, oCaster)) {
+		nFinalDC = nFinalDC - 4;
+	}
+	return nFinalDC;
+}
+
+void ApplyTrapInvisibility(object oCaster, int nDC) {
+	int nHideSuccess = GetIsSkillSuccessful(oCaster, SKILL_HIDE, nDC, FALSE);
+	int nMSSuccess = GetIsSkillSuccessful(oCaster, SKILL_MOVE_SILENTLY, nDC, FALSE);
+	if (nHideSuccess + nMSSuccess == 2) {
+		effect eInvis = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
+		effect eLink = EffectLinkEffects(eInvis, EffectVisualEffect(VFX_DUR_INVISIBILITY));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, 9.0f);
+	}
 }
