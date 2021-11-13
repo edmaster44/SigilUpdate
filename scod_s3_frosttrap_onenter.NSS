@@ -3,7 +3,10 @@
 //:: scod_s3_frosttrap_onenter.nss
 //:://////////////////////////////////////////////
 /*
-    TODO
+    When triggered, all hostiles in the area of effect receive 6d8 points of frost damage and are level drained one 
+	level per 2 Arcane Trickster levels (minimum of 1). A successful Fortitude save (DC 18) negates the level drain. 
+	The damage and DC of the trap are increased by the Craft Trap skill at a rate of +1d8 damage per 4 points 
+	and +1 DC per 5 points. The DC is further increased by the users casting attribute modifier.
 */
 //:://////////////////////////////////////////////
 //:: Created By: SingerFromTheMist

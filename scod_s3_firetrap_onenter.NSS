@@ -3,7 +3,11 @@
 //:: scod_s3_firetrap_onenter.nss
 //:://////////////////////////////////////////////
 /*
-    TODO
+    When triggered, all hostiles in the area of effect receive 10d8 points of fire damage and are knockeddown for one
+	round. A successful reflex save (DC 18) reduces the damage by half and negates the knockdown. The knockdown 
+	duration is increased by one round per five levels of Arcane Trickster (for a maxium of 3 rounds). 
+	The damage and DC of the trap are increased by the Craft Trap skill at a rate of +1d8 damage per 2 points 
+	and +1 DC per 5 points. The DC is further increased by the users casting attribute modifier.
 */
 //:://////////////////////////////////////////////
 //:: Created By: SingerFromTheMist
