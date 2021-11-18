@@ -16,7 +16,7 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
-/*void StackingEquipmentBugFix(object oPC) {
+void StackingEquipmentBugFix(object oPC) {
 
 	//In case we are somewhere unsafe, make me ethereal. Also give temporary stat boosts while gear is being removed
 	effect eSanctuary = EffectEthereal();
@@ -95,7 +95,7 @@ const int nDailyXPlevel = 100;
 		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTRING)));
 	}
 
-}*/
+}
 
 void GiveStartingGold( object oPC, int nAmount )
 {
@@ -536,7 +536,7 @@ void main()
 		PS_ApplyPCWings(oPC);
 	}
 	
-//	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
+	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
