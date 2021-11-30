@@ -835,6 +835,131 @@ void EquipmentEffects(object oPC)
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
 }
 
+void AlternativeSkillStatScaling (object oPC)
+{
+
+	//Remove previous optimization effect
+	if ( GetHasSpellEffect(ASSS_FX, oPC) ) {
+		effect eEffect = GetFirstEffect( oPC );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == ASSS_FX){
+				RemoveEffect( oPC, eEffect );
+			}
+				
+			eEffect = GetNextEffect( oPC );
+		}
+	}
+	
+	int nSTR = (GetAbilityModifier(ABILITY_STRENGTH, oPC));
+	int nWIS = (GetAbilityModifier(ABILITY_WISDOM, oPC));
+	int nINT = (GetAbilityModifier(ABILITY_INTELLIGENCE, oPC));
+	int nCHA = (GetAbilityModifier(ABILITY_CHARISMA, oPC));
+	int nDEX = (GetAbilityModifier(ABILITY_DEXTERITY, oPC));
+	
+	int nIntimidate = nSTR - nCHA;
+	int nLore = nWIS - nINT;
+	int nSearch = nWIS - nINT;
+	int nHeal = nINT - nWIS;
+	int nSetTrap = nINT - nDEX;
+	
+	effect eFX = EffectSkillIncrease(SKILL_TUMBLE, 0); //this should hopefully do nothing
+
+	if (nSTR > nCHA)
+	
+		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_INTIMIDATE, nIntimidate));}
+
+	if (nINT > nDEX)
+    	{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SETTRAP, nSetTrap));}
+		
+	if (nINT > nWIS)
+		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HEAL, nHeal));}
+		
+	if (nWIS > nINT)
+		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_LORE, nLore));
+		 eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SEARCH, nSearch));}
+		 
+	int nDUR = DURATION_TYPE_PERMANENT;
+	
+	eFX = SupernaturalEffect(eFX);
+	eFX = SetEffectSpellId(eFX, ASSS_FX);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+		 
+		 
+}
+		
+
+void NewCustomBackgroundFeats (object oPC, int nSpell)
+
+{
+	{	if(GetHasFeat(3100, oPC)) //stern
+	   
+		effect eIntimGood	= EffectSkillIncrease(SKILL_INTIMIDATE, 6);
+		effect eBluffBad	= EffectSkillDecrease(SKILL_BLUFF, 3);
+		effect eDiploBad	= EffectSkillDecrease(SKILL_DIPLOMACY, 3);
+		effect eEff 		= EffectLinkEffects(eIntimGood, eBluffBad);
+			eEff			= EffectLinkEffects(eEff, eDiploBad);
+			eEff 			= SupernaturalEffect(eEff);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+		
+		
+	{	if(GetHasFeat(3101, oPC)) //misdirector
+	   
+		effect eIntim	= EffectSkillDecrease(SKILL_INTIMIDATE, 3);
+		effect eBluff	= EffectSkillIncrease(SKILL_BLUFF, 6);
+		effect eDiplo	= EffectSkillDecrease(SKILL_DIPLOMACY, 3);
+		effect eEff 		= EffectLinkEffects(eIntim, eBluff);
+			eEff			= EffectLinkEffects(eEff, eDiplo);
+			eEff 			= SupernaturalEffect(eEff);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+		
+		
+	{	if(GetHasFeat(3104, oPC)) //amicable
+	   
+		effect eIntim	= EffectSkillDecrease(SKILL_INTIMIDATE, 3);
+		effect eBluff	= EffectSkillDecrease(SKILL_BLUFF, 3);
+		effect eDiplo	= EffectSkillIncrease(SKILL_DIPLOMACY, 6);
+		effect eEff 		= EffectLinkEffects(eIntim, eBluff);
+			eEff			= EffectLinkEffects(eEff, eDiplo);
+			eEff 			= SupernaturalEffect(eEff);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}	
+		
+		
+	{	if(GetHasFeat(3102, oPC)) //tinker
+	   
+		effect eCW	= EffectSkillIncrease(SKILL_CRAFT_WEAPON, 6);
+		effect eCAR	= EffectSkillIncrease(SKILL_CRAFT_ARMOR, 6);
+		effect eCAL	= EffectSkillIncrease(SKILL_CRAFT_ALCHEMY, 6);
+		effect eCT	= EffectSkillIncrease(SKILL_CRAFT_TRAP, 6);
+		effect eBluffBad	= EffectSkillDecrease(SKILL_BLUFF, 6);
+		effect eDiploBad	= EffectSkillDecrease(SKILL_DIPLOMACY, 6);
+		effect eIntimBad	= EffectSkillDecrease(SKILL_INTIMIDATE, 6);
+		effect eSurvBad	= EffectSkillDecrease(SKILL_SURVIVAL, 6);
+		
+		effect eEff 		= EffectLinkEffects(eCW, eCAR);
+			eEff			= EffectLinkEffects(eEff, eCAL);
+			eEff			= EffectLinkEffects(eEff, eCT);
+			eEff			= EffectLinkEffects(eEff, eBluffBad);
+			eEff			= EffectLinkEffects(eEff, eDiploBad);
+			eEff			= EffectLinkEffects(eEff, eIntimBad);
+			eEff			= EffectLinkEffects(eEff, eSurvBad);
+			eEff 			= SupernaturalEffect(eEff);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+		
+	
+	{	if(GetHasFeat(3100, oPC)) //survivalist
+	   
+		effect eSURV	= EffectSkillIncrease(SKILL_SURVIVAL, 6);
+		effect eLORE	= EffectSkillDecrease(SKILL_LORE, 3);
+		effect eAPPRAISE	= EffectSkillDecrease(SKILL_APPRAISE, 3);
+		effect eEff 		= EffectLinkEffects(eSURV, eLORE);
+			eEff			= EffectLinkEffects(eEff, eAPPRAISE);
+			eEff 			= SupernaturalEffect(eEff);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+	
+}
+
+
 //This starts all the various checks and effects to be applied based on equipment, as per Sigil's custom rules.
 //nEQUIP: TRUE when called from OnEqup and FALSE when called from OnUnequip.
 //Found in "ps_inc_equipment.nss".
