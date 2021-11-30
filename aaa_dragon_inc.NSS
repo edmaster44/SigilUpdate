@@ -37,16 +37,16 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell)
 	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
 	if (GetHasFeat(260, oPC))
 		{	
-			iShield = 4;  // +4 bonus if monk class is taken 						  
+			iShield = 0;  // +0 bonus if monk class is taken 						  
 		}
 	else
 		{					
-		if (iHD >= 20) 			//+9 bonus at 20th level
-			{	iShield = 9;		} 
-		else if (iHD >= 10)		//+8 bonus at 10th level
-			{	iShield = 8;		} 
-		else 					//+7 bonus below 10th level
-			{	iShield = 7;		}									
+		if (iHD >= 20) 			//+0 bonus at 20th level
+			{	iShield = 0;		} 
+		else if (iHD >= 10)		//+0 bonus at 10th level
+			{	iShield = 0;		} 
+		else 					//+0 bonus below 10th level
+			{	iShield = 0;		}									
 		}
 	if (GetLocalInt(oItem, "TempChange") == 1)
 		{	
