@@ -11,10 +11,10 @@
 
 void main()
 {
-
+	
     object oPC = OBJECT_SELF;
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_FAVOR);
-    int nScale = GetAbilityScore(oPC,ABILITY_WISDOM,FALSE);
+    int nScale = GetAbilityModifier(ABILITY_WISDOM,oPC);
 	 if (nScale < 1)
         nScale = 1;
 	 if (nScale >10)
