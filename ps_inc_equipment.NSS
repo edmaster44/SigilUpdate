@@ -16,6 +16,7 @@
 
 const int SIGIL_EQUIP_FX = -9444;
 const int SIGIL_ARMOR_OPTIMIZATION_FX = -9544;
+const int ASSS_FX = -5894;
 
 //This gets the weapons that qualify for Meditative Strikes
 int GetMonkWeapon(object oItem)
@@ -870,7 +871,7 @@ void AlternativeSkillStatScaling (object oPC)
 		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_INTIMIDATE, nIntimidate));}
 
 	if (nINT > nDEX)
-    	{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SETTRAP, nSetTrap));}
+    	{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSetTrap));}
 		
 	if (nINT > nWIS)
 		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HEAL, nHeal));}
@@ -892,40 +893,40 @@ void AlternativeSkillStatScaling (object oPC)
 void NewCustomBackgroundFeats (object oPC, int nSpell)
 
 {
-	{	if(GetHasFeat(3100, oPC)) //stern
+		if(GetHasFeat(3100, oPC)) { //stern
 	   
 		effect eIntimGood	= EffectSkillIncrease(SKILL_INTIMIDATE, 6);
 		effect eBluffBad	= EffectSkillDecrease(SKILL_BLUFF, 3);
 		effect eDiploBad	= EffectSkillDecrease(SKILL_DIPLOMACY, 3);
 		effect eEff 		= EffectLinkEffects(eIntimGood, eBluffBad);
-			eEff			= EffectLinkEffects(eEff, eDiploBad);
-			eEff 			= SupernaturalEffect(eEff);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+				eEff			= EffectLinkEffects(eEff, eDiploBad);
+				eEff 			= SupernaturalEffect(eEff);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
 		
 		
-	{	if(GetHasFeat(3101, oPC)) //misdirector
+		if(GetHasFeat(3101, oPC)) { //misdirector
 	   
 		effect eIntim	= EffectSkillDecrease(SKILL_INTIMIDATE, 3);
 		effect eBluff	= EffectSkillIncrease(SKILL_BLUFF, 6);
 		effect eDiplo	= EffectSkillDecrease(SKILL_DIPLOMACY, 3);
-		effect eEff 		= EffectLinkEffects(eIntim, eBluff);
-			eEff			= EffectLinkEffects(eEff, eDiplo);
-			eEff 			= SupernaturalEffect(eEff);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+		effect eEff 	= EffectLinkEffects(eIntim, eBluff);
+				eEff			= EffectLinkEffects(eEff, eDiplo);
+				eEff 			= SupernaturalEffect(eEff);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
 		
 		
-	{	if(GetHasFeat(3104, oPC)) //amicable
+		if(GetHasFeat(3104, oPC)) { //amicable
 	   
 		effect eIntim	= EffectSkillDecrease(SKILL_INTIMIDATE, 3);
 		effect eBluff	= EffectSkillDecrease(SKILL_BLUFF, 3);
 		effect eDiplo	= EffectSkillIncrease(SKILL_DIPLOMACY, 6);
-		effect eEff 		= EffectLinkEffects(eIntim, eBluff);
-			eEff			= EffectLinkEffects(eEff, eDiplo);
-			eEff 			= SupernaturalEffect(eEff);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}	
+		effect eEff 	= EffectLinkEffects(eIntim, eBluff);
+				eEff			= EffectLinkEffects(eEff, eDiplo);
+				eEff 			= SupernaturalEffect(eEff);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}	
 		
 		
-	{	if(GetHasFeat(3102, oPC)) //tinker
+		if(GetHasFeat(3102, oPC)) { //tinker
 	   
 		effect eCW	= EffectSkillIncrease(SKILL_CRAFT_WEAPON, 6);
 		effect eCAR	= EffectSkillIncrease(SKILL_CRAFT_ARMOR, 6);
@@ -937,17 +938,17 @@ void NewCustomBackgroundFeats (object oPC, int nSpell)
 		effect eSurvBad	= EffectSkillDecrease(SKILL_SURVIVAL, 6);
 		
 		effect eEff 		= EffectLinkEffects(eCW, eCAR);
-			eEff			= EffectLinkEffects(eEff, eCAL);
-			eEff			= EffectLinkEffects(eEff, eCT);
-			eEff			= EffectLinkEffects(eEff, eBluffBad);
-			eEff			= EffectLinkEffects(eEff, eDiploBad);
-			eEff			= EffectLinkEffects(eEff, eIntimBad);
-			eEff			= EffectLinkEffects(eEff, eSurvBad);
-			eEff 			= SupernaturalEffect(eEff);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+				eEff			= EffectLinkEffects(eEff, eCAL);
+				eEff			= EffectLinkEffects(eEff, eCT);
+				eEff			= EffectLinkEffects(eEff, eBluffBad);
+				eEff			= EffectLinkEffects(eEff, eDiploBad);
+				eEff			= EffectLinkEffects(eEff, eIntimBad);
+				eEff			= EffectLinkEffects(eEff, eSurvBad);
+				eEff 			= SupernaturalEffect(eEff);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
 		
 	
-	{	if(GetHasFeat(3100, oPC)) //survivalist
+		if(GetHasFeat(3100, oPC)) { //survivalist
 	   
 		effect eSURV	= EffectSkillIncrease(SKILL_SURVIVAL, 6);
 		effect eLORE	= EffectSkillDecrease(SKILL_LORE, 3);
@@ -955,7 +956,7 @@ void NewCustomBackgroundFeats (object oPC, int nSpell)
 		effect eEff 		= EffectLinkEffects(eSURV, eLORE);
 			eEff			= EffectLinkEffects(eEff, eAPPRAISE);
 			eEff 			= SupernaturalEffect(eEff);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);}
 	
 }
 
