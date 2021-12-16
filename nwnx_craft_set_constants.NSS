@@ -792,6 +792,8 @@ void main() {
 	SetLocalString( oModule, "XC_c_goblin_LE_HELM", "#1#2#" );
 	SetLocalString( oModule, "XC_c_goblin_PF_BELT", "#1#" );
 	SetLocalString( oModule, "XC_c_goblin_SCOD_HELM", "#1#8#18#22#23#24#25#" );
+	SetLocalString( oModule, "XC_c_wolfwinter_CL_BODY", "#1#5#10#" );
+	SetLocalString( oModule, "XC_c_shepard_CL_BODY", "#1#5#10#" );
 
   /*--------------------------------------------------------------------------*\
   |                               ArmorParts                                   |
@@ -1161,6 +1163,8 @@ void main() {
 	SetLocalString( oModule, "XC_AVT_c_goblin_BELT", "#0#1#2#4#5#8#9#10#15#16#17#18#21#" );
 	SetLocalString( oModule, "XC_AVT_c_ogre_BODY", "#0#" );
 	SetLocalString( oModule, "XC_AVT_ree_minotaur_BODY", "#0#" );
+	SetLocalString( oModule, "XC_AVT_c_wolfwinter_BODY", "#0#" );
+	SetLocalString( oModule, "XC_AVT_c_shepard_BODY", "#0#" );
 					
 	//Here's the part with the hairstyles!
 	//Lightfoot Halfling, Strongheart Halfling
