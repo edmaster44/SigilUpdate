@@ -792,7 +792,7 @@ void main() {
 	SetLocalString( oModule, "XC_c_goblin_LE_HELM", "#1#2#" );
 	SetLocalString( oModule, "XC_c_goblin_PF_BELT", "#1#" );
 	SetLocalString( oModule, "XC_c_goblin_SCOD_HELM", "#1#8#18#22#23#24#25#" );
-	SetLocalString( oModule, "XC_c_wolfwinter_CL_BODY", "#1#5#10#" );
+	SetLocalString( oModule, "XC_c_wolfwinter_CL_BODY", "#1#2#3#4#5#10#" );
 	SetLocalString( oModule, "XC_c_shepard_CL_BODY", "#1#5#10#" );
 
   /*--------------------------------------------------------------------------*\
