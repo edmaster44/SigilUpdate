@@ -463,7 +463,7 @@ string XPCraft_GetVariation_ListName(object oPC, int iArmorVisualType, int iBase
 				sRaceGroup = GetStringLeft(Get2DAString("appearance","NWN2_Model_Body",GetAppearanceType(oPC)),4);
 		}
 	
-		//SendMessageToPC(oPC, "race group: "+sRaceGroup);
+		SendMessageToPC(oPC, "race group: "+sRaceGroup);
 	//}
 	
 	if((XP_CRAFT_USE_SEXED_VARIATION) && (GetGender(oPC) == GENDER_FEMALE))
@@ -508,7 +508,7 @@ string XPCraft_GetVariation_ListName(object oPC, int iArmorVisualType, int iBase
 		case BASE_ITEM_HELMET : sListName +="_HELM"; break; 
 	}
 		
-	//SendMessageToPC(oPC, "final list name: "+sListName);
+	SendMessageToPC(oPC, "final list name: "+sListName);
 	
 	return sListName;
 }
