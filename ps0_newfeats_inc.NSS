@@ -28,7 +28,6 @@ const int FEAT_BACKGROUND_MISDIRECTOR           = 3101;
 const int FEAT_BACKGROUND_TINKER                = 3102;
 const int FEAT_BACKGROUND_NATURALIST             = 3103;
 const int FEAT_BACKGROUND_AMICABLE              = 3104;
-const int ASSS_FX = -5894;
 
 
 void PS_Feat_Counterspell(object oPC, object oTarget)
@@ -465,57 +464,4 @@ void PS_Feat_Naturalist(object oPC, int nSpell)
 
    	eEff = SupernaturalEffect(eEff);
    	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
-}
-
-void AlternativeSkillStatScaling (object oPC)
-{
-
-	//Remove previous optimization effect
-	if ( GetHasSpellEffect(ASSS_FX, oPC) ) {
-		effect eEffect = GetFirstEffect( oPC );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == ASSS_FX){
-				RemoveEffect( oPC, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oPC );
-		}
-	}
-	
-	int nSTR = (GetAbilityModifier(ABILITY_STRENGTH, oPC));
-	int nWIS = (GetAbilityModifier(ABILITY_WISDOM, oPC));
-	int nINT = (GetAbilityModifier(ABILITY_INTELLIGENCE, oPC));
-	int nCHA = (GetAbilityModifier(ABILITY_CHARISMA, oPC));
-	int nDEX = (GetAbilityModifier(ABILITY_DEXTERITY, oPC));
-	
-	int nIntimidate = nSTR - nCHA;
-	int nLore = nWIS - nINT;
-	int nSearch = nWIS - nINT;
-	int nHeal = nINT - nWIS;
-	int nSetTrap = nINT - nDEX;
-	
-	effect eFX = EffectSkillIncrease(SKILL_TUMBLE, 0); //this should hopefully do nothing
-
-	if (nSTR > nCHA)
-	
-		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_INTIMIDATE, nIntimidate));}
-
-	if (nINT > nDEX)
-    	{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSetTrap));}
-		
-	if (nINT > nWIS)
-		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HEAL, nHeal));}
-		
-	if (nWIS > nINT)
-		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_LORE, nLore));
-		 eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SEARCH, nSearch));}
-		 
-	int nDUR = DURATION_TYPE_PERMANENT;
-	
-	eFX = SupernaturalEffect(eFX);
-	eFX = SetEffectSpellId(eFX, ASSS_FX);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
-		 
-		 
 }
