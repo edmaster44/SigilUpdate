@@ -12,6 +12,7 @@
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_inc_bgspellfix"
+#include "ginc_time"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -555,5 +556,6 @@ void main()
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
+		SetClockOnForPlayer(oPC, TRUE);
 	}
 }

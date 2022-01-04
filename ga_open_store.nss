@@ -12,6 +12,7 @@
 //#include "nw_i0_plot"
 #include "ginc_param_const"
 #include "ginc_item"
+#include "dethia_shop_sys"
 
 const int MAX_MARKUP = 30;
 const int MIN_MARKUP = 1;
@@ -54,5 +55,5 @@ void main(string sTag, int nMarkUp, int nMarkDown)
 	
 	//SendMessageToPC(oPC, "Markup value = " + IntToString(nMarkUp) + ". Markdown value = " + IntToString(nMarkDown) + ".");
 	
-	OpenStore(GetStoreFromStoreArea(sTag), oPC, nMarkUp, nMarkDown);
+	DS_OpenShop(GetStoreFromStoreArea(sTag), oPC, nMarkUp, nMarkDown);
 }
