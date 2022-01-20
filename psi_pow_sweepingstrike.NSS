@@ -36,12 +36,13 @@ void main()
 		nDamageType = DAMAGE_TYPE_MAGICAL;
 		nVFXHit =EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
 		}
+	else nDamageType = DAMAGE_TYPE_BLUDGEONING;
 
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
 	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Sweeping Strike", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
-		{	nDmg = d10(6);
+		{	nDmg = d10(8);
 			
 			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, FALSE);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 12.0);
@@ -50,7 +51,7 @@ void main()
 		else if (nAttack == 1)
 		{	
 		
-			nDmg = d10(1);
+			nDmg = d10(6);
 			
 			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, FALSE);
 			//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 12.0);

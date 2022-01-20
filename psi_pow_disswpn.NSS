@@ -78,8 +78,8 @@ void main()
         effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
         float fDuration = 600.0f * manif.nManifesterLevel;
         if(manif.bExtend) {fDuration *= 2;}
-		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_5d6;
-		else nDamage	= IP_CONST_DAMAGEBONUS_4d6;
+		if (manif.bAugment) {nDamage = IP_CONST_DAMAGEBONUS_5d6;}
+		 nDamage	= IP_CONST_DAMAGEBONUS_4d6;
 		int DamageType = IP_CONST_DAMAGETYPE_ACID;
 		itemproperty ipAcid = ItemPropertyDamageBonus(DamageType,nDamage);  
         {
