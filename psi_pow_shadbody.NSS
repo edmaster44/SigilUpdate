@@ -90,7 +90,7 @@ void main()
                eLink = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID,       50));
                eLink = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 50));
                eLink = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE,       50));
-			  //eLink = EffectLinkEffects(eLink, EffectConcealment(50));
+			  eLink = EffectLinkEffects(eLink, EffectConcealment(50));
                eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_shadowfiend_2.sef"));
         effect eVis  = EffectVisualEffect(VFX_IMP_MAGIC_PROTECTION);
         float fDuration = 60.0f * manif.nManifesterLevel;

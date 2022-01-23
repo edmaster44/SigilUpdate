@@ -281,11 +281,17 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 
 
 
-
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
    return nTYPE >= 160 && nTYPE <= 180;
+   
+}
+
+int GetIsShields (object oItem)
+{
+  int iBaseItem = GetBaseItemType(oItem);
+   return iBaseItem = BASE_ITEM_LARGESHIELD || BASE_ITEM_SMALLSHIELD || BASE_ITEM_TOWERSHIELD;
 
 }
 
@@ -456,6 +462,14 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     else if (GetIsCreatureWeapon(nITEM) == FALSE)
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
+        AssignCommand(oPC, ClearAllActions());
+        AssignCommand(oPC, ActionUnequipItem(oITEM));
+        return TRUE;
+    }
+	
+	    else if (GetIsShields(oITEM) == TRUE)
+    {
+        SendMessageToPC(oPC, "<c=red>Your character cannot wield shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
         AssignCommand(oPC, ActionUnequipItem(oITEM));
         return TRUE;
