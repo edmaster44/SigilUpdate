@@ -772,7 +772,7 @@ string GetClockDisplayTime(struct CTimeDate rTimeDate)
 string GetClockDisplay(struct CTimeDate rTimeDate, int bTimeOnly)
 {
 	int nRealTime = GetRealTime();
-	string sOut = SigisDate(nRealTime);
+	string sOut = SigisDate(nRealTime, TRUE);
 	return sOut;
 	
 	/*string sOut;
