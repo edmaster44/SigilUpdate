@@ -1,6 +1,7 @@
-
+#include "nwnx_sql"
+#include "gui_kemo_storage_list_open"
 // called from the kemo_storage GUI
-
+/* - Old version
 string GetPCID(object oPC)
 {
 	return GetSubString(GetPCPlayerName(oPC), 0, 12)
@@ -31,7 +32,8 @@ void main(string sItemNumber)
 
 	ExecuteScript("gui_kemo_storage_list",oPC);
 }
-/*/ called from the kemo_storage GUI
+/
+ called from the kemo_storage GUI
 #include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
@@ -150,8 +152,14 @@ void main(string sItemNumber)
 	
 			
 	ExecuteScript("gui_kemo_storage_list",oPC);
+}*/
+void ClearForNextItem(object oPC)
+{
+	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveButton",FALSE);
+	DeleteLocalInt(oPC,"RetrieveDelay");
 }
-/*void main(string sItemNumber)
+
+void main(string sItemNumber)
 {
 	object oPC = OBJECT_SELF;
 	location lPC = GetLocation(oPC);
@@ -247,4 +255,4 @@ void main(string sItemNumber)
 	SQLExecDirect(sQuery);
 
 	ExecuteScript("gui_kemo_storage_list",oPC);
-}*/
+}

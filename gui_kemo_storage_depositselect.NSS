@@ -1,4 +1,4 @@
-string GetStorageItemIcon(object oItem)
+/*string GetStorageItemIcon(object oItem)
 {
 	string sIcon = Get2DAString("nwn2_icons","ICON",GetItemIcon(oItem));
 	return sIcon == "" ? "temp0.tga" : sIcon + ".tga";
@@ -106,9 +106,9 @@ void main (string sItemNumber)
 		if (GetCampaignInt(sDB,"StorageListTotal") < iCounter) SetCampaignInt(sDB,"StorageListTotal",iCounter);
 		DelayCommand(1.0f,ExecuteScript("gui_kemo_storage_deposit",oPC));
 	}
-}	
+}	*/
 
-/*#include "nwnx_sql"
+#include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
 object GetItemFromList(object oPC, string sItemNumber)
@@ -141,19 +141,19 @@ int CheckTag(object oItem)
 			return FALSE;
 	else return TRUE;
 }
-void main (string sItemNumber)
+/*void main (string sItemNumber)
 {
 	object oPC = OBJECT_SELF;
 	string sQuery;
-	//WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
+	WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
 
-	/*if(GetLocalInt(oPC,"DepositDelay") == 1)
+	if(GetLocalInt(oPC,"DepositDelay") == 1)
 	{
 		SendMessageToPC(oPC,"You must wait before depositing the next item.");
 		return;
 	}
 	
-	SetLocalInt(oPC,"DepositDelay",1); 
+	//SetLocalInt(oPC,"DepositDelay",1); 
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonB",TRUE);
 
 	object oItem = GetItemFromList(oPC, sItemNumber); //find the sale item from the list
@@ -222,8 +222,8 @@ void main (string sItemNumber)
 		DelayCommand(1.0f,ExecuteScript("gui_kemo_storage_deposit",oPC));
 		
 }	
-	}
-/*void main (string sItemNumber)
+	} */
+void main (string sItemNumber)
 {
 	object oPC = OBJECT_SELF;
 	string sQuery;
@@ -319,4 +319,4 @@ void main (string sItemNumber)
 		if (GetCampaignInt(sDB,"StorageListTotal") < iCounter) SetCampaignInt(sDB,"StorageListTotal",iCounter);
 		DelayCommand(1.0f,ExecuteScript("gui_kemo_storage_deposit",oPC));
 	}
-}	*/
+}	

@@ -1,4 +1,4 @@
-
+/*
 
 string GetPCID(object oPC)
 {
@@ -21,8 +21,8 @@ void main(string sItemNumber)
 	DelayCommand(1.0f,ActionExamine(oItem));
 	DelayCommand(3.0f,DestroyObject(oItem));
 }
-
-/*#include "nwnx_sql"
+*/
+#include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
 void main(string sItemNumber)
@@ -69,4 +69,4 @@ void main(string sItemNumber)
 	oItem = SQLRetrieveObject(GetLocation(oStorageTable));
 	DelayCommand(1.0f,ActionExamine(oItem));
 	DelayCommand(3.0f,DestroyObject(oItem));
-}*/
+}
