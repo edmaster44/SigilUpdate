@@ -2,7 +2,6 @@
 
 // called from kemo_storage_conv
 
-/*
 string GetPCID(object oPC)
 {
 	return GetSubString(GetPCPlayerName(oPC), 0, 12)
@@ -21,8 +20,7 @@ void main()
 	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
 	ExecuteScript("gui_kemo_storage_list",oPC);
 }
-
- disabled for now */
+/* disabled for now
 
 
 
@@ -114,4 +112,4 @@ void main()
 	DisplayGuiScreen(oPC,"KEMO_STORAGE",FALSE,"kemo_storage.xml");
 	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
 	GuildStorage(oPC);
-} 
+} */

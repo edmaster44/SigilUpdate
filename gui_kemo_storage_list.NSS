@@ -1,6 +1,6 @@
 #include "ginc_param_const"
 
-/*string GetPCID(object oPC)
+string GetPCID(object oPC)
 {
 	return GetSubString(GetPCPlayerName(oPC), 0, 12)
 				+ "_" + GetSubString(GetFirstName(oPC), 0, 6)
@@ -107,9 +107,9 @@ void main()
 	else SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,sItemOfTotal);
 	
 	SetLocalInt(oPC, "kemo_storage_list_size", resultCount);
-}*/
- 
-#include "nwnx_sql"
+}
+
+/*#include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
 void main()
