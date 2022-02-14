@@ -162,12 +162,12 @@ void GiveDruidMonkPenaltyFeat (object oPC)
 
 }
 
-void FinesseRestFix(object oPC, object oWEAPON)
+/*void FinesseRestFix(object oPC, object oWEAPON)
 {
 	if (GetLocalInt(oWEAPON , "S_Finesse") == 0) return;
 	PS_RemoveSpecialWeaponFinesse(oPC, oWEAPON);
 	//DelayCommand(0.0f, PS_ApplySpecialWeaponFinesse(oPC, oWEAPON));
-}
+}*/
 
 void RestStart(object oPC)
 {

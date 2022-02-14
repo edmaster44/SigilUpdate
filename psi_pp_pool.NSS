@@ -271,7 +271,7 @@ void main()
      			nPowerEpPen = TRUE;
 			}
 			//Manifester Tier
-			int nPsion2 = GetLevelByClass(90, OBJECT_SELF);
+			/*int nPsion2 = GetLevelByClass(90, OBJECT_SELF);
 			if (nMentalist > 1)
 			{	nPsion2 = nPsion2 + (nMentalist - 1);	}
 			if (nCerebremancer >= 1)
@@ -324,7 +324,7 @@ void main()
 			{
 				int nProgIX = FeatAdd(OBJECT_SELF, 21433, TRUE, TRUE, FALSE);
 				nProgIX == TRUE;
-			}
+			}*/
 			
 			
 			//

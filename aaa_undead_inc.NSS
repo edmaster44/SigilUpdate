@@ -713,6 +713,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
 	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
+	int iPRCLvl_HUndead = GetLevelByClass(CLASS_TYPE_HALF_UNDEAD,oPC);//Half-Undead
 	int iPRCLvl			= iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal;
 	int nDamage;
 	if (GetCreatureSize(oPC) == CREATURE_SIZE_LARGE)
