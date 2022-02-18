@@ -103,7 +103,6 @@ void DoPsiProgression(object oPC)
 {
 	int nPsion = GetLevelByClass(90, oPC);
 	if (nPsion < 1) return;
-	
 	int nIlMentalist = GetLevelByClass(100, oPC) - 1;
 	int nCerebremancer = GetLevelByClass(152, oPC);
 	int nPknight	   = GetLevelByClass(109, oPC) - 1;
