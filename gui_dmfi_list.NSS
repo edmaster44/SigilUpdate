@@ -59,10 +59,15 @@ void main(string sInput)
 		}
 		else if (nPrior == DMFI_LIST_LANG)
 		{
+			//For handling over the number 9
+			if (GetStringLength(sInput) > 5) {
+				nNum = StringToInt(GetStringRight(sInput, 2));
+			}
 			sValue = GetLocalString(oTool, LIST_PREFIX + PG_LIST_LANGUAGE + "." + IntToString(nNum-1));
 			sValue = GetStringLowerCase(sValue);
 				
 			sCommand = PRM_LANGUAGE + PRM_ + sValue;
+			SendMessageToPC(oPC, "Command entered: "+sCommand);
 		}
 		DMFI_UITarget(oPC, oTool);		
 		DMFI_DefineStructure(oPC, sCommand);
