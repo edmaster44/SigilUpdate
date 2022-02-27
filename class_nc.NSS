@@ -34,7 +34,6 @@ void Claws_of_the_grizzly(object oPC, int nSpell)
 
 
 
-
 void Earth_Resilience(object oPC, int nSpell)
 {
 

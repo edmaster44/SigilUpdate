@@ -103,12 +103,9 @@ void DoPsiProgression(object oPC)
 {
 	int nPsion = GetLevelByClass(90, oPC);
 	if (nPsion < 1) return;
-	
 	int nIlMentalist = GetLevelByClass(100, oPC) - 1;
-	if (nIlMentalist < 0) nIlMentalist = 0;
 	int nCerebremancer = GetLevelByClass(152, oPC);
 	int nPknight	   = GetLevelByClass(109, oPC) - 1;
-	if (nPknight < 0) nPknight = 0;
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int nLEVEL = nPsion + nIlMentalist + nCerebremancer + nGemDragon + nPknight;
 	
@@ -329,7 +326,6 @@ void main()
 	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
-	DoPsyFeatProgression(oPC);
 	KnightLevels(oPC);
 	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
