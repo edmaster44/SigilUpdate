@@ -11,7 +11,7 @@ void GiveFeedback(object oPC, object oSummon, object oTarget, object oOriginal, 
 		{
 			SendMessageToPC(oPC, NPC_REMOTE_FEEDBACK_PREFIX + GetName(oSummon) + " unequipped " + GetName(oOldItemInSlot));
 		}
-		SendMessageToPC(oPC, NPC_REMOTE_FEEDBACK_PREFIX + GetName(oSummon) + " recieved and equipped " + GetName(oTarget));
+		SendMessageToPC(oPC, NPC_REMOTE_FEEDBACK_PREFIX + GetName(oSummon) + " received and equipped " + GetName(oTarget));
 		DestroyObject(oOriginal, 0.1);
 	}
 	else

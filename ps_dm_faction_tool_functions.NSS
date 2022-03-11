@@ -70,7 +70,7 @@ void main(int iToolFunction, int iUseAnarchistCover)
 				SetLocalInt(oBadge, "FactionPoints", GetLocalInt(oBadge, "FactionPoints") + 1);
 				SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + "Granted 1 faction point to " + sTargetName + ". They now have "
 					+ IntToString(GetLocalInt(oBadge, "FactionPoints")) + " points.");
-				SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have recieved a Faction Point from the " + GetLocalString(oBadge, "FactionName") + ".");
+				SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have received a Faction Point from the " + GetLocalString(oBadge, "FactionName") + ".");
 				break;
 		
 			case 5:

@@ -387,19 +387,19 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 	
 	
 		if (GetHasSpellEffect(1721)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if (GetHasSpellEffect(1722)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if (GetHasSpellEffect(1723)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if (GetHasSpellEffect(1724)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if ( GetHasSpellEffect(843, oPC) ) {

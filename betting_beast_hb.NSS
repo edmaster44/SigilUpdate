@@ -44,7 +44,7 @@ void main()
 		DeleteLocalString(OBJECT_SELF, "MONSTER2");
 		DeleteLocalString(OBJECT_SELF, "POTENTIAL_WINNER");
 		
-		SpeakString("The "+WINNER+" has won! Gather around to recieve your rewards!");
+		SpeakString("The "+WINNER+" has won! Gather around to receive your rewards!");
 
 		return;
 	} else if (sFighter1 == "" || sFighter2 == "") {

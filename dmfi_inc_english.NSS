@@ -24,7 +24,7 @@ const string TXT_DATA_LOAD = "Please wait while data is written to new DMFI Tool
 const string TXT_DEBUG = "Debug: ";
 const string TXT_DM_TOOL_WARNING = "This tool is for use by DMs ONLY.";
 
-const string TXT_INITIALIZE_TOOL = "DMFI Database Detroyed.";  //context editted
+const string TXT_INITIALIZE_TOOL = "DMFI Database Destroyed.";  //context editted
 const string TXT_INITIALIZE_DATABASE = "DMFI NOTICE:  Tool Database Updated.  Please log off the server to gain a current tool.";
 
 const string TXT_ONE_TOOL = "Only one DMFI Tool allowed per character.";
@@ -51,7 +51,7 @@ const string TXT_MESSAGE_DELIVERED = "DMFI Message Sent: ";
 
 //Languages
 const string TXT_ALL_LANGUAGES = "ALL LANGUAGES GRANTED TO DMs.";
-const string TXT_LANGUAGE= "DMFI Langugage Granted: ";
+const string TXT_LANGUAGE= "DMFI Language Granted: ";
 const string TXT_LANGUAGE_KNOWN = "DMFI Language Already Known: ";
 const string TXT_LANGUAGE_LIST = "DMFI Languages known by target: ";
 const string TXT_LANGUAGE_REMOVED = "DMFI Language Removed: ";
@@ -122,7 +122,7 @@ const string TXT_SET_AMBIENT_DELAY = "DMFI Ambient Delay set to: ";
 const string TXT_SET_AMBIENT_NIGHT = "DMFI Ambient Sound (volume applied): Night set to: ";
 const string TXT_SET_AMBIENT_VOLUME = "DMFI Ambient Volume set to: ";
 
-const string TXT_SET_SOUND_VOLUME = "DMFI Placeable Sound Volumen set to: ";
+const string TXT_SET_SOUND_VOLUME = "DMFI Placeable Sound Volume set to: ";
 const string TXT_SET_SOUND_DELAY= "DMFI Placeable Sound Delay set to: ";
 
 const string TXT_SET_VFX_DURATION = "DMFI VFX Duration set to: ";
@@ -231,7 +231,7 @@ const string CV_LD_D100 = "d100";
 const string CV_SV_INVEN_IDENTIFY = "Identify ALL items for target.";
 const string CV_SV_INVEN_STRIP = "Strip ALL items from target.";
 const string CV_SV_INVEN_UBER = "Remove Uber Items from target.";
-const string CV_SV_FREEZE = "Freeze player (behavoir)";
+const string CV_SV_FREEZE = "Freeze player (behavior)";
 const string CV_SV_BOOT = "Boot Player from server.";
 
 // Added 11/20/06

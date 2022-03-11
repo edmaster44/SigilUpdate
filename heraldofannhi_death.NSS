@@ -83,7 +83,7 @@ void main()
 		{
 			if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 			ForceRest(oPC);
-			DisplayMessageBox(oPC, 0, "Congratulations on defeating the Herald of Annihiliation! You have received a token for you deeds. If your inventory was full, the token should be at your feet.");
+			DisplayMessageBox(oPC, 0, "Congratulations on defeating the Herald of Annihilation! You have received a token for you deeds. If your inventory was full, the token should be at your feet.");
 			oITEM = CreateItemOnObject("heraldannhi_token", oPC);
 			if (oITEM == OBJECT_INVALID) CreateObject(OBJECT_TYPE_ITEM, "heraldannhi_token", GetLocation(oPC));
 		}

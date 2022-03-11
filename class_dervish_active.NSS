@@ -50,7 +50,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
 		if (!GetIsObjectValid(oArmorNew)) 
 				{
-					SendMessageToPC(oPC, "You must wear an item in your armor slot to recieve the effects of Dervish.");
+					SendMessageToPC(oPC, "You must wear an item in your armor slot to receive the effects of Dervish.");
 				}
 				else				
 		if (nLevel > 9)
