@@ -274,7 +274,7 @@ string GetRacialTypeName(object oTarget)
 	int iRacial = GetRacialType(oTarget);
 
 	if(iRacial == RACIAL_TYPE_ANIMAL) return "Animals";
-	else if(iRacial == RACIAL_TYPE_ABERRATION) return "Abberations";
+	else if(iRacial == RACIAL_TYPE_ABERRATION) return "Aberrations";
 	else if(iRacial == RACIAL_TYPE_BEAST) return "Beasts";
 	else if(iRacial == RACIAL_TYPE_CONSTRUCT) return "Constructs";
 	else if(iRacial == RACIAL_TYPE_DRAGON) return "Dragons";

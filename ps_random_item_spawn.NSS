@@ -291,7 +291,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_RACIALTYPE_HALFELF: sPropertyPrefix = "Protective"; sPropertySuffix = "against Half-Elves"; break;
 					case IP_CONST_RACIALTYPE_HALFORC: sPropertyPrefix = "Protective"; sPropertySuffix = "against Half-Orcs"; break;
 					case IP_CONST_RACIALTYPE_HUMAN: sPropertyPrefix = "Protective"; sPropertySuffix = "against Humans"; break;
-					case IP_CONST_RACIALTYPE_ABERRATION: sPropertyPrefix = "Protective"; sPropertySuffix = "against Abberations"; break;
+					case IP_CONST_RACIALTYPE_ABERRATION: sPropertyPrefix = "Protective"; sPropertySuffix = "against Aberrations"; break;
 					case IP_CONST_RACIALTYPE_ANIMAL: sPropertyPrefix = "Protective"; sPropertySuffix = "against Rabid Animals"; break;
 					case IP_CONST_RACIALTYPE_BEAST: sPropertyPrefix = "Protective"; sPropertySuffix = "against Beasts"; break;
 					case IP_CONST_RACIALTYPE_CONSTRUCT: sPropertyPrefix = "Protective"; sPropertySuffix = "against Constructs"; break;
@@ -299,7 +299,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID: sPropertyPrefix = "Protective"; sPropertySuffix = "against Goblins"; break;
 					case IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS: sPropertyPrefix = "Protective"; sPropertySuffix = "against Monstrous Nasties"; break;
 					case IP_CONST_RACIALTYPE_HUMANOID_ORC: sPropertyPrefix = "Protective"; sPropertySuffix = "against Orcs"; break;
-					case IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN: sPropertyPrefix = "Protective"; sPropertySuffix = "against Reptillains"; break;
+					case IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN: sPropertyPrefix = "Protective"; sPropertySuffix = "against Reptilians"; break;
 					case IP_CONST_RACIALTYPE_ELEMENTAL: sPropertyPrefix = "Protective"; sPropertySuffix = "against Elementals"; break;
 					case IP_CONST_RACIALTYPE_FEY: sPropertyPrefix = "Protective"; sPropertySuffix = "against Fey"; break;
 					case IP_CONST_RACIALTYPE_GIANT: sPropertyPrefix = "Protective"; sPropertySuffix = "against Giants"; break;
