@@ -178,13 +178,13 @@ void GenerateItemDescription(object oItem)
 		case 13: sDesc += " while astrally projecting."; break;
 		case 14: sDesc += " while eating a meal and choking to death on a fish bone."; break;
 		case 15: sDesc += " when they were flayed by the Lady of Pain."; break;
-		case 16: sDesc += " when they mysteriously dissapeared, all that was left was a pair of smoking boots."; break;
+		case 16: sDesc += " when they mysteriously disappeared, all that was left was a pair of smoking boots."; break;
 	}
 	
 	SetDescription(oItem, sDesc);
 }
 
-// Get's first property on the item and returns a string based on that as the value.
+// Gets first property on the item and returns a string based on that as the value.
 // eg: If AC then the return value may be Defense, if Cold Damage then Cold, if vs Race then <race slaying>
 void GenerateItemPropertyName(object oItem)
 {
@@ -311,7 +311,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_RACIALTYPE_UNDEAD: sPropertyPrefix = "Protective"; sPropertySuffix = "against Undead"; break;
 					case IP_CONST_RACIALTYPE_VERMIN: sPropertyPrefix = "Protective"; sPropertySuffix = "against Vermin"; break;
 					case 29: /*Ooze*/ sPropertyPrefix = "Protective"; sPropertySuffix = "against Oozes"; break;
-					case 30: /*Incorpreal*/ sPropertyPrefix = "Protective"; sPropertySuffix = "against Incorpreal"; break;
+					case 30: /*Incorporeal*/ sPropertyPrefix = "Protective"; sPropertySuffix = "against Incorporeal"; break;
 					case 31: /*Yuan-ti*/ sPropertyPrefix = "Protective"; sPropertySuffix = "against Yuan-ti"; break;
 					case 32: /*Orc???*/ sPropertyPrefix = "Protective"; sPropertySuffix = "against Orcs"; break;
 				}
@@ -330,7 +330,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_RACIALTYPE_HALFELF: sPropertySuffix = "of Half-Elf Slaying"; break;
 					case IP_CONST_RACIALTYPE_HALFORC: sPropertySuffix = "of Half-Orc Slaying"; break;
 					case IP_CONST_RACIALTYPE_HUMAN: sPropertySuffix = "of Human Slaying"; break;
-					case IP_CONST_RACIALTYPE_ABERRATION: sPropertySuffix = "of Abberation Slaying"; break;
+					case IP_CONST_RACIALTYPE_ABERRATION: sPropertySuffix = "of Aberration Slaying"; break;
 					case IP_CONST_RACIALTYPE_ANIMAL: sPropertySuffix = "of Animal Cruelty"; break;
 					case IP_CONST_RACIALTYPE_BEAST: sPropertySuffix = "of Beast Slaying"; break;
 					case IP_CONST_RACIALTYPE_CONSTRUCT: sPropertySuffix = "of Construct Slaying"; break;
@@ -338,7 +338,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID: sPropertySuffix = "of Goblin Slaying"; break;
 					case IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS: sPropertySuffix = "of Monstrous Creature Slaying"; break;
 					case IP_CONST_RACIALTYPE_HUMANOID_ORC: sPropertySuffix = "of Orc Slaying"; break;
-					case IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN: sPropertySuffix = "of Reptillian Slaying"; break;
+					case IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN: sPropertySuffix = "of Reptilian Slaying"; break;
 					case IP_CONST_RACIALTYPE_ELEMENTAL: sPropertySuffix = "of Elemental Slaying"; break;
 					case IP_CONST_RACIALTYPE_FEY: sPropertySuffix = "of Fey Slaying"; break;
 					case IP_CONST_RACIALTYPE_GIANT: sPropertySuffix = "of Giant Slaying"; break;
@@ -350,7 +350,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_RACIALTYPE_UNDEAD: sPropertySuffix = "of Undead Slaying"; break;
 					case IP_CONST_RACIALTYPE_VERMIN: sPropertySuffix = "of Vermin Slaying"; break;
 					case 29: /*Ooze*/ sPropertySuffix = "of Ooze Slaying"; break;
-					case 30: /*Incorpreal*/ sPropertySuffix = "of Incorpreal Slaying"; break;
+					case 30: /*Incorporeal*/ sPropertySuffix = "of Incorporeal Slaying"; break;
 					case 31: /*Yuan-ti*/ sPropertySuffix = "of Yuan-ti Slaying"; break;
 					case 32: /*Orc???*/ sPropertySuffix = "of Orc Slaying"; break;
 				}
@@ -480,7 +480,7 @@ void GenerateItemPropertyName(object oItem)
 					case IP_CONST_SAVEVS_COLD: sPropertySuffix = "of Warmth"; break;
 					case IP_CONST_SAVEVS_DEATH: sPropertySuffix = "of Life"; break;
 					case IP_CONST_SAVEVS_DISEASE: sPropertySuffix = "of Good Health"; break;
-					case IP_CONST_SAVEVS_DIVINE: sPropertyPrefix = "Athieistic"; break;
+					case IP_CONST_SAVEVS_DIVINE: sPropertyPrefix = "Atheistic"; break;
 					case IP_CONST_SAVEVS_ELECTRICAL: sPropertyPrefix = "Insulated"; break;
 					case IP_CONST_SAVEVS_FEAR: sPropertySuffix = "of Courage"; break;
 					case IP_CONST_SAVEVS_FIRE: sPropertySuffix = "of Coolness"; break;
@@ -553,7 +553,7 @@ void GenerateItemPropertyName(object oItem)
 	}
 	else
 	{
-		sPropertyPrefix = "Wonderous"; // default if no property detected or something gone wrong.
+		sPropertyPrefix = "Wondrous"; // default if no property detected or something gone wrong.
 		sPropertySuffix = "Wonder"; 
 	}
 	
@@ -658,7 +658,7 @@ string GenerateNPCName(object oItem, int iGender)
 	return sName;
 }
 
-// A semi-sensible name for the item, based off properties that were added, and generate an NPC name for the item decription backstory.
+// A semi-sensible name for the item, based off properties that were added, and generate an NPC name for the item description backstory.
 void NameAndDescribeRandomItem(object oItem)
 {
 	/*
