@@ -11,7 +11,7 @@ void main()
 	
 	if (iLevel == 0)
 	{
-		SendMessageToPC(oPC, "Only Samurai should posess this weapon and have the honour to wield it!");
+		SendMessageToPC(oPC, "Only Samurai should possess this weapon and have the honour to wield it!");
 		AssignCommand(oPC, ActionUnequipItem(oItem));
 	}
 }

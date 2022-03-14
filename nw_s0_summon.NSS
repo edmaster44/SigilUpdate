@@ -28,7 +28,7 @@ const string SCOD_SUMMON_BARD_6 = "ps_summon_bard_vi";
  
 // Spirit Shaman Summons
 const string SCOD_SUMMON_SS_1 = "ps_summon_ss_i"; // Spirit Warrior - Undead 1
-const string SCOD_SUMMON_SS_2 = "ps_summon_ss_ii"; // Sprit Crossbower - Undead 3
+const string SCOD_SUMMON_SS_2 = "ps_summon_ss_ii"; // Spirit Crossbower - Undead 3
 const string SCOD_SUMMON_SS_3 = "ps_summon_ss_iii"; // Spirit Fighter - Undead 5
 const string SCOD_SUMMON_SS_4 = "ps_summon_ss_iv"; // Spirit Fencer - Undead 7
 const string SCOD_SUMMON_SS_5 = "ps_summon_ss_v"; // Spirit Lurker - Undead 9

@@ -11,7 +11,7 @@
 //:: Created On:  March 8, 2001
 //:://////////////////////////////////////////////
 //:: Last Updated By: Preston Watamaniuk, On: May 2, 2001
-//:: Mymothersmeatloaf 6/20/2020: Upped scalling to 20'th level and changed damage dice to d10
+//:: Mymothersmeatloaf 6/20/2020: Upped scaling to 20'th level and changed damage dice to d10
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 

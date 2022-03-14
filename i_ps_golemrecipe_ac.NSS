@@ -36,7 +36,7 @@ void main()
 		return;
 	}
 	
-	// Next, we determine if the PC has the ncessary skill ranks to build this golem.
+	// Next, we determine if the PC has the necessary skill ranks to build this golem.
 	int iAlchemyRank	= Get2DAInt(s2da, "RanskAlchemy", iRow);
 	int iArmorRank		= Get2DAInt(s2da, "RanskArmor", iRow);
 	int iWeaponRank		= Get2DAInt(s2da, "RanskWeapon", iRow);

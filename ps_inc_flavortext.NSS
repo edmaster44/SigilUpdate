@@ -423,7 +423,7 @@ string RandomString_GenerateArtifact() {
 			case 9: sName = "Screaming "+sName; break;
 			case 10: sName = "Thunderous "+sName; break;
 			case 11: sName = "Strong "+sName; break;
-			case 12: sName = "Dextrous "+sName; break;
+			case 12: sName = "Dexterous "+sName; break;
 			case 13: sName = "Healthy "+sName; break;
 			case 14: sName = "Witty "+sName; break;
 			case 15: sName = "Wise "+sName; break;
@@ -846,7 +846,7 @@ string RandomString_GenerateNickname() {
 		case 105: return "the Lost";
 		case 106: return "Quickwit";
 		case 107: return "the child of "+RandomString_GenerateFirstName(GENDER_MALE)+" "+RandomString_GenerateNickname();
-		case 108: return "the descendent of "+RandomString_GenerateFirstName(GENDER_MALE)+" "+RandomString_GenerateNickname();
+		case 108: return "the descendant of "+RandomString_GenerateFirstName(GENDER_MALE)+" "+RandomString_GenerateNickname();
 		case 109: return "the parent of "+RandomString_GenerateFirstName(GENDER_MALE)+" "+RandomString_GenerateNickname();
 	}
 	
@@ -1051,7 +1051,7 @@ string RandomString_GeneratePrimeLocation() {
 		case 4: return "the demi-plane of dread";
 		case 5: return "the Mists";
 		case 6: return "the little known world of Mystara";
-		case 7: return "the prime of Ebberon";
+		case 7: return "the prime of Eberron";
 		case 8: return "the irrelevant prime of Krynn";
 		case 9: return "Blackmoor";
 		case 10: return "the strange prime known as Aebrynis";
@@ -1063,7 +1063,7 @@ string RandomString_GeneratePrimeLocation() {
 		case 16: return "Fearun";
 		case 17: return "Oerth";
 		case 18: return "Mystara";
-		case 19: return "Ebberon";
+		case 19: return "Eberron";
 		case 20: return "Krynn";
 		case 21: return "Aebrynis";
 		case 22: return "Zakhara";
@@ -1451,7 +1451,7 @@ string GenerateRomanceStory(string sStart, struct character protagonist, struct 
 		case 4: sStory += "\n\nBut before they could be married, "; break;
 		case 5: sStory += "\n\nBut the day before the wedding, "; break;
 		case 6: sStory += "\n\nThe wedding was beautitful, but the following day, "; break;
-		case 7: sStory += "\n\nThe happy couple was married, and they soon concieved a child. But "; break;
+		case 7: sStory += "\n\nThe happy couple was married, and they soon conceived a child. But "; break;
 	}
 	
 	//The lovers are separated
@@ -1717,7 +1717,7 @@ string GenerateRecipeText() {
 	
 	total = 6;
 	switch(Random(total)) {
-		case 0: sText += "Take "+ingred1+" and make a find powder from it. Then take distilled vinegar, and disolve the powder within it. Let stand in a glass over a small fire until the vinegar changes color."; break;
+		case 0: sText += "Take "+ingred1+" and make a find powder from it. Then take distilled vinegar, and dissolve the powder within it. Let stand in a glass over a small fire until the vinegar changes color."; break;
 		case 1: sText += "Take "+IntToString(d3())+" parts of "+ingred1+" and "+IntToString(d3())+" parts oil, and combine in a glass vessel. Allow to stand in the sun for "+IntToString(d3())+" days; watching to ensure that the mixture does not mold. Once infused, strain out the "+ingred1+", and store in a dark cool place."; break;
 		case 2: sText += "Heat "+IntToString(d3())+" parts oil, mixed with "+IntToString(d3())+" parts "+ingred1+" over a small fire. Keep at a steady low temperature to allow the "+ingred1+" to infuse in the oil.";
 		case 3: sText += "Combine "+ingred1+" with "+ingred2+", and grind into a fine powder."; break;
@@ -1730,7 +1730,7 @@ string GenerateRecipeText() {
 		case 0: sText += "\n\nBring the mixture to room temperature. Then add "+IntToString(d3())+" parts "+ingred3+". In another vessel, grind "+IntToString(d3())+" parts "+ingred4+" to a fine powder."; break;
 		case 1: sText += "\n\nSet the mixture aside. In another vessel, combine 1 part "+ingred3+" and "+IntToString(d3())+" parts "+ingred4+"."; break;
 		case 2: sText += "\n\nIn another vessel, combine "+ingred3+", "+ingred4+", and "+ingred6+". Place over an open fire, and bring to a boil. Boil for one hour, and then allow to cool."; break;
-		case 3: sText += "\n\nCombine "+ingred3+" with "+ingred4+", and grind into a fine powder. Disolve in the finest distilled vinegar."; break;
+		case 3: sText += "\n\nCombine "+ingred3+" with "+ingred4+", and grind into a fine powder. Dissolve in the finest distilled vinegar."; break;
 		case 4: sText += "\n\nMix "+ingred3+" and "+ingred4+". Allow to rest for "+IntToString(d3())+" hours, then pour into a new vessel."; break;
 		case 5: sText += "\n\nSift "+IntToString(d3())+" parts "+ingred3+" and then add "+IntToString(d3())+" parts "+ingred4+". Set aside."; break;
 	}
@@ -1825,7 +1825,7 @@ string GenerateLoveLetterText() {
 			case 19: sText += "\n\nWhen I’m alone in the quiet, it always feels like I can hear your voice, whispering sweet nothings to me, just like the blessed music of a harp."; break;
 			case 20: sText += "\n\nI must be the luckiest person in all the planes to have you in my life. You are my sunny day in winter. I’d give up everything in the world to know that you will be right there beside me for the rest of our lives."; break;
 			case 21: sText += "\n\nI miss you so much. I hope to soon be done with my business in "+RandomString_GeneratePlanarLocation()+" so that I can return to your arms."; break;
-			case 22: sText += "\n\nOthers may call you "+recipient.nickname+", but to me, you are the most loveable creature in the planes."; break;
+			case 22: sText += "\n\nOthers may call you "+recipient.nickname+", but to me, you are the most lovable creature in the planes."; break;
 			default: break;
 		}
 	}

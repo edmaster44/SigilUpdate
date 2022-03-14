@@ -52,7 +52,7 @@ void main()
 	float fDelay;
 	//counter
 	int nCount = 1;
-	// Succesful save?
+	// Successful save?
 	int nSaved;
 	
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVisual, lTarget);

@@ -131,10 +131,10 @@ void GenerateItemDescription(object oItem)
 		case 0: sDesc+= "Athas."; break;
 		case 1: sDesc+= "the backwater prime known as Toril."; break;
 		case 2: sDesc+= "some unknown prime."; break;
-		case 3: sDesc+= "the wonderours prime of Oerth."; break;
+		case 3: sDesc+= "the wondrous prime of Oerth."; break;
 		case 4: sDesc+= "the evil demi-plane of Ravenloft."; break;
 		case 5: sDesc+= "the little known world of Mystara."; break;
-		case 6: sDesc+= "the prime of Ebberon."; break;
+		case 6: sDesc+= "the prime of Eberron."; break;
 		case 7: sDesc+= "the irrelevant prime of Krynn."; break;
 		case 8: sDesc+= "Blackmoor."; break;
 		case 9: sDesc+= "the strange prime known as Aebrynis."; break;

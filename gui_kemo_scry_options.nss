@@ -8,7 +8,7 @@ void main(string sOPTION)
 	int nOPTION = StringToInt(sOPTION);
 	switch (nOPTION)
 	{
-		case 0: //Anonimous
+		case 0: //Anonymous
 			if (nANON == 1)
 			{
 				SetLocalInt(oPC,"KScry_Anon",0);
@@ -55,7 +55,7 @@ void main(string sOPTION)
 		nROW = nROW + 1;
 		oROW = GetLocalObject(oPC, "ScryObject_"+IntToString(nROW));
 	}
-	if (nFOUND == 0) return; //In case the caller is anonimous
+	if (nFOUND == 0) return; //In case the caller is anonymous
 	string sROW = "ScryRow" + IntToString(nROW);
 	DelayCommand(0.0f, ChangeList(nANON, oPC, oPC, sROW, 1));
 }

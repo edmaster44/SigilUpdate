@@ -57,7 +57,7 @@ void PS_Spell_Gutwrench(object oPC, object oTarget, int nSpell)
 
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-		// Check for "no discernable anatomy"
+		// Check for "no discernible anatomy"
 		if (PS_GetHasDiscernableAnatomy(oTarget) == FALSE)
 		{   SendMessageToPCByStrRef(oPC, 16780102);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);

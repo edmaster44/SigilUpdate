@@ -469,7 +469,7 @@ void main()
 	
 	object oCheck =  GetItemPossessedBy(oPC, "ps_essence");
 	
-	// If OldSubrace is not alredy set, set it!
+	// If OldSubrace is not already set, set it!
 	if (GetLocalInt(oCheck, "OldSubrace") == 0 && GetLocalString(oCheck, "Template") == "")
 	{	SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
 	

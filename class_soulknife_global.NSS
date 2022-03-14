@@ -173,7 +173,7 @@ int ApplyPsychicStrike(object oPC, object oTarget)
 }
 
 // Attempts to recharge the Soulknife's psychic strike. Uses 5.99 second "rounds" to make sure
-// the recharge attempt is made BEFORE the attack comming 6 seconds latter.
+// the recharge attempt is made BEFORE the attack coming 6 seconds latter.
 void AttemptRecharge(object oPC)
 {
 	int DC = GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC);

@@ -87,17 +87,17 @@ void main()
 			else if(GetRacialType(OBJECT_SELF) == RACIAL_TYPE_OUTSIDER || GetRacialType(OBJECT_SELF) == RACIAL_TYPE_CONSTRUCT || GetRacialType(OBJECT_SELF) == RACIAL_TYPE_UNDEAD || GetRacialType(OBJECT_SELF) == RACIAL_TYPE_ELEMENTAL)
 			{
 				newsaltDamage = 0;
-				SendMessageToPC(OBJECT_SELF, "The plane's dissecating atmosphere does not effect you.");
+				SendMessageToPC(OBJECT_SELF, "The plane's desiccating atmosphere does not effect you.");
 			}
 			else if(GetLevelByClass(63, OBJECT_SELF) > 2)
 			{
 				newsaltDamage = 0;
-				SendMessageToPC(OBJECT_SELF, "The plane's dissecating atmosphere does not effect you.");
+				SendMessageToPC(OBJECT_SELF, "The plane's desiccating atmosphere does not effect you.");
 			}
 			else if(GetHasSpellEffect(398, OBJECT_SELF))
 			{
 				newsaltDamage = GetCurrentHitPoints() + 1;
-				SendMessageToPC(OBJECT_SELF, "The plane's dissecating atmosphere has a particularly devestating effect on water elementals");
+				SendMessageToPC(OBJECT_SELF, "The plane's desiccating atmosphere has a particularly devestating effect on water elementals");
 			}
 			else
 			{

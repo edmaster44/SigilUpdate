@@ -1,6 +1,6 @@
 /* v1.01
 12/8/2020 added Psyhic Knight Check
-Removed Alingment change for Thug for exploit reason */ 
+Removed Alignment change for Thug for exploit reason */ 
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "aaa_constants"

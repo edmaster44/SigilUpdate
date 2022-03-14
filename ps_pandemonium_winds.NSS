@@ -18,7 +18,7 @@ void DecreaseSavingThrow(object oPC, int nStage) {
 		SendMessageToPC(oPC, "<i>The harsh conditions of Pandemonium have taken their toll on you.</i>");
 	} else if (nStage < 15) {
 		nDecrease = 8;
-		SendMessageToPC(oPC, "<i>The screaming wind is less noticable as you spend more time in Pandemonium. You are learning to tune it out.</i>");
+		SendMessageToPC(oPC, "<i>The screaming wind is less noticeable as you spend more time in Pandemonium. You are learning to tune it out.</i>");
 	} else {
 		nDecrease = 10;
 		SendMessageToPC(oPC, "<i>You barely hear the wind or dripping water any more. This place finally makes sense.</i>");

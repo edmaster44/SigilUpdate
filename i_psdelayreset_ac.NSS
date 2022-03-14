@@ -54,6 +54,6 @@ void main()
 	}
 	else
 	{
-		SendMessageToPC(oDM, "This is a DM only tool. You shound't have it! Throw it away.");
+		SendMessageToPC(oDM, "This is a DM only tool. You shouldn't have it! Throw it away.");
 	}
 }

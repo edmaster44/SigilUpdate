@@ -1351,7 +1351,7 @@ const string TXT_INVENTORY_MANAGE = "Inventory Copied for Manipulation.";
 const string TXT_INVENTORY_ONLY = "Item must be in your inventory for this inventory action.";
 const string TXT_INVENTORY_TARGET_INVALID = "Inventory Manage Target Invalid";
 const string TXT_ITEM_GIVE = "Item or Items Given: ";
-const string TXT_ITEM_CONTAINER_ERROR = "Error: Can only give contents of containers.  Empty containters NOT valid target.";
+const string TXT_ITEM_CONTAINER_ERROR = "Error: Can only give contents of containers.  Empty containers NOT valid target.";
 
 
 //////////////////////////////////// NEW IN 1.10 //////////////////////////////
@@ -1359,7 +1359,7 @@ const string TXT_ITEM_CONTAINER_ERROR = "Error: Can only give contents of contai
 const string DMFI_STATUS_SHEET = "<b>DMFI STATUS SHEET</b>\n\n";
 const string DONE_UI_BUTTON = "Done";
 const string ONLY_ITEMCREAT = "You can only store items or creatures";
-const string SUCCESS_ADD = "Succesfully added";
+const string SUCCESS_ADD = "Successfully added";
 const string SLOT_EMPTY = "Empty";
 const string TXT_NOTDMEQUAL = "You cannot manage the inventory to yourself";
 //void main() {}

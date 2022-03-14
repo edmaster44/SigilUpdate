@@ -2753,7 +2753,7 @@ void PS_InitializeItemImmunityLookup()
 	//
 	// Note that it is assumed that no items exist with invalid references to
 	// immunity constants (out of range in the 2DA) as these would be treated as
-	// spell 0, "Acid Fog".  This could be accomodated at the cost of more work
+	// spell 0, "Acid Fog".  This could be accommodated at the cost of more work
 	// done in the primary lookup path.
 	//
 
@@ -3569,7 +3569,7 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 	
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
 	
-	// if fix has alredy been applied, stop the script!
+	// if fix has already been applied, stop the script!
 	if (iStop == 1) 
 	{	SendMessageToPC(oPC, "Racial attribute fix already applied!");
 		return;	}
@@ -3637,7 +3637,7 @@ void PS_RemoveTemplateClassAbilityFix(object oPC, object oItem)
 	
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
 	
-	// if fix has alredy been applied, stop the script!
+	// if fix has already been applied, stop the script!
 	if (iStop != 1) 
 	{	// SendMessageToPC(oPC, "No need to run this script!");
 		return;	}
@@ -4159,7 +4159,7 @@ int PS_GetAppWingType(object oPC)
 	return iWing;
 }
 
-// Determines if the selected target has a discernable anatomy
+// Determines if the selected target has a discernible anatomy
 // int PS_GetHasDiscernableAnatomy(object oTarget);
 int PS_GetHasDiscernableAnatomy(object oTarget)
 {

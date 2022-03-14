@@ -966,7 +966,7 @@ void ApplyFatigue(object oTarget, int nFatigueDuration, float fDelay = 0.0f)
 {
 	//SpeakString("Entering ApplyFatigue");
 
-	// Only apply fatigue ifyou're not resting.
+	// Only apply fatigue if you're not resting.
 	// This is to keep you from getting fatigued if you rest while raging.
 	if( !GetIsResting() )
 	{

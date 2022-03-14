@@ -29,10 +29,10 @@ void PS_CalculateECL(object oPC)
 	
 	if (nOriginalECL == nRacialECL)
 	{	nECL = nECL + nRacialECL + nTemplateECL;
-		SendMessageToPC(oPC, "Level adjusmtent calculated using current racial type: +" + IntToString(nECL));	}
+		SendMessageToPC(oPC, "Level adjustment calculated using current racial type: +" + IntToString(nECL));	}
 	else
 	{	nECL = nECL + nOriginalECL + nTemplateECL;
-		SendMessageToPC(oPC, "Level adjusmtent calculated using original racial type: +" + IntToString(nECL));	}
+		SendMessageToPC(oPC, "Level adjustment calculated using original racial type: +" + IntToString(nECL));	}
 
 	string sECL = IntToString(nECL);
 			

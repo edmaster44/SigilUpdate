@@ -1,5 +1,5 @@
 // Kiai Smite
-// works with any equipped wepaon.
+// works with any equipped weapon.
 
 #include "x2_inc_itemprop"
 
