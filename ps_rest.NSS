@@ -47,7 +47,7 @@ int HasToWipeAbilities(object oPC, object oEssence)
 		}
 	}
 
-	if (nORDER == ALIGNMENT_LAWFUL)
+	/*if (nORDER == ALIGNMENT_LAWFUL)
 	{
 		if (GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC) > 0)
 		{
@@ -84,7 +84,7 @@ int HasToWipeAbilities(object oPC, object oEssence)
 		}
 	}
 	
-	return FALSE;
+	return FALSE;*/
 }
 
 void WipeSpecialAbilities(object oCreature)
@@ -240,7 +240,7 @@ void AlternativeSkillStatScaling (object oPC)
 void RestFinish(object oPC)
 {
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
-	if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
+	//if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
 	
 	
 	if (PS_NeedsTemplateClassAbilityFix(oPC) == TRUE) TemplateRacialAdjust(oPC, oESSENCE, FALSE);
