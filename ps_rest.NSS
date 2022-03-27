@@ -29,7 +29,7 @@ void AddEPForDeathDice(object oPC)
 
 }
 
-int HasToWipeAbilities(object oPC, object oEssence)
+/*int HasToWipeAbilities(object oPC, object oEssence)
 {
 	int nORDER = GetAlignmentLawChaos(oPC);
 	int nMORAL = GetAlignmentGoodEvil(oPC);
@@ -45,9 +45,11 @@ int HasToWipeAbilities(object oPC, object oEssence)
    			SendMessageToPC(oPC, "You must find balance or leave your ways behind.");
    			return TRUE;
 		}
-	}
+}
 
-	/*if (nORDER == ALIGNMENT_LAWFUL)
+
+
+	if (nORDER == ALIGNMENT_LAWFUL)
 	{
 		if (GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC) > 0)
 		{
@@ -84,8 +86,8 @@ int HasToWipeAbilities(object oPC, object oEssence)
 		}
 	}
 	
-	return FALSE;*/
-}
+	return FALSE;} */
+
 
 void WipeSpecialAbilities(object oCreature)
 {
