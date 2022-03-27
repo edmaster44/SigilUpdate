@@ -359,17 +359,14 @@ void ApplyTempOrInstantEffect(object oTarget, effect eEffect, float fDelay, floa
 // Created to handle some damage piercing stuff by looking at oCaster's feats
 // It can also modify & increase the spell damage
 // Passes the call to EffectElementalPiercingDamage which handles the creation of the effects
-effect EffectElementalPiercingDamage(object oPC, int nDamage, int nDamageType)
-{	
-	int nLevel = GetLevelByClass(9999, oPC); //"9999" to be replace with Elemental Adept class ID
-	int nDamageA = nDamage * nLevel / 10;
-	int nDamageB = nDamage - nDamageA;
-	
-	effect eDamageA = EffectDamage(nDamageA, nDamageType, DAMAGE_POWER_NORMAL, TRUE);
-	effect eDamageB = EffectDamage(nDamageB, nDamageType, DAMAGE_POWER_NORMAL, FALSE);
-	effect ePiercing = EffectLinkEffects(eDamageA, eDamageB);
-	
-	return (ePiercing);
+effect GetDamageEffect(object oCaster, int nDamageType, int nDamageAmount, int nDamagePower=DAMAGE_POWER_NORMAL)
+{
+    int nPiercing = 0;
+    // Frostmage isn't in... but this is an example of how to do it
+    // int FEAT_FROSTMAGE_PIERCING_COLD = 3285;
+    // if(GetHasFeat(FEAT_FROSTMAGE_PIERCING_COLD, oCaster) && nDamageType == DAMAGE_TYPE_COLD)
+    //     nPiercing = 100;
+    return PS_EffectDamagePiercing(nDamageAmount, nDamageType, nDamagePower, nPiercing);
 }
 
 

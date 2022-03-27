@@ -634,8 +634,8 @@ int ProcessSpellTarget(struct CombatSpellData spell, struct CombatSpellData impa
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, spell.HealVisEffect, oTarget));
             }
 
-            if(spell.InfiniteSpell)
-                DoInfiniteSpell(spell.Caster, oTarget);
+            /*if(spell.InfiniteSpell)
+                DoInfiniteSpell(spell.Caster, oTarget);*/
         }
     }
     // Draw the beams & projectiles even if the target resists/misses
@@ -976,9 +976,9 @@ void HandleSpellImpact(struct CombatSpellData spell, struct CombatSpellData impa
     }
 
     // Add in any bonuses from reserve feats and other sources
-    spell = AddReserveFeatBonuses(spell);
+    /*spell = AddReserveFeatBonuses(spell);
     if(impactSpell.Ready)
-        impactSpell = AddReserveFeatBonuses(impactSpell);
+        impactSpell = AddReserveFeatBonuses(impactSpell);*/
 
     switch(spell.TargetType)
     {

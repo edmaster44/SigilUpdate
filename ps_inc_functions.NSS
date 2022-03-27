@@ -103,6 +103,8 @@ int PS_GetMaxPartylevel(object oPC);
 
 int PS_GetNumPC(object oPC);
 
+effect PS_EffectDamage(int nDamageAmount, int nDamageType = DAMAGE_TYPE_BLUDGEONING, int nDamagePower = DAMAGE_POWER_NORMAL, int IgnoreResistance = FALSE);
+
 float PS_GetAvgPartylevel(object oPC, int iMAX);
 
 int BarbarianLevels(object oPC);
@@ -4477,4 +4479,36 @@ int GetPCActionRecorded(object oTarget, string sVar, object oPC) {
 	}
 	
 	return FALSE;
+}
+
+effect PS_EffectDamage(int nDamageAmount, int nDamageType = DAMAGE_TYPE_BLUDGEONING, int nDamagePower = DAMAGE_POWER_NORMAL, int IgnoreResistance = FALSE)
+{
+	return EffectDamage(nDamageAmount, nDamageType, nDamagePower, IgnoreResistance);
+	
+	//object oCaster = OBJECT_SELF;
+	//int SpellID = GetSpellId();
+	
+	//nDamageAmount = GetSQLDamageBonuses(oCaster, SpellID, nDamageAmount);
+
+	//effect eDamage = EffectDamage(nDamageAmount, nDamageType, nDamagePower, IgnoreResistance);	
+	//return eDamage;
+}
+
+effect PS_EffectDamagePiercing(int nDamageAmount, int nDamageType=DAMAGE_TYPE_BLUDGEONING, int nDamagePower=DAMAGE_POWER_NORMAL, int nPiercePercent=0)
+{
+	if(nPiercePercent <= 0)
+		return PS_EffectDamage(nDamageAmount, nDamageType, nDamagePower, FALSE);
+	else if(nPiercePercent >= 100)
+		return PS_EffectDamage(nDamageAmount, nDamageType, nDamagePower, TRUE);
+	else
+	{
+		// some of the damage is piercing, some is normal
+		// link them together
+		float fPercentage = IntToFloat(nPiercePercent) * 0.01;
+		int nNormalDamage = FloatToInt(nDamageAmount * (1.0 - fPercentage));
+		int nPiercingDamage = nDamageAmount - nNormalDamage;
+		effect eNormal = PS_EffectDamage(nNormalDamage, nDamageType, nDamagePower, FALSE);
+		effect ePiercing = PS_EffectDamage(nPiercingDamage, nDamageType, nDamagePower, TRUE);
+		return EffectLinkEffects(eNormal, ePiercing);
+	}
 }
