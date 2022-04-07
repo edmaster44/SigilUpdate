@@ -284,7 +284,9 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
-   return nTYPE >= 160 && nTYPE <= 180;
+   if (nTYPE < 160) return FALSE;
+    if (nTYPE > 180) return FALSE;
+    return TRUE;
    
 }
 
@@ -459,27 +461,14 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
             return TRUE;
         }
     }
-    if (GetLocalInt(oESSENCE, "TempChange") == 0)
-    {
-    if (GetIsCreatureWeapon(nITEM) == FALSE)
-    
+    else if (GetIsCreatureWeapon(nITEM) == FALSE)
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
         AssignCommand(oPC, ActionUnequipItem(oITEM));
         return TRUE;
     }
-	}
-	if (GetLocalInt(oESSENCE, "TempChange") == 0)
-    {
-    if (GetIsShields(oITEM) == TRUE)
-    {
-        SendMessageToPC(oPC, "<c=red>Your character cannot wield shields in natural form.");
-        AssignCommand(oPC, ClearAllActions());
-        AssignCommand(oPC, ActionUnequipItem(oITEM));
-        return TRUE;
-    }
-    }
+    
     return FALSE;
 }
 
@@ -894,7 +883,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
         {
             if (MonkeyGripAbuse(oPC, oITEM, nITEM) == TRUE) return;
             if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
-            if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return; 
+            if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return;
             IajaitsuMaster(oPC, oITEM, nITEM);
         }
     }
