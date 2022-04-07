@@ -459,22 +459,27 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
             return TRUE;
         }
     }
-    else if (GetIsCreatureWeapon(nITEM) == FALSE)
+    if (GetLocalInt(oESSENCE, "TempChange") == 0)
+    {
+    if (GetIsCreatureWeapon(nITEM) == FALSE)
+    
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
         AssignCommand(oPC, ActionUnequipItem(oITEM));
         return TRUE;
     }
-	
-	    else if (GetIsShields(oITEM) == TRUE)
+	}
+	if (GetLocalInt(oESSENCE, "TempChange") == 0)
+    {
+    if (GetIsShields(oITEM) == TRUE)
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
         AssignCommand(oPC, ActionUnequipItem(oITEM));
         return TRUE;
     }
-    
+    }
     return FALSE;
 }
 
