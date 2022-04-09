@@ -298,14 +298,6 @@ int GetIsShields (object oItem)
 }
 
 
-int GetCreatureWeapons(object oItem)
-{ 
-       int iBaseItem = GetBaseItemType(oItem);
-    return GetIsCreatureWeapon(iBaseItem);
-}
-
-
-
 //A Wrapper for to Ignore Exsisting Finesse
 int GetExistingFinesse(object oItem)
 {
@@ -422,6 +414,8 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 // Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
 int CheckDragonForms(object oPC, object oITEM, int nITEM)
 {
+    if (GetIsCreatureWeapon(nITEM) == TRUE) return FALSE;
+    object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     switch (nITEM)
     {
         case BASE_ITEM_AMULET:
@@ -442,15 +436,21 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
 	if  (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC,oPC)>= 0) return FALSE;
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
-    if (GetArmorRank(oITEM) != ARMOR_RANK_NONE||ARMOR_RANK_LIGHT||ARMOR_RANK_MEDIUM||ARMOR_RANK_HEAVY)
+   if (GetLocalInt(oESSENCE, "TempChange") == 1) return FALSE;
+    AssignCommand(oPC, ClearAllActions());
+    AssignCommand(oPC, ActionUnequipItem(oITEM));
+    SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons, shields, or any other object in their hands due to the No Manual Dexterity feat");
+    return TRUE;    
+
+   /* if (GetArmorRank(oITEM) != ARMOR_RANK_NONE||ARMOR_RANK_LIGHT||ARMOR_RANK_MEDIUM||ARMOR_RANK_HEAVY)
     {
         SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection than any armor could. You may only wear clothes.");
         AssignCommand(oPC, ClearAllActions(TRUE));
         AssignCommand(oPC, ActionUnequipItem(oITEM));   
         return TRUE;
-    } 
+    } */
     
-    object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
+   /* object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1)
     {
         if (GetIsCreatureWeapon(nITEM) == TRUE)
@@ -469,7 +469,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
         return TRUE;
     }
     
-    return FALSE;
+    return FALSE;*/
 }
 
 // Marquis Cambion Silent Metal
@@ -898,5 +898,5 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
         
     }
 
-    DelayCommand(0.1f, EquipmentEffects(oPC));
+    DelayCommand(0.0f, EquipmentEffects(oPC));
 }

@@ -237,7 +237,7 @@ void PS_AltForm_Assume(object oPC)
 // This script should be used in conjunction with PS_AltForm_Assume or PS_ChangeForm_AppearanceType.
 void PS_HumForm_DragonUE(object oPC)
 {
-	object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	/*object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	object oWpn7 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	int iType6 = GetBaseItemType(oWpn6);
 	int iType7 = GetBaseItemType(oWpn7);	
@@ -256,7 +256,7 @@ void PS_HumForm_DragonUE(object oPC)
 				SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form");
 			}
 		}
-	}
+	}*/
 
 	// removes multiattack from "claw" dragons when assuming humanoid form.
 	int iDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
@@ -272,7 +272,7 @@ void PS_HumForm_DragonUE(object oPC)
 // This script should be used in conjunction with PS_RestoreOriginalAppearance.
 void PS_DragForm_DragonUE(object oPC)
 {
-	object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	/*(object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	object oWpn7 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	int iType6 = GetBaseItemType(oWpn6);
 	int iType7 = GetBaseItemType(oWpn7);
@@ -291,7 +291,7 @@ void PS_DragForm_DragonUE(object oPC)
 				SendMessageToPC(oPC, "<c=red>You cannot wield humanoid weapons or shields in your natural form.");
 			}
 		}
-	}
+	}*/
 
 	// applies multiattack to "claw" dragons	
 	int iDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);  
