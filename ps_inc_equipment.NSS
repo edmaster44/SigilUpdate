@@ -26,7 +26,13 @@ int GetMonkWeapon(object oItem)
 }
 
 
-
+int GetCreatureWeapons(object oItem)
+{
+int iBaseItem = GetBaseItemType(oItem);
+return iBaseItem == 164  || iBaseItem == 165  || iBaseItem == 166 || iBaseItem == 167 || iBaseItem == 168 || iBaseItem == 169 || iBaseItem == 170
+|| iBaseItem == 171 || iBaseItem == 172 || iBaseItem == 173 || iBaseItem == 174 || iBaseItem == 175 || iBaseItem == 176 || iBaseItem == 177 || iBaseItem == 178
+|| iBaseItem == 179 || iBaseItem == 180;
+}
 
 
 int NoHeavyArmorOrShield(object oPC)
@@ -290,12 +296,6 @@ int GetIsCreatureWeapon(int nTYPE)
    
 }
 
-
-int GetCreatureWeapons(object oITEM)
-{
-return GetIsCreatureWeapon;
-
-}
 
 int GetIsShields (object oItem)
 {
