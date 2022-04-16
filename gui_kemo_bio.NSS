@@ -114,16 +114,15 @@ object oPC = OBJECT_SELF;
 			DisplayGuiScreen(oPC,"KEMO_BIO_DISPLAY",FALSE,"kemo_bio_display.xml");
 			SetGUIObjectText(oPC,"KEMO_BIO_DISPLAY","INPUT_BIOTEXT",-1,sBio);
 			SetGUITexture(oPC,"KEMO_BIO_DISPLAY","KEMO_PORTRAIT",sPortrait);
-			DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
-			SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you. [Portrait: " + sPortrait + "]</C>");
+
+			//SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you. [Portrait: " + sPortrait + "]</C>");
 		}
 		else
 		{	sPortrait = sPortrait + ".tga";
 			DisplayGuiScreen(oPC,"KEMO_BIO_DISPLAY",FALSE,"kemo_bio_display.xml");
 			SetGUIObjectText(oPC,"KEMO_BIO_DISPLAY","INPUT_BIOTEXT",-1,sBio);
 			SetGUITexture(oPC,"KEMO_BIO_DISPLAY","KEMO_PORTRAIT",sPortrait);
-			DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
-			SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you.</C>");
+			//SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you.</C>");
 		}
 		WriteTimestampedLogEntry(GetName(oPC) + " is displaying a bio/portrait: " + sPortrait);
 		
@@ -154,16 +153,14 @@ object oPC = OBJECT_SELF;
 			DisplayGuiScreen(oPC,"KEMO_BIO_DISPLAY",FALSE,"kemo_bio_display.xml");
 			SetGUIObjectText(oPC,"KEMO_BIO_DISPLAY","INPUT_BIOTEXT",-1,sBio);
 			SetGUITexture(oPC,"KEMO_BIO_DISPLAY","KEMO_PORTRAIT",sPortrait);
-			//DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
-			//SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you. [Portrait: " + sPortrait + "]</C>");
+		
 		}
 		else
 		{	sPortrait = sPortrait + ".tga";
 			DisplayGuiScreen(oPC,"KEMO_BIO_DISPLAY",FALSE,"kemo_bio_display.xml");
 			SetGUIObjectText(oPC,"KEMO_BIO_DISPLAY","INPUT_BIOTEXT",-1,sBio);
 			SetGUITexture(oPC,"KEMO_BIO_DISPLAY","KEMO_PORTRAIT",sPortrait);
-			//DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
-			//SendMessageToPC(oTarget,"<C=gray>Someone is inspecting you.</C>");
+			
 		}
 		WriteTimestampedLogEntry(GetName(oPC) + " is displaying a bio/portrait: " + sPortrait);
 		
@@ -172,7 +169,7 @@ object oPC = OBJECT_SELF;
 	if (sAction == "edit")
 	{
 		WriteTimestampedLogEntry(GetName(oPC) + " is editing a bio/portrait.");
-		SendMessageToPC(oPC,"Players portraits available: https://kingdomofhaven.com/gallery/");
+		SendMessageToPC(oPC,"Players portraits available: https://www.nwn2planescape.com/portrait_gallery.php/");
 		bioid = GetBioPCID(oPC);		
 
 		sQuery = "SELECT AES_DECRYPT(biotext,'insertyourpasswordhere'), portrait FROM kemo_bios"+
@@ -186,7 +183,6 @@ object oPC = OBJECT_SELF;
 		SetGUIObjectText(oPC,"KEMO_BIO_EDIT","INPUT_BIOTEXT",-1,SQLGetData(1));
 		SetGUIObjectText(oPC,"KEMO_BIO_EDIT","PORTRAIT_INPUT_BOX",-1,sPortrait);
 		SetGUITexture(oPC,"KEMO_BIO_EDIT","KEMO_PORTRAIT",sPortraitTGA);
-		DisplayGuiScreen(oPC,"KEMO_ERP",FALSE,"kemo_erp.xml");
 		return;
 	}
 	if (sAction == "save")
