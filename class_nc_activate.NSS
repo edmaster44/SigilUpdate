@@ -46,10 +46,10 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
    				int iATotal = d10(1) + iAttackerCheck;
                 int iDTotal = d10(1) + iDefenderCheck + SizeCheck;
                 int nDur    = 4;
-                SendMessageToPC(GetFirstPC(), "iATotal: " + IntToString(iATotal) + ", iDTotal: " + IntToString(iDTotal)); // HERE YOU LOG BOTH ROLLS
+                SendMessageToPC(oPC, "iATotal: " + IntToString(iATotal) + ", iDTotal: " + IntToString(iDTotal)); // HERE YOU LOG BOTH ROLLS
                 if (iATotal > iDTotal)
                 { 
-                    SendMessageToPC(GetFirstPC(), "SUCCESS!"); // here you log success
+                    SendMessageToPC(oPC,"SUCCESS!"); // here you log success
                     effect eRoped    = EffectEntangle();
                     effect eVis        = EffectVisualEffect(VFX_DUR_PARALYZED);
                     effect eHidePen = EffectSkillDecrease(5, 100);
@@ -62,7 +62,7 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
                     
                 else 
                 {   effect eFail = EffectMovementSpeedDecrease (50);
-                    SendMessageToPC(GetFirstPC(), "FAILURE!"); // here you log failure
+                    SendMessageToPC(oPC "Your rope has failed to ensare!"); // here you log failure
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
                     SpeakString(GetFirstName(oTarget) + " broke free of the attempted ensnarement!"); }
         
