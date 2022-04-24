@@ -25,11 +25,11 @@ int PS_GetSpellSaveDC(object oPC)
     {
         nDC += GetAbilityModifier(ABILITY_INTELLIGENCE);
     }
-    else if (isEpicSorcerer(oPC) || isEpicSpiritShaman(oPC) || isEpicWarlock(oPC))
+    else if (isEpicSorcerer(oPC) ||isEpicWarlock(oPC) || isEpicFavoredSoul(oPC))
     {
         nDC += GetAbilityModifier(ABILITY_CHARISMA);
     }
-    else if (isEpicCleric(oPC) || isEpicDruid(oPC) || isEpicFavoredSoul(oPC))
+    else if (isEpicCleric(oPC) || isEpicSpiritShaman(oPC) || isEpicDruid(oPC))
     {
         nDC += GetAbilityModifier(ABILITY_WISDOM);
     }
