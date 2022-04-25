@@ -147,7 +147,7 @@ if ( GetIsObjectValid(oItem) ) {
 AssignCommand(oItem, ClearAllActions()); // clear any queued clean up actions.
 AssignCommand(oItem, ActionDelayedCleanCheck());
 } else {
-PrintString( "bar_onareaexit: WARNING: No placable objects to assign a command to." );
+PrintString( "bar_onareaexit: WARNING: No placeable objects to assign a command to." );
 }
 }
 }

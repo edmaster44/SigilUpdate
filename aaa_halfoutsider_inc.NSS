@@ -651,12 +651,12 @@ void PS_HO_SupernaturalSight(object oPC, int nSpell)
 	if(GetHasSpellEffect(nSpell, oPC))
 	{
 		RemoveEffectsFromSpell(oPC, nSpell);
-		SendMessageToPC(oPC, "Super natural Site deactivated ");	
+		SendMessageToPC(oPC, "Super natural sight deactivated ");	
 	}
 	else
 	{
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		SendMessageToPC(oPC, "Super natural Site activated");
+		SendMessageToPC(oPC, "Super natural sight activated");
 	}
 	
 }
