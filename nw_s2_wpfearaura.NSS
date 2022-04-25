@@ -15,6 +15,7 @@
 
 #include "NW_I0_SPELLS"   
 #include "x0_i0_spells"
+#include "ps_inc_functions"
  
 void main()
 {
@@ -30,7 +31,7 @@ void main()
     //eLink = EffectLinkEffects(eLink, eDur2);
     
     float fDelay;
-	int nLevel = GetLevelByClass(CLASS_TYPE_WARPRIEST);
+	int nLevel = PS_GetCasterLevel(OBJECT_SELF);
 	
 	if (GetSubRace(OBJECT_SELF) == 169) // Death Knight
 		nLevel = GetTotalLevels(OBJECT_SELF, TRUE);
