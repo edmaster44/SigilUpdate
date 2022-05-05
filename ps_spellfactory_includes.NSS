@@ -39,6 +39,7 @@ void main()
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
+#include "psi_spellhook"
 
 
 
@@ -90,8 +91,8 @@ struct CombatSpellData
     //-------------------------------------------------------------------------
     // Should the X2PreSpellCastCode be called?
     int PreSpellCastHook;
-    // used by Wildsoul casting
-    int InfiniteSpell;
+    // used by Psionic casting
+    int PsiPrePowerCastCode;
     // Should this create a SpellNode creature?
     // ImpactEffects & Beams will be fired at this creature and it will be destroyed in 2 seconds
     int CreateSpellNode;
@@ -277,6 +278,7 @@ struct CombatSpellData GetCombatSpellData(object oCaster)
     spell.ObjectTypeFilter = OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE;
     spell.SpellResistance = TRUE;
     spell.PreSpellCastHook = TRUE;
+    spell.PsiPrePowerCastCode = TRUE;
     spell.SavingThrow = SAVING_THROW_NONE;
     spell.AbilityScoreCheck = -1;
     spell.SecondarySavingThrow = 0;
@@ -975,6 +977,14 @@ void HandleSpellImpact(struct CombatSpellData spell, struct CombatSpellData impa
         }
     }
 
+if(spell.PsiPrePowerCaseCode)
+{
+    if (!PsiPrePowerCastCode())
+    {
+    // If code within the PrePowerCastHook (i.e. UMD) reports FALSE, do not run this spell
+        return;
+    }
+}
     // Add in any bonuses from reserve feats and other sources
     /*spell = AddReserveFeatBonuses(spell);
     if(impactSpell.Ready)

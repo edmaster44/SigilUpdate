@@ -2,7 +2,7 @@
    ----------------
    Elf Sight
 
-   psi_pow_elfsight
+   psi_pow_astralseed
    ----------------
 
    6/11/04 by Stratovarius
@@ -11,7 +11,7 @@
     Elf Sight
 
     Psychometabolism
-    Level: Psion/wilder 2, psychic warrior 1
+    Level: Psion/wilder 9, psychic warrior 1
     Manifesting Time: 1 standard action
     Range: Personal
     Target: You
