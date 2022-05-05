@@ -92,7 +92,7 @@ struct CombatSpellData
     // Should the X2PreSpellCastCode be called?
     int PreSpellCastHook;
     // used by Psionic casting
-    int PsiPrePowerCastCode;
+    int PsiPrePowerCastHook;
     // Should this create a SpellNode creature?
     // ImpactEffects & Beams will be fired at this creature and it will be destroyed in 2 seconds
     int CreateSpellNode;
@@ -278,7 +278,7 @@ struct CombatSpellData GetCombatSpellData(object oCaster)
     spell.ObjectTypeFilter = OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE;
     spell.SpellResistance = TRUE;
     spell.PreSpellCastHook = TRUE;
-    spell.PsiPrePowerCastCode = TRUE;
+    spell.PsiPrePowerCastHook = TRUE;
     spell.SavingThrow = SAVING_THROW_NONE;
     spell.AbilityScoreCheck = -1;
     spell.SecondarySavingThrow = 0;
@@ -587,6 +587,7 @@ int ProcessSpellTarget(struct CombatSpellData spell, struct CombatSpellData impa
                     impactSpell.TargetObject = oTarget;
                     impactSpell.TargetLocation = GetLocation(oTarget);
                     impactSpell.PreSpellCastHook = FALSE;
+					impactSpell.PsiPrePowerCastHook = FALSE;
                     DelayCommand(fDelay, HandleSpell(impactSpell));
                 }
 
@@ -977,7 +978,7 @@ void HandleSpellImpact(struct CombatSpellData spell, struct CombatSpellData impa
         }
     }
 
-if(spell.PsiPrePowerCaseCode)
+if(spell.PsiPrePowerCastHook)
 {
     if (!PsiPrePowerCastCode())
     {

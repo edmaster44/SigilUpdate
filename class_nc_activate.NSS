@@ -62,7 +62,7 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
                     
                 else 
                 {   effect eFail = EffectMovementSpeedDecrease (50);
-                    SendMessageToPC(oPC "Your rope has failed to ensare!"); // here you log failure
+                    SendMessageToPC(oPC, "Your rope has failed to ensare!"); // here you log failure
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
                     SpeakString(GetFirstName(oTarget) + " broke free of the attempted ensnarement!"); }
         
