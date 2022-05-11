@@ -65,6 +65,12 @@ void main()
             GetEffectSpellId(eBad) != SPELL_STONE_BODY &&
             GetEffectSpellId(eBad) != SPELL_IRON_BODY &&
             GetEffectSpellId(eBad) != 803 &&
+			GetEffectSpellId(eBad) != 2881 &&
+			GetEffectSpellId(eBad) != 2000 &&
+			GetEffectSpellId(eBad) != 2001 &&
+			GetEffectSpellId(eBad) != 2002 &&
+			GetEffectSpellId(eBad) != 2003 &&
+			GetEffectSpellId(eBad) != 2004 &&
 			GetEffectSpellId(eBad) != SPELL_BESTOW_CURSE &&
 			GetEffectSpellId(eBad) != SPELL_CURSE_OF_BLADES &&
 			GetEffectSpellId(eBad) != SPELL_GREATER_CURSE_OF_BLADES)
