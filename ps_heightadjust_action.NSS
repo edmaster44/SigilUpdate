@@ -39,10 +39,10 @@ void main(int selection)
 
 	string sMessage;
 	//if(FirstTime(oPC))
-	 sMessage = "Are you sure you want to adjust your height? For this week it'll be free.";
+	 sMessage = "Are you sure you want to adjust your height.";
 //	else sMessage = "Are you sure you want to adjust your height? It will cost 10% xp.";
 	
-	DisplayMessageBox(oPC, -1, sMessage, "gui_cmnsee_height_confirm", "", TRUE, "SCREEN_MESSAGEBOX_DEFAULT", -1, "Yes", -1, "No");
+	DisplayMessageBox(oPC, -1, sMessage, "gui_ps_height_confirm", "", TRUE, "SCREEN_MESSAGEBOX_DEFAULT", -1, "Yes", -1, "No");
 }
 	
 		
