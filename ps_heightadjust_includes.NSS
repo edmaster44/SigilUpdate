@@ -2,7 +2,7 @@
 #include "x0_i0_spells"
 
 //select floor(cm/(12*2.54)) as foot , 
-//round((cm mod (12*2.54))/2.54) as inch from cmnsee_barber_height ;
+//round((cm mod (12*2.54))/2.54) as inch from ps_barber_height ;
 
 string GetRace(object oPC)
 {
@@ -23,9 +23,8 @@ string GetRace(object oPC)
 		
 	if (iRace == RACIAL_TYPE_DWARF) race = "dwarf";
 	if (iRace == RACIAL_TYPE_HALFORC || iRace == RACIAL_TYPE_GRAYORC || iSubrace == 76) race = "halforc";
-	if (iSubrace == 193) race = "halfbreed";
+	if (iSubrace == 193) race = "halforc";
 	if (iSubrace == 72 || iSubrace == 103) race = "mountainorc";
-	if (iSubrace == 74) race = "halfbreed";
 	if (iRace == RACIAL_TYPE_GNOME) race = "gnome";
 	
 	
@@ -201,8 +200,8 @@ void AdjustHeight(object oPC, int selection)
 		if(race == "halfling") sQuery = "SELECT ("+FloatToString(iMin)+" / 120), ("+FloatToString(iMin2)+" / 120)";
 		else if(race == "dwarf") sQuery = "SELECT ("+FloatToString(iMin)+" / 150), ("+FloatToString(iMin2)+" / 150)";
 		else if(race == "gnome") sQuery = "SELECT ("+FloatToString(iMin)+" / 130), ("+FloatToString(iMin2)+" / 130)";
-		else if(race == "halforc") sQuery = "SELECT ("+FloatToString(iMin)+" / 210), ("+FloatToString(iMin2)+" / 210)";
-		else if(race == "mountainorc") sQuery = "SELECT ("+FloatToString(iMin)+" / 230), ("+FloatToString(iMin2)+" / 230)";
+		else if(race == "halforc") sQuery = "SELECT ("+FloatToString(iMin)+" / 210), ("+FloatToString(iMin2)+" / 230)";
+		else if(race == "mountainorc") sQuery = "SELECT ("+FloatToString(iMin)+" / 230), ("+FloatToString(iMin2)+" / 250)";
 		else if(race == "halfbreed") sQuery = "SELECT ("+FloatToString(iMin)+" / 210), ("+FloatToString(iMin2)+" / 210)";
 		else sQuery = "SELECT ("+FloatToString(iMin)+" / 200), ("+FloatToString(iMin2)+" / 200)";
 	}
@@ -211,8 +210,8 @@ void AdjustHeight(object oPC, int selection)
 		if(race == "halfling") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 120, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 120";
 		else if(race == "dwarf") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 150, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 150";
 		else if(race == "gnome") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 130, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 130";
-		else if(race == "halforc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 210, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 210";
-		else if(race == "mountainorc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 230, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 230";
+		else if(race == "halforc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 230, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 210";
+		else if(race == "mountainorc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 250, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 230";
 		else if(race == "halfbreed") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 210, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 210";
 		else sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 200, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 200";
 	}
