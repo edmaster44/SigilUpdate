@@ -51,7 +51,7 @@ void PS_KnightLevels(object oPC)
 
 		if (iTotal >= 1  && GetHasFeat(FEAT_BLACKGUARD,oPC))
 			{FeatAdd(oPC,FEAT_USE_POISON,FALSE,FALSE,FALSE);//Use Poison, BG Path
-			FeatAdd(oPC,FEAT_SMITE_EVIL,FALSE,FALSE,FALSE);//Smite Good, BG Path
+			FeatAdd(oPC,FEAT_SMITE_GOOD,FALSE,FALSE,FALSE);//Smite Good, BG Path
 			}
 		 if (iTotal >= 1 && GetHasFeat(FEAT_BLACKGUARD,oPC))
 				{FeatAdd(oPC,FEAT_BULLS_STRENGTH,FALSE,FALSE,FALSE);//Bull's Strength Feat
