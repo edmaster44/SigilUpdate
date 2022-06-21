@@ -31,7 +31,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nAmount = GetCasterLevel(OBJECT_SELF) * 10;
+    int nAmount = PS_GetCasterLevel(OBJECT_SELF) * 10;
     float fDuration = HoursToSeconds(GetCasterLevel(OBJECT_SELF));
 
     //Fire cast spell at event for the specified target
