@@ -202,7 +202,7 @@ void PS_KnightLevels(object oPC)
 	  }
 		if (iTotal > 13 && GetHasFeat(FEAT_KNIGHT,oPC))
 		
-		{ FeatAdd(oPC,287,FALSE,FALSE,FALSE);//New Smite , Knight Path
+		{ FeatAdd(oPC,1761,FALSE,FALSE,FALSE);//New Smite , Knight Path
 		
 		}
 	  if (iTotal > 20 && GetHasFeat(FEAT_KNIGHT,oPC))
