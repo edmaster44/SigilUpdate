@@ -33,8 +33,8 @@ void main () {
 		//Test server! open the testing room
 		if (version == "Testing") {
 			if (GetObjectByTag("testing_portal_out") == OBJECT_INVALID) {
-				//object oWP = GetWaypointByTag("wp_testing_portal_in_2"); //normal version
-				object oWP = GetWaypointByTag("wp_testing_portal_in"); //xmas version
+				object oWP = GetWaypointByTag("wp_testing_portal_in_2"); //normal version
+				//object oWP = GetWaypointByTag("wp_testing_portal_in"); //xmas version
 				CreateObject(OBJECT_TYPE_PLACEABLE, "testing_portal_out", GetLocation(oWP));
 			}
 		}
