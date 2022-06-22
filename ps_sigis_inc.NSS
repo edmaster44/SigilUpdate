@@ -7,6 +7,7 @@
 
 const string SIGIS_EDITOR = "npc_sigis_editor";
 const string SIGIS_JOURNALIST = "npc_sigis_journalist";
+const string SIGIS_JOURNALIST_OOC = "npc_sigis_journalist_ooc";
 const int SIGIS_BACKDATE = 604800; // how far back in time should we go for fetching entries?
 
 // Date function for newspaper
