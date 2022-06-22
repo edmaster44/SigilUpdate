@@ -52,7 +52,7 @@ int GetCMDifference(object oPC)
 	string sQuery = "SELECT ROUND((max_cm - min_cm) / 2.54) FROM `ps_barber_height` WHERE `race`='"+
 	GetRace(oPC)+"' AND `gender`='"+IntToString(GetGender(oPC))+"';";
 
-	if(GetHasFeat(3053,oPC,TRUE) || GetHasFeat(2706,oPC,TRUE)) sQuery = "SELECT ROUND(((max_cm * 1.1) - min_cm) / 2.54) FROM `cmnsee_barber_height` WHERE `race`='"+
+	if(GetHasFeat(3053,oPC,TRUE) || GetHasFeat(2706,oPC,TRUE)) sQuery = "SELECT ROUND(((max_cm * 1.1) - min_cm) / 2.54) FROM `ps_barber_height` WHERE `race`='"+
 	GetRace(oPC)+"' AND `gender`='"+IntToString(GetGender(oPC))+"';";
 
 	SQLExecDirect(sQuery);
