@@ -13,6 +13,7 @@
 #include "ps_inc_wingtail"
 #include "ps_inc_bgspellfix"
 #include "ginc_time"
+#include "ps_heightadjust_includes"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -419,6 +420,7 @@ void main()
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
+	
 	if(GetIsPC(oPC) && !GetIsDM(oPC) && GetXP(oPC) == 0)
 	{	
 		//special race template
@@ -435,6 +437,7 @@ void main()
 			
 		GiveXPToCreature(oPC, 1);
 		GiveStartingGold(oPC, 500);
+
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
 		CreateItemOnObject("ps_essence", oPC);
 		//template
@@ -538,6 +541,8 @@ void main()
 	}
 	
 //	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
+
+	ScaleAdjust(oPC);
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
