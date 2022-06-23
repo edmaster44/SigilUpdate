@@ -1070,3 +1070,15 @@ int GetIsFactor(object oPC) {
 	
 	return FALSE;
 }
+
+int GetFaction(object oPC)
+{
+	object oItem = GetItemPossessedBy(oPC,"ps_essence");
+    if(GetIsObjectValid(oItem))
+    {
+	 	int nFaction = GetLocalInt(oItem,"Faction");
+		return nFaction;
+    }
+	
+	return 0;
+}
