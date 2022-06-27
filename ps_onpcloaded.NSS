@@ -542,7 +542,6 @@ void main()
 	
 //	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
 
-	ScaleAdjust(oPC);
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
@@ -561,6 +560,7 @@ void main()
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
+		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
 	}
 }
