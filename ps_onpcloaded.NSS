@@ -18,7 +18,7 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
-/*void StackingEquipmentBugFix(object oPC) {
+void StackingEquipmentBugFix(object oPC) {
 
 	//In case we are somewhere unsafe, make me ethereal. Also give temporary stat boosts while gear is being removed
 	effect eSanctuary = EffectEthereal();
@@ -39,7 +39,7 @@ const int nDailyXPlevel = 100;
 	
 	oItem = GetItemInSlot(INVENTORY_SLOT_BELT, oPC);
 	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
+		AssignCommand(oPC, RemoveBoots(oItem));
 		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BELT)));
 	}
 	
@@ -97,7 +97,7 @@ const int nDailyXPlevel = 100;
 		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTRING)));
 	}
 
-}*/
+}
 
 void GiveStartingGold( object oPC, int nAmount )
 {
@@ -560,6 +560,7 @@ void main()
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
+		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
 	}
