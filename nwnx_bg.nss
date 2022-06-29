@@ -87,31 +87,71 @@ int GetRemainingFeatUses(object oCreature, int nFeat)
 
 
 
-object LastSpcAttacker()
+//// Resolve Special Attack Bonus functions for use in special script nwnx_bg_rsab.nss
+
+// Gets the object that is performing the special attack.
+object nwnx_bg_rsadb_Attacker()
 {
-
-	return IntToObject(
-			NWNXGetInt(XP_BG_PLUGIN_NAME, "LastSpcAttacker", "", 0)
-		);
-
+	return IntToObject(NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_rsadb_Attacker", "", 0));
 }
 
-object LastSpcTarget()
+// Gets the object that is the target of the special attack.
+object nwnx_bg_rsadb_Target()
 {
+	return IntToObject(NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_rsadb_Target", "", 0));
+}
 
-	return IntToObject(
-			NWNXGetInt(XP_BG_PLUGIN_NAME, "LastSpcTarget", "", 0)
-		);
-
+// Gets the FeatID associated with the special attack.
+int nwnx_bg_rsadb_FeatId()
+{
+	return NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_rsadb_FeatId", "", 0);
 }
 
 
-int LastSpcFeatId()
+// Sets the amount of damage that you would like to be added for the special attack.
+void nwnx_bg_rsadb_SetDamage(int nAmount)
 {
-	return NWNXGetInt(XP_BG_PLUGIN_NAME, "LastSpcFeatId", "", 0);
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_rsadb_SetDamage", "", nAmount, 0);
 }
 
-void SetLastSpcDmg(int nAmount)
+
+
+// Set Unarmed Damage Dice.  
+// Will only work if used in nwnx_bg_fistdmg.nss 
+// Which will be called by the engine when checking for 
+// fist damage rolls if enabled in the plug-in.
+void nxnx_bg_fistdmg_set(int nDiceNumber, int nDiceValue)
 {
-	NWNXSetInt(XP_BG_PLUGIN_NAME, "SetLastSpcDmg", "", nAmount, 0);
+	// TO DO: Sanity checks on inputs before passing?
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts", "", nDiceNumber, nDiceValue);
+}
+
+
+// Set Unarmed Damage Dice.  Will only work if used in
+// nwnx_bg_fistdmg.nss which will be called by the engine
+// when checking if an item is finessable if enabled in the plug-in.
+void nxnx_bg_finesse_set(int bIsFinessable)
+{
+	// TO DO: Sanity checks on inputs before passing?
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "nxnx_bg_finesse_set", "", bIsFinessable, 0);
+}
+
+// Item to check if it can be finessed.
+object nwnx_bg_finesse_GetItem()
+{
+	return IntToObject(NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_finesse_GetItem", "", 0));
+}
+
+/// Skip Feat Mod Functions for nwnx_bg_skill_featmod.nss
+
+int nwnx_bg_skill_featmod_GetSkill()
+{
+	return NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_skill_featmod_GetSkill", "", 0);
+}
+
+
+void nwnx_bg_skill_featmod_set(int nBaseSkillModifier)
+{
+	// TO DO: Sanity checks on inputs before passing?
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_skill_featmod_set", "", nBaseSkillModifier, 0);
 }

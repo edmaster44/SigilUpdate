@@ -1,8 +1,7 @@
 #include "nwnx_bg"
-#include "ps_adjust_knight"
-#include "ps_inc_functions"
+
 // Calculate Great Smiting Multiplier based on feat count [1, 11].
-int GreatSmiteMultiplier(object oPC);
+int GreatSmiteMultiplier(object oAttacker);
 
 
 // For some reason OEI didn't include this constant in nwscript.nss.
@@ -17,9 +16,9 @@ void main()
 {
 
 	// Information from NWNX.
-	int nFeat = LastSpcFeatId();
-	object oPC = LastSpcAttacker();
-	object oTarget = LastSpcTarget();
+	int nFeat = nwnx_bg_rsadb_FeatId();
+	object oAttacker = nwnx_bg_rsadb_Attacker();
+	object oTarget = nwnx_bg_rsadb_Target();
 	
 	// Tally amount to be sent back to NWNX.
 	int nAmount = 0;
@@ -29,7 +28,7 @@ void main()
 
 		case FEAT_STUNNING_FIST:
 
-			if(GetLevelByClass(CLASS_TYPE_MONK, oPC) == 0)
+			if(GetLevelByClass(CLASS_TYPE_MONK, oAttacker) == 0)
 			{
 				// Non-monks deal four less damage when executing a stunning fist.
 				nAmount = -4;
@@ -37,13 +36,13 @@ void main()
 		break;
 
 
-		case FEAT_SMITE_EVIL:						
+		case FEAT_SMITE_EVIL:			
 
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
 			{
-				nAmount = KnightLevels(oPC);
-				//nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oPC);
-				nAmount *= GreatSmiteMultiplier(oPC);
+				nAmount = GetLevelByClass(CLASS_TYPE_PALADIN, oAttacker);
+				nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
+				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
 
@@ -52,27 +51,26 @@ void main()
 
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)
 			{
-				nAmount = KnightLevels(oPC);
-				//nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oPC);
-				nAmount *= GreatSmiteMultiplier(oPC);
+				nAmount = GetLevelByClass(CLASS_TYPE_BLACKGUARD, oAttacker);
+				nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
+				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
 
 
 		case FEAT_SMITE_INFIDEL:
 
-			if(GetAlignmentGoodEvil(oPC) != GetAlignmentGoodEvil(oTarget) ||
-			   GetAlignmentLawChaos(oPC) != GetAlignmentLawChaos(oTarget))
+			if(GetAlignmentGoodEvil(oAttacker) != GetAlignmentGoodEvil(oTarget) ||
+			   GetAlignmentLawChaos(oAttacker) != GetAlignmentLawChaos(oTarget))
 			{
 
+				nAmount = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 
-				nAmount = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oPC);
-
-				if(GetHasFeat(FEAT_EPITHET_DESTRUCTION_DOMAIN, oPC))
+				if(GetHasFeat(FEAT_EPITHET_DESTRUCTION_DOMAIN, oAttacker))
 				{
-					nAmount += GetClericTRUECasterlevel(oPC);
+					nAmount += GetLevelByClass(CLASS_TYPE_CLERIC, oAttacker);
 				}
-				nAmount *= GreatSmiteMultiplier(oPC);
+				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
 
@@ -85,7 +83,7 @@ void main()
 
 		case FEAT_BOND_OF_FATAL_TOUCH:
 
-			int doomLvls = GetLevelByClass(CLASS_TYPE_DOOMGUIDE, oPC);
+			int doomLvls = GetLevelByClass(CLASS_TYPE_DOOMGUIDE, oAttacker);
 
 			if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 			{
@@ -105,19 +103,19 @@ void main()
 
 
 	// Pass total damage amount back to NWNX.
-	SetLastSpcDmg(nAmount);
+	nwnx_bg_rsadb_SetDamage(nAmount);
 
 
 }
 
-int GreatSmiteMultiplier(object oPC)
+int GreatSmiteMultiplier(object oAttacker)
 {
 	int multiplier = 1;
 	// Great Smite Feats are 824 through 833 inclusive.
 	int i;
 	for(i = 0; i < 10; i++)
 	{
-		multiplier += GetHasFeat(FEAT_EPIC_GREAT_SMITING_1+i, oPC);
+		multiplier += GetHasFeat(FEAT_EPIC_GREAT_SMITING_1+i, oAttacker);
 	}
 	return multiplier;
 }
