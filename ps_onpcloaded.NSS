@@ -39,7 +39,7 @@ void StackingEquipmentBugFix(object oPC) {
 	
 	oItem = GetItemInSlot(INVENTORY_SLOT_BELT, oPC);
 	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, RemoveBoots(oItem));
+		AssignCommand(oPC, ActionUnequipItem(oItem));
 		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BELT)));
 	}
 	
