@@ -41,7 +41,7 @@ void main()
 
 	// IP function covers this, but if you wanted to add
 	// a further white list you could do so like this:
-	/*
+	
 	switch(GetBaseItemType(oWeapon))
 	{
 
@@ -50,13 +50,17 @@ void main()
 		case BASE_ITEM_RAPIER:
 
 		// Finess white list:
+		case 202:
+		case 163:
+		case 164:
+		case 165:
+		case 170:
 		case BASE_ITEM_DAGGER:
 		case BASE_ITEM_LIGHTHAMMER:
 		case BASE_ITEM_LIGHTMACE:
 		case BASE_ITEM_SICKLE:
 		case BASE_ITEM_HANDAXE:
 		case BASE_ITEM_SHORTSWORD:
-		case BASE_ITEM_RAPIER:
 		case BASE_ITEM_KUKRI:
 		case BASE_ITEM_KAMA:
 			bIsFinessable = 1;
@@ -66,7 +70,7 @@ void main()
 			bIsFinessable = 0;		
 
 	}
-	*/
+	
 
 	// Tell NWNX whether the item object fetched by nwnx_TestForFinesse()
 	// finessable or not.

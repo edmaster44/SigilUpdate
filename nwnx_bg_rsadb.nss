@@ -1,4 +1,5 @@
 #include "nwnx_bg"
+#include "ps_adjust_knight"
 
 // Calculate Great Smiting Multiplier based on feat count [1, 11].
 int GreatSmiteMultiplier(object oAttacker);
@@ -40,8 +41,8 @@ void main()
 
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
 			{
-				nAmount = GetLevelByClass(CLASS_TYPE_PALADIN, oAttacker);
-				nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
+				nAmount = KnightLevels(oAttacker);
+				//nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
@@ -52,7 +53,8 @@ void main()
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)
 			{
 				nAmount = GetLevelByClass(CLASS_TYPE_BLACKGUARD, oAttacker);
-				nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
+				nAmount = KnightLevels(oAttacker);
+				//nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
@@ -65,6 +67,7 @@ void main()
 			{
 
 				nAmount = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
+				nAmount = KnightLevels(oAttacker);
 
 				if(GetHasFeat(FEAT_EPITHET_DESTRUCTION_DOMAIN, oAttacker))
 				{
