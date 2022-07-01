@@ -24,6 +24,7 @@ string GetRace(object oPC)
 	if (iRace == RACIAL_TYPE_DWARF) race = "dwarf";
 	if (iRace == RACIAL_TYPE_HALFORC || iRace == RACIAL_TYPE_GRAYORC || iSubrace == 76) race = "halforc";
 	if (iSubrace == 193) race = "halforc";
+	if (iSubrace == 203) race = "halforc";
 	if (iSubrace == 72 || iSubrace == 103) race = "mountainorc";
 	if (iRace == RACIAL_TYPE_GNOME) race = "gnome";
 	
@@ -31,6 +32,7 @@ string GetRace(object oPC)
 	
 	if (iSubrace == RACIAL_SUBTYPE_TIEFLING) race = "tiefling";
 	if (iSubrace == RACIAL_SUBTYPE_OUTSIDER) race = "tiefling";
+	if (iSubrace == 182) race = "tiefling";
 	if (iSubrace == RACIAL_SUBTYPE_DRAGON) race = "tiefling";
 	if (iSubrace == 194) race ="tiefling";
 	if (iSubrace == 195) race = "tiefling";
