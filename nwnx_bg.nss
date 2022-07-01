@@ -6,8 +6,6 @@ const string XP_BG_PLUGIN_NAME	= "BG";
 const int EFFECT_TYPE_SCALE  = 111;
 const int EFFECT_TYPE_KNOCKDOWN = 112;
 
-
-
 ////  Character Sheet Functions
 
 // Experimental functions for retrieving some character sheet combat information.
@@ -114,21 +112,31 @@ void nwnx_bg_rsadb_SetDamage(int nAmount)
 	NWNXSetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_rsadb_SetDamage", "", nAmount, 0);
 }
 
-
-
-// Set Unarmed Damage Dice.  
+// Set Unarmed Damage Dice.
 // Will only work if used in nwnx_bg_fistdmg.nss 
 // Which will be called by the engine when checking for 
 // fist damage rolls if enabled in the plug-in.
-void nxnx_bg_fistdmg_set(int nDiceNumber, int nDiceValue)
+void nxnx_bg_fistdmg_setNum(int nDiceNumber)
 {
-	// TO DO: Sanity checks on inputs before passing?
-	NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts", "", nDiceNumber, nDiceValue);
+	// These values are at most what a uchar can hold.
+	if(nDiceNumber < 0) nDiceNumber = 0;
+	if(nDiceNumber > 255) nDiceNumber = 255;
+
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "nxnx_bg_fistdmg_setNum", "", nDiceNumber, 0);
+}
+
+void nxnx_bg_fistdmg_setSides(int nDiceSides)
+{
+	// These values are at most what a uchar can hold.
+	if(nDiceSides < 0) nDiceSides = 0;
+	if(nDiceSides > 255) nDiceSides = 255;
+
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "nxnx_bg_fistdmg_setSides", "", nDiceSides, 0);
 }
 
 
-// Set Unarmed Damage Dice.  Will only work if used in
-// nwnx_bg_fistdmg.nss which will be called by the engine
+// Set Weapon Finesse true/false flag.  Will only work if used in
+// nwnx_bg_finesse.nss which will be called by the engine
 // when checking if an item is finessable if enabled in the plug-in.
 void nxnx_bg_finesse_set(int bIsFinessable)
 {
@@ -142,13 +150,15 @@ object nwnx_bg_finesse_GetItem()
 	return IntToObject(NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_finesse_GetItem", "", 0));
 }
 
-/// Skip Feat Mod Functions for nwnx_bg_skill_featmod.nss
-
+// Skill Feat Mod Functions
+// Will only work if used in nwnx_bg_skill_featmod.nss which will be called
+// by the engine at the start of calculating base skill modifiers for feats.
+// Afterwards the engine will continue with the usual calculations.
+// Must be enabled by plug-in for engine to call this script.
 int nwnx_bg_skill_featmod_GetSkill()
 {
 	return NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_skill_featmod_GetSkill", "", 0);
 }
-
 
 void nwnx_bg_skill_featmod_set(int nBaseSkillModifier)
 {
