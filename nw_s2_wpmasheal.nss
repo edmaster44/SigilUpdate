@@ -37,7 +37,7 @@ void main()
     }
 
     //Declare major variables
-    int 	nCasterLvl 	= PS_GetCasterLever(OBJECT_SELF);	// AFW-OEI 05/20/2006: main difference w/ Mass Heal
+    int 	nCasterLvl 	= PS_GetCasterLevel(OBJECT_SELF);	// AFW-OEI 05/20/2006: main difference w/ Mass Heal
     effect	eVis 		= EffectVisualEffect(VFX_IMP_SUNSTRIKE); 
     effect 	eVis2	 	= EffectVisualEffect(VFX_IMP_HEALING_M);
     effect 	eImpact 	= EffectVisualEffect(VFX_HIT_CURE_AOE);

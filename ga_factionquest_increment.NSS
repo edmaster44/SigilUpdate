@@ -9,18 +9,6 @@
 #include "ps_inc_quests"
 #include "ps_inc_functions"
 
-int GetFaction(object oPC)
-{
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
-}
-
 void main(int numberOfPoints) {
 
 	object oPC = GetPCSpeaker();

@@ -1,8 +1,6 @@
 #include "ps_inc_achievements"
 #include "ps_inc_faction"
 
-int GetFaction(object oPC);
-
 void CheckForAchievements(object oPC);
 
 void main () {
@@ -199,18 +197,4 @@ void CheckForAchievements(object oPC) {
 	SetLocalInt(oPC, "ACHIEVEMENTS_CHECKED", nChecked+1);
 	DelayCommand(0.5f, CheckForAchievements(oPC));
 
-}
-
-//Get faction
-//Refactor this later
-int GetFaction(object oPC) {
-
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
 }
