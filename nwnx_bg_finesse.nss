@@ -18,7 +18,6 @@ void main()
 	// This script runs on the creature we are testing for finesse.
 	object oSelf = OBJECT_SELF;
 
-
 	// First we must check if the item is a light weapon for
 	// the creature wielding it.  A weapon being light or not
 	// is relative to the size of the creature.
@@ -42,6 +41,25 @@ void main()
 	// IP function covers this, but if you wanted to add
 	// a further white list you could do so like this:
 	
+
+	switch (GetLevelByClass(72,oSelf)>4)
+	{
+	//Weapons that can be finesse
+	case BASE_ITEM_SCIMITAR:
+	case BASE_ITEM_FALCHION:
+	case BASE_ITEM_LONGSWORD:
+	case BASE_ITEM_GREATSWORD:
+	case BASE_ITEM_GREATAXE:
+	case BASE_ITEM_BASTARDSWORD:
+	case BASE_ITEM_BATTLEAXE:
+	case BASE_ITEM_KATANA:
+		bIsFinessable = 1;
+	break;	
+	
+	default:
+			bIsFinessable = 0;
+	
+	}	
 	switch(GetBaseItemType(oWeapon))
 	{
 
@@ -50,11 +68,15 @@ void main()
 		case BASE_ITEM_RAPIER:
 
 		// Finess white list:
-		case 202:
+		case 160:
+		case 161:
+		case 162:
 		case 163:
 		case 164:
 		case 165:
 		case 170:
+		case 173:
+		case 202:
 		case BASE_ITEM_DAGGER:
 		case BASE_ITEM_LIGHTHAMMER:
 		case BASE_ITEM_LIGHTMACE:
