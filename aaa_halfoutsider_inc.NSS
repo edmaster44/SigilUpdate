@@ -272,6 +272,8 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
     	{	if (nSpell == 1649)
             {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
+                if (GetIsReactionTypeHostile(oTarget,OBJECT_SELF))
+                {
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {	if ((GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL) && (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER))
 					{	nDamage = d6(nCasterLvl);	}
@@ -300,6 +302,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 					}
 				}
 			}
+		}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 }	}
