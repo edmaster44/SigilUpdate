@@ -427,6 +427,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
         case BASE_ITEM_ARROW:
         case BASE_ITEM_BELT:
         case BASE_ITEM_BOLT:
+		case BASE_ITEM_ARMOR:
         case BASE_ITEM_BOOTS:
         case BASE_ITEM_BRACER:
         case BASE_ITEM_BULLET:
