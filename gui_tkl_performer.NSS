@@ -1272,18 +1272,18 @@ void main(string sAction, int iOption)
 	else if (GetStringLeft(sAction, 12) == "IMPROV_TRACK")
 	{
 		string s = GetStringRight(sAction, 1);
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_normal.tga");		
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_normal_scod.tga");		
 		switch (iOption)
 		{
-			case 0: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_hover.tga"); break;
-			case 1: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_hover.tga"); break;
-			case 2: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_hover.tga"); break;
-			case 3: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_hover.tga"); break;
-			case 4: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_hover.tga"); break;	
+			case 0: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_hover_scod.tga"); break;
+			case 1: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_hover_scod.tga"); break;
+			case 2: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_hover_scod.tga"); break;
+			case 3: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_hover_scod.tga"); break;
+			case 4: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_hover_scod.tga"); break;	
 		}
 		SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_" + s, iOption);
 	}
@@ -1292,8 +1292,8 @@ void main(string sAction, int iOption)
 	{
 		int iLastSelected = GetLocalInt(oInstrument, "IMPROV_STYLE");
 		if (iLastSelected == 0) iLastSelected = 1;
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + IntToString(iLastSelected), "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + IntToString(iOption), "b_sm_hover.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + IntToString(iLastSelected), "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + IntToString(iOption), "b_sm_hover_scod.tga");
 		SetLocalInt(oInstrument, "IMPROV_STYLE", iOption);
 		// set the description
 		string sDesc;
@@ -1368,7 +1368,7 @@ void main(string sAction, int iOption)
 		int i;
 		for (i = 1; i <= 13; i++)
 		{
-			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(i), "b_sm_normal.tga");
+			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(i), "b_sm_normal_scod.tga");
 		}
 		DeleteLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD");
 	}
@@ -1396,8 +1396,8 @@ void main(string sAction, int iOption)
 			
 			// Now unhighlight and highlight the buttons
 			if (iLastSelected > 0)
-				SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(iLastSelected), "b_sm_normal.tga");
-			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(iOption), "b_sm_hover.tga");	
+				SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(iLastSelected), "b_sm_normal_scod.tga");
+			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(iOption), "b_sm_hover_scod.tga");	
 			
 			// Set the variable to keep track of the selected embellishment
 			SetLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD", iOption);	
