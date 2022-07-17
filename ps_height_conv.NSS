@@ -4,7 +4,9 @@ void main()
 {
 	object oPC = GetPCSpeaker(); 
 	
-	if(GetSubRace(oPC) == 96)
+	if(GetSubRace(oPC) == 197 || GetSubRace(oPC) == 198 || GetSubRace(oPC) == 199 /*For the giant races, we exclude them */
+		|| GetSubRace(oPC) == 200 || GetSubRace(oPC) == 201 || GetSubRace(oPC) == 202 
+		|| GetSubRace(oPC) == 203 || GetSubRace(oPC) == 205 || GetSubRace(oPC) == 206 || GetSubRace(oPC) == 207)
 	{
 		SendMessageToPC(oPC,"Giants cannot use this feature.");
 		AssignCommand(oPC, ActionStartConversation(oPC, "", TRUE));

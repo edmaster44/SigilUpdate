@@ -19,12 +19,19 @@ string GetRace(object oPC)
 	if (iSubrace == 70) race = "avariel";	
 	if (iSubrace == RACIAL_SUBTYPE_WILD_ELF) race = "wildelf";
 	if (iSubrace == RACIAL_SUBTYPE_DROW) race = "drow";
-	
+	if (iSubrace == 52) race = "human";//Xeph
 		
 	if (iRace == RACIAL_TYPE_DWARF) race = "dwarf";
 	if (iRace == RACIAL_TYPE_HALFORC || iRace == RACIAL_TYPE_GRAYORC || iSubrace == 76) race = "halforc";
 	if (iSubrace == 193) race = "halforc";
 	if (iSubrace == 203) race = "halforc";
+	if (iSubrace == 61) race = "halforc";//Khaasta
+	if (iSubrace == 57) race = "human";//Githyanki
+	if (iSubrace == 58) race = "human";//Githzerai
+	if (iSubrace == 68) race = "halforc";//Hobgoblin
+	if (iSubrace == 67) race = "halfling";//Kobold
+	if (iSubrace == 54) race = "halfling";//Goblin
+
 	if (iSubrace == 72 || iSubrace == 103) race = "mountainorc";
 	if (iRace == RACIAL_TYPE_GNOME) race = "gnome";
 	
@@ -54,8 +61,8 @@ int GetCMDifference(object oPC)
 	string sQuery = "SELECT ROUND((max_cm - min_cm) / 2.54) FROM `ps_barber_height` WHERE `race`='"+
 	GetRace(oPC)+"' AND `gender`='"+IntToString(GetGender(oPC))+"';";
 
-	if(GetHasFeat(3053,oPC,TRUE) || GetHasFeat(2706,oPC,TRUE)) sQuery = "SELECT ROUND(((max_cm * 1.1) - min_cm) / 2.54) FROM `ps_barber_height` WHERE `race`='"+
-	GetRace(oPC)+"' AND `gender`='"+IntToString(GetGender(oPC))+"';";
+	//if(GetHasFeat(3053,oPC,TRUE) || GetHasFeat(2706,oPC,TRUE)) sQuery = "SELECT ROUND(((max_cm * 1.1) - min_cm) / 2.54) FROM `ps_barber_height` WHERE `race`='"+
+	//GetRace(oPC)+"' AND `gender`='"+IntToString(GetGender(oPC))+"';";
 
 	SQLExecDirect(sQuery);
 	SQLFetch();
