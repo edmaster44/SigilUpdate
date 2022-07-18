@@ -41,6 +41,9 @@ string GetRace(object oPC)
 	if (iSubrace == RACIAL_SUBTYPE_OUTSIDER) race = "tiefling";
 	if (iSubrace == 182) race = "tiefling";
 	if (iSubrace == RACIAL_SUBTYPE_DRAGON) race = "tiefling";
+	if (iSubrace == 241) race ="tiefling";//Rakasha
+	if (iSubrace == 242) race = "gensai";//Jann
+	if (iSubrace == 243) race = "gensai";//Khayal
 	if (iSubrace == 194) race ="tiefling";
 	if (iSubrace == 195) race = "tiefling";
 	if (iSubrace == RACIAL_SUBTYPE_AIR_GENASI ||
