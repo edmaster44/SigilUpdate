@@ -308,6 +308,7 @@ void DS_CloseShop(object oPC, object oStore)
 
 void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 {//First we check if the shop is already open
+	SendMessageToPC(oPC, "opening new shop");
 	object	oCustomer	= GetLocalObject(oStore, "DS_CUSTOMER");	//The currently registered customer
 	if(GetLocalInt(oStore, "DS_OPEN")  && (GetIsObjectValid(oCustomer) && DS_DistanceCheck(oCustomer, oStore)))
 	{//If yes stop here
