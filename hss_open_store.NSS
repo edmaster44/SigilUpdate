@@ -4,6 +4,7 @@
 	
 */
 // Name_Date
+#include "dethia_shop_sys"
 
 
 void main()
@@ -12,7 +13,7 @@ void main()
 	//HSS_FISHMONGER_STORE
 	
     if (GetIsObjectValid(oStore)) {
-       OpenStore(oStore, GetPCSpeaker());
+       DS_OpenShop(oStore, GetPCSpeaker());
    } else {
        SpeakString("Sorry, I'm closed right now.");
 	}
