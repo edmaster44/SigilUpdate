@@ -145,6 +145,11 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);
+		
+		int nMaxBuy = GetStoreMaxBuyPrice(oStore);
+		if (nMaxBuy < 0)
+			nMaxBuy = 999999;
+		
 		//We will populate the shop gui with all non-cursed items and allowed items
 		object	oItem		= GetFirstItemInInventory(oPC);
 		int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket buy rate
@@ -160,6 +165,10 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 			string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
 			int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
 									GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
+									
+			if (iItemCost > nMaxBuy)
+				iItemCost = nMaxBuy;			
+									
 			if(!GetIdentified(oItem))	//If not identified hide the item name
 			{	sItemName	= "<color=cyan>Unidentified (" + sStackSize + ")</color>";	}
 

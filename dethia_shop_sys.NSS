@@ -536,6 +536,8 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	{	iItemCost	= 10;	}
 	else	//If all is well compute the item's sell value
 	{	iItemCost	= FloatToInt(fCostMod*GetGoldPieceValue(oItem)/GetItemStackSize(oItem));	}
+	
+	
 	//If the cost is less than or equal to 0, set it to 1
 	if(iItemCost <= 0)	{	iItemCost	= 1;	}
 
