@@ -226,11 +226,11 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		if(DS_GetIsProjectile(oItem))
 		{	iPrice	/= iAmount;	}
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
-		else if(!DoesPCHaveFreeInvSlots(oPC))
+		/*else if(!DoesPCHaveFreeInvSlots(oPC))
 		{//If the player doesn't have enough room let them know and end script
 			FloatingTextStringOnCreature("Sorry, I don't think you can carry anymore things.", oPC);
 			return;
-		}
+		}*/
 		else if(DS_GetCoinsOnCreature(oPC) < iPrice)
 		{//If the player doesn't have enough currency let them know and end script
 			FloatingTextStringOnCreature("You don't have enough coins friend.", oPC);

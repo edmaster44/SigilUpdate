@@ -478,13 +478,7 @@ int DS_WillNotBuy(object oItem, string sNoBuyList)
 	string	sCheck		= GetStringParam(sNoBuyList, iListItem, ";");	//The the first string element
 	while(sCheck != "")
 	{//As long as there is a valid value in the list we check it
-		if((iCategory == DS_ARMOR && sCheck == DS_BUY_FILTER_ARMOR)			||
-			(iCategory == DS_WEAPON && sCheck == DS_BUY_FILTER_WEAPON)		||
-			(iCategory == DS_USEABLE && sCheck == DS_BUY_FILTER_USEABLE)	||
-			(iCategory == DS_TRINKETS && sCheck == DS_BUY_FILTER_TRINKETS)	||
-			(iCategory == DS_MISCELLANEOUS && sCheck == DS_BUY_FILTER_MISCELLANEOUS))
-		{	return TRUE;	}
-		else if(sBaseType == sCheck)
+		if(sBaseType == sCheck)
 		{	return TRUE;	}	//If the item matches it cannot be sold here!
 		iListItem++;
 		sCheck = GetStringParam(sNoBuyList, iListItem, ";");	//Get the next string element
@@ -506,13 +500,7 @@ int DS_WillOnlyBuy(object oItem, string sBuyOnlyList)
 	string	sCheck		= GetStringParam(sBuyOnlyList, iListItem, ";");	//The first string element
 	while(sCheck != "")
 	{//As long as there is a valid value in the list we check it
-		if((iCategory == DS_ARMOR && sCheck == DS_BUY_FILTER_ARMOR)			||
-			(iCategory == DS_WEAPON && sCheck == DS_BUY_FILTER_WEAPON)		||
-			(iCategory == DS_USEABLE && sCheck == DS_BUY_FILTER_USEABLE)	||
-			(iCategory == DS_TRINKETS && sCheck == DS_BUY_FILTER_TRINKETS)	||
-			(iCategory == DS_MISCELLANEOUS && sCheck == DS_BUY_FILTER_MISCELLANEOUS))
-		{	return TRUE;	}
-		else if(sBaseType == sCheck)
+		if(sBaseType == sCheck)
 		{	return TRUE;	}	//If the item matches it can be sold here!
 		iListItem++;
 		sCheck = GetStringParam(sBuyOnlyList, iListItem, ";");	//Get the next string element
