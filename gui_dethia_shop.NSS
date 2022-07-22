@@ -97,6 +97,16 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 	else if(iEvent == 5)	//Item selected within the shop
 	{//First set the max stack value to quantity and update local:7 (quant-selected)
+		int nStack = StringToInt(sStackSize);
+		if(DS_GetIsProjectile(oItem)) {
+			if (nStack >= 99)
+				sStackSize = "99";
+			else 
+				sStackSize = IntToString(nStack);
+				
+		} else {
+			sStackSize = "1";
+		}
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 
@@ -114,9 +124,11 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		sStackSize	= IntToString(FloatToInt((StringToInt(sStackSize))*(StringToInt(sExtra)/100.0f)));
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
+		
+		SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
-		if(DS_GetIsProjectile(oItem))	//Don't update price for ammunition
-		{	return;	}
+		//if(DS_GetIsProjectile(oItem))	//Don't update price for ammunition
+		//{	return;	}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
@@ -257,7 +269,9 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 		if(!GetInfiniteFlag(oItem))
 		{//Lastly we update the quantity for sale in the shop if it is not unlimited
+			SpeakString("Item is not infinite, update stack size to: ", TALKVOLUME_SHOUT);
 			sStackSize	= IntToString(iStack - iAmount);
+			SpeakString(sStackSize, TALKVOLUME_SHOUT);
 			if(iStack - iAmount > 0)
 			{//If any of the item is left we update its stack size in the shop and gui
 				SetItemStackSize(oItem, iStack - iAmount);
@@ -321,7 +335,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		else if(iSellAmount <= 0)
 		{	return;	}
 		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		else if(((GetBaseItemType(oItem) == BASE_ITEM_ARROW			||
+		/*else if(((GetBaseItemType(oItem) == BASE_ITEM_ARROW			||
 				GetBaseItemType(oItem) == BASE_ITEM_BOLT			||
 				GetBaseItemType(oItem) == BASE_ITEM_BULLET)			&&
 				iSellAmount < 99)									||
@@ -332,7 +346,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		{//If player is selling less than 99 units of ammunition tell them it's a no no
 			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
 			return;	
-		}
+		}*/
 		//If selling price exceeds the max buying price, set it to max buying price
 		else if(iMaxBuyPrice != -1 && iSellPrice > iMaxBuyPrice)
 		{	iSellPrice	= iMaxBuyPrice;	}
