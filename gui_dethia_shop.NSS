@@ -27,7 +27,7 @@ local:105	Stores the silver scrollbar position
 local:106	Stores the copper scrollbar position
 local:107	Storse the player selected gold value
 local:108	Storse the player selected silver value
-local:109	Storse the player selected copper value
+local:109	Storse the player selected copper valueActionRandomWalk
 local:110	Stores the actual value of the selected coins
 ---------------------------------------------------------------------
 Events:
@@ -112,8 +112,8 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 		//Next set the item's cost (ammunition is not affected by stack size)
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
-		if(DS_GetIsProjectile(oItem))
-		{	iCost	/= StringToInt(sStackSize);	}
+		/*if(DS_GetIsProjectile(oItem))
+		{	iCost	/= StringToInt(sStackSize);	}*/
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_gc", -1, DS_ConvertCoinsToGold(iCost));
@@ -235,8 +235,15 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		int	iAmount	= StringToInt(sUp);
 		int	iStack	= StringToInt(sStackSize);
 		int	iPrice	= StringToInt(sItemCost)*iAmount;
-		if(DS_GetIsProjectile(oItem))
-		{	iPrice	/= iAmount;	}
+		
+		//Updating the stack size if it got stuck in memory
+		SpeakString("iStack "+IntToString(iStack)+" vs. item stack size "+IntToString(GetItemStackSize(oItem)), TALKVOLUME_SHOUT);
+		if (iStack > GetItemStackSize(oItem)) {
+			iStack =  GetItemStackSize(oItem);
+		}
+		
+		/*if(DS_GetIsProjectile(oItem))
+		{	iPrice	/= iAmount;	}*/
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
 		/*else if(!DoesPCHaveFreeInvSlots(oPC))
 		{//If the player doesn't have enough room let them know and end script
@@ -270,14 +277,15 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		if(!GetInfiniteFlag(oItem))
 		{//Lastly we update the quantity for sale in the shop if it is not unlimited
 			SpeakString("Item is not infinite, update stack size to: ", TALKVOLUME_SHOUT);
-			sStackSize	= IntToString(iStack - iAmount);
-			SpeakString(sStackSize, TALKVOLUME_SHOUT);
-			if(iStack - iAmount > 0)
+			int nNewStack = iStack - iAmount;
+			string sNewStack	= IntToString(nNewStack);
+			SpeakString(sNewStack, TALKVOLUME_SHOUT);
+			if(nNewStack > 0)
 			{//If any of the item is left we update its stack size in the shop and gui
-				SetItemStackSize(oItem, iStack - iAmount);
+				SetItemStackSize(oItem, nNewStack);
 				ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
-										"item_name=" + GetName(oItem) + " (" + sStackSize + ")", "",
-										"2=" + sStackSize, "");
+										"item_name=" + GetName(oItem) + " (" + sNewStack + ")", "",
+										"2=" + sNewStack, "");
 			}
 			else if(iStack - iAmount <= 0)
 			{	//If 0 we remove the item from shop and gui
@@ -321,8 +329,8 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		int		iSellAmount		= StringToInt(sUp);
 		int		iStackSize		= StringToInt(sStackSize);
 		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
-		if(DS_GetIsProjectile(oItem))
-		{		iSellPrice		/= iSellAmount;	}
+		/*if(DS_GetIsProjectile(oItem))
+		{		iSellPrice		/= iSellAmount;	}*/
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
 		int		iStoreGold		= GetStoreGold(oStore);
 
