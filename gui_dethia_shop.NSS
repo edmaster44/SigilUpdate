@@ -125,7 +125,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 		
-		SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
+		//SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
 		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1) //Don't update price for base ammunition
 		{	return;	}
@@ -237,7 +237,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		int	iPrice	= StringToInt(sItemCost)*iAmount;
 		
 		//Updating the stack size if it got stuck in memory
-		SpeakString("iStack "+IntToString(iStack)+" vs. item stack size "+IntToString(GetItemStackSize(oItem)), TALKVOLUME_SHOUT);
+		//SpeakString("iStack "+IntToString(iStack)+" vs. item stack size "+IntToString(GetItemStackSize(oItem)), TALKVOLUME_SHOUT);
 		if (iStack > GetItemStackSize(oItem)) {
 			iStack =  GetItemStackSize(oItem);
 		}
@@ -276,10 +276,10 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 		if(!GetInfiniteFlag(oItem))
 		{//Lastly we update the quantity for sale in the shop if it is not unlimited
-			SpeakString("Item is not infinite, update stack size to: ", TALKVOLUME_SHOUT);
+			//SpeakString("Item is not infinite, update stack size to: ", TALKVOLUME_SHOUT);
 			int nNewStack = iStack - iAmount;
 			string sNewStack	= IntToString(nNewStack);
-			SpeakString(sNewStack, TALKVOLUME_SHOUT);
+			//SpeakString(sNewStack, TALKVOLUME_SHOUT);
 			if(nNewStack > 0)
 			{//If any of the item is left we update its stack size in the shop and gui
 				SetItemStackSize(oItem, nNewStack);
@@ -345,18 +345,18 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		else if(iSellAmount <= 0)
 		{	return;	}
 		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		/*else if(((GetBaseItemType(oItem) == BASE_ITEM_ARROW			||
+		else if(((GetBaseItemType(oItem) == BASE_ITEM_ARROW			||
 				GetBaseItemType(oItem) == BASE_ITEM_BOLT			||
 				GetBaseItemType(oItem) == BASE_ITEM_BULLET)			&&
-				iSellAmount < 99)									||
+				iSellAmount < 99 && GetGoldPieceValue(oItem) <= 1)	||
 				((GetBaseItemType(oItem) == BASE_ITEM_DART			||
 				GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN		||
 				GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE)	&&
-				iSellAmount < 50)									)
+				iSellAmount < 50 && GetGoldPieceValue(oItem) <= 1)	)
 		{//If player is selling less than 99 units of ammunition tell them it's a no no
 			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
 			return;	
-		}*/
+		}
 		//If selling price exceeds the max buying price, set it to max buying price
 		else if(iMaxBuyPrice != -1 && iSellPrice > iMaxBuyPrice)
 		{	iSellPrice	= iMaxBuyPrice;	}

@@ -41,5 +41,5 @@ void main(int nMarkUp, int nMarkDown)
 	nMarkDown = MAX_MARKDOWN + iPCAppraise;
 	if (nMarkDown > MIN_MARKDOWN) nMarkDown = MIN_MARKDOWN;
 	
-	OpenStore(oStore, oPC, nMarkUp, nMarkDown);
+	DS_OpenShop(oStore, oPC, nMarkUp, nMarkDown);
 }
