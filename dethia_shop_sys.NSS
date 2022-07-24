@@ -468,9 +468,9 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 
 int DS_WillNotBuy(object oItem, string sNoBuyList)
 {//First we check if the store has a "Will Not Buy" list
-	SpeakString("Checking will not buy", TALKVOLUME_SHOUT);
+	//SpeakString("Checking will not buy", TALKVOLUME_SHOUT);
 	if(sNoBuyList == "")	{	return FALSE;	}
-	SpeakString("We have a list: "+sNoBuyList, TALKVOLUME_SHOUT);
+	//SpeakString("We have a list: "+sNoBuyList, TALKVOLUME_SHOUT);
 	
 	//If there is a No Buy List, we check the item against it
 	string	sBaseType	= IntToString(GetBaseItemType(oItem));
@@ -481,7 +481,7 @@ int DS_WillNotBuy(object oItem, string sNoBuyList)
 	string	sCheck		= GetStringParam(sNoBuyList, iListItem, ";");	//The the first string element
 	while(sCheck != "")
 	{//As long as there is a valid value in the list we check it
-		SpeakString("Checking baseType "+sBaseType+" vs. "+sCheck, TALKVOLUME_SHOUT);
+		//SpeakString("Checking baseType "+sBaseType+" vs. "+sCheck, TALKVOLUME_SHOUT);
 		if(sBaseType == sCheck)
 		{	return TRUE;	}	//If the item matches it cannot be sold here!
 		iListItem++;
@@ -493,9 +493,9 @@ int DS_WillNotBuy(object oItem, string sNoBuyList)
 
 int DS_WillOnlyBuy(object oItem, string sBuyOnlyList)
 {//First we check if the store has a "Will Only Buy" list
-	SpeakString("Checking will only buy", TALKVOLUME_SHOUT);
+	//SpeakString("Checking will only buy", TALKVOLUME_SHOUT);
 	if(sBuyOnlyList == "")	{	return TRUE;	}
-	SpeakString("We have a list: "+sBuyOnlyList, TALKVOLUME_SHOUT);
+	//SpeakString("We have a list: "+sBuyOnlyList, TALKVOLUME_SHOUT);
 
 	//If there is a Only Buy List, we check the item against it
 	string	sBaseType	= IntToString(GetBaseItemType(oItem));
@@ -506,7 +506,7 @@ int DS_WillOnlyBuy(object oItem, string sBuyOnlyList)
 	string	sCheck		= GetStringParam(sBuyOnlyList, iListItem, ";");	//The first string element
 	while(sCheck != "")
 	{//As long as there is a valid value in the list we check it
-		SpeakString("Checking baseType "+sBaseType+" vs. "+sCheck, TALKVOLUME_SHOUT);
+		//SpeakString("Checking baseType "+sBaseType+" vs. "+sCheck, TALKVOLUME_SHOUT);
 		if(sBaseType == sCheck)
 		{	return TRUE;	}	//If the item matches it can be sold here!
 		iListItem++;

@@ -112,8 +112,8 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 		//Next set the item's cost (ammunition is not affected by stack size)
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
-		/*if(DS_GetIsProjectile(oItem))
-		{	iCost	/= StringToInt(sStackSize);	}*/
+		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1)
+		{	iCost	/= StringToInt(sStackSize);	}
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_gc", -1, DS_ConvertCoinsToGold(iCost));
@@ -127,8 +127,8 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		
 		SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
-		//if(DS_GetIsProjectile(oItem))	//Don't update price for ammunition
-		//{	return;	}
+		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1) //Don't update price for base ammunition
+		{	return;	}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
@@ -242,8 +242,8 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 			iStack =  GetItemStackSize(oItem);
 		}
 		
-		/*if(DS_GetIsProjectile(oItem))
-		{	iPrice	/= iAmount;	}*/
+		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1)
+		{	iPrice	/= iAmount;	}
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
 		/*else if(!DoesPCHaveFreeInvSlots(oPC))
 		{//If the player doesn't have enough room let them know and end script
@@ -255,7 +255,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 			FloatingTextStringOnCreature("You don't have enough coins friend.", oPC);
 			return;	
 		}
-		else if(!GetInfiniteFlag(oItem) && StringToInt(sStackSize) < iAmount)
+		else if(!GetInfiniteFlag(oItem) && iStack < iAmount)
 		{//If the store's stock is less than player selected value let them know
 			FloatingTextStringOnCreature("Terribly sorry but I don't have that much in stock.", oPC);
 			return;	
@@ -329,8 +329,10 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		int		iSellAmount		= StringToInt(sUp);
 		int		iStackSize		= StringToInt(sStackSize);
 		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
-		/*if(DS_GetIsProjectile(oItem))
-		{		iSellPrice		/= iSellAmount;	}*/
+		
+		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1)
+		{		iSellPrice		/= iSellAmount;	}
+		
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
 		int		iStoreGold		= GetStoreGold(oStore);
 
