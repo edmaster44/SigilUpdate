@@ -20,6 +20,9 @@ string GetRace(object oPC)
 	if (iSubrace == RACIAL_SUBTYPE_WILD_ELF) race = "wildelf";
 	if (iSubrace == RACIAL_SUBTYPE_DROW) race = "drow";
 	if (iSubrace == 52) race = "human";//Xeph
+	if (iSubrace == 53) race = "human";//Night Hag new
+	if (iSubrace == 149) race = "elf";//Old Nymph
+	if (iSubrace == 150) race = "elf";//Old Killoren
 		
 	if (iRace == RACIAL_TYPE_DWARF) race = "dwarf";
 	if (iRace == RACIAL_TYPE_HALFORC || iRace == RACIAL_TYPE_GRAYORC || iSubrace == 76) race = "halforc";
@@ -31,6 +34,8 @@ string GetRace(object oPC)
 	if (iSubrace == 68) race = "halforc";//Hobgoblin
 	if (iSubrace == 67) race = "halfling";//Kobold
 	if (iSubrace == 54) race = "halfling";//Goblin
+	if (iSubrace ==60 ) race = "halforc";
+
 
 	if (iSubrace == 72 || iSubrace == 103) race = "mountainorc";
 	if (iRace == RACIAL_TYPE_GNOME) race = "gnome";
