@@ -1,6 +1,8 @@
 
 #include "nwnx_sql"
 
+void ConvertBio (object oPC)
+{
 if (GetIsDM(oPC) == TRUE) return;
 
 string name = SQLEncodeSpecialChars(GetName(oPC));
@@ -34,8 +36,8 @@ string sPortrait = GetCampaignString(sDB,"Portrait");
 
 	SQLExecDirect(sQuery);
 
-	DeleteCampaignVariable(sDB,"Portrait", OBJECT_SELF);
-	DeleteCampaignVariable(sDB,"Bio", OBJECT_SELF);
+	DeleteCampaignVariable(sDB,"Portrait", oPC);
+	DeleteCampaignVariable(sDB,"Bio", oPC);
 	
 
 	SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");

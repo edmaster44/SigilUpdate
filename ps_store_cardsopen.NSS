@@ -7,6 +7,7 @@
 
 #include "ps_inc_time"
 #include "ps_inc_stores"
+#include "dethia_shop_sys"
 
 void main(int nMarkUp, int nMarkDown)
 {
