@@ -548,6 +548,8 @@ void main()
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
 	
     DMFI_ClientEnter(oPC);
+
+    ConvertBio(oPC); 
 	
 	SQLExecDirect("SELECT text FROM news ORDER BY id");
 	string sNews = "";
