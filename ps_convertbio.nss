@@ -4,7 +4,7 @@
 void ConvertBio (object oPC)
 {
 if (GetIsDM(oPC) == TRUE) return;
-GetCampaignString
+
 string name = SQLEncodeSpecialChars(GetName(oPC));
 string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 string sQuery; string sDB;
