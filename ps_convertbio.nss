@@ -20,14 +20,14 @@ string sQuery; string sDB; string sBio; string sPortrait;
 	{	sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
 		"_" + GetSubString(GetFirstName(oPC), 0, 6) +
 		"_" + GetSubString(GetLastName(oPC), 0, 9);
-		sBio = GetCampaignString(sDB,"Bio",oPC);
+		sBio = GetCampaignString(sDB,"Bio");
 	}
 
 	if (sPortrait == "")
 	{	sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
 		"_" + GetSubString(GetFirstName(oPC), 0, 6) +
 		"_" + GetSubString(GetLastName(oPC), 0, 9);
-		sPortrait = GetCampaignString(sDB,"Portrait",oPC);
+		sPortrait = GetCampaignString(sDB,"Portrait");
 	if (GetStringLength(sPortrait) < 2) sPortrait = "bg_60_alpha";
 	}
 	sQuery = "INSERT INTO kemo_bios (bioid, name, player, biotext, portrait) SELECT 1 + coalesce((SELECT max(bioid)"+
