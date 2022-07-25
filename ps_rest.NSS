@@ -2,6 +2,7 @@
 #include "ps_rage_func"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
+#include "ps_convertbio"
 
 const int cSaveWait = 300;
 const int ASSS_FX 	= -5894;
@@ -254,9 +255,11 @@ void RestFinish(object oPC)
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}
+	
 	AddEPForDeathDice(oPC);
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
+	ConvertBio(oPC);
 	DoPsyFeatProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
