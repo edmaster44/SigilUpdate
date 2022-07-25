@@ -36,8 +36,8 @@ string sPortrait = GetCampaignString(sDB,"Portrait");
 
 	SQLExecDirect(sQuery);
 
-	DeleteCampaignVariable(sDB,"Portrait", oPC);
-	DeleteCampaignVariable(sDB,"Bio", oPC);
+/*	DeleteCampaignVariable(sDB,"Portrait", oPC);
+	DeleteCampaignVariable(sDB,"Bio", oPC);*/
 	
 
 	SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");
