@@ -549,7 +549,6 @@ void main()
 	
     DMFI_ClientEnter(oPC);
 
-    ConvertBio(oPC); 
 	
 	SQLExecDirect("SELECT text FROM news ORDER BY id");
 	string sNews = "";
