@@ -11,11 +11,6 @@ string sQuery; string sDB; string sBio; string sPortrait;
 //string sBio = GetCampaignString(sDB,"Bio",oPC);
 //string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
 
-
-
-
-	if (sBio != "" & sPortrait != "")
-	{
 	if (sBio == "")
 	{	sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
 		"_" + GetSubString(GetFirstName(oPC), 0, 6) +
@@ -38,5 +33,5 @@ string sQuery; string sDB; string sBio; string sPortrait;
 	SQLExecDirect(sQuery);
 
 	SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");
-	}
+	
 }
