@@ -8,6 +8,7 @@
 #include "ps_class_inc"
 #include "ps_inc_advscript"
 #include "ps_inc_polymorph"
+#include "ps_convertbio"
 #include "ps_inc_time"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
