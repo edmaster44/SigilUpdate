@@ -12,7 +12,7 @@ string sQuery; string sDB; string sBio; string sPortrait;
 //string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
 
 
-	if (sBio == "" & sPortrait == "") return;
+
 
 	if (sBio != "" & sPortrait != "")
 	{
