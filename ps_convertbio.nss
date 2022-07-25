@@ -4,7 +4,7 @@
 void ConvertBio (object oPC)
 {
 if (GetIsDM(oPC) == TRUE) return;
-
+GetCampaignString
 string name = SQLEncodeSpecialChars(GetName(oPC));
 string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 string sQuery; string sDB;
@@ -31,7 +31,7 @@ string sPortrait = GetCampaignString(sDB,"Portrait");
 	}
 	sQuery = "INSERT INTO kemo_bios (bioid, name, player, biotext, portrait) SELECT 1 + coalesce((SELECT max(bioid)"+
 	" FROM kemo_bios), 0), '"+name+"', '"+player+"',"+
-	"AES_ENCRYPT('"+SQLEncodeSpecialChars(sBio)+"','MfAbur3ucTmheLESh2VKYad6H7RtYE'),"+
+	"AES_ENCRYPT('"+SQLEncodeSpecialChars(sBio)+"','PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'),"+
 	"'"+SQLEncodeSpecialChars(sPortrait)+"';";
 
 	SQLExecDirect(sQuery);

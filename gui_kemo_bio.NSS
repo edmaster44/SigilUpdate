@@ -96,7 +96,7 @@ object oPC = OBJECT_SELF;
 	{
 		bioid = GetBioPCID(oTarget);
 
-		sQuery = "SELECT AES_DECRYPT(biotext,'insertyourpasswordhere'), portrait FROM kemo_bios"+
+		sQuery = "SELECT AES_DECRYPT(biotext,'PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'), portrait FROM kemo_bios"+
 		" where bioid='"+bioid+"';";
 		SQLExecDirect(sQuery); SQLFetch();
 
@@ -135,7 +135,7 @@ object oPC = OBJECT_SELF;
 	
 		bioid = GetBioPCID(oPC);
 
-		sQuery = "SELECT AES_DECRYPT(biotext,'insertyourpasswordhere'), portrait FROM kemo_bios"+
+		sQuery = "SELECT AES_DECRYPT(biotext,'PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'), portrait FROM kemo_bios"+
 		" where bioid='"+bioid+"';";
 		SQLExecDirect(sQuery); SQLFetch();
 
@@ -172,7 +172,7 @@ object oPC = OBJECT_SELF;
 		SendMessageToPC(oPC,"Players portraits available: https://www.nwn2planescape.com/portrait_gallery.php/");
 		bioid = GetBioPCID(oPC);		
 
-		sQuery = "SELECT AES_DECRYPT(biotext,'insertyourpasswordhere'), portrait FROM kemo_bios"+
+		sQuery = "SELECT AES_DECRYPT(biotext,'PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'), portrait FROM kemo_bios"+
 		" where bioid='"+bioid+"';";
 		SQLExecDirect(sQuery); SQLFetch();
 
@@ -193,7 +193,7 @@ object oPC = OBJECT_SELF;
 		if (sType == "bio")
 		{
 		sQuery = "UPDATE kemo_bios SET biotext=AES_ENCRYPT('"+SQLEncodeSpecialChars(sEntry)+
-		"','insertyourpasswordhere') where bioid='"+bioid+"';";
+		"','PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4') where bioid='"+bioid+"';";
 		SQLExecDirect(sQuery);
 		CloseGUIScreen(oPC,"KEMO_BIO_EDIT");
 		}
