@@ -345,14 +345,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		else if(iSellAmount <= 0)
 		{	return;	}
 		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		else if(((GetBaseItemType(oItem) == BASE_ITEM_ARROW			||
-				GetBaseItemType(oItem) == BASE_ITEM_BOLT			||
-				GetBaseItemType(oItem) == BASE_ITEM_BULLET)			&&
-				iSellAmount < 99 && GetGoldPieceValue(oItem) <= 1)	||
-				((GetBaseItemType(oItem) == BASE_ITEM_DART			||
-				GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN		||
-				GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE)	&&
-				iSellAmount < 50 && GetGoldPieceValue(oItem) <= 1)	)
+		else if(DS_GetIsProjectile(oItem)&& iSellAmount < 99 && GetGoldPieceValue(oItem) <= 1)
 		{//If player is selling less than 99 units of ammunition tell them it's a no no
 			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
 			return;	
