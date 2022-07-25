@@ -293,6 +293,12 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_bazaarpeddler", lSpawnpoint);    
   }
+  if(GetObjectByTag("ps_npc_bazaarpeddler2") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("WP_ps_npc_bazaarpeddler2");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_bazaarpeddler2", lSpawnpoint);    
+  }
     //Herman (Tier 2 Merchant)
    if(GetObjectByTag("ps_npc_tier2gear") == OBJECT_INVALID)
   {
