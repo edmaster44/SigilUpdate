@@ -853,7 +853,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
         
       DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
 	  
-	 // DelayCommand(0.1f,ApplyAustereStrikes(oPC,oITEM));
+	  DelayCommand(0.1f,ApplyAustereStrikes(oPC,oITEM));
     
       DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
         
@@ -884,7 +884,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
             PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
             RemoveElementalWeapon(oPC,oITEM);
             RemoveMeditativeStrikes(oPC,oITEM);
-		//	RemoveAustereStrikes(oPC,oITEM);
+			RemoveAustereStrikes(oPC,oITEM);
         
     }
 

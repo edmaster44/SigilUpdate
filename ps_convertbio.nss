@@ -32,10 +32,10 @@ string sQuery; string sDB; string sBio; string sPortrait;
 
 	SQLExecDirect(sQuery);
 
-	SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");	
+	//SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");	
 	DeleteCampaignVariable(sDB,sBio);
 	DeleteCampaignVariable(sDB,sPortrait);
-	SendMessageToPC(oPC,"Deleting Campaign Variable.");
+	//SendMessageToPC(oPC,"Deleting Campaign Variable.");
 
 	
 }

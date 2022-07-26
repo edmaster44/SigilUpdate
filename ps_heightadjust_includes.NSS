@@ -228,8 +228,8 @@ void AdjustHeight(object oPC, int selection)
 		if(race == "halfling") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 120, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 120";
 		else if(race == "dwarf") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 150, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 150";
 		else if(race == "gnome") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 130, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 130";
-		else if(race == "halforc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 230, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 210";
-		else if(race == "mountainorc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 250, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 230";
+		else if(race == "halforc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 210, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 210";
+		else if(race == "mountainorc") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 230, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 230";
 		else if(race == "halfbreed") sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 210, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 210";
 		else sQuery = "SELECT ("+FloatToString(iMin)+" + ("+IntToString(selection-1)+" * 2.54)) / 200, ("+FloatToString(iMin2)+" + ("+IntToString(selection-1)+" * 2.54)) / 200";
 	}
