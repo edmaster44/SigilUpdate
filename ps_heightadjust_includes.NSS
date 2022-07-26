@@ -26,6 +26,7 @@ string GetRace(object oPC)
 		
 	if (iRace == RACIAL_TYPE_DWARF) race = "dwarf";
 	if (iRace == RACIAL_TYPE_HALFORC || iRace == RACIAL_TYPE_GRAYORC || iSubrace == 76) race = "halforc";
+		if (iSubrace == 172) race = "human";
 	if (iSubrace == 193) race = "halforc";
 	if (iSubrace == 203) race = "halforc";
 	if (iSubrace == 61) race = "halforc";//Khaasta
