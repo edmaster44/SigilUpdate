@@ -259,7 +259,6 @@ void RestFinish(object oPC)
 	AddEPForDeathDice(oPC);
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
-	ConvertBio(oPC);
 	DoPsyFeatProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
