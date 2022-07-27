@@ -53,7 +53,7 @@ void main(string sTag, int nMarkUp, int nMarkDown)
 	nMarkDown = MAX_MARKDOWN + iPCAppraise;
 	if (nMarkDown > MIN_MARKDOWN) nMarkDown = MIN_MARKDOWN;
 	
-	SendMessageToPC(oPC, "Markup value = " + IntToString(nMarkUp) + ". Markdown value = " + IntToString(nMarkDown) + ".");
+	//SendMessageToPC(oPC, "Markup value = " + IntToString(nMarkUp) + ". Markdown value = " + IntToString(nMarkDown) + ".");
 	
 	DS_OpenShop(GetStoreFromStoreArea(sTag), oPC, nMarkUp, nMarkDown);
 }
