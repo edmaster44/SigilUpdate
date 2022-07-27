@@ -322,9 +322,9 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 	}
 	else	//If no apply the appraise modifier and mark the store as open
 	{
-		int	iAppraise	= DS_AppraiseModifier(OBJECT_SELF, oPC);
+		/*int	iAppraise	= DS_AppraiseModifier(OBJECT_SELF, oPC);
 			iMarkUp		+= iAppraise;
-			iMarkDown	+= iAppraise;
+			iMarkDown	+= iAppraise;*/
 		SetLocalObject(oStore, "DS_CUSTOMER", oPC);
 		SetLocalInt(oStore, "DS_OPEN", TRUE);
 	}
