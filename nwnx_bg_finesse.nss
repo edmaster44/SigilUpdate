@@ -43,7 +43,7 @@ void main()
 	
 
 	
-	}	
+		
 	switch(GetBaseItemType(oWeapon))
 	{
 
