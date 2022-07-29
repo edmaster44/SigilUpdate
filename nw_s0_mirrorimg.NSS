@@ -25,44 +25,48 @@
 
 void main()
 {
-
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
-
+	/* 
+	Spellcast Hook Code 
+	Added 2003-06-23 by GeorgZ
+	If you want to make changes to all spells,
+	check x2_inc_spellhook.nss to find out more
+	
+	*/
     if (!X2PreSpellCastCode())
     {
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
+	// End of Spell Cast Hook
 
-// End of Spell Cast Hook
+	int nSpellIdOffset = 8000;
+	int nMaxImages = 8;
+	int nID = GetSpellId();
 
 	// Prevent stacking
-
-
-    //Declare major variables
-    object oTarget = GetSpellTargetObject();
-    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-	float fDuration = TurnsToSeconds(nCasterLvl);	
-		int nID = GetSpellId();
+	// Each mirror has a separate spellId, I think this is to prevent one mirror from removing
+	// all of them when it pops. But we need to account for that here.
+	int nMinId = nSpellIdOffset + nID;
+	int nMaxId = nSpellIdOffset + nMaxImages + nID;
 	if ( GetHasSpellEffect(nID) )
 	{
 		effect eEffect = GetFirstEffect( OBJECT_SELF );
 		while ( GetIsEffectValid(eEffect) )
 		{
-			if ( GetEffectSpellId(eEffect) == nID )
+			int nSpellEffectId = GetEffectSpellId(eEffect);
+			if ( nSpellEffectId == nID || (nSpellEffectId > nMinId && nSpellEffectId < nMaxId) )
 			{
 				RemoveEffect( OBJECT_SELF, eEffect );
 			}
-			
 			eEffect = GetNextEffect( OBJECT_SELF );
 		}
 	}
+
+    //Declare major variables
+    object oTarget = GetSpellTargetObject();
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	float fDuration = TurnsToSeconds(nCasterLvl);	
+
 	//Cap out caster level at 15 for purposes of AC bonus
 	if (nCasterLvl > 15)
 	{
@@ -82,16 +86,16 @@ void main()
     //nImages += nCasterLvl;
     
 	//Max out Images at 8
-	if( nImages > 8 )  
+	if( nImages > nMaxImages )  
 	{ 
-		nImages = 8; 
+		nImages = nMaxImages; 
 	}
 	//Metamagic duration & duration type
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nID, FALSE));
 	
 	//This determines how long to wait between spawning the images. 
 	float fSpin = ( 1.5 / nImages );
@@ -103,22 +107,20 @@ void main()
     {
         effect eAbsorb = EffectAbsorbDamage(nACBonus);
         effect eDur = EffectVisualEffect(876);
-//        effect eVis = EffectVisualEffect(VFX_IMP_HOLY_AID); //Don't need this.
+        // effect eVis = EffectVisualEffect(VFX_IMP_HOLY_AID); //Don't need this.
 		effect eImg = EffectNWN2SpecialEffectFile( sImg, OBJECT_SELF );
         effect eLink = EffectLinkEffects(eAbsorb, eDur);
 		eLink = EffectLinkEffects(eLink, eImg);
         effect eOnDispell = EffectOnDispel(0.0f, RemoveEffectsFromSpell(oTarget, SPELL_MIRROR_IMAGE));
         eLink = EffectLinkEffects(eLink, eOnDispell);
-
+		
+		if(i > 0 ) eLink = SetEffectSpellId(eLink,nSpellIdOffset+nID+i);
+		else eLink = SetEffectSpellId(eLink,nID);
         //Apply the VFX impact and effects
-//        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
- if (!GetHasSpellEffect(nID, oTarget)){
-
-
+        // ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         DelayCommand( fDelay, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration) );
 		fDelay += fSpin;		
     }
 	
 	
-}
 }
