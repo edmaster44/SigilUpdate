@@ -42,24 +42,8 @@ void main()
 	// a further white list you could do so like this:
 	
 
-	switch (GetLevelByClass(72,oSelf)>4)
-	{
-	//Weapons that can be finesse
-	case BASE_ITEM_SCIMITAR:
-	case BASE_ITEM_FALCHION:
-	case BASE_ITEM_LONGSWORD:
-	case BASE_ITEM_GREATSWORD:
-	case BASE_ITEM_GREATAXE:
-	case BASE_ITEM_BASTARDSWORD:
-	case BASE_ITEM_BATTLEAXE:
-	case BASE_ITEM_KATANA:
-		bIsFinessable = 1;
-	break;	
 	
-	default:
-			bIsFinessable = 0;
-	
-	}	
+		
 	switch(GetBaseItemType(oWeapon))
 	{
 

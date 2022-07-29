@@ -857,7 +857,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
     
       DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
         
-        	//if (GetIsFinessable(oITEM))
+        	 if (GetIsFinessable(oITEM))
 			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
