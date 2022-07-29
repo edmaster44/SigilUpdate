@@ -59,6 +59,8 @@ Events:
 				sUp			= local:997 (selected gold)
 				sDown		= local:998 (selected silver)
 				sExtra		= local:999 (selected copper)
+16 		This event takes you to the previous page of inventory in the sell tab (if applicable)
+17 		This event takes to the next page of inventory in the sell tab (if applicable)
 99		The store is being closed so we run the DS_CloseStore function
 *************************************************************************************/
 #include "dethia_shop_sys"
@@ -458,6 +460,23 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 			AddScriptParameterString(sUp);			//Item listbox row ID
 			ExecuteScriptEnhanced("gui_dethia_shop", oPC);
 		}	
+	}
+	else if (iEvent == 16) { //Player clicked the last page button
+		int nPage = StringToInt(sExtra);
+		SendMessageToPC(oPC, "Clicked last page button, current page: "+sExtra);
+		if (nPage <= 0)
+			nPage = 0;
+		else
+			nPage -= 1;
+		SetLocalGUIVariable(oPC, "dethia_shop", 9, IntToString(nPage));
+
+	} 
+	else if (iEvent == 17) { //Player clicked the next page button
+		int nPage = StringToInt(sExtra);
+		SendMessageToPC(oPC, "Clicked next page button, current page: "+sExtra);
+		nPage += 1;
+		SetLocalGUIVariable(oPC, "dethia_shop", 9, IntToString(nPage));
+
 	}
 /*The below section does not work at all for various reasons.  If I am up to it sometime
 I will re-do this entire segment of the barter window (trading coins) but that is for another time
