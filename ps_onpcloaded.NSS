@@ -13,6 +13,7 @@
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_inc_bgspellfix"
+#include "aaa_dragon_inc"
 #include "ginc_time"
 #include "ps_heightadjust_includes"
 
@@ -563,6 +564,7 @@ void main()
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		ConvertBio(oPC);
+		PS_ShieldArmor_Dragon(oPC,2623);
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
