@@ -17,6 +17,8 @@ local:5		Currently selected item's stack size inside the store (thus max stack t
 local:6		Item's listbox row ID.  If an item is bought we can edit it based on this value
 local:7		The player selected stack size for purchase/sale
 local:8		Whether we are buying or selling (0 = buying ; 1 = selling)
+local:9		current page on the sell tab
+local:10		max page on the sell tab
 --The below variables are not used as the whole section does not work--
 local:100	100-110 are only used in "splitgold.xml", stores the player's total coin value
 local:101	Stores the player's current gold
@@ -85,6 +87,12 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", TRUE);
+		
+		//Remove Pagination
+		SetGUIObjectDisabled(oPC, "dethia_shop", "PAGE_TEXT", TRUE);
+		SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
+		SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
+		
 		//If theft is enabled, allow stealing from the shop
 		if((DS_THEFT_ENABLE && !GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
 			(!DS_THEFT_ENABLE && GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
@@ -155,14 +163,24 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 	else if(iEvent == 8)	//The player chose "sell" category
 	{//First disable/enable the buy, steal/sell buttons (since we are selling)
+		SendMessageToPC(oPC, "selling tab generation");
 		SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", TRUE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);
 		
+		//Add Pagination
+		SetGUIObjectDisabled(oPC, "dethia_shop", "PAGE_TEXT", FALSE);
+		SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", FALSE);
+		SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", FALSE);
+		
 		int nMaxBuy = GetStoreMaxBuyPrice(oStore);
 		if (nMaxBuy < 0)
 			nMaxBuy = 999999;
+		
+		//pagination variables	
+		int nPageLength = 143;
+		int nCurrentPage = StringToInt(sExtra);
 		
 		//We will populate the shop gui with all non-cursed items and allowed items
 		object	oItem		= GetFirstItemInInventory(oPC);
@@ -170,36 +188,55 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		int		iRowID		= 0;	//The listbox row ID for a particular item
 		//Before we populate the listbox we must first clear it
 		ClearListBox(oPC, "dethia_shop", "store_items");
+		
+		//this page's limits
+		int lastItem = (nCurrentPage+1) * nPageLength; // last item in current page
+		int firstItem = lastItem - nPageLength; // first item in current page
+		int nCount = 0;
 
 		//As long as there are valid items we list them for sale
-		while(GetIsObjectValid(oItem))
-		{//We add the item to the "store_items" listbox
-			string	sStackSize	= IntToString(GetItemStackSize(oItem));
-			string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
-			string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
-			int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
-									GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
-									
-			if (iItemCost > nMaxBuy)
-				iItemCost = nMaxBuy;			
-									
-			if(!GetIdentified(oItem))	//If not identified hide the item name
-			{	sItemName	= "<color=cyan>Unidentified (" + sStackSize + ")</color>";	}
-
-			//Add the item into the store sell list
-			AddListBoxRow(oPC, "dethia_shop", "store_items", IntToString(iRowID),
-								"item_cost_cc=" + DS_ConvertCoinsToCopper(iItemCost) + ";"	+
-								"item_cost_sc=" + DS_ConvertCoinsToSilver(iItemCost) + ";"	+
-								"item_cost_gc=" + DS_ConvertCoinsToGold(iItemCost) + ";"	+
-								"item_name=" + sItemName,
-								"item_icon=" + sItemIcon,
-								"0=" + IntToString(ObjectToInt(oItem)) + ";"	+
-								"1=" + IntToString(iItemCost) + ";"	+
-								"2=" + sStackSize + ";"				+
-								"3=" + IntToString(iRowID), "");
-			iRowID++;	//Increment the item ID
+		while(GetIsObjectValid(oItem)) {
+		
+			SendMessageToPC(oPC, "Count: "+IntToString(nCount));
+		
+			if (!GetItemCursedFlag(oItem) && !GetPlotFlag(oItem)) {
+			
+				if (nCount >= firstItem && nCount < lastItem) {
+					//We add the item to the "store_items" listbox
+					string	sStackSize	= IntToString(GetItemStackSize(oItem));
+					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
+					string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
+					int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
+											GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
+											
+					if (iItemCost > nMaxBuy)
+						iItemCost = nMaxBuy;			
+											
+					if(!GetIdentified(oItem))	//If not identified hide the item name
+					{	sItemName	= "<color=cyan>Unidentified (" + sStackSize + ")</color>";	}
+		
+					//Add the item into the store sell list
+					AddListBoxRow(oPC, "dethia_shop", "store_items", IntToString(iRowID),
+										"item_cost_cc=" + DS_ConvertCoinsToCopper(iItemCost) + ";"	+
+										"item_cost_sc=" + DS_ConvertCoinsToSilver(iItemCost) + ";"	+
+										"item_cost_gc=" + DS_ConvertCoinsToGold(iItemCost) + ";"	+
+										"item_name=" + sItemName,
+										"item_icon=" + sItemIcon,
+										"0=" + IntToString(ObjectToInt(oItem)) + ";"	+
+										"1=" + IntToString(iItemCost) + ";"	+
+										"2=" + sStackSize + ";"				+
+										"3=" + IntToString(iRowID), "");
+					iRowID++;	//Increment the item ID
+				}
+				nCount++;
+			}
+			
 			oItem	= GetNextItemInInventory(oPC);	//Get the next item
 		}
+		
+		int nMaxPage = FloatToInt(IntToFloat(nCount)/IntToFloat(nPageLength));
+		SetLocalInt(oPC, "shop_max_pages", nMaxPage);
+		
 	}
 
 	else if(iEvent == 9)	//Player has selected some item and hit Identify button
@@ -469,13 +506,39 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		else
 			nPage -= 1;
 		SetLocalGUIVariable(oPC, "dethia_shop", 9, IntToString(nPage));
-
+		
+		//rerun sell tab generation
+		AddScriptParameterString("8");
+		AddScriptParameterString("");
+		AddScriptParameterString("");
+		AddScriptParameterString("");
+		AddScriptParameterString(sStoreID);
+		AddScriptParameterString(sUp);
+		AddScriptParameterString(sDown);
+		AddScriptParameterString(IntToString(nPage));
+		ExecuteScriptEnhanced("gui_dethia_shop", oPC);
+		
 	} 
 	else if (iEvent == 17) { //Player clicked the next page button
 		int nPage = StringToInt(sExtra);
+		int nMaxPage = GetLocalInt(oPC, "shop_max_pages");
 		SendMessageToPC(oPC, "Clicked next page button, current page: "+sExtra);
-		nPage += 1;
+		if (nPage >= nMaxPage)
+			nPage = (nMaxPage-1);
+		else
+			nPage += 1;
 		SetLocalGUIVariable(oPC, "dethia_shop", 9, IntToString(nPage));
+		
+		//rerun sell tab generation
+		AddScriptParameterString("8");
+		AddScriptParameterString("");
+		AddScriptParameterString("");
+		AddScriptParameterString("");
+		AddScriptParameterString(sStoreID);
+		AddScriptParameterString(sUp);
+		AddScriptParameterString(sDown);
+		AddScriptParameterString(IntToString(nPage));
+		ExecuteScriptEnhanced("gui_dethia_shop", oPC);
 
 	}
 /*The below section does not work at all for various reasons.  If I am up to it sometime

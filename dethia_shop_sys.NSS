@@ -337,9 +337,15 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 	SetLocalGUIVariable(oPC, "dethia_shop", 1, IntToString(iMarkUp));
 	SetLocalGUIVariable(oPC, "dethia_shop", 2, IntToString(iMarkDown));
 	SetLocalGUIVariable(oPC, "dethia_shop", 8, "0");	//Indicate buying mode
+	SetLocalGUIVariable(oPC, "dethia_shop", 9, "0");	//page 0 on sell tab
 	//For buying disable sell/identify and check whether STEAL should be disabled
 	SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
 	SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", TRUE);
+		
+	SetGUIObjectDisabled(oPC, "dethia_shop", "PAGE_TEXT", TRUE);
+	SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
+	SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
+	
 	if((DS_THEFT_ENABLE && GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
 		(!DS_THEFT_ENABLE && !GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
 	{	SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);	}
