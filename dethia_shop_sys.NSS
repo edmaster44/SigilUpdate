@@ -342,7 +342,7 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 	SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
 	SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", TRUE);
 		
-	SetGUIObjectDisabled(oPC, "dethia_shop", "PAGE_TEXT", TRUE);
+	SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page 1 of 1");
 	SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
 	SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
 	

@@ -89,7 +89,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", TRUE);
 		
 		//Remove Pagination
-		SetGUIObjectDisabled(oPC, "dethia_shop", "PAGE_TEXT", TRUE);
+		SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page 1 of 1");
 		SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
 		
@@ -169,11 +169,6 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);
 		
-		//Add Pagination
-		SetGUIObjectDisabled(oPC, "dethia_shop", "PAGE_TEXT", FALSE);
-		SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", FALSE);
-		SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", FALSE);
-		
 		int nMaxBuy = GetStoreMaxBuyPrice(oStore);
 		if (nMaxBuy < 0)
 			nMaxBuy = 999999;
@@ -236,6 +231,17 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		
 		int nMaxPage = FloatToInt(IntToFloat(nCount)/IntToFloat(nPageLength));
 		SetLocalInt(oPC, "shop_max_pages", nMaxPage);
+		
+		//Add Pagination
+		SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page "+IntToString(nCurrentPage)+" of "+IntToString(nMaxPage));
+		if (nCurrentPage > 0)
+			SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", FALSE);
+		else
+			SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
+		if (nCurrentPage < nMaxPage)
+			SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", FALSE);
+		else
+			SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
 		
 	}
 
