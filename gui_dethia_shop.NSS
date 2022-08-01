@@ -233,7 +233,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		SetLocalInt(oPC, "shop_max_pages", nMaxPage);
 		
 		//Add Pagination
-		SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page "+IntToString(nCurrentPage)+" of "+IntToString(nMaxPage));
+		SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page "+IntToString(nCurrentPage+1)+" of "+IntToString(nMaxPage+1));
 		if (nCurrentPage > 0)
 			SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", FALSE);
 		else
