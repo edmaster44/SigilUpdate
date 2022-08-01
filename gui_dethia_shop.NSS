@@ -163,7 +163,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 	else if(iEvent == 8)	//The player chose "sell" category
 	{//First disable/enable the buy, steal/sell buttons (since we are selling)
-		SendMessageToPC(oPC, "selling tab generation");
+		//SendMessageToPC(oPC, "selling tab generation");
 		SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", TRUE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", FALSE);
@@ -192,7 +192,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		//As long as there are valid items we list them for sale
 		while(GetIsObjectValid(oItem)) {
 		
-			SendMessageToPC(oPC, "Count: "+IntToString(nCount));
+			//SendMessageToPC(oPC, "Count: "+IntToString(nCount));
 		
 			if (!GetItemCursedFlag(oItem) && !GetPlotFlag(oItem)) {
 			
@@ -506,7 +506,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 	}
 	else if (iEvent == 16) { //Player clicked the last page button
 		int nPage = StringToInt(sExtra);
-		SendMessageToPC(oPC, "Clicked last page button, current page: "+sExtra);
+		//SendMessageToPC(oPC, "Clicked last page button, current page: "+sExtra);
 		if (nPage <= 0)
 			nPage = 0;
 		else
@@ -528,7 +528,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 	else if (iEvent == 17) { //Player clicked the next page button
 		int nPage = StringToInt(sExtra);
 		int nMaxPage = GetLocalInt(oPC, "shop_max_pages");
-		SendMessageToPC(oPC, "Clicked next page button, current page: "+sExtra);
+		//SendMessageToPC(oPC, "Clicked next page button, current page: "+sExtra);
 		if (nPage >= nMaxPage)
 			nPage = (nMaxPage-1);
 		else
