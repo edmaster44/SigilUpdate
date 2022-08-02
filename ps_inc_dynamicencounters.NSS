@@ -30,6 +30,7 @@
 //CLASS_TYPE_WARLOCK
 //CLASS_TYPE_WIZARD
 object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int isHostile = TRUE);
+object CreateScaledCreatureofClassLocation(location lWP, int nLevel, int classType, int isHostile = TRUE);
 
 //Gets the blueprint string from the class INT
 //(if there is no blueprint of the given class type, defaults to fighter)
@@ -97,16 +98,23 @@ int GetHairByRace(int nGender, int nRace);
 //ACTUAL CODE
 //*******************************************
 object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int faction = STANDARD_FACTION_HOSTILE) {
-
-	int blueprintID = GetNearestCreatureLevelAvailable(nLevel, classType);
-	string sBlueprint = GetBlueprintStringFromClass(classType)+IntToString(blueprintID);
 	
 	//make sure we have a waypoint
 	if (!GetIsObjectValid(oWP)) {
 		return oWP;
 	}
+
+	return CreateScaledCreatureofClassLocation(GetLocation(oWP), nLevel, classType, faction);
+
+}
+
+
+object CreateScaledCreatureofClassLocation(location lWP, int nLevel, int classType, int faction = STANDARD_FACTION_HOSTILE) {
+
+	int blueprintID = GetNearestCreatureLevelAvailable(nLevel, classType);
+	string sBlueprint = GetBlueprintStringFromClass(classType)+IntToString(blueprintID);
 		
-	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, GetLocation(oWP));
+	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, lWP);
 	ChangeToStandardFaction(oCreature, faction);
 	
 	return oCreature;
