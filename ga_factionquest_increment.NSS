@@ -18,4 +18,5 @@ void main(int numberOfPoints) {
 	if(numberOfPoints <= 0) numberOfPoints = 1;
 
 	IncrementModuleFactionQuest(oPC, nFaction, numberOfPoints);
+
 }

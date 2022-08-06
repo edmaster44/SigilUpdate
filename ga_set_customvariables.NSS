@@ -34,6 +34,26 @@ string pickRandomSigilLocation() {
 
 }
 
+string pickPointofInterest() {
+
+	int rand = Random(9)+1;
+	switch(rand) {
+		case 1: return "restaurant";
+		case 2: return "bar";
+		case 3: return "gallery";
+		case 4: return "dive";
+		case 5: return "eatery";
+		case 6: return "tavern";
+		case 7: return "inn";
+		case 8: return "distillery";
+		case 9: return "winery";
+		default: return "restaurant";
+	}
+	
+	return "restaurant";
+}
+
+
 void main () {
 
 	object oPC = GetPCSpeaker();
@@ -46,6 +66,7 @@ void main () {
 	SetCustomToken(6004, randomCharSpeaker.firstname+" "+randomCharSpeaker.lastname);
 	SetCustomToken(6005, randomCharSpeaker.nickname);
 	SetCustomToken(6006, pickRandomSigilLocation());
+	SetCustomToken(6007, pickPointofInterest());
 	
 	
 	string sDebtorQuest = "ps_quest_debtorspole";
