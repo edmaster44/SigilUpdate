@@ -325,7 +325,7 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 		}
 		//original customer doesn't seem to be around. Time to clear variables.
 		else {
-			DS_CloseShop(oCustomer, oStore);
+			DS_CloseShop(oCustomer, oStore); //this function is in distance check, but it doesn't hurt to do it twice!
 		}
 	}
 	//Player tried to steal from here before and failed, tell him to get lost
@@ -676,9 +676,12 @@ int	DS_GetIsTheftSuccessful(object oPC, object oStore, object oItem, int iCost, 
 	return iSuccesFail;
 }
 
-int DS_DistanceCheck(object oPC, object oStore)
-{//Do a simple distance check
-	if(GetDistanceBetween(oPC, DS_GetStoreKeeper(oStore)) < DS_MAX_DISTANCE)
+int DS_DistanceCheck(object oPC, object oStore) {
+
+	object oShopkeeper =  DS_GetStoreKeeper(oStore);
+		
+	//Make sure the PC is in the same area + witihn a reasonable distance
+	if(GetArea(oPC) == GetArea(oShopkeeper) && GetDistanceBetween(oPC, oShopkeeper) < DS_MAX_DISTANCE)
 	{	return TRUE;	}	//If within range return TRUE
 	else
 	{//If the player is out of range we close the shop
@@ -686,6 +689,7 @@ int DS_DistanceCheck(object oPC, object oStore)
 		DS_CloseShop(oPC, oStore);
 		return FALSE;
 	}
+	
 }
 
 int DS_GetItemCategory(object oItem)
