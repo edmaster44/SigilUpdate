@@ -77,9 +77,13 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
 	{//If it is a store action we do a distance check
-		if(!DS_DistanceCheck(oPC, oStore))
-		{	return;	}	//If the player is too far away let them know and end here
+		if(!DS_DistanceCheck(oPC, oStore)) { //If the player is too far away let them know and end here	
+			DS_CloseShop(oPC, oStore);
+			return;	
+		}	
 	}
+	
+	PS_Timestamp_UNIX(oStore, STORE_TIMESTAMP);
 
 	//Now perform the action associated with the event
 	if(iEvent >= 0 && iEvent <= 4)	//populate shop with corresponding category

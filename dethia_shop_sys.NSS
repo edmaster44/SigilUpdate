@@ -90,6 +90,7 @@ displayed in the GUI files where gold usually appears.
 #include "ginc_param_const"
 #include "ginc_item"
 #include "x2_inc_itemprop"
+#include "ps_inc_time"
 
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
@@ -102,6 +103,9 @@ int		DS_THEFT_ENABLE	= FALSE;	//Enable/Disable theft from shops
 float	DS_THEFT_WEIGHT	= 10.0f;	//Maximum allowed weight for stolen items
 float	DS_MAX_DISTANCE	= 5.0f;		//Max shopping distance
 
+//Timestamp for sanity checks
+const string STORE_TIMESTAMP = "last_interacted";	//string for the store timestamp
+const int STORE_TIMEOUT = 5; 						//store timeout in minutes
 
 //Event Handlers
 int	STORE_OPEN	= 0;	//The event handler for when a store opens
@@ -310,24 +314,32 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 {//First we check if the shop is already open
 	//SendMessageToPC(oPC, "opening new shop");
 	object	oCustomer	= GetLocalObject(oStore, "DS_CUSTOMER");	//The currently registered customer
-	if(GetLocalInt(oStore, "DS_OPEN")  && (GetIsObjectValid(oCustomer) && DS_DistanceCheck(oCustomer, oStore)))
-	{//If yes stop here
-		FloatingTextStringOnCreature("Sorry I'm with another customer right now.", oPC);
-		return;
+	
+	//Another person who isn't the currently registered customer wants to open the store
+	if (GetLocalInt(oStore, "DS_OPEN") && GetIsObjectValid(oCustomer) && (oCustomer != oPC))  {
+	
+		//original customer is still close enough and active
+		if ((PS_GetTimestamp_Age_Minutes(oStore, STORE_TIMESTAMP) < 5) && (DS_DistanceCheck(oCustomer, oStore))) { 
+			FloatingTextStringOnCreature("Sorry I'm with another customer right now.", oPC);
+			return;
+		}
+		//original customer doesn't seem to be around. Time to clear variables.
+		else {
+			DS_CloseShop(oCustomer, oStore);
+		}
 	}
+	//Player tried to steal from here before and failed, tell him to get lost
 	else if(GetLocalInt(oPC, "DS_THIEF_" + GetTag(oStore)))
-	{//Player tried to steal from here before and failed, tell him to get lost
+	{
 		FloatingTextStringOnCreature("Dirty thief I'm not showing you my wares, go away.", oPC);
 		return;
 	}
-	else	//If no apply the appraise modifier and mark the store as open
-	{
-		/*int	iAppraise	= DS_AppraiseModifier(OBJECT_SELF, oPC);
-			iMarkUp		+= iAppraise;
-			iMarkDown	+= iAppraise;*/
-		SetLocalObject(oStore, "DS_CUSTOMER", oPC);
-		SetLocalInt(oStore, "DS_OPEN", TRUE);
-	}
+	
+	//Safe to proceed - mark store as open and register new customer
+	SetLocalObject(oStore, "DS_CUSTOMER", oPC);
+	SetLocalInt(oStore, "DS_OPEN", TRUE);
+	
+	PS_Timestamp_UNIX(oStore, STORE_TIMESTAMP);
 
 	//Open the shop GUI, store some vars and populate the shop
 	SetLocalObject(oStore, "DS_SHOP_KEEPER", OBJECT_SELF);	//Store the shop keeper
