@@ -181,7 +181,6 @@ int GetModuleQuestStatus(string sName) {
 	//No entry? Make one!
 	//But if we made one, we know the status is 0
 	if (!questExists) {
-		string sName = FactionIdToName(nFaction);
 		string sQuery = "INSERT INTO serverquests SET quest_name='"+sName+"', current_value = 0";
 		SQLExecDirect(sQuery);
 		return 0;
@@ -241,5 +240,5 @@ int GetActiveNPCEvent(int event_type = 0) {
 
 //get the number of active events, just in case
 int GetNumberOfActiveNPCEvents(int event_type = 0) {
-
+	return 0;
 }
