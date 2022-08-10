@@ -13,6 +13,8 @@ void main(int numberOfPoints) {
 
 	object oPC = GetPCSpeaker();
 	int nFaction = GetFaction(oPC);
+	if (nFaction <= 0)
+		return;
 	//string sID = PS_GetCharID(oPC); //we will want to credit by pc later
 	
 	if(numberOfPoints <= 0) numberOfPoints = 1;

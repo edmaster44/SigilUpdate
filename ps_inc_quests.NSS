@@ -143,3 +143,66 @@ void IncrementModuleFactionQuest(object oPC, int nFaction, int numberOfPoints = 
 	//SendMessageToPC(oPC, sQuery);
 	SQLExecDirect(sQuery);
 }
+
+//checks if the given faction id (as in, sigil faction id) exists
+int GetModuleQuestExists(string sName) {
+
+	string sQuery = "SELECT quest_name FROM serverquests WHERE quest_name = '"+sName+"'";
+	
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		string sName = SQLGetData(1);
+		if (sName == "")
+			return FALSE;
+	} else {
+		return FALSE;
+	}
+	
+	return TRUE;
+	
+}
+
+//get the module counter for faction actions (as in, sigil factions like Athar, not other planar interests)
+//If there isn't an entry for this faction yet, add one
+int GetModuleQuestStatus(string sName) {
+	
+	int questExists = GetModuleQuestExists(sName);
+	
+	//No entry? Make one!
+	//But if we made one, we know the status is 0
+	if (!questExists) {
+		string sName = FactionIdToName(nFaction);
+		string sQuery = "INSERT INTO serverquests SET quest_name='"+sName+"', current_value = 0";
+		SQLExecDirect(sQuery);
+		return 0;
+	}
+	
+	string sQuery = "SELECT current_value FROM serverquests WHERE quest_name = '"+sName+"'";
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		int nValue = StringToInt(SQLGetData(1));
+		return nValue;
+	}
+	
+	return 0;
+
+}
+
+//increments the module counter for faction actions
+//please note this applies to sigil factions (i.e. Athar, Godsmen, Bleakers, etc.)
+//for non-faction interests that follow the same system
+//make a different function (but use the same table!)
+void IncrementModuleQuest(object oPC, string sName, int numberOfPoints = 1) {
+
+	if (numberOfPoints == 0)
+		numberOfPoints = 1;
+
+	int currentValue = GetModuleQuestStatus(sName);
+	int newValue = currentValue+numberOfPoints;
+	if (newValue < 0)
+		newValue = 0;
+	
+	string sQuery = "UPDATE serverquests SET current_value = '"+IntToString(newValue)+"' WHERE quest_name = '"+sName+"'";
+	//SendMessageToPC(oPC, sQuery);
+	SQLExecDirect(sQuery);
+}
