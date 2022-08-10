@@ -1,9 +1,16 @@
 //An include file for quest functions
 //created 6/17/19
+//last updated 8/9/22
 //by MimiFearthegn
 //For permanent quest functions
 #include "nwnx_sql"
 #include "ps_inc_faction"
+#include "ps_inc_time"
+
+//npc event consts
+//currently just riots
+//should add parties/festivals later
+const int NPC_EVENT_RIOT = 1;
 
 //database function
 //Get the permanent int entry id by characer id and quest name
@@ -144,7 +151,9 @@ void IncrementModuleFactionQuest(object oPC, int nFaction, int numberOfPoints = 
 	SQLExecDirect(sQuery);
 }
 
-//checks if the given faction id (as in, sigil faction id) exists
+//Checks if the given module wide quest exists
+//Please note that this tracks the status for the whole module
+//for individual character's deeds, use the permanent int functions
 int GetModuleQuestExists(string sName) {
 
 	string sQuery = "SELECT quest_name FROM serverquests WHERE quest_name = '"+sName+"'";
@@ -162,8 +171,9 @@ int GetModuleQuestExists(string sName) {
 	
 }
 
-//get the module counter for faction actions (as in, sigil factions like Athar, not other planar interests)
-//If there isn't an entry for this faction yet, add one
+//Gets the status of a module quest
+//Please note that this tracks the status for the whole module
+//for individual character's deeds, use the permanent int functions
 int GetModuleQuestStatus(string sName) {
 	
 	int questExists = GetModuleQuestExists(sName);
@@ -188,10 +198,9 @@ int GetModuleQuestStatus(string sName) {
 
 }
 
-//increments the module counter for faction actions
-//please note this applies to sigil factions (i.e. Athar, Godsmen, Bleakers, etc.)
-//for non-faction interests that follow the same system
-//make a different function (but use the same table!)
+//increments the module counter for general quests
+//Please note that this tracks the status for the whole module
+//for individual character's deeds, use the permanent int functions
 void IncrementModuleQuest(object oPC, string sName, int numberOfPoints = 1) {
 
 	if (numberOfPoints == 0)
@@ -205,4 +214,32 @@ void IncrementModuleQuest(object oPC, string sName, int numberOfPoints = 1) {
 	string sQuery = "UPDATE serverquests SET current_value = '"+IntToString(newValue)+"' WHERE quest_name = '"+sName+"'";
 	//SendMessageToPC(oPC, sQuery);
 	SQLExecDirect(sQuery);
+}
+
+//checks whether there is an active NPC event of x type
+//returns the row id if there is
+int GetActiveNPCEvent(int event_type = 0) {
+
+	int nTime = GetRealTime();
+
+	string sQuery = "SELECT event_id FROM ps_npc_events WHERE event_type='"+IntToString(event_type)+"' AND date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT 1";
+
+	//if we didn't specify event type, then just get the first one active
+	if (event_type == 0) {
+		sQuery = "SELECT event_id FROM ps_npc_events WHERE date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT 1";
+	}
+	
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		int nValue = StringToInt(SQLGetData(1));
+		return nValue;
+	}
+	
+	return FALSE;
+	
+}
+
+//get the number of active events, just in case
+int GetNumberOfActiveNPCEvents(int event_type = 0) {
+
 }

@@ -27,6 +27,7 @@ const string TABLE_SIGIS = "sigis";
 const string TABLE_SIGIS_READER = "sigis_reader";
 const string TABLE_SPELL_IDS = "spellids"; //table for sorting spell ids, part of id fix
 const string TABLE_SPELL_IDS_COUNT = "spellids_count"; //table for sorting spell ids, part of id fix
+const string TABLE_NPC_EVENTS = "ps_npc_events"; //table for setting up temporary npc (non-hostile) events
 const string TABLE_TREASURE_ARMOR = "treasure_armor"; //loot table for armor
 const string TABLE_TREASURE_BELTS = "treasure_belts"; //loot table for belts
 const string TABLE_TREASURE_BOOTS = "treasure_boots"; //loot table for boots
