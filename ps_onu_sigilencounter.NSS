@@ -2,6 +2,7 @@
 #include "ps_inc_dynamicencounters"
 #include "ps_inc_functions"
 #include "x0_i0_position"
+#include "ps_inc_quests"
 
 //Spawn some berk
 object SpawnSomeBerk(object oWP, object oPC);
@@ -26,6 +27,17 @@ void main () {
 	if (GetIsObjectValid(myBerk)) {
 		SpeakString("Already has a berk! But we'll create another one anyway", TALKVOLUME_SHOUT);
 	}
+	
+	int nMaxEvents = GetNumberOfActiveNPCEvents(NPC_EVENT_RIOT);
+	SendMessageToPC(oPC, "Max events: "+IntToString(nMaxEvents));
+	int nEventToFetch = Random(nMaxEvents);
+	SendMessageToPC(oPC, "Event to fetch: "+IntToString(nEventToFetch));
+	int nCurrentEvent = GetActiveNPCEvent(NPC_EVENT_RIOT, nEventToFetch);
+	SendMessageToPC(oPC, "Current event: "+IntToString(nCurrentEvent));
+	
+	//Make sure we have an event before we proceed - 
+	if (nCurrentEvent == 0)
+		return;
 	
 	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
 	object oWP = GetWaypointByTag("monstertest_a");
@@ -60,6 +72,42 @@ void main () {
 	EquipBerk(oBerk1);
 	EquipBerk(oBerk2);
 	EquipBerk(oBerk3);
+	
+	string sQuery = "SELECT * FROM ps_npc_events WHERE event_id = '"+IntToString(nCurrentEvent)+"'";
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		int event_id = StringToInt(SQLGetData(1));
+		int event_type = StringToInt(SQLGetData(2));
+		string conversation_file = SQLGetData(3);
+		string slogan_1 = SQLGetData(4);
+		string slogan_2 = SQLGetData(5);
+		string slogan_3 = SQLGetData(6);
+		string explanation = SQLGetData(7);
+		
+		SetConversation(oBerk1, conversation_file);
+		SetConversation(oBerk2, conversation_file);
+		SetConversation(oBerk3, conversation_file);
+		
+		SetLocalString(oBerk1, "Slogan_1", slogan_1);
+		SetLocalString(oBerk1, "Slogan_2", slogan_2);
+		SetLocalString(oBerk1, "Slogan_3", slogan_3);
+		SetLocalString(oBerk1, "Explanation", explanation);
+		
+		SetLocalString(oBerk2, "Slogan_1", slogan_1);
+		SetLocalString(oBerk2, "Slogan_2", slogan_2);
+		SetLocalString(oBerk2, "Slogan_3", slogan_3);
+		SetLocalString(oBerk2, "Explanation", explanation);
+		
+		SetLocalString(oBerk3, "Slogan_1", slogan_1);
+		SetLocalString(oBerk3, "Slogan_2", slogan_2);
+		SetLocalString(oBerk3, "Slogan_3", slogan_3);
+		SetLocalString(oBerk3, "Explanation", explanation);
+		
+		SetCustomToken(6010, slogan_1);
+		SetCustomToken(6011, slogan_2);
+		SetCustomToken(6012, slogan_3);
+		SetCustomToken(6013, explanation);
+	}
 	
 	/*object oBerk = SpawnSomeBerk(oWP, oPC);
 	

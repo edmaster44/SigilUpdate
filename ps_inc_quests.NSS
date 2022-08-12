@@ -217,15 +217,21 @@ void IncrementModuleQuest(object oPC, string sName, int numberOfPoints = 1) {
 
 //checks whether there is an active NPC event of x type
 //returns the row id if there is
-int GetActiveNPCEvent(int event_type = 0) {
+//if offset is included, then get that event. Otherwise, 
+//just get the most recently added
+int GetActiveNPCEvent(int event_type = 0, int offset = 0) {
 
 	int nTime = GetRealTime();
-
-	string sQuery = "SELECT event_id FROM ps_npc_events WHERE event_type='"+IntToString(event_type)+"' AND date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT 1";
+	
+	string sOffset = "";
+	if (offset > 0)
+		sOffset = IntToString(offset)+", ";
+		
+	string sQuery = "SELECT event_id FROM ps_npc_events WHERE event_type='"+IntToString(event_type)+"' AND date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT "+sOffset+"1";
 
 	//if we didn't specify event type, then just get the first one active
 	if (event_type == 0) {
-		sQuery = "SELECT event_id FROM ps_npc_events WHERE date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT 1";
+		sQuery = "SELECT event_id FROM ps_npc_events WHERE date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT "+sOffset+"1";
 	}
 	
 	SQLExecDirect(sQuery);
@@ -240,5 +246,21 @@ int GetActiveNPCEvent(int event_type = 0) {
 
 //get the number of active events, just in case
 int GetNumberOfActiveNPCEvents(int event_type = 0) {
-	return 0;
+
+	int nTime = GetRealTime();
+
+	string sQuery = "SELECT COUNT(*) as total FROM ps_npc_events WHERE event_type='"+IntToString(event_type)+"' AND date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT 1";
+
+	//if we didn't specify event type, then just get the first one active
+	if (event_type == 0) {
+		sQuery = "SELECT COUNT(*) as total FROM ps_npc_events WHERE date_end > '"+IntToString(nTime)+"' ORDER BY date_start ASC LIMIT 1";
+	}
+	
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		int nValue = StringToInt(SQLGetData(1));
+		return nValue;
+	}
+	
+	return FALSE;
 }

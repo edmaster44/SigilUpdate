@@ -68,6 +68,15 @@ void main () {
 	SetCustomToken(6006, pickRandomSigilLocation());
 	SetCustomToken(6007, pickPointofInterest());
 	
+	if (GetLocalString(OBJECT_SELF, "Slogan_1") != "")
+		SetCustomToken(6010, GetLocalString(OBJECT_SELF, "Slogan_1"));
+	if (GetLocalString(OBJECT_SELF, "Slogan_2") != "")
+		SetCustomToken(6011, GetLocalString(OBJECT_SELF, "Slogan_2"));
+	if (GetLocalString(OBJECT_SELF, "Slogan_3") != "")
+		SetCustomToken(6012, GetLocalString(OBJECT_SELF, "Slogan_3"));
+	if (GetLocalString(OBJECT_SELF, "Explanation") != "")
+		SetCustomToken(6013, GetLocalString(OBJECT_SELF, "Explanation"));
+	
 	
 	string sDebtorQuest = "ps_quest_debtorspole";
 	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
