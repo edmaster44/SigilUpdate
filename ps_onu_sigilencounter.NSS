@@ -6,7 +6,7 @@
 
 //Spawn some berk
 object SpawnSomeBerk(object oWP, object oPC);
-object SpawnRioter(location lLoc, object oPC);
+object SpawnEventer(location lLoc, int nEvent, object oPC);
 
 //Randomize Berk appearance
 void DetailBerk(object oBerk);
@@ -42,37 +42,10 @@ void main () {
 	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");
 	object oWP = GetWaypointByTag("monstertest_a");
 	
-	float fDistance = 5.0f;
-	location lLoc1 = GetLocation(oWP);
-	location lLoc2 = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
-	location lLoc3 = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
+	float fDistance = 4.0f;
+	int nBerkNum = Random(5)+1;
 	
-	object oBerk1 = SpawnRioter(lLoc1, oPC);
-	object oBerk2 = SpawnRioter(lLoc2, oPC);
-	object oBerk3 = SpawnRioter(lLoc3, oPC);
-	
-	SetLocalObject(oBerk1, "FELLOW_RIOTER_1", oBerk1);
-	SetLocalObject(oBerk1, "FELLOW_RIOTER_2", oBerk2);
-	SetLocalObject(oBerk1, "FELLOW_RIOTER_3", oBerk3);
-	SetLocalInt(oBerk1, "NUM_RIOTERS", 3);
-	
-	SetLocalObject(oBerk2, "FELLOW_RIOTER_1", oBerk1);
-	SetLocalObject(oBerk2, "FELLOW_RIOTER_2", oBerk2);
-	SetLocalObject(oBerk2, "FELLOW_RIOTER_3", oBerk3);
-	SetLocalInt(oBerk2, "NUM_RIOTERS", 3);
-	
-	SetLocalObject(oBerk3, "FELLOW_RIOTER_1", oBerk1);
-	SetLocalObject(oBerk3, "FELLOW_RIOTER_2", oBerk2);
-	SetLocalObject(oBerk3, "FELLOW_RIOTER_3", oBerk3);
-	SetLocalInt(oBerk3, "NUM_RIOTERS", 3);
-	
-	DetailBerk(oBerk1);
-	DetailBerk(oBerk2);
-	DetailBerk(oBerk3);
-	EquipBerk(oBerk1);
-	EquipBerk(oBerk2);
-	EquipBerk(oBerk3);
-	
+	//Set all the event info
 	string sQuery = "SELECT * FROM ps_npc_events WHERE event_id = '"+IntToString(nCurrentEvent)+"'";
 	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
@@ -84,24 +57,29 @@ void main () {
 		string slogan_3 = SQLGetData(6);
 		string explanation = SQLGetData(7);
 		
-		SetConversation(oBerk1, conversation_file);
-		SetConversation(oBerk2, conversation_file);
-		SetConversation(oBerk3, conversation_file);
-		
-		SetLocalString(oBerk1, "Slogan_1", slogan_1);
-		SetLocalString(oBerk1, "Slogan_2", slogan_2);
-		SetLocalString(oBerk1, "Slogan_3", slogan_3);
-		SetLocalString(oBerk1, "Explanation", explanation);
-		
-		SetLocalString(oBerk2, "Slogan_1", slogan_1);
-		SetLocalString(oBerk2, "Slogan_2", slogan_2);
-		SetLocalString(oBerk2, "Slogan_3", slogan_3);
-		SetLocalString(oBerk2, "Explanation", explanation);
-		
-		SetLocalString(oBerk3, "Slogan_1", slogan_1);
-		SetLocalString(oBerk3, "Slogan_2", slogan_2);
-		SetLocalString(oBerk3, "Slogan_3", slogan_3);
-		SetLocalString(oBerk3, "Explanation", explanation);
+		int n;
+		for (n = 1; n < nBerkNum; n++) {
+			location lLoc = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
+			object oBerk = SpawnEventer(lLoc, event_id, oPC);
+			SetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n), oBerk);
+			DetailRioter(oBerk);
+			EquipBerk(oBerk);
+			
+			SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk);
+			
+			SetConversation(oBerk, conversation_file);
+			SetLocalString(oBerk, "Slogan_1", slogan_1);
+			SetLocalString(oBerk, "Slogan_2", slogan_2);
+			SetLocalString(oBerk, "Slogan_3", slogan_3);
+			SetLocalString(oBerk, "Explanation", explanation);
+			SetLocalInt(oBerk, "NUM_RIOTERS", nBerkNum);
+			
+			int k;
+			for (k = 1; k < nBerkNum; k++) {
+				object oFellow = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(k));
+				SetLocalObject(oBerk, "FELLOW_RIOTER_"+IntToString(k), oFellow);
+			}
+		}
 		
 		SetCustomToken(6010, slogan_1);
 		SetCustomToken(6011, slogan_2);
@@ -126,11 +104,10 @@ void main () {
 		}
 	}*/
 	
-	SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk1);
 
 }
 
-object SpawnRioter(location lLoc, object oPC) {
+object SpawnEventer(location lLoc, int nEvent, object oPC) {
 
 	int iMAX = PS_GetMaxPartylevel(oPC);
 	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));	
@@ -147,8 +124,6 @@ object SpawnRioter(location lLoc, object oPC) {
 		case 3: nClass = CLASS_TYPE_ROGUE; break;
 		case 4: nClass = CLASS_TYPE_MONK; break;
 	}
-	
-	SpeakString("Class chosen: "+IntToString(nClass), TALKVOLUME_SHOUT);
 
 	object oBerk = CreateScaledCreatureofClassLocation(lLoc, nLevel, nClass, STANDARD_FACTION_COMMONER);
 	if (!GetIsObjectValid(oBerk)) {
@@ -156,11 +131,18 @@ object SpawnRioter(location lLoc, object oPC) {
 		return oBerk;
 	}
 	
-	SetConversation(oBerk, "_somerioterconvo_");
+	//uncomment when ready to update haks
+	//SetCreatureScriptsToSet(oNPC, 12);
 	
-	SpeakString("berk is found: "+GetName(oBerk), TALKVOLUME_SHOUT);
+	int nAnim = Random(3)+1;
+	switch(nAnim) {
+		case 1: SetLocalString(oBerk, "ANIMATION", "victory"); break;
+		case 2: SetLocalString(oBerk, "ANIMATION", "talkcheer"); break;
+		case 3: SetLocalString(oBerk, "ANIMATION", "talkforce"); break;
+	}
 	
-	SetLocalString(oBerk, "Berk_Type", "Rioter");
+	if (nEvent == 1)
+		SetLocalString(oBerk, "Berk_Type", "Rioter");
 	
 	SetLocalInt(oBerk, "QUEST_CR", nLevel);
 	

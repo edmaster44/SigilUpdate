@@ -497,6 +497,14 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 			case 2: oWeapon = CreateItemOnObject("ps_darkharmonium_kop", oCreature); break;
 			case 3: oWeapon = CreateItemOnObject("ps_darkharmonium_glad", oCreature); break;
 		}
+	} else if (GetLocalInt(oCreature, "Rioter") > 0) {
+		int nRand = Random(4)+1;
+		switch(nRand) {
+			case 1: oWeapon = CreateItemOnObject("nw_it_torch001", oCreature); break;
+			case 2: oWeapon = CreateItemOnObject("undertrashgear_brokenbottle", oCreature); break;
+			case 3: oWeapon = CreateItemOnObject("psi_conobject_board", oCreature); break;
+			case 4: break;
+		}
 	} else if (typePreference < 0) {
 		oWeapon = CreateRandomItemOfCategory(oCreature, "W");
 	} else {

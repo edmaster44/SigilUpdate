@@ -77,6 +77,15 @@ void main () {
 	if (GetLocalString(OBJECT_SELF, "Explanation") != "")
 		SetCustomToken(6013, GetLocalString(OBJECT_SELF, "Explanation"));
 	
+	//mark everyone in the set as having been spoken to
+	if (GetLocalString(OBJECT_SELF, "Berk_Type") == "Rioter") {
+		int n;
+		int nBerkNum = GetLocalInt(OBJECT_SELF, "NUM_RIOTERS");
+		for (n = 1; n < nBerkNum; n++) {
+			object oBerk = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n)); 
+			SetLocalInt(oBerk, "talkto", 1);
+		}
+	}
 	
 	string sDebtorQuest = "ps_quest_debtorspole";
 	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
