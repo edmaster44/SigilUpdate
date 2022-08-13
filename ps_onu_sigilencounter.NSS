@@ -132,13 +132,14 @@ object SpawnEventer(location lLoc, int nEvent, object oPC) {
 	}
 	
 	//uncomment when ready to update haks
-	//SetCreatureScriptsToSet(oNPC, 12);
+	SetCreatureScriptsToSet(oBerk, 12);
 	
-	int nAnim = Random(3)+1;
+	int nAnim = Random(4)+1;
 	switch(nAnim) {
 		case 1: SetLocalString(oBerk, "ANIMATION", "victory"); break;
 		case 2: SetLocalString(oBerk, "ANIMATION", "talkcheer"); break;
 		case 3: SetLocalString(oBerk, "ANIMATION", "talkforce"); break;
+		case 4: SetLocalString(oBerk, "ANIMATION", "torchidle"); break;
 	}
 	
 	if (nEvent == 1)
@@ -279,7 +280,12 @@ void EquipBerk(object oBerk) {
 	if (berkType == "Clueless_3") {
 		assignProtectiveItems(oBerk, TRUE);
 		assignWeaponToCreature(oBerk, TRUE);
-	} else {
+		DelayCommand(1.0f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
+	} else if (berkType == "Rioter") {
+		assignProtectiveItems(oBerk, FALSE);
+		assignWeaponToCreature(oBerk, TRUE);
+		DelayCommand(1.0f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
+	} else  {
 		assignProtectiveItems(oBerk, FALSE);
 		assignWeaponToCreature(oBerk, FALSE);
 	}
