@@ -284,7 +284,6 @@ void EquipBerk(object oBerk) {
 	} else if (berkType == "Rioter") {
 		assignProtectiveItems(oBerk, FALSE);
 		assignWeaponToCreature(oBerk, TRUE);
-		DelayCommand(1.0f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
 	} else  {
 		assignProtectiveItems(oBerk, FALSE);
 		assignWeaponToCreature(oBerk, FALSE);
