@@ -136,7 +136,7 @@ object SpawnEventer(location lLoc, int nEvent, object oPC) {
 	}
 	
 	//uncomment when ready to update haks
-	SetCreatureScriptsToSet(oBerk, 12);
+	DelayCommand(3.0f, SetCreatureScriptsToSet(oBerk, 12));
 	
 	int nAnim = Random(4)+1;
 	switch(nAnim) {

@@ -499,19 +499,21 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 		}
 	} else if (GetLocalInt(oCreature, "Rioter") > 0) {
 		
+		AssignCommand(oCreature, SpeakString("giving rioter items", TALKVOLUME_SHOUT));
 		if (GetLocalString(oCreature, "ANIMATION") == "torchidle") {
 			oWeapon = CreateItemOnObject("nw_it_torch001", oCreature);
-			DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_LEFTHAND)));
+			AssignCommand(oCreature, SpeakString("giving torch", TALKVOLUME_SHOUT));
+			DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_LEFTHAND)));
 		} else {
 			int nRand = Random(8)+1;
 			switch(nRand) {
 				case 1: break;
-				case 2: oWeapon = CreateItemOnObject("psi_conobject_board", oCreature); DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 3: oWeapon = CreateItemOnObject("psi_conobject_bottle", oCreature); DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 4: oWeapon = CreateItemOnObject("psi_conobject_broom", oCreature); DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 5: oWeapon = CreateItemOnObject("psi_conobject_pan", oCreature); DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 6: oWeapon = CreateItemOnObject("psi_conobject_pin", oCreature); DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 7: oWeapon = CreateItemOnObject("psi_conobject_wrench", oCreature); DelayCommand(0.5f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 2: oWeapon = CreateItemOnObject("psi_conobject_board", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 3: oWeapon = CreateItemOnObject("psi_conobject_bottle", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 4: oWeapon = CreateItemOnObject("psi_conobject_broom", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 5: oWeapon = CreateItemOnObject("psi_conobject_pan", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 6: oWeapon = CreateItemOnObject("psi_conobject_pin", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 7: oWeapon = CreateItemOnObject("psi_conobject_wrench", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
 				case 8: break;
 			}
 		}
