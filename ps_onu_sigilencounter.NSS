@@ -44,6 +44,7 @@ void main () {
 	
 	float fDistance = 4.0f;
 	int nBerkNum = Random(5)+1;
+	SendMessageToPC(oPC, "Number of berks: "+IntToString(nBerkNum));
 	
 	//Set all the event info
 	string sQuery = "SELECT * FROM ps_npc_events WHERE event_id = '"+IntToString(nCurrentEvent)+"'";
@@ -58,7 +59,7 @@ void main () {
 		string explanation = SQLGetData(7);
 		
 		int n;
-		for (n = 1; n < nBerkNum; n++) {
+		for (n = 1; n <= nBerkNum; n++) {
 			location lLoc = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
 			object oBerk = SpawnEventer(lLoc, event_id, oPC);
 			SetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n), oBerk);
@@ -73,7 +74,10 @@ void main () {
 			SetLocalString(oBerk, "Slogan_3", slogan_3);
 			SetLocalString(oBerk, "Explanation", explanation);
 			SetLocalInt(oBerk, "NUM_RIOTERS", nBerkNum);
+		}
 			
+		for (n = 1; n <= nBerkNum; n++) {
+			object oBerk = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n));
 			int k;
 			for (k = 1; k < nBerkNum; k++) {
 				object oFellow = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(k));
