@@ -83,7 +83,9 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE);
 //Levels 15-20 weapons 6-9 points
 //Levels 20-25 weapons 9-10 points
 //Levels 25+ weapons 10-13 points
-void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1);
+//shoud equip doesn't seem to do anything?
+//returns the weapon generated so you can equip it
+object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1);
 
 //Pick one of the human-like appearances - for variety!
 int GetHumanoidRace(object oCreature);
@@ -474,7 +476,7 @@ void makeInventoryUndroppable(object oCreature) {
 
 }
 
-void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1) {
+object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1) {
 	
 	int nLevel = GetChallengeRatingOfTarget(oCreature);
 	
@@ -503,17 +505,16 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 		if (GetLocalString(oCreature, "ANIMATION") == "torchidle") {
 			oWeapon = CreateItemOnObject("nw_it_torch001", oCreature);
 			AssignCommand(oCreature, SpeakString("giving torch", TALKVOLUME_SHOUT));
-			DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_LEFTHAND)));
 		} else {
 			int nRand = Random(8)+1;
 			switch(nRand) {
 				case 1: break;
-				case 2: oWeapon = CreateItemOnObject("psi_conobject_board", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 3: oWeapon = CreateItemOnObject("psi_conobject_bottle", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 4: oWeapon = CreateItemOnObject("psi_conobject_broom", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 5: oWeapon = CreateItemOnObject("psi_conobject_pan", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 6: oWeapon = CreateItemOnObject("psi_conobject_pin", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
-				case 7: oWeapon = CreateItemOnObject("psi_conobject_wrench", oCreature); DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND))); break;
+				case 2: oWeapon = CreateItemOnObject("psi_conobject_board", oCreature); break;
+				case 3: oWeapon = CreateItemOnObject("psi_conobject_bottle", oCreature); break;
+				case 4: oWeapon = CreateItemOnObject("psi_conobject_broom", oCreature); break;
+				case 5: oWeapon = CreateItemOnObject("psi_conobject_pan", oCreature); break;
+				case 6: oWeapon = CreateItemOnObject("psi_conobject_pin", oCreature); break;
+				case 7: oWeapon = CreateItemOnObject("psi_conobject_wrench", oCreature); break;
 				case 8: break;
 			}
 		}
@@ -525,7 +526,7 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 	}
 	
 	if (!GetIsObjectValid(oWeapon))
-		return;
+		return OBJECT_INVALID;
 
 	SetDroppableFlag(oWeapon, FALSE);
 	SetIdentified(oWeapon, TRUE);
@@ -544,6 +545,8 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 	
 	GiveItemRandomEnchantments(oWeapon, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oWeapon);
+	
+	return oWeapon;
 	
 }
 

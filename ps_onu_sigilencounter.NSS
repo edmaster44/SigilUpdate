@@ -58,9 +58,18 @@ void main () {
 		string slogan_3 = SQLGetData(6);
 		string explanation = SQLGetData(7);
 		
+		object oSound = CreateObject(OBJECT_TYPE_PLACEABLE, "ps_snd_riotingmob", GetLocation(oWP));
+		if (GetIsObjectValid(oSound)) {
+			SpeakString("We have a sound: "+GetName(oSound), TALKVOLUME_SHOUT);
+		}
+		
 		int n;
 		for (n = 1; n <= nBerkNum; n++) {
-			location lLoc = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
+			location lLoc;
+			if (n == 1) //first berk generates on the waypoint
+				lLoc = GetLocation(oWP);
+			else //subsequent berks generate in random locations
+				lLoc = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
 			object oBerk = SpawnEventer(lLoc, event_id, oPC);
 			SetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n), oBerk);
 			DetailRioter(oBerk);
@@ -74,12 +83,16 @@ void main () {
 			SetLocalString(oBerk, "Slogan_3", slogan_3);
 			SetLocalString(oBerk, "Explanation", explanation);
 			SetLocalInt(oBerk, "NUM_RIOTERS", nBerkNum);
+			
+			if (n > 1) {
+				DelayCommand(2.0f, TurnToFaceObject(GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_1"), oBerk));
+			}
 		}
 			
 		for (n = 1; n <= nBerkNum; n++) {
 			object oBerk = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n));
 			int k;
-			for (k = 1; k < nBerkNum; k++) {
+			for (k = 1; k <= nBerkNum; k++) {
 				object oFellow = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(k));
 				SetLocalObject(oBerk, "FELLOW_RIOTER_"+IntToString(k), oFellow);
 			}
@@ -207,7 +220,7 @@ void DetailRioter(object oBerk) {
 	int nHead = Random(7);
 	int nHair = Random(26);
 	
-	SpeakString("Detailing berk: Gender = "+IntToString(nGender)+", head = "+IntToString(nHead)+", hair = "+IntToString(nHair), TALKVOLUME_SHOUT);
+	//SpeakString("Detailing berk: Gender = "+IntToString(nGender)+", head = "+IntToString(nHead)+", hair = "+IntToString(nHair), TALKVOLUME_SHOUT);
 
 	struct CreatureCoreAppearance currentAppearance = PS_GetCreatureCoreAppearance(oBerk);
 	currentAppearance.Gender = nGender;
@@ -215,7 +228,7 @@ void DetailRioter(object oBerk) {
 	currentAppearance.HairVariation = nHair;
 	PS_SetCreatureCoreAppearance(oBerk, currentAppearance);
 	
-	SpeakString("Post berk detailing.", TALKVOLUME_SHOUT);
+	//SpeakString("Post berk detailing.", TALKVOLUME_SHOUT);
 	
 	string sName = "Rioter";
 	string sDescription = "A berk with some greivances.";
@@ -247,7 +260,7 @@ void DetailBerk(object oBerk) {
 	int nHead = Random(7);
 	int nHair = Random(26);
 	
-	SpeakString("Detailing berk: Gender = "+IntToString(nGender)+", head = "+IntToString(nHead)+", hair = "+IntToString(nHair), TALKVOLUME_SHOUT);
+	//SpeakString("Detailing berk: Gender = "+IntToString(nGender)+", head = "+IntToString(nHead)+", hair = "+IntToString(nHair), TALKVOLUME_SHOUT);
 
 	struct CreatureCoreAppearance currentAppearance = PS_GetCreatureCoreAppearance(oBerk);
 	currentAppearance.Gender = nGender;
@@ -255,7 +268,7 @@ void DetailBerk(object oBerk) {
 	currentAppearance.HairVariation = nHair;
 	PS_SetCreatureCoreAppearance(oBerk, currentAppearance);
 	
-	SpeakString("Post berk detailing.", TALKVOLUME_SHOUT);
+	//SpeakString("Post berk detailing.", TALKVOLUME_SHOUT);
 	
 	string sName = "Some Berk";
 	string sDescription = "A lost human - likely just fell through some portal. Cagestruck as they come.";
@@ -287,7 +300,11 @@ void EquipBerk(object oBerk) {
 		DelayCommand(1.0f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
 	} else if (berkType == "Rioter") {
 		assignProtectiveItems(oBerk, FALSE);
-		assignWeaponToCreature(oBerk, TRUE);
+		object oWeapon = assignWeaponToCreature(oBerk, TRUE);
+		if (GetIsObjectValid(oWeapon)) {
+			SpeakString("We have a: "+GetName(oWeapon), TALKVOLUME_SHOUT);
+			DelayCommand(0.1f, AssignCommand(oBerk, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND)));
+		}
 	} else  {
 		assignProtectiveItems(oBerk, FALSE);
 		assignWeaponToCreature(oBerk, FALSE);
