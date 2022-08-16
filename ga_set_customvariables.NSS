@@ -81,7 +81,7 @@ void main () {
 	if (GetLocalString(OBJECT_SELF, "Berk_Type") == "Rioter") {
 		int n;
 		int nBerkNum = GetLocalInt(OBJECT_SELF, "NUM_RIOTERS");
-		for (n = 1; n < nBerkNum; n++) {
+		for (n = 1; n <= nBerkNum; n++) {
 			object oBerk = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n)); 
 			SetLocalInt(oBerk, "talkto", 1);
 		}

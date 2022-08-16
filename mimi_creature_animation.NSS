@@ -6,5 +6,11 @@ void main () {
 	string anim = GetLocalString(OBJECT_SELF, "ANIMATION");
 	if (anim != "")
 		PlayCustomAnimation(OBJECT_SELF, anim, TRUE);
+		
+	string sSound = GetLocalString(OBJECT_SELF, "SOUND");
+	if (d100() < 25) {
+		SpeakString("Should play: "+sSound);
+		PlaySound(sSound, TRUE);
+	}
 
 }

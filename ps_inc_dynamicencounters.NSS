@@ -499,7 +499,7 @@ object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typ
 			case 2: oWeapon = CreateItemOnObject("ps_darkharmonium_kop", oCreature); break;
 			case 3: oWeapon = CreateItemOnObject("ps_darkharmonium_glad", oCreature); break;
 		}
-	} else if (GetLocalInt(oCreature, "Rioter") > 0) {
+	} else if (GetLocalString(oCreature, "Berk_Type") == "Rioter") {
 		
 		AssignCommand(oCreature, SpeakString("giving rioter items", TALKVOLUME_SHOUT));
 		if (GetLocalString(oCreature, "ANIMATION") == "torchidle") {

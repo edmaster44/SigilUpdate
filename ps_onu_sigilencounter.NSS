@@ -71,6 +71,7 @@ void main () {
 			else //subsequent berks generate in random locations
 				lLoc = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, fDistance), fDistance, TRUE, FALSE);
 			object oBerk = SpawnEventer(lLoc, event_id, oPC);
+			
 			SetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n), oBerk);
 			DetailRioter(oBerk);
 			EquipBerk(oBerk);
@@ -159,8 +160,8 @@ object SpawnEventer(location lLoc, int nEvent, object oPC) {
 		case 4: SetLocalString(oBerk, "ANIMATION", "torchidle"); break;
 	}
 	
-	if (nEvent == 1)
-		SetLocalString(oBerk, "Berk_Type", "Rioter");
+	//if (nEvent == 1)
+	SetLocalString(oBerk, "Berk_Type", "Rioter");
 	
 	SetLocalInt(oBerk, "QUEST_CR", nLevel);
 	
@@ -241,6 +242,17 @@ void DetailRioter(object oBerk) {
 		case 5: sName = "Ful-Foamer"; break;
 		case 6: sName = "Narky Cutter"; break;
 		case 7: sName = "Rioter"; break;
+	}
+	
+	nRand = Random(7)+1;
+	switch (nRand) {
+		case 1: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf1");
+		case 2: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf2");
+		case 3: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf3");
+		case 4: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob1");
+		case 5: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob2");
+		case 6: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob3");
+		case 7: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob4");
 	}
 	
 	SetFirstName(oBerk, sName);
