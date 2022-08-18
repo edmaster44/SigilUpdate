@@ -36,7 +36,7 @@ void main () {
 	SendMessageToPC(oPC, "Current event: "+IntToString(nCurrentEvent));
 	
 	//Make sure we have an event before we proceed - 
-	if (nCurrentEvent == 0)
+	if (nCurrentEvent <= 0)
 		return;
 	
 	//string sWP = GetLocalString(OBJECT_SELF, "WAYPOINT_BASE");

@@ -9,8 +9,7 @@ void main () {
 		
 	string sSound = GetLocalString(OBJECT_SELF, "SOUND");
 	if (d100() < 15) {
-		SpeakString("Should play: "+sSound);
-		PlaySound(sSound, TRUE);
+		PlaySound(sSound, FALSE);
 	}
 
 }
