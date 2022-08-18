@@ -152,13 +152,28 @@ object SpawnEventer(location lLoc, int nEvent, object oPC) {
 	//uncomment when ready to update haks
 	DelayCommand(3.0f, SetCreatureScriptsToSet(oBerk, 12));
 	
-	int nAnim = Random(4)+1;
+	int nAnim = Random(6)+1;
 	switch(nAnim) {
-		case 1: SetLocalString(oBerk, "ANIMATION", "victory"); break;
+		case 1: SetLocalString(oBerk, "ANIMATION", "talkforce01"); break;
 		case 2: SetLocalString(oBerk, "ANIMATION", "talkcheer"); break;
 		case 3: SetLocalString(oBerk, "ANIMATION", "talkforce"); break;
 		case 4: SetLocalString(oBerk, "ANIMATION", "torchidle"); break;
+		case 5: SetLocalString(oBerk, "ANIMATION", "talkforce02"); break;
+		case 6: SetLocalString(oBerk, "ANIMATION", "talkforce03"); break;
 	}
+	
+	int nSound = Random(7)+1;
+	switch (nSound) {
+		case 1: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf1"); break;
+		case 2: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf2"); break;
+		case 3: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf3"); break;
+		case 4: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob1"); break;
+		case 5: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob2"); break;
+		case 6: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob3"); break;
+		case 7: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob4"); break;
+	}
+	
+	SpeakString("Sound: "+IntToString(nSound)+", "+GetLocalString(oBerk, "SOUND"), TALKVOLUME_SHOUT);
 	
 	//if (nEvent == 1)
 	SetLocalString(oBerk, "Berk_Type", "Rioter");
@@ -242,17 +257,6 @@ void DetailRioter(object oBerk) {
 		case 5: sName = "Ful-Foamer"; break;
 		case 6: sName = "Narky Cutter"; break;
 		case 7: sName = "Rioter"; break;
-	}
-	
-	nRand = Random(7)+1;
-	switch (nRand) {
-		case 1: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf1");
-		case 2: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf2");
-		case 3: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf3");
-		case 4: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob1");
-		case 5: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob2");
-		case 6: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob3");
-		case 7: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob4");
 	}
 	
 	SetFirstName(oBerk, sName);
