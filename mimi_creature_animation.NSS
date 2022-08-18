@@ -8,8 +8,8 @@ void main () {
 		PlayCustomAnimation(OBJECT_SELF, anim, TRUE);
 		
 	string sSound = GetLocalString(OBJECT_SELF, "SOUND");
-	if (d100() < 15) {
-		PlaySound(sSound, TRUE);
+	if (d100() < 50) {
+		PlaySound(sSound, FALSE);
 	}
 
 }

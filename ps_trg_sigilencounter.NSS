@@ -6,7 +6,7 @@
 
 const float 	MAX_BERK_DISTANCE = 3.0f; //the distance at which groups of berks should be from each other
 const int 		MAX_BERKS = 3; //the max number of npcs to spawn at a given time (for group events)
-const int		EVENT_CHANCE = 50; //the chance to do an event instead of a single berk
+const int		EVENT_CHANCE = 10; //the chance to do an event instead of a single berk
 const int		MERCHANT_CHANCE = 2; //the chance to spawn a merchant instead of a berk
 
 //Spawn some berk
@@ -75,6 +75,7 @@ void main () {
 		string sQuery = "SELECT * FROM ps_npc_events WHERE event_id = '"+IntToString(activeEvent)+"'";
 		SQLExecDirect(sQuery);
 		if (SQLFetch() != SQL_ERROR) { 
+			WriteTimestampedLogEntry("Creating a riot in "+GetTag(GetArea(oPC)));
 			int event_id = StringToInt(SQLGetData(1));
 			int event_type = StringToInt(SQLGetData(2));
 			string conversation_file = SQLGetData(3);
