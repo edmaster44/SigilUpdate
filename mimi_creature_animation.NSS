@@ -9,7 +9,7 @@ void main () {
 		
 	string sSound = GetLocalString(OBJECT_SELF, "SOUND");
 	if (d100() < 15) {
-		PlaySound(sSound, FALSE);
+		PlaySound(sSound, TRUE);
 	}
 
 }

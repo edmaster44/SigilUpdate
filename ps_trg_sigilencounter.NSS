@@ -5,7 +5,7 @@
 #include "ps_inc_quests"
 
 const float 	MAX_BERK_DISTANCE = 3.0f; //the distance at which groups of berks should be from each other
-const int 		MAX_BERKS = 5; //the max number of npcs to spawn at a given time (for group events)
+const int 		MAX_BERKS = 3; //the max number of npcs to spawn at a given time (for group events)
 const int		EVENT_CHANCE = 50; //the chance to do an event instead of a single berk
 const int		MERCHANT_CHANCE = 2; //the chance to spawn a merchant instead of a berk
 
@@ -69,7 +69,7 @@ void main () {
 	
 	//Get whether there's an active riot and we should spawn it
 	int activeEvent = GetActiveEvent(NPC_EVENT_RIOT);
-	SendMessageToPC(oPC, "event found: "+IntToString(activeEvent));
+	//SendMessageToPC(oPC, "event found: "+IntToString(activeEvent));
 	if (d100() < EVENT_CHANCE && activeEvent > 0) {
 		int nBerkNum = Random(MAX_BERKS)+1;
 		string sQuery = "SELECT * FROM ps_npc_events WHERE event_id = '"+IntToString(activeEvent)+"'";
@@ -321,6 +321,12 @@ void EquipBerk(object oBerk) {
 		assignProtectiveItems(oBerk, TRUE);
 		assignWeaponToCreature(oBerk, TRUE);
 		DelayCommand(1.0f, AssignCommand(oBerk, ActionEquipMostDamagingMelee()));
+	} else if (berkType == "Rioter") {
+		assignProtectiveItems(oBerk, FALSE);
+		object oWeapon = assignWeaponToCreature(oBerk, TRUE);
+		if (GetIsObjectValid(oWeapon)) {
+			DelayCommand(0.1f, AssignCommand(oBerk, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND)));
+		}
 	} else {
 		assignProtectiveItems(oBerk, FALSE);
 		assignWeaponToCreature(oBerk, FALSE);

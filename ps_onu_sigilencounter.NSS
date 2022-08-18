@@ -318,7 +318,6 @@ void EquipBerk(object oBerk) {
 		assignProtectiveItems(oBerk, FALSE);
 		object oWeapon = assignWeaponToCreature(oBerk, TRUE);
 		if (GetIsObjectValid(oWeapon)) {
-			SpeakString("We have a: "+GetName(oWeapon), TALKVOLUME_SHOUT);
 			DelayCommand(0.1f, AssignCommand(oBerk, ActionEquipItem(oWeapon, INVENTORY_SLOT_RIGHTHAND)));
 		}
 	} else  {
