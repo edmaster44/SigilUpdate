@@ -432,7 +432,7 @@ string GetFactionRankName(int iFaction, int iFactionRank) {
 int GetFaction(object oPC) {
 
 	if (!GetOnNewFactionSystem()) {
-		object oItem = GetItemPossessedBy(oPC,"ps_essence");
+		object oItem = GetFactionBadgeObject(oPC);
 	    if(GetIsObjectValid(oItem))
 	    {
 		 	int nFaction = GetLocalInt(oItem,"Faction");
@@ -454,7 +454,7 @@ int GetFaction(object oPC) {
 int GetFactionRank(object oPC) {
 
 	if (!GetOnNewFactionSystem()) {
-		object oItem = GetItemPossessedBy(oPC,"ps_essence");
+		object oItem = GetFactionBadgeObject(oPC);
 	    if(GetIsObjectValid(oItem))
 	    {
 		 	int nFactionRank = GetLocalInt(oItem,"FactionRank");
@@ -513,7 +513,7 @@ int GetOnNewFactionSystem() {
 	
 	if (sSystem == "") {
 	
-		string sQuery = "SELECT version FROM server_version WHERE row=2";
+		string sQuery = "SELECT version FROM server_version WHERE row_id=2";
 		SQLExecDirect(sQuery);
 		if (SQLFetch() != SQL_ERROR) { 
 			string version = SQLGetData(1);
@@ -964,6 +964,7 @@ void DiscreteShowBadge(object oPC, object oTarget) {
 
 	int nFactionID = GetFaction(oPC);
 	int nFactionRank = GetFactionRank(oPC);
+	SendMessageToPC(oPC, "found faction: "+IntToString(nFactionID)+", rank: "+IntToString(nFactionRank));
 	string sFactionName = FactionIdToName(nFactionID);
 	string sFactionRankName = GetFactionRankName(nFactionID, nFactionRank);
 
