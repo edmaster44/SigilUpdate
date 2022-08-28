@@ -18,22 +18,12 @@
 16- Xaositects
 17- None
 18- Undecided
+19- Ring-Givers
 
 */
 
 #include "ginc_misc"
-
-int GetFaction(object oPC)
-{
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
-}
+#include "ps_inc_faction"
 
 int StartingConditional(int iFaction)
 {

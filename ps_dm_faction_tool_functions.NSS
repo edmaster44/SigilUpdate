@@ -56,7 +56,7 @@ void main(int iToolFunction, int iUseAnarchistCover)
 		
 			case 2:
 				// Who are they?
-				DiscreteShowBadge(oBadge, oTarget, oDM);
+				DiscreteShowBadge(oTarget, oDM);
 				break;
 			
 			case 3:
@@ -90,12 +90,12 @@ void main(int iToolFunction, int iUseAnarchistCover)
 			
 			case 6:
 				// Promote
-				PromoteInFaction(oBadge, oDM, oTarget, sTargetName);
+				PromoteInFaction(oDM, oTarget);
 				break;
 		
 			case 7:
 				// Demote
-				DemoteInFaction(oBadge, oDM, oTarget, sTargetName);
+				DemoteInFaction(oDM, oTarget);
 				break;
 			case 8:
 				RemoveFactionBadge(oBadge, oDM, oTarget);

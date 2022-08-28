@@ -15,16 +15,10 @@ void main()
 	{
 		if (GetIsPC(oTarget))
 		{
-			object oItem = GetItemPossessedBy(oTarget,"ps_essence");
-   			if(GetIsObjectValid(oItem))
-			{
-				iFaction = GetLocalInt(oItem, "Faction");
-				
-				if ((iFaction > 1) & (iFaction < 17))
-				{
-					iFactionFound = TRUE;
-				}	
-			}
+			iFaction = GetFaction(oTarget);
+			
+			if (GetIsFaction(iFaction))
+				iFactionFound = TRUE;
 			
 			SetLocalObject(oDM, "TargetObject", oTarget);
 			//SendMessageToPC(oDM,"DEBUG: Targetted Player is " + GetName(oTarget));

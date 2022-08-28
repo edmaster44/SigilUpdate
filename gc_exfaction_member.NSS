@@ -1,13 +1,9 @@
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
-
-
 // nFaction = 255 means quit quit/booted from faction.
 
 #include "ps_inc_faction"
-
-
 
 int StartingConditional()
 {

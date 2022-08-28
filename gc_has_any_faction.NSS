@@ -1,14 +1,5 @@
-int GetFaction(object oPC)
-{
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-	{
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
-}
+//Get whether the PC is in a valid faction - same as gc_has_faction, really
+#include "ps_inc_faction"
 
 int StartingConditional()
 {
@@ -16,7 +7,7 @@ int StartingConditional()
 
 	int nFaction = GetFaction(oPC);
 	
-    if ( nFaction > 0 ) return TRUE;
+    if ( GetIsFaction(nFaction) ) return TRUE;
 
     return FALSE;
 

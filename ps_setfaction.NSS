@@ -18,6 +18,7 @@
 16- Xaositects
 17- None
 18- Undecided
+19- Ring-Givers
 255 - Booted/quit from faction
 */
 
@@ -28,25 +29,11 @@ void main(int nFaction)
 {
    object oPC = GetPCSpeaker();
    
-   object oItem = GetItemPossessedBy(oPC,"ps_essence");
-   if(GetIsObjectValid(oItem))
-   {
-		SetLocalInt(oItem,"Faction",nFaction);
-   }
-   
    // Faction Badge granting and setup
-   if ((nFaction > 1) & (nFaction < 17))
-   {
-   		object oBadge = CreateItemOnObject("ps_faction_badge", oPC);
+   if (GetIsFaction(nFaction)){
+   
+   		JoinFaction(oPC, nFaction);
+   		AddAchievement(oPC, 2);
 		
-		if (GetIsObjectValid(oBadge))
-		{
-			SetBadgeFaction(oBadge, nFaction);
-			AddAchievement(oPC, 2);
-		}
-		else
-		{
-			SendMessageToPC(oPC, FACTION_MESSAGE_TEXT_COLOUR + "ERROR: No badge created");
-		}	
    }
 }

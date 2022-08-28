@@ -8,6 +8,7 @@
 //DB Table list
 //valid on test server as of 3-8-20
 const string TABLE_CHARACTER_DATA = "characterdata"; //stores things like rp / dm exp pools, public cd key, etc.
+const string TABLE_FACTION_DATA = "characterfactions";
 const string TABLE_CHARACTER_QUESTS = "characterquests"; //stores permanent quest status info by character; see ps_inc_quests for use
 const string TABLE_EVENT_PLANNER = "event_planner";
 const string TABLE_EVENT_PLANNER_RSVP = "event_planner_rsvp";
