@@ -51,6 +51,9 @@ const string FACTION_MESSAGE_TEXT_COLOUR = "<COLOR=green>";
 const string FACTION_NPC_LEFT_HAND = "LeftHandWep";
 const string FACTION_NPC_RIGHT_HAND = "RightHandWep";
 
+const string FACTION_VERSION_OLD = "Old_Factions";
+const string FACTION_VERSION_NEW = "New_Factions";
+
 /* No longer costs points to summon
 const int SUMMON_NPC_COST_RP = 1;
 const int SUMMON_NPC_COST_COMBAT = 5;
@@ -135,7 +138,10 @@ int GetIsFaction(int nFaction);
 int GetFactionRank(object oPC);
 
 //To check if we're on the new faction system yet
-int GetOnNewFactionSystem();
+int GetOnNewFactionSystem(object oPC = OBJECT_INVALID);
+
+//Function for toggling system in game
+void ToggleFactionSystem(object oPC = OBJECT_INVALID);
 
 //Function to call to promote someone in the faction
 void PromoteInFaction(object oDM, object oPC);
@@ -506,27 +512,52 @@ int GetIsFaction(int nFaction) {
 }
 
 //To check if we're on the new faction system yet
-int GetOnNewFactionSystem() {
+int GetOnNewFactionSystem(object oPC = OBJECT_INVALID) {
 
 	object oModule = GetModule();
 	string sSystem = GetLocalString(oModule, "FACTION_SYSTEM");
 	
 	if (sSystem == "") {
 	
-		string sQuery = "SELECT version FROM server_version WHERE row_id=2";
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Fetching faction version");
+		string sQuery = "SELECT version FROM server_version WHERE row_id="+IntToString(FACTION_VERSION_ROW);
 		SQLExecDirect(sQuery);
 		if (SQLFetch() != SQL_ERROR) { 
 			string version = SQLGetData(1);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Found faction version: "+version);
 			SetLocalString(oModule, "FACTION_SYSTEM", version);
-			sSystem = version;
 		}
-	
+		sSystem = GetLocalString(oModule, "FACTION_SYSTEM");
+		
 	}
 	
-	if (sSystem == "New_Factions")
+	if (sSystem == FACTION_VERSION_NEW) {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "We are on the new version");
 		return TRUE;
-	else 
+	}
+	else {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "We are on the old version");
 		return FALSE;
+	}
+
+}
+
+void ToggleFactionSystem(object oPC = OBJECT_INVALID) {
+
+	object oModule = GetModule();
+	
+	string sQuery = "";
+	if (GetOnNewFactionSystem(oPC)) {
+		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_OLD+"' WHERE row_id = "+IntToString(SERVER_VERSION_ROW);
+		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_OLD);
+	} else {
+		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_NEW+"' WHERE row_id = "+IntToString(SERVER_VERSION_ROW);
+		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_NEW);
+	}
+	
+	SQLExecDirect(sQuery);
+	
+	GetOnNewFactionSystem(oPC);
 
 }
 

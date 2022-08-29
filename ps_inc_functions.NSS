@@ -14,6 +14,9 @@ const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest 
 const float MAXMONSTERXP = 500.0; //The absolute maximum xp any monster can yield
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							//CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
+							
+const int SERVER_VERSION_ROW = 1;
+const int FACTION_VERSION_ROW = 2;
 			 				
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44; 
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
