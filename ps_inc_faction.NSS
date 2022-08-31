@@ -448,6 +448,7 @@ int GetFaction(object oPC) {
 	
 	string sID = PS_GetCharID(oPC);
 	string sQuery = "SELECT faction_id FROM characterfactions WHERE character_id = "+sID;
+	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
 		int faction_id = StringToInt(SQLGetData(1));
 		return faction_id;
@@ -470,6 +471,7 @@ int GetFactionRank(object oPC) {
 	
 	string sID = PS_GetCharID(oPC);
 	string sQuery = "SELECT faction_rank FROM characterfactions WHERE character_id = "+sID;
+	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
 		int faction_rank = StringToInt(SQLGetData(1));
 		return faction_rank;
