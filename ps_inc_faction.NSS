@@ -549,17 +549,19 @@ void ToggleFactionSystem(object oPC = OBJECT_INVALID) {
 	object oModule = GetModule();
 	
 	string sQuery = "";
-	if (GetOnNewFactionSystem(oPC)) {
+	if (GetOnNewFactionSystem()) {
 		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_OLD+"' WHERE row_id = "+IntToString(SERVER_VERSION_ROW);
 		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_OLD);
+		SendMessageToPC(oPC, "Server is now using the old faction system");
 	} else {
 		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_NEW+"' WHERE row_id = "+IntToString(SERVER_VERSION_ROW);
 		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_NEW);
+		SendMessageToPC(oPC, "Server is now using the new faction system");
 	}
 	
 	SQLExecDirect(sQuery);
 	
-	GetOnNewFactionSystem(oPC);
+	//GetOnNewFactionSystem(oPC);
 
 }
 
@@ -997,7 +999,8 @@ void DiscreteShowBadge(object oPC, object oTarget) {
 
 	int nFactionID = GetFaction(oPC);
 	int nFactionRank = GetFactionRank(oPC);
-	SendMessageToPC(oPC, "found faction: "+IntToString(nFactionID)+", rank: "+IntToString(nFactionRank));
+	//SendMessageToPC(oPC, "found faction: "+IntToString(nFactionID)+", rank: "+IntToString(nFactionRank));
+	
 	string sFactionName = FactionIdToName(nFactionID);
 	string sFactionRankName = GetFactionRankName(nFactionID, nFactionRank);
 
@@ -1160,6 +1163,7 @@ void CreateFactionSignItem(object oPC) {
 	
 	if (oItem != OBJECT_INVALID)
 	{
+		SendMessageToPC(oPC, sTemplate);
 		SetFirstName(oItem, sItemName);
 		SetLocalString(oItem, "TEMPLATE_RESREF", sTemplate);
 	}
