@@ -550,11 +550,11 @@ void ToggleFactionSystem(object oPC = OBJECT_INVALID) {
 	
 	string sQuery = "";
 	if (GetOnNewFactionSystem()) {
-		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_OLD+"' WHERE row_id = "+IntToString(SERVER_VERSION_ROW);
+		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_OLD+"' WHERE row_id = "+IntToString(FACTION_VERSION_ROW);
 		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_OLD);
 		SendMessageToPC(oPC, "Server is now using the old faction system");
 	} else {
-		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_NEW+"' WHERE row_id = "+IntToString(SERVER_VERSION_ROW);
+		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_NEW+"' WHERE row_id = "+IntToString(FACTION_VERSION_ROW);
 		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_NEW);
 		SendMessageToPC(oPC, "Server is now using the new faction system");
 	}
