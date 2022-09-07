@@ -874,9 +874,7 @@ void RemoveFaction(object oPC, object oDM = OBJECT_INVALID) {
 	string sFactionName = FactionIdToName(iFaction);
 	
 	object oBadge; 
-	if (HasFactionBadge(oPC) == FALSE) {
-		oBadge = CreateItemOnObject("ps_faction_badge", oPC);
-		
+	if (HasFactionBadge(oPC)) {
 		if (GetIsObjectValid(oDM))
 			RemoveFactionBadge(oBadge, oDM, oPC);
 		else

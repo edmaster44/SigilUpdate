@@ -78,7 +78,7 @@ void main(int iBadgeFunction, int iParameter)
 			break;
 			
 		case 8:
-			RemoveFactionBadge(oBadge, oPC, oPC);
+			RemoveFaction(oPC, oPC);
 			break;
 		
 		case 9:
