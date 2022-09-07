@@ -13,6 +13,7 @@
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_inc_bgspellfix"
+#include "aaa_dragon_inc"
 #include "ginc_time"
 #include "ps_heightadjust_includes"
 
@@ -558,11 +559,12 @@ void main()
 		sNews = SQLGetData(1);
 		DelayCommand(5.0, SendMessageToPC(oPC, sNews));
 	}
-	
+	float delay=3.0;
+	float delayInterval=0.2;
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
-		ConvertBio(oPC);
+		DelayCommand(delay+=delayInterval, ConvertBio(oPC));
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
