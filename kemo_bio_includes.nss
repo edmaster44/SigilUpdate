@@ -172,8 +172,8 @@ void kemoBioDisplayBio(object oPC, object oTarget, int bDisplayERP=FALSE)
 // Displays the Kemo Biography Edit screen
 void kemoBioEditBio(object oPC)
 {
-    //SendMessageToPC(oPC, "Players portraits available: https://kingdomofhaven.com/gallery/");
-    SendMessageToPC(oPC, "Not seeing any portraits? Make sure you have the latest Client Extensions installed: https://neverwintervault.org/project/nwn2/other/nwn2-client-extension");
+    SendMessageToPC(oPC, "Player Portraits are Available https://www.nwn2planescape.com/portrait_gallery.php");
+   
 
     string sQuery = "SELECT AES_DECRYPT(biotext,'" + KEMO_BIO_AES + "'), portrait FROM kemo_bios WHERE bioid='" + kemoBioGetBioID(oPC) + "';";
     SQLExecDirect(sQuery); 
