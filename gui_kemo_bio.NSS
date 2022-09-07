@@ -1,49 +1,4 @@
-#include "kemo_bio_includes"
-
-// Processes events from kemo_bio_display.xml and kemo_bio_edit.xml
-void main(string sAction, string sType, string sEntry)
-{
-	object oPC = OBJECT_SELF;
-	object oTarget = GetPlayerCurrentTarget(oPC);
-
-	if (sAction == "display")
-	{
-		
-	//	InspectNotify(oTarget, KEMO_BIO_INSPECT_MESSAGE);
-	}
-	else if (sAction == "edit")
-	{
-		kemoBioEditBio(oPC);
-	}
-	else if (sAction == "preview")
-	{
-		CloseGUIScreen(oPC, KEMO_BIO_EDIT_UI);
-		CloseGUIScreen(oPC, KEMO_BIO_UI);
-		
-	}
-	else if (sAction == "nextportrait")
-	{
-		kemoBioNextPortrait(oPC);
-	}
-	else if (sAction == "prevportrait")
-	{
-		kemoBioPrevPortrait(oPC);
-	}
-	else if (sAction == "save")
-	{
-		if (sType == "bio")
-		{
-			kemoBioSaveBio(oPC, sEntry);
-			CloseGUIScreen(oPC, KEMO_BIO_EDIT_UI);
-		}
-		else if (sType == "portrait")
-		{
-			
-			kemoBioSavePortrait(oPC, sEntry);
-		}
-	}
-}
-/*#include "nwnx_sql"
+#include "nwnx_sql"
 string GetBioPCID(object oPC)
 {
 	string name = SQLEncodeSpecialChars(GetName(oPC));
@@ -129,9 +84,9 @@ object oPC = OBJECT_SELF; string sDB; string sPortrait; int iFilenameLength; str
 			iPackVariant++;
 		}
 	}*/
+}
 
-
-/*void main(string sAction, string sType, string sEntry)
+void main(string sAction, string sType, string sEntry)
 {
 object oPC = OBJECT_SELF;
 	object oTarget = GetPlayerCurrentTarget(oPC);
@@ -366,3 +321,4 @@ object oPC = OBJECT_SELF;
 		}
 		return;
 	}*/
+}
