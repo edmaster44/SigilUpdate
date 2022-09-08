@@ -7,10 +7,11 @@ if (GetIsDM(oPC) == TRUE) return;
 
 string name = SQLEncodeSpecialChars(GetName(oPC));
 string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-string sQuery; string sDB; string sBio; string sPortrait;
-//string sBio = GetCampaignString(sDB,"Bio",oPC);
-//string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
+string sQuery; string sDB; //string sBio; string sPortrait;
+string sBio = GetCampaignString(sDB,"Bio",oPC);
+string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
 
+if (sBio == "" & sPortrait == "") return;
 	if (sBio == "")
 	{	sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
 		"_" + GetSubString(GetFirstName(oPC), 0, 6) +
@@ -32,10 +33,10 @@ string sQuery; string sDB; string sBio; string sPortrait;
 
 	SQLExecDirect(sQuery);
 
-	//SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");	
+	SendMessageToPC(oPC,"KEMO bio succesfully converted to SQL.");	
 	DeleteCampaignVariable(sDB,sBio);
 	DeleteCampaignVariable(sDB,sPortrait);
-	//SendMessageToPC(oPC,"Deleting Campaign Variable.");
+	SendMessageToPC(oPC,"Deleting Campaign Variable.");
 
 	
 }
