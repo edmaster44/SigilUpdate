@@ -10,7 +10,7 @@ string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 string sQuery; string sDB; string sBio; string sPortrait;
 //string sBio = GetCampaignString(sDB,"Bio",oPC);
 //string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
-string sQuery = "SELECT bioid FROM kemo_bios WHERE player = "+player;
+sQuery = "SELECT bioid FROM kemo_bios WHERE player = "+player;
 SQLExecDirect(sQuery);
 if (SQLFetch() != SQL_ERROR) { 
 int bio_id = StringToInt(SQLGetData(1));
