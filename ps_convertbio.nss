@@ -3,19 +3,22 @@
 
 void ConvertBio (object oPC)
 {
-if (GetIsDM(oPC) == TRUE) return;
-
 string name = SQLEncodeSpecialChars(GetName(oPC));
 string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 string sQuery; string sDB; string sBio; string sPortrait;
 //string sBio = GetCampaignString(sDB,"Bio",oPC);
 //string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
+
+
+if (GetIsDM(oPC) == TRUE) return;
 sQuery = "SELECT bioid FROM kemo_bios WHERE player = "+player;
 SQLExecDirect(sQuery);
 if (SQLFetch() != SQL_ERROR) { 
 int bio_id = StringToInt(SQLGetData(1));
 if (bio_id > 0)
-  return; }
+  return; 
+  
+else
     if (sBio == "")
     {    sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
         "_" + GetSubString(GetFirstName(oPC), 0, 6) +
@@ -42,5 +45,5 @@ if (bio_id > 0)
     DeleteCampaignVariable(sDB,sPortrait);
     //SendMessageToPC(oPC,"Deleting Campaign Variable.");
 
-    
+    }
 }
