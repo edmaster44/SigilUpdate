@@ -6,7 +6,7 @@ void main()
 	
 	if(GetSubRace(oPC) == 197 || GetSubRace(oPC) == 147|| GetSubRace(oPC) == 69  || GetSubRace(oPC) == 168 || GetSubRace(oPC) == 198 || GetSubRace(oPC) == 199 /*For the giant races, we exclude them */
 		|| GetSubRace(oPC) == 200 || GetSubRace(oPC) == 220 || GetSubRace(oPC) == 237 || GetSubRace(oPC) == 238|| GetSubRace(oPC) == 201 || GetSubRace(oPC) == 202 
-		|| GetSubRace(oPC) == 239|| GetSubRace(oPC) == 240  || GetSubRace(oPC) == 203 || GetSubRace(oPC) == 205 || GetSubRace(oPC) == 206 
+		|| GetSubRace(oPC) == 239|| GetSubRace(oPC) == 240  || GetSubRace(oPC) == 205 || GetSubRace(oPC) == 206 
 		|| GetSubRace(oPC) == 244|| GetSubRace(oPC) == 221 || GetSubRace(oPC) == 207|| GetSubRace(oPC) == 222|| GetSubRace(oPC) == 223|| GetSubRace(oPC) == 224|| GetSubRace(oPC) == 225|| GetSubRace(oPC) == 226
 		    || GetSubRace(oPC) == 227|| GetSubRace(oPC) == 228|| GetSubRace(oPC) == 230|| GetSubRace(oPC) == 231|| GetSubRace(oPC) == 232|| GetSubRace(oPC) == 234|| GetSubRace(oPC) == 235)
 	{
