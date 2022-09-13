@@ -62,19 +62,40 @@ void DesertWind3(object oCaller, object oTarget) // Throws a ball of fire at the
 {
 	SendMessageToPC(oCaller, "Using <i>Fan the Flames.</i>");
 	int numberOfDice = GetTotalLevels(oCaller, TRUE) ;
+	int ECL 	= StringToInt(PS_GetEssenceECL(OBJECT_SELF));
 	int touchAttackResult = TouchAttackRanged(oTarget, TRUE, 0);
+	int touchAttackResultSTR = TouchAttackMelee(oTarget, TRUE, 0);
+	int STR = GetAbilityModifier(ABILITY_STRENGTH);
+	int DEX = GetAbilityModifier(ABILITY_DEXTERITY);
 	
-	if (touchAttackResult == TOUCH_ATTACK_RESULT_MISS)
-	{
-		return;
+	if (DEX > STR)
+
+	{	if (touchAttackResult == TOUCH_ATTACK_RESULT_MISS)
+		{
+			return;
+		}
+		if (touchAttackResult == TOUCH_ATTACK_RESULT_CRITICAL)
+		{
+			numberOfDice = (numberOfDice * 2) + (ECL*2);
+		}
+		int iDamage = d8(numberOfDice + ECL) + PS_AddSneakDmgToSpell(oCaller, oTarget, DAMAGE_TYPE_FIRE);
+		effect eDamage = EffectDamage(iDamage, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, FALSE);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
 	}
-	if (touchAttackResult == TOUCH_ATTACK_RESULT_CRITICAL)
+	else
 	{
-		numberOfDice = numberOfDice * 2;
-	}
-	int iDamage = d8(numberOfDice) + PS_AddSneakDmgToSpell(oCaller, oTarget, DAMAGE_TYPE_FIRE);
-	effect eDamage = EffectDamage(iDamage, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, FALSE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
+		if (touchAttackResultSTR == TOUCH_ATTACK_RESULT_MISS)
+		{
+			return;
+		}
+		if (touchAttackResultSTR == TOUCH_ATTACK_RESULT_CRITICAL)
+		{
+			numberOfDice = (numberOfDice * 2) + (ECL*2);
+		}
+		int iDamage = d8(numberOfDice + ECL) + PS_AddSneakDmgToSpell(oCaller, oTarget, DAMAGE_TYPE_FIRE);
+		effect eDamage = EffectDamage(iDamage, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, FALSE);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
+		}
 }
 
 void DiamondMind1(object oCaller, object oTarget) // If concentration check succeeds, targets gets -HisDEX (min 3) to AC for 2 round
@@ -640,7 +661,7 @@ void DevotedSpirit2(object oCaller) // All nearby allies get +X AC for two round
 	SendMessageToPC(oCaller, "Using <i>Shield Block.</i>");
 	int shieldAC = GetItemACValue(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oCaller)); //Gets the AC bonus of the user's shield
 
-	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 15.0f, GetLocation(oCaller));
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 30.0f, GetLocation(oCaller));
 	
 	while (GetIsObjectValid(oTarget))
 	{
@@ -658,7 +679,7 @@ void DevotedSpirit2(object oCaller) // All nearby allies get +X AC for two round
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 		}
 		
-		oTarget = GetNextObjectInShape(SHAPE_SPHERE, 15.0f, GetLocation(oCaller));
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, 30.0f, GetLocation(oCaller));
 	}
 	
 		// Initiates an attack against current target
