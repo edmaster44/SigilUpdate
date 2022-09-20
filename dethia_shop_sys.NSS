@@ -111,6 +111,10 @@ const int STORE_TIMEOUT = 5; 						//store timeout in minutes
 int	STORE_OPEN	= 0;	//The event handler for when a store opens
 int	STORE_CLOSE	= 1;	//The event handler for when a store closes	
 
+//Pricing system
+int	PRICING_SYSTEM_OLD	= 0;	//Uses GetGoldPieceValue
+int	PRICING_SYSTEM_NEW	= 1;	//Uses new logic
+
 //Item categories
 int	DS_ARMOR			= 0;	//Shields and armor
 int	DS_WEAPON			= 1;	//Weapons
@@ -280,6 +284,9 @@ int GetItemUseLimited(object oItem, object oPC);
 //Check if you have proficiency
 int GetItemUseable(object oItem, object oPC);
 
+//A function to fetch the "real" gold piece value of an item
+int PS_GetItemValue(object oItem, int nSystem = 0);
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 //------------------------------FUNCTIONS--------------------------------//
 //------------------------------IMPLEMENTATION---------------------------//
@@ -445,7 +452,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
 				fCostMod	+= (iMarkUp + iMarkDown)/200.0f;
-		int		iItemCost	= FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
@@ -548,7 +555,7 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(!GetIdentified(oItem))	//If item is not identified set the price to 10 coppers
 	{	iItemCost	= 10;	}
 	else	//If all is well compute the item's sell value
-	{	iItemCost	= FloatToInt(fCostMod*GetGoldPieceValue(oItem)/GetItemStackSize(oItem));	}
+	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	}
 	
 	
 	//If the cost is less than or equal to 0, set it to 1
@@ -918,4 +925,15 @@ int GetItemUseable(object oItem, object oPC)
 	else
 		return GetItemUseLimited(oItem, oPC);
 	return FALSE;
+}
+
+//A function to fetch the "real" gold piece value of an item
+int PS_GetItemValue(object oItem, int nSystem = 0) {
+
+	if (nSystem == PRICING_SYSTEM_OLD) {
+		return GetGoldPieceValue(oItem);
+	} else { //put custom logic here
+		return GetGoldPieceValue(oItem);
+	}
+
 }

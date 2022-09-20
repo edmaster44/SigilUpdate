@@ -125,7 +125,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 
 		//Next set the item's cost (ammunition is not affected by stack size)
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
-		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1)
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		{	iCost	/= StringToInt(sStackSize);	}
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
@@ -140,7 +140,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		
 		//SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
-		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1) //Don't update price for base ammunition
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1) //Don't update price for base ammunition
 		{	return;	}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
@@ -290,7 +290,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 			iStack =  GetItemStackSize(oItem);
 		}
 		
-		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1)
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		{	iPrice	/= iAmount;	}
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
 		/*else if(!DoesPCHaveFreeInvSlots(oPC))
@@ -378,7 +378,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		int		iStackSize		= StringToInt(sStackSize);
 		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
 		
-		if(DS_GetIsProjectile(oItem) && GetGoldPieceValue(oItem) <= 1)
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		{		iSellPrice		/= iSellAmount;	}
 		
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
@@ -393,7 +393,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 		else if(iSellAmount <= 0)
 		{	return;	}
 		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		else if(DS_GetIsProjectile(oItem)&& iSellAmount < 99 && GetGoldPieceValue(oItem) <= 1)
+		else if(DS_GetIsProjectile(oItem)&& iSellAmount < 99 && PS_GetItemValue(oItem) <= 1)
 		{//If player is selling less than 99 units of ammunition tell them it's a no no
 			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
 			return;	
