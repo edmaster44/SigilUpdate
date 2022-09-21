@@ -91,6 +91,7 @@ displayed in the GUI files where gold usually appears.
 #include "ginc_item"
 #include "x2_inc_itemprop"
 #include "ps_inc_time"
+#include "nwnx_sql"
 
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
@@ -286,6 +287,12 @@ int GetItemUseable(object oItem, object oPC);
 
 //A function to fetch the "real" gold piece value of an item
 int PS_GetItemValue(object oItem, int nSystem = 0);
+
+//get whether the item is in the database
+int GetItemInDB(object oItem);
+
+//Add all the items in the store to the database 
+void AddAllItemsInStoreToDatabase(object oStore);
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 //------------------------------FUNCTIONS--------------------------------//
@@ -934,6 +941,42 @@ int PS_GetItemValue(object oItem, int nSystem = 0) {
 		return GetGoldPieceValue(oItem);
 	} else { //put custom logic here
 		return GetGoldPieceValue(oItem);
+	}
+
+}
+
+//get whether the item is in the database
+int GetItemInDB(object oItem) {
+
+	string sTag = GetResRef(oItem);
+	string sQuery = "SELECT item_id FROM item_prices WHERE item_tag='"+sTag+"'";
+	
+	SQLExecDirect(sQuery);
+	
+	while (SQLFetch() != SQL_ERROR) {
+		int id = StringToInt(SQLGetData(1));
+		return (id > 0);
+	}
+	return FALSE;
+	
+}
+
+//Add all the items in this store to the database
+void AddAllItemsInStoreToDatabase(object oStore) {
+	
+	object oItem = GetFirstItemInInventory(oStore);
+	while(GetIsObjectValid(oItem)) {
+	
+		string sName = GetName(oItem);
+		string sTag = GetResRef(oItem);
+		int nPrice = GetGoldPieceValue(oItem);
+		
+		if (!GetItemInDB(oItem)) {
+			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"'";
+			SQLExecDirect(sQuery);
+		}
+	
+		oItem = GetNextItemInInventory(oStore);
 	}
 
 }
