@@ -11,7 +11,7 @@ string sQuery; string sDB; string sBio; string sPortrait;
 
 
 if (GetIsDM(oPC) == TRUE) return;
-sQuery = "SELECT bioid FROM kemo_bios WHERE player = "+player;
+sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'";
 SQLExecDirect(sQuery);
 if (SQLFetch() != SQL_ERROR) { 
 int bio_id = StringToInt(SQLGetData(1));

@@ -547,6 +547,7 @@ const int FEAT_ROBE_OF_CLOUDS					= 2941;
 const int FEAT_SERPENTINE_COIL					= 2942;
 const int FEAT_WILD_GROWTH						= 2943;
 
+
 //Nature Warrior Spell-Like Ability
 const int SPELLABILITY_ARMOR_OF_THE_CROCODILE 	= 1936;
 const int SPELLABILITY_BLAZE_OF_POWER			= 1937;
@@ -589,6 +590,16 @@ const int FEAT_BLACKGUARD_SMITE					= 3041;
 const int FEAT_CHAIN_OF_OVERWHELMING_FORCE		= 21476;
 const int FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY		= 21473;
 const int FEAT_CHAIN_OF_DEFENSIVE_POSTURE		= 21474;
+//ShieldBash Feat Lines
+const int FEAT_SHIELDBASH 						= 3058;
+const int FEAT_IMPROVED_SHIELDBASH				= 3059;
+const int FEAT_AGILE_SHIELDBASH					= 3060;
+const int FEAT_ARCANEBASH						= 3061;
+const int FEAT_SHIELDTHROW						= 3062;
+//ShieldBash Spell Like
+const int SPELLFEAT_SHIELDBASH					= 1520;
+const int SPELLFEAT_ARCANEBASH					= 1521;
+const int SPELLFEAT_SHIELDTHROW					= 1522;
 //SpellLike Abilities
 const int SPELLABILITY_WARMIND_STRIKE			= 9999;
 
