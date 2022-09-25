@@ -108,13 +108,13 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 			nCost += GetCostOfItemByString(sEssence);
 			nCost += nGemCost;
 			
-			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Generated price: "+IntToString(nCost)+", "+sQuery);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Success / generated price: "+IntToString(nCost));
 			return nCost;
 		} else {
-			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Not found: "+sQuery);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Failed / Not found: "+sQuery);
 		}
 	} else {
-		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Failed: "+sQuery);
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Failed: "+sQuery);
 	}
 		
 	return FALSE;
