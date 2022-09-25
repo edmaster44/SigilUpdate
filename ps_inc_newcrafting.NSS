@@ -189,6 +189,8 @@ string GetCautionString(object oPC, struct baseitem i, struct material m1, struc
 //Checks if nType is a quiver. Range is 90-95
 int GetIsQuiver(int nTYPE);
 
+int GetCostTierOfMaterial(itemproperty iProp);
+
 //************************************************
 //Structure to hold base item information
 //from scod_craft_baseitems
@@ -877,4 +879,53 @@ int GetIDRanged(int nId) {
 	  	return TRUE;
 		
 	return FALSE;
+}
+
+int GetCostTierOfMaterial(itemproperty iProp) {
+
+	int iType = GetItemPropertyType(iProp);
+	int iSub = GetItemPropertySubType(iProp);
+	int iParam = GetItemPropertyCostTableValue(iProp);
+	int iSpecial = GetItemPropertyParam1Value(iProp);
+	
+	if (iType != 100)
+		return 0;
+		
+	string sMatName = Get2DAString("iprp_specialmat", "Label", iSub);  
+	
+	string s2da = "scod_craft_metal";
+	int nMax = GetNum2DARows(s2da);
+	int n = 0;
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	s2da = "scod_craft_leather";
+	nMax = GetNum2DARows(s2da);
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	s2da = "scod_craft_wood";
+	nMax = GetNum2DARows(s2da);
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	s2da = "scod_craft_misc";
+	nMax = GetNum2DARows(s2da);
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	return 0;
+
 }
