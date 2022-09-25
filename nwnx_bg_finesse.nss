@@ -20,7 +20,7 @@ void EnableFinesse()
 	nwnx_bg_CreateFinesseRule(165,42,TRUE);
 	nwnx_bg_CreateFinesseRule(170,42,TRUE);
 	nwnx_bg_CreateFinesseRule(173,42,TRUE);
-	nwnx_bg_CreateFinesseRule(202);
+	nwnx_bg_CreateFinesseRule(202,42,FALSE);
 	
 	
 /*White List	
