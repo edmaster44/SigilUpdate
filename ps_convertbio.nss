@@ -11,13 +11,7 @@ string sQuery; string sDB; string sBio; string sPortrait;
 
 
 if (GetIsDM(oPC) == TRUE) return;
-sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'";
-SQLExecDirect(sQuery);
-if (SQLFetch() != SQL_ERROR) { 
-int bio_id = StringToInt(SQLGetData(1));
-if (bio_id > 0)
-  return; 
-  
+
 else
     if (sBio == "")
     {    sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
@@ -33,7 +27,14 @@ else
         sPortrait = GetCampaignString(sDB,"Portrait");
     if (GetStringLength(sPortrait) < 2) sPortrait = "bg_60_alpha";
     }
-    sQuery = "INSERT INTO kemo_bios (bioid, name, player, biotext, portrait) SELECT 1 + coalesce((SELECT max(bioid)"+
+sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'";
+SQLExecDirect(sQuery);
+if (SQLFetch() != SQL_ERROR) { 
+int bio_id = StringToInt(SQLGetData(1));
+if (bio_id > 0)
+  return; 
+  else
+  { sQuery = "INSERT INTO kemo_bios (bioid, name, player, biotext, portrait) SELECT 1 + coalesce((SELECT max(bioid)"+
     " FROM kemo_bios), 0), '"+name+"', '"+player+"',"+
     "AES_ENCRYPT('"+SQLEncodeSpecialChars(sBio)+"','PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'),"+
     "'"+SQLEncodeSpecialChars(sPortrait)+"';";
@@ -44,6 +45,6 @@ else
     DeleteCampaignVariable(sDB,sBio);
     DeleteCampaignVariable(sDB,sPortrait);
     //SendMessageToPC(oPC,"Deleting Campaign Variable.");
-
-    }
 }
+    
+}}
