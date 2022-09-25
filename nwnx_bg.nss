@@ -1,10 +1,27 @@
-
 ///  Constants
 const string XP_BG_PLUGIN_NAME	= "BG";
 
 // New EFFECT_TYPE_* constants for use with the EnableGetEffectTypeFix
 const int EFFECT_TYPE_SCALE  = 111;
 const int EFFECT_TYPE_KNOCKDOWN = 112;
+
+//// Internal helper functions
+
+int check_ushort(int nNumber, string sParamName, string sModule)
+{
+	// Max range for feat ids.
+	if(nNumber < 0 || nNumber > 65535)
+	{
+		WriteTimestampedLogEntry("Attempted to set " + sParamName + " outside of unsigned short range for " + sModule);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+
+
 
 ////  Character Sheet Functions
 
@@ -135,33 +152,101 @@ void nxnx_bg_fistdmg_setSides(int nDiceSides)
 }
 
 
-// Set Weapon Finesse true/false flag.  Will only work if used in
-// nwnx_bg_finesse.nss which will be called by the engine
-// when checking if an item is finessable if enabled in the plug-in.
-void nxnx_bg_finesse_set(int bIsFinessable)
+
+// Make a base item finessable at engine level.
+// Optionally, only finessable if they also have nFeatId
+// If nFeatId is FEAT_INVALID then only feat id 42 (Weapon Finesse) is required.
+//		Sets up rules for baseitems:
+//
+//		nBaseItem1 ->  (nFeatID1, bIgnoreSize), (nFeatID2, bIgnoreSize), (nFeatID3, bIgnoreSize), ...
+//		nBaseItem2 ->  ...
+//		nBaseItem3 ->  ...
+//		...
+//
+//		If the creature has the feat and meets the size check (or ignores size check for that feat) for
+//		at least one of the entries for the given base item equipped then the item is finessable.
+//
+//		FEAT_INVALID is a catchall meaning no feat is required, but we still do the size check unless 
+//		you've set it to ignore.
+void nwnx_bg_CreateFinesseRule(int nBaseItem, int nFeat=FEAT_INVALID, int bIgnoreSize=FALSE)
 {
-	// TO DO: Sanity checks on inputs before passing?
-	NWNXSetInt(XP_BG_PLUGIN_NAME, "nxnx_bg_finesse_set", "", bIsFinessable, 0);
+	if( check_ushort(nFeat, "nFeat", "nwnx_bg_MakeFinessable") )
+	{
+		NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts", "", nFeat, bIgnoreSize>0);
+		NWNXSetInt(XP_BG_PLUGIN_NAME, "MakeFinessable", "", nBaseItem, 0);
+	}
 }
 
-// Item to check if it can be finessed.
-object nwnx_bg_finesse_GetItem()
+// Logs to xp_bg.txt the current mappings made through nwnx_bg_CreateFinesseRule.
+void nwnx_bg_LogFinesseRules()
 {
-	return IntToObject(NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_finesse_GetItem", "", 0));
+	NWNXGetInt(XP_BG_PLUGIN_NAME, "LogFinesseRules", "", 0);
 }
 
-// Skill Feat Mod Functions
-// Will only work if used in nwnx_bg_skill_featmod.nss which will be called
-// by the engine at the start of calculating base skill modifiers for feats.
-// Afterwards the engine will continue with the usual calculations.
-// Must be enabled by plug-in for engine to call this script.
-int nwnx_bg_skill_featmod_GetSkill()
+// Retrieve from engine if finesse conditions for a weapon are currently met.
+// Returns:
+//  0 --> oWeapon for oTarget of iCreatureSize category is not finessable.
+//  1 --> oWeapon for oTarget of iCreatureSize category is finessable.
+// -1 --> Bad inputs.  (E.g. invalid object, size, etc.)
+// To get unarmed use OBJECT_INVALID for oWeapon.
+int nwnx_bg_GetIsFinessable(object oTarget, object oWeapon, int iCreatureSize)
 {
-	return NWNXGetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_skill_featmod_GetSkill", "", 0);
+	if( !GetIsObjectValid(oTarget)
+		|| iCreatureSize < CREATURE_SIZE_TINY
+		|| iCreatureSize > CREATURE_SIZE_HUGE
+	  )
+	{
+		return -1;
+	}
+
+	NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts", "", ObjectToInt(oWeapon), iCreatureSize);
+	return NWNXGetInt(XP_BG_PLUGIN_NAME, "GetIsFinessable", "", ObjectToInt(oTarget));
 }
 
-void nwnx_bg_skill_featmod_set(int nBaseSkillModifier)
+
+void nwnx_bg_CreateSkillFeat(int nFeat, int nSkill, int nAmount)
 {
-	// TO DO: Sanity checks on inputs before passing?
-	NWNXSetInt(XP_BG_PLUGIN_NAME, "nwnx_bg_skill_featmod_set", "", nBaseSkillModifier, 0);
+	string sModule = "nwnx_bg_CreateSkillFeat";
+
+	if( check_ushort(nFeat, "nFeat", sModule) && 
+		check_ushort(nSkill, "nSkill", sModule) &&
+		nFeat < GetNum2DARows("feat") &&
+		nSkill < GetNum2DARows("skills")
+		)
+	{
+		NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts", "", nSkill, nFeat);
+		NWNXGetInt(XP_BG_PLUGIN_NAME, "CreateSkillFeat", "", nAmount);
+	}
+}
+
+void nwnx_bg_CreateSkillSynergy(int nSkill, int nSynergySkill, int nAmount=2, int nThreshold=4)
+{
+	string sModule = "nwnx_bg_CreateSkillSynergy";
+
+	if( check_ushort(nSynergySkill, "nSynergySkill", sModule) && 
+		check_ushort(nSkill, "nSkill", sModule) &&
+		nSkill < GetNum2DARows("skills") &&
+		nSynergySkill < GetNum2DARows("skills") &&
+		nThreshold <= 33 && nThreshold >= 0 //Threshold shouldn't be some crazy amount of ranks.
+		)
+	{
+		NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts", "", nSkill, nSynergySkill);
+		NWNXSetInt(XP_BG_PLUGIN_NAME, "SetInts2", "", nAmount, nThreshold);
+		NWNXGetInt(XP_BG_PLUGIN_NAME, "CreateSkillSynergy", "", 0);
+	}
+}
+
+
+// Logs to xp_bg.txt the current mapping of nSkills to (nfeat, nAmount).
+// This shows what you've added with nwnx_bg_CreateSkillFeat.
+void nwnx_bg_LogSkillFeats()
+{
+	NWNXGetInt(XP_BG_PLUGIN_NAME, "LogSkillFeats", "", 0);
+}
+
+// Logs to xp_bg.txt the current mapping of nSkills to (nfeat, nAmount).
+// This shows what you've added with nwnx_bg_CreateSkillFeat.
+void nwnx_bg_LogSkillSynergies()
+{
+	NWNXGetInt(XP_BG_PLUGIN_NAME, "LogSkillSynergies", "", 0);
 }
