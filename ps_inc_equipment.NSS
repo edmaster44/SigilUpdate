@@ -858,13 +858,13 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
       DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
         
         /*	 if (GetIsFinessable(oITEM))
-			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));*/
+			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 				
 			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
-				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
+				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM)); */
 
         
         if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
@@ -881,7 +881,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
     {
         ConDrainProtection(oITEM, oPC);
         if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
-            PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
+            //PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
             RemoveElementalWeapon(oPC,oITEM);
             RemoveMeditativeStrikes(oPC,oITEM);
 			RemoveAustereStrikes(oPC,oITEM);

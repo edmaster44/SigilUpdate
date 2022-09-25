@@ -12,17 +12,18 @@ void EnableFinesse()
 		case 170:
 		case 173:
 */
-	nwnx_bg_CreateFinesseRule(160,42,TRUE);
-	nwnx_bg_CreateFinesseRule(161,42,TRUE);
-	nwnx_bg_CreateFinesseRule(162,42,TRUE);
-	nwnx_bg_CreateFinesseRule(163,42,TRUE);
-	nwnx_bg_CreateFinesseRule(164,42,TRUE);
-	nwnx_bg_CreateFinesseRule(165,42,TRUE);
-	nwnx_bg_CreateFinesseRule(170,42,TRUE);
-	nwnx_bg_CreateFinesseRule(173,42,TRUE);
-	nwnx_bg_CreateFinesseRule(202,42,FALSE);
+  	nwnx_bg_CreateFinesseRule(160,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(161,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(162,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(163,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(164,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(165,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(170,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(173,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(202,FEAT_INVALID,FALSE);
 	
-	
+	nwnx_bg_LogFinesseRules();
+
 /*White List	
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_SHORTSWORD);
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_DAGGER);
