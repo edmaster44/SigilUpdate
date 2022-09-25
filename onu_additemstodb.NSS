@@ -11,6 +11,8 @@ int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID);
 
 void main() {
 
+	object oPC = GetLastUsedBy();
+
 	object oChest = GetNearestObjectByTag("item_addition_chest");
 	
 	object oItem = GetFirstItemInInventory(oChest);
@@ -18,7 +20,7 @@ void main() {
 	
 		string sName = GetName(oItem);
 		string sTag = GetResRef(oItem);
-		int nPrice = GetGoldPieceValue(oItem);
+		int nPrice = GetCostOfItem(oItem, oPC);
 		int nOldPrice = GetGoldPieceValue(oItem);
 		
 		if (!GetItemInDB(oItem)) {
@@ -26,7 +28,7 @@ void main() {
 			SQLExecDirect(sQuery);
 		}
 		
-		DestroyObject(oItem, 0.5f);
+		//DestroyObject(oItem, 0.5f);
 	
 		oItem = GetNextItemInInventory(oChest);
 	}
@@ -49,6 +51,8 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 
 	int nCost = 0;
 	itemproperty iProp = GetFirstItemProperty(oItem);
+	
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
 	
 	while(GetIsItemPropertyValid(iProp)) {
 	
