@@ -7,7 +7,7 @@
 	// good.
 
 
-void main()
+/*void main()
 {
 
 	// Passed into the script from nwnx.  The row number
@@ -105,4 +105,4 @@ void main()
 
 	nwnx_bg_skill_featmod_set(nSkillBonus);
 
-}
+}*/

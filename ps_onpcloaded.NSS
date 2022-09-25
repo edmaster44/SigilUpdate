@@ -3,6 +3,7 @@
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
+#include "nwnx_bg_finesse"
 #include "ps_inc_functions"
 #include "nwnx_character"
 #include "ps_class_inc"
@@ -564,6 +565,7 @@ void main()
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
+		EnableFinesse();
 		DelayCommand(delay+=delayInterval, ConvertBio(oPC));
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
