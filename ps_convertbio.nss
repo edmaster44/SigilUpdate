@@ -4,11 +4,11 @@
 void ConvertBio (object oPC)
 {
 string sQuery;
-sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'";
+sQuery = "SELECT biotext FROM kemo_bios WHERE player = '"+player+"'";
 SQLExecDirect(sQuery);
 if (SQLFetch() != SQL_ERROR) { 
-int bio_id = StringToInt(SQLGetData(1));
-if (bio_id > 0)
+int biotext = StringToInt(SQLGetData(1));
+if (biotext > 0)
   return; }
 
 if (GetIsDM(oPC) == TRUE) return;    
