@@ -13,6 +13,12 @@ string sDB; string sQuery;
 string sBio = GetCampaignString(sDB,"Bio",oPC);
 string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
 
+sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'";
+SQLExecDirect(sQuery);
+if (SQLFetch() != SQL_ERROR) { 
+int bio_id = StringToInt(SQLGetData(1));
+if (bio_id > 0)
+  return; }
 
     if (sBio == "")
     {    sDB = GetSubString(GetPCPlayerName(oPC), 0, 12) +
@@ -28,12 +34,7 @@ string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
         sPortrait = GetCampaignString(sDB,"Portrait");
     if (GetStringLength(sPortrait) < 2) sPortrait = "bg_60_alpha";
     }
-sQuery = "SELECT biotext FROM kemo_bios WHERE player = '"+player+"'";
-SQLExecDirect(sQuery);
-if (SQLFetch() != SQL_ERROR) { 
-int biotext = StringToInt(SQLGetData(1));
-if (biotext > 0)
-  return; }
+
    sQuery = "INSERT INTO kemo_bios (bioid, name, player, biotext, portrait) SELECT 1 + coalesce((SELECT max(bioid)"+
     " FROM kemo_bios), 0), '"+name+"', '"+player+"',"+
     "AES_ENCRYPT('"+SQLEncodeSpecialChars(sBio)+"','PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'),"+
