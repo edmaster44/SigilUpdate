@@ -3,18 +3,13 @@
 
 void ConvertBio (object oPC)
 {
-string sQuery;
-sQuery = "SELECT biotext FROM kemo_bios WHERE player = '"+player+"'";
-SQLExecDirect(sQuery);
-if (SQLFetch() != SQL_ERROR) { 
-int biotext = StringToInt(SQLGetData(1));
-if (biotext > 0)
-  return; }
+
+
 
 if (GetIsDM(oPC) == TRUE) return;    
 string name = SQLEncodeSpecialChars(GetName(oPC));
 string player = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-string sDB; 
+string sDB; string sQuery;
 string sBio = GetCampaignString(sDB,"Bio",oPC);
 string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
 
@@ -33,7 +28,12 @@ string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
         sPortrait = GetCampaignString(sDB,"Portrait");
     if (GetStringLength(sPortrait) < 2) sPortrait = "bg_60_alpha";
     }
-
+sQuery = "SELECT biotext FROM kemo_bios WHERE player = '"+player+"'";
+SQLExecDirect(sQuery);
+if (SQLFetch() != SQL_ERROR) { 
+int biotext = StringToInt(SQLGetData(1));
+if (biotext > 0)
+  return; }
    sQuery = "INSERT INTO kemo_bios (bioid, name, player, biotext, portrait) SELECT 1 + coalesce((SELECT max(bioid)"+
     " FROM kemo_bios), 0), '"+name+"', '"+player+"',"+
     "AES_ENCRYPT('"+SQLEncodeSpecialChars(sBio)+"','PdSgVkYp3s5v8y/B?E(H+MbQeThWmZq4'),"+

@@ -566,7 +566,7 @@ void main()
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
-		DelayCommand(delay+=delayInterval, ConvertBio(oPC));
+		ConvertBio(oPC);
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
