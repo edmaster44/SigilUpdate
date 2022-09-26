@@ -548,6 +548,7 @@ const int FEAT_SERPENTINE_COIL					= 2942;
 const int FEAT_WILD_GROWTH						= 2943;
 
 
+
 //Nature Warrior Spell-Like Ability
 const int SPELLABILITY_ARMOR_OF_THE_CROCODILE 	= 1936;
 const int SPELLABILITY_BLAZE_OF_POWER			= 1937;
@@ -565,6 +566,7 @@ const int FEAT_DERVISH_DANCE_DEATH				= 3001;
 const int FEAT_DERVISH_DEFENSIVE_PARRY			= 3002;
 const int FEAT_DERVISH_TIRELESS_DANCE			= 3003;
 const int FEAT_DERVISH_THOUSAND_CUTS			= 3004;
+const int FEAT_DERVISH_SLASHING_BLADES			= 3005;
 //New Spell Like Abilities for Elemental Warrior
 const int ELEMENTAL_WARRIOR_IMMUNITY			= 1920;
 const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1921;
@@ -600,6 +602,7 @@ const int FEAT_SHIELDTHROW						= 3062;
 const int SPELLFEAT_SHIELDBASH					= 1520;
 const int SPELLFEAT_ARCANEBASH					= 1521;
 const int SPELLFEAT_SHIELDTHROW					= 1522;
+const int SPELLFEAT_AGILE_SHIELDSTRIKE          = 1523;
 //SpellLike Abilities
 const int SPELLABILITY_WARMIND_STRIKE			= 9999;
 

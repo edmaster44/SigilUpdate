@@ -1,5 +1,5 @@
 #include "nwnx_bg"
-
+#include "aaa_constants"
 
 void EnableFinesse()
 {/*creature weapons
@@ -22,7 +22,21 @@ void EnableFinesse()
     nwnx_bg_CreateFinesseRule(173,FEAT_INVALID,TRUE);
     nwnx_bg_CreateFinesseRule(202,FEAT_INVALID,FALSE);
 	
-	nwnx_bg_LogFinesseRules();
+	
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_GREATAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_GREATSWORD,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_SCIMITAR,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_KATANA,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_BASTARDSWORD,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_LONGSWORD,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_FALCHION,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_BATTLEAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	nwnx_bg_CreateFinesseRule(BASE_ITEM_DWARVENWARAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
+	
+	
+	
+	
+//	nwnx_bg_LogFinesseRules();
 
 /*White List	
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_SHORTSWORD);
