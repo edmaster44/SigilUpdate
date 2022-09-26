@@ -5,19 +5,27 @@ void main () {
 	{
 	  	SetGlobalInt("MWTUNNELLOCK", 1);
 		
-		if (GetObjectByTag("bzr_corpse_1") == OBJECT_INVALID && GetObjectByTag("bzr_corpse_2") == OBJECT_INVALID) {
+		if (GetObjectByTag("bzr_corpse_a") == OBJECT_INVALID) {
 		
 			object oWP = GetWaypointByTag("wp_bzr_corpse_1");
 	   		location lSpawnpoint = GetLocation(oWP);  
-	   		object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_corpse_1", lSpawnpoint);  
+	   		object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_corpse_1", lSpawnpoint, FALSE, "bzr_corpse_a");  
 			
-			oWP = GetWaypointByTag("wp_bzr_corpse_2");
-			lSpawnpoint = GetLocation(oWP); 
-			oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_corpse_2", lSpawnpoint);  
+		}
+		
+		if (GetObjectByTag("bzr_corpse_b") == OBJECT_INVALID) {
+		
+			object oWP = GetWaypointByTag("wp_bzr_corpse_2");
+	   		location lSpawnpoint = GetLocation(oWP);  
+	   		object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_corpse_2", lSpawnpoint, FALSE, "bzr_corpse_b");  
 			
-			oWP = GetWaypointByTag("wp_bzr_corpse_3");
-			lSpawnpoint = GetLocation(oWP); 
-			oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_corpse_1", lSpawnpoint); 
+		}
+		
+		if (GetObjectByTag("bzr_corpse_c") == OBJECT_INVALID) {
+		
+			object oWP = GetWaypointByTag("wp_bzr_corpse_3");
+	   		location lSpawnpoint = GetLocation(oWP);  
+	   		object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "bzr_corpse_1", lSpawnpoint, FALSE, "bzr_corpse_c");  
 			
 		}
 		
