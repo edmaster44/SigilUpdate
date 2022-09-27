@@ -9,6 +9,8 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID);
 
 int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID);
 
+void AddPropertyToDB(itemproperty iProp);
+
 void main() {
 
 	object oPC = GetLastUsedBy();
@@ -25,6 +27,9 @@ void main() {
 		
 		if (!GetItemInDB(oItem)) {
 			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"'";
+			SQLExecDirect(sQuery);
+		} else {
+			string sQuery = "UPDATE item_prices SET item_name='"+sName+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
 			SQLExecDirect(sQuery);
 		}
 		
@@ -112,10 +117,28 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 			return nCost;
 		} else {
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Failed / Not found: "+sQuery);
+			AddPropertyToDB(iProp);
 		}
 	} else {
 		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Failed: "+sQuery);
+		AddPropertyToDB(iProp);
 	}
 		
 	return FALSE;
+}
+
+void AddPropertyToDB(itemproperty iProp) {
+
+	int iType = GetItemPropertyType(iProp);
+	int iSub = GetItemPropertySubType(iProp);
+	int iParam = GetItemPropertyCostTableValue(iProp);
+	int iSpecial = GetItemPropertyParam1Value(iProp);
+	string sName = SQLEncodeSpecialChars(GetItemPropertyString(iProp));
+	
+	string sQuery = "INSERT INTO recipes SET Label='"+sName+"', Type='"+IntToString(iType)+"', Subtype='"+IntToString(iType)+"', Numerical='"+IntToString(iParam)+"', Special='"+IntToString(iSpecial)+"'";
+	SQLExecDirect(sQuery);
+	
+	sQuery = "INSERT INTO recipes_names SET Prefix='"+sName+"'";
+	SQLExecDirect(sQuery);
+	
 }
