@@ -67,7 +67,7 @@ void main()
     	effect eVis     = EffectVisualEffect(VFX_DUR_INVISIBILITY);
         effect eCrit = EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
 		effect ePois = EffectImmunity(IMMUNITY_TYPE_POISON);
-		effect eDam = EffectDamageReduction(10, DAMAGE_POWER_PLUS_TWO, 0, DR_TYPE_MAGICBONUS );
+		effect eDam = EffectDamageReduction(5, DAMAGE_TYPE_MAGICAL, 0);
 		effect eCon = EffectSkillDecrease(1, 10);
         effect eDur     = EffectNWN2SpecialEffectFile("psi_ectoplasmic_form.sef");
         effect eLink    = EffectLinkEffects(eDur, eCrit);
