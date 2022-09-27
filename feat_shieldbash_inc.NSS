@@ -24,6 +24,7 @@ int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
 void Shield_Bash(object oPC, object oTarget, int nSpell )
 {
 int nDam;
+int nSize;;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -31,16 +32,38 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 		SendMessageToPC(oPC,"You require a Shield to use this");
 		return;
 	}
+int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
-if(shield = 56) nDam = d6(1);
-else if (shield = 57)
-nDam = d8(1);
-else if (shield = 14)
-nDam = d4(1);
-
+effect eStun = EffectCutsceneParalyze();
+//For Damage
+if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(1) + nStrength;
+nSize = 2;}
+else if (shield = BASE_ITEM_TOWERSHIELD)
+{nDam = d8(1)+ nStrength;
+nSize = 4;}
+else if (shield = BASE_ITEM_SMALLSHIELD)
+{nDam = d4(1)+ nStrength;
+nSize = 1;}
+int nTotal = nDam + nSize;
+int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
 if(iHit >0)
 {
+ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+}
+
+if (iHit == 2)
+{
+nTotal = FloatToInt(nTotal * 1.5);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+
+if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+{
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+
+}
 
 }
 }
@@ -48,13 +71,97 @@ if(iHit >0)
 
 void Shield_Throw(object oPC, object oTarget, int nSpell )
 {
+int nDam;
+int nSize;;
+object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+	
+	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
+	{
+		SendMessageToPC(oPC,"You require a Shield to use this");
+		return;
+	}
+int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
+int shield = GetBaseItemType(oShield);
+effect eStun = EffectCutsceneParalyze();
+//For Damage
+if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(1) + nStrength;
+nSize = 2;}
+else if (shield = BASE_ITEM_TOWERSHIELD)
+{nDam = d8(1)+ nStrength;
+nSize = 4;}
+else if (shield = BASE_ITEM_SMALLSHIELD)
+{nDam = d4(1)+ nStrength;
+nSize = 1;}
+int nTotal = nDam + nSize;
+int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 1, nSpell);
+if(iHit >0)
+{
+ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+}
 
+if (iHit == 2)
+{
+nTotal = FloatToInt(nTotal * 1.5);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+
+if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+{
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+
+}
+
+}
 
 }
 
 void Agile_Strike(object oPC, object oTarget, int nSpell )
 {
+int nDam;
+int nSize;;
+object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+	
+	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
+	{
+		SendMessageToPC(oPC,"You require a Shield to use this");
+		return;
+	}
+int nDex = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
+int shield = GetBaseItemType(oShield);
+effect eStun = EffectKnockdown();
+//For Damage
+if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(1) + nDex;
+nSize = 2;}
+else if (shield = BASE_ITEM_TOWERSHIELD)
+{nDam = d8(1)+ nDex;
+nSize = 4;}
+else if (shield = BASE_ITEM_SMALLSHIELD)
+{nDam = d4(1)+ nDex;
+nSize = 1;}
+int nTotal = nDam + nSize;
+int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
+if(iHit >0)
+{
+ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+}
 
+if (iHit == 2)
+{
+nTotal = FloatToInt(nTotal * 1.5);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+
+if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+{
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+
+}
+
+}
 
 }
 
