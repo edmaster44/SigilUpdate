@@ -13,7 +13,7 @@ string sDB; string sQuery;
 string sBio = GetCampaignString(sDB,"Bio",oPC);
 string sPortrait = GetCampaignString(sDB,"Portrait",oPC);
 
-sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'" + "AND name='" +  "'"+name+"'" ;
+sQuery = "SELECT bioid FROM kemo_bios WHERE player = '"+player+"'" + "AND name ='" +  '"+name+"' ;
 SQLExecDirect(sQuery);
 if (SQLFetch() != SQL_ERROR) { 
 int bio_id = StringToInt(SQLGetData(1));
