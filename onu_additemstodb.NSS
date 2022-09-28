@@ -89,7 +89,7 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 		return 1000;
 	}
 	
-	string sQuery = "SELECT Recipe_Id, Points, Gold, Essence, Gemstone FROM recipes WHERE Type='"+IntToString(iType)+"' AND Subtype='"+IntToString(iType)+"' AND Numerical='"+IntToString(iParam)+"' AND Special='"+IntToString(iSpecial)+"'";
+	string sQuery = "SELECT Recipe_Id, Points, Gold, Essence, Gemstone FROM recipes WHERE Type='"+IntToString(iType)+"' AND Subtype='"+IntToString(iSub)+"' AND Numerical='"+IntToString(iParam)+"' AND Special='"+IntToString(iSpecial)+"'";
 	SQLExecDirect(sQuery);
 	
 	if (SQLFetch() != SQL_ERROR) {
@@ -135,7 +135,7 @@ void AddPropertyToDB(itemproperty iProp) {
 	int iSpecial = GetItemPropertyParam1Value(iProp);
 	string sName = SQLEncodeSpecialChars(GetItemPropertyString(iProp));
 	
-	string sQuery = "INSERT INTO recipes SET Label='"+sName+"', Type='"+IntToString(iType)+"', Subtype='"+IntToString(iType)+"', Numerical='"+IntToString(iParam)+"', Special='"+IntToString(iSpecial)+"'";
+	string sQuery = "INSERT INTO recipes SET Label='"+sName+"', Type='"+IntToString(iType)+"', Subtype='"+IntToString(iSub)+"', Numerical='"+IntToString(iParam)+"', Special='"+IntToString(iSpecial)+"'";
 	SQLExecDirect(sQuery);
 	
 	sQuery = "INSERT INTO recipes_names SET Prefix='"+sName+"'";
