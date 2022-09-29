@@ -9,16 +9,6 @@
 #include "x2_inc_itemprop"
 
 
-int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
-{
-	if (GetDistanceBetween(oCaller, oTarget) > 4.5f) // Melee range seems to be around a little less then 3.0f, so picked a number
-	{                                                // a little higher to give some loose.
-		SendMessageToPC(oCaller, "Target out of range.");
-		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
 
 
 void Shield_Bash(object oPC, object oTarget, int nSpell )
