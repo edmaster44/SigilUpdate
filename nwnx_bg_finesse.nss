@@ -12,16 +12,15 @@ void EnableFinesse()
 		case 170:
 		case 173:
 */
-  	nwnx_bg_CreateFinesseRule(160);
-    nwnx_bg_CreateFinesseRule(161);
-    nwnx_bg_CreateFinesseRule(162);
-    nwnx_bg_CreateFinesseRule(163);
-    nwnx_bg_CreateFinesseRule(164);
-    nwnx_bg_CreateFinesseRule(165);
-    nwnx_bg_CreateFinesseRule(170);
-    nwnx_bg_CreateFinesseRule(173);
+  	nwnx_bg_CreateFinesseRule(160,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(161,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(162,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(163,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(164,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(165,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(170,FEAT_INVALID,TRUE);
+    nwnx_bg_CreateFinesseRule(173,FEAT_INVALID,TRUE);
     nwnx_bg_CreateFinesseRule(202);
-	
 	
 /*	nwnx_bg_CreateFinesseRule(BASE_ITEM_GREATAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_GREATSWORD,FEAT_DERVISH_SLASHING_BLADES,TRUE);
@@ -36,7 +35,7 @@ void EnableFinesse()
 	
 	
 	
-//	nwnx_bg_LogFinesseRules();
+	nwnx_bg_LogFinesseRules();
 
 /*White List	
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_SHORTSWORD);
