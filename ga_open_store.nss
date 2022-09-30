@@ -39,7 +39,7 @@ object GetStoreFromStoreArea(string sTag)
 	return oStore;
 }
 
-void main(string sTag, int nMarkUp, int nMarkDown)
+void main(string sTag, int nMarkUp, int nMarkDown, int storeType)
 {
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	

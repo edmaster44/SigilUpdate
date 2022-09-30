@@ -152,7 +152,7 @@ void DS_CloseShop(object oPC, object oStore);
 //object	oPC			= the player who is shopping
 //int		iMarkUp		= the mark-up in the shop for the various items
 //int		iMarkDown	= the mark-down in the shop for the various items
-void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0);
+void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0, int storeType = 0);
 
 //This function retrieves the NPC or placeable that is running oStore.
 object DS_GetStoreKeeper(object oStore);
@@ -179,7 +179,7 @@ string DS_ConvertCoinsToGold(int iCoins);
 //object	iCategory	= the category of the items we wish to display
 //int		iMarkUp		= the mark up of the store
 //int		iMarkDown	= the mark down of the store
-void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown);
+void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown, int storeType = 0);
 
 //This function checks if the specified store will not buy the specified item.
 //Returns TRUE if the item CANNOT be purchased, false otherwise
@@ -324,7 +324,7 @@ void DS_CloseShop(object oPC, object oStore)
 	ExecuteScript(GetEventHandler(oStore, STORE_CLOSE), oStore);
 }
 
-void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
+void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0, int storeType = 0)
 {//First we check if the shop is already open
 	//SendMessageToPC(oPC, "opening new shop");
 	object	oCustomer	= GetLocalObject(oStore, "DS_CUSTOMER");	//The currently registered customer
@@ -416,7 +416,7 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 	SetGUIObjectText(oPC, "dethia_shop", "sg_gc", -1, DS_ConvertCoinsToGold(iStoreGold));
 
 	//Now that basic information has been set we proceed to populate the shop's inventory
-	DS_AddItemsToShop(oStore, oPC, DS_ARMOR, iMarkUp, iMarkDown);
+	DS_AddItemsToShop(oStore, oPC, DS_ARMOR, iMarkUp, iMarkDown, storeType);
 
 	//Lastly we execute the store's OnOpen event script
 	ExecuteScript(GetEventHandler(oStore, STORE_OPEN), oStore);
@@ -434,7 +434,7 @@ string DS_ConvertCoinsToSilver(int iCoins)
 string DS_ConvertCoinsToGold(int iCoins)
 {	return IntToString((iCoins - iCoins%AuC)/AuC);	}
 
-void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown)
+void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown, int storeType = 0)
 {//We first empty the shop of currently available items
 	ClearListBox(oPC, "dethia_shop", "store_items");
 
@@ -459,7 +459,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
 				fCostMod	+= (iMarkUp + iMarkDown)/200.0f;
-		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem, storeType)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
