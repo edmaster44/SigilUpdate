@@ -3,6 +3,7 @@
 **********************************************************/
 
 #include "ps_inc_placeable_signs"
+#include "ps_inc_faction"
 
 const int MAX_ITEMS = 100;
 
@@ -30,10 +31,13 @@ int MerchWandDestinationValid(object oDestination, object oPC)
 {
 	if (GetIsObjectValid(oDestination))
 	{
-		if (GetObjectType(oDestination) == OBJECT_TYPE_PLACEABLE && GetHasInventory(oDestination) == TRUE
-			&& GetLocalString(oDestination,"OWNER_NAME") == GetName(oPC) && GetTag(oDestination) == "ps_usersign_display")
+		if (GetObjectType(oDestination) == OBJECT_TYPE_PLACEABLE && GetHasInventory(oDestination) == TRUE && GetTag(oDestination) == "ps_usersign_display")
 		{
-			return TRUE;
+			if (GetLocalString(oDestination,"OWNER_NAME") == GetName(oPC))
+				return TRUE;
+			if (GetLocalString(oDestination, "OWNER_NAME") == "DOOMGUARD" && GetFaction(oPC) == FACTION_DOOMGUARD)
+				return TRUE;
+			return FALSE;
 		}
 		else
 		{

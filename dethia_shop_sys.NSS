@@ -92,6 +92,7 @@ displayed in the GUI files where gold usually appears.
 #include "x2_inc_itemprop"
 #include "ps_inc_time"
 #include "nwnx_sql"
+#include "ps_inc_newcrafting"
 
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
@@ -293,6 +294,18 @@ int GetItemInDB(object oItem);
 
 //Add all the items in the store to the database 
 void AddAllItemsInStoreToDatabase(object oStore);
+
+//Get the cost of an item property
+int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID);
+
+//Get the total cost of the item (manually calculated)
+int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID);
+
+//Get the cost of the item from the database (must have already been calculated)
+int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID);
+
+//Add this property to the DB - never seen it before!
+void AddPropertyToDB(itemproperty iProp);
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 //------------------------------FUNCTIONS--------------------------------//
@@ -940,7 +953,7 @@ int PS_GetItemValue(object oItem, int nSystem = 0) {
 	if (nSystem == PRICING_SYSTEM_OLD) {
 		return GetGoldPieceValue(oItem);
 	} else { //put custom logic here
-		return GetGoldPieceValue(oItem);
+		return GetCostOfItemByString(GetResRef(oItem));
 	}
 
 }
@@ -980,4 +993,107 @@ void AddAllItemsInStoreToDatabase(object oStore) {
 		oItem = GetNextItemInInventory(oStore);
 	}
 
+}
+
+int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID) {
+
+	string sQuery = "SELECT item_price FROM item_prices WHERE item_tag = '"+sItem+"'";
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) {
+		int nCost = StringToInt(SQLGetData(1));
+		return nCost;
+	}
+	return FALSE;
+
+}
+
+int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
+
+	int nCost = 0;
+	itemproperty iProp = GetFirstItemProperty(oItem);
+	
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
+	
+	while(GetIsItemPropertyValid(iProp)) {
+	
+		nCost += GetCostOfProperty(iProp, oPC);
+	
+		iProp = GetNextItemProperty(oItem);
+	}
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Final cost for "+GetName(oItem)+": "+IntToString(nCost));
+	
+	if (nCost <= 10)
+		return GetGoldPieceValue(oItem);
+	
+	return nCost;
+
+}
+
+int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
+
+	int iType = GetItemPropertyType(iProp);
+	int iSub = GetItemPropertySubType(iProp);
+	int iParam = GetItemPropertyCostTableValue(iProp);
+	int iSpecial = GetItemPropertyParam1Value(iProp);
+	
+	//Special Material
+	if (iType == 100) {
+		int costTier = GetCostTierOfMaterial(iProp);
+		if (costTier > 0)
+			return costTier*1000;
+		return 1000;
+	}
+	
+	string sQuery = "SELECT Recipe_Id, Points, Gold, Essence, Gemstone FROM recipes WHERE Type='"+IntToString(iType)+"' AND Subtype='"+IntToString(iSub)+"' AND Numerical='"+IntToString(iParam)+"' AND Special='"+IntToString(iSpecial)+"'";
+	SQLExecDirect(sQuery);
+	
+	if (SQLFetch() != SQL_ERROR) {
+		int enchant_id = StringToInt(SQLGetData(1));
+		int points = StringToInt(SQLGetData(2));
+		int gold =StringToInt(SQLGetData(3));
+		string sEssence = SQLGetData(4);
+		string sGem = SQLGetData(5);
+		
+		int nQReq = StringToInt(GetSubString(sGem, GetStringLength(sGem)-1, 1));
+		nQReq = nQReq-1;
+		
+		int nGemCost = 100;
+		if (nQReq >= 2)
+			nGemCost = 3000;
+		else if (nQReq >= 1)
+			nGemCost = 1000;
+		
+		if (enchant_id > 0) {
+			int nCost = gold*2;
+			nCost += GetCostOfItemByString(sEssence);
+			nCost += nGemCost;
+			
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Success / generated price: "+IntToString(nCost));
+			return nCost;
+		} else {
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Failed / Not found: "+sQuery);
+			AddPropertyToDB(iProp);
+		}
+	} else {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Failed: "+sQuery);
+		AddPropertyToDB(iProp);
+	}
+		
+	return FALSE;
+}
+
+void AddPropertyToDB(itemproperty iProp) {
+
+	int iType = GetItemPropertyType(iProp);
+	int iSub = GetItemPropertySubType(iProp);
+	int iParam = GetItemPropertyCostTableValue(iProp);
+	int iSpecial = GetItemPropertyParam1Value(iProp);
+	string sName = SQLEncodeSpecialChars(GetItemPropertyString(iProp));
+	
+	string sQuery = "INSERT INTO recipes SET Label='"+sName+"', Type='"+IntToString(iType)+"', Subtype='"+IntToString(iSub)+"', Numerical='"+IntToString(iParam)+"', Special='"+IntToString(iSpecial)+"'";
+	SQLExecDirect(sQuery);
+	
+	sQuery = "INSERT INTO recipes_names SET Prefix='"+sName+"'";
+	SQLExecDirect(sQuery);
+	
 }
