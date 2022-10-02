@@ -93,6 +93,7 @@ displayed in the GUI files where gold usually appears.
 #include "ps_inc_time"
 #include "nwnx_sql"
 #include "ps_inc_newcrafting"
+#include "ps_inc_newenchanting"
 
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
@@ -1020,6 +1021,13 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 	
 		iProp = GetNextItemProperty(oItem);
 	}
+	
+	//Increase price if there are enchanting slots
+	int nSlots = GetItemTotalPoints(oItem);
+	int nSlotsLeft = GetItemTotalPointsAllowed(oItem)-GetItemTotalPoints(oItem);
+	if (nSlots >= 7 && nSlotsLeft > 0)
+		nCost += (nSlotsLeft*1000);
+	
 	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Final cost for "+GetName(oItem)+": "+IntToString(nCost));
 	
 	if (nCost <= 10)
