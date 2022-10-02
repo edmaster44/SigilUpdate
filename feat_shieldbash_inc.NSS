@@ -155,8 +155,14 @@ ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
 
 }
 
+int GetIsOffensiveSpell(int spellid)
+{
+	return StringToInt(Get2DAString("spells", "HostileSetting", spellid));
+}
+
 void Arcane_Bash(object oPC, int nSpell)
 {
 
-
+	
+	
 }

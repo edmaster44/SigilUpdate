@@ -40,8 +40,6 @@ void EnableFinesse()
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_DWARVENWARAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
 	
 	
-	
-	nwnx_bg_LogFinesseRules();
 
 /*White List	
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_SHORTSWORD);

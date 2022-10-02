@@ -284,9 +284,6 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 }
 }
 
-
-
-
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
@@ -305,18 +302,6 @@ int GetIsShields (object oItem)
 }
 
 
-//A Wrapper for to Ignore Exsisting Finesse
-int GetExistingFinesse(object oItem)
-{
-    if ((GetBaseItemType(oItem) == BASE_ITEM_DAGGER) || (GetBaseItemType(oItem) ==BASE_ITEM_GLOVES )
-     ||(GetBaseItemType(oItem) == BASE_ITEM_KAMA ) ||(GetBaseItemType(oItem) == BASE_ITEM_SHORTSWORD)||(GetBaseItemType(oItem) ==BASE_ITEM_SICKLE)
-    ||(GetBaseItemType(oItem) ==BASE_ITEM_HANDAXE)||(GetBaseItemType(oItem) ==BASE_ITEM_LIGHTHAMMER)||
-    (GetBaseItemType(oItem) ==BASE_ITEM_MACE)||(GetBaseItemType(oItem) ==BASE_ITEM_RAPIER)) return TRUE;
-else
-return FALSE;
-
-
-}
 
 //Wrapper to equip effects from equipment in the proper manner.
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT)

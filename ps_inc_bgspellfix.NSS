@@ -87,7 +87,7 @@ void CountSpells(object oPC, int adjust)
    
 }
 
-void OnSeverLoadPopulateSpellSQL()
+/*void OnSeverLoadPopulateSpellSQL()
 {
    	int iCount; int iMax = 2689; string sClass;
 
@@ -97,7 +97,60 @@ void OnSeverLoadPopulateSpellSQL()
       		if(sClass != "") SQLExecDirect("INSERT IGNORE INTO `spellids` VALUES ('"+IntToString(iCount)+"');");
       		iCount++;
    	}
+}*/
+
+void PopulateSpellId(string sLabel, int iCount, string sClass, string sSchool, string sTarget, string sDesc, int Arcane)
+{
+	if(Arcane == 1) SQLExecDirect("INSERT IGNORE INTO `spellids` VALUES ('"+sLabel+"','"+sDesc+"','"+IntToString(iCount)+"','"+SQLEncodeSpecialChars(sClass)+"','"+sSchool+"','"+sTarget+"','1','0','0','0') ON DUPLICATE KEY UPDATE `arcane`=1;");
+	else SQLExecDirect("INSERT IGNORE INTO `spellids` VALUES ('"+sLabel+"','"+sDesc+"','"+IntToString(iCount)+"','"+SQLEncodeSpecialChars(sClass)+"','"+sSchool+"','"+sTarget+"','0','0','0','0');");
+
+	string sIcon = SQLEncodeSpecialChars(Get2DAString("spells","IconResRef",iCount));	
+	string sTrueName = SQLEncodeSpecialChars(GetStringByStrRef(StringToInt(Get2DAString("spells","Name",iCount))));	
+	
+
 }
+
+void OnSeverLoadPopulateSpellSQL()
+{
+	int iCount; int iMax = 2689; string sClass; string sLabel; string sRemoved; string sSchool;
+	 string sWand; string sPotion; string sTarget; string sDesc;
+	
+	SQLExecDirect("DELETE FROM `spellids`;");
+	
+	while(iMax > iCount)
+	{	
+		sClass = Get2DAString("spells", "Wiz_Sorc", iCount);
+		
+		if(sClass != "")
+		{
+			sRemoved = Get2DAString("spells", "REMOVED", iCount);
+			if(sRemoved != "1")
+			{
+				sLabel = SQLEncodeSpecialChars(Get2DAString("spells", "label", iCount));
+				sSchool = SQLEncodeSpecialChars(Get2DAString("spells", "School", iCount));
+				sTarget = SQLEncodeSpecialChars(Get2DAString("spells", "TargetingUI", iCount));
+				sDesc = SQLEncodeSpecialChars(GetStringByStrRef(StringToInt(Get2DAString("spells", "SpellDesc", iCount))));
+				PopulateSpellId(sLabel,iCount,sClass,sSchool,sTarget,sDesc,1);							
+			}
+		}
+		else if(Get2DAString("spells", "Bard", iCount) != ""
+		|| Get2DAString("spells", "Cleric", iCount) != ""
+		|| Get2DAString("spells", "Druid", iCount) != ""
+		|| Get2DAString("spells", "Paladin", iCount) != ""
+		|| Get2DAString("spells", "Ranger", iCount) != "")		
+		{
+				sLabel = SQLEncodeSpecialChars(Get2DAString("spells", "label", iCount));
+				sSchool = SQLEncodeSpecialChars(Get2DAString("spells", "School", iCount));
+				sTarget = SQLEncodeSpecialChars(Get2DAString("spells", "TargetingUI", iCount));
+				sDesc = SQLEncodeSpecialChars(GetStringByStrRef(StringToInt(Get2DAString("spells", "SpellDesc", iCount))));
+				PopulateSpellId(sLabel,iCount,sClass,sSchool,sTarget,sDesc,0);
+		}		
+		
+		iCount++;
+	}	
+}
+
+
 
 int GetClassPosition(object oPC)
 {

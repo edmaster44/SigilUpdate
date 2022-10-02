@@ -566,6 +566,7 @@ void main()
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
+		OnSeverLoadPopulateSpellSQL();
 		ConvertBio(oPC);
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
