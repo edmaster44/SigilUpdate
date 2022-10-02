@@ -481,6 +481,11 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		{	iItemCost	= GetLocalInt(oItem, "DS_SELL_PRICE");	}
 		//Finally add the item details into the GUI
 		
+		//Debug Stuff
+		int nOldPrice = PS_GetItemValue(oItem, 0);
+		int nNewPrice = PS_GetItemValue(oItem, 1);
+		SendMessageToPC(oPC, "Old price: "+IntToString(nOldPrice)+" vs. New: "+IntToString(nNewPrice));
+		
 		if (GetItemUseable(oItem, oPC) == FALSE){
 			//SendMessageToPC(oPC, "You can't use "+sItemName);
 			AddListBoxRow(oPC, "dethia_shop", "store_items", IntToString(iRowID),
@@ -1022,7 +1027,7 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 		iProp = GetNextItemProperty(oItem);
 	}
 	
-	//Increase price if there are enchanting slots
+	//Increase price if there are enchanting slots on an otherwise slotted item
 	int nSlots = GetItemTotalPoints(oItem);
 	int nSlotsLeft = GetItemTotalPointsAllowed(oItem)-GetItemTotalPoints(oItem);
 	if (nSlots >= 7 && nSlotsLeft > 0)
@@ -1072,9 +1077,11 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 			nGemCost = 1000;
 		
 		if (enchant_id > 0) {
-			int nCost = gold*2;
+			int nCost = gold;
 			nCost += GetCostOfItemByString(sEssence);
 			nCost += nGemCost;
+			
+			nCost *= 2;
 			
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetItemPropertyString(iProp)+" - Success / generated price: "+IntToString(nCost));
 			return nCost;
