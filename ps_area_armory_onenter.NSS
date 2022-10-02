@@ -90,6 +90,21 @@ void main() {
 	   		location lSpawnpoint = GetLocation(oWP);  
 	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_armory_laborer2", lSpawnpoint, FALSE, "ps_armory_worker5");    
 	  	}
+  
+	  	if(GetObjectByTag("ps_armory_archivist") == OBJECT_INVALID) {
+		
+	   		object oWP = GetWaypointByTag("wp_armory_archivist");
+	   		location lSpawnpoint = GetLocation(oWP);  
+	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_armory_archivist", lSpawnpoint, FALSE, "ps_armory_archivist");    
+	  	}
+  
+	  	if(GetObjectByTag("ps_armory_draftswoman") == OBJECT_INVALID) {
+		
+	   		object oWP = GetWaypointByTag("wp_armory_draftswoman");
+	   		location lSpawnpoint = GetLocation(oWP);  
+	   		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_armory_draftswoman", lSpawnpoint, FALSE, "ps_armory_draftswoman");    
+	  	}
+		
 		
   		SetGlobalInt("ArmoryEnterLock", 0);
  	}

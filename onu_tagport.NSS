@@ -5,4 +5,8 @@ void main() {
   object oPC = GetLastUsedBy();
   object oWP = GetWaypointByTag(sDestTag);
   TransportToWaypoint(oPC, oWP);
+  
+  string sEvent = GetLocalString(OBJECT_SELF, "PORT_EVENT");
+  if (sEvent != "")
+  	DelayCommand(0.2f, ExecuteScript(sEvent, OBJECT_SELF));
 }  
