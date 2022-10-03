@@ -154,7 +154,7 @@ void DS_CloseShop(object oPC, object oStore);
 //object	oPC			= the player who is shopping
 //int		iMarkUp		= the mark-up in the shop for the various items
 //int		iMarkDown	= the mark-down in the shop for the various items
-void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0, int storeType = 0);
+void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0);
 
 //This function retrieves the NPC or placeable that is running oStore.
 object DS_GetStoreKeeper(object oStore);
@@ -181,7 +181,7 @@ string DS_ConvertCoinsToGold(int iCoins);
 //object	iCategory	= the category of the items we wish to display
 //int		iMarkUp		= the mark up of the store
 //int		iMarkDown	= the mark down of the store
-void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown, int storeType = 0);
+void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown);
 
 //This function checks if the specified store will not buy the specified item.
 //Returns TRUE if the item CANNOT be purchased, false otherwise
@@ -288,7 +288,7 @@ int GetItemUseLimited(object oItem, object oPC);
 int GetItemUseable(object oItem, object oPC);
 
 //A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem, int nSystem = 0);
+int PS_GetItemValue(object oItem);
 
 //get whether the item is in the database
 int GetItemInDB(object oItem);
@@ -338,7 +338,7 @@ void DS_CloseShop(object oPC, object oStore)
 	ExecuteScript(GetEventHandler(oStore, STORE_CLOSE), oStore);
 }
 
-void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0, int storeType = 0)
+void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 {//First we check if the shop is already open
 	//SendMessageToPC(oPC, "opening new shop");
 	object	oCustomer	= GetLocalObject(oStore, "DS_CUSTOMER");	//The currently registered customer
@@ -430,7 +430,7 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0, 
 	SetGUIObjectText(oPC, "dethia_shop", "sg_gc", -1, DS_ConvertCoinsToGold(iStoreGold));
 
 	//Now that basic information has been set we proceed to populate the shop's inventory
-	DS_AddItemsToShop(oStore, oPC, DS_ARMOR, iMarkUp, iMarkDown, storeType);
+	DS_AddItemsToShop(oStore, oPC, DS_ARMOR, iMarkUp, iMarkDown);
 
 	//Lastly we execute the store's OnOpen event script
 	ExecuteScript(GetEventHandler(oStore, STORE_OPEN), oStore);
@@ -448,11 +448,9 @@ string DS_ConvertCoinsToSilver(int iCoins)
 string DS_ConvertCoinsToGold(int iCoins)
 {	return IntToString((iCoins - iCoins%AuC)/AuC);	}
 
-void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown, int storeType = 0)
+void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown)
 {//We first empty the shop of currently available items
 	ClearListBox(oPC, "dethia_shop", "store_items");
-	
-	SendMessageToPC(oPC, "Store type chosen: "+IntToString(storeType));
 
 	int		iRowID	= 0;	//The listbox row item ID
 	object	oItem	= GetFirstItemInInventory(oStore);	//Get the first item in the store
@@ -470,12 +468,17 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 			SetItemStackSize(oItem, 99, FALSE);
 			sStackSize	= IntToString(GetItemStackSize(oItem));
 		}
-		string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
-		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
+		
 		float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
+		
+		//putting debug into title, because why not. . 
+		int		iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		string	sItemName	= GetName(oItem) + " (" + sStackSize + ") - "+IntToString(iOldCost);
+		
+		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
 		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
 				fCostMod	+= (iMarkUp + iMarkDown)/200.0f;
-		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem, storeType)*fCostMod)/GetItemStackSize(oItem));
+		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
@@ -484,8 +487,8 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		//Finally add the item details into the GUI
 		
 		//Debug Stuff
-		int nOldPrice = PS_GetItemValue(oItem, 0);
-		int nNewPrice = PS_GetItemValue(oItem, 1);
+		int nOldPrice = GetGoldPieceValue(oItem);
+		int nNewPrice = PS_GetItemValue(oItem);
 		SendMessageToPC(oPC, GetName(oItem)+" - Old price: "+IntToString(nOldPrice)+" vs. New: "+IntToString(nNewPrice));
 		
 		if (GetItemUseable(oItem, oPC) == FALSE){
@@ -956,48 +959,42 @@ int GetItemUseable(object oItem, object oPC)
 }
 
 //A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem, int nSystem = 0) {
+int PS_GetItemValue(object oItem) {
 
-	if (nSystem == PRICING_SYSTEM_OLD) {
-		return GetGoldPieceValue(oItem);
-	} else { //put custom logic here
-	
-		//Some initial variables
-		int nCost = GetLocalInt(oItem, "PRICE");
-		int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
-		int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
-		string sItem = GetResRef(oItem);
+	//Some initial variables
+	int nCost = GetLocalInt(oItem, "PRICE");
+	int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
+	int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+	string sItem = GetResRef(oItem);
 		
-		//Is nCost valid? Do the Gold piece values line up? (tells us whether or not this item has been further enchanted)
-		//Have we double checked this item's value recently? If no to any of these, update!
-		if (nCost <= 0 || nOldCost != GetGoldPieceValue(oItem) ||
-		   (nTime > 0 && PS_GetTimestamp_Age_Days(oItem, "PRICE_TIMESTAMP") >= 1)) {
+	//Is nCost valid? Do the Gold piece values line up? (tells us whether or not this item has been further enchanted)
+	//Have we double checked this item's value recently? If no to any of these, update!
+	if (nCost <= 0 || nOldCost != GetGoldPieceValue(oItem) ||
+	   (nTime > 0 && PS_GetTimestamp_Age_Days(oItem, "PRICE_TIMESTAMP") >= 1)) {
 		   
-		   int nDBCost = 0;
-		   int nDBOldCost = 0;
+		int nDBCost = 0;
+		int nDBOldCost = 0;
 		   
-		   //Check whether this item is in the DB
-		   string sQuery = "SELECT item_price, item_oldvalue FROM item_prices WHERE item_tag = '"+sItem+"'";
-		   SQLExecDirect(sQuery);
-		   if (SQLFetch() != SQL_ERROR) {
-				nDBCost = StringToInt(SQLGetData(1));
-				nDBOldCost = StringToInt(SQLGetData(2));
-	       }
+		//Check whether this item is in the DB
+		string sQuery = "SELECT item_price, item_oldvalue FROM item_prices WHERE item_tag = '"+sItem+"'";
+		SQLExecDirect(sQuery);
+		if (SQLFetch() != SQL_ERROR) {
+			nDBCost = StringToInt(SQLGetData(1));
+			nDBOldCost = StringToInt(SQLGetData(2));
+	    }
 		   
-		   if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
-		   		nCost = nDBCost;
-		   } else {
-		   		nCost = GetCostOfItem(oItem);
-		   }
-		   
-		   SetLocalInt(oItem, "PRICE", nCost);
-		   PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
-		   SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
+		if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
+		   	nCost = nDBCost;
+		} else {
+		   	nCost = GetCostOfItem(oItem);
 		}
-		
-	
-		return nCost;
+		   
+		SetLocalInt(oItem, "PRICE", nCost);
+		PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
+		SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
 	}
+		
+	return nCost;
 
 }
 
