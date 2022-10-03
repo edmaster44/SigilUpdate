@@ -451,6 +451,8 @@ string DS_ConvertCoinsToGold(int iCoins)
 void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown, int storeType = 0)
 {//We first empty the shop of currently available items
 	ClearListBox(oPC, "dethia_shop", "store_items");
+	
+	SendMessageToPC(oPC, "Store type chosen: "+IntToString(storeType));
 
 	int		iRowID	= 0;	//The listbox row item ID
 	object	oItem	= GetFirstItemInInventory(oStore);	//Get the first item in the store
@@ -484,7 +486,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		//Debug Stuff
 		int nOldPrice = PS_GetItemValue(oItem, 0);
 		int nNewPrice = PS_GetItemValue(oItem, 1);
-		SendMessageToPC(oPC, "Old price: "+IntToString(nOldPrice)+" vs. New: "+IntToString(nNewPrice));
+		SendMessageToPC(oPC, GetName(oItem)+" - Old price: "+IntToString(nOldPrice)+" vs. New: "+IntToString(nNewPrice));
 		
 		if (GetItemUseable(oItem, oPC) == FALSE){
 			//SendMessageToPC(oPC, "You can't use "+sItemName);
@@ -959,7 +961,42 @@ int PS_GetItemValue(object oItem, int nSystem = 0) {
 	if (nSystem == PRICING_SYSTEM_OLD) {
 		return GetGoldPieceValue(oItem);
 	} else { //put custom logic here
-		return GetCostOfItemByString(GetResRef(oItem));
+	
+		//Some initial variables
+		int nCost = GetLocalInt(oItem, "PRICE");
+		int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
+		int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+		string sItem = GetResRef(oItem);
+		
+		//Is nCost valid? Do the Gold piece values line up? (tells us whether or not this item has been further enchanted)
+		//Have we double checked this item's value recently? If no to any of these, update!
+		if (nCost <= 0 || nOldCost != GetGoldPieceValue(oItem) ||
+		   (nTime > 0 && PS_GetTimestamp_Age_Days(oItem, "PRICE_TIMESTAMP") >= 1)) {
+		   
+		   int nDBCost = 0;
+		   int nDBOldCost = 0;
+		   
+		   //Check whether this item is in the DB
+		   string sQuery = "SELECT item_price, item_oldvalue FROM item_prices WHERE item_tag = '"+sItem+"'";
+		   SQLExecDirect(sQuery);
+		   if (SQLFetch() != SQL_ERROR) {
+				nDBCost = StringToInt(SQLGetData(1));
+				nDBOldCost = StringToInt(SQLGetData(2));
+	       }
+		   
+		   if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
+		   		nCost = nDBCost;
+		   } else {
+		   		nCost = GetCostOfItem(oItem);
+		   }
+		   
+		   SetLocalInt(oItem, "PRICE", nCost);
+		   PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
+		   SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
+		}
+		
+	
+		return nCost;
 	}
 
 }
