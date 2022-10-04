@@ -1,12 +1,21 @@
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
 #include "ps_inc_functions"
+#include "aaa_constants"
 #include "ps_inc_equipment"
 #include "ps_inc_advscript"
 #include "nw_i0_spells"
 #include "x0_i0_match"
 #include "ps_inc_bgspellfix"
 #include "x2_inc_itemprop"
+
+
+
+int GetIsOffensiveSpell(int spellid)
+{
+	return StringToInt(Get2DAString("spells", "HostileSetting", spellid));
+}
+
 
 void Wild_Magic(object oPC,object oTarget, int nSpell)
 {
@@ -15,7 +24,7 @@ if(GetIsOffensiveSpell(nSpell) == 0 || GetLocalInt(oPC,"NoWildMagic") == 1) retu
 SetLocalInt(oPC,"NoWildMagic",1);
 DelayCommand(3.0f,DeleteLocalInt(oPC,"NoWildMagic"));
 int iCastLvl = GetSpellLevel(nSpell);
-if(nSpell == 1521) iCastLvl = 3;
+if(nSpell == SPELLFEAT_ARCANEBASH) iCastLvl = 3;
 iCastLvl = iCastLvl + Random(4);
 	if(iCastLvl > 9) iCastLvl = 9;
 	
@@ -35,7 +44,7 @@ iCastLvl = iCastLvl + Random(4);
 		if(GetIsOffensiveSpell(iWildSpell)) break;
 	}
 	
-	FloatingTextStringOnCreature("<I>*Wild Magic: "+GetStringByStrRef(StringToInt(Get2DAString("spells", "Name", iWildSpell)))+"*", oCaster, TRUE, 3.0f);
+	FloatingTextStringOnCreature("<I>*Wild Magic: "+GetStringByStrRef(StringToInt(Get2DAString("spells", "Name", iWildSpell)))+"*", oPC, TRUE, 3.0f);
 	ExecuteScript(Get2DAString("spells", "ImpactScript", iWildSpell), oPC);		
 	
 	

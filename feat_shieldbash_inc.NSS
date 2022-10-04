@@ -4,6 +4,7 @@
 #include "ps_inc_equipment"
 #include "ps_inc_advscript"
 #include "nw_i0_spells"
+#include "ed_wildmagic"
 #include "x0_i0_match"
 #include "ps_inc_melee"
 #include "x2_inc_itemprop"
@@ -42,12 +43,23 @@ int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			{
+				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+					Wild_Magic(oPC, oTarget, GetSpellId());
+			}
+
 }
 
 if (iHit == 2)
 {
 nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			{
+				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+					Wild_Magic(oPC, oTarget, GetSpellId());
+			}
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
@@ -90,10 +102,22 @@ int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			{
+				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+					Wild_Magic(oPC, oTarget, GetSpellId());
+			}
+
 }
 
 if (iHit == 2)
 {
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			{
+				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+					Wild_Magic(oPC, oTarget, GetSpellId());
+			}
+
 nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
@@ -138,12 +162,23 @@ int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			{
+				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+					Wild_Magic(oPC, oTarget, GetSpellId());
+			}
+
 }
 
 if (iHit == 2)
 {
 nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			{
+				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+					Wild_Magic(oPC, oTarget, GetSpellId());
+			}
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
@@ -155,14 +190,48 @@ ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
 
 }
 
-int GetIsOffensiveSpell(int spellid)
+void DeactivateArcaneBash(object oPC, int id, int idneeded)
 {
-	return StringToInt(Get2DAString("spells", "HostileSetting", spellid));
+	AssignCommand(oPC, ClearAllActions());
+
+	if (id != GetLocalInt(oPC, "ArcaneBashId") && idneeded == 1 || GetLocalInt(oPC, "ArcaneBashOn") == 0)
+		return;
+	if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+		FloatingTextStringOnCreature("*Arcane Bash Deactivated!*", oPC, TRUE, 3.0f);
+		DeleteLocalInt(oPC, "ArcaneBashOn");
+
+	RemoveAnySpellEffects(SPELLFEAT_ARCANEBASH, oPC);
+
 }
+
 
 void Arcane_Bash(object oPC, int nSpell)
 {
 
-	
+RemoveAnySpellEffects(SPELLFEAT_ARCANEBASH, oPC);
+
+	AssignCommand(oPC, ClearAllActions());
+
+	if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+	{
+		SendMessageToPC(oPC, "Arcane Bash is already activated. Please wait 45 seconds.");
+		return;
+	}
+
+	effect eVfx = EffectNWN2SpecialEffectFile("sp_bewilderment");
+	eVfx = SetEffectSpellId(eVfx, nSpell);
+	eVfx = ExtraordinaryEffect(eVfx);
+
+	if (nSpell == SPELLFEAT_ARCANEBASH)
+		FloatingTextStringOnCreature("*Arcane Bash Activated!*", oPC, TRUE, 3.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVfx, oPC, 45.0f);
+
+	int id = Random(1000);
+
+	if (nSpell == SPELLFEAT_ARCANEBASH)
+		SetLocalInt(oPC, "ArcaneBashOn", 1);
+	SetLocalInt(oPC, "ArcaneBashId", id);
+
+	DelayCommand(45.0f, DeactivateArcaneBash(oPC, id, 1));	
 	
 }
