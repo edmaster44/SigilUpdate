@@ -246,8 +246,8 @@ void RestFinish(object oPC)
 	//if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
 	
 	
-	if (PS_NeedsTemplateClassAbilityFix(oPC) == TRUE) TemplateRacialAdjust(oPC, oESSENCE, FALSE);
-	else TemplateRacialAdjust(oPC, oESSENCE, TRUE);
+
+	 TemplateRacialAdjust(oPC, oESSENCE, TRUE);
 	
 	if (GetLocalInt(oESSENCE, "TempChange") != 1)
 	{	

@@ -58,5 +58,5 @@ void main(string sTag, int nMarkUp, int nMarkDown, int storeType)
 	object oStore = GetStoreFromStoreArea(sTag);
 	AddAllItemsInStoreToDatabase(oStore);
 	
-	DS_OpenShop(oStore, oPC, nMarkUp, nMarkDown, storeType);
+	DS_OpenShop(oStore, oPC, nMarkUp, nMarkDown);
 }
