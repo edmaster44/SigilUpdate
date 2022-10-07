@@ -1016,13 +1016,14 @@ int GetItemInDB(object oItem) {
 
 //Add all the items in this store to the database
 void AddAllItemsInStoreToDatabase(object oStore) {
-	
+
+	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 	object oItem = GetFirstItemInInventory(oStore);
 	while(GetIsObjectValid(oItem)) {
 	
 		string sName = GetName(oItem);
 		string sTag = GetResRef(oItem);
-		int nPrice = GetGoldPieceValue(oItem);
+		int nPrice = FloatToInt(GetGoldPieceValue(oItem)*fCostMod);
 		int nOldPrice = GetGoldPieceValue(oItem);
 		
 		if (!GetItemInDB(oItem)) {
