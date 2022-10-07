@@ -149,7 +149,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_AAF_DMCB_HELM", "#1#2#3#4#5#6#7#101#102#" );
 	SetLocalString( oModule, "XC_P_AAF_HD_HELM", "#1#2#3#4#" );
 	SetLocalString( oModule, "XC_P_AAF_LE_HELM", "#1#2#3#4#5#99#150#" );
-	SetLocalString( oModule, "XC_P_AAF_PF_BELT", "#51#52#53#" );
+	SetLocalString( oModule, "XC_P_AAF_PF_BELT", "#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_AAF_PF_BOOTS", "#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_AAF_PF_HELM", "#1#2#3#4#5#6#7#8#20#45#46#47#48#49#50#97#" );
 	SetLocalString( oModule, "XC_P_AAF_PH_HELM", "#1#2#3#5#6#7#8#10#11#51#52#53#58#59#" );
@@ -163,7 +163,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_AAM_DMCB_HELM", "#1#2#3#4#5#6#7#101#102#" );
 	SetLocalString( oModule, "XC_P_AAM_HD_HELM", "#1#2#3#4#" );
 	SetLocalString( oModule, "XC_P_AAM_LE_HELM", "#1#2#3#4#5#99#150#" );
-	SetLocalString( oModule, "XC_P_AAM_PF_BELT", "#51#52#53#" );
+	SetLocalString( oModule, "XC_P_AAM_PF_BELT", "#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_AAM_PF_BOOTS", "#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_AAM_PF_HELM", "#1#2#3#4#5#6#7#8#20#45#46#47#48#49#50#" );
 	SetLocalString( oModule, "XC_P_AAM_PH_HELM", "#1#2#3#5#6#7#8#10#11#51#52#53#58#59#" );
@@ -204,7 +204,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_DDF_LS_GLOVES", "#1#2#" );
 	SetLocalString( oModule, "XC_P_DDF_NK_BODY", "#1#" );
 	SetLocalString( oModule, "XC_P_DDF_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_DDF_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_DDF_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_DDF_PF_BODY", "#1#2#3#99#" );
 	SetLocalString( oModule, "XC_P_DDF_PF_BOOTS", "#1#2#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_DDF_PF_GLOVES", "#1#2#3#4#" );
@@ -254,7 +254,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_DDM_LS_GLOVES", "#1#2#" );
 	SetLocalString( oModule, "XC_P_DDM_NK_BODY", "#1#6#" );
 	SetLocalString( oModule, "XC_P_DDM_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_DDM_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_DDM_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_DDM_PF_BODY", "#1#2#3#99#" );
 	SetLocalString( oModule, "XC_P_DDM_PF_BOOTS", "#1#2#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_DDM_PF_GLOVES", "#1#2#3#4#" );
@@ -315,7 +315,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_EEF_MPHA_BOOTS", "#1#2#3#4#5#6#7#" );
 	SetLocalString( oModule, "XC_P_EEF_MPHA_GLOVES", "#1#2#3#4#5#6#7#8#9#10#" );
 	SetLocalString( oModule, "XC_P_EEF_DMCB_HELM", "#1#2#3#4#5#6#7#101#102#103#" );
-	SetLocalString( oModule, "XC_P_EEF_PF_BELT", "#1#2#51#52#53#181#" );
+	SetLocalString( oModule, "XC_P_EEF_PF_BELT", "#1#2#3#51#52#53#181#" );
 	SetLocalString( oModule, "XC_P_EEF_PF_BODY", "#1#2#3#50#51#52#53#54#55#56#57#58#59#70#73#80#81#82#83#84#85#97#98#99#100#101#102#103#160#161#162#163#164#165#166#170#171#181#182#199#200#202#216#" );
 	SetLocalString( oModule, "XC_P_EEF_PF_BOOTS", "#1#2#69#70#71#72#160#161#162#163#164#166#170#200#" );
 	SetLocalString( oModule, "XC_P_EEF_PF_GLOVES", "#1#2#3#4#" );
@@ -371,7 +371,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_EEM_MP_CLOAK", "#11#" );
 	SetLocalString( oModule, "XC_P_EEM_NK_BODY", "#1#2#3#4#5#6#7#20#70#256#" );
 	SetLocalString( oModule, "XC_P_EEM_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_EEM_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_EEM_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_EEM_PF_BODY", "#1#2#3#50#51#52#53#54#55#56#57#99#160#161#162#163#164#165#166#170#171#200#202#216#" );
 	SetLocalString( oModule, "XC_P_EEM_PF_BOOTS", "#1#2#69#70#71#72#160#161#162#163#164#166#170#200#" );
 	SetLocalString( oModule, "XC_P_EEM_PF_GLOVES", "#1#2#3#4#" );
@@ -571,7 +571,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_GGF_LS_GLOVES", "#1#2#" );
 	SetLocalString( oModule, "XC_P_GGF_NK_BODY", "#1#" );
 	SetLocalString( oModule, "XC_P_GGF_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_GGF_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_GGF_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_GGF_PF_BODY", "#1#2#3#99#" );
 	SetLocalString( oModule, "XC_P_GGF_PF_BOOTS", "#1#2#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_GGF_PF_GLOVES", "#1#2#3#4#" );
@@ -621,7 +621,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_GGM_LS_GLOVES", "#1#2#" );
 	SetLocalString( oModule, "XC_P_GGM_NK_BODY", "#1#6#" );
 	SetLocalString( oModule, "XC_P_GGM_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_GGM_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_GGM_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_GGM_PF_BODY", "#1#2#3#99#" );
 	SetLocalString( oModule, "XC_P_GGM_PF_BOOTS", "#1#2#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_GGM_PF_GLOVES", "#1#2#3#4#" );
@@ -670,7 +670,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_OOF_LS_GLOVES", "#1#2#" );
 	SetLocalString( oModule, "XC_P_OOF_NK_BODY", "#1#" );
 	SetLocalString( oModule, "XC_P_OOF_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_OOF_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_OOF_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_OOF_PF_BODY", "#1#2#3#99#" );
 	SetLocalString( oModule, "XC_P_OOF_PF_BOOTS", "#1#2#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_OOF_PF_GLOVES", "#1#2#3#4#" );
@@ -719,7 +719,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_OOM_LS_GLOVES", "#1#2#" );
 	SetLocalString( oModule, "XC_P_OOM_NK_BODY", "#1#256#" );
 	SetLocalString( oModule, "XC_P_OOM_NK_GLOVES", "#1#2#3#4#" );
-	SetLocalString( oModule, "XC_P_OOM_PF_BELT", "#1#2#51#52#53#" );
+	SetLocalString( oModule, "XC_P_OOM_PF_BELT", "#1#2#3#51#52#53#" );
 	SetLocalString( oModule, "XC_P_OOM_PF_BODY", "#1#2#3#99#" );
 	SetLocalString( oModule, "XC_P_OOM_PF_BOOTS", "#1#2#69#70#71#72#" );
 	SetLocalString( oModule, "XC_P_OOM_PF_GLOVES", "#1#2#3#4#" );
@@ -755,6 +755,7 @@ void main() {
 	SetLocalString( oModule, "XC_c_lizman_CH_BODY", "#1#2#3#4#5#" );
 	SetLocalString( oModule, "XC_c_lizman_SC_BODY", "#1#2#" );
 	SetLocalString( oModule, "XC_c_lizman_PF_BODY", "#1#2#3#" );
+	SetLocalString( oModule, "XC_c_lizman_PF_BELT", "#3#" );
 	SetLocalString( oModule, "XC_c_lizman_HD_BODY", "#1#2#3#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_BODY", "#1#2#3#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_BELT", "#2#3#" );
@@ -765,7 +766,7 @@ void main() {
 	SetLocalString( oModule, "XC_c_kobold_LE_BODY", "#1#2#" );
 	SetLocalString( oModule, "XC_c_kobold_NK_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_kobold_PF_BODY", "#1#2#" );
-	SetLocalString( oModule, "XC_c_kobold_PF_BELT", "#1#" );
+	SetLocalString( oModule, "XC_c_kobold_PF_BELT", "#1#3#" );
 	SetLocalString( oModule, "XC_c_kobold_PF_HELM", "#5#7#8#10#11#" );
 	SetLocalString( oModule, "XC_c_kobold_PH_HELM", "#1#2#3#5#6#10#" );
 	SetLocalString( oModule, "XC_c_kobold_SC_HELM", "#1#" );
@@ -794,6 +795,13 @@ void main() {
 	SetLocalString( oModule, "XC_c_goblin_SCOD_HELM", "#1#8#18#22#23#24#25#" );
 	SetLocalString( oModule, "XC_c_wolfwinter_CL_BODY", "#1#2#3#4#5#10#" );
 	SetLocalString( oModule, "XC_c_shepard_CL_BODY", "#1#2#3#4#5#10#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_BA_HELM", "#3#4#5#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_CL_HELM", "#2#3#4#5#9#13#14#15#17#18#19#20#21#22#23#24#25#26#27#28#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_HD_HELM", "#1#2#3#4#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_LE_HELM", "#1#2#3#4#5#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_PF_HELM", "#5#8#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_PH_HELM", "#1#5#6#11#" );
+	SetLocalString( oModule, "XC_c_reeBeholder_SC_HELM", "#1#" );
 
   /*--------------------------------------------------------------------------*\
   |                               ArmorParts                                   |
@@ -1165,6 +1173,7 @@ void main() {
 	SetLocalString( oModule, "XC_AVT_ree_minotaur_BODY", "#0#" );
 	SetLocalString( oModule, "XC_AVT_c_wolfwinter_BODY", "#0#" );
 	SetLocalString( oModule, "XC_AVT_c_shepard_BODY", "#0#" );
+	SetLocalString( oModule, "XC_AVT_c_reeBeholder_HELM", "#0#2#4#5#6#7#8#9#16#17#21#" );
 					
 	//Here's the part with the hairstyles!
 	//Lightfoot Halfling, Strongheart Halfling
@@ -1193,16 +1202,16 @@ void main() {
 	SetLocalString( oModule, "XC_HAIR_P_HFF_HAIR", "#1#2#3#30#58#85#91#92#93#94#95#99#101#102#104#107#110#" );
 	SetLocalString( oModule, "XC_HAIR_P_HFM_HAIR", "#1#2#3#58#85#89#94#95#96#97#98#" );
 	//Human, Aasimar, Half-Elf, Yuan-Ti Pureblood, Half-Drow, Plumach, Erinyes
-	string sHumanF = "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#22#25#26#27#28#29#30#41#42#50#51#52#53#54#55#56#57#58#59#60#61#62#63#66#67#68#69#70#71#72#73#74#75#76#77#78#79#80#81#82#83#84#85#86#87#88#89#90#91#92#93#94#95#96#97#98#99#101#102#104#106#107#108#109#110#111#112#113#114#115#116#117#118#119#120#";
-	sHumanF += "121#122#123#124#125#126#127#128#129#130#131#132#133#134#135#136#137#138#139#140#141#142#143#144#145#146#147#148#149#150#151#152#153#154#155#156#157#158#159#160#161#162#163#164#165#166#167#168#169#170#171#172#173#174#175#176#177#178#179#180#181#182#183#184#185#186#187#188#189#190#191#192#193#194#195#196#197#198#199#200#201#202#203#204#205#206#207#208#209#210#211#212#213#214#215#216#217#218#219#220#221#";
+	string sHumanF = "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#22#25#26#27#28#29#30#41#42#50#51#52#53#54#55#56#57#58#59#60#61#62#63#66#67#68#69#70#71#72#73#74#75#76#77#78#79#80#81#82#83#84#85#86#87#88#89#90#91#92#93#94#95#96#97#98#99#101#102#104#106#107#108#109#110#111#112#113#114#115#116#117#118#119#120#121#122#123#124#125#126#127#128#129#130#131#132#133#134#135#136#137#138#139#140#141#142#143#144#145#146#147#148#149#150#";
+	sHumanF += "151#152#153#154#155#156#157#158#159#160#161#162#163#164#165#166#167#168#169#170#171#172#173#174#175#176#177#178#179#180#181#182#183#184#185#186#187#188#189#190#191#192#193#194#195#196#197#198#199#200#201#202#203#204#205#206#207#208#209#210#211#212#213#214#215#216#217#218#219#220#221#";
 	SetLocalString( oModule, "XC_HAIR_P_HHF_HAIR", sHumanF);
 	SetLocalString( oModule, "XC_HAIR_P_HHM_HAIR", "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#22#23#24#25#37#50#60#66#67#68#69#70#71#72#73#74#75#79#80#81#82#94#121#122#123#124#125#126#127#128#129#130#131#132#133#134#135#136#137#138#139#140#141#142#143#144#145#146#147#148#149#150#151#152#153#154#155#156#157#158#159#160#161#162#163#164#165#166#167#168#169#" );
 	//Air Genasi
 	SetLocalString( oModule, "XC_HAIR_P_HIF_HAIR", "#1#2#3#63#94#" );
 	SetLocalString( oModule, "XC_HAIR_P_HIM_HAIR", "#1#2#3#94#" );
 	//Tiefling, Succubus/Incubus, 
-	string sHumanTF = "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#42#50#51#52#54#56#57#58#59#60#61#62#63#64#65#94#100##106#107#108#109#110#111#112#113#114#115#116#117#118#119#120#";
-	sHumanTF += "121#122#123#124#125#126#127#128#129#130#131#132#133#134#135#136#137#138#139#140#141#142#143#144#145#146#147#148#149#150#151#152#153#154#155#156#157#158#159#160#161#162#163#164#165#166#167#168#169#170#171#172#173#174#175#176#177#178#179#180#181#182#183#184#185#186#187#188#189#190#191#192#193#194#195#196#197#198#199#200#201#202#203#204#205#206#207#208#209#210#211#212#213#214#215#216#217#218#219#220#221#";
+	string sHumanTF = "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#42#50#51#52#54#56#57#58#59#60#61#62#63#64#65#94#100##106#107#108#109#110#111#112#113#114#115#116#117#118#119#120#121#122#123#124#125#126#127#128#129#130#131#132#133#134#135#136#137#138#139#140#141#142#143#144#145#146#147#148#149#150#";
+	sHumanTF += "151#152#153#154#155#156#157#158#159#160#161#162#163#164#165#166#167#168#169#170#171#172#173#174#175#176#177#178#179#180#181#182#183#184#185#186#187#188#189#190#191#192#193#194#195#196#197#198#199#200#201#202#203#204#205#206#207#208#209#210#211#212#213#214#215#216#217#218#219#220#221#";
 	SetLocalString( oModule, "XC_HAIR_P_HTF_HAIR", sHumanTF);
 	SetLocalString( oModule, "XC_HAIR_P_HTM_HAIR", "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#22#23#24#25#26#50#51#52#53#54#94#121#122#123#124#125#126#127#128#129#130#131#132#133#134#135#136#137#138#139#140#141#142#143#144#145#146#147#148#149#150#151#152#153#154#155#156#157#158#159#160#161#162#163#164#165#166#167#168#169#" );
 	//Water Genasi
