@@ -460,20 +460,23 @@ int GetFaction(object oPC) {
 //Get the faction rank of the PC
 int GetFactionRank(object oPC) {
 
+	object oBadge = GetFactionBadgeObject(oPC);
 	if (!GetOnNewFactionSystem()) {
-		object oItem = GetFactionBadgeObject(oPC);
-	    if(GetIsObjectValid(oItem))
+	    if(GetIsObjectValid(oBadge))
 	    {
-		 	int nFactionRank = GetLocalInt(oItem,"FactionRank");
+		 	int nFactionRank = GetLocalInt(oBadge,"FactionRank");
 			return nFactionRank;
 	    }
 	}
 	
 	string sID = PS_GetCharID(oPC);
-	string sQuery = "SELECT faction_rank FROM characterfactions WHERE character_id = "+sID;
+	string sQuery = "SELECT faction_id, faction_rank FROM characterfactions WHERE character_id = "+sID;
 	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) { 
-		int faction_rank = StringToInt(SQLGetData(1));
+		int iFaction = StringToInt(SQLGetData(1));
+		int faction_rank = StringToInt(SQLGetData(2));
+		SetLocalInt(oBadge, "FactionRank", faction_rank);
+		SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, faction_rank));
 		return faction_rank;
 	}
 	
@@ -568,10 +571,10 @@ void ToggleFactionSystem(object oPC = OBJECT_INVALID) {
 //Promte in the faction - new code
 void PromoteInFaction(object oDM, object oPC) {
 	
+	object oBadge = GetFactionBadgeObject(oPC);
 	//For backwards compatibility 
 	if (!GetOnNewFactionSystem()) {
 		string sTargetName = GetName(oPC);
-		object oBadge = GetFactionBadgeObject(oPC);
 		PromoteInFactionOld(oBadge, oDM, oPC, sTargetName);
 		return;
 	}
@@ -590,6 +593,8 @@ void PromoteInFaction(object oDM, object oPC) {
 			int newRank = faction_rank+1;
 			sQuery = "UPDATE characterfactions SET faction_rank="+IntToString(newRank)+" WHERE character_id = "+sID;
 			SQLExecDirect(sQuery);
+			SetLocalInt(oBadge, "FactionRank", newRank);
+			SetLocalString(oBadge, "FactionRankName", GetFactionRankName(faction_id, newRank));
 			
 			SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + GetName(oPC) + " has been promoted in the " 
 				+ sFactionName 
@@ -646,10 +651,11 @@ void PromoteInFactionOld(object oBadge, object oDM, object oTarget, string sTarg
 
 //Demote in faction - new code
 void DemoteInFaction(object oDM, object oPC) {
+
+	object oBadge = GetFactionBadgeObject(oPC);
 	//For backwards compatibility 
 	if (!GetOnNewFactionSystem()) {
 		string sTargetName = GetName(oPC);
-		object oBadge = GetFactionBadgeObject(oPC);
 		DemoteInFactionOld(oBadge, oDM, oPC, sTargetName);
 		return;
 	}
@@ -663,11 +669,13 @@ void DemoteInFaction(object oDM, object oPC) {
 		int iMaxRanks = GetFactionMaxRanks(faction_id);
 		string sFactionName = FactionIdToName(faction_id);
 		
-		if (faction_rank > 1)
-		{
+		if (faction_rank > 1) {
+		
 			int newRank = faction_rank-1;
 			sQuery = "UPDATE characterfactions SET faction_rank="+IntToString(newRank)+" WHERE character_id = "+sID;
 			SQLExecDirect(sQuery);
+			SetLocalInt(oBadge, "FactionRank", newRank);
+			SetLocalString(oBadge, "FactionRankName", GetFactionRankName(faction_id, newRank));
 			
 			SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + GetName(oPC) + " has been demoted in the " 
 				+ sFactionName 

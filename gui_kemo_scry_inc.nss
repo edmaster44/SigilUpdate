@@ -1,24 +1,25 @@
 #include "ps_inc_functions"
+#include "ps_inc_faction"
 
 string ScryFaction(object oPC, object oESS)
 {
 	object oBadge;
 	int nINF;						
-	int nFaction = GetLocalInt(oESS, "Faction");
+	int nFaction = GetFaction(oPC);
 	switch (nFaction)
 	{
 		case 1: return "Prime"; break;
-		case 2: return "Free League"; break;
-		case 3: return "Athar"; break;
-		case 4: return "Believers of the Source"; break;
-		case 5: return "Bleak Cabal"; break;
-		case 6: return "Doomguard"; break;
-		case 7: return "Dustmen"; break;
-		case 8: return "Fated"; break;
-		case 9: return "Fraternity of Order"; break;
-		case 10: return "Harmonium"; break;
-		case 11: return "Mercykillers"; break;
-		case 12: //Anarchists can infiltrate
+		case FACTION_FREE_LEAGUE: return "Free League"; break;
+		case FACTION_ATHAR: return "Athar"; break;
+		case FACTION_BELIEVERS_OF_THE_SOURCE: return "Believers of the Source"; break;
+		case FACTION_BLEAK_CABAL: return "Bleak Cabal"; break;
+		case FACTION_DOOMGUARD: return "Doomguard"; break;
+		case FACTION_DUSTMEN: return "Dustmen"; break;
+		case FACTION_FATED: return "Fated"; break;
+		case FACTION_FRATERNITY_OF_ORDER: return "Fraternity of Order"; break;
+		case FACTION_HARMONIUM: return "Harmonium"; break;
+		case FACTION_MERCYKILLERS: return "Mercykillers"; break;
+		case FACTION_REVOLUTIONARY_LEAGUE: //Anarchists can infiltrate
 			oBadge = GetItemPossessedBy(oPC ,"ps_faction_badge");
 			if ((GetLocalInt(oBadge, "Faction") == 12)&&(GetLocalInt(oBadge, "Infiltrated") == TRUE)) nINF = GetLocalInt(oBadge, "InfiltratedFaction");
 			else nINF = GetLocalInt(oBadge, "Faction");
@@ -44,12 +45,13 @@ string ScryFaction(object oPC, object oESS)
 				default: return "Revolutionary League";
 			}
 			break;
-		case 13: return "Sign of One"; break;
-		case 14: return "Society of Sensation"; break;
-		case 15: return "Transcendent Order"; break;
-		case 16: return "Xaositects"; break;
+		case FACTION_SIGN_OF_ONE: return "Sign of One"; break;
+		case FACTION_SOCIETY_OF_SENSATION: return "Society of Sensation"; break;
+		case FACTION_TRASCENDENT_ORDER: return "Transcendent Order"; break;
+		case FACTION_XAOSITECTS: return "Xaositects"; break;
 		case 17: return "None"; break;
 		case 18: return "Undecided"; break;
+		case FACTION_RINGGIVERS: return "Ring-Giver"; break;
 	}
 	return "";
 }
