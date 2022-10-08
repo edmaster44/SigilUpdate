@@ -470,14 +470,14 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		}
 		
 		float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
+		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
+		fCostMod	+= (iMarkUp + iMarkDown)/200.0f;
 		
 		//putting debug into title, because why not. . 
 		int		iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		string	sItemName	= GetName(oItem) + " (" + sStackSize + ") - "+IntToString(iOldCost);
 		
 		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
-		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
-				fCostMod	+= (iMarkUp + iMarkDown)/200.0f;
 		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
