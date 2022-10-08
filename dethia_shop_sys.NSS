@@ -1027,7 +1027,7 @@ void AddAllItemsInStoreToDatabase(object oStore) {
 		int nOldPrice = GetGoldPieceValue(oItem);
 		
 		if (!GetItemInDB(oItem)) {
-			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"'";
+			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"', store_tag='"+GetTag(oStore)+"'";
 			SQLExecDirect(sQuery);
 		}
 	
