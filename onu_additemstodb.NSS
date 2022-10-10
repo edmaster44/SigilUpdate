@@ -3,8 +3,12 @@
 void main() {
 
 	object oPC = GetLastUsedBy();
+	
+	string sTarget = GetLocalString(OBJECT_SELF, "TARGET");
+	if (sTarget == "")
+		sTarget = "item_addition_chest";
 
-	object oChest = GetNearestObjectByTag("item_addition_chest");
+	object oChest = GetNearestObjectByTag(sTarget);
 	
 	object oItem = GetFirstItemInInventory(oChest);
 	while (GetIsObjectValid(oItem)) {
