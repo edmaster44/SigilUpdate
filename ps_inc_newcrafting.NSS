@@ -189,7 +189,11 @@ string GetCautionString(object oPC, struct baseitem i, struct material m1, struc
 //Checks if nType is a quiver. Range is 90-95
 int GetIsQuiver(int nTYPE);
 
+//Get the cost of the material from the 2da by looking up the item prop
 int GetCostTierOfMaterial(itemproperty iProp);
+
+//Get the base cost of the item by looking it up in the crafting table
+int GetBaseCostOfItem(int nBaseID);
 
 //************************************************
 //Structure to hold base item information
@@ -924,6 +928,22 @@ int GetCostTierOfMaterial(itemproperty iProp) {
 		string sName =  Get2DAString(s2da, "LABEL", n);
 		if (sName == sMatName) 
 			return GetMCostTier(n, s2da);
+	}
+	
+	return 0;
+
+}
+
+int GetBaseCostOfItem(int nBaseID) {
+	
+	int n;
+	int	nMax = GetNum2DARows("scod_craft_baseitems");
+	for (n = 0; n < nMax; n++) {
+		string sID =  Get2DAString("scod_craft_baseitems", "ID", n);
+		if (StringToInt(sID) == nBaseID) {
+			string sCost = Get2DAString("scod_craft_baseitems", "BASE_COST", n);
+			return StringToInt(sCost);
+		}
 	}
 	
 	return 0;

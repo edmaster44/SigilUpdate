@@ -1055,6 +1055,9 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 	
 	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
 	
+	nCost += GetBaseCostOfItem(GetBaseItemType(oItem));
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Base item cost: "+IntToString(nCost));
+	
 	while(GetIsItemPropertyValid(iProp)) {
 	
 		nCost += GetCostOfProperty(iProp, oPC);
