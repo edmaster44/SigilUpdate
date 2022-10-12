@@ -44,7 +44,7 @@ void DesertWind2(object oCaller) // Gives the equiped weapons or gloves fire dam
 
 	// adds damage to character (to make it irresistable)
 	effect fireDamage2 = EffectDamageIncrease(DAMAGE_BONUS_8, DAMAGE_TYPE_FIRE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fireDamage2, oCaller, 18.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fireDamage2, oCaller, 12.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
@@ -172,7 +172,7 @@ void DiamondMind3(object oCaller) // Increases damage by 1/5 of a concentration 
 		damageBonus = damageBonus + 10;
 	}
 	effect damageIncrease = EffectDamageIncrease(damageBonus, DAMAGE_TYPE_MAGICAL); // Set to magical so it will bypass DR
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 30.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 18.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
@@ -192,8 +192,8 @@ void IronHeart1(object oCaller) // +4 AB, -1 AC for 2 rounds.
 	effect attackBonus = EffectAttackIncrease(4);
 	effect ACdecrease = EffectACDecrease(1);
 	
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, attackBonus, oCaller, 24.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oCaller, 24.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, attackBonus, oCaller, 12.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oCaller, 12.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
