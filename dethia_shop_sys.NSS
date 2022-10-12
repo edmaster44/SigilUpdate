@@ -1116,7 +1116,10 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 		
 		if (enchant_id > 0) {
 			int nCost = gold;
-			nCost += GetCostOfItemByString(sEssence);
+			int nEssence = GetCostOfItemByString(sEssence);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "gold: "+IntToString(gold)+" + essence: "+IntToString(nEssence)+" + gem: "+IntToString(nGemCost));
+			
+			nCost += nEssence;
 			nCost += nGemCost;
 			
 			nCost *= 2;
