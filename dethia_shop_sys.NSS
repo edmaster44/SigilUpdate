@@ -1101,7 +1101,7 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 	if (SQLFetch() != SQL_ERROR) {
 		int enchant_id = StringToInt(SQLGetData(1));
 		int points = StringToInt(SQLGetData(2));
-		int gold =StringToInt(SQLGetData(3));
+		int gold = StringToInt(SQLGetData(3));
 		string sEssence = SQLGetData(4);
 		string sGem = SQLGetData(5);
 		
@@ -1113,6 +1113,10 @@ int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID) {
 			nGemCost = 3000;
 		else if (nQReq >= 1)
 			nGemCost = 1000;
+			
+		if (gold <= 0) {
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "We have a no-gold entry: "+IntToString(enchant_id));
+		}
 		
 		if (enchant_id > 0) {
 			int nCost = gold;
