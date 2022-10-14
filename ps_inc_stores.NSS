@@ -3,6 +3,8 @@
 #include "ginc_param_const"
 #include "ginc_item"
 #include "ps_inc_cards"
+#include "dethia_shop_sys"
+#include "ps_inc_time"
 
 const int MAX_MARKUP = 30;
 const int MIN_MARKUP = 1;
@@ -207,5 +209,11 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 	
 	string sDescription = "This "+GetLocalString(oItem, "base_name")+" "+GetLocalString(oStore, "Item_Description");
 	SetDescription(oItem, sDescription);
+	
+	int nBaseCost = GetGoldPieceValue(oItem);
+	SetLocalInt(oItem, "PRICE_OLD", nBaseCost);
+	PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
+	int nNewCost = GetCostOfItem(oItem);
+	SetLocalInt(oItem, "PRICE", nNewCost);
 	
 }
