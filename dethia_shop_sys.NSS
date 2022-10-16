@@ -1024,7 +1024,7 @@ void AddAllItemsInStoreToDatabase(object oStore) {
 	object oItem = GetFirstItemInInventory(oStore);
 	while(GetIsObjectValid(oItem)) {
 	
-		string sName = GetName(oItem);
+		string sName = SQLEncodeSpecialChars(GetName(oItem));
 		string sTag = GetResRef(oItem);
 		int nPrice = FloatToInt(GetGoldPieceValue(oItem)*fCostMod);
 		int nOldPrice = GetGoldPieceValue(oItem);
