@@ -288,7 +288,7 @@ int GetItemUseLimited(object oItem, object oPC);
 int GetItemUseable(object oItem, object oPC);
 
 //A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem);
+int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID);
 
 //get whether the item is in the database
 int GetItemInDB(object oItem);
@@ -478,7 +478,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		string	sItemName	= GetName(oItem) + " (" + sStackSize + ") - "+IntToString(iOldCost);
 		
 		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
-		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem, oPC)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
@@ -959,7 +959,7 @@ int GetItemUseable(object oItem, object oPC)
 }
 
 //A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem) {
+int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
 	//Some initial variables
 	int nCost = GetLocalInt(oItem, "PRICE");
@@ -983,10 +983,13 @@ int PS_GetItemValue(object oItem) {
 			nDBOldCost = StringToInt(SQLGetData(2));
 	    }
 		   
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" "+IntToString(nDBCost)+" vs. "+IntToString(GetGoldPieceValue(oItem)));
 		if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
 		   	nCost = nDBCost;
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
 		} else {
 		   	nCost = GetCostOfItem(oItem);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
 		}
 		   
 		SetLocalInt(oItem, "PRICE", nCost);
