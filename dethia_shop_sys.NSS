@@ -487,9 +487,10 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		//Finally add the item details into the GUI
 		
 		//Debug Stuff
-		int nOldPrice = GetGoldPieceValue(oItem);
+		/*int nOldPrice = GetGoldPieceValue(oItem);
 		int nNewPrice = PS_GetItemValue(oItem);
 		SendMessageToPC(oPC, GetName(oItem)+" - Old price: "+IntToString(nOldPrice)+" vs. New: "+IntToString(nNewPrice));
+		*/
 		
 		if (GetItemUseable(oItem, oPC) == FALSE){
 			//SendMessageToPC(oPC, "You can't use "+sItemName);
