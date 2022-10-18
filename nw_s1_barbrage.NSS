@@ -114,6 +114,7 @@ void main()
 	        eLink = EffectLinkEffects(eLink, eSave);
 	        eLink = EffectLinkEffects(eLink, eAC);
 	        eLink = EffectLinkEffects(eLink, eDur);
+			SupernaturalEffect(eLink);
 			
 			effect eNaturalAC;
 			if (GetHasFeat(FEAT_ICE_TROLL_BERSERKER, OBJECT_SELF, TRUE))

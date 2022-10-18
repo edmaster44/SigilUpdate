@@ -226,9 +226,10 @@ int KnightLevels(object oPC)
 	int iMarquis = GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC);//Marquis Cambion
 	int iDeath = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC);//Death Knight
 	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
+	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
-	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden;
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider ;
 	   if (iPally <1 )
 	   { (iTotal = 0);}
 	else

@@ -658,8 +658,8 @@ void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
     else if (nSAMURAI >= 11) nBONUS = 2;
     effect eFX = EffectAttackIncrease(nBONUS);
     eFX = EffectLinkEffects(eFX, EffectDamageIncrease(nBONUS, nDMG_TYPE));
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
-   // ApplyEquipmentEffect(oPC, eFX);
+	//ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+    ApplyEquipmentEffect(oPC, eFX);
 }
 
 
