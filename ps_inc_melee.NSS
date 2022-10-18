@@ -6,69 +6,7 @@
 
 #include "nwnx_sql"
 #include "X0_I0_SPELLS"
-#include "x0_i0_spells"
-#include "x2_inc_spellhook"
-
-// Determines if the PC is stealthed or invisible and not perceived by the target
-void WhirlWindAnim(object oPC)
-{
-	PlayCustomAnimation(oPC,"*whirlwind",0);
-}
-
-void CleaveAnim(object oPC)
-{
-	PlayCustomAnimation(oPC,"*cleave",0);
-}
-
-void ArrowShower(object oPC)
-{
-	PlayCustomAnimation(oPC,"*multiattack01",0,1.5f);
-}
-
-int GetHighestModifier(object oPC, int divineorarcane)
-{
-	int INT; int DEX;
-
-	if(GetHasFeat(42,oPC,TRUE)) DEX = (GetAbilityScore(oPC,ABILITY_DEXTERITY) - 10 ) / 2; //Weapon Finesse	
-	if(GetHasFeat(1958,oPC,TRUE)) INT = (GetAbilityScore(oPC,ABILITY_INTELLIGENCE) - 10 ) / 2; //Combat Insight
-	int STR = (GetAbilityScore(oPC,ABILITY_STRENGTH) - 10 ) / 2;
-		
-	if(divineorarcane == 1)
-	{
-		int WIS = (GetAbilityScore(oPC,ABILITY_WISDOM) - 10 ) / 2;
-		int CHA = (GetAbilityScore(oPC,ABILITY_CHARISMA) - 10 ) / 2;	
-	
-		if(WIS > STR && WIS > DEX && (WIS - STR) > 0 && (WIS - DEX) > 0) return WIS;		
-		if(CHA > STR && CHA > DEX && (CHA - STR) > 0 && (CHA - DEX) > 0) return CHA;		
-	}
-	else if(divineorarcane == 2)
-	{
-		INT = (GetAbilityScore(oPC,ABILITY_INTELLIGENCE) - 10 ) / 2;
-		int CHA = (GetAbilityScore(oPC,ABILITY_CHARISMA) - 10 ) / 2;	
-	
-		if(INT > STR && INT > DEX && (INT - STR) > 0 && (INT - DEX) > 0) return INT;		
-		if(CHA > STR && CHA > DEX && (CHA - STR) > 0 && (CHA - DEX) > 0) return CHA;		
-	}	
-
-	if(INT > STR && INT > DEX && (INT - STR) > 0 && (INT - DEX) > 0) return INT;		
-	else if(DEX > STR && (DEX - STR) > 0) return DEX;
-	else return STR;	
-}
-
-
-
-int GetHighestRangedModifier(object oPC)
-{
-	int WIS;
-	
-	int DEX = (GetAbilityScore(oPC,ABILITY_DEXTERITY) - 10 ) / 2;
-	if(GetHasFeat(412,oPC,TRUE)) WIS = (GetAbilityScore(oPC,ABILITY_WISDOM) - 10 ) / 2; //Zen Archery
-
-	if(WIS > DEX) return WIS;
-	
-	return DEX;
-}
-
+#include "ps_inc_time"
 
 int GetDamageBonusInt(int nBonus)
 {
@@ -186,76 +124,44 @@ int GetAttackBonusTotal(object oPC)
 
 int SneakAttackCount(object oPC)
 {
-
-
-
-	// First we find out how man dice the character should have. Careful with rounding with integers!
-	int sneakDice = 0;
+	int featid; int sneak;
 	
-	
-	if (GetHasFeat(FEAT_HALFOUTSIDER_PATH_OF_GUILE,oPC))
-		{
-	sneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) / 2;	
-	
-	}
-	
-	if (GetHasFeat(FEAT_PSYWAR_LURK,oPC))
-	{
-		sneakDice += (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC)) / 3;	
-	}
-	
-	if (GetHasFeat(FEAT_BLACKGUARD,oPC))
-	{
-	sneakDice += (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) - 1) / 3;	
-	
-	}
-	
-	sneakDice += (GetLevelByClass(CLASS_TYPE_ROGUE, oPC) + 1) / 2;
-	sneakDice += (GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) - 1) / 3;	
-	sneakDice += GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER, oPC) / 2;
-	sneakDice += (GetLevelByClass(CLASS_TYPE_SHADOWTHIEFOFAMN, oPC) + 1) / 2;
-	sneakDice += (GetLevelByClass(67, oPC) +1 ) / 2 ;
-	sneakDice += GetLevelByClass(78, oPC) / 2;
-	sneakDice += GetLevelByClass(CLASS_TYPE_SHADOWDANCER,oPC) / 3;
-	sneakDice += GetLevelByClass(83, oPC) / 2;
-	sneakDice += GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION, oPC) / 2;
-	sneakDice += (GetLevelByClass(212, oPC) + 1) / 2;
-	
-	return sneakDice;
-//	int featid; int sneak;
-	
-/*	SQLExecDirect("SELECT `featid` FROM `featids` WHERE label LIKE '%sneak%';");
+	SQLExecDirect("SELECT `featid` FROM `featids` WHERE label LIKE '%sneak%';");
 	while(SQLFetch())
 	{
 	featid = StringToInt(SQLGetData(1));
 	if(GetHasFeat(featid, oPC)) sneak++;	
 	}
 
-	return sneak;*/
+	return sneak;
 }
+
 int ConcealmentCheck(object oTarget)
 {
-	int conceal;
+	int conceal; int IntAmt; int iConceal;
 	
 	effect eConceal = GetFirstEffect(oTarget);
 	while(GetIsEffectValid(eConceal))
 	{
 	if(GetEffectType(eConceal) == EFFECT_TYPE_CONCEALMENT)
 	{
-	int IntAmt = GetEffectInteger(eConceal,0);
-	if (IntAmt > conceal) conceal = IntAmt;
+		IntAmt = GetEffectInteger(eConceal,0);
+		if (IntAmt > conceal) conceal = IntAmt;
 	}
 	eConceal = GetNextEffect(oTarget);
 	}
 	
-	if(GetHasFeat(748, oTarget)) return 10;
-	if(GetHasFeat(749, oTarget)) return 20;
-	if(GetHasFeat(750, oTarget)) return 30;
-	if(GetHasFeat(751, oTarget)) return 40;
-	if(GetHasFeat(752, oTarget)) return 50;	
+	if(GetHasFeat(748, oTarget)) iConceal = 10;
+	if(GetHasFeat(749, oTarget)) iConceal = 20;
+	if(GetHasFeat(750, oTarget)) iConceal = 30;
+	if(GetHasFeat(751, oTarget)) iConceal = 40;
+	if(GetHasFeat(752, oTarget)) iConceal = 50;	
+	
+	if(iConceal > conceal) conceal = iConceal;
 	
 	return conceal;	
 }
+
 int InvisibilityCheck(object oTarget)
 {
 	int Invis;
@@ -269,98 +175,77 @@ int InvisibilityCheck(object oTarget)
 	
 	return 0;	
 }
-string GetRacialTypeName(object oTarget)
-{
-	int iRacial = GetRacialType(oTarget);
-
-	if(iRacial == RACIAL_TYPE_ANIMAL) return "Animals";
-	else if(iRacial == RACIAL_TYPE_ABERRATION) return "Aberrations";
-	else if(iRacial == RACIAL_TYPE_BEAST) return "Beasts";
-	else if(iRacial == RACIAL_TYPE_CONSTRUCT) return "Constructs";
-	else if(iRacial == RACIAL_TYPE_DRAGON) return "Dragons";
-	else if(iRacial == RACIAL_TYPE_DWARF) return "Dwarfs"; 
-	else if(iRacial == RACIAL_TYPE_ELEMENTAL) return "Elementals";
-	else if(iRacial == RACIAL_TYPE_ELF) return "Elves"; 
-	else if(iRacial == RACIAL_TYPE_GIANT) return "Giants";
-	else if(iRacial == RACIAL_TYPE_GNOME) return "Gnomes";
-	else if(iRacial == RACIAL_TYPE_HUMANOID_GOBLINOID) return "Goblinoids";
-	else if(iRacial == RACIAL_TYPE_HALFELF) return "Half-Elves";
-	else if(iRacial == RACIAL_TYPE_HALFORC) return "Half-Orcs";
-	else if(iRacial == RACIAL_TYPE_HALFLING) return "Halflings";
-	else if(iRacial == RACIAL_TYPE_HUMAN) return "Humans";
-	else if(iRacial == RACIAL_TYPE_MAGICAL_BEAST) return "Magical Beasts";
-	else if(iRacial == RACIAL_TYPE_HUMANOID_MONSTROUS) return "Monstrous Humanoids";
-	else if(iRacial == RACIAL_TYPE_GRAYORC || iRacial == IP_CONST_RACIALTYPE_HUMANOID_ORC) return "Orcs";
-	else if(iRacial == RACIAL_TYPE_OUTSIDER) return "Outsiders";
-	else if(iRacial == RACIAL_TYPE_HUMANOID_REPTILIAN) return "Reptilian Humanoids";
-	else if(iRacial == RACIAL_TYPE_SHAPECHANGER) return "Shapechangers";	
-	else if(iRacial == RACIAL_TYPE_UNDEAD) return "Undead";
-	else if(iRacial == RACIAL_TYPE_VERMIN) return "Vermin";	
-	else if(iRacial == RACIAL_TYPE_FEY) return "Fey";			
- 	else return "Invalid Race";
-}
-
-int GetRacialTypeConst(object oTarget)
-{
-	int iRacial = GetRacialType(oTarget);
-
-	if(iRacial == RACIAL_TYPE_ANIMAL) return IP_CONST_RACIALTYPE_ANIMAL;
-	else if(iRacial == RACIAL_TYPE_ABERRATION) return IP_CONST_RACIALTYPE_ABERRATION;
-	else if(iRacial == RACIAL_TYPE_BEAST) return IP_CONST_RACIALTYPE_BEAST;
-	else if(iRacial == RACIAL_TYPE_CONSTRUCT) return IP_CONST_RACIALTYPE_CONSTRUCT;
-	else if(iRacial == RACIAL_TYPE_DRAGON) return IP_CONST_RACIALTYPE_DRAGON;
-	else if(iRacial == RACIAL_TYPE_DWARF) return IP_CONST_RACIALTYPE_DWARF; 
-	else if(iRacial == RACIAL_TYPE_ELEMENTAL) return IP_CONST_RACIALTYPE_ELEMENTAL;
-	else if(iRacial == RACIAL_TYPE_ELF) return IP_CONST_RACIALTYPE_ELF; 
-	else if(iRacial == RACIAL_TYPE_GIANT) return IP_CONST_RACIALTYPE_GIANT;
-	else if(iRacial == RACIAL_TYPE_GNOME) return IP_CONST_RACIALTYPE_GNOME;
-	else if(iRacial == RACIAL_TYPE_HUMANOID_GOBLINOID) return IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID;
-	else if(iRacial == RACIAL_TYPE_HALFELF) return IP_CONST_RACIALTYPE_HALFELF;
-	else if(iRacial == RACIAL_TYPE_HALFORC) return IP_CONST_RACIALTYPE_HALFORC;
-	else if(iRacial == RACIAL_TYPE_HALFLING) return IP_CONST_RACIALTYPE_HALFLING;
-	else if(iRacial == RACIAL_TYPE_HUMAN) return IP_CONST_RACIALTYPE_HUMAN;
-	else if(iRacial == RACIAL_TYPE_MAGICAL_BEAST) return IP_CONST_RACIALTYPE_MAGICAL_BEAST;
-	else if(iRacial == RACIAL_TYPE_HUMANOID_MONSTROUS) return IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS;
-	else if(iRacial == RACIAL_TYPE_GRAYORC || iRacial == IP_CONST_RACIALTYPE_HUMANOID_ORC) return IP_CONST_RACIALTYPE_HUMANOID_ORC;
-	else if(iRacial == RACIAL_TYPE_OUTSIDER) return IP_CONST_RACIALTYPE_OUTSIDER;
-	else if(iRacial == RACIAL_TYPE_HUMANOID_REPTILIAN) return IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN;
-	else if(iRacial == RACIAL_TYPE_SHAPECHANGER) return IP_CONST_RACIALTYPE_SHAPECHANGER;	
-	else if(iRacial == RACIAL_TYPE_UNDEAD) return IP_CONST_RACIALTYPE_UNDEAD;
-	else if(iRacial == RACIAL_TYPE_VERMIN) return IP_CONST_RACIALTYPE_VERMIN;	
-	else if(iRacial == RACIAL_TYPE_FEY) return IP_CONST_RACIALTYPE_FEY;			
- 	else return 0;
-}
-
-int GetHasIgnoreCritImmunity(object oPC, object oTarget)
-{
-	if(GetHasFeat(StringToInt(Get2DAString("racialtypes","FEATIgnoreCritImmunity",GetRacialType(oTarget))),oPC,TRUE)) return TRUE;
-	else return FALSE;
-}
 
 int GetIsImprovedRangerFavored(object oPC, object oTarget)
 {
-	int iRacial = GetRacialType(oTarget);
-
-	if(GetHasFeat(StringToInt(Get2DAString("racialtypes","FEATImprovedFavoredEnemy",GetRacialType(oTarget))),oPC,TRUE)) return TRUE;
-	else return FALSE;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_ANIMAL || GetSubRace(oTarget) == RACIAL_SUBTYPE_ANIMAL) && GetHasFeat(1206,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_ABERRATION || GetSubRace(oTarget) == RACIAL_SUBTYPE_ABERRATION) && GetHasFeat(1205,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_BEAST || GetSubRace(oTarget) == RACIAL_SUBTYPE_BEAST) && GetHasFeat(1207,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT || GetSubRace(oTarget) == RACIAL_SUBTYPE_CONSTRUCT) && GetHasFeat(1208,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_DRAGON || GetSubRace(oTarget) == RACIAL_SUBTYPE_DRAGON) && GetHasFeat(1209,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_DWARF && GetHasFeat(1198,oPC)) return 1; 
+	if(GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL && GetHasFeat(277,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_ELF && GetHasFeat(1199,oPC)) return 1; 
+	if(GetRacialType(oTarget) == RACIAL_TYPE_GIANT && GetHasFeat(1216,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_GNOME && GetHasFeat(1200,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HUMANOID_GOBLINOID || GetSubRace(oTarget) == RACIAL_SUBTYPE_HUMANOID_GOBLINOID) && GetHasFeat(1210,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HALFELF || GetSubRace(oTarget) == RACIAL_SUBTYPE_HALFELF) && GetHasFeat(1203,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HALFORC || GetSubRace(oTarget) == RACIAL_SUBTYPE_HALFORC) && GetHasFeat(1203,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_HALFLING && GetHasFeat(1201,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HUMAN || GetSubRace(oTarget) == RACIAL_SUBTYPE_HUMAN) && GetHasFeat(1204,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_MAGICAL_BEAST || GetSubRace(oTarget) == RACIAL_SUBTYPE_MAGICAL_BEAST) && GetHasFeat(1207,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_HUMANOID_MONSTROUS && GetHasFeat(1211,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_GRAYORC && GetHasFeat(1212,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER || GetSubRace(oTarget) == RACIAL_SUBTYPE_TIEFLING || GetSubRace(oTarget) == RACIAL_SUBTYPE_AASIMAR 
+	|| GetSubRace(oTarget) == RACIAL_SUBTYPE_FIRE_GENASI || GetSubRace(oTarget) == RACIAL_SUBTYPE_EARTH_GENASI || GetSubRace(oTarget) == RACIAL_SUBTYPE_WATER_GENASI) && GetHasFeat(1218,oPC)) return 1;
+	if(GetSubRace(oTarget) == RACIAL_SUBTYPE_PLANT && GetHasFeat(2055,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HUMANOID_REPTILIAN || GetSubRace(oTarget) == RACIAL_SUBTYPE_YUANTI || GetSubRace(oTarget) == RACIAL_SUBTYPE_HUMANOID_REPTILIAN) && GetHasFeat(1213,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_SHAPECHANGER || GetSubRace(oTarget) == RACIAL_SUBTYPE_SHAPECHANGER) && GetHasFeat(1219,oPC)) return 1;	
+	if((GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD || GetSubRace(oTarget) == RACIAL_SUBTYPE_UNDEAD) && GetHasFeat(1220,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_VERMIN || GetSubRace(oTarget) == RACIAL_SUBTYPE_VERMIN) && GetHasFeat(1221,oPC)) return 1;	
+		
+ 	return 0;
 }
 
 int GetIsRangerFavored(object oPC, object oTarget)
 {
-	if(GetHasFeat(StringToInt(Get2DAString("racialtypes","FEATFavoredEnemy",GetRacialType(oTarget))),oPC,TRUE)) return TRUE;
-	else return FALSE;
-}
+	if((GetRacialType(oTarget) == RACIAL_TYPE_ANIMAL || GetSubRace(oTarget) == RACIAL_SUBTYPE_ANIMAL) && GetHasFeat(269,oPC)) return 1;
 
-int GetIsRangerFavoredPowerAttack(object oPC, object oTarget)
-{
-	if(GetHasFeat(StringToInt(Get2DAString("racialtypes","FEATFavoredPowerAttack",GetRacialType(oTarget))),oPC,TRUE)) return TRUE;
-	else return FALSE;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_ABERRATION || GetSubRace(oTarget) == RACIAL_SUBTYPE_ABERRATION) && GetHasFeat(268,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_BEAST || GetSubRace(oTarget) == RACIAL_SUBTYPE_BEAST) && GetHasFeat(270,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT || GetSubRace(oTarget) == RACIAL_SUBTYPE_CONSTRUCT) && GetHasFeat(271,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_DRAGON || GetSubRace(oTarget) == RACIAL_SUBTYPE_DRAGON) && GetHasFeat(272,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_DWARF && GetHasFeat(261,oPC)) return 1; 
+	if(GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL && GetHasFeat(277,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_ELF && GetHasFeat(262,oPC)) return 1; 
+	if(GetRacialType(oTarget) == RACIAL_TYPE_GIANT && GetHasFeat(279,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_GNOME && GetHasFeat(263,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HUMANOID_GOBLINOID || GetSubRace(oTarget) == RACIAL_SUBTYPE_HUMANOID_GOBLINOID) && GetHasFeat(273,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HALFELF || GetSubRace(oTarget) == RACIAL_SUBTYPE_HALFELF) && GetHasFeat(265,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HALFORC || GetSubRace(oTarget) == RACIAL_SUBTYPE_HALFORC) && GetHasFeat(266,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_HALFLING && GetHasFeat(264,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HUMAN || GetSubRace(oTarget) == RACIAL_SUBTYPE_HUMAN) && GetHasFeat(267,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_MAGICAL_BEAST || GetSubRace(oTarget) == RACIAL_SUBTYPE_MAGICAL_BEAST) && GetHasFeat(280,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_HUMANOID_MONSTROUS && GetHasFeat(274,oPC)) return 1;
+	if(GetRacialType(oTarget) == RACIAL_TYPE_GRAYORC && GetHasFeat(275,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER || GetSubRace(oTarget) == RACIAL_SUBTYPE_TIEFLING || GetSubRace(oTarget) == RACIAL_SUBTYPE_AASIMAR 
+	|| GetSubRace(oTarget) == RACIAL_SUBTYPE_FIRE_GENASI || GetSubRace(oTarget) == RACIAL_SUBTYPE_EARTH_GENASI || GetSubRace(oTarget) == RACIAL_SUBTYPE_WATER_GENASI) && GetHasFeat(281,oPC)) return 1;
+	if(GetSubRace(oTarget) == RACIAL_SUBTYPE_PLANT && GetHasFeat(282,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_HUMANOID_REPTILIAN || GetSubRace(oTarget) == RACIAL_SUBTYPE_YUANTI || GetSubRace(oTarget) == RACIAL_SUBTYPE_HUMANOID_REPTILIAN) && GetHasFeat(276,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_SHAPECHANGER || GetSubRace(oTarget) == RACIAL_SUBTYPE_SHAPECHANGER) && GetHasFeat(284,oPC)) return 1;	
+	if((GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD || GetSubRace(oTarget) == RACIAL_SUBTYPE_UNDEAD) && GetHasFeat(285,oPC)) return 1;
+	if((GetRacialType(oTarget) == RACIAL_TYPE_VERMIN || GetSubRace(oTarget) == RACIAL_SUBTYPE_VERMIN) && GetHasFeat(286,oPC)) return 1;	
+		
+ 	return 0;
 }
 
 int CalculateRangerBonus(object oPC)
 {	
+	int iBonus;
+
 	if(GetHasFeat(FEAT_EPIC_BANE_OF_ENEMIES,oPC)) return 2;
-	return 0;
+	
+	return iBonus;
 }
 
 int CalculateRangerTotal(object oAttacker,object oTarget)
@@ -372,33 +257,31 @@ int CalculateRangerTotal(object oAttacker,object oTarget)
 	if(GetIsImprovedRangerFavored(oAttacker,oTarget)) iBonus = iBonus + 3;
 	if(GetHasFeat(FEAT_EPIC_BANE_OF_ENEMIES,oAttacker)) iBonus = iBonus + d6(2);
 	
-	return iBonus;
+	return 0;
 }
 
 int ApplyFeatsToWeapon(object oPC, object oWeapon)
 {
 	if(!GetIsObjectValid(oWeapon)) return 0;
 
-	int baseitem = GetBaseItemType(oWeapon);
+	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
+	
+	string sLabel; int featid;
+	
 	int iCount = 0;
-	
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice", baseitem)),oPC,TRUE)) iCount++;
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATEpicWpnFocus", baseitem)),oPC,TRUE)) return iCount + 4;
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATGrtrWpnFocus", baseitem)),oPC,TRUE)) return iCount + 2;
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnFocus", baseitem)),oPC,TRUE)) return iCount + 1;
 		
-//	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
-//	while(SQLFetch())
-//	{
-//	sLabel = SQLGetData(1);
-//	featid = StringToInt(SQLGetData(2));
+	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
+	while(SQLFetch())
+	{
+	sLabel = SQLGetData(1);
+	featid = StringToInt(SQLGetData(2));
 	
-//	if(FindSubString(sLabel, "EPIC_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC)) iCount = 4;
-//	if(FindSubString(sLabel, "GREATER_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 2;
-//	if(FindSubString(sLabel, "WeapFoc") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
-//	if(FindSubString(sLabel, "WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
-//	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
-//	}
+	if(FindSubString(sLabel, "EPIC_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC)) iCount = 4;
+	if(FindSubString(sLabel, "GREATER_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 2;
+	if(FindSubString(sLabel, "WeapFoc") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
+	if(FindSubString(sLabel, "WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
+	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
+	}
 
 	return iCount;
 }
@@ -407,78 +290,67 @@ int ApplyDamageFeatsToWeapon(object oPC, object oWeapon)
 {
 	if(!GetIsObjectValid(oWeapon)) return 0;
 
-//	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
+	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
 	
-//	string sLabel; int featid;
+	string sLabel; int featid;
 	
-	int iCount = 0; int baseitem = GetBaseItemType(oWeapon);
+	int iCount = 0;
 		
-//	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
-//	while(SQLFetch())
-//	{
-//	sLabel = SQLGetData(1);
-//	featid = StringToInt(SQLGetData(2));
+	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
+	while(SQLFetch())
+	{
+	sLabel = SQLGetData(1);
+	featid = StringToInt(SQLGetData(2));
 	
-//	if(FindSubString(sLabel, "EPIC_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC)) iCount = 6;
-//	if(FindSubString(sLabel, "GREATER_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 4;
-//	if(FindSubString(sLabel, "WEAPON_SPECIALIZATION") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 2;
-//	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
-//	}
-	
-	// if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice", baseitem)),oPC,TRUE)) iCount++;
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATEpicWpnSpec", baseitem)),oPC,TRUE)) return iCount + 6;
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATGrtrWpnSpec", baseitem)),oPC,TRUE)) return iCount + 4;
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnSpec", baseitem)),oPC,TRUE)) return iCount + 2;
-		
+	if(FindSubString(sLabel, "EPIC_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC)) iCount = 6;
+	if(FindSubString(sLabel, "GREATER_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 4;
+	if(FindSubString(sLabel, "WEAPON_SPECIALIZATION") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 2;
+	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
+	}
+
 	return iCount;
 }
 
-int GetWeaponThreatRange(object oPC)
+int GetWeaponThreatRange(object oPC, object oWeapon)
 {
-	int iMonk = GetLevelByClass(CLASS_TYPE_MONK,oPC);
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND);
-	
-	if(!GetIsObjectValid(oWeapon) && iMonk > 0) oWeapon = GetItemInSlot(INVENTORY_SLOT_ARMS);
-	else return 20;
-	
-	if(!GetIsObjectValid(oWeapon)) return 20;
+	if(!GetIsObjectValid(oWeapon)) return 0;
 
-	int baseitem = GetBaseItemType(oWeapon);
-	if(baseitem == BASE_ITEM_GLOVES)
-	{
-		if(GetHasFeat(62,oPC,TRUE)) return 19;
-		else return 20;
-	}
-	
-	string sWeapon = Get2DAString("baseitems", "label", baseitem);
-	int ThreatRange = StringToInt(Get2DAString("baseitems", "CritThreat",baseitem));
+	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
+	int ThreatRange = StringToInt(Get2DAString("baseitems", "CritThreat",  GetBaseItemType(oWeapon)));
 	
 //	SendMessageToPC(oPC,"Initial threat range: "+IntToString(ThreatRange));	
 		
-	string sLabel; int featid; int iCount;
+	string sLabel; int featid; int iCount; int iKeen;
 		
-//	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
-//	while(SQLFetch())
-//	{
-//	sLabel = SQLGetData(1);
-//	featid = StringToInt(SQLGetData(2));
-	
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATImprCrit",baseitem)),oPC,TRUE) || GetItemHasItemProperty(oWeapon,ITEM_PROPERTY_KEEN) == TRUE)
+	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
+	while(SQLFetch())
 	{
-		ThreatRange = ThreatRange * 2;
+	sLabel = SQLGetData(1);
+	featid = StringToInt(SQLGetData(2));
+	
+	if((FindSubString(sLabel, "FEAT_IMPROVED_CRITICAL") >= 0 && GetHasFeat(featid, oPC, TRUE) && iKeen == 0)
+	|| GetItemHasItemProperty(oWeapon,ITEM_PROPERTY_KEEN) == TRUE && iKeen == 0)
+	{
+	ThreatRange = ThreatRange * 2; iKeen = 1;
 	}
 	
-	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice",baseitem)),oPC,TRUE)) ThreatRange = ThreatRange + 2;
-//	}
+	if(FindSubString(sLabel, "FEAT_KI_CRITICAL") >= 0 && GetHasFeat(featid, oPC)) ThreatRange = ThreatRange + 2;
+	}
 	
-	iCount = 21 - ThreatRange;
+	if (ThreatRange == 1) iCount = 20;
+	if (ThreatRange == 2) iCount = 19;
+	if (ThreatRange == 3) iCount = 18;
+	if (ThreatRange == 4) iCount = 17;
+	if (ThreatRange == 6) iCount = 15;
+	if (ThreatRange == 8) iCount = 13;
 	
 	if(ThreatRange <= 0) iCount = 20;
-	else if(ThreatRange >= 12) iCount = 17;
+	if(ThreatRange >= 12) iCount = 17;
 	
 //	SendMessageToPC(oPC,"Threat range: "+IntToString(iCount));	
 	return iCount;
 }
+
 int GetWeaponBonuses(object oPC, object oWeapon)
 {
 	if(!GetIsObjectValid(oWeapon)) return 0;
@@ -548,153 +420,20 @@ int GetDodgeAC(object oTarget)
 	return iAC + DEX;
 }
 
-
-// Determines if the PC is stealthed or invisible and not perceived by the target
-int MP_IsPCStealthed(object oPC, object oTarget)
+int FlatFooted(object oAttacker, object oTarget)
 {
-	if (!GetObjectSeen(oTarget, oPC))
-	{	return TRUE;	}
-	else
-	{	return FALSE;	}
-}
-
-// Determines if the target is in a position to be flanked by the caller.
-int MP_IsTargetFlanked(object oPC, object oTarget)
-{
+	if(GetStealthMode(oAttacker)) return TRUE;
+	if(!GetCommandable(oTarget)) return TRUE;
+	if(!GetIsInCombat(oTarget)) return TRUE;
 	
-
-	vector vPC 				= GetPosition(oPC);
-	vector vTarget 			= GetPosition(oTarget);
-	vector vPCtoTarget 		= vPC - vTarget;
-	float fAngleOfVector 	= VectorToAngle(vPCtoTarget);
-	float fTargetFacing 	= GetFacing(oTarget);
-	float fAngleToPC 		= fAngleOfVector - fTargetFacing;
-//	SendMessageToPC(oPC, "<COLOR=RED>DEBUG: You are " + FloatToString(fAngleToPC, 18, 1) + " degrees from target facing");
-					
-	if (fAngleToPC < 280.0 && fAngleToPC > 80.0 || fAngleToPC >= -280.0 && fAngleToPC < -80.0)
-	{
-//		SendMessageToPC(oPC, "<COLOR=RED>Target is attacked from flank");	
-		return TRUE;	
-	}
-	else
-	{	return FALSE;	}
-}
-
-// Determines if the target is within range of the ability's range; fRange is expressed in meters
-int MP_IsTargetWithinRange(object oPC, object oTarget, float fRange = 5.0f)
-{
-	if(MP_IsPCStealthed(oPC,oTarget)) fRange = 6.0f;
-
-	if (GetDistanceToObject(oTarget) <= fRange)	
-	{	return TRUE;	}
-	else
-	{	return FALSE;	}
-}
-
-// Determines if the target has immunity to sneak attack
-int MP_IsTargetSneakImmune(object oTarget)
-{	
-	if (GetIsImmune(oTarget, IMMUNITY_TYPE_SNEAK_ATTACK) || GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
-	{ 	return TRUE;	}
-	else
-	{	return FALSE;	}
-}
-
-// Determines if the target is under an effect or condition which would make it sneakable
-int MP_IsTargetFlatFooted(object oPC, object oTarget)
-{
 	effect eEffect = GetFirstEffect(oTarget);
-	int iEffectType;
-	
-	if (GetHasFeatEffect(FEAT_KNOCKDOWN, oTarget) || 
-		GetHasFeatEffect(FEAT_IMPROVED_KNOCKDOWN, oTarget) ||
-		GetHasFeatEffect(FEAT_FEINT, oTarget) ||
-		GetHasFeatEffect(1510, oTarget)	||						// Impromptu Sneak Attack 1
-		GetHasFeatEffect(1511, oTarget) ||						// Impromptu Sneak Attack 2
-		GetHasSpellEffect(SPELL_I_BESHADOWED_BLAST, oTarget))
-	{	return TRUE;	}
-	if (GetHasEffect(EFFECT_TYPE_STUNNED, oTarget) ||
-		GetHasEffect(EFFECT_TYPE_SLEEP, oTarget) ||
-		GetHasEffect(EFFECT_TYPE_PARALYZE, oTarget) ||
-		GetHasEffect(EFFECT_TYPE_BLINDNESS, oTarget) ||
-		GetHasEffect(EFFECT_TYPE_NWN2_DEX_ACMOD_DISABLE, oTarget))
-	{	return TRUE;	}
-
-		return FALSE;
-}
-
-// Determines if the caller has Epic Precision; if so, sneak damage will be halved
-int MP_HasEpicPrecision(object oPC)
-{	
-	if (GetHasFeat(2128, oPC, TRUE))
-	{	return TRUE;	}
-	else
-	{	return FALSE;	}
-}
-
-// Determines if the caller has the appropriate Ruin feat to bypass sneak/critical immunity
-int MP_HasRuinFeat(object oPC, object oTarget)
-{
-	int nRace 	= GetRacialType(oTarget);
-	if (nRace == RACIAL_TYPE_UNDEAD && GetHasFeat(2129, oPC, TRUE))				//Undead
-	{	return TRUE;	}
-	else if (nRace == RACIAL_TYPE_ELEMENTAL && GetHasFeat(2130, oPC, TRUE))		//Elemental
-	{	return TRUE;	}
-	else if (nRace == 22 && GetHasFeat(2131, oPC, TRUE))						// Plant
-	{	return TRUE;	}
-	else if (nRace == RACIAL_TYPE_INCORPOREAL && GetHasFeat(2132, oPC, TRUE))	// Spirit
-	{	return TRUE;	}
-	else if (nRace == RACIAL_TYPE_CONSTRUCT && GetHasFeat(2133, oPC, TRUE))		// Construct
-	{	return TRUE;	}
-	else
-	{	return FALSE;	}
-}
-
-// The final determination: can the PC sneak attack this target?
-int MP_CanSneak(object oPC, object oTarget, float fRange)
-{
-	if (MP_IsTargetWithinRange(oPC, oTarget, fRange))
-	{	
-		int iSneakImmune = MP_IsTargetSneakImmune(oTarget);
-	
-		if (!iSneakImmune)
-		{	if (MP_IsTargetFlanked(oPC, oTarget))
-			{	return TRUE;	}
-			if (MP_IsTargetFlatFooted(oPC, oTarget))
-			{	return TRUE;	}
-			if (MP_IsPCStealthed(oPC, oTarget))
-			{	return TRUE;	}
-		}
-		
-		if (iSneakImmune && MP_HasEpicPrecision(oPC))
-		{	if (MP_IsTargetFlanked(oPC, oTarget))
-			{	return TRUE;	}
-			if (MP_IsTargetFlatFooted(oPC, oTarget))
-			{	return TRUE;	}
-			if (MP_IsPCStealthed(oPC, oTarget))
-			{	return TRUE;	}
-		}
-		
-		if (iSneakImmune && MP_HasRuinFeat(oPC, oTarget))
-		{	if (MP_IsTargetFlanked(oPC, oTarget))
-			{	return TRUE;	}
-			if (MP_IsTargetFlatFooted(oPC, oTarget))
-			{	return TRUE;	}
-			if (MP_IsPCStealthed(oPC, oTarget))
-			{	return TRUE;	}
-		}
+	while(GetIsEffectValid(eEffect))
+	{
+	if(GetEffectType(eEffect) == (EFFECT_TYPE_PARALYZE || EFFECT_TYPE_DAZED || EFFECT_TYPE_STUNNED || EFFECT_TYPE_SLEEP)) return TRUE;
+	eEffect = GetNextEffect(oTarget);
 	}
 	
 	return FALSE;
-}
-
-
-
-
-
-int FlatFooted(object oAttacker, object oTarget)
-{
-	return MP_CanSneak(oAttacker,oTarget,3.75f);
 }
 
 int CountDualWieldingFeats(object oAttacker, object oWeapon)
@@ -712,6 +451,7 @@ int CountDualWieldingFeats(object oAttacker, object oWeapon)
 
 	return iPen;
 }
+
 effect GetDamageBonusEffects(object oPC)
 {
 	int iCount; effect eLink;
@@ -788,6 +528,7 @@ int WeaponMasterCritCheck(object oAttacker, object oWeapon)
 
 	return 0;
 }
+
 effect GetDamageFeatBonuses(object oPC)
 {
 	effect eDmg;
@@ -796,25 +537,24 @@ effect GetDamageFeatBonuses(object oPC)
 	int WIS = ((GetAbilityScore(oPC,ABILITY_WISDOM) - 10 ) / 2) / 2;
 //	int CHA = ((GetAbilityScore(oPC,ABILITY_CHARISMA) - 10 ) / 2) / 2;
 			
-//	if(DEX > 1 && GetHasFeat(2879,oPC,TRUE)) return EffectDamage(DEX,DAMAGE_TYPE_ACID); //Deadly Precision
-//	if(WIS > 1 && GetHasFeat(2898,oPC,TRUE)) return EffectDamage(WIS,DAMAGE_TYPE_COLD); //insightful Precision
+	if(DEX > 1 && GetHasFeat(2879,oPC,TRUE)) return EffectDamage(DEX,DAMAGE_TYPE_ACID); //Deadly Precision
+	if(WIS > 1 && GetHasFeat(2898,oPC,TRUE)) return EffectDamage(WIS,DAMAGE_TYPE_COLD); //insightful Precision
 //	if(WIS > CHA) WIS = CHA;
 
-//	if(GetHasFeat(3022, oPC, TRUE))
-//	{
-//		int iPerform = GetSkillRank(SKILL_PERFORM,oPC,FALSE);
-	//	int iDmg = FloatToInt(iPerform * 0.15);	
-//		if(iDmg < 0) iDmg = 1;
-//		
-	//    return EffectDamage(iDmg,DAMAGE_TYPE_SONIC); //insightful Precision		
-//	}
+	if(GetHasFeat(3022, oPC, TRUE))
+	{
+		int iPerform = GetSkillRank(SKILL_PERFORM,oPC,FALSE);
+		int iDmg = FloatToInt(iPerform * 0.15);	
+		if(iDmg < 0) iDmg = 1;
+		
+	    return EffectDamage(iDmg,DAMAGE_TYPE_SONIC); //insightful Precision		
+	}
 	
 //	if(WIS > 1 && GetHasFeat(2894,oPC,TRUE)) return EffectDamage(WIS,DAMAGE_TYPE_POSITIVE); //secrest of harsh master
 			
 	return eDmg;
 }
 
-//Gets the Total Damage of the Weapon from Strength to Int depending on feat
 effect GetWeaponDamageTotal(object oAttacker, object oTarget, object oWeapon, int iCrit, int physicalignore, int sneakattack)
 {
 	// Damage Roll: Weapon Damage Roll + Strength Modifier + Weapon Enhancement.
@@ -924,23 +664,6 @@ effect GetWeaponDamageTotal(object oAttacker, object oTarget, object oWeapon, in
 	return eDMG;
 }
 
-void RemoveMirrorImage(object oPC)
-{
-	effect eEffect = GetFirstEffect( oPC );
-	int iType;
-	while ( GetIsEffectValid(eEffect) )
-	{
-		iType = GetEffectType(eEffect);
-	
-		if ( iType == EFFECT_TYPE_ABSORBDAMAGE)
-		{
-			RemoveEffect( oPC, eEffect ); return;
-		}
-			eEffect = GetNextEffect( oPC );
-	}
-}
-
-
 int AttackerABPenalties(object oAttacker, object oRightWeapon)
 {
 	object oLeftWeapon = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oAttacker);
@@ -948,8 +671,8 @@ int AttackerABPenalties(object oAttacker, object oRightWeapon)
 	
 	if(GetIsObjectValid(oLeftWeapon))
 	{
-	if (GetBaseItemType(oLeftWeapon) == BASE_ITEM_TOWERSHIELD) iPen = 2;
-	else iPen = CountDualWieldingFeats(oAttacker, oRightWeapon);	
+		if (GetBaseItemType(oLeftWeapon) == BASE_ITEM_TOWERSHIELD) iPen = 2;
+		else iPen = CountDualWieldingFeats(oAttacker, oRightWeapon);	
 	}
 	
 	int count;
@@ -957,13 +680,20 @@ int AttackerABPenalties(object oAttacker, object oRightWeapon)
 	effect eAB = GetFirstEffect(oAttacker);
 	while(GetIsEffectValid(eAB))
 	{
-	if(GetEffectType(eAB) == EFFECT_TYPE_ATTACK_DECREASE)
-	{
-	count = count + GetEffectInteger(eAB,0);
-	}
-	eAB = GetNextEffect(oAttacker);
+		if(GetEffectType(eAB) == EFFECT_TYPE_ATTACK_DECREASE)
+		{
+			count = count + GetEffectInteger(eAB,0);
+		}
+	
+		eAB = GetNextEffect(oAttacker);
 	}
 	
+	if(GetActionMode(oAttacker,ACTION_MODE_POWER_ATTACK)) iPen = iPen + 3;
+	if(GetActionMode(oAttacker,ACTION_MODE_IMPROVED_POWER_ATTACK)) iPen = iPen + 6;
+
+	if(GetActionMode(oAttacker,ACTION_MODE_COMBAT_EXPERTISE)) iPen = iPen + 3;
+	if(GetActionMode(oAttacker,ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)) iPen = iPen + 6;
+				
 	return iPen + count;
 }
 
@@ -985,84 +715,46 @@ int AttackerTotalAB(object oAttacker)
 	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker);
 	return (GetAttackBonusTotal(oAttacker) + ApplyFeatsToWeapon(oAttacker, oWeapon) + GetWeaponBonuses(oAttacker, oWeapon) + CreatureSize(oAttacker)) - AttackerABPenalties(oAttacker, oWeapon);
 }
-int CheckIsExploitingSpellCastingSpecialAttacker(object oAttacker, int nSpellID)
-{
-	if(GetLocalInt(oAttacker,"CastingExploitDelay") == 0)
-	{
-		SetLocalInt(oAttacker,"CastingExploitDelay",1);
-		DelayCommand(3.0f,DeleteLocalInt(oAttacker,"CastingExploitDelay"));
-	}
 
-	if(GetCurrentAction(oAttacker) == ACTION_CASTSPELL)
-	{
-		FloatingTextStringOnCreature("*(cannot use this while casting spells)*", oAttacker, TRUE, 3.0f);
-		int featid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
-		DelayCommand(1.5f,ResetFeatUses(oAttacker,featid,TRUE,TRUE));
-		AssignCommand(oAttacker, ClearAllActions(FALSE));
-		return TRUE;
-	}		
-	else return FALSE;
-}
-
-
-
-
-
-
-// Script provided by comeandsee, Haven Admin
 int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityname, int givefeedback, string animation, int ranged, int nSpellID)
 {
 	//0 - miss, 1 - hit, 2 - critical
 	// Melee Attack: 1d20 + base attack bonus + strength modifier + size modifier vs their AC.
 	// Damage Roll: Weapon Damage Roll + Strength Modifier + Weapon Enhancement.
-	
-	int featid; float fDistance = 4.0f;	
-	if(MP_IsPCStealthed(oAttacker,oTarget)) fDistance = 5.0f;
-		
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker);
-	if(GetIsObjectValid(oWeapon) && GetBaseItemType(oWeapon) == 202) fDistance = 4.75;
-	
-//	if(CheckIsExploitingSpellCastingSpecialAttacker(oAttacker,nSpellID) && givefeedback == 1) return 0;
+
+	int featid;
 	
 	if(GetDistanceBetween(oAttacker,oTarget) >= 4.0 && ranged == 0)
 	{
+		SendMessageToPC(oAttacker,"Your target is too far away!");
 		if(givefeedback == 1)
 		{
 			FloatingTextStringOnCreature("*"+abilityname+" (miss - target too far)*", oAttacker, TRUE, 3.0f);
 			featid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
 			DelayCommand(1.5f,ResetFeatUses(oAttacker,featid,TRUE,TRUE));
-			AssignCommand(oAttacker, ClearAllActions(FALSE));
-//			if(GetLocalInt(oAttacker,"HIPSTIMER") == 1)
-//			{
-//				SendMessageToPC(oAttacker,"In Stealth!");
-//				DelayCommand(0.5f,SetActionMode(oAttacker,ACTION_MODE_STEALTH,TRUE));
-//			}
 			DelayCommand(0.2f,	AssignCommand(oAttacker, ActionAttack(oTarget)));
 		}
 		return 0;
 	}
 	
-//	if(givefeedback == 1 && nSpellID > 0)
-//	{
-//	int iTime = GetLocalInt(oAttacker,"GCDOWN"); int uTime = GetUNIXTime();
-//	{	
-		//SendMessageToPC(oAttacker,"Debug GCD: "+IntToString(iTime));
-		//SendMessageToPC(oAttacker,"Time: "+IntToString(uTime));	
-		//SendMessageToPC(oAttacker,"Debug SpellID: "+IntToString(nSpellID));	
-	//	if (iTime + 3 > uTime && givefeedback == 1)
-	//	{
-	//		int result = (iTime + 3)-uTime;
-	//		FloatingTextStringOnCreature("*You must wait "+IntToString(result)+" seconds between ability activations*", oAttacker, TRUE, 3.0f);
-	//		featid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
+	if(givefeedback == 1 && nSpellID > 0)
+	{
+	int iTime = GetLocalInt(oAttacker,"GCDOWN"); int uTime = GetRealTime();
+	{	
+		if (iTime + 3 > uTime && givefeedback == 1)
+		{
+		int result = (iTime + 3)-uTime;
+		FloatingTextStringOnCreature("*You must wait "+IntToString(result)+" seconds between ability activations*", oAttacker, TRUE, 3.0f);
+		featid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
 		
 //		SendMessageToPC(oAttacker,"FeatID: "+IntToString(featid));
 	
-	//		DelayCommand(IntToFloat(result),ResetFeatUses(oAttacker,featid,TRUE,TRUE));
-//			return 0;
-	//	}
-///	}
-//	SetLocalInt(oAttacker,"GCDOWN",GetUNIXTime());
-//	}
+		DelayCommand(IntToFloat(result),ResetFeatUses(oAttacker,featid,TRUE,TRUE));
+		return 0;
+		}
+	}
+	SetLocalInt(oAttacker,"GCDOWN",GetRealTime());
+	}
 	
 	int conceal = ConcealmentCheck(oTarget); int imiss;
 	
@@ -1093,105 +785,64 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	
 	if(InvisibilityCheck(oTarget) == 1)
 	{
-		if(!GetHasSpellEffect(186,oAttacker) && !GetItemHasItemProperty(GetItemInSlot(INVENTORY_SLOT_HEAD,oAttacker),ITEM_PROPERTY_TRUE_SEEING))
+		if(!GetHasSpell(186,oAttacker) && !GetItemHasItemProperty(GetItemInSlot(INVENTORY_SLOT_HEAD,oAttacker),ITEM_PROPERTY_TRUE_SEEING))
 		{
 			if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (miss - invisibility)*", oAttacker, TRUE, 3.0f);
 			SendMessageToPC(oAttacker,"You missed! (invisibility failure)");
 			return 0;
 		}
 	}
-	
-	if(GetHasSpellEffect(852,oTarget))
-	{
-		if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (miss - mirror image)*", oAttacker, TRUE, 3.0f);
-		SendMessageToPC(oAttacker,"You missed! (mirror image)");
-		AssignCommand(oAttacker, ClearAllActions(FALSE));		
-		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
-		RemoveMirrorImage(oTarget);
-		return 0;	
-	}
-	
-	if(GetHasFeat(856,oTarget,TRUE) && d4() == 1)
-	{
-		if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (miss - epic dodge)*", oAttacker, TRUE, 3.0f);
-		SendMessageToPC(oAttacker,"You missed! (epic dodge)");
-		AssignCommand(oAttacker, ClearAllActions(FALSE));			
-		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
-		return 0;	
-	}
 				
 	int roll = d20();
 	int TargetAC = GetAC(oTarget);
-	if(FlatFooted(oAttacker, oTarget) && !GetHasFeat(195,oTarget)) TargetAC = TargetAC - GetDodgeAC(oTarget);
+	if(FlatFooted(oAttacker, oTarget)) TargetAC = TargetAC - GetDodgeAC(oTarget);
 	
 	int iAttackerAB = AttackerTotalAB(oAttacker);
-	if(GetLevelByClass(CLASS_TYPE_RANGER,oAttacker) > 0 && GetIsRangerFavored(oAttacker, oTarget))
+	if(GetLevelByClass(CLASS_TYPE_RANGER,oAttacker) > 0 && GetIsRangerFavored(oAttacker, oTarget) > 0)
 	{
 		iAttackerAB = iAttackerAB + CalculateRangerBonus(oAttacker);
 	}
 	
-	int iAttack = roll + iAttackerAB; int confirmationRoll; int confirmationTotal;
+	int iAttack = roll + iAttackerAB;
 	
 	if(roll == 20 || iAttack >= TargetAC && roll > 1)
 	{
-		if(roll == 20)
-		{
-			SendMessageToPC(oAttacker,"You hit! (rolled 20) " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
-			SendMessageToPC(oTarget,"You were hit! (rolled 20) " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
-		}
-		else
-		{
-			SendMessageToPC(oAttacker,"You hit! " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
-			SendMessageToPC(oTarget,"You were hit! " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
-		}
-		
-		int ThreatRange = GetWeaponThreatRange(oAttacker);
+		SendMessageToPC(oAttacker,"You hit! " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
+		int ThreatRange = GetWeaponThreatRange(oAttacker, GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker));
 	
 		if(animation != "")
 		{
 			PS_CustomAnimation(oAttacker,animation,0);
 			BattleCry(oAttacker);
-			if(ranged == 0)
-			{
-				AssignCommand(oAttacker, ClearAllActions(FALSE));
-				DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
-			}
+			if(ranged == 0) DelayCommand(0.2f,	AssignCommand(oAttacker, ActionAttack(oTarget)));
 		}
 	
-		if(roll >= ThreatRange && !GetIsImmune(oTarget,IMMUNITY_TYPE_CRITICAL_HIT) && !GetHasIgnoreCritImmunity(oAttacker, oTarget))
+		if(roll >= ThreatRange)
 		{
-			confirmationRoll = d20();
-			confirmationTotal = confirmationRoll + iAttackerAB;
+			int confirmationRoll = d20();
+			int confirmationTotal = confirmationRoll + iAttackerAB;
 	
-			if (confirmationRoll == 20 || confirmationTotal >= TargetAC && confirmationRoll > 1)
-			{
-				if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (critical hit)*", oAttacker, TRUE, 3.0f);
-				return 2;
+		if (confirmationRoll == 20 || confirmationTotal >= TargetAC && confirmationRoll > 1)
+		{
+			if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (critical hit)*", oAttacker, TRUE, 3.0f);
+			return 2;
 			}
 		}
 	
-		if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (hit)*", oAttacker, TRUE, 3.0f);
-		return 1;	
-	}
-	
-	if(ranged == 0)
-	{
-		AssignCommand(oAttacker, ClearAllActions(FALSE));
-		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
+	if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (hit)*", oAttacker, TRUE, 3.0f);
+	return 1;	
 	}
 	
 	if(givefeedback == 1 && roll == 1)
 	{
-		FloatingTextStringOnCreature(abilityname+" (miss - rolled 1)*", oAttacker, TRUE, 3.0f);
-		SendMessageToPC(oAttacker,"You missed! (Rolled 1) "+IntToString(iAttack)+" vs "+IntToString(TargetAC));
-		AssignCommand(oAttacker, ClearAllActions(FALSE));
-		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
-		return 0;
+	FloatingTextStringOnCreature(abilityname+" (miss - rolled 1)*", oAttacker, TRUE, 3.0f);
+	SendMessageToPC(oAttacker,"You missed! (Rolled 1) "+IntToString(iAttack)+" vs "+IntToString(TargetAC));
+	return 0;
 	}
 	
 	if(givefeedback == 1) FloatingTextStringOnCreature(abilityname+" (miss)*", oAttacker, TRUE, 3.0f);
 	SendMessageToPC(oAttacker,"You missed! "+IntToString(iAttack)+" vs "+IntToString(TargetAC));
-			
+	
 	return 0;
 }
 
