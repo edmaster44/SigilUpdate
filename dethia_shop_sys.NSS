@@ -1033,6 +1033,9 @@ void AddAllItemsInStoreToDatabase(object oStore) {
 		if (!GetItemInDB(oItem)) {
 			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"', store_tag='"+GetTag(oStore)+"'";
 			SQLExecDirect(sQuery);
+		} else {
+			string sQuery = "UPDATE item_prices SET item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
+			SQLExecDirect(sQuery);
 		}
 	
 		oItem = GetNextItemInInventory(oStore);
