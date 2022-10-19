@@ -23,11 +23,16 @@ void main()
 		{
 			if (GetIsOwnedByPlayer(oKiller) == FALSE)
 			{
-				if (GetSubRace(oKiller) != 25)
+				
+				if (GetHasFeat(2806) == FALSE) //Golem Master with Abiding Masterwork does not lose their golem control device.
 				{
-					DestroyObject(oDevice);
-					sMSG = "As your " + sName + " is destroyed, its control device crumbles to dust";
-					//sSPEAK = "The golem drops to the ground and is utterly destroyed";
+					
+					if (GetSubRace(oKiller) != 25)
+					{
+						DestroyObject(oDevice);
+						sMSG = "As your " + sName + " is destroyed, its control device crumbles to dust";
+						//sSPEAK = "The golem drops to the ground and is utterly destroyed";
+					}
 				}
 			}
 		}
