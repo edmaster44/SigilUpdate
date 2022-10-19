@@ -8,6 +8,7 @@
 //DB Table list
 //valid on test server as of 3-8-20
 const string TABLE_CHARACTER_DATA = "characterdata"; //stores things like rp / dm exp pools, public cd key, etc.
+const string TABLE_FACTION_DATA = "characterfactions";
 const string TABLE_CHARACTER_QUESTS = "characterquests"; //stores permanent quest status info by character; see ps_inc_quests for use
 const string TABLE_EVENT_PLANNER = "event_planner";
 const string TABLE_EVENT_PLANNER_RSVP = "event_planner_rsvp";
@@ -27,6 +28,7 @@ const string TABLE_SIGIS = "sigis";
 const string TABLE_SIGIS_READER = "sigis_reader";
 const string TABLE_SPELL_IDS = "spellids"; //table for sorting spell ids, part of id fix
 const string TABLE_SPELL_IDS_COUNT = "spellids_count"; //table for sorting spell ids, part of id fix
+const string TABLE_NPC_EVENTS = "ps_npc_events"; //table for setting up temporary npc (non-hostile) events
 const string TABLE_TREASURE_ARMOR = "treasure_armor"; //loot table for armor
 const string TABLE_TREASURE_BELTS = "treasure_belts"; //loot table for belts
 const string TABLE_TREASURE_BOOTS = "treasure_boots"; //loot table for boots

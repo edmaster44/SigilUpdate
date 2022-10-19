@@ -155,6 +155,7 @@ const int CLASS_TYPE_VAMPIRE_DRA_PRC			= 105;
 const int CLASS_TYPE_VAMPIRE_MAL_PRC			= 106;
 const int CLASS_TYPE_CHAMPION_OF_CHAOS			= 107;
 const int CLASS_TYPE_GRAY_SLAAD					= 108;
+const int CLASS_TYPE_HALF_UNDEAD				= 114;
 const int CLASS_TYPE_HEZROU						= 126;
 const int CLASS_TYPE_DRAGON_PRC					= 127;
 const int CLASS_TYPE_DRAGON_PSION				= 128;
@@ -546,6 +547,8 @@ const int FEAT_ROBE_OF_CLOUDS					= 2941;
 const int FEAT_SERPENTINE_COIL					= 2942;
 const int FEAT_WILD_GROWTH						= 2943;
 
+
+
 //Nature Warrior Spell-Like Ability
 const int SPELLABILITY_ARMOR_OF_THE_CROCODILE 	= 1936;
 const int SPELLABILITY_BLAZE_OF_POWER			= 1937;
@@ -563,6 +566,7 @@ const int FEAT_DERVISH_DANCE_DEATH				= 3001;
 const int FEAT_DERVISH_DEFENSIVE_PARRY			= 3002;
 const int FEAT_DERVISH_TIRELESS_DANCE			= 3003;
 const int FEAT_DERVISH_THOUSAND_CUTS			= 3004;
+const int FEAT_DERVISH_SLASHING_BLADES			= 3005;
 //New Spell Like Abilities for Elemental Warrior
 const int ELEMENTAL_WARRIOR_IMMUNITY			= 1920;
 const int SPELLABILITY_ELEMWAR_MANIFESTATION    = 1921;
@@ -588,6 +592,17 @@ const int FEAT_BLACKGUARD_SMITE					= 3041;
 const int FEAT_CHAIN_OF_OVERWHELMING_FORCE		= 21476;
 const int FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY		= 21473;
 const int FEAT_CHAIN_OF_DEFENSIVE_POSTURE		= 21474;
+//ShieldBash Feat Lines
+const int FEAT_SHIELDBASH 						= 3058;
+const int FEAT_IMPROVED_SHIELDBASH				= 3059;
+const int FEAT_AGILE_SHIELDBASH					= 3060;
+const int FEAT_ARCANEBASH						= 3061;
+const int FEAT_SHIELDTHROW						= 3062;
+//ShieldBash Spell Like
+const int SPELLFEAT_SHIELDBASH					= 1520;
+const int SPELLFEAT_ARCANEBASH					= 1521;
+const int SPELLFEAT_SHIELDTHROW					= 1522;
+const int SPELLFEAT_AGILE_SHIELDSTRIKE          = 1523;
 //SpellLike Abilities
 const int SPELLABILITY_WARMIND_STRIKE			= 9999;
 

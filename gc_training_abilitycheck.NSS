@@ -29,12 +29,17 @@ int StartingConditional(int nAbility, int nDC, int maxExp = 100)
 	if (nExp > maxExp)
 		nExp = maxExp;
 		
-	int nRoll = d20()+nMod;
+	int nD20 = d20();
+	int nRoll = nD20+nMod;
+	SendMessageToPC(oPC, "Rolled "+IntToString(nD20)+" + "+IntToString(nMod) + " = "+IntToString(nRoll));
 	
 	if (nRoll >= nDC) {
+		SendMessageToPC(oPC, "Success!");
 	 	if (!noExp)
 			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
+	} else {
+		SendMessageToPC(oPC, "Failure");
 	}
 	return FALSE;
 }

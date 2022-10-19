@@ -51,7 +51,7 @@ void PS_KnightLevels(object oPC)
 
 		if (iTotal >= 1  && GetHasFeat(FEAT_BLACKGUARD,oPC))
 			{FeatAdd(oPC,FEAT_USE_POISON,FALSE,FALSE,FALSE);//Use Poison, BG Path
-			FeatAdd(oPC,FEAT_BLACKGUARD_SMITE,FALSE,FALSE,FALSE);//Smite Good, BG Path
+			FeatAdd(oPC,FEAT_SMITE_GOOD,FALSE,FALSE,FALSE);//Smite Good, BG Path
 			}
 		 if (iTotal >= 1 && GetHasFeat(FEAT_BLACKGUARD,oPC))
 				{FeatAdd(oPC,FEAT_BULLS_STRENGTH,FALSE,FALSE,FALSE);//Bull's Strength Feat
@@ -202,7 +202,7 @@ void PS_KnightLevels(object oPC)
 	  }
 		if (iTotal > 13 && GetHasFeat(FEAT_KNIGHT,oPC))
 		
-		{ FeatAdd(oPC,FEAT_KNIGHTSMITE,FALSE,FALSE,FALSE);//New Smite , Knight Path
+		{ FeatAdd(oPC,1761,FALSE,FALSE,FALSE);//New Smite , Knight Path
 		
 		}
 	  if (iTotal > 20 && GetHasFeat(FEAT_KNIGHT,oPC))
@@ -226,9 +226,10 @@ int KnightLevels(object oPC)
 	int iMarquis = GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC);//Marquis Cambion
 	int iDeath = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC);//Death Knight
 	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
+	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
-	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden;
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider ;
 	   if (iPally <1 )
 	   { (iTotal = 0);}
 	else

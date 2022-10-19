@@ -272,6 +272,8 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
     	{	if (nSpell == 1649)
             {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
+                if (GetIsReactionTypeHostile(oTarget,OBJECT_SELF))
+                {
                 if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
         	    {	if ((GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL) && (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER))
 					{	nDamage = d6(nCasterLvl);	}
@@ -300,6 +302,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 					}
 				}
 			}
+		}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 }	}
@@ -387,19 +390,19 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 	
 	
 		if (GetHasSpellEffect(1721)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if (GetHasSpellEffect(1722)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if (GetHasSpellEffect(1723)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if (GetHasSpellEffect(1724)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjuction with Fiendform.");
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
 		if ( GetHasSpellEffect(843, oPC) ) {
@@ -585,7 +588,7 @@ void PS_HOM_Gutwrench(object oPC, int nSpell, object oTarget)
 
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-		// Check for "no discernable anatomy"
+		// Check for "no discernible anatomy"
 		if (PS_GetHasDiscernableAnatomy(oTarget) == FALSE)
 		{   SendMessageToPCByStrRef(oPC, 16780102);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
@@ -651,12 +654,12 @@ void PS_HO_SupernaturalSight(object oPC, int nSpell)
 	if(GetHasSpellEffect(nSpell, oPC))
 	{
 		RemoveEffectsFromSpell(oPC, nSpell);
-		SendMessageToPC(oPC, "Super natural Site deactivated ");	
+		SendMessageToPC(oPC, "Super natural sight deactivated ");	
 	}
 	else
 	{
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		SendMessageToPC(oPC, "Super natural Site activated");
+		SendMessageToPC(oPC, "Super natural sight activated");
 	}
 	
 }

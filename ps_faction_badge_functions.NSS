@@ -24,7 +24,7 @@ void main(int iBadgeFunction, int iParameter)
 			break;
 		
 		case 2:
-			DiscreteShowBadge(oBadge, oPC, oPC);
+			DiscreteShowBadge(oPC, oPC);
 			break;
 		 	
 		case 3:
@@ -78,7 +78,7 @@ void main(int iBadgeFunction, int iParameter)
 			break;
 			
 		case 8:
-			RemoveFactionBadge(oBadge, oPC, oPC);
+			RemoveFaction(oPC, oPC);
 			break;
 		
 		case 9:

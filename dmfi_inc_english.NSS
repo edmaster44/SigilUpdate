@@ -24,7 +24,7 @@ const string TXT_DATA_LOAD = "Please wait while data is written to new DMFI Tool
 const string TXT_DEBUG = "Debug: ";
 const string TXT_DM_TOOL_WARNING = "This tool is for use by DMs ONLY.";
 
-const string TXT_INITIALIZE_TOOL = "DMFI Database Detroyed.";  //context editted
+const string TXT_INITIALIZE_TOOL = "DMFI Database Destroyed.";  //context editted
 const string TXT_INITIALIZE_DATABASE = "DMFI NOTICE:  Tool Database Updated.  Please log off the server to gain a current tool.";
 
 const string TXT_ONE_TOOL = "Only one DMFI Tool allowed per character.";
@@ -51,7 +51,7 @@ const string TXT_MESSAGE_DELIVERED = "DMFI Message Sent: ";
 
 //Languages
 const string TXT_ALL_LANGUAGES = "ALL LANGUAGES GRANTED TO DMs.";
-const string TXT_LANGUAGE= "DMFI Langugage Granted: ";
+const string TXT_LANGUAGE= "DMFI Language Granted: ";
 const string TXT_LANGUAGE_KNOWN = "DMFI Language Already Known: ";
 const string TXT_LANGUAGE_LIST = "DMFI Languages known by target: ";
 const string TXT_LANGUAGE_REMOVED = "DMFI Language Removed: ";
@@ -122,7 +122,7 @@ const string TXT_SET_AMBIENT_DELAY = "DMFI Ambient Delay set to: ";
 const string TXT_SET_AMBIENT_NIGHT = "DMFI Ambient Sound (volume applied): Night set to: ";
 const string TXT_SET_AMBIENT_VOLUME = "DMFI Ambient Volume set to: ";
 
-const string TXT_SET_SOUND_VOLUME = "DMFI Placeable Sound Volumen set to: ";
+const string TXT_SET_SOUND_VOLUME = "DMFI Placeable Sound Volume set to: ";
 const string TXT_SET_SOUND_DELAY= "DMFI Placeable Sound Delay set to: ";
 
 const string TXT_SET_VFX_DURATION = "DMFI VFX Duration set to: ";
@@ -231,7 +231,7 @@ const string CV_LD_D100 = "d100";
 const string CV_SV_INVEN_IDENTIFY = "Identify ALL items for target.";
 const string CV_SV_INVEN_STRIP = "Strip ALL items from target.";
 const string CV_SV_INVEN_UBER = "Remove Uber Items from target.";
-const string CV_SV_FREEZE = "Freeze player (behavoir)";
+const string CV_SV_FREEZE = "Freeze player (behavior)";
 const string CV_SV_BOOT = "Boot Player from server.";
 
 // Added 11/20/06
@@ -1351,7 +1351,7 @@ const string TXT_INVENTORY_MANAGE = "Inventory Copied for Manipulation.";
 const string TXT_INVENTORY_ONLY = "Item must be in your inventory for this inventory action.";
 const string TXT_INVENTORY_TARGET_INVALID = "Inventory Manage Target Invalid";
 const string TXT_ITEM_GIVE = "Item or Items Given: ";
-const string TXT_ITEM_CONTAINER_ERROR = "Error: Can only give contents of containers.  Empty containters NOT valid target.";
+const string TXT_ITEM_CONTAINER_ERROR = "Error: Can only give contents of containers.  Empty containers NOT valid target.";
 
 
 //////////////////////////////////// NEW IN 1.10 //////////////////////////////
@@ -1359,7 +1359,7 @@ const string TXT_ITEM_CONTAINER_ERROR = "Error: Can only give contents of contai
 const string DMFI_STATUS_SHEET = "<b>DMFI STATUS SHEET</b>\n\n";
 const string DONE_UI_BUTTON = "Done";
 const string ONLY_ITEMCREAT = "You can only store items or creatures";
-const string SUCCESS_ADD = "Succesfully added";
+const string SUCCESS_ADD = "Successfully added";
 const string SLOT_EMPTY = "Empty";
 const string TXT_NOTDMEQUAL = "You cannot manage the inventory to yourself";
 //void main() {}

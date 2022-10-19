@@ -38,7 +38,7 @@ void main()
 	
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBoost, oPC, RoundsToSeconds(2));
-	DelayCommand(RoundsToSeconds(1),ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAttack, oPC, RoundsToSeconds(1)));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAttack, oPC, RoundsToSeconds(2));
 	
 	if (iFeat == FEAT_BANZAI_CHARGE)
 	{

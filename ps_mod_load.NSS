@@ -43,6 +43,7 @@
 #include "x2_inc_switches"
 #include "x2_inc_restsys"
 #include "ps_inc_functions"
+#include "featload"
 #include "ps_inc_time"
 #include "ps_inc_bgspellfix"
 
@@ -202,7 +203,8 @@ void main()
 	}
 	
 	OnSeverLoadPopulateSpellSQL();
-	
+	DelayCommand(250.00(OnSeverLoadPopulateFeatSQL(0,2500));
+    DelayCommand(350.00(OnSeverLoadPopulateFeatSQL(2501,5000));
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");
 	

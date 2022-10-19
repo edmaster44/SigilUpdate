@@ -89,6 +89,7 @@ void main()
 						{
 							nDamage = ((d6(nCasterLvl))/2);
 							nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_LAW);
+						}
 							
 						//Resolve metamagic
 						if (nMetaMagic == METAMAGIC_MAXIMIZE)
@@ -113,7 +114,7 @@ void main()
 					//		{
 					//			nDamage = nDamage * 2;
 					//		}
-						}
+						
                         //Adjust damage based on Reflex Save, Evasion and Improved Evasion
                        
                         //Set damage effect

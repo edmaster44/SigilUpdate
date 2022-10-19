@@ -23,6 +23,7 @@
 #include "nw_i0_spells"
 #include "x0_i0_spells"
 #include "nwn2_inc_metmag" 
+#include "ps_inc_functions"
 // JLR - OEI 08/24/05 -- Metamagic changes
 
 //================================================================
@@ -200,7 +201,7 @@ void RemovePermanencySpells(object oTarget)
 // from Devour Magic
 void DevourDispelCallback( object oCaster )
 {
-	int 	nHitpoints 	= GetCasterLevel(oCaster) * 2;
+	int 	nHitpoints 	= PS_GetCasterLevel(oCaster) * 2;
 	effect	eHitPoints 	= EffectTemporaryHitpoints( nHitpoints );
 	float	fDuration 	= 1.0f * 60.0f; // 1 minute
 	RemoveTempHitPoints();
@@ -966,7 +967,7 @@ void ApplyFatigue(object oTarget, int nFatigueDuration, float fDelay = 0.0f)
 {
 	//SpeakString("Entering ApplyFatigue");
 
-	// Only apply fatigue ifyou're not resting.
+	// Only apply fatigue if you're not resting.
 	// This is to keep you from getting fatigued if you rest while raging.
 	if( !GetIsResting() )
 	{

@@ -50,7 +50,7 @@ void main()
 	effect eHit			= EffectVisualEffect(VFX_HIT_SPELL_BODAKS_GLARE);
 	effect eSummon		= EffectSummonCreature("ps_c_bodak", VFX_SUMMON_SPELL_BODAKS_GLARE, 0.8f);
 	effect eLink		= EffectLinkEffects(eHit, eDeath);
-	// Succesful save?
+	// Successful save?
 	int nSaved;
 	
 	// Make sure spell target valid

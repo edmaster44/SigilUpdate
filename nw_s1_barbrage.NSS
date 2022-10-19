@@ -114,6 +114,7 @@ void main()
 	        eLink = EffectLinkEffects(eLink, eSave);
 	        eLink = EffectLinkEffects(eLink, eAC);
 	        eLink = EffectLinkEffects(eLink, eDur);
+			SupernaturalEffect(eLink);
 			
 			effect eNaturalAC;
 			if (GetHasFeat(FEAT_ICE_TROLL_BERSERKER, OBJECT_SELF, TRUE))
@@ -168,7 +169,7 @@ void ApplyFatigue2(object oTarget, int nFatigueDuration, float fDelay = 0.0f)
 {
 	//SpeakString("Entering ApplyFatigue");
 
-	// Only apply fatigue ifyou're not resting.
+	// Only apply fatigue if you're not resting.
 	// This is to keep you from getting fatigued if you rest while raging.
 	if( !GetIsResting() && (GetHasFeatEffect(FEAT_BARBARIAN_RAGE)) )
 	{

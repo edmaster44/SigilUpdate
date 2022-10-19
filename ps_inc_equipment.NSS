@@ -17,6 +17,7 @@
 const int SIGIL_EQUIP_FX = -9444;
 const int SIGIL_ARMOR_OPTIMIZATION_FX = -9544;
 
+
 //This gets the weapons that qualify for Meditative Strikes
 int GetMonkWeapon(object oItem)
 { 
@@ -25,7 +26,13 @@ int GetMonkWeapon(object oItem)
 }
 
 
-
+int GetCreatureWeapons(object oItem)
+{
+int iBaseItem = GetBaseItemType(oItem);
+return iBaseItem == 164  || iBaseItem == 165  || iBaseItem == 166 || iBaseItem == 167 || iBaseItem == 168 || iBaseItem == 169 || iBaseItem == 170
+|| iBaseItem == 171 || iBaseItem == 172 || iBaseItem == 173 || iBaseItem == 174 || iBaseItem == 175 || iBaseItem == 176 || iBaseItem == 177 || iBaseItem == 178
+|| iBaseItem == 179 || iBaseItem == 180;
+}
 
 
 int NoHeavyArmorOrShield(object oPC)
@@ -107,9 +114,9 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
 
     
     int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
-    int nDamageType = IP_CONST_DAMAGETYPE_MAGICAL;
+    int nDamageType = IP_CONST_DAMAGETYPE_DIVINE;
     float fDUR = 9999.9f;    
-    ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_MAGICAL, nDamageConstant);
+    ipAdd  = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, nDamageConstant);
     
     if(GetHasFeat(2840,oPC, TRUE))
     {
@@ -277,38 +284,24 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 }
 }
 
-
-
-
-
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
-   return nTYPE >= 160 && nTYPE <= 180;
-
+   if (nTYPE < 160) return FALSE;
+   if (nTYPE > 180) return FALSE;
+    return TRUE;
+   
 }
 
 
-int GetCreatureWeapons(object oItem)
-{ 
-       int iBaseItem = GetBaseItemType(oItem);
-    return GetIsCreatureWeapon(iBaseItem);
-}
-
-
-
-//A Wrapper for to Ignore Exsisting Finesse
-int GetExistingFinesse(object oItem)
+int GetIsShields (object oItem)
 {
-    if ((GetBaseItemType(oItem) == BASE_ITEM_DAGGER) || (GetBaseItemType(oItem) ==BASE_ITEM_GLOVES )
-     ||(GetBaseItemType(oItem) == BASE_ITEM_KAMA ) ||(GetBaseItemType(oItem) == BASE_ITEM_SHORTSWORD)||(GetBaseItemType(oItem) ==BASE_ITEM_SICKLE)
-    ||(GetBaseItemType(oItem) ==BASE_ITEM_HANDAXE)||(GetBaseItemType(oItem) ==BASE_ITEM_LIGHTHAMMER)||
-    (GetBaseItemType(oItem) ==BASE_ITEM_MACE)||(GetBaseItemType(oItem) ==BASE_ITEM_RAPIER)) return TRUE;
-else
-return FALSE;
-
+  int iBaseItem = GetBaseItemType(oItem);
+   return iBaseItem = BASE_ITEM_LARGESHIELD || BASE_ITEM_SMALLSHIELD || BASE_ITEM_TOWERSHIELD;
 
 }
+
+
 
 //Wrapper to equip effects from equipment in the proper manner.
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT)
@@ -419,6 +412,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
         case BASE_ITEM_ARROW:
         case BASE_ITEM_BELT:
         case BASE_ITEM_BOLT:
+		case BASE_ITEM_ARMOR:
         case BASE_ITEM_BOOTS:
         case BASE_ITEM_BRACER:
         case BASE_ITEM_BULLET:
@@ -426,20 +420,10 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
         case BASE_ITEM_GLOVES:
         case BASE_ITEM_HELMET:
         case BASE_ITEM_RING:
-		case BASE_ITEM_ARMOR:
             return FALSE;
-    } 
+    }
     
-	if  (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC,oPC)>= 0) return FALSE;
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
-    
-    if (GetArmorRank(oITEM) != ARMOR_RANK_NONE||ARMOR_RANK_LIGHT||ARMOR_RANK_MEDIUM||ARMOR_RANK_HEAVY)
-    {
-        SendMessageToPC(oPC, "<c=red>Your character's scales provide a better protection than any armor could. You may only wear clothes.");
-        AssignCommand(oPC, ClearAllActions(TRUE));
-        AssignCommand(oPC, ActionUnequipItem(oITEM));   
-        return TRUE;
-    } 
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1)
@@ -674,8 +658,8 @@ void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
     else if (nSAMURAI >= 11) nBONUS = 2;
     effect eFX = EffectAttackIncrease(nBONUS);
     eFX = EffectLinkEffects(eFX, EffectDamageIncrease(nBONUS, nDMG_TYPE));
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
-   // ApplyEquipmentEffect(oPC, eFX);
+	//ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+    ApplyEquipmentEffect(oPC, eFX);
 }
 
 
@@ -835,6 +819,12 @@ void EquipmentEffects(object oPC)
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
 }
 
+
+		
+
+
+
+
 //This starts all the various checks and effects to be applied based on equipment, as per Sigil's custom rules.
 //nEQUIP: TRUE when called from OnEqup and FALSE when called from OnUnequip.
 //Found in "ps_inc_equipment.nss".
@@ -852,14 +842,14 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
     
       DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
         
-        	if (GetIsFinessable(oITEM))
+        /*	 if (GetIsFinessable(oITEM))
 			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 
             if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
             DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
 				
 			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
-				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
+				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM)); */
 
         
         if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
@@ -868,7 +858,7 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
         {
             if (MonkeyGripAbuse(oPC, oITEM, nITEM) == TRUE) return;
             if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
-            if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return; 
+            if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return;
             IajaitsuMaster(oPC, oITEM, nITEM);
         }
     }
@@ -876,12 +866,12 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
     {
         ConDrainProtection(oITEM, oPC);
         if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
-            PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
+            //PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
             RemoveElementalWeapon(oPC,oITEM);
             RemoveMeditativeStrikes(oPC,oITEM);
 			RemoveAustereStrikes(oPC,oITEM);
         
     }
 
-    DelayCommand(0.1f, EquipmentEffects(oPC));
+    DelayCommand(0.0f, EquipmentEffects(oPC));
 }

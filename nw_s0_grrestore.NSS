@@ -77,7 +77,13 @@ void main()
             GetEffectSpellId(eBad) != SPELL_RIGHTEOUS_MIGHT &&
             GetEffectSpellId(eBad) != SPELL_STONE_BODY &&
             GetEffectSpellId(eBad) != SPELL_IRON_BODY &&
-            GetEffectSpellId(eBad) != 803)
+            GetEffectSpellId(eBad) != 803 &&
+			GetEffectSpellId(eBad) != 2881 &&
+			GetEffectSpellId(eBad) != 2000 &&
+			GetEffectSpellId(eBad) != 2001 &&
+			GetEffectSpellId(eBad) != 2002 &&
+			GetEffectSpellId(eBad) != 2003 &&
+			GetEffectSpellId(eBad) != 2004)
         {
             //Remove effect if it is negative.
             //if(!GetIsSupernaturalCurse(eBad))	// HOTU-SPECIFIC

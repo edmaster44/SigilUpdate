@@ -15,6 +15,9 @@ const float MAXMONSTERXP = 500.0; //The absolute maximum xp any monster can yiel
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							//CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
 							
+const int SERVER_VERSION_ROW = 1;
+const int FACTION_VERSION_ROW = 2;
+			 				
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44; 
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
 
@@ -102,6 +105,8 @@ int PS_GetLevel(object oPC);
 int PS_GetMaxPartylevel(object oPC);
 
 int PS_GetNumPC(object oPC);
+
+effect PS_EffectDamage(int nDamageAmount, int nDamageType = DAMAGE_TYPE_BLUDGEONING, int nDamagePower = DAMAGE_POWER_NORMAL, int IgnoreResistance = FALSE);
 
 float PS_GetAvgPartylevel(object oPC, int iMAX);
 
@@ -1927,8 +1932,8 @@ if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 }
 
 string PS_GetEssenceECL(object oPC)
-{
-	string sECL = GetLocalString(oPC,"ECL");
+{	object oEssence        = GetItemPossessedBy(oPC, "ps_essence");
+	string sECL = GetLocalString(oEssence,"ECL");
 	//if (sECL == "")
 	//{
  		//if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC) == TRUE)
@@ -2753,7 +2758,7 @@ void PS_InitializeItemImmunityLookup()
 	//
 	// Note that it is assumed that no items exist with invalid references to
 	// immunity constants (out of range in the 2DA) as these would be treated as
-	// spell 0, "Acid Fog".  This could be accomodated at the cost of more work
+	// spell 0, "Acid Fog".  This could be accommodated at the cost of more work
 	// done in the primary lookup path.
 	//
 
@@ -3569,7 +3574,7 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 	
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
 	
-	// if fix has alredy been applied, stop the script!
+	// if fix has already been applied, stop the script!
 	if (iStop == 1) 
 	{	SendMessageToPC(oPC, "Racial attribute fix already applied!");
 		return;	}
@@ -3637,7 +3642,7 @@ void PS_RemoveTemplateClassAbilityFix(object oPC, object oItem)
 	
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
 	
-	// if fix has alredy been applied, stop the script!
+	// if fix has already been applied, stop the script!
 	if (iStop != 1) 
 	{	// SendMessageToPC(oPC, "No need to run this script!");
 		return;	}
@@ -4159,7 +4164,7 @@ int PS_GetAppWingType(object oPC)
 	return iWing;
 }
 
-// Determines if the selected target has a discernable anatomy
+// Determines if the selected target has a discernible anatomy
 // int PS_GetHasDiscernableAnatomy(object oTarget);
 int PS_GetHasDiscernableAnatomy(object oTarget)
 {
@@ -4381,6 +4386,61 @@ FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
 
 }
 
+void DoPsyFeatProgression(object oPC)
+{
+
+
+int iPsy = PsyWarLevels(oPC);
+if (iPsy >= 1  && GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+{FeatAdd(oPC,21079,FALSE,FALSE,FALSE);//Chameleon
+FeatAdd(oPC,21003,FALSE,FALSE,FALSE);//Coneal Thought
+FeatAdd(oPC,21011,FALSE,FALSE,FALSE);//Dissipating Touch
+}
+if (iPsy >= 9  && GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+{
+FeatAdd(oPC,21472,FALSE,FALSE,FALSE);//Shadow Play
+}
+
+
+
+if (iPsy >= 1  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,21027,FALSE,FALSE,FALSE);//Vigor
+}
+
+if (iPsy >= 3  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,289,FALSE,FALSE,FALSE);//Weapon Prof. Creature
+FeatAdd(oPC,291,FALSE,FALSE,FALSE);//Weapon Focus. Creature
+}
+
+if (iPsy >= 5  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,290,FALSE,FALSE,FALSE);//Weapon creature, Specialization
+
+}
+if (iPsy >= 7  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,1157,FALSE,FALSE,FALSE);//Greater Weapon Focus, Creature
+
+}
+if (iPsy >= 14  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,1383,FALSE,FALSE,FALSE);//Power Critical, Creature
+
+}
+if (iPsy >= 15  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
+{
+FeatAdd(oPC,1197,FALSE,FALSE,FALSE);//Greater Weapon Specialization, Creature
+
+}
+if (iPsy >= 20 )
+{
+FeatAdd(oPC,21477,FALSE,FALSE,FALSE);//Eternal Warrior
+}
+
+}
+
 //Counts levels in low bab arcane classes
 int GetPureMageLevels(object oPC)
 {
@@ -4397,8 +4457,11 @@ int iMYS =	GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
 int iRWZ = 	GetLevelByClass(CLASS_TYPE_RED_WIZARD, oPC);
 int iGSD =  GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
 int iRSC =  GetLevelByClass(CLASS_TYPE_RAKSHASA_SORCERER, oPC);
+int iWDA =  GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC);
+int iCER =  GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oPC);
+
 	
-int PML = (iWIZ + iSOR + iBRA + iLIC + iSUC + iPAL + iGOL + iARC + iMYS + iRWZ + iRSC + iGSD);
+int PML = (iWIZ + iSOR + iBRA + iLIC + iSUC + iPAL + iGOL + iARC + iMYS + iRWZ + iRSC + iGSD + iWDA + iCER);
 
 return PML;
 }
@@ -4419,4 +4482,36 @@ int GetPCActionRecorded(object oTarget, string sVar, object oPC) {
 	}
 	
 	return FALSE;
+}
+
+effect PS_EffectDamage(int nDamageAmount, int nDamageType = DAMAGE_TYPE_BLUDGEONING, int nDamagePower = DAMAGE_POWER_NORMAL, int IgnoreResistance = FALSE)
+{
+	return EffectDamage(nDamageAmount, nDamageType, nDamagePower, IgnoreResistance);
+	
+	//object oCaster = OBJECT_SELF;
+	//int SpellID = GetSpellId();
+	
+	//nDamageAmount = GetSQLDamageBonuses(oCaster, SpellID, nDamageAmount);
+
+	//effect eDamage = EffectDamage(nDamageAmount, nDamageType, nDamagePower, IgnoreResistance);	
+	//return eDamage;
+}
+
+effect PS_EffectDamagePiercing(int nDamageAmount, int nDamageType=DAMAGE_TYPE_BLUDGEONING, int nDamagePower=DAMAGE_POWER_NORMAL, int nPiercePercent=0)
+{
+	if(nPiercePercent <= 0)
+		return PS_EffectDamage(nDamageAmount, nDamageType, nDamagePower, FALSE);
+	else if(nPiercePercent >= 100)
+		return PS_EffectDamage(nDamageAmount, nDamageType, nDamagePower, TRUE);
+	else
+	{
+		// some of the damage is piercing, some is normal
+		// link them together
+		float fPercentage = IntToFloat(nPiercePercent) * 0.01;
+		int nNormalDamage = FloatToInt(nDamageAmount * (1.0 - fPercentage));
+		int nPiercingDamage = nDamageAmount - nNormalDamage;
+		effect eNormal = PS_EffectDamage(nNormalDamage, nDamageType, nDamagePower, FALSE);
+		effect ePiercing = PS_EffectDamage(nPiercingDamage, nDamageType, nDamagePower, TRUE);
+		return EffectLinkEffects(eNormal, ePiercing);
+	}
 }

@@ -54,7 +54,7 @@ void main()
 
     if(manif.bCanManifest)
     {
-        effect eLink    =                          EffectDamageReduction(5, DAMAGE_POWER_NORMAL, 0, DR_TYPE_NONE);
+        effect eLink    =                          EffectDamageReduction(5, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
                eLink    = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_inertialbarrier.sef"));
         float fDuration = 600.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;

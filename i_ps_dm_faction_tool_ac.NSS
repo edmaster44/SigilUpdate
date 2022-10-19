@@ -15,28 +15,22 @@ void main()
 	{
 		if (GetIsPC(oTarget))
 		{
-			object oItem = GetItemPossessedBy(oTarget,"ps_essence");
-   			if(GetIsObjectValid(oItem))
-			{
-				iFaction = GetLocalInt(oItem, "Faction");
-				
-				if ((iFaction > 1) & (iFaction < 17))
-				{
-					iFactionFound = TRUE;
-				}	
-			}
+			iFaction = GetFaction(oTarget);
+			
+			if (GetIsFaction(iFaction)) 
+				iFactionFound = TRUE;
 			
 			SetLocalObject(oDM, "TargetObject", oTarget);
-			//SendMessageToPC(oDM,"DEBUG: Targetted Player is " + GetName(oTarget));
+			SendMessageToPC(oDM,"DEBUG: Targetted Player is " + GetName(oTarget));
 			string sTargetName = GetName(oTarget);
 			SetLocalString(oDM, "TargetName", sTargetName);
 			SetLocalInt(oDM, "TargetFaction", iFaction);
 			// just in case of previous target, let's clear this one.
 			SetLocalInt(oDM, "TargetSecondaryFaction", 0);
-			//SendMessageToPC(oDM, "DEBUG: Faction Found is: " + IntToString(iFaction));
+			SendMessageToPC(oDM, "DEBUG: Faction Found is: " + IntToString(iFaction));
 			if (iFactionFound == TRUE)
 			{
-				//SendMessageToPC(oDM, "DEBUG: Resolved iFactionFound to be TRUE");
+				SendMessageToPC(oDM, "DEBUG: Resolved iFactionFound to be TRUE");
 				
 				int iSecondaryFaction = 0;
 				

@@ -24,10 +24,12 @@ void TransportParty(object oBOSS, object oPC, string sLOC_PARTY, string sHELP_RE
 	}
 }
 
-void main(string sBOSS, string sLOC_BOSS, string sLOC_PARTY, string sHELP_REF = "", string sHELP_TAG = "", string sHELP_LOC = "", int nDIFF = 1, string sRESPAWN = "")
+void main(string sBOSS, string sLOC_BOSS, string sLOC_PARTY, string sHELP_REF, string sHELP_TAG, string sHELP_LOC, int nDIFF, string sRESPAWN)
 {
 	location lBOSS = GetLocation(GetObjectByTag(sLOC_BOSS));
 	if (GetIsLocationValid(lBOSS) == FALSE) return;
+
+	if(nDIFF < 1) nDIFF = 1;
 	
 	object oPC = GetPCSpeaker();
 	object oAREA = GetArea(oPC);

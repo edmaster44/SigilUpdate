@@ -415,7 +415,7 @@ int ServerExts_ObjectKnownToClient(object ReceivingPCObject, object Object)
 
     if ((Code != 0) && (Code != 1))
     {
-        WriteTimestampedLogEntry("ServerExts_ObjectKnownToClient: Failed to query LUO existance for PC " + GetName(ReceivingPCObject) + ": " + PackedParams + " -> returned " + IntToString(Code));
+        WriteTimestampedLogEntry("ServerExts_ObjectKnownToClient: Failed to query LUO existence for PC " + GetName(ReceivingPCObject) + ": " + PackedParams + " -> returned " + IntToString(Code));
     }
 
     return (Code == 1);
@@ -890,4 +890,3 @@ int ServerExts_GetObjectCount()
 
     return Code;
 }
-

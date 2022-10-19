@@ -304,7 +304,7 @@ int GetNumberofEnchantmentsAvailable(object oObj, int value) {
 	if (nMax > 0)
 		return nMax;
 
-	string sSQL = "SELECT COUNT(*) FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
+	string sSQL = "SELECT COUNT(*) FROM recipes WHERE Points='"+IntToString(value)+"' AND Can_Generate=1 AND ";
 	sSQL += GetEnchantmentItemRestriction(oObj, FALSE);
 	SQLExecDirect(sSQL);
 	if (SQLFetch() != SQL_ERROR) { 
@@ -323,7 +323,7 @@ struct enchantment GetRandomEnchantmentOfValue(object oObj, int value) {
 	int nMax = GetNumberofEnchantmentsAvailable(oObj, value);
 	int nRand = Random(nMax);
 
-	string sSQL = "SELECT Recipe_Id FROM recipes WHERE Points='"+IntToString(value)+"' AND ";
+	string sSQL = "SELECT Recipe_Id FROM recipes WHERE Points='"+IntToString(value)+"' AND Can_Generate=1 AND ";
 	sSQL += GetEnchantmentItemRestriction(oObj, FALSE)+" LIMIT "+IntToString(nRand)+", 1";
 	SQLExecDirect(sSQL);
 	
@@ -699,7 +699,7 @@ int GetNumberOfTrinketEnchantmentsAvailable(int nValue) {
 	if (nMax > 0)
 		return nMax;
 	
-	string sQuery = "SELECT COUNT(*) FROM recipes WHERE Misc='1' AND Points='"+IntToString(nValue)+"'";
+	string sQuery = "SELECT COUNT(*) FROM recipes WHERE Misc='1' AND Points='"+IntToString(nValue)+"' AND Can_Generate=1";
 	SQLExecDirect(sQuery);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		nMax = StringToInt(SQLGetData(1));
@@ -714,7 +714,7 @@ struct enchantment GetRandomTrinketEnchantment(int nValue) {
 	int nMax = GetNumberOfTrinketEnchantmentsAvailable(nValue);
 	
 	int nRandom = Random(nMax);
-	string sQuery = "SELECT Recipe_Id FROM recipes WHERE Type='15' AND Points='"+IntToString(nValue)+"' LIMIT "+IntToString(nRandom)+", 1";
+	string sQuery = "SELECT Recipe_Id FROM recipes WHERE Type='15' AND Points='"+IntToString(nValue)+"' AND Can_Generate=1 LIMIT "+IntToString(nRandom)+", 1";
 	SQLExecDirect(sQuery);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		int n = StringToInt(SQLGetData(1));

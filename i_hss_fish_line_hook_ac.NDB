@@ -1,5 +1,5 @@
 NDB V1.0
-0000014 0000004 0001213 0000139 0000535
+0000014 0000004 0001232 0000139 0000535
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -310,6 +310,12 @@ f ffffffff ffffffff 002 i IPGetHasItemPropertyOnCharacter
 fp o
 fp i
 f ffffffff ffffffff 001 i IPGetNumberOfItemProperties
+fp o
+f ffffffff ffffffff 002 i IPGetIsFinessableWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i IPGetIsLightWeapon
+fp o
 fp o
 f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
@@ -654,6 +660,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
 f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
 f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
@@ -1023,6 +1030,7 @@ f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
 f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
 f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
 f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
 f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
@@ -1043,6 +1051,15 @@ f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
@@ -1527,6 +1544,8 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i SERVER_VERSION_ROW
+f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
 f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
 f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
@@ -1612,6 +1631,11 @@ f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
 f ffffffff ffffffff 001 i PS_GetNumPC
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamage
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
@@ -1914,12 +1938,19 @@ f ffffffff ffffffff 003 v RecordPCAction
 fp o
 fp s
 fp o
+f ffffffff ffffffff 001 v DoPsyFeatProgression
+fp o
 f ffffffff ffffffff 001 i GetPureMageLevels
 fp o
 f ffffffff ffffffff 003 i GetPCActionRecorded
 fp o
 fp s
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamagePiercing
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 v PS_Timestamp_UNIX
 fp o
 fp s
@@ -1972,6 +2003,7 @@ f ffffffff ffffffff 001 i GetIsServerResetTime
 fp o
 f ffffffff ffffffff 000 s SIGIS_EDITOR
 f ffffffff ffffffff 000 s SIGIS_JOURNALIST
+f ffffffff ffffffff 000 s SIGIS_JOURNALIST_OOC
 f ffffffff ffffffff 000 i SIGIS_BACKDATE
 f ffffffff ffffffff 002 s SigisDate
 fp i
@@ -2154,7 +2186,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000213 0000002c 00000048
+l02 0000218 0000002c 00000048
 l03 0000186 00000048 00000048
 l03 0000187 00000048 00000048
 l03 0000188 00000048 00000048
@@ -2474,14 +2506,14 @@ l06 0000425 000027b5 000027b7
 l06 0000426 000027b7 0000280e
 l06 0000428 0000280e 00002869
 l06 0000431 00002875 0000287d
-l05 0000247 0000287d 0000288a
-l05 0000250 0000288a 0000289d
-l05 0000253 0000289d 000028b4
-l05 0000256 000028ba 000028f1
-l05 0000259 000028f7 0000292e
-l05 0000267 00002934 00002949
-l05 0000271 00002949 00002964
-l05 0000273 00002970 00002978
+l05 0000258 0000287d 0000288a
+l05 0000261 0000288a 0000289d
+l05 0000264 0000289d 000028b4
+l05 0000267 000028ba 000028f1
+l05 0000270 000028f7 0000292e
+l05 0000278 00002934 00002949
+l05 0000282 00002949 00002964
+l05 0000284 00002970 00002978
 l06 0000526 00002978 0000297a
 l06 0000528 0000297a 0000298a
 l06 0000530 00002990 000029c0
@@ -2651,13 +2683,13 @@ l06 0001153 000038d1 000038e3
 l06 0001155 000038e9 00003903
 l06 0001158 00003903 0000391d
 l06 0001159 00003923 0000392b
-l05 0000327 0000392b 00003946
-l05 0000328 00003946 00003956
-l05 0000330 0000395c 0000399c
-l05 0000331 0000399c 000039ad
-l05 0000332 000039ad 000039c8
-l05 0000333 000039c8 000039e9
-l05 0000334 000039e9 000039f9
-l05 0000336 000039ff 00003a4d
-l05 0000341 00003a53 00003a6f
-l05 0000342 00003a75 00003a7d
+l05 0000338 0000392b 00003946
+l05 0000339 00003946 00003956
+l05 0000341 0000395c 0000399c
+l05 0000342 0000399c 000039ad
+l05 0000343 000039ad 000039c8
+l05 0000344 000039c8 000039e9
+l05 0000345 000039e9 000039f9
+l05 0000347 000039ff 00003a4d
+l05 0000352 00003a53 00003a6f
+l05 0000353 00003a75 00003a7d

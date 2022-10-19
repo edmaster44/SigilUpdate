@@ -1,5 +1,5 @@
 NDB V1.0
-0000011 0000003 0001141 0000043 0000137
+0000011 0000003 0001159 0000043 0000137
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -300,6 +300,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
 f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
 f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
@@ -669,6 +670,7 @@ f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
 f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
 f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
 f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
 f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
@@ -689,6 +691,15 @@ f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
@@ -1285,6 +1296,12 @@ fp o
 fp i
 f ffffffff ffffffff 001 i IPGetNumberOfItemProperties
 fp o
+f ffffffff ffffffff 002 i IPGetIsFinessableWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i IPGetIsLightWeapon
+fp o
+fp o
 f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
 f ffffffff ffffffff 002 i IPGetItemHasItemAbilityBonusPropertySubType
@@ -1347,6 +1364,8 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i SERVER_VERSION_ROW
+f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
 f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
 f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
@@ -1432,6 +1451,11 @@ f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
 f ffffffff ffffffff 001 i PS_GetNumPC
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamage
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
@@ -1734,12 +1758,19 @@ f ffffffff ffffffff 003 v RecordPCAction
 fp o
 fp s
 fp o
+f ffffffff ffffffff 001 v DoPsyFeatProgression
+fp o
 f ffffffff ffffffff 001 i GetPureMageLevels
 fp o
 f ffffffff ffffffff 003 i GetPCActionRecorded
 fp o
 fp s
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamagePiercing
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 000 i SQL_ERROR
 f ffffffff ffffffff 000 i SQL_SUCCESS
 f 00000329 00000357 001 v SQLExecDirect
@@ -1900,7 +1931,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000213 0000002c 00000048
+l02 0000218 0000002c 00000048
 l10 0000007 0000005a 0000007e
 l10 0000008 0000007e 00000099
 l10 0000009 00000099 000000b1
@@ -1925,11 +1956,11 @@ l09 0000157 00000357 0000038e
 l09 0000158 0000038e 00000396
 l09 0000162 00000396 000003d5
 l09 0000163 000003d5 000003dd
-l02 0004259 000003dd 000003f9
-l02 0004261 000003f9 00000409
-l02 0004262 0000040f 0000041b
-l02 0004264 0000041b 00000430
-l02 0004265 00000436 0000043e
+l02 0004264 000003dd 000003f9
+l02 0004266 000003f9 00000409
+l02 0004267 0000040f 0000041b
+l02 0004269 0000041b 00000430
+l02 0004270 00000436 0000043e
 l08 0000017 0000043e 00000459
 l08 0000018 00000459 00000469
 l08 0000019 00000469 00000481

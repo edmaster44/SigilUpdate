@@ -225,9 +225,15 @@ void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
 		if (GetHasFeat(FEAT_STILL_SPELL, oPC))
 		{	iMetam = iMetam++;	}
 		int iBonus = iModif + iMetam;
-		effect eHP = EffectBonusHitpoints(iBonus);
+
+		if (iBonus > 0)
+		{	// Note: EffectBonusHitpoints is not well behaved in the nwscript.nss API when the
+			// input is not greater than 0.
+			effect eHP = EffectBonusHitpoints(iBonus);
 			eHP = ExtraordinaryEffect(eHP);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHP, oPC);		}
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHP, oPC);		
+		}
+	}
 }
 
 void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
@@ -314,10 +320,10 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
    				int iATotal = d10(1) + iAttackerCheck;
                 int iDTotal = d10(1) + iDefenderCheck + SizeCheck;
                 int nDur    = 4;
-                SendMessageToPC(GetFirstPC(), "iATotal: " + IntToString(iATotal) + ", iDTotal: " + IntToString(iDTotal)); // HERE YOU LOG BOTH ROLLS
+                SendMessageToPC(oPC, "iATotal: " + IntToString(iATotal) + ", iDTotal: " + IntToString(iDTotal)); // HERE YOU LOG BOTH ROLLS
                 if (iATotal > iDTotal)
                 { 
-                    SendMessageToPC(GetFirstPC(), "SUCCESS!"); // here you log success
+                    SendMessageToPC(oPC, "SUCCESS!"); // here you log success
                     effect eRoped    = EffectEntangle();
                     effect eVis        = EffectVisualEffect(VFX_DUR_PARALYZED);
                     effect eHidePen = EffectSkillDecrease(5, 100);
@@ -330,7 +336,7 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
                     
                 else 
                 {   effect eFail = EffectMovementSpeedDecrease (50);
-                    SendMessageToPC(GetFirstPC(), "FAILURE!"); // here you log failure
+                    SendMessageToPC(oPC, "FAILURE!"); // here you log failure
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
                     SpeakString(GetFirstName(oTarget) + " broke free of the attempted ensnarement!"); }
         

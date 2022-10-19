@@ -5,7 +5,7 @@
 //:://////////////////////////////////////////////
 /*
     All enemies in LOS of the spell must make 2 saves or die.
-    Even IF the fortitude save is succesful, they will still take
+    Even IF the fortitude save is successful, they will still take
     3d6 damage.
 */
 //:://////////////////////////////////////////////

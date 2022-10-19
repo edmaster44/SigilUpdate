@@ -1,5 +1,5 @@
 NDB V1.0
-0000040 0000009 0002327 0000012 0000087
+0000040 0000009 0002345 0000012 0000087
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -487,6 +487,12 @@ fp o
 fp i
 f ffffffff ffffffff 001 i IPGetNumberOfItemProperties
 fp o
+f ffffffff ffffffff 002 i IPGetIsFinessableWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i IPGetIsLightWeapon
+fp o
+fp o
 f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
 f ffffffff ffffffff 002 i IPGetItemHasItemAbilityBonusPropertySubType
@@ -921,6 +927,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
 f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
 f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
@@ -1290,6 +1297,7 @@ f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
 f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
 f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
 f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
 f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
@@ -1310,6 +1318,15 @@ f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
@@ -1655,6 +1672,8 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i SERVER_VERSION_ROW
+f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
 f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
 f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
@@ -1740,6 +1759,11 @@ f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
 f ffffffff ffffffff 001 i PS_GetNumPC
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamage
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
@@ -2042,12 +2066,19 @@ f ffffffff ffffffff 003 v RecordPCAction
 fp o
 fp s
 fp o
+f ffffffff ffffffff 001 v DoPsyFeatProgression
+fp o
 f ffffffff ffffffff 001 i GetPureMageLevels
 fp o
 f ffffffff ffffffff 003 i GetPCActionRecorded
 fp o
 fp s
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamagePiercing
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 000 i SPELL_TARGET_ALLALLIES
 f ffffffff ffffffff 000 i SPELL_TARGET_STANDARDHOSTILE
 f ffffffff ffffffff 000 i SPELL_TARGET_SELECTIVEHOSTILE
@@ -4215,21 +4246,21 @@ f ffffffff ffffffff 001 v ApplyIajutsuMasterEffect
 fp o
 f ffffffff ffffffff 001 v ApplyFrightfulPresence
 fp o
-f 0000008a 0000039b 000 v main
+f 0000008a 00000379 000 v main
 f 0000000d 00000015 000 v #loader
 f 00000015 0000008a 000 v #globals
 v 00000015 ffffffff 00000000 s PRETTY_LINE_COUNT_VAR
 v 0000002c ffffffff 00000004 i DevMode
 v 00000048 ffffffff 00000008 s X0_DATABASE_DEFAULT
 v 00000062 ffffffff 0000000c s X0_DATABASE_XP1
-v 0000008a 00000393 00000000 o oPC
-v 00000090 00000393 00000004 i iFeat
-v 00000097 00000393 00000008 e0 eBoost
-v 00000099 00000393 0000000c e0 eAttack
-v 0000009b 00000393 00000010 e0 ePenalty
-v 0000009b 00000393 00000014 i iLevel
-v 000001a7 00000393 00000018 e0 eVis
-v 000001b8 00000393 0000001c e0 eVisDur
+v 0000008a 00000371 00000000 o oPC
+v 00000090 00000371 00000004 i iFeat
+v 00000097 00000371 00000008 e0 eBoost
+v 00000099 00000371 0000000c e0 eAttack
+v 0000009b 00000371 00000010 e0 ePenalty
+v 0000009b 00000371 00000014 i iLevel
+v 000001a7 00000371 00000018 e0 eVis
+v 000001b8 00000371 0000001c e0 eVisDur
 l00 0000048 00000015 0000002c
 l01 0000037 0000002c 0000002c
 l01 0000038 0000002c 0000002c
@@ -4258,7 +4289,7 @@ l01 0000076 0000002c 0000002c
 l01 0000077 0000002c 0000002c
 l01 0000078 0000002c 0000002c
 l01 0000080 0000002c 0000002c
-l02 0000213 0000002c 00000048
+l02 0000218 0000002c 00000048
 l03 0000051 00000048 00000062
 l03 0000053 00000062 00000078
 l04 0000040 00000078 00000078
@@ -4312,8 +4343,8 @@ l39 0000035 00000217 00000232
 l39 0000037 00000232 0000025a
 l39 0000039 0000025a 0000027b
 l39 0000040 0000027b 000002a1
-l39 0000041 000002a1 000002e9
-l39 0000043 000002e9 000002f9
-l39 0000045 000002ff 00000347
-l39 0000046 00000347 00000393
-l39 0000048 00000399 0000039b
+l39 0000041 000002a1 000002c7
+l39 0000043 000002c7 000002d7
+l39 0000045 000002dd 00000325
+l39 0000046 00000325 00000371
+l39 0000048 00000377 00000379

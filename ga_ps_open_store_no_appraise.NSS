@@ -1,5 +1,6 @@
 #include "ginc_param_const"
 #include "ginc_item"
+#include "dethia_shop_sys"
 
 object GetStoreFromStoreArea(string sTag)
 {
@@ -22,5 +23,5 @@ object GetStoreFromStoreArea(string sTag)
 void main(string sTag)
 {
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
-	OpenStore(GetStoreFromStoreArea(sTag), oPC);
+	DS_OpenShop(GetStoreFromStoreArea(sTag), oPC);
 }

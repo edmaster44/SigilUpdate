@@ -1,5 +1,5 @@
 NDB V1.0
-0000010 0000003 0001116 0000015 0000056
+0000010 0000003 0001134 0000015 0000056
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -299,6 +299,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
 f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
 f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
@@ -668,6 +669,7 @@ f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
 f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
 f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
 f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
 f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
@@ -688,6 +690,15 @@ f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
@@ -1284,6 +1295,12 @@ fp o
 fp i
 f ffffffff ffffffff 001 i IPGetNumberOfItemProperties
 fp o
+f ffffffff ffffffff 002 i IPGetIsFinessableWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i IPGetIsLightWeapon
+fp o
+fp o
 f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
 f ffffffff ffffffff 002 i IPGetItemHasItemAbilityBonusPropertySubType
@@ -1346,6 +1363,8 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i SERVER_VERSION_ROW
+f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
 f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
 f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
@@ -1431,6 +1450,11 @@ f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
 f ffffffff ffffffff 001 i PS_GetNumPC
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamage
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
@@ -1733,12 +1757,19 @@ f ffffffff ffffffff 003 v RecordPCAction
 fp o
 fp s
 fp o
+f ffffffff ffffffff 001 v DoPsyFeatProgression
+fp o
 f ffffffff ffffffff 001 i GetPureMageLevels
 fp o
 f ffffffff ffffffff 003 i GetPCActionRecorded
 fp o
 fp s
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamagePiercing
+fp i
+fp i
+fp i
+fp i
 f 0000005a 00000140 000 v main
 f 0000000d 00000015 000 v #loader
 f 00000015 0000005a 000 v #globals
@@ -1785,7 +1816,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000213 0000002c 00000048
+l02 0000218 0000002c 00000048
 l09 0000013 0000005a 0000005f
 l09 0000014 0000005f 0000007d
 l09 0000015 0000007d 0000009d
@@ -1797,19 +1828,19 @@ l09 0000023 000000ec 000000f7
 l09 0000024 000000f7 00000122
 l09 0000028 00000128 00000138
 l09 0000030 0000013e 00000140
-l02 0002135 00000140 0000014e
-l02 0002136 00000154 00000177
-l02 0002138 00000177 0000018c
-l02 0002139 0000018c 00000194
-l02 0002141 00000194 000001a6
-l02 0002142 000001ac 000001c2
-l02 0002143 000001c2 000001de
-l02 0002144 000001e4 000001e6
-l02 0002145 000001e6 0000020c
-l02 0002147 00000212 0000021a
-l02 0002122 0000021a 00000251
-l02 0002123 00000251 00000253
-l02 0002127 00000253 00000261
-l02 0002128 00000267 0000028a
-l02 0002130 0000028a 000002a7
-l02 0002131 000002a7 000002af
+l02 0002140 00000140 0000014e
+l02 0002141 00000154 00000177
+l02 0002143 00000177 0000018c
+l02 0002144 0000018c 00000194
+l02 0002146 00000194 000001a6
+l02 0002147 000001ac 000001c2
+l02 0002148 000001c2 000001de
+l02 0002149 000001e4 000001e6
+l02 0002150 000001e6 0000020c
+l02 0002152 00000212 0000021a
+l02 0002127 0000021a 00000251
+l02 0002128 00000251 00000253
+l02 0002132 00000253 00000261
+l02 0002133 00000267 0000028a
+l02 0002135 0000028a 000002a7
+l02 0002136 000002a7 000002af

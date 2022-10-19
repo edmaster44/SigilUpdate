@@ -12,7 +12,7 @@
 #include "ginc_param_const"
 #include "ginc_var_ops"
 
-void main(string sCreatureTag = "", int shouldRun = FALSE) {
+void main(string sCreatureTag, int shouldRun) {
 
     object oCreature = GetTarget(sCreatureTag, TARGET_OBJECT_SELF);
 	object oPC = GetPCSpeaker();

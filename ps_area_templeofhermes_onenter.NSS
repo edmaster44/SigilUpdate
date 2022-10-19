@@ -17,6 +17,10 @@ void main()
   {
   	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hermesguard", GetLocation(GetWaypointByTag("wp_ps_npc_hermesguard1"))); 
 	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hermesguard", GetLocation(GetWaypointByTag("wp_ps_npc_hermesguard2")));  
+	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hermesguard", GetLocation(GetWaypointByTag("wp_ps_npc_hermesguard3")));  
+	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hermesguard", GetLocation(GetWaypointByTag("wp_ps_npc_hermesguard4")));  
+	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hermesguard", GetLocation(GetWaypointByTag("wp_ps_npc_hermesguard5")));  
+	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_hermesguard", GetLocation(GetWaypointByTag("wp_ps_npc_hermesguard6")));  
   }
   if(GetObjectByTag("ps_npc_hermespriestess") == OBJECT_INVALID)
   {

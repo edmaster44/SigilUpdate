@@ -317,7 +317,7 @@ void SetWalkCondition(int nCondition, int bValid=TRUE, object oCreature=OBJECT_S
         // the bit that is true will be set to true in the result
         SetLocalInt(oCreature, sWalkwayVarname, nCurrentCond | nCondition);
     } else {
-        // take complement of conditon and "and" it with current conditions which means
+        // take complement of condition and "and" it with current conditions which means
         // everything preserved except the bit passed in which will be set to 0
         SetLocalInt(oCreature, sWalkwayVarname, nCurrentCond & ~nCondition);
     }

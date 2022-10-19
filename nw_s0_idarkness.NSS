@@ -69,7 +69,7 @@ void main() {
 	}
 	
 	if (nNumberCalled >= nCreatures) {
-		SendMessageToPC(oCaster, "You have already called "+IntToString(nNumberCalled)+" beasts. You will recieve no more aid at this time.");
+		SendMessageToPC(oCaster, "You have already called "+IntToString(nNumberCalled)+" beasts. You will receive no more aid at this time.");
 		return;
 	} else {
 		nCreatures -= nNumberCalled;

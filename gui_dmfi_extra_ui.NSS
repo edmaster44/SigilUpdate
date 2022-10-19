@@ -67,7 +67,8 @@ void main(string sWINDOW)
 	switch (nWINDOW)
 	{
 		case 1: //UI options
-			DisplayGuiScreen(oPC, "SCREEN_CLANGEDDIN_UI_OPTIONS", FALSE, "clangeddin_ui_options.xml");
+ 			DisplayGuiScreen(oPC,"KEMO_ANIM",FALSE,"kemo_anim.xml");
+			CloseGUIScreen(oPC,"KEMO_ANIM_MIN");
 			break;
 		case 2: //Scry Panel
 			DisplayGuiScreen(oPC,"KEMO_SCRY_PANEL", FALSE, "kemo_scry_panel.xml");

@@ -73,9 +73,6 @@ void main()
     }
 
     object oManifester = OBJECT_SELF;
-int	nDamage = IP_CONST_DAMAGEBONUS_1d8;
-int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
-itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
     object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
@@ -92,18 +89,17 @@ itemproperty ipWoE = ItemPropertyDamageBonus(DamageType,nDamage);
     }
 
     if(manif.bCanManifest)
-    {
-        int nDamageType = GetWeaponType(oTarget);
+{
+		int nDamage = IP_CONST_DAMAGEBONUS_1d8;
         effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
-        float fDuration = 600.0f * manif.nManifesterLevel;
+        float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-
-        if(manif.bAugment)
-		{nDamage = IP_CONST_DAMAGEBONUS_1d10;}
-		else 
-           
+		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_1d10;
+		int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
+		itemproperty iPEnergy = ItemPropertyDamageBonus(DamageType,nDamage);  
         {
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-        AddItemProperty(DURATION_TYPE_TEMPORARY, ipWoE, oTarget, fDuration);}
-        }
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
+        AddItemProperty(DURATION_TYPE_TEMPORARY, iPEnergy, oTarget, fDuration);}
+        
     }
+}

@@ -47,7 +47,7 @@ void main()
     int nDC = GetSpellSaveDC();
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
-	object		oCaster		=	OBJECT_SELF;
+	object		oCaster		=  (OBJECT_SELF);
 
 	int	nMetaMagic = GetMetaMagicFeat();
     float fDelay;
@@ -89,14 +89,8 @@ void main()
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 24.0f));
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis3, oTarget,4.0f));
             }
-			
+		}
 
-				
-	
-					
-        
-
-       oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, TRUE, OBJECT_TYPE_CREATURE);
- 			}
-	     }
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, TRUE, OBJECT_TYPE_CREATURE);
+    }
 }

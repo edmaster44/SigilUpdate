@@ -1,5 +1,5 @@
 NDB V1.0
-0000050 0000016 0002700 0000012 0000093
+0000051 0000017 0002715 0000012 0000100
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -8,48 +8,49 @@ n04 x0_i0_enemy
 n05 x0_inc_generic
 n06 nwn2_inc_talent
 n07 nw_i0_generic
-n08 x2_inc_craft
-n09 x0_i0_stringlib
-n10 ginc_param_const
-n11 ginc_crafting
-n12 ps_enchant_lib
-n13 nwnx_sql
-n14 x0_i0_match
-n15 x2_inc_switches
-n16 x2_inc_itemprop
-n17 x0_i0_petrify
-n18 x0_i0_assoc
-n19 x0_i0_position
-n20 ServerExts
-n21 ps_inc_ecl
-n22 NW_I0_SPELLS
-n23 x0_i0_partywide
-n24 x0_i0_transport
-n25 x0_i0_common
-n26 nw_i0_plot
-n27 x0_i0_behavior
-n28 x0_i0_modes
-n29 x0_i0_voice
-n30 x0_i0_debug
-n31 x0_i0_equip
-n32 ginc_2da
-n33 ginc_event_handlers
-n34 x0_i0_talent
-n35 x0_i0_combat
-n36 x0_i0_spawncond
-n37 x0_i0_walkway
-n38 x0_i0_anims
-n39 x0_i0_henchman
-n40 ps_adjust_knight
-n41 nwn2_inc_metmag
-n42 X0_I0_SPELLS
-n43 ginc_vars
-n44 ginc_math
-n45 ginc_item
-n46 x2_inc_spellhook
-n47 ps_inc_melee
-n48 nwn2_inc_spells
-N49 psi_pow_chainsup
+n08 ps_inc_time
+n09 x2_inc_craft
+n10 x0_i0_stringlib
+n11 ginc_param_const
+n12 ginc_crafting
+n13 ps_enchant_lib
+n14 nwnx_sql
+n15 x0_i0_match
+n16 x2_inc_switches
+n17 x2_inc_itemprop
+n18 x0_i0_petrify
+n19 x0_i0_assoc
+n20 x0_i0_position
+n21 ServerExts
+n22 ps_inc_ecl
+n23 NW_I0_SPELLS
+n24 x0_i0_partywide
+n25 x0_i0_transport
+n26 x0_i0_common
+n27 nw_i0_plot
+n28 x0_i0_behavior
+n29 x0_i0_modes
+n30 x0_i0_voice
+n31 x0_i0_debug
+n32 x0_i0_equip
+n33 ginc_2da
+n34 ginc_event_handlers
+n35 x0_i0_talent
+n36 x0_i0_combat
+n37 x0_i0_spawncond
+n38 x0_i0_walkway
+n39 x0_i0_anims
+n40 x0_i0_henchman
+n41 ps_adjust_knight
+n42 nwn2_inc_metmag
+n43 X0_I0_SPELLS
+n44 ps_inc_melee
+n45 ginc_vars
+n46 ginc_math
+n47 ginc_item
+n48 x2_inc_spellhook
+n49 nwn2_inc_spells
+N50 psi_pow_chainsup
 s 03 vector
 sf f x
 sf f y
@@ -117,6 +118,14 @@ sf i nMagicOld
 sf i nStealth
 sf i bScaredOfSilence
 sf i bTacticChosen
+s 07 TimeFields
+sf i Year
+sf i Month
+sf i Day
+sf i Weekday
+sf i Hour
+sf i Minute
+sf i Second
 s 05 craft_struct
 sf i nRow
 sf s sResRef
@@ -613,6 +622,12 @@ fp o
 fp i
 f ffffffff ffffffff 001 i IPGetNumberOfItemProperties
 fp o
+f ffffffff ffffffff 002 i IPGetIsFinessableWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i IPGetIsLightWeapon
+fp o
+fp o
 f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
 f ffffffff ffffffff 002 i IPGetItemHasItemAbilityBonusPropertySubType
@@ -1047,6 +1062,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
 f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
 f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
@@ -1416,6 +1432,7 @@ f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
 f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
 f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
 f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
 f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
@@ -1436,6 +1453,15 @@ f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
@@ -1781,6 +1807,8 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i SERVER_VERSION_ROW
+f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
 f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
 f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
@@ -1866,6 +1894,11 @@ f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
 f ffffffff ffffffff 001 i PS_GetNumPC
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamage
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
@@ -2168,12 +2201,19 @@ f ffffffff ffffffff 003 v RecordPCAction
 fp o
 fp s
 fp o
+f ffffffff ffffffff 001 v DoPsyFeatProgression
+fp o
 f ffffffff ffffffff 001 i GetPureMageLevels
 fp o
 f ffffffff ffffffff 003 i GetPCActionRecorded
 fp o
 fp s
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamagePiercing
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 000 i SPELL_TARGET_ALLALLIES
 f ffffffff ffffffff 000 i SPELL_TARGET_STANDARDHOSTILE
 f ffffffff ffffffff 000 i SPELL_TARGET_SELECTIVEHOSTILE
@@ -4109,6 +4149,146 @@ fp o
 fp i
 f ffffffff ffffffff 001 i GZCanNotUseGazeAttackCheck
 fp o
+f ffffffff ffffffff 002 v PS_Timestamp_UNIX
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_GetTimestamp_Age_Seconds
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_GetTimestamp_Age_Minutes
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_GetTimestamp_Age_Hours
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_GetTimestamp_Age_Days
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_GetTimestamp_Age_Weeks
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_GetTimestamp_Age_Months
+fp o
+fp s
+f ffffffff ffffffff 003 i PS_GetHasTimePassed_Seconds
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i PS_GetHasTimePassed_Minutes
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i PS_GetHasTimePassed_Hours
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i PS_GetHasTimePassed_Days
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i PS_GetHasTimePassed_Weeks
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i PS_GetHasTimePassed_Months
+fp o
+fp s
+fp i
+f ffffffff ffffffff 000 i GetRealTime
+f ffffffff ffffffff 001 t0009 TimeToTimeFields
+fp i
+f ffffffff ffffffff 001 i GetIsServerResetTime
+fp o
+f ffffffff ffffffff 001 i GetDamageBonusInt
+fp i
+f ffffffff ffffffff 001 i GetDamageBonusDie
+fp i
+f ffffffff ffffffff 001 i GetDamageBonusType
+fp i
+f ffffffff ffffffff 001 v BattleCry
+fp o
+f ffffffff ffffffff 004 v PS_CustomAnimation
+fp o
+fp s
+fp i
+fp f
+f ffffffff ffffffff 001 i GetAttackBonusTotal
+fp o
+f ffffffff ffffffff 001 i SneakAttackCount
+fp o
+f ffffffff ffffffff 001 i ConcealmentCheck
+fp o
+f ffffffff ffffffff 001 i InvisibilityCheck
+fp o
+f ffffffff ffffffff 002 i GetIsImprovedRangerFavored
+fp o
+fp o
+f ffffffff ffffffff 002 i GetIsRangerFavored
+fp o
+fp o
+f ffffffff ffffffff 001 i CalculateRangerBonus
+fp o
+f ffffffff ffffffff 002 i CalculateRangerTotal
+fp o
+fp o
+f ffffffff ffffffff 002 i ApplyFeatsToWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i ApplyDamageFeatsToWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i GetWeaponThreatRange
+fp o
+fp o
+f ffffffff ffffffff 002 i GetWeaponBonuses
+fp o
+fp o
+f ffffffff ffffffff 002 i GetEnhancementBonus
+fp o
+fp o
+f ffffffff ffffffff 001 i GetDodgeAC
+fp o
+f ffffffff ffffffff 002 i FlatFooted
+fp o
+fp o
+f ffffffff ffffffff 002 i CountDualWieldingFeats
+fp o
+fp o
+f ffffffff ffffffff 001 e0 GetDamageBonusEffects
+fp o
+f ffffffff ffffffff 002 e0 GetWeaponDamageEnchantments
+fp o
+fp o
+f ffffffff ffffffff 002 i WeaponMasterCritCheck
+fp o
+fp o
+f ffffffff ffffffff 001 e0 GetDamageFeatBonuses
+fp o
+f ffffffff ffffffff 006 e0 GetWeaponDamageTotal
+fp o
+fp o
+fp o
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 i AttackerABPenalties
+fp o
+fp o
+f ffffffff ffffffff 001 i CreatureSize
+fp o
+f ffffffff ffffffff 001 i AttackerTotalAB
+fp o
+f ffffffff ffffffff 007 i AttemptMeleeAttackMainHand
+fp o
+fp o
+fp s
+fp i
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 v AttemptTauntAroundPlayer
+fp o
+fp i
 f ffffffff ffffffff 000 i STR_REF_IC_SPELL_TO_HIGH_FOR_WAND
 f ffffffff ffffffff 000 i STR_REF_IC_SPELL_TO_HIGH_FOR_POTION
 f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_POTION
@@ -4202,7 +4382,7 @@ fp o
 f ffffffff ffffffff 002 i CIGetIsSpellRestrictedFromCraftFeat
 fp i
 fp i
-f ffffffff ffffffff 003 t0009 CIGetCraftItemStructFrom2DA
+f ffffffff ffffffff 003 t0010 CIGetCraftItemStructFrom2DA
 fp s
 fp i
 fp i
@@ -4243,7 +4423,7 @@ fp i
 fp o
 fp o
 fp i
-f ffffffff ffffffff 003 t0010 CIGetCraftingModeFromTarget
+f ffffffff ffffffff 003 t0011 CIGetCraftingModeFromTarget
 fp o
 fp o
 fp o
@@ -4279,15 +4459,15 @@ fp i
 f ffffffff ffffffff 002 i CIGetWeaponModificationCost
 fp o
 fp o
-f ffffffff ffffffff 002 t0011 GetStringTokenizer
+f ffffffff ffffffff 002 t0012 GetStringTokenizer
 fp s
 fp s
 f ffffffff ffffffff 001 i HasMoreTokens
-fp t0011
-f ffffffff ffffffff 001 t0011 AdvanceToNextToken
-fp t0011
+fp t0012
+f ffffffff ffffffff 001 t0012 AdvanceToNextToken
+fp t0012
 f ffffffff ffffffff 001 s GetNextToken
-fp t0011
+fp t0012
 f ffffffff ffffffff 002 i GetNumberTokens
 fp s
 fp s
@@ -4295,7 +4475,7 @@ f ffffffff ffffffff 003 s GetTokenByPosition
 fp s
 fp s
 fp i
-f ffffffff ffffffff 002 t0012 GetFirstAlpha
+f ffffffff ffffffff 002 t0013 GetFirstAlpha
 fp s
 fp s
 f ffffffff ffffffff 003 s RemoveListElement
@@ -4625,7 +4805,7 @@ f ffffffff ffffffff 001 i GetSkillConstant
 fp i
 f ffffffff ffffffff 001 o GetSoundObjectByTag
 fp s
-f ffffffff ffffffff 002 t0013 GetNameValuePairStruct
+f ffffffff ffffffff 002 t0014 GetNameValuePairStruct
 fp s
 fp s
 f ffffffff ffffffff 002 s GetNVPValue
@@ -4878,7 +5058,7 @@ fp s
 fp s
 fp s
 fp o
-f ffffffff ffffffff 001 t0014 GetRowIndexes
+f ffffffff ffffffff 001 t0015 GetRowIndexes
 fp s
 f ffffffff ffffffff 004 i GetCrafting2DARecipeMatch
 fp s
@@ -4963,145 +5143,6 @@ f ffffffff ffffffff 000 v X2BreakConcentrationSpells
 f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
 fp o
 f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
-f ffffffff ffffffff 001 v WhirlWindAnim
-fp o
-f ffffffff ffffffff 001 v CleaveAnim
-fp o
-f ffffffff ffffffff 001 v ArrowShower
-fp o
-f ffffffff ffffffff 002 i GetHighestModifier
-fp o
-fp i
-f ffffffff ffffffff 001 i GetHighestRangedModifier
-fp o
-f ffffffff ffffffff 001 i GetDamageBonusInt
-fp i
-f ffffffff ffffffff 001 i GetDamageBonusDie
-fp i
-f ffffffff ffffffff 001 i GetDamageBonusType
-fp i
-f ffffffff ffffffff 001 v BattleCry
-fp o
-f ffffffff ffffffff 004 v PS_CustomAnimation
-fp o
-fp s
-fp i
-fp f
-f ffffffff ffffffff 001 i GetAttackBonusTotal
-fp o
-f ffffffff ffffffff 001 i SneakAttackCount
-fp o
-f ffffffff ffffffff 001 i ConcealmentCheck
-fp o
-f ffffffff ffffffff 001 i InvisibilityCheck
-fp o
-f ffffffff ffffffff 001 s GetRacialTypeName
-fp o
-f ffffffff ffffffff 001 i GetRacialTypeConst
-fp o
-f ffffffff ffffffff 002 i GetHasIgnoreCritImmunity
-fp o
-fp o
-f ffffffff ffffffff 002 i GetIsImprovedRangerFavored
-fp o
-fp o
-f ffffffff ffffffff 002 i GetIsRangerFavored
-fp o
-fp o
-f ffffffff ffffffff 002 i GetIsRangerFavoredPowerAttack
-fp o
-fp o
-f ffffffff ffffffff 001 i CalculateRangerBonus
-fp o
-f ffffffff ffffffff 002 i CalculateRangerTotal
-fp o
-fp o
-f ffffffff ffffffff 002 i ApplyFeatsToWeapon
-fp o
-fp o
-f ffffffff ffffffff 002 i ApplyDamageFeatsToWeapon
-fp o
-fp o
-f ffffffff ffffffff 001 i GetWeaponThreatRange
-fp o
-f ffffffff ffffffff 002 i GetWeaponBonuses
-fp o
-fp o
-f ffffffff ffffffff 002 i GetEnhancementBonus
-fp o
-fp o
-f ffffffff ffffffff 001 i GetDodgeAC
-fp o
-f ffffffff ffffffff 002 i MP_IsPCStealthed
-fp o
-fp o
-f ffffffff ffffffff 002 i MP_IsTargetFlanked
-fp o
-fp o
-f ffffffff ffffffff 003 i MP_IsTargetWithinRange
-fp o
-fp o
-fp f
-f ffffffff ffffffff 001 i MP_IsTargetSneakImmune
-fp o
-f ffffffff ffffffff 002 i MP_IsTargetFlatFooted
-fp o
-fp o
-f ffffffff ffffffff 001 i MP_HasEpicPrecision
-fp o
-f ffffffff ffffffff 002 i MP_HasRuinFeat
-fp o
-fp o
-f ffffffff ffffffff 003 i MP_CanSneak
-fp o
-fp o
-fp f
-f ffffffff ffffffff 002 i FlatFooted
-fp o
-fp o
-f ffffffff ffffffff 002 i CountDualWieldingFeats
-fp o
-fp o
-f ffffffff ffffffff 001 e0 GetDamageBonusEffects
-fp o
-f ffffffff ffffffff 002 e0 GetWeaponDamageEnchantments
-fp o
-fp o
-f ffffffff ffffffff 002 i WeaponMasterCritCheck
-fp o
-fp o
-f ffffffff ffffffff 001 e0 GetDamageFeatBonuses
-fp o
-f ffffffff ffffffff 006 e0 GetWeaponDamageTotal
-fp o
-fp o
-fp o
-fp i
-fp i
-fp i
-f ffffffff ffffffff 001 v RemoveMirrorImage
-fp o
-f ffffffff ffffffff 002 i AttackerABPenalties
-fp o
-fp o
-f ffffffff ffffffff 001 i CreatureSize
-fp o
-f ffffffff ffffffff 001 i AttackerTotalAB
-fp o
-f ffffffff ffffffff 002 i CheckIsExploitingSpellCastingSpecialAttacker
-fp o
-fp i
-f ffffffff ffffffff 007 i AttemptMeleeAttackMainHand
-fp o
-fp o
-fp s
-fp i
-fp s
-fp i
-fp i
-f ffffffff ffffffff 002 v AttemptTauntAroundPlayer
-fp o
-fp i
 f ffffffff ffffffff 000 i STR_REF_FEEDBACK_SPELL_FAILED
 f ffffffff ffffffff 000 i STR_REF_FEEDBACK_SPELL_INVALID_TARGET
 f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS
@@ -5278,11 +5319,11 @@ f ffffffff ffffffff 003 e4 GetSimilarItemProperty
 fp o
 fp e4
 fp i
-f ffffffff ffffffff 003 t0015 EnhanceItemPropertyCostValue
+f ffffffff ffffffff 003 t0016 EnhanceItemPropertyCostValue
 fp i
 fp e4
 fp i
-f ffffffff ffffffff 002 t0015 GetItemEnhancedItemProperty
+f ffffffff ffffffff 002 t0016 GetItemEnhancedItemProperty
 fp o
 fp e4
 f ffffffff ffffffff 003 i EnchantItem
@@ -5334,7 +5375,7 @@ l01 0000076 0000002c 0000002c
 l01 0000077 0000002c 0000002c
 l01 0000078 0000002c 0000002c
 l01 0000080 0000002c 0000002c
-l02 0000213 0000002c 00000048
+l02 0000218 0000002c 00000048
 l03 0000051 00000048 00000062
 l03 0000053 00000062 00000078
 l04 0000040 00000078 00000078
@@ -5365,37 +5406,44 @@ l07 0000210 00000078 00000078
 l07 0000211 00000078 00000078
 l07 0000213 00000078 00000078
 l07 0000214 00000078 00000078
-l08 0000041 00000078 00000078
-l08 0000042 00000078 00000078
-l08 0000043 00000078 00000078
-l08 0000044 00000078 00000078
-l08 0000045 00000078 00000078
-l08 0000050 00000078 00000078
-l08 0000051 00000078 00000078
-l08 0000052 00000078 00000078
-l09 0000021 00000078 00000078
-l09 0000022 00000078 00000078
-l09 0000023 00000078 00000078
-l09 0000024 00000078 00000078
-l09 0000025 00000078 00000078
-l09 0000031 00000078 00000078
-l09 0000032 00000078 00000078
-l10 0000055 00000078 00000078
-l10 0000056 00000078 00000078
-l11 0000163 00000078 00000078
-l11 0000164 00000078 00000078
-l11 0000165 00000078 00000078
-l12 0000214 00000078 00000078
-l12 0000215 00000078 00000078
-l12 0000216 00000078 00000078
-l49 0000022 0000008a 00000090
-l49 0000023 00000090 00000096
-l49 0000024 00000096 0000009c
-l49 0000025 0000009c 000000ad
-l49 0000026 000000ad 000000b3
-l49 0000027 000000b3 000000ce
-l49 0000030 000000e8 000000fd
-l49 0000031 000000fd 00000112
-l49 0000032 00000112 00000127
-l49 0000034 00000127 00000148
-l49 0000039 0000014e 00000150
+l08 0000186 00000078 00000078
+l08 0000187 00000078 00000078
+l08 0000188 00000078 00000078
+l08 0000189 00000078 00000078
+l08 0000190 00000078 00000078
+l08 0000191 00000078 00000078
+l08 0000192 00000078 00000078
+l09 0000041 00000078 00000078
+l09 0000042 00000078 00000078
+l09 0000043 00000078 00000078
+l09 0000044 00000078 00000078
+l09 0000045 00000078 00000078
+l09 0000050 00000078 00000078
+l09 0000051 00000078 00000078
+l09 0000052 00000078 00000078
+l10 0000021 00000078 00000078
+l10 0000022 00000078 00000078
+l10 0000023 00000078 00000078
+l10 0000024 00000078 00000078
+l10 0000025 00000078 00000078
+l10 0000031 00000078 00000078
+l10 0000032 00000078 00000078
+l11 0000055 00000078 00000078
+l11 0000056 00000078 00000078
+l12 0000163 00000078 00000078
+l12 0000164 00000078 00000078
+l12 0000165 00000078 00000078
+l13 0000214 00000078 00000078
+l13 0000215 00000078 00000078
+l13 0000216 00000078 00000078
+l50 0000022 0000008a 00000090
+l50 0000023 00000090 00000096
+l50 0000024 00000096 0000009c
+l50 0000025 0000009c 000000ad
+l50 0000026 000000ad 000000b3
+l50 0000027 000000b3 000000ce
+l50 0000030 000000e8 000000fd
+l50 0000031 000000fd 00000112
+l50 0000032 00000112 00000127
+l50 0000034 00000127 00000148
+l50 0000039 0000014e 00000150

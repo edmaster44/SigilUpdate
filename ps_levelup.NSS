@@ -1,6 +1,6 @@
 /* v1.01
 12/8/2020 added Psyhic Knight Check
-Removed Alingment change for Thug for exploit reason */ 
+Removed Alignment change for Thug for exploit reason */ 
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "aaa_constants"
@@ -62,6 +62,14 @@ void CheckDragonBreath(object oPC, object oItem)
 	FeatRemove(oPC, 964);
 }
 
+void AddEPForDeathDice(object oPC)
+{
+		if (GetHasFeat(459,oPC))
+		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
+
+
+}
+
 // "level up" of creature weapons.
 // initial thought was to this based off creature weapon as defined in racialsubtypes.2da
 // however, we have option of removing creature weapons, so we don't want this to happen if people
@@ -95,12 +103,9 @@ void DoPsiProgression(object oPC)
 {
 	int nPsion = GetLevelByClass(90, oPC);
 	if (nPsion < 1) return;
-	
 	int nIlMentalist = GetLevelByClass(100, oPC) - 1;
-	if (nIlMentalist < 0) nIlMentalist = 0;
 	int nCerebremancer = GetLevelByClass(152, oPC);
 	int nPknight	   = GetLevelByClass(109, oPC) - 1;
-	if (nPknight < 0) nPknight = 0;
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
 	int nLEVEL = nPsion + nIlMentalist + nCerebremancer + nGemDragon + nPknight;
 	
@@ -318,6 +323,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
+	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);

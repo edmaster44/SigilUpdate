@@ -2,7 +2,8 @@
 void main() {
 
 	object oPC = OBJECT_SELF;
-	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination");
+	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination"); //normal wp
+	//object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination_festivity"); //xmas wp
 	
 	SendMessageToPC(oPC, "teleporting to OOC room");
 	PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");

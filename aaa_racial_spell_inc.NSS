@@ -833,8 +833,9 @@ void PS_Cast_TArchonReveille(object oPC)
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(30));
 		}
+		oTarget = GetNextObjectInArea(GetArea(oPC));
 	}
-	oTarget = GetNextObjectInArea(GetArea(oPC));		
+		
 }
 
 // Helper function for PS_Cast_YTHBAnimalTrance
@@ -929,11 +930,14 @@ void PS_Cast_YTHBNeutralizePoison(object oPC, object oTarget, int nSpell)
 
     SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE));
     while(GetIsEffectValid(ePoison))
-    {	if (GetEffectType(ePoison) == EFFECT_TYPE_POISON)
-        {	RemoveEffect(oTarget, ePoison);
+    {	
+    	if (GetEffectType(ePoison) == EFFECT_TYPE_POISON)
+        {	
+        	RemoveEffect(oTarget, ePoison);
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         }
-        GetNextEffect(oTarget);	}
+        ePoison = GetNextEffect(oTarget);	
+    }
 }
 
 void PS_Cast_XephBurst(object oPC, int iLevel, int nSpell)

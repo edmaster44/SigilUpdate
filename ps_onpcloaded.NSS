@@ -3,15 +3,19 @@
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
+#include "nwnx_bg_finesse"
 #include "ps_inc_functions"
 #include "nwnx_character"
 #include "ps_class_inc"
 #include "ps_inc_advscript"
 #include "ps_inc_polymorph"
+#include "ps_convertbio"
 #include "ps_inc_time"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_inc_bgspellfix"
+#include "ginc_time"
+#include "ps_heightadjust_includes"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -418,6 +422,7 @@ void main()
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
+	
 	if(GetIsPC(oPC) && !GetIsDM(oPC) && GetXP(oPC) == 0)
 	{	
 		//special race template
@@ -434,6 +439,7 @@ void main()
 			
 		GiveXPToCreature(oPC, 1);
 		GiveStartingGold(oPC, 500);
+
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
 		CreateItemOnObject("ps_essence", oPC);
 		//template
@@ -468,7 +474,7 @@ void main()
 	
 	object oCheck =  GetItemPossessedBy(oPC, "ps_essence");
 	
-	// If OldSubrace is not alredy set, set it!
+	// If OldSubrace is not already set, set it!
 	if (GetLocalInt(oCheck, "OldSubrace") == 0 && GetLocalString(oCheck, "Template") == "")
 	{	SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
 	
@@ -536,12 +542,14 @@ void main()
 		PS_ApplyPCWings(oPC);
 	}
 	
-	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
+//	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
+
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
 	
     DMFI_ClientEnter(oPC);
+
 	
 	SQLExecDirect("SELECT text FROM news ORDER BY id");
 	string sNews = "";
@@ -551,9 +559,17 @@ void main()
 		sNews = SQLGetData(1);
 		DelayCommand(5.0, SendMessageToPC(oPC, sNews));
 	}
-	
+	float delay=3.0;
+	float delayInterval=0.2;
+
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
+		EnableFinesse();
+		OnSeverLoadPopulateSpellSQL();
+		ConvertBio(oPC);
+		StackingEquipmentBugFix(oPC);
+		ScaleAdjust(oPC);
+		SetClockOnForPlayer(oPC, TRUE);
 	}
 }

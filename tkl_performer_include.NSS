@@ -1022,25 +1022,25 @@ void RefreshRecordPane(object oPC, object oInstrument)
 	}
 	float fSecondsPerBeat = 60.0f / IntToFloat(iMetronomeTempo);
 	string sSecondsPerBeat = FloatToString(fSecondsPerBeat, 4, 2);
-	SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "MetronomeSecondsPerBeat", -1, "<color=grey>(1 beat=" + sSecondsPerBeat + " sec)</color>");
+	SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "MetronomeSecondsPerBeat", -1, "<color=lightgrey>(1 beat=" + sSecondsPerBeat + " sec)</color>");
 	
 	float fLagCheck = GetLocalFloat(oPC, "LAG_CHECK");
 	int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 	string sTrackName = GetLocalString(oInstrument, "TRACK_" + IntToString(iTrack) + "_NAME");
 	if (sTrackName == "")
 		sTrackName = "Track " + IntToString(iTrack);
-	sTrackName = "<color=grey>" + sTrackName + "</color>";
+	sTrackName = "<color=lightgrey>" + sTrackName + "</color>";
 	SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "RecordTrackName", -1, sTrackName);
 	int bSwitch;
 	if (bMetronomeOn)
 	{
 		bSwitch = FALSE;
-		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "MetronomeStatus", -1, "<color=grey>(enabled)</color>");
+		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "MetronomeStatus", -1, "<color=lightgrey>(enabled)</color>");
 	}
 	else
 	{
 		bSwitch = TRUE;
-		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "MetronomeStatus", -1, "<color=grey>(disabled)</color>");
+		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "MetronomeStatus", -1, "<color=lightgrey>(disabled)</color>");
 	}	
 	SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "MetronomeTempoField", bSwitch);
 	SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "MetronomeDurationField", bSwitch);
@@ -1051,12 +1051,12 @@ void RefreshRecordPane(object oPC, object oInstrument)
 	if (bLagCheckOn)
 	{
 		bSwitch = FALSE;
-		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "LagFixStatus", -1, "<color=grey>(enabled)</color>");
+		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "LagFixStatus", -1, "<color=lightgrey>(enabled)</color>");
 	}
 	else
 	{
 		bSwitch = TRUE;
-		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "LagFixStatus", -1, "<color=grey>(disabled)</color>");
+		SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "LagFixStatus", -1, "<color=lightgrey>(disabled)</color>");
 	}
 	SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "LagCheckInstructions", bSwitch);
 	SetGUIObjectDisabled(oPC, TKL_PERFORMER_SCREEN, "LagCheckButton", bSwitch);
@@ -1094,7 +1094,7 @@ void RefreshModes(object oPC, object oInstrument)
 	string sPane = "Main";
 	
 	if (bEasyMode == FALSE)
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "EasyButton", "skill_points_container.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "EasyButton", "skill_points_container_scod.tga");
 	else
 	{
 		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "EasyButton", "b_overlay.tga");
@@ -1115,7 +1115,7 @@ void RefreshModes(object oPC, object oInstrument)
 		sPane+= "Live";
 	}
 	else
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "LiveButton", "skill_points_container.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "LiveButton", "skill_points_container_scod.tga");
 		
 	SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "MainPane", TRUE);
 	SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "MainEasyMinorLivePane", TRUE);
@@ -1743,20 +1743,20 @@ void SetupImprovPane(object oPC, object oInstrument)
 	{
 		s = IntToString(i);
 		// Clear all instrument buttons
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_normal.tga");
-		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_normal.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_normal_scod.tga");
+		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_normal_scod.tga");
 		// Highlight the currently selected button
 		iSelected = GetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_" + s);
 		switch (iSelected)
 		{
-			case 0: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_hover.tga"); break;
-			case 1: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_hover.tga"); break;
-			case 2: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_hover.tga"); break;
-			case 3: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_hover.tga"); break;
-			case 4: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_hover.tga"); break;	
+			case 0: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "None", "b_sm_hover_scod.tga"); break;
+			case 1: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Drums", "b_sm_hover_scod.tga"); break;
+			case 2: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Chords", "b_sm_hover_scod.tga"); break;
+			case 3: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_hover_scod.tga"); break;
+			case 4: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_hover_scod.tga"); break;	
 		}
 	}
 	// for each style...
@@ -1767,10 +1767,10 @@ void SetupImprovPane(object oPC, object oInstrument)
 		s = IntToString(i);
 		// highlight the selected styel
 		if (i == iSelected)
-			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + s, "b_sm_hover.tga");
+			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + s, "b_sm_hover_scod.tga");
 		// unhighlight all the other ones
 		else
-			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + s, "b_sm_normal.tga");
+			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + s, "b_sm_normal_scod.tga");
 		// set the text on the buttons
 		switch (i)
 		{

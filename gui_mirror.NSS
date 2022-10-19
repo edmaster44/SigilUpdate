@@ -238,7 +238,7 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 			SetGUIObjectHidden(oPC, sSCREEN, "MODEL_3", TRUE);
 			SetGUIObjectHidden(oPC, sSCREEN, "VARIATION", FALSE);
 			SetGUIObjectHidden(oPC, sSCREEN, "STYLE", FALSE);
-			if ((nEXTRA == 0)||(nRETURN == 1)) InitializeItem(oPC, 1, nSLOT, '""');
+			if ((nEXTRA == 0)||(nRETURN == 1)) InitializeItem(oPC, 1, nSLOT, "");
 			if (nSLOT == INVENTORY_SLOT_CHEST)
 			{		
 				if (nEXTRA == 1) //Parts
@@ -274,14 +274,14 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 			SetLocalInt(oPC, "APPEAR_EXTRA", 0);
 			SetLocalGUIVariable(oPC, sSCREEN, 1, "0");
 			SetGUIObjectHidden(oPC, sSCREEN, "PARTS_PANE", FALSE);
-			DelayCommand(0.1, InitializeItem(oPC, 1, 1, '""'));
+			DelayCommand(0.1, InitializeItem(oPC, 1, 1, ""));
 			break;
 		case 3://The Default Pane
 			SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Default");
 			SetLocalInt(oPC, "APPEAR_EXTRA", 0);
 			SetLocalGUIVariable(oPC, sSCREEN, 1, "0");
 			SetGUIObjectHidden(oPC, sSCREEN, "DEFAULT_PANE", FALSE);
-			DelayCommand(0.1, InitializeItem(oPC, 1, 1, '""'));
+			DelayCommand(0.1, InitializeItem(oPC, 1, 1, ""));
 			break;
 		default: 
 			RemovePolymorph(oPC); // The Equipment Pane

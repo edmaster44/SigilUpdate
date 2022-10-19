@@ -35,8 +35,14 @@ void SetECL(object oPC, object oTarget, string nECL)
 		SetLocalString(oTarget,"ECL",nECL);
 		SetLocalString(oItem, "ECL_Manual",nECL);
 		//SpeakString("ECL" + nECL,TALKVOLUME_SHOUT);
-		
-		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + GetPCPlayerName(oPC) + "','" + GetName(oPC) + "','ECL " + nECL + " given to " + GetName(oTarget) + " (" + GetPCPlayerName(oTarget) + ")',102)");
+
+		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
+			SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
+			SQLEncodeSpecialChars(GetName(oPC)) + "','ECL " + 
+			SQLEncodeSpecialChars(nECL) + " given to " + 
+			SQLEncodeSpecialChars(GetName(oTarget)) + " (" + 
+			SQLEncodeSpecialChars(GetPCPlayerName(oTarget)) 
+			+ ")',102)");
 
 		return;
    }

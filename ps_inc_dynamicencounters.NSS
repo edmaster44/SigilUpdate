@@ -30,6 +30,7 @@
 //CLASS_TYPE_WARLOCK
 //CLASS_TYPE_WIZARD
 object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int isHostile = TRUE);
+object CreateScaledCreatureofClassLocation(location lWP, int nLevel, int classType, int isHostile = TRUE);
 
 //Gets the blueprint string from the class INT
 //(if there is no blueprint of the given class type, defaults to fighter)
@@ -82,7 +83,9 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE);
 //Levels 15-20 weapons 6-9 points
 //Levels 20-25 weapons 9-10 points
 //Levels 25+ weapons 10-13 points
-void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1);
+//shoud equip doesn't seem to do anything?
+//returns the weapon generated so you can equip it
+object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1);
 
 //Pick one of the human-like appearances - for variety!
 int GetHumanoidRace(object oCreature);
@@ -97,16 +100,23 @@ int GetHairByRace(int nGender, int nRace);
 //ACTUAL CODE
 //*******************************************
 object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int faction = STANDARD_FACTION_HOSTILE) {
-
-	int blueprintID = GetNearestCreatureLevelAvailable(nLevel, classType);
-	string sBlueprint = GetBlueprintStringFromClass(classType)+IntToString(blueprintID);
 	
 	//make sure we have a waypoint
 	if (!GetIsObjectValid(oWP)) {
 		return oWP;
 	}
+
+	return CreateScaledCreatureofClassLocation(GetLocation(oWP), nLevel, classType, faction);
+
+}
+
+
+object CreateScaledCreatureofClassLocation(location lWP, int nLevel, int classType, int faction = STANDARD_FACTION_HOSTILE) {
+
+	int blueprintID = GetNearestCreatureLevelAvailable(nLevel, classType);
+	string sBlueprint = GetBlueprintStringFromClass(classType)+IntToString(blueprintID);
 		
-	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, GetLocation(oWP));
+	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, lWP);
 	ChangeToStandardFaction(oCreature, faction);
 	
 	return oCreature;
@@ -466,7 +476,7 @@ void makeInventoryUndroppable(object oCreature) {
 
 }
 
-void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1) {
+object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typePreference = -1) {
 	
 	int nLevel = GetChallengeRatingOfTarget(oCreature);
 	
@@ -489,6 +499,25 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 			case 2: oWeapon = CreateItemOnObject("ps_darkharmonium_kop", oCreature); break;
 			case 3: oWeapon = CreateItemOnObject("ps_darkharmonium_glad", oCreature); break;
 		}
+	} else if (GetLocalString(oCreature, "Berk_Type") == "Rioter") {
+		
+		AssignCommand(oCreature, SpeakString("giving rioter items", TALKVOLUME_SHOUT));
+		if (GetLocalString(oCreature, "ANIMATION") == "torchidle") {
+			oWeapon = CreateItemOnObject("nw_it_torch001", oCreature);
+			AssignCommand(oCreature, SpeakString("giving torch", TALKVOLUME_SHOUT));
+		} else {
+			int nRand = Random(8)+1;
+			switch(nRand) {
+				case 1: break;
+				case 2: oWeapon = CreateItemOnObject("psi_conobject_board", oCreature); break;
+				case 3: oWeapon = CreateItemOnObject("psi_conobject_bottle", oCreature); break;
+				case 4: oWeapon = CreateItemOnObject("psi_conobject_broom", oCreature); break;
+				case 5: oWeapon = CreateItemOnObject("psi_conobject_pan", oCreature); break;
+				case 6: oWeapon = CreateItemOnObject("psi_conobject_pin", oCreature); break;
+				case 7: oWeapon = CreateItemOnObject("psi_conobject_wrench", oCreature); break;
+				case 8: break;
+			}
+		}
 	} else if (typePreference < 0) {
 		oWeapon = CreateRandomItemOfCategory(oCreature, "W");
 	} else {
@@ -497,7 +526,7 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 	}
 	
 	if (!GetIsObjectValid(oWeapon))
-		return;
+		return OBJECT_INVALID;
 
 	SetDroppableFlag(oWeapon, FALSE);
 	SetIdentified(oWeapon, TRUE);
@@ -516,6 +545,8 @@ void assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typeP
 	
 	GiveItemRandomEnchantments(oWeapon, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oWeapon);
+	
+	return oWeapon;
 	
 }
 

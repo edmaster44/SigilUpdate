@@ -50,7 +50,7 @@ int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
 		if (!GetIsObjectValid(oArmorNew)) 
 				{
-					SendMessageToPC(oPC, "You must wear an item in your armor slot to recieve the effects of Dervish.");
+					SendMessageToPC(oPC, "You must wear an item in your armor slot to receive the effects of Dervish.");
 				}
 				else				
 		if (nLevel > 9)
@@ -100,7 +100,6 @@ void Dervish_Defensive_Parry(object oPC, int nSpell)
 int nPercentage = GetSkillRank( SKILL_PARRY, oPC,FALSE);
 float fDuration = 60.0f;
 if (nPercentage > 50) nPercentage = 50;
-if (nPercentage < 0) nPercentage = 0;
-	effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, econceal, oPC, fDuration);
+effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
+ApplyEffectToObject(DURATION_TYPE_TEMPORARY, econceal, oPC, fDuration);
 }

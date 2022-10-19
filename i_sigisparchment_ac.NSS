@@ -41,7 +41,7 @@ void main()
 			SetGUIObjectText(oPC, "SIGIS_WRITE_SCENE", "SIGIS_WRITE_TEXT_ARTICLE", -1, sText);
 		} 
 	}
-	else if (GetTag(oTarget) == SIGIS_EDITOR || GetTag(oTarget) == SIGIS_JOURNALIST)
+	else if (GetTag(oTarget) == SIGIS_EDITOR || GetTag(oTarget) == SIGIS_JOURNALIST || GetTag(oTarget) == SIGIS_JOURNALIST_OOC)
 	{
 		if ((sHeadline != "") 
 			&& (sAuthor != "") 

@@ -12,6 +12,7 @@
 //#include "nw_i0_plot"
 #include "ginc_param_const"
 #include "ginc_item"
+#include "dethia_shop_sys"
 
 const int MAX_MARKUP = 30;
 const int MIN_MARKUP = 1;
@@ -38,7 +39,7 @@ object GetStoreFromStoreArea(string sTag)
 	return oStore;
 }
 
-void main(string sTag, int nMarkUp, int nMarkDown)
+void main(string sTag, int nMarkUp, int nMarkDown, int storeType)
 {
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	
@@ -54,5 +55,8 @@ void main(string sTag, int nMarkUp, int nMarkDown)
 	
 	//SendMessageToPC(oPC, "Markup value = " + IntToString(nMarkUp) + ". Markdown value = " + IntToString(nMarkDown) + ".");
 	
-	OpenStore(GetStoreFromStoreArea(sTag), oPC, nMarkUp, nMarkDown);
+	object oStore = GetStoreFromStoreArea(sTag);
+	AddAllItemsInStoreToDatabase(oStore);
+	
+	DS_OpenShop(oStore, oPC, nMarkUp, nMarkDown);
 }

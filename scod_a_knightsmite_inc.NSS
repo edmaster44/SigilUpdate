@@ -8,7 +8,7 @@
 	// Use this to fix infinite range for instant feats.
 int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
 {
-	if (GetDistanceBetween(oCaller, oTarget) > 30.0f) // Melee range seems to be around a little less then 3.0f, so picked a number
+	if (GetDistanceBetween(oCaller, oTarget) > 8.0f) // Melee range seems to be around a little less then 3.0f, so picked a number
 	{                                                // a little higher to give some loose.
 		SendMessageToPC(oCaller, "Target out of range.");
 		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
@@ -47,7 +47,7 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
-	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
+	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Knight Smite", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
 		{	nDmg = nKnight * iChaBonus;
 			

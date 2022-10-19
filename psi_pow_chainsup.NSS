@@ -24,7 +24,7 @@ int nStrength = ABILITY_CONSTITUTION;
 int nCon = ABILITY_STRENGTH;
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
 int nLevel = 4;
-if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >6) nLevel = 6;
+if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >5) nLevel = 6;
 
 
 effect eStr =EffectAbilityIncrease(nStrength,nLevel);

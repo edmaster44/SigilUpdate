@@ -23,6 +23,11 @@ const int FEAT_PSIONIC_THRUST					= 2863;
 const int FEAT_PSIONIC_DOMINATION				= 2864;
 const int FEAT_PSIONIC_BODY_ADJUSTMENT			= 2865;
 const int FEAT_PSIONIC_OVERCHARGE				= 2866;
+const int FEAT_BACKGROUND_STERN                 = 3100;
+const int FEAT_BACKGROUND_MISDIRECTOR           = 3101;
+const int FEAT_BACKGROUND_TINKER                = 3102;
+const int FEAT_BACKGROUND_NATURALIST             = 3103;
+const int FEAT_BACKGROUND_AMICABLE              = 3104;
 
 
 void PS_Feat_Counterspell(object oPC, object oTarget)
@@ -369,6 +374,93 @@ void PS_Feat_Unhallowed(object oPC, int nSpell)
    	effect eEff = EffectLinkEffects(
         EffectSkillIncrease(SKILL_INTIMIDATE, 2),
 		EffectSavingThrowIncrease(SAVING_THROW_FORT, 1));
+
+   	eEff = SupernaturalEffect(eEff);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+}
+
+void PS_Feat_Amicable(object oPC, int nSpell)
+{
+   	if(GetHasFeat(FEAT_BACKGROUND_AMICABLE, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_AMICABLE") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_AMICABLE",1);
+   
+   	
+        effect Stat1 = EffectSkillDecrease(SKILL_INTIMIDATE, 3);
+		effect Stat2 = EffectSkillDecrease(SKILL_BLUFF, 3);
+		effect Stat3 = EffectSkillIncrease(SKILL_DIPLOMACY, 4);
+		effect eEff = EffectLinkEffects(Stat1, Stat2);
+		eEff = EffectLinkEffects (eEff, Stat3);
+
+   	eEff = SupernaturalEffect(eEff);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+}
+
+void PS_Feat_Stern(object oPC, int nSpell)
+{
+   	if(GetHasFeat(FEAT_BACKGROUND_STERN, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_STERN") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_STERN",1);
+   
+        effect Stat1 = EffectSkillIncrease(SKILL_INTIMIDATE, 4);
+		effect Stat2 = EffectSkillDecrease(SKILL_BLUFF, 3);
+		effect Stat3 = EffectSkillDecrease(SKILL_DIPLOMACY, 3);
+		effect eEff = EffectLinkEffects(Stat1, Stat2);
+		eEff = EffectLinkEffects (eEff, Stat3);
+
+   	eEff = SupernaturalEffect(eEff);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+}
+
+void PS_Feat_Misdirector(object oPC, int nSpell)
+{
+   	if(GetHasFeat(FEAT_BACKGROUND_MISDIRECTOR, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_MISDIRECTOR") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_MISDIRECTOR",1);
+   
+        effect Stat1 = EffectSkillDecrease(SKILL_INTIMIDATE, 3);
+		effect Stat2 = EffectSkillIncrease(SKILL_BLUFF, 4);
+		effect Stat3 = EffectSkillDecrease(SKILL_DIPLOMACY, 3);
+		effect eEff = EffectLinkEffects(Stat1, Stat2);
+		eEff = EffectLinkEffects (eEff, Stat3);
+
+   	eEff = SupernaturalEffect(eEff);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+}
+
+void PS_Feat_Tinker(object oPC, int nSpell)
+{
+   	if(GetHasFeat(FEAT_BACKGROUND_TINKER, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_TINKER") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_TINKER",1);
+   
+
+        effect Stat1 = EffectSkillDecrease(SKILL_INTIMIDATE, 3);
+		effect Stat2 = EffectSkillDecrease(SKILL_BLUFF, 3);
+		effect Stat3 = EffectSkillDecrease(SKILL_DIPLOMACY, 3);
+		effect Stat4 = EffectSkillDecrease(SKILL_SURVIVAL, 3);
+		effect Stat5 = EffectSkillIncrease(SKILL_CRAFT_WEAPON, 4);
+		effect Stat6 = EffectSkillIncrease(SKILL_CRAFT_ALCHEMY, 4);
+		effect Stat7 = EffectSkillIncrease(SKILL_CRAFT_ARMOR, 4);
+		effect Stat8 = EffectSkillIncrease(SKILL_CRAFT_TRAP, 4);
+		effect eEff = EffectLinkEffects(Stat1, Stat2);
+		 eEff = EffectLinkEffects(eEff, Stat3);
+		 eEff = EffectLinkEffects(eEff, Stat4);
+		 eEff = EffectLinkEffects(eEff, Stat5);
+		 eEff = EffectLinkEffects(eEff, Stat6);
+		 eEff = EffectLinkEffects(eEff, Stat7);
+		 eEff = EffectLinkEffects(eEff, Stat8);
+
+   	eEff = SupernaturalEffect(eEff);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+}
+
+void PS_Feat_Naturalist(object oPC, int nSpell)
+{
+   	if(GetHasFeat(FEAT_BACKGROUND_NATURALIST, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_NATURALIST") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_NATURALIST",1);
+   
+        effect Stat1 = EffectSkillDecrease(SKILL_LORE, 3);
+		effect Stat2 = EffectSkillDecrease(SKILL_APPRAISE, 3);
+		effect Stat3 = EffectSkillIncrease(SKILL_SURVIVAL, 4);
+		effect eEff = EffectLinkEffects(Stat1, Stat2);
+		eEff = EffectLinkEffects (eEff, Stat3);
 
    	eEff = SupernaturalEffect(eEff);
    	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);

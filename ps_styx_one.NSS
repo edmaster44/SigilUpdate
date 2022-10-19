@@ -20,7 +20,10 @@ void SetXPpools(object oPC, int nAmount)
 	//int dm_pool = StringToInt(SQLGetData(1)) + nAmount; //krampus value
 	//int rp_pool = StringToInt(SQLGetData(2)); //krampus value
 	SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ",rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID);		
-	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + GetPCPlayerName(oPC) + "','" + GetName(oPC) + "','Player lost one level to Styx, increased pools with: " + FloatToString(nAmount * 0.25) + ",106)");
+	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
+		SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
+		SQLEncodeSpecialChars(GetName(oPC)) + 
+		"','Player lost one level to Styx, increased pools with: " + FloatToString(nAmount * 0.25) + "',106)");
 }
 
 void PS_lose_one_level(object oPC)

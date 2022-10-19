@@ -3,7 +3,6 @@
 //MimiFearthegn 3-22-20
 //Opens one of the randomized planar stores and populates it
 //*********************************************************************
-#include "ps_inc_time"
 #include "ps_inc_stores"
 
 void main(string sStoreTag) {
@@ -45,6 +44,6 @@ void main(string sStoreTag) {
 	int nMarkDown = MAX_MARKDOWN + iPCAppraise;
 	if (nMarkDown > MIN_MARKDOWN) nMarkDown = MIN_MARKDOWN;
 	
-	DelayCommand(0.5f, OpenStore(oStore, oPC, nMarkUp, nMarkDown));
+	DelayCommand(0.5f, DS_OpenShop(oStore, oPC, nMarkUp, nMarkDown));
 	
 }

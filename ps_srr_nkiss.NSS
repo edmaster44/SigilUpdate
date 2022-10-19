@@ -81,7 +81,7 @@ void main()
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, HoursToSeconds(iLevels));
 						SendMessageToPC(oPC, "The target falls deeply under your influence.");
 					}
-					else // short furation dominate
+					else // short duration dominate
 					{
 						// dominate
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(iLevels));

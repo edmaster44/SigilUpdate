@@ -34,7 +34,6 @@ void Claws_of_the_grizzly(object oPC, int nSpell)
 
 
 
-
 void Earth_Resilience(object oPC, int nSpell)
 {
 
@@ -44,14 +43,11 @@ void Earth_Resilience(object oPC, int nSpell)
 	FeatAdd(oPC,493,FALSE,FALSE,FALSE);*/
 	
 		nBonus = 10; 
-		effect ePiercing = EffectDamageReduction(nBonus, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
-		effect eSlashing = EffectDamageReduction(nBonus, DAMAGE_TYPE_SLASHING, 0, DR_TYPE_DMGTYPE);
-		effect eBludgeoning = EffectDamageReduction(nBonus, DAMAGE_TYPE_BLUDGEONING, 0, DR_TYPE_DMGTYPE);
+		effect eDR = EffectDamageReduction(nBonus, DAMAGE_TYPE_ALL, 0, DR_TYPE_DMGTYPE);
 		
-		eLink = EffectLinkEffects(ePiercing, eLink);
-		eLink = EffectLinkEffects(eSlashing, eLink);
-		eLink = EffectLinkEffects(eBludgeoning, eLink);
 		
+		eLink = EffectLinkEffects(eDR, eLink);
+	
 		if(iNaturesWarrior == 5) eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN),eLink);
 		
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));

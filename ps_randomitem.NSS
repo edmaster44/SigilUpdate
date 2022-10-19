@@ -197,4 +197,4 @@ void EnchantTargetItem(int nIndex, object oItem, string sTable, object oPC)
 	AssignCommand(oPC, ClearAllActions());
 	AssignCommand(oPC, PlaySound(sSound, TRUE));
 }
-/*
+*/

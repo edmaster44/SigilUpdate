@@ -189,6 +189,12 @@ string GetCautionString(object oPC, struct baseitem i, struct material m1, struc
 //Checks if nType is a quiver. Range is 90-95
 int GetIsQuiver(int nTYPE);
 
+//Get the cost of the material from the 2da by looking up the item prop
+int GetCostTierOfMaterial(itemproperty iProp);
+
+//Get the base cost of the item by looking it up in the crafting table
+int GetBaseCostOfItem(int nBaseID);
+
 //************************************************
 //Structure to hold base item information
 //from scod_craft_baseitems
@@ -877,4 +883,69 @@ int GetIDRanged(int nId) {
 	  	return TRUE;
 		
 	return FALSE;
+}
+
+int GetCostTierOfMaterial(itemproperty iProp) {
+
+	int iType = GetItemPropertyType(iProp);
+	int iSub = GetItemPropertySubType(iProp);
+	int iParam = GetItemPropertyCostTableValue(iProp);
+	int iSpecial = GetItemPropertyParam1Value(iProp);
+	
+	if (iType != 100)
+		return 0;
+		
+	string sMatName = Get2DAString("iprp_specialmat", "Label", iSub);  
+	
+	string s2da = "scod_craft_metal";
+	int nMax = GetNum2DARows(s2da);
+	int n = 0;
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	s2da = "scod_craft_leather";
+	nMax = GetNum2DARows(s2da);
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	s2da = "scod_craft_wood";
+	nMax = GetNum2DARows(s2da);
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	s2da = "scod_craft_misc";
+	nMax = GetNum2DARows(s2da);
+	for (n = 0; n < nMax; n++) {
+		string sName =  Get2DAString(s2da, "LABEL", n);
+		if (sName == sMatName) 
+			return GetMCostTier(n, s2da);
+	}
+	
+	return 0;
+
+}
+
+int GetBaseCostOfItem(int nBaseID) {
+	
+	int n;
+	int	nMax = GetNum2DARows("scod_craft_baseitems");
+	for (n = 0; n < nMax; n++) {
+		string sID =  Get2DAString("scod_craft_baseitems", "ID", n);
+		if (StringToInt(sID) == nBaseID) {
+			string sCost = Get2DAString("scod_craft_baseitems", "BASE_COST", n);
+			return StringToInt(sCost);
+		}
+	}
+	
+	return 0;
+
 }

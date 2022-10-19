@@ -1,3 +1,4 @@
+
 string GetStorageItemIcon(object oItem)
 {
 	string sIcon = Get2DAString("nwn2_icons","ICON",GetItemIcon(oItem));

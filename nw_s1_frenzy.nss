@@ -51,7 +51,7 @@ void main()
 		effect eMove = EffectImmunity(IMMUNITY_TYPE_MOVEMENT_SPEED_DECREASE);
         effect eLink = EffectLinkEffects(eStr, eDur);
        	eLink = EffectLinkEffects(eLink, eAttackMod);
-		
+		SupernaturalEffect(eLink);
 			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) > 7)
 			{
 				eLink = EffectLinkEffects(eLink, eHaste);

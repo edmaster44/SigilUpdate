@@ -16,7 +16,7 @@ void main()
 
     if (!X2PreSpellCastCode())
     {
-	`// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+		// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 	

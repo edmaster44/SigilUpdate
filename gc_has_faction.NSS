@@ -4,17 +4,6 @@
 
 #include "ps_inc_faction"
 
-int GetFaction(object oPC)
-{
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
-}
 
 int StartingConditional()
 {
@@ -22,8 +11,8 @@ int StartingConditional()
 
 	int nFaction = GetFaction(oPC);
 	
-    if (nFaction > 1 & nFaction < 17) 
-	{
+    if (GetIsFaction(nFaction)) {
+	
 		// No need to select a new faction, but give them a badge if they don't have one for some reason.
 		if (HasFactionBadge(oPC) == FALSE)
 		{
@@ -40,9 +29,7 @@ int StartingConditional()
 			}
 		}
 		return TRUE;
-	}
-	else
-	{
+	} else {
     	return FALSE;
 	}
 }

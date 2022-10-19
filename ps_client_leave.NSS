@@ -3,6 +3,7 @@
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
 #include "ps_inc_time"
+#include "ginc_time"
 
 void Reboot_ShutdownNwn2server()
 {
@@ -23,6 +24,8 @@ void Reboot_SendMessageToPC(object oPC, string sMessage)
 void main()
 {
     object oMod = GetModule();
+	
+	UpdateClockForAllPlayers();
 
 	PS_OnPCLeave(GetExitingObject());
 	

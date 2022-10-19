@@ -78,7 +78,7 @@ void ArborealArcherEnhanced(object oItem, object oPC)
 		// Add WF and WS
 		DelayCommand(0.5, IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(420),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE));
 		DelayCommand(0.6, IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(229),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE));
-		DelayCommand(0.7, SendMessageToPC(oPC, "Weapon Focus and Specialiazation added."));
+		DelayCommand(0.7, SendMessageToPC(oPC, "Weapon Focus and Specialization added."));
 		// Add GWF and GWS
 		DelayCommand(1.0, IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(318),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE));
 		DelayCommand(1.1, IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(358),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE));

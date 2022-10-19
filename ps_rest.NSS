@@ -3,7 +3,9 @@
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 
+
 const int cSaveWait = 300;
+const int ASSS_FX 	= -5894;
 
 void DismissSpellHenchmen(object oPC) {
 	if (GetIsObjectValid(GetLocalObject(oPC, "simulacrum"))) {
@@ -20,8 +22,15 @@ void DismissSpellHenchmen(object oPC) {
 		
 	}
 }
+void AddEPForDeathDice(object oPC)
+{
+		if (GetHasFeat(459,oPC))
+		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
 
-int HasToWipeAbilities(object oPC, object oEssence)
+
+}
+
+/*int HasToWipeAbilities(object oPC, object oEssence)
 {
 	int nORDER = GetAlignmentLawChaos(oPC);
 	int nMORAL = GetAlignmentGoodEvil(oPC);
@@ -37,7 +46,9 @@ int HasToWipeAbilities(object oPC, object oEssence)
    			SendMessageToPC(oPC, "You must find balance or leave your ways behind.");
    			return TRUE;
 		}
-	}
+}
+
+
 
 	if (nORDER == ALIGNMENT_LAWFUL)
 	{
@@ -76,8 +87,8 @@ int HasToWipeAbilities(object oPC, object oEssence)
 		}
 	}
 	
-	return FALSE;
-}
+	return FALSE;} */
+
 
 void WipeSpecialAbilities(object oCreature)
 {
@@ -134,6 +145,7 @@ void RemoveBuffs(object oPC)
 				case EFFECT_TYPE_PARALYZE:
 				case EFFECT_TYPE_NEGATIVELEVEL:
 					eFX = GetNextEffect(oPC);
+					break;
 				default:
 					RemoveEffect(oPC, eFX);
 					eFX = GetFirstEffect(oPC);
@@ -175,14 +187,67 @@ void RestStart(object oPC)
 	DismissSpellHenchmen(oPC);
 }
 
+void AlternativeSkillStatScaling (object oPC)
+{
+
+	//Remove previous optimization effect
+	if ( GetHasSpellEffect(ASSS_FX, oPC) ) {
+		effect eEffect = GetFirstEffect( oPC );
+		while ( GetIsEffectValid(eEffect) ) {
+		
+			if ( GetEffectSpellId(eEffect) == ASSS_FX){
+				RemoveEffect( oPC, eEffect );
+			}
+				
+			eEffect = GetNextEffect( oPC );
+		}
+	}
+	
+	int nSTR = (GetAbilityModifier(ABILITY_STRENGTH, oPC));
+	int nWIS = (GetAbilityModifier(ABILITY_WISDOM, oPC));
+	int nINT = (GetAbilityModifier(ABILITY_INTELLIGENCE, oPC));
+	int nCHA = (GetAbilityModifier(ABILITY_CHARISMA, oPC));
+	int nDEX = (GetAbilityModifier(ABILITY_DEXTERITY, oPC));
+	
+	int nIntimidate = nSTR - nCHA;
+	int nLore = nWIS - nINT;
+	int nSearch = nWIS - nINT;
+	int nHeal = nINT - nWIS;
+	int nSetTrap = nINT - nDEX;
+	
+	effect eFX = EffectSkillIncrease(SKILL_TUMBLE, 0); //this should hopefully do nothing
+
+	if (nSTR > nCHA)
+	
+		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_INTIMIDATE, nIntimidate));}
+
+	if (nINT > nDEX)
+    	{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSetTrap));}
+		
+	if (nINT > nWIS)
+		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HEAL, nHeal));}
+		
+	if (nWIS > nINT)
+		{eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_LORE, nLore));
+		 eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SEARCH, nSearch));}
+		 
+	int nDUR = DURATION_TYPE_PERMANENT;
+	
+	eFX = SupernaturalEffect(eFX);
+	eFX = SetEffectSpellId(eFX, ASSS_FX);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+		 
+		 
+}
+
 void RestFinish(object oPC)
 {
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
-	if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
+	//if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
 	
 	
-	if (PS_NeedsTemplateClassAbilityFix(oPC) == TRUE) TemplateRacialAdjust(oPC, oESSENCE, FALSE);
-	else TemplateRacialAdjust(oPC, oESSENCE, TRUE);
+
+	 TemplateRacialAdjust(oPC, oESSENCE, TRUE);
 	
 	if (GetLocalInt(oESSENCE, "TempChange") != 1)
 	{	
@@ -191,10 +256,13 @@ void RestFinish(object oPC)
 		PS_ApplyPCWings(oPC);
 	}
 	
+	AddEPForDeathDice(oPC);
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
+	DoPsyFeatProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
+	AlternativeSkillStatScaling(oPC);
 	
 	if (CheckTimeStamp(oPC, "REST") > cSaveWait)
 	{	
@@ -246,10 +314,6 @@ void main()
 	//Raise if DM rests you???
 	if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 	
-
-		
-
-
 
 	//If this is a limited rest area and you're not in a safe trigger. . don't let you rest
 	if (!IsInSafeRestZone(oPC)) {

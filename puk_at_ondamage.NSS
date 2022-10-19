@@ -144,7 +144,7 @@ void main()
     string sMessage5 = WHITE + "Red.....nice shot!";
     string sMessage6 = WHITE + "Very Nice shot....dead center of the Red!";
 
-    //NO CHEATING =) ...the Wepaon you start the session with is what you must finish with
+    //NO CHEATING =) ...the Weapon you start the session with is what you must finish with
     if(nTally == 0)
     {
       SetLocalString(oPC,"SESSIONRANGED",sWeapon);

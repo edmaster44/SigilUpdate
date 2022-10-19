@@ -8,18 +8,6 @@
 
 const float GPAWARD = 250.0f;
 
-int GetFaction(object oPC)
-{
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
-}
-
 int GetLootLevel(object oPC) {
 
 	int nRand = Random(4)+1;

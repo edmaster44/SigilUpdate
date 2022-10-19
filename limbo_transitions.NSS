@@ -16,7 +16,7 @@ string GetLimboDescription(string sTag)
 	else if (sTag == "ruinsdive" && sDest == "wp_limbo_stormcave")
 		return "You dive down into the water, and are pulled along by the currents. Eventually you see light ahead, and emerge in a sea cave.";
 	else if (sTag == "stormwhirlwind" && sDest == "wp_limbo_hermitage")
-		return "The whirlwind sweeps you up and deposits you near some old ruins of once-stabalized limbo.";
+		return "The whirlwind sweeps you up and deposits you near some old ruins of once-stabilized limbo.";
 	else if (sTag == "stormstairs" && sDest == "wp_limbo_firecave")
 		return "You climb the stairs and eventually come to the mouth of a 'cave' in a giant chunk of rock.";
 	else if (sTag == "firepit" && sDest == "wp_limbo_earthcave")
@@ -31,13 +31,13 @@ string GetLimboDescription(string sTag)
 	else if (sTag == "ruinsdive" && sDest == "wp_limbo_airstairs")
 		return "You dive down into the water, but before you touch the waves, a whirlwind sweeps you up and deposits you on a small island in the sea of chaos.";
 	else if (sTag == "earthin" && sDest == "wp_limbo_hermitage")
-		return "You step out again into the chaos of limbo, and fall, or fly, for a very long time before coming upon some old ruins of once-stabalized limbo.";
+		return "You step out again into the chaos of limbo, and fall, or fly, for a very long time before coming upon some old ruins of once-stabilized limbo.";
 	else if (sTag == "stormwhirlwind" && sDest == "wp_limbo_ruinswhirlwind")
-		return "The whirlwind sweeps you up and deposits you on a chain of islands, covered in ruins of once-stabalized limbo.";
+		return "The whirlwind sweeps you up and deposits you on a chain of islands, covered in ruins of once-stabilized limbo.";
 	else if (sTag == "firepit" && sDest == "wp_limbo_airstairs")
 		return "You dive down into the fire pit, and fall for what seems like forever. Then a gust of wind picks you up, and deposits you on a small island.";
 	else if (sTag == "airstairs" && sDest == "wp_limbo_hermitage")
-		return "You climb the stairs for what seems like forever, and then they simply end near the ruins of once-stabalized limbo.";
+		return "You climb the stairs for what seems like forever, and then they simply end near the ruins of once-stabilized limbo.";
 	else if (sTag == "hermitageout" && sDest == "wp_limbo_earthout")
 		return "You leap into the sea of chaos, and are caught up in a whirlwind. Eventually you find yourself at the mouth of a cave.";
 		
@@ -50,7 +50,7 @@ string GetLimboDescription(string sTag)
 	else if (sTag == "stormstairs" && sDest == "wp_limbo_earthin")
 		return "You climb the stairs and eventually come to the mouth of a 'cave' in a giant chunk of rock.";
 	else if (sTag == "firestairs" && sDest == "wp_limbo_hermitage")
-		return "You climb the stairs for what seems like forever, and then they simply end near the ruins of once-stabalized limbo.";
+		return "You climb the stairs for what seems like forever, and then they simply end near the ruins of once-stabilized limbo.";
 	else if (sTag == "firepit" && sDest == "wp_limbo_ruinswhirlwind")
 		return "You dive down into the pit of fire, and fall for hundreds of feet before a whirlwind sweeps you up and deposits you near some ruins.";
 	else if (sTag == "hermitageout" && sDest == "wp_limbo_firestairs")
@@ -67,19 +67,19 @@ string GetLimboDescription(string sTag)
 	else if (sTag == "stormstairs" && sDest == "wp_limbo_firestairs")
 		return "You climb the stairs and emerge from the storm, only to find yourself at the edge of a fire dominated area.";
 	else if (sTag == "firestairs" && sDest == "wp_limbo_ruinswhirlwind")
-		return "You climb the stairs and emerge in the sea of limbo. A gust of wind pushes you along, and eventually leaves you near ruins of once-stabalized land.";
+		return "You climb the stairs and emerge in the sea of limbo. A gust of wind pushes you along, and eventually leaves you near ruins of once-stabilized land.";
 	
 	else if (sTag == "ruinscave" && sDest == "wp_limbo_firestairs")
 		return "You go through the arch of rock, and find yourself on a set of stairs leading down into a fire-dominated area.";
 	else if (sTag == "firestairs" && sDest == "wp_limbo_ruinscave")
-		return "You climb the stairs, and come to an arch of rock. Stepping through it, you find yourself near the ruins of once-stabalized limbo.";
+		return "You climb the stairs, and come to an arch of rock. Stepping through it, you find yourself near the ruins of once-stabilized limbo.";
 	else if (sTag == "firepit" && sDest == "wp_limbo_stormwhirlwind")
 		return "You dive down through the fire, and are caught up in a storm. You eventually find yourself once again on land.";
 	else if (sTag == "hermitageout" && sDest == "wp_limbo_ruinswhirlwind")
-		return "You leap into the sea of chaos, and are caught up in a whirlwind. Eventually you are deposited near the ruins of once-stabalized limbo.";
+		return "You leap into the sea of chaos, and are caught up in a whirlwind. Eventually you are deposited near the ruins of once-stabilized limbo.";
 	
 	else if (sTag == "ruinswhirlwind" && sDest == "wp_limbo_hermitage")
-		return "The whirlwind sweeps you up and deposits you near the ruins of once-stabalized limbo.";
+		return "The whirlwind sweeps you up and deposits you near the ruins of once-stabilized limbo.";
 	else if (sTag == "ruinsdive" && sDest == "wp_limbo_stormwhirlwind")
 		return "You leap off the log, only to be swept up by a whirlwind and deposited on a storm-wracked island.";
 	else if (sTag == "stormstairs" && sDest == "wp_limbo_firepit")

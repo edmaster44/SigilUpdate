@@ -605,7 +605,7 @@ void HenchHandlePlayerControlChanged(object oCreature)
 		if (GetCurrentAction(oCreature) == ACTION_ATTACKOBJECT)
 		{
 			SetLocalObject(oCreature, sHenchLastPlayerAttackTarget, GetAttemptedAttackTarget());
-//			Jug_Debug(GetName(oCreature) + " settting attack target to " + GetName(GetAttemptedAttackTarget()));		
+//			Jug_Debug(GetName(oCreature) + " setting attack target to " + GetName(GetAttemptedAttackTarget()));		
 		}
 		else
 		{

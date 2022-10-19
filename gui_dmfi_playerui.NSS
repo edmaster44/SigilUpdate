@@ -84,16 +84,16 @@ void main(string sInput, string sInput2)
 			DeleteList(PG_LIST_LANGUAGE, oTool);
             DMFI_BuildLanguageList(oTool, oPC);
 		
-			DisplayGuiScreen(oPC, SCREEN_DMFI_LIST, TRUE, "dmfilist.xml");
-			SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LISTTITLE, -1, TXT_CHOOSE_LANGUAGE);
+			DisplayGuiScreen(oPC, SCREEN_DMFI_LIST_LANG, TRUE, "dmfilist_lang.xml");
+			SetGUIObjectText(oPC, SCREEN_DMFI_LIST_LANG, DMFI_UI_LISTTITLE, -1, TXT_CHOOSE_LANGUAGE);
 			n=0;
-			while (n<10)
+			while (n<=20)
 			{
 				sText = GetLocalString(oTool, LIST_PREFIX + PG_LIST_LANGUAGE + "." + IntToString(n));
 				if (sText!="") 
-					SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LIST  +IntToString(n+1), -1, sText);
+					SetGUIObjectText(oPC, SCREEN_DMFI_LIST_LANG, DMFI_UI_LIST  +IntToString(n+1), -1, sText);
 				else
-					SetGUIObjectHidden(oPC, SCREEN_DMFI_LIST, "btn" +IntToString(n+1), TRUE);	
+					SetGUIObjectHidden(oPC, SCREEN_DMFI_LIST_LANG, "btn" +IntToString(n+1), TRUE);	
 				n++;
 			}		
 		}

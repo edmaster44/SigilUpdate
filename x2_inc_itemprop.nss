@@ -233,7 +233,18 @@ int   IPGetHasItemPropertyOnCharacter(object oPC, int nItemPropertyConst);
 int   IPGetNumberOfItemProperties(object oItem);
 
 
+// ----------------------------------------------------------------------------
+// * Returns TRUE if the object is finessable. Finessable weapons are rapiers 
+// * and whips if they aren't larger than the creature's size, and any weapon 
+// * smaller than the creature's size. Unarmed strikes are also finessable.
+// ----------------------------------------------------------------------------
+int IPGetIsFinessableWeapon(object oPC, object oWeapon);
 
+// ----------------------------------------------------------------------------
+// * Returns TRUE if the object is light. Light weapons are any weapon that is
+// * smaller than the creature's size. Unarmed strikes are also light.
+// ----------------------------------------------------------------------------
+int IPGetIsLightWeapon(object oPC, object oWeapon);
 //------------------------------------------------------------------------------
 //                         I M P L E M E N T A T I O N
 //------------------------------------------------------------------------------
@@ -340,6 +351,72 @@ object IPGetIPWorkContainer(object oCaller = OBJECT_SELF)
 
     return oRet;
 }
+
+
+int IPGetIsFinessableWeapon(object oPC, object oWeapon)
+{
+	if(!GetIsObjectValid(oWeapon))
+	{
+		return TRUE;
+	}
+	
+	int nMyWeapon = GetBaseItemType(oWeapon);
+	string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nMyWeapon);
+	int bMonkeyGrip = GetHasFeat(FEAT_MONKEY_GRIP);
+	
+	if(nMyWeapon == 163 || nMyWeapon == 164 || nMyWeapon == 165 || nMyWeapon == 170 || nMyWeapon == 173 ) // Creature weapons
+	{
+		return TRUE;
+	}
+
+	
+	if(sWeaponSize != "****" && sWeaponSize != "")
+	{
+		int nMyWeaponSize = StringToInt(sWeaponSize);
+		int iMySize	= GetCreatureSize(oPC);
+		if(bMonkeyGrip)
+		{
+			iMySize += 1;
+		}
+		
+		if (((nMyWeapon != BASE_ITEM_RAPIER && nMyWeapon != 111) && nMyWeaponSize >= iMySize) 
+		|| ((nMyWeapon == BASE_ITEM_RAPIER || nMyWeapon == 111) && nMyWeaponSize > iMySize) 
+		|| nMyWeapon == 58
+		|| bMonkeyGrip && IPGetIsLightWeapon(oPC, oWeapon))
+		{
+			return FALSE;
+		}
+	
+		return TRUE;
+	}
+	
+	return FALSE;
+}
+
+int IPGetIsLightWeapon(object oPC, object oWeapon)
+{
+	if(!GetIsObjectValid(oWeapon))
+	{
+		return TRUE;
+	}
+	
+	int nMyWeapon = GetBaseItemType(oWeapon);
+	string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nMyWeapon);
+	if(sWeaponSize != "****" && sWeaponSize != "")
+	{ 
+		int nMyWeaponSize = StringToInt(sWeaponSize);
+		int iMySize	= GetCreatureSize(oPC);
+		if ((nMyWeaponSize < iMySize) && (nMyWeapon != 58))
+		{
+			return TRUE;
+		}
+	
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+
 
 /*
 sorted list of item property constants from NWScript.nss

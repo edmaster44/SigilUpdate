@@ -4,6 +4,7 @@
 
 //Original ga_take_gold passed the gold to the one who initiated the convo, meaning in convo trees where
 //they are the originator they get the gold back!
+#include "dethia_shop_sys"
 
 void main(int nGold, int bAllPartyMembers)
 {
@@ -13,14 +14,14 @@ void main(int nGold, int bAllPartyMembers)
 
     if ( bAllPartyMembers == 0 )
     {
-        TakeGoldFromCreature( nGold,oPC, TRUE, TRUE );
+		DS_TakeCoinsFromCreature(oPC, nGold);
     }
     else    
     {// For multiple players
         oTarg = GetFirstFactionMember(oPC);
         while ( GetIsObjectValid(oTarg) )
         {
-            TakeGoldFromCreature( nGold,oTarg, TRUE, TRUE);
+			DS_TakeCoinsFromCreature(oTarg, nGold);
             oTarg = GetNextFactionMember(oPC);
         }
     }

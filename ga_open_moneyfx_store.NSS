@@ -12,6 +12,7 @@
 //#include "nw_i0_plot"
 #include "ginc_param_const"
 #include "ginc_item"
+#include "dethia_shop_sys"
 
 object GetStoreFromStoreArea(string sTag)
 {
@@ -35,5 +36,5 @@ void main(string sTag, int nMarkUp, int nMarkDown)
 {
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	
-	OpenStore(GetStoreFromStoreArea(sTag), oPC, 0, 0);
+	DS_OpenShop(GetStoreFromStoreArea(sTag), oPC, 0, 0);
 }

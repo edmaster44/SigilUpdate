@@ -43,6 +43,23 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_fangooc", lSpawnpoint);    
   }
+  
+  
+    if(GetObjectByTag("ps_heightadjust") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_ps_heightadjust");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_heightadjust", lSpawnpoint);    
+  }
+
+
+    if(GetObjectByTag("npc_sigis_journalist_ooc") == OBJECT_INVALID)
+  {
+   object oWP = GetWaypointByTag("wp_npc_sigis_journalist_ooc");
+   location lSpawnpoint = GetLocation(oWP);  
+   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "npc_sigis_journalist_ooc", lSpawnpoint);    
+  }
+
 
     if(GetObjectByTag("ps_npc_oocbarber") == OBJECT_INVALID)
   {

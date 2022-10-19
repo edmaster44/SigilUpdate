@@ -73,8 +73,8 @@ int GetHasMultipleEntries(object oPC) {
 
 void RemoveExtraEntries(object oPC) {
 	
-	string sAccount = GetPCPlayerName(oPC);
-	string sName = GetName(oPC);
+	string sAccount = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	string sName = SQLEncodeSpecialChars(GetName(oPC));
 
 	string sQuery = "SELECT id, rp_pool, dm_pool FROM characterdata WHERE account='" + sAccount+"' AND name='"+sName+"'";
 	
@@ -111,8 +111,8 @@ void RemoveExtraEntries(object oPC) {
 
 void UpdatePCID(object oPC) {
 	
-	string sAccount = GetPCPlayerName(oPC);
-	string sName = GetName(oPC);
+	string sAccount = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	string sName = SQLEncodeSpecialChars(GetName(oPC));
 	
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(!GetIsObjectValid(oItem)) {

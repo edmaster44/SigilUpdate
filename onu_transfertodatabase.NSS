@@ -100,7 +100,7 @@ void LoadEnchantmentsIntoDatabase(object oPC) {
 	int n;
 	int max = GetNum2DARows("scodenchantments");
 	for (n = 0; n < max; n++) {
-		string recipe_id 	= IntToString(n);
+		//string recipe_id 	= IntToString(n);
 		string label		= SQLEncodeSpecialChars(Get2DAString("scodenchantments", "Label", n));
 		
 		string type	 		= Get2DAString("scodenchantments", "Type", n);
@@ -178,11 +178,11 @@ void LoadEnchantmentsIntoDatabase(object oPC) {
 		string can_enchant 	= Get2DAString("scodenchantments", "Can_Enchant", n);
 		if (can_enchant == "")		can_enchant = "0";
 		
-		string sQuery = "INSERT INTO recipes SET Recipe_Id='"+recipe_id+"', Label='"+label+"', Type='"+type+"', Subtype='"+subtype+"'";
+		string sQuery = "INSERT INTO recipes SET Label='"+label+"', Type='"+type+"', Subtype='"+subtype+"'";
 		sQuery += ", Numerical='"+numerical+"', Special='"+special+"', Points='"+points+"', Gold='"+gold+"', Gemstone='"+gemstone+"', Essence='"+essence+"', Melee='"+melee+"'";
 		sQuery += ", Ranged='"+ranged+"', Ammo='"+ammo+"', Thrown='"+thrown+"', Armor='"+armor+"', Glove='"+glove+"', Bracer='"+bracer+"'";
 		sQuery += ", Helm='"+helm+"', Amulet='"+amulet+"', Ring='"+ring+"', Boots='"+boots+"', Belt='"+belt+"', Cloak='"+cloak+"', Container='"+container+"', Instrument='"+instrument+"'";
-		sQuery += ", Misc='"+misc+"', Custom_Requirement='"+custom+"', Can_Enchant='"+can_enchant+"'";
+		sQuery += ", Misc='"+misc+"', Custom_Requirement='"+custom+"', Can_Enchant='"+can_enchant+"', Cursed=0, Can_Generate=1";
 		
 		SendMessageToPC(oPC, sQuery);
 		
@@ -207,8 +207,8 @@ void LoadEnchantmentNamesIntoDatabase(object oPC) {
 	int max = GetNum2DARows("enchantments_names");
 	for (n = 0; n < max; n++) {
 		
-		string enchantment_id	 		= Get2DAString("enchantments_names", "enchantment_id", n);
-		if (enchantment_id == "")		enchantment_id = "0";
+		//string enchantment_id	 		= Get2DAString("enchantments_names", "enchantment_id", n);
+		//if (enchantment_id == "")		enchantment_id = "0";
 		string prefix	 				= SQLEncodeSpecialChars(Get2DAString("enchantments_names", "prefix", n));
 		if (prefix == "")				prefix = "";
 		string suffix	 				= SQLEncodeSpecialChars(Get2DAString("enchantments_names", "suffix", n));
@@ -216,7 +216,7 @@ void LoadEnchantmentNamesIntoDatabase(object oPC) {
 		string arcane	 				= SQLEncodeSpecialChars(Get2DAString("enchantments_names", "arcane", n));
 		if (arcane == "")				arcane = "";
 		
-		string sQuery = "INSERT INTO recipes_names SET enchantment_id='"+enchantment_id+"', prefix='"+prefix+"', suffix='"+suffix+"', arcane='"+arcane+"'";
+		string sQuery = "INSERT INTO recipes_names SET prefix='"+prefix+"', suffix='"+suffix+"', arcane='"+arcane+"'";
 		
 		SendMessageToPC(oPC, sQuery);
 		

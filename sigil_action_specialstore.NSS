@@ -1,8 +1,13 @@
-void main(string sINPUT, string sOUTPUT = "", int nINPUT = 1, int nOUTPUT = 1)
+void main(string sINPUT, string sOUTPUT, int nINPUT, int nOUTPUT)
 {
+
 	object oPC = GetPCSpeaker();
 	object oINPUT = GetItemPossessedBy(oPC, sINPUT);
 	if (oINPUT == OBJECT_INVALID) return;
+
+	if(nINPUT < 1) 	nINPUT = 1;
+	if(nOUTPUT < 1) nOUTPUT = 1;
+
 	int nUSED = nINPUT;
 	int nSTACK = GetItemStackSize(oINPUT);
 	if (nSTACK > nINPUT) SetItemStackSize(oINPUT, nSTACK - nINPUT);

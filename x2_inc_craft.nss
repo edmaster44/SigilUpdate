@@ -1326,7 +1326,7 @@ void CISetupCraftingConversation(object oPC, int nNumber, int nSkill, int nRecei
       SetLocalObject(oPC,"X2_CI_CRAFT_MINOR", oMinor);
   }
   SetLocalInt(oPC,"X2_CI_CRAFT_NOOFITEMS",nNumber);    // number of crafting choises for this material
-  SetLocalInt(oPC,"X2_CI_CRAFT_SKILL",nSkill);          // skill used (craft armor or craft waeapon)
+  SetLocalInt(oPC,"X2_CI_CRAFT_SKILL",nSkill);          // skill used (craft armor or craft weapon)
   SetLocalInt(oPC,"X2_CI_CRAFT_RESULTROW",nReceipe);    // number of crafting choises for this material
   SetLocalInt(oPC,"X2_CI_CRAFT_MODE",nMode);
 }

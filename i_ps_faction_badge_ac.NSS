@@ -22,7 +22,7 @@ void main()
 	}
 	else if (GetIsPC(oTarget)) //discrete display
 	{
-		DiscreteShowBadge(oItem, oPC, oTarget);
+		DiscreteShowBadge(oPC, oTarget);
 	}
 	else // public display
 	{

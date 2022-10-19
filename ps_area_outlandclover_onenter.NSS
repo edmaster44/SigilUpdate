@@ -30,6 +30,14 @@ void main() {
 			object oWP = GetWaypointByTag("wp_cbvillager004");
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cbvillager004", GetLocation(oWP));  
 		}
+		if(GetObjectByTag("cloverbrook_sensateguard_1") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_cloverbrook_sensateguard_1");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cloverbrook_sensateguard", GetLocation(oWP), FALSE, "cloverbrook_sensateguard_1");  
+		}
+		if(GetObjectByTag("cloverbrook_sensateguard_2") == OBJECT_INVALID) { 
+			object oWP = GetWaypointByTag("wp_cloverbrook_sensateguard_2");
+			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cloverbrook_sensateguard", GetLocation(oWP), FALSE, "cloverbrook_sensateguard_2");  
+		}
 		   
 		SetGlobalInt("OutlandsCloverbrookEnterLock", 0);
 	}

@@ -1,5 +1,5 @@
 NDB V1.0
-0000053 0000014 0002742 0000134 0000394
+0000053 0000014 0002817 0000134 0000394
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -544,6 +544,7 @@ f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
 f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
 f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
 f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
@@ -913,6 +914,7 @@ f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
 f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
 f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
 f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
 f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
 f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
@@ -933,6 +935,15 @@ f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
 f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
 f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
@@ -1529,6 +1540,12 @@ fp o
 fp i
 f ffffffff ffffffff 001 i IPGetNumberOfItemProperties
 fp o
+f ffffffff ffffffff 002 i IPGetIsFinessableWeapon
+fp o
+fp o
+f ffffffff ffffffff 002 i IPGetIsLightWeapon
+fp o
+fp o
 f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
 f ffffffff ffffffff 002 i IPGetItemHasItemAbilityBonusPropertySubType
@@ -1591,6 +1608,8 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i SERVER_VERSION_ROW
+f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
 f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
 f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
@@ -1676,6 +1695,11 @@ f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
 f ffffffff ffffffff 001 i PS_GetNumPC
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamage
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 f PS_GetAvgPartylevel
 fp o
 fp i
@@ -1978,12 +2002,19 @@ f ffffffff ffffffff 003 v RecordPCAction
 fp o
 fp s
 fp o
+f ffffffff ffffffff 001 v DoPsyFeatProgression
+fp o
 f ffffffff ffffffff 001 i GetPureMageLevels
 fp o
 f ffffffff ffffffff 003 i GetPCActionRecorded
 fp o
 fp s
 fp o
+f ffffffff ffffffff 004 e0 PS_EffectDamagePiercing
+fp i
+fp i
+fp i
+fp i
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_REMOVE_DOMINATED_ON_TRANSITION
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION
@@ -5097,10 +5128,39 @@ f ffffffff ffffffff 001 t0013 TimeToTimeFields
 fp i
 f ffffffff ffffffff 001 i GetIsServerResetTime
 fp o
+f ffffffff ffffffff 000 i FACTION_PRIME
+f ffffffff ffffffff 000 i FACTION_FREE_LEAGUE
+f ffffffff ffffffff 000 i FACTION_ATHAR
+f ffffffff ffffffff 000 i FACTION_BELIEVERS_OF_THE_SOURCE
+f ffffffff ffffffff 000 i FACTION_BLEAK_CABAL
+f ffffffff ffffffff 000 i FACTION_DOOMGUARD
+f ffffffff ffffffff 000 i FACTION_DUSTMEN
+f ffffffff ffffffff 000 i FACTION_FATED
+f ffffffff ffffffff 000 i FACTION_FRATERNITY_OF_ORDER
+f ffffffff ffffffff 000 i FACTION_HARMONIUM
+f ffffffff ffffffff 000 i FACTION_MERCYKILLERS
+f ffffffff ffffffff 000 i FACTION_REVOLUTIONARY_LEAGUE
+f ffffffff ffffffff 000 i FACTION_SIGN_OF_ONE
+f ffffffff ffffffff 000 i FACTION_SOCIETY_OF_SENSATION
+f ffffffff ffffffff 000 i FACTION_TRASCENDENT_ORDER
+f ffffffff ffffffff 000 i FACTION_XAOSITECTS
+f ffffffff ffffffff 000 i FACTION_NONE
+f ffffffff ffffffff 000 i FACTION_UNDECIDED
+f ffffffff ffffffff 000 i FACTION_RINGGIVERS
+f ffffffff ffffffff 000 i FACTION_QUIT
+f ffffffff ffffffff 000 i FACTION_RANKS_MAX
+f ffffffff ffffffff 000 s FACTION_RANKS
+f ffffffff ffffffff 000 i FACTION_RANK_NAMER
+f ffffffff ffffffff 000 i FACTION_RANK_FACTIONEER
+f ffffffff ffffffff 000 i FACTION_RANK_FACTOTUM
+f ffffffff ffffffff 000 i FACTION_RANK_FACTORAL
+f ffffffff ffffffff 000 i FACTION_RANK_FACTOR
 f ffffffff ffffffff 000 i HENCH_MAX_DURATION
 f ffffffff ffffffff 000 s FACTION_MESSAGE_TEXT_COLOUR
 f ffffffff ffffffff 000 s FACTION_NPC_LEFT_HAND
 f ffffffff ffffffff 000 s FACTION_NPC_RIGHT_HAND
+f ffffffff ffffffff 000 s FACTION_VERSION_OLD
+f ffffffff ffffffff 000 s FACTION_VERSION_NEW
 f ffffffff ffffffff 000 s RANKS_FREE_LEAGUE
 f ffffffff ffffffff 000 i RANKS_FREE_LEAGUE_MAX
 f ffffffff ffffffff 000 s RANKS_ATHAR
@@ -5131,29 +5191,98 @@ f ffffffff ffffffff 000 s RANKS_TRANSCENDENT_ORDER
 f ffffffff ffffffff 000 i RANKS_TRANSCENDENT_ORDER_MAX
 f ffffffff ffffffff 000 s RANKS_XAOSITECTS
 f ffffffff ffffffff 000 i RANKS_XAOSITECTS_MAX
+f ffffffff ffffffff 000 i FACTION_ACTION_JOIN
+f ffffffff ffffffff 000 i FACTION_ACTION_PROMOTE
+f ffffffff ffffffff 000 i FACTION_ACTION_DEMOTE
+f ffffffff ffffffff 000 i FACTION_ACTION_LEAVE
+f ffffffff ffffffff 000 i FACTION_ACTION_RECOMMEND
+f ffffffff ffffffff 000 i FACTION_ACTION_CLEAR
+f ffffffff ffffffff 000 i FACTION_ACTION_TRANSFER
 f ffffffff ffffffff 001 s FactionIdToName
 fp i
-f ffffffff ffffffff 001 i HasFactionBadge
-fp o
-f ffffffff ffffffff 002 s FindStringInArray
-fp i
-fp s
 f ffffffff ffffffff 001 i GetFactionMaxRanks
 fp i
 f ffffffff ffffffff 002 s GetFactionRankName
 fp i
 fp i
-f ffffffff ffffffff 004 v PromoteInFaction
+f ffffffff ffffffff 001 i GetFaction
+fp o
+f ffffffff ffffffff 001 i HasFactionBadge
+fp o
+f ffffffff ffffffff 001 i GetIsFaction
+fp i
+f ffffffff ffffffff 001 i GetFactionRank
+fp o
+f ffffffff ffffffff 001 i GetOnNewFactionSystem
+fp o
+f ffffffff ffffffff 001 v ToggleFactionSystem
+fp o
+f ffffffff ffffffff 002 v PromoteInFaction
+fp o
+fp o
+f ffffffff ffffffff 004 v PromoteInFactionOld
 fp o
 fp o
 fp o
 fp s
-f ffffffff ffffffff 004 v DemoteInFaction
+f ffffffff ffffffff 002 v DemoteInFaction
+fp o
+fp o
+f ffffffff ffffffff 004 v DemoteInFactionOld
 fp o
 fp o
 fp o
 fp s
 f ffffffff ffffffff 001 o GetFactionBadgeObject
+fp o
+f ffffffff ffffffff 002 v SetBadgeFaction
+fp o
+fp i
+f ffffffff ffffffff 003 v LogFactionAction
+fp o
+fp i
+fp s
+f ffffffff ffffffff 002 v RemoveFaction
+fp o
+fp o
+f ffffffff ffffffff 003 v RemoveFactionBadge
+fp o
+fp o
+fp o
+f ffffffff ffffffff 002 v RemoveAllFactionData
+fp o
+fp o
+f ffffffff ffffffff 002 v DiscreteShowBadge
+fp o
+fp o
+f ffffffff ffffffff 002 v PublicShowBadge
+fp o
+fp o
+f ffffffff ffffffff 002 i GetOtherFactioneerFaction
+fp o
+fp i
+f ffffffff ffffffff 001 v SendGenericFactionMessage
+fp o
+f ffffffff ffffffff 001 v CreateFactionSignItem
+fp o
+f ffffffff ffffffff 001 i GetIsNamer
+fp o
+f ffffffff ffffffff 001 i GetIsFactioneer
+fp o
+f ffffffff ffffffff 001 i GetIsFactotum
+fp o
+f ffffffff ffffffff 001 i GetIsFactoral
+fp o
+f ffffffff ffffffff 001 i GetIsFactor
+fp o
+f ffffffff ffffffff 001 v PortIntoNewFactionSystem
+fp o
+f ffffffff ffffffff 002 i TranslateOldRankToNewRank
+fp i
+fp i
+f ffffffff ffffffff 001 v GiveHarmoniumKit
+fp o
+f ffffffff ffffffff 001 v GiveMercykillerKit
 fp o
 f ffffffff ffffffff 001 v FactionCohortEquipWeapons
 fp o
@@ -5183,44 +5312,19 @@ fp o
 fp o
 f ffffffff ffffffff 001 v FindOrReplaceHenchman
 fp o
-f ffffffff ffffffff 001 s PS_TimeToString
-fp i
 f ffffffff ffffffff 003 v SummonFactionCohort
 fp o
 fp o
 fp i
-f ffffffff ffffffff 001 v GiveHarmoniumKit
-fp o
-f ffffffff ffffffff 001 v GiveMercykillerKit
-fp o
-f ffffffff ffffffff 003 v RemoveFactionBadge
-fp o
-fp o
-fp o
-f ffffffff ffffffff 002 v RemoveAllFactionData
-fp o
-fp o
-f ffffffff ffffffff 002 v SetBadgeFaction
+f ffffffff ffffffff 001 s PS_TimeToString
+fp i
+f ffffffff ffffffff 002 s FindStringInArray
+fp i
+fp s
+f ffffffff ffffffff 002 v JoinFaction
 fp o
 fp i
-f ffffffff ffffffff 003 v DiscreteShowBadge
-fp o
-fp o
-fp o
-f ffffffff ffffffff 002 v PublicShowBadge
-fp o
-fp o
-f ffffffff ffffffff 002 i GetOtherFactioneerFaction
-fp o
-fp i
-f ffffffff ffffffff 001 v SendGenericFactionMessage
-fp o
-f ffffffff ffffffff 001 v CreateFactionSignItem
-fp o
-f ffffffff ffffffff 001 i GetIsFactotum
-fp o
-f ffffffff ffffffff 001 i GetIsFactor
-fp o
+f ffffffff ffffffff 000 i NPC_EVENT_RIOT
 f 00000572 0000065c 002 i GetPermanentEntry
 fp s
 fp s
@@ -5245,6 +5349,19 @@ fp i
 f ffffffff ffffffff 003 v IncrementModuleFactionQuest
 fp o
 fp i
+fp i
+f ffffffff ffffffff 001 i GetModuleQuestExists
+fp s
+f ffffffff ffffffff 001 i GetModuleQuestStatus
+fp s
+f ffffffff ffffffff 003 v IncrementModuleQuest
+fp o
+fp s
+fp i
+f ffffffff ffffffff 002 i GetActiveNPCEvent
+fp i
+fp i
+f ffffffff ffffffff 001 i GetNumberOfActiveNPCEvents
 fp i
 f ffffffff ffffffff 000 s sAchievementWindow
 f ffffffff ffffffff 001 v ListAchievements
@@ -5439,7 +5556,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000213 0000002c 00000048
+l02 0000218 0000002c 00000048
 l03 0000051 00000048 00000062
 l03 0000053 00000062 00000078
 l04 0000040 00000078 00000078
@@ -5503,39 +5620,39 @@ l52 0000184 0000018c 000001a0
 l52 0000187 000001a6 000001b4
 l52 0000189 000001b4 000001c2
 l52 0000190 000001c8 000001ca
-l02 0002114 000001ca 000001e5
-l02 0002115 000001e5 000001f2
-l02 0002116 000001f8 00000224
-l02 0002117 00000224 0000023d
-l02 0002118 00000243 0000024b
-l50 0000045 0000024b 00000251
-l50 0000046 00000251 000002c5
-l50 0000049 000002c5 000002d3
-l50 0000050 000002d3 000002e8
-l50 0000051 000002ee 0000030f
-l50 0000054 0000030f 0000032b
-l50 0000056 00000331 00000339
+l02 0002119 000001ca 000001e5
+l02 0002120 000001e5 000001f2
+l02 0002121 000001f8 00000224
+l02 0002122 00000224 0000023d
+l02 0002123 00000243 0000024b
+l50 0000052 0000024b 00000251
+l50 0000053 00000251 000002c5
+l50 0000056 000002c5 000002d3
+l50 0000057 000002d3 000002e8
+l50 0000058 000002ee 0000030f
+l50 0000061 0000030f 0000032b
+l50 0000063 00000331 00000339
 l43 0000152 00000339 0000035f
 l43 0000153 0000035f 00000367
 l43 0000157 00000367 0000039e
 l43 0000158 0000039e 000003a6
 l43 0000162 000003a6 000003e5
 l43 0000163 000003e5 000003ed
-l50 0000029 000003ed 000003f1
-l50 0000030 000003f1 00000409
-l50 0000031 00000409 00000419
-l50 0000032 0000041f 000004b8
-l50 0000033 000004be 000004c0
-l50 0000034 000004c0 00000556
-l50 0000037 00000556 00000564
-l50 0000039 0000056a 00000572
-l50 0000012 00000572 00000578
-l50 0000013 00000578 000005e8
-l50 0000016 000005e8 000005f6
-l50 0000017 000005f6 0000060b
-l50 0000018 00000611 00000632
-l50 0000021 00000632 0000064e
-l50 0000023 00000654 0000065c
+l50 0000036 000003ed 000003f1
+l50 0000037 000003f1 00000409
+l50 0000038 00000409 00000419
+l50 0000039 0000041f 000004b8
+l50 0000040 000004be 000004c0
+l50 0000041 000004c0 00000556
+l50 0000044 00000556 00000564
+l50 0000046 0000056a 00000572
+l50 0000019 00000572 00000578
+l50 0000020 00000578 000005e8
+l50 0000023 000005e8 000005f6
+l50 0000024 000005f6 0000060b
+l50 0000025 00000611 00000632
+l50 0000028 00000632 0000064e
+l50 0000030 00000654 0000065c
 l51 0000080 0000065c 0000066c
 l51 0000081 00000672 00000678
 l51 0000083 00000678 00000690
@@ -5651,15 +5768,15 @@ l52 0000078 0000139d 0000139f
 l52 0000079 0000139f 000013be
 l52 0000082 000013be 000013fe
 l52 0000083 00001404 0000140c
-l02 0002101 0000140c 00001412
-l02 0002102 00001412 00001418
-l02 0002103 00001418 0000141e
-l02 0002105 0000141e 00001432
-l02 0002106 0000144a 0000146a
-l02 0002107 0000146a 00001488
-l02 0002105 00001488 0000149c
-l02 0002109 000014a2 000014be
-l02 0002110 000014c4 000014cc
+l02 0002106 0000140c 00001412
+l02 0002107 00001412 00001418
+l02 0002108 00001418 0000141e
+l02 0002110 0000141e 00001432
+l02 0002111 0000144a 0000146a
+l02 0002112 0000146a 00001488
+l02 0002110 00001488 0000149c
+l02 0002114 000014a2 000014be
+l02 0002115 000014c4 000014cc
 l12 0001351 000014cc 000014d4
 l12 0001352 000014d4 000014e5
 l12 0001353 000014e5 000014e7

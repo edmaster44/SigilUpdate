@@ -1,8 +1,6 @@
 #include "ps_inc_achievements"
 #include "ps_inc_faction"
 
-int GetFaction(object oPC);
-
 void CheckForAchievements(object oPC);
 
 void main () {
@@ -13,9 +11,11 @@ void main () {
 	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
+
+	DelayCommand(0.5f, PortIntoNewFactionSystem(oPC));
 	
 	//check achievements
-	DelayCommand(0.5f, CheckForAchievements(oPC));
+	DelayCommand(1.0f, CheckForAchievements(oPC));
 	
 	//Test server vs. production switch
 	string sVersion = GetLocalString(oModule, "serverVersion");
@@ -33,7 +33,8 @@ void main () {
 		//Test server! open the testing room
 		if (version == "Testing") {
 			if (GetObjectByTag("testing_portal_out") == OBJECT_INVALID) {
-				object oWP = GetWaypointByTag("wp_testing_portal_in_2");
+				object oWP = GetWaypointByTag("wp_testing_portal_in_2"); //normal version
+				//object oWP = GetWaypointByTag("wp_testing_portal_in"); //xmas version
 				CreateObject(OBJECT_TYPE_PLACEABLE, "testing_portal_out", GetLocation(oWP));
 			}
 		}
@@ -198,18 +199,4 @@ void CheckForAchievements(object oPC) {
 	SetLocalInt(oPC, "ACHIEVEMENTS_CHECKED", nChecked+1);
 	DelayCommand(0.5f, CheckForAchievements(oPC));
 
-}
-
-//Get faction
-//Refactor this later
-int GetFaction(object oPC) {
-
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
-		return nFaction;
-    }
-	
-	return 0;
 }
