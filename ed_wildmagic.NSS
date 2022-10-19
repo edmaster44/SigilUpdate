@@ -10,43 +10,49 @@
 #include "x2_inc_itemprop"
 
 
-
-int GetIsOffensiveSpell(int spellid)
+int DM_GetIsOffensiveSpell(int spellid)
 {
 	return StringToInt(Get2DAString("spells", "HostileSetting", spellid));
 }
 
-
-void Wild_Magic(object oPC,object oTarget, int nSpell)
+void DoWildMagic(object oCaster, object oTarget, int nSpellID)
 {
-if(GetIsOffensiveSpell(nSpell) == 0 || GetLocalInt(oPC,"NoWildMagic") == 1) return;
-	
-SetLocalInt(oPC,"NoWildMagic",1);
-DelayCommand(3.0f,DeleteLocalInt(oPC,"NoWildMagic"));
-int iCastLvl = GetSpellLevel(nSpell);
-if(nSpell == SPELLFEAT_ARCANEBASH) iCastLvl = 3;
-iCastLvl = iCastLvl + Random(4);
-	if(iCastLvl > 9) iCastLvl = 9;
-	
-	
-	int iHostile; int iWildSpell; string sWildSpell;
-	string TargetUI = Get2DAString("spells", "TargetingUI", nSpell);
-	
-	while(iHostile == 0)
+	if (DM_GetIsOffensiveSpell(nSpellID) == 0 || GetLocalInt(oCaster, "NoWildMagic") == 1)
+		return;
+
+	SetLocalInt(oCaster, "NoWildMagic", 1);
+	DelayCommand(3.0f, DeleteLocalInt(oCaster, "NoWildMagic"));
+
+	int iCastLvl = GetSpellLevel(nSpellID);
+	if (nSpellID == 1521)
+		iCastLvl = 3;
+
+	iCastLvl = iCastLvl + Random(4);
+	if (iCastLvl > 9)
+		iCastLvl = 9;
+
+	int iHostile;
+	int iWildSpell;
+	string sWildSpell;
+	string TargetUI = Get2DAString("spells", "TargetingUI", nSpellID);
+
+	while (iHostile == 0)
 	{
-		SQLExecDirect("SELECT `spellid` FROM `spellids` WHERE `spell_lvl`='"+IntToString(iCastLvl)+"' AND `targetingui`='"+TargetUI+"' OR `spell_lvl`='"+IntToString(iCastLvl)+"' AND `targetingui`='8' ORDER BY RAND() LIMIT 1;");
+		SQLExecDirect("SELECT `spellid` FROM `spellids` WHERE `spell_lvl`='" + IntToString(iCastLvl) + "' AND `targetingui`='" + TargetUI + "' OR `spell_lvl`='" + IntToString(iCastLvl) + "' AND `targetingui`='8' ORDER BY RAND() LIMIT 1;");
 		SQLFetch();
-		
+
 		sWildSpell = SQLGetData(1);
-		if(sWildSpell == "") {iWildSpell = 0; break;}
+		if (sWildSpell == "")
+		{
+			iWildSpell = 0;
+			break;
+		}
 		iWildSpell = StringToInt(sWildSpell);
 
-		if(GetIsOffensiveSpell(iWildSpell)) break;
+		if (DM_GetIsOffensiveSpell(iWildSpell))
+			break;
 	}
-	
-	FloatingTextStringOnCreature("<I>*Wild Magic: "+GetStringByStrRef(StringToInt(Get2DAString("spells", "Name", iWildSpell)))+"*", oPC, TRUE, 3.0f);
-	ExecuteScript(Get2DAString("spells", "ImpactScript", iWildSpell), oPC);		
-	
-	
-	
+
+	FloatingTextStringOnCreature("<I>*Wild Casting: " + GetStringByStrRef(StringToInt(Get2DAString("spells", "Name", iWildSpell))) + "*", oCaster, TRUE, 3.0f);
+	ExecuteScript(Get2DAString("spells", "ImpactScript", iWildSpell), oCaster);
 }

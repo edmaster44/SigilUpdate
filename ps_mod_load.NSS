@@ -203,8 +203,8 @@ void main()
 	}
 	
 	OnSeverLoadPopulateSpellSQL();
-	DelayCommand(250.00(OnSeverLoadPopulateFeatSQL(0,2500));
-    DelayCommand(350.00(OnSeverLoadPopulateFeatSQL(2501,5000));
+	DelayCommand(250.0, OnSeverLoadPopulateFeatSQL(0, 2500));
+    DelayCommand(315.0, OnSeverLoadPopulateFeatSQL(2501, 5000));
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");
 	
