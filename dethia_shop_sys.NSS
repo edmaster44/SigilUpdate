@@ -1034,7 +1034,8 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 		if (!GetItemInDB(oItem)) {
 			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"', store_tag='"+GetTag(oStore)+"'";
 			SQLExecDirect(sQuery);
-		} else {
+		} else if (GetLocalInt(oItem, "PRICE_OLD") <= 0) {
+			SetLocalInt(oItem, "PRICE_OLD", nOldPrice);
 			string sQuery = "UPDATE item_prices SET item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
 			SQLExecDirect(sQuery);
 		}
