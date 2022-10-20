@@ -294,7 +294,7 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID);
 int GetItemInDB(object oItem);
 
 //Add all the items in the store to the database 
-void AddAllItemsInStoreToDatabase(object oStore);
+void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID);
 
 //Get the cost of an item property
 int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID);
@@ -1019,7 +1019,7 @@ int GetItemInDB(object oItem) {
 }
 
 //Add all the items in this store to the database
-void AddAllItemsInStoreToDatabase(object oStore) {
+void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 
 	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 	object oItem = GetFirstItemInInventory(oStore);
