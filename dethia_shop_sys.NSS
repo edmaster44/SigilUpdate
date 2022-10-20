@@ -966,7 +966,9 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 	int nCost = GetLocalInt(oItem, "PRICE");
 	int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
 	int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+	int nCurrentCost = GetGoldPieceValue(oItem);
 	string sItem = GetResRef(oItem);
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Current GP value: "+IntToString(nCurrentCost)+" vs. Saved GP Value: "+IntToString(nOldCost));
 		
 	//Is nCost valid? Do the Gold piece values line up? (tells us whether or not this item has been further enchanted)
 	//Have we double checked this item's value recently? If no to any of these, update!
@@ -975,7 +977,6 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 		   
 		int nDBCost = 0;
 		int nDBOldCost = 0;
-		int nCurrentCost = GetGoldPieceValue(oItem);
 		   
 		//Check whether this item is in the DB
 		string sQuery = "SELECT item_price, item_oldvalue FROM item_prices WHERE item_tag = '"+sItem+"'";
@@ -996,7 +997,7 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 		   
 		SetLocalInt(oItem, "PRICE", nCost);
 		PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
-		SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
+		SetLocalInt(oItem, "PRICE_OLD", nCurrentCost);
 	}
 		
 	return nCost;
@@ -1036,8 +1037,8 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 			SQLExecDirect(sQuery);
 		} else if (GetLocalInt(oItem, "PRICE_OLD") <= 0) {
 			SetLocalInt(oItem, "PRICE_OLD", nOldPrice);
-			string sQuery = "UPDATE item_prices SET item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
-			SQLExecDirect(sQuery);
+			//string sQuery = "UPDATE item_prices SET item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
+			//SQLExecDirect(sQuery);
 		}
 	
 		oItem = GetNextItemInInventory(oStore);
