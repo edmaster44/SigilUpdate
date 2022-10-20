@@ -984,7 +984,7 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 			nDBOldCost = StringToInt(SQLGetData(2));
 	    }
 		   
-		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" "+IntToString(nDBCost)+" vs. "+IntToString(GetGoldPieceValue(oItem)));
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" "+IntToString(nDBOldCost)+" vs. "+IntToString(GetGoldPieceValue(oItem)));
 		if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
 		   	nCost = nDBCost;
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
