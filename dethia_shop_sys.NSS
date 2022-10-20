@@ -975,6 +975,7 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 		   
 		int nDBCost = 0;
 		int nDBOldCost = 0;
+		int nCurrentCost = GetGoldPieceValue(oItem);
 		   
 		//Check whether this item is in the DB
 		string sQuery = "SELECT item_price, item_oldvalue FROM item_prices WHERE item_tag = '"+sItem+"'";
@@ -984,8 +985,8 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 			nDBOldCost = StringToInt(SQLGetData(2));
 	    }
 		   
-		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" "+IntToString(nDBOldCost)+" vs. "+IntToString(GetGoldPieceValue(oItem)));
-		if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" recorded cost "+IntToString(nDBOldCost)+" vs. gold piece value "+IntToString(nCurrentCost));
+		if (nDBCost > 0 && nDBOldCost == nCurrentCost) {
 		   	nCost = nDBCost;
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
 		} else {
