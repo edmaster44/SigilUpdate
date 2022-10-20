@@ -43,11 +43,9 @@ int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
- if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 }
 
@@ -55,11 +53,10 @@ if (iHit == 2)
 {
 nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
@@ -103,20 +100,16 @@ if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 }
 
 if (iHit == 2)
 {
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
@@ -163,10 +156,8 @@ if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 }
 
@@ -175,10 +166,8 @@ if (iHit == 2)
 nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
