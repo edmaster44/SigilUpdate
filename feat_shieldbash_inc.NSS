@@ -40,9 +40,11 @@ int nTotal = nDam + nSize;
 int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
+
+float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
 {
- ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget,fDur);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
@@ -52,7 +54,7 @@ DoWildMagic(oPC, oTarget, GetSpellId());
 if (iHit == 2)
 {
 nTotal = FloatToInt(nTotal * 1.5);
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget,fDur);
 
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
@@ -60,7 +62,7 @@ DoWildMagic(oPC, oTarget, GetSpellId());
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
 }
 
@@ -94,11 +96,12 @@ else if (shield = BASE_ITEM_SMALLSHIELD)
 nSize = 1;}
 int nTotal = nDam + nSize;
 int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+float fDur = RoundsToSeconds(nSaveDC);
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 1, nSpell);
 if(iHit >0)
 {
- ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget,fDur);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
@@ -116,7 +119,7 @@ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
 }
 
@@ -152,9 +155,10 @@ int nTotal = nDam + nSize;
 int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
+float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
 {
- ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget,fDur);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
@@ -164,14 +168,14 @@ DoWildMagic(oPC, oTarget, GetSpellId());
 if (iHit == 2)
 {
 nTotal = FloatToInt(nTotal * 1.5);
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget,fDur);
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
 }
 

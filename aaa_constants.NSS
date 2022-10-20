@@ -77,6 +77,7 @@ const int RACIAL_SUBTYPE_KENKU					= 100;
 const int RACIAL_SUBTYPE_RAKSHASA				= 241;
 const int RACIAL_SUBTYPE_LUPINAL				= 191;
 const int RACIAL_SUBTYPE_ARCANALOTH				= 182;
+const int FEAT_KHAYAL_FINESSE					= 3217;
 
 // List of Races not in existing lists
 const int RACIAL_TYPE_PLANETOUCHED				= 21;
