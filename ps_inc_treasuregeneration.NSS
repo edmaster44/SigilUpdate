@@ -266,6 +266,7 @@ void CreateCreatureDrop(object oCreature) {
 
 	int nChance = GetLocalInt(oCreature, "creature_drop_chance");
 	string sItem = GetLocalString(oCreature, "creature_drop");
+	object oItem;
 	
 	if (d100() < nChance) {
 		if (sItem == "Pearl") { //special case to handle pearls (gemstones)
@@ -273,16 +274,20 @@ void CreateCreatureDrop(object oCreature) {
 			int nQuality = Random(3);
 			int nSize = 0; //we don't split pearls!
 			SetDetailsOfGemstone(oGem, nQuality, nSize, oCreature);
+			oItem = oGem;
 		} else if (sItem == "ESSENTIAL_ITEM") {
 			string sResRef = PickEssentialItemReward(GetHitDice(oCreature));
-			CreateItemOnObject(sResRef, oCreature);
+			oItem = CreateItemOnObject(sResRef, oCreature);
 		} else if (sItem == "EPIC_LOOT_1") {
 			string sResRef = PickFromQuestTreasureLow(); //special loot 1
-			CreateItemOnObject(sResRef, oCreature);
+			oItem = CreateItemOnObject(sResRef, oCreature);
 		} else {
-			CreateItemOnObject(sItem, oCreature);
+			oItem = CreateItemOnObject(sItem, oCreature);
 		}
 	}
+	
+	if (GetIsObjectValid(oItem))
+		SetItemCostVariables(oItem);
 }
 //***************************************************
 //Books and Paper Products
@@ -462,7 +467,10 @@ void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 //***************************************************
 void CreateGemOnTarget(object oTarget, int nTreasureType) {
 
-	CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType); return;
+	object oGem = CreateRandomGemstoneOnSpawnOrChest(oTarget, nTreasureType);
+	
+	if (GetIsObjectValid(oGem))
+		SetItemCostVariables(oGem);
 	  
 }
 //***************************************************

@@ -2,6 +2,7 @@
 #include "ps_inc_experimentaleffects"
 #include "ps_inc_newcrafting"
 #include "ps_inc_newenchanting"
+#include "dethia_shop_sys"
 
 const int SPECIAL_BOOK_CHANCE = 10;
 const string MANUAL_COLOR = "<C=DarkSlateBlue>";
@@ -30,6 +31,10 @@ int GetChallengeRatingOfTarget(object oTarget) {
 object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1, string sNewTag="", int bDisplayFeedback=TRUE) {
 	object oObj = CreateItemOnObject(sBase, oTarget, nStackSize, sNewTag, bDisplayFeedback);
 	WriteTimestampedLogEntry ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
+	
+	if (GetIsObjectValid(oObj))
+		SetItemCostVariables(oObj);
+		
 	return oObj;   
 }
 
@@ -113,6 +118,9 @@ void CreateEnchantmentManualOnTarget(object oTarget) {
 	//Name & Description
 	SetFirstName(oBook, sName);
 	SetDescription(oBook, sDescrip);
+	
+	if (GetIsObjectValid(oBook))
+		SetItemCostVariables(oBook);
 }
 
 //Creates a random junk book
@@ -149,6 +157,9 @@ void CreateRandomBookOnTarget(object oTarget) {
 	SetDescription(oBook, sStory);
 	int nIcon = GetRandomIcon("book");
 	SetItemIcon(oBook, nIcon);
+	
+	if (GetIsObjectValid(oBook))
+		SetItemCostVariables(oBook);
 }
 
 //creates a wonky scroll on the target
@@ -198,6 +209,9 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 	
 	itemproperty ip = ItemPropertyCastSpell(IP_CONST_CASTSPELL_UNIQUE_POWER, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
 	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oScroll);
+	
+	if (GetIsObjectValid(oScroll))
+		SetItemCostVariables(oScroll);
 }
 
 //***************************************************
@@ -237,6 +251,9 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 
 	itemproperty ip = ItemPropertyCastSpell(IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
 	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oPot);
+	
+	if (GetIsObjectValid(oPot))
+		SetItemCostVariables(oPot);
 }
 
 //***************************************************
@@ -665,6 +682,9 @@ void CreateRandomItemOfCategoryOnTarget(object oTarget, string sType) {
 	object oItem = CreateRandomItemOfCategory(oTarget, sType, nMatLevel);
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
+	
+	if (GetIsObjectValid(oItem))
+		SetItemCostVariables(oItem);
 }
 
 //Creates a random item of a given category, and enchants it 
@@ -685,6 +705,9 @@ void CreateRandomItemOfTypeOnTarget(object oTarget, int nIndex) {
 	object oItem = CreateRandomItemOfType(oTarget, nIndex, nMatLevel);
 	GiveItemRandomEnchantments(oItem, nPoints);
 	GenerateRandomNameAndDescriptionForItem(oItem);
+	
+	if (GetIsObjectValid(oItem))
+		SetItemCostVariables(oItem);
 }
 
 //***************************************************
@@ -935,4 +958,7 @@ void CreateTrinketOnTarget(object oTarget, int nLevel = 1) {
 	SetFirstName(oObject, RANDOM_DROP_COLOR+sName+"</C>");
 	SetDescription(oObject, sDescrip);
 	SetItemIcon(oObject, nIcon);
+	
+	if (GetIsObjectValid(oObject))
+		SetItemCostVariables(oObject);
 }

@@ -1,4 +1,5 @@
 #include "ps_inc_newcrafting"
+#include "dethia_shop_sys"
 
 void ShowCustomizationScreen(object oPC, object oItem, struct baseitem i, string sDescrip) {
 	DisplayGuiScreen(oPC, sCustomizationScreen, TRUE, xmlCustomizationFile);
@@ -52,6 +53,7 @@ void main () {
 	
 	string sDescrip = GetCraftingNameDescription(oPC, i, m1, m2, m3);
 	SetDescription(oItem, sDescrip);
+	SetItemCostVariables(oItem);
 	
 	DeleteLocalInt(oPC, "Craft_BaseItemType"); 
 	DeleteLocalInt(oPC, "Craft_Mat1"); 

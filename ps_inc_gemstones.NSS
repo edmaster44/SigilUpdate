@@ -432,7 +432,7 @@ object CreateGemstoneOfType(string sTag, int nQuality = 0, int nSize = 0, object
 	return oGem;
 }
 
-void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
+object CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
 
 	object oGem = GetRandomGemstoneToSpawn(oTarget);
 	
@@ -441,6 +441,8 @@ void CreateRandomGemstoneOnSpawnOrChest(object oTarget, int nLootLevel) {
 		int nQuality = Random(3);
 		SetDetailsOfGemstone(oGem, nQuality, nSize, oTarget);
 	}
+	
+	return oGem;
 }
 
 int GetHasRoughGemstone(object oPC) {

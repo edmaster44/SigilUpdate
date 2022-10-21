@@ -50,7 +50,7 @@ void main() {
 	while (numGems > 0) {
 		//randomize loot level each time
 		int lootLevel = GetLootLevel(oPC);
-		CreateRandomGemstoneOnSpawnOrChest(oPC, lootLevel);
+		CreateGemOnTarget(oPC, lootLevel);
 		numGems--;
 	}
 	
