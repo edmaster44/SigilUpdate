@@ -1207,7 +1207,7 @@ void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {
 			nDBOldPoints = StringToInt(SQLGetData(3));
 	    }
 		   
-		if (nDBCost > 0 && (nDBOldCost == nOldCost || nPoints == nDBOldPoints)) {
+		if (nDBOldCost == nOldCost || nPoints == nDBOldPoints) {
 		   	nCost = nDBCost;
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
 		} else {
