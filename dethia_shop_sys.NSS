@@ -968,7 +968,7 @@ int GetItemUseable(object oItem, object oPC)
 //A function to fetch the "real" gold piece value of an item
 int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
-	SetItemCostVariables(oItem);
+	SetItemCostVariables(oItem, oPC);
 	int nCost = GetLocalInt(oItem, "PRICE");
 		
 	return nCost;
