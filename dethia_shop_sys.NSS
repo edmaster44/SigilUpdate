@@ -309,7 +309,7 @@ int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID);
 void AddPropertyToDB(itemproperty iProp);
 
 //Checks whether we need to recalculate the price for an item
-int GetItemCostUpdated(object oItem);
+int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID);
 
 //Set up all the variables for this item
 void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID);
@@ -1143,7 +1143,7 @@ void AddPropertyToDB(itemproperty iProp) {
 }
 
 //Checks whether we need to recalculate the price for an item
-int GetItemCostUpdated(object oItem) {
+int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 		
 	int nCost = GetLocalInt(oItem, "PRICE");
 	int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
@@ -1153,20 +1153,28 @@ int GetItemCostUpdated(object oItem) {
 	int nBaseGold = GetGoldPieceValue(oItem); //may not be reliable, so we're going to also compare with properties
 	
 	//We haven't run SetItemCostVariables at ALL on this item, so we probably should
-	if (nTime <= 0)
+	if (nTime <= 0) {
 		return TRUE;
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no timestamp, recalculate.");
+	}
 		
 	//The item was enchanted or something; time to update
-	if (nDirty == 1)
+	if (nDirty == 1) {
 		return TRUE;
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - properties updated, recalculate.");
+	}
 	
 	//We haven't set the variables yet, or there's something otherwise wrong
-	if (!GetPlotFlag(oItem) && nCost <= 0)
+	if (!GetPlotFlag(oItem) && nCost <= 0) {
 		return TRUE;
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
+	}
 		
 	//Because we can't strictly trust the base cost function, we're going to double check with the points funtion
-	if (nOldCost != nBaseGold && GetItemTotalPoints(oItem) != nPoints)
+	if (nOldCost != nBaseGold && GetItemTotalPoints(oItem) != nPoints) {
 		return TRUE;
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - gold cost and/or item points have changed.");
+	}
 		
 	return FALSE;
 	
@@ -1175,7 +1183,7 @@ int GetItemCostUpdated(object oItem) {
 //Set up all the variables for this item
 void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {
 
-	if (GetItemCostUpdated(oItem)) {
+	if (GetItemCostUpdated(oItem, oPC)) {
 	
 		SetLocalInt(oItem, "PRICE_POINTS", GetItemTotalPoints(oItem));
 		SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
