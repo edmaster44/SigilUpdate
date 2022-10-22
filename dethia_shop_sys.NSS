@@ -995,17 +995,21 @@ int GetItemInDB(object oItem) {
 //Add all the items in this store to the database
 void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 
+	SendMessageToPC(oPC, "Adding items to store");
+
 	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 	object oItem = GetFirstItemInInventory(oStore);
 	while(GetIsObjectValid(oItem)) {
 	
 		string sName = SQLEncodeSpecialChars(GetName(oItem));
-		string sTag = GetResRef(oItem);
-		int nPrice = FloatToInt(GetGoldPieceValue(oItem)*fCostMod);
+		string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
+		int nPrice = FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		int nOldPrice = GetGoldPieceValue(oItem);
 		
 		if (!GetItemInDB(oItem)) {
 			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"', store_tag='"+GetTag(oStore)+"'";
+			SendMessageToPC(oPC, sQuery);
+			
 			SQLExecDirect(sQuery);
 		} else {
 			SetItemCostVariables(oItem);
@@ -1013,6 +1017,7 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 			int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
 			
 			string sQuery = "UPDATE item_prices SET item_points='"+IntToString(nPoints)+"', item_oldvalue='"+IntToString(nOldCost)+"' WHERE item_tag='"+sTag+"'";
+			SendMessageToPC(oPC, sQuery);
 			SQLExecDirect(sQuery);
 		}
 	
