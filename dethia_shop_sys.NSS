@@ -1144,6 +1144,8 @@ void AddPropertyToDB(itemproperty iProp) {
 
 //Checks whether we need to recalculate the price for an item
 int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
+
+	if (!GetIsObjectValid(oPC)) oPC = GetFirstPC();
 		
 	int nCost = GetLocalInt(oItem, "PRICE");
 	int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
@@ -1183,12 +1185,15 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 //Set up all the variables for this item
 void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {	
 
+	if (!GetIsObjectValid(oPC)) oPC = GetFirstPC();
+
 	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC,  GetName(oItem)+" - here we are.");		
 		
 	if (GetItemCostUpdated(oItem, oPC)) {
 	
+		int	iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
 		SetLocalInt(oItem, "PRICE_POINTS", GetItemTotalPoints(oItem));
-		SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
+		SetLocalInt(oItem, "PRICE_OLD", iOldCost);
 	
 		int nCost = GetLocalInt(oItem, "PRICE");
 		int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
