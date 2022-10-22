@@ -15,7 +15,9 @@
 void Shield_Bash(object oPC, object oTarget, int nSpell )
 {
 int nDam;
-int nSize;;
+int nSize;
+int nTotal;
+int nSaveDC;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -36,8 +38,14 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nStrength;
 nSize = 1;}
-int nTotal = nDam + nSize;
-int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+nTotal = nDam + nSize;
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nSize = nSize + 4;
+nDam = nDam+ 4;
+nSaveDC = nSaveDC +4;
+}
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
 
@@ -73,7 +81,9 @@ ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 void Shield_Throw(object oPC, object oTarget, int nSpell )
 {
 int nDam;
-int nSize;;
+int nSize;
+int nTotal;
+int nSaveDC;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -94,8 +104,15 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nStrength;
 nSize = 1;}
-int nTotal = nDam + nSize;
-int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nSize = nSize + 4;
+nDam = nDam+ 4;
+nSaveDC = nSaveDC +4;
+}
 float fDur = RoundsToSeconds(nSaveDC);
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 1, nSpell);
@@ -130,7 +147,9 @@ ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 void Agile_Strike(object oPC, object oTarget, int nSpell )
 {
 int nDam;
-int nSize;;
+int nSize;
+int nTotal;
+int nSaveDC;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -151,8 +170,15 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nDex;
 nSize = 1;}
-int nTotal = nDam + nSize;
-int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nSize = nSize + 4;
+nDam = nDam+ 4;
+nSaveDC = nSaveDC +4;
+}
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
 float fDur = RoundsToSeconds(nSaveDC);
