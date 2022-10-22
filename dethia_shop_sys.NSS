@@ -995,6 +995,7 @@ int GetItemInDB(object oItem) {
 //Add all the items in this store to the database
 void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 
+	if (!GetIsObjectValid(oPC)) oPC = GetFirstPC();
 	SendMessageToPC(oPC, "Adding items to store");
 
 	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
@@ -1004,7 +1005,7 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 		string sName = SQLEncodeSpecialChars(GetName(oItem));
 		string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
 		int nPrice = FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
-		int nOldPrice = GetGoldPieceValue(oItem);
+		int nOldPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
 		
 		if (!GetItemInDB(oItem)) {
 			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"', store_tag='"+GetTag(oStore)+"'";
