@@ -1154,26 +1154,26 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 	
 	//We haven't run SetItemCostVariables at ALL on this item, so we probably should
 	if (nTime <= 0) {
-		return TRUE;
 		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no timestamp, recalculate.");
+		return TRUE;
 	}
 		
 	//The item was enchanted or something; time to update
 	if (nDirty == 1) {
-		return TRUE;
 		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - properties updated, recalculate.");
+		return TRUE;
 	}
 	
 	//We haven't set the variables yet, or there's something otherwise wrong
 	if (!GetPlotFlag(oItem) && nCost <= 0) {
-		return TRUE;
 		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
+		return TRUE;
 	}
 		
 	//Because we can't strictly trust the base cost function, we're going to double check with the points funtion
 	if (nOldCost != nBaseGold && GetItemTotalPoints(oItem) != nPoints) {
-		return TRUE;
 		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - gold cost and/or item points have changed.");
+		return TRUE;
 	}
 		
 	return FALSE;
@@ -1181,8 +1181,10 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 }
 
 //Set up all the variables for this item
-void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {
+void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {	
 
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC,  GetName(oItem)+" - here we are.");		
+		
 	if (GetItemCostUpdated(oItem, oPC)) {
 	
 		SetLocalInt(oItem, "PRICE_POINTS", GetItemTotalPoints(oItem));
@@ -1197,6 +1199,7 @@ void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {
 		int nDBCost = 0;
 		int nDBOldCost = 0;
 		int nDBOldPoints = 0;
+		int nDBLoaded = FALSE;
 	
 		//Check whether this item is in the DB
 		string sQuery = "SELECT item_price, item_oldvalue, item_points FROM item_prices WHERE item_tag = '"+GetResRef(oItem)+"'";
@@ -1205,14 +1208,20 @@ void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {
 			nDBCost = StringToInt(SQLGetData(1));
 			nDBOldCost = StringToInt(SQLGetData(2));
 			nDBOldPoints = StringToInt(SQLGetData(3));
+			nDBLoaded = TRUE;
 	    }
-		   
-		if (nDBOldCost == nOldCost || nPoints == nDBOldPoints) {
-		   	nCost = nDBCost;
-			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
+		
+		if (nDBLoaded) {
+			if (nDBOldCost == nOldCost || nPoints == nDBOldPoints) {
+			   	nCost = nDBCost;
+				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
+			} else {
+			   	nCost = GetCostOfItem(oItem);
+				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
+			}
 		} else {
-		   	nCost = GetCostOfItem(oItem);
-			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
+			nCost = GetCostOfItem(oItem);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch because no DB info.");		
 		}
 	
 		SetLocalInt(oItem, "PRICE", nCost);
