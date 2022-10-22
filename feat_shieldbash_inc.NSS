@@ -38,14 +38,14 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nStrength;
 nSize = 1;}
-if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
-{
-nSize += 4;
-nDam += 4;
-nSaveDC += 4;
-}
 nTotal = nDam + nSize;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nSize = nSize + 4;
+nDam = nDam+ 4;
+nSaveDC = nSaveDC +4;
+}
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
 
@@ -104,13 +104,15 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nStrength;
 nSize = 1;}
+
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nSize += 4;
-nDam += 4;
-nSaveDC += 4;
+nSize = nSize + 4;
+nDam = nDam+ 4;
+nSaveDC = nSaveDC +4;
 }
-nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 float fDur = RoundsToSeconds(nSaveDC);
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 1, nSpell);
@@ -168,13 +170,15 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nDex;
 nSize = 1;}
+
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nSize += 4;
-nDam += 4;
-nSaveDC += 4;
+nSize = nSize + 4;
+nDam = nDam+ 4;
+nSaveDC = nSaveDC +4;
 }
- nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
 float fDur = RoundsToSeconds(nSaveDC);
