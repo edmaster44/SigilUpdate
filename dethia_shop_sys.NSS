@@ -970,7 +970,8 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
 	SetItemCostVariables(oItem, oPC);
 	int nCost = GetLocalInt(oItem, "PRICE");
-	nCost *= GetItemStackSize(oItem);
+	if (!DS_GetIsProjectile(oItem))
+		nCost *= GetItemStackSize(oItem);
 		
 	return nCost;
 
