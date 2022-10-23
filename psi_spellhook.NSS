@@ -30,15 +30,7 @@ int PsiPrePowerCastCode();
 // WILL break the crafting subsystems
 //------------------------------------------------------------------------------
 
-//Psychic Warrior Classes and PRC
-int nPsyicClasses(object oPC)
-{
-    int nPsywar= GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
-    int nWarmind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	int nDragon =GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oPC);
-    int iTotal = nPsywar +nWarmind + nDragon;
-    return iTotal;
-}
+
 int PsiPrePowerCastCode()
 {
 	object oManifester = OBJECT_SELF;

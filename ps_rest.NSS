@@ -165,25 +165,12 @@ void GiveDruidMonkPenaltyFeat (object oPC)
 
 }
 
-void FinesseRestFix(object oPC, object oWEAPON)
-{
-	if (GetLocalInt(oWEAPON , "S_Finesse") == 0) return;
-	PS_RemoveSpecialWeaponFinesse(oPC, oWEAPON);
-	//DelayCommand(0.0f, PS_ApplySpecialWeaponFinesse(oPC, oWEAPON));
-}
 
 void RestStart(object oPC)
 {
 	RemoveBuffs(oPC);
 	object oRIGHT = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);	
 	if (GetTag(oRIGHT) == "barbancestoraxe") DestroyAncestralWeapon(oRIGHT);
-	if (GetHasFeat(FEAT_WEAPON_FINESSE, oPC, TRUE) == TRUE)
-	{
-		object oLEFT = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-		FinesseRestFix(oPC, oRIGHT);
-		FinesseRestFix(oPC, oLEFT);
-	}
-	
 	DismissSpellHenchmen(oPC);
 }
 
