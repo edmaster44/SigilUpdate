@@ -970,7 +970,9 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
 	SetItemCostVariables(oItem, oPC);
 	int nCost = GetLocalInt(oItem, "PRICE");
-	if (!DS_GetIsProjectile(oItem))
+	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
+		nCost *= GetItemStackSize(oItem);
+	else if (GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
 		nCost *= GetItemStackSize(oItem);
 		
 	return nCost;
