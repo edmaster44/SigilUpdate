@@ -593,7 +593,7 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(!GetIdentified(oItem))	//If item is not identified set the price to 10 coppers
 	{	iItemCost	= 10;	}
 	else	//If all is well compute the item's sell value
-	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	}
+	{	iItemCost	= FloatToInt(fCostMod*GetGoldPieceValue(oItem)/GetItemStackSize(oItem));	} //update to PS_GetItemValue later
 	
 	
 	//If the cost is less than or equal to 0, set it to 1
