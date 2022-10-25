@@ -287,7 +287,7 @@ void CreateCreatureDrop(object oCreature) {
 	}
 	
 	if (GetIsObjectValid(oItem))
-		SetItemCostVariables(oItem);
+		SetItemCostVariables(oItem, TRUE);
 }
 //***************************************************
 //Books and Paper Products

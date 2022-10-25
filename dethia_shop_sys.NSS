@@ -968,7 +968,7 @@ int GetItemUseable(object oItem, object oPC)
 //A function to fetch the "real" gold piece value of an item
 int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
-	SetItemCostVariables(oItem, oPC);
+	SetItemCostVariables(oItem, FALSE, oPC);
 	int nCost = GetLocalInt(oItem, "PRICE");
 	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
 		nCost *= GetItemStackSize(oItem);
@@ -1225,7 +1225,7 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 		if (nDBCost == 0 && addToDB) {
 			string sName = SQLEncodeSpecialChars(GetName(oItem));
 			string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
-			int nPrice = FloatToInt(GetGoldPieceValue(oItem)/GetItemStackSize(oItem));
+			int nPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
 		
 			if (!GetItemInDB(oItem)) {
 				string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"'";

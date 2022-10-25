@@ -33,7 +33,7 @@ object CreateTreasureItemOnTarget(string sBase, object oTarget, int nStackSize=1
 	WriteTimestampedLogEntry ("Created " + IntToString(nStackSize) + " of " + sBase + " on " + GetName(oTarget));
 	
 	if (GetIsObjectValid(oObj))
-		SetItemCostVariables(oObj);
+		SetItemCostVariables(oObj, TRUE);
 		
 	return oObj;   
 }
