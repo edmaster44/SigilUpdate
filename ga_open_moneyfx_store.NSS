@@ -37,7 +37,7 @@ void main(string sTag, int nMarkUp, int nMarkDown)
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	
 	object oStore = GetStoreFromStoreArea(sTag);
-	AddAllItemsInStoreToDatabase(oStore, oPC);
+	//AddAllItemsInStoreToDatabase(oStore, oPC);
 	
 	DS_OpenShop(oStore, oPC, 0, 0);
 }

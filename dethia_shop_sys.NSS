@@ -312,7 +312,7 @@ void AddPropertyToDB(itemproperty iProp);
 int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID);
 
 //Set up all the variables for this item
-void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID);
+void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID);
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 //------------------------------FUNCTIONS--------------------------------//
@@ -481,10 +481,10 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		
 		//putting debug into title, because why not. . 
 		int		iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
-		string	sItemName	= GetName(oItem) + " (" + sStackSize + ") - "+IntToString(iOldCost);
+		string	sItemName	= GetName(oItem) + " (" + sStackSize + ")"; // - "+IntToString(iOldCost);
 		
 		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
-		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem, oPC)*fCostMod)/GetItemStackSize(oItem));
+		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
@@ -998,7 +998,6 @@ int GetItemInDB(object oItem) {
 //Add all the items in this store to the database
 void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 
-	if (!GetIsObjectValid(oPC)) oPC = GetFirstPC();
 	SendMessageToPC(oPC, "Adding items to store");
 
 	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
@@ -1154,8 +1153,6 @@ void AddPropertyToDB(itemproperty iProp) {
 
 //Checks whether we need to recalculate the price for an item
 int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
-
-	if (!GetIsObjectValid(oPC)) oPC = GetFirstPC();
 		
 	int nCost = GetLocalInt(oItem, "PRICE");
 	int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
@@ -1193,9 +1190,7 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 }
 
 //Set up all the variables for this item
-void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {	
-
-	if (!GetIsObjectValid(oPC)) oPC = GetFirstPC();
+void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID) {	
 
 	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC,  GetName(oItem)+" - here we are.");		
 		
@@ -1226,6 +1221,21 @@ void SetItemCostVariables(object oItem, object oPC = OBJECT_INVALID) {
 			nDBLoaded = TRUE;
 	    }
 		
+		//For making sure that items make their way into the pricing DB
+		if (nDBCost == 0 && addToDB) {
+			string sName = SQLEncodeSpecialChars(GetName(oItem));
+			string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
+			int nPrice = FloatToInt(GetGoldPieceValue(oItem)/GetItemStackSize(oItem));
+		
+			if (!GetItemInDB(oItem)) {
+				string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"'";
+				SendMessageToPC(oPC, sQuery);
+			
+				SQLExecDirect(sQuery);
+			}
+		}
+		
+		//Moving on to real calculations
 		if (nDBLoaded) {
 			if (nDBOldCost == nOldCost || nPoints == nDBOldPoints) {
 			   	nCost = nDBCost;
