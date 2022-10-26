@@ -61,7 +61,7 @@ void main()
      struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER | 
+                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER  
                               );
 							  
 

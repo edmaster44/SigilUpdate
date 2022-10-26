@@ -3,21 +3,21 @@
 
 void EnableCreatureFinesse(){
 
-  	nwnx_bg_CreateFinesseRule(160);
-    nwnx_bg_CreateFinesseRule(161);
-    nwnx_bg_CreateFinesseRule(162);
-    nwnx_bg_CreateFinesseRule(163);
-    nwnx_bg_CreateFinesseRule(164);
-    nwnx_bg_CreateFinesseRule(165);
-	nwnx_bg_CreateFinesseRule(166);
-    nwnx_bg_CreateFinesseRule(167);
-    nwnx_bg_CreateFinesseRule(168);
-    nwnx_bg_CreateFinesseRule(169);
-    nwnx_bg_CreateFinesseRule(170);
-	nwnx_bg_CreateFinesseRule(171);
-    nwnx_bg_CreateFinesseRule(172);
-    nwnx_bg_CreateFinesseRule(173);
-    nwnx_bg_CreateFinesseRule(174);
+  	nwnx_bg_CreateFinesseRule(160,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(161,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(162,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(163,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(164,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(165,3218,TRUE);
+	nwnx_bg_CreateFinesseRule(166,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(167,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(168,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(169,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(170,3218,TRUE);
+	nwnx_bg_CreateFinesseRule(171,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(172,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(173,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(174,3218,TRUE);
 	nwnx_bg_LogFinesseRules();
 
 
