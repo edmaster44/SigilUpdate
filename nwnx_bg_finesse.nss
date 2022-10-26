@@ -12,21 +12,21 @@ void EnableFinesse()
 		case 170:
 		case 173:
 */
-  	nwnx_bg_CreateFinesseRule(160,291,TRUE);
-    nwnx_bg_CreateFinesseRule(161,291,TRUE);
-    nwnx_bg_CreateFinesseRule(162,291,TRUE);
-    nwnx_bg_CreateFinesseRule(163,291,TRUE);
-    nwnx_bg_CreateFinesseRule(164,291,TRUE);
-    nwnx_bg_CreateFinesseRule(165,291,TRUE);
-	nwnx_bg_CreateFinesseRule(166,291,TRUE);
-    nwnx_bg_CreateFinesseRule(167,291,TRUE);
-    nwnx_bg_CreateFinesseRule(168,291,TRUE);
-    nwnx_bg_CreateFinesseRule(169,291,TRUE);
-    nwnx_bg_CreateFinesseRule(170,291,TRUE);
-	nwnx_bg_CreateFinesseRule(171,291,TRUE);
-    nwnx_bg_CreateFinesseRule(172,291,TRUE);
-    nwnx_bg_CreateFinesseRule(173,291,TRUE);
-    nwnx_bg_CreateFinesseRule(174,291,TRUE);
+  	nwnx_bg_CreateFinesseRule(160,289,TRUE);
+    nwnx_bg_CreateFinesseRule(161,289,TRUE);
+    nwnx_bg_CreateFinesseRule(162,289,TRUE);
+    nwnx_bg_CreateFinesseRule(163,289,TRUE);
+    nwnx_bg_CreateFinesseRule(164,289,TRUE);
+    nwnx_bg_CreateFinesseRule(165,289,TRUE);
+	nwnx_bg_CreateFinesseRule(166,289,TRUE);
+    nwnx_bg_CreateFinesseRule(167,289,TRUE);
+    nwnx_bg_CreateFinesseRule(168,289,TRUE);
+    nwnx_bg_CreateFinesseRule(169,289,TRUE);
+    nwnx_bg_CreateFinesseRule(170,289,TRUE);
+	nwnx_bg_CreateFinesseRule(171,289,TRUE);
+    nwnx_bg_CreateFinesseRule(172,289,TRUE);
+    nwnx_bg_CreateFinesseRule(173,289,TRUE);
+    nwnx_bg_CreateFinesseRule(174,289,TRUE);
     nwnx_bg_CreateFinesseRule(202);
 	
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_GREATAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
