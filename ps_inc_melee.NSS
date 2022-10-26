@@ -264,24 +264,26 @@ int ApplyFeatsToWeapon(object oPC, object oWeapon)
 {
 	if(!GetIsObjectValid(oWeapon)) return 0;
 
-	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
-	
-	string sLabel; int featid;
-	
+	int baseitem = GetBaseItemType(oWeapon);
 	int iCount = 0;
-		
-	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
-	while(SQLFetch())
-	{
-	sLabel = SQLGetData(1);
-	featid = StringToInt(SQLGetData(2));
 	
-	if(FindSubString(sLabel, "EPIC_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC)) iCount = 4;
-	if(FindSubString(sLabel, "GREATER_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 2;
-	if(FindSubString(sLabel, "WeapFoc") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
-	if(FindSubString(sLabel, "WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
-	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
-	}
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice", baseitem)),oPC,TRUE)) iCount++;
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATEpicWpnFocus", baseitem)),oPC,TRUE)) return iCount + 4;
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATGrtrWpnFocus", baseitem)),oPC,TRUE)) return iCount + 2;
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnFocus", baseitem)),oPC,TRUE)) return iCount + 1;
+		
+//	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
+//	while(SQLFetch())
+//	{
+//	sLabel = SQLGetData(1);
+//	featid = StringToInt(SQLGetData(2));
+	
+//	if(FindSubString(sLabel, "EPIC_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC)) iCount = 4;
+//	if(FindSubString(sLabel, "GREATER_WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 2;
+//	if(FindSubString(sLabel, "WeapFoc") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
+//	if(FindSubString(sLabel, "WEAPON_FOCUS") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 1;
+//	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
+//	}
 
 	return iCount;
 }
@@ -290,62 +292,74 @@ int ApplyDamageFeatsToWeapon(object oPC, object oWeapon)
 {
 	if(!GetIsObjectValid(oWeapon)) return 0;
 
-	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
+//	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
 	
-	string sLabel; int featid;
+//	string sLabel; int featid;
 	
-	int iCount = 0;
+	int iCount = 0; int baseitem = GetBaseItemType(oWeapon);
 		
-	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
-	while(SQLFetch())
-	{
-	sLabel = SQLGetData(1);
-	featid = StringToInt(SQLGetData(2));
+//	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
+//	while(SQLFetch())
+//	{
+//	sLabel = SQLGetData(1);
+//	featid = StringToInt(SQLGetData(2));
 	
-	if(FindSubString(sLabel, "EPIC_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC)) iCount = 6;
-	if(FindSubString(sLabel, "GREATER_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 4;
-	if(FindSubString(sLabel, "WEAPON_SPECIALIZATION") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 2;
-	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
-	}
-
+//	if(FindSubString(sLabel, "EPIC_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC)) iCount = 6;
+//	if(FindSubString(sLabel, "GREATER_WEAPON_SPEC") >= 0 && GetHasFeat(featid, oPC) && iCount < 4) iCount = 4;
+//	if(FindSubString(sLabel, "WEAPON_SPECIALIZATION") >= 0 && GetHasFeat(featid, oPC) && iCount < 3) iCount = 2;
+//	if(FindSubString(sLabel, "WEAPON_OF_CHOICE") >= 0 && GetHasFeat(featid, oPC)) iCount = iCount + 1;
+//	}
+	
+	// if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice", baseitem)),oPC,TRUE)) iCount++;
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATEpicWpnSpec", baseitem)),oPC,TRUE)) return iCount + 6;
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATGrtrWpnSpec", baseitem)),oPC,TRUE)) return iCount + 4;
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnSpec", baseitem)),oPC,TRUE)) return iCount + 2;
+		
 	return iCount;
 }
 
-int GetWeaponThreatRange(object oPC, object oWeapon)
+int GetWeaponThreatRange(object oPC)
 {
-	if(!GetIsObjectValid(oWeapon)) return 0;
+	int iMonk = GetLevelByClass(CLASS_TYPE_MONK,oPC);
+	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND);
+	
+	if(!GetIsObjectValid(oWeapon) && iMonk > 0) oWeapon = GetItemInSlot(INVENTORY_SLOT_ARMS);
+	else return 20;
+	
+	if(!GetIsObjectValid(oWeapon)) return 20;
 
-	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
-	int ThreatRange = StringToInt(Get2DAString("baseitems", "CritThreat",  GetBaseItemType(oWeapon)));
+	int baseitem = GetBaseItemType(oWeapon);
+	if(baseitem == BASE_ITEM_GLOVES)
+	{
+		if(GetHasFeat(62,oPC,TRUE)) return 19;
+		else return 20;
+	}
+	
+	string sWeapon = Get2DAString("baseitems", "label", baseitem);
+	int ThreatRange = StringToInt(Get2DAString("baseitems", "CritThreat",baseitem));
 	
 //	SendMessageToPC(oPC,"Initial threat range: "+IntToString(ThreatRange));	
 		
-	string sLabel; int featid; int iCount; int iKeen;
+	string sLabel; int featid; int iCount;
 		
-	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
-	while(SQLFetch())
-	{
-	sLabel = SQLGetData(1);
-	featid = StringToInt(SQLGetData(2));
+//	SQLExecDirect("SELECT `label`, `featid` FROM `featids` WHERE label LIKE '%"+SQLEncodeSpecialChars(sWeapon)+"%';");
+//	while(SQLFetch())
+//	{
+//	sLabel = SQLGetData(1);
+//	featid = StringToInt(SQLGetData(2));
 	
-	if((FindSubString(sLabel, "FEAT_IMPROVED_CRITICAL") >= 0 && GetHasFeat(featid, oPC, TRUE) && iKeen == 0)
-	|| GetItemHasItemProperty(oWeapon,ITEM_PROPERTY_KEEN) == TRUE && iKeen == 0)
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATImprCrit",baseitem)),oPC,TRUE) || GetItemHasItemProperty(oWeapon,ITEM_PROPERTY_KEEN) == TRUE)
 	{
-	ThreatRange = ThreatRange * 2; iKeen = 1;
+		ThreatRange = ThreatRange * 2;
 	}
 	
-	if(FindSubString(sLabel, "FEAT_KI_CRITICAL") >= 0 && GetHasFeat(featid, oPC)) ThreatRange = ThreatRange + 2;
-	}
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice",baseitem)),oPC,TRUE)) ThreatRange = ThreatRange + 2;
+//	}
 	
-	if (ThreatRange == 1) iCount = 20;
-	if (ThreatRange == 2) iCount = 19;
-	if (ThreatRange == 3) iCount = 18;
-	if (ThreatRange == 4) iCount = 17;
-	if (ThreatRange == 6) iCount = 15;
-	if (ThreatRange == 8) iCount = 13;
+	iCount = 21 - ThreatRange;
 	
 	if(ThreatRange <= 0) iCount = 20;
-	if(ThreatRange >= 12) iCount = 17;
+	else if(ThreatRange >= 12) iCount = 17;
 	
 //	SendMessageToPC(oPC,"Threat range: "+IntToString(iCount));	
 	return iCount;
@@ -513,18 +527,18 @@ effect GetWeaponDamageEnchantments(object oAttacker, object oWeapon)
 
 int WeaponMasterCritCheck(object oAttacker, object oWeapon)
 {
-	string sWeapon = Get2DAString("baseitems", "label", GetBaseItemType(oWeapon));
+	if(GetHasFeat(StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice", GetBaseItemType(oWeapon))),oAttacker,TRUE)) return 1;
 	
-	string sLabel; int featid;
+	//string sLabel; int featid;
 	
-	int iCount = 0;
+//	int iCount = 0;
 		
-	SQLExecDirect("SELECT `featid` FROM `featids` WHERE label LIKE '%FEAT_WEAPON_OF_CHOICE_"+SQLEncodeSpecialChars(sWeapon)+"%';");
-	while(SQLFetch())
-	{
-	featid = StringToInt(SQLGetData(1));
-	if(GetHasFeat(featid, oAttacker)) return 1;
-	}
+//	SQLExecDirect("SELECT `featid` FROM `featids` WHERE label LIKE '%FEAT_WEAPON_OF_CHOICE_"+SQLEncodeSpecialChars(sWeapon)+"%';");
+//	while(SQLFetch())
+//	{
+//	featid = StringToInt(SQLGetData(1));
+//	if(GetHasFeat(featid, oAttacker)) return 1;
+//	}
 
 	return 0;
 }
@@ -553,6 +567,13 @@ effect GetDamageFeatBonuses(object oPC)
 //	if(WIS > 1 && GetHasFeat(2894,oPC,TRUE)) return EffectDamage(WIS,DAMAGE_TYPE_POSITIVE); //secrest of harsh master
 			
 	return eDmg;
+}
+
+int GetIsTwoHanding(object oPC)
+{
+	if(StringToInt(Get2DAString("baseitems", "WeaponSize", GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC)))) > 2 
+	&& GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC) == OBJECT_INVALID) return TRUE;
+	else return FALSE;
 }
 
 effect GetWeaponDamageTotal(object oAttacker, object oTarget, object oWeapon, int iCrit, int physicalignore, int sneakattack)
@@ -808,7 +829,7 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	if(roll == 20 || iAttack >= TargetAC && roll > 1)
 	{
 		SendMessageToPC(oAttacker,"You hit! " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
-		int ThreatRange = GetWeaponThreatRange(oAttacker, GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker));
+		int ThreatRange = GetWeaponThreatRange(oAttacker);
 	
 		if(animation != "")
 		{
