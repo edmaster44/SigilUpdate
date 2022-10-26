@@ -1,6 +1,27 @@
 #include "nwnx_bg"
 #include "aaa_constants"
 
+void EnableCreatureFinesse(){
+
+  	nwnx_bg_CreateFinesseRule(160);
+    nwnx_bg_CreateFinesseRule(161);
+    nwnx_bg_CreateFinesseRule(162);
+    nwnx_bg_CreateFinesseRule(163);
+    nwnx_bg_CreateFinesseRule(164);
+    nwnx_bg_CreateFinesseRule(165);
+	nwnx_bg_CreateFinesseRule(166);
+    nwnx_bg_CreateFinesseRule(167);
+    nwnx_bg_CreateFinesseRule(168);
+    nwnx_bg_CreateFinesseRule(169);
+    nwnx_bg_CreateFinesseRule(170);
+	nwnx_bg_CreateFinesseRule(171);
+    nwnx_bg_CreateFinesseRule(172);
+    nwnx_bg_CreateFinesseRule(173);
+    nwnx_bg_CreateFinesseRule(174);
+	nwnx_bg_LogFinesseRules();
+
+
+}
 void EnableFinesse()
 {/*creature weapons
 		case 160:
@@ -12,21 +33,7 @@ void EnableFinesse()
 		case 170:
 		case 173:
 */
-  	nwnx_bg_CreateFinesseRule(160,289,TRUE);
-    nwnx_bg_CreateFinesseRule(161,289,TRUE);
-    nwnx_bg_CreateFinesseRule(162,289,TRUE);
-    nwnx_bg_CreateFinesseRule(163,289,TRUE);
-    nwnx_bg_CreateFinesseRule(164,289,TRUE);
-    nwnx_bg_CreateFinesseRule(165,289,TRUE);
-	nwnx_bg_CreateFinesseRule(166,289,TRUE);
-    nwnx_bg_CreateFinesseRule(167,289,TRUE);
-    nwnx_bg_CreateFinesseRule(168,289,TRUE);
-    nwnx_bg_CreateFinesseRule(169,289,TRUE);
-    nwnx_bg_CreateFinesseRule(170,289,TRUE);
-	nwnx_bg_CreateFinesseRule(171,289,TRUE);
-    nwnx_bg_CreateFinesseRule(172,289,TRUE);
-    nwnx_bg_CreateFinesseRule(173,289,TRUE);
-    nwnx_bg_CreateFinesseRule(174,289,TRUE);
+
     nwnx_bg_CreateFinesseRule(202);
 	
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_GREATAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
@@ -73,8 +80,6 @@ void EnableFinesse()
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_HANDAXE);
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_MACE);
 	nwnx_bg_CreateFinesseRule(BASE_ITEM_KAMA);*/
-
-
 
 
 }
