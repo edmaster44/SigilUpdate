@@ -567,6 +567,8 @@ void main()
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
 		EnableCreatureFinesse();
+		if (GetHasFeat(289,oPC))
+		FeatAdd(oPC,3222,FALSE,FALSE,TRUE);
 		ConvertBio(oPC);
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
