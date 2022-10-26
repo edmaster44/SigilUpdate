@@ -18,6 +18,14 @@ void EnableCreatureFinesse(){
     nwnx_bg_CreateFinesseRule(172,3218,TRUE);
     nwnx_bg_CreateFinesseRule(173,3218,TRUE);
     nwnx_bg_CreateFinesseRule(174,3218,TRUE);
+	
+	nwnx_bg_CreateFinesseRule(176,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(177,3218,TRUE);
+	nwnx_bg_CreateFinesseRule(178,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(179,3218,TRUE);
+    nwnx_bg_CreateFinesseRule(180,3218,TRUE);
+   
+	
 	nwnx_bg_LogFinesseRules();
 
 
