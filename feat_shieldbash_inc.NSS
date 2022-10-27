@@ -29,7 +29,7 @@ int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eStun = EffectCutsceneParalyze();
 //For Damage
-if(shield = BASE_ITEM_LARGESHIELD)
+/*if(shield = BASE_ITEM_LARGESHIELD)
 {nDam = d6(1) + nStrength;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
@@ -37,12 +37,14 @@ else if (shield = BASE_ITEM_TOWERSHIELD)
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nStrength;
-nSize = 1;}
+nSize = 1;}*/
+int iWeight = StringToInt(Get2DAString("armorrulestats","WEIGHT",GetArmorRulesType(oShield)));
+nDam = iWeight + nStrength * d6(1);
 nTotal = nDam + nSize;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nDam = nDam+ 4;
+iWeight = iWeight+ 4;
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -99,7 +101,7 @@ int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eStun = EffectCutsceneParalyze();
 //For Damage
-if(shield = BASE_ITEM_LARGESHIELD)
+/*if(shield = BASE_ITEM_LARGESHIELD)
 {nDam = d6(1) + nStrength;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
@@ -107,12 +109,14 @@ else if (shield = BASE_ITEM_TOWERSHIELD)
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d4(1)+ nStrength;
-nSize = 1;}
+nSize = 1;}*/
+int iWeight = StringToInt(Get2DAString("armorrulestats","WEIGHT",GetArmorRulesType(oShield)));
+nDam = iWeight + nStrength * d6(1);
 nTotal = nDam + nSize;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nDam = nDam+ 4;
+iWeight = iWeight+ 4;
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -122,7 +126,7 @@ if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
  
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+if(!WillSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
@@ -169,20 +173,22 @@ int nDex = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eKnock = EffectKnockdown();
 //For Damage
-if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nDex;
+/*if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(1) + nStrength;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nDex;
+{nDam = d8(1)+ nStrength;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nDex;
-nSize = 1;}
+{nDam = d4(1)+ nStrength;
+nSize = 1;}*/
+int iWeight = StringToInt(Get2DAString("armorrulestats","WEIGHT",GetArmorRulesType(oShield)));
+nDam = iWeight + nDex * d6(1);
 nTotal = nDam + nSize;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nDam = nDam+ 4;
+iWeight = iWeight+ 4;
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
