@@ -43,9 +43,7 @@ void ReportMuling(object oBY, object oFROM, object oITEM)
 	" and original owner: " + SQLEncodeSpecialChars(sVAR_A2) + "/" + SQLEncodeSpecialChars(sVAR_N2) + " (" + 
 	SQLEncodeSpecialChars(GetTag(oFROM)) + ")',105)");
 	
-	SpeakString("<C=TOMATO>[POSSIBLE MULING] " + sVAR_A1 + "/" + sVAR_N1 + " just gave " + 
-	sBY_PLAY + "/" + sBY_NAME + " following: " + sIT_NAME + "/" + sIT_TAG + 
-	", which was last owned by: " + sVAR_A2 + "/" + sVAR_N2, TALKVOLUME_SILENT_SHOUT);
+	//SpeakString("<C=TOMATO>[POSSIBLE MULING] " + sVAR_A1 + "/" + sVAR_N1 + " just gave " +  sBY_PLAY + "/" + sBY_NAME + " following: " + sIT_NAME + "/" + sIT_TAG + ", which was last owned by: " + sVAR_A2 + "/" + sVAR_N2, TALKVOLUME_SILENT_SHOUT);
 	
 	SetLocalString(oITEM, "A2", "");
 	SetLocalString(oITEM, "N2", "");

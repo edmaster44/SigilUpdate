@@ -11,8 +11,6 @@ void main () {
 	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
-
-	DelayCommand(0.5f, PortIntoNewFactionSystem(oPC));
 	
 	//check achievements
 	DelayCommand(1.0f, CheckForAchievements(oPC));

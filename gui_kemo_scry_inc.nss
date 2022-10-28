@@ -1,7 +1,7 @@
 #include "ps_inc_functions"
 #include "ps_inc_faction"
 
-string ScryFaction(object oPC, object oESS)
+/*string ScryFaction(object oPC, object oESS)
 {
 	object oBadge;
 	int nINF;						
@@ -54,7 +54,7 @@ string ScryFaction(object oPC, object oESS)
 		case FACTION_RINGGIVERS: return "Ring-Giver"; break;
 	}
 	return "";
-}
+}*/
 
 string GetSortRelevant(object oPC, object oList, string sSORT)
 {
@@ -69,7 +69,7 @@ string GetSortRelevant(object oPC, object oList, string sSORT)
 				break; //SortByPlayer
 		case 1: sTXT = GetFirstName(oList);
 				break; //SortByName
-		case 2: sTXT = ScryFaction(oPC, oESS);
+		case 2: sTXT = FactionIdToName(GetFaction(oList));
 				if (GetLocalInt(oESS,"KScry_Faction")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByFaction
 		case 3: sTXT = GetName(GetArea(oList));
@@ -105,7 +105,7 @@ void ChangeList(int nANON, object oPC, object oList, string sRow, int nSTART)
 	else sPCLevel = "??";
 	if ((nPCFaction == 0)&&(GetIsDM(oPC)==FALSE)) sPCFaction = "????";
 	else if (nPCFaction == 2) sPCFaction = "Seeking";
-	else sPCFaction = ScryFaction(oPC, oESS);
+	else sPCFaction = FactionIdToName(GetFaction(oList));
 	if ((nPCLocation != 1)||(GetIsDM(oPC))) sPCArea = GetName(GetArea(oList));
 	else sPCArea = "????";
 	if (GetIsDM(oPC) && nANON == 1) sPCName = sPCName+"*";

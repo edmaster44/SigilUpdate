@@ -104,7 +104,7 @@ void main() {
 			SQLEncodeSpecialChars(GetTag(aFrom)) + ")',105)");
 
 		//SpeakString("Possible muling",TALKVOLUME_SILENT_SHOUT);
-		SpeakString("<C=TOMATO>[POSSIBLE MULING] " + GetLocalString(item,"A1") + "/" + GetLocalString(item,"N1") + " just gave " + GetPCPlayerName(acquirer) + "/" + GetName(acquirer) + " following: " + GetName(item) + "/" + GetTag(item) + ", which was last owned by: " + GetLocalString(item,"A2") + "/" + GetLocalString(item,"N2"),TALKVOLUME_SILENT_SHOUT);
+		//SpeakString("<C=TOMATO>[POSSIBLE MULING] " + GetLocalString(item,"A1") + "/" + GetLocalString(item,"N1") + " just gave " + GetPCPlayerName(acquirer) + "/" + GetName(acquirer) + " following: " + GetName(item) + "/" + GetTag(item) + ", which was last owned by: " + GetLocalString(item,"A2") + "/" + GetLocalString(item,"N2"),TALKVOLUME_SILENT_SHOUT);
 
 		SetLocalString(item,"A2","");
 		SetLocalString(item,"N2","");

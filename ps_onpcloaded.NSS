@@ -422,6 +422,7 @@ void main()
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
+	DelayCommand(0.5f, PortIntoNewFactionSystem(oPC));
 	
 	if(GetIsPC(oPC) && !GetIsDM(oPC) && GetXP(oPC) == 0)
 	{	
