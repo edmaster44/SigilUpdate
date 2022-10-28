@@ -28,23 +28,22 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eStun = EffectCutsceneParalyze();
+effect eStun1 = EffectParalyze();
 //For Damage
-/*if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nStrength;
+if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(9)+ nStrength ;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nStrength;
+{nDam = d6(12)+ nStrength;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nStrength;
-nSize = 1;}*/
-int iWeight = StringToInt(Get2DAString("armorrulestats","WEIGHT",GetArmorRulesType(oShield)));
-nDam = iWeight + nStrength * d6(1);
-nTotal = nDam + nSize;
+{nDam = d6(6)+ nStrength;
+nSize = 1;}
+nTotal = nSize + (nStrength)/2;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-iWeight = iWeight+ 4;
+nDam =+ d6(3);
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -56,7 +55,7 @@ if(iHit >0)
  
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
 
 }
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
@@ -100,23 +99,22 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eStun = EffectCutsceneParalyze();
+effect eStun1 = EffectParalyze();
 //For Damage
-/*if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nStrength;
+if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(9)+nStrength ;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nStrength;
+{nDam = d6(12)+ nStrength;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nStrength;
-nSize = 1;}*/
-int iWeight = StringToInt(Get2DAString("armorrulestats","WEIGHT",GetArmorRulesType(oShield)));
-nDam = iWeight + nStrength * d6(1);
-nTotal = nDam + nSize;
+{nDam = d6(6)+ nStrength;
+nSize = 1;}
+nTotal = nSize + (nStrength)/2;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-iWeight = iWeight+ 4;
+nDam =+ d6(3);
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -128,7 +126,7 @@ if(iHit >0)
  
 if(!WillSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
 
 }
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
@@ -139,22 +137,21 @@ DoWildMagic(oPC, oTarget, GetSpellId());
 
 if (iHit == 2)
 {
-nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+if(!WillSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
 }
 
 }
-
 }
+
 
 void Agile_Strike(object oPC, object oTarget, int nSpell )
 {
@@ -171,24 +168,22 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	}
 int nDex = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
-effect eKnock = EffectKnockdown();
+effect eKD = EffectKnockdown();
 //For Damage
-/*if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nStrength;
+if(shield = BASE_ITEM_LARGESHIELD)
+{nDam = d6(9)+ nDex ;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nStrength;
+{nDam = d6(12)+ nDex;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nStrength;
-nSize = 1;}*/
-int iWeight = StringToInt(Get2DAString("armorrulestats","WEIGHT",GetArmorRulesType(oShield)));
-nDam = iWeight + nDex * d6(1);
-nTotal = nDam + nSize;
+{nDam = d6(6)+ nDex;
+nSize = 1;}
+nTotal = nSize + (nDex)/2;
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-iWeight = iWeight+ 4;
+nDam =+ d6(3);
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -198,9 +193,9 @@ if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
  
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+if(!ReflexSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eKnock,oTarget,fDur);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eKD,oTarget,fDur);
 
 }
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
@@ -211,16 +206,15 @@ DoWildMagic(oPC, oTarget, GetSpellId());
 
 if (iHit == 2)
 {
-nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+if(!ReflexSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eKnock,oTarget,fDur);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eKD,oTarget,fDur);
 
 }
 
