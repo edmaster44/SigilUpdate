@@ -581,6 +581,11 @@ int DS_WillOnlyBuy(object oItem, string sBuyOnlyList)
 
 int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMarket = 0, float fSellMod = 0.0f)
 {//First determine if the store buys stolen goods
+
+	object oPC = GetFirstPC();
+
+	SetItemCostVariables(oItem, TRUE, oPC);
+	
 	int		iItemCost	= 1;	//Yet to be determined item cost
 	float	fCostMod	= (iMarkUp + iMarkDown)/200.0f;	//The buy price modifier
 	//If the sell modifier is not zero we add it to the fCostMod, otherweise we use the default DS_BUY_RATE
@@ -593,7 +598,7 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(!GetIdentified(oItem))	//If item is not identified set the price to 10 coppers
 	{	iItemCost	= 10;	}
 	else	//If all is well compute the item's sell value
-	{	iItemCost	= FloatToInt(fCostMod*GetGoldPieceValue(oItem)/GetItemStackSize(oItem));	} //update to PS_GetItemValue later
+	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem, oPC)/GetItemStackSize(oItem));	} //update to PS_GetItemValue later
 	
 	
 	//If the cost is less than or equal to 0, set it to 1
