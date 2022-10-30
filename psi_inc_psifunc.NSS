@@ -431,9 +431,10 @@ int GetPowerDiscipline(int nSpellID)
 int GetManifesterDC(object oManifester = OBJECT_SELF)
 {
     int nClass = GetManifestingClass(oManifester);
+	int nManifesterLvl = GetManifesterLevel(oManifester);
 	int nPowerLvl = GetPowerLevel(oManifester);
 	int nCastMod = GetAbilityModifier(GetAbilityOfClass(nClass), oManifester);
-    int nDC = 10 + nPowerLvl + nCastMod;
+    int nDC = 10 + nPowerLvl + nCastMod + (nManifesterLvl/3);
 	if (GetHasFeat(1114, oManifester))
 	{
 		nDC++;
