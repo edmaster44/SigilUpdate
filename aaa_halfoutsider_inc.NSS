@@ -383,33 +383,33 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 	int nLevel = GetHitDice(oPC);
     int nDuration = nLevel * 5;
 	
-		if (GetHasSpellEffect(1375)) {
+	if (GetHasSpellEffect(1375)) {
 		SendMessageToPC(oPC, "You may not use Fiendform while discorporated.");
 		return; 
 	}
 	
+	if (GetHasSpellEffect(1721)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
+		return; 
+	}
+	if (GetHasSpellEffect(1722)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
+		return; 
+	}
+	if (GetHasSpellEffect(1723)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
+		return; 
+	}
+	if (GetHasSpellEffect(1724)) {
+		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
+		return; 
+	}
 	
-		if (GetHasSpellEffect(1721)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-		if (GetHasSpellEffect(1722)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-		if (GetHasSpellEffect(1723)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-		if (GetHasSpellEffect(1724)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-		if ( GetHasSpellEffect(843, oPC) ) {
+	if ( GetHasSpellEffect(843, oPC) || GetHasSpellEffect(1657, oPC) ) {
 		effect eEffect = GetFirstEffect( oPC );
 		while ( GetIsEffectValid(eEffect) ) {
 		
-			if ( GetEffectSpellId(eEffect) == 843){
+			if ( GetEffectSpellId(eEffect) == 843 || GetEffectSpellId(eEffect) == 1657 ){
 				RemoveEffect( oPC, eEffect );
 			}
 				
@@ -417,58 +417,90 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		}
 	}
 	
-	if ( GetHasSpellEffect(1657, oPC) ) {
-		effect eEffect = GetFirstEffect( oPC );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == 1657){
-				RemoveEffect( oPC, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oPC );
-		}
-	}
+	int nGender = GetGender(oPC);
 	if (nLevel >= 23)
-	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
-    	{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_baatezu", oPC);
-			  Assumenewform(oPC, Appearance);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC);}	//Greater Baatezu
-		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC)
-		{	FiendformBoni(oPC,"fx_f_beetle_eyes");
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_tanarri", oPC);
-			  Assumenewform(oPC, Appearance);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC);}	//Greater Tanar'ri
+	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL) {
+		
+			FiendformBoni(oPC,"fx_f_beetle_eyes");	
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdevil", oPC);
+			Appearance.Gender = nGender;
+			if (nGender == GENDER_FEMALE){
+				Appearance.HairVariation = 157; //Different hair
+				Appearance.HeadVariation = 24; //Different head
+				Appearance.WingVariation = 66; //raven wings!
+			}
+			Assumenewform(oPC, Appearance);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			PS_HumForm_DragonUE(oPC);
+			
+		}	//Greater Baatezu
+		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC) {
+			
+			FiendformBoni(oPC,"fx_f_beetle_eyes");
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdemon", oPC);
+			Appearance.Gender = nGender;
+			if (nGender == GENDER_FEMALE){
+				Appearance.HairVariation = 100; //Different hair
+				Appearance.HeadVariation = 11;
+				Appearance.WingVariation = 42; //bat wings!
+				Appearance.TailVariation = 9; //Tail switch
+			}
+			
+			Assumenewform(oPC, Appearance);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			PS_HumForm_DragonUE(oPC);
+			
+		}	//Greater Tanar'ri
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
-		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoloth", oPC);
-			  Assumenewform(oPC, Appearance);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC);}	//Greater Yugoloth
+		{	
+			FiendformBoni(oPC,"fx_f_beetle_eyes");	
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC);
+			Assumenewform(oPC, Appearance);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			PS_HumForm_DragonUE(oPC);
+			
+		}	//Greater Yugoloth
     }
     else
 	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
-		{	FiendformBoni(oPC,"fx_f_beetle_eyes");
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_baatles", oPC);
+		{	
+			FiendformBoni(oPC,"fx_f_beetle_eyes");
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdevil", oPC);
+			Appearance.Gender = nGender;
+			if (nGender == GENDER_FEMALE){
+				Appearance.HairVariation = 157; //Different hair
+				Appearance.HeadVariation = 24; //Different head
+				Appearance.WingVariation = 66; //raven wings!
+			}
 			Assumenewform(oPC, Appearance);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC);}	//Lesser Baatezu
+			PS_HumForm_DragonUE(oPC);
+		}	//Lesser Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC)
-		{	FiendformBoni(oPC,"fx_f_beetle_eyes");
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_baatles", oPC);
-				  Assumenewform(oPC, Appearance);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC);		}	//Lesser Tanar'ri
+		{	
+			FiendformBoni(oPC,"fx_f_beetle_eyes");
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdemon", oPC);
+			Appearance.Gender = nGender;
+			if (nGender == GENDER_FEMALE){
+				Appearance.HairVariation = 100; //Different hair
+				Appearance.HeadVariation = 11;
+				Appearance.WingVariation = 42; //bat wings!
+				Appearance.TailVariation = 9; //Tail switch
+			}
+			Assumenewform(oPC, Appearance);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			PS_HumForm_DragonUE(oPC);		
+		}	//Lesser Tanar'ri
 		else if(GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
-		{	FiendformBoni(oPC,"fx_f_beetle_eyes");	 //Lesser Yugoloth
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugoles", oPC)	;
-			   Assumenewform(oPC, Appearance);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-				PS_HumForm_DragonUE(oPC); }
+		{	
+			FiendformBoni(oPC,"fx_f_beetle_eyes");	 //Lesser Yugoloth
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC)	;
+			Assumenewform(oPC, Appearance);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			PS_HumForm_DragonUE(oPC); 
+		}
 
-				}	
+	}	
 											
 }
 
@@ -497,6 +529,7 @@ void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 		}
 	}
 }
+
 
 void PS_HOM_RadiantShield(object oPC, int nSpell)
 {

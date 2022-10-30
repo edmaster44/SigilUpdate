@@ -294,7 +294,7 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID);
 int GetItemInDB(object oItem);
 
 //Add all the items in the store to the database 
-void AddAllItemsInStoreToDatabase(object oStore);
+void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID);
 
 //Get the cost of an item property
 int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID);
@@ -307,6 +307,12 @@ int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID);
 
 //Add this property to the DB - never seen it before!
 void AddPropertyToDB(itemproperty iProp);
+
+//Checks whether we need to recalculate the price for an item
+int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID);
+
+//Set up all the variables for this item
+void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID);
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 //------------------------------FUNCTIONS--------------------------------//
@@ -475,10 +481,10 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		
 		//putting debug into title, because why not. . 
 		int		iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
-		string	sItemName	= GetName(oItem) + " (" + sStackSize + ") - "+IntToString(iOldCost);
+		string	sItemName	= GetName(oItem) + " (" + sStackSize + ")"; // - "+IntToString(iOldCost);
 		
 		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
-		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem, oPC)*fCostMod)/GetItemStackSize(oItem));
+		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
@@ -575,6 +581,11 @@ int DS_WillOnlyBuy(object oItem, string sBuyOnlyList)
 
 int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMarket = 0, float fSellMod = 0.0f)
 {//First determine if the store buys stolen goods
+
+	object oPC = GetFirstPC();
+
+	SetItemCostVariables(oItem, TRUE, oPC);
+	
 	int		iItemCost	= 1;	//Yet to be determined item cost
 	float	fCostMod	= (iMarkUp + iMarkDown)/200.0f;	//The buy price modifier
 	//If the sell modifier is not zero we add it to the fCostMod, otherweise we use the default DS_BUY_RATE
@@ -587,7 +598,7 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(!GetIdentified(oItem))	//If item is not identified set the price to 10 coppers
 	{	iItemCost	= 10;	}
 	else	//If all is well compute the item's sell value
-	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	}
+	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem, oPC)/GetItemStackSize(oItem));	} //update to PS_GetItemValue later
 	
 	
 	//If the cost is less than or equal to 0, set it to 1
@@ -962,41 +973,12 @@ int GetItemUseable(object oItem, object oPC)
 //A function to fetch the "real" gold piece value of an item
 int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
-	//Some initial variables
+	SetItemCostVariables(oItem, FALSE, oPC);
 	int nCost = GetLocalInt(oItem, "PRICE");
-	int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
-	int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
-	string sItem = GetResRef(oItem);
-		
-	//Is nCost valid? Do the Gold piece values line up? (tells us whether or not this item has been further enchanted)
-	//Have we double checked this item's value recently? If no to any of these, update!
-	if (nCost <= 0 || nOldCost != GetGoldPieceValue(oItem) ||
-	   (nTime > 0 && PS_GetTimestamp_Age_Days(oItem, "PRICE_TIMESTAMP") >= 1)) {
-		   
-		int nDBCost = 0;
-		int nDBOldCost = 0;
-		   
-		//Check whether this item is in the DB
-		string sQuery = "SELECT item_price, item_oldvalue FROM item_prices WHERE item_tag = '"+sItem+"'";
-		SQLExecDirect(sQuery);
-		if (SQLFetch() != SQL_ERROR) {
-			nDBCost = StringToInt(SQLGetData(1));
-			nDBOldCost = StringToInt(SQLGetData(2));
-	    }
-		   
-		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" "+IntToString(nDBCost)+" vs. "+IntToString(GetGoldPieceValue(oItem)));
-		if (nDBCost > 0 && nDBOldCost == GetGoldPieceValue(oItem)) {
-		   	nCost = nDBCost;
-			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
-		} else {
-		   	nCost = GetCostOfItem(oItem);
-			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
-		}
-		   
-		SetLocalInt(oItem, "PRICE", nCost);
-		PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
-		SetLocalInt(oItem, "PRICE_OLD", GetGoldPieceValue(oItem));
-	}
+	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
+		nCost *= GetItemStackSize(oItem);
+	else if (GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
+		nCost *= GetItemStackSize(oItem);
 		
 	return nCost;
 
@@ -1019,22 +1001,31 @@ int GetItemInDB(object oItem) {
 }
 
 //Add all the items in this store to the database
-void AddAllItemsInStoreToDatabase(object oStore) {
+void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
+
+	SendMessageToPC(oPC, "Adding items to store");
 
 	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 	object oItem = GetFirstItemInInventory(oStore);
 	while(GetIsObjectValid(oItem)) {
 	
 		string sName = SQLEncodeSpecialChars(GetName(oItem));
-		string sTag = GetResRef(oItem);
-		int nPrice = FloatToInt(GetGoldPieceValue(oItem)*fCostMod);
-		int nOldPrice = GetGoldPieceValue(oItem);
+		string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
+		int nPrice = FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		int nOldPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
 		
 		if (!GetItemInDB(oItem)) {
 			string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"', store_tag='"+GetTag(oStore)+"'";
+			SendMessageToPC(oPC, sQuery);
+			
 			SQLExecDirect(sQuery);
 		} else {
-			string sQuery = "UPDATE item_prices SET item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
+			SetItemCostVariables(oItem);
+			int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+			int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
+			
+			string sQuery = "UPDATE item_prices SET item_points='"+IntToString(nPoints)+"', item_oldvalue='"+IntToString(nOldCost)+"' WHERE item_tag='"+sTag+"'";
+			SendMessageToPC(oPC, sQuery);
 			SQLExecDirect(sQuery);
 		}
 	
@@ -1162,5 +1153,110 @@ void AddPropertyToDB(itemproperty iProp) {
 	
 	sQuery = "INSERT INTO recipes_names SET Prefix='"+sName+"'";
 	SQLExecDirect(sQuery);
+	
+}
+
+//Checks whether we need to recalculate the price for an item
+int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
+		
+	int nCost = GetLocalInt(oItem, "PRICE");
+	int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
+	int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
+	int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+	int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
+	int nBaseGold = GetGoldPieceValue(oItem); //may not be reliable, so we're going to also compare with properties
+	
+	//We haven't run SetItemCostVariables at ALL on this item, so we probably should
+	if (nTime <= 0) {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no timestamp, recalculate.");
+		return TRUE;
+	}
+		
+	//The item was enchanted or something; time to update
+	if (nDirty == 1) {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - properties updated, recalculate.");
+		return TRUE;
+	}
+	
+	//We haven't set the variables yet, or there's something otherwise wrong
+	if (!GetPlotFlag(oItem) && nCost <= 0) {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
+		return TRUE;
+	}
+		
+	//Because we can't strictly trust the base cost function, we're going to double check with the points funtion
+	if (nOldCost != nBaseGold && GetItemTotalPoints(oItem) != nPoints) {
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - gold cost and/or item points have changed.");
+		return TRUE;
+	}
+		
+	return FALSE;
+	
+}
+
+//Set up all the variables for this item
+void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID) {	
+
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC,  GetName(oItem)+" - here we are.");		
+		
+	if (GetItemCostUpdated(oItem, oPC)) {
+	
+		int	iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
+		SetLocalInt(oItem, "PRICE_POINTS", GetItemTotalPoints(oItem));
+		SetLocalInt(oItem, "PRICE_OLD", iOldCost);
+	
+		int nCost = GetLocalInt(oItem, "PRICE");
+		int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
+		int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
+		int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+		int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
+	
+		int nDBCost = 0;
+		int nDBOldCost = 0;
+		int nDBOldPoints = 0;
+		int nDBLoaded = FALSE;
+	
+		//Check whether this item is in the DB
+		string sQuery = "SELECT item_price, item_oldvalue, item_points FROM item_prices WHERE item_tag = '"+GetResRef(oItem)+"'";
+		SQLExecDirect(sQuery);
+		if (SQLFetch() != SQL_ERROR) {
+			nDBCost = StringToInt(SQLGetData(1));
+			nDBOldCost = StringToInt(SQLGetData(2));
+			nDBOldPoints = StringToInt(SQLGetData(3));
+			nDBLoaded = TRUE;
+	    }
+		
+		//For making sure that items make their way into the pricing DB
+		if (nDBCost == 0 && addToDB) {
+			string sName = SQLEncodeSpecialChars(GetName(oItem));
+			string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
+			int nPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
+		
+			if (!GetItemInDB(oItem)) {
+				string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"'";
+				SendMessageToPC(oPC, sQuery);
+			
+				SQLExecDirect(sQuery);
+			}
+		}
+		
+		//Moving on to real calculations
+		if (nDBLoaded) {
+			if (nDBOldCost == nOldCost || nPoints == nDBOldPoints) {
+			   	nCost = nDBCost;
+				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
+			} else {
+			   	nCost = GetCostOfItem(oItem);
+				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
+			}
+		} else {
+			nCost = GetCostOfItem(oItem);
+			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch because no DB info.");		
+		}
+	
+		SetLocalInt(oItem, "PRICE", nCost);
+		PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
+		SetLocalInt(oItem, "PRICE_DIRTY", 0);
+	}
 	
 }

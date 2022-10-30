@@ -23,8 +23,9 @@ void main()
 {
 object oPC = OBJECT_SELF;
 int nSpell = GetSpellId();
-int nArmor = 2;
-if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC)>5) {nArmor =5;}
+int nArmor;
+if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC)>4) {nArmor =5;}
+else nArmor = 2;
 effect eArmour = EffectACIncrease(nArmor,AC_DODGE_BONUS,AC_VS_DAMAGE_TYPE_ALL,FALSE);
 if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
 ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eArmour,oPC,60.0f);

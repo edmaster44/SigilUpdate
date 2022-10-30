@@ -1,5 +1,5 @@
 NDB V1.0
-0000050 0000016 0002701 0000011 0000101
+0000050 0000016 0002722 0000011 0000102
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -988,6 +988,7 @@ f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KENKU
 f ffffffff ffffffff 000 i RACIAL_SUBTYPE_RAKSHASA
 f ffffffff ffffffff 000 i RACIAL_SUBTYPE_LUPINAL
 f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ARCANALOTH
+f ffffffff ffffffff 000 i FEAT_KHAYAL_FINESSE
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
 f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
@@ -2153,12 +2154,6 @@ fp o
 f ffffffff ffffffff 002 v PS_VampMal_DelevelFix
 fp o
 fp o
-f ffffffff ffffffff 003 v PS_ApplyEnhancementToFinesse
-fp o
-fp o
-fp i
-f ffffffff ffffffff 001 i InvalidWeapon
-fp o
 f ffffffff ffffffff 001 v PS_TintFixer
 fp o
 f ffffffff ffffffff 002 v PS_PullAggro
@@ -2350,7 +2345,7 @@ f ffffffff ffffffff 001 i GetDragonFearDC
 fp i
 f ffffffff ffffffff 000 i CalcNumberOfAttacks
 f ffffffff ffffffff 000 v RemoveTempHitPoints
-f 00000149 000001ed 002 v RemoveEffectsFromSpell
+f 00000161 00000205 002 v RemoveEffectsFromSpell
 fp o
 fp i
 f ffffffff ffffffff 000 e0 CreateLesserDoomEffectsLink
@@ -4194,7 +4189,41 @@ f ffffffff ffffffff 001 t0009 TimeToTimeFields
 fp i
 f ffffffff ffffffff 001 i GetIsServerResetTime
 fp o
+f ffffffff ffffffff 002 i GetEnhancementBonus
+fp o
+fp o
+f ffffffff ffffffff 001 i Ceil
+fp f
+f ffffffff ffffffff 002 i PS_IsPCStealthed
+fp o
+fp o
+f ffffffff ffffffff 002 i PS_IsTargetFlanked
+fp o
+fp o
+f ffffffff ffffffff 003 i PS_IsTargetWithinRange
+fp o
+fp o
+fp f
+f ffffffff ffffffff 001 i PS_IsTargetSneakImmune
+fp o
+f ffffffff ffffffff 002 i PS_IsTargetFlatFooted
+fp o
+fp o
+f ffffffff ffffffff 001 i PS_HasEpicPrecision
+fp o
+f ffffffff ffffffff 002 i PS_HasRuinFeat
+fp o
+fp o
+f ffffffff ffffffff 003 i PS_CanSneak
+fp o
+fp o
+fp f
 f ffffffff ffffffff 001 i GetDamageBonusInt
+fp i
+f ffffffff ffffffff 002 i GetDieAverage
+fp i
+fp i
+f ffffffff ffffffff 001 i ConstToDmg
 fp i
 f ffffffff ffffffff 001 i GetDamageBonusDie
 fp i
@@ -4207,18 +4236,32 @@ fp o
 fp s
 fp i
 fp f
-f ffffffff ffffffff 001 i GetAttackBonusTotal
+f ffffffff ffffffff 002 i GetAttackBonusTotal
+fp o
+fp o
+f ffffffff ffffffff 001 v RemoveMirrorImage
 fp o
 f ffffffff ffffffff 001 i SneakAttackCount
 fp o
-f ffffffff ffffffff 001 i ConcealmentCheck
+f ffffffff ffffffff 002 i ConcealmentCheck
 fp o
+fp i
 f ffffffff ffffffff 001 i InvisibilityCheck
+fp o
+f ffffffff ffffffff 001 s GetRacialTypeName
+fp o
+f ffffffff ffffffff 001 i GetRacialTypeConst
+fp o
+f ffffffff ffffffff 002 i GetHasIgnoreCritImmunity
+fp o
 fp o
 f ffffffff ffffffff 002 i GetIsImprovedRangerFavored
 fp o
 fp o
 f ffffffff ffffffff 002 i GetIsRangerFavored
+fp o
+fp o
+f ffffffff ffffffff 002 i GetIsRangerFavoredPowerAttack
 fp o
 fp o
 f ffffffff ffffffff 001 i CalculateRangerBonus
@@ -4232,13 +4275,16 @@ fp o
 f ffffffff ffffffff 002 i ApplyDamageFeatsToWeapon
 fp o
 fp o
-f ffffffff ffffffff 002 i GetWeaponThreatRange
-fp o
+f ffffffff ffffffff 001 i GetWeaponThreatRange
 fp o
 f ffffffff ffffffff 002 i GetWeaponBonuses
 fp o
 fp o
-f ffffffff ffffffff 002 i GetEnhancementBonus
+f ffffffff ffffffff 001 i GetACBonus
+fp o
+f ffffffff ffffffff 001 i GetEnhancedArrowBonus
+fp o
+f ffffffff ffffffff 002 i GetMightyBonus
 fp o
 fp o
 f ffffffff ffffffff 001 i GetDodgeAC
@@ -4251,6 +4297,8 @@ fp o
 fp o
 f ffffffff ffffffff 001 e0 GetDamageBonusEffects
 fp o
+f ffffffff ffffffff 001 e0 GetArrowEnchantments
+fp o
 f ffffffff ffffffff 002 e0 GetWeaponDamageEnchantments
 fp o
 fp o
@@ -4258,6 +4306,8 @@ f ffffffff ffffffff 002 i WeaponMasterCritCheck
 fp o
 fp o
 f ffffffff ffffffff 001 e0 GetDamageFeatBonuses
+fp o
+f ffffffff ffffffff 001 i GetIsTwoHanding
 fp o
 f ffffffff ffffffff 006 e0 GetWeaponDamageTotal
 fp o
@@ -4272,6 +4322,8 @@ fp o
 f ffffffff ffffffff 001 i CreatureSize
 fp o
 f ffffffff ffffffff 001 i AttackerTotalAB
+fp o
+f ffffffff ffffffff 001 i AttackerTotalABCreature
 fp o
 f ffffffff ffffffff 007 i AttemptMeleeAttackMainHand
 fp o
@@ -5280,20 +5332,20 @@ fp e0
 fp e0
 fp i
 fp i
-f 0000008a 00000149 000 v main
+f 0000008a 00000161 000 v main
 f 0000000d 00000015 000 v #loader
 f 00000015 0000008a 000 v #globals
 v 00000015 ffffffff 00000000 s PRETTY_LINE_COUNT_VAR
 v 0000002c ffffffff 00000004 i DevMode
 v 00000048 ffffffff 00000008 s X0_DATABASE_DEFAULT
 v 00000062 ffffffff 0000000c s X0_DATABASE_XP1
-v 0000008a 00000141 00000000 o oPC
-v 00000090 00000141 00000004 i nSpell
-v 00000095 00000141 00000008 i nArmor
-v 000000d0 00000141 0000000c e0 eArmour
-v 00000149 000001e5 00000000 i SpellID
-v 00000149 000001e5 00000004 o oTarget
-v 00000149 000001df 00000008 e0 eLook
+v 0000008a 00000159 00000000 o oPC
+v 00000090 00000159 00000004 i nSpell
+v 00000097 00000159 00000008 i nArmor
+v 000000e8 00000159 0000000c e0 eArmour
+v 00000161 000001fd 00000000 i SpellID
+v 00000161 000001fd 00000004 o oTarget
+v 00000161 000001f7 00000008 e0 eLook
 l00 0000048 00000015 0000002c
 l01 0000037 0000002c 0000002c
 l01 0000038 0000002c 0000002c
@@ -5382,16 +5434,17 @@ l12 0000164 00000078 00000078
 l12 0000165 00000078 00000078
 l49 0000024 0000008a 00000090
 l49 0000025 00000090 00000095
-l49 0000026 00000095 0000009b
-l49 0000027 0000009b 000000b6
-l49 0000028 000000d0 000000ef
-l49 0000029 000000ef 00000104
-l49 0000030 00000120 00000141
-l49 0000034 00000147 00000149
-l22 0000798 00000149 00000156
-l22 0000799 00000156 00000169
-l22 0000801 00000169 00000180
-l22 0000803 00000186 0000019b
-l22 0000804 0000019b 000001b6
-l22 0000806 000001bc 000001be
-l22 0000808 000001e5 000001ed
+l49 0000026 00000095 00000097
+l49 0000027 00000097 000000b2
+l49 0000028 000000d2 000000d4
+l49 0000029 000000e8 00000107
+l49 0000030 00000107 0000011c
+l49 0000031 00000138 00000159
+l49 0000035 0000015f 00000161
+l22 0000798 00000161 0000016e
+l22 0000799 0000016e 00000181
+l22 0000801 00000181 00000198
+l22 0000803 0000019e 000001b3
+l22 0000804 000001b3 000001ce
+l22 0000806 000001d4 000001d6
+l22 0000808 000001fd 00000205

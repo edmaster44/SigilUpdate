@@ -8,6 +8,7 @@
 
 #include "ps_def_cards"
 #include "ps_inc_achievements"
+#include "dethia_shop_sys"
 
 // prototypes where needed
 void CardsChangeGameState(object oBoard, int iNewGameState, int iExitCode=0);
@@ -2684,7 +2685,9 @@ object CardsCreateCard(object oTarget, int i2daRow)
 		SetLocalInt(oCard, CARD_VALUE_LEFT, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_LEFT, i2daRow)));
 		SetLocalInt(oCard, CARD_VALUE_RIGHT, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_RIGHT, i2daRow)));
 		SetLocalInt(oCard, CARD_ID, i2daRow);
+		SetItemCostVariables(oCard);
 	}
+	
 	return oCard;
 }
 

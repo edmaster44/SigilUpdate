@@ -16,11 +16,11 @@ void main()
 	   location lSpawnpoint = GetLocation(oWP);  
 	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_peddler_ladysward", lSpawnpoint);    
 	}
-  	if(GetObjectByTag("ps_npc_lady_leilani") == OBJECT_INVALID) {
+  	/*if(GetObjectByTag("ps_npc_lady_leilani") == OBJECT_INVALID) {
    		object oWP = GetWaypointByTag("ps_wp_leilani");
    		location lSpawnpoint = GetLocation(oWP);  
    		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_lady_leilani", lSpawnpoint);    
-  	} 
+  	} */
 	
 	//Dabus
 	if(GetObjectByTag("ps_npc_ladydabus") == OBJECT_INVALID) {

@@ -15,7 +15,9 @@
 void Shield_Bash(object oPC, object oTarget, int nSpell )
 {
 int nDam;
-int nSize;;
+int nSize;
+int nTotal;
+int nSaveDC;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -26,44 +28,53 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eStun = EffectCutsceneParalyze();
+effect eStun1 = EffectParalyze();
 //For Damage
 if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nStrength;
+{nDam = d6(9)+ nStrength ;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nStrength;
+{nDam = d6(12)+ nStrength;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nStrength;
+{nDam = d6(6)+ nStrength;
 nSize = 1;}
-int nTotal = nDam + nSize;
-int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
-effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+nTotal = nSize + ((nStrength)/2);
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nDam = nDam + d6(3);
+nSaveDC = nSaveDC +4;
+}
+effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
+float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
- if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+ 
+if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+{
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
+
+}
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 }
 
 if (iHit == 2)
 {
-nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
 }
 
@@ -74,7 +85,9 @@ ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
 void Shield_Throw(object oPC, object oTarget, int nSpell )
 {
 int nDam;
-int nSize;;
+int nSize;
+int nTotal;
+int nSaveDC;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -85,56 +98,66 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
 effect eStun = EffectCutsceneParalyze();
+effect eStun1 = EffectParalyze();
 //For Damage
 if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nStrength;
+{nDam = d6(9)+nStrength ;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nStrength;
+{nDam = d6(12)+ nStrength;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nStrength;
+{nDam = d6(6)+ nStrength;
 nSize = 1;}
-int nTotal = nDam + nSize;
-int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
-effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
-int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 1, nSpell);
+nTotal = nSize + ((nStrength)/2);
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nDam =+ nDam + d6(3);
+nSaveDC = nSaveDC +4;
+}
+effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Throw",1, "*shieldbash", 1, nSpell);
+float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ 
+if(!WillSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+{
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
+
+}
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 }
 
 if (iHit == 2)
 {
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
-
-nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
+
+if(!WillSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
 
 }
 
 }
-
 }
+
 
 void Agile_Strike(object oPC, object oTarget, int nSpell )
 {
 int nDam;
-int nSize;;
+int nSize;
+int nTotal;
+int nSaveDC;
 object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	
 	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
@@ -144,45 +167,53 @@ object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	}
 int nDex = GetAbilityModifier(ABILITY_DEXTERITY,OBJECT_SELF);
 int shield = GetBaseItemType(oShield);
-effect eStun = EffectKnockdown();
+effect eKD = EffectKnockdown();
 //For Damage
 if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(1) + nDex;
+{nDam = d6(9)+ nDex ;
 nSize = 2;}
 else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d8(1)+ nDex;
+{nDam = d6(12)+ nDex;
 nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d4(1)+ nDex;
+{nDam = d6(6)+ nDex;
 nSize = 1;}
-int nTotal = nDam + nSize;
-int nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
-effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
-int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
+nTotal = nSize + ((nDex)/2);
+nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
+{
+nDam =+ nDam + d6(3);
+nSaveDC = nSaveDC +4;
+}
+effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Agile Strike",1, "*shieldbash", 0, nSpell);
+float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
 {
  ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+ 
+if(!ReflexSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+{
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eKD,oTarget,fDur);
+
+}
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
 
 }
 
 if (iHit == 2)
 {
-nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-			{
-				if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-					Wild_Magic(oPC, oTarget, GetSpellId());
-			}
 
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
+if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+DoWildMagic(oPC, oTarget, GetSpellId());
+			
+
+if(!ReflexSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 {
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eKD,oTarget,fDur);
 
 }
 

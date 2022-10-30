@@ -23,10 +23,9 @@ object oPC = OBJECT_SELF;
 int nStrength = ABILITY_CONSTITUTION;
 int nCon = ABILITY_STRENGTH;
 object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
-int nLevel = 4;
-if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >5) nLevel = 6;
-
-
+int nLevel;
+if (GetLevelByClass(CLASS_TYPE_WARMIND,oPC) >4) nLevel = 6;
+else nLevel = 4;
 effect eStr =EffectAbilityIncrease(nStrength,nLevel);
 effect eCon=EffectAbilityIncrease(nCon,nLevel);
 effect eLink = EffectLinkEffects(eStr,eCon);

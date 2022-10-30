@@ -422,6 +422,7 @@ void main()
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
+	DelayCommand(0.5f, PortIntoNewFactionSystem(oPC));
 	
 	if(GetIsPC(oPC) && !GetIsDM(oPC) && GetXP(oPC) == 0)
 	{	
@@ -566,7 +567,9 @@ void main()
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
-		OnSeverLoadPopulateSpellSQL();
+		EnableCreatureFinesse();
+		if (GetHasFeat(289,oPC))
+		FeatAdd(oPC,3218,FALSE,FALSE,TRUE);
 		ConvertBio(oPC);
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);

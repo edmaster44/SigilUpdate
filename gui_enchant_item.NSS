@@ -1,4 +1,5 @@
 #include "ps_inc_newenchanting"
+#include "dethia_shop_sys"
 
 void PlayEnchantAnimation(object oPC) {
 
@@ -34,6 +35,8 @@ void main () {
 	if (CanEnchantItem(oPC, oItem, enchant)) {
 		TakeEnchantmentRequirements(oPC, enchant);
 		EnchantItem(oItem, enchant);
+		SetLocalInt(oItem, "PRICE_DIRTY", 1);
+		SetItemCostVariables(oItem);
 	}
 	
 	DisplayItemDescription(oPC, oItem);

@@ -58,10 +58,10 @@ void main()
 
     object oManifester = OBJECT_SELF;
     object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
-    struct manifestation manif =
+     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_EXTEND||METAPSIONIC_AUGMENT
+                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER  
                               );
 							  
 

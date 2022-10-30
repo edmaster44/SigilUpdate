@@ -32,7 +32,8 @@ void MeleeAttack(object oSelf, object oTarget) {
 //No weapon required
 int CheckMonsterHit(object oAttacker, object oTarget, int ThreatRange = 19) {
 	
-	int conceal = ConcealmentCheck(oTarget); 
+	int irange;
+	int conceal = ConcealmentCheck(oTarget,irange); 
 	int imiss;
 	
 	//Concealment check

@@ -1,5 +1,5 @@
 NDB V1.0
-0000027 0000008 0002124 0000024 0000116
+0000033 0000011 0002344 0000030 0000157
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -7,26 +7,32 @@ n03 x0_i0_stringlib
 n04 ginc_param_const
 n05 ginc_crafting
 n06 ps_inc_time
-n07 nwnx_sql
-n08 x0_i0_position
-n09 x0_i0_match
-n10 ServerExts
-n11 x0_i0_petrify
-n12 x2_inc_itemprop
-n13 ps_inc_ecl
-n14 nwnx_srvadmin
-n15 ginc_vars
-n16 ginc_math
-n17 ginc_item
-n18 nw_i0_plot
-n19 ginc_2da
-n20 x2_inc_switches
-n21 ps_inc_placeable_signs
-n22 ps_inc_faction
-n23 ps_inc_quests
-n24 ps_inc_achievements
-n25 ps_inc_cards
-N26 gc_card_table_free
+n07 ps_inc_newenchanting
+n08 ps_inc_newcrafting
+n09 dethia_shop_sys
+n10 nwnx_sql
+n11 x0_i0_position
+n12 x0_i0_match
+n13 ServerExts
+n14 x0_i0_petrify
+n15 x2_inc_itemprop
+n16 ps_inc_ecl
+n17 nwnx_srvadmin
+n18 ginc_vars
+n19 ginc_math
+n20 ginc_item
+n21 nw_i0_plot
+n22 ginc_2da
+n23 x2_inc_switches
+n24 ps_inc_placeable_signs
+n25 ps_inc_faction
+n26 ps_inc_quests
+n27 ps_inc_achievements
+n28 ps_inc_gemstones
+n29 ps_inc_itemprops
+n30 ps_inc_casterlevel
+n31 ps_inc_cards
+N32 gc_card_table_free
 s 03 vector
 sf f x
 sf f y
@@ -84,6 +90,44 @@ sf i Weekday
 sf i Hour
 sf i Minute
 sf i Second
+s 10 enchantment
+sf i id
+sf i type
+sf i subtype
+sf i numerical
+sf i special
+sf i points
+sf i gold
+sf s essence
+sf s gemstone
+sf s special_req
+s 09 baseitem
+sf s label
+sf i id
+sf s type
+sf s resref
+sf i cost
+sf s matlist_1
+sf s matlist_2
+sf s matlist_3
+sf s icon
+s 16 material
+sf s label
+sf s rResref
+sf i costTier
+sf i craftDC
+sf i ipForgedOf
+sf i ipMeleeType
+sf i ipMeleeSubType
+sf i ipMeleeParam
+sf i drMaterial
+sf i ipArmorType
+sf i ipArmorSubType
+sf i ipArmorParam
+sf s armorSuffix
+sf i ipRangedType
+sf i ipRangedSubType
+sf i ipRangedParam
 f ffffffff ffffffff 000 s CARD_GAME_NAME
 f ffffffff ffffffff 000 s CARD_GAME_FEEDBACK_COLOUR
 f ffffffff ffffffff 000 s CARD_PLAYER
@@ -544,6 +588,7 @@ f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KENKU
 f ffffffff ffffffff 000 i RACIAL_SUBTYPE_RAKSHASA
 f ffffffff ffffffff 000 i RACIAL_SUBTYPE_LUPINAL
 f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ARCANALOTH
+f ffffffff ffffffff 000 i FEAT_KHAYAL_FINESSE
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
 f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
@@ -2028,12 +2073,6 @@ fp o
 f ffffffff ffffffff 002 v PS_VampMal_DelevelFix
 fp o
 fp o
-f ffffffff ffffffff 003 v PS_ApplyEnhancementToFinesse
-fp o
-fp o
-fp i
-f ffffffff ffffffff 001 i InvalidWeapon
-fp o
 f ffffffff ffffffff 001 v PS_TintFixer
 fp o
 f ffffffff ffffffff 002 v PS_PullAggro
@@ -3477,6 +3516,531 @@ fp o
 fp i
 f ffffffff ffffffff 001 v CheckToutAchievement
 fp o
+f ffffffff ffffffff 000 s xmlCraftingFile
+f ffffffff ffffffff 000 s sCraftingScreen
+f ffffffff ffffffff 000 s xmlCustomizationFile
+f ffffffff ffffffff 000 s sCustomizationScreen
+f ffffffff ffffffff 000 s xmlEnchantingFile
+f ffffffff ffffffff 000 s sEnchantingScreen
+f ffffffff ffffffff 000 f ENCHANTING_DISTANCE
+f ffffffff ffffffff 000 s sGemScreen
+f ffffffff ffffffff 000 s xmlGemFile
+f ffffffff ffffffff 000 s gemstoneBox
+f ffffffff ffffffff 000 i GEMSTONE_SKILL_ID
+f ffffffff ffffffff 001 i GetIsGemstone
+fp o
+f ffffffff ffffffff 000 v InitializeGemstoneBox
+f ffffffff ffffffff 002 s GetGemstoneUses
+fp s
+fp i
+f ffffffff ffffffff 001 s GetBaseGemTag
+fp o
+f ffffffff ffffffff 003 v TakeNumCraftingMaterials
+fp o
+fp s
+fp i
+f ffffffff ffffffff 001 i GetNumberOfGemstonesOfColor
+fp s
+f ffffffff ffffffff 001 s GetGemstoneColor
+fp o
+f ffffffff ffffffff 001 s GetGemstoneMineral
+fp o
+f ffffffff ffffffff 001 s GetGemstoneDescription
+fp o
+f ffffffff ffffffff 001 s GetGemstoneFullDescription
+fp o
+f ffffffff ffffffff 001 i InitializeGemstoneNumber
+fp s
+f ffffffff ffffffff 001 s RollGemstoneOfColor
+fp s
+f ffffffff ffffffff 001 s RollGemstoneType
+fp o
+f ffffffff ffffffff 001 i IsGemRough
+fp o
+f ffffffff ffffffff 001 i IsGemIdentified
+fp o
+f ffffffff ffffffff 001 s GetBaseGemTagFromString
+fp s
+f ffffffff ffffffff 001 s GetQualityString
+fp i
+f ffffffff ffffffff 001 s GetSizeString
+fp i
+f ffffffff ffffffff 001 i GetCaratWeight
+fp o
+f ffffffff ffffffff 001 i GetGemQuality
+fp o
+f ffffffff ffffffff 001 s GetBaseGemName
+fp o
+f ffffffff ffffffff 004 v SetDetailsOfGemstone
+fp o
+fp i
+fp i
+fp o
+f ffffffff ffffffff 002 v SetQualityOfGemstone
+fp o
+fp i
+f ffffffff ffffffff 002 v SetCaratOfGemstone
+fp o
+fp i
+f ffffffff ffffffff 000 s PickRandomGemColor
+f ffffffff ffffffff 002 o GetRandomGemstoneToSpawn
+fp o
+fp s
+f ffffffff ffffffff 004 o CreateGemstoneOfType
+fp s
+fp i
+fp i
+fp o
+f ffffffff ffffffff 002 o CreateRandomGemstoneOnSpawnOrChest
+fp o
+fp i
+f ffffffff ffffffff 001 i GetHasRoughGemstone
+fp o
+f ffffffff ffffffff 001 v RegenerateGemList
+fp o
+f ffffffff ffffffff 001 v UpdateSelectedGem
+fp o
+f ffffffff ffffffff 000 i SPECIAL_MAT_BLOODIRON
+f ffffffff ffffffff 000 i SPECIAL_MAT_ALCHEMIC_PLATINUM
+f ffffffff ffffffff 000 i SPECIAL_MAT_ARBOREAL_OAK
+f ffffffff ffffffff 000 i SPECIAL_MAT_AURORUM
+f ffffffff ffffffff 000 i SPECIAL_MAT_AXIOMATIC_BRASS
+f ffffffff ffffffff 000 i SPECIAL_MAT_BLOOD_GLASS
+f ffffffff ffffffff 000 i SPECIAL_MAT_BYESHK
+f ffffffff ffffffff 000 i SPECIAL_MAT_CELESTIAL_PLUMES
+f ffffffff ffffffff 000 i SPECIAL_MAT_COPPER
+f ffffffff ffffffff 000 i SPECIAL_MAT_DEMON_SCALE
+f ffffffff ffffffff 000 i SPECIAL_MAT_DEVIL_SCALE
+f ffffffff ffffffff 000 i SPECIAL_MAT_DRAGON_BONE
+f ffffffff ffffffff 000 i SPECIAL_MAT_DHIDE_BLACK
+f ffffffff ffffffff 000 i SPECIAL_MAT_DHIDE_BLUE
+f ffffffff ffffffff 000 i SPECIAL_MAT_DHIDE_GREEN
+f ffffffff ffffffff 000 i SPECIAL_MAT_DHIDE_RED
+f ffffffff ffffffff 000 i SPECIAL_MAT_DHIDE_WHITE
+f ffffffff ffffffff 000 i SPECIAL_MAT_DRAGON_SINEW
+f ffffffff ffffffff 000 i SPECIAL_MAT_ELECTRUM
+f ffffffff ffffffff 000 i SPECIAL_MAT_FORMIC_AMBER
+f ffffffff ffffffff 000 i SPECIAL_MAT_GLASSTEEL
+f ffffffff ffffffff 000 i SPECIAL_MAT_GOLD
+f ffffffff ffffffff 000 i SPECIAL_MAT_METALLINE
+f ffffffff ffffffff 000 i SPECIAL_MAT_METEORIC_IRON
+f ffffffff ffffffff 000 i SPECIAL_MAT_MINDSILVER
+f ffffffff ffffffff 000 i SPECIAL_MAT_MORGUTH_IRON
+f ffffffff ffffffff 000 i SPECIAL_MAT_NEUMANNIC_FLYWHEEL
+f ffffffff ffffffff 000 i SPECIAL_MAT_OERTHBLOOD
+f ffffffff ffffffff 000 i SPECIAL_MAT_OPHIDIAN
+f ffffffff ffffffff 000 i SPECIAL_MAT_PANDEMONIC_SILVER
+f ffffffff ffffffff 000 i SPECIAL_MAT_PLATINUM
+f ffffffff ffffffff 000 i SPECIAL_MAT_REGULAN_GEARSPRING
+f ffffffff ffffffff 000 i SPECIAL_MAT_RIVERINE
+f ffffffff ffffffff 000 i SPECIAL_MAT_SILVER
+f ffffffff ffffffff 000 i SPECIAL_MAT_SOLANION_TRUESTEEL
+f ffffffff ffffffff 000 i SPECIAL_MAT_TANTULHOR
+f ffffffff ffffffff 000 i SPECIAL_MAT_TWELVETREES_BARK
+f ffffffff ffffffff 000 i SPECIAL_MAT_WHITE_GOLD
+f ffffffff ffffffff 000 i SPECIAL_MAT_IRON
+f ffffffff ffffffff 000 i SPECIAL_MAT_LEATHER
+f ffffffff ffffffff 000 i SPECIAL_MAT_WOOD
+f ffffffff ffffffff 000 i SPECIAL_MAT_COLD_IRON
+f ffffffff ffffffff 001 o GetObjectFromDMArea
+fp s
+f ffffffff ffffffff 001 e4 ItemPropertySpecialMaterial
+fp i
+f ffffffff ffffffff 001 i GetItemMaterialTypeFromProperty
+fp e4
+f ffffffff ffffffff 002 i GetCasterLevelFromClass
+fp o
+fp i
+f ffffffff ffffffff 001 i GetFeatGrantedCasterLevel
+fp o
+f ffffffff ffffffff 001 i GetPsionicCasterLevel
+fp o
+f ffffffff ffffffff 001 i GetRealCasterLevel
+fp o
+f ffffffff ffffffff 002 v EnchantItem
+fp o
+fp t0008
+f ffffffff ffffffff 002 v TakeEnchantmentRequirements
+fp o
+fp t0008
+f ffffffff ffffffff 004 i CanEnchantItem
+fp o
+fp o
+fp t0008
+fp i
+f ffffffff ffffffff 001 e4 EnchantmentIndexToItemProp
+fp t0008
+f ffffffff ffffffff 001 i MeetsMinimumRequirements
+fp o
+f ffffffff ffffffff 003 i GetHasRequiredCasterLevel
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 i GetHasRequiredGold
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 i GetHasRequiredEssence
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i GetHasRequiredGemstone
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i GetFulfillsSpecialRequirement
+fp o
+fp s
+fp o
+f ffffffff ffffffff 001 s DisplaySpecialRequirement
+fp s
+f ffffffff ffffffff 003 i HasSimilarProperty
+fp o
+fp o
+fp t0008
+f ffffffff ffffffff 001 i IPGetIsAmmunition
+fp o
+f ffffffff ffffffff 001 i IPGetIsThrownWeapon
+fp o
+f ffffffff ffffffff 001 i GetItemTotalPoints
+fp o
+f ffffffff ffffffff 002 i IsPowerfulMaterial
+fp e4
+fp i
+f ffffffff ffffffff 002 i GetItemTotalPointsAllowed
+fp o
+fp o
+f ffffffff ffffffff 002 s GenerateEnchantmentManualFor
+fp o
+fp s
+f ffffffff ffffffff 001 s GenerateEnchantmentDescription
+fp t0008
+f ffffffff ffffffff 001 i GetTypeIndex
+fp i
+f ffffffff ffffffff 001 i GetSubTypeIndex
+fp i
+f ffffffff ffffffff 001 i GetParamIndex
+fp i
+f ffffffff ffffffff 001 i GetGoldCost
+fp i
+f ffffffff ffffffff 001 i GetPointValue
+fp i
+f ffffffff ffffffff 001 i GetSpecialIndex
+fp i
+f ffffffff ffffffff 001 s GetEssenceRequirement
+fp i
+f ffffffff ffffffff 001 s GetGemRequirement
+fp i
+f ffffffff ffffffff 001 s GetItemPropertyString
+fp e4
+f ffffffff ffffffff 001 i EstimateItemPropertyPointValue
+fp e4
+f ffffffff ffffffff 002 i GetItemPropertyPointValue
+fp e4
+fp s
+f ffffffff ffffffff 002 s GetEnchantmentItemRestriction
+fp o
+fp i
+f ffffffff ffffffff 001 t0008 LoadEnchantment
+fp i
+f ffffffff ffffffff 002 i GetBenchIsValidForEnchanting
+fp o
+fp o
+f ffffffff ffffffff 001 o GetNearestEnchantingWorkbench
+fp o
+f ffffffff ffffffff 002 s GetItemPropertyList
+fp o
+fp o
+f ffffffff ffffffff 001 s GetTypeName
+fp t0008
+f ffffffff ffffffff 001 s GetSecondaryParamName
+fp t0008
+f ffffffff ffffffff 001 i IPGetIsThrown
+fp o
+f ffffffff ffffffff 002 i CanAddEnchantmentToItem
+fp o
+fp i
+f ffffffff ffffffff 001 i IPGetIsInstrument
+fp o
+f ffffffff ffffffff 001 v GenerateEnchantmentTypeList
+fp o
+f ffffffff ffffffff 002 v GenerateParamTypeList
+fp o
+fp t0008
+f ffffffff ffffffff 001 s TranslateItemTagToName
+fp s
+f ffffffff ffffffff 001 s TranslateGemstoneTagToName
+fp s
+f ffffffff ffffffff 003 i IndiciesAreEquivalent
+fp i
+fp i
+fp o
+f ffffffff ffffffff 003 v GenerateEnchantmentRequirementsList
+fp o
+fp t0008
+fp o
+f ffffffff ffffffff 002 v DisplayItemDescription
+fp o
+fp o
+f ffffffff ffffffff 002 v GenerateBaseItemList
+fp o
+fp s
+f ffffffff ffffffff 002 v GenerateMaterial1List
+fp o
+fp i
+f ffffffff ffffffff 002 v GenerateMaterial2List
+fp o
+fp i
+f ffffffff ffffffff 002 v GenerateMaterial3List
+fp o
+fp i
+f ffffffff ffffffff 001 t0009 LoadBaseItem
+fp i
+f ffffffff ffffffff 001 s GetItemLabel
+fp i
+f ffffffff ffffffff 001 s GetItemType
+fp i
+f ffffffff ffffffff 001 s GetItemResref
+fp i
+f ffffffff ffffffff 001 i GetItemCost
+fp i
+f ffffffff ffffffff 001 i GetBaseID
+fp i
+f ffffffff ffffffff 002 s GetItemMatList
+fp i
+fp i
+f ffffffff ffffffff 001 s GetItemIconKeyword
+fp i
+f ffffffff ffffffff 002 s GetMLabel
+fp i
+fp s
+f ffffffff ffffffff 002 s GetMResref
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMCostTier
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMForgedOf
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMMeleeType
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMMeleeSubType
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMMeleeParam
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMDRMaterial
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMArmorType
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMArmorSubType
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMArmorParam
+fp i
+fp s
+f ffffffff ffffffff 002 s GetMArmorSuffix
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMRangedType
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMRangedSubType
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMRangedParam
+fp i
+fp s
+f ffffffff ffffffff 002 i GetMCraftDC
+fp i
+fp s
+f ffffffff ffffffff 003 v SetMaterialListHeader
+fp o
+fp t0009
+fp i
+f ffffffff ffffffff 002 v GenerateItemIconList
+fp o
+fp t0009
+f ffffffff ffffffff 001 v GenerateCraftDetails
+fp o
+f ffffffff ffffffff 005 o CreateCraftedItem
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 005 i GetCraftedItemCost
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 005 v TakeRequiredCraftingItems
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 004 s GetCraftingItemName
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 005 s GetCraftingNameDescription
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 001 i GetIDRanged
+fp i
+f ffffffff ffffffff 005 e4 GetSpecialMaterialItemProperty
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 001 s GetDRMaterialString
+fp i
+f ffffffff ffffffff 004 i GetCraftingRankRequirement
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 001 i GetRequiredCraftSkill
+fp t0009
+f ffffffff ffffffff 005 s GetCautionString
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 001 i GetIsQuiver
+fp i
+f ffffffff ffffffff 001 i GetCostTierOfMaterial
+fp e4
+f ffffffff ffffffff 001 i GetBaseCostOfItem
+fp i
+f ffffffff ffffffff 002 t0010 LoadMaterial
+fp i
+fp s
+f ffffffff ffffffff 005 i GetHasRequiredCraftingItems
+fp o
+fp t0009
+fp t0010
+fp t0010
+fp t0010
+f ffffffff ffffffff 000 s STORE_TIMESTAMP
+f ffffffff ffffffff 000 i STORE_TIMEOUT
+f ffffffff ffffffff 002 v DS_CloseShop
+fp o
+fp o
+f ffffffff ffffffff 004 v DS_OpenShop
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 o DS_GetStoreKeeper
+fp o
+f ffffffff ffffffff 001 s DS_ConvertCoinsToCopper
+fp i
+f ffffffff ffffffff 001 s DS_ConvertCoinsToSilver
+fp i
+f ffffffff ffffffff 001 s DS_ConvertCoinsToGold
+fp i
+f ffffffff ffffffff 005 v DS_AddItemsToShop
+fp o
+fp o
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 i DS_WillNotBuy
+fp o
+fp s
+f ffffffff ffffffff 002 i DS_WillOnlyBuy
+fp o
+fp s
+f ffffffff ffffffff 005 i DS_GetItemSellValue
+fp o
+fp i
+fp i
+fp i
+fp f
+f ffffffff ffffffff 001 i DS_GetCoinsOnCreature
+fp o
+f ffffffff ffffffff 002 v DS_TakeCoinsFromCreature
+fp o
+fp i
+f ffffffff ffffffff 002 v DS_GiveCoinsToCreature
+fp o
+fp i
+f ffffffff ffffffff 004 v DS_UpdateStoreCurrency
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 v DS_UpdateIventoryCoinValues
+fp o
+f ffffffff ffffffff 005 i DS_GetIsTheftSuccessful
+fp o
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i DS_DistanceCheck
+fp o
+fp o
+f ffffffff ffffffff 001 i DS_GetItemCategory
+fp o
+f ffffffff ffffffff 001 i DS_GetIsProjectile
+fp o
+f ffffffff ffffffff 001 f DS_AbsoluteValue
+fp f
+f ffffffff ffffffff 002 i DoesPCHaveFreeInvSlots
+fp o
+fp i
+f ffffffff ffffffff 002 i DS_AppraiseModifier
+fp o
+fp o
+f ffffffff ffffffff 001 i GetSpecificAlignment
+fp o
+f ffffffff ffffffff 002 i GetItemUseLimited
+fp o
+fp o
+f ffffffff ffffffff 002 i GetItemUseable
+fp o
+fp o
+f ffffffff ffffffff 002 i PS_GetItemValue
+fp o
+fp o
+f ffffffff ffffffff 001 i GetItemInDB
+fp o
+f ffffffff ffffffff 002 v AddAllItemsInStoreToDatabase
+fp o
+fp o
+f ffffffff ffffffff 002 i GetCostOfProperty
+fp e4
+fp o
+f ffffffff ffffffff 002 i GetCostOfItem
+fp o
+fp o
+f ffffffff ffffffff 002 i GetCostOfItemByString
+fp s
+fp o
+f ffffffff ffffffff 001 v AddPropertyToDB
+fp e4
+f ffffffff ffffffff 002 i GetItemCostUpdated
+fp o
+fp o
+f ffffffff ffffffff 003 v SetItemCostVariables
+fp o
+fp i
+fp o
 f ffffffff ffffffff 003 v CardsChangeGameState
 fp o
 fp i
@@ -3506,7 +4070,7 @@ f ffffffff ffffffff 003 v CardsSetPlayer
 fp o
 fp i
 fp o
-f 000003df 00000421 002 o CardsGetPlayer
+f 0000040e 00000450 002 o CardsGetPlayer
 fp o
 fp i
 f ffffffff ffffffff 002 s CardsGetObserverName
@@ -3541,10 +4105,10 @@ f ffffffff ffffffff 001 v CardsClearVarsOnBoard
 fp o
 f ffffffff ffffffff 001 v CardsClearVarsOnAllPlayers
 fp o
-f 0000026d 0000032d 002 i CardsGetObserverNumberFromBoard
+f 0000029c 0000035c 002 i CardsGetObserverNumberFromBoard
 fp o
 fp o
-f 0000032d 000003df 002 i CardsGetPlayerNumberFromBoard
+f 0000035c 0000040e 002 i CardsGetPlayerNumberFromBoard
 fp o
 fp o
 f ffffffff ffffffff 001 v CardsClearTablePlaceableOfCards
@@ -3771,7 +4335,7 @@ fp s
 f ffffffff ffffffff 002 i CheckPlayerAlreadyIn
 fp o
 fp o
-f 00000421 0000086f 002 i CheckGameSlotOpen
+f 00000450 0000089e 002 i CheckGameSlotOpen
 fp o
 fp s
 f ffffffff ffffffff 002 v CardsLeaveGame
@@ -3836,34 +4400,40 @@ fp o
 fp i
 f ffffffff ffffffff 001 i CardsAllPositionsFilled
 fp o
-f 0000006c 0000026d 001 i StartingConditional
+f 0000009b 0000029c 001 i StartingConditional
 fp i
 f 0000000d 00000017 000 i #loader
-f 00000017 0000006c 000 v #globals
+f 00000017 0000009b 000 v #globals
 v 0000000f ffffffff 00000000 i #retval
 v 00000017 ffffffff 00000000 s PRETTY_LINE_COUNT_VAR
 v 0000002e ffffffff 00000004 i DevMode
-v 0000006c 0000026b 00000000 i #retval
-v 0000006c 00000265 00000004 i iPosition
-v 0000006c 0000025f 00000008 o oPC
-v 00000071 0000025f 0000000c o oBoard
-v 00000077 0000025f 00000010 i iReturn
-v 0000007d 0000025f 00000014 i iObserver
-v 00000095 0000025f 00000018 i iPlayer
-v 0000026d 0000032b 00000000 i #retval
-v 0000026d 00000325 00000004 o oPC
-v 0000026d 00000325 00000008 o oBoard
-v 0000026f 0000031f 0000000c i n
-v 00000271 0000031f 00000010 i iRet
-v 0000032d 000003dd 00000000 i #retval
-v 0000032d 000003d7 00000004 o oPC
-v 0000032d 000003d7 00000008 o oBoard
-v 000003df 0000041f 00000000 o #retval
-v 000003df 00000419 00000004 i iPlayer
-v 000003df 00000419 00000008 o oBoard
-v 00000421 0000086d 00000000 i #retval
-v 00000421 00000867 00000004 s sPlayerPos
-v 00000421 00000867 00000008 o oBoard
+v 0000004a ffffffff 00000008 s GOLD
+v 0000005b ffffffff 0000000c s DS_BUY_FILTER_ARMOR
+v 00000061 ffffffff 00000010 s DS_BUY_FILTER_WEAPON
+v 00000067 ffffffff 00000014 s DS_BUY_FILTER_USEABLE
+v 0000006d ffffffff 00000018 s DS_BUY_FILTER_TRINKETS
+v 00000073 ffffffff 0000001c s DS_BUY_FILTER_MISCELLANEOUS
+v 0000009b 0000029a 00000000 i #retval
+v 0000009b 00000294 00000004 i iPosition
+v 0000009b 0000028e 00000008 o oPC
+v 000000a0 0000028e 0000000c o oBoard
+v 000000a6 0000028e 00000010 i iReturn
+v 000000ac 0000028e 00000014 i iObserver
+v 000000c4 0000028e 00000018 i iPlayer
+v 0000029c 0000035a 00000000 i #retval
+v 0000029c 00000354 00000004 o oPC
+v 0000029c 00000354 00000008 o oBoard
+v 0000029e 0000034e 0000000c i n
+v 000002a0 0000034e 00000010 i iRet
+v 0000035c 0000040c 00000000 i #retval
+v 0000035c 00000406 00000004 o oPC
+v 0000035c 00000406 00000008 o oBoard
+v 0000040e 0000044e 00000000 o #retval
+v 0000040e 00000448 00000004 i iPlayer
+v 0000040e 00000448 00000008 o oBoard
+v 00000450 0000089c 00000000 i #retval
+v 00000450 00000896 00000004 s sPlayerPos
+v 00000450 00000896 00000008 o oBoard
 l00 0000037 00000017 00000017
 l00 0000038 00000017 00000017
 l00 0000039 00000017 00000017
@@ -3912,71 +4482,112 @@ l06 0000189 0000004a 0000004a
 l06 0000190 0000004a 0000004a
 l06 0000191 0000004a 0000004a
 l06 0000192 0000004a 0000004a
-l26 0000012 0000006c 00000071
-l26 0000013 00000071 00000077
-l26 0000014 00000077 0000007d
-l26 0000015 0000007d 00000095
-l26 0000016 00000095 000000ad
-l26 0000018 000000ad 000000bd
-l26 0000020 000000c3 00000125
-l26 0000021 0000012b 0000013f
-l26 0000023 00000145 00000147
-l26 0000025 0000015d 000001c1
-l26 0000026 000001c7 000001db
-l26 0000028 000001e1 000001e3
-l26 0000030 000001f9 00000229
-l26 0000031 0000022f 00000243
-l26 0000034 00000243 0000025f
-l26 0000035 00000265 0000026d
-l25 0000217 0000026d 0000026f
-l25 0000218 0000026f 00000271
-l25 0000220 00000271 00000285
-l25 0000222 0000029b 000002cd
-l25 0000223 000002d3 000002e9
-l25 0000220 000002e9 000002fd
-l25 0000226 00000303 0000031f
-l25 0000227 00000325 0000032d
-l25 0000232 0000032d 0000034d
-l25 0000234 00000353 0000036d
-l25 0000236 00000373 00000375
-l25 0000238 0000039b 000003b5
-l25 0000240 000003bb 000003bd
-l25 0000242 000003bd 000003d7
-l25 0000244 000003d7 000003df
-l25 0000046 000003df 00000419
-l25 0000047 00000419 00000421
-l25 0002344 00000421 00000435
-l25 0002346 0000043b 0000045b
-l25 0002347 00000461 0000047b
-l25 0002348 00000481 00000483
-l25 0002349 000004a9 000004c3
-l25 0002350 000004c9 000004cb
-l25 0002351 000004cb 000004e5
-l25 0002353 000004eb 000004ed
-l25 0002356 00000509 0000052b
-l25 0002357 00000531 0000054b
-l25 0002358 00000551 00000553
-l25 0002359 0000057b 00000595
-l25 0002360 0000059b 0000059d
-l25 0002361 000005c5 000005df
-l25 0002362 000005e5 000005e7
-l25 0002363 0000060f 00000629
-l25 0002364 0000062f 00000631
-l25 0002365 00000659 00000673
-l25 0002366 00000679 0000067b
-l25 0002367 000006a3 000006bd
-l25 0002368 000006c3 000006c5
-l25 0002369 000006ed 00000707
-l25 0002370 0000070d 0000070f
-l25 0002371 00000737 00000751
-l25 0002372 00000757 00000759
-l25 0002373 00000781 0000079b
-l25 0002374 000007a1 000007a3
-l25 0002375 000007cc 000007e6
-l25 0002376 000007ec 000007ee
-l25 0002377 000007ee 00000808
-l25 0002385 00000808 00000825
-l25 0002386 0000082b 00000845
-l25 0002387 0000084b 0000084d
-l25 0002388 0000084d 00000867
-l25 0002389 00000867 0000086f
+l07 0000133 0000004a 0000004a
+l07 0000134 0000004a 0000004a
+l07 0000135 0000004a 0000004a
+l07 0000136 0000004a 0000004a
+l07 0000137 0000004a 0000004a
+l07 0000138 0000004a 0000004a
+l07 0000139 0000004a 0000004a
+l07 0000140 0000004a 0000004a
+l07 0000141 0000004a 0000004a
+l07 0000142 0000004a 0000004a
+l08 0000203 0000004a 0000004a
+l08 0000204 0000004a 0000004a
+l08 0000205 0000004a 0000004a
+l08 0000206 0000004a 0000004a
+l08 0000207 0000004a 0000004a
+l08 0000208 0000004a 0000004a
+l08 0000209 0000004a 0000004a
+l08 0000210 0000004a 0000004a
+l08 0000211 0000004a 0000004a
+l08 0000220 0000004a 0000004a
+l08 0000221 0000004a 0000004a
+l08 0000222 0000004a 0000004a
+l08 0000223 0000004a 0000004a
+l08 0000224 0000004a 0000004a
+l08 0000225 0000004a 0000004a
+l08 0000226 0000004a 0000004a
+l08 0000227 0000004a 0000004a
+l08 0000228 0000004a 0000004a
+l08 0000229 0000004a 0000004a
+l08 0000230 0000004a 0000004a
+l08 0000231 0000004a 0000004a
+l08 0000232 0000004a 0000004a
+l08 0000233 0000004a 0000004a
+l08 0000234 0000004a 0000004a
+l08 0000235 0000004a 0000004a
+l09 0000100 0000004a 0000005b
+l09 0000133 0000005b 00000061
+l09 0000134 00000061 00000067
+l09 0000135 00000067 0000006d
+l09 0000136 0000006d 00000073
+l09 0000137 00000073 00000079
+l32 0000012 0000009b 000000a0
+l32 0000013 000000a0 000000a6
+l32 0000014 000000a6 000000ac
+l32 0000015 000000ac 000000c4
+l32 0000016 000000c4 000000dc
+l32 0000018 000000dc 000000ec
+l32 0000020 000000f2 00000154
+l32 0000021 0000015a 0000016e
+l32 0000023 00000174 00000176
+l32 0000025 0000018c 000001f0
+l32 0000026 000001f6 0000020a
+l32 0000028 00000210 00000212
+l32 0000030 00000228 00000258
+l32 0000031 0000025e 00000272
+l32 0000034 00000272 0000028e
+l32 0000035 00000294 0000029c
+l31 0000218 0000029c 0000029e
+l31 0000219 0000029e 000002a0
+l31 0000221 000002a0 000002b4
+l31 0000223 000002ca 000002fc
+l31 0000224 00000302 00000318
+l31 0000221 00000318 0000032c
+l31 0000227 00000332 0000034e
+l31 0000228 00000354 0000035c
+l31 0000233 0000035c 0000037c
+l31 0000235 00000382 0000039c
+l31 0000237 000003a2 000003a4
+l31 0000239 000003ca 000003e4
+l31 0000241 000003ea 000003ec
+l31 0000243 000003ec 00000406
+l31 0000245 00000406 0000040e
+l31 0000047 0000040e 00000448
+l31 0000048 00000448 00000450
+l31 0002345 00000450 00000464
+l31 0002347 0000046a 0000048a
+l31 0002348 00000490 000004aa
+l31 0002349 000004b0 000004b2
+l31 0002350 000004d8 000004f2
+l31 0002351 000004f8 000004fa
+l31 0002352 000004fa 00000514
+l31 0002354 0000051a 0000051c
+l31 0002357 00000538 0000055a
+l31 0002358 00000560 0000057a
+l31 0002359 00000580 00000582
+l31 0002360 000005aa 000005c4
+l31 0002361 000005ca 000005cc
+l31 0002362 000005f4 0000060e
+l31 0002363 00000614 00000616
+l31 0002364 0000063e 00000658
+l31 0002365 0000065e 00000660
+l31 0002366 00000688 000006a2
+l31 0002367 000006a8 000006aa
+l31 0002368 000006d2 000006ec
+l31 0002369 000006f2 000006f4
+l31 0002370 0000071c 00000736
+l31 0002371 0000073c 0000073e
+l31 0002372 00000766 00000780
+l31 0002373 00000786 00000788
+l31 0002374 000007b0 000007ca
+l31 0002375 000007d0 000007d2
+l31 0002376 000007fb 00000815
+l31 0002377 0000081b 0000081d
+l31 0002378 0000081d 00000837
+l31 0002386 00000837 00000854
+l31 0002387 0000085a 00000874
+l31 0002388 0000087a 0000087c
+l31 0002389 0000087c 00000896
+l31 0002390 00000896 0000089e

@@ -21,6 +21,11 @@ void DoDiscorporation(object oPC) {
 		return;
 	}
 
+	if (GetHasSpellEffect(1657)) { 
+		SendMessageToPC(oPC, "You may not discorporate while Fiend Form is active.");
+		return;
+	}
+
     //Declare major variables
     object oCaster = oPC;
     int nCasterLvl = GetWarlockCasterLevel(oCaster);

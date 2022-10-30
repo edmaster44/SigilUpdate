@@ -56,7 +56,7 @@ void main(string sTag, int nMarkUp, int nMarkDown, int storeType)
 	//SendMessageToPC(oPC, "Markup value = " + IntToString(nMarkUp) + ". Markdown value = " + IntToString(nMarkDown) + ".");
 	
 	object oStore = GetStoreFromStoreArea(sTag);
-	AddAllItemsInStoreToDatabase(oStore);
+	//AddAllItemsInStoreToDatabase(oStore, oPC);
 	
 	DS_OpenShop(oStore, oPC, nMarkUp, nMarkDown);
 }

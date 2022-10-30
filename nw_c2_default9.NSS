@@ -165,5 +165,5 @@ void OldLoot() {
 		if (Random(2000) < 400) GenerateTreasure(nLOOT, oSPAWN, oSPAWN);
 		
 		if (fCHALLENGE > 25.0) nLOOT = 4; //TREASURE_TYPE_EPIC (only used for gems right now)
-		if (Random(1000) < 10) CreateRandomGemstoneOnSpawnOrChest(oSPAWN, nLOOT);*/
+		if (Random(1000) < 10) CreateGemOnTarget(oSPAWN, nLOOT);*/
 }
