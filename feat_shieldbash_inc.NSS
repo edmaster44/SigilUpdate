@@ -43,7 +43,7 @@ nTotal = nSize + ((nStrength)/2);
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nDam =+ d6(3);
+nDam = nDam + d6(3);
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -113,7 +113,7 @@ nTotal = nSize + ((nStrength)/2);
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nDam =+ d6(3);
+nDam =+ nDam + d6(3);
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
@@ -182,7 +182,7 @@ nTotal = nSize + ((nDex)/2);
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
-nDam =+ d6(3);
+nDam =+ nDam + d6(3);
 nSaveDC = nSaveDC +4;
 }
 effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
