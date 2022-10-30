@@ -27,6 +27,11 @@ void main() {
 		SendMessageToPC(OBJECT_SELF, "You may not discorporate while Word of Changing is active.");
 		return;
 	}
+
+	if (GetHasSpellEffect(1657)) { 
+		SendMessageToPC(OBJECT_SELF, "You may not discorporate while Fiend Form is active.");
+		return;
+	}
 	
 	//Remove Eldritch Shield effects if discorporating
 	//This never worked super well, so removing as of 5/26/21
