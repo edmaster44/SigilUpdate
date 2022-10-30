@@ -3,6 +3,6 @@ void main () {
 
 	object oPC = GetLastUsedBy();
 	
-	GenerateTreasureItemOnTarget(oPC, 1);
+	GenerateTreasureItemOnTarget(oPC, d3());
 
 }
