@@ -39,14 +39,14 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d6(6)+ nStrength;
 nSize = 1;}
-nTotal = nSize + (nStrength)/2;
+nTotal = nSize + ((nStrength)/2);
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
 nDam =+ d6(3);
 nSaveDC = nSaveDC +4;
 }
-effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
 float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
@@ -66,7 +66,6 @@ DoWildMagic(oPC, oTarget, GetSpellId());
 
 if (iHit == 2)
 {
-nTotal = FloatToInt(nTotal * 1.5);
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
 if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
@@ -110,14 +109,14 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d6(6)+ nStrength;
 nSize = 1;}
-nTotal = nSize + (nStrength)/2;
+nTotal = nSize + ((nStrength)/2);
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
 nDam =+ d6(3);
 nSaveDC = nSaveDC +4;
 }
-effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Throw",1, "*shieldbash", 1, nSpell);
 float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
@@ -179,14 +178,14 @@ nSize = 4;}
 else if (shield = BASE_ITEM_SMALLSHIELD)
 {nDam = d6(6)+ nDex;
 nSize = 1;}
-nTotal = nSize + (nDex)/2;
+nTotal = nSize + ((nDex)/2);
 nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
 if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
 {
 nDam =+ d6(3);
 nSaveDC = nSaveDC +4;
 }
-effect eHurt = EffectDamage(nTotal,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
+effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Agile Strike",1, "*shieldbash", 0, nSpell);
 float fDur = RoundsToSeconds(nSaveDC);
 if(iHit >0)
