@@ -202,7 +202,7 @@ void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sS
 				if (nCount >= firstItem && nCount < lastItem) {
 					//We add the item to the "store_items" listbox
 					string	sStackSize	= IntToString(GetItemStackSize(oItem));
-					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
+					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")" + " - "+FloatToString((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
 					string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
 					int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
 											GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
