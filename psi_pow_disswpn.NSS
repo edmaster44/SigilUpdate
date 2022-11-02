@@ -81,9 +81,9 @@ void main()
 		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_5d6;
 		int DamageType = IP_CONST_DAMAGETYPE_ACID;
 		itemproperty ipAcid = ItemPropertyDamageBonus(DamageType,nDamage);  
-        {
+        
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-        AddItemProperty(DURATION_TYPE_TEMPORARY, ipAcid, oTarget, fDuration);}
+        AddItemProperty(DURATION_TYPE_TEMPORARY, ipAcid, oTarget, fDuration);
         
     }
 }
