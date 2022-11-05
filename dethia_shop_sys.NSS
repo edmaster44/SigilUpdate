@@ -311,6 +311,9 @@ void AddPropertyToDB(itemproperty iProp);
 //Checks whether we need to recalculate the price for an item
 int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID);
 
+//Check if item is in pricing db, and add if not
+void AddItemToDB(object oItem);
+
 //Set up all the variables for this item
 void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID);
 
@@ -457,6 +460,8 @@ string DS_ConvertCoinsToGold(int iCoins)
 void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown)
 {//We first empty the shop of currently available items
 	ClearListBox(oPC, "dethia_shop", "store_items");
+	
+	int nShouldUpdateDB = (GetLocalInt(oStore, "STORE_SHOULD_NOT_UPDATE_DB") == FALSE);
 
 	int		iRowID	= 0;	//The listbox row item ID
 	object	oItem	= GetFirstItemInInventory(oStore);	//Get the first item in the store
@@ -474,6 +479,9 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 			SetItemStackSize(oItem, 99, FALSE);
 			sStackSize	= IntToString(GetItemStackSize(oItem));
 		}
+		
+		if (nShouldUpdateDB)
+			AddItemToDB(oItem);
 		
 		float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
@@ -527,6 +535,8 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		iRowID++;	//Increment the item ID
 		oItem	= GetNextItemInInventory(oStore);	//Get the next item in the store
 	}
+	
+	SetLocalInt(oStore, "STORE_SHOULD_NOT_UPDATE_DB", 1);
 }
 
 int DS_WillNotBuy(object oItem, string sNoBuyList)
@@ -1194,6 +1204,18 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 	
 }
 
+//Add an item to the pricing db if it isn't there already
+void AddItemToDB(object oItem) {
+	string sName = SQLEncodeSpecialChars(GetName(oItem));
+	string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
+	int nPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
+		
+	if (!GetItemInDB(oItem)) {
+		string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"'";
+		SQLExecDirect(sQuery);
+	}
+}
+
 //Set up all the variables for this item
 void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID) {	
 
@@ -1228,16 +1250,7 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 		
 		//For making sure that items make their way into the pricing DB
 		if (nDBCost == 0 && addToDB) {
-			string sName = SQLEncodeSpecialChars(GetName(oItem));
-			string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
-			int nPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
-		
-			if (!GetItemInDB(oItem)) {
-				string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"'";
-				SendMessageToPC(oPC, sQuery);
-			
-				SQLExecDirect(sQuery);
-			}
+			AddItemToDB(oItem);
 		}
 		
 		//Moving on to real calculations

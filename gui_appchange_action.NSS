@@ -121,16 +121,16 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 	"sScaleZ = "+sScaleZ);	
 	*/
 	float fScaleX = StringToFloat(sScaleX);
-	if (fScaleX < 0.93f) fScaleX = 0.93f;
-	if (fScaleX > 1.06f) fScaleX = 1.06f;
+	//if (fScaleX < 0.93f) fScaleX = 0.93f;
+	//if (fScaleX > 1.06f) fScaleX = 1.06f;
 	
 	float fScaleY = StringToFloat(sScaleY);
-	if (fScaleY < 0.93f) fScaleY = 0.93f;
-	if (fScaleY > 1.06f) fScaleY = 1.06f;
+	//if (fScaleY < 0.93f) fScaleY = 0.93f;
+	//if (fScaleY > 1.06f) fScaleY = 1.06f;
 	
 	float fScaleZ = StringToFloat(sScaleZ);
-	if (fScaleZ < 0.93f) fScaleZ = 0.93f;
-	if (fScaleZ > 1.06f) fScaleZ = 1.06f;
+	//if (fScaleZ < 0.93f) fScaleZ = 0.93f;
+	//if (fScaleZ > 1.06f) fScaleZ = 1.06f;
 	
 	/* Not working, they are stacking over and over again
 	effect eScale = EffectSetScale(fScaleX, fScaleY, fScaleZ);
