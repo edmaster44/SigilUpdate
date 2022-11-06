@@ -5,7 +5,7 @@
 #include "ps_inc_advscript"
 #include "aaa_constants"
 #include "nw_i0_spells"
-#include "aaa_changeself_inc"
+#include "aaa_halfundead_inc"
 #include "x0_i0_match"
 
 void RunHalfUndeadScript(object oPC, int nSpellID)
@@ -21,5 +21,26 @@ switch(GetSpellId()){
 	case 1516:RunHalfUndeadScript(oPC,64); break; //Ghul's Bite(Based on Ghoul's Touch)
 	case 1518:RunHalfUndeadScript(oPC,459); break; //Fetch's Telekenis(Based on bigby interposing hand)
 	}
-} 
+	
+		if (!X2PreSpellCastCode())
+    {	return;	}
 
+	object oTarget	= GetSpellTargetObject();
+	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
+	int nSpell 		= GetSpellId();
+
+	
+	switch (nSpell)
+	{
+////////////////////////////////////////////////////////////////////////////////////
+		case 1519 :		//Half-Undead Undead Immunity Power
+		{	HalfUndeadPower(oPC, nSpell);	}		
+		break; 
+		
+		case 1514: //Gheden Bonus Feat
+		{ GhedeanDeadNerves(oPC, oItem, nSpell); }
+		break;
+		
+	
+	}
+} 

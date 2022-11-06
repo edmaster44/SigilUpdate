@@ -29,12 +29,20 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 	}
 }
 
-void GhedenBoniFeat(object oPC, object oItem, int nSpell)
+void GhedeanDeadNerves(object oPC, object oItem, int nSpell)
 {
-	if (!GetHasFeat(FEAT_STEADFAST_DETERMINATION, oPC, TRUE))
-	{	FeatAdd(oPC, FEAT_STEADFAST_DETERMINATION, FALSE, TRUE, FALSE);	}
-	}
+if (!GetHasSpellEffect(nSpell, oPC))
+{
+int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+		int nAmount		= 5;
+		if (nLevel >= 5 ) 
+		{	nAmount 	= 10;	}
 
+effect eDR = EffectDamageReduction(5, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
+ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+}
+
+}
 
 void HalfUndeadPower(object oPC, int nSpell)
 {		float fDur = 150.00;
@@ -64,31 +72,3 @@ void HalfUndeadPower(object oPC, int nSpell)
 		eLink = SupernaturalEffect(eLink);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
 }
-
-void main()
-{
-	if (!X2PreSpellCastCode())
-    {	return;	}
-
-    object oPC 		= OBJECT_SELF;
-	object oTarget	= GetSpellTargetObject();
-	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nSpell 		= GetSpellId();
-
-	
-	switch (nSpell)
-	{
-////////////////////////////////////////////////////////////////////////////////////
-		case 1519 :		//Half-Undead Undead Immunity Power
-		{	HalfUndeadPower(oPC, nSpell);	}		
-		break; 
-		
-		case 1514: //Gheden Bonus Feat
-		{ GhedenBoniFeat(oPC, oItem, nSpell); }
-		break;
-		
-		case 1516: //Half Undead Immunity and Vulnerability
-		{ GhedenBoniFeat(oPC, oItem, nSpell); }
-		break;
-	}
-	}

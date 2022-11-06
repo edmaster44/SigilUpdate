@@ -67,10 +67,12 @@ void main()
         effect eLink    = EffectLinkEffects(EffectAttackIncrease(nBonus),
                                             EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE)
                                             );
-        float fDuration = 60.0f * manif.nManifesterLevel;
-        if(manif.bExtend) fDuration *= 2;
+        float fDur = 60.0f * manif.nManifesterLevel;
+        if(manif.bExtend) fDur *= 2;
 		
-
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	if (!GetHasSpellEffect(GetSpellId(), oTarget))
+		{
+        	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+		}
     }
 }

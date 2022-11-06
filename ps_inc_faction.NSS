@@ -883,6 +883,7 @@ void RemoveFaction(object oPC, object oDM = OBJECT_INVALID) {
 	
 	object oBadge; 
 	if (HasFactionBadge(oPC)) {
+		oBadge = GetFactionBadgeObject(oPC);
 		if (GetIsObjectValid(oDM))
 			RemoveFactionBadge(oBadge, oDM, oPC);
 		else

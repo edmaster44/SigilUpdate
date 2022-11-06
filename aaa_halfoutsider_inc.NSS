@@ -455,6 +455,9 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		{	
 			FiendformBoni(oPC,"fx_f_beetle_eyes");	
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC);
+			if (nGender == GENDER_FEMALE){
+				Appearance.WingVariation = 2;
+			}
 			Assumenewform(oPC, Appearance);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 			PS_HumForm_DragonUE(oPC);
@@ -494,7 +497,10 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		else if(GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
 		{	
 			FiendformBoni(oPC,"fx_f_beetle_eyes");	 //Lesser Yugoloth
-			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC)	;
+			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC);
+			if (nGender == GENDER_FEMALE){
+				Appearance.WingVariation = 2;
+			}
 			Assumenewform(oPC, Appearance);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 			PS_HumForm_DragonUE(oPC); 
