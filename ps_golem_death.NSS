@@ -24,7 +24,7 @@ void main()
 			if (GetIsOwnedByPlayer(oKiller) == FALSE)
 			{
 				
-				if (GetHasFeat(2806) == FALSE) //Golem Master with Abiding Masterwork does not lose their golem control device.
+				if (GetHasFeat(2806, oPC) == FALSE) //Golem Master with Abiding Masterwork does not lose their golem control device.
 				{
 					
 					if (GetSubRace(oKiller) != 25)
