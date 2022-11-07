@@ -1932,8 +1932,7 @@ if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 }
 
 string PS_GetEssenceECL(object oPC)
-{	object oEssence        = GetItemPossessedBy(oPC, "ps_essence");
-	string sECL = GetLocalString(oEssence,"ECL");
+{	string sECL = GetLocalString(oPC,"ECL");
 	//if (sECL == "")
 	//{
  		//if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC) == TRUE)

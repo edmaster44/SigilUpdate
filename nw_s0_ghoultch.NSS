@@ -45,7 +45,13 @@ void main()
 
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGGHOUL);
-	int nSaveDC = GetSpellSaveDC();
+	int nSaveDC;
+	int nCha = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	if (GetHasFeat(3054,OBJECT_SELF))
+	{
+	nSaveDC = 5 + PS_GetLevel(OBJECT_SELF) + (nCha/2);
+	}
+	else nSaveDC = GetSpellSaveDC();
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eDur2 = EffectVisualEffect(VFX_DUR_PARALYZED);
