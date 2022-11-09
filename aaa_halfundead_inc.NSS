@@ -13,9 +13,13 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{	int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
 		int nAmount		= 5;
+		int nVulD 		= 15;
+		if (nLevel >= 5 ) 
+		{	nVulD 	= 25;	}
+		
 		if (nLevel >= 5 ) 
 		{	nAmount 	= 10;	}
-		effect eVul1   =  EffectDamageImmunityDecrease(DAMAGE_TYPE_DIVINE,nAmount);
+		effect eVul1   =  EffectDamageImmunityDecrease(DAMAGE_TYPE_DIVINE,nVulD);
 		effect eNeg		=EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,nAmount);
 		effect eDR		= EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
 			eDR			= ExtraordinaryEffect(eDR);
@@ -37,9 +41,16 @@ int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
 		int nAmount		= 5;
 		if (nLevel >= 5 ) 
 		{	nAmount 	= 10;	}
+	int nSkill = 8;
+		
+effect eNegHand =EffectSkillDecrease(SKILL_SLEIGHT_OF_HAND,nSkill);
+effect eNegLock =EffectSkillDecrease(SKILL_OPEN_LOCK,nSkill);
+effect eDR = EffectDamageReduction(nAmount, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
+effect eLink = EffectLinkEffects(eNegHand,eNegLock);
+eLink = EffectLinkEffects(eDR,eLink);
+eLink = SupernaturalEffect(eLink);
 
-effect eDR = EffectDamageReduction(5, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
-ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 }
@@ -69,6 +80,8 @@ void HalfUndeadPower(object oPC, int nSpell)
 		eLink = EffectLinkEffects(eAbility, eLink);
 		eLink = EffectLinkEffects(eDisease, eLink);
 		
+		
+		eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_wraith_aura.sef"));
 		eLink = SupernaturalEffect(eLink);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
 }
