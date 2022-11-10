@@ -1209,9 +1209,10 @@ void AddItemToDB(object oItem) {
 	string sName = SQLEncodeSpecialChars(GetName(oItem));
 	string sTag = SQLEncodeSpecialChars(GetResRef(oItem));
 	int nPrice = FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
+	int nPoints = GetItemTotalPoints(oItem);
 		
 	if (!GetItemInDB(oItem)) {
-		string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"'";
+		string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"', item_points='"+IntToString(nPoints)+"'";
 		SQLExecDirect(sQuery);
 	}
 }
