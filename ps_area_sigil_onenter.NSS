@@ -279,13 +279,7 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_bazaararcanaloth", lSpawnpoint);    
   }
-  //Janella
-  if(GetObjectByTag("ps_npc_noobstore") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_noobstore");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_noobstore", lSpawnpoint);    
-  }
+  
   //Peddler
   if(GetObjectByTag("ps_npc_bazaarpeddler") == OBJECT_INVALID)
   {
@@ -305,13 +299,6 @@ void main()
    object oWP = GetWaypointByTag("wp_ps_npc_tier2gear");
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_tier2gear", lSpawnpoint);    
-  }
-      //Bormaek (Tier 2 Merchant)
-   if(GetObjectByTag("ps_npc_tier1gear") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("wp_ps_npc_tier1gear");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_tier1gear", lSpawnpoint);    
   }
   
   string sID = PS_GetCharID(oPC);
