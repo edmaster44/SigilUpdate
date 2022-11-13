@@ -22,12 +22,14 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 		effect eVul1   =  EffectDamageImmunityDecrease(DAMAGE_TYPE_DIVINE,nVulD);
 		effect eNeg		=EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,nAmount);
 		effect eDR		= EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
+		
 			eDR			= ExtraordinaryEffect(eDR);
 			eNeg		= ExtraordinaryEffect(eNeg);
 			eVul1		= ExtraordinaryEffect(eVul1);
 			eVul1		= SetEffectSpellId(eVul1, nSpell);
 			eDR			= SetEffectSpellId(eDR, nSpell);
 		effect	eLink    =EffectLinkEffects(eDR,eVul1);
+		
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 	}
@@ -53,6 +55,45 @@ eLink = SupernaturalEffect(eLink);
 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
+}
+
+void HalfUndeadSkills(object oPC, int nSpell)
+{
+if (!X2PreSpellCastCode())
+    {	return;	}
+	int nFeat;
+	if (GetHasSpellEffect(nSpell,oPC))	
+	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
+	 nFeat = GetHasFeat(nFeat,oPC);
+	
+	int iSkill1 = SKILL_HIDE;
+	int iSkill2 = SKILL_MOVE_SILENTLY;
+	int iSkill3;
+	int iSkill4;
+	
+	switch (nFeat)
+	{	case 0://Debug
+		SendMessageToPC(oPC, "Something is wrong.");	
+		break;
+		case 3049://Half Vampire
+		iSkill3 = SKILL_BLUFF;
+		iSkill4 = SKILL_LISTEN;
+		break;
+		
+	}
+	effect eSk1		=	EffectSkillIncrease(iSkill1, 4);
+	effect eSk2 	=	EffectSkillIncrease(iSkill2, 4);
+	effect eSk3 	=	EffectSkillIncrease(iSkill3, 4);
+	effect eSk4 	=	EffectSkillIncrease(iSkill4, 4);
+	effect eLink1	=	EffectLinkEffects(eSk1,eSk2);
+	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
+	effect eSkill	=	EffectLinkEffects(eLink1,eLink2);
+	eSkill	=	ExtraordinaryEffect(eSkill);
+				if (!GetHasSpellEffect(nSpell, oPC))
+	{			
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkill, oPC);			
+	}
+		
 }
 
 void HalfUndeadPower(object oPC, int nSpell)
