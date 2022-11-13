@@ -199,8 +199,11 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 	EnchantItem(oItem, e);
 	
 	if (GetTag(oStore) == "ps_store_armory") {
-		enchantment e = LoadEnchantment(nEnchant);
-		EnchantItem(oItem, e);
+		itemproperty iDoom = ItemPropertySpecialMaterial(SPECIAL_MAT_DOOMFORGED);
+	
+		if (GetIsItemPropertyValid(iDoom)) {
+			IPSafeAddItemProperty(oItem, iDoom);
+		}
 	}
 	
 	string sMat = GetLocalString(oItem, "material_name");
