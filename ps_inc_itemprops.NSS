@@ -40,6 +40,7 @@ const int SPECIAL_MAT_IRON = 38;
 const int SPECIAL_MAT_LEATHER = 39;
 const int SPECIAL_MAT_WOOD = 40;
 const int SPECIAL_MAT_COLD_IRON = 41;
+const int SPECIAL_MAT_DOOMFORGED = 42;
 
 //Cycles through objects in the DM area until it finds the correct one
 object GetObjectFromDMArea(string sTag)
@@ -103,6 +104,7 @@ itemproperty ItemPropertySpecialMaterial(int nMat) {
 		case SPECIAL_MAT_LEATHER: sItem = "ps_crft_utility_leather"; break;
 		case SPECIAL_MAT_WOOD: sItem = "ps_crft_utility_wood"; break;
 		case SPECIAL_MAT_COLD_IRON: sItem = "ps_crft_utility_coldiron"; break;
+		case SPECIAL_MAT_DOOMFORGED: sItem = "ps_crft_utility_doomforged"; break;
 	}
 	
 	object oSpoon = CreateItemOnObject(sItem, oChest);

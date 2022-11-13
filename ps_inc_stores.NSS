@@ -198,6 +198,11 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 	}
 	EnchantItem(oItem, e);
 	
+	if (GetTag(oStore) == "ps_store_armory") {
+		enchantment e = LoadEnchantment(nEnchant);
+		EnchantItem(oItem, e);
+	}
+	
 	string sMat = GetLocalString(oItem, "material_name");
 	if (sMat == "Leather" || sMat == "Iron" || sMat == "Wood")
 		sMat = "";
