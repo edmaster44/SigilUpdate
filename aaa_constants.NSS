@@ -87,10 +87,10 @@ const int RACIAL_TYPE_OUTSIDER_NATIVE			= 33;
 
 
 //Half Undead Feats
-const int FEAT_HALFVAMPIRE 						= 2538;
-const int FEAT_FETCH 	   						= 2537;
-const int FEAT_GHUL		   						= 2539;
-const int FEAT_GHAEDEN	   						= 2540;
+const int FEAT_HALFVAMPIRE 						= 3049;
+const int FEAT_FETCH 	   						= 3051;
+const int FEAT_GHUL		   						= 3050;
+const int FEAT_GHAEDEN	   						= 3052;
 
 
 // List of PC-compliant wing types
