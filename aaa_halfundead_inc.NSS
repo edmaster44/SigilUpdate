@@ -26,10 +26,8 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 			eDR			= ExtraordinaryEffect(eDR);
 			eNeg		= ExtraordinaryEffect(eNeg);
 			eVul1		= ExtraordinaryEffect(eVul1);
-			eVul1		= SetEffectSpellId(eVul1, nSpell);
-			eDR			= SetEffectSpellId(eDR, nSpell);
 		effect	eLink    =EffectLinkEffects(eDR,eVul1);
-		
+				eLink    =EffectLinkEffects(eLink,eNeg);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 	}
@@ -66,6 +64,7 @@ if (!X2PreSpellCastCode())
 	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
 	 nFeat = GetHasFeat(nFeat,oPC);
 	
+	 int nAmount;
 	int iSkill1 = SKILL_HIDE;
 	int iSkill2 = SKILL_MOVE_SILENTLY;
 	int iSkill3;
@@ -73,18 +72,28 @@ if (!X2PreSpellCastCode())
 	
 	switch (nFeat)
 	{	case 0://Debug
-		SendMessageToPC(oPC, "Something is wrong.");	
+		//SendMessageToPC(oPC, "Something is wrong.");	
 		break;
 		case 3049://Half Vampire
+		nAmount = 4;
 		iSkill3 = SKILL_BLUFF;
 		iSkill4 = SKILL_LISTEN;
 		break;
-		
+		case 3051://fetch
+		nAmount = 2;
+		iSkill3 = SKILL_HIDE;
+		iSkill4 = SKILL_MOVE_SILENTLY;
+		break;
+		case 3050://Ghul
+		nAmount = 2;
+		iSkill3 = SKILL_HIDE;
+		iSkill4 = SKILL_MOVE_SILENTLY;
+		break;
 	}
-	effect eSk1		=	EffectSkillIncrease(iSkill1, 4);
-	effect eSk2 	=	EffectSkillIncrease(iSkill2, 4);
-	effect eSk3 	=	EffectSkillIncrease(iSkill3, 4);
-	effect eSk4 	=	EffectSkillIncrease(iSkill4, 4);
+	effect eSk1		=	EffectSkillIncrease(iSkill1, nAmount);
+	effect eSk2 	=	EffectSkillIncrease(iSkill2, nAmount);
+	effect eSk3 	=	EffectSkillIncrease(iSkill3, nAmount);
+	effect eSk4 	=	EffectSkillIncrease(iSkill4, nAmount);
 	effect eLink1	=	EffectLinkEffects(eSk1,eSk2);
 	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
 	effect eSkill	=	EffectLinkEffects(eLink1,eLink2);
@@ -122,7 +131,7 @@ void HalfUndeadPower(object oPC, int nSpell)
 		eLink = EffectLinkEffects(eDisease, eLink);
 		
 		
-		eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_wraith_aura.sef"));
+		eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_wraith_aura.sef",oPC));
 		eLink = SupernaturalEffect(eLink);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
 }

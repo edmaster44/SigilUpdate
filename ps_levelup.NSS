@@ -12,7 +12,6 @@ Removed Alignment change for Thug for exploit reason */
 #include "ps_adjust_barbarian"
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
-#include "ps_adjust_halfundead"
 #include "ps_inc_bgspellfix"
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
@@ -325,7 +324,6 @@ void main()
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
 	AddEPForDeathDice(oPC);
-	PS_HalfUndeadFeats(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
