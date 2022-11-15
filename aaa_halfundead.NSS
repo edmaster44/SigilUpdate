@@ -17,7 +17,7 @@ void RunHalfUndeadScript(object oPC, int nSpellID)
 void main(){
 	object oPC = OBJECT_SELF;
 switch(GetSpellId()){
-	case 1517:RunHalfUndeadScript(oPC,1308); break; //Vampire Slam(based on Vampire class slam)
+	case 1517:RunHalfUndeadScript(oPC,188); break; //Vampiric Touch
 	case 1516:RunHalfUndeadScript(oPC,64); break; //Ghul's Bite(Based on Ghoul's Touch)
 	case 1518:RunHalfUndeadScript(oPC,459); break; //Fetch's Telekenis(Based on bigby interposing hand)
 	case 1513:RunHalfUndeadScript(oPC,845);break;//Detect Undead
