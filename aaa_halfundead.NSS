@@ -50,13 +50,13 @@ switch(GetSpellId()){
 		{ed_halfvampirestats(oPC,nSpell);}
 		break;
 		case 1526://Ghul Stats
-		{HalfUndeadSkills(oPC,nSpell);}
+		{ed_ghulstats(oPC,nSpell);}
 		break;
 		case 1527://Fetch Stats
-		{HalfUndeadSkills(oPC,nSpell);}
+		{ed_fetchstats(oPC,nSpell);}
 		break;
 		case 1528://Gheden Stats
-		{HalfUndeadSkills(oPC,nSpell);}
+		{ed_ghedenstats(oPC,nSpell);}
 		break;
 	}
 } 

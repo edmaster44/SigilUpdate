@@ -145,7 +145,7 @@ string name = SQLEncodeSpecialChars(GetName(oPC));
 	
 	
 	
-	SQLExecDirect("SELECT `str_level`,dex_level,cha_level FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	SQLExecDirect("SELECT `str_level`,`dex_level`,`cha_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
 	SQLFetch();
 	
 	return StringToInt(SQLGetData(1));
@@ -189,39 +189,57 @@ if(iRank > 0 && iLevel < 4)
 
 
 
-int Ed_checkfetchstats(object oPC)
+int ed_checkghulstats(object oPC)
 {
 string name = SQLEncodeSpecialChars(GetName(oPC));
 	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 	
 	
 	
-	SQLExecDirect("SELECT `str_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	SQLExecDirect("SELECT `dex_level`,`cha_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
 	SQLFetch();
 	
 	return StringToInt(SQLGetData(1));
 }
-int Ed_checkghulstats(object oPC)
-{
-string name = SQLEncodeSpecialChars(GetName(oPC));
-	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-	
 
-	
-	SQLExecDirect("SELECT `str_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-	SQLFetch();
-	
-	return StringToInt(SQLGetData(1));
-}
-int Ed_checkghedenstats(object oPC)
+void ed_updateghul(object oPC, int delete = 0)
 {
+
 string name = SQLEncodeSpecialChars(GetName(oPC));
-	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-	
-	
-	
-	SQLExecDirect("SELECT `str_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-	SQLFetch();
-	
-	return StringToInt(SQLGetData(1));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	else SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('"+name+"','"+act+"','114','1','0','0') ON DUPLICATE KEY UPDATE `str_level`=`str_level`+1 AND`dex_level`=`dex_level`+1 AND `cha_level`=`cha_level`+1; ");
 }
+
+
+void ed_ghulstats(object oPC, int nSpell)
+{
+/*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
+int iLevel = GetLevelByClass(114,oPC);
+int iRank = ed_checkhalfvampirestats(oPC);
+if(iRank > 0 && iLevel < 4)
+	{
+		SendMessageToPC(oPC,"Purging Half-Vamp information. Please rest again.");
+		ed_updatehalfvampirestat(oPC,1);
+		return;
+	}
+
+	if(iRank >= 1 && iLevel >= 3 && iLevel < 5) return;
+	if(iRank >= 2 && iLevel >= 5) return;	
+
+	ed_updateghul(oPC);
+
+	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+2+GetRacialBonus(oPC,ABILITY_DEXTERITY));
+	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
+	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
+	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +2.</I>");
+	ExportSingleCharacter(oPC);
+	
+}
+
+void ed_fetchstats(object oPC, int nSpell)
+{}
+
+
+void ed_ghedenstats(object oPC, int nSpell)
+{}
