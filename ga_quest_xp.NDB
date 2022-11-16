@@ -1,5 +1,5 @@
 NDB V1.0
-0000010 0000003 0001137 0000014 0000062
+0000011 0000003 0001163 0000014 0000062
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -7,9 +7,10 @@ n03 x0_i0_position
 n04 x0_i0_match
 n05 ServerExts
 n06 x0_i0_petrify
-n07 x2_inc_itemprop
-n08 ps_inc_ecl
-N09 ga_quest_xp
+n07 nwnx_sql
+n08 x2_inc_itemprop
+n09 ps_inc_ecl
+N10 ga_quest_xp
 s 03 vector
 sf f x
 sf f y
@@ -1172,6 +1173,92 @@ fp o
 f ffffffff ffffffff 002 v RemoveEffectOfType
 fp o
 fp i
+f ffffffff ffffffff 000 i SQL_ERROR
+f ffffffff ffffffff 000 i SQL_SUCCESS
+f ffffffff ffffffff 001 v SQLExecDirect
+fp s
+f ffffffff ffffffff 001 i SQLFetch
+fp s
+f ffffffff ffffffff 001 s SQLGetData
+fp i
+f ffffffff ffffffff 001 s SQLGetDataText
+fp i
+f ffffffff ffffffff 000 i SQLGetAffectedRows
+f ffffffff ffffffff 001 s SQLLocationToString
+fp e2
+f ffffffff ffffffff 001 e2 SQLStringToLocation
+fp s
+f ffffffff ffffffff 001 s SQLVectorToString
+fp t0000
+f ffffffff ffffffff 001 t0000 SQLStringToVector
+fp s
+f ffffffff ffffffff 005 v SetPersistentString
+fp o
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentInt
+fp o
+fp s
+fp i
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentFloat
+fp o
+fp s
+fp f
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentLocation
+fp o
+fp s
+fp e2
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentVector
+fp o
+fp s
+fp t0000
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentObject
+fp o
+fp s
+fp o
+fp i
+fp s
+f ffffffff ffffffff 003 s GetPersistentString
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 i GetPersistentInt
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 f GetPersistentFloat
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 e2 GetPersistentLocation
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 t0000 GetPersistentVector
+fp o
+fp s
+fp s
+f ffffffff ffffffff 004 o GetPersistentObject
+fp o
+fp s
+fp o
+fp s
+f ffffffff ffffffff 003 v DeletePersistentVariable
+fp o
+fp s
+fp s
+f ffffffff ffffffff 001 s SQLEncodeSpecialChars
+fp s
 f ffffffff ffffffff 000 s X2_IP_WORK_CONTAINER_TAG
 f ffffffff ffffffff 000 s X2_IP_ADDRPOP_2DA
 f ffffffff ffffffff 000 s X2_IP_POISONWEAPON_2DA
@@ -1439,6 +1526,9 @@ fp o
 f ffffffff ffffffff 001 i GetIsHighBabClass
 fp i
 f ffffffff ffffffff 002 i MonkLevels
+fp o
+fp i
+f ffffffff ffffffff 002 i GetRacialBonus
 fp o
 fp i
 f ffffffff ffffffff 002 i MonkUnarmedDamage
@@ -1817,37 +1907,37 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000218 0000002c 00000048
-l09 0000005 0000005a 0000007e
-l09 0000006 0000007e 00000084
-l09 0000007 00000084 0000008a
-l09 0000009 0000008a 0000009a
-l09 0000011 000000a0 000000c3
-l09 0000012 000000c3 000000d3
-l09 0000014 000000d9 0000012a
-l09 0000016 00000130 00000132
-l09 0000018 00000132 0000015a
-l09 0000020 0000015a 00000174
-l09 0000022 0000017a 0000017c
-l09 0000024 0000017c 0000018f
-l09 0000025 0000018f 000001a2
-l09 0000027 000001a2 000001c5
-l09 0000028 000001c5 000001d5
-l09 0000030 000001db 0000022c
-l09 0000032 00000232 00000234
-l09 0000034 00000234 0000025c
-l09 0000036 0000025c 00000276
-l09 0000038 00000276 00000297
-l09 0000042 000002a9 000002b1
-l02 0001935 000002b1 000002c5
-l02 0001969 000002c5 000002e1
-l02 0001970 000002e7 000002ef
-l02 0002092 000002ef 0000036b
-l02 0002093 0000036b 0000036b
-l02 0002094 00000385 00000385
-l02 0002095 0000039f 0000039f
-l02 0002096 000003b9 000003b9
-l02 0002097 000003d3 000003d3
-l02 0002098 000003ed 000003ed
-l02 0002099 0000040d 00000427
-l02 0002101 00000427 0000042f
+l02 0000221 0000002c 00000048
+l10 0000005 0000005a 0000007e
+l10 0000006 0000007e 00000084
+l10 0000007 00000084 0000008a
+l10 0000009 0000008a 0000009a
+l10 0000011 000000a0 000000c3
+l10 0000012 000000c3 000000d3
+l10 0000014 000000d9 0000012a
+l10 0000016 00000130 00000132
+l10 0000018 00000132 0000015a
+l10 0000020 0000015a 00000174
+l10 0000022 0000017a 0000017c
+l10 0000024 0000017c 0000018f
+l10 0000025 0000018f 000001a2
+l10 0000027 000001a2 000001c5
+l10 0000028 000001c5 000001d5
+l10 0000030 000001db 0000022c
+l10 0000032 00000232 00000234
+l10 0000034 00000234 0000025c
+l10 0000036 0000025c 00000276
+l10 0000038 00000276 00000297
+l10 0000042 000002a9 000002b1
+l02 0001961 000002b1 000002c5
+l02 0001995 000002c5 000002e1
+l02 0001996 000002e7 000002ef
+l02 0002118 000002ef 0000036b
+l02 0002119 0000036b 0000036b
+l02 0002120 00000385 00000385
+l02 0002121 0000039f 0000039f
+l02 0002122 000003b9 000003b9
+l02 0002123 000003d3 000003d3
+l02 0002124 000003ed 000003ed
+l02 0002125 0000040d 00000427
+l02 0002127 00000427 0000042f

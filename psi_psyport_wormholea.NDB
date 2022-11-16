@@ -1,5 +1,5 @@
 NDB V1.0
-0000043 0000010 0005187 0000019 0000103
+0000044 0000010 0005215 0000019 0000103
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -16,33 +16,34 @@ n12 x0_i0_petrify
 n13 x0_i0_assoc
 n14 x0_i0_position
 n15 ServerExts
-n16 ps_inc_ecl
-n17 NW_I0_SPELLS
-n18 x0_i0_partywide
-n19 x0_i0_transport
-n20 x0_i0_common
-n21 nw_i0_plot
-n22 x0_i0_behavior
-n23 x0_i0_modes
-n24 x0_i0_voice
-n25 x0_i0_debug
-n26 x0_i0_equip
-n27 ginc_2da
-n28 ginc_event_handlers
-n29 x0_i0_talent
-n30 x0_i0_combat
-n31 x0_i0_spawncond
-n32 x0_i0_walkway
-n33 x0_i0_anims
-n34 x0_i0_henchman
-n35 ps_adjust_knight
-n36 nwn2_inc_metmag
-n37 X0_I0_SPELLS
-n38 psi_inc_fillin
-n39 nwn2_inc_spells
-n40 psi_inc_manifest
-n41 psi_inc_psifunc
-N42 psi_psyport_wormholea
+n16 nwnx_sql
+n17 ps_inc_ecl
+n18 NW_I0_SPELLS
+n19 x0_i0_partywide
+n20 x0_i0_transport
+n21 x0_i0_common
+n22 nw_i0_plot
+n23 x0_i0_behavior
+n24 x0_i0_modes
+n25 x0_i0_voice
+n26 x0_i0_debug
+n27 x0_i0_equip
+n28 ginc_2da
+n29 ginc_event_handlers
+n30 x0_i0_talent
+n31 x0_i0_combat
+n32 x0_i0_spawncond
+n33 x0_i0_walkway
+n34 x0_i0_anims
+n35 x0_i0_henchman
+n36 ps_adjust_knight
+n37 nwn2_inc_metmag
+n38 X0_I0_SPELLS
+n39 psi_inc_fillin
+n40 nwn2_inc_spells
+n41 psi_inc_manifest
+n42 psi_inc_psifunc
+N43 psi_psyport_wormholea
 s 03 vector
 sf f x
 sf f y
@@ -261,10 +262,13 @@ f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_UNPLOT_ON_ROSTER_SPAWN
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_COMPANION_WEAPON_SWAP_ENABLED
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_COMPANION_WEAPON_SWAP_ON_USE_ITEM_ONLY
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_COMPANION_WEAPON_SWAP_AUTO_PFEF_DISABLED
+f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_ONLY_SHOW_TIME
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_SMITH_HAMMER_RENAME_ITEM
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_WORLD_MAP_AUTO_SAVE
+f ffffffff ffffffff 000 s CAMPAIGN_VAR_WM_MIN_THRESHOLD
 f ffffffff ffffffff 000 s CAMPAIGN_STRING_CUSTOM_IPSPEAKER
 f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_CRAFTING_USE_TOTAL_LEVEL
+f ffffffff ffffffff 000 s CAMPAIGN_SWITCH_REST_SYS_USE_FORCE_REST
 f ffffffff ffffffff 000 s MODULE_SWITCH_ENABLE_UMD_SCROLLS
 f ffffffff ffffffff 000 s MODULE_SWITCH_DISABLE_ITEM_CREATION_FEATS
 f ffffffff ffffffff 000 s MODULE_SWITCH_AOE_HURT_NEUTRAL_NPCS
@@ -281,11 +285,11 @@ f ffffffff ffffffff 000 s MODULE_SWITCH_DISABLE_SECRET_DOOR_FLASH
 f ffffffff ffffffff 000 s MODULE_SWITCH_ENABLE_TAGBASED_SCRIPTS
 f ffffffff ffffffff 000 s MODULE_SWITCH_ENABLE_SEPERATE_ITEM_SCRIPTS
 f ffffffff ffffffff 000 s MODULE_SWITCH_USE_XP2_RESTSYSTEM
+f ffffffff ffffffff 000 s MODULE_SWITCH_USE_NX1_SINGLE_PARTY_RESTSYSTEM
 f ffffffff ffffffff 000 s MODULE_SWITCH_DISABLE_AI_DISPEL_AOE
 f ffffffff ffffffff 000 s MODULE_SWITCH_NO_RANDOM_MONSTER_LOOT
 f ffffffff ffffffff 000 s MODULE_VAR_OVERRIDE_SPELLSCRIPT
 f ffffffff ffffffff 000 s MODULE_VAR_TAGBASED_SCRIPT_PREFIX
-f ffffffff ffffffff 000 s MODULE_VAR_WANDERING_MONSTER_2DA
 f ffffffff ffffffff 000 s MODULE_VAR_AI_NO_DISPEL_AOE_CHANCE
 f ffffffff ffffffff 000 s MODULE_VAR_AI_STOP_EXPERTISE_ABUSE
 f ffffffff ffffffff 000 s CREATURE_VAR_CUSTOM_AISCRIPT
@@ -369,8 +373,6 @@ f ffffffff ffffffff 001 v ClearCreatureOverrideAIScriptTarget
 fp o
 f ffffffff ffffffff 001 o GetCreatureOverrideAIScriptTarget
 fp o
-f ffffffff ffffffff 001 v SetWanderingMonster2DAFile
-fp s
 f ffffffff ffffffff 000 s GetModuleOverrideSpellscript
 f ffffffff ffffffff 000 v SetModuleOverrideSpellScriptFinished
 f ffffffff ffffffff 000 i GetModuleOverrideSpellScriptFinished
@@ -1679,6 +1681,92 @@ fp f
 f ffffffff ffffffff 001 v ServerExts_EnablePlayerEvent
 fp i
 f ffffffff ffffffff 000 i ServerExts_GetObjectCount
+f ffffffff ffffffff 000 i SQL_ERROR
+f ffffffff ffffffff 000 i SQL_SUCCESS
+f ffffffff ffffffff 001 v SQLExecDirect
+fp s
+f ffffffff ffffffff 001 i SQLFetch
+fp s
+f ffffffff ffffffff 001 s SQLGetData
+fp i
+f ffffffff ffffffff 001 s SQLGetDataText
+fp i
+f ffffffff ffffffff 000 i SQLGetAffectedRows
+f ffffffff ffffffff 001 s SQLLocationToString
+fp e2
+f ffffffff ffffffff 001 e2 SQLStringToLocation
+fp s
+f ffffffff ffffffff 001 s SQLVectorToString
+fp t0000
+f ffffffff ffffffff 001 t0000 SQLStringToVector
+fp s
+f ffffffff ffffffff 005 v SetPersistentString
+fp o
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentInt
+fp o
+fp s
+fp i
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentFloat
+fp o
+fp s
+fp f
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentLocation
+fp o
+fp s
+fp e2
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentVector
+fp o
+fp s
+fp t0000
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentObject
+fp o
+fp s
+fp o
+fp i
+fp s
+f ffffffff ffffffff 003 s GetPersistentString
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 i GetPersistentInt
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 f GetPersistentFloat
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 e2 GetPersistentLocation
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 t0000 GetPersistentVector
+fp o
+fp s
+fp s
+f ffffffff ffffffff 004 o GetPersistentObject
+fp o
+fp s
+fp o
+fp s
+f ffffffff ffffffff 003 v DeletePersistentVariable
+fp o
+fp s
+fp s
+f ffffffff ffffffff 001 s SQLEncodeSpecialChars
+fp s
 f ffffffff ffffffff 001 v PS_CalculateECL
 fp o
 f ffffffff ffffffff 001 i PS_CalculateRacialECL
@@ -1766,6 +1854,9 @@ fp o
 f ffffffff ffffffff 001 i GetIsHighBabClass
 fp i
 f ffffffff ffffffff 002 i MonkLevels
+fp o
+fp i
+f ffffffff ffffffff 002 i GetRacialBonus
 fp o
 fp i
 f ffffffff ffffffff 002 i MonkUnarmedDamage
@@ -7210,7 +7301,7 @@ l01 0000076 0000002c 0000002c
 l01 0000077 0000002c 0000002c
 l01 0000078 0000002c 0000002c
 l01 0000080 0000002c 0000002c
-l02 0000218 0000002c 00000048
+l02 0000221 0000002c 00000048
 l03 0000051 00000048 00000062
 l03 0000053 00000062 00000078
 l04 0000040 00000078 00000078
@@ -7256,32 +7347,32 @@ l08 0000128 00000078 00000078
 l08 0000130 00000078 00000078
 l08 0000132 00000078 00000078
 l08 0000134 00000078 00000078
-l42 0000024 0000008a 0000008f
-l42 0000025 0000008f 0000009a
-l42 0000026 0000009a 0000009c
-l42 0000027 0000009c 0000009e
-l42 0000028 0000009e 000000d2
-l42 0000029 000000d2 000000dd
-l42 0000030 000000dd 000000e2
-l42 0000031 000000e2 000000f6
-l42 0000034 000000f6 0000010b
-l42 0000037 00000111 0000013a
-l42 0000043 0000013a 00000160
-l42 0000044 00000160 0000016d
-l42 0000046 0000016d 00000191
-l42 0000048 00000197 000001dd
-l42 0000049 000001dd 000001e9
-l42 0000052 000001e9 0000021b
-l42 0000053 0000021b 00000241
-l42 0000058 0000024d 0000024f
-l17 0001055 0000024f 00000261
-l17 0001056 00000261 00000271
-l17 0001058 00000277 00000291
-l17 0001060 00000297 00000299
-l17 0001062 00000299 0000029b
-l17 0001063 0000029b 000002be
-l17 0001064 000002be 000002e1
-l17 0001065 000002e1 000002fc
-l17 0001066 000002fc 0000031a
-l17 0001067 0000031a 00000340
-l17 0001069 0000034c 00000354
+l43 0000024 0000008a 0000008f
+l43 0000025 0000008f 0000009a
+l43 0000026 0000009a 0000009c
+l43 0000027 0000009c 0000009e
+l43 0000028 0000009e 000000d2
+l43 0000029 000000d2 000000dd
+l43 0000030 000000dd 000000e2
+l43 0000031 000000e2 000000f6
+l43 0000034 000000f6 0000010b
+l43 0000037 00000111 0000013a
+l43 0000043 0000013a 00000160
+l43 0000044 00000160 0000016d
+l43 0000046 0000016d 00000191
+l43 0000048 00000197 000001dd
+l43 0000049 000001dd 000001e9
+l43 0000052 000001e9 0000021b
+l43 0000053 0000021b 00000241
+l43 0000058 0000024d 0000024f
+l18 0001055 0000024f 00000261
+l18 0001056 00000261 00000271
+l18 0001058 00000277 00000291
+l18 0001060 00000297 00000299
+l18 0001062 00000299 0000029b
+l18 0001063 0000029b 000002be
+l18 0001064 000002be 000002e1
+l18 0001065 000002e1 000002fc
+l18 0001066 000002fc 0000031a
+l18 0001067 0000031a 00000340
+l18 0001069 0000034c 00000354

@@ -4,6 +4,7 @@
 #include "x0_i0_match"
 #include "ServerExts"
 #include "x0_i0_petrify"
+#include "nwnx_sql"
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
 
@@ -94,6 +95,8 @@ int GetIsHighBabClass(int classid);
 
 int MonkLevels(object oPC, int BAB = 0);
 						
+int GetRacialBonus(object oPC, int category);
+
 int MonkUnarmedDamage(object oPC, int iMonk);
 
 int IncreasedUnarmedDamageBonus(object oPC, object oItem);
@@ -250,7 +253,7 @@ int MonkUnarmedDamage(object oPC, int iMonk)
 	else if(iMonk >= 1) return 4;	
 	else return 0;
 }
-//Increasess
+//Increases Unarmed Damage
 int IncreasedUnarmedDamageBonus(object oPC, object oItem)
 {
 	int iDmgAvg = 2;
@@ -268,7 +271,30 @@ int IncreasedUnarmedDamageBonus(object oPC, object oItem)
 	
 	return iBonus + iDmgAvg + MonkUnarmedDamage(oPC,iMonk);
 }
-//Counts Monk Levels.
+//Gets Racial bonuses and adjusts according 
+int GetRacialBonus(object oPC, int category)
+{
+	return 0;
+
+	int iResult;
+	if (category == 0)
+		iResult = StringToInt(Get2DAString("racialsubtypes", "StrAdjust", GetSubRace(oPC)));
+	else if (category == 1)
+		iResult = StringToInt(Get2DAString("racialsubtypes", "DexAdjust", GetSubRace(oPC)));
+	else if (category == 2)
+		iResult = StringToInt(Get2DAString("racialsubtypes", "ConAdjust", GetSubRace(oPC)));
+	else if (category == 3)
+		iResult = StringToInt(Get2DAString("racialsubtypes", "IntAdjust", GetSubRace(oPC)));
+	else if (category == 4)
+		iResult = StringToInt(Get2DAString("racialsubtypes", "WisAdjust", GetSubRace(oPC)));
+	else if (category == 5)
+		iResult = StringToInt(Get2DAString("racialsubtypes", "ChaAdjust", GetSubRace(oPC)));
+	else
+		return 0;
+
+	return iResult;
+}
+
 
 //Counts Spellcasting Progression from bsplvl file
 int GetClassBspLevel(object oPC, int nClass)

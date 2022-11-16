@@ -1,6 +1,5 @@
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
-#include "ps_inc_functions"
 #include "ps_inc_advscript"
 #include "aaa_constants"
 #include "nw_i0_spells"
@@ -32,6 +31,8 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 	}
 }
+
+
 
 void GhedeanDeadNerves(object oPC, object oItem, int nSpell)
 {
@@ -134,4 +135,93 @@ void HalfUndeadPower(object oPC, int nSpell)
 		eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_wraith_aura.sef",oPC));
 		eLink = SupernaturalEffect(eLink);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
+}
+
+
+int ed_checkhalfvampirestats(object oPC)
+{
+string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	
+	
+	
+	SQLExecDirect("SELECT `str_level`,dex_level,cha_level FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	SQLFetch();
+	
+	return StringToInt(SQLGetData(1));
+}
+
+void ed_updatehalfvampirestat(object oPC, int delete = 0)
+{
+
+string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	else SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('"+name+"','"+act+"','114','1','0','0') ON DUPLICATE KEY UPDATE `str_level`=`str_level`+1 AND`dex_level`=`dex_level`+1 AND `cha_level`=`cha_level`+1; ");
+}
+
+
+void ed_halfvampirestats(object oPC, int nSpell)
+{
+/*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
+int iLevel = GetLevelByClass(114,oPC);
+int iRank = ed_checkhalfvampirestats(oPC);
+if(iRank > 0 && iLevel < 4)
+	{
+		SendMessageToPC(oPC,"Purging Half-Vamp information. Please rest again.");
+		ed_updatehalfvampirestat(oPC,1);
+		return;
+	}
+
+	if(iRank >= 1 && iLevel >= 3 && iLevel < 5) return;
+	if(iRank >= 2 && iLevel >= 5) return;	
+
+	ed_updatehalfvampirestat(oPC);
+	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+1+GetRacialBonus(oPC,ABILITY_STRENGTH));
+	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+1+GetRacialBonus(oPC,ABILITY_DEXTERITY));
+	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
+	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
+	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +2.</I>");
+	ExportSingleCharacter(oPC);
+	
+}
+
+
+
+
+int Ed_checkfetchstats(object oPC)
+{
+string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	
+	
+	
+	SQLExecDirect("SELECT `str_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	SQLFetch();
+	
+	return StringToInt(SQLGetData(1));
+}
+int Ed_checkghulstats(object oPC)
+{
+string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	
+
+	
+	SQLExecDirect("SELECT `str_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	SQLFetch();
+	
+	return StringToInt(SQLGetData(1));
+}
+int Ed_checkghedenstats(object oPC)
+{
+string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	
+	
+	
+	SQLExecDirect("SELECT `str_level` FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	SQLFetch();
+	
+	return StringToInt(SQLGetData(1));
 }
