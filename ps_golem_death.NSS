@@ -17,28 +17,40 @@ void main()
 	
 	//does not destroy the device if golem is killed by another golem or player
 	object oDevice = GetLocalObject(oGolem, "ControlObject");
-	if (oDevice != OBJECT_INVALID)
+	if (oDevice == OBJECT_INVALID)
 	{
-		if (GetIsPC(oKiller) == FALSE)
-		{
-			if (GetIsOwnedByPlayer(oKiller) == FALSE)
-			{
-				
-				if (GetHasFeat(2806, oPC) == FALSE) //Golem Master with Abiding Masterwork does not lose their golem control device.
-				{
-					
-					if (GetSubRace(oKiller) != 25)
-					{
-						DestroyObject(oDevice);
-						sMSG = "As your " + sName + " is destroyed, its control device crumbles to dust";
-						//sSPEAK = "The golem drops to the ground and is utterly destroyed";
-					}
-				}
-			}
-		}
+		SendMessageToPC(oPC, sMSG);
+		ExecuteScript("nw_c2_default7", oGolem);
+		return;
+	}
+	if (GetIsPC(oKiller) == TRUE)
+	{
+		SendMessageToPC(oPC, sMSG);
+		ExecuteScript("nw_c2_default7", oGolem);
+		return;
+	}
+	if (GetIsOwnedByPlayer(oKiller) == TRUE)
+	{
+		SendMessageToPC(oPC, sMSG);
+		ExecuteScript("nw_c2_default7", oGolem);
+		return;
+	}
+	if (GetHasFeat(2806, oPC) == TRUE) //Golem Master with Abiding Masterwork does not lose their golem control device.
+	{
+		SendMessageToPC(oPC, sMSG);
+		ExecuteScript("nw_c2_default7", oGolem);
+		return;
+	}				
+	if (GetSubRace(oKiller) == 25)
+	{
+		
+		SendMessageToPC(oPC, sMSG);
+		ExecuteScript("nw_c2_default7", oGolem);
+		return;				
 	}
 	
-	//SpeakString(sSPEAK);
-	SendMessageToPC(oPC, sMSG);
-	ExecuteScript("nw_c2_default7", oGolem);
+	DestroyObject(oDevice);
+	sMSG = "As your " + sName + " is destroyed, its control device crumbles to dust";
+	//sSPEAK = "The golem drops to the ground and is utterly destroyed";
+	return;
 }
