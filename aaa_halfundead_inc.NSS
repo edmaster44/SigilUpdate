@@ -227,7 +227,7 @@ void ed_ghulstats(object oPC, int nSpell)
 {
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
-int iRank = ed_checkhalfvampirestats(oPC);
+int iRank = ed_checkghulstats(oPC);
 if(iRank > 0 && iLevel < 4)
 	{
 		SendMessageToPC(oPC,"Purging Ghul information. Please rest again.");
