@@ -57,23 +57,23 @@ void main()
 
     if(manif.bCanManifest)
     {
-	int nLevel = GetManifesterLevel(OBJECT_SELF);
+	int nLevel = GetManifesterLevel(oManifester);
 	
 	
-        int nAC;
-		if (nLevel < 3)
-		nAC = 1;
-		else if (nLevel > 5)
-		nAC = 2;
-		else if (nLevel > 8)
-		nAC = 3;
-		else if (nLevel > 11)
-		nAC = 4; 
-		else if (nLevel > 14)
-		nAC = 5;
+        int nBonus; 
+		if (nLevel > 0)
+		nBonus = 1;
+		 if (nLevel > 3)
+		nBonus = 2;
+		 if (nLevel > 6)
+		nBonus = 3;
+		 if (nLevel > 7)
+		nBonus = 4; 
+		 if (nLevel > 10)
+		nBonus = 5;
 		if (manif.bAugment)
-			nAC += 1;
-        effect eLink    =                          EffectACIncrease(nAC, AC_SHIELD_ENCHANTMENT_BONUS);
+			nBonus += 1;
+        effect eLink    =                          EffectACIncrease(nBonus, AC_SHIELD_ENCHANTMENT_BONUS);
                eLink    = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_forcescreen.sef"));
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
