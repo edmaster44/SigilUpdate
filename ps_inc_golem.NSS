@@ -71,6 +71,12 @@ void AdjustGolem(object oPC, object oGolem, object oItem = OBJECT_INVALID)
 	ApplyCraftsmanship(oPC, oGolem);
 	ApplyAbidingMasterwork(oPC, oGolem);
 	ApplyMastercraft(oPC, oGolem);
+	// Add variable to prevent golem destruction with Abiding Masterwork
+	if (GetHasFeat(2806, oPC, TRUE) == TRUE)
+	{
+		SetLocalInt(oItem, "AbidingMasterwork", 1);
+	}
+	
 	
 	DelayCommand(0.0f, StoreHenchInfo(oItem, oGolem));
 }

@@ -35,7 +35,7 @@ void main()
 		ExecuteScript("nw_c2_default7", oGolem);
 		return;
 	}
-	if (GetHasFeat(2806, oPC) == TRUE) //Golem Master with Abiding Masterwork does not lose their golem control device.
+	if (GetLocalInt(oDevice, "AbidingMasterwork") == 1) //Golem Master with Abiding Masterwork does not lose their golem control device.
 	{
 		SendMessageToPC(oPC, sMSG);
 		ExecuteScript("nw_c2_default7", oGolem);
