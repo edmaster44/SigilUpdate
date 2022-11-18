@@ -14,6 +14,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -36,6 +37,13 @@ void main()
 
 
     //Declare major variables
+	int nSaveDC;
+	int nCha = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
+	if (GetHasFeat(3051,OBJECT_SELF))
+	{
+	nSaveDC = 10 + (PS_GetLevel(OBJECT_SELF)/2) + (nCha);
+	}
+	else nSaveDC = GetSpellSaveDC();
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     float fDuration = RoundsToSeconds(nCasterLevel);
@@ -65,7 +73,7 @@ void main()
             if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
                 //Make a will save
-                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR, OBJECT_SELF, fDelay))
+                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_FEAR, OBJECT_SELF, fDelay))
                 {
                     //Apply the linked effects and the VFX impact
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));

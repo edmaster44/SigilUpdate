@@ -439,12 +439,12 @@ int GetManifesterDC(object oManifester = OBJECT_SELF)
 	{
 		nDC++;
 	}
-	if (GetManifestingClass(oManifester) >= 22)
+	if (GetManifesterLevel(oManifester) >= 22)
 	{
 		nDC++;
 	
 	}
-		if (GetManifestingClass(oManifester) >= 25)
+		if (GetManifesterLevel(oManifester) >= 25)
 	{
 		nDC++;
 	
@@ -717,6 +717,7 @@ int GetPsionicPRCLevels(object oCreature)
 	nLevel +=  GetLevelByClass(100, oCreature);
 	nLevel +=  GetLevelByClass(152, oCreature);
 	nLevel += GetLevelByClass(109, oCreature);
+    nLevel += GetLevelByClass(111,oCreature);
 	nLevel +=  GetLevelByClass(128, oCreature);
     // Cerebremancer and Psychic Theurge add manifester levels on each level
     //nLevel += GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
@@ -745,8 +746,8 @@ int GetPsionicPRCLevels(object oCreature)
 
 int GetIsPsionicClass(int nClass)
 {
-    return (nClass==CLASS_TYPE_PSION || nClass == CLASS_PSYCHIC_KNIGHT ||nClass == CLASS_TYPE_CEREBREMANCER	|| nClass == CLASS_TYPE_DRAGON_PSION|| 
-	nClass == CLASS_PSYCHIC_WARRIOR || CLASS_TYPE_WARMIND
+    return (nClass==CLASS_TYPE_PSION || nClass == CLASS_PSYCHIC_WARRIOR ||nClass == CLASS_TYPE_CEREBREMANCER	|| nClass == CLASS_TYPE_DRAGON_PSION|| 
+	nClass == CLASS_PSYCHIC_KNIGHT || CLASS_TYPE_WARMIND  
 	);
 }
 

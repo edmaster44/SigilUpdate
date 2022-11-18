@@ -1,5 +1,5 @@
 NDB V1.0
-0000023 0000009 0001880 0000071 0000251
+0000024 0000009 0001910 0000071 0000251
 n00 ginc_debug
 n01 x2_inc_craft
 n02 x0_i0_stringlib
@@ -20,9 +20,10 @@ n16 x0_i0_match
 n17 x0_i0_petrify
 n18 x0_i0_assoc
 n19 ServerExts
-n20 ps_inc_ecl
-n21 nw_i0_spells
-N22 nw_s0_imprinvis
+n20 nwnx_sql
+n21 ps_inc_ecl
+n22 nw_i0_spells
+N23 nw_s0_imprinvis
 s 03 vector
 sf f x
 sf f y
@@ -1950,6 +1951,10 @@ f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
 f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
 f ffffffff ffffffff 000 i RACIAL_TYPE_OUTSIDER_NATIVE
+f ffffffff ffffffff 000 i FEAT_HALFVAMPIRE
+f ffffffff ffffffff 000 i FEAT_FETCH
+f ffffffff ffffffff 000 i FEAT_GHUL
+f ffffffff ffffffff 000 i FEAT_GHAEDEN
 f ffffffff ffffffff 000 i WING_TYPE_NONE
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_M
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_F
@@ -2744,6 +2749,92 @@ fp f
 f ffffffff ffffffff 001 v ServerExts_EnablePlayerEvent
 fp i
 f ffffffff ffffffff 000 i ServerExts_GetObjectCount
+f ffffffff ffffffff 000 i SQL_ERROR
+f ffffffff ffffffff 000 i SQL_SUCCESS
+f ffffffff ffffffff 001 v SQLExecDirect
+fp s
+f ffffffff ffffffff 001 i SQLFetch
+fp s
+f ffffffff ffffffff 001 s SQLGetData
+fp i
+f ffffffff ffffffff 001 s SQLGetDataText
+fp i
+f ffffffff ffffffff 000 i SQLGetAffectedRows
+f ffffffff ffffffff 001 s SQLLocationToString
+fp e2
+f ffffffff ffffffff 001 e2 SQLStringToLocation
+fp s
+f ffffffff ffffffff 001 s SQLVectorToString
+fp t0000
+f ffffffff ffffffff 001 t0000 SQLStringToVector
+fp s
+f ffffffff ffffffff 005 v SetPersistentString
+fp o
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentInt
+fp o
+fp s
+fp i
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentFloat
+fp o
+fp s
+fp f
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentLocation
+fp o
+fp s
+fp e2
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentVector
+fp o
+fp s
+fp t0000
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentObject
+fp o
+fp s
+fp o
+fp i
+fp s
+f ffffffff ffffffff 003 s GetPersistentString
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 i GetPersistentInt
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 f GetPersistentFloat
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 e2 GetPersistentLocation
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 t0000 GetPersistentVector
+fp o
+fp s
+fp s
+f ffffffff ffffffff 004 o GetPersistentObject
+fp o
+fp s
+fp o
+fp s
+f ffffffff ffffffff 003 v DeletePersistentVariable
+fp o
+fp s
+fp s
+f ffffffff ffffffff 001 s SQLEncodeSpecialChars
+fp s
 f ffffffff ffffffff 001 v PS_CalculateECL
 fp o
 f ffffffff ffffffff 001 i PS_CalculateRacialECL
@@ -2831,6 +2922,9 @@ fp o
 f ffffffff ffffffff 001 i GetIsHighBabClass
 fp i
 f ffffffff ffffffff 002 i MonkLevels
+fp o
+fp i
+f ffffffff ffffffff 002 i GetRacialBonus
 fp o
 fp i
 f ffffffff ffffffff 002 i MonkUnarmedDamage
@@ -3428,29 +3522,29 @@ l05 0000076 0000002c 0000002c
 l05 0000077 0000002c 0000002c
 l05 0000078 0000002c 0000002c
 l05 0000080 0000002c 0000002c
-l06 0000218 0000002c 00000048
-l22 0000030 0000005a 00000064
-l22 0000033 0000006a 00000070
-l22 0000040 00000070 00000075
-l22 0000043 00000075 00000080
-l22 0000045 00000080 00000091
-l22 0000046 00000091 000000a2
-l22 0000047 000000a2 000000b3
-l22 0000048 000000b3 000000c8
-l22 0000049 000000c8 000000eb
-l22 0000051 000000eb 0000011c
-l22 0000052 0000011c 0000013f
-l22 0000053 0000013f 00000162
-l22 0000056 00000162 00000185
-l22 0000057 00000185 00000190
-l22 0000058 00000190 0000019d
-l22 0000060 000001a3 000001d5
-l22 0000063 000001d5 000001da
-l22 0000065 000001da 000001ea
-l22 0000067 000001f0 0000020e
-l22 0000072 0000020e 00000236
-l22 0000073 00000236 0000025e
-l22 0000074 00000264 00000266
+l06 0000221 0000002c 00000048
+l23 0000030 0000005a 00000064
+l23 0000033 0000006a 00000070
+l23 0000040 00000070 00000075
+l23 0000043 00000075 00000080
+l23 0000045 00000080 00000091
+l23 0000046 00000091 000000a2
+l23 0000047 000000a2 000000b3
+l23 0000048 000000b3 000000c8
+l23 0000049 000000c8 000000eb
+l23 0000051 000000eb 0000011c
+l23 0000052 0000011c 0000013f
+l23 0000053 0000013f 00000162
+l23 0000056 00000162 00000185
+l23 0000057 00000185 00000190
+l23 0000058 00000190 0000019d
+l23 0000060 000001a3 000001d5
+l23 0000063 000001d5 000001da
+l23 0000065 000001da 000001ea
+l23 0000067 000001f0 0000020e
+l23 0000072 0000020e 00000236
+l23 0000073 00000236 0000025e
+l23 0000074 00000264 00000266
 l15 0000250 00000266 0000026b
 l15 0000251 0000026b 0000026d
 l15 0000260 0000026d 0000027a
@@ -3624,10 +3718,10 @@ l04 0000278 000014cf 000014f2
 l04 0000279 000014f8 00001512
 l04 0000281 00001512 0000152c
 l04 0000282 00001532 0000153a
-l21 0000798 0000153a 00001547
-l21 0000799 00001547 0000155a
-l21 0000801 0000155a 00001571
-l21 0000803 00001577 0000158c
-l21 0000804 0000158c 000015a7
-l21 0000806 000015ad 000015af
-l21 0000808 000015d6 000015de
+l22 0000798 0000153a 00001547
+l22 0000799 00001547 0000155a
+l22 0000801 0000155a 00001571
+l22 0000803 00001577 0000158c
+l22 0000804 0000158c 000015a7
+l22 0000806 000015ad 000015af
+l22 0000808 000015d6 000015de

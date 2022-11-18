@@ -17,9 +17,11 @@ void RunHalfUndeadScript(object oPC, int nSpellID)
 void main(){
 	object oPC = OBJECT_SELF;
 switch(GetSpellId()){
-	case 1517:RunHalfUndeadScript(oPC,1308); break; //Vampire Slam(based on Vampire class slam)
+	case 1517:RunHalfUndeadScript(oPC,188); break; //Vampiric Touch
 	case 1516:RunHalfUndeadScript(oPC,64); break; //Ghul's Bite(Based on Ghoul's Touch)
 	case 1518:RunHalfUndeadScript(oPC,459); break; //Fetch's Telekenis(Based on bigby interposing hand)
+	case 1513:RunHalfUndeadScript(oPC,845);break;//Detect Undead
+	case 1524:RunHalfUndeadScript(oPC,54);break;//Fetch Unnerving Gaze
 	}
 	
 		if (!X2PreSpellCastCode())
@@ -37,10 +39,24 @@ switch(GetSpellId()){
 		{	HalfUndeadPower(oPC, nSpell);	}		
 		break; 
 		
-		case 1514: //Gheden Bonus Feat
+		case 1514: //Gheden Dead Nerves
 		{ GhedeanDeadNerves(oPC, oItem, nSpell); }
 		break;
 		
-	
+		case 1512://Half Undead Skills
+		{HalfUndeadSkills(oPC,nSpell);}
+		break;
+		case 1525://Half Vampire Stats
+		{ed_halfvampirestats(oPC,nSpell);}
+		break;
+		case 1526://Ghul Stats
+		{ed_ghulstats(oPC,nSpell);}
+		break;
+		case 1527://Fetch Stats
+		{ed_fetchstats(oPC,nSpell);}
+		break;
+		case 1528://Gheden Stats
+		{ed_ghedenstats(oPC,nSpell);}
+		break;
 	}
 } 

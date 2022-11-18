@@ -54,12 +54,16 @@ void main()
     // End of Spell Cast Hook
     //--------------------------------------------------------------------------
 
-
+	int nCasterLevel;
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
 	int PML = GetPureMageLevels(OBJECT_SELF);
+	if (GetHasFeat(3049,OBJECT_SELF))
+	{
+	nCasterLevel = PS_GetLevel(OBJECT_SELF);
+	}
+	else nCasterLevel= PS_GetCasterLevel(OBJECT_SELF);
 
-    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
 	
     int nDDice = nCasterLevel;

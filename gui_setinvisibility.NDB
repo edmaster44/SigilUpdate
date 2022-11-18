@@ -1,5 +1,5 @@
 NDB V1.0
-0000013 0000003 0001379 0000007 0000045
+0000014 0000003 0001409 0000007 0000045
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -10,9 +10,10 @@ n06 x0_i0_petrify
 n07 x0_i0_assoc
 n08 x0_i0_position
 n09 ServerExts
-n10 ps_inc_ecl
-n11 nw_i0_spells
-N12 gui_setinvisibility
+n10 nwnx_sql
+n11 ps_inc_ecl
+n12 nw_i0_spells
+N13 gui_setinvisibility
 s 03 vector
 sf f x
 sf f y
@@ -802,6 +803,10 @@ f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
 f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
 f ffffffff ffffffff 000 i RACIAL_TYPE_OUTSIDER_NATIVE
+f ffffffff ffffffff 000 i FEAT_HALFVAMPIRE
+f ffffffff ffffffff 000 i FEAT_FETCH
+f ffffffff ffffffff 000 i FEAT_GHUL
+f ffffffff ffffffff 000 i FEAT_GHAEDEN
 f ffffffff ffffffff 000 i WING_TYPE_NONE
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_M
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_F
@@ -1596,6 +1601,92 @@ fp f
 f ffffffff ffffffff 001 v ServerExts_EnablePlayerEvent
 fp i
 f ffffffff ffffffff 000 i ServerExts_GetObjectCount
+f ffffffff ffffffff 000 i SQL_ERROR
+f ffffffff ffffffff 000 i SQL_SUCCESS
+f ffffffff ffffffff 001 v SQLExecDirect
+fp s
+f ffffffff ffffffff 001 i SQLFetch
+fp s
+f ffffffff ffffffff 001 s SQLGetData
+fp i
+f ffffffff ffffffff 001 s SQLGetDataText
+fp i
+f ffffffff ffffffff 000 i SQLGetAffectedRows
+f ffffffff ffffffff 001 s SQLLocationToString
+fp e2
+f ffffffff ffffffff 001 e2 SQLStringToLocation
+fp s
+f ffffffff ffffffff 001 s SQLVectorToString
+fp t0000
+f ffffffff ffffffff 001 t0000 SQLStringToVector
+fp s
+f ffffffff ffffffff 005 v SetPersistentString
+fp o
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentInt
+fp o
+fp s
+fp i
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentFloat
+fp o
+fp s
+fp f
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentLocation
+fp o
+fp s
+fp e2
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentVector
+fp o
+fp s
+fp t0000
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentObject
+fp o
+fp s
+fp o
+fp i
+fp s
+f ffffffff ffffffff 003 s GetPersistentString
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 i GetPersistentInt
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 f GetPersistentFloat
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 e2 GetPersistentLocation
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 t0000 GetPersistentVector
+fp o
+fp s
+fp s
+f ffffffff ffffffff 004 o GetPersistentObject
+fp o
+fp s
+fp o
+fp s
+f ffffffff ffffffff 003 v DeletePersistentVariable
+fp o
+fp s
+fp s
+f ffffffff ffffffff 001 s SQLEncodeSpecialChars
+fp s
 f ffffffff ffffffff 001 v PS_CalculateECL
 fp o
 f ffffffff ffffffff 001 i PS_CalculateRacialECL
@@ -1683,6 +1774,9 @@ fp o
 f ffffffff ffffffff 001 i GetIsHighBabClass
 fp i
 f ffffffff ffffffff 002 i MonkLevels
+fp o
+fp i
+f ffffffff ffffffff 002 i GetRacialBonus
 fp o
 fp i
 f ffffffff ffffffff 002 i MonkUnarmedDamage
@@ -2197,20 +2291,20 @@ l01 0000076 0000002c 0000002c
 l01 0000077 0000002c 0000002c
 l01 0000078 0000002c 0000002c
 l01 0000080 0000002c 0000002c
-l02 0000218 0000002c 00000048
-l12 0000005 0000005a 00000060
-l12 0000007 00000060 000000c6
-l12 0000009 000000cc 000000ef
-l12 0000010 000000ef 00000110
-l12 0000012 00000116 00000118
-l12 0000014 00000118 0000013b
-l12 0000015 0000013b 0000014f
-l12 0000016 0000014f 00000163
-l12 0000018 00000169 00000171
-l11 0000798 00000171 0000017e
-l11 0000799 0000017e 00000191
-l11 0000801 00000191 000001a8
-l11 0000803 000001ae 000001c3
-l11 0000804 000001c3 000001de
-l11 0000806 000001e4 000001e6
-l11 0000808 0000020d 00000215
+l02 0000221 0000002c 00000048
+l13 0000005 0000005a 00000060
+l13 0000007 00000060 000000c6
+l13 0000009 000000cc 000000ef
+l13 0000010 000000ef 00000110
+l13 0000012 00000116 00000118
+l13 0000014 00000118 0000013b
+l13 0000015 0000013b 0000014f
+l13 0000016 0000014f 00000163
+l13 0000018 00000169 00000171
+l12 0000798 00000171 0000017e
+l12 0000799 0000017e 00000191
+l12 0000801 00000191 000001a8
+l12 0000803 000001ae 000001c3
+l12 0000804 000001c3 000001de
+l12 0000806 000001e4 000001e6
+l12 0000808 0000020d 00000215

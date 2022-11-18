@@ -1,5 +1,5 @@
 NDB V1.0
-0000024 0000008 0001807 0000067 0000252
+0000024 0000008 0001812 0000067 0000252
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -11,9 +11,9 @@ n07 x0_i0_position
 n08 x0_i0_match
 n09 ServerExts
 n10 x0_i0_petrify
-n11 x2_inc_itemprop
-n12 ps_inc_ecl
-n13 nwnx_sql
+n11 nwnx_sql
+n12 x2_inc_itemprop
+n13 ps_inc_ecl
 n14 nwnx_srvadmin
 n15 ginc_vars
 n16 ginc_math
@@ -273,6 +273,10 @@ f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
 f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
 f ffffffff ffffffff 000 i RACIAL_TYPE_OUTSIDER_NATIVE
+f ffffffff ffffffff 000 i FEAT_HALFVAMPIRE
+f ffffffff ffffffff 000 i FEAT_FETCH
+f ffffffff ffffffff 000 i FEAT_GHUL
+f ffffffff ffffffff 000 i FEAT_GHAEDEN
 f ffffffff ffffffff 000 i WING_TYPE_NONE
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_M
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_F
@@ -1206,6 +1210,92 @@ fp o
 f ffffffff ffffffff 002 v RemoveEffectOfType
 fp o
 fp i
+f ffffffff ffffffff 000 i SQL_ERROR
+f ffffffff ffffffff 000 i SQL_SUCCESS
+f 000007a8 000007d6 001 v SQLExecDirect
+fp s
+f 000007d6 00000815 001 i SQLFetch
+fp s
+f 00000815 0000085c 001 s SQLGetData
+fp i
+f ffffffff ffffffff 001 s SQLGetDataText
+fp i
+f ffffffff ffffffff 000 i SQLGetAffectedRows
+f ffffffff ffffffff 001 s SQLLocationToString
+fp e2
+f ffffffff ffffffff 001 e2 SQLStringToLocation
+fp s
+f ffffffff ffffffff 001 s SQLVectorToString
+fp t0000
+f ffffffff ffffffff 001 t0000 SQLStringToVector
+fp s
+f ffffffff ffffffff 005 v SetPersistentString
+fp o
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentInt
+fp o
+fp s
+fp i
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentFloat
+fp o
+fp s
+fp f
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentLocation
+fp o
+fp s
+fp e2
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentVector
+fp o
+fp s
+fp t0000
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentObject
+fp o
+fp s
+fp o
+fp i
+fp s
+f ffffffff ffffffff 003 s GetPersistentString
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 i GetPersistentInt
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 f GetPersistentFloat
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 e2 GetPersistentLocation
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 t0000 GetPersistentVector
+fp o
+fp s
+fp s
+f ffffffff ffffffff 004 o GetPersistentObject
+fp o
+fp s
+fp o
+fp s
+f ffffffff ffffffff 003 v DeletePersistentVariable
+fp o
+fp s
+fp s
+f ffffffff ffffffff 001 s SQLEncodeSpecialChars
+fp s
 f ffffffff ffffffff 000 s X2_IP_WORK_CONTAINER_TAG
 f ffffffff ffffffff 000 s X2_IP_ADDRPOP_2DA
 f ffffffff ffffffff 000 s X2_IP_POISONWEAPON_2DA
@@ -1473,6 +1563,9 @@ fp o
 f ffffffff ffffffff 001 i GetIsHighBabClass
 fp i
 f ffffffff ffffffff 002 i MonkLevels
+fp o
+fp i
+f ffffffff ffffffff 002 i GetRacialBonus
 fp o
 fp i
 f ffffffff ffffffff 002 i MonkUnarmedDamage
@@ -1803,92 +1896,6 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 000 i SQL_ERROR
-f ffffffff ffffffff 000 i SQL_SUCCESS
-f 000007a8 000007d6 001 v SQLExecDirect
-fp s
-f 000007d6 00000815 001 i SQLFetch
-fp s
-f 00000815 0000085c 001 s SQLGetData
-fp i
-f ffffffff ffffffff 001 s SQLGetDataText
-fp i
-f ffffffff ffffffff 000 i SQLGetAffectedRows
-f ffffffff ffffffff 001 s SQLLocationToString
-fp e2
-f ffffffff ffffffff 001 e2 SQLStringToLocation
-fp s
-f ffffffff ffffffff 001 s SQLVectorToString
-fp t0000
-f ffffffff ffffffff 001 t0000 SQLStringToVector
-fp s
-f ffffffff ffffffff 005 v SetPersistentString
-fp o
-fp s
-fp s
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentInt
-fp o
-fp s
-fp i
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentFloat
-fp o
-fp s
-fp f
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentLocation
-fp o
-fp s
-fp e2
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentVector
-fp o
-fp s
-fp t0000
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentObject
-fp o
-fp s
-fp o
-fp i
-fp s
-f ffffffff ffffffff 003 s GetPersistentString
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 i GetPersistentInt
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 f GetPersistentFloat
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 e2 GetPersistentLocation
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 t0000 GetPersistentVector
-fp o
-fp s
-fp s
-f ffffffff ffffffff 004 o GetPersistentObject
-fp o
-fp s
-fp o
-fp s
-f ffffffff ffffffff 003 v DeletePersistentVariable
-fp o
-fp s
-fp s
-f ffffffff ffffffff 001 s SQLEncodeSpecialChars
-fp s
 f ffffffff ffffffff 000 v ShutdownNwn2server
 f ffffffff ffffffff 001 v BroadcastServerMessage
 fp s
@@ -3324,7 +3331,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000218 0000002c 00000048
+l02 0000221 0000002c 00000048
 l03 0000021 00000048 00000048
 l03 0000022 00000048 00000048
 l03 0000023 00000048 00000048
@@ -3402,22 +3409,22 @@ l22 0000543 00000741 00000743
 l22 0000544 00000743 00000750
 l22 0000545 00000780 0000079a
 l22 0000548 000007a0 000007a8
-l13 0000152 000007a8 000007ce
-l13 0000153 000007ce 000007d6
-l13 0000157 000007d6 0000080d
-l13 0000158 0000080d 00000815
-l13 0000162 00000815 00000854
-l13 0000163 00000854 0000085c
+l11 0000152 000007a8 000007ce
+l11 0000153 000007ce 000007d6
+l11 0000157 000007d6 0000080d
+l11 0000158 0000080d 00000815
+l11 0000162 00000815 00000854
+l11 0000163 00000854 0000085c
 l22 0000501 0000085c 0000087d
 l22 0000502 0000087d 0000088c
 l22 0000503 00000892 000008c1
 l22 0000505 000008c1 000008dd
 l22 0000506 000008e3 000008eb
-l02 0002119 000008eb 00000906
-l02 0002120 00000906 00000913
-l02 0002121 00000919 00000945
-l02 0002122 00000945 0000095e
-l02 0002123 00000964 0000096c
+l02 0002144 000008eb 00000906
+l02 0002145 00000906 00000913
+l02 0002146 00000919 00000945
+l02 0002147 00000945 0000095e
+l02 0002148 00000964 0000096c
 l22 0000463 0000096c 0000097c
 l22 0000464 0000097c 0000098c
 l22 0000465 00000992 0000099f

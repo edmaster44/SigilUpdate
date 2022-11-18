@@ -1141,6 +1141,8 @@ int IsPowerfulMaterial(itemproperty ip, int countSilver = FALSE) {
 		return TRUE;
 	} else if (nSubType >= 22 && nSubType <= 37) {
 		return TRUE;
+	}  else if (nSubType == 42) {
+		return TRUE;
 	} else if (countSilver && (nSubType == 41 || nSubType == 20)) { //Allowing Cold Iron / Silver to add to points, because sometimes you want a weapon with full points and no existing property!
 		return TRUE;
 	}

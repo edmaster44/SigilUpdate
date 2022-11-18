@@ -33,8 +33,7 @@ void UpdateItem(object oItem, object oPC) {
 	int nOldPrice = GetGoldPieceValue(oItem);
 	
 	if (!GetItemInDB(oItem)) {
-		string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"'";
-		SQLExecDirect(sQuery);
+		AddItemToDB(oItem);
 	} else {
 		string sQuery = "UPDATE item_prices SET item_name='"+sName+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nOldPrice)+"' WHERE item_tag='"+sTag+"'";
 		SQLExecDirect(sQuery);

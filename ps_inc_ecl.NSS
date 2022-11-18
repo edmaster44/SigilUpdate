@@ -85,6 +85,9 @@ int PS_CalculateTemplateECL(object oPC)
 {
 	int nValue		= 0;
 	
+	if (GetLevelByClass(CLASS_TYPE_HALF_UNDEAD,oPC) >= 1)
+	 	{	SendMessageToPC(oPC, "Half-Undead tempalte class:LA +2");
+		nValue = nValue +2;		}
 	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) >= 1)				// Divine Lich
 	{	SendMessageToPC(oPC, "Lich (divine) template class: LA +3");
 		nValue = nValue +3;		}

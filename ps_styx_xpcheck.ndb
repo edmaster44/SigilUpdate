@@ -1,5 +1,5 @@
 NDB V1.0
-0000011 0000003 0001161 0000039 0000099
+0000011 0000003 0001166 0000039 0000099
 n00 ps_inc_advscript
 n01 ginc_debug
 n02 ps_inc_functions
@@ -7,9 +7,9 @@ n03 x0_i0_position
 n04 x0_i0_match
 n05 ServerExts
 n06 x0_i0_petrify
-n07 x2_inc_itemprop
-n08 ps_inc_ecl
-n09 nwnx_sql
+n07 nwnx_sql
+n08 x2_inc_itemprop
+n09 ps_inc_ecl
 N10 ps_styx_xpcheck
 s 03 vector
 sf f x
@@ -236,6 +236,10 @@ f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
 f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
 f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
 f ffffffff ffffffff 000 i RACIAL_TYPE_OUTSIDER_NATIVE
+f ffffffff ffffffff 000 i FEAT_HALFVAMPIRE
+f ffffffff ffffffff 000 i FEAT_FETCH
+f ffffffff ffffffff 000 i FEAT_GHUL
+f ffffffff ffffffff 000 i FEAT_GHAEDEN
 f ffffffff ffffffff 000 i WING_TYPE_NONE
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_M
 f ffffffff ffffffff 000 i WING_TYPE_ANGEL_F
@@ -1169,6 +1173,92 @@ fp o
 f ffffffff ffffffff 002 v RemoveEffectOfType
 fp o
 fp i
+f ffffffff ffffffff 000 i SQL_ERROR
+f ffffffff ffffffff 000 i SQL_SUCCESS
+f 00000297 000002c5 001 v SQLExecDirect
+fp s
+f 000002c5 00000304 001 i SQLFetch
+fp s
+f 00000304 0000034b 001 s SQLGetData
+fp i
+f ffffffff ffffffff 001 s SQLGetDataText
+fp i
+f ffffffff ffffffff 000 i SQLGetAffectedRows
+f ffffffff ffffffff 001 s SQLLocationToString
+fp e2
+f ffffffff ffffffff 001 e2 SQLStringToLocation
+fp s
+f ffffffff ffffffff 001 s SQLVectorToString
+fp t0000
+f ffffffff ffffffff 001 t0000 SQLStringToVector
+fp s
+f ffffffff ffffffff 005 v SetPersistentString
+fp o
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentInt
+fp o
+fp s
+fp i
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentFloat
+fp o
+fp s
+fp f
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentLocation
+fp o
+fp s
+fp e2
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentVector
+fp o
+fp s
+fp t0000
+fp i
+fp s
+f ffffffff ffffffff 005 v SetPersistentObject
+fp o
+fp s
+fp o
+fp i
+fp s
+f ffffffff ffffffff 003 s GetPersistentString
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 i GetPersistentInt
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 f GetPersistentFloat
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 e2 GetPersistentLocation
+fp o
+fp s
+fp s
+f ffffffff ffffffff 003 t0000 GetPersistentVector
+fp o
+fp s
+fp s
+f ffffffff ffffffff 004 o GetPersistentObject
+fp o
+fp s
+fp o
+fp s
+f ffffffff ffffffff 003 v DeletePersistentVariable
+fp o
+fp s
+fp s
+f 0000054c 00000597 001 s SQLEncodeSpecialChars
+fp s
 f ffffffff ffffffff 000 s X2_IP_WORK_CONTAINER_TAG
 f ffffffff ffffffff 000 s X2_IP_ADDRPOP_2DA
 f ffffffff ffffffff 000 s X2_IP_POISONWEAPON_2DA
@@ -1436,6 +1526,9 @@ fp o
 f ffffffff ffffffff 001 i GetIsHighBabClass
 fp i
 f ffffffff ffffffff 002 i MonkLevels
+fp o
+fp i
+f ffffffff ffffffff 002 i GetRacialBonus
 fp o
 fp i
 f ffffffff ffffffff 002 i MonkUnarmedDamage
@@ -1766,92 +1859,6 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 000 i SQL_ERROR
-f ffffffff ffffffff 000 i SQL_SUCCESS
-f 00000297 000002c5 001 v SQLExecDirect
-fp s
-f 000002c5 00000304 001 i SQLFetch
-fp s
-f 00000304 0000034b 001 s SQLGetData
-fp i
-f ffffffff ffffffff 001 s SQLGetDataText
-fp i
-f ffffffff ffffffff 000 i SQLGetAffectedRows
-f ffffffff ffffffff 001 s SQLLocationToString
-fp e2
-f ffffffff ffffffff 001 e2 SQLStringToLocation
-fp s
-f ffffffff ffffffff 001 s SQLVectorToString
-fp t0000
-f ffffffff ffffffff 001 t0000 SQLStringToVector
-fp s
-f ffffffff ffffffff 005 v SetPersistentString
-fp o
-fp s
-fp s
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentInt
-fp o
-fp s
-fp i
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentFloat
-fp o
-fp s
-fp f
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentLocation
-fp o
-fp s
-fp e2
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentVector
-fp o
-fp s
-fp t0000
-fp i
-fp s
-f ffffffff ffffffff 005 v SetPersistentObject
-fp o
-fp s
-fp o
-fp i
-fp s
-f ffffffff ffffffff 003 s GetPersistentString
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 i GetPersistentInt
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 f GetPersistentFloat
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 e2 GetPersistentLocation
-fp o
-fp s
-fp s
-f ffffffff ffffffff 003 t0000 GetPersistentVector
-fp o
-fp s
-fp s
-f ffffffff ffffffff 004 o GetPersistentObject
-fp o
-fp s
-fp o
-fp s
-f ffffffff ffffffff 003 v DeletePersistentVariable
-fp o
-fp s
-fp s
-f 0000054c 00000597 001 s SQLEncodeSpecialChars
-fp s
 f 0000018c 00000297 001 i GetHasMultipleEntries
 fp o
 f 0000034b 0000054c 001 v RemoveExtraEntries
@@ -1928,7 +1935,7 @@ l00 0000077 00000015 00000015
 l00 0000078 00000015 00000015
 l00 0000080 00000015 00000015
 l01 0000048 00000015 0000002c
-l02 0000218 0000002c 00000048
+l02 0000221 0000002c 00000048
 l10 0000017 0000005a 0000005f
 l10 0000021 0000005f 0000006f
 l10 0000022 00000075 00000083
@@ -1954,12 +1961,12 @@ l10 0000064 00000232 00000245
 l10 0000068 00000245 00000269
 l10 0000071 0000026f 00000289
 l10 0000072 0000028f 00000297
-l09 0000152 00000297 000002bd
-l09 0000153 000002bd 000002c5
-l09 0000157 000002c5 000002fc
-l09 0000158 000002fc 00000304
-l09 0000162 00000304 00000343
-l09 0000163 00000343 0000034b
+l07 0000152 00000297 000002bd
+l07 0000153 000002bd 000002c5
+l07 0000157 000002c5 000002fc
+l07 0000158 000002fc 00000304
+l07 0000162 00000304 00000343
+l07 0000163 00000343 0000034b
 l10 0000076 0000034b 00000360
 l10 0000077 00000360 00000375
 l10 0000079 00000375 000003e4
@@ -1979,8 +1986,8 @@ l10 0000104 000004d5 000004e3
 l10 0000105 000004e9 00000530
 l10 0000106 00000530 0000053e
 l10 0000110 00000544 0000054c
-l09 0000531 0000054c 0000058f
-l09 0000532 0000058f 00000597
+l07 0000531 0000054c 0000058f
+l07 0000532 0000058f 00000597
 l10 0000114 00000597 000005ac
 l10 0000115 000005ac 000005c1
 l10 0000117 000005c1 000005dc
@@ -1994,8 +2001,8 @@ l10 0000127 000006a3 000006b6
 l10 0000129 000006b6 000006d1
 l10 0000130 000006d1 000006ec
 l10 0000132 000006f8 00000700
-l02 0002119 00000700 0000071b
-l02 0002120 0000071b 00000728
-l02 0002121 0000072e 0000075a
-l02 0002122 0000075a 00000773
-l02 0002123 00000779 00000781
+l02 0002144 00000700 0000071b
+l02 0002145 0000071b 00000728
+l02 0002146 0000072e 0000075a
+l02 0002147 0000075a 00000773
+l02 0002148 00000779 00000781
