@@ -57,20 +57,20 @@ void main()
 
     if(manif.bCanManifest)
     {
-	int nLevel = GetManifesterLevel(oManifester);
+	int nLevel = GetManifesterLevel(OBJECT_SELF);
 	
 	
         int nAC;
 		if (nLevel < 3)
-		{nAC = 1;}
+		nAC = 1;
 		else if (nLevel > 5)
-		{nAC = 2;} 
+		nAC = 2;
 		else if (nLevel > 8)
-		{nAC = 3;} 
+		nAC = 3;
 		else if (nLevel > 11)
-		{nAC = 4;} 
+		nAC = 4; 
 		else if (nLevel > 14)
-		{nAC = 5;} 
+		nAC = 5;
 		if (manif.bAugment)
 			nAC += 1;
         effect eLink    =                          EffectACIncrease(nAC, AC_SHIELD_ENCHANTMENT_BONUS);
