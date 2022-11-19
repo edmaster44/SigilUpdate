@@ -38,6 +38,8 @@ int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppear
 	}
 	newValue=StringToInt(sVarValue)+nAdj;
 	
+	SendMessageToPC(OBJECT_SELF, "Starting value: "+IntToString(newValue));
+	
 	if (newValue == -1)
 		newValue = 0;
 		
@@ -229,22 +231,23 @@ int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppear
 					newValue = jumpID(newValue, 145, 146);
 					newValue = jumpID(newValue, 148, 149);
 					newValue = jumpID(newValue, 152, 156);
-					newValue = jumpID(newValue, 161, 162);
+					if (newValue == 161) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 165, 166);
 					newValue = jumpID(newValue, 168, 170);
 					newValue = jumpID(newValue, 172, 174);
 					newValue = jumpID(newValue, 175, 181);
-					newValue = jumpID(newValue, 182, 183);
+					if (newValue == 182) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 185, 191);
-					newValue = jumpID(newValue, 194, 195);
-					newValue = jumpID(newValue, 197, 198);
+					if (newValue == 194) newValue = newValue + nAdj;
+					if (newValue == 197) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 200, 202);
-					newValue = jumpID(newValue, 204, 205);
+					if (newValue == 204) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 207, 209);
-					newValue = jumpID(newValue, 210, 211);
-					newValue = jumpID(newValue, 212, 213);
-					newValue = jumpID(newValue, 219, 220);
-					if (newValue > 221) newValue = 221;
+					if (newValue == 210) newValue = newValue + nAdj;
+					if (newValue == 212) newValue = newValue + nAdj;
+					if (newValue == 219) newValue = newValue + nAdj;
+					if (newValue > 221) newValue = 221;	
+					SendMessageToPC(OBJECT_SELF, "Post-processed value: "+IntToString(newValue));
 				break;
 				case 5: case 1087: case 1102: //Half-Orc /Ogrillion /Orog
 					newValue = jumpID(newValue, 20, 42);
@@ -268,22 +271,23 @@ int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppear
 					newValue = jumpID(newValue, 145, 146);
 					newValue = jumpID(newValue, 148, 149);
 					newValue = jumpID(newValue, 152, 156);
-					newValue = jumpID(newValue, 161, 162);
+					if (newValue == 161) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 165, 166);
 					newValue = jumpID(newValue, 168, 170);
 					newValue = jumpID(newValue, 172, 174);
 					newValue = jumpID(newValue, 175, 181);
-					newValue = jumpID(newValue, 182, 183);
+					if (newValue == 182) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 185, 191);
 					newValue = jumpID(newValue, 194, 195);
 					newValue = jumpID(newValue, 197, 198);
 					newValue = jumpID(newValue, 200, 202);
-					newValue = jumpID(newValue, 204, 205);
+					if (newValue == 204) newValue = newValue + nAdj;
 					newValue = jumpID(newValue, 207, 209);
-					newValue = jumpID(newValue, 210, 211);
-					newValue = jumpID(newValue, 212, 213);
-					newValue = jumpID(newValue, 219, 220);
+					if (newValue == 210) newValue = newValue + nAdj;
+					if (newValue == 212) newValue = newValue + nAdj;
+					if (newValue == 219) newValue = newValue + nAdj;
 					if (newValue > 221) newValue = 221;
+					SendMessageToPC(OBJECT_SELF, "Post-processed value: "+IntToString(newValue));
 				break;
 				case 1036: //Elf, Wild
 					newValue = jumpID(newValue, 4, 50);
