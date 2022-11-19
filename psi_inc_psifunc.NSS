@@ -322,7 +322,7 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
     {
         //if(DEBUG) SendMessageToPC(oManifester, "Item casting at level " + IntToString(GetCasterLevel(oManifester)));
 
-        return GetCasterLevel(oManifester) + nAdjust;
+        return PS_GetCasterLevel(oManifester) + nAdjust;
     }
 
     // For when you want to assign the caster level.
@@ -705,20 +705,28 @@ int GetPsiPenetration(object oManifester = OBJECT_SELF)
 
 int GetIsPsionicCharacter(object oCreature)
 {
-    return (GetLevelByClass(CLASS_TYPE_PSION,          oCreature)||
-	GetLevelByClass(CLASS_PSYCHIC_WARRIOR,         oCreature)
-              // Racial psionicity signifying feats go here
-             );
+    
+    return (GetLevelByClass(CLASS_TYPE_PSION,oCreature) ||
+              GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oCreature) ||
+              GetLevelByClass(CLASS_PSYCHIC_KNIGHT,oCreature) ||
+              GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oCreature) ||
+              GetLevelByClass(CLASS_TYPE_CEREBREMANCER,oCreature) ||
+              GetLevelByClass(CLASS_TYPE_WARMIND,oCreature) ||
+			  GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC, oCreature));
 }
 
 int GetPsionicPRCLevels(object oCreature)
 {
     int nLevel = 0;
-	nLevel +=  GetLevelByClass(100, oCreature);
-	nLevel +=  GetLevelByClass(152, oCreature);
-	nLevel += GetLevelByClass(109, oCreature);
-    nLevel += GetLevelByClass(111,oCreature);
-	nLevel +=  GetLevelByClass(128, oCreature);
+	nLevel +=  GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC, oCreature);
+	nLevel +=  GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
+	//No Level boost for Psychic Knight, at level 1
+	if(GetLevelByClass(CLASS_PSYCHIC_KNIGHT, oCreature))
+    {
+        nLevel += GetLevelByClass(CLASS_PSYCHIC_KNIGHT, oCreature) - 1;
+    }
+    nLevel += GetLevelByClass(CLASS_TYPE_WARMIND,oCreature);
+	nLevel +=  GetLevelByClass(CLASS_TYPE_DRAGON_PSION, oCreature);
     // Cerebremancer and Psychic Theurge add manifester levels on each level
     //nLevel += GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
     //nLevel += GetLevelByClass(CLASS_TYPE_PSYCHIC_THEURGE, oCreature);
