@@ -5,6 +5,8 @@ void main () {
 	object oTarget = GetItemActivatedTarget();
 	location lLoc = GetItemActivatedTargetLocation();
 	
+	int nNoDestroy = GetLocalInt(oItem, "DoNotDestroy");
+	
 	string sEffect = GetLocalString(oItem, "VFX");
 	if (sEffect == "")
 		return;
@@ -22,7 +24,8 @@ void main () {
 		ApplyEffectAtLocation(nDuration, eEffect, lLoc, fDur);
 	}
 	
-	DestroyObject(oItem);
+	if (!nNoDestroy)
+		DestroyObject(oItem);
 	
 	//removing this because gemstone gravel now has a purpose
 	//CreateItemOnObject("gemstone_gravel", oPC);
