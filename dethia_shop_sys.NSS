@@ -1214,9 +1214,6 @@ void AddItemToDB(object oItem) {
 	if (!GetItemInDB(oItem)) {
 		string sQuery = "INSERT INTO item_prices SET item_name='"+sName+"', item_tag='"+sTag+"', item_price='"+IntToString(nPrice)+"', item_oldvalue='"+IntToString(nPrice)+"', item_points='"+IntToString(nPoints)+"'";
 		SQLExecDirect(sQuery);
-	} else {
-		string sQuery = "UPDATE item_prices SET item_oldvalue='"+IntToString(nPrice)+"', item_points='"+IntToString(nPoints)+"' WHERE item_tag='"+sTag+"'";
-		SQLExecDirect(sQuery);
 	}
 }
 
