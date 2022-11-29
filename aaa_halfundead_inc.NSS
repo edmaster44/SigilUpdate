@@ -140,31 +140,28 @@ void HalfUndeadPower(object oPC, int nSpell)
 
 int ed_checkhalfvampirestats(object oPC)
 {
-string name = SQLEncodeSpecialChars(GetName(oPC));
-    string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+   	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
     
-    SQLExecDirect("SELECT `str_level`,`dex_level`,`cha_level` FROM generalability_tracking WHERE name='"+name+"' AND act='"+act+"';");
-    
-    int nStr = 0;
-    int nDex = 0;
-    int nCha = 0;
-    if (SQLFetch() != SQL_ERROR) {
-        nStr = StringToInt(SQLGetData(1));
-        nDex = StringToInt(SQLGetData(2));
-        nCha = StringToInt(SQLGetData(3));
-    }
-    
-    return ((nStr > 0) && (nDex > 0) && (nCha > 0));
+
+	
+	SQLExecDirect("SELECT `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
+	SQLFetch();
+
+	return StringToInt(SQLGetData(1));
 
 }
 
 void ed_updatehalfvampirestat(object oPC, int delete = 0)
 {
 
-string name = SQLEncodeSpecialChars(GetName(oPC));
-	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+
+
 	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-	else SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('"+name+"','"+act+"','114','1','0','0') ON DUPLICATE KEY UPDATE `str_level`=`str_level`+1 AND`dex_level`=`dex_level`+1 AND `cha_level`=`cha_level`+1; ");
+
+	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
 
@@ -172,16 +169,16 @@ void ed_halfvampirestats(object oPC, int nSpell)
 {
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
-int iRank = ed_checkhalfvampirestats(oPC);
-if(iRank > 0 && iLevel < 4)
+int iVal = ed_checkhalfvampirestats(oPC);
+
+if (iVal > 0 && iLevel <3 )
 	{
-		SendMessageToPC(oPC,"Purging Half-Vamp information. Please rest again.");
+		SendMessageToPC(oPC,"Purging I-Bonus information. Please rest again.");
 		ed_updatehalfvampirestat(oPC,1);
 		return;
 	}
-
-	if(iRank >= 1 && iLevel >= 3 && iLevel < 5) return;
-	if(iRank >= 2 && iLevel >= 5) return;	
+	if(iVal >= 1 && iLevel >= 3) return;
+	if(iVal >= 2 && iLevel >= 5) return;	
 
 	ed_updatehalfvampirestat(oPC);
 	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+1+GetRacialBonus(oPC,ABILITY_STRENGTH));
