@@ -51,7 +51,7 @@ void ApplyMastercraft(object oPC, object oGolem)
 void SetCreatureScriptsToSetAndSetDeathScript(object Creature, int ScriptSet, string DeathScript)
 {
 	SetCreatureScriptsToSet(Creature, ScriptSet);
-	SetEventHandler(Creature, CREATURE_SCRIPT_ON_DEATH, DeathScript);
+	SetEventHandler(Creature, CREATURE_SCRIPT_ON_DAMAGED, DeathScript);
 }
 
 // Applies the proper buffs and settings to summoned golems
@@ -65,7 +65,7 @@ void AdjustGolem(object oPC, object oGolem, object oItem = OBJECT_INVALID)
 	
 	AddHenchman(oPC, oGolem);
 	if (oItem != OBJECT_INVALID) SetLocalObject(oGolem, "ControlObject", oItem);
-	SetCreatureScriptsToSetAndSetDeathScript(oGolem, 10, "ps_golem_death");
+	SetCreatureScriptsToSetAndSetDeathScript(oGolem, 10, "ps_golem_dmg");
 	
 	// Add bonuses from the Golem Master prestige class
 	ApplyCraftsmanship(oPC, oGolem);
