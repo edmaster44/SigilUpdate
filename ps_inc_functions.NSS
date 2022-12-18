@@ -18,6 +18,10 @@ const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
 							
 const int SERVER_VERSION_ROW = 1;
 const int FACTION_VERSION_ROW = 2;
+const int HOLIDAY_VERSION_ROW = 3;
+
+const string HOLIDAY_NONE = "Holiday_Ordinary";
+const string HOLIDAY_XMAS = "Holiday_Xmas";
 			 				
 const int CLASS_TYPE_MYSTIC_THEURGE 					= 44; 
 const int CLASS_TYPE_GOLEMMASTER 						= 77;
@@ -4400,4 +4404,19 @@ effect PS_EffectDamagePiercing(int nDamageAmount, int nDamageType=DAMAGE_TYPE_BL
 		effect ePiercing = PS_EffectDamage(nPiercingDamage, nDamageType, nDamagePower, TRUE);
 		return EffectLinkEffects(eNormal, ePiercing);
 	}
+}
+
+//check server settings
+string CheckServerVersion(int versionRow) {
+	string sQuery = "SELECT version FROM server_version WHERE row_id = "+IntToString(versionRow);
+	
+	SQLExecDirect(sQuery);
+	
+	if (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
+		string version = SQLGetData(1);
+		return version;
+	}
+	
+	return "";
+	
 }

@@ -1,92 +1,167 @@
+#include "ps_inc_functions"
 
-void main()
-{
- object oPC = GetEnteringObject();
-// if (!GetIsPC(oPC) && !GetIsDM(oPC))
-//  return;
+int GetIsChristmas();
+
+void main() {
+
+	int isHolidays = GetIsChristmas();
+
+ 	object oPC = GetEnteringObject();
+	string lockVariable = "OOCEnterLock"; //change this to something unique for this area
 	
- int iLock = GetGlobalInt("OOCEnterLock");
- if ( iLock == 0 )
- {
-  SetGlobalInt("OOCEnterLock", 1); // Only allows one clean up at a time.
+	//declaring some variables for tidyness
+	string sNPCTag;
+	string sWPTag;
+	object oWP;
+	
+ 	int iLock = GetGlobalInt(lockVariable);
+ 	if ( iLock == 0 )
+ 	{
+  		SetGlobalInt(lockVariable, 1); // Makes sure the script doesn't retrigger while still running
   
-  if(GetObjectByTag("ps_npc_custom") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("wp_ooc_tailor");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_custom", lSpawnpoint);    
-  }
-
-  if(GetObjectByTag("ps_npc_oocroommerchant") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_oocroom-merchant");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_oocroommerchant", lSpawnpoint);    
-  }
-
-  if(GetObjectByTag("ps_npc_mimir") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("wp_mimir");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_mimir", lSpawnpoint);    
-  }
-  
-    if(GetObjectByTag("ps_npc_oocstyx") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("wp_styxoarsman");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_oocstyx", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalxanta") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal1");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalxanta", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalxantahelper") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal2");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalxantahelper", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalreindeer1") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal3");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer1", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalreindeer2") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal4");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer2", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalreindeer3") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal5");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer3", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalreindeer4") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal6");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer4", lSpawnpoint);    
-  }
-  
-  if(GetObjectByTag("ps_npc_seasonalreindeer5") == OBJECT_INVALID)
-  {
-   object oWP = GetWaypointByTag("ps_wp_seasonal7");
-   location lSpawnpoint = GetLocation(oWP);  
-   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer5", lSpawnpoint);    
-  }
+		//*******************************************************
+		sNPCTag = "ps_ooc_mimic"; //the resref of the creature to spawn
+		sWPTag = "wp_ps_ooc_mimic"; //the tag of the waypoint where the creature should spawn
+  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+		
+   			oWP = GetWaypointByTag(sWPTag);
+   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+			 
+  		}
+		sNPCTag = "npc_sigis_journalist_ooc"; //the resref of the creature to spawn
+		sWPTag = "wp_npc_sigis_journalist_ooc"; //the tag of the waypoint where the creature should spawn
+  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+		
+   			oWP = GetWaypointByTag(sWPTag);
+   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+			 
+  		}
+		sNPCTag = "ps_npc_mimir"; //the resref of the creature to spawn
+		sWPTag = "wp_ps_npc_mimir"; //the tag of the waypoint where the creature should spawn
+  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+		
+   			oWP = GetWaypointByTag(sWPTag);
+   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+			 
+  		}
+		sNPCTag = "ps_npc_ditchoarsman"; //the resref of the creature to spawn
+		sWPTag = "wp_ps_npc_ditchoarsman"; //the tag of the waypoint where the creature should spawn
+  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+		
+   			oWP = GetWaypointByTag(sWPTag);
+   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+			 
+  		}
+		
+		if (isHolidays) {
+			sNPCTag = "ps_npc_seasonalxantahelper"; //the resref of the creature to spawn
+			sWPTag = "wp_ps_npc_seasonalxantahelper"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			sNPCTag = "ps_npc_seasonalxanta"; //the resref of the creature to spawn
+			sWPTag = "wp_ps_npc_seasonalxanta"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			sNPCTag = "ps_npc_seasonalkrampus"; //the resref of the creature to spawn
+			sWPTag = "wp_ps_npc_seasonalkrampus"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_CREATURE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			//Placeables
+			sNPCTag = "plc_oocseasonal_1"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_oocseasonal_1"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_oocseasonal_2"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_oocseasonal_2"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_oocseasonal_3"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_oocseasonal_3"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_oocseasonal_4"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_oocseasonal_4"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_oocseasonal_5"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_oocseasonal_5"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_oocseasonal_6"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_oocseasonal_6"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_christmas_4"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_christmas_4"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+			
+			sNPCTag = "plc_christmas_6"; //the resref of the creature to spawn
+			sWPTag = "wp_plc_christmas_6"; //the tag of the waypoint where the creature should spawn
+	  		if(GetObjectByTag(sNPCTag) == OBJECT_INVALID) {
+			
+	   			oWP = GetWaypointByTag(sWPTag);
+	   			CreateObject(OBJECT_TYPE_PLACEABLE, sNPCTag, GetLocation(oWP));   
+				 
+	  		}
+		}
+		//*******************************************************
+		
     
-  SetGlobalInt("OOCEnterLock", 0);
- }
+  		SetGlobalInt(lockVariable, 0); //release area for future spawning
+ 	}
+}
+
+int GetIsChristmas() {
+	
+	string version = CheckServerVersion(HOLIDAY_VERSION_ROW);
+	return (version == HOLIDAY_XMAS);
+	
 }
