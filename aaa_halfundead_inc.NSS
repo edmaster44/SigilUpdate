@@ -9,8 +9,8 @@
 
 void HalfUndeadImmunity(object oPC, int nSpell)	
 {
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+
+		int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
 		int nAmount		= 5;
 		int nVulD 		= 15;
 		if (nLevel >= 5 ) 
@@ -25,24 +25,22 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 			eDR			= ExtraordinaryEffect(eDR);
 			eNeg		= ExtraordinaryEffect(eNeg);
 			eVul1		= ExtraordinaryEffect(eVul1);
-		effect	eLink    =EffectLinkEffects(eDR,eVul1);
+		effect	eLink    =EffectLinkEffects(eDR,eNeg);
 				eLink    =EffectLinkEffects(eLink,eNeg);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
-	}
+	
 }
 
 
 
 void GhedeanDeadNerves(object oPC, object oItem, int nSpell)
 {
-if (!GetHasSpellEffect(nSpell, oPC))
-{
 int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
 		int nAmount		= 5;
 		if (nLevel >= 5 ) 
 		{	nAmount 	= 10;	}
-	int nSkill = 8;
+		int nSkill = 8;
 		
 effect eNegHand =EffectSkillDecrease(SKILL_SLEIGHT_OF_HAND,nSkill);
 effect eNegLock =EffectSkillDecrease(SKILL_OPEN_LOCK,nSkill);
@@ -54,7 +52,7 @@ eLink = SupernaturalEffect(eLink);
 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
-}
+
 
 void HalfUndeadSkills(object oPC, int nSpell)
 {
@@ -157,10 +155,7 @@ void ed_updatehalfvampirestat(object oPC, int delete = 0)
 
 	string name = SQLEncodeSpecialChars(GetName(oPC));
 	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-
-
 	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-
 	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
@@ -189,34 +184,22 @@ if (iVal > 0 && iLevel <3 )
 	ExportSingleCharacter(oPC);
 	
 }
-
-
-
-
 int ed_checkghulstats(object oPC)
 {
-string name = SQLEncodeSpecialChars(GetName(oPC));
-    string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-    
-    SQLExecDirect("SELECT `dex_level`,`cha_level` FROM generalability_tracking WHERE name='"+name+"' AND act='"+act+"';");
-    
-    int nDex = 0;
-    int nCha = 0;
-    if (SQLFetch() != SQL_ERROR) {
-        nDex = StringToInt(SQLGetData(1));
-        nCha = StringToInt(SQLGetData(2));
-    }
-    
-    return  ((nDex > 0) && (nCha > 0));
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+   	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	SQLExecDirect("SELECT `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
+	SQLFetch();
+	return StringToInt(SQLGetData(1));
 }
 
 void ed_updateghul(object oPC, int delete = 0)
 {
 
-string name = SQLEncodeSpecialChars(GetName(oPC));
-	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-	else SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('"+name+"','"+act+"','114','1','0','0') ON DUPLICATE KEY UPDATE `dex_level`=`dex_level`+1 AND `cha_level`=`cha_level`+1; ");
+	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
 
@@ -225,7 +208,7 @@ void ed_ghulstats(object oPC, int nSpell)
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
 int iRank = ed_checkghulstats(oPC);
-if(iRank > 0 && iLevel < 4)
+if(iRank > 0 && iLevel < 3)
 	{
 		SendMessageToPC(oPC,"Purging Ghul information. Please rest again.");
 		ed_updateghul(oPC,1);
@@ -246,29 +229,21 @@ if(iRank > 0 && iLevel < 4)
 }
 int ed_checkfetchstats(object oPC)
 {
-string name = SQLEncodeSpecialChars(GetName(oPC));
-    string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-    
-    SQLExecDirect("SELECT `cha_level`,`wis_level` FROM generalability_tracking WHERE name='"+name+"' AND act='"+act+"';");
-    
-    int nCha = 0;
-    int nWis = 0;
-    if (SQLFetch() != SQL_ERROR) {
-        nCha = StringToInt(SQLGetData(1));
-        nWis = StringToInt(SQLGetData(2));
-    }
-    
-    return  ((nCha > 0) && (nWis > 0));
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+   	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	SQLExecDirect("SELECT `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
+	SQLFetch();
+	return StringToInt(SQLGetData(1));
 }
 
 void ed_updatefetch(object oPC, int delete = 0)
 {
-
-string name = SQLEncodeSpecialChars(GetName(oPC));
-	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-	else SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('"+name+"','"+act+"','114','1','0','0') ON DUPLICATE KEY UPDATE `dex_level`=`cha_level`+1 AND `cha_level`=`wis_level`+1; ");
-}
+	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
+	
+	}
 
 
 void ed_fetchstats(object oPC, int nSpell)
@@ -276,7 +251,7 @@ void ed_fetchstats(object oPC, int nSpell)
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
 int iRank = ed_checkfetchstats(oPC);
-if(iRank > 0 && iLevel < 4)
+if(iRank > 0 && iLevel < 3)
 	{
 		SendMessageToPC(oPC,"Purging Fetch information. Please rest again.");
 		ed_updatefetch(oPC,1);
@@ -298,36 +273,28 @@ if(iRank > 0 && iLevel < 4)
 
 int ed_checkghedenstats(object oPC)
 {
-string name = SQLEncodeSpecialChars(GetName(oPC));
-    string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-    
-    SQLExecDirect("SELECT `str_level`,`con_level` FROM generalability_tracking WHERE name='"+name+"' AND act='"+act+"';");
-    
-    int nSTR = 0;
-    int nCON = 0;
-    if (SQLFetch() != SQL_ERROR) {
-        nSTR = StringToInt(SQLGetData(1));
-        nCON = StringToInt(SQLGetData(2));
-    }
-    
-    return  ((nSTR > 0) && (nCON > 0));
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+   	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	SQLExecDirect("SELECT `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
+	SQLFetch();
+	return StringToInt(SQLGetData(1));
 }
 
 void ed_updategheden(object oPC, int delete = 0)
 {
 
-string name = SQLEncodeSpecialChars(GetName(oPC));
-	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
+	string name = SQLEncodeSpecialChars(GetName(oPC));
+	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
-	else SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('"+name+"','"+act+"','114','1','0','0') ON DUPLICATE KEY UPDATE `str_level`=`str_level`+1 AND 'cha_level`=`cha_level`+1; ");
+	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
 
 void ed_ghedenstats(object oPC, int nSpell)
 {
-int iLevel = GetLevelByClass(114,oPC);
-int iRank = ed_checkghedenstats(oPC);
-if(iRank > 0 && iLevel < 4)
+	int iLevel = GetLevelByClass(114,oPC);
+	int iRank = ed_checkghedenstats(oPC);
+	if(iRank > 0 && iLevel < 3)
 	{
 		SendMessageToPC(oPC,"Purging Fetch information. Please rest again.");
 		ed_updategheden(oPC,1);
