@@ -155,7 +155,7 @@ void ed_updatehalfvampirestat(object oPC, int delete = 0)
 
 	string name = SQLEncodeSpecialChars(GetName(oPC));
 	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	if(delete == 1) SQLExecDirect("DELETE `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';")
 	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
