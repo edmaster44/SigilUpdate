@@ -26,7 +26,7 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 			eNeg		= ExtraordinaryEffect(eNeg);
 			eVul1		= ExtraordinaryEffect(eVul1);
 		effect	eLink    =EffectLinkEffects(eDR,eNeg);
-				eLink    =EffectLinkEffects(eLink,eNeg);
+				eLink    =EffectLinkEffects(eLink,eVul1);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 	
@@ -172,7 +172,7 @@ if (iVal > 0 && iLevel <3 )
 		ed_updatehalfvampirestat(oPC,1);
 		return;
 	}
-	if(iVal >= 1 && iLevel >= 3) return;
+	if(iVal >= 1 && iLevel >= 3 && iLevel < 5) return;
 	if(iVal >= 2 && iLevel >= 5) return;	
 
 	ed_updatehalfvampirestat(oPC);

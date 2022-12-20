@@ -43,6 +43,11 @@ switch(GetSpellId()){
 		{ GhedeanDeadNerves(oPC, oItem, nSpell); }
 		break;
 		
+			case 1515: //Half Undead Immunities 
+		{ HalfUndeadImmunity(oPC, nSpell); }
+		break;
+		
+		
 		case 1512://Half Undead Skills
 		{HalfUndeadSkills(oPC,nSpell);}
 		break;
