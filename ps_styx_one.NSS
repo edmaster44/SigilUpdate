@@ -3,7 +3,12 @@
 #include "nwnx_sql"
 #include "aaa_racial_ability_inc"
 
-
+int GetIsChristmas() {
+	
+	string version = CheckServerVersion(HOLIDAY_VERSION_ROW);
+	return (version == HOLIDAY_XMAS);
+	
+}
 
 void SetXPpools(object oPC, int nAmount)
 {
@@ -15,10 +20,17 @@ void SetXPpools(object oPC, int nAmount)
 	SQLExecDirect("SELECT dm_pool,rp_pool FROM characterdata WHERE id=" + sID);
 	if (SQLFetch() == SQL_ERROR) return;
 	
-	int dm_pool = StringToInt(SQLGetData(1)) + FloatToInt(nAmount * 0.25);
-	int rp_pool = StringToInt(SQLGetData(2)) + FloatToInt(nAmount * 0.25);
-	//int dm_pool = StringToInt(SQLGetData(1)) + nAmount; //krampus value
-	//int rp_pool = StringToInt(SQLGetData(2)); //krampus value
+	int dm_pool;
+	int rp_pool;
+	
+	if (GetIsChristmas()) {
+		dm_pool = StringToInt(SQLGetData(1)) + nAmount;
+		rp_pool = StringToInt(SQLGetData(2));
+	} else {
+		dm_pool = StringToInt(SQLGetData(1)) + FloatToInt(nAmount * 0.25);
+		rp_pool = StringToInt(SQLGetData(2)) + FloatToInt(nAmount * 0.25);
+	}
+	
 	SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ",rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID);		
 	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
 		SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
