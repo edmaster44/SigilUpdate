@@ -168,14 +168,16 @@ int iVal = ed_checkhalfvampirestats(oPC);
 if (iVal >2)
 return;
 
-ed_updatehalfvampirestat(oPC);
 if (iVal == 0 && iLevel >= 3 )
 	
 {	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+1+GetRacialBonus(oPC,ABILITY_STRENGTH));
 	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+1+GetRacialBonus(oPC,ABILITY_DEXTERITY));
 	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
 	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
-	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");}
+	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");
+	ed_updatehalfvampirestat(oPC);
+	}
+	
 	
 if (iVal == 1 && iLevel >=5 )
 	
@@ -183,7 +185,9 @@ if (iVal == 1 && iLevel >=5 )
 	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+1+GetRacialBonus(oPC,ABILITY_DEXTERITY));
 	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
 	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
-	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");}
+	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");
+	ed_updatehalfvampirestat(oPC);
+	}
 	
 	
 	ExportSingleCharacter(oPC);

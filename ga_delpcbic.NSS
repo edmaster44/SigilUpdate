@@ -3,6 +3,14 @@
 #include "aaa_constants"
 #include "nwnx_sql"
 
+void Finalize(object oPC)
+{
+string name = SQLEncodeSpecialChars(GetName(oPC));
+string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+SQLExecDirect("DELETE FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+
+}
+
 void SetXPPools(object oPC,int nAmount)
 {
 	SendMessageToPC(oPC, "Adding "+FloatToString(nAmount*0.25f)+" to your RP and DM exp pools");
@@ -30,7 +38,7 @@ void main()
 	int xp = GetXP(oPC);
 	
 	SetXPPools(oPC, xp);
-	
+	Finalize(oPC);
 	DelayCommand(0.2f, ArchiveCharacter(oPC));
 	
 }
