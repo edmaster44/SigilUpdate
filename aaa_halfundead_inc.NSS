@@ -26,7 +26,7 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 			eNeg		= ExtraordinaryEffect(eNeg);
 			eVul1		= ExtraordinaryEffect(eVul1);
 		effect	eLink    =EffectLinkEffects(eDR,eNeg);
-				eLink    =EffectLinkEffects(eLink,eNeg);
+				eLink    =EffectLinkEffects(eLink,eVul1);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 	
@@ -155,7 +155,7 @@ void ed_updatehalfvampirestat(object oPC, int delete = 0)
 
 	string name = SQLEncodeSpecialChars(GetName(oPC));
 	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	if(delete == 1) SQLExecDirect("DELETE `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
 	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
@@ -165,22 +165,27 @@ void ed_halfvampirestats(object oPC, int nSpell)
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
 int iVal = ed_checkhalfvampirestats(oPC);
+if (iVal >2)
+return;
 
-if (iVal > 0 && iLevel <3 )
-	{
-		SendMessageToPC(oPC,"Purging I-Bonus information. Please rest again.");
-		ed_updatehalfvampirestat(oPC,1);
-		return;
-	}
-	if(iVal >= 1 && iLevel >= 3) return;
-	if(iVal >= 2 && iLevel >= 5) return;	
-
-	ed_updatehalfvampirestat(oPC);
-	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+1+GetRacialBonus(oPC,ABILITY_STRENGTH));
+ed_updatehalfvampirestat(oPC);
+if (iVal == 0 && iLevel >= 3 )
+	
+{	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+1+GetRacialBonus(oPC,ABILITY_STRENGTH));
 	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+1+GetRacialBonus(oPC,ABILITY_DEXTERITY));
 	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
 	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
-	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");
+	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");}
+	
+if (iVal == 1 && iLevel >=5 )
+	
+{	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+1+GetRacialBonus(oPC,ABILITY_STRENGTH));
+	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+1+GetRacialBonus(oPC,ABILITY_DEXTERITY));
+	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
+	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
+	SendMessageToPC(oPC,"<I>Strength, Dexterity and Charisma increased by +1.</I>");}
+	
+	
 	ExportSingleCharacter(oPC);
 	
 }

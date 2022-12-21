@@ -41,6 +41,15 @@ void SetXPpools(object oPC,int nAmount)
 		"','Player lost ALL levels to Styx, increased pools with: " + FloatToString(nAmount * 0.25) + "',107)");
 }
 
+void Finalize(object oPC)
+{
+string name = SQLEncodeSpecialChars(GetName(oPC));
+string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
+SQLExecDirect("DELETE FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+
+}
+
+
 void PS_lose_one_level(object oPC)
 {	
 	int xp = GetXP(oPC);	
@@ -104,6 +113,8 @@ void DelayedFixes(object oPC, object oItem, int nSTEP)
 
 void main()
 {
+
+
 	object oPC = GetPCSpeaker();
 	object oItem = GetItemPossessedBy(oPC, "ps_essence");
 	int iRacelevels = 0;
@@ -133,4 +144,5 @@ void main()
 	
 	//Launch the delayed commands
 	DelayCommand(0.0f, DelayedFixes(oPC, oItem, 0));	
+	Finalize(oPC);
 }
