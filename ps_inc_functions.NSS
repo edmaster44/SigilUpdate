@@ -4420,3 +4420,10 @@ string CheckServerVersion(int versionRow) {
 	return "";
 	
 }
+
+int GetIsChristmas() {
+	
+	string version = CheckServerVersion(HOLIDAY_VERSION_ROW);
+	return (version == HOLIDAY_XMAS);
+	
+}

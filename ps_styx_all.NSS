@@ -6,13 +6,6 @@
 #include "nwnx_sql"
 #include "aaa_racial_ability_inc"
 
-int GetIsChristmas() {
-	
-	string version = CheckServerVersion(HOLIDAY_VERSION_ROW);
-	return (version == HOLIDAY_XMAS);
-	
-}
-
 void SetXPpools(object oPC,int nAmount)
 { 
 	SendMessageToPC(oPC, "Adding "+IntToString(nAmount)+" to your RP and DM exp pools");

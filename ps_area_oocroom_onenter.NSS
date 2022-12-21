@@ -1,6 +1,5 @@
 #include "ps_inc_functions"
-
-int GetIsChristmas();
+#include "ps_inc_music"
 
 void main() {
 
@@ -8,6 +7,8 @@ void main() {
 
  	object oPC = GetEnteringObject();
 	string lockVariable = "OOCEnterLock"; //change this to something unique for this area
+
+	SwitchMusic(GetArea(oPC));
 	
 	//declaring some variables for tidyness
 	string sNPCTag;
@@ -157,11 +158,4 @@ void main() {
     
   		SetGlobalInt(lockVariable, 0); //release area for future spawning
  	}
-}
-
-int GetIsChristmas() {
-	
-	string version = CheckServerVersion(HOLIDAY_VERSION_ROW);
-	return (version == HOLIDAY_XMAS);
-	
 }
