@@ -139,13 +139,9 @@ void HalfUndeadPower(object oPC, int nSpell)
 int ed_checkhalfvampirestats(object oPC)
 {
 	string name = SQLEncodeSpecialChars(GetName(oPC));
-   	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-    
-
-	
+   	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));	
 	SQLExecDirect("SELECT `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
 	SQLFetch();
-
 	return StringToInt(SQLGetData(1));
 
 }
@@ -200,6 +196,7 @@ int ed_checkghulstats(object oPC)
 	SQLExecDirect("SELECT `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
 	SQLFetch();
 	return StringToInt(SQLGetData(1));
+
 }
 
 void ed_updateghul(object oPC, int delete = 0)
@@ -207,7 +204,7 @@ void ed_updateghul(object oPC, int delete = 0)
 
 	string name = SQLEncodeSpecialChars(GetName(oPC));
 	string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
-	if(delete == 1) SQLExecDirect("DELETE `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
+	if(delete == 1) SQLExecDirect("DELETE `bonus` FROM `generalability_tracking` WHERE `name`='" + name + "' AND `act`='" + act + "';");
 	SQLExecDirect("INSERT INTO `generalability_tracking` VALUES('" + name + "','" + act + "','1') ON DUPLICATE KEY UPDATE `bonus`=`bonus`+1;");
 }
 
@@ -216,23 +213,31 @@ void ed_ghulstats(object oPC, int nSpell)
 {
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
-int iRank = ed_checkghulstats(oPC);
-if(iRank > 0 && iLevel < 3)
-	{
-		SendMessageToPC(oPC,"Purging Ghul information. Please rest again.");
-		ed_updateghul(oPC,1);
-		return;
-	}
+int iVal = ed_checkghulstats(oPC);
+if (iVal >2)
+return;
 
-	if(iRank >= 1 && iLevel >= 3 && iLevel < 5) return;
-	if(iRank >= 2 && iLevel >= 5) return;	
-
-	ed_updateghul(oPC);
-
-	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+2+GetRacialBonus(oPC,ABILITY_DEXTERITY));
-	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+1+GetRacialBonus(oPC,ABILITY_CHARISMA));
+if (iVal == 0 && iLevel >= 3 )
+	
+{	
+	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+2+GetRacialBonus(oPC,ABILITY_DEXTERITY));	
 	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
-	SendMessageToPC(oPC,"<I>Dexterity and Charisma increased by +2.</I>");
+	SendMessageToPC(oPC,"<I>Dexterity increased by +2.</I>");
+	ed_updateghul(oPC);
+	}
+	
+	
+if (iVal == 1 && iLevel >=5 )
+	
+{	
+	SetBaseAbilityScore(oPC,ABILITY_DEXTERITY,GetAbilityScore(oPC,ABILITY_DEXTERITY,TRUE)+2+GetRacialBonus(oPC,ABILITY_DEXTERITY));
+	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+2+GetRacialBonus(oPC,ABILITY_CHARISMA));
+	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
+	SendMessageToPC(oPC,"<I>Dexterity and Charisma  by +2.</I>");
+	ed_updateghul(oPC);
+	}
+	
+	
 	ExportSingleCharacter(oPC);
 	
 }
@@ -259,25 +264,32 @@ void ed_fetchstats(object oPC, int nSpell)
 {
 /*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
 int iLevel = GetLevelByClass(114,oPC);
-int iRank = ed_checkfetchstats(oPC);
-if(iRank > 0 && iLevel < 3)
-	{
-		SendMessageToPC(oPC,"Purging Fetch information. Please rest again.");
-		ed_updatefetch(oPC,1);
-		return;
-	}
+int iVal = ed_checkfetchstats(oPC);
 
-	if(iRank >= 1 && iLevel >= 3 && iLevel < 5) return;
-	if(iRank >= 2 && iLevel >= 5) return;	
 
-	ed_updatefetch(oPC);
 
-	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+2+GetRacialBonus(oPC,ABILITY_CHARISMA));
-	SetBaseAbilityScore(oPC,ABILITY_WISDOM,GetAbilityScore(oPC,ABILITY_WISDOM,TRUE)+1+GetRacialBonus(oPC,ABILITY_WISDOM));
-	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
-	SendMessageToPC(oPC,"<I>Charisma and Wisdom increased by +2.</I>");
-	ExportSingleCharacter(oPC);
+if (iVal == 0 && iLevel >= 3 )
 	
+{	
+	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+2+GetRacialBonus(oPC,ABILITY_CHARISMA));	
+	SendMessageToPC(oPC,"<I>Your Undead Heritage Makes your more Charismatic  . . .</I>");
+	SendMessageToPC(oPC,"<I>Charisma  by +2</I>");
+	ed_updatefetch(oPC);
+	}
+	
+	
+if (iVal == 1 && iLevel >=5 )
+	
+{	
+	SetBaseAbilityScore(oPC,ABILITY_CHARISMA,GetAbilityScore(oPC,ABILITY_CHARISMA,TRUE)+2+GetRacialBonus(oPC,ABILITY_CHARISMA));
+	SetBaseAbilityScore(oPC,ABILITY_WISDOM,GetAbilityScore(oPC,ABILITY_WISDOM,TRUE)+2+GetRacialBonus(oPC,ABILITY_WISDOM));
+	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you wiser and charismatic . . .</I>");
+	SendMessageToPC(oPC,"<I>Charismia and Wisdom  by +2.</I>");
+	ed_updatefetch(oPC);
+	}
+	
+	
+	ExportSingleCharacter(oPC);
 }
 
 int ed_checkghedenstats(object oPC)
@@ -301,23 +313,29 @@ void ed_updategheden(object oPC, int delete = 0)
 
 void ed_ghedenstats(object oPC, int nSpell)
 {
-	int iLevel = GetLevelByClass(114,oPC);
-	int iRank = ed_checkghedenstats(oPC);
-	if(iRank > 0 && iLevel < 3)
-	{
-		SendMessageToPC(oPC,"Purging Fetch information. Please rest again.");
-		ed_updategheden(oPC,1);
-		return;
-	}
+int iLevel = GetLevelByClass(114,oPC);
+int iVal = ed_checkghedenstats(oPC);
 
-	if(iRank >= 1 && iLevel >= 3 && iLevel < 5) return;
-	if(iRank >= 2 && iLevel >= 5) return;	
-
+if (iVal == 0 && iLevel >= 3 )
+	
+{	
+	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+2+GetRacialBonus(oPC,ABILITY_STRENGTH));	
+	SendMessageToPC(oPC,"<I>Your Undead Heritage Increases your Muscle mass  . . .</I>");
+	SendMessageToPC(oPC,"<I>Strength  increases by +2.</I>");
 	ed_updategheden(oPC);
-
+	}
+	
+	
+if (iVal == 1 && iLevel >=5 )
+	
+{	
 	SetBaseAbilityScore(oPC,ABILITY_STRENGTH,GetAbilityScore(oPC,ABILITY_STRENGTH,TRUE)+2+GetRacialBonus(oPC,ABILITY_STRENGTH));
-	SetBaseAbilityScore(oPC,ABILITY_CONSTITUTION,GetAbilityScore(oPC,ABILITY_CONSTITUTION,TRUE)+1+GetRacialBonus(oPC,ABILITY_CONSTITUTION));
+	SetBaseAbilityScore(oPC,ABILITY_CONSTITUTION,GetAbilityScore(oPC,ABILITY_CONSTITUTION,TRUE)+2+GetRacialBonus(oPC,ABILITY_CONSTITUTION));
 	SendMessageToPC(oPC,"<I>Your Undead Heritage makes you stronger . . .</I>");
-	SendMessageToPC(oPC,"<I>Strength and Constituion increased by +2.</I>");
+	SendMessageToPC(oPC,"<I>Strength and Contitution increased  by +2.</I>");
+	ed_updategheden(oPC);
+	}
+	
+	
 	ExportSingleCharacter(oPC);
 }
