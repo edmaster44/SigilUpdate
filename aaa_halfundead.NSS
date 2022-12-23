@@ -45,9 +45,7 @@ switch(GetSpellId()){
 		
 			case 1515: //Half Undead Immunities 
 		{ HalfUndeadImmunity(oPC, nSpell); }
-		break;
-		
-		
+		break;		
 		case 1512://Half Undead Skills
 		{HalfUndeadSkills(oPC,nSpell);}
 		break;

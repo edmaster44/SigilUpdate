@@ -59,11 +59,8 @@ void HalfUndeadSkills(object oPC, int nSpell)
 if (!X2PreSpellCastCode())
     {	return;	}
 	int nFeat;
-	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
-	 nFeat = GetHasFeat(nFeat,oPC);
-	
-	 int nAmount;
+	nFeat = GetHasFeat(nFeat,oPC);	
+	int nAmount;
 	int iSkill1 = SKILL_HIDE;
 	int iSkill2 = SKILL_MOVE_SILENTLY;
 	int iSkill3;
@@ -80,13 +77,13 @@ if (!X2PreSpellCastCode())
 		break;
 		case 3051://fetch
 		nAmount = 2;
-		iSkill3 = SKILL_HIDE;
-		iSkill4 = SKILL_MOVE_SILENTLY;
+		iSkill3 = SKILL_LORE;
+		iSkill4 = SKILL_CONCENTRATION;
 		break;
 		case 3050://Ghul
 		nAmount = 2;
-		iSkill3 = SKILL_HIDE;
-		iSkill4 = SKILL_MOVE_SILENTLY;
+		iSkill3 = SKILL_SURVIVAL;
+		iSkill4 = SKILL_CRAFT_TRAP;
 		break;
 	}
 	effect eSk1		=	EffectSkillIncrease(iSkill1, nAmount);
@@ -96,11 +93,9 @@ if (!X2PreSpellCastCode())
 	effect eLink1	=	EffectLinkEffects(eSk1,eSk2);
 	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
 	effect eSkill	=	EffectLinkEffects(eLink1,eLink2);
-	eSkill	=	ExtraordinaryEffect(eSkill);
-				if (!GetHasSpellEffect(nSpell, oPC))
-	{			
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkill, oPC);			
-	}
+	eSkill	=	ExtraordinaryEffect(eSkill);			
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkill, oPC);			
+
 		
 }
 
