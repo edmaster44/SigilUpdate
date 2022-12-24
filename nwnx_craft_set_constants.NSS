@@ -754,7 +754,7 @@ void main() {
 	SetLocalString( oModule, "XC_c_lizman_CL_HELM", "#1#2#3#4#5#6#7#8#9#11#13#14#15#17#18#19#20#21#22#23#24#25#26#27#28#29#" );
 	SetLocalString( oModule, "XC_c_lizman_CP_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_lizman_LE_BODY", "#1#2#3#6#" );
-	SetLocalString( oModule, "XC_c_lizman_LE_HELM", "#1#2#3#4#5#" );
+	SetLocalString( oModule, "XC_c_lizman_LE_HELM", "#1#2#3#4#5#6#" );
 	SetLocalString( oModule, "XC_c_lizman_CH_BODY", "#1#2#3#4#5#" );
 	SetLocalString( oModule, "XC_c_lizman_CH_HELM", "#1#4#" );
 	SetLocalString( oModule, "XC_c_lizman_SC_BODY", "#1#2#" );
@@ -765,7 +765,7 @@ void main() {
 	SetLocalString( oModule, "XC_c_lizman_PH_HELM", "#1#2#3#5#6#7#8#10#11#" );
 	SetLocalString( oModule, "XC_c_lizman_SCOD_HELM", "#1#18#26#" );
 	SetLocalString( oModule, "XC_c_lizman_HD_BODY", "#1#2#3#" );
-	SetLocalString( oModule, "XC_c_lizman_HD_HELM", "#1#2#3#4#5#" );
+	SetLocalString( oModule, "XC_c_lizman_HD_HELM", "#1#2#3#4#5#6#7#" );
 	SetLocalString( oModule, "XC_c_kobold_BA_HELM", "#60#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_BODY", "#1#2#3#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_BELT", "#2#3#" );
