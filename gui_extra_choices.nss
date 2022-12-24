@@ -65,6 +65,12 @@ int CheckEpiteth(int nCLASS, object oPC)
 		case 110: 	if (GetHasFeat(21470)==TRUE) return TRUE;//Psychic Warrior, Lurk Path
 				  	else if (GetHasFeat(21471)==TRUE) return TRUE;
 				  	else break;
+					
+		case 114:	if (GetHasFeat(FEAT_HALFVAMPIRE)==TRUE) return TRUE;//Half Vampire
+					else if (GetHasFeat(FEAT_FETCH)==TRUE) return TRUE;//Fetch
+					else if (GetHasFeat(FEAT_GHUL)==TRUE) return TRUE;//Ghul
+					else if (GetHasFeat(FEAT_GHAEDEN)==TRUE) return TRUE;//Ghaeden
+					else break;			
 		case 621:	if (GetHasFeat(2179)==TRUE) return TRUE; //Bright Flight
 					else if (GetHasFeat(2556)==TRUE) return TRUE; //Supernatural Sight
 					else if (GetHasFeat(3024)== TRUE) return TRUE;//New celestial Wings
@@ -92,6 +98,7 @@ int GetRelevantClass(object oPC) {
 	if ((GetLevelByClass(106, oPC) >= 5)) return 106; //VampMal L5 Bonus Feat
 	if ((GetLevelByClass(108, oPC) >= 6))  return 108; //Gray Slaad Chaotic Crafting
 	if ((GetLevelByClass(110,oPC) > 0 ) && (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior
+	if ((GetLevelByClass(114,oPC) > 0 ) && (CheckEpiteth(114,oPC) == FALSE)) return 114;//Half Undead
 	if ((GetLevelByClass(49, oPC) >= 6) && (CheckEpiteth(499, oPC) == FALSE)) return 499; //Half-Dragon Wings
 	if (GetRacialType(oPC) == RACIAL_TYPE_FEY && GetHasFeat(2843, oPC) && (CheckEpiteth(CLASS_TYPE_FEY, oPC) == FALSE)) return CLASS_TYPE_FEY;
 	else return -1;
@@ -172,6 +179,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 16: return 171;	//Spell Focus: Necromancy
 			case 17: return 172;	//Spell Focus: Transmutation 
 			case 18: return 36;		//Spell Penetration
+			break;
 		}
 		case 108: switch(nCOUNT) //Gray Slaad Chaotic Crafting
 		{
@@ -185,6 +193,14 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 1: return 21470; // Lurk Path
 			case 2: return 21471; // Feral Path
 			break;
+		}
+		case 114: switch(nCOUNT)//Half Undead Heritage
+		{
+		case 1: return FEAT_HALFVAMPIRE;
+		case 2: return FEAT_FETCH;
+		case 3: return FEAT_GHUL;
+		case 4:	return FEAT_GHAEDEN;
+		break;
 		}
 		case 621: switch(nCOUNT) //Half-Celestial Wings/Eyes
 		{
@@ -213,6 +229,7 @@ string GetClassSubtitle(int nCLASS)
 		case 106: return "You must select your bonus feat."; //VampMal
 		case 108: return "You must select your bonus crafting feat."; //Gray Slaad
 		case 110: return "You must Select Your Psychic Warrior Path";//Psychic Warrior
+		case 114: return "You must Select your Undead Heritage";//Half-Undead
 		case 621: return "You must select either celestial wings or supernatural sight."; //Half-Celestial
 		case 499: return "Your draconic heritage allows you to select wings if you so choose. This choice is permanent."; //Half-Dragon Wings
 	}
@@ -231,6 +248,7 @@ int GetTitle(int nCLASS)
 		case 106: return 16780457; //VampMal L5 Bonus Feat
 		case 108: return 16780538; //Gray Slaad Chaotic Crafting
 		case 110: return 16781147; // Psychic warrior path
+		case 114: return 16781148;//Half-Undead Heritage
 		case 621: return 16780074; //Outsider Apotheosis
 		case 499: return 16780036; //Half-Dragon Wings
 	}

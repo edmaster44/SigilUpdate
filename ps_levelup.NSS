@@ -5,6 +5,7 @@ Removed Alignment change for Thug for exploit reason */
 #include "ps_class_inc"
 #include "aaa_constants"
 #include "gui_add_psywarfeat"
+#include "gui_add_halfundeadfeat"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_adjust_sneakattack"
@@ -320,6 +321,7 @@ void main()
 	GetFavoredSoulWithoutFeat(oPC);
 	PS_MonkLevels(oPC);
 	PsyWarProgression(oPC);
+	HalfUndeadFeat(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
