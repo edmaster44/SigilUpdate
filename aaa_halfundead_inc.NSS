@@ -46,7 +46,7 @@ effect eNegHand =EffectSkillDecrease(SKILL_SLEIGHT_OF_HAND,nSkill);
 effect eNegLock =EffectSkillDecrease(SKILL_OPEN_LOCK,nSkill);
 effect eDR = EffectDamageReduction(nAmount, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
 effect eLink = EffectLinkEffects(eNegHand,eNegLock);
-eLink = EffectLinkEffects(eDR,eLink);
+eLink = EffectLinkEffects(eLink,eDR);
 eLink = SupernaturalEffect(eLink);
 
 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
@@ -56,43 +56,34 @@ ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 
 void HalfUndeadSkills(object oPC, int nSpell)
 {
-	int nFeat;
-	nFeat = GetHasFeat(nFeat,oPC);	
 	int nAmount;
-	int iSkill1 = SKILL_HIDE;
-	int iSkill2 = SKILL_MOVE_SILENTLY;
 	int iSkill3;
 	int iSkill4;
 	
-	switch (nFeat)
-	{	case 0://Debug
-		//SendMessageToPC(oPC, "Something is wrong.");	
-		break;
-		case 3049://Half Vampire
-		nAmount = 4;
+
+
+	if (GetHasFeat(FEAT_HALFVAMPIRE,oPC))
+	{	nAmount = 4;
 		iSkill3 = SKILL_BLUFF;
-		iSkill4 = SKILL_LISTEN;
-		break;
-		case 3051://fetch
-		nAmount = 2;
+		iSkill4 = SKILL_LISTEN; }
+
+	if (GetHasFeat(FEAT_FETCH,oPC))
+	{	nAmount = 2;
 		iSkill3 = SKILL_LORE;
-		iSkill4 = SKILL_CONCENTRATION;
-		break;
-		case 3050://Ghul
-		nAmount = 2;
+		iSkill4 = SKILL_CONCENTRATION;}
+if 	(GetHasFeat(FEAT_GHUL,oPC))
+	{	nAmount = 2;
 		iSkill3 = SKILL_SURVIVAL;
-		iSkill4 = SKILL_CRAFT_TRAP;
-		break;
-	}
-	effect eSk1		=	EffectSkillIncrease(iSkill1, nAmount);
-	effect eSk2 	=	EffectSkillIncrease(iSkill2, nAmount);
+		iSkill4 = SKILL_CRAFT_TRAP;}
+	
+	effect eSk1		=	EffectSkillIncrease(SKILL_HIDE, nAmount);
+	effect eSk2 	=	EffectSkillIncrease(SKILL_MOVE_SILENTLY, nAmount);
 	effect eSk3 	=	EffectSkillIncrease(iSkill3, nAmount);
 	effect eSk4 	=	EffectSkillIncrease(iSkill4, nAmount);
-	effect eLink1	=	EffectLinkEffects(eSk1,eSk2);
-	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
-	effect eSkill	=	EffectLinkEffects(eLink1,eLink2);
-	eSkill	=	ExtraordinaryEffect(eSkill);			
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkill, oPC);			
+	effect eLink 	= 	EffectLinkEffects(eSk1,eSk2);
+		   eLink	=	EffectLinkEffects(eSk3,eSk4);
+		   eLink	=	ExtraordinaryEffect(eLink);			
+ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
 
 		
 }
