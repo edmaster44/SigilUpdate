@@ -56,8 +56,6 @@ ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 
 void HalfUndeadSkills(object oPC, int nSpell)
 {
-if (!X2PreSpellCastCode())
-    {	return;	}
 	int nFeat;
 	nFeat = GetHasFeat(nFeat,oPC);	
 	int nAmount;
