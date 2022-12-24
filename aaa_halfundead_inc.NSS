@@ -80,12 +80,13 @@ if 	(GetHasFeat(FEAT_GHUL,oPC))
 	effect eSk2 	=	EffectSkillIncrease(SKILL_MOVE_SILENTLY, nAmount);
 	effect eSk3 	=	EffectSkillIncrease(iSkill3, nAmount);
 	effect eSk4 	=	EffectSkillIncrease(iSkill4, nAmount);
-	effect eLink 	= 	EffectLinkEffects(eSk1,eSk2);
-		   eLink	=	EffectLinkEffects(eSk3,eSk4);
-		   eLink	=	ExtraordinaryEffect(eLink);			
+	effect eLink	= 	EffectLinkEffects(eSk1,eSk2);
+		   eLink	=	EffectLinkEffects(eLink,eSk3);
+		   eLink	=	EffectLinkEffects(eLink,eSk4);
+		   eLink	=	ExtraordinaryEffect(eLink);	
 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
 
-		
+	
 }
 
 void HalfUndeadPower(object oPC, int nSpell)
