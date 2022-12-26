@@ -45,6 +45,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 
     // Manifester-related stuff
     int nManifesterLevel = GetManifesterLevel(oManifester);
+    int nClass 			= GetManifestingClass(oManifester);
 
     int nPowerLevel      = GetSpellLevel(spellID);
     int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
@@ -75,7 +76,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 	int nCastMod;
     // Run an ability score check to see if the manifester can manifest the power at all
 
-    if(GetAbilityScoreOfClass(oManifester, GetManifestingClass(oManifester)) - 10 < nPowerLevel)
+    if(GetAbilityScoreOfClass(oManifester, nClass) - 10 < nPowerLevel)
     {
         SendMessageToPC(oManifester, "You do not have a high enough ability score to manifest this power."); 
         manif.bCanManifest = FALSE;
