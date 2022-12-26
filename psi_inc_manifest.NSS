@@ -1,6 +1,7 @@
 #include "psi_inc_metapsi"
 #include "nwn2_inc_spells"
 #include "aaa_constants"
+#include "psi_inc_psifunc"
 
 
 int PS_PsionicClasses(object oPC)
@@ -43,30 +44,8 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 
 
     // Manifester-related stuff
-     int nManifesterLevel = PS_PsionicClasses(oManifester);
-	if(GetLevelByClass(100, oManifester) > 0)
-    {
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(100, oManifester);
-    }
-		if(GetLevelByClass(109, oManifester) > 0)
-	{
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(109, oManifester);
-    }
-	
-	if (GetLevelByClass(CLASS_TYPE_WARMIND,oManifester) > 0 )
-	{
-		nManifesterLevel = nManifesterLevel + GetLevelByClass(CLASS_TYPE_WARMIND,oManifester);
+    int nManifesterLevel = GetManifesterLevel(oManifester);
 
-	}
-
-	if(GetLevelByClass(152, oManifester) > 0)
-	{
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(152, oManifester);
-    }
-	if(GetLevelByClass(128, oManifester) > 0)
-	{
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(128, oManifester);
-    }
     int nPowerLevel      = GetSpellLevel(spellID);
     int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 	if (GetLocalInt(oManifester, "PSI_SPAWN"))
@@ -95,12 +74,8 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     manif.nSpellID          = spellID;
 	int nCastMod;
     // Run an ability score check to see if the manifester can manifest the power at all
-	if (nPsion(oManifester) > 0) 
-	{ nCastMod = ABILITY_INTELLIGENCE;}
-	if (nPsywar(oManifester) > 0)
-	{ nCastMod = ABILITY_WISDOM; }
-	
-    if(GetAbilityScore(oManifester, nCastMod, FALSE) - 10 < nPowerLevel)
+
+    if(GetAbilityScoreOfClass(oManifester, GetManifestingClass(oManifester)) - 10 < nPowerLevel)
     {
         SendMessageToPC(oManifester, "You do not have a high enough ability score to manifest this power."); 
         manif.bCanManifest = FALSE;
