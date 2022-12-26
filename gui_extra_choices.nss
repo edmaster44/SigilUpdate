@@ -98,7 +98,7 @@ int GetRelevantClass(object oPC) {
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
 	if ((GetLevelByClass(106, oPC) >= 5)) return 106; //VampMal L5 Bonus Feat
 	if ((GetLevelByClass(108, oPC) >= 6))  return 108; //Gray Slaad Chaotic Crafting
-	if ((GetLevelByClass(110,oPC) > 0 )) return 110;//Psychic Warrior
+	if ((GetLevelByClass(110,oPC) > 0 )&& (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior
 	if ((GetLevelByClass(114,oPC) > 0 ) && (CheckEpiteth(114,oPC) == FALSE)) return 114;//Half Undead
 	if ((GetLevelByClass(49, oPC) >= 6) && (CheckEpiteth(499, oPC) == FALSE)) return 499; //Half-Dragon Wings
 	if (GetRacialType(oPC) == RACIAL_TYPE_FEY && GetHasFeat(2843, oPC) && (CheckEpiteth(CLASS_TYPE_FEY, oPC) == FALSE)) return CLASS_TYPE_FEY;
