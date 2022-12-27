@@ -707,8 +707,9 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	if (!X2PreSpellCastCode())
     {	return;	} 
 	
-	if (!CancelIfNotInMeleeRange(oPC, oTarget, 2464))
+	if (!CancelIfNotInMeleeRange(oPC, oTarget, 2464)||!CancelIfNotInMeleeRange(oPC, oTarget, 3055))
 		return;
+	
 	 
 	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
@@ -746,7 +747,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 				 
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkT, oTarget);
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oPC);
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, HoursToSeconds(1));	}
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));	}
 }	}	}
 
 void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
@@ -796,7 +797,7 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 						eHeal		= ExtraordinaryEffect(eHeal);
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(24));
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, HoursToSeconds(1));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));
 					SpeakString(GetFirstName(oPC) + "'s fangs pierce " + GetFirstName(oTarget) + "'s throat, draining " + sGend + " blood!");	}
 	}	}
 }
