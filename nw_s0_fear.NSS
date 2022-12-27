@@ -41,7 +41,8 @@ void main()
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
 	if (GetHasFeat(3051,OBJECT_SELF))
 	{
-	nSaveDC = 10 + (PS_GetLevel(OBJECT_SELF)/2) + (nCha);
+	
+	nSaveDC = 10 + PS_GetLevel(OBJECT_SELF) + (nCha/2);
 	}
 	else nSaveDC = GetSpellSaveDC();
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
