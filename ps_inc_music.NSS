@@ -44,7 +44,7 @@ int ShouldMusicSwitch(object oArea, object oPC = OBJECT_INVALID) {
 	int shouldSwitch = TRUE;
 
 	int nMin = PS_GetTimestamp_Age_Minutes(oArea, MUSIC_TIMESTAMP);
-	if (nMin < MUSIC_SWAP_TIMEOUT)
+	if (GetLocalInt(oArea, MUSIC_TIMESTAMP) != 0 && nMin < MUSIC_SWAP_TIMEOUT)
 		shouldSwitch = FALSE;
 		
 	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Num of minutes: "+IntToString(nMin));
