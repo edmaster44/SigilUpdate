@@ -8,7 +8,7 @@ void main() {
  	object oPC = GetEnteringObject();
 	string lockVariable = "OOCEnterLock"; //change this to something unique for this area
 
-	SwitchMusic(GetArea(oPC));
+	SwitchMusic(GetArea(oPC), oPC);
 	
 	//declaring some variables for tidyness
 	string sNPCTag;
