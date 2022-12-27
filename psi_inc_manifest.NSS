@@ -45,6 +45,30 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 
     // Manifester-related stuff
     int nManifesterLevel = GetManifesterLevel(oManifester);
+	
+	if(GetLevelByClass(100, oManifester) > 0)
+    {
+        nManifesterLevel = nManifesterLevel + GetLevelByClass(100, oManifester);
+    }
+		if(GetLevelByClass(109, oManifester) > 0)
+	{
+        nManifesterLevel = nManifesterLevel + GetLevelByClass(109, oManifester);
+    }
+	
+	if (GetLevelByClass(CLASS_TYPE_WARMIND,oManifester) > 0 )
+	{
+		nManifesterLevel = nManifesterLevel + GetLevelByClass(CLASS_TYPE_WARMIND,oManifester);
+
+	}
+
+	if(GetLevelByClass(152, oManifester) > 0)
+	{
+        nManifesterLevel = nManifesterLevel + GetLevelByClass(152, oManifester);
+    }
+	if(GetLevelByClass(128, oManifester) > 0)
+	{
+        nManifesterLevel = nManifesterLevel + GetLevelByClass(128, oManifester);
+    }
     int nClass 			= GetManifestingClass(oManifester);
 
     int nPowerLevel      = GetSpellLevel(spellID);
@@ -75,8 +99,12 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     manif.nSpellID          = spellID;
 	int nCastMod;
     // Run an ability score check to see if the manifester can manifest the power at all
-
-    if(GetAbilityScoreOfClass(oManifester, nClass) - 10 < nPowerLevel)
+	if (nPsion(oManifester) > 0) 
+	{ nCastMod = ABILITY_INTELLIGENCE;}
+	if (nPsywar(oManifester) > 0)
+	{ nCastMod = ABILITY_WISDOM; }
+	
+    if(GetAbilityScore(oManifester, nCastMod, FALSE) - 10 < nPowerLevel)
     {
         SendMessageToPC(oManifester, "You do not have a high enough ability score to manifest this power."); 
         manif.bCanManifest = FALSE;
