@@ -65,6 +65,10 @@ void main()
     int nDuration = d6()+2;
     int nMetaMagic = GetMetaMagicFeat();
     //Enter Metamagic conditions
+	if (GetHasFeat(3054,OBJECT_SELF))
+	{
+	nDuration = 5 + PS_GetLevel(OBJECT_SELF);
+	}
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
         nDuration = 8;//Damage is at max
