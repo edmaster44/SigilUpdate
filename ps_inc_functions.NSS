@@ -4422,8 +4422,14 @@ string CheckServerVersion(int versionRow) {
 }
 
 int GetIsChristmas() {
+
+	object oMod = GetModule();
+	string version = GetLocalString(oMod, "HOLIDAY_MODE");
+	if (version == "")
+		version = CheckServerVersion(HOLIDAY_VERSION_ROW);
+		
+	SetLocalString(oMod, "HOLIDAY_MODE", version);
 	
-	string version = CheckServerVersion(HOLIDAY_VERSION_ROW);
 	return (version == HOLIDAY_XMAS);
 	
 }
