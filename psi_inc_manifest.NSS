@@ -44,7 +44,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 
 
     // Manifester-related stuff
-    int nManifesterLevel = GetManifesterLevel(oManifester);
+    int nManifesterLevel = PS_PsionicClasses(oManifester);
 	
 	if(GetLevelByClass(100, oManifester) > 0)
     {
