@@ -61,9 +61,9 @@ void main (int nFunction) {
 			if (nGold > 0)
 				GiveGoldToCreature(oPC, nGold, TRUE);
 			if (GetTag(oCaught) == "ps_trap_unicorn") {
-				if (GetGender(oPC) == GENDER_FEMALE && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
+				if (GetGender(oPC) == GENDER_FEMALE && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD) {
 					CreateItemOnObject(sItem, oPC);
-				else {
+				} else {
 					SetCustomToken(2032, "The unicorn resists your advances, and breaks free, intent on teaching you a lesson!");
 					DeleteLocalObject(OBJECT_SELF, "target");
 					ChangeToStandardFaction(oCaught, STANDARD_FACTION_HOSTILE);
