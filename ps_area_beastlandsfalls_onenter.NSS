@@ -25,8 +25,8 @@ void main()
 	//Generates fish guy
 	if(GetObjectByTag("ps_fish_barnaclebob") == OBJECT_INVALID)
 	{
-	object oWP = GetWaypointByTag("wp_fish_barnaclebob");
-	location lSpawnpoint = GetLocation(oWP);  
+		object oWP = GetWaypointByTag("wp_fish_barnaclebob");
+		location lSpawnpoint = GetLocation(oWP);  
 		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_fish_barnaclebob", lSpawnpoint);    
 	}
    
