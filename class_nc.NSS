@@ -24,14 +24,9 @@ void Claws_of_the_grizzly(object oPC, int nSpell)
 
 	int nDamage = DAMAGE_BONUS_3;
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
-	effect eSlashing = EffectDamage(nDamage,DAMAGE_TYPE_SLASHING,DAMAGE_POWER_NORMAL,FALSE);
+	effect eSlashing = EffectDamageIncrease(nDamage,DAMAGE_TYPE_SLASHING);
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlashing, oPC));
-
-
-
 }
-
-
 
 
 void Earth_Resilience(object oPC, int nSpell)
