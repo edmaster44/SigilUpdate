@@ -479,6 +479,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_HHM_ACME_BOOTS", "#1#" );
 	SetLocalString( oModule, "XC_P_HHM_ACME_GLOVES", "#1#" );
 	SetLocalString( oModule, "XC_P_HHM_ACME_HELM", "#1#2#3#4#5#6#7#8#9#10#11#12#15#52#53#" );
+	SetLocalString( oModule, "XC_P_HHM_AN_HELM", "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#22#23#24#25#26#27#28#29#30#31#32#33#" );
 	SetLocalString( oModule, "XC_P_HHM_BA_BOOTS", "#1#" );
 	SetLocalString( oModule, "XC_P_HHM_BA_HELM", "#1#2#3#4#5#6#50#51#52#53#54#55#60#84#" );
 	SetLocalString( oModule, "XC_P_HHM_CH_BODY", "#1#2#3#4#5#6#50#51#52#69#71#72#75#150#151#152#153#" );
@@ -1137,7 +1138,7 @@ void main() {
 	SetLocalString( oModule, "XC_AVT_P_HHM_BOOTS", "#0#2#3#4#5#6#7#8#9#10#15#16#17#18#20#21#" );
 	SetLocalString( oModule, "XC_AVT_P_HHM_CLOAK", "#0#16#" );
 	SetLocalString( oModule, "XC_AVT_P_HHM_GLOVES", "#0#2#3#4#5#7#8#10#15#16#17#18#20#21#" );
-	SetLocalString( oModule, "XC_AVT_P_HHM_HELM", "#0#2#4#5#6#7#8#9#16#17#21#" );
+	SetLocalString( oModule, "XC_AVT_P_HHM_HELM", "#0#2#4#5#6#7#8#9#16#17#21#22#" );
 	SetLocalString( oModule, "XC_AVT_P_GGF_BELT", "#0#2#8#17#" );
 	SetLocalString( oModule, "XC_AVT_P_GGF_BODY", "#0#1#2#4#5#8#9#10#16#17#21#" );
 	SetLocalString( oModule, "XC_AVT_P_GGF_BOOTS", "#0#2#3#4#5#6#7#8#9#16#17#" );
