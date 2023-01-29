@@ -1,13 +1,13 @@
 //:://////////////////////////////////////////////
-//:: Power: Dissolving Weapon
-//:: psi_pow_disswpn
+//:: Power: Stygian Weapon
+//:: psi_pow_stygwn
 //:://////////////////////////////////////////////
 /** @file
 
     Dissolving Weapon
 
     Psychometabolism [Acid]
-    Level: Psychic warrior 2
+    Level: Psychic warrior 2/ Lurk 2 
     Manifesting Time: 1 standard action
     Range: Personal
     Target: One held weapon; see text
@@ -15,16 +15,13 @@
     Saving Throw: None
     Power Resistance: No
     Power Points: 3
-    Metapsionics: Empower, Maximize, Twin
+    Metapsionics: Empower
+	
+    Tendrils of crackling black energy course from you into your weapon.
 
-    Your weapon is corrosive, and sizzling moisture visibly oozes from it.
-    You deal 4d6 points of acid damage to any creature or object you touch
-    with your successful melee attack. Your weapon is charged with acid until
-    you make a successful attack.
-
-    Augment: For every 2 additional power points you spend, this power’s damage
-             increases by 1d6 points.
-
+You form a momentary link between yourself and the Negative Energy Plane, allowing you to empower your weapon with fell energy.
+ One melee attack you make in this round is infused with negative energy.
+  On a successful attack, your foe is treated as if struck with a stygian ray (page 101). That creature’s power resistance (if any) applies to this attack.
 
     @author Ornedan
     @date   Created - 2005.01.19
@@ -61,7 +58,7 @@ void main()
      struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER |METAPSIONIC_EXTEND 
+                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER|METAPSIONIC_EXTEND  
                               );
 							  
 
@@ -74,16 +71,24 @@ void main()
 
     if(manif.bCanManifest)
 {
-		int nDamage = IP_CONST_DAMAGEBONUS_4d6;
-        effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
+		int nDamage = IP_CONST_DAMAGEBONUS_1d4;
+        effect eVis     = EffectVisualEffect(VFX_IMP_AURA_NEGATIVE_ENERGY);
+		int iWisMod		= GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
+		int iSaveDC		= 10 + iWisMod;
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_5d6;
-		int DamageType = IP_CONST_DAMAGETYPE_ACID;
-		itemproperty ipAcid = ItemPropertyDamageBonus(DamageType,nDamage);  
+		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_1d6;
+		
+		itemproperty ipDrainer = ItemPropertyOnHitProps(IP_CONST_ONHIT_LEVELDRAIN, iSaveDC, 0);
+		itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
+		int DamageType = IP_CONST_DAMAGETYPE_NEGATIVE;
+		itemproperty ipNegative = ItemPropertyDamageBonus(DamageType,nDamage);  
         
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-        AddItemProperty(DURATION_TYPE_TEMPORARY, ipAcid, oTarget, fDuration);
+        AddItemProperty(DURATION_TYPE_TEMPORARY, ipNegative, oTarget, fDuration);
+		AddItemProperty(DURATION_TYPE_TEMPORARY, ipGlow, oTarget, fDuration);
+		AddItemProperty(DURATION_TYPE_TEMPORARY, ipDrainer, oTarget, fDuration);
+		
         
     }
 }
