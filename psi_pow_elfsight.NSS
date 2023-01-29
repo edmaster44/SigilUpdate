@@ -47,6 +47,7 @@ void main()
 
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
+	object oChest 		= GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
@@ -55,15 +56,16 @@ void main()
 
     if(manif.bCanManifest)
     {
-        effect eLink =                          EffectSkillIncrease(SKILL_SPOT,   4);
+      /*  effect eLink =                          EffectSkillIncrease(SKILL_SPOT,   4);
                eLink = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_SEARCH, 4));
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_SPELL_CLAIRAUD));
-        effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);
+        effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);*/
         float fDuration = HoursToSeconds(manif.nManifesterLevel);
+		itemproperty iKeenSight = ItemPropertyBonusFeat(FEAT_KEEN_SENSE);	//
         if(manif.bExtend) fDuration *= 2;
 
-
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		AddItemProperty(DURATION_TYPE_TEMPORARY,iKeenSight,oChest,fDuration);
+       /* ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);*/
     }
 }
