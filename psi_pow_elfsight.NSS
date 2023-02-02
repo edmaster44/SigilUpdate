@@ -61,7 +61,7 @@ void main()
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_SPELL_CLAIRAUD));
         effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);*/
         float fDuration = HoursToSeconds(manif.nManifesterLevel);
-		itemproperty iKeenSight = ItemPropertyBonusFeat(FEAT_KEEN_SENSE);	//
+		itemproperty iKeenSight = ItemPropertyBonusFeat(800);	//
         if(manif.bExtend) fDuration *= 2;
 
 		AddItemProperty(DURATION_TYPE_TEMPORARY,iKeenSight,oChest,fDuration);
