@@ -39,6 +39,7 @@
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
 
+const int IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON = 148;
 
 
 void main()
@@ -74,16 +75,11 @@ void main()
 
     if(manif.bCanManifest)
 {
-		int nDamage = IP_CONST_DAMAGEBONUS_4d6;
-        effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_5d6;
-		int DamageType = IP_CONST_DAMAGETYPE_ACID;
-		itemproperty ipAcid = ItemPropertyDamageBonus(DamageType,nDamage);  
+		IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON, 2), fDuration);
+		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_ACID), fDuration);
         
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-        AddItemProperty(DURATION_TYPE_TEMPORARY, ipAcid, oTarget, fDuration);
         
     }
 }
