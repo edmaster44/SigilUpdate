@@ -5,6 +5,7 @@ Spell-like abilities granted by certain classes  */
 #include "ps0_newfeats_inc"
 #include "aaa_constants"
 #include "ps_inc_functions"
+#include "class_alienist"
 
 
 void main()
@@ -86,6 +87,18 @@ void main()
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2004 :		//Amicable Background Feat
 			PS_Feat_Amicable(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1530 :		//Alien Blessing Alienist feat
+			PS_Alien_Blessing(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1531 :		//Mad Certainty Alienist feat
+			PS_Mad_Certainty(oPC, nSpell);
+		break;
+////////////////////////////////////////////////////////////////////////////////////
+		case 1532 :		//Insane Certainty Alienist feat
+			PS_Insane_Certainty(oPC, nSpell);
 		break;
 
 

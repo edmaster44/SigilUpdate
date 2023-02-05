@@ -121,6 +121,7 @@ const int WING_TYPE_WORDARCHON_M				= 73;
 const int CLASS_TYPE_PSION 						= 90;
 const int CLASS_PSYCHIC_WARRIOR					= 110;
 //List of All new PRCs
+const int CLASS_ALIENIST                        = 115;
 const int CLASS_TYPE_ELEMENTAL_WARRIOR			= 68;
 const int CLASS_DERVISH							= 72;
 const int CLASS_PSYCHIC_KNIGHT					= 109;
@@ -566,6 +567,11 @@ const int SPELLABILITY_NATURES_WEAPON			= 1940;
 const int SPELLABILITY_ROBE_OF_CLOUDS			= 1941;
 const int SPELLABILITY_SERPENTINE_COIL			= 1942;
 const int SPELLABILITY_WILD_GROWTH				= 1943;
+
+//Alienist Feats
+const int FEAT_ALIENIST_ALIEN_BLESSING          = 3084;
+const int FEAT_ALIENIST_MAD_CERTAINTY           = 3085;
+const int FEAT_ALIENIST_INSANE_CERTAINTY        = 3086;
 
 //Dervish Feats 
 const int FEAT_DERVISH_AC_BONUS					= 2999;
