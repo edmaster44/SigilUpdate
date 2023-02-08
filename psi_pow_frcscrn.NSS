@@ -57,19 +57,10 @@ void main()
 
     if(manif.bCanManifest)
     {
-	int nLevel = GetManifesterLevel(oManifester);
+
 	
 	
         int nBonus; 
-		if (nLevel > 0)
-		nBonus = 1;
-		 if (nLevel > 3)
-		nBonus = 2;
-		 if (nLevel > 6)
-		nBonus = 3;
-		 if (nLevel > 7)
-		nBonus = 4; 
-		 if (nLevel > 10)
 		nBonus = 5;
 		if (manif.bAugment)
 			nBonus += 1;
