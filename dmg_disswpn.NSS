@@ -23,24 +23,30 @@ struct manifestation manif =
 
 int nNumberOfDice;
 
-if (GetManifesterLevel(oManifester)>3)
+
+
+if (nPsywar(oManifester)>3)
 {nNumberOfDice = 1;}
 
-if (GetManifesterLevel(oManifester)>6)
+if (nPsywar(oManifester)>6)
 {nNumberOfDice = 2;}
 
-if (GetManifesterLevel(oManifester)>9)
+if (nPsywar(oManifester)>9)
 {nNumberOfDice = 3;}
 
-if (GetManifesterLevel(oManifester)>12)
+if (nPsywar(oManifester)>12)
 {nNumberOfDice = 4;}
 
-if (GetManifesterLevel(oManifester)>15)
+if (nPsywar(oManifester)>15)
 {nNumberOfDice = 5;}
 
 if (manif.bAugment) nNumberOfDice = nNumberOfDice+1;	
 
-float fDur = 60.0f * manif.nManifesterLevel;
+float fDur = 60.0f * nPsywar(oManifester);
+
+
+if (manif.bAugment) nNumberOfDice = nNumberOfDice+1;	
+
 
 	
 
