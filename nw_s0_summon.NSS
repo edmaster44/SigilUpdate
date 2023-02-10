@@ -1,8 +1,10 @@
 /* Stripped all Bioware/Obsidan comments and reworked a lot of the script
 hopefully to make thing a little clearier and make modification simpler - Agony_Aunt */
 
+#include "aaa_constants.NSS"
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
+#include "template_pseudonatural.nss"
 
 // predefine the templates here as constants so easier to find and modify the templates.
 
@@ -596,6 +598,14 @@ void ApplySummonMastery(object oCaster = OBJECT_SELF)
 	}
 }
 
+void ApplyPseudonaturalToSummon(object oCaster = OBJECT_SELF)
+{
+	object oSummon = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oCaster);
+	if (GetHasFeat(FEAT_ALIENIST_SUMMON_ALIEN, oCaster, TRUE) && GetIsObjectValid(oSummon))
+	{
+		ApplyTemplatePseudonatural(oSummon);
+	}
+}
 
 void main()
 {
@@ -618,6 +628,7 @@ void main()
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eSummon, GetSpellTargetLocation(),RoundsToSeconds(nDuration));
 	
 	DelayCommand(1.0, ApplySummonMastery());
+	DelayCommand(1.5, ApplyPseudonaturalToSummon());
 	
 	ApplyPostSummonActions(oPC, sTemplate);
 }
