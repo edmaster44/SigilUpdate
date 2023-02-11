@@ -4,10 +4,10 @@
 //:://////////////////////////////////////////////
 /** @file
 
-    Dissolving Weapon
+    Stygian Weapon
 
-    Psychometabolism [Acid]
-    Level: Psychic warrior 2/ Lurk 2 
+    Psychometabolism 
+    Level: Psychic warrior 2
     Manifesting Time: 1 standard action
     Range: Personal
     Target: One held weapon; see text
@@ -15,16 +15,15 @@
     Saving Throw: None
     Power Resistance: No
     Power Points: 3
-    Metapsionics: Empower
+    Metapsionics: Augmented
 	
-    Tendrils of crackling black energy course from you into your weapon.
+	
+ Tendrils of crackling black energy course from you into your weapon.
 
-You form a momentary link between yourself and the Negative Energy Plane, allowing you to empower your weapon with fell energy.
- One melee attack you make in this round is infused with negative energy.
-  On a successful attack, your foe is treated as if struck with a stygian ray (page 101). That creature’s power resistance (if any) applies to this attack.
+You form a momentary link between yourself and the Negative Energy Plane, allowing you to empower your weapon with fell energy, 1d4 Negative Damage, Augmenting your power 
+adds an extra 1d2 Damage for a grand total of 1d6 negative
+On a successful attack, your foe is treated as if struck with a stygian ray, Draining your foes level DC 10 + Wisdom Modifer 
 
-    @author Ornedan
-    @date   Created - 2005.01.19
 */
 //:://////////////////////////////////////////////
 //:://////////////////////////////////////////////
