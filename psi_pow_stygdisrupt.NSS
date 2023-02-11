@@ -71,8 +71,9 @@ void main()
 {
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-		IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_FEAT_UNDEAD_RUIN, 2), fDuration);
-		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_HOLY), fDuration);
+		
+		{IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_FEAT_UNDEAD_RUIN, 2), fDuration);
+		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_HOLY), fDuration);}
         
         
     }

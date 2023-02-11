@@ -12,7 +12,7 @@ void main()
 {
 
 object oManifester = OBJECT_SELF;
-object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
+object oTarget     = GetSpellTargetObject();
 struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),

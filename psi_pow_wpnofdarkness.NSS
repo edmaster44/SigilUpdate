@@ -56,14 +56,15 @@ void main()
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_1d8;
-		int DamageType = DAMAGE_TYPE_COLD;
+		int DamageType = IP_CONST_DAMAGETYPE_COLD;
 		int iWisMod		= GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
 		int iSaveDC		= 10 + iWisMod;
 		itemproperty ipSlow = ItemPropertyOnHitProps(IP_CONST_ONHIT_SLOW, iSaveDC, 0);
 		itemproperty ipCold = ItemPropertyDamageBonus(DamageType,nDamage);  
+		{
         IPSafeAddItemProperty(oTarget, ipSlow, fDuration);
 		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_COLD), fDuration);
-		IPSafeAddItemProperty(oTarget, ipCold, fDuration);
+		IPSafeAddItemProperty(oTarget, ipCold, fDuration);}
 		
 		
         

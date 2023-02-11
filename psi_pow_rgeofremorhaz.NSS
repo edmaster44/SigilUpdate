@@ -43,7 +43,7 @@ effect eVis  = EffectNWN2SpecialEffectFile("psi_energyretort_fire.sef", oManifes
 effect eShield = EffectDamageShield(nDamage, DAMAGE_BONUS_1, DAMAGE_TYPE_FIRE);
 	   		  eShield = EffectLinkEffects(eShield, eVis);
 
-if (GetHasSpellEffect(14477, oTarget) || GetHasSpellEffect(14478, oTarget) || GetHasSpellEffect(14479, oTarget) || GetHasSpellEffect(14480, oTarget))
+if (GetHasSpellEffect(14306, oTarget))
 	   {
 	   		FloatingTextStringOnCreature("This power does not stack with other instances of itself.",OBJECT_SELF, FALSE);
 	   		return;
