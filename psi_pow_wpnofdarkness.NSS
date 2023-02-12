@@ -36,10 +36,10 @@ void main()
 
     object oManifester = OBJECT_SELF;
     object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
-    struct manifestation manif =
+        struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_EXTEND||METAPSIONIC_AUGMENT
+                              METAPSIONIC_AUGMENT  |METAPSIONIC_EXTEND 
                               );
 							  
 
@@ -52,10 +52,11 @@ void main()
 
     if(manif.bCanManifest)
 {
-		int nDamage = IP_CONST_DAMAGEBONUS_1d6;
+		int nDamage;
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend){ fDuration *= 2;}
 		if (manif.bAugment){ nDamage = IP_CONST_DAMAGEBONUS_1d8;}
+		else  {nDamage = IP_CONST_DAMAGEBONUS_1d6;}
 		int DamageType = IP_CONST_DAMAGETYPE_COLD;
 		int iWisMod		= GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
 		int iSaveDC		= 10 + iWisMod;

@@ -94,7 +94,7 @@ void main()
         effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
-		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_1d10;
+		if (manif.bAugment){ nDamage = IP_CONST_DAMAGEBONUS_1d10;}
 		int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
 		itemproperty iPEnergy = ItemPropertyDamageBonus(DamageType,nDamage);  
         {
