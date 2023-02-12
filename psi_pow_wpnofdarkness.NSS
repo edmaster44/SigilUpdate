@@ -54,8 +54,8 @@ void main()
 {
 		int nDamage = IP_CONST_DAMAGEBONUS_1d6;
         float fDuration = 60.0f * manif.nManifesterLevel;
-        if(manif.bExtend) fDuration *= 2;
-		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_1d8;
+        if(manif.bExtend){ fDuration *= 2;}
+		if (manif.bAugment){ nDamage = IP_CONST_DAMAGEBONUS_1d8;}
 		int DamageType = IP_CONST_DAMAGETYPE_COLD;
 		int iWisMod		= GetAbilityModifier(ABILITY_WISDOM, OBJECT_SELF);
 		int iSaveDC		= 10 + iWisMod;

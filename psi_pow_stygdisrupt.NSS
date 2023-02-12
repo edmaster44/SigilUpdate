@@ -70,9 +70,9 @@ void main()
     if(manif.bCanManifest)
 {
         float fDuration = 60.0f * manif.nManifesterLevel;
-        if(manif.bExtend) fDuration *= 2;
-		
-		{IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_FEAT_UNDEAD_RUIN, 2), fDuration);
+        if(manif.bExtend){ fDuration *= 2;}
+		itemproperty iRuin		= 	ItemPropertyBonusFeat(IP_CONST_FEAT_UNDEAD_RUIN);
+		{IPSafeAddItemProperty(oTarget,iRuin, fDuration);
 		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_HOLY), fDuration);}
         
         

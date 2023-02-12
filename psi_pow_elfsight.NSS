@@ -56,16 +56,16 @@ void main()
 
     if(manif.bCanManifest)
     {
-      /*  effect eLink =                          EffectSkillIncrease(SKILL_SPOT,   4);
-               eLink = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_SEARCH, 4));
+        effect eLink =                          EffectSkillIncrease(SKILL_SPOT,   2);
+               eLink = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_SEARCH, 2));
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_SPELL_CLAIRAUD));
-        effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);*/
+        effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);
         float fDuration = HoursToSeconds(manif.nManifesterLevel);
-		itemproperty iKeenSight = ItemPropertyBonusFeat(800);	//
+		itemproperty iKeenSight = ItemPropertyBonusFeat(800);	
         if(manif.bExtend) fDuration *= 2;
 
 		AddItemProperty(DURATION_TYPE_TEMPORARY,iKeenSight,oChest,fDuration);
-       /* ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);*/
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }
