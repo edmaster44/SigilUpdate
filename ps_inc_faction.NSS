@@ -446,6 +446,13 @@ int GetFaction(object oPC) {
 	    }
 	}
 	
+	object oItem = GetItemPossessedBy(oPC,"ps_essence");
+	if(GetIsObjectValid(oItem)) {
+		int oldFaction = GetLocalInt(oItem, "Faction");
+		if (oldFaction == FACTION_QUIT)
+			return FACTION_QUIT;
+	}
+	
 	string sID = PS_GetCharID(oPC);
 	string sQuery = "SELECT faction_id FROM characterfactions WHERE character_id = "+sID;
 	SQLExecDirect(sQuery);
@@ -923,6 +930,8 @@ void RemoveFactionBadge(object oBadge, object oSource, object oTarget) {
 		}
 	}
 	
+	int nOldRank = GetLocalInt(oBadge,"FactionRank");
+	
 	int iInfiltrated = 0;
 	string sFactionName = GetLocalString(oBadge, "FactionName");
 	object oEssence = GetItemPossessedBy(oTarget, "ps_essence");
@@ -948,12 +957,17 @@ void RemoveFactionBadge(object oBadge, object oSource, object oTarget) {
 		
 		if (iInfiltrationConfirmed == TRUE)
 			SetLocalInt(oEssence, "Faction", iInfiltrated);
+		else if (nOldRank > 1)
+			SetLocalInt(oEssence, "Faction", FACTION_QUIT);
 		else
-			SetLocalInt(oEssence, "Faction", 255);
+			DeleteLocalInt(oEssence, "Faction");
 	}
 	else
 	{
-		SetLocalInt(oEssence, "Faction", 255);
+		if (nOldRank > 1)
+			SetLocalInt(oEssence, "Faction", FACTION_QUIT);
+		else
+			DeleteLocalInt(oEssence, "Faction");
 	}
 	
 	DestroyObject(oBadge, 0.0, TRUE);
