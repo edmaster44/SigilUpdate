@@ -106,6 +106,10 @@ string PickItemFromDatabase(string sTable, int nTreasureLevel, string sSubTable 
 	
 }
 
+//returns the tag of a campaign item - Fate of an Empire
+//called in SpecialDrop()
+string GetCampaignItemString();
+
 //Handles special material drops
 //redo later
 void SpecialDrop(string sAREA, object oSPAWN)
@@ -253,6 +257,9 @@ void SpecialDrop(string sAREA, object oSPAWN)
 			case 0: sSPECIAL = "ps_cfrt_ing_pd"; break;
 			case 1: sSPECIAL = "ps_cfrt_ing_ml"; break;
 		}
+	} 
+	else if (TestStringAgainstPattern("**undersigil**", sAREA)) {
+		sSPECIAL = GetCampaignItemString();
 	}
 	else return;	
 	CreateTreasureItemOnTarget(sSPECIAL, oSPAWN);
@@ -405,7 +412,7 @@ void CreatePaperItemsOnTarget(object oTarget, int nTreasureType = TREASURE_LOW) 
 //***************************************************
 //Junk Generation
 //***************************************************
-//creates one of the mirror items on the target for the upcoming campaign
+//creates one of the mirror items on the target (Twin Cages Campaign)
 //Called in CreateJunkOnTarget()
 void CreateCampaignItemOnTarget(object oTarget) {
 	int nRandom = Random(13)+1;
@@ -420,6 +427,20 @@ void CreateCampaignItemOnTarget(object oTarget) {
 		case 10: CreateTreasureItemOnTarget("ps_lorebook_102", oTarget, 1); break;
 		case 11: CreateTreasureItemOnTarget("ps_lorebook_103", oTarget, 1); break;
 	}
+}
+
+//returns the tag of a campaign item - Fate of an Empire
+//called in SpecialDrop()
+string GetCampaignItemString() {
+	int nRandom = Random(4)+1;
+	switch (nRandom) {
+		case 1: return "foae_armor";
+		case 2: return "foae_weapon_gladius";
+		case 3: return "foae_shield";
+		case 4: return "foae_badge";
+	}
+	
+	return "foae_armor";
 }
 
 //General junk creation script
