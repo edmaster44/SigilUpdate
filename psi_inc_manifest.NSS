@@ -122,11 +122,8 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 			return manif;
 		}
 		
-		//dmg_disswpn does not drain PP per strike
-		if (GetHasSpell(2893,OBJECT_SELF))
-		{
-			return manif;
-		} 
+
+	
 		
         //If the manifester does not have enough points before hostile modifiers, cancel power
         else if(manif.nPPCost > nManifesterPP)
@@ -146,9 +143,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 			int nPPFinal = nManifesterPP-manif.nPPCost;
 			nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 			//Debug message
-			if (!GetHasSpell(2893,OBJECT_SELF))
-			 
-			SendMessageToPC(oManifester, "Power cast successfully; Current Power Points: "+IntToString(nManifesterPP));
+			
 		
 		
 			
