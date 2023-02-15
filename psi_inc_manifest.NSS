@@ -146,6 +146,8 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 			int nPPFinal = nManifesterPP-manif.nPPCost;
 			nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 			//Debug message
+			if (!GetHasSpell(2893,OBJECT_SELF))
+			 
 			SendMessageToPC(oManifester, "Power cast successfully; Current Power Points: "+IntToString(nManifesterPP));
 		
 		
