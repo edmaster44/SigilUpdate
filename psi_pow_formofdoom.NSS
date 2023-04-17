@@ -99,7 +99,7 @@ void main()
                //eLink    = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_INTIMIDATE, 10));
                eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"));
         effect eTest;
-        float fDuration = 6.0f * (manif.nManifesterLevel + (2 * manif.nManifesterLevel));
+        float fDuration = 6.0f * (manif.nManifesterLevel);
         if(manif.bExtend) fDuration *= 2;
 
         // Will not work if under the effects of Polymorph. Also will not stack with itself
