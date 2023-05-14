@@ -16,7 +16,8 @@
 //:: 11/28/06 - BDF(OEI): fixed an issue with the spell DC being calculated incorrectly
 
 #include "X0_I0_SPELLS"
-#include "x2_inc_spellhook" 
+#include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 int GetIsValidHenchman(object oTarget, object oMaster)
 {
@@ -54,7 +55,7 @@ void main()
 	effect eDeath = EffectDeath(FALSE, TRUE, TRUE); //FIX: should work on death-immune
 	effect eLink = EffectLinkEffects(eVis, eDeath);
     int nBaseSpellDC = GetSpellSaveDC();
-	int nCasterLevel = GetCasterLevel ( OBJECT_SELF );
+	int nCasterLevel = PS_GetCasterLevel ( OBJECT_SELF );
 	int nRacial;
 	int nHitDice;
 	int nAdjustedSpellDC;
