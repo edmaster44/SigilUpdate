@@ -37,7 +37,7 @@ void main()
   //  nLevel = nLevel + GetLevelByClass(CLASS_TYPE_DIVINECHAMPION);
 	
 	//11/9/2020 - Knight Progression for Lay on Hands
-	 int nLevel =KnightLevels(OBJECT_SELF);
+	 int nLevel = LayOnHandsLevels(OBJECT_SELF);
 
     //--------------------------------------------------------------------------
     // Caluclate the amount to heal, min is 1 hp

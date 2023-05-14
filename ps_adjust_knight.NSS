@@ -248,3 +248,32 @@ int KnightLevels(object oPC)
 
 
 }
+
+int LayOnHandsLevels(object oPC)
+{
+	int iPally = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);//Paladin, aka, Knight
+	int iWarPriest = GetLevelByClass(CLASS_TYPE_WARPRIEST,oPC);//Warpriest	
+	int iHalfCelestial = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Celestial
+	int	iDivine = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC);//Divine Champion
+	int iEnvoy = GetLevelByClass(42,oPC); //Celestial Envoy	
+	int iHound = GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); // Hound Archon
+	int iAstral = GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);//Astral Deva PRC
+	int iDoomg  = GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC);//Doomguide
+	int iMovanic = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);//Movanic Deva
+	int iMarquis = GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC);//Marquis Cambion
+	int iDeath = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC);//Death Knight
+	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
+	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
+	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
+	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider ;
+	 
+		
+	   
+	   return iTotal;
+	   
+	  
+	
+
+
+}
