@@ -69,6 +69,7 @@ void main()
 			GetEffectSpellId(eBad) != 2000 &&
 			GetEffectSpellId(eBad) != 2001 &&
 			GetEffectSpellId(eBad) != 1515 &&//Half-Undead
+			GetEffectSpellId(eBad) != 1927 &&//Dervish Dance
 			GetEffectSpellId(eBad) != 2002 &&
 			GetEffectSpellId(eBad) != 2003 &&
 			GetEffectSpellId(eBad) != 2004 &&
