@@ -1016,6 +1016,7 @@ int AttackerABPenalties(object oAttacker, object oRightWeapon)
 	if(GetIsObjectValid(oLeftWeapon))
 	{
 		if (GetBaseItemType(oLeftWeapon) == BASE_ITEM_TOWERSHIELD) iPen = 2;
+		if ((GetBaseItemType(oLeftWeapon) == BASE_ITEM_TOWERSHIELD) && GetHasFeat(3060,oAttacker)) iPen = 0;
 		else iPen = CountDualWieldingFeats(oAttacker, oRightWeapon);	
 	}
 	
