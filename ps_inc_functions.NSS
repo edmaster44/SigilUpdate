@@ -195,8 +195,6 @@ int GetAbilityRacialBonus(object oPC, int iAbility);
 
 int GetAbilityBonuses(object oPC, int iAbility);
 
-void PS_ApplySpecialWeaponFinesse(object oPC, object oItem);
-
 int GetIsFinessable(object oItem);
 //Gets the Classes without Practiced Spell caster, for Qualifer Feats
 int GetClericWithoutFeat(object oPC);
@@ -214,9 +212,6 @@ int GetPaladinWithoutFeat(object oPC);
 int	GetSpiritShamanWithoutFeat(object oPC);
 //Gets the Classes without Practiced Spell caster, for Qualifer Feats
 int	GetFavoredSoulWithoutFeat(object oPC);
-
-
-void PS_RemoveSpecialWeaponFinesse(object oPC, object oItem);
 
 void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem);
 
@@ -1962,8 +1957,8 @@ if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 }
 
 string PS_GetEssenceECL(object oPC)
-{	object oEssence        = GetItemPossessedBy(oPC, "ps_essence");
-	string sECL = GetLocalString(oEssence,"ECL");
+{	
+	string sECL = GetLocalString(oPC,"ECL");
 	//if (sECL == "")
 	//{
  		//if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC) == TRUE)
