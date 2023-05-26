@@ -6,7 +6,27 @@
 
 void PS_BarbarianLevels(object oPC);
 
+int BarbarianLevels(object oPC);
 
+
+int BarbarianLevels(object oPC)
+{
+	int iBarb = GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC);
+	int iBralani = GetLevelByClass(CLASS_TYPE_BRALANI_PRC,oPC);//Bralani
+	int iSavage = GetLevelByClass(CLASS_TYPE_SAVAGE_MARAUDER_PRC,oPC);//Savage Marauder
+	int iScaly = GetLevelByClass(CLASS_TYPE_SCALED_HUNTER_PRC,oPC);//Scaled Hunter
+	int iHilly = GetLevelByClass(CLASS_TYPE_HILL_GIANT_PRC,oPC);//Hill Giant
+	int iFrost = GetLevelByClass(CLASS_TYPE_FROST_GIANT_PRC,oPC);//Frost Giant PRC
+	int iFrenzy = GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER,oPC);//Frenized Berserker.
+	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy +iScaly + iHilly;
+	if (iBarb < 1)
+	{ (iTotal = 0);}
+	
+	if(GetHasFeat(FEAT_LYCAN_BP_WEREBOAR,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(CLASS_TYPE_LYCAN_PRC,oPC);
+
+
+return iTotal;
+}
 
 void PS_BarbarianLevels(object oPC)
 {

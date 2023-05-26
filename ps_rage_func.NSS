@@ -2,6 +2,7 @@
 // New Rage feats for Barbarians.
 
 #include "x2_inc_itemprop"
+#include "ps_adjust_barbarian"
 #include "ps_inc_functions"
 
 // iType is 1 for Blazing, 2 for Frozen, 3 for Both

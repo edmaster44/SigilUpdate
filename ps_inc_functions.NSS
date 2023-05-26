@@ -117,8 +117,6 @@ effect PS_EffectDamage(int nDamageAmount, int nDamageType = DAMAGE_TYPE_BLUDGEON
 
 float PS_GetAvgPartylevel(object oPC, int iMAX);
 
-int BarbarianLevels(object oPC);
-
 float PS_GetXPModifier(int iECL);
 
 int PS_GetXPForLevel(int iLevel);
@@ -220,25 +218,6 @@ void DebugMessageToPC(object oPC, string sMessage);
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 
 
-//Progresses Barbarian 
-int BarbarianLevels(object oPC)
-{
-	int iBarb = GetLevelByClass(CLASS_TYPE_BARBARIAN, oPC);
-	int iBralani = GetLevelByClass(CLASS_TYPE_BRALANI_PRC,oPC);//Bralani
-	int iSavage = GetLevelByClass(CLASS_TYPE_SAVAGE_MARAUDER_PRC,oPC);//Savage Marauder
-	int iScaly = GetLevelByClass(CLASS_TYPE_SCALED_HUNTER_PRC,oPC);//Scaled Hunter
-	int iHilly = GetLevelByClass(CLASS_TYPE_HILL_GIANT_PRC,oPC);//Hill Giant
-	int iFrost = GetLevelByClass(CLASS_TYPE_FROST_GIANT_PRC,oPC);//Frost Giant PRC
-	int iFrenzy = GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER,oPC);//Frenized Berserker.
-	int iTotal = iBarb + iBralani + iSavage + iFrost + iFrenzy +iScaly + iHilly;
-	if (iBarb < 1)
-	{ (iTotal = 0);}
-	
-	if(GetHasFeat(FEAT_LYCAN_BP_WEREBOAR,oPC,TRUE)) iTotal = iTotal + GetLevelByClass(CLASS_TYPE_LYCAN_PRC,oPC);
-
-
-return iTotal;
-}
 //Calculates Monk Unarmed Damage Based on Monk Class +PRC
 int MonkUnarmedDamage(object oPC, int iMonk)
 {				
@@ -1845,115 +1824,16 @@ if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 	if(iCasterLevelTrue > iLevel) iLevel = iCasterLevelTrue;
 	
 	return iLevel;
-	
-	
-   /* // mystic theurge, sacred fist, stormlord, doomguide, warpriest and Harper agent can increase caster level if they have appropriate feats
-    // practiced caster can also increase by +4.
-
-    if (iClass == CLASS_TYPE_RANGER)
-    {	iLevel = GetLevelByClass(CLASS_TYPE_RANGER, oPC);
-        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER, oPC, TRUE)) iLevel += 4;
-        if (GetHasFeat(1548, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
-        if (GetHasFeat(1552, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
-        if (GetHasFeat(1583, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
-        if (GetHasFeat(1811, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
-        if (GetHasFeat(2036, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
-        if (GetHasFeat(2254, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide	
-    }
-    else if (iClass == CLASS_TYPE_PALADIN)
-    {	iLevel = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);
-        if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN, oPC, TRUE)) iLevel += 4;
-        if (GetHasFeat(1547, oPC, TRUE)) iLevel += GetLevelByClass(44, oPC); // Mystic Theurge
-        if (GetHasFeat(1551, oPC, TRUE)) iLevel += GetLevelByClass(45, oPC); // Sacred Fist
-        if (GetHasFeat(1582, oPC, TRUE)) iLevel += GetLevelByClass(28, oPC); // Harper Agent
-        if (GetHasFeat(1810, oPC, TRUE)) iLevel += GetLevelByClass(51, oPC); // Warpriest
-        if (GetHasFeat(2035, oPC, TRUE)) iLevel += GetLevelByClass(56, oPC); // Stormlord
-        if (GetHasFeat(2250, oPC, TRUE)) iLevel += GetLevelByClass(60, oPC); // Doomguide
-    }
-    
-	else
-    {	iLevel = GetCasterLevel(oPC);	}
-
-    return iLevel; */
-	
 }
 
 /* 	Used to calculate full caster level for golem masters. Combines all arcane or all divine caster level classes
 	for the calculation, and selects whichever number is higher */
 int PS_GetGolemCasterLevel(object oPC)
 {
- int iClass = GetLastSpellCastClass();
- int iCasterLevelTrue = GetCasterLevel(oPC);
- int iLevel;
-if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
+
 	
-	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_SPIRIT_SHAMAN)iLevel = GetSpiritShamanTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_WIZARD)iLevel = GetWizardTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_SORCERER)iLevel = GetSorcererTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_BARD)iLevel =GetBardTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_DRUID)iLevel = GetDruidTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_FAVORED_SOUL)iLevel =GetFavoredSoulTRUECasterlevel(oPC);
-	else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
-	else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
-	
-		if(iCasterLevelTrue > iLevel) iLevel = iCasterLevelTrue;
-	
-	return iLevel;
-   /* // Arcane
-	int iBard = GetLevelByClass(1, oPC);
-	int iSorc = GetLevelByClass(9, oPC);
-	int iWiza = GetLevelByClass(10, oPC);
-	int iHarp = GetLevelByClass(28, oPC);
-		iHarp = FloatToInt(IntToFloat(iHarp)*0.8f);
-	int iPale = GetLevelByClass(34, oPC);
-		iPale = FloatToInt(IntToFloat(iPale)*0.5f);
-	int iWarl = GetLevelByClass(39,oPC);	
-	int iTric = GetLevelByClass(40, oPC);
-	int iTheu = GetLevelByClass(44, oPC);
-	int iEldr = GetLevelByClass(52, oPC);
-		iEldr = FloatToInt(IntToFloat(iEldr)*0.8f);
-	int iRedw = GetLevelByClass(53, oPC);
-	int iArca = GetLevelByClass(54, oPC);
-	int iBrac = GetLevelByClass(97, oPC);
-	int iSucc = GetLevelByClass(98, oPC);
-	int iDemo = GetLevelByClass(69, oPC);
-		iDemo = FloatToInt(IntToFloat(iDemo)*0.7f);
-	int iLich = GetLevelByClass(93, oPC) + GetLevelByClass(92, oPC);
-		iLich = FloatToInt(IntToFloat(iLich)*0.9f);
-	
-	// Divine
-	int iCler = GetLevelByClass(2, oPC);
-	int iDrui = GetLevelByClass(3, oPC);
-	int iPala = GetLevelByClass(6, oPC);
-	int iRang = GetLevelByClass(7, oPC);
-//	int iHarp = GetLevelByClass(28, oPC);
-	int iEnvo = GetLevelByClass(42, oPC);
-		iEnvo = FloatToInt(IntToFloat(iEnvo)*0.6f);
-	//	int iTheu = GetLevelByClass(44, oPC);
-	int iFist = GetLevelByClass(45, oPC);
-		iFist = FloatToInt(IntToFloat(iFist)*0.8f);
-	int iWarp = GetLevelByClass(51, oPC);
-		iWarp = FloatToInt(IntToFloat(iWarp)*0.8f);
-	int iSham = GetLevelByClass(55, oPC);
-	int iStor = GetLevelByClass(56, oPC);
-	int iFavo = GetLevelByClass(58, oPC);
-	int iDoom = GetLevelByClass(60, oPC);
-	
-	// And now the math...
-	int iArcane = iBard + iSorc + iWiza + iHarp + iPale + iWarl + iTric + iTheu + iEldr + iRedw + iArca + iBrac + iSucc + iDemo + iLich;
-	int iDivine = iCler + iDrui + iPala + iRang + iHarp + iEnvo + iTheu + iFist + iWarp + iSham + iStor + iFavo + iDoom +iSucc + iLich;
-	
-	int iLevel;
-	if((iArcane >= 1) && (iArcane >= iDivine))
-		{	iLevel = iArcane;	}
-	else if(iDivine >= 1)
-		{	iLevel = iDivine;	}
-	else
-		{	iLevel = 0;	}
-		
-	return iLevel; */
+	return PS_GetCasterLevel(oPC);
+  
 }
 
 string PS_GetEssenceECL(object oPC)
@@ -3407,18 +3287,7 @@ struct CreatureCoreAppearance PS_RetrieveStoredCreatureCoreAppearance(object Obj
 
 void PS_RefreshAppearance(object oPC)
 {
-	/*object gloves = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
-	if (!GetIsObjectValid(gloves))
-	{
-		object newGloves = CreateItemOnObject("ps_srlg_gloves", oPC);
-		ActionEquipItem(newGloves, INVENTORY_SLOT_ARMS);
-		DelayCommand(0.2f, DestroyObject(newGloves));
-	}
-	else
-	{
-		ActionUnequipItem(gloves);
-		DelayCommand(0.2f, ActionEquipItem(gloves, INVENTORY_SLOT_ARMS));
-	}*/
+
 	ServerExts_RefreshCreatureAppearance(oPC, oPC);
 }
 
@@ -3594,64 +3463,7 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 {
 	TemplateRacialAdjust(oPC, oItem, FALSE);
-	
-	/*OLD COMMANDS REMOVED
-	
-	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	
-	// if fix has already been applied, stop the script!
-	if (iStop == 1) 
-	{	SendMessageToPC(oPC, "Racial attribute fix already applied!");
-		return;	}
 
-	// calcualte bonuses from racialsubtypes.2da
-	int iStrBonus		= GetAbilityOriginalRacialBonus(oPC, 0);
-	int iDexBonus		= GetAbilityOriginalRacialBonus(oPC, 1);
-	int iConBonus		= GetAbilityOriginalRacialBonus(oPC, 2);
-	int iIntBonus		= GetAbilityOriginalRacialBonus(oPC, 3);
-	int iWisBonus		= GetAbilityOriginalRacialBonus(oPC, 4);
-	int iChaBonus		= GetAbilityOriginalRacialBonus(oPC, 5);
-	
-	// get current ability scores
-	int iStrBase		= GetAbilityScore(oPC, ABILITY_STRENGTH, TRUE);
-	int iDexBase		= GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE);
-	int iConBase		= GetAbilityScore(oPC, ABILITY_CONSTITUTION, TRUE);
-	int iIntBase		= GetAbilityScore(oPC, ABILITY_INTELLIGENCE, TRUE);
-	int iWisBase		= GetAbilityScore(oPC, ABILITY_WISDOM, TRUE);
-	int iChaBase		= GetAbilityScore(oPC, ABILITY_CHARISMA, TRUE);
-	
-	int iStrNew, iDexNew, iConNew, iIntNew, iWisNew, iChaNew;
-
-	if (iStrBonus != 0)
-	{	iStrNew = (iStrBase + iStrBonus);
-		SetBaseAbilityScore(oPC, ABILITY_STRENGTH, iStrNew);
-		SendMessageToPC(oPC, "Strength Adjusted from " + IntToString(iStrBase) + " to " + IntToString(iStrNew) + ".");	
-		SetLocalInt(oItem, "TemplateFix", 1);	}
-	if (iDexBonus != 0)
-	{	iDexNew = (iDexBase + iDexBonus);
-		SetBaseAbilityScore(oPC, ABILITY_DEXTERITY, iDexNew);
-		SendMessageToPC(oPC, "Dexterity Adjusted from " + IntToString(iDexBase) + " to " + IntToString(iDexNew) + ".");	
-		SetLocalInt(oItem, "TemplateFix", 1);	}
-	if (iConBonus != 0)
-	{	iConNew = (iConBase + iConBonus);
-		SetBaseAbilityScore(oPC, ABILITY_CONSTITUTION, iConNew);
-		SendMessageToPC(oPC, "Constitution Adjusted from " + IntToString(iConBase) + " to " + IntToString(iConNew) + ".");	
-		SetLocalInt(oItem, "TemplateFix", 1);	}
-	if (iIntBonus != 0)
-	{	iIntNew = (iIntBase + iIntBonus);
-		SetBaseAbilityScore(oPC, ABILITY_INTELLIGENCE, iIntNew);
-		SendMessageToPC(oPC, "Intelligence Adjusted from " + IntToString(iIntBase) + " to " + IntToString(iIntNew) + ".");
-		SetLocalInt(oItem, "TemplateFix", 1);	}
-	if (iWisBonus != 0)
-	{	iWisNew = (iWisBase + iWisBonus);
-		SetBaseAbilityScore(oPC, ABILITY_WISDOM, iWisNew);
-		SendMessageToPC(oPC, "Wisdom Adjusted from " + IntToString(iWisBase) + " to " + IntToString(iWisNew) + ".");
-		SetLocalInt(oItem, "TemplateFix", 1);	}
-	if (iChaBonus != 0)
-	{	iChaNew = (iChaBase + iChaBonus);
-		SetBaseAbilityScore(oPC, ABILITY_CHARISMA, iChaNew);
-		SendMessageToPC(oPC, "Charisma adjusted from " + IntToString(iChaBase) + " to " + IntToString(iChaNew) + ".");
-		SetLocalInt(oItem, "TemplateFix", 1);	}*/
 }
 
 // Remove racial bonuses to if the character delevels to no longer have a template class.
@@ -3662,94 +3474,14 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 void PS_RemoveTemplateClassAbilityFix(object oPC, object oItem)
 {
 	TemplateRacialAdjust(oPC, oItem, TRUE);
-	
-	/*OLD COMMANDS REMOVED
-	
-	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	
-	// if fix has already been applied, stop the script!
-	if (iStop != 1) 
-	{	// SendMessageToPC(oPC, "No need to run this script!");
-		return;	}
 
-	// calcualte bonuses from racialsubtypes.2da
-	int iStrBonus		= GetAbilityOriginalRacialBonus(oPC, 0);
-	int iDexBonus		= GetAbilityOriginalRacialBonus(oPC, 1);
-	int iConBonus		= GetAbilityOriginalRacialBonus(oPC, 2);
-	int iIntBonus		= GetAbilityOriginalRacialBonus(oPC, 3);
-	int iWisBonus		= GetAbilityOriginalRacialBonus(oPC, 4);
-	int iChaBonus		= GetAbilityOriginalRacialBonus(oPC, 5);
-	
-	// get current ability scores
-	int iStrBase		= GetAbilityScore(oPC, ABILITY_STRENGTH, TRUE);
-	int iDexBase		= GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE);
-	int iConBase		= GetAbilityScore(oPC, ABILITY_CONSTITUTION, TRUE);
-	int iIntBase		= GetAbilityScore(oPC, ABILITY_INTELLIGENCE, TRUE);
-	int iWisBase		= GetAbilityScore(oPC, ABILITY_WISDOM, TRUE);
-	int iChaBase		= GetAbilityScore(oPC, ABILITY_CHARISMA, TRUE);
-	
-	int iStrNew, iDexNew, iConNew, iIntNew, iWisNew, iChaNew;
-
-	if (iStrBonus != 0)
-	{	iStrNew = (iStrBase - iStrBonus);
-		SetBaseAbilityScore(oPC, ABILITY_STRENGTH, iStrNew);
-		SendMessageToPC(oPC, "Strength Adjusted from " + IntToString(iStrBase) + " to " + IntToString(iStrNew) + ".");		}
-	if (iDexBonus != 0)
-	{	iDexNew = (iDexBase - iDexBonus);
-		SetBaseAbilityScore(oPC, ABILITY_DEXTERITY, iDexNew);
-		SendMessageToPC(oPC, "Dexterity Adjusted from " + IntToString(iDexBase) + " to " + IntToString(iDexNew) + ".");		}
-	if (iConBonus != 0)
-	{	iConNew = (iConBase - iConBonus);
-		SetBaseAbilityScore(oPC, ABILITY_CONSTITUTION, iConNew);
-		SendMessageToPC(oPC, "Constitution Adjusted from " + IntToString(iConBase) + " to " + IntToString(iConNew) + ".");		}
-	if (iIntBonus != 0)
-	{	iIntNew = (iIntBase - iIntBonus);
-		SetBaseAbilityScore(oPC, ABILITY_INTELLIGENCE, iIntNew);
-		SendMessageToPC(oPC, "Intelligence Adjusted from " + IntToString(iIntBase) + " to " + IntToString(iIntNew) + ".");	}
-	if (iWisBonus != 0)
-	{	iWisNew = (iWisBase - iWisBonus);
-		SetBaseAbilityScore(oPC, ABILITY_WISDOM, iWisNew);
-		SendMessageToPC(oPC, "Wisdom Adjusted from " + IntToString(iWisBase) + " to " + IntToString(iWisNew) + ".");	}
-	if (iChaBonus != 0)
-	{	iChaNew = (iChaBase - iChaBonus);
-		SetBaseAbilityScore(oPC, ABILITY_CHARISMA, iChaNew);
-		SendMessageToPC(oPC, "Charisma adjusted from " + IntToString(iChaBase) + " to " + IntToString(iChaNew) + ".");	}
-		
-	SetLocalInt(oItem, "TemplateFix", 0);*/
 }
 
 void PS_Template_DelevelFix(object oPC, object oItem)
 {
 	if (PS_NeedsTemplateClassAbilityFix(oPC) == TRUE) return;
 	PS_RemoveTemplateClassAbilityFix(oPC, oItem);
-	
-	/*OLD COMMANDS REMOVED
-	
-	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	string sTemplate	= GetLocalString(oItem, "Template");
-	int iTemplateLevel 	= 0;
-	
-	if (sTemplate == "Lich" || sTemplate == "Vampire" || sTemplate == "DeathKnight" || sTemplate == "Lycan" || sTemplate == "HalfDragon" || sTemplate == "HalfOutsider")
-	{	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0 )
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-		if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0 )
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-		if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0 )
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
-		if (GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC) > 0 )
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);	}
-		if (GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC) > 0 )
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);	}
-		if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0 )
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);	}
-		if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
-//		if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) > 0)
-//		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) - 6;	}
-//		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) > 0)
-//		{	iTemplateLevel = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) - 6;	}
-		// Add additional template classes here using the same as above
-	}*/
+
 }
 
 void PS_VampMal_DelevelFix(object oPC, object oItem)
@@ -3794,47 +3526,6 @@ void PS_PullAggro(object oPC, object oTarget)
 	}
 }
 
-/*void PS_Ability_RaceFlight(object oPC)
-{
-	int iGender = GetGender(oPC);
-	int iSUB = GetSubRace(oPC);
-	string sMWing = Get2DAString("racialsubtypes", "MWING", iSUB);
-	string sFWing = Get2DAString("racialsubtypes", "FWING", iSUB);
-	string sTail = Get2DAString("racialsubtypes", "TAIL", iSUB);
-	int iWing;
-	if (iGender == GENDER_MALE)
-	{	iWing = StringToInt(sMWing);	}
-	else  if (iGender = GENDER_FEMALE)
-	{	iWing = StringToInt(sFWing);	}
-	int iTail = StringToInt(sTail);
-
-	PS_RestoreOriginalAppearance(oPC);
-	
-	if (iWing != 0 && iTail != 0)
-	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-			app.WingVariation = iWing;
-			app.TailVariation = iTail;
-		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_SaveOriginalAppearance(oPC);
-		DelayCommand(0.1f, PS_RefreshAppearance(oPC));	
-		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC)); }
-	
-	if (iWing != 0 && iTail == 0)
-	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-			app.WingVariation = iWing;
-		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_SaveOriginalAppearance(oPC);
-		DelayCommand(0.1f, PS_RefreshAppearance(oPC));	
-		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC)); }
-	
-	if (iTail != 0 && iWing == 0)
-	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-			app.TailVariation = iTail;
-		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_SaveOriginalAppearance(oPC);
-		DelayCommand(0.1f, PS_RefreshAppearance(oPC));	
-		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC)); }
-}*/
 
 // 	Removes an item's current visual effect and permanently replaces it with 
 //	a new one.
