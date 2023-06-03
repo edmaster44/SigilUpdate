@@ -495,7 +495,8 @@ string XPCraft_GetVariation_ListName(object oPC, int iArmorVisualType, int iBase
 		case 18: sListName +="OPS"; break; //OPS	
 		case 20: sListName +="MPHA"; break; //MPHA	
 		case 21: sListName +="SCOD"; break; //SCoD	
-		case 22: sListName +="AN"; break; //AN / Creature	
+		case 22: sListName +="AN"; break; //AN / Creature
+		case 24: sListName +="JUDE"; break; //AN / Creature	
 	}
 	
 	switch(iBaseItemType)
