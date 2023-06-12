@@ -40,8 +40,6 @@ void main()
 		case RACIAL_SUBTYPE_FIRE_GENASI: sAnim = sChairType + "hum"; break;
 		case RACIAL_SUBTYPE_WATER_GENASI: sAnim = sChairType + "hum"; break;
 		case 74: sAnim = sChairType + "hum"; break;
-
-		case 204: sAnim = sChairType + "hum"; break;
 		// changes for new special races.
  
 		case 120: sAnim = sChairType + "dwf"; break;
@@ -72,7 +70,7 @@ void main()
 	SetCommandable(0,oPC);
 
 	if (GetRacialType(oPC) == RACIAL_TYPE_GNOME || 
-		GetRacialType(oPC) == RACIAL_TYPE_HALFORC  && iSubrace != 74 ||  	
+		GetRacialType(oPC) == RACIAL_TYPE_HALFORC || 
 		GetRacialType(oPC) == 32 || 
 		GetRacialType(oPC) == RACIAL_TYPE_DWARF ||
 		GetSubRace(oPC) == 120)
