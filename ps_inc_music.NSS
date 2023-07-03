@@ -19,7 +19,7 @@ int GetNewMusicTrack(object oArea, object oPC = OBJECT_INVALID);
 
 void SwitchMusic(object oArea, object oPC = OBJECT_INVALID) {
 
-	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Switching musice. . .");
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Switching music. . .");
 
 	if (ShouldMusicSwitch(oArea, oPC)) {
 	
