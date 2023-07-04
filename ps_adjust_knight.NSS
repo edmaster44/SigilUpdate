@@ -230,22 +230,28 @@ int KnightLevels(object oPC)
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
 	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider ;
-	   if (iPally <1 )
-	   { (iTotal = 0);}
-	else
-	      if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
-	{ FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);}
-		else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
-		{ FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);}
-			else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
-		{ FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);}
-		
-	   
-	   return iTotal;
-	   
-	  
 	
-
+	if (iPally <1 )
+	{
+		iTotal = 0;
+	}
+	else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+	{
+		if(GetHasFeat(FEAT_BLACKGUARD, oPC) == FALSE)
+			FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);
+	}
+	else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD)
+	{
+		if(GetHasFeat(FEAT_PALADIN, oPC) == FALSE)
+			FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);
+	}
+	else if (iTotal >= 1 && GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
+	{
+		if(GetHasFeat(FEAT_KNIGHT, oPC) == FALSE)
+			FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);
+	}
+	
+	return iTotal;
 
 }
 
