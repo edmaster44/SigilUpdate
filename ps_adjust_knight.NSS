@@ -211,7 +211,7 @@ void PS_KnightLevels(object oPC)
 		
 		}
 	  }
-	  
+
 int KnightLevels(object oPC)
 {
 	int iPally = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);//Paladin, aka, Knight
@@ -229,7 +229,7 @@ int KnightLevels(object oPC)
 	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
-	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider ;
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider + iDoomg;
 	
 	if (iPally <1 )
 	{
@@ -250,9 +250,8 @@ int KnightLevels(object oPC)
 		if(GetHasFeat(FEAT_KNIGHT, oPC) == FALSE)
 			FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);
 	}
-	
-	return iTotal;
 
+	return iTotal;
 }
 
 int LayOnHandsLevels(object oPC)
@@ -272,14 +271,7 @@ int LayOnHandsLevels(object oPC)
 	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
-	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider ;
-	 
-		
-	   
-	   return iTotal;
-	   
-	  
-	
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider + iDoomg;
 
-
+	return iTotal;
 }
