@@ -8,7 +8,6 @@ int GreatSmiteMultiplier(object oAttacker);
 // For some reason OEI didn't include this constant in nwscript.nss.
 const int FEAT_SMITE_INFIDEL = 1761;
 
-// Not sure if this is a custom feat or not for bgtscc.
 // This is used to check for Destruction Domain for Clerics.
 const int FEAT_EPITHET_DESTRUCTION_DOMAIN = 1837;
 
@@ -42,7 +41,6 @@ void main()
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)
 			{
 				nAmount = KnightLevels(oAttacker);
-				//nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
@@ -52,9 +50,7 @@ void main()
 
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)
 			{
-				nAmount = GetLevelByClass(CLASS_TYPE_BLACKGUARD, oAttacker);
 				nAmount = KnightLevels(oAttacker);
-				//nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
@@ -65,8 +61,6 @@ void main()
 			if(GetAlignmentGoodEvil(oAttacker) != GetAlignmentGoodEvil(oTarget) ||
 			   GetAlignmentLawChaos(oAttacker) != GetAlignmentLawChaos(oTarget))
 			{
-
-				nAmount = GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 				nAmount = KnightLevels(oAttacker);
 
 				if(GetHasFeat(FEAT_EPITHET_DESTRUCTION_DOMAIN, oAttacker))
@@ -80,7 +74,7 @@ void main()
 
 		case FEAT_FLOURISH:
 
-			nAmount = d6(2);	
+			nAmount = d6(2);
 		break;
 
 
