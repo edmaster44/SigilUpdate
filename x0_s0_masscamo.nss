@@ -39,19 +39,15 @@ void main()
 // End of Spell Cast Hook
 
     //Get the first target in the radius around the caster
-    //object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation());
     while(GetIsObjectValid(oTarget))
     {
     	if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF) || GetFactionEqual(oTarget))
     	{
-            RemoveEffectsFromSpell(OBJECT_SELF, SPELL_CAMOFLAGE);
-            //Fire spell cast at event for target
-            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 454, FALSE));
-            DoCamoflage(oTarget); // Handles visual effects
+            // Fire spell cast at event for target.
+            DoCamoflage(oTarget, SPELL_MASS_CAMOFLAGE);
         }
         //Get the next target in the specified area around the caster
-        //oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation());
     }
  
