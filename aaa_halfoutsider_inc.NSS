@@ -297,7 +297,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));	}
                     else
 					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_DISEASE))
+						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_GOOD))
 						{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(1)));	}
 					}
 				}
