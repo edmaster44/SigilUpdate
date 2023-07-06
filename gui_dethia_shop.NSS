@@ -67,7 +67,7 @@ Events:
 *************************************************************************************/
 #include "dethia_shop_sys"
 
-void main(string sEvent, string sItemID = "0", string sItemCost = "0", string sStackSize = "0", string sStoreID = "0", string sUp = "0", string sDown = "0", string sExtra = "0")
+void main(string sEvent, string sItemID, string sItemCost, string sStackSize, string sStoreID, string sUp, string sDown, string sExtra)
 {//First we convert sEvent to an integer value
 	int		iEvent	= StringToInt(sEvent);
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
