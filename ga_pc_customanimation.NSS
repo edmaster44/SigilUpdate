@@ -5,7 +5,7 @@ void PlayCustomAnimationWrapper(object oTarget, string sAnim, int bLoop)	//so it
 	PlayCustomAnimation(oTarget,sAnim,bLoop);
 }
 
-void main(string sAnim, int bLoop=0, float fDelayUntilStart=0.0f)
+void main(string sAnim, int bLoop, float fDelayUntilStart)
 {
 	object oTarget = GetPCSpeaker();
 	

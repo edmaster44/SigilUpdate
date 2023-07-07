@@ -762,7 +762,7 @@ int GetDlgPageInt()
 // EDIT BY Demetrious:  Changed bZoom to NWN1 or NWN2 style because
 // zoom has no effect anyway on a NWN2 style conversation.
 void StartDlg( object oPC, object oObjectToConverseWith, string dlgHandler = "",
-               int bPrivate = FALSE, int bPlayHello = TRUE, int bNWN2Style = FALSE )
+               int bPrivate = FALSE, int bPlayHello = TRUE, int bNWN2Style = TRUE )
 {
     string dlg;
 	// Setup the conversation
@@ -783,7 +783,7 @@ void StartDlg( object oPC, object oObjectToConverseWith, string dlgHandler = "",
     if( bNWN2Style )
         dlg = "dmfi_conv2";
 	else
-		dlg = "dmfi_conv";	
+		dlg = "dmfi_conv";
 
     AssignCommand( oObjectToConverseWith,
                    ActionStartConversation( oPC, dlg, bPrivate, bPlayHello ) );

@@ -36,7 +36,6 @@ void main()
 
 // End of Spell Cast Hook
 
-    RemoveEffectsFromSpell(OBJECT_SELF, SPELL_MASS_CAMOFLAGE);
-    DoCamoflage(OBJECT_SELF);
+    DoCamoflage(OBJECT_SELF, SPELL_CAMOFLAGE);
 
 }

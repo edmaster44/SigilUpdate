@@ -129,7 +129,8 @@ void DoMagicFang(int nPower, int nDamagePower);
 void DoSpikeGrowthEffect(object oTarget);
 
 // * Applies the 'camoflage' magical effect to the target
-void DoCamoflage(object oTarget);
+// Yes, they spelled camouflage wrong.  nSpellId is to distinguish between normal and mass camo.
+void DoCamoflage(object oTarget, int nSpellId);
 
 // * Does a damage type grenade (direct or splash on miss)
 void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit, int nDamageType, float fExplosionRadius , int nObjectFilter, int nRacialType=RACIAL_TYPE_ALL);
@@ -532,23 +533,43 @@ void DoDirgeEffect(object oTarget)
 //:: Created On:
 //:://////////////////////////////////////////////
  
-void DoCamoflage(object oTarget)
+void DoCamoflage(object oTarget, int nSpellId)
 {
+
+    // Early return if nSpellId isn't valid.
+    if(nSpellId != SPELL_CAMOFLAGE && nSpellId != SPELL_MASS_CAMOFLAGE) return;
+
+
+
+
     //Declare major variables
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);	// NWN1 VFX
-    effect eVis = EffectVisualEffect( 631 );	// NWN2 VFX: VFX_DUR_SPELL_CAMOFLAGE
+    effect eVis = EffectVisualEffect( VFX_DUR_SPELL_CAMOFLAGE );	// NWN2 VFX: VFX_DUR_SPELL_CAMOFLAGE
     effect eHide = EffectSkillIncrease(SKILL_HIDE, 10);
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
     effect eLink = EffectLinkEffects(eHide, eVis);
 
 	// concern over duration, so trying this now as still getting strangely short durations - Agony_Aunt
 	int iDuration = (PS_GetCasterLevel(OBJECT_SELF));
-    float fDuration = TurnsToSeconds(iDuration); 
+    float fDuration = 0.0;
+
+    if(nSpellId == SPELL_CAMOFLAGE)
+    {
+        RemoveEffectsFromSpell(oTarget, SPELL_MASS_CAMOFLAGE);
+        fDuration = TurnsToSeconds(iDuration);
+
+    }
+    else if(nSpellId == SPELL_MASS_CAMOFLAGE)
+    {
+        RemoveEffectsFromSpell(oTarget, SPELL_CAMOFLAGE);
+        fDuration = HoursToSeconds(iDuration);
+    }
+
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Fire spell cast at event for target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 421, FALSE));
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellId, FALSE));
 
     //Apply VFX impact and bonus effects
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
