@@ -46,23 +46,23 @@ void main()
         //Make a saving throw check
         if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
         {
-			if ((GetHitDice(oCreator) - GetHitDice(oTarget) >= 6) ||
-			    GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
-			    GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, GetAreaOfEffectCreator()))
-			{
-	            //Apply the VFX impact and effects
-	            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-	            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-			}
-			
-			else 
+			if (
+				GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
+			    GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, GetAreaOfEffectCreator())
+			    )
 			{
 				//Apply Shaken Effect 
 				//Characters who are shaken take a -2 penalty on attack rolls, 
 				//saving throws, skill checks, and ability checks (note: cannot apply ability
 				//penalty).
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
-			}	
+			}
+			else
+			{
+	            // Apply Fear
+	            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+
+			}
         }
     }
 }

@@ -48,16 +48,19 @@ void main()
      	  		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 2647, TRUE));
       		  		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
 	  				{
-						if ((GetHitDice(oTarget) <= 4) ||
-			   				GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
-			    			GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, GetAreaOfEffectCreator()))
+						if (
+   							GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
+			    			GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, GetAreaOfEffectCreator())
+			    			)
 						{
-		    				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-						}				
+							// Shaken
+		    				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
+						}
 						else 
 						{
-							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
-						}	
+							// Fear
+							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+						}
 					}
 					SetLocalInt(oTarget, "DRAGONFEAR", 1);
 				}
