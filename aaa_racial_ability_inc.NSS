@@ -1185,7 +1185,7 @@ void PS_Ability_MOTCCraftHeartstone(object oPC, object oTarget)
 	string sAmulet = "ps_misc_coinage-gsoulprism";
 
   	if (GetItemStackSize(oTarget) > 1)
-    	{    SendMessageToPC(oPC, "You may only use an indivudal greater soul prism to create your heartstone.");
+    	{    SendMessageToPC(oPC, "You may only use an individual greater soul prism to create your heartstone.");
         	return;    }
 		
 	if (oTarget != OBJECT_INVALID)
@@ -1368,7 +1368,7 @@ void PS_ApplyExaltedWeaponProperties(object oWeapon, object oPC, int nSpell, flo
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectNWN2SpecialEffectFile("sp_divination_hit", oPC);
-	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
 		IP_CONST_DAMAGEBONUS_1d4);
@@ -1439,7 +1439,7 @@ void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, flo
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d4);
 	itemproperty ipEff2 = ItemPropertyKeen();
@@ -1460,7 +1460,7 @@ void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, 
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL,
 		IP_CONST_DAMAGEBONUS_1d4);
@@ -1474,5 +1474,3 @@ void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, 
 	IPSafeAddItemProperty(oWeapon, ipGlow, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 	IPSafeAddItemProperty(oWeapon, ipClas, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 }
-				
-	
