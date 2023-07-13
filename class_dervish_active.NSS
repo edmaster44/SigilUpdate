@@ -31,68 +31,46 @@ int DervishLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 
 void Dervish_Dance(object oPC,int nSpell)
 {
+	// Early return if requirements to use dance are not met.
+	if(DervishCanUseDance(oPC) == FALSE) return;
 
+		RemoveEffectsFromSpell(OBJECT_SELF, SPELLABILITY_DERVISH_DANCE);
 
-int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
-	int nBonus = (nLevel +1) / 2;
-	float fDuration = RoundsToSeconds(10);
-	int nValid = nDervishValid(oPC);
-	if (nValid )
-	{effect eAB = EffectAttackIncrease(nBonus);
+		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
+		int nBonus = (nLevel + 1) / 2;
+		float fDuration = RoundsToSeconds(10);
+
+		effect eAB = EffectAttackIncrease(nBonus);
 		effect eSlash = EffectDamageIncrease(nBonus, DAMAGE_TYPE_SLASHING);
-		effect eFatigue = EffectFatigue ();
 		effect eLink = EffectLinkEffects(eAB, eSlash);
 		eLink = SupernaturalEffect(eLink);
-		eLink = SetEffectSpellId(eLink, SPELLABILITY_DERVISH_DANCE );
-		
-    	RemoveEffectsFromSpell(OBJECT_SELF, SPELLABILITY_DERVISH_DANCE);
-	//Dance of Death	
-	object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
-		if (!GetIsObjectValid(oArmorNew)) 
-				{
-					SendMessageToPC(oPC, "You must wear an item in your armor slot to receive the effects of Dervish.");
-				}
-				else				
+		eLink = SetEffectSpellId(eLink, SPELLABILITY_DERVISH_DANCE);
+
+		object oMainHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
+
 		if (nLevel > 9)
 		{
 			itemproperty iBonusFeat1 = ItemPropertyBonusFeat(IP_CONST_FEAT_CLEAVE);  //Cleave
 			itemproperty iBonusFeat2 = ItemPropertyBonusFeat(45);	//Great Cleave
-			if (!nDervishValid(oPC))
-			{
-					AddItemProperty(DURATION_TYPE_TEMPORARY, iBonusFeat1,oArmorNew,fDuration);	
-		        	AddItemProperty(DURATION_TYPE_TEMPORARY, iBonusFeat2,oArmorNew,fDuration);	 }
-			else
-			{
-		  		IPSafeAddItemProperty(oArmorNew, iBonusFeat1, fDuration,X2_IP_ADDPROP_POLICY_KEEP_EXISTING, FALSE,FALSE );	
-		        IPSafeAddItemProperty(oArmorNew, iBonusFeat2, fDuration,X2_IP_ADDPROP_POLICY_KEEP_EXISTING, FALSE,FALSE );	;	
-			}		
+			IPSafeAddItemProperty(oMainHand, iBonusFeat1, fDuration);
+			IPSafeAddItemProperty(oMainHand, iBonusFeat2, fDuration);
 		}
-		else
-		if (nLevel > 3)
-		{		itemproperty iBonusFeat1 = ItemPropertyBonusFeat(IP_CONST_FEAT_CLEAVE);  //Cleave
-		
-			if (!nDervishValid(oPC))
-			{
-				AddItemProperty(DURATION_TYPE_TEMPORARY, iBonusFeat1,oArmorNew,fDuration);	
-			}
-			else
-			{
-		       IPSafeAddItemProperty(oArmorNew, iBonusFeat1, fDuration,X2_IP_ADDPROP_POLICY_KEEP_EXISTING, FALSE,FALSE );	
-			}		
+		else if (nLevel > 3)
+		{
+			itemproperty iBonusFeat1 = ItemPropertyBonusFeat(IP_CONST_FEAT_CLEAVE);  //Cleave
+			IPSafeAddItemProperty(oMainHand, iBonusFeat1, fDuration);
 		}
-		
-		if (nLevel < 9)	
-		{	
-			if (!GetHasFeat(FEAT_DERVISH_TIRELESS_DANCE,oPC))				
-					ApplyDervishFatigue(oPC);
+
+		// Apply the dance bonuses.
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));
+
+		if (nLevel < 9 && !GetHasFeat(FEAT_DERVISH_TIRELESS_DANCE,oPC))
+		{
+			// Apply fatigue at the end of the dance.
+			DelayCommand(fDuration, ApplyDervishFatigue(oPC));
 		}
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));	
-		}	
-	else
-	{
-		SendMessageToPC(oPC, "You must be wearing light or no armor and wielding a slashing weapon (both must be slashing if two weapons are used).");
-	}
 }
+
 //Defensive Parry.
 void Dervish_Defensive_Parry(object oPC, int nSpell)
 {

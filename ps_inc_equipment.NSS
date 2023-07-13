@@ -56,36 +56,57 @@ int NoHeavyArmorOrShield(object oPC)
 }
 
 
-
-
-int GetDervishWeapon(object oItem)
-{  
-if(!GetIsObjectValid(oItem)) return FALSE;
-        
-int iType = GetBaseItemType(oItem);
-    if(Get2DAString("baseitems","WeaponType",iType) == "3" && Get2DAString("baseitems","WeaponSize",iType) == "3"
-    || Get2DAString("baseitems","WeaponType",iType) == "3" && Get2DAString("baseitems","WeaponSize",iType) == "4") return TRUE;
-    else            
-    return FALSE;
-}
-int nDervishValid (object oPC)
+// Checks to see if Dervish meets the requirements to activate the Dervish Dance ability.
+int DervishCanUseDance(object oPC)
 {
+    // Armor Rank must be none or light.
+    int nArmorRank = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC));
+	if(nArmorRank == ARMOR_RANK_HEAVY || nArmorRank == ARMOR_RANK_MEDIUM) {
+        SendMessageToPC(oPC, "Dervish Dance cannot be activated while wearing medium or heavy armor.");
+        return FALSE;
+    }
 
-int chest = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC));
-	if(chest == 3 || chest == 2) return FALSE;
+    // Both Mainhand and Offhand must be slashing weapons.
+    object oMainHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 
-//	SendMessageToPC(oPC,"DEBUG: Armor check is good!");	
-	
-	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
-	if (oShield == OBJECT_INVALID) return TRUE;
+    if(!GetIsObjectValid(oMainHand))
+    {
+        SendMessageToPC(oPC, "Dervish Dance cannot be activated without a weapon equipped.");
+        return FALSE;
+    }
 
-//	SendMessageToPC(oPC,"DEBUG: Shield check is good!");	
-		
-	int shield = GetBaseItemType(oShield);
-	if(shield == 56 || shield == 14 || shield == 57) return FALSE;	
+    if( GetWeaponType(oMainHand) != WEAPON_TYPE_SLASHING &&
+        GetWeaponType(oMainHand) != WEAPON_TYPE_PIERCING_AND_SLASHING)
+    {
+        SendMessageToPC(oPC, "Dervish Dance requires the mainhand weapon be of slashing type.");
+        return FALSE;
+    }
 
-//	SendMessageToPC(oPC,"DEBUG: Shield type check is good!");	
-		
+    object oOffHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+    int nOffhandBaseType = GetBaseItemType(oOffHand);
+
+    // if an offhand is equipped.
+    if(GetIsObjectValid(oOffHand))
+    {
+        // Offhand cannot be a shield.
+        if(nOffhandBaseType == BASE_ITEM_LARGESHIELD || 
+            nOffhandBaseType == BASE_ITEM_SMALLSHIELD || 
+            nOffhandBaseType == BASE_ITEM_TOWERSHIELD) 
+        {
+            SendMessageToPC(oPC, "Dervish Dance cannot be activated while holding a shield.");
+            return FALSE;
+        }
+
+        // Offhand must be a slashing type.
+        if( GetWeaponType(oMainHand) != WEAPON_TYPE_SLASHING &&
+            GetWeaponType(oMainHand) != WEAPON_TYPE_PIERCING_AND_SLASHING)
+        {
+            SendMessageToPC(oPC, "Dervish Dance requires both weapons be of slashing type.");
+            return FALSE;
+        }
+    }
+
+    // We passed all the checks.  Yippee!
 	return TRUE;
 }
 
