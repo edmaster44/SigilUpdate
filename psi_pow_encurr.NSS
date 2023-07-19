@@ -155,7 +155,19 @@ void main()
 		            {
 		                nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
 		            }
-					nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSavingThrowType);
+
+
+		            if(nSpell == 14565)
+		            {
+		            	// Cold variant is vs. Fort not Reflex.
+		            	if(FortitudeSave(oTarget, nDC, nSavingThrowType) == SAVING_THROW_CHECK_FAILED)
+		            		nDamage /= 2;
+		            }
+		            else
+		            {
+  						nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSavingThrowType);
+		            }
+
 					effect eDamage = EffectDamage(nDamStrike, nDamageType);
 					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
                 }// end if - SR check
@@ -191,8 +203,19 @@ void main()
 		                {
 		                    nDamage = nDamage + (nDamage/2); //Damage/is +50%
 		                }
-		                //Adjust damage via Reflex Save or Evasion or Improved Evasion
-		                nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSavingThrowType);
+
+			            if(nSpell == 14565)
+			            {
+			            	// Cold variant is vs. Fort not Reflex.
+			            	if(FortitudeSave(oTarget, nDC, nSavingThrowType, GetAreaOfEffectCreator()) == SAVING_THROW_CHECK_FAILED)
+			            		nDamage /= 2;
+			            }
+			            else
+			            {
+			                //Adjust damage via Reflex Save or Evasion or Improved Evasion
+			                nDamStrike = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSavingThrowType, GetAreaOfEffectCreator());
+			            }
+
 		                //Apply the damage and VFX impact to the current target
 		                eDamage = EffectDamage(nDamStrike /2, nDamageType);
 		                if(nDamStrike > 0) //age > 0)
