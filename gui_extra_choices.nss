@@ -96,9 +96,9 @@ int GetRelevantClass(object oPC) {
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend(magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial(Magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
-	if ((GetLevelByClass(106, oPC) >= 5)) return 106; //VampMal L5 Bonus Feat
-	if ((GetLevelByClass(108, oPC) >= 6))  return 108; //Gray Slaad Chaotic Crafting
-	if ((GetLevelByClass(110,oPC) > 0 )&& (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior
+	if ((GetLevelByClass(106, oPC) >= 5) && (GetHasFeat(2584, oPC))) return 106; //VampMal L5 Bonus Feat
+	if ((GetLevelByClass(108, oPC) >= 6)) return 108; //Gray Slaad Chaotic Crafting
+	if ((GetLevelByClass(110,oPC) > 0 ) && (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior
 	if ((GetLevelByClass(114,oPC) > 0 ) && (CheckEpiteth(114,oPC) == FALSE)) return 114;//Half Undead
 	if ((GetLevelByClass(49, oPC) >= 6) && (CheckEpiteth(499, oPC) == FALSE)) return 499; //Half-Dragon Wings
 	if (GetRacialType(oPC) == RACIAL_TYPE_FEY && GetHasFeat(2843, oPC) && (CheckEpiteth(CLASS_TYPE_FEY, oPC) == FALSE)) return CLASS_TYPE_FEY;
@@ -180,29 +180,27 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 16: return 171;	//Spell Focus: Necromancy
 			case 17: return 172;	//Spell Focus: Transmutation 
 			case 18: return 36;		//Spell Penetration
-			break;
-		}
+		} break;
 		case 108: switch(nCOUNT) //Gray Slaad Chaotic Crafting
 		{
 			case 1: return 946;		// Craft Wand
 			case 2: return 1092;	// Craft Magic Arms and Armor
 			case 3: return 1093;	// Craft Wondrous Items
-		}	break;
+		} break;
 
 		case 110: switch(nCOUNT)//Psychic Warrior Paths
 		{
 			case 1: return 21470; // Lurk Path
 			case 2: return 21471; // Feral Path
-			break;
-		}
+			
+		} break;
 		case 114: switch(nCOUNT)//Half Undead Heritage
 		{
-		case 1: return FEAT_HALFVAMPIRE;
-		case 2: return FEAT_FETCH;
-		case 3: return FEAT_GHUL;
-		case 4:	return FEAT_GHAEDEN;
-		break;
-		}
+			case 1: return FEAT_HALFVAMPIRE;
+			case 2: return FEAT_FETCH;
+			case 3: return FEAT_GHUL;
+			case 4:	return FEAT_GHAEDEN;
+		} break;
 		case 621: switch(nCOUNT) //Half-Celestial Wings/Eyes
 		{
 			case 1: return 2179; //Bright Flight

@@ -8,21 +8,18 @@ int PsyWarProgression(object oPC);
 //GUI Stuff
 int PsyWarProgression(object oPC)
 {
-	
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
 
-	if (GetLevelByClass(nPsywar, oPC) >= 0)
-{	
-	
-	if (!GetHasFeat(FEAT_PSYWAR_FERAL,oPC)||!GetHasFeat(FEAT_PSYWAR_LURK,oPC))
-		
-	{AddScriptParameterString("START");
-	AddScriptParameterString("");
-	ExecuteScriptEnhanced("gui_extra_choices", oPC); }
-	
-
-}
-return nPsywar;
+	if (nPsywar > 0)
+	{
+		if (!GetHasFeat(FEAT_PSYWAR_FERAL,oPC) && !GetHasFeat(FEAT_PSYWAR_LURK,oPC))
+		{
+			AddScriptParameterString("START");
+			AddScriptParameterString("");
+			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		}
+	}
+	return nPsywar;
 }
 
 //Progression for Psychic Warrior and PRC
