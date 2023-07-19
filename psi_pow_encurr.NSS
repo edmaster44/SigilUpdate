@@ -161,7 +161,7 @@ void main()
 		            {
 		            	// Cold variant is vs. Fort not Reflex.
 		            	if(FortitudeSave(oTarget, nDC, nSavingThrowType) == SAVING_THROW_CHECK_FAILED)
-		            		nDamStrike /= 2;
+		            		nDamStrike = nDamage / 2;
 		            }
 		            else
 		            {
@@ -208,7 +208,7 @@ void main()
 			            {
 			            	// Cold variant is vs. Fort not Reflex.
 			            	if(FortitudeSave(oTarget, nDC, nSavingThrowType, GetAreaOfEffectCreator()) == SAVING_THROW_CHECK_FAILED)
-			            		nDamStrike /= 2;
+			            		nDamStrike = nDamage / 2;
 			            }
 			            else
 			            {
