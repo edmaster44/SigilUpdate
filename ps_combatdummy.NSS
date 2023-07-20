@@ -26,7 +26,7 @@ void main()
 
 	// already exceeded xp for the day? if yes, exit
 	int currentXp = GetOrCreateCurrentXp(oPC);
-	int maxXp = FloatToInt(maxXpPerDay*PS_GetXPModifier(StringToInt(PS_GetEssenceECL(oPC))));
+	int maxXp = FloatToInt(maxXpPerDay*PS_GetXPModifier(PS_GetEssenceECL(oPC)));
 	
 //	SpeakString(IntToString(maxXp),TALKVOLUME_SHOUT);
 	

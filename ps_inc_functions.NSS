@@ -10,6 +10,8 @@
 
 // String name of local variable on essence for storing the original race of the oPC.
 const string VAR_OLD_RACE = "OldRace";
+// String name of local variable on essence for storing ECL.
+const string VAR_ECL = "ECL";
 
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
@@ -82,7 +84,7 @@ int MonkUnarmedDamage(object oPC, int iMonk);
 
 int IncreasedUnarmedDamageBonus(object oPC, object oItem);
 
-string PS_GetEssenceECL(object oPC);
+int PS_GetEssenceECL(object oPC);
 
 int PS_GetLevel(object oPC);
 
@@ -1811,15 +1813,13 @@ if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 	for the calculation, and selects whichever number is higher */
 int PS_GetGolemCasterLevel(object oPC)
 {
-
-	
 	return PS_GetCasterLevel(oPC);
-  
 }
 
-string PS_GetEssenceECL(object oPC)
-{	
-	string sECL = GetLocalString(oPC,"ECL");
+int PS_GetEssenceECL(object oPC)
+{
+	return StringToInt(GetLocalString(PS_GetEssence(oPC), VAR_ECL));
+
 	//if (sECL == "")
 	//{
  		//if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC) == TRUE)
@@ -1853,7 +1853,6 @@ string PS_GetEssenceECL(object oPC)
  			//sECL = IntToString(nECL);		}
  		//SetLocalString(oPC, "NEW_ECL", sECL);
  		//SendMessageToPC(oPC, "Final LA: " + sECL);	}
-	return sECL;
 }
 
 
@@ -1865,9 +1864,9 @@ string PS_GetScryStatus(object oPC)
 	if(sStatus != "")
 		return sStatus;
 		
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-	if(GetIsObjectValid(oItem))
-	{	sStatus = GetLocalString(oItem,"SCRY");
+	object oEssence = PS_GetEssence(oPC);
+	if(GetIsObjectValid(oEssence))
+	{	sStatus = GetLocalString(oEssence,"SCRY");
 		SetLocalString(oPC,"SCRY",sStatus);
 		return sStatus;		}
 	
@@ -1877,14 +1876,9 @@ string PS_GetScryStatus(object oPC)
 int PS_GetLevel(object oPC) //get level of PC including ECL
 {
 //	***New version by Clangeddin**	
-	int iHD 		= GetHitDice(oPC);
-	string sECL 	= PS_GetEssenceECL(oPC);
-	int iLA;
-	if (sECL=="") 
-	{	iLA = 0;	}
-	else  
-	{	iLA = StringToInt(sECL);	}
-	if (iHD <= iLA)	
+	int iHD 	= GetHitDice(oPC);
+	int iLA 	= PS_GetEssenceECL(oPC);
+	if (iHD <= iLA)
 	{	iLA = iHD-1;	} // discount for low levels
 
 	int iRet = iHD + iLA;
@@ -1892,35 +1886,6 @@ int PS_GetLevel(object oPC) //get level of PC including ECL
 	{	iRet = 30;	} // failsafe for bugged characters
 	//SendMessageToPC(oPC, "Debug: Adjusted level " + IntToString(iRet));
 	return iRet;
-
-/*	***OLD VERSION***	
-	int iHD = GetHitDice(oPC);
-	int iLA;
-	int iRet;
-	string sECL = GetLocalString(oPC,"ECL");
-	if(sECL != "")
-		iLA = StringToInt(sECL);
-	else
-	{
-		sECL = PS_GetEssenceECL(oPC);
-	
-		if(sECL != "")
-		{
-			iLA = StringToInt(sECL);
-			SetLocalString(oPC, "ECL", sECL);
-		}
-	}
-
-	// discount for low levels
-	if (iHD <= iLA)
-		iLA = iHD-1;
-	
-	iRet = iHD + iLA;
-	
-	if (iRet < 1)
-		iRet = 30; // failsafe for bugged characters
-		
-	return iRet; */
 }
 
 int PS_GetMaxPartylevel(object oPC) //finds highest level in party (with ECL)
@@ -2018,7 +1983,7 @@ void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 	if (sTimeStampVariable == "") 
 		sTimeStampVariable = GetTag(oObject)+"_s";
 		
-  	SetLocalInt(oObject, sTimeStampVariable, GetTime());	
+  	SetLocalInt(oObject, sTimeStampVariable, GetTime());
 }
 
 int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
@@ -2049,7 +2014,7 @@ void DoPsiDeLevelCheck(object oPC)
 		if (nIlMentalist > 1)
 		{	nPsion = nPsion + (nIlMentalist - 1);	}
 		if (nCerebremancer > 1)
-		{	nPsion = nPsion + nCerebremancer;	}		
+		{	nPsion = nPsion + nCerebremancer;	}
 		if (nPsyKnight > 1)
 		{ nPsion = nPsion + (nPsyKnight - 1);}
 		if (nGemDragon > 1)

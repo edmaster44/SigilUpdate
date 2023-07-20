@@ -14,7 +14,7 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 {
 	int nAfflict = GetLocalInt(oItem, "Lycan_Affliction");
 	
-	int nOldECL = StringToInt(PS_GetEssenceECL(oPC));
+	int nOldECL = PS_GetEssenceECL(oPC);
 	
 	if (nAfflict != 0)
 	{	return;		}

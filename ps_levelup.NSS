@@ -255,7 +255,7 @@ void main()
 	if (sAREA != "ps_area_dmlair" && sAREA != "jeg_preparation_room")
 	{
 		int nHD = GetHitDice(oPC);
-		int nECL = StringToInt(PS_GetEssenceECL(oPC));
+		int nECL = PS_GetEssenceECL(oPC);
 		if (nHD + nECL < 30)
 		{
 			int xp = GetXP(oPC);

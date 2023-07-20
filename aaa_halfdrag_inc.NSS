@@ -108,7 +108,7 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 	int nHeritage = GetLocalInt(oItem, "Draconic_Heritage");
 	int iGood_D;
 	int iLaw_D;
-	int nOldECL = StringToInt(PS_GetEssenceECL(oPC));
+	int nOldECL = PS_GetEssenceECL(oPC);
 	string sInBlood	= GetLocalString(oItem, "InBlood");
 	int iNewECL, iDragon;
 	string sNewECL;

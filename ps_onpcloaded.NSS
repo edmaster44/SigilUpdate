@@ -174,7 +174,7 @@ int prepChar(object oPC)
 	int nID = GetLocalInt(oItem,"ID");
 	string sAccount = "";
 	string sName = "";
-	string sECL = PS_GetEssenceECL(oPC); //Edit by Clangeddin, this will take care of setting the proper ECL at login.
+	int sECL = PS_GetEssenceECL(oPC); //Edit by Clangeddin, this will take care of setting the proper ECL at login.
 	string sKey = GetPCPublicCDKey(oPC);
 	string sIP = GetPCIPAddress(oPC);
 		
@@ -235,7 +235,7 @@ int prepChar(object oPC)
 			SetLocalString(oItem,"XPDay",SQLGetData(4));
 			//DebugMessageToPC(oPC,"xpday:" + GetLocalString(oItem,"XPDay"));
 				
-			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * GetHitDice(oPC)) * PS_GetXPModifier(StringToInt(sECL)));
+			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * GetHitDice(oPC)) * PS_GetXPModifier(sECL));
 			if (dm_pool > nModifiedXP)
 			{	
 				//SendMessageToPC(oPC, "Pulling from DM Pool");

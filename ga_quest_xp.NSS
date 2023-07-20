@@ -8,7 +8,7 @@ void main(int nXP, int bAllPartyMembers, int nLevelvaried)
 	
     if ( bAllPartyMembers == 0 )
 	{
-	 iECL = StringToInt(PS_GetEssenceECL(oPC));
+	 iECL = PS_GetEssenceECL(oPC);
 	 if ( nLevelvaried > 0 )
 	 {
 	 	fXP = nXP * 3.0 / (2+GetHitDice(oPC)+iECL) * PS_GetXPModifier(iECL);
@@ -24,7 +24,7 @@ void main(int nXP, int bAllPartyMembers, int nLevelvaried)
         object oTarg = GetFirstFactionMember(oPC);
         while(GetIsObjectValid(oTarg))
         {
-			 iECL = StringToInt(PS_GetEssenceECL(oTarg));
+			 iECL = PS_GetEssenceECL(oTarg);
 			 if ( nLevelvaried > 0 )
 			 {
 			 	fXP = nXP * 3.0 / (2+GetHitDice(oTarg)+iECL) * PS_GetXPModifier(iECL);

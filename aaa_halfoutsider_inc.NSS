@@ -45,7 +45,7 @@ void PS_OutsiderBloodlineCelestial(object oPC, int nSpell)
 void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 {
 	string sFiend		= GetLocalString(oItem, "Planar");
-	int nOldECL 		= StringToInt(PS_GetEssenceECL(oPC));
+	int nOldECL 		= PS_GetEssenceECL(oPC);
 	int iOutsider 		= 0;
 	int iNewECL;
 	string sNewECL;
@@ -68,7 +68,7 @@ void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 void PS_HO_PlanarHeritageCelestial(object oPC, object oItem)
 {
 	string sCelest	= GetLocalString(oItem, "Planar");
-	int nOldECL 	= StringToInt(PS_GetEssenceECL(oPC));
+	int nOldECL 	= PS_GetEssenceECL(oPC);
 	int iOutsider 	= 0;
 	int iNewECL;
 	string sNewECL;

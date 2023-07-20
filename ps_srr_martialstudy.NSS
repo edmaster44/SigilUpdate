@@ -62,7 +62,7 @@ void DesertWind3(object oCaller, object oTarget) // Throws a ball of fire at the
 {
 	SendMessageToPC(oCaller, "Using <i>Fan the Flames.</i>");
 	int numberOfDice = GetTotalLevels(oCaller, TRUE) ;
-	int ECL 	= StringToInt(PS_GetEssenceECL(OBJECT_SELF));
+	int ECL 	= PS_GetEssenceECL(OBJECT_SELF);
 	int touchAttackResult = TouchAttackRanged(oTarget, TRUE, 0);
 	int touchAttackResultSTR = TouchAttackMelee(oTarget, TRUE, 0);
 	int STR = GetAbilityModifier(ABILITY_STRENGTH);

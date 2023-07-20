@@ -13,13 +13,13 @@
 */
 
 
-// Apply a level adjustment to the character for the template class
+// Apply a level adjustment to the character for the template class.
 // Do not use this by itself; there should be a check to ensure it has not been previously applied
 // Called by PS_Undead_TouchOfEvil (see below)
 void PS_Template_LevelAdjustment(object oPC, object oItem)
 {	
 	// Listing of all template class values; set a new int and new if statement for each
-	int nOldECL = StringToInt(PS_GetEssenceECL(oPC));
+	int nOldECL = PS_GetEssenceECL(oPC);
 
 	int iLich = 0;
 	int iVamp = 0;
