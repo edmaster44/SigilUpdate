@@ -70,6 +70,9 @@ const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
+// Call this function to get the oPC's essence object.
+object PS_GetEssence(object oPC = OBJECT_SELF);
+
 int GetHasSpiritShamanProgression(object oPC, int iClass);
 
 int GetSpiritShamanTRUECasterlevel(object oPC);
@@ -210,6 +213,10 @@ void DebugMessageToPC(object oPC, string sMessage);
 
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 
+object PS_GetEssence(object oPC = OBJECT_SELF)
+{
+	return GetItemPossessedBy(oPC, "ps_essence");
+}
 
 //Calculates Monk Unarmed Damage Based on Monk Class +PRC
 int MonkUnarmedDamage(object oPC, int iMonk)
