@@ -23,9 +23,7 @@
 // RPGplayer1 08.31.08 -- Will not count creatures that do not pass spellsIsTarget() check
 
 #include "nwn2_inc_spells"
-
-
-
+#include "ps_inc_functions"
 #include "x0_i0_spells"
 #include "x2_inc_spellhook"
 #include "ginc_henchman"
@@ -74,7 +72,7 @@ void main()
     //    RemoveSpellEffects( SPELL_MASS_HASTE, OBJECT_SELF, oTarget ); //NWN2 doesn't have this spell
     //}
 
-    int nCasterLvl = GetCasterLevel( OBJECT_SELF );
+    int nCasterLvl = PS_GetCasterLevel( OBJECT_SELF );
     //int nDuration = nCasterLvl;
 	float fDuration = RoundsToSeconds( nCasterLvl );
 
