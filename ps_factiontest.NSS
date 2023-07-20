@@ -121,7 +121,7 @@ void CalculateBonuses(object oPC, string bonus) {
 
 }
 
-void main (string bonus1 = "", string bonus2 = "", string bonus3 = "", string bonus4 = "") {
+void main (string bonus1, string bonus2, string bonus3, string bonus4) {
 
 	object oPC = GetPCSpeaker();
 	CalculateBonuses(oPC, bonus1);

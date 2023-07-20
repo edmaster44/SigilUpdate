@@ -33,7 +33,7 @@ string IntToFaction(string nFact) {
 	return "";
 }
 
-void main (int clear = 0) {
+void main (int clear) {
 
 	object oPC = GetPCSpeaker();
 	if (clear == 1) {

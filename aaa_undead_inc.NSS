@@ -12,6 +12,9 @@
 	aaa_undead, which acts as the universal spell with a case-based system.
 */
 
+// String name of local variable on essence for storing the original race of the oPC.
+const string VAR_OLD_RACE = "OldRace";
+
 // Apply a level adjustment to the character for the template class
 // Do not use this by itself; there should be a check to ensure it has not been previously applied
 // Called by PS_Undead_TouchOfEvil (see below)
@@ -99,7 +102,7 @@ int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
 // Upon becoming undead, move the character 35 points towards evil and apply template ECL adjustment
 void PS_Undead_TouchOfEvil(object oPC)
 {
-	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
+	object 	oItem	= PS_GetEssence(oPC);
 	
 	int iUndead = 0;
 	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
@@ -137,46 +140,61 @@ void PS_Undead_TouchOfEvil(object oPC)
 	}	
 }
 
-// Changes the character's racial type to Undead, and applys an evil little effect
+// Changes the character's racial type to Undead, and applies an evil little effect.
 void PS_UndeadRacialType(object oPC)
 {
-	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	if(GetRacialType(oPC) != 24)
-	{	int nOrigin = GetRacialType(oPC);
+	object oEssence = PS_GetEssence(oPC);
+
+	if(GetRacialType(oPC) != RACIAL_TYPE_UNDEAD)
+	{
+		int nOrigin = GetRacialType(oPC);
 		int nOriSub = GetSubRace(oPC);
 		PS_RestoreOriginalAppearance(oPC);
-		SetLocalInt(oItem, "OldRace", nOrigin);
-		SetLocalInt(oItem, "OldSubrace", nOriSub);
+		SetLocalInt(oEssence, VAR_OLD_RACE, nOrigin);
+		SetLocalInt(oEssence, "OldSubrace", nOriSub);
 		effect eUndead 	= EffectNWN2SpecialEffectFile("fx_coven_murder", oPC);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
 		effect eUndead2 = EffectNWN2SpecialEffectFile("fx_black_cloud", oPC);
 			DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead2, oPC, 4.0f));
-		if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-		{	int nAppVar = 1008;
-			if (GetRacialType(oPC) == 0) //Dwarf
-			{	nAppVar = 991;	}
-			if (GetRacialType(oPC) == 1) //Elf
-			{	nAppVar = 992;	}
-			if (GetRacialType(oPC) == 2) //Gnome
-			{	nAppVar = 993;	}
-			if (GetRacialType(oPC) == 14 || GetRacialType(oPC) == 5 || GetRacialType(oPC) == 32) //Orc or Half-orc
-			{	nAppVar = 994;	}
-			if (GetRacialType(oPC) == 3) //Halfling
-			{	nAppVar = 989;	}
-			object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-			int iAppearance = GetAppearanceType(oPC);
-			SetLocalInt(oItem, "OldAppearance", iAppearance);
-			SetLocalInt(oItem, "TemplateFix", 0);
 
-		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		// Set Death Knight appearance if needed.
+		if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
+		{
+			int nAppVar;
+
+			switch(GetRacialType(oPC))
+			{
+				case RACIAL_TYPE_DWARF:
+					nAppVar = 991; break;
+				case RACIAL_TYPE_ELF:
+					nAppVar = 992; break;
+				case RACIAL_TYPE_GNOME:
+					nAppVar = 993; break;
+				case RACIAL_TYPE_HALFLING:
+					nAppVar = 989; break;
+				case RACIAL_TYPE_HUMANOID_ORC:
+				case RACIAL_TYPE_HALFORC:
+				case RACIAL_TYPE_GRAYORC:
+					nAppVar = 994; break;
+				default:
+					nAppVar = 1008; break;
+			}
+
+			int iAppearance = GetAppearanceType(oPC);
+			SetLocalInt(oEssence, "OldAppearance", iAppearance);
+			SetLocalInt(oEssence, "TemplateFix", 0);
+
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAppVar;
 			PS_SetCreatureCoreAppearance(oPC, app);
 			PS_RefreshAppearance(oPC);
-			
-		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
-		PS_SetRacialType(oPC, RACIAL_TYPE_UNDEAD);
-		PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_UNDEAD);
-}	}
+
+			DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
+		}
+			PS_SetRacialType(oPC, RACIAL_TYPE_UNDEAD);
+			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_UNDEAD);
+	}
+}
 
 // Applies undead properties, dependent upon level in Lich PRC
 void PS_UndeadProperties(object oPC, int nSpell)
@@ -241,16 +259,16 @@ void PS_UndeadProperties(object oPC, int nSpell)
 		{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eOneGo, oPC);	}
 }	}	
 
-// Determines if character is halfling, gnome, or dwarf
+// Determines if character is halfling, gnome, or dwarf.
 int GetIsShortRace(object oPC)
 {
-	object oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nRace		= GetLocalInt(oItem, "OldRace");
-	
-	switch (nRace)
-	{	case 0 :	return TRUE;
-		case 2 :	return TRUE;
-		case 3 :	return TRUE;	}
+	object oEssence	= PS_GetEssence(oPC);
+	switch(GetLocalInt(oEssence, VAR_OLD_RACE))
+	{	case RACIAL_TYPE_DWARF:
+		case RACIAL_TYPE_GNOME:
+		case RACIAL_TYPE_HALFLING:
+			return TRUE; break;
+	}
 	return FALSE;
 }
 
@@ -258,22 +276,19 @@ int GetIsShortRace(object oPC)
 // Determines if character is an elf or drow
 int GetIsElf(object oPC)
 {
-	object oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nRace		= GetLocalInt(oItem, "OldRace");
-	
-	switch (nRace)
-	{	case 1 :	return TRUE;	}
-	return FALSE;
+	object oEssence	= PS_GetEssence(oPC);
+	int nRace		= GetLocalInt(oEssence, VAR_OLD_RACE);
+	return nRace == TRUE;
 }
-	
+
 // Helper function for PS_RottingVisage
 // Appearance Change to Lich model
-void PS_RottingVisage(object oPC, int nSpell)	
+void PS_RottingVisage(object oPC, int nSpell)
 {
 	if (!X2PreSpellCastCode())
     {	return;		}
 	
-	object oItem	= GetItemPossessedBy(oPC,"ps_essence");
+	object oItem	= PS_GetEssence(oPC);
 	int nTemp		= GetLocalInt(oItem, "TempChange");
 	int iForm = 102;
 	effect eVis 	= EffectNWN2SpecialEffectFile("fx_shadowjump", oPC);
