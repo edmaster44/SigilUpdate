@@ -751,3 +751,27 @@ const int FEAT_HEXEN_HEXER_1		 			= 2908;
 const int FEAT_HEXEN_HEXER_2		 			= 2900;
 const int FEAT_HEXEN_HEXER_3		 			= 2901;
 const int FEAT_HEXEN_CURSEMASTER		 		= 2907;
+
+
+// New Base Items.
+const int BASE_ITEM_CREQ_SLASH_M						= 160;
+const int BASE_ITEM_CREQ_PIERCE_M						= 161;
+const int BASE_ITEM_CREQ_BLUDGEON_M						= 162;
+const int BASE_ITEM_CREQ_SLASH_S						= 163;
+const int BASE_ITEM_CREQ_PIERCE_S						= 164;
+const int BASE_ITEM_CREQ_BLUDGEON_S						= 165;
+const int BASE_ITEM_CREQ_SLASH_L						= 166;
+const int BASE_ITEM_CREQ_PIERCE_L						= 167;
+const int BASE_ITEM_CREQ_BLUDGEON_L						= 168;
+const int BASE_ITEM_CREQ_PIERCE_SLASH_M					= 169;
+const int BASE_ITEM_CREQ_PIERCE_SLASH_S					= 170;
+const int BASE_ITEM_CREQ_PIERCE_SLASH_L					= 171;
+const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_M				= 172;
+const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_S				= 173;
+const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_L				= 174;
+const int BASE_ITEM_CREATURECLAW						= 176;
+const int BASE_ITEM_CREATUREBITE						= 177;
+const int BASE_ITEM_CREATURESLAM						= 178;
+const int BASE_ITEM_CREATURECLAW_LARGE					= 179;
+const int BASE_ITEM_CREATUREBITE_LARGE					= 180;
+const int BASE_ITEM_WHIP_SCOD							= 202;

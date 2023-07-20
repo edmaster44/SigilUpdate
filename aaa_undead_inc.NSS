@@ -12,8 +12,6 @@
 	aaa_undead, which acts as the universal spell with a case-based system.
 */
 
-// String name of local variable on essence for storing the original race of the oPC.
-const string VAR_OLD_RACE = "OldRace";
 
 // Apply a level adjustment to the character for the template class
 // Do not use this by itself; there should be a check to ensure it has not been previously applied
@@ -153,9 +151,9 @@ void PS_UndeadRacialType(object oPC)
 		SetLocalInt(oEssence, VAR_OLD_RACE, nOrigin);
 		SetLocalInt(oEssence, "OldSubrace", nOriSub);
 		effect eUndead 	= EffectNWN2SpecialEffectFile("fx_coven_murder", oPC);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
 		effect eUndead2 = EffectNWN2SpecialEffectFile("fx_black_cloud", oPC);
-			DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead2, oPC, 4.0f));
+		DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead2, oPC, 4.0f));
 
 		// Set Death Knight appearance if needed.
 		if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
@@ -191,8 +189,9 @@ void PS_UndeadRacialType(object oPC)
 
 			DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
 		}
-			PS_SetRacialType(oPC, RACIAL_TYPE_UNDEAD);
-			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_UNDEAD);
+
+		PS_SetRacialType(oPC, RACIAL_TYPE_UNDEAD);
+		PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_UNDEAD);
 	}
 }
 
@@ -623,12 +622,12 @@ void PS_DKDamageReduction(object oPC, int nSpell)
         {    iDR = 3;    }    }
             
     effect eGood    = EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
-	
-	 {  eGood = ExtraordinaryEffect(eGood);
+	// Dae: This block is weird, was there supposed to be a conditional here?
+	{  eGood = ExtraordinaryEffect(eGood);
         ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
         SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
-        
-}}
+	}
+}
 
 void PS_DKSymbolOfPain(object oPC, int nSpell)
 {
@@ -726,11 +725,10 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 		return;
 	
 	 
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl_HUndead = GetLevelByClass(CLASS_TYPE_HALF_UNDEAD,oPC);//Half-Undead
-	int iPRCLvl			= iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal + iPRCLvl_HUndead;
+	int iPRCLvl	= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
+	iPRCLvl += GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
+	iPRCLvl += GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
+	iPRCLvl += GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
 	int nDamage;
 	if (GetCreatureSize(oPC) == CREATURE_SIZE_LARGE)
 	{	nDamage = d8(1);	}

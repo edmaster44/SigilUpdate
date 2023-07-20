@@ -8,6 +8,9 @@
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
 
+// String name of local variable on essence for storing the original race of the oPC.
+const string VAR_OLD_RACE = "OldRace";
+
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest level in group
@@ -39,28 +42,6 @@ const int FEAT_PRACTICED_INVOKER						= 2842;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION			= 1833;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER	= 1834;
 const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
-
-const int BASE_ITEM_CREQ_SLASH_M						= 160;
-const int BASE_ITEM_CREQ_PIERCE_M						= 161;
-const int BASE_ITEM_CREQ_BLUDGEON_M						= 162;
-const int BASE_ITEM_CREQ_SLASH_S						= 163;
-const int BASE_ITEM_CREQ_PIERCE_S						= 164;
-const int BASE_ITEM_CREQ_BLUDGEON_S						= 165;
-const int BASE_ITEM_CREQ_SLASH_L						= 166;
-const int BASE_ITEM_CREQ_PIERCE_L						= 167;
-const int BASE_ITEM_CREQ_BLUDGEON_L						= 168;
-const int BASE_ITEM_CREQ_PIERCE_SLASH_M					= 169;
-const int BASE_ITEM_CREQ_PIERCE_SLASH_S					= 170;
-const int BASE_ITEM_CREQ_PIERCE_SLASH_L					= 171;
-const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_M				= 172;
-const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_S				= 173;
-const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_L				= 174;
-const int BASE_ITEM_CREATURECLAW						= 176;
-const int BASE_ITEM_CREATUREBITE						= 177;
-const int BASE_ITEM_CREATURESLAM						= 178;
-const int BASE_ITEM_CREATURECLAW_LARGE					= 179;
-const int BASE_ITEM_CREATUREBITE_LARGE					= 180;
-const int BASE_ITEM_WHIP_SCOD							= 202;
 
 //
 // For use with PS_GetPCFlags/PS_SetPCFlags.
@@ -3207,7 +3188,7 @@ void PS_UndeadRaceFix(object oPC)
 		{
 			//int iOldECL	= GetLocalInt(oItem, "OldECL");
 			//string sOldECL = IntToString(iOldECL);
-			int iOldRace = GetLocalInt(oItem, "OldRace");
+			int iOldRace = GetLocalInt(oItem, VAR_OLD_RACE);
 			int iOldSub = GetLocalInt(oItem, "OldSubrace");
 			int iOldGoodEvil = GetLocalInt(oItem, "OldGoodEvil");
 			
@@ -3240,7 +3221,7 @@ void PS_UndeadRaceFix(object oPC)
 					DeleteLocalString(oItem, "Template");
 					DeleteLocalInt(oItem, "IsUndead");
 					//DeleteLocalInt(oItem, "OldECL");
-					DeleteLocalInt(oItem, "OldRace");
+					DeleteLocalInt(oItem, VAR_OLD_RACE);
 					SetFirstName(oItem, "Your Essence");
 					SetItemIcon(oItem, 122);
 				}
@@ -3266,7 +3247,7 @@ void PS_UndeadRaceFix(object oPC)
 					DeleteLocalString(oItem, "Template");
 					DeleteLocalInt(oItem, "IsUndead");
 					//DeleteLocalInt(oItem, "OldECL");
-					DeleteLocalInt(oItem, "OldRace");
+					DeleteLocalInt(oItem, VAR_OLD_RACE);
 				}
 			}
 		}
@@ -3299,7 +3280,7 @@ void PS_SaveOriginalAppearance(object oPC)
 	Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
 	Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
 	
-	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
+	object oEssence = PS_GetEssence(oPC);
 	
 	PS_CreatureCoreAppearanceToScriptVariables(oEssence, "OriginalApp", Appearance);
 	SetLocalInt(oEssence, "TempChange", 0);
@@ -3308,7 +3289,7 @@ void PS_SaveOriginalAppearance(object oPC)
 
 void PS_RestoreOriginalAppearance(object oPC)
 {
-	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
+	object oEssence = PS_GetEssence(oPC);
 	struct CreatureCoreAppearance Appearance = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
 	PS_SetCreatureCoreAppearance(oPC, Appearance);
 	SendMessageToPC(oPC, "Original appearance restored");
@@ -3318,7 +3299,7 @@ void PS_RestoreOriginalAppearance(object oPC)
 
 void PS_ClassAppearanceDeleveling(object oPC)
 {
-	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
+	object oItem = PS_GetEssence(oPC);
 	
 	// Add a new entry to this list for each necessary reversion.
 	
@@ -3577,7 +3558,7 @@ void PS_HalfDragonRaceFix(object oPC)
 		{	//string sECL			= GetLocalString(oItem, "ECL");
 			//int iECL			= StringToInt(sECL);
 			string sRaceChg		= GetLocalString(oItem, "RaceChange");
-			int iOldRace 		= GetLocalInt(oItem, "OldRace");
+			int iOldRace 		= GetLocalInt(oItem, VAR_OLD_RACE);
 			int iOldSub 		= GetLocalInt(oItem, "OldSubrace");
 			int iOldGoodEvil 	= GetLocalInt(oItem, "OldGoodEvil");
 			string sInBlood		= GetLocalString(oItem, "InBlood");
@@ -3594,7 +3575,7 @@ void PS_HalfDragonRaceFix(object oPC)
 			{	PS_SetRacialType(oPC, iOldRace);
 				PS_SetSubRacialType(oPC, iOldSub);
 				DeleteLocalString(oItem, "RaceChange");
-				DeleteLocalInt(oItem, "OldRace");
+				DeleteLocalInt(oItem, VAR_OLD_RACE);
 				DeleteLocalInt(oItem, "OldSubrace");
 				SendMessageToPC(oPC, "Racial type and subtype reverting to original");	}
 			
@@ -3679,7 +3660,7 @@ void PS_HalfOutsiderRaceFix(object oPC)
 			//int iOldECL			= GetLocalInt(oItem, "OldECL");
 			//string sOldECL 		= IntToString(iOldECL);
 			string sRaceChg		= GetLocalString(oItem, "RaceChange");
-			int iOldRace 		= GetLocalInt(oItem, "OldRace");
+			int iOldRace 		= GetLocalInt(oItem, VAR_OLD_RACE);
 			int iOldSub 		= GetLocalInt(oItem, "OldSubrace");
 			int iHDLevel 		= GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
 			int iFlight			= GetLocalInt(oItem, "DarkFlight");
@@ -3689,7 +3670,7 @@ void PS_HalfOutsiderRaceFix(object oPC)
 			{	PS_SetRacialType(oPC, iOldRace);
 				PS_SetSubRacialType(oPC, iOldSub);
 				DeleteLocalString(oItem, "RaceChange");
-				DeleteLocalInt(oItem, "OldRace");
+				DeleteLocalInt(oItem, VAR_OLD_RACE);
 				DeleteLocalInt(oItem, "OldSubrace");
 				SendMessageToPC(oPC, "Racial type and subtype reverting to original");	}
 			
