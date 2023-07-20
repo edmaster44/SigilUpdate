@@ -22,16 +22,9 @@ const int HOLIDAY_VERSION_ROW = 3;
 
 const string HOLIDAY_NONE = "Holiday_Ordinary";
 const string HOLIDAY_XMAS = "Holiday_Xmas";
-			 				
-const int CLASS_TYPE_MYSTIC_THEURGE 					= 44; 
-const int CLASS_TYPE_GOLEMMASTER 						= 77;
 
-const int CLASS_TYPE_FELLBLADE 							= 80;
-const int CLASS_TYPE_ARCANE_ARCHER2 					= 81;
-const int CLASS_TYPE_PALEMASTER_W 						= 82;
-const int CLASS_TYPE_ARCANETRICKSTER_W 					= 83;
 const int FEAT_MYSTICTHEURGE_SPELLCASTING_WARLOCK 		= 1678;
-const int FEAT_PALE_MASTER_SPELLCASTING_WARLOCK 		= 1803;	
+const int FEAT_PALE_MASTER_SPELLCASTING_WARLOCK 		= 1803;
 const int FEAT_ARCANE_TRICKSTER_SPELLCASTING_WARLOCK 	= 1677;
 const int FEAT_BRACHINA_SPELLCASTING_WARLOCK 			= 2789;
 const int FEAT_SUCCUBUS_SPELLCASTING_WARLOCK 			= 2821;
@@ -98,7 +91,7 @@ int PS_GetGolemCasterLevel(object oPC);
 int GetIsHighBabClass(int classid);
 
 int MonkLevels(object oPC, int BAB = 0);
-						
+
 int GetRacialBonus(object oPC, int category);
 
 int MonkUnarmedDamage(object oPC, int iMonk);
@@ -220,7 +213,7 @@ int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 
 //Calculates Monk Unarmed Damage Based on Monk Class +PRC
 int MonkUnarmedDamage(object oPC, int iMonk)
-{				
+{
 	if(iMonk >= 30) return 16;
 	else if(iMonk >= 24) return 13;
 	else if(iMonk >= 20) return 11;
@@ -228,7 +221,7 @@ int MonkUnarmedDamage(object oPC, int iMonk)
 	else if(iMonk >= 12) return 7;
 	else if(iMonk >= 8) return 6;
 	else if(iMonk >= 4) return 5;
-	else if(iMonk >= 1) return 4;	
+	else if(iMonk >= 1) return 4;
 	else return 0;
 }
 //Increases Unarmed Damage
@@ -243,7 +236,7 @@ int IncreasedUnarmedDamageBonus(object oPC, object oItem)
 	else if(iMonk >= 24) iBonus = 8;
 	else if(iMonk >= 20) iBonus = 6;
 	else if(iMonk >= 16) iBonus = 5;
-	else if(iMonk >= 12) iBonus = 4;											
+	else if(iMonk >= 12) iBonus = 4;
 	else if(iMonk >= 8) iBonus = 3;
 	else iBonus = 2;
 	

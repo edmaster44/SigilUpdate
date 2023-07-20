@@ -124,13 +124,19 @@ const int WING_TYPE_WORDARCHON_M				= 73;
 const int CLASS_TYPE_PSION 						= 90;
 const int CLASS_PSYCHIC_WARRIOR					= 110;
 //List of All new PRCs
-const int CLASS_TYPE_ELEMENTAL_WARRIOR			= 68;
 const int CLASS_DERVISH							= 72;
 const int CLASS_PSYCHIC_KNIGHT					= 109;
-const int CLASS_TYPE_WARMIND					= 111;
-const int CLASS_TYPE_NATUREWARRIOR				= 113;
-const int CLASS_TYPE_CEREBREMANCER				= 152;
 const int CLASS_STALWART_DEFENDER 				= 180;
+const int CLASS_TYPE_ARCANETRICKSTER_W 			= 83;
+const int CLASS_TYPE_ARCANE_ARCHER2 			= 81;
+const int CLASS_TYPE_CEREBREMANCER				= 152;
+const int CLASS_TYPE_ELEMENTAL_WARRIOR			= 68;
+const int CLASS_TYPE_FELLBLADE 					= 80;
+const int CLASS_TYPE_GOLEMMASTER 				= 77;
+const int CLASS_TYPE_MYSTIC_THEURGE 			= 44;
+const int CLASS_TYPE_NATUREWARRIOR				= 113;
+const int CLASS_TYPE_PALEMASTER_W 				= 82;
+const int CLASS_TYPE_WARMIND					= 111;
 // List of all racial prestige classes
 const int CLASS_TYPE_SCALED_HUNTER_PRC			= 48;
 const int CLASS_TYPE_HALFDRAGON_PRC				= 49;
