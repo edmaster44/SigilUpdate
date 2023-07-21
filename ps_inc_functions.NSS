@@ -3942,29 +3942,24 @@ FeatAdd(oPC,21477,FALSE,FALSE,FALSE);//Eternal Warrior
 
 }
 
-//Counts levels in low bab arcane classes
+// Return count of levels in low bab arcane classes.
 int GetPureMageLevels(object oPC)
 {
-	 
-int iWIZ =	GetLevelByClass(CLASS_TYPE_WIZARD, oPC);     
-int	iSOR =	GetLevelByClass(CLASS_TYPE_SORCERER, oPC);
-int iBRA =	GetLevelByClass(CLASS_TYPE_BRACHINA, oPC); 
-int iLIC =	GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
-int iSUC =	GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
-int iPAL =	GetLevelByClass(CLASS_TYPE_PALEMASTER, oPC);
-int iGOL =	GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
-int iARC =	GetLevelByClass(CLASS_TYPE_ARCANE_SCHOLAR, oPC);
-int iMYS =	GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
-int iRWZ = 	GetLevelByClass(CLASS_TYPE_RED_WIZARD, oPC);
-int iGSD =  GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
-int iRSC =  GetLevelByClass(CLASS_TYPE_RAKSHASA_SORCERER, oPC);
-int iWDA =  GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC);
-int iCER =  GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oPC);
-
-	
-int PML = (iWIZ + iSOR + iBRA + iLIC + iSUC + iPAL + iGOL + iARC + iMYS + iRWZ + iRSC + iGSD + iWDA + iCER);
-
-return PML;
+	int nPML =	GetLevelByClass(CLASS_TYPE_WIZARD, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_SORCERER, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_BRACHINA, oPC); 
+		nPML +=	GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_PALEMASTER, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_GOLEMMASTER, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_ARCANE_SCHOLAR, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_MYSTIC_THEURGE, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_RED_WIZARD, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_RAKSHASA_SORCERER, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC);
+		nPML +=	GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oPC);
+	return nPML;
 }
 
 //Get whether this PC has done this action (defined by variable given) this reset
