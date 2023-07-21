@@ -168,7 +168,7 @@ int AddCharacterToDatabase(object oPC) {
 int prepChar(object oPC)
 {
 	//should be moved to first time entry after every char is fixed
-	object oItem = GetItemPossessedBy(oPC, "ps_essence");
+	object oItem = PS_GetEssence(oPC);
 	object oINVALID = OBJECT_INVALID;
 
 	int nID = GetLocalInt(oItem,"ID");
@@ -361,7 +361,7 @@ int prepChar(object oPC)
 		int iType = GetLocalInt(oItem, "DRAGONTYPE");
 		int iImmunity;
 		if (iType < 1)
-		SendMessageToPC(oPC, "Cannot set Immunity type as Dragon heritage not selected. Use your breath ability to fix or if that fails, contact a member of staff");
+		SendMessageToPC(oPC, "Cannot set Immunity type as Dragon heritage not selected. Use your breath ability to fix or if that fails, contact a member of the staff.");
 		else
 		{	
 			switch (iType)
@@ -432,7 +432,7 @@ void main()
 		{	
 			//SendMessageToPC(GetFirstPC(), "has valid templace object");
 			Legal = GetLocalString(oItem,"LEGAL");
-			ECL = GetLocalString(oItem,"ECL");
+			ECL = GetLocalString(oItem,VAR_ECL);
 			Template = 1;
 			DestroyObject(oItem);
 			//SendMessageToPC(GetFirstPC(), Legal+ECL+IntToString(Template));
@@ -447,7 +447,7 @@ void main()
 		if (Template == 1)
 		{	
 			//SendMessageToPC(GetFirstPC(), "setting to essence");
-			oItem = GetItemPossessedBy(oPC,"ps_essence");
+			oItem = PS_GetEssence(oPC);
 			SetLocalString(oItem, "LEGAL", Legal);
 			//SetLocalString(oItem, "ECL", ECL);
 			SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC)); 

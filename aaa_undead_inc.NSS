@@ -150,6 +150,7 @@ void PS_UndeadRacialType(object oPC)
 		PS_RestoreOriginalAppearance(oPC);
 		SetLocalInt(oEssence, VAR_OLD_RACE, nOrigin);
 		SetLocalInt(oEssence, "OldSubrace", nOriSub);
+		SetLocalInt(oEssence, "TemplateFix", 0);
 		effect eUndead 	= EffectNWN2SpecialEffectFile("fx_coven_murder", oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
 		effect eUndead2 = EffectNWN2SpecialEffectFile("fx_black_cloud", oPC);
@@ -180,13 +181,10 @@ void PS_UndeadRacialType(object oPC)
 
 			int iAppearance = GetAppearanceType(oPC);
 			SetLocalInt(oEssence, "OldAppearance", iAppearance);
-			SetLocalInt(oEssence, "TemplateFix", 0);
-
 			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAppVar;
 			PS_SetCreatureCoreAppearance(oPC, app);
 			PS_RefreshAppearance(oPC);
-
 			DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
 		}
 

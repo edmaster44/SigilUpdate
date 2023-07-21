@@ -245,7 +245,7 @@ void GiveWarlockBlastShapes(object oPC) {
 void main()
 {
 	object oPC = GetPCLevellingUp();
-	object oItem = GetItemPossessedBy(oPC, "ps_essence");
+	object oItem = PS_GetEssence(oPC);
 	
 	//DeleteLocalString(oPC, "ECL"); //Clang's fix on 3-31-16
 
@@ -284,7 +284,7 @@ void main()
 	// Add new templates to this list when created
 	string sTemplate	= GetLocalString(oItem, "Template");
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	int iOldSub			= GetLocalInt(oItem, "OldSubrace");	
+	int iOldSub			= GetLocalInt(oItem, "OldSubrace");
 	if (PS_NeedsTemplateClassAbilityFix(oPC))
 	{	
 		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
@@ -303,7 +303,7 @@ void main()
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}	
-	// various class and race related checks	
+	// various class and race related checks
 	CountSpells(oPC,1);
 	GetWarlockCasterLevel(oPC);
 	GiveWarlockBlastShapes(oPC);

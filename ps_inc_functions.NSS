@@ -3315,33 +3315,6 @@ void PS_ClassAppearanceDeleveling(object oPC)
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 }
 
-//DEPRECATED: TemplateRacialAdjust already takes care of it.
-// Determine the racial bonuses for a ability based upon the character's original subrace.
-// Use this ONLY in conjunction with PS_ApplyTemplateClassAbilityFix.
-// iAbility values: 0 = Str, 1 = Dex, 2 = Con, 3 = Int, 4 = Wis, 5 = Cha
-int GetAbilityOriginalRacialBonus(object oPC, int iAbility)
-{
-	string sColumn;
-	switch (iAbility)
-	{
-		case ABILITY_STRENGTH: 		sColumn = "StrAdjust"; break;
-		case ABILITY_DEXTERITY: 	sColumn = "DexAdjust"; break;
-		case ABILITY_CONSTITUTION: 	sColumn = "ConAdjust"; break;
-		case ABILITY_INTELLIGENCE: 	sColumn = "IntAdjust"; break;
-		case ABILITY_WISDOM: 		sColumn = "WisAdjust"; break;
-		case ABILITY_CHARISMA: 		sColumn = "ChaAdjust"; break;
-		default: return 0;
-	}
-	// SendMessageToPC(oPC, "Ability to pull: " + sColumn);
-	
-	object 	oItem		= GetItemPossessedBy(oPC,"ps_essence");
-	int iOldSub			= GetLocalInt(oItem, "OldSubrace");
-	string sRacialBonus = Get2DAString("racialsubtypes", sColumn, iOldSub);
-	int iRacialBonus	= StringToInt(sRacialBonus);
-	// SendMessageToPC(oPC, "Racial bonus: " + sRacialBonus + " to Ability #" + sColumn);
-	return iRacialBonus;
-}
-
 int PS_NeedsTemplateClassAbilityFix(object oPC)
 {
 	if (GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC) >= 6) return TRUE;
@@ -3362,6 +3335,7 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 {
 	int nSUBRACE;
 	int nVAR = GetLocalInt(oESSENCE, "TemplateFix");
+
 	if (nREVERSE == TRUE)
 	{
 		if (nVAR != TRUE) return;
@@ -3377,7 +3351,7 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 	}
 	string s2DA = "racialsubtypes";
 	string sSTAT;
-	int nCACHE = GetNum2DARows(s2DA);	
+	int nCACHE = GetNum2DARows(s2DA);
 	int nSTAT;
 	int nSTAT_AD;
 	int nABILITY = ABILITY_STRENGTH;
@@ -3393,10 +3367,12 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 			case ABILITY_CHARISMA: 		sSTAT = "ChaAdjust"; break;
 		}
 		nSTAT_AD = StringToInt(Get2DAString(s2DA, sSTAT, nSUBRACE));
+
 		if (nSTAT_AD != 0)
 		{
 			nSTAT = GetAbilityScore(oPC, nABILITY, TRUE);
 			if (nREVERSE == TRUE) nSTAT_AD = 0 - nSTAT_AD;
+
 			SetBaseAbilityScore(oPC, nABILITY, nSTAT + nSTAT_AD);
 		}
 		nABILITY = nABILITY + 1;
@@ -3409,7 +3385,6 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 {
 	TemplateRacialAdjust(oPC, oItem, FALSE);
-
 }
 
 // Remove racial bonuses to if the character delevels to no longer have a template class.
@@ -3420,7 +3395,6 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 void PS_RemoveTemplateClassAbilityFix(object oPC, object oItem)
 {
 	TemplateRacialAdjust(oPC, oItem, TRUE);
-
 }
 
 void PS_Template_DelevelFix(object oPC, object oItem)
@@ -3515,7 +3489,7 @@ void PS_RemoveDraconicMagic(object oPC)
 // they no longer have levels in that template class!
 void PS_HalfDragonRaceFix(object oPC)
 {
-	object oItem 			= GetItemPossessedBy(oPC, "ps_essence");
+	object oItem 			= PS_GetEssence(oPC);
 	string sTemplate		= GetLocalString(oItem, "Template");
 	int iGEDiff, iLCDiff;
 	if (GetIsObjectValid(oItem))
@@ -3542,7 +3516,8 @@ void PS_HalfDragonRaceFix(object oPC)
 				DeleteLocalString(oItem, "RaceChange");
 				DeleteLocalInt(oItem, VAR_OLD_RACE);
 				DeleteLocalInt(oItem, "OldSubrace");
-				SendMessageToPC(oPC, "Racial type and subtype reverting to original");	}
+				SendMessageToPC(oPC, "Racial type and subtype reverting to original.");
+			}
 			
 			if (iHDLevel != 6)
 			{	PS_RemoveDraconicMagic(oPC);

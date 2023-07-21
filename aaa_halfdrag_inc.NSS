@@ -414,7 +414,7 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 		case 2512 : //DRACONIC_HERITAGE_FANG
 	    {	break;	} //DR 2/ and 5/
 	}
-	int nHalfdragon		= GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC);
+	int nHalfdragon	= GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC);
 	int nImmune;
 	
 	if (nHalfdragon == 6)
@@ -451,39 +451,52 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 			{	eLink = EffectLinkEffects(eSleep, eFang1);
 				eLink = ExtraordinaryEffect(eLink);	}	}
 		else
-		{	if (nHalfdragon == 6)
-			{	eLink = EffectLinkEffects(ePara, eSleep);
+		{
+			if (nHalfdragon == 6)
+			{
+				eLink = EffectLinkEffects(ePara, eSleep);
 				eLink = EffectLinkEffects(eLink, eImmune2);
-				eLink = ExtraordinaryEffect(eLink);	}
+				eLink = ExtraordinaryEffect(eLink);
+			}
 			else
-			{	eLink = EffectLinkEffects(eSleep, eImmune);
-				eLink = ExtraordinaryEffect(eLink);	}	}
+			{
+				eLink = EffectLinkEffects(eSleep, eImmune);
+				eLink = ExtraordinaryEffect(eLink);
+			}
+		}
 		
 	if (!GetHasSpellEffect(nSpell, oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		SendMessageToPC(oPC, "Half-dragon - immunities applied");	}
+	{
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+		SendMessageToPC(oPC, "Half-dragon - immunities applied.");
+	}
 
 	if (PS_GetAppWingType(oPC) != 0)
 	{	SetLocalInt(oPC, "OldWings", 1);	}
 	else
 	{	AddScriptParameterString("START");
 		AddScriptParameterString("");
-		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}			
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);
+	}
 
 	if(GetRacialType(oPC) != RACIAL_TYPE_DRAGON)
-	{	if (nHalfdragon == 6)
-		{	SetLocalInt(oItem, "OldRace", nOrigin);
+	{
+		if (nHalfdragon == 6)
+		{
+			SetLocalInt(oItem, VAR_OLD_RACE, nOrigin);
 			SetLocalInt(oItem, "OldSubrace", nOriSub);
 			SetLocalString(oItem, "RaceChange", "Dragon");
 			SetLocalInt(oItem, "TemplateFix", 0);
 			PS_SetRacialType(oPC, RACIAL_TYPE_DRAGON);
-			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_DRAGON);	}	}
+			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_DRAGON);
+		}
+	}
 }
 
 
 void PS_HD_DraconicMagic(object oPC, object oItem)
 {
-    int nHeritage, nFeat; 
+    int nHeritage, nFeat;
 	
 	if(GetIsObjectValid(oItem))
 	{	nHeritage = GetLocalInt(oItem, "Draconic_Heritage");	}
