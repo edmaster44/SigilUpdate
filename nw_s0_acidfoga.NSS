@@ -20,23 +20,24 @@
 void main()
 {
 
-    //Declare major variables
-    int nMetaMagic = GetMetaMagicFeat();
-    int nDamage;
+		
+	int nMetaMagic = GetMetaMagicFeat();
+	int nDamage;
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-	int PML = GetPureMageLevels(OBJECT_SELF);
-    effect eDam;
-    effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
-    effect eSlow = EffectMovementSpeedDecrease(50);
-    object oTarget = GetEnteringObject();
-    float fDelay = GetRandomDelay(1.0, 2.2);
+	int nPML = PS_GetPureMageCL(OBJECT_SELF);
+	effect eDam;
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
+	effect eSlow = EffectMovementSpeedDecrease(50);
+	object oTarget = GetEnteringObject();
+	float fDelay = GetRandomDelay(1.0, 2.2);
 
-	
+/* DAE: The SR check was already commented out so didn't seem like we need to this part.
     int nIgnoreSR = FALSE;
     if (GetTag(OBJECT_SELF) == "AOE_ACID_BOMB")
     {
         nIgnoreSR = TRUE;
     }
+*/
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
     {
@@ -47,10 +48,15 @@ void main()
        // {
             //Roll Damage
             //Enter Metamagic conditions
-            nDamage = d4(nCL/3) + d4(PML/9);
-			if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
-			nDamage = d4(20/3) + d4(PML/9);
-			} 
+            
+			if (nCL < ITEM_MIN_CL && !GetIsObjectValid(GetSpellCastItem())){
+				nDamage = d4(ITEM_MIN_CL/3) + d4(nPML/3);
+			}
+			else
+			{
+				nDamage = d4(nCL/3) + d4(nPML/3);
+			}
+
             if (nMetaMagic == METAMAGIC_MAXIMIZE)
             {
                 nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
