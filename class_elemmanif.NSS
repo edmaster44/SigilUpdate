@@ -13,18 +13,18 @@ int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 int nDuration = (nLevel-1)*10;
 effect eDur;
 if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC)) eDur = EffectVisualEffect(925);
-else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH))eDur = EffectVisualEffect(VFX_DUR_PROT_STONESKIN);
+else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH)) eDur = EffectVisualEffect(VFX_DUR_PROT_STONESKIN);
 else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC)) eDur = EffectVisualEffect(VFX_DUR_ELEMENTAL_SHIELD);
-else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC)) eDur =eDur = EffectVisualEffect(VFX_DUR_GLOBE_MINOR);
+else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC)) eDur = EffectVisualEffect(VFX_DUR_GLOBE_MINOR);
 
 	int nSpellID = SPELLABILITY_ELEMWAR_MANIFESTATION;
-	object oTarget	= GetSpellTargetObject();	
+	object oTarget	= GetSpellTargetObject();
 	effect eHaste = EffectHaste();
 	effect eCleanse = EffectRegenerate(3,1.0f);
 	itemproperty eSlow = ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_SLOW,nLevel*2);
-	
-    RemoveSpellEffects(nSpellID, OBJECT_SELF, OBJECT_SELF);
-	
+
+	RemoveSpellEffects(nSpellID, OBJECT_SELF, OBJECT_SELF);
+
 	effect eLink;
 	
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC))
@@ -39,28 +39,28 @@ else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC)) eDur =eDur = EffectVisualE
 	}
 	else
 	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC))
-	{	
-			if (nLevel >= 5 ) 
-		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;	
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(nDuration)); }
+	{
+		if (nLevel >= 5 )
+		{
+			nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eHaste,oPC, RoundsToSeconds(nDuration));
+		}
 		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_FIRE);
 	}
-	else
-	if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
-	{	
-			if (nLevel >= 5 ) 
-		{	nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eCleanse,oPC, RoundsToSeconds(nDuration));	}
-		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_COLD);
+	else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC))
+	{
+		if (nLevel >= 5 )
+		{
+			nShieldDamage 	= DAMAGE_BONUS_1d6 * 3;
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCleanse, oPC, RoundsToSeconds(nDuration));
 		}
+		eLink = EffectDamageShield(0, nShieldDamage, DAMAGE_TYPE_COLD);
+	}
 
-		
-	eLink = EffectLinkEffects(eDur, eLink);	
+	eLink = EffectLinkEffects(eDur, eLink);
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpellID);
 
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration)));
-	
-	
 
 }

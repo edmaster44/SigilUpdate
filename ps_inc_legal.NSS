@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 //Checks for illegal character abilities
 int CheckELC(object oPC);
 
@@ -78,7 +80,7 @@ int CheckELC(object oPC)
 int CheckEssence(object oPC) {
 	
 	int iEssence = 0;
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
+	object oItem = PS_GetEssence(oPC);
     if(GetIsObjectValid(oItem))
     {
 		iEssence += 1;
@@ -357,7 +359,7 @@ string PS_CheckCharacterLegality(object PC, int ForceCheck)
 		return "";
 	}
 	
-	object oItem = GetItemPossessedBy(PC,"ps_essence");
+	object oItem = PS_GetEssence(PC);
     if(GetIsObjectValid(oItem))
     {
 	 	string sLegal = GetLocalString(oItem,"LEGAL");

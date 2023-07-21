@@ -47,7 +47,7 @@ void main()
     int  nRacial    = GetRacialType(oTarget);
     int  nMetaMagic = GetMetaMagicFeat();
 
-    //Minimum caster level of 1, maximum of 15.
+    // Minimum caster level of 1, maximum of 15.
     if(nCasterLvl == 0)
     {
         nCasterLvl = 1;
@@ -95,10 +95,10 @@ void main()
 }
 
 //------------------------------------------------------------------------------
-// This part is moved into a delayed function in order to alllow it to bypass
+// This part is moved into a delayed function in order to allow it to bypass
 // Golem Spell Immunity. Magic works by rendering all effects applied
 // from within a spellscript useless. Delaying the creation and application of
-// an effect causes it to loose it's SpellId, making it possible to ignore
+// an effect causes it to loose its SpellId, making it possible to ignore
 // Magic Immunity. Hacktastic!
 //------------------------------------------------------------------------------
 void DoCrumble (int nDam, object oCaster, object oTarget)

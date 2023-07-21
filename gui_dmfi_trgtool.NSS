@@ -24,7 +24,7 @@ void JumpAllPlayers(object oDM);
 void DestroyPlaceables(object oTarget);
 
 
-void main(string sValue, int n = 0)
+void main(string sValue, int n )
 {
 	object oPC = OBJECT_SELF;
 	object oTarget = GetPlayerCurrentTarget(OBJECT_SELF);
@@ -109,9 +109,6 @@ void main(string sValue, int n = 0)
 	   else
 	    return;
 	  }
-
-		
-
 }
 
 

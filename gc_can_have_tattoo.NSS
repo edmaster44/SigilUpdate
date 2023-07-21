@@ -12,7 +12,7 @@
 
 #include "inc_tattoo"
 
-int StartingConditional (string sTattooTag = "")
+int StartingConditional (string sTattooTag )
 {
 	object oPC = GetPCSpeaker();
 	//check if PC doesn't already have the max number of tattoes

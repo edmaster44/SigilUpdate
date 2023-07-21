@@ -16,9 +16,8 @@
 //	0 = no random items, only pulled from the epic pools
 //	1 = randomized items allowed 50/50 chance
 //***********************************************************************
-void main (int nTreasurePool = 0, int allowRandom = FALSE) {
+void main (int nTreasurePool , int allowRandom) {
 
-	object oPC = GetPCSpeaker();
-	GenerateQuestRewardOnTarget(oPC, nTreasurePool, allowRandom);
-	
+	GenerateQuestRewardOnTarget(GetPCSpeaker(), nTreasurePool, allowRandom);
+
 }

@@ -109,7 +109,7 @@ void main()
 
 
 	object oPC = GetPCSpeaker();
-	object oItem = GetItemPossessedBy(oPC, "ps_essence");
+	object oItem = PS_GetEssence(oPC);
 	int iRacelevels = 0;
 	
 	if ((GetClassByPosition(1,oPC) > 11 && GetClassByPosition(1,oPC) < 27) || GetClassByPosition(1,oPC) == 38) //Prevent delevelling of outsider++ type levels
@@ -117,11 +117,11 @@ void main()
 		iRacelevels = GetLevelByPosition(1,oPC);
 		if (GetLevelByPosition(2, oPC) < 1) return;
 	}
-	
+
 	WriteTimestampedLogEntry(GetName(oPC)+" is releveling! All levels are about to be removed.");
-	
+
 	ForceRest(oPC);
-	
+
 	if (iRacelevels > 0) PS_set_level(oPC, iRacelevels);
 	else PS_set_level(oPC, 1);
 	
@@ -129,13 +129,13 @@ void main()
 
 	// Remove any temporary appearance changes
 	PS_RestoreOriginalAppearance(oPC);
-	
+
 	// Check for earlier wings, etc.
 	if (GetHasFeat(2781) && !GetLocalInt(oItem, "DarkFlight" )) PS_Ability_DarkFlight(oPC);
-	
+
 	PS_CalculateECL(oPC);
-	
+
 	//Launch the delayed commands
-	DelayCommand(0.0f, DelayedFixes(oPC, oItem, 0));	
+	DelayCommand(0.0f, DelayedFixes(oPC, oItem, 0));
 	Finalize(oPC);
 }
