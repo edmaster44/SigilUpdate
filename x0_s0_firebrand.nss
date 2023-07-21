@@ -16,8 +16,6 @@
 //:://////////////////////////////////////////////
 //:: Last Updated By:
 // ChazM 10/19/06 - modified params to DoMissileStorm()
-
-
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "ps_inc_functions"
@@ -32,25 +30,25 @@ void main()
   check x2_inc_spellhook.nss to find out more
 
 */
-
-
-
-    if (!X2PreSpellCastCode())
-    {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
+	if (!X2PreSpellCastCode())
+	{
+	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+		return;
+	}
 
 // End of Spell Cast Hook
-	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-	int PML = GetPureMageLevels(OBJECT_SELF);
-    int nDamageDice;
-	
-	
-	nDamageDice = ((nCL) + (PML/4));
-	if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
-	nDamageDice = (20) + (PML/4);
-	} 
 
-    DoMissileStorm(nDamageDice, 30, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 1);
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int nPML = GetPureMageLevels(OBJECT_SELF) / 4;
+	int nDamageDice;
+
+	if (nCL < ITEM_MIN_CL && !GetIsObjectValid(GetSpellCastItem())){
+		nDamageDice = ITEM_MIN_CL + nPML;
+	}
+	else
+	{
+		nDamageDice = nCL + nPML;
+	}
+
+	DoMissileStorm(nDamageDice, 30, SPELL_FIREBRAND, VFX_HIT_SPELL_FIRE, DAMAGE_TYPE_FIRE, SAVING_THROW_TYPE_FIRE, 1);
 }

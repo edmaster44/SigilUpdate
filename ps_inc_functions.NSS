@@ -13,6 +13,9 @@ const string VAR_OLD_RACE = "OldRace";
 // String name of local variable on essence for storing ECL.
 const string VAR_ECL = "ECL";
 
+// Minimum Caster Level for spells when cast from an item.
+const int ITEM_MIN_CL = 20;
+
 const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 7; //PC's that are less than this number from highest level in group
