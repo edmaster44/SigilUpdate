@@ -36,18 +36,16 @@ void main()
 
 // End of Spell Cast Hook
 
-   //Declare major variables
-    object oTarget = GetSpellTargetObject();
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	//Declare major variables
+	object oTarget = GetSpellTargetObject();
 	int nTouch      = TouchAttackRanged(oTarget);
-
-    effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
-    effect eRay = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_HAND);
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
+	effect eRay = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_HAND);
 
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 424));
+        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ACID_SPLASH));
 		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
 		{ 
 	        //Make SR Check
