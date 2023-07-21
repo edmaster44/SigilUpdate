@@ -19,6 +19,7 @@
 
 #include "x2_inc_spellhook"
 #include "x0_i0_spells"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -42,7 +43,7 @@ void main()
 
     //Declare major variables
     effect eVis = EffectVisualEffect(448);
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF) + PS_GetPureMageCL(OBJECT_SELF);
     int nDamage = nDuration * 2;
     int nMetaMagic = GetMetaMagicFeat();
     object oTarget = OBJECT_SELF;
