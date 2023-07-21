@@ -39,7 +39,7 @@ void main()
 // End of Spell Cast Hook
 
 	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-	int nPML = GetPureMageLevels(OBJECT_SELF) / 3;
+	int nPML = PS_GetPureMageCL(OBJECT_SELF);
 	int nDamageDice;
 
 	if (nCL < ITEM_MIN_CL && !GetIsObjectValid(GetSpellCastItem())){

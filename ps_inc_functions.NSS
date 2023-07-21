@@ -103,7 +103,7 @@ float PS_GetXPModifier(int iECL);
 
 int PS_GetXPForLevel(int iLevel);
 
-int PS_GetPureMageLevels(int PML);
+int PS_GetPureMageCL(object oPC);
 
 int GetWarlockCasterLevel(object oPC);
 
@@ -3960,6 +3960,11 @@ int GetPureMageLevels(object oPC)
 		nPML +=	GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC);
 		nPML +=	GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oPC);
 	return nPML;
+}
+
+int PS_GetPureMageCL(object oPC)
+{
+	return GetPureMageLevels(oPC) / 3;
 }
 
 //Get whether this PC has done this action (defined by variable given) this reset
