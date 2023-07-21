@@ -1,31 +1,36 @@
 //::///////////////////////////////////////////////
-//:: Invisibility
-//:: NW_S0_Invisib.nss
-//:: Copyright (c) 2001 Bioware Corp.
+//:: Blur
+//:: nw_s0_blur.nss
 //:://////////////////////////////////////////////
 /*
-    Target creature becomes invisibility
+    Caster gains 20% concealment for 1 round per CL.
 */
 //:://////////////////////////////////////////////
 //:: Created By: Preston Watamaniuk
 //:: Created On: Jan 7, 2002
 //:://////////////////////////////////////////////
+#include "X0_I0_SPELLS"
+#include "x2_inc_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
+
+	if (!X2PreSpellCastCode())
+	{
+		// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+		return;
+	}
+
     //Declare major variables
     object oTarget = OBJECT_SELF;
-
-    //effect eVis = EffectVisualEffect(VFX_DUR_INVISIBILITY);
     effect eConc = EffectConcealment(20);
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
-
     effect eLink = EffectLinkEffects(eConc, eDur);
-    //eLink = EffectLinkEffects(eLink, eVis);
 
     //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_INVISIBILITY, FALSE));
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF) + PS_GetPureMageCL(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_EXTEND)
