@@ -1,18 +1,16 @@
 //::///////////////////////////////////////////////
-//:: Bigby's Forceful Hand
-//:: [x0_s0_bigby2]
-//:: Copyright (c) 2002 Bioware Corp.
+//:: Telekinetic Maneuver
+//:: [psi_pow_telekineticman]
 //:://////////////////////////////////////////////
 /*
-    dazed vs strength check (+14 on strength check); Target knocked down.
-    Target dazed down for 1 round per level of caster
+You use a limited form of telekenisis to trip your foe. Your opponent must make 
+a Dexterity check (modified by their size) against 1d20 + your Intelligence 
+modifier. On a failed Dexterity check, your opponent is knocked down and dazed 
+for one round per two manifester levels.
 
+Augment: If augmented, your Intelligence modifier increases by 1 for the purposes 
+of this power.
 */
-//:://////////////////////////////////////////////
-//:: Created By: Brent
-//:: Created On: September 7, 2002
-//:://////////////////////////////////////////////
-//:: Last Updated By: Andrew Nobbs May 01, 2003
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
