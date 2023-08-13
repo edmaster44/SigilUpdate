@@ -137,6 +137,8 @@ const int CLASS_TYPE_MYSTIC_THEURGE 			= 44;
 const int CLASS_TYPE_NATUREWARRIOR				= 113;
 const int CLASS_TYPE_PALEMASTER_W 				= 82;
 const int CLASS_TYPE_WARMIND					= 111;
+const int CLASS_TYPE_PSYCHIC_THERUGE			= 115;
+
 // List of all racial prestige classes
 const int CLASS_TYPE_SCALED_HUNTER_PRC			= 48;
 const int CLASS_TYPE_HALFDRAGON_PRC				= 49;

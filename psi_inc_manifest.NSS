@@ -19,8 +19,9 @@ int nPsion = GetLevelByClass(CLASS_TYPE_PSION,oPC);
 int nDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oPC);
 int nMentalist = GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC,oPC);
 int nCere	   = GetLevelByClass(CLASS_TYPE_CEREBREMANCER,oPC);
+int nTheruge	   = GetLevelByClass(CLASS_TYPE_PSYCHIC_THERUGE,oPC);
 int nPsyKnight = GetLevelByClass(CLASS_PSYCHIC_KNIGHT,oPC);
-int iTotal = nPsion + nDragon + nMentalist + nCere + nPsyKnight;
+int iTotal = nPsion + nDragon + nMentalist + nCere + nPsyKnight + nTheruge ;
 return iTotal;
 
 }
@@ -60,7 +61,12 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 		nManifesterLevel = nManifesterLevel + GetLevelByClass(CLASS_TYPE_WARMIND,oManifester);
 
 	}
-
+	
+	if(GetLevelByClass(115, oManifester) > 0)
+	{
+        nManifesterLevel = nManifesterLevel + GetLevelByClass(115, oManifester);
+    }
+	
 	if(GetLevelByClass(152, oManifester) > 0)
 	{
         nManifesterLevel = nManifesterLevel + GetLevelByClass(152, oManifester);

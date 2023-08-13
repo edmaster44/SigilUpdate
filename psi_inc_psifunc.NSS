@@ -399,6 +399,7 @@ int GetAbilityOfClass(int nClass) {
 	case CLASS_TYPE_DRAGON_PSION://Gem Dragon
 	case CLASS_TYPE_ILLITHID_MENTALIST_PRC://Illithid Mentalist
 	case CLASS_PSYCHIC_KNIGHT://Psychic Knight
+	case CLASS_TYPE_PSYCHIC_THERUGE:
 	case CLASS_TYPE_CEREBREMANCER://Cerebremancer
 		return ABILITY_INTELLIGENCE;		
 	case CLASS_PSYCHIC_WARRIOR:	
@@ -720,6 +721,7 @@ int GetPsionicPRCLevels(object oCreature)
     int nLevel = 0;
 	nLevel +=  GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC, oCreature);
 	nLevel +=  GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
+	nLevel +=  GetLevelByClass(CLASS_TYPE_PSYCHIC_THERUGE, oCreature);
 	//No Level boost for Psychic Knight, at level 1
 	if(GetLevelByClass(CLASS_PSYCHIC_KNIGHT, oCreature))
     {
@@ -755,7 +757,7 @@ int GetPsionicPRCLevels(object oCreature)
 int GetIsPsionicClass(int nClass)
 {
     return (nClass==CLASS_TYPE_PSION || nClass == CLASS_PSYCHIC_WARRIOR ||nClass == CLASS_TYPE_CEREBREMANCER	|| nClass == CLASS_TYPE_DRAGON_PSION|| 
-	nClass == CLASS_PSYCHIC_KNIGHT || CLASS_TYPE_WARMIND  
+	nClass == CLASS_PSYCHIC_KNIGHT || CLASS_TYPE_WARMIND || nClass == CLASS_TYPE_PSYCHIC_THERUGE
 	);
 }
 
