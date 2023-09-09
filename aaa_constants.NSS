@@ -7,9 +7,6 @@
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
 
-/*Test thing*/
-
-
 //Background Feats
 
 const int FEAT_OUTSIDER_BLOODLINE_FIENDISH = 81; 
