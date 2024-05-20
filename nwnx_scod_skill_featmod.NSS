@@ -1,4 +1,4 @@
-#include "nwnx_bg"
+#include "nwnx_dae"
 
 
 	// Called at the end of the usual feat mods by the engine.

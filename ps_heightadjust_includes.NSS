@@ -11,6 +11,7 @@ string GetRace(object oPC)
 	string race;
 
 	if (iRace == RACIAL_TYPE_HUMAN) race = "human";
+	if (iRace == RACIAL_TYPE_UNDEAD) race = "human";	
 	if (iSubrace == RACIAL_SUBTYPE_AASIMAR) race = "aasimar";
 	if (iRace == RACIAL_TYPE_HALFELF || iSubrace == 43) race = "halfelf";	
 	if (iSubrace == RACIAL_SUBTYPE_YUANTI ) race = "yuanti";

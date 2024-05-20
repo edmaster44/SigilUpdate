@@ -3,7 +3,8 @@
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
-#include "nwnx_bg_finesse"
+#include "nwnx_scod_finesse"
+#include "nwnx_scod_monkweapon"
 #include "ps_inc_functions"
 #include "nwnx_character"
 #include "ps_class_inc"
@@ -568,6 +569,7 @@ void main()
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
 		EnableCreatureFinesse();
+		EnableMonkNew();
 		if (GetHasFeat(289,oPC))
 		FeatAdd(oPC,3218,FALSE,FALSE,TRUE);
 		ConvertBio(oPC);
