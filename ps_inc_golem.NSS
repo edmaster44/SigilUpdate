@@ -65,16 +65,16 @@ void AdjustGolem(object oPC, object oGolem, object oItem = OBJECT_INVALID)
 	
 	AddHenchman(oPC, oGolem);
 	if (oItem != OBJECT_INVALID) SetLocalObject(oGolem, "ControlObject", oItem);
-	SetCreatureScriptsToSetAndSetDeathScript(oGolem, 10, "ps_golem_dmg");
+	
 	
 	// Add bonuses from the Golem Master prestige class
 	ApplyCraftsmanship(oPC, oGolem);
 	ApplyAbidingMasterwork(oPC, oGolem);
 	ApplyMastercraft(oPC, oGolem);
 	// Add variable to prevent golem destruction with Abiding Masterwork
-	if (GetHasFeat(2806, oPC, TRUE) == TRUE)
+	if (GetHasFeat(2806, oPC, TRUE) == FALSE)
 	{
-		SetLocalInt(oItem, "AbidingMasterwork", 1);
+		SetCreatureScriptsToSetAndSetDeathScript(oGolem, 10, "ps_golem_dmg");
 	}
 	
 	
