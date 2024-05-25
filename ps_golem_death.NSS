@@ -48,9 +48,11 @@ void main()
 		ExecuteScript("nw_c2_default7", oGolem);
 		return;				
 	}
-	
-	DestroyObject(oDevice);
-	sMSG = "As your " + sName + " is destroyed, its control device crumbles to dust";
-	//sSPEAK = "The golem drops to the ground and is utterly destroyed";
-	return;
+	else
+	{
+		DestroyObject(oDevice);
+		sMSG = "As your " + sName + " is destroyed, its control device crumbles to dust";
+		//sSPEAK = "The golem drops to the ground and is utterly destroyed";
+		return;
+	}
 }
