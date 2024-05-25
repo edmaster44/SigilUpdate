@@ -75,6 +75,9 @@ int PS_IsEquippableCW(object oItem);
 
 int PS_GetCasterLevel(object oPC);
 
+//Safely retrieves the Icon Picture
+int GetItemIconSafe(object oItem);
+
 int PS_GetGolemCasterLevel(object oPC);
 
 int GetIsHighBabClass(int classid);
@@ -691,6 +694,12 @@ int GetWarlockCasterLevelBase(object oPC) {
 	return iTotal;
 }
 
+
+//Safely retrieves the Icon Picture
+int GetItemIconSafe(object oItem)
+{
+    return GetIsObjectValid(oItem) ? GetItemIcon(oItem) : -1;
+}
 //Gets Warlock Caster Levels with Feats included 
 int GetWarlockCasterLevel(object oPC)
 {
