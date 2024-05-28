@@ -11,6 +11,7 @@ Removed Alignment change for Thug for exploit reason */
 #include "ps_adjust_sneakattack"
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"
+#include "ff_sneak_fix"
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
 #include "ps_inc_bgspellfix"
@@ -329,6 +330,7 @@ void main()
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
-	PS_AdjustSneakAttack(oPC);
+//	PS_AdjustSneakAttack(oPC);
+	ff_sneak_fix(oPC);
 	PS_KnightLevels(oPC);
 }
