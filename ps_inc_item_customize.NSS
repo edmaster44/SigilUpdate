@@ -5,7 +5,6 @@
 //:://////////////////////////////////////////////
 
 #include "ginc_crafting"
-#include "ps_inc_functions"
 
 void PS_SetItemDescription(object oPC, object oItem)
 {
@@ -61,7 +60,7 @@ void PS_SetItemName(object oPC, object oItem)
 
 void PS_SetItemIcon(object oPC, object oItem)
 {
-	int nIconNumber			= GetItemIconSafe(oItem);
+	int nIconNumber			= GetItemIcon(oItem);
 	string sIconNumber		= IntToString(nIconNumber);
 
 	int nMessageStrRef 		= 181743;

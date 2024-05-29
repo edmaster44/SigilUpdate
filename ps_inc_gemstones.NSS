@@ -1,5 +1,4 @@
 #include "nwnx_sql"
-#include "ps_inc_functions"
 const string sGemScreen = "SCOD_GEMCUTTING";
 const string xmlGemFile = "scod_gemcutting_window.xml";
 const string gemstoneBox = "plc_chest_gemstonegeneration";
@@ -485,7 +484,7 @@ void RegenerateGemList(object oPC) {
 	
 		if (GetBaseItemType(oGem) == BASE_ITEM_GEM) {
 			if (GetTag(oGem) != "gemstone_gravel" && GetIsGemstone(oGem) && IsGemRough(oGem)) { 
-				int iconIndex = GetItemIconSafe(oGem);
+				int iconIndex = GetItemIcon(oGem);
 				string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
 				SetLocalObject(oPC, "gemrow_"+IntToString(nCount), oGem);
 				AddListBoxRow(oPC, sGemScreen, "SCOD_GEM_INVENTORY", "GEMROW_"+IntToString(nCount), "GemEntryName="+GetName(oGem)+";", "GemEntryIcon="+sIcon+".tga;", "5=" + IntToString(nCount), "");
@@ -511,7 +510,7 @@ void UpdateSelectedGem(object oPC) {
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 		return;
 	} else if (GetBaseItemType(oGem) == BASE_ITEM_MISCSMALL) { //for gems with special effects
-		int iconIndex = GetItemIconSafe(oGem);
+		int iconIndex = GetItemIcon(oGem);
 		string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
 		SetGUITexture(oPC, sGemScreen, "MAINGEM_ICON", sIcon+".tga");
 		SetGUIObjectText(oPC, sGemScreen, "MAINGEM_NAME", -1, GetName(oGem));
@@ -531,7 +530,7 @@ void UpdateSelectedGem(object oPC) {
 		SetGUIObjectHidden(oPC, sGemScreen, "IDENTIFY_GEM", FALSE);
 		SetGUIObjectHidden(oPC, sGemScreen, "CUT_GEM", TRUE);
 	}
-	int iconIndex = GetItemIconSafe(oGem);
+	int iconIndex = GetItemIcon(oGem);
 	string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
 	SetGUITexture(oPC, sGemScreen, "MAINGEM_ICON", sIcon+".tga");
 	SetGUIObjectText(oPC, sGemScreen, "MAINGEM_NAME", -1, GetName(oGem));

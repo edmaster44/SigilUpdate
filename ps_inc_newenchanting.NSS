@@ -3,7 +3,6 @@ const string sEnchantingScreen = "SCOD_ENCHANTING";
 const float ENCHANTING_DISTANCE = 5.0f;
 
 #include "x2_inc_itemprop"
-#include "ps_inc_functions"
 #include "x0_i0_match"
 #include "ps_inc_gemstones"
 #include "nw_i0_plot"
@@ -770,7 +769,7 @@ void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant,
 
 //Display the item description in the gui
 void DisplayItemDescription(object oPC, object oItem) {
-	int iconIndex = GetItemIconSafe(oItem);
+	int iconIndex = GetItemIcon(oItem);
 	string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
 	SetGUITexture(oPC, sEnchantingScreen, "ENCHANTING_ITEM_ICON", sIcon+".tga");
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_NAME", -1, GetName(oItem));

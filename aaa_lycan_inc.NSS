@@ -10,9 +10,6 @@
 #include "ps_inc_melee"
 #include "x2_inc_itemprop"
 
-
-
-
 void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)	
 {
 	int nAfflict = GetLocalInt(oItem, "Lycan_Affliction");
@@ -34,10 +31,10 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 // Helper feat for granting wererat sneak attack bonus
 void PS_Wererat_SneakAdd(object oPC)
 {
-	if (GetHasFeat(2593, oPC))
+	if (GetHasFeat(2593, oPC) && GetHasFeat(221, oPC))
 	{	FeatAdd(oPC, 460, 0);
 		FeatAdd(oPC, 461, 0);
-		SendMessageToPC(oPC, "Wererat sneak attack feats granted while in hybrid form."); 	}
+		SendMessageToPC(oPC, "Wererat sneak attack feats granted while in animal or hybrid form."); 	}
 }
 
 // Helper feat for removing wererat sneak attack bonus
@@ -46,7 +43,7 @@ void PS_Wererat_SneakRemove(object oPC)
 	if (GetHasFeat(2593, oPC))
 	{	FeatRemove(oPC, 460);
 		FeatRemove(oPC, 461);
-		SendMessageToPC(oPC, "Wererat sneak attack feats removed while not in hybrid form.");	}
+		SendMessageToPC(oPC, "Wererat sneak attack feats removed while not in animal or hybrid form.");	}
 }
 
 void PS_Wererat_AnimalSneakApply(object oPC)

@@ -42,7 +42,7 @@ void main () {
 		SetFirstName(oItem, "Rough "+sName+" <Color=Gray>"+GetSizeString(nSize)+"</Color>");	
 	}
 	
-	SetItemIcon(oItem, GetItemIconSafe(oGem));
+	SetItemIcon(oItem, GetItemIcon(oGem));
 	SetDescription(oItem, GetGemstoneFullDescription(oItem));
 	SetLocalObject(oPC, "selected_gem", oItem);
 	TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);

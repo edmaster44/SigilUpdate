@@ -94,7 +94,6 @@ displayed in the GUI files where gold usually appears.
 #include "nwnx_sql"
 #include "ps_inc_newcrafting"
 #include "ps_inc_newenchanting"
-#include "ps_inc_functions"
 
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
@@ -492,7 +491,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		int		iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		string	sItemName	= GetName(oItem) + " (" + sStackSize + ")"; // - "+IntToString(iOldCost);
 		
-		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
+		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIcon(oItem)) + ".tga";
 		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
