@@ -2,16 +2,6 @@
 
 		Sneak Attack Adjustment Script by FlattedFifth, May 27, 2024
 		
-		TODO: 
-		1) Figure out why lycanthrope isn't getting a choice of type.
-		Restore original ps_levelup and check, then examine if there's
-		something in ps_adjust_sneakattack that is handling it.
-		2) Further testing with all possible sneak attack combo characters
-		3) include aaa_constants and replace most of the constants here with 
-		the ones there to avoid unnecessary overhead.
-		4) Remove AddEPForDeathDice() function and its call from ps_levelup. 
-		It's redundant now and all sneak dice related methods should be in 
-		one file.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -29,6 +19,9 @@ const int bOnlyEvilBlackguardSneakAttacks = TRUE;
 // control whether to include checks for legacy blackguard class from before the
 // conversion to knight, in case of legacy characters
 const int bIncludeLegacyBlackguard = FALSE;
+
+// boolean to control whether or not we save character after adjusting sneak dice
+const int bSaveAfterThisScript = FALSE;
 
 // integer to control the maximum allowed sneak dice. Cannot be more than 20
 const int nMaxAllowedSneakDice = 20;
@@ -124,13 +117,13 @@ void fRemoveSneakFeats(object oPC);
 int fCalcSneakDice(object oPC);
 int fCalcDeathDice(object oPC);
 void fGrantSneakFeats(object oPC, int sneakDice, int deathDice);
+string fCheckForTempSneakDice(object oPC);
 
 
-//void main()
+//main logic of this script
 void ff_sneak_fix(object oPC)
 {
 
-//object oPC = GetPCLevellingUp();
 int nSneakDice = 0;
 int nDeathDice = 0;
 
@@ -142,13 +135,64 @@ nDeathDice = fCalcDeathDice(oPC);
 
 fGrantSneakFeats(oPC, nSneakDice, nDeathDice);
 
-
 SendMessageToPC(oPC, "Finished re-calculating Sneak Dice");
 
-// save character here, yes/no?
-// ExportSingleCharacter(oPC);
+
+string tempDiceWarning = "";
+tempDiceWarning = fCheckForTempSneakDice(oPC);
+
+if (!tempDiceWarning == "")
+{
+	SendMessageToPC(oPC, tempDiceWarning);
+}
+
+if (bSaveAfterThisScript)
+{
+	ExportSingleCharacter(oPC);
+}
 
 }
+
+// function that checks for a character having conditions that might 
+// generate temporary sneak attack dice that this script would remove if
+// that condition is active while levelling up
+string fCheckForTempSneakDice(object oPC)
+{
+string nMessage = "WARNING: If you leveled up while ";
+int n = 0;
+
+if (GetHasFeat(idFeatFranticReactions, oPC))
+{
+	n += 1;
+}
+
+if (GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(idClassLycan, oPC) >= 4)
+{
+	n += 2;
+}
+
+switch (n)
+{
+	case 1: nMessage = nMessage + "Frantic Reactions ";
+		break;
+	case 2: nMessage = nMessage + "Wererat Hybrid Form ";
+		break;
+	case 3: nMessage = nMessage + "Frantic Reactions or Wererat Hybrid Form ";
+		break;
+	default: nMessage = "";
+		break;
+}
+
+if (!nMessage == "")
+{
+	nMessage = nMessage + "was active, you have lost your temporary sneak attack " +
+		"until you use that ability again.";
+}
+
+return nMessage;
+
+}
+
 
 // function that returns the sneak attack feat according to number of sneak dice
 // if the total number of allowed dice changes, change the nMaxAllowedSneakDice constant.
