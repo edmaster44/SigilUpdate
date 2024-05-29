@@ -10,7 +10,6 @@
 // constants to control optional epic precision qualifications
 const int bGrantToSwash12 = TRUE;
 const int bCountBleedingWound = TRUE;
-const int bCountWardenFranticReactions = TRUE;
 const int bCountWererat = TRUE;
 
 //control whether blackguard loses sneak attack if they become non-evil
@@ -123,81 +122,53 @@ string fCheckForTempSneakDice(object oPC);
 //main logic of this script
 void ff_sneak_fix(object oPC)
 {
+	int nSneakDice = 0;
+	int nDeathDice = 0;
 
-int nSneakDice = 0;
-int nDeathDice = 0;
+	SendMessageToPC(oPC, "Re-calculating Sneak Dice");
+	fRemoveSneakFeats(oPC);
 
-SendMessageToPC(oPC, "Re-calculating Sneak Dice");
-fRemoveSneakFeats(oPC);
+	nSneakDice = fCalcSneakDice(oPC);
+	nDeathDice = fCalcDeathDice(oPC);
 
-nSneakDice = fCalcSneakDice(oPC);
-nDeathDice = fCalcDeathDice(oPC);
+	fGrantSneakFeats(oPC, nSneakDice, nDeathDice);
 
-fGrantSneakFeats(oPC, nSneakDice, nDeathDice);
-
-SendMessageToPC(oPC, "Finished re-calculating Sneak Dice");
+	SendMessageToPC(oPC, "Finished re-calculating Sneak Dice");
 
 
-string tempDiceWarning = "";
-tempDiceWarning = fCheckForTempSneakDice(oPC);
+	string tempDiceWarning = "";
+	tempDiceWarning = fCheckForTempSneakDice(oPC);
 
-if (!tempDiceWarning == "")
-{
-	SendMessageToPC(oPC, tempDiceWarning);
-}
+	if (!tempDiceWarning == "")
+	{
+		SendMessageToPC(oPC, tempDiceWarning);
+	}
 
-if (bSaveAfterThisScript)
-{
-	ExportSingleCharacter(oPC);
-}
-
+	if (bSaveAfterThisScript)
+	{
+		ExportSingleCharacter(oPC);
+	}
 }
 
 // function that checks for a character having conditions that might 
 // generate temporary sneak attack dice that this script would remove if
-// that condition is active while levelling up
+// that condition is active while levelling up. For now there's only wererat
+// hybrid form, but there may be others in the future.
 string fCheckForTempSneakDice(object oPC)
 {
-string nMessage = "WARNING: If you leveled up while ";
-int n = 0;
+	string nMessage = "";
 
-if (GetHasFeat(idFeatFranticReactions, oPC))
-{
-	n += 1;
-}
-
-if (GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(idClassLycan, oPC) >= 4)
-{
-	n += 2;
-}
-
-switch (n)
-{
-	case 1: nMessage = nMessage + "Frantic Reactions ";
-		break;
-	case 2: nMessage = nMessage + "Wererat Hybrid Form ";
-		break;
-	case 3: nMessage = nMessage + "Frantic Reactions or Wererat Hybrid Form ";
-		break;
-	default: nMessage = "";
-		break;
-}
-
-if (!nMessage == "")
-{
-	nMessage = nMessage + "was active, you have lost your temporary sneak attack " +
-		"until you use that ability again.";
-}
-
-return nMessage;
-
+	if (GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(idClassLycan, oPC) >= 4)
+	{
+		nMessage =  "WARNING: If you leveled up while Wererat Hybrid Form " + 
+			"was active, you have lost your bonus sneak dice until you re-activate "
+			+ "that ability.";
+	}
+	return nMessage;
 }
 
 
 // function that returns the sneak attack feat according to number of sneak dice
-// if the total number of allowed dice changes, change the nMaxAllowedSneakDice constant.
-// If you want to limit the number of iterations of checking for sneak dice during removal, 
-// change the nSneakAttackFeatsToCheckFor constant.
 int fFindSneakFeat(int dice)
 {
 	int nFeatID = 0;
@@ -248,9 +219,6 @@ int fFindSneakFeat(int dice)
 }
 
 // function that returns the appropriate death attack feat based on number of dice
-// Although there's 20 death attack feats listed in the 2da, the last 15 don't 
-// actually exist in the game. So someone who used alignment change to try to 
-// get 10d6 death attack is wasting their time.
 int fFindDeathFeat(int dice)
 {
 	int nFeatID = 0;
@@ -271,8 +239,6 @@ int fFindDeathFeat(int dice)
 }
 
 // function that returns the blackguard sneak attack feat ids
-// If you want to limit the number of iterations of checking for the feat, 
-// during the removal function, change the nBlackguardSneakAttackFeatsToCheckFor constant.
 int fFindBgFeat(int dice)
 {
 	int nFeatID = 0;
@@ -329,47 +295,47 @@ int fFindGuildFeat(int dice)
 // sneak through Lupus vampire).
 void fRemoveSneakFeats(object oPC)
 {
-// remove basic sneak attack feats
-int i;
-int nFeatID = idFeatSneakAttack1;
-for (i = 1; i <= 20; i++)
+	// remove basic sneak attack feats
+	int i;
+	int nFeatID = idFeatSneakAttack1;
+	for (i = 1; i <= 20; i++)
 	{
 		nFeatID = fFindSneakFeat(i);
 		FeatRemove(oPC, nFeatID);
 	}
 
-// remove death attack feats
-for (i = 1; i <= 5; i++)
+	// remove death attack feats
+	for (i = 1; i <= 5; i++)
 	{
 		nFeatID = fFindDeathFeat(i);
 		FeatRemove(oPC, nFeatID);
 	}
-	
-// remove blackguard sneak attack feats
-for (i = 1; i <= 3; i++)
+		
+	// remove blackguard sneak attack feats
+	for (i = 1; i <= 3; i++)
 	{
 		nFeatID = fFindBgFeat(i);
 		FeatRemove(oPC, nFeatID);
 	}
-		
-// remove arcane trickster sneak attack feats
-for (i = 1; i <= 5; i++)
+			
+	// remove arcane trickster sneak attack feats
+	for (i = 1; i <= 5; i++)
 	{
 		nFeatID = fFindArcFeat(i);
 		FeatRemove(oPC, nFeatID);
 	}
-	
-// remove guild thief sneak attack feats
-for (i = 1; i <= 3; i++)
+		
+	// remove guild thief sneak attack feats
+	for (i = 1; i <= 3; i++)
 	{
-	nFeatID = fFindGuildFeat(i);
-	FeatRemove(oPC, nFeatID);
+		nFeatID = fFindGuildFeat(i);
+		FeatRemove(oPC, nFeatID);
 	}	
-	
-// remove epic precision but only if the character didn't qualify for it normally
-if (!GetHasFeat(idFeatCripplingStrike, oPC))
+		
+	// remove epic precision but only if the character didn't qualify for it normally
+	if (!GetHasFeat(idFeatCripplingStrike, oPC))
 	{
-	FeatRemove(oPC, idFeatEpicPrecision);
+		FeatRemove(oPC, idFeatEpicPrecision);
 	}
 }
 // End remove feats
@@ -377,153 +343,143 @@ if (!GetHasFeat(idFeatCripplingStrike, oPC))
 // function to calculate sneak dice
 int fCalcSneakDice(object oPC)
 {
+	int nSneakDice = 0;
 
-int nSneakDice = 0;
-
-// lets do knight first, and make it so that they can lose their sneak dice
-// if they become non-evil.
-if (GetHasFeat(idFeatBlackguardPath, oPC))
-{
-	if (bOnlyEvilBlackguardSneakAttacks)
+	// lets do knight first, and make it so that they can lose their sneak dice
+	// if they become non-evil, IF the appropriate boolean in this script is set to TRUE
+	if (GetHasFeat(idFeatBlackguardPath, oPC))
 	{
-		if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+		if (bOnlyEvilBlackguardSneakAttacks)
 		{
-			nSneakDice += (GetLevelByClass(idClassKnight, oPC) -1) / 3;
+			if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
+			{
+				nSneakDice += (GetLevelByClass(idClassKnight, oPC) -1) / 3;
+			}
+		}
+		else
+		{
+		nSneakDice += (GetLevelByClass(idClassKnight, oPC) -1) / 3;
 		}
 	}
-	else
+
+	// next legacy blackguards from before they were replaced with knight,
+	// just in case of an old returning character, but really they should remake.
+	// This is also controlled by a boolean
+	if (bIncludeLegacyBlackguard)
 	{
-	nSneakDice += (GetLevelByClass(idClassKnight, oPC) -1) / 3;
-	}
-}
-
-
-
-// next legacy blackguards from before they were replaced with knight,
-// just in case of an old returning character, but really they should remake.
-
-if (bIncludeLegacyBlackguard)
-{
-	nSneakDice += (GetLevelByClass(idClassBlackguard, oPC) -1) / 3;
-}
-
-// next half outsider
-if (GetHasFeat(idFeatPathOfGuile, oPC))
-	{
-	nSneakDice += (GetLevelByClass(idClassHalfOutsider, oPC) + 1) /2;
+		nSneakDice += (GetLevelByClass(idClassBlackguard, oPC) -1) / 3;
 	}
 
-// psychic warrior
-if (GetHasFeat(idFeatPsyWarLurk, oPC))
+	// next half outsider
+	if (GetHasFeat(idFeatPathOfGuile, oPC))
 	{
-	nSneakDice += GetLevelByClass(idClassPsyWarrior, oPC) / 3;
+		nSneakDice += (GetLevelByClass(idClassHalfOutsider, oPC) + 1) /2;
 	}
 
-// rogue
-nSneakDice += (GetLevelByClass(idClassRogue, oPC) + 1) / 2;
+	// psychic warrior
+	if (GetHasFeat(idFeatPsyWarLurk, oPC))
+	{
+		nSneakDice += GetLevelByClass(idClassPsyWarrior, oPC) / 3;
+	}
 
-// what I presume to be legacy arcane trickster
-nSneakDice += GetLevelByClass(idClassArcTrickster1, oPC) / 2;
+	// rogue
+	nSneakDice += (GetLevelByClass(idClassRogue, oPC) + 1) / 2;
 
-// what I presume to be current arcane trickster
-nSneakDice += GetLevelByClass(idClassArcTrickster2, oPC) / 2;
+	// what I presume to be legacy arcane trickster
+	nSneakDice += GetLevelByClass(idClassArcTrickster1, oPC) / 2;
 
-// guild thief
-nSneakDice += (GetLevelByClass(idClassGuildThief, oPC) + 1) / 2;
+	// what I presume to be current arcane trickster
+	nSneakDice += GetLevelByClass(idClassArcTrickster2, oPC) / 2;
 
-// thug
-nSneakDice += (GetLevelByClass(idClassThug, oPC) +1 ) / 2 ;
+	// guild thief
+	nSneakDice += (GetLevelByClass(idClassGuildThief, oPC) + 1) / 2;
 
-// vampire via lupus
-nSneakDice += GetLevelByClass(idClassVampLupus, oPC) / 2;
+	// thug
+	nSneakDice += (GetLevelByClass(idClassThug, oPC) +1 ) / 2 ;
 
-// shadowdancer
-nSneakDice += GetLevelByClass(idClassShadowdancer,oPC) / 3;
+	// vampire via lupus
+	nSneakDice += GetLevelByClass(idClassVampLupus, oPC) / 2;
 
-// marquis cambion
-nSneakDice += GetLevelByClass(idClassMarquisCambion, oPC) / 2;
+	// shadowdancer
+	nSneakDice += GetLevelByClass(idClassShadowdancer,oPC) / 3;
 
-// shifting infiltrator
-nSneakDice += (GetLevelByClass(idClassShiftingInfiltrator, oPC) + 1) / 2;
+	// marquis cambion
+	nSneakDice += GetLevelByClass(idClassMarquisCambion, oPC) / 2;
 
-return nSneakDice;
+	// shifting infiltrator
+	nSneakDice += (GetLevelByClass(idClassShiftingInfiltrator, oPC) + 1) / 2;
+
+	// warden frantic reactions
+	if (GetHasFeat(idFeatFranticReactions))
+	{
+		nSneakDice += 2;
+	}
+
+	return nSneakDice;
 }
 
 // function to calculate the number of death attack dice
 int fCalcDeathDice(object oPC)
 {
-int nDeathDice = 0;
+	int nDeathDice = 0;
 
-nDeathDice += (GetLevelByClass(idClassAssassin, oPC) + 1) /2;
-nDeathDice += (GetLevelByClass(idClassSlayerOfDomiel, oPC) + 1) /2;
-
-return nDeathDice;
+	nDeathDice += (GetLevelByClass(idClassAssassin, oPC) + 1) /2;
+	nDeathDice += (GetLevelByClass(idClassSlayerOfDomiel, oPC) + 1) /2;
+	
+	return nDeathDice;
 }
 
 //Function to grant sneak dice, death dice, and ep if applicable
 void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
-{
-int nSneakDice = sneakDice;
-int nDeathDice = deathDice;
-int nBonusDice = 0;
+	{
+	int nSneakDice = sneakDice;
+	int nDeathDice = deathDice;
+	int nBonusDice = 0;
 
-//grant sneak attack
-if (nSneakDice > 0)
-{
-	if (nSneakDice > nMaxAllowedSneakDice)
+	//grant sneak attack
+	if (nSneakDice > 0)
+	{
+		if (nSneakDice > nMaxAllowedSneakDice)
 		{
-		nSneakDice = nMaxAllowedSneakDice;
+			nSneakDice = nMaxAllowedSneakDice;
 		}
-	FeatAdd(oPC, fFindSneakFeat(nSneakDice), FALSE);
-}
-// grant death attack
-if (nDeathDice > 0)
-{
-	if (nDeathDice > 5)
+		FeatAdd(oPC, fFindSneakFeat(nSneakDice), FALSE);
+	}
+	// grant death attack
+	if (nDeathDice > 0)
+	{
+		if (nDeathDice > 5)
 		{
-		nDeathDice = 5;
+			nDeathDice = 5;
 		}
-	FeatAdd(oPC, fFindDeathFeat(nDeathDice), FALSE);
-}
+		FeatAdd(oPC, fFindDeathFeat(nDeathDice), FALSE);
+	}
 
-// calculate additional qualifier dice for Epic Precision
+	// calculate additional qualifier dice for Epic Precision
 
-// +1 for each bleeding wound
-if (bCountBleedingWound)
-{
-	nBonusDice += (GetLevelByClass(idClassInvisibleBlade, oPC) + 1) / 2;
-}
+	// +1 for each bleeding wound if the appropriate boolean in this script is set to true.
+	if (bCountBleedingWound)
+	{
+		nBonusDice += (GetLevelByClass(idClassInvisibleBlade, oPC) + 1) / 2;
+	}
 
-
-// +2 if they have frantic reactions
-if (bCountWardenFranticReactions && GetHasFeat(idFeatFranticReactions, oPC))
-{
-nBonusDice += 2;
-}
-
-	
-// +2 for wererat but ONLY if they have sneak dice from some other source
-// and have their hybrid form
-if (bCountWererat && GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(idClassLycan, oPC) >= 4)
-{
-	if (nSneakDice > 0 || nDeathDice > 0)
+	// +2 for wererat but ONLY if they have their hybrid form and the appropriate boolean
+	// in this script is set to TRUE
+	if (bCountWererat && GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(idClassLycan, oPC) >= 4)
 	{
 		nBonusDice += 2;
 	}
-}
 
-// Give swash EP at level 12.
-// Remove this condition if you don't want Swash to get EP at lvl 12,
-// but that will make me very sad : (
-if (bGrantToSwash12 && GetLevelByClass(idClassSwashbuckler, oPC) >= 12)
-{
-	nBonusDice += 5;
-}
-
-// grant ep if sneak dice + death dice + other qualifier >= 5
-if ((nSneakDice + nDeathDice + nBonusDice) >= 5)
+	// Give swash EP at level 12 if the appropriate boolean in this script is set to TRUE
+	if (bGrantToSwash12 && GetLevelByClass(idClassSwashbuckler, oPC) >= 12)
 	{
-	FeatAdd(oPC, idFeatEpicPrecision, FALSE);
+		nBonusDice += 5;
+	}
+
+	// grant ep if sneak dice + death dice + other qualifier >= 5
+	if ((nSneakDice + nDeathDice + nBonusDice) >= 5)
+	{
+		FeatAdd(oPC, idFeatEpicPrecision, FALSE);
 	}
 }
 // end grant feats
