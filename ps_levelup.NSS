@@ -8,9 +8,12 @@ Removed Alignment change for Thug for exploit reason */
 #include "gui_add_halfundeadfeat"
 #include "ps_inc_ecl"
 #include "ps_inc_wingtail"
-#include "ps_adjust_sneakattack"
+//	this include removed because of redundancy, this
+//  methodology now performed by ff_sneak_fix
+//	AddEPForDeathDice(oPC);
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"
+#include "ff_sneak_fix"
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
 #include "ps_inc_bgspellfix"
@@ -63,13 +66,14 @@ void CheckDragonBreath(object oPC, object oItem)
 	FeatRemove(oPC, 964);
 }
 
-void AddEPForDeathDice(object oPC)
-{
-		if (GetHasFeat(459,oPC))
-		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
+// This function removed because of redundancy, this method now performed
+// by ff_sneak_fix
+// void AddEPForDeathDice(object oPC)
+// {
+//	if (GetHasFeat(459,oPC))
+//		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
+// }
 
-
-}
 
 // "level up" of creature weapons.
 // initial thought was to this based off creature weapon as defined in racialsubtypes.2da
@@ -329,6 +333,7 @@ void main()
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
-	PS_AdjustSneakAttack(oPC);
+//	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
+	ff_sneak_fix(oPC);
 }

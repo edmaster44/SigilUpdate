@@ -2,6 +2,7 @@
 #include "ps_inc_gemstones"
 #include "ps_inc_treasuregeneration"
 #include "ps_inc_oldloottables"
+#include "ps_inc_functions"
 
 void LoadGemstonesIntoDatabase (object oPC);
 void LoadEnchantmentsIntoDatabase(object oPC);
@@ -75,7 +76,7 @@ void LoadGemstonesIntoDatabase (object oPC) {
 		
 		string sName = SQLEncodeSpecialChars(GetName(oItem));
 		string sTag = GetTag(oItem);
-		int nIcon = GetItemIcon(oItem);
+		int nIcon = GetItemIconSafe(oItem);
 		string sColor = GetLocalString(oItem, "Color");
 		string sDescription = SQLEncodeSpecialChars(GetLocalString(oItem, "GemDescription")+"\n\n"+GetLocalString(oItem, "MineralDescription"));
 		string sVFX = GetLocalString(oItem, "VFX");
