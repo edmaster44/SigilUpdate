@@ -2,6 +2,10 @@
 
 		Sneak Attack Adjustment Script by FlattedFifth, May 27, 2024
 		
+		last change May 30, 2024 by FlattedFifth: 
+			Changed sneak attack feat grants to be additive, like in the OC.
+			Corrected string comparison operator to check for temp dice warning.
+			 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -139,14 +143,11 @@ void ff_sneak_fix(object oPC)
 	string tempDiceWarning = "";
 	tempDiceWarning = fCheckForTempSneakDice(oPC);
 
-	if (tempDiceWarning == "")
-	{
-		tempDiceWarning = ""
-	}
-	else
+	if (tempDiceWarning != "")
 	{
 		SendMessageToPC(oPC, tempDiceWarning);
 	}
+
 
 	if (bSaveAfterThisScript)
 	{
@@ -463,7 +464,7 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 		}
 		for (i = 1; i <= nDeathDice; i++)
 		{
-			FeatAdd(oPC, fFindDeathFeat(d), FALSE);
+			FeatAdd(oPC, fFindDeathFeat(i), FALSE);
 		}
 	}
 
@@ -495,4 +496,3 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 	}
 }
 // end grant feats
-
