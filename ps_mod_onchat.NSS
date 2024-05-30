@@ -230,12 +230,12 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 				}
 			}
 			
-			else if (GetStringLeft(sMessage,9)=="areashout")
+			 if (GetStringLeft(sMessage,9)=="areashout")
 			{		
-				if(IsAuthorizedToUseThisCmd(oSender))
+				if(GetIsDM(oSender))
 				{
 				//	SendMessageToPC(oSender,"Sorry, This command isn't available to Players.");
-					int iStringLength; 
+				int iStringLength; 
 				iStringLength = GetStringLength(sMessage);
 				sMessage = GetStringRight(sMessage,iStringLength-11);
 				SetLocalInt(oSender, "areashout", 1);
