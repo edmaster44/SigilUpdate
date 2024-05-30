@@ -435,6 +435,8 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 	int nSneakDice = sneakDice;
 	int nDeathDice = deathDice;
 	int nBonusDice = 0;
+	int s;
+	int d;
 
 	//grant sneak attack
 	if (nSneakDice > 0)
@@ -443,7 +445,10 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 		{
 			nSneakDice = nMaxAllowedSneakDice;
 		}
-		FeatAdd(oPC, fFindSneakFeat(nSneakDice), FALSE);
+		for (s = 1; s <= nSneakDice; s++)
+		{
+			FeatAdd(oPC, fFindSneakFeat(s), FALSE);
+		}
 	}
 	// grant death attack
 	if (nDeathDice > 0)
@@ -452,7 +457,10 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 		{
 			nDeathDice = 5;
 		}
-		FeatAdd(oPC, fFindDeathFeat(nDeathDice), FALSE);
+		for (d = 1; d <= nDeathDice; d++)
+		{
+			FeatAdd(oPC, fFindDeathFeat(d), FALSE);
+		}
 	}
 
 	// calculate additional qualifier dice for Epic Precision
