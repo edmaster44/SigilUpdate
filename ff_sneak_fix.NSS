@@ -139,7 +139,11 @@ void ff_sneak_fix(object oPC)
 	string tempDiceWarning = "";
 	tempDiceWarning = fCheckForTempSneakDice(oPC);
 
-	if (!tempDiceWarning == "")
+	if (tempDiceWarning == "")
+	{
+		tempDiceWarning = ""
+	}
+	else
 	{
 		SendMessageToPC(oPC, tempDiceWarning);
 	}
