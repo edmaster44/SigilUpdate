@@ -435,8 +435,8 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 	int nSneakDice = sneakDice;
 	int nDeathDice = deathDice;
 	int nBonusDice = 0;
-	int s;
-	int d;
+	int i;
+	
 
 	//grant sneak attack
 	if (nSneakDice > 0)
@@ -445,9 +445,9 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 		{
 			nSneakDice = nMaxAllowedSneakDice;
 		}
-		for (s = 1; s <= nSneakDice; s++)
+		for (i = 1; i <= nSneakDice; i++)
 		{
-			FeatAdd(oPC, fFindSneakFeat(s), FALSE);
+			FeatAdd(oPC, fFindSneakFeat(i), FALSE);
 		}
 	}
 	// grant death attack
@@ -457,7 +457,7 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 		{
 			nDeathDice = 5;
 		}
-		for (d = 1; d <= nDeathDice; d++)
+		for (i = 1; i <= nDeathDice; i++)
 		{
 			FeatAdd(oPC, fFindDeathFeat(d), FALSE);
 		}
