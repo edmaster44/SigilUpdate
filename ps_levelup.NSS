@@ -1,6 +1,10 @@
 /* v1.01
 12/8/2020 added Psyhic Knight Check
-Removed Alignment change for Thug for exploit reason */ 
+Removed Alignment change for Thug for exploit reason 
+May 30, 2024 FlattedFifth
+	removed redundant ps_adjust_sneakattack and AddEPForDeathDice()
+	Added ff_sneak_fix as final function in level up operations.
+ */ 
 #include "ps_inc_functions"
 #include "ps_class_inc"
 #include "aaa_constants"
@@ -10,7 +14,7 @@ Removed Alignment change for Thug for exploit reason */
 #include "ps_inc_wingtail"
 //	this include removed because of redundancy, this
 //  methodology now performed by ff_sneak_fix
-//	AddEPForDeathDice(oPC);
+//	#include "ps_adjust_sneakattack"
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"
 #include "ff_sneak_fix"
@@ -64,6 +68,7 @@ void CheckDragonBreath(object oPC, object oItem)
 	
 	FeatAdd(oPC, nIMMUNITY, FALSE, TRUE, TRUE);
 	FeatRemove(oPC, 964);
+	
 }
 
 // This function removed because of redundancy, this method now performed
@@ -329,11 +334,15 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
-	//AddEPForDeathDice(oPC);
+	// redundant, ff_sneak_fix does this
+//	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
+	// redundant, ff_sneak_fix does all of this
 //	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
+	// ff_sneak_fix should always come last after all 
+	// other leveling up operations.
 	ff_sneak_fix(oPC);
 }

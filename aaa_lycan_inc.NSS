@@ -1,3 +1,10 @@
+/*
+May 30, 2024: FlattedFifth
+	Removed requirement for wererat to have sneak attack from other sources
+	in order to get +2d6 temp sneak dice in hybrid form.
+
+*/
+
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
 #include "ps_inc_functions"
@@ -30,6 +37,7 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 	SetLocalString(oItem, "Template", "Lycan");
 	SetLocalInt(oItem, "Lycan_Afflication", 1);
 }
+
 
 // Helper feat for granting wererat sneak attack bonus
 void PS_Wererat_SneakAdd(object oPC)
