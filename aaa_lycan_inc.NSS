@@ -31,6 +31,7 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 	SetLocalInt(oItem, "Lycan_Afflication", 1);
 }
 
+
 // Helper feat for granting wererat sneak attack bonus
 void PS_Wererat_SneakAdd(object oPC)
 {
