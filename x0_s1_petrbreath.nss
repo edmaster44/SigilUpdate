@@ -84,7 +84,9 @@ void DoPetrificationNew(int nPower, object oSource, object oTarget, int nSpellID
                         //SpeakString(IntToString(nSpellID));
 
             // Do a fortitude save check
-            if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC))
+			if (spellsIsImmuneToPetrification(oTarget) == TRUE)
+       		{   return;	}
+            else if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC))
             {
                 // Save failed; apply paralyze effect and VFX impact
 

@@ -496,4 +496,3 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 }
 // end grant feats
 
-

@@ -54,7 +54,7 @@ void ApplyFrostGiantPRCImmunities(object oPC, int nImm, int nVul)
 
 void ApplyCoreDevaImmunities(object oPC, int iImmCore, int nSpell)
 {
-	effect ePar1 = EffectSpellImmunity(SPELL_STONE_TO_FLESH);
+	effect ePar1 = EffectSpellImmunity(SPELL_FLESH_TO_STONE);
 	effect ePar2 = EffectSpellImmunity(SPELL_POWORD_PETRIFY);
 	effect ePar3 = EffectSpellImmunity(SPELLABILITY_BREATH_PETRIFY);
 	effect ePar4 = EffectSpellImmunity(SPELLABILITY_GAZE_PETRIFY);

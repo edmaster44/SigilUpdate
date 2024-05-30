@@ -1680,6 +1680,15 @@ int spellsIsImmuneToPetrification(object oCreature)
 	case 22: // For Plant types (Myconids)
 	bImmune = TRUE;
 	}
+	
+	int nSubRacial = GetSubRace(oCreature);
+	switch (nSubRacial)
+	{
+	case 163: // Hound Archon
+	case 176: // Archon
+	case 203: // Aasimon
+	bImmune = TRUE;
+	}
 
     // * GZ: Sept 2003 - Prevent people from petrifying DM, resulting in GUI even when
     //                   effect is not successful.
