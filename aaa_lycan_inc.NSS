@@ -1,3 +1,10 @@
+/*
+May 30, 2024: FlattedFifth
+	Removed requirement for wererat to have sneak attack from other sources
+	in order to get +2d6 temp sneak dice in hybrid form.
+
+*/
+
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
 #include "ps_inc_functions"
