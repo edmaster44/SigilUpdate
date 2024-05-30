@@ -139,7 +139,7 @@ void ff_sneak_fix(object oPC)
 	string tempDiceWarning = "";
 	tempDiceWarning = fCheckForTempSneakDice(oPC);
 
-	if (!tempDiceWarning == "")
+	if (tempDiceWarning == "")
 	{
 		SendMessageToPC(oPC, tempDiceWarning);
 	}
@@ -483,5 +483,4 @@ void fGrantSneakFeats(object oPC, int sneakDice, int deathDice)
 	}
 }
 // end grant feats
-
 

@@ -329,7 +329,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
-	AddEPForDeathDice(oPC);
+	//AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
