@@ -64,6 +64,7 @@ void CheckDragonBreath(object oPC, object oItem)
 	
 	FeatAdd(oPC, nIMMUNITY, FALSE, TRUE, TRUE);
 	FeatRemove(oPC, 964);
+	
 }
 
 // This function removed because of redundancy, this method now performed
