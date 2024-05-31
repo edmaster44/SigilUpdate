@@ -61,6 +61,8 @@ int spellsIsFlying(object oCreature);
 // * returns true if the creature has flesh
 int spellsIsImmuneToPetrification(object oCreature);
 
+int spellsIsImmuneToDrowning(object oCreature);
+
 // * Generic apply area of effect Wrapper
 // * lTargetLoc = where spell was targeted
 // * fRadius = RADIUS_SIZE_ constant
@@ -1699,6 +1701,41 @@ int spellsIsImmuneToPetrification(object oCreature)
     return bImmune;
 }
 
+// * Returns true or false if a creature can breathe water or doesn't need to breathe.
+
+int spellsIsImmuneToDrowning(object oCreature)
+{
+    
+    int bImmune = FALSE;
+	int nRacial = GetRacialType(oCreature);
+	switch (nRacial)
+	{
+	case RACIAL_TYPE_UNDEAD:
+	case RACIAL_TYPE_CONSTRUCT:
+	case 22: // For Plant types (Myconids)
+	case RACIAL_TYPE_ELEMENTAL:
+	case RACIAL_TYPE_OOZE:
+	bImmune = TRUE;
+	}
+	int nSubRacial = GetSubRace(oCreature);
+	switch (nSubRacial)
+	{
+	case 185: // Marid
+	case 222: // Bronze Dragon
+	case 239: // Topaz Dragon
+	case 226: // Black Dragon
+	case 21: // Water Genasi
+	bImmune = TRUE;
+	}
+
+    // * GZ: Sept 2003 - Prevent people from petrifying DM, resulting in GUI even when
+    //                   effect is not successful.
+    if (!GetPlotFlag(oCreature) && GetIsDM(oCreature))
+    {
+       bImmune = FALSE;
+    }
+    return bImmune;
+}
 // * Returns true or false depending on whether the creature is flying
 // * or not
 int spellsIsFlying(object oCreature)

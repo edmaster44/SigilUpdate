@@ -24,6 +24,8 @@
 
 #include "nw_i0_spells"
 #include "x2_inc_spellhook"  
+#include "x0_i0_spells"
+#include "ps_inc_time"
 
 void main()
 {
@@ -54,9 +56,15 @@ void main()
     effect eDam;
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
 	int nSave = 14 + nCha;
+	int nWeek = 1;
 	
 //target discrimination
-	while (GetIsObjectValid(oTarget))
+	if (PS_GetHasTimePassed_Weeks(OBJECT_SELF, "LAST_WISH_GRANTED", nWeek) == FALSE)
+	{
+		SendMessageToPC(oCaster, "You can only cast Limited Wish once per week.");
+		return;
+	}
+	else while (GetIsObjectValid(oTarget))
 	{
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
 		{
@@ -67,18 +75,17 @@ void main()
         	if(!MyResistSpell(OBJECT_SELF, oTarget))
         	{
             	// * certain racial types are immune
-            	if ((GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT)
-                	&&(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
-                	&&(GetRacialType(oTarget) != RACIAL_TYPE_ELEMENTAL))
+            	if(spellsIsImmuneToDrowning(oTarget)== FALSE)
             	{
                 	//Make a fortitude save 
                 	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nSave))
                 	{
                     	nDam = FloatToInt(GetCurrentHitPoints(oTarget) * 0.9);
-                    	eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
+                    	eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, TRUE);
                     	//Apply the VFX impact and damage effect
                     	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+						PS_Timestamp_UNIX(oCaster, "LAST_WISH_GRANTED");
 					}
 				}
 			}

@@ -23,6 +23,7 @@
 //:: Updates to scripts go here.
 
 #include "nw_i0_spells"
+#include "x0_i0_spells"
 #include "x2_inc_spellhook"  
 
 void main()
@@ -71,15 +72,13 @@ void main()
         	else if(!MyResistSpell(OBJECT_SELF, oTarget))
         	{
             	// * certain racial types are immune
-            	if ((GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT)
-                	&&(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
-                	&&(GetRacialType(oTarget) != RACIAL_TYPE_ELEMENTAL))
+            	if(spellsIsImmuneToDrowning(oTarget)== FALSE)
             	{
                 	//Make a fortitude save 
                 	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
                 	{
                     	nDam = FloatToInt(GetCurrentHitPoints(oTarget) * 0.9);
-                    	eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
+                    	eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, TRUE);
                     	//Apply the VFX impact and damage effect
                     	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
