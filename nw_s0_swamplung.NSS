@@ -79,7 +79,8 @@ void main()
 			|| GetRacialType(oTarget) == RACIAL_TYPE_VERMIN 
 			|| GetRacialType(oTarget) == RACIAL_TYPE_OOZE 
 			|| GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER 
-			|| GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
+			|| GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD
+			|| GetSubRace(oTarget) == 226)
 			{
 				FloatingTextStrRefOnCreature(184683, oCaster, FALSE);
 				return;
