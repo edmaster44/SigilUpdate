@@ -13,7 +13,7 @@
 //:://////////////////////////////////////////////
 //:: Created By: Georg Zoeller
 //:: Created On: 2003-05-09
-//:: Last Updated On: 2003-10-14
+//:: Last Updated On: 2024-05-31
 //:://////////////////////////////////////////////
 // ChazM 5/10/06 - Removed XP costs.  Did anyone really like XP costs?
 // ChazM 5/23/06 - added AppendSpellToName().  Updated potion and wand creation to use it.
@@ -24,11 +24,27 @@
 //				cost half of first level spells, reorganized some sections, replaced string refs w/ constants, 
 //				fixed SPELLS_WIZ_SORC_LEVEL_COL
 // ChazM 4/27/07 - Moved constants to ginc_2da
+// FlattedFifth May 31, 2024 - modified MakeItemUseableByClassesWithSpellAccess() to fix a bug that was 
+//				causing some wands to not be usable by favored soul, even though FS has the same spell list and
+//				and even if it was a FS that made the wand; and added spirit shaman to druid wands just in 
+//				case a similar bug popped up for them. Also gave knight access to all player-made wands made 
+//				with cleric spells, gave bards access to all player-made wands of wizard spells, and 
+//				gave ranger access to all player-made wands of druid spells. Also added constants
+//				for favored soul class and shaman class because I could not find "ginc_2da" to verify those constants.
+//				Also modified MakeItemUseableByClass() to check for that property before adding it. So far this is 
+//				working correctly for wands but not for scrolls. Something to do with the fact that the wand is
+//				generated from scratch but scribe scroll spawns the existing in-game scroll? Possibly. Removed
+//				the property add function call from scribe scroll function until I can get it working properly.
 
 #include "x2_inc_itemprop"
 #include "x2_inc_switches"
 #include "ginc_debug"
 #include "ginc_2da"
+
+const int idClassFavoredSoul = 58;
+const int idClassShaman = 55;
+
+int CompareItemProperties(itemproperty ip1, itemproperty ip2);
 
 //void main(){}
 
@@ -287,11 +303,73 @@ int IsOnSpellList(int iSpell, int iClass)
 	return (GetSpellLevelForClass(iSpell, iClass) >= 0);
 }
 
+int CompareItemProperties(itemproperty ip1, itemproperty ip2)
+{
+    if (!GetIsItemPropertyValid(ip1) || !GetIsItemPropertyValid(ip2))
+    {
+        return FALSE; // Invalid properties can't be compared
+    }
+
+    if (GetItemPropertyType(ip1) != GetItemPropertyType(ip2))
+    {
+        return FALSE;
+    }
+
+    if (GetItemPropertySubType(ip1) != GetItemPropertySubType(ip2))
+    {
+        return FALSE;
+    }
+
+    if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2))
+    {
+        return FALSE;
+    }
+
+    if (GetItemPropertyCostTableValue(ip1) != GetItemPropertyCostTableValue(ip2))
+    {
+        return FALSE;
+    }
+
+    if (GetItemPropertyParam1(ip1) != GetItemPropertyParam1(ip2))
+    {
+        return FALSE;
+    }
+
+    if (GetItemPropertyParam1Value(ip1) != GetItemPropertyParam1Value(ip2))
+    {
+        return FALSE;
+    }
+
+    if (GetItemPropertyDurationType(ip1) != GetItemPropertyDurationType(ip2))
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+
 
 void MakeItemUseableByClass(int iClassType, object oItem)
 {
 	itemproperty ipLimit = ItemPropertyLimitUseByClass(iClassType);
-	AddItemProperty(DURATION_TYPE_PERMANENT,ipLimit,oItem);
+	int hasIp = FALSE;
+	
+	itemproperty ip = GetFirstItemProperty(oItem);
+	while (GetIsItemPropertyValid(ip) && hasIp == FALSE)
+	{
+		if (CompareItemProperties(ip, ipLimit))
+		{
+			hasIp = TRUE;
+			break;
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	
+	if (hasIp == FALSE)
+	{
+		AddItemProperty(DURATION_TYPE_PERMANENT,ipLimit,oItem);
+	}
 }
 
 void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
@@ -300,10 +378,19 @@ void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
 		MakeItemUseableByClass(CLASS_TYPE_BARD, oItem);
 		
 	if (IsOnSpellList(iSpell, CLASS_TYPE_CLERIC))
+	{
 		MakeItemUseableByClass(CLASS_TYPE_CLERIC, oItem);
+		MakeItemUseableByClass(idClassFavoredSoul, oItem);
+		MakeItemUseableByClass(CLASS_TYPE_PALADIN, oItem);
+	}
+		
 	
 	if (IsOnSpellList(iSpell, CLASS_TYPE_DRUID))
+	{
 		MakeItemUseableByClass(CLASS_TYPE_DRUID, oItem);
+		MakeItemUseableByClass(idClassShaman, oItem);
+		MakeItemUseableByClass(CLASS_TYPE_RANGER, oItem);
+	}
 		
 	if (IsOnSpellList(iSpell, CLASS_TYPE_PALADIN))
 		MakeItemUseableByClass(CLASS_TYPE_PALADIN, oItem);
@@ -315,6 +402,7 @@ void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
 	{
 		MakeItemUseableByClass(CLASS_TYPE_WIZARD, oItem);
 		MakeItemUseableByClass(CLASS_TYPE_SORCERER, oItem);
+		MakeItemUseableByClass(CLASS_TYPE_BARD, oItem);
 	}
 	
 	if (IsOnSpellList(iSpell, CLASS_TYPE_WARLOCK))
@@ -540,6 +628,11 @@ object CICraftCraftWand(object oCreator, int nSpellID )
 // -----------------------------------------------------------------------------
 object CICraftScribeScroll(object oCreator, int nSpellID)
 {
+	//Debugging Message
+//	object oPC = GetFirstPC();
+//	string spellName = Get2DAString("spells", "Name", nSpellID);
+//	string sMessage = "Using CICraftScribeScroll to scribe " + spellName;
+//	SendMessageToPC(oPC, sMessage);
     int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellID);
     object oTarget;
     // Handle optional material components
@@ -599,6 +692,12 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
         if (sResRef != "")
         {
             oTarget = CreateItemOnObject(sResRef,oCreator);
+			// Adding the proper item properties is not working properly with scrolls.
+			// The item properties are all getting added twice in spite of my
+			// check to make sure that they're not there before adding.
+			// Having them twice works, of course, but it looks unprofessional.
+			// Removed until I can fix it.
+			//MakeItemUseableByClassesWithSpellAccess(nSpellID, oTarget);
         }
 
         if (oTarget == OBJECT_INVALID)
