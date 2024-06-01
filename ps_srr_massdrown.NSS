@@ -25,7 +25,6 @@
 #include "nw_i0_spells"
 #include "x2_inc_spellhook"  
 #include "x0_i0_spells"
-#include "ps_inc_time"
 
 void main()
 {
@@ -59,12 +58,7 @@ void main()
 	int nWeek = 1;
 	
 //target discrimination
-	if (PS_GetHasTimePassed_Weeks(OBJECT_SELF, "LAST_WISH_GRANTED", nWeek) == FALSE)
-	{
-		SendMessageToPC(oCaster, "You can only cast Limited Wish once per week.");
-		return;
-	}
-	else while (GetIsObjectValid(oTarget))
+	while (GetIsObjectValid(oTarget))
 	{
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
 		{
@@ -85,7 +79,6 @@ void main()
                     	//Apply the VFX impact and damage effect
                     	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-						PS_Timestamp_UNIX(oCaster, "LAST_WISH_GRANTED");
 					}
 				}
 			}
