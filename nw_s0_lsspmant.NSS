@@ -74,5 +74,5 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_GREATER_SPELL_MANTLE);
     RemoveEffectsFromSpell(oTarget, SPELL_SPELL_MANTLE);
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, nDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, IntToFloat(nDuration));
 }
