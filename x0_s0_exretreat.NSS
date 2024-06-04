@@ -45,6 +45,8 @@ void main()
 
 	//Declare major variables
     object oTarget = GetSpellTargetObject();
+	
+	int CasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
     if (GetHasSpellEffect(SPELL_HASTE, oTarget) == TRUE)
     {
@@ -56,7 +58,7 @@ void main()
     effect eLink = EffectLinkEffects(eFast, eDur);
     
     //float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));// default duration
-	float fDuration = 30 + (5 * PS_GetCasterLevel(OBJECT_SELF)); // FlattedFifth duration
+	float fDuration = 30 + (5 * CasterLevel)); // FlattedFifth duration
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
