@@ -14,7 +14,14 @@
 //:: Created By: Brent Knowles
 //:: Created On: July 15, 2002
 //:://////////////////////////////////////////////
-//:: Last Update By: Andrew Nobbs May 01, 2003
+//:: Last Update By: FlattedFifth, May 31, 2024
+
+// FlattedFifth - June 3, 2024. Changed spell target from OBJECT_SELF to GetSpellTargetObject()
+//				Changed vfx to get it to appear on target properly.
+// Flatted Fifth June 4, 2024 - changed call from GetCasterLevel to PS_GetCasterLevel, nerfed duration from 1 hour per level
+//				to 30 minutes + 1 minute per level (default is 1 minute per level, ffs)
+
+#include "ps_inc_functions"
 
 
 // JLR - OEI 08/23/05 -- Metamagic changes
@@ -44,28 +51,35 @@ void main()
 // End of Spell Cast Hook
 
 
+
     //Declare major variables
-    object oTarget = OBJECT_SELF;
-    //effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);
+    //object oTarget = OBJECT_SELF;
+	object oTarget = GetSpellTargetObject(); 
+	int nID = GetSpellId();
+    effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);
+
 
     effect eArmor = EffectACIncrease(5, AC_SHIELD_ENCHANTMENT_BONUS);	// AFW-OEI 11/02/2006 change from Deflection to Shield bonus.
     effect eSpell = EffectSpellImmunity(SPELL_MAGIC_MISSILE);
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SHIELD);
 
-
     effect eLink = EffectLinkEffects(eArmor, eSpell);
   
 
-    float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF)); // * Duration 1 turn
-    fDuration = ApplyMetamagicDurationMods(fDuration);
+    //float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF)); //Duration 1 hour per level, not my change but the comment was wrong -FlattedFifth
+    float fDuration = (60 * 30) + (60 * PS_GetCasterLevel(OBJECT_SELF)); // still too long but w/e, FlattedFifth
+	fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Fire spell cast at event for target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 417, FALSE));
-    
-    RemoveEffectsFromSpell(OBJECT_SELF, GetSpellId());
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nID, FALSE));
+
+
+    //RemoveEffectsFromSpell(OBJECT_SELF, GetSpellId());
+	RemoveEffectsFromSpell(oTarget, nID);
     
     //Apply VFX impact and bonus effects
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
+	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

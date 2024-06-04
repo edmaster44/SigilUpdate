@@ -11,6 +11,10 @@
 //:: Created By: Preston Watamaniuk
 //:: Created On: Jan 7, 2002
 //:://////////////////////////////////////////////
+// Flatted Fifth June 4, 2024 - Changed duration from 6 seconds per level to 1 minute per lvl like ghostly,
+//					changed call from GetCasterLevel to PS_GetCasterLevel
+
+#include "ps_inc_functions"
 
 #include "x2_inc_spellhook" 
 
@@ -50,7 +54,9 @@ void main()
     eLink = EffectLinkEffects(eLink, eConceal);
 
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	//nDuration = RoundsToSeconds(nDuration); // default duration
+	nDuration = 60 * nDuration; // new duration FlattedFifth
     //Enter Metamagic conditions
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ETHEREAL_VISAGE, FALSE));
@@ -60,6 +66,6 @@ void main()
     	nDuration = nDuration *2; //Duration is +100%
     }
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, nDuration);
 	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);	// NWN1 VFX
 }

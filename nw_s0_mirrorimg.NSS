@@ -12,6 +12,8 @@
 //:://////////////////////////////////////////////
 //:: PKM-OEI 08.14.06:VFX and functionality revision 
 
+// FlattedFifth - June 3 2024, changed some objects from self to GetSpellTargetObject()
+
 
 
 // JLR - OEI 08/24/05 -- Metamagic changes
@@ -46,24 +48,24 @@ void main()
 	// Prevent stacking
 	// Each mirror has a separate spellId, I think this is to prevent one mirror from removing
 	// all of them when it pops. But we need to account for that here.
+	object oTarget = GetSpellTargetObject();
 	int nMinId = nSpellIdOffset + nID;
 	int nMaxId = nSpellIdOffset + nMaxImages + nID;
 	if ( GetHasSpellEffect(nID) )
 	{
-		effect eEffect = GetFirstEffect( OBJECT_SELF );
+		effect eEffect = GetFirstEffect( oTarget );
 		while ( GetIsEffectValid(eEffect) )
 		{
 			int nSpellEffectId = GetEffectSpellId(eEffect);
 			if ( nSpellEffectId == nID || (nSpellEffectId > nMinId && nSpellEffectId < nMaxId) )
 			{
-				RemoveEffect( OBJECT_SELF, eEffect );
+				RemoveEffect( oTarget, eEffect );
 			}
-			eEffect = GetNextEffect( OBJECT_SELF );
+			eEffect = GetNextEffect( oTarget );
 		}
 	}
 
     //Declare major variables
-    object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
 	float fDuration = TurnsToSeconds(nCasterLvl);	
 
@@ -108,7 +110,8 @@ void main()
         effect eAbsorb = EffectAbsorbDamage(nACBonus);
         effect eDur = EffectVisualEffect(876);
         // effect eVis = EffectVisualEffect(VFX_IMP_HOLY_AID); //Don't need this.
-		effect eImg = EffectNWN2SpecialEffectFile( sImg, OBJECT_SELF );
+		//effect eImg = EffectNWN2SpecialEffectFile( sImg, OBJECT_SELF );
+		effect eImg = EffectNWN2SpecialEffectFile( sImg, oTarget );
         effect eLink = EffectLinkEffects(eAbsorb, eDur);
 		eLink = EffectLinkEffects(eLink, eImg);
         effect eOnDispell = EffectOnDispel(0.0f, RemoveEffectsFromSpell(oTarget, SPELL_MIRROR_IMAGE));

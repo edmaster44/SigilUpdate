@@ -14,6 +14,11 @@
 
 // (Updated JLR - OEI 07/05/05 NWN2 3.5)
 
+// Flatted Fifth June 4, 2024 - Changed duration from 6 seconds per level to 30 seconds + 5 seconds per level,
+//					changed call to GetCasterLevel to PS_GetCasterLevel, made able to target allies
+
+#include "ps_inc_functions"
+
 #include "x2_inc_spellhook" 
 
 void main()
@@ -37,12 +42,14 @@ void main()
 
 
 	//Declare major variables
-    object oTarget = OBJECT_SELF;
+    object oTarget = GetSpellTargetObject();
 	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_GLOBE_INV_LESS);
     effect eSpell = EffectSpellLevelAbsorption(3, 0);
     //Link Effects
     effect eLink = EffectLinkEffects(eVis, eSpell);
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	//nDuration = RoundsToSeconds(nDuration);  // default duration
+	nDuration = 30 + (5 * nDuration);
     int nMetaMagic = GetMetaMagicFeat();
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LESSER_GLOBE_OF_INVULNERABILITY, FALSE));
@@ -53,5 +60,5 @@ void main()
     	nDuration = nDuration *2; //Duration is +100%
     }
     //Apply the VFX impact and effects
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, nDuration);
 }

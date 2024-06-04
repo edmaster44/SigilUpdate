@@ -35,6 +35,11 @@
 //				working correctly for wands but not for scrolls. Something to do with the fact that the wand is
 //				generated from scratch but scribe scroll spawns the existing in-game scroll? Possibly. Removed
 //				the property add function call from scribe scroll function until I can get it working properly.
+//	FlattedFifth June 4, 2024 - Fixed a previous error of mine in  MakeItemUseableByClass() that caused double-application 
+//				of the same class use limitation property on some scrolls. Added option to allow players to brew cure 
+//				critical and inflict critical, heal, and harm potions controlled via boolean style integer constants. 
+//				Added options for player-scribed raise dead and resurrection scrolls to be usuable by anyone without UMD,
+//				also controlled by a boolean style integer constant. (Special thanks to Dae for simplifying MakeItemUseableByClass())
 
 #include "x2_inc_itemprop"
 #include "x2_inc_switches"
@@ -43,8 +48,37 @@
 
 const int idClassFavoredSoul = 58;
 const int idClassShaman = 55;
+const int idSpellRaise = 142;
+const int idSpellRes = 153;
+const int idCureCritical = 31;
+const int idInflictCritical = 435;
+const int idSpellHeal = 79;
+const int idSpellHarm = 77;
 
-int CompareItemProperties(itemproperty ip1, itemproperty ip2);
+// If true, then scrolls of raise dead scribed by players have no class use limitations, anyone can use them
+// without UMD. Default OC behavious is false.
+const int bRaiseScrollUsableByEveryone = TRUE;
+
+// As above, but with resurrection
+const int bResScrollUsableByEveryone = TRUE;
+
+// If true, allows players to brew potions of cure critical wounds. I don't like that an npc is the only source
+// for these. Players should give other players their money, not npcs, whenever possible. Note that we will 
+// need to do some testing to make sure that the cost to brew these potions is == or > the sell price to stores.
+const int bAllowCureCritPotions = TRUE;
+
+// As above, but for heal (and harm for undead pcs). Allowing heals automatically allows the above, but having
+// both set to true doesn't hurt anything.
+const int bAllowHealPotions = TRUE;
+
+//nerfs the cost for players to make raise dead scrolls to compare favourably with NPC sold items
+const int bCheapRaiseScrolls = TRUE;
+// cost to make raise scrolls IF above is true. Based on 70% of the cost of 1 use of a pheonix feather
+const int nRaiseCost = 250;
+
+//as above, but for full res
+const int bCheapResScrolls = TRUE;
+const int nResCost = 350;
 
 //void main(){}
 
@@ -303,73 +337,20 @@ int IsOnSpellList(int iSpell, int iClass)
 	return (GetSpellLevelForClass(iSpell, iClass) >= 0);
 }
 
-int CompareItemProperties(itemproperty ip1, itemproperty ip2)
-{
-    if (!GetIsItemPropertyValid(ip1) || !GetIsItemPropertyValid(ip2))
-    {
-        return FALSE; // Invalid properties can't be compared
-    }
-
-    if (GetItemPropertyType(ip1) != GetItemPropertyType(ip2))
-    {
-        return FALSE;
-    }
-
-    if (GetItemPropertySubType(ip1) != GetItemPropertySubType(ip2))
-    {
-        return FALSE;
-    }
-
-    if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2))
-    {
-        return FALSE;
-    }
-
-    if (GetItemPropertyCostTableValue(ip1) != GetItemPropertyCostTableValue(ip2))
-    {
-        return FALSE;
-    }
-
-    if (GetItemPropertyParam1(ip1) != GetItemPropertyParam1(ip2))
-    {
-        return FALSE;
-    }
-
-    if (GetItemPropertyParam1Value(ip1) != GetItemPropertyParam1Value(ip2))
-    {
-        return FALSE;
-    }
-
-    if (GetItemPropertyDurationType(ip1) != GetItemPropertyDurationType(ip2))
-    {
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-
 
 void MakeItemUseableByClass(int iClassType, object oItem)
 {
-	itemproperty ipLimit = ItemPropertyLimitUseByClass(iClassType);
-	int hasIp = FALSE;
-	
 	itemproperty ip = GetFirstItemProperty(oItem);
-	while (GetIsItemPropertyValid(ip) && hasIp == FALSE)
+	while (GetIsItemPropertyValid(ip))
 	{
-		if (CompareItemProperties(ip, ipLimit))
+		if (GetItemPropertyType(ip) == ITEM_PROPERTY_USE_LIMITATION_CLASS
+				&& GetItemPropertySubType(ip) == iClassType)
 		{
-			hasIp = TRUE;
-			break;
+			return;	// if the item property already exists, bail
 		}
 		ip = GetNextItemProperty(oItem);
 	}
-	
-	if (hasIp == FALSE)
-	{
-		AddItemProperty(DURATION_TYPE_PERMANENT,ipLimit,oItem);
-	}
+	AddItemProperty(DURATION_TYPE_PERMANENT, ItemPropertyLimitUseByClass(iClassType), oItem);
 }
 
 void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
@@ -692,12 +673,6 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
         if (sResRef != "")
         {
             oTarget = CreateItemOnObject(sResRef,oCreator);
-			// Adding the proper item properties is not working properly with scrolls.
-			// The item properties are all getting added twice in spite of my
-			// check to make sure that they're not there before adding.
-			// Having them twice works, of course, but it looks unprofessional.
-			// Removed until I can fix it.
-			//MakeItemUseableByClassesWithSpellAccess(nSpellID, oTarget);
         }
 
         if (oTarget == OBJECT_INVALID)
@@ -733,13 +708,17 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     }
 
     // -------------------------------------------------------------------------
-    // check if spell is below maxlevel for brew potions
+    // check if spell is below maxlevel for brew potions, but allow cure and inflict crit
+	// if that boolean or the heal one is set to true and allow heal and harm if that boolean is set to true.
     // -------------------------------------------------------------------------
-    if (nLevel > X2_CI_BREWPOTION_MAXLEVEL)
-    {
-        FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
-        return TRUE;
-    }
+
+	if (!(((nID == idCureCritical || nID == idInflictCritical) && (bAllowCureCritPotions || bAllowHealPotions))
+		|| ((nID == idSpellHeal || nID == idSpellHarm) && bAllowHealPotions)))
+	{
+		FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
+		return TRUE;
+	}
+
 
     // -------------------------------------------------------------------------
     // Check if the spell is allowed to be used with Brew Potions
@@ -837,7 +816,18 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     int  nLevel    = CIGetSpellInnateLevel(nID,FALSE);
     int nCost = CIGetCraftGPCost(nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
 //    float fExperienceCost = 0.04 * nCost;
-    int nGoldCost = nCost ;
+    int nGoldCost = nCost;
+	
+	// nerf the cost of raise deads and or full res? controlled by boolean-like integer constants at top
+	if (nID == idSpellRaise && bCheapRaiseScrolls)
+	{
+		nGoldCost = nRaiseCost;
+	}
+	else if (nID == idSpellRes && bCheapResScrolls)
+	{
+		nGoldCost = nResCost;
+	}
+
 
     // -------------------------------------------------------------------------
     // Does Player have enough gold?
@@ -871,10 +861,33 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     if (GetIsObjectValid(oScroll))
     {
-        //----------------------------------------------------------------------
+		// Adding the proper item properties 
+		if ((nID == idSpellRaise && bRaiseScrollUsableByEveryone) || (nID == idSpellRes && bResScrollUsableByEveryone))
+		{
+			IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
+		}
+		else
+		{
+			MakeItemUseableByClassesWithSpellAccess(nID, oScroll);
+		}
+		//This script spawns the default in-game spell scrolls, so since some of those descriptions have
+		//changed we update the spell description with current value from tlk
+		int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nID));
+		string sSpellDesc = GetStringByStrRef(refSpellDesc);
+		SetDescription(oScroll, sSpellDesc);
+		//----------------------------------------------------------------------
         // Some scrollsare ar not identified ... fix that here
         //----------------------------------------------------------------------
         SetIdentified(oScroll,TRUE);
+		// if the scroll is a cheap raise dead or res, make it unsellable. I hope. Will flagging it stolen do that?
+		if (nID == idSpellRaise && bCheapRaiseScrolls)
+		{
+			SetStolenFlag(oScroll, TRUE);
+		}
+		else if (nID == idSpellRes && bCheapResScrolls)
+		{
+			SetStolenFlag(oScroll, TRUE);
+		}
         ActionPlayAnimation (ANIMATION_FIREFORGET_READ,1.0);
         TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
 //        SetXP(oCaster, nNewXP);

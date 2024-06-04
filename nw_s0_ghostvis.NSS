@@ -12,6 +12,9 @@
 //:: Created On: Jan 7, 2001
 //:://////////////////////////////////////////////
 //:: AFW-OEI 08/03/2007: Account for Assassins.
+// Flatted Fifth June 4, 2024 - Changed call from GetCasterLevel to PS_GetCasterLevel
+
+#include "ps_inc_functions"
 
 #include "x2_inc_spellhook" 
 
@@ -48,7 +51,7 @@ void main()
     eLink = EffectLinkEffects(eLink, eConceal);
     //eLink = EffectLinkEffects(eLink, eDur);
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	
 	if (GetSpellId() == SPELLABILITY_AS_GHOSTLY_VISAGE)
 	{	// Duration is equal to Assassin level for Assassins.

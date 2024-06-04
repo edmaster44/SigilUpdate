@@ -13,6 +13,10 @@
 //:: Created On: 05/22/2006
 //:://////////////////////////////////////////////
 //: PKM-OEI 07.10.06 VFX pass
+// Flatted Fifth June 4, 2024 - Changed duration from 6 seconds per level to 30 seconds + 5 seconds per level,
+//					changed call from GetCasterLevel to PS_GetCasterLevel
+
+#include "ps_inc_functions"
 
 #include "nw_i0_spells"
 
@@ -43,7 +47,9 @@ void main()
     //effect eVis = EffectVisualEffect(VFX_DUR_SPELLTURNING);//nwn1 vfx
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);//nwn1 vfx
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_LESSER_SPELL_MANTLE);//nwn2 vfx
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	// nDuration = RoundsToSeconds(nDuration); // default duration
+	nDuration = 30 + (5 * nDuration); // FlattedFifth duration
     int nAbsorb = d4() + 4;
     int nMetaMagic = GetMetaMagicFeat();
 
@@ -72,5 +78,5 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_GREATER_SPELL_MANTLE);
     RemoveEffectsFromSpell(oTarget, SPELL_SPELL_MANTLE);
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, nDuration);
 }

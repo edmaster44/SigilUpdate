@@ -7,7 +7,7 @@
     Gives the gives the creature touched 20/Adamantine
     damage reduction.  This lasts for 1 hour per
     caster level or until 10 * Caster Level (150 Max)
-    is dealt to the person.
+    is dealt to the person.  -FlattedFifth changed to 200 max, June 4 2024
 */
 //:://////////////////////////////////////////////
 //:: Created By: Preston Watamaniuk
@@ -17,6 +17,10 @@
 
 
 // (Update JLR - OEI 07/22/05) -- Changed Damage Reduction
+// Flatted Fifth June 4, 2024 - Changed dr to absorb 200, not 150,
+//					changed call from GetCasterLevel to PS_GetCasterLevel
+
+#include "ps_inc_functions"
 
 
 #include "nw_i0_spells"
@@ -43,16 +47,16 @@ void main()
 
 
     //Declare major variables
-    int nAmount = GetCasterLevel(OBJECT_SELF);
+    int nAmount = PS_GetCasterLevel(OBJECT_SELF);
     int nDuration = nAmount;
     object oTarget = GetSpellTargetObject();
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_GREATER_STONESKIN, FALSE));
 
-    if (nAmount > 15)
+    if (nAmount > 20) //changed from 15. FlattedFifth
     {
-        nAmount = 15;
+        nAmount = 20;
     }
     int nDamage = nAmount * 10;
     if (GetMetaMagicFeat() == METAMAGIC_EXTEND)
