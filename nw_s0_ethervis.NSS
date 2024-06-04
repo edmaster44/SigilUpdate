@@ -66,6 +66,6 @@ void main()
     	nDuration = nDuration *2; //Duration is +100%
     }
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, IntToFloat(nDuration));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, nDuration);
 	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);	// NWN1 VFX
 }

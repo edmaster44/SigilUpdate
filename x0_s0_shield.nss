@@ -67,7 +67,7 @@ void main()
   
 
     //float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF)); //Duration 1 hour per level, not my change but the comment was wrong -FlattedFifth
-    float fDuration = IntToFloat((60 * 30) + (60 * PS_GetCasterLevel(OBJECT_SELF))); // still too long but w/e, FlattedFifth
+    float fDuration = (60 * 30) + (60 * PS_GetCasterLevel(OBJECT_SELF)); // still too long but w/e, FlattedFifth
 	fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
