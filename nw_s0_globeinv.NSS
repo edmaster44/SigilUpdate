@@ -58,5 +58,5 @@ void main()
     	nDuration = nDuration *2; //Duration is +100%
     }
     //Apply the VFX impact and effects
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, nDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, IntToFloat(nDuration));
 }
