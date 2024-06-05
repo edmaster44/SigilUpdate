@@ -40,6 +40,7 @@
 //				critical and inflict critical, heal, and harm potions controlled via boolean style integer constants. 
 //				Added options for player-scribed raise dead and resurrection scrolls to be usuable by anyone without UMD,
 //				also controlled by a boolean style integer constant. (Special thanks to Dae for simplifying MakeItemUseableByClass())
+//				Fixed spell level check in brew potions.
 
 #include "x2_inc_itemprop"
 #include "x2_inc_switches"
@@ -715,8 +716,11 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 	if (!(((nID == idCureCritical || nID == idInflictCritical) && (bAllowCureCritPotions || bAllowHealPotions))
 		|| ((nID == idSpellHeal || nID == idSpellHarm) && bAllowHealPotions)))
 	{
-		FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
-		return TRUE;
+		if (nLevel > X2_CI_BREWPOTION_MAXLEVEL)
+		{
+			FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
+			return TRUE;
+		}
 	}
 
 

@@ -11,7 +11,7 @@
 //:: Created By: Preston Watamaniuk
 //:: Created On: Jan 7, 2002
 //:://////////////////////////////////////////////
-// Flatted Fifth June 4, 2024 - Changed duration from 6 seconds per level to 30 seconds + 5 seconds per level,
+// Flatted Fifth June 4, 2024 - Changed duration from 6 seconds per level to 60 seconds + 5 seconds per level,
 //					changed call from GetCasterLevel to PS_GetCasterLevel
 
 #include "ps_inc_functions"
@@ -46,7 +46,7 @@ void main()
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	//nDuration =  RoundsToSeconds(nDuration); // default duration of 6 seconds per level
-	nDuration = 30 + (5 * nDuration); // new duration of 30 seconds + 5 seconds per level
+	nDuration = 60 + (5 * nDuration); // new duration of 30 seconds + 5 seconds per level
     int nAbsorb = d12() + 10;
     int nMetaMagic = GetMetaMagicFeat();
 
