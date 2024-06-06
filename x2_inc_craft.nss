@@ -41,6 +41,12 @@
 //				Added options for player-scribed raise dead and resurrection scrolls to be usuable by anyone without UMD,
 //				also controlled by a boolean style integer constant. (Special thanks to Dae for simplifying MakeItemUseableByClass())
 //				Fixed spell level check in brew potions.
+//	FlattedFifth June 6, 2024 - Fixed Erroneous old code that was preventing clerics from scribing their domain spells
+//				because it was looking at the caster to know what spellbook to look in instead of the spell itself.
+//				Edited MakeItemUseableByClassesWithSpellAccess() to properly add cleric when a spell is cast by a cleric 
+//				so that wands and scrolls of cleric domain spells are useable by clerics when clerics make them, but this
+//      		might need to be edited to exclude making wands and scrolls from other wands and scrolls. a GetSpellCastItem() 
+//				check, maybe?
 
 #include "x2_inc_itemprop"
 #include "x2_inc_switches"
@@ -267,6 +273,8 @@ struct craft_struct CIGetCraftItemStructFrom2DA(string s2DA, int nRow, int nItem
 void AppendSpellToName(object oObject, int nSpellID);
 
 
+
+
 //--------------------------------------------------------------------
 // functrions
 //--------------------------------------------------------------------
@@ -356,39 +364,65 @@ void MakeItemUseableByClass(int iClassType, object oItem)
 
 void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
 {
+	int bBard = FALSE;
+	int bCleric = FALSE;
+	int bDruid = FALSE;
+	int bFavored = FALSE;
+	int bKnight = FALSE;
+	int bRanger = FALSE;
+	int bShaman = FALSE;
+	int bSorc = FALSE;
+	int bWarlock = FALSE;
+	int bWizard = FALSE;
+	
+	
+	
 	if (IsOnSpellList(iSpell, CLASS_TYPE_BARD))
-		MakeItemUseableByClass(CLASS_TYPE_BARD, oItem);
+		bBard = TRUE;
 		
-	if (IsOnSpellList(iSpell, CLASS_TYPE_CLERIC))
+		//FlattedFifth, June 6 2024, now checks for cleric caster to account for domain spells
+		//that aren't normally in the cleric spellbook
+	if (IsOnSpellList(iSpell, CLASS_TYPE_CLERIC) || GetLastSpellCastClass() == CLASS_TYPE_CLERIC)
 	{
-		MakeItemUseableByClass(CLASS_TYPE_CLERIC, oItem);
-		MakeItemUseableByClass(idClassFavoredSoul, oItem);
-		MakeItemUseableByClass(CLASS_TYPE_PALADIN, oItem);
+		bCleric = TRUE;
+		bFavored = TRUE;
+		bKnight = TRUE;
 	}
 		
-	
 	if (IsOnSpellList(iSpell, CLASS_TYPE_DRUID))
 	{
-		MakeItemUseableByClass(CLASS_TYPE_DRUID, oItem);
-		MakeItemUseableByClass(idClassShaman, oItem);
-		MakeItemUseableByClass(CLASS_TYPE_RANGER, oItem);
+		bDruid = TRUE;
+		bShaman = TRUE;
+		bRanger = TRUE;
 	}
 		
 	if (IsOnSpellList(iSpell, CLASS_TYPE_PALADIN))
-		MakeItemUseableByClass(CLASS_TYPE_PALADIN, oItem);
+		bKnight = TRUE;
 
 	if (IsOnSpellList(iSpell, CLASS_TYPE_RANGER))
-		MakeItemUseableByClass(CLASS_TYPE_RANGER, oItem);
+		bRanger = TRUE;
 	
 	if (IsOnSpellList(iSpell, CLASS_TYPE_WIZARD))
 	{
-		MakeItemUseableByClass(CLASS_TYPE_WIZARD, oItem);
-		MakeItemUseableByClass(CLASS_TYPE_SORCERER, oItem);
-		MakeItemUseableByClass(CLASS_TYPE_BARD, oItem);
+		bWizard = TRUE;
+		bSorc = TRUE;
+		bBard = TRUE;
 	}
-	
+		//Warlock invocations can't be used to make wands or scrolls afaik but this
+		//contingency was here in the original so it's here still. -FlattedFifth
 	if (IsOnSpellList(iSpell, CLASS_TYPE_WARLOCK))
-		MakeItemUseableByClass(CLASS_TYPE_WARLOCK, oItem);
+		bWarlock = TRUE;
+	
+	if (bBard) MakeItemUseableByClass(CLASS_TYPE_BARD, oItem);
+	if (bCleric) MakeItemUseableByClass(CLASS_TYPE_CLERIC, oItem);
+	if (bDruid) MakeItemUseableByClass(CLASS_TYPE_DRUID, oItem);
+	if (bFavored) MakeItemUseableByClass(CLASS_TYPE_FAVORED_SOUL, oItem);
+	if (bKnight) MakeItemUseableByClass(CLASS_TYPE_PALADIN, oItem);
+	if (bRanger) MakeItemUseableByClass(CLASS_TYPE_RANGER, oItem);
+	if (bShaman) MakeItemUseableByClass(CLASS_TYPE_SPIRIT_SHAMAN, oItem);
+	if (bSorc) MakeItemUseableByClass(CLASS_TYPE_SORCERER, oItem);
+	if (bWarlock) MakeItemUseableByClass(CLASS_TYPE_WARLOCK, oItem);
+	if (bWizard) MakeItemUseableByClass(CLASS_TYPE_WIZARD, oItem);
 }		
 	
 
@@ -632,9 +666,13 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
             DestroyObject (oMat);
         }
      }
+	 
 
-    // get scroll resref from scrolls lookup 2da
-    int nClass =GetLastSpellCastClass ();
+    /* 
+		Erroneous code commented out, this bit breaks if it's a cleric casting a domain spell
+		because it's trying to get the scroll resref based on the caster's class. -FlattedFifth, June 6, 2024
+	
+	int nClass = GetLastSpellCastClass();
     string sClass = "Wiz_Sorc";
     switch (nClass)
     {
@@ -667,6 +705,31 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
             sClass = "Cleric";
             break;
     }
+	*/
+	
+	
+	// The following bit of code gets the scroll blueprint id from des_crft_scroll.2da, 
+	// BUT while the original code that I commented out above was only looking at the caster's class, 
+	// here we're getting the spellbook the spell is in for clerics casting domain spells. Since we're 
+	// changing the default "Only Useable By" properties anyway, it's ok to use the default scroll for that 
+	// spell. -FlattedFifth, June 6 2024
+   
+	string sClass = "Wiz_Sorc";
+	if (IsOnSpellList(nSpellID, CLASS_TYPE_WIZARD)) sClass = "Wiz_Sorc";
+	else if (IsOnSpellList(nSpellID, CLASS_TYPE_CLERIC)) sClass = "Cleric";
+	else if (IsOnSpellList(nSpellID, CLASS_TYPE_DRUID)) sClass = "Druid";
+	else if (IsOnSpellList(nSpellID, CLASS_TYPE_PALADIN)) sClass = "Paladin";
+	else if (IsOnSpellList(nSpellID, CLASS_TYPE_RANGER)) sClass = "Ranger";
+	else if (IsOnSpellList(nSpellID, CLASS_TYPE_BARD)) sClass = "Bard";
+	else 
+	{
+		string sSpellID = IntToString(nSpellID);
+		SendMessageToPC(oCreator, "x2_inc_craft::CICraftScribeScroll(), Unable to find scroll ID number " + sSpellID);
+		SendMessageToPC(oCreator, "Please screenshot the above message and contact the dev team on our Discord.");
+		WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed -  Class: " + sClass + ", SpellID " + sSpellID);
+	}
+	
+
 
     if (sClass != "")
     {
@@ -678,7 +741,8 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
 
         if (oTarget == OBJECT_INVALID)
         {
-           WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - Resref: " + sResRef + " Class: " + sClass + "(" +IntToString(nClass) +") " + " SpellID " + IntToString (nSpellID));
+			int nClass = GetLastSpellCastClass();
+          	WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - Resref: " + sResRef + " Class: " + sClass + "(" +IntToString(nClass) +") " + " SpellID " + IntToString (nSpellID));
         }
     }
     return oTarget;
