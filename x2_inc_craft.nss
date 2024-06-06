@@ -46,46 +46,54 @@
 //				Edited MakeItemUseableByClassesWithSpellAccess() to properly add cleric when a spell is cast by a cleric 
 //				so that wands and scrolls of cleric domain spells are useable by clerics when clerics make them, but this
 //      		might need to be edited to exclude making wands and scrolls from other wands and scrolls. a GetSpellCastItem() 
-//				check, maybe?
+//				check, maybe? -Addendum, added optional booleans to toggle and and off allowing favored soul and knight access
+//				to wands and scrolls made with a cleric domain spell. Also added check that prevents a multiclass cleric with UMD 
+//				from just making any wand or scroll cleric usable by using an item to create it. Also changed all my constants
+//				from camelCase to SHOUTY_CAPS in keeping with standard practice for nwscript.
 
 #include "x2_inc_itemprop"
 #include "x2_inc_switches"
 #include "ginc_debug"
 #include "ginc_2da"
 
-const int idClassFavoredSoul = 58;
-const int idClassShaman = 55;
-const int idSpellRaise = 142;
-const int idSpellRes = 153;
-const int idCureCritical = 31;
-const int idInflictCritical = 435;
-const int idSpellHeal = 79;
-const int idSpellHarm = 77;
+
+const int ID_SPELL_RAISE_DEAD = 142;
+const int ID_SPELL_FULL_RES = 153;
+const int ID_SPELL_CURE_CRIT = 31;
+const int ID_SPELL_INFLICT_CRIT = 435;
+const int ID_SPELL_HEAL = 79;
+const int ID_SPELL_HARM = 77;
 
 // If true, then scrolls of raise dead scribed by players have no class use limitations, anyone can use them
 // without UMD. Default OC behavious is false.
-const int bRaiseScrollUsableByEveryone = TRUE;
+const int B_RAISE_SCROLL_NO_CLASS_LIMIT = TRUE;
 
 // As above, but with resurrection
-const int bResScrollUsableByEveryone = TRUE;
+const int B_FULL_RES_SCROLL_NO_CLASS_LIMIT = TRUE;
 
 // If true, allows players to brew potions of cure critical wounds. I don't like that an npc is the only source
 // for these. Players should give other players their money, not npcs, whenever possible. Note that we will 
 // need to do some testing to make sure that the cost to brew these potions is == or > the sell price to stores.
-const int bAllowCureCritPotions = TRUE;
+const int B_ALLOW_CURE_CRIT_POTS = TRUE;
 
 // As above, but for heal (and harm for undead pcs). Allowing heals automatically allows the above, but having
 // both set to true doesn't hurt anything.
-const int bAllowHealPotions = TRUE;
+const int B_ALLOW_HEAL_POTS = TRUE;
 
 //nerfs the cost for players to make raise dead scrolls to compare favourably with NPC sold items
-const int bCheapRaiseScrolls = TRUE;
+const int B_CHEAP_RAISE_SCROLLS = TRUE;
 // cost to make raise scrolls IF above is true. Based on 70% of the cost of 1 use of a pheonix feather
-const int nRaiseCost = 250;
+const int N_RAISE_COST = 250;
 
 //as above, but for full res
-const int bCheapResScrolls = TRUE;
-const int nResCost = 350;
+const int B_CHEAP_FULL_RES_SCROLLS = TRUE;
+const int N_RES_COST = 350;
+
+// if true enables a favored soul to use a cleric wand or scroll made via a domain, without UMD.
+const int B_FS_ACCESS_DOMAIN_WANDSCROLL = FALSE;
+
+// as above, but for knights
+const int B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL = FALSE;
 
 //void main(){}
 
@@ -375,14 +383,31 @@ void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
 	int bWarlock = FALSE;
 	int bWizard = FALSE;
 	
+		//FlattedFifth, June 6 2024 - Checks for cleric caster to account for domain spells
+		//that aren't normally in the cleric spellbook and then checks to make sure the spell 
+		//isn't being cast from a wand, scroll, or other item. Enabling PCs to make wands and scrolls
+		//from other wands and scrolls is fine on a server with normally low-ish players, but I don't 
+		//want clerics with UMD to be able to wholesale cleric-usable wands and scrolls by making them
+		//from other wands and scrolls. This will limit to only spells cast via domain becoming cleric
+		// useable.
+	if (GetLastSpellCastClass() == CLASS_TYPE_CLERIC)
+	{	
+		// Getting the base item type of the item that casts the spell will return the PC
+		// themself if they cast from a spellbook, and the ItemActivator is also the PC
+		if (GetBaseItemType(GetSpellCastItem()) == GetBaseItemType(GetItemActivator()))
+		{
+			bCleric = TRUE;
+			if (B_FS_ACCESS_DOMAIN_WANDSCROLL) bFavored = TRUE;
+			if (B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL) bKnight = TRUE;
+		}
 	
-	
+	}
+
 	if (IsOnSpellList(iSpell, CLASS_TYPE_BARD))
 		bBard = TRUE;
 		
-		//FlattedFifth, June 6 2024, now checks for cleric caster to account for domain spells
-		//that aren't normally in the cleric spellbook
-	if (IsOnSpellList(iSpell, CLASS_TYPE_CLERIC) || GetLastSpellCastClass() == CLASS_TYPE_CLERIC)
+
+	if (IsOnSpellList(iSpell, CLASS_TYPE_CLERIC))
 	{
 		bCleric = TRUE;
 		bFavored = TRUE;
@@ -777,8 +802,8 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 	// if that boolean or the heal one is set to true and allow heal and harm if that boolean is set to true.
     // -------------------------------------------------------------------------
 
-	if (!(((nID == idCureCritical || nID == idInflictCritical) && (bAllowCureCritPotions || bAllowHealPotions))
-		|| ((nID == idSpellHeal || nID == idSpellHarm) && bAllowHealPotions)))
+	if (!(((nID == ID_SPELL_CURE_CRIT || nID == ID_SPELL_INFLICT_CRIT) && (B_ALLOW_CURE_CRIT_POTS || B_ALLOW_HEAL_POTS))
+		|| ((nID == ID_SPELL_HEAL || nID == ID_SPELL_HARM) && B_ALLOW_HEAL_POTS)))
 	{
 		if (nLevel > X2_CI_BREWPOTION_MAXLEVEL)
 		{
@@ -887,13 +912,13 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     int nGoldCost = nCost;
 	
 	// nerf the cost of raise deads and or full res? controlled by boolean-like integer constants at top
-	if (nID == idSpellRaise && bCheapRaiseScrolls)
+	if (nID == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
 	{
-		nGoldCost = nRaiseCost;
+		nGoldCost = N_RAISE_COST;
 	}
-	else if (nID == idSpellRes && bCheapResScrolls)
+	else if (nID == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
 	{
-		nGoldCost = nResCost;
+		nGoldCost = N_RES_COST;
 	}
 
 
@@ -930,7 +955,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     if (GetIsObjectValid(oScroll))
     {
 		// Adding the proper item properties 
-		if ((nID == idSpellRaise && bRaiseScrollUsableByEveryone) || (nID == idSpellRes && bResScrollUsableByEveryone))
+		if ((nID == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || (nID == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT))
 		{
 			IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
 		}
@@ -948,11 +973,11 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
         //----------------------------------------------------------------------
         SetIdentified(oScroll,TRUE);
 		// if the scroll is a cheap raise dead or res, make it unsellable. I hope. Will flagging it stolen do that?
-		if (nID == idSpellRaise && bCheapRaiseScrolls)
+		if (nID == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
 		{
 			SetStolenFlag(oScroll, TRUE);
 		}
-		else if (nID == idSpellRes && bCheapResScrolls)
+		else if (nID == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
 		{
 			SetStolenFlag(oScroll, TRUE);
 		}
