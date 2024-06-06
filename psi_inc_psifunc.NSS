@@ -290,6 +290,7 @@ int GetManifestingClass(object oManifester = OBJECT_SELF)
 	return CLASS_TYPE_DRAGON_PSION;
 	return CLASS_TYPE_CEREBREMANCER;
 	return CLASS_PSYCHIC_WARRIOR;
+	return CLASS_TYPE_PSYCHIC_THERUGE;
 	return CLASS_TYPE_WARMIND;
 	return CLASS_PSYCHIC_KNIGHT;
 }
@@ -710,6 +711,7 @@ int GetIsPsionicCharacter(object oCreature)
     return (GetLevelByClass(CLASS_TYPE_PSION,oCreature) ||
               GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oCreature) ||
               GetLevelByClass(CLASS_PSYCHIC_KNIGHT,oCreature) ||
+			   GetLevelByClass(CLASS_TYPE_PSYCHIC_THERUGE,oCreature) ||
               GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oCreature) ||
               GetLevelByClass(CLASS_TYPE_CEREBREMANCER,oCreature) ||
               GetLevelByClass(CLASS_TYPE_WARMIND,oCreature) ||
