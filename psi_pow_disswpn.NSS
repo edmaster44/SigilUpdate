@@ -72,11 +72,11 @@ void main()
         SendMessageToPC(oManifester, "Target must be a weapon or creature holding a weapon!"); // Item must be weapon or creature holding a weapon
     	return;
     }
-
+float fDur = 6.0f;
     if(manif.bCanManifest)
 {
-        float fDuration = 60.0f * manif.nManifesterLevel;
-        if(manif.bExtend) fDuration *= 2;
+        float fDuration = fDur * manif.nManifesterLevel;
+        if(manif.bExtend)  fDur *2;
 		IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON, 2), fDuration);
 		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_ACID), fDuration);
         
