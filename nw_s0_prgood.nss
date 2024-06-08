@@ -45,7 +45,9 @@ void main()
     object oTarget = GetSpellTargetObject();
     float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 
-    effect eDur = EffectVisualEffect(VFX_DUR_SPELL_PROT_ALIGN);
+    //effect eDur = EffectVisualEffect(VFX_DUR_SPELL_PROT_ALIGN);
+	effect eVis = EffectVisualEffect(VFX_IMP_EVIL_HELP);
+	//effect eDur = EffectVisualEffect(VFX_DUR_SPELL_EVIL_AURA);
     effect eAC = EffectACIncrease(2, AC_DEFLECTION_BONUS);
     //Change the effects so that it only applies when the target is evil
     eAC = VersusAlignmentEffect(eAC, ALIGNMENT_ALL, nAlign);
@@ -57,7 +59,7 @@ void main()
 
     effect eLink = EffectLinkEffects(eImmune, eSave);
     eLink = EffectLinkEffects(eLink, eAC);
-	eLink = EffectLinkEffects(eLink, eDur);
+	//eLink = EffectLinkEffects(eLink, eDur);
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
@@ -67,7 +69,7 @@ void main()
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PROTECTION_FROM_GOOD, FALSE));
-
-    //Apply the VFX impact and effects
+	//Apply the VFX impact and effects
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

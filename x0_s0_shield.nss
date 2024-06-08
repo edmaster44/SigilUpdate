@@ -56,12 +56,14 @@ void main()
     //object oTarget = OBJECT_SELF;
 	object oTarget = GetSpellTargetObject(); 
 	int nID = GetSpellId();
-    effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);
+    //effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);
 
 
     effect eArmor = EffectACIncrease(5, AC_SHIELD_ENCHANTMENT_BONUS);	// AFW-OEI 11/02/2006 change from Deflection to Shield bonus.
     effect eSpell = EffectSpellImmunity(SPELL_MAGIC_MISSILE);
-    effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SHIELD);
+   	effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SHIELD_OF_FAITH);
+//	effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SANCTUARY);
+//	effect eDur = EffectVisualEffect(VFX_DUR_GLOBE_MINOR);
 
     effect eLink = EffectLinkEffects(eArmor, eSpell);
   
@@ -79,7 +81,7 @@ void main()
 	RemoveEffectsFromSpell(oTarget, nID);
     
     //Apply VFX impact and bonus effects
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
 	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

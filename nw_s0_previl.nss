@@ -19,7 +19,7 @@
 
 #include "ps_inc_functions"
 #include "x2_inc_spellhook"
-
+#include "NW_I0_SPELLS"
 void main()
 {
 
@@ -45,7 +45,9 @@ void main()
     object oTarget = GetSpellTargetObject();
     float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 
-    effect eDur = EffectVisualEffect(VFX_DUR_SPELL_PROT_ALIGN);
+    //effect eDur = EffectVisualEffect(VFX_DUR_SPELL_PROT_ALIGN);
+	effect eVis = EffectVisualEffect(VFX_IMP_GOOD_HELP);
+	//effect eDur = EffectVisualEffect(VFX_DUR_SPELL_GOOD_AURA);
     effect eAC = EffectACIncrease(2, AC_DEFLECTION_BONUS);
     //Change the effects so that it only applies when the target is evil
     //Try wrapping the sanctuary effect in the Evil wrapper and see if the effect works.
@@ -58,7 +60,7 @@ void main()
 
     effect eLink = EffectLinkEffects(eImmune, eSave);
     eLink = EffectLinkEffects(eLink, eAC);
-	eLink = EffectLinkEffects(eLink, eDur);
+	//eLink = EffectLinkEffects(eLink, eDur);
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
@@ -70,5 +72,6 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PROTECTION_FROM_EVIL, FALSE));
 
     //Apply the VFX impact and effects
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
