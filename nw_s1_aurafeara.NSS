@@ -37,7 +37,8 @@ void main()
 //  int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/3;
 //  int nDC = 10 + GetHitDice(GetAreaOfEffectCreator());
     int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/2;
-    int nDuration = GetScaledDuration(nHD, oTarget);
+	int nReduceHD = (nHD)/2;
+    int nDuration = GetScaledDuration(nReduceHD, oTarget);
 		
 	if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
 	{
