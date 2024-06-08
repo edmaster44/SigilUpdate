@@ -1,4 +1,6 @@
 //v. 1.01
+// FlattedFifth = June 7, 2024. Added ff_sneak_fix as last function call to perform on the pc if they are not being booted
+//				so that existing characters do not need to wait for a level up to get their sneak dice properly calculated.
 
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
@@ -17,6 +19,7 @@
 #include "ps_inc_bgspellfix"
 #include "ginc_time"
 #include "ps_heightadjust_includes"
+#include "ff_sneak_fix"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -576,5 +579,7 @@ void main()
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
+		// recalculate sneak dice and epic precision qualification.
+		ff_sneak_fix(oPC);
 	}
 }
