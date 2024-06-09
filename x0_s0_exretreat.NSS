@@ -16,6 +16,7 @@
 // JLR - OEI 08/23/05 -- Metamagic changes
 // Flatted Fifth June 4, 2024 - Changed duration from 6 seconds per level to 30 seconds + 5 seconds per level,
 //					changed call from GetCasterLevel to PS_GetCasterLevel
+//					fixed typo
 #include "ps_inc_functions"
 #include "nwn2_inc_spells"
 
