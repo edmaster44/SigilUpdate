@@ -49,7 +49,8 @@ void main()
     effect eLink = EffectLinkEffects(eVis, eSpell);
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	//nDuration = RoundsToSeconds(nDuration);  // default duration
-	nDuration = 30 + (5 * nDuration);
+	nDuration = 30 + (6 * nDuration);
+	if (nDuration > 180) nDuration = 180;
     int nMetaMagic = GetMetaMagicFeat();
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LESSER_GLOBE_OF_INVULNERABILITY, FALSE));

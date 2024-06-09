@@ -49,7 +49,8 @@ void main()
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_LESSER_SPELL_MANTLE);//nwn2 vfx
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	// nDuration = RoundsToSeconds(nDuration); // default duration
-	nDuration = 30 + (5 * nDuration); // FlattedFifth duration
+	nDuration = 30 + (6 * nDuration); // FlattedFifth duration
+	if (nDuration > 180) nDuration = 180;
     int nAbsorb = d4() + 4;
     int nMetaMagic = GetMetaMagicFeat();
 

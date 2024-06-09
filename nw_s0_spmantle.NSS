@@ -44,7 +44,8 @@ void main()
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_SPELL_MANTLE );
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	//nDuration = RoundsToSeconds(nDuration); //default duration
-	nDuration = 30 + (5 * nDuration); //flattedfifth duration
+	nDuration = 30 + (6 * nDuration); //flattedfifth duration
+	if (nDuration > 180) nDuration = 180;
     int nAbsorb = d8() + 8;
     int nMetaMagic = GetMetaMagicFeat();
 

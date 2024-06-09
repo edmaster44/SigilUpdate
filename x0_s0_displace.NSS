@@ -41,9 +41,11 @@ void main()
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
 
     int nMetaMagic = GetMetaMagicFeat();
-    int nRaise = GetCasterLevel(OBJECT_SELF) / 2;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+    int nRaise = nCL / 2;
     //int nDuration = GetCasterLevel(OBJECT_SELF);
-	int nDuration = 30 + (5 * GetCasterLevel(OBJECT_SELF));
+	int nDuration = 30 + (6 * nCL);
+	if (nDuration > 180) nDuration = 180;
 
     if (nMetaMagic == METAMAGIC_EXTEND)
     {

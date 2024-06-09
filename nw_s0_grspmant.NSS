@@ -46,7 +46,7 @@ void main()
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	//nDuration =  RoundsToSeconds(nDuration); // default duration of 6 seconds per level
-	nDuration = 60 + (5 * nDuration); // new duration of 30 seconds + 5 seconds per level
+	nDuration = 30 + (6 * nDuration); // new duration of 30 seconds + 6 seconds per level
     int nAbsorb = d12() + 10;
     int nMetaMagic = GetMetaMagicFeat();
 
