@@ -57,7 +57,7 @@ void main()
     
     //float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));// default duration
 	float fDuration = 30.0 + (6.0 * IntToFloat(PS_GetCasterLevel(OBJECT_SELF))); // FlattedFifth duration
-	if (nDuration > 180.0) nDuration = 180.0;
+	if (fDuration > 180.0) fDuration = 180.0;
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
