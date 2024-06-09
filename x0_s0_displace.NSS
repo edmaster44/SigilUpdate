@@ -11,8 +11,9 @@
 //:: Created On: September 7, 2002
 //:://////////////////////////////////////////////
 
-#include "x2_inc_spellhook" 
-#include "ps_inc_functions"
+#include "x2_inc_spellhook"
+
+#include "ps_inc_functions" 
 
 void main()
 {
