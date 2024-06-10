@@ -1,6 +1,4 @@
 //v. 1.01
-// FlattedFifth = June 7, 2024. Added ff_sneak_fix as last function call to perform on the pc if they are not being booted
-//				so that existing characters do not need to wait for a level up to get their sneak dice properly calculated.
 
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
@@ -20,6 +18,7 @@
 #include "ginc_time"
 #include "ps_heightadjust_includes"
 #include "ff_sneak_fix"
+#include "ff_mod_game_item"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -579,7 +578,12 @@ void main()
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
-		// recalculate sneak dice and epic precision qualification.
+		// check for the sword saint armor and if found, apply a -2 ac penalty to make it as it was b4 the base armor
+		// overhaul, if it doesn't have that property already. Note that this works because I initially changed hide 
+		// from 3/4 to 4/5, but now have changed it to 5/4
+		ff_mod_game_item(oPC, "ps_itemset_swordsaint3", ItemPropertyDecreaseAC(IP_CONST_ACMODIFIERTYPE_ARMOR, 2), TRUE);
+		// fix sneak dice for incoming characters, otherwise they won't get them fixed until lvl up, meaning lvl 30's2DA
+		// are screwed
 		ff_sneak_fix(oPC);
 	}
 }
