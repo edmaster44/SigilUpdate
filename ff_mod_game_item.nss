@@ -7,13 +7,85 @@
 // Add = a boolean style integer. Set to TRUE if you want to add a property and FALSE
 // if you want to remove it
 
+#include "x2_inc_itemprop"
+
 // declaration of helper function
-void ff_mod_it(object oItem, itemproperty ipProperty, int bAdd);
+void FF_ModifyItem(object oItem, itemproperty ipProperty, int bAdd);
+
 
 // main function
-void ff_mod_game_item(object oPC, string sResRef, itemproperty ipProperty, int bAdd)
+void FF_ModifyGameItem(object oPC, string sResRef, itemproperty ipProperty, int bAdd)
 {
-    object oItem = GetFirstItemInInventory(oPC);
+	object oItem;
+
+    oItem = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_BELT, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC);
+	if (GetResRef(oItem) == sResRef)
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_HEAD, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	if (GetResRef(oItem) == sResRef)
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_NECK, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	if (GetResRef(oItem) == sResRef) 
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC);
+	if (GetResRef(oItem) == sResRef)
+	{
+		DelayCommand(0.3f, AssignCommand(oPC,FF_ModifyItem(oItem, ipProperty, bAdd)));
+	}
+
+    oItem = GetFirstItemInInventory(oPC);
 
     // Iterate through all items in the inventory
     while (GetIsObjectValid(oItem))
@@ -21,32 +93,23 @@ void ff_mod_game_item(object oPC, string sResRef, itemproperty ipProperty, int b
         // Check if the item's ResRef matches
         if (GetResRef(oItem) == sResRef)
         {
-            ff_mod_it(oItem, ipProperty, bAdd);
+            FF_ModifyItem(oItem, ipProperty, bAdd);
         }
         oItem = GetNextItemInInventory(oPC);
     }
 }
 
-void ff_mod_it(object oItem, itemproperty ipProperty, int bAdd)
+void FF_ModifyItem(object oItem, itemproperty ipProperty, int bAdd)
 {
-	int hasIpProperty = FALSE;
-	itemproperty ip = GetFirstItemProperty(oItem);
+	if (bAdd == TRUE)
+	{
+		IPSafeAddItemProperty(oItem, ipProperty, 0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+	}
+	else
+	{
+		int ipType = GetItemPropertyType(ipProperty);
+		int ipSubType = GetItemPropertySubType(ipProperty);
+		IPRemoveMatchingItemProperties(oItem, ipType, DURATION_TYPE_PERMANENT, ipSubType);
+	}
 	
-    while (GetIsItemPropertyValid(ip))
-    {
-        if (GetItemPropertyType(ip) == GetItemPropertyType(ipProperty) && GetItemPropertySubType(ip) == GetItemPropertySubType(ipProperty))
-        {
-            hasIpProperty = TRUE;
-			break;
-        }
-        ip = GetNextItemProperty(oItem);
-    }
-	if (bAdd == TRUE && hasIpProperty == FALSE)
-	{
-		AddItemProperty(DURATION_TYPE_PERMANENT, ipProperty, oItem);
-	}
-	else if (bAdd == FALSE && hasIpProperty == TRUE)
-	{
-		RemoveItemProperty(oItem, ipProperty);
-	}
 }
