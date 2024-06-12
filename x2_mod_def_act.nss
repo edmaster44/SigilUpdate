@@ -12,15 +12,62 @@
 //:: Created On: 2003-07-16
 //:://////////////////////////////////////////////
 
+
+
 #include "x2_inc_switches"
 #include "kinc_crafting"
+
+const int ID_CRAFTED_POTION = 49;
+const int ID_MAT_HARM = 18;
+const int ID_MAT_INFL_MINOR = 13;
+const int ID_MAT_INFL_LIGHT = 14;
+const int ID_MAT_INFL_MOD = 15;
+const int ID_MAT_INFL_SER = 16;
+const int ID_MAT_INFL_CRIT = 17;
+
+const int ID_SPELL_HARM = 77;
+const int ID_SPELL_INFL_MINOR = 431;
+const int ID_SPELL_INFL_LIGHT = 432;
+const int ID_SPELL_INFL_MOD = 433;
+const int ID_SPELL_INFL_SER = 434;
+const int ID_SPELL_INFL_CRIT = 435;
+
+
+
 void main()
 {
+
     object oItem = GetItemActivated();
 	object oPC = GetItemActivator();
+	int nItemID = GetBaseItemType(oItem);
+	
+	// workaround for inflict wounds potions not working in no pvp areas due to the hostile flag.
+	// the craft potion feat now creates these potions with UNIQUE_POWER_SELF_ONLY spell, so that they
+	// register here, and the material is set so that the potion is identifiable even if the name and 
+	// description is changed.
+	if (nItemID == ID_CRAFTED_POTION)
+	{
+		int nSpellID = 0;
+		int nMaterial = GetItemBaseMaterialType(oItem);
+		switch (nMaterial)
+		{
+			case ID_MAT_HARM: nSpellID = ID_SPELL_HARM; break;
+			case ID_MAT_INFL_MINOR: nSpellID = ID_SPELL_INFL_MINOR; break;
+			case ID_MAT_INFL_LIGHT: nSpellID = ID_SPELL_INFL_LIGHT; break;
+			case ID_MAT_INFL_MOD: nSpellID = ID_SPELL_INFL_MOD; break;
+			case ID_MAT_INFL_SER: nSpellID = ID_SPELL_INFL_SER; break;
+			case ID_MAT_INFL_CRIT: nSpellID = ID_SPELL_INFL_CRIT; break;
+			default: nSpellID = 0; break;
+		}
+		
+		if (nSpellID != 0)
+		{
+			AssignCommand(oPC, ActionCastSpellAtObject(nSpellID, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+		}
+	}
 
 	string sTag = GetTag(oItem);
-	if(GetBaseItemType(oItem) == 145 && GetTag(oItem) != "sigisedition") //Recipes are itemtype 145
+	if(nItemID == 145 && GetTag(oItem) != "sigisedition") //Recipes are itemtype 145
  	{ 
 		if(TestStringAgainstPattern("**_r_g_**", sTag) ||
 			TestStringAgainstPattern("**_r_poi_**", sTag) ||
@@ -56,7 +103,7 @@ void main()
 		}
 	}
 	
-	if(GetBaseItemType(oItem) == 146) //Incantations are itemtype 146
+	if(nItemID == 146) //Incantations are itemtype 146
 	{
 		//object oPC = GetItemActivator();
 		SendMessageToPC(oPC, "This crafting system has been disabled. Please refer to the SCoD wiki for the latest crafting information.");

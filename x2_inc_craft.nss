@@ -50,6 +50,12 @@
 //				to wands and scrolls made with a cleric domain spell. Also added check that prevents a multiclass cleric with UMD 
 //				from just making any wand or scroll cleric usable by using an item to create it. Also changed all my constants
 //				from camelCase to SHOUTY_CAPS in keeping with standard practice for nwscript.
+//	FlattedFifth June 12, 2024 - Made all crafted potions use the base item from a default Heal spell because that base Item
+//				will autotarget the user with the cast spell item property. We just remove the heal spell from it and place
+//				the new one in. Also crafted potions have the spell descriptions as their own descriptions. Some spells
+//				that make no sense to be user-only, such as remove fear or remove paralysis, use the normal crafted potion bottle
+//				that asks for a target. Also removed class use limitations from Stone To Flesh, and of course that can be toggled
+//				off with a boolean.
 
 #include "x2_inc_itemprop"
 #include "x2_inc_switches"
@@ -63,13 +69,17 @@ const int ID_SPELL_CURE_CRIT = 31;
 const int ID_SPELL_INFLICT_CRIT = 435;
 const int ID_SPELL_HEAL = 79;
 const int ID_SPELL_HARM = 77;
+const int ID_SPELL_STONE_TO_FLESH = 486;
 
 // If true, then scrolls of raise dead scribed by players have no class use limitations, anyone can use them
-// without UMD. Default OC behavious is false.
+// without UMD. Default OC behaviour is false.
 const int B_RAISE_SCROLL_NO_CLASS_LIMIT = TRUE;
 
 // As above, but with resurrection
 const int B_FULL_RES_SCROLL_NO_CLASS_LIMIT = TRUE;
+
+// As above but with Stone to Flesh
+const int B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT = TRUE;
 
 // If true, allows players to brew potions of cure critical wounds. I don't like that an npc is the only source
 // for these. Players should give other players their money, not npcs, whenever possible. Note that we will 
@@ -147,7 +157,8 @@ const int     X2_CI_BREWPOTION_FEAT_ID        = 944;                    // Brew 
 const int     X2_CI_BREWPOTION_MAXLEVEL       = 3;                      // Max Level for potions
 const int     X2_CI_BREWPOTION_COSTMODIFIER   = 16;                     // gp Brew Potion XPCost Modifier
 
-const string  X2_CI_BREWPOTION_NEWITEM_RESREF = "x2_it_pcpotion";       // ResRef for new potion item
+const string  X2_CI_BREWPOTION_NEWITEM_RESREF = "x2_it_pcpotion";       // ResRef for new potion item, if we want the potion to ask the user for a target
+const string  X2_CI_DEFAULT_HEAL_POTION_RESREF = "nw_it_mpotion012";    // ResRef for new base game heal potion, if we want the potion to auto target the user
 
 // Scribe Scroll related constants
 const int     X2_CI_SCRIBESCROLL_FEAT_ID        = 945;
@@ -289,7 +300,7 @@ void AppendSpellToName(object oObject, int nSpellID);
 
 // *  Returns the innate level of a spell. If bDefaultZeroToOne is given
 // *  Level 0 spell will be returned as level 1 spells
-int   CIGetSpellInnateLevel(int nSpellID, int bDefaultZeroToOne = FALSE)
+int CIGetSpellInnateLevel(int nSpellID, int bDefaultZeroToOne = FALSE)
 {
     //int nRet = StringToInt(Get2DAString(X2_CI_CRAFTING_SP_2DA, "Level", nSpellID));
 	// Instead of using innate level (a single level always used for a spell) we now use actual level.
@@ -543,6 +554,123 @@ int CIGetCraftGPCost(int nLevel, int nMod)
 
 }
 
+// Decide whether to use the base item potion that can target others or the one that can target only the 
+// use based on what spell the potion will cast.
+int GetPotionCanTargetOthers(int nSpellID)
+{
+	int bRet = FALSE;
+	switch (nSpellID)
+	{
+		case 486: bRet = TRUE; break; // stone to flesh, if we make that a potion
+		case 149: bRet = TRUE; break;// remove paralysis
+		case 148: bRet = TRUE; break;// remove fear
+		case 142: bRet = TRUE; break;//raise dead, if we make that a potion
+		default: bRet = FALSE; break;
+	}
+	return bRet;
+}
+
+// New Version of crafting a potion. In order to make player-crafted potions auto target the user like default
+// potions do, in most cases we will now spawn a default potion item, remove its original properies, and rename it.
+// We will still use the potion that can target others in a couple cases where doing otherwise wouldn't make 
+// sense, via the function just above this comment. -FlattedFifth, June 12, 2024
+object CICraftBrewPotion(object oCreator, int nSpellID )
+{
+
+/*
+// MAP 3/24/2009
+// Set the base material type of oItem to nmaterialType, which must refer to a valid
+// iprp_materials.2da row.
+void SetItemBaseMaterialType(object oItem, int nMaterialType);
+
+IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY
+*/
+
+	int nPropID;
+	object oTarget;
+	int nMaterial = 0;
+	// potions of inflict and harm cannot be used by undead pcs in no pvp areas because of the hostile flag in 
+	// spells.2da, so we bypass it using the on activate item script. We can't use the spellhook because that
+	// doesn't catch the spell until it's being cast, and the pvp settings won't let it even start to be cast.
+	// Potions also don't normally register to the On Activate Item event, UNLESS the spell is a unique power.
+	// So we set the spell to that, and then we set the base material to a new custom one to identify the potion
+	// to the player even if the potion's creator changes the name and description. We'll also use that material
+	// to identify the spell to the x2_mod_def_act.nss instead of a local integer since the material is going To
+	// be there anyway
+	switch (nSpellID)
+	{
+		case 77: // harm
+			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nMaterial = 18;
+			break;
+		case 431: // inflict minor
+			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nMaterial = 13;
+			break;
+		case 432: // inflict light
+			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nMaterial = 14;
+			break;
+		case 433: // inflict moderate
+			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nMaterial = 15;
+			break;
+		case 434: // inflict serious
+			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nMaterial = 16;
+			break;
+		case 435: // inflict critical
+			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nMaterial = 17;
+			break;
+		default:
+			nPropID = IPGetIPConstCastSpellFromSpellID(nSpellID);
+			break;		
+	}
+
+
+	
+	if (nPropID == 0 && nSpellID != 0)
+    {
+		SendMessageToPC(GetFirstPC(), "DEBUG: Failed at CICraftBrewPotion due to x2_inc_craft line 620");
+        FloatingTextStrRefOnCreature(84544,oCreator);
+        return OBJECT_INVALID;
+    }
+
+    if (nPropID != -1)
+    {
+		int bCanTargetOthers = GetPotionCanTargetOthers(nSpellID);
+		
+
+		if (bCanTargetOthers)
+		{
+			 oTarget = CreateItemOnObject(X2_CI_BREWPOTION_NEWITEM_RESREF,oCreator);
+			 SetFirstName(oTarget, "Magical Elixir");
+		}
+		else
+		{
+			oTarget = CreateItemOnObject(X2_CI_DEFAULT_HEAL_POTION_RESREF,oCreator);
+			itemproperty ip = GetFirstItemProperty(oTarget);
+			while (GetIsItemPropertyValid(ip))
+			{
+				RemoveItemProperty(oTarget, ip);
+				ip = GetFirstItemProperty(oTarget);	
+			}
+			SetFirstName(oTarget, "Magical Potion");
+		}
+		
+        itemproperty ipProp = ItemPropertyCastSpell(nPropID,IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
+        AddItemProperty(DURATION_TYPE_PERMANENT,ipProp,oTarget);
+		AppendSpellToName(oTarget, nSpellID);
+		string sDescRef = Get2DAString("spells", "SpellDesc", nSpellID);
+		string sDesc = GetStringByStrRef(StringToInt(sDescRef));
+		SetDescription(oTarget, sDesc);	
+		if (nMaterial != 0){ SetItemBaseMaterialType(oTarget, nMaterial);}
+		
+    }
+    return oTarget;
+	
+}
 
 // *******************************************************
 // ** Craft!
@@ -551,6 +679,7 @@ int CIGetCraftGPCost(int nLevel, int nMod)
 // Georg, 2003-06-12
 // Create a new playermade potion object with properties matching nSpellID and return it
 // -----------------------------------------------------------------------------
+/*
 object CICraftBrewPotion(object oCreator, int nSpellID )
 {
 
@@ -568,6 +697,7 @@ object CICraftBrewPotion(object oCreator, int nSpellID )
 
     if (nPropID != -1)
     {
+		
         itemproperty ipProp = ItemPropertyCastSpell(nPropID,IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
         oTarget = CreateItemOnObject(X2_CI_BREWPOTION_NEWITEM_RESREF,oCreator);
         AddItemProperty(DURATION_TYPE_PERMANENT,ipProp,oTarget);
@@ -575,6 +705,7 @@ object CICraftBrewPotion(object oCreator, int nSpellID )
     }
     return oTarget;
 }
+*/
 
 
 // -----------------------------------------------------------------------------
@@ -782,9 +913,9 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
 // -----------------------------------------------------------------------------
 int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 {
-
-    object oSpellTarget = GetSpellTargetObject();
-    object oCaster      = OBJECT_SELF;
+	// the below two are arguments we're getting, why did the oc declare them again?
+    //object oSpellTarget = GetSpellTargetObject();
+   // object oCaster      = OBJECT_SELF;
     int    nID          = GetSpellId();
     int    nLevel       = CIGetSpellInnateLevel(nID,FALSE);
 
@@ -801,9 +932,19 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // check if spell is below maxlevel for brew potions, but allow cure and inflict crit
 	// if that boolean or the heal one is set to true and allow heal and harm if that boolean is set to true.
     // -------------------------------------------------------------------------
+	
+	int bSkipLevelCheck = FALSE;
+	if ((nID == ID_SPELL_CURE_CRIT || nID == ID_SPELL_INFLICT_CRIT) && (B_ALLOW_CURE_CRIT_POTS || B_ALLOW_HEAL_POTS))
+	{
+		bSkipLevelCheck = TRUE;
+	}
+	
+	if ((nID == ID_SPELL_HEAL || nID == ID_SPELL_HARM) && B_ALLOW_HEAL_POTS)
+	{
+		bSkipLevelCheck = TRUE;
+	}
 
-	if (!(((nID == ID_SPELL_CURE_CRIT || nID == ID_SPELL_INFLICT_CRIT) && (B_ALLOW_CURE_CRIT_POTS || B_ALLOW_HEAL_POTS))
-		|| ((nID == ID_SPELL_HEAL || nID == ID_SPELL_HARM) && B_ALLOW_HEAL_POTS)))
+	if (bSkipLevelCheck != TRUE)
 	{
 		if (nLevel > X2_CI_BREWPOTION_MAXLEVEL)
 		{
@@ -816,8 +957,14 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Check if the spell is allowed to be used with Brew Potions
     // -------------------------------------------------------------------------
+	
+	int bSkipAllowedCheck = FALSE;
+	
+	
+
     if (CIGetIsSpellRestrictedFromCraftFeat(nID, X2_CI_BREWPOTION_FEAT_ID))
     {
+		SendMessageToPC(GetFirstPC(), "DEBUG craft failed on allwed check line 923");
         FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_RESTRICTED_FOR_POTION, oCaster);
         return TRUE;
     }
@@ -955,7 +1102,9 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     if (GetIsObjectValid(oScroll))
     {
 		// Adding the proper item properties 
-		if ((nID == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || (nID == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT))
+		if ((nID == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
+				(nID == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
+				(nID = ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT))
 		{
 			IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
 		}
