@@ -20,6 +20,11 @@
 //:://////////////////////////////////////////////
 // ChazM 8/16/06 added workbench check to X2PreSpellCastCode()
 // ChazM 8/27/06 modified  X2PreSpellCastCode() - Fire "cast spell at" event on a workbench. 
+// FlattedFifth June 12, 2024. Added options to allow mage slayers to use potions and crafted items
+//			such as minerva's potion recipes. I think. Added a local int to crafted items in 
+//			kinc_crafting.nss the flags them as crafted and added a check here for that int.
+//			Also added boolean style integers to control what items a mage slayer can use and 3
+//			functions to discover what type of item is being used and what kind of spell it casts.
 
 
 //#include "x2_inc_itemprop" - Inherited from x2_inc_craft
@@ -29,218 +34,47 @@
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
 
+// Control what a mage slayer is allowed to use and what non-hostile spells others can use on mage slayers.
+// NOTE: Currently I don't know what the recipes minerva sells are or how they work or what base item they use,
+// so I just added a local int, "bIsCrafted" and set to TRUE on items made with recipes in kinc_crafting.nss.
 
-// Use Magic Device Check.
-// Returns TRUE if the Spell is allowed to be cast, either because the
-// character is allowed to cast it or he has won the required UMD check
-// Only active on spell scroll
+// what kind of potions can a mage slayer use?
+const int B_MAGE_SLAYER_USES_RECIPE_ITEMS = TRUE;
+const int B_MAGE_SLAYER_USES_DIVINE_POTIONS = TRUE;
+const int B_MAGE_SLAYER_USES_ARCANE_POTIONS = FALSE;
+// Can mage slayer use divine scrolls and wands? The class isn't called "Cleric Slayer" after all. Set to "no" for now
+// but like everything it's really up to Ed.
+const int B_MAGE_SLAYER_USES_DIVINE_SCROLLS = FALSE;
+const int B_MAGE_SLAYER_USES_DIVINE_WANDS = FALSE;
+// Can mage slayers cast divine spells themselves? Just because I don't think they should doesn't mean I won't make it easy
+// for someone else to allow it. 
+const int B_MAGE_SLAYERS_CAST_DIVINE_SPELLS = FALSE;
+// controls what kind of non-hostile spell other players can cast on mage slayer
+const int B_MAGE_SLAYER_BUFFED_BY_DIVINE = TRUE;
+const int B_MAGE_SLAYER_BUFFED_BY_ARCANE = FALSE;
+
+
+// function declarations
+int GetSpellIsDevine(int nSpellId);
+int GetSpellIsArcane(int nSpellId);
+int BypassMageSlayerRestriction(object oTarget);
+int GetMageSlayerAllowedItems(object oItem);
 int X2UseMagicDeviceCheck();
-
-
-// This function holds all functions that are supposed to run before the actual
-// spellscript gets run. If this functions returns FALSE, the spell is aborted
-// and the spellscript will not run
-int X2PreSpellCastCode();
-
-
-// check if the spell is prohibited from being cast on items
-// returns FALSE if the spell was cast on an item but is prevented
-// from being cast there by its corresponding entry in des_crft_spells
-// oItem - pass GetSpellTargetObject in here
-int X2CastOnItemWasAllowed(object oItem);
-
-// Sequencer Item Property Handling
-// Returns TRUE (and charges the sequencer item) if the spell
-// ... was cast on an item AND
-// ... the item has the sequencer property
-// ... the spell was non hostile
-// ... the spell was not cast from an item
-// in any other case, FALSE is returned an the normal spellscript will be run
-// oItem - pass GetSpellTargetObject in here
 int X2GetSpellCastOnSequencerItem(object oItem);
-
 int X2RunUserDefinedSpellScript();
 
-
-
-int X2UseMagicDeviceCheck()
-{
-    int nRet = ExecuteScriptAndReturnInt("x2_pc_umdcheck",OBJECT_SELF);
-    return nRet;
-}
-
-//------------------------------------------------------------------------------
-// GZ: This is a filter I added to prevent spells from firing their original spell
-// script when they were cast on items and do not have special coding for that
-// case. If you add spells that can be cast on items you need to put them into
-// des_crft_spells.2da
-//------------------------------------------------------------------------------
-int X2CastOnItemWasAllowed(object oItem)
-{
-    int bAllow = (Get2DAString(X2_CI_CRAFTING_SP_2DA,"CastOnItems",GetSpellId()) == "1");
-    if (!bAllow)
-    {
-        FloatingTextStrRefOnCreature(83453, OBJECT_SELF); // not cast spell on item
-    }
-    return bAllow;
-
-}
-
-//------------------------------------------------------------------------------
-// Execute a user overridden spell script.
-//------------------------------------------------------------------------------
-int X2RunUserDefinedSpellScript()
-{
-    // See x2_inc_switches for details on this code
-    string sScript =  GetModuleOverrideSpellscript();
-    if (sScript != "")
-    {
-        ExecuteScript(sScript,OBJECT_SELF);
-        if (GetModuleOverrideSpellScriptFinished() == TRUE)
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
+/*
+	// the below functions were commented out of the primary function so 
+	// no need to load them.
+int X2CastOnItemWasAllowed(object oItem);
+void X2BreakConcentrationSpells();
+int X2GetBreakConcentrationCondition(object oPlayer);
+void X2DoBreakConcentrationCheck();
+*/
 
 
 //------------------------------------------------------------------------------
-// Created Brent Knowles, Georg Zoeller 2003-07-31
-// Returns TRUE (and charges the sequencer item) if the spell
-// ... was cast on an item AND
-// ... the item has the sequencer property
-// ... the spell was non hostile
-// ... the spell was not cast from an item
-// in any other case, FALSE is returned an the normal spellscript will be run
-//------------------------------------------------------------------------------
-int X2GetSpellCastOnSequencerItem(object oItem)
-{
-
-    if (!GetIsObjectValid(oItem))
-    {
-        return FALSE;
-    }
-
-    int nMaxSeqSpells = IPGetItemSequencerProperty(oItem); // get number of maximum spells that can be stored
-    if (nMaxSeqSpells <1)
-    {
-        return FALSE;
-    }
-
-    if (GetIsObjectValid(GetSpellCastItem())) // spell cast from item?
-    {
-        // we allow scrolls
-        int nBt = GetBaseItemType(GetSpellCastItem());
-        if ( nBt !=BASE_ITEM_SPELLSCROLL && nBt != 105)
-        {
-            FloatingTextStrRefOnCreature(83373, OBJECT_SELF);
-            return TRUE; // wasted!
-        }
-    }
-
-    // Check if the spell is marked as hostile in spells.2da
-    int nHostile = StringToInt(Get2DAString("spells","HostileSetting",GetSpellId()));
-    if(nHostile ==1)
-    {
-        FloatingTextStrRefOnCreature(83885,OBJECT_SELF);
-        return TRUE; // no hostile spells on sequencers, sorry ya munchkins :)
-    }
-
-    int nNumberOfTriggers = GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
-    // is there still space left on the sequencer?
-    if (nNumberOfTriggers < nMaxSeqSpells)
-    {
-        // success visual and store spell-id on item.
-        effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
-        nNumberOfTriggers++;
-        //NOTE: I add +1 to the SpellId to spell 0 can be used to trap failure
-        int nSID = GetSpellId()+1;
-        SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
-        SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
-        FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
-    }
-    else
-    {
-        FloatingTextStrRefOnCreature(83859,OBJECT_SELF);
-    }
-
-    return TRUE; // in any case, spell is used up from here, so do not fire regular spellscript
-}
-
-//------------------------------------------------------------------------------
-// * This is our little concentration system for black blade of disaster
-// * if the mage tries to cast any kind of spell, the blade is signaled an event to die
-//------------------------------------------------------------------------------
-void X2BreakConcentrationSpells()
-{
-    // * At the moment we got only one concentration spell, black blade of disaster
-
-    object oAssoc = GetAssociate(ASSOCIATE_TYPE_SUMMONED);
-    if (GetIsObjectValid(oAssoc) && GetIsPC(OBJECT_SELF)) // only applies to PCS
-    {
-        if(GetTag(oAssoc) == "x2_s_bblade") // black blade of disaster
-        {
-            if (GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
-            {
-                SignalEvent(oAssoc,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
-            }
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-// being hit by any kind of negative effect affecting the caster's ability to concentrate
-// will cause a break condition for concentration spells
-//------------------------------------------------------------------------------
-int X2GetBreakConcentrationCondition(object oPlayer)
-{
-     effect e1 = GetFirstEffect(oPlayer);
-     int nType;
-     int bRet = FALSE;
-     while (GetIsEffectValid(e1) && !bRet)
-     {
-        nType = GetEffectType(e1);
-
-        if (nType == EFFECT_TYPE_STUNNED || nType == EFFECT_TYPE_PARALYZE ||
-            nType == EFFECT_TYPE_SLEEP || nType == EFFECT_TYPE_FRIGHTENED ||
-            nType == EFFECT_TYPE_PETRIFY || nType == EFFECT_TYPE_CONFUSED ||
-            nType == EFFECT_TYPE_DOMINATED || nType == EFFECT_TYPE_POLYMORPH)
-         {
-           bRet = TRUE;
-         }
-                    e1 = GetNextEffect(oPlayer);
-     }
-    return bRet;
-}
-
-void X2DoBreakConcentrationCheck()
-{
-    object oMaster = GetMaster();
-    if (GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
-    {
-         if (GetIsObjectValid(oMaster))
-         {
-            int nAction = GetCurrentAction(oMaster);
-            // master doing anything that requires attention and breaks concentration
-            if (nAction == ACTION_DISABLETRAP || nAction == ACTION_TAUNT ||
-                nAction == ACTION_PICKPOCKET || nAction ==ACTION_ATTACKOBJECT ||
-                nAction == ACTION_COUNTERSPELL || nAction == ACTION_FLAGTRAP ||
-                nAction == ACTION_CASTSPELL || nAction == ACTION_ITEMCASTSPELL)
-            {
-                SignalEvent(OBJECT_SELF,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
-            }
-            else if (X2GetBreakConcentrationCondition(oMaster))
-            {
-                SignalEvent(OBJECT_SELF,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
-            }
-         }
-    }
-}
-
-//------------------------------------------------------------------------------
+// PRIMARY FUNCTION
 // if FALSE is returned by this function, the spell will not be cast
 // the order in which the functions are called here DOES MATTER, changing it
 // WILL break the crafting subsystems
@@ -248,6 +82,7 @@ void X2DoBreakConcentrationCheck()
 int X2PreSpellCastCode()
 {
    object oTarget = GetSpellTargetObject();
+   
    int nContinue;
 
    //---------------------------------------------------------------------------
@@ -265,19 +100,17 @@ int X2PreSpellCastCode()
        }
    }
 
-   //---------------------------------------------------------------------------
-   // Break any spell require maintaining concentration (only black blade of
-   // disaster)
-   // /*REM*/ X2BreakConcentrationSpells();
-   //---------------------------------------------------------------------------
-   
 
-   // Returns false if the user can't cast spells and the "spell" isn't cast from a feat. -Electrohydra
-   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE) && GetSpellFeatId() == 0)
+   // MAGE SLAYER CHECK
+   // first let's just skip this if neither the caster nor the target are a mage slayer and move
+   // all of the mage slayer logic out to its own function so as not to clutter main() for devs trying to read
+   // something else
+   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE) || GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget))
    {
-   		SendMessageToPC(OBJECT_SELF, "You can't cast spells.");
-		return FALSE;
+		if (BypassMageSlayerRestriction(oTarget) != TRUE){ return FALSE; } 
    }
+   
+   
    
    //---------------------------------------------------------------------------
    // Run use magic device skill check
@@ -360,3 +193,348 @@ int X2PreSpellCastCode()
 	
    return nContinue;
 }
+
+
+
+int GetSpellIsDivine(int nSpellId)
+{
+	int bRet = FALSE;
+	if (IsOnSpellList(nSpellId, CLASS_TYPE_CLERIC) ||
+		IsOnSpellList(nSpellId, CLASS_TYPE_DRUID) ||
+		IsOnSpellList(nSpellId, CLASS_TYPE_PALADIN) ||
+		IsOnSpellList(nSpellId, CLASS_TYPE_RANGER))
+		{
+		bRet = TRUE;
+		}
+	return bRet;
+}
+
+int GetSpellIsArcane(int nSpellId)
+{
+	int bRet = FALSE;
+	if (IsOnSpellList(nSpellId, CLASS_TYPE_BARD) ||
+		IsOnSpellList(nSpellId, CLASS_TYPE_WIZARD) ||
+		IsOnSpellList(nSpellId, CLASS_TYPE_WARLOCK))
+		{
+		bRet = TRUE;
+		}
+	return bRet;
+}
+
+
+	// Returns false if the user can't cast spells and the "spell" isn't cast from a feat. -Electrohydra
+	// Electrohydra's code completely disallowed all spells from any source, including healing potions
+	// and I felt that was too crippling for the class so I added functionality to allow mageslayers to use some potions
+	// and abilities, which ones are controlled by boolean style integers at the top of this file, and added ability to 
+	// control what sort of non-hostile spell other players can cast on mage slayer. -FlattedFifth
+int BypassMageSlayerRestriction(object oTarget)
+{
+	// let's set up the variables we need
+	object oItem = GetSpellCastItem();
+	int nItem = GetBaseItemType(oItem);
+	int bCanCastSpell = FALSE;
+	string sMessage;
+	
+	object oCaster;
+	if (oItem == OBJECT_INVALID){ oCaster = OBJECT_SELF; } else { oCaster = GetItemActivator();}
+	
+	int nSpellId = GetSpellId();
+	if (nSpellId == IP_CONST_CASTSPELL_UNIQUE_POWER || nSpellId == IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY)
+	{
+		nSpellId = GetLocalInt(oItem, "nSpellId");
+	}
+	
+	int bDivineSpell = GetSpellIsDivine(nSpellId);
+	int bArcaneSpell = GetSpellIsArcane(nSpellId);
+	
+	// potion base item types
+	int nSelfOnlyPotion = 49;
+	int nTargetablePotion = 104;
+	int nOtherPotion = 101;
+	
+	// scroll base item types
+	int nScrolla = 75;
+	int nScrollb = 102;
+	int nScrollc = 105;
+	
+	//wand base item types
+	int nWanda = 46;
+	int nWandb = 103;
+	int nWandc = 106;
+	
+	
+	// if the caster / item activator is the one who is a mage slayer
+	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE))
+	{	
+		sMessage = "You cannot cast spells or use items of this type.";
+		
+		// if the spell is not being cast from an item and therefore the mage slayer is casting it directly
+		if (oItem == OBJECT_INVALID)
+		{
+			// if the user is using a special "unique power self only" potion activated in the on item activated
+			// event, then that registers first and then spellhook thinks they're casting the spell themselves,
+			// which technically they are. So that script sets a local int on the character to let the spellhook
+			// know to let it pass. Here we'll set it to false and allow it past.
+			if (GetLocalInt(oCaster, "UsingPotion"))
+			{
+				SetLocalInt(oCaster, "UsingPotion", FALSE);
+				bCanCastSpell = TRUE;
+			}
+			// if the spell is from a feat, allow it
+			if (GetSpellFeatId() != -1 && GetSpellFeatId() != 0){ bCanCastSpell = TRUE;}
+			
+			if (bDivineSpell && B_MAGE_SLAYERS_CAST_DIVINE_SPELLS){ bCanCastSpell = TRUE;}
+		
+		}
+		else // the mage slayer is casting a spell from an item
+		{
+			// if the spell is from an item crafted with recipes in kinc_crafting.nss
+			if (GetLocalInt(oItem, "bIsCrafted") && B_MAGE_SLAYER_USES_RECIPE_ITEMS){ bCanCastSpell = TRUE;}
+			
+			// if the spell is from a potion
+			if (nItem == nSelfOnlyPotion || nItem == nTargetablePotion || nItem == nOtherPotion)
+			{
+				if (bDivineSpell && B_MAGE_SLAYER_USES_DIVINE_POTIONS){ bCanCastSpell = TRUE;}
+				if (bArcaneSpell && B_MAGE_SLAYER_USES_ARCANE_POTIONS){ bCanCastSpell = TRUE;}
+			}
+			if (nItem == nScrolla || nItem == nScrollb || nItem == nScrollc)
+			{
+				if (bDivineSpell && B_MAGE_SLAYER_USES_DIVINE_SCROLLS){ bCanCastSpell = TRUE;}
+			}
+			if (nItem == nWanda || nItem == nWandb || nItem == nWandc)
+			{
+				if (bDivineSpell && B_MAGE_SLAYER_USES_DIVINE_WANDS){ bCanCastSpell = TRUE;}
+			}
+		}
+	}
+	else // the mage slayer is the target but isn't the caster
+	{
+		sMessage = "Spells or items of this type cannot affect your target.";
+		// a hostile spell is allowed ofc
+		if (StringToInt(Get2DAString("spells", "HostileSetting", nSpellId)) == 1)
+		{ 	
+			bCanCastSpell = TRUE;
+		}
+		else 
+		{
+			if (bDivineSpell && B_MAGE_SLAYER_BUFFED_BY_DIVINE){ bCanCastSpell = TRUE;}
+			if (bArcaneSpell && B_MAGE_SLAYER_BUFFED_BY_ARCANE){ bCanCastSpell = TRUE;}
+		}
+	}
+	
+	// check for further allowed items, but only bother if we haven't allowed the spell
+	// already AND there actually is an item involved.
+	if (bCanCastSpell == FALSE && oItem != OBJECT_INVALID)
+	{
+		bCanCastSpell = GetMageSlayerAllowedItems(oItem);
+	}
+		
+	if (bCanCastSpell == FALSE)
+	{
+		SendMessageToPC(oCaster, sMessage);
+	}
+	return bCanCastSpell;
+}
+
+// helper function to get items that mage slayer can use. If there are other items
+// we want mage slayer to use, add their resref strings here.
+int GetMageSlayerAllowedItems(object oItem)
+{
+	string sRes = GetResRef(oItem);
+	int bCanUse = FALSE;
+	
+	if (sRes == "nx2_misc_lifecoin"){ bCanUse = TRUE; }
+	if (sRes == "ps_miscthin_bludimndwhetstone"){bCanUse = TRUE; }
+	if (FindSubString(sRes, "i_ps_itemeditor") != -1){ bCanUse = TRUE;}
+	if (FindSubString(sRes, "ps_grenade") != -1){ bCanUse = TRUE;}
+	if (FindSubString(sRes, "it_herb") != -1){ bCanUse = TRUE;}
+	if (FindSubString(sRes, "ps_food") != -1){ bCanUse = TRUE;}
+	if (FindSubString(sRes, "nx2_r_") != -1){ bCanUse = TRUE;}
+	return bCanUse;
+}
+
+
+// Use Magic Device Check.
+// Returns TRUE if the Spell is allowed to be cast, either because the
+// character is allowed to cast it or he has won the required UMD check
+// Only active on spell scroll
+int X2UseMagicDeviceCheck()
+{
+    int nRet = ExecuteScriptAndReturnInt("x2_pc_umdcheck",OBJECT_SELF);
+    return nRet;
+}
+
+//------------------------------------------------------------------------------
+// Execute a user overridden spell script.
+//------------------------------------------------------------------------------
+int X2RunUserDefinedSpellScript()
+{
+    // See x2_inc_switches for details on this code
+    string sScript =  GetModuleOverrideSpellscript();
+    if (sScript != "")
+    {
+        ExecuteScript(sScript,OBJECT_SELF);
+        if (GetModuleOverrideSpellScriptFinished() == TRUE)
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+
+//------------------------------------------------------------------------------
+// Created Brent Knowles, Georg Zoeller 2003-07-31
+// Returns TRUE (and charges the sequencer item) if the spell
+// ... was cast on an item AND
+// ... the item has the sequencer property
+// ... the spell was non hostile
+// ... the spell was not cast from an item
+// in any other case, FALSE is returned an the normal spellscript will be run
+//------------------------------------------------------------------------------
+int X2GetSpellCastOnSequencerItem(object oItem)
+{
+
+    if (!GetIsObjectValid(oItem))
+    {
+        return FALSE;
+    }
+
+    int nMaxSeqSpells = IPGetItemSequencerProperty(oItem); // get number of maximum spells that can be stored
+    if (nMaxSeqSpells <1)
+    {
+        return FALSE;
+    }
+
+    if (GetIsObjectValid(GetSpellCastItem())) // spell cast from item?
+    {
+        // we allow scrolls
+        int nBt = GetBaseItemType(GetSpellCastItem());
+        if ( nBt !=BASE_ITEM_SPELLSCROLL && nBt != 105)
+        {
+            FloatingTextStrRefOnCreature(83373, OBJECT_SELF);
+            return TRUE; // wasted!
+        }
+    }
+
+    // Check if the spell is marked as hostile in spells.2da
+    int nHostile = StringToInt(Get2DAString("spells","HostileSetting",GetSpellId()));
+    if(nHostile ==1)
+    {
+        FloatingTextStrRefOnCreature(83885,OBJECT_SELF);
+        return TRUE; // no hostile spells on sequencers, sorry ya munchkins :)
+    }
+
+    int nNumberOfTriggers = GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
+    // is there still space left on the sequencer?
+    if (nNumberOfTriggers < nMaxSeqSpells)
+    {
+        // success visual and store spell-id on item.
+        effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
+        nNumberOfTriggers++;
+        //NOTE: I add +1 to the SpellId to spell 0 can be used to trap failure
+        int nSID = GetSpellId()+1;
+        SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
+        SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
+        FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
+    }
+    else
+    {
+        FloatingTextStrRefOnCreature(83859,OBJECT_SELF);
+    }
+
+    return TRUE; // in any case, spell is used up from here, so do not fire regular spellscript
+}
+
+//  All of the remaining functions had been commented out of the main function so there's no sense in loading them
+
+/*
+
+//------------------------------------------------------------------------------
+// GZ: This is a filter I added to prevent spells from firing their original spell
+// script when they were cast on items and do not have special coding for that
+// case. If you add spells that can be cast on items you need to put them into
+// des_crft_spells.2da
+//------------------------------------------------------------------------------
+int X2CastOnItemWasAllowed(object oItem)
+{
+    int bAllow = (Get2DAString(X2_CI_CRAFTING_SP_2DA,"CastOnItems",GetSpellId()) == "1");
+    if (!bAllow)
+    {
+        FloatingTextStrRefOnCreature(83453, OBJECT_SELF); // not cast spell on item
+    }
+    return bAllow;
+
+}
+
+//------------------------------------------------------------------------------
+// * This is our little concentration system for black blade of disaster
+// * if the mage tries to cast any kind of spell, the blade is signaled an event to die
+//------------------------------------------------------------------------------
+void X2BreakConcentrationSpells()
+{
+    // * At the moment we got only one concentration spell, black blade of disaster
+
+    object oAssoc = GetAssociate(ASSOCIATE_TYPE_SUMMONED);
+    if (GetIsObjectValid(oAssoc) && GetIsPC(OBJECT_SELF)) // only applies to PCS
+    {
+        if(GetTag(oAssoc) == "x2_s_bblade") // black blade of disaster
+        {
+            if (GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
+            {
+                SignalEvent(oAssoc,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+// being hit by any kind of negative effect affecting the caster's ability to concentrate
+// will cause a break condition for concentration spells
+//------------------------------------------------------------------------------
+int X2GetBreakConcentrationCondition(object oPlayer)
+{
+     effect e1 = GetFirstEffect(oPlayer);
+     int nType;
+     int bRet = FALSE;
+     while (GetIsEffectValid(e1) && !bRet)
+     {
+        nType = GetEffectType(e1);
+
+        if (nType == EFFECT_TYPE_STUNNED || nType == EFFECT_TYPE_PARALYZE ||
+            nType == EFFECT_TYPE_SLEEP || nType == EFFECT_TYPE_FRIGHTENED ||
+            nType == EFFECT_TYPE_PETRIFY || nType == EFFECT_TYPE_CONFUSED ||
+            nType == EFFECT_TYPE_DOMINATED || nType == EFFECT_TYPE_POLYMORPH)
+         {
+           bRet = TRUE;
+         }
+                    e1 = GetNextEffect(oPlayer);
+     }
+    return bRet;
+}
+
+void X2DoBreakConcentrationCheck()
+{
+    object oMaster = GetMaster();
+    if (GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
+    {
+         if (GetIsObjectValid(oMaster))
+         {
+            int nAction = GetCurrentAction(oMaster);
+            // master doing anything that requires attention and breaks concentration
+            if (nAction == ACTION_DISABLETRAP || nAction == ACTION_TAUNT ||
+                nAction == ACTION_PICKPOCKET || nAction ==ACTION_ATTACKOBJECT ||
+                nAction == ACTION_COUNTERSPELL || nAction == ACTION_FLAGTRAP ||
+                nAction == ACTION_CASTSPELL || nAction == ACTION_ITEMCASTSPELL)
+            {
+                SignalEvent(OBJECT_SELF,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
+            }
+            else if (X2GetBreakConcentrationCondition(oMaster))
+            {
+                SignalEvent(OBJECT_SELF,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
+            }
+         }
+    }	
+}
+*/

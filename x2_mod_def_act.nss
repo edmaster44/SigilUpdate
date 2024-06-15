@@ -17,21 +17,8 @@
 #include "x2_inc_switches"
 #include "kinc_crafting"
 
-const int ID_CRAFTED_POTION = 49;
-const int ID_MAT_HARM = 18;
-const int ID_MAT_INFL_MINOR = 13;
-const int ID_MAT_INFL_LIGHT = 14;
-const int ID_MAT_INFL_MOD = 15;
-const int ID_MAT_INFL_SER = 16;
-const int ID_MAT_INFL_CRIT = 17;
 
-const int ID_SPELL_HARM = 77;
-const int ID_SPELL_INFL_MINOR = 431;
-const int ID_SPELL_INFL_LIGHT = 432;
-const int ID_SPELL_INFL_MOD = 433;
-const int ID_SPELL_INFL_SER = 434;
-const int ID_SPELL_INFL_CRIT = 435;
-
+const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
 
 
 void main()
@@ -40,29 +27,26 @@ void main()
     object oItem = GetItemActivated();
 	object oPC = GetItemActivator();
 	int nItemID = GetBaseItemType(oItem);
+	int ID_CRAFTED_POTION = 49;
+
 	
 	// workaround for inflict wounds potions not working in no pvp areas due to the hostile flag.
 	// the craft potion feat now creates these potions with UNIQUE_POWER_SELF_ONLY spell, so that they
-	// register here, and the material is set so that the potion is identifiable even if the name and 
-	// description is changed.
-	if (nItemID == ID_CRAFTED_POTION)
+	// register here, and the material is set so that the potion is identifiable to players even if the 
+	// name and description is changed. 
+	// June 13, 2024, I changed the potion crafting to include the spell id as a local integer so I
+	// simplified to just retrieve the spell id
+	if (nItemID == ID_CRAFTED_POTION && GetLocalInt(oItem, "nSpellId") != 0)
 	{
-		int nSpellID = 0;
+		int ID_MAT_INFL_MINOR = 13;
+		int ID_MAT_NEG_ENERGY_RAY = 19;
+		int nSpellId = 0;
 		int nMaterial = GetItemBaseMaterialType(oItem);
-		switch (nMaterial)
+		if (nMaterial >= ID_MAT_INFL_MINOR && nMaterial <= ID_MAT_NEG_ENERGY_RAY){ nSpellId = GetLocalInt(oItem, "nSpellId");}
+		if (nSpellId != 0)
 		{
-			case ID_MAT_HARM: nSpellID = ID_SPELL_HARM; break;
-			case ID_MAT_INFL_MINOR: nSpellID = ID_SPELL_INFL_MINOR; break;
-			case ID_MAT_INFL_LIGHT: nSpellID = ID_SPELL_INFL_LIGHT; break;
-			case ID_MAT_INFL_MOD: nSpellID = ID_SPELL_INFL_MOD; break;
-			case ID_MAT_INFL_SER: nSpellID = ID_SPELL_INFL_SER; break;
-			case ID_MAT_INFL_CRIT: nSpellID = ID_SPELL_INFL_CRIT; break;
-			default: nSpellID = 0; break;
-		}
-		
-		if (nSpellID != 0)
-		{
-			AssignCommand(oPC, ActionCastSpellAtObject(nSpellID, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+			if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)){ SetLocalInt(oPC, "UsingPotion", TRUE);}
+			AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 		}
 	}
 

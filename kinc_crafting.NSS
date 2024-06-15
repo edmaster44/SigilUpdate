@@ -179,21 +179,21 @@ int CheckItemReagents(int nIndex, object oPC, string sTable)
 
 int CheckCraftingSpellUses(int nIndex, object oPC, string sTable)
 {
-	string sSpellIDs = Get2DAString(sTable, "COST_SPELLS", nIndex);
-	string sParam = GetStringParam(sSpellIDs, 0);
+	string sSpellIds = Get2DAString(sTable, "COST_SPELLS", nIndex);
+	string sParam = GetStringParam(sSpellIds, 0);
 	int i=0;
 
 	while(sParam != "")
 	{
-		int nSpellID = StringToInt(sParam);
+		int nSpellId = StringToInt(sParam);
 		int bSpellValid = FALSE;							//Initialise the spell test to FALSE
-		if(GetHasSpell(nSpellID, oPC))
+		if(GetHasSpell(nSpellId, oPC))
 			bSpellValid = TRUE;								//If I've got the spell, then we're golden.
 		
 		object oFM = GetFirstFactionMember(oPC, FALSE);
 		while(GetIsObjectValid(oFM) && bSpellValid != TRUE)	//Otherwise, we iterate through the party until we find someone who has it (or have
 		{													//iterated through the entire party).
-			if(GetHasSpell(nSpellID, oFM))
+			if(GetHasSpell(nSpellId, oFM))
 				bSpellValid = TRUE;
 				
 			oFM = GetNextFactionMember(oPC, FALSE);
@@ -201,13 +201,13 @@ int CheckCraftingSpellUses(int nIndex, object oPC, string sTable)
 		
 		if (bSpellValid != TRUE)							//If we still haven't found someone who has this spell, we need to fail out at this point.
 		{
-			string sSpellName = GetStringByStrRef(Get2DAInt("spells", "Name", nSpellID));
+			string sSpellName = GetStringByStrRef(Get2DAInt("spells", "Name", nSpellId));
 			DoCraftingFailureFeedback(CRAFTING_FAILURE_SPELL, oPC, sSpellName);
 			return FALSE;
 		}
 		++i;
 		
-		sParam = GetStringParam(sSpellIDs, i);
+		sParam = GetStringParam(sSpellIds, i);
 	}
 	PrettyDebug("CheckCraftingSpellUses returning TRUE");
 	return TRUE;
@@ -629,27 +629,27 @@ void ConsumeItemReagents(int nIndex, object oPC, string sTable)
 
 void ConsumeCraftingSpellUse(int nIndex, object oPC, string sTable)
 {
-	string sSpellIDs = Get2DAString(sTable, "COST_SPELLS", nIndex);
-	string sParam = GetStringParam(sSpellIDs, 0);
+	string sSpellIds = Get2DAString(sTable, "COST_SPELLS", nIndex);
+	string sParam = GetStringParam(sSpellIds, 0);
 	int i=0;
 	
 	while(sParam != "")
 	{
 		int nSpellDeducted = FALSE;
-		int nSpellID = StringToInt(sParam);
+		int nSpellId = StringToInt(sParam);
 				
-		if(GetHasSpell(nSpellID, oPC))
+		if(GetHasSpell(nSpellId, oPC))
 		{
-			DecrementRemainingSpellUses(oPC, nSpellID);
+			DecrementRemainingSpellUses(oPC, nSpellId);
 			nSpellDeducted = TRUE;
 		}
 		
 		object oFM = GetFirstFactionMember(oPC, FALSE);
 		while(GetIsObjectValid(oFM) && nSpellDeducted != TRUE)
 		{
-			if(GetHasSpell(nSpellID, oFM) && !GetIsOwnedByPlayer(oFM))		//Don't use another player's spells in a MP game.
+			if(GetHasSpell(nSpellId, oFM) && !GetIsOwnedByPlayer(oFM))		//Don't use another player's spells in a MP game.
 			{
-				DecrementRemainingSpellUses(oPC, nSpellID);
+				DecrementRemainingSpellUses(oPC, nSpellId);
 				nSpellDeducted = TRUE;
 			}	
 			oFM = GetNextFactionMember(oPC, FALSE);
@@ -657,7 +657,7 @@ void ConsumeCraftingSpellUse(int nIndex, object oPC, string sTable)
 		
 		++i;
 		
-		sParam = GetStringParam(sSpellIDs, i);
+		sParam = GetStringParam(sSpellIds, i);
 	}
 }
 
@@ -675,6 +675,9 @@ void CreateCraftedItem(int nIndex, object oPC, string sTable)
 		{
 			object oItem = CreateItemOnObject(sParam, oPC, nNum);
 			SetIdentified(oItem, TRUE);
+			// Setting a local int on the resulting item so that the spellhook can see that it's 
+			// a crafted item, for allowing mageslayer to use it.
+			SetLocalInt(oItem, "bIsCrafted", TRUE);
 		
 			i += 2;												//We want to increment i by 2 in this case to skip the iterator.
 		}
@@ -683,9 +686,11 @@ void CreateCraftedItem(int nIndex, object oPC, string sTable)
 		{
 			object oItem = CreateItemOnObject(sParam, oPC);
 			SetIdentified(oItem, TRUE);
+			SetLocalInt(oItem, "bIsCrafted", TRUE);
 			++i;
 		}
-		
+
+
 		sParam = GetStringParam(sItems, i);
 	}
 	

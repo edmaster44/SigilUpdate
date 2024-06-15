@@ -229,7 +229,7 @@ const int X2_CI_MODMODE_WEAPON = 2;
 //--------------------------------------------------------------------
 // *  Returns the innate level of a spell. If bDefaultZeroToOne is given
 // *  Level 0 spell will be returned as level 1 spells
-int   CIGetSpellInnateLevel(int nSpellID, int bDefaultZeroToOne = FALSE);
+int   CIGetSpellInnateLevel(int nSpellId, int bDefaultZeroToOne = FALSE);
 
 string GetClassSpellLevelColumn(int iClass);
 int GetSpellLevelForClass(int iSpell, int iClass);
@@ -257,14 +257,14 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster);
 
 // *******************************************************
 // ** Craft!
-// *   Create a new potion item based on the spell nSpellID  on the creator
-object CICraftBrewPotion(object oCreator, int nSpellID );
+// *   Create a new potion item based on the spell nSpellId  on the creator
+object CICraftBrewPotion(object oCreator, int nSpellId );
 
-// *   Create a new scroll item based on the spell nSpellID on the creator
-object CICraftScribeScroll(object oCreator, int nSpellID);
+// *   Create a new scroll item based on the spell nSpellId on the creator
+object CICraftScribeScroll(object oCreator, int nSpellId);
 
-// *   Create a new wand item based on the spell nSpellID on the creator
-object CICraftCraftWand(object oCreator, int nSpellID );
+// *   Create a new wand item based on the spell nSpellId on the creator
+object CICraftCraftWand(object oCreator, int nSpellId );
 
 
 // *  Checks if the caster intends to use his item creation feats and
@@ -283,13 +283,13 @@ int   CIGetSpellWasUsedForItemCreation(object oSpellTarget);
 object CIUseCraftItemSkill(object oPC, int nSkill, string sResRef, int nDC, object oContainer = OBJECT_INVALID);
 
 // *  Returns TRUE if a spell is prevented from being used with one of the crafting feats
-int   CIGetIsSpellRestrictedFromCraftFeat(int nSpellID, int nFeatID);
+int   CIGetIsSpellRestrictedFromCraftFeat(int nSpellId, int nFeatID);
 
 // *  Return craftitemstructdata
 struct craft_struct CIGetCraftItemStructFrom2DA(string s2DA, int nRow, int nItemNo);
 
 // Appends the spell name to the object's name
-void AppendSpellToName(object oObject, int nSpellID);
+void AppendSpellToName(object oObject, int nSpellId);
 
 
 
@@ -300,19 +300,19 @@ void AppendSpellToName(object oObject, int nSpellID);
 
 // *  Returns the innate level of a spell. If bDefaultZeroToOne is given
 // *  Level 0 spell will be returned as level 1 spells
-int CIGetSpellInnateLevel(int nSpellID, int bDefaultZeroToOne = FALSE)
+int CIGetSpellInnateLevel(int nSpellId, int bDefaultZeroToOne = FALSE)
 {
-    //int nRet = StringToInt(Get2DAString(X2_CI_CRAFTING_SP_2DA, "Level", nSpellID));
+    //int nRet = StringToInt(Get2DAString(X2_CI_CRAFTING_SP_2DA, "Level", nSpellId));
 	// Instead of using innate level (a single level always used for a spell) we now use actual level.
 		
 	// The level of a spell is dependent on what class casts it.  For example
 	// Dominate Person is level 5 when cast by Wizard or Sorceror, but 4th level
 	// when cast by a Bard.  The spell can't be cast by any other class.
-   	int nRet = GetSpellLevel(nSpellID);
+   	int nRet = GetSpellLevel(nSpellId);
 	//int nClass = GetLastSpellCastClass();
-   	//int nRet = GetSpellLevelForClass(nSpellID, nClass);
+   	//int nRet = GetSpellLevelForClass(nSpellId, nClass);
 	
-	//PrettyDebug ("CIGetSpellInnateLevel: For Spell " + IntToString(nSpellID) + " with last spell clast class of " +
+	//PrettyDebug ("CIGetSpellInnateLevel: For Spell " + IntToString(nSpellId) + " with last spell clast class of " +
 	//			 IntToString(nClass) + " Level is: " + IntToString(nRet));
 	
 	if (bDefaultZeroToOne == TRUE)
@@ -510,9 +510,9 @@ int CIGetIsCraftFeatBaseItem(object oItem)
       return FALSE;
 }
 
-void AppendSpellToName(object oObject, int nSpellID)
+void AppendSpellToName(object oObject, int nSpellId)
 {
-	int iSpellStringRef = StringToInt(Get2DAString("spells","Name", nSpellID));
+	int iSpellStringRef = StringToInt(Get2DAString("spells","Name", nSpellId));
 	if (iSpellStringRef == 0)
 		return;
 
@@ -554,118 +554,166 @@ int CIGetCraftGPCost(int nLevel, int nMod)
 
 }
 
-// Decide whether to use the base item potion that can target others or the one that can target only the 
-// use based on what spell the potion will cast.
-int GetPotionCanTargetOthers(int nSpellID)
-{
-	int bRet = FALSE;
-	switch (nSpellID)
-	{
-		case 486: bRet = TRUE; break; // stone to flesh, if we make that a potion
-		case 149: bRet = TRUE; break;// remove paralysis
-		case 148: bRet = TRUE; break;// remove fear
-		case 142: bRet = TRUE; break;//raise dead, if we make that a potion
-		default: bRet = FALSE; break;
-	}
-	return bRet;
-}
+
 
 // New Version of crafting a potion. In order to make player-crafted potions auto target the user like default
 // potions do, in most cases we will now spawn a default potion item, remove its original properies, and rename it.
 // We will still use the potion that can target others in a couple cases where doing otherwise wouldn't make 
 // sense, via the function just above this comment. -FlattedFifth, June 12, 2024
-object CICraftBrewPotion(object oCreator, int nSpellID )
+object CICraftBrewPotion(object oCreator, int nSpellId )
 {
 
-/*
-// MAP 3/24/2009
-// Set the base material type of oItem to nmaterialType, which must refer to a valid
-// iprp_materials.2da row.
-void SetItemBaseMaterialType(object oItem, int nMaterialType);
-
-IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY
-*/
 
 	int nPropID;
 	object oTarget;
-	int nMaterial = 0;
+	int nIcon;
+	int nMaterial;
 	// potions of inflict and harm cannot be used by undead pcs in no pvp areas because of the hostile flag in 
-	// spells.2da, so we bypass it using the on activate item script. We can't use the spellhook because that
-	// doesn't catch the spell until it's being cast, and the pvp settings won't let it even start to be cast.
-	// Potions also don't normally register to the On Activate Item event, UNLESS the spell is a unique power.
-	// So we set the spell to that, and then we set the base material to a new custom one to identify the potion
-	// to the player even if the potion's creator changes the name and description. We'll also use that material
-	// to identify the spell to the x2_mod_def_act.nss instead of a local integer since the material is going To
-	// be there anyway
-	switch (nSpellID)
+	// spells.2da, but making non-hostile versions didn't work all by itself because adding the appropriate lines
+	// to iprp_spells.2da caused errors. Instead, we're going to do 2 things: 1, we change the spell id to the
+	// non hostile versions for the potions (and only the potions), and 2, we make the neg energy potions cast 
+	// the spell UNIQUE_POWER_SELF_ONLY so that we don't need an iprp_spells.2da entry at all. Instead, with
+	// UNIQUE_POWER_SELF_ONLY, using the potion registers on the On Item Activated event (potions don't normally)
+	// so that x2_mod_def_act.nss will catch the potion use and make the player using the potion cast the spell
+	// on themselves even if they don't know the spell. And by using the non-hostile version I created, the drinker
+	// of the potion will not have spell resistence trigger. We're also setting a custom material on these negative
+	// energy potion so that, if one player makes the potion and then changes its name and desc, another player getting 
+	// the potion can still plainly see what the potion is. We're also setting the icons to black ones for these potions.
+	
+	switch (nSpellId)
 	{
 		case 77: // harm
-			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nIcon = 237;
 			nMaterial = 18;
 			break;
+		case 371: // negative energy ray
+			nIcon = 238;
+			nMaterial = 19;
+			break;
 		case 431: // inflict minor
-			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nIcon = 239;
 			nMaterial = 13;
 			break;
 		case 432: // inflict light
-			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nIcon = 238;
 			nMaterial = 14;
 			break;
 		case 433: // inflict moderate
-			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nIcon = 1194;
 			nMaterial = 15;
 			break;
 		case 434: // inflict serious
-			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nIcon = 237;
 			nMaterial = 16;
 			break;
 		case 435: // inflict critical
-			nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+			nIcon = 237;
 			nMaterial = 17;
 			break;
 		default:
-			nPropID = IPGetIPConstCastSpellFromSpellID(nSpellID);
+			nIcon = 0;
+			nMaterial = 0;
 			break;		
 	}
+	
+	if (nMaterial == 0)
+	{
+		nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
+		int nSpellLvl = StringToInt(Get2DAString("spells", "Innate", nSpellId));
+		StringToInt(Get2DAString("spells", "Name", nSpellId));
+		string sSpellName = GetStringByStrRef(StringToInt(Get2DAString("spells", "Name", nSpellId)));
+		if (FindSubString(sSpellName, "Cure") != -1 || FindSubString(sSpellName, "Heal") != -1)
+		{
+			switch (nSpellLvl) // blue bottle icons
+			{
+				case 0: case 1: nIcon = 1669; break; 
+				case 2: nIcon = 1668; break;
+				default: nIcon = 1670; break;
+			}
+		}
+		else if (IsOnSpellList(nSpellId, CLASS_TYPE_DRUID) || IsOnSpellList(nSpellId, CLASS_TYPE_RANGER))
+		{
+			switch (nSpellLvl) // green bottle icons
+			{
+				case 0: nIcon = 247; break; 
+				case 1: nIcon = 246; break;
+				case 2: nIcon = 1195; break;
+				default: nIcon = 248; break;
+			}
+		}
+		else if (IsOnSpellList(nSpellId, CLASS_TYPE_CLERIC) || IsOnSpellList(nSpellId, CLASS_TYPE_PALADIN))
+		{
+			switch (nSpellLvl) // white bottle icons
+			{
+				case 0: nIcon = 241; break; 
+				case 1: nIcon = 240; break;
+				case 2: nIcon = 1198; break;
+				default: nIcon = 242; break;
+			}
+		}
+		else if (IsOnSpellList(nSpellId, CLASS_TYPE_WIZARD) || IsOnSpellList(nSpellId, CLASS_TYPE_BARD))
+		{
+			switch (nSpellLvl) // purple bottle icons
+			{
+				case 0: nIcon = 235; break; 
+				case 1: nIcon = 236; break;
+				case 2: nIcon = 1197; break;
+				default: nIcon = 234; break;
+			}
+		}
+		else
+		{
+			switch (nSpellLvl) // orange bottle icons
+			{
+				case 0: nIcon = 245; break; 
+				case 1: nIcon = 244; break;
+				case 2: nIcon = 1196; break;
+				default: nIcon = 243; break;
+			}
+		}
+	}
+	else
+	{
+		nPropID = IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY;
+	}
+	
 
 
 	
-	if (nPropID == 0 && nSpellID != 0)
+	if (nPropID == 0 && nSpellId != 0)
     {
-		SendMessageToPC(GetFirstPC(), "DEBUG: Failed at CICraftBrewPotion due to x2_inc_craft line 620");
-        FloatingTextStrRefOnCreature(84544,oCreator);
+		FloatingTextStrRefOnCreature(84544,oCreator);
         return OBJECT_INVALID;
     }
 
     if (nPropID != -1)
     {
-		int bCanTargetOthers = GetPotionCanTargetOthers(nSpellID);
-		
+		// create a base game heal potion and then remove all properties and rename it.
+		// Why? because the potion this script normally creates asks for a target, which
+		// is not only crap from an RP pov (what, we're forcing a potion down someone else's throat?)
+		// but slows down the process of drinking an emergency heal or invis
+		oTarget = CreateItemOnObject(X2_CI_DEFAULT_HEAL_POTION_RESREF,oCreator);
+		itemproperty ip = GetFirstItemProperty(oTarget);
+		while (GetIsItemPropertyValid(ip))
+		{
+			RemoveItemProperty(oTarget, ip);
+			ip = GetFirstItemProperty(oTarget);	
+		}
+		SetFirstName(oTarget, "Magical Potion");
 
-		if (bCanTargetOthers)
-		{
-			 oTarget = CreateItemOnObject(X2_CI_BREWPOTION_NEWITEM_RESREF,oCreator);
-			 SetFirstName(oTarget, "Magical Elixir");
-		}
-		else
-		{
-			oTarget = CreateItemOnObject(X2_CI_DEFAULT_HEAL_POTION_RESREF,oCreator);
-			itemproperty ip = GetFirstItemProperty(oTarget);
-			while (GetIsItemPropertyValid(ip))
-			{
-				RemoveItemProperty(oTarget, ip);
-				ip = GetFirstItemProperty(oTarget);	
-			}
-			SetFirstName(oTarget, "Magical Potion");
-		}
 		
         itemproperty ipProp = ItemPropertyCastSpell(nPropID,IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
         AddItemProperty(DURATION_TYPE_PERMANENT,ipProp,oTarget);
-		AppendSpellToName(oTarget, nSpellID);
-		string sDescRef = Get2DAString("spells", "SpellDesc", nSpellID);
+		AppendSpellToName(oTarget, nSpellId);
+		string sDescRef = Get2DAString("spells", "SpellDesc", nSpellId);
 		string sDesc = GetStringByStrRef(StringToInt(sDescRef));
 		SetDescription(oTarget, sDesc);	
-		if (nMaterial != 0){ SetItemBaseMaterialType(oTarget, nMaterial);}
+		if (nMaterial != 0)
+		{ 
+			SetItemBaseMaterialType(oTarget, nMaterial);
+			SetLocalInt(oTarget, "nSpellId", nSpellId);
+		}
+		SetItemIcon(oTarget, nIcon);
 		
     }
     return oTarget;
@@ -677,19 +725,19 @@ IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY
 
 // -----------------------------------------------------------------------------
 // Georg, 2003-06-12
-// Create a new playermade potion object with properties matching nSpellID and return it
+// Create a new playermade potion object with properties matching nSpellId and return it
 // -----------------------------------------------------------------------------
 /*
-object CICraftBrewPotion(object oCreator, int nSpellID )
+object CICraftBrewPotion(object oCreator, int nSpellId )
 {
 
-    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellID);
+    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
 
     object oTarget;
     // * GZ 2003-09-11: If the current spell cast is not acid fog, and
     // *                returned property ID is 0, bail out to prevent
     // *                creation of acid fog items.
-    if (nPropID == 0 && nSpellID != 0)
+    if (nPropID == 0 && nSpellId != 0)
     {
         FloatingTextStrRefOnCreature(84544,oCreator);
         return OBJECT_INVALID;
@@ -701,7 +749,7 @@ object CICraftBrewPotion(object oCreator, int nSpellID )
         itemproperty ipProp = ItemPropertyCastSpell(nPropID,IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
         oTarget = CreateItemOnObject(X2_CI_BREWPOTION_NEWITEM_RESREF,oCreator);
         AddItemProperty(DURATION_TYPE_PERMANENT,ipProp,oTarget);
-		AppendSpellToName(oTarget, nSpellID);				
+		AppendSpellToName(oTarget, nSpellId);				
     }
     return oTarget;
 }
@@ -710,18 +758,18 @@ object CICraftBrewPotion(object oCreator, int nSpellID )
 
 // -----------------------------------------------------------------------------
 // Georg, 2003-06-12
-// Create a new playermade wand object with properties matching nSpellID
+// Create a new playermade wand object with properties matching nSpellId
 // and return it
 // -----------------------------------------------------------------------------
-object CICraftCraftWand(object oCreator, int nSpellID )
+object CICraftCraftWand(object oCreator, int nSpellId )
 {
-    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellID);
+    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
 
     object oTarget;
     // * GZ 2003-09-11: If the current spell cast is not acid fog, and
     // *                returned property ID is 0, bail out to prevent
     // *                creation of acid fog items.
-    if (nPropID == 0 && nSpellID != 0)
+    if (nPropID == 0 && nSpellId != 0)
     {
         FloatingTextStrRefOnCreature(84544,oCreator);
         return OBJECT_INVALID;
@@ -734,7 +782,7 @@ object CICraftCraftWand(object oCreator, int nSpellID )
         oTarget = CreateItemOnObject(X2_CI_CRAFTWAND_NEWITEM_RESREF,oCreator);
         AddItemProperty(DURATION_TYPE_PERMANENT,ipProp,oTarget);
 
-		MakeItemUseableByClassesWithSpellAccess(nSpellID, oTarget);
+		MakeItemUseableByClassesWithSpellAccess(nSpellId, oTarget);
 		
 		/*
         int nType = CI_GetClassMagicType(GetLastSpellCastClass());
@@ -761,7 +809,7 @@ object CICraftCraftWand(object oCreator, int nSpellID )
              AddItemProperty(DURATION_TYPE_PERMANENT,ipLimit,oTarget);
         }
 		*/
-		AppendSpellToName(oTarget, nSpellID);				
+		AppendSpellToName(oTarget, nSpellId);				
 
 		
 		// Wands are now always created w/ 50 charges 
@@ -781,13 +829,12 @@ object CICraftCraftWand(object oCreator, int nSpellID )
 		*/
         SetItemCharges(oTarget,nCharges);
 		
-		// Set the wand's icon to it's custom icon - Electrohydra
-		string spellIcon = Get2DAString("spells", "IconResRef", nSpellID);
+		// Set the wand's icon to its custom icon - Electrohydra
+		string spellIcon = Get2DAString("spells", "IconResRef", nSpellId);
 		string wandIcon = spellIcon + "_w";
 		int iconNumber = Search2DA("nwn2_icons", "ICON", wandIcon, FIRST_WAND_ICON);
 		SetItemIcon(oTarget, iconNumber);
 
-        // TODOL Add use restrictions there when item becomes available
     }
     return oTarget;
 }
@@ -795,17 +842,12 @@ object CICraftCraftWand(object oCreator, int nSpellID )
 // -----------------------------------------------------------------------------
 // Georg, 2003-06-12
 // Create and Return a magic wand with an item property
-// matching nSpellID. Charges are set to d20 + casterlevel
+// matching nSpellId. Charges are set to d20 + casterlevel
 // capped at 50 max
 // -----------------------------------------------------------------------------
-object CICraftScribeScroll(object oCreator, int nSpellID)
+object CICraftScribeScroll(object oCreator, int nSpellId)
 {
-	//Debugging Message
-//	object oPC = GetFirstPC();
-//	string spellName = Get2DAString("spells", "Name", nSpellID);
-//	string sMessage = "Using CICraftScribeScroll to scribe " + spellName;
-//	SendMessageToPC(oPC, sMessage);
-    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellID);
+    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
     object oTarget;
     // Handle optional material components
     string sMat = GetMaterialComponentTag(nPropID);
@@ -871,25 +913,25 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
 	// spell. -FlattedFifth, June 6 2024
    
 	string sClass = "Wiz_Sorc";
-	if (IsOnSpellList(nSpellID, CLASS_TYPE_WIZARD)) sClass = "Wiz_Sorc";
-	else if (IsOnSpellList(nSpellID, CLASS_TYPE_CLERIC)) sClass = "Cleric";
-	else if (IsOnSpellList(nSpellID, CLASS_TYPE_DRUID)) sClass = "Druid";
-	else if (IsOnSpellList(nSpellID, CLASS_TYPE_PALADIN)) sClass = "Paladin";
-	else if (IsOnSpellList(nSpellID, CLASS_TYPE_RANGER)) sClass = "Ranger";
-	else if (IsOnSpellList(nSpellID, CLASS_TYPE_BARD)) sClass = "Bard";
+	if (IsOnSpellList(nSpellId, CLASS_TYPE_WIZARD)) sClass = "Wiz_Sorc";
+	else if (IsOnSpellList(nSpellId, CLASS_TYPE_CLERIC)) sClass = "Cleric";
+	else if (IsOnSpellList(nSpellId, CLASS_TYPE_DRUID)) sClass = "Druid";
+	else if (IsOnSpellList(nSpellId, CLASS_TYPE_PALADIN)) sClass = "Paladin";
+	else if (IsOnSpellList(nSpellId, CLASS_TYPE_RANGER)) sClass = "Ranger";
+	else if (IsOnSpellList(nSpellId, CLASS_TYPE_BARD)) sClass = "Bard";
 	else 
 	{
-		string sSpellID = IntToString(nSpellID);
-		SendMessageToPC(oCreator, "x2_inc_craft::CICraftScribeScroll(), Unable to find scroll ID number " + sSpellID);
+		string sSpellId = IntToString(nSpellId);
+		SendMessageToPC(oCreator, "x2_inc_craft::CICraftScribeScroll(), Unable to find scroll ID number " + sSpellId);
 		SendMessageToPC(oCreator, "Please screenshot the above message and contact the dev team on our Discord.");
-		WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed -  Class: " + sClass + ", SpellID " + sSpellID);
+		WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed -  Class: " + sClass + ", SpellId " + sSpellId);
 	}
 	
 
 
     if (sClass != "")
     {
-        string sResRef = Get2DAString(X2_CI_2DA_SCROLLS,sClass,nSpellID);
+        string sResRef = Get2DAString(X2_CI_2DA_SCROLLS,sClass,nSpellId);
         if (sResRef != "")
         {
             oTarget = CreateItemOnObject(sResRef,oCreator);
@@ -898,7 +940,7 @@ object CICraftScribeScroll(object oCreator, int nSpellID)
         if (oTarget == OBJECT_INVALID)
         {
 			int nClass = GetLastSpellCastClass();
-          	WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - Resref: " + sResRef + " Class: " + sClass + "(" +IntToString(nClass) +") " + " SpellID " + IntToString (nSpellID));
+          	WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - Resref: " + sResRef + " Class: " + sClass + "(" +IntToString(nClass) +") " + " SpellId " + IntToString (nSpellId));
         }
     }
     return oTarget;
@@ -964,7 +1006,6 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 
     if (CIGetIsSpellRestrictedFromCraftFeat(nID, X2_CI_BREWPOTION_FEAT_ID))
     {
-		SendMessageToPC(GetFirstPC(), "DEBUG craft failed on allwed check line 923");
         FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_RESTRICTED_FOR_POTION, oCaster);
         return TRUE;
     }
@@ -1612,11 +1653,11 @@ int CIGetArmorModificationDC(object oOldItem, object oNewItem)
 }
 
 // -----------------------------------------------------------------------------
-// returns TRUE if the spell matching nSpellID is prevented from being used
+// returns TRUE if the spell matching nSpellId is prevented from being used
 // with the CraftFeat matching nFeatID
 // This is controlled in des_crft_spells.2da
 // -----------------------------------------------------------------------------
-int CIGetIsSpellRestrictedFromCraftFeat(int nSpellID, int nFeatID)
+int CIGetIsSpellRestrictedFromCraftFeat(int nSpellId, int nFeatID)
 {
     string sCol;
     if (nFeatID == X2_CI_BREWPOTION_FEAT_ID)
@@ -1632,7 +1673,7 @@ int CIGetIsSpellRestrictedFromCraftFeat(int nSpellID, int nFeatID)
          sCol = "NoWand";
     }
 
-    string sRet = Get2DAString(X2_CI_CRAFTING_SP_2DA,sCol,nSpellID);
+    string sRet = Get2DAString(X2_CI_CRAFTING_SP_2DA,sCol,nSpellId);
     int nRet = (sRet == "1") ;
 
     return nRet;
