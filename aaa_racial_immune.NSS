@@ -47,6 +47,9 @@ void main()
 		break;
 		case 1913 :     // Khayal
 			DelayCommand(0.0f, PS_Immunity_Khayal(oPC, nSpell));
+		break;
+		case 1429 :     // Rilmani
+			DelayCommand(0.0f, PS_Immunity_Rilmani(oPC, nSpell));
 		break;		
 	}
 }

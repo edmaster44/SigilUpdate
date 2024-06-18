@@ -404,3 +404,35 @@ void PS_Immunity_NightHag_MOTC(object oPC, int nSpell)
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Night Hag - " + IntToString(iResist) + "% resistance to fire and cold applied");
 }
+
+void PS_Immunity_Rilmani(object oPC, int nSpell)
+{
+	int iImmElec = 25;
+	int iPRCLvl;
+	//Let's calculate how many racial prestige class levels the character has.
+	if (GetLevelByClass(116, oPC) > 0) 			//Cuprilach
+	{	
+		iPRCLvl = GetLevelByClass(116, oPC);
+		if (iPRCLvl >= 6) iImmElec = 100;
+		else if (iPRCLvl >= 2) iImmElec = 50;
+	}
+	else if (GetLevelByClass(117, oPC) > 0) 		//Ferrumach
+	{	
+		iPRCLvl = GetLevelByClass(117, oPC);	
+		if (iPRCLvl >= 6) iImmElec = 100;
+		else if (iPRCLvl >= 2) iImmElec = 50;
+	}
+
+	//Calculate the bonus percentages...
+	effect eElec = EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, iImmElec);
+	if (iImmElec == 100) eElec = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, 9999);
+	effect ePois = EffectImmunity(IMMUNITY_TYPE_POISON);
+	effect eMind = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
+	effect eLink = EffectLinkEffects(eElec, ePois);
+	eLink = EffectLinkEffects(eMind, eLink);
+	eLink = ExtraordinaryEffect(eLink);
+	eLink = SetEffectSpellId(eLink, nSpell);
+	//Now we finally apply all the appropriate bonuses
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	SendMessageToPC(oPC, "Rilmani - " + IntToString(iImmElec) + "% electrical immunity, mind-effecting, and poison immunity applied");
+}
