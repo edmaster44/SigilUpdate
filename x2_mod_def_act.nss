@@ -18,7 +18,8 @@
 #include "kinc_crafting"
 
 
-const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
+
+
 
 
 void main()
@@ -27,27 +28,42 @@ void main()
     object oItem = GetItemActivated();
 	object oPC = GetItemActivator();
 	int nItemID = GetBaseItemType(oItem);
-	int ID_CRAFTED_POTION = 49;
+	int idCraftedPotion = 49;
 
 	
 	// workaround for inflict wounds potions not working in no pvp areas due to the hostile flag.
 	// the craft potion feat now creates these potions with UNIQUE_POWER_SELF_ONLY spell, so that they
 	// register here, and the material is set so that the potion is identifiable to players even if the 
-	// name and description is changed. 
-	// June 13, 2024, I changed the potion crafting to include the spell id as a local integer so I
-	// simplified to just retrieve the spell id
-	if (nItemID == ID_CRAFTED_POTION && GetLocalInt(oItem, "nSpellId") != 0)
+	// name and description is changed. The material also identifies what spell we want to cast.
+	if (nItemID == idCraftedPotion)
 	{
-		int ID_MAT_INFL_MINOR = 13;
-		int ID_MAT_NEG_ENERGY_RAY = 19;
-		int nSpellId = 0;
+		// new custom materials in iprp_materials.2da are just identifiers for the spells, as explained above
+		// specifically, they are inflict minor = 13, infl light = 14, infl mod = 15, infl serious = 16, 
+		// infl crit = 17, harm = 18, and neg energy ray = 19
+		int matMinor = 13;
+		int matNeg = 19;
+		int nSpellId;
 		int nMaterial = GetItemBaseMaterialType(oItem);
-		if (nMaterial >= ID_MAT_INFL_MINOR && nMaterial <= ID_MAT_NEG_ENERGY_RAY){ nSpellId = GetLocalInt(oItem, "nSpellId");}
-		if (nSpellId != 0)
+		if (nMaterial >= matMinor && nMaterial <= matNeg)
 		{
-			if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)){ SetLocalInt(oPC, "UsingPotion", TRUE);}
-			AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-		}
+			switch (nMaterial)
+			{
+				case 13: nSpellId = 431; break; // inflict minor
+				case 14: nSpellId = 432; break;
+				case 15: nSpellId = 433; break;
+				case 16: nSpellId = 434; break;
+				case 17: nSpellId = 435; break; // inflict crit
+				case 18: nSpellId = 77; break; // harm
+				case 19: nSpellId = 371; break; // negative energy ray
+				default: nSpellId = 0; break;
+			}
+			if (nSpellId != 0)
+			{
+				SetLocalInt(oPC, "UsingPotion", TRUE);
+				// character casts the designated spell on themselves, bypassing pvp settings.
+				AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+			}
+		}	
 	}
 
 	string sTag = GetTag(oItem);
