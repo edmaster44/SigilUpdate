@@ -711,7 +711,6 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 		if (nMaterial != 0)
 		{ 
 			SetItemBaseMaterialType(oTarget, nMaterial);
-			SetLocalInt(oTarget, "nSpellId", nSpellId);
 		}
 		SetItemIcon(oTarget, nIcon);
 		
@@ -1145,7 +1144,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 		// Adding the proper item properties 
 		if ((nID == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
 				(nID == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
-				(nID = ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT))
+				(nID == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT))
 		{
 			IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
 		}
