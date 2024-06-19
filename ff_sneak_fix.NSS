@@ -52,6 +52,7 @@ const int idClassPsyWarrior = 110;
 // only included in case of legacy blackguard characters, this class
 // has been replaced by knight, which internally is paladin class id
 const int idClassBlackguard = 31;
+const int idClassCuprilach = 116;
 	
 	
 
@@ -413,6 +414,9 @@ int fCalcSneakDice(object oPC)
 
 	// shifting infiltrator
 	nSneakDice += (GetLevelByClass(idClassShiftingInfiltrator, oPC) + 1) / 2;
+	
+	// Cuprilach racial PrC
+	nSneakDice += GetLevelByCLass(idClassCuprilach, oPC) / 2;
 
 	// warden frantic reactions
 	if (GetHasFeat(idFeatFranticReactions))
