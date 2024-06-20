@@ -18,7 +18,7 @@
 #include "kinc_crafting"
 
 
-
+const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
 
 
 
@@ -59,7 +59,9 @@ void main()
 			}
 			if (nSpellId != 0)
 			{
-				SetLocalInt(oPC, "UsingPotion", TRUE);
+				// if the character is a mage slayer, alert the spellhook that this is actually a potion that is bypassing the pvp settings so 
+				// that an undead mage slayer can drink a potion of neg energy to heal in no pvp areas.
+				if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)) SetLocalInt(oPC, "UsingPotion", TRUE);
 				// character casts the designated spell on themselves, bypassing pvp settings.
 				AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 			}

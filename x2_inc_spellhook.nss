@@ -20,52 +20,30 @@
 //:://////////////////////////////////////////////
 // ChazM 8/16/06 added workbench check to X2PreSpellCastCode()
 // ChazM 8/27/06 modified  X2PreSpellCastCode() - Fire "cast spell at" event on a workbench. 
-// FlattedFifth June 12, 2024. Added options to allow mage slayers to use potions and crafted items
-//			such as minerva's potion recipes. I think. Added a local int to crafted items in 
-//			kinc_crafting.nss the flags them as crafted and added a check here for that int.
-//			Also added boolean style integers to control what items a mage slayer can use and 3
-//			functions to discover what type of item is being used and what kind of spell it casts.
+// FlattedFifth June 12, 2024. Added options to allow mage slayers to use potions and most npc 
+//		store items that don't have class restrictions. Added check for "UsingPotion" local int from
+//  	using a inflict wounds potion via the UNIQUE PROPERTY SELF ONLY. See x2_def_mod_act.nss and the 
+//		craft potions section of x2_inc_craft.nss
 
 
 //#include "x2_inc_itemprop" - Inherited from x2_inc_craft
 #include "x2_inc_craft"
 #include "ginc_crafting"
 
+
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
 
-// Control what a mage slayer is allowed to use and what non-hostile spells others can use on mage slayers.
-// NOTE: Currently I don't know what the recipes minerva sells are or how they work or what base item they use,
-// so I just added a local int, "bIsCrafted" and set to TRUE on items made with recipes in kinc_crafting.nss.
-
-// what kind of potions can a mage slayer use?
-const int B_MAGE_SLAYER_USES_RECIPE_ITEMS = TRUE;
-const int B_MAGE_SLAYER_USES_DIVINE_POTIONS = TRUE;
-const int B_MAGE_SLAYER_USES_ARCANE_POTIONS = FALSE;
-// Can mage slayer use divine scrolls and wands? The class isn't called "Cleric Slayer" after all. Set to "no" for now
-// but like everything it's really up to Ed.
-const int B_MAGE_SLAYER_USES_DIVINE_SCROLLS = FALSE;
-const int B_MAGE_SLAYER_USES_DIVINE_WANDS = FALSE;
-// Can mage slayers cast divine spells themselves? Just because I don't think they should doesn't mean I won't make it easy
-// for someone else to allow it. 
-const int B_MAGE_SLAYERS_CAST_DIVINE_SPELLS = FALSE;
-// controls what kind of non-hostile spell other players can cast on mage slayer
-const int B_MAGE_SLAYER_BUFFED_BY_DIVINE = TRUE;
-const int B_MAGE_SLAYER_BUFFED_BY_ARCANE = FALSE;
-
-
 // function declarations
-int GetSpellIsDevine(int nSpellId);
-int GetSpellIsArcane(int nSpellId);
-int BypassMageSlayerRestriction(object oTarget);
-int GetMageSlayerAllowedItems(object oItem);
 int X2UseMagicDeviceCheck();
 int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
+int GetMageSlayerAllowedItems(object oItem);
+int GetBypassMageSlayerRestriction(object oItem, int nFeatId);
 
 /*
-	// the below functions were commented out of the primary function so 
-	// no need to load them.
+	// the below functions were commented out of the primary prior to my joining the server so 
+	// no need to load them. -FlattedFifth
 int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
@@ -100,17 +78,16 @@ int X2PreSpellCastCode()
        }
    }
 
-
-   // MAGE SLAYER CHECK
-   // first let's just skip this if neither the caster nor the target are a mage slayer and move
-   // all of the mage slayer logic out to its own function so as not to clutter main() for devs trying to read
-   // something else
-   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE) || GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget))
+   // MAGE SLAYER CHECK, call to ps_mage_slayer_utils
+   // Let's just skip this if not a mage slayer and move logic out to its own function so as not to clutter this 
+   // for devs trying to read something else
+   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF))
    {
-		if (BypassMageSlayerRestriction(oTarget) != TRUE){ return FALSE; } 
+		object oItem = GetSpellCastItem();
+		int nFeatId = GetSpellFeatId();
+		// note that we don't return true if the spell/item is allowed because there are other checks as well.
+		if (GetBypassMageSlayerRestriction(oItem, nFeatId) == FALSE) return FALSE;
    }
-   
-   
    
    //---------------------------------------------------------------------------
    // Run use magic device skill check
@@ -194,133 +171,43 @@ int X2PreSpellCastCode()
    return nContinue;
 }
 
-
-
-int GetSpellIsDivine(int nSpellId)
+int GetBypassMageSlayerRestriction(object oItem, int nFeatId)
 {
-	int bRet = FALSE;
-	if (IsOnSpellList(nSpellId, CLASS_TYPE_CLERIC) ||
-		IsOnSpellList(nSpellId, CLASS_TYPE_DRUID) ||
-		IsOnSpellList(nSpellId, CLASS_TYPE_PALADIN) ||
-		IsOnSpellList(nSpellId, CLASS_TYPE_RANGER))
-		{
-		bRet = TRUE;
-		}
-	return bRet;
-}
 
-int GetSpellIsArcane(int nSpellId)
-{
-	int bRet = FALSE;
-	if (IsOnSpellList(nSpellId, CLASS_TYPE_BARD) ||
-		IsOnSpellList(nSpellId, CLASS_TYPE_WIZARD) ||
-		IsOnSpellList(nSpellId, CLASS_TYPE_WARLOCK))
-		{
-		bRet = TRUE;
-		}
-	return bRet;
-}
-
-
-	// Returns false if the user can't cast spells and the "spell" isn't cast from a feat. -Electrohydra
-	// Electrohydra's code completely disallowed all spells from any source, including healing potions
-	// and I felt that was too crippling for the class so I added functionality to allow mageslayers to use some potions
-	// and abilities, which ones are controlled by boolean style integers at the top of this file, and added ability to 
-	// control what sort of non-hostile spell other players can cast on mage slayer. -FlattedFifth
-int BypassMageSlayerRestriction(object oTarget)
-{
+	// Electrohydra's original code completely disallowed all spells from any source except feats, including healing potions 
+	// and even the item editor and lots of basic stuff. I felt that was too crippling for the class so I added 
+	// functionality to allow mageslayers to use potions -FlattedFifth
+	
 	// let's set up the variables we need
-	object oItem = GetSpellCastItem();
-	int nItem = GetBaseItemType(oItem);
+	
+	
+	 // Note that at no point after this do we set this to false. If any condition changes this to true
+	 // we don't want a failed check on any other condition to set it back to false again. Every check
+	 // from here either sets this to true or doesn't change it.
 	int bCanCastSpell = FALSE;
+		
 	string sMessage;
 	
-	object oCaster;
-	if (oItem == OBJECT_INVALID){ oCaster = OBJECT_SELF; } else { oCaster = GetItemActivator();}
+	if (oItem == OBJECT_INVALID){ sMessage = "You can't cast spells";} else {sMessage = "You cannot use items of this type.";}
 	
-	int nSpellId = GetSpellId();
-	if (nSpellId == IP_CONST_CASTSPELL_UNIQUE_POWER || nSpellId == IP_CONST_CASTSPELL_UNIQUE_POWER_SELF_ONLY)
+	// the mage slayer is using a potion that uses unique power self only to bypass pvp rules.
+	// see x2_mod_def_act.nss
+	if (GetLocalInt(OBJECT_SELF, "UsingPotion"))
 	{
-		nSpellId = GetLocalInt(oItem, "nSpellId");
+		SetLocalInt(OBJECT_SELF, "UsingPotion", FALSE);
+		bCanCastSpell = TRUE;
 	}
 	
-	int bDivineSpell = GetSpellIsDivine(nSpellId);
-	int bArcaneSpell = GetSpellIsArcane(nSpellId);
 	
-	// potion base item types
-	int nSelfOnlyPotion = 49;
-	int nTargetablePotion = 104;
-	int nOtherPotion = 101;
+	// the mage slayer is using a feat. We might at some point want to exclude specific feats, like the assassin spell feats,
+	// but for now we're just allowing all of them so that we don't exclude racial ones.
+	if (nFeatId != -1 && nFeatId != 0) bCanCastSpell = TRUE;
 	
-	// scroll base item types
-	int nScrolla = 75;
-	int nScrollb = 102;
-	int nScrollc = 105;
-	
-	//wand base item types
-	int nWanda = 46;
-	int nWandb = 103;
-	int nWandc = 106;
-	
-	
-	// if the caster / item activator is the one who is a mage slayer
-	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE))
-	{	
-		sMessage = "You cannot cast spells or use items of this type.";
-		
-		// if the spell is not being cast from an item and therefore the mage slayer is casting it directly
-		if (oItem == OBJECT_INVALID)
-		{
-			// if the user is using a special "unique power self only" potion activated in the on item activated
-			// event, then that registers first and then spellhook thinks they're casting the spell themselves,
-			// which technically they are. So that script sets a local int on the character to let the spellhook
-			// know to let it pass. Here we'll set it to false and allow it past.
-			if (GetLocalInt(oCaster, "UsingPotion"))
-			{
-				SetLocalInt(oCaster, "UsingPotion", FALSE);
-				bCanCastSpell = TRUE;
-			}
-			// if the spell is from a feat, allow it
-			if (GetSpellFeatId() != -1 && GetSpellFeatId() != 0){ bCanCastSpell = TRUE;}
-			
-			if (bDivineSpell && B_MAGE_SLAYERS_CAST_DIVINE_SPELLS){ bCanCastSpell = TRUE;}
-		
-		}
-		else // the mage slayer is casting a spell from an item
-		{
-			// if the spell is from an item crafted with recipes in kinc_crafting.nss
-			if (GetLocalInt(oItem, "bIsCrafted") && B_MAGE_SLAYER_USES_RECIPE_ITEMS){ bCanCastSpell = TRUE;}
-			
-			// if the spell is from a potion
-			if (nItem == nSelfOnlyPotion || nItem == nTargetablePotion || nItem == nOtherPotion)
-			{
-				if (bDivineSpell && B_MAGE_SLAYER_USES_DIVINE_POTIONS){ bCanCastSpell = TRUE;}
-				if (bArcaneSpell && B_MAGE_SLAYER_USES_ARCANE_POTIONS){ bCanCastSpell = TRUE;}
-			}
-			if (nItem == nScrolla || nItem == nScrollb || nItem == nScrollc)
-			{
-				if (bDivineSpell && B_MAGE_SLAYER_USES_DIVINE_SCROLLS){ bCanCastSpell = TRUE;}
-			}
-			if (nItem == nWanda || nItem == nWandb || nItem == nWandc)
-			{
-				if (bDivineSpell && B_MAGE_SLAYER_USES_DIVINE_WANDS){ bCanCastSpell = TRUE;}
-			}
-		}
-	}
-	else // the mage slayer is the target but isn't the caster
-	{
-		sMessage = "Spells or items of this type cannot affect your target.";
-		// a hostile spell is allowed ofc
-		if (StringToInt(Get2DAString("spells", "HostileSetting", nSpellId)) == 1)
-		{ 	
-			bCanCastSpell = TRUE;
-		}
-		else 
-		{
-			if (bDivineSpell && B_MAGE_SLAYER_BUFFED_BY_DIVINE){ bCanCastSpell = TRUE;}
-			if (bArcaneSpell && B_MAGE_SLAYER_BUFFED_BY_ARCANE){ bCanCastSpell = TRUE;}
-		}
-	}
+	int nItem = GetBaseItemType(oItem);
+
+	// The mage-slayer is drinking a potion
+	if (nItem == 49 || nItem == 104 || nItem == 101) bCanCastSpell = TRUE;
+
 	
 	// check for further allowed items, but only bother if we haven't allowed the spell
 	// already AND there actually is an item involved.
@@ -331,7 +218,7 @@ int BypassMageSlayerRestriction(object oTarget)
 		
 	if (bCanCastSpell == FALSE)
 	{
-		SendMessageToPC(oCaster, sMessage);
+		SendMessageToPC(OBJECT_SELF, sMessage);
 	}
 	return bCanCastSpell;
 }
@@ -352,7 +239,6 @@ int GetMageSlayerAllowedItems(object oItem)
 	if (FindSubString(sRes, "nx2_r_") != -1){ bCanUse = TRUE;}
 	return bCanUse;
 }
-
 
 // Use Magic Device Check.
 // Returns TRUE if the Spell is allowed to be cast, either because the
