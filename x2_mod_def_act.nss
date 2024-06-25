@@ -16,10 +16,7 @@
 
 #include "x2_inc_switches"
 #include "kinc_crafting"
-
-
-const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
-
+#include "class_mageslayer_utils"
 
 
 void main()
@@ -32,7 +29,7 @@ void main()
 
 	
 	// workaround for inflict wounds potions not working in no pvp areas due to the hostile flag.
-	// the craft potion feat now creates these potions with UNIQUE_POWER_SELF_ONLY spell, so that they
+	// the craft potion feat now creates neg energy potions with UNIQUE_POWER_SELF_ONLY spell, so that they
 	// register here, and the material is set so that the potion is identifiable to players even if the 
 	// name and description is changed. The material also identifies what spell we want to cast.
 	if (nItemID == idCraftedPotion)
@@ -61,7 +58,8 @@ void main()
 			{
 				// if the character is a mage slayer, alert the spellhook that this is actually a potion that is bypassing the pvp settings so 
 				// that an undead mage slayer can drink a potion of neg energy to heal in no pvp areas.
-				if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)) SetLocalInt(oPC, "UsingPotion", TRUE);
+				// call to class_mageslayer_utils
+				if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)) SetMageSlayerSpecialItemBoolean(oPC);
 				// character casts the designated spell on themselves, bypassing pvp settings.
 				AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 			}

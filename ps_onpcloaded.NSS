@@ -19,6 +19,7 @@
 #include "ps_heightadjust_includes"
 #include "ff_sneak_fix"
 #include "ff_mod_game_item"
+#include "class_mageslayer_utils"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -33,7 +34,7 @@ void StackingEquipmentBugFix(object oPC) {
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_CHARISMA, 12), oPC, 8.0f);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_STRENGTH, 12), oPC, 8.0f);
 	SendMessageToPC(oPC, "Re-equipping equipment for bugfix. Check the ground for any lost items before proceeding.");
-	
+
 	ClearAllActions();
 	
 	//check for un nerfed sword saint armor and nerf as requested
@@ -582,5 +583,8 @@ void main()
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
 		ff_sneak_fix(oPC);
+		// call to class_mageslayer_utils
+		CheckForOutdatedMageSlayer(oPC);
+		
 	}
 }

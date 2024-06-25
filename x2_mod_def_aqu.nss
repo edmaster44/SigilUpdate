@@ -8,12 +8,64 @@
 //:: Created By: Georg Zoeller
 //:: Created On: 2003-07-16
 //:://////////////////////////////////////////////
+// FlattedFifth - June 18, 2024: Re-ordered file to put main logic at top because IMO it's more readable that way,
+//				Added a boolean style integer to control whether we bother logging muling or not (idk why we would
+//				when it's allowed), though that might be better moved to x2_inc_switches at some point.
 
 #include "x2_inc_switches"
 #include "nwnx_sql"
 #include "ps_wandofsort_inc"
 #include "ps_inc_advscript"
 #include "ps_inc_functions"
+#include "class_mageslayer_utils"
+
+
+// since muling is allowed there's no reason to make unnecessary writes to disk to log it.
+// Just set to true if you want to turn this back on.
+const int B_CHECK_FOR_MULING = FALSE;
+
+
+
+// function declarations
+int GetIsLooted(object oFROM);
+void ReportMuling(object oBY, object oFROM, object oITEM);
+int CheckMuling(object oBY, object oFROM, object oITEM);
+void CheckAndPlaceItemInContainer(object oBY, object oFROM, object oITEM);
+void BroadcastLoot(object oBY, object oFROM, object oITEM);
+void HandleSigilAcquisition(object oBY, object oFROM, object oITEM);
+
+
+void main()
+{
+	object oBY = GetModuleItemAcquiredBy();
+	if (GetIsPC(oBY) == FALSE) return;
+	object oFROM = GetModuleItemAcquiredFrom();
+	object oITEM = GetModuleItemAcquired();
+	HandleSigilAcquisition(oBY, oFROM, oITEM);
+	
+	// call to ps_mage_slayer_utils
+	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oBY))
+	{
+		CheckMakeItemUseableForMageSlayer(oITEM, oBY);
+	}
+	
+    // * Generic Item Script Execution Code
+    // * If MODULE_SWITCH_EXECUTE_TAGBASED_SCRIPTS is set to TRUE on the module,
+    // * it will execute a script that has the same name as the item's tag
+    // * inside this script you can manage scripts for all events by checking against
+    // * GetUserDefinedItemEventNumber(). See x2_it_example.nss
+    if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_TAGBASED_SCRIPTS) == TRUE)
+    {
+    	SetUserDefinedItemEventNumber(X2_ITEM_EVENT_ACQUIRE);
+        int nRet = ExecuteScriptAndReturnInt(GetUserDefinedItemEventScriptName(oITEM), OBJECT_SELF);
+        //if (nRet == X2_EXECUTE_SCRIPT_END) return;
+    }
+
+	//Old Script, Replaced by HandleSigilAcquisition subroutine up here. (Clangeddin 01/01/2018)
+	//ExecuteScript("ps_item_onacquire", OBJECT_SELF);
+}
+
+
 
 //Simple wrapper to tell if the item is being looted from a bodybag or a treasure chest.
 int GetIsLooted(object oFROM)
@@ -142,7 +194,10 @@ void BroadcastLoot(object oBY, object oFROM, object oITEM)
 void HandleSigilAcquisition(object oBY, object oFROM, object oITEM)
 {
 	string sITEM_TAG = GetTag(oITEM);
-	if (CheckMuling(oBY, oFROM, oITEM) == TRUE) ReportMuling(oBY, oFROM, oITEM);
+	if (B_CHECK_FOR_MULING)
+	{
+		if (CheckMuling(oBY, oFROM, oITEM) == TRUE) ReportMuling(oBY, oFROM, oITEM);
+	}
 	if (GetIsLooted(oFROM) == TRUE)
 	{
 		CheckAndPlaceItemInContainer(oBY, oFROM, oITEM);
@@ -152,26 +207,3 @@ void HandleSigilAcquisition(object oBY, object oFROM, object oITEM)
 	else if (sITEM_TAG == "ps_essence") PS_LoadEssenceState(oBY, oITEM);
 }
  
-void main()
-{
-	object oBY = GetModuleItemAcquiredBy();
-	if (GetIsPC(oBY) == FALSE) return;
-	object oFROM = GetModuleItemAcquiredFrom();
-	object oITEM = GetModuleItemAcquired();
-	HandleSigilAcquisition(oBY, oFROM, oITEM);
-	
-    // * Generic Item Script Execution Code
-    // * If MODULE_SWITCH_EXECUTE_TAGBASED_SCRIPTS is set to TRUE on the module,
-    // * it will execute a script that has the same name as the item's tag
-    // * inside this script you can manage scripts for all events by checking against
-    // * GetUserDefinedItemEventNumber(). See x2_it_example.nss
-    if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_TAGBASED_SCRIPTS) == TRUE)
-    {
-    	SetUserDefinedItemEventNumber(X2_ITEM_EVENT_ACQUIRE);
-        int nRet = ExecuteScriptAndReturnInt(GetUserDefinedItemEventScriptName(oITEM), OBJECT_SELF);
-        //if (nRet == X2_EXECUTE_SCRIPT_END) return;
-    }
-
-	//Old Script, Replaced by HandleSigilAcquisition subroutine up here. (Clangeddin 01/01/2018)
-	//ExecuteScript("ps_item_onacquire", OBJECT_SELF);
-}

@@ -24,22 +24,24 @@
 //		store items that don't have class restrictions. Added check for "UsingPotion" local int from
 //  	using a inflict wounds potion via the UNIQUE PROPERTY SELF ONLY. See x2_def_mod_act.nss and the 
 //		craft potions section of x2_inc_craft.nss
+// 		June 25, 2024, moved all the mage slayer logic to its own file, class_mageslayer_utils, expanded mage slayer abilities
 
 
 //#include "x2_inc_itemprop" - Inherited from x2_inc_craft
 #include "x2_inc_craft"
 #include "ginc_crafting"
+#include "class_mageslayer_utils"
 
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
-const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
+
 
 // function declarations
 int X2UseMagicDeviceCheck();
 int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
-int GetMageSlayerAllowedItems(object oItem);
-int GetBypassMageSlayerRestriction(object oItem, int nFeatId);
+
+
 
 /*
 	// the below functions were commented out of the primary prior to my joining the server so 
@@ -78,15 +80,18 @@ int X2PreSpellCastCode()
        }
    }
 
-   // MAGE SLAYER CHECK, call to ps_mage_slayer_utils
-   // Let's just skip this if not a mage slayer and move logic out to its own function so as not to clutter this 
-   // for devs trying to read something else
-   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF))
+   // MAGE SLAYER CHECK, call to class_mageslayer_utils
+   // Let's just skip this if neither the caster nor the target is a mage slayer and move logic out to its own 
+   // file so as not to clutter this for devs trying to read something else
+   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF) ||
+   		GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget))
    {
+		object oPC = OBJECT_SELF;
 		object oItem = GetSpellCastItem();
+		int nSpellId = GetSpellId();
 		int nFeatId = GetSpellFeatId();
 		// note that we don't return true if the spell/item is allowed because there are other checks as well.
-		if (GetBypassMageSlayerRestriction(oItem, nFeatId) == FALSE) return FALSE;
+		if (GetBypassMageSlayerRestriction(oTarget, oPC, oItem, nSpellId, nFeatId) == FALSE) return FALSE;
    }
    
    //---------------------------------------------------------------------------
@@ -171,74 +176,6 @@ int X2PreSpellCastCode()
    return nContinue;
 }
 
-int GetBypassMageSlayerRestriction(object oItem, int nFeatId)
-{
-
-	// Electrohydra's original code completely disallowed all spells from any source except feats, including healing potions 
-	// and even the item editor and lots of basic stuff. I felt that was too crippling for the class so I added 
-	// functionality to allow mageslayers to use potions -FlattedFifth
-	
-	// let's set up the variables we need
-	
-	
-	 // Note that at no point after this do we set this to false. If any condition changes this to true
-	 // we don't want a failed check on any other condition to set it back to false again. Every check
-	 // from here either sets this to true or doesn't change it.
-	int bCanCastSpell = FALSE;
-		
-	string sMessage;
-	
-	if (oItem == OBJECT_INVALID){ sMessage = "You can't cast spells";} else {sMessage = "You cannot use items of this type.";}
-	
-	// the mage slayer is using a potion that uses unique power self only to bypass pvp rules.
-	// see x2_mod_def_act.nss
-	if (GetLocalInt(OBJECT_SELF, "UsingPotion"))
-	{
-		SetLocalInt(OBJECT_SELF, "UsingPotion", FALSE);
-		bCanCastSpell = TRUE;
-	}
-	
-	
-	// the mage slayer is using a feat. We might at some point want to exclude specific feats, like the assassin spell feats,
-	// but for now we're just allowing all of them so that we don't exclude racial ones.
-	if (nFeatId != -1 && nFeatId != 0) bCanCastSpell = TRUE;
-	
-	int nItem = GetBaseItemType(oItem);
-
-	// The mage-slayer is drinking a potion
-	if (nItem == 49 || nItem == 104 || nItem == 101) bCanCastSpell = TRUE;
-
-	
-	// check for further allowed items, but only bother if we haven't allowed the spell
-	// already AND there actually is an item involved.
-	if (bCanCastSpell == FALSE && oItem != OBJECT_INVALID)
-	{
-		bCanCastSpell = GetMageSlayerAllowedItems(oItem);
-	}
-		
-	if (bCanCastSpell == FALSE)
-	{
-		SendMessageToPC(OBJECT_SELF, sMessage);
-	}
-	return bCanCastSpell;
-}
-
-// helper function to get items that mage slayer can use. If there are other items
-// we want mage slayer to use, add their resref strings here.
-int GetMageSlayerAllowedItems(object oItem)
-{
-	string sRes = GetResRef(oItem);
-	int bCanUse = FALSE;
-	
-	if (sRes == "nx2_misc_lifecoin"){ bCanUse = TRUE; }
-	if (sRes == "ps_miscthin_bludimndwhetstone"){bCanUse = TRUE; }
-	if (FindSubString(sRes, "i_ps_itemeditor") != -1){ bCanUse = TRUE;}
-	if (FindSubString(sRes, "ps_grenade") != -1){ bCanUse = TRUE;}
-	if (FindSubString(sRes, "it_herb") != -1){ bCanUse = TRUE;}
-	if (FindSubString(sRes, "ps_food") != -1){ bCanUse = TRUE;}
-	if (FindSubString(sRes, "nx2_r_") != -1){ bCanUse = TRUE;}
-	return bCanUse;
-}
 
 // Use Magic Device Check.
 // Returns TRUE if the Spell is allowed to be cast, either because the
