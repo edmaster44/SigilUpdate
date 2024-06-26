@@ -226,6 +226,9 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	
 	if (bCanCastSpell == FALSE)
 	{
+		// send messages explaining why the spell isn't working, but only to pcs
+		if (GetIsPC(oCaster)) SendMessageToPC(oCaster, sCasterMessage);
+		if (GetIsPC(oTarget) && oTarget != oCaster) SendMessageToPC(oTarget, sTargetMessage);
 		// If the caster can cast the spell but the target cannot recieve it use some VFX to give them a show of
 		// the target mage-slayer resisting the spell. Not necessary to add !bTargetCanReceive because if 
 		// bTargetCanReceive was true and so was bCasterCanCast we wouldn't get to this point due to the above 
@@ -236,14 +239,15 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 			string sAlreadyCast = GetFirstName(oCaster) + "_" + IntToString(nSpellId);
 			if (GetLocalInt(oTarget, sAlreadyCast) != TRUE)
 			{
-				AssignCommand(oCaster, ActionCastFakeSpellAtObject(nSpellId, oTarget, PROJECTILE_PATH_TYPE_DEFAULT));
+				if (nFeatId == -1)
+				{
+					AssignCommand(oCaster, ActionCastFakeSpellAtObject(nSpellId, oTarget, PROJECTILE_PATH_TYPE_DEFAULT));
+				}
 				effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SPELL_RESISTANCE);
-				DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				DelayCommand(1.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 				SetLocalInt(oTarget, sAlreadyCast, TRUE);
 			}
 		}
-		if (GetIsPC(oCaster)) SendMessageToPC(oCaster, sCasterMessage);
-		if (GetIsPC(oTarget) && oTarget != oCaster) SendMessageToPC(oTarget, sTargetMessage);
 	}
 	return bCanCastSpell;
 }
