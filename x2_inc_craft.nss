@@ -158,8 +158,8 @@ const int     X2_CI_BREWPOTION_MAXLEVEL       = 3;                      // Max L
 const int     X2_CI_BREWPOTION_COSTMODIFIER   = 16;                     // gp Brew Potion XPCost Modifier
 
 const string  X2_CI_BREWPOTION_NEWITEM_RESREF = "x2_it_pcpotion";       // ResRef for new potion item, if we want the potion to ask the user for a target
-const string  X2_CI_DEFAULT_HEAL_POTION_RESREF = "nw_it_mpotion012";    // ResRef for new base game heal potion, if we want the potion to auto target the user
-
+// const string  X2_CI_DEFAULT_HEAL_POTION_RESREF = "nw_it_mpotion021";    // ResRef for new base game ale potion, if we want the potion to auto target the user
+const string  X2_CI_DEFAULT_HEAL_POTION_RESREF = "ps_crft_basepotion"; 	//ResRef for new custom PS potion, if we want the potion to auto target the user
 // Scribe Scroll related constants
 const int     X2_CI_SCRIBESCROLL_FEAT_ID        = 945;
 const int     X2_CI_SCRIBESCROLL_COSTMODIFIER   = 15;                 // Scribescroll Cost Modifier
@@ -567,7 +567,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 	int nPropID;
 	object oTarget;
 	int nIcon;
-	int nMaterial;
+	int nMaterial = 0;
 	// potions of inflict and harm cannot be used by undead pcs in no pvp areas because of the hostile flag in 
 	// spells.2da, but making non-hostile versions didn't work all by itself because adding the appropriate lines
 	// to iprp_spells.2da caused errors. Instead, we're going to do 2 things: 1, we change the spell id to the
@@ -1053,6 +1053,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 //        SetXP(oCaster, nNewXP);
         DestroyObject (oSpellTarget);
         FloatingTextStrRefOnCreature(STR_REF_IC_SUCCESS, oCaster); // Item Creation successful
+		SetIdentified(oPotion, TRUE);
         return TRUE;
      }
      else
