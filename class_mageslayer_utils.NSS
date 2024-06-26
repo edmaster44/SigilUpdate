@@ -57,9 +57,16 @@ const int N_ANTI_DIVINE_MS_BUFFS = N_ARCANE;
 const int B_USE_VFX_FOR_MS_FAIL = TRUE;
 
 
-
+struct ItemUsage
+{
+    int nPotionUse;
+    int nScrollUse;
+    int nWandUse;
+    int nBuffs;
+};
 
 // function declarations
+struct ItemUsage GetMageSlayerUsageData(object oPC);
 int GetSpellIsHostile(int nSpellId, object oTarget);
 void CheckForOutdatedMageSlayer(object oPC);
 int GetSpellIsDivine(int nSpellId);
@@ -76,15 +83,6 @@ int GetItemUsuableByDivine(object oItem);
 int GetItemUsuableByArcane(object oItem);
 
 
-struct ItemUsage
-{
-    int nPotionUse;
-    int nScrollUse;
-    int nWandUse;
-    int nBuffs;
-};
-
-struct ItemUsage GetMageSlayerUsageData(object oPC);
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -106,7 +104,7 @@ void CheckForOutdatedMageSlayer(object oPC)
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-					Called from ps_inc_spellhook and ga_cast_spell_at_object, 
+					Called from x2_inc_spellhook and ga_cast_spell_at_object, 
 					check if the mage slayer can use the item/ability
 					or be the target of the spell/item/ability
 
@@ -121,32 +119,48 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	
 	// I don't think a mage-slayer's principles should stand in the way of saving a companion's 
 	// life, or from being saved, so we will allow raise dead, resurrection, and stone to flesh
+	// regardless of whether the mage slayer is caster or target
 	if (nSpellId == 142 || nSpellId == 153 || nSpellId == 486) return TRUE;
 	
 	
 	//Some items are automatically allowed, such as the Coin of Life, Item Editor, and any mundane items
 	//so we'll check for those first with a function in this file and skip the rest of the checks if it's 
-	//one of those
+	//one of those. Currently there aren't any items in that function that a MS shouldn't be able to use or
+	// be the targetof, they're either mundane, hostile, or both, but if this changes we can move this check
+	//into the specific conditions for caster and target. For now I'd prefer to skip a lot of checks when possible.
 	if (oItem != OBJECT_INVALID && GetMageSlayerAllowedSpecificItems(oItem)) return TRUE;
 	
+	
 	// let's set up the variables we need. We won't be setting these 5 to false in the rest of this function. The
-	// rest will either set them to true or leave them alone.
+	// rest of the code will either set them to true or leave them alone.
 	int bCasterIsSlayer = GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oCaster);
 	int bTargetIsSlayer = GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget);
 	int bCasterCanCast = !bCasterIsSlayer;
 	int bTargetCanReceive = !bTargetIsSlayer;
 	int bCanCastSpell = FALSE;
+
+	// if the mage slayer is using a feat ability then it's allowed for the caster but not necessarily for the target.
+	// At some point we should probably make exceptions and disallow class-based feat spells, such as from Assassin,
+	// but for now we'll let it slide so that we don't disallow any racial abilities. Testing with feats such as barb 
+	// aura of courage showed that disallowing feat spells as a target but not as the caster resulting in an endless 
+	// loop of attempting to cast and failing. To be really accurate we need to make a function that grants or refuses 
+	// feat spells on a case by case basis. For now we'll make sure that the mage slayer can use the feat ability on
+	// themselves to avoid the aforementioned auro of courage loop. After Dae decides what classes are getting spellbooks
+	// instead of feats we can revisit this.
+	if (nFeatId > 0 && bCasterIsSlayer) bCasterCanCast = TRUE;
+
 	
 	// note that a spell can be both arcane and divine, like stoneskin, energy immunity, and prot from alignment,
 	// so we do two checks. One or both of these will be TRUE, but it's unlikely that both will be FALSE other than 
 	// maybe some feat abilities.
 	int bDivineSpell = GetSpellIsDivine(nSpellId);
 	int bArcaneSpell = GetSpellIsArcane(nSpellId);
+
 	
 	string sCasterMessage = "";
 	string sTargetMessage = "You cannot be the target of spells or items of this type.";
 	int nItem = GetBaseItemType(oItem);
-	
+
 	
 	// If the caster/item user is the mage slayer, also if the mage slayer is targeting themself.
 	if (bCasterIsSlayer)
@@ -172,7 +186,6 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 				if (GetMageSlayerItemOrSpell(oCaster, 49, nSpellId))
 				{
 					bCasterCanCast = TRUE;
-					bTargetCanReceive = TRUE;
 				}
 			}
 
@@ -189,21 +202,13 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 					if (GetMageSlayerItemOrSpell(oCaster, nItem, nSpellId)) bCasterCanCast = TRUE;
 				}
 		}
-		// if the mage slayer is using a feat ability then it's allowed for the caster but not necessarily for the target.
-		// At some point we should probably make exceptions and disallow class-based feat spells, such as from Assassin,
-		// but for now we'll let it slide so that we don't disallow any racial abilities. Testing with feats such as barb 
-		// aura of courage showed that disallowing feat spells as a target but not as the caster resulting in an endless 
-		// loop of attempting to cast and failing. To be really accurate we need to make a function that grants or refuses 
-		// feat spells on a case by case basis. For now we'll make sure that the mage slayer can use the feat ability on
-		// themselves to avoid the aforementioned auro of courage loop. After Dae decides what classes are getting spellbooks
-		// instead of feats we can revisit this.
-		if (nFeatId != -1) bCasterCanCast = TRUE;
-		// allow the mage slayer to target themselves with anything that they're allowed to use. This is primarily to 
-		// avoid problems with feat-based spells like aura of courage and undead resistances.
-		if (oCaster == oTarget) bTargetCanReceive = bCasterCanCast;
 	}
 	
-	// Separate check for if the target is a mage slayer. we'll let the 1st condition
+	// if the mage slayer is targeting themself then whatever we decided applies to the caster also applies to them as
+	// the target.
+	if (oCaster == oTarget) bTargetCanReceive = bCasterCanCast;
+	
+	// Separate check for if the target is a mage slayer but isn't the same as the caster. we'll let the 1st condition
 	// catch all instances of a self-targeting mage slayer, but there ARE cases where a mage slayer could use something 
 	// that targets another mage slayer but that other can't be the target of, if they are diff mage slayer paths.
 	if (bTargetIsSlayer && oTarget != oCaster)
@@ -226,28 +231,25 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	
 	if (bCanCastSpell == FALSE)
 	{
-		// send messages explaining why the spell isn't working, but only to pcs
-		if (GetIsPC(oCaster)) SendMessageToPC(oCaster, sCasterMessage);
-		if (GetIsPC(oTarget) && oTarget != oCaster) SendMessageToPC(oTarget, sTargetMessage);
 		// If the caster can cast the spell but the target cannot recieve it use some VFX to give them a show of
 		// the target mage-slayer resisting the spell. Not necessary to add !bTargetCanReceive because if 
 		// bTargetCanReceive was true and so was bCasterCanCast we wouldn't get to this point due to the above 
 		/// two conditions. Also we'll disable the vfx feedback if it's been done once already this session.
 		//	Turn off this vfx with a boolean at the top of this file if you don't like it.
-		if (bCasterCanCast && B_USE_VFX_FOR_MS_FAIL) 
+		if (bCasterCanCast && B_USE_VFX_FOR_MS_FAIL && nFeatId < 1) 
 		{
-			string sAlreadyCast = GetFirstName(oCaster) + "_" + IntToString(nSpellId);
+			string sAlreadyCast = GetFirstName(oCaster) + "_Cast_" + IntToString(nSpellId);
 			if (GetLocalInt(oTarget, sAlreadyCast) != TRUE)
 			{
-				if (nFeatId == -1)
-				{
-					AssignCommand(oCaster, ActionCastFakeSpellAtObject(nSpellId, oTarget, PROJECTILE_PATH_TYPE_DEFAULT));
-				}
+				AssignCommand(oCaster, ActionCastFakeSpellAtObject(nSpellId, oTarget, PROJECTILE_PATH_TYPE_DEFAULT));
 				effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SPELL_RESISTANCE);
 				DelayCommand(1.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 				SetLocalInt(oTarget, sAlreadyCast, TRUE);
 			}
 		}
+
+		if (GetIsPC(oCaster)) SendMessageToPC(oCaster, sCasterMessage);
+		if (GetIsPC(oTarget) && oTarget != oCaster) SendMessageToPC(oTarget, sTargetMessage);
 	}
 	return bCanCastSpell;
 }
@@ -584,5 +586,3 @@ int GetSpellIsArcane(int nSpellId)
 		}
 	return bRet;
 }
-
-
