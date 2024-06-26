@@ -3,6 +3,9 @@
 // FlattedFifth - June 17, 2024. Reworked logic to have no affect on allies, changed damage 
 //			to do 1d8 vs good, 2d8 vs neutral, and 3d8 vs evil with an additional 1d8 vs
 //			enemy outsiders, undead, and fey
+// FlattedFifth - June 26, 2024. Updated to use spellIsTarget() function in nw_io_spells. That's
+// 		 	a more thorough check than just GetReactionTypeHostile().
+
 #include "NW_I0_SPELLS"
 #include "aaa_constants"
 
@@ -29,7 +32,7 @@ void main()
     while(GetIsObjectValid(oTarget))
     {	
 		// Only process anything at all if the target is hostile
-		if (GetIsReactionTypeHostile(oTarget,oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
 		{
 			int nNumDice = 1;
 			int bIsBlinded = FALSE;
