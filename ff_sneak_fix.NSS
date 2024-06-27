@@ -416,7 +416,7 @@ int fCalcSneakDice(object oPC)
 	nSneakDice += (GetLevelByClass(idClassShiftingInfiltrator, oPC) + 1) / 2;
 	
 	// Cuprilach racial PrC
-	nSneakDice += GetLevelByCLass(idClassCuprilach, oPC) / 2;
+	nSneakDice += GetLevelByClass(idClassCuprilach, oPC) / 2;
 
 	// warden frantic reactions
 	if (GetHasFeat(idFeatFranticReactions))
