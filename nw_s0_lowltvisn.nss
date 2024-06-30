@@ -16,13 +16,18 @@
 
 // JLR - OEI 08/23/05 -- Metamagic changes
 #include "nwn2_inc_spells"
-
-
+#include "NW_I0_SPELLS"
+#include "ps_inc_functions"
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
-#include "ginc_henchman"
-#include "ps_inc_functions"
- 
+
+
+
+
+
+
+
+
 void main()
 {
 
@@ -44,46 +49,29 @@ void main()
 
 
     //Declare major variables
-    object oTarget = GetSpellTargetObject();
+	int nFeatLowLightVision = 354;
+    location lLoc = GetSpellTargetLocation();
     int nMetaMagic = GetMetaMagicFeat();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     float fDuration = HoursToSeconds(nCasterLvl);
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
-    int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+	// removed because this will always return DURATION_TYPE_TEMPORARY, we don't have any Metamagic that changes
+	// the duration type.
+    //int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
-    // First, affect Caster...
-    int nHenchmen = GetNumHenchmen(oTarget);
-    int nCurHenchman = 0;
+	effect eDur = EffectVisualEffect( VFX_DUR_SPELL_LOWLIGHT_VISION );
 
-    // Now process all target critters, starting with the Caster
-    while ( GetIsObjectValid(oTarget) )
+	object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_LARGE, lLoc, TRUE, OBJECT_TYPE_CREATURE);
+    while (GetIsObjectValid(oTarget))
     {
-        //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-
-        //effect eVis = EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT);
-        effect eDur = EffectVisualEffect( VFX_DUR_SPELL_LOWLIGHT_VISION );
-        //effect eSight = EffectLowLightVision();
-        //effect eLink = EffectLinkEffects(eDur, eSight);
-        //eLink = EffectLinkEffects(eLink, eDur);
-		if (!GetHasFeat(FEAT_LOWLIGHTVISION))
-		{	FeatAdd(oTarget, FEAT_LOWLIGHTVISION, FALSE);
-			DelayCommand(fDuration, FeatRemove(oTarget, FEAT_LOWLIGHTVISION));	}
-
-        //Apply the VFX impact and effects
-        ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
-
-        // Now prep to do the next critter in the list...
-        if ( nCurHenchman < nHenchmen )
-        {
-            oTarget = GetHenchman( OBJECT_SELF, nCurHenchman );
-            nCurHenchman++;
-        }
-        else
-        {
-            oTarget = OBJECT_INVALID;
-        }
+        if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oTarget))
+		{
+			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
+			PS_GrantFeatBySpellWithEffect(nFeatLowLightVision, oTarget, eDur, fDuration);
+		}
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lLoc, TRUE, OBJECT_TYPE_CREATURE);
+       
     }
 }

@@ -13,9 +13,9 @@
 
 
 // JLR - OEI 08/23/05 -- Permanency & Metamagic changes
+
 #include "nwn2_inc_spells"
 #include "ps_inc_functions"
-
 #include "x2_inc_spellhook" 
 
 void main()
@@ -28,6 +28,7 @@ void main()
     }
 
 	//Declare major variables
+	int nFeatDarkvision = 228;
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_BLINDSIGHT );	// NWN2 VFX
     effect eSightInvis = EffectSeeInvisible();
@@ -36,17 +37,18 @@ void main()
     eLink = EffectLinkEffects(eLink, eSightDark);
     eLink = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_BLINDNESS));
 
-    //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLINDSIGHT, FALSE));
-
     float fDuration = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
-    int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+    //int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+	itemproperty ipDarkImmune = ItemPropertySpellImmunitySpecific(IP_CONST_IMMUNITYSPELL_DARKNESS);
 
-    RemovePermanencySpells(oTarget);
 
+   //Fire cast spell at event for the specified target
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLINDSIGHT, FALSE));
     //Apply the VFX impact and effects
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	PS_GrantTempItemPropertyToPC(ipDarkImmune, oTarget, fDuration);
+	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oTarget, eLink, fDuration);
 }

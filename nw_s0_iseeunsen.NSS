@@ -11,12 +11,14 @@
 //:: Created On: June 19, 2005
 //:://////////////////////////////////////////////
 //:: VFX Pass By: Preston W, On: June 20, 2001
+// FlattedFifth june 28, 2024: Former version of this spell granted Darkvision PERMANENTLY 
+// 				if caster rests or logs out before duration end. Fixed it.
 
 
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 #include "nw_i0_spells"
-
+#include "ps_inc_functions"
 #include "x2_inc_spellhook" 
 
 void main()
@@ -40,28 +42,19 @@ void main()
 
 
     //Declare major variables
+	int nFeatDarkvision = 228;
     object oTarget = GetSpellTargetObject();
     float fDuration = HoursToSeconds(24);  // Note: Might change this to Permanent?
 
     fDuration = ApplyMetamagicDurationMods(fDuration);
-    int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+   // int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
-    //effect eVis = EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT);
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_SEE_INVISIBILITY );
     effect eSight = EffectSeeInvisible();
     effect eLink = EffectLinkEffects(eSight, eDur);
-    //eLink = EffectLinkEffects(eLink, eSight);
-    //effect eVis2 = EffectVisualEffect(VFX_DUR_ULTRAVISION);
-    //effect eUltra = EffectDarkVision();
-    //eLink = EffectLinkEffects(eLink, eVis2);
-    //eLink = EffectLinkEffects(eLink, eUltra);
-
+  
     RemoveEffectsFromSpell(oTarget, GetSpellId());
 
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-	if (!GetHasFeat(FEAT_DARKVISION, oTarget))
-	{	FeatAdd(oTarget, FEAT_DARKVISION, FALSE);
-		DelayCommand(fDuration, FeatRemove(oTarget, FEAT_DARKVISION));	}
+	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oTarget, eLink, fDuration);
 }

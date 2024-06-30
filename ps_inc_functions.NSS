@@ -1,3 +1,13 @@
+// FlattedFifth- June 28, 2024. Added PS_GrantFeatBySpell, PS_GrantFeatBySpellWithEffect(), and
+//			PS_GetIpBonusFeat()to temporarily add a feat with a spell by using a temp item property
+//			on the Player's hide/skin item. Special thanks to Azazoth @ NWN2 Builder 
+// 			Discord for the intial concept as a way to get the Low Light Vision spell working.
+//			Implemented that concept here to get any feat added by a spell and made functions
+//			to allow with or without an effect (since nw script doesn't seem to support a default
+//			arg for the effect data type).
+
+
+
 #include "x0_i0_position"
 #include "aaa_constants"
 #include "ps_inc_advscript"
@@ -58,6 +68,21 @@ const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
 // Call this function to get the oPC's essence object.
 object PS_GetEssence(object oPC = OBJECT_SELF);
+
+// Call this function to add a feat temporarily with a spell but without any other spell effects
+void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0, int bFeatLookup = TRUE,);
+
+// Call this function to add a feat temporarily with a spell and have other spell effects as well
+void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1, int bFeatLookup = TRUE);
+
+// Use this if you have a item property already set up in the spell script.
+void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0);
+
+// use this if you want to apply the item prop and all other spell effects in one function.
+void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1);
+
+// accepts a feat id from feat.2da and returns the id to be used in ItemPropertyBonusFeat() from iprp_feats.2da
+int PS_GetIpBonusFeat(int nFeatId);
 
 int GetHasSpiritShamanProgression(object oPC, int iClass);
 
@@ -206,6 +231,152 @@ object PS_GetEssence(object oPC = OBJECT_SELF)
 {
 	return GetItemPossessedBy(oPC, "ps_essence");
 }
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Temporarily grant a feat with a spell without spell FX by adding it as item property bonus feat to creature skin.
+  Concept intially by Azazoth @ NWN2 Creator Discord June 27, 2024 to add low light vis by spell.
+  Implementation by FlattedFifth/GreenMonster @ SCoD Discord, June 28, 2024 to be used for any feat 
+  to be granted by spell. Use this function for all spells that grant temporary feats so that you 
+  don't later have to remove those feats manually. Note that these functions require the x2_inc_itemprop 
+  include if you wish to move them elsewhere. 
+ Args:
+ nFeatId = 	the feat id from feat.2da of the feat you want to grant, will use iprp_feats.2da to look up the proper id
+			from iprp_feats.2da for adding as a bonus property. If you already know the correct iprp_feats index, 
+			put that here and set bFeatLookup to FALSE.
+			
+oPC = 		The pc to get the feat from a spell. Only PCs, not npcs.
+
+fDuration = Spell duration in seconds after calling ApplyMetamagicDurationMods(fDuration) in the spell script. If you leave this at
+			0.0 it will be changed to 24 hours to prevent being permanent
+
+bFeatLookup=If nFeatId is the feat id from feat.2da, leave this set to TRUE. If you entered the proper id for ItemPropertyBonusFeat
+			from iprp_feats.2da, set this to FALSE.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0, int bFeatLookup = TRUE,)
+{
+	// since EffectLowLightVision doesn't work we're only using it as a placeholder value.
+	// If we want an actual effect we can call the below function directly.
+	PS_GrantFeatBySpellWithEffect(nFeatId, oPC, EffectLowLightVision(), fDuration, -1, bFeatLookup);
+}
+
+/*
+Temporarily grant a feat with a spell by adding it as a temp item property bonus feat to creature skin, 
+and use spell effects from spell for spells such as See the Unseen that have other effects.
+ Args:
+ nFeatId = 	the feat id from feat.2da of the feat you want to grant, will use iprp_feats.2da to look up the proper id
+			from iprp_feats.2da for adding as a bonus property. If you already know the correct iprp_feats index, 
+			put that here and set bFeatLookup to FALSE.
+			
+oPC = 		The pc to get the feat from a spell. Only PCs, not npcs.
+
+eEffect = 	The other spell effects. Use EffectLinkEffects to combine them, EXCEPT any vfx of the VFX_IMP_* group. Set that separately
+			in nImpact, but only use 1
+
+fDuration = Spell duration in seconds after calling ApplyMetamagicDurationMods(fDuration) in the spell script. If you leave this at
+			0.0 it will be changed to 24 hours to prevent being permanent
+			
+nImpact =	VFX to be applied as an impact on the target with duration type instant. You can only choose 1. Leave at -1 for none.
+
+bFeatLookup=If nFeatId is the feat id from feat.2da, leave this set to TRUE. If you entered the proper id for ItemPropertyBonusFeat
+			from iprp_feats.2da, set this to FALSE.	
+*/
+void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1, int bFeatLookup = TRUE)
+{
+	// since this feat is going to be an item property and we're using the safeadd function with keep existing
+	// it doesn't really matter if the pc has the feat in some form already or not. Just go for it.
+	itemproperty ipBonusFeat;
+	if (bFeatLookup){ ipBonusFeat = ItemPropertyBonusFeat(PS_GetIpBonusFeat(nFeatId));
+	}
+	else { ipBonusFeat = ItemPropertyBonusFeat(nFeatId); }
+	PS_GrantTempItemPropertyToPCWithEffects(ipBonusFeat, oPC, eEffect, fDuration, nImpact);
+	
+	
+}
+
+// Use this if you have a item property already set up in the spell script.
+void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0)
+{
+	PS_GrantTempItemPropertyToPCWithEffects(ip, oPC, EffectLowLightVision(), fDuration, -1);
+}
+
+// use this if you want to apply the item prop and all other spell effects in one function.
+void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1)
+{
+	if (GetIsPC(oPC))
+	{
+		// if the we don't pass a duration just set it to 24 hours. We're not setting any permament properties here.
+		if (fDuration == 0.0) fDuration = HoursToSeconds(24);
+		object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+		if (oSkin == OBJECT_INVALID)
+		{
+			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
+			AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR));
+		}
+		IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
+	}
+	if (nImpact != -1)
+	{
+		effect eVis = EffectVisualEffect(nImpact);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+	}
+	// Effect LowLightVision() doesn't actually do anything, so it's a handy placeholder to mean "do nothing"
+	// since there's no intentional effect_invalid sort of thing we could use.
+	if (eEffect != EffectLowLightVision())
+	{
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
+	}
+}
+
+// Input a feat id from feat.2da and get the corresponding item property bonus feat from iprp_feats.2da
+int PS_GetIpBonusFeat(int nFeatId)
+{
+	 // we'll use weapon finesse as a default return value for a feat that isn't found.
+	 // Harmless since everyone has that anyway.
+	int nId = 19;
+	
+	// get the iprp index that corresponds to the featid. Add any other common requests
+	// to cases here.
+	switch (nFeatId)
+	{
+		case 354: return 801; // low light Vision
+		case 228: return 438; //darkvision 
+		case 21103: return 438; //darkvision, searched by psi feat
+		case 240: return 800; // keen senses
+		case 408: return 386; // blind fight
+		default: 
+		{
+			string sCheckString = IntToString(nFeatId);
+			int nRow = 0;
+			// max number of lines to check. Note that the loop SHOULD exit when we reach the last row, this is just
+			// a safety measure. Number chosen based on number of lines in iprp_feats.2da. If we add enough more feats
+			// to change that number then ofc we should adjust this number. Note that this loop depends on there being
+			// no blank entries in the "label" column.
+			int nMaxRow = 458;
+			
+			while (Get2DAString("iprp_feats", "Label", nRow) != "")
+			{
+				string sValue = Get2DAString("iprp_feats", "FeatIndex", nRow);
+				
+				if (sValue != "")
+				{
+					if (sCheckString == sValue)
+					{
+						return nRow; // Return the row ID if the FeatIndex matches
+					}
+				}
+				// return weapon finesse if we've reached max rows to check (shouldn't ever happn)
+				// or increment row to check
+				if (nRow == nMaxRow) return nId; else nRow++;
+			}
+			return nId;
+		}
+	}
+	// we have already returned a valid value by this point because if we run out of 2da or reach max rows somehow
+	// without finding the feat we return nId, but the compiler complains if this isn't here.
+	return nId;
+}
+
 
 //Calculates Monk Unarmed Damage Based on Monk Class +PRC
 int MonkUnarmedDamage(object oPC, int iMonk)

@@ -26,6 +26,7 @@
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -47,7 +48,7 @@ void main()
 
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
-	object oChest 		= GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
+//	object oChest 		= GetItemInSlot(INVENTORY_SLOT_CHEST, OBJECT_SELF);
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
@@ -61,10 +62,12 @@ void main()
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_SPELL_CLAIRAUD));
         effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);
         float fDuration = HoursToSeconds(manif.nManifesterLevel);
-		itemproperty iKeenSight = ItemPropertyBonusFeat(800);	
+		//itemproperty iKeenSight = ItemPropertyBonusFeat(800);	
         if(manif.bExtend) fDuration *= 2;
 
-		AddItemProperty(DURATION_TYPE_TEMPORARY,iKeenSight,oChest,fDuration);
+		//AddItemProperty(DURATION_TYPE_TEMPORARY,iKeenSight,oChest,fDuration);
+		PS_GrantFeatBySpell(800, oTarget, fDuration, FALSE); // keen senses
+		PS_GrantFeatBySpell(801, oTarget, fDuration, FALSE); // low light vision
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }

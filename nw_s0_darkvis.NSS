@@ -15,9 +15,8 @@
 
 // JLR - OEI 08/23/05 -- Permanency & Metamagic changes
 #include "nwn2_inc_spells"
-
-
 #include "x2_inc_spellhook" 
+#include "ps_inc_functions"
 
 void main()
 {
@@ -55,9 +54,10 @@ void main()
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
-    int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+    //int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     RemovePermanencySpells(oTarget);
 
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	PS_GrantFeatBySpellWithEffect(228, oTarget, eLink, fDuration);
 }
