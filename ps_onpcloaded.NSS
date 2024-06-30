@@ -1,4 +1,10 @@
 //v. 1.01
+// FlattedFifth, June 30, 2024; Replaced old call to "ff_mod_game_items" with new, improved
+//					"ff_update_legacy_items" and call it just before StackingEquipmentBugFix is
+//					called from main. Also moved boots to last item of StackingEquipmentBugFix
+//					and increased the delay from 0.1 second to o.5 seconds in the hopes of
+//					removing double dodge ac bug.
+
 
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
@@ -17,12 +23,14 @@
 #include "ps_inc_bgspellfix"
 #include "ginc_time"
 #include "ps_heightadjust_includes"
+#include "ff_update_legacy_items"
 #include "ff_sneak_fix"
-#include "ff_mod_game_item"
 #include "class_mageslayer_utils"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
+
+
 
 void StackingEquipmentBugFix(object oPC) {
 
@@ -36,9 +44,7 @@ void StackingEquipmentBugFix(object oPC) {
 	SendMessageToPC(oPC, "Re-equipping equipment for bugfix. Check the ground for any lost items before proceeding.");
 
 	ClearAllActions();
-	
-	//check for un nerfed sword saint armor and nerf as requested
-	FF_ModifyGameItem(oPC, "ps_itemset_swordsaint3", ItemPropertyDecreaseAC(IP_CONST_ACMODIFIERTYPE_SHIELD, 2), TRUE);
+
 	
 	object oItem = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
 	if (GetIsObjectValid(oItem)) {
@@ -50,12 +56,6 @@ void StackingEquipmentBugFix(object oPC) {
 	if (GetIsObjectValid(oItem)) {
 		AssignCommand(oPC, ActionUnequipItem(oItem));
 		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BELT)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BOOTS)));
 	}
 	
 	oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
@@ -104,6 +104,12 @@ void StackingEquipmentBugFix(object oPC) {
 	if (GetIsObjectValid(oItem)) {
 		AssignCommand(oPC, ActionUnequipItem(oItem));
 		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTRING)));
+	}
+	
+	oItem = GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC);
+	if (GetIsObjectValid(oItem)) {
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		DelayCommand(0.5f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BOOTS)));
 	}
 
 }
@@ -579,6 +585,9 @@ void main()
 		if (GetHasFeat(289,oPC))
 		FeatAdd(oPC,3218,FALSE,FALSE,TRUE);
 		ConvertBio(oPC);
+		// We will update legacy items before the re-equip feature in case any 
+		// items get dropped on re-equip
+		FF_UpdateLegacyItems(oPC);
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);

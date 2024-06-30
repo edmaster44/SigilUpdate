@@ -11,13 +11,15 @@
 // FlattedFifth - June 18, 2024: Re-ordered file to put main logic at top because IMO it's more readable that way,
 //				Added a boolean style integer to control whether we bother logging muling or not (idk why we would
 //				when it's allowed), though that might be better moved to x2_inc_switches at some point.
-
+// 				Also makes wands and scrolls useable by those mage slayers who can use them.
+//		ditto - June 30, added call to ff_update_legacy_items to fix any wrong items when the pc gets them.
 #include "x2_inc_switches"
 #include "nwnx_sql"
 #include "ps_wandofsort_inc"
 #include "ps_inc_advscript"
 #include "ps_inc_functions"
 #include "class_mageslayer_utils"
+#include "ff_update_legacy_items"
 
 
 // since muling is allowed there's no reason to make unnecessary writes to disk to log it.
@@ -42,6 +44,9 @@ void main()
 	object oFROM = GetModuleItemAcquiredFrom();
 	object oITEM = GetModuleItemAcquired();
 	HandleSigilAcquisition(oBY, oFROM, oITEM);
+	
+	// call to ff_update_legacy_items
+	FF_UpdateSingleLegacyItem(oITEM);
 	
 	// call to ps_mage_slayer_utils
 	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oBY))
