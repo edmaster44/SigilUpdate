@@ -15,17 +15,17 @@ void main()
     object oPC = OBJECT_SELF;
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DIVINE_FAVOR);
     int nScale = GetAbilityModifier(ABILITY_WISDOM,oPC);
-	 if (nScale < 1)
-        nScale = 1;
-	 if (nScale >10)
-	 nScale = 10;
-	    float fDuration = TurnsToSeconds(nScale); 
-	  effect eLink = EffectMovementSpeedIncrease(nScale*5);
-	   		 eLink = EffectLinkEffects(eLink, EffectDamageIncrease(nScale,DAMAGE_TYPE_SLASHING));
-			 eLink = EffectLinkEffects(eLink,EffectAttackIncrease(nScale,ATTACK_BONUS_MISC));
-
+	if (nScale < 1) 
+		nScale = 1;
+	if (nScale >10)
+	 	nScale = 10;
+	float fDuration = TurnsToSeconds(nScale); 
+	effect eLink = EffectMovementSpeedIncrease(nScale*5);
+	eLink = EffectLinkEffects(eLink, EffectDamageIncrease(nScale,DAMAGE_TYPE_SLASHING));
+	eLink = EffectLinkEffects(eLink,EffectAttackIncrease(nScale,ATTACK_BONUS_MISC));
+	eLink = SupernaturalEffect(eLink);
 	  
 	  
-	  ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 	  
 }
