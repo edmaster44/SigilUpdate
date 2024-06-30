@@ -14,7 +14,7 @@ void main()
 	if (nDamageBonus > 0)
 	{
 		effect eDam	= EffectDamageIncrease(nDamageBonus, nDamageType);
-		eDam = ExtraordinaryEffect(eDam);
+		eDam = SupernaturalEffect(eDam);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oPC);
 	}
 }
