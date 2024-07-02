@@ -17,12 +17,39 @@
 const int SIGIL_EQUIP_FX = -9444;
 const int SIGIL_ARMOR_OPTIMIZATION_FX = -9544;
 
+void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT);
+
 
 //This gets the weapons that qualify for Meditative Strikes
 int GetMonkWeapon(object oItem)
 { 
        int iBaseItem = GetBaseItemType(oItem);
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
+}
+
+
+//TODO Test with halfling monkey grip 
+// Feat that reduces the penalty for using a larger than normal offhand weapon by 2. 
+void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
+{
+	// OversizeTWF id = 21923. We're not going to check for regular twf because that's 
+	// already a requirement in feat.2da to have oversize twf. Bail if they don't have it.
+	if (!GetHasFeat(21923, oPC, TRUE)) return;
+	
+	// bail if not dual wielding.
+	if (!IPGetIsMeleeWeapon(oRHAND) || !IPGetIsMeleeWeapon(oLHAND)) return;
+	
+	int nPCsize = GetCreatureSize(oPC);
+	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", GetBaseItemType(oLHAND)));
+	int nAb = 0;
+	if (nWeaponSize == nPCsize) nAb = 2;
+		else if (nWeaponSize > nPCsize) nAb = 1;
+	
+	if (nAb > 0)
+	{
+		effect eAb = EffectAttackIncrease(nAb);
+		ApplyEquipmentEffect(oPC, eAb);
+	}
 }
 
 
@@ -836,6 +863,7 @@ void EquipmentEffects(object oPC)
     UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
+	OversizeTwoWeaponFighting(oPC, oRHAND, oLHAND);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
 }

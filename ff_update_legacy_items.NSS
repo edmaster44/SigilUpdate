@@ -37,6 +37,18 @@ void FF_UpdateSingleLegacyItem(object oItem)
 		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_DRAGONDISCIPLE), FALSE);
 		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(idClassHalfDragon), TRUE);
 	}
+	
+	// Fix Helm of Darkness darkvision. Note that this requires my updated iprp_feats.2da to work properly because 
+	// darkvision wasn't available as a bonus feat until I added it, so we'll do a little check and default to low 
+	// light vision instead if darkvision isn't found. -FlattedFifth
+	if (GetResRef(oItem) == "ps_helmet_helmofdarkness")
+	{
+		itemproperty ipdv = ItemPropertyDarkvision();
+		FF_ModifyItemProperty(oItem, ipdv, FALSE);
+		int nFeatId = 801;
+		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228") nFeatId = 438; 
+		FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(nFeatId), TRUE);
+	}
 }
 
 
