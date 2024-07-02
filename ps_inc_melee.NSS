@@ -8,6 +8,7 @@
 #include "X0_I0_SPELLS"
 #include "ps_inc_time"
 #include "ps_inc_advscript"
+#include "nwnx_dae"
 
 int GetEnhancementBonus(object oPC, object oWeapon);
 
@@ -262,6 +263,9 @@ void PS_CustomAnimation(object oObject, string sAnimationName, int nLooping, flo
 
 int GetAttackBonusTotal(object oPC, object oWeapon)
 {
+/*
+	All of this is deprecated, Dae does it better.
+	
 	int AB = GetTRUEBaseAttackBonus(oPC);
 	int STR = GetAbilityModifier(ABILITY_STRENGTH,oPC);
 	int DEX = GetAbilityModifier(ABILITY_DEXTERITY,oPC);
@@ -288,6 +292,8 @@ int GetAttackBonusTotal(object oPC, object oWeapon)
 	
 	if(GetHasFeat(584,oPC)) AB++; //Epic Prowess	
 	return AB + count;
+	*/
+	return GetBaseAttackBonus(oPC) + dae_GetOnHandAttackModifier(oPC);
 }
 
 void RemoveMirrorImage(object oPC)
