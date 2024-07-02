@@ -39,6 +39,7 @@ void main()
 		
 		if (nAttack == 2 && GetHasFeat(FEAT_CHAIN_OF_OVERWHELMING_FORCE,oPC))
 		{
+			nDmg = d10(8); // added by FlattedFifth, June 2, 2024
 			nDamageType = DAMAGE_TYPE_MAGICAL;
 			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, FALSE);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 12.0);
