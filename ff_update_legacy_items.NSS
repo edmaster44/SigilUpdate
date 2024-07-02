@@ -15,8 +15,11 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd);
 // item event script x2_mod_def_aqu.nss
 void FF_UpdateSingleLegacyItem(object oItem)
 {
+	// since multiple checks require knowing the res ref, we'll just get it here.
+	string nRef = GetResRef(oItem);
+	
 	// nerf the sword saint armor
-	if (GetResRef(oItem) == "ps_itemset_swordsaint3")
+	if (nRef == "ps_itemset_swordsaint3")
 	{
 		FF_ModifyItemProperty(oItem, ItemPropertyDecreaseAC(IP_CONST_ACMODIFIERTYPE_SHIELD, 2), TRUE);
 	}
@@ -38,12 +41,14 @@ void FF_UpdateSingleLegacyItem(object oItem)
 		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(idClassHalfDragon), TRUE);
 	}
 	
-	// Fix Helm of Darkness darkvision. Note that this requires my updated iprp_feats.2da to work properly because 
+	// Fix darkvision helmets. Note that this requires my updated iprp_feats.2da to work properly because 
 	// darkvision wasn't available as a bonus feat until I added it, so we'll do a little check and default to low 
-	// light vision instead if darkvision isn't found. -FlattedFifth
-	if (GetResRef(oItem) == "ps_helmet_helmofdarkness")
+	// light vision instead if darkvision isn't found. IPGetItemHasProperty() will not recognize ItempropertyDarkvision()
+	// for some reason so we have to check for individual helms. -FlattedFifth
+	if (nRef == "ps_luca_safetygoggles" || nRef == "ps_helmet_helmofdarkness" ) 
 	{
 		itemproperty ipdv = ItemPropertyDarkvision();
+		// go ahead and remove item property darkvision since it doesn't work anyway. Its'a biobug
 		FF_ModifyItemProperty(oItem, ipdv, FALSE);
 		int nFeatId = 801;
 		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228") nFeatId = 438; 
