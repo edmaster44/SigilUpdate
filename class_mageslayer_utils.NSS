@@ -5,12 +5,14 @@
 // uses a couple utility functions from the x2_inc_craft and from x2_inc_itemprop (included in x2_inc_craft)
 #include "x2_inc_craft"
 #include "ps_inc_functions"
+#include "nw_i0_spells"
 
 const int FEAT_MAGE_SLAYER_NORMAL = 21923;
 const int FEAT_MAGE_SLAYER_ANTI_ARCANE = 21925;
 const int FEAT_MAGE_SLAYER_ANTI_DIVINE = 21926;
 const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
 const int CLASS_TYPE_MAGE_SLAYER = 70;
+const int SPELL_ID_MAGE_SLAYER_TYPE = 14717;
 
 // a string that is used as the variable for when an item that uses the UNIQUE_POWER type causes the mage slayer to cast
 // a spell. The mechanical reality is that the mage slayer is casting the spell, usually on themself, but ICly it's actually 
@@ -68,7 +70,7 @@ struct ItemUsage
 // function declarations
 struct ItemUsage GetMageSlayerUsageData(object oPC);
 int GetSpellIsHostile(int nSpellId, object oTarget);
-void CheckForOutdatedMageSlayer(object oPC);
+void MageSlayerLevels(object oPC);
 int GetSpellIsDivine(int nSpellId);
 int GetSpellIsArcane(int nSpellId);
 int GetSpellIsHealing(int nSpellId, object oPC);
@@ -87,18 +89,37 @@ int GetItemUsuableByArcane(object oItem);
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-			Called from ps_onpcloaded, check for pre-change mage slayer
+			Called from ps_onpcloaded and ps_pclevelup, check for pre-change mage slayer and make 
+			sure that mage slayer combat bonuses are applied correctly for class level, in case of de-leveling
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void CheckForOutdatedMageSlayer(object oPC)
+void MageSlayerLevels(object oPC)
 {
 	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC))
 	{
-		if (!GetHasFeat(FEAT_MAGE_SLAYER_ANTI_ARCANE) && !GetHasFeat(FEAT_MAGE_SLAYER_ANTI_DIVINE) && 
-				  !GetHasFeat(FEAT_MAGE_SLAYER_NORMAL))
+		if (!GetHasFeat(FEAT_MAGE_SLAYER_ANTI_ARCANE, oPC) && !GetHasFeat(FEAT_MAGE_SLAYER_ANTI_DIVINE, oPC) && 
+				  !GetHasFeat(FEAT_MAGE_SLAYER_NORMAL, oPC))
 		{
 			SendMessageToPC(oPC, "Mage Slayer class pre-requisites and abilites have changed. Please see a DM/EM for assistance with a rebuild");
+			return;
 		}
+	}
+	RemoveEffectsFromSpell(oPC, SPELL_ID_MAGE_SLAYER_TYPE);
+	int nDamageType = DAMAGE_TYPE_POSITIVE;
+	// set the bonus damage type for the type of mage slayer. If they don't have any of
+	// these feats, exit. 
+	if (GetHasFeat(FEAT_MAGE_SLAYER_ANTI_ARCANE, oPC)) nDamageType = DAMAGE_TYPE_DIVINE;
+		else if (GetHasFeat(FEAT_MAGE_SLAYER_ANTI_DIVINE, oPC)) nDamageType = DAMAGE_TYPE_MAGICAL;
+		else if (GetHasFeat(FEAT_MAGE_SLAYER_NORMAL, oPC)) nDamageType = DAMAGE_TYPE_POSITIVE;
+		else return;
+
+	int nDamageBonus = (GetLevelByClass(CLASS_TYPE_MAGE_SLAYER, oPC) + 1) / 3;
+	if (nDamageBonus > 0)
+	{
+		effect eDam	= EffectDamageIncrease(nDamageBonus, nDamageType);
+		eDam = SupernaturalEffect(eDam);
+		eDam = SetEffectSpellId(eDam, SPELL_ID_MAGE_SLAYER_TYPE);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oPC);
 	}
 }
 

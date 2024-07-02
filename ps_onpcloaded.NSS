@@ -593,7 +593,7 @@ void main()
 		SetClockOnForPlayer(oPC, TRUE);
 		ff_sneak_fix(oPC);
 		// call to class_mageslayer_utils
-		CheckForOutdatedMageSlayer(oPC);
+		MageSlayerLevels(oPC);
 		
 	}
 }

@@ -21,6 +21,7 @@ May 30, 2024 FlattedFifth
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
 #include "ps_inc_bgspellfix"
+#include "class_mageslayer_utils"
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
 void CheckDragonBreath(object oPC, object oItem)
@@ -342,6 +343,7 @@ void main()
 	// redundant, ff_sneak_fix does all of this
 //	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
+	MageSlayerLevels(oPC);
 	// ff_sneak_fix should always come last after all 
 	// other leveling up operations.
 	ff_sneak_fix(oPC);
