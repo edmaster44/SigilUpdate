@@ -5,6 +5,10 @@
 //			Implemented that concept here to get any feat added by a spell and made functions
 //			to allow with or without an effect (since nw script doesn't seem to support a default
 //			arg for the effect data type).
+// FlattedFifth - July 3, 2024. Added function to PS_ManageImbueItem() to grant imbue item to Psi
+//			and to warlocks with warlock-specific prcs but who dont have 12 base levels. Made 
+//			previously declared but non-implemented GetIsFinessable() a wrapper for Dae's
+// 			function dae_GetIsFinessable().
 
 
 
@@ -17,6 +21,8 @@
 #include "nwnx_sql"
 #include "x2_inc_itemprop"
 #include "ps_inc_ecl"
+#include "ps_inc_casterlevel"
+#include "nwnx_dae"
 
 // String name of local variable on essence for storing the original race of the oPC.
 const string VAR_OLD_RACE = "OldRace";
@@ -83,6 +89,9 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
 
 // accepts a feat id from feat.2da and returns the id to be used in ItemPropertyBonusFeat() from iprp_feats.2da
 int PS_GetIpBonusFeat(int nFeatId);
+
+// grant Imbue Item to psi and to warlocks with prcs that make lvl 12 warlock base more difficult.
+void PS_ManageImbueItem(object oPC);
 
 int GetHasSpiritShamanProgression(object oPC, int iClass);
 
@@ -203,7 +212,12 @@ int GetAbilityRacialBonus(object oPC, int iAbility);
 
 int GetAbilityBonuses(object oPC, int iAbility);
 
+// This function is not defined as far as I can tell, but it shows up in a file search in over 2000 ndb files, but 
+// not in any nss file. What gives? If this is a declaration for something defined in a plug in, fine, but if it's 
+// an oversight we could make it a wrapper for Dae's function pretty easily. I've already done so and commented it 
+// out below. If we want to do that just un-comment.
 int GetIsFinessable(object oItem);
+
 //Gets the Classes without Practiced Spell caster, for Qualifer Feats
 int GetClericWithoutFeat(object oPC);
 //Gets the Classes without Practiced Spell caster, for Qualifer Feats
@@ -375,6 +389,37 @@ int PS_GetIpBonusFeat(int nFeatId)
 	// we have already returned a valid value by this point because if we run out of 2da or reach max rows somehow
 	// without finding the feat we return nId, but the compiler complains if this isn't here.
 	return nId;
+}
+
+// Give Imbue Item to Psi if they have caster level 6 or higher. Remove it from 
+// deleveled pcs who no longer qualify. Give imbue item to warlock if their 
+// warlock + warlock-specific prcs >= 15. Warlock will still get it at base class 
+// 12 as per the 2da, I didn't change that. -FlattedFifth, July 3, 2024
+void PS_ManageImbueItem(object oPC)
+{
+	int idClassHexen = 112;
+	int nPsiCaster = GetPsionicCasterLevel(oPC);
+	int nWarlockClass = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC);
+	int nWarlockClassPlus = nWarlockClass + GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC) +
+		GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC) + GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) +
+		GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC) + GetLevelByClass(idClassHexen, oPC);
+
+	int bQualifiesFree = (nPsiCaster >= 6 || nWarlockClass >= 12 || nWarlockClassPlus >= 15);
+	int bHasInbue = GetHasFeat(1430, oPC);
+	
+	if (bHasInbue && !bQualifiesFree) FeatRemove(oPC, 1430);
+	else if (!bHasInbue && bQualifiesFree) FeatAdd(oPC, 1430, FALSE);
+}
+
+
+// This function was declared but never defined, so made it a wrapper for Dae's function
+// without changing the arguments of either. -FlattedFifth
+
+int GetIsFinessable(object oItem)
+{
+	object oPC = GetItemPossessor(oItem);
+	int nSize = GetCreatureSize(oPC);
+	return dae_GetIsFinessable(oPC, oItem, nSize);
 }
 
 

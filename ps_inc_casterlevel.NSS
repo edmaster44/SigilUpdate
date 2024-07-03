@@ -54,7 +54,20 @@ int GetFeatGrantedCasterLevel(object oPC) {
 
 //Pulled out of the manifestation struct for using more generically
 int GetPsionicCasterLevel(object oPC) {
+	int nPsionLevel = GetLevelByClass(90, oPC);
+	int nIllithidMentalistLevel = GetLevelByClass(100,oPC);
+	int nGemDragonLevel = GetLevelByClass(128, oPC);
+	int nCerebremancerLevel = GetLevelByClass(152, oPC);
+	int nPsyKnightLevel = GetLevelByClass(109, oPC);
+	int nPsyWarriorLevel = GetLevelByClass(110, oPC);
+	int nWarmindLevel = GetLevelByClass(111, oPC);
+	
+	return nPsionLevel + nIllithidMentalistLevel + nGemDragonLevel + nCerebremancerLevel + 
+		nPsyKnightLevel + nPsyWarriorLevel + nWarmindLevel;
 
+	/*
+	We don't need to make 2 function calls for each class, and there were some missing.
+	- FlattedFifth, June 3, 2024
 	int nManifesterLevel = GetLevelByClass(90, oPC);
 	if(GetLevelByClass(100, oPC) > 0)
     {
@@ -69,6 +82,7 @@ int GetPsionicCasterLevel(object oPC) {
         nManifesterLevel = nManifesterLevel + GetLevelByClass(128, oPC);
     }
 	return nManifesterLevel;
+	*/
 }
 
 //Gets the PC's caster level, via 2da and feats

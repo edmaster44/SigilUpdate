@@ -4,6 +4,8 @@ Removed Alignment change for Thug for exploit reason
 May 30, 2024 FlattedFifth
 	removed redundant ps_adjust_sneakattack and AddEPForDeathDice()
 	Added ff_sneak_fix as final function in level up operations.
+July 3, 2024 FlattedFifth
+	Added imbue item to psi at psi caster level 6. Removed dragon disciple function
  */ 
 #include "ps_inc_functions"
 #include "ps_class_inc"
@@ -22,6 +24,11 @@ May 30, 2024 FlattedFifth
 #include "ps_adjust_knight"
 #include "ps_inc_bgspellfix"
 #include "class_mageslayer_utils"
+
+
+
+/* We don't have red dragon disciple any more
+
 // check for RDD levels and change immunity to fire to appropriate type.
 // we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
 void CheckDragonBreath(object oPC, object oItem)
@@ -71,6 +78,7 @@ void CheckDragonBreath(object oPC, object oItem)
 	FeatRemove(oPC, 964);
 	
 }
+*/
 
 // This function removed because of redundancy, this method now performed
 // by ff_sneak_fix
@@ -166,8 +174,6 @@ void DoPsiProgression(object oPC)
 		}
 	}
 }
-
-
 
 
 //Bardic music stacks
@@ -318,7 +324,8 @@ void main()
 	GetWarlockCasterLevel(oPC);
 	GiveWarlockBlastShapes(oPC);
 	CheckDiashoWeapons(oPC, oItem);
-	CheckDragonBreath(oPC, oItem);
+	// We don't hve dragon disciple any more
+	//CheckDragonBreath(oPC, oItem);
 	PS_BarbarianLevels(oPC);
 	GetClericWithoutFeat(oPC);
 	GetDruidWithoutFeat(oPC);
@@ -344,7 +351,9 @@ void main()
 //	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
 	MageSlayerLevels(oPC);
+	// call to ps_inc_functions to grant Imbue Item to psi and to warlocks with warlock prcs.
+	PS_ManageImbueItem(oPC);
 	// ff_sneak_fix should always come last after all 
-	// other leveling up operations.
+	// other leveling up operations. It matters less with the on login script.
 	ff_sneak_fix(oPC);
 }

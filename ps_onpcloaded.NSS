@@ -591,6 +591,8 @@ void main()
 		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
+		// call to ps_inc_functions to grant imbue item to psi and to warlock builds that are prc-heavy
+		PS_ManageImbueItem(oPC);
 		ff_sneak_fix(oPC);
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
