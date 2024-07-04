@@ -34,5 +34,5 @@ void main()
     }
 
     // Check if concentration is required to maintain this creature
-   // X2DoBreakConcentrationCheck();
+    X2DoBreakConcentrationCheck();
 }

@@ -181,7 +181,7 @@ void main()
     }
 
     // Check if concentration is required to maintain this creature
-    //X2DoBreakConcentrationCheck();
+    X2DoBreakConcentrationCheck();
 
     // * if I am dominated, ask for some help
     // TK removed SendForHelp
