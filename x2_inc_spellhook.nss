@@ -41,16 +41,11 @@ int X2UseMagicDeviceCheck();
 int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
 
-
-
-/*
-	// the below functions were commented out of the primary prior to my joining the server so 
-	// no need to load them. -FlattedFifth
 int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-*/
+
 
 
 //------------------------------------------------------------------------------
@@ -270,9 +265,8 @@ int X2GetSpellCastOnSequencerItem(object oItem)
     return TRUE; // in any case, spell is used up from here, so do not fire regular spellscript
 }
 
-//  All of the remaining functions had been commented out of the main function so there's no sense in loading them
 
-/*
+
 
 //------------------------------------------------------------------------------
 // GZ: This is a filter I added to prevent spells from firing their original spell
@@ -360,4 +354,3 @@ void X2DoBreakConcentrationCheck()
          }
     }	
 }
-*/
