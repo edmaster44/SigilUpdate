@@ -1,5 +1,5 @@
 NDB V1.0
-0000040 0000009 0002335 0000026 0000114
+0000042 0000009 0002387 0000026 0000114
 n00 ginc_debug
 n01 x0_i0_enemy
 n02 x0_inc_generic
@@ -24,22 +24,24 @@ n20 x0_i0_position
 n21 ServerExts
 n22 nwnx_sql
 n23 ps_inc_ecl
-n24 NW_I0_SPELLS
-n25 x0_i0_partywide
-n26 x0_i0_transport
-n27 x0_i0_common
-n28 nw_i0_plot
-n29 x0_i0_behavior
-n30 x0_i0_modes
-n31 x0_i0_voice
-n32 x0_i0_spawncond
-n33 x0_i0_walkway
-n34 x0_i0_anims
-n35 x0_i0_henchman
-n36 ps_adjust_knight
-n37 nwn2_inc_metmag
-n38 x0_i0_spells
-N39 gb_hydra_hb
+n24 ps_inc_casterlevel
+n25 nwnx_dae
+n26 NW_I0_SPELLS
+n27 x0_i0_partywide
+n28 x0_i0_transport
+n29 x0_i0_common
+n30 nw_i0_plot
+n31 x0_i0_behavior
+n32 x0_i0_modes
+n33 x0_i0_voice
+n34 x0_i0_spawncond
+n35 x0_i0_walkway
+n36 x0_i0_anims
+n37 x0_i0_henchman
+n38 ps_adjust_knight
+n39 nwn2_inc_metmag
+n40 x0_i0_spells
+N41 gb_hydra_hb
 s 03 vector
 sf f x
 sf f y
@@ -2452,6 +2454,89 @@ f ffffffff ffffffff 001 i PS_CalculateTemplateECL
 fp o
 f ffffffff ffffffff 001 v PS_EnforceMaxLevel
 fp o
+f ffffffff ffffffff 002 i GetCasterLevelFromClass
+fp o
+fp i
+f ffffffff ffffffff 001 i GetFeatGrantedCasterLevel
+fp o
+f ffffffff ffffffff 001 i GetPsionicCasterLevel
+fp o
+f ffffffff ffffffff 001 i GetRealCasterLevel
+fp o
+f ffffffff ffffffff 000 s XP_DAE_PLUGIN_NAME
+f ffffffff ffffffff 000 i EFFECT_TYPE_SCALE
+f ffffffff ffffffff 000 i EFFECT_TYPE_KNOCKDOWN
+f ffffffff ffffffff 000 i EFFECT_TYPE_MODIFY_ATTACKS
+f ffffffff ffffffff 003 i check_ushort
+fp i
+fp s
+fp s
+f ffffffff ffffffff 001 i dae_GetOnHandAttackModifier
+fp o
+f ffffffff ffffffff 001 i dae_GetOffHandAttackModifier
+fp o
+f ffffffff ffffffff 001 i dae_GetNumAttacks
+fp o
+f ffffffff ffffffff 001 i dae_GetMainHandDamage
+fp o
+f ffffffff ffffffff 001 s dae_GetUuid
+fp o
+f ffffffff ffffffff 002 i dae_GetRemainingFeatUses
+fp o
+fp i
+f ffffffff ffffffff 000 o rsadb_Attacker
+f ffffffff ffffffff 000 o rsadb_Target
+f ffffffff ffffffff 000 i rsadb_FeatId
+f ffffffff ffffffff 001 v rsadb_SetDamage
+fp i
+f ffffffff ffffffff 003 v dae_CreateFinesseRule
+fp i
+fp i
+fp i
+f ffffffff ffffffff 000 v dae_LogFinesseRules
+f ffffffff ffffffff 003 i dae_GetIsFinessable
+fp o
+fp o
+fp i
+f ffffffff ffffffff 003 v dae_CreateSkillFeat
+fp i
+fp i
+fp i
+f ffffffff ffffffff 004 v dae_CreateSkillSynergy
+fp i
+fp i
+fp i
+fp i
+f ffffffff ffffffff 000 v dae_LogSkillFeats
+f ffffffff ffffffff 000 v dae_LogSkillSynergies
+f ffffffff ffffffff 001 v dae_AddMonkWeapon
+fp i
+f ffffffff ffffffff 000 i AC_TYPE_TOTAL
+f ffffffff ffffffff 000 i AC_TYPE_NATURAL_BASE
+f ffffffff ffffffff 000 i AC_TYPE_ARMOR_BASE
+f ffffffff ffffffff 000 i AC_TYPE_SHIELD_BASE
+f ffffffff ffffffff 000 i AC_TYPE_ARMOR_MOD
+f ffffffff ffffffff 000 i AC_TYPE_ARMOR_NEG
+f ffffffff ffffffff 000 i AC_TYPE_DEFLECTION_MOD
+f ffffffff ffffffff 000 i AC_TYPE_DEFLECTION_NEG
+f ffffffff ffffffff 000 i AC_TYPE_SHIELD_MOD
+f ffffffff ffffffff 000 i AC_TYPE_SHIELD_NEG
+f ffffffff ffffffff 000 i AC_TYPE_NATURAL_MOD
+f ffffffff ffffffff 000 i AC_TYPE_NATURAL_NEG
+f ffffffff ffffffff 000 i AC_TYPE_DODGE_MOD
+f ffffffff ffffffff 000 i AC_TYPE_DODGE_NEG
+f ffffffff ffffffff 000 i AC_TYPE_INNATE
+f ffffffff ffffffff 002 i dae_GetAC
+fp o
+fp i
+f ffffffff ffffffff 002 v dae_AddInnateACFeat
+fp i
+fp i
+f ffffffff ffffffff 002 v dae_AddBaseNAACFeat
+fp i
+fp i
+f ffffffff ffffffff 001 i dae_LogEffects
+fp o
 f ffffffff ffffffff 000 s VAR_OLD_RACE
 f ffffffff ffffffff 000 s VAR_ECL
 f ffffffff ffffffff 000 i ITEM_MIN_CL
@@ -2484,6 +2569,32 @@ f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC
 f ffffffff ffffffff 000 i PS_PC_FLAG_COLOR_EMOTES
 f ffffffff ffffffff 000 s PS_PC_FLAGS_VAR
 f ffffffff ffffffff 001 o PS_GetEssence
+fp o
+f ffffffff ffffffff 004 v PS_GrantFeatBySpell
+fp i
+fp o
+fp f
+fp i
+f ffffffff ffffffff 006 v PS_GrantFeatBySpellWithEffect
+fp i
+fp o
+fp e0
+fp f
+fp i
+fp i
+f ffffffff ffffffff 003 v PS_GrantTempItemPropertyToPC
+fp e4
+fp o
+fp f
+f ffffffff ffffffff 005 v PS_GrantTempItemPropertyToPCWithEffects
+fp e4
+fp o
+fp e0
+fp f
+fp i
+f ffffffff ffffffff 001 i PS_GetIpBonusFeat
+fp i
+f ffffffff ffffffff 001 v PS_ManageImbueItem
 fp o
 f ffffffff ffffffff 002 i GetHasSpiritShamanProgression
 fp o
@@ -4306,7 +4417,7 @@ l04 0000076 0000002c 0000002c
 l04 0000077 0000002c 0000002c
 l04 0000078 0000002c 0000002c
 l04 0000080 0000002c 0000002c
-l05 0000203 0000002c 00000048
+l05 0000242 0000002c 00000048
 l06 0000051 00000048 00000062
 l06 0000053 00000062 00000078
 l07 0000207 00000078 00000078
@@ -4316,45 +4427,45 @@ l07 0000210 00000078 00000078
 l07 0000211 00000078 00000078
 l07 0000213 00000078 00000078
 l07 0000214 00000078 00000078
-l39 0000016 0000008a 000000aa
-l39 0000017 000000b0 000000bc
-l39 0000019 000000bc 000000cf
-l39 0000020 000000cf 000000e5
-l39 0000022 000000e5 000000f5
-l39 0000024 000000fb 00000118
-l39 0000025 00000118 00000124
-l39 0000027 00000124 00000142
-l39 0000028 00000142 00000160
-l39 0000029 00000160 00000171
-l39 0000030 00000171 0000017c
-l39 0000031 0000017c 0000018c
-l39 0000032 0000018c 0000019c
-l39 0000033 000001b6 000001c3
-l39 0000034 000001c3 000001d6
-l39 0000036 000001d6 000001e8
-l39 0000038 000001ee 000001fe
-l39 0000039 00000204 00000225
-l39 0000040 00000225 0000023e
-l39 0000041 0000023e 0000025a
-l39 0000044 0000025a 00000277
-l39 0000045 0000027d 0000027f
-l39 0000049 0000027f 00000281
-l39 0000050 00000281 0000028e
-l39 0000051 0000028e 0000029e
-l39 0000052 000002b0 000002c0
-l39 0000053 000002c0 000002da
-l39 0000054 000002da 000002f2
-l39 0000055 000002f2 00000302
-l39 0000056 0000031c 0000032c
-l39 0000058 0000032c 0000033e
-l39 0000059 00000350 00000366
-l39 0000060 00000366 00000388
-l39 0000061 00000388 0000039c
-l39 0000062 0000039c 000003ac
-l39 0000063 000003be 000003e9
-l39 0000064 000003e9 00000427
-l39 0000065 00000427 00000465
-l39 0000066 0000046b 00000473
+l41 0000016 0000008a 000000aa
+l41 0000017 000000b0 000000bc
+l41 0000019 000000bc 000000cf
+l41 0000020 000000cf 000000e5
+l41 0000022 000000e5 000000f5
+l41 0000024 000000fb 00000118
+l41 0000025 00000118 00000124
+l41 0000027 00000124 00000142
+l41 0000028 00000142 00000160
+l41 0000029 00000160 00000171
+l41 0000030 00000171 0000017c
+l41 0000031 0000017c 0000018c
+l41 0000032 0000018c 0000019c
+l41 0000033 000001b6 000001c3
+l41 0000034 000001c3 000001d6
+l41 0000036 000001d6 000001e8
+l41 0000038 000001ee 000001fe
+l41 0000039 00000204 00000225
+l41 0000040 00000225 0000023e
+l41 0000041 0000023e 0000025a
+l41 0000044 0000025a 00000277
+l41 0000045 0000027d 0000027f
+l41 0000049 0000027f 00000281
+l41 0000050 00000281 0000028e
+l41 0000051 0000028e 0000029e
+l41 0000052 000002b0 000002c0
+l41 0000053 000002c0 000002da
+l41 0000054 000002da 000002f2
+l41 0000055 000002f2 00000302
+l41 0000056 0000031c 0000032c
+l41 0000058 0000032c 0000033e
+l41 0000059 00000350 00000366
+l41 0000060 00000366 00000388
+l41 0000061 00000388 0000039c
+l41 0000062 0000039c 000003ac
+l41 0000063 000003be 000003e9
+l41 0000064 000003e9 00000427
+l41 0000065 00000427 00000465
+l41 0000066 0000046b 00000473
 l17 0000104 00000473 00000480
 l17 0000105 00000480 0000048d
 l17 0000106 0000048d 0000049d
@@ -4363,11 +4474,11 @@ l17 0000108 000004bd 000004cf
 l17 0000109 000004d5 000004ef
 l17 0000110 000004ef 0000052c
 l17 0000111 00000532 0000053a
-l38 0001824 0000053a 0000053c
-l38 0001825 0000053c 00000551
-l38 0001828 00000557 00000572
-l38 0001829 00000572 00000585
-l38 0001832 00000585 0000059c
-l38 0001834 000005a2 000005b7
-l38 0001837 000005b7 000005d2
-l38 0001840 000005de 000005e6
+l40 0001824 0000053a 0000053c
+l40 0001825 0000053c 00000551
+l40 0001828 00000557 00000572
+l40 0001829 00000572 00000585
+l40 0001832 00000585 0000059c
+l40 0001834 000005a2 000005b7
+l40 0001837 000005b7 000005d2
+l40 0001840 000005de 000005e6
