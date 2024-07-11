@@ -28,7 +28,7 @@ int GetMonkWeapon(object oItem)
 }
 
 
-//TODO Test with halfling monkey grip 
+
 // Feat that reduces the penalty for using a larger than normal offhand weapon by 2. 
 void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
 {
@@ -41,14 +41,10 @@ void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
 	
 	int nPCsize = GetCreatureSize(oPC);
 	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", GetBaseItemType(oLHAND)));
-	int nAb = 0;
-	if (nWeaponSize == nPCsize) nAb = 2;
-		else if (nWeaponSize > nPCsize) nAb = 1;
-	
-	if (nAb > 0)
+	if (nWeaponSize >= nPCsize)
 	{
-		effect eAb = EffectAttackIncrease(nAb);
-		ApplyEquipmentEffect(oPC, eAb);
+		effect eOTWF = EffectAttackIncrease(2);
+		ApplyEquipmentEffect(oPC, eOTWF);
 	}
 }
 
