@@ -41,6 +41,14 @@ void FF_UpdateSingleLegacyItem(object oItem)
 		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(idClassHalfDragon), TRUE);
 	}
 	
+	// replace Dwarven Defender use limit with Stalwart Defender
+	if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_DWARVENDEFENDER), DURATION_TYPE_PERMANENT))
+	{
+		int idClassStalwart = 180;
+		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_DWARVENDEFENDER), FALSE);
+		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(idClassStalwart), TRUE);
+	}
+	
 	// Fix darkvision helmets. Note that this requires my updated iprp_feats.2da to work properly because 
 	// darkvision wasn't available as a bonus feat until I added it, so we'll do a little check and default to low 
 	// light vision instead if darkvision isn't found. IPGetItemHasProperty() will not recognize ItempropertyDarkvision()
