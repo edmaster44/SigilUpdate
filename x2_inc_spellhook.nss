@@ -183,7 +183,8 @@ int X2UseMagicDeviceCheck()
 	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF))
 	{
 		object oItem = GetSpellCastItem();
-		if (oItem == OBJECT_INVALID) return FALSE;
+		if (oItem == OBJECT_INVALID && GetSpellFeatId() < 1) return FALSE;
+		if (GetSpellFeatId() > 0) return TRUE;
 		int nItem = GetBaseItemType(oItem);
 		int nSpellId = GetSpellId();
 		return GetMageSlayerItemOrSpell(OBJECT_SELF, nItem, nSpellId);
