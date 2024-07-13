@@ -175,11 +175,20 @@ int X2PreSpellCastCode()
 // Use Magic Device Check.
 // Returns TRUE if the Spell is allowed to be cast, either because the
 // character is allowed to cast it or he has won the required UMD check
-// Only active on spell scroll
+// Only active on spell scroll. Special pass for Mage Slayer if constants
+// in class_mageslayer_utils.nss are set to allow scrolls for the type
+// of mage slayer in question.
 int X2UseMagicDeviceCheck()
 {
-    int nRet = ExecuteScriptAndReturnInt("x2_pc_umdcheck",OBJECT_SELF);
-    return nRet;
+	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF))
+	{
+		object oItem = GetSpellCastItem();
+		if (oItem == OBJECT_INVALID) return FALSE;
+		int nItem = GetBaseItemType(oItem);
+		int nSpellId = GetSpellId();
+		return GetMageSlayerItemOrSpell(OBJECT_SELF, nItem, nSpellId);
+	}
+    else return ExecuteScriptAndReturnInt("x2_pc_umdcheck",OBJECT_SELF);
 }
 
 //------------------------------------------------------------------------------
