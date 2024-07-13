@@ -32,87 +32,6 @@ const int nDailyXPlevel = 100;
 
 
 
-void StackingEquipmentBugFix(object oPC) {
-
-	//In case we are somewhere unsafe, make me ethereal. Also give temporary stat boosts while gear is being removed
-	effect eSanctuary = EffectEthereal();
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSanctuary, oPC, 8.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_WISDOM, 12), oPC, 8.0f);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_INTELLIGENCE, 12), oPC, 8.0f);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_CHARISMA, 12), oPC, 8.0f);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_STRENGTH, 12), oPC, 8.0f);
-	SendMessageToPC(oPC, "Re-equipping equipment for bugfix. Check the ground for any lost items before proceeding.");
-
-	ClearAllActions();
-
-	
-	object oItem = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_ARMS)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_BELT, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BELT)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_CHEST)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_CLOAK)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_HEAD, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_HEAD)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_LEFTHAND)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_LEFTRING)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_NECK, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_NECK)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTHAND)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.1f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTRING)));
-	}
-	
-	oItem = GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC);
-	if (GetIsObjectValid(oItem)) {
-		AssignCommand(oPC, ActionUnequipItem(oItem));
-		DelayCommand(0.5f, AssignCommand(oPC, ActionEquipItem(oItem, INVENTORY_SLOT_BOOTS)));
-	}
-
-}
 
 void GiveStartingGold( object oPC, int nAmount )
 {
@@ -588,7 +507,6 @@ void main()
 		// We will update legacy items before the re-equip feature in case any 
 		// items get dropped on re-equip
 		FF_UpdateLegacyItems(oPC);
-		StackingEquipmentBugFix(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
 		// call to ps_inc_functions to grant imbue item to psi and to warlock builds that are prc-heavy

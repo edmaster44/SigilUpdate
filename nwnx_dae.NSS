@@ -286,3 +286,30 @@ int dae_LogEffects(object oCreature)
 {
 	return NWNXGetInt(XP_DAE_PLUGIN_NAME, "LogEffects", "", ObjectToInt(oCreature));
 }
+
+
+const int CATEGORY_ENHANCEMENT = -1; // The default category.
+const int CATEGORY_RAGE = 0; // Barbarian Rage category, any rage effects you want to take the highest of add to category 0
+// Create as many categories as you want, but they must be positive integers.
+// You don't need consts for them, but it's a good idea to keep track of them.
+// E.g. CATEGORY_FOO = 2; CATEGORY_BAR = 3; etc.
+// You can register spells to categories with dae_AddSpellAbilityCategory.
+// An example, if I want to make spell id 2021 belong to category 7, I would call:
+// dae_AddSpellAbilityCategory(2021, 7); within the on module load.
+// Now any ability increase or decrease effects that are tied to spell id 2021 will belong to category 7.
+
+void dae_AddSpellAbilityCategory(int nSpellId, int nCategory)
+{
+	if( check_ushort(nSpellId, "nFeat", "nwnx_dae_AddSpellAbilityCategory") )
+	{
+		NWNXSetInt(XP_DAE_PLUGIN_NAME, "AddSpellIdAbilityCategory", "", nCategory, nSpellId);
+	}
+}
+
+void dae_AddSpellSkillCategory(int nSpellId, int nCategory)
+{
+	if( check_ushort(nSpellId, "nFeat", "nwnx_dae_AddSpellSkillCategory") )
+	{
+		NWNXSetInt(XP_DAE_PLUGIN_NAME, "AddSpellIdSkillCategory", "", nCategory, nSpellId);
+	}
+}
