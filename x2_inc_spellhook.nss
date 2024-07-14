@@ -90,9 +90,12 @@ int X2PreSpellCastCode()
    }
    
    //---------------------------------------------------------------------------
-   // Run use magic device skill check
+   // Run use magic device skill check, except Mage Slayer. They had their item use check in 
+   // the previous conditional so there'd be no point in just calling those same functions again.
    //---------------------------------------------------------------------------
-   nContinue = X2UseMagicDeviceCheck();
+   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF) && 
+		MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS) nContinue = TRUE;
+   else nContinue = X2UseMagicDeviceCheck();
 
    if (nContinue)
    {
@@ -180,16 +183,8 @@ int X2PreSpellCastCode()
 // of mage slayer in question.
 int X2UseMagicDeviceCheck()
 {
-	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF))
-	{
-		object oItem = GetSpellCastItem();
-		if (oItem == OBJECT_INVALID && GetSpellFeatId() < 1) return FALSE;
-		if (GetSpellFeatId() > 0) return TRUE;
-		int nItem = GetBaseItemType(oItem);
-		int nSpellId = GetSpellId();
-		return GetMageSlayerItemOrSpell(OBJECT_SELF, nItem, nSpellId);
-	}
-    else return ExecuteScriptAndReturnInt("x2_pc_umdcheck",OBJECT_SELF);
+	int nRet = ExecuteScriptAndReturnInt("x2_pc_umdcheck",OBJECT_SELF);
+	return nRet;
 }
 
 //------------------------------------------------------------------------------

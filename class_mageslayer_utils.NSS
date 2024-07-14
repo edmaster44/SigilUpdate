@@ -14,6 +14,8 @@ const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
 const int CLASS_TYPE_MAGE_SLAYER = 70;
 const int SPELL_ID_MAGE_SLAYER_TYPE = 14717;
 
+const int MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS = TRUE;
+
 // a string that is used as the variable for when an item that uses the UNIQUE_POWER type causes the mage slayer to cast
 // a spell. The mechanical reality is that the mage slayer is casting the spell, usually on themself, but ICly it's actually 
 // the item that is doing it. At the time of this writing the ONLY items that do this are the self-only potions of negative
