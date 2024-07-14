@@ -27,11 +27,57 @@ int GetMonkWeapon(object oItem)
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
 }
 
+	// Prevent people from dual-wielding bites. If there's anyone with 2 heads I will have to adjust this.
+	// Also add a 1/2 str bonus to large characters wielding a creature sheathe one-handed to simulate
+	// 2-handed.
+void ManageCreatureWeapons(object oPC, object oRHAND, object oLHAND)
+{
+	int nBite1 = 177;
+	int nBite2 = 180; // possibly not currently in stores
+	int nItem = GetBaseItemType(oRHAND);
+	int nOffItem = GetBaseItemType(oLHAND);
+		// Prevent PC's from "dual wielding" bite attacks.
+	if ((nItem == nBite1 || nItem == nBite2) && (nOffItem == nBite1 || nOffItem == nBite2))
+	{
+		SendMessageToPC(oPC, "You cannot dual-wield bite attacks unless you have 2 heads.");
+		AssignCommand(oPC, ActionUnequipItem(oLHAND));
+		return;
+	}
+		// The rest of this only applies to large PCs with nothing in the off hand, 
+		// so bail if they are not large or have something in the off-Hand.
+	if (GetCreatureSize(oPC) <= 3 || oLHAND != OBJECT_INVALID) return;
+	
+	int nSlam = 178;
+	int nClawL = 179;
+
+		// Finally, having established that the PC is large and has an empty off-Hand
+	if (nItem == nBite1 || nItem == nBite2 || nItem == nSlam || nItem == nClawL)
+	{
+		int nBonus = GetAbilityModifier(ABILITY_STRENGTH, oPC) / 2;
+			// EffectDamageIncrease is designed to use the DAMAGE_BONUS_* constants, and
+			// values 6 - 15 are actually dice rolls rather than static numbers, 
+			// (see DAMAGE_BONUS_* constants in nwscript.nss), so we'll skip over those
+		int nBonusConstVal = nBonus;
+		if (nBonus > 5) nBonusConstVal = nBonus + 10; // a value of 16 actually means a damage bonus of 6.
+		if (nBonusConstVal > 50) nBonusConstVal = 50; // max value, which = 40 damage. I don't think anyone's out here with an 80 str mod though.
+		effect efx = EffectDamageIncrease(nBonusConstVal, DAMAGE_TYPE_SLASHING);
+		SendMessageToPC(oPC, "Adding a bonus of " + IntToString(nBonus) + " to simulate two-handed wield.");
+			// Note that since we are applying the 1/2 str damage bonus to the character it will bypass DR, but it will
+			// do until we add claws, slams, and bites that actually ARE large. This should be only a temp work around 
+			// until then. I haven't had time to look into creating wholly new items and adding them to stores.
+			// -FlattedFifth, July 13, 2024
+		ApplyEquipmentEffect(oPC, efx);	
+	}
+}
+
 
 
 // Feat that reduces the penalty for using a larger than normal offhand weapon by 2. 
 void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
 {
+	//DEBUG
+	SendMessageToPC(oPC, "Equipping Item");
+
 	// OversizeTWF id = 21923. We're not going to check for regular twf because that's 
 	// already a requirement in feat.2da to have oversize twf. Bail if they don't have it.
 	if (!GetHasFeat(21923, oPC, TRUE)) return;
@@ -859,6 +905,7 @@ void EquipmentEffects(object oPC)
     UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
+	ManageCreatureWeapons(oPC, oRHAND, oLHAND);
 	OversizeTwoWeaponFighting(oPC, oRHAND, oLHAND);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
