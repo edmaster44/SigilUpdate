@@ -375,7 +375,9 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		}
 		//If we passed all the preliminaries next make sure the store can afford the item
 		int		iSellAmount		= StringToInt(sUp);
-		int		iStackSize		= StringToInt(sStackSize);
+	//	int		iStackSize		= StringToInt(sStackSize);
+		int 	iStackSize 		= GetItemStackSize(oItem);
+		string	sStackSize = IntToString(iStackSize); 
 		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
 		
 		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
@@ -383,7 +385,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
 		int		iStoreGold		= GetStoreGold(oStore);
-
+		
 		if(iMaxBuyPrice != -1 && iStoreGold < iMaxBuyPrice && iSellPrice > iStoreGold)
 		{//Not enough gold in the store, let player know and end here
 			FloatingTextStringOnCreature("Sorry but I don't have the coin to pay for that.", oPC);
@@ -469,6 +471,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			FloatingTextStringOnCreature("Why you dirty scoundrel get out of here before I call the guards!", oPC);
 			DS_CloseShop(oPC, oStore);	//Close the store
 		}
+		
 	}
 
 	else if(iEvent == 13)	//Update the player's coin values in the inventory
