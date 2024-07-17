@@ -377,7 +377,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		int		iSellAmount		= StringToInt(sUp);
 	//	int		iStackSize		= StringToInt(sStackSize);
 		int 	iStackSize 		= GetItemStackSize(oItem);
-		string	sStackSize = IntToString(iStackSize); 
+		sStackSize = IntToString(iStackSize); 
 		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
 		
 		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
