@@ -43,31 +43,7 @@ void ManageCreatureWeapons(object oPC, object oRHAND, object oLHAND)
 		AssignCommand(oPC, ActionUnequipItem(oLHAND));
 		return;
 	}
-		// The rest of this only applies to large PCs with nothing in the off hand, 
-		// so bail if they are not large or have something in the off-Hand.
-	if (GetCreatureSize(oPC) <= 3 || oLHAND != OBJECT_INVALID) return;
 	
-	int nSlam = 178;
-	int nClawL = 179;
-
-		// Finally, having established that the PC is large and has an empty off-Hand
-	if (nItem == nBite1 || nItem == nBite2 || nItem == nSlam || nItem == nClawL)
-	{
-		int nBonus = GetAbilityModifier(ABILITY_STRENGTH, oPC) / 2;
-			// EffectDamageIncrease is designed to use the DAMAGE_BONUS_* constants, and
-			// values 6 - 15 are actually dice rolls rather than static numbers, 
-			// (see DAMAGE_BONUS_* constants in nwscript.nss), so we'll skip over those
-		int nBonusConstVal = nBonus;
-		if (nBonus > 5) nBonusConstVal = nBonus + 10; // a value of 16 actually means a damage bonus of 6.
-		if (nBonusConstVal > 50) nBonusConstVal = 50; // max value, which = 40 damage. I don't think anyone's out here with an 80 str mod though.
-		effect efx = EffectDamageIncrease(nBonusConstVal, DAMAGE_TYPE_SLASHING);
-		SendMessageToPC(oPC, "Adding a bonus of " + IntToString(nBonus) + " to simulate two-handed wield.");
-			// Note that since we are applying the 1/2 str damage bonus to the character it will bypass DR, but it will
-			// do until we add claws, slams, and bites that actually ARE large. This should be only a temp work around 
-			// until then. I haven't had time to look into creating wholly new items and adding them to stores.
-			// -FlattedFifth, July 13, 2024
-		ApplyEquipmentEffect(oPC, efx);	
-	}
 }
 
 
