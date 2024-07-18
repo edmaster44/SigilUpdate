@@ -51,9 +51,6 @@ void ManageCreatureWeapons(object oPC, object oRHAND, object oLHAND)
 // Feat that reduces the penalty for using a larger than normal offhand weapon by 2. 
 void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
 {
-	//DEBUG
-	SendMessageToPC(oPC, "Equipping Item");
-
 	// OversizeTWF id = 21923. We're not going to check for regular twf because that's 
 	// already a requirement in feat.2da to have oversize twf. Bail if they don't have it.
 	if (!GetHasFeat(21923, oPC, TRUE)) return;
