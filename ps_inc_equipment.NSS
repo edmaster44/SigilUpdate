@@ -28,8 +28,6 @@ int GetMonkWeapon(object oItem)
 }
 
 	// Prevent people from dual-wielding bites. If there's anyone with 2 heads I will have to adjust this.
-	// Also add a 1/2 str bonus to large characters wielding a creature sheathe one-handed to simulate
-	// 2-handed.
 void ManageCreatureWeapons(object oPC, object oRHAND, object oLHAND)
 {
 	int nBite1 = 177;
