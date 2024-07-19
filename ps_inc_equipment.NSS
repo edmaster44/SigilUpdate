@@ -27,22 +27,7 @@ int GetMonkWeapon(object oItem)
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
 }
 
-	// Prevent people from dual-wielding bites. If there's anyone with 2 heads I will have to adjust this.
-void ManageCreatureWeapons(object oPC, object oRHAND, object oLHAND)
-{
-	int nBite1 = 177;
-	int nBite2 = 180; // possibly not currently in stores
-	int nItem = GetBaseItemType(oRHAND);
-	int nOffItem = GetBaseItemType(oLHAND);
-		// Prevent PC's from "dual wielding" bite attacks.
-	if ((nItem == nBite1 || nItem == nBite2) && (nOffItem == nBite1 || nOffItem == nBite2))
-	{
-		SendMessageToPC(oPC, "You cannot dual-wield bite attacks unless you have 2 heads.");
-		AssignCommand(oPC, ActionUnequipItem(oLHAND));
-		return;
-	}
-	
-}
+
 
 
 
@@ -876,7 +861,6 @@ void EquipmentEffects(object oPC)
     UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
     TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
-	ManageCreatureWeapons(oPC, oRHAND, oLHAND);
 	OversizeTwoWeaponFighting(oPC, oRHAND, oLHAND);
     //TatooedMonk(oPC, nRIGHT, nLEFT);
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
