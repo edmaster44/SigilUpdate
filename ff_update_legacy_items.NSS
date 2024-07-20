@@ -13,7 +13,7 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd);
 // Edit this function to perform whatever operations need to be done to correct erroneous items.
 // This function is called from the function below it and should also be called from the on acquire 
 // item event script x2_mod_def_aqu.nss
-void FF_UpdateSingleLegacyItem(object oItem)
+void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 {
 	// since multiple checks require knowing the res ref, we'll just get it here.
 	string nRef = GetResRef(oItem);
@@ -62,6 +62,49 @@ void FF_UpdateSingleLegacyItem(object oItem)
 		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228") nFeatId = 438; 
 		FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(nFeatId), TRUE);
 	}
+	
+	// Replace the "large" creature bite weapons that had been changed to medium to the proper medium.
+	// At some point there were "large" and medium creature bites but someone changed the large to medium
+	// in actual size, without changing the tlk or anything else, so we had 1 1d10 medium bite and 1 1d12
+	// medium bite, but the 1d12 has a resref of creaturebiteeld_lrg and erroneously was labeled large in the 
+	// tlk. So I've changed the 1d10 to a 1d12 & we're going to phase out the creaturebiteeld_lrg and add a new 
+	// bite that really IS large. Here, though, we're just replacing creaturebiteeld_lrg with creaturebiteeld
+	// so that we can phase out the mis-labeled creaturebiteeld_lrg
+	if (GetBaseItemType(oItem) == 180)
+	{
+		//check for empty inventory slots
+		int nMaxItems = 27072;
+		int i = 0;
+		object invItem = GetFirstItemInInventory(oPC);
+		while (GetIsObjectValid(invItem))
+		{
+			i++;
+			if (i >= nMaxItems) break;
+			invItem = GetNextItemInInventory(oPC);
+		}
+		if (i >= nMaxItems) 
+		{
+			SendMessageToPC(oPC, "One of your creature weapons needs to be updated.");
+			SendMessageToPC(oPC, "Please clear 1 inventory space and re-log");
+		}
+		else
+		{
+			object newItem = CreateItemOnObject("creaturebiteeld", oPC);
+			itemproperty ip = GetFirstItemProperty(oItem);
+			while (GetIsItemPropertyValid(ip))
+			{
+				FF_ModifyItemProperty(newItem, ip, TRUE);
+				ip = GetNextItemProperty(oItem);
+			}
+			string s = GetFirstName(oItem);
+			SetFirstName(newItem, s);
+			s = GetLastName(oItem);
+			SetLastName(newItem, s);
+			s = GetDescription(oItem);
+			SetDescription(newItem, s);
+			if (GetIsObjectValid(newItem)) DestroyObject(oItem);
+		}
+	}
 }
 
 
@@ -74,7 +117,7 @@ void FF_UpdateLegacyItems(object oPC)
 	for (i = 0; i <= NUM_INVENTORY_SLOTS; i++)
 	{
 		oItem = GetItemInSlot(i, oPC);
-		DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oItem)));
+		DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oPC, oItem)));
 	}
     // Iterate through all items in the inventory
 	i = 0;
@@ -82,7 +125,7 @@ void FF_UpdateLegacyItems(object oPC)
     while (GetIsObjectValid(oItem))
     {
 		i++;
-        FF_UpdateSingleLegacyItem(oItem);
+        FF_UpdateSingleLegacyItem(oPC, oItem);
         oItem = GetNextItemInInventory(oPC);
 		// num of items a pc could have if inv full of full bags, including the bags
 		if (i > 27072) return;

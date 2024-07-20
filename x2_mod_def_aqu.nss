@@ -46,7 +46,7 @@ void main()
 	HandleSigilAcquisition(oBY, oFROM, oITEM);
 	
 	// call to ff_update_legacy_items
-	FF_UpdateSingleLegacyItem(oITEM);
+	FF_UpdateSingleLegacyItem(oBY, oITEM);
 	
 	// call to ps_mage_slayer_utils
 	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oBY))
