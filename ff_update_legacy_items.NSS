@@ -63,13 +63,19 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 		FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(nFeatId), TRUE);
 	}
 	
-	// Replace the "large" creature bite weapons that had been changed to medium to the proper medium.
-	// At some point there were "large" and medium creature bites but someone changed the large to medium
-	// in actual size, without changing the tlk or anything else, so we had 1 1d10 medium bite and 1 1d12
-	// medium bite, but the 1d12 has a resref of creaturebiteeld_lrg and erroneously was labeled large in the 
-	// tlk. So I've changed the 1d10 to a 1d12 & we're going to phase out the creaturebiteeld_lrg and add a new 
-	// bite that really IS large. Here, though, we're just replacing creaturebiteeld_lrg with creaturebiteeld
-	// so that we can phase out the mis-labeled creaturebiteeld_lrg
+	// The following conditional is to replace all instances of the now deprected base item 180 with its 
+	// basitem 177 replacement, but since they are functionally identical it's really not necessary for
+	// any logical reason. Just nit-pickiness. For future devs who do not know what the deal is with this,
+	// there was once a large sized creature bite weapon that did 1d12 damage, and a medium sized bite that
+	// did 1d10. Then it was decided that 1d12 should be standard damage for medium weapons and someone changed
+	// the 1d12 into a medium instead of changing the medium to a 1d12. So then we had a 1d10 medium bite with 
+	// resref creaturebiteeld and a 1d12 medium bite with resref creaturebiteeld_lrg. Base item 180 is the
+	// creaturebiteeld_lrg. So I made the 1d10 one be 1d12 and removed creaturebiteeld_lrg from shops. The
+	// following conditional would replace all instances of creaturebiteeld_lrg with creaturebiteeld and copy
+	// over the item properties, but it's not actually necessary except that the very existence of a medium
+	// weapon with _lrg in its resref annoys me. Uncomment this if it annoys you too, but there's no real
+	// mechanical reason to do with. -FlattedFifth, July 20, 2024
+	/*
 	if (GetBaseItemType(oItem) == 180)
 	{
 		//check for empty inventory slots
@@ -105,6 +111,7 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 			if (GetIsObjectValid(newItem)) DestroyObject(oItem);
 		}
 	}
+	*/
 }
 
 
