@@ -49,6 +49,16 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(idClassStalwart), TRUE);
 	}
 	
+	// replace harper agent use limitation with bard, if it doesn't have bard already 
+	if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_HARPER), DURATION_TYPE_PERMANENT))
+	{
+		FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_HARPER), FALSE);
+		if (!IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_BARD), DURATION_TYPE_PERMANENT))
+		{
+			FF_ModifyItemProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_BARD), TRUE);
+		}
+	}
+	
 	// Fix darkvision helmets. Note that this requires my updated iprp_feats.2da to work properly because 
 	// darkvision wasn't available as a bonus feat until I added it, so we'll do a little check and default to low 
 	// light vision instead if darkvision isn't found. IPGetItemHasProperty() will not recognize ItempropertyDarkvision()
