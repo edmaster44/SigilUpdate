@@ -435,10 +435,10 @@ void PS_Feat_Tinker(object oPC, int nSpell)
 		effect Stat2 = EffectSkillDecrease(SKILL_BLUFF, 3);
 		effect Stat3 = EffectSkillDecrease(SKILL_DIPLOMACY, 3);
 		effect Stat4 = EffectSkillDecrease(SKILL_SURVIVAL, 3);
-		effect Stat5 = EffectSkillIncrease(SKILL_CRAFT_WEAPON, 4);
-		effect Stat6 = EffectSkillIncrease(SKILL_CRAFT_ALCHEMY, 4);
-		effect Stat7 = EffectSkillIncrease(SKILL_CRAFT_ARMOR, 4);
-		effect Stat8 = EffectSkillIncrease(SKILL_CRAFT_TRAP, 4);
+		effect Stat5 = EffectSkillIncrease(SKILL_DISABLE_TRAP, 3);
+		effect Stat6 = EffectSkillIncrease(SKILL_OPEN_LOCK, 3);
+		effect Stat7 = EffectSkillIncrease(SKILL_SET_TRAP, 3);
+		effect Stat8 = EffectSkillIncrease(SKILL_CRAFT_TRAP, 3);
 		effect eEff = EffectLinkEffects(Stat1, Stat2);
 		 eEff = EffectLinkEffects(eEff, Stat3);
 		 eEff = EffectLinkEffects(eEff, Stat4);
