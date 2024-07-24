@@ -430,15 +430,21 @@ void PS_Feat_Tinker(object oPC, int nSpell)
    	if(GetHasFeat(FEAT_BACKGROUND_TINKER, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_TINKER") <1))
       	SetLocalInt(oPC,"FEAT_BACKGROUND_TINKER",1);
    
-
+		// This background gives bonuses to craft alch, armor, and weapon but at the time of this writing
+		// these are NOT counted in actual craft rolls. If feats ever become counted in craft rolls then this 
+		// should be re-visited. For now they are for rp purposes only and the TLK lets the player know that.
+		// -FlattedFifth, July 24, 2024
         effect Stat1 = EffectSkillDecrease(SKILL_INTIMIDATE, 3);
 		effect Stat2 = EffectSkillDecrease(SKILL_BLUFF, 3);
 		effect Stat3 = EffectSkillDecrease(SKILL_DIPLOMACY, 3);
 		effect Stat4 = EffectSkillDecrease(SKILL_SURVIVAL, 3);
-		effect Stat5 = EffectSkillIncrease(SKILL_DISABLE_TRAP, 3);
-		effect Stat6 = EffectSkillIncrease(SKILL_OPEN_LOCK, 3);
+		effect Stat5 = EffectSkillIncrease(SKILL_OPEN_LOCK, 3);
+		effect Stat6 = EffectSkillIncrease(SKILL_DISABLE_TRAP, 3);
 		effect Stat7 = EffectSkillIncrease(SKILL_SET_TRAP, 3);
 		effect Stat8 = EffectSkillIncrease(SKILL_CRAFT_TRAP, 3);
+		effect Stat9 = EffectSkillIncrease(SKILL_CRAFT_ALCHEMY, 4);
+		effect Stat10 = EffectSkillIncrease(SKILL_CRAFT_ARMOR, 4);
+		effect Stat11 = EffectSkillIncrease(SKILL_CRAFT_WEAPON, 4);
 		effect eEff = EffectLinkEffects(Stat1, Stat2);
 		 eEff = EffectLinkEffects(eEff, Stat3);
 		 eEff = EffectLinkEffects(eEff, Stat4);
@@ -446,6 +452,9 @@ void PS_Feat_Tinker(object oPC, int nSpell)
 		 eEff = EffectLinkEffects(eEff, Stat6);
 		 eEff = EffectLinkEffects(eEff, Stat7);
 		 eEff = EffectLinkEffects(eEff, Stat8);
+		 eEff = EffectLinkEffects(eEff, Stat9);
+		 eEff = EffectLinkEffects(eEff, Stat10);
+		 eEff = EffectLinkEffects(eEff, Stat11);
 
    	eEff = SupernaturalEffect(eEff);
    	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
