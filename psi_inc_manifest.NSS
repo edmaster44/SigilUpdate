@@ -43,7 +43,6 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 {
 
 
-
     // Manifester-related stuff
     int nManifesterLevel = PS_PsionicClasses(oManifester);
 	
@@ -51,10 +50,12 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     {
         nManifesterLevel = nManifesterLevel + GetLevelByClass(100, oManifester);
     }
-		if(GetLevelByClass(109, oManifester) > 0)
+	if(GetLevelByClass(109, oManifester) > 0)
 	{
         nManifesterLevel = nManifesterLevel + GetLevelByClass(109, oManifester);
     }
+
+	
 	
 	if (GetLevelByClass(CLASS_TYPE_WARMIND,oManifester) > 0 )
 	{
@@ -76,8 +77,11 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
         nManifesterLevel = nManifesterLevel + GetLevelByClass(128, oManifester);
     }
     int nClass 			= GetManifestingClass(oManifester);
-
+	
+	
     int nPowerLevel      = GetSpellLevel(spellID);
+	// elfsight is 1 pp for psywar
+	if (GetLevelByClass(110, oManifester) > 0 && spellID == 14419) nPowerLevel = 1;
     int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 	if (GetLocalInt(oManifester, "PSI_SPAWN"))
 	{
