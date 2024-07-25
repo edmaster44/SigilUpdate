@@ -325,9 +325,9 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
 		if (oSkin == OBJECT_INVALID)
 		{
 			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
-			AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR));
+			DelayCommand(0.3, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
 		}
-		IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
+		DelayCommand(0.3, IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING));	
 	}
 	if (nImpact != -1)
 	{
