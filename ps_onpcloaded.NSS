@@ -31,6 +31,18 @@ const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
 
+//Since the racial feat skill affinity craft alchemy is useless
+//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
+void ReplaceSkillAffinityAlch(object oPC)
+{
+	if (GetHasFeat(1754, oPC)
+	{
+		FeatRemove(oPC, 1754);
+		FeatAdd(oPC, 243, FALSE);
+	}
+}
+
+
 
 
 void GiveStartingGold( object oPC, int nAmount )
@@ -511,6 +523,7 @@ void main()
 		SetClockOnForPlayer(oPC, TRUE);
 		// call to ps_inc_functions to grant imbue item to psi and to warlock builds that are prc-heavy
 		PS_ManageImbueItem(oPC);
+		ReplaceSkillAffinityAlch(oPC);
 		ff_sneak_fix(oPC);
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
