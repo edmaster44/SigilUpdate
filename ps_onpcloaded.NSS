@@ -35,7 +35,7 @@ const int nDailyXPlevel = 100;
 //replace it with skill affinity concentration -FlattedFifth, July 25, 2024
 void ReplaceSkillAffinityAlch(object oPC)
 {
-	if (GetHasFeat(1754, oPC)
+	if (GetHasFeat(1754, oPC))
 	{
 		FeatRemove(oPC, 1754);
 		FeatAdd(oPC, 243, FALSE);
