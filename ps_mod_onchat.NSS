@@ -5,6 +5,7 @@
 #include "ServerExts"
 
 
+
 int IsAuthorizedToUseThisCmd(object oPC)
 {
     if(GetIsDM(oPC))  return TRUE;
@@ -157,6 +158,13 @@ void ApplyRPXP(object oSender, object oTarget, int nChannel, string sMessage)
 
 int StartingConditional(object oSender, object oTarget, int nChannel, string sMessage)
 { 
+
+	// if sending to the dm channel, echo it to the sender
+	if (nChannel == CHAT_MODE_SILENT_SHOUT && GetIsPC(oSender))
+	{
+		SendMessageToPC(oSender, "You sent to DM channel: '" + sMessage + "'");
+	}
+	
 	string MessageToSend;
 
 	// Dispatch the message to Sigil.TextCommands first and if it handles the
