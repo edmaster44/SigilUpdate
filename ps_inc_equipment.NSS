@@ -414,7 +414,7 @@ int FixARMOR(object oPC, object oARMOR)
 // Check for giant weapons and monkey grip abuse
 int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
 {
-	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", nItem));
+	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", nITEM));
 	if (nWeaponSize < 5) return FALSE;
 	int nCreatureSize = GetCreatureSize(oPC);
 	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
