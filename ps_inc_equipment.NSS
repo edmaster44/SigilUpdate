@@ -392,11 +392,39 @@ int FixARMOR(object oPC, object oARMOR)
     return TRUE;
 }
 
+/*
+	// OversizeTWF id = 21923. We're not going to check for regular twf because that's 
+	// already a requirement in feat.2da to have oversize twf. Bail if they don't have it.
+	if (!GetHasFeat(21923, oPC, TRUE)) return;
+	
+	// bail if not dual wielding.
+	if (!IPGetIsMeleeWeapon(oRHAND) || !IPGetIsMeleeWeapon(oLHAND)) return;
+	
+	int nPCsize = GetCreatureSize(oPC);
+	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", GetBaseItemType(oLHAND)));
+	if (nWeaponSize >= nPCsize)
+	{
+		effect eOTWF = EffectAttackIncrease(2);
+		ApplyEquipmentEffect(oPC, eOTWF);
+	}
+*/
+
+
+
 // Check for giant weapons and monkey grip abuse
 int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
 {
-    if (nITEM != 150 && nITEM != 151 && nITEM != 152) return FALSE;
-    if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
+	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", nItem));
+	if (nWeaponSize < 5) return FALSE;
+	int nCreatureSize = GetCreatureSize(oPC);
+	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	// this function should probably be applied to npcs at some point
+	if (nCreatureSize > CREATURE_SIZE_LARGE) return FALSE;
+	if (nCreatureSize == CREATURE_SIZE_LARGE && oLHAND == OBJECT_INVALID) return FALSE;
+	if (nCreatureSize == CREATURE_SIZE_LARGE && GetHasFeat(1105, oPC)) return FALSE;
+	if (nCreatureSize == CREATURE_SIZE_MEDIUM && GetHasFeat(1105, oPC) && 
+		oLHAND == OBJECT_INVALID) return FALSE;
+    //if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
     AssignCommand(oPC, ClearAllActions());
     AssignCommand(oPC, ActionUnequipItem(oITEM));
     SendMessageToPC(oPC, "<c=red>Your character is too small to wield giant weapons, yes, even with monkey grip, the size/weight mechanics are simply too much for you.");
@@ -900,8 +928,6 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP)
 
         
         if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
-        
-    
         {
             if (MonkeyGripAbuse(oPC, oITEM, nITEM) == TRUE) return;
             if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
