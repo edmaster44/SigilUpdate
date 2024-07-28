@@ -4071,6 +4071,12 @@ void DoPsyProgression(object oPC)
 {	
 
 int iPsy = PsyWarLevels(oPC);
+
+// remove the teir 1 feat granted by the 2da
+if (iPsy >= 4 && GetHasFeat(FEAT_PSYWAR_PROGRESSION_I,oPC,TRUE)){ 
+FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
+}
+
 if (iPsy >=21)
 	{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
 	 else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
@@ -4088,7 +4094,8 @@ else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){
 {FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
                 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);}
 else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
+// Not necessary, covered already just after get iPsy
+//FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
             }
 else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
