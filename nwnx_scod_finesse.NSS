@@ -43,6 +43,7 @@ void EnableFinesse()
 */
 
     dae_CreateFinesseRule(202);
+    dae_CreateFinesseRule(111);
 	
 	dae_CreateFinesseRule(BASE_ITEM_GREATAXE,FEAT_DERVISH_SLASHING_BLADES,TRUE);
 	dae_CreateFinesseRule(BASE_ITEM_GREATSWORD,FEAT_DERVISH_SLASHING_BLADES,TRUE);
