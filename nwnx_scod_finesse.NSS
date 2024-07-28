@@ -24,6 +24,11 @@ void EnableCreatureFinesse(){
 	dae_CreateFinesseRule(178,3218,TRUE);
     dae_CreateFinesseRule(179,3218,TRUE);
     dae_CreateFinesseRule(180,3218,TRUE);
+	dae_CreateFinesseRule(181,3218,TRUE);
+	dae_CreateFinesseRule(182,3218,TRUE);
+	dae_CreateFinesseRule(183,3218,TRUE);
+	dae_CreateFinesseRule(184,3218,TRUE);
+	dae_CreateFinesseRule(185,3218,TRUE);
    
 	
 	dae_LogFinesseRules();
