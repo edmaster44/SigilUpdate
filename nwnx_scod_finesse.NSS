@@ -2,7 +2,9 @@
 #include "aaa_constants"
 
 void EnableCreatureFinesse(){
-
+	
+	dae_CreateFinesseRule(111,3218,TRUE);
+	dae_CreateFinesseRule(202,3218,TRUE);
   	dae_CreateFinesseRule(160,3218,TRUE);
     dae_CreateFinesseRule(161,3218,TRUE);
     dae_CreateFinesseRule(162,3218,TRUE);
