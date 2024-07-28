@@ -529,4 +529,12 @@ void main()
 		MageSlayerLevels(oPC);
 		
 	}
+	// give new psywar char tier 1 feat. 
+	if (GetLevelByClass(110, oPC) == 1)
+	{
+		if (GetHasFeat(21464,oPC,TRUE) == FALSE)
+		{    
+			FeatAdd(oPC, 21464, FALSE, FALSE, FALSE);
+		}
+	}
 }
