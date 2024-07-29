@@ -312,7 +312,7 @@ return; }
     //IPSafeAddItemProperty(oItem, iGlow, fDUR, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
     SaveItemPropertyReference(oItem, "ElementalWeapon", ipAdd);
   //  SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
-}
+	}
 }
 //Removes Elemental Weapon Property off Weapon
 void RemoveElementalWeapon(object oPC,object oItem)
@@ -427,7 +427,11 @@ int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
     //if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
     AssignCommand(oPC, ClearAllActions());
     AssignCommand(oPC, ActionUnequipItem(oITEM));
-    SendMessageToPC(oPC, "<c=red>Your character is too small to wield giant weapons, yes, even with monkey grip, the size/weight mechanics are simply too much for you.");
+	string sMessage = "<c=red>Your character is too small to wield giant weapons";
+	if (nCreatureSize < CREATURE_SIZE_MEDIUM){
+    sMessage += ", yes, even with monkey grip, the size/weight mechanics are simply too much for you.</c>";
+	} else sMessage += " without monkey grip.</c>";
+	SendMessageToPC(oPC, sMessage);
     return TRUE;
 }
 
