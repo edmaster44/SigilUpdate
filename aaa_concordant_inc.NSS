@@ -23,230 +23,164 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 	{
 		if (nDex = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nDex = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nDex = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nDex = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nDex = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nDex = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 	}
 	if (nAlignGE != ALIGNMENT_EVIL)
 	{
 		if (nDex = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nDex = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nDex = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nDex = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nDex = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nDex = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 	}
 	if (nAlignLC != ALIGNMENT_LAWFUL)
 	{
 		if (nDex = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nDex = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nDex = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nDex = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nDex = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nDex = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 	}
-		if (nAlignLC != ALIGNMENT_CHAOTIC)
+	if (nAlignLC != ALIGNMENT_CHAOTIC)
 	{
 		if (nDex = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nDex = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nDex = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nDex = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nDex = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nDex = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 	}
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
 }
 void PS_ConcordantProwess(object oPC, int nSpell)
 {
@@ -258,232 +192,166 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 	}
 	int nAlignGE = GetAlignmentGoodEvil(oPC);
 	int nAlignLC = GetAlignmentLawChaos(oPC);
-	if (nAlignGE != ALIGNMENT_GOOD)
+		if (nAlignGE != ALIGNMENT_GOOD)
 	{
 		if (nStr = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nStr = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nStr = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nStr = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nStr = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 		else if (nStr = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+				eSacredG			= ExtraordinaryEffect(eSacredG);
 		}
 	}
 	if (nAlignGE != ALIGNMENT_EVIL)
 	{
 		if (nStr = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nStr = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nStr = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nStr = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nStr = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 		else if (nStr = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+				eSacredE			= ExtraordinaryEffect(eSacredE);
 		}
 	}
 	if (nAlignLC != ALIGNMENT_LAWFUL)
 	{
 		if (nStr = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nStr = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nStr = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nStr = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nStr = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 		else if (nStr = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+				eSacredL			= ExtraordinaryEffect(eSacredL);
 		}
 	}
-		if (nAlignLC != ALIGNMENT_CHAOTIC)
+	if (nAlignLC != ALIGNMENT_CHAOTIC)
 	{
 		if (nStr = 1)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nStr = 2)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nStr = 3)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nStr = 4)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nStr = 5)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 		else if (nStr = 6)
 		{
-			effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
-				eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacred			= ExtraordinaryEffect(eSacred);
-		    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+			effect eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
+				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+				eSacredC			= ExtraordinaryEffect(eSacredC);
 		}
 	}
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
 }
