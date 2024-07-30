@@ -9,6 +9,9 @@
 //			and to warlocks with warlock-specific prcs but who dont have 12 base levels. Made 
 //			previously declared but non-implemented GetIsFinessable() a wrapper for Dae's
 // 			function dae_GetIsFinessable().
+// FlattedFifth - July 28, 2024. Added bCharCreation arguement to DoPsyProgression() with default
+//			value of false. Calling that from ps_onpcloaded in the same conditional that 
+//			grants the starting gold for a new character.
 
 
 
@@ -188,7 +191,7 @@ int GetBardicClassLevelForSongs(object oPC);
 
 int GetDisallowedLevelDownPRC(object oPC);
 
-void DoPsyProgression(object oPC);
+void DoPsyProgression(object oPC, int bCharCreation = FALSE);
 
 int PsyWarLevels(object oPC);
 
@@ -4066,34 +4069,60 @@ int PsyWarLevels(object oPC)
 	
 	return iTotal;	
 }
+
 //This Determines Psychic Warrior Progression
-void DoPsyProgression(object oPC)
+void DoPsyProgression(object oPC, int bCharCreation = FALSE)
 {	
 
 int iPsy = PsyWarLevels(oPC);
 
-if (iPsy >=21)
-	{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);}
-	 else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
-		  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
-  		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);}
-else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
-  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
-  FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
+// Give Psy their first tier feat in case they do not rest before reaching lvl 2
+if (bCharCreation)
+{
+	if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) == 1 && GetXP(oPC) == 0)
+		{
+			FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
+		}
+	return;
 }
- else if (iPsy >= 11 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {    
+
+// The original intent of this was that it would fire at the start of
+// level up, but it doesn't. It fires at the end of level up.  So all the 
+// level checks need to be reduced by 1 to make sure the character gets 
+// access to the right powers at the right level  -FlattedFifth, July 28, 2024
+
+//if (iPsy >=21){
+if (iPsy >=20){
+	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
+}
+//else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
+else if (iPsy >= 15 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
+	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
+  	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
+}
+//else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
+else if (iPsy >= 13 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
+	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
+	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
+}
+//else if (iPsy >= 11 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) { 
+else if (iPsy >= 10 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {    
 	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
 	FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
 }
- else if (iPsy >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE))
-{FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
-                FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);}
-else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
+// else if (iPsy >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE))
+else if (iPsy >= 6 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){
+	FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
+    FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
+}
+//else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
+else if (iPsy >= 3 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
 FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
-            }
+}
 else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
-FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);}
+FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
+}
 	
 if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 {	SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);

@@ -42,9 +42,16 @@ void ReplaceSkillAffinityAlch(object oPC)
 	}
 }
 
-
-
-
+// ps_levelup is not called on character creation, and it's not called at the 
+// start of the level up process but at the END. So if there's any feats we
+// need a character to have before they reach level 2 rather than after it, 
+// we need to add that code here.
+void GiveStartingFeats(object oPC)
+{
+	// calls the psywar progression function from ps_inc_functions with 
+	// an argument that tells it to grant the first feat only.
+	DoPsyProgression(oPC, TRUE);
+}
 void GiveStartingGold( object oPC, int nAmount )
 {
 	int nGold = GetGold(oPC);
@@ -381,8 +388,11 @@ void main()
 			DestroyObject(oItem);
 			//SendMessageToPC(GetFirstPC(), Legal+ECL+IntToString(Template));
 		}
-			
-		GiveXPToCreature(oPC, 1);
+		
+		// Give Newly created characters starting feats that they would have gotten
+		// from ps_levelup at level 1 if it were called on character creation
+		GiveStartingFeats(oPC);
+		PS_GiveXPReward(oPC, 1);
 		GiveStartingGold(oPC, 500);
 
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
@@ -397,6 +407,7 @@ void main()
 			SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC)); 
 			SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));			
 		}
+		
 
 		Booted = prepChar(oPC);
 		ExportSingleCharacter(oPC);
