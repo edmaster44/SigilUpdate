@@ -25,6 +25,9 @@
 //  	using a inflict wounds potion via the UNIQUE PROPERTY SELF ONLY. See x2_def_mod_act.nss and the 
 //		craft potions section of x2_inc_craft.nss
 // 		June 25, 2024, moved all the mage slayer logic to its own file, class_mageslayer_utils, expanded mage slayer abilities
+// FlattedFifth July 30, 2024 Added function TouchRangedFeatInRange() to return whether or not a feat-based
+//		spell is in touch range. NOT called from main(), this is only called from specific spell scripts as
+// 		the need arises and only for feats.
 
 
 //#include "x2_inc_itemprop" - Inherited from x2_inc_craft
@@ -45,6 +48,7 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
+int TouchRangedFeatInRange();
 
 
 
@@ -96,6 +100,7 @@ int X2PreSpellCastCode()
    if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF) && 
 		MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS) nContinue = TRUE;
    else nContinue = X2UseMagicDeviceCheck();
+   
 
    if (nContinue)
    {
@@ -172,6 +177,35 @@ int X2PreSpellCastCode()
 
 	
    return nContinue;
+}
+
+// cancel a feat-based spell if it has a range of touch and the target is too far from
+// caster. Basically just copied from the one in aaa_undead_inc.nss. Returns TRUE if the 
+// spell is not from a feat, or the feat is not touch ranged, or the target is within range.
+// -FlattedFifth, July 29, 2024
+int TouchRangedFeatInRange()
+{
+
+	int nFeatId = GetSpellFeatId();
+	if (nFeatId < 1) return TRUE;
+	
+	object oCaster = OBJECT_SELF;
+	int nSpellId = GetSpellId();
+	string sRange = Get2DAString("spells", "Range", nSpellId);
+	if (GetStringLowerCase(sRange) != "t") return TRUE;
+		
+	//object oCaster = OBJECT_SELF;
+	object oTarget = GetSpellTargetObject();
+	
+	// below comment and most of conditional from author of aaa_undead_inc
+	// Melee range seems to be around a little less then 3.0f, so picked a number a little higher
+	if (GetDistanceBetween(oCaster, oTarget) > 3.5f) 
+	{                                              
+		SendMessageToPC(oCaster, "Target out of range.");
+		ResetFeatUses(oCaster, nFeatId, FALSE, TRUE);
+		return FALSE;
+	}	
+	return TRUE;
 }
 
 
