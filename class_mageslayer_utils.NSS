@@ -106,6 +106,32 @@ void MageSlayerLevels(object oPC)
 			return;
 		}
 	}
+	
+	int nSlayerLevel = GetLevelByClass(CLASS_TYPE_MAGE_SLAYER, oPC);
+	
+	// if they have just gotten their first level of mage slayer for the first time, then
+	// cycle through their inventory and check to see if any of their scrolls and wands
+	// are now useable by them
+	object oEss = PS_GetEssence(oPC);
+	if (nSlayerLevel == 1 && GetLocalInt(oEss, "MageSlayerInvCheckDone"))
+	{
+		 // Iterate through all items in the inventory
+		int i = 0;
+		object oItem = GetFirstItemInInventory(oPC);
+		while (GetIsObjectValid(oItem))
+		{
+			i++;
+			// num of items a pc could have if inv full of full bags, including the bags
+			if (i > 27072) break;
+			CheckMakeItemUseableForMageSlayer(oItem, oPC);
+			oItem = GetNextItemInInventory(oPC);
+		}
+		SetLocalInt(oEss, "MageSlayerInvCheckDone", TRUE);
+	}
+	// Setting the boolean back to false at level 2 so that if the player re-levels the same check will 
+	// happen again at slayer level 1
+	if (nSlayerLevel >= 2 || nSlayerLevel == 0) SetLocalInt(oEss, "MageSlayerInvCheckDone", FALSE);
+	
 	RemoveEffectsFromSpell(oPC, SPELL_ID_MAGE_SLAYER_TYPE);
 	int nDamageType = DAMAGE_TYPE_POSITIVE;
 	// set the bonus damage type for the type of mage slayer. If they don't have any of
@@ -146,12 +172,32 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	if (nSpellId == 142 || nSpellId == 153 || nSpellId == 486) return TRUE;
 	
 	
-	//Some items are automatically allowed, such as the Coin of Life, Item Editor, and any mundane items
-	//so we'll check for those first with a function in this file and skip the rest of the checks if it's 
-	//one of those. Currently there aren't any items in that function that a MS shouldn't be able to use or
-	// be the targetof, they're either mundane, hostile, or both, but if this changes we can move this check
-	//into the specific conditions for caster and target. For now I'd prefer to skip a lot of checks when possible.
-	if (oItem != OBJECT_INVALID && GetMageSlayerAllowedSpecificItems(oItem)) return TRUE;
+
+	if (oItem != OBJECT_INVALID)
+	{	
+		//Some items are automatically allowed, such as the Coin of Life, Item Editor, and any mundane items
+		//so we'll check for those first with a function in this file and skip the rest of the checks if it's 
+		//one of those. Currently there aren't any items in that function that a MS shouldn't be able to use or
+		// be the targetof, they're either mundane, hostile, or both, but if this changes we can move this check
+		//into the specific conditions for caster and target. For now I'd prefer to skip a lot of checks when possible.
+		if (GetMageSlayerAllowedSpecificItems(oItem)) return TRUE;
+		
+		//DEBUG
+		if (GetItemActivator() == oCaster) SendMessageToPC(oCaster, "POPPY!!!!!!!!");
+		// allow all on hit properties on all weapons and armor. Sadly this will also allow all other cast
+		// spell properties on any weapons and armor that also have on hit properties but it's 3am and I can't
+		// think of a way around that.
+		itemproperty ip = GetFirstItemProperty(oItem);
+		while (GetIsItemPropertyValid(ip))
+		{
+			// Check if the item property type is OnHitCastSpell
+			if (GetItemPropertyType(ip) == ITEM_PROPERTY_ON_HIT_PROPERTIES)
+			{
+				return TRUE;
+			}
+        ip = GetNextItemProperty(oItem);
+		}
+	}
 	
 	
 	// let's set up the variables we need. We won't be setting these 5 to false in the rest of this function. The
