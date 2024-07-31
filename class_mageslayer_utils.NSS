@@ -182,8 +182,6 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 		//into the specific conditions for caster and target. For now I'd prefer to skip a lot of checks when possible.
 		if (GetMageSlayerAllowedSpecificItems(oItem)) return TRUE;
 		
-		//DEBUG
-		if (GetItemActivator() == oCaster) SendMessageToPC(oCaster, "POPPY!!!!!!!!");
 		// allow all on hit properties on all weapons and armor. Sadly this will also allow all other cast
 		// spell properties on any weapons and armor that also have on hit properties but it's 3am and I can't
 		// think of a way around that.

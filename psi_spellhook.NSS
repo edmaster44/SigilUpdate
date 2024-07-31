@@ -96,10 +96,9 @@ int PsiPrePowerCastCode()
         nContinue = FALSE;
     }
 	//********************************************************************
-	if (GetHasFeat(2950, oManifester))
-	{
-		nContinue = FALSE;
-	}
+	// Mage slayer
+	//if (GetHasFeat(2950, oManifester)) nContinue = FALSE;
+	
 
 	/*object oManifester = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
