@@ -4059,30 +4059,34 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
 }
 
 //Calculuates Psychic Warrior Levels
-
 int PsyWarLevels(object oPC)
 {
 	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
 	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1; 
+	// bit of a math error here. If the gem dragon level is 0, then this is 
+	// adding 1. 
+	//int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1; 
+	// instead we'll do this:
+	int nGemDragon = GetLevelByClass(128, oPC);
+	if (nGemDragon > 0) nGemDragon = nGemDragon / 2 + 1;
 	int	iTotal = nPsywar + nWarMind + nGemDragon;
 	
 	return iTotal;	
 }
 
+
 //This Determines Psychic Warrior Progression
 void DoPsyProgression(object oPC, int bCharCreation = FALSE)
 {	
-
 int iPsy = PsyWarLevels(oPC);
 
 // Give Psy their first tier feat in case they do not rest before reaching lvl 2
 if (bCharCreation)
 {
-	if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) == 1 && GetXP(oPC) == 0)
-		{
-			FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
-		}
+	if (iPsy == 1 && GetXP(oPC) == 0)
+	{
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
+	}
 	return;
 }
 
