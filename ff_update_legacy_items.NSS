@@ -133,8 +133,11 @@ void FF_UpdateLegacyItems(object oPC)
 	object oItem;
 	for (i = 0; i <= NUM_INVENTORY_SLOTS; i++)
 	{
-		oItem = GetItemInSlot(i, oPC);
-		DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oPC, oItem)));
+		if (i != INVENTORY_SLOT_CARMOUR)
+		{
+			oItem = GetItemInSlot(i, oPC);
+			DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oPC, oItem)));
+		}
 	}
     // Iterate through all items in the inventory
 	i = 0;
