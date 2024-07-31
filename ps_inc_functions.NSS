@@ -325,17 +325,16 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
 		// if the we don't pass a duration just set it to 24 hours. We're not setting any permament properties here.
 		if (fDuration == 0.0) fDuration = HoursToSeconds(24);
 		object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
-	object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
-	if (oSkin == OBJECT_INVALID)
-	{
-		oSkin = GetItemPossessedBy(oPC, "x2_it_emptyskin");
 		if (oSkin == OBJECT_INVALID)
 		{
-			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
+			oSkin = GetItemPossessedBy(oPC, "x2_it_emptyskin");
+			if (oSkin == OBJECT_INVALID)
+			{
+				oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
+			}
+			DelayCommand(0.6, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
 		}
-		DelayCommand(0.6, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
-	}
-	IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
+		IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
 	}
 	if (nImpact != -1)
 	{
