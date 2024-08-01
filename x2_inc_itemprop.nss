@@ -25,6 +25,7 @@
 //  ChazM 11/13/06 fixed ITEM_PROPERTY_SPELL_RESISTANCE, ITEM_PROPERTY_DAMAGE_VULNERABILITY, ITEM_PROPERTY_DECREASED_SAVING_THROWS_SPECIFIC in IPGetItemPropertyByID() (found by Webscav)
 // ChazM-OEI 3/21/07 - Added support for ItemPropertyBonusHitpoints()
 // ChazM 7/2/07 - Removed constant (now in NWSCRIPT)
+// Added new creature weapons to 
 
 //void main(){}
 // *  The tag of the ip work container, a placeable which has to be set into each
@@ -83,7 +84,14 @@ const int 	BASE_ITEM_CREEQ_CLAW		= 176;
 const int 	BASE_ITEM_CREEQ_BITE		= 177;
 const int 	BASE_ITEM_CREEQ_SLAM		= 178;
 const int 	BASE_ITEM_CREEQ_CLAW_LARGE	= 179;
-const int 	BASE_ITEM_CREEQ_BITE_LARGE	= 180;
+//Someone had made this medium, thereby making the resref with _lrg a lie and therefore misleanding in the toolset, and 
+//making it large again would have screwed it up for players who have it already and depend on it being medium
+const int 	BASE_ITEM_CREEQ_BITE_LARGE	= 180; 
+const int 	BASE_ITEM_CREEQ_CLAW_TINY	= 181;
+const int 	BASE_ITEM_CREEQ_SLAM_TINY	= 182;
+const int 	BASE_ITEM_CREEQ_SLAM_MED	= 183;
+const int 	BASE_ITEM_CREEQ_BITE_TINY	= 184;
+const int 	BASE_ITEM_CREEQ_BITE_LRG	= 185; //New large
 
 // *  removes all itemproperties with matching nItemPropertyType and nItemPropertyDuration
 void  IPRemoveMatchingItemProperties( object oItem, int nItemPropertyType, int nItemPropertyDuration = DURATION_TYPE_TEMPORARY, int nItemPropertySubType = -1 );
@@ -914,7 +922,12 @@ int IPGetIsMeleeWeapon(object oItem)
 	  (nItem == BASE_ITEM_CREEQ_BITE) || // these 5 are creature weapons.
 	  (nItem == BASE_ITEM_CREEQ_SLAM) || // these 5 are creature weapons.
 	  (nItem == BASE_ITEM_CREEQ_CLAW_LARGE) || // these 5 are creature weapons.
-	  (nItem == BASE_ITEM_CREEQ_BITE_LARGE)) // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_BITE_LARGE) || // these 5 are creature weapons.
+	  (nItem == BASE_ITEM_CREEQ_CLAW_TINY) || //The following 5 are new creature weapons
+	  (nItem == BASE_ITEM_CREEQ_SLAM_TINY) ||
+	  (nItem == BASE_ITEM_CREEQ_SLAM_MED) ||
+	  (nItem == BASE_ITEM_CREEQ_BITE_TINY) ||
+	  (nItem == BASE_ITEM_CREEQ_BITE_LRG))
    {
         return TRUE;
    }
@@ -927,30 +940,35 @@ int IPGetIsCreatureEquippedWeapon(object oItem)
     //Declare major variables
     int nItem = GetBaseItemType(oItem);
 
-    if((nItem == BASE_ITEM_CREEQ_BLUDG_L) ||
-      (nItem == BASE_ITEM_CREEQ_BLUDG_M) ||
-      (nItem == BASE_ITEM_CREEQ_BLUDG_S) ||
-      (nItem == BASE_ITEM_CREEQ_PIERC_L) ||
-      (nItem == BASE_ITEM_CREEQ_PIERC_M) ||
-      (nItem == BASE_ITEM_CREEQ_PIERC_S) ||
-      (nItem == BASE_ITEM_CREEQ_PRCBL_L) ||
-      (nItem == BASE_ITEM_CREEQ_PRCBL_M) ||
-      (nItem == BASE_ITEM_CREEQ_PRCBL_S) ||
-      (nItem == BASE_ITEM_CREEQ_PRCSL_L) ||
-      (nItem == BASE_ITEM_CREEQ_PRCSL_M) ||
-      (nItem == BASE_ITEM_CREEQ_PRCSL_S) ||
-      (nItem == BASE_ITEM_CREEQ_SLASH_L) ||
-      (nItem == BASE_ITEM_CREEQ_SLASH_M) ||
-      (nItem == BASE_ITEM_CREEQ_SLASH_S) ||
-      (nItem == BASE_ITEM_CREEQ_CLAW) ||
-      (nItem == BASE_ITEM_CREEQ_BITE) ||
-      (nItem == BASE_ITEM_CREEQ_SLAM) ||
-      (nItem == BASE_ITEM_CREEQ_CLAW_LARGE) ||
-      (nItem == BASE_ITEM_CREEQ_BITE_LARGE))
-   {
+	if((nItem == BASE_ITEM_CREEQ_BLUDG_L) ||
+		(nItem == BASE_ITEM_CREEQ_BLUDG_M) ||
+		(nItem == BASE_ITEM_CREEQ_BLUDG_S) ||
+		(nItem == BASE_ITEM_CREEQ_PIERC_L) ||
+		(nItem == BASE_ITEM_CREEQ_PIERC_M) ||
+		(nItem == BASE_ITEM_CREEQ_PIERC_S) ||
+		(nItem == BASE_ITEM_CREEQ_PRCBL_L) ||
+		(nItem == BASE_ITEM_CREEQ_PRCBL_M) ||
+		(nItem == BASE_ITEM_CREEQ_PRCBL_S) ||
+		(nItem == BASE_ITEM_CREEQ_PRCSL_L) ||
+		(nItem == BASE_ITEM_CREEQ_PRCSL_M) ||
+		(nItem == BASE_ITEM_CREEQ_PRCSL_S) ||
+		(nItem == BASE_ITEM_CREEQ_SLASH_L) ||
+		(nItem == BASE_ITEM_CREEQ_SLASH_M) ||
+		(nItem == BASE_ITEM_CREEQ_SLASH_S) ||
+		(nItem == BASE_ITEM_CREEQ_CLAW) ||
+		(nItem == BASE_ITEM_CREEQ_BITE) ||
+		(nItem == BASE_ITEM_CREEQ_SLAM) ||
+		(nItem == BASE_ITEM_CREEQ_CLAW_LARGE) ||
+		(nItem == BASE_ITEM_CREEQ_BITE_LARGE) ||
+		(nItem == BASE_ITEM_CREEQ_CLAW_TINY) ||
+		(nItem == BASE_ITEM_CREEQ_SLAM_TINY) ||
+		(nItem == BASE_ITEM_CREEQ_SLAM_MED) ||
+		(nItem == BASE_ITEM_CREEQ_BITE_TINY) ||
+		(nItem == BASE_ITEM_CREEQ_BITE_LRG))
+	{
         return TRUE;
-   }
-   return FALSE;
+	}
+	return FALSE;
 }
 
 // ----------------------------------------------------------------------------
