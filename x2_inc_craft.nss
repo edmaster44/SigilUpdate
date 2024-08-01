@@ -70,6 +70,14 @@ const int ID_SPELL_INFLICT_CRIT = 435;
 const int ID_SPELL_HEAL = 79;
 const int ID_SPELL_HARM = 77;
 const int ID_SPELL_STONE_TO_FLESH = 486;
+const int ID_SPELL_RESTORATION = 152;
+const int ID_SPELL_GREATER_RESTORATION = 70;
+
+// if true, allow players to brew restoration pots
+const int B_ALLOW_RESTORATION_POTS = TRUE;
+
+// if true, allow players to brew restoration pots
+const int B_ALLOW_GREATER_RESTORATION_POTS = TRUE;
 
 // If true, then scrolls of raise dead scribed by players have no class use limitations, anyone can use them
 // without UMD. Default OC behaviour is false.
@@ -972,6 +980,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // check if spell is below maxlevel for brew potions, but allow cure and inflict crit
 	// if that boolean or the heal one is set to true and allow heal and harm if that boolean is set to true.
+	// Also allow restoration and greater restoration if those booleans are set to true.
     // -------------------------------------------------------------------------
 	
 	int bSkipLevelCheck = FALSE;
@@ -984,6 +993,11 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 	{
 		bSkipLevelCheck = TRUE;
 	}
+	if (nID == ID_SPELL_GREATER_RESTORATION && B_ALLOW_GREATER_RESTORATION_POTS) 
+		bSkipLevelCheck = TRUE;
+		
+	if (nID == ID_SPELL_RESTORATION && B_ALLOW_RESTORATION_POTS)
+		bSkipLevelCheck = TRUE;
 
 	if (bSkipLevelCheck != TRUE)
 	{
