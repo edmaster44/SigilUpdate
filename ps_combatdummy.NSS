@@ -58,7 +58,7 @@ void main()
 		{
 			// give some xp
 			SetCurrentXp(oPC, newXp);
-			GiveXPToCreature(oPC, giveXp);
+			PS_GiveXPReward(oPC, giveXp);
 		}
 		else
 		{

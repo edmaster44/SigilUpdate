@@ -45,6 +45,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 
 // Color Variables
 const string RED       = "<color=#FF0000>";
@@ -189,7 +190,7 @@ void main()
     if(nGive == 1 && nTrainerLEV == 0)
     {
       AssignCommand(oPC,ClearAllActions(TRUE));
-      GiveXPToCreature(oPC,nXP);
+      PS_GiveXPReward(oPC,nXP);
       SendMessageToPC(oPC, WHITE + "Nice work!! You have gained " + YELLOW +IntToString(nXP)+ WHITE + " Experience in this session.");
       DelayCommand(1.0, AssignCommand(oPC,ActionPlayAnimation(ANIMATION_LOOPING_PAUSE_TIRED,1.0,3.0)));
       DelayCommand(4.5, AssignCommand(oPC,ActionPlayAnimation(ANIMATION_FIREFORGET_VICTORY1,1.0)));

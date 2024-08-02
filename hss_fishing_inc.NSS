@@ -82,6 +82,7 @@ the chance to receive XP for fishing skill.
 	
 #include "x0_i0_position"
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 
 //void main(){}
 
@@ -404,7 +405,7 @@ void HSS_DoCatch(object oPC, object oBait, object oRod, object oWay)
 		 	 int nCurrent = GetLocalInt(oPC,"FISH_XP");
 		 	nValue = nValue * HSS_PRIZED_SPECIMEN_MULTIPLIER;
 			if(nCurrent < 1251){
-	         	GiveXPToCreature(oPC, nValue);
+	         	PS_GiveXPReward(oPC, nValue);
 				SetLocalInt(oPC,"FISH_XP", nCurrent+nValue);
 			}
 			else{
@@ -419,7 +420,7 @@ void HSS_DoCatch(object oPC, object oBait, object oRod, object oWay)
          {
 		 	int nCurrent = GetLocalInt(oPC,"FISH_XP");
 			if(nCurrent < 1251){
-	         	GiveXPToCreature(oPC, nValue);
+	         	PS_GiveXPReward(oPC, nValue);
 				SetLocalInt(oPC,"FISH_XP", nCurrent+nValue);
 			}
 			else{

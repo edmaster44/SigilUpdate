@@ -15,6 +15,7 @@
 */
 // Sean Claypool aka Publilius_Syrus 10/08/09
 
+#include "ps_inc_functions"
 
 void fResetDoor()
     {
@@ -86,7 +87,7 @@ if (iDamage>=iMaxHP || GetLocked(oDoor)==0) {
     }
 	
 	if (nExp > 0 && GetHitDice(oPC) <= 5)
-		GiveXPToCreature(oPC, nExp);
+		PS_GiveXPReward(oPC, nExp);
 }
 //Assigns the values to the below formula.
 float fPercent = (IntToFloat(iDamage)/IntToFloat(iMaxHP));

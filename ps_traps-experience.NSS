@@ -6,6 +6,9 @@
 // enjoy or destroy
 //
 // www.versuchungdermacht.de 
+
+#include "ps_inc_functions"
+
 object oPC; //player who disarmed trap 
 int nXP; //XP player gets 
 int nDC; //DC 
@@ -22,6 +25,6 @@ nDC = GetTrapDisarmDC(OBJECT_SELF);
 if (GetTrapCreator(OBJECT_SELF)==OBJECT_INVALID) 
 { 
 nXP = (nDC-(15+nlevel))*2*nlevel; 
-GiveXPToCreature(oPC,nXP); 
+PS_GiveXPReward(oPC,nXP); 
 } 
 }

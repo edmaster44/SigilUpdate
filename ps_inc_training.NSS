@@ -376,7 +376,7 @@ int GetIsTrainingAbilitySuccessful(object oPC, int nAbility, int nDC) {
 	
 	if (nRoll >= nDC) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;
@@ -452,7 +452,7 @@ int GetIsTrainingSavingThrowSuccessful(object oPC, int nSave, int nDC, int nSave
 	
 	if (nResult == SAVING_THROW_CHECK_SUCCEEDED) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	} else if (nResult == SAVING_THROW_CHECK_IMMUNE) {
 		return TRUE;

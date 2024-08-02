@@ -1,5 +1,6 @@
 #include "ps_inc_faction"
 #include "ps_inc_randomitems"
+//requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 /**********************************************************
 * Handles the actual Harmonium pursuit code, because that *
@@ -79,7 +80,7 @@ void ApprehendPC(object oPC, object oGuard) {
 	
 		if (GetIsSkillSuccessful(oPC, SKILL_HIDE, nDC, TRUE)) {
 	 		if (!noExp)
-				GiveXPToCreature(oPC, nExp);
+				PS_GiveXPReward(oPC, nExp);
 				
 			string sMessage = GetRandomGuardSpeak(oPC, oGuard);
 			AssignCommand(oGuard, ActionSpeakString(sMessage));

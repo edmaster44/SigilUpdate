@@ -1,5 +1,7 @@
 // Give books for xp and gold
 
+#include "ps_inc_functions"
+
 const int XPAWARD = 50;
 const int GPAWARD = 10;
 
@@ -27,5 +29,5 @@ void main()
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	GiveXPToCreature(oPC, iXp);
+	PS_GiveXPReward(oPC, iXp);
 }

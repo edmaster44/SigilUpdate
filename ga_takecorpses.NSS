@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 const int XPAWARD = 150;
 const int GPAWARD = 300;
 const int GPAWARD2 = 350;
@@ -44,6 +46,6 @@ void main (int max) {
 	
 	SetLocalInt(oPC, "corpseNumber", nCount);
 	GiveGoldToCreature(oPC, iGold);
-	GiveXPToCreature(oPC, iXp);
+	PS_GiveXPReward(oPC, iXp);
 
 }

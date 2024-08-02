@@ -17,7 +17,7 @@ void main ()
 							
 		if (dm_pool > 0 )
 		{	DebugMessageToPC(oPC, "Exhausting pools");
-			GiveXPToCreature(oPC, availableXP);
+			PS_GiveXPReward(oPC, availableXP);
 			dm_pool = 0;
 			DelayCommand(11.0, SendMessageToPC(oPC,"Your pool is now empty."));		
 			DelayCommand(10.0, SendMessageToPC(oPC,"Your character has been awarded " + IntToString(availableXP) + " XP for previous roleplay (or from removing xp with Styx)"));

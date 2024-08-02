@@ -22,6 +22,8 @@
 //:://////////////////////////////////////////////
 // ChazM 6/27/06 - updated string refs for gplotAppraiseOpenStore()
 
+#include "ps_inc_functions"
+
 const int DC_EASY = 0;
 const int DC_MEDIUM = 1;
 const int DC_HARD = 2;
@@ -862,7 +864,7 @@ void DoGiveXP(string sJournalTag, int nPercentage, object oTarget, int QuestAlig
         nRewardMod = 0.75;
     }
 //    AssignCommand(oTarget,SpeakString("My XP reward is: " + FloatToString(nRewardMod * nXP)));
-    GiveXPToCreature(oTarget, FloatToInt(nRewardMod * nXP));
+    PS_GiveXPReward(oTarget, FloatToInt(nRewardMod * nXP));
 
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -1470,13 +1472,13 @@ void Reward_2daXP(object oPC, int nRow, int bAllParty = TRUE, int nPercentage = 
         object oParty = GetFirstFactionMember(oPC);
         while (oParty != OBJECT_INVALID)
         {
-            GiveXPToCreature(oParty, nReward);
+            PS_GiveXPReward(oParty, nReward);
             oParty = GetNextFactionMember(oPC);
         }
    }
    else
    {
-        GiveXPToCreature(oPC, nReward);
+        PS_GiveXPReward(oPC, nReward);
    }
 }
 //::///////////////////////////////////////////////

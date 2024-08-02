@@ -1,3 +1,4 @@
+//requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 #include "nw_i0_plot"
 // 1 = break
@@ -117,7 +118,7 @@ void main (int nAction, int nDC) {
 		int xp_reward = 35;
 		int gold_reward = 120;
 		int xp = xp_reward*nTotalItem;
-		GiveXPToCreature(oPC, xp);
+		PS_GiveXPReward(oPC, xp);
 		if (nTotalItem >= 4) {
 			GenerateStarterItem(oPC);
 		} else {

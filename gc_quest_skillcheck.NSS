@@ -1,7 +1,9 @@
 //Performs skill check and gives exp if you should succeed on 
 //a skill appropriate challenge.
 
+//requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
+
 
 int StartingConditional(int nSkill, int nDC, int maxExp = 100)
 {
@@ -30,7 +32,7 @@ int StartingConditional(int nSkill, int nDC, int maxExp = 100)
 	
 	if (GetIsSkillSuccessful(oPC, nSkill, nDC, TRUE)) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		return TRUE;
 	}
 	return FALSE;

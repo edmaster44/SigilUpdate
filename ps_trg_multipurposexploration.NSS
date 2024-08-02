@@ -7,6 +7,7 @@ It may also be used to open a dialogue.
 © Mr_Otyugh: feel free to use, copy and/or modify.  
 //modified 11/26/17 to add training exp - Mimi Fearthegn
 */
+//requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 
 
@@ -145,7 +146,7 @@ if (creature != "") {
 	DestroyObject(GetNearestObjectByTag(creature),creDur);
 	}
 
-if (exp > 0) GiveXPToCreature(oPC, exp);
+if (exp > 0) PS_GiveXPReward(oPC, exp);
 if (gold > 0) GiveGoldToCreature(oPC, gold, TRUE);
 if (message != "") SendMessageToPC(oPC, message);
 if (convo != "") AssignCommand(oPC, ActionStartConversation(oPC, convo, TRUE, FALSE));

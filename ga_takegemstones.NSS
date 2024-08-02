@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 const int XPAWARD = 75;
 const int GPAWARD = 150;
 
@@ -29,6 +31,6 @@ void main () {
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	GiveXPToCreature(oPC, iXp);
+	PS_GiveXPReward(oPC, iXp);
 
 }

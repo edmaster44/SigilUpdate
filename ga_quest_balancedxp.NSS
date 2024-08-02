@@ -92,7 +92,7 @@ void main (float fCR) {
 					
 					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID);	
 				}
-				GiveXPToCreature(oPartyMember, nFinalXP);
+				PS_GiveXPReward(oPartyMember, nFinalXP);
 			}	
 		}
 		

@@ -1,3 +1,4 @@
+//requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 #include "ginc_var_ops"
 
@@ -53,7 +54,7 @@ void main() {
 	
 	if (GetIsSkillSuccessful(oPC, SKILL_SPOT, spotDC, TRUE)) {
 	 	if (!noExp)
-			GiveXPToCreature(oPC, nExp);
+			PS_GiveXPReward(oPC, nExp);
 		SendMessageToPC(oPC, "You see the wererat patron snatch a small but exotic looking skull from the shelf and shove it into his trenchcoat.");
 		AddJournalQuestEntry("ps_quest_chirperskulls", 2, oPC, TRUE);
 	} else {

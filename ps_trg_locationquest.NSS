@@ -1,4 +1,5 @@
 #include "ginc_var_ops"
+#include "ps_inc_functions"
 
 int GetHasJournalEntry(object oPC, string sQuestTag, string sCheck)
 {
@@ -28,9 +29,9 @@ void main () {
 		AddJournalQuestEntry(sQuestName, 2, oPC);
 		int nXP = 50*nMax;
 		SendMessageToPC(oPC, "You've found everything on the map. Congratulations!");
-		GiveXPToCreature(oPC, nXP);
+		PS_GiveXPReward(oPC, nXP);
 	} else {
-		GiveXPToCreature(oPC, 100);
+		PS_GiveXPReward(oPC, 100);
 	}
 	
 	

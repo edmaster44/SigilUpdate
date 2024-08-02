@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 const int NWN2_MAXDAMAGE = 9999;
 
 //This subroutine properly inflicts damage on oTARGET. Can exceed 9999 damage.
@@ -104,7 +106,7 @@ void EnemyReward(object oPC, object oENEMY)
 				nGAP = GetHitDice(oPARTY) - nHD;
 				if (nGAP < 1) nXP = nXP_BASE;
 				else nXP = (nXP_BASE * (100 - nGAP * 20)) / 100;
-				if (nXP > 0) GiveXPToCreature(oPARTY, nXP);
+				if (nXP > 0) PS_GiveXPReward(oPARTY, nXP);
 				if (sDROP != "")
 				{
 					oDROP = GetItemPossessedBy(oPARTY, sDROP);

@@ -1,6 +1,7 @@
 // Created by Agony_Aunt for SCoD server
 
 #include "nw_i0_plot"
+#include "ps_inc_functions"
 
 // Script is used by both Ghyris and the Rakashka for removing the quest items and rewarding
 // iRewarder should be 1 if it is Ghyris who will give gold and 2 for Rakashka who will give XP.
@@ -27,7 +28,7 @@ void main (int iRewarder)
 	else if (iRewarder == 2)
 	{
 		iAmount = (31 - iLevel) * iLoreMod * iTotalItems;
-		GiveXPToCreature(oPC, iAmount);
+		PS_GiveXPReward(oPC, iAmount);
 	}
 	else
 	{

@@ -1,4 +1,5 @@
 // Gives xp and gold for runes
+#include "ps_inc_functions"
 
 const int XPAWARD = 25;
 const int GPAWARD = 100;
@@ -23,5 +24,5 @@ void main()
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	GiveXPToCreature(oPC, iXp);
+	PS_GiveXPReward(oPC, iXp);
 }

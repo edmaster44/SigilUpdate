@@ -17,7 +17,7 @@ void main(int nXP, int bAllPartyMembers, int nLevelvaried)
 	 {
 	 	fXP = nXP * PS_GetXPModifier(iECL);
 	 }
-	 GiveXPToCreature(oPC, FloatToInt(fXP) );
+	 PS_GiveXPReward(oPC, FloatToInt(fXP) );
 	}
     else
     {

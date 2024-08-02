@@ -1,6 +1,8 @@
 const int XPAWARD = 75;
 const int GPAWARD = 150;
 
+#include "ps_inc_functions"
+
 void main () {
 
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
@@ -23,6 +25,6 @@ void main () {
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	GiveXPToCreature(oPC, iXp);
+	PS_GiveXPReward(oPC, iXp);
 
 }

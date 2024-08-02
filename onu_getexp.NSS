@@ -1,9 +1,11 @@
+#include "ps_inc_functions"
+
 void main () {
 
 	object oPC = GetLastUsedBy();
 	
 	int nXP = 10000;
 	
-	GiveXPToCreature(oPC, nXP);
+	PS_GiveXPReward(oPC, nXP);
 
 }
