@@ -75,6 +75,9 @@ const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
+// The default GiveXPToCreature() has return type void, so int GiveCPRewar() doesn't always work in place of it.
+void PS_GiveXPRewardNoReturn(object oPC, int nXP);
+
 // Call this function to get the oPC's essence object.
 object PS_GetEssence(object oPC = OBJECT_SELF);
 
@@ -3986,6 +3989,7 @@ void DebugMessageToPC(object oPC, string sMessage)
 	SendMessageToPC(oPC, sMessage);
 }
 
+
 //wrapper for the standard exp script, makes sure you don't keep getting exp past level 30
 int PS_GiveXPReward(object oPC, int nXP) {
 
@@ -3995,6 +3999,13 @@ int PS_GiveXPReward(object oPC, int nXP) {
 	GiveXPToCreature(oPC, nXP);
 	return TRUE;
 
+}
+
+// The above doesn't always work in place of GiveXPToCreature() because GiveXPToCreature()
+// returns void, not int, so the above does not work as an arg for AssignCommand or DelayCommand
+void PS_GiveXPRewardNoReturn(object oPC, int nXP)
+{
+	PS_GiveXPReward(oPC, nXP);
 }
 
 struct CreatureCoreAppearance GetNewFormAppearance(string sResRef, object oPC = OBJECT_INVALID) {

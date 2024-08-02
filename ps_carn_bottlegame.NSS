@@ -77,7 +77,7 @@ void main () {
 		if (nExp > 200)
 			nExp = 200;
 		if (nExp > 0)
-			DelayCommand(2.5f, PS_GiveXPReward(oDamager, nExp));
+			DelayCommand(2.5f, PS_GiveXPRewardNoReturn(oDamager, nExp));
 		if (nGold > 0)
 			DelayCommand(2.5f, GiveGoldToCreature(oDamager, nGold));
 		SetLocalInt(oDamager, "cipher_game_played", 1);
