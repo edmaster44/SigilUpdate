@@ -66,6 +66,8 @@ void main()
 //	effect eDur = EffectVisualEffect(VFX_DUR_GLOBE_MINOR);
 
     effect eLink = EffectLinkEffects(eArmor, eSpell);
+	eLink = EffectLinkEffects(eLink, eDur);
+	eLink = SetEffectSpellId(eLink, nID);
   
 
     //float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF)); //Duration 1 hour per level, not my change but the comment was wrong -FlattedFifth
@@ -82,6 +84,6 @@ void main()
     
     //Apply VFX impact and bonus effects
 	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
+    //ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
 	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
