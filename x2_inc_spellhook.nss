@@ -85,12 +85,11 @@ int X2PreSpellCastCode()
    if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF) ||
    		GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget))
    {
-		object oPC = OBJECT_SELF;
 		object oItem = GetSpellCastItem();
 		int nSpellId = GetSpellId();
 		int nFeatId = GetSpellFeatId();
 		// note that we don't return true if the spell/item is allowed because there are other checks as well.
-		if (GetBypassMageSlayerRestriction(oTarget, oPC, oItem, nSpellId, nFeatId) == FALSE) return FALSE;
+		if (GetBypassMageSlayerRestriction(oTarget, OBJECT_SELF, oItem, nSpellId, nFeatId) == FALSE) return FALSE;
    }
    
    //---------------------------------------------------------------------------
