@@ -93,6 +93,9 @@ const int 	BASE_ITEM_CREEQ_SLAM_MED	= 183;
 const int 	BASE_ITEM_CREEQ_BITE_TINY	= 184;
 const int 	BASE_ITEM_CREEQ_BITE_LRG	= 185; //New large
 
+// return the content of the new "WeaponCategory" column of baseitems.2da
+string IPGetWeaponCategory(object oItem);
+
 // *  removes all itemproperties with matching nItemPropertyType and nItemPropertyDuration
 void  IPRemoveMatchingItemProperties( object oItem, int nItemPropertyType, int nItemPropertyDuration = DURATION_TYPE_TEMPORARY, int nItemPropertySubType = -1 );
 
@@ -850,13 +853,23 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    return ipRet;
 }
 
+//Returns value in WeaponCategory column of baseitems
+string IPGetWeaponCategory(object oItem)
+{
+	int nItem = GetBaseItemType(oItem);
+	return GetStringLowerCase(Get2DAString("baseitems", "WeaponCategory", nItem));
+}
+
 // ----------------------------------------------------------------------------
 // Returns TRUE if oItem is a projectile
 // ----------------------------------------------------------------------------
 int IPGetIsProjectile(object oItem)
 {
+	return (IPGetWeaponCategory(oItem) == "projectile");
+	/* deprecated, FlattedFifth Aug 1, 2024
   int nBT = GetBaseItemType(oItem);
   return (nBT == BASE_ITEM_ARROW || nBT == BASE_ITEM_BOLT || nBT == BASE_ITEM_BULLET);
+  */
 }
 
 // ----------------------------------------------------------------------------
@@ -872,7 +885,9 @@ int IPGetIsRangedWeapon(object oItem)
 // ----------------------------------------------------------------------------
 int IPGetIsMeleeWeapon(object oItem)
 {
-    //Declare major variables
+	return (FindSubString(IPGetWeaponCategory(oItem), "melee") != -1);
+    /* deprecated, FlattedFifth Aug 1, 2024
+	//Declare major variables
     int nItem = GetBaseItemType(oItem);
 
     if((nItem == BASE_ITEM_BASTARDSWORD) ||
@@ -932,11 +947,14 @@ int IPGetIsMeleeWeapon(object oItem)
         return TRUE;
    }
    return FALSE;
+   */
 }
 
 // Added by Ceremorph for SCoD
 int IPGetIsCreatureEquippedWeapon(object oItem)
 {
+	return (FindSubString(IPGetWeaponCategory(oItem), "creature") != -1);
+	/* deprecated, FlattedFifth Aug 1, 2024
     //Declare major variables
     int nItem = GetBaseItemType(oItem);
 
@@ -969,6 +987,7 @@ int IPGetIsCreatureEquippedWeapon(object oItem)
         return TRUE;
 	}
 	return FALSE;
+	*/
 }
 
 // ----------------------------------------------------------------------------
