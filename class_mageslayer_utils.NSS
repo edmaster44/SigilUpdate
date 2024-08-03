@@ -7,10 +7,10 @@
 #include "ps_inc_functions"
 #include "nw_i0_spells"
 
-const int FEAT_MAGE_SLAYER_NORMAL = 21923;
-const int FEAT_MAGE_SLAYER_ANTI_ARCANE = 21925;
-const int FEAT_MAGE_SLAYER_ANTI_DIVINE = 21926;
 const int FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE = 2950;
+const int MAGE_SLAYER_NORMAL = 21924;
+const int MAGE_SLAYER_ANTI_ARCANE = 21925;
+const int MAGE_SLAYER_ANTI_DIVINE = 21926;
 const int CLASS_TYPE_MAGE_SLAYER = 70;
 const int SPELL_ID_MAGE_SLAYER_TYPE = 14717;
 
@@ -42,16 +42,19 @@ const int N_ANY = 5;
 // stone to flesh, and be the target of raise and un-petrify, because their beliefs won't stop them
 // from saving a companion or from being saved.
 const int N_NORMAL_MS_POTION_USE = N_ANY;
+const int N_NORMAL_MS_TRINKET_USE = N_ANY;
 const int N_NORMAL_MS_SCROLL_USE = N_NONE;
 const int N_NORMAL_MS_WAND_USE = N_NONE;
 const int N_NORMAL_MS_BUFFS = N_ANY;
 
 const int N_ANTI_ARCANE_MS_POTION_USE = N_ANY;
+const int N_ANTI_ARCANE_MS_TRINKET_USE = N_DIVINE;
 const int N_ANTI_ARCANE_MS_SCROLL_USE = N_DIVINE;
 const int N_ANTI_ARCANE_MS_WAND_USE = N_DIVINE;
 const int N_ANTI_ARCANE_MS_BUFFS = N_DIVINE;
 
 const int N_ANTI_DIVINE_MS_POTION_USE = N_ANY;
+const int N_ANTI_DIVINE_MS_TRINKET_USE = N_ARCANE;
 const int N_ANTI_DIVINE_MS_SCROLL_USE = N_ARCANE;
 const int N_ANTI_DIVINE_MS_WAND_USE = N_ARCANE;
 const int N_ANTI_DIVINE_MS_BUFFS = N_ARCANE;
@@ -64,6 +67,7 @@ const int B_USE_VFX_FOR_MS_FAIL = TRUE;
 struct ItemUsage
 {
     int nPotionUse;
+	int nTrinketUse;
     int nScrollUse;
     int nWandUse;
     int nBuffs;
@@ -78,13 +82,15 @@ int GetSpellIsArcane(int nSpellId);
 int GetSpellIsHealing(int nSpellId, object oPC);
 int GetMageSlayerAllowedSpecificItems(object oItem);
 int GetMageSlayerType(object oPC);
-int GetMageSlayerItemOrSpell(object oPC, int nItem, int nSpellId);
+int GetMageSlayerItemOrSpell(object oPC, object oItem, int nSpellId);
 int GetBypassMageSlayerRestriction(object oTarget, object oPC, object oItem, int nSpellId, int nFeatId);
 void SetMageSlayerSpecialItemBoolean(object oPC);
 void CheckMakeItemUseableForMageSlayer(object oItem, object oPC);
 int GetItemUseableByClass(int iClassType, object oItem);
 int GetItemUsuableByDivine(object oItem);
 int GetItemUsuableByArcane(object oItem);
+int GetIsActivated(object oItem, int nSpellId);
+
 
 
 
@@ -97,15 +103,20 @@ int GetItemUsuableByArcane(object oItem);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void MageSlayerLevels(object oPC)
 {
-	if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC))
+	if (!GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC))
 	{
-		if (!GetHasFeat(FEAT_MAGE_SLAYER_ANTI_ARCANE, oPC) && !GetHasFeat(FEAT_MAGE_SLAYER_ANTI_DIVINE, oPC) && 
-				  !GetHasFeat(FEAT_MAGE_SLAYER_NORMAL, oPC))
+		return;
+	}
+	else
+	{
+		if (!GetHasFeat(MAGE_SLAYER_ANTI_ARCANE, oPC) && !GetHasFeat(MAGE_SLAYER_ANTI_DIVINE, oPC) && 
+				  !GetHasFeat(MAGE_SLAYER_NORMAL, oPC))
 		{
 			SendMessageToPC(oPC, "Mage Slayer class pre-requisites and abilites have changed. Please see a DM/EM for assistance with a rebuild");
 			return;
 		}
 	}
+	
 	
 	int nSlayerLevel = GetLevelByClass(CLASS_TYPE_MAGE_SLAYER, oPC);
 	
@@ -133,14 +144,11 @@ void MageSlayerLevels(object oPC)
 	if (nSlayerLevel >= 2 || nSlayerLevel == 0) SetLocalInt(oEss, "MageSlayerInvCheckDone", FALSE);
 	
 	RemoveEffectsFromSpell(oPC, SPELL_ID_MAGE_SLAYER_TYPE);
-	int nDamageType = DAMAGE_TYPE_POSITIVE;
-	// set the bonus damage type for the type of mage slayer. If they don't have any of
-	// these feats, exit. 
-	if (GetHasFeat(FEAT_MAGE_SLAYER_ANTI_ARCANE, oPC)) nDamageType = DAMAGE_TYPE_DIVINE;
-		else if (GetHasFeat(FEAT_MAGE_SLAYER_ANTI_DIVINE, oPC)) nDamageType = DAMAGE_TYPE_MAGICAL;
-		else if (GetHasFeat(FEAT_MAGE_SLAYER_NORMAL, oPC)) nDamageType = DAMAGE_TYPE_POSITIVE;
-		else return;
-
+	int nDamageType = DAMAGE_TYPE_POSITIVE; 
+	int nSlayerType = GetMageSlayerType(oPC);
+	if (nSlayerType == MAGE_SLAYER_ANTI_ARCANE) nDamageType = DAMAGE_TYPE_DIVINE;
+	else if (nSlayerType == MAGE_SLAYER_ANTI_DIVINE) nDamageType = DAMAGE_TYPE_MAGICAL;
+	
 	int nDamageBonus = (GetLevelByClass(CLASS_TYPE_MAGE_SLAYER, oPC) + 1) / 3;
 	if (nDamageBonus > 0)
 	{
@@ -165,70 +173,45 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	// functionality to allow mageslayers to use some potions and abilities, which ones are controlled by 
 	// integers at the top of this file, and added ability to control what sort of non-hostile spell other
 	// players can cast on mage slayer. -FlattedFifth
+
 	
 	// I don't think a mage-slayer's principles should stand in the way of saving a companion's 
 	// life, or from being saved, so we will allow raise dead, resurrection, and stone to flesh
 	// regardless of whether the mage slayer is caster or target
 	if (nSpellId == 142 || nSpellId == 153 || nSpellId == 486) return TRUE;
 	
+	//Some items are automatically allowed, such as the Coin of Life, Item Editor, and any mundane items
+	//so we'll check for those first with a function in this file and skip the rest of the checks if it's 
+	//one of those. Currently there aren't any items in that function that a MS shouldn't be able to use or
+	// be the targetof, they're either mundane, hostile, or both, but if this changes we can move this check
+	//into the specific conditions for caster and target. For now I'd prefer to skip a lot of checks when possible.
+	if (GetMageSlayerAllowedSpecificItems(oItem)) return TRUE;
 	
-
-	if (oItem != OBJECT_INVALID)
-	{	
-		//Some items are automatically allowed, such as the Coin of Life, Item Editor, and any mundane items
-		//so we'll check for those first with a function in this file and skip the rest of the checks if it's 
-		//one of those. Currently there aren't any items in that function that a MS shouldn't be able to use or
-		// be the targetof, they're either mundane, hostile, or both, but if this changes we can move this check
-		//into the specific conditions for caster and target. For now I'd prefer to skip a lot of checks when possible.
-		if (GetMageSlayerAllowedSpecificItems(oItem)) return TRUE;
+	// note that a spell can be both arcane and divine, like stoneskin, energy immunity, and prot from alignment,
+	// so we do two checks. One or both of these will be TRUE, but it's unlikely that both will be FALSE other than 
+	// maybe some feat abilities such as Psionics.
+	int bDivineSpell = GetSpellIsDivine(nSpellId);
+	int bArcaneSpell = GetSpellIsArcane(nSpellId);
 		
-		// allow all on hit properties on all weapons and armor. Sadly this will also allow all other cast
-		// spell properties on any weapons and armor that also have on hit properties but it's 3am and I can't
-		// think of a way around that.
-		itemproperty ip = GetFirstItemProperty(oItem);
-		while (GetIsItemPropertyValid(ip))
-		{
-			// Check if the item property type is OnHitCastSpell
-			if (GetItemPropertyType(ip) == ITEM_PROPERTY_ON_HIT_PROPERTIES)
-			{
-				return TRUE;
-			}
-        ip = GetNextItemProperty(oItem);
-		}
-	}
-	
-	
-	// let's set up the variables we need. We won't be setting these 5 to false in the rest of this function. The
+	// let's set up the other variables we need. We won't be setting these 5 to false in the rest of this function. The
 	// rest of the code will either set them to true or leave them alone.
 	int bCasterIsSlayer = GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oCaster);
 	int bTargetIsSlayer = GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget);
 	int bCasterCanCast = !bCasterIsSlayer;
 	int bTargetCanReceive = !bTargetIsSlayer;
 	int bCanCastSpell = FALSE;
-
-	// if the mage slayer is using a feat ability then it's allowed for the caster but not necessarily for the target.
-	// At some point we should probably make exceptions and disallow class-based feat spells, such as from Assassin,
-	// but for now we'll let it slide so that we don't disallow any racial abilities. Testing with feats such as barb 
-	// aura of courage showed that disallowing feat spells as a target but not as the caster resulting in an endless 
-	// loop of attempting to cast and failing. To be really accurate we need to make a function that grants or refuses 
-	// feat spells on a case by case basis. For now we'll make sure that the mage slayer can use the feat ability on
-	// themselves to avoid the aforementioned auro of courage loop. After Dae decides what classes are getting spellbooks
-	// instead of feats we can revisit this.
-	if (nFeatId > 0 && bCasterIsSlayer) bCasterCanCast = TRUE;
-
-	
-	// note that a spell can be both arcane and divine, like stoneskin, energy immunity, and prot from alignment,
-	// so we do two checks. One or both of these will be TRUE, but it's unlikely that both will be FALSE other than 
-	// maybe some feat abilities.
-	int bDivineSpell = GetSpellIsDivine(nSpellId);
-	int bArcaneSpell = GetSpellIsArcane(nSpellId);
-
-	
-	string sCasterMessage = "";
-	string sTargetMessage = "You cannot be the target of spells or items of this type.";
 	int nItem = GetBaseItemType(oItem);
-
 	
+	int nSlayerType = 0;
+	if (bCasterIsSlayer) nSlayerType = GetMageSlayerType(oCaster);
+	
+	// Mage slayers can use feats. If the target is the slayer and not the caster, that will be handled 
+	// later in this function.
+	if (nFeatId > 0) bCasterCanCast = TRUE;
+	
+	string sCasterMessage = "You cannot cast spells.";
+	string sTargetMessage = "You cannot be the target of spells or items of this type.";
+
 	// If the caster/item user is the mage slayer, also if the mage slayer is targeting themself.
 	if (bCasterIsSlayer)
 	{
@@ -237,7 +220,6 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 		// such as a racial spell like ability.
 		if (oItem == OBJECT_INVALID)
 		{
-			sCasterMessage = "You cannot cast spells.";
 			// if the mage slayer is using a special "unique power self only" item activated in the on item activated
 			// event, then that registers first and then spellhook thinks they're casting the spell themselves,
 			// which technically they are. So that script sets a local int on the character to let the spellhook
@@ -245,29 +227,33 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 			if (GetLocalInt(oCaster, S_ACTIVATED_POTION_IDENTIFIER))
 			{
 				SetLocalInt(oCaster, S_ACTIVATED_POTION_IDENTIFIER, FALSE);
-				// in this case we'll pretend the item is a potion because at the time of this writing that's the ONLY
-				// thing the this could be. If that changes, we will have to adjust this. Probably by changing the 
-				// identifier to have a diff variable string for each type of item that uses the On Item Activated event.
-				// Since at this time the only thing that uses this local int is a self-only potion, we'll set TRUE
-				// for both the caster and the target.
-				if (GetMageSlayerItemOrSpell(oCaster, 49, nSpellId))
-				{
-					bCasterCanCast = TRUE;
-				}
+				// for now we will automatically allow it because the only thing that currently uses
+				// this local int is a potion of negative energy, and mage slayers are allowed potions.
+				// It would kinda suck for undead mage slayers otherwise.
+				bCasterCanCast = TRUE;
 			}
 
 		}
 		else // the mage slayer is using a spell ability from an item
 		{	
-				sCasterMessage = "You cannot use items of this type.";
-
-				// The mage-slayer is using a potion, wand, or scroll. Any other spellcasting item should either be
-				// caught by GetMageSlayerAllowedSpecificItems() or not allowed.
-				if (nItem == 49 || nItem == 104 || nItem == 101 || nItem == 103 || nItem == 106 ||
-						nItem == 46 || nItem == 75 || nItem == 102 || nItem == 105)
-				{
-					if (GetMageSlayerItemOrSpell(oCaster, nItem, nSpellId)) bCasterCanCast = TRUE;
-				}
+			sCasterMessage = "You cannot use items of this type.";
+			
+			// A normal mage slayer can use the on-hit properties of any armor, weapon, or shield but cannot use Activated
+			// properties such as item property cast spell. Whereas the other two can use any properties of any armor, weapon or shield but only if it aligns with their path.
+			if (IPGetIsRangedWeapon(oItem) || IPGetIsMeleeWeapon(oItem) || IPGetIsProjectile(oItem) ||
+			(nItem == BASE_ITEM_ARMOR) || (nItem == BASE_ITEM_SMALLSHIELD) || (nItem == BASE_ITEM_LARGESHIELD) ||
+			(nItem == BASE_ITEM_TOWERSHIELD))
+			{
+				if ((nSlayerType == MAGE_SLAYER_ANTI_ARCANE) && bDivineSpell){
+					bCasterCanCast = TRUE;}
+				else if ((nSlayerType == MAGE_SLAYER_ANTI_DIVINE) && bArcaneSpell){
+					bCasterCanCast = TRUE;}
+				else if ((nSlayerType == MAGE_SLAYER_NORMAL) && !GetIsActivated(oItem, nSpellId)){
+					bCasterCanCast = TRUE;}	
+			}
+			// potions, scrolls, wands, the "trinkets" sold by Bouldertank, and anything else
+			else if (GetMageSlayerItemOrSpell(oCaster, oItem, nSpellId)){ 
+				bCasterCanCast = TRUE;}
 		}
 	}
 	
@@ -275,12 +261,13 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	// the target.
 	if (oCaster == oTarget) bTargetCanReceive = bCasterCanCast;
 	
+	
 	// Separate check for if the target is a mage slayer but isn't the same as the caster. we'll let the 1st condition
 	// catch all instances of a self-targeting mage slayer, but there ARE cases where a mage slayer could use something 
 	// that targets another mage slayer but that other can't be the target of, if they are diff mage slayer paths.
 	if (bTargetIsSlayer && oTarget != oCaster)
 	{
-		if (sCasterMessage != "") sCasterMessage = sCasterMessage + " ";
+		if (sCasterMessage != "") sCasterMessage = sCasterMessage + "\n";
 		sCasterMessage = sCasterMessage + "Spells or items of this type cannot affect your target.";
 		
 		// If it's a hostile spell let it through and let the SR handle it. 
@@ -290,10 +277,12 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 		}
 		else
 		{
-			if (GetMageSlayerItemOrSpell(oTarget, -1, nSpellId)) bTargetCanReceive = TRUE;
+			if (GetMageSlayerItemOrSpell(oTarget, OBJECT_INVALID, nSpellId)){
+				bTargetCanReceive = TRUE;}
 		}	
 	}
 	
+
 	if (bCasterCanCast && bTargetCanReceive) bCanCastSpell = TRUE;
 	
 	if (bCanCastSpell == FALSE)
@@ -403,7 +392,7 @@ void CheckMakeItemUseableForMageSlayer(object oItem, object oPC)
 			// by this point we SHOULD either have a valid spellid or have bailed on this function.
 			if (nSpellId != -1)
 			{
-				if (GetMageSlayerItemOrSpell(oPC, nItem, nSpellId)) bAddMageSlayerUseProperty = TRUE;
+				if (GetMageSlayerItemOrSpell(oPC, oItem, nSpellId)) bAddMageSlayerUseProperty = TRUE;
 			}
 			// we SHOULD have been able to find a valid spell id by now, but just in case we didn't we'll check for 
 			// usuable by properties for other classes.
@@ -442,33 +431,52 @@ void CheckMakeItemUseableForMageSlayer(object oItem, object oPC)
 int GetMageSlayerAllowedSpecificItems(object oItem)
 {
 	string sRes = GetResRef(oItem);
-	int bCanUse;
-	
+	int bCanUse = FALSE;
 	if (sRes == "nx2_misc_lifecoin"){ bCanUse = TRUE;}
 	else if (sRes == "ps_miscthin_bludimndwhetstone"){ bCanUse = TRUE;}
 	else if (FindSubString(sRes, "i_ps_itemeditor") != -1){ bCanUse = TRUE;}
 	else if (FindSubString(sRes, "ps_grenade") != -1){ bCanUse = TRUE;}
 	else if (FindSubString(sRes, "it_herb") != -1){ bCanUse = TRUE;}
 	else if (FindSubString(sRes, "ps_food") != -1){ bCanUse = TRUE;}
-	else if (FindSubString(sRes, "nx2_r_") != -1){ bCanUse = TRUE;}
-	else bCanUse = FALSE;
+	else if (FindSubString(sRes, "nx2_r_") != -1){ bCanUse = TRUE;} // recipes
+	
 	return bCanUse;
 }
+
+int GetIsActivated(object oItem, int nSpellId)
+{
+
+	itemproperty ip = GetFirstItemProperty(oItem);
+	while (GetIsItemPropertyValid(ip))
+	{
+		int ipType = GetItemPropertyType(ip);
+		if (ipType == ITEM_PROPERTY_CAST_SPELL)
+		{
+			int ipSub = GetItemPropertySubType(ip);
+			if (ipSub == nSpellId) return TRUE;
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	return FALSE;
+}
+
 
 struct ItemUsage GetMageSlayerUsageData(object oPC)
 {
 	int nSlayerType = GetMageSlayerType(oPC);
 	struct ItemUsage dItemUsage;
-	if (nSlayerType == FEAT_MAGE_SLAYER_ANTI_ARCANE)
+	if (nSlayerType == MAGE_SLAYER_ANTI_ARCANE)
 	{
 		dItemUsage.nPotionUse = N_ANTI_ARCANE_MS_POTION_USE;
+		dItemUsage.nTrinketUse = N_ANTI_ARCANE_MS_TRINKET_USE;
 		dItemUsage.nWandUse = N_ANTI_ARCANE_MS_WAND_USE;
 		dItemUsage.nScrollUse = N_ANTI_ARCANE_MS_SCROLL_USE;
 		dItemUsage.nBuffs = N_ANTI_ARCANE_MS_BUFFS;
 	}
-	else if (nSlayerType == FEAT_MAGE_SLAYER_ANTI_DIVINE)
+	else if (nSlayerType == MAGE_SLAYER_ANTI_DIVINE)
 	{
 		dItemUsage.nPotionUse = N_ANTI_DIVINE_MS_POTION_USE;
+		dItemUsage.nTrinketUse = N_ANTI_DIVINE_MS_TRINKET_USE;
 		dItemUsage.nWandUse = N_ANTI_DIVINE_MS_WAND_USE;
 		dItemUsage.nScrollUse = N_ANTI_DIVINE_MS_SCROLL_USE;	
 		dItemUsage.nBuffs = N_ANTI_DIVINE_MS_BUFFS;
@@ -476,6 +484,7 @@ struct ItemUsage GetMageSlayerUsageData(object oPC)
 	else
 	{
 		dItemUsage.nPotionUse = N_NORMAL_MS_POTION_USE;
+		dItemUsage.nTrinketUse = N_NORMAL_MS_TRINKET_USE;
 		dItemUsage.nWandUse = N_NORMAL_MS_WAND_USE;
 		dItemUsage.nScrollUse = N_NORMAL_MS_SCROLL_USE;
 		dItemUsage.nBuffs = N_NORMAL_MS_BUFFS;
@@ -483,18 +492,23 @@ struct ItemUsage GetMageSlayerUsageData(object oPC)
 	return dItemUsage;	
 }
 
-int GetMageSlayerItemOrSpell(object oPC, int nItem, int nSpellId)
+int GetMageSlayerItemOrSpell(object oPC, object oItem, int nSpellId)
 {
-	int bDivineSpell = GetSpellIsDivine(nSpellId);
-	int bArcaneSpell = GetSpellIsArcane(nSpellId);
-	int bHealingSpell = GetSpellIsHealing(nSpellId, oPC);
+	int nItem = GetBaseItemType(oItem);
 	int nThis;
 	int bAllowed = FALSE;
 	
 	struct ItemUsage dItemUsage = GetMageSlayerUsageData(oPC);
 	
+	string sRes = GetResRef(oItem);
+	int bCanUse = FALSE;
+	if (sRes == "nx2_misc_lifecoin"){ bCanUse = TRUE;}
+	
 	// item is a potion
 	if (nItem == 49 || nItem == 104 || nItem == 101){ nThis = dItemUsage.nPotionUse;
+	}
+	// trinket
+	else if (FindSubString(GetResRef(oItem), "trinket") >= 0){ nThis = dItemUsage.nTrinketUse;
 	}
 	// wand
 	else if (nItem == 103 || nItem == 106 || nItem == 46){ nThis = dItemUsage.nWandUse;
@@ -624,9 +638,10 @@ int GetItemUseableByClass(int iClassType, object oItem)
 
 int GetMageSlayerType(object oPC)
 {
-	if (GetHasFeat(FEAT_MAGE_SLAYER_ANTI_ARCANE, oPC)) return FEAT_MAGE_SLAYER_ANTI_ARCANE;
-	else if (GetHasFeat(FEAT_MAGE_SLAYER_ANTI_DIVINE, oPC)) return FEAT_MAGE_SLAYER_ANTI_DIVINE;
-	else return FEAT_MAGE_SLAYER_NORMAL;
+	if (GetHasFeat(MAGE_SLAYER_ANTI_ARCANE, oPC)) return MAGE_SLAYER_ANTI_ARCANE;
+	else if (GetHasFeat(MAGE_SLAYER_ANTI_DIVINE, oPC)) return MAGE_SLAYER_ANTI_DIVINE;
+	else if (GetHasFeat(MAGE_SLAYER_NORMAL, oPC)) return MAGE_SLAYER_NORMAL;
+	else return 0;
 }
 
 int GetSpellIsDivine(int nSpellId)
