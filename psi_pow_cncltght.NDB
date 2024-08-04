@@ -1,5 +1,5 @@
 NDB V1.0
-0000057 0000017 0005712 0000076 0000271
+0000057 0000017 0005727 0000076 0000272
 n00 psi_inc_metapsi
 n01 ginc_debug
 n02 ps_inc_advscript
@@ -166,8 +166,9 @@ s 03 IntVector
 sf i x
 sf i y
 sf i z
-s 04 ItemUsage
+s 05 ItemUsage
 sf i nPotionUse
+sf i nTrinketUse
 sf i nScrollUse
 sf i nWandUse
 sf i nBuffs
@@ -511,6 +512,13 @@ f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_SLAM
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_CLAW_LARGE
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE_LARGE
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_CLAW_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_SLAM_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_SLAM_MED
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE_LRG
+f ffffffff ffffffff 001 s IPGetWeaponCategory
+fp o
 f ffffffff ffffffff 004 v IPRemoveMatchingItemProperties
 fp o
 fp i
@@ -2022,6 +2030,9 @@ f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER
 f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC
 f ffffffff ffffffff 000 i PS_PC_FLAG_COLOR_EMOTES
 f ffffffff ffffffff 000 s PS_PC_FLAGS_VAR
+f ffffffff ffffffff 002 v PS_GiveXPRewardNoReturn
+fp o
+fp i
 f ffffffff ffffffff 001 o PS_GetEssence
 fp o
 f ffffffff ffffffff 004 v PS_GrantFeatBySpell
@@ -7446,6 +7457,10 @@ f ffffffff ffffffff 000 i ID_SPELL_INFLICT_CRIT
 f ffffffff ffffffff 000 i ID_SPELL_HEAL
 f ffffffff ffffffff 000 i ID_SPELL_HARM
 f ffffffff ffffffff 000 i ID_SPELL_STONE_TO_FLESH
+f ffffffff ffffffff 000 i ID_SPELL_RESTORATION
+f ffffffff ffffffff 000 i ID_SPELL_GREATER_RESTORATION
+f ffffffff ffffffff 000 i B_ALLOW_RESTORATION_POTS
+f ffffffff ffffffff 000 i B_ALLOW_GREATER_RESTORATION_POTS
 f ffffffff ffffffff 000 i B_RAISE_SCROLL_NO_CLASS_LIMIT
 f ffffffff ffffffff 000 i B_FULL_RES_SCROLL_NO_CLASS_LIMIT
 f ffffffff ffffffff 000 i B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT
@@ -8299,10 +8314,10 @@ f ffffffff ffffffff 003 i GetMaxProperties
 fp o
 fp i
 fp o
-f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_NORMAL
-f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_ANTI_ARCANE
-f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_ANTI_DIVINE
 f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE
+f ffffffff ffffffff 000 i MAGE_SLAYER_NORMAL
+f ffffffff ffffffff 000 i MAGE_SLAYER_ANTI_ARCANE
+f ffffffff ffffffff 000 i MAGE_SLAYER_ANTI_DIVINE
 f ffffffff ffffffff 000 i CLASS_TYPE_MAGE_SLAYER
 f ffffffff ffffffff 000 i SPELL_ID_MAGE_SLAYER_TYPE
 f ffffffff ffffffff 000 i MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS
@@ -8314,14 +8329,17 @@ f ffffffff ffffffff 000 i N_ARCANE
 f ffffffff ffffffff 000 i N_ARCANE_AND_HEALING
 f ffffffff ffffffff 000 i N_ANY
 f ffffffff ffffffff 000 i N_NORMAL_MS_POTION_USE
+f ffffffff ffffffff 000 i N_NORMAL_MS_TRINKET_USE
 f ffffffff ffffffff 000 i N_NORMAL_MS_SCROLL_USE
 f ffffffff ffffffff 000 i N_NORMAL_MS_WAND_USE
 f ffffffff ffffffff 000 i N_NORMAL_MS_BUFFS
 f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_POTION_USE
+f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_TRINKET_USE
 f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_SCROLL_USE
 f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_WAND_USE
 f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_BUFFS
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_POTION_USE
+f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_TRINKET_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_SCROLL_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_WAND_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_BUFFS
@@ -8346,7 +8364,7 @@ f ffffffff ffffffff 001 i GetMageSlayerType
 fp o
 f ffffffff ffffffff 003 i GetMageSlayerItemOrSpell
 fp o
-fp i
+fp o
 fp i
 f ffffffff ffffffff 005 i GetBypassMageSlayerRestriction
 fp o
@@ -8366,6 +8384,9 @@ f ffffffff ffffffff 001 i GetItemUsuableByDivine
 fp o
 f ffffffff ffffffff 001 i GetItemUsuableByArcane
 fp o
+f ffffffff ffffffff 002 i GetIsActivated
+fp o
+fp i
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
 f ffffffff ffffffff 000 i X2UseMagicDeviceCheck
 f ffffffff ffffffff 001 i X2GetSpellCastOnSequencerItem
@@ -8502,7 +8523,7 @@ l02 0000076 0000002c 0000002c
 l02 0000077 0000002c 0000002c
 l02 0000078 0000002c 0000002c
 l02 0000080 0000002c 0000002c
-l03 0000245 0000002c 00000048
+l03 0000248 0000002c 00000048
 l04 0000051 00000048 00000062
 l04 0000053 00000062 00000078
 l05 0000040 00000078 00000078
@@ -8533,14 +8554,14 @@ l08 0000210 00000078 00000078
 l08 0000211 00000078 00000078
 l08 0000213 00000078 00000078
 l08 0000214 00000078 00000078
-l09 0000116 00000078 00000078
-l09 0000117 00000078 00000078
-l09 0000118 00000078 00000078
-l09 0000119 00000078 00000078
-l09 0000120 00000078 00000078
+l09 0000124 00000078 00000078
 l09 0000125 00000078 00000078
 l09 0000126 00000078 00000078
 l09 0000127 00000078 00000078
+l09 0000128 00000078 00000078
+l09 0000133 00000078 00000078
+l09 0000134 00000078 00000078
+l09 0000135 00000078 00000078
 l10 0000021 00000078 00000078
 l10 0000022 00000078 00000078
 l10 0000023 00000078 00000078
@@ -8553,10 +8574,11 @@ l11 0000056 00000078 00000078
 l12 0000163 00000078 00000078
 l12 0000164 00000078 00000078
 l12 0000165 00000078 00000078
-l13 0000066 00000078 00000078
-l13 0000067 00000078 00000078
-l13 0000068 00000078 00000078
 l13 0000069 00000078 00000078
+l13 0000070 00000078 00000078
+l13 0000071 00000078 00000078
+l13 0000072 00000078 00000078
+l13 0000073 00000078 00000078
 l56 0000043 0000008a 00000094
 l56 0000046 0000009a 000000a0
 l56 0000051 000000a0 000000a6
