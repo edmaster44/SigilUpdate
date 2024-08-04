@@ -772,5 +772,13 @@ const int BASE_ITEM_CREATURECLAW						= 176;
 const int BASE_ITEM_CREATUREBITE						= 177;
 const int BASE_ITEM_CREATURESLAM						= 178;
 const int BASE_ITEM_CREATURECLAW_LARGE					= 179;
-const int BASE_ITEM_CREATUREBITE_LARGE					= 180;
+const int BASE_ITEM_CREATUREBITE_LARGE					= 180; //Deprecated item because someone made it medium
 const int BASE_ITEM_WHIP_SCOD							= 202;
+
+// more new base items -FlattedFifth
+const int BASE_ITEM_SHORT_STAFF							= 45;
+const int BASE_ITEM_CREATURECLAW_TINY					= 181;
+const int BASE_ITEM_CREATURESLAM_TINY					= 182;
+const int BASE_ITEM_CREATURESLAM_MEDIUM					= 183;
+const int BASE_ITEM_CREATUREBITE_TINY					= 184;
+const int BASE_ITEM_CREATUREBITE_LRG					= 185;
