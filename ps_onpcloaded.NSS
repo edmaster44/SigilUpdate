@@ -42,6 +42,23 @@ void ReplaceSkillAffinityAlch(object oPC)
 	}
 }
 
+// the creature skin in the invisible inventory slot carmor is necessary
+// for spells that grant darkvision, and also for some future planned features.
+// Make sure the player has it on login.
+void GiveCreatureSkin(object oPC)
+{
+	object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+	if (oSkin == OBJECT_INVALID)
+	{
+		oSkin = GetItemPossessedBy(oPC, "x2_it_emptyskin");
+		if (oSkin == OBJECT_INVALID)
+		{
+			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
+		}
+		DelayCommand(0.6, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
+	}
+}
+
 // ps_levelup is not called on character creation, and it's not called at the 
 // start of the level up process but at the END. So if there's any feats we
 // need a character to have before they reach level 2 rather than after it, 
@@ -519,6 +536,7 @@ void main()
 	float delayInterval=0.2;
 
 	if (Booted == FALSE) {
+		GiveCreatureSkin(object oPC);
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
