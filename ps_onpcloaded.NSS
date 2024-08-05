@@ -536,7 +536,7 @@ void main()
 	float delayInterval=0.2;
 
 	if (Booted == FALSE) {
-		GiveCreatureSkin(object oPC);
+		GiveCreatureSkin(oPC);
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
