@@ -333,9 +333,18 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 //Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
 int GetIsCreatureWeapon(int nTYPE)
 {
+	/* More maintainable to use new column in baseitems than to check 
+	specific ids
    if (nTYPE < 160) return FALSE;
-   if (nTYPE > 180) return FALSE;
+   if (nTYPE > 185) return FALSE;
     return TRUE;
+	
+	At some point we should put all such checks, both by id and by object, 
+	into x2_inc_itemprop, but I don't have time right now. -FlattedFifth, Aug 6, 2024
+	*/
+	string sType = Get2DAString("baseitems", "WeaponCategory", nType);
+	if (FindSubString(GetStringLowerCase(sType), "creature") != -1) return TRUE;
+	else return FALSE;
    
 }
 
@@ -454,6 +463,7 @@ void CheckForTempProperties(object oItem, object oPC)
 int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 {
     if (GetIsCreatureWeapon(nITEM) == TRUE) return FALSE;
+	if (GetResRef(oITEM) == "x2_it_emptyskin") return FALSE;
     
     switch (nITEM)
     {
