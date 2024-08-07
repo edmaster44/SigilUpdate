@@ -342,7 +342,7 @@ int GetIsCreatureWeapon(int nTYPE)
 	At some point we should put all such checks, both by id and by object, 
 	into x2_inc_itemprop, but I don't have time right now. -FlattedFifth, Aug 6, 2024
 	*/
-	string sType = Get2DAString("baseitems", "WeaponCategory", nType);
+	string sType = Get2DAString("baseitems", "WeaponCategory", nTYPE);
 	if (FindSubString(GetStringLowerCase(sType), "creature") != -1) return TRUE;
 	else return FALSE;
    
