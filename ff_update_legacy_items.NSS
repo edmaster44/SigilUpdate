@@ -68,60 +68,17 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 		itemproperty ipdv = ItemPropertyDarkvision();
 		// go ahead and remove item property darkvision since it doesn't work anyway. Its'a biobug
 		FF_ModifyItemProperty(oItem, ipdv, FALSE);
-		int nFeatId = 801;
-		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228") nFeatId = 438; 
+		int nFeatId = 801; // low light vision
+		
+		// if the currently used iprp_feats.2da has darkvision at line 438, remove
+		// low light vision and change nFeatId to darkvision.
+		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228"){
+			FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(801), FALSE);
+			nFeatId = 438; 
+		}
+		// add either bonus feat darkvision of bonus feat low light vision		
 		FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(nFeatId), TRUE);
 	}
-	
-	// The following conditional is to replace all instances of the now deprected base item 180 with its 
-	// basitem 177 replacement, but since they are functionally identical it's really not necessary for
-	// any logical reason. Just nit-pickiness. For future devs who do not know what the deal is with this,
-	// there was once a large sized creature bite weapon that did 1d12 damage, and a medium sized bite that
-	// did 1d10. Then it was decided that 1d12 should be standard damage for medium weapons and someone changed
-	// the 1d12 into a medium instead of changing the medium to a 1d12. So then we had a 1d10 medium bite with 
-	// resref creaturebiteeld and a 1d12 medium bite with resref creaturebiteeld_lrg. Base item 180 is the
-	// creaturebiteeld_lrg. So I made the 1d10 one be 1d12 and removed creaturebiteeld_lrg from shops. The
-	// following conditional would replace all instances of creaturebiteeld_lrg with creaturebiteeld and copy
-	// over the item properties, but it's not actually necessary except that the very existence of a medium
-	// weapon with _lrg in its resref annoys me. Uncomment this if it annoys you too, but there's no real
-	// mechanical reason to do with. -FlattedFifth, July 20, 2024
-	/*
-	if (GetBaseItemType(oItem) == 180)
-	{
-		//check for empty inventory slots
-		int nMaxItems = 27072;
-		int i = 0;
-		object invItem = GetFirstItemInInventory(oPC);
-		while (GetIsObjectValid(invItem))
-		{
-			i++;
-			if (i >= nMaxItems) break;
-			invItem = GetNextItemInInventory(oPC);
-		}
-		if (i >= nMaxItems) 
-		{
-			SendMessageToPC(oPC, "One of your creature weapons needs to be updated.");
-			SendMessageToPC(oPC, "Please clear 1 inventory space and re-log");
-		}
-		else
-		{
-			object newItem = CreateItemOnObject("creaturebiteeld", oPC);
-			itemproperty ip = GetFirstItemProperty(oItem);
-			while (GetIsItemPropertyValid(ip))
-			{
-				FF_ModifyItemProperty(newItem, ip, TRUE);
-				ip = GetNextItemProperty(oItem);
-			}
-			string s = GetFirstName(oItem);
-			SetFirstName(newItem, s);
-			s = GetLastName(oItem);
-			SetLastName(newItem, s);
-			s = GetDescription(oItem);
-			SetDescription(newItem, s);
-			if (GetIsObjectValid(newItem)) DestroyObject(oItem);
-		}
-	}
-	*/
 }
 
 
