@@ -75,23 +75,23 @@ const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
-// The default GiveXPToCreature() has return type void, so int GiveCPRewar() doesn't always work in place of it.
+// The default GiveXPToCreature() has return type void, so int PS_GiveXPReward() doesn't always work in place of it.
 void PS_GiveXPRewardNoReturn(object oPC, int nXP);
 
 // Call this function to get the oPC's essence object.
 object PS_GetEssence(object oPC = OBJECT_SELF);
 
 // Call this function to add a feat temporarily with a spell but without any other spell effects
-void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0, int bFeatLookup = TRUE,);
+void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0f, int bFeatLookup = TRUE,);
 
 // Call this function to add a feat temporarily with a spell and have other spell effects as well
-void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1, int bFeatLookup = TRUE);
+void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1, int bFeatLookup = TRUE);
 
 // Use this if you have a item property already set up in the spell script.
-void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0);
+void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0f);
 
 // use this if you want to apply the item prop and all other spell effects in one function.
-void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1);
+void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1);
 
 // accepts a feat id from feat.2da and returns the id to be used in ItemPropertyBonusFeat() from iprp_feats.2da
 int PS_GetIpBonusFeat(int nFeatId);
@@ -273,7 +273,7 @@ fDuration = Spell duration in seconds after calling ApplyMetamagicDurationMods(f
 bFeatLookup=If nFeatId is the feat id from feat.2da, leave this set to TRUE. If you entered the proper id for ItemPropertyBonusFeat
 			from iprp_feats.2da, set this to FALSE.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0, int bFeatLookup = TRUE,)
+void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0f, int bFeatLookup = TRUE,)
 {
 	// since EffectLowLightVision doesn't work we're only using it as a placeholder value.
 	// If we want an actual effect we can call the below function directly.
@@ -301,7 +301,7 @@ nImpact =	VFX to be applied as an impact on the target with duration type instan
 bFeatLookup=If nFeatId is the feat id from feat.2da, leave this set to TRUE. If you entered the proper id for ItemPropertyBonusFeat
 			from iprp_feats.2da, set this to FALSE.	
 */
-void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1, int bFeatLookup = TRUE)
+void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1, int bFeatLookup = TRUE)
 {
 	// since this feat is going to be an item property and we're using the safeadd function with keep existing
 	// it doesn't really matter if the pc has the feat in some form already or not. Just go for it.
@@ -315,18 +315,18 @@ void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, floa
 }
 
 // Use this if you have a item property already set up in the spell script.
-void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0)
+void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0f)
 {
 	PS_GrantTempItemPropertyToPCWithEffects(ip, oPC, EffectLowLightVision(), fDuration, -1);
 }
 
 // use this if you want to apply the item prop and all other spell effects in one function.
-void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0, int nImpact = -1)
+void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1)
 {
 	if (GetIsPC(oPC))
 	{
 		// if the we don't pass a duration just set it to 24 hours. We're not setting any permament properties here.
-		if (fDuration == 0.0) fDuration = HoursToSeconds(24);
+		if (fDuration == 0.0f) fDuration = HoursToSeconds(24);
 		object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
 		if (oSkin == OBJECT_INVALID)
 		{
@@ -335,7 +335,7 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
 			{
 				oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
 			}
-			DelayCommand(0.6, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
+			DelayCommand(0.6f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
 		}
 		IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
 	}
