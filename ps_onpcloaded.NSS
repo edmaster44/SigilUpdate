@@ -48,14 +48,29 @@ void ReplaceSkillAffinityAlch(object oPC)
 void GiveCreatureSkin(object oPC)
 {
 	object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
-	if (oSkin == OBJECT_INVALID)
-	{
-		oSkin = GetItemPossessedBy(oPC, "x2_it_emptyskin");
-		if (oSkin == OBJECT_INVALID)
+	
+	if (oSkin != OBJECT_INVALID){
+	return;
+	}
+	else {
+		int i = 0;
+		object oItem = GetFirstItemInInventory(oPC);
+		while (GetIsObjectValid(oItem))
 		{
+			i++;
+			// num of items a pc could have if inv full of full bags, including the bags
+			if (i > 27072) break;
+			// creature skin base item id is 73
+			if (GetBaseItemType(oItem) == 73){
+				oSkin = oItem;
+				break;
+			}
+			oItem = GetNextItemInInventory(oPC);
+		}
+		if (oSkin == OBJECT_INVALID){
 			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
 		}
-		DelayCommand(0.6, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
+		DelayCommand(1.0f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
 	}
 }
 
@@ -536,7 +551,6 @@ void main()
 	float delayInterval=0.2;
 
 	if (Booted == FALSE) {
-		GiveCreatureSkin(oPC);
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		EnableFinesse();
@@ -556,6 +570,7 @@ void main()
 		ff_sneak_fix(oPC);
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
+		DelayCommand(1.0f, GiveCreatureSkin(oPC));
 		
 	}
 
