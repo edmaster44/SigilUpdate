@@ -463,7 +463,8 @@ void CheckForTempProperties(object oItem, object oPC)
 int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 {
     if (GetIsCreatureWeapon(nITEM) == TRUE) return FALSE;
-	if (GetResRef(oITEM) == "x2_it_emptyskin") return FALSE;
+	// base item type of creature skin is 73
+	if (nITEM == 73) return FALSE;
     
     switch (nITEM)
     {
