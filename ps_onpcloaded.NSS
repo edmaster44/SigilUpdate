@@ -26,6 +26,7 @@
 #include "ff_update_legacy_items"
 #include "ff_sneak_fix"
 #include "class_mageslayer_utils"
+#include "inc_tattoos"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -562,6 +563,7 @@ void main()
 		// We will update legacy items before the re-equip feature in case any 
 		// items get dropped on re-equip
 		FF_UpdateLegacyItems(oPC);
+		CheckTattoos(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
 		// call to ps_inc_functions to grant imbue item to psi and to warlock builds that are prc-heavy
