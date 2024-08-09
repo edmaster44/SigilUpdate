@@ -84,6 +84,7 @@ int isNotAlone(object oPC)
 	return FALSE;
 }
 
+
 int ForwardMessageToTextCommands(object oSender, object oTarget, int nChannel, string sMessage)
 {
 	ClearScriptParams();
@@ -93,6 +94,8 @@ int ForwardMessageToTextCommands(object oSender, object oTarget, int nChannel, s
 	AddScriptParameterString(sMessage);
 	return ExecuteScriptEnhanced("Sigil.TextCommands", OBJECT_SELF, TRUE);
 }
+
+
 
 string ExpandMessage(object oSender, string sMessage)
 {
@@ -166,8 +169,9 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 	}
 	
 	string MessageToSend;
+	
 
-	// Dispatch the message to Sigil.TextCommands first and if it handles the
+	// Dispatch the message to Sigil.TextCommands Second and if it handles the
 	// message then don't forward it on.
 	if (ForwardMessageToTextCommands(oSender, oTarget, nChannel, sMessage) == FALSE)
 	{
