@@ -78,7 +78,7 @@ void main()
         if(manif.bExtend) fDuration *= 2;
 		if (manif.bAugment) nDamage = IP_CONST_DAMAGEBONUS_1d6;
 		
-		itemproperty ipDrainer = ItemPropertyOnHitProps(IP_CONST_ONHIT_LEVELDRAIN, iSaveDC, 0);
+		itemproperty ipDrainer = ItemPropertyOnHitProps(IP_CONST_ONHIT_LEVELDRAIN, iSaveDC, 1);
 		itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
 		int DamageType = IP_CONST_DAMAGETYPE_NEGATIVE;
 		itemproperty ipNegative = ItemPropertyDamageBonus(DamageType,nDamage);  
