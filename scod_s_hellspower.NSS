@@ -52,25 +52,30 @@ void main()
 	  object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     float fDuration = TurnsToSeconds(nCasterLvl * 10);
+	in nSpellId = GetSpellId();
 
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HELLSPOWER, FALSE));
 
-    int nLvlBonus;
-    if ( nCasterLvl < 12 ) { nLvlBonus = nCasterLvl / 3; }
-    else if (nCasterLvl >= 15  )               { nLvlBonus = 5; }
+    int nLvlBonus = nCasterLvl / 3;
+    if ( nLvlBonus > 5} nLvlBonus = 5;
 
-    int nACBonus = 1 + nLvlBonus;
-	int nSilver = 10;
-	    //Check for metamagic extend
+ 
+	//Check for metamagic extend
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
-	effect eAC = EffectACIncrease(nACBonus, AC_ARMOUR_ENCHANTMENT_BONUS);
-	effect eDRColdIron = EffectDamageReduction(nSilver, DR_TYPE_GMATERIAL, 0, GMATERIAL_METAL_ALCHEMICAL_SILVER);
-	effect eLink = EffectLinkEffects(eDRColdIron, eAC);
+	effect eAC = EffectACIncrease(nLvlBonus + 1, AC_ARMOUR_ENCHANTMENT_BONUS);
 	
-    RemoveEffectsFromSpell(oTarget, SPELL_HELLSPOWER);
+	//Wrong argument order. The material and the type are reveresed. Should be 
+	// (int nAmount, int nDRSubType=DAMAGE_POWER_NORMAL, int nLimit=0, int nDRType=DR_TYPE_MAGICBONUS);
+	//effect eDRColdIron = EffectDamageReduction(nSilver, DR_TYPE_GMATERIAL, 0, GMATERIAL_METAL_ALCHEMICAL_SILVER);
+	effect eDR = EffectDamageReduction(10, GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
+	effect eLink = EffectLinkEffects(eDR, eAC);
+	
+	eLink = SetEffectSpellId(eLink, nSpellId);
+	
+    RemoveEffectsFromSpell(oTarget, nSpellId);
 	
 	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 	
