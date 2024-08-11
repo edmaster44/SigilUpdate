@@ -26,7 +26,7 @@
 #include "ff_update_legacy_items"
 #include "ff_sneak_fix"
 #include "class_mageslayer_utils"
-#include "inc_tattoos"
+#include "inc_tattoo"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
