@@ -72,7 +72,7 @@ void main()
         SendMessageToPC(oManifester, "Target must be a weapon or creature holding a weapon!"); // Item must be weapon or creature holding a weapon
     	return;
     }
-float fDur = 6.0f;
+float fDur = 60.0f;
     if(manif.bCanManifest)
 {
         float fDuration = fDur * manif.nManifesterLevel;

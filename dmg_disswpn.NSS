@@ -49,11 +49,7 @@ float fDur = TurnsToSeconds(nPsywar(oManifester));
 	
 	effect eDam = EffectDamageOverTime(d6(nNumberOfDice),6.0,DAMAGE_TYPE_ACID,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
-	if (GetHasSpellEffect(2893, oTarget))
-	{
-		RemoveEffect(oTarget, eDam);
-	}
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget,fDur);
 	}
 	
  
