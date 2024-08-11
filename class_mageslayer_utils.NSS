@@ -207,7 +207,7 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 	
 	// Mage slayers can use feats. If the target is the slayer and not the caster, that will be handled 
 	// later in this function.
-	if (nFeatId > 0) bCasterCanCast = TRUE;
+	if (nFeatId > 0 && nFeatId != FEAT_INVALID) bCasterCanCast = TRUE;
 	
 	string sCasterMessage = "You cannot cast spells.";
 	string sTargetMessage = "You cannot be the target of spells or items of this type.";
