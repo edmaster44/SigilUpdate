@@ -52,14 +52,14 @@ void main()
 	  object oTarget = GetSpellTargetObject();
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     float fDuration = TurnsToSeconds(nCasterLvl * 10);
-	in nSpellId = GetSpellId();
+	int nSpellId = GetSpellId();
 
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HELLSPOWER, FALSE));
 
     int nLvlBonus = nCasterLvl / 3;
-    if ( nLvlBonus > 5} nLvlBonus = 5;
+    if ( nLvlBonus > 5) nLvlBonus = 5;
 
  
 	//Check for metamagic extend
