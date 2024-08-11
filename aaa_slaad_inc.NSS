@@ -34,10 +34,10 @@ void PS_StunningCroak(object oPC, int nSpell)
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (GetSubRace(oTarget) != 168)
-			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget,fDuration);
+			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget,fDuration);
 				nSave = MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_CHAOS, oPC);
 				if (nSave == 0)
-				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun, oTarget,fDuration));
+				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget,fDuration));
                 } 
              }
         }
