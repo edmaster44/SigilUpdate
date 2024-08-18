@@ -55,7 +55,7 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell)
 	else 		
 
 	{	effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
+			eAC = SupernaturalEffect(eAC);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
 	}
 }
@@ -78,7 +78,7 @@ void PS_Immunity_Electricity(object oPC)
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
 	effect eBronze 	= EffectLinkEffects(eElec, eImmu);
-		eBronze = ExtraordinaryEffect(eBronze);
+		eBronze = SupernaturalEffect(eBronze);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBronze, oPC);
@@ -104,7 +104,7 @@ void PS_Immunity_Acid(object oPC)
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
 	effect eBlack 	= EffectLinkEffects(eAcid, eImmu);
-		eBlack = ExtraordinaryEffect(eBlack);
+		eBlack = SupernaturalEffect(eBlack);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
@@ -129,7 +129,7 @@ void PS_Immunity_Sonic(object oPC)
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
 	effect eEmerald 	= EffectLinkEffects(eSonic, eImmu);
-		eEmerald = ExtraordinaryEffect(eEmerald);
+		eEmerald = SupernaturalEffect(eEmerald);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEmerald, oPC);
@@ -154,7 +154,7 @@ void PS_Immunity_Cold(object oPC)
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
 	effect eTopaz 	= EffectLinkEffects(eCold, eImmu);
-		eTopaz = ExtraordinaryEffect(eTopaz);
+		eTopaz = SupernaturalEffect(eTopaz);
 
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
@@ -184,7 +184,7 @@ void PS_Immunity_Fire(object oPC)
 	effect eImmu2	= EffectLinkEffects(eSlep, ePara);
 	effect eImmu    = EffectLinkEffects(eImmu2, eCold);		
 	effect eRed 	= EffectLinkEffects(eFire, eImmu);
-		eRed = ExtraordinaryEffect(eRed);
+		eRed = SupernaturalEffect(eRed);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
@@ -212,7 +212,7 @@ void PS_Immunity_Cold_White(object oPC)
 	effect eImmu2	= EffectLinkEffects(eSlep, ePara);
 	effect eImmu    = EffectLinkEffects(eImmu2, eCold);		
 	effect eRed 	= EffectLinkEffects(eFire, eImmu);
-		eRed = ExtraordinaryEffect(eRed);
+		eRed = SupernaturalEffect(eRed);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
@@ -237,7 +237,7 @@ void PS_Immunity_Negative(object oPC)
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
 	effect eShadow 	= EffectLinkEffects(eNeg, eImmu);
-		eShadow = ExtraordinaryEffect(eShadow);
+		eShadow = SupernaturalEffect(eShadow);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oPC);
@@ -276,8 +276,8 @@ void PS_Immunity_Radiant(object oPC)
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
 	effect eRadiant	= EffectLinkEffects(eBlind, eImmu);
 
-		eRadiant = ExtraordinaryEffect(eRadiant);
-		eLight = ExtraordinaryEffect(eLight);
+		eRadiant = SupernaturalEffect(eRadiant);
+		eLight = SupernaturalEffect(eLight);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRadiant, oPC);
@@ -305,7 +305,7 @@ void PS_Immunity_Acid_Poison(object oPC)
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);
 	effect eImmu2	= EffectLinkEffects(ePois, eAcid);		
 	effect eBlack 	= EffectLinkEffects(eImmu, eImmu2);
-		eBlack = ExtraordinaryEffect(eBlack);
+		eBlack = SupernaturalEffect(eBlack);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
@@ -332,7 +332,7 @@ void PS_Immunity_Force(object oPC)
 	effect eImmu	= EffectLinkEffects(eSlep, ePara);
 			
 	effect eBlack 	= EffectLinkEffects(eImmu, ePois);
-		eBlack = ExtraordinaryEffect(eBlack);
+		eBlack = SupernaturalEffect(eBlack);
 		
     if (!GetHasSpellEffect(GetSpellId(), oPC))
 	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
@@ -1964,8 +1964,8 @@ void PS_Hardening_Scales(object oPC, int nSpell)
 		effect eMagic	= EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
 		effect ePierc	= EffectDamageReduction(iDR, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
 		effect eDR		= EffectLinkEffects(eMagic, ePierc);
-				eDR		= ExtraordinaryEffect(eDR);
-				eAC 	= ExtraordinaryEffect(eAC);
+				eDR		= SupernaturalEffect(eDR);
+				eAC 	= SupernaturalEffect(eAC);
 	
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
@@ -2072,7 +2072,7 @@ void PS_Dragon_Senses(object oPC, int nSpell)
 	effect eLink1	=	EffectLinkEffects(eSk1,eSk2);
 	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
 	effect eSense	=	EffectLinkEffects(eLink1,eLink2);
-			eSense	=	ExtraordinaryEffect(eSense);
+			eSense	=	SupernaturalEffect(eSense);
 		
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{			
