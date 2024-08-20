@@ -43,7 +43,7 @@ const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 int X2UseMagicDeviceCheck();
 int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
-
+int GetSkipByRestoration(int nSpellId);
 int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
@@ -391,4 +391,40 @@ void X2DoBreakConcentrationCheck()
             }
          }
     }	
+}
+
+// Called by all 3 divine restoration spells, psi restoration, and restore other.
+// Returns TRUE if restoration spell should NOT remove these effects that contain
+// some negative aspect.
+int GetSkipByRestoration(int nSpellId){
+	
+	switch (nSpellId){
+		case 489: return TRUE; // half dragon
+		case 803: return TRUE; // Grey Dwarf enlarge
+		case 1254: return TRUE; // ectoplasmic form
+		case 1257: return TRUE;	// Racial cold vulnerability
+		case 1258: return TRUE; // Racial fire vulnerability
+		case 1442: return TRUE; // Giant
+		case 1514: return TRUE; // Gheadan dead nerves skill penalties
+		case 1515: return TRUE; // Half Undead
+		case 1900: return TRUE; // Rakshasa
+		case 1927: return TRUE; // Dervish dance
+		case 2000: return TRUE; // Background: Stern
+		case 2001: return TRUE; // Background: Misdirector
+		case 2002: return TRUE; // Background: Tinker
+		case 2003: return TRUE; // Background: Naturalist
+		case 2004: return TRUE; // Background: Amicable
+		case 2629: return TRUE; // Red and Brass Dragons
+		case 2663: return TRUE; // White and Silver Dragons
+		case 2881: return TRUE; // Stalwart defender stance
+		case 4004: return TRUE;	// Winter Wolf 1
+		case 4005: return TRUE; // Winter Wolf 2
+		case 4018: return TRUE; // Treant
+		case SPELL_ENLARGE_PERSON: return TRUE;
+		case SPELL_IRON_BODY: return TRUE;
+		case SPELL_RIGHTEOUS_MIGHT: return TRUE;
+		case SPELL_STONE_BODY: return TRUE;
+		default: return FALSE;
+	}
+	return FALSE;
 }

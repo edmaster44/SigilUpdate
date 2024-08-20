@@ -16,8 +16,15 @@
 //:://////////////////////////////////////////////
 //:: VFX Pass By: Preston W, On: June 20, 2001
 // DBR 8/31/06 - RemoveEffect() messes up the iterators, start from beginning of list if RemoveEffect Occurs.
+// Aug 20, 2024 FlattedFifth -  Streamlined Code by reducing the number of external function calls from 36 
+//				per effect on target to 3. Introduced function call in spellhook to check for effects that
+//				include some negative aspects but should NOT be removed due to them being racial, class feats
+//				beneficial spells that are only partly negative, etc. Removed checks that are now redundant due
+//				to aforementioned. Added Harm spell effect to heal undead.
+
 
 #include "x2_inc_spellhook" 
+#include "nwn2_inc_spells"
 
 // return TRUE if the effect created by a supernatural force and can't be dispelled by spells
 int GetIsSupernaturalCurse(effect eEff);
@@ -45,55 +52,63 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     effect eVisual = EffectVisualEffect(VFX_IMP_RESTORATION_GREATER);
-
     effect eBad = GetFirstEffect(oTarget);
+	int eType;
+	int nId;
     //Search for negative effects
     while(GetIsEffectValid(eBad))
     {
-        if ((GetEffectType(eBad) == EFFECT_TYPE_ABILITY_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_AC_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_ATTACK_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SAVING_THROW_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SKILL_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS ||
-            GetEffectType(eBad) == EFFECT_TYPE_DEAF ||
-            GetEffectType(eBad) == EFFECT_TYPE_CURSE ||
-            GetEffectType(eBad) == EFFECT_TYPE_DISEASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_POISON ||
-            GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-            GetEffectType(eBad) == EFFECT_TYPE_CHARMED ||
-            GetEffectType(eBad) == EFFECT_TYPE_DOMINATED ||
-            GetEffectType(eBad) == EFFECT_TYPE_DAZED ||
-            GetEffectType(eBad) == EFFECT_TYPE_CONFUSED ||
-            GetEffectType(eBad) == EFFECT_TYPE_FRIGHTENED ||
-            GetEffectType(eBad) == EFFECT_TYPE_NEGATIVELEVEL ||
-            GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SLOW ||
-            GetEffectType(eBad) == EFFECT_TYPE_STUNNED) &&
-            GetEffectSpellId(eBad) != SPELL_ENLARGE_PERSON &&
-            GetEffectSpellId(eBad) != SPELL_RIGHTEOUS_MIGHT &&
-            GetEffectSpellId(eBad) != SPELL_STONE_BODY &&
-            GetEffectSpellId(eBad) != SPELL_IRON_BODY &&
-            GetEffectSpellId(eBad) != 803 &&
-			GetEffectSpellId(eBad) != 2881 &&
-			GetEffectSpellId(eBad) != 2000 &&
-			GetEffectSpellId(eBad) != 2001 &&
-			GetEffectSpellId(eBad) != 1515 &&//Half-Undead
-			GetEffectSpellId(eBad) != 1927 &&//Dervish Dance
-			GetEffectSpellId(eBad) != 2002 &&
-			GetEffectSpellId(eBad) != 2003 &&
-			GetEffectSpellId(eBad) != 2004)
+		eType = GetEffectType(eBad);
+		nId = GetEffectSpellId(eBad);
+        if ((eType == EFFECT_TYPE_ABILITY_DECREASE ||
+            eType == EFFECT_TYPE_AC_DECREASE ||
+            eType == EFFECT_TYPE_ATTACK_DECREASE ||
+            eType == EFFECT_TYPE_DAMAGE_DECREASE ||
+            eType == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
+            eType == EFFECT_TYPE_SAVING_THROW_DECREASE ||
+            eType == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
+            eType == EFFECT_TYPE_SKILL_DECREASE ||
+            eType == EFFECT_TYPE_BLINDNESS ||
+            eType == EFFECT_TYPE_DEAF ||
+            eType == EFFECT_TYPE_CURSE ||
+            eType == EFFECT_TYPE_DISEASE ||
+            eType == EFFECT_TYPE_POISON ||
+            eType == EFFECT_TYPE_PARALYZE ||
+            eType == EFFECT_TYPE_CHARMED ||
+            eType == EFFECT_TYPE_DOMINATED ||
+            eType == EFFECT_TYPE_DAZED ||
+            eType == EFFECT_TYPE_CONFUSED ||
+            eType == EFFECT_TYPE_FRIGHTENED ||
+            eType == EFFECT_TYPE_NEGATIVELEVEL ||
+            eType == EFFECT_TYPE_PARALYZE ||
+            eType == EFFECT_TYPE_SLOW ||
+            eType == EFFECT_TYPE_STUNNED) &&
+			!GetSkipByRestoration(nId)
+			/* All the below checks are now made by the above, more thorough
+				function call.
+            nId != SPELL_ENLARGE_PERSON &&
+            nId != SPELL_RIGHTEOUS_MIGHT &&
+            nId != SPELL_STONE_BODY &&
+            nId != SPELL_IRON_BODY &&
+            nId != 803 && //grey dwarf enlarge
+			nId != 2881 && // defensive stance
+			nId != 2000 && //background stern
+			nId != 2001 && // background misdirector
+			nId != 1515 &&//Half-Undead
+			nId != 1927 &&//Dervish Dance
+			nId != 2002 && // background tinker
+			nId != 2003 && //background naturalist
+			nId != 2004 && // background amicable
+			*/
+			)
         {
             //Remove effect if it is negative.
             //if(!GetIsSupernaturalCurse(eBad))	// HOTU-SPECIFIC
-               RemoveEffect(oTarget, eBad);
+			RemoveEffect(oTarget, eBad);
 			eBad = GetFirstEffect(oTarget);
-        }
+		}
 		else
-        	eBad = GetNextEffect(oTarget);
+			eBad = GetNextEffect(oTarget);
     }
     if(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
     {
@@ -101,7 +116,9 @@ void main()
         int nHeal = GetMaxHitPoints(oTarget) - GetCurrentHitPoints(oTarget);
         effect eHeal = EffectHeal(nHeal);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
-    }
+    } else {
+		HealHarmTarget(oTarget, 30, SPELL_HARM, FALSE, FALSE);
+	}
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_GREATER_RESTORATION, FALSE));
 

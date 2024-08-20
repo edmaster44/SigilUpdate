@@ -13,6 +13,11 @@
 //:://////////////////////////////////////////////
 //:: VFX Pass By: Preston W, On: June 22, 2001
 // DBR 8/31/06 - RemoveEffect() messes up the iterators, start from beginning of list if RemoveEffect Occurs.
+// Aug 20, 2024 FlattedFifth -  Streamlined Code by reducing the number of external function calls from 36 
+//				per effect on target to 3. Introduced function call in spellhook to check for effects that
+//				include some negative aspects but should NOT be removed due to them being racial, class feats
+//				beneficial spells that are only partly negative, etc. Removed checks that are now redundant due
+//				to aforementioned. 
 
 #include "x2_inc_spellhook" 
 
@@ -41,41 +46,47 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    effect eVisual = EffectVisualEffect(VFX_IMP_RESTORATION);
-    int bValid;
+    effect eVisual = PS_EffectVisualEffect(VFX_IMP_RESTORATION);
+   // int bValid;
+   	int eType;
+	int nId;
 
     effect eBad = GetFirstEffect(oTarget);
     //Search for negative effects
     while(GetIsEffectValid(eBad))
     {
-        if ((GetEffectType(eBad) == EFFECT_TYPE_ABILITY_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_AC_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_ATTACK_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SAVING_THROW_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_SKILL_DECREASE ||
-            GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS ||
-            GetEffectType(eBad) == EFFECT_TYPE_DEAF ||
-            GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-            GetEffectType(eBad) == EFFECT_TYPE_NEGATIVELEVEL) &&
-            GetEffectSpellId(eBad) != SPELL_ENLARGE_PERSON &&
-            GetEffectSpellId(eBad) != SPELL_RIGHTEOUS_MIGHT &&
-            GetEffectSpellId(eBad) != SPELL_STONE_BODY &&
-            GetEffectSpellId(eBad) != SPELL_IRON_BODY &&
-            GetEffectSpellId(eBad) != 803 &&
-			GetEffectSpellId(eBad) != 2881 &&
-			GetEffectSpellId(eBad) != 2000 &&
-			GetEffectSpellId(eBad) != 2001 &&
-			GetEffectSpellId(eBad) != 1515 &&//Half-Undead
-			GetEffectSpellId(eBad) != 1927 &&//Dervish Dance
-			GetEffectSpellId(eBad) != 2002 &&
-			GetEffectSpellId(eBad) != 2003 &&
-			GetEffectSpellId(eBad) != 2004 &&
-			GetEffectSpellId(eBad) != SPELL_BESTOW_CURSE &&
-			GetEffectSpellId(eBad) != SPELL_CURSE_OF_BLADES &&
-			GetEffectSpellId(eBad) != SPELL_GREATER_CURSE_OF_BLADES)
+		eType = GetEffectType(eBad);
+		nId = GetEffectSpellId(eBad);
+        if ((eType == EFFECT_TYPE_ABILITY_DECREASE ||
+            eType == EFFECT_TYPE_AC_DECREASE ||
+            eType == EFFECT_TYPE_ATTACK_DECREASE ||
+            eType == EFFECT_TYPE_DAMAGE_DECREASE ||
+            eType == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
+            eType == EFFECT_TYPE_SAVING_THROW_DECREASE ||
+            eType == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
+            eType == EFFECT_TYPE_SKILL_DECREASE ||
+            eType == EFFECT_TYPE_BLINDNESS ||
+            eType == EFFECT_TYPE_DEAF ||
+            eType == EFFECT_TYPE_PARALYZE ||
+            eType == EFFECT_TYPE_NEGATIVELEVEL) &&
+			!GetSkipByRestoration(nId)
+			/* the following are redundant since the addition of the more expansive
+			function call above
+            nId != SPELL_ENLARGE_PERSON &&
+            nId != SPELL_RIGHTEOUS_MIGHT &&
+            nId != SPELL_STONE_BODY &&
+            nId != SPELL_IRON_BODY &&
+			nId != 803 &&
+			nId != 2881 &&
+			nId != 2000 &&
+			nId != 2001 &&
+			nId != 1515 &&//Half-Undead
+			nId != 1927 &&//Dervish Dance
+			nId != 2002 &&
+			nId != 2003 &&
+			nId != 2004
+			*/
+			)
             {
                 //Remove effect if it is negative.
                 //if(!GetIsSupernaturalCurse(eBad))	// THIS IS HOTU-SPECIFIC AND ISN'T RELEVANT TO NWN2

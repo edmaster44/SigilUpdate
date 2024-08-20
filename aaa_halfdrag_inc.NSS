@@ -835,7 +835,7 @@ void PS_HDM_EctoplasmicForm(object oPC, int nSpell)
 	int iAC			= StringToInt(sAC);
 	effect eACPen	= EffectACDecrease(iAC, AC_ARMOUR_ENCHANTMENT_BONUS);
 		eLink		= EffectLinkEffects(eLink, eACPen);
-
+		eLink 		= SetEffectSpellId(eLink, nSpell);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oPC, fDuration);
@@ -870,7 +870,7 @@ void PS_HDM_MirrorImage(object oPC, int nSpell)
     int i;
     for ( i = 0; i < nImages; i++ )
     {	effect eAbsorb	= EffectAbsorbDamage(nACBonus);
-        effect eDur		= EffectVisualEffect(876);
+        effect eDur		= PS_EffectVisualEffect(876);
 		effect eImg 	= EffectNWN2SpecialEffectFile("sp_mirror_image_1", oPC);
         effect eLink 	= EffectLinkEffects(eAbsorb, eDur);
 			eLink 		= EffectLinkEffects(eLink, eImg);
@@ -961,7 +961,7 @@ void PS_HDM_EnergyAdaptGlow(object oPC, int nSpell)
 		{	iLight	= VFX_DUR_LIGHT_YELLOW_20;
 			break;	}
 	}
-	effect eLight	= EffectVisualEffect(iLight, FALSE);
+	effect eLight	= PS_EffectVisualEffect(iLight, FALSE);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLight, oPC, TurnsToSeconds(1));
 }
@@ -979,6 +979,7 @@ void PS_DraconicBloodline(object oPC, int nSpell)
 		eEff			= EffectLinkEffects(eEff, eTumblBad);
 		eEff			= EffectLinkEffects(eEff, eDiploBad);
 		eEff 			= SupernaturalEffect(eEff);
+		eEff = SetEffectSpellId(eEff, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 

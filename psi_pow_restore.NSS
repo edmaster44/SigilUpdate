@@ -19,6 +19,13 @@
     @date   Created: Feb 19, 2004
     @date   Modified: Jul 3, 2006
 */
+
+// Aug 20, 2024 FlattedFifth -  Streamlined Code by reducing the number of external function calls from 36 
+//				per effect on target to 3. Introduced function call in spellhook to check for effects that
+//				include some negative aspects but should NOT be removed due to them being racial, class feats
+//				beneficial spells that are only partly negative, etc. Removed checks that are now redundant due
+//				to aforementioned. 
+
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
@@ -30,7 +37,7 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
     int nEffectType;
     effect eVis = EffectVisualEffect(VFX_IMP_RESTORATION);
     effect eTest;
-
+	int nId;
     // Let the AI know - Special handling
     SignalEvent(oTarget, EventSpellCastAt(oManifester, manif.nSpellID));
 
@@ -38,25 +45,35 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
     eTest = GetFirstEffect(oTarget);
     while(GetIsEffectValid(eTest))
     {
-        nEffectType = GetEffectType(eTest);
-        if(nEffectType == EFFECT_TYPE_ABILITY_DECREASE          ||
-           nEffectType == EFFECT_TYPE_AC_DECREASE               ||
-           nEffectType == EFFECT_TYPE_ATTACK_DECREASE           ||
-           nEffectType == EFFECT_TYPE_DAMAGE_DECREASE           ||
-           nEffectType == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE  ||
-           nEffectType == EFFECT_TYPE_SAVING_THROW_DECREASE     ||
-           nEffectType == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
-           nEffectType == EFFECT_TYPE_SKILL_DECREASE            ||
-           nEffectType == EFFECT_TYPE_BLINDNESS                 ||
-           nEffectType == EFFECT_TYPE_DEAF                      ||
-           nEffectType == EFFECT_TYPE_PARALYZE                  ||
-           nEffectType == EFFECT_TYPE_NEGATIVELEVEL
-           )
-        {
-            RemoveEffect(oTarget, eTest);
-        }
-
-        eTest = GetNextEffect(oTarget);
+		nId = GetEffectSpellId(eTest);
+		nEffectType = GetEffectType(eTest);
+		if((nEffectType == EFFECT_TYPE_ABILITY_DECREASE          ||
+			nEffectType == EFFECT_TYPE_AC_DECREASE               ||
+			nEffectType == EFFECT_TYPE_ATTACK_DECREASE           ||
+			nEffectType == EFFECT_TYPE_DAMAGE_DECREASE           ||
+			nEffectType == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE  ||
+			nEffectType == EFFECT_TYPE_SAVING_THROW_DECREASE     ||
+			nEffectType == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
+			nEffectType == EFFECT_TYPE_SKILL_DECREASE            ||
+			nEffectType == EFFECT_TYPE_BLINDNESS                 ||
+			nEffectType == EFFECT_TYPE_DEAF                      ||
+			nEffectType == EFFECT_TYPE_PARALYZE                  ||
+			nEffectType == EFFECT_TYPE_NEGATIVELEVEL)			&&
+			!GetSkipByRestoration(nId)
+			/* The following are redundant since the inclusion of the
+			 more thorough function call above
+			nId != SPELL_ENLARGE_PERSON &&
+			nId != SPELL_RIGHTEOUS_MIGHT &&
+			nId != SPELL_STONE_BODY &&
+			nId != SPELL_IRON_BODY
+			*/
+			)
+		{
+			RemoveEffect(oTarget, eTest);
+			eTest = GetFirstEffect(oTarget);
+		} else
+			eTest = GetNextEffect(oTarget);
+		
     }// end while - Effect loop
 
     // Apply visuals

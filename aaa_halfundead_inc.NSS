@@ -27,6 +27,9 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 			eVul1		= ExtraordinaryEffect(eVul1);
 		effect	eLink    =EffectLinkEffects(eDR,eNeg);
 				eLink    =EffectLinkEffects(eLink,eVul1);
+				eLink = SupernaturalEffect(eLink);
+				eLink = SetEffectSpellId(eLink, nSpell);
+				
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 	
@@ -48,6 +51,8 @@ effect eDR = EffectDamageReduction(nAmount, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
 effect eLink = EffectLinkEffects(eNegHand,eNegLock);
 eLink = EffectLinkEffects(eLink,eDR);
 eLink = SupernaturalEffect(eLink);
+eLink = SetEffectSpellId(eLink, nSpell);
+
 
 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }

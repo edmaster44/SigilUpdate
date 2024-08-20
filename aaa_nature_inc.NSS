@@ -41,6 +41,7 @@ void WinterWolfColdImmunity(int nColdRes, int nFireVul)
 	if (nFireVul>0) eFireVulnerability = EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, nFireVul);
 	effect eLink = EffectLinkEffects(eColdImmunity, eFireVulnerability);
 	eLink = SupernaturalEffect(eLink);
+	eLink = SetEffectSpellId(eLink, GetSpellId());
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));	
 }
 
@@ -303,6 +304,7 @@ void TreantResist()
 	
 	effect eLink 	= EffectLinkEffects(eDamageReduction, eFireVuln);
 		eLink		= ExtraordinaryEffect(eLink);
+		eLink 		= SetEffectSpellId(eLink, GetSpellId());
 	
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));
 //	SendMessageToPC(oSelf, "Applying Treant Resistance!");
