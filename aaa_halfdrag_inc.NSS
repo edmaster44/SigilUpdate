@@ -870,7 +870,7 @@ void PS_HDM_MirrorImage(object oPC, int nSpell)
     int i;
     for ( i = 0; i < nImages; i++ )
     {	effect eAbsorb	= EffectAbsorbDamage(nACBonus);
-        effect eDur		= PS_EffectVisualEffect(876);
+        effect eDur		= EffectVisualEffect(876);
 		effect eImg 	= EffectNWN2SpecialEffectFile("sp_mirror_image_1", oPC);
         effect eLink 	= EffectLinkEffects(eAbsorb, eDur);
 			eLink 		= EffectLinkEffects(eLink, eImg);
@@ -961,7 +961,7 @@ void PS_HDM_EnergyAdaptGlow(object oPC, int nSpell)
 		{	iLight	= VFX_DUR_LIGHT_YELLOW_20;
 			break;	}
 	}
-	effect eLight	= PS_EffectVisualEffect(iLight, FALSE);
+	effect eLight	= EffectVisualEffect(iLight, FALSE);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLight, oPC, TurnsToSeconds(1));
 }

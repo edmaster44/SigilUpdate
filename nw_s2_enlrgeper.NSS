@@ -67,7 +67,7 @@ void main()
     RemoveEffectsFromSpell(oTarget, GetSpellId());
     RemovePermanencySpells(oTarget);
 
-    effect eVis = PS_EffectVisualEffect(VFX_HIT_SPELL_ENLARGE_PERSON);
+    effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ENLARGE_PERSON);
 
     effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH, 2);
     effect eDex = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);

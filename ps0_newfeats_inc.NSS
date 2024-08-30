@@ -60,7 +60,7 @@ void PrintCreatureLevel(int nCreatureLevel)
 void PS_Feat_ControlUndead(object oPC, object oTarget, int nSpell)
 {
     effect eControl 		= EffectCutsceneDominated(); //EffectDominated is bugged
-    effect eVis 			= PS_EffectVisualEffect( VFX_DUR_SPELL_CONTROL_UNDEAD );
+    effect eVis 			= EffectVisualEffect( VFX_DUR_SPELL_CONTROL_UNDEAD );
 	eControl 				= EffectLinkEffects( eControl, eVis );
     int nCasterLevel 		= PS_GetCasterLevel(oPC);
     int nDuration 			= nCasterLevel;
@@ -172,7 +172,7 @@ void PS_Feat_PsionicThrust(object oPC, object oTarget, int nSpell)
     int nDuration = 2;
     
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
-    {   effect eImpact 				= PS_EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND);
+    {   effect eImpact 				= EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
         SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
         if(!MyResistSpell(oPC, oTarget))
@@ -181,7 +181,7 @@ void PS_Feat_PsionicThrust(object oPC, object oTarget, int nSpell)
             if (HasSizeIncreasingSpellEffect(oTarget) || GetHasSpellEffect(803, oTarget))
                 nTargetRoll 		= nTargetRoll + 4;
             if (nCasterRoll >= nTargetRoll)
-            {	effect eVis 		= PS_EffectVisualEffect( VFX_DUR_SPELL_DAZE );
+            {	effect eVis 		= EffectVisualEffect( VFX_DUR_SPELL_DAZE );
                 effect eKnockdown 	= EffectDazed();
                 effect eKnockdown2 	= EffectKnockdown();
                 effect eLink 		= EffectLinkEffects(eKnockdown, eVis);
@@ -206,7 +206,7 @@ void PS_Feat_PsionicDominate(object oPC, object oTarget, int nSpell)
     object oTarget 		= GetSpellTargetObject();
     effect eDom 		= EffectDominated();
     	eDom 			= GetScaledEffect(eDom, oTarget);
-    effect eDur 		= PS_EffectVisualEffect(VFX_DUR_SPELL_DOM_MONSTER);
+    effect eDur 		= EffectVisualEffect(VFX_DUR_SPELL_DOM_MONSTER);
     effect eLink 		= EffectLinkEffects(eDur, eDom);
 
     int nMetaMagic 		= GetMetaMagicFeat();
@@ -242,7 +242,7 @@ void PS_Feat_PsionicBodyAdjustment(object oPC, int nSpell)
 {
     int nLevel 			= GetTotalLevels(oPC, 1) * 2;
     effect eHeal 		= EffectHeal(d10(1) + nLevel);
-    effect eVis 		= PS_EffectVisualEffect(VFX_IMP_HEALING_M);
+    effect eVis 		= EffectVisualEffect(VFX_IMP_HEALING_M);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
@@ -269,7 +269,7 @@ void PS_Feat_PsionicOvercharge(object oPC, int nSpell)
     int nLevel = GetTotalLevels(oPC, 1);
 	int nDamage = d6(1) + nLevel;
     effect eDamage 		= EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, FALSE);
-    effect eVis 		= PS_EffectVisualEffect(VFX_HIT_AOE_MAGIC);
+    effect eVis 		= EffectVisualEffect(VFX_HIT_AOE_MAGIC);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);

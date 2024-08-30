@@ -45,7 +45,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    effect eVisual = PS_EffectVisualEffect(VFX_IMP_RESTORATION_LESSER);
+    effect eVisual = EffectVisualEffect(VFX_IMP_RESTORATION_LESSER);
     effect eBad = GetFirstEffect(oTarget);
 	int eType;
 	int nId;
