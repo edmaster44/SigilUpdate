@@ -54,6 +54,7 @@ void CheckTattoos(object oPC){
 		if (i > 27072) break;
 		string sRes = GetStringLowerCase(GetResRef(oItem));
 		if (FindSubString(sRes, "ps_tattoo") != -1){
+			if (sRes == ART_TATTOO) UpdateTattoo(oPC, oItem);
 			ApplyTattooFX(oPC, oItem);
 			break;
 		}
