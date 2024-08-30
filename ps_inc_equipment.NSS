@@ -432,7 +432,13 @@ int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
 	if (nCreatureSize == CREATURE_SIZE_LARGE && oLHAND == OBJECT_INVALID) return FALSE;
 	if (nCreatureSize == CREATURE_SIZE_LARGE && GetHasFeat(1105, oPC)) return FALSE;
 	if (nCreatureSize == CREATURE_SIZE_MEDIUM && GetHasFeat(1105, oPC) && 
-		oLHAND == OBJECT_INVALID) return FALSE;
+		oLHAND == OBJECT_INVALID){
+		// apply a monkey grip -2 penalty for a medium character using a weapon 2 categories up
+		// in two hands.
+		effect eMonkey = EffectAttackDecrease(2, ATTACK_BONUS_ONHAND);
+		ApplyEquipmentEffect(oPC, eMonkey);
+		return FALSE;
+		}
     //if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
     AssignCommand(oPC, ClearAllActions());
     AssignCommand(oPC, ActionUnequipItem(oITEM));

@@ -420,6 +420,7 @@ int GetSkipByRestoration(int nSpellId){
 		case 4004: return TRUE;	// Winter Wolf 1
 		case 4005: return TRUE; // Winter Wolf 2
 		case 4018: return TRUE; // Treant
+		case -9444: return TRUE; // effects from ps_inc_equipment
 		case SPELL_ENLARGE_PERSON: return TRUE;
 		case SPELL_IRON_BODY: return TRUE;
 		case SPELL_RIGHTEOUS_MIGHT: return TRUE;
