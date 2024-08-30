@@ -42,7 +42,9 @@ void CheckTattoos(object oPC){
 	RemoveTattooFX(oPC);
 	object oItem = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
 	if (oItem != OBJECT_INVALID){
-		UpdateTattoo(oPC, oItem);
+		string sRes = GetStringLowerCase(GetResRef(oItem));
+		if (sRes == DR_TATTOO || sRes == SR_TATTOO)
+			UpdateTattoo(oPC, oItem);
 	}
 	int i = 0;
 	oItem = GetFirstItemInInventory(oPC);
