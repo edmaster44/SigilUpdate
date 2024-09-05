@@ -32,15 +32,18 @@ void main()
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	int nSkillBuff = (nCasterLevel/2) + 5;
 	
-    //Fire cast spell at event for the specified target
-    SignalEvent(oCaster, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
- 	float fDuration = 60.0*60.0*24.0;  // 24 hours
+    
+ 	//float fDuration = 60.0*60.0*24.0;  // 24 hours
+	float fDuration = HoursToSeconds(24);
 	
     effect eLore = EffectSkillIncrease(SKILL_LORE, nSkillBuff);
 	effect eSpellCraft = EffectSkillIncrease(SKILL_SPELLCRAFT, nSkillBuff);
 	effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nSkillBuff);
     effect eLink = EffectLinkEffects(eLore, eSpellCraft);
 	eLink = EffectLinkEffects(eLink, eSearch);
+	
+	//Fire cast spell at event for the specified target
+    SignalEvent(oCaster, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
 
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }
