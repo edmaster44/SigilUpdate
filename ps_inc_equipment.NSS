@@ -53,10 +53,13 @@ void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
 
 int GetCreatureWeapons(object oItem)
 {
+	return IPGetIsCreatureEquippedWeapon(oItem);
+/*
 int iBaseItem = GetBaseItemType(oItem);
 return iBaseItem == 164  || iBaseItem == 165  || iBaseItem == 166 || iBaseItem == 167 || iBaseItem == 168 || iBaseItem == 169 || iBaseItem == 170
 || iBaseItem == 171 || iBaseItem == 172 || iBaseItem == 173 || iBaseItem == 174 || iBaseItem == 175 || iBaseItem == 176 || iBaseItem == 177 || iBaseItem == 178
 || iBaseItem == 179 || iBaseItem == 180;
+*/
 }
 
 
@@ -262,13 +265,14 @@ DeleteItemPropertyReference(oItem, "AustereStrikes");
 //Elemental Weapon - Applies Elemental Damage based on feat.
 void ApplyElementalWeapon(object oPC, object oItem)
 {   
+	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
+	if (nLevel < 1) return;
+	
+	if (GetWeaponRanged(oItem)==TRUE) 
+	{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");//
+	return; }
 
-if (GetWeaponRanged(oItem)==TRUE) 
-{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");//
-return; }
 
-
-    int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
     itemproperty ipAdd = GetItemPropertyReference(oItem, "ElementalWeapon");
     int nDamage = IP_CONST_DAMAGEBONUS_1d6;
         if (nLevel >= 5 ) 
@@ -421,33 +425,41 @@ int FixARMOR(object oPC, object oARMOR)
 
 
 // Check for giant weapons and monkey grip abuse
-int MonkeyGripAbuse(object oPC, object oITEM, int nITEM)
-{
-	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", nITEM));
-	if (nWeaponSize < 5) return FALSE;
-	int nCreatureSize = GetCreatureSize(oPC);
+// returns FALSE if no abuse is taking place, true if there is
+int MonkeyGripAbuse(object oPC, object oITEM, int nITEM){
+	
+	// if the equipped item isn't in one of the hand slots, bail
 	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	// this function should probably be applied to npcs at some point
-	if (nCreatureSize > CREATURE_SIZE_LARGE) return FALSE;
-	if (nCreatureSize == CREATURE_SIZE_LARGE && oLHAND == OBJECT_INVALID) return FALSE;
-	if (nCreatureSize == CREATURE_SIZE_LARGE && GetHasFeat(1105, oPC)) return FALSE;
-	if (nCreatureSize == CREATURE_SIZE_MEDIUM && GetHasFeat(1105, oPC) && 
-		oLHAND == OBJECT_INVALID){
-		// apply a monkey grip -2 penalty for a medium character using a weapon 2 categories up
-		// in two hands.
-		effect eMonkey = EffectAttackDecrease(2, ATTACK_BONUS_ONHAND);
-		ApplyEquipmentEffect(oPC, eMonkey);
-		return FALSE;
-		}
-    //if (GetCreatureSize(oPC) >= CREATURE_SIZE_LARGE) return FALSE;
-    AssignCommand(oPC, ClearAllActions());
-    AssignCommand(oPC, ActionUnequipItem(oITEM));
-	string sMessage = "<c=red>Your character is too small to wield giant weapons";
-	if (nCreatureSize < CREATURE_SIZE_MEDIUM){
-    sMessage += ", yes, even with monkey grip, the size/weight mechanics are simply too much for you.</c>";
-	} else sMessage += " without monkey grip.</c>";
-	SendMessageToPC(oPC, sMessage);
-    return TRUE;
+	if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC) != oITEM && oLHAND != oITEM)
+			return FALSE;
+	
+	int bIsAbuse = FALSE;
+	int bEmptyOffHand = (oLHAND == OBJECT_INVALID);
+	int bHasMonkey = GetHasFeat(FEAT_MONKEY_GRIP, oPC, TRUE);
+	int nPCsize = GetCreatureSize(oPC);
+	int nWeaponSize = IPGetWeaponSize(oITEM);
+	
+	if (nWeaponSize >= nPCsize + 3) bIsAbuse = TRUE;
+	else if (nWeaponSize == nPCsize + 2){
+		if (bHasMonkey && bEmptyOffHand) bIsAbuse = FALSE;
+		else bIsAbuse = TRUE;
+	} else if (nWeaponSize == nPCsize + 1){
+		if (bHasMonkey || bEmptyOffHand) bIsAbuse = FALSE;
+		else bIsAbuse = TRUE;
+	} else bIsAbuse = FALSE;
+	
+	if (bIsAbuse == TRUE){
+		string sMessage = "This weapon is too large to be wielded in this way";
+		if (nWeaponSize >= nPCsize + 3) 
+			sMessage = "This weapon is too large for you to wield, even with Monkey Grip";
+		if (nWeaponSize == nPCsize + 2)
+			sMessage = "This weapon is so large you can only wield it 2-handed and only with Monkey Grip";
+		else sMessage = "You need Monkey Grip to wield this weapon in this way";
+		AssignCommand(oPC, ClearAllActions());
+		AssignCommand(oPC, ActionUnequipItem(oITEM));
+		SendMessageToPC(oPC, sMessage);
+	}
+	return bIsAbuse;
 }
 
 // once per day any temp properties stuck on the item will be cleared. Basically first time it is equipped between resets.
