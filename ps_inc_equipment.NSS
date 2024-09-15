@@ -334,7 +334,7 @@ if (GetIsItemPropertyValid(ipAdd) == FALSE) {
 }
 }
 
-//Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
+//Wrapper to check if nTYPE is a creature weapon.
 int GetIsCreatureWeapon(int nTYPE)
 {
 	/* More maintainable to use new column in baseitems than to check 
@@ -481,9 +481,7 @@ void CheckForTempProperties(object oItem, object oPC)
 int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 {
     if (GetIsCreatureWeapon(nITEM) == TRUE) return FALSE;
-	// base item type of creature skin is 73
-	if (nITEM == 73) return FALSE;
-    
+
     switch (nITEM)
     {
         case BASE_ITEM_AMULET:
@@ -510,7 +508,7 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 }
 
 // No Weapons and Shields for Dragons in Natural Form and no Armor in both forms (exept clothes)
-// Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
+// Creature weapons are 160-201. Others are not allowed unless "in humanoid form (=1)".
 int CheckDragonForms(object oPC, object oITEM, int nITEM)
 {
     switch (nITEM)
@@ -936,10 +934,15 @@ void EquipmentEffects(object oPC)
 //This starts all the various checks and effects to be applied based on equipment, as per Sigil's custom rules.
 //nEQUIP: TRUE when called from OnEqup and FALSE when called from OnUnequip.
 //Found in "ps_inc_equipment.nss".
-void SigilEquipment(object oPC, object oITEM, int nEQUIP)
-{
+void SigilEquipment(object oPC, object oITEM, int nEQUIP){
+
+	// we shouldn't have to do ANY processing for creature skin, so just skip all this if 
+	// that's what it is
+	int nITEM = GetBaseItemType(oITEM);
+	if (nITEM == BASE_ITEM_CREATUREITEM) return;
+	
     RemoveEffectsFromSpell(oPC, SIGIL_EQUIP_FX);
-    int nITEM = GetBaseItemType(oITEM);
+    
     if (nEQUIP == TRUE)
     {
         CheckForTempProperties(oITEM, oPC);
