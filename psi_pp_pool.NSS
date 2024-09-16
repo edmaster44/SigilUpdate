@@ -45,8 +45,9 @@ void main()
 			int nMentalist = GetLevelByClass(100, OBJECT_SELF);
 			int nPsychicKnight = GetLevelByClass(109,OBJECT_SELF);
 			int nCerebremancer = GetLevelByClass(152, OBJECT_SELF);
+			int nPhyTheruge = GetLevelByClass(115,OBJECT_SELF);
 			int nGem = GetLevelByClass(128, OBJECT_SELF);
-			nPsion = nPsion + nMentalist + nCerebremancer + nGem + nPsychicKnight;
+			nPsion = nPsion + nMentalist + nCerebremancer + nGem + nPsychicKnight+ nPhyTheruge ;
 			//Determines level in psion class.
 			int nPPvalue;
 			int nIntBonus = GetAbilityModifier(ABILITY_INTELLIGENCE, OBJECT_SELF);
