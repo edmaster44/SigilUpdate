@@ -32,15 +32,21 @@ const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
 
-//Since the racial feat skill affinity craft alchemy is useless
-//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
-void ReplaceSkillAffinityAlch(object oPC)
+
+void UpdateFeats(object oPC)
 {
+	//Since the racial feat skill affinity craft alchemy is useless
+	//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
 	if (GetHasFeat(1754, oPC))
 	{
 		FeatRemove(oPC, 1754);
 		FeatAdd(oPC, 243, FALSE);
 	}
+	
+	// Add situational awareness persistent feat. Please see file ff_feat_situational_awareness.nss
+	// for code and an EXTREMELY IMPORTANT note on interaction with Dae's plugin. Recommend use with xp_fix
+	// plugin to remove dodge ac limits at https://github.com/nwn2dev/nwnx4/wiki at the bottom of the page.
+	if (!GetHasFeat(21916, oPC, TRUE)) FeatAdd(oPC, 21916, FALSE);
 }
 
 // the creature skin in the invisible inventory slot carmor is necessary
@@ -568,7 +574,7 @@ void main()
 		SetClockOnForPlayer(oPC, TRUE);
 		// call to ps_inc_functions to grant imbue item to psi and to warlock builds that are prc-heavy
 		PS_ManageImbueItem(oPC);
-		ReplaceSkillAffinityAlch(oPC);
+		UpdateFeats(oPC);
 		ff_sneak_fix(oPC);
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
