@@ -93,8 +93,56 @@ const int 	BASE_ITEM_CREEQ_SLAM_MED	= 183;
 const int 	BASE_ITEM_CREEQ_BITE_TINY	= 184;
 const int 	BASE_ITEM_CREEQ_BITE_LRG	= 185; //New large
 
+// *  returns true if weapon is blugeoning (used for poison)
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem. Set bOnly to FALSE
+// if you want to include weapons that are both bludgeoning and piercing,
+// like morningstar
+int IPGetIsBludgeoningWeapon(object oItem, int nItem = -1, int bOnly = TRUE);
+
+// Returns TRUE if a creature weapon.
+// If you only have the id because you're checking in the general instead 
+// of a specific object, enter OBJECT_INVALID for oItem.
+int IPGetIsCreatureEquippedWeapon(object oItem, int nItem = -1);
+
+// *  return TRUE if oItem is a melee weapon
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem.
+int IPGetIsMeleeWeapon(object oItem, int nItem = -1);
+
+// *  returns true if weapon is piercing
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem. Set bOnly to FALSE
+// if you want to include weapons that are both bludgeoning and piercing,
+// like morningstar, and both slashing and piercing, like halberd
+int IPGetIsPiercingWeapon(object oItem, int nItem = -1, int bOnly = TRUE);
+
+// *  return TRUE if oItem is a projectile (bolt, arrow, etc)
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem.
+int IPGetIsProjectile(object oItem, int nItem = -1);
+
+// *  returns TRUE if oItem is a ranged weapon
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem.
+int IPGetIsRangedWeapon(object oItem, int nItem = -1);
+
+// *  returns true if weapon is slashing
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem. Set bOnly to FALSE
+// if you want to include weapons that are both slashing and piercing, like halberd
+int IPGetIsSlashingWeapon(object oItem, int nItem = -1, int bOnly = TRUE);
+
+// gets the weapon size category from baseitems.2da. Returns -1 on error. If you
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem.
+int IPGetWeaponSize(object oItem, int nItem = -1);
+
 // return the content of the new "WeaponCategory" column of baseitems.2da
-string IPGetWeaponCategory(object oItem);
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem.
+string IPGetWeaponCategory(object oItem, int nItem = -1);
+
 
 // *  removes all itemproperties with matching nItemPropertyType and nItemPropertyDuration
 void  IPRemoveMatchingItemProperties( object oItem, int nItemPropertyType, int nItemPropertyDuration = DURATION_TYPE_TEMPORARY, int nItemPropertySubType = -1 );
@@ -122,18 +170,12 @@ object IPGetIPWorkContainer( object oCaller = OBJECT_SELF );
 // *  ip types we want to use, but it goes into the item property include anyway
 itemproperty IPGetItemPropertyByID( int nPropID, int nParam1 = 0, int nParam2 = 0, int nParam3 = 0, int nParam4 = 0 );
 
-// *  returns TRUE if oItem is a ranged weapon
-int   IPGetIsRangedWeapon( object oItem );
 
-// *  return TRUE if oItem is a melee weapon
-int   IPGetIsMeleeWeapon( object oItem );
 
-// *  return TRUE if oItem is a projectile (bolt, arrow, etc)
-int   IPGetIsProjectile( object oItem );
 
-// *  returns true if weapon is blugeoning (used for poison)
-// *  This uses Get2DAstring, so it is slow. Avoid using in loops!
-int   IPGetIsBludgeoningWeapon( object oItem );
+
+
+
 
 // *  Return the IP_CONST_CASTSPELL_* ID matching to the SPELL_* constant given in nSPELL_ID
 // *  This uses Get2DAstring, so it is slow. Avoid using in loops!
@@ -150,7 +192,6 @@ int   IPGetItemHasItemOnHitPropertySubType( object oTarget, int nSubType );
 // *  nPart - ITEM_APPR_ARMOR_MODEL_* constant
 // *  Uses Get2DAstring, so do not use in loops
 int   IPGetNumberOfAppearances( int nPart );
-
 
 // *  Returns the next valid appearance type for oArmor
 // *  nPart - ITEM_APPR_ARMOR_MODEL_* constant
@@ -853,19 +894,24 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    return ipRet;
 }
 
+int IPGetWeaponSize(object oItem, int nItem = -1){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nItem);
+	if(sWeaponSize == "****" || sWeaponSize == "") return -1;
+	return StringToInt(sWeaponSize);
+}
+
 //Returns value in WeaponCategory column of baseitems
-string IPGetWeaponCategory(object oItem)
-{
-	int nItem = GetBaseItemType(oItem);
+string IPGetWeaponCategory(object oItem, int nItem = -1){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
 	return GetStringLowerCase(Get2DAString("baseitems", "WeaponCategory", nItem));
 }
 
 // ----------------------------------------------------------------------------
 // Returns TRUE if oItem is a projectile
 // ----------------------------------------------------------------------------
-int IPGetIsProjectile(object oItem)
-{
-	return (IPGetWeaponCategory(oItem) == "projectile");
+int IPGetIsProjectile(object oItem, int nItem = -1){
+	return (IPGetWeaponCategory(oItem, nItem) == "projectile");
 	/* deprecated, FlattedFifth Aug 1, 2024
   int nBT = GetBaseItemType(oItem);
   return (nBT == BASE_ITEM_ARROW || nBT == BASE_ITEM_BOLT || nBT == BASE_ITEM_BULLET);
@@ -875,17 +921,22 @@ int IPGetIsProjectile(object oItem)
 // ----------------------------------------------------------------------------
 // Returns TRUE if oItem is a ranged weapon
 // ----------------------------------------------------------------------------
-int IPGetIsRangedWeapon(object oItem)
-{
-    return GetWeaponRanged(oItem); // doh !
+int IPGetIsRangedWeapon(object oItem, int nItem = -1){
+	if (oItem == OBJECT_INVALID){
+		string sType = IPGetWeaponCategory(oItem, nItem);
+		if (FindSubString(sType, "launcher") != -1 || 
+			FindSubString(sType, "thrown") != -1){
+				return TRUE;
+			} else return FALSE;
+	}
+    else return GetWeaponRanged(oItem); // doh !
 }
 
 // ----------------------------------------------------------------------------
 // Returns TRUE if oItem is a melee weapon
 // ----------------------------------------------------------------------------
-int IPGetIsMeleeWeapon(object oItem)
-{
-	return (FindSubString(IPGetWeaponCategory(oItem), "melee") != -1);
+int IPGetIsMeleeWeapon(object oItem, int nItem = -1){
+	return (FindSubString(IPGetWeaponCategory(oItem, nItem), "melee") != -1);
     /* deprecated, FlattedFifth Aug 1, 2024
 	//Declare major variables
     int nItem = GetBaseItemType(oItem);
@@ -951,9 +1002,8 @@ int IPGetIsMeleeWeapon(object oItem)
 }
 
 // Added by Ceremorph for SCoD
-int IPGetIsCreatureEquippedWeapon(object oItem)
-{
-	return (FindSubString(IPGetWeaponCategory(oItem), "creature") != -1);
+int IPGetIsCreatureEquippedWeapon(object oItem, int nItem = -1){
+	return (FindSubString(IPGetWeaponCategory(oItem, nItem), "creature") != -1);
 	/* deprecated, FlattedFifth Aug 1, 2024
     //Declare major variables
     int nItem = GetBaseItemType(oItem);
@@ -994,12 +1044,29 @@ int IPGetIsCreatureEquippedWeapon(object oItem)
 // Returns TRUE if weapon is a blugeoning weapon
 // Uses Get2DAString!
 // ----------------------------------------------------------------------------
-int IPGetIsBludgeoningWeapon(object oItem)
-{
-  int nBT = GetBaseItemType(oItem);
-  int nWeapon =  ( StringToInt(Get2DAString("baseitems","WeaponType",nBT)));
-  // 2 = bludgeoning
-  return (nWeapon == 2);
+int IPGetIsBludgeoningWeapon(object oItem, int nItem = -1, int bOnly = TRUE){
+  if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+  int nWeapon =  ( StringToInt(Get2DAString("baseitems","WeaponType", nItem)));
+  // 2 = bludgeoning, 5 = bludgeoning + piercing
+  if (bOnly) return nWeapon == 2;
+  else return (nWeapon == 2 || nWeapon == 5);
+}
+
+int IPGetIsSlashingWeapon(object oItem, int nItem = -1, int bOnly = TRUE){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	int nWeapon = StringToInt(Get2DAString("baseitems","WeaponType", nItem));
+	// 3 = slashing, 4 = slashing + piercing
+	if (bOnly) return nWeapon == 3;
+	else return (nWeapon == 3 || nWeapon == 4);
+}
+
+int IPGetIsPiercingWeapon(object oItem, int nItem = -1, int bOnly = TRUE){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	int nWeapon = StringToInt(Get2DAString("baseitems","WeaponType", nItem));
+	// 1 = piercing, 4 = piercing + slashing, 5 = bludgeoning + slashing
+	if (bOnly) return nWeapon == 1;
+	else return (nWeapon == 1 || nWeapon == 4 || nWeapon == 5);
+
 }
 
 // ----------------------------------------------------------------------------
