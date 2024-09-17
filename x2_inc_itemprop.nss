@@ -310,6 +310,18 @@ void IPRemoveAllItemProperties(object oItem, int nItemPropertyDuration = DURATIO
     }
 }
 
+
+
+/*Gets Weapon Size*/
+
+int IPGetWeaponSize(object oItem, int nItem = -1){
+    if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+    string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nItem);
+    if(sWeaponSize == "**" || sWeaponSize == "") return -1;
+    return StringToInt(sWeaponSize);
+}
+
+
 // ----------------------------------------------------------------------------
 // returns TRUE if item can be equipped. Uses Get2DAString, so do not use in a loop!
 // ----------------------------------------------------------------------------
