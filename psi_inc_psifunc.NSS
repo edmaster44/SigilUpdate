@@ -724,11 +724,13 @@ int GetPsionicPRCLevels(object oCreature)
 	nLevel +=  GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC, oCreature);
 	nLevel +=  GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
 	nLevel +=  GetLevelByClass(CLASS_TYPE_PSYCHIC_THERUGE, oCreature);
+
 	//No Level boost for Psychic Knight, at level 1
 	if(GetLevelByClass(CLASS_PSYCHIC_KNIGHT, oCreature))
-    {
+    {   
         nLevel += GetLevelByClass(CLASS_PSYCHIC_KNIGHT, oCreature) - 1;
     }
+
     nLevel += GetLevelByClass(CLASS_TYPE_WARMIND,oCreature);
 	nLevel +=  GetLevelByClass(CLASS_TYPE_DRAGON_PSION, oCreature);
     // Cerebremancer and Psychic Theurge add manifester levels on each level
