@@ -906,12 +906,6 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    return ipRet;
 }
 
-int IPGetWeaponSize(object oItem, int nItem = -1){
-	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
-	string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nItem);
-	if(sWeaponSize == "****" || sWeaponSize == "") return -1;
-	return StringToInt(sWeaponSize);
-}
 
 //Returns value in WeaponCategory column of baseitems
 string IPGetWeaponCategory(object oItem, int nItem = -1){
