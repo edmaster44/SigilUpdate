@@ -32,4 +32,4 @@ void CopyItemDoppelganger(object oTarget, int nItemSlot)
 		SetIdentified(oItemNewInv, TRUE);
 		ActionEquipItem(oItemNewInv, nItemSlot);
 	}
-}
+}*/

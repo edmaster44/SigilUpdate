@@ -2,16 +2,10 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
+#include "x2_inc_itemprop"
 
 int FEAT_DARING_CHARGE = 15000;
 
-int GetCreatureWeapons(object oItem)
-{
-int iBaseItem = GetBaseItemType(oItem);
-return iBaseItem == 164  || iBaseItem == 165  || iBaseItem == 166 || iBaseItem == 167 || iBaseItem == 168 || iBaseItem == 169 || iBaseItem == 170
-|| iBaseItem == 171 || iBaseItem == 172 || iBaseItem == 173 || iBaseItem == 174 || iBaseItem == 175 || iBaseItem == 176 || iBaseItem == 177 || iBaseItem == 178
-|| iBaseItem == 179 || iBaseItem == 180;
-}
 
 void main()
 {
@@ -40,7 +34,11 @@ void main()
 	}
 
 	object mainWpnItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND);
-	int mainWpnOk = (mainWpnItem == OBJECT_INVALID) || GetCreatureWeapons(mainWpnItem);
+	int mainWpnOk = (mainWpnItem == OBJECT_INVALID) || IPGetIsCreatureEquippedWeapon(mainWpnItem);
+	if (!mainWpnOk) mainWpnOk = GetIsFinessable(mainWpnItem);
+	
+	// checking for specific ids is not very maintainable, better to just get if the weapon is finessable
+	/*
 	if(!mainWpnOk) {
 		int nMainWpnType = GetBaseItemType(mainWpnItem);
 		switch(nMainWpnType) {
@@ -60,11 +58,16 @@ void main()
 			break;
 		}
 	}
+	*/
 	if(mainWpnOk) {
 		object offhandWpnItem = GetItemInSlot(INVENTORY_SLOT_LEFTHAND);
-		// Not checking for large weapons in offhand for convenience. If someone accepts the negatives for that its their choice
-		if(offhandWpnItem != OBJECT_INVALID  || !GetCreatureWeapons(mainWpnItem)) {
+
+		if(offhandWpnItem != OBJECT_INVALID  || !IPGetIsCreatureEquippedWeapon(offhandWpnItem)) {
 			int nOffhandWpnType = GetBaseItemType(offhandWpnItem);
+			if (nOffhandWpnType != BASE_ITEM_SMALLSHIELD){
+				mainWpnOk = GetIsFinessable(offhandWpnItem);
+			}
+			/*
 			switch(nOffhandWpnType) {
 			case BASE_ITEM_LARGESHIELD:
 			case BASE_ITEM_TOWERSHIELD:
@@ -72,10 +75,11 @@ void main()
 			default:
 				break;
 			}
+			*/
 		}
 	}
 	if(!mainWpnOk) {
-		SendMessageToPC(oCaster, "Daring Charge failed, can not be used with a non-finessable/non-creature main weapon or with a larger than small shield.");
+		SendMessageToPC(oCaster, "Daring Charge failed, can not be used with a non-finessable/non-creature weapons or with a larger than small shield.");
 		return;
 	}
 	
@@ -88,3 +92,13 @@ void main()
 	
 	DelayCommand(0.1f, ActionJumpToObject(oTarget));
 }
+
+/* Deprecated. Changed to use IPGetIsCreatureEquippedWeapon() in x2_inc_itemprop
+int GetCreatureWeapons(object oItem)
+{
+int iBaseItem = GetBaseItemType(oItem);
+return iBaseItem == 164  || iBaseItem == 165  || iBaseItem == 166 || iBaseItem == 167 || iBaseItem == 168 || iBaseItem == 169 || iBaseItem == 170
+|| iBaseItem == 171 || iBaseItem == 172 || iBaseItem == 173 || iBaseItem == 174 || iBaseItem == 175 || iBaseItem == 176 || iBaseItem == 177 || iBaseItem == 178
+|| iBaseItem == 179 || iBaseItem == 180;
+}
+*/

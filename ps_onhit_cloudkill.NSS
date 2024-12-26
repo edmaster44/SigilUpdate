@@ -24,7 +24,7 @@ void main()
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGKILL, "ps_onhit_cloudkilla", "ps_onhit_cloudkillc", "ps_onhit_cloudkillb");
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nDuration = GetCasterLevel(oCaster) / 2;
+    int nDuration = PS_GetCasterLevel(oCaster) / 2;
 	
     if(nDuration < 1)
     {

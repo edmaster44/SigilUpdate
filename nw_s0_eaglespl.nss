@@ -47,8 +47,11 @@ void main()
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_EAGLE_SPLENDOR);
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
 
-    int nRaise = 4;
-    float fDuration = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
+	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+    int nModify = 4;
+	if (nCasterLvl >= 12) nModify = 6;
+	else if (nCasterLvl >= 8) nModify = 5;
+    float fDuration = TurnsToSeconds(nCasterLvl);
 
     //Fire cast spell at event for the specified target
         //SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_EAGLES_SPLENDOR));
@@ -58,7 +61,7 @@ void main()
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Set Adjust Ability Score effect
-    eRaise = EffectAbilityIncrease(ABILITY_CHARISMA, nRaise);
+    eRaise = EffectAbilityIncrease(ABILITY_CHARISMA, nModify);
     effect eLink = EffectLinkEffects(eRaise, eVis);
 
     //Fire cast spell at event for the specified target

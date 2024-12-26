@@ -21,7 +21,7 @@ void main() {
 	
 	if (GetHasSpell(SPELL_BANISHMENT, oCaster)) {
 		object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget);
-	    int nPool = 2* GetCasterLevel(OBJECT_SELF);
+	    int nPool = 2* PS_GetCasterLevel(OBJECT_SELF);
 	
 	    while(GetIsObjectValid(oTarget))
 	    {

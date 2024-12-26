@@ -19,7 +19,7 @@
 //:: Mymothersmeatloaf: 6/21/2020 - uncapped the spells damage.
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
-#include "ps_inc_functions"
+//#include "ps_inc_functions" inherited from spellhook via class_mageslayer_utils
 
 void main()
 {
@@ -31,7 +31,7 @@ void main()
     int nDamage;
 	int PML = GetPureMageLevels(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 
 	
     int nFire = GetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL");

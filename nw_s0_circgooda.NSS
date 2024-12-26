@@ -26,7 +26,7 @@ void main()
     if(spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, GetAreaOfEffectCreator()))
     {
         //Declare major variables
-        int nDuration = GetCasterLevel(OBJECT_SELF);
+        int nDuration = PS_GetCasterLevel(OBJECT_SELF);
         //effect eVis = EffectVisualEffect( VFX_DUR_SPELL_GOOD_CIRCLE );	// handled by CreateProtectionFromAlignmentLink()
         effect eLink = CreateProtectionFromAlignmentLink(ALIGNMENT_GOOD);
 

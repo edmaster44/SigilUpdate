@@ -18,6 +18,7 @@
 #include "hench_i0_attack"
 #include "hench_i0_buff"
 #include "hench_i0_dispel"
+#include "ps_inc_functions"
 
 const int HENCH_ITEM_TYPE_NONE      = 0;
 const int HENCH_ITEM_TYPE_OTHER     = 1;
@@ -2064,7 +2065,7 @@ int InitializeClassByPosition(int iPosition)
         default:
             if (GetCasterLevel(OBJECT_SELF) > 0)
             {
-                nMySpellCasterLevel = GetCasterLevel(OBJECT_SELF);
+                nMySpellCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
             }
             else if (nMySpellCasterLevel < GetHitDice(OBJECT_SELF))
             {

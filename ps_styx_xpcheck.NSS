@@ -1,6 +1,6 @@
 //ps_styx_all v1.02
 #include "ps_inc_functions"
-#include "aaa_constants"
+//#include "aaa_constants"
 #include "nwnx_sql"
 
 //Check whether you have multiple entries in the DB
@@ -15,6 +15,8 @@ void UpdatePCID(object oPC);
 void main()
 {
 	object oPC = GetPCSpeaker();
+	string sID = PS_GetCharID(oPC);
+	if (sID == "NULL") return;
 	
 	//SendMessageToPC(oPC, "Current ID: "+PS_GetCharID(oPC));
 	
@@ -27,25 +29,25 @@ void main()
 	
 	//SendMessageToPC(oPC, "New ID: "+PS_GetCharID(oPC));
 	
-	string sID = PS_GetCharID(oPC);
+
 	
 	string sQuery = "SELECT rp_pool, dm_pool FROM characterdata WHERE id='" + sID + "'";
-	
+	string sRPXP;
+	string sDMXP;
 	SQLExecDirect(sQuery);
 	if (SQLFetch() != SQL_ERROR) {
 	
-		string sRPXP = SQLGetData(1);
-		string sDMXP = SQLGetData(2);
-		
-		SetCustomToken(4001, sRPXP);
-		SetCustomToken(4002, sDMXP);
-		
-	} else {
+		sRPXP = SQLGetData(1);
+		sDMXP = SQLGetData(2);
 	
-		SetCustomToken(4001, "0");
-		SetCustomToken(4002, "0");
+	} else {
+		object oSpeaker = GetLastSpeaker();
+		sDMXP = IntToString(GetLocalInt(oSpeaker, sID+"dm"));
+		sRPXP = IntToString(GetLocalInt(oSpeaker, sID+"rp"));
 		
 	}
+		SetCustomToken(4001, sRPXP);
+		SetCustomToken(4002, sDMXP);
 	
 }
 

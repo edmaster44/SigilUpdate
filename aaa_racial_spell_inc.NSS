@@ -338,8 +338,11 @@ void PS_Cast_IG_HoarfrostArmor(object oPC, int nSpell, int iLevel)
 {
     if (!X2PreSpellCastCode())
     {	return;	}
-
-    int nDuration = 5 + (iLevel - 5);
+	// desc states 5 rounds +1 per lvl above 5, but this math is wrong. At lvl 1 This
+	// is 1 round. 5 + (1 - 5) = 5 + -4 = 1;
+    //int nDuration = 5 + (iLevel - 5); 
+	int nDuration = 5;
+	if (iLevel > 5) nDuration += iLevel - 5;
 	int nDamage = (iLevel / 6) * 2;
  	effect eShield = EffectDamageShield(nDamage, DAMAGE_BONUS_1d4, DAMAGE_TYPE_COLD);
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_CREEPING_COLD);

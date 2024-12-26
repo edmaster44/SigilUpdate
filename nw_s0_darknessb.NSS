@@ -17,11 +17,13 @@
 
 void main()
 {
+	PS_RemoveEffects(GetExitingObject(), SPELL_DARKNESS, -1, GetAreaOfEffectCreator());
+}
 
-    object oTarget = GetExitingObject();
-    object oCreator = GetAreaOfEffectCreator();
-	// 
 
+
+
+/* original code now handled by new function in spellhook
     int bValid = FALSE;
     effect eAOE;
     //Search through the valid effects on the target.
@@ -38,3 +40,4 @@ void main()
         eAOE = GetNextEffect(oTarget);
     }
 }
+*/

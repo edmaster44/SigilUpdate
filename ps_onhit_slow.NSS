@@ -22,7 +22,7 @@ void main()
     //Declare major variables
     location lSpell = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(OBJECT_SELF);
 	int nID = GetOnHitAbilityID(OBJECT_SELF);
     effect eSlow = EffectSlow();

@@ -28,7 +28,8 @@ void main()
     //Declare major variables including Area of Effect Object
     effect eAOE      = EffectAreaOfEffect(AOE_PER_SHROUDING_FOG);
     location lTarget = GetSpellTargetLocation();
-    int nDuration    = 5;		// Fixed to 5 rounds.
+    int nDuration    = GetTotalLevels(OBJECT_SELF, TRUE);
+	if (nDuration < 5) nDuration = 5;
     int nMetaMagic   = GetMetaMagicFeat();
 	
 	object oTarget = GetSpellTargetObject();

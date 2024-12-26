@@ -53,6 +53,8 @@ void main()
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nModify = 4;
+	if (nCasterLvl >= 12) nModify = 6;
+	else if (nCasterLvl >= 8) nModify = 5;
     float fDuration = TurnsToSeconds(nCasterLvl);
 
     //Signal spell cast at event to fire on the target.

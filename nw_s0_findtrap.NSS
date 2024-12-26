@@ -35,13 +35,24 @@ void main()
     }
 
 // End of Spell Cast Hook
-
-
+	int nDuration = 2 + PS_GetCasterLevel(OBJECT_SELF); 
+	int nBonus = 10;
+	
+	int nMeta = GetMetaMagicFeat();
+	if (nMeta == METAMAGIC_EMPOWER) nBonus += nBonus / 2;
+	if (nMeta == METAMAGIC_EXTEND) nDuration *= 2;
+	
+	effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nBonus);
+	eSearch = SetEffectSpellId(eSearch, SPELL_FIND_TRAPS);
+	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_FIND_TRAPS, FALSE));
+	PS_RemoveEffects(OBJECT_SELF, SPELL_FIND_TRAPS);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, OBJECT_SELF, TurnsToSeconds(nDuration)); 
+	
     //effect eVis = EffectVisualEffect(VFX_IMP_KNOCK);	// NWN1 VFX
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_FIND_TRAPS );	// NWN2 VFX
     int nCnt = 1;
     object oTrap = GetNearestObject(OBJECT_TYPE_TRIGGER | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, OBJECT_SELF, nCnt);
-    while( GetIsObjectValid(oTrap) && (GetDistanceToObject(oTrap) <= 30.0) && GetTrapDetectable(oTrap) )	// 8/1/06 - BDF: added GetTrapDetectable check
+    while(GetIsObjectValid(oTrap) && (GetDistanceToObject(oTrap) <= 30.0) && GetTrapDetectable(oTrap) )	// 8/1/06 - BDF: added GetTrapDetectable check
     {
         if(GetIsTrapped(oTrap))
         {

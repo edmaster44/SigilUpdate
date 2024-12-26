@@ -29,8 +29,8 @@
 //CLASS_TYPE_ROGUE
 //CLASS_TYPE_WARLOCK
 //CLASS_TYPE_WIZARD
-object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int isHostile = TRUE);
-object CreateScaledCreatureofClassLocation(location lWP, int nLevel, int classType, int isHostile = TRUE);
+object CreateScaledCreatureofClass(object oWP, int nLevel, int classType, int faction = STANDARD_FACTION_HOSTILE);
+object CreateScaledCreatureofClassLocation(location lWP, int nLevel, int classType, int faction = STANDARD_FACTION_HOSTILE);
 
 //Gets the blueprint string from the class INT
 //(if there is no blueprint of the given class type, defaults to fighter)
@@ -38,7 +38,7 @@ string GetBlueprintStringFromClass(int classType);
 
 //Gets the nearest blueprint available
 //classType currently does nothing; putting it in for later
-int GetNearestCreatureLevelAvailable(int nLevel, int classType);
+int GetNearestCreatureLevelAvailable(int nLevel, int classType = CLASS_TYPE_FIGHTER);
 
 //Sets the creature's conversation
 void SetConversation(object oCreature, string sConversation);

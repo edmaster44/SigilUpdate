@@ -3,11 +3,18 @@
 // Note: A complete list of animations for use in this script can be found at
 // nwn2.wikia.com/wiki/PlayCustomAnimation:_List_of_animations
 
+// Nov 27, 2024. FlattedFifth - Shield Bash wasn't working on some large targets. It was saying I wasn't 
+// close enough even though I was as close as possible. This is because GetDistanceBetween()
+// measures from centre of footprint to centre of footprint. I made a better function
+// in ps_inc_functions that takes size into account and call it from AttemptMeleeAttackMainHand()
+
+
 
 #include "nwnx_sql"
 #include "X0_I0_SPELLS"
 #include "ps_inc_time"
 #include "ps_inc_advscript"
+#include "ps_inc_functions"
 #include "nwnx_dae"
 
 int GetEnhancementBonus(object oPC, object oWeapon);
@@ -1075,6 +1082,168 @@ int AttackerTotalABCreature(object oAttacker)
 	return (GetAttackBonusTotal(oAttacker, oWeapon) + ApplyFeatsToWeapon(oAttacker, oWeapon) + GetWeaponBonuses(oAttacker, oWeapon) + CreatureSize(oAttacker)) - AttackerABPenalties(oAttacker, oWeapon);
 }
 
+// 0 = miss, 1 = hit, 2 = crit
+int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityname, int givefeedback, string animation, int ranged, int nSpellID){
+	//0 - miss, 1 - hit, 2 - critical
+	// Melee Attack: 1d20 + base attack bonus + strength modifier + size modifier vs their AC.
+	// Damage Roll: Weapon Damage Roll + Strength Modifier + Weapon Enhancement.
+
+	
+	int nBash = FALSE;
+	if (nSpellID == SPELLFEAT_SHIELDBASH || nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE ||
+		nSpellID == SPELLFEAT_ARCANEBASH || nSpellID == SPELLFEAT_SHIELDTHROW)
+			nBash = TRUE;
+	int nThrow = (nSpellID == SPELLFEAT_SHIELDTHROW);
+	
+	if (!GetInWeaponRange(oAttacker, oTarget, nBash, nThrow)){
+		if (givefeedback == 1)
+			FloatingTextStringOnCreature("*"+abilityname+" (miss - target too far)*", oAttacker, TRUE, 3.0f);
+		int nFeatid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
+		DelayCommand(1.5f,ResetFeatUses(oAttacker,nFeatid,TRUE,TRUE));
+		AssignCommand(oAttacker, ClearAllActions(FALSE));
+		DelayCommand(0.2f,	AssignCommand(oAttacker, ActionAttack(oTarget)));
+		return 0;
+	}
+
+	int imiss;
+	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker);
+	
+	int conceal = ConcealmentCheck(oTarget,ranged);
+	
+	if(conceal > 0 && conceal > d100() + 1){
+		imiss = 1;	
+		if(GetHasFeat(408, oAttacker,TRUE))
+		{
+			if(conceal > d100()) imiss = 1;
+			else imiss = 0;
+		}
+	}
+	
+	if(imiss == 1)
+	{
+		if(givefeedback == 1)
+			FloatingTextStringOnCreature("*"+abilityname+" (miss - concealment)*", oAttacker, TRUE, 3.0f);
+		SendMessageToPC(oAttacker,"You missed! (concealment failure)");
+		return 0;
+	}
+	
+	if(GetHasSpellEffect(443,oTarget) || GetHasSpellEffect(724,oTarget))
+	{
+		if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (miss - etherealness)*", oAttacker, TRUE, 3.0f);
+		SendMessageToPC(oAttacker,"You missed! (etherealness failure)");
+		return 0;	
+	}
+	
+	if(InvisibilityCheck(oTarget) == 1)
+	{
+		if(!GetHasSpellEffect(186,oAttacker) && !GetHasSpellEffect(943, oAttacker) && 
+		!GetHasSpellEffect(849, oAttacker) &&
+		!GetItemHasItemProperty(GetItemInSlot(INVENTORY_SLOT_HEAD,oAttacker),ITEM_PROPERTY_TRUE_SEEING))
+		{
+			if(givefeedback == 1)
+				FloatingTextStringOnCreature("*"+abilityname+" (miss - invisibility)*", oAttacker, TRUE, 3.0f);
+			SendMessageToPC(oAttacker,"You missed! (invisibility failure)");
+			return 0;
+		}
+	}
+	
+	if(GetHasSpellEffect(852,oTarget))
+	{
+		if(givefeedback == 1)
+			FloatingTextStringOnCreature("*"+abilityname+" (miss - mirror image)*", oAttacker, TRUE, 3.0f);
+		SendMessageToPC(oAttacker,"You missed! (mirror image)");
+		AssignCommand(oAttacker, ClearAllActions(FALSE));		
+		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
+		RemoveMirrorImage(oTarget);
+		return 0;	
+	}
+	
+	if(GetHasFeat(856,oTarget,TRUE) && d6() == 1)
+	{
+		if(givefeedback == 1)
+			FloatingTextStringOnCreature("*"+abilityname+" (miss - epic dodge)*", oAttacker, TRUE, 3.0f);
+		SendMessageToPC(oAttacker,"You missed! (epic dodge)");
+		AssignCommand(oAttacker, ClearAllActions(FALSE));			
+		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
+		return 0;	
+	}
+				
+	int roll = d20();
+	int TargetAC = GetAC(oTarget);
+	if(FlatFooted(oAttacker, oTarget) && !GetHasFeat(195,oTarget)) TargetAC = TargetAC - GetDodgeAC(oTarget);
+	
+	int iAttackerAB = AttackerTotalAB(oAttacker);
+	if(GetLevelByClass(CLASS_TYPE_RANGER,oAttacker) > 0 && GetIsRangerFavored(oAttacker, oTarget))
+	{
+		iAttackerAB = iAttackerAB + CalculateRangerBonus(oAttacker);
+	}
+	
+	int iAttack = roll + iAttackerAB; int confirmationRoll; int confirmationTotal;
+	
+	if(roll == 20 || iAttack >= TargetAC && roll > 1)
+	{
+		if(roll == 20)
+		{
+			SendMessageToPC(oAttacker,"You hit! (rolled 20) " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
+			SendMessageToPC(oTarget,"You were hit! (rolled 20) " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
+		}
+		else
+		{
+			SendMessageToPC(oAttacker,"You hit! " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
+			SendMessageToPC(oTarget,"You were hit! " + IntToString(iAttack)+" vs "+IntToString(TargetAC));
+		}
+		
+		int ThreatRange = GetWeaponThreatRange(oAttacker);
+	
+		if(animation != "")
+		{
+			PS_CustomAnimation(oAttacker,animation,0);
+			BattleCry(oAttacker);
+			if(ranged == 0)
+			{
+				AssignCommand(oAttacker, ClearAllActions(FALSE));
+				DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
+			}
+		}
+	
+		if(roll >= ThreatRange && !GetIsImmune(oTarget,IMMUNITY_TYPE_CRITICAL_HIT) && !GetHasIgnoreCritImmunity(oAttacker, oTarget))
+		{
+			confirmationRoll = d20();
+			confirmationTotal = confirmationRoll + iAttackerAB;
+	
+			if (confirmationRoll == 20 || confirmationTotal >= TargetAC && confirmationRoll > 1)
+			{
+				if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (critical hit)*", oAttacker, TRUE, 3.0f);
+				return 2;
+			}
+		}
+	
+		if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (hit)*", oAttacker, TRUE, 3.0f);
+		return 1;	
+	}
+	
+	if(ranged == 0)
+	{
+		AssignCommand(oAttacker, ClearAllActions(FALSE));
+		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
+	}
+	
+	if(givefeedback == 1 && roll == 1)
+	{
+		FloatingTextStringOnCreature(abilityname+" (miss - rolled 1)*", oAttacker, TRUE, 3.0f);
+		SendMessageToPC(oAttacker,"You missed! (Rolled 1) "+IntToString(iAttack)+" vs "+IntToString(TargetAC));
+		AssignCommand(oAttacker, ClearAllActions(FALSE));
+		DelayCommand(0.2f,AssignCommand(oAttacker, ActionAttack(oTarget)));
+		return 0;
+	}
+	
+	if(givefeedback == 1) FloatingTextStringOnCreature(abilityname+" (miss)*", oAttacker, TRUE, 3.0f);
+	SendMessageToPC(oAttacker,"You missed! "+IntToString(iAttack)+" vs "+IntToString(TargetAC));
+			
+	return 0;
+}
+
+/* orginal code
 
 int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityname, int givefeedback, string animation, int ranged, int nSpellID)
 {
@@ -1158,7 +1327,9 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	
 	if(InvisibilityCheck(oTarget) == 1)
 	{
-		if(!GetHasSpellEffect(186,oAttacker) && !GetItemHasItemProperty(GetItemInSlot(INVENTORY_SLOT_HEAD,oAttacker),ITEM_PROPERTY_TRUE_SEEING))
+		if(!GetHasSpellEffect(186,oAttacker) && !GetHasSpellEffect(943, oAttacker) && 
+		!GetHasSpellEffect(849, oAttacker) &&
+		!GetItemHasItemProperty(GetItemInSlot(INVENTORY_SLOT_HEAD,oAttacker),ITEM_PROPERTY_TRUE_SEEING))
 		{
 			if(givefeedback == 1) FloatingTextStringOnCreature("*"+abilityname+" (miss - invisibility)*", oAttacker, TRUE, 3.0f);
 			SendMessageToPC(oAttacker,"You missed! (invisibility failure)");
@@ -1259,6 +1430,7 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 			
 	return 0;
 }
+*/
 
 void AttemptTauntAroundPlayer(object oPC, int iMax)
 {

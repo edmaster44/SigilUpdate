@@ -54,7 +54,7 @@ void main()
 	effect	eVis			=	EffectVisualEffect(VFX_HIT_SPELL_TOUCH_OF_FATIGUE);
 	//effect	eFatigue	=	EffectFatigue();
 	//effect	eLink		=	EffectLinkEffects(eVis, eFatigue);
-	int 	nFatigueRds 	=   GetCasterLevel(oCaster);
+	int 	nFatigueRds 	=   PS_GetCasterLevel(oCaster);
 	
 	
 	

@@ -172,7 +172,7 @@ int GetIntInRange(int iVal, int iMin, int iMax)
 // Number of missiles is lesser of caster level and nCap.
 int GetCappedCasterLevel(int iCap)
 {
-    int iCappedCasterLevel 	= GetCasterLevel(OBJECT_SELF);
+    int iCappedCasterLevel 	= PS_GetCasterLevel(OBJECT_SELF);
 
     if (iCappedCasterLevel > iCap)	
 		iCappedCasterLevel = iCap;
@@ -280,7 +280,7 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
 {
     //Declare major variables  ( fDist / (3.0f * log( fDist ) + 2.0f) )
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nDamage = 0;
     int nMetaMagic = GetMetaMagicFeat();
     int nCnt;
@@ -653,7 +653,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
     int nMetaMagic = GetMetaMagicFeat();
     //int nTouch = TouchAttackMelee(oTarget);
 
-    int nExtraDamage = GetCasterLevel(OBJECT_SELF); // * figure out the bonus damage
+    int nExtraDamage = PS_GetCasterLevel(OBJECT_SELF); // * figure out the bonus damage
 
     if (nSpellID == SPELLABILITY_BG_INFLICT_SERIOUS_WOUNDS || nSpellID == SPELLABILITY_BG_INFLICT_CRITICAL_WOUNDS)
     {

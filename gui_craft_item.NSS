@@ -5,7 +5,14 @@ void ShowCustomizationScreen(object oPC, object oItem, struct baseitem i, string
 	DisplayGuiScreen(oPC, sCustomizationScreen, TRUE, xmlCustomizationFile);
 	GenerateItemIconList(oPC, i);
 	
-	SetGUIObjectText(oPC, sCustomizationScreen, "SCOD_ITEMNAME_TEXT", -1, GetName(oItem));
+	string sName = GetName(oItem);
+	string sLastName = GetLastName(oItem);
+	if (RemoveWhitespace(sName) == "") sName = GetFirstName(oItem);
+	if (RemoveWhitespace(sLastName) != "") sName += " " + sLastName;
+	if (RemoveWhitespace(sName) == ""){
+		sName = GetStringByStrRef(StringToInt(Get2DAString("baseitems", "Name", GetBaseItemType(oItem))));
+	}
+	SetGUIObjectText(oPC, sCustomizationScreen, "SCOD_ITEMNAME_TEXT", -1, sName);
 	SetGUIObjectText(oPC, sCustomizationScreen, "SCOD_ITEMDESC_TEXT", -1, sDescrip);
 }
 
@@ -25,7 +32,7 @@ void main () {
 	
 	int nRequiredRank = GetCraftingRankRequirement(i, m1, m2, m3);
 	int nSkill = GetRequiredCraftSkill(i);
-	if (GetSkillRank(nSkill, oPC, TRUE) < nRequiredRank) {
+	if (PS_GetSkillRank(nSkill, oPC, TRUE) < nRequiredRank) {
 		SendMessageToPC(oPC, "You do not have the required skill rank.");
 		return;
 	}
@@ -46,14 +53,18 @@ void main () {
 	
 	//Create crafted item
 	object oItem = CreateCraftedItem(oPC, i, m1, m2, m3);
-	SetLocalObject(oPC, "crafted_item", oItem);
 	
 	string sName = GetCraftingItemName(i, m1, m2, m3);
+	if (RemoveWhitespace(sName) == ""){
+		sName = GetStringByStrRef(StringToInt(Get2DAString("baseitems", "Name", GetBaseItemType(oItem))));
+	}
 	SetFirstName(oItem, sName);
 	
 	string sDescrip = GetCraftingNameDescription(oPC, i, m1, m2, m3);
 	SetDescription(oItem, sDescrip);
-	SetItemCostVariables(oItem);
+	//SetItemCostVariables(oItem, FALSE, oPC);
+	
+	SetLocalObject(oPC, "crafted_item", oItem);
 	
 	DeleteLocalInt(oPC, "Craft_BaseItemType"); 
 	DeleteLocalInt(oPC, "Craft_Mat1"); 

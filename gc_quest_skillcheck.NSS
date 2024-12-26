@@ -5,9 +5,9 @@
 #include "ps_inc_training"
 
 
-int StartingConditional(int nSkill, int nDC, int maxExp = 100)
+int StartingConditional(int nSkill, int nDC, int maxExp)
 {
-
+	if (maxExp == 0) maxExp = 100;
 	object oPC = GetPCSpeaker();
 	int nMod = GetSkillRank(nSkill, oPC, TRUE);
 	int diff = nDC-nMod;

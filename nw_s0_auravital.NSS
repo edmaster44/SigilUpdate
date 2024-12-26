@@ -33,13 +33,20 @@ void main()
     }
 
 // End of Spell Cast Hook
+	int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	int nBonus = 4;
+    int nMetaMagic = GetMetaMagicFeat();
+    //Enter Metamagic conditions
+    if (nMetaMagic == METAMAGIC_EXTEND) nDuration *= 2;	//Duration is +100%
+	if (nMetaMagic == METAMAGIC_EMPOWER) nBonus += nBonus / 2;
+    
 
 
     //Declare major variables
     object oTarget;
-    effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH,4);
-    effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY,4);
-    effect eCon = EffectAbilityIncrease(ABILITY_CONSTITUTION,4);
+    effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH,nBonus);
+    effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY,nBonus);
+    effect eCon = EffectAbilityIncrease(ABILITY_CONSTITUTION,nBonus);
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
     
     effect eLink = EffectLinkEffects(eStr, eDex);
@@ -49,10 +56,9 @@ void main()
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);	// NWN1 VFX
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_AURA_OF_VITALITY );	// NWN2 VFX
     eLink = EffectLinkEffects(eLink, eVis);
-    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     float fDelay;
     
-    int nMetaMagic = GetMetaMagicFeat();
+
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_EXTEND)
     {

@@ -89,10 +89,44 @@ void main () {
 
 //***********************************************************************8
 
-void specialDrop(object oPC)
-{
-	int nRandom = Random(38)+1;
-	string sIngot = "";
+void specialDrop(object oPC){
+
+	// get the material from 2das instead of from code. Note that because
+	// I've made precious metals such as gold, platinum, white gold, etc
+	// be on both the metal and the misc lists (shows up in crafting as base 
+	// metal for jewelery and as misc material for weapons, armor, shields, and bracers)
+	// this means that people are more likely to get a precious metal that provides
+	// nothing but a crafring point than they are something that provides a special 
+	// property. I'm ok with that. -FlattedFifth.
+	string sChosen2da;
+	switch (Random(4)){
+		case 0: sChosen2da = "scod_craft_leather"; break;
+		case 1: sChosen2da = "scod_craft_metal"; break;
+		case 2: sChosen2da = "scod_craft_misc"; break;
+		case 3: sChosen2da = "scod_craft_wood"; break;
+	}
+	
+	int nNumRows = GetNum2DARows(sChosen2da);
+	// if the 2da is metal, there's 2 useless mats: copper and iron
+	// at rows 0 and 1. otherwise, there's 1 useless mat at row 0
+	if (sChosen2da == "scod_craft_metal") nNumRows -= 2;
+	else nNumRows -= 1;
+	
+	int nChosenRow = Random(nNumRows);
+	// skip the iron, wood, copper, etc
+	if (sChosen2da == "scod_craft_metal") nChosenRow += 2;
+	else nChosenRow += 1;
+	
+	string sIngot = Get2DAString(sChosen2da, "BASE_RESREF", nChosenRow);
+	string sIngotName = Get2DAString(sChosen2da, "LABEL", nChosenRow);
+	object oItem = CreateItemOnObject( sIngot, oPC);
+	// error catching
+	if (sIngot != "" && sIngot != "****"){
+		SetLocalInt(oPC, "HASWON", 1);
+		SpeakString("Congratulations, "+GetName(oPC)+", you win one " + sIngotName + " from the Crafter's Square!");
+	} else SpeakString("Too bad, "+GetName(oPC)+", try again!");
+	
+	/*
 	switch (nRandom)
 	{
 		case 1: sIngot = "ps_cfrt_ing_pd"; break;
@@ -139,6 +173,7 @@ void specialDrop(object oPC)
 	object oItem = CreateItemOnObject( sIngot, oPC);
 	SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Crafter's Square!");
+	*/
 }
 
 //Gives a special item!

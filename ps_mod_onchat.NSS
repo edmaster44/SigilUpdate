@@ -5,7 +5,6 @@
 #include "ServerExts"
 
 
-
 int IsAuthorizedToUseThisCmd(object oPC)
 {
     if(GetIsDM(oPC))  return TRUE;
@@ -42,7 +41,8 @@ void GiveXPTick(object oPC) {
 	baseTick += d20();
 
 	SendMessageToPC(oPC, "Experience awarded for RP:");
-	PS_GiveXPReward(oPC, baseTick);
+	//PS_GiveXPReward(oPC, baseTick); // xp rewards for rp do not get taxed for ECL
+	GiveXPToCreature(oPC, baseTick);
 
 }
 
@@ -84,7 +84,6 @@ int isNotAlone(object oPC)
 	return FALSE;
 }
 
-
 int ForwardMessageToTextCommands(object oSender, object oTarget, int nChannel, string sMessage)
 {
 	ClearScriptParams();
@@ -94,8 +93,6 @@ int ForwardMessageToTextCommands(object oSender, object oTarget, int nChannel, s
 	AddScriptParameterString(sMessage);
 	return ExecuteScriptEnhanced("Sigil.TextCommands", OBJECT_SELF, TRUE);
 }
-
-
 
 string ExpandMessage(object oSender, string sMessage)
 {
@@ -168,10 +165,49 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 		SendMessageToPC(oSender, "You sent to DM channel: '" + sMessage + "'");
 	}
 	
-	string MessageToSend;
+	// new chat command to scribe scrolls at minimum level for purposes of sharing to wiz
+	// for learning. Sets a local int to PC that is checked in x2_inc_craft
+	if (nChannel == CHAT_MODE_TALK && GetIsPC(oSender)){
+		string sFeedback = "";
+		string sInput = GetStringLowerCase(sMessage);
+		if (sInput == "#scribemin"){
+			if (GetLocalInt(oSender, "bScribeAtMinLvl")){
+				SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
+				sFeedback = "ScribeMin OFF\n";
+				sFeedback += "You will now scribe scrolls as normal until next login ";
+				sFeedback += "or until ScribeMin turned on.";
+			} else {
+				SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
+				sFeedback = "ScribeMin ON\n";
+				sFeedback += "You will now scribe scrolls at minimum caster level until next login ";
+				sFeedback += "or until ScribeMin turned off.";
+			}
+		} else if (sInput == "#showcl"){ // new chat command for showing caster level
+			SendMessageToPC(oSender, "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE)));
+		} else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
+			sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, TRUE));
+		} else if (sInput == "#showecl"){
+			int nECL = 0;
+			if (ALLOW_ECL_LEVEL_30){
+				sFeedback = "Your ECL is ";
+				nECL = GetNewECL(oSender);
+			} else {
+				sFeedback = "Your Level Adjustment is ";
+				PS_CalculateECL(oSender);
+				nECL = PS_GetEssenceECL(oSender);
+			}
+			sFeedback += IntToString(nECL);
+		}
+		if (sFeedback != ""){
+			SendMessageToPC(oSender, sFeedback);
+			return FALSE;
+		}
+		
+	}
 	
+	string MessageToSend;
 
-	// Dispatch the message to Sigil.TextCommands Second and if it handles the
+	// Dispatch the message to Sigil.TextCommands first and if it handles the
 	// message then don't forward it on.
 	if (ForwardMessageToTextCommands(oSender, oTarget, nChannel, sMessage) == FALSE)
 	{

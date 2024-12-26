@@ -30,7 +30,7 @@ void main()
     //Declare major variables
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(OBJECT_SELF);
 	int nID = GetOnHitAbilityID(OBJECT_SELF);
     effect eAOE = EffectAreaOfEffect(AOE_MOB_SILENCE, "ps_onhit_silencea", "ps_onhit_silencec", "ps_onhit_silenceb");

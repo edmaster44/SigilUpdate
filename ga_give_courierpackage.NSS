@@ -72,7 +72,7 @@ void main() {
 	} else if (sLocation == "Mortuary") {
 		sDescription = "<i>This box appears to be full of occult objects, bones, incense, and ashes.</i>\n\n"+sDescription;
 	} else if (sLocation == "Armory") {
-		sDescription = "<i>This box appears to be full of alchemical ingrediants; they look explosive.</i>\n\n"+sDescription;
+		sDescription = "<i>This box appears to be full of alchemical ingredients; they look explosive.</i>\n\n"+sDescription;
 	} else {
 		sDescription = "<i>This box appears to be full of magical components, and scrolls.</i>\n\n"+sDescription;
 	}

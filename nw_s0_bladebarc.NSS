@@ -25,7 +25,7 @@ void main()
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_COM_BLOOD_REG_RED);
     int nMetaMagic = GetMetaMagicFeat();
-    int nLevel = GetCasterLevel(oCreator);
+    int nLevel = PS_GetCasterLevel(oCreator);
 	
 	
     //Make level check

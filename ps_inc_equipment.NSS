@@ -9,84 +9,440 @@
 #include "aaa_constants"
 #include "ginc_2da"
 #include "nw_i0_spells"
-#include "x2_inc_itemprop"
 #include "class_monk_shatteringblows"
 #include "ps_inc_equipmentprops"
+#include "ps_inc_functions"
+#include "ff_combat_mods"
+#include "ff_feat_tactical_weapon_feat"
+#include "ff_update_feats_inc"
+
+
+
 
 
 const int SIGIL_EQUIP_FX = -9444;
 const int SIGIL_ARMOR_OPTIMIZATION_FX = -9544;
 
+/*----------------------------------------------------------------------------------------
+			DECLARATIONS
+-----------------------------------------------------------------------------------------*/
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT);
+void SigilEquipment(object oPC, object oITEM, int nEQUIP);
+void EquipmentEffects(object oPC, object oChanged, int bOnEquip);
+void ConDrainProtection(object oItem, object oPC);
+int GetACProvidedByShield(object oShield);
+void DrunkMasterImprovised(object oPC, int nRIGHT);
+void FrightfulPresence(object oPC);
+void FIX_BLINDFIGHT(object oPC);
+void ShieldRangedConceal(object oPC, int nSHIELD);
+void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
+void MonkDruidPenalty(object oPC);
+void UnearthlyGrace(object oPC, object oCHEST);
+void HeavyArmorOptimizations(object oPC, object oARMOR);
+void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string s2DA = "armorrulestats", string sCOLUMN = "ACCHECK");
+int CheckDragonForms(object oPC, object oITEM, int nITEM);
+int CheckManualDexterity(object oPC, object oITEM, int nITEM);
+void CheckForTempProperties(object oItem, object oPC);
+int MonkeyGripAbuse(object oPC, object oITEM);
+int FixARMOR(object oPC, object oARMOR);
+int FixSHIELD(object oPC, object oSHIELD, int nSHIELD);
+void RemoveElementalWeapon(object oPC,object oItem);
+void ApplyElementalWeapon(object oPC, object oItem);
+void RemoveAustereStrikes(object oPC,object oItem);
+void ApplyAustereStrikes(object oPC,object oItem);
+void RemoveMeditativeStrikes(object oPC,object oItem);
+void ApplyMeditativeStrikes(object oPC,object oItem);
+int DervishCanUseDance(object oPC);
+int NoHeavyArmorOrShield(object oPC);
+int GetMonkWeapon(object oItem);
+void MurderousIntent(object oPC, object oRHAND);
+void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND);
+void BucklerFinesse(object oPC, object oLHAND);
+void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor);
+void FlorentineTWF(object oPC, object oRHAND, object oLHAND);
+void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip);
 
+
+//int GetCreatureWeapons(object oItem);
+//int GetIsSpecialFinessable(int nTYPE);
+//int GetIsShields(object oItem)
+//void TatooedMonk(object oPC, int nRIGHT, int nLEFT);
+//void DrunkMasterImprovised(object oPC, int nRIGHT);
+
+
+/*----------------------------------------------------------------------------------------
+			IMPLEMENTATIONS
+-----------------------------------------------------------------------------------------*/
+
+
+//This starts all the various checks and effects to be applied based on equipment, as per Sigil's custom rules.
+//nEQUIP: TRUE when called from OnEquip and FALSE when called from OnUnequip.
+//Found in "ps_inc_equipment.nss".
+void SigilEquipment(object oPC, object oITEM, int nEQUIP){
+
+	// we shouldn't have to do ANY processing for creature skin, so just skip all this if 
+	// that's what it is
+	int nITEM = GetBaseItemType(oITEM);
+	if (nITEM == BASE_ITEM_CREATUREITEM) return; // base item 73, creature skin
+	
+    RemoveEffectsFromSpell(oPC, SIGIL_EQUIP_FX);
+    if (nEQUIP == TRUE)
+    {
+      CheckForTempProperties(oITEM, oPC);
+        
+      DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
+	  
+	  DelayCommand(0.1f,ApplyAustereStrikes(oPC,oITEM));
+    
+      DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
+        
+        /*	 if (GetIsFinessable(oITEM))
+			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
+
+            if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
+            DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
+				
+			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
+				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM)); */
+
+        
+        if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
+        //{  // weird orphan brackets
+		if (MonkeyGripAbuse(oPC, oITEM) == TRUE) return;
+		if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
+		if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return;
+
+        //}
+    }
+    else
+    {
+        ConDrainProtection(oITEM, oPC);
+        if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
+            //PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
+            RemoveElementalWeapon(oPC,oITEM);
+            RemoveMeditativeStrikes(oPC,oITEM);
+			RemoveAustereStrikes(oPC,oITEM);
+        
+    }
+	
+    DelayCommand(0.1f, EquipmentEffects(oPC, oITEM, nEQUIP));
+}
+
+//When all is said and done, the various custom effects dependant on equipment are applied.
+void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
+{
+    object oCHEST = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+    if (FixARMOR(oPC, oCHEST) == TRUE) return;
+    
+    object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+    int nLEFT = GetBaseItemType(oLHAND);
+    if (FixSHIELD(oPC, oLHAND, nLEFT) == TRUE) return;
+    
+    object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+    int nRIGHT = GetBaseItemType(oRHAND);   
+    SpellResistFix(oPC);
+    ShieldRangedConceal(oPC, nLEFT);
+	FIX_BLINDFIGHT(oPC);
+    SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
+    HeavyArmorOptimizations(oPC, oCHEST);
+    UnearthlyGrace(oPC, oCHEST);
+	MonkDruidPenalty(oPC);
+	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
+	MurderousIntent(oPC, oRHAND);
+	UpdateWeaponBenefits(oPC, oRHAND, oLHAND, oCHEST, oChanged, bOnEquip);
+
+	
+    //TatooedMonk(oPC, nRIGHT, nLEFT);
+    //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
+}
+
+// because EffectAttackIncrease() doesn't stack and multiple conditions could result
+// in multiple applications (forexample, a samurai drawing a katana while using
+// oversized twf feat, all functions that involve an attack bonus have been moved
+// to ff_combat_mods (which also does the heavy lifting for Methodical Strike, Considered Strike,
+// and Staff Fighting). This function checks if it's necessary and then calls it if it is.
+// Likewise we call the script that adds the tactical bonus feats from here, if needed.
+void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
+	// compare current armor and weapons to previous. No need to use essence, they
+	// don't need to persist across logins
+	string sCurrentArmor = ObjectToString(oCHEST);
+	string sCurrentWeapon = ObjectToString(oRHAND);
+	string sCurrentWeaponLeft = ObjectToString(oLHAND);
+	string sLastTacArmor = GetLocalString(oPC, "TacArmor");
+	string sLastTacWeapon = GetLocalString(oPC, "TacWeapon");
+	string sLastTacWeaponLeft = GetLocalString(oPC, "TacWeaponLeft");
+	
+	// if we haven't changed armor or weapons since the last time this was
+	// called, we don't need to do any of this.
+	if (sCurrentArmor == sLastTacArmor && sCurrentWeapon == sLastTacWeapon &&
+		sCurrentWeaponLeft == sLastTacWeaponLeft) return;
+		
+	BucklerFinesse(oPC, oLHAND);
+	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
+	FlorentineTWF(oPC, oRHAND, oLHAND);
+
+	UpdateCombatMods(oPC, -1, oChanged, bOnEquip);
+	
+	int bSameMainHand = (sCurrentWeapon == sLastTacWeapon);
+		
+	// reset the stored data for armor and weapons
+	SetLocalString(oPC, "TacArmor", sCurrentArmor);
+	SetLocalString(oPC, "TacWeapon", sCurrentWeapon);
+	SetLocalString(oPC, "TacWeaponLeft", sCurrentWeaponLeft);
+	
+	// Tac only cares about the main hand weapon, so if that hasn't changed bail
+	if (bSameMainHand) return;
+	object oSkin = PS_GetCreatureSkin(oPC);
+	FF_TacticalWeapons(oPC, oRHAND, oSkin);
+}
+
+
+// Gain defense improvements to twf if using the smallest possible off hand weapon
+// and a normal sized, or smaller, main hand and the character has twd feat. 
+// 10% - 25% concealment vs melee, depending on combo of weapons and feats. 
+void FlorentineTWF(object oPC, object oRHAND, object oLHAND){
+
+	if (!GetHasFeat(FEAT_TWO_WEAPON_DEFENSE, oPC, TRUE)) return;
+	
+	if (!IPGetIsMeleeWeapon(oRHAND) || !IPGetIsMeleeWeapon(oLHAND)) return;
+	
+	int nPCsize = GetCreatureSize(oPC);
+	if (IPGetWeaponSize(oRHAND) > nPCsize) return;
+	
+	int nSmallestWeap = nPCsize - 2;
+	if (nSmallestWeap < 1) nSmallestWeap = 1;
+	// bail if they're not using the smallest off-hand they can
+	if (IPGetWeaponSize(oLHAND) > nSmallestWeap) return;
+	
+	int bIsMainGauche = FALSE;
+	int nLeftId = GetBaseItemType(oLHAND);
+	if (nPCsize > 3){
+	if (nLeftId == BASE_ITEM_SHORTSWORD || nLeftId == BASE_ITEM_LIGHTMACE ||
+		nLeftId ==  BASE_ITEM_CREATURECLAW_SML) bIsMainGauche = TRUE;
+	} else {
+		if (nLeftId == BASE_ITEM_DAGGER || nLeftId == BASE_ITEM_LIGHTHAMMER ||
+		nLeftId ==  BASE_ITEM_CREATURECLAW_TINY) bIsMainGauche = TRUE;
+	}
+	int nMiss = 10;
+	if (GetHasFeat(FEAT_IMPROVED_TWO_WEAPON_DEFENSE, oPC, TRUE)) nMiss += 10;
+	if (bIsMainGauche) nMiss += 5;
+
+	effect eMainGauche = EffectConcealment(nMiss, MISS_CHANCE_TYPE_VS_MELEE);
+	ApplyEquipmentEffect(oPC, eMainGauche);
+}
+
+
+// If base dex 17 and 7 levels of swash or rogue then can use a light shield
+// as effectively as a normal sized shield. Gain +1 ac. Had a problem with this
+// double-applying when equipped from hotbar, so I gave it its own spellid =
+// buckler prof feat * -1 
+void BucklerFinesse(object oPC, object oLHAND){
+	int nId = -21915;
+	RemoveEffectsFromSpell(oPC, nId);
+	if (GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE) < 17) return;
+	if (GetBaseItemType(oLHAND) != BASE_ITEM_SMALLSHIELD) return;
+
+	if (GetLevelByClass(CLASS_TYPE_SWASHBUCKLER, oPC) < 7 && 
+		GetLevelByClass(CLASS_TYPE_ROGUE, oPC) < 7)
+			return;
+			
+	effect eFX = EffectACIncrease(1);
+	eFX = SupernaturalEffect(eFX);
+    eFX = SetEffectSpellId(eFX, nId);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+}
+
+// had to give this its own spell id for ac for the same reason as buckler
+void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
+	int bQualifies = TRUE;
+
+	// must be two handed
+	if (!GetWeaponIsTwoHanded(oPC, oRHAND, oLHAND))
+		bQualifies = FALSE;
+		
+	// no heavy armor
+	if (GetArmorRank(oArmor) == ARMOR_RANK_HEAVY) bQualifies = FALSE;
+	
+	// find out it's a qualifying sword or a qualifying staff
+	int nType = GetBaseItemType(oRHAND);
+	int bKenjutsu = FALSE;
+	int bBojutsu = FALSE;
+	switch (nType){
+		case BASE_ITEM_SCIMITAR: bKenjutsu = TRUE; break;
+		case BASE_ITEM_KATANA: bKenjutsu = TRUE; break;
+		case BASE_ITEM_FALCHION: bKenjutsu = TRUE; break;
+		case BASE_ITEM_NINJATO: bKenjutsu = TRUE; break;
+	}
+	if (!bKenjutsu) bBojutsu = GetQualifiesForStaffFighting(oPC, oRHAND, oLHAND);
+	if (!bKenjutsu && !bBojutsu) bQualifies = FALSE;
+
+	int bGetsAC = FALSE;
+	int bMartialArtist = (GetLevelByClass(CLASS_TYPE_MONK, oPC) + 
+		GetLevelByClass(CLASS_SAMURAI, oPC) +
+			GetLevelByClass(CLASS_KENSAI, oPC) > 0);
+	int nSizeDifference = IPGetWeaponSize(oRHAND) - GetCreatureSize(oPC);
+	if (bKenjutsu){
+		if (nSizeDifference == 1 && !GetHasFeat(FEAT_MONKEY_GRIP, oPC, TRUE))
+			bQualifies = FALSE;
+		else if (nSizeDifference >= 2) bQualifies = FALSE;
+	}
+	int nId = -21912;
+	RemoveEffectsFromSpell(oPC, nId);
+	if (!bQualifies){
+		if (GetHasFeat(FEAT_BOJUTSU, oPC, TRUE)) FeatRemove(oPC, FEAT_BOJUTSU);
+		if (GetHasFeat(FEAT_KENJUTSU, oPC, TRUE))FeatRemove(oPC, FEAT_KENJUTSU);
+		return;
+	} else {
+		if (bBojutsu){
+			if (!GetHasFeat(FEAT_BOJUTSU, oPC, TRUE))
+				FeatAdd(oPC, FEAT_BOJUTSU, FALSE);
+		} else {
+			if (!GetHasFeat(FEAT_KENJUTSU, oPC, TRUE))
+				FeatAdd(oPC, FEAT_KENJUTSU, FALSE);
+		}
+		
+		if (bMartialArtist) bGetsAC = TRUE;
+		else if (bBojutsu && (GetHasFeat(FEAT_TWO_WEAPON_DEFENSE, oPC, TRUE) ||
+			GetHasFeat(FEAT_COMBAT_EXPERTISE))) bGetsAC = TRUE;
+		else {
+			string WeapSpec = Get2DAString("baseitems", "FEATWpnSpec", nType);
+			string WeapCh = Get2DAString("baseitems", "FEATWpnOfChoice", nType);
+			string GrWeapFoc = Get2DAString("baseitems", "FEATGrtrWpnFocus", nType);
+			string PwrCrit = Get2DAString("baseitems", "FEATPowerCrit", nType);
+			if (GetHasFeat(FEAT_IMPROVED_COMBAT_EXPERTISE, oPC, TRUE) ||
+				GetHasFeat(StringToInt(WeapSpec), oPC, TRUE) ||
+				GetHasFeat(StringToInt(WeapCh), oPC, TRUE) ||
+				GetHasFeat(StringToInt(GrWeapFoc), oPC, TRUE) ||
+				GetHasFeat(StringToInt(PwrCrit), oPC, TRUE))
+					bGetsAC = TRUE;
+		}
+	
+		if (bGetsAC){
+			effect eFX = EffectACIncrease(1);
+			eFX = SupernaturalEffect(eFX);
+			eFX = SetEffectSpellId(eFX, nId);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+		}
+	}
+}
+
+// Ninjato and stiletto grant +1d6 stacking sneak attack if wielded in the main hand and if the 
+// character has sneak attack from race or class. "Murderous Intent" was what I renamed the feat
+// for NeverWinter 9 Agent sneak attack 1. Nw9 Agent is a class that was supposed to be a rogue-ish
+// alternative PrC for nwn9, but Bioware never finished it and it's not in the game. But the feat works. 
+void MurderousIntent(object oPC, object oRHAND){
+	int nType = GetBaseItemType(oRHAND);
+	if (nType != BASE_ITEM_NINJATO && nType != BASE_ITEM_STILETTO){
+		if (GetHasFeat(FEAT_MURDEROUS_INTENT, oPC, TRUE))
+			FeatRemove(oPC, FEAT_MURDEROUS_INTENT);
+		return;
+	}
+	// check if they have sneak dice (or equivalent) from class or race. We're giving them additional dice
+	// if they already have some naturally, not giving a non-sneak-attacker a free sneak attack
+	int nSneakDice = fCalcOtherSneakFeats(oPC);
+	if (nSneakDice < 1) nSneakDice += fCalcDeathDice(oPC);
+	if (nSneakDice < 1) nSneakDice += fCalcSneakDice(oPC);
+	
+	if (nSneakDice > 0){
+		if (!GetHasFeat(FEAT_MURDEROUS_INTENT, oPC, TRUE))
+			FeatAdd(oPC, FEAT_MURDEROUS_INTENT, FALSE);
+	} else if (GetHasFeat(FEAT_MURDEROUS_INTENT, oPC, TRUE))
+		FeatRemove(oPC, FEAT_MURDEROUS_INTENT);
+}
+
+void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND){
+	// giants can one-hand these weapons with only martial feat.
+	int nPCsize = GetCreatureSize(oPC);
+	if (nPCsize > 3) return;
+	
+	int nRtype = GetBaseItemType(oRHAND);
+	int nLtype = GetBaseItemType(oLHAND);
+	
+	int bRightBastard = (nRtype == BASE_ITEM_BASTARDSWORD || nRtype == BASE_ITEM_MAUL ||
+		nRtype == BASE_ITEM_INFANTRYFLAIL || nRtype == BASE_ITEM_DWARVENWARAXE);
+	int bLeftBastard = (nLtype == BASE_ITEM_BASTARDSWORD || nLtype == BASE_ITEM_MAUL ||
+		nLtype == BASE_ITEM_INFANTRYFLAIL || nLtype == BASE_ITEM_DWARVENWARAXE);
+	
+	// if they're not using any of the Hand and a half weapons, bail.
+	if (!bRightBastard && !bLeftBastard) return;
+	
+	int bHasExotic = GetHasFeat(FEAT_WEAPON_PROFICIENCY_EXOTIC, oPC, TRUE);
+	int bHasMonkey = GetHasFeat(FEAT_MONKEY_GRIP, oPC, TRUE);
+	
+	string sMessage = "This weapon is slightly larger than normal weapons of its type (though not as big as a large weapon)";
+	int bUnequipR = FALSE;
+	int bUnequipL = FALSE;
+	
+	// small characters need either exotic or monkey grip to use
+	// two handed, and both to use 1 handed.
+	if (nPCsize < 3){
+		// small character who has nothing in off hand and has either feat is golden. bail.
+		if ((bHasExotic || bHasMonkey) && oLHAND == OBJECT_INVALID) return;
+		if (bHasExotic && bHasMonkey) return; // small char with both feats also golden. bail.
+		if (oLHAND == OBJECT_INVALID){
+			sMessage += " You need either exotic weapon proficiency or monkey grip to wield this weapon in two hands.";
+			sMessage += " (You will not suffer the large weapon -2 penalty for using this weapon two-handed if doing so via monkey grip.)";
+			bUnequipR = TRUE;	
+		} else {
+			sMessage += " You need both monkey grip and exotic weapon proficiency to wield this weapon in one hand.";
+			if (bRightBastard) bUnequipR = TRUE;
+			if (bLeftBastard) bUnequipL = TRUE;
+		}
+	} else { // medium chars only, we've already bailed for large and handled small
+		// if either hand is empty then this doesn't concern us, we only need to check
+		// medium characters for one-handing a bastard or dwarfaxe
+		if (oLHAND == OBJECT_INVALID) return;
+	
+		// if a medium char has exotic or monkey, they're all set. bail.
+		if (bHasExotic || bHasMonkey) return;
+	
+		// dwarves have special rules due to being culturally accustomed to dwarfaxe
+		if (GetRacialType(oPC) == RACIAL_TYPE_DWARF){
+			if (bRightBastard && nRtype != BASE_ITEM_DWARVENWARAXE) bUnequipR = TRUE;
+			if (bLeftBastard && nLtype != BASE_ITEM_DWARVENWARAXE) bUnequipL = TRUE;
+		} else {
+			if (bRightBastard) bUnequipR = TRUE;
+			if (bLeftBastard) bUnequipL = TRUE;
+		} // end racial check
+		if (bUnequipR || bUnequipL){
+			sMessage += " You need to have either monkey grip or exotic weapon proficiency to use this weapon in one hand.";
+			sMessage += " (You will not suffer the large weapon -2 penalty for using this weapon one-handed if doing so via monkey grip.)";
+		}
+	} // end of pc size conditional
+	
+	if (bUnequipR || bUnequipL){
+		if (bUnequipR) AssignCommand(oPC, ActionUnequipItem(oRHAND));
+		if (bUnequipL) AssignCommand(oPC, ActionUnequipItem(oLHAND));
+		SendMessageToPC(oPC, sMessage);
+	}
+}
 
 //This gets the weapons that qualify for Meditative Strikes
 int GetMonkWeapon(object oItem)
 { 
-       int iBaseItem = GetBaseItemType(oItem);
+    int iBaseItem = GetBaseItemType(oItem);
     return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
-}
-
-
-
-
-
-// Feat that reduces the penalty for using a larger than normal offhand weapon by 2. 
-void OversizeTwoWeaponFighting(object oPC, object oRHAND, object oLHAND)
-{
-	// OversizeTWF id = 21923. We're not going to check for regular twf because that's 
-	// already a requirement in feat.2da to have oversize twf. Bail if they don't have it.
-	if (!GetHasFeat(21923, oPC, TRUE)) return;
-	
-	// bail if not dual wielding.
-	if (!IPGetIsMeleeWeapon(oRHAND) || !IPGetIsMeleeWeapon(oLHAND)) return;
-	
-	int nPCsize = GetCreatureSize(oPC);
-	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", GetBaseItemType(oLHAND)));
-	if (nWeaponSize >= nPCsize)
-	{
-		effect eOTWF = EffectAttackIncrease(2);
-		ApplyEquipmentEffect(oPC, eOTWF);
-	}
-}
-
-
-int GetCreatureWeapons(object oItem)
-{
-	return IPGetIsCreatureEquippedWeapon(oItem);
-/*
-int iBaseItem = GetBaseItemType(oItem);
-return iBaseItem == 164  || iBaseItem == 165  || iBaseItem == 166 || iBaseItem == 167 || iBaseItem == 168 || iBaseItem == 169 || iBaseItem == 170
-|| iBaseItem == 171 || iBaseItem == 172 || iBaseItem == 173 || iBaseItem == 174 || iBaseItem == 175 || iBaseItem == 176 || iBaseItem == 177 || iBaseItem == 178
-|| iBaseItem == 179 || iBaseItem == 180;
-*/
 }
 
 
 int NoHeavyArmorOrShield(object oPC)
 {
 	int chest = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC));
-	if(chest == 3 || chest == 2) return FALSE;
+	if(chest == ARMOR_RANK_HEAVY || chest == ARMOR_RANK_MEDIUM) return FALSE;
 
-//	SendMessageToPC(oPC,"DEBUG: Armor check is good!");	
-	
 	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
 	if (oShield == OBJECT_INVALID) return TRUE;
-
-//	SendMessageToPC(oPC,"DEBUG: Shield check is good!");	
-		
+	
 	int shield = GetBaseItemType(oShield);
-	if(shield == 56 || shield == 14 || shield == 57) return FALSE;	
-
-//	SendMessageToPC(oPC,"DEBUG: Shield type check is good!");	
+	if(shield == BASE_ITEM_SMALLSHIELD || shield == BASE_ITEM_LARGESHIELD || shield == BASE_ITEM_TOWERSHIELD)
+		return FALSE;		
 		
 	return TRUE;
 }
 
 
 // Checks to see if Dervish meets the requirements to activate the Dervish Dance ability.
-int DervishCanUseDance(object oPC)
-{
+int DervishCanUseDance(object oPC){
     // Armor Rank must be none or light.
     int nArmorRank = GetArmorRank(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC));
 	if(nArmorRank == ARMOR_RANK_HEAVY || nArmorRank == ARMOR_RANK_MEDIUM) {
@@ -140,28 +496,18 @@ int DervishCanUseDance(object oPC)
 
 
 //Gets the Property from wisdom, converts into Magical Damage, and applies it on correct weapons
-void ApplyMeditativeStrikes(object oPC,object oItem)
-{    
+void ApplyMeditativeStrikes(object oPC,object oItem){    
     int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
     
-    if(nWis <= 0){
+    if(nWis <= 0)return;
+    else if(!GetMonkWeapon(oItem)) return;
     
-    //    SendMessageToPC(oPC, "Wisdom modifier is lower or equal to 0");
-        return;
-    }
-    else if(!GetMonkWeapon(oItem)){
-    
-      //  SendMessageToPC(oPC, "Weapon is not a monk weapon");
-        return;
-    }
     itemproperty ipAdd = GetItemPropertyReference(oItem, "MeditativeStrikes");
-        if (GetIsItemPropertyValid(ipAdd) != FALSE) {
-        SendMessageToPC(oPC, "Meditative strikes already active.");
-        return;
-}
+	if (GetIsItemPropertyValid(ipAdd) != FALSE) {
+		SendMessageToPC(oPC, "Meditative strikes already active.");
+		return;
+	}
 
-
-    
     int nDamageConstant = IPGetDamageBonusConstantFromNumber(nWis);    
     int nDamageType = IP_CONST_DAMAGETYPE_DIVINE;
     float fDUR = 9999.9f;    
@@ -181,23 +527,19 @@ void ApplyMeditativeStrikes(object oPC,object oItem)
 
         SendMessageToPC(oPC, "Wisdom Damage bonus of " + IntToString(nWis) + " applied to your Monk Weapon");
     }
-
 }
 
 //Removes Meditative Strikes off propertry
 void RemoveMeditativeStrikes(object oPC,object oItem)
 {
-  if(GetHasFeat(2840,oPC, TRUE)){
-itemproperty ipAdd = GetItemPropertyReference(oItem, "MeditativeStrikes");
-if (GetIsItemPropertyValid(ipAdd) == FALSE) {
-    SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
-    return;
-}
-
-DeleteItemPropertyReference(oItem, "MeditativeStrikes");
-
-}
-
+	if(GetHasFeat(2840,oPC, TRUE)){
+		itemproperty ipAdd = GetItemPropertyReference(oItem, "MeditativeStrikes");
+		if (GetIsItemPropertyValid(ipAdd) == FALSE) {
+			SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
+			return;
+		}
+		DeleteItemPropertyReference(oItem, "MeditativeStrikes");
+	}
 }
 
 //Adds Austere One levels as flat Slashing Damage to gloves
@@ -248,36 +590,33 @@ void ApplyAustereStrikes(object oPC,object oItem)
 //Removes Austere Strikes off propertry
 void RemoveAustereStrikes(object oPC,object oItem)
 {
-  if(GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC)> 0){
-itemproperty ipAdd = GetItemPropertyReference(oItem, "AustereStrikes");
-if (GetIsItemPropertyValid(ipAdd) == FALSE) {
-    SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
-    return;
-}
-
-DeleteItemPropertyReference(oItem, "AustereStrikes");
-
-}
-
+	if(GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC)> 0){
+		itemproperty ipAdd = GetItemPropertyReference(oItem, "AustereStrikes");
+		if (GetIsItemPropertyValid(ipAdd) == FALSE) {
+			SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
+			return;
+		}
+		DeleteItemPropertyReference(oItem, "AustereStrikes");
+	}
 }
 
 
 //Elemental Weapon - Applies Elemental Damage based on feat.
 void ApplyElementalWeapon(object oPC, object oItem)
 {   
-	int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
+    int nLevel=GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR, oPC);
 	if (nLevel < 1) return;
+	if (GetWeaponRanged(oItem)==TRUE){
+		SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");
+		return; 
+	}
 	
-	if (GetWeaponRanged(oItem)==TRUE) 
-	{SendMessageToPC(oPC,"Elemental Weapon only works with Melee Weapons");//
-	return; }
-
-
     itemproperty ipAdd = GetItemPropertyReference(oItem, "ElementalWeapon");
     int nDamage = IP_CONST_DAMAGEBONUS_1d6;
-        if (nLevel >= 5 ) 
-        {   nDamage = IP_CONST_DAMAGEBONUS_3d6; }
-   // int nItemVisual;
+    if (nLevel >= 5 ){   
+		nDamage = IP_CONST_DAMAGEBONUS_3d6;
+	}
+	// int nItemVisual;
     int DamageType;     
     //itemproperty iGlow = ItemPropertyVisualEffect(nItemVisual);
     if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_AIR,oPC,TRUE))
@@ -285,20 +624,17 @@ void ApplyElementalWeapon(object oPC, object oItem)
         DamageType = IP_CONST_DAMAGETYPE_ELECTRICAL;
        // nItemVisual = ITEM_VISUAL_ELECTRICAL;
     }
-        else
-    if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC,TRUE))
+    else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_EARTH,oPC,TRUE))
     {   
         DamageType = IP_CONST_DAMAGETYPE_ACID;
        // nItemVisual = ITEM_VISUAL_ACID;             
     }
-        else
-    if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC,TRUE))
+    else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_FIRE,oPC,TRUE))
     {
         DamageType = IP_CONST_DAMAGETYPE_FIRE;
       //  nItemVisual = ITEM_VISUAL_FIRE;         
     }
-        else
-    if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC,TRUE))
+    else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC,TRUE))
     {
         DamageType = IP_CONST_DAMAGETYPE_COLD;
       //  nItemVisual = ITEM_VISUAL_COLD; 
@@ -306,10 +642,10 @@ void ApplyElementalWeapon(object oPC, object oItem)
     ipAdd =ItemPropertyDamageBonus(DamageType,nDamage);
     float fDUR = 9999.9f;   
     if(GetHasFeat(FEAT_ELEMWAR_WEAPON,oPC, TRUE))
-    {   if(!GetIsItemPropertyValid(ipAdd)){
-        
-           // SendMessageToPC(oPC, "Itemproperty was not valid");
-            return;
+    {   
+		if(!GetIsItemPropertyValid(ipAdd)){
+			// SendMessageToPC(oPC, "Itemproperty was not valid");
+			return;
         }
    // SendMessageToPC(oPC, "Applying damage constant: "+IntToString(nDamage));    
     IPSafeAddItemProperty(oItem,ipAdd,fDUR,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
@@ -318,49 +654,19 @@ void ApplyElementalWeapon(object oPC, object oItem)
   //  SendMessageToPC(oPC, "Elemental Damage has been added to your weapon");
 	}
 }
+
 //Removes Elemental Weapon Property off Weapon
 void RemoveElementalWeapon(object oPC,object oItem)
 {
-  if(GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC)>=0 ){
-itemproperty ipAdd = GetItemPropertyReference(oItem, "ElementalWeapon");
-if (GetIsItemPropertyValid(ipAdd) == FALSE) {
-    //SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
-    return;
-}
+	if(GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC)> 0 ){
+		itemproperty ipAdd = GetItemPropertyReference(oItem, "ElementalWeapon");
+		if (GetIsItemPropertyValid(ipAdd) == FALSE) {
+			//SendMessageToPC(oPC, "Item Property no longer exists on the Item itself");
+			return;
+		}
     DeleteItemPropertyReference(oItem, "ElementalWeapon");
-    
-    
-
+	}
 }
-}
-
-//Wrapper to check if nTYPE is a creature weapon.
-int GetIsCreatureWeapon(int nTYPE)
-{
-	/* More maintainable to use new column in baseitems than to check 
-	specific ids
-   if (nTYPE < 160) return FALSE;
-   if (nTYPE > 185) return FALSE;
-    return TRUE;
-	
-	At some point we should put all such checks, both by id and by object, 
-	into x2_inc_itemprop, but I don't have time right now. -FlattedFifth, Aug 6, 2024
-	*/
-	string sType = Get2DAString("baseitems", "WeaponCategory", nTYPE);
-	if (FindSubString(GetStringLowerCase(sType), "creature") != -1) return TRUE;
-	else return FALSE;
-   
-}
-
-
-int GetIsShields (object oItem)
-{
-  int iBaseItem = GetBaseItemType(oItem);
-   return iBaseItem = BASE_ITEM_LARGESHIELD || BASE_ITEM_SMALLSHIELD || BASE_ITEM_TOWERSHIELD;
-
-}
-
-
 
 //Wrapper to equip effects from equipment in the proper manner.
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT)
@@ -373,6 +679,12 @@ void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMA
 //Removes Shield if you don't have the feat required for it. To prevent exploit.
 int FixSHIELD(object oPC, object oSHIELD, int nSHIELD)
 {
+	// new rogue and swash only feat allows use of small shields without
+	// full shield profi, but does not allow use of any other shields
+	if (nSHIELD == BASE_ITEM_SMALLSHIELD && 
+		GetHasFeat(FEAT_BUCKLER_PROFICIENCY, oPC, TRUE))
+			return FALSE;
+			
     int nFEAT;
     switch (nSHIELD)
     {
@@ -405,29 +717,10 @@ int FixARMOR(object oPC, object oARMOR)
     return TRUE;
 }
 
-/*
-	// OversizeTWF id = 21923. We're not going to check for regular twf because that's 
-	// already a requirement in feat.2da to have oversize twf. Bail if they don't have it.
-	if (!GetHasFeat(21923, oPC, TRUE)) return;
-	
-	// bail if not dual wielding.
-	if (!IPGetIsMeleeWeapon(oRHAND) || !IPGetIsMeleeWeapon(oLHAND)) return;
-	
-	int nPCsize = GetCreatureSize(oPC);
-	int nWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", GetBaseItemType(oLHAND)));
-	if (nWeaponSize >= nPCsize)
-	{
-		effect eOTWF = EffectAttackIncrease(2);
-		ApplyEquipmentEffect(oPC, eOTWF);
-	}
-*/
-
-
-
 // Check for giant weapons and monkey grip abuse
 // returns FALSE if no abuse is taking place, true if there is
-int MonkeyGripAbuse(object oPC, object oITEM, int nITEM){
-	
+int MonkeyGripAbuse(object oPC, object oITEM){
+
 	// if the equipped item isn't in one of the hand slots, bail
 	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC) != oITEM && oLHAND != oITEM)
@@ -480,8 +773,11 @@ void CheckForTempProperties(object oItem, object oPC)
 // Check No Manual Dexterity. With it you can only equip creature weapons.
 int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 {
-    if (GetIsCreatureWeapon(nITEM) == TRUE) return FALSE;
 
+    if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE) return FALSE;
+	// base item type of creature skin is 73
+	if (nITEM == 73) return FALSE;
+    
     switch (nITEM)
     {
         case BASE_ITEM_AMULET:
@@ -508,9 +804,9 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
 }
 
 // No Weapons and Shields for Dragons in Natural Form and no Armor in both forms (exept clothes)
-// Creature weapons are 160-201. Others are not allowed unless "in humanoid form (=1)".
+// Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
 int CheckDragonForms(object oPC, object oITEM, int nITEM)
-{
+{		//TODO ADD EXCEPTION FOR CREATURE SKIN AND CHECK FOR OTHER PROBS, TEST WRAITH
     switch (nITEM)
     {
         case BASE_ITEM_AMULET:
@@ -533,7 +829,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1)
     {
-        if (GetIsCreatureWeapon(nITEM) == TRUE)
+        if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE)
         {
             SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
             AssignCommand(oPC, ClearAllActions());
@@ -541,7 +837,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
             return TRUE;
         }
     }
-    else if (GetIsCreatureWeapon(nITEM) == FALSE)
+    else if (IPGetIsCreatureEquippedWeapon(oITEM) == FALSE)
     {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
@@ -583,7 +879,7 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
 
 
 // Heavy Armor Optimization Feats
-void HeavyArmorOptimizations(object oPC, object oARMOR) {
+void HeavyArmorOptimizations(object oPC, object oARMOR){
 
 	//Remove previous optimization effect
 	if ( GetHasSpellEffect(SIGIL_ARMOR_OPTIMIZATION_FX, oPC) ) {
@@ -638,24 +934,6 @@ void HeavyArmorOptimizations(object oPC, object oARMOR) {
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
-// Check if the weapon is finessable. Custom finessables from 160 to 174 and 202.
-int GetIsSpecialFinessable(int nTYPE)
-{
-    if (GetIsCreatureWeapon(nTYPE) == TRUE) return TRUE;
-    switch (nTYPE)
-    {
-        case 202:
-        case BASE_ITEM_WHIP:
-        case BASE_ITEM_CSLASHWEAPON:
-        case BASE_ITEM_CPIERCWEAPON:
-        case BASE_ITEM_CBLUDGWEAPON:
-        case BASE_ITEM_CSLSHPRCWEAP:
-            return TRUE;
-    }
-    return FALSE;
-}
-
-
 // Unearthly grace feat for Nymphs. CHA bonus to Saves and Dodge AC.
 void UnearthlyGrace(object oPC, object oCHEST)
 {
@@ -680,10 +958,6 @@ void MonkDruidPenalty(object oPC)
     ApplyEquipmentEffect(oPC, eFX);
 	SendMessageToPC(oPC, "Both Druid and Monk levels detected. Applying AC penalty based on WIS mod");
 }
-
-
-
-
 
 //Fixes the Spell Resistance bug from items.
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value")
@@ -747,74 +1021,45 @@ void FIX_BLINDFIGHT(object oPC)
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEBLIND, oPC);
 }
 
-//Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword in off hand.
-void TwoSwordsAsOne(object oPC, int nRIGHT, int nLEFT)
-{
-    int nSAMURAI = GetLevelByClass(65, oPC);
-    if (nSAMURAI < 2) return;
-    if ((nRIGHT != BASE_ITEM_KATANA) && (nRIGHT != BASE_ITEM_LONGSWORD)) return;
-    if (nLEFT != BASE_ITEM_SHORTSWORD) return;
-    int nBONUS = 1;
-    int nDMG_TYPE = DAMAGE_TYPE_BLUDGEONING;
-    if (nSAMURAI >= 30) nDMG_TYPE = DAMAGE_TYPE_DIVINE;
-    if (nSAMURAI >= 26) nBONUS = 5;
-    else if (nSAMURAI >= 21) nBONUS = 4;
-    else if (nSAMURAI >= 16) nBONUS = 3;
-    else if (nSAMURAI >= 11) nBONUS = 2;
-    effect eFX = EffectAttackIncrease(nBONUS);
-    eFX = EffectLinkEffects(eFX, EffectDamageIncrease(nBONUS, nDMG_TYPE));
-	//ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
-    ApplyEquipmentEffect(oPC, eFX);
-}
-
-
-
-//When a Samurai draws their weapon (a katana or longsword) foes can be frightened by it.
-void FrightfulPresence(object oPC)
-{
-    if (GetHasFeat(2419, oPC, TRUE) == FALSE) return;
-    location lPC = GetLocation(oPC);
-    int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
-    float fDUR = RoundsToSeconds(nCHA);
-    int nDC = 20 + nCHA;
-    int nHD;
-    effect eFX_1 = EffectLinkEffects(EffectStunned(), EffectVisualEffect(VFX_DUR_STUN));
-    effect eFX_2 = EffectLinkEffects(EffectFrightened(), EffectVisualEffect(VFX_DUR_SPELL_FEAR));
-    effect eFX_3 = EffectLinkEffects(EffectLinkEffects(EffectACDecrease(2), EffectAttackDecrease(2)), EffectVisualEffect(VFX_DUR_SPELL_DOOM));
-    object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
-    while (oTARGET != OBJECT_INVALID)
-    {
-        if (GetIsEnemy(oTARGET, oPC) == TRUE)
-        {
-            if (WillSave(oTARGET, nDC, SAVING_THROW_TYPE_FEAR, oPC) == SAVING_THROW_CHECK_FAILED)
-            {
-                nHD = GetHitDice(oTARGET);
-                if (nHD >= 20) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_3, oTARGET, fDUR);
-                else if (nHD >= 5) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_2, oTARGET, fDUR);
-                else ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_1, oTARGET, fDUR);    
-            }
+//Gets the AC provided by the equipped shield
+//oShield should be the item equipped in the left hand
+int GetACProvidedByShield(object oShield) {
+    if (!GetIsObjectValid(oShield))
+        return 0;
+        
+    int nIndex = GetArmorRulesType(oShield);
+    int nAC = Get2DAInt("armorrulestats", "ACBONUS", nIndex);
+    
+    //we have the base AC, now to check enchantment bonus
+    itemproperty ip = GetFirstItemProperty(oShield);
+    while (GetIsItemPropertyValid(ip)) {
+        if (GetItemPropertyType(ip) == ITEM_PROPERTY_AC_BONUS) {
+            nAC += GetItemPropertyCostTableValue(ip);
+            break;
         }
-        oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
+        ip = GetNextItemProperty(oShield);
     }
+    
+    return nAC;
 }
 
-//At level 5, when the Samurai draws a longsword or katana (in right hand) they gain an attack bonus 
-//equal to their charisma bonus for 1 round. They also gain 1 extra attack for that round as well. 
-void IajaitsuMaster(object oPC, object oITEM, int nITEM)
-{
-    if ((nITEM != BASE_ITEM_KATANA) && (nITEM != BASE_ITEM_LONGSWORD)) return;
-    if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC) != oITEM) return;
-    if (GetHasFeat(2414, oPC, TRUE))
-    {
-        int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
-        float fDUR = RoundsToSeconds(1);
-        effect eFX = EffectModifyAttacks(1);
-        if (nCHA > 0) eFX = EffectLinkEffects(eFX, EffectAttackIncrease(nCHA));
-        eFX = ExtraordinaryEffect(eFX);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oPC, fDUR);
-    }
-    DelayCommand(0.0f, FrightfulPresence(oPC));
+//Con Drain Protection in OOC rooms.
+void ConDrainProtection(object oItem, object oPC)
+{   
+    string sArea = GetTag(GetArea(oPC));
+    if (sArea == "ooc_appearance_changer_room" || sArea == "ps_area_s_cw_festhall-changing")
+    {   
+        if (IPGetItemHasItemAbilityBonusPropertySubType(oItem, ABILITY_CONSTITUTION)) ForceRest(oPC);
+    }   
 }
+
+
+
+
+/* 
+
+
+Following 2 functions currently disabled, so no sense in compiling them.
 
 // Do bonus damage when unarmed or wielding a creature weapon (new creature weapons)
 // need to check on-equip script and cancel these effects if a weapon is equipped.
@@ -824,8 +1069,6 @@ void TatooedMonk(object oPC, int nRIGHT, int nLEFT)
     if (GetLevelByClass(998, oPC) < 1) return;
     
 }
-
-
 //Drunk Masters get bonuses with improvised weapons.
 //Not implemented yet
 void DrunkMasterImprovised(object oPC, int nRIGHT)
@@ -867,120 +1110,48 @@ void DrunkMasterImprovised(object oPC, int nRIGHT)
     ApplyEquipmentEffect(oPC, eFX);
 }
 
-
-//Gets the AC provided by the equipped shield
-//oShield should be the item equipped in the left hand
-int GetACProvidedByShield(object oShield) {
-    if (!GetIsObjectValid(oShield))
-        return 0;
-        
-    int nIndex = GetArmorRulesType(oShield);
-    int nAC = StringToInt(Get2DAString("armorrulestats", "ACBONUS", nIndex));
-    
-    //we have the base AC, now to check enchantment bonus
-    itemproperty ip = GetFirstItemProperty(oShield);
-    while (GetIsItemPropertyValid(ip)) {
-        if (GetItemPropertyType(ip) == ITEM_PROPERTY_AC_BONUS) {
-            nAC += GetItemPropertyCostTableValue(ip);
-            break;
-        }
-        ip = GetNextItemProperty(oShield);
-    }
-    
-    return nAC;
-}
-
-//Con Drain Protection in OOC rooms.
-void ConDrainProtection(object oItem, object oPC)
-{   
-    string sArea = GetTag(GetArea(oPC));
-    if (sArea == "ooc_appearance_changer_room" || sArea == "ps_area_s_cw_festhall-changing")
-    {   
-        if (IPGetItemHasItemAbilityBonusPropertySubType(oItem, ABILITY_CONSTITUTION)) ForceRest(oPC);
-    }   
-}
-
-//When all is said and done, the various custom effects dependant on equipment are applied.
-void EquipmentEffects(object oPC)
+// Deprecated. References to this changed to IPGetIsCreatureEquippedWeapon() in x2_inc_itemprop
+int GetCreatureWeapons(object oItem)
 {
-    object oCHEST = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-    if (FixARMOR(oPC, oCHEST) == TRUE) return;
-    
-    object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-    int nLEFT = GetBaseItemType(oLHAND);
-    if (FixSHIELD(oPC, oLHAND, nLEFT) == TRUE) return;
-    
-    object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-    int nRIGHT = GetBaseItemType(oRHAND);   
-    SpellResistFix(oPC);
-    ShieldRangedConceal(oPC, nLEFT);
-	FIX_BLINDFIGHT(oPC);
-    SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
-    HeavyArmorOptimizations(oPC, oCHEST);
-    UnearthlyGrace(oPC, oCHEST);
-	MonkDruidPenalty(oPC);
-    TwoSwordsAsOne(oPC, nRIGHT, nLEFT);
-	OversizeTwoWeaponFighting(oPC, oRHAND, oLHAND);
-    //TatooedMonk(oPC, nRIGHT, nLEFT);
-    //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
+	return IPGetIsCreatureEquippedWeapon(oItem);
+}
+
+//Wrapper to check if nTYPE is a creature weapon. Item Type from 160 to 180
+int GetIsCreatureWeapon(int nTYPE)
+{
+	string sType = Get2DAString("baseitems", "WeaponCategory", nTYPE);
+	if (FindSubString(GetStringLowerCase(sType), "creature") != -1) return TRUE;
+	else return FALSE;
 }
 
 
-		
 
 
+A file search reveals that these functions aren't called from anywhere.
 
-
-//This starts all the various checks and effects to be applied based on equipment, as per Sigil's custom rules.
-//nEQUIP: TRUE when called from OnEqup and FALSE when called from OnUnequip.
-//Found in "ps_inc_equipment.nss".
-void SigilEquipment(object oPC, object oITEM, int nEQUIP){
-
-	// we shouldn't have to do ANY processing for creature skin, so just skip all this if 
-	// that's what it is
-	int nITEM = GetBaseItemType(oITEM);
-	if (nITEM == BASE_ITEM_CREATUREITEM) return;
-	
-    RemoveEffectsFromSpell(oPC, SIGIL_EQUIP_FX);
-    
-    if (nEQUIP == TRUE)
+// Check if the weapon is finessable. Custom finessables from 160 to 174 and 202.
+int GetIsSpecialFinessable(int nTYPE)
+{
+    if (GetIsCreatureWeapon(nTYPE) == TRUE) return TRUE;
+    switch (nTYPE)
     {
-        CheckForTempProperties(oITEM, oPC);
-        
-      DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
-	  
-	  DelayCommand(0.1f,ApplyAustereStrikes(oPC,oITEM));
-    
-      DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
-        
-        /*	 if (GetIsFinessable(oITEM))
-			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
-
-            if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
-            DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
-				
-			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
-				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM)); */
-
-        
-        if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
-        {
-            if (MonkeyGripAbuse(oPC, oITEM, nITEM) == TRUE) return;
-            if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
-            if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return;
-            IajaitsuMaster(oPC, oITEM, nITEM);
-        }
+        case 202:
+        case BASE_ITEM_WHIP:
+        case BASE_ITEM_CSLASHWEAPON:
+        case BASE_ITEM_CPIERCWEAPON:
+        case BASE_ITEM_CBLUDGWEAPON:
+        case BASE_ITEM_CSLSHPRCWEAP:
+            return TRUE;
     }
-    else
-    {
-        ConDrainProtection(oITEM, oPC);
-        if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
-            //PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
-            RemoveElementalWeapon(oPC,oITEM);
-            RemoveMeditativeStrikes(oPC,oITEM);
-			RemoveAustereStrikes(oPC,oITEM);
-        
-    }
-
-    DelayCommand(0.0f, EquipmentEffects(oPC));
+    return FALSE;
 }
+
+
+int GetIsShields(object oItem)
+{
+  int iBaseItem = GetBaseItemType(oItem);
+   return iBaseItem = BASE_ITEM_LARGESHIELD || BASE_ITEM_SMALLSHIELD || BASE_ITEM_TOWERSHIELD;
+
+}
+
+*/

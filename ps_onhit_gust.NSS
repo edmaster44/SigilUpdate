@@ -6,7 +6,7 @@ void main() {
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
 
    //Declare major variables
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
     int nDamage;
     float fDelay;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);

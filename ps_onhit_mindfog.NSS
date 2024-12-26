@@ -23,11 +23,11 @@ void main()
     //Declare major variables
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(OBJECT_SELF);
 	int nID = GetOnHitAbilityID(OBJECT_SELF);
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGMIND, "ps_onhit_mindfoga", "", "ps_onhit_mindfogb");
-    int nDuration = 2 + GetCasterLevel(OBJECT_SELF) / 2;
+    int nDuration = 2 + PS_GetCasterLevel(OBJECT_SELF) / 2;
 	
     //Create an instance of the AOE Object using the Apply Effect function
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));

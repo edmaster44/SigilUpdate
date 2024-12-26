@@ -53,6 +53,18 @@ void main()
 
     if(manif.bCanManifest)
     {
+		int nDuration = 2 + manif.nManifesterLevel; 
+		int nBonus = 10;
+		
+		if (manif.bEmpower) nBonus += nBonus / 2;
+		if (manif.bExtend) nDuration *= 2;
+		
+		effect eOpen = EffectSkillIncrease(SKILL_OPEN_LOCK, nBonus);
+		eOpen = SetEffectSpellId(eOpen, manif.nSpellID);
+		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, manif.nSpellID, FALSE));
+		PS_RemoveEffects(OBJECT_SELF, manif.nSpellID);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eOpen, OBJECT_SELF, TurnsToSeconds(nDuration)); 
+		
         int nResistFlag;
         effect eVis      = EffectVisualEffect(VFX_IMP_KNOCK);
         float fDelay;

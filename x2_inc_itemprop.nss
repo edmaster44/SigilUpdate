@@ -30,6 +30,10 @@
 //void main(){}
 // *  The tag of the ip work container, a placeable which has to be set into each
 // *  module that is using any of the crafting functions.
+
+
+#include "aaa_constants"
+
 const string  X2_IP_WORK_CONTAINER_TAG = "x2_plc_ipbox";
 // *  2da for the AddProperty ItemProperty
 const string X2_IP_ADDRPOP_2DA = "des_crft_props" ;
@@ -93,6 +97,15 @@ const int 	BASE_ITEM_CREEQ_SLAM_MED	= 183;
 const int 	BASE_ITEM_CREEQ_BITE_TINY	= 184;
 const int 	BASE_ITEM_CREEQ_BITE_LRG	= 185; //New large
 
+// what it says on the box. returns true if the 2 itemproperties are the same
+int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE);
+
+// returns true if the item is any craftable item that can have a metal component
+int IPGetIsForgedItem(object oItem, int nItem = -1);
+
+// returns true if item is a thrown quiver or ammo quiver
+int IPGetIsQuiver(object oItem, int nItem = -1);
+
 // *  returns true if weapon is blugeoning (used for poison)
 // If you only have the id because you're checking in the general instead 
 // of a specific object,enter OBJECT_INVALID for oItem. Set bOnly to FALSE
@@ -117,15 +130,30 @@ int IPGetIsMeleeWeapon(object oItem, int nItem = -1);
 // like morningstar, and both slashing and piercing, like halberd
 int IPGetIsPiercingWeapon(object oItem, int nItem = -1, int bOnly = TRUE);
 
-// *  return TRUE if oItem is a projectile (bolt, arrow, etc)
+// *  return TRUE if oItem is a projectile or projectile quiver
 // If you only have the id because you're checking in the general instead 
 // of a specific object,enter OBJECT_INVALID for oItem.
 int IPGetIsProjectile(object oItem, int nItem = -1);
 
-// *  returns TRUE if oItem is a ranged weapon
+// *  return TRUE if oItem is a thrown or thrown quiver
 // If you only have the id because you're checking in the general instead 
 // of a specific object,enter OBJECT_INVALID for oItem.
+int IPGetIsThrownWeapon(object oItem, int nItem = -1);
+
+
+// only returns true on bow, xbow, and sling
+// If you only have the id because you're checking in the general instead 
+// of a specific object,enter OBJECT_INVALID for oItem.
+int IPGetIsLauncher(object oItem, int nItem = -1);
+
+// *  returns TRUE if oItem is a bow, xbow, sling, thrown, or thrown quiver
+// If you only have the id because you're checking in the general instead 
+// of a specific object, enter OBJECT_INVALID for oItem.
 int IPGetIsRangedWeapon(object oItem, int nItem = -1);
+
+//Get is instrument
+int IPGetIsInstrument(object oItem, int nItem = -1);
+
 
 // *  returns true if weapon is slashing
 // If you only have the id because you're checking in the general instead 
@@ -152,7 +180,7 @@ void  IPRemoveAllItemProperties( object oItem, int nItemPropertyDuration = DURAT
 
 // *  returns TRUE if item can be equipped.
 // *  Uses Get2DAString, so do not use in a loop!
-int   IPGetIsItemEquipable( object oItem );
+int IPGetIsItemEquipable(object oItem, int nBaseType = -1);
 
 // *  Changes the color of an item armor
 // *  oItem        - The armor
@@ -170,17 +198,10 @@ object IPGetIPWorkContainer( object oCaller = OBJECT_SELF );
 // *  ip types we want to use, but it goes into the item property include anyway
 itemproperty IPGetItemPropertyByID( int nPropID, int nParam1 = 0, int nParam2 = 0, int nParam3 = 0, int nParam4 = 0 );
 
-
-
-
-
-
-
-
 // *  Return the IP_CONST_CASTSPELL_* ID matching to the SPELL_* constant given in nSPELL_ID
-// *  This uses Get2DAstring, so it is slow. Avoid using in loops!
+// *  This uses Get2DAString, so it is slow. Avoid using in loops!
 // *  returns -1 if there is no matching property for a spell
-int   IPGetIPConstCastSpellFromSpellID( int nSpellID );
+int IPGetIPConstCastSpellFromSpellID(int nSpellID, int nCasterLvl = 1);
 
 // *  Returns TRUE if an item has ITEM_PROPERTY_ON_HIT and the specified nSubType
 // *  possible values for nSubType can be taken from IPRP_ONHIT.2da
@@ -190,22 +211,22 @@ int   IPGetItemHasItemOnHitPropertySubType( object oTarget, int nSubType );
 
 // *  Returns the number of possible armor part variations for the specified part
 // *  nPart - ITEM_APPR_ARMOR_MODEL_* constant
-// *  Uses Get2DAstring, so do not use in loops
+// *  Uses Get2DAString, so do not use in loops
 int   IPGetNumberOfAppearances( int nPart );
 
 // *  Returns the next valid appearance type for oArmor
 // *  nPart - ITEM_APPR_ARMOR_MODEL_* constant
-// *  Uses Get2DAstring, so do not use in loops
+// *  Uses Get2DAString, so do not use in loops
 int   IPGetNextArmorAppearanceType(object oArmor, int nPart);
 
 // *  Returns the previous valid appearance type for oArmor
 // *  nPart - ITEM_APPR_ARMOR_MODEL_* constant
-// *  Uses Get2DAstring, so do not use in loops
+// *  Uses Get2DAString, so do not use in loops
 int   IPGetPrevArmorAppearanceType(object oArmor, int nPart);
 
 // *  Returns a random valid appearance type for oArmor
 // *  nPart - ITEM_APPR_ARMOR_MODEL_* constant
-// *  Uses Get2DAstring, so do not use in loops
+// *  Uses Get2DAString, so do not use in loops
 int   IPGetRandomArmorAppearanceType(object oArmor, int nPart);
 
 // * Returns a new armor based of oArmor with nPartModified
@@ -216,7 +237,7 @@ int   IPGetRandomArmorAppearanceType(object oArmor, int nPart);
 // *        X2_IP_ARMORTYPE_RANDOM  - random valid appearance;
 // *
 // * bDestroyOldOnSuccess - Destroy oArmor in process?
-// * Uses Get2DAstring, so do not use in loops
+// * Uses Get2DAString, so do not use in loops
 object IPGetModifiedArmor(object oArmor, int nPart, int nMode, int bDestroyOldOnSuccess);
 
 // *  Add an item property in a safe fashion, preventing unwanted stacking
@@ -301,6 +322,19 @@ int IPGetIsLightWeapon(object oPC, object oWeapon);
 //                         I M P L E M E N T A T I O N
 //------------------------------------------------------------------------------
 
+
+// just compare every possible part of 2 itemproperties. For some reason subtypes won't always match
+// if comparing an itemproperty on an item to an itemproperty generated by nwscript but not applied
+int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE){
+	if (GetItemPropertyType(ip1) != GetItemPropertyType(ip2)) return FALSE;
+	if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2)) return FALSE;
+	if (GetItemPropertyCostTableValue(ip1) != GetItemPropertyCostTableValue(ip2)) return FALSE;
+	if (!bIgnoreDuration){
+		if (GetItemPropertyDurationType(ip1) != GetItemPropertyDurationType(ip2)) return FALSE;
+	}
+	return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // Removes all itemproperties with matching nItemPropertyType and
 // nItemPropertyDuration (a DURATION_TYPE_* constant)
@@ -351,24 +385,11 @@ void IPRemoveAllItemProperties(object oItem, int nItemPropertyDuration = DURATIO
     }
 }
 
-
-
-/*Gets Weapon Size*/
-
-int IPGetWeaponSize(object oItem, int nItem = -1){
-    if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
-    string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nItem);
-    if(sWeaponSize == "**" || sWeaponSize == "") return -1;
-    return StringToInt(sWeaponSize);
-}
-
-
 // ----------------------------------------------------------------------------
 // returns TRUE if item can be equipped. Uses Get2DAString, so do not use in a loop!
 // ----------------------------------------------------------------------------
-int IPGetIsItemEquipable(object oItem)
-{
-    int nBaseType =GetBaseItemType(oItem);
+int IPGetIsItemEquipable(object oItem, int nBaseType = -1){
+	if (oItem != OBJECT_INVALID) nBaseType = GetBaseItemType(oItem);
 
     // fix, if we get BASE_ITEM_INVALID (usually because oItem is invalid), we
     // need to make sure that this function returns FALSE
@@ -906,6 +927,12 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    return ipRet;
 }
 
+int IPGetWeaponSize(object oItem, int nItem = -1){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	string sWeaponSize = Get2DAString("baseitems", "WeaponSize", nItem);
+	if(sWeaponSize == "****" || sWeaponSize == "") return -1;
+	return StringToInt(sWeaponSize);
+}
 
 //Returns value in WeaponCategory column of baseitems
 string IPGetWeaponCategory(object oItem, int nItem = -1){
@@ -913,36 +940,83 @@ string IPGetWeaponCategory(object oItem, int nItem = -1){
 	return GetStringLowerCase(Get2DAString("baseitems", "WeaponCategory", nItem));
 }
 
+//Get is instrument
+int IPGetIsInstrument(object oItem, int nItem = -1){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	if (nItem == BASE_ITEM_DRUM || nItem == BASE_ITEM_FLUTE || nItem == BASE_ITEM_MANDOLIN)
+		return TRUE;
+	return FALSE;
+}
+
+int IPGetIsQuiver(object oItem, int nItem = -1){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	string sType = IPGetWeaponCategory(OBJECT_INVALID, nItem);
+	if (FindSubString(sType, "quiver") != -1) return TRUE;
+	return FALSE;
+}
+
+int IPGetIsForgedItem(object oItem, int nItem = -1){
+	if (oItem == OBJECT_INVALID && nItem == -1) return FALSE;
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	if (IPGetIsQuiver(OBJECT_INVALID, nItem)) return TRUE;
+	if (IPGetIsItemEquipable(OBJECT_INVALID, nItem)) return TRUE;
+	int nNumRows = GetNum2DARows("scod_craft_baseitems");
+	int i;
+	for (i = 0; i < nNumRows; i++){
+		if (StringToInt(Get2DAString("scod_craft_baseitems", "ID", i)) == nItem)
+			return TRUE;
+	}
+	return FALSE;
+}
+
 // ----------------------------------------------------------------------------
-// Returns TRUE if oItem is a projectile
+// Returns TRUE if oItem is a projectile or projectile "quiver"
 // ----------------------------------------------------------------------------
 int IPGetIsProjectile(object oItem, int nItem = -1){
-	return (IPGetWeaponCategory(oItem, nItem) == "projectile");
+	string sType = IPGetWeaponCategory(oItem, nItem);
+	if (FindSubString(sType, "projectile") != -1) return TRUE;
+	return FALSE;
 	/* deprecated, FlattedFifth Aug 1, 2024
   int nBT = GetBaseItemType(oItem);
   return (nBT == BASE_ITEM_ARROW || nBT == BASE_ITEM_BOLT || nBT == BASE_ITEM_BULLET);
   */
 }
 
+//Returns TRUE if oItem is thrown or thrown "quiver"
+int IPGetIsThrownWeapon(object oItem, int nItem = -1){
+	string sType = IPGetWeaponCategory(oItem, nItem);
+	if (FindSubString(sType, "thrown") != -1) return TRUE;
+	return FALSE;
+}
+
+// returns true for slings, bows, and xbows but not thrown
+int IPGetIsLauncher(object oItem, int nItem = -1){
+	string sType = IPGetWeaponCategory(oItem, nItem);
+	if (FindSubString(sType, "launcher") != -1) return TRUE;
+	return FALSE;
+}
+
 // ----------------------------------------------------------------------------
-// Returns TRUE if oItem is a ranged weapon
+// Returns TRUE if oItem is a bow, sling, xbow, thrown, or thrown quiver
 // ----------------------------------------------------------------------------
 int IPGetIsRangedWeapon(object oItem, int nItem = -1){
-	if (oItem == OBJECT_INVALID){
+	//if (oItem == OBJECT_INVALID){
 		string sType = IPGetWeaponCategory(oItem, nItem);
 		if (FindSubString(sType, "launcher") != -1 || 
 			FindSubString(sType, "thrown") != -1){
 				return TRUE;
-			} else return FALSE;
-	}
-    else return GetWeaponRanged(oItem); // doh !
+			}
+			return FALSE;
+	//}
+    //else return GetWeaponRanged(oItem); // doh !
 }
 
 // ----------------------------------------------------------------------------
 // Returns TRUE if oItem is a melee weapon
 // ----------------------------------------------------------------------------
 int IPGetIsMeleeWeapon(object oItem, int nItem = -1){
-	return (FindSubString(IPGetWeaponCategory(oItem, nItem), "melee") != -1);
+	string sString = IPGetWeaponCategory(oItem, nItem);
+	return (FindSubString(sString, "melee") != -1);
     /* deprecated, FlattedFifth Aug 1, 2024
 	//Declare major variables
     int nItem = GetBaseItemType(oItem);
@@ -1078,21 +1152,52 @@ int IPGetIsPiercingWeapon(object oItem, int nItem = -1, int bOnly = TRUE){
 // ----------------------------------------------------------------------------
 // Return the IP_CONST_CASTSPELL_* ID matching to the SPELL_* constant given
 // in nSPELL_ID.
-// This uses Get2DAstring, so it is slow. Avoid using in loops!
+// This uses Get2DAString, so it is slow. Avoid using in loops!
 // returns -1 if there is no matching property for a spell
+
+// Now returns a new IPRP_SpellIndex based on the caster level of the creator:
+// will result in a caster lvl of the potion/wand/scroll equal to either minimum lvl
+// for the spell, min level +5, or min level +10
 // ----------------------------------------------------------------------------
-int IPGetIPConstCastSpellFromSpellID(int nSpellID)
-{
+int IPGetIPConstCastSpellFromSpellID(int nSpellID, int nCasterLvl = 1){
+
+	
     // look up Spell Property Index
     string sTemp = Get2DAString("des_crft_spells","IPRP_SpellIndex",nSpellID);
-    /*
-    if (sTemp == "") // invalid nSpellID
-    {
+    
+    if (sTemp == "" || sTemp == "****"){
         PrintString("x2_inc_craft.nss::GetIPConstCastSpellFromSpellID called with invalid nSpellID" + IntToString(nSpellID));
         return -1;
     }
-    */
-    int nSpellPrpIdx = StringToInt(sTemp);
+	
+	int nSpellPrpIdx = StringToInt(sTemp);
+
+	string sMed = Get2DAString("des_crft_spells", "IPRP_Med", nSpellID);
+	string sHigh = Get2DAString("des_crft_spells", "IPRP_High", nSpellID);
+	
+	int nMedIPIdx = -1;
+	int nHighIPIdx = -1;
+	if (sMed != "" && sMed != "****") nMedIPIdx = StringToInt(sMed);
+	if (sHigh != "" && sHigh != "****") nHighIPIdx = StringToInt(sHigh);
+	
+	int nMedCL = -1;
+	int nHighCL = -1;
+	if (nMedIPIdx != -1)
+		nMedCL = StringToInt(Get2DAString("iprp_spells", "CasterLvl", nMedIPIdx));
+		
+	if (nHighIPIdx != -1)
+		nHighCL = StringToInt(Get2DAString("iprp_spells", "CasterLvl", nHighIPIdx));
+	
+	if (nHighCL != -1){
+		if (B_ALLOW_CRAFT_PLUS_10_ALL || (nCasterLvl >= nHighCL && 
+			B_ALLOW_CRAFT_PLUS_10_MATCH)) return nHighIPIdx;
+			
+	}
+	if (nMedCL != -1){
+		if (B_ALLOW_CRAFT_PLUS_5_ALL || (nCasterLvl >= nMedCL && 
+			B_ALLOW_CRAFT_PLUS_5_MATCH)) return nMedIPIdx;	
+	}
+	
     return nSpellPrpIdx;
 }
 // ----------------------------------------------------------------------------
@@ -1155,7 +1260,7 @@ int IPGetItemHasItemAbilityBonusPropertySubType(object oTarget, int nSubType)
 // ----------------------------------------------------------------------------
 // Returns the number of possible armor part variations for the specified part
 // nPart - ITEM_APPR_ARMOR_MODEL_* constant
-// Uses Get2DAstring, so do not use in loops
+// Uses Get2DAString, so do not use in loops
 // ----------------------------------------------------------------------------
 int IPGetNumberOfArmorAppearances(int nPart)
 {
@@ -1249,7 +1354,7 @@ int IPGetArmorAppearanceType(object oArmor, int nPart, int nMode)
 
 // ----------------------------------------------------------------------------
 // Returns the next valid appearance type for oArmor
-// Uses Get2DAstring, so do not use in loops
+// Uses Get2DAString, so do not use in loops
 // ----------------------------------------------------------------------------
 int IPGetNextArmorAppearanceType(object oArmor, int nPart)
 {
@@ -1259,7 +1364,7 @@ int IPGetNextArmorAppearanceType(object oArmor, int nPart)
 
 // ----------------------------------------------------------------------------
 // Returns the next valid appearance type for oArmor
-// Uses Get2DAstring, so do not use in loops
+// Uses Get2DAString, so do not use in loops
 // ----------------------------------------------------------------------------
 int IPGetPrevArmorAppearanceType(object oArmor, int nPart)
 {
@@ -1268,7 +1373,7 @@ int IPGetPrevArmorAppearanceType(object oArmor, int nPart)
 
 // ----------------------------------------------------------------------------
 // Returns the next valid appearance type for oArmor
-// Uses Get2DAstring, so do not use in loops
+// Uses Get2DAString, so do not use in loops
 // ----------------------------------------------------------------------------
 int IPGetRandomArmorAppearanceType(object oArmor, int nPart)
 {
@@ -1283,7 +1388,7 @@ int IPGetRandomArmorAppearanceType(object oArmor, int nPart)
 //          X2_IP_ARMORTYPE_PREV    - previous valid apperance;
 //          X2_IP_ARMORTYPE_RANDOM  - random valid appearance (torso is never changed);
 // bDestroyOldOnSuccess - Destroy oArmor in process?
-// Uses Get2DAstring, so do not use in loops
+// Uses Get2DAString, so do not use in loops
 // ----------------------------------------------------------------------------
 object IPGetModifiedArmor(object oArmor, int nPart, int nMode, int bDestroyOldOnSuccess)
 {
@@ -1483,6 +1588,37 @@ object IPGetTargetedOrEquippedMeleeWeapon()
 
 
 
+
+object IPGetTargetedOrEquippedArmor(int bAllowShields = FALSE){
+
+	object oTarget = GetSpellTargetObject();
+	int nType;
+	if(GetIsObjectValid(oTarget)){
+		if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
+			nType = GetBaseItemType(oTarget);
+			if (nType == BASE_ITEM_ARMOR) return oTarget;
+			else if ((bAllowShields) && (nType == BASE_ITEM_LARGESHIELD ||
+				nType == BASE_ITEM_SMALLSHIELD || nType == BASE_ITEM_TOWERSHIELD))
+					return oTarget;
+			else return OBJECT_INVALID;
+		} else {
+			object oArmor1 = GetItemInSlot(INVENTORY_SLOT_CHEST, oTarget);
+			if (!GetIsObjectValid(oArmor1)){
+				if (bAllowShields) 
+					oArmor1 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oTarget);
+				else return OBJECT_INVALID;
+			}
+			nType = GetBaseItemType(oArmor1);
+			if (nType == BASE_ITEM_ARMOR || (bAllowShields && (nType == BASE_ITEM_LARGESHIELD ||
+				nType == BASE_ITEM_SMALLSHIELD || nType == BASE_ITEM_TOWERSHIELD)))
+					return oArmor1;
+		}
+	}
+	return OBJECT_INVALID;
+}
+
+
+/* Original IPGetTargetedOrEquippedArmor()
 object IPGetTargetedOrEquippedArmor(int bAllowShields = FALSE)
 {
   object oTarget = GetSpellTargetObject();
@@ -1529,6 +1665,7 @@ object IPGetTargetedOrEquippedArmor(int bAllowShields = FALSE)
   return OBJECT_INVALID;
 
 }
+*/
 
 // ----------------------------------------------------------------------------
 // Returns FALSE it the item has no sequencer property
@@ -1701,7 +1838,7 @@ int IPGetWeaponAppearanceType(object oWeapon, int nPart, int nMode)
 //          X2_IP_WEAPONTYPE_PREV    - previous valid apperance;
 //          X2_IP_WEAPONTYPE_RANDOM  - random valid appearance (torso is never changed);
 // bDestroyOldOnSuccess - Destroy oArmor in process?
-// Uses Get2DAstring, so do not use in loops
+// Uses Get2DAString, so do not use in loops
 // ----------------------------------------------------------------------------
 object IPGetModifiedWeapon(object oWeapon, int nPart, int nMode, int bDestroyOldOnSuccess)
 {

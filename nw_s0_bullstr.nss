@@ -51,6 +51,8 @@ void main()
 	}
 	
     int nModify = 4;
+	if (nCasterLvl >= 12) nModify = 6;
+	else if (nCasterLvl >= 8) nModify = 5;
     float fDuration = TurnsToSeconds(nCasterLvl);
 
     //Signal the spell cast at event

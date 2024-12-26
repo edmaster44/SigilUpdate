@@ -27,6 +27,8 @@ void main()
     object oTarget = GetEnteringObject();	
 	object oCreator = GetAreaOfEffectCreator();
 	int oCreatorLevels = GetTotalLevels(oCreator, TRUE);
+	int nDuration = oCreatorLevels;
+	if (nDuration < 5) nDuration = 5;
 	effect eConceal;
 	
 	if (GetAppearanceType(oTarget) == APPEARANCE_TYPE_ELEMENTAL_WATER || 
@@ -59,7 +61,7 @@ void main()
         //if ( ResistSpell(oCreator ,oTarget) != 2 )
         {
             //Fire cast spell at event for the specified target
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
         }
     }
 

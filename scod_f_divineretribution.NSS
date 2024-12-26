@@ -1,28 +1,30 @@
 #include "x0_i0_spells"
 #include "x2_inc_itemprop"
 #include "nwn2_inc_spells"
-#include "aaa_constants"
+#include "ps_inc_functions"
+//#include "aaa_constants" inherited via ps_inc_functions
 void main()
 {
 
    if (!GetHasFeat(FEAT_TURN_UNDEAD, OBJECT_SELF))
    {
         SpeakStringByStrRef(STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS);
+		return;
    }
-   else
+
    
    
    if(GetHasFeatEffect(FEAT_DIVINE_RETRIBUTION) == FALSE)
    {
         //Declare major variables
         object oTarget = GetSpellTargetObject();
-        int nLevel = GetCasterLevel(OBJECT_SELF);
+        int nLevel = PS_GetCasterLevel(OBJECT_SELF);
 
         effect eVis = EffectVisualEffect( VFX_HIT_SPELL_EVOCATION );
         effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
 
         int nCharismaBonus = GetAbilityModifier(ABILITY_CHARISMA);
-        if (nCharismaBonus>0)
+        if (nCharismaBonus > 0)
         {
        
         

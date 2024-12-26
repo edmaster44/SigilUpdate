@@ -10,6 +10,7 @@
 
 void PS_NatArmor_Giant(object oPC)
 {
+	int bIsSavage = FALSE;
 	int iPRCLvl;
 	int iBonus;
 //Determine class level of prestige classes which use this feat	
@@ -20,10 +21,13 @@ void PS_NatArmor_Giant(object oPC)
 	else if (GetLevelByClass(CLASS_TYPE_HILL_GIANT_PRC, oPC) != 0)
 	{	iPRCLvl = GetLevelByClass(CLASS_TYPE_HILL_GIANT_PRC, oPC);		}
 	else if (GetLevelByClass(CLASS_TYPE_SAVAGE_MARAUDER_PRC, oPC) != 0)
-	{	iPRCLvl = GetLevelByClass(CLASS_TYPE_SAVAGE_MARAUDER_PRC, oPC);	}
+	{	bIsSavage = TRUE;
+		iPRCLvl = GetLevelByClass(CLASS_TYPE_SAVAGE_MARAUDER_PRC, oPC);	}
 	else 	{iPRCLvl = 0;}
 //Determine AC bonus granted based on PRC class level
-	if (iPRCLvl >= 5) 		//+5 bonus at 5th level
+	if (bIsSavage) // savage maurader gets +1 ac at lvl 1, +3 at lvl 2, +5 at lvl 3
+	{ iBonus = (iPRCLvl * 2) - 1; }
+	else if (iPRCLvl >= 5) 		//+5 bonus at 5th level
 	{	iBonus = 5;		} 
 	else if (iPRCLvl >= 4)	//+4 bonus at 4th level
 	{	iBonus = 4;		} 
@@ -55,7 +59,7 @@ void PS_NatArmor_Deva(object oPC)
 	{	iPRCLvl = GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC, oPC);}
 	else {iPRCLvl = 0;}
 //Determine AC bonus granted based on PRC class level
-	if (iPRCLvl >= 10) 		//+6 bonus at 10th level
+	if (iPRCLvl >= 10) 		//+5 bonus at 10th level
 	{	iBonus = 5;		} 
 	else if (iPRCLvl >= 7)	//+4 bonus at 7th level
 	{	iBonus = 3;		} 
@@ -135,17 +139,17 @@ void PS_NatArmor_Succubus(object oPC)
 //Determine class level of prestige classes which use this feat	
 	iPRCLvl	= GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC);
 //Determine AC bonus granted based on PRC class level
-	if (iPRCLvl >= 10) 		//+9 bonus at 10th level
+	if (iPRCLvl >= 10) 		
 	{	iBonus = 5;		} 
-	else if (iPRCLvl >= 8)	//+7 bonus at 8th level
+	else if (iPRCLvl >= 8)	
 	{	iBonus = 4;		} 
-	else if (iPRCLvl >= 6) 	//+5 bonus at 6th level
+	else if (iPRCLvl >= 6) 	
 	{	iBonus = 3;		}
-	else if (iPRCLvl >= 4) 	//+3 bonus at 4th level
+	else if (iPRCLvl >= 4) 	
 	{	iBonus = 2;		}
-	else if (iPRCLvl >= 1) 	//+1 bonus at 1st level
+	else if (iPRCLvl >= 1) 	
 	{	iBonus = 1;		}
-	else					//no bonus
+	else					
 	{	iBonus = 0;		}
 	
 	if (!GetHasSpellEffect(GetSpellId(), oPC))
@@ -221,7 +225,7 @@ void PS_NatArmor_Archon(object oPC)
 //Determine class level of prestige classes which use this feat	
 	iPRCLvl	= GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC, oPC);
 //Determine AC bonus granted based on PRC class level
-	if (iPRCLvl >= 6) 		//+7 bonus at 6th level
+	if (iPRCLvl >= 6) 		//+6 bonus at 6th level
 	{	iBonus = 6;		} 
 	else if (iPRCLvl >= 5)	//+5 bonus at 5th level
 	{	iBonus = 5;		} 
@@ -269,19 +273,24 @@ void PS_NatArmor_Eladrin(object oPC)
 	int iPRCLvl;
 	int iBonus;
 //Determine class level of prestige classes which use this feat	
-	if (GetLevelByClass(CLASS_TYPE_BRALANI_PRC, oPC) != 0)
-	{	iPRCLvl	= GetLevelByClass(CLASS_TYPE_BRALANI_PRC, oPC);	}
-	else if (GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC) != 0)
-	{	iPRCLvl = GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);}
-	else if (GetLevelByClass(CLASS_TYPE_GHAELE_PRC) != 0)
-	{	iPRCLvl = GetLevelByClass(CLASS_TYPE_GHAELE_PRC, oPC);}
-	else {iPRCLvl = 0;}
-//Determine AC bonus granted based on PRC class level
-	iBonus = iPRCLvl / 2;
-	if	(iBonus < 0)
-	{	iBonus = 0;	}
+	if (GetLevelByClass(CLASS_TYPE_BRALANI_PRC, oPC) != 0){	
+		iPRCLvl	= GetLevelByClass(CLASS_TYPE_BRALANI_PRC, oPC);	
+		// bralani has 6 lvls and gets +1 ac every lvl but 1st
+		iBonus = iPRCLvl - 1;
+	} else if (GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC) != 0){	
+		iPRCLvl = GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);
+		// firre has 8 lvls and gets +1 ac at 1st lvl and then +1 every even
+		iBonus = (iPRCLvl / 2) + 1;
+	} else if (GetLevelByClass(CLASS_TYPE_GHAELE_PRC) != 0){	
+		iPRCLvl = GetLevelByClass(CLASS_TYPE_GHAELE_PRC, oPC);
+		// ghaele has 10 lvls and gets +1 ac every even level
+		iBonus = iPRCLvl / 2;
+	} else {iPRCLvl = 0;}
+
+	if	(iBonus < 0) iBonus = 0;
+	else if (iBonus > 5) iBonus = 5;
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
+	if (!GetHasSpellEffect(GetSpellId(), oPC) && iBonus > 0)
 	{	//Calculate and apply AC bonus
 		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
 			eAC = ExtraordinaryEffect(eAC);

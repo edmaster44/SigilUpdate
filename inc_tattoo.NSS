@@ -12,7 +12,7 @@
 // even if they have a racial creature skin
 #include "nw_i0_spells"
 
-const int TATTOO_SPELL_ID = -8675309; // Jenny has all the tattoos
+const int TATTOO_SPELL_ID = -8675309; // Jenny has tattoos
 const string TATTOO_UPDATED_SUFFIX = "_updated";
 const string ART_TATTOO = "ps_tattoo_42";
 // the following are the only 2 tattoos at the time of this writing that do not 
@@ -35,15 +35,12 @@ void removeTattoo(object oPC, string sTattooTag);
 string GetUpdatedTattooTag(string sTag);
 
 
-
-
-
 void CheckTattoos(object oPC){
 	RemoveTattooFX(oPC);
 	object oItem = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
 	if (oItem != OBJECT_INVALID){
 		string sRes = GetStringLowerCase(GetResRef(oItem));
-		if (sRes == DR_TATTOO || sRes == SR_TATTOO)
+		if (FindSubString(sRes, "ps_tattoo") != -1)
 			UpdateTattoo(oPC, oItem);
 	}
 	int i = 0;
@@ -54,8 +51,7 @@ void CheckTattoos(object oPC){
 		if (i > 27072) break;
 		string sRes = GetStringLowerCase(GetResRef(oItem));
 		if (FindSubString(sRes, "ps_tattoo") != -1){
-			if (sRes == ART_TATTOO) UpdateTattoo(oPC, oItem);
-			else ApplyTattooFX(oPC, oItem);
+			ApplyTattooFX(oPC, oItem);
 			break;
 		}
 		oItem = GetNextItemInInventory(oPC);
@@ -177,7 +173,7 @@ void removeTattoo(object oPC, string sTattooTag)
 	}
 	// And just a quick and dirty check to see if it is the tattoo is on the hide...
 	oItem = GetItemInSlot(INVENTORY_SLOT_CARMOUR,oPC);
-	if(FindSubString(GetTag(oItem), tattooTagPrefix, 0) == 0)
+	if (FindSubString(GetTag(oItem), tattooTagPrefix, 0) == 0)
 	{
 		SetItemCursedFlag(oItem, FALSE);
 		SetPlotFlag(oItem, FALSE);
@@ -189,11 +185,11 @@ void removeTattoo(object oPC, string sTattooTag)
 
 void UpdateTattoo(object oPC, object oTattoo){
 	string sRes = GetStringLowerCase(GetResRef(oTattoo));
-	if (sRes == GetUpdatedTattooTag(sRes)){
+	string sNewRes = GetUpdatedTattooTag(sRes);
+	if (sRes == sNewRes){
 		return;
 	}
 	else {
-		string sNewRes = GetUpdatedTattooTag(sRes);
 		object oNewTat = CreateItemOnObject(sNewRes, oPC, 1, "", FALSE);
 		if (oNewTat != OBJECT_INVALID){
 			SetItemCursedFlag(oTattoo, FALSE);

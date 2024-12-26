@@ -83,12 +83,18 @@ void main()
                               GetSpellId(),
                               METAPSIONIC_EXTEND
                               );
+	
+	int nBonus = 10;						  
+	if (manif.bEmpower) nBonus = 15;
 
-      if(manif.bCanManifest)
+    if(manif.bCanManifest)
     {
         effect eLink    =                          EffectVisualEffect(VFX_DUR_ULTRAVISION);
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE));
+               eLink    = EffectLinkEffects(EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT), eLink);
+               eLink    = EffectLinkEffects(EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE), eLink);
+			   eLink 	= EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_BLINDNESS), eLink);
+			   eLink 	= EffectLinkEffects(EffectSkillIncrease(SKILL_SEARCH, nBonus), eLink);
+			   eLink 	= EffectLinkEffects(EffectSkillIncrease(SKILL_SPOT, nBonus), eLink);
         effect eTrueSee = EffectTrueSeeing();
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;

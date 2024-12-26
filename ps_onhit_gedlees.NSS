@@ -18,7 +18,7 @@ void main() {
     //--------------------------------------------------------------------------
     // Calculate Damage Dice. 1d per 2 caster levels, max 5d
     //--------------------------------------------------------------------------
-    int nNumDice = GetCasterLevel(oCaster)/2;
+    int nNumDice = PS_GetCasterLevel(oCaster)/2;
     if (nNumDice<1)
     {
         nNumDice = 1;

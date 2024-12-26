@@ -18,6 +18,8 @@
 // Called by PS_Undead_TouchOfEvil (see below)
 void PS_Template_LevelAdjustment(object oPC, object oItem)
 {	
+
+	if (ALLOW_ECL_LEVEL_30) return;
 	// Listing of all template class values; set a new int and new if statement for each
 	int nOldECL = PS_GetEssenceECL(oPC);
 
@@ -325,15 +327,15 @@ void PS_NatArmor_Lich(object oPC, int nSpell)
 	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
 	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
 	
-	int iBonus;
+	int iBonus = 0;
 // Determine AC bonus granted based on PRC class level
-	if (iLevel >= 10) 		//+3 bonus at 10th level
+	if (iLevel >= 10) 		//+5 bonus at 10th level
+	{	iBonus = 5;		} 
+	else if (iLevel >= 7)	//+3 bonus at 7th level
 	{	iBonus = 3;		} 
-	else if (iLevel >= 7)	//+2 bonus at 7th level
-	{	iBonus = 2;		} 
-	else 					//+1 bonus at 3rd level
+	else if (iLevel >= 4)	//+1 bonus at 4rd level
 	{	iBonus = 1;		}
-	if (!GetHasSpellEffect(nSpell, oPC))
+	if (!GetHasSpellEffect(nSpell, oPC) && iBonus > 0)
 	{	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
 			eAC = ExtraordinaryEffect(eAC);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
@@ -691,23 +693,18 @@ void PS_VampArmor(object oPC)
 	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
 	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl			= iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal;
+	int iPRCLvl_other	= iPRCLvl_Lup + iPRCLvl_Dra;
 	int iBonus;
+
 //Determine AC bonus granted based on PRC class level
-	if (iPRCLvl >= 10) 		//+5 bonus at 10th level
-	{	iBonus = 5;		} 
-	else if (iPRCLvl >= 8)	//+4 bonus at 8th level
-	{	iBonus = 4;		} 
-	else if (iPRCLvl >= 6) 	//+3 bonus at 6th level
-	{	iBonus = 3;		}
-	else if (iPRCLvl >= 4) 	//+2 bonus at 2nd level
-	{	iBonus = 2;		}
-	else if (iPRCLvl >= 2) 	//+1 bonus at 2nd level
-	{	iBonus = 1;		}
-	else					//no bonus
+	if (iPRCLvl_Mal > 0)
+	{	iBonus = iPRCLvl_Mal / 2;}
+	else if (iPRCLvl_other >= 3)
+	{	iBonus = iPRCLvl_other - 2;	}
+	else
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
+	if (!GetHasSpellEffect(GetSpellId(), oPC) && iBonus > 0)
 	{	//Calculate and apply AC bonus
 		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
 			eAC = ExtraordinaryEffect(eAC);
@@ -735,6 +732,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	else
 	{	nDamage = d6(1);	}
 		nDamage = nDamage + (iPRCLvl * 2);
+	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC) >= 7) nDamage += d6(1);
 	int nTouch      = TouchAttackMelee(oTarget, GetSpellCastItem() == OBJECT_INVALID);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{	nDamage = nDamage * 2;	}
@@ -744,27 +742,45 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	int iHeal = iDrain * 5;
 	effect eHeal 	= EffectTemporaryHitpoints(iHeal);
 	effect eVisHeal = EffectVisualEffect(VFX_IMP_HEAD_EVIL);
+	int nRace = GetRacialType(oTarget);
+	int bImmuneNeg = (nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_INCORPOREAL ||
+		nRace == RACIAL_TYPE_INVALID || GetHasSpellEffect(SPELL_NEGATIVE_ENERGY_PROTECTION, oTarget));
+	int bImmuneBlood = (bImmuneNeg || nRace == RACIAL_TYPE_OOZE || nRace == RACIAL_TYPE_CONSTRUCT ||
+		nRace == RACIAL_TYPE_ELEMENTAL);
     if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) &&
-            GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD && 
-            GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT &&
-            !GetHasSpellEffect(SPELL_NEGATIVE_ENERGY_PROTECTION, oTarget))	
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))	
         {	if (nTouch > 0)
             {	nDamage += PS_AddSneakDmgToSpell(oPC, oTarget, DAMAGE_TYPE_NEGATIVE);
     			effect eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
-    			effect eVis		= EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
-    			effect eLinkT	= EffectLinkEffects(eDamage, eDrain);
-					eLinkT		= EffectLinkEffects(eLinkT, eVis);
+    			effect eVis;
+				if (!bImmuneNeg){
+					eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
+					eDamage = EffectLinkEffects(eDamage, eDrain);
+				} else {
+					eVis = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
+				}
+				eDamage	= EffectLinkEffects(eDamage, eVis);
 				 
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkT, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				if (!bImmuneBlood){
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oPC);
                 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));	}
+			}
 }	}	}
 
 void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 
-	if (GetObjectType(oTarget) != OBJECT_TYPE_CREATURE) {
+	int nRace = GetRacialType(oTarget);
+	if (nRace == RACIAL_TYPE_CONSTRUCT || nRace == RACIAL_TYPE_ELEMENTAL || 
+		nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_OOZE ||
+		nRace == RACIAL_TYPE_INCORPOREAL || nRace == RACIAL_TYPE_INVALID ||
+		GetObjectType(oTarget) != OBJECT_TYPE_CREATURE){
 		SendMessageToPC(oPC, "Don't bite "+GetName(oTarget)+"s. They don't taste good.");
+		return;
+	}
+	
+	if (GetCurrentHitPoints(oPC) >= (2 * GetMaxHitPoints(oPC))){
+		SendMessageToPC(oPC, "You're really quite full and couldn't drink another drop.");
 		return;
 	}
 
@@ -776,7 +792,8 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 	int iLevelV			= iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal;
 	int iVBAB			= GetBaseAttackBonus(oPC) + GetAbilityModifier(ABILITY_STRENGTH, oPC);
 	int iTBAB			= GetBaseAttackBonus(oTarget);
-
+	int bTargetHelpless = FALSE;
+	
 	iTBAB = iTBAB + (4 * GetCreatureSize(oTarget) - 4 * GetCreatureSize(oPC));
 	
 	int iTSMd	= GetAbilityModifier(ABILITY_STRENGTH, oTarget);
@@ -794,11 +811,14 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 		if (GetHasEffect(EFFECT_TYPE_STUNNED, oTarget) || GetHasEffect(EFFECT_TYPE_PARALYZE, oTarget) ||
 			GetHasEffect(EFFECT_TYPE_SLEEP, oTarget) || GetHasEffect(EFFECT_TYPE_DOMINATED, oTarget))
-		{	nDrain = 5;	}
-		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
+		{
+			nDrain += 3;	
+			bTargetHelpless = TRUE;
+			}
+		if (nTouch != TOUCH_ATTACK_RESULT_MISS || bTargetHelpless)
 		{	int iCaster = d20(1) + iVBAB;
 			int iTarget = d20(1) + iTBAB;
-			if (iCaster > iTarget)
+			if (iCaster > iTarget || bTargetHelpless)
 				{	effect eFreeze	= EffectCutsceneImmobilize();
 	   	 			effect eDrain	= EffectAbilityDecrease(ABILITY_CONSTITUTION, nDrain);
 					effect eVis		= EffectVisualEffect(VFX_INVOCATION_UTTERDARK_HIT);
@@ -809,7 +829,7 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(24));
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));
-					SpeakString(GetFirstName(oPC) + "'s fangs pierce " + GetFirstName(oTarget) + "'s throat, draining " + sGend + " blood!");	}
+					SpeakString(GetFirstName(oPC) + "'s fangs pierce their victim's throat, draining " + sGend + " blood!");	}
 	}	}
 }
 
@@ -819,7 +839,9 @@ void PS_VampAltForm_Bat(object oPC, int nSpell)
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly = EffectPolymorph(POLYMORPH_VAMPIRE_BAT);
+	effect eSpeed = EffectMovementSpeedIncrease(50);
 		ePoly = EffectLinkEffects(ePoly, eVis);
+		ePoly = EffectLinkEffects(ePoly, eSpeed);
 		ePoly = ExtraordinaryEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_BAT);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
@@ -856,8 +878,12 @@ void PS_VampAltForm_Gas(object oPC, int nSpell)
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly = EffectPolymorph(POLYMORPH_VAMPIRE_GASEOUS);
 	effect eDR = EffectDamageReduction(10, DAMAGE_POWER_PLUS_ONE, 0, DR_TYPE_MAGICBONUS);
+	effect eConceal = EffectConcealment(50);
+	effect eMiss = EffectAttackDecrease(5);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = EffectLinkEffects(ePoly, eDR);
+		ePoly = EffectLinkEffects(ePoly, eConceal);
+		ePoly = EffectLinkEffects(ePoly, eMiss);
 		ePoly = ExtraordinaryEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_GASEOUS);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
@@ -910,21 +936,22 @@ void PS_VampResistance(object oPC, int nSpell)
 
 void PS_VampFastHealing(object oPC, int nSpell)
 {
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
+	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl			= iPRCLvl_Mal;
-	int iPRCLvlV		= iPRCLvl_Lup + iPRCLvl_Dra;
+	int iPRCLvl_other	= iPRCLvl_Lup + iPRCLvl_Dra;
 	int iBonus;
-	if (iPRCLvl >= 10 || iPRCLvlV >= 7)
+
+	
+	if (iPRCLvl_Mal >= 10 || iPRCLvl_other >= 7)
 	{	iBonus = 3;		}
-	else if (iPRCLvl >= 7 || iPRCLvlV >= 5)
+	else if (iPRCLvl_Mal >= 7 || iPRCLvl_other >= 5)
 	{	iBonus = 2;		}
-	else if (iPRCLvl >= 3 || iPRCLvlV >= 3)
+	else if (iPRCLvl_Mal >= 4 || iPRCLvl_other >= 3)
 	{	iBonus = 1;		}
 	else
 	{	iBonus = 0;		}
-	if (!GetHasSpellEffect(nSpell, oPC))
+	if (!GetHasSpellEffect(nSpell, oPC) && iBonus > 0)
 	{	effect eRegen	= EffectRegenerate(iBonus, 6.0f);
 			eRegen		= ExtraordinaryEffect(eRegen);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
@@ -959,6 +986,10 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 {
     if (!X2PreSpellCastCode())
     {	return;	}
+	if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC)){
+		SendMessageToPC(oPC, "Target is immune to mind spells.");
+		return;
+	}
     effect eDom 		= EffectDominated();
     	eDom = GetScaledEffect(eDom, oTarget);
     effect eVis 		= EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
@@ -971,6 +1002,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 	int nCharLevel		= GetHitDice(oPC);
     int nDuration 		= nCasterLevel;
 	int iChaBonus		= GetAbilityModifier(ABILITY_CHARISMA, oPC);
+	if (iPRCLvl_Mal > 0) iChaBonus += d6(1);
 	int nDC 			= 10 + (nCharLevel / 2) + iChaBonus;
     nDuration = GetScaledDuration(nDuration, oTarget);
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DOMINATE_PERSON, FALSE));

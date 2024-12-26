@@ -40,7 +40,7 @@ void main()
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
 	location lTarget = GetLocation(OBJECT_SELF);
 	int nDamage;
-	int nCasterLvl = GetCasterLevel(oCaster);
+	int nCasterLvl = PS_GetCasterLevel(oCaster);
 	float fDelay;
 	effect eImpactVis = EffectVisualEffect(VFX_COM_HIT_SONIC);
 	effect eDam;

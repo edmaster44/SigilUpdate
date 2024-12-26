@@ -26,37 +26,39 @@ void main()
   
 */
 
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
+    if (!X2PreSpellCastCode()) return;
+	
+	int nMod = 5;
+	int nDur = 10 * PS_GetCasterLevel(OBJECT_SELF);
+	int nMetaMagic = GetMetaMagicFeat();
 
-// End of Spell Cast Hook
 
+	if (nMetaMagic == METAMAGIC_EXTEND) nDur *= 2;
+	if (nMetaMagic == METAMAGIC_EMPOWER) nMod += nMod / 2;
+   
 
     object oTarget = GetSpellTargetObject();
-    //Declare major variables
-    effect eSearch = EffectSkillIncrease(SKILL_SEARCH, 10);
-    effect eDisable = EffectSkillIncrease(SKILL_DISABLE_TRAP, 10);
-    effect eMove = EffectSkillIncrease(SKILL_MOVE_SILENTLY, 10);
-    effect eOpen = EffectSkillIncrease(SKILL_OPEN_LOCK, 5);
-    effect ePick = EffectSkillIncrease(SKILL_SLEIGHT_OF_HAND, 10);
-    effect eTrap = EffectSkillIncrease(SKILL_SET_TRAP, 10);
-    effect eHide = EffectSkillIncrease(SKILL_HIDE, 10);
+    effect eDisable = EffectSkillIncrease(SKILL_DISABLE_TRAP, nMod);
+	effect eMove = EffectSkillIncrease(SKILL_MOVE_SILENTLY, nMod);
+	effect eHide = EffectSkillIncrease(SKILL_HIDE, nMod);
+	effect eOpen = EffectSkillIncrease(SKILL_OPEN_LOCK, nMod);
+    effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nMod);
+    effect ePick = EffectSkillIncrease(SKILL_SLEIGHT_OF_HAND, nMod);
+    effect eTrap = EffectSkillIncrease(SKILL_SET_TRAP, nMod);
+    
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     
     //Link Effects
-    effect eLink = EffectLinkEffects(eSearch, eDisable);
-    eLink = EffectLinkEffects(eLink, eMove);
-    eLink = EffectLinkEffects(eLink, eOpen);
+    effect eLink = EffectLinkEffects(eMove, eDisable);
+	eLink = EffectLinkEffects(eLink, eHide);
+	eLink = EffectLinkEffects(eLink, eOpen);
+    eLink = EffectLinkEffects(eLink, eSearch);
     eLink = EffectLinkEffects(eLink, ePick);
     eLink = EffectLinkEffects(eLink, eTrap);
-    eLink = EffectLinkEffects(eLink, eHide);
     eLink = EffectLinkEffects(eLink, eDur);
 
     effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(5));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDur));
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }

@@ -15,6 +15,7 @@ void DoGreaterFangOfBalance(int nVFX)
 //Declare major variables
 	object			oTarget		=	GetSpellTargetObject();
 	object			oCaster		=	OBJECT_SELF;
+	object 			oGlove 		= 	GetItemInSlot(INVENTORY_SLOT_ARMS, oTarget);
 	object			oWeapon1	=	GetItemInSlot(INVENTORY_SLOT_CWEAPON_B, oTarget);
 	object			oWeapon2	=	GetItemInSlot(INVENTORY_SLOT_CWEAPON_R, oTarget);
 	object			oWeapon3	=	GetItemInSlot(INVENTORY_SLOT_CWEAPON_L, oTarget);
@@ -39,6 +40,18 @@ void DoGreaterFangOfBalance(int nVFX)
 	{
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster))
 		{
+			if (GetIsObjectValid(oGlove) && GetBaseItemType(oGlove) == BASE_ITEM_GLOVES)
+			{
+				IPSafeAddItemProperty(oGlove, property1, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property2, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property3, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property4, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property5, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property6, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property7, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				IPSafeAddItemProperty(oGlove, property8, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
+				bApplied = TRUE;
+			}
 			if (GetIsObjectValid(oWeapon1))
 			{
 				IPSafeAddItemProperty(oWeapon1, property1, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
@@ -76,7 +89,7 @@ void DoGreaterFangOfBalance(int nVFX)
 				bApplied = TRUE;
 			}
 		//Additional checks to verify equippable creature weapons - Ceremorph 1/10/15
-			if (GetIsObjectValid(oCWeapR) && GetBaseItemType(oCWeapR) >= 160 && GetBaseItemType(oCWeapR) <= 177)
+			if (GetIsObjectValid(oCWeapR) && IPGetIsCreatureEquippedWeapon(oCWeapR))
 			{
 				IPSafeAddItemProperty(oCWeapR, property1, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
 				IPSafeAddItemProperty(oCWeapR, property2, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
@@ -88,7 +101,7 @@ void DoGreaterFangOfBalance(int nVFX)
 				IPSafeAddItemProperty(oCWeapR, property8, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
 				bApplied = TRUE;
 			}
-			if (GetIsObjectValid(oCWeapL) && GetBaseItemType(oCWeapL) >= 160 && GetBaseItemType(oCWeapL) <= 177)
+			if (GetIsObjectValid(oCWeapL) && IPGetIsCreatureEquippedWeapon(oCWeapL))
 			{
 				IPSafeAddItemProperty(oCWeapL, property1, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
 				IPSafeAddItemProperty(oCWeapL, property2, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
@@ -105,6 +118,8 @@ void DoGreaterFangOfBalance(int nVFX)
 			if (bApplied != FALSE)
 			{
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
+			} else {
+				FloatingTextStringOnCreature("No valid creature weapons found", oCaster);
 			}
 		}
 		else

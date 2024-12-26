@@ -29,7 +29,7 @@ void main()
 	
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
 
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     object oTarget = GetEnteringObject();
 	object oCaster =  GetAreaOfEffectCreator();
 	

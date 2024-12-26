@@ -1,38 +1,11 @@
 //ps_styx_all v1.02
 #include "ps_inc_functions"
-#include "aaa_constants"
+//#include "aaa_constants" - inherited from ps_inc_functions
 #include "ps_adjust_knight"
 #include "ps_adjust_barbarian"
 #include "nwnx_sql"
 #include "aaa_racial_ability_inc"
 
-void SetXPpools(object oPC,int nAmount)
-{ 
-	SendMessageToPC(oPC, "Adding "+IntToString(nAmount)+" to your RP and DM exp pools");
-	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-	if (oItem == OBJECT_INVALID) return;
-	
-	string sID = IntToString(GetLocalInt(oItem,"ID"));
-	SQLExecDirect("SELECT dm_pool,rp_pool FROM characterdata WHERE id=" + sID);
-	if (SQLFetch() == SQL_ERROR) return;
-	
-	int dm_pool;
-	int rp_pool;
-	
-	if (GetIsChristmas()) {
-		dm_pool = StringToInt(SQLGetData(1)) + nAmount;
-		rp_pool = StringToInt(SQLGetData(2));
-	} else {
-		dm_pool = StringToInt(SQLGetData(1)) + FloatToInt(nAmount * 0.25);
-		rp_pool = StringToInt(SQLGetData(2)) + FloatToInt(nAmount * 0.25);
-	}
-
-	SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ",rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID);		
-	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
-		SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
-		SQLEncodeSpecialChars(GetName(oPC)) + 
-		"','Player lost ALL levels to Styx, increased pools with: " + FloatToString(nAmount * 0.25) + "',107)");
-}
 
 void Finalize(object oPC)
 {
@@ -41,47 +14,24 @@ string act = SQLEncodeSpecialChars(GetPCPlayerName(oPC));
 SQLExecDirect("DELETE FROM `generalability_tracking` WHERE `name`='"+name+"' AND `act`='"+act+"';");
 
 }
-
-
-void PS_lose_one_level(object oPC)
-{	
-	int xp = GetXP(oPC);	
-	int nextlvl = 1000;
-	int totalxp = 1;
-	
-	while (1) 
-	{	
-		totalxp = totalxp + nextlvl;
-		if (totalxp >= xp) 
-		{
-			xp = totalxp - nextlvl;
-			if (xp < 0) xp = 0; 
-			SetXP(oPC, xp);
-			return;
-		}
-		nextlvl = nextlvl + 1000;
-	}
-}
-
-void PS_set_level(object oPC, int iLevel)
+void PS_set_level(object oPC, int nLvl)
 {
-	int xp = GetXP(oPC);
+	int nXP = GetXP(oPC);
+	int nNewXP;
 	int nextlvl = 1000;
 	int totalxp = 0;
 		
-	if (iLevel == 0) iLevel = 1; // increase level by 1
-	if (iLevel == 1) // make level 1
-	{	SetXP(oPC, 1);
-		SetXPpools(oPC, xp);
-		return;		}
-
-	// set your level
-	int i;
-	for (i = 1; i < iLevel; i++) 
-	{	totalxp += nextlvl;
-		nextlvl += 1000;	}
-	SetXPpools(oPC, xp - totalxp);
-	SetXP(oPC, totalxp + 1);
+	if (nLvl < 1) nLvl = 1;
+	if (nLvl == 1){
+		if (nXP >= 1000) nNewXP = 999;
+		else return;
+	} else {
+		nNewXP = PS_GetXPForLevel(nLvl);
+	}
+	int nPool = nXP - nNewXP;
+	if (nNewXP > nXP) nPool = 0;
+	SetXPpools(oPC, nPool);
+	SetXP(oPC, nNewXP);
 }
 
 void DelayedFixes(object oPC, object oItem, int nSTEP)

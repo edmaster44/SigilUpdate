@@ -6,8 +6,13 @@
 #include "ps_inc_randomitems"
 #include "ps_inc_functions"
 
-int StartingConditional(int nSkill, int maxExp = 100, int nDifficulty = ENCOUNTER_DIFFICULTY_NORMAL)
+/*
+Warning: gc_skill_dc_scaled.nss(9): Warning: NSC6010: Entry point function "StartingConditional" has a default value for argument "maxExp", but the runtime will select default argument values from a hardcoded list of defaults for script entry point symbols.  Consider removing explicit default arguments from the function and handling the actual runtime default values (which are zero, OBJECT_INVALID, and an empty string, as appropriate).
+*/
+int StartingConditional(int nSkill, int maxExp, int nDifficulty)
 {
+	if (maxExp == 0) maxExp = 100;
+	if (nDifficulty == 0) nDifficulty = ENCOUNTER_DIFFICULTY_NORMAL;
 	int nBase = 10;
 	
 	if (nDifficulty >= ENCOUNTER_DIFFICULTY_HARD)

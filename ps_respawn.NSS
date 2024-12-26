@@ -12,8 +12,6 @@ Created On: 08/30/02
 //in place of NW_WAYPOINT001.
 #include "nw_i0_plot"
 #include "ps_inc_functions"
-#include "ps_class_inc"
-#include "ps_inc_ecl"
 #include "ps_inc_achievements"
  
 //Uses some in game default scripts
@@ -148,15 +146,14 @@ void respawn(object xPC)
    ApplyEffectToObject(DURATION_TYPE_INSTANT,xHeal,xPC,0.0f);
    RemoveEffects(xPC); //Removes Negative effects. Is defined in nw_i0_plot.
    
-   // fixes for respawning with effects from Samurai or shield
-   	if (GetLevelByClass(CLASS_TYPE_SAMURAI, xPC) > 1) // because they get at level 2.
-	{	Samurai_Two_Swords_As_One(xPC); 	}
-	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, xPC);
-	if (GetIsObjectValid(oShield))
-	{	int iBaseItemType = GetBaseItemType(oShield);
-		if (iBaseItemType == BASE_ITEM_TOWERSHIELD || iBaseItemType == BASE_ITEM_LARGESHIELD || iBaseItemType == BASE_ITEM_SMALLSHIELD)
-		{	DoShieldBonus(xPC, iBaseItemType);		}
-	}
+   // re-equip left and right hand equip
+   
+   object oRhand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, xPC);
+   object oLhand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, xPC);
+   AssignCommand(xPC, ActionUnequipItem(oRhand));
+   DelayCommand(0.5f, ActionEquipItem(oRhand, INVENTORY_SLOT_RIGHTHAND));
+      AssignCommand(xPC, ActionUnequipItem(oLhand));
+   DelayCommand(0.5f, ActionEquipItem(oLhand, INVENTORY_SLOT_LEFTHAND));
    
    	AssignCommand(xPC,ActionJumpToLocation(xStart));
 	PS_CalculateECL(xPC);

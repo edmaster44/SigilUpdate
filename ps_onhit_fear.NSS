@@ -21,7 +21,7 @@ void main()
 
     //Declare major variables
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
     float fDuration = RoundsToSeconds(nCasterLevel);
     int nDamage;
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);	// NWN1 VFX

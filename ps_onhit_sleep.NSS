@@ -41,7 +41,7 @@ void main() {
     int nCurrentHD;
     int bAlreadyAffected;
     int nLow;
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
     nDuration = 3 + GetScaledDuration(nDuration, oTarget);
 
     string sSpellLocal = "BIOWARE_SPELL_LOCAL_SLEEP_" + ObjectToString(OBJECT_SELF);

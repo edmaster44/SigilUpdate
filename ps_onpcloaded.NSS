@@ -18,48 +18,52 @@
 #include "ps_inc_polymorph"
 #include "ps_convertbio"
 #include "ps_inc_time"
-#include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 #include "ps_inc_bgspellfix"
 #include "ginc_time"
 #include "ps_heightadjust_includes"
 #include "ff_update_legacy_items"
-#include "ff_sneak_fix"
+#include "ff_update_feats"
 #include "class_mageslayer_utils"
 #include "inc_tattoo"
+#include "ff_combat_mods"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
-
-
-void UpdateFeats(object oPC)
-{
-	//Since the racial feat skill affinity craft alchemy is useless
-	//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
-	if (GetHasFeat(1754, oPC))
-	{
-		FeatRemove(oPC, 1754);
-		FeatAdd(oPC, 243, FALSE);
+//remove all bonus feats added to the creature skin by spells or Tactical Weapon feat 
+// or ps_inc_equipment in case any got stuck by a poorly timed player or server crash or 
+// some other ill-fated event. Note that currently none of the tattoos use a bonus feat on
+// a skin like they used to. There are also 3 feats that are added directly to the pc in
+// ps_inc_equipment instead of the skin because they are feats that cannot be gained
+// through any normal means; therefore the safety of the skin isn't needed. But remove
+// those also in case any got stuck.
+void RemoveTempFeatsAndFX(object oPC, object oSkin){
+	itemproperty ip = GetFirstItemProperty(oSkin);
+	while (GetIsItemPropertyValid(ip)){
+		if (GetItemPropertyType(ip) == ITEM_PROPERTY_BONUS_FEAT)
+				RemoveItemProperty(oSkin, ip);
+		ip = GetNextItemProperty(oSkin);
 	}
+	if (GetHasFeat(FEAT_MURDEROUS_INTENT, oPC, TRUE))
+		FeatRemove(oPC, FEAT_MURDEROUS_INTENT);
+	if (GetHasFeat(FEAT_KENJUTSU, oPC, TRUE))
+		FeatRemove(oPC, FEAT_KENJUTSU);
+	if (GetHasFeat(FEAT_BOJUTSU, oPC, TRUE))
+		FeatRemove(oPC, FEAT_BOJUTSU);
+	UpdateCombatMods(oPC, 0);
 	
-	// Add situational awareness persistent feat. Please see file ff_feat_situational_awareness.nss
-	// for code and an EXTREMELY IMPORTANT note on interaction with Dae's plugin. Recommend use with xp_fix
-	// plugin to remove dodge ac limits at https://github.com/nwn2dev/nwnx4/wiki at the bottom of the page.
-	if (!GetHasFeat(21916, oPC, TRUE)) FeatAdd(oPC, 21916, FALSE);
 }
 
 // the creature skin in the invisible inventory slot carmor is necessary
-// for spells that grant darkvision, and also for some future planned features.
+// for spells that grant darkvision, and also for adding temp bonus feats
+// in ff_feat_tactical_weapon that won't interfere with existing feats or
+// existing bonus feats on other items.
 // Make sure the player has it on login.
-void GiveCreatureSkin(object oPC)
-{
+void GiveCreatureSkin(object oPC){
 	object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
 	
-	if (oSkin != OBJECT_INVALID){
-	return;
-	}
-	else {
+	if (oSkin == OBJECT_INVALID){
 		int i = 0;
 		object oItem = GetFirstItemInInventory(oPC);
 		while (GetIsObjectValid(oItem))
@@ -74,11 +78,12 @@ void GiveCreatureSkin(object oPC)
 			}
 			oItem = GetNextItemInInventory(oPC);
 		}
-		if (oSkin == OBJECT_INVALID){
+		if (oSkin == OBJECT_INVALID)
 			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
-		}
+		
 		DelayCommand(1.0f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
 	}
+	DelayCommand(0.5f, RemoveTempFeatsAndFX(oPC, oSkin));
 }
 
 // ps_levelup is not called on character creation, and it's not called at the 
@@ -90,6 +95,18 @@ void GiveStartingFeats(object oPC)
 	// calls the psywar progression function from ps_inc_functions with 
 	// an argument that tells it to grant the first feat only.
 	DoPsyProgression(oPC, TRUE);
+	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustments");
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	if (!GetLocalInt(oEss, "startability") && GetHitDice(oPC) == 1){
+		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
+			AssignCommand(oPC, ClearAllActions(TRUE));
+			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
+		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
+			AssignCommand(oPC, ClearAllActions(TRUE));
+			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
+		}
+	}
+	SendMessageToPC(oPC, "Finished Adjusting Ability Scores.");
 }
 void GiveStartingGold( object oPC, int nAmount )
 {
@@ -563,8 +580,6 @@ void main()
 		EnableFinesse();
 		EnableCreatureFinesse();
 		EnableMonkNew();
-		if (GetHasFeat(289,oPC))
-		FeatAdd(oPC,3218,FALSE,FALSE,TRUE);
 		ConvertBio(oPC);
 		// We will update legacy items before the re-equip feature in case any 
 		// items get dropped on re-equip
@@ -572,14 +587,9 @@ void main()
 		CheckTattoos(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
-		// call to ps_inc_functions to grant imbue item to psi and to warlock builds that are prc-heavy
-		PS_ManageImbueItem(oPC);
-		UpdateFeats(oPC);
-		ff_sneak_fix(oPC);
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
+		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
-		
 	}
-
 }

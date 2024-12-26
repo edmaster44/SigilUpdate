@@ -34,10 +34,10 @@ void PS_StunningCroak(object oPC, int nSpell)
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (GetSubRace(oTarget) != 168)
-			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget,fDuration);
+			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget,fDuration);
 				nSave = MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_CHAOS, oPC);
 				if (nSave == 0)
-				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget,fDuration));
+				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun, oTarget,fDuration));
                 } 
              }
         }
@@ -74,24 +74,32 @@ void PS_SlaadRegen_Gray(object oPC, int nSpell)
 {
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{	int nLevel		= GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
-		int nBonus		= (nLevel +1) / 2;
-		effect eRegen	= EffectRegenerate(nBonus, 6.0f);
-			eRegen		= ExtraordinaryEffect(eRegen);
-			eRegen		= SetEffectSpellId(eRegen, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
+		int nBonus		= nLevel / 3;
+		if (nBonus < 0) nBonus = 0;
+		else if (nBonus > 3) nBonus = 3;
+		if (nBonus > 0){
+			effect eRegen	= EffectRegenerate(nBonus, 6.0f);
+				eRegen		= ExtraordinaryEffect(eRegen);
+				eRegen		= SetEffectSpellId(eRegen, nSpell);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
+		}
+	}
 }
 
 void PS_SlaadRegen_CoC(object oPC, int nSpell)
 {
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{	int nLevel		= GetLevelByClass(CLASS_TYPE_CHAMPION_OF_CHAOS, oPC);
-			nLevel		= nLevel - 2;
-		if (nLevel <0) nLevel = 0;
-		int nBonus		= 1 + nLevel;
-		effect eRegen	= EffectRegenerate(nBonus, 6.0f);
-			eRegen		= ExtraordinaryEffect(eRegen);
-			eRegen		= SetEffectSpellId(eRegen, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
+		int nBonus		= nLevel / 2;
+		if (nBonus < 0) nBonus = 0;
+		else if (nBonus > 3) nBonus = 3;
+		if (nBonus > 0){
+			effect eRegen	= EffectRegenerate(nBonus, 6.0f);
+				eRegen		= ExtraordinaryEffect(eRegen);
+				eRegen		= SetEffectSpellId(eRegen, nSpell);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);
+		}		
+	}
 }
 
 void PS_OnHit_ChaosDamage(int nSpell, int nRank)

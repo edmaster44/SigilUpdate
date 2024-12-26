@@ -30,13 +30,13 @@ void main () {
 	DeleteLocalObject(oPC, "GemstoneToTake");
 	DeleteLocalObject(oPC, "EssenceToTake");
 	
-	struct enchantment enchant = LoadEnchantment(nIndex);
+	struct enchantment enchant = LoadEnchantment(nIndex, oPC);
 	
 	if (CanEnchantItem(oPC, oItem, enchant)) {
 		TakeEnchantmentRequirements(oPC, enchant);
 		EnchantItem(oItem, enchant);
 		SetLocalInt(oItem, "PRICE_DIRTY", 1);
-		SetItemCostVariables(oItem);
+		if (!CRAFT_DIRECT_FROM_2DA) SetItemCostVariables(oItem);
 	}
 	
 	DisplayItemDescription(oPC, oItem);

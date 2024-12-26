@@ -40,6 +40,8 @@ const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
+void PS_RemoveEffects(object oTarget, int nId = -1, int nType = -1, object oCreator = OBJECT_INVALID);
+int PS_GetHasEffectById(object oTarget, int nId);
 int X2UseMagicDeviceCheck();
 int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
@@ -48,7 +50,7 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-int TouchRangedFeatInRange();
+int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = -1, int nFeatId = -1);
 
 
 
@@ -182,23 +184,24 @@ int X2PreSpellCastCode()
 // caster. Basically just copied from the one in aaa_undead_inc.nss. Returns TRUE if the 
 // spell is not from a feat, or the feat is not touch ranged, or the target is within range.
 // -FlattedFifth, July 29, 2024
-int TouchRangedFeatInRange()
-{
-
-	int nFeatId = GetSpellFeatId();
-	if (nFeatId < 1) return TRUE;
+// Filled up the args with dummy values so I can pass the values I already have or get values
+// fresh, depending upon my needs - FlattedFifth, Sept 18, 2024
+int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = -1, int nFeatId = -1){
+	if (oCaster == OBJECT_INVALID) oCaster = OBJECT_SELF;
+	if (nSpellId == -1) nSpellId = GetSpellId();
+	if (oTarget == OBJECT_INVALID) oTarget = GetSpellTargetObject();
+	if (nFeatId == -1) nFeatId = GetSpellFeatId();
 	
-	object oCaster = OBJECT_SELF;
-	int nSpellId = GetSpellId();
 	string sRange = Get2DAString("spells", "Range", nSpellId);
 	if (GetStringLowerCase(sRange) != "t") return TRUE;
-		
-	//object oCaster = OBJECT_SELF;
-	object oTarget = GetSpellTargetObject();
-	
-	// below comment and most of conditional from author of aaa_undead_inc
-	// Melee range seems to be around a little less then 3.0f, so picked a number a little higher
-	if (GetDistanceBetween(oCaster, oTarget) > 3.5f) 
+	// GetDistanceBetween() gets centre to centre distance, which will result
+	// in a false neg for some very large mobs like the big blob devil in the 
+	// devil cave at the lava fields.
+	float fDis = GetDistanceBetween(oCaster, oTarget);
+	//  so subtract the radii of the footprints to get edge to edge distance
+	fDis -= ((GetCreatureFootprint(oCaster) / 2) + GetCreatureFootprint(oTarget) / 2);
+
+	if (fDis > fRange) 
 	{                                              
 		SendMessageToPC(oCaster, "Target out of range.");
 		ResetFeatUses(oCaster, nFeatId, FALSE, TRUE);
@@ -392,6 +395,39 @@ void X2DoBreakConcentrationCheck()
          }
     }	
 }
+// More robust way to remove effects. Specify either the id, the type, the creator, or any combination
+// to remove all effects that match those criteria. If you do not specify any critera, all effects
+// are removed. -FlattedFifth, Nov 24, 2024
+void PS_RemoveEffects(object oTarget, int nId = -1, int nType = -1, object oCreator = OBJECT_INVALID){
+	effect eEff = GetFirstEffect(oTarget);
+	int bIdMatch;
+	int bTypeMatch;
+	int bCreatorMatch;
+	while (GetIsEffectValid(eEff)){
+		if (nId == -1 || nId == GetEffectSpellId(eEff)) bIdMatch = TRUE;
+		else bIdMatch = FALSE;
+		
+		if (nType == -1 || nType == GetEffectType(eEff)) bTypeMatch = TRUE;
+		else bTypeMatch = FALSE;
+		
+		if (oCreator == OBJECT_INVALID || oCreator == GetEffectCreator(eEff)) bCreatorMatch = TRUE;
+		else bCreatorMatch = FALSE;
+		
+		if (bIdMatch && bTypeMatch && bCreatorMatch){
+			RemoveEffect(oTarget, eEff);
+			eEff = GetFirstEffect(oTarget);
+		} else eEff = GetNextEffect(oTarget);
+	}
+}
+
+int PS_GetHasEffectById(object oTarget, int nId){
+	effect eEff = GetFirstEffect(oTarget);
+	while (GetIsEffectValid(eEff)){
+		if (nId == GetEffectSpellId(eEff)) return TRUE;
+		eEff = GetNextEffect(oTarget);
+	}
+	return FALSE;
+}
 
 // Called by all 3 divine restoration spells, psi restoration, and restore other.
 // Returns TRUE if restoration spell should NOT remove these effects that contain
@@ -421,6 +457,9 @@ int GetSkipByRestoration(int nSpellId){
 		case 4005: return TRUE; // Winter Wolf 2
 		case 4018: return TRUE; // Treant
 		case -9444: return TRUE; // effects from ps_inc_equipment
+		case 14709: return TRUE; // considered strike, methodical defense, staff fighting
+		case SPELL_LIGHT: return TRUE;
+		case SPELL_DARKNESS: return TRUE;
 		case SPELL_ENLARGE_PERSON: return TRUE;
 		case SPELL_IRON_BODY: return TRUE;
 		case SPELL_RIGHTEOUS_MIGHT: return TRUE;

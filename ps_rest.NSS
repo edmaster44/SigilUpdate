@@ -1,6 +1,5 @@
 #include "ps_inc_functions"
 #include "ps_rage_func"
-#include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 
 

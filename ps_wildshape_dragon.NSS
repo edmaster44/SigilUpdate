@@ -1,6 +1,7 @@
 //New Dragon form setup
 
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -12,7 +13,7 @@ void main()
     effect ePoly;
     int nPoly = POLYMORPH_TYPE_COW;	
     int nMetaMagic = GetMetaMagicFeat();
-    int nDuration = GetCasterLevel(oCreature);
+    int nDuration = PS_GetCasterLevel(oCreature);
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
         nDuration = nDuration *2; //Duration is +100%

@@ -37,6 +37,16 @@
 	
 */
 
+// Dec 19, 2024 - FlattedFifth.
+// Removing Freedom of Movement, Deathward, etc and then reapplying
+// isn't balanced because first of all, if a cleric has to cast three spells to get the same 
+// effects as a one or two mage spells then how is that OP? Secondly, doing
+// so strips all Metamagic duration from the initial casting. Instead, we will allow death ward
+// and freedom of movement to prevent negative effects but ALSO have them prevent some of the 
+// positive effect. If FoM is on, prevents decreased speed but ALSO prevents crit immunity.
+// If Death Ward is on, prevents decreased dex but ALSO prevents stun immunity
+
+
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 
@@ -45,141 +55,91 @@
 void main()
 {
 
-   if (!X2PreSpellCastCode())
-   {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-       return;
-   }
+	if (!X2PreSpellCastCode()) return;
+	
+	object oTarget      = GetSpellTargetObject(); // should be the caster
+	int nCasterLevel    = PS_GetCasterLevel(OBJECT_SELF);
+	float fDuration     = 60.0*nCasterLevel; // seconds  (1 min per level)
+
+	// Freedom of Movement
+	int bHasFoM = FALSE;
+	if (GetHasSpellEffect(SPELL_FREEDOM_OF_MOVEMENT, oTarget)) bHasFoM = TRUE;
+
+	int bHasDW = FALSE;
+	if (GetHasSpellEffect(SPELL_DEATH_WARD, oTarget) || 
+	GetHasSpellEffect(SPELL_MASS_DEATH_WARD, oTarget)) bHasDW = TRUE;
+
+	//Fire cast spell at event for the specified target
+	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_STONE_BODY, FALSE));
+
+	fDuration = ApplyMetamagicDurationMods(fDuration);
+	int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
+
+	//Adding a check to make sure that the player's dex is never reduced to 0.
+	int nDex = GetAbilityScore (oTarget, ABILITY_DEXTERITY);
+	int nDexMod;
+
+	if (nDex <= 6)
+	{
+	nDexMod = nDex - 1;
+	}
+	else
+	{
+	nDexMod = 6;
+	}
+
+	//effect eVisTemp     = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);
+	effect eStone       = EffectDamageReduction(15, GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL); // JLR-OEI 02/14/06: NWN2 3.5 -- New Damage Reduction Rules
+	//effect eVis         = EffectVisualEffect(VFX_DUR_PROT_STONESKIN);
+	effect eDur         = EffectVisualEffect( VFX_DUR_SPELL_IRON_BODY );
+	effect eStrIncr     = EffectAbilityIncrease( ABILITY_STRENGTH, 6 );
+	effect eDexDecr     = EffectAbilityDecrease( ABILITY_DEXTERITY, nDexMod );
+	effect eMovDecr     = EffectMovementSpeedDecrease( 50 );
+	effect eSpellFail   = EffectArcaneSpellFailure( 50 ); // AFW-OEI 10/19/2006: Use ASF instead of Spell Failure
+
+	effect eArmorCheck  = EffectArmorCheckPenaltyIncrease( oTarget, 8 );
+
+	effect eBlindI      = EffectImmunity( IMMUNITY_TYPE_BLINDNESS );
+	effect eCritI       = EffectImmunity( IMMUNITY_TYPE_CRITICAL_HIT );
+	effect eStatDecI    = EffectImmunity( IMMUNITY_TYPE_ABILITY_DECREASE );
+	effect eDeafI       = EffectImmunity( IMMUNITY_TYPE_DEAFNESS );
+	effect eDiseaseI    = EffectImmunity( IMMUNITY_TYPE_DISEASE );
+	effect eElectricI   = EffectDamageImmunityIncrease( DAMAGE_TYPE_ELECTRICAL, 100 );  
+	effect ePoison      = EffectImmunity( IMMUNITY_TYPE_POISON );
+	effect eStunI       = EffectImmunity( IMMUNITY_TYPE_STUN );
+	effect eFireI       = EffectDamageImmunityIncrease( DAMAGE_TYPE_FIRE, 50 );
+	effect eAcidI       = EffectDamageImmunityIncrease( DAMAGE_TYPE_ACID, 50 );
+	effect eDrown  = EffectSpellImmunity( 281 );//Immunity to the water elemental pulse drown ability
+	effect eDrown2  = EffectSpellImmunity( 437 );//immunity to the drown spell
 
 
-   object oTarget      = GetSpellTargetObject(); // should be the caster
-   int nCasterLevel    = GetCasterLevel(OBJECT_SELF);
-   float fDuration     = 60.0*nCasterLevel; // seconds  (1 min per level)
+	effect eLink = EffectLinkEffects(eDur, eStone);
+	eLink = EffectLinkEffects(eSpellFail, eLink);
+	eLink = EffectLinkEffects(eArmorCheck, eLink);
+	eLink = EffectLinkEffects(eBlindI, eLink);
+	eLink = EffectLinkEffects(eDeafI, eLink);
+	eLink = EffectLinkEffects(eDiseaseI, eLink);
+	eLink = EffectLinkEffects(eElectricI, eLink);
+	eLink = EffectLinkEffects(ePoison, eLink);
+	eLink = EffectLinkEffects(eFireI, eLink);
+	eLink = EffectLinkEffects(eAcidI, eLink);
+	eLink = EffectLinkEffects(eDrown, eLink);
+	eLink = EffectLinkEffects(eDrown2, eLink);
+	
+	if (!bHasDW){
+		eLink = EffectLinkEffects(eDexDecr, eLink);
+		eLink = EffectLinkEffects(eStrIncr, eLink);
+		eLink = EffectLinkEffects(eStunI, eLink);
+		eLink = EffectLinkEffects(eStatDecI, eLink);
+	}
+	
+	if (!bHasFoM){
+		eLink = EffectLinkEffects(eMovDecr, eLink);
+		eLink = EffectLinkEffects(eCritI, eLink);
+	}
 
-//____________________________________________________
+	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 
-// pelhikano fix
-
-// Freedom of Movement
-int hadFoM = 0;
-if (GetHasSpellEffect(SPELL_FREEDOM_OF_MOVEMENT, oTarget))
-{
- RemoveSpellEffectsFromCaster(SPELL_FREEDOM_OF_MOVEMENT, oTarget, OBJECT_INVALID);
- hadFoM = 1;
-}
-
-// Death Ward
-int hadDW = 0;
-if (GetHasSpellEffect(SPELL_DEATH_WARD, oTarget))
-{
- RemoveSpellEffectsFromCaster(SPELL_DEATH_WARD, oTarget, OBJECT_INVALID);
- hadDW = 1;
-}
-
-// Mass Death Ward
-if (GetHasSpellEffect(SPELL_MASS_DEATH_WARD, oTarget))
-{
- RemoveSpellEffectsFromCaster(SPELL_MASS_DEATH_WARD, oTarget, OBJECT_INVALID);
- hadDW = 1;
-}
-
-//____________________________________________________
-
-   //Fire cast spell at event for the specified target
-   SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_STONE_BODY, FALSE));
-
-   fDuration = ApplyMetamagicDurationMods(fDuration);
-   int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
-
-//Adding a check to make sure that the player's dex is never reduced to 0.
-int nDex = GetAbilityScore (oTarget, ABILITY_DEXTERITY);
-int nDexMod;
-
-if (nDex <= 6)
-{
- nDexMod = nDex - 1;
-}
-else
-{
- nDexMod = 6;
-}
-
-   //effect eVisTemp     = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);
-   effect eStone       = EffectDamageReduction(15, GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL); // JLR-OEI 02/14/06: NWN2 3.5 -- New Damage Reduction Rules
-   //effect eVis         = EffectVisualEffect(VFX_DUR_PROT_STONESKIN);
-   effect eDur         = EffectVisualEffect( VFX_DUR_SPELL_IRON_BODY );
-   effect eStrIncr     = EffectAbilityIncrease( ABILITY_STRENGTH, 6 );
-   effect eDexDecr     = EffectAbilityDecrease( ABILITY_DEXTERITY, nDexMod );
-   effect eMovDecr     = EffectMovementSpeedDecrease( 50 );
-   effect eSpellFail   = EffectArcaneSpellFailure( 50 ); // AFW-OEI 10/19/2006: Use ASF instead of Spell Failure
-
-   effect eArmorCheck  = EffectArmorCheckPenaltyIncrease( oTarget, 8 );
-
-   effect eBlindI      = EffectImmunity( IMMUNITY_TYPE_BLINDNESS );
-   effect eCritI       = EffectImmunity( IMMUNITY_TYPE_CRITICAL_HIT );
-   effect eStatDecI    = EffectImmunity( IMMUNITY_TYPE_ABILITY_DECREASE );
-   effect eDeafI       = EffectImmunity( IMMUNITY_TYPE_DEAFNESS );
-   effect eDiseaseI    = EffectImmunity( IMMUNITY_TYPE_DISEASE );
-   effect eElectricI   = EffectDamageImmunityIncrease( DAMAGE_TYPE_ELECTRICAL, 100 );  
-   effect ePoison      = EffectImmunity( IMMUNITY_TYPE_POISON );
-   effect eStunI       = EffectImmunity( IMMUNITY_TYPE_STUN );
-   effect eFireI       = EffectDamageImmunityIncrease( DAMAGE_TYPE_FIRE, 50 );
-   effect eAcidI       = EffectDamageImmunityIncrease( DAMAGE_TYPE_ACID, 50 );
-effect eDrown  = EffectSpellImmunity( 281 );//Immunity to the water elemental pulse drown ability
-effect eDrown2  = EffectSpellImmunity( 437 );//immunity to the drown spell
-
-
-   // Link the effects together
-   effect eLink = EffectLinkEffects(eDur, eStone);
-   //eLink = EffectLinkEffects(eLink, eDur);
-   eLink = EffectLinkEffects(eLink, eStrIncr);
-   eLink = EffectLinkEffects(eLink, eDexDecr);
-   eLink = EffectLinkEffects(eLink, eMovDecr);
-   eLink = EffectLinkEffects(eLink, eSpellFail);
-   eLink = EffectLinkEffects(eLink, eArmorCheck);
-   eLink = EffectLinkEffects(eLink, eBlindI);
-   eLink = EffectLinkEffects(eLink, eCritI);
-   eLink = EffectLinkEffects(eLink, eStatDecI);
-   eLink = EffectLinkEffects(eLink, eDeafI);
-   eLink = EffectLinkEffects(eLink, eDiseaseI);
-   eLink = EffectLinkEffects(eLink, eElectricI);
-   eLink = EffectLinkEffects(eLink, ePoison);
-   eLink = EffectLinkEffects(eLink, eStunI);
-   eLink = EffectLinkEffects(eLink, eFireI);
-   eLink = EffectLinkEffects(eLink, eAcidI);
-eLink = EffectLinkEffects(eLink, eDrown);
-eLink = EffectLinkEffects(eLink, eDrown2);
-
-
-   //Apply the effects
-   //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTemp, oTarget);
-
-//_________________
-// pelhikano fix: Delay the command so the FoM and DW removal works
-   // ApplyEffectToObject(nDurType, eLink, oTarget, fDuration );
-DelayCommand(0.5, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration ));
-
-// Re-apply FoM and DW with reset durations
-if (hadFoM)
-{
- ActionCastSpellAtObject(SPELL_FREEDOM_OF_MOVEMENT,
-  oTarget,
-  METAMAGIC_NONE,
-  TRUE,
-  nCasterLevel,
-  PROJECTILE_PATH_TYPE_DEFAULT,
-  TRUE);
-}
-
-if (hadDW)
-{
- ActionCastSpellAtObject(SPELL_DEATH_WARD,
-  oTarget,
-  METAMAGIC_NONE,
-  TRUE,
-  nCasterLevel,
-  PROJECTILE_PATH_TYPE_DEFAULT,
-  TRUE);
-}
+	
 
 }

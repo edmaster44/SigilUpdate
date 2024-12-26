@@ -1,5 +1,6 @@
 #include "nwnx_sql"
 #include "ps_inc_functions"
+
 const string sGemScreen = "SCOD_GEMCUTTING";
 const string xmlGemFile = "scod_gemcutting_window.xml";
 const string gemstoneBox = "plc_chest_gemstonegeneration";
@@ -325,10 +326,31 @@ string PickRandomGemColor() {
 	return sColor;
 }
 
+//Get the enchantments this gemstone is used in from 2da instead of sql
+string GetGemstoneUsesFrom2da(string sGemTag){
+	int nNumRows = GetNum2DARows("scodenchantments");
+	string sResult = "";
+	int i;
+	string sLabel;
+	for (i = 0; i < nNumRows; i++){
+		if (Get2DAString("scodenchantments", "Can_Enchant", i) == "1"){
+			if (Get2DAString("scodenchantments", "Gemstone", i) == sGemTag){
+				sLabel = Get2DAString("scodenchantments", "Label", i);
+				if (sResult == "") sResult = sLabel;
+				else sResult += ", "+ sLabel;
+			}
+		}
+	}
+	if (sResult == "") return "";
+	else return "\n\nKnown uses: "+ sResult;
+} 
+
 //Get the enchantments this gemstone is used in
 string GetGemstoneUses(string sTag, int nQuality) {
 
 	string sGemTag = sTag+"_q"+IntToString(nQuality+1);
+	if (CRAFT_DIRECT_FROM_2DA) return GetGemstoneUsesFrom2da(sGemTag);
+	
 	string sQuery = "SELECT Label FROM recipes WHERE gemstone = '"+sGemTag+"'";
 	string sResult = "";
 	

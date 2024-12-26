@@ -3,7 +3,7 @@
 Removed Alignment change for Thug for exploit reason 
 May 30, 2024 FlattedFifth
 	removed redundant ps_adjust_sneakattack and AddEPForDeathDice()
-	Added ff_sneak_fix as final function in level up operations.
+	Added ff_update_feats as final function in level up operations.
 July 3, 2024 FlattedFifth
 	Added imbue item to psi at psi caster level 6. Removed dragon disciple function
  */ 
@@ -12,81 +12,17 @@ July 3, 2024 FlattedFifth
 #include "aaa_constants"
 #include "gui_add_psywarfeat"
 #include "gui_add_halfundeadfeat"
-#include "ps_inc_ecl"
 #include "ps_inc_wingtail"
 //	this include removed because of redundancy, this
-//  methodology now performed by ff_sneak_fix
+//  methodology now performed by ff_update_feats, which used to be ff_sneak_fix
 //	#include "ps_adjust_sneakattack"
 #include "ps_givespellfeat"
 #include "ps_adjust_barbarian"
-#include "ff_sneak_fix"
+#include "ff_update_feats"
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
 #include "ps_inc_bgspellfix"
 #include "class_mageslayer_utils"
-
-
-
-/* We don't have red dragon disciple any more
-
-// check for RDD levels and change immunity to fire to appropriate type.
-// we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
-void CheckDragonBreath(object oPC, object oItem)
-{	
-	int nDRAGON = GetLevelByClass(CLASS_TYPE_DRAGONDISCIPLE, oPC);
-	if (nDRAGON < 1) return;
-	if (oItem == OBJECT_INVALID)
-	{
-		SendMessageToPC(oPC, "You appear to be missing your essence. Contact a member of staff");
-		return;
-	}
-	int nTYPE = GetLocalInt(oItem, "DRAGONTYPE");
-	if (nTYPE < 1)
-	{
-		ActionStartConversation(oPC, "ps_srr_conv_dbreath", TRUE, FALSE, TRUE, TRUE);
-		return;
-	}
-	if (nDRAGON < 10) return;
-	if (GetHasFeat(964, oPC, TRUE) == FALSE) return;
-	int nIMMUNITY;
-	switch (nTYPE)
-	{
-		case 2: 	//Silver
-		case 10:	//White
-			nIMMUNITY = 2261;
-			break;
-		case 3:		//Copper
-		case 7:		//Black
-		case 9:		//Green
-			nIMMUNITY = 2282;
-			break;
-		case 1:		//Gold
-		case 4:		//Brass
-		case 6:		//Red
-			nIMMUNITY = 2260;
-			break;
-		case 5:		//Bronze
-		case 8:		//Blue
-			nIMMUNITY = 2283;
-			break;
-		default:
-			SendMessageToPC(oPC, "Cannot set Immunity type as Dragon heritage not selected. Use your breath ability to fix or if that fails, contact a member of staff");
-			return;
-	}
-	
-	FeatAdd(oPC, nIMMUNITY, FALSE, TRUE, TRUE);
-	FeatRemove(oPC, 964);
-	
-}
-*/
-
-// This function removed because of redundancy, this method now performed
-// by ff_sneak_fix
-// void AddEPForDeathDice(object oPC)
-// {
-//	if (GetHasFeat(459,oPC))
-//		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
-// }
 
 
 // "level up" of creature weapons.
@@ -268,27 +204,14 @@ void main()
 	//Remove XP from xp-saving players
 	//Disabled on Jeg Training Sigil Edition Preparation Room.
 	string sAREA = GetTag(GetArea(oPC));
-	if (sAREA != "ps_area_dmlair" && sAREA != "jeg_preparation_room")
-	{
-		int nHD = GetHitDice(oPC);
-		int nECL = PS_GetEssenceECL(oPC);
-		if (nHD + nECL < 30)
-		{
-			int xp = GetXP(oPC);
-			int nextlvl = 1000;
-			int totalxp = 0;
-			int i;
-			for (i = 0; i < nHD; i++) 
-			{	
-				totalxp += nextlvl;
-				nextlvl += 1000;
-			}
-			if (xp > totalxp) SetXP(oPC, totalxp - 1);
-		}
-	}
+	int bCullXP = TRUE;
+	if (sAREA == "ps_area_dmlair" || sAREA == "jeg_preparation_room")
+		bCullXP = FALSE;
+	if (ALLOW_INSTANT_REBUILD && (sAREA == "OOC_Area_Tailor" || 
+		sAREA =="spawnroom")) bCullXP = FALSE;
+	if (bCullXP) PS_TrimXP(oPC);
 	
-	//Make sure ECL players don't get over 30th
-	PS_EnforceMaxLevel(oPC);
+	if (!ALLOW_ECL_LEVEL_30) PS_EnforceMaxLevel(oPC);
 	
 	//Save new ECL to essence
 	PS_CalculateECL(oPC);
@@ -342,18 +265,82 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
-	// redundant, ff_sneak_fix does this
+	// redundant, ff_update_feats does this
 //	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
 	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
-	// redundant, ff_sneak_fix does all of this
+	// redundant, ff_update_feats does all of this
 //	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
 	MageSlayerLevels(oPC);
-	// call to ps_inc_functions to grant Imbue Item to psi and to warlocks with warlock prcs.
-	PS_ManageImbueItem(oPC);
-	// ff_sneak_fix should always come last after all 
+	// moved to ff_update_feats
+	//PS_ManageImbueItem(oPC);
+	// ff_update_feats should always come last after all 
 	// other leveling up operations. It matters less with the on login script.
-	ff_sneak_fix(oPC);
+	// Sept 12, 2024, ff_update_feats also handling some other feat grants that need to
+	// happen at both login and level up. Should prob change name -FlattedFifth. 
+	ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 }
+
+
+/* We don't have red dragon disciple any more
+
+// check for RDD levels and change immunity to fire to appropriate type.
+// we still check for 10 levels of RDD just in case same feat was granted to another class or race or something
+void CheckDragonBreath(object oPC, object oItem)
+{	
+	int nDRAGON = GetLevelByClass(CLASS_TYPE_DRAGONDISCIPLE, oPC);
+	if (nDRAGON < 1) return;
+	if (oItem == OBJECT_INVALID)
+	{
+		SendMessageToPC(oPC, "You appear to be missing your essence. Contact a member of staff");
+		return;
+	}
+	int nTYPE = GetLocalInt(oItem, "DRAGONTYPE");
+	if (nTYPE < 1)
+	{
+		ActionStartConversation(oPC, "ps_srr_conv_dbreath", TRUE, FALSE, TRUE, TRUE);
+		return;
+	}
+	if (nDRAGON < 10) return;
+	if (GetHasFeat(964, oPC, TRUE) == FALSE) return;
+	int nIMMUNITY;
+	switch (nTYPE)
+	{
+		case 2: 	//Silver
+		case 10:	//White
+			nIMMUNITY = 2261;
+			break;
+		case 3:		//Copper
+		case 7:		//Black
+		case 9:		//Green
+			nIMMUNITY = 2282;
+			break;
+		case 1:		//Gold
+		case 4:		//Brass
+		case 6:		//Red
+			nIMMUNITY = 2260;
+			break;
+		case 5:		//Bronze
+		case 8:		//Blue
+			nIMMUNITY = 2283;
+			break;
+		default:
+			SendMessageToPC(oPC, "Cannot set Immunity type as Dragon heritage not selected. Use your breath ability to fix or if that fails, contact a member of staff");
+			return;
+	}
+	
+	FeatAdd(oPC, nIMMUNITY, FALSE, TRUE, TRUE);
+	FeatRemove(oPC, 964);
+	
+}
+*/
+
+// This function removed because of redundancy, this method now performed
+// by ff_update_feats
+// void AddEPForDeathDice(object oPC)
+// {
+//	if (GetHasFeat(459,oPC))
+//		{FeatAdd(oPC, 2128, FALSE, FALSE, TRUE);}
+// }

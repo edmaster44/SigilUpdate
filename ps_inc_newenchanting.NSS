@@ -1,16 +1,11 @@
+#include "ps_inc_newcraft_include"
+
 const string xmlEnchantingFile = "scod_enchanting_window.xml";
 const string sEnchantingScreen = "SCOD_ENCHANTING";
-const float ENCHANTING_DISTANCE = 5.0f;
 
-#include "x2_inc_itemprop"
-#include "ps_inc_functions"
-#include "x0_i0_match"
-#include "ps_inc_gemstones"
-#include "nw_i0_plot"
-#include "ps_inc_itemprops"
-#include "nwnx_sql"
-//#include "ps_inc_functions"
-#include "ps_inc_casterlevel"
+
+
+struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID);
 
 //Enchant the chosen item
 void EnchantItem(object oItem, struct enchantment enchant);
@@ -22,9 +17,6 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant);
 
 //Can you enchant this item? 
 int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int feedback = TRUE);
-
-//Converts between type/subtype/param/special and the actual property
-itemproperty EnchantmentIndexToItemProp(struct enchantment enchant);
 
 //Meets the minimum requirements for the most basic enchantment
 int MeetsMinimumRequirements(object oPC);
@@ -58,20 +50,11 @@ string DisplaySpecialRequirement(string sReq);
 //3 = something greater
 int HasSimilarProperty(object oPC, object oItem, struct enchantment enchant);
 
-//Get is ammunition or ammunition quiver
-int IPGetIsAmmunition(object oItem);
-
-//Get is thrown weapon or thrown weapon quiver
-int IPGetIsThrownWeapon(object oItem);
-
 //Get the point value of this enchanted weapon
-int GetItemTotalPoints(object oItem);
-
-//Get whether this Made Of material is powerful enough to give an extra point
-int IsPowerfulMaterial(itemproperty ip, int countSilver = FALSE);
+int GetItemTotalPoints(object oItem, object oPC = OBJECT_INVALID);
 
 //Max number of enchantment points
-int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID);
+int GetItemTotalPointsAllowed(object oItem);
 
 //Grabs all the enchantments for the given db column
 //Valid columns are: Melee, Ranged, Ammo, Thrown, Armor, Glove
@@ -83,33 +66,42 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn);
 //Takes an enchantment and returns a string describing its recipe
 string GenerateEnchantmentDescription(struct enchantment enchant);
 
+// characters using the Alchemical Infusion feat to enchant need an additional power essence
+// to fuel the enchantment since they have insufficient magic of their own to fuel it, but 
+// sometimes that will be the same essence they need for the base enchantment. This will 
+// search their inv for a duplicate. 
+int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence);
+
+// special check for dragonhide boots, as player made dragonhide boots will be the only
+// boots that can get an ac bonus. Don't want loot drop boots getting ac because it would stack with
+// any that have an ac vs alignment. For example boots with ac 5 and ac vs evil 3 would be ac 8 vs evil.
+// Restricting to have the Forged Of property for dragonhide should mitigate that risk
+int GetIsAcEligibleBoots(object oItem);
+
+// Further restricting boots to only "Masterwork", ie, having 3 special materials, should further
+// mitigate the above described risk.
+int GetIsPlayerMade(object oItem);
+
+// Applies the "Masterwork" item property, which is used to denote items made with all 3 special mats.
+// Will allow for additional points for player-crafted weapons and new enchant options for other items
+void ApplyPlayerMade(object oItem);
+
+void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID);
+
+string GetAdditionalEssenceReq(object oPC, int nPoints);
+
 //************************************************
 //2da data fetch classes
 //************************************************
 
-//Get Index from 2da
-int GetTypeIndex(int index);
+// GenerateEnchantmentTypeList without sql
+void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem);
 
-//Get Subtype Index from 2da
-int GetSubTypeIndex(int index);
+void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment enchant);
 
-//Get Numerical index from 2da
-int GetParamIndex(int index);
-
-//Get Gold cost from 2da
-int GetGoldCost(int index);
-
-//Get Point value from 2da
-int GetPointValue(int index);
-
-//Get Special index cost from 2da
-int GetSpecialIndex(int index);
-
-//Get essence requirement from 2da
-string GetEssenceRequirement(int index);
-
-//Get Gem requirement from 2da
-string GetGemRequirement(int index);
+// Gets the same thing as LoadEnchantment, but without sql.
+// Set constant CRAFT_DIRECT_FROM_2DA to TRUE to use this
+struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID);
 
 //Writes out the item property in a pretty string
 //fit for gui display
@@ -124,29 +116,43 @@ int EstimateItemPropertyPointValue(itemproperty ip);
 //if entry not found
 int GetItemPropertyPointValue(itemproperty ip, string itemType = "");
 
+// exceedingly complicated but the sql version returns inconsistent results where tantulhor, beyshk, and blood glass are concerned,
+// sometimes reporting as 2 points, sometimes 3.
+int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID);
+
 //Get the sql string to filter out inappropriate enchantments by item type
 string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE);
 
-//************************************************
-//Structure to hold enchantment values
-//************************************************
-struct enchantment {
-	int id;
-	int type;
-	int subtype;
-	int numerical;
-	int special;
-	int points;
-	int gold;
-	string essence;
-	string gemstone;
-	string special_req;
-};
+
+//Enchant the chosen item
+void EnchantItem(object oItem, struct enchantment enchant) {
+
+	itemproperty ip;
+	int nItem = GetBaseItemType(oItem);
+	// if the item property is "keen" and the item is a thrown weapon or bow, 
+	// get item property bonus feat Improved Critical for that weapon instead.
+	if (enchant.type == 43){
+		if (IPGetIsLauncher(OBJECT_INVALID, nItem) || IPGetIsThrownWeapon(OBJECT_INVALID, nItem))
+			ip = GetImpCritItemPropertyForRanged(nItem);
+		else if (nItem == BASE_ITEM_GLOVES)
+			ip = ItemPropertyBonusFeat(20); // bonus feat imp crit unarmed
+		else ip = EnchantmentIndexToItemProp(enchant);
+	} else ip = EnchantmentIndexToItemProp(enchant);
+		
+	IPSafeAddItemProperty(oItem, ip);
+	
+	//spell cast / per day
+	if (enchant.type == 15) SetItemCharges(oItem, 50);
+}
 
 //A structure to store the enchantment data
 //Will get variables differently from sql, of course
 // Variables of struct would stay the same though
-struct enchantment LoadEnchantment(int index) {
+struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID){
+	
+	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+
+	if (CRAFT_DIRECT_FROM_2DA) return LoadEnchantmentFrom2DA(index, oPC);
 
 	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE Recipe_Id='"+IntToString(index)+"'");
 	
@@ -163,95 +169,126 @@ struct enchantment LoadEnchantment(int index) {
 		enchant.gemstone = SQLGetData(9);
 		enchant.special_req = SQLGetData(10);
 	}
+	if (GetIsObjectValid(oPC)) enchant.add_essence = GetAdditionalEssenceReq(oPC, enchant.points);
+	else enchant.add_essence = "";
 	return enchant;
+}
+
+struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID){
+
+	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+
+    struct enchantment enchant;
+	enchant.id = index;
+	enchant.type = GetTypeIndex(index);
+	enchant.subtype = GetSubTypeIndex(index);
+	enchant.numerical = GetParamIndex(index);
+	enchant.special = GetSpecialIndex(index);
+	enchant.points = GetPointValue(index);
+	enchant.gold = GetGoldCost(index);
+	enchant.essence = GetEssenceRequirement(index);
+	enchant.gemstone = GetGemRequirement(index);
+	enchant.special_req = Get2DAString("scodenchantments", "Custom_Requirement", index); 
+	if (GetIsObjectValid(oPC)) enchant.add_essence = GetAdditionalEssenceReq(oPC, enchant.points);
+	else enchant.add_essence = "";
+	return enchant;
+}
+
+
+void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 	
+	int nItem = GetBaseItemType(oItem);
+	string sColumn = GetItemColumn(nItem);
+	string s2da = "scodenchantments";
+	int i = 0;
+	int nMax = GetNum2DARows(s2da);
+	int nNumTypes = 0;
+	int bItemOk = FALSE; // give yourself a high 5 if you read this as "bite me, ok?"
+	int bCanEnchant = FALSE;
+	string sName;
+	int nType;
+	int nSubType;
+	int nPropRes;
+	int nSubRes;
+	int nLastType = -1;
+	int nLastSub = -1;
+	int nLasti = -1;
+	string sSubTable;
+	for (i = 0; i < nMax; i++){
+		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
+		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
+		if (bItemOk && bCanEnchant){
+			nType = StringToInt(Get2DAString(s2da, "Type", i));
+			nSubType = StringToInt(Get2DAString(s2da, "Subtype", i));
+
+			nPropRes = StringToInt(Get2DAString("itempropdef", "Name", nType));
+			sName = GetStringByStrRef(nPropRes);
+			if (nSubType > -1) {
+				sSubTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
+				if (sSubTable != "" && sSubTable != "****") {
+					nSubRes = StringToInt(Get2DAString(sSubTable, "Name", nSubType));
+					sName += ": "+ GetStringByStrRef(nSubRes);
+				}
+			}
+			
+			if (nType == nLastType && nSubType == nLastSub){
+				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
+			}
+			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(i), "EnchantTypeName="+sName+";", "", "5="+IntToString(i), "");
+			nLastType = nType;
+			nLastSub = nSubType;
+			nLasti = i;
+		}
+	}
 }
 
-//Get Index from 2da
-int GetTypeIndex(int index) {
-	int nIndex = StringToInt(Get2DAString("scodenchantments", "Type", index));  
-	return nIndex;
+
+//Generate the sub type list
+void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment enchant){
+
+	int nItem = GetBaseItemType(oItem);
+	string sColumn = GetItemColumn(nItem);
+	
+	string s2da = "scodenchantments";
+	int i = 0;
+	int nMax = GetNum2DARows(s2da);
+	string sName;
+	int nType;
+	int nSub;
+	int bCanEnchant;
+	int bItemOk;
+	int nCostTableIndex;
+	string sCostTable; 
+	int nNumIndex;
+	int nParam; 
+	string sParam;
+	for (i = 0; i < nMax; i++){
+		nType = StringToInt(Get2DAString(s2da, "Type", i));
+		nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
+		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
+		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
+		if (nType == enchant.type && nSub == enchant.subtype && bItemOk && bCanEnchant){
+			nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
+			
+			nCostTableIndex = StringToInt(Get2DAString("itempropdef", "CostTableResRef", nType));
+			sCostTable = Get2DAString("iprp_costtable", "Name", nCostTableIndex); 
+			nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
+			sParam = GetStringByStrRef(nParam);
+			sName = sParam;
+			
+			if (sName == "" || GetStringLowerCase(sParam) == "bad strref" || 
+				GetStringLowerCase(sParam) == "bad_strref") sName = "Click for Details";
+			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST", "ENCHANTPROW_"+IntToString(i), "ParamTypeName="+sName+";", "", "5="+IntToString(i), "");
+		}
+	}
 }
 
-//Get Subtype Index from 2da
-int GetSubTypeIndex(int index) {
-	int nIndex = StringToInt(Get2DAString("scodenchantments", "Subtype", index));  
-	return nIndex;
-}
-
-//Get Numerical index from 2da
-int GetParamIndex(int index) {
-	int nIndex = StringToInt(Get2DAString("scodenchantments", "Numerical", index));  
-	return nIndex;
-}
-
-//Get Gold cost from 2da
-int GetGoldCost(int index) {
-	int nGold = StringToInt(Get2DAString("scodenchantments", "Gold", index));  
-	return nGold;
-}
-
-//Get Point value from 2da
-int GetPointValue(int index) {
-	int nPoint = StringToInt(Get2DAString("scodenchantments", "Points", index));  
-	return nPoint;
-}
-
-//Get Special index cost from 2da
-int GetSpecialIndex(int index) {
-	int nPoint = StringToInt(Get2DAString("scodenchantments", "Special", index));  
-	return nPoint;
-}
-
-//Get Gem requirement from 2da
-string GetGemRequirement(int index) {
-	string sGem = Get2DAString("scodenchantments", "Gemstone", index);  
-	return sGem;
-}
-
-//Get essence requirement from 2da
-string GetEssenceRequirement(int index) {
-	string sEssence = Get2DAString("scodenchantments", "Essence", index);  
-	return sEssence;
-}
 
 
 //************************************************
 //Bench classes - for fetching workbenches for 
 //fancy effects
 //************************************************
-
-int GetBenchIsValidForEnchanting(object oPC, object oBench) {
-	if(GetIsObjectValid(oBench)) 
-	{
-		//if(LineOfSightObject(oPC, oBench)) {
-			if(GetDistanceBetween(oPC, oBench) <= ENCHANTING_DISTANCE)
-			{
-				return TRUE;
-			}
-		/*} else {
-			SendMessageToPC(oPC, "There must be no obstructions between you and the workbench.");
-		}*/
-	}
-	return FALSE;
-}
-
-//Get the nearest enchanting Workbench
-object GetNearestEnchantingWorkbench(object oPC) {
-	object oBench = GetNearestObjectByTag("PLC_MR_MWBench", oPC);//PLC_MR_MWBench
-	if (GetBenchIsValidForEnchanting(oPC, oBench)) 
-		return oBench;
-	oBench = GetNearestObjectByTag("PLC_MC_CBENCH03", oPC);
-	if (GetBenchIsValidForEnchanting(oPC, oBench)) 
-		return oBench;
-	oBench = GetNearestObjectByTag("ps_usersign_magetable", oPC);
-	if (GetBenchIsValidForEnchanting(oPC, oBench)) 
-		return oBench;
-	oBench = GetNearestObjectByTag("nx2_mage_bench", oPC);
-	if (GetBenchIsValidForEnchanting(oPC, oBench)) 
-		return oBench;
-	return OBJECT_INVALID;
-}
 
 string GetItemPropertyString(itemproperty ip) {
 
@@ -335,12 +372,6 @@ string GetSecondaryParamName(struct enchantment enchant) {
 		return sParam;
 }
 
-//Is this a thrown weapon?
-int IPGetIsThrown(object oItem)
-{
-  int nBT = GetBaseItemType(oItem);
-  return (nBT == BASE_ITEM_DART || nBT == BASE_ITEM_SHURIKEN || nBT == BASE_ITEM_THROWINGAXE);
-}
 
 //Checks whether this enchantment type is valid on this item
 //May need to be revisited - not everything is clearly marked in the 2da
@@ -351,13 +382,13 @@ int CanAddEnchantmentToItem(object oItem, int nEnchant) {
 	/*int nAllowed = FALSE;
 	if (IPGetIsMeleeWeapon(oItem)) {
 		nAllowed = StringToInt(Get2DAString("itemprops", "0_Melee", nEnchant));
-	} else if (IPGetIsRangedWeapon(oItem)) {
+	} else if (IPGetIsLauncher(oItem)) {
 		nAllowed = StringToInt(Get2DAString("itemprops", "1_Ranged", nEnchant));	
 	} else if (IPGetIsThrownWeapon(oItem)) {
 		nAllowed = StringToInt(Get2DAString("itemprops", "2_Thrown", nEnchant));	
 	} else if (GetBaseItemType(oItem) == BASE_ITEM_QUARTERSTAFF || GetBaseItemType(oItem) == BASE_ITEM_MAGICSTAFF) {
 		nAllowed = StringToInt(Get2DAString("itemprops", "3_Staves", nEnchant));	
-	} else if (IPGetIsAmmunition(oItem)) {
+	} else if (IPGetIsProjectile(oItem)) {
 		nAllowed = StringToInt(Get2DAString("itemprops", "5_Ammo", nEnchant));	
 	} else if (MatchShield(oItem) || GetBaseItemType(oItem) == BASE_ITEM_BRACER 
 		|| GetBaseItemType(oItem) == BASE_ITEM_BOOTS || GetArmorRank(oItem) > ARMOR_RANK_NONE) {
@@ -372,39 +403,14 @@ int CanAddEnchantmentToItem(object oItem, int nEnchant) {
 	return nAllowed;*/
 }
 
-//Get is ammunition or ammunition quiver
-int IPGetIsAmmunition(object oItem) {
-	if (GetBaseItemType(oItem) == BASE_ITEM_ARROW || GetBaseItemType(oItem) == BASE_ITEM_BOLT || GetBaseItemType(oItem) == BASE_ITEM_BULLET)
-		return TRUE;
-	if (GetBaseItemType(oItem) >= 93 && GetBaseItemType(oItem) <= 95)
-		return TRUE;
-	return FALSE;
-}
-
-//Get is thrown weapon or thrown weapon quiver
-int IPGetIsThrownWeapon(object oItem) {
-	if (GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE || GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN || GetBaseItemType(oItem) == BASE_ITEM_DART)
-		return TRUE;
-	if (GetBaseItemType(oItem) >= 90 && GetBaseItemType(oItem) <= 92)
-		return TRUE;
-	return FALSE;
-}
-
-//Get is instrument
-int IPGetIsInstrument(object oItem) {
-	if (GetBaseItemType(oItem) == BASE_ITEM_DRUM || GetBaseItemType(oItem) == BASE_ITEM_FLUTE || GetBaseItemType(oItem) == BASE_ITEM_MANDOLIN)
-		return TRUE;
-	return FALSE;
-}
-
 //Get the sql string to filter out inappropriate enchantments by item type
 string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE) {
 	string sQuery = "";
 	if (IPGetIsInstrument(oItem)) sQuery = "Instrument='1'";
 	else if (IPGetIsMeleeWeapon(oItem)) sQuery = "Melee='1'";
 	else if (IPGetIsThrownWeapon(oItem)) sQuery = "Thrown='1'";
-	else if (IPGetIsAmmunition(oItem)) sQuery = "Ammo='1'";
-	else if (IPGetIsRangedWeapon(oItem)) sQuery = "Ranged='1'";
+	else if (IPGetIsProjectile(oItem)) sQuery = "Ammo='1'";
+	else if (IPGetIsLauncher(oItem)) sQuery = "Ranged='1'";
 	else if (GetBaseItemType(oItem) == BASE_ITEM_ARMOR || 
 	GetBaseItemType(oItem) == BASE_ITEM_SMALLSHIELD || 
 	GetBaseItemType(oItem) == BASE_ITEM_LARGESHIELD || 
@@ -427,11 +433,17 @@ string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE) {
 }
 
 //Generate the main type list
-void GenerateEnchantmentTypeList(object oPC) {
+void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST");
 	
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	if (oItem == OBJECT_INVALID) oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	
+	if (CRAFT_DIRECT_FROM_2DA){
+		GenerateEnchantmentTypeListFrom2DA(oPC, oItem);
+		return;
+	}
+	
 	string sRestrict = GetEnchantmentItemRestriction(oItem, TRUE);
 	
 	string sQuery = "SELECT Recipe_Id FROM recipes WHERE "+sRestrict;
@@ -454,7 +466,7 @@ void GenerateEnchantmentTypeList(object oPC) {
 	for (index = 0; index < max; index++) {
 	
 		int n = GetLocalInt(oPC, "enchant_type_"+IntToString(index));
-		struct enchantment e = LoadEnchantment(n);
+		struct enchantment e = LoadEnchantment(n, oPC);
 		string sName = GetTypeName(e);
 		int nType = e.type;
 		
@@ -485,17 +497,23 @@ void GenerateEnchantmentTypeList(object oPC) {
 	}
 }
 
-//Generate the main type list
+//Generate the sub type list
 //will need refactoring for sql
 void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 
-	//Clear the box
+		//Clear the box
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST");
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	
+	if (CRAFT_DIRECT_FROM_2DA){
+		GenerateParamTypeListFrom2DA(oPC, oItem, enchant);
+		return;
+	}
+
 	
 	//fetching the parameters to match
 	int nType = enchant.type;
 	int nSubType = enchant.subtype;
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	string sRestrict = GetEnchantmentItemRestriction(oItem, TRUE);
 	
 	string sQuery = "SELECT Recipe_Id FROM recipes WHERE Type='"+IntToString(nType)+"' AND Subtype='"+IntToString(nSubType)+"' AND "+sRestrict;
@@ -517,7 +535,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 	for (index = 0; index < max; index++) {
 	
 		int n = GetLocalInt(oPC, "enchant_type_"+IntToString(index));
-		struct enchantment e = LoadEnchantment(n);
+		struct enchantment e = LoadEnchantment(n, oPC);
 		
 		int type = e.type;
 		int sub = e.subtype;
@@ -626,7 +644,6 @@ int HasSimilarProperty(object oPC, object oItem, struct enchantment enchant) {
 	return 0;
 	
 }
-
 //Takes an enchantment and returns a string describing its recipe
 string GenerateEnchantmentDescription(struct enchantment enchant) {
 
@@ -656,14 +673,17 @@ string GenerateEnchantmentDescription(struct enchantment enchant) {
 		sResult += "Essence: "+TranslateItemTagToName(sEssence)+"\n";
 	}
 	
+	string sAddEssence = enchant.add_essence;
+	if (sAddEssence != "") {
+		sResult += "Fuel Essence: "+TranslateItemTagToName(sAddEssence)+"\n";
+	}
+
 	//Special requirements
 	string sReq = enchant.special_req;
 	if (sReq != "") {
 		sResult += DisplaySpecialRequirement(sReq)+"\n";
 	}
-	
 	return sResult;
-
 }
 
 
@@ -704,52 +724,54 @@ string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
 	return sResult;
 	
 }
-
 //Get the list of enchantment requirements for the GUI
 void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant, object oItem) {
 
 	string sResult = "<b>"+GetTypeName(enchant)+" "+GetSecondaryParamName(enchant)+"</b>\n\n";
-	
 	int nPoints = enchant.points;
 	int nCasterLevel = nPoints*3; //need CL 3x that of point value, AT LEAST
-	if (nCasterLevel < 3)
-		nCasterLevel = 3;
-	if (GetHasRequiredCasterLevel(oPC, nCasterLevel, TRUE))
-		sResult += "<i>Caster Level: "+IntToString(nCasterLevel)+"</i>\n";
-	else
-		sResult += "<Color=FireBrick><i>Caster Level: "+IntToString(nCasterLevel)+"</i></Color>\n";
+	if (nCasterLevel < 3) nCasterLevel = 3;
+	
+	string sTemp = "<i>Caster Level: "+IntToString(nCasterLevel)+"</i>\n";
+	if (GetHasRequiredCasterLevel(oPC, nCasterLevel, TRUE)) sResult += sTemp;
+	else sResult += "<Color=FireBrick>" + sTemp + "</Color>";
 	
 	sResult += "Point Value: "+IntToString(nPoints)+"\n";
 	
-	int nGold = enchant.gold;
-	if (GetHasRequiredGold(oPC, nGold, FALSE))
-		sResult += "Gold: "+IntToString(nGold)+"gp \n";
-	else
-		sResult += "<Color=FireBrick>Gold: "+IntToString(nGold)+"gp </Color>\n";
 	
+	int nGold = enchant.gold;
+	 // currently all enchantments cost something afaik, but who knows what faction perks lay in wait?
+	if (nGold > 0){
+		// changing to copper, less confusion in game
+		sTemp = "Cost: "+IntToString(nGold)+" copper \n";
+		if (GetHasRequiredGold(oPC, nGold, FALSE)) sResult += sTemp;
+		else sResult += "<Color=FireBrick>" + sTemp + "</Color>";
+	}
 	string sGem = enchant.gemstone;
 	if (sGem != "") {
-		if (GetHasRequiredGemstone(oPC, sGem, FALSE))
-			sResult += "Gemstone: "+TranslateGemstoneTagToName(sGem)+"\n";
-		else
-			sResult += "<Color=FireBrick>Gemstone: "+TranslateGemstoneTagToName(sGem)+"</Color>\n";
+		sTemp = "Gemstone: "+TranslateGemstoneTagToName(sGem)+"\n";
+		if (GetHasRequiredGemstone(oPC, sGem, FALSE)) sResult += sTemp;
+		else sResult += "<Color=FireBrick>" + sTemp + "</Color>";
 	}
 	
 	string sEssence = enchant.essence;
 	if (sEssence != "") {
-		if (GetHasRequiredEssence(oPC, sEssence, FALSE))
-			sResult += "Essence: "+TranslateItemTagToName(sEssence)+"\n";
-		else
-			sResult += "<Color=FireBrick>Essence: "+TranslateItemTagToName(sEssence)+"</Color>\n";
+		sTemp = "Essence: "+TranslateItemTagToName(sEssence)+"\n";
+		if (GetHasRequiredEssence(oPC, sEssence, FALSE)) sResult += sTemp;
+		else sResult += "<Color=FireBrick>" + sTemp + "</Color>";
+	}
+	string sAddEssence = enchant.add_essence;
+	if (sAddEssence != ""){
+		sTemp = "Fuel Essence: "+TranslateItemTagToName(sAddEssence)+"\n";
+		if (GetHasAddEssence(oPC, sAddEssence, sEssence)) sResult += sTemp;
+		else sResult += "<Color=FireBrick>" + sTemp + "</Color>";
 	}
 	
 	string sReq = enchant.special_req;
 	if (sReq != "") {
-		string sText = DisplaySpecialRequirement(sReq);
-		if (GetFulfillsSpecialRequirement(oPC, sReq, oItem))
-			sResult += sText+"\n";
-		else
-			sResult += "<Color=FireBrick>Special Requirement: "+sText+"</Color>\n";
+		sTemp = DisplaySpecialRequirement(sReq) + "\n";
+		if (GetFulfillsSpecialRequirement(oPC, sReq, oItem)) sResult += sTemp;
+		else sResult += "<Color=FireBrick>" + sTemp + "</Color>";
 	}
 	
 	int nType = enchant.type;
@@ -767,130 +789,66 @@ void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant,
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_REQUIREMENTS", -1, sResult);
 
 }
-
+// ff add
 //Display the item description in the gui
 void DisplayItemDescription(object oPC, object oItem) {
 	int iconIndex = GetItemIconSafe(oItem);
 	string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
 	SetGUITexture(oPC, sEnchantingScreen, "ENCHANTING_ITEM_ICON", sIcon+".tga");
-	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_NAME", -1, GetName(oItem));
+	string sName = GetName(oItem);
+	string sLastName = GetLastName(oItem);
+	if (RemoveWhitespace(sName) == "") sName = GetFirstName(oItem);
+	if (RemoveWhitespace(sLastName) != "") sName += " " + sLastName;
+	if (RemoveWhitespace(sName) == ""){
+		sName = GetStringByStrRef(StringToInt(Get2DAString("baseitems", "Name", GetBaseItemType(oItem))));
+	}
+	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_NAME", -1, sName);
 	string sDesc = GetItemPropertyList(oItem, oPC);
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_DESCRIPTION", -1, sDesc);
+	SendMessageToPC(oPC, "Starting points");
 	
-	int nPointTotal = GetItemTotalPoints(oItem);
+	int nPointTotal = GetItemTotalPoints(oItem, oPC);
 	int nPointAllowed = GetItemTotalPointsAllowed(oItem);
+	if (nPointTotal < 0) nPointTotal = 0;
+	if (nPointAllowed > 12) nPointAllowed = 12;
 	string sPoint = "Points: "+IntToString(nPointTotal)+"/"+IntToString(nPointAllowed);
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_POINTS", -1, sPoint);
 }
 
-//Converts between type/subtype/param/special and the actual property
-itemproperty EnchantmentIndexToItemProp(struct enchantment enchant) {
-
-	int nType = enchant.type;
-	int nSub = enchant.subtype;
-	int nParam = enchant.numerical;
-	int nSpecial = enchant.special;
-
-	switch(nType) {
-		case 0: return ItemPropertyAbilityBonus(nSub, nParam);
-		case 1: return ItemPropertyACBonus(nParam);
-		case 2: return ItemPropertyACBonusVsAlign(nSub, nParam);
-		case 3: return ItemPropertyACBonusVsDmgType(nSub, nParam);
-		case 4: return ItemPropertyACBonusVsRace(nSub, nParam);
-		case 5: return ItemPropertyACBonusVsAlign(nSub, nParam);
-	 	case 6: return ItemPropertyEnhancementBonus(nParam);
-		case 7: return ItemPropertyEnhancementBonusVsAlign(nSub, nParam);
-		case 8: return ItemPropertyEnhancementBonusVsRace(nSub, nParam);
-		case 9: return ItemPropertyEnhancementBonusVsSAlign(nSub, nParam);
-	 	case 10: return ItemPropertyAttackPenalty(nParam);
-	 	case 11: return ItemPropertyWeightReduction(nParam);
-		case 12: return ItemPropertyBonusFeat(nSub);
-		case 13: return ItemPropertyBonusLevelSpell(nSub, nParam);
-		case 15: return ItemPropertyCastSpell(nSub, nParam);
-		case 16: return ItemPropertyDamageBonus(nSub, nParam);
-		case 17: return ItemPropertyDamageBonusVsAlign(nSub, IP_CONST_DAMAGETYPE_MAGICAL, nParam);
-		case 18: return ItemPropertyDamageBonusVsRace(nSub, IP_CONST_DAMAGETYPE_MAGICAL, nParam);
-		case 19: return ItemPropertyDamageBonusVsSAlign(nSub, IP_CONST_DAMAGETYPE_MAGICAL, nParam);
-		case 20: return ItemPropertyDamageImmunity(nSub, nParam);
-		case 21: return ItemPropertyDamagePenalty(nParam);
-		case 22: return ItemPropertyDamageReduction(nParam, nSub);
-		case 23: return ItemPropertyDamageResistance(nSub, nParam);
-		case 24: return ItemPropertyDamageVulnerability(nSub, nParam);
-		case 26: return ItemPropertyDarkvision();
-		case 27: return ItemPropertyDecreaseAbility(nSub, nParam);
-		case 28: return ItemPropertyDecreaseAC(nSub, nParam);
-		case 29: return ItemPropertyDecreaseSkill(nSub, nParam);
-		case 32: return ItemPropertyContainerReducedWeight(nParam);
-		case 35: return ItemPropertyHaste();
-		case 36: return ItemPropertyHolyAvenger();
-		case 37: return ItemPropertyImmunityMisc(nSub);
-		case 38: return ItemPropertyImprovedEvasion();
-		case 39: return ItemPropertyBonusSpellResistance(nParam);
-		case 40: return ItemPropertyBonusSavingThrowVsX(nSub, nParam);
-		case 41: return ItemPropertyBonusSavingThrow(nSub, nParam);
-		case 43: return ItemPropertyKeen();
-		case 44: return ItemPropertyLight(nSub, nParam);
-		case 45: return ItemPropertyMaxRangeStrengthMod(nParam);
-		case 47: return ItemPropertyNoDamage();
-		case 48: return ItemPropertyOnHitProps(nSub, nParam, nSpecial);
-		case 49: return ItemPropertyReducedSavingThrow(nSub, nParam);
-		case 50: return ItemPropertyReducedSavingThrowVsX(nSub, nParam);
-		case 51: return ItemPropertyRegeneration(nParam);
-		case 52: return ItemPropertySkillBonus(nSub, nParam);
-		case 53: return ItemPropertySpellImmunitySpecific(nParam);
-		case 54: return ItemPropertySpellImmunitySchool(nSub);
-		case 55: return ItemPropertyThievesTools(nParam);
-		case 56: return ItemPropertyAttackBonus(nParam);
-		case 57: return ItemPropertyAttackBonusVsAlign(nSub, nParam);
-		case 58: return ItemPropertyAttackBonusVsRace(nSub, nParam);
-		case 59: return ItemPropertyAttackBonusVsSAlign(nSub, nParam);
-		case 60: return ItemPropertyAttackPenalty(nParam);
-		case 61: return ItemPropertyUnlimitedAmmo(nParam);
-		case 62: return ItemPropertyLimitUseByAlign(nSub);
-		case 63: return ItemPropertyLimitUseByClass(nSub);
-		case 64: return ItemPropertyLimitUseByRace(nSub);
-		case 65: return ItemPropertyLimitUseBySAlign(nSub);
-		case 66: return ItemPropertyBonusHitpoints(nParam);
-		case 67: return ItemPropertyVampiricRegeneration(nParam);
-		case 70: return ItemPropertyTrap(nSub, nParam);
-		case 71: return ItemPropertyTrueSeeing();
-		case 72: return ItemPropertyOnMonsterHitProperties(nSub, nSpecial);
-		case 73: return ItemPropertyTurnResistance(nParam);
-		case 74: return ItemPropertyMassiveCritical(nParam);
-		case 75: return ItemPropertyFreeAction();
-		case 78: return ItemPropertyImmunityToSpellLevel(nParam);
-		case 79: return ItemPropertySpecialWalk(nSub);
-		case 80: return ItemPropertyHealersKit(nParam);
-		case 81: return ItemPropertyWeightIncrease(nSpecial);
-		case 82: return ItemPropertyOnHitCastSpell(nSub, nParam);
-		case 83: return ItemPropertyVisualEffect(nSub);
-		case 84: return ItemPropertyArcaneSpellFailure(nParam);
-		case 100: return ItemPropertySpecialMaterial(nSub);
-		default: return ItemPropertyEnhancementBonus(nParam);
-	}
-	return ItemPropertyEnhancementBonus(nParam);
-}
 
 //Prints out the details of the requirement
 string DisplaySpecialRequirement(string sReq) {
-
+	object oPC = OBJECT_SELF;
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	string line = "";
 	if (sReq == "CL_DIVINE") {
 		line = "Must be Cleric, Paladin, or Favored Soul.";
 	} else if (sReq == "CL_ARCANE") {
-		line = "Must be Wizard, Sorcerer, or Bard.";
+		line = "Must be Wizard, Sorcerer, Bard, or have the Magic domain.";
 	} else if (sReq == "CL_NATURE") {
-		line = "Must be Druid, Ranger, or Spirit Shaman.";
+		line = "Must be Druid, Ranger, Spirit Shaman, or have either the Animal or Plant domain.";
 	} else if (sReq == "CL_BARD") {
-		line = "Must be Bard.";
+		line = "Must be Bard or have either the Knowledge, Travel, or Trickery domain.";
 	} else if (sReq == "CREATURE") {
 		line = "On Creature weapons only.";
+	} else if (sReq == "PLAYERMADE_STRONG_MATERIAL_BOOTS") {
+		if (GetBaseItemType(oItem) == BASE_ITEM_BOOTS)
+			line = "Only boots crafted within Sigil from Dragonhide, Flesh Golem, or Outsider can have armor enchantment added.";
+	} else if (sReq == "PLAYER_MADE_ONLY_FOR_RINGS"){
+		if (GetBaseItemType(oItem) == BASE_ITEM_RING)
+			line = "Only rings crafted within Sigil can have ability modifiers greater than three added.";
+	} else if (sReq == "PLAYER_MADE"){
+		line = "Item must be crafted in Sigil.";
+	} else if (sReq == "PLAYERMADE_XBOW_BRACER_GLOVE"){
+		line = "Can only be enchanted on crossbows, bracers, and gloves made in Sigil";
 	}
 	return line;
+	
 }
 
 //Defines / Implements the custom requirements field
 int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID) {
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	if (sReq == "CL_DIVINE") {
 		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) ||
@@ -902,7 +860,8 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	} else if (sReq == "CL_ARCANE") {
 		if (GetLevelByClass(CLASS_TYPE_WIZARD, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_SORCERER, oPC) ||
-		GetLevelByClass(CLASS_TYPE_BARD, oPC)) {
+		GetLevelByClass(CLASS_TYPE_BARD, oPC) ||
+		GetHasFeat(1844, oPC, TRUE)){ // magic domain
 			return TRUE;
 		} else {
 			return FALSE;
@@ -910,13 +869,16 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	} else if (sReq == "CL_NATURE") {
 		if (GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_RANGER, oPC) ||
-		GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC)) {
+		GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) ||
+		GetHasFeat(1835, oPC, TRUE) || GetHasFeat(1845, oPC, TRUE)){//plant and animal domains
 			return TRUE;
 		} else {
 			return FALSE;
 		}
 	} else if (sReq == "CL_BARD") {
-		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0)
+		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
+			GetHasFeat(1849, oPC, TRUE) || GetHasFeat(1850, oPC, TRUE) ||
+			GetHasFeat(1843, oPC, TRUE))// Knowledge, travel, and trickery domains
 			return TRUE;
 		else
 			return FALSE;
@@ -925,8 +887,27 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 			return TRUE;
 		else
 			return FALSE;
+	// added special condition in scodenchantments.2da for the ac enchant rows. 
+	// This way we can enchant ac on player-made boots of golem, dragon, and outsider but not on others
+	} else if (sReq == "PLAYERMADE_STRONG_MATERIAL_BOOTS") {
+		if (GetBaseItemType(oItem) == BASE_ITEM_BOOTS){
+			if (GetIsAcEligibleBoots(oItem) && GetIsPlayerMade(oItem)) return TRUE;
+			else return FALSE;
+		} else return TRUE;
+	} else if (sReq == "PLAYER_MADE_ONLY_FOR_RINGS"){
+		if (GetBaseItemType(oItem) == BASE_ITEM_RING){
+			return GetIsPlayerMade(oItem);
+		} else return TRUE;
+	} else if (sReq == "PLAYER_MADE"){
+		return GetIsPlayerMade(oItem);
+	} else if (sReq == "PLAYERMADE_XBOW_BRACER_GLOVE"){
+		if (!GetIsPlayerMade(oItem)) return FALSE;
+		if (IPGetIsLauncher(oItem)){
+			int nItem = GetBaseItemType(oItem);
+			if (nItem != BASE_ITEM_HEAVYCROSSBOW && nItem != BASE_ITEM_LIGHTCROSSBOW)
+				return FALSE;
+		}
 	}
-	
 	return TRUE; //no special req, return true
 }
 
@@ -1010,6 +991,31 @@ int GetHasRequiredEssence(object oPC, string sReq, int giveFeedback = FALSE) {
 	return FALSE;
 }
 
+//This MUST be called AFTER getting the regular essence requirement
+int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence){
+	if (sAddEssence == "") return TRUE;
+	object oMainEssence = GetLocalObject(oPC, "EssenceToTake");
+	if (sAddEssence == sMainEssence && GetIsObjectValid(oMainEssence)){
+		if (GetItemStackSize(oMainEssence) > 1){
+			SetLocalObject(oPC, "AddEssenceToTake", oMainEssence);
+			return TRUE;
+		}	
+	}
+	int i = 0;
+	object oItem = GetFirstItemInInventory(oPC);
+	while (GetIsObjectValid(oItem)){
+		i++;
+		// num of items a pc could have if inv full of full bags, including the bags
+		if (i > 27072) break;
+		if (GetResRef(oItem) == sAddEssence && oItem != oMainEssence){
+			SetLocalObject(oPC, "AddEssenceToTake", oItem);
+			return TRUE;
+		}
+		oItem = GetNextItemInInventory(oPC);
+	}
+	return FALSE;
+}
+
 //Checks gold + gives failure message
 int GetHasRequiredGold(object oPC, int nGold, int giveFeedback = FALSE) {
 	
@@ -1021,14 +1027,16 @@ int GetHasRequiredGold(object oPC, int nGold, int giveFeedback = FALSE) {
 	return FALSE;
 }
 
+
 //Checks CL + gives failure message
 int GetHasRequiredCasterLevel(object oPC, int nCL, int giveFeedback = FALSE) {
 	
-	if (GetRealCasterLevel(oPC) >= nCL)
+	int nRCL = GetRealCasterLevel(oPC, TRUE);
+	if (nRCL >= nCL)
 		return TRUE;
 		
 	if (giveFeedback)
-		SendMessageToPC(oPC, "You need caster level "+IntToString(nCL)+" in order to enchant this item. Your caster level is "+IntToString(GetRealCasterLevel(oPC)));	
+		SendMessageToPC(oPC, "You need caster level "+IntToString(nCL)+" in order to enchant this item. Your caster level is "+IntToString(nRCL));	
 	return FALSE;
 }
 
@@ -1043,12 +1051,12 @@ int MeetsMinimumRequirements(object oPC) {
 	int nGold = 300; //minimum amount of gold for 1 point ability
 	int nCL = 3; //minimum CL for 1 point ability
 	
-	int nPoints = GetItemTotalPoints(oItem);
+	int nPoints = GetItemTotalPoints(oItem, oPC);
 	int nAllowed = GetItemTotalPointsAllowed(oItem);
 	
 	if (nPoints < nAllowed &&
 	GetGold(oPC) > nGold &&
-	GetRealCasterLevel(oPC) > nCL)
+	GetRealCasterLevel(oPC, TRUE) >= nCL)
 		return TRUE;
 	return FALSE;
 }
@@ -1058,7 +1066,6 @@ int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int fee
 
 	if (GetIsDM(oPC))
 		return TRUE;
-	
 	string sEssence = enchant.essence;
 	string sGem = enchant.gemstone;
 	int nGold = enchant.gold;
@@ -1066,18 +1073,19 @@ int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int fee
 	int nCL = enchant.points*3;
 	if (nCL < 3)
 		nCL = 3;
-	int nPoints = GetItemTotalPoints(oItem);
+	int nPoints = GetItemTotalPoints(oItem, oPC);
 	int nAllowed = GetItemTotalPointsAllowed(oItem);
-	
-	if ((nPoints+enchant.points) <= nAllowed &&
+	int bHasBaseReq = ((nPoints+enchant.points) <= nAllowed &&
 	GetHasRequiredCasterLevel(oPC, nCL, feedback) &&
 	GetHasRequiredGold(oPC, nGold, feedback) &&
 	GetHasRequiredEssence(oPC, sEssence, feedback) && 
 	GetHasRequiredGemstone(oPC, sGem, feedback) && 
-	GetFulfillsSpecialRequirement(oPC, sReq, oItem))
-		return TRUE;
-	
-	return FALSE;
+	GetFulfillsSpecialRequirement(oPC, sReq, oItem));
+	if (bHasBaseReq && enchant.add_essence != ""){
+		if (!GetHasAddEssence(oPC, enchant.add_essence, enchant.essence))
+			bHasBaseReq = FALSE;
+	}
+	return bHasBaseReq;
 }
 
 //Must be called after GetHasRequiredEssence and/or GetHasRequiredGemstone
@@ -1098,32 +1106,251 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant) {
 	if (GetIsObjectValid(oEssence)) {
 		string sTag = GetTag(oEssence);
 		TakeNumCraftingMaterials(oPC, sTag, 1);
-	} else {
-		SendMessageToPC(oPC, "no essence required");
+	} 
+	if (enchant.add_essence != ""){
+		object oAddEssence = GetLocalObject(oPC, "AddEssenceToTake");
+		if (GetIsObjectValid(oAddEssence)) {
+			string sAddTag = GetTag(oAddEssence);
+			TakeNumCraftingMaterials(oPC, sAddTag, 1);
+		} 
 	}
+	if (enchant.essence == "" && enchant.add_essence == "")
+		SendMessageToPC(oPC, "no essence required");
 		
 }
 
-//Enchant the chosen item
-void EnchantItem(object oItem, struct enchantment enchant) {
-
-	itemproperty ip = EnchantmentIndexToItemProp(enchant);
-	IPSafeAddItemProperty(oItem, ip);
+int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
+	// just a heads up, setting a default value in an arg to OBJECT_SELF might not get the right
+	// context for OBJECT_SELF, better to set it inside the function.
+	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
 	
-	if (enchant.type == 15) {//spell cast / per day
-		SetItemCharges(oItem, 50);
+	int nPoints = 0; // this will be our ultimate return value. May as well set it up first thing.
+
+	int nItem = GetBaseItemType(oItem);
+	if (nItem == 111) nItem = 202; // there are 2 whip ids. The scod_craft_baseitems uses 202
+	
+	// Crafted items have item properties that are either more powerful than what can be done with enchanting
+	// or cost fewer points than enchaning versions, otherwise what's the point in using the special mats?
+	// Under the old system making a pandemic silver sword with an automatic +1d6 vs lawful cost more than
+	// just buying a regular alchemical silver ingot from Layla and enchanting it with +1d6 vs law, resulting
+	// in the same points for the same mechanical stats but less $$$. So now we need to identify the base
+	// material item property so that we can assign our own points for it instead of matching it to scodenchantments.2da
+	
+	
+	// to start, lets just get an item property variable for the material. When we find what this is 
+	// we'll set the points to what is set for this material in the 2da
+	itemproperty ipMatPower;
+
+	// now we need a variable to hold the row for scod_craft_baseitems
+	int nCraftId = -1;
+
+	// now let's go ahead and figure out what we're dealing with. Although every weapon and other base item is craftable,
+	// not every armor is (such as masterwork and elven mithral), so if it's an armor we need to find it by it's 
+	// armorrulesstats id. There's 2 columns for that in scod_craft_baseitems, one for sigilian (golem) mithral and one for
+	// everything else. 
+	int i;
+	int nNumRows = GetNum2DARows("scod_craft_baseitems");
+	if (nItem == 16){
+		// going to compare strings instead of using StringToInt in the 2da because "****" in the 2da 
+		// would be converted to 0 as integer, which would match with clothing rulesstat
+		string sArmorStat = IntToString(GetArmorRulesType(oItem));
+		for (i = 0; i < nNumRows; i++){
+			if (Get2DAString("scod_craft_baseitems", "ARMORSTAT_ID", i) == sArmorStat ||
+				Get2DAString("scod_craft_baseitems", "MITH_ARMORSTAT_ID", i) == sArmorStat){
+					nCraftId = i;
+					break;
+				}
+		}
+	} else {
+		for (i = 0; i < nNumRows; i++){
+			if (StringToInt(Get2DAString("scod_craft_baseitems", "ID", i)) == nItem){
+				nCraftId = i;
+				break;
+			}
+		}
 	}
+	// we should have a craft id now. If we don't then whatever oItem is it's not something we can craft, so screw it.
+	// Kidding. We just skip getting the material itemprop. But if we DO have a scod_craft_baseitems id, then we
+	// go ahead and do what we have to do to get that ipMatPower. ofc just because it CAN be crafted doesn't mean
+	// it was, but if we don't get valid materials and ipMatPower we don't assign points based on the ipMatPower.
+	itemproperty ip;
+	int nIpType;
+	int nIpSub;
+	if (nCraftId != -1){
+		struct baseitem dItem = LoadBaseItem(nCraftId);
+		string sMat2da = GetStringLowerCase(dItem.matlist_1);
+		int nIpRpBaseMatId = -1; // this will be the id of mat1 in iprp_specialmat, NOT the id within scod_craft_leather, etc
+		// So now we try to find the base material. If the item is metalline, then that makes it easy.
+		if (GetTag(oItem) == "nw_metalline"){
+			nIpRpBaseMatId = SPECIAL_MAT_METALLINE;
+			sMat2da = "scod_craft_metal"; // wood and leather melee weapons with metalline get metalline shift property, so set this
+		} else {
+			// now find the right base material. iprp_specialmat now has a column to say which material list a special
+			// material shows up in. Although the precious metals like gold, electrum, etc can now be either mat1 for
+			// jewelry or mat 3 for weapons and armor, it only matters in this case for mat1 so they're assigned to 
+			// scod_craft_metal. (not that they provide any matpower anyway).
+			ip = GetFirstItemProperty(oItem);
+			while (GetIsItemPropertyValid(ip)){
+				if (GetItemPropertyType(ip) == 100){
+					nIpSub = GetItemPropertySubType(ip);
+					// if the special mat item property subtype row matches the mat1 for oItem, bingo. We have iprpmatid
+					if (GetStringLowerCase(Get2DAString("iprp_specialmat", "Mat_2da", nIpSub)) == sMat2da){
+						nIpRpBaseMatId = nIpSub; // this is the row of iprp_specialmat for our item's base material
+						break;
+					}
+				}
+				ip = GetNextItemProperty(oItem);
+			}
+		}
+		// now we need to cycle through our material 2da to get the id within that 2da for our material,
+		// assuming of course we found an iprp value
+		if (nIpRpBaseMatId != -1){
+			int nMatIndex = -1;
+			nNumRows = GetNum2DARows(sMat2da);
+			for (i = 0; i < nNumRows; i++){
+				if (StringToInt(Get2DAString(sMat2da, "IP_DESCRIPTION_ID", i)) == nIpRpBaseMatId){
+					nMatIndex = i;
+					break;
+				}
+			}
+			// now load our material if we have a matindex
+			if (nMatIndex != -1){
+				struct material dMat = LoadMaterial(nMatIndex, sMat2da);
+				// finally we can get the special mat ip. maybe. Of course, we don't KNOW 
+				// that there is one even if we got to this point. For example physical DR armors 
+				// have no item property because it's set in the toolset (thank you, bioware, for creating
+				// dr functions that don't function), but we'll try to get the special mat property
+				// and if we've found a special mat that corresponds to what the base mat is supposed to be 
+				// then we'll assign the points as if the mat power is there. Should be safe enough unless
+				// someone starts adding special mat properties to drop items. Riverine items in the Armory
+				// should be safe enough because I haven't changed what item property riverine gets, so those 
+				// should get the correct points.
+				ip = GetSpecialMaterialItemProperty(dItem, dMat);
+				if (GetIsItemPropertyValid(ip)) ipMatPower = ip;
+				// now lets figure out the points. I've created columns for those, too, in iprp_specialmat
+				string sPointsColumn = "";
+				if (dItem.type == "W"){
+					if (IPGetIsLauncher(oItem)) sPointsColumn = "R_POINTS"; // bows, xbows, slings
+					else sPointsColumn = "M_POINTS"; // all other weapons and ammo
+				} else if (dItem.type == "A"){ sPointsColumn = "A_POINTS";
+				} else if (nItem == BASE_ITEM_GLOVES && CRAFTED_GLOVES_GET_MAT_POWER)
+					sPointsColumn = "M_POINTS";
+				// misc items other than gloves don't get a base mat power, so they don't cost points.
+				
+				// Now we add the points for the mat power. We don't wait till we see if the item has the mat
+				// power because some items, like DR armors, don't have the mat power defined in the 2da.
+				// We just hope no dev does anything silly like giving a loot drop item a Forged Of property
+				// without giving the mat power.
+				if (sPointsColumn != "")
+					nPoints += StringToInt(Get2DAString(sMat2da, sPointsColumn, nMatIndex));
+			}
+		}
+	} // end if (nCraftId != -1)
+	
+	// ok, that was a lot of work to get the points and matpower. Maybe that should be stored on a 
+	// local int on the item at creation? How reliable would that be? No idea.
+	
+	// there's 5 more item properties to account for that cost specific points based on circumstance:
+	// material synergy bonus for special materials, 
+	// rapid reload for crossbows that were made with a crossbow cocking lever
+	// weapon focus for crossbows that were made with a self-adjusting sight
+	// bonus feat imp crit unarmed or for specific ranged weapons is applied instead of keen, so we'll
+	// check for that.
+	// and ofc 50% weight costs nothing so why scan the 2da for that one?
+	struct synergyBonus dSynergy = GetItemMaterialSynergyBonus(oItem);
+	itemproperty ipSynergy = dSynergy.ip;
+	int nSynergyPoints = dSynergy.nPoints;
+	struct xbowMechanicals dXbow = GetXbowMechanicals(oItem);
+	itemproperty ipMechAim = dXbow.ipAim;
+	itemproperty ipMechReload = dXbow.ipReload;
+	itemproperty ipCrit = ItemPropertyKeen();
+	if (nItem == BASE_ITEM_GLOVES) ipCrit = ItemPropertyBonusFeat(20);
+	else if (IPGetIsLauncher(OBJECT_INVALID, nItem) || IPGetIsThrownWeapon(OBJECT_INVALID, nItem))
+		ipCrit = GetImpCritItemPropertyForRanged(nItem);
+	itemproperty ipWeight = ItemPropertyWeightReduction(IP_CONST_REDUCEDWEIGHT_50_PERCENT);
+	
+	string sTypeColumn = GetItemColumn(nItem); // the column in scodenchantments for a valid enchantment for this item, 0_Melee, etc
+	struct enchantment eFrom2da; // the enchantment in scodenchantments that might be the one on our item
+	itemproperty ipFrom2da; // the item property from above, we'll compare it to the one on the item
+	int bFoundMatch; // boolean, did we find a matching enchantment?
+	nNumRows = GetNum2DARows("scodenchantments");
+	int bSkipIp; // boolean to skip an ip that we know is 0 points or specific points already added.
+	ip = GetFirstItemProperty(oItem);
+	while (GetIsItemPropertyValid(ip)){
+		bSkipIp = FALSE;
+		bFoundMatch = FALSE;
+		nIpType = GetItemPropertyType(ip);
+		
+		if (nIpType == 100 || nIpType == 101) bSkipIp = TRUE; // "Forged Of" and Player-Made ips
+		
+		if (!bSkipIp && GetIsItemPropertyValid(ipMatPower)){
+			if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
+				bSkipIp = TRUE; // we've already added the points for the mat power
+			}
+		}
+		
+		// reload and aim features granted by materials a crossbow is made with do not cost points
+		// (because they don't grant any either)
+		if (!bSkipIp && GetIsItemPropertyValid(ipMechReload)){
+			if (IPGetItemPropertiesIdentical(ipMechReload, ip)) bSkipIp = TRUE;	
+		}
+		if (!bSkipIp && GetIsItemPropertyValid(ipMechAim)){
+			if (IPGetItemPropertiesIdentical(ipMechAim, ip)) bSkipIp = TRUE;	
+		}
+		if (!bSkipIp && GetIsItemPropertyValid(ipSynergy)){
+			if (IPGetItemPropertiesIdentical(ipSynergy, ip)){
+				nPoints += nSynergyPoints;
+				bSkipIp = TRUE;
+			}
+		}
+		if (!bSkipIp){
+			if (IPGetItemPropertiesIdentical(ipWeight, ip)) bSkipIp = TRUE;
+		}
+		// checking for keen/imp crit last in case it was already the matpower
+		if (!bSkipIp && !IPGetItemPropertiesIdentical(ipCrit, ipMatPower)){
+			if (nIpType == 43){
+				nPoints += 1;
+				bSkipIp = TRUE;
+			}
+		}
+		if (!bSkipIp){
+			nIpSub = GetItemPropertySubType(ip);
+			// now search for matching type and subtype in scodenchantments
+			for (i = 0; i < nNumRows; i++){
+				if (StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType){
+					if (Get2DAString("scodenchantments", sTypeColumn, i) == "1"){
+						// if the type and subtype match and it's a valid enchantment for this item, lets compare
+						eFrom2da = LoadEnchantment(i, oPC);
+						ipFrom2da = EnchantmentIndexToItemProp(eFrom2da);
+						if (IPGetItemPropertiesIdentical(ip, ipFrom2da)){
+							bFoundMatch = TRUE;
+							nPoints += eFrom2da.points;
+							break;
+						}	
+					}
+				}
+			}
+			if (!bFoundMatch) nPoints += EstimateItemPropertyPointValue(ip);
+		}
+		ip = GetNextItemProperty(oItem);
+	}	
+	return nPoints;
 }
 
-int GetItemTotalPoints(object oItem) {
+
+int GetItemTotalPoints(object oItem, object oPC = OBJECT_INVALID) {
+
+	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+	if (CRAFT_DIRECT_FROM_2DA) return GetItemTotalPointsFrom2DA(oItem, oPC);
 
 	string itemType = "";
-	if (GetBaseItemType(oItem) == BASE_ITEM_ARMOR || 
-	GetBaseItemType(oItem) == BASE_ITEM_SMALLSHIELD || 
-	GetBaseItemType(oItem) == BASE_ITEM_LARGESHIELD || 
-	GetBaseItemType(oItem) == BASE_ITEM_TOWERSHIELD) 
+	int nItem = GetBaseItemType(oItem);
+	if (nItem == BASE_ITEM_ARMOR || 
+	nItem == BASE_ITEM_SMALLSHIELD || 
+	nItem == BASE_ITEM_LARGESHIELD || 
+	nItem == BASE_ITEM_TOWERSHIELD) 
 		itemType = "Armor";
-	
+
 	int nTotal = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)) {
@@ -1131,55 +1358,57 @@ int GetItemTotalPoints(object oItem) {
 		ip = GetNextItemProperty(oItem);
 	}
 	return nTotal;
-	
 }
 
-//Get whether this subtype is powerful enough to give an extra point
-int IsPowerfulMaterial(itemproperty ip, int countSilver = FALSE) {
-
-	int nSubType = GetItemPropertySubType(ip);
-	if (nSubType >= 0 && nSubType <= 15) {
-		return TRUE;
-	} else if (nSubType >= 22 && nSubType <= 37) {
-		return TRUE;
-	}  else if (nSubType == 42) {
-		return TRUE;
-	} else if (countSilver && (nSubType == 41 || nSubType == 20)) { //Allowing Cold Iron / Silver to add to points, because sometimes you want a weapon with full points and no existing property!
-		return TRUE;
-	}
-	return FALSE;
-}
 
 //Max number of enchantment points
-int GetItemTotalPointsAllowed(object oItem, object oPC = OBJECT_INVALID) {
-
+int GetItemTotalPointsAllowed(object oItem) {
+	// New Points:
+	// All player-made items start with 10 points except launchers and ammo, which start at 8. loot
+	// drop weapons have base 8. If a weapon has the player-made property "Cage-Forged", or if it is 
+	// made with 3 special materials, then we know it's player-made and gets 10.
+	/*
 	int countSilver = FALSE;
 	int nBase = 10; //later we can add higher point base for suboptimal items
-	if (GetWeaponType(oItem) != WEAPON_TYPE_NONE || (GetBaseItemType(oItem) >= 93 && GetBaseItemType(oItem) <= 95)) { //Weapons/Quivers start at 8 points
+	if (GetWeaponType(oItem) != WEAPON_TYPE_NONE || (GetBaseItemType(oItem) >= 93 && GetBaseItemType(oItem) <= 95)) 
+	{ //Weapons/Quivers start at 8 points
 		nBase = 8;
 		countSilver = TRUE;
 	}
-	
+	*/
+	// there's no reason why we shouldn't always count cold iron and silver as special
+	// even if it's not adding any properties of use, like in an amulet. It still cost more
+	// than iron or brass so it's worth a point. We can just use conditionals at the end
+	// to keep points in the allowed range, so idk why this is even here.
+	int countSilver = TRUE; 
+	int nBase = 10;
+	int bIsThrownOrMelee = (IPGetIsMeleeWeapon(oItem) || IPGetIsThrownWeapon(oItem));
+	// set all weapons to base 8, but player-made melee and thrown will get 2 added back at the end
+	if (bIsThrownOrMelee || IPGetIsLauncher(oItem) || IPGetIsProjectile(oItem)) nBase = 8;
 	int nNumMaterials = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)) {
-	
-		if (GetIsObjectValid(oPC)) 
-			SendMessageToPC(oPC, "Property type: "+IntToString(GetItemPropertyType(ip))+", sub type: "+IntToString(GetItemPropertySubType(ip)));
-		
-		if (GetItemPropertyType(ip) == 100 && IsPowerfulMaterial(ip, countSilver))  //find Made Of property and check value
-			nNumMaterials++;
-		
+		if (GetItemPropertyType(ip) == 100){
+			if (GetIsPowerfulMaterial(GetItemPropertySubType(ip))) nNumMaterials++;
+		}
 		ip = GetNextItemProperty(oItem);
 	}
-	
-	if (GetIsObjectValid(oPC)) 
-		SendMessageToPC(oPC, "number of materials: "+IntToString(nNumMaterials));
 
-	if (nNumMaterials > 0)
-		nNumMaterials -= 1;
-	return nBase+nNumMaterials;
+	if (bIsThrownOrMelee){
+		if (GetIsPlayerMade(oItem)) nBase += 2;
+		else if (nNumMaterials >= 3){ // if it's made with 3 special materials we will assume it's a player-made from before this change
+			nBase += 2;
+			ApplyPlayerMade(oItem);
+		}
+	}
+
+	if (nNumMaterials > 0) nNumMaterials -= 1;
+	int nTotal = nBase + nNumMaterials;
+	if (nTotal > nBase + 2) nTotal = nBase + 2;
+	else if (nTotal < nBase) nTotal = nBase;
+	return nTotal;
 }
+
 
 //get the point value for item property
 int GetItemPropertyPointValue(itemproperty ip, string itemType = "") {
@@ -1226,6 +1455,7 @@ int EstimateItemPropertyPointValue(itemproperty ip) {
 		return 0;
 	if (nType == 100) //Made of Properties
 		return 0;
+	if (nType == 101) return 0; // player-made
 	//Locked off / Power properties
 	if (nType == 20 || nType == 35 || nType == 36 
 	|| nType == 37 || nType == 54 || nType == 78 || nType == 75) //Damage Immunity, Haste, Holy Avenger, Immunity Misc, Immunity to Spell Level / School, Freedom of Movement
@@ -1249,3 +1479,100 @@ int EstimateItemPropertyPointValue(itemproperty ip) {
 		
 	return FloatToInt(estimate);
 }
+
+
+int GetIsAcEligibleBoots(object oItem){
+	int nSub = 0;
+	if (GetBaseItemType(oItem) == BASE_ITEM_BOOTS){
+		int nMat = GetItemBaseMaterialType(oItem);
+		if (nMat == 20 || nMat == 9 || nMat == 1) return TRUE;
+		itemproperty ip = GetFirstItemProperty(oItem);
+		while (GetIsItemPropertyValid(ip)){
+			if (GetItemPropertyType(ip) == 100){
+				nSub = GetItemPropertySubType(ip);
+				// special mats for dragonhide are 22 - 26, Celestial, demon, 
+				// and devil are 27 - 29, flesh golem is 57
+				if ((nSub >= 22 && nSub <= 29) || nSub == 57) return TRUE; 	
+			}
+			ip = GetNextItemProperty(oItem);
+		}
+	}
+	return FALSE;
+}
+
+int GetIsPlayerMade(object oItem){
+	int ipType;
+	int bRet = FALSE;
+	itemproperty ip = GetFirstItemProperty(oItem);
+    while (GetIsItemPropertyValid(ip)){
+		ipType = GetItemPropertyType(ip);
+        if (ipType == 101){ // "Cage-Forged" property to denote a player-made item
+			bRet = TRUE;
+			break;
+		} 
+		ip = GetNextItemProperty(oItem);
+    }
+    return bRet;
+}
+
+void ApplyPlayerMade(object oItem){
+	object oChest = GetObjectFromDMArea("pc_utility_ipchest");
+	object oSpoon = CreateItemOnObject("ps_crft_utility_playermade", oChest);
+	itemproperty ip = GetFirstItemProperty(oSpoon);
+	DestroyObject(oSpoon, 1.0f);
+	IPSafeAddItemProperty(oItem, ip);
+}
+
+string GetAdditionalEssenceReq(object oPC, int nPoints){
+	if (nPoints < 0) nPoints = 0;
+	else if (nPoints > 5) nPoints = 5;
+	// in case they have some real caster levels, check to see if they would
+	// be able to do the enchantment with those. If they can, then they don't
+	// need the additional power essence
+	int nReqCasterLevel = nPoints * 3;
+	if (nReqCasterLevel < 3) nReqCasterLevel = 3;
+	// Check caster level excluding calculation for Alchemical Infusion.
+	// If they have suffient magical power of their own, bail without
+	// setting an additional power essence requirement.
+	if (GetRealCasterLevel(oPC, FALSE) >= nReqCasterLevel) return "";
+	// else assign a power essence based on points of enchantment.
+	// 1 point is free and sets no power essence.
+	switch (nPoints){
+		case 1: case 2: return "cft_ess_power1";
+		case 3: return "cft_ess_power2";
+		case 4: return "cft_ess_power3";
+		case 5: return "cft_ess_power4";
+		default: return "";
+	}
+	return "";
+}
+
+
+/* Moved to x2_inc_itemprops where they can be accessable to other scripts as well
+
+//Is this a thrown weapon?
+int IPGetIsThrownWeapon(object oItem)
+{
+  int nBT = GetBaseItemType(oItem);
+  return (nBT == BASE_ITEM_DART || nBT == BASE_ITEM_SHURIKEN || nBT == BASE_ITEM_THROWINGAXE);
+}
+
+//Get is ammunition or ammunition quiver
+int IPGetIsProjectile(object oItem) {
+	if (GetBaseItemType(oItem) == BASE_ITEM_ARROW || GetBaseItemType(oItem) == BASE_ITEM_BOLT || GetBaseItemType(oItem) == BASE_ITEM_BULLET)
+		return TRUE;
+	if (GetBaseItemType(oItem) >= 93 && GetBaseItemType(oItem) <= 95)
+		return TRUE;
+	return FALSE;
+}
+
+//Get is thrown weapon or thrown weapon quiver
+int IPGetIsThrownWeapon(object oItem) {
+	if (GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE || GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN || GetBaseItemType(oItem) == BASE_ITEM_DART)
+		return TRUE;
+	if (GetBaseItemType(oItem) >= 90 && GetBaseItemType(oItem) <= 92)
+		return TRUE;
+	return FALSE;
+}
+
+*/

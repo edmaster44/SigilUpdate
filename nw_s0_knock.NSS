@@ -36,6 +36,18 @@ void main()
 
 // End of Spell Cast Hook
 
+	int nDuration = 2 + PS_GetCasterLevel(OBJECT_SELF); 
+	int nBonus = 10;
+	
+	int nMeta = GetMetaMagicFeat();
+	if (nMeta == METAMAGIC_EMPOWER) nBonus += nBonus / 2;
+	if (nMeta == METAMAGIC_EXTEND) nDuration *= 2;
+	
+	effect eOpen = EffectSkillIncrease(SKILL_OPEN_LOCK, nBonus);
+	eOpen = SetEffectSpellId(eOpen, SPELL_KNOCK);
+	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_KNOCK, FALSE));
+	PS_RemoveEffects(OBJECT_SELF, SPELL_KNOCK);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eOpen, OBJECT_SELF, TurnsToSeconds(nDuration)); 
 
     object oTarget;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);

@@ -21,7 +21,7 @@ void main()
 	//Declare major variables
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
 	object oTarget;
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
     //effect eImpact = EffectVisualEffect(VFX_FNF_LOS_NORMAL_20);	// NWN1 VFX
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);	// NWN1 VFX
     effect eConfuse = EffectConfused();

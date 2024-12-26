@@ -1,3 +1,5 @@
+
+
 //Gets caster progression for the given classID from the 2das
 //can safely be passed CLASS_TYPE_INVALID
 int GetCasterLevelFromClass(object oPC, int classID) {
@@ -88,8 +90,11 @@ int GetPsionicCasterLevel(object oPC) {
 //Gets the PC's caster level, via 2da and feats
 //Does not require you to cast a spell first
 //A bit slower than GetCasterLevel - only use for non-spells
-int GetRealCasterLevel(object oPC) {
-
+// -bIncludeAlch is for enchanting with alchemy skill via 
+// Alchemical Infusion feat
+int GetRealCasterLevel(object oPC, int bIncludeAlch = FALSE) {
+	
+	int nRet;
 	int nCasterLevel = 0;
 	int nPsionicLevel = GetPsionicCasterLevel(oPC);
 	
@@ -108,8 +113,34 @@ int GetRealCasterLevel(object oPC) {
 	//Account for Practiced Spellcaster
 	nCasterLevel += GetFeatGrantedCasterLevel(oPC);
 	
-	if (nPsionicLevel > nCasterLevel)
-		return nPsionicLevel;
-	else
-		return nCasterLevel;
+	if (nPsionicLevel > nCasterLevel) nRet = nPsionicLevel;
+	else nRet = nCasterLevel;
+	
+	// Alchemical Infusion
+	if (bIncludeAlch && GetHasFeat(21919, oPC, TRUE)){
+		// alchemical caster level is calulated base alch -3 + 1/2 of spellcraft + 1/2 of UMD
+		// get base ranks
+		int nAlchRank = GetSkillRank(SKILL_CRAFT_ALCHEMY, oPC, TRUE);
+		int nSpellRank = GetSkillRank(SKILL_USE_MAGIC_DEVICE, oPC, TRUE);
+		int nUmdRank = GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE);
+		// then do the math as floats so that if any two wind up with a .5 value they add up to a +1
+		float fAlchRank = IntToFloat(nAlchRank);
+		float fSpellRank = IntToFloat(nSpellRank);
+		float fUmdRank = IntToFloat(nUmdRank);
+		float fTotal = (fAlchRank -3.0f) + (fSpellRank / 2.0f) + (fUmdRank / 2.0f);
+		// convert back to integer
+		int nAlchLevel = FloatToInt(fTotal);
+		// get char level including ecl, could not use ps_inc_functions
+		// function for this because this file is included in ps_inc_functions
+		// not the other way around and cyclical inclusions cause problems
+		int nLevel = GetHitDice(oPC);
+		object oEss = GetItemPossessedBy(oPC, "ps_essence");
+		int nECL = StringToInt(GetLocalString(oEss, "ECL"));
+		if (nECL > 0) nLevel += nECL;
+		// cannot have an Alchemical casting lvl higher than adjusted char lvl
+		if (nAlchLevel > nLevel) nAlchLevel = nLevel;
+		// if alch lvl higher than reg caster level and we're checking for it, return it
+		if (nAlchLevel > nRet) nRet = nAlchLevel;
+	}
+	return nRet;
 }

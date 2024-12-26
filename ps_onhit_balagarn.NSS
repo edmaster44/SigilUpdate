@@ -24,7 +24,7 @@ void main()
 
     //Declare major variables
     object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
     float fDelay;
 	float fMaxDelay;
     float nSize =  RADIUS_SIZE_HUGE;	

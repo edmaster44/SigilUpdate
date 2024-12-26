@@ -28,7 +28,7 @@ void main()
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_DARKNESS));
 	
     location lTarget = GetLocation(OBJECT_SELF);
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
 	
     //Make sure duration does no equal 0
     if (nDuration < 1)

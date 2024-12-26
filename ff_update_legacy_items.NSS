@@ -4,10 +4,11 @@
 // Edit FF_UpdateSingleLegacyItem() to add or remove any procedures.
 
 #include "x2_inc_itemprop"
+#include "x2_inc_craft"
 
 // function declarations
 void FF_UpdateLegacyItems(object oPC);
-void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd);
+void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
 
 
 // Edit this function to perform whatever operations need to be done to correct erroneous items.
@@ -16,10 +17,84 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd);
 void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 {
 	// since multiple checks require knowing the res ref, we'll just get it here.
-	string nRef = GetResRef(oItem);
+	string sRef = GetResRef(oItem);
+	
+	//ditto base item type
+	int nType = GetBaseItemType(oItem);
+	
+	// make sure scrolls and wands are usuable by all classes that have the same spellbook or 
+	// are supposed to be allowed to use scrolls and wands of another spellbook
+	if (nType == 102 || nType == 105 || nType == 103 || nType == 106){
+		// make sure fs can use cleric and vice versa, also make knight able if boolean set
+		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_CLERIC), DURATION_TYPE_PERMANENT) ||
+		IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_FAVORED_SOUL), DURATION_TYPE_PERMANENT)){
+			MakeItemUseableByClass(CLASS_TYPE_FAVORED_SOUL, oItem); // checks for existing before adding
+			MakeItemUseableByClass(CLASS_TYPE_CLERIC, oItem);
+			if (B_KNIGHT_USE_CLERIC_WANDSCROLL) MakeItemUseableByClass(CLASS_TYPE_PALADIN, oItem);
+		}
+		// if boolean set make cleric and fs able to use knight wands and scrolls
+		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_PALADIN), DURATION_TYPE_PERMANENT) &&
+			B_CLERIC_USE_KNIGHT_WANDSCROLL){
+			MakeItemUseableByClass(CLASS_TYPE_FAVORED_SOUL, oItem);
+			MakeItemUseableByClass(CLASS_TYPE_CLERIC, oItem);
+		}
+		// make sure shaman can use druid and vice versa, also make ranger able if boolean set
+		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_DRUID), DURATION_TYPE_PERMANENT) ||
+		IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_SPIRIT_SHAMAN), DURATION_TYPE_PERMANENT)){
+			MakeItemUseableByClass(CLASS_TYPE_DRUID, oItem);
+			MakeItemUseableByClass(CLASS_TYPE_SPIRIT_SHAMAN, oItem);
+			if (B_RANGER_USE_DRUID_WANDSCROLL) MakeItemUseableByClass(CLASS_TYPE_RANGER, oItem);
+		}
+		// if boolean set make shaman and druid able to use ranger wands and scrolls
+		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_RANGER), DURATION_TYPE_PERMANENT) &&
+			B_DRUID_USE_RANGER_WANDSCROLL){
+			MakeItemUseableByClass(CLASS_TYPE_DRUID, oItem);
+			MakeItemUseableByClass(CLASS_TYPE_SPIRIT_SHAMAN, oItem);
+		}
+		// make sure sorc can use wiz and vice versa, also make bard able if boolean set
+		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_WIZARD), DURATION_TYPE_PERMANENT) ||
+		IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_SORCERER), DURATION_TYPE_PERMANENT)){
+			MakeItemUseableByClass(CLASS_TYPE_WIZARD, oItem);
+			MakeItemUseableByClass(CLASS_TYPE_SORCERER, oItem);
+			if (B_BARD_USE_WIZ_WANDSCROLL) MakeItemUseableByClass(CLASS_TYPE_BARD, oItem);
+		}
+		// if boolean set make sorc and wiz able to use bard wands and scrolls
+		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_BARD), DURATION_TYPE_PERMANENT) &&
+			B_WIZ_USE_BARD_ARCANE_WANDSCROLL){
+			itemproperty ipSpell = GetFirstItemProperty(oItem);
+			int nId = -1;
+			int nSub = -1;
+			while (GetIsItemPropertyValid(ipSpell)){
+				if (GetItemPropertyType(ipSpell) == ITEM_PROPERTY_CAST_SPELL){
+					nSub = GetItemPropertySubType(ipSpell);
+					nId = StringToInt(Get2DAString("iprp_spells", "SpellIndex", nSub));
+					break;
+				}
+				ipSpell = GetNextItemProperty(oItem);
+			}
+			if (nId != -1 && !IsOnSpellList(nId, CLASS_TYPE_CLERIC)){
+				MakeItemUseableByClass(CLASS_TYPE_WIZARD, oItem);
+				MakeItemUseableByClass(CLASS_TYPE_SORCERER, oItem);
+			}
+		}
+	}
+	
+	// make sure that people get the mithral and adamantine ingots used in crafting here instead of
+	// the default ones that might be lingering in treasure tables
+	if (sRef == "n2_crft_ingadamant" || sRef == "n2_crft_ingmithral"){
+		int nStack = GetNumStackedItems(oItem);
+		object oNewItem;
+		if (sRef == "n2_crft_ingadamant") oNewItem = CreateItemOnObject("ps_crft_ing_ada", oPC, nStack, "ps_crft_ing_ada", 0);
+		else oNewItem = CreateItemOnObject("ps_golem_mithral", oPC, nStack, "ps_golem_mithral", 0);
+		
+		// this does nothing. All it's for is to delay things by half a sec to make sure the new item is created
+		DelayCommand(0.5f, SetLocalInt(oPC, "GotACraftIngot", TRUE));
+		
+		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem, 0.3f, FALSE);
+	}
 	
 	// nerf the sword saint armor
-	if (nRef == "ps_itemset_swordsaint3")
+	if (sRef == "ps_itemset_swordsaint3")
 	{
 		FF_ModifyItemProperty(oItem, ItemPropertyDecreaseAC(IP_CONST_ACMODIFIERTYPE_SHIELD, 2), TRUE);
 	}
@@ -59,25 +134,31 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 		}
 	}
 	
-	// Fix darkvision helmets. Note that this requires my updated iprp_feats.2da to work properly because 
+	// Fix darkvision items, because ItemPropertyDarkvision() is Biobugged. 
+	// Note that this requires my updated iprp_feats.2da to work properly because 
 	// darkvision wasn't available as a bonus feat until I added it, so we'll do a little check and default to low 
-	// light vision instead if darkvision isn't found. IPGetItemHasProperty() will not recognize ItempropertyDarkvision()
-	// for some reason so we have to check for individual helms. -FlattedFifth
-	if (nRef == "ps_luca_safetygoggles" || nRef == "ps_helmet_helmofdarkness" ) 
-	{
-		itemproperty ipdv = ItemPropertyDarkvision();
-		// go ahead and remove item property darkvision since it doesn't work anyway. Its'a biobug
-		FF_ModifyItemProperty(oItem, ipdv, FALSE);
+	// light vision instead if darkvision isn't found. -FlattedFifth
+	
+    itemproperty ip = GetFirstItemProperty(oItem);
+	int bHasDV = FALSE;
+    while (GetIsItemPropertyValid(ip)){
+        if (GetItemPropertyType(ip) == ITEM_PROPERTY_DARKVISION){
+            bHasDV = TRUE;
+			break;
+        }
+        ip = GetNextItemProperty(oItem);
+    }
+	if (bHasDV){
+		FF_ModifyItemProperty(oItem, ip, FALSE);
 		int nFeatId = 801; // low light vision
 		
-		// if the currently used iprp_feats.2da has darkvision at line 438, remove
-		// low light vision and change nFeatId to darkvision.
-		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228"){
-			FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(801), FALSE);
-			nFeatId = 438; 
-		}
+		// if the currently used iprp_feats.2da has darkvision at line 438 change nFeatId to darkvision.
+		if (Get2DAString("iprp_feats", "FeatIndex", 438) == "228") nFeatId = 438; 
+		
+		FF_ModifyItemProperty(oItem, ItemPropertyDarkvision());
 		// add either bonus feat darkvision of bonus feat low light vision		
 		FF_ModifyItemProperty(oItem, ItemPropertyBonusFeat(nFeatId), TRUE);
+		
 	}
 }
 
@@ -113,7 +194,7 @@ void FF_UpdateLegacyItems(object oPC)
 
 
 // set bAdd to TRUE to add the item property, FALSE to remove it.
-void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd)
+void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE)
 {
 	if (bAdd == TRUE)
 	{

@@ -29,5 +29,6 @@ void main()
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	PS_GiveXPReward(oPC, iXp);
+	if (!ALLOW_ECL_LEVEL_30 || TAX_BOOKS_FOR_ECL) PS_GiveXPReward(oPC, iXp);
+	else GiveXPToCreature(oPC, iXp);
 }

@@ -34,7 +34,7 @@ void main()
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
     effect      eAOE        = EffectAreaOfEffect(AOE_PER_CHILLING_TENTACLES, "ps_onhit_chillingtentaclesa", "ps_onhit_chillingtentaclesc");
-    int         nDuration   = GetCasterLevel(oCaster);
+    int         nDuration   = PS_GetCasterLevel(oCaster);
 
     //Make sure duration does no equal 0
     if (nDuration < 1)

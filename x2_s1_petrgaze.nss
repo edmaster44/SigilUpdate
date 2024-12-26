@@ -13,7 +13,7 @@
 //:: Created By: Georg Zoeller
 //:: Created On: July, 09, 2003
 //:://////////////////////////////////////////////
- 
+ #include "ps_inc_functions"
 #include "x0_i0_spells"
 #include "x2_inc_shifter"
 
@@ -44,7 +44,7 @@ void main()
 
     float fDelay;
     object oTarget = GetSpellTargetObject();
-    int nHitDice = GetCasterLevel(OBJECT_SELF);
+    int nHitDice = PS_GetCasterLevel(OBJECT_SELF);
     location lTargetLocation = GetSpellTargetLocation();
     int nSpellID = GetSpellId();
     object oSelf = OBJECT_SELF;

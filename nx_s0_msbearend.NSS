@@ -43,18 +43,21 @@ void main()
 // End of Spell Cast Hook
 
     //Declare major variables
+	int nId = GetSpellId();
 	location lTarget = GetSpellTargetLocation();
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     effect eBuff;
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_BEAR_ENDURANCE ); //replace this with proper vfx later
 	
-	int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
 
     float fDuration = TurnsToSeconds(nCasterLevel); 
     
     //Set the buff effect
-    eBuff = EffectAbilityIncrease(ABILITY_CONSTITUTION, 4);
+	int nMod = 5;
+	if (nCasterLevel >= 16) nMod = 6;
+    eBuff = EffectAbilityIncrease(ABILITY_CONSTITUTION, nMod);
 	eBuff = EffectLinkEffects( eBuff, eVis );
 
 	//Check for metamagic
@@ -66,7 +69,7 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF))
 		{
 			//Fire cast spell at event for the specified target
-    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1024, FALSE));
+    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
 
     		//should not stack with Bear Endurance or itself
     		RemoveEffectsFromSpell(oTarget, SPELL_BEARS_ENDURANCE);

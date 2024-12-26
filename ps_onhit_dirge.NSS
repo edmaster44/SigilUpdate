@@ -20,7 +20,7 @@ void main()
 {
     location  lLocal       = GetLocation(OBJECT_SELF);
 	object 	  oCaster 	   = GetOnHitAbilityCaster(OBJECT_SELF);
-    int       nCasterLevel = GetCasterLevel(oCaster);
+    int       nCasterLevel = PS_GetCasterLevel(oCaster);
 	effect eAOE = EffectAreaOfEffect(AOE_MOB_CIRCGOOD, "ps_onhit_dirgea", "ps_onhit_dirgec", "ps_onhit_dirgeb");
     int nDuration = nCasterLevel;
 

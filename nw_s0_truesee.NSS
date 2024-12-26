@@ -32,8 +32,12 @@ void main()
     }
 
 // End of Spell Cast Hook
-
-
+	int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	int nMetaMagic = GetMetaMagicFeat();
+	int nSightBonus = 10;
+	if (nMetaMagic == METAMAGIC_EMPOWER) nSightBonus = 15;
+	if (nMetaMagic == METAMAGIC_EXTEND) nDuration *= 2;
+	int nId = GetSpellId();
 	//Declare major variables
     object oTarget = GetSpellTargetObject();
 	//effect eVis = EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT);//NWN1 VFX
@@ -42,17 +46,18 @@ void main()
     effect eSight = EffectTrueSeeing();
     effect eLink = EffectLinkEffects(eVis, eSight);
     eLink = EffectLinkEffects(eLink, eDur);
+	eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_BLINDNESS), eLink);
+	eLink = EffectLinkEffects(EffectSkillIncrease(SKILL_SEARCH, nSightBonus), eLink);
+	eLink = EffectLinkEffects(EffectSkillIncrease(SKILL_SPOT, nSightBonus), eLink);
+	eLink = SetEffectSpellId(eLink, nId); 
 	
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_TRUE_SEEING, FALSE));
-    int nDuration = GetCasterLevel(OBJECT_SELF);
-    int nMetaMagic = GetMetaMagicFeat();
-	
-    //Enter Metamagic conditions
-    if (nMetaMagic == METAMAGIC_EXTEND)
-    {
-    	nDuration = nDuration *2; //Duration is +100%
-    }
+    
     //Apply the VFX impact and effects
+	RemoveEffect(oTarget, EffectBlindness());
+	PS_RemoveEffects(oTarget, nId);
+	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_MISS_CHANCE);
+	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_SKILL_DECREASE);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
 }

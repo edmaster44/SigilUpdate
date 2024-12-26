@@ -61,59 +61,12 @@
 #include "x2_inc_switches"
 #include "ginc_debug"
 #include "ginc_2da"
+#include "ps_inc_functions"
 
 
 const int ID_SPELL_RAISE_DEAD = 142;
 const int ID_SPELL_FULL_RES = 153;
-const int ID_SPELL_CURE_CRIT = 31;
-const int ID_SPELL_INFLICT_CRIT = 435;
-const int ID_SPELL_HEAL = 79;
-const int ID_SPELL_HARM = 77;
 const int ID_SPELL_STONE_TO_FLESH = 486;
-const int ID_SPELL_RESTORATION = 152;
-const int ID_SPELL_GREATER_RESTORATION = 70;
-
-// if true, allow players to brew restoration pots
-const int B_ALLOW_RESTORATION_POTS = TRUE;
-
-// if true, allow players to brew restoration pots
-const int B_ALLOW_GREATER_RESTORATION_POTS = TRUE;
-
-// If true, then scrolls of raise dead scribed by players have no class use limitations, anyone can use them
-// without UMD. Default OC behaviour is false.
-const int B_RAISE_SCROLL_NO_CLASS_LIMIT = TRUE;
-
-// As above, but with resurrection
-const int B_FULL_RES_SCROLL_NO_CLASS_LIMIT = TRUE;
-
-// As above but with Stone to Flesh
-const int B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT = TRUE;
-
-// If true, allows players to brew potions of cure critical wounds. I don't like that an npc is the only source
-// for these. Players should give other players their money, not npcs, whenever possible. Note that we will 
-// need to do some testing to make sure that the cost to brew these potions is == or > the sell price to stores.
-const int B_ALLOW_CURE_CRIT_POTS = TRUE;
-
-// As above, but for heal (and harm for undead pcs). Allowing heals automatically allows the above, but having
-// both set to true doesn't hurt anything.
-const int B_ALLOW_HEAL_POTS = TRUE;
-
-//nerfs the cost for players to make raise dead scrolls to compare favourably with NPC sold items
-const int B_CHEAP_RAISE_SCROLLS = TRUE;
-// cost to make raise scrolls IF above is true. Based on 70% of the cost of 1 use of a pheonix feather
-const int N_RAISE_COST = 250;
-
-//as above, but for full res
-const int B_CHEAP_FULL_RES_SCROLLS = TRUE;
-const int N_RES_COST = 350;
-
-// if true enables a favored soul to use a cleric wand or scroll made via a domain, without UMD.
-const int B_FS_ACCESS_DOMAIN_WANDSCROLL = FALSE;
-
-// as above, but for knights
-const int B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL = FALSE;
-
-//void main(){}
 
 //--------------------------------------------------------------------
 // Structs
@@ -238,7 +191,6 @@ const int X2_CI_MODMODE_WEAPON = 2;
 // *  Returns the innate level of a spell. If bDefaultZeroToOne is given
 // *  Level 0 spell will be returned as level 1 spells
 int   CIGetSpellInnateLevel(int nSpellId, int bDefaultZeroToOne = FALSE);
-
 string GetClassSpellLevelColumn(int iClass);
 int GetSpellLevelForClass(int iSpell, int iClass);
 int IsOnSpellList(int iSpell, int iClass);
@@ -303,26 +255,20 @@ void AppendSpellToName(object oObject, int nSpellId);
 
 
 //--------------------------------------------------------------------
-// functrions
+// functions
 //--------------------------------------------------------------------
 
-// *  Returns the innate level of a spell. If bDefaultZeroToOne is given
-// *  Level 0 spell will be returned as level 1 spells
+
+
+// *  Returns either the innate level of the spell or the level of the spell as
+// it's being cast by whatever class, whichever is lower.
 int CIGetSpellInnateLevel(int nSpellId, int bDefaultZeroToOne = FALSE)
 {
-    //int nRet = StringToInt(Get2DAString(X2_CI_CRAFTING_SP_2DA, "Level", nSpellId));
-	// Instead of using innate level (a single level always used for a spell) we now use actual level.
-		
-	// The level of a spell is dependent on what class casts it.  For example
-	// Dominate Person is level 5 when cast by Wizard or Sorceror, but 4th level
-	// when cast by a Bard.  The spell can't be cast by any other class.
-   	int nRet = GetSpellLevel(nSpellId);
-	//int nClass = GetLastSpellCastClass();
-   	//int nRet = GetSpellLevelForClass(nSpellId, nClass);
-	
-	//PrettyDebug ("CIGetSpellInnateLevel: For Spell " + IntToString(nSpellId) + " with last spell clast class of " +
-	//			 IntToString(nClass) + " Level is: " + IntToString(nRet));
-	
+	int nRet;
+	int nClass = GetSpellLevel(nSpellId);
+    int nInnate = StringToInt(Get2DAString("spells", "Innate", nSpellId));
+	if (nClass < nInnate) nRet = nClass;
+	else nRet = nInnate;
 	if (bDefaultZeroToOne == TRUE)
 	    if (nRet == 0)
 	        nRet =1;
@@ -409,48 +355,51 @@ void MakeItemUseableByClassesWithSpellAccess(int iSpell, object oItem)
 		//want clerics with UMD to be able to wholesale cleric-usable wands and scrolls by making them
 		//from other wands and scrolls. This will limit to only spells cast via domain becoming cleric
 		// useable.
-	if (GetLastSpellCastClass() == CLASS_TYPE_CLERIC)
-	{	
-		// Getting the base item type of the item that casts the spell will return the PC
-		// themself if they cast from a spellbook, and the ItemActivator is also the PC
-		if (GetBaseItemType(GetSpellCastItem()) == GetBaseItemType(GetItemActivator()))
-		{
-			bCleric = TRUE;
-			if (B_FS_ACCESS_DOMAIN_WANDSCROLL) bFavored = TRUE;
-			if (B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL) bKnight = TRUE;
-		}
-	
+	if (GetLastSpellCastClass() == CLASS_TYPE_CLERIC && GetSpellCastItem() == OBJECT_INVALID){	
+		bCleric = TRUE;
+		if (B_FS_ACCESS_DOMAIN_WANDSCROLL) bFavored = TRUE;
+		if (B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL && B_KNIGHT_USE_CLERIC_WANDSCROLL) bKnight = TRUE;
 	}
 
 	if (IsOnSpellList(iSpell, CLASS_TYPE_BARD))
 		bBard = TRUE;
-		
-
+		if (B_WIZ_USE_BARD_ARCANE_WANDSCROLL && !IsOnSpellList(iSpell, CLASS_TYPE_CLERIC)){
+			bWizard = TRUE;
+			bSorc = TRUE;
+		}
 	if (IsOnSpellList(iSpell, CLASS_TYPE_CLERIC))
 	{
 		bCleric = TRUE;
 		bFavored = TRUE;
-		bKnight = TRUE;
+		if (B_KNIGHT_USE_CLERIC_WANDSCROLL) bKnight = TRUE;
 	}
 		
 	if (IsOnSpellList(iSpell, CLASS_TYPE_DRUID))
 	{
 		bDruid = TRUE;
 		bShaman = TRUE;
-		bRanger = TRUE;
+		if (B_RANGER_USE_DRUID_WANDSCROLL) bRanger = TRUE;
 	}
 		
 	if (IsOnSpellList(iSpell, CLASS_TYPE_PALADIN))
 		bKnight = TRUE;
+		if (B_CLERIC_USE_KNIGHT_WANDSCROLL){
+			bCleric = TRUE;
+			bFavored = TRUE;
+		}
 
 	if (IsOnSpellList(iSpell, CLASS_TYPE_RANGER))
 		bRanger = TRUE;
+		if (B_DRUID_USE_RANGER_WANDSCROLL){
+			bDruid = TRUE;
+			bShaman = TRUE;
+		}
 	
 	if (IsOnSpellList(iSpell, CLASS_TYPE_WIZARD))
 	{
 		bWizard = TRUE;
 		bSorc = TRUE;
-		bBard = TRUE;
+		if (B_BARD_USE_WIZ_WANDSCROLL) bBard = TRUE;
 	}
 		//Warlock invocations can't be used to make wands or scrolls afaik but this
 		//contingency was here in the original so it's here still. -FlattedFifth
@@ -537,23 +486,23 @@ void AppendSpellToName(object oObject, int nSpellId)
 // -----------------------------------------------------------------------------
 // Wrapper for the crafting cost calculation, returns GP required
 // -----------------------------------------------------------------------------
-int CIGetCraftGPCost(int nLevel, int nMod)
-{
-    int nLvlRow =   IPGetIPConstCastSpellFromSpellID(GetSpellId());
+int CIGetCraftGPCost(object oCaster, int nLevel, int nMod){
+
+	int nCasterLvl = PS_GetCasterLevel(oCaster);
+	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER){
+		if (GetLocalInt(oCaster, "bScribeAtMinLvl")) nCasterLvl = 1;
+	}
+	
+    int nLvlRow =   IPGetIPConstCastSpellFromSpellID(GetSpellId(), nCasterLvl);
     int nCLevel = StringToInt(Get2DAString("iprp_spells","CasterLvl",nLvlRow));
 
-	int bZeroLevel = (nLevel == 0);
-	if (bZeroLevel)
-		nLevel = 1;
+	if (nLevel == 0) nLevel = 1;
 		
     // -------------------------------------------------------------------------
     // in case we don't get a valid CLevel, use spell level instead
     // -------------------------------------------------------------------------
-    if (nCLevel ==0)
-    {
-        nCLevel = nLevel;
-    }
-
+    if (nCLevel == 0) nCLevel = nLevel;
+    
 	int nRet = 0;
 	
 	nRet = FloatToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
@@ -626,7 +575,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 	
 	if (nMaterial == 0)
 	{
-		nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
+		nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId, PS_GetCasterLevel(oCreator));
 		int nSpellLvl = StringToInt(Get2DAString("spells", "Innate", nSpellId));
 		StringToInt(Get2DAString("spells", "Name", nSpellId));
 		string sSpellName = GetStringByStrRef(StringToInt(Get2DAString("spells", "Name", nSpellId)));
@@ -738,7 +687,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 object CICraftBrewPotion(object oCreator, int nSpellId )
 {
 
-    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
+    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId, PS_GetCasterLevel(oCreator));
 
     object oTarget;
     // * GZ 2003-09-11: If the current spell cast is not acid fog, and
@@ -770,7 +719,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 // -----------------------------------------------------------------------------
 object CICraftCraftWand(object oCreator, int nSpellId )
 {
-    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
+    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId, PS_GetCasterLevel(oCreator));
 
     object oTarget;
     // * GZ 2003-09-11: If the current spell cast is not acid fog, and
@@ -854,7 +803,10 @@ object CICraftCraftWand(object oCreator, int nSpellId )
 // -----------------------------------------------------------------------------
 object CICraftScribeScroll(object oCreator, int nSpellId)
 {
-    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId);
+
+	int nCasterLvl = 1;
+	if (!GetLocalInt(oCreator, "bScribeAtMinLvl")) nCasterLvl = PS_GetCasterLevel(oCreator);
+    int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId, nCasterLvl);
     object oTarget;
     // Handle optional material components
     string sMat = GetMaterialComponentTag(nPropID);
@@ -965,8 +917,8 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 	// the below two are arguments we're getting, why did the oc declare them again?
     //object oSpellTarget = GetSpellTargetObject();
    // object oCaster      = OBJECT_SELF;
-    int    nID          = GetSpellId();
-    int    nLevel       = CIGetSpellInnateLevel(nID,FALSE);
+    int    nId          = GetSpellId();
+    int    nLevel       = CIGetSpellInnateLevel(nId,TRUE);
 
     // -------------------------------------------------------------------------
     // check if brew potion feat is there
@@ -982,43 +934,22 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 	// if that boolean or the heal one is set to true and allow heal and harm if that boolean is set to true.
 	// Also allow restoration and greater restoration if those booleans are set to true.
     // -------------------------------------------------------------------------
+	int nMax = X2_CI_BREWPOTION_MAXLEVEL;
+	if (B_RAISE_POTION_LVL_BY_ALCH) nMax += (GetSkillRank(SKILL_CRAFT_ALCHEMY, oCaster, TRUE)/ 10);
 	
-	int bSkipLevelCheck = FALSE;
-	if ((nID == ID_SPELL_CURE_CRIT || nID == ID_SPELL_INFLICT_CRIT) && (B_ALLOW_CURE_CRIT_POTS || B_ALLOW_HEAL_POTS))
-	{
-		bSkipLevelCheck = TRUE;
-	}
-	
-	if ((nID == ID_SPELL_HEAL || nID == ID_SPELL_HARM) && B_ALLOW_HEAL_POTS)
-	{
-		bSkipLevelCheck = TRUE;
-	}
-	if (nID == ID_SPELL_GREATER_RESTORATION && B_ALLOW_GREATER_RESTORATION_POTS) 
-		bSkipLevelCheck = TRUE;
-		
-	if (nID == ID_SPELL_RESTORATION && B_ALLOW_RESTORATION_POTS)
-		bSkipLevelCheck = TRUE;
-
-	if (bSkipLevelCheck != TRUE)
-	{
-		if (nLevel > X2_CI_BREWPOTION_MAXLEVEL)
+	if (nLevel > nMax)
 		{
 			FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
 			return TRUE;
 		}
-	}
+	
 
 
     // -------------------------------------------------------------------------
     // Check if the spell is allowed to be used with Brew Potions
     // -------------------------------------------------------------------------
 	
-	int bSkipAllowedCheck = FALSE;
-	
-	
-
-    if (CIGetIsSpellRestrictedFromCraftFeat(nID, X2_CI_BREWPOTION_FEAT_ID))
-    {
+	if (CIGetIsSpellRestrictedFromCraftFeat(nId, X2_CI_BREWPOTION_FEAT_ID)){
         FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_RESTRICTED_FOR_POTION, oCaster);
         return TRUE;
     }
@@ -1026,7 +957,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // XP/GP Cost Calculation
     // -------------------------------------------------------------------------
-    int nCost = CIGetCraftGPCost(nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
+    int nCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
 //    float nExperienceCost = 0.04  * nCost; // xp = 1/25 of gp value
     int nGoldCost = nCost ;
 
@@ -1056,7 +987,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Here we brew the new potion
     // -------------------------------------------------------------------------
-    object oPotion = CICraftBrewPotion(oCaster, nID);
+    object oPotion = CICraftBrewPotion(oCaster, nId);
 
     // -------------------------------------------------------------------------
     // Verify Results
@@ -1085,7 +1016,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 // -----------------------------------------------------------------------------
 int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 {
-    int  nID = GetSpellId();
+    int  nId = GetSpellId();
 
     // -------------------------------------------------------------------------
     // check if scribe scroll feat is there
@@ -1099,7 +1030,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Check if the spell is allowed to be used with Scribe Scroll
     // -------------------------------------------------------------------------
-    if (CIGetIsSpellRestrictedFromCraftFeat(nID, X2_CI_SCRIBESCROLL_FEAT_ID))
+    if (CIGetIsSpellRestrictedFromCraftFeat(nId, X2_CI_SCRIBESCROLL_FEAT_ID))
     {
         FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_RESTRICTED_FOR_SCROLL, oCaster); // can not be used with this feat
         return TRUE;
@@ -1108,17 +1039,17 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // XP/GP Cost Calculation
     // -------------------------------------------------------------------------
-    int  nLevel    = CIGetSpellInnateLevel(nID,FALSE);
-    int nCost = CIGetCraftGPCost(nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
+    int  nLevel    = CIGetSpellInnateLevel(nId,FALSE);
+    int nCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
 //    float fExperienceCost = 0.04 * nCost;
     int nGoldCost = nCost;
 	
 	// nerf the cost of raise deads and or full res? controlled by boolean-like integer constants at top
-	if (nID == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
+	if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
 	{
 		nGoldCost = N_RAISE_COST;
 	}
-	else if (nID == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
+	else if (nId == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
 	{
 		nGoldCost = N_RES_COST;
 	}
@@ -1149,7 +1080,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Here we scribe the scroll
     // -------------------------------------------------------------------------
-    object oScroll = CICraftScribeScroll(oCaster, nID);
+    object oScroll = CICraftScribeScroll(oCaster, nId);
 
     // -------------------------------------------------------------------------
     // Verify Results
@@ -1157,19 +1088,19 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     if (GetIsObjectValid(oScroll))
     {
 		// Adding the proper item properties 
-		if ((nID == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
-				(nID == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
-				(nID == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT))
+		if ((nId == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
+				(nId == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
+				(nId == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT))
 		{
 			IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
 		}
 		else
 		{
-			MakeItemUseableByClassesWithSpellAccess(nID, oScroll);
+			MakeItemUseableByClassesWithSpellAccess(nId, oScroll);
 		}
 		//This script spawns the default in-game spell scrolls, so since some of those descriptions have
 		//changed we update the spell description with current value from tlk
-		int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nID));
+		int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nId));
 		string sSpellDesc = GetStringByStrRef(refSpellDesc);
 		SetDescription(oScroll, sSpellDesc);
 		//----------------------------------------------------------------------
@@ -1177,11 +1108,11 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
         //----------------------------------------------------------------------
         SetIdentified(oScroll,TRUE);
 		// if the scroll is a cheap raise dead or res, make it unsellable. I hope. Will flagging it stolen do that?
-		if (nID == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
+		if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
 		{
 			SetStolenFlag(oScroll, TRUE);
 		}
-		else if (nID == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
+		else if (nId == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
 		{
 			SetStolenFlag(oScroll, TRUE);
 		}
@@ -1208,7 +1139,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
 {
 
-    int nID = GetSpellId();
+    int nId = GetSpellId();
 
     // -------------------------------------------------------------------------
     // check if craft wand feat is there
@@ -1222,14 +1153,14 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Check if the spell is allowed to be used with Craft Wand
     // -------------------------------------------------------------------------
-    if (CIGetIsSpellRestrictedFromCraftFeat(nID, X2_CI_CRAFTWAND_FEAT_ID))
+    if (CIGetIsSpellRestrictedFromCraftFeat(nId, X2_CI_CRAFTWAND_FEAT_ID))
     {
         FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_RESTRICTED_FOR_WAND, oCaster); // can not be used with this feat
         return TRUE;
     }
 
 	// now returns the actual spell level the spell was cast with.
-    int nLevel = CIGetSpellInnateLevel(nID,FALSE);
+    int nLevel = CIGetSpellInnateLevel(nId,FALSE);
 
     // -------------------------------------------------------------------------
     // check if spell is below maxlevel for craft wands
@@ -1243,7 +1174,7 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // XP/GP Cost Calculation
     // -------------------------------------------------------------------------
-    int nCost = CIGetCraftGPCost( nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
+    int nCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
 //    float nExperienceCost = 0.04 * nCost;
     int nGoldCost = nCost;
 
@@ -1273,7 +1204,7 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Here we craft the wand
     // -------------------------------------------------------------------------
-    object oWand = CICraftCraftWand(oCaster, nID);
+    object oWand = CICraftCraftWand(oCaster, nId);
 
     // -------------------------------------------------------------------------
     // Verify Results
@@ -1673,6 +1604,10 @@ int CIGetArmorModificationDC(object oOldItem, object oNewItem)
 // -----------------------------------------------------------------------------
 int CIGetIsSpellRestrictedFromCraftFeat(int nSpellId, int nFeatID)
 {
+
+	if (Get2DAString(X2_CI_CRAFTING_SP_2DA, "IPRP_SpellIndex", nSpellId) == "****")
+		return TRUE;
+		
     string sCol;
     if (nFeatID == X2_CI_BREWPOTION_FEAT_ID)
     {

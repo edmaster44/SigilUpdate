@@ -33,7 +33,7 @@ void main(int nXP, int bAllPartyMembers, int nLevelvaried)
 			 {
 			 	fXP = nXP * PS_GetXPModifier(iECL);
 			 }
-			 GiveXPToCreature(oTarg, FloatToInt(fXP) );
+			 PS_GiveXPRewardNoReturn(oTarg, FloatToInt(fXP) );
 
             oTarg = GetNextFactionMember(oPC);
         }

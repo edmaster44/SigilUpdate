@@ -43,18 +43,21 @@ void main()
 // End of Spell Cast Hook
 
     //Declare major variables
+	int nId = GetSpellId();
 	location lTarget = GetSpellTargetLocation();
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     effect eBuff;
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_CAT_GRACE ); //replace this with proper vfx later
 	
-	int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 
 
     float fDuration = TurnsToSeconds(nCasterLevel); 
     
     //Set the buff effect
-    eBuff = EffectAbilityIncrease(ABILITY_DEXTERITY, 4);
+	int nMod = 5;
+	if (nCasterLevel >= 16) nMod = 6;
+    eBuff = EffectAbilityIncrease(ABILITY_DEXTERITY, nMod);
 	eBuff = EffectLinkEffects( eBuff, eVis );
 
 	//Check for metamagic
@@ -66,7 +69,7 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF))
 		{
 			//Fire cast spell at event for the specified target
-    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1026, FALSE));
+    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
 
 			//Apply the bonus effect and VFX impact
     		ApplyEffectToObject(nDurType, eBuff, oTarget, fDuration);

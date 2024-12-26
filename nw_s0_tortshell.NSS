@@ -14,6 +14,14 @@
 //:: Created By: Patrick Mills
 //:: Created On: Oct 12, 2006
 //:://////////////////////////////////////////////
+
+
+// Dec 19, 2024 - FlattedFifth.
+// Removing Freedom of MOvement and then reapplying isn't balanced because doing
+// so strips all Metamagic duration from the initial casting. Instead, we will allow FoM
+// prevent negative effects but ALSO have them prevent some of the positive effects.
+// If FoM is on, the AC provided by this spell is reduced by 2. Otherwise the spell is unchanged.
+
 // MDiekmann 7/27/07 - Added signal event.
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
@@ -24,23 +32,8 @@
 
 void main()
 {
-    /*
-      Spellcast Hook Code
-      Added 2003-07-07 by Georg Zoeller
-      If you want to make changes to all spells,
-      check x2_inc_spellhook.nss to find out more
+	if (!X2PreSpellCastCode()) return;
 
-    */
-
-    if (!X2PreSpellCastCode())
-    {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-
-//Major variables
 
 	object	oTarget		=	GetSpellTargetObject();
 	object	oCaster		=	OBJECT_SELF;
@@ -48,73 +41,40 @@ void main()
 	effect	eDur		=	EffectVisualEffect(VFX_SPELL_DUR_TORT_SHELL); 
 	effect 	eSpeed		=	EffectMovementSpeedDecrease(50);
 	int 	nMeta		=	GetMetaMagicFeat();
-	int		nCLevel		=	GetCasterLevel(oCaster);
-	
-	//	Caster level is capped at 20.
-	if (nCLevel > 20)
-	{
-		nCLevel = 20;
-	}
-	
-	int		nAC			=	6 + ((nCLevel - 11)/3);
+	int		nCLevel		=	PS_GetCasterLevel(oCaster);
+	int bHasFoM = FALSE;
+	if (GetHasSpellEffect(SPELL_FREEDOM_OF_MOVEMENT, oTarget)) bHasFoM = TRUE;
+
+	int	nAC	= 6 + ((nCLevel - 11)/3);
+	if (nAC > 9) nAC = 9;
+	if (bHasFoM) nAC -= 2;
 		
-	float	fDuration	=	TurnsToSeconds(10*(GetCasterLevel(oCaster)));
-	
-	//____________________________________________________
-	// pelhikano fix
-	int hadFoM = 0;
-	if (GetHasSpellEffect(SPELL_FREEDOM_OF_MOVEMENT, oTarget))
-	{
-		RemoveSpellEffectsFromCaster(SPELL_FREEDOM_OF_MOVEMENT, oTarget, OBJECT_INVALID);
-		hadFoM = 1;
-	}
-	
-	//____________________________________________________
-//Prevent this spell from stacking, the AC won't stack anyway, but the slowing will
+	float	fDuration	=	TurnsToSeconds(10*nCLevel);
+
+
+
+
+	//Prevent this spell from stacking, the AC won't stack anyway, but the slowing will
 	if (GetHasSpellEffect(1005, oTarget))
 	{
 		RemoveSpellEffects( 1005, oCaster, oTarget);
 	}
-	
-//Determine AC bonus
-//			nAC			=	ApplyMetamagicVariableMods(nAC, 9);
-	
-//Declare AC bonus
-			eAC			=	EffectACIncrease(nAC, AC_NATURAL_BONUS);
+
+
+	eAC	= EffectACIncrease(nAC, AC_NATURAL_BONUS);
 			
-//Determine duration
+
 	fDuration = ApplyMetamagicDurationMods(fDuration);
 
-//Link effects
-	effect	eLink	=	EffectLinkEffects(eAC, eDur);
-	eLink			=	EffectLinkEffects(eLink, eSpeed);
-	
-//Apply effects
-	if (GetIsObjectValid(oTarget))
-	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster))
-		{
-			//Fire cast spell at event for the specified target
-            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-			
-	//_________________
-	// pelhikano fix: Delay the command so the FoM and DW removal works
-			//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
-	
-	// Re-apply buffs with reset durations
-	if (hadFoM)
-	{
-		DelayCommand(0.75, 
-		ActionCastSpellAtObject(SPELL_FREEDOM_OF_MOVEMENT, 
-			oTarget, 
-			METAMAGIC_NONE, 
-			TRUE, 
-			nCLevel, 
-			PROJECTILE_PATH_TYPE_DEFAULT, 
-			TRUE));
-	}
+	effect eLink = EffectLinkEffects(eAC, eDur);
+	eLink = EffectLinkEffects(eLink, eSpeed);
 
+	//Apply effects
+	if (GetIsObjectValid(oTarget)){
+		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster)){
+			//Fire cast spell at event for the specified target
+			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 		}
 	}
 }

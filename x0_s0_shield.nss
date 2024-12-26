@@ -18,8 +18,6 @@
 
 // FlattedFifth - June 3, 2024. Changed spell target from OBJECT_SELF to GetSpellTargetObject()
 //				Changed vfx to get it to appear on target properly.
-// Flatted Fifth June 4, 2024 - changed call from GetCasterLevel to PS_GetCasterLevel, nerfed duration from 1 hour per level
-//				to 30 minutes + 1 minute per level (default is 1 minute per level, ffs)
 
 #include "ps_inc_functions"
 
@@ -57,9 +55,12 @@ void main()
 	object oTarget = GetSpellTargetObject(); 
 	int nID = GetSpellId();
     //effect eVis = EffectVisualEffect(VFX_IMP_AC_BONUS);
+	int nLvl = PS_GetCasterLevel(OBJECT_SELF);
+	int nBonus = 5;
+	if (nLvl >= 10) nBonus = 6;
 
 
-    effect eArmor = EffectACIncrease(5, AC_SHIELD_ENCHANTMENT_BONUS);	// AFW-OEI 11/02/2006 change from Deflection to Shield bonus.
+    effect eArmor = EffectACIncrease(nBonus, AC_SHIELD_ENCHANTMENT_BONUS);	// AFW-OEI 11/02/2006 change from Deflection to Shield bonus.
     effect eSpell = EffectSpellImmunity(SPELL_MAGIC_MISSILE);
    	effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SHIELD_OF_FAITH);
 //	effect eDur = EffectVisualEffect(VFX_DUR_SPELL_SANCTUARY);
@@ -68,10 +69,8 @@ void main()
     effect eLink = EffectLinkEffects(eArmor, eSpell);
 	eLink = EffectLinkEffects(eLink, eDur);
 	eLink = SetEffectSpellId(eLink, nID);
-  
 
-    //float fDuration = HoursToSeconds(PS_GetCasterLevel(OBJECT_SELF)); //Duration 1 hour per level, not my change but the comment was wrong -FlattedFifth
-    float fDuration = IntToFloat((60 * 30) + (60 * PS_GetCasterLevel(OBJECT_SELF))); // still too long but w/e, FlattedFifth
+    float fDuration = HoursToSeconds(nLvl); 
 	fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 

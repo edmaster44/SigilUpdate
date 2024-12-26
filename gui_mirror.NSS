@@ -46,6 +46,7 @@ int StartingConditional(object oPC, int iCondition, int iInventorySlot, int iVis
 				case BASE_ITEM_HALBERD :
 				case BASE_ITEM_KATANA :
 				case BASE_ITEM_LIGHTHAMMER :
+				case 87: // maul
 				case BASE_ITEM_LONGSWORD :
 				case BASE_ITEM_MACE :
 				case BASE_ITEM_MORNINGSTAR :
@@ -54,6 +55,12 @@ int StartingConditional(object oPC, int iCondition, int iInventorySlot, int iVis
 				case BASE_ITEM_SCYTHE :
 				case BASE_ITEM_SHORTSWORD :
 				case BASE_ITEM_WARHAMMER :
+				case 111:
+				case 202:
+				case 50:
+				case 45:
+				case 96:
+				case 97:
 					bReturn = TRUE;
 					break;
 			}		

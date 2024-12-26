@@ -169,7 +169,8 @@ void PS_Immunity_Rakshasa(object oPC, int nSpell)
 {
 	//Rakshasa piercing vulnerability, DR/Good.
 	effect eDR = EffectDamageImmunityDecrease(DAMAGE_TYPE_PIERCING, 25);
-	effect eDR2 = EffectDamageReduction(10, ALIGNMENT_GOOD, 0, DR_TYPE_ALIGNMENT);
+	//effect eDR2 = EffectDamageReduction(10, ALIGNMENT_GOOD, 0, DR_TYPE_ALIGNMENT);
+	effect eDR2 = EffectDamageReduction(5, ALIGNMENT_GOOD, 0, DR_TYPE_ALIGNMENT);
 	effect eLink = EffectLinkEffects(eDR, eDR2);
 	
 	eLink = SupernaturalEffect(eLink);

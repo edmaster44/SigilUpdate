@@ -118,4 +118,4 @@ void main()
 		DelayCommand(delay, SendMessageToPC(oPC,"Stored "+IntToString(iCount)+" items into storage."));
 		DelayCommand(delay, ExportSingleCharacter(oPC));
 	}
-}
+}*/

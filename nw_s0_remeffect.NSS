@@ -51,7 +51,8 @@ void SafeRemoveAbilityDecrease(object oTarget)
             GetEffectSpellId(eAOE) != SPELL_RIGHTEOUS_MIGHT &&
             GetEffectSpellId(eAOE) != SPELL_STONE_BODY &&
             GetEffectSpellId(eAOE) != SPELL_IRON_BODY &&
-            GetEffectSpellId(eAOE) != 803)
+            GetEffectSpellId(eAOE) != 803 && 
+			!GetSkipByRestoration(GetEffectSpellId(eAOE)))
         {
             //If the effect was created by the spell then remove it
             RemoveEffect(oTarget, eAOE);
@@ -86,7 +87,11 @@ void main()
 
 
     //Declare major variables
-    int nSpellID = GetSpellId();
+	int nSpellID = GetSpellId();
+	int nDur = PS_GetCasterLevel(OBJECT_SELF);
+	if (nSpellID == SPELLABILITY_REMOVE_DISEASE) nDur = GetTotalLevels(OBJECT_SELF, TRUE);
+	if (nDur > 24) nDur = 24;
+    
     object oTarget = GetSpellTargetObject();
     int nEffect1;
     int nEffect2;
@@ -94,6 +99,7 @@ void main()
     int bAreaOfEffect = FALSE;
     
     effect eVis;
+	effect eImmune;
     //Check for which removal spell is being cast.
     if(nSpellID == SPELL_REMOVE_BLINDNESS_AND_DEAFNESS)
     {
@@ -101,6 +107,8 @@ void main()
         nEffect2 = EFFECT_TYPE_DEAF;
         bAreaOfEffect = TRUE;
 		eVis = EffectVisualEffect(VFX_HIT_SPELL_CONJURATION);
+		eImmune = EffectImmunity(IMMUNITY_TYPE_BLINDNESS); 
+		eImmune = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_DEAFNESS), eImmune);
     }
     else if(nSpellID == SPELL_REMOVE_CURSE)
     {
@@ -112,7 +120,9 @@ void main()
     {
         nEffect1 = EFFECT_TYPE_DISEASE;
         nEffect2 = EFFECT_TYPE_ABILITY_DECREASE;
-		eVis = EffectVisualEffect(VFX_HIT_SPELL_CONJURATION);
+		eVis = EffectVisualEffect(VFX_HIT_SPELL_CONJURATION); 
+		eImmune = EffectImmunity(IMMUNITY_TYPE_DISEASE);
+
     }
     else if(nSpellID == SPELL_NEUTRALIZE_POISON)
     {	// AFW-OEI 10/27/2006: Neutralize Poison does not remove disease effects or ability damage.
@@ -120,6 +130,7 @@ void main()
         //nEffect2 = EFFECT_TYPE_DISEASE;
         //nEffect3 = EFFECT_TYPE_ABILITY_DECREASE;
 		eVis = EffectVisualEffect( VFX_IMP_HEALING_M );
+		eImmune = EffectImmunity(IMMUNITY_TYPE_POISON);
     }
 
 
@@ -153,4 +164,7 @@ void main()
         RemoveSpecificEffect(nEffect3, oTarget);
     }
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	if (GetEffectType(eImmune) != EFFECT_TYPE_INVALIDEFFECT)
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, HoursToSeconds(nDur));
+	
 }

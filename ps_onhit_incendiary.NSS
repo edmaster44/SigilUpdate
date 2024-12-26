@@ -24,7 +24,7 @@ void main()
     //Capture the spell target location so that the AoE object can be created.
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
 	
     if(nDuration < 1)
     {

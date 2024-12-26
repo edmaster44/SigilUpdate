@@ -30,7 +30,7 @@ void main()
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetLocation(OBJECT_SELF);
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
     float fDuration = TurnsToSeconds(nCasterLvl);
     int nNumTargets = (nCasterLvl / 3) + 1;
 

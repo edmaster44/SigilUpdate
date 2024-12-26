@@ -6,11 +6,178 @@
 /*
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
+// for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
+// of enchanting
+const int DEBUG_IGNORE_CRAFT_COSTS = FALSE;
+
+
+// module control booleans
+// if TRUE causes checking that your xp pool is lined up with the mimic to give the whole pool
+// recommend leaving this TRUE until Jan 1, 2025 and then setting to false until the next time
+// there is a massive change to the server
+const int ALLOW_INSTANT_REBUILD = TRUE;
+
+// If this is true, then we no longer cap ECL characters below lvl 30.
+// Instead, we only apply a percentage of the xp they earn to their character 
+// depending upon the ECL, forcing them to have to earn the xp for their ECL
+// (Due to a cap of 528k xp we would be limited to ECL 3 if we used the OC
+// method, but this way we can mimic any ECL we need. See GetECLXP() in
+// ps_inc_functions
+const int ALLOW_ECL_LEVEL_30 = TRUE;
+
+// if ALLOW_ECL_LEVEL_30 = true then this would reduce the xp gained from turning runes in
+// to marroweater according to ecl. If ecl isn't getting to lvl 30 this doesn't matter
+const int TAX_RUNES_FOR_ECL = FALSE;
+
+// as above, but for the gems with the dao in the central part of elemental earth
+const int TAX_GEMS_FOR_ECL = FALSE;
+
+// as above, but for books being turned into the hall of records
+const int TAX_BOOKS_FOR_ECL = FALSE; 
+
+// as above, but for the interesting skulls turned in at the bones of the night
+const int TAX_SKULLS_FOR_ECL = FALSE;
+
+// as above, but for the corpses turned in at that taxidermist in the market ward
+const int TAX_CORPSES_FOR_ECL = FALSE;
+
+// This is only useful if ALLOW_ECL_LEVEL_30 is false. It would allow characters who have been
+// capped below level 30 to get their crafting skills up to 33. See ps_inc_functions
+const int ALLOW_CRAFT_PROGRESSION_FOR_ECL = FALSE;
+
+// set this to false to get crafting and enchanting recipes, costs, etc from sql instead of 2da.
+const int CRAFT_DIRECT_FROM_2DA = TRUE;
+
+// allow crafted gloves to get the base material melee property like melee weapons
+const int CRAFTED_GLOVES_GET_MAT_POWER = TRUE;
+
+//set this to true to grant FlattedFifth's tumble ac replacement feat "Situational Awareness"
+// only use this if the tumble ac replacement in Dae's plugin is NOT being used, otherwise they'd stack
+const int GRANT_SITUATIONAL_AWARENESS = FALSE;
+
+/**************************************************************************************************
+				SPECIAL MATERIAL SYNERGY BONUS CONTROLS
+	when any 2 of the more expensive woods, leathers, and misc are used together they can grant
+	bonuses vs a race associated with those materials. Edit the constants below to control 
+	what items get what kind of bonuses. Creating or disabling specific race bonuses would 
+	require editing the GetItemMaterialSynergyBonus() function in ps_newcraft_include
+***************************************************************************************************/
+// ac vs race constants
+const int SYN_AC_FOR_ARMOR = FALSE; // armor gets ac vs race bonus from specific mats, y/n
+const int SYN_AC_FOR_SHIELDS = FALSE; // shields get ac vs race bonus from specific mats, y/n
+const int SYN_AC_NUMERICAL = 7; // amount of ac vs race
+
+ // set to 1 for attack bonus vs race, 2 for damage bonus vs race, 3 for enhancement bonus vs race,
+//  anything else for no bonus 
+//  WARNING: giving damage or EB bonus to both bows and ammo WILL stack if vs same race, even if same damage type.
+// 	Note: The attack portion of EBvs Race will not stack with the attack portion of normal EB, but afaik the damage
+// will, so adding an EBvs Race will effectively just give a non-bypassing physical damage bonus. For ex if I have
+// a sword that is +5 generally and +3 vs undead, it's +5 to hit undead and +8 physical damage to undead.
+const int SYN_TYPE_FOR_BOWS = 1;
+const int SYN_TYPE_FOR_MELEE_AND_THROWN = 2;
+
+// afaik projectiles cannot get an attack or enhance bonus so this is damage or nothing. NOTE: If you set melee
+// to enhancement bonus vs race then set this to false because it would hardly be fair for melee to get non-bypassing
+// and ammo to get bypassing. Likewise if you set bows to have EB or damage, set this to false otherwise you've 
+// got ranged characters doing 2x the damage of melee. So the ideal combos are 
+// Melee = damage, Bows = attack, Ammo = damage, OR 
+// Melee = damage, Bows = damage, ammo = none, OR 
+// Melee = eb, Bows = eb, Ammo = none
+const int SYN_FOR_PROJECTILES = TRUE; 
+
+const int SYN_ATTACK_NUMERICAL = 6; // amount of attack bonus, 1 - 20. Doesn't stack with EB
+const int SYN_DAM_NUMERICAL = IP_CONST_DAMAGEBONUS_1d6; // amount of damage bonus, see IP_CONST_DAMAGEBONUS_* lines in nwscript
+const int SYN_EB_NUMERICAL = 3; // eb vs race, 1-20
+
+// Number of points the synergy bonus "uses up" on an item. shields and armor stack, 
+// so recommend 3 for ac if only shield or armor, 5 if both, and 0 for weapons
+const int SYN_AC_POINTS = 2; 
+const int SYN_ATTACK_POINTS = 0;
+const int SYN_DAM_POINTS = 0;
+const int SYN_EB_POINTS = 0;
+/**************************************************************************************************
+					END SPECIAL MATERIAL SYNERGY BONUS CONTROLS
+					
+					BEGIN CRAFT SCROLL/POTION/WAND CONTROLS
+**************************************************************************************************/
+// if true, extends the max level of spells to be made into potions by 1 per 10 base ranks
+// of Craft Alchemy. For example, a char with 20 base ranks in craft alch could make potions
+// up to spell level 5. (3 + (20/10))
+const int B_RAISE_POTION_LVL_BY_ALCH = TRUE;
+
+// If true, then scrolls of raise dead scribed by players have no class use limitations, anyone can use them
+// without UMD. Default OC behaviour is false.
+const int B_RAISE_SCROLL_NO_CLASS_LIMIT = TRUE;
+
+// As above, but with resurrection
+const int B_FULL_RES_SCROLL_NO_CLASS_LIMIT = TRUE;
+
+// As above but with Stone to Flesh
+const int B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT = TRUE;
+
+//nerfs the cost for players to make raise dead scrolls to compare favourably with NPC sold items
+const int B_CHEAP_RAISE_SCROLLS = TRUE;
+// cost to make raise scrolls IF above is true. Based on 70% of the cost of 1 use of a pheonix feather
+const int N_RAISE_COST = 250;
+
+//as above, but for full res
+const int B_CHEAP_FULL_RES_SCROLLS = TRUE;
+const int N_RES_COST = 350;
+
+// if true enables a favored soul to use a cleric wand or scroll made via a domain, without UMD.
+const int B_FS_ACCESS_DOMAIN_WANDSCROLL = TRUE;
+
+// as above, but for knights
+const int B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL = TRUE;
+
+// Can bards use all wiz wands and scrolls? Can wiz use all non-divine bard wands and scrolls? etc
+const int B_BARD_USE_WIZ_WANDSCROLL = TRUE;
+const int B_WIZ_USE_BARD_ARCANE_WANDSCROLL = TRUE;
+const int B_KNIGHT_USE_CLERIC_WANDSCROLL = TRUE;
+const int B_CLERIC_USE_KNIGHT_WANDSCROLL = TRUE;
+const int B_RANGER_USE_DRUID_WANDSCROLL = TRUE;
+const int B_DRUID_USE_RANGER_WANDSCROLL = TRUE;
+
+// allow players to make potions/scrolls/wands with a CL of minimum lvl +5 regardless
+// of whether the player has that caster level
+const int B_ALLOW_CRAFT_PLUS_5_ALL = FALSE;
+
+const int B_ALLOW_CRAFT_PLUS_10_ALL = FALSE; // ditto, but for +10
+
+// allow players to make potions/scrolls/wands with a CL of minimum lvl +5 but only
+// if the player has that caster level
+const int B_ALLOW_CRAFT_PLUS_5_MATCH = TRUE;
+
+const int B_ALLOW_CRAFT_PLUS_10_MATCH = TRUE; // ditto, but for +10
+
+
+
+/**************************************************************************************************
+					END CRAFT SCROLL/POTION/WAND CONTROLS
+**************************************************************************************************/
+
+
+
 
 //Background Feats
 
 const int FEAT_OUTSIDER_BLOODLINE_FIENDISH = 81; 
 const int FEAT_OUTSIDER_BLOODLINE_CELESTIAL = 86;
+
+
+const int SPELL_RACIAL_LIGHT = 942;
+const int SPELL_RACIAL_DARKNESS = 941;
+
+const int FEAT_EXPOSE_WEAKNESS_NEW = 21908;
+const int FEAT_FEINT_NEW = 21907;
+const int FEAT_FEINT_MASTERY = 2051;
+const int FEAT_IMPROMPTU_SNEAK_ATTACK_1 = 1510;
+const int FEAT_IMPROMPTU_SNEAK_ATTACK_2 = 1511;
+const int FEAT_IMPROMPTU_SNEAK_ATTACK_1_NEW = 21904;
+const int FEAT_IMPROMPTU_SNEAK_ATTACK_2_NEW = 21905;
+const int FEAT_HUMAN_ABILITY_BONUS = 21910;
+const int FEAT_HALF_ELF_ABILITY_BONUS = 21909;
+
 
 
 //new half-outsider feats
@@ -135,6 +302,14 @@ const int CLASS_TYPE_NATUREWARRIOR				= 113;
 const int CLASS_TYPE_PALEMASTER_W 				= 82;
 const int CLASS_TYPE_WARMIND					= 111;
 const int CLASS_TYPE_PSYCHIC_THERUGE			= 115;
+// these two are defined in pc_class_inc as CLASS_TYPE 
+// but they ought to be here. I don't have time rn to 
+// do a file search to see what would break if I moved
+// them so for now they're here as CLASS_ without the TYPE 
+// so I can access them without including ps_class
+const int CLASS_SAMURAI							= 65;
+const int CLASS_KENSAI							= 66;
+
 
 // List of all racial prestige classes
 const int CLASS_TYPE_SCALED_HUNTER_PRC			= 48;
@@ -445,6 +620,7 @@ const int FEAT_PSYWAR_PROGRESSION_V 			= 21468;
 const int FEAT_PSYWAR_PROGRESSION_VI 			= 21469;
 const int POWER_POINT_POOL_PSYWAR				= 20996;
 
+
 // Polymorph Forms
 const int POLYMORPH_TYPE_HA_HOUND				= 50;
 const int POLYMORPH_TYPE_HA_HOUNDF				= 51;
@@ -473,6 +649,7 @@ const int POLYMORPH_WERETIGER_ANIMFORM			= 419;
 const int POLYMORPH_WERERAT_ANIMFORM			= 420;
 
 // Areas of Effect
+const int AOE_PER_LIGHT							= 93;
 const int AOE_PER_FREEZINGFOG					= 75;
 const int AOE_PER_OBSCURINGMIST					= 76;
 const int VFX_MOB_CROWN_OF_FLAME				= 79;
@@ -752,6 +929,35 @@ const int FEAT_HEXEN_HEXER_3		 			= 2901;
 const int FEAT_HEXEN_CURSEMASTER		 		= 2907;
 
 
+const int FEAT_SHADOWSNEAK_1 = 1562;
+
+
+// new feats
+
+//Feats granted in ps_inc_functions because whether or 
+// not the character has it depends on what weapon they're wielding
+// and how
+const int FEAT_BOJUTSU = 21912;
+const int FEAT_KENJUTSU = 21921;
+const int FEAT_MURDEROUS_INTENT = 1497;// NW9 agent sneak attack for a class that was never implemented
+
+// new proficiency feat to allow rogues and swashbucklers to use small shields, but not heavy.
+// Granted to rogues and swash only. Regular shield prof still includes small shields, so not
+// necessary for anyone else.
+const int FEAT_BUCKLER_PROFICIENCY = 21915;
+
+//New general Feats
+const int FEAT_STAFF_FIGHTING = 21911;
+const int FEAT_OVERSIZE_TWF = 21923;
+const int FEAT_METHODICAL_DEFENSE = 21917;
+const int FEAT_CONSIDERED_STRIKE = 21918;
+const int FEAT_TACTICAL_WEAPONS = 21922;
+const int FEAT_GIANT_FINESSE = 21920;
+const int FEAT_UNNERVE = 21914;
+const int FEAT_SHARPSHOOTER = 21913;
+const int FEAT_ALCHEMICAL_INFUSION = 21919;
+
+
 // New Base Items.
 const int BASE_ITEM_CREQ_SLASH_M						= 160;
 const int BASE_ITEM_CREQ_PIERCE_M						= 161;
@@ -768,17 +974,67 @@ const int BASE_ITEM_CREQ_PIERCE_SLASH_L					= 171;
 const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_M				= 172;
 const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_S				= 173;
 const int BASE_ITEM_CREQ_PIERCE_BLUDGEON_L				= 174;
-const int BASE_ITEM_CREATURECLAW						= 176;
-const int BASE_ITEM_CREATUREBITE						= 177;
-const int BASE_ITEM_CREATURESLAM						= 178;
-const int BASE_ITEM_CREATURECLAW_LARGE					= 179;
-const int BASE_ITEM_CREATUREBITE_LARGE					= 180; //Deprecated item because someone made it medium
+
+
+
+
+const int BASE_ITEM_CREATUREBITE_LARGE					= 180; //Deprecated item
 const int BASE_ITEM_WHIP_SCOD							= 202;
 
 // more new base items -FlattedFifth
 const int BASE_ITEM_SHORT_STAFF							= 45;
-const int BASE_ITEM_CREATURECLAW_TINY					= 181;
-const int BASE_ITEM_CREATURESLAM_TINY					= 182;
-const int BASE_ITEM_CREATURESLAM_MEDIUM					= 183;
+const int BASE_ITEM_ODACHI 								= 96;
+const int BASE_ITEM_NINJATO 							= 85;
+const int BASE_ITEM_STILETTO							= 86; 
+const int BASE_ITEM_MAUL 								= 87;
+const int BASE_ITEM_TINYFLAIL							= 88;
+const int BASE_ITEM_GIANT_SPEAR 						= 99;
+const int BASE_ITEM_GIANT_STAFF 						= 98;
+const int BASE_ITEM_GIANT_SCYTHE 						= 97;
+const int BASE_ITEM_SRR_GIANT_SWORD 					= 150; 
+const int BASE_ITEM_SRR_GIANT_AXE 						= 151;
+const int BASE_ITEM_SRR_GIANT_CLUB 						= 152;
+const int BASE_ITEM_GIANT_WARMACE 						= 153;
+const int BASE_ITEM_INFANTRYFLAIL						= 203;
+const int BASE_ITEM_SEIGEFLAIL 							= 175;
+
+// the following are already defined in nwscript, they are unimplemented 
+// weapons that I re-implemented. -FlattedFifth
+/*
+BASE_ITEM_SHORTSPEAR = 58;
+BASE_ITEM_FLAIL = 116; // small 1d6 flail that can be equipped in either hand. 
+						// confusingly enough, BASE_ITEM_LIGHTFLAIL is the medium sized one
+BASE_ITEM_HEAVYFLAIL = 35; 
+
+*/
+
+// PLAYER CRAFTABLE CREATURE WEAPONS
 const int BASE_ITEM_CREATUREBITE_TINY					= 184;
+const int BASE_ITEM_CREATUREBITE_SML 					= 186;
+const int BASE_ITEM_CREATUREBITE_MED					= 177;
 const int BASE_ITEM_CREATUREBITE_LRG					= 185;
+const int BASE_ITEM_CREATUREBITE_GIANT 					= 187;
+
+const int BASE_ITEM_CREATURECLAW_TINY					= 181;
+const int BASE_ITEM_CREATURECLAW_SML					= 176;
+const int BASE_ITEM_CREATURECLAW_MED 					= 188;
+const int BASE_ITEM_CREATURECLAW_LRG					= 179;
+const int BASE_ITEM_CREATURECLAW_GIANT 					= 189;
+
+const int BASE_ITEM_CREATURESLAM_TINY					= 182;
+const int BASE_ITEM_CREATURESLAM_SML 					= 190;
+const int BASE_ITEM_CREATURESLAM_MED					= 183;
+const int BASE_ITEM_CREATURESLAM_LRG					= 178; 
+const int BASE_ITEM_CREATURESLAM_GIANT 					= 191;
+
+const int BASE_ITEM_CREATUREKICK_TINY  					= 192;
+const int BASE_ITEM_CREATUREKICK_SML					= 193;
+const int BASE_ITEM_CREATUREKICK_MED					= 194;
+const int BASE_ITEM_CREATUREKICK_LRG 					= 195;
+const int BASE_ITEM_CREATUREKICK_GIANT  				= 196;
+
+const int BASE_ITEM_CREATURETALON_TINY 					= 197;
+const int BASE_ITEM_CREATURETALON_SMl					= 198; 
+const int BASE_ITEM_CREATURETALON_MED					= 199;
+const int BASE_ITEM_CREATURETALON_LRG					= 200;
+const int BASE_ITEM_CREATURETALON_GIANT  				= 201;

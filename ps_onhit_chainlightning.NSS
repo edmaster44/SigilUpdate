@@ -35,7 +35,7 @@ void main()
 
     //Declare major variables
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
     //Limit caster level
     // June 2/04 - Bugfix: Cap the level BEFORE the damage calculation, not after. Doh.
     if (nCasterLevel > 20)

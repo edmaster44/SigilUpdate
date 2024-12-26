@@ -305,7 +305,7 @@ int CheckSkillPrereqs(int nIndex, object oPC, string sTable)
 		int nSkill = StringToInt(sParam);
 		int nRanks = StringToInt(sRank);
 		
-		if(GetSkillRank(nSkill, oPC) >= nRanks )
+		if(PS_GetSkillRank(nSkill, oPC) >= nRanks )
 		{
 			bHasSkill = TRUE;
 		}
@@ -313,7 +313,7 @@ int CheckSkillPrereqs(int nIndex, object oPC, string sTable)
 		object oFM = GetFirstFactionMember(oPC, FALSE);
 		while(GetIsObjectValid(oFM) && bHasSkill != TRUE)
 		{
-			if(GetSkillRank(nSkill, oFM) >= nRanks )
+			if(PS_GetSkillRank(nSkill, oFM) >= nRanks )
 				bHasSkill = TRUE;
 				
 			oFM = GetNextFactionMember(oPC, FALSE);

@@ -214,7 +214,7 @@ void DevourDispelCallback( object oCaster )
 // from Voracious Dispelling
 void VoraciousDispelCallback( object oTarget, object oCaster )
 {
-	int		nDamage	= GetCasterLevel( oCaster ) / 2;
+	int		nDamage	= PS_GetCasterLevel( oCaster ) / 2;
 	effect	eDmg	= EffectDamage( nDamage );
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget);
 }

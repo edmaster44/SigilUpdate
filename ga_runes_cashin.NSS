@@ -10,19 +10,21 @@ void main()
 
 	int iGold = 0;
 	int iXp = 0;
-	
+	int nStack = 1;
 	object oItem = GetFirstItemInInventory(oPC);
     while(GetIsObjectValid(oItem))
     {
-	 if(TestStringAgainstPattern("ps_rune_**",GetTag(oItem)))
-	 {
-	 	DestroyObject(oItem);
-		iGold += GPAWARD;
-		iXp += XPAWARD;
-     }
+		nStack = 1;
+		if(TestStringAgainstPattern("ps_rune_**",GetTag(oItem))){
+			nStack = GetNumStackedItems(oItem);
+			DestroyObject(oItem);
+			iGold += GPAWARD * nStack;
+			iXp += XPAWARD * nStack;
+		}
      oItem = GetNextItemInInventory(oPC);
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	PS_GiveXPReward(oPC, iXp);
+	if (!ALLOW_ECL_LEVEL_30 || TAX_RUNES_FOR_ECL) PS_GiveXPReward(oPC, iXp);
+	else GiveXPToCreature(oPC, iXp);
 }

@@ -26,7 +26,7 @@ void main()
     object    oTarget      = OBJECT_SELF;
     location  lLocal       = GetLocation(oTarget);
 	object 	  oCaster 	   = GetOnHitAbilityCaster(OBJECT_SELF);
-    int       nCasterLevel = GetCasterLevel(oCaster);
+    int       nCasterLevel = PS_GetCasterLevel(oCaster);
 
     //--------------------------------------------------------------------------
     // Dispel Magic is capped at caster level 10

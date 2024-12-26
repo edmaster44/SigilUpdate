@@ -28,7 +28,7 @@ void main()
     //Declare major variables
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
     int nDamage;
     float fDelay;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);

@@ -42,6 +42,16 @@
 	
 */
 
+// Dec 19, 2024 - FlattedFifth.
+// Removing Freedom of Movement, Deathward, etc and then reapplying
+// isn't balanced because first of all, if a cleric has to cast three spells to get the same 
+// effects as a one or two mage spells then how is that OP? Secondly, doing
+// so strips all Metamagic duration from the initial casting. Instead, we will allow death ward
+// and freedom of movement to prevent negative effects but ALSO have them prevent some of the 
+// positive effects. If FoM is on, prevents decreased speed but ALSO prevents crit immunity.
+// If Death Ward is on, prevents decreased dex but ALSO prevents stun immunity
+
+
 
 
 
@@ -52,45 +62,21 @@
 
 void main()
 {
-   if (!X2PreSpellCastCode())
-   {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-       return;
-   }
+   if (!X2PreSpellCastCode()) return;
+  
 
    object oTarget      = GetSpellTargetObject(); // should be the caster
-   int nCasterLevel    = GetCasterLevel(OBJECT_SELF);
+   int nCasterLevel    = PS_GetCasterLevel(OBJECT_SELF);
    float fDuration     = 60.0*nCasterLevel; // seconds  (1 min per level)
+   
+   	// Freedom of Movement
+	int bHasFoM = FALSE;
+	if (GetHasSpellEffect(SPELL_FREEDOM_OF_MOVEMENT, oTarget)) bHasFoM = TRUE;
 
-//____________________________________________________
-// pelhikano fix
-
-// Freedom of Movement
-int hadFoM = 0;
-if (GetHasSpellEffect(SPELL_FREEDOM_OF_MOVEMENT, oTarget))
-{
- RemoveSpellEffectsFromCaster(SPELL_FREEDOM_OF_MOVEMENT, oTarget, OBJECT_INVALID);
- hadFoM = 1;
-}
-
-// Death Ward
-int hadDW = 0;
-if (GetHasSpellEffect(SPELL_DEATH_WARD, oTarget))
-{
- RemoveSpellEffectsFromCaster(SPELL_DEATH_WARD, oTarget, OBJECT_INVALID);
- hadDW = 1;
-}
-
-// Mass Death Ward
-if (GetHasSpellEffect(SPELL_MASS_DEATH_WARD, oTarget))
-{
- RemoveSpellEffectsFromCaster(SPELL_MASS_DEATH_WARD, oTarget, OBJECT_INVALID);
- hadDW = 1;
-}
-
-
-//____________________________________________________
-
+	int bHasDW = FALSE;
+	if (GetHasSpellEffect(SPELL_DEATH_WARD, oTarget) || 
+	GetHasSpellEffect(SPELL_MASS_DEATH_WARD, oTarget)) bHasDW = TRUE;
+   
    //Fire cast spell at event for the specified target
    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_STONE_BODY, FALSE));
 
@@ -119,55 +105,37 @@ if (GetHasSpellEffect(SPELL_MASS_DEATH_WARD, oTarget))
    effect eAcidI       = EffectDamageImmunityIncrease( DAMAGE_TYPE_ACID, 50 );  
 
    // Link the effects together
-   effect eLink = EffectLinkEffects(eStrIncr, eStone);
-   eLink = EffectLinkEffects(eLink, eDexDecr);
-   eLink = EffectLinkEffects(eLink, eMovDecr);
-   eLink = EffectLinkEffects(eLink, eSpellFail);
-   eLink = EffectLinkEffects(eLink, eArmorCheck);
-   eLink = EffectLinkEffects(eLink, eBlindI);
-   eLink = EffectLinkEffects(eLink, eCritI);
-   eLink = EffectLinkEffects(eLink, eStatDecI);
-   eLink = EffectLinkEffects(eLink, eDeafI);
-   eLink = EffectLinkEffects(eLink, eDiseaseI);
+	effect eLink = EffectLinkEffects(eSpellFail, eStone);
+	eLink = EffectLinkEffects(eStrIncr, eLink);
+	eLink = EffectLinkEffects(ePoison, eLink);
+	eLink = EffectLinkEffects(eFireI, eLink);
+	eLink = EffectLinkEffects(eAcidI, eLink);
+	eLink = EffectLinkEffects(eVis, eLink);
+	eLink = EffectLinkEffects(eArmorCheck, eLink);
+	eLink = EffectLinkEffects(eBlindI, eLink);
+	eLink = EffectLinkEffects(eDeafI, eLink);
+	eLink = EffectLinkEffects(eDiseaseI, eLink);
 
-   if (!GetHasSpellEffect(1106, oTarget)) //SPELLABILITY_IMMUNITY_TO_ELECTRICITY
-   {
-       eLink = EffectLinkEffects(eLink, eElectricI);
-   }
+	if (!GetHasSpellEffect(1106, oTarget)) //SPELLABILITY_IMMUNITY_TO_ELECTRICITY
+	{
+	   eLink = EffectLinkEffects(eElectricI, eLink);
+	}
 
-   eLink = EffectLinkEffects(eLink, ePoison);
-   eLink = EffectLinkEffects(eLink, eStunI);
-   eLink = EffectLinkEffects(eLink, eFireI);
-   eLink = EffectLinkEffects(eLink, eAcidI);
-   eLink = EffectLinkEffects(eLink, eVis);
 
-   //Apply the effects
-   //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTemp, oTarget);
-//_________________
-// pelhikano fix: Delay the command so the FoM and DW removal works
-DelayCommand(0.5, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration ));
+	if (!bHasDW){
+	   eLink = EffectLinkEffects(eStrIncr, eLink);
+	   eLink = EffectLinkEffects(eDexDecr, eLink);
+	   eLink = EffectLinkEffects(eStatDecI, eLink);
+	   eLink = EffectLinkEffects(eStunI, eLink);
+	}
 
-// Re-apply FoM and DW with reset durations
-if (hadFoM)
-{
- ActionCastSpellAtObject(SPELL_FREEDOM_OF_MOVEMENT,
-  oTarget,
-  METAMAGIC_NONE,
-  TRUE,
-  nCasterLevel,
-  PROJECTILE_PATH_TYPE_DEFAULT,
-  TRUE);
-}
+	if (!bHasFoM){
+		eLink = EffectLinkEffects(eMovDecr, eLink);
+		eLink = EffectLinkEffects(eCritI, eLink);
+	}
+   ApplyEffectToObject(nDurType, eLink, oTarget, fDuration );
 
-if (hadDW)
-{
- ActionCastSpellAtObject(SPELL_DEATH_WARD,
-  oTarget,
-  METAMAGIC_NONE,
-  TRUE,
-  nCasterLevel,
-  PROJECTILE_PATH_TYPE_DEFAULT,
-  TRUE);
-}
+
+
 
 }

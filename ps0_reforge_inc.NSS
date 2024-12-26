@@ -17,6 +17,13 @@
 
 int PS_GetWeaponSize(object oWeapon)
 {
+
+	return IPGetWeaponSize(oWeapon);
+	
+	
+	/* this is difficult to maintain, better to just use the new function in
+	x2_inc_itemprop to get the value directly from the 2da
+	
 	int nBaseItem = GetBaseItemType(oWeapon);
 	int nWeapSize = 99;
 	
@@ -49,6 +56,7 @@ int PS_GetWeaponSize(object oWeapon)
 		case 126 : nWeapSize = 4; break;	//warmace
 	}
 	return nWeapSize;
+	*/
 }
 
 int PS_GetShieldSize(object oShield)

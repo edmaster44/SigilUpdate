@@ -4,7 +4,7 @@
 //:://////////////////////////////////////////////
 /*
     Allows the mage to see invisible creatures &
-    see in darkness.
+    see in darkness as well as being immune to blindness.
 */
 //:://////////////////////////////////////////////
 //:: Created By: Jesse Reynolds (JLR - OEI)
@@ -36,19 +36,35 @@ void main()
     effect eLink = EffectLinkEffects(eVis, eSightInvis);
     eLink = EffectLinkEffects(eLink, eSightDark);
     eLink = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_BLINDNESS));
+	eLink = SetEffectSpellId(eLink, SPELL_BLINDSIGHT);
+	
+	int nlvl = PS_GetCasterLevel(OBJECT_SELF);
+	// caster lvl for assassin feat/spells is assassin lvl + 1/2 of non-assassin lvls
+	if (GetSpellFeatId() == 21895){
+		nlvl = GetLevelByClass(CLASS_TYPE_ASSASSIN, OBJECT_SELF);
+		nlvl += (GetTotalLevels(OBJECT_SELF, TRUE) - nlvl) / 2;
+	}
+	
 
-    float fDuration = TurnsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
+	// ALSO, put in script in onaquire to make sure that scrolls that are useable by druids also get the 
+	// useable by shaman porperty, and add the encircling scale to the list of items to get proper darkvision.
+	// ALSO make new feint
+
+    float fDuration = TurnsToSeconds(nlvl);
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
     //int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
-	itemproperty ipDarkImmune = ItemPropertySpellImmunitySpecific(IP_CONST_IMMUNITYSPELL_DARKNESS);
+	
 
 
    //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLINDSIGHT, FALSE));
     //Apply the VFX impact and effects
 	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-	PS_GrantTempItemPropertyToPC(ipDarkImmune, oTarget, fDuration);
+	PS_RemoveEffects(oTarget, SPELL_BLINDSIGHT);
+	RemoveEffect(oTarget, EffectBlindness());
+	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_MISS_CHANCE);
+	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_SKILL_DECREASE);
 	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oTarget, eLink, fDuration);
 }

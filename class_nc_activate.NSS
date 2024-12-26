@@ -18,6 +18,8 @@ RemoveSpellEffects(nSpell, OBJECT_SELF, OBJECT_SELF);
 int nLevel=GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oPC);
 int nDuration = (nLevel-1)*10;
 effect eConceal = EffectConcealment(10 * nLevel , MISS_CHANCE_TYPE_NORMAL);
+effect eDur   = EffectVisualEffect(VFX_DUR_SPELL_SHROUDING_FOG);
+eConceal = EffectLinkEffects(eDur, eConceal);
 SupernaturalEffect(eConceal);
 
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, OBJECT_SELF, RoundsToSeconds(nDuration)));

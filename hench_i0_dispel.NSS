@@ -7,7 +7,7 @@
 */
 
 #include "hench_i0_spells"
-
+#include "ps_inc_functions"
 
 struct sEnhancementLevel
 {
@@ -51,7 +51,7 @@ float GetDispelChance(object oCreator)
 {
 	if (GetIsObjectValid(oCreator))
 	{
-		int nCasterLevel = GetCasterLevel(oCreator);	// this isn't always accurate (reset every spell)	
+		int nCasterLevel = PS_GetCasterLevel(oCreator);	// this isn't always accurate (reset every spell)	
 		if (nCasterLevel <= 0)
 		{
 			nCasterLevel = GetHitDice(oCreator);

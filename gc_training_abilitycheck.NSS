@@ -4,8 +4,15 @@
 #include "ps_inc_training"
 #include "ps_inc_functions"
 
-int StartingConditional(int nAbility, int nDC, int maxExp = 100)
+/*
+compiler Warning:
+Warning: gc_training_abilitycheck.nss(7): Warning: NSC6010: Entry point function "StartingConditional" has a default value for argument "maxExp", but the runtime will select default argument values from a hardcoded list of defaults for script entry point symbols.  Consider removing explicit default arguments from the function and handling the actual runtime default values (which are zero, OBJECT_INVALID, and an empty string, as appropriate).
+
+*/
+//int StartingConditional(int nAbility, int nDC, int maxExp = 100)
+int StartingConditional(int nAbility, int nDC, int maxExp)
 {
+	if (maxExp == 0) maxExp = 100;
 
 	object oPC = GetPCSpeaker();
 	int nMod = GetAbilityModifier(nAbility, oPC);

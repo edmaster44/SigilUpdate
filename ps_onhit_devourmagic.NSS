@@ -35,6 +35,7 @@
 #include "x2_inc_spellhook"
 #include "nwn2_inc_spells"
 #include "ps_inc_onhit" 
+
 void DispelAoECallback(object oTarget, object oCaster, int nID);
 
 void main()
@@ -42,7 +43,7 @@ void main()
 
     location lLocal = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(OBJECT_SELF);
 	int nID = GetOnHitAbilityID(OBJECT_SELF);
     effect    eVis         = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);

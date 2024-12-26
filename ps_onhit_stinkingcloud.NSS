@@ -21,12 +21,12 @@ void main()
     //Declare major variables
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(OBJECT_SELF);
 	int nID = GetOnHitAbilityID(OBJECT_SELF);
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGSTINK, "ps_onhit_stinkingclouda", "ps_onhit_stinkingcloudc");
 
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
     //effect eImpact = EffectVisualEffect(259);
     //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpact, lTarget);
     if (nDuration < 1)

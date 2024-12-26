@@ -15,17 +15,33 @@
 
 
 
-#include "x0_i0_position"
 #include "aaa_constants"
-#include "ps_inc_advscript"
-#include "x0_i0_match"
 #include "ServerExts"
 #include "x0_i0_petrify"
 #include "nwnx_sql"
-#include "x2_inc_itemprop"
 #include "ps_inc_ecl"
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
+
+
+// get whether the defender is in range of the attacker's current weapon or shield bash
+int GetInWeaponRange(object oAttacker, object oDefender, int bShieldBash = FALSE, int bRangedBash = FALSE);
+
+// Gets the size of the creature's footprint in meters based on size category and
+// 3.5e rules
+float GetCreatureFootprint(object oCreature);
+
+// adjust values to be added to xp pool for christmas and rebuild type
+int XPpoolAdjust(int nXP);
+int GetIsChristmas();
+void PS_TrimXP(object oPC);
+string PS_GetCharID(object oPC);
+void SetXPpools(object oPC, int nAmount, int bAll = TRUE, int bEmptyPool = FALSE);
+void PS_lose_one_level(object oPC);
+
+// the prefix for the local integer for the craft skill bonus that ecl characters can 
+// get under the right conditions (see function PS_EclCraftProgression()).
+const string ECL_CRAFT_BONUS_PREFIX = "ecl_craft_bonus_";
 
 // String name of local variable on essence for storing the original race of the oPC.
 const string VAR_OLD_RACE = "OldRace";
@@ -75,11 +91,29 @@ const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
+// FloatToInt(), despite what the documentation says, does not round to nearest.
+// It tuncates. This will round. Choose "up", "down", or "nearest", not case sensitive
+int PS_RoundToInt(float fNum, string RoundTo = "nearest");
+
+// NWN2 has a cap of 528k xp, so if we set the races ecl in the 2da then we couldn't have
+// any ECL greater than 3 (A character with 0 ecl needs 435k xp to reach 30, a character 
+// with 1 ecl 465k, 2 ecl is 496, 3 is 528). Instead to mimic ECL we will take the xp
+// the character earns and only apply a percentage of it to the character, based on the
+// ECL, and leave them all set to 0 in the 2da. For example, a character with 1 ecl will 
+// get only get 96.7% of the xp they earn applied to their character because 96.7% of 465k
+// is roughly 435k. In this way we can have any amount of ECL we need, not just up to 3 
+// (but for now I've capped it at ECL 20, which would be 36% of earned xp is applied)
+int GetECLXP(int nXP, int nLevel, int nECL);
+
 // The default GiveXPToCreature() has return type void, so int PS_GiveXPReward() doesn't always work in place of it.
 void PS_GiveXPRewardNoReturn(object oPC, int nXP);
 
 // Call this function to get the oPC's essence object.
 object PS_GetEssence(object oPC = OBJECT_SELF);
+
+// gets the creature skin item, will check entire inventory for any base item creature skin if not found in slot.
+// creates one on pc and equips it if not found.
+object PS_GetCreatureSkin(object oPC);
 
 // Call this function to add a feat temporarily with a spell but without any other spell effects
 void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0f, int bFeatLookup = TRUE,);
@@ -88,16 +122,31 @@ void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0f, int bF
 void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1, int bFeatLookup = TRUE);
 
 // Use this if you have a item property already set up in the spell script.
-void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0f);
+void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0f, int bPerm = FALSE);
 
 // use this if you want to apply the item prop and all other spell effects in one function.
-void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1);
+void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1, int bPerm = FALSE);
 
 // accepts a feat id from feat.2da and returns the id to be used in ItemPropertyBonusFeat() from iprp_feats.2da
 int PS_GetIpBonusFeat(int nFeatId);
 
 // grant Imbue Item to psi and to warlocks with prcs that make lvl 12 warlock base more difficult.
 void PS_ManageImbueItem(object oPC);
+
+
+// The following 3 are not implemented yet
+// allow earned xp to continue to progress craft skills for ECL characters, if and only if their craft skills are maxed, 
+// up to the same as possible for a non-ecl character.
+void PS_EclCraftProgression(object oPC, int nXP);
+
+// Helper function to above
+void PS_SetEclCraftBonus(object oPC, int nXP, int nSkill);
+
+// Returns the bonus(es) set above. Called from PS_SetEclCraftBonus and PS_GetSkillRank
+int PS_GetEclCraftBonus(object oPC, int nSkill, int nEcl, object oEss);
+
+// wrapper for GetSkillRank to include special ecl bonuses to craft skills, called in kinc_crafting.nss and gui_craft_item.nss
+int PS_GetSkillRank(int nSkill, object oTarget = OBJECT_SELF, int bBaseOnly = FALSE);
 
 int GetHasSpiritShamanProgression(object oPC, int iClass);
 
@@ -252,6 +301,300 @@ object PS_GetEssence(object oPC = OBJECT_SELF)
 	return GetItemPossessedBy(oPC, "ps_essence");
 }
 
+int GetInWeaponRange(object oAttacker, object oDefender, int bShieldBash = FALSE, int bRangedBash = FALSE){
+	// get right hand item
+	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oAttacker);
+	int nType = GetBaseItemType(oWeapon);
+	int nOffType = GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oAttacker));
+	// get the range of the weapon
+	float fRange;
+	// if right hand empty or this is a shield bash, set min range
+	if (oWeapon == OBJECT_INVALID || (bShieldBash && !bRangedBash)) fRange = 0.5f;
+	// if shield throw feat set range to half of a normal ranged weapon
+	else if (bRangedBash) fRange = 15.0f;
+	//if item in right hand it not a weapon, set min range
+	else if (StringToInt(Get2DAString("baseitems", "NumDice", nType)) == 0)
+		fRange = 0.5f;
+	else fRange = StringToFloat(Get2DAString("baseitems", "PrefAttackDist", nType));
+	
+	// add range based upon the reach distance of the attacker,
+	// which is the same as the footprint
+	float fReach = GetCreatureFootprint(oAttacker);
+	fRange += fReach;
+
+	// general consensus seems to be melee range is 4.0 so I'll set that as Minimum
+	if (fRange < 4.0f) fRange = 4.0f;
+	
+	// Get the distace between the attack and defender
+	float fDistance = GetDistanceBetween(oAttacker, oDefender);
+	
+	// GetDistanceBetween measures centre to center, not edge to edge
+	// so to get that I will get subtract the radius of each creature
+	
+	fDistance -= ((fReach / 2.0f) + (GetCreatureFootprint(oDefender) / 2.0f));
+	
+	return (fDistance <= fRange);
+}
+
+
+// Get the amount of space taken up by the creature, as per
+// https://dungeons.fandom.com/wiki/Table:_Creature_Size_and_Scale_(3.5e_Other)
+float GetCreatureFootprint(object oCreature){
+	int nSize = GetCreatureSize(oCreature);
+	float fFoot;
+	if (nSize <= 0) fFoot = 0.5f;
+	else if (nSize >= 7) fFoot = 30.0f;
+	else switch (nSize){
+		case 1: fFoot = 2.5f; break;
+		case 2: fFoot = 5.0f; break; 
+		case 3: fFoot = 5.0f; break;
+		case 4: fFoot = 10.0f; break;
+		case 5: fFoot = 15.0f; break;
+		case 6: fFoot = 20.0f; break;
+	}
+	// now we have our size in feet, but GetDistanceBetween()
+	// deals in meters, so return the value in meters
+	return fFoot * 0.3048;
+}
+
+
+
+
+
+// remove unspent xp, prevents people from grinding away at a more advantageous
+// lvl for the xp before leveling up.
+void PS_TrimXP(object oPC){
+	int nHD = GetHitDice(oPC);
+
+	int nXpToNext = PS_GetXPForLevel(nHD + 1);
+	int nXP = GetXP(oPC);
+	if (nXP > nXpToNext) SetXP(oPC, nXpToNext -1);
+}
+
+void PS_lose_one_level(object oPC){	
+	int nLvl = GetHitDice(oPC);
+	if (nLvl == 1) return;
+	
+	int nXP = GetXP(oPC);
+	int nXPforThisLevel = PS_GetXPForLevel(nLvl);
+	SetXPpools(oPC, nXP - nXPforThisLevel - 1, FALSE);
+	SetXP(oPC, nXPforThisLevel - 1);
+}
+
+void SetXPpools(object oPC, int nAmount, int bAll = TRUE, int bEmptyPool = FALSE){
+	int nAdjustedXP;
+	if (bEmptyPool) nAdjustedXP = 0;
+	else nAdjustedXP = XPpoolAdjust(nAmount);
+	
+	SendMessageToPC(oPC, "Adding "+IntToString(nAdjustedXP)+" to your RP and DM exp pools");
+	string sID = PS_GetCharID(oPC);
+	if (sID == "NULL") return;
+	int dm_pool = nAdjustedXP;
+	int rp_pool = 0;
+	if (nAdjustedXP < nAmount) rp_pool = nAdjustedXP;
+	string sLog = "lost ALL levels to Styx, increased pool to";
+	if (bAll && bEmptyPool) sLog = "removed all xp from styx, setting pool to";
+	else if (!bAll) sLog = "lost one level to Styx, increased pools to";
+	SQLExecDirect("SELECT dm_pool,rp_pool FROM characterdata WHERE id=" + sID);
+	if (SQLFetch() == SQL_ERROR){
+		object oSpeaker = GetLastSpeaker();
+		if (!bEmptyPool){
+			dm_pool += GetLocalInt(oSpeaker, sID+"dm");
+			rp_pool += GetLocalInt(oSpeaker, sID+"rp");
+		}
+		SetLocalInt(oSpeaker, sID+"dm", dm_pool);
+		SetLocalInt(oSpeaker, sID+"rp", rp_pool);
+	
+	} else {
+		if (!bEmptyPool){
+			dm_pool += StringToInt(SQLGetData(1));
+			rp_pool += StringToInt(SQLGetData(2));
+		}
+		SQLExecDirect("UPDATE characterdata SET dm_pool=" + IntToString(dm_pool) + ",rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID);		
+		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
+			SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
+			SQLEncodeSpecialChars(GetName(oPC)) + 
+			"','Player " +sLog+ ": " +IntToString(nAdjustedXP)+ "',106)");
+	}
+}
+
+int XPpoolAdjust(int nXP){
+	
+	if (ALLOW_INSTANT_REBUILD) return nXP;
+	else if (GetIsChristmas()) return PS_RoundToInt(nXP * 0.5);
+	else return PS_RoundToInt(nXP * 0.25);
+}
+
+// Called from PS_GiveXPReward().
+int GetECLXP(int nXP, int nLevel, int nECL){
+	
+	
+	if (nECL < 0) nECL = 0;
+	if (nECL > 20) nECL = 20;
+
+	if (nECL == 0) return nXP;
+	// nLevel is the character's current level, not next.
+	int nXpToNext = 500 * nLevel * (nLevel + 1);
+	
+	int nDiv = 500 * (nLevel + nECL) * (nLevel + nECL + 1);
+	
+	/* math checked based on ecl 3 needing to earn 10k xp to get to lvl 2
+		as per the character progression chart at https://nwn2.fandom.com/wiki/ 
+		
+	*/
+	
+	float fBase = IntToFloat(nXpToNext);
+	float fDiv = IntToFloat(nDiv);
+	float fPercentage = fBase / fDiv;
+	// get the xp to apply, rounded to nearest integer
+	int nAppliedXP = PS_RoundToInt(IntToFloat(nXP) * fPercentage);
+	// be kind and give at least 1 xp, if they got at least 1 to begin with
+	if (nAppliedXP < 1 && nXP > 0) nAppliedXP = 1;
+	return nAppliedXP;
+}
+
+
+int PS_RoundToInt(float fNum, string RoundTo = "nearest"){	
+
+	if (GetStringLowerCase(RoundTo) == "up") RoundTo = "up";
+	else if (GetStringLowerCase(RoundTo) == "down") RoundTo = "down";
+	else RoundTo = "nearest";
+
+	// the comment in nwscript.nss says that this rounds to nearest.
+	// That is a lie. It truncates the decimal
+	int nInt = FloatToInt(fNum);
+	
+	// but just in case a future Dae plugin corrects that lie lets
+	// go ahead and check
+	if (IntToFloat(nInt) > fNum) nInt -= 1;
+
+	// now get the decimal portion of fNum
+	float fDec = fNum - IntToFloat(nInt);
+	if (fDec == 0.0f) return nInt;
+	else if (RoundTo == "down") return nInt;
+	else if (RoundTo == "up") return nInt + 1;
+	else {
+		if (fDec >= 0.5f) return nInt + 1;
+		else return nInt;
+	}
+	return nInt;
+}
+
+
+
+// Allow earned xp to continue to progress craft skills for ECL Characters
+// if and only if their craft skills are maxed, until max rank of 33.
+// Called from PS_GiveXPReward().
+// Local ints set here will be added to skill checks in gui_craft_item.nss
+// for alchemy, armor, and weapons and in kinc_crafting for craft trap.
+void PS_EclCraftProgression(object oPC, int nXP)
+{
+	if (ALLOW_CRAFT_PROGRESSION_FOR_ECL)
+	{
+		// Add the gained xp to the calculations for ECL craft bonuses, if applicable
+		PS_SetEclCraftBonus(oPC, nXP, SKILL_APPRAISE);
+		PS_SetEclCraftBonus(oPC, nXP, SKILL_CRAFT_ALCHEMY);
+		PS_SetEclCraftBonus(oPC, nXP, SKILL_CRAFT_ARMOR);
+		PS_SetEclCraftBonus(oPC, nXP, SKILL_CRAFT_TRAP);
+		PS_SetEclCraftBonus(oPC, nXP, SKILL_CRAFT_WEAPON);
+	}
+}
+
+void PS_SetEclCraftBonus(object oPC, int nXP, int nSkill)
+{
+	object oEss = PS_GetEssence(oPC);
+	if (GetIsObjectValid(oEss))
+	{
+		int nHD = GetHitDice(oPC);
+		int nEcl = PS_GetEssenceECL(oPC);
+		// bail if not an ecl char or if the ecl char has not yet reached max level
+		if (nEcl < 1 || nHD + nEcl < 30) return;
+		
+		// For each craft skill we will not grant any bonuses unless the character spent
+		// as many points as they could in that skill, so bail if they haven't.
+		if (GetSkillRank(nSkill, oPC, TRUE) < nHD + 3) return;
+		
+		// get the current bonus
+		int nCurrentBonus = PS_GetEclCraftBonus(oPC, nSkill, nEcl, oEss);
+		// bail if they already have the maximum bonus.
+		if (nCurrentBonus >= nEcl) return;
+		
+		SendMessageToPC(oPC, "Gaining ECL craft xp");
+		
+		// Get how much xp has been saved up towards craft bonus
+		string sCurrentEclCraftXP = ECL_CRAFT_BONUS_PREFIX + IntToString(nSkill) + "_current_xp";
+		int nCurrentXP = GetLocalInt(oEss, sCurrentEclCraftXP);
+		// if this is the first time we check this, then set this to the xp of the character,
+		// keeping in mind that they won't have enough xp to get to the next real character level.
+		// This way at least all xp they gained until they stopped gaining any will count.
+		// Also note that PS_EclCraftProgression() is called in PS_GiveXPReward() BEFORE that 
+		// function decides not to give any to the character because they're max level, so until 
+		// the bonus reaches the ecl, the character can still gain xp towards this skill.
+		if (nCurrentXP == 0) nCurrentXP = GetXP(oPC); 
+		// add the xp gained to our tracking for the craft bonus
+		nCurrentXP += nXP;
+		SetLocalInt(oEss, sCurrentEclCraftXP, nCurrentXP);
+		int nSkillNameRef = StringToInt(Get2DAString("skills", "Name", nSkill));
+		string sSkillName = GetStringByStrRef(nSkillNameRef);
+		string sMessage = "You have gained " + IntToString(nXP) + " experience points towards " + sSkillName;
+		SendMessageToPC(oPC, sMessage);
+		
+		// Get how much xp we need to get the next craft skill bonus
+		int nVirtualLevel = nHD + nCurrentBonus;
+		int nXpToNext = 500 * nVirtualLevel * (nVirtualLevel + 1);
+		if (nCurrentXP >= nXpToNext)
+		{
+			nCurrentBonus += 1;
+			string sEclCraftBonus = ECL_CRAFT_BONUS_PREFIX + IntToString(nSkill);
+			SetLocalInt(oEss, sEclCraftBonus, nCurrentBonus);
+			sMessage =  "You have gained a rank in " + sSkillName + "\n";
+			sMessage += "You now have a bonus of +" + IntToString(nCurrentBonus) + " to " + sSkillName + "\n";
+			sMessage += "This will not be reflected in your character sheet but will be counted when crafting.";
+			SendMessageToPC(oPC, sMessage);
+			nVirtualLevel = nHD + nCurrentBonus;
+			nXpToNext = 500 * nVirtualLevel * (nVirtualLevel + 1);
+		}
+		int nXpNeeded = nXpToNext - nCurrentXP;
+		if (nCurrentBonus == nEcl) sMessage = "You have reached maximum rank in " + sSkillName + ".";
+		else sMessage = "You need " + IntToString(nXpNeeded) + " more experience to next skill rank.";
+		SendMessageToPC(oPC, sMessage);
+	}
+}
+
+// Returns the bonus(es) set above. Called from PS_SetEclCraftBonus and PS_GetSkillRank
+int PS_GetEclCraftBonus(object oPC, int nSkill, int nEcl, object oEss)
+{
+	// bail if not an ecl character
+	if (nEcl < 1) return 0;
+	
+	string sEclCraftBonus = ECL_CRAFT_BONUS_PREFIX + IntToString(nSkill);
+	int nBonus = GetLocalInt(oEss, sEclCraftBonus);
+	// do not return a value higher than the ecl. Shouldn't be possible, but lets be certain.
+	if (nBonus > nEcl) return nEcl;
+	else return nBonus;
+}
+
+// wrapper for GetSkillRank to include special ecl bonuses to craft skills, called in kinc_crafting.nss and gui_craft_item.nss
+int PS_GetSkillRank(int nSkill, object oTarget = OBJECT_SELF, int bBaseOnly = FALSE)
+{
+	int nRank = 0;
+	
+	if (ALLOW_CRAFT_PROGRESSION_FOR_ECL && (nSkill == SKILL_CRAFT_ALCHEMY || nSkill == SKILL_CRAFT_ARMOR ||
+		nSkill == SKILL_CRAFT_TRAP || nSkill == SKILL_CRAFT_WEAPON || nSkill == SKILL_APPRAISE))
+		{
+			object oEss = PS_GetEssence(oTarget);
+			if (GetIsObjectValid(oEss))
+			{
+				int nEcl = PS_GetEssenceECL(oTarget);
+				nRank += PS_GetEclCraftBonus(oTarget, nSkill, nEcl, oEss);
+			}
+		}
+	nRank += GetSkillRank(nSkill, oTarget, bBaseOnly);
+	return nRank;
+}
+
+
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Temporarily grant a feat with a spell without spell FX by adding it as item property bonus feat to creature skin.
@@ -273,7 +616,7 @@ fDuration = Spell duration in seconds after calling ApplyMetamagicDurationMods(f
 bFeatLookup=If nFeatId is the feat id from feat.2da, leave this set to TRUE. If you entered the proper id for ItemPropertyBonusFeat
 			from iprp_feats.2da, set this to FALSE.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0f, int bFeatLookup = TRUE,)
+void PS_GrantFeatBySpell(int nFeatId, object oPC, float fDuration = 0.0f, int bFeatLookup = TRUE)
 {
 	// since EffectLowLightVision doesn't work we're only using it as a placeholder value.
 	// If we want an actual effect we can call the below function directly.
@@ -315,29 +658,29 @@ void PS_GrantFeatBySpellWithEffect(int nFeatId, object oPC, effect eEffect, floa
 }
 
 // Use this if you have a item property already set up in the spell script.
-void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0f)
+void PS_GrantTempItemPropertyToPC(itemproperty ip, object oPC, float fDuration = 0.0f, int bPerm = FALSE)
 {
-	PS_GrantTempItemPropertyToPCWithEffects(ip, oPC, EffectLowLightVision(), fDuration, -1);
+	PS_GrantTempItemPropertyToPCWithEffects(ip, oPC, EffectLowLightVision(), fDuration, -1, bPerm);
 }
 
 // use this if you want to apply the item prop and all other spell effects in one function.
-void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1)
+void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect eEffect, float fDuration = 0.0f, int nImpact = -1, int bPerm = FALSE)
 {
 	if (GetIsPC(oPC))
 	{
 		// if the we don't pass a duration just set it to 24 hours. We're not setting any permament properties here.
 		if (fDuration == 0.0f) fDuration = HoursToSeconds(24);
-		object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
-		if (oSkin == OBJECT_INVALID)
-		{
-			oSkin = GetItemPossessedBy(oPC, "x2_it_emptyskin");
-			if (oSkin == OBJECT_INVALID)
-			{
-				oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
-			}
-			DelayCommand(0.6f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
+		// the "creature skin" item is what we apply temp bonus feat properties to to make the mechanics more seamless
+		
+		// Get the character's creature skin
+		object oSkin = PS_GetCreatureSkin(oPC);
+		
+		// apply the bonus feat item property to the creature skin
+		if (bPerm){ // if we're adding a property permanently (with the intention to remove later) from ps_inc_equipment
+			IPSafeAddItemProperty(oSkin, ip, 0.0, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);
+		} else {
+			IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
 		}
-		IPSafeAddItemProperty(oSkin, ip, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	
 	}
 	if (nImpact != -1)
 	{
@@ -353,21 +696,35 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
 }
 
 // Input a feat id from feat.2da and get the corresponding item property bonus feat from iprp_feats.2da
-int PS_GetIpBonusFeat(int nFeatId)
-{
+int PS_GetIpBonusFeat(int nFeatId){
 	 // we'll use weapon finesse as a default return value for a feat that isn't found.
 	 // Harmless since everyone has that anyway.
 	int nId = 19;
 	
 	// get the iprp index that corresponds to the featid. Add any other common requests
 	// to cases here.
-	switch (nFeatId)
-	{
+	switch (nFeatId){
 		case 354: return 801; // low light Vision
 		case 228: return 438; //darkvision 
 		case 21103: return 438; //darkvision, searched by psi feat
 		case 240: return 800; // keen senses
 		case 408: return 386; // blind fight
+		case 389: return 44; // combat expertise
+		case 23: return 6;	// knockdown
+		case 9: return 28; // disarm
+		case 6: return 2; // cleave
+		case 28: return 16; // power attack
+		case 61: return 1316; // imp crit sling
+		case 64: return 1317; // imp crit shortbow
+		case 63: return 1318; // imp crit longbow
+		case 55: return 1319; // imp crit light xbow
+		case 54: return 1320; // imp crit heavy xbow
+		case 53: return 1321; // imp crit dart
+		case 82: return 1322; // imp crit shuriken
+		case 71: return 1323; // imp crit throwing axe
+		case 92: return 412; // weap foc hvy xbow
+		case 93: return 419; // weap foc lght xbow
+		case 411: return 89; // rapid reload;
 		default: 
 		{
 			string sCheckString = IntToString(nFeatId);
@@ -376,7 +733,7 @@ int PS_GetIpBonusFeat(int nFeatId)
 			// a safety measure. Number chosen based on number of lines in iprp_feats.2da. If we add enough more feats
 			// to change that number then ofc we should adjust this number. Note that this loop depends on there being
 			// no blank entries in the "label" column.
-			int nMaxRow = 458;
+			int nMaxRow = GetNum2DARows("iprp_feats");
 			
 			while (Get2DAString("iprp_feats", "Label", nRow) != "")
 			{
@@ -399,6 +756,42 @@ int PS_GetIpBonusFeat(int nFeatId)
 	// we have already returned a valid value by this point because if we run out of 2da or reach max rows somehow
 	// without finding the feat we return nId, but the compiler complains if this isn't here.
 	return nId;
+}
+
+object PS_GetCreatureSkin(object oPC){
+	// Get the character's creature skin from the slot for it
+	object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+	
+	// if it's not there...
+	if (oSkin == OBJECT_INVALID)
+	{
+		// look for the default one on. 
+		oSkin = GetItemPossessedBy(oPC, "x2_it_emptyskin");
+		// If it's still not found, cycle through inventory looking for any creature skin, base item 73
+		if (oSkin == OBJECT_INVALID)
+		{
+			int i = 0; // track the number of items we check just because I don't like infinite loops
+			object oItem = GetFirstItemInInventory(oPC);
+			while (GetIsObjectValid(oItem))
+			{
+				i++;
+				// 27072 = num of items a pc could have if inv full of full bags, including the bags
+				// if we pass that, stop looking
+				if (i > 27072) break;
+				// creature skin base item id is 73
+				if (GetBaseItemType(oItem) == 73){
+					oSkin = oItem;
+					break;
+				}
+				oItem = GetNextItemInInventory(oPC);
+			}
+			// if we STILL haven't found any creature skin, make one
+			if (oSkin == OBJECT_INVALID) oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
+		}
+		// Now that we have a creature skin, having not found one in the slot to start, equip it.
+		DelayCommand(1.0f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
+	}
+	return oSkin;
 }
 
 // Give Imbue Item to Psi if they have caster level 6 or higher. Remove it from 
@@ -431,6 +824,8 @@ int GetIsFinessable(object oItem)
 	int nSize = GetCreatureSize(oPC);
 	return dae_GetIsFinessable(oPC, oItem, nSize);
 }
+
+
 
 
 //Calculates Monk Unarmed Damage Based on Monk Class +PRC
@@ -2024,6 +2419,8 @@ int iSlotNumber; int iClass;
 
 
 }
+
+
 int PS_GetCasterLevel(object oPC)
 {
  int iClass = GetLastSpellCastClass();
@@ -2056,7 +2453,11 @@ int PS_GetGolemCasterLevel(object oPC)
 
 int PS_GetEssenceECL(object oPC)
 {
+	if (ALLOW_ECL_LEVEL_30) return GetNewECL(oPC);
+	
+	
 	return StringToInt(GetLocalString(PS_GetEssence(oPC), VAR_ECL));
+	
 
 	//if (sECL == "")
 	//{
@@ -2111,10 +2512,12 @@ string PS_GetScryStatus(object oPC)
 	return "";
 }
 
-int PS_GetLevel(object oPC) //get level of PC including ECL
-{
+
+
+int PS_GetLevel(object oPC){
 //	***New version by Clangeddin**	
 	int iHD 	= GetHitDice(oPC);
+	if (ALLOW_ECL_LEVEL_30) return iHD;
 	int iLA 	= PS_GetEssenceECL(oPC);
 	if (iHD <= iLA)
 	{	iLA = iHD-1;	} // discount for low levels
@@ -2190,8 +2593,24 @@ float PS_GetXPModifier(int iECL)
 	//return (435000.0-(29500-500*iECL)*iECL)/435000.0;
 }
 
-int PS_GetXPForLevel(int iLevel)
-{
+
+// this used to be a for loop but there's a much simpler math for this.
+// you can check the math yourself using this table
+// https://nwn2.fandom.com/wiki/Character_progression
+int PS_GetXPForLevel(int iLevel){
+
+	// is there such a thing as a level 0 npc? no idea
+	if (iLevel < 1) return 0;
+	// and this math works on lvl >= 1. 
+	// 0 xp to have lvl 1, 1000 to have lvl 2, etc.
+	// We don't cap this at 30 because adding the ECL will 
+	// give us how much xp an ecl char will need to get.
+	// for example if we wanted to know how much xp
+	// an ecl 3 needed to get to 30 we could plug 33 in and get
+	// 528k
+	return (500 * (iLevel -1) * (iLevel));
+	
+	/*
 	int nextlvl = 1000;
 	int totalxp = 1;
 	int i=0;
@@ -2200,14 +2619,13 @@ int PS_GetXPForLevel(int iLevel)
 	{	totalxp += nextlvl;
 	 	nextlvl = nextlvl + 1000;	}
 	
-	return totalxp;
+	return totalxp; */
 }
 
-string PS_GetCharID(object oPC)
-{
+string PS_GetCharID(object oPC){
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem))
-    {	return IntToString(GetLocalInt(oPC,"ID"));	}
+    if(GetIsObjectValid(oItem)) return IntToString(GetLocalInt(oPC,"ID"));
+	else return "NULL";
 	return "0";
 }
 
@@ -3993,9 +4411,16 @@ void DebugMessageToPC(object oPC, string sMessage)
 //wrapper for the standard exp script, makes sure you don't keep getting exp past level 30
 int PS_GiveXPReward(object oPC, int nXP) {
 
+	if (ALLOW_CRAFT_PROGRESSION_FOR_ECL){
+		 PS_EclCraftProgression(oPC, nXP);
+	}
+
 	if (PS_GetLevel(oPC) >= 30)
 		return FALSE;
 		
+	if (ALLOW_ECL_LEVEL_30)
+		nXP = GetECLXP(nXP, GetHitDice(oPC), PS_GetEssenceECL(oPC));
+	
 	GiveXPToCreature(oPC, nXP);
 	return TRUE;
 

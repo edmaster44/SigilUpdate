@@ -48,6 +48,8 @@ void main()
 
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     int nModify = 4;
+	if (nCasterLvl >= 12) nModify = 6;
+	else if (nCasterLvl >= 8) nModify = 5;
     float fDuration = TurnsToSeconds(nCasterLvl);
 
     //Fire cast spell at event for the specified target

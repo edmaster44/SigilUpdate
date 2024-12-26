@@ -282,7 +282,7 @@ int GetXPForSkillTrainingQuest(object oPC, int nSkill, int nDifficulty) {
 /*Currently just a rewrapped GiveXPToCreature */
 void GiveTrainingQuestXP(object oPC, int nAmount) {
 
-	GiveXPToCreature(oPC, nAmount);
+	PS_GiveXPRewardNoReturn(oPC, nAmount);
 
 }
 

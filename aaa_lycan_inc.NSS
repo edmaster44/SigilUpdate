@@ -42,6 +42,8 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 // Helper feat for granting wererat sneak attack bonus
 void PS_Wererat_SneakAdd(object oPC)
 {
+	// adds 2 dice of blackguard sneak attack. Shouldn't conflict with anything since blackguard
+	// path gets normal sneak dice.
 	if (GetHasFeat(2593, oPC))
 	{	FeatAdd(oPC, 460, 0);
 		FeatAdd(oPC, 461, 0);
@@ -415,16 +417,16 @@ void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 		oWeapL = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 		sWeapL = GetTag(oWeapL);
 			sWeapR	= GetStringLeft(sWeapR, 4);
-		if (!GetCreatureWeapons(oItem))
+		if (!IPGetIsCreatureEquippedWeapon(oItem))
 		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
 			SendMessageToPC(oPC, "Damage bonus not applied unless creature weapon(s) are equipped!");
 		}
 		else
 		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
-			if (GetCreatureWeapons(oItem))
+			if (IPGetIsCreatureEquippedWeapon(oItem))
 			{	IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 				SendMessageToPC(oPC, "Damage bonus applied to right tusk!");	}
-			if (GetCreatureWeapons(oItem))
+			if (IPGetIsCreatureEquippedWeapon(oItem))
 			{	IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 				SendMessageToPC(oPC, "Damage Bonus applied to left tusk!");	}
 		}

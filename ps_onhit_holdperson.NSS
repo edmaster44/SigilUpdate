@@ -36,7 +36,7 @@ void main()
     //Declare major variables
     location locTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-	int nRounds = GetCasterLevel(oCaster);
+	int nRounds = PS_GetCasterLevel(oCaster);
 	int nSaveDC = GetOnHitAbilityDC(OBJECT_SELF);
 	
 

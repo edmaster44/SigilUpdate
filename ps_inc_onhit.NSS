@@ -498,7 +498,7 @@ int DoEssenceOnHitBrimstoneBlast(object oCaster, object oTarget, int nDC, int nI
                 return FALSE;
             }
 
-            int nCasterLvl = GetCasterLevel(oCaster);
+            int nCasterLvl = PS_GetCasterLevel(oCaster);
             int nRoundsLeft;
             if ( nCasterLvl >= 20 )       { nRoundsLeft = 4; }
             else if ( nCasterLvl >= 15 )  { nRoundsLeft = 3; }
@@ -686,7 +686,7 @@ int DoEssenceOnHitVitriolicBlast(object oCaster, object oTarget, int nDC, int nI
                     return FALSE;
                 }
 
-                int nCasterLvl = GetCasterLevel(oCaster);
+                int nCasterLvl = PS_GetCasterLevel(oCaster);
                 int nRoundsLeft;
                 if ( nCasterLvl >= 20 )       { nRoundsLeft = 4; }
                 else if ( nCasterLvl >= 15 )  { nRoundsLeft = 3; }

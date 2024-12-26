@@ -21,6 +21,7 @@
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 #include "nwn2_inc_metmag"
+#include "ps_inc_functions"
 
 void ShadowBolt (object oTarget, int nMetaMagic);
 
@@ -29,7 +30,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     object oTarget = GetSpellTargetObject();
     int nCast;
-	int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
     float fDuration = HoursToSeconds(nCasterLevel);
 	float fSummonDuration = RoundsToSeconds(nCasterLevel + 3) * 4;
     effect eVis;
@@ -90,7 +91,7 @@ void main()
 void ShadowBolt (object oTarget, int nMetaMagic)
 {
     int nDamage;
-    int nBolts = GetCasterLevel(OBJECT_SELF)/5;
+    int nBolts = PS_GetCasterLevel(OBJECT_SELF)/5;
     int nCnt;
     effect eVis2 = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
     effect eDam;

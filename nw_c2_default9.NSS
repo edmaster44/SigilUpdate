@@ -117,8 +117,10 @@ void main()
 			nLOOT = 4;  //TREASURE_TYPE_EPIC
 		}
 		
-		//1% to spawn special material depending on area
-		if (Random(1000) < 10) SpecialDrop(GetTag(GetArea(oSPAWN)), oSPAWN); 
+		// chance of special drop now based upon general difficulty of area, from same function
+		string sArea = GetTag(GetArea(oSPAWN));
+		int nChance = (SpecialDrop(sArea, oSPAWN, TRUE) * 5);
+		if (Random(1000) < nChance) SpecialDrop(sArea, oSPAWN); 
 		
 		//Generate general loot!
 		if (d100() <= nLOOTCHANCE){

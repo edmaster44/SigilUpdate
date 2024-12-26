@@ -1,4 +1,5 @@
 #include "ps_totem_constants"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -6,7 +7,7 @@ void main()
 	object oCreator = GetAreaOfEffectCreator(OBJECT_SELF);
 	int nAoeSpellId = GetAreaOfEffectSpellId(OBJECT_SELF);
 	int nSaveDC = GetSpellSaveDC();
-	int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+	int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
 	int nMetaMagic = GetMetaMagicFeat();
 	
 	switch(nAoeSpellId) {

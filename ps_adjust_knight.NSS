@@ -173,8 +173,13 @@ void PS_KnightLevels(object oPC)
 	     if (iTotal >= 1 && GetHasFeat(FEAT_KNIGHT,oPC))
 	  
 	  {
-	  		//FeatAdd(oPC,FEAT_DIVINE_GRACE,FALSE,FALSE,FALSE);//Divine Grace , Knight Path
 			FeatAdd(oPC,FEAT_LAY_ON_HANDS,FALSE,FALSE,FALSE);//Lay on Hands , Knight Path
+	  
+	  }
+	   if (iTotal >= 2 && GetHasFeat(FEAT_KNIGHT,oPC))
+	  
+	  {
+	  		FeatAdd(oPC,FEAT_DIVINE_GRACE,FALSE,FALSE,FALSE);//Divine Grace , Knight Path
 	  
 	  }
 	  
@@ -182,16 +187,10 @@ void PS_KnightLevels(object oPC)
 	  
 	  {
 	  		FeatAdd(oPC,FEAT_DIVINE_RETRIBUTION,FALSE,FALSE,FALSE);//Divine Retribution , Knight Path
-		
+			FeatAdd(oPC,FEAT_TURN_UNDEAD,FALSE,FALSE,FALSE);// Turn Undead, Knight Path
 	  
 	  }
-	  if (iTotal >= 3 && GetHasFeat(FEAT_KNIGHT,oPC))
-	  
-	  {
-	  			FeatAdd(oPC,FEAT_TURN_UNDEAD,FALSE,FALSE,FALSE);// Turn Undead, Knight Path
-		
-	  
-	  }
+	 
 	  
 	    if (iTotal >= 6 && GetHasFeat(FEAT_KNIGHT,oPC))
 	  

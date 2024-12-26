@@ -9,19 +9,18 @@ void main () {
 	
 	int iGold = 0;
 	int iXp = 0;
-	
+	int nStack = 1;
 	object oItem = GetFirstItemInInventory(oPC);
     while(GetIsObjectValid(oItem))
     {
-		
+		nStack = 1;
 		if (GetBaseItemType(oItem) == BASE_ITEM_GEM) {
 			
 			if (FindSubString(GetTag(oItem), "gemstone_rough") >= 0) {
-			
+				nStack = GetNumStackedItems(oItem);
 			 	DestroyObject(oItem);
-				
-				iGold += GPAWARD;
-				iXp += XPAWARD;
+				iGold += GPAWARD * nStack;
+				iXp += XPAWARD * nStack;
 		
 		    }
 			
@@ -31,6 +30,7 @@ void main () {
     }
 	
 	GiveGoldToCreature(oPC, iGold);
-	PS_GiveXPReward(oPC, iXp);
+	if (!ALLOW_ECL_LEVEL_30 || TAX_GEMS_FOR_ECL) PS_GiveXPReward(oPC, iXp);
+	else GiveXPToCreature(oPC, iXp);
 
 }

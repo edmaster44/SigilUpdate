@@ -26,7 +26,7 @@ void main()
     location lTarget = GetLocation(OBJECT_SELF);
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
 	
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
     effect eImpact = EffectVisualEffect(VFX_IMP_DUST_EXPLOSION);
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpact, lTarget);
     if (nDuration < 1)

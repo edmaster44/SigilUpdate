@@ -9,9 +9,9 @@ void main (string sNum) {
 	int nIndex = StringToInt(sNum);
 	SetLocalInt(oPC, "Craft_BaseItemType", nIndex);
 	
-	GenerateMaterial1List(oPC, nIndex);
-	GenerateMaterial2List(oPC, nIndex);
-	GenerateMaterial3List(oPC, nIndex);
+	GenerateMaterialList(oPC, nIndex, 1);
+	GenerateMaterialList(oPC, nIndex, 2);
+	GenerateMaterialList(oPC, nIndex, 3);
 
 	GenerateCraftDetails(oPC);
 }

@@ -42,7 +42,7 @@ void main () {
 		nSize = d3()-1;
 	int nQuality = GetGemQuality(oGem);
 	
-	int nRank = GetSkillRank(GEMSTONE_SKILL_ID, oPC, FALSE);
+	int nRank = PS_GetSkillRank(GEMSTONE_SKILL_ID, oPC, FALSE);
 	int nRoll = d20()+nRank; 
 	
 	if (nRoll < failureRoll) {

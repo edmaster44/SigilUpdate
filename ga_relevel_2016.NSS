@@ -1,6 +1,6 @@
 #include "ps_inc_functions"
 #include "nwnx_sql"
-#include "ps_inc_ecl"
+
 
 void main ()
 {

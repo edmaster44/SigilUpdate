@@ -29,7 +29,7 @@ void main()
     effect eLink2 =  EffectLinkEffects(eInvis, eDur);
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
 
-    int nDuration = GetCasterLevel(oCaster);
+    int nDuration = PS_GetCasterLevel(oCaster);
 	
     object oTarget = GetEnteringObject();
 

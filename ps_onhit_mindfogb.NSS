@@ -20,7 +20,7 @@ void main()
 {
     //Declare major variables
 	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(GetAreaOfEffectCreator());
 	int nID = GetOnHitAbilityID(GetAreaOfEffectCreator());
     effect eSave = EffectSavingThrowDecrease(SAVING_THROW_WILL, 10);

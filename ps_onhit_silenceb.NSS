@@ -22,7 +22,7 @@ void main()
     //Declare major variables
     location lTarget = GetLocation(GetAreaOfEffectCreator());
 	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
-    int nCasterLevel = GetCasterLevel(oCaster);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
 	int nDC = GetOnHitAbilityDC(GetAreaOfEffectCreator());
 	int nID = GetOnHitAbilityID(GetAreaOfEffectCreator());
     object oTarget = GetExitingObject();

@@ -42,7 +42,7 @@ void main()
 
     //Declare major variables
 	object oCaster = GetOnHitAbilityCaster(OBJECT_SELF);
-    int nCasterLvl = GetCasterLevel(oCaster);
+    int nCasterLvl = PS_GetCasterLevel(oCaster);
     effect eVis = EffectVisualEffect( VFX_IMP_SUNSTRIKE );
     effect eVis2 = EffectVisualEffect(VFX_IMP_HEALING_L);
 	effect eImpact = EffectVisualEffect(VFX_HIT_CURE_AOE);
@@ -59,7 +59,7 @@ void main()
 
 void CureObject( object oTarget, effect eVis, effect eVis2, object oCaster)
 {
-	int nCasterLvl = GetCasterLevel(oCaster);
+	int nCasterLvl = PS_GetCasterLevel(oCaster);
 	int nDamagen, nModify, nHurt;
 	effect eKill, eHeal;
 	float fDelay = GetRandomDelay();
