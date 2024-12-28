@@ -252,6 +252,7 @@ void GenerateCraftDetails(object oPC) {
 	string sPointsColumn = "";
 	// generating more complete info than before -FlattedFifth
 	string sInfoText = ", a ";
+	int bIsRanged = FALSE; // not counting thrown weapons
 	if (i.type == "A"){
 		sPointsColumn = "A_POINTS";
 		// Get the row of armorrulestats.2da that corresponds to this armor from the columns
@@ -274,10 +275,12 @@ void GenerateCraftDetails(object oPC) {
 	} else if (i.type == "W"){
 		sPointsColumn = "M_POINTS";
 		if (IPGetIsProjectile(OBJECT_INVALID, i.id)){
+			bIsRanged = TRUE;
 			nTotalPoints = 8;
 			sInfoText = "projectile";
 		} else {
 			if (IPGetIsLauncher(OBJECT_INVALID, i.id)){
+				bIsRanged = TRUE;
 				nTotalPoints = 8;
 				sPointsColumn = "R_POINTS";
 			}
@@ -308,12 +311,19 @@ void GenerateCraftDetails(object oPC) {
 		}
 	} else sInfoText = "";
 	
+	nTotalPoints -= 1;
 	int nMatPoints = 0;
 	if (GetIsPowerfulMaterial(m1.ipForgedOf)) nMatPoints += 1;
 	if (GetIsPowerfulMaterial(m2.ipForgedOf)) nMatPoints += 1;
 	if (GetIsPowerfulMaterial(m3.ipForgedOf)) nMatPoints += 1;
-	if (nMatPoints > 0) nMatPoints -= 1;
+	
 	nTotalPoints += nMatPoints;
+	if (bIsRanged && nTotalPoints < 8) nTotalPoints = 8;
+	else if (nTotalPoints < 10) nTotalPoints = 10;
+
+	nTotalPoints += nMatPoints;
+	if (bIsRanged && nTotalPoints < 8) nTotalPoints = 8;
+	else if (nTotalPoints < 10) nTotalPoints = 10;
 	
 	int nUsedPoints = 0;
 	int nPointsRow = nMat1;
@@ -342,7 +352,8 @@ void GenerateCraftDetails(object oPC) {
 		if (nUsedPoints < 0) nUsedPoints = 0;
 		else if (nUsedPoints > 8) nUsedPoints = 8;
 	}
-	sInfoText += " with " + IntToString(nUsedPoints) + "/" + IntToString(nTotalPoints) + " points.";
+	// TODO, fix this
+	//sInfoText += " with " + IntToString(nUsedPoints) + "/" + IntToString(nTotalPoints) + " points.";
 	
 	if (GetIsItemPropertyValid(matPower)) {
 		sFeatures += "<i>"+GetItemPropertyString(matPower)+"</i>\n";

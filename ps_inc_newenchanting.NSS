@@ -238,6 +238,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 			nLastType = nType;
 			nLastSub = nSubType;
 			nLasti = i;
+			
 		}
 	}
 }
@@ -1120,8 +1121,7 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant) {
 }
 
 int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
-	// just a heads up, setting a default value in an arg to OBJECT_SELF might not get the right
-	// context for OBJECT_SELF, better to set it inside the function.
+
 	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
 	
 	int nPoints = 0; // this will be our ultimate return value. May as well set it up first thing.
@@ -1276,6 +1276,8 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 	nNumRows = GetNum2DARows("scodenchantments");
 	int bSkipIp; // boolean to skip an ip that we know is 0 points or specific points already added.
 	ip = GetFirstItemProperty(oItem);
+	int nNumerical;
+	int nSpecial;
 	while (GetIsItemPropertyValid(ip)){
 		bSkipIp = FALSE;
 		bFoundMatch = FALSE;
@@ -1315,18 +1317,30 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		}
 		if (!bSkipIp){
 			nIpSub = GetItemPropertySubType(ip);
-			// now search for matching type and subtype in scodenchantments
-			for (i = 0; i < nNumRows; i++){
-				if (StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType){
+			nNumerical = GetItemPropertyCostTableValue(ip);
+			nSpecial = GetItemPropertyParam1(ip);
+			// for some reason vamp regen wasn't being recognized, so handling itspecifically
+			if (nIpType == 67) nPoints += (nNumerical - 1);
+			else {
+				// now search for matching type and subtype in scodenchantments
+				for (i = 0; i < nNumRows; i++){
 					if (Get2DAString("scodenchantments", sTypeColumn, i) == "1"){
-						// if the type and subtype match and it's a valid enchantment for this item, lets compare
-						eFrom2da = LoadEnchantment(i, oPC);
-						ipFrom2da = EnchantmentIndexToItemProp(eFrom2da);
-						if (IPGetItemPropertiesIdentical(ip, ipFrom2da)){
-							bFoundMatch = TRUE;
-							nPoints += eFrom2da.points;
-							break;
-						}	
+						if (StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType && 
+							StringToInt(Get2DAString("scodenchantments", "Subtype", i)) == nIpSub &&
+							StringToInt(Get2DAString("scodenchantments", "Numerical", i)) == nNumerical &&
+							StringToInt(Get2DAString("scodenchantments", "Special", i)) == nSpecial){
+							
+			
+							// if the type and subtype match and it's a valid enchantment for this item, lets compare
+							eFrom2da = LoadEnchantment(i, oPC);
+							ipFrom2da = EnchantmentIndexToItemProp(eFrom2da);
+							if (IPGetItemPropertiesIdentical(ip, ipFrom2da)){
+								bFoundMatch = TRUE;
+								nPoints += eFrom2da.points;
+								break;
+							}
+								
+						}
 					}
 				}
 			}
