@@ -1,10 +1,10 @@
 NDB V1.0
-0000057 0000016 0002936 0000293 0000655
+0000057 0000016 0003045 0000293 0000655
 n00 ginc_debug
-n01 x2_inc_craft
-n02 x0_i0_stringlib
-n03 ps_inc_advscript
-n04 ps_inc_functions
+n01 ps_inc_advscript
+n02 ps_inc_functions
+n03 x2_inc_craft
+n04 x0_i0_stringlib
 n05 ginc_param_const
 n06 ginc_crafting
 n07 class_mageslayer_utils
@@ -16,17 +16,17 @@ n12 nw_i0_generic
 n13 x2_inc_itemprop
 n14 x2_inc_switches
 n15 ginc_2da
-n16 ginc_vars
-n17 x0_i0_position
-n18 ginc_math
-n19 ginc_item
+n16 ServerExts
+n17 x0_i0_petrify
+n18 nwnx_sql
+n19 x0_i0_position
 n20 x0_i0_match
-n21 ServerExts
-n22 x0_i0_petrify
-n23 nwnx_sql
-n24 ps_inc_ecl
-n25 ps_inc_casterlevel
-n26 nwnx_dae
+n21 ps_inc_ecl
+n22 ps_inc_casterlevel
+n23 nwnx_dae
+n24 ginc_vars
+n25 ginc_math
+n26 ginc_item
 n27 nw_i0_plot
 n28 x0_i0_assoc
 n29 nw_i0_spells
@@ -61,25 +61,6 @@ s 03 vector
 sf f x
 sf f y
 sf f z
-s 05 craft_struct
-sf i nRow
-sf s sResRef
-sf i nDC
-sf i nCost
-sf s sLabel
-s 03 craft_receipe_struct
-sf i nMode
-sf o oMajor
-sf o oMinor
-s 05 sStringTokenizer
-sf i nRemainingLen
-sf s sOrig
-sf s sRemaining
-sf s sDelim
-sf s sLastTok
-s 02 rNameValuePair
-sf s sName
-sf i iValue
 s 04 TintSet
 sf i Color0
 sf i Color1
@@ -109,6 +90,25 @@ sf i HairTint_Color1
 sf i HairTint_Color2
 sf i HairTint_Mask
 sf i NeverDrawHelmet
+s 05 craft_struct
+sf i nRow
+sf s sResRef
+sf i nDC
+sf i nCost
+sf s sLabel
+s 03 craft_receipe_struct
+sf i nMode
+sf o oMajor
+sf o oMinor
+s 05 sStringTokenizer
+sf i nRemainingLen
+sf s sOrig
+sf s sRemaining
+sf s sDelim
+sf s sLastTok
+s 02 rNameValuePair
+sf s sName
+sf i iValue
 s 02 rNameValueStringPair
 sf s sName
 sf s sValue
@@ -156,6 +156,781 @@ sf i nMagicOld
 sf i nStealth
 sf i bScaredOfSilence
 sf i bTacticChosen
+f ffffffff ffffffff 000 i DEBUG_IGNORE_CRAFT_COSTS
+f ffffffff ffffffff 000 i ALLOW_INSTANT_REBUILD
+f ffffffff ffffffff 000 i ALLOW_ECL_LEVEL_30
+f ffffffff ffffffff 000 i TAX_RUNES_FOR_ECL
+f ffffffff ffffffff 000 i TAX_GEMS_FOR_ECL
+f ffffffff ffffffff 000 i TAX_BOOKS_FOR_ECL
+f ffffffff ffffffff 000 i TAX_SKULLS_FOR_ECL
+f ffffffff ffffffff 000 i TAX_CORPSES_FOR_ECL
+f ffffffff ffffffff 000 i ALLOW_CRAFT_PROGRESSION_FOR_ECL
+f ffffffff ffffffff 000 i CRAFT_DIRECT_FROM_2DA
+f ffffffff ffffffff 000 i CRAFTED_GLOVES_GET_MAT_POWER
+f ffffffff ffffffff 000 i GRANT_SITUATIONAL_AWARENESS
+f ffffffff ffffffff 000 i SYN_AC_FOR_ARMOR
+f ffffffff ffffffff 000 i SYN_AC_FOR_SHIELDS
+f ffffffff ffffffff 000 i SYN_AC_NUMERICAL
+f ffffffff ffffffff 000 i SYN_TYPE_FOR_BOWS
+f ffffffff ffffffff 000 i SYN_TYPE_FOR_MELEE_AND_THROWN
+f ffffffff ffffffff 000 i SYN_FOR_PROJECTILES
+f ffffffff ffffffff 000 i SYN_ATTACK_NUMERICAL
+f ffffffff ffffffff 000 i SYN_DAM_NUMERICAL
+f ffffffff ffffffff 000 i SYN_EB_NUMERICAL
+f ffffffff ffffffff 000 i SYN_AC_POINTS
+f ffffffff ffffffff 000 i SYN_ATTACK_POINTS
+f ffffffff ffffffff 000 i SYN_DAM_POINTS
+f ffffffff ffffffff 000 i SYN_EB_POINTS
+f ffffffff ffffffff 000 i B_RAISE_POTION_LVL_BY_ALCH
+f ffffffff ffffffff 000 i B_RAISE_SCROLL_NO_CLASS_LIMIT
+f ffffffff ffffffff 000 i B_FULL_RES_SCROLL_NO_CLASS_LIMIT
+f ffffffff ffffffff 000 i B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT
+f ffffffff ffffffff 000 i B_CHEAP_RAISE_SCROLLS
+f ffffffff ffffffff 000 i N_RAISE_COST
+f ffffffff ffffffff 000 i B_CHEAP_FULL_RES_SCROLLS
+f ffffffff ffffffff 000 i N_RES_COST
+f ffffffff ffffffff 000 i B_FS_ACCESS_DOMAIN_WANDSCROLL
+f ffffffff ffffffff 000 i B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL
+f ffffffff ffffffff 000 i B_BARD_USE_WIZ_WANDSCROLL
+f ffffffff ffffffff 000 i B_WIZ_USE_BARD_ARCANE_WANDSCROLL
+f ffffffff ffffffff 000 i B_KNIGHT_USE_CLERIC_WANDSCROLL
+f ffffffff ffffffff 000 i B_CLERIC_USE_KNIGHT_WANDSCROLL
+f ffffffff ffffffff 000 i B_RANGER_USE_DRUID_WANDSCROLL
+f ffffffff ffffffff 000 i B_DRUID_USE_RANGER_WANDSCROLL
+f ffffffff ffffffff 000 i B_ALLOW_CRAFT_PLUS_5_ALL
+f ffffffff ffffffff 000 i B_ALLOW_CRAFT_PLUS_10_ALL
+f ffffffff ffffffff 000 i B_ALLOW_CRAFT_PLUS_5_MATCH
+f ffffffff ffffffff 000 i B_ALLOW_CRAFT_PLUS_10_MATCH
+f ffffffff ffffffff 000 i FEAT_OUTSIDER_BLOODLINE_FIENDISH
+f ffffffff ffffffff 000 i FEAT_OUTSIDER_BLOODLINE_CELESTIAL
+f ffffffff ffffffff 000 i SPELL_RACIAL_LIGHT
+f ffffffff ffffffff 000 i SPELL_RACIAL_DARKNESS
+f ffffffff ffffffff 000 i FEAT_EXPOSE_WEAKNESS_NEW
+f ffffffff ffffffff 000 i FEAT_FEINT_NEW
+f ffffffff ffffffff 000 i FEAT_FEINT_MASTERY
+f ffffffff ffffffff 000 i FEAT_IMPROMPTU_SNEAK_ATTACK_1
+f ffffffff ffffffff 000 i FEAT_IMPROMPTU_SNEAK_ATTACK_2
+f ffffffff ffffffff 000 i FEAT_IMPROMPTU_SNEAK_ATTACK_1_NEW
+f ffffffff ffffffff 000 i FEAT_IMPROMPTU_SNEAK_ATTACK_2_NEW
+f ffffffff ffffffff 000 i FEAT_HUMAN_ABILITY_BONUS
+f ffffffff ffffffff 000 i FEAT_HALF_ELF_ABILITY_BONUS
+f ffffffff ffffffff 000 i FEAT_HALFOUTSIDER_PATH_OF_GUILE
+f ffffffff ffffffff 000 i FEAT_HALFOUTSIDER_PATH_OF_STRENGTH
+f ffffffff ffffffff 000 i FEAT_ERINYES_WINGS
+f ffffffff ffffffff 000 i FEAT_MEZZOWINGS
+f ffffffff ffffffff 000 i FEAT_TATTERED_WINGS
+f ffffffff ffffffff 000 i FEAT_NEW_CELESTIAL_WINGS
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_NIGHT_HAG
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_TROGLODYTE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_LIZARDFOLK_NEW
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KHAASTA_NEW
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HEZROU_NEW
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_AVARIEL
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ICEGENASI
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRIDER_MALE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRIDER_FEMALE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HOUND_ARCHON
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_SLAAD
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ARCHON
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ELADRIN
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_TANARRI
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_BAATEZU
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HALFOGRE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_OGRE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_TROLL
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ONI
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HILL_GIANT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FROST_GIANT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FIRE_GIANT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_AASIMON
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FROST_GIANT_NEW
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FIRE_GIANT_NEW
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_QUASIT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_IMP
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGBRONZE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGRED
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGBLUE
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGSHADOW
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGBLACK
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGCOPPER
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGIRON
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_BEHOLDER
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_UMBER_HULK
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ELAN
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FIRE_MEPHIT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ICE_MEPHIT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_EARTH_MEPHIT
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DAO
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_MARID
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DJINN
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_EFREET
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_JANN
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KHAYAL
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_XEPH
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KENKU
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_RAKSHASA
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_LUPINAL
+f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ARCANALOTH
+f ffffffff ffffffff 000 i FEAT_KHAYAL_FINESSE
+f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
+f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
+f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
+f ffffffff ffffffff 000 i RACIAL_TYPE_OUTSIDER_NATIVE
+f ffffffff ffffffff 000 i FEAT_HALFVAMPIRE
+f ffffffff ffffffff 000 i FEAT_FETCH
+f ffffffff ffffffff 000 i FEAT_GHUL
+f ffffffff ffffffff 000 i FEAT_GHAEDEN
+f ffffffff ffffffff 000 i WING_TYPE_NONE
+f ffffffff ffffffff 000 i WING_TYPE_ANGEL_M
+f ffffffff ffffffff 000 i WING_TYPE_ANGEL_F
+f ffffffff ffffffff 000 i WING_TYPE_HEZEBEL_M
+f ffffffff ffffffff 000 i WING_TYPE_HEZEBEL_F
+f ffffffff ffffffff 000 i WING_TYPE_DWARF_BAT_M
+f ffffffff ffffffff 000 i WING_TYPE_DWARF_BAT_F
+f ffffffff ffffffff 000 i WING_TYPE_ORC_BAT_M
+f ffffffff ffffffff 000 i WING_TYPE_ORC_BAT_F
+f ffffffff ffffffff 000 i WING_TYPE_ERINYES_M
+f ffffffff ffffffff 000 i WING_TYPE_ERINYES_F
+f ffffffff ffffffff 000 i WING_TYPE_BAT_M
+f ffffffff ffffffff 000 i WING_TYPE_BAT_F
+f ffffffff ffffffff 000 i WING_TYPE_HAWK_M
+f ffffffff ffffffff 000 i WING_TYPE_HAWK_F
+f ffffffff ffffffff 000 i WING_TYPE_RAVEN_M
+f ffffffff ffffffff 000 i WING_TYPE_RAVEN_F
+f ffffffff ffffffff 000 i WING_TYPE_LILITU_M
+f ffffffff ffffffff 000 i WING_TYPE_LILITU_F
+f ffffffff ffffffff 000 i WING_TYPE_MEZZOLOTH
+f ffffffff ffffffff 000 i WING_TYPE_WORDARCHON_F
+f ffffffff ffffffff 000 i WING_TYPE_WORDARCHON_M
+f ffffffff ffffffff 000 i CLASS_TYPE_PSION
+f ffffffff ffffffff 000 i CLASS_PSYCHIC_WARRIOR
+f ffffffff ffffffff 000 i CLASS_DERVISH
+f ffffffff ffffffff 000 i CLASS_PSYCHIC_KNIGHT
+f ffffffff ffffffff 000 i CLASS_STALWART_DEFENDER
+f ffffffff ffffffff 000 i CLASS_TYPE_ARCANETRICKSTER_W
+f ffffffff ffffffff 000 i CLASS_TYPE_ARCANE_ARCHER2
+f ffffffff ffffffff 000 i CLASS_TYPE_CEREBREMANCER
+f ffffffff ffffffff 000 i CLASS_TYPE_ELEMENTAL_WARRIOR
+f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
+f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
+f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
+f ffffffff ffffffff 000 i CLASS_TYPE_NATUREWARRIOR
+f ffffffff ffffffff 000 i CLASS_TYPE_PALEMASTER_W
+f ffffffff ffffffff 000 i CLASS_TYPE_WARMIND
+f ffffffff ffffffff 000 i CLASS_TYPE_PSYCHIC_THERUGE
+f ffffffff ffffffff 000 i CLASS_SAMURAI
+f ffffffff ffffffff 000 i CLASS_KENSAI
+f ffffffff ffffffff 000 i CLASS_TYPE_SCALED_HUNTER_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_HALFDRAGON_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_HALFOUTSIDER_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_MISSCAULDRON
+f ffffffff ffffffff 000 i CLASS_TYPE_HOUNDARCH_HERO_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_TRUMPET_ARCHON_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_WORD_ARCHON_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_HALFOUTSIDERMAGE_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_LUP_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_DEATH_KNIGHT_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_HILL_GIANT_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_FIRE_GIANT_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_FROST_GIANT_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_ASTRAL_DEVA_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_MONADIC_DEVA_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_MOVANIC_DEVA_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_LICH_W_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_LICH_D_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_LICH_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_SAVAGE_MARAUDER_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_OGRE_MAGE_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_ERINYES
+f ffffffff ffffffff 000 i CLASS_TYPE_BRACHINA
+f ffffffff ffffffff 000 i CLASS_TYPE_SUCCUBUS_INCUBUS
+f ffffffff ffffffff 000 i CLASS_TYPE_MARQUIS_CAMBION
+f ffffffff ffffffff 000 i CLASS_TYPE_ILLITHID_MENTALIST_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_BRALANI_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_FIRRE_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_GHAELE_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_LYCAN_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
+f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
+f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
+f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
+f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
+f ffffffff ffffffff 000 i CLASS_TYPE_PACK_LEADER
+f ffffffff ffffffff 000 i CLASS_TYPE_PLANTPC
+f ffffffff ffffffff 000 i CLASS_TYPE_RAKSHASA_SORCERER
+f ffffffff ffffffff 000 i CLASS_TYPE_AUSTERE_ONE
+f ffffffff ffffffff 000 i FEAT_GIANT_ROCK_THROW
+f ffffffff ffffffff 000 i FEAT_DRIDER_SKILL_AFFINITY
+f ffffffff ffffffff 000 i FEAT_DRIDER_CLAIRVOYANCE
+f ffffffff ffffffff 000 i FEAT_DRIDER_DISPEL_MAGIC
+f ffffffff ffffffff 000 i FEAT_DRIDER_SUMMON_SWARM
+f ffffffff ffffffff 000 i FEAT_GIANT_ARMOR
+f ffffffff ffffffff 000 i FEAT_TROGLODYTE_SKILL_AFFINITY_HIDE
+f ffffffff ffffffff 000 i FEAT_GIANT_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_GIANT_STRIDE
+f ffffffff ffffffff 000 i FEAT_TROGLODYTE_STENCH
+f ffffffff ffffffff 000 i FEAT_EPITHET_FIRE_GIANT
+f ffffffff ffffffff 000 i FEAT_EPITHET_FROST_GIANT
+f ffffffff ffffffff 000 i FEAT_EPITHET_HILL_GIANT
+f ffffffff ffffffff 000 i FEAT_EPITHET_HALFOGRE
+f ffffffff ffffffff 000 i FEAT_EPITHET_OGRE
+f ffffffff ffffffff 000 i FEAT_EPITHET_TROLL
+f ffffffff ffffffff 000 i FEAT_EPITHET_ONI
+f ffffffff ffffffff 000 i FEAT_TROLL_REGENERATION
+f ffffffff ffffffff 000 i FEAT_DARKNESS_OGRE_MAGE
+f ffffffff ffffffff 000 i FEAT_HISS_OF_SLEEP_OGRE_MAGE
+f ffffffff ffffffff 000 i FEAT_CONE_OF_COLD_OGRE_MAGE
+f ffffffff ffffffff 000 i FEAT_DEVA_ARMOR
+f ffffffff ffffffff 000 i FEAT_DEVA_AURA
+f ffffffff ffffffff 000 i FEAT_DEVA_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_DEVA_WEAPON
+f ffffffff ffffffff 000 i FEAT_DELIVERANCE_FROM_DEATH_MONADIC
+f ffffffff ffffffff 000 i FEAT_HEAVENLY_DEFLECTION_MOVANIC
+f ffffffff ffffffff 000 i FEAT_PRAYER_MOVANIC
+f ffffffff ffffffff 000 i FEAT_CURE_CRITICAL_MOVANIC
+f ffffffff ffffffff 000 i FEAT_ETHEREAL_JAUNT_MOVANIC
+f ffffffff ffffffff 000 i FEAT_RAISE_DEAD_MOVANIC
+f ffffffff ffffffff 000 i FEAT_EPITHET_AASIMON
+f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_ABYSSAL_BLAST
+f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_NEGATIVE_WEAPON
+f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_DR
+f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_SYMBOL_OF_PAIN
+f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_FEAR_AURA
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_NATURAL_ARMOR
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_SLAM
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_DRAIN_BLOOD
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_BAT
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_WOLF
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_GASEOUS
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_DIREWOLF
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_FAST_HEALING
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_RESISTANCE
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_DR
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_DOMINATING_GAZE
+f ffffffff ffffffff 000 i FEAT_VAMPIRE_DOMINATING_GAZE_2
+f ffffffff ffffffff 000 i FEAT_TOUCH_OF_EVIL
+f ffffffff ffffffff 000 i FEAT_UNDEAD_RACIAL_TYPE
+f ffffffff ffffffff 000 i FEAT_UNDEAD_PROPERTIES
+f ffffffff ffffffff 000 i FEAT_LICH_ROTTING_VISAGE
+f ffffffff ffffffff 000 i FEAT_LICH_PARALYZING_TOUCH
+f ffffffff ffffffff 000 i FEAT_LICH_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_LICH_DR
+f ffffffff ffffffff 000 i FEAT_TURN_RESISTANCE
+f ffffffff ffffffff 000 i FEAT_LICH_FEAR_AURA
+f ffffffff ffffffff 000 i FEAT_LICH_ARMOR
+f ffffffff ffffffff 000 i FEAT_BAATEZU_BLINDSIGHT
+f ffffffff ffffffff 000 i FEAT_BAATEZU_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_EPITHET_BAATEZU
+f ffffffff ffffffff 000 i FEAT_DARK_FLIGHT
+f ffffffff ffffffff 000 i FEAT_ERINYES_ARMOR
+f ffffffff ffffffff 000 i FEAT_ERINYES_ROPE_OF_ENTANGLEMENT
+f ffffffff ffffffff 000 i FEAT_ERINYES_UNHOLY_BLIGHT
+f ffffffff ffffffff 000 i FEAT_ERINYES_DR
+f ffffffff ffffffff 000 i FEAT_ERINYES_SUMMON_BAATEZU
+f ffffffff ffffffff 000 i FEAT_BRACHINA_ARMOR
+f ffffffff ffffffff 000 i FEAT_BRACHINA_REGENERATION
+f ffffffff ffffffff 000 i FEAT_BRACHINA_VAMPIRIC_TOUCH
+f ffffffff ffffffff 000 i FEAT_BRACHINA_SUMMON_BAATEZU
+f ffffffff ffffffff 000 i FEAT_BRACHINA_DR
+f ffffffff ffffffff 000 i FEAT_BRACHINA_BEGUILE
+f ffffffff ffffffff 000 i FEAT_UNSUMMON_BAATEZU
+f ffffffff ffffffff 000 i FEAT_CHANGE_SELF
+f ffffffff ffffffff 000 i FEAT_TANARRI_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_EPITHET_TANARRI
+f ffffffff ffffffff 000 i FEAT_SUCCUBUS_ARMOR
+f ffffffff ffffffff 000 i FEAT_SUCCUBUS_DRAINING_KISS
+f ffffffff ffffffff 000 i FEAT_SUCCUBUS_DR
+f ffffffff ffffffff 000 i FEAT_SUCCUBUS_SUMMMON_TANARRI
+f ffffffff ffffffff 000 i FEAT_UNSUMMON_TANARRI
+f ffffffff ffffffff 000 i FEAT_MARQCAMB_MIRROR_IMAGE
+f ffffffff ffffffff 000 i FEAT_MARQCAMB_ALTERNATE_FORM
+f ffffffff ffffffff 000 i FEAT_MARQCAMB_ALIGNED_STRIKE
+f ffffffff ffffffff 000 i FEAT_MARQCAMB_ARMOR
+f ffffffff ffffffff 000 i FEAT_MARQCAMB_SILENT_METAL
+f ffffffff ffffffff 000 i FEAT_SUCCUBUS_DRAINING_KISS_2
+f ffffffff ffffffff 000 i FEAT_UNHOLY_APOTHESIS
+f ffffffff ffffffff 000 i FEAT_LILITUS_GIFT
+f ffffffff ffffffff 000 i FEAT_HEZROU_BLASPHEMY
+f ffffffff ffffffff 000 i FEAT_HEZROU_ARMOR
+f ffffffff ffffffff 000 i FEAT_HEZROU_STENCH
+f ffffffff ffffffff 000 i FEAT_HEZROU_SUMMMON_TANARRI
+f ffffffff ffffffff 000 i FEAT_HEZROU_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_HEZROU_ALIGNED_STRIKE
+f ffffffff ffffffff 000 i FEAT_ELADRIN_ALTERNATE_FORM
+f ffffffff ffffffff 000 i FEAT_ELADRIN_PRC_ARMOR
+f ffffffff ffffffff 000 i FEAT_BRALANI_WHIRLWIND_BLAST
+f ffffffff ffffffff 000 i FEAT_ELADRIN_PRC_DR
+f ffffffff ffffffff 000 i FEAT_BRALANI_BLUR
+f ffffffff ffffffff 000 i FEAT_BRALANI_LIGHTNING_BOLT
+f ffffffff ffffffff 000 i FEAT_ELADRIN_PRC_TRANSCENDENT_STRIKE
+f ffffffff ffffffff 000 i FEAT_FIRRE_FLAMING_SLAM
+f ffffffff ffffffff 000 i FEAT_FIRRE_MAGIC_CIRCLE_VS_EVIL
+f ffffffff ffffffff 000 i FEAT_GHAELE_LIGHT_RAY
+f ffffffff ffffffff 000 i FEAT_GHAELE_BONUS_DOMAIN
+f ffffffff ffffffff 000 i FEAT_GHAELE_PROTECTIVE_AURA
+f ffffffff ffffffff 000 i FEAT_GHAELE_GLOW
+f ffffffff ffffffff 000 i FEAT_EPITHET_ELADRIN
+f ffffffff ffffffff 000 i FEAT_ELADRIN_ARBOREAL_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_ICEGENASI_HOARFROST_ARMOR
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_REGENERATION
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_DR
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_BAT
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_CAT
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_RAT
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_SPIDER
+f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_WEASEL
+f ffffffff ffffffff 000 i FEAT_DRACONIC_SCALES
+f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_BRONZE
+f ffffffff ffffffff 000 i FEAT_EPITHET_DRAGON_SIZE
+f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BRONZE
+f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BRONZE_GAS
+f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_BLACK
+f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_RED
+f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_SHADOW
+f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BLACK
+f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_RED
+f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_SHADOW
+f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BLUE
+f ffffffff ffffffff 000 i FEAT_DRAGON_BLACK_DARKNESS
+f ffffffff ffffffff 000 i FEAT_DRAGON_SHADOW_BLEND
+f ffffffff ffffffff 000 i FEAT_DRAGON_BLUE_SOUND
+f ffffffff ffffffff 000 i FEAT_HARDENING_SCALES
+f ffffffff ffffffff 000 i FEAT_DRAGON_SENSES
+f ffffffff ffffffff 000 i FEAT_DRAGON_ROAR
+f ffffffff ffffffff 000 i FEAT_DRAGON_PATH_SORCERER
+f ffffffff ffffffff 000 i FEAT_DRAGON_PRESENCE
+f ffffffff ffffffff 000 i FEAT_DRAGON_SWIPE
+f ffffffff ffffffff 000 i FEAT_DRAGON_PATH_MELEE
+f ffffffff ffffffff 000 i FEAT_WARCHON_WORD_OF_NURTURING
+f ffffffff ffffffff 000 i FEAT_WARCHON_WORD_OF_SHOCKWAVE
+f ffffffff ffffffff 000 i FEAT_WARCHON_WORD_OF_PEACE
+f ffffffff ffffffff 000 i FEAT_ARCHON_EXALTED_WEAPON
+f ffffffff ffffffff 000 i FEAT_ARCHON_AURA_OF_MENACE
+f ffffffff ffffffff 000 i FEAT_EPITHET_ARCHON
+f ffffffff ffffffff 000 i FEAT_ARCHON_ARMOR
+f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET
+f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET_BLADE
+f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET_BLAST
+f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET_REVEILLE
+f ffffffff ffffffff 000 i FEAT_ARCHON_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_CANINE_FORM
+f ffffffff ffffffff 000 i FEAT_HA_ARCHONIC_ARMOR
+f ffffffff ffffffff 000 i FEAT_HA_CANINE_FORM_2
+f ffffffff ffffffff 000 i FEAT_HA_DAMAGE_REDUCTION
+f ffffffff ffffffff 000 i FEAT_HA_SPELLABILITY_AID
+f ffffffff ffffffff 000 i FEAT_HA_SANCTIFIED_WEAPON
+f ffffffff ffffffff 000 i FEAT_HA_AURA_OF_MENACE
+f ffffffff ffffffff 000 i FEAT_NHAG_IMMUNITIES
+f ffffffff ffffffff 000 i FEAT_NHAG_SLEEP_SPELLLIKE
+f ffffffff ffffffff 000 i FEAT_NHAG_RAY_OF_ENFEEBLEMENT_SL
+f ffffffff ffffffff 000 i FEAT_NHAG_DECEITFUL
+f ffffffff ffffffff 000 i FEAT_NHAG_INEFFABLY_EVIL
+f ffffffff ffffffff 000 i FEAT_MOTC_ELEMENTAL_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_MOTC_MAGIC_MISSILE_SPELLLIKE
+f ffffffff ffffffff 000 i FEAT_MOTC_CRAFT_HEARTSTONE
+f ffffffff ffffffff 000 i FEAT_LYCAN_AFFLICTION
+f ffffffff ffffffff 000 i FEAT_LYCAN_ANIMAL_FORM
+f ffffffff ffffffff 000 i FEAT_LYCAN_DAMAGE_REDUCTION
+f ffffffff ffffffff 000 i FEAT_LYCAN_HYBRID_FORM
+f ffffffff ffffffff 000 i FEAT_LYCAN_BP_WEREWOLF
+f ffffffff ffffffff 000 i FEAT_LYCAN_BP_WEREBOAR
+f ffffffff ffffffff 000 i FEAT_LYCAN_BP_WERETIGER
+f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WEREWOLF
+f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WERERAT
+f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WEREBOAR
+f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WERETIGER
+f ffffffff ffffffff 000 i FEAT_SLAAD_STUNNING_CROAK
+f ffffffff ffffffff 000 i FEAT_SLAAD_INNATE_IMMUNITY
+f ffffffff ffffffff 000 i FEAT_SLAAD_COMPLETELY_CHAOTIC
+f ffffffff ffffffff 000 i FEAT_GREYSLAAD_REGENERATION
+f ffffffff ffffffff 000 i FEAT_SLAAD_CLAWS_OF_CHAOS
+f ffffffff ffffffff 000 i FEAT_SLAAD_DR
+f ffffffff ffffffff 000 i FEAT_SLAAD_CHAOS_HAMMER
+f ffffffff ffffffff 000 i FEAT_SLAAD_SUMMON_SLAAD
+f ffffffff ffffffff 000 i FEAT_SLAAD_GRAY_APPEARANCE
+f ffffffff ffffffff 000 i FEAT_SLAAD_CHAOTIC_CRAFTING
+f ffffffff ffffffff 000 i FEAT_EPITHET_DEATH_SLAAD
+f ffffffff ffffffff 000 i FEAT_IMPROVED_STUNNING_CROAK
+f ffffffff ffffffff 000 i FEAT_DS_CIRCLE_OF_DEATH
+f ffffffff ffffffff 000 i FEAT_DS_CLOAK_OF_CHAOS
+f ffffffff ffffffff 000 i FEAT_DS_POWER_WORD_BLIND
+f ffffffff ffffffff 000 i FEAT_COC_REGENERATION
+f ffffffff ffffffff 000 i FEAT_BLINK
+f ffffffff ffffffff 000 i FEAT_DIMENSION_DOOR
+f ffffffff ffffffff 000 i FEAT_CANINE_TYPE_BDOG
+f ffffffff ffffffff 000 i FEAT_CANINE_TYPE_WWOLF
+f ffffffff ffffffff 000 i FEAT_CANINE_TYPE_WORG
+f ffffffff ffffffff 000 i FEAT_FERAL_MARK
+f ffffffff ffffffff 000 i FEAT_BATTLE_HOWL
+f ffffffff ffffffff 000 i FEAT_HUNTING_LOPE1
+f ffffffff ffffffff 000 i FEAT_HUNTING_LOPE2
+f ffffffff ffffffff 000 i FEAT_WW_COLDTYPE1
+f ffffffff ffffffff 000 i FEAT_WW_COLDTYPE2
+f ffffffff ffffffff 000 i FEAT_WG_ImpKnockdown
+f ffffffff ffffffff 000 i FEAT_BD_Mobility
+f ffffffff ffffffff 000 i FEAT_WW_FREEZING_BR
+f ffffffff ffffffff 000 i FEAT_ETERNAL_LEADER
+f ffffffff ffffffff 000 i FEAT_TEARING_BITE
+f ffffffff ffffffff 000 i FEAT_GENESIS
+f ffffffff ffffffff 000 i FEAT_ARMOR_OF_NATURE
+f ffffffff ffffffff 000 i FEAT_OVERGROWTH
+f ffffffff ffffffff 000 i FEAT_TOUGH_ROOTS
+f ffffffff ffffffff 000 i FEAT_ANIMATE_TREES
+f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_I
+f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_II
+f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_III
+f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_IV
+f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_I
+f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_II
+f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_III
+f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_IV
+f ffffffff ffffffff 000 i FEAT_SPELL_BARD_I
+f ffffffff ffffffff 000 i FEAT_SPELL_BARD_II
+f ffffffff ffffffff 000 i FEAT_SPELL_BARD_III
+f ffffffff ffffffff 000 i FEAT_SPELL_BARD_IV
+f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_I
+f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_II
+f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_III
+f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_IV
+f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_I
+f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_II
+f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_III
+f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_IV
+f ffffffff ffffffff 000 i FEAT_INVOCATIONS_WARLOCK_I
+f ffffffff ffffffff 000 i FEAT_INVOCATIONS_WARLOCK_II
+f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_I
+f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_II
+f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_III
+f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_IV
+f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_V
+f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_VI
+f ffffffff ffffffff 000 i POWER_POINT_POOL_PSYWAR
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUND
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUNDF
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUND2
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUND2F
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_LIGHT
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_BRALANI
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_FIRRE
+f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_GHAELE
+f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_BAT
+f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_WOLF
+f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_GASEOUS
+f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_DIREWOLF
+f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_WYVERN
+f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_TWOLF
+f ffffffff ffffffff 000 i POLYMORPH_BAT
+f ffffffff ffffffff 000 i POLYMORPH_WEASEL
+f ffffffff ffffffff 000 i POLYMORPH_RAT
+f ffffffff ffffffff 000 i POLYMORPH_SMALL_SPIDER
+f ffffffff ffffffff 000 i POLYMORPH_CAT
+f ffffffff ffffffff 000 i VAMPIRE_WYVERN_FORM
+f ffffffff ffffffff 000 i VAMPIRE_TWOLF_FORM
+f ffffffff ffffffff 000 i POLYMORPH_WEREWOLF_ANIMFORM
+f ffffffff ffffffff 000 i POLYMORPH_WEREBOAR_ANIMFORM
+f ffffffff ffffffff 000 i POLYMORPH_WERETIGER_ANIMFORM
+f ffffffff ffffffff 000 i POLYMORPH_WERERAT_ANIMFORM
+f ffffffff ffffffff 000 i AOE_PER_LIGHT
+f ffffffff ffffffff 000 i AOE_PER_FREEZINGFOG
+f ffffffff ffffffff 000 i AOE_PER_OBSCURINGMIST
+f ffffffff ffffffff 000 i VFX_MOB_CROWN_OF_FLAME
+f ffffffff ffffffff 000 i AOE_MOB_SCINTILLATING_PATTERN
+f ffffffff ffffffff 000 i VFX_MOB_DRAGON_FEAR_PC
+f ffffffff ffffffff 000 i VFX_MOB_ARCHON_MENACE
+f ffffffff ffffffff 000 i WING_VARIATION_DWARF
+f ffffffff ffffffff 000 i WING_VARIATION_GNOME
+f ffffffff ffffffff 000 i WING_VARIATION_HUMAN
+f ffffffff ffffffff 000 i WING_VARIATION_ORC
+f ffffffff ffffffff 000 i IP_CONST_ONHIT_CASTSPELL_CHAOSDAM1
+f ffffffff ffffffff 000 i IP_CONST_ONHIT_CASTSPELL_CHAOSDAM2
+f ffffffff ffffffff 000 i IP_CONST_ONHIT_CASTSPELL_CHAOSDAM3
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L24
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L24
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L24
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L24
+f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L24
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L24
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L01
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L08
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L16
+f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L24
+f ffffffff ffffffff 000 i SPELL_IRRESISTIBLE_DANCE
+f ffffffff ffffffff 000 i SPELL_MASS_HIDEOUS_LAUGHTER
+f ffffffff ffffffff 000 i SPELL_RAINBOW_DWEOMER
+f ffffffff ffffffff 000 i SPELL_ICE_SIMULACRUM
+f ffffffff ffffffff 000 i SPELL_MISLEAD
+f ffffffff ffffffff 000 i SPELL_FAERIE_FIRE
+f ffffffff ffffffff 000 i SPELL_GLAMER
+f ffffffff ffffffff 000 i SPELL_HALLUCINATORY_TERRAIN
+f ffffffff ffffffff 000 i VFX_PER_HALLUCINATORY_TERRAIN
+f ffffffff ffffffff 000 i SPELL_HYPNOTISM
+f ffffffff ffffffff 000 i SPELL_SLEEP_OF_AGES
+f ffffffff ffffffff 000 i SPELL_VEIL_OF_SHADOW
+f ffffffff ffffffff 000 i SPELL_ABYSSAL_MIGHT
+f ffffffff ffffffff 000 i SPELL_DEMON_FLESH
+f ffffffff ffffffff 000 i SPELL_DEMONHIDE
+f ffffffff ffffffff 000 i SPELL_DIVINE_SACRIFICE
+f ffffffff ffffffff 000 i SPELL_HELLSPOWER
+f ffffffff ffffffff 000 i SPELL_MASOCHISM
+f ffffffff ffffffff 000 i SPELL_UNHOLY_STORM
+f ffffffff ffffffff 000 i SPELL_BLEED
+f ffffffff ffffffff 000 i SPELL_BLADE_OF_BLOOD
+f ffffffff ffffffff 000 i SPELL_BLADE_OF_FEAR
+f ffffffff ffffffff 000 i SPELLABILITY_DIVINE_RETRIBUTION
+f ffffffff ffffffff 000 i SPELLABILITY_DERVISH_AC_BONUS
+f ffffffff ffffffff 000 i SPELLABILITY_DERVISH_DANCE
+f ffffffff ffffffff 000 i SPELLABILITY_THOUSAND_CUTS
+f ffffffff ffffffff 000 i SPELLABILITY_DERVISH_DEFENSIVE_PARRY
+f ffffffff ffffffff 000 i FEAT_ARMOR_OF_THE_CROCODILE
+f ffffffff ffffffff 000 i FEAT_BLAZE_OF_POWER
+f ffffffff ffffffff 000 i FEAT_CLAWS_OF_THE_GRIZZLY
+f ffffffff ffffffff 000 i FEAT_EARTH_RESILIENCE
+f ffffffff ffffffff 000 i FEAT_NATURES_WEAPON
+f ffffffff ffffffff 000 i FEAT_ROBE_OF_CLOUDS
+f ffffffff ffffffff 000 i FEAT_SERPENTINE_COIL
+f ffffffff ffffffff 000 i FEAT_WILD_GROWTH
+f ffffffff ffffffff 000 i SPELLABILITY_ARMOR_OF_THE_CROCODILE
+f ffffffff ffffffff 000 i SPELLABILITY_BLAZE_OF_POWER
+f ffffffff ffffffff 000 i SPELLABILITY_CLAWS_OF_THE_GRIZZLY
+f ffffffff ffffffff 000 i SPELLABILITY_EARTH_RESILIENCE
+f ffffffff ffffffff 000 i SPELLABILITY_NATURES_WEAPON
+f ffffffff ffffffff 000 i SPELLABILITY_ROBE_OF_CLOUDS
+f ffffffff ffffffff 000 i SPELLABILITY_SERPENTINE_COIL
+f ffffffff ffffffff 000 i SPELLABILITY_WILD_GROWTH
+f ffffffff ffffffff 000 i FEAT_DERVISH_AC_BONUS
+f ffffffff ffffffff 000 i FEAT_DERVISH_DERVISH_DANCE
+f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
+f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
+f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
+f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
+f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
+f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
+f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
+f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_WEAPON
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_AIR
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_EARTH
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_FIRE
+f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_WATER
+f ffffffff ffffffff 000 i FEAT_PSYWAR_FERAL
+f ffffffff ffffffff 000 i FEAT_PSYWAR_LURK
+f ffffffff ffffffff 000 i FEAT_PALADIN
+f ffffffff ffffffff 000 i FEAT_KNIGHT
+f ffffffff ffffffff 000 i FEAT_BLACKGUARD
+f ffffffff ffffffff 000 i FEAT_DIVINE_RETRIBUTION
+f ffffffff ffffffff 000 i FEAT_KNIGHTS_AURA
+f ffffffff ffffffff 000 i FEAT_KNIGHTSMITE
+f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
+f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
+f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
+f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
+f ffffffff ffffffff 000 i FEAT_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
+f ffffffff ffffffff 000 i FEAT_ARCANEBASH
+f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
+f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
+f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
+f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
+f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
+f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
+f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
+f ffffffff ffffffff 000 i SPELLABILITY_BLACKGUARD_SMITE
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_2
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE3
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION2
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_4
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION3
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION4
+f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_6
+f ffffffff ffffffff 000 i FEAT_TRAP_SENSE_8
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION7
+f ffffffff ffffffff 000 i FEAT_TRAP_SENSE9
+f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION8
+f ffffffff ffffffff 000 i SPELL_I_ELDRICH_SHIELD
+f ffffffff ffffffff 000 i SPELL_I_BLACKBOLT_BLAST
+f ffffffff ffffffff 000 i SPELL_I_BINDING_BLAST
+f ffffffff ffffffff 000 i SPELL_I_DARK_DISCORPORATION
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_ELDRTICH
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_DRAINING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_FRIGHTFUL
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BSHADOWED
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BRIMSTONE
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_HELLRIME
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BWITCHING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_NOXIOUS
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_VITRIOLIC
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_UTTERDARK
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BLACKBOLT
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BINDING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_ELDRTICH
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_DRAINING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_FRIGHTFUL
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BSHADOWED
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BRIMSTONE
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_HELLRIME
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BWITCHING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_NOXIOUS
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_VITRIOLIC
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_UTTERDARK
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BLACKBOLT
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BINDING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_ELDRTICH
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_DRAINING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_FRIGHTFUL
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BSHADOWED
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BRIMSTONE
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_HELLRIME
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BWITCHING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_NOXIOUS
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_VITRIOLIC
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_UTTERDARK
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BLACKBOLT
+f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BINDING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_ELDRITCH
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_DRAINING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_FRIGHTFUL
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BSHADOWED
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BRIMSTONE
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_HELLRIME
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BWITCHING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_NOXIOUS
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_VITRIOLIC
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_UTTERDARK
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BLACKBOLT
+f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BINDING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_ELDRITCH
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_DRAINING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_FRIGHTFUL
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BSHADOWED
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BRIMSTONE
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_HELLRIME
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BWITCHING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_NOXIOUS
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_VITRIOLIC
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_UTTERDARK
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BLACKBOLT
+f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BINDING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_ELDRITCH
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_DRAINING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_FRIGHTFUL
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BSHADOWED
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BRIMSTONE
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_HELLRIME
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BWITCHING
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_NOXIOUS
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_VITRIOLIC
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_UTTERDARK
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BLACKBOLT
+f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BINDING
+f ffffffff ffffffff 000 i FEAT_FELLBLADE_BIND_WEAPON_1
+f ffffffff ffffffff 000 i FEAT_FELLBLADE_BIND_WEAPON_2
+f ffffffff ffffffff 000 i FEAT_FELLBLADE_BIND_WEAPON_3
+f ffffffff ffffffff 000 i FEAT_FELLBLADE_ARMOR_OF_SHADOWS
+f ffffffff ffffffff 000 i FEAT_FELLBLADE_THIRSTING_BLADE
+f ffffffff ffffffff 000 i FEAT_HEXEN_DREADFUL_AURA
+f ffffffff ffffffff 000 i FEAT_HEXEN_DREAD_SEIZURE
+f ffffffff ffffffff 000 i FEAT_HEXEN_BALEFUL_GEAS
+f ffffffff ffffffff 000 i FEAT_HEXEN_BALEFUL_POLYMORPH
+f ffffffff ffffffff 000 i FEAT_HEXEN_PAINFUL_SLEEP
+f ffffffff ffffffff 000 i FEAT_HEXEN_HEXER_1
+f ffffffff ffffffff 000 i FEAT_HEXEN_HEXER_2
+f ffffffff ffffffff 000 i FEAT_HEXEN_HEXER_3
+f ffffffff ffffffff 000 i FEAT_HEXEN_CURSEMASTER
+f ffffffff ffffffff 000 i FEAT_SHADOWSNEAK_1
+f ffffffff ffffffff 000 i FEAT_BOJUTSU
+f ffffffff ffffffff 000 i FEAT_KENJUTSU
+f ffffffff ffffffff 000 i FEAT_MURDEROUS_INTENT
+f ffffffff ffffffff 000 i FEAT_BUCKLER_PROFICIENCY
+f ffffffff ffffffff 000 i FEAT_STAFF_FIGHTING
+f ffffffff ffffffff 000 i FEAT_OVERSIZE_TWF
+f ffffffff ffffffff 000 i FEAT_METHODICAL_DEFENSE
+f ffffffff ffffffff 000 i FEAT_CONSIDERED_STRIKE
+f ffffffff ffffffff 000 i FEAT_TACTICAL_WEAPONS
+f ffffffff ffffffff 000 i FEAT_GIANT_FINESSE
+f ffffffff ffffffff 000 i FEAT_UNNERVE
+f ffffffff ffffffff 000 i FEAT_SHARPSHOOTER
+f ffffffff ffffffff 000 i FEAT_ALCHEMICAL_INFUSION
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_M
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_M
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_M
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_S
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_S
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_S
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_L
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_L
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_L
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_SLASH_M
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_SLASH_S
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_SLASH_L
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_BLUDGEON_M
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_BLUDGEON_S
+f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_BLUDGEON_L
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_LARGE
+f ffffffff ffffffff 000 i BASE_ITEM_WHIP_SCOD
+f ffffffff ffffffff 000 i BASE_ITEM_SHORT_STAFF
+f ffffffff ffffffff 000 i BASE_ITEM_ODACHI
+f ffffffff ffffffff 000 i BASE_ITEM_NINJATO
+f ffffffff ffffffff 000 i BASE_ITEM_STILETTO
+f ffffffff ffffffff 000 i BASE_ITEM_MAUL
+f ffffffff ffffffff 000 i BASE_ITEM_TINYFLAIL
+f ffffffff ffffffff 000 i BASE_ITEM_GIANT_SPEAR
+f ffffffff ffffffff 000 i BASE_ITEM_GIANT_STAFF
+f ffffffff ffffffff 000 i BASE_ITEM_GIANT_SCYTHE
+f ffffffff ffffffff 000 i BASE_ITEM_SRR_GIANT_SWORD
+f ffffffff ffffffff 000 i BASE_ITEM_SRR_GIANT_AXE
+f ffffffff ffffffff 000 i BASE_ITEM_SRR_GIANT_CLUB
+f ffffffff ffffffff 000 i BASE_ITEM_GIANT_WARMACE
+f ffffffff ffffffff 000 i BASE_ITEM_INFANTRYFLAIL
+f ffffffff ffffffff 000 i BASE_ITEM_SEIGEFLAIL
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_SML
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_MED
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_LRG
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_GIANT
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_SML
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_MED
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_LRG
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_GIANT
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_SML
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_MED
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_LRG
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_GIANT
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREKICK_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREKICK_SML
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREKICK_MED
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREKICK_LRG
+f ffffffff ffffffff 000 i BASE_ITEM_CREATUREKICK_GIANT
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURETALON_TINY
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURETALON_SMl
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURETALON_MED
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURETALON_LRG
+f ffffffff ffffffff 000 i BASE_ITEM_CREATURETALON_GIANT
 f ffffffff ffffffff 000 s X2_IP_WORK_CONTAINER_TAG
 f ffffffff ffffffff 000 s X2_IP_ADDRPOP_2DA
 f ffffffff ffffffff 000 s X2_IP_POISONWEAPON_2DA
@@ -199,8 +974,55 @@ f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_SLAM_TINY
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_SLAM_MED
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE_TINY
 f ffffffff ffffffff 000 i BASE_ITEM_CREEQ_BITE_LRG
-f ffffffff ffffffff 001 s IPGetWeaponCategory
+f ffffffff ffffffff 003 i IPGetItemPropertiesIdentical
+fp e4
+fp e4
+fp i
+f ffffffff ffffffff 002 i IPGetIsForgedItem
 fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsQuiver
+fp o
+fp i
+f ffffffff ffffffff 003 i IPGetIsBludgeoningWeapon
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i IPGetIsCreatureEquippedWeapon
+fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsMeleeWeapon
+fp o
+fp i
+f ffffffff ffffffff 003 i IPGetIsPiercingWeapon
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i IPGetIsProjectile
+fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsThrownWeapon
+fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsLauncher
+fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsRangedWeapon
+fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsInstrument
+fp o
+fp i
+f ffffffff ffffffff 003 i IPGetIsSlashingWeapon
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i IPGetWeaponSize
+fp o
+fp i
+f ffffffff ffffffff 002 s IPGetWeaponCategory
+fp o
+fp i
 f ffffffff ffffffff 004 v IPRemoveMatchingItemProperties
 fp o
 fp i
@@ -209,8 +1031,9 @@ fp i
 f ffffffff ffffffff 002 v IPRemoveAllItemProperties
 fp o
 fp i
-f ffffffff ffffffff 001 i IPGetIsItemEquipable
+f ffffffff ffffffff 002 i IPGetIsItemEquipable
 fp o
+fp i
 f ffffffff ffffffff 003 o IPDyeArmor
 fp o
 fp i
@@ -223,15 +1046,8 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 001 i IPGetIsRangedWeapon
-fp o
-f ffffffff ffffffff 001 i IPGetIsMeleeWeapon
-fp o
-f ffffffff ffffffff 001 i IPGetIsProjectile
-fp o
-f ffffffff ffffffff 001 i IPGetIsBludgeoningWeapon
-fp o
-f ffffffff ffffffff 001 i IPGetIPConstCastSpellFromSpellID
+f ffffffff ffffffff 002 i IPGetIPConstCastSpellFromSpellID
+fp i
 fp i
 f ffffffff ffffffff 002 i IPGetItemHasItemOnHitPropertySubType
 fp o
@@ -296,11 +1112,6 @@ fp o
 fp o
 f ffffffff ffffffff 002 i IPGetIsLightWeapon
 fp o
-fp o
-f ffffffff ffffffff 002 i IPGetWeaponSize
-fp o
-fp i
-f ffffffff ffffffff 001 i IPGetIsCreatureEquippedWeapon
 fp o
 f ffffffff ffffffff 002 i IPGetItemHasItemAbilityBonusPropertySubType
 fp o
@@ -664,1485 +1475,6 @@ f ffffffff ffffffff 003 i Get2DAInt
 fp s
 fp s
 fp i
-f ffffffff ffffffff 000 i ID_SPELL_RAISE_DEAD
-f ffffffff ffffffff 000 i ID_SPELL_FULL_RES
-f ffffffff ffffffff 000 i ID_SPELL_CURE_CRIT
-f ffffffff ffffffff 000 i ID_SPELL_INFLICT_CRIT
-f ffffffff ffffffff 000 i ID_SPELL_HEAL
-f ffffffff ffffffff 000 i ID_SPELL_HARM
-f ffffffff ffffffff 000 i ID_SPELL_STONE_TO_FLESH
-f ffffffff ffffffff 000 i ID_SPELL_RESTORATION
-f ffffffff ffffffff 000 i ID_SPELL_GREATER_RESTORATION
-f ffffffff ffffffff 000 i B_ALLOW_RESTORATION_POTS
-f ffffffff ffffffff 000 i B_ALLOW_GREATER_RESTORATION_POTS
-f ffffffff ffffffff 000 i B_RAISE_SCROLL_NO_CLASS_LIMIT
-f ffffffff ffffffff 000 i B_FULL_RES_SCROLL_NO_CLASS_LIMIT
-f ffffffff ffffffff 000 i B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT
-f ffffffff ffffffff 000 i B_ALLOW_CURE_CRIT_POTS
-f ffffffff ffffffff 000 i B_ALLOW_HEAL_POTS
-f ffffffff ffffffff 000 i B_CHEAP_RAISE_SCROLLS
-f ffffffff ffffffff 000 i N_RAISE_COST
-f ffffffff ffffffff 000 i B_CHEAP_FULL_RES_SCROLLS
-f ffffffff ffffffff 000 i N_RES_COST
-f ffffffff ffffffff 000 i B_FS_ACCESS_DOMAIN_WANDSCROLL
-f ffffffff ffffffff 000 i B_KNIGHT_ACCESS_DOMAIN_WANDSCROLL
-f ffffffff ffffffff 000 i STR_REF_IC_SPELL_TO_HIGH_FOR_WAND
-f ffffffff ffffffff 000 i STR_REF_IC_SPELL_TO_HIGH_FOR_POTION
-f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_POTION
-f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_SCROLL
-f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_WAND
-f ffffffff ffffffff 000 i STR_REF_IC_MISSING_REQUIRED_FEAT
-f ffffffff ffffffff 000 i STR_REF_IC_INSUFFICIENT_GOLD
-f ffffffff ffffffff 000 i STR_REF_IC_INSUFFICIENT_XP
-f ffffffff ffffffff 000 i STR_REF_IC_SUCCESS
-f ffffffff ffffffff 000 i STR_REF_IC_FAILED
-f ffffffff ffffffff 000 i STR_REF_IC_DISABLED
-f ffffffff ffffffff 000 i STR_REF_IC_ITEM_USE_NOT_ALLOWED
-f ffffffff ffffffff 000 i FIRST_WAND_ICON
-f ffffffff ffffffff 000 s X2_CI_CRAFTSKILL_CONV
-f ffffffff ffffffff 000 i X2_CI_BREWPOTION_FEAT_ID
-f ffffffff ffffffff 000 i X2_CI_BREWPOTION_MAXLEVEL
-f ffffffff ffffffff 000 i X2_CI_BREWPOTION_COSTMODIFIER
-f ffffffff ffffffff 000 s X2_CI_BREWPOTION_NEWITEM_RESREF
-f ffffffff ffffffff 000 s X2_CI_DEFAULT_HEAL_POTION_RESREF
-f ffffffff ffffffff 000 i X2_CI_SCRIBESCROLL_FEAT_ID
-f ffffffff ffffffff 000 i X2_CI_SCRIBESCROLL_COSTMODIFIER
-f ffffffff ffffffff 000 s X2_CI_SCRIBESCROLL_NEWITEM_RESREF
-f ffffffff ffffffff 000 i X2_CI_CRAFTWAND_FEAT_ID
-f ffffffff ffffffff 000 i X2_CI_CRAFTWAND_MAXLEVEL
-f ffffffff ffffffff 000 i X2_CI_CRAFTWAND_COSTMODIFIER
-f ffffffff ffffffff 000 s X2_CI_CRAFTWAND_NEWITEM_RESREF
-f ffffffff ffffffff 000 s X2_CI_CRAFTING_WP_2DA
-f ffffffff ffffffff 000 s X2_CI_CRAFTING_AR_2DA
-f ffffffff ffffffff 000 s X2_CI_CRAFTING_MAT_2DA
-f ffffffff ffffffff 000 s X2_CI_CRAFTING_SP_2DA
-f ffffffff ffffffff 000 i X2_CI_CRAFTINGSKILL_CTOKENBASE
-f ffffffff ffffffff 000 i X2_CI_CRAFTINGSKILL_DC_CTOKENBASE
-f ffffffff ffffffff 000 i X2_CI_CRAFTINGSKILL_GP_CTOKENBASE
-f ffffffff ffffffff 000 i X2_CI_MODIFYARMOR_GP_CTOKENBASE
-f ffffffff ffffffff 000 i X2_CI_CRAFTING_ITEMS_PER_ROW
-f ffffffff ffffffff 000 s X2_CI_2DA_SCROLLS
-f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_INVALID
-f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_CONTAINER
-f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_BASE_ITEM
-f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_ASSEMBLE
-f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_INVALID
-f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_ARCANE
-f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_DIVINE
-f ffffffff ffffffff 000 i X2_CI_MODMODE_INVALID
-f ffffffff ffffffff 000 i X2_CI_MODMODE_ARMOR
-f ffffffff ffffffff 000 i X2_CI_MODMODE_WEAPON
-f ffffffff ffffffff 002 i CIGetSpellInnateLevel
-fp i
-fp i
-f ffffffff ffffffff 001 s GetClassSpellLevelColumn
-fp i
-f ffffffff ffffffff 002 i GetSpellLevelForClass
-fp i
-fp i
-f ffffffff ffffffff 002 i IsOnSpellList
-fp i
-fp i
-f ffffffff ffffffff 002 v MakeItemUseableByClass
-fp i
-fp o
-f ffffffff ffffffff 002 v MakeItemUseableByClassesWithSpellAccess
-fp i
-fp o
-f ffffffff ffffffff 001 i CIGetIsCraftFeatBaseItem
-fp o
-f ffffffff ffffffff 002 i CICraftCheckBrewPotion
-fp o
-fp o
-f ffffffff ffffffff 002 i CICraftCheckScribeScroll
-fp o
-fp o
-f ffffffff ffffffff 002 i CICraftCheckCraftWand
-fp o
-fp o
-f ffffffff ffffffff 002 o CICraftBrewPotion
-fp o
-fp i
-f ffffffff ffffffff 002 o CICraftScribeScroll
-fp o
-fp i
-f ffffffff ffffffff 002 o CICraftCraftWand
-fp o
-fp i
-f ffffffff ffffffff 001 i CIGetSpellWasUsedForItemCreation
-fp o
-f ffffffff ffffffff 005 o CIUseCraftItemSkill
-fp o
-fp i
-fp s
-fp i
-fp o
-f ffffffff ffffffff 002 i CIGetIsSpellRestrictedFromCraftFeat
-fp i
-fp i
-f ffffffff ffffffff 003 t0001 CIGetCraftItemStructFrom2DA
-fp s
-fp i
-fp i
-f ffffffff ffffffff 002 v AppendSpellToName
-fp o
-fp i
-f ffffffff ffffffff 001 i CI_GetClassMagicType
-fp i
-f ffffffff ffffffff 001 s GetMaterialComponentTag
-fp i
-f ffffffff ffffffff 002 i CIGetCraftGPCost
-fp i
-fp i
-f ffffffff ffffffff 001 i CIDoCraftItemFromConversation
-fp i
-f ffffffff ffffffff 002 i CIGetItemPartModificationCost
-fp o
-fp i
-f ffffffff ffffffff 002 i CIGetItemPartModificationDC
-fp o
-fp i
-f ffffffff ffffffff 002 i CIGetArmorModificationCost
-fp o
-fp o
-f ffffffff ffffffff 002 i CIGetArmorModificationDC
-fp o
-fp o
-f ffffffff ffffffff 004 i CIGetCraftingReceipeRow
-fp i
-fp o
-fp o
-fp i
-f ffffffff ffffffff 007 v CISetupCraftingConversation
-fp o
-fp i
-fp i
-fp i
-fp o
-fp o
-fp i
-f ffffffff ffffffff 003 t0002 CIGetCraftingModeFromTarget
-fp o
-fp o
-fp o
-f ffffffff ffffffff 001 i CIGetInModWeaponOrArmorConv
-fp o
-f ffffffff ffffffff 002 v CISetCurrentModMode
-fp o
-fp i
-f ffffffff ffffffff 001 i CIGetCurrentModMode
-fp o
-f ffffffff ffffffff 001 o CIGetCurrentModBackup
-fp o
-f ffffffff ffffffff 001 o CIGetCurrentModItem
-fp o
-f ffffffff ffffffff 002 v CISetCurrentModBackup
-fp o
-fp o
-f ffffffff ffffffff 002 v CISetCurrentModItem
-fp o
-fp o
-f ffffffff ffffffff 003 v CISetCurrentModPart
-fp o
-fp i
-fp i
-f ffffffff ffffffff 001 i CIGetCurrentModPart
-fp o
-f ffffffff ffffffff 001 v CISetDefaultModItemCamera
-fp o
-f ffffffff ffffffff 003 v CIUpdateModItemCostDC
-fp o
-fp i
-fp i
-f ffffffff ffffffff 002 i CIGetWeaponModificationCost
-fp o
-fp o
-f ffffffff ffffffff 002 t0003 GetStringTokenizer
-fp s
-fp s
-f ffffffff ffffffff 001 i HasMoreTokens
-fp t0003
-f ffffffff ffffffff 001 t0003 AdvanceToNextToken
-fp t0003
-f ffffffff ffffffff 001 s GetNextToken
-fp t0003
-f ffffffff ffffffff 002 i GetNumberTokens
-fp s
-fp s
-f ffffffff ffffffff 003 s GetTokenByPosition
-fp s
-fp s
-fp i
-f ffffffff ffffffff 002 t0004 GetFirstAlpha
-fp s
-fp s
-f ffffffff ffffffff 003 s RemoveListElement
-fp s
-fp s
-fp s
-f ffffffff ffffffff 002 s Sort
-fp s
-fp s
-f ffffffff ffffffff 002 s FormListElement
-fp s
-fp s
-f ffffffff ffffffff 003 s AppendToList
-fp s
-fp s
-fp s
-f ffffffff ffffffff 003 i FindListElementIndex
-fp s
-fp s
-fp s
-f ffffffff ffffffff 003 i GetIsInList
-fp s
-fp s
-fp s
-f ffffffff ffffffff 003 s AppendUniqueToList
-fp s
-fp s
-fp s
-f ffffffff ffffffff 004 s AppendGlobalList
-fp s
-fp s
-fp i
-fp s
-f ffffffff ffffffff 003 s GetStringPad
-fp s
-fp i
-fp s
-f ffffffff ffffffff 003 s ReplaceSubString
-fp s
-fp s
-fp s
-f ffffffff ffffffff 003 s ReplaceAllSubStrings
-fp s
-fp s
-fp s
-f ffffffff ffffffff 003 s SpliceString
-fp s
-fp i
-fp i
-f ffffffff ffffffff 000 s DONE_ONCE
-f ffffffff ffffffff 001 f GetGlobalIntAsFloat
-fp s
-f ffffffff ffffffff 002 i ModifyGlobalInt
-fp s
-fp i
-f ffffffff ffffffff 003 i ModifyLocalInt
-fp o
-fp s
-fp i
-f ffffffff ffffffff 004 v ModifyLocalIntOnFaction
-fp o
-fp s
-fp i
-fp i
-f ffffffff ffffffff 001 o GetGlobalObject
-fp s
-f ffffffff ffffffff 002 v SetGlobalObject
-fp s
-fp o
-f ffffffff ffffffff 001 v DeleteGlobalObject
-fp s
-f ffffffff ffffffff 001 s GetDoneFlag
-fp i
-f ffffffff ffffffff 001 v DoneFlagSanityCheck
-fp o
-f ffffffff ffffffff 002 i IsMarkedAsDone
-fp o
-fp i
-f ffffffff ffffffff 002 v MarkAsDone
-fp o
-fp i
-f ffffffff ffffffff 002 v MarkAsUndone
-fp o
-fp i
-f ffffffff ffffffff 002 s GetGlobalArrayString
-fp s
-fp i
-f ffffffff ffffffff 003 v SetGlobalArrayString
-fp s
-fp i
-fp s
-f ffffffff ffffffff 002 i GetGlobalArrayInt
-fp s
-fp i
-f ffffffff ffffffff 003 v SetGlobalArrayInt
-fp s
-fp i
-fp i
-f ffffffff ffffffff 002 s GetStringPrefix
-fp s
-fp s
-f ffffffff ffffffff 002 s GetStringSuffix
-fp s
-fp s
-f ffffffff ffffffff 000 f DISTANCE_TINY
-f ffffffff ffffffff 000 f DISTANCE_SHORT
-f ffffffff ffffffff 000 f DISTANCE_MEDIUM
-f ffffffff ffffffff 000 f DISTANCE_LARGE
-f ffffffff ffffffff 000 f DISTANCE_HUGE
-f ffffffff ffffffff 001 s LocationToString
-fp e2
-f ffffffff ffffffff 001 s VectorToString
-fp t0000
-f ffffffff ffffffff 002 v MoveToNewLocation
-fp e2
-fp o
-f 00001032 00001065 002 f GetChangeInX
-fp f
-fp f
-f 00001065 00001098 002 f GetChangeInY
-fp f
-fp f
-f 00000f30 00001032 003 t0000 GetChangedPosition
-fp t0000
-fp f
-fp f
-f ffffffff ffffffff 002 f GetAngleBetweenLocations
-fp e2
-fp e2
-f 000010ff 00001133 001 f GetOppositeDirection
-fp f
-f 00001240 00001274 001 f GetRightDirection
-fp f
-f 00001431 00001465 001 f GetHalfRightDirection
-fp f
-f 00001567 0000159b 001 f GetFarRightDirection
-fp f
-f ffffffff ffffffff 002 f GetCustomRightDirection
-fp f
-fp f
-f 000012db 0000130f 001 f GetLeftDirection
-fp f
-f 00001386 000013ba 001 f GetHalfLeftDirection
-fp f
-f 000014cc 00001500 001 f GetFarLeftDirection
-fp f
-f ffffffff ffffffff 002 f GetCustomLeftDirection
-fp f
-fp f
-f ffffffff ffffffff 002 v TurnToFaceObject
-fp o
-fp o
-f 00001500 00001567 002 e2 GetFlankingRightLocation
-fp o
-fp f
-f 00001465 000014cc 002 e2 GetFlankingLeftLocation
-fp o
-fp f
-f ffffffff ffffffff 002 e2 GetOppositeLocation
-fp o
-fp f
-f 00000e64 00000ebb 002 e2 GetAheadLocation
-fp o
-fp f
-f 00001098 000010ff 002 e2 GetBehindLocation
-fp o
-fp f
-f ffffffff ffffffff 002 e2 GetForwardFlankingRightLocation
-fp o
-fp f
-f ffffffff ffffffff 002 e2 GetForwardFlankingLeftLocation
-fp o
-fp f
-f 000013ba 00001431 002 e2 GetAheadRightLocation
-fp o
-fp f
-f 0000130f 00001386 002 e2 GetAheadLeftLocation
-fp o
-fp f
-f ffffffff ffffffff 001 e2 GetStepLeftLocation
-fp o
-f ffffffff ffffffff 001 e2 GetStepRightLocation
-fp o
-f ffffffff ffffffff 003 e2 GetRandomLocation
-fp o
-fp o
-fp f
-f ffffffff ffffffff 003 f GetAngle
-fp t0000
-fp t0000
-fp f
-f ffffffff ffffffff 002 f GetAngleBetweenObjects
-fp o
-fp o
-f ffffffff ffffffff 003 i IsDirectionWithinTolerance
-fp f
-fp f
-fp f
-f ffffffff ffffffff 002 i IsFacingWithin
-fp f
-fp o
-f ffffffff ffffffff 003 i IsPlaceableInView
-fp o
-fp f
-fp f
-f ffffffff ffffffff 002 i IsCreatureInView
-fp o
-fp f
-f 00001274 000012db 002 e2 GetLeftLocation
-fp o
-fp f
-f 000011d9 00001240 002 e2 GetRightLocation
-fp o
-fp f
-f ffffffff ffffffff 001 v SpeakLocation
-fp e2
-f ffffffff ffffffff 001 v PrintLocation
-fp e2
-f 00001133 000011d9 001 f GetNormalizedDirection
-fp f
-f 00000ebb 00000f30 004 e2 GenerateNewLocation
-fp o
-fp f
-fp f
-fp f
-f ffffffff ffffffff 004 e2 GenerateNewLocationFromLocation
-fp e2
-fp f
-fp f
-fp f
-f ffffffff ffffffff 001 e2 GetCenterPointOfArea
-fp o
-f ffffffff ffffffff 000 f EPSILON
-f ffffffff ffffffff 001 f RandomDelta
-fp f
-f ffffffff ffffffff 001 f RandomFloat
-fp f
-f ffffffff ffffffff 002 f RandomFloatBetween
-fp f
-fp f
-f ffffffff ffffffff 002 i RandomIntBetween
-fp i
-fp i
-f ffffffff ffffffff 002 t0000 GetRandom2DVector
-fp f
-fp f
-f ffffffff ffffffff 004 e2 GetNearbyLocation
-fp e2
-fp f
-fp f
-fp f
-f ffffffff ffffffff 003 i IsIntInRange
-fp i
-fp i
-fp i
-f ffffffff ffffffff 002 i ScaleInt
-fp i
-fp f
-f ffffffff ffffffff 002 i IsFloatNearInt
-fp f
-fp i
-f ffffffff ffffffff 004 v SetLocalIntState
-fp o
-fp s
-fp i
-fp i
-f ffffffff ffffffff 003 i GetLocalIntState
-fp o
-fp s
-fp i
-f ffffffff ffffffff 003 i SetState
-fp i
-fp i
-fp i
-f ffffffff ffffffff 002 i GetState
-fp i
-fp i
-f ffffffff ffffffff 001 i GetHexStringDigitValue
-fp s
-f ffffffff ffffffff 001 i HexStringToInt
-fp s
-f ffffffff ffffffff 002 i CompareVectors
-fp t0000
-fp t0000
-f ffffffff ffffffff 002 i CompareVectors2D
-fp t0000
-fp t0000
-f ffffffff ffffffff 000 s LAST_SLOT_NUM
-f ffffffff ffffffff 000 s LAST_SLOT_OBJ
-f ffffffff ffffffff 000 i ITEM_CATEGORY_NONE
-f ffffffff ffffffff 000 i ITEM_CATEGORY_WEAPON
-f ffffffff ffffffff 000 i ITEM_CATEGORY_ARMOR_SHIELD
-f ffffffff ffffffff 000 i ITEM_CATEGORY_OTHER
-f ffffffff ffffffff 000 i ITEM_CATEGORY_MISC_EQUIPPABLE
-f ffffffff ffffffff 000 i ITEM_CATEGORY_ALL
-f ffffffff ffffffff 000 i ITEM_CATEGORY_EQUIPPABLE
-f ffffffff ffffffff 000 s PARAM_NO_DRR
-f ffffffff ffffffff 000 s VAR_PREFIX_RECREATE_LIST
-f ffffffff ffffffff 003 i GetIsItemEquipped
-fp s
-fp o
-fp i
-f ffffffff ffffffff 004 i GetPartyMemberHasEquipped
-fp s
-fp o
-fp i
-fp i
-f ffffffff ffffffff 002 i RemoveItem
-fp o
-fp s
-f ffffffff ffffffff 003 v CreateItemOnFaction
-fp o
-fp s
-fp i
-f ffffffff ffffffff 002 v DestroyItemInSlot
-fp o
-fp i
-f ffffffff ffffffff 004 v EquipNewItem
-fp o
-fp s
-fp i
-fp i
-f ffffffff ffffffff 003 v DoEquipmentUpgrade
-fp s
-fp s
-fp i
-f ffffffff ffffffff 004 v TransferItem
-fp o
-fp o
-fp o
-fp i
-f ffffffff ffffffff 002 v RememberEquippedItem
-fp o
-fp i
-f ffffffff ffffffff 001 v RememberEquippedItems
-fp o
-f ffffffff ffffffff 003 v RestoreEquippedItem
-fp o
-fp o
-fp i
-f ffffffff ffffffff 002 v RestoreEquippedItems
-fp o
-fp i
-f ffffffff ffffffff 002 v UnequipSlot
-fp o
-fp i
-f ffffffff ffffffff 004 v GiveEquippedItem
-fp o
-fp o
-fp i
-fp i
-f ffffffff ffffffff 003 v GiveAllEquippedItems
-fp o
-fp o
-fp i
-f ffffffff ffffffff 003 v GiveAllInventory
-fp o
-fp o
-fp i
-f ffffffff ffffffff 003 v GiveEverything
-fp o
-fp o
-fp i
-f ffffffff ffffffff 001 i GetItemCategory
-fp o
-f ffffffff ffffffff 002 i GetIsItemCategory
-fp o
-fp i
-f ffffffff ffffffff 001 i GetIsWeapon
-fp o
-f ffffffff ffffffff 001 i GetIsShield
-fp o
-f ffffffff ffffffff 001 i GetIsArmorOrShield
-fp o
-f ffffffff ffffffff 001 i GetIsEquippable
-fp o
-f ffffffff ffffffff 001 i GetIsMiscEquippable
-fp o
-f ffffffff ffffffff 002 i GetSlotOfEquippedItem
-fp o
-fp o
-f ffffffff ffffffff 001 i GetIsCreatureSlot
-fp i
-f ffffffff ffffffff 001 i N2_GetNPCEasyMark
-fp o
-f ffffffff ffffffff 004 v N2_AppraiseOpenStore
-fp o
-fp o
-fp i
-fp i
-f ffffffff ffffffff 001 v IdentifyEquippedItems
-fp o
-f ffffffff ffffffff 001 v IdentifyInventory
-fp o
-f ffffffff ffffffff 004 v VoidCreateItemOnObject
-fp s
-fp o
-fp i
-fp i
-f ffffffff ffffffff 002 i CountInventoryItemsOfBaseType
-fp i
-fp o
-f ffffffff ffffffff 003 o GetInventoryItemOfBaseType
-fp i
-fp i
-fp o
-f ffffffff ffffffff 001 i ListInventory
-fp o
-f ffffffff ffffffff 002 o GetItemInInventory
-fp s
-fp o
-f ffffffff ffffffff 000 i EquipRandomArmorFromInventory
-f ffffffff ffffffff 001 v RecreateItemsFromBlueprint
-fp o
-f ffffffff ffffffff 000 i FEAT_OUTSIDER_BLOODLINE_FIENDISH
-f ffffffff ffffffff 000 i FEAT_OUTSIDER_BLOODLINE_CELESTIAL
-f ffffffff ffffffff 000 i FEAT_HALFOUTSIDER_PATH_OF_GUILE
-f ffffffff ffffffff 000 i FEAT_HALFOUTSIDER_PATH_OF_STRENGTH
-f ffffffff ffffffff 000 i FEAT_ERINYES_WINGS
-f ffffffff ffffffff 000 i FEAT_MEZZOWINGS
-f ffffffff ffffffff 000 i FEAT_TATTERED_WINGS
-f ffffffff ffffffff 000 i FEAT_NEW_CELESTIAL_WINGS
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_NIGHT_HAG
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_TROGLODYTE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_LIZARDFOLK_NEW
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KHAASTA_NEW
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HEZROU_NEW
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_AVARIEL
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ICEGENASI
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRIDER_MALE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRIDER_FEMALE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HOUND_ARCHON
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_SLAAD
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ARCHON
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ELADRIN
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_TANARRI
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_BAATEZU
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HALFOGRE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_OGRE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_TROLL
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ONI
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_HILL_GIANT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FROST_GIANT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FIRE_GIANT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_AASIMON
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FROST_GIANT_NEW
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FIRE_GIANT_NEW
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_QUASIT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_IMP
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGBRONZE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGRED
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGBLUE
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGSHADOW
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGBLACK
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGCOPPER
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DRAGIRON
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_BEHOLDER
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_UMBER_HULK
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ELAN
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_FIRE_MEPHIT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ICE_MEPHIT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_EARTH_MEPHIT
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DAO
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_MARID
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_DJINN
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_EFREET
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_JANN
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KHAYAL
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_XEPH
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_KENKU
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_RAKSHASA
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_LUPINAL
-f ffffffff ffffffff 000 i RACIAL_SUBTYPE_ARCANALOTH
-f ffffffff ffffffff 000 i FEAT_KHAYAL_FINESSE
-f ffffffff ffffffff 000 i RACIAL_TYPE_PLANETOUCHED
-f ffffffff ffffffff 000 i RACIAL_TYPE_PLANT
-f ffffffff ffffffff 000 i RACIAL_TYPE_HUMANOID_OTHER
-f ffffffff ffffffff 000 i RACIAL_TYPE_OUTSIDER_NATIVE
-f ffffffff ffffffff 000 i FEAT_HALFVAMPIRE
-f ffffffff ffffffff 000 i FEAT_FETCH
-f ffffffff ffffffff 000 i FEAT_GHUL
-f ffffffff ffffffff 000 i FEAT_GHAEDEN
-f ffffffff ffffffff 000 i WING_TYPE_NONE
-f ffffffff ffffffff 000 i WING_TYPE_ANGEL_M
-f ffffffff ffffffff 000 i WING_TYPE_ANGEL_F
-f ffffffff ffffffff 000 i WING_TYPE_HEZEBEL_M
-f ffffffff ffffffff 000 i WING_TYPE_HEZEBEL_F
-f ffffffff ffffffff 000 i WING_TYPE_DWARF_BAT_M
-f ffffffff ffffffff 000 i WING_TYPE_DWARF_BAT_F
-f ffffffff ffffffff 000 i WING_TYPE_ORC_BAT_M
-f ffffffff ffffffff 000 i WING_TYPE_ORC_BAT_F
-f ffffffff ffffffff 000 i WING_TYPE_ERINYES_M
-f ffffffff ffffffff 000 i WING_TYPE_ERINYES_F
-f ffffffff ffffffff 000 i WING_TYPE_BAT_M
-f ffffffff ffffffff 000 i WING_TYPE_BAT_F
-f ffffffff ffffffff 000 i WING_TYPE_HAWK_M
-f ffffffff ffffffff 000 i WING_TYPE_HAWK_F
-f ffffffff ffffffff 000 i WING_TYPE_RAVEN_M
-f ffffffff ffffffff 000 i WING_TYPE_RAVEN_F
-f ffffffff ffffffff 000 i WING_TYPE_LILITU_M
-f ffffffff ffffffff 000 i WING_TYPE_LILITU_F
-f ffffffff ffffffff 000 i WING_TYPE_MEZZOLOTH
-f ffffffff ffffffff 000 i WING_TYPE_WORDARCHON_F
-f ffffffff ffffffff 000 i WING_TYPE_WORDARCHON_M
-f ffffffff ffffffff 000 i CLASS_TYPE_PSION
-f ffffffff ffffffff 000 i CLASS_PSYCHIC_WARRIOR
-f ffffffff ffffffff 000 i CLASS_DERVISH
-f ffffffff ffffffff 000 i CLASS_PSYCHIC_KNIGHT
-f ffffffff ffffffff 000 i CLASS_STALWART_DEFENDER
-f ffffffff ffffffff 000 i CLASS_TYPE_ARCANETRICKSTER_W
-f ffffffff ffffffff 000 i CLASS_TYPE_ARCANE_ARCHER2
-f ffffffff ffffffff 000 i CLASS_TYPE_CEREBREMANCER
-f ffffffff ffffffff 000 i CLASS_TYPE_ELEMENTAL_WARRIOR
-f ffffffff ffffffff 000 i CLASS_TYPE_FELLBLADE
-f ffffffff ffffffff 000 i CLASS_TYPE_GOLEMMASTER
-f ffffffff ffffffff 000 i CLASS_TYPE_MYSTIC_THEURGE
-f ffffffff ffffffff 000 i CLASS_TYPE_NATUREWARRIOR
-f ffffffff ffffffff 000 i CLASS_TYPE_PALEMASTER_W
-f ffffffff ffffffff 000 i CLASS_TYPE_WARMIND
-f ffffffff ffffffff 000 i CLASS_TYPE_PSYCHIC_THERUGE
-f ffffffff ffffffff 000 i CLASS_TYPE_SCALED_HUNTER_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_HALFDRAGON_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_HALFOUTSIDER_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_MISSCAULDRON
-f ffffffff ffffffff 000 i CLASS_TYPE_HOUNDARCH_HERO_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_TRUMPET_ARCHON_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_WORD_ARCHON_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_HALFOUTSIDERMAGE_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_LUP_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_DEATH_KNIGHT_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_HILL_GIANT_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_FIRE_GIANT_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_FROST_GIANT_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_ASTRAL_DEVA_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_MONADIC_DEVA_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_MOVANIC_DEVA_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_LICH_W_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_LICH_D_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_LICH_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_SAVAGE_MARAUDER_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_OGRE_MAGE_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_ERINYES
-f ffffffff ffffffff 000 i CLASS_TYPE_BRACHINA
-f ffffffff ffffffff 000 i CLASS_TYPE_SUCCUBUS_INCUBUS
-f ffffffff ffffffff 000 i CLASS_TYPE_MARQUIS_CAMBION
-f ffffffff ffffffff 000 i CLASS_TYPE_ILLITHID_MENTALIST_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_BRALANI_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_FIRRE_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_GHAELE_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_LYCAN_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_DRA_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_VAMPIRE_MAL_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_CHAMPION_OF_CHAOS
-f ffffffff ffffffff 000 i CLASS_TYPE_GRAY_SLAAD
-f ffffffff ffffffff 000 i CLASS_TYPE_HALF_UNDEAD
-f ffffffff ffffffff 000 i CLASS_TYPE_HEZROU
-f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PRC
-f ffffffff ffffffff 000 i CLASS_TYPE_DRAGON_PSION
-f ffffffff ffffffff 000 i CLASS_TYPE_PACK_LEADER
-f ffffffff ffffffff 000 i CLASS_TYPE_PLANTPC
-f ffffffff ffffffff 000 i CLASS_TYPE_RAKSHASA_SORCERER
-f ffffffff ffffffff 000 i CLASS_TYPE_AUSTERE_ONE
-f ffffffff ffffffff 000 i FEAT_GIANT_ROCK_THROW
-f ffffffff ffffffff 000 i FEAT_DRIDER_SKILL_AFFINITY
-f ffffffff ffffffff 000 i FEAT_DRIDER_CLAIRVOYANCE
-f ffffffff ffffffff 000 i FEAT_DRIDER_DISPEL_MAGIC
-f ffffffff ffffffff 000 i FEAT_DRIDER_SUMMON_SWARM
-f ffffffff ffffffff 000 i FEAT_GIANT_ARMOR
-f ffffffff ffffffff 000 i FEAT_TROGLODYTE_SKILL_AFFINITY_HIDE
-f ffffffff ffffffff 000 i FEAT_GIANT_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_GIANT_STRIDE
-f ffffffff ffffffff 000 i FEAT_TROGLODYTE_STENCH
-f ffffffff ffffffff 000 i FEAT_EPITHET_FIRE_GIANT
-f ffffffff ffffffff 000 i FEAT_EPITHET_FROST_GIANT
-f ffffffff ffffffff 000 i FEAT_EPITHET_HILL_GIANT
-f ffffffff ffffffff 000 i FEAT_EPITHET_HALFOGRE
-f ffffffff ffffffff 000 i FEAT_EPITHET_OGRE
-f ffffffff ffffffff 000 i FEAT_EPITHET_TROLL
-f ffffffff ffffffff 000 i FEAT_EPITHET_ONI
-f ffffffff ffffffff 000 i FEAT_TROLL_REGENERATION
-f ffffffff ffffffff 000 i FEAT_DARKNESS_OGRE_MAGE
-f ffffffff ffffffff 000 i FEAT_HISS_OF_SLEEP_OGRE_MAGE
-f ffffffff ffffffff 000 i FEAT_CONE_OF_COLD_OGRE_MAGE
-f ffffffff ffffffff 000 i FEAT_DEVA_ARMOR
-f ffffffff ffffffff 000 i FEAT_DEVA_AURA
-f ffffffff ffffffff 000 i FEAT_DEVA_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_DEVA_WEAPON
-f ffffffff ffffffff 000 i FEAT_DELIVERANCE_FROM_DEATH_MONADIC
-f ffffffff ffffffff 000 i FEAT_HEAVENLY_DEFLECTION_MOVANIC
-f ffffffff ffffffff 000 i FEAT_PRAYER_MOVANIC
-f ffffffff ffffffff 000 i FEAT_CURE_CRITICAL_MOVANIC
-f ffffffff ffffffff 000 i FEAT_ETHEREAL_JAUNT_MOVANIC
-f ffffffff ffffffff 000 i FEAT_RAISE_DEAD_MOVANIC
-f ffffffff ffffffff 000 i FEAT_EPITHET_AASIMON
-f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_ABYSSAL_BLAST
-f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_NEGATIVE_WEAPON
-f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_DR
-f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_SYMBOL_OF_PAIN
-f ffffffff ffffffff 000 i FEAT_DEATHKNIGHT_FEAR_AURA
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_NATURAL_ARMOR
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_SLAM
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_DRAIN_BLOOD
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_BAT
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_WOLF
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_GASEOUS
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_ALTERNATE_FORM_DIREWOLF
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_FAST_HEALING
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_RESISTANCE
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_DR
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_DOMINATING_GAZE
-f ffffffff ffffffff 000 i FEAT_VAMPIRE_DOMINATING_GAZE_2
-f ffffffff ffffffff 000 i FEAT_TOUCH_OF_EVIL
-f ffffffff ffffffff 000 i FEAT_UNDEAD_RACIAL_TYPE
-f ffffffff ffffffff 000 i FEAT_UNDEAD_PROPERTIES
-f ffffffff ffffffff 000 i FEAT_LICH_ROTTING_VISAGE
-f ffffffff ffffffff 000 i FEAT_LICH_PARALYZING_TOUCH
-f ffffffff ffffffff 000 i FEAT_LICH_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_LICH_DR
-f ffffffff ffffffff 000 i FEAT_TURN_RESISTANCE
-f ffffffff ffffffff 000 i FEAT_LICH_FEAR_AURA
-f ffffffff ffffffff 000 i FEAT_LICH_ARMOR
-f ffffffff ffffffff 000 i FEAT_BAATEZU_BLINDSIGHT
-f ffffffff ffffffff 000 i FEAT_BAATEZU_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_EPITHET_BAATEZU
-f ffffffff ffffffff 000 i FEAT_DARK_FLIGHT
-f ffffffff ffffffff 000 i FEAT_ERINYES_ARMOR
-f ffffffff ffffffff 000 i FEAT_ERINYES_ROPE_OF_ENTANGLEMENT
-f ffffffff ffffffff 000 i FEAT_ERINYES_UNHOLY_BLIGHT
-f ffffffff ffffffff 000 i FEAT_ERINYES_DR
-f ffffffff ffffffff 000 i FEAT_ERINYES_SUMMON_BAATEZU
-f ffffffff ffffffff 000 i FEAT_BRACHINA_ARMOR
-f ffffffff ffffffff 000 i FEAT_BRACHINA_REGENERATION
-f ffffffff ffffffff 000 i FEAT_BRACHINA_VAMPIRIC_TOUCH
-f ffffffff ffffffff 000 i FEAT_BRACHINA_SUMMON_BAATEZU
-f ffffffff ffffffff 000 i FEAT_BRACHINA_DR
-f ffffffff ffffffff 000 i FEAT_BRACHINA_BEGUILE
-f ffffffff ffffffff 000 i FEAT_UNSUMMON_BAATEZU
-f ffffffff ffffffff 000 i FEAT_CHANGE_SELF
-f ffffffff ffffffff 000 i FEAT_TANARRI_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_EPITHET_TANARRI
-f ffffffff ffffffff 000 i FEAT_SUCCUBUS_ARMOR
-f ffffffff ffffffff 000 i FEAT_SUCCUBUS_DRAINING_KISS
-f ffffffff ffffffff 000 i FEAT_SUCCUBUS_DR
-f ffffffff ffffffff 000 i FEAT_SUCCUBUS_SUMMMON_TANARRI
-f ffffffff ffffffff 000 i FEAT_UNSUMMON_TANARRI
-f ffffffff ffffffff 000 i FEAT_MARQCAMB_MIRROR_IMAGE
-f ffffffff ffffffff 000 i FEAT_MARQCAMB_ALTERNATE_FORM
-f ffffffff ffffffff 000 i FEAT_MARQCAMB_ALIGNED_STRIKE
-f ffffffff ffffffff 000 i FEAT_MARQCAMB_ARMOR
-f ffffffff ffffffff 000 i FEAT_MARQCAMB_SILENT_METAL
-f ffffffff ffffffff 000 i FEAT_SUCCUBUS_DRAINING_KISS_2
-f ffffffff ffffffff 000 i FEAT_UNHOLY_APOTHESIS
-f ffffffff ffffffff 000 i FEAT_LILITUS_GIFT
-f ffffffff ffffffff 000 i FEAT_HEZROU_BLASPHEMY
-f ffffffff ffffffff 000 i FEAT_HEZROU_ARMOR
-f ffffffff ffffffff 000 i FEAT_HEZROU_STENCH
-f ffffffff ffffffff 000 i FEAT_HEZROU_SUMMMON_TANARRI
-f ffffffff ffffffff 000 i FEAT_HEZROU_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_HEZROU_ALIGNED_STRIKE
-f ffffffff ffffffff 000 i FEAT_ELADRIN_ALTERNATE_FORM
-f ffffffff ffffffff 000 i FEAT_ELADRIN_PRC_ARMOR
-f ffffffff ffffffff 000 i FEAT_BRALANI_WHIRLWIND_BLAST
-f ffffffff ffffffff 000 i FEAT_ELADRIN_PRC_DR
-f ffffffff ffffffff 000 i FEAT_BRALANI_BLUR
-f ffffffff ffffffff 000 i FEAT_BRALANI_LIGHTNING_BOLT
-f ffffffff ffffffff 000 i FEAT_ELADRIN_PRC_TRANSCENDENT_STRIKE
-f ffffffff ffffffff 000 i FEAT_FIRRE_FLAMING_SLAM
-f ffffffff ffffffff 000 i FEAT_FIRRE_MAGIC_CIRCLE_VS_EVIL
-f ffffffff ffffffff 000 i FEAT_GHAELE_LIGHT_RAY
-f ffffffff ffffffff 000 i FEAT_GHAELE_BONUS_DOMAIN
-f ffffffff ffffffff 000 i FEAT_GHAELE_PROTECTIVE_AURA
-f ffffffff ffffffff 000 i FEAT_GHAELE_GLOW
-f ffffffff ffffffff 000 i FEAT_EPITHET_ELADRIN
-f ffffffff ffffffff 000 i FEAT_ELADRIN_ARBOREAL_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_ICEGENASI_HOARFROST_ARMOR
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_REGENERATION
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_DR
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_BAT
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_CAT
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_RAT
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_SPIDER
-f ffffffff ffffffff 000 i FEAT_FAMILIAR_ALTERNATE_FORM_WEASEL
-f ffffffff ffffffff 000 i FEAT_DRACONIC_SCALES
-f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_BRONZE
-f ffffffff ffffffff 000 i FEAT_EPITHET_DRAGON_SIZE
-f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BRONZE
-f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BRONZE_GAS
-f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_BLACK
-f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_RED
-f ffffffff ffffffff 000 i FEAT_DRACONIC_IMMUNITY_SHADOW
-f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BLACK
-f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_RED
-f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_SHADOW
-f ffffffff ffffffff 000 i FEAT_DRAGON_BREATH_BLUE
-f ffffffff ffffffff 000 i FEAT_DRAGON_BLACK_DARKNESS
-f ffffffff ffffffff 000 i FEAT_DRAGON_SHADOW_BLEND
-f ffffffff ffffffff 000 i FEAT_DRAGON_BLUE_SOUND
-f ffffffff ffffffff 000 i FEAT_HARDENING_SCALES
-f ffffffff ffffffff 000 i FEAT_DRAGON_SENSES
-f ffffffff ffffffff 000 i FEAT_DRAGON_ROAR
-f ffffffff ffffffff 000 i FEAT_DRAGON_PATH_SORCERER
-f ffffffff ffffffff 000 i FEAT_DRAGON_PRESENCE
-f ffffffff ffffffff 000 i FEAT_DRAGON_SWIPE
-f ffffffff ffffffff 000 i FEAT_DRAGON_PATH_MELEE
-f ffffffff ffffffff 000 i FEAT_WARCHON_WORD_OF_NURTURING
-f ffffffff ffffffff 000 i FEAT_WARCHON_WORD_OF_SHOCKWAVE
-f ffffffff ffffffff 000 i FEAT_WARCHON_WORD_OF_PEACE
-f ffffffff ffffffff 000 i FEAT_ARCHON_EXALTED_WEAPON
-f ffffffff ffffffff 000 i FEAT_ARCHON_AURA_OF_MENACE
-f ffffffff ffffffff 000 i FEAT_EPITHET_ARCHON
-f ffffffff ffffffff 000 i FEAT_ARCHON_ARMOR
-f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET
-f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET_BLADE
-f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET_BLAST
-f ffffffff ffffffff 000 i FEAT_TARCHON_TRUMPET_REVEILLE
-f ffffffff ffffffff 000 i FEAT_ARCHON_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_CANINE_FORM
-f ffffffff ffffffff 000 i FEAT_HA_ARCHONIC_ARMOR
-f ffffffff ffffffff 000 i FEAT_HA_CANINE_FORM_2
-f ffffffff ffffffff 000 i FEAT_HA_DAMAGE_REDUCTION
-f ffffffff ffffffff 000 i FEAT_HA_SPELLABILITY_AID
-f ffffffff ffffffff 000 i FEAT_HA_SANCTIFIED_WEAPON
-f ffffffff ffffffff 000 i FEAT_HA_AURA_OF_MENACE
-f ffffffff ffffffff 000 i FEAT_NHAG_IMMUNITIES
-f ffffffff ffffffff 000 i FEAT_NHAG_SLEEP_SPELLLIKE
-f ffffffff ffffffff 000 i FEAT_NHAG_RAY_OF_ENFEEBLEMENT_SL
-f ffffffff ffffffff 000 i FEAT_NHAG_DECEITFUL
-f ffffffff ffffffff 000 i FEAT_NHAG_INEFFABLY_EVIL
-f ffffffff ffffffff 000 i FEAT_MOTC_ELEMENTAL_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_MOTC_MAGIC_MISSILE_SPELLLIKE
-f ffffffff ffffffff 000 i FEAT_MOTC_CRAFT_HEARTSTONE
-f ffffffff ffffffff 000 i FEAT_LYCAN_AFFLICTION
-f ffffffff ffffffff 000 i FEAT_LYCAN_ANIMAL_FORM
-f ffffffff ffffffff 000 i FEAT_LYCAN_DAMAGE_REDUCTION
-f ffffffff ffffffff 000 i FEAT_LYCAN_HYBRID_FORM
-f ffffffff ffffffff 000 i FEAT_LYCAN_BP_WEREWOLF
-f ffffffff ffffffff 000 i FEAT_LYCAN_BP_WEREBOAR
-f ffffffff ffffffff 000 i FEAT_LYCAN_BP_WERETIGER
-f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WEREWOLF
-f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WERERAT
-f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WEREBOAR
-f ffffffff ffffffff 000 i LYCAN_AFFLICTION_WERETIGER
-f ffffffff ffffffff 000 i FEAT_SLAAD_STUNNING_CROAK
-f ffffffff ffffffff 000 i FEAT_SLAAD_INNATE_IMMUNITY
-f ffffffff ffffffff 000 i FEAT_SLAAD_COMPLETELY_CHAOTIC
-f ffffffff ffffffff 000 i FEAT_GREYSLAAD_REGENERATION
-f ffffffff ffffffff 000 i FEAT_SLAAD_CLAWS_OF_CHAOS
-f ffffffff ffffffff 000 i FEAT_SLAAD_DR
-f ffffffff ffffffff 000 i FEAT_SLAAD_CHAOS_HAMMER
-f ffffffff ffffffff 000 i FEAT_SLAAD_SUMMON_SLAAD
-f ffffffff ffffffff 000 i FEAT_SLAAD_GRAY_APPEARANCE
-f ffffffff ffffffff 000 i FEAT_SLAAD_CHAOTIC_CRAFTING
-f ffffffff ffffffff 000 i FEAT_EPITHET_DEATH_SLAAD
-f ffffffff ffffffff 000 i FEAT_IMPROVED_STUNNING_CROAK
-f ffffffff ffffffff 000 i FEAT_DS_CIRCLE_OF_DEATH
-f ffffffff ffffffff 000 i FEAT_DS_CLOAK_OF_CHAOS
-f ffffffff ffffffff 000 i FEAT_DS_POWER_WORD_BLIND
-f ffffffff ffffffff 000 i FEAT_COC_REGENERATION
-f ffffffff ffffffff 000 i FEAT_BLINK
-f ffffffff ffffffff 000 i FEAT_DIMENSION_DOOR
-f ffffffff ffffffff 000 i FEAT_CANINE_TYPE_BDOG
-f ffffffff ffffffff 000 i FEAT_CANINE_TYPE_WWOLF
-f ffffffff ffffffff 000 i FEAT_CANINE_TYPE_WORG
-f ffffffff ffffffff 000 i FEAT_FERAL_MARK
-f ffffffff ffffffff 000 i FEAT_BATTLE_HOWL
-f ffffffff ffffffff 000 i FEAT_HUNTING_LOPE1
-f ffffffff ffffffff 000 i FEAT_HUNTING_LOPE2
-f ffffffff ffffffff 000 i FEAT_WW_COLDTYPE1
-f ffffffff ffffffff 000 i FEAT_WW_COLDTYPE2
-f ffffffff ffffffff 000 i FEAT_WG_ImpKnockdown
-f ffffffff ffffffff 000 i FEAT_BD_Mobility
-f ffffffff ffffffff 000 i FEAT_WW_FREEZING_BR
-f ffffffff ffffffff 000 i FEAT_ETERNAL_LEADER
-f ffffffff ffffffff 000 i FEAT_TEARING_BITE
-f ffffffff ffffffff 000 i FEAT_GENESIS
-f ffffffff ffffffff 000 i FEAT_ARMOR_OF_NATURE
-f ffffffff ffffffff 000 i FEAT_OVERGROWTH
-f ffffffff ffffffff 000 i FEAT_TOUGH_ROOTS
-f ffffffff ffffffff 000 i FEAT_ANIMATE_TREES
-f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_I
-f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_II
-f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_III
-f ffffffff ffffffff 000 i FEAT_SPELL_WIZARD_IV
-f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_I
-f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_II
-f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_III
-f ffffffff ffffffff 000 i FEAT_SPELL_CLERDRU_IV
-f ffffffff ffffffff 000 i FEAT_SPELL_BARD_I
-f ffffffff ffffffff 000 i FEAT_SPELL_BARD_II
-f ffffffff ffffffff 000 i FEAT_SPELL_BARD_III
-f ffffffff ffffffff 000 i FEAT_SPELL_BARD_IV
-f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_I
-f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_II
-f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_III
-f ffffffff ffffffff 000 i FEAT_SPELL_PALRANG_IV
-f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_I
-f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_II
-f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_III
-f ffffffff ffffffff 000 i FEAT_SPELL_SORCFAVSHAMAN_IV
-f ffffffff ffffffff 000 i FEAT_INVOCATIONS_WARLOCK_I
-f ffffffff ffffffff 000 i FEAT_INVOCATIONS_WARLOCK_II
-f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_I
-f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_II
-f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_III
-f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_IV
-f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_V
-f ffffffff ffffffff 000 i FEAT_PSYWAR_PROGRESSION_VI
-f ffffffff ffffffff 000 i POWER_POINT_POOL_PSYWAR
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUND
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUNDF
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUND2
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_HA_HOUND2F
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_LIGHT
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_BRALANI
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_FIRRE
-f ffffffff ffffffff 000 i POLYMORPH_TYPE_ELADRIN_GHAELE
-f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_BAT
-f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_WOLF
-f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_GASEOUS
-f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_DIREWOLF
-f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_WYVERN
-f ffffffff ffffffff 000 i POLYMORPH_VAMPIRE_TWOLF
-f ffffffff ffffffff 000 i POLYMORPH_BAT
-f ffffffff ffffffff 000 i POLYMORPH_WEASEL
-f ffffffff ffffffff 000 i POLYMORPH_RAT
-f ffffffff ffffffff 000 i POLYMORPH_SMALL_SPIDER
-f ffffffff ffffffff 000 i POLYMORPH_CAT
-f ffffffff ffffffff 000 i VAMPIRE_WYVERN_FORM
-f ffffffff ffffffff 000 i VAMPIRE_TWOLF_FORM
-f ffffffff ffffffff 000 i POLYMORPH_WEREWOLF_ANIMFORM
-f ffffffff ffffffff 000 i POLYMORPH_WEREBOAR_ANIMFORM
-f ffffffff ffffffff 000 i POLYMORPH_WERETIGER_ANIMFORM
-f ffffffff ffffffff 000 i POLYMORPH_WERERAT_ANIMFORM
-f ffffffff ffffffff 000 i AOE_PER_FREEZINGFOG
-f ffffffff ffffffff 000 i AOE_PER_OBSCURINGMIST
-f ffffffff ffffffff 000 i VFX_MOB_CROWN_OF_FLAME
-f ffffffff ffffffff 000 i AOE_MOB_SCINTILLATING_PATTERN
-f ffffffff ffffffff 000 i VFX_MOB_DRAGON_FEAR_PC
-f ffffffff ffffffff 000 i VFX_MOB_ARCHON_MENACE
-f ffffffff ffffffff 000 i WING_VARIATION_DWARF
-f ffffffff ffffffff 000 i WING_VARIATION_GNOME
-f ffffffff ffffffff 000 i WING_VARIATION_HUMAN
-f ffffffff ffffffff 000 i WING_VARIATION_ORC
-f ffffffff ffffffff 000 i IP_CONST_ONHIT_CASTSPELL_CHAOSDAM1
-f ffffffff ffffffff 000 i IP_CONST_ONHIT_CASTSPELL_CHAOSDAM2
-f ffffffff ffffffff 000 i IP_CONST_ONHIT_CASTSPELL_CHAOSDAM3
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_BITE_L24
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_WOLF_CLAW_L24
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_BITE_L24
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_RAT_CLAW_L24
-f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_BOAR_GORE_L24
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_BITE_L24
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L01
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L08
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L16
-f ffffffff ffffffff 000 s ITEM_LYCAN_TIGER_CLAW_L24
-f ffffffff ffffffff 000 i SPELL_IRRESISTIBLE_DANCE
-f ffffffff ffffffff 000 i SPELL_MASS_HIDEOUS_LAUGHTER
-f ffffffff ffffffff 000 i SPELL_RAINBOW_DWEOMER
-f ffffffff ffffffff 000 i SPELL_ICE_SIMULACRUM
-f ffffffff ffffffff 000 i SPELL_MISLEAD
-f ffffffff ffffffff 000 i SPELL_FAERIE_FIRE
-f ffffffff ffffffff 000 i SPELL_GLAMER
-f ffffffff ffffffff 000 i SPELL_HALLUCINATORY_TERRAIN
-f ffffffff ffffffff 000 i VFX_PER_HALLUCINATORY_TERRAIN
-f ffffffff ffffffff 000 i SPELL_HYPNOTISM
-f ffffffff ffffffff 000 i SPELL_SLEEP_OF_AGES
-f ffffffff ffffffff 000 i SPELL_VEIL_OF_SHADOW
-f ffffffff ffffffff 000 i SPELL_ABYSSAL_MIGHT
-f ffffffff ffffffff 000 i SPELL_DEMON_FLESH
-f ffffffff ffffffff 000 i SPELL_DEMONHIDE
-f ffffffff ffffffff 000 i SPELL_DIVINE_SACRIFICE
-f ffffffff ffffffff 000 i SPELL_HELLSPOWER
-f ffffffff ffffffff 000 i SPELL_MASOCHISM
-f ffffffff ffffffff 000 i SPELL_UNHOLY_STORM
-f ffffffff ffffffff 000 i SPELL_BLEED
-f ffffffff ffffffff 000 i SPELL_BLADE_OF_BLOOD
-f ffffffff ffffffff 000 i SPELL_BLADE_OF_FEAR
-f ffffffff ffffffff 000 i SPELLABILITY_DIVINE_RETRIBUTION
-f ffffffff ffffffff 000 i SPELLABILITY_DERVISH_AC_BONUS
-f ffffffff ffffffff 000 i SPELLABILITY_DERVISH_DANCE
-f ffffffff ffffffff 000 i SPELLABILITY_THOUSAND_CUTS
-f ffffffff ffffffff 000 i SPELLABILITY_DERVISH_DEFENSIVE_PARRY
-f ffffffff ffffffff 000 i FEAT_ARMOR_OF_THE_CROCODILE
-f ffffffff ffffffff 000 i FEAT_BLAZE_OF_POWER
-f ffffffff ffffffff 000 i FEAT_CLAWS_OF_THE_GRIZZLY
-f ffffffff ffffffff 000 i FEAT_EARTH_RESILIENCE
-f ffffffff ffffffff 000 i FEAT_NATURES_WEAPON
-f ffffffff ffffffff 000 i FEAT_ROBE_OF_CLOUDS
-f ffffffff ffffffff 000 i FEAT_SERPENTINE_COIL
-f ffffffff ffffffff 000 i FEAT_WILD_GROWTH
-f ffffffff ffffffff 000 i SPELLABILITY_ARMOR_OF_THE_CROCODILE
-f ffffffff ffffffff 000 i SPELLABILITY_BLAZE_OF_POWER
-f ffffffff ffffffff 000 i SPELLABILITY_CLAWS_OF_THE_GRIZZLY
-f ffffffff ffffffff 000 i SPELLABILITY_EARTH_RESILIENCE
-f ffffffff ffffffff 000 i SPELLABILITY_NATURES_WEAPON
-f ffffffff ffffffff 000 i SPELLABILITY_ROBE_OF_CLOUDS
-f ffffffff ffffffff 000 i SPELLABILITY_SERPENTINE_COIL
-f ffffffff ffffffff 000 i SPELLABILITY_WILD_GROWTH
-f ffffffff ffffffff 000 i FEAT_DERVISH_AC_BONUS
-f ffffffff ffffffff 000 i FEAT_DERVISH_DERVISH_DANCE
-f ffffffff ffffffff 000 i FEAT_DERVISH_DANCE_DEATH
-f ffffffff ffffffff 000 i FEAT_DERVISH_DEFENSIVE_PARRY
-f ffffffff ffffffff 000 i FEAT_DERVISH_TIRELESS_DANCE
-f ffffffff ffffffff 000 i FEAT_DERVISH_THOUSAND_CUTS
-f ffffffff ffffffff 000 i FEAT_DERVISH_SLASHING_BLADES
-f ffffffff ffffffff 000 i ELEMENTAL_WARRIOR_IMMUNITY
-f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_MANIFESTATION
-f ffffffff ffffffff 000 i SPELLABILITY_ELEMWAR_STRIKE
-f ffffffff ffffffff 000 i FEAT_ELEMWAR_WEAPON
-f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_AIR
-f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_EARTH
-f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_FIRE
-f ffffffff ffffffff 000 i FEAT_ELEMWAR_AFFINITY_WATER
-f ffffffff ffffffff 000 i FEAT_PSYWAR_FERAL
-f ffffffff ffffffff 000 i FEAT_PSYWAR_LURK
-f ffffffff ffffffff 000 i FEAT_PALADIN
-f ffffffff ffffffff 000 i FEAT_KNIGHT
-f ffffffff ffffffff 000 i FEAT_BLACKGUARD
-f ffffffff ffffffff 000 i FEAT_DIVINE_RETRIBUTION
-f ffffffff ffffffff 000 i FEAT_KNIGHTS_AURA
-f ffffffff ffffffff 000 i FEAT_KNIGHTSMITE
-f ffffffff ffffffff 000 i FEAT_BLACKGUARD_SMITE
-f ffffffff ffffffff 000 i FEAT_CHAIN_OF_OVERWHELMING_FORCE
-f ffffffff ffffffff 000 i FEAT_CHAIN_OF_PERSONAL_SUPRERIOTY
-f ffffffff ffffffff 000 i FEAT_CHAIN_OF_DEFENSIVE_POSTURE
-f ffffffff ffffffff 000 i FEAT_SHIELDBASH
-f ffffffff ffffffff 000 i FEAT_IMPROVED_SHIELDBASH
-f ffffffff ffffffff 000 i FEAT_AGILE_SHIELDBASH
-f ffffffff ffffffff 000 i FEAT_ARCANEBASH
-f ffffffff ffffffff 000 i FEAT_SHIELDTHROW
-f ffffffff ffffffff 000 i SPELLFEAT_SHIELDBASH
-f ffffffff ffffffff 000 i SPELLFEAT_ARCANEBASH
-f ffffffff ffffffff 000 i SPELLFEAT_SHIELDTHROW
-f ffffffff ffffffff 000 i SPELLFEAT_AGILE_SHIELDSTRIKE
-f ffffffff ffffffff 000 i SPELLABILITY_WARMIND_STRIKE
-f ffffffff ffffffff 000 i SPELLABILITY_KNIGHTSMITE
-f ffffffff ffffffff 000 i SPELLABILITY_KNIGHT_AURA
-f ffffffff ffffffff 000 i SPELLABILITY_BLACKGUARD_SMITE
-f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_2
-f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE3
-f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION2
-f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_4
-f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION3
-f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION4
-f ffffffff ffffffff 000 i FEAT_BARBARIAN_RAGE_6
-f ffffffff ffffffff 000 i FEAT_TRAP_SENSE_8
-f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION7
-f ffffffff ffffffff 000 i FEAT_TRAP_SENSE9
-f ffffffff ffffffff 000 i FEAT_DAMAGE_REDUCTION8
-f ffffffff ffffffff 000 i SPELL_I_ELDRICH_SHIELD
-f ffffffff ffffffff 000 i SPELL_I_BLACKBOLT_BLAST
-f ffffffff ffffffff 000 i SPELL_I_BINDING_BLAST
-f ffffffff ffffffff 000 i SPELL_I_DARK_DISCORPORATION
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_ELDRTICH
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_DRAINING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_FRIGHTFUL
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BSHADOWED
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BRIMSTONE
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_HELLRIME
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BWITCHING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_NOXIOUS
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_VITRIOLIC
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_UTTERDARK
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BLACKBOLT
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SPEAR_BINDING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_ELDRTICH
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_DRAINING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_FRIGHTFUL
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BSHADOWED
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BRIMSTONE
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_HELLRIME
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BWITCHING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_NOXIOUS
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_VITRIOLIC
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_UTTERDARK
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BLACKBOLT
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BLOW_BINDING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_ELDRTICH
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_DRAINING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_FRIGHTFUL
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BSHADOWED
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BRIMSTONE
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_HELLRIME
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BWITCHING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_NOXIOUS
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_VITRIOLIC
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_UTTERDARK
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BLACKBOLT
-f ffffffff ffffffff 000 i FEAT_WARLOCK_SHIELD_BINDING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_ELDRITCH
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_DRAINING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_FRIGHTFUL
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BSHADOWED
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BRIMSTONE
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_HELLRIME
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BWITCHING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_NOXIOUS
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_VITRIOLIC
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_UTTERDARK
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BLACKBOLT
-f ffffffff ffffffff 000 i FEAT_WARLOCK_CHAIN_BINDING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_ELDRITCH
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_DRAINING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_FRIGHTFUL
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BSHADOWED
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BRIMSTONE
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_HELLRIME
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BWITCHING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_NOXIOUS
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_VITRIOLIC
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_UTTERDARK
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BLACKBOLT
-f ffffffff ffffffff 000 i FEAT_WARLOCK_BURST_BINDING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_ELDRITCH
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_DRAINING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_FRIGHTFUL
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BSHADOWED
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BRIMSTONE
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_HELLRIME
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BWITCHING
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_NOXIOUS
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_VITRIOLIC
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_UTTERDARK
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BLACKBOLT
-f ffffffff ffffffff 000 i FEAT_WARLOCK_DOOM_BINDING
-f ffffffff ffffffff 000 i FEAT_FELLBLADE_BIND_WEAPON_1
-f ffffffff ffffffff 000 i FEAT_FELLBLADE_BIND_WEAPON_2
-f ffffffff ffffffff 000 i FEAT_FELLBLADE_BIND_WEAPON_3
-f ffffffff ffffffff 000 i FEAT_FELLBLADE_ARMOR_OF_SHADOWS
-f ffffffff ffffffff 000 i FEAT_FELLBLADE_THIRSTING_BLADE
-f ffffffff ffffffff 000 i FEAT_HEXEN_DREADFUL_AURA
-f ffffffff ffffffff 000 i FEAT_HEXEN_DREAD_SEIZURE
-f ffffffff ffffffff 000 i FEAT_HEXEN_BALEFUL_GEAS
-f ffffffff ffffffff 000 i FEAT_HEXEN_BALEFUL_POLYMORPH
-f ffffffff ffffffff 000 i FEAT_HEXEN_PAINFUL_SLEEP
-f ffffffff ffffffff 000 i FEAT_HEXEN_HEXER_1
-f ffffffff ffffffff 000 i FEAT_HEXEN_HEXER_2
-f ffffffff ffffffff 000 i FEAT_HEXEN_HEXER_3
-f ffffffff ffffffff 000 i FEAT_HEXEN_CURSEMASTER
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_M
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_M
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_M
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_S
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_S
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_S
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_L
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_L
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_L
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_SLASH_M
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_SLASH_S
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_SLASH_L
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_BLUDGEON_M
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_BLUDGEON_S
-f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_BLUDGEON_L
-f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW
-f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE
-f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM
-f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_LARGE
-f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_LARGE
-f ffffffff ffffffff 000 i BASE_ITEM_WHIP_SCOD
-f ffffffff ffffffff 000 i BASE_ITEM_SHORT_STAFF
-f ffffffff ffffffff 000 i BASE_ITEM_CREATURECLAW_TINY
-f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_TINY
-f ffffffff ffffffff 000 i BASE_ITEM_CREATURESLAM_MEDIUM
-f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_TINY
-f ffffffff ffffffff 000 i BASE_ITEM_CREATUREBITE_LRG
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_R
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_G
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_B
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_A
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_R
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_G
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_B
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_A
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_R
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_G
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_B
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_A
-f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2
-f ffffffff ffffffff 000 i PS_CCA_TINT_ALL
-f ffffffff ffffffff 001 v PS_MergeContainerStacks
-fp o
-f ffffffff ffffffff 002 v PS_SendAreaWeatherToPlayer
-fp o
-fp o
-f ffffffff ffffffff 001 v PS_DisableAreaWeather
-fp o
-f ffffffff ffffffff 001 v PS_EnableAreaWeather
-fp o
-f ffffffff ffffffff 001 v PS_ClearAreaWeather
-fp o
-f ffffffff ffffffff 001 v PS_GenerateAreaWeather
-fp o
-f ffffffff ffffffff 001 i PS_GetAreaWeatherSystemId
-fp o
-f ffffffff ffffffff 001 t0006 PS_GetCreatureCoreAppearance
-fp o
-f ffffffff ffffffff 002 v PS_SetCreatureCoreAppearance
-fp o
-fp t0006
-f ffffffff ffffffff 001 s PS_GetObjectAppearanceSEF
-fp o
-f ffffffff ffffffff 002 v PS_SetObjectAppearanceSEF
-fp o
-fp s
-f ffffffff ffffffff 003 f PS_ComputeHeight
-fp o
-fp f
-fp f
-f ffffffff ffffffff 003 i PS_CalcPath
-fp o
-fp t0000
-fp t0000
-f ffffffff ffffffff 003 i PS_CalcPathFromCreature
-fp o
-fp o
-fp t0000
-f ffffffff ffffffff 003 t0000 PS_GetPathWaypoint
-fp o
-fp i
-fp i
-f ffffffff ffffffff 003 i PS_StraightPathExists
-fp o
-fp t0000
-fp t0000
-f ffffffff ffffffff 002 v PS_SetRacialType
-fp o
-fp i
-f ffffffff ffffffff 001 v PS_OnPCLoaded
-fp o
-f ffffffff ffffffff 002 v PS_SetSubRacialType
-fp o
-fp i
-f ffffffff ffffffff 001 v PS_OnPCLeave
-fp o
-f ffffffff ffffffff 000 i PS_GetTime
-f ffffffff ffffffff 000 i PS_GetTick
-f ffffffff ffffffff 002 f PS_UnmarshalFloat
-fp o
-fp s
-f ffffffff ffffffff 002 i PS_UnmarshalInt
-fp o
-fp s
-f ffffffff ffffffff 002 s PS_UnmarshalString
-fp o
-fp s
-f ffffffff ffffffff 002 i PS_ScriptVariablesToAppearanceColor
-fp o
-fp s
-f ffffffff ffffffff 003 v PS_AppearanceColorToScriptVariables
-fp o
-fp s
-fp i
-f ffffffff ffffffff 002 t0005 PS_ScriptVariablesToTintSet
-fp o
-fp s
-f ffffffff ffffffff 003 v PS_TintSetToScriptVariables
-fp o
-fp s
-fp t0005
-f ffffffff ffffffff 002 t0006 PS_ScriptVariablesToCreatureCoreAppearance
-fp o
-fp s
-f ffffffff ffffffff 003 v PS_CreatureCoreAppearanceToScriptVariables
-fp o
-fp s
-fp t0006
-f ffffffff ffffffff 007 i PS_CallExtensionsScript
-fp i
-fp o
-fp o
-fp i
-fp i
-fp s
-fp s
-f ffffffff ffffffff 000 i PS_Ext_Initialize
-f ffffffff ffffffff 000 i PS_Ext_MergeContainerStacks
-f ffffffff ffffffff 000 i PS_Ext_SendAreaWeatherToPlayer
-f ffffffff ffffffff 000 i PS_Ext_DisableAreaWeather
-f ffffffff ffffffff 000 i PS_Ext_EnableAreaWeather
-f ffffffff ffffffff 000 i PS_Ext_ClearAreaWeather
-f ffffffff ffffffff 000 i PS_Ext_GenerateAreaWeather
-f ffffffff ffffffff 000 i PS_Ext_ActivateCounterSpell
-f ffffffff ffffffff 000 i PS_Ext_GetCreatureCoreAppearance
-f ffffffff ffffffff 000 i PS_Ext_SetCreatureCoreAppearance
-f ffffffff ffffffff 000 i PS_Ext_GetObjectAppearanceSEF
-f ffffffff ffffffff 000 i PS_Ext_SetObjectAppearanceSEF
-f ffffffff ffffffff 000 i PS_Ext_ComputeHeight
-f ffffffff ffffffff 000 i PS_Ext_CalcPath
-f ffffffff ffffffff 000 i PS_Ext_StraightPathExists
-f ffffffff ffffffff 000 i PS_Ext_SetRacialType
-f ffffffff ffffffff 000 i PS_Ext_OnPCLoaded
-f ffffffff ffffffff 000 i PS_Ext_SetSubRacialType
-f ffffffff ffffffff 000 i PS_Ext_OnPCLeave
-f ffffffff ffffffff 000 i PS_Ext_GetTime
-f ffffffff ffffffff 000 i PS_Ext_GetTick
-f ffffffff ffffffff 000 i PS_INVALID_WEATHER_ID
-f ffffffff ffffffff 001 v PS_ActivateCounterSpell
-fp o
-f ffffffff ffffffff 000 i NW_TALENT_PROTECT
-f ffffffff ffffffff 000 i NW_TALENT_ENHANCE
-f ffffffff ffffffff 003 i GetMatchCompatibility
-fp e3
-fp s
-fp i
-f ffffffff ffffffff 001 i MatchDoIHaveAMindAffectingSpellOnMe
-fp o
-f ffffffff ffffffff 001 i MatchAreaOfEffectSpell
-fp i
-f ffffffff ffffffff 001 i MatchCombatProtections
-fp e3
-f ffffffff ffffffff 001 i MatchSpellProtections
-fp e3
-f ffffffff ffffffff 001 i MatchElementalProtections
-fp e3
-f ffffffff ffffffff 001 i MatchSingleHandedWeapon
-fp o
-f ffffffff ffffffff 001 i MatchDoubleHandedWeapon
-fp o
-f ffffffff ffffffff 001 i MatchMeleeWeapon
-fp o
-f ffffffff ffffffff 001 i MatchShield
-fp o
-f ffffffff ffffffff 001 i MatchCrossbow
-fp o
-f ffffffff ffffffff 001 i MatchNormalBow
-fp o
-f ffffffff ffffffff 001 i MatchMindAffectingSpells
-fp i
-f ffffffff ffffffff 001 i MatchPersonSpells
-fp i
-f ffffffff ffffffff 001 i MatchInflictTouchAttack
-fp i
-f ffffffff ffffffff 001 i MatchNonliving
-fp i
-f ffffffff ffffffff 002 i VerifyDisarm
-fp e3
-fp o
-f ffffffff ffffffff 002 i VerifyCombatMeleeTalent
-fp e3
-fp o
-f ffffffff ffffffff 002 i GetHasEffect
-fp i
-fp o
-f ffffffff ffffffff 001 i MatchHumanoidRacialType
-fp i
-f ffffffff ffffffff 000 i GetRemovalSpell
 f ffffffff ffffffff 003 v ServerExts_SendObjectDisplayPositionUpdate
 fp o
 fp o
@@ -2329,6 +1661,319 @@ fp s
 fp s
 f ffffffff ffffffff 001 s SQLEncodeSpecialChars
 fp s
+f ffffffff ffffffff 000 f DISTANCE_TINY
+f ffffffff ffffffff 000 f DISTANCE_SHORT
+f ffffffff ffffffff 000 f DISTANCE_MEDIUM
+f ffffffff ffffffff 000 f DISTANCE_LARGE
+f ffffffff ffffffff 000 f DISTANCE_HUGE
+f ffffffff ffffffff 001 s LocationToString
+fp e2
+f ffffffff ffffffff 001 s VectorToString
+fp t0000
+f ffffffff ffffffff 002 v MoveToNewLocation
+fp e2
+fp o
+f 00001032 00001065 002 f GetChangeInX
+fp f
+fp f
+f 00001065 00001098 002 f GetChangeInY
+fp f
+fp f
+f 00000f30 00001032 003 t0000 GetChangedPosition
+fp t0000
+fp f
+fp f
+f ffffffff ffffffff 002 f GetAngleBetweenLocations
+fp e2
+fp e2
+f 000010ff 00001133 001 f GetOppositeDirection
+fp f
+f 00001240 00001274 001 f GetRightDirection
+fp f
+f 00001431 00001465 001 f GetHalfRightDirection
+fp f
+f 00001567 0000159b 001 f GetFarRightDirection
+fp f
+f ffffffff ffffffff 002 f GetCustomRightDirection
+fp f
+fp f
+f 000012db 0000130f 001 f GetLeftDirection
+fp f
+f 00001386 000013ba 001 f GetHalfLeftDirection
+fp f
+f 000014cc 00001500 001 f GetFarLeftDirection
+fp f
+f ffffffff ffffffff 002 f GetCustomLeftDirection
+fp f
+fp f
+f ffffffff ffffffff 002 v TurnToFaceObject
+fp o
+fp o
+f 00001500 00001567 002 e2 GetFlankingRightLocation
+fp o
+fp f
+f 00001465 000014cc 002 e2 GetFlankingLeftLocation
+fp o
+fp f
+f ffffffff ffffffff 002 e2 GetOppositeLocation
+fp o
+fp f
+f 00000e64 00000ebb 002 e2 GetAheadLocation
+fp o
+fp f
+f 00001098 000010ff 002 e2 GetBehindLocation
+fp o
+fp f
+f ffffffff ffffffff 002 e2 GetForwardFlankingRightLocation
+fp o
+fp f
+f ffffffff ffffffff 002 e2 GetForwardFlankingLeftLocation
+fp o
+fp f
+f 000013ba 00001431 002 e2 GetAheadRightLocation
+fp o
+fp f
+f 0000130f 00001386 002 e2 GetAheadLeftLocation
+fp o
+fp f
+f ffffffff ffffffff 001 e2 GetStepLeftLocation
+fp o
+f ffffffff ffffffff 001 e2 GetStepRightLocation
+fp o
+f ffffffff ffffffff 003 e2 GetRandomLocation
+fp o
+fp o
+fp f
+f ffffffff ffffffff 003 f GetAngle
+fp t0000
+fp t0000
+fp f
+f ffffffff ffffffff 002 f GetAngleBetweenObjects
+fp o
+fp o
+f ffffffff ffffffff 003 i IsDirectionWithinTolerance
+fp f
+fp f
+fp f
+f ffffffff ffffffff 002 i IsFacingWithin
+fp f
+fp o
+f ffffffff ffffffff 003 i IsPlaceableInView
+fp o
+fp f
+fp f
+f ffffffff ffffffff 002 i IsCreatureInView
+fp o
+fp f
+f 00001274 000012db 002 e2 GetLeftLocation
+fp o
+fp f
+f 000011d9 00001240 002 e2 GetRightLocation
+fp o
+fp f
+f ffffffff ffffffff 001 v SpeakLocation
+fp e2
+f ffffffff ffffffff 001 v PrintLocation
+fp e2
+f 00001133 000011d9 001 f GetNormalizedDirection
+fp f
+f 00000ebb 00000f30 004 e2 GenerateNewLocation
+fp o
+fp f
+fp f
+fp f
+f ffffffff ffffffff 004 e2 GenerateNewLocationFromLocation
+fp e2
+fp f
+fp f
+fp f
+f ffffffff ffffffff 001 e2 GetCenterPointOfArea
+fp o
+f ffffffff ffffffff 000 i NW_TALENT_PROTECT
+f ffffffff ffffffff 000 i NW_TALENT_ENHANCE
+f ffffffff ffffffff 003 i GetMatchCompatibility
+fp e3
+fp s
+fp i
+f ffffffff ffffffff 001 i MatchDoIHaveAMindAffectingSpellOnMe
+fp o
+f ffffffff ffffffff 001 i MatchAreaOfEffectSpell
+fp i
+f ffffffff ffffffff 001 i MatchCombatProtections
+fp e3
+f ffffffff ffffffff 001 i MatchSpellProtections
+fp e3
+f ffffffff ffffffff 001 i MatchElementalProtections
+fp e3
+f ffffffff ffffffff 001 i MatchSingleHandedWeapon
+fp o
+f ffffffff ffffffff 001 i MatchDoubleHandedWeapon
+fp o
+f ffffffff ffffffff 001 i MatchMeleeWeapon
+fp o
+f ffffffff ffffffff 001 i MatchShield
+fp o
+f ffffffff ffffffff 001 i MatchCrossbow
+fp o
+f ffffffff ffffffff 001 i MatchNormalBow
+fp o
+f ffffffff ffffffff 001 i MatchMindAffectingSpells
+fp i
+f ffffffff ffffffff 001 i MatchPersonSpells
+fp i
+f ffffffff ffffffff 001 i MatchInflictTouchAttack
+fp i
+f ffffffff ffffffff 001 i MatchNonliving
+fp i
+f ffffffff ffffffff 002 i VerifyDisarm
+fp e3
+fp o
+f ffffffff ffffffff 002 i VerifyCombatMeleeTalent
+fp e3
+fp o
+f ffffffff ffffffff 002 i GetHasEffect
+fp i
+fp o
+f ffffffff ffffffff 001 i MatchHumanoidRacialType
+fp i
+f ffffffff ffffffff 000 i GetRemovalSpell
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_R
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_G
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_B
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0_A
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR0
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_R
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_G
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_B
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1_A
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR1
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_R
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_G
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_B
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2_A
+f ffffffff ffffffff 000 i PS_CCA_TINT_COLOR2
+f ffffffff ffffffff 000 i PS_CCA_TINT_ALL
+f ffffffff ffffffff 001 v PS_MergeContainerStacks
+fp o
+f ffffffff ffffffff 002 v PS_SendAreaWeatherToPlayer
+fp o
+fp o
+f ffffffff ffffffff 001 v PS_DisableAreaWeather
+fp o
+f ffffffff ffffffff 001 v PS_EnableAreaWeather
+fp o
+f ffffffff ffffffff 001 v PS_ClearAreaWeather
+fp o
+f ffffffff ffffffff 001 v PS_GenerateAreaWeather
+fp o
+f ffffffff ffffffff 001 i PS_GetAreaWeatherSystemId
+fp o
+f ffffffff ffffffff 001 t0002 PS_GetCreatureCoreAppearance
+fp o
+f ffffffff ffffffff 002 v PS_SetCreatureCoreAppearance
+fp o
+fp t0002
+f ffffffff ffffffff 001 s PS_GetObjectAppearanceSEF
+fp o
+f ffffffff ffffffff 002 v PS_SetObjectAppearanceSEF
+fp o
+fp s
+f ffffffff ffffffff 003 f PS_ComputeHeight
+fp o
+fp f
+fp f
+f ffffffff ffffffff 003 i PS_CalcPath
+fp o
+fp t0000
+fp t0000
+f ffffffff ffffffff 003 i PS_CalcPathFromCreature
+fp o
+fp o
+fp t0000
+f ffffffff ffffffff 003 t0000 PS_GetPathWaypoint
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 i PS_StraightPathExists
+fp o
+fp t0000
+fp t0000
+f ffffffff ffffffff 002 v PS_SetRacialType
+fp o
+fp i
+f ffffffff ffffffff 001 v PS_OnPCLoaded
+fp o
+f ffffffff ffffffff 002 v PS_SetSubRacialType
+fp o
+fp i
+f ffffffff ffffffff 001 v PS_OnPCLeave
+fp o
+f ffffffff ffffffff 000 i PS_GetTime
+f ffffffff ffffffff 000 i PS_GetTick
+f ffffffff ffffffff 002 f PS_UnmarshalFloat
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_UnmarshalInt
+fp o
+fp s
+f ffffffff ffffffff 002 s PS_UnmarshalString
+fp o
+fp s
+f ffffffff ffffffff 002 i PS_ScriptVariablesToAppearanceColor
+fp o
+fp s
+f ffffffff ffffffff 003 v PS_AppearanceColorToScriptVariables
+fp o
+fp s
+fp i
+f ffffffff ffffffff 002 t0001 PS_ScriptVariablesToTintSet
+fp o
+fp s
+f ffffffff ffffffff 003 v PS_TintSetToScriptVariables
+fp o
+fp s
+fp t0001
+f ffffffff ffffffff 002 t0002 PS_ScriptVariablesToCreatureCoreAppearance
+fp o
+fp s
+f ffffffff ffffffff 003 v PS_CreatureCoreAppearanceToScriptVariables
+fp o
+fp s
+fp t0002
+f ffffffff ffffffff 007 i PS_CallExtensionsScript
+fp i
+fp o
+fp o
+fp i
+fp i
+fp s
+fp s
+f ffffffff ffffffff 000 i PS_Ext_Initialize
+f ffffffff ffffffff 000 i PS_Ext_MergeContainerStacks
+f ffffffff ffffffff 000 i PS_Ext_SendAreaWeatherToPlayer
+f ffffffff ffffffff 000 i PS_Ext_DisableAreaWeather
+f ffffffff ffffffff 000 i PS_Ext_EnableAreaWeather
+f ffffffff ffffffff 000 i PS_Ext_ClearAreaWeather
+f ffffffff ffffffff 000 i PS_Ext_GenerateAreaWeather
+f ffffffff ffffffff 000 i PS_Ext_ActivateCounterSpell
+f ffffffff ffffffff 000 i PS_Ext_GetCreatureCoreAppearance
+f ffffffff ffffffff 000 i PS_Ext_SetCreatureCoreAppearance
+f ffffffff ffffffff 000 i PS_Ext_GetObjectAppearanceSEF
+f ffffffff ffffffff 000 i PS_Ext_SetObjectAppearanceSEF
+f ffffffff ffffffff 000 i PS_Ext_ComputeHeight
+f ffffffff ffffffff 000 i PS_Ext_CalcPath
+f ffffffff ffffffff 000 i PS_Ext_StraightPathExists
+f ffffffff ffffffff 000 i PS_Ext_SetRacialType
+f ffffffff ffffffff 000 i PS_Ext_OnPCLoaded
+f ffffffff ffffffff 000 i PS_Ext_SetSubRacialType
+f ffffffff ffffffff 000 i PS_Ext_OnPCLeave
+f ffffffff ffffffff 000 i PS_Ext_GetTime
+f ffffffff ffffffff 000 i PS_Ext_GetTick
+f ffffffff ffffffff 000 i PS_INVALID_WEATHER_ID
+f ffffffff ffffffff 001 v PS_ActivateCounterSpell
+fp o
+f ffffffff ffffffff 001 i GetNewECL
+fp o
 f ffffffff ffffffff 001 v PS_CalculateECL
 fp o
 f ffffffff ffffffff 001 i PS_CalculateRacialECL
@@ -2347,8 +1992,9 @@ f ffffffff ffffffff 001 i GetFeatGrantedCasterLevel
 fp o
 f ffffffff ffffffff 001 i GetPsionicCasterLevel
 fp o
-f ffffffff ffffffff 001 i GetRealCasterLevel
+f ffffffff ffffffff 002 i GetRealCasterLevel
 fp o
+fp i
 f ffffffff ffffffff 000 s XP_DAE_PLUGIN_NAME
 f ffffffff ffffffff 000 i EFFECT_TYPE_SCALE
 f ffffffff ffffffff 000 i EFFECT_TYPE_KNOCKDOWN
@@ -2431,6 +2077,28 @@ fp i
 f ffffffff ffffffff 002 v dae_AddSpellSkillCategory
 fp i
 fp i
+f ffffffff ffffffff 004 i GetInWeaponRange
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 f GetCreatureFootprint
+fp o
+f ffffffff ffffffff 001 i XPpoolAdjust
+fp i
+f ffffffff ffffffff 000 i GetIsChristmas
+f ffffffff ffffffff 001 v PS_TrimXP
+fp o
+f ffffffff ffffffff 001 s PS_GetCharID
+fp o
+f ffffffff ffffffff 004 v SetXPpools
+fp o
+fp i
+fp i
+fp i
+f ffffffff ffffffff 001 v PS_lose_one_level
+fp o
+f ffffffff ffffffff 000 s ECL_CRAFT_BONUS_PREFIX
 f ffffffff ffffffff 000 s VAR_OLD_RACE
 f ffffffff ffffffff 000 s VAR_ECL
 f ffffffff ffffffff 000 i ITEM_MIN_CL
@@ -2462,10 +2130,19 @@ f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_GREATER
 f ffffffff ffffffff 000 i SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC
 f ffffffff ffffffff 000 i PS_PC_FLAG_COLOR_EMOTES
 f ffffffff ffffffff 000 s PS_PC_FLAGS_VAR
+f ffffffff ffffffff 002 i PS_RoundToInt
+fp f
+fp s
+f ffffffff ffffffff 003 i GetECLXP
+fp i
+fp i
+fp i
 f ffffffff ffffffff 002 v PS_GiveXPRewardNoReturn
 fp o
 fp i
 f ffffffff ffffffff 001 o PS_GetEssence
+fp o
+f ffffffff ffffffff 001 o PS_GetCreatureSkin
 fp o
 f ffffffff ffffffff 004 v PS_GrantFeatBySpell
 fp i
@@ -2479,20 +2156,38 @@ fp e0
 fp f
 fp i
 fp i
-f ffffffff ffffffff 003 v PS_GrantTempItemPropertyToPC
+f ffffffff ffffffff 004 v PS_GrantTempItemPropertyToPC
 fp e4
 fp o
 fp f
-f ffffffff ffffffff 005 v PS_GrantTempItemPropertyToPCWithEffects
+fp i
+f ffffffff ffffffff 006 v PS_GrantTempItemPropertyToPCWithEffects
 fp e4
 fp o
 fp e0
 fp f
 fp i
+fp i
 f ffffffff ffffffff 001 i PS_GetIpBonusFeat
 fp i
 f ffffffff ffffffff 001 v PS_ManageImbueItem
 fp o
+f ffffffff ffffffff 002 v PS_EclCraftProgression
+fp o
+fp i
+f ffffffff ffffffff 003 v PS_SetEclCraftBonus
+fp o
+fp i
+fp i
+f ffffffff ffffffff 004 i PS_GetEclCraftBonus
+fp o
+fp i
+fp i
+fp o
+f ffffffff ffffffff 003 i PS_GetSkillRank
+fp i
+fp o
+fp i
 f 000038f6 000039e7 002 i GetHasSpiritShamanProgression
 fp o
 fp i
@@ -2581,12 +2276,12 @@ fp o
 fp i
 f ffffffff ffffffff 001 s ParseTellDescription
 fp s
-f ffffffff ffffffff 002 t0006 GetNewFormAppearance
+f ffffffff ffffffff 002 t0002 GetNewFormAppearance
 fp s
 fp o
 f ffffffff ffffffff 002 v Assumenewform
 fp o
-fp t0006
+fp t0002
 f ffffffff ffffffff 001 i PS_GetPCFlags
 fp o
 f ffffffff ffffffff 002 v PS_SetPCFlags
@@ -2634,7 +2329,7 @@ f ffffffff ffffffff 001 v PS_RestoreOriginalAppearance
 fp o
 f ffffffff ffffffff 001 v PS_RacialDeleveling
 fp o
-f ffffffff ffffffff 002 t0006 PS_RetrieveStoredCreatureCoreAppearance
+f ffffffff ffffffff 002 t0002 PS_RetrieveStoredCreatureCoreAppearance
 fp o
 fp s
 f ffffffff ffffffff 002 i GetAbilityRacialBonus
@@ -2727,8 +2422,6 @@ fp o
 f ffffffff ffffffff 001 i GetClericAndPRCClassLevels
 fp o
 f ffffffff ffffffff 001 s PS_GetScryStatus
-fp o
-f ffffffff ffffffff 001 s PS_GetCharID
 fp o
 f ffffffff ffffffff 000 i GetTime
 f ffffffff ffffffff 002 v TimeStamp
@@ -2844,7 +2537,484 @@ fp i
 fp i
 f ffffffff ffffffff 001 s CheckServerVersion
 fp i
-f ffffffff ffffffff 000 i GetIsChristmas
+f ffffffff ffffffff 000 i ID_SPELL_RAISE_DEAD
+f ffffffff ffffffff 000 i ID_SPELL_FULL_RES
+f ffffffff ffffffff 000 i ID_SPELL_STONE_TO_FLESH
+f ffffffff ffffffff 000 i STR_REF_IC_SPELL_TO_HIGH_FOR_WAND
+f ffffffff ffffffff 000 i STR_REF_IC_SPELL_TO_HIGH_FOR_POTION
+f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_POTION
+f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_SCROLL
+f ffffffff ffffffff 000 i STR_REF_IC_SPELL_RESTRICTED_FOR_WAND
+f ffffffff ffffffff 000 i STR_REF_IC_MISSING_REQUIRED_FEAT
+f ffffffff ffffffff 000 i STR_REF_IC_INSUFFICIENT_GOLD
+f ffffffff ffffffff 000 i STR_REF_IC_INSUFFICIENT_XP
+f ffffffff ffffffff 000 i STR_REF_IC_SUCCESS
+f ffffffff ffffffff 000 i STR_REF_IC_FAILED
+f ffffffff ffffffff 000 i STR_REF_IC_DISABLED
+f ffffffff ffffffff 000 i STR_REF_IC_ITEM_USE_NOT_ALLOWED
+f ffffffff ffffffff 000 i FIRST_WAND_ICON
+f ffffffff ffffffff 000 s X2_CI_CRAFTSKILL_CONV
+f ffffffff ffffffff 000 i X2_CI_BREWPOTION_FEAT_ID
+f ffffffff ffffffff 000 i X2_CI_BREWPOTION_MAXLEVEL
+f ffffffff ffffffff 000 i X2_CI_BREWPOTION_COSTMODIFIER
+f ffffffff ffffffff 000 s X2_CI_BREWPOTION_NEWITEM_RESREF
+f ffffffff ffffffff 000 s X2_CI_DEFAULT_HEAL_POTION_RESREF
+f ffffffff ffffffff 000 i X2_CI_SCRIBESCROLL_FEAT_ID
+f ffffffff ffffffff 000 i X2_CI_SCRIBESCROLL_COSTMODIFIER
+f ffffffff ffffffff 000 s X2_CI_SCRIBESCROLL_NEWITEM_RESREF
+f ffffffff ffffffff 000 i X2_CI_CRAFTWAND_FEAT_ID
+f ffffffff ffffffff 000 i X2_CI_CRAFTWAND_MAXLEVEL
+f ffffffff ffffffff 000 i X2_CI_CRAFTWAND_COSTMODIFIER
+f ffffffff ffffffff 000 s X2_CI_CRAFTWAND_NEWITEM_RESREF
+f ffffffff ffffffff 000 s X2_CI_CRAFTING_WP_2DA
+f ffffffff ffffffff 000 s X2_CI_CRAFTING_AR_2DA
+f ffffffff ffffffff 000 s X2_CI_CRAFTING_MAT_2DA
+f ffffffff ffffffff 000 s X2_CI_CRAFTING_SP_2DA
+f ffffffff ffffffff 000 i X2_CI_CRAFTINGSKILL_CTOKENBASE
+f ffffffff ffffffff 000 i X2_CI_CRAFTINGSKILL_DC_CTOKENBASE
+f ffffffff ffffffff 000 i X2_CI_CRAFTINGSKILL_GP_CTOKENBASE
+f ffffffff ffffffff 000 i X2_CI_MODIFYARMOR_GP_CTOKENBASE
+f ffffffff ffffffff 000 i X2_CI_CRAFTING_ITEMS_PER_ROW
+f ffffffff ffffffff 000 s X2_CI_2DA_SCROLLS
+f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_INVALID
+f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_CONTAINER
+f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_BASE_ITEM
+f ffffffff ffffffff 000 i X2_CI_CRAFTMODE_ASSEMBLE
+f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_INVALID
+f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_ARCANE
+f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_DIVINE
+f ffffffff ffffffff 000 i X2_CI_MODMODE_INVALID
+f ffffffff ffffffff 000 i X2_CI_MODMODE_ARMOR
+f ffffffff ffffffff 000 i X2_CI_MODMODE_WEAPON
+f ffffffff ffffffff 002 i CIGetSpellInnateLevel
+fp i
+fp i
+f ffffffff ffffffff 001 s GetClassSpellLevelColumn
+fp i
+f ffffffff ffffffff 002 i GetSpellLevelForClass
+fp i
+fp i
+f ffffffff ffffffff 002 i IsOnSpellList
+fp i
+fp i
+f ffffffff ffffffff 002 v MakeItemUseableByClass
+fp i
+fp o
+f ffffffff ffffffff 002 v MakeItemUseableByClassesWithSpellAccess
+fp i
+fp o
+f ffffffff ffffffff 001 i CIGetIsCraftFeatBaseItem
+fp o
+f ffffffff ffffffff 002 i CICraftCheckBrewPotion
+fp o
+fp o
+f ffffffff ffffffff 002 i CICraftCheckScribeScroll
+fp o
+fp o
+f ffffffff ffffffff 002 i CICraftCheckCraftWand
+fp o
+fp o
+f ffffffff ffffffff 002 o CICraftBrewPotion
+fp o
+fp i
+f ffffffff ffffffff 002 o CICraftScribeScroll
+fp o
+fp i
+f ffffffff ffffffff 002 o CICraftCraftWand
+fp o
+fp i
+f ffffffff ffffffff 001 i CIGetSpellWasUsedForItemCreation
+fp o
+f ffffffff ffffffff 005 o CIUseCraftItemSkill
+fp o
+fp i
+fp s
+fp i
+fp o
+f ffffffff ffffffff 002 i CIGetIsSpellRestrictedFromCraftFeat
+fp i
+fp i
+f ffffffff ffffffff 003 t0003 CIGetCraftItemStructFrom2DA
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 v AppendSpellToName
+fp o
+fp i
+f ffffffff ffffffff 001 i CI_GetClassMagicType
+fp i
+f ffffffff ffffffff 001 s GetMaterialComponentTag
+fp i
+f ffffffff ffffffff 003 i CIGetCraftGPCost
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 i CIDoCraftItemFromConversation
+fp i
+f ffffffff ffffffff 002 i CIGetItemPartModificationCost
+fp o
+fp i
+f ffffffff ffffffff 002 i CIGetItemPartModificationDC
+fp o
+fp i
+f ffffffff ffffffff 002 i CIGetArmorModificationCost
+fp o
+fp o
+f ffffffff ffffffff 002 i CIGetArmorModificationDC
+fp o
+fp o
+f ffffffff ffffffff 004 i CIGetCraftingReceipeRow
+fp i
+fp o
+fp o
+fp i
+f ffffffff ffffffff 007 v CISetupCraftingConversation
+fp o
+fp i
+fp i
+fp i
+fp o
+fp o
+fp i
+f ffffffff ffffffff 003 t0004 CIGetCraftingModeFromTarget
+fp o
+fp o
+fp o
+f ffffffff ffffffff 001 i CIGetInModWeaponOrArmorConv
+fp o
+f ffffffff ffffffff 002 v CISetCurrentModMode
+fp o
+fp i
+f ffffffff ffffffff 001 i CIGetCurrentModMode
+fp o
+f ffffffff ffffffff 001 o CIGetCurrentModBackup
+fp o
+f ffffffff ffffffff 001 o CIGetCurrentModItem
+fp o
+f ffffffff ffffffff 002 v CISetCurrentModBackup
+fp o
+fp o
+f ffffffff ffffffff 002 v CISetCurrentModItem
+fp o
+fp o
+f ffffffff ffffffff 003 v CISetCurrentModPart
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 i CIGetCurrentModPart
+fp o
+f ffffffff ffffffff 001 v CISetDefaultModItemCamera
+fp o
+f ffffffff ffffffff 003 v CIUpdateModItemCostDC
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i CIGetWeaponModificationCost
+fp o
+fp o
+f ffffffff ffffffff 002 t0005 GetStringTokenizer
+fp s
+fp s
+f ffffffff ffffffff 001 i HasMoreTokens
+fp t0005
+f ffffffff ffffffff 001 t0005 AdvanceToNextToken
+fp t0005
+f ffffffff ffffffff 001 s GetNextToken
+fp t0005
+f ffffffff ffffffff 002 i GetNumberTokens
+fp s
+fp s
+f ffffffff ffffffff 003 s GetTokenByPosition
+fp s
+fp s
+fp i
+f ffffffff ffffffff 002 t0006 GetFirstAlpha
+fp s
+fp s
+f ffffffff ffffffff 003 s RemoveListElement
+fp s
+fp s
+fp s
+f ffffffff ffffffff 002 s Sort
+fp s
+fp s
+f ffffffff ffffffff 002 s FormListElement
+fp s
+fp s
+f ffffffff ffffffff 003 s AppendToList
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 i FindListElementIndex
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 i GetIsInList
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s AppendUniqueToList
+fp s
+fp s
+fp s
+f ffffffff ffffffff 004 s AppendGlobalList
+fp s
+fp s
+fp i
+fp s
+f ffffffff ffffffff 003 s GetStringPad
+fp s
+fp i
+fp s
+f ffffffff ffffffff 003 s ReplaceSubString
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s ReplaceAllSubStrings
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s SpliceString
+fp s
+fp i
+fp i
+f ffffffff ffffffff 000 s DONE_ONCE
+f ffffffff ffffffff 001 f GetGlobalIntAsFloat
+fp s
+f ffffffff ffffffff 002 i ModifyGlobalInt
+fp s
+fp i
+f ffffffff ffffffff 003 i ModifyLocalInt
+fp o
+fp s
+fp i
+f ffffffff ffffffff 004 v ModifyLocalIntOnFaction
+fp o
+fp s
+fp i
+fp i
+f ffffffff ffffffff 001 o GetGlobalObject
+fp s
+f ffffffff ffffffff 002 v SetGlobalObject
+fp s
+fp o
+f ffffffff ffffffff 001 v DeleteGlobalObject
+fp s
+f ffffffff ffffffff 001 s GetDoneFlag
+fp i
+f ffffffff ffffffff 001 v DoneFlagSanityCheck
+fp o
+f ffffffff ffffffff 002 i IsMarkedAsDone
+fp o
+fp i
+f ffffffff ffffffff 002 v MarkAsDone
+fp o
+fp i
+f ffffffff ffffffff 002 v MarkAsUndone
+fp o
+fp i
+f ffffffff ffffffff 002 s GetGlobalArrayString
+fp s
+fp i
+f ffffffff ffffffff 003 v SetGlobalArrayString
+fp s
+fp i
+fp s
+f ffffffff ffffffff 002 i GetGlobalArrayInt
+fp s
+fp i
+f ffffffff ffffffff 003 v SetGlobalArrayInt
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 s GetStringPrefix
+fp s
+fp s
+f ffffffff ffffffff 002 s GetStringSuffix
+fp s
+fp s
+f ffffffff ffffffff 000 f EPSILON
+f ffffffff ffffffff 001 f RandomDelta
+fp f
+f ffffffff ffffffff 001 f RandomFloat
+fp f
+f ffffffff ffffffff 002 f RandomFloatBetween
+fp f
+fp f
+f ffffffff ffffffff 002 i RandomIntBetween
+fp i
+fp i
+f ffffffff ffffffff 002 t0000 GetRandom2DVector
+fp f
+fp f
+f ffffffff ffffffff 004 e2 GetNearbyLocation
+fp e2
+fp f
+fp f
+fp f
+f ffffffff ffffffff 003 i IsIntInRange
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 i ScaleInt
+fp i
+fp f
+f ffffffff ffffffff 002 i IsFloatNearInt
+fp f
+fp i
+f ffffffff ffffffff 004 v SetLocalIntState
+fp o
+fp s
+fp i
+fp i
+f ffffffff ffffffff 003 i GetLocalIntState
+fp o
+fp s
+fp i
+f ffffffff ffffffff 003 i SetState
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 i GetState
+fp i
+fp i
+f ffffffff ffffffff 001 i GetHexStringDigitValue
+fp s
+f ffffffff ffffffff 001 i HexStringToInt
+fp s
+f ffffffff ffffffff 002 i CompareVectors
+fp t0000
+fp t0000
+f ffffffff ffffffff 002 i CompareVectors2D
+fp t0000
+fp t0000
+f ffffffff ffffffff 000 s LAST_SLOT_NUM
+f ffffffff ffffffff 000 s LAST_SLOT_OBJ
+f ffffffff ffffffff 000 i ITEM_CATEGORY_NONE
+f ffffffff ffffffff 000 i ITEM_CATEGORY_WEAPON
+f ffffffff ffffffff 000 i ITEM_CATEGORY_ARMOR_SHIELD
+f ffffffff ffffffff 000 i ITEM_CATEGORY_OTHER
+f ffffffff ffffffff 000 i ITEM_CATEGORY_MISC_EQUIPPABLE
+f ffffffff ffffffff 000 i ITEM_CATEGORY_ALL
+f ffffffff ffffffff 000 i ITEM_CATEGORY_EQUIPPABLE
+f ffffffff ffffffff 000 s PARAM_NO_DRR
+f ffffffff ffffffff 000 s VAR_PREFIX_RECREATE_LIST
+f ffffffff ffffffff 003 i GetIsItemEquipped
+fp s
+fp o
+fp i
+f ffffffff ffffffff 004 i GetPartyMemberHasEquipped
+fp s
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i RemoveItem
+fp o
+fp s
+f ffffffff ffffffff 003 v CreateItemOnFaction
+fp o
+fp s
+fp i
+f ffffffff ffffffff 002 v DestroyItemInSlot
+fp o
+fp i
+f ffffffff ffffffff 004 v EquipNewItem
+fp o
+fp s
+fp i
+fp i
+f ffffffff ffffffff 003 v DoEquipmentUpgrade
+fp s
+fp s
+fp i
+f ffffffff ffffffff 004 v TransferItem
+fp o
+fp o
+fp o
+fp i
+f ffffffff ffffffff 002 v RememberEquippedItem
+fp o
+fp i
+f ffffffff ffffffff 001 v RememberEquippedItems
+fp o
+f ffffffff ffffffff 003 v RestoreEquippedItem
+fp o
+fp o
+fp i
+f ffffffff ffffffff 002 v RestoreEquippedItems
+fp o
+fp i
+f ffffffff ffffffff 002 v UnequipSlot
+fp o
+fp i
+f ffffffff ffffffff 004 v GiveEquippedItem
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 003 v GiveAllEquippedItems
+fp o
+fp o
+fp i
+f ffffffff ffffffff 003 v GiveAllInventory
+fp o
+fp o
+fp i
+f ffffffff ffffffff 003 v GiveEverything
+fp o
+fp o
+fp i
+f ffffffff ffffffff 001 i GetItemCategory
+fp o
+f ffffffff ffffffff 002 i GetIsItemCategory
+fp o
+fp i
+f ffffffff ffffffff 001 i GetIsWeapon
+fp o
+f ffffffff ffffffff 001 i GetIsShield
+fp o
+f ffffffff ffffffff 001 i GetIsArmorOrShield
+fp o
+f ffffffff ffffffff 001 i GetIsEquippable
+fp o
+f ffffffff ffffffff 001 i GetIsMiscEquippable
+fp o
+f ffffffff ffffffff 002 i GetSlotOfEquippedItem
+fp o
+fp o
+f ffffffff ffffffff 001 i GetIsCreatureSlot
+fp i
+f ffffffff ffffffff 001 i N2_GetNPCEasyMark
+fp o
+f ffffffff ffffffff 004 v N2_AppraiseOpenStore
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 v IdentifyEquippedItems
+fp o
+f ffffffff ffffffff 001 v IdentifyInventory
+fp o
+f ffffffff ffffffff 004 v VoidCreateItemOnObject
+fp s
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 i CountInventoryItemsOfBaseType
+fp i
+fp o
+f ffffffff ffffffff 003 o GetInventoryItemOfBaseType
+fp i
+fp i
+fp o
+f ffffffff ffffffff 001 i ListInventory
+fp o
+f ffffffff ffffffff 002 o GetItemInInventory
+fp s
+fp o
+f ffffffff ffffffff 000 i EquipRandomArmorFromInventory
+f ffffffff ffffffff 001 v RecreateItemsFromBlueprint
+fp o
 f ffffffff ffffffff 000 i DC_EASY
 f ffffffff ffffffff 000 i DC_MEDIUM
 f ffffffff ffffffff 000 i DC_HARD
@@ -3697,6 +3867,14 @@ f ffffffff ffffffff 002 i GetIsActivated
 fp o
 fp i
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
+f ffffffff ffffffff 004 v PS_RemoveEffects
+fp o
+fp i
+fp i
+fp o
+f ffffffff ffffffff 002 i PS_GetHasEffectById
+fp o
+fp i
 f ffffffff ffffffff 000 i X2UseMagicDeviceCheck
 f ffffffff ffffffff 001 i X2GetSpellCastOnSequencerItem
 fp o
@@ -3709,7 +3887,12 @@ f ffffffff ffffffff 000 v X2BreakConcentrationSpells
 f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
 fp o
 f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
-f ffffffff ffffffff 000 i TouchRangedFeatInRange
+f ffffffff ffffffff 005 i TouchRangedFeatInRange
+fp o
+fp o
+fp f
+fp i
+fp i
 f ffffffff ffffffff 000 i X2PreSpellCastCode
 f ffffffff ffffffff 000 s GetCampaignDBName
 f ffffffff ffffffff 003 v SetCampaignDBString
@@ -6066,54 +6249,54 @@ v 00004fbc 000050a5 00000004 i iClass
 v 00004fbc 000050a5 00000008 o oPC
 v 00004fbc 0000509f 0000000c s BspCasterFeat
 l00 0000048 00000015 0000002c
-l01 0000124 0000002c 0000002c
-l01 0000125 0000002c 0000002c
-l01 0000126 0000002c 0000002c
-l01 0000127 0000002c 0000002c
-l01 0000128 0000002c 0000002c
-l01 0000133 0000002c 0000002c
-l01 0000134 0000002c 0000002c
-l01 0000135 0000002c 0000002c
-l02 0000021 0000002c 0000002c
-l02 0000022 0000002c 0000002c
-l02 0000023 0000002c 0000002c
-l02 0000024 0000002c 0000002c
-l02 0000025 0000002c 0000002c
-l02 0000031 0000002c 0000002c
-l02 0000032 0000002c 0000002c
-l03 0000037 0000002c 0000002c
-l03 0000038 0000002c 0000002c
-l03 0000039 0000002c 0000002c
-l03 0000040 0000002c 0000002c
-l03 0000050 0000002c 0000002c
-l03 0000051 0000002c 0000002c
-l03 0000052 0000002c 0000002c
-l03 0000053 0000002c 0000002c
-l03 0000054 0000002c 0000002c
-l03 0000055 0000002c 0000002c
-l03 0000056 0000002c 0000002c
-l03 0000057 0000002c 0000002c
-l03 0000058 0000002c 0000002c
-l03 0000059 0000002c 0000002c
-l03 0000065 0000002c 0000002c
-l03 0000066 0000002c 0000002c
-l03 0000067 0000002c 0000002c
-l03 0000068 0000002c 0000002c
-l03 0000070 0000002c 0000002c
-l03 0000071 0000002c 0000002c
-l03 0000072 0000002c 0000002c
-l03 0000073 0000002c 0000002c
-l03 0000075 0000002c 0000002c
-l03 0000076 0000002c 0000002c
-l03 0000077 0000002c 0000002c
-l03 0000078 0000002c 0000002c
-l03 0000080 0000002c 0000002c
-l04 0000248 0000002c 00000048
+l01 0000037 0000002c 0000002c
+l01 0000038 0000002c 0000002c
+l01 0000039 0000002c 0000002c
+l01 0000040 0000002c 0000002c
+l01 0000050 0000002c 0000002c
+l01 0000051 0000002c 0000002c
+l01 0000052 0000002c 0000002c
+l01 0000053 0000002c 0000002c
+l01 0000054 0000002c 0000002c
+l01 0000055 0000002c 0000002c
+l01 0000056 0000002c 0000002c
+l01 0000057 0000002c 0000002c
+l01 0000058 0000002c 0000002c
+l01 0000059 0000002c 0000002c
+l01 0000065 0000002c 0000002c
+l01 0000066 0000002c 0000002c
+l01 0000067 0000002c 0000002c
+l01 0000068 0000002c 0000002c
+l01 0000070 0000002c 0000002c
+l01 0000071 0000002c 0000002c
+l01 0000072 0000002c 0000002c
+l01 0000073 0000002c 0000002c
+l01 0000075 0000002c 0000002c
+l01 0000076 0000002c 0000002c
+l01 0000077 0000002c 0000002c
+l01 0000078 0000002c 0000002c
+l01 0000080 0000002c 0000002c
+l02 0000297 0000002c 00000048
+l03 0000077 00000048 00000048
+l03 0000078 00000048 00000048
+l03 0000079 00000048 00000048
+l03 0000080 00000048 00000048
+l03 0000081 00000048 00000048
+l03 0000086 00000048 00000048
+l03 0000087 00000048 00000048
+l03 0000088 00000048 00000048
+l04 0000021 00000048 00000048
+l04 0000022 00000048 00000048
+l04 0000023 00000048 00000048
+l04 0000024 00000048 00000048
+l04 0000025 00000048 00000048
+l04 0000031 00000048 00000048
+l04 0000032 00000048 00000048
 l05 0000055 00000048 00000048
 l05 0000056 00000048 00000048
-l06 0000163 00000048 00000048
 l06 0000164 00000048 00000048
 l06 0000165 00000048 00000048
+l06 0000166 00000048 00000048
 l07 0000069 00000048 00000048
 l07 0000070 00000048 00000048
 l07 0000071 00000048 00000048
@@ -6135,9 +6318,9 @@ l09 0000056 00000078 00000078
 l09 0000057 00000078 00000078
 l09 0000058 00000078 00000078
 l09 0000059 00000078 00000078
-l10 0000085 00000078 00000078
-l10 0000087 00000078 00000078
+l10 0000086 00000078 00000078
 l10 0000088 00000078 00000078
+l10 0000089 00000078 00000078
 l11 0000023 00000078 00000078
 l11 0000024 00000078 00000078
 l11 0000029 00000078 00000078
@@ -6221,78 +6404,78 @@ l49 0000812 00000d7e 00000dc6
 l49 0000813 00000dc6 00000e0e
 l49 0000814 00000e0e 00000e56
 l49 0000815 00000e5c 00000e64
-l17 0000435 00000e64 00000e71
-l17 0000436 00000e71 00000ead
-l17 0000440 00000eb3 00000ebb
-l17 0000373 00000ebb 00000ec8
-l17 0000374 00000ec8 00000ef1
-l17 0000377 00000ef1 00000f22
-l17 0000378 00000f28 00000f30
-l17 0000259 00000f30 00000f36
-l17 0000260 00000f36 00000f4c
-l17 0000261 00000f4c 00000f7c
-l17 0000262 00000f7c 00000f8c
-l17 0000263 00000f92 00000faa
-l17 0000264 00000faa 00000fda
-l17 0000265 00000fda 00000fea
-l17 0000266 00000ff0 00001008
-l17 0000268 00001008 00001024
-l17 0000269 0000102a 00001032
-l17 0000243 00001032 0000105d
-l17 0000244 0000105d 00001065
-l17 0000250 00001065 00001090
-l17 0000251 00001090 00001098
-l17 0000446 00001098 000010a5
-l17 0000447 000010a5 000010b5
-l17 0000448 000010b5 000010f1
-l17 0000452 000010f7 000010ff
-l17 0000304 000010ff 0000112b
-l17 0000305 0000112b 00001133
-l17 0000288 00001133 0000113b
-l17 0000289 0000113b 00001151
-l17 0000290 00001151 0000116f
-l17 0000292 00001175 0000118b
-l17 0000293 0000118b 000011a9
-l17 0000296 000011af 000011cb
-l17 0000297 000011d1 000011d9
-l17 0000756 000011d9 000011e6
-l17 0000757 000011e6 000011f6
-l17 0000758 000011f6 00001232
-l17 0000759 00001238 00001240
-l17 0000312 00001240 0000126c
-l17 0000313 0000126c 00001274
-l17 0000747 00001274 00001281
-l17 0000748 00001281 00001291
-l17 0000749 00001291 000012cd
-l17 0000750 000012d3 000012db
-l17 0000337 000012db 00001307
-l17 0000338 00001307 0000130f
-l17 0000499 0000130f 0000131c
-l17 0000500 0000131c 0000132c
-l17 0000501 0000132c 0000133c
-l17 0000502 0000133c 00001378
-l17 0000506 0000137e 00001386
-l17 0000343 00001386 000013b2
-l17 0000344 000013b2 000013ba
-l17 0000486 000013ba 000013c7
-l17 0000487 000013c7 000013d7
-l17 0000488 000013d7 000013e7
-l17 0000489 000013e7 00001423
-l17 0000493 00001429 00001431
-l17 0000318 00001431 0000145d
-l17 0000319 0000145d 00001465
-l17 0000410 00001465 00001472
-l17 0000411 00001472 00001482
-l17 0000412 00001482 000014be
-l17 0000416 000014c4 000014cc
-l17 0000349 000014cc 000014f8
-l17 0000350 000014f8 00001500
-l17 0000396 00001500 0000150d
-l17 0000397 0000150d 0000151d
-l17 0000398 0000151d 00001559
-l17 0000402 0000155f 00001567
-l17 0000324 00001567 00001593
-l17 0000325 00001593 0000159b
+l19 0000435 00000e64 00000e71
+l19 0000436 00000e71 00000ead
+l19 0000440 00000eb3 00000ebb
+l19 0000373 00000ebb 00000ec8
+l19 0000374 00000ec8 00000ef1
+l19 0000377 00000ef1 00000f22
+l19 0000378 00000f28 00000f30
+l19 0000259 00000f30 00000f36
+l19 0000260 00000f36 00000f4c
+l19 0000261 00000f4c 00000f7c
+l19 0000262 00000f7c 00000f8c
+l19 0000263 00000f92 00000faa
+l19 0000264 00000faa 00000fda
+l19 0000265 00000fda 00000fea
+l19 0000266 00000ff0 00001008
+l19 0000268 00001008 00001024
+l19 0000269 0000102a 00001032
+l19 0000243 00001032 0000105d
+l19 0000244 0000105d 00001065
+l19 0000250 00001065 00001090
+l19 0000251 00001090 00001098
+l19 0000446 00001098 000010a5
+l19 0000447 000010a5 000010b5
+l19 0000448 000010b5 000010f1
+l19 0000452 000010f7 000010ff
+l19 0000304 000010ff 0000112b
+l19 0000305 0000112b 00001133
+l19 0000288 00001133 0000113b
+l19 0000289 0000113b 00001151
+l19 0000290 00001151 0000116f
+l19 0000292 00001175 0000118b
+l19 0000293 0000118b 000011a9
+l19 0000296 000011af 000011cb
+l19 0000297 000011d1 000011d9
+l19 0000756 000011d9 000011e6
+l19 0000757 000011e6 000011f6
+l19 0000758 000011f6 00001232
+l19 0000759 00001238 00001240
+l19 0000312 00001240 0000126c
+l19 0000313 0000126c 00001274
+l19 0000747 00001274 00001281
+l19 0000748 00001281 00001291
+l19 0000749 00001291 000012cd
+l19 0000750 000012d3 000012db
+l19 0000337 000012db 00001307
+l19 0000338 00001307 0000130f
+l19 0000499 0000130f 0000131c
+l19 0000500 0000131c 0000132c
+l19 0000501 0000132c 0000133c
+l19 0000502 0000133c 00001378
+l19 0000506 0000137e 00001386
+l19 0000343 00001386 000013b2
+l19 0000344 000013b2 000013ba
+l19 0000486 000013ba 000013c7
+l19 0000487 000013c7 000013d7
+l19 0000488 000013d7 000013e7
+l19 0000489 000013e7 00001423
+l19 0000493 00001429 00001431
+l19 0000318 00001431 0000145d
+l19 0000319 0000145d 00001465
+l19 0000410 00001465 00001472
+l19 0000411 00001472 00001482
+l19 0000412 00001482 000014be
+l19 0000416 000014c4 000014cc
+l19 0000349 000014cc 000014f8
+l19 0000350 000014f8 00001500
+l19 0000396 00001500 0000150d
+l19 0000397 0000150d 0000151d
+l19 0000398 0000151d 00001559
+l19 0000402 0000155f 00001567
+l19 0000324 00001567 00001593
+l19 0000325 00001593 0000159b
 l56 0000034 0000159b 0000159d
 l56 0000035 0000159d 0000159f
 l56 0000036 0000159f 000015a1
@@ -6467,256 +6650,256 @@ l55 0000082 00002a04 00002a0c
 l55 0000028 00002a0c 00002a1c
 l55 0000068 00002a1c 00002a38
 l55 0000069 00002a3e 00002a46
-l04 0002029 00002a46 00002a4b
-l04 0002030 00002a4b 00002a58
-l04 0002031 00002a58 00002a5a
-l04 0002032 00002a5a 00002a67
-l04 0002034 00002a89 00002a99
-l04 0002035 00002ac3 00002ac5
-l04 0002036 00002aff 00002b01
-l04 0002037 00002b3b 00002b3d
-l04 0002038 00002b77 00002b79
-l04 0002039 00002bb3 00002bb5
-l04 0002040 00002bef 00002bf1
-l04 0002041 00002c2b 00002c2d
-l04 0002042 00002c67 00002c69
-l04 0002043 00002ca3 00002ca5
-l04 0002045 00002cd9 00002ceb
-l04 0002047 00002d07 00002d23
-l04 0002048 00002d29 00002d31
-l04 0001264 00002d31 00002d33
-l04 0001265 00002d35 00002d37
-l04 0001267 00002d39 00002d54
-l04 0001269 00002d74 00002d88
-l04 0001271 00002d9e 00002dc1
-l04 0001273 00002dc1 00002dd1
-l04 0001275 00002ddd 00002ded
-l04 0001276 00002e26 00002e28
-l04 0001269 00002e76 00002e8a
-l04 0001279 00002e90 00002ea9
-l04 0001282 00002ecd 00002ee9
-l04 0001283 00002eef 00002ef7
-l04 0001234 00002ef7 00002f2c
-l04 0001235 00002f2c 00002f3a
-l04 0001239 00002f5a 00002f98
-l04 0001240 00002fbe 00002fc0
-l04 0001241 00002fe0 00002fe8
-l04 0000496 00002fe8 0000301e
-l04 0000500 0000301e 00003033
-l04 0000501 00003033 00003035
-l04 0000503 00003039 00003049
-l04 0000504 0000309a 0000309c
-l04 0000506 0000309c 000030b4
-l04 0000508 000030b4 000030fb
-l04 0000509 000030fb 0000310b
-l04 0000511 00003111 00003125
-l04 0000514 00003125 00003139
-l04 0000520 0000313f 0000315b
-l04 0000521 00003161 00003169
-l04 0001144 00003169 0000316b
-l04 0001145 0000316d 0000316f
-l04 0001147 00003171 0000318c
-l04 0001149 000031ac 000031c0
-l04 0001151 000031d6 000031f9
-l04 0001153 000031f9 00003209
-l04 0001155 00003215 00003225
-l04 0001156 0000325e 00003260
-l04 0001149 000032ae 000032c2
-l04 0001159 000032c8 000032e1
-l04 0001162 00003305 00003315
-l04 0001164 0000331b 00003336
-l04 0001165 0000333c 00003367
-l04 0001167 00003367 00003377
-l04 0001169 0000337d 00003398
-l04 0001170 0000339e 000033c9
-l04 0001172 000033c9 000033d9
-l04 0001174 000033df 000033fa
-l04 0001175 00003400 0000342b
-l04 0001177 0000342b 0000343b
-l04 0001179 00003441 0000345c
-l04 0001180 00003462 0000348d
-l04 0001183 0000348d 000034a9
-l04 0001184 000034af 000034b7
-l04 0001113 000034b7 000034ec
-l04 0001114 000034ec 000034fa
-l04 0001118 0000351a 00003558
-l04 0001119 0000357e 00003580
-l04 0001120 000035a0 000035a8
-l04 0001021 000035a8 000035aa
-l04 0001022 000035ac 000035ae
-l04 0001024 000035b0 000035cb
-l04 0001026 000035eb 000035ff
-l04 0001028 00003615 00003638
-l04 0001030 00003638 00003648
-l04 0001032 00003654 00003664
-l04 0001033 0000369d 0000369f
-l04 0001026 000036ed 00003701
-l04 0001036 00003707 00003720
-l04 0001037 00003744 00003754
-l04 0001039 0000375a 00003775
-l04 0001040 0000377b 000037a6
-l04 0001042 000037a6 000037b6
-l04 0001044 000037bc 000037d7
-l04 0001045 000037dd 00003808
-l04 0001048 00003808 00003818
-l04 0001050 0000381e 00003839
-l04 0001051 0000383f 0000386a
-l04 0001053 0000386a 0000387a
-l04 0001055 00003880 0000389b
-l04 0001056 000038a1 000038cc
-l04 0001061 000038cc 000038e8
-l04 0001062 000038ee 000038f6
-l04 0001010 000038f6 0000392b
-l04 0001011 0000392b 00003939
-l04 0001015 00003959 00003997
-l04 0001016 000039bd 000039bf
-l04 0001017 000039df 000039e7
-l04 0001343 000039e7 000039e9
-l04 0001344 000039eb 000039ed
-l04 0001346 000039ef 00003a0a
-l04 0001348 00003a2a 00003a3e
-l04 0001350 00003a54 00003a77
-l04 0001352 00003a77 00003a87
-l04 0001354 00003a93 00003aa3
-l04 0001355 00003adc 00003ade
-l04 0001348 00003b2c 00003b40
-l04 0001358 00003b46 00003b5f
-l04 0001360 00003b83 00003b96
-l04 0001361 00003b96 00003ba6
-l04 0001363 00003bac 00003bbc
-l04 0001364 00003be6 00003be8
-l04 0001368 00003c10 00003c2c
-l04 0001369 00003c32 00003c3a
-l04 0001332 00003c3a 00003c6f
-l04 0001333 00003c6f 00003c7d
-l04 0001337 00003c9d 00003cdb
-l04 0001338 00003d01 00003d03
-l04 0001339 00003d23 00003d2b
-l04 0001426 00003d2b 00003d2d
-l04 0001427 00003d2f 00003d31
-l04 0001429 00003d33 00003d4e
-l04 0001431 00003d6e 00003d82
-l04 0001433 00003d98 00003dbb
-l04 0001435 00003dbb 00003dcb
-l04 0001437 00003dd7 00003de7
-l04 0001438 00003e20 00003e22
-l04 0001431 00003e70 00003e84
-l04 0001441 00003e8a 00003ea3
-l04 0001444 00003ec7 00003ee3
-l04 0001445 00003ee9 00003ef1
-l04 0001415 00003ef1 00003f26
-l04 0001416 00003f26 00003f34
-l04 0001420 00003f54 00003f92
-l04 0001421 00003fb8 00003fba
-l04 0001422 00003fda 00003fe2
-l04 0001549 00003fe2 00003fe4
-l04 0001550 00003fe6 00003fe8
-l04 0001552 00003fea 00004005
-l04 0001554 00004025 00004039
-l04 0001556 0000404f 00004072
-l04 0001558 00004072 00004082
-l04 0001560 0000408e 0000409e
-l04 0001561 000040d7 000040d9
-l04 0001554 00004127 0000413b
-l04 0001564 00004141 0000415a
-l04 0001566 0000417e 0000419a
-l04 0001567 000041a0 000041a8
-l04 0001519 000041a8 000041dd
-l04 0001520 000041dd 000041eb
-l04 0001524 0000420b 00004249
-l04 0001525 0000426f 00004271
-l04 0001526 00004291 00004299
-l04 0001653 00004299 0000429b
-l04 0001654 0000429d 0000429f
-l04 0001656 000042a1 000042bc
-l04 0001658 000042dc 000042f0
-l04 0001660 00004306 00004329
-l04 0001662 00004329 00004339
-l04 0001664 00004345 00004355
-l04 0001665 0000438e 00004390
-l04 0001658 000043de 000043f2
-l04 0001668 000043f8 00004411
-l04 0001670 00004435 00004451
-l04 0001671 00004457 0000445f
-l04 0001623 0000445f 00004494
-l04 0001624 00004494 000044a2
-l04 0001628 000044c2 00004500
-l04 0001629 00004526 00004528
-l04 0001630 00004548 00004550
-l04 0001757 00004550 00004552
-l04 0001758 00004554 00004556
-l04 0001760 00004558 00004573
-l04 0001762 00004593 000045a7
-l04 0001764 000045bd 000045e0
-l04 0001766 000045e0 000045f0
-l04 0001768 000045fc 0000460c
-l04 0001769 00004645 00004647
-l04 0001762 00004695 000046a9
-l04 0001772 000046af 000046c8
-l04 0001773 000046ec 000046fc
-l04 0001775 00004702 0000471d
-l04 0001776 00004723 0000474e
-l04 0001778 0000474e 0000475e
-l04 0001780 00004764 0000477f
-l04 0001781 00004785 000047b0
-l04 0001784 000047b0 000047c0
-l04 0001786 000047c6 000047e1
-l04 0001787 000047e7 00004812
-l04 0001789 00004812 00004822
-l04 0001791 00004828 00004843
-l04 0001792 00004849 00004874
-l04 0001796 00004874 00004890
-l04 0001797 00004896 0000489e
-l04 0001726 0000489e 000048d3
-l04 0001727 000048d3 000048e1
-l04 0001731 00004901 0000493f
-l04 0001732 00004965 00004967
-l04 0001733 00004987 0000498f
-l04 0000900 0000498f 00004991
-l04 0000901 00004993 00004995
-l04 0000903 00004995 000049b0
-l04 0000905 000049d0 000049e4
-l04 0000907 000049fa 00004a1d
-l04 0000909 00004a1d 00004a2d
-l04 0000911 00004a39 00004a49
-l04 0000912 00004a82 00004a84
-l04 0000905 00004ad2 00004ae6
-l04 0000916 00004aec 00004b05
-l04 0000917 00004b29 00004b39
-l04 0000918 00004b3f 00004b53
-l04 0000920 00004b53 00004b6f
-l04 0000921 00004b75 00004b7d
-l04 0000551 00004b7d 00004bb2
-l04 0000552 00004bb2 00004bc0
-l04 0000554 00004be0 00004c1e
-l04 0000555 00004c44 00004c46
-l04 0000556 00004c66 00004c6e
-l04 0001920 00004c6e 00004c70
-l04 0001921 00004c72 00004c74
-l04 0001923 00004c76 00004c91
-l04 0001925 00004cb1 00004cc5
-l04 0001927 00004cdb 00004cfe
-l04 0001929 00004cfe 00004d0e
-l04 0001931 00004d1a 00004d2a
-l04 0001932 00004d63 00004d65
-l04 0001925 00004db3 00004dc7
-l04 0001935 00004dcd 00004de6
-l04 0001936 00004e0a 00004e1a
-l04 0001938 00004e20 00004e3b
-l04 0001939 00004e41 00004e6c
-l04 0001941 00004e6c 00004e7c
-l04 0001943 00004e82 00004e9d
-l04 0001944 00004ea3 00004ece
-l04 0001947 00004ece 00004ede
-l04 0001949 00004ee4 00004eff
-l04 0001950 00004f05 00004f30
-l04 0001952 00004f30 00004f40
-l04 0001954 00004f46 00004f61
-l04 0001955 00004f67 00004f92
-l04 0001959 00004f92 00004fae
-l04 0001960 00004fb4 00004fbc
-l04 0001848 00004fbc 00004ff1
-l04 0001849 00004ff1 00004fff
-l04 0001853 0000501f 0000505d
-l04 0001854 00005083 00005085
-l04 0001855 000050a5 000050ad
+l02 0002426 00002a46 00002a4b
+l02 0002427 00002a4b 00002a58
+l02 0002428 00002a58 00002a5a
+l02 0002429 00002a5a 00002a67
+l02 0002431 00002a89 00002a99
+l02 0002432 00002ac3 00002ac5
+l02 0002433 00002aff 00002b01
+l02 0002434 00002b3b 00002b3d
+l02 0002435 00002b77 00002b79
+l02 0002436 00002bb3 00002bb5
+l02 0002437 00002bef 00002bf1
+l02 0002438 00002c2b 00002c2d
+l02 0002439 00002c67 00002c69
+l02 0002440 00002ca3 00002ca5
+l02 0002442 00002cd9 00002ceb
+l02 0002444 00002d07 00002d23
+l02 0002445 00002d29 00002d31
+l02 0001659 00002d31 00002d33
+l02 0001660 00002d35 00002d37
+l02 0001662 00002d39 00002d54
+l02 0001664 00002d74 00002d88
+l02 0001666 00002d9e 00002dc1
+l02 0001668 00002dc1 00002dd1
+l02 0001670 00002ddd 00002ded
+l02 0001671 00002e26 00002e28
+l02 0001664 00002e76 00002e8a
+l02 0001674 00002e90 00002ea9
+l02 0001677 00002ecd 00002ee9
+l02 0001678 00002eef 00002ef7
+l02 0001629 00002ef7 00002f2c
+l02 0001630 00002f2c 00002f3a
+l02 0001634 00002f5a 00002f98
+l02 0001635 00002fbe 00002fc0
+l02 0001636 00002fe0 00002fe8
+l02 0000891 00002fe8 0000301e
+l02 0000895 0000301e 00003033
+l02 0000896 00003033 00003035
+l02 0000898 00003039 00003049
+l02 0000899 0000309a 0000309c
+l02 0000901 0000309c 000030b4
+l02 0000903 000030b4 000030fb
+l02 0000904 000030fb 0000310b
+l02 0000906 00003111 00003125
+l02 0000909 00003125 00003139
+l02 0000915 0000313f 0000315b
+l02 0000916 00003161 00003169
+l02 0001539 00003169 0000316b
+l02 0001540 0000316d 0000316f
+l02 0001542 00003171 0000318c
+l02 0001544 000031ac 000031c0
+l02 0001546 000031d6 000031f9
+l02 0001548 000031f9 00003209
+l02 0001550 00003215 00003225
+l02 0001551 0000325e 00003260
+l02 0001544 000032ae 000032c2
+l02 0001554 000032c8 000032e1
+l02 0001557 00003305 00003315
+l02 0001559 0000331b 00003336
+l02 0001560 0000333c 00003367
+l02 0001562 00003367 00003377
+l02 0001564 0000337d 00003398
+l02 0001565 0000339e 000033c9
+l02 0001567 000033c9 000033d9
+l02 0001569 000033df 000033fa
+l02 0001570 00003400 0000342b
+l02 0001572 0000342b 0000343b
+l02 0001574 00003441 0000345c
+l02 0001575 00003462 0000348d
+l02 0001578 0000348d 000034a9
+l02 0001579 000034af 000034b7
+l02 0001508 000034b7 000034ec
+l02 0001509 000034ec 000034fa
+l02 0001513 0000351a 00003558
+l02 0001514 0000357e 00003580
+l02 0001515 000035a0 000035a8
+l02 0001416 000035a8 000035aa
+l02 0001417 000035ac 000035ae
+l02 0001419 000035b0 000035cb
+l02 0001421 000035eb 000035ff
+l02 0001423 00003615 00003638
+l02 0001425 00003638 00003648
+l02 0001427 00003654 00003664
+l02 0001428 0000369d 0000369f
+l02 0001421 000036ed 00003701
+l02 0001431 00003707 00003720
+l02 0001432 00003744 00003754
+l02 0001434 0000375a 00003775
+l02 0001435 0000377b 000037a6
+l02 0001437 000037a6 000037b6
+l02 0001439 000037bc 000037d7
+l02 0001440 000037dd 00003808
+l02 0001443 00003808 00003818
+l02 0001445 0000381e 00003839
+l02 0001446 0000383f 0000386a
+l02 0001448 0000386a 0000387a
+l02 0001450 00003880 0000389b
+l02 0001451 000038a1 000038cc
+l02 0001456 000038cc 000038e8
+l02 0001457 000038ee 000038f6
+l02 0001405 000038f6 0000392b
+l02 0001406 0000392b 00003939
+l02 0001410 00003959 00003997
+l02 0001411 000039bd 000039bf
+l02 0001412 000039df 000039e7
+l02 0001738 000039e7 000039e9
+l02 0001739 000039eb 000039ed
+l02 0001741 000039ef 00003a0a
+l02 0001743 00003a2a 00003a3e
+l02 0001745 00003a54 00003a77
+l02 0001747 00003a77 00003a87
+l02 0001749 00003a93 00003aa3
+l02 0001750 00003adc 00003ade
+l02 0001743 00003b2c 00003b40
+l02 0001753 00003b46 00003b5f
+l02 0001755 00003b83 00003b96
+l02 0001756 00003b96 00003ba6
+l02 0001758 00003bac 00003bbc
+l02 0001759 00003be6 00003be8
+l02 0001763 00003c10 00003c2c
+l02 0001764 00003c32 00003c3a
+l02 0001727 00003c3a 00003c6f
+l02 0001728 00003c6f 00003c7d
+l02 0001732 00003c9d 00003cdb
+l02 0001733 00003d01 00003d03
+l02 0001734 00003d23 00003d2b
+l02 0001821 00003d2b 00003d2d
+l02 0001822 00003d2f 00003d31
+l02 0001824 00003d33 00003d4e
+l02 0001826 00003d6e 00003d82
+l02 0001828 00003d98 00003dbb
+l02 0001830 00003dbb 00003dcb
+l02 0001832 00003dd7 00003de7
+l02 0001833 00003e20 00003e22
+l02 0001826 00003e70 00003e84
+l02 0001836 00003e8a 00003ea3
+l02 0001839 00003ec7 00003ee3
+l02 0001840 00003ee9 00003ef1
+l02 0001810 00003ef1 00003f26
+l02 0001811 00003f26 00003f34
+l02 0001815 00003f54 00003f92
+l02 0001816 00003fb8 00003fba
+l02 0001817 00003fda 00003fe2
+l02 0001944 00003fe2 00003fe4
+l02 0001945 00003fe6 00003fe8
+l02 0001947 00003fea 00004005
+l02 0001949 00004025 00004039
+l02 0001951 0000404f 00004072
+l02 0001953 00004072 00004082
+l02 0001955 0000408e 0000409e
+l02 0001956 000040d7 000040d9
+l02 0001949 00004127 0000413b
+l02 0001959 00004141 0000415a
+l02 0001961 0000417e 0000419a
+l02 0001962 000041a0 000041a8
+l02 0001914 000041a8 000041dd
+l02 0001915 000041dd 000041eb
+l02 0001919 0000420b 00004249
+l02 0001920 0000426f 00004271
+l02 0001921 00004291 00004299
+l02 0002048 00004299 0000429b
+l02 0002049 0000429d 0000429f
+l02 0002051 000042a1 000042bc
+l02 0002053 000042dc 000042f0
+l02 0002055 00004306 00004329
+l02 0002057 00004329 00004339
+l02 0002059 00004345 00004355
+l02 0002060 0000438e 00004390
+l02 0002053 000043de 000043f2
+l02 0002063 000043f8 00004411
+l02 0002065 00004435 00004451
+l02 0002066 00004457 0000445f
+l02 0002018 0000445f 00004494
+l02 0002019 00004494 000044a2
+l02 0002023 000044c2 00004500
+l02 0002024 00004526 00004528
+l02 0002025 00004548 00004550
+l02 0002152 00004550 00004552
+l02 0002153 00004554 00004556
+l02 0002155 00004558 00004573
+l02 0002157 00004593 000045a7
+l02 0002159 000045bd 000045e0
+l02 0002161 000045e0 000045f0
+l02 0002163 000045fc 0000460c
+l02 0002164 00004645 00004647
+l02 0002157 00004695 000046a9
+l02 0002167 000046af 000046c8
+l02 0002168 000046ec 000046fc
+l02 0002170 00004702 0000471d
+l02 0002171 00004723 0000474e
+l02 0002173 0000474e 0000475e
+l02 0002175 00004764 0000477f
+l02 0002176 00004785 000047b0
+l02 0002179 000047b0 000047c0
+l02 0002181 000047c6 000047e1
+l02 0002182 000047e7 00004812
+l02 0002184 00004812 00004822
+l02 0002186 00004828 00004843
+l02 0002187 00004849 00004874
+l02 0002191 00004874 00004890
+l02 0002192 00004896 0000489e
+l02 0002121 0000489e 000048d3
+l02 0002122 000048d3 000048e1
+l02 0002126 00004901 0000493f
+l02 0002127 00004965 00004967
+l02 0002128 00004987 0000498f
+l02 0001295 0000498f 00004991
+l02 0001296 00004993 00004995
+l02 0001298 00004995 000049b0
+l02 0001300 000049d0 000049e4
+l02 0001302 000049fa 00004a1d
+l02 0001304 00004a1d 00004a2d
+l02 0001306 00004a39 00004a49
+l02 0001307 00004a82 00004a84
+l02 0001300 00004ad2 00004ae6
+l02 0001311 00004aec 00004b05
+l02 0001312 00004b29 00004b39
+l02 0001313 00004b3f 00004b53
+l02 0001315 00004b53 00004b6f
+l02 0001316 00004b75 00004b7d
+l02 0000946 00004b7d 00004bb2
+l02 0000947 00004bb2 00004bc0
+l02 0000949 00004be0 00004c1e
+l02 0000950 00004c44 00004c46
+l02 0000951 00004c66 00004c6e
+l02 0002315 00004c6e 00004c70
+l02 0002316 00004c72 00004c74
+l02 0002318 00004c76 00004c91
+l02 0002320 00004cb1 00004cc5
+l02 0002322 00004cdb 00004cfe
+l02 0002324 00004cfe 00004d0e
+l02 0002326 00004d1a 00004d2a
+l02 0002327 00004d63 00004d65
+l02 0002320 00004db3 00004dc7
+l02 0002330 00004dcd 00004de6
+l02 0002331 00004e0a 00004e1a
+l02 0002333 00004e20 00004e3b
+l02 0002334 00004e41 00004e6c
+l02 0002336 00004e6c 00004e7c
+l02 0002338 00004e82 00004e9d
+l02 0002339 00004ea3 00004ece
+l02 0002342 00004ece 00004ede
+l02 0002344 00004ee4 00004eff
+l02 0002345 00004f05 00004f30
+l02 0002347 00004f30 00004f40
+l02 0002349 00004f46 00004f61
+l02 0002350 00004f67 00004f92
+l02 0002354 00004f92 00004fae
+l02 0002355 00004fb4 00004fbc
+l02 0002243 00004fbc 00004ff1
+l02 0002244 00004ff1 00004fff
+l02 0002248 0000501f 0000505d
+l02 0002249 00005083 00005085
+l02 0002250 000050a5 000050ad
