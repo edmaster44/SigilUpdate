@@ -142,5 +142,14 @@ int GetRealCasterLevel(object oPC, int bIncludeAlch = FALSE) {
 		// if alch lvl higher than reg caster level and we're checking for it, return it
 		if (nAlchLevel > nRet) nRet = nAlchLevel;
 	}
+	// if you have more than one caster class then practiced spellcaster might
+	// result in this function returning a value > 30. Really this needs to be
+	// updated to be more accurate. For example, if you had 10 sorc, 10 favoured soul,
+	// and 10 mystic theurge your CL would be 20 sorc and 20 favoured soul, for an 
+	// actual CL of 20, but this function would return 30. If you had practiced spellcaster
+	// in both sorc and FS, your real CL would be 24 in each but this function would say
+	// 38. It needs to calc each KIND of caster separately and return the highest value. 
+	// but that's low priority for now.
+	if (nRet > 30) nRet = 30;
 	return nRet;
 }

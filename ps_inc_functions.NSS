@@ -2582,6 +2582,7 @@ float PS_GetAvgPartylevel(object oPC, int iMAX) //Gets modified average level wh
 
 float PS_GetXPModifier(int iECL)
 {
+	if (ALLOW_ECL_LEVEL_30) return 1.0;
 	switch (iECL)
 	{	case 0: return 1.0;
 		case 1: return 0.975;
