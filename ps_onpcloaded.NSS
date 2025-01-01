@@ -81,9 +81,9 @@ void GiveCreatureSkin(object oPC){
 		if (oSkin == OBJECT_INVALID)
 			oSkin = CreateItemOnObject("x2_it_emptyskin", oPC, 1, "", FALSE);
 		
-		DelayCommand(1.0f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
-	}
-	DelayCommand(0.5f, RemoveTempFeatsAndFX(oPC, oSkin));
+		DelayCommand(2.0f, AssignCommand(oPC, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR)));
+	} else 
+		DelayCommand(0.5f, RemoveTempFeatsAndFX(oPC, oSkin));
 }
 
 // ps_levelup is not called on character creation, and it's not called at the 

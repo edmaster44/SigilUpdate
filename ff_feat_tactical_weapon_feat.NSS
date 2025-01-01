@@ -17,8 +17,8 @@ void FF_TacticalWeapons(object oPC, object oRHAND, object oSkin){
 	SetLocalInt(oPC, "tacbusy", TRUE);
 	RemoveBonusFeats(oSkin);
 	if (oRHAND == OBJECT_INVALID){
-		SetLocalInt(oPC, "tacbusy", FALSE);
 		SendMessageToPC(oPC, "Tactical bonuses disabled");
+		SetLocalInt(oPC, "tacbusy", FALSE);
 		return;
 	}
 

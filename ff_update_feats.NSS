@@ -125,8 +125,10 @@ void fUpdateOtherFeats(object oPC){
 	// Add situational awareness persistent feat. Please see file ff_feat_situational_awareness.nss
 	// for code and an EXTREMELY IMPORTANT note on interaction with Dae's plugin. Recommend use with xp_fix
 	// plugin to remove dodge ac limits at https://github.com/nwn2dev/nwnx4/wiki at the bottom of the page.
-	if (GRANT_SITUATIONAL_AWARENESS && !GetHasFeat(21916, oPC, TRUE)) FeatAdd(oPC, 21916, FALSE);
-	else if (!GRANT_SITUATIONAL_AWARENESS && GetHasFeat(21916, oPC, TRUE)) FeatRemove(oPC, 21916);
+	if (GRANT_SITUATIONAL_AWARENESS && !GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+		FeatAdd(oPC, FEAT_SITUATIONAL_AWARENESS, FALSE);
+	else if (!GRANT_SITUATIONAL_AWARENESS && GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+		FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
 	
 	// Add tactical weapons feat.
 	if (!GetHasFeat(21922, oPC, TRUE)) FeatAdd(oPC, 21922, FALSE);

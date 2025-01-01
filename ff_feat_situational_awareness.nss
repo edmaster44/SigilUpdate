@@ -19,7 +19,7 @@ void main(){
 	int nLevel = GetHitDice(oPC);
 	int nTumble = GetSkillRank(SKILL_TUMBLE, oPC, TRUE);
 	int nAcFromLvl = (nLevel + 3) / 10;
-	int nAcFromTumble = (nTumble + 3) / 10;
+	int nAcFromTumble = nTumble / 10;
 	int nAC = nAcFromLvl - nAcFromTumble;
 	if (TUMBLE_DISABLED_BY_DAE) nAC = nAcFromLvl;
 	if (nAC > 0){

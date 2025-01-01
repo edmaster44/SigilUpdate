@@ -8,7 +8,7 @@ rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
 // for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
 // of enchanting
-const int DEBUG_IGNORE_CRAFT_COSTS = FALSE;
+const int DEBUG_IGNORE_CRAFT_COSTS = TRUE;
 
 
 // module control booleans
@@ -53,7 +53,7 @@ const int CRAFTED_GLOVES_GET_MAT_POWER = TRUE;
 
 //set this to true to grant FlattedFifth's tumble ac replacement feat "Situational Awareness"
 // only use this if the tumble ac replacement in Dae's plugin is NOT being used, otherwise they'd stack
-const int GRANT_SITUATIONAL_AWARENESS = FALSE;
+const int GRANT_SITUATIONAL_AWARENESS = TRUE;
 
 /**************************************************************************************************
 				SPECIAL MATERIAL SYNERGY BONUS CONTROLS
@@ -177,6 +177,8 @@ const int FEAT_IMPROMPTU_SNEAK_ATTACK_1_NEW = 21904;
 const int FEAT_IMPROMPTU_SNEAK_ATTACK_2_NEW = 21905;
 const int FEAT_HUMAN_ABILITY_BONUS = 21910;
 const int FEAT_HALF_ELF_ABILITY_BONUS = 21909;
+
+const int FEAT_SITUATIONAL_AWARENESS = 21916;
 
 
 

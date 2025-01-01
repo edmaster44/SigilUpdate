@@ -22,7 +22,8 @@ void main()
 	object oTarget			= GetSpellTargetObject();
 	object oCaster			= OBJECT_SELF;
 	int nCasterLevel		= PS_GetCasterLevel(oCaster);
-	int nAmount 			= nCasterLevel/5;
+	int nAmount 			= (nCasterLevel/3) + 1;
+	if (nAmount > 6) nAmount = 6;
 	// Spell Duration
 	float fDuration			= TurnsToSeconds(nCasterLevel * 10);
 	fDuration			= ApplyMetamagicDurationMods(fDuration);

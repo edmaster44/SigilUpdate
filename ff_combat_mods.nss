@@ -321,7 +321,7 @@ struct CombatMods CreatureTWF(struct CombatMods data){
 
 	nWeaponSize = IPGetWeaponSize(data.oLHAND);
 	
-	// if they don't have twf and the left is a creature weapon, mimic twf it by reducing
+	// if they don't have twf and the left is a creature weapon, mimic twf by reducing
 	// the penalties. penalties for twf without the feat are -4 main hand and - 8 for 
 	// off hand if the offhand weapon is light, so we'll reduce those to -2 / -2
 	if (bLisCreature && nWeaponSize <= nPCsize && !bHasTWF){
