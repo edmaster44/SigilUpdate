@@ -47,7 +47,6 @@ struct CombatMods CreatureTWF(struct CombatMods data);
 struct CombatMods OversizeTwoWeaponFighting(struct CombatMods data);
 struct CombatMods TwoSwordsAsOne(struct CombatMods data);
 struct CombatMods XbowAndSharpshooter(struct CombatMods data);
-void ApplyCombatModFX(object oPC, effect eFX);
 void ApplyCombatMods(struct CombatMods data);
 void IajaitsuMaster(struct CombatMods data);
 void FrightfulPresence(object oPC);
@@ -56,8 +55,7 @@ void GiveFeedback(object oPC, string sMessage);
 
 struct CombatMods{
 	int nAPR; // attacks per round
-	int nRAB; // right attack bonus/penalty
-	int nLAB; // left attack bonus/penalty
+	int nAB; //attack bonus/penalty
 	int nDam; // damage bonus
 	int nDamType; // damage bonus type
 	int nAC; // AC bonus
@@ -133,8 +131,7 @@ void UpdateCombatMods(object oPC, int nAction = -1, object oChanged = OBJECT_INV
 	
 	struct CombatMods data;
 	data.nAPR = 0;
-	data.nRAB = 0;
-	data.nLAB = 0;
+	data.nAB = 0;
 	data.nAC = 0;
 	data.nDam = 0;
 	data.nDamType = DAMAGE_TYPE_BLUDGEONING;
@@ -213,7 +210,7 @@ struct CombatMods ConsideredStrike(struct CombatMods data){
 	int nHalfAttacks = GetHalfAttacks(data.oPC, data.oRHAND);
 	if (nHalfAttacks > 0){
 		data.nAPR -= nHalfAttacks;
-		data.nRAB += nHalfAttacks;
+		data.nAB += nHalfAttacks;
 		if (data.nAction == STRIKE_ON) GiveFeedback(data.oPC, sStrikeOnFb);
 	} else {
 		data.bUsingStrike = FALSE;
@@ -232,7 +229,7 @@ struct CombatMods StaffFighting(struct CombatMods data){
 		return data;
 	}
 	data.nAPR += 1;
-	data.nRAB -= 2;
+	data.nAB -= 2;
 	if (data.nAction == STAFF_ON) GiveFeedback(data.oPC, sStaffOnFb);
 	return data;
 }
@@ -251,8 +248,7 @@ struct CombatMods OversizeTwoWeaponFighting(struct CombatMods data){
 	
 	if (IPGetWeaponSize(data.oLHAND) >= GetCreatureSize(data.oPC))
 	{
-		data.nRAB += 2;
-		data.nLAB += 2;
+		data.nAB += 2;
 	}
 	return data;
 }
@@ -290,7 +286,7 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 		}
 	}
 	if (nAB > 0){
-		data.nRAB += nAB;
+		data.nAB += nAB;
 	}
 	return data;
 }
@@ -302,46 +298,27 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 // feat. These bonuses do not apply to creature weapons that are larger category than the character 
 // because a monkey-gripped creature weapon isn't one that the character has natural use of.
 struct CombatMods CreatureTWF(struct CombatMods data){
-	int bRisCreature = IPGetIsCreatureEquippedWeapon(data.oRHAND);
 	int bLisCreature = IPGetIsCreatureEquippedWeapon(data.oLHAND);
-	// bail if neither is creature weap
-	if (!bRisCreature && !bLisCreature) return data;
+	
+	RemoveBonusFeats(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+	// bail if off hand is not a creature weap
+	if (!bLisCreature) return data;
 
-	int nRightBonus = 0;
-	int nLeftBonus = 0;
+	int nBonus = 0;
 	int nPCsize = GetCreatureSize(data.oPC);
-	int nWeaponSize = IPGetWeaponSize(data.oRHAND);
-	
-	int bHasTWF = (GetHasFeat(FEAT_TWO_WEAPON_FIGHTING, data.oPC, TRUE) ||
-		GetHasFeat(FEAT_COMBATSTYLE_RANGER_DUAL_WIELD_TWO_WEAPON_FIGHTING, data.oPC, TRUE));
+	int nLWeaponSize = IPGetWeaponSize(data.oLHAND);
+	int bHasTWF = GetHasFeat(FEAT_TWO_WEAPON_FIGHTING, data.oPC, TRUE);
 
-	// if the main hand is a creature weapon of a size natural for the character
-	// and they have twf, drop their penalty with that hand from -2 to 0;
-	if (bRisCreature && nWeaponSize <= nPCsize && bHasTWF) nRightBonus += 2; 
+	// if they don't have twf and the left is a creature weapon of normal size, give them twf
+	if (nLWeaponSize <= nPCsize && !bHasTWF)
+		ApplyTacticalBonusFeat(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+	// if they're using an off hand creature weapon that is the same size cat as themselves
+	// reduce penalty by 2 unless oversize twf is doing that already
+	if (nLWeaponSize == nPCsize && !GetHasFeat(FEAT_OVERSIZE_TWF, data.oPC, TRUE))
+		nBonus = 2;
+	
+	data.nAB += nBonus;
 
-	nWeaponSize = IPGetWeaponSize(data.oLHAND);
-	
-	// if they don't have twf and the left is a creature weapon, mimic twf by reducing
-	// the penalties. penalties for twf without the feat are -4 main hand and - 8 for 
-	// off hand if the offhand weapon is light, so we'll reduce those to -2 / -2
-	if (bLisCreature && nWeaponSize <= nPCsize && !bHasTWF){
-		nRightBonus += 2;
-		nLeftBonus += 6;
-	}
-	
-	// if the off-hand is a creature weapon of a size natural for the character
-	// and they have twf, drop their penalty with that hand from -2 to 0;
-	if (bLisCreature && nWeaponSize <= nPCsize && bHasTWF) nLeftBonus += 2;
-	
-	// if the offhand weapon is a creature weapon the same size cat. as the char
-	// mimic oversize twf feat if they don't have it
-	if (bLisCreature && nWeaponSize == nPCsize && 
-		!GetHasFeat(FEAT_OVERSIZE_TWF, data.oPC, TRUE)){
-			nRightBonus += 2;
-			nLeftBonus += 2;
-	}
-	if (nRightBonus > 0) data.nRAB += nRightBonus;
-	if (nLeftBonus > 0)data.nLAB += nLeftBonus;
 	return data;
 }
 
@@ -387,8 +364,7 @@ struct CombatMods TwoSwordsAsOne(struct CombatMods data){
     else if (nSAMURAI >= 21) nBONUS = 4;
     else if (nSAMURAI >= 16) nBONUS = 3;
     else if (nSAMURAI >= 11) nBONUS = 2;
-	data.nRAB += nBONUS;
-	data.nLAB += nBONUS;
+	data.nAB += nBONUS;
 	data.nDam = nBONUS;
 	data.nDamType = nDMG_TYPE;
 	return data;
@@ -422,7 +398,7 @@ void IajaitsuMaster(struct CombatMods data){
         int nCHA = GetAbilityModifier(ABILITY_CHARISMA, data.oPC);
         float fDUR = RoundsToSeconds(1);
         effect eFX = EffectModifyAttacks(1);
-        if (nCHA > 0) eFX = EffectLinkEffects(eFX, EffectAttackIncrease(nCHA + data.nRAB));
+        if (nCHA > 0) eFX = EffectLinkEffects(eFX, EffectAttackIncrease(nCHA + data.nAB));
         eFX = ExtraordinaryEffect(eFX);
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, data.oPC, fDUR);
     }
@@ -492,41 +468,47 @@ void GiveFeedback(object oPC, string sMessage){
 }
 
 void ApplyCombatMods(struct CombatMods data){
-	effect eFX;
+	effect eFX = EffectDarkVision(); // EffectDarkVision doesnt work, so I'll use it as ab
+	// placeholder effect to build an effect chain off of
+
+	int bApplyChange = FALSE;
 	if (data.nAPR != 0){
+		bApplyChange = TRUE;
 		// not currently possible to be >5 or < -5, but who knows what future devs will do.
 		// the effect breaks if you try to add or subtract more than 5.
 		if (data.nAPR > 5) data.nAPR = 5;
 		else if (data.nAPR < -5) data.nAPR = -5;
-		eFX = EffectModifyAttacks(data.nAPR);
-		ApplyCombatModFX(data.oPC, eFX);
+		effect eAPR = EffectModifyAttacks(data.nAPR);
+		eFX = EffectLinkEffects(eAPR, eFX);
 	}
-	if (data.nRAB != 0){
-		if (data.nRAB > 0) eFX = EffectAttackIncrease(data.nRAB, ATTACK_BONUS_ONHAND);
-		else eFX = EffectAttackDecrease(data.nRAB * -1, ATTACK_BONUS_ONHAND); // accepts a positive integer for the nerf
-		ApplyCombatModFX(data.oPC, eFX);
+	if (data.nAB != 0){
+		bApplyChange = TRUE;
+		effect eAB;
+		if (data.nAB > 0) eAB = EffectAttackIncrease(data.nAB);
+		else eAB = EffectAttackDecrease(data.nAB * -1); // accepts a positive integer for the nerf
+		eFX = EffectLinkEffects(eAB, eFX);
 	}
-	if (data.nLAB != 0){
-		if (data.nLAB > 0) eFX = EffectAttackIncrease(data.nLAB, ATTACK_BONUS_OFFHAND);
-		else eFX = EffectAttackDecrease(data.nLAB * -1, ATTACK_BONUS_OFFHAND); // accepts a positive integer for the nerf
-		ApplyCombatModFX(data.oPC, eFX);
-	}
+	
 	if (data.nDam != 0){
-		if (data.nDam > 0) eFX = EffectDamageIncrease(data.nDam, data.nDamType);
-		else eFX = EffectDamageDecrease(data.nDam * -1, data.nDamType);
-		ApplyCombatModFX(data.oPC, eFX);
+		bApplyChange = TRUE;
+		effect eDAM;
+		if (data.nDam > 0) eDAM = EffectDamageIncrease(data.nDam, data.nDamType);
+		else eDAM = EffectDamageDecrease(data.nDam * -1, data.nDamType);
+		eFX = EffectLinkEffects(eDAM, eFX);
 	}
 	if (data.nAC != 0){
-		if (data.nAC > 0) eFX =  EffectACIncrease(data.nAC);
-		else eFX = EffectACDecrease(data.nAC * -1);  // accepts a positive integer for the nerf
-		ApplyCombatModFX(data.oPC, eFX);
+		bApplyChange = TRUE;
+		effect eAC;
+		if (data.nAC > 0) eAC =  EffectACIncrease(data.nAC);
+		else eAC = EffectACDecrease(data.nAC * -1);  // accepts a positive integer for the nerf
+		eFX = EffectLinkEffects(eAC, eFX);
 	}
-}
-
-void ApplyCombatModFX(object oPC, effect eFX){
-	eFX = SupernaturalEffect(eFX);
-    eFX = SetEffectSpellId(eFX, EFFECT_ID);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	
+	if (bApplyChange){
+		eFX = SupernaturalEffect(eFX);
+		eFX = SetEffectSpellId(eFX, EFFECT_ID);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, data.oPC);
+	}
 }
 
 int GetQualifiesForStaffFighting(object oPC, object oRHAND, object oLHAND){

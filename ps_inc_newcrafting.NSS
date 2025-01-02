@@ -9,7 +9,7 @@ void GenerateCraftDetails(object oPC);
 //requires the indicies for the base item type
 //and any applicable materials
 //defaults to basic wood/leather/metal/misc
-object CreateCraftedItem(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3);
+object CreateCraftedItem(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3, int bByPlayer = FALSE);
 
 //get the item cost so far
 //based on base item type and material cost tiers
@@ -30,7 +30,7 @@ int GetBaseCostOfItem(int nBaseID);
 int GetHasRequiredCraftingItems(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3);
 
 
-object CreateCraftedItem(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3) {
+object CreateCraftedItem(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3, int bByPlayer = FALSE) {
 	
 	string toCreate = i.resref;
 	if (i.type == "A" && m1.armorSuffix != "")
@@ -59,7 +59,7 @@ object CreateCraftedItem(object oPC, struct baseitem i, struct material m1, stru
 	// and allows some new, special enchantments not available to loot items.
 	// Also opens up the possibility of nerfing the points on loot-drop armor without affecting
 	// player-made.
-	ApplyPlayerMade(oItem);
+	if (bByPlayer) ApplyPlayerMade(oItem);
 	
 	int bIsMelee = (IPGetIsMeleeWeapon(oItem) || 
 		(i.id == BASE_ITEM_GLOVES && CRAFTED_GLOVES_GET_MAT_POWER));

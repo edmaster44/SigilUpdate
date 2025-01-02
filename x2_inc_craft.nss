@@ -469,7 +469,11 @@ int CIGetIsCraftFeatBaseItem(object oItem)
 
 void AppendSpellToName(object oObject, int nSpellId)
 {
-	int iSpellStringRef = StringToInt(Get2DAString("spells","Name", nSpellId));
+	// if this is a sub-spell, like Protection from Evil, get the id of the
+	// master spell, like Protection from Alignment.
+	int nMaster = StringToInt(Get2DAString("spells", "Master", nSpellId));
+	if (nMaster > 0) nSpellId = nMaster;
+	int iSpellStringRef = StringToInt(Get2DAString("spells", "Name", nSpellId));
 	if (iSpellStringRef == 0)
 		return;
 
@@ -478,8 +482,9 @@ void AppendSpellToName(object oObject, int nSpellId)
 	PrettyDebug ("First Name = "  + GetFirstName(oObject));
 	PrettyDebug ("Last Name = "  +  GetLastName(oObject));
 	PrettyDebug ("Name = "  + GetName(oObject));
-	string sName = sOldName + " - " + sSpellName;
+	string sName = sOldName + ": " + sSpellName;
 	SetFirstName(oObject, sName);
+	SetLastName(oObject, "");
 	PrettyDebug ("sNewName = "  + sName);
 }
 
@@ -765,25 +770,12 @@ object CICraftCraftWand(object oCreator, int nSpellId )
              AddItemProperty(DURATION_TYPE_PERMANENT,ipLimit,oTarget);
         }
 		*/
+		SetFirstName(oTarget, "Magic Wand");
 		AppendSpellToName(oTarget, nSpellId);				
 
 		
 		// Wands are now always created w/ 50 charges 
-        int nCharges = 50;
-		/*		
-		nCharges = GetLevelByClass(GetLastSpellCastClass(),OBJECT_SELF) + d20();
-
-        if (nCharges == 0) // stupi cheaters
-        {
-            nCharges = 10+d20();
-        }
-        // Hard core rule mode enabled
-        if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_CRAFT_WAND_50_CHARGES))
-        {
-            nCharges = 50;
-        }
-		*/
-        SetItemCharges(oTarget,nCharges);
+        SetItemCharges(oTarget, 50);
 		
 		// Set the wand's icon to its custom icon - Electrohydra
 		string spellIcon = Get2DAString("spells", "IconResRef", nSpellId);
@@ -805,7 +797,7 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
 {
 
 	int nCasterLvl = 1;
-	if (!GetLocalInt(oCreator, "bScribeAtMinLvl")) nCasterLvl = PS_GetCasterLevel(oCreator);
+	if (GetLocalInt(oCreator, "bScribeAtMinLvl") == FALSE) nCasterLvl = PS_GetCasterLevel(oCreator);
     int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId, nCasterLvl);
     object oTarget;
     // Handle optional material components
@@ -823,54 +815,7 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
             DestroyObject (oMat);
         }
      }
-	 
-
-    /* 
-		Erroneous code commented out, this bit breaks if it's a cleric casting a domain spell
-		because it's trying to get the scroll resref based on the caster's class. -FlattedFifth, June 6, 2024
 	
-	int nClass = GetLastSpellCastClass();
-    string sClass = "Wiz_Sorc";
-    switch (nClass)
-    {
-       case CLASS_TYPE_WIZARD:
-            sClass = "Wiz_Sorc";
-            break;
-
-       case CLASS_TYPE_SORCERER:
-            sClass = "Wiz_Sorc";
-            break;
-       case CLASS_TYPE_CLERIC:
-            sClass = "Cleric";
-            break;
-       case CLASS_TYPE_PALADIN:
-            sClass = "Paladin";
-            break;
-       case CLASS_TYPE_DRUID:
-            sClass = "Druid";
-            break;
-       case CLASS_TYPE_RANGER:
-            sClass = "Ranger";
-            break;
-       case CLASS_TYPE_BARD:
-            sClass = "Bard";
-            break;
-		case CLASS_TYPE_SPIRIT_SHAMAN:
-            sClass = "Druid";
-            break;
-		case CLASS_TYPE_FAVORED_SOUL:
-            sClass = "Cleric";
-            break;
-    }
-	*/
-	
-	
-	// The following bit of code gets the scroll blueprint id from des_crft_scroll.2da, 
-	// BUT while the original code that I commented out above was only looking at the caster's class, 
-	// here we're getting the spellbook the spell is in for clerics casting domain spells. Since we're 
-	// changing the default "Only Useable By" properties anyway, it's ok to use the default scroll for that 
-	// spell. -FlattedFifth, June 6 2024
-   
 	string sClass = "Wiz_Sorc";
 	if (IsOnSpellList(nSpellId, CLASS_TYPE_WIZARD)) sClass = "Wiz_Sorc";
 	else if (IsOnSpellList(nSpellId, CLASS_TYPE_CLERIC)) sClass = "Cleric";
@@ -878,30 +823,31 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
 	else if (IsOnSpellList(nSpellId, CLASS_TYPE_PALADIN)) sClass = "Paladin";
 	else if (IsOnSpellList(nSpellId, CLASS_TYPE_RANGER)) sClass = "Ranger";
 	else if (IsOnSpellList(nSpellId, CLASS_TYPE_BARD)) sClass = "Bard";
-	else 
-	{
-		string sSpellId = IntToString(nSpellId);
+	else {
+	string sSpellId = IntToString(nSpellId);
 		SendMessageToPC(oCreator, "x2_inc_craft::CICraftScribeScroll(), Unable to find scroll ID number " + sSpellId);
 		SendMessageToPC(oCreator, "Please screenshot the above message and contact the dev team on our Discord.");
-		WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed -  Class: " + sClass + ", SpellId " + sSpellId);
+		WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - SpellId " + sSpellId);
+		return OBJECT_INVALID;
 	}
 	
-
-
-    if (sClass != "")
-    {
-        string sResRef = Get2DAString(X2_CI_2DA_SCROLLS,sClass,nSpellId);
-        if (sResRef != "")
-        {
-            oTarget = CreateItemOnObject(sResRef,oCreator);
-        }
-
-        if (oTarget == OBJECT_INVALID)
-        {
-			int nClass = GetLastSpellCastClass();
-          	WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - Resref: " + sResRef + " Class: " + sClass + "(" +IntToString(nClass) +") " + " SpellId " + IntToString (nSpellId));
-        }
-    }
+	string sGenericScrollRef = "X2_IT_SPDVSCR201";
+	string sResRef = Get2DAString(X2_CI_2DA_SCROLLS, sClass, nSpellId);
+    if (sResRef == "" || sResRef == "****") sResRef = sGenericScrollRef;
+    
+	oTarget = CreateItemOnObject(sResRef, oCreator);
+	
+	if (sResRef == sGenericScrollRef) SetItemIcon(oTarget, 99);
+        
+	itemproperty ip = GetFirstItemProperty(oTarget);
+	while (GetIsItemPropertyValid(ip))
+	{
+		RemoveItemProperty(oTarget, ip);
+		ip = GetFirstItemProperty(oTarget);	
+	}
+	itemproperty ipProp = ItemPropertyCastSpell(nPropID, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
+	AddItemProperty(DURATION_TYPE_PERMANENT, ipProp, oTarget);
+	
     return oTarget;
 }
 
@@ -1103,6 +1049,10 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 		int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nId));
 		string sSpellDesc = GetStringByStrRef(refSpellDesc);
 		SetDescription(oScroll, sSpellDesc);
+		SetFirstName(oScroll, "Scroll");
+		AppendSpellToName(oScroll, nId);
+		
+		// FF_WIP
 		//----------------------------------------------------------------------
         // Some scrollsare ar not identified ... fix that here
         //----------------------------------------------------------------------
@@ -2029,3 +1979,4 @@ int CIGetWeaponModificationCost(object oOldItem, object oNewItem)
    }
    return nTotal;
 }
+

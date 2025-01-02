@@ -718,3 +718,6 @@ void  SetExecutedScriptReturnValue(int nValue = X2_EXECUTE_SCRIPT_END)
 {
     SetLocalInt(OBJECT_SELF,"X2_L_LAST_RETVAR",nValue);
 }
+
+
+

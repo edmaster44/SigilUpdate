@@ -52,7 +52,7 @@ void main () {
 	TakeRequiredCraftingItems(oPC, i, m1, m2, m3);
 	
 	//Create crafted item
-	object oItem = CreateCraftedItem(oPC, i, m1, m2, m3);
+	object oItem = CreateCraftedItem(oPC, i, m1, m2, m3, TRUE);
 	
 	string sName = GetCraftingItemName(i, m1, m2, m3);
 	if (RemoveWhitespace(sName) == ""){

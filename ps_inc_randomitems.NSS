@@ -309,11 +309,13 @@ struct baseitem GetRandomBaseItem(object oPC, string sType = "W") {
 	return LoadBaseItem(nIndex);
 }
 
+/*
 struct material GetRandomMaterial(string s2da) {
+	
 	int nMax = GetNum2DARows(s2da);
 	int nChosen = Random(nMax);
 	return LoadMaterial(nChosen, s2da);
-}
+}*/
 
 int GetNumberofEnchantmentsAvailable(object oObj, int value) {
 	object oHolder = OBJECT_SELF;
@@ -379,99 +381,110 @@ void GiveItemRandomEnchantments(object oItem, int nPoints) {
 }
 
 //Get Material for random item of tier = matTier
-struct material GetRandomMaterialOfTier(string sList, int matTier) {
+struct material GetRandomMaterialOfTier(string sList, int matTier, int bIsJewelry = FALSE) {
 	struct material m1 = LoadMaterial(0, sList);
 	if (sList == "SCOD_CRAFT_METAL") {
 		if (matTier == 1) {
 			int nRand = Random(2);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(23, sList); //Cold Iron
-				case 1: m1 = LoadMaterial(24, sList); //Silver
+				case 0: m1 = LoadMaterial(12, sList); //Cold Iron
+				case 1: m1 = LoadMaterial(5, sList); //Silver
 			}
 		} else if (matTier == 2) {
-			int nRand = Random(6);
+			int nRand = Random(7);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(1, sList); //Abyssal Bloodiron
-				case 1: m1 = LoadMaterial(2, sList); //Alchemic Platinum
-				case 2: m1 = LoadMaterial(7, sList); //Glassteel
-				case 3: m1 = LoadMaterial(10, sList); //Mindsilver
-				case 4: m1 = LoadMaterial(12, sList); //Oerthblood
-				case 5: m1 = LoadMaterial(14, sList); //Riverine
+				case 0: m1 = LoadMaterial(3, sList); //Abyssal Bloodiron
+				case 1: m1 = LoadMaterial(4, sList); //Alchemic Platinum
+				case 2: m1 = LoadMaterial(15, sList); //Glassteel
+				case 3: m1 = LoadMaterial(19, sList); //Mindsilver
+				case 4: m1 = LoadMaterial(22, sList); //Oerthblood
+				case 5: m1 = LoadMaterial(26, sList); //Riverine
+				case 6: m1 = LoadMaterial(6, sList); //AstralDriftmetal
 			}
 		} else if (matTier == 3) {
 			int nRand = Random(4);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(5, sList); //Bloodglass
-				case 1: m1 = LoadMaterial(6, sList); //Byeshk
-				case 2: m1 = LoadMaterial(7, sList); //Tantulhor
-				case 3: m1 = LoadMaterial(8, sList); //Metalline
+				case 0: m1 = LoadMaterial(9, sList); //Bloodglass
+				case 1: m1 = LoadMaterial(11, sList); //Byeshk
+				case 2: m1 = LoadMaterial(29, sList); //Tantulhor
+				case 3: m1 = LoadMaterial(17, sList); //Metalline
 			}
 		} else if (matTier == 4) {
 			int nRand = Random(4);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(4, sList); //Axiomatic Brass
-				case 1: m1 = LoadMaterial(11, sList); //Morguth-Iron
-				case 2: m1 = LoadMaterial(13, sList); //Pandemonic Silver
-				case 3: m1 = LoadMaterial(15, sList); //Solanian Truesteel
+				case 0: m1 = LoadMaterial(8, sList); //Axiomatic Brass
+				case 1: m1 = LoadMaterial(21, sList); //Morguth-Iron
+				case 2: m1 = LoadMaterial(23, sList); //Pandemonic Silver
+				case 3: m1 = LoadMaterial(28, sList); //Solanian Truesteel
 			}
 		} else if (matTier > 4) {
-			int nRand = Random(2);
+			int nRand = Random(4);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(9, sList); //Meteoric Iron
-				case 1: m1 = LoadMaterial(3, sList); //Aurorum
+				case 0: m1 = LoadMaterial(18, sList); //Meteoric Iron
+				case 1: m1 = LoadMaterial(7, sList); //Aurorum
+				case 2: m1 = LoadMaterial(24, sList); //Pure Adamantine
+				case 3: m1 = LoadMaterial(20, sList); //Golem Mithral
 			}
-		} else if (d100() < 10) {
+		} else if (d100() < 10 && bIsJewelry) {
 			int nRand = Random(6);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(17, sList); //Copper
-				case 1: m1 = LoadMaterial(18, sList); //Electrum
-				case 2: m1 = LoadMaterial(19, sList); //Gold
-				case 3: m1 = LoadMaterial(20, sList); //Platinum
-				case 4: m1 = LoadMaterial(21, sList); //Silver
-				case 5: m1 = LoadMaterial(22, sList); //White Gold
+				case 0: m1 = LoadMaterial(1, sList); //Copper
+				case 1: m1 = LoadMaterial(14, sList); //Electrum
+				case 2: m1 = LoadMaterial(16, sList); //Gold
+				case 3: m1 = LoadMaterial(25, sList); //Platinum
+				case 4: m1 = LoadMaterial(27, sList); //Silver
+				case 5: m1 = LoadMaterial(30, sList); //White Gold
 			}
 		}
 	} else if (sList == "SCOD_CRAFT_LEATHER") {
 		if (matTier > 2) {
-			int nRand = Random(9);
+			int nRand = Random(11);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(1, sList); //Dragon Hide Black
-				case 1: m1 = LoadMaterial(2, sList); //Dragon Hide Blue
-				case 2: m1 = LoadMaterial(3, sList); //Dragon Hide Red
-				case 3: m1 = LoadMaterial(4, sList); //Dragon Hide White
-				case 4: m1 = LoadMaterial(5, sList); //Dragon Hide Green
-				case 5: m1 = LoadMaterial(6, sList); //Celestial Plumes
-				case 6: m1 = LoadMaterial(7, sList); //Demonscale
-				case 7: m1 = LoadMaterial(8, sList); //Devilscale
-				case 8: m1 = LoadMaterial(9, sList); //Ophidian Hide
+				case 0: m1 = LoadMaterial(5, sList); //Dragon Hide Black
+				case 1: m1 = LoadMaterial(6, sList); //Dragon Hide Blue
+				case 2: m1 = LoadMaterial(8, sList); //Dragon Hide Red
+				case 3: m1 = LoadMaterial(9, sList); //Dragon Hide White
+				case 4: m1 = LoadMaterial(7, sList); //Dragon Hide Green
+				case 5: m1 = LoadMaterial(1, sList); //Celestial Plumes
+				case 6: m1 = LoadMaterial(3, sList); //Demonscale
+				case 7: m1 = LoadMaterial(4, sList); //Devilscale
+				case 8: m1 = LoadMaterial(11, sList); //Manticore Hide
+				case 9: m1 = LoadMaterial(2, sList); //Chimera Hide
+				case 10: m1 = LoadMaterial(10, sList); //Flesh Golem Hide
 			}
 		} else if (matTier > 1) {
 			int nRand = Random(8);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(1, sList); //Dragon Hide Black
-				case 1: m1 = LoadMaterial(2, sList); //Dragon Hide Blue
-				case 2: m1 = LoadMaterial(3, sList); //Dragon Hide Red
-				case 3: m1 = LoadMaterial(4, sList); //Dragon Hide White
-				case 4: m1 = LoadMaterial(5, sList); //Dragon Hide Green
-				case 5: m1 = LoadMaterial(6, sList); //Celestial Plumes
-				case 6: m1 = LoadMaterial(7, sList); //Demonscale
-				case 7: m1 = LoadMaterial(8, sList); //Devilscale
+				case 0: m1 = LoadMaterial(5, sList); //Dragon Hide Black
+				case 1: m1 = LoadMaterial(6, sList); //Dragon Hide Blue
+				case 2: m1 = LoadMaterial(8, sList); //Dragon Hide Red
+				case 3: m1 = LoadMaterial(9, sList); //Dragon Hide White
+				case 4: m1 = LoadMaterial(7, sList); //Dragon Hide Green
+				case 5: m1 = LoadMaterial(7, sList); //Demonscale
+				case 6: m1 = LoadMaterial(8, sList); //Devilscale
+				case 7: m1 = LoadMaterial(12, sList); //Ophidian Hide
 			}
 		}
 	} else if (sList == "SCOD_CRAFT_WOOD") {
 		if (matTier > 2) {
-			int nRand = Random(4);
+			int nRand = Random(9);
 			switch (nRand) {
 				case 0: m1 = LoadMaterial(1, sList); //Arboreal Oak
-				case 1: m1 = LoadMaterial(2, sList); //Dragon Bone
-				case 2: m1 = LoadMaterial(3, sList); //Formic Amber
-				case 3: m1 = LoadMaterial(4, sList); //Twelvetrees Bark
+				case 1: m1 = LoadMaterial(4, sList); //Dragon Bone
+				case 2: m1 = LoadMaterial(6, sList); //Formic Amber
+				case 3: m1 = LoadMaterial(11, sList); //Twelvetrees Bark
+				case 4: m1 = LoadMaterial(2, sList); //Demon Horn
+				case 5: m1 = LoadMaterial(3, sList); //Devil Horn
+				case 6: m1 = LoadMaterial(7, sList); //Giant Bone
+				case 7: m1 = LoadMaterial(9, sList); //Rowan Wood
+				case 8: m1 = LoadMaterial(8, sList); //Ironwood
 			}
 		} else if (matTier > 1) {
-			int nRand = Random(2);
+			int nRand = Random(3);
 			switch (nRand) {
-				case 0: m1 = LoadMaterial(2, sList); //Dragon Bone
-				case 1: m1 = LoadMaterial(3, sList); //Formic Amber
+				case 0: m1 = LoadMaterial(5, sList); //Duskwood
+				case 1: m1 = LoadMaterial(10, sList); //Shedarran
+				case 2: m1 = LoadMaterial(12, sList); // Zalantar
 			}
 		}
 	}
@@ -503,9 +516,9 @@ int GetCraftingItemIndexByBaseItemType(int standardIndex) {
 
 }
 
-object CreateRandomItemFromBaseType(object oPC, struct baseitem i, int matTier = 0) {
-	
-	struct material m1 = GetRandomMaterialOfTier(i.matlist_1, matTier);
+object CreateRandomItemFromBaseType(object oPC, struct baseitem i, int matTier = 0){
+	int bIsJewelry = (i.id == 19 || i.id == 52);
+	struct material m1 = GetRandomMaterialOfTier(i.matlist_1, matTier, bIsJewelry);
 	struct material m2 = LoadMaterial(0, i.matlist_2);
 	struct material m3 = LoadMaterial(0, i.matlist_3);
 	
