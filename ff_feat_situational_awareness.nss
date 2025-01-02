@@ -17,15 +17,16 @@ void main(){
 	RemoveEffectsFromSpell(oPC, nId);
 	
 	int nLevel = GetHitDice(oPC);
-	int nTumble = GetSkillRank(SKILL_TUMBLE, oPC, TRUE);
-	int nAcFromLvl = (nLevel + 3) / 10;
-	int nAcFromTumble = nTumble / 10;
-	int nAC = nAcFromLvl - nAcFromTumble;
-	if (TUMBLE_DISABLED_BY_DAE) nAC = nAcFromLvl;
-	if (nAC > 0){
-		effect eAC = EffectACIncrease(nAC, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
-		eAC = SupernaturalEffect(eAC);
-		eAC = SetEffectSpellId(eAC, nId);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
-	}
+    int nTumble = GetSkillRank(SKILL_TUMBLE, oPC, TRUE);
+    int nAcFromLvl = (nLevel + 3) / 10;
+    int nAcFromTumble = nTumble / 10;
+    int nAC = nAcFromLvl - nAcFromTumble;
+    if (TUMBLE_DISABLED_BY_DAE) nAC = nAcFromLvl;
+    if (nAC > 0){
+        effect eAC = EffectACIncrease(nAC, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
+        eAC = SupernaturalEffect(eAC);
+        eAC = SetEffectSpellId(eAC, nId);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
+    }
+	
 }
