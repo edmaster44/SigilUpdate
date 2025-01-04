@@ -68,12 +68,12 @@ void DoMagicFang2(int nPower, int nVFX)
 				bApplied = TRUE;
 			}
 		//Additional checks to verify equippable creature weapons - Ceremorph 1/10/15
-			if (GetIsObjectValid(oCWeapR) && GetBaseItemType(oCWeapR) >= 160 && GetBaseItemType(oCWeapR) <= 177)
+			if (GetIsObjectValid(oCWeapR) && IPGetIsCreatureEquippedWeapon(oCWeapR))
 			{
 				IPSafeAddItemProperty(oCWeapR, iEbonus, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
 				bApplied = TRUE;
 			}
-			if (GetIsObjectValid(oCWeapL) && GetBaseItemType(oCWeapL) >= 160 && GetBaseItemType(oCWeapL) <= 177)
+			if (GetIsObjectValid(oCWeapL) && IPGetIsCreatureEquippedWeapon(oCWeapL))
 			{
 				IPSafeAddItemProperty(oCWeapL, iEbonus, fDuration, X2_IP_ADDPROP_POLICY_IGNORE_EXISTING);
 				bApplied = TRUE;
