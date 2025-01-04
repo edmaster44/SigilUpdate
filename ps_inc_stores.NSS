@@ -193,7 +193,7 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 		SendMessageToPC(oPC, "About to enchant. . ");
 	}
 	
-	struct enchantment e = LoadEnchantment(nEnchant, oPC);
+	struct enchantment e = LoadEnchantmentFromSQL(nEnchant, oPC);
 	
 	if (GetIsObjectValid(oPC)) {
 		SendMessageToPC(oPC, "Enchantment chosen: "+IntToString(e.id));

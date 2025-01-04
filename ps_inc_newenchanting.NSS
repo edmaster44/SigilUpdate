@@ -4,8 +4,9 @@ const string xmlEnchantingFile = "scod_enchanting_window.xml";
 const string sEnchantingScreen = "SCOD_ENCHANTING";
 
 
-
 struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID);
+struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID);
+struct enchantment LoadEnchantmentFromSQL(int index, object oPC = OBJECT_INVALID);
 
 //Enchant the chosen item
 void EnchantItem(object oItem, struct enchantment enchant);
@@ -86,22 +87,14 @@ int GetIsPlayerMade(object oItem);
 // Will allow for additional points for player-crafted weapons and new enchant options for other items
 void ApplyPlayerMade(object oItem);
 
-void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID);
-
 string GetAdditionalEssenceReq(object oPC, int nPoints);
 
-//************************************************
-//2da data fetch classes
-//************************************************
-
-// GenerateEnchantmentTypeList without sql
+void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID);
 void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem);
 
+void GenerateParamTypeList(object oPC, struct enchantment enchant);
 void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment enchant);
 
-// Gets the same thing as LoadEnchantment, but without sql.
-// Set constant CRAFT_DIRECT_FROM_2DA to TRUE to use this
-struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID);
 
 //Writes out the item property in a pretty string
 //fit for gui display
@@ -149,30 +142,10 @@ void EnchantItem(object oItem, struct enchantment enchant) {
 //Will get variables differently from sql, of course
 // Variables of struct would stay the same though
 struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID){
-	
-	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
-
 	if (CRAFT_DIRECT_FROM_2DA) return LoadEnchantmentFrom2DA(index, oPC);
-
-	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE Recipe_Id='"+IntToString(index)+"'");
-	
-    struct enchantment enchant;
-	while (SQLFetch() != SQL_ERROR) {
-		enchant.id = StringToInt(SQLGetData(1));
-		enchant.type = StringToInt(SQLGetData(2));
-		enchant.subtype = StringToInt(SQLGetData(3));
-		enchant.numerical = StringToInt(SQLGetData(4));
-		enchant.special = StringToInt(SQLGetData(5));
-		enchant.points = StringToInt(SQLGetData(6));
-		enchant.gold =StringToInt(SQLGetData(7));
-		enchant.essence = SQLGetData(8);
-		enchant.gemstone = SQLGetData(9);
-		enchant.special_req = SQLGetData(10);
-	}
-	if (GetIsObjectValid(oPC)) enchant.add_essence = GetAdditionalEssenceReq(oPC, enchant.points);
-	else enchant.add_essence = "";
-	return enchant;
+	return LoadEnchantmentFromSQL(index, oPC);
 }
+
 
 struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID){
 
@@ -193,6 +166,31 @@ struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID
 	else enchant.add_essence = "";
 	return enchant;
 }
+
+struct enchantment LoadEnchantmentFromSQL(int index, object oPC = OBJECT_INVALID){
+
+	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+	
+	SQLExecDirect("SELECT Recipe_Id, Type, Subtype, Numerical, Special, Points, Gold, Essence, Gemstone, Custom_Requirement FROM recipes WHERE Recipe_Id='"+IntToString(index)+"'");
+	
+    struct enchantment enchant;
+	while (SQLFetch() != SQL_ERROR) {
+		enchant.id = StringToInt(SQLGetData(1));
+		enchant.type = StringToInt(SQLGetData(2));
+		enchant.subtype = StringToInt(SQLGetData(3));
+		enchant.numerical = StringToInt(SQLGetData(4));
+		enchant.special = StringToInt(SQLGetData(5));
+		enchant.points = StringToInt(SQLGetData(6));
+		enchant.gold =StringToInt(SQLGetData(7));
+		enchant.essence = SQLGetData(8);
+		enchant.gemstone = SQLGetData(9);
+		enchant.special_req = SQLGetData(10);
+	}
+	if (GetIsObjectValid(oPC)) enchant.add_essence = GetAdditionalEssenceReq(oPC, enchant.points);
+	else enchant.add_essence = "";
+	return enchant;
+}
+
 
 
 void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
@@ -806,7 +804,8 @@ void DisplayItemDescription(object oPC, object oItem) {
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_NAME", -1, sName);
 	string sDesc = GetItemPropertyList(oItem, oPC);
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_DESCRIPTION", -1, sDesc);
-	SendMessageToPC(oPC, "Starting points");
+	//debug
+	//SendMessageToPC(oPC, "Starting points");
 	
 	int nPointTotal = GetItemTotalPoints(oItem, oPC);
 	int nPointAllowed = GetItemTotalPointsAllowed(oItem);
@@ -1150,7 +1149,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 	// everything else. 
 	int i;
 	int nNumRows = GetNum2DARows("scod_craft_baseitems");
-	if (nItem == 16){
+	if (nItem == 16){ // armor/clothing
 		// going to compare strings instead of using StringToInt in the 2da because "****" in the 2da 
 		// would be converted to 0 as integer, which would match with clothing rulesstat
 		string sArmorStat = IntToString(GetArmorRulesType(oItem));
@@ -1276,20 +1275,30 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 	nNumRows = GetNum2DARows("scodenchantments");
 	int bSkipIp; // boolean to skip an ip that we know is 0 points or specific points already added.
 	ip = GetFirstItemProperty(oItem);
-	int nNumerical;
-	int nSpecial;
 	while (GetIsItemPropertyValid(ip)){
 		bSkipIp = FALSE;
 		bFoundMatch = FALSE;
 		nIpType = GetItemPropertyType(ip);
+		nIpSub = GetItemPropertySubType(ip);
 		
-		if (nIpType == 100 || nIpType == 101) bSkipIp = TRUE; // "Forged Of" and Player-Made ips
+		// skip temp enchantments like from light spell or magic vestment spell
+		if (GetItemPropertyDurationType(ip) !=  DURATION_TYPE_PERMANENT)
+			bSkipIp = TRUE;
 		
+		// "Forged Of" and Player-Made ips
+		if (!bSkipIp && (nIpType == 100 || nIpType == 101))
+			bSkipIp = TRUE; 
+		
+		// the special material power
 		if (!bSkipIp && GetIsItemPropertyValid(ipMatPower)){
 			if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
 				bSkipIp = TRUE; // we've already added the points for the mat power
 			}
 		}
+		
+		// skip the unique power self only on ammo and thrown quivers
+		if (!bSkipIp && IPGetIsQuiver(OBJECT_INVALID, nItem) && nIpType == 15)
+			bSkipIp = TRUE;
 		
 		// reload and aim features granted by materials a crossbow is made with do not cost points
 		// (because they don't grant any either)
@@ -1299,15 +1308,20 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		if (!bSkipIp && GetIsItemPropertyValid(ipMechAim)){
 			if (IPGetItemPropertiesIdentical(ipMechAim, ip)) bSkipIp = TRUE;	
 		}
+		
+		// synergy bonus
 		if (!bSkipIp && GetIsItemPropertyValid(ipSynergy)){
 			if (IPGetItemPropertiesIdentical(ipSynergy, ip)){
 				nPoints += nSynergyPoints;
 				bSkipIp = TRUE;
 			}
 		}
+		
+		// 50% weight reduction costs no points
 		if (!bSkipIp){
 			if (IPGetItemPropertiesIdentical(ipWeight, ip)) bSkipIp = TRUE;
 		}
+		
 		// checking for keen/imp crit last in case it was already the matpower
 		if (!bSkipIp && !IPGetItemPropertiesIdentical(ipCrit, ipMatPower)){
 			if (nIpType == 43){
@@ -1315,32 +1329,54 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 				bSkipIp = TRUE;
 			}
 		}
+		
+		// if a ranged weapon has bonus feat imp crit, that is equivalent to keen
+		// because you cannot dual wield ranged weapons. Therefore we add 1 point and move on
+		if (!bSkipIp && nIpType == 12){ // type 12 = bonus feat
+			// for reasons I don't understand there are 2 entries in iprp_feats
+			// for each imp crit for ranged weapons
+			if ((nItem == BASE_ITEM_LONGBOW && (nIpSub == 59 || nIpSub == 1318)) ||
+				(nItem == BASE_ITEM_SHORTBOW && (nIpSub == 60 || nIpSub == 1317)) ||
+				(nItem == BASE_ITEM_HEAVYCROSSBOW && (nIpSub == 50 || nIpSub == 1320)) ||
+				(nItem == BASE_ITEM_LIGHTCROSSBOW && (nIpSub == 51 || nIpSub == 1319)) ||
+				(nItem == BASE_ITEM_SLING && (nIpSub == 57 || nIpSub == 1316)) ||
+				(nItem == BASE_ITEM_DART && (nIpSub == 49 || nIpSub == 1321)) ||
+				(nItem == BASE_ITEM_SHURIKEN && (nIpSub == 77 || nIpSub == 1322)) ||
+				(nItem == BASE_ITEM_THROWINGAXE && (nIpSub == 67 || nIpSub == 1323))){
+				nPoints += 1;
+				bSkipIp = TRUE;
+			}
+		}
+	
 		if (!bSkipIp){
-			nIpSub = GetItemPropertySubType(ip);
-			nNumerical = GetItemPropertyCostTableValue(ip);
-			nSpecial = GetItemPropertyParam1(ip);
-			// for some reason vamp regen wasn't being recognized, so handling itspecifically
-			if (nIpType == 67) nPoints += (nNumerical - 1);
-			else {
-				// now search for matching type and subtype in scodenchantments
-				for (i = 0; i < nNumRows; i++){
-					if (Get2DAString("scodenchantments", sTypeColumn, i) == "1"){
-						if (StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType && 
-							StringToInt(Get2DAString("scodenchantments", "Subtype", i)) == nIpSub &&
-							StringToInt(Get2DAString("scodenchantments", "Numerical", i)) == nNumerical &&
-							StringToInt(Get2DAString("scodenchantments", "Special", i)) == nSpecial){
-							
-			
-							// if the type and subtype match and it's a valid enchantment for this item, lets compare
-							eFrom2da = LoadEnchantment(i, oPC);
-							ipFrom2da = EnchantmentIndexToItemProp(eFrom2da);
-							if (IPGetItemPropertiesIdentical(ip, ipFrom2da)){
-								bFoundMatch = TRUE;
-								nPoints += eFrom2da.points;
-								break;
-							}
-								
-						}
+			for (i = 0; i < nNumRows; i++){
+				if (Get2DAString("scodenchantments", sTypeColumn, i) == "1" &&
+					StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType){
+					
+					eFrom2da = LoadEnchantment(i, oPC);
+					ipFrom2da = EnchantmentIndexToItemProp(eFrom2da);
+					
+					//debug 
+					/*
+					string sDebug = "\nComparison\n";
+					sDebug += "Item type: " + IntToString(nIpType);
+					sDebug += ", 2da type: " +IntToString(GetItemPropertyType(ipFrom2da)) + "\n";
+					sDebug += "Item sub: " +IntToString(GetItemPropertySubType(ip));
+					sDebug += ", 2da sub: " +IntToString(GetItemPropertySubType(ipFrom2da)) + "\n";
+					sDebug += "Item table: " +IntToString(GetItemPropertyCostTable(ip));
+					sDebug += ", 2da table: " +IntToString(GetItemPropertyCostTable(ipFrom2da)) + "\n";
+					sDebug += "Item num: " +IntToString(GetItemPropertyCostTableValue(ip));
+					sDebug += ", 2da num: " +IntToString(GetItemPropertyCostTableValue(ipFrom2da)) + "\n";
+					sDebug += "Item spec: " +IntToString(GetItemPropertyParam1Value(ip));
+					sDebug += ", 2da spec: " +IntToString(GetItemPropertyParam1Value(ipFrom2da)) + "\n\n";					
+					SendMessageToPC(oPC, sDebug);
+					*/
+					if (IPGetItemPropertiesIdentical(ip, ipFrom2da)){
+						//debug
+						//SendMessageToPC(oPC, "FOUND MATCH");
+						bFoundMatch = TRUE;
+						nPoints += StringToInt(Get2DAString("scodenchantments", "Points", i));
+						break;
 					}
 				}
 			}

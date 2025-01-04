@@ -325,8 +325,10 @@ int IPGetIsLightWeapon(object oPC, object oWeapon);
 
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE){
 	if (GetItemPropertyType(ip1) != GetItemPropertyType(ip2)) return FALSE;
+	if (GetItemPropertySubType(ip1) != GetItemPropertySubType(ip2)) return FALSE;
 	if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2)) return FALSE;
 	if (GetItemPropertyCostTableValue(ip1) != GetItemPropertyCostTableValue(ip2)) return FALSE;
+	if (GetItemPropertyParam1Value(ip1) != GetItemPropertyParam1Value(ip2)) return FALSE;
 	if (!bIgnoreDuration){
 		if (GetItemPropertyDurationType(ip1) != GetItemPropertyDurationType(ip2)) return FALSE;
 	}
