@@ -1161,8 +1161,22 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 				}
 		}
 	} else {
+		// the base item id listed in scod_craft_baseitems for quivers is the id for the weapon
+		// the quiver produces, not the quiver itself, so we need to look for the actual 
+		// arrow/dart/etc id
+		int nConvertedId;
+		switch(nItem){
+			case 90: nConvertedId = 31; break; // dart quiver to dart
+			case 91: nConvertedId = 63; break; // throwing axe quiver to taxe
+			case 92: nConvertedId = 59; break; // shuriken quiver to shuriken
+			case 93: nConvertedId = 20; break; // arrow quiver to arrow
+			case 94: nConvertedId = 25; break; // bolt quiver to bolt
+			case 95: nConvertedId = 27; break; // bullet quiver to bullet
+			default: nConvertedId = nItem; break; // anything else
+		}
+	
 		for (i = 0; i < nNumRows; i++){
-			if (StringToInt(Get2DAString("scod_craft_baseitems", "ID", i)) == nItem){
+			if (StringToInt(Get2DAString("scod_craft_baseitems", "ID", i)) == nConvertedId){
 				nCraftId = i;
 				break;
 			}
@@ -1291,9 +1305,8 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		
 		// the special material power
 		if (!bSkipIp && GetIsItemPropertyValid(ipMatPower)){
-			if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
+			if (IPGetItemPropertiesIdentical(ipMatPower, ip))
 				bSkipIp = TRUE; // we've already added the points for the mat power
-			}
 		}
 		
 		// skip the unique power self only on ammo and thrown quivers
