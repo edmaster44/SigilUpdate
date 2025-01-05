@@ -154,7 +154,81 @@ const int B_ALLOW_CRAFT_PLUS_10_MATCH = TRUE; // ditto, but for +10
 
 /**************************************************************************************************
 					END CRAFT SCROLL/POTION/WAND CONTROLS
+					
+					Begin Craft Weapon/Armor/Etc system constants
 **************************************************************************************************/
+
+const int SPECIAL_MAT_ABYSSAL_BLOODIRON = 0;
+const int SPECIAL_MAT_ALCHEMIC_PLATINUM = 1;
+const int SPECIAL_MAT_ARBOREAL_OAK = 31;
+const int SPECIAL_MAT_ASTRAL_DRIFTMETAL = 53;
+const int SPECIAL_MAT_AURORUM = 2;
+const int SPECIAL_MAT_AXIOMATIC_BRASS = 3;
+const int SPECIAL_MAT_BLOOD_GLASS = 4;
+const int SPECIAL_MAT_BRASS_FOR_GOLEM = 49;
+const int SPECIAL_MAT_BYESHK = 5;
+const int SPECIAL_MAT_CELESTIAL_PLUMES = 27;
+const int SPECIAL_MAT_CHIMERA_HIDE = 54;
+const int SPECIAL_MAT_COLD_IRON = 41;
+const int SPECIAL_MAT_COPPER = 16;
+const int SPECIAL_MAT_DARKSTEEL = 45;
+const int SPECIAL_MAT_DEMON_HORN = 51;
+const int SPECIAL_MAT_DEMON_SCALE = 28;
+const int SPECIAL_MAT_DEVIL_HORN = 52;
+const int SPECIAL_MAT_DEVIL_SCALE = 29;
+const int SPECIAL_MAT_DHIDE_BLACK = 22;
+const int SPECIAL_MAT_DHIDE_BLUE = 23;
+const int SPECIAL_MAT_DHIDE_GREEN = 26;
+const int SPECIAL_MAT_DHIDE_RED = 24;
+const int SPECIAL_MAT_DHIDE_WHITE = 25;
+const int SPECIAL_MAT_DOOMFORGED = 42;
+const int SPECIAL_MAT_DRAGON_BONE = 32;
+const int SPECIAL_MAT_DRAGON_SINEW = 35;
+const int SPECIAL_MAT_DUSKWOOD = 46;
+const int SPECIAL_MAT_ELECTRUM = 17;
+const int SPECIAL_MAT_FIENDISH_IVORY = 50;
+const int SPECIAL_MAT_FLESH_GOLEM_HIDE = 57;
+const int SPECIAL_MAT_FORMIC_AMBER = 33;
+const int SPECIAL_MAT_GIANT_BONE = 55;
+const int SPECIAL_MAT_GLASSTEEL = 6;
+const int SPECIAL_MAT_GOLD = 18;
+const int SPECIAL_MAT_IRON = 38;
+const int SPECIAL_MAT_IRONWOOD = 60;
+const int SPECIAL_MAT_LEATHER = 39;
+const int SPECIAL_MAT_MANTICORE_HIDE = 61;
+const int SPECIAL_MAT_MERCURIAN_ROSE = 56;
+const int SPECIAL_MAT_METALLINE = 7;
+const int SPECIAL_MAT_METEORIC_IRON = 8;
+const int SPECIAL_MAT_MINDSILVER = 9;
+const int SPECIAL_MAT_MITHRAL_FOR_GOLEM = 44;
+const int SPECIAL_MAT_MOON_PEARL = 59;
+const int SPECIAL_MAT_MORGUTH_IRON = 10;
+const int SPECIAL_MAT_NEUMANNIC_FLYWHEEL = 36;
+const int SPECIAL_MAT_OERTHBLOOD = 11;
+const int SPECIAL_MAT_OPHIDIAN = 30;
+const int SPECIAL_MAT_PANDEMONIC_SILVER = 12;
+const int SPECIAL_MAT_PLATINUM = 19;
+const int SPECIAL_MAT_PURE_ADAMANTINE = 43;
+const int SPECIAL_MAT_PYRITE = 62;
+const int SPECIAL_MAT_REGULAN_GEARSPRING = 37;
+const int SPECIAL_MAT_RIVERINE = 13;
+const int SPECIAL_MAT_ROWANWOOD = 58;
+const int SPECIAL_MAT_SHEDERRAN = 47;
+const int SPECIAL_MAT_SILVER_ALCH = 20;
+const int SPECIAL_MAT_SILVER_REG = 63;
+const int SPECIAL_MAT_SOLANION_TRUESTEEL = 14;
+const int SPECIAL_MAT_TANTULHOR = 15;
+const int SPECIAL_MAT_TWELVETREES_BARK = 34;
+const int SPECIAL_MAT_WHITE_GOLD = 21;
+const int SPECIAL_MAT_WOOD = 40;
+const int SPECIAL_MAT_ZALANTAR = 48;
+// the following 2 do not grant enchantment points, they grant a bonus feat instead
+const int SPECIAL_MAT_XBOW_LEVER = 64;
+const int SPECIAL_MAT_XBOW_SIGHT = 65;
+
+/*********************************************************************************************
+						End Craft Weapon/Armor/Etc system constants
+*********************************************************************************************/
 
 
 

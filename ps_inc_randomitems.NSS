@@ -382,113 +382,120 @@ void GiveItemRandomEnchantments(object oItem, int nPoints) {
 
 //Get Material for random item of tier = matTier
 struct material GetRandomMaterialOfTier(string sList, int matTier, int bIsJewelry = FALSE) {
-	struct material m1 = LoadMaterial(0, sList);
+	int nIprpSpecialMat = 0;
+	
 	if (sList == "SCOD_CRAFT_METAL") {
 		if (matTier == 1) {
-			int nRand = Random(2);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(12, sList); //Cold Iron
-				case 1: m1 = LoadMaterial(5, sList); //Silver
+			switch (Random(5)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_COLD_IRON; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_COLD_IRON; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_SILVER_ALCH; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_SILVER_ALCH; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_DARKSTEEL; break;
+
 			}
 		} else if (matTier == 2) {
-			int nRand = Random(7);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(3, sList); //Abyssal Bloodiron
-				case 1: m1 = LoadMaterial(4, sList); //Alchemic Platinum
-				case 2: m1 = LoadMaterial(15, sList); //Glassteel
-				case 3: m1 = LoadMaterial(19, sList); //Mindsilver
-				case 4: m1 = LoadMaterial(22, sList); //Oerthblood
-				case 5: m1 = LoadMaterial(26, sList); //Riverine
-				case 6: m1 = LoadMaterial(6, sList); //AstralDriftmetal
+			switch (Random(7)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_ABYSSAL_BLOODIRON; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_ALCHEMIC_PLATINUM; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_GLASSTEEL; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_MINDSILVER; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_OERTHBLOOD; break;
+				case 5: nIprpSpecialMat = SPECIAL_MAT_RIVERINE; break;
+				case 6: nIprpSpecialMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break;
 			}
 		} else if (matTier == 3) {
-			int nRand = Random(4);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(9, sList); //Bloodglass
-				case 1: m1 = LoadMaterial(11, sList); //Byeshk
-				case 2: m1 = LoadMaterial(29, sList); //Tantulhor
-				case 3: m1 = LoadMaterial(17, sList); //Metalline
+			switch (Random(5)){
+				case 0: nIprpSpecialMat = SPECIAL_MAT_AXIOMATIC_BRASS; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_METALLINE; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_METEORIC_IRON; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_MITHRAL_FOR_GOLEM; break;
 			}
 		} else if (matTier == 4) {
-			int nRand = Random(4);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(8, sList); //Axiomatic Brass
-				case 1: m1 = LoadMaterial(21, sList); //Morguth-Iron
-				case 2: m1 = LoadMaterial(23, sList); //Pandemonic Silver
-				case 3: m1 = LoadMaterial(28, sList); //Solanian Truesteel
+			switch (Random(5)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_MORGUTH_IRON; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_BLOOD_GLASS; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_BYESHK; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_TANTULHOR; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_SOLANION_TRUESTEEL; break;
 			}
 		} else if (matTier > 4) {
-			int nRand = Random(4);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(18, sList); //Meteoric Iron
-				case 1: m1 = LoadMaterial(7, sList); //Aurorum
-				case 2: m1 = LoadMaterial(24, sList); //Pure Adamantine
-				case 3: m1 = LoadMaterial(20, sList); //Golem Mithral
+			switch (Random(3)) { 
+				case 0: nIprpSpecialMat = SPECIAL_MAT_MINDSILVER; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_AURORUM; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_PURE_ADAMANTINE; break;
 			}
-		} else if (d100() < 10 && bIsJewelry) {
-			int nRand = Random(6);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(1, sList); //Copper
-				case 1: m1 = LoadMaterial(14, sList); //Electrum
-				case 2: m1 = LoadMaterial(16, sList); //Gold
-				case 3: m1 = LoadMaterial(25, sList); //Platinum
-				case 4: m1 = LoadMaterial(27, sList); //Silver
-				case 5: m1 = LoadMaterial(30, sList); //White Gold
+		} else {
+			if (d100() < 10 && bIsJewelry) {
+				switch (Random(7)) {
+					case 0: nIprpSpecialMat = SPECIAL_MAT_COPPER; break;
+					case 1: nIprpSpecialMat = SPECIAL_MAT_ELECTRUM; break;
+					case 2: nIprpSpecialMat = SPECIAL_MAT_GOLD; break;
+					case 3: nIprpSpecialMat = SPECIAL_MAT_PLATINUM; break;
+					case 4: nIprpSpecialMat = SPECIAL_MAT_SILVER_REG; break;
+					case 5: nIprpSpecialMat = SPECIAL_MAT_WHITE_GOLD; break;
+					case 6: nIprpSpecialMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break;
+				}
+			} else {
+				nIprpSpecialMat = SPECIAL_MAT_IRON;
 			}
 		}
 	} else if (sList == "SCOD_CRAFT_LEATHER") {
 		if (matTier > 2) {
-			int nRand = Random(11);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(5, sList); //Dragon Hide Black
-				case 1: m1 = LoadMaterial(6, sList); //Dragon Hide Blue
-				case 2: m1 = LoadMaterial(8, sList); //Dragon Hide Red
-				case 3: m1 = LoadMaterial(9, sList); //Dragon Hide White
-				case 4: m1 = LoadMaterial(7, sList); //Dragon Hide Green
-				case 5: m1 = LoadMaterial(1, sList); //Celestial Plumes
-				case 6: m1 = LoadMaterial(3, sList); //Demonscale
-				case 7: m1 = LoadMaterial(4, sList); //Devilscale
-				case 8: m1 = LoadMaterial(11, sList); //Manticore Hide
-				case 9: m1 = LoadMaterial(2, sList); //Chimera Hide
-				case 10: m1 = LoadMaterial(10, sList); //Flesh Golem Hide
+			switch (Random(7)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_DHIDE_BLACK; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_DHIDE_BLUE; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_DHIDE_GREEN; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_DHIDE_WHITE; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_DHIDE_RED; break;
+				case 5: nIprpSpecialMat = SPECIAL_MAT_CELESTIAL_PLUMES; break;
+				case 6: nIprpSpecialMat = SPECIAL_MAT_FLESH_GOLEM_HIDE; break;
 			}
 		} else if (matTier > 1) {
-			int nRand = Random(8);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(5, sList); //Dragon Hide Black
-				case 1: m1 = LoadMaterial(6, sList); //Dragon Hide Blue
-				case 2: m1 = LoadMaterial(8, sList); //Dragon Hide Red
-				case 3: m1 = LoadMaterial(9, sList); //Dragon Hide White
-				case 4: m1 = LoadMaterial(7, sList); //Dragon Hide Green
-				case 5: m1 = LoadMaterial(7, sList); //Demonscale
-				case 6: m1 = LoadMaterial(8, sList); //Devilscale
-				case 7: m1 = LoadMaterial(12, sList); //Ophidian Hide
+			switch (Random(6)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_DEMON_SCALE; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_DEVIL_SCALE; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_MANTICORE_HIDE; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_CHIMERA_HIDE; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_OPHIDIAN; break;
+				case 5: nIprpSpecialMat = SPECIAL_MAT_OPHIDIAN; break;
 			}
-		}
+		} else nIprpSpecialMat = SPECIAL_MAT_LEATHER;
 	} else if (sList == "SCOD_CRAFT_WOOD") {
 		if (matTier > 2) {
-			int nRand = Random(9);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(1, sList); //Arboreal Oak
-				case 1: m1 = LoadMaterial(4, sList); //Dragon Bone
-				case 2: m1 = LoadMaterial(6, sList); //Formic Amber
-				case 3: m1 = LoadMaterial(11, sList); //Twelvetrees Bark
-				case 4: m1 = LoadMaterial(2, sList); //Demon Horn
-				case 5: m1 = LoadMaterial(3, sList); //Devil Horn
-				case 6: m1 = LoadMaterial(7, sList); //Giant Bone
-				case 7: m1 = LoadMaterial(9, sList); //Rowan Wood
-				case 8: m1 = LoadMaterial(8, sList); //Ironwood
+			switch (Random(9)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_ARBOREAL_OAK; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_DRAGON_BONE; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_FORMIC_AMBER; break;
+				case 3: nIprpSpecialMat = SPECIAL_MAT_TWELVETREES_BARK; break;
+				case 4: nIprpSpecialMat = SPECIAL_MAT_DEMON_HORN; break;
+				case 5: nIprpSpecialMat = SPECIAL_MAT_DEVIL_HORN; break;
+				case 6: nIprpSpecialMat = SPECIAL_MAT_GIANT_BONE; break;
+				case 7: nIprpSpecialMat = SPECIAL_MAT_ROWANWOOD; break;
+				case 8: nIprpSpecialMat = SPECIAL_MAT_IRONWOOD; break;
 			}
 		} else if (matTier > 1) {
-			int nRand = Random(3);
-			switch (nRand) {
-				case 0: m1 = LoadMaterial(5, sList); //Duskwood
-				case 1: m1 = LoadMaterial(10, sList); //Shedarran
-				case 2: m1 = LoadMaterial(12, sList); // Zalantar
+			switch (Random(3)) {
+				case 0: nIprpSpecialMat = SPECIAL_MAT_DUSKWOOD; break;
+				case 1: nIprpSpecialMat = SPECIAL_MAT_SHEDERRAN; break;
+				case 2: nIprpSpecialMat = SPECIAL_MAT_ZALANTAR; break;
 			}
+		} else nIprpSpecialMat = SPECIAL_MAT_WOOD;
+	}
+	
+	int nMaxRows = GetNum2DARows(sList) - 1;
+	int i;
+	int nIpId;
+	int nListRow = 0;
+	for (i = 0; i <= nMaxRows; i++){
+		nIpId = StringToInt(Get2DAString(sList, "IP_DESCRIPTION_ID", i));
+		if (nIpId == nIprpSpecialMat){
+			nListRow = i;
+			break;
 		}
 	}
-	return m1;
+	return LoadMaterial(nListRow, sList);
 }
 
 //Runs through scod_craft_baseitems and returns the crafting index
