@@ -62,7 +62,8 @@ int GetItemTotalPointsAllowed(object oItem);
 //Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
 //Misc, Belt, Cloak
 //used by the crafting manual script
-string GenerateEnchantmentManualFor(object oTarget, string sColumn);
+string GenerateEnchantmentManual(string sColumn);
+string GenerateEnchantmentManualFrom2da(string sColumn);
 
 //Takes an enchantment and returns a string describing its recipe
 string GenerateEnchantmentDescription(struct enchantment enchant);
@@ -371,37 +372,6 @@ string GetSecondaryParamName(struct enchantment enchant) {
 		return sParam;
 }
 
-
-//Checks whether this enchantment type is valid on this item
-//May need to be revisited - not everything is clearly marked in the 2da
-//update 5/2/18 - may not be necessary anymore, so always returns true.
-int CanAddEnchantmentToItem(object oItem, int nEnchant) {
-
-	return TRUE;
-	/*int nAllowed = FALSE;
-	if (IPGetIsMeleeWeapon(oItem)) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "0_Melee", nEnchant));
-	} else if (IPGetIsLauncher(oItem)) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "1_Ranged", nEnchant));	
-	} else if (IPGetIsThrownWeapon(oItem)) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "2_Thrown", nEnchant));	
-	} else if (GetBaseItemType(oItem) == BASE_ITEM_QUARTERSTAFF || GetBaseItemType(oItem) == BASE_ITEM_MAGICSTAFF) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "3_Staves", nEnchant));	
-	} else if (IPGetIsProjectile(oItem)) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "5_Ammo", nEnchant));	
-	} else if (MatchShield(oItem) || GetBaseItemType(oItem) == BASE_ITEM_BRACER 
-		|| GetBaseItemType(oItem) == BASE_ITEM_BOOTS || GetArmorRank(oItem) > ARMOR_RANK_NONE) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "6_Arm_Shld", nEnchant));	
-	} else if (GetBaseItemType(oItem) == BASE_ITEM_HELMET) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "7_Helm", nEnchant));	
-	} else if (GetBaseItemType(oItem) == BASE_ITEM_AMULET || GetBaseItemType(oItem) == BASE_ITEM_RING) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "16_Misc", nEnchant));	
-	} else if (GetBaseItemType(oItem) == BASE_ITEM_GLOVES) {
-		nAllowed = StringToInt(Get2DAString("itemprops", "21_Glove", nEnchant));	
-	}   
-	return nAllowed;*/
-}
-
 //Get the sql string to filter out inappropriate enchantments by item type
 string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE) {
 	string sQuery = "";
@@ -469,8 +439,7 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 		string sName = GetTypeName(e);
 		int nType = e.type;
 		
-		if (CanAddEnchantmentToItem(oItem, nType) && 
-		GetLocalInt(oPC, sName) == 0) {
+		if (GetLocalInt(oPC, sName) == 0) {
 			SetLocalInt(oPC, sName, 1);
 			SetLocalString(oPC, "enchantment_"+IntToString(nDisplayed), sName);
 			nDisplayed++;
@@ -674,7 +643,7 @@ string GenerateEnchantmentDescription(struct enchantment enchant) {
 	
 	string sAddEssence = enchant.add_essence;
 	if (sAddEssence != "") {
-		sResult += "Fuel Essence: "+TranslateItemTagToName(sAddEssence)+"\n";
+		sResult += "Fuel Essence (Alchemical Infusion only): "+TranslateItemTagToName(sAddEssence)+"\n";
 	}
 
 	//Special requirements
@@ -693,8 +662,45 @@ string GenerateEnchantmentDescription(struct enchantment enchant) {
 //Bracer, Helm, Amulet, Ring, Boots, Container, Instrument,
 //Misc, Belt, Cloak
 //used by the crafting manual script
-string GenerateEnchantmentManualFor(object oTarget, string sColumn) {
+string GenerateEnchantmentManualFrom2da(string sColumn){
+	sColumn = GetStringLowerCase(sColumn);
+	if (sColumn == "melee") sColumn = "0_Melee";
+	else if (sColumn == "ranged") sColumn = "1_Ranged";
+	else if (sColumn == "ammo") sColumn = "2_Ammo";
+	else if (sColumn == "thrown") sColumn = "3_Thrown"; 
+	else if (sColumn == "armor") sColumn = "4_Armor";
+	else if (sColumn == "glove") sColumn = "5_Glove";
+	else if (sColumn == "bracer") sColumn = "6_Bracer";
+	else if (sColumn == "helm") sColumn = "7_Helm";
+	else if (sColumn == "amulet") sColumn = "8_Amulet";
+	else if (sColumn == "ring") sColumn = "9_Ring";
+	else if (sColumn == "boots") sColumn = "10_Boots";
+	else if (sColumn == "belt") sColumn = "11_Belt";
+	else if (sColumn == "cloak") sColumn = "12_Cloak";
+	else if (sColumn == "container") sColumn = "13_Container";
+	else if (sColumn == "instrument") sColumn = "14_Instrument";
+	else sColumn = "15_Misc";
+	
+	
+	string sResult = "";
+	int nNumRows = GetNum2DARows("scodenchantments") - 1;
+	int i;
+	struct enchantment e;
+	for (i = 0; i <= nNumRows; i++){
+		if (Get2DAString("scodenchantments", sColumn, i) == "1"){
+			if (Get2DAString("scodenchantments", "Can_Enchant", i) == "1"){
+				e = LoadEnchantmentFrom2DA(i);
+				sResult += GenerateEnchantmentDescription(e);
+				sResult += "\n\n";
+			}
+		}
+	}
+	return sResult;
+} 
 
+string GenerateEnchantmentManual(string sColumn) {
+
+	if (CRAFT_DIRECT_FROM_2DA) return GenerateEnchantmentManualFrom2da(sColumn);
 	//Book contents
 	string sResult = "";
 

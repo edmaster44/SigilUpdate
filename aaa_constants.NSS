@@ -378,7 +378,7 @@ const int CLASS_TYPE_NATUREWARRIOR				= 113;
 const int CLASS_TYPE_PALEMASTER_W 				= 82;
 const int CLASS_TYPE_WARMIND					= 111;
 const int CLASS_TYPE_PSYCHIC_THERUGE			= 115;
-// these two are defined in pc_class_inc as CLASS_TYPE 
+// these two are defined in ps_class_inc as CLASS_TYPE 
 // but they ought to be here. I don't have time rn to 
 // do a file search to see what would break if I moved
 // them so for now they're here as CLASS_ without the TYPE 

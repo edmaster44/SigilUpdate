@@ -307,23 +307,26 @@ int GetInWeaponRange(object oAttacker, object oDefender, int bShieldBash = FALSE
 	int nType = GetBaseItemType(oWeapon);
 	int nOffType = GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oAttacker));
 	// get the range of the weapon
-	float fRange;
+	
+
+	// Set range based upon the reach distance of the attacker. Most functions had set this as
+	// 4 so I will set this as 3 + the reach distance.
+	float fReach = GetCreatureFootprint(oAttacker);
+	float fRange = fReach + 3.0f;
+
+	
 	// if right hand empty or this is a shield bash, set min range
-	if (oWeapon == OBJECT_INVALID || (bShieldBash && !bRangedBash)) fRange = 0.5f;
+	if (oWeapon == OBJECT_INVALID || (bShieldBash && !bRangedBash)) fRange += 0.1f;
 	// if shield throw feat set range to half of a normal ranged weapon
 	else if (bRangedBash) fRange = 15.0f;
 	//if item in right hand it not a weapon, set min range
 	else if (StringToInt(Get2DAString("baseitems", "NumDice", nType)) == 0)
-		fRange = 0.5f;
-	else fRange = StringToFloat(Get2DAString("baseitems", "PrefAttackDist", nType));
-	
-	// add range based upon the reach distance of the attacker,
-	// which is the same as the footprint
-	float fReach = GetCreatureFootprint(oAttacker);
-	fRange += fReach;
+		fRange += 0.1f;
+	else if (IPGetIsRangedWeapon(OBJECT_INVALID, nType))
+		fRange = StringToFloat(Get2DAString("baseitems", "PrefAttackDist", nType));
+	else fRange += StringToFloat(Get2DAString("baseitems", "PrefAttackDist", nType));
 
-	// general consensus seems to be melee range is 4.0 so I'll set that as Minimum
-	if (fRange < 4.0f) fRange = 4.0f;
+
 	
 	// Get the distace between the attack and defender
 	float fDistance = GetDistanceBetween(oAttacker, oDefender);

@@ -509,6 +509,7 @@ struct DamageStats GetDamageStats(object oPC, object oTarget, object oItem){
 	int nDicetype = 0;
 	int nBonus = 0;	
 	int bImpCrit = FALSE;
+	int bKiCrit = FALSE;
 
 	// get the data for the above integers, as well as crit ranges for weapons and ability mods
 	// and damage types
@@ -551,6 +552,13 @@ struct DamageStats GetDamageStats(object oPC, object oTarget, object oItem){
 			else if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE)) nOtherMode = 3;
 			else if (GetActionMode(oPC, ACTION_MODE_FLURRY_OF_BLOWS)) nOtherMode = 2;
 			data.nHitMod -= nOtherMode;
+			
+			// is this a kensai or weapon master using their chosen weapon?
+			int nWeapOfChoice = StringToInt(Get2DAString("baseitems", "FEATWpnOfChoice", nType));
+			if (GetHasFeat(nWeapOfChoice, oPC, TRUE)){
+				if (GetHasFeat(883, oPC, TRUE)) data.nCritMult += 1; // wm or kensai increase mult
+				if (GetHasFeat(885, oPC, TRUE)) bKiCrit = TRUE; // wm ki crit, added later after keen check
+			}
 		} else { // ranged
 			data.nHitMod = nDex;
 			if (GetHasFeat(412, oPC, TRUE)){ // zen archery
@@ -630,6 +638,7 @@ struct DamageStats GetDamageStats(object oPC, object oTarget, object oItem){
 		eEff = GetNextEffect(oPC);
 		
 	}
+	if (bKiCrit) data.nCritRange += 2;
 	if (data.nPow > 5) data.nPow = 5;
 	if (data.nPow < 0) data.nPow = 0;
 	if (data.nDam < 0) data.nDam = 1;
