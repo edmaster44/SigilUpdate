@@ -1,32 +1,67 @@
 //::///////////////////////////////////////////////
 //:: Darkness
-//:: NW_S0_Darkness.nss
+//:: NW_S2_Darkness.nss
 //:: Copyright (c) 2001 Bioware Corp.
 //:://////////////////////////////////////////////
+
+
+#include "nw_s0_darkness_inc"
+
+void main(){
+	if (!X2PreSpellCastCode()) return;
+
+
+	object oCaster = OBJECT_SELF;
+	object oTarget = GetSpellTargetObject();
+	int nTargetType = GetObjectType(oTarget);
+	
+	int nId = GetSpellId();
+	int bAbyssalDark = FALSE;
+	int nRace = GetSubRace(oCaster);
+	int nRounds = PS_GetCasterLevel(oCaster);
+	
+	if (nId == SPELL_RACIAL_DARKNESS){
+		nRounds = GetTotalLevels(oCaster, TRUE);
+		if (nRace == 14 || nRace == 194)
+			bAbyssalDark = TRUE;
+	
+	} else if (nId == SPELLABILITY_AS_DARKNESS){
+		nRounds = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
+		nRounds += (GetTotalLevels(oCaster, TRUE) - nRounds) / 2;
+	}
+	
+    if (nRounds < 5) nRounds = 5;
+
+    if (GetMetaMagicFeat() == METAMAGIC_EXTEND || bAbyssalDark) nRounds *= 2;
+	float fDur = RoundsToSeconds(nRounds);
+	
+	effect eAOE = EffectAreaOfEffect(AOE_PER_DARKNESS);
+	
+	//debug
+	//if (bAbyssalDark) SendMessageToPC(oCaster, "Abyssal");
+	//if (oCaster == oTarget) SendMessageToPC(oCaster, "Cast on self");
+
+	if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
+		nTargetType == OBJECT_TYPE_PLACEABLE || nTargetType == OBJECT_TYPE_ITEM){
+		
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
+		ApplyDarkness(oCaster, oTarget, nId, fDur, bAbyssalDark);
+		
+	} else {
+		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, GetSpellTargetLocation(), fDur);
+	}   
+}
+
+// original Code
 /*
-    Creates a globe of darkness around those in the area
-    of effect.
-*/
-//:://////////////////////////////////////////////
-//:: Created By: Preston Watamaniuk
-//:: Created On: Jan 7, 2002
-//:://////////////////////////////////////////////
-// ChazM 7/14/06 If cast on an object, signal the object cast on (needed for crafting)
-//:: AFW-OEI 08/03/2007: Account for Assassins.
+
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook" 
-
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-20 by Georg
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
+
 
     if (!X2PreSpellCastCode())
     {
@@ -37,32 +72,23 @@ void main()
 // End of Spell Cast Hook
 
 
+
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_DARKNESS);
-    object oTarget = GetSpellTargetObject();
-	if (GetIsObjectValid(oTarget))
-		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DARKNESS));
-	
     location lTarget = GetSpellTargetLocation();
-    int nDuration = GetCasterLevel(OBJECT_SELF);
-	
-	if (GetSpellId() == SPELLABILITY_AS_DARKNESS)
-	{	// Duration is equal to Assassin level for Assassins.
-		nDuration = GetLevelByClass(CLASS_TYPE_ASSASSIN);
-	}
-	
-	int nMetaMagic = GetMetaMagicFeat();
+    int nRounds = GetTotalLevels(OBJECT_SELF, 1); //PS_GetCasterLevel(OBJECT_SELF);
+    int nMetaMagic = GetMetaMagicFeat();
     //Make sure duration does no equal 0
-    if (nDuration < 1)
+    if (nRounds < 1)
     {
-        nDuration = 1;
+        nRounds = 1;
     }
     //Check Extend metamagic feat.
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
-	   nDuration = nDuration *2;	//Duration is +100%
+	   nRounds = nRounds *2;	//Duration is +100%
     }
-	
     //Create an instance of the AOE Object using the Apply Effect function
-    ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
+    ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nRounds));
 }
+*/

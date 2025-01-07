@@ -12,12 +12,13 @@
 //:: Created On: Feb 28, 2002
 //:://////////////////////////////////////////////
 #include "X0_I0_SPELLS"
-#include "aaa_constants"
 #include "x2_inc_spellhook"
 
 void main()
 {
-	PS_RemoveEffects(GetExitingObject(), SPELL_DARKNESS, -1, GetAreaOfEffectCreator());
+	int nId = GetSpellId();
+	PS_RemoveEffects(GetExitingObject(), nId, -1, GetAreaOfEffectCreator());
+	PS_RemoveEffects(GetExitingObject(), nId * -1, -1, GetAreaOfEffectCreator());
 }
 
 
