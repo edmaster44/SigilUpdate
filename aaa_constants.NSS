@@ -8,7 +8,7 @@ rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
 // for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
 // of enchanting
-const int DEBUG_IGNORE_CRAFT_COSTS = TRUE;
+const int DEBUG_IGNORE_CRAFT_COSTS = FALSE;
 
 
 // module control booleans
