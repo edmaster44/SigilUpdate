@@ -22,7 +22,8 @@
 
 #include "nw_s0_darkness_inc"
 
-void main(){
+void main()
+{
 
 	object oCaster = GetAreaOfEffectCreator();
 	object oTarget = GetEnteringObject();
@@ -50,7 +51,9 @@ void main(){
 
     if (GetIsObjectValid(oTarget))
 		ApplyDarkness(oCaster, oTarget, nId, fDur, bAbyssalDark);
-}
+		}
+
+
 // previous code
 /*
 void main()
