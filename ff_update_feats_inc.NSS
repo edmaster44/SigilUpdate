@@ -101,7 +101,7 @@ int fCalcSneakDice(object oPC)
 
 	// lets do knight first, and make it so that they can lose their sneak dice
 	// if they become non-evil, IF the appropriate boolean in this script is set to TRUE
-	if (GetHasFeat(idFeatBlackguardPath, oPC)){
+	if (GetHasFeat(idFeatBlackguardPath, oPC, TRUE)){
 		if (bOnlyEvilBlackguardSneakAttacks){
 			if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
 				nSneakDice += (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) -1) / 3;
@@ -117,11 +117,11 @@ int fCalcSneakDice(object oPC)
 		nSneakDice += (GetLevelByClass(idClassBlackguard, oPC) -1) / 3;
 
 	// next half outsider
-	if (GetHasFeat(idFeatPathOfGuile, oPC))
+	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE))
 		nSneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) /2;
 
 	// psychic warrior
-	if (GetHasFeat(idFeatPsyWarLurk, oPC))
+	if (GetHasFeat(idFeatPsyWarLurk, oPC, TRUE))
 		nSneakDice += GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) / 3;
 
 	// rogue
@@ -155,7 +155,7 @@ int fCalcSneakDice(object oPC)
 	nSneakDice += GetLevelByClass(idClassCuprilach, oPC) / 2;
 
 	// warden frantic reactions
-	if (GetHasFeat(idFeatFranticReactions)) nSneakDice += 2;
+	if (GetHasFeat(idFeatFranticReactions, oPC, TRUE)) nSneakDice += 2;
 	
 	if (nSneakDice > nMaxAllowedSneakDice)nSneakDice = nMaxAllowedSneakDice;
 
@@ -183,7 +183,7 @@ int fCalcOtherSneakFeats(object oPC){
 	
 	// +2 for wererat but ONLY if they have their hybrid form and the appropriate boolean
 	// in this script is set to TRUE
-	if (bCountWererat && GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC) >= 4)
+	if (bCountWererat && GetHasFeat(idFeatWererat, oPC, TRUE) && GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC) >= 4)
 		nBonusDice += 2;
 	
 	return nBonusDice;
@@ -197,7 +197,7 @@ string fCheckForTempSneakDice(object oPC)
 {
 	string nMessage = "";
 
-	if (GetHasFeat(idFeatWererat, oPC) && GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC) >= 4)
+	if (GetHasFeat(idFeatWererat, oPC, TRUE) && GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC) >= 4)
 	{
 		nMessage =  "WARNING: If you leveled up while Wererat Hybrid Form " + 
 			"was active, you have lost your bonus sneak dice until you re-activate "
@@ -372,7 +372,7 @@ void fRemoveSneakFeats(object oPC)
 	}	
 		
 	// remove epic precision but only if the character didn't qualify for it normally
-	if (!GetHasFeat(idFeatCripplingStrike, oPC))
+	if (!GetHasFeat(idFeatCripplingStrike, oPC, TRUE))
 	{
 		FeatRemove(oPC, idFeatEpicPrecision);
 	}
