@@ -95,18 +95,6 @@ void GiveStartingFeats(object oPC)
 	// calls the psywar progression function from ps_inc_functions with 
 	// an argument that tells it to grant the first feat only.
 	DoPsyProgression(oPC, TRUE);
-	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustments");
-	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (!GetLocalInt(oEss, "startability") && GetHitDice(oPC) == 1){
-		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		}
-	}
-	SendMessageToPC(oPC, "Finished Adjusting Ability Scores.");
 }
 void GiveStartingGold( object oPC, int nAmount )
 {
