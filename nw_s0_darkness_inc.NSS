@@ -38,6 +38,7 @@ void ApplyDarkness(object oCaster, object oTarget, int nId, float fDur, int bAby
 			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId * -1, TRUE));
 		}
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, fDur);
+		}
     /*
 	if (bImmuneNeg){
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
