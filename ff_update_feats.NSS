@@ -20,9 +20,12 @@
 			That still leaves Arcane Trickster sneak attacks unused so if you need another sneak attack
 			that will stack with all the rest, there's that one. -FlattedFifth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+#include "aaa_constants"
 #include "ff_update_feats_inc"
 #include "ff_combat_mods"
-#include "aaa_constants"
+
+
+
 
 void ff_update_feats(object oPC);
 void fGrantSneakFeats(object oPC);
@@ -35,9 +38,6 @@ void AdjustAbilityScores(object oPC);
 //main logic of this script
 void ff_update_feats(object oPC){
 
-	AdjustAbilityScores(oPC);
-	
-	
 	SendMessageToPC(oPC, "Re-calculating Sneak Dice");
 	
 	int nSneakDice = 0;
@@ -60,12 +60,31 @@ void ff_update_feats(object oPC){
 	{
 		SendMessageToPC(oPC, tempDiceWarning);
 	}
-
+	
+	DelayCommand(3.0f, AdjustAbilityScores(oPC));
 
 	if (bSaveAfterThisScript)
 	{
 		ExportSingleCharacter(oPC);
 	}
+}
+
+void AdjustAbilityScores(object oPC){
+	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustments");
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	if (GetLocalInt(oEss, "startability")){
+		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
+		return;
+	} else {
+		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
+			AssignCommand(oPC, ClearAllActions(TRUE));
+			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
+		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
+			AssignCommand(oPC, ClearAllActions(TRUE));
+			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
+		} else SendMessageToPC(oPC, "Error: Contact FlattedFifth on Discord");
+	}
+	SendMessageToPC(oPC, "Finished Adjusting Ability Scores.");
 }
 
 //Function to grant sneak dice, death dice, and ep if applicable
@@ -99,21 +118,6 @@ void fGrantSneakFeats(object oPC){
 	// grant ep if sneak dice + death dice + other qualifier >= 5
 	if ((nSneakDice + nDeathDice + nBonusDice) >= 5)
 		FeatAdd(oPC, idFeatEpicPrecision, FALSE);
-}
-
-void AdjustAbilityScores(object oPC){
-	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustments");
-	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (!GetLocalInt(oEss, "startability") && GetHitDice(oPC) <= 3){
-		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		}
-	}
-	SendMessageToPC(oPC, "Finished Adjusting Ability Scores.");
 }
 
 void GiveCreatureWeaponFinesse(object oPC){

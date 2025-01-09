@@ -43,9 +43,9 @@ void main()
 	int nDuration = nCasterLvl;
 	if (GetMetaMagicFeat() == METAMAGIC_EXTEND) nDuration *= 2;
 
-    int nAmount = (nCasterLvl / 3) + 1;	// JLR - OEI 07/12/05 NWN2 3.5
+    int nAmount = (nCasterLvl / 3) + 1;	
     if (nAmount < 1) nAmount = 1;
-    else if (nAmount>6) nAmount = 6;
+    else if (nAmount > 5) nAmount = 5;
 	nAmount += 1;
     
     object oArmor = IPGetTargetedOrEquippedArmor(TRUE);

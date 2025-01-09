@@ -12,7 +12,7 @@
 //:: Created On: Jan 7, 2001
 //:://////////////////////////////////////////////
 //:: AFW-OEI 08/03/2007: Account for Assassins.
-// Flatted Fifth June 4, 2024 - Changed call from GetCasterLevel to PS_GetCasterLevel
+// Flatted Fifth June 4, 2024 - Changed call from PS_GetCasterLevel to PS_GetCasterLevel
 
 #include "ps_inc_functions"
 
@@ -54,7 +54,7 @@ void main()
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	
 	if (GetSpellId() == SPELLABILITY_AS_GHOSTLY_VISAGE)
-	{	// Duration is equal to Assassin level for Assassins.
+	{
 		nDuration = GetLevelByClass(CLASS_TYPE_ASSASSIN);
 	}
 	

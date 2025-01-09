@@ -54,9 +54,9 @@ void main()
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
 	if (GetSpellId() == SPELLABILITY_AS_GREATER_INVISIBLITY)
-	{	// Duration is equal to Assassin level for Assassins.
+	{	
 		nDuration = GetLevelByClass(CLASS_TYPE_ASSASSIN) + GetLevelByClass(41);
 	}
 	

@@ -22,8 +22,7 @@
 
 #include "nw_s0_darkness_inc"
 
-void main()
-{
+void main(){
 
 	object oCaster = GetAreaOfEffectCreator();
 	object oTarget = GetEnteringObject();
@@ -40,7 +39,6 @@ void main()
 	
 	} else if (nId == SPELLABILITY_AS_DARKNESS){
 		nRounds = GetLevelByClass(CLASS_TYPE_ASSASSIN, OBJECT_SELF);
-		nRounds += (GetTotalLevels(OBJECT_SELF, TRUE) - nRounds) / 2;
 	}
 	
     if (nRounds < 5) nRounds = 5;
@@ -51,9 +49,7 @@ void main()
 
     if (GetIsObjectValid(oTarget))
 		ApplyDarkness(oCaster, oTarget, nId, fDur, bAbyssalDark);
-		}
-
-
+}
 // previous code
 /*
 void main()

@@ -85,9 +85,9 @@ void main()
         
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
 		
-        {AddItemProperty(DURATION_TYPE_TEMPORARY, ipNegative, oTarget, fDuration);
+        AddItemProperty(DURATION_TYPE_TEMPORARY, ipNegative, oTarget, fDuration);
 		AddItemProperty(DURATION_TYPE_TEMPORARY, ipGlow, oTarget, fDuration);
-		AddItemProperty(DURATION_TYPE_TEMPORARY, ipDrainer, oTarget, fDuration);}
+		AddItemProperty(DURATION_TYPE_TEMPORARY, ipDrainer, oTarget, fDuration);
 		
         
     }

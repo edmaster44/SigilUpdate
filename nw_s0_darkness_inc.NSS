@@ -53,5 +53,5 @@ void ApplyDarkness(object oCaster, object oTarget, int nId, float fDur, int bAby
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, fDur);
 	}*/
-}	  
+	  
 }

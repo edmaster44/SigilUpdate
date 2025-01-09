@@ -6,7 +6,8 @@
 void ApplyLight(object oCaster, object oTarget, int nId, float fDur, int bDivineLight){
 	
 	int nBonus = 5;
-	if (GetMetaMagicFeat() == METAMAGIC_EMPOWER || bDivineLight) nBonus += nBonus / 2;
+	if (GetMetaMagicFeat() == METAMAGIC_EMPOWER) nBonus += nBonus / 2;
+	else if (bDivineLight) nBonus = 10;
 	
 	effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nBonus);
 	effect eSpot = EffectSkillIncrease(SKILL_SPOT, nBonus);

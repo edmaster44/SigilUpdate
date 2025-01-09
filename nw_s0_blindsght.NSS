@@ -39,16 +39,11 @@ void main()
 	eLink = SetEffectSpellId(eLink, SPELL_BLINDSIGHT);
 	
 	int nlvl = PS_GetCasterLevel(OBJECT_SELF);
-	// caster lvl for assassin feat/spells is assassin lvl + 1/2 of non-assassin lvls
+	
 	if (GetSpellFeatId() == 21895){
 		nlvl = GetLevelByClass(CLASS_TYPE_ASSASSIN, OBJECT_SELF);
-		nlvl += (GetTotalLevels(OBJECT_SELF, TRUE) - nlvl) / 2;
 	}
 	
-
-	// ALSO, put in script in onaquire to make sure that scrolls that are useable by druids also get the 
-	// useable by shaman porperty, and add the encircling scale to the list of items to get proper darkvision.
-	// ALSO make new feint
 
     float fDuration = TurnsToSeconds(nlvl);
 

@@ -37,6 +37,7 @@ void main(){
 	if (nId == SPELL_RACIAL_LIGHT){
 		nRounds = GetTotalLevels(oCaster, TRUE); 
 		if (nRace == 13 || nRace == 203) bDivineLight = TRUE;
+			
 	}
 	if (GetMetaMagicFeat() == METAMAGIC_EXTEND) nRounds *= 2;
 	float fDur = HoursToSeconds(nRounds);

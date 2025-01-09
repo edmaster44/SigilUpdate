@@ -27,7 +27,6 @@ void main(){
 	
 	} else if (nId == SPELLABILITY_AS_DARKNESS){
 		nRounds = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
-		nRounds += (GetTotalLevels(oCaster, TRUE) - nRounds) / 2;
 	}
 	
     if (nRounds < 5) nRounds = 5;
