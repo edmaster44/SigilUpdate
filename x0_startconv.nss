@@ -6,7 +6,11 @@
 //:: Created On: 01/13/2003
 //::///////////////////////////////////////////////////
 
+
+
 void main()
 {
+
+	
     ActionStartConversation(GetLastUsedBy(), "", TRUE);
 }
