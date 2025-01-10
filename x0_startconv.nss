@@ -7,10 +7,11 @@
 //::///////////////////////////////////////////////////
 
 
+#include "ed_startconv_safe"
 
 void main()
 {
 
 	
-    ActionStartConversation(GetLastUsedBy(), "", TRUE);
+    ActionStartConversationSafe(GetLastUsedBy(), "", TRUE);
 }

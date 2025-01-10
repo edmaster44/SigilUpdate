@@ -42,12 +42,3 @@ void ActionStartConversationSafe(object oObjectToConverseWith, string sDialogRes
 
     ActionStartConversation(oObjectToConverseWith, sDialogResRef, bPrivateConversation, bPlayHello, bIgnoreStartDistance, bDisableCutsceneBars);
 }
-
-
-
-void main()
-{
-
-	
-    ActionStartConversationSafe(GetLastUsedBy(), "", TRUE);
-}
