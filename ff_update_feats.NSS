@@ -70,7 +70,7 @@ void ff_update_feats(object oPC){
 }
 
 void AdjustAbilityScores(object oPC){
-	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustments");
+	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
 	if (GetLocalInt(oEss, "startability")){
 		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
@@ -82,9 +82,8 @@ void AdjustAbilityScores(object oPC){
 		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
 			AssignCommand(oPC, ClearAllActions(TRUE));
 			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		} else SendMessageToPC(oPC, "Error: Contact FlattedFifth on Discord");
+		}
 	}
-	SendMessageToPC(oPC, "Finished Adjusting Ability Scores.");
 }
 
 //Function to grant sneak dice, death dice, and ep if applicable
