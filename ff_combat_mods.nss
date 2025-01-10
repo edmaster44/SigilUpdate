@@ -9,11 +9,11 @@
 	
 
 */
-
+#include "x2_inc_spellhook"
 #include "nw_i0_spells"
 #include "ff_feat_tactical_weapon_inc"
 
-const int EFFECT_ID 	= 14709; // this is the spell id that will be applied to the fx that actually does something
+
 const int MODE_STAFF 	= 14709;
 const int MODE_DEF 		= 14719;
 const int MODE_STRIKE	= 14720;
@@ -96,7 +96,7 @@ void UpdateCombatMods(object oPC, int nAction = -1, object oChanged = OBJECT_INV
 	
 	// remove all fx and confirm for intentional ones that will not 
 	// be reapplied
-	RemoveEffectsFromSpell(oPC, EFFECT_ID);
+	PS_RemoveEffects(oPC, COMBAT_MODS_FX); // reserved spell id, defined in aaa_constants
 	if (bUsingDef && (nAction == DEF_OFF || nAction == STRIKE_ON))
 		GiveFeedback(oPC, sDefOffFb);
 	if (bUsingStrike && (nAction == STRIKE_OFF || nAction == DEF_ON))
@@ -506,7 +506,7 @@ void ApplyCombatMods(struct CombatMods data){
 	
 	if (bApplyChange){
 		eFX = SupernaturalEffect(eFX);
-		eFX = SetEffectSpellId(eFX, EFFECT_ID);
+		eFX = SetEffectSpellId(eFX, COMBAT_MODS_FX);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, data.oPC);
 	}
 }

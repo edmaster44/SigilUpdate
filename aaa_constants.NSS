@@ -8,8 +8,7 @@ rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
 // for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
 // of enchanting
-const int DEBUG_IGNORE_CRAFT_COSTS = FALSE;
-
+const int DEBUG_IGNORE_CRAFT_COSTS = TRUE;
 
 // module control booleans
 // if TRUE causes checking that your xp pool is lined up with the mimic to give the whole pool
@@ -228,8 +227,27 @@ const int SPECIAL_MAT_XBOW_SIGHT = 65;
 
 /*********************************************************************************************
 						End Craft Weapon/Armor/Etc system constants
+						
+						Begin Reserved Spell Ids for Equipment and Toggle Feats
+						(also marked reserved in spells.2da
 *********************************************************************************************/
 
+// used in ff_combat_mods
+const int COMBAT_MODS_FX = 2997;
+
+//used in equipment fx in ps_inc_equipment
+const int EQUIP_FX = 2998;
+
+// as above but specifically for armor optimization feats
+const int ARMOR_OPT_FX = 2999;
+
+// another in ps_inc_equipment, but for dodge ac for graceful bucklers, kenjutsu, and bojutsu.
+// (nature of these means you can only have one active so they will share
+const int FF_AC_FX = 3000;
+
+/*********************************************************************************************
+						End Reserved Spell Ids for Equipment and Toggle Feats
+*********************************************************************************************/
 
 
 

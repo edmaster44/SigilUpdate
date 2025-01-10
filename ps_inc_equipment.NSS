@@ -15,13 +15,8 @@
 #include "ff_combat_mods"
 #include "ff_feat_tactical_weapon_feat"
 #include "ff_update_feats_inc"
+#include "x2_inc_spellhook"
 
-
-
-
-
-const int SIGIL_EQUIP_FX = -9444;
-const int SIGIL_ARMOR_OPTIMIZATION_FX = -9544;
 
 /*----------------------------------------------------------------------------------------
 			DECLARATIONS
@@ -85,7 +80,8 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP){
 	int nITEM = GetBaseItemType(oITEM);
 	if (nITEM == BASE_ITEM_CREATUREITEM) return; // base item 73, creature skin
 	
-    RemoveEffectsFromSpell(oPC, SIGIL_EQUIP_FX);
+    //RemoveEffectsFromSpell(oPC, EQUIP_FX);
+	PS_RemoveEffects(oPC, EQUIP_FX);
     if (nEQUIP == TRUE)
     {
       CheckForTempProperties(oITEM, oPC);
@@ -237,8 +233,8 @@ void FlorentineTWF(object oPC, object oRHAND, object oLHAND){
 // double-applying when equipped from hotbar, so I gave it its own spellid =
 // buckler prof feat * -1 
 void BucklerFinesse(object oPC, object oLHAND){
-	int nId = -21915;
-	RemoveEffectsFromSpell(oPC, nId);
+
+	PS_RemoveEffects(oPC, FF_AC_FX);
 	if (GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE) < 17) return;
 	if (GetBaseItemType(oLHAND) != BASE_ITEM_SMALLSHIELD) return;
 
@@ -248,7 +244,7 @@ void BucklerFinesse(object oPC, object oLHAND){
 			
 	effect eFX = EffectACIncrease(1);
 	eFX = SupernaturalEffect(eFX);
-    eFX = SetEffectSpellId(eFX, nId);
+    eFX = SetEffectSpellId(eFX, FF_AC_FX);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
@@ -287,7 +283,8 @@ void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
 		else if (nSizeDifference >= 2) bQualifies = FALSE;
 	}
 	int nId = -21912;
-	RemoveEffectsFromSpell(oPC, nId);
+
+	PS_RemoveEffects(oPC, FF_AC_FX);
 	if (!bQualifies){
 		if (GetHasFeat(FEAT_BOJUTSU, oPC, TRUE)) FeatRemove(oPC, FEAT_BOJUTSU);
 		if (GetHasFeat(FEAT_KENJUTSU, oPC, TRUE))FeatRemove(oPC, FEAT_KENJUTSU);
@@ -320,7 +317,7 @@ void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
 		if (bGetsAC){
 			effect eFX = EffectACIncrease(1);
 			eFX = SupernaturalEffect(eFX);
-			eFX = SetEffectSpellId(eFX, nId);
+			eFX = SetEffectSpellId(eFX, FF_AC_FX);
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 		}
 	}
@@ -672,7 +669,7 @@ void RemoveElementalWeapon(object oPC,object oItem)
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT)
 {
     eFX = SupernaturalEffect(eFX);
-    eFX = SetEffectSpellId(eFX, SIGIL_EQUIP_FX);
+    eFX = SetEffectSpellId(eFX, EQUIP_FX);
     ApplyEffectToObject(nDUR, eFX, oPC);
 }
 
@@ -882,17 +879,8 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
 void HeavyArmorOptimizations(object oPC, object oARMOR){
 
 	//Remove previous optimization effect
-	if ( GetHasSpellEffect(SIGIL_ARMOR_OPTIMIZATION_FX, oPC) ) {
-		effect eEffect = GetFirstEffect( oPC );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == SIGIL_ARMOR_OPTIMIZATION_FX){
-				RemoveEffect( oPC, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oPC );
-		}
-	}
+	if (GetHasSpellEffect(ARMOR_OPT_FX, oPC)) 
+		PS_RemoveEffects(oPC, ARMOR_OPT_FX);
 	
 	if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR) return;
     if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
@@ -930,7 +918,7 @@ void HeavyArmorOptimizations(object oPC, object oARMOR){
 	
 	
     eFX = SupernaturalEffect(eFX);
-    eFX = SetEffectSpellId(eFX, SIGIL_ARMOR_OPTIMIZATION_FX);
+    eFX = SetEffectSpellId(eFX, ARMOR_OPT_FX);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
