@@ -324,13 +324,48 @@ int IPGetIsLightWeapon(object oPC, object oWeapon);
 
 
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE){
-	if (GetItemPropertyType(ip1) != GetItemPropertyType(ip2)) return FALSE;
-	if (GetItemPropertySubType(ip1) != GetItemPropertySubType(ip2)) return FALSE;
+	int nType = GetItemPropertyType(ip1);
+	if (nType != GetItemPropertyType(ip2)) return FALSE;
 	if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2)) return FALSE;
-	if (GetItemPropertyCostTableValue(ip1) != GetItemPropertyCostTableValue(ip2)) return FALSE;
-	if (GetItemPropertyParam1Value(ip1) != GetItemPropertyParam1Value(ip2)) return FALSE;
 	if (!bIgnoreDuration){
 		if (GetItemPropertyDurationType(ip1) != GetItemPropertyDurationType(ip2)) return FALSE;
+	}
+	
+	int bCompSub = FALSE;
+	int bCompParam = FALSE;
+	int bCompSpec = FALSE;
+
+	// find which properties of the ip go into its creation so we know which to compare
+	if (nType == 26 || (nType >= 35 && nType <= 38) || nType == 43 || nType == 47 ||
+		nType == 71 || nType == 75){
+			return TRUE; // these ip types have no parameters
+	} else if (nType == 12 || (nType >= 62 && nType <= 65) || nType == 79 ||
+		nType == 83 || nType == 100){
+			bCompSub = TRUE;
+	} else if (nType == 0 || (nType >= 2 && nType <= 5) || (nType >= 7 && nType <= 9) ||
+		(nType >= 13 && nType <= 20) || (nType >= 22 && nType <= 24) || 
+		(nType >= 27 && nType <= 29) || (nType >= 57 && nType <= 59) || 
+		nType == 40 || nType == 41 || nType == 44 || nType == 49 || 
+		nType == 50 || nType == 52 || nType == 70 || nType == 82){
+			bCompSub = TRUE; bCompParam = TRUE;
+	} else if (nType == 48){
+		bCompSub = TRUE; bCompParam = TRUE; bCompSpec = TRUE;
+	} else if (nType == 72){
+		bCompSub = TRUE; bCompSpec = TRUE;
+	} else if (nType == 81){
+		bCompSpec = TRUE;
+	} else {
+		bCompParam = TRUE;
+	}
+	
+	if (bCompSub){
+		if (GetItemPropertySubType(ip1) != GetItemPropertySubType(ip2)) return FALSE;
+	}
+	if (bCompParam){
+		if (GetItemPropertyCostTableValue(ip1) != GetItemPropertyCostTableValue(ip2)) return FALSE;
+	}
+	if (bCompSpec){
+		if (GetItemPropertyParam1Value(ip1) != GetItemPropertyParam1Value(ip2)) return FALSE;
 	}
 	return TRUE;
 }

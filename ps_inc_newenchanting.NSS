@@ -558,6 +558,7 @@ string TranslateGemstoneTagToName(string sString) {
 int IndiciesAreEquivalent(int x, int y, object oPC = OBJECT_INVALID) {
 	/*if (GetIsObjectValid(oPC))
 		SendMessageToPC(oPC, "pre change: "+IntToString(x)+", "+IntToString(y));*/
+	// why the upper limit of 255? There's 1323 lines in iprp_feats
 	if (x <= 0 || x >= 255)
 		x = -1;
 	if (y <= 0 || y >= 255)
@@ -787,8 +788,22 @@ void GenerateEnchantmentRequirementsList(object oPC, struct enchantment enchant,
 	if (nSimilar == 3)
 		sResult += "\n\n<Color=FireBrick>Warning: This item already contains a better property of the same type. Proceeding may overwrite the existing property.</Color>";
 	else if (nSimilar == 2) {
-		sResult += "\n\n<Color=FireBrick>This item already contains this enchantment.</Color>";
-		SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANT_ITEM", TRUE);
+		// Double check to make sure the item already has the ip because this has been
+		// wrong on occasion
+		itemproperty ipEnchant = EnchantmentIndexToItemProp(enchant);
+		int bSame = FALSE;
+		itemproperty ip = GetFirstItemProperty(oItem);
+		while (GetIsItemPropertyValid(ip)){
+			if (IPGetItemPropertiesIdentical(ip, ipEnchant)){
+				bSame = TRUE;
+				break;
+			}
+			ip = GetNextItemProperty(oItem);
+		}
+		if (bSame){
+			sResult += "\n\n<Color=FireBrick>This item already contains this enchantment.</Color>";
+			SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANT_ITEM", TRUE);
+		}
 	} else if (nSimilar == 1)
 		sResult += "\n\n<Color=Teal>This item contains a lesser version of this enchantment. Continuing will overwrite the old property.</Color>";
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_REQUIREMENTS", -1, sResult);
@@ -1293,11 +1308,13 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 	itemproperty ipFrom2da; // the item property from above, we'll compare it to the one on the item
 	int bFoundMatch; // boolean, did we find a matching enchantment?
 	nNumRows = GetNum2DARows("scodenchantments");
+	int nAddPoints;
 	int bSkipIp; // boolean to skip an ip that we know is 0 points or specific points already added.
 	ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)){
 		bSkipIp = FALSE;
 		bFoundMatch = FALSE;
+		nAddPoints = 0;
 		nIpType = GetItemPropertyType(ip);
 		nIpSub = GetItemPropertySubType(ip);
 		
@@ -1331,7 +1348,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		// synergy bonus
 		if (!bSkipIp && GetIsItemPropertyValid(ipSynergy)){
 			if (IPGetItemPropertiesIdentical(ipSynergy, ip)){
-				nPoints += nSynergyPoints;
+				nAddPoints = nSynergyPoints;
 				bSkipIp = TRUE;
 			}
 		}
@@ -1344,7 +1361,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		// checking for keen/imp crit last in case it was already the matpower
 		if (!bSkipIp && !IPGetItemPropertiesIdentical(ipCrit, ipMatPower)){
 			if (nIpType == 43){
-				nPoints += 1;
+				nAddPoints = 1;
 				bSkipIp = TRUE;
 			}
 		}
@@ -1362,12 +1379,12 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 				(nItem == BASE_ITEM_DART && (nIpSub == 49 || nIpSub == 1321)) ||
 				(nItem == BASE_ITEM_SHURIKEN && (nIpSub == 77 || nIpSub == 1322)) ||
 				(nItem == BASE_ITEM_THROWINGAXE && (nIpSub == 67 || nIpSub == 1323))){
-				nPoints += 1;
+				nAddPoints = 1;
 				bSkipIp = TRUE;
 			}
 		}
-	
-		if (!bSkipIp){
+		if (bSkipIp) bFoundMatch = TRUE;
+		else {
 			for (i = 0; i < nNumRows; i++){
 				if (Get2DAString("scodenchantments", sTypeColumn, i) == "1" &&
 					StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType){
@@ -1394,13 +1411,15 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 						//debug
 						//SendMessageToPC(oPC, "FOUND MATCH");
 						bFoundMatch = TRUE;
-						nPoints += StringToInt(Get2DAString("scodenchantments", "Points", i));
+						nAddPoints = StringToInt(Get2DAString("scodenchantments", "Points", i));
 						break;
 					}
 				}
 			}
-			if (!bFoundMatch) nPoints += EstimateItemPropertyPointValue(ip);
+			if (!bFoundMatch) nAddPoints = EstimateItemPropertyPointValue(ip);
 		}
+		if (nAddPoints > 5) nAddPoints = 5;
+		nPoints += nAddPoints;
 		ip = GetNextItemProperty(oItem);
 	}	
 	return nPoints;
