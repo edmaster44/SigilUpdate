@@ -22,23 +22,26 @@ void ApplyDarkness(object oCaster, object oTarget, int nId, float fDur, int bAby
     effect eBlindness = EffectMissChance(50);
 	eBlindness = EffectLinkEffects(EffectSkillDecrease(SKILL_SEARCH, nBonus), eBlindness);
 	eBlindness = EffectLinkEffects(EffectSkillDecrease(SKILL_SPOT, nBonus), eBlindness);
-	SetEffectSpellId(eBlindness, nId * -1); 
+	SetEffectSpellId(eBlindness, nId); 
 	
 	int bImmuneNeg = (GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster) ||
 		(bAbyssalDark && oTarget == oCaster)); 
 		
-
-	SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, fDur);
-	if(!bImmuneNeg) {
+	
+	if(bImmuneNeg) {
+		SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, fDur);
+	} else {
 		if (oTarget == oCaster || !GetObjectSeen(oCaster, oTarget)){
-			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId * -1, FALSE));
+			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
 		} else {
-			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId * -1, TRUE));
+			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, TRUE));
 		}
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, fDur);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, fDur);
-		}
+	} 
     /*
 	if (bImmuneNeg){
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));

@@ -6,6 +6,13 @@
 /*
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
+
+// value to be used as a placeholder that basically means "ignore this if the value is this".
+// Usually to be used as a default arg in a function that indicates no value was passed so
+// ignore this check. Especially useful for spell ids, as my usual practice of using -1 may
+// be problematic, the constant "ALL_SPELLS" is defined as -1 in nwscript.nss
+const int NULL = 50000;
+
 // for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
 // of enchanting
 const int DEBUG_IGNORE_CRAFT_COSTS = TRUE;

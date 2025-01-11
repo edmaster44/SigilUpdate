@@ -40,7 +40,7 @@ const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
-void PS_RemoveEffects(object oTarget, int nId = -1, int nType = -1, object oCreator = OBJECT_INVALID);
+void PS_RemoveEffects(object oTarget, int nId = NULL, int nType = NULL, object oCreator = OBJECT_INVALID);
 int PS_GetHasEffectById(object oTarget, int nId);
 int X2UseMagicDeviceCheck();
 int X2GetSpellCastOnSequencerItem(object oItem);
@@ -50,7 +50,7 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = -1, int nFeatId = -1);
+int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = NULL, int nFeatId = NULL);
 
 
 
@@ -186,11 +186,11 @@ int X2PreSpellCastCode()
 // -FlattedFifth, July 29, 2024
 // Filled up the args with dummy values so I can pass the values I already have or get values
 // fresh, depending upon my needs - FlattedFifth, Sept 18, 2024
-int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = -1, int nFeatId = -1){
+int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = NULL, int nFeatId = NULL){
 	if (oCaster == OBJECT_INVALID) oCaster = OBJECT_SELF;
-	if (nSpellId == -1) nSpellId = GetSpellId();
+	if (nSpellId == NULL) nSpellId = GetSpellId();
 	if (oTarget == OBJECT_INVALID) oTarget = GetSpellTargetObject();
-	if (nFeatId == -1) nFeatId = GetSpellFeatId();
+	if (nFeatId == NULL) nFeatId = GetSpellFeatId();
 	
 	string sRange = Get2DAString("spells", "Range", nSpellId);
 	if (GetStringLowerCase(sRange) != "t") return TRUE;
@@ -398,16 +398,16 @@ void X2DoBreakConcentrationCheck()
 // More robust way to remove effects. Specify either the id, the type, the creator, or any combination
 // to remove all effects that match those criteria. If you do not specify any critera, all effects
 // are removed. -FlattedFifth, Nov 24, 2024
-void PS_RemoveEffects(object oTarget, int nId = -1, int nType = -1, object oCreator = OBJECT_INVALID){
+void PS_RemoveEffects(object oTarget, int nId = NULL, int nType = NULL, object oCreator = OBJECT_INVALID){
 	effect eEff = GetFirstEffect(oTarget);
 	int bIdMatch;
 	int bTypeMatch;
 	int bCreatorMatch;
 	while (GetIsEffectValid(eEff)){
-		if (nId == -1 || nId == GetEffectSpellId(eEff)) bIdMatch = TRUE;
+		if (nId == NULL || nId == GetEffectSpellId(eEff)) bIdMatch = TRUE;
 		else bIdMatch = FALSE;
 		
-		if (nType == -1 || nType == GetEffectType(eEff)) bTypeMatch = TRUE;
+		if (nType == NULL || nType == GetEffectType(eEff)) bTypeMatch = TRUE;
 		else bTypeMatch = FALSE;
 		
 		if (oCreator == OBJECT_INVALID || oCreator == GetEffectCreator(eEff)) bCreatorMatch = TRUE;

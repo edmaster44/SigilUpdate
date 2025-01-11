@@ -24,7 +24,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
   int nEffect;
   int bNumber;
   int nMusic;
-  int nAbility = -1;
+  int nAbility = NULL;
   int nWeather;
 
   string sHeard;
@@ -917,7 +917,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             nAbility = ABILITY_WISDOM;
         else if (FindSubString(sCommand, PRM_ABILITY_CHARISMA))
             nAbility = ABILITY_CHARISMA;
-        if (nAbility!=-1)
+        if (nAbility!= NULL)
         {
             if (StringToInt(sParam1)<0)
                 eEffect = EffectAbilityDecrease(nAbility, StringToInt(sParam1));

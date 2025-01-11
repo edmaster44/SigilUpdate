@@ -9,7 +9,7 @@ void main()
 	int charLevel = GetTotalLevels(OBJECT_SELF, TRUE);
 	int classLevels = GetLevelByClass(CLASS_TYPE_MAGE_SLAYER, OBJECT_SELF);
 	
-	int SR = (-5 + charLevel + 2*classLevels);
+	int SR = (2 * classLevels) + charLevel - 5; // the () are prob unnecessary because OoO, but w/e
 	
 	applyCurseGuard(oTarget, OBJECT_SELF, SR, FALSE);
 }

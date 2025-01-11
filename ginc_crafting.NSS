@@ -182,8 +182,8 @@ int GetCraftingIntData(string sRecipeType, string sCategory, string sColumn, int
 
 // ------------------------
 // useful functions (may be moved elsewhere)
-string MakeNonNegIntList(int nVal1, int nVal2 = -10000, int nVal3 = -10000, int nVal4 = -10000, int nVal5 = -10000);
-string MakeBaseItemList(int nVal1, int nVal2 = -10000, int nVal3 = -10000, int nVal4 = -10000, int nVal5 = -10000);
+string MakeNonNegIntList(int nVal1, int nVal2 = NULL, int nVal3 = NULL, int nVal4 = NULL, int nVal5 = NULL);
+string MakeBaseItemList(int nVal1, int nVal2 = NULL, int nVal3 = NULL, int nVal4 = NULL, int nVal5 = NULL);
 string MakeList(string sReagent1, string sReagent2="", string sReagent3="", string sReagent4="", string sReagent5="",
             	string sReagent6="", string sReagent7="", string sReagent8="", string sReagent9="", string sReagent10="");
 string MakeRepeatedItemList(string sListElement, int iCount);	
@@ -450,25 +450,25 @@ int GetCraftingIntData(string sRecipeType, string sCategory, string sColumn, int
 // Useful funcs
 // ===========================================
 
-string MakeNonNegIntList(int nVal1, int nVal2 = -10000, int nVal3 = -10000, int nVal4 = -10000, int nVal5 = -10000)
+string MakeNonNegIntList(int nVal1, int nVal2 = NULL, int nVal3 = NULL, int nVal4 = NULL, int nVal5 = NULL)
 {
     string sRet;
 
     sRet = IntToString(nVal1);
-	if (nVal2 != -10000)
+	if (nVal2 != NULL)
     	sRet += FormListElement(IntToString(nVal2));
-	if (nVal3 != -10000)
+	if (nVal3 != NULL)
 	    sRet += FormListElement(IntToString(nVal3));
-	if (nVal4 != -10000)
+	if (nVal4 != NULL)
 	    sRet += FormListElement(IntToString(nVal4));
-	if (nVal5 != -10000)
+	if (nVal5 != NULL)
 	    sRet += FormListElement(IntToString(nVal5));
 
     return (sRet);
 }
 
 
-string MakeBaseItemList(int nVal1, int nVal2 = -10000, int nVal3 = -10000, int nVal4 = -10000, int nVal5 = -10000)
+string MakeBaseItemList(int nVal1, int nVal2 = NULL, int nVal3 = NULL, int nVal4 = NULL, int nVal5 = NULL)
 {
     string sRet = "B" + MakeNonNegIntList(nVal1, nVal2, nVal3, nVal4, nVal5);
     return (sRet);

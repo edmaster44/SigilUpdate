@@ -25,7 +25,7 @@ void FF_TacticalWeapons(object oPC, object oRHAND, object oSkin){
 	int nTacRange = GetTacSuiteByWeaponCategory(oPC, oRHAND);
 	string sMessage = "Tactical ";
 	string sManeuver = "";
-	int nFeat = -1;
+	int nFeat = NULL;
 	switch (nTacRange){
 		case TAC_SUITE_BOW:{
 			sManeuver = "Disabling Strike";

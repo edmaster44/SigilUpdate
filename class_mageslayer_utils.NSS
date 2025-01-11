@@ -354,7 +354,7 @@ void CheckMakeItemUseableForMageSlayer(object oItem, object oPC)
 
 			int bHasUsageLimitations = FALSE;
 			int bUseableByMageSlayer = FALSE;
-			int nSpellId = -1;
+			int nSpellId = NULL;
 
 			itemproperty ip = GetFirstItemProperty(oItem);
 			while (GetIsItemPropertyValid(ip))
@@ -373,7 +373,7 @@ void CheckMakeItemUseableForMageSlayer(object oItem, object oPC)
 				{
 					// it would be unusual for a scroll or wand to cast multiple spells and against best practice
 					// but just in case we will only catch the first valid spell we come to.
-					if (nSpellId == -1)
+					if (nSpellId == NULL)
 					{
 						int nIprpSpellId = GetItemPropertySubType(ip);
 						nSpellId = StringToInt(Get2DAString("iprp_spells", "SpellIndex", nIprpSpellId));
@@ -381,7 +381,7 @@ void CheckMakeItemUseableForMageSlayer(object oItem, object oPC)
 				}
 				// if we have all the data we need go ahead and exit the loop. Otherwise keep looking
 				// until we run out of item properties.
-				if (nSpellId != -1 && bHasUsageLimitations == TRUE && bUseableByMageSlayer == TRUE) break;
+				if (nSpellId != NULL && bHasUsageLimitations == TRUE && bUseableByMageSlayer == TRUE) break;
 				ip = GetNextItemProperty(oItem);
 			}
 			// bail if there are not use limitation or mage slayer can already use it

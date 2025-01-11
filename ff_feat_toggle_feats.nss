@@ -6,7 +6,7 @@ void main(){
 	object oPC = OBJECT_SELF;
 	int nId = GetSpellId();
 	object oEss = PS_GetEssence(oPC);
-	int nAction = -1;
+	int nAction = NULL;
 
 	if (nId ==  MODE_DEF){
 		if (GetLocalInt(oEss, DEF_STATE_ON)) nAction = DEF_OFF;

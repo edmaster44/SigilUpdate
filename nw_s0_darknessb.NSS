@@ -16,9 +16,7 @@
 
 void main()
 {
-	int nId = GetSpellId();
-	PS_RemoveEffects(GetExitingObject(), nId, -1, GetAreaOfEffectCreator());
-	PS_RemoveEffects(GetExitingObject(), nId * -1, -1, GetAreaOfEffectCreator());
+	PS_RemoveEffects(GetExitingObject(), GetSpellId(), NULL, GetAreaOfEffectCreator());
 }
 
 

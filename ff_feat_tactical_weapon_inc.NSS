@@ -10,7 +10,7 @@ const int TAC_SUITE_DISARM = 5;
 const int TAC_SUITE_KD = 6;
 const int TAC_BONUS_ONLY = -1;
 
-void RemoveBonusFeats(object oSkin, int nSpecificFeat = -1);
+void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL);
 int GetFeatFromIprp(int iprp);
 int GetIsTacIprp(int iprp);
 int GetTacSuiteByDamageType(int nType);
@@ -32,8 +32,8 @@ void ApplyTacticalBonusFeat(object oSkin, int nFeat){
 	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oSkin);
 }
 
-void RemoveBonusFeats(object oSkin, int nSpecificFeat = -1){
-	if (nSpecificFeat != -1){
+void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL){
+	if (nSpecificFeat != NULL){
 		int iprp = PS_GetIpBonusFeat(nSpecificFeat);
 		if (iprp == 19) return;
 		itemproperty ip = ItemPropertyBonusFeat(iprp);
@@ -63,7 +63,7 @@ int GetFeatFromIprp(int iprp){
 		case 16: return FEAT_POWER_ATTACK;
 		case 17: return FEAT_TWO_WEAPON_FIGHTING;
 	}
-	return -1;
+	return NULL;
 }
 
 int GetIsTacIprp(int iprp){

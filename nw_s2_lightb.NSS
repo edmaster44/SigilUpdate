@@ -20,5 +20,5 @@
 #include "x2_inc_spellhook"
 
 void main(){
-    PS_RemoveEffects(GetExitingObject(), GetSpellId(), -1, GetAreaOfEffectCreator());
+    PS_RemoveEffects(GetExitingObject(), GetSpellId(), NULL, GetAreaOfEffectCreator());
 }

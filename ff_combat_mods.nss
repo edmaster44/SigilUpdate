@@ -35,7 +35,7 @@ const string sStaffOffFb = "Deactivating Staff-Fighting Mode";
 const string sStaffOnFb = "Activating Staff-Fighting Mode";
 const string sBabError = "You can only use this ability if your Base Attack Bonus is 6 or higher";
 
-void UpdateCombatMods(object oPC, int nAction = -1, object oChanged = OBJECT_INVALID, int bOnEquip = FALSE);
+void UpdateCombatMods(object oPC, int nAction = NULL, object oChanged = OBJECT_INVALID, int bOnEquip = FALSE);
 int GetHalfAttacks(object oPC, object oRHAND);
 int GetQualifiesForStaffFighting(object oPC, object oRHAND, object oLHAND);
 struct CombatMods PerformToggleFunctions(struct CombatMods data);
@@ -76,7 +76,7 @@ struct CombatMods{
 
 // this needs to be updated on login, level up, and when weapons change because BAB and what weapon is equipped affects this,
 // so it's called as the final step in ff_tactical_weapon_inc (which is called from ps_inc_equipment), ff_update_feats, and ps_onpcloaded
-void UpdateCombatMods(object oPC, int nAction = -1, object oChanged = OBJECT_INVALID, int bOnEquip = FALSE){
+void UpdateCombatMods(object oPC, int nAction = NULL, object oChanged = OBJECT_INVALID, int bOnEquip = FALSE){
 	
 
 	object oTarget = OBJECT_INVALID;
@@ -87,12 +87,10 @@ void UpdateCombatMods(object oPC, int nAction = -1, object oChanged = OBJECT_INV
 	object oSkin = PS_GetCreatureSkin(oPC);
 	object oEss = PS_GetEssence(oPC);
 	// get current state of modes
-	int bUsingDef = FALSE;
-	int bUsingStrike = FALSE;
-	int bUsingStaff = FALSE;
-	if (GetLocalInt(oEss, DEF_STATE_ON)) bUsingDef = TRUE;
-	if (GetLocalInt(oEss, STRIKE_STATE_ON)) bUsingStrike = TRUE;
-	if (GetLocalInt(oEss, STAFF_STATE_ON)) bUsingStaff = TRUE;
+	int bUsingDef = GetLocalInt(oEss, DEF_STATE_ON);
+	int bUsingStrike = GetLocalInt(oEss, STRIKE_STATE_ON);
+	int bUsingStaff = GetLocalInt(oEss, STAFF_STATE_ON);
+
 	
 	// remove all fx and confirm for intentional ones that will not 
 	// be reapplied
@@ -105,7 +103,7 @@ void UpdateCombatMods(object oPC, int nAction = -1, object oChanged = OBJECT_INV
 		GiveFeedback(oPC, sStaffOffFb);
 	
 	
-	// figure out what we want these states to be. If the action is -1 we're just
+	// figure out what we want these states to be. If the action is NULL we're just
 	// double checking that the current states are still valid, so we don't change
 	// anything from the current states unless they're not.
 	switch (nAction){

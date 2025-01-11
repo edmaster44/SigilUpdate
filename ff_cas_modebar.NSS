@@ -56,7 +56,7 @@ void LoadAllModeBars(object oPC, int bard){
 
 	int i;
 	int nFeat = 0;
-	while(nFeat != -1){
+	while(nFeat != NULL){
 		nFeat = GetModebarFeats(i, bard);
 		if(GetHasFeat(nFeat,oPC,TRUE)){	
 			LoadModeBar(oPC,i,nFeat,bard);
@@ -66,7 +66,7 @@ void LoadAllModeBars(object oPC, int bard){
 }
 
 int GetModebarFeats(int index, int bard){
-	if (bard) return -1; // no custom bard modes yet
+	if (bard) return NULL; // no custom bard modes yet
 	else {
 		switch (index){
 			case 1: return FEAT_METHODICAL_DEFENSE;

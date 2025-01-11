@@ -62,8 +62,8 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 		if (IPGetItemHasProperty(oItem, ItemPropertyLimitUseByClass(CLASS_TYPE_BARD), DURATION_TYPE_PERMANENT) &&
 			B_WIZ_USE_BARD_ARCANE_WANDSCROLL){
 			itemproperty ipSpell = GetFirstItemProperty(oItem);
-			int nId = -1;
-			int nSub = -1;
+			int nId = NULL;
+			int nSub = NULL;
 			while (GetIsItemPropertyValid(ipSpell)){
 				if (GetItemPropertyType(ipSpell) == ITEM_PROPERTY_CAST_SPELL){
 					nSub = GetItemPropertySubType(ipSpell);
@@ -72,7 +72,7 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem)
 				}
 				ipSpell = GetNextItemProperty(oItem);
 			}
-			if (nId != -1 && !IsOnSpellList(nId, CLASS_TYPE_CLERIC)){
+			if (nId != NULL && !IsOnSpellList(nId, CLASS_TYPE_CLERIC)){
 				MakeItemUseableByClass(CLASS_TYPE_WIZARD, oItem);
 				MakeItemUseableByClass(CLASS_TYPE_SORCERER, oItem);
 			}
