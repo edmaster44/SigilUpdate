@@ -156,6 +156,19 @@ void ApplyRPXP(object oSender, object oTarget, int nChannel, string sMessage)
 	}
 }
 
+// a function that sends a tick message to the player every 6 seconds
+// to be used for debugging purposes. 
+void SixSecondTick(object oPC, int nRound = 1){
+
+	if (GetLocalInt(oPC, "6secondtick")){
+		// Send the message to the player
+		SendMessageToPC(oPC, "<c=cyan>Tick " + IntToString(nRound) + "</c>");
+		nRound += 1;
+		// Schedule the next tick after 6 seconds
+		DelayCommand(6.0f, SixSecondTick(oPC, nRound));
+	}
+}
+
 int StartingConditional(object oSender, object oTarget, int nChannel, string sMessage)
 { 
 
@@ -197,12 +210,21 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 				nECL = PS_GetEssenceECL(oSender);
 			}
 			sFeedback += IntToString(nECL);
+		} else if (sInput == "#tick"){
+			sMessage = "tick";
+			if (!GetLocalInt(oSender, "6secondtick")){
+				SetLocalInt(oSender, "6secondtick", TRUE);
+				SendMessageToPC(oSender, "Starting Tick");
+				SixSecondTick(oSender);
+			} else {
+				SetLocalInt(oSender, "6secondtick", FALSE);
+				SendMessageToPC(oSender, "Stopping Tick");	
+			}
 		}
 		if (sFeedback != ""){
-			SendMessageToPC(oSender, sFeedback);
+			if (sMessage != "tick") SendMessageToPC(oSender, sFeedback);
 			return FALSE;
-		}
-		
+		}	
 	}
 	
 	string MessageToSend;
