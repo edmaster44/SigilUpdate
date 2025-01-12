@@ -14,5 +14,5 @@ void main()
 {
 
 	
-    ActionStartConversationSafe(GetLastUsedBy(), "", TRUE);
+    ActionStartConversation(GetLastUsedBy(), "", TRUE);
 }
