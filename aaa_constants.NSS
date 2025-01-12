@@ -238,6 +238,15 @@ const int SPECIAL_MAT_XBOW_SIGHT = 65;
 						Begin Reserved Spell Ids for Equipment and Toggle Feats
 						(also marked reserved in spells.2da
 *********************************************************************************************/
+//used in inc_tattoo.nss
+const int TATTOO_SPELL_ID = 2993; 
+
+// used in heraldofannhi_death.nss & heraldofannhi_death1.nss
+const int BOSS_EFFECTS = 2994;
+
+// used in gui_hss_pc_tool.nss and gui_hss_pc_tool1.nss
+const int PC_TOOL_FX = 2995;
+const int PC_TOOL_AFK = 2996;
 
 // used in ff_combat_mods
 const int COMBAT_MODS_FX = 2997;

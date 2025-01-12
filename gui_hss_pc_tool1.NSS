@@ -165,7 +165,7 @@ No (2)
 //-- empty strings are now being passed as "0" by the engine -- unsure if intended or not.
 
 
-
+#include "aaa_constants"
 #include "x0_i0_position"
 #include "nwnx_sql"
 #include "ps_action_inclusion"
@@ -1924,27 +1924,27 @@ void HSS_PCTools_ToggleAFK(object oPC)
    switch (HSS_PCTOOLS_AFK_VFX)
        {
 	   case 1:
-       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_01"), -999));	   
+       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_01"), PC_TOOL_AFK));	   
 	   break;
 	   
 	   case 2:
-       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_02"), -999));	   
+       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_02"), PC_TOOL_AFK));	   
 	   break;
 	   
 	   case 3:
-       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_03"), -999));	   
+       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_03"), PC_TOOL_AFK));	   
 	   break;
 	   
 	   case 4:
-       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_04"), -999));	   
+       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_04"), PC_TOOL_AFK));	   
 	   break;	
 	   
 	   case 5:
-       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_05"), -999));	   
+       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_05"), PC_TOOL_AFK));	   
 	   break;
 	   
 	   case 6:
-       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_06"), -999));	   
+       eAFK = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile("fx_hss_afk_06"), PC_TOOL_AFK));	   
 	   break;	   		      	   	   	   
 	   }
 	   
@@ -1953,7 +1953,7 @@ void HSS_PCTools_ToggleAFK(object oPC)
    
    while (GetIsEffectValid(eFirst))
        {
-	   if (GetEffectSpellId(eFirst) == -999)
+	   if (GetEffectSpellId(eFirst) == PC_TOOL_AFK)
 	      {
 		  RemoveEffect(oPC, eFirst);
 		  return;
@@ -2421,7 +2421,7 @@ void HSS_PCTools_DoEmote(object oPC)
 void HSS_PCTools_ApplyVFX(object oPC, string sVFX)
 {
    string sEffect = "fx_hss_" + sVFX;
-   effect eProp = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile(sEffect), -899));
+   effect eProp = SupernaturalEffect(SetEffectSpellId(EffectNWN2SpecialEffectFile(sEffect), PC_TOOL_FX));
    effect eFirst = GetFirstEffect(oPC);
    object oItem;
    string sItem;
@@ -2510,7 +2510,7 @@ void HSS_PCTools_ApplyVFX(object oPC, string sVFX)
          
    while (GetIsEffectValid(eFirst))
        {
-	   if (GetEffectSpellId(eFirst) == -899)
+	   if (GetEffectSpellId(eFirst) == PC_TOOL_FX)
 	      {
 		  RemoveEffect(oPC, eFirst);
 		  break;

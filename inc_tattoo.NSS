@@ -12,7 +12,7 @@
 // even if they have a racial creature skin
 #include "nw_i0_spells"
 
-const int TATTOO_SPELL_ID = -8675309; // Jenny has tattoos
+
 const string TATTOO_UPDATED_SUFFIX = "_updated";
 const string ART_TATTOO = "ps_tattoo_42";
 // the following are the only 2 tattoos at the time of this writing that do not 

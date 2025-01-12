@@ -1,4 +1,5 @@
-const int BOSS_EFFECTS = -4;
+
+#include "aaa_constants"
 
 effect BossFX(int nBHP)
 {

@@ -1,6 +1,7 @@
+#include "aaa_constants"
 #include "nw_i0_spells"
 
-const int BOSS_EFFECTS = -4;
+
 
 effect BossFX(int nBHP)
 {
