@@ -1612,6 +1612,7 @@ void ApplyPlayerMade(object oItem){
 }
 
 string GetAdditionalEssenceReq(object oPC, int nPoints){
+	if (DEBUG_IGNORE_CRAFT_COSTS) return "";
 	if (nPoints < 0) nPoints = 0;
 	else if (nPoints > 5) nPoints = 5;
 	// in case they have some real caster levels, check to see if they would
@@ -1626,7 +1627,7 @@ string GetAdditionalEssenceReq(object oPC, int nPoints){
 	// else assign a power essence based on points of enchantment.
 	// 1 point is free and sets no power essence.
 	switch (nPoints){
-		case 1: case 2: return "cft_ess_power1";
+		case 2: return "cft_ess_power1";
 		case 3: return "cft_ess_power2";
 		case 4: return "cft_ess_power3";
 		case 5: return "cft_ess_power4";
