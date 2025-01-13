@@ -4,22 +4,9 @@
 #include "aaa_constants"
 #include "nwn2_inc_spells"
 
-	// Use this to fix infinite range for instant feats.
-int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
-{
-	if (GetDistanceBetween(oCaller, oTarget) > 30.0f) // Melee range seems to be around a little less then 3.0f, so picked a number
-	{                                                // a little higher to give some loose.
-		SendMessageToPC(oCaller, "Target out of range.");
-		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
-
-
 void main()
 {
-	    object oPC = OBJECT_SELF;
+	object oPC = OBJECT_SELF;
 	object oTarget	= GetSpellTargetObject();
 	int nSpell = GetSpellId();
 	int Warmind = CLASS_TYPE_WARMIND;
@@ -32,6 +19,9 @@ void main()
 	int nDmg;
 	int nDamageType;
 	 nDamageType = DAMAGE_TYPE_BLUDGEONING;
+	 
+	if (PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), TRUE))
+		return;
 
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);

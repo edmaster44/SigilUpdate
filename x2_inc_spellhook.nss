@@ -50,7 +50,7 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = NULL, int nFeatId = NULL);
+
 
 
 
@@ -179,37 +179,6 @@ int X2PreSpellCastCode()
 	
    return nContinue;
 }
-
-// cancel a feat-based spell if it has a range of touch and the target is too far from
-// caster. Basically just copied from the one in aaa_undead_inc.nss. Returns TRUE if the 
-// spell is not from a feat, or the feat is not touch ranged, or the target is within range.
-// -FlattedFifth, July 29, 2024
-// Filled up the args with dummy values so I can pass the values I already have or get values
-// fresh, depending upon my needs - FlattedFifth, Sept 18, 2024
-int TouchRangedFeatInRange(object oCaster = OBJECT_INVALID, object oTarget = OBJECT_INVALID, float fRange = 3.5f, int nSpellId = NULL, int nFeatId = NULL){
-	if (oCaster == OBJECT_INVALID) oCaster = OBJECT_SELF;
-	if (nSpellId == NULL) nSpellId = GetSpellId();
-	if (oTarget == OBJECT_INVALID) oTarget = GetSpellTargetObject();
-	if (nFeatId == NULL) nFeatId = GetSpellFeatId();
-	
-	string sRange = Get2DAString("spells", "Range", nSpellId);
-	if (GetStringLowerCase(sRange) != "t") return TRUE;
-	// GetDistanceBetween() gets centre to centre distance, which will result
-	// in a false neg for some very large mobs like the big blob devil in the 
-	// devil cave at the lava fields.
-	float fDis = GetDistanceBetween(oCaster, oTarget);
-	//  so subtract the radii of the footprints to get edge to edge distance
-	fDis -= ((GetCreatureFootprint(oCaster) / 2) + GetCreatureFootprint(oTarget) / 2);
-
-	if (fDis > fRange) 
-	{                                              
-		SendMessageToPC(oCaster, "Target out of range.");
-		ResetFeatUses(oCaster, nFeatId, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
-
 
 // Use Magic Device Check.
 // Returns TRUE if the Spell is allowed to be cast, either because the

@@ -55,19 +55,20 @@ void main()
     // End of Spell Cast Hook
     //--------------------------------------------------------------------------
 
-	// returns true if spell is not from a feat, or feat is not touch range, or if target in range
-	if (!TouchRangedFeatInRange()) return;
-
-
 	int nCasterLevel;
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
 	int PML = GetPureMageLevels(OBJECT_SELF);
-	if (GetHasFeat(3049,OBJECT_SELF))
-	{
+	int nFeatId = GetSpellFeatId();
+	if (nFeatId == 3049){
 		nCasterLevel = PS_GetLevel(OBJECT_SELF);
+	} else {
+		nFeatId = NULL;
+		nCasterLevel= PS_GetCasterLevel(OBJECT_SELF);
 	}
-	else nCasterLevel= PS_GetCasterLevel(OBJECT_SELF);
+	
+	if (!PS_GetTargetInRange(OBJECT_SELF, oTarget, nFeatId, TRUE, TRUE))
+		return;
 		
 
 

@@ -1,25 +1,14 @@
 #include "ps_inc_melee"
 #include "x2_inc_itemprop"
 #include "x2_inc_spellhook"
-#include "aaa_constants"
+#include "ps_inc_functions"
 #include "nwn2_inc_spells"
 #include "ps_adjust_knight"
 
-	// Use this to fix infinite range for instant feats.
-int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
-{
-	if (GetDistanceBetween(oCaller, oTarget) > 8.0f) // Melee range seems to be around a little less then 3.0f, so picked a number
-	{                                                // a little higher to give some loose.
-		SendMessageToPC(oCaller, "Target out of range.");
-		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
-
-
 void KnightSmite(object oPC, object oTarget, int nSpell )
 {
+	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId()))
+		return;
 
 	int nKnight = KnightLevels(oPC);
 	int iChaBonus = GetAbilityModifier(ABILITY_CHARISMA, oPC);

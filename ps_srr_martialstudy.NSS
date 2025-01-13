@@ -7,17 +7,6 @@
 #include "x2_i0_spells"
 #include "ps_inc_functions"
 
-// checks to see if the target of the feat is withing melee range. If not, reset the feat and return FALSE
-int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
-{
-	if (GetDistanceBetween(oCaller, oTarget) > 3.5f) // Melee range seems to be around a little less then 3.0f, so picked a number
-	{                                              // a little higher to give some loose.
-		SendMessageToPC(oCaller, "Target out of range.");
-		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
 
 void DesertWind1(object oCaller) // Applies a Haste effect to the caller for 2 round
 {		
@@ -100,7 +89,7 @@ void DesertWind3(object oCaller, object oTarget) // Throws a ball of fire at the
 
 void DiamondMind1(object oCaller, object oTarget) // If concentration check succeeds, targets gets -HisDEX (min 3) to AC for 2 round
 {
-	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2913))
+	if (PS_GetTargetInRange(oCaller, oTarget, 2913))
 	{
 		SendMessageToPC(oCaller, "Using <i>Sapphire Nightmare Blade.</i>");
 		// Success if concentration VS target's AC
@@ -209,7 +198,7 @@ void IronHeart1(object oCaller) // +4 AB, -1 AC for 2 rounds.
 
 void IronHeart2(object oCaller, object oTarget) //  Give the target -4 damage and -2 AB for 4 rounds if you hit a touch attack
 {
-	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2917))
+	if (PS_GetTargetInRange(oCaller, oTarget, 2917))
 	{
 		SendMessageToPC(oCaller, "Using <i>Exorcism of Steel.</i>");
 		int touchAttackResult = TouchAttackMelee(oTarget, TRUE, 0);
@@ -499,7 +488,7 @@ void IronHeart3(object oCaller) // Removes a debuff from the caller
 
 void ShadowHand1(object oCaller, object oTarget) // on a touch attack, gives the target 50% miss chance for 2 rounds
 {		
-	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2919))
+	if (PS_GetTargetInRange(oCaller, oTarget, 2919))
 	{
 		SendMessageToPC(oCaller, "Using <i>Clinging Shadows Strike.</i>");
 		int touchAttackResult = TouchAttackMelee(oTarget, TRUE, 0);
@@ -569,7 +558,7 @@ void ShadowHand3(object oCaller, object oTarget) // User shadow jumps to a hosti
 
 void StoneDragon1(object oCaller, object oTarget) // on a touch attack, opponent loses DR for 3 round.
 {		
-	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2922))
+	if (PS_GetTargetInRange(oCaller, oTarget, 2922))
 	{
 		SendMessageToPC(oCaller, "Using <i>Mountain Hammer.</i>");
 		int touchAttackResult = TouchAttackMelee(oTarget, TRUE, 0);
@@ -612,7 +601,7 @@ void StoneDragon2(object oCaller) // DR 15/- for 3 rounds.
 
 void StoneDragon3(object oCaller, object oTarget) // on a touch attack, root and slow foe for 3 rounds.
 {		
-	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2924))
+	if (PS_GetTargetInRange(oCaller, oTarget, 2924))
 	{
 		SendMessageToPC(oCaller, "Using <i>Stone Vise.</i>");
 		int touchAttackResult = TouchAttackMelee(oTarget, TRUE, 0);
@@ -637,7 +626,7 @@ void StoneDragon3(object oCaller, object oTarget) // on a touch attack, root and
 
 void DevotedSpirit1(object oCaller, object oTarget) // ennemy gets -4AB, you get -1 AC for 3 rounds.
 {		
-	if (CancelIfNotInMeleeRange(oCaller, oTarget, 2925))
+	if (PS_GetTargetInRange(oCaller, oTarget, 2925))
 	{
 		SendMessageToPC(oCaller, "Using <i>Iron Guard's Glare.</i>");
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(1, ATTACK_BONUS_MISC), oCaller, 18.0f);

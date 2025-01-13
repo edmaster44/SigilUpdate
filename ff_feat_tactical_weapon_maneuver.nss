@@ -58,9 +58,7 @@ void main(){
 		return;
 	}
 	
-	if (!GetInWeaponRange(oPC, oTarget)){
-		SendMessageToPC(oPC, "Target out of range!");
-		ResetFeatUses(oPC, GetSpellFeatId(), FALSE, TRUE);
+	if (!PS_GetTargetInRange(oPC, oTarget, TAC_FEAT_ID, FALSE)){
 		return;
 	}
 	

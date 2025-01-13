@@ -1,29 +1,16 @@
-int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
-{
-	if (GetDistanceBetween(oCaller, oTarget) > 3.5f) // Melee range seems to be around a little less then 3.0f, so picked a number
-	{                                                // a little higher to give some loose.
-		SendMessageToPC(oCaller, "Target out of range.");
-		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
+#include "ps_inc_functions"
 
 void main()
 {
-	object target = GetSpellTargetObject();
-	if (CancelIfNotInMeleeRange(OBJECT_SELF, target, GetSpellFeatId()))
+	object oTarget = GetSpellTargetObject();
+	if (PS_GetTargetInRange(OBJECT_SELF, oTarget, GetSpellFeatId(), TRUE))
 	{
-///	int touchAttackResult = TouchAttackMelee(target, TRUE, 0);
+		effect disruption = EffectSpellFailure(100, SPELL_SCHOOL_GENERAL);
+		effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
+		effect eDaze = EffectDazed();
+		effect eLink = EffectLinkEffects(eMind, eDaze);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, disruption, oTarget, 6.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f);
 		
-//		if (touchAttackResult)
-		{
-			effect disruption = EffectSpellFailure(100, SPELL_SCHOOL_GENERAL);
-			effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
-   			effect eDaze = EffectDazed();
-			effect eLink = EffectLinkEffects(eMind, eDaze);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, disruption, target, 6.0f);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, target, 6.0f);
-		}
 	}
 }

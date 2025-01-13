@@ -1,43 +1,26 @@
 #include "ps_inc_melee"
 #include "x2_inc_itemprop"
 #include "x2_inc_spellhook"
-#include "aaa_constants"
+#include "ps_inc_functions"
 #include "nwn2_inc_spells"
-
-
-
-
-	// Use this to fix infinite range for instant feats.
-int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
-{
-	if (GetDistanceBetween(oCaller, oTarget) > 4.5f) // Melee range seems to be around a little less then 3.0f, so picked a number
-	{                                                // a little higher to give some loose.
-		SendMessageToPC(oCaller, "Target out of range.");
-		ResetFeatUses(oCaller, nFeatID, FALSE, TRUE);
-		return FALSE;
-	}	
-	return TRUE;
-}
-
-
-
 
 //Elemental Strike
 void ElementalStrike(object oPC, object oTarget, int nSpell )
 {
+	
+	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
+	int nFeatId = GetSpellFeatId();
+	
 
-
-	if (!CancelIfNotInMeleeRange(oPC, oTarget, 1922))
+	if (!PS_GetTargetInRange(oPC, oTarget, nFeatId, TRUE))
 		return;
-	 
 
-
-		int nType;
-		int nSaveType;
-		effect nVFXHit;
-		effect eStatusEffect;
-		int nDmg;
-		int nDamageType;
+	int nType;
+	int nSaveType;
+	effect nVFXHit;
+	effect eStatusEffect;
+	int nDmg;
+	int nDamageType;
 	//Elemental Warrior
 	int nElemWar = GetLevelByClass(CLASS_TYPE_ELEMENTAL_WARRIOR,oPC);
     //Air Electrical 
@@ -81,13 +64,6 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 	}	
 	SendMessageToPC(oPC, "Attempting Melee Strike");	 
 	
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
-	
-	if(GetWeaponRanged(oWeapon))
-	{
-	SendMessageToPC(oPC,"You require a melee weapon to use this");
-	return;
-	}
     int iHit = TouchAttackMelee(oTarget);
     
     if(iHit >0)

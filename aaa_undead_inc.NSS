@@ -86,6 +86,10 @@ void PS_Template_LevelAdjustment(object oPC, object oItem)
 		DelayCommand(1.0f, ForceRest(oPC));	}
 }
 
+/*
+//Deprecated. This uses GetDistanceBetween() which measures the distance between the centres of two
+// models, not the edge to edge. Therefore there's been many times when I've been standing on the toes
+// of large opponents and been told they're out of range.
 // Use this to fix infinite range for instant feats.
 int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
 {
@@ -97,6 +101,7 @@ int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
 	}	
 	return TRUE;
 }
+*/ 
 
 
 // Upon becoming undead, move the character 35 points towards evil and apply template ECL adjustment
@@ -716,10 +721,9 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	if (!X2PreSpellCastCode())
     {	return;	} 
 	
-	if (!CancelIfNotInMeleeRange(oPC, oTarget, 2464)||!CancelIfNotInMeleeRange(oPC, oTarget, 3055))
+	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), TRUE, TRUE))
 		return;
-	
-	 
+		
 	int iPRCLvl	= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
 	iPRCLvl += GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
 	iPRCLvl += GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);

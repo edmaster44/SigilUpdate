@@ -1088,14 +1088,12 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	// Melee Attack: 1d20 + base attack bonus + strength modifier + size modifier vs their AC.
 	// Damage Roll: Weapon Damage Roll + Strength Modifier + Weapon Enhancement.
 
+	int nFeatId = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
 	
-	int nBash = FALSE;
-	if (nSpellID == SPELLFEAT_SHIELDBASH || nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE ||
-		nSpellID == SPELLFEAT_ARCANEBASH || nSpellID == SPELLFEAT_SHIELDTHROW)
-			nBash = TRUE;
-	int nThrow = (nSpellID == SPELLFEAT_SHIELDTHROW);
+	int nBash = (nSpellID == SPELLFEAT_SHIELDBASH || nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE);
+	int nThrow = (nSpellID == SPELLFEAT_SHIELDTHROW || nSpellID == SPELLFEAT_ARCANEBASH);
 	
-	if (!GetInWeaponRange(oAttacker, oTarget, nBash, nThrow)){
+	if (!PS_GetTargetInRange(oAttacker, oTarget, nFeatId, TRUE, nBash, nThrow)){
 		if (givefeedback == 1)
 			FloatingTextStringOnCreature("*"+abilityname+" (miss - target too far)*", oAttacker, TRUE, 3.0f);
 		int nFeatid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));

@@ -24,8 +24,9 @@
 #include "nwnx_dae"
 
 
-// get whether the defender is in range of the attacker's current weapon or shield bash
-int GetInWeaponRange(object oAttacker, object oDefender, int bShieldBash = FALSE, int bRangedBash = FALSE);
+// get whether the defender is in range of the attacker's current weapon or feat
+int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bMeleeOnly = TRUE, 
+	int bMeleeTouch = FALSE, int bRangedTouch = FALSE);
 
 // Gets the size of the creature's footprint in meters based on size category and
 // 3.5e rules
@@ -90,6 +91,10 @@ const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
 const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
+
+// GetDistanceBetween measures centre to center, not edge to edge
+// so to get that I will subtract the radius of each creature
+float PS_GetDistanceBetween(object oObject1, object oObject2);
 
 // FloatToInt(), despite what the documentation says, does not round to nearest.
 // It tuncates. This will round. Choose "up", "down", or "nearest", not case sensitive
@@ -301,42 +306,62 @@ object PS_GetEssence(object oPC = OBJECT_SELF)
 	return GetItemPossessedBy(oPC, "ps_essence");
 }
 
-int GetInWeaponRange(object oAttacker, object oDefender, int bShieldBash = FALSE, int bRangedBash = FALSE){
+int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bMeleeOnly = TRUE, 
+	int bMeleeTouch = FALSE, int bRangedTouch = FALSE){
+	
 	// get right hand item
-	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oAttacker);
-	int nType = GetBaseItemType(oWeapon);
-	int nOffType = GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oAttacker));
-	// get the range of the weapon
-	
+	object oWeapon = OBJECT_INVALID;
+	if (!bMeleeTouch && !bRangedTouch)
+		oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oAttacker);
+	if (bMeleeOnly){
+		if (oWeapon != OBJECT_INVALID && !IPGetIsMeleeWeapon(oWeapon))
+			SendMessageToPC(oAttacker, "This ability is melee only!");
+			if (nFeatId != NULL)
+				ResetFeatUses(oAttacker, nFeatId, TRUE, TRUE);
+			return FALSE;
+	}
 
-	// Set range based upon the reach distance of the attacker. Most functions had set this as
-	// 4 so I will set this as 3 + the reach distance.
-	float fReach = GetCreatureFootprint(oAttacker);
-	float fRange = fReach + 3.0f;
+	// Set range. Most functions had set this as
+	// 4.5 so I will set this as 4.4 + the reach distance.
+	float fRange = 4.4f;
 
-	
+
 	// if right hand empty or this is a shield bash, set min range
-	if (oWeapon == OBJECT_INVALID || (bShieldBash && !bRangedBash)) fRange += 0.1f;
-	// if shield throw feat set range to half of a normal ranged weapon
-	else if (bRangedBash) fRange = 15.0f;
+	if (oWeapon == OBJECT_INVALID || (bMeleeTouch && !bRangedTouch)) fRange += 0.1f;
+	// if ranged touch set to normal ranged weapon
+	else if (bRangedTouch) fRange = 30.0f;
 	//if item in right hand it not a weapon, set min range
-	else if (StringToInt(Get2DAString("baseitems", "NumDice", nType)) == 0)
+	else if (StringToInt(Get2DAString("baseitems", "NumDice", GetBaseItemType(oWeapon))) == 0)
 		fRange += 0.1f;
-	else if (IPGetIsRangedWeapon(OBJECT_INVALID, nType))
-		fRange = StringToFloat(Get2DAString("baseitems", "PrefAttackDist", nType));
-	else fRange += StringToFloat(Get2DAString("baseitems", "PrefAttackDist", nType));
+	// else get the reach of the weapon
+	else fRange += StringToFloat(Get2DAString("baseitems", "PrefAttackDist", GetBaseItemType(oWeapon)));
 
+	float fDistance = PS_GetDistanceBetween(oAttacker, oDefender);
+	if (fDistance == -1.0f) {
+		if (nFeatId != NULL)
+			ResetFeatUses(oAttacker, nFeatId, TRUE, TRUE);
+		SendMessageToPC(oAttacker, "Target Invalid!");
+		return FALSE;
+	} else if (fDistance > fRange){
+		if (nFeatId != NULL)
+			ResetFeatUses(oAttacker, nFeatId, TRUE, TRUE);
+		SendMessageToPC(oAttacker, "Target Out of Range!");
+		return FALSE;
+	} else return TRUE;
+}
 
+float PS_GetDistanceBetween(object oObject1, object oObject2){
+	if (oObject1 == OBJECT_INVALID || oObject2 == OBJECT_INVALID)
+		return -1.0f;
 	
-	// Get the distace between the attack and defender
-	float fDistance = GetDistanceBetween(oAttacker, oDefender);
+	float Centre2Centre = GetDistanceBetween(oObject1, oObject2);
 	
-	// GetDistanceBetween measures centre to center, not edge to edge
-	// so to get that I will get subtract the radius of each creature
+	if (Centre2Centre <= 0.0f) return -1.0f; //GetDistanceBetween returns 0.0f on error
 	
-	fDistance -= ((fReach / 2.0f) + (GetCreatureFootprint(oDefender) / 2.0f));
+	float fRadius1 = GetCreatureFootprint(oObject1) / 2.0f;
+	float fRadius2 = GetCreatureFootprint(oObject2) / 2.0f;
 	
-	return (fDistance <= fRange);
+	return Centre2Centre - fRadius1 - fRadius2;
 }
 
 
