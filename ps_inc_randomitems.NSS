@@ -350,7 +350,7 @@ struct enchantment GetRandomEnchantmentOfValue(object oObj, int value) {
 	if (SQLFetch() != SQL_ERROR) { 
 		recipe_id = StringToInt(SQLGetData(1));
 	}
-	return LoadEnchantment(recipe_id);
+	return LoadEnchantmentFromSQL(recipe_id);
 }
 
 int GetPointValueForCR(int nCR) {
@@ -761,9 +761,9 @@ struct enchantment GetRandomTrinketEnchantment(int nValue) {
 	SQLExecDirect(sQuery);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		int n = StringToInt(SQLGetData(1));
-		return LoadEnchantment(n);
+		return LoadEnchantmentFromSQL(n);
 	}
-	return LoadEnchantment(0);
+	return LoadEnchantmentFromSQL(0);
 	
 }
 
