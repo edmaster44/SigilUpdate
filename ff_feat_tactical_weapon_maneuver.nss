@@ -61,7 +61,7 @@ void main(){
 	if (!GetInWeaponRange(oPC, oTarget)){
 		SendMessageToPC(oPC, "Target out of range!");
 		ResetFeatUses(oPC, GetSpellFeatId(), FALSE, TRUE);
-		
+		return;
 	}
 	
 	struct DamageStats data = GetDamageStats(oPC, oTarget, oRHAND);
