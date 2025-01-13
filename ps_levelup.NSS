@@ -61,8 +61,9 @@ void DoPsiProgression(object oPC)
 	int nIlMentalist = GetLevelByClass(100, oPC) - 1;
 	int nCerebremancer = GetLevelByClass(152, oPC);
 	int nPknight	   = GetLevelByClass(109, oPC) - 1;
+	int nTheruge 	   = GetLevelByClass(115,oPC);
 	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
-	int nLEVEL = nPsion + nIlMentalist + nCerebremancer + nGemDragon + nPknight;
+	int nLEVEL = nPsion + nIlMentalist + nCerebremancer + nGemDragon + nPknight + nTheruge;
 	
 	if (nLEVEL > 16)
 	{
