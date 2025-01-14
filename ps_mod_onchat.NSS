@@ -169,6 +169,74 @@ void SixSecondTick(object oPC, int nRound = 1){
 	}
 }
 
+// collection of simple chat commands by FlattedFifth
+int GetIsFFcommand(object oSender, int nChannel, string sMessage){
+
+	if (nChannel != CHAT_MODE_TALK || !GetIsPC(oSender))
+		return FALSE;
+			
+	int bFFcommand = FALSE; // return value, if TRUE then action will take place and text will not go to chat
+	string sFeedback = "";
+	string sInput = GetStringLowerCase(sMessage);
+	
+	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
+	if (sInput == "#scribemin"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
+			SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
+			sFeedback = "ScribeMin OFF\n";
+			sFeedback += "You will now scribe scrolls as normal until next login ";
+			sFeedback += "or until ScribeMin turned on.";
+		} else {
+			SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
+			sFeedback = "ScribeMin ON\n";
+			sFeedback += "You will now scribe scrolls at minimum caster level until next login ";
+			sFeedback += "or until ScribeMin turned off.";
+		}
+		
+	 // command for showing caster level. uses GetRealCasterLevel() in ps_inc_casterlevel
+	 // which is not accurate, especially if theurge. GetRealCasterLevel needs fixing
+	} else if (sInput == "#showcl"){
+		bFFcommand = TRUE;
+		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE));
+		
+	// as above but including Alchemical Infusion caster lvl where applicable
+	} else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
+		bFFcommand = TRUE;
+		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, TRUE));
+		
+	// Shows ECL if allowing ECL characters to reach lvl 30, otherwise shows level adjustment
+	} else if (sInput == "#showecl"){
+		bFFcommand = TRUE;
+		int nECL = 0;
+		if (ALLOW_ECL_LEVEL_30){
+			sFeedback = "Your ECL is ";
+			nECL = GetNewECL(oSender);
+		} else {
+			sFeedback = "Your Level Adjustment is ";
+			PS_CalculateECL(oSender);
+			nECL = PS_GetEssenceECL(oSender);
+		}
+		sFeedback += IntToString(nECL);
+		
+	// toggles on and off a tick in cyan text sent to user every 6 seconds.
+	// note that this is NOT synced to combat rounds but is simply every 6 seconds.
+	} else if (sInput == "#tick"){
+		bFFcommand = TRUE;
+		if (!GetLocalInt(oSender, "6secondtick")){
+			SetLocalInt(oSender, "6secondtick", TRUE);
+			SendMessageToPC(oSender, "Starting Tick");
+			SixSecondTick(oSender);
+		} else {
+			SetLocalInt(oSender, "6secondtick", FALSE);
+			SendMessageToPC(oSender, "Stopping Tick");	
+		}
+	}
+
+	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
+	return bFFcommand;
+}
+
 int StartingConditional(object oSender, object oTarget, int nChannel, string sMessage)
 { 
 
@@ -178,54 +246,8 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 		SendMessageToPC(oSender, "You sent to DM channel: '" + sMessage + "'");
 	}
 	
-	// new chat command to scribe scrolls at minimum level for purposes of sharing to wiz
-	// for learning. Sets a local int to PC that is checked in x2_inc_craft
-	if (nChannel == CHAT_MODE_TALK && GetIsPC(oSender)){
-		string sFeedback = "";
-		string sInput = GetStringLowerCase(sMessage);
-		if (sInput == "#scribemin"){
-			if (GetLocalInt(oSender, "bScribeAtMinLvl")){
-				SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
-				sFeedback = "ScribeMin OFF\n";
-				sFeedback += "You will now scribe scrolls as normal until next login ";
-				sFeedback += "or until ScribeMin turned on.";
-			} else {
-				SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
-				sFeedback = "ScribeMin ON\n";
-				sFeedback += "You will now scribe scrolls at minimum caster level until next login ";
-				sFeedback += "or until ScribeMin turned off.";
-			}
-		} else if (sInput == "#showcl"){ // new chat command for showing caster level
-			SendMessageToPC(oSender, "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE)));
-		} else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
-			sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, TRUE));
-		} else if (sInput == "#showecl"){
-			int nECL = 0;
-			if (ALLOW_ECL_LEVEL_30){
-				sFeedback = "Your ECL is ";
-				nECL = GetNewECL(oSender);
-			} else {
-				sFeedback = "Your Level Adjustment is ";
-				PS_CalculateECL(oSender);
-				nECL = PS_GetEssenceECL(oSender);
-			}
-			sFeedback += IntToString(nECL);
-		} else if (sInput == "#tick"){
-			sMessage = "tick";
-			if (!GetLocalInt(oSender, "6secondtick")){
-				SetLocalInt(oSender, "6secondtick", TRUE);
-				SendMessageToPC(oSender, "Starting Tick");
-				SixSecondTick(oSender);
-			} else {
-				SetLocalInt(oSender, "6secondtick", FALSE);
-				SendMessageToPC(oSender, "Stopping Tick");	
-			}
-		}
-		if (sFeedback != ""){
-			if (sMessage != "tick") SendMessageToPC(oSender, sFeedback);
-			return FALSE;
-		}	
-	}
+	// if message is a chat command by FlattedFifth, do not forward text to chat
+	if (GetIsFFcommand(oSender, nChannel, sMessage)) return FALSE;
 	
 	string MessageToSend;
 
