@@ -4,6 +4,6 @@
 
 void main()
 {
-ActionStartConversationSafe(GetLastUsedBy(),"ps_gehenna_fiendsummon",FALSE,FALSE,FALSE);
+ActionStartConversationSafe(GetLastUsedBy(), "", TRUE);
 
 }
