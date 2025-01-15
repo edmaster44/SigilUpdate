@@ -253,7 +253,7 @@ struct CombatMods OversizeTwoWeaponFighting(struct CombatMods data){
 
 
 struct CombatMods XbowAndSharpshooter(struct CombatMods data){
-	RemoveBonusFeats(data.oSkin, FEAT_RAPID_RELOAD);
+	//RemoveBonusFeats(data.oSkin, FEAT_RAPID_RELOAD);
 	int nRightId = GetBaseItemType(data.oRHAND);
 	int bIsXbow = (nRightId == BASE_ITEM_HEAVYCROSSBOW || 
 		nRightId == BASE_ITEM_LIGHTCROSSBOW);
@@ -298,7 +298,7 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 struct CombatMods CreatureTWF(struct CombatMods data){
 	int bLisCreature = IPGetIsCreatureEquippedWeapon(data.oLHAND);
 	
-	RemoveBonusFeats(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+	//RemoveBonusFeats(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
 	// bail if off hand is not a creature weap
 	if (!bLisCreature) return data;
 

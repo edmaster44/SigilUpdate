@@ -1090,10 +1090,13 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 
 	int nFeatId = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
 	
-	int nBash = (nSpellID == SPELLFEAT_SHIELDBASH || nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE);
-	int nThrow = (nSpellID == SPELLFEAT_SHIELDTHROW || nSpellID == SPELLFEAT_ARCANEBASH);
+	int bWeaponRange = TRUE;
+	if (nSpellID == SPELLFEAT_SHIELDBASH || nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE ||
+		nSpellID == SPELLFEAT_SHIELDTHROW || nSpellID == SPELLFEAT_ARCANEBASH){
+		bWeaponRange = FALSE;
+	}
 	
-	if (!PS_GetTargetInRange(oAttacker, oTarget, nFeatId, TRUE, nBash, nThrow)){
+	if (!PS_GetTargetInRange(oAttacker, oTarget, nFeatId, bWeaponRange)){
 		if (givefeedback == 1)
 			FloatingTextStringOnCreature("*"+abilityname+" (miss - target too far)*", oAttacker, TRUE, 3.0f);
 		int nFeatid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));

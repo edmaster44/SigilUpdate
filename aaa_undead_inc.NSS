@@ -721,7 +721,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	if (!X2PreSpellCastCode())
     {	return;	} 
 	
-	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), TRUE, TRUE))
+	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), FALSE))
 		return;
 		
 	int iPRCLvl	= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
@@ -828,8 +828,20 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 					effect eVis		= EffectVisualEffect(VFX_INVOCATION_UTTERDARK_HIT);
 					effect eLink	= EffectLinkEffects(eFreeze, eVis);
 					int iHeal		= nDrain  * 5;
+	
+					effect eDam = EffectDamage(iHeal, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_PLUS_FIVE);
+					
+					// now get the amount of hp gained based on how much got past target resistance
+					int nHpBefore = GetCurrentHitPoints(oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					int nHpAfter = 0;
+					if (oTarget != OBJECT_INVALID) nHpAfter = GetCurrentHitPoints(oTarget);
+					iHeal = nHpBefore - nHpAfter;
+					if (iHeal <= 0) iHeal = 1;
+					
 					effect eHeal	= EffectTemporaryHitpoints(iHeal);
 						eHeal		= ExtraordinaryEffect(eHeal);
+						
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(24));
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));
@@ -1011,11 +1023,34 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
     nDuration = GetScaledDuration(nDuration, oTarget);
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DOMINATE_PERSON, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{	if (!MyResistSpell(OBJECT_SELF, oTarget))
-    	{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, 1.0))
-			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));	}
-	}	}	
+	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)){
+		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
+			SendMessageToPC(oPC, "Target Immune");
+		else if (!MyResistSpell(OBJECT_SELF, oTarget)){
+			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, 1.0)){
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));
+			}
+		}	
+	} else if (GetIsPC(oTarget)){
+		string sCasterMessage = "<c=red>" + GetFirstName(oTarget);
+		string sTargetMessage = "<c=red>" + GetFirstName(oPC);
+		int bImmune = FALSE;
+		int bResist = FALSE;
+		int bSave = FALSE;
+		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC)){
+			sCasterMessage += " is immune to mind spells!";
+			sTargetMessage += " tried to dominate you but you're immune.";
+		} else if (MyResistSpell(oPC, oTarget) > 0 || 
+				MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oPC, 1.0) > 0){
+			sCasterMessage += " has resisted your domination effect!";
+			sTargetMessage += " tried to use a charm effect upon you but you resisted.";
+		} else {
+			sCasterMessage += " has succumbed to your dominating gaze!";
+			sTargetMessage += " has dominated you!";
+		}
+		SendMessageToPC(oPC, sCasterMessage + "</c>");
+		SendMessageToPC(oTarget, sTargetMessage + "</c>");
+	}
 }
 
 void PS_Vamp_AltForm_Wyvern(object oPC, int nSpell)

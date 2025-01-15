@@ -3,24 +3,6 @@
 
 //called from ps_inc_equipment. 
 void FF_TacticalWeapons(object oPC, object oRHAND, object oSkin){
-	int bBusy = GetLocalInt(oPC, "tacbusy");
-	int nCount = 0;
-	// pause if this function is called by an equipment change 
-	// while an equipment change is already in progress.
-	while (bBusy && nCount < 3000){
-		bBusy = GetLocalInt(oPC, "tacbusy");
-		nCount++;
-	}
-	
-	
-	
-	SetLocalInt(oPC, "tacbusy", TRUE);
-	RemoveBonusFeats(oSkin);
-	if (oRHAND == OBJECT_INVALID){
-		SendMessageToPC(oPC, "Tactical bonuses disabled");
-		SetLocalInt(oPC, "tacbusy", FALSE);
-		return;
-	}
 
 	int nTacRange = GetTacSuiteByWeaponCategory(oPC, oRHAND);
 	string sMessage = "Tactical ";
@@ -80,5 +62,5 @@ void FF_TacticalWeapons(object oPC, object oRHAND, object oSkin){
 		SendMessageToPC(oPC, sMessage);
 		SetLocalString(oPC, "tac_message", sMessage);
 	}
-	SetLocalInt(oPC, "tacbusy", FALSE);
+
 }

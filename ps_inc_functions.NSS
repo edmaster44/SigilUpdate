@@ -23,10 +23,12 @@
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
 
+// for local machine testing only, leave this as FALSE on both live servers
+const int FF_LOCAL = TRUE;
+
 
 // get whether the defender is in range of the attacker's current weapon or feat
-int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bMeleeOnly = TRUE, 
-	int bMeleeTouch = FALSE, int bRangedTouch = FALSE);
+int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
 
 // Gets the size of the creature's footprint in meters based on size category and
 // 3.5e rules
@@ -314,39 +316,34 @@ int GetIsCraftingFree(object oPC){
 	if (DevMode) return TRUE;
 	if (GetIsDM(oPC)) return TRUE;
 	if (GetIsDMPossessed(oPC)) return TRUE;
+	if (FF_LOCAL) return TRUE;
 	return FALSE;
 }
 
 
-int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bMeleeOnly = TRUE, 
-	int bMeleeTouch = FALSE, int bRangedTouch = FALSE){
+int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE){
+	
+	// Set range. Most functions had set this as 4.5 
+	float fBaseRange = 4.5f;
+	float fAddRange = 0.0f;
+	
+	// adjust range for long or short range effects
+	if (nFeatId != NULL && !bWeaponRange){
+		string sRange = "";
+		int nSpellId = StringToInt(Get2DAString("feat", "SPELLID", nFeatId));
+		sRange = GetStringLowerCase(Get2DAString("spells","Range", nSpellId));
+		if (sRange == "l") fBaseRange = 40.0f;
+		else if (sRange == "s") fBaseRange = 8.0f;		
+	}
 	
 	// get right hand item
-	object oWeapon = OBJECT_INVALID;
-	if (!bMeleeTouch && !bRangedTouch)
-		oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oAttacker);
-	if (bMeleeOnly){
-		if (oWeapon != OBJECT_INVALID && !IPGetIsMeleeWeapon(oWeapon))
-			SendMessageToPC(oAttacker, "This ability is melee only!");
-			if (nFeatId != NULL)
-				ResetFeatUses(oAttacker, nFeatId, TRUE, TRUE);
-			return FALSE;
-	}
-
-	// Set range. Most functions had set this as
-	// 4.5 so I will set this as 4.4 + the reach distance.
-	float fRange = 4.4f;
-
-
-	// if right hand empty or this is a shield bash, set min range
-	if (oWeapon == OBJECT_INVALID || (bMeleeTouch && !bRangedTouch)) fRange += 0.1f;
-	// if ranged touch set to normal ranged weapon
-	else if (bRangedTouch) fRange = 30.0f;
-	//if item in right hand it not a weapon, set min range
-	else if (StringToInt(Get2DAString("baseitems", "NumDice", GetBaseItemType(oWeapon))) == 0)
-		fRange += 0.1f;
-	// else get the reach of the weapon
-	else fRange += StringToFloat(Get2DAString("baseitems", "PrefAttackDist", GetBaseItemType(oWeapon)));
+	object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oAttacker);
+	
+	// get range to add for weapon, if applicable
+	if (bWeaponRange && IPGetIsWeapon(oWeapon))
+		fAddRange = StringToFloat(Get2DAString("baseitems", "PrefAttackDist", GetBaseItemType(oWeapon)));
+	
+	float fRange = fBaseRange + fAddRange;
 
 	float fDistance = PS_GetDistanceBetween(oAttacker, oDefender);
 	if (fDistance == -1.0f) {
@@ -372,9 +369,9 @@ float PS_GetDistanceBetween(object oObject1, object oObject2){
 	
 	float fRadius1 = GetCreatureFootprint(oObject1) / 2.0f;
 	float fRadius2 = GetCreatureFootprint(oObject2) / 2.0f;
-	int nTrueDistance = Centre2Centre - fRadius1 - fRadius2;
-	if (nTrueDistance < 0.01f) nTrueDistance = 0.01f;
-	return nTrueDistance;
+	float fTrueDistance = Centre2Centre - fRadius1 - fRadius2;
+	if (fTrueDistance < 0.01f) fTrueDistance = 0.01f;
+	return fTrueDistance;
 }
 
 

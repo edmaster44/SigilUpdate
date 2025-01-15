@@ -9,7 +9,7 @@
 
 void blackguardsmite(object oPC, object oTarget, int nSpell )
 {
-	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId()))
+	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), TRUE))
 		return;
 
 	int nKnight = KnightLevels(oPC);

@@ -33,22 +33,26 @@ void ApplyTacticalBonusFeat(object oSkin, int nFeat){
 }
 
 void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL){
-	if (nSpecificFeat != NULL){
-		int iprp = PS_GetIpBonusFeat(nSpecificFeat);
-		if (iprp == 19) return;
-		itemproperty ip = ItemPropertyBonusFeat(iprp);
-		RemoveItemProperty(oSkin, ip);
-		return;
-	}
-	itemproperty ip = GetFirstItemProperty(oSkin);
+	
 	int nSub;
+	int nIpSub;
+	int bRemove;
+	itemproperty ip = GetFirstItemProperty(oSkin);
 	while (GetIsItemPropertyValid(ip)){
+		bRemove = FALSE;
 		if (GetItemPropertyType(ip) == ITEM_PROPERTY_BONUS_FEAT){
 			nSub = GetItemPropertySubType(ip);
-			if (GetIsTacIprp(nSub))
-				RemoveItemProperty(oSkin, ip);
+			if (nSpecificFeat != NULL){
+				nIpSub = PS_GetIpBonusFeat(nSpecificFeat);
+				if (nSub == nIpSub) bRemove = TRUE;
+			} else if (GetIsTacIprp(nSub)){
+				bRemove = TRUE;
+			}
 		}
-		ip = GetNextItemProperty(oSkin);
+		if (bRemove){
+			RemoveItemProperty(oSkin, ip);
+			ip = GetFirstItemProperty(oSkin);
+		} else ip = GetNextItemProperty(oSkin);
 	}
 }
 

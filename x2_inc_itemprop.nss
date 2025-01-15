@@ -97,6 +97,8 @@ const int 	BASE_ITEM_CREEQ_SLAM_MED	= 183;
 const int 	BASE_ITEM_CREEQ_BITE_TINY	= 184;
 const int 	BASE_ITEM_CREEQ_BITE_LRG	= 185; //New large
 
+int IPGetIsWeapon(object oItem, int nItem = -1);
+
 // what it says on the box. returns true if the 2 itemproperties are the same
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE);
 
@@ -321,6 +323,13 @@ int IPGetIsLightWeapon(object oPC, object oWeapon);
 //------------------------------------------------------------------------------
 //                         I M P L E M E N T A T I O N
 //------------------------------------------------------------------------------
+
+int IPGetIsWeapon(object oItem, int nItem = -1){
+	if (oItem != OBJECT_INVALID) nItem = GetBaseItemType(oItem);
+	int nDice = StringToInt(Get2DAString("baseitems", "NumDice", nItem));
+	if (nDice <= 0) return FALSE;
+	return TRUE;
+}
 
 
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE){

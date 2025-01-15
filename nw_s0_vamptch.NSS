@@ -67,7 +67,7 @@ void main()
 		nCasterLevel= PS_GetCasterLevel(OBJECT_SELF);
 	}
 	
-	if (!PS_GetTargetInRange(OBJECT_SELF, oTarget, nFeatId, TRUE, TRUE))
+	if (!PS_GetTargetInRange(OBJECT_SELF, oTarget, nFeatId, FALSE))
 		return;
 		
 

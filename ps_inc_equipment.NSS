@@ -128,11 +128,15 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP){
 void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 {
     object oCHEST = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-    if (FixARMOR(oPC, oCHEST) == TRUE) return;
+	if (oCHEST != OBJECT_INVALID){
+		if (FixARMOR(oPC, oCHEST) == TRUE) return; // why are we exiting here?
+	}
     
     object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-    int nLEFT = GetBaseItemType(oLHAND);
-    if (FixSHIELD(oPC, oLHAND, nLEFT) == TRUE) return;
+	int nLEFT = GetBaseItemType(oLHAND);
+	if (oLHAND != OBJECT_INVALID){
+		if (FixSHIELD(oPC, oLHAND, nLEFT) == TRUE ) return; // why are we exiting here?
+	}
     
     object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
     int nRIGHT = GetBaseItemType(oRHAND);   
@@ -144,7 +148,6 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
     UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
 	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
-	MurderousIntent(oPC, oRHAND);
 	UpdateWeaponBenefits(oPC, oRHAND, oLHAND, oCHEST, oChanged, bOnEquip);
 
 	
@@ -161,6 +164,10 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
 	// compare current armor and weapons to previous. No need to use essence, they
 	// don't need to persist across logins
+	
+	// DEBUG UPDATE WEAPONS, is preventing the checks actually helping performance?
+	// Or has it only been making the granting and removing of bonus feats unreliable
+	/*
 	string sCurrentArmor = ObjectToString(oCHEST);
 	string sCurrentWeapon = ObjectToString(oRHAND);
 	string sCurrentWeaponLeft = ObjectToString(oLHAND);
@@ -172,13 +179,18 @@ void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHES
 	// called, we don't need to do any of this.
 	if (sCurrentArmor == sLastTacArmor && sCurrentWeapon == sLastTacWeapon &&
 		sCurrentWeaponLeft == sLastTacWeaponLeft) return;
-		
+	*/	
+	// these four apply bonus feats directly to the character, not to the creature skin
+	// becasue these feats are not available in any other way and therefore
+	// they won't conflict with feats the player already has
+	PS_RemoveEffects(oPC, FF_AC_FX);
+	MurderousIntent(oPC, oRHAND);
 	BucklerFinesse(oPC, oLHAND);
 	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
 	FlorentineTWF(oPC, oRHAND, oLHAND);
-
-	UpdateCombatMods(oPC, -1, oChanged, bOnEquip);
 	
+	// DEBUG UPDATE WEAPONS PART 2
+	/* 
 	int bSameMainHand = (sCurrentWeapon == sLastTacWeapon);
 		
 	// reset the stored data for armor and weapons
@@ -188,8 +200,25 @@ void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHES
 	
 	// Tac only cares about the main hand weapon, so if that hasn't changed bail
 	if (bSameMainHand) return;
+	*/
+	
+	int bBusy = GetLocalInt(oPC, "tacbusy");
+	int nCount = 0;
+	// pause if this function is called by an equipment change 
+	// while an equipment change is already in progress.
+	while (bBusy && nCount < 3000){
+		bBusy = GetLocalInt(oPC, "tacbusy");
+		nCount++;
+	}
 	object oSkin = PS_GetCreatureSkin(oPC);
+	
+	SetLocalInt(oPC, "tacbusy", TRUE);
+	
+	RemoveBonusFeats(oSkin);
+	UpdateCombatMods(oPC, NULL, oChanged, bOnEquip);
 	FF_TacticalWeapons(oPC, oRHAND, oSkin);
+	
+	SetLocalInt(oPC, "tacbusy", FALSE);
 }
 
 
@@ -234,7 +263,7 @@ void FlorentineTWF(object oPC, object oRHAND, object oLHAND){
 // buckler prof feat * -1 
 void BucklerFinesse(object oPC, object oLHAND){
 
-	PS_RemoveEffects(oPC, FF_AC_FX);
+	
 	if (GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE) < 17) return;
 	if (GetBaseItemType(oLHAND) != BASE_ITEM_SMALLSHIELD) return;
 
@@ -284,7 +313,6 @@ void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
 	}
 	int nId = -21912;
 
-	PS_RemoveEffects(oPC, FF_AC_FX);
 	if (!bQualifies){
 		if (GetHasFeat(FEAT_BOJUTSU, oPC, TRUE)) FeatRemove(oPC, FEAT_BOJUTSU);
 		if (GetHasFeat(FEAT_KENJUTSU, oPC, TRUE))FeatRemove(oPC, FEAT_KENJUTSU);

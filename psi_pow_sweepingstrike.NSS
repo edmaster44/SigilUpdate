@@ -19,8 +19,9 @@ void main()
 	int nDmg;
 	int nDamageType;
 	 nDamageType = DAMAGE_TYPE_BLUDGEONING;
-	 
-	if (PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), TRUE))
+	
+
+	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), TRUE))
 		return;
 
 

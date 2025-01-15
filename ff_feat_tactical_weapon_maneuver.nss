@@ -58,7 +58,7 @@ void main(){
 		return;
 	}
 	
-	if (!PS_GetTargetInRange(oPC, oTarget, TAC_FEAT_ID, FALSE)){
+	if (!PS_GetTargetInRange(oPC, oTarget, TAC_FEAT_ID, TRUE)){
 		return;
 	}
 	
