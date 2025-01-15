@@ -15,7 +15,7 @@ const int NULL = 50000;
 
 // for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
 // of enchanting
-const int DEBUG_IGNORE_CRAFT_COSTS = TRUE;
+const int DEBUG_IGNORE_CRAFT_COSTS = FALSE;
 
 // module control booleans
 // if TRUE causes checking that your xp pool is lined up with the mimic to give the whole pool
