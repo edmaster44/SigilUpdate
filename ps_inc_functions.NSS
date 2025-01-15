@@ -368,12 +368,13 @@ float PS_GetDistanceBetween(object oObject1, object oObject2){
 	
 	float Centre2Centre = GetDistanceBetween(oObject1, oObject2);
 	
-	if (Centre2Centre <= 0.0f) return -1.0f; //GetDistanceBetween returns 0.0f on error
+	if (Centre2Centre == 0.0f) return -1.0f; //GetDistanceBetween returns 0.0f on error
 	
 	float fRadius1 = GetCreatureFootprint(oObject1) / 2.0f;
 	float fRadius2 = GetCreatureFootprint(oObject2) / 2.0f;
-	
-	return Centre2Centre - fRadius1 - fRadius2;
+	int nTrueDistance = Centre2Centre - fRadius1 - fRadius2;
+	if (nTrueDistance < 0.01f) nTrueDistance = 0.01f;
+	return nTrueDistance;
 }
 
 
