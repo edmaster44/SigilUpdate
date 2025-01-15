@@ -301,10 +301,22 @@ void DebugMessageToPC(object oPC, string sMessage);
 
 int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 
+// gets whether to ignore craft material and gold costs if test server or crafter is dm
+int GetIsCraftingFree(object oPC);
+
 object PS_GetEssence(object oPC = OBJECT_SELF)
 {
 	return GetItemPossessedBy(oPC, "ps_essence");
 }
+
+
+int GetIsCraftingFree(object oPC){
+	if (DevMode) return TRUE;
+	if (GetIsDM(oPC)) return TRUE;
+	if (GetIsDMPossessed(oPC)) return TRUE;
+	return FALSE;
+}
+
 
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bMeleeOnly = TRUE, 
 	int bMeleeTouch = FALSE, int bRangedTouch = FALSE){

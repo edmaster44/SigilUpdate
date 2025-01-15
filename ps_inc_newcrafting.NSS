@@ -218,7 +218,8 @@ string GetCraftingNameDescription(object oPC, struct baseitem i, struct material
 }
 
 int GetCraftedItemCost(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3) {
-	if (DEBUG_IGNORE_CRAFT_COSTS) return 0;
+
+	if (GetIsCraftingFree(oPC)) return 0;
 	int nGold = i.cost;
 	int nMatCost1 = m1.costTier*1000;
 	int nMatCost2 = (m2.costTier*1000)/2;

@@ -13,10 +13,6 @@ rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 // be problematic, the constant "ALL_SPELLS" is defined as -1 in nwscript.nss
 const int NULL = 50000;
 
-// for testing/debugging enchanting only. Set true to ignore gem, essence, and gold costs 
-// of enchanting
-const int DEBUG_IGNORE_CRAFT_COSTS = FALSE;
-
 // module control booleans
 // if TRUE causes checking that your xp pool is lined up with the mimic to give the whole pool
 // recommend leaving this TRUE until Jan 1, 2025 and then setting to false until the next time

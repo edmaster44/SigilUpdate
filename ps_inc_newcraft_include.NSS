@@ -541,7 +541,8 @@ int GetParamIndex(int index){
 
 //Get Gold cost from 2da
 int GetGoldCost(int index){
-	if (DEBUG_IGNORE_CRAFT_COSTS) return 0;
+	object oPC = OBJECT_SELF;
+	if (GetIsCraftingFree(oPC)) return 0;
 	int nGold = StringToInt(Get2DAString("scodenchantments", "Gold", index));  
 	return nGold;
 }
@@ -560,14 +561,16 @@ int GetSpecialIndex(int index){
 
 //Get Gem requirement from 2da
 string GetGemRequirement(int index){
-	if (DEBUG_IGNORE_CRAFT_COSTS) return "";
+	object oPC = OBJECT_SELF;
+	if (GetIsCraftingFree(oPC)) return "";
 	string sGem = Get2DAString("scodenchantments", "Gemstone", index);  
 	return sGem;
 }
 
 //Get essence requirement from 2da
 string GetEssenceRequirement(int index){
-	if (DEBUG_IGNORE_CRAFT_COSTS) return "";
+	object oPC = OBJECT_SELF;
+	if (GetIsCraftingFree(oPC)) return "";
 	string sEssence = Get2DAString("scodenchantments", "Essence", index);  
 	return sEssence;
 }
