@@ -23,10 +23,6 @@
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
 
-// for local machine testing only, leave this as FALSE on both live servers
-const int FF_LOCAL = TRUE;
-
-
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
 
@@ -316,7 +312,6 @@ int GetIsCraftingFree(object oPC){
 	if (DevMode) return TRUE;
 	if (GetIsDM(oPC)) return TRUE;
 	if (GetIsDMPossessed(oPC)) return TRUE;
-	if (FF_LOCAL) return TRUE;
 	return FALSE;
 }
 
