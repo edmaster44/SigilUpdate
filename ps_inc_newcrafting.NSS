@@ -364,7 +364,7 @@ void GenerateCraftDetails(object oPC) {
 	
 	//Manually adding DR notes since they're on the items, not itemproperties
 	if (i.type == "A") {
-		if (m1.label == "Demonscale") {
+		if (m1.label == "Demonscale" || m1.label == "Abyssal Bloodiron"){
 			sFeatures += "<i>Damage Reduction 5/Cold Iron or Good</i>";
 		} else if (m1.label == "Devilscale") {
 			sFeatures += "<i>Damage Reduction 5/Silver or Good</i>";
