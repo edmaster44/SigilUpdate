@@ -1,4 +1,4 @@
-/*#include "ginc_param_const"
+#include "ginc_param_const"
 #include "nwnx_sql"
 
 string GetStorageItemIcon(object oItem)
@@ -163,4 +163,4 @@ int GetGuildAccessLevel(object oPC, string guild)
 	if (GetItemPossessedBy(oPC,sGuildToken)!= OBJECT_INVALID && iGuildAccess >= 6) return 6;
 	}
 	return -1;	
-}*/
+}
