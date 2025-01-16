@@ -857,7 +857,7 @@ string DisplaySpecialRequirement(string sReq) {
 			line = "Only boots crafted within Sigil from Dragonhide, Flesh Golem, or Outsider can have armor enchantment added.";
 	} else if (sReq == "PLAYER_MADE_ONLY_FOR_RINGS"){
 		if (GetBaseItemType(oItem) == BASE_ITEM_RING)
-			line = "Only rings crafted within Sigil can have ability modifiers greater than three added.";
+			line = "Only rings crafted within Sigil can get this enchantment.";
 	} else if (sReq == "PLAYER_MADE"){
 		line = "Item must be crafted in Sigil.";
 	} else if (sReq == "PLAYERMADE_XBOW_BRACER_GLOVE"){
