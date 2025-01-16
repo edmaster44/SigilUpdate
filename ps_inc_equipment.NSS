@@ -162,63 +162,39 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 // and Staff Fighting). This function checks if it's necessary and then calls it if it is.
 // Likewise we call the script that adds the tactical bonus feats from here, if needed.
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
-	// compare current armor and weapons to previous. No need to use essence, they
-	// don't need to persist across logins
-	
-	// DEBUG UPDATE WEAPONS, is preventing the checks actually helping performance?
-	// Or has it only been making the granting and removing of bonus feats unreliable
-	/*
-	string sCurrentArmor = ObjectToString(oCHEST);
-	string sCurrentWeapon = ObjectToString(oRHAND);
-	string sCurrentWeaponLeft = ObjectToString(oLHAND);
-	string sLastTacArmor = GetLocalString(oPC, "TacArmor");
-	string sLastTacWeapon = GetLocalString(oPC, "TacWeapon");
-	string sLastTacWeaponLeft = GetLocalString(oPC, "TacWeaponLeft");
-	
-	// if we haven't changed armor or weapons since the last time this was
-	// called, we don't need to do any of this.
-	if (sCurrentArmor == sLastTacArmor && sCurrentWeapon == sLastTacWeapon &&
-		sCurrentWeaponLeft == sLastTacWeaponLeft) return;
-	*/	
-	// these four apply bonus feats directly to the character, not to the creature skin
-	// becasue these feats are not available in any other way and therefore
-	// they won't conflict with feats the player already has
+
+
 	PS_RemoveEffects(oPC, FF_AC_FX);
-	MurderousIntent(oPC, oRHAND);
 	BucklerFinesse(oPC, oLHAND);
 	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
+	
+	//the rest only relate to weapons
+	if (!IPGetIsWeapon(oChanged)) return;
+	
+	MurderousIntent(oPC, oRHAND);
 	FlorentineTWF(oPC, oRHAND, oLHAND);
 	
-	// DEBUG UPDATE WEAPONS PART 2
-	/* 
-	int bSameMainHand = (sCurrentWeapon == sLastTacWeapon);
-		
-	// reset the stored data for armor and weapons
-	SetLocalString(oPC, "TacArmor", sCurrentArmor);
-	SetLocalString(oPC, "TacWeapon", sCurrentWeapon);
-	SetLocalString(oPC, "TacWeaponLeft", sCurrentWeaponLeft);
-	
-	// Tac only cares about the main hand weapon, so if that hasn't changed bail
-	if (bSameMainHand) return;
-	*/
-	
-	int bBusy = GetLocalInt(oPC, "tacbusy");
-	int nCount = 0;
-	// pause if this function is called by an equipment change 
-	// while an equipment change is already in progress.
-	while (bBusy && nCount < 3000){
-		bBusy = GetLocalInt(oPC, "tacbusy");
-		nCount++;
-	}
 	object oSkin = PS_GetCreatureSkin(oPC);
-	
-	SetLocalInt(oPC, "tacbusy", TRUE);
-	
-	RemoveBonusFeats(oSkin);
-	UpdateCombatMods(oPC, NULL, oChanged, bOnEquip);
-	FF_TacticalWeapons(oPC, oRHAND, oSkin);
-	
-	SetLocalInt(oPC, "tacbusy", FALSE);
+	if (!bOnEquip){
+		RemoveBonusFeats(oSkin);
+	} else {
+		
+		int bBusy = GetLocalInt(oPC, "tacbusy");
+		int nCount = 0;
+		// pause if this function is called by an equipment change 
+		// while an equipment change is already in progress.
+		while (bBusy && nCount < 10000){
+			bBusy = GetLocalInt(oPC, "tacbusy");
+			nCount++;
+		}
+		SetLocalInt(oPC, "tacbusy", TRUE);
+		
+		UpdateCombatMods(oPC, NULL, oChanged, bOnEquip);
+		
+		FF_TacticalWeapons(oPC, oRHAND, oSkin);
+		
+		SetLocalInt(oPC, "tacbusy", FALSE);
+	}
 }
 
 

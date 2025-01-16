@@ -45,14 +45,11 @@ void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL){
 			if (nSpecificFeat != NULL){
 				nIpSub = PS_GetIpBonusFeat(nSpecificFeat);
 				if (nSub == nIpSub) bRemove = TRUE;
-			} else if (GetIsTacIprp(nSub)){
-				bRemove = TRUE;
-			}
+			} else if (GetIsTacIprp(nSub)) bRemove = TRUE;	
 		}
-		if (bRemove){
-			RemoveItemProperty(oSkin, ip);
-			ip = GetFirstItemProperty(oSkin);
-		} else ip = GetNextItemProperty(oSkin);
+		if (bRemove)RemoveItemProperty(oSkin, ip);
+
+		ip = GetNextItemProperty(oSkin);
 	}
 }
 
@@ -78,6 +75,8 @@ int GetIsTacIprp(int iprp){
 		case FEAT_CLEAVE: return TRUE;
 		case FEAT_KNOCKDOWN: return TRUE;
 		case FEAT_POWER_ATTACK: return TRUE;
+		case FEAT_RAPID_RELOAD: return TRUE;
+		case FEAT_TWO_WEAPON_FIGHTING: return TRUE;
 	}
 	return FALSE;
 }

@@ -253,7 +253,7 @@ struct CombatMods OversizeTwoWeaponFighting(struct CombatMods data){
 
 
 struct CombatMods XbowAndSharpshooter(struct CombatMods data){
-	//RemoveBonusFeats(data.oSkin, FEAT_RAPID_RELOAD);
+
 	int nRightId = GetBaseItemType(data.oRHAND);
 	int bIsXbow = (nRightId == BASE_ITEM_HEAVYCROSSBOW || 
 		nRightId == BASE_ITEM_LIGHTCROSSBOW);
@@ -269,9 +269,8 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 		int nReqStr = 13;
 		if (nRightId == BASE_ITEM_HEAVYCROSSBOW) nReqStr = 15;
 		bGetsRR = (GetAbilityScore(data.oPC, ABILITY_STRENGTH, FALSE) >= nReqStr);
-		
-		if (bGetsRR && !GetHasFeat(FEAT_RAPID_RELOAD, data.oPC, TRUE))
-			ApplyTacticalBonusFeat(data.oSkin, FEAT_RAPID_RELOAD);
+	
+		if (bGetsRR) ApplyTacticalBonusFeat(data.oSkin, FEAT_RAPID_RELOAD);
 	}
 	// now check for Sharpshooter
 	if (bSharpshooter){
@@ -298,17 +297,15 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 struct CombatMods CreatureTWF(struct CombatMods data){
 	int bLisCreature = IPGetIsCreatureEquippedWeapon(data.oLHAND);
 	
-	//RemoveBonusFeats(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
 	// bail if off hand is not a creature weap
 	if (!bLisCreature) return data;
 
 	int nBonus = 0;
 	int nPCsize = GetCreatureSize(data.oPC);
 	int nLWeaponSize = IPGetWeaponSize(data.oLHAND);
-	int bHasTWF = GetHasFeat(FEAT_TWO_WEAPON_FIGHTING, data.oPC, TRUE);
-
-	// if they don't have twf and the left is a creature weapon of normal size, give them twf
-	if (nLWeaponSize <= nPCsize && !bHasTWF)
+	
+	// if the left is a creature weapon of normal size, give them twf
+	if (nLWeaponSize <= nPCsize)
 		ApplyTacticalBonusFeat(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
 	// if they're using an off hand creature weapon that is the same size cat as themselves
 	// reduce penalty by 2 unless oversize twf is doing that already
