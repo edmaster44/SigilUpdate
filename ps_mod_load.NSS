@@ -46,6 +46,8 @@
 #include "featload"
 #include "ps_inc_time"
 #include "ps_inc_bgspellfix"
+#include "nwnx_scod_finesse"
+#include "nwnx_scod_monkweapon"
 
 void main()
 {
@@ -207,5 +209,11 @@ void main()
     OnSeverLoadPopulateFeatSQL(2501, 5000);
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");
+	
+	EnableFinesse();
+	EnableCreatureFinesse();
+	EnableMonkNew();
+	
+	
 	
 }

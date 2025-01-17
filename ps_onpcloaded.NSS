@@ -9,8 +9,6 @@
 #include "dmfi_inc_initial"
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
-#include "nwnx_scod_finesse"
-#include "nwnx_scod_monkweapon"
 #include "ps_inc_functions"
 #include "nwnx_character"
 #include "ps_class_inc"
@@ -566,9 +564,6 @@ void main()
 	if (Booted == FALSE) {
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
-		EnableFinesse();
-		EnableCreatureFinesse();
-		EnableMonkNew();
 		ConvertBio(oPC);
 		// We will update legacy items before the re-equip feature in case any 
 		// items get dropped on re-equip
