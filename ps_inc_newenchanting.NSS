@@ -1612,7 +1612,7 @@ void ApplyPlayerMade(object oItem){
 }
 
 string GetAdditionalEssenceReq(object oPC, int nPoints){
-	if (GetIsCraftingFree(oPC)) return "";
+	//if (GetIsCraftingFree(oPC)) return "";
 	if (nPoints < 0) nPoints = 0;
 	else if (nPoints > 5) nPoints = 5;
 	// in case they have some real caster levels, check to see if they would
