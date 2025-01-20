@@ -1359,11 +1359,9 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		}
 		
 		// checking for keen/imp crit last in case it was already the matpower
-		if (!bSkipIp && !IPGetItemPropertiesIdentical(ipCrit, ipMatPower)){
-			if (nIpType == 43){
+		if (!bSkipIp && IPGetItemPropertiesIdentical(ipCrit, ip)){
 				nAddPoints = 1;
 				bSkipIp = TRUE;
-			}
 		}
 		
 		// if a ranged weapon has bonus feat imp crit, that is equivalent to keen
