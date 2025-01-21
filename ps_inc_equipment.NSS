@@ -32,7 +32,7 @@ void FIX_BLINDFIGHT(object oPC);
 void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
 void MonkDruidPenalty(object oPC);
-void UnearthlyGrace(object oPC, object oCHEST);
+//void UnearthlyGrace(object oPC, object oCHEST);
 void HeavyArmorOptimizations(object oPC, object oARMOR);
 void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string s2DA = "armorrulestats", string sCOLUMN = "ACCHECK");
 int CheckDragonForms(object oPC, object oITEM, int nITEM);
@@ -145,7 +145,7 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 	FIX_BLINDFIGHT(oPC);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     HeavyArmorOptimizations(oPC, oCHEST);
-    UnearthlyGrace(oPC, oCHEST);
+   // UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
 	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
 	UpdateWeaponBenefits(oPC, oRHAND, oLHAND, oCHEST, oChanged, bOnEquip);
@@ -882,50 +882,73 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
 // Heavy Armor Optimization Feats
 void HeavyArmorOptimizations(object oPC, object oARMOR){
 
-	//Remove previous optimization effect
+	//Remove previous optimization skill effects
 	if (GetHasSpellEffect(ARMOR_OPT_FX, oPC)) 
 		PS_RemoveEffects(oPC, ARMOR_OPT_FX);
 	
-	if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR) return;
-    if (GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY) return;
+	int bHasEpicAO = GetHasFeat(2838, oPC, TRUE);
+	int bHasGreaterAO = GetHasFeat(2837, oPC, TRUE);
+	int bHasAO = GetHasFeat(2836, oPC, TRUE);
+	
+	// remove the Armor Opt AC feats if the armor isn't heavy or they
+	// do not have Armor Opt
+	if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR ||
+		GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY ||
+		(!bHasEpicAO && !bHasGreaterAO && !bHasAO)){
+			if (GetHasFeat(FEAT_ARMOR_OPT_AC_4, oPC, TRUE))
+				FeatRemove(oPC, FEAT_ARMOR_OPT_AC_4);
+			if (GetHasFeat(FEAT_ARMOR_OPT_AC_2, oPC, TRUE))
+				FeatRemove(oPC, FEAT_ARMOR_OPT_AC_2);
+			if (GetHasFeat(FEAT_ARMOR_OPT_AC_1, oPC, TRUE))
+				FeatRemove(oPC, FEAT_ARMOR_OPT_AC_1);
+			return;
+	}
 	
 	//On to calculations
-    int nAC;
+   // int nAC;
 	int nDUR = DURATION_TYPE_PERMANENT;
     int nSKILL;
-    if (GetHasFeat(2838, oPC, TRUE) == TRUE)
-    {
-        nAC = 4;
+    if (bHasEpicAO){
+		if (GetHasFeat(FEAT_ARMOR_OPT_AC_1, oPC, TRUE))
+			FeatRemove(oPC, FEAT_ARMOR_OPT_AC_1);
+		if (GetHasFeat(FEAT_ARMOR_OPT_AC_2, oPC, TRUE))
+			FeatRemove(oPC, FEAT_ARMOR_OPT_AC_2);
+		if (!GetHasFeat(FEAT_ARMOR_OPT_AC_4, oPC, TRUE))
+			FeatAdd(oPC, FEAT_ARMOR_OPT_AC_4, FALSE);
         nSKILL = 5;
-    }
-    else if (GetHasFeat(2837, oPC, TRUE) == TRUE)
-    {
-        nAC = 2;
+    } else if (bHasGreaterAO){
+        if (GetHasFeat(FEAT_ARMOR_OPT_AC_1, oPC, TRUE))
+			FeatRemove(oPC, FEAT_ARMOR_OPT_AC_1);
+		if (GetHasFeat(FEAT_ARMOR_OPT_AC_4, oPC, TRUE))
+			FeatRemove(oPC, FEAT_ARMOR_OPT_AC_4);
+		if (!GetHasFeat(FEAT_ARMOR_OPT_AC_2, oPC, TRUE))
+			FeatAdd(oPC, FEAT_ARMOR_OPT_AC_2, FALSE);
         nSKILL = 3;
-    }
-    else if (GetHasFeat(2836, oPC, TRUE) == TRUE)
-    {
-        nAC = 1;
+    } else if (bHasAO){
+        if (GetHasFeat(FEAT_ARMOR_OPT_AC_4, oPC, TRUE))
+			FeatRemove(oPC, FEAT_ARMOR_OPT_AC_4);
+		if (GetHasFeat(FEAT_ARMOR_OPT_AC_2, oPC, TRUE))
+			FeatRemove(oPC, FEAT_ARMOR_OPT_AC_2);
+		if (!GetHasFeat(FEAT_ARMOR_OPT_AC_1, oPC, TRUE))
+			FeatAdd(oPC, FEAT_ARMOR_OPT_AC_1, FALSE);
         nSKILL = 1;
-    }
-    else return;
+    } else return;
+	
     
-    effect eFX = EffectACIncrease(nAC);
-    eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_PARRY, nSKILL));
+    //effect eFX = EffectACIncrease(nAC);
+    effect eFX = EffectSkillIncrease(SKILL_PARRY, nSKILL);
     eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSKILL));
     eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_TUMBLE, nSKILL));
-    if (GetHasFeat(FEAT_MARQCAMB_SILENT_METAL, oPC, TRUE) == FALSE)
-    {
+    if (GetHasFeat(FEAT_MARQCAMB_SILENT_METAL, oPC, TRUE) == FALSE){
         eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HIDE, nSKILL));
         eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_MOVE_SILENTLY, nSKILL));
     }
-	
 	
     eFX = SupernaturalEffect(eFX);
     eFX = SetEffectSpellId(eFX, ARMOR_OPT_FX);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
-
+/* race removed
 // Unearthly grace feat for Nymphs. CHA bonus to Saves and Dodge AC.
 void UnearthlyGrace(object oPC, object oCHEST)
 {
@@ -934,9 +957,10 @@ void UnearthlyGrace(object oPC, object oCHEST)
     int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
     if (nCHA < 1) return;
     effect eFX = EffectSavingThrowIncrease(SAVING_THROW_ALL, nCHA);
-    eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA, AC_DEFLECTION_BONUS));
+    eFX = EffectLinkEffects(eFX, EffectACIncrease(nCHA));
     ApplyEquipmentEffect(oPC, eFX);
 }
+*/
 
 
 // Keep monk AC from affecting druids

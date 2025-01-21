@@ -399,7 +399,8 @@ struct synergyBonus GetItemMaterialSynergyBonus(object oItem){
 	if (!bCheckForAC && nSynergyType == -1) return dSynergy;
 
 	int nIpSub;
-	int vsDragon = 0; 
+	int vsDragon = 0;
+	int vsElemental = 0;
 	int vsFey = 0; 
 	int vsGoblin = 0; 
 	int vsOutsider = 0; 
@@ -437,6 +438,11 @@ struct synergyBonus GetItemMaterialSynergyBonus(object oItem){
 					vsUndead += 1;
 					break;
 				}
+				case SPECIAL_MAT_FORMIC_AMBER: case SPECIAL_MAT_REGULAN_GEARSPRING:
+				case SPECIAL_MAT_NEUMANNIC_FLYWHEEL:{
+					vsElemental += 1;
+					break;
+				}
 			}	
 		}
 		ip = GetNextItemProperty(oItem);
@@ -444,6 +450,7 @@ struct synergyBonus GetItemMaterialSynergyBonus(object oItem){
 	
 	int nRace = -1;
 	if (vsDragon >= 2) nRace = IP_CONST_RACIALTYPE_DRAGON;
+	else if (vsElemental >= 2) nRace = IP_CONST_RACIALTYPE_ELEMENTAL;
 	else if (vsFey >= 2) nRace = IP_CONST_RACIALTYPE_FEY;
 	else if (vsGoblin >= 2) nRace = IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID;
 	else if (vsOutsider >= 2) nRace = IP_CONST_RACIALTYPE_OUTSIDER;
@@ -1164,4 +1171,3 @@ string RemoveWhitespace(string sInput){
     }
     return sResult;
 }
-

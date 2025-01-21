@@ -52,6 +52,7 @@ void IajaitsuMaster(struct CombatMods data);
 void FrightfulPresence(object oPC);
 void FrightfulPresence(object oPC);
 void GiveFeedback(object oPC, string sMessage);
+void RemoveMethodicalDefenseFeats(object oPC);
 
 struct CombatMods{
 	int nAPR; // attacks per round
@@ -170,7 +171,7 @@ void UpdateCombatMods(object oPC, int nAction = NULL, object oChanged = OBJECT_I
 }
 
 struct CombatMods PerformToggleFunctions(struct CombatMods data){
-
+	if (!data.bUsingDef) RemoveMethodicalDefenseFeats(data.oPC);
 	if (data.bUsingDef) data = MethodicalDefense(data);
 	if (data.bUsingStrike) data = ConsideredStrike(data);
 	if (data.bUsingStaff) data = StaffFighting(data);
@@ -190,13 +191,42 @@ struct CombatMods PerformNonToggleFunctions(struct CombatMods data){
 						toggle
 ********************************************************************************************************/
 
+void RemoveMethodicalDefenseFeats(object oPC){
+	FeatRemove(oPC, FEAT_METHODICAL_DEF_AC_1);
+	FeatRemove(oPC, FEAT_METHODICAL_DEF_AC_2);
+	FeatRemove(oPC, FEAT_METHODICAL_DEF_AC_3);
+}
+
 struct CombatMods MethodicalDefense(struct CombatMods data){
 	int nHalfAttacks = GetHalfAttacks(data.oPC, data.oRHAND);
 	if (nHalfAttacks > 0){
 		data.nAPR -= nHalfAttacks;
-		data.nAC += nHalfAttacks;
+		//data.nAC += nHalfAttacks;
+		if (nHalfAttacks >= 3){
+			if (GetHasFeat(FEAT_METHODICAL_DEF_AC_1, data.oPC, TRUE))
+				FeatRemove(data.oPC, FEAT_METHODICAL_DEF_AC_1);
+			if (GetHasFeat(FEAT_METHODICAL_DEF_AC_2, data.oPC, TRUE))
+				FeatRemove(data.oPC, FEAT_METHODICAL_DEF_AC_2);
+			if (!GetHasFeat(FEAT_METHODICAL_DEF_AC_3, data.oPC, TRUE))
+				FeatAdd(data.oPC, FEAT_METHODICAL_DEF_AC_3, FALSE);
+		} else if (nHalfAttacks == 2){
+			if (GetHasFeat(FEAT_METHODICAL_DEF_AC_1, data.oPC, TRUE))
+				FeatRemove(data.oPC, FEAT_METHODICAL_DEF_AC_1);
+			if (GetHasFeat(FEAT_METHODICAL_DEF_AC_3, data.oPC, TRUE))
+				FeatRemove(data.oPC, FEAT_METHODICAL_DEF_AC_3);
+			if (!GetHasFeat(FEAT_METHODICAL_DEF_AC_2, data.oPC, TRUE))
+				FeatAdd(data.oPC, FEAT_METHODICAL_DEF_AC_2, FALSE);
+		} else {
+			if (GetHasFeat(FEAT_METHODICAL_DEF_AC_3, data.oPC, TRUE))
+				FeatRemove(data.oPC, FEAT_METHODICAL_DEF_AC_3);
+			if (GetHasFeat(FEAT_METHODICAL_DEF_AC_2, data.oPC, TRUE))
+				FeatRemove(data.oPC, FEAT_METHODICAL_DEF_AC_2);
+			if (!GetHasFeat(FEAT_METHODICAL_DEF_AC_1, data.oPC, TRUE))
+				FeatAdd(data.oPC, FEAT_METHODICAL_DEF_AC_1, FALSE);
+		}
 		if (data.nAction == DEF_ON) GiveFeedback(data.oPC, sDefOnFb);
 	} else {
+		RemoveMethodicalDefenseFeats(data.oPC);
 		data.bUsingDef = FALSE;
 		SendMessageToPC(data.oPC, sBabError);
 		GiveFeedback(data.oPC, sDefOffFb);
@@ -334,21 +364,24 @@ struct CombatMods TwoSwordsAsOne(struct CombatMods data){
 	// change size to accomodate the character. So I fix that here.
 	
 	// large Samurai can use a falchion, greatsword, or odachi in the right hand
-	// and katana in left
+	// and katana, longsword, ninjato, or shortsword in left
 	if (nPCsize > 3){
 		bRightQualifies = (nRIGHT == BASE_ITEM_FALCHION || nRIGHT == BASE_ITEM_GREATSWORD ||
-			nRIGHT == BASE_ITEM_ODACHI);
-		bLeftQualifies = (nLEFT == BASE_ITEM_KATANA || nLEFT == BASE_ITEM_LONGSWORD);
-	// small samurai can use a ninjato or shortsword in the right hand and dagger or kukri in the left
-	// otherwise they would have massive penalties making a small samurai unplayable
+			nRIGHT == BASE_ITEM_ODACHI );
+		bLeftQualifies = (nLEFT == BASE_ITEM_KATANA || nLEFT == BASE_ITEM_LONGSWORD ||
+			nLEFT == BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO);
+	// small samurai can use a ninjato, shortsword, katana, or longsword in the right hand 
+	// and dagger or kukri in the left otherwise they would have -2 penalties making 
+	// a small samurai unfairly penalized
 	} else if (nPCsize < 3){
-		bRightQualifies = (nRIGHT == BASE_ITEM_NINJATO || nRIGHT == BASE_ITEM_SHORTSWORD);
+		bRightQualifies = (nRIGHT == BASE_ITEM_NINJATO || nRIGHT == BASE_ITEM_SHORTSWORD || 
+			nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD);
 		bLeftQualifies = (nLEFT == BASE_ITEM_DAGGER || nLEFT == BASE_ITEM_KUKRI);
-	} 
-	// the orginal weapons still qualify, but added ninjato as a left hand option
-	if (nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD) bRightQualifies = TRUE;
-	if (nLEFT = BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO) bLeftQualifies = TRUE;
-	
+	} else { //medium characters
+		bRightQualifies = (nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD);
+		bLeftQualifies = (nLEFT = BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO || 
+		nLEFT == BASE_ITEM_DAGGER || nLEFT == BASE_ITEM_KUKRI);
+	}
 	
 	if (!bRightQualifies || !bLeftQualifies) return data;
 	 
@@ -463,8 +496,7 @@ void GiveFeedback(object oPC, string sMessage){
 }
 
 void ApplyCombatMods(struct CombatMods data){
-	effect eFX = EffectDarkVision(); // EffectDarkVision doesnt work, so I'll use it as ab
-	// placeholder effect to build an effect chain off of
+	effect eFX;
 
 	int bApplyChange = FALSE;
 	if (data.nAPR != 0){
@@ -474,14 +506,16 @@ void ApplyCombatMods(struct CombatMods data){
 		if (data.nAPR > 5) data.nAPR = 5;
 		else if (data.nAPR < -5) data.nAPR = -5;
 		effect eAPR = EffectModifyAttacks(data.nAPR);
-		eFX = EffectLinkEffects(eAPR, eFX);
+		if (!GetIsEffectValid(eFX)) eFX = eAPR;
+		else eFX = EffectLinkEffects(eAPR, eFX);
 	}
 	if (data.nAB != 0){
 		bApplyChange = TRUE;
 		effect eAB;
 		if (data.nAB > 0) eAB = EffectAttackIncrease(data.nAB);
 		else eAB = EffectAttackDecrease(data.nAB * -1); // accepts a positive integer for the nerf
-		eFX = EffectLinkEffects(eAB, eFX);
+		if (!GetIsEffectValid(eFX)) eFX = eAB;
+		else eFX = EffectLinkEffects(eAB, eFX);
 	}
 	
 	if (data.nDam != 0){
@@ -489,14 +523,16 @@ void ApplyCombatMods(struct CombatMods data){
 		effect eDAM;
 		if (data.nDam > 0) eDAM = EffectDamageIncrease(data.nDam, data.nDamType);
 		else eDAM = EffectDamageDecrease(data.nDam * -1, data.nDamType);
-		eFX = EffectLinkEffects(eDAM, eFX);
+		if (!GetIsEffectValid(eFX)) eFX = eDAM;
+		else eFX = EffectLinkEffects(eDAM, eFX);
 	}
 	if (data.nAC != 0){
 		bApplyChange = TRUE;
 		effect eAC;
 		if (data.nAC > 0) eAC =  EffectACIncrease(data.nAC);
 		else eAC = EffectACDecrease(data.nAC * -1);  // accepts a positive integer for the nerf
-		eFX = EffectLinkEffects(eAC, eFX);
+		if (!GetIsEffectValid(eFX)) eFX = eAC;
+		else eFX = EffectLinkEffects(eAC, eFX);
 	}
 	
 	if (bApplyChange){
@@ -535,5 +571,4 @@ int GetQualifiesForStaffFighting(object oPC, object oRHAND, object oLHAND){
 	
 	return bWeaponOk;
 }
-
 

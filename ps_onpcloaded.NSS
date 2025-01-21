@@ -26,6 +26,7 @@
 #include "ps_adjust_knight"
 #include "inc_tattoo"
 #include "ff_combat_mods"
+#include "_aaa_first_login"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -404,6 +405,8 @@ void main()
 {
 	//SendMessageToPC(GetFirstPC(), "onpcloaded start");
 	
+	// set up the plugin commands in _aaa_first_login
+	FirstLogin();
 	object oPC = GetEnteringObject();
 	if(!CheckIfNameExploiting(oPC)) return;
 	

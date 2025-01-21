@@ -1,3 +1,5 @@
+#include "aaa_constants"
+
 
 // constants to control optional epic precision qualifications
 const int bGrantToSwash12 = TRUE;
@@ -91,8 +93,140 @@ int fCalcSneakDice(object oPC);
 int fCalcDeathDice(object oPC);
 int fCalcOtherSneakFeats(object oPC);
 string fCheckForTempSneakDice(object oPC);
+void SituationalAwareness(object oPC);
+void ImprovedDefense(object oPC);
+
+void SituationalAwareness(object oPC){
+	// Add situational awareness feat
+	if (GRANT_SITUATIONAL_AWARENESS){
+		int nLvlAC = (GetHitDice(oPC) + 3) / 10;
+		int nTumbleAC = GetSkillRank(SKILL_TUMBLE, oPC, TRUE);
+		int nAC = nLvlAC - nTumbleAC;
+		switch (nAC){
+			case 3: {
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_1_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_1_AC);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_2_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_2_AC);
+				if (!GetHasFeat(FEAT_SITUATIONAL_AWARENESS_3_AC, oPC, TRUE))
+					FeatAdd(oPC, FEAT_SITUATIONAL_AWARENESS_3_AC, FALSE);
+				break;
+			}
+			case 2:{
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_1_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_1_AC);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_3_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_3_AC);
+				if (!GetHasFeat(FEAT_SITUATIONAL_AWARENESS_2_AC, oPC, TRUE))
+					FeatAdd(oPC, FEAT_SITUATIONAL_AWARENESS_2_AC, FALSE);
+				break;
+			}
+			case 1:{
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_3_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_3_AC);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_2_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_2_AC);
+				if (!GetHasFeat(FEAT_SITUATIONAL_AWARENESS_1_AC, oPC, TRUE))
+					FeatAdd(oPC, FEAT_SITUATIONAL_AWARENESS_1_AC, FALSE);
+				break;
+			}
+			default: {
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_1_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_1_AC);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_2_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_2_AC);
+				if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_3_AC, oPC, TRUE))
+					FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_3_AC);
+				if (!GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+					FeatAdd(oPC, FEAT_SITUATIONAL_AWARENESS, FALSE);
+				break;
+			}
+		}
+	} else {
+		if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_1_AC, oPC, TRUE))
+			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_1_AC);
+		if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_2_AC, oPC, TRUE))
+			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_2_AC);
+		if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS_3_AC, oPC, TRUE))
+			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_3_AC);
+		if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
+			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
+	}
+}
 
 
+void ImprovedDefense(object oPC){
+	int nStalwartLevel = GetLevelByClass(CLASS_STALWART_DEFENDER, oPC);
+	int nAC = 0;
+	if (nStalwartLevel >= 10) nAC = 4;
+	else if (nStalwartLevel >= 7) nAC = 3;
+	else if (nStalwartLevel >= 3) nAC = 2;
+	else if (nStalwartLevel >= 1) nAC = 1;
+	
+	switch (nAC){
+		case 4: {
+			if (GetHasFeat(FEAT_STAL_DEF_AC_1, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_1);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_2, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_2);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_3, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_3);
+			if (!GetHasFeat(FEAT_STAL_DEF_AC_4, oPC, TRUE))
+				FeatAdd(oPC, FEAT_STAL_DEF_AC_4, FALSE);
+			break;
+		}
+		case 3:{
+			if (GetHasFeat(FEAT_STAL_DEF_AC_1, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_1);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_2, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_2);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_4, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_4);
+			if (!GetHasFeat(FEAT_STAL_DEF_AC_3, oPC, TRUE))
+				FeatAdd(oPC, FEAT_STAL_DEF_AC_3, FALSE);
+			break;
+		}
+		case 2:{
+			if (GetHasFeat(FEAT_STAL_DEF_AC_1, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_1);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_3, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_3);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_4, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_4);
+			if (!GetHasFeat(FEAT_STAL_DEF_AC_2, oPC, TRUE))
+				FeatAdd(oPC, FEAT_STAL_DEF_AC_2, FALSE);
+			break;
+		}
+		case 1:{
+			if (GetHasFeat(FEAT_STAL_DEF_AC_2, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_2);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_3, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_3);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_4, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_4);
+			if (!GetHasFeat(FEAT_STAL_DEF_AC_1, oPC, TRUE))
+				FeatAdd(oPC, FEAT_STAL_DEF_AC_1, FALSE);
+			break;
+		}
+		default:{
+			if (GetHasFeat(FEAT_STAL_DEF_AC_1, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_1);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_2, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_2);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_3, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_3);
+			if (GetHasFeat(FEAT_STAL_DEF_AC_4, oPC, TRUE))
+				FeatRemove(oPC, FEAT_STAL_DEF_AC_4);
+			break;
+		}
+	}
+}
 
 // function to calculate sneak dice
 int fCalcSneakDice(object oPC)

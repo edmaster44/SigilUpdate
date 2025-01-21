@@ -24,14 +24,13 @@
 #include "ff_update_feats_inc"
 #include "ff_combat_mods"
 
-
-
-
 void ff_update_feats(object oPC);
 void fGrantSneakFeats(object oPC);
+void UpdateACFeats(object oPC);
 void fUpdateOtherFeats(object oPC);
 void GiveCreatureWeaponFinesse(object oPC);
 void AdjustAbilityScores(object oPC);
+
 
 
 
@@ -69,22 +68,6 @@ void ff_update_feats(object oPC){
 	}
 }
 
-void AdjustAbilityScores(object oPC){
-	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
-	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (GetLocalInt(oEss, "startability")){
-		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
-		return;
-	} else {
-		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		}
-	}
-}
 
 //Function to grant sneak dice, death dice, and ep if applicable
 void fGrantSneakFeats(object oPC){
@@ -119,22 +102,12 @@ void fGrantSneakFeats(object oPC){
 		FeatAdd(oPC, idFeatEpicPrecision, FALSE);
 }
 
-void GiveCreatureWeaponFinesse(object oPC){
-	// if they have creature weap prof
-	if (GetHasFeat(289, oPC, TRUE)){ 
-		 // give weapon finesse for small, tiny, and med creat weap
-		if (!GetHasFeat(3218, oPC, TRUE)) FeatAdd(oPC, 3218, FALSE);
-		int nSize = GetCreatureSize(oPC);
-		// if charsize >= med give weap finesse for large creat weap
-		if (nSize >= 3 && !GetHasFeat(3259, oPC, TRUE)) FeatAdd(oPC, 3259, FALSE);
-		// if charsize >= large give weap finesse for huge creat
-		if (nSize >= 4 && !GetHasFeat(3260, oPC, TRUE)) FeatAdd(oPC, 3260, FALSE);
-	}
-}
 
 void fUpdateOtherFeats(object oPC){
 	// call to ps_inc_functions to grant Imbue Item to psi and to warlocks with warlock prcs.
 	PS_ManageImbueItem(oPC);
+	
+	UpdateACFeats(oPC);
 	
 	GiveCreatureWeaponFinesse(oPC);
 	
@@ -145,14 +118,6 @@ void fUpdateOtherFeats(object oPC){
 		FeatRemove(oPC, 1754);
 		FeatAdd(oPC, 243, FALSE);
 	}
-	// Add situational awareness persistent feat. Please see file ff_feat_situational_awareness.nss
-	// for code and an EXTREMELY IMPORTANT note on interaction with Dae's plugin. Recommend use with xp_fix
-	// plugin to remove dodge ac limits at https://github.com/nwn2dev/nwnx4/wiki at the bottom of the page.
-	if (GRANT_SITUATIONAL_AWARENESS && !GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
-		FeatAdd(oPC, FEAT_SITUATIONAL_AWARENESS, FALSE);
-	else if (!GRANT_SITUATIONAL_AWARENESS && GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
-		FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
-	
 	// Add tactical weapons feat.
 	if (!GetHasFeat(21922, oPC, TRUE)) FeatAdd(oPC, 21922, FALSE);
 	
@@ -171,10 +136,11 @@ void fUpdateOtherFeats(object oPC){
 		if (!GetHasFeat(FEAT_METHODICAL_DEFENSE, oPC, TRUE)) FeatAdd(oPC, FEAT_METHODICAL_DEFENSE, FALSE);
 		if (!GetHasFeat(FEAT_CONSIDERED_STRIKE, oPC, TRUE)) FeatAdd(oPC, FEAT_CONSIDERED_STRIKE, FALSE);
 	} else {
-		if (GetHasFeat(FEAT_METHODICAL_DEFENSE, oPC, TRUE) || GetHasFeat(FEAT_CONSIDERED_STRIKE, oPC, TRUE)){
-			FeatRemove(oPC, FEAT_METHODICAL_DEFENSE);
+		if (GetHasFeat(FEAT_METHODICAL_DEFENSE, oPC, TRUE))
+				FeatRemove(oPC, FEAT_METHODICAL_DEFENSE);
+		if (GetHasFeat(FEAT_CONSIDERED_STRIKE, oPC, TRUE))
 			FeatRemove(oPC, FEAT_CONSIDERED_STRIKE);
-		}
+		
 	}
 	// give staff fighting if they have twf of either kind, or are a monk, samurai
 	// or kensai, or remove staff fighting if a de-leveled pc no longer qualifies.
@@ -187,4 +153,41 @@ void fUpdateOtherFeats(object oPC){
 	
 	// update any ongoing effects for methdef, constrike, and staff
 	UpdateCombatMods(oPC);
+}
+
+void UpdateACFeats(object oPC){
+	
+	SituationalAwareness(oPC);
+	ImprovedDefense(oPC);
+}
+
+void GiveCreatureWeaponFinesse(object oPC){
+	// if they have creature weap prof
+	if (GetHasFeat(289, oPC, TRUE)){ 
+		 // give weapon finesse for small, tiny, and med creat weap
+		if (!GetHasFeat(3218, oPC, TRUE)) FeatAdd(oPC, 3218, FALSE);
+		int nSize = GetCreatureSize(oPC);
+		// if charsize >= med give weap finesse for large creat weap
+		if (nSize >= 3 && !GetHasFeat(3259, oPC, TRUE)) FeatAdd(oPC, 3259, FALSE);
+		// if charsize >= large give weap finesse for huge creat
+		if (nSize >= 4 && !GetHasFeat(3260, oPC, TRUE)) FeatAdd(oPC, 3260, FALSE);
+	}
+}
+
+
+void AdjustAbilityScores(object oPC){
+	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	if (GetLocalInt(oEss, "startability")){
+		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
+		return;
+	} else {
+		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
+			AssignCommand(oPC, ClearAllActions(TRUE));
+			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
+		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
+			AssignCommand(oPC, ClearAllActions(TRUE));
+			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
+		}
+	}
 }

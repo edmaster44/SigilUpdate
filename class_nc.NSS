@@ -4,17 +4,50 @@
 int iNaturesWarrior = GetLevelByClass(CLASS_TYPE_NATUREWARRIOR,OBJECT_SELF);
 int nBonus;
 effect eLink;
-void Armor_of_the_crocodile(object oPC, int nSpell)
-{
 
+void Armor_of_the_crocodile(object oPC, int nSpell){
+
+	if (!GetHasFeat(2936, oPC, TRUE)){
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_3);
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_2);
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_1);
+	} else if (iNaturesWarrior >= 5){
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_1);
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_2);
+		if (!GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE))
+			FeatAdd(oPC, FEAT_CROC_ARMOR_AC_3, FALSE);
+    } else if (iNaturesWarrior >= 3){
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_1);
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_3);
+		if (!GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE))
+			FeatAdd(oPC, FEAT_CROC_ARMOR_AC_2, FALSE);
+	} else {
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_3);
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE))
+			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_2);
+		if (!GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
+			FeatAdd(oPC, FEAT_CROC_ARMOR_AC_1, FALSE);
+	}
+		
+
+	/*
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
 
-if(iNaturesWarrior == 5) nBonus = 3;
-		else if(iNaturesWarrior >= 3) nBonus = 2;
+	if(iNaturesWarrior == 5) nBonus = 3;
+	else if(iNaturesWarrior >= 3) nBonus = 2;
 		else nBonus = 1;
 		
 	effect eArmor = EffectACIncrease(nBonus,AC_DODGE_BONUS);
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC));
+	*/
 }
 
 
