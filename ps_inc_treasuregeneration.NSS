@@ -114,7 +114,8 @@ string GetCampaignItemString();
 // if bGetTreasure then it generates the treasure on the spawn and returns 1, which is not captured
 // by the calling function. Otherwise, returns an integer to determine the chance of a special drop.
 int SpecialDrop(string sAREA, object oSPAWN, int bGetPercentage = FALSE){
-
+	
+	sAREA = GetStringLowerCase(sAREA);
 	int nChance = 1;
 	string sSpecial = "";
 	int nMat = -1;
@@ -123,14 +124,14 @@ int SpecialDrop(string sAREA, object oSPAWN, int bGetPercentage = FALSE){
 	// low level areas
 	
 if (TestStringAgainstPattern("**graywaste**", sAREA)){
-		nChance = 4;
+		nChance = 3;
 		switch (Random(4)){
 			case 0: case 1: nMat = -1; break;
 			case 2: nMat = SPECIAL_MAT_SILVER_ALCH; break;
 			case 3: nMat = SPECIAL_MAT_COLD_IRON; break;
 		}
 	} else if (TestStringAgainstPattern("**mechanus**", sAREA)){
-		nChance = 4;
+		nChance = 3;
 		if (Random(9) > 2){
 			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
@@ -145,7 +146,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 		
 	} else 	if (TestStringAgainstPattern("**outland**", sAREA)){
-		nChance = 4;
+		nChance = 3;
 		if (Random(9) > 2){
 			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_DUSKWOOD; break;
@@ -163,7 +164,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	}
 	// mid level areas
 	else if (TestStringAgainstPattern("**beastlands**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_MANTICORE_HIDE; break;
@@ -181,7 +182,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else if (TestStringAgainstPattern("**earth**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(6)){ 
 				case 0: nMat = SPECIAL_MAT_GOLD; break; 
@@ -199,7 +200,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 	} else if (TestStringAgainstPattern("**fire**", sAREA) || 
 		TestStringAgainstPattern("**magma**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			int nRoll = 4;
 			if (TestStringAgainstPattern("**salamander**", sAREA) ||
@@ -220,7 +221,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}	
 	} else if (TestStringAgainstPattern("**water**", sAREA) || 
 		TestStringAgainstPattern("**ooze**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_SILVER_REG; break;
@@ -235,7 +236,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else if (TestStringAgainstPattern("**ice**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_RIVERINE; break;
@@ -258,7 +259,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 	} else 	if (TestStringAgainstPattern("**maldomini**", sAREA) || 
 		TestStringAgainstPattern("**minauros**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
@@ -273,7 +274,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else 	if (TestStringAgainstPattern("**mercuria**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_PLATINUM; break; 
@@ -289,7 +290,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 	} else if (TestStringAgainstPattern("**astral**", sAREA) ||
 		TestStringAgainstPattern("**limbo**", sAREA)){
-		nChance = 5;
+		nChance = 4;
 		if (Random(9) > 2){
 			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_METALLINE; break;
@@ -307,7 +308,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	}
 	// mid-high and high level areas
 	else if (TestStringAgainstPattern("**plateau**", sAREA)){
-		nChance = 6;
+		nChance = 5;
 		if (Random(9) > 2){
 			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
@@ -323,7 +324,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 	} else if (TestStringAgainstPattern("**phlegethon**", sAREA) ||
 		TestStringAgainstPattern("**abyss**", sAREA)){
-		nChance = 6;
+		nChance = 5;
 		if (Random(9) > 2){
 			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
@@ -337,7 +338,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else if (TestStringAgainstPattern("**carceri**", sAREA)){
-		nChance = 6;
+		nChance = 5;
 		if (Random(9) > 2){
 			switch (Random(5)){
 				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
@@ -360,7 +361,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else if (TestStringAgainstPattern("**clangor**", sAREA)){
-		nChance = 6;
+		nChance = 5;
 		if (Random(9) > 2){
 			switch (Random(3)){ 
 				case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
@@ -375,7 +376,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else if (TestStringAgainstPattern("**niflheim**", sAREA)){
-		nChance = 6;
+		nChance = 5;
 		if (Random(9) > 2){
 			switch (Random(2)){
 				case 0: nMat = SPECIAL_MAT_TWELVETREES_BARK; break;
@@ -388,7 +389,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			}
 		}
 	} else if (TestStringAgainstPattern("**gehenna**", sAREA)){
-		nChance = 6;
+		nChance = 5;
 		if (Random(9) > 2){
 			switch (Random(5)){
 				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break;
