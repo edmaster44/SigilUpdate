@@ -58,7 +58,7 @@ void main()
     //effect eVis = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);//NWN1 VFX
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);// NWN1 VFX
     effect eDur = EffectVisualEffect(VFX_DUR_SPELL_WEAPON_OF_IMPACT);// NWN2 VFX
-    float fDuration = TurnsToSeconds(10 * GetCasterLevel(OBJECT_SELF));
+    float fDuration = TurnsToSeconds(10 * PS_GetCasterLevel(OBJECT_SELF));
 
     object oMyWeapon   =  IPGetTargetedOrEquippedMeleeWeapon();
 
@@ -69,7 +69,7 @@ void main()
     {
         SignalEvent(oMyWeapon, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
-        if (GetBluntWeapon(oMyWeapon))
+        if (IPGetIsBludgeoningWeapon(oMyWeapon, -1, FALSE))
         {
             if (fDuration>0.0)
             {

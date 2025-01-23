@@ -83,25 +83,13 @@ void main()
 			}
 			if (GetIsObjectValid(oCWeapR)) 
 			{
-				if (GetBaseItemType(oCWeapR) >= 160)
-				{
-					if (GetBaseItemType(oCWeapR) <= 177)
-					{
-						cWeapREq = TRUE;
-					}
-				}
-
+				if (IPGetIsCreatureEquippedWeapon(oCWeapR))
+					cWeapREq = TRUE;
 			}
 			if (GetIsObjectValid(oCWeapL)) 
 			{
-				if (GetBaseItemType(oCWeapL) >= 160)
-				{
-					if (GetBaseItemType(oCWeapL) <= 177)
-					{
-						cWeapLEq = TRUE;
-					}
-				}
-
+				if (IPGetIsCreatureEquippedWeapon(oCWeapL))
+					cWeapLEq = TRUE;
 			}
 					
 
