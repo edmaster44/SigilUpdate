@@ -423,17 +423,6 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	PS_SetCreatureCoreAppearance(oPC, app);
 	
 	// Refresh appearance
-	object gloves = GetItemInSlot(INVENTORY_SLOT_ARMS, oPC);
-	if (!GetIsObjectValid(gloves))
-	{
-		object newGloves = CreateItemOnObject("ps_srlg_gloves", oPC);
-		ActionEquipItem(newGloves, INVENTORY_SLOT_ARMS);
-		DelayCommand(1.0f, DestroyObject(newGloves));
-	}
-	else
-	{
-		ActionUnequipItem(gloves);
-		DelayCommand(1.0f, ActionEquipItem(gloves, INVENTORY_SLOT_ARMS));
-	}
+	PS_RefreshAppearance(oPC);
 
 }
