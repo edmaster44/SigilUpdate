@@ -5,6 +5,7 @@
 
 #include "x2_inc_itemprop"
 #include "x2_inc_craft"
+#include "dmfi_inc_const"
 
 // function declarations
 void FF_UpdateLegacyItems(object oPC);
@@ -14,8 +15,7 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FAL
 // Edit this function to perform whatever operations need to be done to correct erroneous items.
 // This function is called from the function below it and should also be called from the on acquire 
 // item event script x2_mod_def_aqu.nss
-void FF_UpdateSingleLegacyItem(object oPC, object oItem)
-{
+void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	// since multiple checks require knowing the res ref, we'll just get it here.
 	string sRef = GetResRef(oItem);
 	
@@ -177,13 +177,19 @@ void FF_UpdateLegacyItems(object oPC)
 			DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oPC, oItem)));
 		}
 	}
+	int nNumDMFI = 0;
     // Iterate through all items in the inventory
 	i = 0;
 	oItem = GetFirstItemInInventory(oPC);
-    while (GetIsObjectValid(oItem))
-    {
+    while (GetIsObjectValid(oItem)){
 		i++;
-        FF_UpdateSingleLegacyItem(oPC, oItem);
+		// destroy extra dmfi tools
+		if (GetResRef(oItem) == DMFI_PCTOOL_RESREF){
+			nNumDMFI++;
+			if (nNumDMFI > 1) DestroyObject(oItem, 0.3f, FALSE);
+		} else {
+			FF_UpdateSingleLegacyItem(oPC, oItem);
+		}
         oItem = GetNextItemInInventory(oPC);
 		// num of items a pc could have if inv full of full bags, including the bags
 		if (i > 27072) return;
