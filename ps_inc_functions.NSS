@@ -23,6 +23,7 @@
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
 
+
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
 
@@ -397,6 +398,11 @@ float GetCreatureFootprint(object oCreature){
 // remove unspent xp, prevents people from grinding away at a more advantageous
 // lvl for the xp before leveling up.
 void PS_TrimXP(object oPC){
+	string sAREA = GetTag(GetArea(oPC));
+	if (sAREA == "OOC_Area_Tailor" || sAREA =="spawnroom" ||
+		sAREA == "ps_area_dmlair" || sAREA == "jeg_preparation_room")
+		return;
+		
 	int nHD = GetHitDice(oPC);
 
 	int nXpToNext = PS_GetXPForLevel(nHD + 1);
