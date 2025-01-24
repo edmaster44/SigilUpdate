@@ -50,7 +50,7 @@ void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTrea
 
 int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
 	object oHolder = GetModule();
-	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
+	int nMax = PS_GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
 	if (nMax > 0)
 		return nMax;
 		
@@ -261,16 +261,16 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		TestStringAgainstPattern("**minauros**", sAREA)){
 		nChance = 4;
 		if (Random(9) > 2){
-			switch (Random(4)){
+			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
 				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
-				case 2: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-				case 3: nMat = SPECIAL_MAT_METEORIC_IRON; break;			
+				case 2: nMat = SPECIAL_MAT_METEORIC_IRON; break;			
 			}
 		} else {
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_TANTULHOR; break; 
-				case 1: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
+			switch (Random(3)){
+				case 0: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
+				case 1: nMat = SPECIAL_MAT_TANTULHOR; break; 
+				case 2: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
 			}
 		}
 	} else 	if (TestStringAgainstPattern("**mercuria**", sAREA)){
@@ -328,24 +328,23 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		if (Random(9) > 2){
 			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
-				case 1: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-				case 2: nMat = SPECIAL_MAT_DEMON_HORN; break; 
+				case 1: nMat = SPECIAL_MAT_DEMON_HORN; break;
+				case 2: nMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;				
 			}
 		} else {
 			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;
+				case 0: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
 				case 1: nMat = SPECIAL_MAT_ABYSSAL_BLOODIRON; break; 
 			}
 		}
 	} else if (TestStringAgainstPattern("**carceri**", sAREA)){
 		nChance = 5;
 		if (Random(9) > 2){
-			switch (Random(5)){
+			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
-				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
-				case 2: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-				case 3: nMat = SPECIAL_MAT_METEORIC_IRON; break; 
-				case 4: nMat = SPECIAL_MAT_MORGUTH_IRON; break; 
+				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break;  
+				case 2: nMat = SPECIAL_MAT_METEORIC_IRON; break; 
+				case 3: nMat = SPECIAL_MAT_MORGUTH_IRON; break; 
 			}
 		} else {
 			int nAltMat = SPECIAL_MAT_TANTULHOR;
@@ -354,10 +353,11 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 			else if (TestStringAgainstPattern("**prison**", sAREA) || 
 				TestStringAgainstPattern("**garden**", sAREA))
 					nAltMat = SPECIAL_MAT_PURE_ADAMANTINE; 
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break; 
-				case 1: nMat = SPECIAL_MAT_AURORUM; break; 
-				case 2: nMat = nAltMat; break;
+			switch (Random(4)){
+				case 0: nMat = SPECIAL_MAT_FIENDISH_IVORY; break;
+				case 1: nMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break; 
+				case 2: nMat = SPECIAL_MAT_AURORUM; break; 
+				case 3: nMat = nAltMat; break;
 			}
 		}
 	} else if (TestStringAgainstPattern("**clangor**", sAREA)){
@@ -391,17 +391,17 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	} else if (TestStringAgainstPattern("**gehenna**", sAREA)){
 		nChance = 5;
 		if (Random(9) > 2){
-			switch (Random(5)){
+			switch (Random(4)){
 				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break;
 				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
-				case 2: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-				case 3: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
-				case 4: nMat = SPECIAL_MAT_DEMON_HORN; break; 
+				case 2: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
+				case 3: nMat = SPECIAL_MAT_DEMON_HORN; break; 
 			}
 		} else {
-			switch (Random(2)){
+			switch (Random(3)){
 				case 0: nMat = SPECIAL_MAT_OERTHBLOOD; break; 
 				case 1: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
+				case 2: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
 			}
 		}
 	}
@@ -428,8 +428,8 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 //creature_drop_chance = drop chance
 void CreateCreatureDrop(object oCreature) {
 
-	int nChance = GetLocalInt(oCreature, "creature_drop_chance");
-	string sItem = GetLocalString(oCreature, "creature_drop");
+	int nChance = PS_GetLocalInt(oCreature, "creature_drop_chance");
+	string sItem = PS_GetLocalString(oCreature, "creature_drop");
 	object oItem;
 	
 	if (d100() < nChance) {
