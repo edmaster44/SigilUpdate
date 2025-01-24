@@ -3,8 +3,11 @@
 
 void EnableMonkNew(){
 
+	dae_AddMonkWeapon(BASE_ITEM_STILETTO);
 	dae_AddMonkWeapon(BASE_ITEM_DAGGER);
 	dae_AddMonkWeapon(BASE_ITEM_KUKRI);
+	dae_AddMonkWeapon(BASE_ITEM_SHORT_STAFF);
+	dae_AddMonkWeapon(BASE_ITEM_GIANT_STAFF);
 
 	/*Creature Weapons*/
 
