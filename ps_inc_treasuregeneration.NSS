@@ -50,7 +50,7 @@ void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTrea
 
 int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
 	object oHolder = GetModule();
-	int nMax = PS_GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
+	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
 	if (nMax > 0)
 		return nMax;
 		
@@ -428,8 +428,8 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 //creature_drop_chance = drop chance
 void CreateCreatureDrop(object oCreature) {
 
-	int nChance = PS_GetLocalInt(oCreature, "creature_drop_chance");
-	string sItem = PS_GetLocalString(oCreature, "creature_drop");
+	int nChance = GetLocalInt(oCreature, "creature_drop_chance");
+	string sItem = GetLocalString(oCreature, "creature_drop");
 	object oItem;
 	
 	if (d100() < nChance) {
