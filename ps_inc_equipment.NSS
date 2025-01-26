@@ -55,6 +55,7 @@ void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND);
 void BucklerFinesse(object oPC, object oLHAND);
 void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor);
 void FlorentineTWF(object oPC, object oRHAND, object oLHAND);
+void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0);
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip);
 
 
@@ -163,7 +164,6 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 // Likewise we call the script that adds the tactical bonus feats from here, if needed.
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
 
-
 	PS_RemoveEffects(oPC, FF_AC_FX);
 	BucklerFinesse(oPC, oLHAND);
 	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
@@ -173,28 +173,33 @@ void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHES
 	
 	MurderousIntent(oPC, oRHAND);
 	FlorentineTWF(oPC, oRHAND, oLHAND);
-	
+	UpdateCombatMods(oPC, NULL, oChanged, bOnEquip);
 	object oSkin = PS_GetCreatureSkin(oPC);
-	if (!bOnEquip){
-		RemoveBonusFeats(oSkin);
-	} else {
-		
-		int bBusy = GetLocalInt(oPC, "tacbusy");
-		int nCount = 0;
-		// pause if this function is called by an equipment change 
-		// while an equipment change is already in progress.
-		while (bBusy && nCount < 10000){
-			bBusy = GetLocalInt(oPC, "tacbusy");
-			nCount++;
+	CheckTacticalWeapons(oPC, oSkin);
+}
+
+void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
+	int nType;
+	object oRHAND;
+	// There appears to be a slight delay when adding or removing item properties
+	// so make sure this waits a bit if it's doing that in case of rapid calls,
+	// such as equipping 2 items at once from hotbar
+    if (nCount >= 2000 || !GetLocalInt(oPC, "tacbusy")){
+		oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+		nType = GetBaseItemType(oRHAND);
+		// don't change tac weapons feat if the base item type of weapon has
+		// not changed
+		if (GetLocalInt(oPC, "tacweapon") != nType){
+			SetLocalInt(oPC, "tacbusy", TRUE);
+			SetLocalInt(oPC, "tacweapon", nType);
+			RemoveBonusFeats(oSkin);
+			FF_TacticalWeapons(oPC, oRHAND, oSkin);
+			DelayCommand(0.1, SetLocalInt(oPC, "tacbusy", FALSE));
 		}
-		SetLocalInt(oPC, "tacbusy", TRUE);
-		
-		UpdateCombatMods(oPC, NULL, oChanged, bOnEquip);
-		
-		FF_TacticalWeapons(oPC, oRHAND, oSkin);
-		
-		SetLocalInt(oPC, "tacbusy", FALSE);
-	}
+        return;
+    }
+    // Still busy, check again after delay
+    DelayCommand(0.001, CheckTacticalWeapons(oPC, oSkin, nCount + 1));
 }
 
 
