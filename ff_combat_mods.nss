@@ -288,19 +288,19 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 	int bIsXbow = (nRightId == BASE_ITEM_HEAVYCROSSBOW || 
 		nRightId == BASE_ITEM_LIGHTCROSSBOW);
 	int bSharpshooter = GetHasFeat(FEAT_SHARPSHOOTER, data.oPC, FALSE);
-	if (!bSharpshooter && !bIsXbow) return data;
-	
+	if (!bSharpshooter && !bIsXbow){
+		RemoveBonusFeats(data.oSkin, FEAT_RAPID_RELOAD);
+		return data;
+	}
+	int bGetsRR = FALSE;
 	int nAB = 0;
 	// check for crossbow features. +1 ab because they're easy to aim, 
 	// temp rapid reload if strong enough
 	if (bIsXbow){
 		nAB += 1;
-		int bGetsRR = FALSE;
 		int nReqStr = 13;
 		if (nRightId == BASE_ITEM_HEAVYCROSSBOW) nReqStr = 15;
 		bGetsRR = (GetAbilityScore(data.oPC, ABILITY_STRENGTH, FALSE) >= nReqStr);
-	
-		if (bGetsRR) ApplyTacticalBonusFeat(data.oSkin, FEAT_RAPID_RELOAD);
 	}
 	// now check for Sharpshooter
 	if (bSharpshooter){
@@ -312,9 +312,9 @@ struct CombatMods XbowAndSharpshooter(struct CombatMods data){
 			else nAB += nInt;
 		}
 	}
-	if (nAB > 0){
-		data.nAB += nAB;
-	}
+	if (bGetsRR) ApplyTacticalBonusFeat(data.oSkin, FEAT_RAPID_RELOAD);
+	else RemoveBonusFeats(data.oSkin, FEAT_RAPID_RELOAD);
+	if (nAB > 0)data.nAB += nAB;
 	return data;
 }
 
@@ -328,20 +328,24 @@ struct CombatMods CreatureTWF(struct CombatMods data){
 	int bLisCreature = IPGetIsCreatureEquippedWeapon(data.oLHAND);
 	
 	// bail if off hand is not a creature weap
-	if (!bLisCreature) return data;
-
+	if (!bLisCreature){
+		RemoveBonusFeats(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+		return data;
+	}
 	int nBonus = 0;
 	int nPCsize = GetCreatureSize(data.oPC);
 	int nLWeaponSize = IPGetWeaponSize(data.oLHAND);
 	
+	int bGetsTWF = FALSE;
 	// if the left is a creature weapon of normal size, give them twf
-	if (nLWeaponSize <= nPCsize)
-		ApplyTacticalBonusFeat(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+	if (nLWeaponSize <= nPCsize) bGetsTWF = TRUE;
+
 	// if they're using an off hand creature weapon that is the same size cat as themselves
 	// reduce penalty by 2 unless oversize twf is doing that already
 	if (nLWeaponSize == nPCsize && !GetHasFeat(FEAT_OVERSIZE_TWF, data.oPC, TRUE))
 		nBonus = 2;
-	
+	if (bGetsTWF) ApplyTacticalBonusFeat(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+	else RemoveBonusFeats(data.oSkin, FEAT_TWO_WEAPON_FIGHTING);
 	data.nAB += nBonus;
 
 	return data;
