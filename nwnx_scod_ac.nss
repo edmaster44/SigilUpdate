@@ -12,7 +12,7 @@ void SetFeatAC(){
 	dae_AddInnateACFeat(FEAT_SITUATIONAL_AWARENESS_1_AC, 1);
 	dae_AddInnateACFeat(FEAT_SITUATIONAL_AWARENESS_2_AC, 2);
 	dae_AddInnateACFeat(FEAT_SITUATIONAL_AWARENESS_3_AC, 3);
-	dae_AddInnateACFeat(FEAT_METHODICAL_DEF_AC_1, 2);
+	dae_AddInnateACFeat(FEAT_METHODICAL_DEF_AC_1, 1);
 	dae_AddInnateACFeat(FEAT_METHODICAL_DEF_AC_2, 2);
 	dae_AddInnateACFeat(FEAT_METHODICAL_DEF_AC_3, 3);
 	dae_AddInnateACFeat(FEAT_ARMOR_OPT_AC_1, 1);
