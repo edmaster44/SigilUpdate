@@ -27,6 +27,7 @@ void PS_KnightLevels(object oPC)
 	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
 	int iHalfFiend_M = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider_Mage path
 	int iHalfCelestial_M = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider_Mage Path
+	int iGhaele = GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);//Ghaele
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
 	  
 	  
@@ -36,8 +37,8 @@ void PS_KnightLevels(object oPC)
 	  if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && GetHasFeat(FEAT_BLACKGUARD,oPC) && GetHasFeat(3036,oPC))iTotal = iTotal + iHalfFiend_M ;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)) iTotal = iTotal + iHalfCelestial;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)&& GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)&& GetHasFeat(3036,oPC)) iTotal = iTotal + iHalfCelestial_M;
-	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden + iDoomg;
-	  if (GetHasFeat(FEAT_PALADIN,oPC) && GetHasFeat(2455)) iTotal = iTotal + iHound;
+	  if (GetHasFeat(FEAT_KNIGHT,oPC)) iTotal = iTotal + iDivine + iWarPriest + iWarden + iDoomg + iGhaele;
+	  if (GetHasFeat(FEAT_PALADIN,oPC) && GetHasFeat(2455)) iTotal = iTotal + iHound + iGhaele;
 	  if (GetHasFeat(FEAT_KNIGHT,oPC) && GetHasFeat(2673)) iTotal = iTotal + iAstral;
 	  if (GetHasFeat(FEAT_KNIGHT,oPC) && GetHasFeat(2635)) iTotal = iTotal + iEnvoy;
 	  if (GetHasFeat(FEAT_PALADIN,oPC)) iTotal = iTotal + iMovanic;
@@ -227,8 +228,9 @@ int KnightLevels(object oPC)
 	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
 	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
+	int iGhaele = GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);//Ghaele
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
-	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider + iDoomg;
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider + iDoomg+ iGhaele;
 	
 	if (iPally <1 )
 	{
@@ -269,8 +271,9 @@ int LayOnHandsLevels(object oPC)
 	int iHalfFiend = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);//Half-Outsider
 	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Mage Path
 	int iWarden = GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
+	int iGhaele = GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
 	int iTotal = iPally + iWarPriest + iHalfCelestial + iDivine + iEnvoy + iHound + iAstral + 
-	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider + iDoomg;
+	  iMovanic + iMarquis + iDeath + iHalfFiend + iWarden + iHalfOutsider + iDoomg+ iGhaele;
 
 	return iTotal;
 }
