@@ -862,6 +862,9 @@ string DisplaySpecialRequirement(string sReq) {
 		line = "Item must be crafted in Sigil.";
 	} else if (sReq == "PLAYERMADE_XBOW_BRACER_GLOVE"){
 		line = "Can only be enchanted on crossbows, bracers, and gloves made in Sigil";
+	} else if (sReq == "NO_SLINGS"){
+		if (GetBaseItemType(oItem) == BASE_ITEM_SLING)
+			line = "This enchantment is redunant on slings.";
 	}
 	return line;
 	
@@ -928,6 +931,8 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 			if (nItem != BASE_ITEM_HEAVYCROSSBOW && nItem != BASE_ITEM_LIGHTCROSSBOW)
 				return FALSE;
 		}
+	} else if (sReq == "NO_SLINGS"){
+		if (GetBaseItemType(oItem) == BASE_ITEM_SLING) return FALSE;
 	}
 	return TRUE; //no special req, return true
 }
@@ -1335,6 +1340,30 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		// skip the unique power self only on ammo and thrown quivers
 		if (!bSkipIp && IPGetIsQuiver(OBJECT_INVALID, nItem) && nIpType == 15)
 			bSkipIp = TRUE;
+			
+		// mighty property is redundant on slings because they get infinite mighty,
+		// so add no points if a sling has mighty
+		if (!bSkipIp && nIpType == 45 && nItem == BASE_ITEM_SLING)
+			bSkipIp = TRUE;
+		
+		// armors with physical DR don't have their matpower set via script with 
+		// numbers from 2da because the function for that doesn't work. Instead 
+		// we have to catch it here
+		if (!bSkipIp && nItem == 16 && nIpType == 22){
+			int nMat = GetArmorBaseMaterial(oItem);
+			if (nMat != NULL){
+				string s2da = Get2DAString("iprp_specialmat", "Mat_2da", nMat);
+				int nRows = GetNum2DARows(s2da);
+				int index;
+				for (index = 0; index < nRows; index++){
+					if (StringToInt(Get2DAString(s2da, "IP_DESCRIPTION_ID", index)) == nMat){
+						nPoints += StringToInt(Get2DAString(s2da, "A_POINTS", index));
+						bSkipIp = TRUE;
+						break;
+					}
+				}
+			}
+		}
 		
 		// reload and aim features granted by materials a crossbow is made with do not cost points
 		// (because they don't grant any either)

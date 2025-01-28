@@ -55,6 +55,8 @@ object GetNearestSmithingWorkbench(object oPC);
 
 struct xbowMechanicals GetXbowMechanicals(object oItem);
 
+int GetArmorBaseMaterial(object oItem);
+
 // WIP returns the iprp_specialmat index of the faction-craft itemproperty if the item
 // is one associated with the faction of the player. Called in ps_inc_newcrafting to apply
 // the itemproperty on item creation and in ps_inc_newenchanting to give a 10% discount
@@ -582,7 +584,29 @@ string GetEssenceRequirement(int index){
 	return sEssence;
 }
 
-
+int GetArmorBaseMaterial(object oItem){
+	if (GetBaseItemType(oItem) != 16) return NULL;
+	int nRuleType = GetArmorRulesType(oItem);
+	string s2da;
+	if (nRuleType <= 3 || nRuleType == 12) s2da = "scod_craft_leather";
+	else s2da = "scod_craft_metal";
+	
+	int nSub;
+	int i;
+	int nNumRows = GetNum2DARows(s2da);
+	itemproperty ip = GetFirstItemProperty(oItem);
+	while (GetIsItemPropertyValid(ip)){
+		if (GetItemPropertyType(ip) == 100){
+			nSub = GetItemPropertySubType(ip);
+			for (i = 0; i < nNumRows; i++){
+				if (StringToInt(Get2DAString(s2da, "IP_DESCRIPTION_ID", i)) == nSub)
+					return nSub;
+			}
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	return NULL;
+}
 
 //Converts between type/subtype/param/special and the actual property
 itemproperty EnchantmentIndexToItemProp(struct enchantment enchant) {
