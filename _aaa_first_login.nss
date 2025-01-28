@@ -7,10 +7,10 @@
 // once, not once per person logging in
 
 void FirstLogin(){
-	object oMod = GetModule();
+	//object oMod = GetModule();
 	
 	// if we've already done this, bail
-	if (GetLocalInt(oMod, "FirstLogin")) return;
+	//if (GetLocalInt(oMod, "FirstLogin")) return;
 	
 	EnableFinesse();
 	EnableCreatureFinesse();
@@ -18,7 +18,7 @@ void FirstLogin(){
 	SetFeatAC();
 	
 	// show that we've done this
-	SetLocalInt(oMod, "FirstLogin", TRUE);
+	//SetLocalInt(oMod, "FirstLogin", TRUE);
 	
 }
 
