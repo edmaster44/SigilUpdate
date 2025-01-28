@@ -162,6 +162,17 @@ void SituationalAwareness(object oPC){
 
 
 void ImprovedDefense(object oPC){
+
+	// remove old dodge ac Stalwart Defender feats
+	if (GetHasFeat(1572, oPC, TRUE))
+		FeatRemove(oPC, 1572);
+	if (GetHasFeat(1573, oPC, TRUE))
+		FeatRemove(oPC, 1573);
+	if (GetHasFeat(1574, oPC, TRUE))
+		FeatRemove(oPC, 1574);
+	if (GetHasFeat(1575, oPC, TRUE))
+		FeatRemove(oPC, 1575);
+		
 	int nStalwartLevel = GetLevelByClass(CLASS_STALWART_DEFENDER, oPC);
 	int nAC = 0;
 	if (nStalwartLevel >= 10) nAC = 4;
