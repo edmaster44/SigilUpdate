@@ -236,7 +236,7 @@ void PS_UndeadProperties(object oPC, int nSpell)
 		eOne		= EffectLinkEffects(eOne, eDrain);
 //		eOne		= EffectLinkEffects(eOne, eRott);
 		eOne		= EffectLinkEffects(eOne, eIcon);
-	effect eOneGo	= ExtraordinaryEffect(eOne);
+	effect eOneGo	= SupernaturalEffect(eOne);
 		
 	effect ePoiso	= EffectImmunity(IMMUNITY_TYPE_POISON);
 	effect eDisea	= EffectImmunity(IMMUNITY_TYPE_DISEASE);
@@ -246,22 +246,28 @@ void PS_UndeadProperties(object oPC, int nSpell)
 		eFive		= EffectLinkEffects(eFive, eDisea);
 		eFive		= EffectLinkEffects(eFive, eParal);
 		eFive		= EffectLinkEffects(eFive, eAblty);
-	effect eFiveGo	= ExtraordinaryEffect(eFive);
+	effect eFiveGo	= SupernaturalEffect(eFive);
 		
 	effect eCriti	= EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
 	effect eSneak	= EffectImmunity(IMMUNITY_TYPE_SNEAK_ATTACK);
 	effect eTen		= EffectLinkEffects(eFive, eCriti);
 		eTen		= EffectLinkEffects(eTen, eSneak);
-	effect eTenGo	= ExtraordinaryEffect(eTen);
+	effect eTenGo	= SupernaturalEffect(eTen);
 
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	if(iLevel >= 10 || iLevelV >= 7)
-		{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTenGo, oPC);	}
-		else if(iLevel >= 5 || iLevelV >= 4)
-		{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFiveGo, oPC);	}
-		else
-		{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eOneGo, oPC);	}
-}	}	
+		if(iLevel >= 10 || iLevelV >= 7){
+			eTenGo = SetEffectSpellId(eTenGo, nSpell);
+			RemoveEffectsFromSpell(oPC, nSpell);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTenGo, oPC);	
+		} else if(iLevel >= 5 || iLevelV >= 4){
+			eFiveGo = SetEffectSpellId(eFiveGo, nSpell);
+			RemoveEffectsFromSpell(oPC, nSpell);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFiveGo, oPC);	
+		} else {
+			eOneGo = SetEffectSpellId(eOneGo, nSpell);
+			RemoveEffectsFromSpell(oPC, nSpell);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eOneGo, oPC);	
+		}
+}		
 
 // Determines if character is halfling, gnome, or dwarf.
 int GetIsShortRace(object oPC)
@@ -340,9 +346,11 @@ void PS_NatArmor_Lich(object oPC, int nSpell)
 	{	iBonus = 3;		} 
 	else if (iLevel >= 4)	//+1 bonus at 4rd level
 	{	iBonus = 1;		}
-	if (!GetHasSpellEffect(nSpell, oPC) && iBonus > 0)
-	{	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
+	if (iBonus > 0){	
+		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+		eAC = SupernaturalEffect(eAC);
+		eAC = SetEffectSpellId(eAC, nSpell);
+		RemoveEffectsFromSpell(oPC, nSpell);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
 	}
 }
@@ -404,7 +412,10 @@ void ApplyLichImmunities(object oPC, int nImm)
 	effect eCold 	= EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, nImm);
 	effect eElec	= EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, nImm);
 	effect eLink	= EffectLinkEffects(eCold, eElec);
-		eLink = ExtraordinaryEffect(eLink);
+	eLink = SupernaturalEffect(eLink);
+	int nSpell = GetSpellId();
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Cold and Electrical immunity of " + IntToString(nImm) + "% applied.");
 }
@@ -415,7 +426,10 @@ void ApplyLichFullImmunities(object oPC, int nImm)
 	effect eColdF	= EffectDamageResistance(DAMAGE_TYPE_COLD, 9999, 0);
 	effect eElecF	= EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, 9999, 0);
 	effect eLink 	= EffectLinkEffects(eColdF, eElecF);
-		eLink = ExtraordinaryEffect(eLink);
+		eLink = SupernaturalEffect(eLink);
+	int nSpell = GetSpellId();
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Cold and Electrical immunity of " + IntToString(nImm) + "% applied.");
 }
@@ -466,21 +480,22 @@ void PS_LichDR(object oPC, int nSpell)
 
     int iDR;
     
-    if (!GetHasSpellEffect(nSpell, oPC))
-    {    if (iLevel >= 10)
-        {    iDR = 10;   }
-        else if (iLevel >= 7)
-        {    iDR = 7;    }
-        else
-        {    iDR = 3;    }    }
+    if (iLevel >= 10) iDR = 10;   
+    else if (iLevel >= 7) iDR = 7;    
+    else iDR = 3;
             
     effect eGood    = EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
 	
-	 {  eGood = ExtraordinaryEffect(eGood);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
-        SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
+	eGood = SupernaturalEffect(eGood);
+	eGood = SetEffectSpellId(eGood, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+	if (GetLocalInt(oPC, "drGood") != iDR){
+		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
+		SetLocalInt(oPC, "drGood", iDR);
+	}
         
-}}
+}
 
 // Are you scared yet? You will be after the Lich unleashes his Fear Aura!
 void PS_LichFearAura(object oPC, int nSpell)
@@ -618,20 +633,20 @@ void PS_DKDamageReduction(object oPC, int nSpell)
 
     int iDR;
     
-    if (!GetHasSpellEffect(nSpell, oPC))
-    {    if (iLevel >= 10)
-        {    iDR = 10;   }
-        else if (iLevel >= 7)
-        {    iDR = 7;    }
-        else
-        {    iDR = 3;    }    }
+    if (iLevel >= 10) iDR = 10;
+    else if (iLevel >= 7) iDR = 7;
+    else iDR = 3;
             
     effect eGood    = EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
 	// Dae: This block is weird, was there supposed to be a conditional here?
-	{  eGood = ExtraordinaryEffect(eGood);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
-        SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
-	}
+	eGood = SupernaturalEffect(eGood);
+	eGood = SetEffectSpellId(eGood, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+	if (GetLocalInt(oPC, "drGood") != iDR){
+		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
+		SetLocalInt(oPC, "drGood", iDR);
+	}	
 }
 
 void PS_DKSymbolOfPain(object oPC, int nSpell)
@@ -709,11 +724,13 @@ void PS_VampArmor(object oPC)
 	else
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC) && iBonus > 0)
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
 }
 
 void PS_VampSlam(object oPC, object oTarget, int nSpell)
@@ -840,7 +857,7 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 					if (iHeal <= 0) iHeal = 1;
 					
 					effect eHeal	= EffectTemporaryHitpoints(iHeal);
-						eHeal		= ExtraordinaryEffect(eHeal);
+						eHeal		= SupernaturalEffect(eHeal);
 						
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(24));
@@ -858,7 +875,7 @@ void PS_VampAltForm_Bat(object oPC, int nSpell)
 	effect eSpeed = EffectMovementSpeedIncrease(50);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = EffectLinkEffects(ePoly, eSpeed);
-		ePoly = ExtraordinaryEffect(ePoly);
+		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_BAT);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -875,7 +892,7 @@ void PS_VampAltForm_Wolf(object oPC, int nSpell)
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly = EffectPolymorph(POLYMORPH_VAMPIRE_WOLF);
 		ePoly = EffectLinkEffects(ePoly, eVis);
-		ePoly = ExtraordinaryEffect(ePoly);
+		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_WOLF);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -900,7 +917,7 @@ void PS_VampAltForm_Gas(object oPC, int nSpell)
 		ePoly = EffectLinkEffects(ePoly, eDR);
 		ePoly = EffectLinkEffects(ePoly, eConceal);
 		ePoly = EffectLinkEffects(ePoly, eMiss);
-		ePoly = ExtraordinaryEffect(ePoly);
+		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_GASEOUS);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -917,7 +934,7 @@ void PS_VampAltForm_DireWolf(object oPC, int nSpell)
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly = EffectPolymorph(POLYMORPH_VAMPIRE_DIREWOLF);
 		ePoly = EffectLinkEffects(ePoly, eVis);
-		ePoly = ExtraordinaryEffect(ePoly);
+		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_DIREWOLF);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -942,12 +959,13 @@ void PS_VampResistance(object oPC, int nSpell)
 	else					//no bonus
 	{	iBonus = 0;		}
 
-	if	(!GetHasSpellEffect(nSpell, oPC))
-	{	effect eColdRes = EffectDamageResistance(DAMAGE_TYPE_COLD, iBonus);
-		effect eElecRes = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iBonus);
-		effect eLink	= EffectLinkEffects(eColdRes, eElecRes);
-			eLink		= ExtraordinaryEffect(eLink);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}
+	effect eColdRes = EffectDamageResistance(DAMAGE_TYPE_COLD, iBonus);
+	effect eElecRes = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iBonus);
+	effect eLink	= EffectLinkEffects(eColdRes, eElecRes);
+	eLink		= SupernaturalEffect(eLink);
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	
 }
 
 void PS_VampFastHealing(object oPC, int nSpell)
@@ -967,10 +985,13 @@ void PS_VampFastHealing(object oPC, int nSpell)
 	{	iBonus = 1;		}
 	else
 	{	iBonus = 0;		}
-	if (!GetHasSpellEffect(nSpell, oPC) && iBonus > 0)
-	{	effect eRegen	= EffectRegenerate(iBonus, 6.0f);
-			eRegen		= ExtraordinaryEffect(eRegen);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
+	if (iBonus > 0){	
+		effect eRegen	= EffectRegenerate(iBonus, 6.0f);
+		eRegen		= SupernaturalEffect(eRegen);
+		eRegen = SetEffectSpellId(eRegen, nSpell);
+		RemoveEffectsFromSpell(oPC, nSpell);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
+	}
 }
 
 void PS_VampDR(object oPC, int nSpell)
@@ -987,15 +1008,22 @@ void PS_VampDR(object oPC, int nSpell)
 	{	iBonus = 5;		}
 	else
 	{	iBonus = 0;		}
-    if (!GetHasSpellEffect(nSpell, oPC))
-	{	effect eDR		= EffectDamageReduction(iBonus, GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
+    if (iBonus > 0){	
+		effect eDR		= EffectDamageReduction(iBonus, GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
 		effect eCold	= EffectDamageResistance(DAMAGE_TYPE_COLD, iBonus);
 		effect eElec	= EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iBonus);
 		effect eLink	= EffectLinkEffects(eDR, eCold);
 			eLink		= EffectLinkEffects(eLink, eElec);
-			eLink		= ExtraordinaryEffect(eLink);
+			eLink		= SupernaturalEffect(eLink);
+
+		eLink = SetEffectSpellId(eLink, nSpell);
+		RemoveEffectsFromSpell(oPC, nSpell);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iBonus) + "/alchemical silver and resistance of " + IntToString(iBonus) + " to cold and electricity applied.");	}
+		if (GetLocalInt(oPC, "vampDr") != iBonus){
+			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iBonus) + "/alchemical silver and resistance of " + IntToString(iBonus) + " to cold and electricity applied.");
+			SetLocalInt(oPC, "vampDr", iBonus);
+		}
+	}
 }
 
 void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
@@ -1060,7 +1088,7 @@ void PS_Vamp_AltForm_Wyvern(object oPC, int nSpell)
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly = EffectPolymorph(POLYMORPH_VAMPIRE_WYVERN);
 		ePoly = EffectLinkEffects(ePoly, eVis);
-		ePoly = ExtraordinaryEffect(ePoly);
+		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_WYVERN);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -1077,7 +1105,7 @@ void PS_Vamp_AltForm_TerrorWolf(object oPC, int nSpell)
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly = EffectPolymorph(POLYMORPH_VAMPIRE_TWOLF);
 		ePoly = EffectLinkEffects(ePoly, eVis);
-		ePoly = ExtraordinaryEffect(ePoly);
+		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_TWOLF);
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));

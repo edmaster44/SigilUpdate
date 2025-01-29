@@ -38,12 +38,14 @@ void PS_NatArmor_Giant(object oPC)
 	else					//+1 bonus at 1st level
 	{	iBonus = 1;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
+	
 }
 
 void PS_NatArmor_Deva(object oPC)
@@ -68,12 +70,14 @@ void PS_NatArmor_Deva(object oPC)
 	else					//no bonus at 1st level
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_Erinyes(object oPC)
@@ -96,12 +100,14 @@ void PS_NatArmor_Erinyes(object oPC)
 	else					//no bonus at 1st level
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_Brachina(object oPC)
@@ -124,12 +130,14 @@ void PS_NatArmor_Brachina(object oPC)
 	else					//no bonus at 1st level
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_Succubus(object oPC)
@@ -152,12 +160,14 @@ void PS_NatArmor_Succubus(object oPC)
 	else					
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_MarqCamb(object oPC)
@@ -182,12 +192,14 @@ void PS_NatArmor_MarqCamb(object oPC)
 	else					//no bonus
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_Hezrou(object oPC)
@@ -210,12 +222,14 @@ void PS_NatArmor_Hezrou(object oPC)
 	else					//no bonus
 	{	iBonus = 0;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_Archon(object oPC)
@@ -238,12 +252,14 @@ void PS_NatArmor_Archon(object oPC)
 	else					//+1 bonus at 1st level
 	{	iBonus = 1;		}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_ArchonPRC(object oPC)
@@ -260,12 +276,14 @@ void PS_NatArmor_ArchonPRC(object oPC)
 	if (iWALevel >= 2)		//NA bonus = half of the Archon's level
 	{	iBonus = (iWALevel / 2);	}
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }
 
 void PS_NatArmor_Eladrin(object oPC)
@@ -290,10 +308,12 @@ void PS_NatArmor_Eladrin(object oPC)
 	if	(iBonus < 0) iBonus = 0;
 	else if (iBonus > 5) iBonus = 5;
 	
-	if (!GetHasSpellEffect(GetSpellId(), oPC) && iBonus > 0)
-	{	//Calculate and apply AC bonus
-		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
-			eAC = ExtraordinaryEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	}
+	//Calculate and apply AC bonus
+	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
+	eAC = SupernaturalEffect(eAC);
+	int nSpell = GetSpellId();
+	eAC = SetEffectSpellId(eAC, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	
 }

@@ -37,7 +37,7 @@ void main()
 
 	eLink = SupernaturalEffect(eLink);
 	int nSpell = GetSpellId();
-	SetEffectSpellId(eLink, nSpell);
+	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oTarget, nSpell);
 	
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);

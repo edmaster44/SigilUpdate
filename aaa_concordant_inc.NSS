@@ -33,25 +33,25 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 			}
 			if (nAlignGE != ALIGNMENT_EVIL)
 			{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 			}
 			if (nAlignLC != ALIGNMENT_LAWFUL)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 			}
 			break;
 		}
@@ -61,25 +61,25 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 			}
 			if (nAlignGE != ALIGNMENT_EVIL)
 			{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 			}
 			if (nAlignLC != ALIGNMENT_LAWFUL)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 			}
 			break;
 		}
@@ -89,25 +89,25 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 			}
 			if (nAlignGE != ALIGNMENT_EVIL)
 			{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 			}
 			if (nAlignLC != ALIGNMENT_LAWFUL)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 			}
 			break;
 		}
@@ -117,25 +117,25 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 			}
 			if (nAlignGE != ALIGNMENT_EVIL)
 			{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 			}
 			if (nAlignLC != ALIGNMENT_LAWFUL)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 			}
 			break;
 		}
@@ -145,25 +145,25 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 			}
 			if (nAlignGE != ALIGNMENT_EVIL)
 			{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 			}
 			if (nAlignLC != ALIGNMENT_LAWFUL)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 			}
 			break;
 		}
@@ -173,32 +173,32 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 			}
 			if (nAlignGE != ALIGNMENT_EVIL)
 			{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 			}
 			if (nAlignLC != ALIGNMENT_LAWFUL)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 			}
 			break;
 		}
 	}
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
@@ -226,37 +226,37 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 		{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 		}
 		else if (nStr = 2)
 		{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 		}
 		else if (nStr = 3)
 		{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 		}
 		else if (nStr = 4)
 		{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 		}
 		else if (nStr = 5)
 		{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 		}
 		else if (nStr = 6)
 		{
 				eSacredG		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredG			= VersusAlignmentEffect(eSacredG, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-				eSacredG			= ExtraordinaryEffect(eSacredG);
+				eSacredG			= SupernaturalEffect(eSacredG);
 		}
 	}
 	if (nAlignGE != ALIGNMENT_EVIL)
@@ -265,37 +265,37 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 		{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 		}
 		else if (nStr = 2)
 		{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 		}
 		else if (nStr = 3)
 		{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 		}
 		else if (nStr = 4)
 		{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 		}
 		else if (nStr = 5)
 		{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 		}
 		else if (nStr = 6)
 		{
 				eSacredE		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredE			= VersusAlignmentEffect(eSacredE, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-				eSacredE			= ExtraordinaryEffect(eSacredE);
+				eSacredE			= SupernaturalEffect(eSacredE);
 		}
 	}
 	if (nAlignLC != ALIGNMENT_LAWFUL)
@@ -304,37 +304,37 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 		{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 		}
 		else if (nStr = 2)
 		{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 		}
 		else if (nStr = 3)
 		{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 		}
 		else if (nStr = 4)
 		{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 		}
 		else if (nStr = 5)
 		{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 		}
 		else if (nStr = 6)
 		{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= ExtraordinaryEffect(eSacredL);
+				eSacredL			= SupernaturalEffect(eSacredL);
 		}
 	}
 	if (nAlignLC != ALIGNMENT_CHAOTIC)
@@ -343,41 +343,45 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 		{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 		}
 		else if (nStr = 2)
 		{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_2, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 		}
 		else if (nStr = 3)
 		{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_3, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 		}
 		else if (nStr = 4)
 		{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_4, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 		}
 		else if (nStr = 5)
 		{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 		}
 		else if (nStr = 6)
 		{
 				eSacredC		= EffectDamageIncrease(DAMAGE_BONUS_6, DAMAGE_TYPE_DIVINE);
 				eSacredC			= VersusAlignmentEffect(eSacredC, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
-				eSacredC			= ExtraordinaryEffect(eSacredC);
+				eSacredC			= SupernaturalEffect(eSacredC);
 		}
 	}
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+	eSacredC = SetEffectSpellId(eSacredC, nSpell);
+	eSacredE = SetEffectSpellId(eSacredE, nSpell);
+	eSacredG = SetEffectSpellId(eSacredG, nSpell);
+	eSacredL = SetEffectSpellId(eSacredL, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);

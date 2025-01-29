@@ -22,17 +22,19 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 		effect eNeg		=EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,nAmount);
 		effect eDR		= EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
 		
-			eDR			= ExtraordinaryEffect(eDR);
-			eNeg		= ExtraordinaryEffect(eNeg);
-			eVul1		= ExtraordinaryEffect(eVul1);
+			eDR			= SupernaturalEffect(eDR);
+			eNeg		= SupernaturalEffect(eNeg);
+			eVul1		= SupernaturalEffect(eVul1);
 		effect	eLink    =EffectLinkEffects(eDR,eNeg);
 				eLink    =EffectLinkEffects(eLink,eVul1);
 				eLink = SupernaturalEffect(eLink);
 				eLink = SetEffectSpellId(eLink, nSpell);
-				
+		RemoveEffectsFromSpell(oPC, nSpell);		
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		//SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
-	
+		if (!GetLocalInt(oPC, "halfUndeadDR")){
+			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
+			SetLocalInt(oPC, "halfUndeadDR", TRUE);
+		}	
 }
 
 
@@ -52,7 +54,7 @@ effect eLink = EffectLinkEffects(eNegHand,eNegLock);
 eLink = EffectLinkEffects(eLink,eDR);
 eLink = SupernaturalEffect(eLink);
 eLink = SetEffectSpellId(eLink, nSpell);
-
+RemoveEffectsFromSpell(oPC, nSpell);
 
 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
@@ -88,8 +90,10 @@ if 	(GetHasFeat(FEAT_GHUL,oPC))
 	effect eLink	= 	EffectLinkEffects(eSk1,eSk2);
 		   eLink	=	EffectLinkEffects(eLink,eSk3);
 		   eLink	=	EffectLinkEffects(eLink,eSk4);
-		   eLink	=	ExtraordinaryEffect(eLink);	
-ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
+		   eLink	=	SupernaturalEffect(eLink);	
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
 
 	
 }

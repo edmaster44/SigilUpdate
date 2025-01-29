@@ -265,7 +265,10 @@ void TearingBite()
 void Genesis()
 {
     effect eMindImmunity = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
-		eMindImmunity = ExtraordinaryEffect(eMindImmunity);
+		eMindImmunity = SupernaturalEffect(eMindImmunity);
+	int nSpell = GetSpellId();
+	eMindImmunity = SetEffectSpellId(eMindImmunity, nSpell);
+	RemoveEffectsFromSpell(oSelf, nSpell);
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eMindImmunity, oSelf));			
 }
 
@@ -273,8 +276,11 @@ void ArmorOfNature()
 {
 	int nPlantLevel = GetLevelByClass(CLASS_TYPE_PLANTPC);
     effect eDodge = EffectACIncrease(nPlantLevel, AC_DODGE_BONUS);
-		eDodge = ExtraordinaryEffect(eDodge);
+		eDodge = SupernaturalEffect(eDodge);
 //	SendMessageToPC(oSelf, "ExpectedACBonus: "+IntToString(nPlantLevel));
+	int nSpell = GetSpellId();
+	eDodge = SetEffectSpellId(eDodge, nSpell);
+	RemoveEffectsFromSpell(oSelf, nSpell);
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oSelf));			
 }
 
@@ -286,14 +292,20 @@ void Overgrowth()
 	
 	effect eLink = EffectLinkEffects(eParalysisImmunity, eStunImmunity);
 	effect eLink2 = EffectLinkEffects(eLink, ePoisonImmunity);
-		eLink2 = ExtraordinaryEffect(eLink2);
+		eLink2 = SupernaturalEffect(eLink2);
+	int nSpell = GetSpellId();
+	eLink2 = SetEffectSpellId(eLink2, nSpell);
+	RemoveEffectsFromSpell(oSelf, nSpell);
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink2, oSelf));			
 }
 
 void ToughRoots()
 {
     effect eCritImmune = EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
-		eCritImmune = ExtraordinaryEffect(eCritImmune);
+		eCritImmune = SupernaturalEffect(eCritImmune);
+	int nSpell = GetSpellId();
+	eCritImmune = SetEffectSpellId(eCritImmune, nSpell);
+	RemoveEffectsFromSpell(oSelf, nSpell);
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCritImmune, oSelf));			
 }
 
@@ -303,8 +315,11 @@ void TreantResist()
 	effect eFireVuln = EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, 50);
 	
 	effect eLink 	= EffectLinkEffects(eDamageReduction, eFireVuln);
-		eLink		= ExtraordinaryEffect(eLink);
+		eLink		= SupernaturalEffect(eLink);
 		eLink 		= SetEffectSpellId(eLink, GetSpellId());
+	int nSpell = GetSpellId();
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oSelf, nSpell);
 	
 	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));
 //	SendMessageToPC(oSelf, "Applying Treant Resistance!");
@@ -323,9 +338,14 @@ void AnimateTrees()
 
 void HuntingLope(object oPC, int nIncrease, int nSpell)
 {
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	effect eSpeed = EffectMovementSpeedIncrease(nIncrease);
-			eSpeed = ExtraordinaryEffect(eSpeed);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
-		SendMessageToPC(oPC, "Speed increased by " + IntToString(nIncrease) + "%.");	}
+	effect eSpeed = EffectMovementSpeedIncrease(nIncrease);
+	eSpeed = SupernaturalEffect(eSpeed);
+	eSpeed = SetEffectSpellId(eSpeed, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
+	if (!GetLocalInt(oPC, "HuntingLope")){
+		SendMessageToPC(oPC, "Speed increased by " + IntToString(nIncrease) + "%.");
+		SetLocalInt(oPC, "HuntingLope", TRUE);
+	}
+	
 }

@@ -26,9 +26,9 @@ void PS_OutsiderBloodlineFiendish(object oPC, int nSpell)
 {
 	effect eProfane		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 		eProfane		= VersusAlignmentEffect(eProfane, ALIGNMENT_ALL, ALIGNMENT_GOOD);
-		eProfane		= ExtraordinaryEffect(eProfane);
+		eProfane		= SupernaturalEffect(eProfane);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+    RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProfane, oPC);
 }
 
@@ -36,9 +36,10 @@ void PS_OutsiderBloodlineCelestial(object oPC, int nSpell)
 {
 	effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 		eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
-		eSacred			= ExtraordinaryEffect(eSacred);
+		eSacred			= SupernaturalEffect(eSacred);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
+	eSacred = SetEffectSpellId(eSacred, nSpell);
+    RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
 }
 
@@ -96,8 +97,9 @@ void PS_HO_Immunity(object oPC, int nSpell)
 	else if (GetHasFeat(2538, oPC))
 	{	eImmune = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);	}
 	else return;
-	eImmune = ExtraordinaryEffect(eImmune);
-	
+	eImmune = SupernaturalEffect(eImmune);
+	eImmune = SetEffectSpellId(eImmune, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eImmune, oPC);
 }
 
@@ -113,8 +115,9 @@ void PS_HO_Resistance(object oPC, int nSpell)
 	effect eLink = EffectLinkEffects(eAcid, eFire);
 		eLink = EffectLinkEffects(eLink, eCold);
 		eLink = EffectLinkEffects(eLink, eElec);
-		eLink = ExtraordinaryEffect(eLink);
-		
+		eLink = SupernaturalEffect(eLink);
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
@@ -131,8 +134,9 @@ void PS_HO_DR(object oPC, int nSpell)
 		{	nDamagePower = DAMAGE_POWER_PLUS_THREE;	}	}
 	
 	effect eDR = EffectDamageReduction(nReduct, nDamagePower, 0, DR_TYPE_MAGICBONUS);
-		eDR = ExtraordinaryEffect(eDR);
-		
+		eDR = SupernaturalEffect(eDR);
+	eDR = SetEffectSpellId(eDR, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 }
 
@@ -688,17 +692,17 @@ void PS_HO_SupernaturalSight(object oPC, int nSpell)
 	{	eEyes = EffectNWN2SpecialEffectFile("fx_erinyes_eyes", oPC);	}
 	
     effect eLink = EffectLinkEffects(eEyes, eSight);
-    	eLink = ExtraordinaryEffect(eLink);
-	
+    	eLink = SupernaturalEffect(eLink);
+	eLink = SetEffectSpellId(eLink, nSpell);
 	if(GetHasSpellEffect(nSpell, oPC))
 	{
 		RemoveEffectsFromSpell(oPC, nSpell);
-		SendMessageToPC(oPC, "Super natural sight deactivated ");	
+		SendMessageToPC(oPC, "Supernatural sight deactivated ");	
 	}
 	else
 	{
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		SendMessageToPC(oPC, "Super natural sight activated");
+		SendMessageToPC(oPC, "Supernatural sight activated");
 	}
 	
 }

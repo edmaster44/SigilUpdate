@@ -352,6 +352,7 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 
 void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 {
+	
     int nHeritage, nImmunity; 
 	
 	if(GetIsObjectValid(oItem))
@@ -438,37 +439,39 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 	{	if (nHalfdragon == 6)
 		{	eLink = EffectLinkEffects(ePara, eSleep);
 			eLink = EffectLinkEffects(eLink, eAmethyst2);
-			eLink = ExtraordinaryEffect(eLink);	}
+			eLink = SupernaturalEffect(eLink);	}
 		else
 		{	eLink = EffectLinkEffects(eSleep, eAmethyst1);
-			eLink = ExtraordinaryEffect(eLink);	}	}
+			eLink = SupernaturalEffect(eLink);	}	}
 	else if (nHeritage == DRACONIC_HERITAGE_FANG)
 		{	if (nHalfdragon == 6)
 			{	eLink = EffectLinkEffects(ePara, eSleep);
 				eLink = EffectLinkEffects(eLink, eFang2);
-				eLink = ExtraordinaryEffect(eLink);	}
+				eLink = SupernaturalEffect(eLink);	}
 			else
 			{	eLink = EffectLinkEffects(eSleep, eFang1);
-				eLink = ExtraordinaryEffect(eLink);	}	}
+				eLink = SupernaturalEffect(eLink);	}	}
 		else
 		{
 			if (nHalfdragon == 6)
 			{
 				eLink = EffectLinkEffects(ePara, eSleep);
 				eLink = EffectLinkEffects(eLink, eImmune2);
-				eLink = ExtraordinaryEffect(eLink);
+				eLink = SupernaturalEffect(eLink);
 			}
 			else
 			{
 				eLink = EffectLinkEffects(eSleep, eImmune);
-				eLink = ExtraordinaryEffect(eLink);
+				eLink = SupernaturalEffect(eLink);
 			}
 		}
 		
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	eLink = SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	if (!GetLocalInt(oPC, "halfDragonImmunities")){
 		SendMessageToPC(oPC, "Half-dragon - immunities applied.");
+		SetLocalInt(oPC, "halfDragonImmunities", TRUE);
 	}
 
 	if (PS_GetAppWingType(oPC) != 0)

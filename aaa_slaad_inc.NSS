@@ -57,8 +57,9 @@ void PS_SlaadImmune(object oPC, int nSpell)
 		eLink		= EffectLinkEffects(eLink, eCold);
 		eLink		= EffectLinkEffects(eLink, eElec);
 		eLink		= EffectLinkEffects(eLink, eFire);
-		eLink 		= ExtraordinaryEffect(eLink);
+		eLink 		= SupernaturalEffect(eLink);
 		eLink 		= SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
@@ -72,34 +73,34 @@ void PS_SlaadCompletelyChaotic(object oPC, int nSpell)
 
 void PS_SlaadRegen_Gray(object oPC, int nSpell)
 {
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	int nLevel		= GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
-		int nBonus		= nLevel / 3;
-		if (nBonus < 0) nBonus = 0;
-		else if (nBonus > 3) nBonus = 3;
-		if (nBonus > 0){
-			effect eRegen	= EffectRegenerate(nBonus, 6.0f);
-				eRegen		= ExtraordinaryEffect(eRegen);
-				eRegen		= SetEffectSpellId(eRegen, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
-		}
+	int nLevel		= GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
+	int nBonus		= nLevel / 3;
+	if (nBonus < 0) nBonus = 0;
+	else if (nBonus > 3) nBonus = 3;
+	if (nBonus > 0){
+		effect eRegen	= EffectRegenerate(nBonus, 6.0f);
+			eRegen		= SupernaturalEffect(eRegen);
+			eRegen		= SetEffectSpellId(eRegen, nSpell);
+		RemoveEffectsFromSpell(oPC, nSpell);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
 	}
+	
 }
 
 void PS_SlaadRegen_CoC(object oPC, int nSpell)
 {
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	int nLevel		= GetLevelByClass(CLASS_TYPE_CHAMPION_OF_CHAOS, oPC);
-		int nBonus		= nLevel / 2;
-		if (nBonus < 0) nBonus = 0;
-		else if (nBonus > 3) nBonus = 3;
-		if (nBonus > 0){
-			effect eRegen	= EffectRegenerate(nBonus, 6.0f);
-				eRegen		= ExtraordinaryEffect(eRegen);
-				eRegen		= SetEffectSpellId(eRegen, nSpell);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);
-		}		
-	}
+	int nLevel		= GetLevelByClass(CLASS_TYPE_CHAMPION_OF_CHAOS, oPC);
+	int nBonus		= nLevel / 2;
+	if (nBonus < 0) nBonus = 0;
+	else if (nBonus > 3) nBonus = 3;
+	if (nBonus > 0){
+		effect eRegen	= EffectRegenerate(nBonus, 6.0f);
+			eRegen		= SupernaturalEffect(eRegen);
+			eRegen		= SetEffectSpellId(eRegen, nSpell);
+			RemoveEffectsFromSpell(oPC, nSpell);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);
+	}		
+
 }
 
 void PS_OnHit_ChaosDamage(int nSpell, int nRank)
@@ -155,8 +156,7 @@ void PS_SlaadClawsOfChaos(object oPC, int nSpell)
 
 void PS_SlaadDR(object oPC, int nSpell)
 {
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	int nGrayLevel	= GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
+		int nGrayLevel	= GetLevelByClass(CLASS_TYPE_GRAY_SLAAD, oPC);
 		int nCoCLevel	= GetLevelByClass(CLASS_TYPE_CHAMPION_OF_CHAOS, oPC);
 		int nAmount		= 5;
 		if (nGrayLevel >= 6 || nCoCLevel >= 6)
@@ -165,9 +165,10 @@ void PS_SlaadDR(object oPC, int nSpell)
 		{	nAmount		= 15;	}
 		
 		effect eDR		= EffectDamageReduction(nAmount, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_LAWFUL);
-			eDR			= ExtraordinaryEffect(eDR);
+			eDR			= SupernaturalEffect(eDR);
 			eDR			= SetEffectSpellId(eDR, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	}
+		RemoveEffectsFromSpell(oPC, nSpell);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
 }
 
 void PS_SlaadChaosHammer(object oPC, int nSpell, location lTarget)
@@ -434,7 +435,7 @@ void PS_SlaadPWBlind(object oPC, int nSpell)
 	float fDuration;
 	effect	eLink		= EffectLinkEffects(eBlind, eVis);
 		eLink			= EffectLinkEffects(eLink, eEyes);
-		eLink			= ExtraordinaryEffect(eLink);
+		eLink			= SupernaturalEffect(eLink);
 
 	if (GetIsObjectValid(oTarget))
 	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
