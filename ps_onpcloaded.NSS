@@ -568,8 +568,12 @@ void main()
 		CountSpells(oPC,0);
 		PS_OnPCLoaded(oPC);
 		ConvertBio(oPC);
-		// We will update legacy items before the re-equip feature in case any 
-		// items get dropped on re-equip
+		// it is VITALLY IMPORTANT that we update items BEFORE we update feats
+		// in ff_update_feats because GetHasFeat() cannot differentiate between
+		// a feat a char has on char and a feat a char has as a bonus feat on an 
+		// item. So in the case of replacing old feats with new versions we have 
+		// to check the items first otherwise we could get a false positive when
+		// checking the character
 		FF_UpdateLegacyItems(oPC);
 		CheckTattoos(oPC);
 		ScaleAdjust(oPC);

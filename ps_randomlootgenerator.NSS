@@ -790,7 +790,8 @@ void AddRandomBonusFeatIfEnoughPoints(object oItem)
 	int nPropertyRoll = Random(26) + 1;
 	switch (nPropertyRoll)
 	{
-		case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSFEAT, ItemPropertyBonusFeat(IP_CONST_FEAT_ALERTNESS)); break;
+		//case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSFEAT, ItemPropertyBonusFeat(IP_CONST_FEAT_ALERTNESS)); break;
+		case 1: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSFEAT, ItemPropertyBonusFeat(1324)); break; //new alertness
 		case 2: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSFEAT, ItemPropertyBonusFeat(IP_CONST_FEAT_CLEAVE)); break;
 		case 3: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSFEAT, ItemPropertyBonusFeat(IP_CONST_FEAT_COMBAT_CASTING)); break;
 		case 4: AddPropertyIfEnoughPoints(oItem, SRLG_COST_BONUSFEAT, ItemPropertyBonusFeat(IP_CONST_FEAT_DEFLECT_ARROWS)); break;

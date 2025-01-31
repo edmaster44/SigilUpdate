@@ -83,6 +83,7 @@ const int idFeatPsyWarLurk = 21470;
 const int idFeatWererat = 2593;
 const int idFeatBlackguardPath = 3019;
 
+void fFixAlertness(object oPC);
 int fFindSneakFeat(int dice);
 int fFindDeathFeat(int dice);
 int fFindBgFeat(int dice);
@@ -95,6 +96,15 @@ int fCalcOtherSneakFeats(object oPC);
 string fCheckForTempSneakDice(object oPC);
 void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
+
+void fFixAlertness(object oPC){
+	if (GetHasFeat(FEAT_ALERTNESS, oPC, TRUE)){
+		FeatRemove(oPC, FEAT_ALERTNESS);
+		// we cannot check if they already have this because if they
+		// have it as a bonus feat on equipment we will get a false positive
+		FeatAdd(oPC, FEAT_ALERTNESS_NEW, FALSE);
+	}
+}
 
 void SituationalAwareness(object oPC){
 	// Add situational awareness feat

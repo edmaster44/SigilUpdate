@@ -22,6 +22,14 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
 	
+	//replace old bug-inducing bonus feat alertness with new version
+	itemproperty ipOldAlert = ItemPropertyBonusFeat(0);
+	itemproperty ipNewAlert = ItemPropertyBonusFeat(1324);
+	if (IPGetItemHasProperty(oItem, ipOldAlert, DURATION_TYPE_PERMANENT)){
+		FF_ModifyItemProperty(oItem, ipOldAlert);
+		FF_ModifyItemProperty(oItem, ipNewAlert, TRUE);
+	}
+	
 	// make sure scrolls and wands are usuable by all classes that have the same spellbook or 
 	// are supposed to be allowed to use scrolls and wands of another spellbook
 	if (nType == 102 || nType == 105 || nType == 103 || nType == 106){

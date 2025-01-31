@@ -378,7 +378,8 @@ void GenerateItemPropertyName(object oItem)
 			{
 				switch (iPropertySubType)
 				{
-					case IP_CONST_FEAT_ALERTNESS: sPropertySuffix = "of Alertness"; break;
+					//case IP_CONST_FEAT_ALERTNESS: sPropertySuffix = "of Alertness"; break;
+					case 1324: sPropertySuffix = "of Alertness"; break; // new Alertness
 					case IP_CONST_FEAT_CLEAVE: sPropertySuffix = "of Cleaving"; break;
 					case IP_CONST_FEAT_COMBAT_CASTING: sPropertySuffix = "of the Battle Mage"; break;
 					case IP_CONST_FEAT_DEFLECT_ARROWS: sPropertySuffix = "of the Swift Hand"; break;

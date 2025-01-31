@@ -111,6 +111,8 @@ void fUpdateOtherFeats(object oPC){
 	
 	GiveCreatureWeaponFinesse(oPC);
 	
+	fFixAlertness(oPC);
+	
 	//Since the racial feat skill affinity craft alchemy is useless
 	//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
 	if (GetHasFeat(1754, oPC))
