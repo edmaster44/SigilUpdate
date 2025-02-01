@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oPC = GetEnteringObject();
@@ -9,7 +11,7 @@ void main()
 ("CourthouseEnterLock3");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("CourthouseEnterLock3", 1);
+	  PS_SetGlobalInt("CourthouseEnterLock3", 1);
 	   //Only allows one clean up at a time.
 	
 	  if(GetObjectByTag("cc_accused") == 
@@ -317,6 +319,6 @@ OBJECT_INVALID)
 
 (OBJECT_TYPE_CREATURE, "cc_judge02", lSpawnpoint);    
 	  }
-	  SetGlobalInt("CourthouseEnterLock", 0);
+	  PS_SetGlobalInt("CourthouseEnterLock", 0);
   	}
 }

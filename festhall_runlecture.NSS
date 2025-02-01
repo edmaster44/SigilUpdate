@@ -19,7 +19,7 @@ void main () {
 		return;
 	}
 	
-	if (GetLocalInt(oLecture, "LECTURE_TOPIC") <= 0) {
+	if (PS_GetLocalInt(oLecture, "LECTURE_TOPIC") <= 0) {
 		SendMessageToPC(oPC, "No lecture chosen.");
 		return;
 	}
@@ -40,18 +40,18 @@ void PlayNextPart(object oLecture, object oPC = OBJECT_INVALID) {
 	if (GetIsObjectValid(oPC))
 		SendMessageToPC(oPC, "Timestamp Passed");
 		
-	int nLecture = GetLocalInt(oLecture, "LECTURE_TOPIC");
-	int nStage = GetLocalInt(oLecture, "LECTURE_STAGE");
+	int nLecture = PS_GetLocalInt(oLecture, "LECTURE_TOPIC");
+	int nStage = PS_GetLocalInt(oLecture, "LECTURE_STAGE");
 	int nDone = FALSE;
 	switch (nLecture) {
 		case 1: nDone = PlayLectureTooMuch(nStage, oPC); break;
 		case 2: nDone = PlayLectureSensoryStone(nStage, oPC); break;
 	}
 	
-	SetLocalInt(oLecture, "LECTURE_STAGE", nStage+1);
+	PS_SetLocalInt(oLecture, "LECTURE_STAGE", nStage+1);
 
 	if (nDone) {
-		DelayCommand(300.0f, SetLocalInt(oLecture, "LECTURE_STAGE", 0)); //reset lecture stage
+		DelayCommand(300.0f, PS_SetLocalInt(oLecture, "LECTURE_STAGE", 0)); //reset lecture stage
 	} else {
 		DelayCommand(12.1f, PlayNextPart(oLecture, oPC));
 	}
@@ -61,19 +61,19 @@ void MarkListeners(int nMax = 1, int nFinal = FALSE) {
 
 	object oSpeaker = GetNearestObjectByTag("festhallnpc_lecturer");
 	object oLecture = GetNearestObjectByTag("festhall_lectureschedule");
-	int nLecture = GetLocalInt(oLecture, "LECTURE_TOPIC");
+	int nLecture = PS_GetLocalInt(oLecture, "LECTURE_TOPIC");
 	
 	object oListener = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, GetLocation(oSpeaker), TRUE);
 	while (GetIsObjectValid(oListener)) {
 		
 		if (GetIsPC(oListener)) {
 		
-			int nListened = GetLocalInt(oListener, "LECTURE_LISTENED");
+			int nListened = PS_GetLocalInt(oListener, "LECTURE_LISTENED");
 			//SendMessageToPC(oListener, "Incrementing listening to "+IntToString(nListened+1));
-			SetLocalInt(oListener, "LECTURE_LISTENED", nListened+1);
+			PS_SetLocalInt(oListener, "LECTURE_LISTENED", nListened+1);
 			
-			if (nFinal && GetLocalInt(oListener, "LECTURE_LISTENED") >= nMax && 
-				GetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture)) <= 0) {
+			if (nFinal && PS_GetLocalInt(oListener, "LECTURE_LISTENED") >= nMax && 
+				PS_GetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture)) <= 0) {
 				
 				SendMessageToPC(oListener, "Experience given for listening to lecture:");
 				PS_GiveXPReward(oListener, 100);
@@ -83,8 +83,8 @@ void MarkListeners(int nMax = 1, int nFinal = FALSE) {
 				string sID = PS_GetCharID(oListener);
 				SetPermanentInt(sID, "FINISHED_LECTURE_"+IntToString(nLecture), 1);
 				
-				SetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture), 1);
-				DelayCommand(300.0f, SetLocalInt(oListener, "LECTURE_LISTENED", 0));
+				PS_SetLocalInt(oListener, "FINISHED_LECTURE_"+IntToString(nLecture), 1);
+				DelayCommand(300.0f, PS_SetLocalInt(oListener, "LECTURE_LISTENED", 0));
 				
 			}
 		}

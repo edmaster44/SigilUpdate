@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "enft_cnsts"
 
 int saltRelief(object oSaltPerson)
@@ -18,7 +20,7 @@ int saltRelief(object oSaltPerson)
     while(GetDistanceBetween(oSaltPerson, oNearest) < hydrateDistance)
     {
         // Determine if the object is a cooling object
-        if(!GetLocalInt(oNearest, "ENFT_NOT_HYDRATING"))
+        if(!PS_GetLocalInt(oNearest, "ENFT_NOT_HYDRATING"))
         {
             sNearest = GetTag(oNearest);
             if(sNearest == "ENFT_RELIEF_SPOT") return 1;
@@ -34,7 +36,7 @@ int saltRelief(object oSaltPerson)
         // List sources of proximity heat relief as shown in examples above.
 
             // Not a cooling object.  Flag it to save time next pass
-            SetLocalInt(oNearest, "ENFT_NOT_HYDRATING", TRUE);
+            PS_SetLocalInt(oNearest, "ENFT_NOT_HYDRATING", TRUE);
         }
 
         // This object is not a cooling object.  Check next object.
@@ -46,7 +48,7 @@ int saltRelief(object oSaltPerson)
     for(i = 0; i < NUM_INVENTORY_SLOTS; i++)
     {
         oEquipedItem = GetItemInSlot(i, oSaltPerson);
-        if(!GetLocalInt(oEquipedItem, "ENFT_NOT_COOLING"))
+        if(!PS_GetLocalInt(oEquipedItem, "ENFT_NOT_COOLING"))
         {
             if(GetResRef(oEquipedItem) == saltProtection1)
 			{
@@ -54,7 +56,7 @@ int saltRelief(object oSaltPerson)
 			}
 
             // Not a cooling item.  Flag it to save time next pass
-            SetLocalInt(oEquipedItem, "ENFT_NOT_COOLING", TRUE);
+            PS_SetLocalInt(oEquipedItem, "ENFT_NOT_COOLING", TRUE);
         }
     }
 

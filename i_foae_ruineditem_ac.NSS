@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //
 /*
    Template for an Activate item script.
@@ -15,9 +17,9 @@ void main()
     object oPC      = GetItemActivator();
     object oItem    = GetItemActivated();
 	
-	string sItemType = GetLocalString(oItem, "RuinedItem_Type");
+	string sItemType = PS_GetLocalString(oItem, "RuinedItem_Type");
 	
-	if (GetLocalInt(oPC, "RUINED_ARMOR") > 0) {
+	if (PS_GetLocalInt(oPC, "RUINED_ARMOR") > 0) {
 		SendMessageToPC(oPC, "You can discern nothing more about this bit of scrap metal.");
 		return;
 	}
@@ -75,6 +77,6 @@ void main()
 		SendMessageToPC(oPC, "You can discern nothing about this bit of scrap metal.");
 	}
 	
-	SetLocalInt(oPC, "RUINED_ARMOR", 1);
+	PS_SetLocalInt(oPC, "RUINED_ARMOR", 1);
 	
 }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /******************************************************************************
 *****                         nwnx_craft_Item_Init                        *****
 *****                               V 1                                   *****
@@ -30,14 +32,14 @@ void main(int bStore, int iInventorySlot, string sRoadMap)
 		if (oItemToCraft!=OBJECT_INVALID)
 		{//never too carefull	
 			XPCraft_StoreItemToCraft(oPC,oItemToCraft);
-			SetLocalInt(oPC,"XC_INVENT_SLOT",iInventorySlot);
-			SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", oItemToCraft);
-			object oSavedItem = CopyItem(oItemToCraft,GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER"),TRUE);
-			SetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC),oSavedItem);
+			PS_SetLocalInt(oPC,"XC_INVENT_SLOT",iInventorySlot);
+			PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", oItemToCraft);
+			object oSavedItem = CopyItem(oItemToCraft,PS_GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER"),TRUE);
+			PS_SetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC),oSavedItem);
 			//cryptc: Added "timestamp" variable to be unique identifier accepting that its same item to be modified.
 			string tso = TimeStamp();
-			SetLocalString(oPC,"TSO",tso);
-			SetLocalString(oItemToCraft,"TSO",tso);
+			PS_SetLocalString(oPC,"TSO",tso);
+			PS_SetLocalString(oItemToCraft,"TSO",tso);
 			
 			//
 			// Figure out which armor pieces are part of this items armor set in case
@@ -56,7 +58,7 @@ void main(int bStore, int iInventorySlot, string sRoadMap)
 
 	//initialisation of local vars
 	
-	SetLocalString(oPC,"XC_ROAD_MAP",sRoadMap);	
+	PS_SetLocalString(oPC,"XC_ROAD_MAP",sRoadMap);	
 	string sSubAction = GetStringLeft(sRoadMap,2);
 
 	if(sSubAction =="Va")

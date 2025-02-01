@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ff_feat_tactical_weapon_inc"
 
 
@@ -58,9 +60,9 @@ void FF_TacticalWeapons(object oPC, object oRHAND, object oSkin){
 		sMessage += sManeuver + " Maneuver Enabled"; // but ranged gets a Maneuver	
 	}
 	// make sure we don't double-message, doesn't have to persist across resets
-	if (GetLocalString(oPC, "tac_message") != sMessage){
+	if (PS_GetLocalString(oPC, "tac_message") != sMessage){
 		SendMessageToPC(oPC, sMessage);
-		SetLocalString(oPC, "tac_message", sMessage);
+		PS_SetLocalString(oPC, "tac_message", sMessage);
 	}
 
 }

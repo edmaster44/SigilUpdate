@@ -1,14 +1,16 @@
+#include "ff_safevar"
+
 void main()
 {
 	string parchmentVarName = "parchmentObject";
 	string parchmentWritingVarName = "writing";
 
 	object oPC = GetPCSpeaker();
-	object parchmentObject = GetLocalObject(oPC, parchmentVarName);
+	object parchmentObject = PS_GetLocalObject(oPC, parchmentVarName);
 	
 	if(parchmentObject != OBJECT_INVALID)
 	{
-		string writtenText = GetLocalString(parchmentObject, parchmentWritingVarName);
+		string writtenText = PS_GetLocalString(parchmentObject, parchmentWritingVarName);
 		if (writtenText != "")
 		{
 			SendMessageToPC(oPC, "You read: '" + writtenText + "'");
@@ -24,5 +26,5 @@ void main()
 	}
 	
 	// delete the item mark	
-	DeleteLocalObject(oPC, parchmentVarName);
+	PS_DeleteLocalObject(oPC, parchmentVarName);
 }

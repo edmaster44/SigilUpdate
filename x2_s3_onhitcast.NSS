@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: User Defined OnHitCastSpell code
 //:: x2_s3_onhitcast
@@ -54,7 +56,7 @@ void main()
      //{
         SetUserDefinedItemEventNumber(X2_ITEM_EVENT_ONHITCAST);
         int nRet =   ExecuteScriptAndReturnInt(GetUserDefinedItemEventScriptName(oItem),OBJECT_SELF);
-		if (GetLocalInt(oItem, "abilityID") > 0) {
+		if (PS_GetLocalInt(oItem, "abilityID") > 0) {
 			ExecuteTempOnHitProperty(oItem, oSpellTarget);
 		}
 		

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////////
 //:: X0_I0_HENCHMAN
 //:: Copyright (c) 2002 Floodgate Entertainment
@@ -331,9 +333,9 @@ void CopyHenchmanLocals(object oSource, object oTarget)
 
     // This copies over our current associate state, so we
     // keep whatever settings we had before.
-    SetLocalInt(oTarget,
+    PS_SetLocalInt(oTarget,
                 sAssociateMasterConditionVarname,
-                GetLocalInt(oSource, sAssociateMasterConditionVarname));
+                PS_GetLocalInt(oSource, sAssociateMasterConditionVarname));
 
 }
 
@@ -358,12 +360,12 @@ int GetHasMet(object oPC, object oHench=OBJECT_SELF)
 // *returns true if oHench is a follower
 int GetIsFollower(object oHench)
 {
-    return GetLocalInt(oHench, "X2_JUST_A_FOLLOWER");
+    return PS_GetLocalInt(oHench, "X2_JUST_A_FOLLOWER");
 }
 // * sets whether oHench is a follower or not
 void SetIsFollower(object oHench, int bValue=TRUE)
 {
-    SetLocalInt(oHench, "X2_JUST_A_FOLLOWER", bValue);
+    PS_SetLocalInt(oHench, "X2_JUST_A_FOLLOWER", bValue);
 }
 
 // * removes all followers
@@ -509,7 +511,7 @@ void HireHenchman(object oPC, object oHench=OBJECT_SELF, int bAdd=TRUE)
     {
         // This keeps track if the player has EVER hired this henchman
         // Floodgate only (XP1). Should never store info to a database as game runs, only between modules or in Persistent setting
-        if (GetLocalInt(GetModule(), "X2_L_XP2") !=  1)
+        if (PS_GetLocalInt(GetModule(), "X2_L_XP2") !=  1)
         {
             SetPlayerHasHiredInCampaign(oPC, oHench);
         }
@@ -532,9 +534,9 @@ void HireHenchman(object oPC, object oHench=OBJECT_SELF, int bAdd=TRUE)
 
     // By default, companions come in with Attack Nearest and Follow
     // modes enabled.
-    SetLocalInt(oHench,
+    PS_SetLocalInt(oHench,
                 "NW_COM_MODE_COMBAT",ASSOCIATE_COMMAND_ATTACKNEAREST);
-    SetLocalInt(oHench,
+    PS_SetLocalInt(oHench,
                 "NW_COM_MODE_MOVEMENT",ASSOCIATE_COMMAND_FOLLOWMASTER);
 
     // Add the henchman
@@ -619,15 +621,15 @@ int GetIsHired(object oHench=OBJECT_SELF)
 void SetLastMaster(object oPC, object oHench=OBJECT_SELF)
 {
     //DBG_msg("Set last master to " + GetName(oPC));
-    SetLocalObject(oHench, sLastMasterVarname, oPC);
+    PS_SetLocalObject(oHench, sLastMasterVarname, oPC);
 }
 
 // Returns the last master of this henchman (useful for death situations)
 object GetLastMaster(object oHench=OBJECT_SELF)
 {
     //DBG_msg("Getting last master: "
-    //        + GetName(GetLocalObject(oHench, sLastMasterVarname)));
-    return GetLocalObject(oHench, sLastMasterVarname);
+    //        + GetName(PS_GetLocalObject(oHench, sLastMasterVarname)));
+    return PS_GetLocalObject(oHench, sLastMasterVarname);
 }
 
 // Indicate whether the player has ever hired this henchman
@@ -726,7 +728,7 @@ void StoreHenchmanItems(object oPC, object oHench)
 
             // store the slot number + 1 so when we
             // retrieve a 0 can be treated as unequipped
-            SetLocalInt(oPC, "HENCH_HAS_EQUIPPED_" + sItemName, i+1);
+            PS_SetLocalInt(oPC, "HENCH_HAS_EQUIPPED_" + sItemName, i+1);
 
             if (FindSubString(sItemName, sHenchTag) == -1) {
                 // put it in the db
@@ -788,10 +790,10 @@ void RetrieveHenchmanItems(object oPC, object oHench)
 
         // Above, we stored the slot + 1 so we could treat a 0
         // as meaning "not equipped".
-        nSlot = GetLocalInt(oPC, "HENCH_HAS_EQUIPPED_" + sItemName) - 1;
+        nSlot = PS_GetLocalInt(oPC, "HENCH_HAS_EQUIPPED_" + sItemName) - 1;
         if (nSlot != -1) {
             //DBG_msg("Item was equipped in slot " + IntToString(nSlot));
-            DeleteLocalInt(oPC, "HENCH_HAS_EQUIPPED_" + sItemName);
+            PS_DeleteLocalInt(oPC, "HENCH_HAS_EQUIPPED_" + sItemName);
             oCurItem = GetItemInSlot(nSlot, oHench);
             if (GetIsObjectValid(oCurItem)) {
                 AssignCommand(oHench, ActionUnequipItem(oCurItem));
@@ -1002,9 +1004,9 @@ void DoRespawn(object oPC, object oHench=OBJECT_SELF)
                      WrapCommandable(TRUE, oHench));
 
        // if (GetCurrentHitPoints(oHench) > 0)
-        if (GetLocalInt(oHench, "X0_L_WAS_HEALED") == 10)
+        if (PS_GetLocalInt(oHench, "X0_L_WAS_HEALED") == 10)
         {
-            SetLocalInt(oHench, "X0_L_WAS_HEALED",0);
+            PS_SetLocalInt(oHench, "X0_L_WAS_HEALED",0);
             // Hey, we've been stabilized! Good on you, master.
             SetResurrected(oPC, oHench);
 
@@ -1199,10 +1201,10 @@ void LevelHenchmanUpTo(object oHenchman, int nLevel, int nClass2=CLASS_TYPE_INVA
         // * 1 = Secondary Class: only take levels in your second class
         // * 2 = First class: only take levels in your first class
         // * Note: This choice overrides the above nMaxLevelInSecondClass
-        int nRule = GetLocalInt(oHenchman, "X0_L_LEVELRULES");
+        int nRule = PS_GetLocalInt(oHenchman, "X0_L_LEVELRULES");
 
         // HACK: If in XP2, reverse the rules
-        if (GetLocalInt(GetModule(), "X2_L_XP2") == 1)
+        if (PS_GetLocalInt(GetModule(), "X2_L_XP2") == 1)
         {
             if (nRule == 1)
              nRule = 2;
@@ -1281,7 +1283,7 @@ void LevelUpXP1Henchman(object oPC)
         if ( GetIsObjectValid(oAssociate) )
         {
             // * Followers do not level up
-            if (GetLocalInt(oAssociate, "X2_JUST_A_FOLLOWER") == FALSE)
+            if (PS_GetLocalInt(oAssociate, "X2_JUST_A_FOLLOWER") == FALSE)
             {
                 int nResult;
                 int nLevel = GetHitDice(oPC);
@@ -1457,7 +1459,7 @@ void SetNumberOfRandom(string sVariableName, object oHench, int nNum)
         sString = sString + IntToString(i) + "|";
     }
 
-    SetLocalString(oHench, sVariableName, sString);
+    PS_SetLocalString(oHench, sVariableName, sString);
 }
 
 // * Oct 14 - added the oHench parameters

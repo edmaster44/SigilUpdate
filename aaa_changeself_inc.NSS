@@ -17,7 +17,7 @@ void PS_ChangeSelf_AppearanceType(object oPC, int nAppVar)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.AppearanceType = nAppVar;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Appearance type changed to " + IntToString(nAppVar) + ".");
 }
@@ -31,7 +31,7 @@ void PS_ChangeSelf_Gender(object oPC, int nGender)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.Gender = nGender;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Gender changed to " + IntToString(nGender) + ".");
 }
@@ -45,7 +45,7 @@ void PS_ChangeSelf_HeadVariation(object oPC, int nHead)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.HeadVariation = nHead;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Head variation changed to " + IntToString(nHead) + ".");
 }
@@ -60,7 +60,7 @@ void PS_ChangeSelf_TailVariation(object oPC, int nTail)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.TailVariation = nTail;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Tail variation changed to " + IntToString(nTail) + ".");
 }
@@ -75,7 +75,7 @@ void PS_ChangeSelf_WingVariation(object oPC, int nWing)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.WingVariation = nWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Wing variation changed to " + IntToString(nWing) + ".");
 }
@@ -89,7 +89,7 @@ void PS_ChangeSelf_HairVariation(object oPC, int nHair)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.HairVariation = nHair;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Hair variation changed to " + IntToString(nHair) + ".");
 }
@@ -104,7 +104,7 @@ void PS_ChangeSelf_FacialHairVariation(object oPC, int nFacial)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	app.FacialHairVariation = nFacial;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Facial hair variation changed to " + IntToString(nFacial) + ".");
 }
@@ -120,7 +120,7 @@ void PS_ChangeSelf_HairTint_Accessory(object oPC, string sHairTint0)
 	app.HairTint_Color0 = iTint0;
 	app.HairTint_Mask = PS_CCA_TINT_COLOR0;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Hair accessory tint changed to " + sHairTint0 + ".");
 }
@@ -136,7 +136,7 @@ void PS_ChangeSelf_HairTint_Main(object oPC, string sHairTint1)
 	app.HairTint_Color1 = iTint1;
 	app.HairTint_Mask = PS_CCA_TINT_COLOR1;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Hair tint changed to " + sHairTint1 + ".");
 }
@@ -152,7 +152,7 @@ void PS_ChangeSelf_HairTint_Highlight(object oPC, string sHairTint2)
 	app.HairTint_Color2 = iTint2;
 	app.HairTint_Mask = PS_CCA_TINT_COLOR2;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Hair highlight tint changed to " + sHairTint2 + ".");
 }
@@ -168,7 +168,7 @@ void PS_ChangeSelf_HeadTint_Skin(object oPC, string sHeadTint0)
 	app.HeadTint_Color0 = iHTint0;
 	app.HeadTint_Mask = PS_CCA_TINT_COLOR0;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Skin tint changed to " + sHeadTint0 + ".");
 }
@@ -184,7 +184,7 @@ void PS_ChangeSelf_HeadTint_Eyes(object oPC, string sHeadTint1)
 	app.HeadTint_Color1 = iHTint1;
 	app.HeadTint_Mask = PS_CCA_TINT_COLOR1;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Eye tint changed to " + sHeadTint1 + ".");
 }
@@ -200,7 +200,7 @@ void PS_ChangeSelf_HeadTint_Eyebrows(object oPC, string sHeadTint2)
 	app.HeadTint_Color2 = iHTint2;
 	app.HeadTint_Mask = PS_CCA_TINT_COLOR2;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	PS_RefreshAppearance(oPC);
 	//SendMessageToPC(oPC, "Eyebrow tint changed to " + sHeadTint2 + ".");
 }
@@ -218,8 +218,8 @@ void PS_AltForm_SaveForm(object oPC)
 	
 	PS_CreatureCoreAppearanceToScriptVariables(oEssence, "AltForm", Appearance);
 	SendMessageToPC(oPC, "Alternate form appearance information saved.");
-	SetLocalInt(oEssence, "AltFormSet", 1);
-	SetLocalInt(oEssence, "TempChange", 1);
+	PS_SetLocalInt(oEssence, "AltFormSet", 1);
+	PS_SetLocalInt(oEssence, "TempChange", 1);
 }
 
 // Alternate Form ability: assume alternate form
@@ -230,7 +230,7 @@ void PS_AltForm_Assume(object oPC)
 	PS_SetCreatureCoreAppearance(oPC, Appearance);
 	SendMessageToPC(oPC, "Alternative form assumed.");
 	PS_RefreshAppearance(oPC);
-	SetLocalInt(oEssence, "TempChange", 1);
+	PS_SetLocalInt(oEssence, "TempChange", 1);
 }
 
 // Dragons assuming Alternate Form have their creature weapons unequipped when doing so.

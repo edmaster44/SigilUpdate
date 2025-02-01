@@ -1,14 +1,16 @@
+#include "ff_safevar"
+
 void SpecialChest(object oPC, object oPLACE)
 {
-	int nDC = GetLocalInt(oPLACE, "DC");
+	int nDC = PS_GetLocalInt(oPLACE, "DC");
 	if (GetSkillRank(SKILL_OPEN_LOCK, oPC) < nDC)
 	{
 		SendMessageToPC(oPC, "You need at least " + IntToString(nDC) + " ranks in Open Lock skill to be able to open this chest.");
 		return;
 	}
-	int nQTY = GetLocalInt(oPLACE, "ITEM_QTY");
+	int nQTY = PS_GetLocalInt(oPLACE, "ITEM_QTY");
 	if (nQTY < 1) nQTY = 1;
-	string sTYPE = GetLocalString(oPLACE, "ITEM_REF");
+	string sTYPE = PS_GetLocalString(oPLACE, "ITEM_REF");
 	string sTXT;
 	string sPARTY;
 	object oITEM;
@@ -18,7 +20,7 @@ void SpecialChest(object oPC, object oPLACE)
 		if (GetIsOwnedByPlayer(oPARTY) == TRUE)
 		{
 			sPARTY = GetBicFileName(oPARTY);
-			if (GetLocalInt(oPLACE, sPARTY) == TRUE) sTXT = "*You have already received the contents from that chest.*";
+			if (PS_GetLocalInt(oPLACE, sPARTY) == TRUE) sTXT = "*You have already received the contents from that chest.*";
 			else
 			{
 				if (sTYPE == "")
@@ -36,7 +38,7 @@ void SpecialChest(object oPC, object oPLACE)
 					}
 					sTXT = "*You obtain " + IntToString(nQTY) + " " + GetName(oITEM) + " from the chest.*";
 				}
-				SetLocalInt(oPLACE, sPARTY, TRUE);
+				PS_SetLocalInt(oPLACE, sPARTY, TRUE);
 			}
 			FloatingTextStringOnCreature(sTXT, oPARTY, FALSE);
 		}
@@ -53,10 +55,10 @@ void LifeCrystal(object oPC)
 
 void ReturnPortal(object oPC, object oPLACE)
 {
-	string sWP = GetLocalString(oPLACE, "WAYPOINT");
+	string sWP = PS_GetLocalString(oPLACE, "WAYPOINT");
 	object oWP = GetWaypointByTag(sWP);
 	if (oWP == OBJECT_INVALID) return;
-	SetLocalObject(oPC, "RETURN_PORTAL", oWP);
+	PS_SetLocalObject(oPC, "RETURN_PORTAL", oWP);
 	string sTXT = "This portal will send you back to " + GetName(oWP) + ". Do you wish to enter?";
 	DisplayMessageBox(oPC, 0, sTXT, "gui_returnportal", "", TRUE, "SCREEN_MESSAGEBOX_DEFAULT", 0, "YES", 0, "NO");
 }
@@ -72,7 +74,7 @@ void main()
 		return;
 	}
 	object oPLACE = OBJECT_SELF;
-	int nTYPE = GetLocalInt(oPLACE, "TYPE");
+	int nTYPE = PS_GetLocalInt(oPLACE, "TYPE");
 	switch (nTYPE)
 	{
 		case 1: LifeCrystal(oPC); break;

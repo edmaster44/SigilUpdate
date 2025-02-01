@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: x2_inc_banter
 //:: Copyright (c) 2003 Bioware Corp.
@@ -166,12 +168,12 @@ int BanterReady(string sTag, string sTag2="", string sTag3="")
 // * Wrapper function to streamline that party banter system
 int TryBanterWith(string sTag, int nBanter)
 {
-    if (GetLocalInt(OBJECT_SELF, "X2_BANTER_TRY") == 1 && BanterReady(sTag) == TRUE
-        && GetLocalInt(OBJECT_SELF, "BANT" + sTag) == nBanter -1)
+    if (PS_GetLocalInt(OBJECT_SELF, "X2_BANTER_TRY") == 1 && BanterReady(sTag) == TRUE
+        && PS_GetLocalInt(OBJECT_SELF, "BANT" + sTag) == nBanter -1)
     {
             // * Prepare for next banter
-          SetLocalInt(OBJECT_SELF, "BANT" + sTag, nBanter);
-          SetLocalInt(OBJECT_SELF, "X2_BANTER_TRY", 0);
+          PS_SetLocalInt(OBJECT_SELF, "BANT" + sTag, nBanter);
+          PS_SetLocalInt(OBJECT_SELF, "X2_BANTER_TRY", 0);
 
           return TRUE;
     }
@@ -279,7 +281,7 @@ void DoInterjection(object oHench, object oPC, int MOD_EVENT_NUMBER, string sCon
 //:://////////////////////////////////////////////
 int GetRandomTextNumber(object oHench, string sVariableName, int nDeleteMe=-1)
 {
-			string sCode = GetLocalString(oHench, sVariableName);
+			string sCode = PS_GetLocalString(oHench, sVariableName);
 
             // * if string is blank, we've said them all. (Nov 1 - BK)
             if (sCode == "")
@@ -356,7 +358,7 @@ int GetRandomTextNumber(object oHench, string sVariableName, int nDeleteMe=-1)
                 sCopy2 = "";
             }
             // * Store variable string with adjusted list of remaining random strings
-            SetLocalString(oHench, sVariableName, sCopy2);
+            PS_SetLocalString(oHench, sVariableName, sCopy2);
 
     return StringToInt(sFinalNumber) * - 1; // * all random numbers are negative
 
@@ -440,7 +442,7 @@ int AttemptToShowInfo(int nTriggerType, int nId, int bDestroyAnyways = FALSE, ob
         // * Player does not know anything about Pizza.
         case 1002:
         {
-//            if (GetLocalInt(GetModule(), "X2_L_TRUTH_ABOUT_PIZZA") == FALSE)
+//            if (PS_GetLocalInt(GetModule(), "X2_L_TRUTH_ABOUT_PIZZA") == FALSE)
 //                return FALSE;
             break;
         }
@@ -679,7 +681,7 @@ void AttemptInterjectionOrPopup(object oSelf, string sTag, object oTrigger, int 
         {
             AssignCommand(oHench, SetOneLiner(TRUE, MOD_EVENT_NUMBER));
             AssignCommand(oHench, SpeakOneLinerConversation(sConvFile, oMaster));
-            SetLocalInt(oHench, "X0_L_BUSY_SPEAKING_ONE_LINER", 10);
+            PS_SetLocalInt(oHench, "X0_L_BUSY_SPEAKING_ONE_LINER", 10);
             return;
         }
     }
@@ -709,7 +711,7 @@ void AttemptInterjectionOrPopup(object oSelf, string sTag, object oTrigger, int 
                 return;
             AssignCommand(oHench, SetOneLiner(TRUE, MOD_EVENT_NUMBER));
             AssignCommand(oHench, SpeakOneLinerConversation(sConvFile, oMaster));
-            SetLocalInt(oHench, "X0_L_BUSY_SPEAKING_ONE_LINER", 10);
+            PS_SetLocalInt(oHench, "X0_L_BUSY_SPEAKING_ONE_LINER", 10);
             return;
         }
     }
@@ -806,7 +808,7 @@ void AttemptInterjectionOrPopup(object oSelf, string sTag, object oTrigger, int 
               DestroyObject(oSelf); // remove trigger
             return;
         }
-        SetLocalInt(oHench, "X2_BANTER_TRY", 1);
+        PS_SetLocalInt(oHench, "X2_BANTER_TRY", 1);
         // * Try first banter that has not been done already
         AssignCommand(oHench, ClearAllActions());
         AssignCommand(oHench, JumpToObject(oMaster));
@@ -905,12 +907,12 @@ void AttemptRomanceDialog(object oPC, int nLimit)
                 if (bPlayerGender ==  GENDER_MALE)
                 {
                     // * can't complete the romance (4) in Chapter 2
-                    if (bHasNath == TRUE && GetLocalInt(GetModule(), "iNathyrraStage") < nLimit)
+                    if (bHasNath == TRUE && PS_GetLocalInt(GetModule(), "iNathyrraStage") < nLimit)
                     {
                         oHenchToSpeak = oNathyrra;
                     }
                     else
-                    if (bHasValen == TRUE && GetLocalInt(GetModule(), "iValenStage") < nLimit)
+                    if (bHasValen == TRUE && PS_GetLocalInt(GetModule(), "iValenStage") < nLimit)
                     {
                         oHenchToSpeak = oValen;
                     }
@@ -918,12 +920,12 @@ void AttemptRomanceDialog(object oPC, int nLimit)
                 else
                 if (bPlayerGender ==  GENDER_FEMALE)
                 {
-                    if (bHasValen == TRUE && GetLocalInt(GetModule(), "iValenStage") < nLimit)
+                    if (bHasValen == TRUE && PS_GetLocalInt(GetModule(), "iValenStage") < nLimit)
                     {
                         oHenchToSpeak = oValen;
                     }
                     else
-                    if (bHasNath == TRUE && GetLocalInt(GetModule(), "iNathyrraStage") < nLimit)
+                    if (bHasNath == TRUE && PS_GetLocalInt(GetModule(), "iNathyrraStage") < nLimit)
                     {
                         oHenchToSpeak = oNathyrra;
                     }
@@ -947,36 +949,36 @@ int GetPlotProgress()
     //First - check to see if any new plots have been completed
     //Shattered Mirror
     int nPlots = 0;
-    if (GetLocalInt(GetModule(), "q6_city_gone") == 1)
+    if (PS_GetLocalInt(GetModule(), "q6_city_gone") == 1)
     {
         nPlots++;
     }
     //Hive Mother
-    if (GetLocalInt(GetModule(), "x2_plot_beholders_out") == 1)
+    if (PS_GetLocalInt(GetModule(), "x2_plot_beholders_out") == 1)
     {
         nPlots++;
     }
     //Isle of the Maker
-    if (GetLocalInt(GetModule(), "x2_plot_golem2_in") == 1 || GetLocalInt(GetModule(), "x2_plot_golem1_in") == 1)
+    if (PS_GetLocalInt(GetModule(), "x2_plot_golem2_in") == 1 || PS_GetLocalInt(GetModule(), "x2_plot_golem1_in") == 1)
     {
         nPlots++;
     }
     //Slaves to the Overmind
-    if (GetLocalInt(GetModule(), "X2_Q2DOvermind") > 0)
+    if (PS_GetLocalInt(GetModule(), "X2_Q2DOvermind") > 0)
     {
         nPlots++;
 
     }
     // dracolich
-    if (GetLocalInt(GetModule(),"x2_plot_undead_out") == 1)
+    if (PS_GetLocalInt(GetModule(),"x2_plot_undead_out") == 1)
     {
         nPlots++;
     }
-    int nGetLastRomanceSaid = GetLocalInt(GetModule(), "X2_G_LASTROMANCESAID");
+    int nGetLastRomanceSaid = PS_GetLocalInt(GetModule(), "X2_G_LASTROMANCESAID");
     if (nPlots > nGetLastRomanceSaid)
     {
         nGetLastRomanceSaid++;
-        SetLocalInt(GetModule(), "X2_G_LASTROMANCESAID", nGetLastRomanceSaid);
+        PS_SetLocalInt(GetModule(), "X2_G_LASTROMANCESAID", nGetLastRomanceSaid);
         return TRUE;
     }
     return FALSE;

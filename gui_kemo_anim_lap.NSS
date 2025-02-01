@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ginc_param_const"
 #include "kemo_includes"
 
@@ -18,7 +20,7 @@ void main(string sNumber,string sLaptype)
 		
 	StoreAnimation(sAnimB,1.0f);
 	StoreIdle(sAnimC);
-	SetLocalLocation(oPC,"AnimationLocation",GetLocation(oPC));
+	PS_SetLocalLocation(oPC,"AnimationLocation",GetLocation(oPC));
 	AnimationLoop(oPC,GetLocation(oPC)); // fires the looping idle animation
 	DisplayGuiScreen(oPC, "KEMO_ANIM_ADJUST", FALSE, "kemo_anim_adjust.xml");
 			
@@ -39,7 +41,7 @@ void main(string sNumber,string sLaptype)
 
 		StoreAnimation(sAnimB,1.0f);
 		StoreIdle(sAnimC);
-		SetLocalLocation(oPC,"AnimationLocation",GetLocation(oPC));
+		PS_SetLocalLocation(oPC,"AnimationLocation",GetLocation(oPC));
 		AnimationLoop(oPC,GetLocation(oPC)); // fires the looping idle animation
 	}
 }

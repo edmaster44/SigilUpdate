@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // i_ps_changeself_ac
 /*	Script created by Dedic8ed for use in the Sigil: City of Doors PW
 	   
@@ -12,7 +14,7 @@ void main()
     object oItem    = GetItemActivated();
 	effect eVis		= EffectVisualEffect(VFX_IMP_POLYMORPH);
 	
-	switch (GetLocalInt(oItem,"change"))
+	switch (PS_GetLocalInt(oItem,"change"))
 	
 {
 case 1 :
@@ -24,13 +26,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(244, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 2);
+	PS_SetLocalInt(oItem, "change", 2);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(243, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 2);
+	PS_SetLocalInt(oItem, "change", 2);
 }
 break;
 
@@ -43,13 +45,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(259, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 3);
+	PS_SetLocalInt(oItem, "change", 3);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(258, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 3);
+	PS_SetLocalInt(oItem, "change", 3);
 }
 break;
 
@@ -62,13 +64,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(234, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 4);
+	PS_SetLocalInt(oItem, "change", 4);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(233, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 4);
+	PS_SetLocalInt(oItem, "change", 4);
 }
 break;
 
@@ -81,13 +83,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(236, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 5);
+	PS_SetLocalInt(oItem, "change", 5);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(235, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 5);
+	PS_SetLocalInt(oItem, "change", 5);
 }
 break;
 
@@ -100,13 +102,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(238, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 6);
+	PS_SetLocalInt(oItem, "change", 6);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(237, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 6);
+	PS_SetLocalInt(oItem, "change", 6);
 }
 break;
 
@@ -119,13 +121,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(60, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 7);
+	PS_SetLocalInt(oItem, "change", 7);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(59, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 7);
+	PS_SetLocalInt(oItem, "change", 7);
 }
 break;
 
@@ -138,13 +140,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(240, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 8);
+	PS_SetLocalInt(oItem, "change", 8);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(239, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 8);
+	PS_SetLocalInt(oItem, "change", 8);
 }
 break;
 
@@ -157,13 +159,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(242, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 9);
+	PS_SetLocalInt(oItem, "change", 9);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(241, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 9);
+	PS_SetLocalInt(oItem, "change", 9);
 }
 break;
 
@@ -176,13 +178,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(261, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 10);
+	PS_SetLocalInt(oItem, "change", 10);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(260, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 10);
+	PS_SetLocalInt(oItem, "change", 10);
 }
 break;
 
@@ -195,13 +197,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(250, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 11);
+	PS_SetLocalInt(oItem, "change", 11);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(249, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 11);
+	PS_SetLocalInt(oItem, "change", 11);
 }
 break;
 
@@ -214,13 +216,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(252, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 12);
+	PS_SetLocalInt(oItem, "change", 12);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(251, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 12);
+	PS_SetLocalInt(oItem, "change", 12);
 }
 break;
 
@@ -233,13 +235,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(232, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 13);
+	PS_SetLocalInt(oItem, "change", 13);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(231, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 13);
+	PS_SetLocalInt(oItem, "change", 13);
 }
 break;
 
@@ -252,13 +254,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(245, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 14);
+	PS_SetLocalInt(oItem, "change", 14);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(217, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 14);
+	PS_SetLocalInt(oItem, "change", 14);
 }
 break;
 
@@ -271,13 +273,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(248, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 15);
+	PS_SetLocalInt(oItem, "change", 15);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(216, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 15);
+	PS_SetLocalInt(oItem, "change", 15);
 }
 break;
 
@@ -290,13 +292,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(247, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 16);
+	PS_SetLocalInt(oItem, "change", 16);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(246, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 16);
+	PS_SetLocalInt(oItem, "change", 16);
 }
 break;
 
@@ -309,13 +311,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(256, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 17);
+	PS_SetLocalInt(oItem, "change", 17);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(255, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 17);
+	PS_SetLocalInt(oItem, "change", 17);
 }
 break;
 
@@ -328,13 +330,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(254, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 18);
+	PS_SetLocalInt(oItem, "change", 18);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(253, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 18);
+	PS_SetLocalInt(oItem, "change", 18);
 }
 break;
 
@@ -347,13 +349,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(215, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 19);
+	PS_SetLocalInt(oItem, "change", 19);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(214, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 19);
+	PS_SetLocalInt(oItem, "change", 19);
 }
 break;
 
@@ -366,13 +368,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(257, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 20);
+	PS_SetLocalInt(oItem, "change", 20);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(213, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 20);
+	PS_SetLocalInt(oItem, "change", 20);
 }
 break;
 
@@ -385,13 +387,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(263, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 21);
+	PS_SetLocalInt(oItem, "change", 21);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(262, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 21);
+	PS_SetLocalInt(oItem, "change", 21);
 }
 break;
 
@@ -404,13 +406,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(265, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 22);
+	PS_SetLocalInt(oItem, "change", 22);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(264, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 22);
+	PS_SetLocalInt(oItem, "change", 22);
 }
 break;
 
@@ -423,13 +425,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(267, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 23);
+	PS_SetLocalInt(oItem, "change", 23);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(266, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 23);
+	PS_SetLocalInt(oItem, "change", 23);
 }
 break;
 
@@ -442,13 +444,13 @@ if (GetGender(oPC) == 1)
 {
 	effect ePoly	= EffectPolymorph(269, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 2);
+	PS_SetLocalInt(oItem, "change", 2);
 }
 else
 {
 	effect ePoly	= EffectPolymorph(268, 0, 0);
 	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
-	SetLocalInt(oItem, "change", 2);
+	PS_SetLocalInt(oItem, "change", 2);
 }
 break;
 }

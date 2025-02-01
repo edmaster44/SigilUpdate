@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "x0_i0_transport"
 void bridgeSpawn()
 {
@@ -29,7 +31,7 @@ void bridgeSpawn()
 		{
 			if (GetIsDM(oPC))
 				return;
-			if (GetLocalInt(oPC, "onbridge") == 1)
+			if (PS_GetLocalInt(oPC, "onbridge") == 1)
 			{
 				if (GetIsDM(oPC))
 					continue;
@@ -37,7 +39,7 @@ void bridgeSpawn()
 				{
 					AssignCommand(oPC, ActionSpeakString("<i>The rocks collapse under "+GetName(oPC)+"'s feet and they plunge into the darkness!</i>", 0));
 					TransportToWaypoint(oPC, GetWaypointByTag("wp_limbo_stormwhirlwind"));
-					SetLocalInt(oPC, "onbridge", 0);
+					PS_SetLocalInt(oPC, "onbridge", 0);
 				}
 			}
 				
@@ -167,7 +169,7 @@ int figureCount(int count, int max)
 
 void lightAppear(object self)
 {
-	int lightCount = GetLocalInt(OBJECT_SELF, "lightCount");
+	int lightCount = PS_GetLocalInt(OBJECT_SELF, "lightCount");
 	//SpeakString("spawning light #"+IntToString(lightCount), TALKVOLUME_SHOUT);
 
 	object oLightWP = GetWaypointByTag("wp_limbolight_"+IntToString(lightCount));
@@ -184,7 +186,7 @@ void lightAppear(object self)
 	SetLightActive(oLight, FALSE);
 	DestroyObject(oLightEffect);
 			
-	SetLocalInt(OBJECT_SELF, "lightCount", figureCount(lightCount, 9));	
+	PS_SetLocalInt(OBJECT_SELF, "lightCount", figureCount(lightCount, 9));	
 }
 
 void SpawnCrystals() {
@@ -221,10 +223,10 @@ void main ()
 	}
 		
 	//variable setup
-	int count = GetLocalInt(OBJECT_SELF, "count");
+	int count = PS_GetLocalInt(OBJECT_SELF, "count");
 	if (count <= 0)
-		SetLocalInt(OBJECT_SELF, "count", 1);
-	count = GetLocalInt(OBJECT_SELF, "count");
+		PS_SetLocalInt(OBJECT_SELF, "count", 1);
+	count = PS_GetLocalInt(OBJECT_SELF, "count");
 	int nChance = d100();
 	
 	if (nChance < 50)
@@ -237,8 +239,8 @@ void main ()
 			OpenDoor("_limboearth_", (count-6));
 		else
 			OpenDoor("_limboearth_", (count+6));
-		SetLocalInt(OBJECT_SELF, "count", figureCount(count, 13));
-		count = GetLocalInt(OBJECT_SELF, "count");
+		PS_SetLocalInt(OBJECT_SELF, "count", figureCount(count, 13));
+		count = PS_GetLocalInt(OBJECT_SELF, "count");
 		if (nChance <= 20)
 			OpenDoor("_limboearth_", count);
 	}

@@ -1,16 +1,18 @@
+#include "ff_safevar"
+
 void main()
 {
 object oExit = GetExitingObject();
 if (!GetIsPC(oExit)) return;
 
 string SPAWNED = "nSpawned";
-if(GetLocalInt(OBJECT_SELF, SPAWNED))
+if(PS_GetLocalInt(OBJECT_SELF, SPAWNED))
 {
 object oPortal=GetObjectByTag("ps_plac_port_courtwoe01");
 SetPlotFlag(oPortal,FALSE);
 object oPortalEffect=GetNearestObjectByTag("fx_b_fiery_song_portal");
 DestroyObject(oPortalEffect,30.0f);
 DestroyObject(oPortal,30.0f);
-SetLocalInt(OBJECT_SELF, SPAWNED, FALSE);
+PS_SetLocalInt(OBJECT_SELF, SPAWNED, FALSE);
 }
 } 

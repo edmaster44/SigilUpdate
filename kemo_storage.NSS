@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // called from kemo_storage_conv
 
 // called from kemo_storage_conv
@@ -31,12 +33,12 @@ void GuildStorage(object oPC)
 {
 	int iValid = 0;
 	int iCounter = 0;
-	SetLocalInt(oPC, "kemo_storage_page", 1);
+	PS_SetLocalInt(oPC, "kemo_storage_page", 1);
 		
-	DeleteLocalString(oPC,"kemo_storage_mode_guildname");
-	DeleteLocalString(oPC,"kemo_storage_mode_guild");
-	DeleteLocalString(oPC,"kemo_temp_guildname");
-	DeleteLocalString(oPC,"kemo_temp_accesslevel");
+	PS_DeleteLocalString(oPC,"kemo_storage_mode_guildname");
+	PS_DeleteLocalString(oPC,"kemo_storage_mode_guild");
+	PS_DeleteLocalString(oPC,"kemo_temp_guildname");
+	PS_DeleteLocalString(oPC,"kemo_temp_accesslevel");
 	
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE",FALSE);
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","RetrieveLabelPane",FALSE);
@@ -91,16 +93,16 @@ void GuildStorage(object oPC)
 		}
 	}
 	
-	DeleteLocalString(oPC, "kemo_temp_guildname");
-	DeleteLocalInt(oPC, "kemo_temp_accesslevel");
+	PS_DeleteLocalString(oPC, "kemo_temp_guildname");
+	PS_DeleteLocalInt(oPC, "kemo_temp_accesslevel");
 	
 	if (iValid == 0)
 	{
-	DeleteLocalString(oPC,"kemo_storage_mode_guild");
+	PS_DeleteLocalString(oPC,"kemo_storage_mode_guild");
 	ExecuteScript("gui_kemo_storage_list",oPC);
 	return;
 	}
-	SetLocalString(oPC, "kemo_storage_mode_guild","yes");
+	PS_SetLocalString(oPC, "kemo_storage_mode_guild","yes");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,"Please select which guild.");
 	SetGUIObjectText(oPC,"KEMO_STORAGE","RetrieveButton",-1,"Select guild.");
 }

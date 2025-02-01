@@ -1,10 +1,12 @@
+#include "ff_safevar"
+
 void main(int nVar, string sValue)
 {
 	SendMessageToPC(OBJECT_SELF, "Setting VarIndex "+IntToString(nVar)+" to "+sValue);
 	SetLocalGUIVariable(OBJECT_SELF, "CharacterAppearanceChangeGUI", nVar, sValue);
 	if (nVar == 1)
 	{
-		SetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIGenderID", StringToInt(sValue));
+		PS_SetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIGenderID", StringToInt(sValue));
 		AddScriptParameterInt(0);
 		ExecuteScriptEnhanced("gui_appchange_resetfields", OBJECT_SELF);
 		ClearScriptParams();

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_sigis_inc"
 #include "ps_inc_faction"
 #include "nw_i0_plot"
@@ -19,8 +21,8 @@ void main (int roomNum) {
 		object oItem = CreateItemOnObject("ps_3dragons_key", oPC, 1, "ps_3dragons_key_1", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nRoom 1 \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
-		SetLocalInt(OBJECT_SELF, "room_1", 1);
-		SetLocalString(oItem, "timestamp", TodaysDate());
+		PS_SetLocalInt(OBJECT_SELF, "room_1", 1);
+		PS_SetLocalString(oItem, "timestamp", TodaysDate());
 	}
 	else if (roomNum == 2)
 	{
@@ -28,8 +30,8 @@ void main (int roomNum) {
 		object oItem = CreateItemOnObject("ps_3dragons_key", oPC, 1, "ps_3dragons_key_2", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nRoom 2 \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
-		SetLocalInt(OBJECT_SELF, "room_2", 1);
-		SetLocalString(oItem, "timestamp", TodaysDate());
+		PS_SetLocalInt(OBJECT_SELF, "room_2", 1);
+		PS_SetLocalString(oItem, "timestamp", TodaysDate());
 	}
 	else if (roomNum == 3)
 	{
@@ -37,8 +39,8 @@ void main (int roomNum) {
 		object oItem = CreateItemOnObject("ps_3dragons_key", oPC, 1, "ps_3dragons_key_3", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nRoom 3 \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
-		SetLocalInt(OBJECT_SELF, "room_3", 1);
-		SetLocalString(oItem, "timestamp", TodaysDate());
+		PS_SetLocalInt(OBJECT_SELF, "room_3", 1);
+		PS_SetLocalString(oItem, "timestamp", TodaysDate());
 	}
 	else if (roomNum == 4)
 	{
@@ -46,8 +48,8 @@ void main (int roomNum) {
 		object oItem = CreateItemOnObject("ps_3dragons_key", oPC, 1, "ps_3dragons_key_4", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nRoom 4 \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
-		SetLocalInt(OBJECT_SELF, "room_4", 1);
-		SetLocalString(oItem, "timestamp", TodaysDate());
+		PS_SetLocalInt(OBJECT_SELF, "room_4", 1);
+		PS_SetLocalString(oItem, "timestamp", TodaysDate());
 	}
 }
 

@@ -136,11 +136,11 @@ void main()
                     nDamage = d6(nNumberOfDice)+ nBonus;
 					if (manif.bAugment)
 					nNumberOfDice += 1;
-					if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
+					if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
 					{
 						nDamage = 6 + nBonus;
 					}
-					if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+					if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
 		            {
 		                nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
 		            }

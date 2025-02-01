@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Conversation script for the Debtors Pole
 //Sets up the variables and pretty text
 //3-12-20, Mimi Fearthegn
@@ -65,11 +67,11 @@ int GetGoldReward(object oPC) {
 
 string PrintPrettyWantedPost(object oPC, int nDebtor) {
 
-	string sName = GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_NAME");
-	string sBounty = IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY"));
-	string sAmount = IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY")*3);
-	string sOwedTo = GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO");
-	string sLastSeen = GetLastSeenWardFromTag(GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_LOCATION"));
+	string sName = PS_GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_NAME");
+	string sBounty = IntToString(PS_GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY"));
+	string sAmount = IntToString(PS_GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY")*3);
+	string sOwedTo = PS_GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO");
+	string sLastSeen = GetLastSeenWardFromTag(PS_GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_LOCATION"));
 	
 	string sResult = ""; 
 	int nRand = Random(5)+1;
@@ -90,41 +92,41 @@ void main() {
 
 	object oPC = GetPCSpeaker();
 	string sQuestTag = "ps_quest_debtorspole";
-	int nQuestStage = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
+	int nQuestStage = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
 	
 	string sPrintOut = "";
 	
 	if (nQuestStage <= 0) {
 	
 		struct character char1 = DetailCharacter(Random(2));
-		SetLocalInt(oPC, "DEBTOR_1_GENDER", char1.gender);
-		SetLocalString(oPC, "DEBTOR_1_NAME", char1.firstname+" "+char1.lastname);
+		PS_SetLocalInt(oPC, "DEBTOR_1_GENDER", char1.gender);
+		PS_SetLocalString(oPC, "DEBTOR_1_NAME", char1.firstname+" "+char1.lastname);
 		int nBounty = GetGoldReward(oPC);
-		SetLocalInt(oPC, "DEBTOR_1_BOUNTY", nBounty);
-		SetLocalString(oPC, "DEBTOR_1_OWED_TO", GetMoneyOwedTo());
+		PS_SetLocalInt(oPC, "DEBTOR_1_BOUNTY", nBounty);
+		PS_SetLocalString(oPC, "DEBTOR_1_OWED_TO", GetMoneyOwedTo());
 		
 		string lastSeenTag1 = GetLastSeenAreaTag();
-		SetLocalString(oPC, "DEBTOR_1_LOCATION", lastSeenTag1);
+		PS_SetLocalString(oPC, "DEBTOR_1_LOCATION", lastSeenTag1);
 		
 		struct character char2 = DetailCharacter(Random(2));
-		SetLocalInt(oPC, "DEBTOR_2_GENDER", char2.gender);
-		SetLocalString(oPC, "DEBTOR_2_NAME", char2.firstname+" "+char2.lastname);
+		PS_SetLocalInt(oPC, "DEBTOR_2_GENDER", char2.gender);
+		PS_SetLocalString(oPC, "DEBTOR_2_NAME", char2.firstname+" "+char2.lastname);
 		nBounty = GetGoldReward(oPC);
-		SetLocalInt(oPC, "DEBTOR_2_BOUNTY", nBounty);
-		SetLocalString(oPC, "DEBTOR_2_OWED_TO", GetMoneyOwedTo());
+		PS_SetLocalInt(oPC, "DEBTOR_2_BOUNTY", nBounty);
+		PS_SetLocalString(oPC, "DEBTOR_2_OWED_TO", GetMoneyOwedTo());
 		
 		string lastSeenTag2 = GetLastSeenAreaTag();
-		SetLocalString(oPC, "DEBTOR_2_LOCATION", lastSeenTag2);
+		PS_SetLocalString(oPC, "DEBTOR_2_LOCATION", lastSeenTag2);
 		
 		struct character char3 = DetailCharacter(Random(2));
-		SetLocalInt(oPC, "DEBTOR_3_GENDER", char3.gender);
-		SetLocalString(oPC, "DEBTOR_3_NAME", char3.firstname+" "+char3.lastname);
+		PS_SetLocalInt(oPC, "DEBTOR_3_GENDER", char3.gender);
+		PS_SetLocalString(oPC, "DEBTOR_3_NAME", char3.firstname+" "+char3.lastname);
 		nBounty = GetGoldReward(oPC);
-		SetLocalInt(oPC, "DEBTOR_3_BOUNTY", nBounty);
-		SetLocalString(oPC, "DEBTOR_3_OWED_TO", GetMoneyOwedTo());
+		PS_SetLocalInt(oPC, "DEBTOR_3_BOUNTY", nBounty);
+		PS_SetLocalString(oPC, "DEBTOR_3_OWED_TO", GetMoneyOwedTo());
 		
 		string lastSeenTag3 = GetLastSeenAreaTag();
-		SetLocalString(oPC, "DEBTOR_3_LOCATION", lastSeenTag3);
+		PS_SetLocalString(oPC, "DEBTOR_3_LOCATION", lastSeenTag3);
 		
 		AddJournalQuestEntry(sQuestTag, 1, oPC);
 	

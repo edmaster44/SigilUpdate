@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // ginc_2da
 /*
 	A central location for storing all the 2da constants and data lookup functions.
@@ -180,7 +182,7 @@ string GetCacheVarName(string s2DA, string sColumn, string sEntry)
 int GetCached2DAIndex(string s2DA, string sColumn, string sEntry)
 {
 	string sVarName = GetCacheVarName(s2DA, sColumn, sEntry);
-	int nRow = GetGlobalInt(sVarName);
+	int nRow = PS_GetGlobalInt(sVarName);
 	return (nRow);
 }
 
@@ -192,7 +194,7 @@ string SetCached2DAIndex(string s2DA, string sColumn, int nRow)
 	if (sEntry != "") // sEntry not allowed to be empty string
 	{
 		string sVarName = GetCacheVarName(s2DA, sColumn, sEntry);
-		SetGlobalInt(sVarName, nRow);
+		PS_SetGlobalInt(sVarName, nRow);
 	}		
 	return (sEntry);
 }
@@ -201,7 +203,7 @@ string SetCached2DAIndex(string s2DA, string sColumn, int nRow)
 string GetCached2DAEntry(string s2DA, string sColumn, int nRow)
 {
 	string sVarName = GetCacheVarName(s2DA, sColumn, IntToString(nRow));
-	string sCachedEntry = GetGlobalString(sVarName);
+	string sCachedEntry = PS_GetGlobalString(sVarName);
 	return (sCachedEntry);
 }
 
@@ -213,7 +215,7 @@ void SetCached2DAEntry(string s2DA, string sColumn, int nRow)
 		
 	string sEntry = Get2DAString(s2DA, sColumn, nRow);
 	string sVarName = GetCacheVarName(s2DA, sColumn, IntToString(nRow));
-	SetGlobalString(sVarName, sEntry);
+	PS_SetGlobalString(sVarName, sEntry);
 }
 
 

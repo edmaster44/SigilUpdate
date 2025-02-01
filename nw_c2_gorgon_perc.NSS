@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Gorgon On Perceive
 //:: NW_C2_GORGON_PERC
@@ -53,19 +55,19 @@ void main()
                 GetIsEnemy(oLastPerceived) && (!HENCH_MONSTER_DONT_CHECK_HEARD_MONSTER || GetIsPCGroup(oLastPerceived)))
             {
 //              Jug_Debug(GetName(OBJECT_SELF) + " move to last heard or seen");
-                if (GetLastPerceptionVanished() || !GetLocalInt(OBJECT_SELF, sHenchScoutMode))
+                if (GetLastPerceptionVanished() || !PS_GetLocalInt(OBJECT_SELF, sHenchScoutMode))
                 {
 //                  Jug_Debug(GetName(OBJECT_SELF) + " setting enemy location");
                     SetEnemyLocation(oLastPerceived);
                 }
                 // add check if target - prevents creature from following the target
                 // due to ActionAttack without actually perceiving them
-                if (GetLocalObject(OBJECT_SELF, sHenchLastTarget) == oLastPerceived)
+                if (PS_GetLocalObject(OBJECT_SELF, sHenchLastTarget) == oLastPerceived)
                 {
 //                  Jug_Debug(GetName(OBJECT_SELF) + " calling det combat round, doing clearallactions");
                     ClearAllActions();
-                    DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
-					if (!GetIsObjectValid(GetLocalObject(OBJECT_SELF, "Charge")))
+                    PS_DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
+					if (!GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, "Charge")))
 						{
 //						SendMessageToPC(GetFirstPC(), "Charge Initiated");
 						Charge(oLastPerceived);
@@ -91,7 +93,7 @@ void main()
                 {
 //                  Jug_Debug(GetName(OBJECT_SELF) + " starting combat round in percep");
                     SetFacingPoint(GetPosition(oLastPerceived));
-					if (!GetIsObjectValid(GetLocalObject(OBJECT_SELF, "Charge")))
+					if (!GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, "Charge")))
 						{
 //						SendMessageToPC(GetFirstPC(), "Charge Initiated");
 						Charge(oLastPerceived);
@@ -143,7 +145,7 @@ AssignCommand(OBJECT_SELF, PlaySound("c_dragred_bat1"));
 AssignCommand(OBJECT_SELF, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCharge, OBJECT_SELF, 12.0));
 effect eDust = EffectNWN2SpecialEffectFile("fx_dirt_puff.sef");
 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDust, OBJECT_SELF, 6.0);
-SetLocalObject(OBJECT_SELF, "Charge", oTarget);
+PS_SetLocalObject(OBJECT_SELF, "Charge", oTarget);
 DelayCommand(0.1, ActionForceFollowObject(oTarget, 1.0));
 DelayCommand(12.0, SetCollision(OBJECT_SELF, 1));
 DelayCommand(12.0, SetAILevel(OBJECT_SELF, AI_LEVEL_DEFAULT));

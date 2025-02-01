@@ -1,13 +1,15 @@
+#include "ff_safevar"
+
 #include "nw_i0_plot"
 
 void main () {
 
 	object oPC = GetEnteringObject();
 
-	int iLock = GetGlobalInt("ChirpersEnterLock");
+	int iLock = PS_GetGlobalInt("ChirpersEnterLock");
 	if ( iLock == 0 )
 	{
-		SetGlobalInt("ChirpersEnterLock", 1); // Only allows one clean up at a time.
+		PS_SetGlobalInt("ChirpersEnterLock", 1); // Only allows one clean up at a time.
 		
 		//General / Permanent NPCs
 		if(GetObjectByTag("ps_chirpers_hostess_up") == OBJECT_INVALID)
@@ -141,7 +143,7 @@ void main () {
 		object oSign1 = GetNearestObjectByTag("chirpers_sign_1");
 		object oSign2 = GetNearestObjectByTag("chirpers_sign_2");
 		//Entertainers
-		if(GetObjectByTag("ps_chripers_entertainer1") == OBJECT_INVALID && GetLocalInt(oSign1, "entertainersOff") <= 0) {
+		if(GetObjectByTag("ps_chripers_entertainer1") == OBJECT_INVALID && PS_GetLocalInt(oSign1, "entertainersOff") <= 0) {
 			object oWP1 = GetWaypointByTag("wp_chirpers_entertainer1");
 			object oWP2 = GetWaypointByTag("wp_chirpers_entertainer2");
 			object oWP3 = GetWaypointByTag("wp_chirpers_entertainer3");
@@ -165,5 +167,5 @@ void main () {
 			}
 		}
 	}
-	SetGlobalInt("ChirpersEnterLock", 0);
+	PS_SetGlobalInt("ChirpersEnterLock", 0);
 }

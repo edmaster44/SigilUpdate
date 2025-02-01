@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("NiflheimLock");
+ int iLock = PS_GetGlobalInt("NiflheimLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("NiflheimLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("NiflheimLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_doi_bugbear") == OBJECT_INVALID)
   {
@@ -165,6 +167,6 @@ void main()
   }
      
    
-  SetGlobalInt("NiflheimLock", 0);
+  PS_SetGlobalInt("NiflheimLock", 0);
  }
 }

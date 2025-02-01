@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
    ----------------
    Null Psionics Field - OnExit
@@ -68,7 +70,7 @@ void main()
     // the current one.
     if(GetObjectType(oExit) == OBJECT_TYPE_CREATURE)
     {
-        DeleteLocalInt(oExit, "NullPsionicsField");
+        PS_DeleteLocalInt(oExit, "NullPsionicsField");
 
         RemoveEffectsNPF(oExit);
     }

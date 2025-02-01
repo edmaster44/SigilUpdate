@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -162,7 +164,7 @@ void DoOpenWithWeapons(object oTarget)
     ActionEquipMostDamagingMelee(oTarget);
     ActionWait(1.0);
     HenchAttackObject(oTarget);
-    SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oTarget);
+    PS_SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oTarget);
     ActionDoCommand(VoiceTaskComplete());
 }
 
@@ -172,13 +174,13 @@ void DoDisarmTrap(object oTrap, int bForce = FALSE)
     ClearAllActions();
 
         // TODO spell change makes this not disable traps
-/*    if (GetTrapDisarmable(oTrap) && GetLocalInt(oTrap, "NW_L_IATTEMPTEDTODISARMNOWORK") == 0)
+/*    if (GetTrapDisarmable(oTrap) && PS_GetLocalInt(oTrap, "NW_L_IATTEMPTEDTODISARMNOWORK") == 0)
     {
         InitItemSpellCasting();
         if (GetHasFixedSpell(SPELL_FIND_TRAPS))
         {
             CastFixedSpellOnObject(SPELL_FIND_TRAPS, OBJECT_SELF, 3);
-            SetLocalInt(oTrap, "NW_L_IATTEMPTEDTODISARMNOWORK", 10);
+            PS_SetLocalInt(oTrap, "NW_L_IATTEMPTEDTODISARMNOWORK", 10);
             return;
         }
     } */
@@ -304,16 +306,16 @@ int CheckInventoryFull()
 	int result = IsInventoryFull();
 	if (result)
 	{
-		if (!GetLocalInt(OBJECT_SELF, sGaveInventoryFullMessage))
+		if (!PS_GetLocalInt(OBJECT_SELF, sGaveInventoryFullMessage))
 		{
 			//	"My inventory is full."
 			SpeakStringByStrRef(230418);		
-			SetLocalInt(OBJECT_SELF, sGaveInventoryFullMessage, TRUE);
+			PS_SetLocalInt(OBJECT_SELF, sGaveInventoryFullMessage, TRUE);
 		}
 	}
 	else
 	{
-		DeleteLocalInt(OBJECT_SELF, sGaveInventoryFullMessage);
+		PS_DeleteLocalInt(OBJECT_SELF, sGaveInventoryFullMessage);
 	}
 	return result;
 }
@@ -353,9 +355,9 @@ int CheckForProblemAoESpell()
 			if (!bFriendsAOE || (bCheckFriendsAOE && (persistSpellFlags & HENCH_PERSIST_UNFRIENDLY)))
 			{
 //				Jug_Debug(GetName(OBJECT_SELF) + " stopping due to AoE spell");				
-				if (!GetLocalInt(oAOE, sPersistAoEShown))
+				if (!PS_GetLocalInt(oAOE, sPersistAoEShown))
 				{
-					SetLocalInt(oAOE, sPersistAoEShown, TRUE);				
+					PS_SetLocalInt(oAOE, sPersistAoEShown, TRUE);				
                     SpeakString(sHenchWaitAoECleared);
 				}
 				return TRUE;
@@ -396,20 +398,20 @@ int DoSearchLoop()
 		}
 	}
 
- //   int nCanOpenChests = GetLocalInt(OBJECT_SELF, sHenchAutoOpenChest);
-    object oMasterFailLock = GetLocalObject(OBJECT_SELF, sLockMasterFailed);
-    if (GetLocalInt(oMasterFailLock, "X2_L_BASH_FALSE"))
+ //   int nCanOpenChests = PS_GetLocalInt(OBJECT_SELF, sHenchAutoOpenChest);
+    object oMasterFailLock = PS_GetLocalObject(OBJECT_SELF, sLockMasterFailed);
+    if (PS_GetLocalInt(oMasterFailLock, "X2_L_BASH_FALSE"))
     {
         oMasterFailLock = OBJECT_INVALID;
     }
     int nMasterFailedLock = GetIsObjectValid(oMasterFailLock);
-    int bForceTrap = GetLocalInt(OBJECT_SELF, sForceTrap);
+    int bForceTrap = PS_GetLocalInt(OBJECT_SELF, sForceTrap);
 
     // first check if we have completed something
-    object oTrap = GetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP");
+    object oTrap = PS_GetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP");
     if (GetIsObjectValid(oTrap))
     {
-        DeleteLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP");
+        PS_DeleteLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP");
         if (GetIsTrapped(oTrap))
         {
             int nTrapDC = GetTrapDisarmDC(oTrap);
@@ -417,7 +419,7 @@ int DoSearchLoop()
 
             if (nCanDisarmThisTrap)
             {
-                DeleteLocalInt(oTrap, sDisarmTried);
+                PS_DeleteLocalInt(oTrap, sDisarmTried);
             }
             else
             {
@@ -427,32 +429,32 @@ int DoSearchLoop()
         else
         {
             VoiceTaskComplete();
-            DeleteLocalInt(oTrap, sDisarmTried);
+            PS_DeleteLocalInt(oTrap, sDisarmTried);
         }
     }
 
-    object oLock = GetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_LOCK");
+    object oLock = PS_GetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_LOCK");
     if (GetIsObjectValid(oLock))
     {
-        DeleteLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_LOCK");
+        PS_DeleteLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_LOCK");
         if (GetLocked(oLock))
         {
             int nLockDC = GetLockUnlockDC(oLock);
             int nCanOpenThisLock = nOpenLockSkill + nMaxThievesToolBonus + 20 >= nLockDC;
             if (nCanOpenThisLock)
             {
-                DeleteLocalInt(oLock, sLockTried);
+                PS_DeleteLocalInt(oLock, sLockTried);
             }
             VoiceCuss();
         }
         else
         {
             VoiceTaskComplete();
-            DeleteLocalInt(oLock, sLockTried);
+            PS_DeleteLocalInt(oLock, sLockTried);
         }
     }
     // add check for follow mode
-    if (!nMasterFailedLock && GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag))
+    if (!nMasterFailedLock && PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag))
     {
         return FALSE;
     }
@@ -508,7 +510,7 @@ int DoSearchLoop()
             SetTrapDetectedBy(oCurrent, oRealMaster);
             SetTrapDetectedBy(oCurrent, OBJECT_SELF);
             int nTrapDC = GetTrapDisarmDC(oCurrent);
-            int nTrapTried = GetLocalInt(oCurrent, sDisarmTried);
+            int nTrapTried = PS_GetLocalInt(oCurrent, sDisarmTried);
             int nCanDisarmThisTrap = nAutoDisarm && (nDisarmTrapSkill + 20 >= nTrapDC);
                 // we can't disarm this : play message once to indicate failure
             if (!nAutoDisarm)
@@ -540,10 +542,10 @@ int DoSearchLoop()
                 }
             }
         }
-        else if (nCanOpenLock && nObjectType == OBJECT_TYPE_PLACEABLE && GetLocked(oCurrent) && !GetLockKeyRequired(oCurrent) && !GetLocalInt(oCurrent, "X2_L_BASH_FALSE"))
+        else if (nCanOpenLock && nObjectType == OBJECT_TYPE_PLACEABLE && GetLocked(oCurrent) && !GetLockKeyRequired(oCurrent) && !PS_GetLocalInt(oCurrent, "X2_L_BASH_FALSE"))
         {
             int nLockDC = GetLockUnlockDC(oCurrent);
-            int nLockTried = GetLocalInt(oCurrent, sLockTried);
+            int nLockTried = PS_GetLocalInt(oCurrent, sLockTried);
             int nCanOpenThisLock = nOpenLockSkill + nMaxThievesToolBonus + 20 >= nLockDC;
 
             if (nCanOpenThisLock || nLockTried == 0)
@@ -556,7 +558,7 @@ int DoSearchLoop()
                 }
             }
         }
-        else if (nCanPickUp && nObjectType == OBJECT_TYPE_ITEM && !GetLocalInt(oCurrent, sItemDropped))
+        else if (nCanPickUp && nObjectType == OBJECT_TYPE_ITEM && !PS_GetLocalInt(oCurrent, sItemDropped))
         {
             if (fDistance < fDistanceToDoorOrPlaceable)
             {
@@ -567,11 +569,11 @@ int DoSearchLoop()
         }
         else if (nObjectType == OBJECT_TYPE_PLACEABLE && GetHasInventory(oCurrent))
         {
-//          Jug_Debug(GetName(OBJECT_SELF) + " testing placeable" + GetName(oCurrent) + " tag " + GetTag(oCurrent) + " already searched " + IntToString(GetLocalInt(oCurrent, sMasterShownFlag)));
+//          Jug_Debug(GetName(OBJECT_SELF) + " testing placeable" + GetName(oCurrent) + " tag " + GetTag(oCurrent) + " already searched " + IntToString(PS_GetLocalInt(oCurrent, sMasterShownFlag)));
                 // treat body bags as items on the ground
             if (((GetTag(oCurrent) == "Body Bag") || (GetTag(oCurrent) == "BodyBag") ||
                 (GetStringLength(GetTag(oCurrent)) == 0)) &&
-                !GetLocalInt(oCurrent, sMasterShownFlag))
+                !PS_GetLocalInt(oCurrent, sMasterShownFlag))
             {
                 if (nCanPickUp && !GetLocked(oCurrent))
                 {
@@ -587,10 +589,10 @@ int DoSearchLoop()
             }
  /*           else if (nCanOpenChests && !GetLocked(oCurrent))
             {
-                if (GetLocalInt(oCurrent, "NW_DO_ONCE"))
+                if (PS_GetLocalInt(oCurrent, "NW_DO_ONCE"))
                 {
                     // delete master shown flag if it is there
-                    DeleteLocalInt(oCurrent, sMasterShownFlag);
+                    PS_DeleteLocalInt(oCurrent, sMasterShownFlag);
 
                  // TK should this be done or just leave opened things alone?
                  // maybe just use speak string (i.e. "something has been left behind" ?
@@ -606,7 +608,7 @@ int DoSearchLoop()
                     }
                     *
                 }
-                else if (!GetLocalInt(oCurrent, sMasterShownFlag))
+                else if (!PS_GetLocalInt(oCurrent, sMasterShownFlag))
                 {
                     if (fDistance < fDistanceToDoorOrPlaceable)
                     {
@@ -621,7 +623,7 @@ int DoSearchLoop()
         oCurrent = GetNextObjectInShape(SHAPE_SPHERE, 15.0, oMasterLoc, FALSE, OBJECT_TYPE_DOOR | OBJECT_TYPE_ITEM | OBJECT_TYPE_PLACEABLE | OBJECT_TYPE_TRIGGER);
     }
 
-    float lastDistance = GetLocalFloat(OBJECT_SELF, sLastMoveDistance);
+    float lastDistance = PS_GetLocalFloat(OBJECT_SELF, sLastMoveDistance);
 
     if (GetIsObjectValid(oNearestItemTrap))
     {
@@ -635,7 +637,7 @@ int DoSearchLoop()
         {
             int nTrapDC = GetTrapDisarmDC(oNearestItemTrap);
             int nCanDisarmThisTrap = (nDisarmTrapSkill + 20 >= nTrapDC);
-            int nTrapTried = GetLocalInt(oNearestItemTrap, sDisarmTried);
+            int nTrapTried = PS_GetLocalInt(oNearestItemTrap, sDisarmTried);
 
             if (!nCanDisarmThisTrap && nTrapTried)
             {
@@ -646,7 +648,7 @@ int DoSearchLoop()
             {
  //     Jug_Debug(GetName(OBJECT_SELF) + " doing something oNearestItemTrap " + GetName(oNearestItemTrap));
 
-                SetLocalFloat(OBJECT_SELF, sLastMoveDistance, fDistanceToItemTrap);
+                PS_SetLocalFloat(OBJECT_SELF, sLastMoveDistance, fDistanceToItemTrap);
 
                 int bResult = ActionUseSkill(SKILL_DISABLE_TRAP, oNearestItemTrap);
                 ClearAllActions();
@@ -669,7 +671,7 @@ int DoSearchLoop()
 
                 return DOING_MOVINGTO_ACTION;
             }
-            DeleteLocalFloat(OBJECT_SELF, sLastMoveDistance);
+            PS_DeleteLocalFloat(OBJECT_SELF, sLastMoveDistance);
 
             ClearAllActions();
 			
@@ -680,17 +682,17 @@ int DoSearchLoop()
                 nCanRecoverTraps && (nDisarmTrapSkill + iRecoverTreshold >= nTrapDC) ? SUBSKILL_RECOVERTRAP : 0);
 
 //          Jug_Debug(GetName(OBJECT_SELF) + " dis trap result " + IntToString(bResult));
-            ActionDoCommand(SetLocalInt(oNearestItemTrap, sDisarmTried, TRUE));
-            ActionDoCommand(SetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP", oNearestItemTrap));
+            ActionDoCommand(PS_SetLocalInt(oNearestItemTrap, sDisarmTried, TRUE));
+            ActionDoCommand(PS_SetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP", oNearestItemTrap));
             return TRUE;
         }
         else if (!GetIsObjectValid(oNearestDoorOrPlaceable))
         {
-            if (!GetLocalInt(oNearestItemTrap, sSomethingFishy))
+            if (!PS_GetLocalInt(oNearestItemTrap, sSomethingFishy))
             {
 				//	"There's something interesting near that door."
                	SpeakStringByStrRef(230408);
-                SetLocalInt(oNearestItemTrap, sSomethingFishy, TRUE);
+                PS_SetLocalInt(oNearestItemTrap, sSomethingFishy, TRUE);
             }
         }
     }
@@ -708,11 +710,11 @@ int DoSearchLoop()
 				}
 				if (GetIsObjectValid(oProblemTrapOnGroundFound))
 				{
-				    int nTrapTried = GetLocalInt(oProblemTrapOnGroundFound, sDisarmTried);
+				    int nTrapTried = PS_GetLocalInt(oProblemTrapOnGroundFound, sDisarmTried);
 
                     if (!nTrapTried)
                     {
-                        SetLocalInt(oProblemTrapOnGroundFound, sDisarmTried, TRUE);
+                        PS_SetLocalInt(oProblemTrapOnGroundFound, sDisarmTried, TRUE);
 						//	"I'm not doing anything until these traps are cleared."
                         SpeakStringByStrRef(230414);
                     }
@@ -723,7 +725,7 @@ int DoSearchLoop()
             if (iActionToDo == ACTION_DISABLETRAP)
             {
                 int nTrapDC = GetTrapDisarmDC(oNearestDoorOrPlaceable);
-                int nTrapTried = GetLocalInt(oNearestDoorOrPlaceable, sDisarmTried);
+                int nTrapTried = PS_GetLocalInt(oNearestDoorOrPlaceable, sDisarmTried);
                 int nCanDisarmThisTrap = nCanDisarm && (nDisarmTrapSkill + 20 >= nTrapDC);
 
                     // only attempt to move toward trap if disarm is to be tried
@@ -731,7 +733,7 @@ int DoSearchLoop()
                 {
                     if (fDistanceToDoorOrPlaceable > 2.0 && fDistanceToDoorOrPlaceable != lastDistance)
                     {
-                        SetLocalFloat(OBJECT_SELF, sLastMoveDistance, fDistanceToDoorOrPlaceable);
+                        PS_SetLocalFloat(OBJECT_SELF, sLastMoveDistance, fDistanceToDoorOrPlaceable);
                         ClearAllActions();
                         ActionMoveToObject(oNearestDoorOrPlaceable, FALSE);
                         return DOING_MOVINGTO_ACTION;
@@ -742,14 +744,14 @@ int DoSearchLoop()
             {
                 if (fDistanceToDoorOrPlaceable > 2.0 && fDistanceToDoorOrPlaceable != lastDistance)
                 {
-                    SetLocalFloat(OBJECT_SELF, sLastMoveDistance, fDistanceToDoorOrPlaceable);
+                    PS_SetLocalFloat(OBJECT_SELF, sLastMoveDistance, fDistanceToDoorOrPlaceable);
                     ClearAllActions();
                     ActionMoveToObject(oNearestDoorOrPlaceable, FALSE);
                     return DOING_MOVINGTO_ACTION;
                 }
             }
 
-            DeleteLocalFloat(OBJECT_SELF, sLastMoveDistance);
+            PS_DeleteLocalFloat(OBJECT_SELF, sLastMoveDistance);
             // give a last chance to check out the placeable for a trap (do a full search)
             if (GetIsTrapped(oNearestDoorOrPlaceable) && GetTrapDetectable(oNearestDoorOrPlaceable) &&
                 !GetTrapDetectedBy(oNearestDoorOrPlaceable, oRealMaster))
@@ -775,7 +777,7 @@ int DoSearchLoop()
             {
                 ClearForceOptions();
                 int nTrapDC = GetTrapDisarmDC(oNearestDoorOrPlaceable);
-                int nTrapTried = GetLocalInt(oNearestDoorOrPlaceable, sDisarmTried);
+                int nTrapTried = PS_GetLocalInt(oNearestDoorOrPlaceable, sDisarmTried);
                 int nCanDisarmThisTrap = nCanDisarm && (nDisarmTrapSkill + 20 >= nTrapDC);
                     // only attempt to disable trap if disarm is to be tried
                 if (nCanDisarm && (nCanDisarmThisTrap || !nTrapTried))
@@ -786,8 +788,8 @@ int DoSearchLoop()
 					int iRecoverTreshold = GetHenchAssociateState(HENCH_ASC_NON_SAFE_RECOVER_TRAPS) ? 10 : -1;
                     ActionUseSkill(SKILL_DISABLE_TRAP, oNearestDoorOrPlaceable, GetTrapRecoverable(oNearestDoorOrPlaceable) &&
                         nCanRecoverTraps && (nDisarmTrapSkill + iRecoverTreshold >= nTrapDC) ? SUBSKILL_RECOVERTRAP : 0);
-                    ActionDoCommand(SetLocalInt(oNearestDoorOrPlaceable, sDisarmTried, TRUE));
-                    ActionDoCommand(SetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP", oNearestDoorOrPlaceable));
+                    ActionDoCommand(PS_SetLocalInt(oNearestDoorOrPlaceable, sDisarmTried, TRUE));
+                    ActionDoCommand(PS_SetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_TRAP", oNearestDoorOrPlaceable));
                     return TRUE;
                 }
                 // attempt various means to disarm trap
@@ -803,13 +805,13 @@ int DoSearchLoop()
                 ClearForceOptions();
 
                 int nLockDC = GetLockUnlockDC(oNearestDoorOrPlaceable);
-                int nLockTried = GetLocalInt(oNearestDoorOrPlaceable, sLockTried);
+                int nLockTried = PS_GetLocalInt(oNearestDoorOrPlaceable, sLockTried);
                 int nCanOpenThisLock = nOpenLockSkill + nMaxThievesToolBonus + 20 >= nLockDC;
 
                 if (GetHasSkill(SKILL_OPEN_LOCK) && !GetLockKeyRequired(oNearestDoorOrPlaceable) &&
                     (nCanOpenThisLock || !nLockTried))
                 {
-               //     SetLocalInt(oNearestDoorOrPlaceable, sLockTried, TRUE);
+               //     PS_SetLocalInt(oNearestDoorOrPlaceable, sLockTried, TRUE);
 
                     object oSelThievesTool;
 
@@ -861,8 +863,8 @@ int DoSearchLoop()
 					}					
 					
                     ActionUseSkill(SKILL_OPEN_LOCK, oNearestDoorOrPlaceable, 0, oSelThievesTool);
-                    ActionDoCommand(SetLocalInt(oNearestDoorOrPlaceable, sLockTried, TRUE));
-                    ActionDoCommand(SetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_LOCK", oNearestDoorOrPlaceable));
+                    ActionDoCommand(PS_SetLocalInt(oNearestDoorOrPlaceable, sLockTried, TRUE));
+                    ActionDoCommand(PS_SetLocalObject(OBJECT_SELF, "NW_ASSOCIATES_LAST_LOCK", oNearestDoorOrPlaceable));
                     return TRUE;
                 }
                 else if (nMasterFailedLock)
@@ -876,8 +878,8 @@ int DoSearchLoop()
                 ClearAllActions();
                 ActionPickUpItem(oNearestDoorOrPlaceable);
                 GivePickupMessage(oNearestDoorOrPlaceable, oRealMaster);
-//                SetLocalInt(oNearestDoorOrPlaceable, sGiveToMaster, 1);
-//                SetLocalInt(OBJECT_SELF, sGiveToMaster, 1);
+//                PS_SetLocalInt(oNearestDoorOrPlaceable, sGiveToMaster, 1);
+//                PS_SetLocalInt(OBJECT_SELF, sGiveToMaster, 1);
                 return TRUE;
             }
             if (iActionToDo == ACTION_USEOBJECT)
@@ -909,15 +911,15 @@ int DoSearchLoop()
                             ActionTakeItem(oItem, oNearestDoorOrPlaceable);
                             GivePickupMessage(oItem, oRealMaster);
 							ActionDoCommand(ActionCheckInventoryFull());
-//                            SetLocalInt(oItem, sGiveToMaster, 1);
+//                            PS_SetLocalInt(oItem, sGiveToMaster, 1);
                             nFoundAnItem = TRUE;
                         }
                         oItem = GetNextItemInInventory(oNearestDoorOrPlaceable);
                     }
-                    ActionDoCommand(SetLocalInt(oNearestDoorOrPlaceable, sMasterShownFlag, 1));
+                    ActionDoCommand(PS_SetLocalInt(oNearestDoorOrPlaceable, sMasterShownFlag, 1));
 //                    if (nFoundAnItem)
 //                    {
-//                        SetLocalInt(OBJECT_SELF, sGiveToMaster, 1);
+//                        PS_SetLocalInt(OBJECT_SELF, sGiveToMaster, 1);
 //                    }
                     return TRUE;
                 }
@@ -927,7 +929,7 @@ int DoSearchLoop()
                 {
 					//	"There is something important here you should look at."
 					SpeakStringByStrRef(230415);
-                    SetLocalInt(oNearestDoorOrPlaceable, sMasterShownFlag, 1);
+                    PS_SetLocalInt(oNearestDoorOrPlaceable, sMasterShownFlag, 1);
                     return TRUE;
                 }
                 else
@@ -935,7 +937,7 @@ int DoSearchLoop()
 					//	"Look what I found."
                     SpeakStringByStrRef(230416);
                     AssignCommand(oRealMaster, ActionDoCommand(DoPlaceableObjectAction(oNearestDoorOrPlaceable, PLACEABLE_ACTION_USE)));
-                    SetLocalInt(oNearestDoorOrPlaceable, sMasterShownFlag, 1);
+                    PS_SetLocalInt(oNearestDoorOrPlaceable, sMasterShownFlag, 1);
                     return TRUE;
                 }
             }
@@ -948,7 +950,7 @@ int DoSearchLoop()
     // if associates can ever have thieving skills
 /*
     disable, leave in inventory
-    if (GetLocalInt(OBJECT_SELF, sGiveToMaster))
+    if (PS_GetLocalInt(OBJECT_SELF, sGiveToMaster))
     {
         if (GetDistanceToObject(oRealMaster) > 2.0)
         {
@@ -963,7 +965,7 @@ int DoSearchLoop()
         object oItem = GetFirstItemInInventory();
         while (GetIsObjectValid(oItem))
         {
-            if (GetLocalInt(oItem, sGiveToMaster))
+            if (PS_GetLocalInt(oItem, sGiveToMaster))
             {
                 if (!nAnyItemsFound)
                 {
@@ -973,7 +975,7 @@ int DoSearchLoop()
                 }
                 HenchIdentifyItem(oItem, iMaxGPIdentify);
                 ActionGiveItem(oItem, oRealMaster);
-                DeleteLocalInt(oItem, sGiveToMaster);
+                PS_DeleteLocalInt(oItem, sGiveToMaster);
             }
             oItem = GetNextItemInInventory();
         }
@@ -996,7 +998,7 @@ int DoSearchLoop()
         }
         else
         {
-            DeleteLocalInt(OBJECT_SELF, sGiveToMaster);
+            PS_DeleteLocalInt(OBJECT_SELF, sGiveToMaster);
         }
     }
 */
@@ -1012,12 +1014,12 @@ void main()
         return;
     }
 
-    int nCurAction = GetLocalInt(OBJECT_SELF, "tk_doing_action");
+    int nCurAction = PS_GetLocalInt(OBJECT_SELF, "tk_doing_action");
     if (nCurAction)
     {
         ActionDoCommand(ActionWait(0.5));
         ActionDoCommand(ExecuteScript("hench_o0_act", OBJECT_SELF));
-        SetLocalInt(OBJECT_SELF, "tk_doing_action", FALSE);
+        PS_SetLocalInt(OBJECT_SELF, "tk_doing_action", FALSE);
         return;
     }
 
@@ -1028,20 +1030,20 @@ void main()
         // only if we did something
     if (!result)
     {
-        SetLocalInt(OBJECT_SELF, "tk_doing_action", FALSE);
+        PS_SetLocalInt(OBJECT_SELF, "tk_doing_action", FALSE);
     }
     else
     {
         if (result != DOING_MOVINGTO_ACTION)
         {
-            SetLocalInt(OBJECT_SELF, "tk_doing_action", TRUE);
+            PS_SetLocalInt(OBJECT_SELF, "tk_doing_action", TRUE);
         }
         else
         {
-            SetLocalInt(OBJECT_SELF, "tk_doing_action", FALSE);
+            PS_SetLocalInt(OBJECT_SELF, "tk_doing_action", FALSE);
         }
         ActionDoCommand(ActionWait(0.5));
         ActionDoCommand(ExecuteScript("hench_o0_act", OBJECT_SELF));
     }
-    SetLocalInt(OBJECT_SELF, "tk_action_result", result);
+    PS_SetLocalInt(OBJECT_SELF, "tk_action_result", result);
 }

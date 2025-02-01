@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -11,10 +13,10 @@
 
 void main()
 {
-	int bShowStatus = GetLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
+	int bShowStatus = PS_GetLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
 	if (bShowStatus)
 	{
-		DeleteLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
+		PS_DeleteLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
 	}
     if (!HenchEquipAppropriateWeapons(OBJECT_INVALID, -5., bShowStatus, GetHasEffect(EFFECT_TYPE_POLYMORPH)))
     {

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // gb_comp_conv.nss
 /*
 	Companion OnConversation handler
@@ -29,7 +31,7 @@ void FightIfYouAintBusy( object oTarget );
 
 void main()
 {
-	//int i = GetLocalInt( OBJECT_SELF, sAssociateMasterConditionVarname );
+	//int i = PS_GetLocalInt( OBJECT_SELF, sAssociateMasterConditionVarname );
     //PrettyDebug( "gb_comp_conv: " + GetName(OBJECT_SELF) + " - Associate State: " + IntToHexString(i) );
 	//PrettyDebug( "gb_comp_conv: " + GetName(OBJECT_SELF) + " - Speaker: " + GetName(GetLastSpeaker()) + " - Heard Pattern: " + IntToString(GetListenPatternNumber()) );
 	
@@ -74,7 +76,7 @@ void main()
 					//sOut +=  " who is my friend.";
 					if ( nMatch == 4 ) // ?
 					{
-						oIntruder = GetLocalObject( oShouter, "NW_BLOCKER_INTRUDER" );
+						oIntruder = PS_GetLocalObject( oShouter, "NW_BLOCKER_INTRUDER" );
 					}
 					else if ( nMatch == 5 ) // ?
 					{
@@ -123,7 +125,7 @@ int AbleToTalk( object oSelf )
 	if (GetAssociateState(NW_ASC_MODE_PUPPET))
 		return;
 
-	int bSurrendered = GetLocalInt( OBJECT_SELF, "Generic_Surrender" );
+	int bSurrendered = PS_GetLocalInt( OBJECT_SELF, "Generic_Surrender" );
 	if ( bSurrendered ) return;
 
 	switch ( nShoutIndex )

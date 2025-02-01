@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_achievements"
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("LadyEnterLock");
+ int iLock = PS_GetGlobalInt("LadyEnterLock");
  if ( iLock == 0 )
  {
-  	SetGlobalInt("LadyEnterLock", 1); // Only allows one clean up at a time.
+  	PS_SetGlobalInt("LadyEnterLock", 1); // Only allows one clean up at a time.
 
 	//Merchants
 	if(GetObjectByTag("ps_peddler_ladysward") == OBJECT_INVALID) {
@@ -190,6 +192,6 @@ void main()
   
   	DelayCommand(7.0f, CheckToutAchievement(oPC));
 
-  	SetGlobalInt("LadyEnterLock", 0);
+  	PS_SetGlobalInt("LadyEnterLock", 0);
  }
 }

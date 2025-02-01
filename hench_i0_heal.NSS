@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -208,7 +210,7 @@ void HenchCheckRegeneration()
 	while (curLoopCount <= iLoopLimit && GetIsObjectValid(oFriend))
 	{	
 //		Jug_Debug(GetName(OBJECT_SELF) + " check healing for " + GetName(oFriend));
-		int iCurrent = GetLocalInt(oFriend, sHealingCurrentInfo);
+		int iCurrent = PS_GetLocalInt(oFriend, sHealingCurrentInfo);
 		if ((iCurrent != iHealingNotNeeded) && (GetDistanceBetween(oTestTarget, oFriend) <= fRange))
 		{
 			int iBase = GetMaxHitPoints(oFriend);
@@ -230,14 +232,14 @@ void HenchCheckRegeneration()
 	//		Jug_Debug(GetName(OBJECT_SELF) + " health ratio " + FloatToString(healthRatio) + " healing thres " + FloatToString(gfHealingThreshold) + " threshold damage limit " + FloatToString(IntToFloat(iBase / (bgMeleeAttackers ?  8 : 15))));
 			if ((spellID == SPELLABILITY_SONG_INSPIRE_REGENERATION) &&
 				((GetRacialType(oFriend) == RACIAL_TYPE_CONSTRUCT) || (GetRacialType(oFriend) == RACIAL_TYPE_UNDEAD) ||
-				(GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DYING_OR_DEAF)))
+				(PS_GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DYING_OR_DEAF)))
 			{
 				// has no effect
 			}
 			else
 			{		
-				int posEffects = GetLocalInt(oFriend, curPostiveEffectsStr);
-				int currentRegenerateAmount = GetLocalInt(oFriend, regenerationRateStr);
+				int posEffects = PS_GetLocalInt(oFriend, curPostiveEffectsStr);
+				int currentRegenerateAmount = PS_GetLocalInt(oFriend, regenerationRateStr);
 			
 				if (iHealAmount >= (iBase / giHealingDivisor))
 				{
@@ -260,7 +262,7 @@ void HenchCheckRegeneration()
 							curTargetWeight *= gfHealOthersWeightAdjustment;
 						}
 						curTargetWeight *= (1.0 - (IntToFloat(iCurrent) / IntToFloat(iBase)));
-						if (gbDisableNonHealorCure || (GetLocalInt(oFriend, HENCH_HEAL_SELF_STATE) <= HENCH_HEAL_SELF_CANT) || GetIsPC(oFriend))
+						if (gbDisableNonHealorCure || (PS_GetLocalInt(oFriend, HENCH_HEAL_SELF_STATE) <= HENCH_HEAL_SELF_CANT) || GetIsPC(oFriend))
 						{						
 							if (bIsAreaSpell)
 							{
@@ -283,14 +285,14 @@ void HenchCheckRegeneration()
 					{
 						if ((oFriend == OBJECT_SELF) && (iHealAmount >= (iBase / giHealingDivisor)))
 						{
-							SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_WAIT);
+							PS_SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_WAIT);
 						}
 					}
 				}
 			}
 		}
 	
-		oFriend = GetLocalObject(oFriend, sTargetList);
+		oFriend = PS_GetLocalObject(oFriend, sTargetList);
 		curLoopCount ++;
 	}
     
@@ -362,14 +364,14 @@ void HenchCheckHealSpecial()
 		{
 			return;
 		}	
-		oFriend = GetLocalObject(OBJECT_SELF, sAllySeen);
+		oFriend = PS_GetLocalObject(OBJECT_SELF, sAllySeen);
 	}
 			
 	float maxEffectWeight;
 	object oBestTarget;
 	while (curLoopCount <= iLoopLimit && GetIsObjectValid(oFriend))
 	{	
-		int iCurrent = GetLocalInt(oFriend, sHealingCurrentInfo);
+		int iCurrent = PS_GetLocalInt(oFriend, sHealingCurrentInfo);
 		if ((iCurrent != iHealingNotNeeded) && (GetDistanceToObject(oFriend) <= fRange))
 		{	
 	//		Jug_Debug(GetName(OBJECT_SELF) + " check healing for " + GetName(oFriend));				
@@ -397,7 +399,7 @@ void HenchCheckHealSpecial()
 				}
 				curTargetWeight *= (1.0 - (IntToFloat(iCurrent) / IntToFloat(iBase)));
 				if ((curTargetWeight > maxEffectWeight) &&
-					(gbDisableNonHealorCure || (GetLocalInt(oFriend, HENCH_HEAL_SELF_STATE) <= HENCH_HEAL_SELF_CANT)) || GetIsPC(oFriend))
+					(gbDisableNonHealorCure || (PS_GetLocalInt(oFriend, HENCH_HEAL_SELF_STATE) <= HENCH_HEAL_SELF_CANT)) || GetIsPC(oFriend))
 				{
 					maxEffectWeight = curTargetWeight;
 					oBestTarget = oFriend;
@@ -407,19 +409,19 @@ void HenchCheckHealSpecial()
 			{
 				if ((oFriend == OBJECT_SELF) && (iHealAmount >= (iBase / giHealingDivisor)))
 				{
-					SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_WAIT);
+					PS_SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_WAIT);
 				}
 			}
 		}
 	
-		oFriend = GetLocalObject(oFriend, sAllySeen);
+		oFriend = PS_GetLocalObject(oFriend, sAllySeen);
 		curLoopCount ++;
 	}
 	
 	if (spellID == 1773)	/* Blood of the Martyr */
 	{
 		// reduce weight due to damage to self
-		int currentRegenerateAmount = GetLocalInt(OBJECT_SELF, regenerationRateStr);
+		int currentRegenerateAmount = PS_GetLocalInt(OBJECT_SELF, regenerationRateStr);
 		int currentDamageAmount = 20 - currentRegenerateAmount * giRegenHealScaleAmount;
 		if (currentDamageAmount > 0)
 		{
@@ -496,7 +498,7 @@ void HenchCheckCureCondition()
 	if (saveType & HENCH_SPELL_SAVE_TYPE_NOTSELF_FLAG)
 	{
 //	Jug_Debug(GetName(OBJECT_SELF) + " not self");	
-		oFriend = GetLocalObject(OBJECT_SELF, sTargetList);
+		oFriend = PS_GetLocalObject(OBJECT_SELF, sTargetList);
 	}
 	
 	int iLoopLimit = gsCurrentspInfo.range == 0.0 ? 1 : 10;
@@ -506,7 +508,7 @@ void HenchCheckCureCondition()
 //		Jug_Debug("%%" + GetName(OBJECT_SELF) + " testing cure target " + GetName(oFriend) + " spell " + IntToString(gsCurrentspInfo.spellID));
 		if (GetDistanceBetween(oTestTarget, oFriend) <= fRange)
 		{		
-			int curNegEffects = GetLocalInt(oFriend, curNegativeEffectsStr) & cureMask;
+			int curNegEffects = PS_GetLocalInt(oFriend, curNegativeEffectsStr) & cureMask;
 			if ((curNegEffects != 0) || immunity1)
 			{
 				float curEffectWeight = GetThreatRating(oFriend);
@@ -560,7 +562,7 @@ void HenchCheckCureCondition()
 	            }
 	        }
 		}
-		oFriend = GetLocalObject(oFriend, sTargetList);
+		oFriend = PS_GetLocalObject(oFriend, sTargetList);
 		curLoopCount ++;
 	}
 	
@@ -570,7 +572,7 @@ void HenchCheckCureCondition()
 		{
 			iLoopLimit = 10;
 			int curLoopCount = 1;
-			oFriend = GetLocalObject(OBJECT_SELF, sEnemySeen);
+			oFriend = PS_GetLocalObject(OBJECT_SELF, sEnemySeen);
 			while (curLoopCount <= iLoopLimit && GetIsObjectValid(oFriend))
 			{
 				int curNegEffects = GetCreatureNegEffects(oFriend) & cureMask;
@@ -584,7 +586,7 @@ void HenchCheckCureCondition()
 						oBestTarget = oFriend;
 					}
 				} 
-				oFriend = GetLocalObject(oFriend, sEnemySeen);
+				oFriend = PS_GetLocalObject(oFriend, sEnemySeen);
 			}	
 		}
 		if ((cureMask & HENCH_EFFECT_TYPE_CHARMED) && GetIsObjectValid(ogCharmedAlly))

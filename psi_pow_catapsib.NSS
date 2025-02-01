@@ -46,7 +46,7 @@ void main()
     object oTarget = GetExitingObject();
 
     // Clear variables. Unfortunately, if they are inside another Catapsi effect at this moment, they will be unaffected by it until it's next HB
-    DeleteLocalInt(oTarget, "PRC_IsInCatapsi");
-    DeleteLocalInt(oTarget, "PRC_Catapsi_DC");
-    DeleteLocalObject(oTarget, "PRC_Catapsi_Manifester");
+    PS_DeleteLocalInt(oTarget, "PRC_IsInCatapsi");
+    PS_DeleteLocalInt(oTarget, "PRC_Catapsi_DC");
+    PS_DeleteLocalObject(oTarget, "PRC_Catapsi_Manifester");
 }

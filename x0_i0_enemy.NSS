@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////////
 //:: X0_I0_ENEMY
 /*
@@ -475,9 +477,9 @@ int GetNumberOfMeleeAttackers() {
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, 5.0, GetLocation(OBJECT_SELF), FALSE);
     }
 	if(bEnemyClose) 
-		SetLocalInt(OBJECT_SELF, EVENFLW_AI_CLOSE, TRUE);
+		PS_SetLocalInt(OBJECT_SELF, EVENFLW_AI_CLOSE, TRUE);
 	else 
-		DeleteLocalInt(OBJECT_SELF, EVENFLW_AI_CLOSE);
+		PS_DeleteLocalInt(OBJECT_SELF, EVENFLW_AI_CLOSE);
     return (nCnt);
 }
 

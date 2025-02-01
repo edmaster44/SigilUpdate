@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Default On Attacked
 //:: NW_C2_DEFAULT5
@@ -23,7 +25,7 @@ void main()
 	// I've been attacked so no longer partially focused
 	if (iFocused == FOCUSED_PARTIAL)
 	{
-		SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
+		PS_SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
 	}
     if (iFocused == FOCUSED_FULL)
 	{

@@ -30,9 +30,9 @@ void CreateSimulacrum(object oCaster, location lLoc, float fDur) {
 	object oClone = CreateIllusoryClone(oCaster, SIMULACRUM_TEMPLATE, lLoc);
 	effect eIce = EffectNWN2SpecialEffectFile("fx_telthor_s");
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIce, oClone);
-	SetLocalObject(oCaster, "simulacrum", oClone);
-	SetLocalObject(oClone, "Caster", oCaster);
-	SetLocalFloat(oClone, "Duration", fDur);
+	PS_SetLocalObject(oCaster, "simulacrum", oClone);
+	PS_SetLocalObject(oClone, "Caster", oCaster);
+	PS_SetLocalFloat(oClone, "Duration", fDur);
 	PS_Timestamp_UNIX(oClone, "Simulacrum_Timestamp");
 	
 	SetFirstName(oClone, GetFirstName(oClone)+"'s");

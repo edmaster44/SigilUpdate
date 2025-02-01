@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 const int STRONG_EVIL = 0;
 const int MILD_EVIL = 1;
 const int MILD_NEUTRAL = 2;
@@ -210,12 +212,12 @@ string GetAlignmentEffect(int negative) {
 
 void SetAreaValue(object oPC, string plane) {
 	object oArea = GetArea(oPC);
-	SetLocalString(oArea, "Plane", plane);
+	PS_SetLocalString(oArea, "Plane", plane);
 }
 
 string GetAreaValue(object oPC) {
 	object oArea = GetArea(oPC);
- 	return	GetLocalString(oArea, "Plane");
+ 	return	PS_GetLocalString(oArea, "Plane");
 }
 
 void ApplyPlanarAlignmentEffects(object oPC, string plane, string description) {
@@ -227,11 +229,11 @@ void ApplyPlanarAlignmentEffects(object oPC, string plane, string description) {
 	string sAlign = "<color=red><i>"+GetAlignmentEffect(diff)+"</i></color>";
 	description = "<i>"+description+"</i>";
 	string finalMessage = "";
-	if (GetLocalInt(oPC, plane) == 0)
+	if (PS_GetLocalInt(oPC, plane) == 0)
 		finalMessage = planarInfo+sAlign+"\n\n"+description;
 	else if (description != "")
 		finalMessage = planarInfo+description;
 		
 	SendMessageToPC(oPC, finalMessage);
-	SetLocalInt(oPC, plane, 1);
+	PS_SetLocalInt(oPC, plane, 1);
 }

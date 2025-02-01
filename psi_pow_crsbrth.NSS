@@ -107,7 +107,7 @@ void main()
         for(; nRepeats > 0; nRepeats--)
         {
             // Do the primary target if it hasn't been already affected in the previous iteration
-            if(!GetLocalInt(oTarget, "PRC_CrisisOfBreathMarker"))
+            if(!PS_GetLocalInt(oTarget, "PRC_CrisisOfBreathMarker"))
             {
                 if(CheckRace(manif, oTarget))
                 {
@@ -120,7 +120,7 @@ void main()
                             RunImpact(oTarget, GetLocation(oTarget), oManifester, manif.nSpellID, nDC, 0, FALSE, fDur);
 
                             // Set a marker on the target for next iteration, so the heartbeat won't get run twice
-                            SetLocalInt(oTarget, "PRC_CrisisOfBreathMarker", TRUE);
+                            PS_SetLocalInt(oTarget, "PRC_CrisisOfBreathMarker", TRUE);
                         }
                     }
                     else
@@ -132,7 +132,7 @@ void main()
             }// end if - Target has no been affected yet
         }// end for - Twin Power
     }// end if - Successfull manifestation
-    SetLocalInt(oTarget, "PRC_CrisisOfBreathMarker", FALSE);
+    PS_SetLocalInt(oTarget, "PRC_CrisisOfBreathMarker", FALSE);
 }
 
 int CheckRace(struct manifestation manif, object oTarget)

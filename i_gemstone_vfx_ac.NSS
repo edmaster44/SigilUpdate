@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main () {
 
 	object oPC = GetItemActivator();
@@ -5,13 +7,13 @@ void main () {
 	object oTarget = GetItemActivatedTarget();
 	location lLoc = GetItemActivatedTargetLocation();
 	
-	int nNoDestroy = GetLocalInt(oItem, "DoNotDestroy");
+	int nNoDestroy = PS_GetLocalInt(oItem, "DoNotDestroy");
 	
-	string sEffect = GetLocalString(oItem, "VFX");
+	string sEffect = PS_GetLocalString(oItem, "VFX");
 	if (sEffect == "")
 		return;
 		
-	float fDur = GetLocalFloat(oItem, "Duration");
+	float fDur = PS_GetLocalFloat(oItem, "Duration");
 	int nDuration = DURATION_TYPE_INSTANT;
 	if (fDur > 0.0f)
 		nDuration = DURATION_TYPE_TEMPORARY;

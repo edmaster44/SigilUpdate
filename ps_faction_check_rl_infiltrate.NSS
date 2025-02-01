@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -21,11 +23,11 @@ int StartingConditional()
 	{
 		if (GetTag(oItem) == "ps_faction_badge")
 		{
-			iFaction = GetLocalInt(oItem, "Faction");
+			iFaction = PS_GetLocalInt(oItem, "Faction");
 			if (iFaction == 12)
 			{
 				iBadgeFound = TRUE;
-				if (GetLocalInt(oItem, "Infiltrated") == TRUE)
+				if (PS_GetLocalInt(oItem, "Infiltrated") == TRUE)
 					iInfiltrated = TRUE;	
 			}
 		}

@@ -71,7 +71,7 @@ void main()
         int nSize    = GetCreatureSize(oTarget);
 		effect eVis = EffectNWN2SpecialEffectFile("fx_teleport_new");
 		
-		if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED") || GetLocalInt(oManifester, "DIMENSIONAL_ACHORED"))
+		if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED") || PS_GetLocalInt(oManifester, "DIMENSIONAL_ACHORED"))
 		{
 			SendMessageToPC(oTarget, "A Dimensional Anchor on one or both parties makes it impossible to teleport.");
 			return;	

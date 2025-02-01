@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nw_i0_generic"
 #include "cw_inc_intellect"
 
@@ -9,7 +11,7 @@ void main()
  string devourer="cw_intellectdevourer";//change this tag *IF* your intellect devourer tag is different
  float intellect_reach=3.5f;//How far they can get onto a dead creature
  
- if(GetLocalString(OBJECT_SELF, "DeathScript")=="cw_spawnintellect" ||
+ if(PS_GetLocalString(OBJECT_SELF, "DeathScript")=="cw_spawnintellect" ||
     GetTag(OBJECT_SELF)==devourer)//Check to make sure two guys don't enter the same skull
 	 return;
 	 
@@ -20,7 +22,7 @@ void main()
 	 return;
 	 
  //Also, modders can make sure intellect devourers can't do anything via the variable "CW_NODEVOUR"
- if(GetLocalInt(OBJECT_SELF, "CW_NODEVOUR")==1)
+ if(PS_GetLocalInt(OBJECT_SELF, "CW_NODEVOUR")==1)
   return;
   
  if(/*GetIsPC(OBJECT_SELF) || */

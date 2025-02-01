@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_achievements"
 void main()
 {
@@ -5,25 +7,25 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("HiveEnterLock");
+ int iLock = PS_GetGlobalInt("HiveEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("HiveEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("HiveEnterLock", 1); // Only allows one clean up at a time.
   
-  if (GetLocalInt(OBJECT_SELF, "XaosPicked") == 0)
+  if (PS_GetLocalInt(OBJECT_SELF, "XaosPicked") == 0)
   {
   	int num = Random(5)+1;
 	string sTag = "wp_xaos_out"+IntToString(num);
 	object oWP = GetWaypointByTag(sTag);
 	SetMapPinEnabled(oWP, TRUE);
-	SetLocalString(GetObjectByTag("pl_xaos_out"), "waypoint", sTag);
+	PS_SetLocalString(GetObjectByTag("pl_xaos_out"), "waypoint", sTag);
 	
 	if (num != 1) DestroyObject(GetObjectByTag("pl_xaos_1"));
 	if (num != 2) DestroyObject(GetObjectByTag("pl_xaos_2"));
 	if (num != 3) DestroyObject(GetObjectByTag("pl_xaos_3"));
 	if (num != 4) DestroyObject(GetObjectByTag("pl_xaos_4"));
 	if (num != 5) DestroyObject(GetObjectByTag("pl_xaos_5"));
-  	SetLocalInt(OBJECT_SELF, "XaosPicked", 1);
+  	PS_SetLocalInt(OBJECT_SELF, "XaosPicked", 1);
   }
 
   if(GetObjectByTag("ps_npc_hivepeddler") == OBJECT_INVALID)
@@ -145,6 +147,6 @@ void main()
   
   DelayCommand(7.0f, CheckToutAchievement(oPC));
   
-  SetGlobalInt("HiveEnterLock", 0);
+  PS_SetGlobalInt("HiveEnterLock", 0);
  }
 }

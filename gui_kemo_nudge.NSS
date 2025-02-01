@@ -1,10 +1,12 @@
+#include "ff_safevar"
+
 // KEMO 2/09 --- called from KEMO_ANIM GUI
 #include "kemo_includes"
 
 void main(int iNudge, float fDistance, int iAnimate)
 {
 	object oPC = OBJECT_SELF;
-	string sAnim = GetLocalString(oPC,"StoredAnimation");
+	string sAnim = PS_GetLocalString(oPC,"StoredAnimation");
 	sAnim = sAnim + "i";
 	
 	vector vPC = GetPosition(oPC);

@@ -69,21 +69,21 @@ void main()
 		            //Enter Metamagic conditions
 		 			int nDam = d4(1)+1;
 					
-					if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+					if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 					{
 						nDam = d4(2) + 1;
 					}
 					
-					if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
+					if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
 		            {
 		                nDam = 5; //Damage/Healing is +50%
-						if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 						{
 							nDam = 8;
 						}
 		            }
 					
-					if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+					if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
 		            {
 		                nDam = nDam + (nDam/2); //Damage/Healing is +50%
 		            }

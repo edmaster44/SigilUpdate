@@ -16,14 +16,14 @@ void main()
     object oTarget = GetSpellTargetObject();
 	
 	
-	if (GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 0)
+	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 0)
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 1);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Twin Power");
 	}
 	else
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");
 	}
 	    

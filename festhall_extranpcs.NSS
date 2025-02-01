@@ -21,9 +21,9 @@ void main() {
 		return;
 	TimeStamp();
 	
-	int nSector = GetLocalInt(OBJECT_SELF, "SECTOR");
+	int nSector = PS_GetLocalInt(OBJECT_SELF, "SECTOR");
 	
-	object oEncounter = GetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_"+IntToString(nSector));
+	object oEncounter = PS_GetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_"+IntToString(nSector));
 	if (GetIsObjectValid(oEncounter)) {
 		return;
 	}
@@ -33,67 +33,67 @@ void main() {
 	if (nSector == 1) {
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc1");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talknormal");
+		PS_SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_1", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_1", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc2");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talkcheer");
+		PS_SetLocalString(oSensate, "ANIMATION", "talkcheer");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc3");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talklaugh");
+		PS_SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 	if (nSector == 2) {
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc4");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "sittalk01");
+		PS_SetLocalString(oSensate, "ANIMATION", "sittalk01");
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_2", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_2", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc5");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "sitgroundidle");
+		PS_SetLocalString(oSensate, "ANIMATION", "sitgroundidle");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector1_npc6");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talknormal");
+		PS_SetLocalString(oSensate, "ANIMATION", "talknormal");
 	}
 	if (nSector == 3) {
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc1");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "cooking02");
+		PS_SetLocalString(oSensate, "ANIMATION", "cooking02");
 		SetFirstName(oSensate, "Painter");
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_3", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_3", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc2");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talknormal");
+		PS_SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector2_npc3");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talklaugh");
+		PS_SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 	if (nSector == 4) {
 		oWP = GetWaypointByTag("wp_festhall_sector4_npc1");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talklaugh");
+		PS_SetLocalString(oSensate, "ANIMATION", "talklaugh");
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_4", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_4", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector4_npc2");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talknormal");
+		PS_SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector4_npc3");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "playflute");
+		PS_SetLocalString(oSensate, "ANIMATION", "playflute");
 		
 		effect eFlute = EffectNWN2SpecialEffectFile("fx_hss_flutea");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFlute, oSensate);
@@ -102,57 +102,57 @@ void main() {
 	if (nSector == 5) {
 		oWP = GetWaypointByTag("wp_festhall_sector5_npc1");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "idle");
+		PS_SetLocalString(oSensate, "ANIMATION", "idle");
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_5", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_5", oSensate);
 		
 		oWP = GetWaypointByTag("wp_festhall_sector5_npc2");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talknormal");
+		PS_SetLocalString(oSensate, "ANIMATION", "talknormal");
 		
 		oWP = GetWaypointByTag("wp_festhall_sector5_npc3");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talklaugh");
+		PS_SetLocalString(oSensate, "ANIMATION", "talklaugh");
 	}
 	if (nSector == 6) {
 		oWP = GetWaypointByTag("wp_festhall_sector6_npc1");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "playguitar");
+		PS_SetLocalString(oSensate, "ANIMATION", "playguitar");
 		
 		effect eFlute = EffectNWN2SpecialEffectFile("fx_hss_mandolina");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFlute, oSensate);
 		SetFirstName(oSensate, "Lute Player");
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_6", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_6", oSensate);
 		
 		object oLecture = GetNearestObjectByTag("festhall_lectureschedule");
 		SetLectureTopic(oLecture);
-		SetLocalInt(oLecture, "LECTURE_STAGE", 0);
+		PS_SetLocalInt(oLecture, "LECTURE_STAGE", 0);
 	}
 	if (nSector == 7) {
 		oWP = GetWaypointByTag("wp_operasensate_1");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "drinkbeerfidget");
+		PS_SetLocalString(oSensate, "ANIMATION", "drinkbeerfidget");
 		
 		effect eDrink = EffectNWN2SpecialEffectFile("fx_handr_stein");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrink, oSensate);
 		
 		//Save that we did this
-		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_7", oSensate);
+		PS_SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_7", oSensate);
 		
 		oWP = GetWaypointByTag("wp_operasensate_2");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talklaugh");
+		PS_SetLocalString(oSensate, "ANIMATION", "talklaugh");
 		
 		oWP = GetWaypointByTag("wp_operasensate_3");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "kemo_lapsit_4i");
+		PS_SetLocalString(oSensate, "ANIMATION", "kemo_lapsit_4i");
 		
 		oWP = GetWaypointByTag("wp_operasensate_4");
 		oSensate = CreateRandomSensate(oWP);
-		SetLocalString(oSensate, "ANIMATION", "talkplead");
+		PS_SetLocalString(oSensate, "ANIMATION", "talkplead");
 	}
 
 }
@@ -160,10 +160,10 @@ void main() {
 void SetLectureTopic(object oLecture) {
 
 	switch (Random(2)+1) {
-		case 1: SetFirstName(oLecture, "Lecture Hall\n<i>The Danger of Too Much</i>"); SetLocalInt(oLecture, "LECTURE_TOPIC", 1); break;
-		case 2: SetFirstName(oLecture, "Lecture Hall\n<i>What is a Sensory Stone?</i>"); SetLocalInt(oLecture, "LECTURE_TOPIC", 2); break;
-		case 3: SetFirstName(oLecture, "Lecture Hall\n<i>A Matter of Perspective</i>"); SetLocalInt(oLecture, "LECTURE_TOPIC", 3); break;
-		case 4: SetFirstName(oLecture, "Lecture Hall\n<i>Instinct: A Sixth Sense?</i>"); SetLocalInt(oLecture, "LECTURE_TOPIC", 4); break;
+		case 1: SetFirstName(oLecture, "Lecture Hall\n<i>The Danger of Too Much</i>"); PS_SetLocalInt(oLecture, "LECTURE_TOPIC", 1); break;
+		case 2: SetFirstName(oLecture, "Lecture Hall\n<i>What is a Sensory Stone?</i>"); PS_SetLocalInt(oLecture, "LECTURE_TOPIC", 2); break;
+		case 3: SetFirstName(oLecture, "Lecture Hall\n<i>A Matter of Perspective</i>"); PS_SetLocalInt(oLecture, "LECTURE_TOPIC", 3); break;
+		case 4: SetFirstName(oLecture, "Lecture Hall\n<i>Instinct: A Sixth Sense?</i>"); PS_SetLocalInt(oLecture, "LECTURE_TOPIC", 4); break;
 	}
 
 }
@@ -218,12 +218,12 @@ object CreateRandomSensate(object oWP, object oPC = OBJECT_INVALID) {
 
 	//give them animations and the conversation script
 	SetCreatureScriptsToSet(oNPC, 11);
-	SetLocalInt(oNPC, "responses", 5);
-	SetLocalString(oNPC, "say1", GenerateRandomComments());
-	SetLocalString(oNPC, "say2", GenerateRandomComments());
-	SetLocalString(oNPC, "say3", GenerateRandomComments());
-	SetLocalString(oNPC, "say4", GenerateRandomComments());
-	SetLocalString(oNPC, "say5", GenerateRandomComments());
+	PS_SetLocalInt(oNPC, "responses", 5);
+	PS_SetLocalString(oNPC, "say1", GenerateRandomComments());
+	PS_SetLocalString(oNPC, "say2", GenerateRandomComments());
+	PS_SetLocalString(oNPC, "say3", GenerateRandomComments());
+	PS_SetLocalString(oNPC, "say4", GenerateRandomComments());
+	PS_SetLocalString(oNPC, "say5", GenerateRandomComments());
 	
 	return oNPC;
 }

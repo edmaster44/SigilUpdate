@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // ginc_companion
 /*
 
@@ -336,13 +338,13 @@ int RemoveHenchmanByTag(object oPC, string sHenchmanTag = "")
 void SetHangOutSpot(string sRMRosterName, string sHangOutWPTag)
 {
 	string sVarName = sRMRosterName + "HangOut";
-	SetGlobalString(sVarName, sHangOutWPTag);
+	PS_SetGlobalString(sVarName, sHangOutWPTag);
 }
 
 string GetHangOutSpot(string sRMRosterName)
 {
 	string sVarName = sRMRosterName + "HangOut";
-	string sHangOutWPTag = GetGlobalString(sVarName);
+	string sHangOutWPTag = PS_GetGlobalString(sVarName);
 	return (sHangOutWPTag);
 }
 
@@ -778,7 +780,7 @@ void ForceRestParty( object oPC )
 int GetInfluence(object oCompanion)
 {
 	string sVarInfluence = INFLUENCE_PREFIX + GetTag(oCompanion);
-	int iInfluence = GetGlobalInt(sVarInfluence);
+	int iInfluence = PS_GetGlobalInt(sVarInfluence);
 	return (iInfluence);
 }
 
@@ -790,7 +792,7 @@ void SetInfluence(object oCompanion, int nInfluence)
 	else if ( nInfluence > INFLUENCE_MAX )
 		nInfluence = INFLUENCE_MAX;
 		
-	SetGlobalInt( sVarInfluence, nInfluence);
+	PS_SetGlobalInt( sVarInfluence, nInfluence);
 }
 
 // User defined event handler for possessing a party member
@@ -864,7 +866,7 @@ void HandlePlayerControlChanged( object oCreature )
 // Used to prevent DetermineCombatRound() clearing actions queued during player possession
 int GetHasPlayerQueuedAction( object oCreature )
 {
-	int bQueued = GetLocalInt( oCreature, PLAYER_QUEUED_ACTION );
+	int bQueued = PS_GetLocalInt( oCreature, PLAYER_QUEUED_ACTION );
 	int nAction = GetCurrentAction( oCreature );
 		
 	// Safety: If following, attacking, or no more actions in queue
@@ -879,21 +881,21 @@ int GetHasPlayerQueuedAction( object oCreature )
 // Set player queued action local var to bQueued
 void SetHasPlayerQueuedAction( object oCreature, int bQueued )
 {
-	SetLocalInt( oCreature, PLAYER_QUEUED_ACTION, bQueued );
+	PS_SetLocalInt( oCreature, PLAYER_QUEUED_ACTION, bQueued );
 }
 
 // Return's oCreature's preferred attack target
 // Used in HenchmenCombatRound() to prevent smashing player queued attacks
 object GetPlayerQueuedTarget( object oCreature )
 {
-	object oTarget = GetLocalObject( oCreature, PLAYER_QUEUED_TARGET );
+	object oTarget = PS_GetLocalObject( oCreature, PLAYER_QUEUED_TARGET );
 	return ( oTarget );
 }
 
 // Sets oCreature's preferred attack target to oTarget
 void SetPlayerQueuedTarget( object oCreature, object oTarget )
 {
-	SetLocalObject( oCreature, PLAYER_QUEUED_TARGET, oTarget );
+	PS_SetLocalObject( oCreature, PLAYER_QUEUED_TARGET, oTarget );
 }
 
 // Stores attempted attack target as preferred attack target

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // i_ps_summoner_ac
 /*	Script created by Dedic8ed for use in the Sigil: City of Doors PW
 	   
@@ -20,7 +22,7 @@ void main()
 	object oPC		= GetItemActivator();
 	object oItem	= GetItemActivated();
 //	Collect variable from the calling item to determine what will be summonned
-	string sCritter	= GetLocalString(oItem, "summon");
+	string sCritter	= PS_GetLocalString(oItem, "summon");
 	location oLoc 	= GetItemActivatedTargetLocation();
 	object oBad		= GetFirstItemInInventory(oPC);
 	
@@ -48,7 +50,7 @@ while (GetIsObjectValid(oBad))
 	ChangeToStandardFaction(oHench, STANDARD_FACTION_DEFENDER);
 	AssignCommand(oHench, ClearAllActions());
 	
-	SetLocalObject(oHench, "SUMMONER", oPC);
+	PS_SetLocalObject(oHench, "SUMMONER", oPC);
 		
 //	Add the created creature as a henchman and apply the "henchman" script set
 	object oFeather = CreateItemOnObject("ps_unsummoner", oPC);

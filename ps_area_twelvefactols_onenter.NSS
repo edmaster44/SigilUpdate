@@ -1,10 +1,12 @@
+#include "ff_safevar"
+
 void main() {
 
 	object oPC = GetEnteringObject();
 
-	int iLock = GetGlobalInt("twelveFactolsLock");
+	int iLock = PS_GetGlobalInt("twelveFactolsLock");
 	if ( iLock == 0 ) {
-		SetGlobalInt("twelveFactolsLock", 1); // Only allows one clean up at a time.
+		PS_SetGlobalInt("twelveFactolsLock", 1); // Only allows one clean up at a time.
 		
 		//pigs
    		if(GetObjectByTag("ps_lw_12f_pig") == OBJECT_INVALID) {
@@ -83,7 +85,7 @@ void main() {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_prop_factoldustmen", GetLocation(GetWaypointByTag("wp_prop_factoldustmen")));
 		}
 			
-		SetGlobalInt("twelveFactolsLock", 0);
+		PS_SetGlobalInt("twelveFactolsLock", 0);
  	}
 	
 }

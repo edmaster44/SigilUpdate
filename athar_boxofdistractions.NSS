@@ -1,9 +1,11 @@
+#include "ff_safevar"
+
 //Makes the named target come running to the box
 void ComeRunning(string sTag, object self) {
 	object oTarget = GetNearestObjectByTag(sTag);
 	if (GetIsObjectValid(oTarget) && GetArea(oTarget) == GetArea(self)) {
-		if (!GetIsLocationValid(GetLocalLocation(self, sTag)))
-			SetLocalLocation(self, sTag, GetLocation(oTarget));
+		if (!GetIsLocationValid(PS_GetLocalLocation(self, sTag)))
+			PS_SetLocalLocation(self, sTag, GetLocation(oTarget));
 		AssignCommand(oTarget, ActionForceMoveToObject(self, TRUE, 3.0f));
 		
 	}
@@ -13,7 +15,7 @@ void ComeRunning(string sTag, object self) {
 void GoHome(string sTag, object self) {
 
 	object oTarget = GetNearestObjectByTag(sTag);
-	location myHome = GetLocalLocation(self, sTag);
+	location myHome = PS_GetLocalLocation(self, sTag);
 	if (GetIsLocationValid(myHome))
 		AssignCommand(oTarget, ActionForceMoveToLocation(myHome, FALSE, 3.0f));
 }
@@ -21,7 +23,7 @@ void GoHome(string sTag, object self) {
 //Main function
 void main() {
 
-	int timer = GetLocalInt(OBJECT_SELF, "rounds_in_existence");
+	int timer = PS_GetLocalInt(OBJECT_SELF, "rounds_in_existence");
 	
 	if (timer > 10)
 		DestroyObject(OBJECT_SELF);
@@ -39,6 +41,6 @@ void main() {
 		ComeRunning("ps_npc_hermespriestess", OBJECT_SELF);
 	}
 	
-	SetLocalInt(OBJECT_SELF, "rounds_in_existence", timer+1);
+	PS_SetLocalInt(OBJECT_SELF, "rounds_in_existence", timer+1);
 
 }

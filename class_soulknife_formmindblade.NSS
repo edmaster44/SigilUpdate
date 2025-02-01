@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Form mind blade script
 // By Electrohydra
 // Last edited 8/1/16 by Leoric
@@ -98,11 +100,11 @@ void main()
 	}*/
 	
 	// if psychic strike hasn't yet been initialized, do it now.
-	if (GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC) == 0)
+	if (PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC) == 0)
 	{
 		SendMessageToPC(oPC, "Psychic strike initialized");
-		SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, TRUE);
-		SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, 20);
+		PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, TRUE);
+		PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, 20);
 	}
 	
 	// Activate Mind Shield
@@ -129,9 +131,9 @@ void main()
 	{
 		ACBonus = 0;
 	}
-	SetLocalInt(oPC, VAR_MIND_SHIELD, ACBonus);
+	PS_SetLocalInt(oPC, VAR_MIND_SHIELD, ACBonus);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectACIncrease(ACBonus, AC_SHIELD_ENCHANTMENT_BONUS)), oPC, 0.0f);
 	
 	// Debug psy strike
-	DebugPsychicStrike(GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON), GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC));
+	DebugPsychicStrike(PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON), PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC));
 }

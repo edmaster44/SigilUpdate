@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // zdlg_include_i - DM Friendly Initiative -  Include file for the dynamic conversation
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -246,7 +248,7 @@ string IndexToString( int index, string list )
 // Returns the number of items in the specified list.
 int GetElementCount( string list, object holder = OBJECT_SELF )
 {
-    return( GetLocalInt( holder, LIST_PREFIX + list ) );
+    return( PS_GetLocalInt( holder, LIST_PREFIX + list ) );
 }
 
 // Removes the list element at the specified index.  Returns
@@ -268,22 +270,22 @@ int RemoveElement( int index, string list, object holder = OBJECT_SELF )
         string current = IndexToString( i, list );
         next = IndexToString( i + 1, list );
 
-        SetLocalFloat( holder, current, GetLocalFloat( holder, next ) );
-        SetLocalInt( holder, current, GetLocalInt( holder, next ) );
-        SetLocalLocation( holder, current, GetLocalLocation( holder, next ) );
-        SetLocalObject( holder, current, GetLocalObject( holder, next ) );
-        SetLocalString( holder, current, GetLocalString( holder, next ) );
+        PS_SetLocalFloat( holder, current, PS_GetLocalFloat( holder, next ) );
+        PS_SetLocalInt( holder, current, PS_GetLocalInt( holder, next ) );
+        PS_SetLocalLocation( holder, current, PS_GetLocalLocation( holder, next ) );
+        PS_SetLocalObject( holder, current, PS_GetLocalObject( holder, next ) );
+        PS_SetLocalString( holder, current, PS_GetLocalString( holder, next ) );
         }
 
     // Delete the top item
-    DeleteLocalFloat( holder, next );
-    DeleteLocalInt( holder, next );
-    DeleteLocalLocation( holder, next );
-    DeleteLocalObject( holder, next );
-    DeleteLocalString( holder, next );
+    PS_DeleteLocalFloat( holder, next );
+    PS_DeleteLocalInt( holder, next );
+    PS_DeleteLocalLocation( holder, next );
+    PS_DeleteLocalObject( holder, next );
+    PS_DeleteLocalString( holder, next );
 
     count--;
-    SetLocalInt( holder, LIST_PREFIX + list, count );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count );
 
     return( count );
 }
@@ -308,26 +310,26 @@ int RemoveElements( int start, int end, string list, object holder = OBJECT_SELF
         string current = IndexToString( i, list );
         next = IndexToString( i + removeCount, list );
 
-        SetLocalFloat( holder, current, GetLocalFloat( holder, next ) );
-        SetLocalInt( holder, current, GetLocalInt( holder, next ) );
-        SetLocalLocation( holder, current, GetLocalLocation( holder, next ) );
-        SetLocalObject( holder, current, GetLocalObject( holder, next ) );
-        SetLocalString( holder, current, GetLocalString( holder, next ) );
+        PS_SetLocalFloat( holder, current, PS_GetLocalFloat( holder, next ) );
+        PS_SetLocalInt( holder, current, PS_GetLocalInt( holder, next ) );
+        PS_SetLocalLocation( holder, current, PS_GetLocalLocation( holder, next ) );
+        PS_SetLocalObject( holder, current, PS_GetLocalObject( holder, next ) );
+        PS_SetLocalString( holder, current, PS_GetLocalString( holder, next ) );
         }
 
     // Delete the top items
     for( i = count - removeCount; i < count; i++ )
         {
         next = IndexToString( i, list );
-        DeleteLocalFloat( holder, next );
-        DeleteLocalInt( holder, next );
-        DeleteLocalLocation( holder, next );
-        DeleteLocalObject( holder, next );
-        DeleteLocalString( holder, next );
+        PS_DeleteLocalFloat( holder, next );
+        PS_DeleteLocalInt( holder, next );
+        PS_DeleteLocalLocation( holder, next );
+        PS_DeleteLocalObject( holder, next );
+        PS_DeleteLocalString( holder, next );
         }
 
     count -= removeCount;
-    SetLocalInt( holder, LIST_PREFIX + list, count );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count );
 
     return( count );
 }
@@ -350,24 +352,24 @@ int InsertElement( int index, string list, object holder = OBJECT_SELF )
         string current = IndexToString( i, list );
         next = IndexToString( i + 1, list );
 
-        SetLocalFloat( holder, next, GetLocalFloat( holder, current ) );
-        SetLocalInt( holder, next, GetLocalInt( holder, current ) );
-        SetLocalLocation( holder, next, GetLocalLocation( holder, current ) );
-        SetLocalObject( holder, next, GetLocalObject( holder, current ) );
-        SetLocalString( holder, next, GetLocalString( holder, current ) );
+        PS_SetLocalFloat( holder, next, PS_GetLocalFloat( holder, current ) );
+        PS_SetLocalInt( holder, next, PS_GetLocalInt( holder, current ) );
+        PS_SetLocalLocation( holder, next, PS_GetLocalLocation( holder, current ) );
+        PS_SetLocalObject( holder, next, PS_GetLocalObject( holder, current ) );
+        PS_SetLocalString( holder, next, PS_GetLocalString( holder, current ) );
         }
 
     // Delete the old values from the index since
     // it should be empty now
     string current = IndexToString( index, list );
-    DeleteLocalFloat( holder, current );
-    DeleteLocalInt( holder, current );
-    DeleteLocalLocation( holder, current );
-    DeleteLocalObject( holder, current );
-    DeleteLocalString( holder, current );
+    PS_DeleteLocalFloat( holder, current );
+    PS_DeleteLocalInt( holder, current );
+    PS_DeleteLocalLocation( holder, current );
+    PS_DeleteLocalObject( holder, current );
+    PS_DeleteLocalString( holder, current );
 
     count++;
-    SetLocalInt( holder, LIST_PREFIX + list, count );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count );
 
     return( count );
 }
@@ -385,15 +387,15 @@ int DeleteList( string list, object holder = OBJECT_SELF )
     for( i = 0; i < count; i++ )
         {
         string current = IndexToString( i, list );
-        DeleteLocalFloat( holder, current );
-        DeleteLocalInt( holder, current );
-        DeleteLocalLocation( holder, current );
-        DeleteLocalObject( holder, current );
-        DeleteLocalString( holder, current );
+        PS_DeleteLocalFloat( holder, current );
+        PS_DeleteLocalInt( holder, current );
+        PS_DeleteLocalLocation( holder, current );
+        PS_DeleteLocalObject( holder, current );
+        PS_DeleteLocalString( holder, current );
         }
 
     // Delete the main list info
-    DeleteLocalInt( holder, LIST_PREFIX + list );
+    PS_DeleteLocalInt( holder, LIST_PREFIX + list );
 
     return( count );
 }
@@ -404,9 +406,9 @@ int DeleteList( string list, object holder = OBJECT_SELF )
 int AddStringElement( string item, string list, object holder = OBJECT_SELF )
 {
     int count = GetElementCount( list, holder );
-    SetLocalString( holder, IndexToString( count, list ), item );
+    PS_SetLocalString( holder, IndexToString( count, list ), item );
     count++;
-    SetLocalInt( holder, LIST_PREFIX + list, count );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count );
 
     return( count );
 }
@@ -421,7 +423,7 @@ string GetStringElement( int index, string list, object holder = OBJECT_SELF )
                      + IntToString(index) + "] in list:" + list );
         return( "" );
         }
-    return( GetLocalString( holder, IndexToString( index, list ) ) );
+    return( PS_GetLocalString( holder, IndexToString( index, list ) ) );
 }
 
 // Removes the string item from the end of the list and returns
@@ -431,12 +433,12 @@ string PopStringElement( string list, object holder = OBJECT_SELF )
 {
     int count = GetElementCount( list, holder );
     string index = IndexToString( count - 1, list );
-    string value = GetLocalString( holder, index );
+    string value = PS_GetLocalString( holder, index );
 
     // Delete the values
-    DeleteLocalString( holder, index );
+    PS_DeleteLocalString( holder, index );
 
-    SetLocalInt( holder, LIST_PREFIX + list, count - 1 );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count - 1 );
 
     return( value );
 }
@@ -453,8 +455,8 @@ string ReplaceStringElement( int index, string value, string list, object holder
         return( "" );
         }
 
-    string original = GetLocalString( holder, IndexToString( index, list ) );
-    SetLocalString( holder, IndexToString( index, list ), value );
+    string original = PS_GetLocalString( holder, IndexToString( index, list ) );
+    PS_SetLocalString( holder, IndexToString( index, list ), value );
 
     return( original );
 }
@@ -464,7 +466,7 @@ string GetFirstStringElement( string list, object holder = OBJECT_SELF )
 {
     currentCount = GetElementCount( list, holder );
     currentIndex = 0;
-    return( GetLocalString( holder, IndexToString( currentIndex++, list ) ) );
+    return( PS_GetLocalString( holder, IndexToString( currentIndex++, list ) ) );
 }
 
 // Returns the next item in a list iteration
@@ -472,7 +474,7 @@ string GetNextStringElement()
 {
     if( currentIndex >= currentCount )
         return( "" );
-    return( GetLocalString( currentHolder, IndexToString( currentIndex++, currentList ) ) );
+    return( PS_GetLocalString( currentHolder, IndexToString( currentIndex++, currentList ) ) );
 }
 
 //// OBJECT FUNCTIONS
@@ -481,9 +483,9 @@ string GetNextStringElement()
 int AddObjectElement( object item, string list, object holder = OBJECT_SELF )
 {
     int count = GetElementCount( list, holder );
-    SetLocalObject( holder, IndexToString( count, list ), item );
+    PS_SetLocalObject( holder, IndexToString( count, list ), item );
     count++;
-    SetLocalInt( holder, LIST_PREFIX + list, count );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count );
 
     return( count );
 }
@@ -498,7 +500,7 @@ object GetObjectElement( int index, string list, object holder = OBJECT_SELF )
                      + "] in list:" + list );
         return( OBJECT_INVALID );
         }
-    return( GetLocalObject( holder, IndexToString( index, list ) ) );
+    return( PS_GetLocalObject( holder, IndexToString( index, list ) ) );
 }
 
 // Removes the object item from the end of the list and returns
@@ -508,12 +510,12 @@ object PopObjectElement( string list, object holder = OBJECT_SELF )
 {
     int count = GetElementCount( list, holder );
     string index = IndexToString( count - 1, list );
-    object value = GetLocalObject( holder, index );
+    object value = PS_GetLocalObject( holder, index );
 
     // Delete the values
-    DeleteLocalObject( holder, index );
+    PS_DeleteLocalObject( holder, index );
 
-    SetLocalInt( holder, LIST_PREFIX + list, count - 1 );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count - 1 );
 
     return( value );
 }
@@ -530,8 +532,8 @@ object ReplaceObjectElement( int index, object value, string list, object holder
         return( OBJECT_INVALID );
         }
 
-    object original = GetLocalObject( holder, IndexToString( index, list ) );
-    SetLocalObject( holder, IndexToString( index, list ), value );
+    object original = PS_GetLocalObject( holder, IndexToString( index, list ) );
+    PS_SetLocalObject( holder, IndexToString( index, list ), value );
 
     return( original );
 }
@@ -543,7 +545,7 @@ object GetFirstObjectElement( string list, object holder = OBJECT_SELF )
     currentHolder = holder;
     currentCount = GetElementCount( list, holder );
     currentIndex = 0;
-    return( GetLocalObject( holder, IndexToString( currentIndex++, list ) ) );
+    return( PS_GetLocalObject( holder, IndexToString( currentIndex++, list ) ) );
 }
 
 // Returns the next item in an object list iteration
@@ -551,7 +553,7 @@ object GetNextObjectElement()
 {
     if( currentIndex >= currentCount )
         return( OBJECT_INVALID );
-    return( GetLocalObject( currentHolder, IndexToString( currentIndex++, currentList ) ) );
+    return( PS_GetLocalObject( currentHolder, IndexToString( currentIndex++, currentList ) ) );
 }
 
 //// INT FUNCTIONS
@@ -560,9 +562,9 @@ object GetNextObjectElement()
 int AddIntElement( int item, string list, object holder = OBJECT_SELF )
 {
     int count = GetElementCount( list, holder );
-    SetLocalInt( holder, IndexToString( count, list ), item );
+    PS_SetLocalInt( holder, IndexToString( count, list ), item );
     count++;
-    SetLocalInt( holder, LIST_PREFIX + list, count );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count );
 
     return( count );
 }
@@ -577,7 +579,7 @@ int GetIntElement( int index, string list, object holder = OBJECT_SELF )
                      + "] in list:" + list );
         return( -1 );
         }
-    return( GetLocalInt( holder, IndexToString( index, list ) ) );
+    return( PS_GetLocalInt( holder, IndexToString( index, list ) ) );
 }
 
 // Removes the int item from the end of the list and returns
@@ -587,12 +589,12 @@ int PopIntElement( string list, object holder = OBJECT_SELF )
 {
     int count = GetElementCount( list, holder );
     string index = IndexToString( count - 1, list );
-    int value = GetLocalInt( holder, index );
+    int value = PS_GetLocalInt( holder, index );
 
     // Delete the values
-    DeleteLocalInt( holder, index );
+    PS_DeleteLocalInt( holder, index );
 
-    SetLocalInt( holder, LIST_PREFIX + list, count - 1 );
+    PS_SetLocalInt( holder, LIST_PREFIX + list, count - 1 );
 
     return( value );
 }
@@ -609,8 +611,8 @@ int ReplaceIntElement( int index, int value, string list, object holder = OBJECT
         return( -1 );
         }
 
-    int original = GetLocalInt( holder, IndexToString( index, list ) );
-    SetLocalInt( holder, IndexToString( index, list ), value );
+    int original = PS_GetLocalInt( holder, IndexToString( index, list ) );
+    PS_SetLocalInt( holder, IndexToString( index, list ), value );
 
     return( original );
 }
@@ -620,7 +622,7 @@ int GetFirstIntElement( string list, object holder = OBJECT_SELF )
 {
     currentCount = GetElementCount( list, holder );
     currentIndex = 0;
-    return( GetLocalInt( holder, IndexToString( currentIndex++, list ) ) );
+    return( PS_GetLocalInt( holder, IndexToString( currentIndex++, list ) ) );
 }
 
 // Returns the next item in a list iteration
@@ -628,7 +630,7 @@ int GetNextIntElement()
 {
     if( currentIndex >= currentCount )
         return( -1 );
-    return( GetLocalInt( currentHolder, IndexToString( currentIndex++, currentList ) ) );
+    return( PS_GetLocalInt( currentHolder, IndexToString( currentIndex++, currentList ) ) );
 }
 
 // Returns the current PC speaker for this dialog.
@@ -642,7 +644,7 @@ object GetPcDlgSpeaker()
         // See if we're an item and if we're connected to a PC already.
         // Note: GetItemActivator won't work in multiplayer because other
         //       players will be trouncing on its state.
-        oPC = GetLocalObject( OBJECT_SELF, DLG_ITEM_CONVERSER );
+        oPC = PS_GetLocalObject( OBJECT_SELF, DLG_ITEM_CONVERSER );
         }
     if( oPC == OBJECT_INVALID )
         PrintString( "WARNING: Unable to retrieve a PC speaker." );
@@ -654,13 +656,13 @@ object GetPcDlgSpeaker()
 // be called within a conversation related event.
 void SetCurrentDlgHandlerScript( string script )
 {
-    SetLocalString( GetPcDlgSpeaker(), DLG_CURRENT_HANDLER, script );
+    PS_SetLocalString( GetPcDlgSpeaker(), DLG_CURRENT_HANDLER, script );
 }
 
 // Returns the current dialog handler script for the current conversation.
 string GetCurrentDlgHandlerScript()
 {
-    return( GetLocalString( GetPcDlgSpeaker(), DLG_CURRENT_HANDLER ) );
+    return( PS_GetLocalString( GetPcDlgSpeaker(), DLG_CURRENT_HANDLER ) );
 }
 
 // Returns the current conversation's default dialog handler script if
@@ -668,35 +670,35 @@ string GetCurrentDlgHandlerScript()
 // not a current handler script set.
 string GetDefaultDlgHandlerScript( object oNPC = OBJECT_SELF )
 {
-    return( GetLocalString( oNPC, DLG_HANDLER ) );
+    return( PS_GetLocalString( oNPC, DLG_HANDLER ) );
 }
 
 // Sets the prompt that will be displayed in the dialog
 // when talking to the current speaker.
 void SetDlgPrompt( string prompt )
 {
-    SetLocalString( GetPcDlgSpeaker(), DLG_PROMPT, prompt );
+    PS_SetLocalString( GetPcDlgSpeaker(), DLG_PROMPT, prompt );
 }
 
 // Returns the current prompt that will be displayed in the
 // dialog when talking to the current speaker.
 string GetDlgPrompt()
 {
-    return( GetLocalString( GetPcDlgSpeaker(), DLG_PROMPT ) );
+    return( PS_GetLocalString( GetPcDlgSpeaker(), DLG_PROMPT ) );
 }
 
 // Set to TRUE if the end dialog selection should be shown
 // on every page.  FALSE if not.
 void SetShowEndSelection( int flag )
 {
-    SetLocalInt( GetPcDlgSpeaker(), DLG_HAS_END, flag );
+    PS_SetLocalInt( GetPcDlgSpeaker(), DLG_HAS_END, flag );
 }
 
 // Returns TRUE if the end dialog selection should be shown
 // on every page.  FALSE if not.
 int GetShowEndSelection()
 {
-    return( GetLocalInt( GetPcDlgSpeaker(), DLG_HAS_END ) );
+    return( PS_GetLocalInt( GetPcDlgSpeaker(), DLG_HAS_END ) );
 }
 
 // Sets the list of responses that will be displayed in the
@@ -704,56 +706,56 @@ int GetShowEndSelection()
 void SetDlgResponseList( string listId, object oListHolder )
 {
     object oSpeaker = GetPcDlgSpeaker();
-    SetLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER, oListHolder );
-    SetLocalString( oSpeaker, DLG_RESPONSE_LIST, listId );
+    PS_SetLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER, oListHolder );
+    PS_SetLocalString( oSpeaker, DLG_RESPONSE_LIST, listId );
 }
 
 // Returns the list id for the list of responses that will be
 // displayed in the dialog when talking to the current speaker.
 string GetDlgResponseList()
 {
-    return( GetLocalString( GetPcDlgSpeaker(), DLG_RESPONSE_LIST ) );
+    return( PS_GetLocalString( GetPcDlgSpeaker(), DLG_RESPONSE_LIST ) );
 }
 
 // Returns the dialog type of event that caused the handler
 // script to be executed.
 int GetDlgEventType()
 {
-    return( GetLocalInt( GetPcDlgSpeaker(), DLG_EVENT_TYPE ) );
+    return( PS_GetLocalInt( GetPcDlgSpeaker(), DLG_EVENT_TYPE ) );
 }
 
 // Returns the selected item in a DLG_SELECTION event.
 int GetDlgSelection()
 {
-    return( GetLocalInt( GetPcDlgSpeaker(), DLG_EVENT_SELECTION ) );
+    return( PS_GetLocalInt( GetPcDlgSpeaker(), DLG_EVENT_SELECTION ) );
 }
 
 // Sets a page string that the scripts can use to track
 // progress through the conversation.
 void SetDlgPageString( string page )
 {
-    SetLocalString( GetPcDlgSpeaker(), DLG_PAGE_ID, page );
+    PS_SetLocalString( GetPcDlgSpeaker(), DLG_PAGE_ID, page );
 }
 
 // Returns a page string that the scripts can use to track
 // progress through the conversation.
 string GetDlgPageString()
 {
-    return( GetLocalString( GetPcDlgSpeaker(), DLG_PAGE_ID ) );
+    return( PS_GetLocalString( GetPcDlgSpeaker(), DLG_PAGE_ID ) );
 }
 
 // Sets a page string that the scripts can use to track
 // progress through the conversation.
 void SetDlgPageInt( int page )
 {
-    SetLocalInt( GetPcDlgSpeaker(), DLG_PAGE_ID, page );
+    PS_SetLocalInt( GetPcDlgSpeaker(), DLG_PAGE_ID, page );
 }
 
 // Returns a page string that the scripts can use to track
 // progress through the conversation.
 int GetDlgPageInt()
 {
-    return( GetLocalInt( GetPcDlgSpeaker(), DLG_PAGE_ID ) );
+    return( PS_GetLocalInt( GetPcDlgSpeaker(), DLG_PAGE_ID ) );
 }
 
 // Called to initiate a conversation programmatically between
@@ -767,16 +769,16 @@ void StartDlg( object oPC, object oObjectToConverseWith, string dlgHandler = "",
     string dlg;
 	// Setup the conversation
     if( dlgHandler != "" )
-        SetLocalString( oPC, DLG_CURRENT_HANDLER, dlgHandler );
+        PS_SetLocalString( oPC, DLG_CURRENT_HANDLER, dlgHandler );
 
     if( GetObjectType( oObjectToConverseWith ) == OBJECT_TYPE_ITEM )
         {
         // We presume that only one player can talk to an item at
         // a time... we could check, but we don't.
-        SetLocalObject( oObjectToConverseWith, DLG_ITEM_CONVERSER, oPC );
+        PS_SetLocalObject( oObjectToConverseWith, DLG_ITEM_CONVERSER, oPC );
 
         // We can't actually talk to items so we fudge it.
-        SetLocalObject( oPC, DLG_ITEM, oObjectToConverseWith );
+        PS_SetLocalObject( oPC, DLG_ITEM, oObjectToConverseWith );
         oObjectToConverseWith = oPC;
         }
     
@@ -793,7 +795,7 @@ void StartDlg( object oPC, object oObjectToConverseWith, string dlgHandler = "",
 void EndDlg()
 {
     object oSpeaker = GetPcDlgSpeaker();
-    SetLocalInt( oSpeaker, DLG_STATE, DLG_STATE_ENDED );
+    PS_SetLocalInt( oSpeaker, DLG_STATE, DLG_STATE_ENDED );
 }
 
 // Returns the number of responses that will be displayed
@@ -802,8 +804,8 @@ void EndDlg()
 // so that the functions don't have to retrieve it every time.
 int GetDlgResponseCount( object oSpeaker )
 {
-    object oHolder = GetLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER );
-    string listId = GetLocalString( oSpeaker, DLG_RESPONSE_LIST );
+    object oHolder = PS_GetLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER );
+    string listId = PS_GetLocalString( oSpeaker, DLG_RESPONSE_LIST );
     return( GetElementCount( listId, oHolder ) );
 }
 
@@ -812,58 +814,58 @@ int GetDlgResponseCount( object oSpeaker )
 // so that the functions don't have to retrieve it every time.
 string GetDlgResponse( int num, object oSpeaker )
 {
-    object oHolder = GetLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER );
-    string listId = GetLocalString( oSpeaker, DLG_RESPONSE_LIST );
+    object oHolder = PS_GetLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER );
+    string listId = PS_GetLocalString( oSpeaker, DLG_RESPONSE_LIST );
     return( GetStringElement( num, listId, oHolder ) );
 }
 
 // Sets up the previous/next buttons
 void _SetDlgPreviousNext( object oSpeaker, int hasPrevious, int hasNext )
 {
-    SetLocalInt( oSpeaker, DLG_HAS_PREV, hasPrevious );
-    SetLocalInt( oSpeaker, DLG_HAS_NEXT, hasNext );
+    PS_SetLocalInt( oSpeaker, DLG_HAS_PREV, hasPrevious );
+    PS_SetLocalInt( oSpeaker, DLG_HAS_NEXT, hasNext );
 }
 
 // Returns true if the "previous" entry is turned on in the
 // response list
 int _HasDlgPrevious( object oSpeaker )
 {
-    return( GetLocalInt( oSpeaker, DLG_HAS_PREV ) );
+    return( PS_GetLocalInt( oSpeaker, DLG_HAS_PREV ) );
 }
 
 // Returns true if the "next" entry is turned on in the
 // response list
 int _HasDlgNext( object oSpeaker )
 {
-    return( GetLocalInt( oSpeaker, DLG_HAS_NEXT ) );
+    return( PS_GetLocalInt( oSpeaker, DLG_HAS_NEXT ) );
 }
 
 // Returns true if the "end" entry is turned on in the
 // response list
 int _HasDlgEnd( object oSpeaker )
 {
-    return( GetLocalInt( oSpeaker, DLG_HAS_END ) );
+    return( PS_GetLocalInt( oSpeaker, DLG_HAS_END ) );
 }
 
 // Sets the starting entry for when a response list is
 // broken into multiple pages.
 void _SetDlgFirstResponse( object oSpeaker, int start )
 {
-    SetLocalInt( oSpeaker, DLG_START_ENTRY, start );
+    PS_SetLocalInt( oSpeaker, DLG_START_ENTRY, start );
 }
 
 // Returns the starting entry for when a response list is
 // broken into multiple pages.
 int _GetDlgFirstResponse( object oSpeaker )
 {
-    return( GetLocalInt( oSpeaker, DLG_START_ENTRY ) );
+    return( PS_GetLocalInt( oSpeaker, DLG_START_ENTRY ) );
 }
 
 // Sets the token for the response string and returns true
 // if there is a valid response entry for the specified num.
 int _SetupDlgResponse( int num, object oSpeaker )
 {
-    int nPage = GetLocalInt(oSpeaker, "dlg_num");
+    int nPage = PS_GetLocalInt(oSpeaker, "dlg_num");
 	if (nPage==0)
 		nPage = DLG_CONV_NUM;
 
@@ -906,24 +908,24 @@ int _SetupDlgResponse( int num, object oSpeaker )
 void _CleanupDlg( object oSpeaker )
 {
     // See if the PC was associated with an item
-    object oItem = GetLocalObject( oSpeaker, DLG_ITEM );
+    object oItem = PS_GetLocalObject( oSpeaker, DLG_ITEM );
     if( oItem != OBJECT_INVALID )
         {
-        DeleteLocalObject( oItem, DLG_ITEM_CONVERSER );
+        PS_DeleteLocalObject( oItem, DLG_ITEM_CONVERSER );
         }
 
-    DeleteLocalInt( oSpeaker, DLG_STATE );
-    DeleteLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER );
-    DeleteLocalString( oSpeaker, DLG_RESPONSE_LIST );
-    DeleteLocalString( oSpeaker, DLG_PROMPT );
-    DeleteLocalString( oSpeaker, DLG_CURRENT_HANDLER );
-    DeleteLocalInt( oSpeaker, DLG_PAGE_ID );
-    DeleteLocalString( oSpeaker, DLG_PAGE_ID );
-    DeleteLocalObject( oSpeaker, DLG_ITEM );
-    DeleteLocalInt( oSpeaker, DLG_HAS_PREV );
-    DeleteLocalInt( oSpeaker, DLG_HAS_NEXT );
-    DeleteLocalInt( oSpeaker, DLG_HAS_END );
-    DeleteLocalInt( oSpeaker, DLG_START_ENTRY );
+    PS_DeleteLocalInt( oSpeaker, DLG_STATE );
+    PS_DeleteLocalObject( oSpeaker, DLG_RESPONSE_LIST_HOLDER );
+    PS_DeleteLocalString( oSpeaker, DLG_RESPONSE_LIST );
+    PS_DeleteLocalString( oSpeaker, DLG_PROMPT );
+    PS_DeleteLocalString( oSpeaker, DLG_CURRENT_HANDLER );
+    PS_DeleteLocalInt( oSpeaker, DLG_PAGE_ID );
+    PS_DeleteLocalString( oSpeaker, DLG_PAGE_ID );
+    PS_DeleteLocalObject( oSpeaker, DLG_ITEM );
+    PS_DeleteLocalInt( oSpeaker, DLG_HAS_PREV );
+    PS_DeleteLocalInt( oSpeaker, DLG_HAS_NEXT );
+    PS_DeleteLocalInt( oSpeaker, DLG_HAS_END );
+    PS_DeleteLocalInt( oSpeaker, DLG_START_ENTRY );
 }
 
 // Sends the specified dialog event to the specified NPC
@@ -934,18 +936,18 @@ void _SendDlgEvent( object oSpeaker, int dlgEvent, int selection = -1, object oN
 {
     string dlg = GetCurrentDlgHandlerScript();
     if( oNPC == oSpeaker )
-        oNPC = GetLocalObject( oSpeaker, DLG_ITEM );
+        oNPC = PS_GetLocalObject( oSpeaker, DLG_ITEM );
 
-    SetLocalInt( oSpeaker, DLG_EVENT_TYPE, dlgEvent );
-    SetLocalInt( oSpeaker, DLG_EVENT_SELECTION, selection );
+    PS_SetLocalInt( oSpeaker, DLG_EVENT_TYPE, dlgEvent );
+    PS_SetLocalInt( oSpeaker, DLG_EVENT_SELECTION, selection );
     ExecuteScript( dlg, oNPC );
-    DeleteLocalInt( oSpeaker, DLG_EVENT_TYPE );
-    DeleteLocalInt( oSpeaker, DLG_EVENT_SELECTION );
+    PS_DeleteLocalInt( oSpeaker, DLG_EVENT_TYPE );
+    PS_DeleteLocalInt( oSpeaker, DLG_EVENT_SELECTION );
 }
 
 void _DoDlgSelection( object oSpeaker, int selection, object oNPC = OBJECT_SELF )
 {
-    int nPage = GetLocalInt(oSpeaker, "dlg_num");
+    int nPage = PS_GetLocalInt(oSpeaker, "dlg_num");
     if (nPage==0)
 		nPage = DLG_CONV_NUM;
 	// Check to see if this is one or our internal events
@@ -983,17 +985,17 @@ void _DoDlgSelection( object oSpeaker, int selection, object oNPC = OBJECT_SELF 
 // Returns the current conversation state.
 int _GetDlgState( object oSpeaker )
 {
-    return( GetLocalInt( oSpeaker, DLG_STATE ) );
+    return( PS_GetLocalInt( oSpeaker, DLG_STATE ) );
 }
 
 // Called by the dialog internals to initialize the page
 // and possibly the conversation
 void _InitializePage( object oSpeaker, object oNPC = OBJECT_SELF )
 {
-    int state = GetLocalInt( oSpeaker, DLG_STATE );
+    int state = PS_GetLocalInt( oSpeaker, DLG_STATE );
     string dlg = GetCurrentDlgHandlerScript();
     if( oNPC == oSpeaker )
-        oNPC = GetLocalObject( oSpeaker, DLG_ITEM );
+        oNPC = PS_GetLocalObject( oSpeaker, DLG_ITEM );
 
     // See if the NPC has a dialog file defined
     if( dlg == "" )
@@ -1009,7 +1011,7 @@ void _InitializePage( object oSpeaker, object oNPC = OBJECT_SELF )
         {
         // Then we'll send the conversation init event
         _SendDlgEvent( oSpeaker, DLG_INIT, -1, oNPC );
-        SetLocalInt( oSpeaker, DLG_STATE, DLG_STATE_RUNNING );
+        PS_SetLocalInt( oSpeaker, DLG_STATE, DLG_STATE_RUNNING );
         }
 
     // Send the page initialization event
@@ -1032,15 +1034,15 @@ void ConfigureConv(string sStartPage, object oHolder, int nNum=0, int nShowEnd=F
 			SetDlgPageString(sStartPage);
 	
 	object oSpeaker = GetPcDlgSpeaker();
-	SetLocalObject(OBJECT_SELF, "DLG_HOLDER", oHolder);
+	PS_SetLocalObject(OBJECT_SELF, "DLG_HOLDER", oHolder);
 	
 	if (nNum==0)	nNum = DLG_CONV_NUM;
 	if (nNum>27)	nNum =27;
-	SetLocalInt(oSpeaker, "dlg_num", nNum);
+	PS_SetLocalInt(oSpeaker, "dlg_num", nNum);
 	
 	SetShowEndSelection(nShowEnd);
-	SetLocalString(OBJECT_SELF, "DLG_ABORT", sAbort);
-	SetLocalString(OBJECT_SELF, "DLG_END", sGoodbye);
+	PS_SetLocalString(OBJECT_SELF, "DLG_ABORT", sAbort);
+	PS_SetLocalString(OBJECT_SELF, "DLG_END", sGoodbye);
 }
 
 // StaticPage					FILE: dmfi_inc_conv
@@ -1050,8 +1052,8 @@ void StaticPage(string sPage, string sPrompt, int nColor=-1)
 {
 	if (nColor!=-1) sPrompt = ColorText(sPrompt, nColor);
 	
-	SetLocalString(OBJECT_SELF, sPage + "PROMPT", sPrompt);
-	SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", sPage);
+	PS_SetLocalString(OBJECT_SELF, sPage + "PROMPT", sPrompt);
+	PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", sPage);
 }	
 
 // DynamicPage					FILE: dmfi_inc_conv
@@ -1059,14 +1061,14 @@ void StaticPage(string sPage, string sPrompt, int nColor=-1)
 // is a COLOR constant.
 void DynamicPage(string sPage, string sPrompt, int nColor=-1)
 {
-	object oHolder = GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
-	SetLocalInt(oHolder, "DLG_REFRESH" + sPage, 1);
+	object oHolder = PS_GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
+	PS_SetLocalInt(oHolder, "DLG_REFRESH" + sPage, 1);
 	DeleteList(sPage, oHolder);
 	
 	if (nColor!=-1) sPrompt = ColorText(sPrompt, nColor);
 	
-	SetLocalString(OBJECT_SELF, sPage + "PROMPT", sPrompt);
-	SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", sPage);
+	PS_SetLocalString(OBJECT_SELF, sPage + "PROMPT", sPrompt);
+	PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", sPage);
 }
 
 // AddReply						FILE: dmfi_inc_conv
@@ -1075,11 +1077,11 @@ void DynamicPage(string sPage, string sPrompt, int nColor=-1)
 void AddReply(string sReply, string sTargetPage="", int nColor=-1)
 {
 	string sPage;
-	object oHolder = GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
+	object oHolder = PS_GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
 	
 	if (nColor!=-1) sReply = ColorText(sReply, nColor);
 	
-	sPage = GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
+	sPage = PS_GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
 	AddStringElement(sReply, sPage, oHolder);
 	AddStringElement(sTargetPage, sPage + "TARGET_PAGE", oHolder);
 }	
@@ -1092,10 +1094,10 @@ void AddReplyLinkInt(string sReply, string sTargetPage="", int nColor=-1, int nL
 {
 	int n;
 	string sPage;
-	object oHolder = GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
+	object oHolder = PS_GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
 	if (nColor!=-1) sReply = ColorText(sReply, nColor);
 	
-	sPage = GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
+	sPage = PS_GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
 	n = AddStringElement(sReply, sPage, oHolder);
 	ReplaceIntElement(n-1, nLink, sPage, oHolder);
 	AddStringElement(sTargetPage, sPage + "TARGET_PAGE", oHolder);
@@ -1109,10 +1111,10 @@ void AddReplyLinkObject(string sReply, string sTargetPage="", int nColor=-1, obj
 {
 	int n;
 	string sPage;
-	object oHolder = GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
+	object oHolder = PS_GetLocalObject(OBJECT_SELF, "DLG_HOLDER");
 	if (nColor!=-1) sReply = ColorText(sReply, nColor);
 	
-	sPage = GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
+	sPage = PS_GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
 	n = AddStringElement(sReply, sPage, oHolder);
 	ReplaceObjectElement(n-1, oLink, sPage, oHolder);
 	AddStringElement(sTargetPage, sPage + "TARGET_PAGE", oHolder);
@@ -1124,8 +1126,8 @@ void AddReplyLinkObject(string sReply, string sTargetPage="", int nColor=-1, obj
 // USE:  Will assign last created page to use sString page's replies.
 void UseReplyPage(string sString)
 {
-	string sPage = GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
-	SetLocalString(OBJECT_SELF, sPage + "DLG_REPLY_PAGE", sString);
+	string sPage = PS_GetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE");
+	PS_SetLocalString(OBJECT_SELF, sPage + "DLG_REPLY_PAGE", sString);
 }	
 
 //void main(){}

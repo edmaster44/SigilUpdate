@@ -108,9 +108,9 @@ void main()
             //if(DEBUG) if(!GetIsObjectValid(oAoE)) DoDebug("ERROR: Can't find area of effect for Ectoplasmic Shambler!");
 
             // Store data for use in the AoE scripts
-            SetLocalInt(oAoE, "PRC_EctoShambler_Damage", manif.nManifesterLevel / 2);
+            PS_SetLocalInt(oAoE, "PRC_EctoShambler_Damage", manif.nManifesterLevel / 2);
 
-            SetLocalInt(oAoE, "PRC_EctoShambler_Inited", TRUE);
+            PS_SetLocalInt(oAoE, "PRC_EctoShambler_Inited", TRUE);
         }// end for - Twin Power
     }// end if - Successfull manifestation
 }

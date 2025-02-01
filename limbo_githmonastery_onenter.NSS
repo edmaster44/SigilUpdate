@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 	string sPlane = "Githzerai Monastery";
  	string sDescrip = "The interior of the tower is peaceful, tranquil, and unchanging. The collective will of the tower's inhabitants keeps the chaos at bay.";
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
- 	int iLock = GetGlobalInt("Limbo_Githlock");
+ 	int iLock = PS_GetGlobalInt("Limbo_Githlock");
 	if ( iLock == 0 )
 	{
-		  SetGlobalInt("Limbo_Githlock", 1); // Only allows one clean up at a time.
+		  PS_SetGlobalInt("Limbo_Githlock", 1); // Only allows one clean up at a time.
 		
 		  if(GetObjectByTag("ps_npc_limbogith1") == OBJECT_INVALID)
 		  {
@@ -47,6 +49,6 @@ void main()
 			   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_limbogith6", lSpawnpoint);    
 		  }
 		  
-		  SetGlobalInt("Limbo_Githlock", 0);
+		  PS_SetGlobalInt("Limbo_Githlock", 0);
 	}
 }

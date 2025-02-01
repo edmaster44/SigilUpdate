@@ -15,10 +15,10 @@ void main() {
 	string sWPTag;
 	object oWP;
 	
- 	int iLock = GetGlobalInt(lockVariable);
+ 	int iLock = PS_GetGlobalInt(lockVariable);
  	if ( iLock == 0 )
  	{
-  		SetGlobalInt(lockVariable, 1); // Makes sure the script doesn't retrigger while still running
+  		PS_SetGlobalInt(lockVariable, 1); // Makes sure the script doesn't retrigger while still running
   
 		//*******************************************************
 		sNPCTag = "ps_ooc_mimic"; //the resref of the creature to spawn
@@ -156,6 +156,6 @@ void main() {
 		//*******************************************************
 		
     
-  		SetGlobalInt(lockVariable, 0); //release area for future spawning
+  		PS_SetGlobalInt(lockVariable, 0); //release area for future spawning
  	}
 }

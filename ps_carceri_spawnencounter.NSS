@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Handles the spawning of the stone serpents or treasure chests in carceri
 //nAction = 1 --> serpent encounter
 //nAction = 2 --> treasure chest
@@ -26,8 +28,8 @@ void main (int nAction) {
   		float avg = PS_GetAvgPartylevel(oPC,PS_GetMaxPartylevel(oPC));
 		string mod = "";
 		
-		float low = IntToFloat(GetLocalInt(OBJECT_SELF,"LOW"));
-  		float high = IntToFloat(GetLocalInt(OBJECT_SELF,"HIGH"));
+		float low = IntToFloat(PS_GetLocalInt(OBJECT_SELF,"LOW"));
+  		float high = IntToFloat(PS_GetLocalInt(OBJECT_SELF,"HIGH"));
 		if(avg>low && avg<high && iDiff == DIFFNORM)
 		   mod="2";
 		else if(avg>=high || iDiff == DIFFHIGH || iDiff == DIFFVERY)
@@ -50,7 +52,7 @@ void main (int nAction) {
 		
 		int nCR = PickCRFromTreasureLevel(TREASURE_QUEST_LOW);
 		object oChest = CreateObject(OBJECT_TYPE_PLACEABLE, "ps_carceri_treasurecache", GetLocation(OBJECT_SELF));
-		SetLocalInt(oChest, "CR", nCR);
+		PS_SetLocalInt(oChest, "CR", nCR);
 		
 	} else if (nAction == 3) { //wizard encounter
 	
@@ -69,8 +71,8 @@ void main (int nAction) {
   		float avg = PS_GetAvgPartylevel(oPC,PS_GetMaxPartylevel(oPC));
 		string mod = "";
 		
-		float low = IntToFloat(GetLocalInt(OBJECT_SELF,"LOW"));
-  		float high = IntToFloat(GetLocalInt(OBJECT_SELF,"HIGH"));
+		float low = IntToFloat(PS_GetLocalInt(OBJECT_SELF,"LOW"));
+  		float high = IntToFloat(PS_GetLocalInt(OBJECT_SELF,"HIGH"));
 		if(avg>low && avg<high && iDiff == DIFFNORM)
 		   mod="2";
 		else if(avg>=high || iDiff == DIFFHIGH || iDiff == DIFFVERY)
@@ -115,9 +117,9 @@ void main (int nAction) {
 			effect eShield = EffectDamageShield(5, DAMAGE_BONUS_1d6, DAMAGE_TYPE_FIRE);
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShield, oPartyMember);
 			
-			if (GetLocalInt(oPartyMember, "Hyperions_Reward") == 0) {
+			if (PS_GetLocalInt(oPartyMember, "Hyperions_Reward") == 0) {
 				GenerateQuestRewardOnTarget(oPartyMember, TREASURE_EPIC, TRUE);
-				SetLocalInt(oPartyMember, "Hyperions_Reward", 1);
+				PS_SetLocalInt(oPartyMember, "Hyperions_Reward", 1);
 			}
 			
         	oPartyMember = GetNextFactionMember(oPC, TRUE);	    

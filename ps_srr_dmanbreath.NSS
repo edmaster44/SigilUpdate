@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Dragonman breath weapon
 
 #include "NW_I0_SPELLS"
@@ -22,7 +24,7 @@ void main()
 	
 	if(GetIsObjectValid(oItem))
 	{
-		nType = GetLocalInt(oItem, "DRAGONTYPE");
+		nType = PS_GetLocalInt(oItem, "DRAGONTYPE");
 	}
 	else
 	{

@@ -233,7 +233,7 @@ void HandleTargetCreature( object oTarget )
 	object oTarget2;
 	float fDelay2 = 2.0f;
 	
-	// SetLocalInt(oTarget, "MeteorSwarmPrimaryTarget", 1);
+	// PS_SetLocalInt(oTarget, "MeteorSwarmPrimaryTarget", 1);
 	
 	//Travel Time Calculation for Main Target
 	lTargetLoc = GetLocation( oTarget );
@@ -289,7 +289,7 @@ void HandleTargetCreature( object oTarget )
 	
     while ( GetIsObjectValid(oTarget2) )
     {
-		//if (GetLocalInt(oTarget2, "MeteorSwarmPrimaryTarget") == 0)
+		//if (PS_GetLocalInt(oTarget2, "MeteorSwarmPrimaryTarget") == 0)
 		if (oTarget2 != oTarget)
 		{			
 	    	if ( spellsIsTarget(oTarget2, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
@@ -328,5 +328,5 @@ void HandleTargetCreature( object oTarget )
 	oTarget2 = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, lTargetLoc);	
 	}
 		
-//	SetLocalInt(oTarget, "MeteorSwarmPrimaryTarget", 0);
+//	PS_SetLocalInt(oTarget, "MeteorSwarmPrimaryTarget", 0);
 }

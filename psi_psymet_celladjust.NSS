@@ -69,12 +69,12 @@ void main()
 		}
 	
 	    int nBonus = 1;
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 		{
 			nBonus = 2;
 		}
 	    float fDuration = RoundsToSeconds(10+nCasterLevel); 
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 		{
 			fDuration = fDuration * 2;
 		}

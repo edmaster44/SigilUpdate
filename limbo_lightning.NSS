@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main ()
 {
 	//Should this even been running?
@@ -10,7 +12,7 @@ void main ()
 
 	object oLight = GetNearestObjectByTag("lt_storm_limbo");
 	object oThunder = GetNearestObjectByTag("sound_thunder");
-	int myCount = GetLocalInt(OBJECT_SELF, "myCount");
+	int myCount = PS_GetLocalInt(OBJECT_SELF, "myCount");
 	int nRoll = d6();
 	float nDec = ((d10())/5.0);
 	if (myCount == nRoll)
@@ -20,10 +22,10 @@ void main ()
 		DelayCommand((nDec+0.5), SetLightActive(oLight, FALSE));
 		DelayCommand((nDec+3.0), SoundObjectStop(oThunder));
 	}
-	SetLocalInt(OBJECT_SELF, "myCount", myCount+1);
-	myCount = GetLocalInt(OBJECT_SELF, "myCount");
+	PS_SetLocalInt(OBJECT_SELF, "myCount", myCount+1);
+	myCount = PS_GetLocalInt(OBJECT_SELF, "myCount");
 	if (myCount > 6)
-		SetLocalInt(OBJECT_SELF, "myCount", 0);
+		PS_SetLocalInt(OBJECT_SELF, "myCount", 0);
 		
 //	SpeakString("LIGHTNING!", TALKVOLUME_SHOUT);
 }

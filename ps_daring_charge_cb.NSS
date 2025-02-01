@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "X0_I0_SPELLS"
 
 int FEAT_RECKLESS_CHARGE = 15001;
@@ -89,8 +91,8 @@ void doKnockdown(object oCaster, object oTarget, int hasHeavyCharge)
 void main()
 {
 	object oCaster = OBJECT_SELF;
-	object oTarget = GetLocalObject(oCaster, "DARING_CHARGE_TARGET_OBJ");
-	DeleteLocalObject(oCaster, "DARING_CHARGE_TARGET_OBJ");
+	object oTarget = PS_GetLocalObject(oCaster, "DARING_CHARGE_TARGET_OBJ");
+	PS_DeleteLocalObject(oCaster, "DARING_CHARGE_TARGET_OBJ");
 
 	float fDist = GetDistanceToObject(oTarget);
 

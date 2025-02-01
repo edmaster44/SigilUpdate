@@ -1,11 +1,13 @@
+#include "ff_safevar"
+
 
 void main()
 {
 
- int iLock = GetGlobalInt("HarmYardEnterLock");
+ int iLock = PS_GetGlobalInt("HarmYardEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("HarmYardEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("HarmYardEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_peddler_harmonium") == OBJECT_INVALID)
   {
@@ -42,6 +44,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_harmoniumyardguard4", lSpawnpoint);    
   }  
  
-  SetGlobalInt("HarmYardEnterLock", 0);
+  PS_SetGlobalInt("HarmYardEnterLock", 0);
  }
 }

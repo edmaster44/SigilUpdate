@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -52,7 +54,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
             }
         }		
 	    // fight defensively
-	    if (!GetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED))
+	    if (!PS_GetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED))
 		{	
 			if (GetHasFeat(FEAT_IMPROVED_COMBAT_EXPERTISE))
 			{		
@@ -105,9 +107,9 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
 //                    ClearAllActions();
                     ActionMoveToLocation(destLocation, TRUE);
 
-                    if (!GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
+                    if (!PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
                     {
-                        SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
+                        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
                         DelayCommand(2.0, HenchStartCombatRoundAfterDelay(oTarget));
                     }
 
@@ -117,7 +119,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
                 else
                 {
 //					Jug_Debug(GetName(OBJECT_SELF ) + " setting location failed for " + GetName(oTarget));
-                    SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
+                    PS_SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
                 }
             }
         }
@@ -125,9 +127,9 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
 
 	if (!bRangedWeapon && (GetDistanceToObject(oTarget) > 7.5))
 	{	
-		if (!GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
+		if (!PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
 		{
-			SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
+			PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
 			DelayCommand(2.0, HenchStartCombatRoundAfterDelay(oTarget));
 		}
 	}
@@ -191,7 +193,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
     int iAC = GetAC(oTarget);
     int iNewBAB = GetBaseAttackBonus(OBJECT_SELF) + 5 + d4(2);
 
-    int bCombatModeUseEnabled = !GetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED);
+    int bCombatModeUseEnabled = !PS_GetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED);
 	
 	int bCanUseFlurryOfBlows = GetHasFeat(FEAT_FLURRY_OF_BLOWS) &&
 		(!GetIsObjectValid(oRightWeapon) ||
@@ -284,7 +286,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
 
     int bStartOfRound = (GetCurrentAction() == ACTION_INVALID);
 	int bAllowLimitedUseFeats = bAllowFeatUse && bStartOfRound &&
-		!(GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_ABILITY);
+		!(PS_GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_ABILITY);
     if (bAllowLimitedUseFeats && (GetDistanceToObject(oTarget) < 5.0))
     {
 //		Jug_Debug(GetName(OBJECT_SELF) + " check smite " + IntToString(iNewBAB - iAC));
@@ -385,7 +387,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
             iSizeThreshold = CREATURE_SIZE_MEDIUM;
         }
 
-        object oTestTarget = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+        object oTestTarget = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
         while (GetIsObjectValid(oTestTarget))
         {
             if ((GetDistanceToObject(oTestTarget) <= fThresholdDistance) &&
@@ -397,7 +399,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
                     break;
                 }
             }
-            oTestTarget = GetLocalObject(oTestTarget, sEnemyLineOfSight);
+            oTestTarget = PS_GetLocalObject(oTestTarget, sEnemyLineOfSight);
         }
 //      Jug_Debug(GetName(OBJECT_SELF) + " num attacks " + IntToString((GetBaseAttackBonus(OBJECT_SELF) + 1) / 5) + " count is " + IntToString(iAttackThreshold));
         if (iAttackThreshold <= 0)
@@ -686,7 +688,7 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
 void ActionContinueMeleeAttack(object oTarget, float fThresholdDistance, int iCreatureType, int bAllowFeatUse, int iCallNumber)
 {
 //  Jug_Debug(GetName(OBJECT_SELF) + " in continue melee attack vs. " + GetName(oTarget));
-    if (GetLocalInt(OBJECT_SELF, "UseRangedWeapons"))
+    if (PS_GetLocalInt(OBJECT_SELF, "UseRangedWeapons"))
     {
         if (!EquipRangedWeapon(oTarget, iCreatureType == 1, iCallNumber))
         {
@@ -704,7 +706,7 @@ void ActionContinueMeleeAttack(object oTarget, float fThresholdDistance, int iCr
             return;
         }
     }
-    if (HenchDoTalentMeleeAttack(oTarget, fThresholdDistance, iCreatureType, bAllowFeatUse) && !GetLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED))
+    if (HenchDoTalentMeleeAttack(oTarget, fThresholdDistance, iCreatureType, bAllowFeatUse) && !PS_GetLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED))
 	{
 		ActionDoCommand(HenchMoveAndDetermineCombatRound(oTarget));
 	}
@@ -756,7 +758,7 @@ int HenchTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCreatu
     else if (GetHenchAssociateState(HENCH_ASC_MELEE_DISTANCE_ANY))
     {
 //		Jug_Debug(GetName(OBJECT_SELF) + " check attack distance any");
-        object oFriend = GetLocalObject(OBJECT_SELF, sAllyLineOfSight);
+        object oFriend = PS_GetLocalObject(OBJECT_SELF, sAllyLineOfSight);
         while (GetIsObjectValid(oFriend))
         {
 			object oClosestEnemyOfFriend = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_ENEMY,
@@ -781,7 +783,7 @@ int HenchTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCreatu
                 fThresholdDistance = 1000.0;
                 break;
             }
-            oFriend = GetLocalObject(oFriend, sAllyLineOfSight);
+            oFriend = PS_GetLocalObject(oFriend, sAllyLineOfSight);
         }
     }
 
@@ -789,7 +791,7 @@ int HenchTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCreatu
 
  //   Jug_Debug(GetName(OBJECT_SELF) + " weapon effective " + IntToString(GetIsWeaponEffective(oTarget)));
 
-    SetLocalObject(OBJECT_SELF, sHenchLastTarget, oTarget);
+    PS_SetLocalObject(OBJECT_SELF, sHenchLastTarget, oTarget);
 
     if (!HenchEquipAppropriateWeapons(oTarget, fThresholdDistance, (iCreatureType == 1) &&
 		!GetHenchPartyState(HENCH_PARTY_DISABLE_WEAPON_EQUIP_MSG), bPolymorphed, iRangedOverride))
@@ -799,7 +801,7 @@ int HenchTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCreatu
     }
     else
     {
-        if (HenchDoTalentMeleeAttack(oTarget, fThresholdDistance, iCreatureType, !bPolymorphed) && !GetLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED))
+        if (HenchDoTalentMeleeAttack(oTarget, fThresholdDistance, iCreatureType, !bPolymorphed) && !PS_GetLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED))
 		{
 			ActionDoCommand(HenchMoveAndDetermineCombatRound(oTarget));
 		}
@@ -826,19 +828,19 @@ int HenchBashDoorCheck(int bPolymorphed)
 {
     int bDoor = FALSE;
     //This code is here to make sure that henchmen keep bashing doors and placeables.
-    object oDoor = GetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH");
+    object oDoor = PS_GetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH");
 
     if(GetIsObjectValid(oDoor))
     {
         int nDoorMax = GetMaxHitPoints(oDoor);
         int nDoorNow = GetCurrentHitPoints(oDoor);
-        int nCnt = GetLocalInt(OBJECT_SELF,"NW_GENERIC_DOOR_TO_BASH_HP");
+        int nCnt = PS_GetLocalInt(OBJECT_SELF,"NW_GENERIC_DOOR_TO_BASH_HP");
 //        if(GetLocked(oDoor) || GetIsTrapped(oDoor))
         {
             if(nDoorMax == nDoorNow)
             {
                 nCnt++;
-                SetLocalInt(OBJECT_SELF,"NW_GENERIC_DOOR_TO_BASH_HP", nCnt);
+                PS_SetLocalInt(OBJECT_SELF,"NW_GENERIC_DOOR_TO_BASH_HP", nCnt);
             }
             if(nCnt <= 2)
             {
@@ -848,8 +850,8 @@ int HenchBashDoorCheck(int bPolymorphed)
         }
         if(!bDoor)
         {
-            DeleteLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH");
-            DeleteLocalInt(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH_HP");
+            PS_DeleteLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH");
+            PS_DeleteLocalInt(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH_HP");
             VoiceCuss();
             ActionDoCommand(HenchEquipDefaultWeapons());
         }
@@ -870,7 +872,7 @@ void HenchStartRangedBashDoor(object oDoor)
         ActionWait(0.5);
     }
     ActionAttack(oDoor);
-    SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oDoor);
+    PS_SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oDoor);
 }
 
 

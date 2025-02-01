@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // ga_open_store
 /*
 	Opens store with tag sTag for the PC Speaker.  
@@ -16,7 +18,7 @@
 
 object GetStoreFromStoreArea(string sTag)
 {
-	int iStoreArea = GetGlobalInt("STORE_AREA");
+	int iStoreArea = PS_GetGlobalInt("STORE_AREA");
 	object oStoreArea = IntToObject(iStoreArea);
 	
 	object oStore = GetFirstObjectInArea(oStoreArea);

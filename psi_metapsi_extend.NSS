@@ -22,15 +22,15 @@ void main()
     object oTarget = GetSpellTargetObject();
 	effect eDur     = EffectNWN2SpecialEffectFile("psi_metapsi_extend.sef");
 	
-	if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 0)
+	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 0)
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 1);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Extend Power");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDur, OBJECT_SELF);
 	}
 	else
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Extend Power");
 		RemoveEffectsFromSpell(oTarget, GetSpellId());
 	}

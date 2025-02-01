@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*/////////////////////////////////////////////////////////*/
 /*
 /*	Handles SCOD's animated traps
@@ -19,8 +21,8 @@ void main () {
 	//1 == the spot trigger
 	//2 == the damage trigger
 	//3 == the disarm object function
-	int nType = GetLocalInt(OBJECT_SELF, "TRAP_TRIGGER_TYPE");
-	int nIsRocks = GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
+	int nType = PS_GetLocalInt(OBJECT_SELF, "TRAP_TRIGGER_TYPE");
+	int nIsRocks = PS_GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
 
 	object oPC;
 	if (nType == 3) {
@@ -33,13 +35,13 @@ void main () {
 			return;
 	} 
 
-	string sTrapTag = GetLocalString(OBJECT_SELF, "PLC_TRAP");
-	string sDisarmTag = GetLocalString(OBJECT_SELF, "PLC_TRAP_DISARM");
+	string sTrapTag = PS_GetLocalString(OBJECT_SELF, "PLC_TRAP");
+	string sDisarmTag = PS_GetLocalString(OBJECT_SELF, "PLC_TRAP_DISARM");
 	
-	int nDisarmDC = GetLocalInt(OBJECT_SELF, "DC_DISARM_TRAP");
-	int nSpotDC = GetLocalInt(OBJECT_SELF, "DC_SPOT_TRAP");
-	float fReset = GetLocalFloat(OBJECT_SELF, "TRAP_RESET_TIME");
-	float fRadius = GetLocalFloat(OBJECT_SELF, "TRAP_DAMAGE_RADIUS");
+	int nDisarmDC = PS_GetLocalInt(OBJECT_SELF, "DC_DISARM_TRAP");
+	int nSpotDC = PS_GetLocalInt(OBJECT_SELF, "DC_SPOT_TRAP");
+	float fReset = PS_GetLocalFloat(OBJECT_SELF, "TRAP_RESET_TIME");
+	float fRadius = PS_GetLocalFloat(OBJECT_SELF, "TRAP_DAMAGE_RADIUS");
 	
 	object oTrap = GetNearestObjectByTag(sTrapTag);
 	object oDisarm = GetNearestObjectByTag(sDisarmTag);
@@ -52,7 +54,7 @@ void main () {
 		SendMessageToPC(oPC, "DEBUG: There is no override by this tag: "+sDisarmTag);
 	}
 	
-	int nInactive = GetLocalInt(oTrap, "TRAP_INACTIVE");
+	int nInactive = PS_GetLocalInt(oTrap, "TRAP_INACTIVE");
 	if (nInactive) {
 		SendMessageToPC(oPC, "Trap is inactive.");
 		return;
@@ -60,7 +62,7 @@ void main () {
 
 	if (nType == 1) {
 	
-		int nDone = GetLocalInt(oPC, "spot_"+sTrapTag);
+		int nDone = PS_GetLocalInt(oPC, "spot_"+sTrapTag);
 		if (nDone)
 			return;
 	
@@ -72,21 +74,21 @@ void main () {
 			
 			SetUseableFlag(oDisarm, TRUE);
 				
-			SetLocalString(oDisarm, "PLC_TRAP", sTrapTag);
-			SetLocalString(oDisarm, "PLC_TRAP_DISARM", sDisarmTag);
-			SetLocalInt(oDisarm, "DC_DISARM_TRAP", nDisarmDC);
-			SetLocalFloat(oDisarm, "TRAP_RESET_TIME", fReset);
-			SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
+			PS_SetLocalString(oDisarm, "PLC_TRAP", sTrapTag);
+			PS_SetLocalString(oDisarm, "PLC_TRAP_DISARM", sDisarmTag);
+			PS_SetLocalInt(oDisarm, "DC_DISARM_TRAP", nDisarmDC);
+			PS_SetLocalFloat(oDisarm, "TRAP_RESET_TIME", fReset);
+			PS_SetLocalInt(oDisarm, "TRAP_TRIGGER_TYPE", 3);
 			
 			ToggleTrapTrigger(oPC, OBJECT_SELF, TRUE);
 		}
 		
-		SetLocalInt(oPC, "spot_"+sTrapTag, 1);
-		DelayCommand(fReset, DeleteLocalInt(oPC, "spot_"+sTrapTag));
+		PS_SetLocalInt(oPC, "spot_"+sTrapTag, 1);
+		DelayCommand(fReset, PS_DeleteLocalInt(oPC, "spot_"+sTrapTag));
 		
 	} else if (nType == 2) {
 	
-		SetLocalInt(oTrap, "TRAP_INACTIVE", 1);
+		PS_SetLocalInt(oTrap, "TRAP_INACTIVE", 1);
 		
 		if (!nIsRocks)
 			AssignCommand(oTrap, ActionPlayAnimation(ANIMATION_PLACEABLE_OPEN));
@@ -113,7 +115,7 @@ void main () {
 		if (GetIsTrainingSkillSuccessful(oPC, SKILL_DISABLE_TRAP, nDisarmDC)) {
 			SendMessageToPC(oPC, "You successfully disable the trap");
 			
-			SetLocalInt(oTrap, "TRAP_INACTIVE", 1);
+			PS_SetLocalInt(oTrap, "TRAP_INACTIVE", 1);
 			DelayCommand(fReset, ResetTrap(OBJECT_SELF));
 		} else {
 			SendMessageToPC(oPC, "You fail to disable the trap. The override mechanism is now broken.");
@@ -124,13 +126,13 @@ void main () {
 
 void ResetTrap(object oTrap) {
 
-	string sTrapTag = GetLocalString(OBJECT_SELF, "PLC_TRAP");
+	string sTrapTag = PS_GetLocalString(OBJECT_SELF, "PLC_TRAP");
 	object oTrap = GetNearestObjectByTag(sTrapTag);
 	
-	string sDisarmTag = GetLocalString(OBJECT_SELF, "PLC_TRAP_DISARM");
+	string sDisarmTag = PS_GetLocalString(OBJECT_SELF, "PLC_TRAP_DISARM");
 	object oDisarm = GetNearestObjectByTag(sDisarmTag);
 	
-	DeleteLocalInt(oTrap, "TRAP_INACTIVE");
+	PS_DeleteLocalInt(oTrap, "TRAP_INACTIVE");
 	AssignCommand(oTrap, ActionPlayAnimation(ANIMATION_PLACEABLE_CLOSE));
 	SetUseableFlag(oDisarm, FALSE);
 	
@@ -138,15 +140,15 @@ void ResetTrap(object oTrap) {
 
 void TriggerTrapOn(object oTrap, object oVic) {
 
-	int nDC = GetLocalInt(oTrap, "DC_REFLEX_TRAP");
-	int nDice = GetLocalInt(oTrap, "TRAP_DAMAGE_d6");
-	int nDamType = GetLocalInt(oTrap, "TRAP_DAMAGE_TYPE");
+	int nDC = PS_GetLocalInt(oTrap, "DC_REFLEX_TRAP");
+	int nDice = PS_GetLocalInt(oTrap, "TRAP_DAMAGE_d6");
+	int nDamType = PS_GetLocalInt(oTrap, "TRAP_DAMAGE_TYPE");
 	float fDelay = 0.0f;
 	
-	int nIsRocks = GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
+	int nIsRocks = PS_GetLocalInt(OBJECT_SELF, "TRAP_IS_ROCKS"); //handles rocks fall version
 	if (nIsRocks) {
 		SendMessageToPC(oVic, "<i>You trip over a wire, and suddenly rocks start falling from the ceiling!</i>"); 
-		string sTrapTag = GetLocalString(OBJECT_SELF, "PLC_TRAP");
+		string sTrapTag = PS_GetLocalString(OBJECT_SELF, "PLC_TRAP");
 		object oRockCaster = GetObjectByTag(sTrapTag);
 		if (GetIsObjectValid(oRockCaster)) {
 			effect eImpact	 = EffectNWN2SpecialEffectFile("fx_wooden_explosion_big");
@@ -173,13 +175,13 @@ void TriggerTrapOn(object oTrap, object oVic) {
 void ToggleTrapTrigger(object oPC, object oTrigger, int on = FALSE) {
 
 	//SendMessageToPC(oPC, "Toggling trap trigger");
-	string sTrapTag = GetLocalString(oTrigger, "PLC_TRAP");
+	string sTrapTag = PS_GetLocalString(oTrigger, "PLC_TRAP");
 	object oTrap = GetFirstObjectInShape(SHAPE_SPHERE, 5.0f, GetLocation(oTrigger), FALSE, OBJECT_TYPE_TRIGGER);
 	while (GetIsObjectValid(oTrap)) {
 	
 		//SendMessageToPC(oPC, "Found trigger: "+GetTag(oTrap));
-		string sCompareTrapTag = GetLocalString(oTrap, "PLC_TRAP");
-		int nType = GetLocalInt(oTrap, "TRAP_TRIGGER_TYPE");
+		string sCompareTrapTag = PS_GetLocalString(oTrap, "PLC_TRAP");
+		int nType = PS_GetLocalInt(oTrap, "TRAP_TRIGGER_TYPE");
 		if (nType == 2 && sCompareTrapTag == sTrapTag) {
 			if (on) {
 				SetTrapDetectable(oTrap, TRUE);

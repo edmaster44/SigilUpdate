@@ -63,12 +63,12 @@ void HandleTargetLocation( location lSpellTargetLocation, object oCaster )
 				lTargetLoc = GetLocation( oTarget );
 				fTravelTime = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
 									
-				if (GetLocalInt(oTarget, "MeteorSwarmCentralTarget") == 1)				
+				if (PS_GetLocalInt(oTarget, "MeteorSwarmCentralTarget") == 1)				
 				{
 					i = 3;
 					eVis = EffectVisualEffect(VFX_HIT_SPELL_METEOR_SWARM_SML);	// makes use of NWN2 VFX
 				}
-				else if (GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)
+				else if (PS_GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)
 				{
 					i = 4;
 					eVis = EffectVisualEffect(VFX_HIT_SPELL_METEOR_SWARM_SML);	// makes use of NWN2 VFX
@@ -81,8 +81,8 @@ void HandleTargetLocation( location lSpellTargetLocation, object oCaster )
 							
 				for (i; i <= 4; i++)
 				{					
-					if (GetLocalInt(oTarget, "MeteorSwarmCentralTarget") == 1 ||
-						GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
+					if (PS_GetLocalInt(oTarget, "MeteorSwarmCentralTarget") == 1 ||
+						PS_GetLocalInt(oTarget, "MeteorSwarmNormalTarget") == 1)			
 					{
 						//Roll damage
 						nDamage = d6(12);
@@ -113,8 +113,8 @@ void HandleTargetLocation( location lSpellTargetLocation, object oCaster )
 					fDelay2 += fDelay;					
 				}
 				
-				SetLocalInt(oTarget, "MeteorSwarmCentralTarget", 0);	
-				SetLocalInt(oTarget, "MeteorSwarmNormalTarget", 0);				
+				PS_SetLocalInt(oTarget, "MeteorSwarmCentralTarget", 0);	
+				PS_SetLocalInt(oTarget, "MeteorSwarmNormalTarget", 0);				
 			}
         }
 		//Get next target in the spell area

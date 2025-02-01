@@ -51,10 +51,10 @@ void main()
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FINGER_OF_DEATH);
 	int DC = GetSpellSaveDC();
 	
-	int DCbonus_2 = GetLocalInt(OBJECT_SELF, "FingerDCBonus_2");
+	int DCbonus_2 = PS_GetLocalInt(OBJECT_SELF, "FingerDCBonus_2");
 	if (DCbonus_2 > 0)
 	{
-		SetLocalInt(OBJECT_SELF, "FingerDCBonus_2", DCbonus_2 - 1);
+		PS_SetLocalInt(OBJECT_SELF, "FingerDCBonus_2", DCbonus_2 - 1);
 		DC = DC + 2;
 	}
 

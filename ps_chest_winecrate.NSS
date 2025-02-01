@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // v 1.01
 #include "x0_i0_treasure"
 #include "nwnx_sql"
@@ -10,9 +12,9 @@ const int cChestWait = 915;
 
 void FillGold(object oChest)
 {
-	int iGolddice = GetLocalInt(oChest,"GOLDDICE");
-	int iGoldnr = GetLocalInt(oChest,"GOLDNR");
-	int iGoldcons = GetLocalInt(oChest,"GOLDCONS");
+	int iGolddice = PS_GetLocalInt(oChest,"GOLDDICE");
+	int iGoldnr = PS_GetLocalInt(oChest,"GOLDNR");
+	int iGoldcons = PS_GetLocalInt(oChest,"GOLDCONS");
 	int iGoldAmount = 0;
 		
 	if(iGolddice > 0 && iGoldnr > 0)
@@ -86,7 +88,7 @@ void FillItems(object oChest)
 	string sItem;
 	int nAmount=0;
 	int i=0;
-	sItem = GetLocalString(oChest,"TAG");
+	sItem = PS_GetLocalString(oChest,"TAG");
 	if ( sItem != "" )
 	{
 		dbCreateItemOnObject(sItem, oChest, 1);
@@ -102,12 +104,12 @@ void FillItems(object oChest)
 	
 	if (Random(200) < 1) CardsCreateCardOnSpawnOrChest(oChest);
 	
-	int nType = GetLocalInt(oChest,"TYPE");
+	int nType = PS_GetLocalInt(oChest,"TYPE");
 	if ( nType == 0 )
 		nType = 1;
 		
-	sItem = GetLocalString(oChest,"TREASURE1");
-	nAmount = GetLocalInt(oChest,"TREASURE1N");
+	sItem = PS_GetLocalString(oChest,"TREASURE1");
+	nAmount = PS_GetLocalInt(oChest,"TREASURE1N");
 	if ( nAmount == 0 )
 		nAmount = 1;
 	for ( i = 0; i < nAmount; i++ )
@@ -115,8 +117,8 @@ void FillItems(object oChest)
 		FillSpecificItem(oChest, sItem, nType);
 	}
 	
-	sItem = GetLocalString(oChest,"TREASURE2");
-	nAmount = GetLocalInt(oChest,"TREASURE2N");
+	sItem = PS_GetLocalString(oChest,"TREASURE2");
+	nAmount = PS_GetLocalInt(oChest,"TREASURE2N");
 	if ( nAmount == 0 )
 		nAmount = 1;
 	for ( i = 0; i < nAmount; i++ )
@@ -184,7 +186,7 @@ void main()
 {
 	object oChest = OBJECT_SELF;
 
-	int iChestWait = GetLocalInt(oChest,"RESPAWN");
+	int iChestWait = PS_GetLocalInt(oChest,"RESPAWN");
 	
 	object oPC = GetLastOpenedBy();
 	
@@ -192,17 +194,17 @@ void main()
 		iChestWait = cChestWait;
 
 	//	SpeakString(IntToString(GetTime()),TALKVOLUME_SHOUT);
-	//	SpeakString(IntToString(GetLocalInt(OBJECT_SELF,"TS")),TALKVOLUME_SHOUT);
+	//	SpeakString(IntToString(PS_GetLocalInt(OBJECT_SELF,"TS")),TALKVOLUME_SHOUT);
 				
-	if(GetSQLTime()<GetLocalInt(oChest,"TS"))
+	if(GetSQLTime()<PS_GetLocalInt(oChest,"TS"))
 		TimeStamp(oChest,"TS");
 
-	if(GetLocalString(oChest,"LASTOPENER")==GetPCPublicCDKey(oPC))
+	if(PS_GetLocalString(oChest,"LASTOPENER")==GetPCPublicCDKey(oPC))
 		return;
 					
-	if(GetSQLTime()-GetLocalInt(oChest,"TS") > iChestWait)
+	if(GetSQLTime()-PS_GetLocalInt(oChest,"TS") > iChestWait)
 	{
-		SetLocalString(oChest,"LASTOPENER",GetPCPublicCDKey(oPC));	
+		PS_SetLocalString(oChest,"LASTOPENER",GetPCPublicCDKey(oPC));	
 	
 		TimeStamp(oChest,"TS");
 		//SpeakString("timestamping",TALKVOLUME_SHOUT);

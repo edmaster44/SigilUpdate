@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Example XP2 OnActivate Script Script
 //:: x2_mod_def_act
@@ -92,7 +94,7 @@ void main()
 			TestStringAgainstPattern("**_spi**", sTag) ||
 			TestStringAgainstPattern("**_tan**", sTag)) {
 		
-			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
+			PS_SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			int nRecipeIndex = Search2DA(NX2_CRAFTING_2DA, "RECIPE_TAG", sTag, 1);
 		
 			if(CheckCanCraft(nRecipeIndex, oPC, NX2_CRAFTING_2DA) )
@@ -111,7 +113,7 @@ void main()
 		if(GetObjectType(oItemToEnchant) == OBJECT_TYPE_ITEM)
 		{
 			string sTag = GetTag(oItem);
-			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
+			PS_SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			
 				//	SpeakString("searching 2da for: " + sTag,TALKVOLUME_SHOUT); 
 			int nIncantIndex = Search2DA(NX2_ENCHANTING_2DA, "INCANTATION_TAG", sTag, 1);

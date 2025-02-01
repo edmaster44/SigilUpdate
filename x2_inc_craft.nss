@@ -495,7 +495,7 @@ int CIGetCraftGPCost(object oCaster, int nLevel, int nMod){
 
 	int nCasterLvl = PS_GetCasterLevel(oCaster);
 	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER){
-		if (GetLocalInt(oCaster, "bScribeAtMinLvl")) nCasterLvl = 1;
+		if (PS_GetLocalInt(oCaster, "bScribeAtMinLvl")) nCasterLvl = 1;
 	}
 	
     int nLvlRow =   IPGetIPConstCastSpellFromSpellID(GetSpellId(), nCasterLvl);
@@ -797,7 +797,7 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
 {
 
 	int nCasterLvl = 1;
-	if (GetLocalInt(oCreator, "bScribeAtMinLvl") == FALSE) nCasterLvl = PS_GetCasterLevel(oCreator);
+	if (PS_GetLocalInt(oCreator, "bScribeAtMinLvl") == FALSE) nCasterLvl = PS_GetCasterLevel(oCreator);
     int nPropID = IPGetIPConstCastSpellFromSpellID(nSpellId, nCasterLvl);
     object oTarget;
     // Handle optional material components
@@ -1325,23 +1325,23 @@ int CIDoCraftItemFromConversation(int nNumber)
 {
   string    sNumber     = IntToString(nNumber);
   object    oPC         = GetPCSpeaker();
-  //object    oMaterial   = GetLocalObject(oPC,"X2_CI_CRAFT_MATERIAL");
-  object    oMajor       = GetLocalObject(oPC,"X2_CI_CRAFT_MAJOR");
-  object    oMinor       = GetLocalObject(oPC,"X2_CI_CRAFT_MINOR");
-  int       nSkill      =  GetLocalInt(oPC,"X2_CI_CRAFT_SKILL");
-  int       nMode       =  GetLocalInt(oPC,"X2_CI_CRAFT_MODE");
+  //object    oMaterial   = PS_GetLocalObject(oPC,"X2_CI_CRAFT_MATERIAL");
+  object    oMajor       = PS_GetLocalObject(oPC,"X2_CI_CRAFT_MAJOR");
+  object    oMinor       = PS_GetLocalObject(oPC,"X2_CI_CRAFT_MINOR");
+  int       nSkill      =  PS_GetLocalInt(oPC,"X2_CI_CRAFT_SKILL");
+  int       nMode       =  PS_GetLocalInt(oPC,"X2_CI_CRAFT_MODE");
   string    sResult;
   string    s2DA;
   int       nDC;
 
 
-    DeleteLocalObject(oPC,"X2_CI_CRAFT_MAJOR");
-    DeleteLocalObject(oPC,"X2_CI_CRAFT_MINOR");
+    PS_DeleteLocalObject(oPC,"X2_CI_CRAFT_MAJOR");
+    PS_DeleteLocalObject(oPC,"X2_CI_CRAFT_MINOR");
 
     if (!GetIsObjectValid(oMajor))
     {
           FloatingTextStrRefOnCreature(83374,oPC);    //"Invalid target"
-          DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
+          PS_DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
           return FALSE;
     }
     else
@@ -1349,7 +1349,7 @@ int CIDoCraftItemFromConversation(int nNumber)
           if (GetItemPossessor(oMajor) != oPC)
           {
                FloatingTextStrRefOnCreature(83354,oPC);     //"Invalid target"
-               DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
+               PS_DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
                return FALSE;
           }
     }
@@ -1360,13 +1360,13 @@ int CIDoCraftItemFromConversation(int nNumber)
         if (!GetIsObjectValid(oMinor))
         {
               FloatingTextStrRefOnCreature(83374,oPC);    //"Invalid target"
-              DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
+              PS_DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
               return FALSE;
         }
         else if (GetItemPossessor(oMinor) != oPC)
          {
               FloatingTextStrRefOnCreature(83354,oPC);   //"Invalid target"
-              DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
+              PS_DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
               return FALSE;
          }
    }
@@ -1381,7 +1381,7 @@ int CIDoCraftItemFromConversation(int nNumber)
         s2DA = X2_CI_CRAFTING_AR_2DA;
   }
 
-  int nRow = GetLocalInt(oPC,"X2_CI_CRAFT_RESULTROW");
+  int nRow = PS_GetLocalInt(oPC,"X2_CI_CRAFT_RESULTROW");
   struct craft_struct stItem =  CIGetCraftItemStructFrom2DA(s2DA,nRow,nNumber);
   object oContainer = OBJECT_INVALID;
 
@@ -1410,7 +1410,7 @@ int CIDoCraftItemFromConversation(int nNumber)
       // -----------------------------------------------------------------------
        if (GetGold(oPC)<stItem.nCost)
        {
-          DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
+          PS_DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
           FloatingTextStrRefOnCreature(86675,oPC);
           DestroyObject(oRet);
           return FALSE;
@@ -1421,13 +1421,13 @@ int CIDoCraftItemFromConversation(int nNumber)
           IPCopyItemProperties(oMajor,oRet);
         }
       // set success variable for conversation
-      SetLocalInt(oPC,"X2_CRAFT_SUCCESS",TRUE);
+      PS_SetLocalInt(oPC,"X2_CRAFT_SUCCESS",TRUE);
   }
   else
   {
       TakeGoldFromCreature(stItem.nCost / 4, oPC,TRUE);
       // make sure there is no success
-      DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
+      PS_DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
   }
 
   // Destroy first material component
@@ -1614,15 +1614,15 @@ int CIGetCraftingReceipeRow(int nMode, object oMajor, object oMinor, int nSkill)
 void CISetupCraftingConversation(object oPC, int nNumber, int nSkill, int nReceipe, object oMajor, object oMinor, int nMode)
 {
 
-  SetLocalObject(oPC,"X2_CI_CRAFT_MAJOR",oMajor);
+  PS_SetLocalObject(oPC,"X2_CI_CRAFT_MAJOR",oMajor);
   if (nMode == X2_CI_CRAFTMODE_CONTAINER ||  nMode == X2_CI_CRAFTMODE_ASSEMBLE )
   {
-      SetLocalObject(oPC,"X2_CI_CRAFT_MINOR", oMinor);
+      PS_SetLocalObject(oPC,"X2_CI_CRAFT_MINOR", oMinor);
   }
-  SetLocalInt(oPC,"X2_CI_CRAFT_NOOFITEMS",nNumber);    // number of crafting choises for this material
-  SetLocalInt(oPC,"X2_CI_CRAFT_SKILL",nSkill);          // skill used (craft armor or craft weapon)
-  SetLocalInt(oPC,"X2_CI_CRAFT_RESULTROW",nReceipe);    // number of crafting choises for this material
-  SetLocalInt(oPC,"X2_CI_CRAFT_MODE",nMode);
+  PS_SetLocalInt(oPC,"X2_CI_CRAFT_NOOFITEMS",nNumber);    // number of crafting choises for this material
+  PS_SetLocalInt(oPC,"X2_CI_CRAFT_SKILL",nSkill);          // skill used (craft armor or craft weapon)
+  PS_SetLocalInt(oPC,"X2_CI_CRAFT_RESULTROW",nReceipe);    // number of crafting choises for this material
+  PS_SetLocalInt(oPC,"X2_CI_CRAFT_MODE",nMode);
 }
 
 // -----------------------------------------------------------------------------
@@ -1785,7 +1785,7 @@ struct craft_receipe_struct CIGetCraftingModeFromTarget(object oPC,object oTarge
 // -----------------------------------------------------------------------------
 int CIGetInModWeaponOrArmorConv(object oPC)
 {
-    return GetLocalInt(oPC,"X2_L_CRAFT_MODIFY_CONVERSATION");
+    return PS_GetLocalInt(oPC,"X2_L_CRAFT_MODIFY_CONVERSATION");
 }
 
 
@@ -1793,39 +1793,39 @@ void CISetCurrentModMode(object oPC, int nMode)
 {
     if (nMode == X2_CI_MODMODE_INVALID)
     {
-        DeleteLocalInt(oPC,"X2_L_CRAFT_MODIFY_MODE");
+        PS_DeleteLocalInt(oPC,"X2_L_CRAFT_MODIFY_MODE");
     }
     else
     {
-        SetLocalInt(oPC,"X2_L_CRAFT_MODIFY_MODE",nMode);
+        PS_SetLocalInt(oPC,"X2_L_CRAFT_MODIFY_MODE",nMode);
     }
 }
 
 int CIGetCurrentModMode(object oPC)
 {
-  return GetLocalInt(oPC,"X2_L_CRAFT_MODIFY_MODE");
+  return PS_GetLocalInt(oPC,"X2_L_CRAFT_MODIFY_MODE");
 }
 
 
 object CIGetCurrentModBackup(object oPC)
 {
-    return GetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_BACKUP");
+    return PS_GetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_BACKUP");
 }
 
 object CIGetCurrentModItem(object oPC)
 {
-    return GetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_ITEM");
+    return PS_GetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_ITEM");
 }
 
 
 void CISetCurrentModBackup(object oPC, object oBackup)
 {
-    SetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_BACKUP",oBackup);
+    PS_SetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_BACKUP",oBackup);
 }
 
 void CISetCurrentModItem(object oPC, object oItem)
 {
-    SetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_ITEM",oItem);
+    PS_SetLocalObject(GetPCSpeaker(),"X2_O_CRAFT_MODIFY_ITEM",oItem);
 }
 
 
@@ -1837,7 +1837,7 @@ void CISetCurrentModItem(object oPC, object oItem)
 // -----------------------------------------------------------------------------
 void CISetCurrentModPart(object oPC, int nPart, int nStrRef)
 {
-    SetLocalInt(oPC,"X2_TAILOR_CURRENT_PART",nPart);
+    PS_SetLocalInt(oPC,"X2_TAILOR_CURRENT_PART",nPart);
 
     if (CIGetCurrentModMode(oPC) == X2_CI_MODMODE_ARMOR)
     {
@@ -1907,8 +1907,8 @@ void CISetCurrentModPart(object oPC, int nPart, int nStrRef)
         SetCameraFacing(fFacing, fDistance, fPitch,CAMERA_TRANSITION_TYPE_VERY_FAST) ;
     }
 
-    int nCost = GetLocalInt(oPC,"X2_TAILOR_CURRENT_COST");
-    int nDC = GetLocalInt(oPC,"X2_TAILOR_CURRENT_DC");
+    int nCost = PS_GetLocalInt(oPC,"X2_TAILOR_CURRENT_COST");
+    int nDC = PS_GetLocalInt(oPC,"X2_TAILOR_CURRENT_DC");
 
     SetCustomToken(X2_CI_MODIFYARMOR_GP_CTOKENBASE,IntToString(nCost));
     SetCustomToken(X2_CI_MODIFYARMOR_GP_CTOKENBASE+1,IntToString(nDC));
@@ -1919,7 +1919,7 @@ void CISetCurrentModPart(object oPC, int nPart, int nStrRef)
 
 int CIGetCurrentModPart(object oPC)
 {
-    return GetLocalInt(oPC,"X2_TAILOR_CURRENT_PART");
+    return PS_GetLocalInt(oPC,"X2_TAILOR_CURRENT_PART");
 }
 
 
@@ -1952,8 +1952,8 @@ void CISetDefaultModItemCamera(object oPC)
 
 void CIUpdateModItemCostDC(object oPC, int nDC, int nCost)
 {
-        SetLocalInt(oPC,"X2_TAILOR_CURRENT_COST", nCost);
-        SetLocalInt(oPC,"X2_TAILOR_CURRENT_DC",nDC);
+        PS_SetLocalInt(oPC,"X2_TAILOR_CURRENT_COST", nCost);
+        PS_SetLocalInt(oPC,"X2_TAILOR_CURRENT_DC",nDC);
         SetCustomToken(X2_CI_MODIFYARMOR_GP_CTOKENBASE,IntToString(nCost));
         SetCustomToken(X2_CI_MODIFYARMOR_GP_CTOKENBASE+1,IntToString(nDC));
 }

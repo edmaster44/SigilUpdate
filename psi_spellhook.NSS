@@ -35,7 +35,7 @@ int PsiPrePowerCastCode()
 {
 	object oManifester = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
-	int nPP = GetLocalInt(oManifester, "PSI_PP");
+	int nPP = PS_GetLocalInt(oManifester, "PSI_PP");
     int nContinue = TRUE;
 	
 	//********************************************************************
@@ -63,7 +63,7 @@ int PsiPrePowerCastCode()
 	//********************************************************************
 	//Ectoplasmic Cocoon
 	//********************************************************************
-	if (GetLocalInt(oManifester, "PRC_Power_EctoForm") && GetHasSpellEffect(14139, OBJECT_SELF))
+	if (PS_GetLocalInt(oManifester, "PRC_Power_EctoForm") && GetHasSpellEffect(14139, OBJECT_SELF))
     {
         int nPower = GetSpellLevel(GetSpellId());
         nContinue = GetIsSkillSuccessful(oManifester, SKILL_CONCENTRATION, (20 + nPower));
@@ -71,7 +71,7 @@ int PsiPrePowerCastCode()
 	//********************************************************************
 	//Ectoplasmic Shambler Effect
 	//********************************************************************
-	if (GetLocalInt(oManifester, "PRC_IsInEctoplasmicShambler") && GetHasSpellEffect(14192, OBJECT_SELF))
+	if (PS_GetLocalInt(oManifester, "PRC_IsInEctoplasmicShambler") && GetHasSpellEffect(14192, OBJECT_SELF))
     {
         int nPower = GetSpellLevel(GetSpellId());
         nContinue = GetIsSkillSuccessful(oManifester, SKILL_CONCENTRATION, (15 + nPower));
@@ -79,19 +79,19 @@ int PsiPrePowerCastCode()
 	//********************************************************************
 	//Mind Trap effect
 	//********************************************************************
-	if (GetLocalInt(oManifester, "PRC_Power_MindTrap_Active") && GetHasSpellEffect(14123, OBJECT_SELF))
+	if (PS_GetLocalInt(oManifester, "PRC_Power_MindTrap_Active") && GetHasSpellEffect(14123, OBJECT_SELF))
     {
         int num = d6();
-		SetLocalInt(oManifester, "PSI_PP", GetLocalInt(oManifester, "PSI_PP")-num);
+		PS_SetLocalInt(oManifester, "PSI_PP", PS_GetLocalInt(oManifester, "PSI_PP")-num);
     }
 	//********************************************************************
 	//Null Psionics effect
 	//********************************************************************
-	if (GetLocalInt(oManifester, "NullPsionicsField") && GetHasSpellEffect(14215, OBJECT_SELF))
+	if (PS_GetLocalInt(oManifester, "NullPsionicsField") && GetHasSpellEffect(14215, OBJECT_SELF))
     {
         nContinue = FALSE;
     }
-	if (GetLocalInt(oTarget, "NullPsionicsField") && GetHasSpellEffect(14215, oTarget))
+	if (PS_GetLocalInt(oTarget, "NullPsionicsField") && GetHasSpellEffect(14215, oTarget))
     {
         nContinue = FALSE;
     }
@@ -104,7 +104,7 @@ int PsiPrePowerCastCode()
     object oTarget = GetSpellTargetObject();
     int nContinue;
 
-    DeleteLocalInt(oManifester, "SpellConc");
+    PS_DeleteLocalInt(oManifester, "SpellConc");
     nContinue = !ExecuteScriptAndReturnInt("prespellcode",oManifester);
 
     //---------------------------------------------------------------------------
@@ -117,14 +117,14 @@ int PsiPrePowerCastCode()
     if(!GetIsPC(oManifester))
     //&& !GetPRCSwitch(PRC_NPC_HAS_PC_SPELLCASTING))
     {
-        if(!GetIsDMPossessed(oManifester) && !GetLocalInt(GetArea(oManifester), "X2_L_WILD_MAGIC"))
+        if(!GetIsDMPossessed(oManifester) && !PS_GetLocalInt(GetArea(oManifester), "X2_L_WILD_MAGIC"))
         {
             return TRUE;
         }
     }
 
     // Ectoplasmic Form conc check
-    if (GetLocalInt(oTarget, "PRC_Power_EctoForm"))
+    if (PS_GetLocalInt(oTarget, "PRC_Power_EctoForm"))
     {
         int nPower = GetPowerLevel(oManifester);
         nContinue = GetIsSkillSuccessful(oManifester, SKILL_CONCENTRATION, (20 + nPower));
@@ -133,7 +133,7 @@ int PsiPrePowerCastCode()
     //---------------------------------------------------------------------------
     // Run Disrupting Strike Check
     //---------------------------------------------------------------------------
-    if (nContinue && GetLocalInt(oManifester, "DisruptingStrike_PsionicsFail"))
+    if (nContinue && PS_GetLocalInt(oManifester, "DisruptingStrike_PsionicsFail"))
     {
         nContinue = FALSE;
     }
@@ -214,17 +214,17 @@ int PsiPrePowerCastCode()
     }
 
     //Cleaning spell variables used for holding the charge
-    if(!GetLocalInt(oManifester, "PRC_SPELL_EVENT"))
+    if(!PS_GetLocalInt(oManifester, "PRC_SPELL_EVENT"))
     {
-        DeleteLocalInt(oManifester, "PRC_SPELL_CHARGE_COUNT");
-        DeleteLocalInt(oManifester, "PRC_SPELL_CHARGE_SPELLID");
-        DeleteLocalObject(oManifester, "PRC_SPELL_CONC_TARGET");
-        DeleteLocalInt(oManifester, "PRC_SPELL_METAMAGIC");
+        PS_DeleteLocalInt(oManifester, "PRC_SPELL_CHARGE_COUNT");
+        PS_DeleteLocalInt(oManifester, "PRC_SPELL_CHARGE_SPELLID");
+        PS_DeleteLocalObject(oManifester, "PRC_SPELL_CONC_TARGET");
+        PS_DeleteLocalInt(oManifester, "PRC_SPELL_METAMAGIC");
         DeleteLocalManifestation(oManifester, "PRC_POWER_HOLD_MANIFESTATION");
     }
-    else if(GetLocalInt(oManifester, "PRC_SPELL_CHARGE_SPELLID") != GetSpellId())
+    else if(PS_GetLocalInt(oManifester, "PRC_SPELL_CHARGE_SPELLID") != GetSpellId())
     {   //Sanity check, in case something goes wrong with the action queue
-        DeleteLocalInt(oManifester, "PRC_SPELL_EVENT");
+        PS_DeleteLocalInt(oManifester, "PRC_SPELL_EVENT");
     }*/
 	
 	

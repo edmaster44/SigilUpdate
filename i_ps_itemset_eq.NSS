@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //i_ps_itemset_eq
 /*	Script by Dedic8ed
 	Created for use in the Sigil: City of Doors PW
@@ -26,7 +28,7 @@ void main()
     object oItem    = GetPCItemLastEquipped();
 	
 RestrictItemUse(oItem, oPC);
-switch (GetLocalInt(oItem,"vSetID"))
+switch (PS_GetLocalInt(oItem,"vSetID"))
 {	
 
 /////////////////////////////////////////////////////////////////////////////////////////

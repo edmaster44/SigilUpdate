@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////
 //:: Created By: Clangeddin
 //:: Created On: 2015
@@ -24,12 +26,12 @@ int CheckPoly(object oPC)
 void OOCRoomPortal(object oPC) {
 
 	object oOOCWP = GetWaypointByTag("wp_ooc_portal_destination");
-	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
+	if (PS_GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
 	int nCurrentTime = GetRealTime();
-	int nLastCheck = GetLocalInt(oPC, "LAST_OOC_PORTAL");
+	int nLastCheck = PS_GetLocalInt(oPC, "LAST_OOC_PORTAL");
 	int nDiff = nCurrentTime-nLastCheck;
 	int nMinutes = (nDiff/60);
 	

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Distracted Script - for the spell effects which 
 //:: need to be broken by damage
@@ -27,5 +29,5 @@ void main () {
 	}
 
 	//Remove me after I've been called
-	SetLocalString(OBJECT_SELF, "DamagedScript", "");
+	PS_SetLocalString(OBJECT_SELF, "DamagedScript", "");
 }

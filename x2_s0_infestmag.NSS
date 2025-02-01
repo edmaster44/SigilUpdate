@@ -98,7 +98,7 @@ void main()
            		// Apply Effects, Schedule damage ticks
            		//---------------------------------------------------------------
             	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget,RoundsToSeconds(nDuration)));
-            	SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(SPELL_INFESTATION_OF_MAGGOTS), nDC);
+            	PS_SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(SPELL_INFESTATION_OF_MAGGOTS), nDC);
             	DelayCommand(fDelay+0.1f, RunInfestImpact(oTarget,oCaster,nDC, nMetaMagic));
         	}
 		}
@@ -120,13 +120,13 @@ void RunInfestImpact(object oTarget, object oCaster, int nSaveDC, int nMetaMagic
 
     if (GetIsDead(oTarget) == FALSE)
     {
-         int nDC = GetLocalInt( oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(SPELL_INFESTATION_OF_MAGGOTS) );
+         int nDC = PS_GetLocalInt( oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(SPELL_INFESTATION_OF_MAGGOTS) );
 
          if ( !MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_DISEASE, OBJECT_SELF) )
          {
             if (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE))
             {
-               DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_INFESTATION_OF_MAGGOTS));
+               PS_DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_INFESTATION_OF_MAGGOTS));
                GZRemoveSpellEffects(SPELL_INFESTATION_OF_MAGGOTS, oTarget);
                return;
             }
@@ -183,7 +183,7 @@ void RunInfestImpact(object oTarget, object oCaster, int nSaveDC, int nMetaMagic
          }
          else
          {
-            DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_INFESTATION_OF_MAGGOTS));
+            PS_DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_INFESTATION_OF_MAGGOTS));
             GZRemoveSpellEffects(SPELL_INFESTATION_OF_MAGGOTS, oTarget);
          }
 

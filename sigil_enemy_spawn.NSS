@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "sigil_enemy_inc"
 
 effect EffectDifficulty(int nLVL, int nDIFF, int nRANK, int nHP, int nSLOW, int nDESTR, int nBOSS)
@@ -62,7 +64,7 @@ effect EffectDifficulty(int nLVL, int nDIFF, int nRANK, int nHP, int nSLOW, int 
 void BossStartup(object oBOSS)
 {
 	object oHELPER;
-	int nENEMY = GetLocalInt(oBOSS, "ENEMY_HEART");
+	int nENEMY = PS_GetLocalInt(oBOSS, "ENEMY_HEART");
 	switch (nENEMY)
 	{
 		case 101:
@@ -90,29 +92,29 @@ void LoopTheKO(object oNPC)
 void main()
 {
 	object oENEMY = OBJECT_SELF;
-	if (GetLocalInt(oENEMY, "KO") == TRUE)
+	if (PS_GetLocalInt(oENEMY, "KO") == TRUE)
 	{
 		DelayCommand(0.0f, LoopTheKO(oENEMY));
 		return;
 	}
 	object oAREA = GetArea(oENEMY);
-	int nDIFF = GetLocalInt(oAREA, "ENEMY_DIFF");
+	int nDIFF = PS_GetLocalInt(oAREA, "ENEMY_DIFF");
 	if (nDIFF < 1)
 	{
 		object oMOB = GetNearestObjectByTag("sigil_mobs", oENEMY);
-		nDIFF = GetLocalInt(oMOB, "ENEMY_DIFF");
+		nDIFF = PS_GetLocalInt(oMOB, "ENEMY_DIFF");
 	}
 	
 	if (nDIFF < 1) nDIFF = 1;
 	else if (nDIFF > 4) nDIFF = 4;
-	SetLocalInt(oENEMY, "ENEMY_DIFF", nDIFF);
+	PS_SetLocalInt(oENEMY, "ENEMY_DIFF", nDIFF);
 	int nLVL = GetHitDice(oENEMY);
-	int nRANK = GetLocalInt(oENEMY, "ENEMY_RANK");
+	int nRANK = PS_GetLocalInt(oENEMY, "ENEMY_RANK");
 	if (nRANK < 1) nRANK = 1;
-	int nHP = GetLocalInt(oENEMY, "ENEMY_HP");
-	int nSLOW = GetLocalInt(oENEMY, "ENEMY_SLOW");
-	int nDESTR = GetLocalInt(oENEMY, "ENEMY_DEST");
-	int nBOSS = GetLocalInt(oENEMY, "ENEMY_BOSS");
+	int nHP = PS_GetLocalInt(oENEMY, "ENEMY_HP");
+	int nSLOW = PS_GetLocalInt(oENEMY, "ENEMY_SLOW");
+	int nDESTR = PS_GetLocalInt(oENEMY, "ENEMY_DEST");
+	int nBOSS = PS_GetLocalInt(oENEMY, "ENEMY_BOSS");
 	string sCOLOR = "<c=Aquamarine>";
 	switch (nDIFF)
 	{

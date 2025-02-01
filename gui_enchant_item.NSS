@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_newenchanting"
 #include "dethia_shop_sys"
 
@@ -17,8 +19,8 @@ void PlayIdleAnimation(object oPC) {
 void main () {
 
 	object oPC = OBJECT_SELF;
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
-	int nIndex = GetLocalInt(oPC, "EnchantmentToApply");
+	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	int nIndex = PS_GetLocalInt(oPC, "EnchantmentToApply");
 	
 	object oBench = GetNearestEnchantingWorkbench(oPC);
 	if (!GetIsObjectValid(oBench)) {
@@ -27,15 +29,15 @@ void main () {
 	}
 	
 	//Clearing any saved objects so it doesn't get confused
-	DeleteLocalObject(oPC, "GemstoneToTake");
-	DeleteLocalObject(oPC, "EssenceToTake");
+	PS_DeleteLocalObject(oPC, "GemstoneToTake");
+	PS_DeleteLocalObject(oPC, "EssenceToTake");
 	
 	struct enchantment enchant = LoadEnchantment(nIndex, oPC);
 	
 	if (CanEnchantItem(oPC, oItem, enchant)) {
 		TakeEnchantmentRequirements(oPC, enchant);
 		EnchantItem(oItem, enchant);
-		SetLocalInt(oItem, "PRICE_DIRTY", 1);
+		PS_SetLocalInt(oItem, "PRICE_DIRTY", 1);
 		if (!CRAFT_DIRECT_FROM_2DA) SetItemCostVariables(oItem);
 	}
 	

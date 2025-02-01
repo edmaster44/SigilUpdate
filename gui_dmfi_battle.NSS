@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_batui - DM Friendly Initiative - GUI script for DMFI Battle UI
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -19,7 +21,7 @@ void main(string sInput)
 	effect eEffect, eStrEffect, eDexEffect, eConEffect, eDREffect, eSREffect;
 	object oTool = DMFI_GetTool(OBJECT_SELF);
 	object oSpeaker = DMFI_UITarget(OBJECT_SELF, oTool);
-	object oTarget = GetLocalObject(oTool, DMFI_TARGET);
+	object oTarget = PS_GetLocalObject(oTool, DMFI_TARGET);
 	
 	nStr = GetAbilityScore(oTarget, ABILITY_STRENGTH);
 	nDex = GetAbilityScore(oTarget, ABILITY_DEXTERITY);
@@ -27,10 +29,10 @@ void main(string sInput)
 	
 	nSR = GetSpellResistance(oTarget);
 	
-	nStrEffect = GetLocalInt(oTarget, DMFI_STR_EFFECT);
-	nDexEffect = GetLocalInt(oTarget, DMFI_DEX_EFFECT);
-	nConEffect = GetLocalInt(oTarget, DMFI_CON_EFFECT);
-	nSREffect = GetLocalInt(oTarget, DMFI_SR_EFFECT);
+	nStrEffect = PS_GetLocalInt(oTarget, DMFI_STR_EFFECT);
+	nDexEffect = PS_GetLocalInt(oTarget, DMFI_DEX_EFFECT);
+	nConEffect = PS_GetLocalInt(oTarget, DMFI_CON_EFFECT);
+	nSREffect = PS_GetLocalInt(oTarget, DMFI_SR_EFFECT);
 	
 	eEffect = GetFirstEffect(oTarget);
 	while (GetIsEffectValid(eEffect))
@@ -73,10 +75,10 @@ void main(string sInput)
 	if (nSREffect>0)			eSREffect = EffectSpellResistanceIncrease(nSREffect);
 	else 						eSREffect = EffectSpellResistanceDecrease(-nSREffect);			
 
-	SetLocalInt(oTarget, DMFI_STR_EFFECT, nStrEffect);
-	SetLocalInt(oTarget, DMFI_DEX_EFFECT, nDexEffect);
-	SetLocalInt(oTarget, DMFI_CON_EFFECT, nConEffect);
-	SetLocalInt(oTarget, DMFI_SR_EFFECT, nSREffect);
+	PS_SetLocalInt(oTarget, DMFI_STR_EFFECT, nStrEffect);
+	PS_SetLocalInt(oTarget, DMFI_DEX_EFFECT, nDexEffect);
+	PS_SetLocalInt(oTarget, DMFI_CON_EFFECT, nConEffect);
+	PS_SetLocalInt(oTarget, DMFI_SR_EFFECT, nSREffect);
 		
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eStrEffect, oTarget);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDexEffect, oTarget);

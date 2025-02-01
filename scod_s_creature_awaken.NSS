@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: For Painful Sleep of Ages - does the damage
 //:: to monsters when they wake up
@@ -13,7 +15,7 @@ void main () {
 	if (nDamage < 0)
 		return;
 		
-	int nAwake = GetLocalInt(OBJECT_SELF, "AWAKEN_DICE");
+	int nAwake = PS_GetLocalInt(OBJECT_SELF, "AWAKEN_DICE");
 	if (nAwake <= 2)
 		nAwake = 2;
 
@@ -32,5 +34,5 @@ void main () {
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, OBJECT_SELF);
 
 	//Remove me after I've been called
-	SetLocalString(OBJECT_SELF, "DamagedScript", "");
+	PS_SetLocalString(OBJECT_SELF, "DamagedScript", "");
 }

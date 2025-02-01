@@ -48,7 +48,7 @@ void PS_Feat_SHD_SummonShadow(object oPC, int nSpell)
 	int nLevel 			= GetLevelByClass(CLASS_TYPE_SHADOWDANCER, oPC);
     int nCharLevel 		= GetTotalLevels(oPC,0);
 	object oItem		= GetItemPossessedBy(oPC,"ps_essence");
-	string sLA 			= GetLocalString(oItem, "ECL");
+	string sLA 			= PS_GetLocalString(oItem, "ECL");
 	int nLA 			= StringToInt(sLA);
 	int nEffLevel 		= (nCharLevel + nLA);
 
@@ -153,7 +153,7 @@ void PS_Feat_BG_FiendishServant(object oPC, int nSpell)
 	int nLevel 			= GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) ||KnightLevels(oPC);
     int nCharLevel 		= GetTotalLevels(oPC,0);
 	object oItem		= GetItemPossessedBy(oPC,"ps_essence");
-	string sLA 			= GetLocalString(oItem, "ECL");
+	string sLA 			= PS_GetLocalString(oItem, "ECL");
 	int nLA 			= StringToInt(sLA);
 	int nEffLevel = (nCharLevel + nLA);
 	int iAlignmentLaw = GetAlignmentLawChaos(oPC);
@@ -204,7 +204,7 @@ void PS_Feat_SHD_ShadowJump(object oPC, location lTarget, int nSpell)
     effect eConceal = EffectConcealment(80);
 
     if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
-    if (GetLocalInt(oPC, "DIMENSIONAL_ACHORED"))
+    if (PS_GetLocalInt(oPC, "DIMENSIONAL_ACHORED"))
     {    SendMessageToPC(oPC, "A Dimensional Anchor makes it impossible to teleport.");
         return;        }
     AssignCommand(oPC, ActionJumpToLocation(lTarget));
@@ -254,7 +254,7 @@ void PS_Feat_DMN_BinderOfFiends(object oPC, int nSpell)
 	int nLevel 				= GetLevelByClass(69, oPC);
     int nCharLevel 			= GetTotalLevels(oPC, 0);
 	object oItem			= GetItemPossessedBy(oPC, "ps_essence");
-	string sLA 				= GetLocalString(oItem, "ECL");
+	string sLA 				= PS_GetLocalString(oItem, "ECL");
 	int nLA 				= StringToInt(sLA);
 	int nEffLevel 			= (nCharLevel + nLA);
 	int iAlignmentLaw	 	= GetAlignmentLawChaos(oPC);

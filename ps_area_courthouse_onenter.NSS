@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 	// if (!GetIsPC(oPC) && !GetIsDM(oPC))
 	//  return;
 	  
-	int iLock = GetGlobalInt("CourthouseEnterLock");
+	int iLock = PS_GetGlobalInt("CourthouseEnterLock");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("CourthouseEnterLock", 1); // Only allows one clean up at a time.
+	  PS_SetGlobalInt("CourthouseEnterLock", 1); // Only allows one clean up at a time.
 	
 	  if(GetObjectByTag("cc_accused") == OBJECT_INVALID)
 	  {
@@ -160,6 +162,6 @@ void main()
 		   location lSpawnpoint = GetLocation(oWP);  
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cc_judge03", lSpawnpoint);    
 	  }
-	  SetGlobalInt("CourthouseEnterLock", 0);
+	  PS_SetGlobalInt("CourthouseEnterLock", 0);
   	}
 }

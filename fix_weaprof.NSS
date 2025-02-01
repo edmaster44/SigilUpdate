@@ -1,10 +1,12 @@
+#include "ff_safevar"
+
 //Weapon Proficiency fixes for Favored Souls
 
 void main()
 {
 	object oPC = OBJECT_SELF;
 	if (GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) < 1) return;
-	if (GetLocalInt(oPC, "FAVSOUL_PROF_FIX") == 1) return; //This is to spare a lot of strain on the server.
+	if (PS_GetLocalInt(oPC, "FAVSOUL_PROF_FIX") == 1) return; //This is to spare a lot of strain on the server.
 	string sDEITY = GetDeity(oPC);
 	string sCOMPARE;
 	int nFEAT;
@@ -26,7 +28,7 @@ void main()
 	if (nFEAT <= 0) return; //Just in case something wrong happened and we didn't find our deity.
 	if (GetHasFeat(nFEAT, oPC, TRUE) == FALSE) 
 	{
-		SetLocalInt(oPC, "FAVSOUL_PROF_FIX", 1); //Makes sure we won't do this check again until server reset.
+		PS_SetLocalInt(oPC, "FAVSOUL_PROF_FIX", 1); //Makes sure we won't do this check again until server reset.
 		FeatAdd(oPC, nFEAT, FALSE, FALSE, TRUE);
 	}
 }

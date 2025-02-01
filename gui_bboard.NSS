@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 const string MSGBOARD_XML = "bboard.xml";
 const string MSGBOARD_XML2 = "bboard_msg.xml";
 const string SCREEN_MSGBOARD = "SCREEN_BBOARD"; //main board
@@ -13,9 +15,9 @@ void main (int N1, int N2, string sVar) {
 	//SpeakString("showing "+IntToString(N1)+", "+IntToString(N2)+", "+sVar, TALKVOLUME_SHOUT);
 	string sNum = IntToString(N1);
 	
-	string sImg = GetLocalString(OBJECT_SELF, "quest_img_"+sNum);
-	string sText = GetLocalString(OBJECT_SELF, "quest_msg_"+sNum);
-	string sTitle = GetLocalString(OBJECT_SELF, "quest_title_"+sNum);
+	string sImg = PS_GetLocalString(OBJECT_SELF, "quest_img_"+sNum);
+	string sText = PS_GetLocalString(OBJECT_SELF, "quest_msg_"+sNum);
+	string sTitle = PS_GetLocalString(OBJECT_SELF, "quest_title_"+sNum);
 	
 	//SpeakString("showing title: "+sTitle+", img: "+sImg+", text: "+sText, TALKVOLUME_SHOUT);
 	

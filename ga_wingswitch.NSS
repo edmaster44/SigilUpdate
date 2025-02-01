@@ -8,8 +8,8 @@ void main(int type)
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
 	
-	DeleteLocalInt(oItem, "WingSwitch");
-	SetLocalInt(oItem, "WingOverride", type);
+	PS_DeleteLocalInt(oItem, "WingSwitch");
+	PS_SetLocalInt(oItem, "WingOverride", type);
 	PS_WingTailSetup(oPC);
 	PS_ApplyPCWings(oPC);
 }

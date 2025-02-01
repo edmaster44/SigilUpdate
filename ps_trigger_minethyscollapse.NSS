@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_time"
 #include "x0_i0_transport"
 
@@ -10,8 +12,8 @@ void main () {
 	//	return;
 	SendMessageToPC(oPC, "Checking.");
 	
-	object oTargetWP = GetWaypointByTag(GetLocalString(OBJECT_SELF, "TargetWP"));
-	object oEscapeWP = GetWaypointByTag(GetLocalString(OBJECT_SELF, "EscapeWP"));
+	object oTargetWP = GetWaypointByTag(PS_GetLocalString(OBJECT_SELF, "TargetWP"));
+	object oEscapeWP = GetWaypointByTag(PS_GetLocalString(OBJECT_SELF, "EscapeWP"));
 		
 	if (d100() < 25) { //25% of a given trap triggering
 	

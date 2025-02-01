@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nw_i0_spells"
 
 void main(string status)
@@ -6,12 +8,12 @@ void main(string status)
 
 	if (status=="On" && GetHasSpell(SPELL_I_DARK_FORESIGHT, oPC)>0) 
 	{
-		SetLocalInt(oPC,"DarkForesight",TRUE);
+		PS_SetLocalInt(oPC,"DarkForesight",TRUE);
 		ExecuteScript("nw_s0_idarkfors2",oPC);
 	}
 	else 
 	{	
-		SetLocalInt(oPC,"DarkForesight",FALSE);
+		PS_SetLocalInt(oPC,"DarkForesight",FALSE);
 		RemoveEffectsFromSpell(oPC, SPELL_I_DARK_FORESIGHT);
 	}
 }

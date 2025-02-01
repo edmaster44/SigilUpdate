@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /******************************************************************************
 *****                    Dialog_nwnx_craft_action                         *****
 *****                               V 1                                   *****
@@ -41,11 +43,11 @@ void main(int iAction, int iAvtValue)
 	object oPC = GetPCSpeaker();//since the player speaks to himself in that dialog, one could use OBJECT_SELF instead of PCSpeaker()
 	
 	//Check for the object to craft
-	int iInventorySlot = GetLocalInt(oPC,"XC_INVENT_SLOT");
+	int iInventorySlot = PS_GetLocalInt(oPC,"XC_INVENT_SLOT");
 	object oItemToCraft = GetItemInSlot(iInventorySlot,oPC);
 
 	//cryptc: this is where to check for identical TSO.
-	if(	GetLocalString(oPC,"TSO") != GetLocalString(oItemToCraft,"TSO") )
+	if(	PS_GetLocalString(oPC,"TSO") != PS_GetLocalString(oItemToCraft,"TSO") )
 	{
 		return;
 	}
@@ -60,7 +62,7 @@ void main(int iAction, int iAvtValue)
 	
 	//ACTION MANGEMENT
 	//since we can't declare a variable into a case statement, we do it here though it won't be used in every case.
-	string sSubAction =  GetStringLeft( GetLocalString(oPC,"XC_ROAD_MAP"),2);
+	string sSubAction =  GetStringLeft( PS_GetLocalString(oPC,"XC_ROAD_MAP"),2);
 	//sub action we be like "Va" for Variation, "Ar" for ArmorVisualType, "AC" for ArmorParts and "Mo" for ModelParts 
 	
 	switch(iAction)
@@ -86,7 +88,7 @@ void main(int iAction, int iAvtValue)
 		case XP_CRAFT_ACTION_TINT_1 ://change colors (without a break once it enters the statement
 		case XP_CRAFT_ACTION_TINT_2 ://it'll execute whatever comes after ;) )
 		case XP_CRAFT_ACTION_TINT_3 ://
-			SetLocalInt(oPC,"XC_ACTION_TINT",iAction);
+			PS_SetLocalInt(oPC,"XC_ACTION_TINT",iAction);
 			DisplayGuiScreen(oPC,"SCREEN_COLOR_TLS",TRUE,"elechos_colortls.xml");
 			break;
 			
@@ -94,7 +96,7 @@ void main(int iAction, int iAvtValue)
 		//previously using the same Next/Previous system  than for Vairations and ArmorPArts... ,
 		// i've changed for this approach in order to make it more readeable for the end user
 		//since AVTypes are number that truly means something (unlike Variations, ArmorParts or ModelParts)
-			SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorVisualType(oPC, oItemToCraft, iAvtValue));
+			PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorVisualType(oPC, oItemToCraft, iAvtValue));
 			break;
 			
 		case XP_CRAFT_ACTION_SELECT_ARMOR_PIECE:// Choose an armor piece in this items armor set to edit.
@@ -105,15 +107,15 @@ void main(int iAction, int iAvtValue)
 			//SubAction Mangement
 			if(sSubAction == "Va")
 			{
-				SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeVariation(oPC, oItemToCraft, iAction));
+				PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeVariation(oPC, oItemToCraft, iAction));
 			}
 			else if(sSubAction == "AC")
 			{
-				SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorPart(oPC, oItemToCraft, iAction));
+				PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorPart(oPC, oItemToCraft, iAction));
 			}
 			else if(sSubAction == "Mo")
 			{
-				SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeModelPart(oPC, oItemToCraft, iAction));
+				PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeModelPart(oPC, oItemToCraft, iAction));
 			}
 			else
 			{//won't actually happend with this dialog

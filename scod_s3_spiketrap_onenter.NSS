@@ -32,7 +32,7 @@ void main()
 	//Base DC 15
 	int nDC = GetSkillAdjustedTrapDC(15, oCaster, 4);
 	int nSlowDur = 5;
-    int nFire = GetLocalInt(OBJECT_SELF, "scod_spiketrap");
+    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_spiketrap");
     
 	effect eSlow = ExtraordinaryEffect(EffectSlow());
 	effect eVis = EffectVisualEffect(VFX_IMP_SPIKE_TRAP);
@@ -44,7 +44,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            SetLocalInt(OBJECT_SELF, "scod_spiketrap",TRUE);
+            PS_SetLocalInt(OBJECT_SELF, "scod_spiketrap",TRUE);
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SPIKE_TRAP));
 			

@@ -83,7 +83,7 @@ void PS_Fey_FeyHypnotism(object oPC) {
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
 					
 						//Make sure being damaged breaks the spell
-						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
+						PS_SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
 					
 	                    maxCreatures--;
 	                }
@@ -201,7 +201,7 @@ void PS_Fey_FeyInvisbility(object oPC) {
 //Fey Glamer spell
 void PS_Fey_FeyGlamer(object oPC, location lTarget) {
 
-	object oGlamer = GetLocalObject(oPC, "Glamer_2");
+	object oGlamer = PS_GetLocalObject(oPC, "Glamer_2");
 	if (GetIsObjectValid(oGlamer)) {
 		SendMessageToPC(oPC, "You may not have more than one fey Glamer active at a time!");
 		DestroyObject(oGlamer);
@@ -214,13 +214,13 @@ void PS_Fey_FeyGlamer(object oPC, location lTarget) {
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
 	string sImmune = "Immunity_"+IntToString(Random(10000));
-	SetLocalString(oClone, "Immunity_String", sImmune);
-	SetLocalFloat(oClone, "Duration", RoundsToSeconds(nDuration));
-	SetLocalObject(oClone, "Caster", oPC);
-	SetLocalInt(oClone, "SaveDC", GetSpellSaveDC());
+	PS_SetLocalString(oClone, "Immunity_String", sImmune);
+	PS_SetLocalFloat(oClone, "Duration", RoundsToSeconds(nDuration));
+	PS_SetLocalObject(oClone, "Caster", oPC);
+	PS_SetLocalInt(oClone, "SaveDC", GetSpellSaveDC());
 	PS_Timestamp_UNIX(oClone, "Glamer_Timestamp");
-	SetLocalInt(oClone, "Spell_ID", GetSpellId());
-	SetLocalObject(oPC, "Glamer_2", oClone);
+	PS_SetLocalInt(oClone, "Spell_ID", GetSpellId());
+	PS_SetLocalObject(oPC, "Glamer_2", oClone);
 	
 	AssignCommand(oClone, ActionRandomWalk());
 	
@@ -333,9 +333,9 @@ void PS_Fey_Kiss(object oPC, object oTarget) {
 //Fey Aspect of Seasons spell
 void PS_Fey_SeasonalAspect(object oPC) {
 
-	int currentSeason = GetLocalInt(oPC, "currentSeason") + 1;
+	int currentSeason = PS_GetLocalInt(oPC, "currentSeason") + 1;
 	if (currentSeason == 4) currentSeason = 0;
-	SetLocalInt(oPC, "currentSeason", currentSeason);
+	PS_SetLocalInt(oPC, "currentSeason", currentSeason);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ENTANGLE), oPC, 1.0f);
 	
 	//temporary

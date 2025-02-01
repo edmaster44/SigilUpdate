@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Default On Damaged
 //:: NW_C2_DEFAULT6
@@ -24,7 +26,7 @@ void main()
 	// I've been damaged so no longer partially focused
 	if (iFocused == FOCUSED_PARTIAL)
 	{
-		SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
+		PS_SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
 	}
     if (iFocused == FOCUSED_FULL)
 	{
@@ -47,7 +49,7 @@ void main()
         }
         else if (!GetIsFighting(OBJECT_SELF))
         {
-            if ((GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
+            if ((PS_GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
                 (GetPercentageHPLoss(OBJECT_SELF) < 30))
             {
                 // force heal
@@ -76,11 +78,11 @@ void main()
 	//Beast Special
 	//***********************************************************
 	object controller = GetObjectByTag("ps_fw_beastmaster");
-	/*if (GetLocalInt(controller,"FIGHTING") == 0) {
+	/*if (PS_GetLocalInt(controller,"FIGHTING") == 0) {
 		return;
 	}*/
 
-	int nDamage = GetLocalInt(OBJECT_SELF, "total_damage");
+	int nDamage = PS_GetLocalInt(OBJECT_SELF, "total_damage");
 	int damageDealt = GetTotalDamageDealt();
 	object oMonster1 = GetObjectByTag("ps_fw_monster1");
 	object oMonster2 = GetObjectByTag("ps_fw_monster2");
@@ -95,7 +97,7 @@ void main()
 	
 	nDamage = nDamage+damageDealt;
 	//The winner is actually determined by the script, not real combat!
-	if (nDamage > GetMaxHitPoints() && GetLocalInt(oDamager, "Winner")) {
+	if (nDamage > GetMaxHitPoints() && PS_GetLocalInt(oDamager, "Winner")) {
 		EndFight(oDamager);
 		
 		SetImmortal(OBJECT_SELF, FALSE);
@@ -105,19 +107,19 @@ void main()
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, OBJECT_SELF);
 		SpawnBloodHit(OBJECT_SELF, TRUE, GetLastDamager());
 	}
-	SetLocalInt(OBJECT_SELF, "total_damage", nDamage);
+	PS_SetLocalInt(OBJECT_SELF, "total_damage", nDamage);
 }
 
 void EndFight(object oKiller) {
 	object oMonster1 = GetObjectByTag("ps_fw_monster1");
 	object oMonster2 = GetObjectByTag("ps_fw_monster2");
 	object controller = GetObjectByTag("ps_fw_beastmaster");
-	SetLocalString(controller, "Winner", GetLocalString(controller, "POTENTIAL_WINNER"));
+	PS_SetLocalString(controller, "Winner", PS_GetLocalString(controller, "POTENTIAL_WINNER"));
 		
 	if (GetIsObjectValid(oMonster1))
 		DestroyObject(oMonster1, 2.0f);
 	if (GetIsObjectValid(oMonster2))
 		DestroyObject(oMonster2, 2.0f);
 		
-    DeleteLocalInt(controller,"FIGHTING");
+    PS_DeleteLocalInt(controller,"FIGHTING");
 }

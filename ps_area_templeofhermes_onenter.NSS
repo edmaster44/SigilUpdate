@@ -1,12 +1,14 @@
+#include "ff_safevar"
+
 
 void main()
 {
  object oPC = GetEnteringObject();
   
- int iLock = GetGlobalInt("Temple_of_Hermes");
+ int iLock = PS_GetGlobalInt("Temple_of_Hermes");
  if ( iLock == 0 )
  {
-  SetGlobalInt("Temple_of_Hermes", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("Temple_of_Hermes", 1); // Only allows one clean up at a time.
   
   if(GetObjectByTag("ps_npc_hermespriest") == OBJECT_INVALID)
   {
@@ -33,6 +35,6 @@ void main()
   	CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_madmoll", GetLocation(GetWaypointByTag("wp_ps_npc_madmoll"))); 
   }
   
-  SetGlobalInt("Temple_of_Hermes", 0);
+  PS_SetGlobalInt("Temple_of_Hermes", 0);
  }
 }

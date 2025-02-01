@@ -9,7 +9,7 @@ int GetFaction(object oPC)
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
+	 	int nFaction = PS_GetLocalInt(oItem,"Faction");
 		return nFaction;
     }
 	
@@ -44,7 +44,7 @@ void main (int max) {
      	oItem = GetNextItemInInventory(oPC);
     }
 	
-	SetLocalInt(oPC, "corpseNumber", nCount);
+	PS_SetLocalInt(oPC, "corpseNumber", nCount);
 	GiveGoldToCreature(oPC, iGold);
 	if (!ALLOW_ECL_LEVEL_30 || TAX_CORPSES_FOR_ECL) PS_GiveXPReward(oPC, iXp);
 	else GiveXPToCreature(oPC, iXp);

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*#include "ginc_param_const"
 #include "nwnx_sql"
 
@@ -24,7 +26,7 @@ int GetStorageListTotal(string sDB, object oPC)
 {
 	string sQuery = "SELECT COUNT(*) FROM new_storage where storageid='"+sDB+"';";
 	
-	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
 	sQuery = "SELECT COUNT(*) FROM new_storage_guildstorage where storageid='"+sDB+"';";
 	}	

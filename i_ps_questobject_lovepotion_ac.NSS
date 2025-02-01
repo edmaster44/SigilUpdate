@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //
 /*
    Activate item - Love Potion
@@ -36,7 +38,7 @@ void main() {
     object oPC = GetItemActivator();
 	
 	//reset counter
-	DeleteLocalInt(oPC, "LOVE_POTION");
+	PS_DeleteLocalInt(oPC, "LOVE_POTION");
 	
 	DoLovePotion(oPC);
 	
@@ -76,9 +78,9 @@ void DoLovePotion(object oPC) {
 		
 		//We'll keep checking for people in the vicinity
 		//At least 10 times
-		int nTimesChecked = GetLocalInt(oPC, "LOVE_POTION");
+		int nTimesChecked = PS_GetLocalInt(oPC, "LOVE_POTION");
 		if (nTimesChecked < 10) {
-			SetLocalInt(oPC, "LOVE_POTION", nTimesChecked++);
+			PS_SetLocalInt(oPC, "LOVE_POTION", nTimesChecked++);
 			
 			DelayCommand(120.0f, DoLovePotion(oPC));
 		}

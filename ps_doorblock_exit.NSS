@@ -4,9 +4,9 @@ void main()
 {
 	object oPC = GetExitingObject();
 	if (GetIsPC(oPC))
-	{	SetLocalInt(oPC,"ExploitBlocker",0);
-		DeleteLocalInt(oPC,"DoorExploitPrevent");
-		if (GetLocalInt(oPC,"ClosenessStatus") == 1)
+	{	PS_SetLocalInt(oPC,"ExploitBlocker",0);
+		PS_DeleteLocalInt(oPC,"DoorExploitPrevent");
+		if (PS_GetLocalInt(oPC,"ClosenessStatus") == 1)
 		{	PS_CollisionControl(oPC,0);		}
 	}
 }

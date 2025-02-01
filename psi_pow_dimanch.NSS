@@ -95,10 +95,10 @@ void main()
 		        //Check for Power Resistance
 		        if(PRCMyResistPower(manif.oManifester, oTarget, nPen))
 		        {
-		            if(!GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+		            if(!PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 		            {
 		                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDur);
-		                SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", TRUE);
+		                PS_SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", TRUE);
 						FloatingTextStringOnCreature("Dimensional Anchor Successful",oManifester, FALSE);
 		                // Start the monitor
 		                DelayCommand(fDur, DispelMe(oTarget));
@@ -111,5 +111,5 @@ void main()
 }
 
 void DispelMe(object oTarget) {
-	SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", FALSE);
+	PS_SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", FALSE);
 }

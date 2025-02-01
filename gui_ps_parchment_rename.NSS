@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main (string newname)
 {
 	newname = GetSubString(newname, 0, 20);
@@ -6,17 +8,17 @@ void main (string newname)
 	string parchmentWritingVarName = "writing";
 	
 	object oPC = OBJECT_SELF;
-	object parchmentObject = GetLocalObject(oPC, parchmentVarName);
+	object parchmentObject = PS_GetLocalObject(oPC, parchmentVarName);
 
 	if (newname != "")
 	{
 		SetFirstName(parchmentObject, "Parchment: " + newname);
-		SetLocalString(parchmentObject, parchmentWritingVarName, "(no text)");
+		PS_SetLocalString(parchmentObject, parchmentWritingVarName, "(no text)");
 	}
 	else
 	{
 		SetFirstName(parchmentObject, "Written parchment");
-		SetLocalString(parchmentObject, parchmentWritingVarName, "(no text)");
+		PS_SetLocalString(parchmentObject, parchmentWritingVarName, "(no text)");
 	}
 	
 	// get the actual message text

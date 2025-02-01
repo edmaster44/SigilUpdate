@@ -21,8 +21,8 @@ void main()
 	
     object oItem    = GetItemActivated();
 	
-	string sQuestName = GetLocalString(oItem, "quest_name");
-	int nQuestStatus = GetLocalInt(oItem, "quest_status");
+	string sQuestName = PS_GetLocalString(oItem, "quest_name");
+	int nQuestStatus = PS_GetLocalInt(oItem, "quest_status");
 	
 	SetPermanentInt(sID, sQuestName, nQuestStatus);
 	SendMessageToPC(oDM, sQuestName+" achievement given to "+GetFirstName(oPC));

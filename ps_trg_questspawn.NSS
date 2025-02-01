@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Uses the standard encounter trigger set up to spawn 
 //an encounter - but only when quest parameters are met.
 //Requires all the same variables as a normal encounter trigger
@@ -14,11 +16,11 @@ void main () {
 	object oPC = GetEnteringObject();
 	if (!GetIsPC(oPC)) return;
 	
-	string sQuestTag = GetLocalString(OBJECT_SELF, "RequiredQuest");
-	string sCheck = GetLocalString(OBJECT_SELF, "RequiredQuestStage");
-	string sCheck2 = GetLocalString(OBJECT_SELF, "RequiredQuestStage2");
+	string sQuestTag = PS_GetLocalString(OBJECT_SELF, "RequiredQuest");
+	string sCheck = PS_GetLocalString(OBJECT_SELF, "RequiredQuestStage");
+	string sCheck2 = PS_GetLocalString(OBJECT_SELF, "RequiredQuestStage2");
 	
-	int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
+	int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
  	int nCanSpawn = (CompareInts(iQuestEntry, sCheck));
 	
 	if (nCanSpawn && sCheck2 != "") {
