@@ -1,12 +1,10 @@
-#include "ff_safevar"
-
 void main() {
 
 	object oPC = GetEnteringObject();
 
-	int iLock = PS_GetGlobalInt("crypt1EnterLock");
+	int iLock = GetGlobalInt("crypt1EnterLock");
 	if ( iLock == 0 ) {
-		PS_SetGlobalInt("crypt1EnterLock", 1); // Only allows one clean up at a time.
+		SetGlobalInt("crypt1EnterLock", 1); // Only allows one clean up at a time.
    		if(GetObjectByTag("ps_us_crypt2_ghostgirl") == OBJECT_INVALID) {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_crypt2_ghostgirl", GetLocation(GetWaypointByTag("wp_us_crypt2_ghostgirl")));
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_crypt2_ghostgirl", GetLocation(GetWaypointByTag("wp_us_crypt2_ghostgirl2")));
@@ -18,7 +16,7 @@ void main() {
 			SetScriptHidden(GetObjectByTag("ps_us_crypt2_ghostgirl2"), FALSE);
 		}
 		
-		PS_SetGlobalInt("crypt1EnterLock", 0);
+		SetGlobalInt("crypt1EnterLock", 0);
  	}
 	
 }

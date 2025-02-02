@@ -26,7 +26,7 @@ void PS_SetItemDescription(object oPC, object oItem)
 
 	// the gui script will always run on the owned PC, regardless of who the player has possessed.
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
+	SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
 	
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,
@@ -52,7 +52,7 @@ void PS_SetItemName(object oPC, object oItem)
 
 	// the gui script will always run on the owned PC, regardless of who the player has possessed.
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
+	SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
 
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,
@@ -81,7 +81,7 @@ void PS_SetItemIcon(object oPC, object oItem)
 	// the gui script will always run on the owned PC, regardless of who the player has possessed.
 	SendMessageToPC(oPC, "Current Icon: " + sIconNumber);
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
+	SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
 
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,

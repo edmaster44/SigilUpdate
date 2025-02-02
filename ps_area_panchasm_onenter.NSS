@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -9,10 +7,10 @@ void main()
  	 string sDescrip = "Occasionally the tight passages open out into large caverns. Here the sound of the wind is less oppressive, replaced by the sound of dripping water. The wind is still strong, however, threatening to throw you off of the narrow pathways. With a little light, you can make out shapes moving at the edge of sight.";
  	 DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	 
-	 int iLock = PS_GetGlobalInt("PanChasmEnterLock");
+	 int iLock = GetGlobalInt("PanChasmEnterLock");
 	 if ( iLock == 0 )
 	 {
-		  PS_SetGlobalInt("PanChasmEnterLock", 1); // Only allows one clean up at a time.
+		  SetGlobalInt("PanChasmEnterLock", 1); // Only allows one clean up at a time.
 		  
 		  /*if(GetObjectByTag("ps_pan_malla") == OBJECT_INVALID) {
 		  	   object oWP = GetWaypointByTag("wp_ps_pan_malla");
@@ -50,7 +48,7 @@ void main()
 			   oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_pandemonium_monster", lSpawnpoint);   
 		  }
 		   
-		  PS_SetGlobalInt("PanChasmEnterLock", 0);
+		  SetGlobalInt("PanChasmEnterLock", 0);
 	  
 	 }
 }

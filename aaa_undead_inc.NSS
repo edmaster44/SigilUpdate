@@ -47,28 +47,28 @@ void PS_Template_LevelAdjustment(object oPC, object oItem)
 	if (iLich != 0)
 	{	//iNewECL = nOldECL + 3;
 		//sNewECL = IntToString(iNewECL);
-		//PS_SetLocalInt(oItem, "OldECL", nOldECL);
-		//PS_SetLocalString(oPC, "ECL", sNewECL);
-		//PS_SetLocalString(oItem, "ECL", sNewECL);
-		PS_SetLocalString(oItem, "Template", "Lich");
+		//SetLocalInt(oItem, "OldECL", nOldECL);
+		//SetLocalString(oPC, "ECL", sNewECL);
+		//SetLocalString(oItem, "ECL", sNewECL);
+		SetLocalString(oItem, "Template", "Lich");
 		SetFirstName(oItem, "My Phylactery");
 		SetItemIcon(oItem, 2711);	}
 		
 	if (iVamp != 0)
 	{	//iNewECL = nOldECL + 3;
 		//sNewECL = IntToString(iNewECL);
-		//PS_SetLocalInt(oItem, "OldECL", nOldECL);
-		//PS_SetLocalString(oPC, "ECL", sNewECL);
-		//PS_SetLocalString(oItem, "ECL", sNewECL);
-		PS_SetLocalString(oItem, "Template", "Vampire");	}
+		//SetLocalInt(oItem, "OldECL", nOldECL);
+		//SetLocalString(oPC, "ECL", sNewECL);
+		//SetLocalString(oItem, "ECL", sNewECL);
+		SetLocalString(oItem, "Template", "Vampire");	}
 		
 	if (iDKnt != 0)
 	{	//iNewECL = nOldECL + 3;
 		//sNewECL = IntToString(iNewECL);
-		//PS_SetLocalInt(oItem, "OldECL", nOldECL);
-		//PS_SetLocalString(oPC, "ECL", sNewECL);
-		//PS_SetLocalString(oItem, "ECL", sNewECL);
-		PS_SetLocalString(oItem, "Template", "DeathKnight");	}
+		//SetLocalInt(oItem, "OldECL", nOldECL);
+		//SetLocalString(oPC, "ECL", sNewECL);
+		//SetLocalString(oItem, "ECL", sNewECL);
+		SetLocalString(oItem, "Template", "DeathKnight");	}
 	
 	// Remove one level if total ECL results in a value greater than 30
 	if (PS_GetLevel(oPC) > 30 )
@@ -129,7 +129,7 @@ void PS_Undead_TouchOfEvil(object oPC)
 	
     {	if(GetIsObjectValid(oItem))
     	{
-	 		int nUndead = PS_GetLocalInt(oItem,"IsUndead"); //verifies this will not be set twice
+	 		int nUndead = GetLocalInt(oItem,"IsUndead"); //verifies this will not be set twice
 			int nGoodEvil = GetGoodEvilValue(oPC);
 			if(nUndead != 1)
 			{	if(GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC) > 0)
@@ -138,8 +138,8 @@ void PS_Undead_TouchOfEvil(object oPC)
 				{	AdjustAlignment(oPC, ALIGNMENT_EVIL, 35);	}
 				SendMessageToPC(oPC, "As you begin your undeath, evil has left its mark on your soul.");
 				PS_Template_LevelAdjustment(oPC, oItem);
-				PS_SetLocalInt(oItem, "IsUndead", 1);
-				PS_SetLocalInt(oItem, "OldGoodEvil", nGoodEvil);
+				SetLocalInt(oItem, "IsUndead", 1);
+				SetLocalInt(oItem, "OldGoodEvil", nGoodEvil);
 			}	
 		}
 	}	
@@ -155,9 +155,9 @@ void PS_UndeadRacialType(object oPC)
 		int nOrigin = GetRacialType(oPC);
 		int nOriSub = GetSubRace(oPC);
 		PS_RestoreOriginalAppearance(oPC);
-		PS_SetLocalInt(oEssence, VAR_OLD_RACE, nOrigin);
-		PS_SetLocalInt(oEssence, "OldSubrace", nOriSub);
-		PS_SetLocalInt(oEssence, "TemplateFix", 0);
+		SetLocalInt(oEssence, VAR_OLD_RACE, nOrigin);
+		SetLocalInt(oEssence, "OldSubrace", nOriSub);
+		SetLocalInt(oEssence, "TemplateFix", 0);
 		effect eUndead 	= EffectNWN2SpecialEffectFile("fx_coven_murder", oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
 		effect eUndead2 = EffectNWN2SpecialEffectFile("fx_black_cloud", oPC);
@@ -187,7 +187,7 @@ void PS_UndeadRacialType(object oPC)
 			}
 
 			int iAppearance = GetAppearanceType(oPC);
-			PS_SetLocalInt(oEssence, "OldAppearance", iAppearance);
+			SetLocalInt(oEssence, "OldAppearance", iAppearance);
 			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAppVar;
 			PS_SetCreatureCoreAppearance(oPC, app);
@@ -273,7 +273,7 @@ void PS_UndeadProperties(object oPC, int nSpell)
 int GetIsShortRace(object oPC)
 {
 	object oEssence	= PS_GetEssence(oPC);
-	switch(PS_GetLocalInt(oEssence, VAR_OLD_RACE))
+	switch(GetLocalInt(oEssence, VAR_OLD_RACE))
 	{	case RACIAL_TYPE_DWARF:
 		case RACIAL_TYPE_GNOME:
 		case RACIAL_TYPE_HALFLING:
@@ -287,7 +287,7 @@ int GetIsShortRace(object oPC)
 int GetIsElf(object oPC)
 {
 	object oEssence	= PS_GetEssence(oPC);
-	int nRace		= PS_GetLocalInt(oEssence, VAR_OLD_RACE);
+	int nRace		= GetLocalInt(oEssence, VAR_OLD_RACE);
 	return nRace == TRUE;
 }
 
@@ -299,7 +299,7 @@ void PS_RottingVisage(object oPC, int nSpell)
     {	return;		}
 	
 	object oItem	= PS_GetEssence(oPC);
-	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nTemp		= GetLocalInt(oItem, "TempChange");
 	int iForm = 102;
 	effect eVis 	= EffectNWN2SpecialEffectFile("fx_shadowjump", oPC);
 	effect eScale;
@@ -314,7 +314,7 @@ void PS_RottingVisage(object oPC, int nSpell)
 	{	PS_ChangeSelf_AppearanceType(oPC, iForm);
 		PS_ChangeSelf_HeadVariation(oPC, 1);
 		PS_RefreshAppearance(oPC);
-		PS_SetLocalInt(oItem, "TempChange", 1);
+		SetLocalInt(oItem, "TempChange", 1);
 		if (GetIsShortRace(oPC))
 		{	eScale = EffectSetScale(0.68f, 0.68f, 0.68f);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eScale, oPC, HoursToSeconds(24));	}
@@ -490,9 +490,9 @@ void PS_LichDR(object oPC, int nSpell)
 	eGood = SetEffectSpellId(eGood, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
-	if (PS_GetLocalInt(oPC, "drGood") != iDR){
+	if (GetLocalInt(oPC, "drGood") != iDR){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
-		PS_SetLocalInt(oPC, "drGood", iDR);
+		SetLocalInt(oPC, "drGood", iDR);
 	}
         
 }
@@ -643,9 +643,9 @@ void PS_DKDamageReduction(object oPC, int nSpell)
 	eGood = SetEffectSpellId(eGood, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
-	if (PS_GetLocalInt(oPC, "drGood") != iDR){
+	if (GetLocalInt(oPC, "drGood") != iDR){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
-		PS_SetLocalInt(oPC, "drGood", iDR);
+		SetLocalInt(oPC, "drGood", iDR);
 	}	
 }
 
@@ -1019,9 +1019,9 @@ void PS_VampDR(object oPC, int nSpell)
 		eLink = SetEffectSpellId(eLink, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		if (PS_GetLocalInt(oPC, "vampDr") != iBonus){
+		if (GetLocalInt(oPC, "vampDr") != iBonus){
 			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iBonus) + "/alchemical silver and resistance of " + IntToString(iBonus) + " to cold and electricity applied.");
-			PS_SetLocalInt(oPC, "vampDr", iBonus);
+			SetLocalInt(oPC, "vampDr", iBonus);
 		}
 	}
 }
@@ -1139,7 +1139,7 @@ void PS_Vamp_BloodFrenzy(object oPC, int iLevel, int nSpell)
 void PS_VampMal_BonusFeat(object oPC, object oItem, int nSpell)
 {
 
-	int iHasBonus = PS_GetLocalInt(oItem, "VML5");
+	int iHasBonus = GetLocalInt(oItem, "VML5");
 
 	if (iHasBonus != 0)
 	{
@@ -1152,5 +1152,5 @@ void PS_VampMal_BonusFeat(object oPC, object oItem, int nSpell)
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);
 	}
 
-	PS_SetLocalInt(oItem, "VML5", 1);
+	SetLocalInt(oItem, "VML5", 1);
 }

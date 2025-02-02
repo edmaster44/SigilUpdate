@@ -63,11 +63,11 @@ void main()
         if(GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT, oManifester))
 		   {
 		   				nDamage = d6(nNumberOfDice);
-						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
+						if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
 						{
 							nDamage = 6 + (nNumberOfDice);
 						}
-						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+						if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
 			            {
 			                nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
 			            }
@@ -92,11 +92,11 @@ void main()
                     {
                         // Roll damage
                         nDamage = d6(nNumberOfDice);
-						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
+						if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
 						{
 							nDamage = 6 + (nNumberOfDice);
 						}
-						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+						if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
 			            {
 			                nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
 			            }

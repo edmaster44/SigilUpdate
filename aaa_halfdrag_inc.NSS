@@ -83,13 +83,13 @@ void PS_HD_SetAlignmentsByHeritage(object oPC)
 
 	object oItem = GetItemPossessedBy(oPC, "ps_essence");
 
-	PS_SetLocalInt(oItem, "Draconic_Heritage", nHeritage);
+	SetLocalInt(oItem, "Draconic_Heritage", nHeritage);
 }
 
 
 void PS_HD_DraconicHeritage(object oPC, int nSpell, object oItem)
 {
-	int iHeritage = PS_GetLocalInt(oItem, "Draconic_Heritage");
+	int iHeritage = GetLocalInt(oItem, "Draconic_Heritage");
 	if (iHeritage != 0)
 	{	return;		}
 	else
@@ -98,18 +98,18 @@ void PS_HD_DraconicHeritage(object oPC, int nSpell, object oItem)
 		AddScriptParameterString("");
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
-	PS_SetLocalString(oItem, "Template", "HalfDragon");
+	SetLocalString(oItem, "Template", "HalfDragon");
 	PS_HD_SetAlignmentsByHeritage(oPC);
 	PS_TintFixer(oPC); //testing to see if this gives properly tinted wings!
 }
 
 void PS_HD_InTheBlood(object oPC, object oItem)
 {
-	int nHeritage = PS_GetLocalInt(oItem, "Draconic_Heritage");
+	int nHeritage = GetLocalInt(oItem, "Draconic_Heritage");
 	int iGood_D;
 	int iLaw_D;
 	int nOldECL = PS_GetEssenceECL(oPC);
-	string sInBlood	= PS_GetLocalString(oItem, "InBlood");
+	string sInBlood	= GetLocalString(oItem, "InBlood");
 	int iNewECL, iDragon;
 	string sNewECL;
 
@@ -138,10 +138,10 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 	int iGood  = GetGoodEvilValue(oPC);
 	int iLaw  = GetLawChaosValue(oPC);
 
-	if (PS_GetLocalInt(oItem, "HD_Align") == 0)
-	{	PS_SetLocalInt(oItem, "OldGoodEvil", iGood);
-		PS_SetLocalInt(oItem, "OldLawChaos", iLaw);
-		PS_SetLocalInt(oItem, "HD_Align", 1);	}
+	if (GetLocalInt(oItem, "HD_Align") == 0)
+	{	SetLocalInt(oItem, "OldGoodEvil", iGood);
+		SetLocalInt(oItem, "OldLawChaos", iLaw);
+		SetLocalInt(oItem, "HD_Align", 1);	}
 
 	// Good-Evil axis check
 	int nDiff_Good = iGood_D - iGood;
@@ -158,17 +158,17 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 	if (iDragon == 6)
 	{	//iNewECL = nOldECL +2;
 		//sNewECL = IntToString(iNewECL);
-		//PS_SetLocalString(oItem, "ECL", sNewECL);
-		//PS_SetLocalString(oPC, "ECL", sNewECL);
-		PS_SetLocalString(oItem, "InBlood", "HD+2");		}
+		//SetLocalString(oItem, "ECL", sNewECL);
+		//SetLocalString(oPC, "ECL", sNewECL);
+		SetLocalString(oItem, "InBlood", "HD+2");		}
 	
 	else if (iDragon != 0)
 	{	//iNewECL = nOldECL + 1;
 		//sNewECL = IntToString(iNewECL);
-		//PS_SetLocalInt(oItem, "OldECL", nOldECL);
-		//PS_SetLocalString(oItem, "ECL", sNewECL);
-		//PS_SetLocalString(oPC, "ECL", sNewECL);
-		PS_SetLocalString(oItem, "InBlood", "HD+1");	}
+		//SetLocalInt(oItem, "OldECL", nOldECL);
+		//SetLocalString(oItem, "ECL", sNewECL);
+		//SetLocalString(oPC, "ECL", sNewECL);
+		SetLocalString(oItem, "InBlood", "HD+1");	}
 		
 	// Remove one level if total ECL results in a value greater than 30
 	if (PS_GetLevel(oPC) > 30 )
@@ -193,7 +193,7 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 	string sBreath, sImpact;
 	
 	if(GetIsObjectValid(oItem))
-	{	nHeritage = PS_GetLocalInt(oItem, "Draconic_Heritage");	}
+	{	nHeritage = GetLocalInt(oItem, "Draconic_Heritage");	}
 	else
 	{	SendMessageToPC(oPC, "You appear to be missing your Essence. Unable to access Draconic Heritage. Contact a member of staff.");	}
 
@@ -356,7 +356,7 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
     int nHeritage, nImmunity; 
 	
 	if(GetIsObjectValid(oItem))
-	{	nHeritage = PS_GetLocalInt(oItem, "Draconic_Heritage");	}
+	{	nHeritage = GetLocalInt(oItem, "Draconic_Heritage");	}
 	else
 	{	SendMessageToPC(oPC, "You appear to be missing your Essence. Unable to access Draconic Heritage. Contact a member of staff.");	}
 
@@ -469,13 +469,13 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-	if (!PS_GetLocalInt(oPC, "halfDragonImmunities")){
+	if (!GetLocalInt(oPC, "halfDragonImmunities")){
 		SendMessageToPC(oPC, "Half-dragon - immunities applied.");
-		PS_SetLocalInt(oPC, "halfDragonImmunities", TRUE);
+		SetLocalInt(oPC, "halfDragonImmunities", TRUE);
 	}
 
 	if (PS_GetAppWingType(oPC) != 0)
-	{	PS_SetLocalInt(oPC, "OldWings", 1);	}
+	{	SetLocalInt(oPC, "OldWings", 1);	}
 	else
 	{	AddScriptParameterString("START");
 		AddScriptParameterString("");
@@ -486,10 +486,10 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 	{
 		if (nHalfdragon == 6)
 		{
-			PS_SetLocalInt(oItem, VAR_OLD_RACE, nOrigin);
-			PS_SetLocalInt(oItem, "OldSubrace", nOriSub);
-			PS_SetLocalString(oItem, "RaceChange", "Dragon");
-			PS_SetLocalInt(oItem, "TemplateFix", 0);
+			SetLocalInt(oItem, VAR_OLD_RACE, nOrigin);
+			SetLocalInt(oItem, "OldSubrace", nOriSub);
+			SetLocalString(oItem, "RaceChange", "Dragon");
+			SetLocalInt(oItem, "TemplateFix", 0);
 			PS_SetRacialType(oPC, RACIAL_TYPE_DRAGON);
 			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_DRAGON);
 		}
@@ -502,7 +502,7 @@ void PS_HD_DraconicMagic(object oPC, object oItem)
     int nHeritage, nFeat;
 	
 	if(GetIsObjectValid(oItem))
-	{	nHeritage = PS_GetLocalInt(oItem, "Draconic_Heritage");	}
+	{	nHeritage = GetLocalInt(oItem, "Draconic_Heritage");	}
 	else
 	{	SendMessageToPC(oPC, "You appear to be missing your Essence. Unable to access Draconic Heritage. Contact a member of staff.");	}
 
@@ -564,7 +564,7 @@ void PS_HD_DraconicMagic(object oPC, object oItem)
 			break;	}
 	}
 	FeatAdd(oPC, nFeat, FALSE, FALSE, FALSE);
-	PS_SetLocalInt(oItem, "Draconic Magic", nFeat);
+	SetLocalInt(oItem, "Draconic Magic", nFeat);
 }
 
 void PS_HDM_SeeInvisibility(object oPC, int nSpell)
@@ -809,7 +809,7 @@ void PS_HDM_DimensionDoor(object oPC, location lTarget)
 	effect eVis = EffectNWN2SpecialEffectFile("fx_spell_planar_rift.sef");
 		
 	if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
-	if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+	if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 	{	SendMessageToPC(oTarget, "A Dimensional Anchor makes it impossible to teleport.");
 		return;		}
 	SendMessageToPC(oTarget, "Psionic energies whisk you away to your targeted location.");
@@ -971,8 +971,8 @@ void PS_HDM_EnergyAdaptGlow(object oPC, int nSpell)
 
 void PS_DraconicBloodline(object oPC, int nSpell)
 {
-	if(GetHasFeat(FEAT_BACKGROUND_DRACONIC_BLOODLINE, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_DRACONIC_BLOODLINE") <1))
-    	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_DRACONIC_BLOODLINE",1);
+	if(GetHasFeat(FEAT_BACKGROUND_DRACONIC_BLOODLINE, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_DRACONIC_BLOODLINE") <1))
+    	SetLocalInt(oPC,"FEAT_BACKGROUND_DRACONIC_BLOODLINE",1);
    
 	effect eIntimGood	= EffectSkillIncrease(SKILL_INTIMIDATE, 1);
 	effect eFort		= EffectSavingThrowIncrease(SAVING_THROW_FORT, 1);
@@ -988,12 +988,12 @@ void PS_DraconicBloodline(object oPC, int nSpell)
 
 void PS_HD_Dragonflight(object oPC, object oItem)
 {
-	int iCheck		= PS_GetLocalInt(oItem, "DragonFlight");
-	int iTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int iCheck		= GetLocalInt(oItem, "DragonFlight");
+	int iTemp		= GetLocalInt(oItem, "TempChange");
 	if (iTemp == 1) return;
 	int iWing, iWingF, iWingM;
-	int iRace		= PS_GetLocalInt(oItem, "OldRace");
-	int iSub		= PS_GetLocalInt(oItem, "OldSubrace");
+	int iRace		= GetLocalInt(oItem, "OldRace");
+	int iSub		= GetLocalInt(oItem, "OldSubrace");
 	
 	if (iRace == RACIAL_TYPE_INVALID)
 	{	SendMessageToPC(oPC, "Debug: Error, no racial type found."); return;	}
@@ -1026,7 +1026,7 @@ void PS_HD_Dragonflight(object oPC, object oItem)
 		app.WingVariation = iWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
 	PS_RefreshAppearance(oPC);
-	PS_SetLocalInt(oItem, "DragonFlight", 1);
+	SetLocalInt(oItem, "DragonFlight", 1);
 	DelayCommand(0.1f, PS_TintFixer(oPC));
 	DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 	DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));
@@ -1036,5 +1036,5 @@ void PS_HD_RemainWingless(object oPC, object oItem)
 {
 	FeatAdd(oPC, FEAT_STEADFAST_DETERMINATION, FALSE);
 	SendMessageToPC(oPC, "Steadfast Determination feat granted.");
-	PS_SetLocalInt(oItem, "Wingless", 1);
+	SetLocalInt(oItem, "Wingless", 1);
 }

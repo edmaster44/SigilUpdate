@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //version 1.00
 
 void main(int nLegal)
@@ -16,7 +14,7 @@ void main(int nLegal)
    		if(nLegal == 1)
 			Legal = "TRUE";
 			
-		PS_SetLocalString(oItem,"LEGAL",Legal);
+		SetLocalString(oItem,"LEGAL",Legal);
 		return;
 	}
 

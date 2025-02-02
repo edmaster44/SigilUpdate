@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /******************************************************************************
 *****                         nwnx_craft_system                           *****
 *****                               V 1                                   *****
@@ -298,10 +296,10 @@ int XPCraft_GetLastEntryInList(string sList)
 
 int XPCraft_GetNewVariationValue(object oPC, int iBaseItemType, int iAction)
 {
-	int iCurrentVariationValue =  PS_GetLocalInt(oPC,"XC_VARIATION_VALUE");
+	int iCurrentVariationValue =  GetLocalInt(oPC,"XC_VARIATION_VALUE");
  	
-	string sListName = XPCraft_GetVariation_ListName(oPC, PS_GetLocalInt(oPC,"XC_AVT_VALUE"), iBaseItemType);
-	string sVariationList = PS_GetLocalString(GetModule(), sListName);
+	string sListName = XPCraft_GetVariation_ListName(oPC, GetLocalInt(oPC,"XC_AVT_VALUE"), iBaseItemType);
+	string sVariationList = GetLocalString(GetModule(), sListName);
 	if(sVariationList=="")
 	{
 		//XPCraft_Debug(oPC,"No Variation List : " + sListName);
@@ -339,13 +337,13 @@ int XPCraft_GetNewVariationValue(object oPC, int iBaseItemType, int iAction)
 
 int XPCraft_GetNewArmorPartValue(object oPC, string sRoadMap, int iAction)
 {
-	int iCurrentArmorPartValue =  PS_GetLocalInt(oPC,"XC_ITEM_PART_VALUE");
+	int iCurrentArmorPartValue =  GetLocalInt(oPC,"XC_ITEM_PART_VALUE");
  	
 	string sListName = XPCraft_GetArmorPart_ListName(oPC, sRoadMap);
 	
 	//SendMessageToPC(oPC, "armor part list name: "+sListName);
 	
-	string sArmorPartList = PS_GetLocalString(GetModule(), sListName);
+	string sArmorPartList = GetLocalString(GetModule(), sListName);
 	if(sArmorPartList=="")
 	{
 //XPCraft_Debugug(oPC,"No ArmorPart List : " + sListName);
@@ -387,13 +385,13 @@ int XPCraft_GetNewArmorPartValue(object oPC, string sRoadMap, int iAction)
 
 int XPCraft_GetNewModelPartValue(object oPC, int iBaseItemType, int iModelPartID, int iAction)
 {
-	int iCurrentModelPartValue = PS_GetLocalInt(oPC,"XC_ITEM_PART_VALUE"); 
+	int iCurrentModelPartValue = GetLocalInt(oPC,"XC_ITEM_PART_VALUE"); 
 	
 	string sListName =  XPCraft_GetModelPart_ListName(oPC, iBaseItemType, iModelPartID);
 	
 	//SendMessageToPC(oPC, "model part list name: "+sListName);
 	
-	string sModelPartList = PS_GetLocalString(GetModule(), sListName);
+	string sModelPartList = GetLocalString(GetModule(), sListName);
 	
 	if(sModelPartList=="")
 	{
@@ -634,7 +632,7 @@ int XPCraft_GetEffectiveItemType(object oPC, int iBaseItemType)
 {
 	int nSelectedArmorPiece;
 
-	nSelectedArmorPiece = PS_GetLocalInt(oPC,"XC_ITEM_ARMORSET_PIECE_ID");
+	nSelectedArmorPiece = GetLocalInt(oPC,"XC_ITEM_ARMORSET_PIECE_ID");
 
 	//
 	// If we were not editing a sub armor piece but the raw item itself, then
@@ -686,17 +684,17 @@ object XPCraft_ActionChangeVariation(object oPC, object oItemToCraft, int iActio
 {
 	//Get The New  Value
 	int iNewVariationValue = XPCraft_GetNewVariationValue(oPC, GetBaseItemType(oItemToCraft), iAction);
-	string sPieceName      = PS_GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
+	string sPieceName      = GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 	
 	//a Little check to ensure we really got something to change
-	if(iNewVariationValue ==  PS_GetLocalInt(oPC,"XC_VARIATION_VALUE"))
+	if(iNewVariationValue ==  GetLocalInt(oPC,"XC_VARIATION_VALUE"))
 	{
 		XPCraft_Debug(oPC,"You cannot change Variation for this item.");
 		return oItemToCraft;
 	}
 	
 	//actually change the value via the plugin		
-	int iVariation_ElementIndex = PS_GetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID");
+	int iVariation_ElementIndex = GetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID");
 	if(iVariation_ElementIndex!=0)
 	{
 		XPCraft_SetValue(IntToString(iNewVariationValue-XP_CRAFT_VARIATION_LISTS_BASE), "", iVariation_ElementIndex, XPCraft_GetDatafileName(oPC));
@@ -706,10 +704,10 @@ object XPCraft_ActionChangeVariation(object oPC, object oItemToCraft, int iActio
 		XPCraft_SetValue(IntToString(iNewVariationValue-XP_CRAFT_VARIATION_LISTS_BASE), "Variation", 0, XPCraft_GetDatafileName(oPC));		
 	}
 	XPCraft_ClearMemory();//always perform after all accesses to the plugin have been made		
-	PS_SetLocalInt(oPC,"XC_VARIATION_VALUE",iNewVariationValue);
+	SetLocalInt(oPC,"XC_VARIATION_VALUE",iNewVariationValue);
 	
 	//Get the newly crafted Item and equip it.
-	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, PS_GetLocalInt(oPC,"XC_INVENT_SLOT"));
+	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, GetLocalInt(oPC,"XC_INVENT_SLOT"));
 }
 
 
@@ -718,19 +716,19 @@ object XPCraft_ActionChangeArmorVisualType(object oPC, object oItemToCraft, int 
 
 //AVT
 	string sDatafileName = XPCraft_GetDatafileName(oPC);	
-	string sPieceName    = PS_GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
+	string sPieceName    = GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 
-	//SendMessageToPC(oPC, "list value: "+IntToString(PS_GetLocalInt(oPC,"XC_AVT_VALUE")));
-	//SendMessageToPC(oPC, "list element: "+IntToString(PS_GetLocalInt(oPC,"XC_AVT_ELEMENT_ID")));
+	//SendMessageToPC(oPC, "list value: "+IntToString(GetLocalInt(oPC,"XC_AVT_VALUE")));
+	//SendMessageToPC(oPC, "list element: "+IntToString(GetLocalInt(oPC,"XC_AVT_ELEMENT_ID")));
 	//a Little check to ensure we really got something to change
-	if(iNewArmorVisualTypeValue == PS_GetLocalInt(oPC,"XC_AVT_VALUE"))
+	if(iNewArmorVisualTypeValue == GetLocalInt(oPC,"XC_AVT_VALUE"))
 	{
 		XPCraft_Debug(oPC,"This Armor Visual Type is already set for this Item.");
 		return oItemToCraft;
 	}
 	
 	//actually change the value via the plugin		
-	int iArmorVisualType_ElementIndex = PS_GetLocalInt(oPC,"XC_AVT_ELEMENT_ID");
+	int iArmorVisualType_ElementIndex = GetLocalInt(oPC,"XC_AVT_ELEMENT_ID");
 	if(iArmorVisualType_ElementIndex!=0)
 	{
 		XPCraft_SetValue(IntToString(iNewArmorVisualTypeValue), "", iArmorVisualType_ElementIndex, sDatafileName);
@@ -739,7 +737,7 @@ object XPCraft_ActionChangeArmorVisualType(object oPC, object oItemToCraft, int 
 	{		
 		XPCraft_SetValue(IntToString(iNewArmorVisualTypeValue), "ArmorVisualType", 0, sDatafileName);		
 	}
-	PS_SetLocalInt(oPC,"XC_AVT_VALUE",iNewArmorVisualTypeValue);
+	SetLocalInt(oPC,"XC_AVT_VALUE",iNewArmorVisualTypeValue);
 
 //Variation
 		
@@ -751,10 +749,10 @@ object XPCraft_ActionChangeArmorVisualType(object oPC, object oItemToCraft, int 
 	//cryptc: first variation is so far always 0. //cryptc, changing to filename instead of toolset iteration has changed this
 	//a Little check to ensure we really got something to change
 	//cryptc: didn't fire always when needed, so removed the check.
-	//if(iNewVariationValue !=  PS_GetLocalInt(oPC,"XC_VARIATION_VALUE"))
+	//if(iNewVariationValue !=  GetLocalInt(oPC,"XC_VARIATION_VALUE"))
 	//{
 		//actually change the value via the plugin		
-		int iVariation_ElementIndex = PS_GetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID");
+		int iVariation_ElementIndex = GetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID");
 		if(iVariation_ElementIndex!=0)
 		{
 			//XPCraft_Debug(oPC,"1");
@@ -766,18 +764,18 @@ object XPCraft_ActionChangeArmorVisualType(object oPC, object oItemToCraft, int 
 			XPCraft_SetValue(IntToString(iNewVariationValue-XP_CRAFT_VARIATION_LISTS_BASE), "Variation", 0, sDatafileName);		
 		}
 		
-		PS_SetLocalInt(oPC,"XC_VARIATION_VALUE",iNewVariationValue);
+		SetLocalInt(oPC,"XC_VARIATION_VALUE",iNewVariationValue);
 	//}	
 
 	XPCraft_ClearMemory();//always perform after all accesses to the plugin have been made	
 	
 	//Get the newly crafted Item and equip it.
-	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, PS_GetLocalInt(oPC,"XC_INVENT_SLOT"));
+	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, GetLocalInt(oPC,"XC_INVENT_SLOT"));
 }
 
 object  XPCraft_ActionChangeArmorPart(object oPC, object oItemToCraft, int iAction)
 {
-	string sRoadMap = PS_GetLocalString(oPC,"XC_ROAD_MAP");
+	string sRoadMap = GetLocalString(oPC,"XC_ROAD_MAP");
 	
 	//SendMessageToPC(oPC, "roadmap: "+sRoadMap);
 	
@@ -785,14 +783,14 @@ object  XPCraft_ActionChangeArmorPart(object oPC, object oItemToCraft, int iActi
 	int iNewItemPartValue = XPCraft_GetNewArmorPartValue(oPC, sRoadMap, iAction);
 	
 	//a Little check to ensure we really got something to change
-	if(iNewItemPartValue ==  PS_GetLocalInt(oPC,"XC_ITEM_PART_VALUE"))
+	if(iNewItemPartValue ==  GetLocalInt(oPC,"XC_ITEM_PART_VALUE"))
 	{
 		XPCraft_Debug(oPC,"You cannot change this ArmorPart for this item.");
 		return oItemToCraft;
 	}
 	
 	//actually change the value via the plugin
-	int iItemPart_ElementIndex = PS_GetLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID");
+	int iItemPart_ElementIndex = GetLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID");
 	if(iItemPart_ElementIndex!=0)
 	{
 		XPCraft_SetValue(IntToString(iNewItemPartValue), "", iItemPart_ElementIndex, XPCraft_GetDatafileName(oPC));
@@ -802,28 +800,28 @@ object  XPCraft_ActionChangeArmorPart(object oPC, object oItemToCraft, int iActi
 		XPCraft_SetValue(IntToString(iNewItemPartValue), sRoadMap + "|Accessory", 0, XPCraft_GetDatafileName(oPC));
 	}
 	XPCraft_ClearMemory();//always perform after all accesses to the plugin have been made		
-	PS_SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iNewItemPartValue);
+	SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iNewItemPartValue);
 	
 	//Get the newly crafted Item and equip it.
-	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, PS_GetLocalInt(oPC,"XC_INVENT_SLOT"));
+	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, GetLocalInt(oPC,"XC_INVENT_SLOT"));
 }
 
 object XPCraft_ActionChangeModelPart(object oPC, object oItemToCraft, int iAction)
 {
-	string sRoadMap = PS_GetLocalString(oPC,"XC_ROAD_MAP");
+	string sRoadMap = GetLocalString(oPC,"XC_ROAD_MAP");
 
 	//Get The New  Value
 	int iNewItemPartValue = XPCraft_GetNewModelPartValue(oPC, GetBaseItemType(oItemToCraft), StringToInt(GetStringRight(sRoadMap,1)), iAction);
 	
 	//a Little check to ensure we really got something to change
-	if(iNewItemPartValue ==  PS_GetLocalInt(oPC,"XC_ITEM_PART_VALUE"))
+	if(iNewItemPartValue ==  GetLocalInt(oPC,"XC_ITEM_PART_VALUE"))
 	{
 		XPCraft_Debug(oPC,"You cannot change this ModelPart for this item.");
 		return oItemToCraft;
 	}
 	
 	//actually change the value via the plugin
-	int iItemPart_ElementIndex = PS_GetLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID");
+	int iItemPart_ElementIndex = GetLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID");
 	if(iItemPart_ElementIndex!=0)
 	{
 		XPCraft_SetValue(IntToString(iNewItemPartValue), "", iItemPart_ElementIndex, XPCraft_GetDatafileName(oPC));
@@ -833,17 +831,17 @@ object XPCraft_ActionChangeModelPart(object oPC, object oItemToCraft, int iActio
 		XPCraft_SetValue(IntToString(iNewItemPartValue), sRoadMap, 0, XPCraft_GetDatafileName(oPC));
 	}
 	XPCraft_ClearMemory();//always perform after all accesses to the plugin have been made
-	PS_SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iNewItemPartValue);	
+	SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iNewItemPartValue);	
 
 	//Get the newly crafted Item and equip it.
-	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, PS_GetLocalInt(oPC,"XC_INVENT_SLOT"));
+	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, GetLocalInt(oPC,"XC_INVENT_SLOT"));
 }
 
 object XPCraft_ActionChangeColor(object oPC, int iNewColorValue)
 {
-	int iInventorySlot = PS_GetLocalInt(oPC,"XC_INVENT_SLOT");
+	int iInventorySlot = GetLocalInt(oPC,"XC_INVENT_SLOT");
 	object oItemToCraft = GetItemInSlot(iInventorySlot,oPC);
-	string sPieceName = PS_GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
+	string sPieceName = GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 	if(oItemToCraft==OBJECT_INVALID)
 	{
 		//XPCraft_Debug(oPC,"No Item In Slot : " + IntToString(iInventorySlot));
@@ -853,8 +851,8 @@ object XPCraft_ActionChangeColor(object oPC, int iNewColorValue)
 	}//END
 
 	string sDatafileName = XPCraft_GetDatafileName(oPC);
-	int iTintID = PS_GetLocalInt(oPC,"XC_ACTION_TINT");
-	string sRoadMap = PS_GetLocalString(oPC,"XC_ROAD_MAP");
+	int iTintID = GetLocalInt(oPC,"XC_ACTION_TINT");
+	string sRoadMap = GetLocalString(oPC,"XC_ROAD_MAP");
 	string sRedRoadMap;
 	
 	if(GetStringLeft(sRoadMap,2)=="AC")
@@ -883,14 +881,14 @@ object XPCraft_ActionChangeColor(object oPC, int iNewColorValue)
 object XPCraft_ActionCancelChanges(object oPC)
 {
 	//get the saved-before-changes-item
-	object oSavedItem = PS_GetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC));
+	object oSavedItem = GetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC));
 	object oItemToEquip = OBJECT_INVALID;
 	
 	if(oSavedItem != OBJECT_INVALID)
 	{
-		DestroyObject(PS_GetLocalObject(oPC,"XC_ITEM_TO_CRAFT"));
+		DestroyObject(GetLocalObject(oPC,"XC_ITEM_TO_CRAFT"));
 		oItemToEquip = CopyItem(oSavedItem,oPC,TRUE);
-		int iInventorySlot = PS_GetLocalInt(oPC,"XC_INVENT_SLOT");
+		int iInventorySlot = GetLocalInt(oPC,"XC_INVENT_SLOT");
 		AssignCommand(oPC, ActionEquipItem(oItemToEquip, iInventorySlot));		
 	}
 	else
@@ -906,26 +904,26 @@ object XPCraft_ActionCancelChanges(object oPC)
 
 void XPCraft_CleanLocals(object oPC, int bEraseDatafile=TRUE)
 {
-	PS_DeleteLocalInt(oPC,"XC_INVENT_SLOT");
-	PS_DeleteLocalObject(oPC,"XC_ITEM_TO_CRAFT");
-	PS_DeleteLocalString(oPC,"XC_ROAD_MAP");
-	PS_DeleteLocalInt(oPC,"XC_VARIATION_VALUE");
-	PS_DeleteLocalInt(oPC,"XC_AVT_VALUE");
-	PS_DeleteLocalInt(oPC,"XC_VARIATION_ELEMENT_ID");
-	PS_DeleteLocalInt(oPC,"XC_AVT_ELEMENT_ID");
-	PS_DeleteLocalInt(oPC,"XC_ITEM_PART_VALUE");
-	PS_DeleteLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID");
-	PS_DeleteLocalInt(oPC,"XC_ITEM_ARMORSET_MASK");
-	PS_DeleteLocalString(oPC,"XC_ITEM_ARMORSET_PIECE");
-	PS_DeleteLocalInt(oPC,"XC_ITEM_ARMORSET_PIECE_ID");
+	DeleteLocalInt(oPC,"XC_INVENT_SLOT");
+	DeleteLocalObject(oPC,"XC_ITEM_TO_CRAFT");
+	DeleteLocalString(oPC,"XC_ROAD_MAP");
+	DeleteLocalInt(oPC,"XC_VARIATION_VALUE");
+	DeleteLocalInt(oPC,"XC_AVT_VALUE");
+	DeleteLocalInt(oPC,"XC_VARIATION_ELEMENT_ID");
+	DeleteLocalInt(oPC,"XC_AVT_ELEMENT_ID");
+	DeleteLocalInt(oPC,"XC_ITEM_PART_VALUE");
+	DeleteLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID");
+	DeleteLocalInt(oPC,"XC_ITEM_ARMORSET_MASK");
+	DeleteLocalString(oPC,"XC_ITEM_ARMORSET_PIECE");
+	DeleteLocalInt(oPC,"XC_ITEM_ARMORSET_PIECE_ID");
 	
-	PS_DeleteLocalInt(oPC,"XC_ACTION_TINT");
+	DeleteLocalInt(oPC,"XC_ACTION_TINT");
 	
 	//destroy the saved item
 	string sSavedItemVarName = "XC_TEMP_" + XPCraft_GetPCID(oPC);
-	object oSavedItem = PS_GetLocalObject(GetModule(),sSavedItemVarName);
+	object oSavedItem = GetLocalObject(GetModule(),sSavedItemVarName);
 	DestroyObject(oSavedItem);
-	PS_DeleteLocalObject(GetModule(),sSavedItemVarName);
+	DeleteLocalObject(GetModule(),sSavedItemVarName);
 	
 	if(bEraseDatafile)
 	{
@@ -937,7 +935,7 @@ void XPCraft_ActionSelectArmorPiece(object oPC, int nArmorPiece)
 {
 	string sFieldPath;
 
-	PS_DeleteLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
+	DeleteLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 
 	if (nArmorPiece == 0)
 		return;
@@ -985,8 +983,8 @@ void XPCraft_ActionSelectArmorPiece(object oPC, int nArmorPiece)
 	// Now update our selection to point to this piece.
 	//
 
-	PS_SetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE", sFieldPath);
-	PS_SetLocalInt(oPC, "XC_ITEM_ARMORSET_PIECE_ID", nArmorPiece);
+	SetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE", sFieldPath);
+	SetLocalInt(oPC, "XC_ITEM_ARMORSET_PIECE_ID", nArmorPiece);
 	//XPCraft_Debug(oPC, "Set armor set piece to " + sFieldPath + " (" + IntToString(nArmorPiece) + ")");
 }
 /*****************************************************************************/
@@ -1019,7 +1017,7 @@ void XPCraft_InitVariationValues(object oPC)
 {
 
 	string sDatafileName = XPCraft_GetDatafileName(oPC);
-	string sPieceName    = PS_GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
+	string sPieceName    = GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 	
 	//in order to speed up things we retrieve the Element_Index given it's roadmap.
 	//any further call made with the element _Index will be much faster tahn seeking for the roadmap each time
@@ -1038,10 +1036,10 @@ void XPCraft_InitVariationValues(object oPC)
 	iVariation += XP_CRAFT_VARIATION_LISTS_BASE;	
 		
 	//init the local vars that will be used by the craft system
-	PS_SetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID",iVariation_ElementID);
-	PS_SetLocalInt(oPC,"XC_VARIATION_VALUE",iVariation);
+	SetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID",iVariation_ElementID);
+	SetLocalInt(oPC,"XC_VARIATION_VALUE",iVariation);
 
-	PS_SetLocalInt(oPC,"XC_AVT_VALUE",iArmorVisualType);
+	SetLocalInt(oPC,"XC_AVT_VALUE",iArmorVisualType);
 
 	//XPCraft_Debug(oPC,"INIT : Variation = " + IntToString(iVariation));
 	//XPCraft_Debug(oPC,"INIT : ArmorType = " + IntToString(iArmorVisualType));	
@@ -1055,7 +1053,7 @@ void XPCraft_InitArmorVisualTypeValues(object oPC)
 	// is that we need the AVT in order to get the proper Variation List.
 	
 	string sDatafileName = XPCraft_GetDatafileName(oPC);
-	string sPieceName    = PS_GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
+	string sPieceName    = GetLocalString(oPC, "XC_ITEM_ARMORSET_PIECE");
 	
 	//in order to speed up things we retrieve the Element_Index given it's roadmap.
 	//any further call made with the element _Index will be much faster than seeking for the roadmap each time
@@ -1070,23 +1068,23 @@ void XPCraft_InitArmorVisualTypeValues(object oPC)
 	int iArmorVisualType = StringToInt(XPCraft_GetValue( "", iArmorVisualType_ElementID, sDatafileName));
 
 	//init the local vars that will be used by the craft system
-	PS_SetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID",iVariation_ElementID);
+	SetLocalInt(oPC,"XC_VARIATION_ELEMENT_ID",iVariation_ElementID);
 
-	PS_SetLocalInt(oPC,"XC_AVT_ELEMENT_ID",iArmorVisualType_ElementID);
-	PS_SetLocalInt(oPC,"XC_AVT_VALUE",iArmorVisualType);
+	SetLocalInt(oPC,"XC_AVT_ELEMENT_ID",iArmorVisualType_ElementID);
+	SetLocalInt(oPC,"XC_AVT_VALUE",iArmorVisualType);
 
 	//XPCraft_Debug(oPC,"INIT : ArmorType = " + IntToString(iArmorVisualType) + ", PieceName = " + sPieceName + ", ArmorVisualTypeIndex = " + IntToString(iArmorVisualType_ElementID));	
 	
 	XPCraft_ClearMemory();//always perform a clearmem after you're done interracting with the plugin
 	
 	//Gets and stores the AVT listname for this item 
-	string sAVT_Listname = XPCraft_GetArmorVisualType_ListName(oPC, GetBaseItemType(PS_GetLocalObject(oPC,"XC_ITEM_TO_CRAFT")));
+	string sAVT_Listname = XPCraft_GetArmorVisualType_ListName(oPC, GetBaseItemType(GetLocalObject(oPC,"XC_ITEM_TO_CRAFT")));
 
 	
 //XPCraft_Debug(oPC,"INIT : AVT_Listname = " + sAVT_Listname);
-//XPCraft_Debug(oPC,"INIT : AVT_List = " + PS_GetLocalString(GetModule(),sAVT_Listname));
+//XPCraft_Debug(oPC,"INIT : AVT_List = " + GetLocalString(GetModule(),sAVT_Listname));
 			
-	PS_SetLocalString(oPC,"XC_AVT_LISTNAME",sAVT_Listname);
+	SetLocalString(oPC,"XC_AVT_LISTNAME",sAVT_Listname);
 }
 
 void XPCraft_InitItemPartValues(object oPC, string sRoadMap)
@@ -1105,8 +1103,8 @@ void XPCraft_InitItemPartValues(object oPC, string sRoadMap)
 	int iItemPartValue = StringToInt(XPCraft_GetValue("" , iItemPart_ElementID, sDatafileName));
 	
 	//init the local vars that will be used by the craft system
-	PS_SetLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID",iItemPart_ElementID);
-	PS_SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iItemPartValue);
+	SetLocalInt(oPC,"XC_ITEM_PART_ELEMENT_ID",iItemPart_ElementID);
+	SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iItemPartValue);
 
 
 //XPCraft_Debug(oPC,"INIT : ItemPart = " + IntToString(iItemPartValue));
@@ -1141,7 +1139,7 @@ void XPCraft_InitArmorSetMask(object oPC)
 	// Now update our accounting in the variable.
 	//
 
-	PS_SetLocalInt(oPC, "XC_ITEM_ARMORSET_MASK", ArmorSetMask);
+	SetLocalInt(oPC, "XC_ITEM_ARMORSET_MASK", ArmorSetMask);
 }
 
 
@@ -1150,7 +1148,7 @@ int XPCraft_GetLastChangesType(object oPC, object oInventoryItem)
 // you can't easily know whether a Player has just modified an ArmorPart or the Color of this ArmorPart.
 
 	int iLastChangesType;
-	string sSubAction =  GetStringLeft( PS_GetLocalString(oPC,"XC_ROAD_MAP"),2);
+	string sSubAction =  GetStringLeft( GetLocalString(oPC,"XC_ROAD_MAP"),2);
 
 	if(sSubAction =="Va")
 	{//changed the Variation 
@@ -1252,5 +1250,5 @@ int XPCraft_GetHasArmorPiece(object oPC, int nArmorPieceMask)
 	// already been initialized, i.e. that XPCraft_InitArmorSetMask has run.
 	//
 
-	return (PS_GetLocalInt(oPC, "XC_ITEM_ARMORSET_MASK") & nArmorPieceMask) != 0;
+	return (GetLocalInt(oPC, "XC_ITEM_ARMORSET_MASK") & nArmorPieceMask) != 0;
 }

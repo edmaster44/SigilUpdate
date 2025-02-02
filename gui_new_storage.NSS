@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*#include "nwnx_sql"
 #include "ps_inc_time"
 
@@ -247,23 +245,23 @@ void ClearForNextItem(object oPC, int mode = 0)
 		SetGUIObjectHidden(oPC,SCREENNAME,"BAG_STORAGE",TRUE);
 		SetGUIObjectDisabled(oPC,SCREENNAME,"TUTORIAL_LISTBOX",FALSE);	
 		SetCommandable(TRUE,oPC);	
-		PS_DeleteLocalInt(oPC,"NoRetrieveItems");
+		DeleteLocalInt(oPC,"NoRetrieveItems");
 	}
 	else if(mode == 2)
 	{
 		SetGUIObjectHidden(oPC,SCREENNAME,"BAG_STORAGE",TRUE);	
 		SetCommandable(TRUE,oPC);
 		
-		PS_DeleteLocalObject(oPC,"LastStoredItem");
-		PS_DeleteLocalInt(oPC,"LastStoredID");
-		PS_DeleteLocalInt(oPC,"NoStoreItems");
+		DeleteLocalObject(oPC,"LastStoredItem");
+		DeleteLocalInt(oPC,"LastStoredID");
+		DeleteLocalInt(oPC,"NoStoreItems");
 	}
 	else
 	{
 		SetGUIObjectHidden(oPC,SCREENNAME,"StorageGrid",FALSE);
-		PS_DeleteLocalObject(oPC,"LastStoredItem");
-		PS_DeleteLocalInt(oPC,"LastStoredID");
-		PS_DeleteLocalInt(oPC,"NoStoreItems");
+		DeleteLocalObject(oPC,"LastStoredItem");
+		DeleteLocalInt(oPC,"LastStoredID");
+		DeleteLocalInt(oPC,"NoStoreItems");
 		SetGUIObjectHidden(oPC,SCREENNAME,"BAG_STORAGE",TRUE);
 		SetCommandable(TRUE,oPC);
 	}
@@ -271,7 +269,7 @@ void ClearForNextItem(object oPC, int mode = 0)
 
 string GetPCID(object oPC)
 {
-	string sID = PS_GetLocalString(oPC,"StorageID");
+	string sID = GetLocalString(oPC,"StorageID");
 
 	if(sID != "") return sID;
 
@@ -294,7 +292,7 @@ string GetPCID(object oPC)
 		userid = SQLGetData(1);
 	}
 	
-	PS_SetLocalString(oPC,"StorageID",userid);
+	SetLocalString(oPC,"StorageID",userid);
 	
 	return userid;
 }
@@ -361,19 +359,19 @@ void AddRecentDepositedListBoxRow(object oPC, string sItemName, string sItemID, 
 	texts = "ROW_TEXT=" + sItemName + ";";
 	string textures = "ROW_ICON=" + sIcon;
 	
-	int iRow = PS_GetLocalInt(oPC,"StorageRow");
+	int iRow = GetLocalInt(oPC,"StorageRow");
 	
 	string svariable = "1="+sItemID+";2="+sItemName+";3=Row_"+IntToString(iRow)+";4="+sOriginalItemName;
 
 	AddListBoxRow(oPC,SCREENNAME, "TUTORIAL_LISTBOX", "Row_" + IntToString(iRow), texts, textures, ""+svariable+"", "");	
-	PS_SetLocalInt(oPC,"StorageRow",iRow+1);
+	SetLocalInt(oPC,"StorageRow",iRow+1);
 }
 
 void GetRecentlyStoredItems(object oPC, string sFilter = "")
 {
 	string sID;
 	
-	int guildid = PS_GetLocalInt(oPC,"storage_guildid"); int guildmode;	
+	int guildid = GetLocalInt(oPC,"storage_guildid"); int guildmode;	
 	if (guildid > 0)
 	{
 		sID = IntToString(guildid);
@@ -383,21 +381,21 @@ void GetRecentlyStoredItems(object oPC, string sFilter = "")
 	
 	ClearListBox(oPC,SCREENNAME,"TUTORIAL_LISTBOX");
 		
-	PS_DeleteLocalInt(oPC,"NoRetrieveItems");
+	DeleteLocalInt(oPC,"NoRetrieveItems");
 	
-	if(sFilter == "") sFilter = PS_GetLocalString(oPC,"StorageFilter");	
+	if(sFilter == "") sFilter = GetLocalString(oPC,"StorageFilter");	
 	if(sFilter != "")
 	{
-		if(sFilter != PS_GetLocalString(oPC,"StoragePrevFilter")) PS_DeleteLocalInt(oPC,"StoragePage");
-		PS_SetLocalString(oPC,"StoragePrevFilter",sFilter);
+		if(sFilter != GetLocalString(oPC,"StoragePrevFilter")) DeleteLocalInt(oPC,"StoragePage");
+		SetLocalString(oPC,"StoragePrevFilter",sFilter);
 		sFilter = "AND `itemname` LIKE '%"+SQLEncodeSpecialChars(sFilter)+"%'";
 	}
-	else PS_DeleteLocalString(oPC,"StoragePrevFilter");
+	else DeleteLocalString(oPC,"StoragePrevFilter");
 	
-	int page = PS_GetLocalInt(oPC,"StoragePage");
+	int page = GetLocalInt(oPC,"StoragePage");
 	if (page < 1)
 	{
-		PS_SetLocalInt(oPC,"StoragePage",1);
+		SetLocalInt(oPC,"StoragePage",1);
 		page = 1;	
 	}
 	
@@ -408,11 +406,11 @@ void GetRecentlyStoredItems(object oPC, string sFilter = "")
 	string sLimit = "LIMIT "+IntToString(firstItem)+","+IntToString(lastItem);
 	string sOrderBy;
 	
-	if(PS_GetLocalInt(oPC,"StorageSortOrder") == 1) sOrderBy = "ORDER BY `ITEMNAME`";
+	if(GetLocalInt(oPC,"StorageSortOrder") == 1) sOrderBy = "ORDER BY `ITEMNAME`";
 	else sOrderBy = "ORDER BY `TIMESTAMP` DESC";
 	
 	string sAdditionalFilter;
-	int iFilterType = PS_GetLocalInt(oPC,"StorageFilterType");
+	int iFilterType = GetLocalInt(oPC,"StorageFilterType");
 	if(iFilterType == 1) sAdditionalFilter = " AND `category`='armor'";
 	else if(iFilterType == 2) sAdditionalFilter = " AND `category`='weapon'";
 	else if(iFilterType == 3) sAdditionalFilter = " AND `category`='gathering'";
@@ -477,7 +475,7 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 	SetPlotFlag(oItem,FALSE);
 
 	string sDB;
-	int guildid = PS_GetLocalInt(oPC,"storage_guildid"); int guildmode;
+	int guildid = GetLocalInt(oPC,"storage_guildid"); int guildmode;
 
 	if (guildid > 0)
 	{
@@ -522,8 +520,8 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 		
 		DestroyObject(oItem);
 	
-		PS_SetLocalObject(oPC,"LastStoredItem",oItem);
-		PS_SetLocalInt(oPC,"LastStoredID",ObjectToInt(oItem));
+		SetLocalObject(oPC,"LastStoredItem",oItem);
+		SetLocalInt(oPC,"LastStoredID",ObjectToInt(oItem));
 		
 		if (guildmode == 1) sQuery = "INSERT INTO new_storage_guild_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
 		" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
@@ -532,7 +530,7 @@ void StoreItem(object oPC, object oItem, int iBox = 0)
 	
 		SQLExecDirect(sQuery);	
 			
-		int iTime = PS_GetLocalInt(oPC,"STOREDELAY"); int uTime = GetRealTime();
+		int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = GetRealTime();
 	
 		
 //		SendMessageToPC(oPC,"<I>Depositing the item took . . "+FloatToString(time / 1000.0)+" seconds.");
@@ -615,7 +613,7 @@ void StoreBagItem(object oPC, object oItem, string sDB, string name, string play
 void ProcessBag(object oPC, object oTarget)
 {
 	string sDB;
-	int guildid = PS_GetLocalInt(oPC,"storage_guildid"); int guildmode;
+	int guildid = GetLocalInt(oPC,"storage_guildid"); int guildmode;
 
 	if (guildid > 0)
 	{
@@ -733,7 +731,7 @@ void TryAndDestroyBadItem(object oItem)
 	
 	if(GetIsObjectValid(oItem))
 	{
-		PS_SetLocalInt(oItem,"DestroyOnPickup",1);
+		SetLocalInt(oItem,"DestroyOnPickup",1);
 		DelayCommand(1.5,DestroyObject(oItem,0.0,TRUE));
 	}
 }
@@ -842,10 +840,10 @@ void AttemptToRetrieveObject(object oPC, object oStorageItem, string sDB, string
 	
 	SQLExecDirect(sQuery1);
 	
-//	int iTime = PS_GetLocalInt(oPC,"STOREDELAY"); int uTime = GetUNIXTime();
+//	int iTime = GetLocalInt(oPC,"STOREDELAY"); int uTime = GetUNIXTime();
 	
 		ExportSingleCharacter(oPC);
-	//	PS_SetLocalInt(oPC,"STOREDELAY",uTime+10);
+	//	SetLocalInt(oPC,"STOREDELAY",uTime+10);
 	
 	
 //	float time = TimerElapsed(timerid);
@@ -867,18 +865,18 @@ void RetrieveObject(object oPC, string sItemNumber, string sRow)
 	location lPC = GetLocation(GetWaypointByTag("wp_itemstorage"));
 	string sQuery1; string sQuery2;
 	
-	if(PS_GetLocalInt(oPC,"storage_noguildwithdraw") == 1)
+	if(GetLocalInt(oPC,"storage_noguildwithdraw") == 1)
 	{
 		SendMessageToPC(oPC,"Sorry, you don't have access to withdraw with this guild token.");
 		return;
 	}
 	
-	PS_SetLocalInt(oPC,"NoRetrieveItems",1);
+	SetLocalInt(oPC,"NoRetrieveItems",1);
 	
 	SetGUIObjectDisabled(oPC,SCREENNAME,"TUTORIAL_LISTBOX",TRUE);	
 	
 	string sDB;
-	int guildid = PS_GetLocalInt(oPC,"storage_guildid"); int guildmode;
+	int guildid = GetLocalInt(oPC,"storage_guildid"); int guildmode;
 
 	if (guildid > 0)
 	{
@@ -926,13 +924,13 @@ void RetrieveObject(object oPC, string sItemNumber, string sRow)
 
 void AttemptToStoreItem(object oPC, int iLoop = 0)
 {
-	object oItem = PS_GetLocalObject(oPC,"LAST_DRAGGED_ITEM");
-	int oID = PS_GetLocalInt(oPC,"LastDraggedID");
+	object oItem = GetLocalObject(oPC,"LAST_DRAGGED_ITEM");
+	int oID = GetLocalInt(oPC,"LastDraggedID");
 			
 	SetGUIObjectHidden(oPC,SCREENNAME,"StorageGrid",TRUE);
-	PS_SetLocalInt(oPC,"NoStoreItems",1);
+	SetLocalInt(oPC,"NoStoreItems",1);
 	
-	if(PS_GetLocalInt(oPC,"LastStoredID") != oID && GetIsObjectValid(oItem))
+	if(GetLocalInt(oPC,"LastStoredID") != oID && GetIsObjectValid(oItem))
 	{
 		if(GetBaseItemType(oItem) == BASE_ITEM_LARGEBOX) ProcessBag(oPC,oItem);
 		else StoreItem(oPC,oItem);
@@ -948,31 +946,31 @@ void AttemptToStoreItem(object oPC, int iLoop = 0)
 void ClearVariables(object oPC)
 {
 	ClearForNextItem(oPC);
-	PS_DeleteLocalInt(oPC,"NoStoreItems");
-	PS_DeleteLocalInt(oPC,"StorageRow");
-	PS_DeleteLocalInt(oPC,"StoragePage");	
-	PS_DeleteLocalString(oPC,"StoragePrevFilter");
-	PS_DeleteLocalString(oPC,"StorageFilter");	
-	PS_DeleteLocalString(oPC,"StorageID");	
-	PS_DeleteLocalInt(oPC,"StorageSortOrder");	
-	PS_DeleteLocalInt(oPC,"StorageID");
-	PS_DeleteLocalInt(oPC,"StorageFilterType");
-	PS_DeleteLocalInt(oPC,"storage_guildid");		
-	PS_DeleteLocalInt(oPC,"storage_noguildwithdraw");	
-	PS_DeleteLocalInt(oPC,"NoRetrieveItems");	
+	DeleteLocalInt(oPC,"NoStoreItems");
+	DeleteLocalInt(oPC,"StorageRow");
+	DeleteLocalInt(oPC,"StoragePage");	
+	DeleteLocalString(oPC,"StoragePrevFilter");
+	DeleteLocalString(oPC,"StorageFilter");	
+	DeleteLocalString(oPC,"StorageID");	
+	DeleteLocalInt(oPC,"StorageSortOrder");	
+	DeleteLocalInt(oPC,"StorageID");
+	DeleteLocalInt(oPC,"StorageFilterType");
+	DeleteLocalInt(oPC,"storage_guildid");		
+	DeleteLocalInt(oPC,"storage_noguildwithdraw");	
+	DeleteLocalInt(oPC,"NoRetrieveItems");	
 }
 
 void DoFilter(object oPC, string sFilter)
 {
 	if(sFilter == "")
 	{
-		PS_DeleteLocalString(oPC,"StorageFilter");
+		DeleteLocalString(oPC,"StorageFilter");
 		GetRecentlyStoredItems(oPC);
 	}
 	else if(GetStringLength(sFilter) < 3) SendMessageToPC(oPC,"Filter search must be atleast 3 characters.");
 	else
 	{
-		PS_SetLocalString(oPC,"StorageFilter",sFilter);
+		SetLocalString(oPC,"StorageFilter",sFilter);
 		GetRecentlyStoredItems(oPC,sFilter);
 	}
 }
@@ -982,7 +980,7 @@ void ExamineItem(object oPC, string sItemNumber)
 	object oItem; object oCopy; string sQuery1; string sQuery2;
 		
 	string sDB;
-	int guildid = PS_GetLocalInt(oPC,"storage_guildid"); int guildmode;
+	int guildid = GetLocalInt(oPC,"storage_guildid"); int guildmode;
 
 	if (guildid > 0)
 	{
@@ -1033,18 +1031,18 @@ void ExamineItem(object oPC, string sItemNumber)
 
 void DoIconFilter(object oPC, int iMode)
 {
-	if(iMode == 1) PS_DeleteLocalInt(oPC,"StorageSortOrder");
-	else if(iMode == 2) PS_SetLocalInt(oPC,"StorageSortOrder",1);
-	else if(iMode == 3) PS_DeleteLocalInt(oPC,"StorageFilterType");
-	else if(iMode == 4) PS_SetLocalInt(oPC,"StorageFilterType",1);
-	else if(iMode == 5) PS_SetLocalInt(oPC,"StorageFilterType",2);
-	else if(iMode == 6) PS_SetLocalInt(oPC,"StorageFilterType",3);			
-	else if(iMode == 7) PS_SetLocalInt(oPC,"StorageFilterType",4);	
-	else if(iMode == 8) PS_SetLocalInt(oPC,"StorageFilterType",5);	
-	else if(iMode == 9) PS_SetLocalInt(oPC,"StorageFilterType",6);	
-	else if(iMode == 10) PS_SetLocalInt(oPC,"StorageFilterType",7);	
+	if(iMode == 1) DeleteLocalInt(oPC,"StorageSortOrder");
+	else if(iMode == 2) SetLocalInt(oPC,"StorageSortOrder",1);
+	else if(iMode == 3) DeleteLocalInt(oPC,"StorageFilterType");
+	else if(iMode == 4) SetLocalInt(oPC,"StorageFilterType",1);
+	else if(iMode == 5) SetLocalInt(oPC,"StorageFilterType",2);
+	else if(iMode == 6) SetLocalInt(oPC,"StorageFilterType",3);			
+	else if(iMode == 7) SetLocalInt(oPC,"StorageFilterType",4);	
+	else if(iMode == 8) SetLocalInt(oPC,"StorageFilterType",5);	
+	else if(iMode == 9) SetLocalInt(oPC,"StorageFilterType",6);	
+	else if(iMode == 10) SetLocalInt(oPC,"StorageFilterType",7);	
 							
-	PS_DeleteLocalInt(oPC,"StoragePage");
+	DeleteLocalInt(oPC,"StoragePage");
 	
 	GetRecentlyStoredItems(oPC);
 }
@@ -1072,8 +1070,8 @@ void main(string sMode, string sObjectID, string sRow, string sNoWithdraw)
 		
 	object oItem;
 	
-	int StoragePage = PS_GetLocalInt(oPC,"StoragePage");
-	string sStorageFilter = PS_GetLocalString(oPC,"StoragePrevFilter");
+	int StoragePage = GetLocalInt(oPC,"StoragePage");
+	string sStorageFilter = GetLocalString(oPC,"StoragePrevFilter");
 	
 //	SendMessageToPC(oPC,"Debug: Previous Filter "+sStorageFilter);
 		
@@ -1092,15 +1090,15 @@ void main(string sMode, string sObjectID, string sRow, string sNoWithdraw)
 
 		if(sRow == "guild")
 		{
-			PS_SetLocalInt(oPC,"storage_guildid",StringToInt(sObjectID));
-			if(StringToInt(sNoWithdraw) < 6) PS_SetLocalInt(oPC,"storage_noguildwithdraw",1);
+			SetLocalInt(oPC,"storage_guildid",StringToInt(sObjectID));
+			if(StringToInt(sNoWithdraw) < 6) SetLocalInt(oPC,"storage_noguildwithdraw",1);
 			GetRecentlyStoredItems(oPC);
 		}
 		else GetRecentlyStoredItems(oPC);
 	}
 	else if(sMode == "DROPITEM")
 	{
-		if(PS_GetLocalInt(oPC,"NoStoreItems") == 1)
+		if(GetLocalInt(oPC,"NoStoreItems") == 1)
 		{
 			SendMessageToPC(oPC,"Please wait for last item to finish storing.");
 			return;
@@ -1109,7 +1107,7 @@ void main(string sMode, string sObjectID, string sRow, string sNoWithdraw)
 	}  
 	else if(sMode == "RETRIEVE")
 	{
-		if(PS_GetLocalInt(oPC,"NoRetrieveItems") == 1)
+		if(GetLocalInt(oPC,"NoRetrieveItems") == 1)
 		{
 			SendMessageToPC(oPC,"Please wait for last item to finish retrieving.");
 			return;
@@ -1118,26 +1116,26 @@ void main(string sMode, string sObjectID, string sRow, string sNoWithdraw)
 	}
 	else if(sMode == "FILTER")
 	{
-		if(sStorageFilter != sObjectID) PS_DeleteLocalInt(oPC,"StoragePage");
+		if(sStorageFilter != sObjectID) DeleteLocalInt(oPC,"StoragePage");
 		DoFilter(oPC,sRow);
 	}
 	else if(sMode == "NEXT")                                                          
 	{
-		if(sStorageFilter != sObjectID) PS_DeleteLocalInt(oPC,"StoragePage");
-		else PS_SetLocalInt(oPC,"StoragePage",StoragePage+1);
+		if(sStorageFilter != sObjectID) DeleteLocalInt(oPC,"StoragePage");
+		else SetLocalInt(oPC,"StoragePage",StoragePage+1);
 		GetRecentlyStoredItems(oPC,sRow);
 	}
 	else if(sMode == "PREV")
 	{
-		if(sStorageFilter != sObjectID) PS_DeleteLocalInt(oPC,"StoragePage");
-		else PS_SetLocalInt(oPC,"StoragePage",StoragePage-1);
+		if(sStorageFilter != sObjectID) DeleteLocalInt(oPC,"StoragePage");
+		else SetLocalInt(oPC,"StoragePage",StoragePage-1);
 		GetRecentlyStoredItems(oPC,sRow);
 	}	
 	else if(sMode == "EXAMINE") ExamineItem(oPC,sObjectID);
 	else if(sMode == "SETICONFILTER") DoIconFilter(oPC,StringToInt(sObjectID));
 	else if(sMode == "REFRESH")
 	{
-		PS_DeleteLocalInt(oPC,"StoragePage");
+		DeleteLocalInt(oPC,"StoragePage");
 		GetRecentlyStoredItems(oPC);
 	}
 	else if(sMode == "DOEVERYTHING") DoEverything(oPC);

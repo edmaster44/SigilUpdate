@@ -8,13 +8,13 @@ const int minRollForXp = 18;
 // code
 int GetOrCreateCurrentXp(object targetObject)
 {
- 	int xp = PS_GetLocalInt(targetObject, combatdummyVariable);
+ 	int xp = GetLocalInt(targetObject, combatdummyVariable);
 	return xp;
 }
 
 void SetCurrentXp(object targetObject, int xp)
 {
-	PS_SetLocalInt(targetObject, combatdummyVariable, xp);
+	SetLocalInt(targetObject, combatdummyVariable, xp);
 }
 
 void main()

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 	ps_onunacquire001
 	This is code for module trash collectors (see "ps_lib-trashcollector).
@@ -30,7 +28,7 @@ void TrashCollectedChat(object oCollector)
 	}
 	
 	if (nCOUNT < 1) return;
-	string sEmote = PS_GetLocalString(oCollector, "EATING_TALK");
+	string sEmote = GetLocalString(oCollector, "EATING_TALK");
 	if (sEmote == "") return;
 	SpeakString(sEmote);
 }

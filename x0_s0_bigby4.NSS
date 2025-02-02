@@ -53,7 +53,7 @@ void RunHandImpact(object oTarget, object oCaster, int nMetaMagic)
 	
     if (nCasterRoll >= nTargetRoll)
     {
-       	int nDC = PS_GetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpellID));
+       	int nDC = GetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpellID));
 
        	int nDam  = d2(nCL);
        	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
@@ -131,7 +131,7 @@ void main()
             // Save the current save DC on the character because
             // GetSpellSaveDC won't work when delayed
             //----------------------------------------------------------
-            PS_SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpellID), GetSpellSaveDC());
+            SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpellID), GetSpellSaveDC());
             RunHandImpact(oTarget,OBJECT_SELF, nMetaMagic);
         }
     }

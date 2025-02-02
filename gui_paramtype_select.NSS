@@ -1,14 +1,12 @@
-#include "ff_safevar"
-
 #include "ps_inc_newenchanting"
 
 void main (string sNum) {
 
 	object oPC = OBJECT_SELF;
 	int nIndex = StringToInt(sNum);
-	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	
-	PS_SetLocalInt(oPC, "EnchantmentToApply", nIndex);
+	SetLocalInt(oPC, "EnchantmentToApply", nIndex);
 	
 	struct enchantment enchant = LoadEnchantment(nIndex, oPC);
 	

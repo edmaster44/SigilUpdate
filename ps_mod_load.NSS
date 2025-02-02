@@ -142,22 +142,22 @@ void main()
    }
    
 	// Only setup once for entire campaign
-	if ( PS_GetGlobalInt("CAMPAIGN_SETUP_FLAG") == FALSE )
+	if ( GetGlobalInt("CAMPAIGN_SETUP_FLAG") == FALSE )
 	{
-		PS_SetGlobalInt( "CAMPAIGN_SETUP_FLAG", TRUE );
+		SetGlobalInt( "CAMPAIGN_SETUP_FLAG", TRUE );
 	
 		//This variable makes all transitions a "gather your party" transition.
-		// PS_SetGlobalInt( VAR_GLOBAL_GATHER_PARTY, 1 );
+		// SetGlobalInt( VAR_GLOBAL_GATHER_PARTY, 1 );
 		
 		// Force kills dominated group members if no valid members remain - checked on HeartBeat ( nw_g0_dominate )
-		//PS_SetGlobalInt( CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP, TRUE );
+		//SetGlobalInt( CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP, TRUE );
 		
 		// Removes effect and prevents transition if object is dominated - checked in ginc_transition / nw_g0_transition
-		//PS_SetGlobalInt( CAMPAIGN_SWITCH_REMOVE_DOMINATED_ON_TRANSITION, TRUE );		
+		//SetGlobalInt( CAMPAIGN_SWITCH_REMOVE_DOMINATED_ON_TRANSITION, TRUE );		
 		
 		// A flag that reflects the engine setting for whether or not we use personal reputation; this is a consideration in spell targeting
 		// BMA-OEI 11/14/2006: Defaulted TRUE to enable spell targetting neutral PC associates (nw_i0_spells)
-		PS_SetGlobalInt( CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION, TRUE );
+		SetGlobalInt( CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION, TRUE );
 	}
 	
 	object oMod = GetModule();
@@ -168,7 +168,7 @@ void main()
     if (SQLFetch() == SQL_SUCCESS) {
         string sBootTime = SQLGetData(1);
 
-        PS_SetLocalInt(oMod, "boottime", StringToInt(sBootTime));
+        SetLocalInt(oMod, "boottime", StringToInt(sBootTime));
 
     }
 	
@@ -179,7 +179,7 @@ void main()
 	}
 	
 	int iStoreArea = ObjectToInt(oStoreArea);
-	PS_SetGlobalInt("STORE_AREA", iStoreArea);
+	SetGlobalInt("STORE_AREA", iStoreArea);
 	
 	
 	//set object id for dm area
@@ -189,7 +189,7 @@ void main()
 	}
 	
 	int iDMArea = ObjectToInt(oDMArea);
-	PS_SetGlobalInt("DM_AREA", iDMArea);
+	SetGlobalInt("DM_AREA", iDMArea);
 	
 	//For xp_craft mod
 	ExecuteScript("nwnx_craft_set_constants",oMod);

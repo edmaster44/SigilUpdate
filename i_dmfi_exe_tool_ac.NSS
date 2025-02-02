@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_exe_tool - DM Friendly Initiative - Script for DMFI Tool Activation
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -32,7 +30,7 @@ void main()
 
 	//if (DMFI_GetIsDM(oPC))
 	//{
-		PS_SetLocalObject(oTool, DMFI_TARGET, oTarget);
+		SetLocalObject(oTool, DMFI_TARGET, oTarget);
 		DMFI_RenameObject(oPC, oTarget);
 	//}
 }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 object GetNearestEncounterMonsterNotTeleported(string sTag);
 
 void main() {
@@ -11,8 +9,8 @@ void main() {
 		
 	//SendMessageToPC(oPC, "Should be teleporting something.");
 
-	string sWP = PS_GetLocalString(OBJECT_SELF, "Teleport_Waypoint");
-	string sMonster = PS_GetLocalString(OBJECT_SELF, "Teleport_Monster");
+	string sWP = GetLocalString(OBJECT_SELF, "Teleport_Waypoint");
+	string sMonster = GetLocalString(OBJECT_SELF, "Teleport_Monster");
 	
 	effect eVis = EffectNWN2SpecialEffectFile("fx_teleport");
 	
@@ -29,7 +27,7 @@ void main() {
 		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oMonster, 3.0f);
 		AssignCommand(oMonster, JumpToLocation(lWP));
-		PS_SetLocalInt(oMonster, "Teleported", 1);
+		SetLocalInt(oMonster, "Teleported", 1);
 		return;
 		
 	} else {
@@ -45,13 +43,13 @@ object GetNearestEncounterMonsterNotTeleported(string sTag) {
 	int n = 1;
 	for (n = 1; n < 10; n++) {
 		object oMonster = GetNearestObjectByTag(sTag, OBJECT_SELF, n);
-		if (GetIsObjectValid(oMonster) && PS_GetLocalInt(oMonster, "Teleported") == 0) 
+		if (GetIsObjectValid(oMonster) && GetLocalInt(oMonster, "Teleported") == 0) 
 			return oMonster;
 		oMonster = GetNearestObjectByTag(sTag+"2", OBJECT_SELF, n);
-		if (GetIsObjectValid(oMonster) && PS_GetLocalInt(oMonster, "Teleported") == 0) 
+		if (GetIsObjectValid(oMonster) && GetLocalInt(oMonster, "Teleported") == 0) 
 			return oMonster;
 		oMonster = GetNearestObjectByTag(sTag+"3", OBJECT_SELF, n);
-		if (GetIsObjectValid(oMonster) && PS_GetLocalInt(oMonster, "Teleported") == 0) 
+		if (GetIsObjectValid(oMonster) && GetLocalInt(oMonster, "Teleported") == 0) 
 			return oMonster;
 	}
 	

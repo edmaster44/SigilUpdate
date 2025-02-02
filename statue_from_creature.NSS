@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // statue_from_creature
 /*
 This script should be placed in the 'On Spawn In' script of a creature. When
@@ -13,7 +11,7 @@ const string COLLISION_BALL_TAG = "plc_collbox";
 const int FREEZE_SPELL_ID = -2999;
 void main()
 {
-	float fDelay = PS_GetLocalFloat(OBJECT_SELF, "ANIMATION_DELAY");
+	float fDelay = GetLocalFloat(OBJECT_SELF, "ANIMATION_DELAY");
 	if (fDelay <= 0.0)
 		fDelay = 0.75;
 		
@@ -21,6 +19,6 @@ void main()
 	eFreeze = SetEffectSpellId(eFreeze, FREEZE_SPELL_ID);
 	
 	DelayCommand(fDelay, ApplyEffectToObject( DURATION_TYPE_PERMANENT, eFreeze, OBJECT_SELF ));
-	DelayCommand(fDelay, PS_SetLocalInt(OBJECT_SELF, "STOP_ANIMATION", 1));
+	DelayCommand(fDelay, SetLocalInt(OBJECT_SELF, "STOP_ANIMATION", 1));
 
 }

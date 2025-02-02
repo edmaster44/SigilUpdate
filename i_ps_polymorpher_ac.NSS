@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // i_ps_polymorpher_ac
 /*	Script created by Dedic8ed for use in the Sigil: City of Doors PW
 	   
@@ -17,11 +15,11 @@ void main()
 {
     object oPC      = GetItemActivator();
     object oItem    = GetItemActivated();
-	int iPolym		= PS_GetLocalInt(oItem, "polymorph");
-	int iWild		= PS_GetLocalInt(oItem, "wild");
+	int iPolym		= GetLocalInt(oItem, "polymorph");
+	int iWild		= GetLocalInt(oItem, "wild");
 	effect ePolym	= EffectPolymorph(iPolym, 0, iWild);
 	effect eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
-	int iDuration	= PS_GetLocalInt(oItem, "duration");
+	int iDuration	= GetLocalInt(oItem, "duration");
 	float fDuration = HoursToSeconds(iDuration);
 
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oPC));

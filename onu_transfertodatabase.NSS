@@ -22,7 +22,7 @@ void LoadWeaponsToDatabase(object oPC);
 
 void main () {
 	object oPC = GetLastUsedBy();
-	int nType = PS_GetLocalInt(OBJECT_SELF, "load_type");
+	int nType = GetLocalInt(OBJECT_SELF, "load_type");
 	if (nType == 1)
 		LoadEnchantmentsIntoDatabase(oPC);
 	else if (nType == 2)
@@ -77,10 +77,10 @@ void LoadGemstonesIntoDatabase (object oPC) {
 		string sName = SQLEncodeSpecialChars(GetName(oItem));
 		string sTag = GetTag(oItem);
 		int nIcon = GetItemIconSafe(oItem);
-		string sColor = PS_GetLocalString(oItem, "Color");
-		string sDescription = SQLEncodeSpecialChars(PS_GetLocalString(oItem, "GemDescription")+"\n\n"+PS_GetLocalString(oItem, "MineralDescription"));
-		string sVFX = PS_GetLocalString(oItem, "VFX");
-		float fDur = PS_GetLocalFloat(oItem, "Duration");
+		string sColor = GetLocalString(oItem, "Color");
+		string sDescription = SQLEncodeSpecialChars(GetLocalString(oItem, "GemDescription")+"\n\n"+GetLocalString(oItem, "MineralDescription"));
+		string sVFX = GetLocalString(oItem, "VFX");
+		float fDur = GetLocalFloat(oItem, "Duration");
 	
 		string sQuery = "INSERT INTO gemstones SET gem_id='"+IntToString(n)+"', name='"+sName+"', tag='"+sTag+"', resref='"+sResref+"', icon='"+IntToString(nIcon)+"', color='"+sColor+"', description='"+sDescription+"', frequency='1', vfx='"+sVFX+"', duration='"+FloatToString(fDur)+"'";
 		SendMessageToPC(oPC, sQuery);

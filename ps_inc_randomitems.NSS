@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_flavortext"
 #include "ps_inc_experimentaleffects"
 #include "ps_inc_newcrafting"
@@ -18,13 +16,13 @@ string sHolder = "ps_utility_itemvariableholder";
 //Grabs the CR of the creature, or the saved int CR on the placeable
 int GetChallengeRatingOfTarget(object oTarget) {
 	if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE) {
-		if (PS_GetLocalInt(oTarget, "QUEST_CR") > 0)
-			return PS_GetLocalInt(oTarget, "QUEST_CR");
+		if (GetLocalInt(oTarget, "QUEST_CR") > 0)
+			return GetLocalInt(oTarget, "QUEST_CR");
 		else
 			return FloatToInt(GetChallengeRating(oTarget));
 	} else {
-		if (PS_GetLocalInt(oTarget, "CR") > 0)
-			return PS_GetLocalInt(oTarget, "CR");
+		if (GetLocalInt(oTarget, "CR") > 0)
+			return GetLocalInt(oTarget, "CR");
 		else 
 			return Random(10)+1;
 	}
@@ -46,7 +44,7 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 	object oHolder = GetObjectByTag(sHolder);
 	
 	//If this list hasn't been saved yet; save it for later!
-	int nMax = PS_GetLocalInt(oHolder, sPartial+"_max");
+	int nMax = GetLocalInt(oHolder, sPartial+"_max");
 	if (nMax <= 0) {
 		int index = 0;
 		int count = 0;
@@ -58,20 +56,20 @@ int GetRandomIcon(string sPartial, object oTarget = OBJECT_INVALID) {
 				if (index >= 1955 && index <= 1961) {//golem + corpse stuff	
 					count++;
 				} else {
-					PS_SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
+					SetLocalInt(oHolder, sPartial+"_"+IntToString(count), index);	
 					count++;
 				}
 			}
 			index++;	
 			
 		}
-		PS_SetLocalInt(oHolder, sPartial+"_max", count);
+		SetLocalInt(oHolder, sPartial+"_max", count);
 	} 
 	
 	//We have the list; go!	
-	nMax = PS_GetLocalInt(oHolder, sPartial+"_max");
+	nMax = GetLocalInt(oHolder, sPartial+"_max");
 	int nRandom = Random(nMax);
-	int nIcon = PS_GetLocalInt(oHolder, sPartial+"_"+IntToString(nRandom));
+	int nIcon = GetLocalInt(oHolder, sPartial+"_"+IntToString(nRandom));
 	return nIcon;
 } 
 
@@ -199,10 +197,10 @@ void CreateExperimentalScrollOnTarget(object oTarget, int nLevel = 1) {
 	}
 	
 	object oScroll = CreateTreasureItemOnTarget("ps_crft_basemisc", oTarget, 1, "experimentalscroll");
-	PS_SetLocalInt(oScroll, "Item_Level", nLevel);
-	PS_SetLocalInt(oScroll, "Item_Effect_Helpful", nGood);
-	PS_SetLocalInt(oScroll, "Item_Effect_Harmful", nBad);
-	PS_SetLocalInt(oScroll, "Item_Effect_Type", nType);
+	SetLocalInt(oScroll, "Item_Level", nLevel);
+	SetLocalInt(oScroll, "Item_Effect_Helpful", nGood);
+	SetLocalInt(oScroll, "Item_Effect_Harmful", nBad);
+	SetLocalInt(oScroll, "Item_Effect_Type", nType);
 	
 	SetFirstName(oScroll, sName);
 	SetDescription(oScroll, sDescrip);
@@ -243,9 +241,9 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 	
 	int nIcon = GetRandomIcon("it_pot");
 	object oPot = CreateTreasureItemOnTarget("ps_crft_basemisc", oTarget, 1, "experimentalpotion");
-	PS_SetLocalInt(oPot, "Item_Level", nLevel);
-	PS_SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
-	PS_SetLocalInt(oPot, "Item_Effect_Harmful", nBad);
+	SetLocalInt(oPot, "Item_Level", nLevel);
+	SetLocalInt(oPot, "Item_Effect_Helpful", nGood);
+	SetLocalInt(oPot, "Item_Effect_Harmful", nBad);
 	
 	SetFirstName(oPot, sName);
 	SetDescription(oPot, sDescrip);
@@ -264,9 +262,9 @@ void CreateExperimentalPotionOnTarget(object oTarget, int nLevel = 1) {
 void SaveInformationAboutItems() {
 	object oHolder = OBJECT_SELF;
 	
-	if (PS_GetLocalInt(oHolder, "Items_Initialized") > 0)
+	if (GetLocalInt(oHolder, "Items_Initialized") > 0)
 		return;
-	PS_SetLocalInt(oHolder, "Items_Initialized", 1);
+	SetLocalInt(oHolder, "Items_Initialized", 1);
 	
 	int nNumA = 0;
 	int nNumW = 0;
@@ -278,26 +276,26 @@ void SaveInformationAboutItems() {
 	while (nIndex < nMax) {
 		string sType = GetItemType(nIndex);
 		if (sType == "W") {
-			PS_SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumW), nIndex);
+			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumW), nIndex);
 			nNumW++;
 		} else if (sType == "A") {
-			PS_SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumA), nIndex);
+			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumA), nIndex);
 			nNumA++;
 		} else {
-			PS_SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumM), nIndex);
+			SetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nNumM), nIndex);
 			nNumM++;
 		}
 		nIndex++;
 	}
 	
-	PS_SetLocalInt(oHolder, "Item_A_Max", nNumA);
-	PS_SetLocalInt(oHolder, "Item_W_Max", nNumW);
-	PS_SetLocalInt(oHolder, "Item_M_Max", nNumM);
+	SetLocalInt(oHolder, "Item_A_Max", nNumA);
+	SetLocalInt(oHolder, "Item_W_Max", nNumW);
+	SetLocalInt(oHolder, "Item_M_Max", nNumM);
 }
 
 int GetNumberOfBaseItemTypes(string sType = "W") {
 	object oHolder = OBJECT_SELF;
-	return PS_GetLocalInt(oHolder, "Item_"+sType+"_Max");
+	return GetLocalInt(oHolder, "Item_"+sType+"_Max");
 }
 
 struct baseitem GetRandomBaseItem(object oPC, string sType = "W") {
@@ -307,7 +305,7 @@ struct baseitem GetRandomBaseItem(object oPC, string sType = "W") {
 
 	int max = GetNumberOfBaseItemTypes(sType);
 	int nChosen = Random(max);
-	int nIndex = PS_GetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nChosen));
+	int nIndex = GetLocalInt(oHolder, "Item_"+sType+"_"+IntToString(nChosen));
 	return LoadBaseItem(nIndex);
 }
 
@@ -321,7 +319,7 @@ struct material GetRandomMaterial(string s2da) {
 
 int GetNumberofEnchantmentsAvailable(object oObj, int value) {
 	object oHolder = OBJECT_SELF;
-	int nMax = PS_GetLocalInt(oHolder, "MaxEnchants_"+IntToString(GetBaseItemType(oObj))+"_"+IntToString(value));
+	int nMax = GetLocalInt(oHolder, "MaxEnchants_"+IntToString(GetBaseItemType(oObj))+"_"+IntToString(value));
 	if (nMax > 0)
 		return nMax;
 
@@ -333,7 +331,7 @@ int GetNumberofEnchantmentsAvailable(object oObj, int value) {
 	} else {
 		nMax = 0;
 	}
-	PS_SetLocalInt(oHolder, "MaxEnchants_"+IntToString(GetBaseItemType(oObj))+"_"+IntToString(value), nMax);
+	SetLocalInt(oHolder, "MaxEnchants_"+IntToString(GetBaseItemType(oObj))+"_"+IntToString(value), nMax);
 	return nMax;
 	
 }
@@ -375,11 +373,11 @@ void GiveItemRandomEnchantments(object oItem, int nPoints) {
 			nValue = 5;
 		struct enchantment e = GetRandomEnchantmentOfValue(oItem, nValue);
 		EnchantItem(oItem, e);
-		PS_SetLocalInt(oItem, "enchantment_"+IntToString(nCount), e.id);
+		SetLocalInt(oItem, "enchantment_"+IntToString(nCount), e.id);
 		nCount++;
 		nRemaining -= nValue;
 	}
-	PS_SetLocalInt(oItem, "enchantment_num", nCount);
+	SetLocalInt(oItem, "enchantment_num", nCount);
 }
 
 //Get Material for random item of tier = matTier
@@ -506,8 +504,8 @@ struct material GetRandomMaterialOfTier(string sList, int matTier, int bIsJewelr
 int GetCraftingItemIndexByBaseItemType(int standardIndex) {
 
 	object oHolder = GetObjectByTag(sHolder);
-	if (PS_GetLocalInt(oHolder, "BASE_ITEM_CACHE") > 0) {
-		return PS_GetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex));
+	if (GetLocalInt(oHolder, "BASE_ITEM_CACHE") > 0) {
+		return GetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex));
 	}
 
 	//No info already available - time to load 2da!
@@ -516,12 +514,12 @@ int GetCraftingItemIndexByBaseItemType(int standardIndex) {
 	while (nIndex < nMax) {
 	
 		int baseID = GetBaseID(nIndex);
-		PS_SetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex), baseID);
+		SetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex), baseID);
 		nIndex++;
 	}
 	
-	PS_SetLocalInt(oHolder, "BASE_ITEM_CACHE", 1);
-	return PS_GetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex));
+	SetLocalInt(oHolder, "BASE_ITEM_CACHE", 1);
+	return GetLocalInt(oHolder, "ITEM_INDEX_"+IntToString(standardIndex));
 
 }
 
@@ -533,8 +531,8 @@ object CreateRandomItemFromBaseType(object oPC, struct baseitem i, int matTier =
 	
 	object obj = CreateCraftedItem(oPC, i, m1, m2, m3);
 	SetFirstName(obj, GetCraftingItemName(i, m1, m2, m3));
-	PS_SetLocalString(obj, "material_name", m1.label);
-	PS_SetLocalString(obj, "base_name", i.label);
+	SetLocalString(obj, "material_name", m1.label);
+	SetLocalString(obj, "base_name", i.label);
 	return obj;
 }
 
@@ -601,13 +599,13 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 	string sName = "";
 	struct character owner = DetailCharacter(2);
 	struct character antagonist = DetailCharacter(2);
-	string sBaseItem = PS_GetLocalString(oItem, "base_name");
+	string sBaseItem = GetLocalString(oItem, "base_name");
 	
 	int nRandom = d100();
 	if (nRandom < 25) {
 		int n;
-		for (n = 0; n < PS_GetLocalInt(oItem, "enchantment_num"); n++) {
-			int nId = PS_GetLocalInt(oItem, "enchantment_"+IntToString(n));
+		for (n = 0; n < GetLocalInt(oItem, "enchantment_num"); n++) {
+			int nId = GetLocalInt(oItem, "enchantment_"+IntToString(n));
 			if (n > 0) {
 				int d = d100();
 				if (d < 5)
@@ -632,15 +630,15 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 			case 4: sName = sBaseItem+" of "+owner.nickname; break;
 		}
 	} else {
-		if (PS_GetLocalInt(oItem, "enchantment_0") > 0) {
-			int nId = PS_GetLocalInt(oItem, "enchantment_0");
+		if (GetLocalInt(oItem, "enchantment_0") > 0) {
+			int nId = GetLocalInt(oItem, "enchantment_0");
 			sName += GetItemNamePart(nId, "prefix");
 		} else {
-			sName += PS_GetLocalString(oItem, "material_name");
+			sName += GetLocalString(oItem, "material_name");
 		}
 		sName += " "+sBaseItem;
-		if (PS_GetLocalInt(oItem, "enchantment_1") > 0) {
-			int nId = PS_GetLocalInt(oItem, "enchantment_1");
+		if (GetLocalInt(oItem, "enchantment_1") > 0) {
+			int nId = GetLocalInt(oItem, "enchantment_1");
 			sName += " "+GetItemNamePart(nId, "suffix");
 		}
 	}
@@ -654,9 +652,9 @@ void GenerateRandomNameAndDescriptionForItem(object oItem) {
 		case 0: sDescription += "This "+sBaseItem+" was forged by "+IntroduceCharacter(owner); break;
 		case 1: sDescription += "The known history of this "+sBaseItem+" begins when it fell into the hands of "+IntroduceCharacter(owner); break;
 		case 2: sDescription += "This "+sBaseItem+" was created for "+IntroduceCharacter(owner); break;
-		case 3: sDescription += "A "+PS_GetLocalString(oItem, "material_name")+" "+sBaseItem+", this item was first wielded by "+IntroduceCharacter(owner); break;
+		case 3: sDescription += "A "+GetLocalString(oItem, "material_name")+" "+sBaseItem+", this item was first wielded by "+IntroduceCharacter(owner); break;
 		case 4: sDescription += "Used in the wars against "+antagonist.firstname+" "+antagonist.lastname+", this "+sBaseItem+" the property of "+IntroduceCharacter(owner); break;
-		case 5: sDescription += "Forged of "+PS_GetLocalString(oItem, "material_name")+", this "+sBaseItem+" was the property of "+IntroduceCharacter(owner); break;
+		case 5: sDescription += "Forged of "+GetLocalString(oItem, "material_name")+", this "+sBaseItem+" was the property of "+IntroduceCharacter(owner); break;
 		case 6: sDescription += "Created in "+RandomString_GeneratePlanarLocation()+" to defeat "+antagonist.firstname+" "+antagonist.nickname+", this "+sBaseItem+" was used by "+IntroduceCharacter(owner); break;
 		case 7: sDescription += sName+" was forged by the great smith "+IntroduceCharacter(owner); break;
 	}
@@ -740,7 +738,7 @@ void CreateRandomItemOfTypeOnTarget(object oTarget, int nIndex) {
 int GetNumberOfTrinketEnchantmentsAvailable(int nValue) {
 
 	object oHolder = GetModule();
-	int nMax = PS_GetLocalInt(oHolder, "MaxEnchants_"+IntToString(BASE_ITEM_MISCSMALL)+"_"+IntToString(nValue));
+	int nMax = GetLocalInt(oHolder, "MaxEnchants_"+IntToString(BASE_ITEM_MISCSMALL)+"_"+IntToString(nValue));
 	if (nMax > 0)
 		return nMax;
 	
@@ -749,7 +747,7 @@ int GetNumberOfTrinketEnchantmentsAvailable(int nValue) {
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		nMax = StringToInt(SQLGetData(1));
 	}
-	PS_SetLocalInt(oHolder, "MaxEnchants_"+IntToString(BASE_ITEM_MISCSMALL)+"_"+IntToString(nValue), nMax);	
+	SetLocalInt(oHolder, "MaxEnchants_"+IntToString(BASE_ITEM_MISCSMALL)+"_"+IntToString(nValue), nMax);	
 	return nMax;
 }
 

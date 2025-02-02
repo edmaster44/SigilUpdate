@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // Does a check for local vars with DC values on the trigger and reports the lore known.
 // Could be moved to an include at some point and have checks for different types of skills
 // especially things like spot and listen
@@ -24,27 +22,27 @@ void main()
 	if (GetIsPC(oPC))
 	{
 		// local trigger string var that is then used for the storing of local var on PC
-		sLoreType = PS_GetLocalString(oTrigger, "LoreType");
+		sLoreType = GetLocalString(oTrigger, "LoreType");
 		
 		// check to see if they have already made 1 lore check since reset/relog
-		if (PS_GetLocalInt(oPC, "LORECHECK_" + sLoreType) == 0)
+		if (GetLocalInt(oPC, "LORECHECK_" + sLoreType) == 0)
 		{
 			// next time trigger is tripped this will cause bypass.
-			PS_SetLocalInt(oPC, "LORECHECK_" + sLoreType, 1);
+			SetLocalInt(oPC, "LORECHECK_" + sLoreType, 1);
 			// make the lore check
 			int iLore = GetSkillRank(SKILL_LORE, oPC, FALSE);
-			int iSuccess = PS_GetLocalInt(oTrigger, "LoreCheckSuccessValue");
+			int iSuccess = GetLocalInt(oTrigger, "LoreCheckSuccessValue");
 			
 			if (iLore < 0)
-				SendMessageToPC(oPC, LORE_STRING_FORMAT + PS_GetLocalString(oTrigger, "LoreGenericEpicFail"));
+				SendMessageToPC(oPC, LORE_STRING_FORMAT + GetLocalString(oTrigger, "LoreGenericEpicFail"));
 			else if (iLore < iSuccess)
-				SendMessageToPC(oPC, LORE_STRING_FORMAT + PS_GetLocalString(oTrigger, "LoreGenericFail"));
+				SendMessageToPC(oPC, LORE_STRING_FORMAT + GetLocalString(oTrigger, "LoreGenericFail"));
 			else
 			{
-				SendMessageToPC(oPC, LORE_STRING_FORMAT + PS_GetLocalString(oTrigger, "LoreGenericSuccess"));
+				SendMessageToPC(oPC, LORE_STRING_FORMAT + GetLocalString(oTrigger, "LoreGenericSuccess"));
 				
 				int iCount;
-				int iLoreCheckMaxValue = PS_GetLocalInt(oTrigger, "LoreCheckMaxValue");
+				int iLoreCheckMaxValue = GetLocalInt(oTrigger, "LoreCheckMaxValue");
 				string sCurrentString;
 				
 				// no need to go through entries which they do not have lore for anyway.
@@ -57,7 +55,7 @@ void main()
 					
 				for (iCount = 1; iCount <= iLoreCheckMaxValue; iCount++)
 				{
-					sCurrentString = PS_GetLocalString(oTrigger, "DC" + IntToString(iCount));
+					sCurrentString = GetLocalString(oTrigger, "DC" + IntToString(iCount));
 					if (sCurrentString != "")
 						SendMessageToPC(oPC, LORE_STRING_FORMAT + sCurrentString);
 				}

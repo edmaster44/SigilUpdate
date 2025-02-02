@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ///////////////////////////////////////////////////////////////
 // ps_scod_lib_traps
 //
@@ -214,7 +212,7 @@ RespawnAreaMovingFloorTraps(object oArea, object oPC, string sRandomWPTag="rndfl
 	if (oWP == OBJECT_INVALID)
 		return; // fatal
 
-	int nNumberRandomWPs = PS_GetLocalInt(oWP, "NUMBER_IN_SET");
+	int nNumberRandomWPs = GetLocalInt(oWP, "NUMBER_IN_SET");
 	
 	// If the number of random waypoints in this "set" (all share the same tag)
 	// is zero or 1, we can only put a trap right here
@@ -238,7 +236,7 @@ RespawnTrap(object oTrapObject, string sDisarmedScript,
     //////////////////////
     // Trap Type& Creation
     ///////////////////////
-    string sTrapType = PS_GetLocalString(oTrapObject, "TRAP_TYPE");
+    string sTrapType = GetLocalString(oTrapObject, "TRAP_TYPE");
 	
 	
     int nTrapType = TRAP_BASE_TYPE_MINOR_ACID;
@@ -248,7 +246,7 @@ RespawnTrap(object oTrapObject, string sDisarmedScript,
 
         nMaxTrapStrength =
             StringTrapStrengthToInt(
-                PS_GetLocalString(oTrapObject, "TRAP_STRENGTH"));
+                GetLocalString(oTrapObject, "TRAP_STRENGTH"));
 
         nTrapType = GetRandomTrapBaseType(nMaxTrapStrength);
     }
@@ -263,13 +261,13 @@ RespawnTrap(object oTrapObject, string sDisarmedScript,
 		nTrapType = TRAP_BASE_TYPE_MINOR_ACID;
 		
 	/// GRAB any and ALL of the local ints for trap configuration HERE (not later) !
-    int nTrapDetectDC = PS_GetLocalInt(oTrapObject, "TRAP_DETECT_DC");
-    int nTrapDisarmDC = PS_GetLocalInt(oTrapObject, "TRAP_DISARM_DC");
-	int nTrapRecoverablePercentage = PS_GetLocalInt(oTrapObject, "TRAP_RECOVERABLE_PERCENTAGE");
+    int nTrapDetectDC = GetLocalInt(oTrapObject, "TRAP_DETECT_DC");
+    int nTrapDisarmDC = GetLocalInt(oTrapObject, "TRAP_DISARM_DC");
+	int nTrapRecoverablePercentage = GetLocalInt(oTrapObject, "TRAP_RECOVERABLE_PERCENTAGE");
 	/// SCOD: only 10% of traps recoverable
 	if (nTrapRecoverablePercentage && d100() > nTrapRecoverablePercentage)
 		nTrapRecoverablePercentage = 0;
-    string sTrapKeyTag = PS_GetLocalString(oTrapObject, "TRAP_KEYTAG");
+    string sTrapKeyTag = GetLocalString(oTrapObject, "TRAP_KEYTAG");
 	
 	///////////DEBUG REMOVE THIS REMOVE THIS ///////////////////
 	/*
@@ -285,7 +283,7 @@ RespawnTrap(object oTrapObject, string sDisarmedScript,
     if (nTrapObjectType == OBJECT_TYPE_WAYPOINT)
     {
 
-        float fTrapSize = PS_GetLocalFloat(oTrapObject, "TRAP_SIZE");
+        float fTrapSize = GetLocalFloat(oTrapObject, "TRAP_SIZE");
         if (fTrapSize == 0.0f)
             fTrapSize = 2.0f;
 			

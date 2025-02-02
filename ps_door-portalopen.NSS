@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 ps_door-portalopen
 by Ceremorph 10/26/2015
@@ -21,11 +19,11 @@ void main()
 
 {
 	//	Get the float for the duration of the time to pass before the door is closed and locked
-	string sPortal		= PS_GetLocalString(OBJECT_SELF, "Portal");		//Tag of portal
-	string sKey			= PS_GetLocalString(OBJECT_SELF, "Key");			//Portal key (if any)
-	string sFX			= PS_GetLocalString(OBJECT_SELF, "VFX");			//Visual effect to apply
-	int iLocked			= PS_GetLocalInt(OBJECT_SELF, "Locked");			//1 for locked door, 2 for unlocked
-	float fDelay		= PS_GetLocalFloat(OBJECT_SELF, "Delay");			//Delay (in seconds) to close door
+	string sPortal		= GetLocalString(OBJECT_SELF, "Portal");		//Tag of portal
+	string sKey			= GetLocalString(OBJECT_SELF, "Key");			//Portal key (if any)
+	string sFX			= GetLocalString(OBJECT_SELF, "VFX");			//Visual effect to apply
+	int iLocked			= GetLocalInt(OBJECT_SELF, "Locked");			//1 for locked door, 2 for unlocked
+	float fDelay		= GetLocalFloat(OBJECT_SELF, "Delay");			//Delay (in seconds) to close door
 	if (fDelay < 60.0f)
 		fDelay = 60.0f;
 	
@@ -44,7 +42,7 @@ void main()
 			object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
 			SetPlotFlag(oPortal,TRUE);												//Mark the portal as plot
 			if (sFX != "") CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);	//Generate the portal visual effect
-			PS_SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);								//Mark the portal as spawned
+			SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);								//Mark the portal as spawned
 			DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));						//Close the door after fDelay seconds	
 		}
 		
@@ -52,7 +50,7 @@ void main()
 		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);		//Create the portal
 		SetPlotFlag(oPortal,TRUE);													//Mark the portal as plot
 		if (sFX != "") CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);		//Generate the portal visual effect
-		PS_SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);									//Mark the portal as spawned
+		SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);									//Mark the portal as spawned
 		DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));							//Close the door after fDelay seconds	
 	}	
 }

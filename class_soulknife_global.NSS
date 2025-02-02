@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // contains all the constants and a few reusable functions for the Mind
 // Blade class. All scripts for the class should include this file
 // By Electrohydra
@@ -113,7 +111,7 @@ int GetPsychicStrikeDice(object oPC)
 // Applies Knife to the Soul on target. Returns FALSE if knife to the soul was not applied
 int ApplyKTTS(object oPC, object oTarget, int dice)
 {
-	int kkts = PS_GetLocalInt(oPC, VAR_KNIFE_TO_THE_SOUL);
+	int kkts = GetLocalInt(oPC, VAR_KNIFE_TO_THE_SOUL);
 	int ability = 0;
 	int dice =  GetPsychicStrikeDice(oPC);
 	switch (kkts)
@@ -178,14 +176,14 @@ int ApplyPsychicStrike(object oPC, object oTarget)
 // the recharge attempt is made BEFORE the attack coming 6 seconds latter.
 void AttemptRecharge(object oPC)
 {
-	int DC = PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC);
+	int DC = GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC);
 
 	// If a recharge is not needed
-	if (PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON) == TRUE)
+	if (GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON) == TRUE)
 	{
 		if (DC > 20)
 		{
-			PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC - 5);
+			SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC - 5);
 			DelayCommand(5.99f, AttemptRecharge(oPC));
 		}
 	}
@@ -193,14 +191,14 @@ void AttemptRecharge(object oPC)
 	{
 		if (GetIsSkillSuccessful(oPC, SKILL_CONCENTRATION, DC, FALSE)) // Set to TRUE to see skill roll
 		{
-			PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, TRUE);
-			PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC + 10);
+			SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, TRUE);
+			SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC + 10);
 			DelayCommand(5.99f, AttemptRecharge(oPC));
 		}
 		else
 		{
 			if (DC > 20)
-				PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC - 5);		
+				SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC - 5);		
 			
 			DelayCommand(5.99f, AttemptRecharge(oPC));
 		}
@@ -210,17 +208,17 @@ void AttemptRecharge(object oPC)
 // Checks if the target is dead, if so, apply Reaper's Blade
 void CheckReapersBlade(object oPC, object oTarget)
 {
-	if (GetIsDead(oTarget) && PS_GetLocalInt(oTarget, VAR_REAPERS_BLADE) != TRUE)
+	if (GetIsDead(oTarget) && GetLocalInt(oTarget, VAR_REAPERS_BLADE) != TRUE)
 	{
-		PS_SetLocalInt(oTarget, VAR_REAPERS_BLADE, TRUE);	
+		SetLocalInt(oTarget, VAR_REAPERS_BLADE, TRUE);	
 	
-		PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, TRUE);
+		SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, TRUE);
 		
-		int DC = PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC) - 10;
+		int DC = GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC) - 10;
 		if (DC < 20)
 			DC = 20;
 			
-		PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC);
+		SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC, DC);
 		// DEBUG!!!!
 		// SendMessageToPC(oPC, "Reaper's Blade Applied");
 	}
@@ -229,7 +227,7 @@ void CheckReapersBlade(object oPC, object oTarget)
 // Restarts the Strike if the DC hasn't changed since last round.
 void RestartPsychicStrike(int DC)
 {
-	if (DC == PS_GetLocalInt(OBJECT_SELF, VAR_PSYCHIC_STRIKE_DC))
+	if (DC == GetLocalInt(OBJECT_SELF, VAR_PSYCHIC_STRIKE_DC))
 		AttemptRecharge(OBJECT_SELF);
 }
 

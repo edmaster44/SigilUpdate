@@ -75,7 +75,7 @@ void main()
 	                //Create an instance of the AOE Object using the Apply Effect function
 	                ApplyEffectToObject( nDurType, eAOE, oTarget, fDuration );
 					ApplyEffectToObject( DURATION_TYPE_INSTANT, eHit, oTarget );
-					PS_SetLocalInt(oTarget, EVENFLW_SILENCE, TRUE);
+					SetLocalInt(oTarget, EVENFLW_SILENCE, TRUE);
 	            }
 	        }
 			if(!GetIsInCombat(oTarget))
@@ -89,7 +89,7 @@ void main()
 				ApplyEffectToObject( nDurType, eHit, oTarget, fDuration );
 				//Create an instance of the AOE Object using the Apply Effect function
 	        	ApplyEffectToObject( nDurType, eAOE, oTarget, fDuration );
-				PS_SetLocalInt(oTarget, EVENFLW_SILENCE, TRUE);
+				SetLocalInt(oTarget, EVENFLW_SILENCE, TRUE);
 	        	//Fire cast spell at event for the specified target
 	        	SignalEvent( oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SILENCE, FALSE) );
 			}

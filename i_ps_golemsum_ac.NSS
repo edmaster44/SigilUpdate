@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // i_ps_golemsum_ac
 // Script created by Ceremorph 7/19/2015 for use in the Sigil: City of Doors PW
 // This will be used in conjunction with the Golem Control Device created when one crafts a golem.   
@@ -15,7 +13,7 @@ void main()
 	object oPC		= GetItemActivator();
 	object oItem	= GetItemActivated();
 	// Collect variable from the calling item to determine what will be summonned
-	string sGolem	= PS_GetLocalString(oItem, "golem");
+	string sGolem	= GetLocalString(oItem, "golem");
 	location oLoc 	= GetItemActivatedTargetLocation();
 
 	// If the PC already has a creature in the henchman slot (golem or not), it will be unsummoned (destroyed). This

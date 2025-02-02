@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /********************************************************************************
 * Script that handles deck activation for Triple Triad like card game for SCoD  *
 * by Agony_Aunt/Loki_999                                                        *
@@ -23,7 +21,7 @@ void main()
 	}
 	else if (oTarget == oDeck)
 	{
-		PS_SetLocalObject(oPC, "DECK_TALK", oDeck);
+		SetLocalObject(oPC, "DECK_TALK", oDeck);
 		AssignCommand(oPC, ActionStartConversation(oPC, "conv_card_deck", TRUE, FALSE, TRUE, TRUE));
 	}	
 	else if (GetIsLocationValid(lTarget))

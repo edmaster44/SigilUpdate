@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Hordes of the Underdark RestSystem
 //:: x2_inc_restsys
@@ -206,7 +204,7 @@ void WMDebug (string sWrite)
 string WMGet2DAToUse()
 {
     //Check if the user has overwritten the 2da to use
-    string s2DA = PS_GetLocalString(GetModule(),"X2_WM_2DA_NAME");
+    string s2DA = GetLocalString(GetModule(),"X2_WM_2DA_NAME");
     if (s2DA == "")
     {
        s2DA = X2_WM_2DA_NAME;     // Not overwritten, take default (defined in the header of this file)
@@ -233,7 +231,7 @@ struct wm_struct GetNextWMTableEntry(int bAllData = FALSE)
     //--------------------------------------------------------------------------
     // Which row to start from...
     //--------------------------------------------------------------------------
-    int nCurRow = PS_GetLocalInt(GetModule(),"X2_WM_ROWSCANPTR");
+    int nCurRow = GetLocalInt(GetModule(),"X2_WM_ROWSCANPTR");
     struct wm_struct stRet;
 
     stRet.sTable = GetStringLowerCase(Get2DAString(s2DA, "TableName", nCurRow));
@@ -272,13 +270,13 @@ struct wm_struct GetNextWMTableEntry(int bAllData = FALSE)
     }
     stRet.nRowNumber = nCurRow;
     nCurRow++;
-    PS_SetLocalInt(GetModule(),"X2_WM_ROWSCANPTR",nCurRow); // point to the next row
+    SetLocalInt(GetModule(),"X2_WM_ROWSCANPTR",nCurRow); // point to the next row
     return stRet;
 }
 
 struct wm_struct GetFirstWMTableEntry(int bAllData = FALSE)
 {
-  PS_SetLocalInt(GetModule(),"X2_WM_ROWSCANPTR",0); // set the pointer to the first row
+  SetLocalInt(GetModule(),"X2_WM_ROWSCANPTR",0); // set the pointer to the first row
   return  GetNextWMTableEntry(bAllData);
 }
 
@@ -287,7 +285,7 @@ struct wm_struct GetFirstWMTableEntry(int bAllData = FALSE)
 //------------------------------------------------------------------------------
 struct wm_struct GetWMTableEntryByIndex(int nNo)
 {
-  PS_SetLocalInt(GetModule(),"X2_WM_ROWSCANPTR",nNo);
+  SetLocalInt(GetModule(),"X2_WM_ROWSCANPTR",nNo);
   return  GetNextWMTableEntry(TRUE);
 }
 
@@ -299,11 +297,11 @@ struct wm_struct GetWMStructByName(string sName, int bAllData = FALSE)
     struct wm_struct stRet;
     sName = GetStringLowerCase(sName);
     // check if there is a cached 2da row with this name
-    if (PS_GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName + "_ROWNR") != X2_WMT_INVALID_TABLE)
+    if (GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName + "_ROWNR") != X2_WMT_INVALID_TABLE)
     {
-        stRet.nRowNumber = PS_GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName+ "_ROWNR");
-        stRet.nProbabilityDay = PS_GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName+ "_PROBDAY");
-        stRet.nProbabilityNight = PS_GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName+ "_PROBNIGHT");
+        stRet.nRowNumber = GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName+ "_ROWNR");
+        stRet.nProbabilityDay = GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName+ "_PROBDAY");
+        stRet.nProbabilityNight = GetLocalInt(GetModule(),"X2_WM_TABLE_" + sName+ "_PROBNIGHT");
 
         // in case all data is requested, read them from the 2da
         if (bAllData)
@@ -337,9 +335,9 @@ void WMBuild2DACache()
     while (stEntry.nRowNumber != -1) // while there are still records matching
     {
 
-        PS_SetLocalInt(GetModule(),"X2_WM_TABLE_" + stEntry.sTable+ "_ROWNR", stEntry.nRowNumber );
-        PS_SetLocalInt(GetModule(),"X2_WM_TABLE_" + stEntry.sTable+ "_PROBDAY",stEntry.nProbabilityDay);
-        PS_SetLocalInt(GetModule(),"X2_WM_TABLE_" + stEntry.sTable+ "_PROBNIGHT",stEntry.nProbabilityNight);
+        SetLocalInt(GetModule(),"X2_WM_TABLE_" + stEntry.sTable+ "_ROWNR", stEntry.nRowNumber );
+        SetLocalInt(GetModule(),"X2_WM_TABLE_" + stEntry.sTable+ "_PROBDAY",stEntry.nProbabilityDay);
+        SetLocalInt(GetModule(),"X2_WM_TABLE_" + stEntry.sTable+ "_PROBNIGHT",stEntry.nProbabilityNight);
         nCount++;
         stEntry = GetNextWMTableEntry();
     }
@@ -355,7 +353,7 @@ void WMBuild2DACache()
 struct wm_struct WMGetAreaMonsterTable(object oArea)
 {
     struct wm_struct stTable;
-    int nTable =     PS_GetLocalInt(oArea,"X2_WM_AREA_TABLE");
+    int nTable =     GetLocalInt(oArea,"X2_WM_AREA_TABLE");
     stTable = GetWMTableEntryByIndex(nTable);
     return stTable;
 }
@@ -415,7 +413,7 @@ location WMGetAmbushSpot(object oPC)
 {
 
 	object oArea = GetArea(oPC);
-	float fMaxDist = PS_GetLocalFloat(oArea, VAR_WM_SPAWNPOINT_MAX_DIST);
+	float fMaxDist = GetLocalFloat(oArea, VAR_WM_SPAWNPOINT_MAX_DIST);
 	if (fMaxDist == 0.0f)
 		fMaxDist = WM_DEFAULT_SPAWNPOINT_MAX_DIST;
 
@@ -430,7 +428,7 @@ location WMGetAmbushSpot(object oPC)
 	//---------------------------------------------------------------------------
 	if (oSpot != OBJECT_INVALID && GetDistanceBetween(oSpot,oPC) < fMaxDist )
 	{
-	     PS_SetLocalObject(oPC,"X2_WM_AMBUSH_SPOT",oSpot);
+	     SetLocalObject(oPC,"X2_WM_AMBUSH_SPOT",oSpot);
 	     return GetLocation(oSpot);
 	}
 	
@@ -438,7 +436,7 @@ location WMGetAmbushSpot(object oPC)
 	// check if the designer has enabled the use of doors
 	//--------------------------------------------------------------------------
 	
-	int bUseDoors = PS_GetLocalInt(GetArea(oPC),"X2_WM_AREA_USEDOORS");
+	int bUseDoors = GetLocalInt(GetArea(oPC),"X2_WM_AREA_USEDOORS");
 	if (bUseDoors)
 	{
         //----------------------------------------------------------------------
@@ -479,7 +477,7 @@ location WMGetAmbushSpot(object oPC)
                     vNew.y += 0.8;
 
                 location lLoc = Location(GetArea(oDoor),vNew,GetFacing(oDoor));
-                PS_SetLocalObject(oPC, "X2_WM_AMBUSH_DOOR", oDoor);
+                SetLocalObject(oPC, "X2_WM_AMBUSH_DOOR", oDoor);
                 location lRet = lLoc;
                 return lRet;
            }
@@ -490,7 +488,7 @@ location WMGetAmbushSpot(object oPC)
 	// everything failed, so we just report the location of the PC
 	//---------------------------------------------------------------------------
 	
-	PS_SetLocalInt(oPC, "X2_WM_AMBUSH_ON_TOP_OF_PLAYER", TRUE);
+	SetLocalInt(oPC, "X2_WM_AMBUSH_ON_TOP_OF_PLAYER", TRUE);
 	//SendMessageToPC(oPC,"**WM-Debug: Ambush will use player location");
 	return GetLocation(oPC);
 
@@ -514,13 +512,13 @@ location WMGetAmbushSpot(object oPC)
 
 void WMSetupAmbush(object oPC, string sMonsters)
 {
-    PS_SetLocalString(oPC,"X2_WM_AMBUSH",sMonsters);
+    SetLocalString(oPC,"X2_WM_AMBUSH",sMonsters);
 
     //--------------------------------------------------------------------------
     // Prevent Player to rest while ambush is running
     // This is cleared in WMRunAmbush()!
     //--------------------------------------------------------------------------
-    PS_SetLocalInt(oPC,"X2_WM_AMBUSH_IN_PROGRESS",TRUE);
+    SetLocalInt(oPC,"X2_WM_AMBUSH_IN_PROGRESS",TRUE);
 }
 
 //------------------------------------------------------------------------------
@@ -529,14 +527,14 @@ void WMSetupAmbush(object oPC, string sMonsters)
 //------------------------------------------------------------------------------
 void WMSpawnAmbushMonsters(object oPC, location lSpot)
 {
-    string sMonsters =  PS_GetLocalString(oPC,"X2_WM_AMBUSH");
-    PS_DeleteLocalString(oPC,"X2_WM_AMBUSH");
+    string sMonsters =  GetLocalString(oPC,"X2_WM_AMBUSH");
+    DeleteLocalString(oPC,"X2_WM_AMBUSH");
 
     //--------------------------------------------------------------------------
     // Check if this ambush is occuring on top of the player's head
     //--------------------------------------------------------------------------
-    int bOnTop =   PS_GetLocalInt(oPC, "X2_WM_AMBUSH_ON_TOP_OF_PLAYER");
-    PS_DeleteLocalInt(oPC, "X2_WM_AMBUSH_ON_TOP_OF_PLAYER");
+    int bOnTop =   GetLocalInt(oPC, "X2_WM_AMBUSH_ON_TOP_OF_PLAYER");
+    DeleteLocalInt(oPC, "X2_WM_AMBUSH_ON_TOP_OF_PLAYER");
 
     string sTemp;
     object oMonster;
@@ -547,7 +545,7 @@ void WMSpawnAmbushMonsters(object oPC, location lSpot)
     // explode the list here....
     //--------------------------------------------------------------------------
     int nPos = FindSubString(sMonsters,",");
-    object oDoor = PS_GetLocalObject(oPC, "X2_WM_AMBUSH_DOOR");
+    object oDoor = GetLocalObject(oPC, "X2_WM_AMBUSH_DOOR");
      int bSpawnAnimation = FALSE;
      if (bOnTop)
      {
@@ -575,7 +573,7 @@ void WMSpawnAmbushMonsters(object oPC, location lSpot)
         if (oDoor != OBJECT_INVALID)
         {
             AssignCommand(oMonster,ActionOpenDoor(oDoor));
-            PS_DeleteLocalObject(oPC,"X2_WM_AMBUSH_DOOR");
+            DeleteLocalObject(oPC,"X2_WM_AMBUSH_DOOR");
         }
         AssignCommand(oMonster, ActionMoveToObject(oPC,TRUE));
     }
@@ -586,14 +584,14 @@ void WMSpawnAmbushMonsters(object oPC, location lSpot)
     if (oDoor != OBJECT_INVALID)
     {
         AssignCommand(oMonster,ActionOpenDoor(oDoor));
-        PS_DeleteLocalObject(oPC,"X2_WM_AMBUSH_DOOR");
+        DeleteLocalObject(oPC,"X2_WM_AMBUSH_DOOR");
     }
     AssignCommand(oMonster, ActionMoveToObject(oPC,TRUE));
 
     //--------------------------------------------------------------------------
     // Allow Resting again
     //--------------------------------------------------------------------------
-    PS_DeleteLocalInt(oPC,"X2_WM_AMBUSH_IN_PROGRESS");
+    DeleteLocalInt(oPC,"X2_WM_AMBUSH_IN_PROGRESS");
 }
 
 //------------------------------------------------------------------------------
@@ -607,12 +605,12 @@ void WMRunAmbush(object oPC)
     //--------------------------------------------------------------------------
     location lSpot = WMGetAmbushSpot(oPC);
 
-    object oSpot = PS_GetLocalObject(oPC,"X2_WM_AMBUSH_SPOT");
+    object oSpot = GetLocalObject(oPC,"X2_WM_AMBUSH_SPOT");
     if (GetIsObjectValid(oSpot))
     {
         event eUser = EventUserDefined(X2_WM_SPAWNSPOT_EVENTID);
         SignalEvent(oSpot,eUser);
-        PS_DeleteLocalObject(oPC, "X2_WM_AMBUSH_SPOT");
+        DeleteLocalObject(oPC, "X2_WM_AMBUSH_SPOT");
     }
     //--------------------------------------------------------------------------
     // Brent: Removed Delay
@@ -655,7 +653,7 @@ int WMCheckForWanderingMonster(object oPC)
     //--------------------------------------------------------------------------
     // we just had one encounter, we dont want another right now!
     //--------------------------------------------------------------------------
-    if (PS_GetLocalInt(GetArea(oPC),"X2_WM_AREA_FLOODPROTECTION"))
+    if (GetLocalInt(GetArea(oPC),"X2_WM_AREA_FLOODPROTECTION"))
     {
         return FALSE;
     }
@@ -667,11 +665,11 @@ int WMCheckForWanderingMonster(object oPC)
     //--------------------------------------------------------------------------
     if (GetIsDay())
     {
-        nProb = PS_GetLocalInt(GetArea(oPC),"X2_WM_AREA_PROBDAY");
+        nProb = GetLocalInt(GetArea(oPC),"X2_WM_AREA_PROBDAY");
     }
     else
     {
-        nProb = PS_GetLocalInt(GetArea(oPC),"X2_WM_AREA_PROBNIGHT");
+        nProb = GetLocalInt(GetArea(oPC),"X2_WM_AREA_PROBNIGHT");
     }
 
     if (nProb > d100())
@@ -682,8 +680,8 @@ int WMCheckForWanderingMonster(object oPC)
        //-----------------------------------------------------------------------
        // Flood Protection to prevent lots of spawns
        //-----------------------------------------------------------------------
-       PS_SetLocalInt(GetArea(oPC),"X2_WM_AREA_FLOODPROTECTION",TRUE);
-       DelayCommand(X2_WM_FLOOD_PROTECTION_PERIOD,PS_DeleteLocalInt(GetArea(oPC),"X2_WM_AREA_FLOODPROTECTION"));
+       SetLocalInt(GetArea(oPC),"X2_WM_AREA_FLOODPROTECTION",TRUE);
+       DelayCommand(X2_WM_FLOOD_PROTECTION_PERIOD,DeleteLocalInt(GetArea(oPC),"X2_WM_AREA_FLOODPROTECTION"));
        return TRUE;
     }
 
@@ -706,10 +704,10 @@ int WMCheckForWanderingMonster(object oPC)
 void WMSetAreaTable(object oArea, string sTableName, int bUseDoors = FALSE, int nListenCheckDC = -1)
 {
     struct wm_struct stTbl = GetWMStructByName(sTableName);
-    PS_SetLocalInt(oArea,"X2_WM_AREA_TABLE",stTbl.nRowNumber);
-    PS_SetLocalInt(oArea,"X2_WM_AREA_PROBDAY",stTbl.nProbabilityDay);
-    PS_SetLocalInt(oArea,"X2_WM_AREA_PROBNIGHT",stTbl.nProbabilityNight);
-    PS_SetLocalInt(oArea,"X2_WM_AREA_USEDOORS",bUseDoors);
+    SetLocalInt(oArea,"X2_WM_AREA_TABLE",stTbl.nRowNumber);
+    SetLocalInt(oArea,"X2_WM_AREA_PROBDAY",stTbl.nProbabilityDay);
+    SetLocalInt(oArea,"X2_WM_AREA_PROBNIGHT",stTbl.nProbabilityNight);
+    SetLocalInt(oArea,"X2_WM_AREA_USEDOORS",bUseDoors);
 
     // get 2da defined listen check...
     if (nListenCheckDC == 0)
@@ -717,7 +715,7 @@ void WMSetAreaTable(object oArea, string sTableName, int bUseDoors = FALSE, int 
         nListenCheckDC = stTbl.nListenCheckDC;
     }
 
-    PS_SetLocalInt(oArea,"X2_WM_AREA_LISTENCHECK", nListenCheckDC);
+    SetLocalInt(oArea,"X2_WM_AREA_LISTENCHECK", nListenCheckDC);
 
 
     //WMDebug("Set encounter table " + sTableName + "(" + IntToString(stTbl.nRowNumber) + ") on area " +GetName(oArea) );
@@ -734,8 +732,8 @@ void WMSetAreaProbability(object oArea, int nDayPercent, int nNightPercent)
 {
     if (WMGetAreaHasTable(oArea)) // if there is an encounter table set....
     {
-        PS_SetLocalInt(oArea,"X2_WM_AREA_PROBDAY", nDayPercent);
-        PS_SetLocalInt(oArea,"X2_WM_AREA_PROBNIGHT", nNightPercent);
+        SetLocalInt(oArea,"X2_WM_AREA_PROBDAY", nDayPercent);
+        SetLocalInt(oArea,"X2_WM_AREA_PROBNIGHT", nNightPercent);
     }
 }
 
@@ -744,7 +742,7 @@ void WMSetAreaProbability(object oArea, int nDayPercent, int nNightPercent)
 //------------------------------------------------------------------------------
 int WMGetAreaHasTable(object oArea)
 {
-    return (PS_GetLocalInt(oArea,"X2_WM_AREA_TABLE"));
+    return (GetLocalInt(oArea,"X2_WM_AREA_TABLE"));
 }
 
 //------------------------------------------------------------------------------
@@ -752,7 +750,7 @@ int WMGetAreaHasTable(object oArea)
 //------------------------------------------------------------------------------
 int WMGetWanderingMonstersDisabled(object oArea)
 {
-    return (PS_GetLocalInt(oArea,"X2_WM_DISABLED"));
+    return (GetLocalInt(oArea,"X2_WM_DISABLED"));
 }
 
 //------------------------------------------------------------------------------
@@ -760,7 +758,7 @@ int WMGetWanderingMonstersDisabled(object oArea)
 //------------------------------------------------------------------------------
 void WMSetWanderingMonstersDisabled(object oArea, int bDisabled = FALSE )
 {
-    PS_SetLocalInt(oArea,"X2_WM_DISABLED",bDisabled);
+    SetLocalInt(oArea,"X2_WM_DISABLED",bDisabled);
 }
 
 //------------------------------------------------------------------------------
@@ -785,7 +783,7 @@ void WMMakePartyRest(object oPC)
 //------------------------------------------------------------------------------
 int WMStartPlayerRest(object oPC)
 {
-    if  (PS_GetLocalInt(oPC,"X2_WM_AMBUSH_IN_PROGRESS"))
+    if  (GetLocalInt(oPC,"X2_WM_AMBUSH_IN_PROGRESS"))
     {
         // do not allow to sleep when an ambush is already in progress
         return FALSE;
@@ -816,7 +814,7 @@ int WMGetAreaListenCheck(object oArea)
     {
         return 15; // return default
     }
-    int nDC = PS_GetLocalInt(oArea,"X2_WM_AREA_LISTENCHECK");    // this int is stored by WMSetAreaTable
+    int nDC = GetLocalInt(oArea,"X2_WM_AREA_LISTENCHECK");    // this int is stored by WMSetAreaTable
     return nDC;
 }
 
@@ -844,5 +842,5 @@ int WMDoListenCheck(object oPC)
 //------------------------------------------------------------------------------
 int WMGetUseAppearAnimation(object oArea)
 {
-    return PS_GetLocalInt(oArea,"X2_L_WM_USE_APPEAR_ANIMATIONS");
+    return GetLocalInt(oArea,"X2_L_WM_USE_APPEAR_ANIMATIONS");
 }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
     Companion and Monster AI
@@ -125,7 +123,7 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
         return;
     }
     // Pausanias: Do not respond to shouts if you've surrendered.
-    int iSurrendered = PS_GetLocalInt(OBJECT_SELF,"Generic_Surrender");
+    int iSurrendered = GetLocalInt(OBJECT_SELF,"Generic_Surrender");
     if (iSurrendered) return;
 
     object oMaster = GetCurrentMaster();
@@ -158,16 +156,16 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
             break;
         // * June 2003: Stop spellcasting
         case ASSOCIATE_COMMAND_TOGGLECASTING:
-            if (PS_GetLocalInt(OBJECT_SELF, sHenchStopCasting) == 10)
+            if (GetLocalInt(OBJECT_SELF, sHenchStopCasting) == 10)
             {
                // SpeakString("Was in no casting mode. Switching to cast mode");
-                PS_SetLocalInt(OBJECT_SELF, sHenchStopCasting, 0);
+                SetLocalInt(OBJECT_SELF, sHenchStopCasting, 0);
                 VoiceCanDo();
             }
-            else if (PS_GetLocalInt(OBJECT_SELF, sHenchStopCasting) == 0)
+            else if (GetLocalInt(OBJECT_SELF, sHenchStopCasting) == 0)
             {
              //   SpeakString("Was in casting mode. Switching to NO cast mode");
-                PS_SetLocalInt(OBJECT_SELF, sHenchStopCasting, 10);
+                SetLocalInt(OBJECT_SELF, sHenchStopCasting, 10);
                 VoiceCanDo();
             }
             break;
@@ -178,7 +176,7 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
             }
             else
             {
-                if (!PS_GetLocalInt(OBJECT_SELF, "X2_JUST_A_DISABLEEQUIP"))
+                if (!GetLocalInt(OBJECT_SELF, "X2_JUST_A_DISABLEEQUIP"))
                 {
                     ClearWeaponStates();
                     // fix problem with unidentified equipped items
@@ -223,16 +221,16 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
                 HenchResetHenchmenState();
                 SetAssociateState(NW_ASC_MODE_DEFEND_MASTER, FALSE);
                 SetAssociateState(NW_ASC_MODE_STAND_GROUND, FALSE);
-                if (PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag))
+                if (GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag))
                 {
-                    PS_DeleteLocalInt(OBJECT_SELF, sHenchDontAttackFlag);
+                    DeleteLocalInt(OBJECT_SELF, sHenchDontAttackFlag);
 					if (!GetHenchPartyState(HENCH_PARTY_DISABLE_PEACEFUL_MODE))
 					{
                     	SpeakStringByStrRef(230409);
 					}
                 }
                 object oClosest = GetNearestSeenOrHeardEnemyNotDead(FALSE);
-                PS_DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
+                DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
                 if (GetIsObjectValid(oClosest))
                 {
                     HenchDetermineCombatRound(oClosest, TRUE, TRUE);
@@ -251,7 +249,7 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
                         else
                         {
                             HenchAttackObject(oTarget);
-                            PS_SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oTarget);
+                            SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oTarget);
                         }
                     }
                     else
@@ -277,8 +275,8 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
                     else
                         SpeakString(GetStringByStrRef(230412) + GetName(OBJECT_SELF) + GetStringByStrRef(230413));
 
-					PS_SetLocalInt(OBJECT_SELF, sHenchDontAttackFlag, TRUE);
-					PS_SetLocalInt(OBJECT_SELF, sHenchShouldIAttackMessageGiven, TRUE);
+					SetLocalInt(OBJECT_SELF, sHenchDontAttackFlag, TRUE);
+					SetLocalInt(OBJECT_SELF, sHenchShouldIAttackMessageGiven, TRUE);
 
                     if (!GetActionMode(oMaster, ACTION_MODE_STEALTH))
                     {
@@ -295,7 +293,7 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
                 }
                 SetPlayerQueuedTarget(OBJECT_SELF, OBJECT_INVALID);
                 HenchResetHenchmenState();
-                PS_DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
+                DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
                 SetAssociateState(NW_ASC_MODE_STAND_GROUND, FALSE);
                 HenchFollowLeader();
                 RelayCommandToAssociates(nShoutIndex);
@@ -311,7 +309,7 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
                 }
                 SetPlayerQueuedTarget(OBJECT_SELF, OBJECT_INVALID);
                 HenchResetHenchmenState();
-                PS_DeleteLocalInt(OBJECT_SELF, sHenchDontAttackFlag);
+                DeleteLocalInt(OBJECT_SELF, sHenchDontAttackFlag);
                 DelayCommand(2.5, VoiceCanDo());
                 //Companions will only attack the Masters Last Attacker
                 SetAssociateState(NW_ASC_MODE_DEFEND_MASTER);
@@ -424,10 +422,10 @@ void HenchChRespondToShout(object oShouter, int nShoutIndex, object oIntruder = 
         case ASSOCIATE_COMMAND_HEALMASTER: //Ignore current healing settings and heal me now
             SetPlayerQueuedTarget(OBJECT_SELF, OBJECT_INVALID);
             HenchResetHenchmenState();
-            PS_SetLocalInt(OBJECT_SELF, henchHealCountStr, 1);
-            PS_SetLocalObject(OBJECT_SELF, henchHealSpellTarget, oMaster);
-            PS_SetLocalInt(OBJECT_SELF, henchHealTypeStr, HENCH_CNTX_MENU_HEAL);
-            PS_DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
+            SetLocalInt(OBJECT_SELF, henchHealCountStr, 1);
+            SetLocalObject(OBJECT_SELF, henchHealSpellTarget, oMaster);
+            SetLocalInt(OBJECT_SELF, henchHealTypeStr, HENCH_CNTX_MENU_HEAL);
+            DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
             ExecuteScript("hench_o0_heal", OBJECT_SELF);
             break;
 

@@ -7,11 +7,11 @@
 void main()
 {
 	object oKiller = GetLastKiller();
-	if (GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, abilityCaster)))  {
-		oKiller = PS_GetLocalObject(OBJECT_SELF, abilityCaster);
+	if (GetIsObjectValid(GetLocalObject(OBJECT_SELF, abilityCaster)))  {
+		oKiller = GetLocalObject(OBJECT_SELF, abilityCaster);
 	}
-	if (GetIsObjectValid(PS_GetLocalObject(oKiller, abilityCaster)))  {
-		oKiller = PS_GetLocalObject(oKiller, abilityCaster);
+	if (GetIsObjectValid(GetLocalObject(oKiller, abilityCaster)))  {
+		oKiller = GetLocalObject(oKiller, abilityCaster);
 	}
 	
 	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF)
@@ -33,7 +33,7 @@ void main()
 	float fAVG = PS_GetAvgPartylevel(oKiller, iMAX);	
 	int iPartySize = PS_GetNumPC(oKiller);
 	
-	int iElite = StringToInt(PS_GetLocalString(oDead,"ELITE"));
+	int iElite = StringToInt(GetLocalString(oDead,"ELITE"));
 	if(iElite > 0)
 	{
 		if (fAVG+5.0 < 10.0 * iElite)
@@ -59,7 +59,7 @@ void main()
     {
 		if (oArea == GetArea(oPartyMember))
 		{
-	    	if (PS_GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
+	    	if (GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_ANIMAL
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_BEAST
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_CONSTRUCT

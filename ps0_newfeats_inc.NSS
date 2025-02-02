@@ -282,9 +282,9 @@ void PS_Feat_PsionicOvercharge(object oPC, int nSpell)
 	ResetFeatUses(oPC, 2336, FALSE, TRUE);
 	ResetFeatUses(oPC, 2356, FALSE, TRUE);
 	if (GetHasFeat(20998, oPC))
-	{	int nPP 		= PS_GetLocalInt(oPC, "PSI_PP");
+	{	int nPP 		= GetLocalInt(oPC, "PSI_PP");
 		int nPPFinal 	= nPP + nDamage;
-		PS_SetLocalInt(oPC, "PSI_PP", nPPFinal);
+		SetLocalInt(oPC, "PSI_PP", nPPFinal);
 		SendMessageToPC(oPC, "Psionic Overcharge Restored  " + IntToString(nDamage) + " Power Points!");
 		SendMessageToPC(oPC, "Current Power Points:  " + IntToString(nPPFinal));
 		SetGUIObjectText(oPC, "powerpointscreen", "PPRatioTXT", -1, IntToString(nPPFinal));	}
@@ -300,7 +300,7 @@ void PS_Feat_ServantOfTheHeavens(object oPC, int nSpell)
         int nCharLevel 		= GetTotalLevels(oPC, 0);
 		int iSub 			= GetSubRace(oPC);
 		object oItem		= GetItemPossessedBy(oPC,"ps_essence");
-		string sECL			= PS_GetLocalString(oItem, "ECL");
+		string sECL			= GetLocalString(oItem, "ECL");
 		int nLevelAdj		= StringToInt(sECL);
 		int nEffLevel 		= (nCharLevel + nLevelAdj);
    		int nAmount 		= nEffLevel/5;
@@ -330,7 +330,7 @@ void PS_Feat_DiscipleOfDarkness(object oPC, int nSpell)
    	{	int nCharLevel 		= GetTotalLevels(oPC, 0);
 		int iSub 			= GetSubRace(OBJECT_SELF);
 		object oItem		= GetItemPossessedBy(oPC,"ps_essence");
-		string sECL			= PS_GetLocalString(oItem, "ECL");
+		string sECL			= GetLocalString(oItem, "ECL");
 		int nLevelAdj		= StringToInt(sECL);
 		int nEffLevel 		= (nCharLevel + nLevelAdj);
    		int nAmount 		= nEffLevel/5;
@@ -355,8 +355,8 @@ void PS_Feat_DiscipleOfDarkness(object oPC, int nSpell)
 
 void PS_Feat_SacredVow(object oPC, int nSpell)
 {
-	if(GetHasFeat(FEAT_BACKGROUND_SACRED_VOW, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_SACRED_VOW") <1))
-    	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_SACRED_VOW",1);
+	if(GetHasFeat(FEAT_BACKGROUND_SACRED_VOW, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_SACRED_VOW") <1))
+    	SetLocalInt(oPC,"FEAT_BACKGROUND_SACRED_VOW",1);
    
 	effect eEff = EffectLinkEffects(
         EffectSkillIncrease(SKILL_DIPLOMACY, 2),
@@ -368,8 +368,8 @@ void PS_Feat_SacredVow(object oPC, int nSpell)
 
 void PS_Feat_Unhallowed(object oPC, int nSpell)
 {
-   	if(GetHasFeat(FEAT_BACKGROUND_UNHALLOWED, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_UNHALLOWED") <1))
-      	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_UNHALLOWED",1);
+   	if(GetHasFeat(FEAT_BACKGROUND_UNHALLOWED, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_UNHALLOWED") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_UNHALLOWED",1);
    
    	effect eEff = EffectLinkEffects(
         EffectSkillIncrease(SKILL_INTIMIDATE, 2),
@@ -381,8 +381,8 @@ void PS_Feat_Unhallowed(object oPC, int nSpell)
 
 void PS_Feat_Amicable(object oPC, int nSpell)
 {
-   	if(GetHasFeat(FEAT_BACKGROUND_AMICABLE, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_AMICABLE") <1))
-      	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_AMICABLE",1);
+   	if(GetHasFeat(FEAT_BACKGROUND_AMICABLE, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_AMICABLE") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_AMICABLE",1);
    
    	
         effect Stat1 = EffectSkillDecrease(SKILL_INTIMIDATE, 3);
@@ -399,8 +399,8 @@ void PS_Feat_Amicable(object oPC, int nSpell)
 
 void PS_Feat_Stern(object oPC, int nSpell)
 {
-   	if(GetHasFeat(FEAT_BACKGROUND_STERN, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_STERN") <1))
-      	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_STERN",1);
+   	if(GetHasFeat(FEAT_BACKGROUND_STERN, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_STERN") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_STERN",1);
    
         effect Stat1 = EffectSkillIncrease(SKILL_INTIMIDATE, 4);
 		effect Stat2 = EffectSkillDecrease(SKILL_BLUFF, 3);
@@ -416,8 +416,8 @@ void PS_Feat_Stern(object oPC, int nSpell)
 
 void PS_Feat_Misdirector(object oPC, int nSpell)
 {
-   	if(GetHasFeat(FEAT_BACKGROUND_MISDIRECTOR, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_MISDIRECTOR") <1))
-      	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_MISDIRECTOR",1);
+   	if(GetHasFeat(FEAT_BACKGROUND_MISDIRECTOR, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_MISDIRECTOR") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_MISDIRECTOR",1);
    
         effect Stat1 = EffectSkillDecrease(SKILL_INTIMIDATE, 3);
 		effect Stat2 = EffectSkillIncrease(SKILL_BLUFF, 4);
@@ -433,8 +433,8 @@ void PS_Feat_Misdirector(object oPC, int nSpell)
 
 void PS_Feat_Tinker(object oPC, int nSpell)
 {
-   	if(GetHasFeat(FEAT_BACKGROUND_TINKER, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_TINKER") <1))
-      	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_TINKER",1);
+   	if(GetHasFeat(FEAT_BACKGROUND_TINKER, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_TINKER") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_TINKER",1);
    
 		// This background gives bonuses to craft alch, armor, and weapon but at the time of this writing
 		// these are NOT counted in actual craft rolls. If feats ever become counted in craft rolls then this 
@@ -470,8 +470,8 @@ void PS_Feat_Tinker(object oPC, int nSpell)
 
 void PS_Feat_Naturalist(object oPC, int nSpell)
 {
-   	if(GetHasFeat(FEAT_BACKGROUND_NATURALIST, oPC) && (PS_GetLocalInt(oPC,"FEAT_BACKGROUND_NATURALIST") <1))
-      	PS_SetLocalInt(oPC,"FEAT_BACKGROUND_NATURALIST",1);
+   	if(GetHasFeat(FEAT_BACKGROUND_NATURALIST, oPC) && (GetLocalInt(oPC,"FEAT_BACKGROUND_NATURALIST") <1))
+      	SetLocalInt(oPC,"FEAT_BACKGROUND_NATURALIST",1);
    
         effect Stat1 = EffectSkillDecrease(SKILL_LORE, 3);
 		effect Stat2 = EffectSkillDecrease(SKILL_APPRAISE, 3);

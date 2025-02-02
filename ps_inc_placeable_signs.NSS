@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -23,21 +21,21 @@ void UserPlaceableCleanContainter(object oTarget)
 
 void MovePlaceableToPlayer(object oPC, object oPlaceable)
 {
-	string oOwner = PS_GetLocalString(oPlaceable,"OWNER_NAME");
+	string oOwner = GetLocalString(oPlaceable,"OWNER_NAME");
 	location lPC = GetLocation(oPC);
 	string sRef = GetResRef(oPlaceable);
 	string sSignName = GetFirstName(oPlaceable);
 	DestroyObject(oPlaceable, 0.01);
 	
 	object oNewSign = CreateObject(OBJECT_TYPE_PLACEABLE, sRef, lPC, FALSE);
-	PS_SetLocalString(oNewSign, "OWNER_NAME", GetName(oPC));
-	PS_SetLocalObject(oPC, "LASTSIGNTALK", oNewSign);
+	SetLocalString(oNewSign, "OWNER_NAME", GetName(oPC));
+	SetLocalObject(oPC, "LASTSIGNTALK", oNewSign);
 	SetFirstName(oNewSign, sSignName);
 }
 
 void MovePlaceableZAxis(object oPC, object oPlaceable, int iParam)
 {
-	string oOwner = PS_GetLocalString(oPlaceable,"OWNER_NAME");
+	string oOwner = GetLocalString(oPlaceable,"OWNER_NAME");
 	location lSign = GetLocation(oPlaceable);
 	object oArea = GetAreaFromLocation(lSign);
 	vector vVector = GetPositionFromLocation(lSign);
@@ -51,14 +49,14 @@ void MovePlaceableZAxis(object oPC, object oPlaceable, int iParam)
 	DestroyObject(oPlaceable, 0.01);
 	lSign = Location(oArea, vVector, fRotation);
 	object oNewSign = CreateObject(OBJECT_TYPE_PLACEABLE, sRef, lSign, FALSE);
-	PS_SetLocalString(oNewSign, "OWNER_NAME", GetName(oPC));
-	PS_SetLocalObject(oPC, "LASTSIGNTALK", oNewSign);
+	SetLocalString(oNewSign, "OWNER_NAME", GetName(oPC));
+	SetLocalObject(oPC, "LASTSIGNTALK", oNewSign);
 	SetFirstName(oNewSign, sSignName);
 }
 
 void RotatePlaceableSign(object oPC, object oPlaceable, int iParam)
 {
-		string oOwner = PS_GetLocalString(oPlaceable,"OWNER_NAME");
+		string oOwner = GetLocalString(oPlaceable,"OWNER_NAME");
 		location lSign = GetLocation(oPlaceable);
 		object oArea = GetAreaFromLocation(lSign);
 		vector vVector = GetPositionFromLocation(lSign);
@@ -72,8 +70,8 @@ void RotatePlaceableSign(object oPC, object oPlaceable, int iParam)
 		DestroyObject(oPlaceable, 0.01);
 		lSign = Location(oArea, vVector, fRotation);
 		object oNewSign = CreateObject(OBJECT_TYPE_PLACEABLE, sRef, lSign, FALSE);
-		PS_SetLocalString(oNewSign, "OWNER_NAME", GetName(oPC));
-		PS_SetLocalObject(oPC, "LASTSIGNTALK", oNewSign);
+		SetLocalString(oNewSign, "OWNER_NAME", GetName(oPC));
+		SetLocalObject(oPC, "LASTSIGNTALK", oNewSign);
 		SetFirstName(oNewSign, sSignName);
 }
 
@@ -106,8 +104,8 @@ void DescSpawnableSign(object oPC, object oItem, int iNewAdd)
 
 	// the gui script will always run on the owned PC, regardless of who the player has possessed.
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
-	PS_SetLocalInt(oObj, "DescriptionAdd", iNewAdd);
+	SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
+	SetLocalInt(oObj, "DescriptionAdd", iNewAdd);
 	
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,
@@ -133,7 +131,7 @@ void NameSpawnableSign(object oPC, object oItem)
 
 	// the gui script will always run on the owned PC, regardless of who the player has possessed.
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
+	SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
 
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,
@@ -149,18 +147,18 @@ void CreateSignPlaceable(object oPC, object oItem, location lTarget)
 	
 	// Flat placeables (eg: arcane circles) present a difficulty moving after, so a bit of a hack
 	// so that it will spawn above ground... hopefully.
-	if (PS_GetLocalString(oItem, "TEMPLATE_RESREF") == "ps_usersign_acircle")
+	if (GetLocalString(oItem, "TEMPLATE_RESREF") == "ps_usersign_acircle")
 	{
 		vector vVector = GetPositionFromLocation(lTarget);
 		vVector.z += 0.1;
 		lTarget = Location(GetAreaFromLocation(lTarget), vVector, GetFacingFromLocation(lTarget));
 	}
-	object oPlacedSign = CreateObject(OBJECT_TYPE_PLACEABLE, PS_GetLocalString(oItem, "TEMPLATE_RESREF"), lTarget);
+	object oPlacedSign = CreateObject(OBJECT_TYPE_PLACEABLE, GetLocalString(oItem, "TEMPLATE_RESREF"), lTarget);
 	if (oPlacedSign != OBJECT_INVALID)
 	{
 		// going with PC name as only they should be able to manipulate their signs and should 
 		// still work after client crash, which could result in different object ID.
-		PS_SetLocalString(oPlacedSign, "OWNER_NAME", GetName(oPC));
+		SetLocalString(oPlacedSign, "OWNER_NAME", GetName(oPC));
 		NameSpawnableSign(oPC, oPlacedSign);
 	}
 }

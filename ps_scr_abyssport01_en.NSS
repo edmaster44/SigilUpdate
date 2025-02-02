@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "NW_I0_TOOL"
 
 void main()
@@ -11,9 +9,9 @@ if(CheckPartyForItem(oEnter, "X1_WMGRENADE002") || GetHasFeat(2380, oEnter, FALS
 {
 string SPAWNED = "nSpawned";
 location lPortal = GetLocation(GetObjectByTag("ps_abyssportalinsigil"));
-if(!PS_GetLocalInt(OBJECT_SELF, SPAWNED))
+if(!GetLocalInt(OBJECT_SELF, SPAWNED))
 {
-PS_SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
+SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
 
 CreateObject(OBJECT_TYPE_PLACED_EFFECT, "fx_gem_energy_orange", lPortal);
 CreateObject(OBJECT_TYPE_PLACED_EFFECT, "fx_steamroom_planescape", lPortal);

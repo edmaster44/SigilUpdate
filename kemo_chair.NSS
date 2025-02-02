@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //Causes the PC to sit in the selected chair with a pose based on race and chair type. -KEMO
 // called as the chair's OnUse script
 // 9/28/08 - added GetIsDMPossessed option to resolve problem for DMs, fix suggested by Viconius
@@ -67,8 +65,8 @@ void main()
 	AssignCommand(oPC,ActionMoveToLocation(lChair));
 
 //Start a conversation to set up the sitting pose
-	PS_SetLocalString(oPC,"SittingPose",sAnim);
-	PS_SetLocalObject(oPC,"SittingChair",OBJECT_SELF);
+	SetLocalString(oPC,"SittingPose",sAnim);
+	SetLocalObject(oPC,"SittingChair",OBJECT_SELF);
 	// SetOrientOnDialog(oPC,FALSE);
 	SetCommandable(0,oPC);
 
@@ -100,7 +98,7 @@ void main()
 		FindSubString(sTag,"chair_8") > 0 ||
 		FindSubString(sTag,"chair_9") > 0)
 			SetGUIObjectHidden(oPC,"KEMO_CHAIRS","Reverse",1);
-	if (PS_GetLocalInt(OBJECT_SELF,"Portable"))
+	if (GetLocalInt(OBJECT_SELF,"Portable"))
 		SetGUIObjectHidden(oPC,"KEMO_CHAIRS","Portable",0);
 	
 /*	if (GetIsDMPossessed(oPC)==TRUE) BeginConversation("kemo_sitting_conv",oPC);

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "NW_I0_TOOL"
 
 void main()
@@ -11,9 +9,9 @@ if(CheckPartyForItem(oEnter, "cft_gem_03")) //Portal key
 {
 string SPAWNED = "nSpawned";
 location lPortal = GetLocation(GetObjectByTag("ps_wp_sigport_01"));
-if(!PS_GetLocalInt(OBJECT_SELF, SPAWNED))
+if(!GetLocalInt(OBJECT_SELF, SPAWNED))
 {
-PS_SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
+SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
 
 effect eVis = EffectVisualEffect( VFX_DUR_GATE );
 ApplyEffectAtLocation ( DURATION_TYPE_TEMPORARY, eVis, lPortal, 5.0);

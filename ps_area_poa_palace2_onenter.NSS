@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 void main()
 {
 	object oPC = GetEnteringObject();
@@ -11,7 +9,7 @@ void main()
 ("PoAPalace2EnterLock");
 	if ( iLock == 0 )
  	{
-	  PS_SetGlobalInt("PoAPalace2EnterLock", 1); 
+	  SetGlobalInt("PoAPalace2EnterLock", 1); 
 	  // Only allows one clean up at a time.
 
 
@@ -138,6 +136,6 @@ lSpawnpoint);
 
 
 
-PS_SetGlobalInt("PoAPalace2EnterLock", 0);
+SetGlobalInt("PoAPalace2EnterLock", 0);
   	}
 }

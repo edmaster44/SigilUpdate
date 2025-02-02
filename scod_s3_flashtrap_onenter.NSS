@@ -30,7 +30,7 @@ void main()
 	int nDC = GetSkillAdjustedTrapDC(19, oCaster, 4);
 	//Base duration 5
 	int nBlindDur = GetSkillAdjustedTrapDC(5, oCaster, 4);
-    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_flashtrap");
+    int nFire = GetLocalInt(OBJECT_SELF, "scod_flashtrap");
     
 	effect eBlind = ExtraordinaryEffect(EffectBlindness());
 	effect eDetVis = EffectVisualEffect(VFX_HIT_AOE_HOLY);
@@ -41,7 +41,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            PS_SetLocalInt(OBJECT_SELF, "scod_flashtrap",TRUE);
+            SetLocalInt(OBJECT_SELF, "scod_flashtrap",TRUE);
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_FLASH_TRAP));
 			

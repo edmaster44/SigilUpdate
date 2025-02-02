@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "NW_I0_TOOL"
 
 void main()
@@ -11,9 +9,9 @@ if(CheckPartyForItem(oEnter, "ps_misc_shackles")) //Portal key
 {
 string SPAWNED = "nSpawned";
 location lPortal = GetLocation(GetObjectByTag("ps_carceriportalincarceri"));
-if(!PS_GetLocalInt(OBJECT_SELF, SPAWNED))
+if(!GetLocalInt(OBJECT_SELF, SPAWNED))
 {
-PS_SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
+SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
 
 CreateObject(OBJECT_TYPE_PLACED_EFFECT, "fx_portal_gen_small", lPortal);
 CreateObject(OBJECT_TYPE_PLACEABLE, "ps_plac_port_carceri02", lPortal);

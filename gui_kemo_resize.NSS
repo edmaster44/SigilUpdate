@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // KEMO
 // called from kemo_sitting_conv (option 8) and kemo_animation_conv (option 8)
 // normalizes PC height
@@ -10,7 +8,7 @@ void main()
 	//object oPC = GetPCSpeaker();
 	object oPC = OBJECT_SELF;
 	float fPCHeight = GetScale(oPC,SCALE_Z);
-	float fPCNaturalHeight = PS_GetLocalFloat(oPC,"CharacterHeight");
+	float fPCNaturalHeight = GetLocalFloat(oPC,"CharacterHeight");
 		if (fPCNaturalHeight < 0.1) fPCNaturalHeight = fPCHeight;
 	float fPCX = GetScale(oPC,SCALE_X);
 	float fPCY = GetScale(oPC,SCALE_Y);
@@ -19,7 +17,7 @@ void main()
 		SetScale(oPC,fPCX,fPCY,fPCNaturalHeight);
 	else // character is at natural height, normalize
 	{
-		PS_SetLocalFloat(oPC,"CharacterHeight",fPCHeight);
+		SetLocalFloat(oPC,"CharacterHeight",fPCHeight);
 		SetScale(oPC,fPCX,fPCY,1.0f);
 	}
 }

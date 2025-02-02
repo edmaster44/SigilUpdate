@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //:://////////////////////////////////////////////////
 //:: X0_I0_TREASURE
 
@@ -401,7 +399,7 @@ string CTG_GetRacialtypeChestTag(string sBaseTag, object oSource);
 // specific base treasure type use. 
 int CTG_GetIsContainerInitialized(object oBaseCont)
 {
-    return PS_GetLocalInt(oBaseCont, "X0_CONTAINER_INITIALIZED");
+    return GetLocalInt(oBaseCont, "X0_CONTAINER_INITIALIZED");
 }
 
 // This function deliberately not prototyped. Should not be used
@@ -410,7 +408,7 @@ int CTG_GetIsContainerInitialized(object oBaseCont)
 // specific base treasure type use. 
 void CTG_SetIsContainerInitialized(object oBaseCont, int bInit=TRUE)
 {
-    PS_SetLocalInt(oBaseCont, "X0_CONTAINER_INITIALIZED", bInit);
+    SetLocalInt(oBaseCont, "X0_CONTAINER_INITIALIZED", bInit);
 }
 
 // This function deliberately not prototyped. Should not be used
@@ -433,9 +431,9 @@ void CTG_InitContainer(object oBaseCont)
         // the container object itself.
         string sIndex = IntToString(i);
         string sVar = sBaseTypeVarname + sIndex;
-        PS_SetLocalInt(oBaseCont, sVar, GetBaseItemType(oTmp));
+        SetLocalInt(oBaseCont, sVar, GetBaseItemType(oTmp));
         sVar = sTreasureItemVarname + sIndex;
-        PS_SetLocalObject(oBaseCont, sVar, oTmp);
+        SetLocalObject(oBaseCont, sVar, oTmp);
 
         oTmp = GetNextItemInInventory(oBaseCont);
     }
@@ -469,7 +467,7 @@ int CTG_GetNumItems()
 // Get the number of items in a base container
 int CTG_GetNumItemsInBaseContainer(object oBaseCont)
 {
-    int nItems = PS_GetLocalInt(oBaseCont, sNumTreasureItemsVarname);
+    int nItems = GetLocalInt(oBaseCont, sNumTreasureItemsVarname);
     if (nItems != 0) {
         return nItems;
     }
@@ -480,7 +478,7 @@ int CTG_GetNumItemsInBaseContainer(object oBaseCont)
         nItems++;
         oTmp = GetNextItemInInventory(oBaseCont);
     }
-    PS_SetLocalInt(oBaseCont, sNumTreasureItemsVarname, nItems);
+    SetLocalInt(oBaseCont, sNumTreasureItemsVarname, nItems);
     return nItems;
 }
 
@@ -640,7 +638,7 @@ object CTG_GetTreasureItem(object oBaseCont, int nItemNum)
 
     // Refs to the items are stored on the container itself
     string sVar = sTreasureItemVarname + IntToString(nItemNum);
-    return PS_GetLocalObject(oBaseCont, sVar);
+    return GetLocalObject(oBaseCont, sVar);
 }
 
 // Starting from the specified item position, return the first
@@ -679,7 +677,7 @@ object CTG_GetSpecificBaseTypeTreasureItem(object oBaseCont,
         
         // The base type of each item is stored on the container itself
         sVar = sBaseTypeVarname + IntToString(i);
-        nItemBaseType = PS_GetLocalInt(oBaseCont, sVar);
+        nItemBaseType = GetLocalInt(oBaseCont, sVar);
 
         // Check to see if the type matches our desired type.
         if (
@@ -739,13 +737,13 @@ object CTG_GetSpecificBaseTypeTreasureItem(object oBaseCont,
 // Test if treasure has been generated in the given object
 int CTG_GetIsTreasureGenerated(object oCont)
 {
-    return PS_GetLocalInt(oCont, sTreasureGeneratedVarname);
+    return GetLocalInt(oCont, sTreasureGeneratedVarname);
 }
 
 // Set whether treasure has been generated
 void CTG_SetIsTreasureGenerated(object oCont, int bGenerated=TRUE)
 {
-    PS_SetLocalInt(oCont, sTreasureGeneratedVarname, bGenerated);
+    SetLocalInt(oCont, sTreasureGeneratedVarname, bGenerated);
 }
 
 // Create random treasure items of the appropriate type

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Default On Blocked
 //:: NW_C2_DEFAULTE
@@ -28,11 +26,11 @@ void main()
     if (GetObjectType(oDoor) == OBJECT_TYPE_CREATURE)
     {
         // * Increment number of times blocked
-        /*PS_SetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED", PS_GetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED") + 1);
-        if (PS_GetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED") > 3)
+        /*SetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED", GetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED") + 1);
+        if (GetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED") > 3)
         {
             SpeakString("Blocked by creature");
-            PS_SetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED",0);
+            SetLocalInt(OBJECT_SELF, "X2_NUMTIMES_BLOCKED",0);
             ClearAllActions();
             object oEnemy = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_ENEMY);
             if (GetIsObjectValid(oEnemy) == TRUE)
@@ -51,7 +49,7 @@ void main()
         // TODO add wisdom check?
     }
 
-    int iAggPursue = PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
+    int iAggPursue = GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
     if (!iAggPursue)
     {
         if (GetPlotFlag(oDoor))
@@ -78,11 +76,11 @@ void main()
         GetAbilityScore(OBJECT_SELF, ABILITY_INTELLIGENCE) >= 7 &&
         GetCreatureUseItems(OBJECT_SELF))
     {
-//	    Jug_Debug("******" + GetName(OBJECT_SELF) + " doing open" + GetName(oDoor) + " combat round + " + IntToString(PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr)));
+//	    Jug_Debug("******" + GetName(OBJECT_SELF) + " doing open" + GetName(oDoor) + " combat round + " + IntToString(GetLocalInt(OBJECT_SELF, henchCombatRoundStr)));
         DoDoorAction(oDoor, DOOR_ACTION_OPEN);
         if (!iAggPursue)
         {
-            PS_SetLocalInt(OBJECT_SELF,"OpenedDoor", TRUE);
+            SetLocalInt(OBJECT_SELF,"OpenedDoor", TRUE);
         }
     }
     else if ((HENCH_OPTION_UNLOCK & nSel) && GetIsDoorActionPossible(oDoor, DOOR_ACTION_UNLOCK))
@@ -91,9 +89,9 @@ void main()
     }
     else if ((HENCH_OPTION_UNLOCK & nSel) && GetIsDoorActionPossible(oDoor, DOOR_ACTION_BASH))
     {
-//	    Jug_Debug("******" + GetName(OBJECT_SELF) + " bash open" + GetName(oDoor) + " combat round + " + IntToString(PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr)));
+//	    Jug_Debug("******" + GetName(OBJECT_SELF) + " bash open" + GetName(oDoor) + " combat round + " + IntToString(GetLocalInt(OBJECT_SELF, henchCombatRoundStr)));
         DoDoorAction(oDoor, DOOR_ACTION_BASH);
 		// don't give up, keep at it
-		PS_SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oDoor);
+		SetLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH", oDoor);
     }
 }

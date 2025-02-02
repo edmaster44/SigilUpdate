@@ -87,7 +87,7 @@ void main()
 				oArea = GetArea(oPC);
 				if(oArea != OBJECT_INVALID)	
 				{
-					nID = PS_GetLocalInt(oPC,"ID");
+					nID = GetLocalInt(oPC,"ID");
 					nLevel = PS_GetLevel(oPC);
 					sAreaName = SQLEncodeSpecialChars(GetName(oArea));
 					SQLExecDirect("SELECT scryopt from characterdata where id=" + IntToString(nID) + ";");

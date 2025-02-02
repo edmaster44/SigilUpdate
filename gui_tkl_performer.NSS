@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 Script:
 Author: brockfanning
@@ -28,8 +26,8 @@ void QuantizeNote(object oPC, object oInstrument, int iTrack, int iNote, float f
 	fTick = fTick / IntToFloat(iSubDivide);
 	if (fTick < 0.01)
 		fTick = 0.01;
-	float fPlayed = PS_GetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack);
-	int iPitch = PS_GetLocalInt(oInstrument, "NOTE" + sNote + "PITCH_TRACK" + sTrack);
+	float fPlayed = GetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack);
+	int iPitch = GetLocalInt(oInstrument, "NOTE" + sNote + "PITCH_TRACK" + sTrack);
 	float fRolledOffset = 0.0f;
 	// Apply "rolled" note offsets if necessary
 	if (iPitch > 100 && iPitch < 137)
@@ -46,11 +44,11 @@ void QuantizeNote(object oPC, object oInstrument, int iTrack, int iNote, float f
 	float fLate = fPlayed - (fNearestBeat - fTick);
 	if (fEarly <= fLate)
 	{
-		PS_SetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack, fNearestBeat - fRolledOffset);
+		SetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack, fNearestBeat - fRolledOffset);
 	}
 	else
 	{
-		PS_SetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack, (fNearestBeat - fTick) - fRolledOffset);
+		SetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack, (fNearestBeat - fTick) - fRolledOffset);
 	}
 }
 
@@ -156,28 +154,28 @@ int GetEmbellishmentPitch(int iChord, int iEmbellishment)
 void main(string sAction, int iOption)
 {
 	object oPC = OBJECT_SELF;
-	object oInstrument = PS_GetLocalObject(oPC, "TKL_PERFORMER_INSTRUMENT");
+	object oInstrument = GetLocalObject(oPC, "TKL_PERFORMER_INSTRUMENT");
 	
 	if (sAction == "RECORD_NOTE")
 	{
-		int iTrack = PS_GetLocalInt(oInstrument, "RECORDING_TRACK");
+		int iTrack = GetLocalInt(oInstrument, "RECORDING_TRACK");
 		if (iTrack > 0)
 		{
 			string sTrack = IntToString(iTrack);
 			float fSecondsIn = StringToFloat(QueryTimer(oInstrument, "PLAYBACK")) / 1000000.0f;
-			int iNotesRecorded = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
+			int iNotesRecorded = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
 			iNotesRecorded++;
-			PS_SetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack, iNotesRecorded);
+			SetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack, iNotesRecorded);
 			string sID = "NOTE" + IntToString(iNotesRecorded);
-			PS_SetLocalFloat(oInstrument, sID + "PLAYBACK_TRACK" + sTrack, fSecondsIn);
-			PS_SetLocalInt(oInstrument, sID + "PITCH_TRACK" + sTrack, iOption);
+			SetLocalFloat(oInstrument, sID + "PLAYBACK_TRACK" + sTrack, fSecondsIn);
+			SetLocalInt(oInstrument, sID + "PITCH_TRACK" + sTrack, iOption);
 			SendMessageToPC(oPC, "Note recorded at time: " + FloatToString(fSecondsIn) + " on Track " + sTrack);
 		}
 	}
 	
 	else if (sAction == "PLAY_LIVE")
 	{
-		int iKey = PS_GetLocalInt(oInstrument, "KEY");
+		int iKey = GetLocalInt(oInstrument, "KEY");
 		PlayNote(iOption, iKey);
 	}
 	
@@ -185,8 +183,8 @@ void main(string sAction, int iOption)
 	{
 		// check to see if someone is just holding a score, instead of any instrument
 		if (GetIsObjectValid(oInstrument) == FALSE)
-			oInstrument = PS_GetLocalObject(oPC, "TKL_PERFORMER_SCORE");
-		string sLyric = PS_GetLocalString(oInstrument, "LYRIC" + IntToString(iOption));
+			oInstrument = GetLocalObject(oPC, "TKL_PERFORMER_SCORE");
+		string sLyric = GetLocalString(oInstrument, "LYRIC" + IntToString(iOption));
 		if (sLyric == "")
 		{
 			SendMessageToPC(oPC, "There is no lyric in that slot.");
@@ -203,15 +201,15 @@ void main(string sAction, int iOption)
 		}
 		else
 			SpeakString(sLyric);
-		if (PS_GetLocalInt(oInstrument, "RECORDING_LYRICS"))
+		if (GetLocalInt(oInstrument, "RECORDING_LYRICS"))
 		{
 			float fSecondsIn = StringToFloat(QueryTimer(oInstrument, "PLAYBACK")) / 1000000.0f;
-			int iLyricsRecorded = PS_GetLocalInt(oInstrument, "LYRICS_RECORDED");
+			int iLyricsRecorded = GetLocalInt(oInstrument, "LYRICS_RECORDED");
 			iLyricsRecorded++;
-			PS_SetLocalInt(oInstrument, "LYRICS_RECORDED", iLyricsRecorded);
+			SetLocalInt(oInstrument, "LYRICS_RECORDED", iLyricsRecorded);
 			string sID = "LYRIC" + IntToString(iLyricsRecorded);
-			PS_SetLocalFloat(oInstrument, sID + "PLAYBACK", fSecondsIn);
-			PS_SetLocalInt(oInstrument, sID + "TEXT", iOption);
+			SetLocalFloat(oInstrument, sID + "PLAYBACK", fSecondsIn);
+			SetLocalInt(oInstrument, sID + "TEXT", iOption);
 			SendMessageToPC(oPC, "Lyric recorded at time: " + FloatToString(fSecondsIn) + ".");	
 		}	
 	}
@@ -246,34 +244,34 @@ void main(string sAction, int iOption)
 				SendMessageToPC(oPC, "Lag check successful: Result = " + FloatToString(fSecondsIn, 4, 2));
 				SendMessageToPC(oPC, "This amount will be deducted from all recording times.");
 				SendMessageToPC(oPC, "If you feel you didn't click at the right time, please try again.");
-				PS_SetLocalFloat(oPC, "LAG_CHECK", fSecondsIn);
+				SetLocalFloat(oPC, "LAG_CHECK", fSecondsIn);
 				SetCampaignFloat(TKL_PERFORMER_DATABASE, "LAG_CHECK", fSecondsIn, oPC);
 				RefreshRecordPane(oPC, oInstrument);
 			}			
 		}
 		else
 		{
-			PS_DeleteLocalFloat(oPC, "LAG_CHECK");
+			DeleteLocalFloat(oPC, "LAG_CHECK");
 			SendMessageToPC(oPC, "Lag Check reset succesfully.");
 		}
 	}	
 	
 	else if (sAction == "EASY_MODE")
 	{
-		if (PS_GetLocalInt(oInstrument, "EASY_MODE"))
-			PS_DeleteLocalInt(oInstrument, "EASY_MODE");
+		if (GetLocalInt(oInstrument, "EASY_MODE"))
+			DeleteLocalInt(oInstrument, "EASY_MODE");
 		else
-			PS_SetLocalInt(oInstrument, "EASY_MODE", TRUE);
+			SetLocalInt(oInstrument, "EASY_MODE", TRUE);
 		RefreshNoteNames(oPC, oInstrument);
 		RefreshModes(oPC, oInstrument);
 	}
 	
 	else if (sAction == "MINOR_MODE")
 	{
-		if (PS_GetLocalInt(oInstrument, "MINOR_MODE"))
-			PS_DeleteLocalInt(oInstrument, "MINOR_MODE");
+		if (GetLocalInt(oInstrument, "MINOR_MODE"))
+			DeleteLocalInt(oInstrument, "MINOR_MODE");
 		else
-			PS_SetLocalInt(oInstrument, "MINOR_MODE", TRUE);
+			SetLocalInt(oInstrument, "MINOR_MODE", TRUE);
 		RefreshNoteNames(oPC, oInstrument);
 		RefreshModes(oPC, oInstrument);
 	}
@@ -286,9 +284,9 @@ void main(string sAction, int iOption)
 			iOption -= 4;
 			bGoToBeginning = TRUE;
 		}
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
-		int iCurrentNote = PS_GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
+		int iCurrentNote = GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
 		if (iCurrentNote == 0)
 			iCurrentNote = 1;
 		
@@ -299,9 +297,9 @@ void main(string sAction, int iOption)
 		
 		if (iCurrentNote < 1)
 			iCurrentNote = 1;
-		PS_SetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack, iCurrentNote);
-		PlayNote(PS_GetLocalInt(oInstrument, "NOTE" + IntToString(iCurrentNote) + "PITCH_TRACK" + sTrack),
-			PS_GetLocalInt(oInstrument, "KEY"));
+		SetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack, iCurrentNote);
+		PlayNote(GetLocalInt(oInstrument, "NOTE" + IntToString(iCurrentNote) + "PITCH_TRACK" + sTrack),
+			GetLocalInt(oInstrument, "KEY"));
 		RefreshNotePane(oPC, oInstrument);
 	}
 	
@@ -313,12 +311,12 @@ void main(string sAction, int iOption)
 			iOption -= 4;
 			bGoToEnd = TRUE;
 		}
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
-		int iCurrentNote = PS_GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
+		int iCurrentNote = GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
 		if (iCurrentNote == 0)
 			iCurrentNote = 1;
-		int iEnd = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
+		int iEnd = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
 		if (bGoToEnd)
 			iCurrentNote = iEnd;
 		else
@@ -326,21 +324,21 @@ void main(string sAction, int iOption)
 		
 		if (iCurrentNote > iEnd)
 			iCurrentNote = iEnd;
-		PS_SetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack, iCurrentNote);
-		PlayNote(PS_GetLocalInt(oInstrument, "NOTE" + IntToString(iCurrentNote) + "PITCH_TRACK" + sTrack),
-			PS_GetLocalInt(oInstrument, "KEY"));
+		SetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack, iCurrentNote);
+		PlayNote(GetLocalInt(oInstrument, "NOTE" + IntToString(iCurrentNote) + "PITCH_TRACK" + sTrack),
+			GetLocalInt(oInstrument, "KEY"));
 		RefreshNotePane(oPC, oInstrument);
 	}
 	
 	else if (sAction == "CURRENT_NOTE")
 	{
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
-		int iCurrentNote = PS_GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
+		int iCurrentNote = GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
 		if (iCurrentNote == 0)
 			iCurrentNote = 1;
-		PlayNote(PS_GetLocalInt(oInstrument, "NOTE" + IntToString(iCurrentNote) + "PITCH_TRACK" + sTrack),
-			PS_GetLocalInt(oInstrument, "KEY"));
+		PlayNote(GetLocalInt(oInstrument, "NOTE" + IntToString(iCurrentNote) + "PITCH_TRACK" + sTrack),
+			GetLocalInt(oInstrument, "KEY"));
 	}
 	
 	
@@ -398,7 +396,7 @@ void main(string sAction, int iOption)
 			SendMessageToPC(oPC, "This function is disabled on this server.");
 			return;
 		}
-		PS_SetLocalString(oPC, "TKL_PERFORMER_ACTION", "LYRIC_RECORD");
+		SetLocalString(oPC, "TKL_PERFORMER_ACTION", "LYRIC_RECORD");
 		string sMessage = "Are you sure you want to record a new Lyric Track? (The current Lyric Track will be overwritten.)";
 		DisplayMessageBox(oPC, 0, sMessage, "gui_tkl_performer_message", "gui_tkl_performer_cancel", TRUE); 		
 	}
@@ -407,8 +405,8 @@ void main(string sAction, int iOption)
 	{
 		if (GetIsObjectValid(oInstrument) == FALSE)
 			return;
-		PS_SetLocalInt(oPC, "TKL_PERFORMER_OPTION", iOption);
-		PS_SetLocalString(oPC, "TKL_PERFORMER_ACTION", "LYRIC_LEARN");
+		SetLocalInt(oPC, "TKL_PERFORMER_OPTION", iOption);
+		SetLocalString(oPC, "TKL_PERFORMER_ACTION", "LYRIC_LEARN");
 		DisplayInputBox(oPC, 0, "Please type your lyric:", "gui_tkl_performer_input", "gui_tkl_performer_cancel", TRUE);	
 	}
 	
@@ -426,31 +424,31 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "TRANSCRIBE")
 	{
-		if (TKL_ONE_TRANSCRIPTION_PER_HOUR && PS_GetLocalInt(oPC, "TKL_PERFORMER_LAST_SCORE") == GetTimeHour())
+		if (TKL_ONE_TRANSCRIPTION_PER_HOUR && GetLocalInt(oPC, "TKL_PERFORMER_LAST_SCORE") == GetTimeHour())
 		{
 			SendMessageToPC(oPC, "You need to wait a while before you transcribe again.");
 			return;
 		}
-		if (TKL_TRANSCRIPTIONS_PER_RESET > 0 && PS_GetLocalInt(oPC, "TKL_TRANSCRIPTIONS_DONE") >= TKL_TRANSCRIPTIONS_PER_RESET)
+		if (TKL_TRANSCRIPTIONS_PER_RESET > 0 && GetLocalInt(oPC, "TKL_TRANSCRIPTIONS_DONE") >= TKL_TRANSCRIPTIONS_PER_RESET)
 		{
 			SendMessageToPC(oPC, "You must wait until the next server-reset before transcribing more.");
 			return;
 		}
 		if (TKL_ONE_TRANSCRIPTION_PER_HOUR)
-			PS_SetLocalInt(oPC, "TKL_PERFORMER_LAST_SCORE", GetTimeHour());
+			SetLocalInt(oPC, "TKL_PERFORMER_LAST_SCORE", GetTimeHour());
 		if (TKL_TRANSCRIPTIONS_PER_RESET > 0)
-			PS_SetLocalInt(oPC, "TKL_TRANSCRIPTIONS_DONE", PS_GetLocalInt(oPC, "TKL_TRANSCRIPTIONS_DONE") + 1);
+			SetLocalInt(oPC, "TKL_TRANSCRIPTIONS_DONE", GetLocalInt(oPC, "TKL_TRANSCRIPTIONS_DONE") + 1);
 		if (TKL_TRANSCRIPTION_DC > 0)
 		{
 			int iDC = TKL_TRANSCRIPTION_DC;
 			if (TKL_TRANSCRIPTION_LENGTH_PENALTY > 0)
 			{
 				int iTotalNotes = 
-					PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK1") +
-					PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK2") +
-					PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK3") +
-					PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK4") +
-					PS_GetLocalInt(oInstrument, "LYRICS_RECORDED");
+					GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK1") +
+					GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK2") +
+					GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK3") +
+					GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK4") +
+					GetLocalInt(oInstrument, "LYRICS_RECORDED");
 				iDC += iTotalNotes / TKL_TRANSCRIPTION_LENGTH_PENALTY;
 			}
 			int iRoll = d20();
@@ -475,10 +473,10 @@ void main(string sAction, int iOption)
 			}	
 		}
 		object oScore = CreateItemOnObject("tkl_performer_score", oPC);
-		string sComposer = PS_GetLocalString(oInstrument, "ORIGINAL_COMPOSER");
+		string sComposer = GetLocalString(oInstrument, "ORIGINAL_COMPOSER");
 		if (sComposer == "")
 			sComposer = GetName(oPC);
-		string sName = PS_GetLocalString(oInstrument, "SONG_NAME");
+		string sName = GetLocalString(oInstrument, "SONG_NAME");
 		SetFirstName(oScore, sName + " <i>(by " + sComposer + ")</i>");
 		TransferSong(oInstrument, oScore);
 		SetItemCharges(oScore, TKL_TRANSCRIPTION_CHARGES);
@@ -486,7 +484,7 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "STOP_RECORDING")
 	{
-		if (PS_GetLocalInt(oInstrument, "RECORDING_TRACK") > 0 || PS_GetLocalInt(oInstrument, "RECORDING_LYRICS") == TRUE)
+		if (GetLocalInt(oInstrument, "RECORDING_TRACK") > 0 || GetLocalInt(oInstrument, "RECORDING_LYRICS") == TRUE)
 			StopRecording(oPC, oInstrument);
 	}
 	
@@ -503,7 +501,7 @@ void main(string sAction, int iOption)
 			fAdjust = -0.1f;
 		string sTrack = IntToString(iOption);
 		
-		float fDelay = PS_GetLocalFloat(oInstrument, "NOTE1PLAYBACK_TRACK" + sTrack);
+		float fDelay = GetLocalFloat(oInstrument, "NOTE1PLAYBACK_TRACK" + sTrack);
 		if (fDelay + fAdjust < 0.0f)
 		{
 			sMessage = "Sorry, track " + sTrack + " can't be moved ahead any further.";
@@ -511,16 +509,16 @@ void main(string sAction, int iOption)
 			return;
 		}
 
-		float fOffset = PS_GetLocalFloat(oInstrument, "OFFSET" + sTrack);
+		float fOffset = GetLocalFloat(oInstrument, "OFFSET" + sTrack);
 		fOffset += fAdjust;
 		sMessage = "Track " + sTrack + " will be adjusted by " + FloatToString(fOffset, 4, 1) + " seconds.";
-		PS_SetLocalFloat(oInstrument, "OFFSET" + sTrack, fOffset);
+		SetLocalFloat(oInstrument, "OFFSET" + sTrack, fOffset);
 		
-		int iTotalNotes = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
+		int iTotalNotes = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
 		while (iTotalNotes > 0)
 		{
-			PS_SetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack,
-				PS_GetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack) + fAdjust);
+			SetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack,
+				GetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack) + fAdjust);
 			iTotalNotes--;
 		}
 		
@@ -539,15 +537,15 @@ void main(string sAction, int iOption)
 		else
 			fAdjust = 0.1f;
 		string sTrack = IntToString(iOption);
-		float fOffset = PS_GetLocalFloat(oInstrument, "OFFSET" + sTrack);
+		float fOffset = GetLocalFloat(oInstrument, "OFFSET" + sTrack);
 		fOffset += fAdjust;
 		sMessage = "Track " + sTrack + " will be adjusted by " + FloatToString(fOffset, 4, 1) + " seconds.";
-		PS_SetLocalFloat(oInstrument, "OFFSET" + sTrack, fOffset);
-		int iTotalNotes = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
+		SetLocalFloat(oInstrument, "OFFSET" + sTrack, fOffset);
+		int iTotalNotes = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
 		while (iTotalNotes > 0)
 		{
-			PS_SetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack, 
-				PS_GetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack) + fAdjust);
+			SetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack, 
+				GetLocalFloat(oInstrument, "NOTE" + IntToString(iTotalNotes) + "PLAYBACK_TRACK" + sTrack) + fAdjust);
 			iTotalNotes--;
 		}
 		
@@ -557,7 +555,7 @@ void main(string sAction, int iOption)
 	else if (sAction == "TRACK_ADJUST")
 	{
 		string sTrack = IntToString(iOption);
-		float fOffset = PS_GetLocalFloat(oInstrument, "OFFSET" + sTrack);
+		float fOffset = GetLocalFloat(oInstrument, "OFFSET" + sTrack);
 		SendMessageToPC(oPC, "Click - or + to adjust the timing of this track.");
 		SendMessageToPC(oPC, "Currently, Track " + sTrack + " has an offset of: " + FloatToString(fOffset, 4, 1) + " seconds.");		
 	}
@@ -581,12 +579,12 @@ void main(string sAction, int iOption)
 			return;
 		}
 		SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "RecordPane", TRUE);
-		int iOption = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
-		if (PS_GetLocalInt(oInstrument, "METRONOME_ON"))
+		int iOption = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		if (GetLocalInt(oInstrument, "METRONOME_ON"))
 		{
-			int iSeconds = PS_GetLocalInt(oInstrument, "METRONOME_DURATION");
+			int iSeconds = GetLocalInt(oInstrument, "METRONOME_DURATION");
 			SendMessageToPC(oPC, "Metronome will play for " + IntToString(iSeconds) + " seconds.");
-			int iTempo = PS_GetLocalInt(oInstrument, "METRONOME");
+			int iTempo = GetLocalInt(oInstrument, "METRONOME");
 			if (iTempo == 0)
 				iTempo = 60;
 			PlayMetronome(oPC, iTempo, iSeconds);
@@ -607,13 +605,13 @@ void main(string sAction, int iOption)
 		if (iOption > 0)
 		{
 			sOption = IntToString(iOption);
-			sOldName = PS_GetLocalString(oInstrument, "TRACK_" + sOption + "_NAME");
+			sOldName = GetLocalString(oInstrument, "TRACK_" + sOption + "_NAME");
 			if (sOldName == "")
 				sOldName = "Track " + sOption;
 		}
 		else
 		{
-			sOldName = PS_GetLocalString(oInstrument, "SONG_NAME");
+			sOldName = GetLocalString(oInstrument, "SONG_NAME");
 			if (sOldName == "")
 				sOldName = "Opus #1";
 		}
@@ -623,14 +621,14 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "WRITE")
 	{
-		if (PS_GetLocalInt(oInstrument, "METRONOME_ON") == FALSE)
+		if (GetLocalInt(oInstrument, "METRONOME_ON") == FALSE)
 		{
 			SendMessageToPC(oPC, "Sorry, you can only input tracks if you have the Metronome on.");
 			return;
 		}
 		SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "RecordPane", TRUE);
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
-		string sOldWrite = PS_GetLocalString(oInstrument, "WRITE_TRACK" + IntToString(iTrack));
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		string sOldWrite = GetLocalString(oInstrument, "WRITE_TRACK" + IntToString(iTrack));
 		PassTKLParameters(oPC, sAction, iTrack);
 		DisplayGuiScreen(oPC, "TKL_PERFORMER_WRITE", TRUE, "tkl_performer_write.xml");
 		SetGUIObjectText(oPC, "TKL_PERFORMER_WRITE", "inputbox", -1, sOldWrite);
@@ -639,7 +637,7 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "SONG_TEMPO")
 	{
-		int iTempo = PS_GetLocalInt(oInstrument, "TEMPO");
+		int iTempo = GetLocalInt(oInstrument, "TEMPO");
 		if (iTempo < 1)
 			iTempo = 100;
 		int iAdjust;
@@ -667,14 +665,14 @@ void main(string sAction, int iOption)
 		}
 		if (iTempo < 1)
 			iTempo == 1;
-		PS_SetLocalInt(oInstrument, "TEMPO", iTempo);
+		SetLocalInt(oInstrument, "TEMPO", iTempo);
 		SendMessageToPC(oPC, "Speed changed to  " + IntToString(100 + (100-iTempo)) + "%.");
-		PS_SetLocalFloat(oInstrument, "SONG_LENGTH", GetSongLength(oInstrument));
+		SetLocalFloat(oInstrument, "SONG_LENGTH", GetSongLength(oInstrument));
 	}
 	
 	else if (sAction == "METRONOME")
 	{
-		int iTempo = PS_GetLocalInt(oInstrument, "METRONOME");
+		int iTempo = GetLocalInt(oInstrument, "METRONOME");
 		if (iTempo < 1)
 			iTempo = 60;
 		int iAdjust;
@@ -690,7 +688,7 @@ void main(string sAction, int iOption)
 		// turn on metronome
 		else if (iOption == 4)
 		{
-			PS_SetLocalInt(oInstrument, "METRONOME_ON", TRUE);
+			SetLocalInt(oInstrument, "METRONOME_ON", TRUE);
 			SetGUIObjectDisabled(oPC, TKL_PERFORMER_SCREEN, "ApplyMetronome", FALSE);
 			RefreshRecordPane(oPC, oInstrument);
 			return;
@@ -698,7 +696,7 @@ void main(string sAction, int iOption)
 		// turn off metronome
 		else if (iOption == 5)
 		{
-			PS_DeleteLocalInt(oInstrument, "METRONOME_ON");
+			DeleteLocalInt(oInstrument, "METRONOME_ON");
 			SetGUIObjectDisabled(oPC, TKL_PERFORMER_SCREEN, "ApplyMetronome", TRUE);
 			RefreshRecordPane(oPC, oInstrument);
 			return;
@@ -707,8 +705,8 @@ void main(string sAction, int iOption)
 		else if (iOption == 6)
 		{
 			SetGUIObjectDisabled(oPC, TKL_PERFORMER_SCREEN, "ApplyMetronome", TRUE);
-			int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
-			PS_SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iTrack), iTempo);
+			int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+			SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iTrack), iTempo);
 			SendMessageToPC(oPC, "Metronome " + IntToString(iTempo) + " applied to Track " + IntToString(iTrack) + ".");
 			return;
 		}
@@ -716,14 +714,14 @@ void main(string sAction, int iOption)
 		iTempo += iAdjust;
 		if (iTempo < 1)
 			iTempo = 1;
-		PS_SetLocalInt(oInstrument, "METRONOME", iTempo);
+		SetLocalInt(oInstrument, "METRONOME", iTempo);
 		SetGUIObjectDisabled(oPC, TKL_PERFORMER_SCREEN, "ApplyMetronome", FALSE);
 		RefreshRecordPane(oPC, oInstrument);
 	}
 	
 	else if (sAction == "METRONOME_DURATION")
 	{
-		int iDuration = PS_GetLocalInt(oInstrument, "METRONOME_DURATION");
+		int iDuration = GetLocalInt(oInstrument, "METRONOME_DURATION");
 		if (iDuration < 1)
 			iDuration = 60;
 		int iAdjust;
@@ -741,7 +739,7 @@ void main(string sAction, int iOption)
 			iDuration = 1;
 		if (iDuration > 300)
 			iDuration = 300;
-		PS_SetLocalInt(oInstrument, "METRONOME_DURATION", iDuration);
+		SetLocalInt(oInstrument, "METRONOME_DURATION", iDuration);
 		RefreshRecordPane(oPC, oInstrument);
 	}
 	
@@ -749,15 +747,15 @@ void main(string sAction, int iOption)
 	{
 		if (iOption == 0)
 		{
-			int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+			int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 			string sTrack = IntToString(iTrack);
-			int iTempo = PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack);
+			int iTempo = GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack);
 			
 			float fTick = 60.0f / IntToFloat(iTempo);
-			int iSubdivide = PS_GetLocalInt(oInstrument, "QUANTIZE_SUBDIVIDE");
+			int iSubdivide = GetLocalInt(oInstrument, "QUANTIZE_SUBDIVIDE");
 			if (iSubdivide == 0)
 				iSubdivide = 1;
-			int iTotalNotes = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
+			int iTotalNotes = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
 			SendMessageToPC(oPC, "Quantizing " + IntToString(iTotalNotes) + " notes.");
 			while (iTotalNotes > 0)
 			{
@@ -768,7 +766,7 @@ void main(string sAction, int iOption)
 			SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "QuantizePane", TRUE);
 		}
 		else
-			PS_SetLocalInt(oInstrument, "QUANTIZE_SUBDIVIDE", iOption);
+			SetLocalInt(oInstrument, "QUANTIZE_SUBDIVIDE", iOption);
 	}
 		
 	else if (sAction == "SONG_LOAD")
@@ -826,26 +824,26 @@ void main(string sAction, int iOption)
 		
 	else if (sAction == "KEY_CHANGE")
 	{
-		PS_SetLocalInt(oInstrument, "KEY", iOption);
+		SetLocalInt(oInstrument, "KEY", iOption);
 		RefreshNoteNames(oPC, oInstrument);	
 	}
 	
 	else if (sAction == "TRACK_MUTE")
 	{
 		string sOption = IntToString(iOption);
-		if (PS_GetLocalInt(oInstrument, "TRACK" + sOption + "MUTE"))
-			PS_DeleteLocalInt(oInstrument, "TRACK" + sOption + "MUTE");
+		if (GetLocalInt(oInstrument, "TRACK" + sOption + "MUTE"))
+			DeleteLocalInt(oInstrument, "TRACK" + sOption + "MUTE");
 		else
-			PS_SetLocalInt(oInstrument, "TRACK" + sOption + "MUTE", TRUE);
+			SetLocalInt(oInstrument, "TRACK" + sOption + "MUTE", TRUE);
 		RefreshMuting(oPC, oInstrument);
 	}
 	
 	else if (sAction == "LYRIC_MUTE")
 	{
-		if (PS_GetLocalInt(oInstrument, "LYRICS_MUTED"))
-			PS_DeleteLocalInt(oInstrument, "LYRICS_MUTED");
+		if (GetLocalInt(oInstrument, "LYRICS_MUTED"))
+			DeleteLocalInt(oInstrument, "LYRICS_MUTED");
 		else
-			PS_SetLocalInt(oInstrument, "LYRICS_MUTED", TRUE);
+			SetLocalInt(oInstrument, "LYRICS_MUTED", TRUE);
 		RefreshMuting(oPC, oInstrument);
 	}
 	
@@ -858,8 +856,8 @@ void main(string sAction, int iOption)
 		}
 		if (iOption == 1)
 		{
-			PS_SetLocalInt(oPC, "LAG_CHECK_ON", TRUE);
-			float fLagCheck = PS_GetLocalFloat(oPC, "LAG_CHECK");
+			SetLocalInt(oPC, "LAG_CHECK_ON", TRUE);
+			float fLagCheck = GetLocalFloat(oPC, "LAG_CHECK");
 			if (fLagCheck <= 0.01f)
 			{
 				RefreshRecordPane(oPC, oInstrument);
@@ -872,7 +870,7 @@ void main(string sAction, int iOption)
 		}
 		else if (iOption == 0)
 		{
-			PS_DeleteLocalInt(oPC, "LAG_CHECK_ON");
+			DeleteLocalInt(oPC, "LAG_CHECK_ON");
 			RefreshRecordPane(oPC, oInstrument);
 		}		
 	}
@@ -880,11 +878,11 @@ void main(string sAction, int iOption)
 	else if (sAction == "RECORD_PANE")
 	{
 		// Set the metronome setting based on what was recorded/written (or default to 60)
-		int iRecordedMetronome = PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iOption));
+		int iRecordedMetronome = GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iOption));
 		if (iRecordedMetronome == 0)
-			PS_SetLocalInt(oInstrument, "METRONOME", 60);
+			SetLocalInt(oInstrument, "METRONOME", 60);
 		else
-			PS_SetLocalInt(oInstrument, "METRONOME", iRecordedMetronome);
+			SetLocalInt(oInstrument, "METRONOME", iRecordedMetronome);
 		SetGUIObjectDisabled(oPC, TKL_PERFORMER_SCREEN, "ApplyMetronome", TRUE);
 		SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "RecordPane", FALSE);
 		PassTKLParameters(oPC, sAction, iOption);
@@ -894,7 +892,7 @@ void main(string sAction, int iOption)
 	else if (sAction == "QUANTIZE_PANE")
 	{
 		string sTrack = IntToString(iOption);
-		int iTempo = PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack);
+		int iTempo = GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack);
 		if (iTempo == 0)
 		{
 			SendMessageToPC(oPC, "Sorry, you can only quantize tracks that were recorded with the metronome on.");
@@ -917,39 +915,39 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "COPY")
 	{
-		int iDestinationTrack = PS_GetLocalInt(oInstrument, "COPY_TO_TRACK");
+		int iDestinationTrack = GetLocalInt(oInstrument, "COPY_TO_TRACK");
 		if (iDestinationTrack == 0)
 			iDestinationTrack = 1;
 		
-		int iSourceTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
-		int bDeleteSource = PS_GetLocalInt(oInstrument, "DELETE_SOURCE");
-		int bBeats = PS_GetLocalInt(oInstrument, "COPY_MODE_BEATS");
+		int iSourceTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int bDeleteSource = GetLocalInt(oInstrument, "DELETE_SOURCE");
+		int bBeats = GetLocalInt(oInstrument, "COPY_MODE_BEATS");
 		float fCopyFrom, fPasteTo;
 		// If we're in beats mode...
 		if (bBeats)
 		{
-			int iMetronome = PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iSourceTrack));
+			int iMetronome = GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iSourceTrack));
 			if (iMetronome == 0)
 			{
 				SendMessageToPC(oPC, "Sorry, you cannot copy in 'beats' mode because the source track was not recorded with a metronome.");
 				return;
 			}
 			float fBeat = 60.0 / IntToFloat(iMetronome);
-			fCopyFrom = fBeat * IntToFloat(PS_GetLocalInt(oInstrument, "COPY_FROM_BEATS"));
-			fPasteTo = fBeat * IntToFloat(PS_GetLocalInt(oInstrument, "PASTE_TO_BEATS"));
+			fCopyFrom = fBeat * IntToFloat(GetLocalInt(oInstrument, "COPY_FROM_BEATS"));
+			fPasteTo = fBeat * IntToFloat(GetLocalInt(oInstrument, "PASTE_TO_BEATS"));
 		}
 		// Otherwise if we're in seconds mode...
 		else
 		{
-			fCopyFrom = PS_GetLocalFloat(oInstrument, "COPY_FROM");
-			fPasteTo = PS_GetLocalFloat(oInstrument, "PASTE_TO");
+			fCopyFrom = GetLocalFloat(oInstrument, "COPY_FROM");
+			fPasteTo = GetLocalFloat(oInstrument, "PASTE_TO");
 		}
 		//SendMessageToPC(oPC, "Copy from = " + FloatToString(fCopyFrom));
 		//SendMessageToPC(oPC, "Paste to = " + FloatToString(fPasteTo));
 		string sSourceTrack = IntToString(iSourceTrack);
 		string sDestinationTrack = IntToString(iDestinationTrack);
-		int iSourceNotes = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sSourceTrack);
-		int iDestinationNotes = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sDestinationTrack);
+		int iSourceNotes = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sSourceTrack);
+		int iDestinationNotes = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sDestinationTrack);
 		float fDelay, fAdjustedDelay;
 		// Special case for if you are copying to the same track, AND deleting source notes
 		// To avoid massive TMI errors, we simply alter the PLAYBACK settings of the notes in question
@@ -957,30 +955,30 @@ void main(string sAction, int iOption)
 		{
 			while (iSourceNotes > 0)
 			{
-				fDelay = PS_GetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PLAYBACK_TRACK" + sSourceTrack);
+				fDelay = GetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PLAYBACK_TRACK" + sSourceTrack);
 				if (fDelay >= fCopyFrom)
 				{
 					fAdjustedDelay = fDelay + fPasteTo;
 					if (fAdjustedDelay < 0.0f) fAdjustedDelay = 0.0f;
-					PS_SetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PLAYBACK_TRACK" + sDestinationTrack, fAdjustedDelay);
+					SetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PLAYBACK_TRACK" + sDestinationTrack, fAdjustedDelay);
 				}
 				iSourceNotes--;
 			}		
 		}
 		else
 		{
-			PS_SetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sDestinationTrack, iSourceNotes + iDestinationNotes);
+			SetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sDestinationTrack, iSourceNotes + iDestinationNotes);
 			while (iSourceNotes > 0)
 			{
 				//SendMessageToPC(oPC, "Copying Source Note " + IntToString(iSourceNotes));
-				fDelay = PS_GetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PLAYBACK_TRACK" + sSourceTrack);
+				fDelay = GetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PLAYBACK_TRACK" + sSourceTrack);
 				if (fDelay >= fCopyFrom)
 				{
 					fAdjustedDelay = fDelay + fPasteTo;
 					if (fAdjustedDelay < 0.0f) fAdjustedDelay = 0.0f;
-					PS_SetLocalInt(oInstrument, "NOTE" + IntToString(iSourceNotes + iDestinationNotes) + "PITCH_TRACK" + sDestinationTrack,
-						PS_GetLocalInt(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PITCH_TRACK" + sSourceTrack));
-					PS_SetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes + iDestinationNotes) + "PLAYBACK_TRACK" + sDestinationTrack,
+					SetLocalInt(oInstrument, "NOTE" + IntToString(iSourceNotes + iDestinationNotes) + "PITCH_TRACK" + sDestinationTrack,
+						GetLocalInt(oInstrument, "NOTE" + IntToString(iSourceNotes) + "PITCH_TRACK" + sSourceTrack));
+					SetLocalFloat(oInstrument, "NOTE" + IntToString(iSourceNotes + iDestinationNotes) + "PLAYBACK_TRACK" + sDestinationTrack,
 						fAdjustedDelay);
 					if (bDeleteSource)
 						DeleteNote(oInstrument, iSourceTrack, iSourceNotes);
@@ -991,13 +989,13 @@ void main(string sAction, int iOption)
 			}
 		}
 		// Copy over the recorded metronome settings
-		PS_SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sDestinationTrack, 
-			PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sSourceTrack));
+		SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sDestinationTrack, 
+			GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sSourceTrack));
 		
 		SortNotes(oPC, oInstrument, iDestinationTrack);
 		ClearTKLPerformerVariables(oPC);
 		SetGUIObjectHidden(oPC, TKL_PERFORMER_SCREEN, "CopyPane", TRUE);
-		//PS_SetLocalFloat(oInstrument, "SONG_LENGTH", GetSongLength(oInstrument));
+		//SetLocalFloat(oInstrument, "SONG_LENGTH", GetSongLength(oInstrument));
 		SendMessageToPC(oPC, "Copy successful.");
 	}
 	
@@ -1011,14 +1009,14 @@ void main(string sAction, int iOption)
 		for (iTrack=1; iTrack<=4; iTrack++)
 		{
 			sTrack = IntToString(iTrack);
-			sName = PS_GetLocalString(oInstrument, "TRACK_" + sTrack + "_NAME");
+			sName = GetLocalString(oInstrument, "TRACK_" + sTrack + "_NAME");
 			if (sName == "")
 				sName = "Track " + sTrack;
 			SetGUIObjectText(oPC, TKL_PERFORMER_SCREEN, "CopyTrackText" + sTrack, -1, "(" + sName + ")");
 		}
 		// Make sure that "beats" mode is allowed
-		if (PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iOption)) == 0)
-			PS_DeleteLocalInt(oInstrument, "COPY_MODE_BEATS");
+		if (GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iOption)) == 0)
+			DeleteLocalInt(oInstrument, "COPY_MODE_BEATS");
 		RefreshCopyPane(oPC, oInstrument);
 	}
 	
@@ -1028,10 +1026,10 @@ void main(string sAction, int iOption)
 		PassTKLParameters(oPC, sAction, iOption);
 		// Make sure that "beats" mode is allowed, and set the metronome text
 		string sMetronomeText = "(1 beat=";
-		int iMetronome = PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iOption));
+		int iMetronome = GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iOption));
 		if (iMetronome == 0)
 		{
-			PS_DeleteLocalInt(oInstrument, "NOTE_EDIT_BEATS");
+			DeleteLocalInt(oInstrument, "NOTE_EDIT_BEATS");
 			sMetronomeText += "NA)";
 		}
 		else
@@ -1047,20 +1045,20 @@ void main(string sAction, int iOption)
 	{
 		if (iOption > 0 && iOption < 5)
 		{
-			PS_SetLocalInt(oInstrument, "COPY_TO_TRACK", iOption);
+			SetLocalInt(oInstrument, "COPY_TO_TRACK", iOption);
 			return;
 		}
 		else if (iOption == 5)
 		{
-			PS_SetLocalInt(oInstrument, "DELETE_SOURCE", TRUE);
+			SetLocalInt(oInstrument, "DELETE_SOURCE", TRUE);
 		}
 		else if (iOption == 6)
 		{
-			PS_DeleteLocalInt(oInstrument, "DELETE_SOURCE");
+			DeleteLocalInt(oInstrument, "DELETE_SOURCE");
 		}
 		else
 		{
-			int bBeats = PS_GetLocalInt(oInstrument, "COPY_MODE_BEATS");
+			int bBeats = GetLocalInt(oInstrument, "COPY_MODE_BEATS");
 			int iAdjust;
 			float fAdjust;
 			string sSetting;
@@ -1079,24 +1077,24 @@ void main(string sAction, int iOption)
 			if (bBeats)
 			{
 				sSetting += "_BEATS";
-				int iCurrent = PS_GetLocalInt(oInstrument, sSetting);
+				int iCurrent = GetLocalInt(oInstrument, sSetting);
 				if (iCurrent + iAdjust < 0 && iOption < 11) // Copy From numbers can't go below 0
 				{
 					iAdjust = 0;
 					iCurrent = 0;
 				}
-				PS_SetLocalInt(oInstrument, sSetting, iCurrent + iAdjust);
+				SetLocalInt(oInstrument, sSetting, iCurrent + iAdjust);
 			}
 			// Otherwise if we're in "seconds" copy mode
 			else
 			{
-				float fCurrent = PS_GetLocalFloat(oInstrument, sSetting);
+				float fCurrent = GetLocalFloat(oInstrument, sSetting);
 				if (fCurrent + fAdjust < 0.0f && iOption < 11) // Copy From numbers can't go below 0
 				{
 					fAdjust = 0.0f;
 					fCurrent = 0.0f;
 				}
-				PS_SetLocalFloat(oInstrument, sSetting, fCurrent + fAdjust);
+				SetLocalFloat(oInstrument, sSetting, fCurrent + fAdjust);
 			}
 			RefreshCopyPane(oPC, oInstrument);
 		}
@@ -1104,90 +1102,90 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "COPY_MODE")
 	{
-		int iSourceTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iSourceTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iSourceTrack);
-		if (PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack) == 0)
+		if (GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack) == 0)
 		{
-			if (!PS_GetLocalInt(oInstrument, "COPY_MODE_BEATS"))
+			if (!GetLocalInt(oInstrument, "COPY_MODE_BEATS"))
 			{
 					SendMessageToPC(oPC, "The source track was not recorded with a metronome, so you cannot change the copy mode to 'beats'.");
 					return;
 			}
 		}
-		PS_SetLocalInt(oInstrument, "COPY_MODE_BEATS", !PS_GetLocalInt(oInstrument, "COPY_MODE_BEATS"));
+		SetLocalInt(oInstrument, "COPY_MODE_BEATS", !GetLocalInt(oInstrument, "COPY_MODE_BEATS"));
 		RefreshCopyPane(oPC, oInstrument);
 	}
 	
 	else if (sAction == "NOTE_SETTINGS")
 	{
-		int bBeats = PS_GetLocalInt(oInstrument, "NOTE_EDIT_BEATS");
+		int bBeats = GetLocalInt(oInstrument, "NOTE_EDIT_BEATS");
 		
 		int iCurrentAdjust;
 		float fCurrentAdjust;
 		switch (iOption)
 		{
 			case 1:
-				iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_PITCH");
-				PS_SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust + 1);
+				iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_PITCH");
+				SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust + 1);
 				break;
 			case 2:
-				iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_PITCH");
-				PS_SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust + 3);
+				iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_PITCH");
+				SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust + 3);
 				break;
 			case 3:
-				iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_PITCH");
-				PS_SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust - 1);
+				iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_PITCH");
+				SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust - 1);
 				break;
 			case 4:
-				iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_PITCH");
-				PS_SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust - 3);
+				iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_PITCH");
+				SetLocalInt(oInstrument, "EDIT_PITCH", iCurrentAdjust - 3);
 				break;
 			case 5:
 				if (bBeats)
 				{
-					iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_BEATS");
-					PS_SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust + 1);
+					iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_BEATS");
+					SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust + 1);
 				}
 				else
 				{
-					fCurrentAdjust = PS_GetLocalFloat(oInstrument, "EDIT_TIME");
-					PS_SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust + 0.1f);
+					fCurrentAdjust = GetLocalFloat(oInstrument, "EDIT_TIME");
+					SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust + 0.1f);
 				}
 				break;
 			case 6:
 				if (bBeats)
 				{
-					iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_BEATS");
-					PS_SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust + 3);
+					iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_BEATS");
+					SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust + 3);
 				}
 				else
 				{
-					fCurrentAdjust = PS_GetLocalFloat(oInstrument, "EDIT_TIME");
-					PS_SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust + 3.0f);
+					fCurrentAdjust = GetLocalFloat(oInstrument, "EDIT_TIME");
+					SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust + 3.0f);
 				}
 				break;
 			case 7:
 				if (bBeats)
 				{
-					iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_BEATS");
-					PS_SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust - 1);
+					iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_BEATS");
+					SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust - 1);
 				}
 				else
 				{
-					fCurrentAdjust = PS_GetLocalFloat(oInstrument, "EDIT_TIME");
-					PS_SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust - 0.1f);
+					fCurrentAdjust = GetLocalFloat(oInstrument, "EDIT_TIME");
+					SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust - 0.1f);
 				}
 				break;
 			case 8:
 				if (bBeats)
 				{
-					iCurrentAdjust = PS_GetLocalInt(oInstrument, "EDIT_BEATS");
-					PS_SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust - 3);
+					iCurrentAdjust = GetLocalInt(oInstrument, "EDIT_BEATS");
+					SetLocalInt(oInstrument, "EDIT_BEATS", iCurrentAdjust - 3);
 				}
 				else
 				{
-					fCurrentAdjust = PS_GetLocalFloat(oInstrument, "EDIT_TIME");
-					PS_SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust - 3.0f);
+					fCurrentAdjust = GetLocalFloat(oInstrument, "EDIT_TIME");
+					SetLocalFloat(oInstrument, "EDIT_TIME", fCurrentAdjust - 3.0f);
 				}
 				break;
 		}
@@ -1196,23 +1194,23 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "NOTE_MODE")
 	{
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
 		switch (iOption)
 		{
 			case 1:
-				if (PS_GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack) == 0)
+				if (GetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + sTrack) == 0)
 				{
-					if (!PS_GetLocalInt(oInstrument, "NOTE_EDIT_BEATS"))
+					if (!GetLocalInt(oInstrument, "NOTE_EDIT_BEATS"))
 					{
 						SendMessageToPC(oPC, "This track was not recorded with a metronome, so cannot be edited by beats.");
 						return;
 					}
 				}
-				PS_SetLocalInt(oInstrument, "NOTE_EDIT_BEATS", !PS_GetLocalInt(oInstrument, "NOTE_EDIT_BEATS"));
+				SetLocalInt(oInstrument, "NOTE_EDIT_BEATS", !GetLocalInt(oInstrument, "NOTE_EDIT_BEATS"));
 				break;
 			case 2:
-				PS_SetLocalInt(oInstrument, "NOTE_EDIT_CHROMATIC", !PS_GetLocalInt(oInstrument, "NOTE_EDIT_CHROMATIC"));
+				SetLocalInt(oInstrument, "NOTE_EDIT_CHROMATIC", !GetLocalInt(oInstrument, "NOTE_EDIT_CHROMATIC"));
 				break;	
 		}
 		RefreshNotePane(oPC, oInstrument);
@@ -1220,18 +1218,18 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "NOTE_EDIT")
 	{
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
-		int iNote = PS_GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
+		int iNote = GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
 		string sID = "NOTE" + IntToString(iNote) + "PITCH_TRACK" + sTrack;
-		int iPitch = PS_GetLocalInt(oInstrument, sID);
+		int iPitch = GetLocalInt(oInstrument, sID);
 		if (iPitch == 0)
 		{
 			SendMessageToPC(oPC, "There is not a current note selected.");
 			return;
 		}
 		int iNewPitch;
-		int iKey = PS_GetLocalInt(oInstrument, "KEY");
+		int iKey = GetLocalInt(oInstrument, "KEY");
 		switch (iOption)
 		{
 			// Delete note
@@ -1253,14 +1251,14 @@ void main(string sAction, int iOption)
 			case 4:
 				iNewPitch = TogglePrimaryVariation(iPitch);
 				PlayNote(iNewPitch, iKey);
-				PS_SetLocalInt(oInstrument, sID, iNewPitch);
+				SetLocalInt(oInstrument, sID, iNewPitch);
 				RefreshNotePane(oPC, oInstrument);
 				break;
 			// Toggle secondary variation (major/minor/half-diminished, percussion variations)
 			case 5:
 				iNewPitch = ToggleSecondaryVariation(iPitch);
 				PlayNote(iNewPitch, iKey);
-				PS_SetLocalInt(oInstrument, sID, iNewPitch);
+				SetLocalInt(oInstrument, sID, iNewPitch);
 				RefreshNotePane(oPC, oInstrument);
 				break;
 			// Duplicate the note
@@ -1287,16 +1285,16 @@ void main(string sAction, int iOption)
 			case 3: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Lute", "b_sm_hover_scod.tga"); break;
 			case 4: SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovTrack" + s + "Flute", "b_sm_hover_scod.tga"); break;	
 		}
-		PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_" + s, iOption);
+		SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_" + s, iOption);
 	}
 	
 	else if (sAction == "IMPROV_STYLE")
 	{
-		int iLastSelected = PS_GetLocalInt(oInstrument, "IMPROV_STYLE");
+		int iLastSelected = GetLocalInt(oInstrument, "IMPROV_STYLE");
 		if (iLastSelected == 0) iLastSelected = 1;
 		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + IntToString(iLastSelected), "b_sm_normal_scod.tga");
 		SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "ImprovStyle" + IntToString(iOption), "b_sm_hover_scod.tga");
-		PS_SetLocalInt(oInstrument, "IMPROV_STYLE", iOption);
+		SetLocalInt(oInstrument, "IMPROV_STYLE", iOption);
 		// set the description
 		string sDesc;
 		switch (iOption)
@@ -1317,7 +1315,7 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "IMPROVISE")
 	{	
-		int iStyle = PS_GetLocalInt(oInstrument, "IMPROV_STYLE");
+		int iStyle = GetLocalInt(oInstrument, "IMPROV_STYLE");
 		if (iStyle == 0) iStyle = 1;
 		int iPerformRequired = 0;
 		switch (iStyle)
@@ -1354,10 +1352,10 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "EMBELLISH_PANE")
 	{
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
-		int iNote = PS_GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
-		int iChord = PS_GetLocalInt(oInstrument, "NOTE" + IntToString(iNote) + "PITCH_TRACK" + sTrack);
+		int iNote = GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack);
+		int iChord = GetLocalInt(oInstrument, "NOTE" + IntToString(iNote) + "PITCH_TRACK" + sTrack);
 		// Make sure the current note is a chord
 		if (iChord < 101 || iChord > 186)
 		{
@@ -1372,16 +1370,16 @@ void main(string sAction, int iOption)
 		{
 			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(i), "b_sm_normal_scod.tga");
 		}
-		PS_DeleteLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD");
+		DeleteLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD");
 	}
 	
 	else if (sAction == "EMBELLISH")
 	{
-		int iTrack = PS_GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
+		int iTrack = GetLocalInt(oPC, "TKL_PERFORMER_OPTION");
 		string sTrack = IntToString(iTrack);
-		string sNote = IntToString(PS_GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack));
-		int iChord = PS_GetLocalInt(oInstrument, "NOTE" + sNote + "PITCH_TRACK" + sTrack);
-		int iLastSelected = PS_GetLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD");
+		string sNote = IntToString(GetLocalInt(oInstrument, "CURRENT_NOTE_TRACK" + sTrack));
+		int iChord = GetLocalInt(oInstrument, "NOTE" + sNote + "PITCH_TRACK" + sTrack);
+		int iLastSelected = GetLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD");
 		// Delay the note if it is a rolled chord
 		float fNoteDelay = 0.0f;
 		if (iChord < 151) fNoteDelay = TKL_CHORD_ROLL_OFFSET;
@@ -1389,7 +1387,7 @@ void main(string sAction, int iOption)
 		// If iOption is not 0, the user is previewing the chord with the embellishment.
 		if (iOption > 0)
 		{
-			int iKey = PS_GetLocalInt(oInstrument, "KEY");
+			int iKey = GetLocalInt(oInstrument, "KEY");
 			int iEmbellishment = GetEmbellishmentPitch(iChord, iOption);
 			
 			// First play the chord and note together
@@ -1402,18 +1400,18 @@ void main(string sAction, int iOption)
 			SetGUITexture(oPC, TKL_PERFORMER_SCREEN, "Embellish" + IntToString(iOption), "b_sm_hover_scod.tga");	
 			
 			// Set the variable to keep track of the selected embellishment
-			PS_SetLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD", iOption);	
+			SetLocalInt(oInstrument, "EMBELLISHMENT_TO_ADD", iOption);	
 		}
 		// Otherwise go ahead and add the embellishment as a new note in the track
 		else
 		{
 			int iEmbellishment = GetEmbellishmentPitch(iChord, iLastSelected);
-			int iTotalNotes = PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
+			int iTotalNotes = GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack);
 			string sNewID = "NOTE" + IntToString(iTotalNotes + 1);
-			PS_SetLocalInt(oInstrument, sNewID + "PITCH_TRACK" + sTrack, iEmbellishment);
-			PS_SetLocalFloat(oInstrument, sNewID + "PLAYBACK_TRACK" + sTrack, 
-				fNoteDelay + PS_GetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack));
-			PS_SetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack, iTotalNotes + 1);
+			SetLocalInt(oInstrument, sNewID + "PITCH_TRACK" + sTrack, iEmbellishment);
+			SetLocalFloat(oInstrument, sNewID + "PLAYBACK_TRACK" + sTrack, 
+				fNoteDelay + GetLocalFloat(oInstrument, "NOTE" + sNote + "PLAYBACK_TRACK" + sTrack));
+			SetLocalInt(oInstrument, "NOTES_RECORDED_TRACK" + sTrack, iTotalNotes + 1);
 			SortNotes(oPC, oInstrument, iTrack);
 			RefreshNotePane(oPC, oInstrument);
 		}	
@@ -1421,13 +1419,13 @@ void main(string sAction, int iOption)
 	
 	else if (sAction == "LYRIC_RECORD_PANE")
 	{
-		float fSecondsPerLyric = PS_GetLocalFloat(oInstrument, "SECONDS_PER_LYRIC");
+		float fSecondsPerLyric = GetLocalFloat(oInstrument, "SECONDS_PER_LYRIC");
 		SetGUIObjectText(oPC, "TKL_PERFORMER_LYRICS", "LyricAutomationField", -1, FloatToString(fSecondsPerLyric, 3, 1));
 	}
 	
 	else if (sAction == "LYRIC_AUTOMATION")
 	{
-		float fSecondsPerLyric = PS_GetLocalFloat(oInstrument, "SECONDS_PER_LYRIC");
+		float fSecondsPerLyric = GetLocalFloat(oInstrument, "SECONDS_PER_LYRIC");
 		
 		float fAdjust;
 		switch (iOption)
@@ -1446,14 +1444,14 @@ void main(string sAction, int iOption)
 				}
 				PassTKLParameters(oPC, "WRITE_LYRICS", 0);
 				SetGUIObjectHidden(oPC, "TKL_PERFORMER_LYRICS", "LyricRecordPane", TRUE);
-				string sOldWrite = PS_GetLocalString(oInstrument, "WRITE_LYRICS");
+				string sOldWrite = GetLocalString(oInstrument, "WRITE_LYRICS");
 				PassTKLParameters(oPC, "WRITE_LYRICS", 0);
 				DisplayGuiScreen(oPC, "TKL_PERFORMER_WRITE", TRUE, "tkl_performer_write.xml");
 				SetGUIObjectText(oPC, "TKL_PERFORMER_WRITE", "inputbox", -1, sOldWrite); 
 				return;
 				break;		
 		}
-		PS_SetLocalFloat(oInstrument, "SECONDS_PER_LYRIC", fAdjust + fSecondsPerLyric);
+		SetLocalFloat(oInstrument, "SECONDS_PER_LYRIC", fAdjust + fSecondsPerLyric);
 		SetGUIObjectText(oPC, "TKL_PERFORMER_LYRICS", "LyricAutomationField", -1, FloatToString(fAdjust + fSecondsPerLyric, 3, 1));
 	}
 }

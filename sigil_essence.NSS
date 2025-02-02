@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "nw_i0_spells"
 
 const int GOD_MODE = -9999;
@@ -84,7 +82,7 @@ void main (int nCOMMAND, int nINPUT)
 	object oPC = GetPCSpeaker();
 	switch (nCOMMAND)
 	{
-		case 0: PS_SetLocalInt(oPC, "DIFF", nINPUT); break;
+		case 0: SetLocalInt(oPC, "DIFF", nINPUT); break;
 		case 1: ToggleGodMode(oPC); break;
 		case 2: OpenShop(oPC); break;
 		case 3: ExportSingleCharacter(oPC); break;

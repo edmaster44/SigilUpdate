@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 Author: brockfanning
 Date: 1/24/09
@@ -29,12 +27,12 @@ void ErasePreviousSong(object oNPC, object oInstrument)
 	EraseTrack(oInstrument, 3);
 	EraseTrack(oInstrument, 2);
 	EraseTrack(oInstrument, 1);
-	PS_DeleteLocalString(oInstrument, "SONG_NAME");
+	DeleteLocalString(oInstrument, "SONG_NAME");
 	EraseLyrics(oInstrument);
 	EraseLyricTrack(oInstrument);
-	PS_DeleteLocalInt(oInstrument, "KEY");
-	PS_DeleteLocalInt(oInstrument, "TEMPO");
-	PS_DeleteLocalString(oInstrument, "ORIGINAL_COMPOSER");
+	DeleteLocalInt(oInstrument, "KEY");
+	DeleteLocalInt(oInstrument, "TEMPO");
+	DeleteLocalString(oInstrument, "ORIGINAL_COMPOSER");
 }
 
 // Set a local int until the song ends, so that the conversation can be disabled.
@@ -42,9 +40,9 @@ void ErasePreviousSong(object oNPC, object oInstrument)
 // Also disable environmental audio and background music for the duration.
 void DisableNPC(object oNPC, object oInstrument)
 {
-	PS_SetLocalInt(oNPC, "NPC_IS_PLAYING", TRUE);
-	float fLength = PS_GetLocalFloat(oInstrument, "SONG_LENGTH");
-	DelayCommand(fLength, PS_DeleteLocalInt(oNPC, "NPC_IS_PLAYING"));
+	SetLocalInt(oNPC, "NPC_IS_PLAYING", TRUE);
+	float fLength = GetLocalFloat(oInstrument, "SONG_LENGTH");
+	DelayCommand(fLength, DeleteLocalInt(oNPC, "NPC_IS_PLAYING"));
 	
 	object oArea = GetArea(oNPC);
 	MusicBackgroundStop(oArea);
@@ -58,7 +56,7 @@ void DisableNPC(object oNPC, object oInstrument)
 int CatalogBlueprintScores(object oNPC)
 {
 	// Check for a variable, so that we don't have to search every time.
-	int iBlueprintScores = PS_GetLocalInt(oNPC, "TOTAL_BLUEPRINT_SCORES");
+	int iBlueprintScores = GetLocalInt(oNPC, "TOTAL_BLUEPRINT_SCORES");
 	
 	// If not found, cycle through the NPC's inventory
 	if (iBlueprintScores == 0)
@@ -66,11 +64,11 @@ int CatalogBlueprintScores(object oNPC)
 		object oItem = GetFirstItemInInventory(oNPC);
 		while (GetIsObjectValid(oItem))
 		{
-			if (PS_GetLocalInt(oItem, "BLUEPRINT_SCORE"))
+			if (GetLocalInt(oItem, "BLUEPRINT_SCORE"))
 			{
 				// Increment the total and save the score's name for later.
 				iBlueprintScores++;
-				PS_SetLocalObject(oNPC, "BLUEPRINT_SCORE" + IntToString(iBlueprintScores), oItem);			
+				SetLocalObject(oNPC, "BLUEPRINT_SCORE" + IntToString(iBlueprintScores), oItem);			
 			}
 			oItem = GetNextItemInInventory(oNPC);
 		}
@@ -78,9 +76,9 @@ int CatalogBlueprintScores(object oNPC)
 		// Set a local int so we won't have to cycle through inventory next time
 		// If none were found, set the variable to -1 so it won't be searched for next time.
 		if (iBlueprintScores > 0)
-			PS_SetLocalInt(oNPC, "TOTAL_BLUEPRINT_SCORES", iBlueprintScores);
+			SetLocalInt(oNPC, "TOTAL_BLUEPRINT_SCORES", iBlueprintScores);
 		else 
-			PS_SetLocalInt(oNPC, "TOTAL_BLUEPRINT_SCORES", -1);
+			SetLocalInt(oNPC, "TOTAL_BLUEPRINT_SCORES", -1);
 	}
 	
 	return iBlueprintScores;
@@ -90,7 +88,7 @@ void PlayBlueprintScore(object oPC, object oNPC, object oInstrument, int iParam1
 {
 	int iBlueprintScores = CatalogBlueprintScores(oNPC);
 		
-	object oScore = PS_GetLocalObject(oNPC, "BLUEPRINT_SCORE" + IntToString(iParam1));
+	object oScore = GetLocalObject(oNPC, "BLUEPRINT_SCORE" + IntToString(iParam1));
 	if (!GetIsObjectValid(oScore))
 	{
 		SpeakString("I'm sorry, it seems I am missing that score.");
@@ -104,37 +102,37 @@ void PlayBlueprintScore(object oPC, object oNPC, object oInstrument, int iParam1
 	
 	// Check for any speed variance, or set the default 100 (low = faster, high = slower)
 	int iTempo = 100;
-	int iVariance = PS_GetLocalInt(oScore, "SPEED_VARIANCE");
+	int iVariance = GetLocalInt(oScore, "SPEED_VARIANCE");
 	if (iVariance > 0)
 		iTempo -= (Random(iVariance) + 1);
 	else if (iVariance < 0)
 		iTempo += (Random(iVariance) + 1);
-	PS_SetLocalInt(oInstrument, "TEMPO", iTempo);
+	SetLocalInt(oInstrument, "TEMPO", iTempo);
 	
-	float fSecondsPerBeat = PS_GetLocalFloat(oScore, "SECONDS_PER_BEAT");
+	float fSecondsPerBeat = GetLocalFloat(oScore, "SECONDS_PER_BEAT");
 	if (fSecondsPerBeat <= 0.0f) fSecondsPerBeat = 1.0f;
 	int iMetronome = FloatToInt(60.0f / fSecondsPerBeat);
-	//int iMetronome = PS_GetLocalInt(oScore, "METRONOME");
+	//int iMetronome = GetLocalInt(oScore, "METRONOME");
 	//if (iMetronome == 0) iMetronome = 60;
-	PS_SetLocalInt(oInstrument, "METRONOME", iMetronome);
+	SetLocalInt(oInstrument, "METRONOME", iMetronome);
 		
 	int iTrack;
 	float fDelay;
 	// Cycle through each track, and write it.
 	for (iTrack = 1; iTrack <= 4; iTrack++)
 	{
-		string sInstrument = PS_GetLocalString(oScore, "INSTRUMENT" + IntToString(iTrack));
+		string sInstrument = GetLocalString(oScore, "INSTRUMENT" + IntToString(iTrack));
 		string sGUIFile = "tkl_performer_lute.xml";
 		if (GetStringLowerCase(sInstrument) == "flute")
 			sGUIFile = "tkl_performer_flute.xml";
 		else if (GetStringLowerCase(sInstrument) == "drum" || GetStringLowerCase(sInstrument) == "drums")
 			sGUIFile = "tkl_performer_drum.xml";	
 	
-		string sInput = PS_GetLocalString(oScore, "NOTES" + IntToString(iTrack));
+		string sInput = GetLocalString(oScore, "NOTES" + IntToString(iTrack));
 		if (sInput != "")
 		{
-			PS_SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iTrack), iMetronome);
-			PS_SetLocalString(oInstrument, "TRACK_" + IntToString(iTrack) + "_NAME", sInstrument);
+			SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iTrack), iMetronome);
+			SetLocalString(oInstrument, "TRACK_" + IntToString(iTrack) + "_NAME", sInstrument);
 			AssignCommand(oNPC, DelayCommand(fDelay, WriteTrack(oNPC, oInstrument, iTrack, sInput, sGUIFile)));
 			fDelay += 1.0f;
 		}
@@ -146,27 +144,27 @@ void PlayBlueprintScore(object oPC, object oNPC, object oInstrument, int iParam1
 	for (iLyric = 1; iLyric <= 64; iLyric++)
 	{
 		sLyric = IntToString(iLyric);
-		sText = PS_GetLocalString(oScore, "LYRIC" + sLyric);
+		sText = GetLocalString(oScore, "LYRIC" + sLyric);
 		if (sText != "")
-			PS_SetLocalString(oInstrument, "LYRIC" + sLyric, sText);
+			SetLocalString(oInstrument, "LYRIC" + sLyric, sText);
 	}
 	// Check for a Lyric "Write" track
-	string sLyricWrite = PS_GetLocalString(oScore, "WRITE_LYRICS");
+	string sLyricWrite = GetLocalString(oScore, "WRITE_LYRICS");
 	if (sLyricWrite != "")
 	{
-		float fSecondsPerLyric = PS_GetLocalFloat(oScore, "SECONDS_PER_LYRIC");
+		float fSecondsPerLyric = GetLocalFloat(oScore, "SECONDS_PER_LYRIC");
 		if (fSecondsPerLyric <= 0.0f) fSecondsPerLyric = 1.0f;
-		PS_SetLocalFloat(oInstrument, "SECONDS_PER_LYRIC", fSecondsPerLyric);
-		PS_SetLocalString(oInstrument, "WRITE_LYRICS", sLyricWrite);
+		SetLocalFloat(oInstrument, "SECONDS_PER_LYRIC", fSecondsPerLyric);
+		SetLocalString(oInstrument, "WRITE_LYRICS", sLyricWrite);
 		AssignCommand(oNPC, DelayCommand(fDelay + 0.5f, WriteLyrics(oNPC, oInstrument, sLyricWrite))); 
 	}
 	
 	// Transfer a few variables
-	PS_SetLocalString(oInstrument, "SONG_NAME", GetName(oScore));
-	PS_SetLocalString(oInstrument, "ORIGINAL_COMPOSER", PS_GetLocalString(oScore, "ORIGINAL_COMPOSER"));
+	SetLocalString(oInstrument, "SONG_NAME", GetName(oScore));
+	SetLocalString(oInstrument, "ORIGINAL_COMPOSER", GetLocalString(oScore, "ORIGINAL_COMPOSER"));
 	
 	// Set a random key
-	PS_SetLocalInt(oInstrument, "KEY", Random(12));
+	SetLocalInt(oInstrument, "KEY", Random(12));
 	
 	// After a nice long delay, start playing the song
 	DelayCommand(fDelay + 3.0f, PlaySong(oNPC, oInstrument, 0, TRUE));
@@ -185,7 +183,7 @@ void PlayServerSong(object oNPC, object oInstrument, int iParam1)
 	
 		TransferSong(oSong, oInstrument);
 		// Set a random key
-		PS_SetLocalInt(oInstrument, "KEY", Random(12));
+		SetLocalInt(oInstrument, "KEY", Random(12));
 		DelayCommand(3.0f, PlaySong(oNPC, oInstrument));
 		DelayCommand(3.1f, DisableNPC(oNPC, oInstrument));
 		DestroyObject(oSong);
@@ -279,18 +277,18 @@ void ImproviseRandom(object oNPC, object oInstrument, object oPC)
 			iTrack4 = IMPROV_INSTRUMENT_DRUM;
 			break;		
 	}
-	PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_1", iTrack1);
-	PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_2", iTrack2);
-	PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_3", iTrack3);
-	PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_4", iTrack4);
+	SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_1", iTrack1);
+	SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_2", iTrack2);
+	SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_3", iTrack3);
+	SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_4", iTrack4);
 	
 	// Write and play the song
 	Improvise(oNPC);
 	// Set a random key
-	PS_SetLocalInt(oInstrument, "KEY", Random(12));
+	SetLocalInt(oInstrument, "KEY", Random(12));
 	// Set a random speed (90 to 110)
 	int iVariance = Random(21) - 10;
-	PS_SetLocalInt(oInstrument, "TEMPO", 100 + iVariance);
+	SetLocalInt(oInstrument, "TEMPO", 100 + iVariance);
 	// Announce the style
 	string sStyle;
 	switch (iStyle)
@@ -311,7 +309,7 @@ void ImproviseRandom(object oNPC, object oInstrument, object oPC)
 	DelayCommand(3.1f, DisableNPC(oNPC, oInstrument));
 	DelayCommand(5.0f, ClearImprovStyle(oNPC));
 
-	PS_SetLocalString(oInstrument, "ORIGINAL_COMPOSER", GetName(oNPC));
+	SetLocalString(oInstrument, "ORIGINAL_COMPOSER", GetName(oNPC));
 }
 
 void main(string sAction, int iParam1, int iParam2, int iParam3, int iParam4, int iParam5)
@@ -321,7 +319,7 @@ void main(string sAction, int iParam1, int iParam2, int iParam3, int iParam4, in
 	
 	// For the purposes of this script, the bard itself is considered the "instrument"
 	object oInstrument = oNPC;
-	PS_SetLocalObject(oNPC, "TKL_PERFORMER_INSTRUMENT", oInstrument);
+	SetLocalObject(oNPC, "TKL_PERFORMER_INSTRUMENT", oInstrument);
 	
 	// Set up Custom Tokens for all the styles available for Improvisation
 	if (sAction == "LIST_STYLES")
@@ -371,37 +369,37 @@ void main(string sAction, int iParam1, int iParam2, int iParam3, int iParam4, in
 		ErasePreviousSong(oNPC, oInstrument);
 	
 		// Assign the instruments
-		PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_1", iParam1);
-		PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_2", iParam2);
-		PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_3", iParam3);
-		PS_SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_4", iParam4);
+		SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_1", iParam1);
+		SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_2", iParam2);
+		SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_3", iParam3);
+		SetLocalInt(oInstrument, "IMPROV_INSTRUMENT_TRACK_4", iParam4);
 		
 		// Write and play the song
 		Improvise(oNPC);
 		// Set a random key
-		PS_SetLocalInt(oInstrument, "KEY", Random(12));
+		SetLocalInt(oInstrument, "KEY", Random(12));
 		DelayCommand(3.0f, PlaySong(oNPC, oInstrument));
 		DelayCommand(3.1f, DisableNPC(oNPC, oInstrument));
 		DelayCommand(5.0f, ClearImprovStyle(oNPC));
 		
-		PS_SetLocalString(oInstrument, "ORIGINAL_COMPOSER", GetName(oNPC));
+		SetLocalString(oInstrument, "ORIGINAL_COMPOSER", GetName(oNPC));
 	}
 	
 	// Give the PC a score of the last song played
 	else if (sAction == "TRANSCRIBE")
 	{
-		if (PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK1") == 0 &&
-			PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK2") == 0 &&
-			PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK3") == 0 &&
-			PS_GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK4") == 0)
+		if (GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK1") == 0 &&
+			GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK2") == 0 &&
+			GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK3") == 0 &&
+			GetLocalInt(oInstrument, "NOTES_RECORDED_TRACK4") == 0)
 			ActionSpeakString("I haven't played anything yet!");
 		else
 		{
 			object oScore = CreateItemOnObject("tkl_performer_score", oPC);
-			string sComposer = PS_GetLocalString(oInstrument, "ORIGINAL_COMPOSER");
+			string sComposer = GetLocalString(oInstrument, "ORIGINAL_COMPOSER");
 			if (sComposer == "")
 				sComposer = GetName(oNPC);
-			string sName = PS_GetLocalString(oInstrument, "SONG_NAME");
+			string sName = GetLocalString(oInstrument, "SONG_NAME");
 			if (sName == "")
 				sName = "Untitled";
 			SetFirstName(oScore, sName + " <i>(by " + sComposer + ")</i>");
@@ -443,7 +441,7 @@ void main(string sAction, int iParam1, int iParam2, int iParam3, int iParam4, in
 		for (i = 1; i <= 10; i++)
 		{
 			if (i <= iBlueprintScores)
-				SetCustomToken(2344 + i, GetName(PS_GetLocalObject(oNPC, "BLUEPRINT_SCORE" + IntToString(i))));
+				SetCustomToken(2344 + i, GetName(GetLocalObject(oNPC, "BLUEPRINT_SCORE" + IntToString(i))));
 			else
 				SetCustomToken(2344 + i, "...");
 		}
@@ -469,24 +467,24 @@ void main(string sAction, int iParam1, int iParam2, int iParam3, int iParam4, in
 		if (iBlueprintScores > 0) 
 		{
 			iChoices++;
-			PS_SetLocalString(oNPC, "CHOICE" + IntToString(iChoices), "PLAY_A_BLUEPRINT_SCORE");	
+			SetLocalString(oNPC, "CHOICE" + IntToString(iChoices), "PLAY_A_BLUEPRINT_SCORE");	
 		}
 		if (iServerSongs > 0)
 		{
 			iChoices++;
-			PS_SetLocalString(oNPC, "CHOICE" + IntToString(iChoices), "PLAY_A_SERVER_SONG");
+			SetLocalString(oNPC, "CHOICE" + IntToString(iChoices), "PLAY_A_SERVER_SONG");
 		}
 		if (TOTAL_STYLES > 0)
 		{
 			iChoices++;
-			PS_SetLocalString(oNPC, "CHOICE" + IntToString(iChoices), "PLAY_AN_IMPROVISATION");
+			SetLocalString(oNPC, "CHOICE" + IntToString(iChoices), "PLAY_AN_IMPROVISATION");
 		}
 		if (iChoices == 0)
 		{
 			SpeakString("Sorry, I don't have any songs available.");
 			return;	
 		}
-		string sChoice = PS_GetLocalString(oNPC, "CHOICE" + IntToString(Random(iChoices) + 1));
+		string sChoice = GetLocalString(oNPC, "CHOICE" + IntToString(Random(iChoices) + 1));
 		if (sChoice == "PLAY_A_BLUEPRINT_SCORE")
 			PlayBlueprintScore(oPC, oNPC, oInstrument, Random(iBlueprintScores) + 1);
 		else if (sChoice == "PLAY_A_SERVER_SONG")

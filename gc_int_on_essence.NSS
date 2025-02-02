@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // Created by Agony_Aunt/Loki for SCoD
 // Initially created to handle Grinnie and Shezz convo options by placing/checking vars on Essence
 // to stop infinite XP and other stuff from what should be once only options.
@@ -12,7 +10,7 @@ int StartingConditional(string sVariable)
 	object oPC = GetPCSpeaker();
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
 	
-	if (PS_GetLocalInt(oEssence, sVariable) == 0)
+	if (GetLocalInt(oEssence, sVariable) == 0)
 	{
 		return 0;
 	}

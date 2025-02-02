@@ -108,8 +108,8 @@ void main()
 	
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
-	int nPP = PS_GetLocalInt(oManifester, "PSI_PP");
-	int nPPt = PS_GetLocalInt(oTarget, "PSI_PP");
+	int nPP = GetLocalInt(oManifester, "PSI_PP");
+	int nPPt = GetLocalInt(oTarget, "PSI_PP");
 	effect eVis  = EffectVisualEffect(VFX_COM_HIT_NEGATIVE);
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,

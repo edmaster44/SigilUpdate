@@ -10,7 +10,7 @@
 
 void RunHalfUndeadScript(object oPC, int nSpellID)
 {
-	PS_SetLocalInt(oPC,"HUCASTING",1); DelayCommand(1.0f,PS_DeleteLocalInt(oPC,"HUCASTING"));
+	SetLocalInt(oPC,"HUCASTING",1); DelayCommand(1.0f,DeleteLocalInt(oPC,"HUCASTING"));
 	ExecuteScript(Get2DAString("spells", "ImpactScript", nSpellID),oPC);
 }
 

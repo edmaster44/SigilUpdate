@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // gc_is_legal v1.02
 
 //#include "ps_wandofsort_inc"
@@ -209,7 +207,7 @@ int StartingConditional()
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-	 	string sLegal = PS_GetLocalString(oItem,"LEGAL");
+	 	string sLegal = GetLocalString(oItem,"LEGAL");
 		if(sLegal == "TRUE")
 		{
 			//ScanMerkBelt(oPC);

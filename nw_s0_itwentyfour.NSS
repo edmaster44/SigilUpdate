@@ -114,7 +114,7 @@ void DoSeeTheUnseen(object oPC)
 
 void TwentyFour(object oPC)
 {
-	if (PS_GetLocalInt(oPC,"TwentyFour")==FALSE) return;
+	if (GetLocalInt(oPC,"TwentyFour")==FALSE) return;
 	
 	if ((GetHasSpell(SPELL_I_BEGUILING_INFLUENCE,oPC))&&(!GetHasSpellEffect(SPELL_I_BEGUILING_INFLUENCE,oPC)))
 		DoBeguilingInfluence(oPC);

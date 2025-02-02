@@ -34,7 +34,7 @@ if (nPsywar(oManifester)>12)
 if (nPsywar(oManifester)>15)
 {nNumberOfDice = 5;}
 
-if(PS_GetLocalInt(oManifester,"METAPSI_AUGMENT"))
+if(GetLocalInt(oManifester,"METAPSI_AUGMENT"))
 {
 nNumberOfDice = nNumberOfDice+1;	}
 

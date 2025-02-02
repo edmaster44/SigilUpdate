@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_text - DM Friendly Initiative - Code to run all voice throw / language code
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -21,8 +19,8 @@ void main (string sInput)
 	int nState;
 	object oPC = GetControlledCharacter(OBJECT_SELF);
 	object oTarget, oTool;
-	string sLang = PS_GetLocalString(OBJECT_SELF, DMFI_LANGUAGE_TOGGLE);
-	string sLangTest = PS_GetLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
+	string sLang = GetLocalString(OBJECT_SELF, DMFI_LANGUAGE_TOGGLE);
+	string sLangTest = GetLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
 	string sConvertUsing, sTest;
 	
 	//SendText(oPC, "DEBUG: sLang from ObjectSelf: " + sLang + " : " +GetName(OBJECT_SELF));	
@@ -49,9 +47,9 @@ void main (string sInput)
 				if (sTest!=DMFI_RUNSCRIPT_PREFIX)
 					return;
 			}
-			PS_SetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD", sInput);
-			PS_SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER", oPC);
-			PS_SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET", oTarget);
+			SetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD", sInput);
+			SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER", oPC);
+			SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET", oTarget);
 			ExecuteScript(sInput, OBJECT_SELF);
 		}
 		return;
@@ -62,9 +60,9 @@ void main (string sInput)
 		// outside standards are bit different for simplicity for
 		// the end user.
 		SetGUIObjectText(oPC, SCREEN_DMFI_TEXT, "INPUT_BOX", -1, "");
-		PS_SetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD", sInput);
-		PS_SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER", oPC);
-		PS_SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET", oTarget);
+		SetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD", sInput);
+		SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER", oPC);
+		SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET", oTarget);
 		nState = DMFI_RunCommandPlugins(OBJECT_SELF);
 		
 		if (!nState)
@@ -80,7 +78,7 @@ void main (string sInput)
 			DMFI_RunCommandCode(oTool, oPC, sInput);
 			
 		}	
-		PS_DeleteLocalInt(GetModule(), DMFI_STRING_OVERRIDE);
+		DeleteLocalInt(GetModule(), DMFI_STRING_OVERRIDE);
 		return;
 	}	
 
@@ -111,19 +109,19 @@ void main (string sInput)
 		if (FindSubString(sInput, DMFI_CHAR_EMOTE)!=-1)
 	    {
 	    	SetGUIObjectText(oPC, SCREEN_DMFI_TEXT, "INPUT_BOX", -1, "");
-			PS_SetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD", sInput);
-			PS_SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER", oPC);
-			PS_SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET", oTarget);
+			SetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD", sInput);
+			SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER", oPC);
+			SetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET", oTarget);
 			nState = DMFI_RunEmotePlugins(OBJECT_SELF);
 			
 			if (!nState)
 			{
 				DMFI_UITarget(oPC, oTool);
-				PS_SetLocalString(oPC, DMFI_HEARD_TEXT, sInput);
+				SetLocalString(oPC, DMFI_HEARD_TEXT, sInput);
 				DMFI_RunEmotes(oTool, oTarget, sInput);
 				
 			}
-			PS_DeleteLocalInt(GetModule(), DMFI_STRING_OVERRIDE);	
+			DeleteLocalInt(GetModule(), DMFI_STRING_OVERRIDE);	
 		}
 	}
 	else

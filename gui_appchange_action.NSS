@@ -69,7 +69,7 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 		return;
 	}
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 0)
+	if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 0)
 	{
 		effect eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
@@ -92,7 +92,7 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 		PS_ChangeSelf_HeadTint_Eyebrows(oPC, sEyebrowColor);
 		
 	}
-	else if (PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 1)
+	else if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 1)
 	{	
 		PS_ChangeSelf_FacialHairVariation_Barbershop(oPC, nFacialHairID);
 		PS_ChangeSelf_HairVariation_Barbershop(oPC, nHairID);
@@ -138,7 +138,7 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, SupernaturalEffect(eScale), OBJECT_SELF);
 	*/
 	SetScale(OBJECT_SELF, fScaleX, fScaleY, fScaleZ);
-	if (PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 2)
+	if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 2)
 	{
 		effect eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
@@ -170,7 +170,7 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 	
 		PS_CreatureCoreAppearanceToScriptVariables(oEssence, "AltForm", Appearance);
 		SendMessageToPC(oPC, "Alternate form appearance information saved.");
-		PS_SetLocalInt(oEssence, "AltFormSet", 1);
-		PS_SetLocalInt(oEssence, "TempChange", 1);
+		SetLocalInt(oEssence, "AltFormSet", 1);
+		SetLocalInt(oEssence, "TempChange", 1);
 	} 
 }

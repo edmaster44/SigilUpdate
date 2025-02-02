@@ -249,7 +249,7 @@ void HSS_DoCatch(object oPC, object oBait, object oRod, object oWay)
    int nBonus;
  
    //remove the cast ID
-   PS_DeleteLocalInt(oPC, "HSS_CAST_ID");
+   DeleteLocalInt(oPC, "HSS_CAST_ID");
 
    //bonus/penalty for spot quality   
    if (sSpotType == "G")
@@ -402,11 +402,11 @@ void HSS_DoCatch(object oPC, object oBait, object oRod, object oWay)
 	  if (Random(HSS_PRIZED_SPECIMEN_CHANCE) == 0 && 
 	     HSS_ALLOW_PRIZED_SPECIMENS == 1 && HSS_DO_XP_FOR_RARE_FISH)	 
 		 {
-		 	 int nCurrent = PS_GetLocalInt(oPC,"FISH_XP");
+		 	 int nCurrent = GetLocalInt(oPC,"FISH_XP");
 		 	nValue = nValue * HSS_PRIZED_SPECIMEN_MULTIPLIER;
 			if(nCurrent < 1251){
 	         	PS_GiveXPReward(oPC, nValue);
-				PS_SetLocalInt(oPC,"FISH_XP", nCurrent+nValue);
+				SetLocalInt(oPC,"FISH_XP", nCurrent+nValue);
 			}
 			else{
 				SendMessageToPC(oPC, HSS_FEEDBACK_COLOUR + "You have hit the XP cap per reset.  No xp granted");
@@ -418,10 +418,10 @@ void HSS_DoCatch(object oPC, object oBait, object oRod, object oWay)
 
       if (nRoll > 1 && HSS_DO_XP_FOR_RARE_FISH)
          {
-		 	int nCurrent = PS_GetLocalInt(oPC,"FISH_XP");
+		 	int nCurrent = GetLocalInt(oPC,"FISH_XP");
 			if(nCurrent < 1251){
 	         	PS_GiveXPReward(oPC, nValue);
-				PS_SetLocalInt(oPC,"FISH_XP", nCurrent+nValue);
+				SetLocalInt(oPC,"FISH_XP", nCurrent+nValue);
 			}
 			else{
 				SendMessageToPC(oPC, HSS_FEEDBACK_COLOUR + "You have hit the XP cap per reset.  No xp granted");
@@ -449,9 +449,9 @@ void HSS_DoCast(object oPC, object oRod)
    float fDist = HSS_GetDistanceBetweenNoZ(oPC, oWay);
    string sWay = GetTag(oWay);   
    string sFishWay = GetStringLeft(sWay, 8);
-   object oFisher = PS_GetLocalObject(oWay, "HSS_FISHERMAN");
-   int nMinCast = PS_GetLocalInt(oWay, "HSS_MINCAST");
-   int nRandCast = PS_GetLocalInt(oWay, "HSS_RANDCAST");
+   object oFisher = GetLocalObject(oWay, "HSS_FISHERMAN");
+   int nMinCast = GetLocalInt(oWay, "HSS_MINCAST");
+   int nRandCast = GetLocalInt(oWay, "HSS_RANDCAST");
     
    if ((sFishWay != "HSS_FISH") || fDist > 12.0)
       {
@@ -464,7 +464,7 @@ void HSS_DoCast(object oPC, object oRod)
       {
       if (HSS_GetDistanceBetweenNoZ(oFisher, oWay) > 1.25)
          {
-         PS_DeleteLocalObject(oWay, "HSS_FISHERMAN");
+         DeleteLocalObject(oWay, "HSS_FISHERMAN");
          }
          else
          {
@@ -484,7 +484,7 @@ void HSS_DoCast(object oPC, object oRod)
    AssignCommand(oPC, ActionMoveToObject(oWay, FALSE, 0.0));
    AssignCommand(oPC, ActionDoCommand(SetFacing(GetFacing(oWay))));
 
-   AssignCommand(oPC, ActionDoCommand(PS_SetLocalObject(oWay, "HSS_FISHERMAN", oPC)));   
+   AssignCommand(oPC, ActionDoCommand(SetLocalObject(oWay, "HSS_FISHERMAN", oPC)));   
   
    int nCastTime = HSS_MIN_CAST_TIME + (Random(HSS_RANDOM_CAST_TIME) + 1);
 
@@ -498,7 +498,7 @@ void HSS_DoCast(object oPC, object oRod)
    string sSender = ObjectToString(oWay);
    int nCastID = Random(65535) + Random(65535);
    
-   AssignCommand(oPC, ActionDoCommand(PS_SetLocalInt(oPC,
+   AssignCommand(oPC, ActionDoCommand(SetLocalInt(oPC,
                 "HSS_CAST_ID", nCastID)));   
    
    //cool new NWN2 projectile functions 
@@ -1075,7 +1075,7 @@ void HSS_DoFishingEffectIfFishing(object oPC, effect eSplash, location lAnim, st
 {
    object oWay = GetNearestObject(OBJECT_TYPE_WAYPOINT, oPC);
    float fDist = HSS_GetDistanceBetweenNoZ(oPC, oWay);
-   object oFisher = PS_GetLocalObject(oWay, "HSS_FISHERMAN");
+   object oFisher = GetLocalObject(oWay, "HSS_FISHERMAN");
 
    if (GetIsObjectValid(oFisher) && oFisher == oPC)
       {
@@ -1083,7 +1083,7 @@ void HSS_DoFishingEffectIfFishing(object oPC, effect eSplash, location lAnim, st
 	     {
 		 //as sure as we can be the PC should get this feedback		 
 		 if (ObjectToString(oWay) == sSender &&
-		    PS_GetLocalInt(oPC, "HSS_CAST_ID") == nCastID)
+		    GetLocalInt(oPC, "HSS_CAST_ID") == nCastID)
 		    {		 
             ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eSplash, lAnim);
 			}
@@ -1097,7 +1097,7 @@ void HSS_DoFishingFeedbackIfFishing(object oPC, string sMsg, string sSender, int
 {
    object oWay = GetNearestObject(OBJECT_TYPE_WAYPOINT, oPC);
    float fDist = HSS_GetDistanceBetweenNoZ(oPC, oWay);
-   object oFisher = PS_GetLocalObject(oWay, "HSS_FISHERMAN");
+   object oFisher = GetLocalObject(oWay, "HSS_FISHERMAN");
  
    if (GetIsObjectValid(oFisher) && oFisher == oPC)
       {
@@ -1105,7 +1105,7 @@ void HSS_DoFishingFeedbackIfFishing(object oPC, string sMsg, string sSender, int
 	     {
 		 //as sure as we can be the PC should get this feedback
 		 if (ObjectToString(oWay) == sSender &&
-		    PS_GetLocalInt(oPC, "HSS_CAST_ID") == nCastID)
+		    GetLocalInt(oPC, "HSS_CAST_ID") == nCastID)
 		    {
 			SendMessageToPC(oPC, HSS_FEEDBACK_COLOUR + sMsg);
 			}
@@ -1149,7 +1149,7 @@ float HSS_GetDistanceBetweenNoZ(object oObjectA, object oObjectB)
 
 int HSS_GetBitwiseFlag(int nFlag, object oTarget, string sVar)
 {
-   int nVar = PS_GetLocalInt(oTarget, sVar);
+   int nVar = GetLocalInt(oTarget, sVar);
 	
    if (nVar & nFlag)
       {

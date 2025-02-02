@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("HarmoniumEnterLock");
+ int iLock = GetGlobalInt("HarmoniumEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("HarmoniumEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("HarmoniumEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_peddler_harmonium") == OBJECT_INVALID)
   {
@@ -229,6 +227,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "harmonium_scholar", lSpawnpoint);    
   } 
   
-  PS_SetGlobalInt("HarmoniumEnterLock", 0);
+  SetGlobalInt("HarmoniumEnterLock", 0);
  }
 }

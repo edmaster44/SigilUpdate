@@ -46,8 +46,8 @@ string GetCrowdSpeakstring();
 
 void main() {
 
-	int nTimer = PS_GetLocalInt(OBJECT_SELF, "SceneTimer");
-	PS_SetLocalInt(OBJECT_SELF, "SceneTimer", nTimer+1);
+	int nTimer = GetLocalInt(OBJECT_SELF, "SceneTimer");
+	SetLocalInt(OBJECT_SELF, "SceneTimer", nTimer+1);
 	//SpeakString("Timer: "+IntToString(nTimer), TALKVOLUME_SHOUT);
 	
 	int nDeathType = GetExecutionType();
@@ -63,11 +63,11 @@ void main() {
 		
 		//Create Whisper
 		object oWhisper = CreateCreatureAtWaypoint("ps_npc_sigcommoner5", "wp_mk_snackvendor");
-		PS_SetLocalInt(oWhisper, "responses", 4);
-		PS_SetLocalString(oWhisper, "say1", "Meat pies! Can't view an execution without a hearty snack!");
-		PS_SetLocalString(oWhisper, "say2", "Limlim kabob? Fresh LimLim! Get them here!");
-		PS_SetLocalString(oWhisper, "say3", "Meat pies! Get your meat pies here!");
-		PS_SetLocalString(oWhisper, "say4", "Wash down that meat pie with a bit of Candle Brew. Special deal, today only!");
+		SetLocalInt(oWhisper, "responses", 4);
+		SetLocalString(oWhisper, "say1", "Meat pies! Can't view an execution without a hearty snack!");
+		SetLocalString(oWhisper, "say2", "Limlim kabob? Fresh LimLim! Get them here!");
+		SetLocalString(oWhisper, "say3", "Meat pies! Get your meat pies here!");
+		SetLocalString(oWhisper, "say4", "Wash down that meat pie with a bit of Candle Brew. Special deal, today only!");
 		
 		object oWP = GetWaypointByTag("wp_mk_snackcart");
 		object oCart = CreateObject(OBJECT_TYPE_PLACEABLE, "pl_mkfoodwagon", GetLocation(oWP));
@@ -89,7 +89,7 @@ void main() {
 		object oPrisoner; 
 		object oGuard1;
 		object oGuard2;
-		int nGender = PS_GetLocalInt(OBJECT_SELF, "VictimGender");
+		int nGender = GetLocalInt(OBJECT_SELF, "VictimGender");
 		
 		if (nDeathType == 1) {
 			oGuard1 = CreateCreatureAtWaypoint("ps_npc_ladymercykiller", "wp_mkexit_3");
@@ -104,9 +104,9 @@ void main() {
 			AssignCommand(oGuard2, ActionMoveToObject(GetWaypointByTag("wp_mkexecutioner_4")));
 			AssignCommand(oPrisoner, ActionMoveToObject(GetWaypointByTag("wp_mkvictim_2")));
 			
-			PS_SetLocalString(oGuard1, "DestinationWaypoint", "wp_mkexecutioner_3");
-			PS_SetLocalString(oGuard2, "DestinationWaypoint", "wp_mkexecutioner_4");
-			PS_SetLocalString(oPrisoner, "DestinationWaypoint", "wp_mkvictim_2");
+			SetLocalString(oGuard1, "DestinationWaypoint", "wp_mkexecutioner_3");
+			SetLocalString(oGuard2, "DestinationWaypoint", "wp_mkexecutioner_4");
+			SetLocalString(oPrisoner, "DestinationWaypoint", "wp_mkvictim_2");
 			
 		} else {
 			oGuard1 = CreateCreatureAtWaypoint("ps_npc_ladymercykiller", "wp_towerofwyrm_exit3");
@@ -121,31 +121,31 @@ void main() {
 			AssignCommand(oGuard2, ActionMoveToObject(GetWaypointByTag("wp_mkexecutioner_2")));
 			AssignCommand(oPrisoner, ActionMoveToObject(GetWaypointByTag("wp_mkvictim_1")));
 			
-			PS_SetLocalString(oGuard1, "DestinationWaypoint", "wp_mkexecutioner_1");
-			PS_SetLocalString(oGuard2, "DestinationWaypoint", "wp_mkexecutioner_2");
-			PS_SetLocalString(oPrisoner, "DestinationWaypoint", "wp_mkvictim_1");
+			SetLocalString(oGuard1, "DestinationWaypoint", "wp_mkexecutioner_1");
+			SetLocalString(oGuard2, "DestinationWaypoint", "wp_mkexecutioner_2");
+			SetLocalString(oPrisoner, "DestinationWaypoint", "wp_mkvictim_1");
 		}
 		
 		
 		//Dress the prisoner
 		object oScrubs = CreateItemOnObject("mkpinmategarb", oPrisoner);
 		AssignCommand(oPrisoner, ActionEquipItem(oScrubs, INVENTORY_SLOT_CHEST));
-		SetFirstName(oPrisoner, PS_GetLocalString(OBJECT_SELF, "VictimName_First"));
-		SetLastName(oPrisoner, PS_GetLocalString(OBJECT_SELF, "VictimName_Last"));
+		SetFirstName(oPrisoner, GetLocalString(OBJECT_SELF, "VictimName_First"));
+		SetLastName(oPrisoner, GetLocalString(OBJECT_SELF, "VictimName_Last"));
 		
 		//Save these characters
-		PS_SetLocalObject(OBJECT_SELF, "MK_Executioner", oGuard1);
-		PS_SetLocalObject(OBJECT_SELF, "MK_Announcer", oGuard2);
-		PS_SetLocalObject(OBJECT_SELF, "MK_Prisoner", oPrisoner);
+		SetLocalObject(OBJECT_SELF, "MK_Executioner", oGuard1);
+		SetLocalObject(OBJECT_SELF, "MK_Announcer", oGuard2);
+		SetLocalObject(OBJECT_SELF, "MK_Prisoner", oPrisoner);
 	
 	}
 	
 	//5 minutes in, announce crimes
 	else if (nTimer == 40) {
 		
-		object oAnnounce = PS_GetLocalObject(OBJECT_SELF, "MK_Announcer");
-		object oExecutioner = PS_GetLocalObject(OBJECT_SELF, "MK_Executioner");
-		object oPrisoner = PS_GetLocalObject(OBJECT_SELF, "MK_Prisoner");
+		object oAnnounce = GetLocalObject(OBJECT_SELF, "MK_Announcer");
+		object oExecutioner = GetLocalObject(OBJECT_SELF, "MK_Executioner");
+		object oPrisoner = GetLocalObject(OBJECT_SELF, "MK_Prisoner");
 		
 		//set up the crowd facing
 		vector vTarget;
@@ -154,14 +154,14 @@ void main() {
 		else
 			vTarget = GetPosition(GetWaypointByTag("wp_mkvictim_1"));
 			
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_1"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_2"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_3"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_4"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_5"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_6"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_7"), SetFacingPoint(vTarget));
-		AssignCommand(PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_8"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_1"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_2"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_3"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_4"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_5"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_6"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_7"), SetFacingPoint(vTarget));
+		AssignCommand(GetLocalObject(OBJECT_SELF, "wp_mkcrowd_8"), SetFacingPoint(vTarget));
 		AssignCommand(oExecutioner, SetFacingPoint(vTarget));
 		
 		string sAnnounce = GetName(oPrisoner)+" is hereby sentenced to ";
@@ -171,12 +171,12 @@ void main() {
 			sAnnounce += "death by beheading ";
 		else 
 			sAnnounce += "death by by the wyrm ";
-		sAnnounce += "for the crimes of "+PS_GetLocalString(OBJECT_SELF, "Victim_Crimes");
+		sAnnounce += "for the crimes of "+GetLocalString(OBJECT_SELF, "Victim_Crimes");
 		AssignCommand(oAnnounce, ActionSpeakString(sAnnounce));
 		
 		if (d100() < 33) {
 			DelayCommand(4.0f, AssignCommand(oPrisoner, ActionSpeakString("*slips a few coins to one of the guards*")));
-			PS_SetLocalInt(OBJECT_SELF, "GuardBribe", 1);
+			SetLocalInt(OBJECT_SELF, "GuardBribe", 1);
 		}
 		
 		DelayCommand(8.0f, AssignCommand(oAnnounce, ActionSpeakString(GetName(oPrisoner)+", do you have any last words?")));
@@ -187,8 +187,8 @@ void main() {
 	//minute 6, victim speach
 	else if (nTimer == 42) {
 	
-		object oPrisoner = PS_GetLocalObject(OBJECT_SELF, "MK_Prisoner");
-		string sWords = PS_GetLocalString(OBJECT_SELF, "Victim_LastWords");
+		object oPrisoner = GetLocalObject(OBJECT_SELF, "MK_Prisoner");
+		string sWords = GetLocalString(OBJECT_SELF, "Victim_LastWords");
 		AssignCommand(oPrisoner, ActionSpeakString(sWords));
 		DelayCommand(3.0f, CrowdMurmurs());
 		DelayCommand(6.0f, CrowdMurmurs());
@@ -198,20 +198,20 @@ void main() {
 	//execution
 	else if (nTimer == 43) {
 	
-		object oAnnounce = PS_GetLocalObject(OBJECT_SELF, "MK_Announcer");
-		object oExecutioner = PS_GetLocalObject(OBJECT_SELF, "MK_Executioner");
-		object oPrisoner = PS_GetLocalObject(OBJECT_SELF, "MK_Prisoner");
+		object oAnnounce = GetLocalObject(OBJECT_SELF, "MK_Announcer");
+		object oExecutioner = GetLocalObject(OBJECT_SELF, "MK_Executioner");
+		object oPrisoner = GetLocalObject(OBJECT_SELF, "MK_Prisoner");
 		
 		if (nDeathType == 1) {
 		
-			PS_DeleteLocalString(oAnnounce, "DestinationWaypoint");
+			DeleteLocalString(oAnnounce, "DestinationWaypoint");
 			AssignCommand(oAnnounce, ActionMoveToObject(oPrisoner));
 			DelayCommand(4.0f, AssignCommand(oAnnounce, ActionSpeakString("*places the noose around the prisoner's neck*")));
-			DelayCommand(5.0f, PS_SetLocalString(oAnnounce, "DestinationWaypoint", "wp_mkexecutioner_4"));
+			DelayCommand(5.0f, SetLocalString(oAnnounce, "DestinationWaypoint", "wp_mkexecutioner_4"));
 			AssignCommand(oExecutioner, SetFacing(90.0f));
 			
 			if (d100() < 50) {
-				string sWords = PS_GetLocalString(OBJECT_SELF, "Victim_LastWords_2");
+				string sWords = GetLocalString(OBJECT_SELF, "Victim_LastWords_2");
 				DelayCommand(9.0f, AssignCommand(oPrisoner, ActionSpeakString(sWords)));
 			}
 			
@@ -221,10 +221,10 @@ void main() {
 			DelayCommand(10.0f, AssignCommand(oExecutioner, ActionSpeakString("*pulls the lever, and the trap door beneath the prisoner falls open*")));
 			
 			
-			if (PS_GetLocalInt(OBJECT_SELF, "GuardBribe") > 0)
+			if (GetLocalInt(OBJECT_SELF, "GuardBribe") > 0)
 				DelayCommand(12.0f, AssignCommand(oPrisoner, ActionSpeakString("*the rope snaps the prisoner's neck; death is likely near instantaneous*")));
 			else {
-				int nGender = PS_GetLocalInt(OBJECT_SELF, "VictimGender");
+				int nGender = GetLocalInt(OBJECT_SELF, "VictimGender");
 				string sPronoun = "his";
 				if (nGender == GENDER_FEMALE)
 					sPronoun = "her";
@@ -274,7 +274,7 @@ void main() {
 			}
 			
 			if (d100() < 50) {
-				string sWords = PS_GetLocalString(OBJECT_SELF, "Victim_LastWords_2");
+				string sWords = GetLocalString(OBJECT_SELF, "Victim_LastWords_2");
 				DelayCommand(9.0f, AssignCommand(oPrisoner, ActionSpeakString(sWords)));
 			}
 			
@@ -282,7 +282,7 @@ void main() {
 			DelayCommand(12.0f, PlayNWN2CustomAnimation(oExecutioner, "c2h_1attack03", FALSE, 1.0f));
 			DelayCommand(12.0f, PlayCrowdCheers());
 			
-			if (PS_GetLocalInt(OBJECT_SELF, "GuardBribe") > 0)
+			if (GetLocalInt(OBJECT_SELF, "GuardBribe") > 0)
 				DelayCommand(12.0f, AssignCommand(oExecutioner, ActionSpeakString("*lops off the prisoner's head in one clean strike*")));
 			else {
 				DelayCommand(12.0f, AssignCommand(oExecutioner, ActionSpeakString(sThing)));
@@ -292,9 +292,9 @@ void main() {
 			DelayCommand(12.0f, PlayNWN2CustomAnimation(oPrisoner, "kneeldeath", 0, 1.0f));
 			DestroyObject(oPrisoner, 13.0f);
 			
-			string sFirstName = PS_GetLocalString(OBJECT_SELF, "VictimName_First");
-			string sLastName = PS_GetLocalString(OBJECT_SELF, "VictimName_Last");
-			string sCrimes = PS_GetLocalString(OBJECT_SELF, "Victim_Crimes");
+			string sFirstName = GetLocalString(OBJECT_SELF, "VictimName_First");
+			string sLastName = GetLocalString(OBJECT_SELF, "VictimName_Last");
+			string sCrimes = GetLocalString(OBJECT_SELF, "Victim_Crimes");
 			
 			object oWP = GetWaypointByTag("wp_mkbloodstain");
 			object oBlood = CreateObject(OBJECT_TYPE_PLACEABLE, "pl_mkbloodstain", GetLocation(oWP));
@@ -314,12 +314,12 @@ void main() {
 	else if (nTimer == 47) {
 		
 		if (nDeathType == 1) {
-			object oPrisoner = PS_GetLocalObject(OBJECT_SELF, "MK_Prisoner");
+			object oPrisoner = GetLocalObject(OBJECT_SELF, "MK_Prisoner");
 			DestroyObject(oPrisoner, 1.0f);
 			
-			string sFirstName = PS_GetLocalString(OBJECT_SELF, "VictimName_First");
-			string sLastName = PS_GetLocalString(OBJECT_SELF, "VictimName_Last");
-			string sCrimes = PS_GetLocalString(OBJECT_SELF, "Victim_Crimes");
+			string sFirstName = GetLocalString(OBJECT_SELF, "VictimName_First");
+			string sLastName = GetLocalString(OBJECT_SELF, "VictimName_Last");
+			string sCrimes = GetLocalString(OBJECT_SELF, "Victim_Crimes");
 		
 			object oWP = GetWaypointByTag("wp_mk_gallowsbody");
 			object oGallows = CreateObject(OBJECT_TYPE_PLACEABLE, "pl_mk_hangingbody", GetLocation(oWP));
@@ -332,8 +332,8 @@ void main() {
 	//5 minutes in, MK disperse everyone
 	else if (nTimer == 50) {
 	
-		object oAnnounce = PS_GetLocalObject(OBJECT_SELF, "MK_Announcer");
-		object oExecutioner = PS_GetLocalObject(OBJECT_SELF, "MK_Executioner");
+		object oAnnounce = GetLocalObject(OBJECT_SELF, "MK_Announcer");
+		object oExecutioner = GetLocalObject(OBJECT_SELF, "MK_Executioner");
 		
 		string sComment = "Alright, show's over. Off with you lot.";
 		switch(Random(3)) {
@@ -362,18 +362,18 @@ void main() {
 	//MK Leave
 	else if (nTimer == 55) {
 	
-		object oAnnounce = PS_GetLocalObject(OBJECT_SELF, "MK_Announcer");
-		object oExecutioner = PS_GetLocalObject(OBJECT_SELF, "MK_Executioner");
+		object oAnnounce = GetLocalObject(OBJECT_SELF, "MK_Announcer");
+		object oExecutioner = GetLocalObject(OBJECT_SELF, "MK_Executioner");
 		
 		if (nDeathType == 1) {
-			DelayCommand(4.0f, PS_SetLocalString(oExecutioner, "DestinationWaypoint", "wp_mkexit_2"));
-			DelayCommand(4.0f, PS_SetLocalString(oAnnounce, "DestinationWaypoint", "wp_mkexit_3"));
+			DelayCommand(4.0f, SetLocalString(oExecutioner, "DestinationWaypoint", "wp_mkexit_2"));
+			DelayCommand(4.0f, SetLocalString(oAnnounce, "DestinationWaypoint", "wp_mkexit_3"));
 			
 			DestroyObject(oExecutioner, 8.0f);
 			DestroyObject(oAnnounce, 8.0f);
 		} else {
-			DelayCommand(4.0f, PS_SetLocalString(oExecutioner, "DestinationWaypoint", "wp_towerofwyrm_exit1"));
-			DelayCommand(4.0f, PS_SetLocalString(oAnnounce, "DestinationWaypoint", "wp_towerofwyrm_exit2"));
+			DelayCommand(4.0f, SetLocalString(oExecutioner, "DestinationWaypoint", "wp_towerofwyrm_exit1"));
+			DelayCommand(4.0f, SetLocalString(oAnnounce, "DestinationWaypoint", "wp_towerofwyrm_exit2"));
 			
 			DestroyObject(oExecutioner, 8.0f);
 			DestroyObject(oAnnounce, 8.0f);
@@ -412,10 +412,10 @@ void CryerYell() {
 	if (!GetIsObjectValid(oCryer))
 		return;
 		
-	string sDeath = PS_GetLocalString(OBJECT_SELF, "DeathName");
-	string sFirstName = PS_GetLocalString(OBJECT_SELF, "VictimName_First");
-	string sLastName = PS_GetLocalString(OBJECT_SELF, "VictimName_Last");
-	string sCrimes = PS_GetLocalString(OBJECT_SELF, "Victim_Crimes");
+	string sDeath = GetLocalString(OBJECT_SELF, "DeathName");
+	string sFirstName = GetLocalString(OBJECT_SELF, "VictimName_First");
+	string sLastName = GetLocalString(OBJECT_SELF, "VictimName_Last");
+	string sCrimes = GetLocalString(OBJECT_SELF, "Victim_Crimes");
 	int nDeathType = GetExecutionType();
 		
 	switch(Random(8)) {
@@ -453,7 +453,7 @@ void CrowdAnimations() {
 	}
 	
 	object oWP = GetWaypointByTag(sObj);
-	object oCreature = PS_GetLocalObject(OBJECT_SELF, sObj);
+	object oCreature = GetLocalObject(OBJECT_SELF, sObj);
 	if (!GetIsObjectValid(oWP) || !GetIsObjectValid(oCreature)) 
 		return;
 
@@ -469,8 +469,8 @@ void CrowdAnimations() {
 		case 4: sAnim = "drinkbeeridle"; break;
 	}	
 	
-	PS_DeleteLocalString(oCreature, "DestinationWaypoint");
-	PS_SetLocalString(oCreature, "ANIMATION", sAnim);
+	DeleteLocalString(oCreature, "DestinationWaypoint");
+	SetLocalString(oCreature, "ANIMATION", sAnim);
 	PlayCustomAnimation(oCreature, sAnim, TRUE, 1.0f);
 	
 	if (sAnim == "drinkbeeridle") {
@@ -484,7 +484,7 @@ void CrowdAnimations() {
 
 string GetCrowdSpeakstring() {
 	string sComment = "";
-	if (PS_GetLocalInt(OBJECT_SELF, "VictimGender") == GENDER_MALE) {
+	if (GetLocalInt(OBJECT_SELF, "VictimGender") == GENDER_MALE) {
 		switch(Random(14)) {
 			case 0: sComment = "I heard he deserves this and more."; break;
 			case 1: sComment = "*excited murmurring*"; break;
@@ -537,7 +537,7 @@ void CrowdMurmurs() {
 		case 7: sObj = "wp_mkcrowd_8"; break;
 	}
 	
-	object oMember = PS_GetLocalObject(OBJECT_SELF, sObj);
+	object oMember = GetLocalObject(OBJECT_SELF, sObj);
 	if (!GetIsObjectValid(oMember)) 
 		return;
 		
@@ -556,7 +556,7 @@ void CrowdMurmurs() {
 		case 7: sObj = "wp_mkcrowd_8"; break;
 	}
 	
-	oMember = PS_GetLocalObject(OBJECT_SELF, sObj);
+	oMember = GetLocalObject(OBJECT_SELF, sObj);
 	if (!GetIsObjectValid(oMember)) 
 		return;
 		
@@ -576,13 +576,13 @@ void CrowdMurmurs() {
 //chose between execution scenes
 int GetExecutionType() {
 
-	int nType = PS_GetLocalInt(OBJECT_SELF, "ExecutionType");
+	int nType = GetLocalInt(OBJECT_SELF, "ExecutionType");
 	if (nType <= 0) {
 		if (d100() <= 60) 
 			nType = 1;
 		else
 			nType = 2;
-		PS_SetLocalInt(OBJECT_SELF, "ExecutionType", nType);
+		SetLocalInt(OBJECT_SELF, "ExecutionType", nType);
 	}
 	
 	return nType;
@@ -602,12 +602,12 @@ void DetailVictim() {
 
 	struct character char = DetailCharacter(nGender);
 	
-	PS_SetLocalInt(OBJECT_SELF, "VictimGender", char.gender);
-	PS_SetLocalString(OBJECT_SELF, "VictimName_First", char.firstname);
-	PS_SetLocalString(OBJECT_SELF, "VictimName_Last", char.lastname);
+	SetLocalInt(OBJECT_SELF, "VictimGender", char.gender);
+	SetLocalString(OBJECT_SELF, "VictimName_First", char.firstname);
+	SetLocalString(OBJECT_SELF, "VictimName_Last", char.lastname);
 	
-	PS_SetLocalString(OBJECT_SELF, "Victim_LastWords", RandomString_LastWordsGenerator(char));
-	PS_SetLocalString(OBJECT_SELF, "Victim_LastWords_2", RandomString_LastWordsGenerator(char));
+	SetLocalString(OBJECT_SELF, "Victim_LastWords", RandomString_LastWordsGenerator(char));
+	SetLocalString(OBJECT_SELF, "Victim_LastWords_2", RandomString_LastWordsGenerator(char));
 	
 	string crime1 = RandomString_GenerateCrime();
 	string crime2 = RandomString_GenerateCrime();
@@ -624,7 +624,7 @@ void DetailVictim() {
 		sCrimes = crime1+", "+crime2+", and "+crime3;
 	}
 		
-	PS_SetLocalString(OBJECT_SELF, "Victim_Crimes", sCrimes);
+	SetLocalString(OBJECT_SELF, "Victim_Crimes", sCrimes);
 	//SpeakString("The victims crimes are "+sCrimes, TALKVOLUME_SHOUT);
 	
 	string sTitle = "";
@@ -635,7 +635,7 @@ void DetailVictim() {
 		case 3: sTitle = "The Deep Dark on "+char.firstname+"!"; break;
 		case 4: sTitle = char.firstname+": Facing "+char.possessivePronoun+" fate!"; break;
 	}
-	PS_SetLocalString(OBJECT_SELF, "Victim_Pamphlet_Title", sTitle);
+	SetLocalString(OBJECT_SELF, "Victim_Pamphlet_Title", sTitle);
 	
 	string sPamphlet = "";
 	
@@ -658,7 +658,7 @@ void DetailVictim() {
 	} else if (nType == 3) {
 		sDeathType = "Dying by the Wyrm";
 	}
-	PS_SetLocalString(OBJECT_SELF, "DeathName", sDeathType);
+	SetLocalString(OBJECT_SELF, "DeathName", sDeathType);
 	
 	//intro + crime
 	switch(Random(3)) {
@@ -711,7 +711,7 @@ void DetailVictim() {
 	
 	sPamphlet += "\n\nThis Dark is sponsored by "+RandomString_RandomBusinessGenerator()+".";
 	
-	PS_SetLocalString(OBJECT_SELF, "Victim_Pamphlet", sPamphlet);
+	SetLocalString(OBJECT_SELF, "Victim_Pamphlet", sPamphlet);
 	
 }
 
@@ -754,14 +754,14 @@ void CreateCrowdMember(string sWP) {
 	object oCreature = CreateCreatureInVicinity(sBlue, sWP);
 	SetFirstName(oCreature, CreateCommonerName());
 	SetEventHandler(oCreature, CREATURE_SCRIPT_ON_DIALOGUE, "ps_convo_multiuse");
-	PS_SetLocalInt(oCreature, "responses", 3);
-	PS_SetLocalString(oCreature, "say1", GetCrowdSpeakstring());
-	PS_SetLocalString(oCreature, "say2", GetCrowdSpeakstring());
-	PS_SetLocalString(oCreature, "say3", GetCrowdSpeakstring());
+	SetLocalInt(oCreature, "responses", 3);
+	SetLocalString(oCreature, "say1", GetCrowdSpeakstring());
+	SetLocalString(oCreature, "say2", GetCrowdSpeakstring());
+	SetLocalString(oCreature, "say3", GetCrowdSpeakstring());
 	
 	AssignCommand(oCreature, ActionMoveToLocation(GetLocation(oWP)));
 	
-	PS_SetLocalObject(OBJECT_SELF, sWP, oCreature);
+	SetLocalObject(OBJECT_SELF, sWP, oCreature);
 }
 
 void CreateCrowd() {
@@ -788,14 +788,14 @@ void CreateCrowd() {
 
 void DisperseCrowd() {
 
-	object oCom1 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_1");
-	object oCom2 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_2");
-	object oCom3 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_3");
-	object oCom4 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_4");
-	object oCom5 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_5");
-	object oCom6 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_6");
-	object oCom7 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_7");
-	object oCom8 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_8");
+	object oCom1 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_1");
+	object oCom2 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_2");
+	object oCom3 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_3");
+	object oCom4 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_4");
+	object oCom5 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_5");
+	object oCom6 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_6");
+	object oCom7 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_7");
+	object oCom8 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_8");
 	
 	string sEntrance = "";
 	switch(Random(3)) {
@@ -805,24 +805,24 @@ void DisperseCrowd() {
 		default: sEntrance = "wp_mkcrowd_entrance_1"; break;
 	}
 	
-	PS_DeleteLocalString(oCom1, "ANIMATION");
-	PS_DeleteLocalString(oCom2, "ANIMATION");
-	PS_DeleteLocalString(oCom3, "ANIMATION");
-	PS_DeleteLocalString(oCom4, "ANIMATION");
-	PS_DeleteLocalString(oCom5, "ANIMATION");
-	PS_DeleteLocalString(oCom6, "ANIMATION");
-	PS_DeleteLocalString(oCom7, "ANIMATION");
-	PS_DeleteLocalString(oCom8, "ANIMATION");
+	DeleteLocalString(oCom1, "ANIMATION");
+	DeleteLocalString(oCom2, "ANIMATION");
+	DeleteLocalString(oCom3, "ANIMATION");
+	DeleteLocalString(oCom4, "ANIMATION");
+	DeleteLocalString(oCom5, "ANIMATION");
+	DeleteLocalString(oCom6, "ANIMATION");
+	DeleteLocalString(oCom7, "ANIMATION");
+	DeleteLocalString(oCom8, "ANIMATION");
 	
 	object oWP = GetWaypointByTag(sEntrance);
 	
-	DelayCommand(2.0f, PS_SetLocalString(oCom1, "DestinationWaypoint", sEntrance));
+	DelayCommand(2.0f, SetLocalString(oCom1, "DestinationWaypoint", sEntrance));
 	DelayCommand(2.0f, AssignCommand(oCom1, ActionMoveToObject(oWP)));
 	
-	DelayCommand(5.0f, PS_SetLocalString(oCom3, "DestinationWaypoint", sEntrance));
+	DelayCommand(5.0f, SetLocalString(oCom3, "DestinationWaypoint", sEntrance));
 	DelayCommand(5.0f, AssignCommand(oCom3, ActionMoveToObject(oWP)));
 	
-	DelayCommand(6.0f, PS_SetLocalString(oCom5, "DestinationWaypoint", sEntrance));
+	DelayCommand(6.0f, SetLocalString(oCom5, "DestinationWaypoint", sEntrance));
 	DelayCommand(6.0f, AssignCommand(oCom5, ActionMoveToObject(oWP)));
 	
 	switch(Random(3)) {
@@ -834,19 +834,19 @@ void DisperseCrowd() {
 	
 	oWP = GetWaypointByTag(sEntrance);
 	
-	DelayCommand(8.0f, PS_SetLocalString(oCom2, "DestinationWaypoint", sEntrance));
+	DelayCommand(8.0f, SetLocalString(oCom2, "DestinationWaypoint", sEntrance));
 	DelayCommand(8.0f, AssignCommand(oCom2, ActionMoveToObject(oWP)));
 	
-	DelayCommand(10.0f, PS_SetLocalString(oCom4, "DestinationWaypoint", sEntrance));
+	DelayCommand(10.0f, SetLocalString(oCom4, "DestinationWaypoint", sEntrance));
 	DelayCommand(10.0f, AssignCommand(oCom4, ActionMoveToObject(oWP)));
 	
-	DelayCommand(10.0f, PS_SetLocalString(oCom6, "DestinationWaypoint", sEntrance));
+	DelayCommand(10.0f, SetLocalString(oCom6, "DestinationWaypoint", sEntrance));
 	DelayCommand(10.0f, AssignCommand(oCom6, ActionMoveToObject(oWP)));
 	
-	DelayCommand(10.0f, PS_SetLocalString(oCom7, "DestinationWaypoint", sEntrance));
+	DelayCommand(10.0f, SetLocalString(oCom7, "DestinationWaypoint", sEntrance));
 	DelayCommand(10.0f, AssignCommand(oCom7, ActionMoveToObject(oWP)));
 	
-	DelayCommand(10.0f, PS_SetLocalString(oCom8, "DestinationWaypoint", sEntrance));
+	DelayCommand(10.0f, SetLocalString(oCom8, "DestinationWaypoint", sEntrance));
 	DelayCommand(10.0f, AssignCommand(oCom8, ActionMoveToObject(oWP)));
 	
 
@@ -894,7 +894,7 @@ void CleanUp() {
 //for cleanup later; returns object invalid if WP isn't valid
 object CreateCreatureAtWaypoint(string sBlueprint, string sWP) {
 
-	int nNumber = PS_GetLocalInt(OBJECT_SELF, "NumberOfNPCs");
+	int nNumber = GetLocalInt(OBJECT_SELF, "NumberOfNPCs");
 
 	object oWP = GetWaypointByTag(sWP);
 	if (!GetIsObjectValid(oWP))
@@ -903,8 +903,8 @@ object CreateCreatureAtWaypoint(string sBlueprint, string sWP) {
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sBlueprint, GetLocation(oWP));
 	
 	//save this creature for later cleanup
-	PS_SetLocalObject(OBJECT_SELF, "Creature_"+IntToString(nNumber), oCreature);
-	PS_SetLocalInt(OBJECT_SELF, "NumberOfNPCs", nNumber+1);
+	SetLocalObject(OBJECT_SELF, "Creature_"+IntToString(nNumber), oCreature);
+	SetLocalInt(OBJECT_SELF, "NumberOfNPCs", nNumber+1);
 	
 	return oCreature;
 }
@@ -913,7 +913,7 @@ object CreateCreatureAtWaypoint(string sBlueprint, string sWP) {
 //for cleanup later; returns object invalid if WP isn't valid
 object CreateCreatureInVicinity(string sBlueprint, string sWP) {
 
-	int nNumber = PS_GetLocalInt(OBJECT_SELF, "NumberOfNPCs");
+	int nNumber = GetLocalInt(OBJECT_SELF, "NumberOfNPCs");
 	
 	//SpeakString("creating creature "+sBlueprint+" at "+sWP, TALKVOLUME_SHOUT);
 
@@ -938,11 +938,11 @@ object CreateCreatureInVicinity(string sBlueprint, string sWP) {
 	//SpeakString("Creature created: "+GetName(oCreature), TALKVOLUME_SHOUT);
 	
 	//save this creature for later cleanup
-	PS_SetLocalObject(OBJECT_SELF, "Creature_"+IntToString(nNumber), oCreature);
-	PS_SetLocalInt(OBJECT_SELF, "NumberOfNPCs", nNumber+1);
+	SetLocalObject(OBJECT_SELF, "Creature_"+IntToString(nNumber), oCreature);
+	SetLocalInt(OBJECT_SELF, "NumberOfNPCs", nNumber+1);
 	
 	AssignCommand(oCreature, ActionMoveToLocation(GetLocation(oWP)));
-	PS_SetLocalString(oCreature, "DestinationWaypoint", sWP);
+	SetLocalString(oCreature, "DestinationWaypoint", sWP);
 	
 	return oCreature;
 }
@@ -971,14 +971,14 @@ void PlayNWN2CustomAnimation(object oCreature, string sAnim, int nLoop, float fS
 
 void PlayCrowdCheers() {
 
-	object oCom1 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_1");
-	object oCom2 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_2");
-	object oCom3 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_3");
-	object oCom4 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_4");
-	object oCom5 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_5");
-	object oCom6 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_6");
-	object oCom7 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_7");
-	object oCom8 = PS_GetLocalObject(OBJECT_SELF, "wp_mkcrowd_8");
+	object oCom1 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_1");
+	object oCom2 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_2");
+	object oCom3 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_3");
+	object oCom4 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_4");
+	object oCom5 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_5");
+	object oCom6 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_6");
+	object oCom7 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_7");
+	object oCom8 = GetLocalObject(OBJECT_SELF, "wp_mkcrowd_8");
 	
 	int nAnim = ANIMATION_FIREFORGET_VICTORY1;
 	switch(Random(3)) {

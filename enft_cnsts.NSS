@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 float freezeTime = TurnsToSeconds(1);  // One game hour
 float heatTime = 60.0f;
 float magmaTime = 30.0f;
@@ -50,12 +48,12 @@ int TimeStampT()
 //Sanity check to make sure the script doesn't run too many times on the same PC
 int CanRunEnvironmentLoop(string sTime, float timeDelay) {
 	
-	int lastRun = PS_GetLocalInt(OBJECT_SELF, sTime);
+	int lastRun = GetLocalInt(OBJECT_SELF, sTime);
 	float diff = IntToFloat(abs(TimeStampT()-lastRun));
 	if (diff < timeDelay)
 		return FALSE;
 	else
-		PS_SetLocalInt(OBJECT_SELF, sTime, TimeStampT());
+		SetLocalInt(OBJECT_SELF, sTime, TimeStampT());
 		
 	return TRUE;
 }

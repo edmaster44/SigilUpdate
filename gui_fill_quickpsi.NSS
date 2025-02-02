@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 int nColoumns1 = 1;
 int nColoumns2 = 1;
 int nColoumns3 = 1;
@@ -67,9 +65,9 @@ void ClearSpells(int nSpellLvl)
 
 void main()
 {
-if (PS_GetLocalInt(OBJECT_SELF, "PsionQuickCastUpdated") == 1) return;
+if (GetLocalInt(OBJECT_SELF, "PsionQuickCastUpdated") == 1) return;
 
-//SendMessageToPC(OBJECT_SELF, "Updating... "+IntToString((PS_GetLocalInt(OBJECT_SELF, "PsionQuickCastUpdated"))));
+//SendMessageToPC(OBJECT_SELF, "Updating... "+IntToString((GetLocalInt(OBJECT_SELF, "PsionQuickCastUpdated"))));
 int n;
 nColoumns1 = 1;
 nColoumns2 = 1;

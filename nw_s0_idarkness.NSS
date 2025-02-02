@@ -62,7 +62,7 @@ void main() {
 	//Sanity checker
 	CheckNumberOfBeasts(oCaster);
 
-	int nNumberCalled = PS_GetLocalInt(oCaster, "WARLOCK_ANIMALS_CALLED");
+	int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_ANIMALS_CALLED");
 	
 	if (nNumberCalled > 0) {
 		PullBeastsToMe(oCaster);
@@ -88,9 +88,9 @@ void main() {
 void PullBeastsToMe(object oPC) {
 
 	int n;
-	int nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = PS_GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
 			//SendMessageToPC(oPC, "Snagging beast "+GetFirstName(oSummon));
 		    AssignCommand(oSummon, ClearAllActions());
@@ -102,28 +102,28 @@ void PullBeastsToMe(object oPC) {
 
 void CheckNumberOfBeasts(object oPC) {
 	
-	int nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
 	int currentNumber = 0;
 
 	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = PS_GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
 			currentNumber++;
 		}
 	}
 
-	PS_SetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED", currentNumber);
+	SetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED", currentNumber);
 
 	int newCount = 0;
 	if (currentNumber != nNumberCalled) {
 		for(n = 0; n <= nNumberCalled; n++) {
-			object oSummon = PS_GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+			object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 			if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
-				PS_SetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(newCount), oSummon);
+				SetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(newCount), oSummon);
 				newCount++;
 			} else {
-				PS_DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+				DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 			}
 		}
 	}
@@ -144,14 +144,14 @@ void SpawnInSummon(object oPC, string sResRef) {
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVFX, lTarget);
 	
 	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, lTarget);
-	PS_SetLocalObject(oCreature, abilityCaster, oPC);
-	PS_SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
-	PS_SetLocalInt(oCreature, "IS_SUMMONED", 1);
+	SetLocalObject(oCreature, abilityCaster, oPC);
+	SetLocalObject(oCreature, "FOLLOW_MASTER", oPC);
+	SetLocalInt(oCreature, "IS_SUMMONED", 1);
 	SetSummonAppearance(oPC, oCreature);
 
-	int nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
-	PS_SetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(nNumberCalled), oCreature);
-	PS_SetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED", nNumberCalled+1);
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	SetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(nNumberCalled), oCreature);
+	SetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED", nNumberCalled+1);
 }
 
 void SetSummonAppearance(object oPC, object oSummon) {

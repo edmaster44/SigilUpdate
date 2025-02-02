@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 #include "nw_i0_plot"
@@ -32,7 +30,7 @@ void GenerateTreasure(object oPC) {
 	
 		SendMessageToPC(oPC, "You find a piece of machinery which has been altered by some sort of corruption.");
 		CreateItemOnObject("ps_questobject_mechanus", oPC);
-		int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + "ps_quest_brokengears");
+		int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + "ps_quest_brokengears");
 		if (iQuestEntry >= 1) {
 			AddJournalQuestEntry("ps_quest_brokengears", 2, oPC, 0, 0, 0);
 		}
@@ -83,14 +81,14 @@ void main (int nAction, int nDC) {
 	object oPC = GetPCSpeaker();
 	string sTag = GetTag(OBJECT_SELF);
 	if (nAction == 1) {
-		PS_SetLocalInt(oPC, sTag+"_broken", 1);
+		SetLocalInt(oPC, sTag+"_broken", 1);
 	} else if (nAction == 2) {
-		PS_SetLocalInt(oPC, sTag+"_fixed", 1);
+		SetLocalInt(oPC, sTag+"_fixed", 1);
 		
 		if (d100() <= 15) {
 			SendMessageToPC(oPC, "You find a piece of machinery which has been altered by some sort of corruption.");
 			CreateItemOnObject("ps_questobject_mechanus", oPC);
-			int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + "ps_quest_brokengears");
+			int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + "ps_quest_brokengears");
 			if (iQuestEntry >= 1) {
 				AddJournalQuestEntry("ps_quest_brokengears", 2, oPC, 0, 0, 0);
 			}
@@ -104,11 +102,11 @@ void main (int nAction, int nDC) {
 		} else {
 			SendMessageToPC(oPC, "You are not able to scavenge anything interesting.");
 		}
-		PS_SetLocalInt(oPC, sTag+"_broken", 1);
+		SetLocalInt(oPC, sTag+"_broken", 1);
 	} else if (nAction == 4) {
 	
 		GenerateTreasure(oPC);
-		PS_SetLocalInt(oPC, sTag+"_broken", 1);
+		SetLocalInt(oPC, sTag+"_broken", 1);
 		
 	} else if (nAction == 5) {
 	

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Acid Fog: On Enter
 //:: NW_S0_AcidFogA.nss
@@ -32,7 +30,7 @@ void main()
     float fDelay = GetRandomDelay(1.0, 2.2);
 	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, GetAreaOfEffectCreator());
 	int nDC = GetManifesterDC(GetAreaOfEffectCreator());
-    if (PS_GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_AUGMENT") == 1)
+    if (GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_AUGMENT") == 1)
     {
         nDC = nDC + 2;
     }
@@ -47,11 +45,11 @@ void main()
             //Roll Damage
             //Enter Metamagic conditions
             nDamage = d6(4);
-            if (PS_GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_MAXIMIZE") == 1)
+            if (GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_MAXIMIZE") == 1)
             {
                 nDamage = 24;//Damage is at max
             }
-            if (PS_GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_EMPOWER") == 1)
+            if (GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_EMPOWER") == 1)
             {
                 nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
             }

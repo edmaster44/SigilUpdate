@@ -1,11 +1,9 @@
-#include "ff_safevar"
-
 void main ()
 {
 	object oObject = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, GetLocation(OBJECT_SELF));
 	while (GetIsObjectValid(oObject))
 	{
-		if (GetObjectType(oObject) == OBJECT_TYPE_CREATURE && PS_GetLocalInt(oObject, "LIMBO_IMMUNE") == 0)
+		if (GetObjectType(oObject) == OBJECT_TYPE_CREATURE && GetLocalInt(oObject, "LIMBO_IMMUNE") == 0)
 		{
 			int nDam = d6(6);
 			effect damage = EffectDamage(nDam, DAMAGE_TYPE_FIRE, DAMAGE_POWER_ENERGY);

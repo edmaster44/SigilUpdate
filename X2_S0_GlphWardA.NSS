@@ -108,7 +108,7 @@ void main()
 {
     object oTarget  = GetEnteringObject();
     object oPLC     = GetAreaOfEffectCreator(OBJECT_SELF);
-    object oCreator = PS_GetLocalObject(oPLC,"X2_PLC_GLYPH_CASTER") ;
+    object oCreator = GetLocalObject(oPLC,"X2_PLC_GLYPH_CASTER") ;
 
     if ( GetLocalInt (oPLC,"X2_PLC_GLYPH_PLAYERCREATED") == 0 )
     {
@@ -123,7 +123,7 @@ void main()
 
     if (spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,oCreator))
     {
-        PS_SetLocalObject(oPLC,"X2_GLYPH_LAST_ENTER",oTarget );
+        SetLocalObject(oPLC,"X2_GLYPH_LAST_ENTER",oTarget );
         SignalEvent(oPLC,EventUserDefined(2000));
     }
 

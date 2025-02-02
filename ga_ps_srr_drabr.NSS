@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // script called from ps_srr_conv_dbreath - sets dragonman race breath weapon
 
 void main(int iType)
@@ -10,7 +8,7 @@ void main(int iType)
 	
 	if(GetIsObjectValid(oItem))
 	{
-		PS_SetLocalInt(oItem, "DRAGONTYPE", iType);
+		SetLocalInt(oItem, "DRAGONTYPE", iType);
 		
 		// give appropriate immunity.
 		switch (iType)

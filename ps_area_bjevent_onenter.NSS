@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
-int iLock = PS_GetGlobalInt("BJEnterLock");
+int iLock = GetGlobalInt("BJEnterLock");
 	if ( iLock == 0 )
  {
-  PS_SetGlobalInt("BJEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("BJEnterLock", 1); // Only allows one clean up at a time.
   
 //Resets the fight event trigger if there are not already PCs in the area
 	object oTrigger = GetObjectByTag("ps_bjevent_trigger"); 
@@ -18,7 +16,7 @@ int iLock = PS_GetGlobalInt("BJEnterLock");
 
 	if (!GetIsObjectValid(oEmpty))
   {
-	PS_SetLocalInt(oTrigger,"Used",FALSE);    
+	SetLocalInt(oTrigger,"Used",FALSE);    
 	
 	//Generates Barl Hoxun, proprietor
 	if(GetObjectByTag("ps_bjevent_hoxun") == OBJECT_INVALID)
@@ -130,7 +128,7 @@ int iLock = PS_GetGlobalInt("BJEnterLock");
   }
 	
   }
-  PS_SetGlobalInt("BJEnterLock", 0);
+  SetGlobalInt("BJEnterLock", 0);
  
   }
 }

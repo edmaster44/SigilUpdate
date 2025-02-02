@@ -19,7 +19,7 @@ void DarkForesight(object oPC)
 
 void RefreshDarkForesight(object oPC)
 {
-	if (PS_GetLocalInt(oPC,"DarkForesight")==FALSE) return;
+	if (GetLocalInt(oPC,"DarkForesight")==FALSE) return;
 	
 	if (!GetIsInCombat()) DarkForesight(oPC);
 	DelayCommand(6.0, RefreshDarkForesight(oPC));

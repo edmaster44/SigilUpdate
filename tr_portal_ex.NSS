@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "NW_I0_TOOL"
 
 void main()
@@ -16,9 +14,9 @@ void main()
 	
 	object oExiting = GetExitingObject();
 	
-	sKeyTag = PS_GetLocalString(OBJECT_SELF, "KeyTag");
-	sWPTag = PS_GetLocalString(OBJECT_SELF, "WPTag");
-	iPrevCounter = PS_GetLocalInt(OBJECT_SELF, "Counter");
+	sKeyTag = GetLocalString(OBJECT_SELF, "KeyTag");
+	sWPTag = GetLocalString(OBJECT_SELF, "WPTag");
+	iPrevCounter = GetLocalInt(OBJECT_SELF, "Counter");
 	//if the counter is already at 0, no need to do further operations
 	if (iPrevCounter > 0)
 	{
@@ -38,11 +36,11 @@ void main()
 		}
 		
 		//now save the new counter state and despawn the portal if it's zero
-		PS_SetLocalInt(OBJECT_SELF, "Counter", iSpawnCounter);
+		SetLocalInt(OBJECT_SELF, "Counter", iSpawnCounter);
 		if (iSpawnCounter == 0)
 		{
-			sFXTag = PS_GetLocalString(OBJECT_SELF, "FXTag");
-			sPortalTag = PS_GetLocalString(OBJECT_SELF, "PortalTag");
+			sFXTag = GetLocalString(OBJECT_SELF, "FXTag");
+			sPortalTag = GetLocalString(OBJECT_SELF, "PortalTag");
 			object oPortal = GetObjectByTag(sPortalTag);
 			SetPlotFlag(oPortal, FALSE);
 			

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //**************************************
 //ga_set_customvariables
 //Sets tokens with variables which might be needed in conversation
@@ -22,14 +20,14 @@ string pickRandomSigilLocation() {
 
 	int rand = Random(7)+1;
 	switch(rand) {
-		case 1: PS_SetLocalString(OBJECT_SELF, "Destination", "Temple of the Abyss"); return "Temple of the Abyss";
-		case 2: PS_SetLocalString(OBJECT_SELF, "Destination", "Hall of Records"); return "Hall of Records";
-		case 3: PS_SetLocalString(OBJECT_SELF, "Destination", "Civic Festhall"); return "Civic Festhall";
-		case 4: PS_SetLocalString(OBJECT_SELF, "Destination", "Shattered Temple"); return "Shattered Temple";
-		case 5: PS_SetLocalString(OBJECT_SELF, "Destination", "Mortuary"); return "Mortuary";
-		case 6: PS_SetLocalString(OBJECT_SELF, "Destination", "Armory"); return "Armory";
-		case 7: PS_SetLocalString(OBJECT_SELF, "Destination", "Laboratory"); return "Laboratory, in the Lower Ward";
-		default: PS_SetLocalString(OBJECT_SELF, "Destination", "Laboratory"); return "Laboratory";
+		case 1: SetLocalString(OBJECT_SELF, "Destination", "Temple of the Abyss"); return "Temple of the Abyss";
+		case 2: SetLocalString(OBJECT_SELF, "Destination", "Hall of Records"); return "Hall of Records";
+		case 3: SetLocalString(OBJECT_SELF, "Destination", "Civic Festhall"); return "Civic Festhall";
+		case 4: SetLocalString(OBJECT_SELF, "Destination", "Shattered Temple"); return "Shattered Temple";
+		case 5: SetLocalString(OBJECT_SELF, "Destination", "Mortuary"); return "Mortuary";
+		case 6: SetLocalString(OBJECT_SELF, "Destination", "Armory"); return "Armory";
+		case 7: SetLocalString(OBJECT_SELF, "Destination", "Laboratory"); return "Laboratory, in the Lower Ward";
+		default: SetLocalString(OBJECT_SELF, "Destination", "Laboratory"); return "Laboratory";
 	}
 	
 	return "Gatehouse";
@@ -70,32 +68,32 @@ void main () {
 	SetCustomToken(6006, pickRandomSigilLocation());
 	SetCustomToken(6007, pickPointofInterest());
 	
-	if (PS_GetLocalString(OBJECT_SELF, "Slogan_1") != "")
-		SetCustomToken(6010, PS_GetLocalString(OBJECT_SELF, "Slogan_1"));
-	if (PS_GetLocalString(OBJECT_SELF, "Slogan_2") != "")
-		SetCustomToken(6011, PS_GetLocalString(OBJECT_SELF, "Slogan_2"));
-	if (PS_GetLocalString(OBJECT_SELF, "Slogan_3") != "")
-		SetCustomToken(6012, PS_GetLocalString(OBJECT_SELF, "Slogan_3"));
-	if (PS_GetLocalString(OBJECT_SELF, "Explanation") != "")
-		SetCustomToken(6013, PS_GetLocalString(OBJECT_SELF, "Explanation"));
+	if (GetLocalString(OBJECT_SELF, "Slogan_1") != "")
+		SetCustomToken(6010, GetLocalString(OBJECT_SELF, "Slogan_1"));
+	if (GetLocalString(OBJECT_SELF, "Slogan_2") != "")
+		SetCustomToken(6011, GetLocalString(OBJECT_SELF, "Slogan_2"));
+	if (GetLocalString(OBJECT_SELF, "Slogan_3") != "")
+		SetCustomToken(6012, GetLocalString(OBJECT_SELF, "Slogan_3"));
+	if (GetLocalString(OBJECT_SELF, "Explanation") != "")
+		SetCustomToken(6013, GetLocalString(OBJECT_SELF, "Explanation"));
 	
 	//mark everyone in the set as having been spoken to
-	if (PS_GetLocalString(OBJECT_SELF, "Berk_Type") == "Rioter") {
+	if (GetLocalString(OBJECT_SELF, "Berk_Type") == "Rioter") {
 		int n;
-		int nBerkNum = PS_GetLocalInt(OBJECT_SELF, "NUM_RIOTERS");
+		int nBerkNum = GetLocalInt(OBJECT_SELF, "NUM_RIOTERS");
 		for (n = 1; n <= nBerkNum; n++) {
-			object oBerk = PS_GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n)); 
-			PS_SetLocalInt(oBerk, "talkto", 1);
+			object oBerk = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n)); 
+			SetLocalInt(oBerk, "talkto", 1);
 		}
 	}
 	
 	string sDebtorQuest = "ps_quest_debtorspole";
-	int nHasDebtorQuest = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
+	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
 	if (nHasDebtorQuest > 0) {
-		int nDebtor = PS_GetLocalInt(OBJECT_SELF, "DEBTOR_INDEX");
-		SetCustomToken(6007, PS_GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_NAME"));
-		SetCustomToken(6008, IntToString(PS_GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY")*3));
-		SetCustomToken(6009, PS_GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO"));
+		int nDebtor = GetLocalInt(OBJECT_SELF, "DEBTOR_INDEX");
+		SetCustomToken(6007, GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_NAME"));
+		SetCustomToken(6008, IntToString(GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY")*3));
+		SetCustomToken(6009, GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO"));
 	}
 	
 }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_training"
 
 void CreateMiningPlaceable(object oPC, string sPlac, int nDC, object oLoc, string sSuccess) {
@@ -14,10 +12,10 @@ void CreateMiningPlaceable(object oPC, string sPlac, int nDC, object oLoc, strin
 void main () {
 
 	object oPC = GetEnteringObject();
-	string sPlac = PS_GetLocalString(OBJECT_SELF, "mining_placeable");	
+	string sPlac = GetLocalString(OBJECT_SELF, "mining_placeable");	
 	object oLoc = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
-	int nDC = PS_GetLocalInt(OBJECT_SELF, "mining_dc");
-	string sSuccess = PS_GetLocalString(OBJECT_SELF, "mining_success");
+	int nDC = GetLocalInt(OBJECT_SELF, "mining_dc");
+	string sSuccess = GetLocalString(OBJECT_SELF, "mining_success");
 	int lastDone = CheckTimeStamp();
 	
 	if (!GetIsPC(oPC))

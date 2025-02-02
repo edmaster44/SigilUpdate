@@ -89,7 +89,7 @@ void main()
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
         	{
                 //Get the local variable off the target and determined if the spell has already checked them.
-                bAlreadyAffected = PS_GetLocalInt(oTarget, sSpellLocal);
+                bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
                 {
                      //Get the current HD of the target creature
@@ -135,9 +135,9 @@ void main()
         }
         //Set a local int to make sure the creature is not used twice in the pass.  Destroy that variable in
         //.3 seconds to remove it from the creature
-        PS_SetLocalInt(oLowest, sSpellLocal, TRUE);
-        DelayCommand(0.5, PS_SetLocalInt(oLowest, sSpellLocal, FALSE));
-        DelayCommand(0.5, PS_DeleteLocalInt(oLowest, sSpellLocal));
+        SetLocalInt(oLowest, sSpellLocal, TRUE);
+        DelayCommand(0.5, SetLocalInt(oLowest, sSpellLocal, FALSE));
+        DelayCommand(0.5, DeleteLocalInt(oLowest, sSpellLocal));
         //Remove the HD of the creature from the total
         nHD = nHD - GetHitDice(oLowest);
         oLowest = OBJECT_INVALID;

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "nwnx_sql"
 #include "nwnx_srvadmin"
 
@@ -20,9 +18,9 @@ void main()
 		SetCustomHeartbeat(OBJECT_SELF,60000); // 1 minute
 	}
 	
-	if(PS_GetLocalInt(OBJECT_SELF,"NOHB") == 1) return;
-	PS_SetLocalInt(OBJECT_SELF,"NOHB",1);
-	DelayCommand(60.0f, PS_DeleteLocalInt(OBJECT_SELF,"NOHB"));
+	if(GetLocalInt(OBJECT_SELF,"NOHB") == 1) return;
+	SetLocalInt(OBJECT_SELF,"NOHB",1);
+	DelayCommand(60.0f, DeleteLocalInt(OBJECT_SELF,"NOHB"));
 
 	SQLExecDirect("SELECT `title`, MINUTE(TIMEDIFF(`starttime`,NOW())) from event_planner where `starttime`"+
 	" <= date_add(NOW(), interval 1 hour) and `starttime` >= date_sub(NOW(), interval 1 hour);");

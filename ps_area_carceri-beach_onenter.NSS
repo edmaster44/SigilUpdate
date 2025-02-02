@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 #include "enft_startengine"
 
@@ -22,17 +20,17 @@ void main () {
 	if (!GetIsPC(oPC))
 		return;
 		
-	string sDescrip = PS_GetLocalString(GetArea(oPC), "planar_description");
-	string sPlane = PS_GetLocalString(GetArea(oPC), "plane");
+	string sDescrip = GetLocalString(GetArea(oPC), "planar_description");
+	string sPlane = GetLocalString(GetArea(oPC), "plane");
 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	
 	if (GetIsPC(oPC))
 		startEngine(oPC);
 
-	int iLock = PS_GetGlobalInt("CarceriEnterLock");
+	int iLock = GetGlobalInt("CarceriEnterLock");
 	if ( iLock == 0 )
 	{
-		PS_SetGlobalInt("CarceriEnterLock", 1); // Only allows one clean up at a time.
+		SetGlobalInt("CarceriEnterLock", 1); // Only allows one clean up at a time.
 		
 		
 		//have white caravel turn up at some point
@@ -65,7 +63,7 @@ void main () {
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_porphatys_oldpriest", lSpawnpoint);    
 		}
 		
-		PS_SetGlobalInt("CarceriEnterLock", 0);
+		SetGlobalInt("CarceriEnterLock", 0);
 		
 	}
 	

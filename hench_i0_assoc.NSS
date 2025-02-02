@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
     Companion and Monster AI
@@ -201,22 +199,22 @@ void HenchSetDefSettings(object oCreature = OBJECT_SELF)
         return;
     }
 
-    PS_SetLocalInt(oPC, preDefStr + sAssociateMasterConditionVarname, PS_GetLocalInt(oCreature, sAssociateMasterConditionVarname));
-    PS_SetLocalInt(oPC, preDefStr + sHenchStealthMode, PS_GetLocalInt(oCreature, sHenchStealthMode));
-    PS_SetLocalInt(oPC, preDefStr + sHenchStopCasting, PS_GetLocalInt(oCreature, sHenchStopCasting));
-    PS_SetLocalInt(oPC, preDefStr + sHenchDontDispel, PS_GetLocalInt(oCreature, sHenchDontDispel));
-    PS_SetLocalInt(oPC, preDefStr + henchAssociateSettings, PS_GetLocalInt(oCreature, henchAssociateSettings));
+    SetLocalInt(oPC, preDefStr + sAssociateMasterConditionVarname, GetLocalInt(oCreature, sAssociateMasterConditionVarname));
+    SetLocalInt(oPC, preDefStr + sHenchStealthMode, GetLocalInt(oCreature, sHenchStealthMode));
+    SetLocalInt(oPC, preDefStr + sHenchStopCasting, GetLocalInt(oCreature, sHenchStopCasting));
+    SetLocalInt(oPC, preDefStr + sHenchDontDispel, GetLocalInt(oCreature, sHenchDontDispel));
+    SetLocalInt(oPC, preDefStr + henchAssociateSettings, GetLocalInt(oCreature, henchAssociateSettings));
 }
 
 
 void HenchGetDefSettings(object oCreature = OBJECT_SELF)
 {
-    if (PS_GetLocalInt(oCreature, sHenchDefSettingsSet))
+    if (GetLocalInt(oCreature, sHenchDefSettingsSet))
     {
         return;
     }
 
-    PS_SetLocalInt(oCreature, sHenchDefSettingsSet, TRUE);
+    SetLocalInt(oCreature, sHenchDefSettingsSet, TRUE);
 
     int iAssocType = GetAssociateType(oCreature);
     if ((iAssocType == ASSOCIATE_TYPE_NONE) ||
@@ -237,9 +235,9 @@ void HenchGetDefSettings(object oCreature = OBJECT_SELF)
     string preSrcStr;
         // check if the PC has never had settings copied
         // for associate type
-    if (!PS_GetLocalInt(oPC, preDefStr + sHenchDefSettingsSet))
+    if (!GetLocalInt(oPC, preDefStr + sHenchDefSettingsSet))
     {
-        PS_SetLocalInt(oPC, preDefStr + sHenchDefSettingsSet, TRUE);
+        SetLocalInt(oPC, preDefStr + sHenchDefSettingsSet, TRUE);
         oTarget = oPC;
         oSource = oCreature;
         preSrcStr = preDefStr;
@@ -252,16 +250,16 @@ void HenchGetDefSettings(object oCreature = OBJECT_SELF)
         preSrcStr = "";
     }
 
-    PS_SetLocalInt(oTarget, preSrcStr + sAssociateMasterConditionVarname,
-        PS_GetLocalInt(oSource, preDefStr + sAssociateMasterConditionVarname));
-    PS_SetLocalInt(oTarget, preSrcStr + sHenchStealthMode,
-        PS_GetLocalInt(oSource, preDefStr + sHenchStealthMode));
-    PS_SetLocalInt(oTarget, preSrcStr + sHenchStopCasting,
-        PS_GetLocalInt(oSource, preDefStr + sHenchStopCasting));
-    PS_SetLocalInt(oTarget, preSrcStr + sHenchDontDispel,
-        PS_GetLocalInt(oSource, preDefStr + sHenchDontDispel));
-    PS_SetLocalInt(oTarget, preSrcStr + henchAssociateSettings,
-        PS_GetLocalInt(oSource, preDefStr + henchAssociateSettings));
+    SetLocalInt(oTarget, preSrcStr + sAssociateMasterConditionVarname,
+        GetLocalInt(oSource, preDefStr + sAssociateMasterConditionVarname));
+    SetLocalInt(oTarget, preSrcStr + sHenchStealthMode,
+        GetLocalInt(oSource, preDefStr + sHenchStealthMode));
+    SetLocalInt(oTarget, preSrcStr + sHenchStopCasting,
+        GetLocalInt(oSource, preDefStr + sHenchStopCasting));
+    SetLocalInt(oTarget, preSrcStr + sHenchDontDispel,
+        GetLocalInt(oSource, preDefStr + sHenchDontDispel));
+    SetLocalInt(oTarget, preSrcStr + henchAssociateSettings,
+        GetLocalInt(oSource, preDefStr + henchAssociateSettings));
 }
 
 /*
@@ -272,13 +270,13 @@ void HenchSetAssociateFlee(float fChallenge, int bFightToDeath)
     // Set the variables
     if (iAssocType == ASSOCIATE_TYPE_FAMILIAR)
     {
-        PS_SetLocalFloat(oPC, sHenchFamiliarChallenge, fChallenge);
-        PS_SetLocalInt(oPC, sHenchFamiliarToDeath, bFightToDeath);
+        SetLocalFloat(oPC, sHenchFamiliarChallenge, fChallenge);
+        SetLocalInt(oPC, sHenchFamiliarToDeath, bFightToDeath);
     }
     else if (iAssocType == ASSOCIATE_TYPE_ANIMALCOMPANION)
     {
-        PS_SetLocalFloat(oPC, sHenchAniCompChallenge, fChallenge);
-        PS_SetLocalInt(oPC, sHenchAniCompToDeath, bFightToDeath);
+        SetLocalFloat(oPC, sHenchAniCompChallenge, fChallenge);
+        SetLocalInt(oPC, sHenchAniCompToDeath, bFightToDeath);
     }
 }*/
 
@@ -286,12 +284,12 @@ void HenchSetAssociateFlee(float fChallenge, int bFightToDeath)
 void HenchResetHenchmenState()
 {
     SetCommandable(TRUE);
-    PS_DeleteLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH");
-    PS_DeleteLocalInt(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH_HP");
-    PS_DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
-    PS_DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
+    DeleteLocalObject(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH");
+    DeleteLocalInt(OBJECT_SELF, "NW_GENERIC_DOOR_TO_BASH_HP");
+    DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
+    DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
+    DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
+    DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
     SetAssociateState(NW_ASC_IS_BUSY, FALSE);
     ClearForceOptions();
     ClearAllActions();
@@ -300,7 +298,7 @@ void HenchResetHenchmenState()
 
 void SetHenchAssociateState(int nCondition, int bValid, object oCreature)
 {
-    int nPlot = PS_GetLocalInt(oCreature, henchAssociateSettings);
+    int nPlot = GetLocalInt(oCreature, henchAssociateSettings);
     if(bValid)
     {
         nPlot = nPlot | nCondition;
@@ -309,14 +307,14 @@ void SetHenchAssociateState(int nCondition, int bValid, object oCreature)
     {
         nPlot = nPlot & ~nCondition;
     }
-    PS_SetLocalInt(oCreature, henchAssociateSettings, nPlot);
+    SetLocalInt(oCreature, henchAssociateSettings, nPlot);
 }
 
 
 void SetHenchPartyState(int nCondition, int bValid, object oCreature)
 {
     object oPlayerCharacter = GetOwnedCharacter(GetFactionLeader(oCreature));
-    int nPlot = PS_GetLocalInt(oPlayerCharacter, henchPartySettings);
+    int nPlot = GetLocalInt(oPlayerCharacter, henchPartySettings);
     if(bValid)
     {
         nPlot = nPlot | nCondition;
@@ -325,35 +323,35 @@ void SetHenchPartyState(int nCondition, int bValid, object oCreature)
     {
         nPlot = nPlot & ~nCondition;
     }
-    PS_SetLocalInt(oPlayerCharacter, henchPartySettings, nPlot);
+    SetLocalInt(oPlayerCharacter, henchPartySettings, nPlot);
 }
 
 
 void HenchClearPersistedObject(object oTarget, string storageString)
 {
-    PS_DeleteLocalObject(oTarget, storageString);
-    PS_DeleteLocalString(oTarget, storageString);
-    PS_DeleteLocalInt(oTarget, storageString);
+    DeleteLocalObject(oTarget, storageString);
+    DeleteLocalString(oTarget, storageString);
+    DeleteLocalInt(oTarget, storageString);
 }
 
 
 object HenchGetPersistedObject(object oTarget, string storageString)
 {
-    object oObject = PS_GetLocalObject(oTarget, storageString);
+    object oObject = GetLocalObject(oTarget, storageString);
 
     if (!GetIsObjectValid(oObject))
     {
-        string tagToFollow = PS_GetLocalString(oTarget, storageString);
+        string tagToFollow = GetLocalString(oTarget, storageString);
         if (tagToFollow != "")
         {
             oObject = GetObjectByTag(tagToFollow);
             if (GetIsObjectValid(oObject) && GetFactionEqual(oObject, oTarget))
             {
-                PS_SetLocalObject(oTarget, storageString, oObject);
+                SetLocalObject(oTarget, storageString, oObject);
             }
             else
             {
-                PS_DeleteLocalString(oTarget, storageString);
+                DeleteLocalString(oTarget, storageString);
             }
 //          Jug_Debug(GetName(oTarget) + " try to get persisted object from in " + GetName(oObject) + " in module " + GetName(GetModule()));
         }
@@ -367,14 +365,14 @@ object HenchGetPersistedObject(object oTarget, string storageString)
         }
         else
         {
-            int assocType = PS_GetLocalInt(oTarget, storageString);
+            int assocType = GetLocalInt(oTarget, storageString);
             if (assocType != GetAssociateType(oObject))
             {
                 object oAssociate = GetAssociate(assocType, oObject);
                 if (GetIsObjectValid(oAssociate))
                 {
                     oObject = oAssociate;
-                    PS_SetLocalObject(oTarget, storageString, oObject);
+                    SetLocalObject(oTarget, storageString, oObject);
                 }
             }
         }
@@ -390,9 +388,9 @@ void HenchSetPersistedObject(object oTarget, object oObject, string storageStrin
     {
         oObject = GetMaster(oObject);
     }
-    PS_SetLocalObject(oTarget, storageString, oObject);
-    PS_SetLocalString(oTarget, storageString, GetTag(oObject));
-    PS_SetLocalInt(oTarget, storageString, assocType);
+    SetLocalObject(oTarget, storageString, oObject);
+    SetLocalString(oTarget, storageString, GetTag(oObject));
+    SetLocalInt(oTarget, storageString, assocType);
 
     // prevent circular leaders
     object oNextObject = oObject;
@@ -412,7 +410,7 @@ const string sHenchFollowTarget = "HenchFollowTarget";
 
 object HenchGetFollowLeader()
 {
-    if (PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag))
+    if (GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag))
     {
         return GetCurrentMaster();
     }
@@ -424,7 +422,7 @@ object HenchGetFollowLeader()
 //          Jug_Debug(GetName(OBJECT_SELF) + " following " + GetName(oLeader) + " in module " + GetName(GetModule()));
             return oLeader;
         }
-        else if (!PS_GetLocalInt(OBJECT_SELF, sHenchFollowTarget))
+        else if (!GetLocalInt(OBJECT_SELF, sHenchFollowTarget))
         {
 //          Jug_Debug(GetName(OBJECT_SELF) + " following current master in module " + GetName(GetModule()));
             return GetCurrentMaster();
@@ -476,7 +474,7 @@ void HenchSetLeader(object oTarget, object oLeader)
 void HenchSetNoLeader(object oTarget)
 {
     HenchClearPersistedObject(oTarget, sHenchFollowTarget);
-    PS_SetLocalInt(oTarget, sHenchFollowTarget, TRUE);
+    SetLocalInt(oTarget, sHenchFollowTarget, TRUE);
     if ((GetCurrentAction(oTarget) == ACTION_FOLLOW) && !GetIsPC(oTarget))
     {
         if (oTarget == OBJECT_SELF)
@@ -537,12 +535,12 @@ void HenchSetDefaultDefendee(object oTarget)
 
 void HenchCheckOutOfCombatStealth(object oRealMaster)
 {
-    if (!(PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
+    if (!(GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
 		!GetHenchPartyState(HENCH_PARTY_DISABLE_PEACEFUL_MODE)))
     {
 //		Jug_Debug(GetName(OBJECT_SELF) + " checking stealth");
         // Check to see if should re-enter stealth mode
-        int nStealth = PS_GetLocalInt(GetTopMaster(), sHenchStealthMode);
+        int nStealth = GetLocalInt(GetTopMaster(), sHenchStealthMode);
         if ((nStealth == 1) || (nStealth == 2))
         {
 //			Jug_Debug(GetName(OBJECT_SELF) + " going back to stealth");
@@ -606,12 +604,12 @@ void HenchHandlePlayerControlChanged(object oCreature)
     {
 		if (GetCurrentAction(oCreature) == ACTION_ATTACKOBJECT)
 		{
-			PS_SetLocalObject(oCreature, sHenchLastPlayerAttackTarget, GetAttemptedAttackTarget());
+			SetLocalObject(oCreature, sHenchLastPlayerAttackTarget, GetAttemptedAttackTarget());
 //			Jug_Debug(GetName(oCreature) + " setting attack target to " + GetName(GetAttemptedAttackTarget()));		
 		}
 		else
 		{
-			PS_DeleteLocalObject(oCreature, sHenchLastPlayerAttackTarget);
+			DeleteLocalObject(oCreature, sHenchLastPlayerAttackTarget);
 //			Jug_Debug(GetName(oCreature) + " clearing attack target");		
 		}	
         PlayerControlUnpossessed(oCreature);
@@ -726,7 +724,7 @@ void HenchGuiBehaviorInit(object oPlayerObject, object oTargetObject, string sSc
     {
         userText += GetName(oLeader);
     }
-    else if (!PS_GetLocalInt(oTargetObject, sHenchFollowTarget))
+    else if (!GetLocalInt(oTargetObject, sHenchFollowTarget))
     {
         if (!GetAssociateType(oTargetObject))
         {
@@ -967,11 +965,11 @@ int HenchCheckPlayerPause()
 		return FALSE;
 	}
 		
-//	Jug_Debug(GetName(OBJECT_SELF) + " last attack target was " + GetName(PS_GetLocalObject(OBJECT_SELF, sHenchLastPlayerAttackTarget)) + " current is " + GetName(GetAttemptedAttackTarget()));
+//	Jug_Debug(GetName(OBJECT_SELF) + " last attack target was " + GetName(GetLocalObject(OBJECT_SELF, sHenchLastPlayerAttackTarget)) + " current is " + GetName(GetAttemptedAttackTarget()));
 	
 	if (GetHenchAssociateState(HENCH_ASC_PAUSE_EVERY_ROUND) ||
 		(GetCurrentAction() != ACTION_ATTACKOBJECT) ||
-		(PS_GetLocalObject(OBJECT_SELF, sHenchLastPlayerAttackTarget) != GetAttemptedAttackTarget()))
+		(GetLocalObject(OBJECT_SELF, sHenchLastPlayerAttackTarget) != GetAttemptedAttackTarget()))
 	{
 //		Jug_Debug(GetName(OBJECT_SELF) + " pausing game in combat, controlling " + GetName(GetFactionLeader(OBJECT_SELF)));
 		SetPause(TRUE);		

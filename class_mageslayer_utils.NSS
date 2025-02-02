@@ -124,7 +124,7 @@ void MageSlayerLevels(object oPC)
 	// cycle through their inventory and check to see if any of their scrolls and wands
 	// are now useable by them
 	object oEss = PS_GetEssence(oPC);
-	if (nSlayerLevel == 1 && PS_GetLocalInt(oEss, "MageSlayerInvCheckDone"))
+	if (nSlayerLevel == 1 && GetLocalInt(oEss, "MageSlayerInvCheckDone"))
 	{
 		 // Iterate through all items in the inventory
 		int i = 0;
@@ -137,11 +137,11 @@ void MageSlayerLevels(object oPC)
 			CheckMakeItemUseableForMageSlayer(oItem, oPC);
 			oItem = GetNextItemInInventory(oPC);
 		}
-		PS_SetLocalInt(oEss, "MageSlayerInvCheckDone", TRUE);
+		SetLocalInt(oEss, "MageSlayerInvCheckDone", TRUE);
 	}
 	// Setting the boolean back to false at level 2 so that if the player re-levels the same check will 
 	// happen again at slayer level 1
-	if (nSlayerLevel >= 2 || nSlayerLevel == 0) PS_SetLocalInt(oEss, "MageSlayerInvCheckDone", FALSE);
+	if (nSlayerLevel >= 2 || nSlayerLevel == 0) SetLocalInt(oEss, "MageSlayerInvCheckDone", FALSE);
 	
 	RemoveEffectsFromSpell(oPC, SPELL_ID_MAGE_SLAYER_TYPE);
 	int nDamageType = DAMAGE_TYPE_POSITIVE; 
@@ -224,9 +224,9 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 			// event, then that registers first and then spellhook thinks they're casting the spell themselves,
 			// which technically they are. So that script sets a local int on the character to let the spellhook
 			// know to let it pass. Here we'll set it to false and allow it past if the right conditions are met.
-			if (PS_GetLocalInt(oCaster, S_ACTIVATED_POTION_IDENTIFIER))
+			if (GetLocalInt(oCaster, S_ACTIVATED_POTION_IDENTIFIER))
 			{
-				PS_SetLocalInt(oCaster, S_ACTIVATED_POTION_IDENTIFIER, FALSE);
+				SetLocalInt(oCaster, S_ACTIVATED_POTION_IDENTIFIER, FALSE);
 				// for now we will automatically allow it because the only thing that currently uses
 				// this local int is a potion of negative energy, and mage slayers are allowed potions.
 				// It would kinda suck for undead mage slayers otherwise.
@@ -295,12 +295,12 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 		if (bCasterCanCast && B_USE_VFX_FOR_MS_FAIL && nFeatId < 1) 
 		{
 			string sAlreadyCast = GetFirstName(oCaster) + "_Cast_" + IntToString(nSpellId);
-			if (PS_GetLocalInt(oTarget, sAlreadyCast) != TRUE)
+			if (GetLocalInt(oTarget, sAlreadyCast) != TRUE)
 			{
 				AssignCommand(oCaster, ActionCastFakeSpellAtObject(nSpellId, oTarget, PROJECTILE_PATH_TYPE_DEFAULT));
 				effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SPELL_RESISTANCE);
 				DelayCommand(1.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				PS_SetLocalInt(oTarget, sAlreadyCast, TRUE);
+				SetLocalInt(oTarget, sAlreadyCast, TRUE);
 			}
 		}
 
@@ -322,7 +322,7 @@ void SetMageSlayerSpecialItemBoolean(object oPC)
 	// here in case the method of identifying to the spellhook that the special potion is being
 	// used needs to change for any reason, then everything that would need changed would be in one
 	// file
-	 PS_SetLocalInt(oPC, S_ACTIVATED_POTION_IDENTIFIER, TRUE);
+	 SetLocalInt(oPC, S_ACTIVATED_POTION_IDENTIFIER, TRUE);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

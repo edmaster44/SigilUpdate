@@ -1,14 +1,12 @@
-#include "ff_safevar"
-
 #include "ps_randomlootgenerator"
 
 void main()
 {
 	object oPC = ((GetPCSpeaker() == OBJECT_INVALID) ? OBJECT_SELF : GetPCSpeaker());
-	int price = PS_GetLocalInt(oPC, "SRLG_PRICE");
-	int nType = PS_GetLocalInt(oPC, "SRLG_TYPE");
-	PS_DeleteLocalInt(oPC, "SRLG_PRICE");
-	PS_DeleteLocalInt(oPC, "SRLG_TYPE");
+	int price = GetLocalInt(oPC, "SRLG_PRICE");
+	int nType = GetLocalInt(oPC, "SRLG_TYPE");
+	DeleteLocalInt(oPC, "SRLG_PRICE");
+	DeleteLocalInt(oPC, "SRLG_TYPE");
 
 	object oItem = OBJECT_INVALID;
 	string tokenTag = "";

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*////////////////////////////////////////////
 1 - Set Custom Tokens
 2 - Kill Animal
@@ -19,29 +17,29 @@ void ClearEffects(object oTarget) {
 void main (int nFunction) {
 
 	object oPC = GetPCSpeaker();
-	object oCaught = PS_GetLocalObject(OBJECT_SELF, "target");
+	object oCaught = GetLocalObject(OBJECT_SELF, "target");
 	SetActionMode(oPC, ACTION_MODE_STEALTH, FALSE); //break stealth, so effects can happen
 
 	switch (nFunction) {
 	
 		case 1: {
 			if (!GetIsObjectValid(oCaught)) {
-				PS_SetLocalInt(OBJECT_SELF, "caughtThing", 0);
+				SetLocalInt(OBJECT_SELF, "caughtThing", 0);
 				break;
 			}
-			SetCustomToken(2030, PS_GetLocalString(oCaught, "TextCaught"));
-			if (PS_GetLocalString(oCaught, "TextKill") != "")
-				PS_SetLocalInt(OBJECT_SELF, "canKill", 1);
-			if (PS_GetLocalString(oCaught, "TextCapture") != "")
-				PS_SetLocalInt(OBJECT_SELF, "canCapture", 1);
-			if (PS_GetLocalString(oCaught, "TextFree") != "")
-				PS_SetLocalInt(OBJECT_SELF, "canFree", 1);
+			SetCustomToken(2030, GetLocalString(oCaught, "TextCaught"));
+			if (GetLocalString(oCaught, "TextKill") != "")
+				SetLocalInt(OBJECT_SELF, "canKill", 1);
+			if (GetLocalString(oCaught, "TextCapture") != "")
+				SetLocalInt(OBJECT_SELF, "canCapture", 1);
+			if (GetLocalString(oCaught, "TextFree") != "")
+				SetLocalInt(OBJECT_SELF, "canFree", 1);
 			break;
 		}
 		case 2: {
-			SetCustomToken(2031, PS_GetLocalString(oCaught, "TextKill"));
-			int nGold = PS_GetLocalInt(oCaught, "GoldValueKill");
-			string sItem = PS_GetLocalString(oCaught, "ItemKill");
+			SetCustomToken(2031, GetLocalString(oCaught, "TextKill"));
+			int nGold = GetLocalInt(oCaught, "GoldValueKill");
+			string sItem = GetLocalString(oCaught, "ItemKill");
 			if (nGold > 0)
 				GiveGoldToCreature(oPC, nGold, TRUE);
 			if (sItem != "") {
@@ -57,9 +55,9 @@ void main (int nFunction) {
 			break;
 		}
 		case 3: {
-			SetCustomToken(2032, PS_GetLocalString(oCaught, "TextCapture"));
-			int nGold = PS_GetLocalInt(oCaught, "GoldValueCapture");
-			string sItem = PS_GetLocalString(oCaught, "ItemCapture");
+			SetCustomToken(2032, GetLocalString(oCaught, "TextCapture"));
+			int nGold = GetLocalInt(oCaught, "GoldValueCapture");
+			string sItem = GetLocalString(oCaught, "ItemCapture");
 			if (nGold > 0)
 				GiveGoldToCreature(oPC, nGold, TRUE);
 			if (GetTag(oCaught) == "ps_trap_unicorn") {
@@ -67,7 +65,7 @@ void main (int nFunction) {
 					CreateItemOnObject(sItem, oPC);
 				} else {
 					SetCustomToken(2032, "The unicorn resists your advances, and breaks free, intent on teaching you a lesson!");
-					PS_DeleteLocalObject(OBJECT_SELF, "target");
+					DeleteLocalObject(OBJECT_SELF, "target");
 					ChangeToStandardFaction(oCaught, STANDARD_FACTION_HOSTILE);
 					AssignCommand(oCaught, ActionAttack(oPC));
 				}
@@ -78,9 +76,9 @@ void main (int nFunction) {
 			break;
 		}
 		case 4: {
-			SetCustomToken(2033, PS_GetLocalString(oCaught, "TextFree"));
-			int nGold = PS_GetLocalInt(oCaught, "GoldValueFree");
-			string sItem = PS_GetLocalString(oCaught, "ItemFree");
+			SetCustomToken(2033, GetLocalString(oCaught, "TextFree"));
+			int nGold = GetLocalInt(oCaught, "GoldValueFree");
+			string sItem = GetLocalString(oCaught, "ItemFree");
 			if (nGold > 0)
 				GiveGoldToCreature(oPC, nGold, TRUE);
 			if (sItem != "") {
@@ -88,14 +86,14 @@ void main (int nFunction) {
 			}
 			ClearEffects(oCaught);
 			if (GetTag(oCaught) == "ps_trap_boar") {
-				PS_DeleteLocalObject(OBJECT_SELF, "target");
+				DeleteLocalObject(OBJECT_SELF, "target");
 				location lLoc = GetLocation(oCaught);
 				DestroyObject(oCaught);
 				object oBoar = CreateObject(OBJECT_TYPE_CREATURE, "ps_trap_boar", lLoc);
 				ChangeToStandardFaction(oBoar, STANDARD_FACTION_HOSTILE);
 				AssignCommand(oBoar, ActionAttack(oPC));
 			} else {
-				location lOrigin = PS_GetLocalLocation(OBJECT_SELF, "startingLoc");
+				location lOrigin = GetLocalLocation(OBJECT_SELF, "startingLoc");
 				AssignCommand(oCaught, ActionMoveToLocation(lOrigin));
 				DestroyObject(oCaught, 1.0f);
 			}

@@ -105,7 +105,7 @@ void ContinueEffect(object oPC, object oItem, int i, string sAOETag)
 		EndAttack(oPC, oItem, sAOETag);
 	}
 		
-	else if (PS_GetLocalInt(oItem, "SS_Stop_Ability") == 1)
+	else if (GetLocalInt(oItem, "SS_Stop_Ability") == 1)
 	{
 		EndAttack(oPC, oItem, sAOETag);
 		return;
@@ -167,7 +167,7 @@ void EndAttack(object oPC, object oItem, string sAOETag)
 	DestroyObject(oAOE);
 	RevealWeapon(oPC, oItem);
 	DelayCommand(2.5f, RestoreItemAbilities(oItem));
-	PS_SetLocalInt(oItem, "SS_Stop_Ability", 0);
+	SetLocalInt(oItem, "SS_Stop_Ability", 0);
 }
 
 void EndAttackDead(object oPC, object oItem, string sAOETag)
@@ -191,7 +191,7 @@ void EndAttackDead(object oPC, object oItem, string sAOETag)
 	DestroyObject(oAOE);
 	RevealWeapon(oPC, oItem);
 	DelayCommand(2.5f, RestoreItemAbilities(oItem));
-	PS_SetLocalInt(oItem, "SS_Stop_Ability", 0);
+	SetLocalInt(oItem, "SS_Stop_Ability", 0);
 }	
 
 void RestoreItemAbilities(object oItem)

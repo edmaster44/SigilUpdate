@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: NW_S3_Alcohol.nss
 //:: Copyright (c) 2001 Bioware Corp.
@@ -28,12 +26,12 @@ void MakeDrunk(object oTarget, int nPoints)
 	
 	if (GetHasSpellEffect(406, oTarget) || GetHasSpellEffect(407, oTarget) || GetHasSpellEffect(408, oTarget))
 	{
-		nPoints = nPoints + PS_GetLocalInt(oTarget, "DRUNKLEVEL");
-		PS_SetLocalInt(oTarget, "DRUNKLEVEL", nPoints);
+		nPoints = nPoints + GetLocalInt(oTarget, "DRUNKLEVEL");
+		SetLocalInt(oTarget, "DRUNKLEVEL", nPoints);
 	}
 	else
 	{
-		PS_SetLocalInt(oTarget, "DRUNKLEVEL", nPoints);
+		SetLocalInt(oTarget, "DRUNKLEVEL", nPoints);
 	}
 	
 	int iINT = GetAbilityScore(oTarget, ABILITY_INTELLIGENCE, TRUE);

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 void main (string sMessage, string sOk, string sCancel) {
 
 	object oPC = GetPCSpeaker();
@@ -18,7 +16,7 @@ void main (string sMessage, string sOk, string sCancel) {
 	string sVariableString	= "";
 	
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, "SLAVE", oSlave);
+	SetLocalObject(oObj, "SLAVE", oSlave);
 
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,

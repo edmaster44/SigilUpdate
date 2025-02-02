@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 
 string GetPCID(object oPC)
@@ -33,7 +31,7 @@ void main(string sItemNumber)
 	object oStorageTable = GetNearestObjectByTag("kemo_storage_viewpoint");
 	object oItem; object oCopy; string sDB; string sQuery; string stillexists;
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
 	{	
 	sDB = GetPCID(oPC);
 	sQuery = "SELECT itemname FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
@@ -49,9 +47,9 @@ void main(string sItemNumber)
 	sQuery = "SELECT campaignstring FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	}
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
-	sDB = GetGuildID(oPC, PS_GetLocalString(oPC,"kemo_storage_mode_guildname"));
+	sDB = GetGuildID(oPC, GetLocalString(oPC,"kemo_storage_mode_guildname"));
 	sQuery = "SELECT itemname FROM new_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	SQLExecDirect(sQuery); SQLFetch();
 	stillexists = SQLGetData(1);

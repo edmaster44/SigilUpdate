@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ServerExts"
 // Determines the loop animation trigger delay based on PC's race/subrace; KEMO Emotes/Partners only
 float RacialDelay(object oTarget);
@@ -62,21 +60,21 @@ void AnimationLoop(object oPC, location lCurrentSpot)
 	/* This script now sets the animation information on a Secret Object and starts its heartbeat
 	on a 48 second interval. If the Ipoint already exists, it transfers the new animation
 	name to that Secret Object. Thanks to GrinningFool for this more elegant solution. 7/29/08 */
-	object oPoint = PS_GetLocalObject(oPC,"AnimationPoint");
-	string sAnim = PS_GetLocalString(oPC,"StoredAnimationIdle");
+	object oPoint = GetLocalObject(oPC,"AnimationPoint");
+	string sAnim = GetLocalString(oPC,"StoredAnimationIdle");
 
 	SetCollision(oPC,0); //turns collision off for the course of the animation.
 	if (oPoint != OBJECT_INVALID)
 	{
-		PS_SetLocalString(oPoint,"StoredAnimationIdle",sAnim);
+		SetLocalString(oPoint,"StoredAnimationIdle",sAnim);
 		PlayKemoAnimation(oPC,sAnim);
 	}
 	else
 	{
 		object oPoint = CreateObject(OBJECT_TYPE_PLACEABLE,"plc_secretobject",lCurrentSpot,FALSE,"AnimationPoint");
-		PS_SetLocalObject(oPC,"AnimationPoint",oPoint);
-		PS_SetLocalObject(oPoint,"StoredAnimationPC",oPC);
-		PS_SetLocalString(oPoint,"StoredAnimationIdle",sAnim);
+		SetLocalObject(oPC,"AnimationPoint",oPoint);
+		SetLocalObject(oPoint,"StoredAnimationPC",oPC);
+		SetLocalString(oPoint,"StoredAnimationIdle",sAnim);
 		SetUseableFlag(oPoint,0);
 		SetCustomHeartbeat(oPoint,12000);
 		SetEventHandler(oPoint,SCRIPT_PLACEABLE_ON_HEARTBEAT,"kemo_animation_hb");
@@ -87,11 +85,11 @@ void AnimationLoop(object oPC, location lCurrentSpot)
 /* the following is the original loop script, now replaced with a heartbeat on an Ipoint 7/29/08
 {
 	object oPC = OBJECT_SELF;
-	location lSpot = PS_GetLocalLocation(oPC,"AnimationLocation");
+	location lSpot = GetLocalLocation(oPC,"AnimationLocation");
 	vector vSpot = GetPositionFromLocation(lSpot);
 	vector vCurrentSpot = GetPositionFromLocation(lCurrentSpot);
-	string sAnim = PS_GetLocalString(oPC,"StoredAnimationIdle");
-	int iOverlap = PS_GetLocalInt(oPC,"AnimationOverlap");
+	string sAnim = GetLocalString(oPC,"StoredAnimationIdle");
+	int iOverlap = GetLocalInt(oPC,"AnimationOverlap");
 	
 	// This function gets re-called for each new animation, so that more than one iteration of the
 	// function can be running at the same time if the PC hasn't spent at least 48 seconds not in an
@@ -105,13 +103,13 @@ void AnimationLoop(object oPC, location lCurrentSpot)
 	if (vSpot != vCurrentSpot)
 	{
 		iOverlap = 1;
-		PS_SetLocalInt(oPC,"AnimationOverlap",iOverlap);
+		SetLocalInt(oPC,"AnimationOverlap",iOverlap);
 		return;					 
 	}
 	if (iOverlap > 1)
 	{
 		iOverlap--;
-		PS_SetLocalInt(oPC,"AnimationOverlap",iOverlap);						 
+		SetLocalInt(oPC,"AnimationOverlap",iOverlap);						 
 		ActionDoCommand(PlayKemoAnimation(oPC,sAnim));
 		return;
 	}
@@ -120,16 +118,16 @@ void AnimationLoop(object oPC, location lCurrentSpot)
 		ActionDoCommand(PlayKemoAnimation(oPC,sAnim));
 		ActionDoCommand(DelayCommand(48.0f,AnimationLoop(lCurrentSpot)));
 	}
-	else PS_SetLocalInt(oPC,"AnimationOverlap",0);
+	else SetLocalInt(oPC,"AnimationOverlap",0);
 }*/
 
 void StoreAnimation(string sAnim, float fDelay)
 {
-	PS_SetLocalString(OBJECT_SELF,"StoredAnimation",sAnim); // stores the animation name for re-triggering
-	PS_SetLocalFloat(OBJECT_SELF,"StoredDelay",fDelay); // stores the delay for re-triggering		
+	SetLocalString(OBJECT_SELF,"StoredAnimation",sAnim); // stores the animation name for re-triggering
+	SetLocalFloat(OBJECT_SELF,"StoredDelay",fDelay); // stores the delay for re-triggering		
 }
 
 void StoreIdle(string sAnim)
 {
-	PS_SetLocalString(OBJECT_SELF,"StoredAnimationIdle",sAnim);
+	SetLocalString(OBJECT_SELF,"StoredAnimationIdle",sAnim);
 }

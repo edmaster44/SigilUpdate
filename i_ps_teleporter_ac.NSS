@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*Script by Ceremorph
 This script is for single-use "home portal" items which will teleport the character using them to a
 preset location, determined by the variable "waypoint" on the activated item.
@@ -10,7 +8,7 @@ void main()
     object oPC = GetItemActivator();
 	object oItem = GetItemActivated();
     object oTarget = oPC;
-	string sWaypoint = PS_GetLocalString(oItem,"waypoint");
+	string sWaypoint = GetLocalString(oItem,"waypoint");
 	object oWaypoint;
 	location lWaypoint;
     effect eVis = EffectNWN2SpecialEffectFile("fx_teleport");

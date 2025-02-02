@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //Script by Dedic8ed
 //This script is designed to be used by a placed trigger.
 //Place in the triggers's OnEnter; this can be used in conjunction with ps_nhdw_trigger_multiuse_exit
@@ -12,23 +10,23 @@ void main()
 	if (!GetIsPC(oPC1)) return;
 
 //the "open1" variable will open a door with this tag 
-	string sOpen1 		= PS_GetLocalString(OBJECT_SELF,"open1");
+	string sOpen1 		= GetLocalString(OBJECT_SELF,"open1");
 //the "close1" variable will close a door with this tag
-	string sClose1 		= PS_GetLocalString(OBJECT_SELF,"close1");
+	string sClose1 		= GetLocalString(OBJECT_SELF,"close1");
 //the "vfx1" variable will apply this visual effect to the person setting off the trigger; the full filename (xxxx.sef) must be used
-	string sVFX1 		= PS_GetLocalString(OBJECT_SELF,"vfx1");
+	string sVFX1 		= GetLocalString(OBJECT_SELF,"vfx1");
 //the "floaty1" variable will be generated as floaty text over the head of the character pulling the lever
-	string sFloaty1 	= PS_GetLocalString(OBJECT_SELF,"floaty1");
+	string sFloaty1 	= GetLocalString(OBJECT_SELF,"floaty1");
 // objects 1-4 to apply object vfx to
-	string sObj1 		= PS_GetLocalString(OBJECT_SELF, "obj1");
-	string sObj2 		= PS_GetLocalString(OBJECT_SELF, "obj2");
-	string sObj3 		= PS_GetLocalString(OBJECT_SELF, "obj3");
-	string sObj4 		= PS_GetLocalString(OBJECT_SELF, "obj4");
+	string sObj1 		= GetLocalString(OBJECT_SELF, "obj1");
+	string sObj2 		= GetLocalString(OBJECT_SELF, "obj2");
+	string sObj3 		= GetLocalString(OBJECT_SELF, "obj3");
+	string sObj4 		= GetLocalString(OBJECT_SELF, "obj4");
 // vfx on objects 1-4; the full filename (xxxx.sef) must be used
-	string sVFXo1 		= PS_GetLocalString(OBJECT_SELF, "vfxo1");
-	string sVFXo2 		= PS_GetLocalString(OBJECT_SELF, "vfxo2");
-	string sVFXo3 		= PS_GetLocalString(OBJECT_SELF, "vfxo3");
-	string sVFXo4 		= PS_GetLocalString(OBJECT_SELF, "vfxo4");
+	string sVFXo1 		= GetLocalString(OBJECT_SELF, "vfxo1");
+	string sVFXo2 		= GetLocalString(OBJECT_SELF, "vfxo2");
+	string sVFXo3 		= GetLocalString(OBJECT_SELF, "vfxo3");
+	string sVFXo4 		= GetLocalString(OBJECT_SELF, "vfxo4");
 	
 //Definition
 	object oDoorOpen1	= GetObjectByTag(sOpen1);

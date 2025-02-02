@@ -15,7 +15,7 @@
 
 void main()
 {
-	object oTarget = PS_GetLocalObject( OBJECT_SELF, "NWN2_TRUE_NAME_TARGET" );
+	object oTarget = GetLocalObject( OBJECT_SELF, "NWN2_TRUE_NAME_TARGET" );
 
 	//Fire cast spell at event for the specified target
    	SignalEvent( oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE) );

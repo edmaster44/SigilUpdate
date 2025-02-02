@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main () {
 
@@ -7,8 +5,8 @@ void main () {
 	if (!GetIsPC(oPC))
 		return;
 		
-	string sDescrip = PS_GetLocalString(GetArea(oPC), "planar_description");
-	string sPlane = PS_GetLocalString(GetArea(oPC), "plane");
+	string sDescrip = GetLocalString(GetArea(oPC), "planar_description");
+	string sPlane = GetLocalString(GetArea(oPC), "plane");
 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 
 }

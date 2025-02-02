@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // kemo_animation
 // 7/13/08 modified by KEMO for Custom Animations; called by conversation through gui_hss_pc_tool
 // 2/09 now called by KEMO_ANIM GUI
@@ -24,7 +22,7 @@
 
 	StoreAnimation(sAnimB,fDelayUntilStart);
 	StoreIdle(sAnimC);
-	PS_SetLocalLocation(oTarget,"AnimationLocation",GetLocation(oTarget));
+	SetLocalLocation(oTarget,"AnimationLocation",GetLocation(oTarget));
 
 	PlayKemoAnimation(oTarget,sAnimB); // fires the transitional animation
 		// a graphical bug causes some races to lose their eyes and lips on a non-looping animation,
@@ -79,7 +77,7 @@ void main(string sAnimA, int iFrames, int iNoLoop)
 
 	StoreAnimation(sAnimB,fDelayUntilStart);
 	StoreIdle(sAnimC);
-	PS_SetLocalLocation(oTarget,"AnimationLocation",GetLocation(oTarget));
+	SetLocalLocation(oTarget,"AnimationLocation",GetLocation(oTarget));
 
 	PlayKemoAnimation(oTarget,sAnimB); // fires the transitional animation
 		// a graphical bug causes some races to lose their eyes and lips on a non-looping animation,

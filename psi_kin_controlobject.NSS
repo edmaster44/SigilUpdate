@@ -24,7 +24,7 @@ void spellsCreateItemForSummoned(object oCaster, float fDuration)
 {
     //Declare major variables
     int nStat = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster) / 2;
-	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+	if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 	{
 		nStat = nStat + 2;
 	}
@@ -136,7 +136,7 @@ void main()
 	    effect eSummon = EffectSummonCreature("scod_x_psiconobject");
 	    effect eVis = EffectVisualEffect(VFX_FNF_SUMMON_MONSTER_1);
 	    //Make metamagic check for extend
-	    if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+	    if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 		{
 			nDuration = nDuration * 2;
 		}

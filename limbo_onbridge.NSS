@@ -1,7 +1,5 @@
-#include "ff_safevar"
-
 void main ()
 {
 	object oPC = GetEnteringObject();
-	PS_SetLocalInt(oPC, "onbridge", 1);
+	SetLocalInt(oPC, "onbridge", 1);
 }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 ps_door-portalclose
 by Ceremorph 10/26/2015
@@ -14,23 +12,23 @@ void main()
 
 {
 	//	Get the float for the duration of the time to pass before the door is closed and locked
-	string sPortal		= PS_GetLocalString(OBJECT_SELF, "Portal");	//Tag of portal
-	string sKey			= PS_GetLocalString(OBJECT_SELF, "Key");		//Portal key (if any)
-	string sFX			= PS_GetLocalString(OBJECT_SELF, "VFX");		//Visual effect to apply
-	int iLocked			= PS_GetLocalInt(OBJECT_SELF, "Locked");		//1 for locked door, 2 for unlocked
-	float fDelay		= PS_GetLocalFloat(OBJECT_SELF, "Delay");		//Delay (in seconds) to close door
+	string sPortal		= GetLocalString(OBJECT_SELF, "Portal");	//Tag of portal
+	string sKey			= GetLocalString(OBJECT_SELF, "Key");		//Portal key (if any)
+	string sFX			= GetLocalString(OBJECT_SELF, "VFX");		//Visual effect to apply
+	int iLocked			= GetLocalInt(OBJECT_SELF, "Locked");		//1 for locked door, 2 for unlocked
+	float fDelay		= GetLocalFloat(OBJECT_SELF, "Delay");		//Delay (in seconds) to close door
 	location lPortal	= GetLocation(OBJECT_SELF);					//Door's location
 
 	string SPAWNED = "nSpawned";
 
-	if(PS_GetLocalInt(OBJECT_SELF, SPAWNED))						//Determine the portal is existant
+	if(GetLocalInt(OBJECT_SELF, SPAWNED))						//Determine the portal is existant
 	{
 		object oPortal=GetObjectByTag(sPortal);						//Select the portal object
 		SetPlotFlag(oPortal,FALSE);									//Mark the portal as non-plot
 		object oPortalEffect=GetNearestObjectByTag(sFX);			//Select the visual effect
 		DestroyObject(oPortalEffect,30.0f);							//Remove the visual effect
 		DestroyObject(oPortal,30.0f);								//Destroy the portal
-		PS_SetLocalInt(OBJECT_SELF, SPAWNED, FALSE);					//Mark the portal as non-spawned
+		SetLocalInt(OBJECT_SELF, SPAWNED, FALSE);					//Mark the portal as non-spawned
 	}
 	if (iLocked == 1)
 	{

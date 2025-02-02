@@ -43,26 +43,26 @@ void GiveMinedItem(object oPC) {
 		return;
 
 	SendMessageToPC(oPC, "You find an item of interest!");
-	int nSpawns = PS_GetLocalInt(OBJECT_SELF, "option_num");
+	int nSpawns = GetLocalInt(OBJECT_SELF, "option_num");
 	int nRand = Random(nSpawns)+1;
 	
-	string sSpawn = PS_GetLocalString(OBJECT_SELF, "item_"+IntToString(nRand));
+	string sSpawn = GetLocalString(OBJECT_SELF, "item_"+IntToString(nRand));
 	if (GetIsGemstoneString(sSpawn)) {
 		CreateGemstoneOnPC(oPC, sSpawn);
 	} else {
 		CreateItemOnObject(sSpawn, oPC, 1);
 	}
 	
-	int nGiven = PS_GetLocalInt(OBJECT_SELF, "items_given");
-	PS_SetLocalInt(OBJECT_SELF, "items_given", nGiven+1);
+	int nGiven = GetLocalInt(OBJECT_SELF, "items_given");
+	SetLocalInt(OBJECT_SELF, "items_given", nGiven+1);
 	
 }
 
 void DoMining(object oPC) {
 	
-	location lPast = PS_GetLocalLocation(OBJECT_SELF, "starting_loc");
-	int nGiven = PS_GetLocalInt(OBJECT_SELF, "items_given");
-	int nMax = PS_GetLocalInt(OBJECT_SELF, "max_items");
+	location lPast = GetLocalLocation(OBJECT_SELF, "starting_loc");
+	int nGiven = GetLocalInt(OBJECT_SELF, "items_given");
+	int nMax = GetLocalInt(OBJECT_SELF, "max_items");
 	if (nGiven >= nMax || GetDistanceBetweenLocations(GetLocation(oPC), lPast) > 2.0f) { //kill mine if you've moved
 		SendMessageToPC(oPC, "Mine exhausted.");
 		AssignCommand(oPC, ClearAllActions());
@@ -92,12 +92,12 @@ void main () {
 		return;
 	TimeStamp();
 	
-	PS_SetLocalLocation(OBJECT_SELF, "starting_loc", GetLocation(oPC));
-	int nGiven = PS_GetLocalInt(OBJECT_SELF, "items_given");
-	int nMax = PS_GetLocalInt(OBJECT_SELF, "max_items");
+	SetLocalLocation(OBJECT_SELF, "starting_loc", GetLocation(oPC));
+	int nGiven = GetLocalInt(OBJECT_SELF, "items_given");
+	int nMax = GetLocalInt(OBJECT_SELF, "max_items");
 	if (nMax <= 0) {
 		nMax = Random(2)+1;
-		PS_SetLocalInt(OBJECT_SELF, "max_items", nMax);
+		SetLocalInt(OBJECT_SELF, "max_items", nMax);
 	}
 	
 	if (nGiven >= nMax) {

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Default On Perceive
 //:: NW_C2_DEFAULT2
@@ -34,7 +32,7 @@ void main()
     int bSeen = GetLastPerceptionSeen();
 	
 	//Script hook
-	string sPercievedScript = PS_GetLocalString(OBJECT_SELF, "PercievedScript");
+	string sPercievedScript = GetLocalString(OBJECT_SELF, "PercievedScript");
 	if (sPercievedScript != "")
 		ExecuteScript(sPercievedScript, OBJECT_SELF);
 	
@@ -57,18 +55,18 @@ void main()
                 GetIsEnemy(oLastPerceived) && (!HENCH_MONSTER_DONT_CHECK_HEARD_MONSTER || GetIsPCGroup(oLastPerceived)))
             {
 //				Jug_Debug(GetName(OBJECT_SELF) + " move to last heard or seen");
-                if (GetLastPerceptionVanished() || PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr) || !HenchEnemyOnOtherSideOfDoor(oLastPerceived))
+                if (GetLastPerceptionVanished() || GetLocalInt(OBJECT_SELF, henchCombatRoundStr) || !HenchEnemyOnOtherSideOfDoor(oLastPerceived))
                 {
 //					Jug_Debug(GetName(OBJECT_SELF) + " setting enemy location");
                     SetEnemyLocation(oLastPerceived);
                 }
                 // add check if target - prevents creature from following the target
                 // due to ActionAttack without actually perceiving them
-                if (PS_GetLocalObject(OBJECT_SELF, sHenchLastTarget) == oLastPerceived)
+                if (GetLocalObject(OBJECT_SELF, sHenchLastTarget) == oLastPerceived)
                 {
 //					Jug_Debug(GetName(OBJECT_SELF) + " calling det combat round, doing clearallactions");
                     ClearAllActions();
-                    PS_DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
+                    DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
                     HenchDetermineCombatRound(oLastPerceived, TRUE);
                 }
             }

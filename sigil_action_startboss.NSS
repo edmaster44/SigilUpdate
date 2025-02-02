@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "sigil_enemy_inc"
 
 void TransportParty(object oBOSS, object oPC, string sLOC_PARTY, string sHELP_REF, string sHELP_TAG, string sHELP_LOC, string sRESPAWN, object oAREA)
@@ -14,8 +12,8 @@ void TransportParty(object oBOSS, object oPC, string sLOC_PARTY, string sHELP_RE
 	}
 	object oSTARTER = OBJECT_SELF;
 	object oRESPAWN = GetObjectByTag(sRESPAWN);
-	PS_SetLocalObject(oBOSS, "RESPAWN_POINT", oRESPAWN);
-	PS_SetLocalObject(oBOSS, "START_NPC", oSTARTER);
+	SetLocalObject(oBOSS, "RESPAWN_POINT", oRESPAWN);
+	SetLocalObject(oBOSS, "START_NPC", oSTARTER);
 	SetScriptHidden(oSTARTER, TRUE);
 	
 	object oPARTY = GetFirstFactionMember(oPC, FALSE);
@@ -35,8 +33,8 @@ void main(string sBOSS, string sLOC_BOSS, string sLOC_PARTY, string sHELP_REF, s
 	
 	object oPC = GetPCSpeaker();
 	object oAREA = GetArea(oPC);
-	PS_SetLocalInt(oAREA, "ENEMY_DIFF", nDIFF);
-	PS_SetLocalInt(oAREA, "WRECK_HAVOC", TRUE);
+	SetLocalInt(oAREA, "ENEMY_DIFF", nDIFF);
+	SetLocalInt(oAREA, "WRECK_HAVOC", TRUE);
 	object oBOSS = CreateObject(OBJECT_TYPE_CREATURE, sBOSS, lBOSS);
 	if (oBOSS == OBJECT_INVALID) return;
 	

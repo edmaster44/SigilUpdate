@@ -200,7 +200,7 @@ void main()
 	object oPC = GetPCLevellingUp();
 	object oItem = PS_GetEssence(oPC);
 	
-	//PS_DeleteLocalString(oPC, "ECL"); //Clang's fix on 3-31-16
+	//DeleteLocalString(oPC, "ECL"); //Clang's fix on 3-31-16
 
 	//Remove XP from xp-saving players
 	//Disabled on Jeg Training Sigil Edition Preparation Room.
@@ -222,12 +222,12 @@ void main()
 
 	// Template classes - apply fix to racial ability bonuses
 	// Add new templates to this list when created
-	string sTemplate	= PS_GetLocalString(oItem, "Template");
-	int iStop			= PS_GetLocalInt(oItem, "TemplateFix");
-	int iOldSub			= PS_GetLocalInt(oItem, "OldSubrace");
+	string sTemplate	= GetLocalString(oItem, "Template");
+	int iStop			= GetLocalInt(oItem, "TemplateFix");
+	int iOldSub			= GetLocalInt(oItem, "OldSubrace");
 	if (PS_NeedsTemplateClassAbilityFix(oPC))
 	{	
-		if (iStop != 1)	PS_SetLocalInt(oItem, "TemplateFix", 0);
+		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
 		SendMessageToPC(oPC, "Your character has levels in a template class.");
 		if (iStop == 0)
 		{	
@@ -237,7 +237,7 @@ void main()
 		}
 	}
 	
-	if (PS_GetLocalInt(oItem, "TempChange") != 1)
+	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
@@ -298,7 +298,7 @@ void CheckDragonBreath(object oPC, object oItem)
 		SendMessageToPC(oPC, "You appear to be missing your essence. Contact a member of staff");
 		return;
 	}
-	int nTYPE = PS_GetLocalInt(oItem, "DRAGONTYPE");
+	int nTYPE = GetLocalInt(oItem, "DRAGONTYPE");
 	if (nTYPE < 1)
 	{
 		ActionStartConversation(oPC, "ps_srr_conv_dbreath", TRUE, FALSE, TRUE, TRUE);

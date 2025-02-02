@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -35,9 +33,9 @@ int MerchWandDestinationValid(object oDestination, object oPC)
 	{
 		if (GetObjectType(oDestination) == OBJECT_TYPE_PLACEABLE && GetHasInventory(oDestination) == TRUE && GetTag(oDestination) == "ps_usersign_display")
 		{
-			if (PS_GetLocalString(oDestination,"OWNER_NAME") == GetName(oPC))
+			if (GetLocalString(oDestination,"OWNER_NAME") == GetName(oPC))
 				return TRUE;
-			if (PS_GetLocalString(oDestination, "OWNER_NAME") == "DOOMGUARD" && GetFaction(oPC) == FACTION_DOOMGUARD)
+			if (GetLocalString(oDestination, "OWNER_NAME") == "DOOMGUARD" && GetFaction(oPC) == FACTION_DOOMGUARD)
 				return TRUE;
 			return FALSE;
 		}
@@ -62,7 +60,7 @@ void MerchDoCloneItems(object oSource, object oDestination, object oPC)
 	while (oItem != OBJECT_INVALID && iCount < MAX_ITEMS)
 	{
 		oTemp = CopyObject(oItem, lDest, oDestination, "itemondisplay");
-		PS_SetLocalObject(oTemp, "CONTAINER", oDestination);
+		SetLocalObject(oTemp, "CONTAINER", oDestination);
 		iCount += 1;
 		SendMessageToPC(oPC, "Item on display: " + GetName(oItem));
 		oItem = GetNextItemInInventory(oSource);
@@ -76,8 +74,8 @@ void main()
 	object oPC = GetItemActivator();
     object oItem = GetItemActivated();
     object oTarget = GetItemActivatedTarget();
-	object oSource = PS_GetLocalObject(oItem, "SOURCE");
-	//object oDestination = PS_GetLocalObject(oItem, "DESTINATION"); // not needed i think
+	object oSource = GetLocalObject(oItem, "SOURCE");
+	//object oDestination = GetLocalObject(oItem, "DESTINATION"); // not needed i think
 	
 	
 	// some checks first
@@ -107,7 +105,7 @@ void main()
 		// check to see if own inventory container
 		if (MerchWandSourceValid(oTarget, oPC) == TRUE)
 		{
-			PS_SetLocalObject(oItem, "SOURCE", oTarget);
+			SetLocalObject(oItem, "SOURCE", oTarget);
 			SendMessageToPC(oPC, "Targetted container (" + GetName(oTarget) + ") is now stored. Now target an owned placeable container.");
 		}
 		else

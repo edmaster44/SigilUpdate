@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
      Companion and Monster AI
@@ -102,31 +100,31 @@ const string sHenchLastHeardOrSeen          = "LastSeenOrHeard";
 
 void HenchResetCombatRound()
 {
-    PS_SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, OBJECT_INVALID);
-    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_FORCE, FALSE);
-    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_NOT_RUN);
-	PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED);
+    SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, OBJECT_INVALID);
+    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_FORCE, FALSE);
+    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_NOT_RUN);
+	DeleteLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED);
 }
 
 
 void SetEnemyLocation(object oEnemy)
 {
-    PS_SetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen, TRUE);
+    SetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen, TRUE);
     location enemyLocation = GetLocation(oEnemy);
-    PS_SetLocalLocation(OBJECT_SELF, sHenchLastHeardOrSeen, enemyLocation);
+    SetLocalLocation(OBJECT_SELF, sHenchLastHeardOrSeen, enemyLocation);
 }
 
 
 void ClearEnemyLocation()
 {
-    PS_DeleteLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen);
-    PS_DeleteLocalLocation(OBJECT_SELF, sHenchLastHeardOrSeen);
+    DeleteLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen);
+    DeleteLocalLocation(OBJECT_SELF, sHenchLastHeardOrSeen);
 }
 
 
 int MoveToLastSeenOrHeard(int bDoSearch = TRUE)
 {
-    location moveToLoc = PS_GetLocalLocation(OBJECT_SELF, sHenchLastHeardOrSeen);
+    location moveToLoc = GetLocalLocation(OBJECT_SELF, sHenchLastHeardOrSeen);
     if (GetDistanceBetweenLocations(GetLocation(OBJECT_SELF), moveToLoc) <= 5.0)
     {
 //		Jug_Debug("!1111" + GetName(OBJECT_SELF) + " start search " + LocationToString(moveToLoc));
@@ -170,7 +168,7 @@ int HenchCheckEventClearAllActions(int bEndOfRound)
 {
     if (bEndOfRound)
     {
-        PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB);
+        DeleteLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB);
     }
     int nCurAction = GetCurrentAction();
 //	Jug_Debug(GetName(OBJECT_SELF) + "  HenchCheckEventClearAllActions action " + IntToString(nCurAction));
@@ -228,14 +226,14 @@ int HenchCheckEventClearAllActions(int bEndOfRound)
 
 int HenchCheckHeartbeatCombat(int bSetFlag = TRUE)
 {
-	PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED);
-    if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB))
+	DeleteLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED);
+    if (GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB))
     {
         return TRUE;
     }
 	if (bSetFlag)
 	{
-    	PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB, TRUE);
+    	SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB, TRUE);
 	}
     int nCurAction = GetCurrentAction();
     return (nCurAction == ACTION_INVALID) || (nCurAction == ACTION_MOVETOPOINT) ||
@@ -252,7 +250,7 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
         return;
     }
 
-    string sAIScript = PS_GetLocalString(OBJECT_SELF, "AIScript");
+    string sAIScript = GetLocalString(OBJECT_SELF, "AIScript");
     if (sAIScript == "")
     {
         sAIScript = "hench_o0_ai";
@@ -260,16 +258,16 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
 
     if (bForceTarget)
     {
-        PS_SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, oIntruder);
-        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_FORCE, TRUE);
+        SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, oIntruder);
+        SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_FORCE, TRUE);
     }
-    else if (GetIsObjectValid(oIntruder) && !PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_FORCE))
+    else if (GetIsObjectValid(oIntruder) && !GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_FORCE))
     {
-        PS_SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, oIntruder);
+        SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, oIntruder);
     }
 
         // check if we have to actually determine to rerun ai
-    int iAIScriptRunState = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE);
+    int iAIScriptRunState = GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE);
 
     if (iAIScriptRunState == HENCH_AI_SCRIPT_IN_PROGRESS)
     {
@@ -279,7 +277,7 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
     if (bForceInterrupt)
     {
 //      Jug_Debug(GetName(OBJECT_SELF) + " det com round using force");
-        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
+        SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
         DelayCommand(HENCH_AI_SCRIPT_DELAY, ExecuteScript(sAIScript, OBJECT_SELF));
         return;
     }
@@ -288,13 +286,13 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
     {
         // first run of HenchDetermineCombatRound
 //      Jug_Debug(GetName(OBJECT_SELF) + " det com round not run, do run");
-        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
+        SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
         DelayCommand(HENCH_AI_SCRIPT_DELAY, ExecuteScript(sAIScript, OBJECT_SELF));
         return;
     }
-    object oLastTarget = PS_GetLocalObject(OBJECT_SELF, sHenchLastTarget);
+    object oLastTarget = GetLocalObject(OBJECT_SELF, sHenchLastTarget);
 
-    if (!GetIsObjectValid(oLastTarget) || GetIsDead(oLastTarget) || !GetIsEnemy(oLastTarget) || PS_GetLocalInt(oLastTarget, sHenchRunningAway))
+    if (!GetIsObjectValid(oLastTarget) || GetIsDead(oLastTarget) || !GetIsEnemy(oLastTarget) || GetLocalInt(oLastTarget, sHenchRunningAway))
     {
         oLastTarget = OBJECT_INVALID;
     }
@@ -306,10 +304,10 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
     {
         // prevent too many calls to main script if already moving to an unseen and
         // unheard monster
-        if (!PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen) || GetObjectSeen(oIntruder) || GetObjectHeard(oIntruder))
+        if (!GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen) || GetObjectSeen(oIntruder) || GetObjectHeard(oIntruder))
         {
 //          Jug_Debug(GetName(OBJECT_SELF) + " det com round no last target");
-            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
+            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
             DelayCommand(HENCH_AI_SCRIPT_DELAY, ExecuteScript(sAIScript, OBJECT_SELF));
         }
     }
@@ -318,13 +316,13 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
         if (GetDistanceToObject(oIntruder) <= 5.0 && GetDistanceToObject(oLastTarget) > 5.0)
         {
 //          Jug_Debug(GetName(OBJECT_SELF) + " nearby with long distance target");
-            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
+            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
             DelayCommand(HENCH_AI_SCRIPT_DELAY, ExecuteScript(sAIScript, OBJECT_SELF));
         }
         else if (GetObjectSeen(oIntruder) && !GetObjectSeen(oLastTarget))
         {
 //          Jug_Debug(GetName(OBJECT_SELF) + " target seen check");
-            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
+            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_RUN_STATE, HENCH_AI_SCRIPT_IN_PROGRESS);
             DelayCommand(HENCH_AI_SCRIPT_DELAY, ExecuteScript(sAIScript, OBJECT_SELF));
         }
     }
@@ -334,22 +332,22 @@ void HenchDetermineCombatRound(object oIntruder = OBJECT_INVALID, int bForceInte
 // start combat after action complete
 void HenchStartCombatRoundAfterAction(object oTarget)
 {
-    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
+    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
     ActionDoCommand(HenchDetermineCombatRound(oTarget, TRUE));
-    DelayCommand(2.0, PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE));
+    DelayCommand(2.0, SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE));
 }
 
 
 void HenchStartCombatRoundAfterDelay(object oTarget)
 {
-    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
     HenchDetermineCombatRound(oTarget, TRUE);
 }
 
 
 void HenchStartAttack(object oIntruder)
 {
-    PS_SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, oIntruder);
+    SetLocalObject(OBJECT_SELF, HENCH_AI_SCRIPT_INTRUDER_OBJ, oIntruder);
     ExecuteScript("hench_o0_att", OBJECT_SELF);
 }
 
@@ -485,7 +483,7 @@ void HenchDetermineSpecialBehavior(object oIntruder = OBJECT_INVALID)
                     if(GetLevelByClass(CLASS_TYPE_DRUID, oTarget) == 0 && GetLevelByClass(CLASS_TYPE_RANGER, oTarget) == 0 && GetAssociateType(oTarget) != ASSOCIATE_TYPE_ANIMALCOMPANION)
                     {
                         // oTarget has neutral reputation, and is NOT a druid or ranger or an "Animal Companion"
-                        PS_SetLocalInt(OBJECT_SELF, "lcTempEnemy", 8);
+                        SetLocalInt(OBJECT_SELF, "lcTempEnemy", 8);
                         SetIsTemporaryEnemy(oTarget);
                         ClearAllActions();
                         HenchDetermineCombatRound(oTarget);
@@ -505,7 +503,7 @@ void HenchDetermineSpecialBehavior(object oIntruder = OBJECT_INVALID)
                     if(!GetIsFriend(oTarget) && GetLevelByClass(CLASS_TYPE_DRUID, oTarget) == 0 && GetLevelByClass(CLASS_TYPE_RANGER, oTarget) == 0 && GetAssociateType(oTarget) != ASSOCIATE_TYPE_ANIMALCOMPANION)
                     {
                         // oTarget has neutral reputation, and is NOT a druid or ranger or an "Animal Companion"
-                        PS_SetLocalInt(OBJECT_SELF, "lcTempEnemy", 8);
+                        SetLocalInt(OBJECT_SELF, "lcTempEnemy", 8);
                         SetIsTemporaryEnemy(oTarget);
                         ClearAllActions();
                         HenchDetermineCombatRound(oTarget);
@@ -543,17 +541,17 @@ void HenchDetermineSpecialBehavior(object oIntruder = OBJECT_INVALID)
             // after a while (20-25 seconds), omnivore (boar) "gives up"
             // chasing someone who didn't hurt it. but if the person fought back
             // this condition won't run and the boar will fight to death
-            if(PS_GetLocalInt(OBJECT_SELF, "lcTempEnemy") != FALSE && (GetLastDamager() == OBJECT_INVALID || GetLastDamager() != oTarget) )
+            if(GetLocalInt(OBJECT_SELF, "lcTempEnemy") != FALSE && (GetLastDamager() == OBJECT_INVALID || GetLastDamager() != oTarget) )
             {
-                int nPatience = PS_GetLocalInt(OBJECT_SELF, "lcTempEnemy");
+                int nPatience = GetLocalInt(OBJECT_SELF, "lcTempEnemy");
                 if (nPatience <= 1)
                 {
                     ClearAllActions();
                     ClearPersonalReputation(oTarget);  // reset reputation
-                    PS_DeleteLocalInt(OBJECT_SELF, "lcTempEnemy");
+                    DeleteLocalInt(OBJECT_SELF, "lcTempEnemy");
                     return;
                 }
-                PS_SetLocalInt(OBJECT_SELF, "lcTempEnemy", --nPatience);
+                SetLocalInt(OBJECT_SELF, "lcTempEnemy", --nPatience);
             }
             ClearAllActions();
             HenchDetermineCombatRound(oIntruder);
@@ -902,11 +900,11 @@ object GetNearestTougherFriend(object oSelf, object oPC)
             oSelf, i);
     }
 
-    PS_SetLocalInt(OBJECT_SELF,"LocalBoss",FALSE);
+    SetLocalInt(OBJECT_SELF,"LocalBoss",FALSE);
     if (nEqual == 0)
         if (nNear > 0 || GetHitDice(oPC) - GetHitDice(OBJECT_SELF) < 2)
     {
-        PS_SetLocalInt(OBJECT_SELF,"LocalBoss",TRUE);
+        SetLocalInt(OBJECT_SELF,"LocalBoss",TRUE);
     }
 
     return OBJECT_INVALID;
@@ -920,11 +918,11 @@ const float stealthDistThresh = 80.0;
 int DoStealthAndWander()
 {
     // Pausanias: monsters try to find you.
-    int scoutMode = PS_GetLocalInt(OBJECT_SELF, sHenchScoutMode);
+    int scoutMode = GetLocalInt(OBJECT_SELF, sHenchScoutMode);
     if (scoutMode == 0)
     {
         scoutMode = d2();
-        PS_SetLocalInt(OBJECT_SELF, sHenchScoutMode, scoutMode);
+        SetLocalInt(OBJECT_SELF, sHenchScoutMode, scoutMode);
     }
     if (GetPlotFlag(OBJECT_SELF))
     {
@@ -979,7 +977,7 @@ int DoStealthAndWander()
     if ((nStealthAndWander & HENCH_OPTION_WANDER) && GetDistanceToObject(oPC) < 25.0)
     {
         object oTarget = GetNearestTougherFriend(OBJECT_SELF,oPC);
-        if (!PS_GetLocalInt(OBJECT_SELF, "LocalBoss"))
+        if (!GetLocalInt(OBJECT_SELF, "LocalBoss"))
         {
             int fDist = 15;
             if (!GetIsObjectValid(oTarget) || scoutMode == 1)
@@ -990,10 +988,10 @@ int DoStealthAndWander()
             }
 //          Jug_Debug(GetName(OBJECT_SELF) + " doing wander");
             location lNew;
-            if (PS_GetLocalInt(OBJECT_SELF, "OpenedDoor"))
+            if (GetLocalInt(OBJECT_SELF, "OpenedDoor"))
             {
-                lNew = PS_GetLocalLocation(OBJECT_SELF, "ScoutZone");
-                PS_SetLocalInt(OBJECT_SELF, "OpenedDoor", FALSE);
+                lNew = GetLocalLocation(OBJECT_SELF, "ScoutZone");
+                SetLocalInt(OBJECT_SELF, "OpenedDoor", FALSE);
             }
             else
             {
@@ -1002,7 +1000,7 @@ int DoStealthAndWander()
                 vLoc.y += fDist-IntToFloat(Random(2*fDist+1));
                 vLoc.z += fDist-IntToFloat(Random(2*fDist+1));
                 lNew = Location(GetArea(oTarget),vLoc,0.);
-                PS_SetLocalLocation(OBJECT_SELF, "ScoutZone", lNew);
+                SetLocalLocation(OBJECT_SELF, "ScoutZone", lNew);
             }
             if (!bActionsCleared)
             {
@@ -1069,7 +1067,7 @@ void HenchTestStep(object oTarget, location oldLocation, int curTest)
 	if (curTest >= HENCH_STEP_NONE)
 	{	
 //		Jug_Debug("^^^^^^^^^" + GetName(OBJECT_SELF) + " ran out of options");		
-		PS_SetLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED, TRUE);
+		SetLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED, TRUE);
 		HenchDetermineCombatRound(oTarget, TRUE);
 		return;
 	}	
@@ -1124,14 +1122,14 @@ void HenchCheckAttackSecondaryTarget(object oOriginalTarget)
 	if (oTestTarget != oOriginalTarget)
 	{
 //		Jug_Debug("^^^^^^^^^" + GetName(OBJECT_SELF) + " new target " + GetName(oTestTarget));
-		PS_SetLocalObject(OBJECT_SELF, sHenchLastTarget, oTestTarget);
+		SetLocalObject(OBJECT_SELF, sHenchLastTarget, oTestTarget);
 		ActionAttack(oTestTarget);
 	}
 	// last ditch attempt to get unstuck
 	ActionDoCommand(HenchTestStep(oTestTarget, GetLocation(OBJECT_SELF), HENCH_STEP_FORWARD));
-	if (!PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
+	if (!GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
 	{
-		PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
+		SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
 		DelayCommand(2.0, HenchStartCombatRoundAfterDelay(oTestTarget));
 	}
 }
@@ -1160,9 +1158,9 @@ void HenchMoveAndDetermineCombatRound(object oTarget)
 		if (GetDistanceBetweenLocations(destLocation, targetLocation) < (GetDistanceToObject(oTarget) - 2.5))
 		{
 			ActionMoveToLocation(destLocation, TRUE);
-			if (!PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
+			if (!GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
 			{
-				PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
+				SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
 				DelayCommand(2.0, HenchStartCombatRoundAfterDelay(oTarget));
 			}
 			ActionDoCommand(HenchCheckAttackSecondaryTarget(oTarget));			
@@ -1171,7 +1169,7 @@ void HenchMoveAndDetermineCombatRound(object oTarget)
 		else
 		{
 	//		Jug_Debug(GetName(OBJECT_SELF ) + " setting location failed for " + GetName(oTarget));
-			PS_SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
+			SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
 		}
 	}
 	HenchCheckAttackSecondaryTarget(oTarget);
@@ -1201,9 +1199,9 @@ void HenchMoveToMaster(object oMaster)
 		if (GetDistanceBetweenLocations(destLocation, targetLocation) < (GetDistanceToObject(oMaster) - 2.5))
 		{
 			ActionMoveToLocation(destLocation, TRUE);
-			if (!PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
+			if (!GetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL))
 			{
-				PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
+				SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, TRUE);
 				DelayCommand(2.0, HenchStartCombatRoundAfterDelay(OBJECT_INVALID));
 			}
 			return;
@@ -1211,7 +1209,7 @@ void HenchMoveToMaster(object oMaster)
 		else
 		{
 	//		Jug_Debug(GetName(OBJECT_SELF ) + " setting location failed for " + GetName(oTarget));
-			PS_SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
+			SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
 		}
 	}
 }

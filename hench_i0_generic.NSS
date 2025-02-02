@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
     Companion and Monster AI
@@ -683,7 +681,7 @@ void InitializeCreatureInformationInternal(object oTarget)
             break;
         case EFFECT_TYPE_POLYMORPH:
             posEffects |= HENCH_EFFECT_TYPE_POLYMORPH;
-            PS_SetLocalInt(OBJECT_SELF, sPolymorphTypeStr, GetEffectInteger(eCheck, 0));
+            SetLocalInt(OBJECT_SELF, sPolymorphTypeStr, GetEffectInteger(eCheck, 0));
             if (GetEffectInteger(eCheck, 3))
             {
                 posEffects |= HENCH_EFFECT_TYPE_WILDSHAPE;
@@ -988,18 +986,18 @@ void InitializeCreatureInformationInternal(object oTarget)
         }
     }
 
-    PS_SetLocalInt(oTarget, curPostiveEffectsStr, posEffects);
-    PS_SetLocalInt(oTarget, curNegativeEffectsStr, negEffects);
-    PS_SetLocalInt(oTarget, abilityIncreaseStr, abilityMask);
-    PS_SetLocalInt(oTarget, attackBonusStr, attackBonus);
-    PS_SetLocalInt(oTarget, spellLevelProtStr, iSpellLevelProt);
-    PS_SetLocalInt(oTarget, damageInformationStr, damageInformation);
-    PS_SetLocalFloat(oTarget, rangedConcealmentStr, fRangedConcealment);
-    PS_SetLocalFloat(oTarget, meleeConcealmentStr, fMeleeConcealment);
-	PS_SetLocalInt(oTarget, regenerationRateStr, iRegenerationRate);
-	PS_SetLocalInt(oTarget, spellSaveBonusStr, iSpellSaveBonus);
+    SetLocalInt(oTarget, curPostiveEffectsStr, posEffects);
+    SetLocalInt(oTarget, curNegativeEffectsStr, negEffects);
+    SetLocalInt(oTarget, abilityIncreaseStr, abilityMask);
+    SetLocalInt(oTarget, attackBonusStr, attackBonus);
+    SetLocalInt(oTarget, spellLevelProtStr, iSpellLevelProt);
+    SetLocalInt(oTarget, damageInformationStr, damageInformation);
+    SetLocalFloat(oTarget, rangedConcealmentStr, fRangedConcealment);
+    SetLocalFloat(oTarget, meleeConcealmentStr, fMeleeConcealment);
+	SetLocalInt(oTarget, regenerationRateStr, iRegenerationRate);
+	SetLocalInt(oTarget, spellSaveBonusStr, iSpellSaveBonus);
 	
-    PS_SetLocalInt(oTarget, lastEffectQueryStr, GetTimeSecond() + 1);
+    SetLocalInt(oTarget, lastEffectQueryStr, GetTimeSecond() + 1);
 }
 
 
@@ -1007,7 +1005,7 @@ void InitializeCreatureInformation(object oTarget)
 {
     InitializeCreatureInformationInternal(oTarget);
 
-    PS_SetLocalInt(oTarget, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_UNKNOWN);
+    SetLocalInt(oTarget, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_UNKNOWN);
 }
 
 
@@ -1015,7 +1013,7 @@ int gICheckCreatureInfoStaleTime;
 
 int GetIsOldCreatureInformation(object oTarget)
 {
-    int lastQueryTime = PS_GetLocalInt(oTarget, lastEffectQueryStr);
+    int lastQueryTime = GetLocalInt(oTarget, lastEffectQueryStr);
     if (!lastQueryTime)
     {
         return TRUE;
@@ -1038,7 +1036,7 @@ int GetCreaturePosEffects(object oTarget)
     {
         InitializeCreatureInformationInternal(oTarget);
     }
-    return PS_GetLocalInt(oTarget, curPostiveEffectsStr);
+    return GetLocalInt(oTarget, curPostiveEffectsStr);
 }
 
 int GetCreatureNegEffects(object oTarget)
@@ -1047,14 +1045,14 @@ int GetCreatureNegEffects(object oTarget)
     {
         InitializeCreatureInformationInternal(oTarget);
     }
-    return PS_GetLocalInt(oTarget, curNegativeEffectsStr);
+    return GetLocalInt(oTarget, curNegativeEffectsStr);
 }
 
 int GetCreatureAbilityIncrease(object oTarget, int nAbilityType)
 {
     // assume already initialized
     int abilityBitMask = 1 << nAbilityType;
-    if (abilityBitMask & PS_GetLocalInt(oTarget, abilityIncreaseStr))
+    if (abilityBitMask & GetLocalInt(oTarget, abilityIncreaseStr))
     {
         return GetIntArray(oTarget, abilityIncreaseStr, nAbilityType);
     }
@@ -1065,7 +1063,7 @@ int GetCreatureACBonus(object oTarget, int nACType)
 {
     // assume already initialized
     int abilityBitMask = 1 << (nACType + acIncreaseOffset);
-    if (abilityBitMask & PS_GetLocalInt(oTarget, abilityIncreaseStr))
+    if (abilityBitMask & GetLocalInt(oTarget, abilityIncreaseStr))
     {
         return GetIntArray(oTarget, acIncreaseStr, nACType);
     }
@@ -1080,9 +1078,9 @@ int GetTouchAC(object oTarget)
 {
 	int touchAC;
 
-	if (PS_GetLocalInt(oTarget, lastEffectQueryStr) == PS_GetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC_TIME))
+	if (GetLocalInt(oTarget, lastEffectQueryStr) == GetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC_TIME))
 	{
-		touchAC = PS_GetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC);
+		touchAC = GetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC);
 	}
 	else
 	{
@@ -1133,8 +1131,8 @@ int GetTouchAC(object oTarget)
 			}							
 		}						
 	
-		PS_SetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC, touchAC);						
-		PS_SetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC_TIME, PS_GetLocalInt(oTarget, lastEffectQueryStr));
+		SetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC, touchAC);						
+		SetLocalInt(oTarget, HENCH_SAVE_BASE_TOUCH_AC_TIME, GetLocalInt(oTarget, lastEffectQueryStr));
 	}
 
 	return touchAC;
@@ -1145,12 +1143,12 @@ const string sThreatRating = "HenchThreatRating";
 
 float GetRawThreatRating(object oTarget)
 {
-    int lastTestHitDice = PS_GetLocalInt(oTarget, sThreatRating);
+    int lastTestHitDice = GetLocalInt(oTarget, sThreatRating);
     int hitDice = GetHitDice(oTarget);
     float fThreat;
     if (GetHitDice(oTarget) == lastTestHitDice)
     {
-        fThreat = PS_GetLocalFloat(oTarget, sThreatRating);
+        fThreat = GetLocalFloat(oTarget, sThreatRating);
     }
     else
     {
@@ -1178,8 +1176,8 @@ float GetRawThreatRating(object oTarget)
         {
             fThreat = 0.001;
         }
-        PS_SetLocalFloat(oTarget, sThreatRating, fThreat);
-        PS_SetLocalInt(oTarget, sThreatRating, hitDice);
+        SetLocalFloat(oTarget, sThreatRating, fThreat);
+        SetLocalInt(oTarget, sThreatRating, hitDice);
     }
     return fThreat;
 }
@@ -1211,7 +1209,7 @@ int GetCreatureUseItems(object oCreature)
     int nAppearanceType = GetAppearanceType(oCreature);
     string sUseItemsSizeStr = "HENCH_AI_USE_ITEMS_" + IntToString(nAppearanceType);
     object oModule = GetModule();
-    int useItems = PS_GetLocalInt(oModule, sUseItemsSizeStr);
+    int useItems = GetLocalInt(oModule, sUseItemsSizeStr);
     if (useItems == 0)
     {
         if ((GetRacialType(oCreature) == RACIAL_TYPE_DRAGON) || (nAppearanceType == 1011))
@@ -1221,7 +1219,7 @@ int GetCreatureUseItems(object oCreature)
         else
         {
             useItems = StringToInt(Get2DAString("appearance", "BodyType", nAppearanceType)) > 0 ? 2 : 1;
-            PS_SetLocalInt(oModule, sUseItemsSizeStr, useItems);
+            SetLocalInt(oModule, sUseItemsSizeStr, useItems);
         }
     }
     return useItems > 1;
@@ -1246,37 +1244,37 @@ int GetCreatureHasItemProperty(int nItemProperty, object oCreature = OBJECT_SELF
 void SetObjectArray(object oSource, string sName, int iElem, object oElem)
 {
     string sFull = sName+IntToString(iElem);
-    PS_SetLocalObject(oSource,sFull,oElem);
+    SetLocalObject(oSource,sFull,oElem);
 }
 
 object GetObjectArray(object oSource, string sName, int iElem)
 {
     string sFull = sName+IntToString(iElem);
-    return PS_GetLocalObject(oSource,sFull);
+    return GetLocalObject(oSource,sFull);
 }
 
 void SetIntArray(object oSource, string sName, int iElem, int iState)
 {
     string sFull = sName+IntToString(iElem);
-    PS_SetLocalInt(oSource,sFull,iState);
+    SetLocalInt(oSource,sFull,iState);
 }
 
 int GetIntArray(object oSource, string sName, int iElem)
 {
     string sFull = sName+IntToString(iElem);
-    return PS_GetLocalInt(oSource,sFull);
+    return GetLocalInt(oSource,sFull);
 }
 
 void SetFloatArray(object oSource, string sName, int iElem, float fVal)
 {
     string sFull = sName+IntToString(iElem);
-    PS_SetLocalFloat(oSource,sFull,fVal);
+    SetLocalFloat(oSource,sFull,fVal);
 }
 
 float GetFloatArray(object oSource, string sName, int iElem)
 {
     string sFull = sName+IntToString(iElem);
-    return PS_GetLocalFloat(oSource,sFull);
+    return GetLocalFloat(oSource,sFull);
 }
 
 int IsOnOppositeSideOfDoor(object oDoor, object obj1, object obj2)
@@ -1308,7 +1306,7 @@ int HenchEnemyOnOtherSideOfDoor(object oTarget)
     while (GetIsObjectValid(oDoor))
     {
 //      Jug_Debug(GetName(OBJECT_SELF) + " check door " + GetName(oDoor));
-        if (!GetIsOpen(oDoor) && (bIngoreDoorWarning || PS_GetLocalInt(oDoor, "tkDoorWarning")))
+        if (!GetIsOpen(oDoor) && (bIngoreDoorWarning || GetLocalInt(oDoor, "tkDoorWarning")))
         {
 //          Jug_Debug(GetName(OBJECT_SELF) + "door open with warning given");
             if (IsOnOppositeSideOfDoor(oDoor, oTarget, OBJECT_SELF))
@@ -1474,13 +1472,13 @@ int HenchDetermineClassToUse(object oCharacter = OBJECT_SELF)
 
 int CheckStealth()
 {
-    int nStealthCheck = PS_GetLocalInt(OBJECT_SELF, "canStealth");
+    int nStealthCheck = GetLocalInt(OBJECT_SELF, "canStealth");
     if (nStealthCheck == 0)
     {
         int nThreshold = GetHitDice(OBJECT_SELF) / 2;
         nStealthCheck = ((GetSkillRank(SKILL_HIDE, OBJECT_SELF, TRUE) > nThreshold) ||
             (GetSkillRank(SKILL_MOVE_SILENTLY, OBJECT_SELF, TRUE) > nThreshold)) ? 1 : 2;
-        PS_SetLocalInt(OBJECT_SELF, "canStealth", nStealthCheck);
+        SetLocalInt(OBJECT_SELF, "canStealth", nStealthCheck);
     }
     return nStealthCheck == 1;
 }
@@ -1527,7 +1525,7 @@ void UseCombatAttack(object oTarget, int nFeatID = -1, int nCombatMode = -1)
     {
         ActionUseFeat(nFeatID, oTarget);
     }
-    PS_SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
+    SetLocalLocation(OBJECT_SELF, sHenchLastAttackLocation, GetLocation(OBJECT_SELF));
 }
 
 
@@ -1544,16 +1542,16 @@ const string sHenchShouldIAttackMessageGiven = "HenchShouldIAttackMessageGiven";
 
 void CleanCombatVars()
 {
-    PS_DeleteLocalInt(OBJECT_SELF, henchCombatRoundStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchLastDraBrStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchLastDispelStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchLastDomStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchLastTurnStr);
-    PS_DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
-    PS_DeleteLocalLocation(OBJECT_SELF, sHenchLastAttackLocation);
-    PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB);
-	PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED);
-	PS_DeleteLocalInt(OBJECT_SELF, sHenchShouldIAttackMessageGiven);
+    DeleteLocalInt(OBJECT_SELF, henchCombatRoundStr);
+    DeleteLocalInt(OBJECT_SELF, henchLastDraBrStr);
+    DeleteLocalInt(OBJECT_SELF, henchLastDispelStr);
+    DeleteLocalInt(OBJECT_SELF, henchLastDomStr);
+    DeleteLocalInt(OBJECT_SELF, henchLastTurnStr);
+    DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
+    DeleteLocalLocation(OBJECT_SELF, sHenchLastAttackLocation);
+    DeleteLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_HB);
+	DeleteLocalInt(OBJECT_SELF, HENCH_AI_BLOCKED);
+	DeleteLocalInt(OBJECT_SELF, sHenchShouldIAttackMessageGiven);
 }
 
 
@@ -1575,7 +1573,7 @@ void ReportUnseenAllies()
 
 int GetHenchAssociateState(int nCondition, object oCreature = OBJECT_SELF)
 {
-    int result = PS_GetLocalInt(oCreature, henchAssociateSettings);
+    int result = GetLocalInt(oCreature, henchAssociateSettings);
     if (!result)
     {
         // check global setting to disable
@@ -1642,10 +1640,10 @@ int GetHenchAssociateState(int nCondition, object oCreature = OBJECT_SELF)
             SetAssociateState(NW_ASC_OVERKIll_CASTING, TRUE, oCreature);
             SetAssociateState(NW_ASC_POWER_CASTING, FALSE, oCreature);
             SetAssociateState(NW_ASC_SCALED_CASTING, FALSE, oCreature);
-            PS_DeleteLocalInt(oCreature, N2_COMBAT_MODE_USE_DISABLED);
-            PS_SetLocalInt(oCreature, sHenchDontDispel, 10);
+            DeleteLocalInt(oCreature, N2_COMBAT_MODE_USE_DISABLED);
+            SetLocalInt(oCreature, sHenchDontDispel, 10);
         }
-        PS_SetLocalInt(oCreature, henchAssociateSettings, result);
+        SetLocalInt(oCreature, henchAssociateSettings, result);
     }
     return result & nCondition;
 }
@@ -1654,12 +1652,12 @@ int GetHenchAssociateState(int nCondition, object oCreature = OBJECT_SELF)
 int GetHenchPartyState(int nCondition, object oCreature = OBJECT_SELF)
 {
     object oPlayerCharacter = GetOwnedCharacter(GetFactionLeader(oCreature));
-    int nResult = PS_GetLocalInt(oPlayerCharacter, henchPartySettings);	
+    int nResult = GetLocalInt(oPlayerCharacter, henchPartySettings);	
 	if (!nResult)
 	{
 		nResult = GetCampaignInt(HENCH_CAMPAIGN_DB, henchPartySettings);
 		nResult |= HENCH_OPTION_SET_ONCE;
-    	PS_SetLocalInt(oPlayerCharacter, henchPartySettings, nResult);
+    	SetLocalInt(oPlayerCharacter, henchPartySettings, nResult);
 	}	
     return nResult & nCondition;
 }
@@ -1674,7 +1672,7 @@ int GetMeleeWeaponSize(object oItem)
     int nBase = GetBaseItemType(oItem);
     string sWeaponSizeStr = "HENCH_AI_WEAPON_SIZE_" + IntToString(nBase);
     object oModule = GetModule();
-    int iWeaponSize = PS_GetLocalInt(oModule, sWeaponSizeStr);
+    int iWeaponSize = GetLocalInt(oModule, sWeaponSizeStr);
     if (iWeaponSize == 0)
     {
         iWeaponSize = StringToInt(Get2DAString("baseitems", "WeaponSize", nBase));
@@ -1682,7 +1680,7 @@ int GetMeleeWeaponSize(object oItem)
         {
             iWeaponSize = -1;
         }
-        PS_SetLocalInt(oModule, sWeaponSizeStr, iWeaponSize);
+        SetLocalInt(oModule, sWeaponSizeStr, iWeaponSize);
     }
     if (iWeaponSize > 0)
     {
@@ -1936,6 +1934,6 @@ struct sAttackInfo GetAttackBonus(object oCreature, object oTarget)
     {
         sReturnVal = GetMeleeAttackBonus(oCreature, oRightWeapon, oTarget);
     }
-    sReturnVal.attackBonus += PS_GetLocalInt(oCreature, attackBonusStr);
+    sReturnVal.attackBonus += GetLocalInt(oCreature, attackBonusStr);
     return sReturnVal;
 }

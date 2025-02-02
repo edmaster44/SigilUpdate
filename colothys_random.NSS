@@ -11,7 +11,7 @@ void main () {
 	object oPC = GetEnteringObject();
 	int nRoll = d100();
 	
-	int nTime = PS_GetLocalInt(OBJECT_SELF, "last_fired");
+	int nTime = GetLocalInt(OBJECT_SELF, "last_fired");
 	if (GetTime()-nTime < 60)
 		return;
 		
@@ -24,13 +24,13 @@ void main () {
 	}
 	
 			
-	PS_SetLocalInt(OBJECT_SELF, "last_fired", GetTime());
+	SetLocalInt(OBJECT_SELF, "last_fired", GetTime());
 
 }
 
 void SpawnGuardian(object oPC) {
 
-	string sWP = PS_GetLocalString(OBJECT_SELF, "guardian_wp");
+	string sWP = GetLocalString(OBJECT_SELF, "guardian_wp");
 	object oWP = GetWaypointByTag(sWP);
 	if (GetNearestObjectByTag("guardian_1") != OBJECT_INVALID)
 		return;
@@ -40,7 +40,7 @@ void SpawnGuardian(object oPC) {
 
 void SpawnVine(object oPC) {
 	
-	string sWP = PS_GetLocalString(OBJECT_SELF, "cliff_wp");
+	string sWP = GetLocalString(OBJECT_SELF, "cliff_wp");
 	object oWP = GetWaypointByTag(sWP);
 	TransportToWaypoint(oPC, oWP);
 	

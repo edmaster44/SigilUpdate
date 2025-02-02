@@ -355,17 +355,17 @@ string PS_CheckCharacterLegality(object PC, int ForceCheck)
 {
 	// Early exit if the PC has already been confirmed to be valid this boot of
 	// the server.
-	if ((PS_GetLocalInt(PC, "canEnterModule") != FALSE) && (ForceCheck == FALSE)) {
+	if ((GetLocalInt(PC, "canEnterModule") != FALSE) && (ForceCheck == FALSE)) {
 		return "";
 	}
 	
 	object oItem = PS_GetEssence(PC);
     if(GetIsObjectValid(oItem))
     {
-	 	string sLegal = PS_GetLocalString(oItem,"LEGAL");
+	 	string sLegal = GetLocalString(oItem,"LEGAL");
 		if(sLegal == "TRUE")
 		{
-			PS_SetLocalInt(PC, "canEnterModule", TRUE);
+			SetLocalInt(PC, "canEnterModule", TRUE);
 			return "";
 		}
     }
@@ -390,10 +390,10 @@ string PS_CheckCharacterLegality(object PC, int ForceCheck)
 	}
 
 	if (errorMessage == "") {
-		PS_SetLocalInt(PC, "canEnterModule", TRUE);
+		SetLocalInt(PC, "canEnterModule", TRUE);
 	}
 	else {
-		PS_SetLocalInt(PC, "canEnterModule", FALSE);
+		SetLocalInt(PC, "canEnterModule", FALSE);
 	}
 
 	return errorMessage;

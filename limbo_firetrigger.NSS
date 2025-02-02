@@ -1,11 +1,9 @@
-#include "ff_safevar"
-
 void main ()
 {
 	object oPC = GetEnteringObject();
 	string sTag = GetTag(OBJECT_SELF);
 	object oBridge;
-	if (PS_GetLocalInt(oPC, sTag) == 1 || GetIsDM(oPC))
+	if (GetLocalInt(oPC, sTag) == 1 || GetIsDM(oPC))
 		return;
 	
 	//rolling. . .
@@ -20,7 +18,7 @@ void main ()
 	}
 	else
 	{
-		PS_SetLocalInt(oPC, sTag, 1);
+		SetLocalInt(oPC, sTag, 1);
 		SendMessageToPC(oPC, "Will Roll: "+IntToString(nWis)+"+"+IntToString(nRoll)+"="+IntToString(nWis+nRoll)+" Failure.");	
 	}
 	

@@ -11,8 +11,8 @@ Created - 11/26/17 Mimi Fearthegn
 void main () {
 
 	object oPC = GetLastOpenedBy();
-	string sCreate = PS_GetLocalString(OBJECT_SELF, "CreatureToSpawn");
-	int nPercen = PS_GetLocalInt(OBJECT_SELF, "PercentageToSpawn");
+	string sCreate = GetLocalString(OBJECT_SELF, "CreatureToSpawn");
+	int nPercen = GetLocalInt(OBJECT_SELF, "PercentageToSpawn");
 	int lastDone = CheckTimeStamp();
 	
 	if (lastDone < 600) //checks once per 10 minutes

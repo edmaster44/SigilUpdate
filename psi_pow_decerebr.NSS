@@ -96,7 +96,7 @@ void main()
             if(PRCMyResistPower(oManifester, oTarget, nPen))
             {
                 if(!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)  &&   // Check if the target has a brain to mess with
-                   !PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED")  // And that the target can be teleported at all
+                   !GetLocalInt(oTarget, "DIMENSIONAL_ACHORED")  // And that the target can be teleported at all
                    )
                 {
                     // Fort negates

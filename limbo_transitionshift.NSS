@@ -1,132 +1,130 @@
-#include "ff_safevar"
-
 void SetNewPath(object oHolder, int rand)
 {
 	if (rand == 1)
 	{
-		PS_SetLocalString(oHolder, "ruinscave", "wp_limbo_earthin");
-		PS_SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "ruinsdive", "wp_limbo_stormcave");
+		SetLocalString(oHolder, "ruinscave", "wp_limbo_earthin");
+		SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "ruinsdive", "wp_limbo_stormcave");
 		
-		PS_SetLocalString(oHolder, "earthin", "wp_limbo_ruinscave");
-		PS_SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
+		SetLocalString(oHolder, "earthin", "wp_limbo_ruinscave");
+		SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
 		
-		PS_SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_hermitage");
-		PS_SetLocalString(oHolder, "stormstairs", "wp_limbo_firecave");
-		PS_SetLocalString(oHolder, "stormcave", "wp_limbo_earthout");
+		SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "stormstairs", "wp_limbo_firecave");
+		SetLocalString(oHolder, "stormcave", "wp_limbo_earthout");
 		
-		PS_SetLocalString(oHolder, "firecave", "wp_limbo_earthout");
-		PS_SetLocalString(oHolder, "firestairs", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "firepit", "wp_limbo_earthcave");
+		SetLocalString(oHolder, "firecave", "wp_limbo_earthout");
+		SetLocalString(oHolder, "firestairs", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "firepit", "wp_limbo_earthcave");
 		
-		PS_SetLocalString(oHolder, "airstairs", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "airstairs", "wp_limbo_stormwhirlwind");
 		
-		PS_SetLocalString(oHolder, "hermitageout", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "hermitageout", "wp_limbo_stormwhirlwind");
 	}
 	else if (rand == 2)
 	{
-		PS_SetLocalString(oHolder, "ruinscave", "wp_limbo_firecave");
-		PS_SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_stormwhirlwind");
-		PS_SetLocalString(oHolder, "ruinsdive", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "ruinscave", "wp_limbo_firecave");
+		SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "ruinsdive", "wp_limbo_airstairs");
 		
-		PS_SetLocalString(oHolder, "earthin", "wp_limbo_hermitage");
-		PS_SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
+		SetLocalString(oHolder, "earthin", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
 		
-		PS_SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_ruinswhirlwind");
-		PS_SetLocalString(oHolder, "stormstairs", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "stormcave", "wp_limbo_earthin");
+		SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_ruinswhirlwind");
+		SetLocalString(oHolder, "stormstairs", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "stormcave", "wp_limbo_earthin");
 		
-		PS_SetLocalString(oHolder, "firecave", "wp_limbo_ruinscave");
-		PS_SetLocalString(oHolder, "firestairs", "wp_limbo_stormstairs");
-		PS_SetLocalString(oHolder, "firepit", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "firecave", "wp_limbo_ruinscave");
+		SetLocalString(oHolder, "firestairs", "wp_limbo_stormstairs");
+		SetLocalString(oHolder, "firepit", "wp_limbo_airstairs");
 		
-		PS_SetLocalString(oHolder, "airstairs", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "airstairs", "wp_limbo_hermitage");
 		
-		PS_SetLocalString(oHolder, "hermitageout", "wp_limbo_earthout");
+		SetLocalString(oHolder, "hermitageout", "wp_limbo_earthout");
 	}
 	else if (rand == 3)
 	{
-		PS_SetLocalString(oHolder, "ruinscave", "wp_limbo_earthout");
-		PS_SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "ruinsdive", "wp_limbo_firestairs");
+		SetLocalString(oHolder, "ruinscave", "wp_limbo_earthout");
+		SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "ruinsdive", "wp_limbo_firestairs");
 		
-		PS_SetLocalString(oHolder, "earthin", "wp_limbo_stormstairs");
-		PS_SetLocalString(oHolder, "earthout", "wp_limbo_ruinscave");
+		SetLocalString(oHolder, "earthin", "wp_limbo_stormstairs");
+		SetLocalString(oHolder, "earthout", "wp_limbo_ruinscave");
 		
-		PS_SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "stormstairs", "wp_limbo_earthin");
-		PS_SetLocalString(oHolder, "stormcave", "wp_limbo_firecave");
+		SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "stormstairs", "wp_limbo_earthin");
+		SetLocalString(oHolder, "stormcave", "wp_limbo_firecave");
 		
-		PS_SetLocalString(oHolder, "firecave", "wp_limbo_stormcave");
-		PS_SetLocalString(oHolder, "firestairs", "wp_limbo_hermitage");
-		PS_SetLocalString(oHolder, "firepit", "wp_limbo_ruinswhirlwind");
+		SetLocalString(oHolder, "firecave", "wp_limbo_stormcave");
+		SetLocalString(oHolder, "firestairs", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "firepit", "wp_limbo_ruinswhirlwind");
 		
-		PS_SetLocalString(oHolder, "airstairs", "wp_limbo_ruinswhirlwind");
+		SetLocalString(oHolder, "airstairs", "wp_limbo_ruinswhirlwind");
 		
-		PS_SetLocalString(oHolder, "hermitageout", "wp_limbo_firestairs");
+		SetLocalString(oHolder, "hermitageout", "wp_limbo_firestairs");
 	}
 	else if (rand == 4)
 	{
-		PS_SetLocalString(oHolder, "ruinscave", "wp_limbo_stormcave");
-		PS_SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_firestairs");
-		PS_SetLocalString(oHolder, "ruinsdive", "wp_limbo_earthcave");
+		SetLocalString(oHolder, "ruinscave", "wp_limbo_stormcave");
+		SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_firestairs");
+		SetLocalString(oHolder, "ruinsdive", "wp_limbo_earthcave");
 		
-		PS_SetLocalString(oHolder, "earthin", "wp_limbo_firecave");
-		PS_SetLocalString(oHolder, "earthout", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "earthin", "wp_limbo_firecave");
+		SetLocalString(oHolder, "earthout", "wp_limbo_stormwhirlwind");
 		
-		PS_SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_earthout");
-		PS_SetLocalString(oHolder, "stormstairs", "wp_limbo_firestairs");
-		PS_SetLocalString(oHolder, "stormcave", "wp_limbo_ruinscave");
+		SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_earthout");
+		SetLocalString(oHolder, "stormstairs", "wp_limbo_firestairs");
+		SetLocalString(oHolder, "stormcave", "wp_limbo_ruinscave");
 		
-		PS_SetLocalString(oHolder, "firecave", "wp_limbo_earthin");
-		PS_SetLocalString(oHolder, "firestairs", "wp_limbo_ruinswhirlwind");
-		PS_SetLocalString(oHolder, "firepit", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "firecave", "wp_limbo_earthin");
+		SetLocalString(oHolder, "firestairs", "wp_limbo_ruinswhirlwind");
+		SetLocalString(oHolder, "firepit", "wp_limbo_airstairs");
 		
-		PS_SetLocalString(oHolder, "airstairs", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "airstairs", "wp_limbo_hermitage");
 		
-		PS_SetLocalString(oHolder, "hermitageout", "wp_limbo_earthout");
+		SetLocalString(oHolder, "hermitageout", "wp_limbo_earthout");
 	}
 	else if (rand == 5)
 	{
-		PS_SetLocalString(oHolder, "ruinscave", "wp_limbo_firestairs");
-		PS_SetLocalString(oHolder, "ruinswhirlwind", "limbo_blocked");
-		PS_SetLocalString(oHolder, "ruinsdive", "wp_limbo_earthin");
+		SetLocalString(oHolder, "ruinscave", "wp_limbo_firestairs");
+		SetLocalString(oHolder, "ruinswhirlwind", "limbo_blocked");
+		SetLocalString(oHolder, "ruinsdive", "wp_limbo_earthin");
 		
-		PS_SetLocalString(oHolder, "earthin", "limbo_blocked");
-		PS_SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
+		SetLocalString(oHolder, "earthin", "limbo_blocked");
+		SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
 		
-		PS_SetLocalString(oHolder, "stormwhirlwind", "limbo_blocked");
-		PS_SetLocalString(oHolder, "stormstairs", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "stormcave", "wp_limbo_earthin");
+		SetLocalString(oHolder, "stormwhirlwind", "limbo_blocked");
+		SetLocalString(oHolder, "stormstairs", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "stormcave", "wp_limbo_earthin");
 		
-		PS_SetLocalString(oHolder, "firecave", "wp_limbo_earthout");
-		PS_SetLocalString(oHolder, "firestairs", "wp_limbo_ruinscave");
-		PS_SetLocalString(oHolder, "firepit", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "firecave", "wp_limbo_earthout");
+		SetLocalString(oHolder, "firestairs", "wp_limbo_ruinscave");
+		SetLocalString(oHolder, "firepit", "wp_limbo_stormwhirlwind");
 		
-		PS_SetLocalString(oHolder, "airstairs", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "airstairs", "wp_limbo_hermitage");
 		
-		PS_SetLocalString(oHolder, "hermitageout", "wp_limbo_ruinswhirlwind");
+		SetLocalString(oHolder, "hermitageout", "wp_limbo_ruinswhirlwind");
 	}
 	else
 	{
-		PS_SetLocalString(oHolder, "ruinscave", "wp_limbo_stormcave");
-		PS_SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_hermitage");
-		PS_SetLocalString(oHolder, "ruinsdive", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "ruinscave", "wp_limbo_stormcave");
+		SetLocalString(oHolder, "ruinswhirlwind", "wp_limbo_hermitage");
+		SetLocalString(oHolder, "ruinsdive", "wp_limbo_stormwhirlwind");
 		
-		PS_SetLocalString(oHolder, "earthin", "wp_limbo_stormcave");
-		PS_SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
+		SetLocalString(oHolder, "earthin", "wp_limbo_stormcave");
+		SetLocalString(oHolder, "earthout", "wp_limbo_firecave");
 		
-		PS_SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_airstairs");
-		PS_SetLocalString(oHolder, "stormstairs", "wp_limbo_firepit");
-		PS_SetLocalString(oHolder, "stormcave", "wp_limbo_ruinscave");
+		SetLocalString(oHolder, "stormwhirlwind", "wp_limbo_airstairs");
+		SetLocalString(oHolder, "stormstairs", "wp_limbo_firepit");
+		SetLocalString(oHolder, "stormcave", "wp_limbo_ruinscave");
 		
-		PS_SetLocalString(oHolder, "firecave", "wp_limbo_earthout");
-		PS_SetLocalString(oHolder, "firestairs", "wp_limbo_ruinswhirlwind");
-		PS_SetLocalString(oHolder, "firepit", "wp_limbo_stormstairs");
+		SetLocalString(oHolder, "firecave", "wp_limbo_earthout");
+		SetLocalString(oHolder, "firestairs", "wp_limbo_ruinswhirlwind");
+		SetLocalString(oHolder, "firepit", "wp_limbo_stormstairs");
 		
-		PS_SetLocalString(oHolder, "airstairs", "wp_limbo_stormwhirlwind");
+		SetLocalString(oHolder, "airstairs", "wp_limbo_stormwhirlwind");
 		
-		PS_SetLocalString(oHolder, "hermitageout", "wp_limbo_earthcave");
+		SetLocalString(oHolder, "hermitageout", "wp_limbo_earthcave");
 	}
 }
 
@@ -136,7 +134,7 @@ void main ()
 	object oHolder = GetObjectByTag("limbo_transitionmanager");
 	
 	//timer:
-	int lastTime = PS_GetLocalInt(oHolder, "lastshift");
+	int lastTime = GetLocalInt(oHolder, "lastshift");
 	if (lastTime < 0)
 		lastTime = 0;
 	int currentTime = ((GetCalendarYear()*336)+(GetCalendarMonth()*28)+GetCalendarDay()); //days
@@ -145,7 +143,7 @@ void main ()
 	//SendMessageToPC(GetEnteringObject(), IntToString(currentTime)+" "+IntToString(lastTime));
 	int dif = (currentTime-lastTime);
 	//SendMessageToPC(GetEnteringObject(), "it has been "+IntToString(dif)+" minutes since you last stepped on this trigger.");
-	PS_SetLocalInt(oHolder, "lastshift", currentTime);
+	SetLocalInt(oHolder, "lastshift", currentTime);
 	
 	//code!
 	if (dif >= 10) //ten minutes

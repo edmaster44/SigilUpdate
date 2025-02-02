@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "dmfi_inc_sendtex"
 #include "dmfi_inc_const"
 
@@ -7,9 +5,9 @@ void main()
 {
 
 	object oPC = OBJECT_SELF;
-	object oSpeaker = PS_GetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER");
-	object oTarget = PS_GetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET");
-	string sInput = PS_GetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD");
+	object oSpeaker = GetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_SPEAKER");
+	object oTarget = GetLocalObject(OBJECT_SELF, "DMFI_CUSTOM_TARGET");
+	string sInput = GetLocalString(OBJECT_SELF, "DMFI_CUSTOM_CMD");
 	
 	SendText(oSpeaker, "DEBUG: CMD 1");
 	SendText(oSpeaker, "DEBUG: sInput: " + sInput);
@@ -21,7 +19,7 @@ void main()
 	{
 		// Setting this variable will not allow further plugins OR
 		// the default DMFI behavior to run - Set it for OVERRIDES!
-		PS_SetLocalInt(GetModule(), DMFI_STRING_OVERRIDE, 1);
+		SetLocalInt(GetModule(), DMFI_STRING_OVERRIDE, 1);
 		SendText(oSpeaker, "DEBUG: OVERRIDE - CMD2 will not run.");
 	}	
 

@@ -192,9 +192,9 @@ void CheckDiashoWeapons(object oPC, object oEssence)
 	if (GetLevelByClass(CLASS_TYPE_SAMURAI, oPC) == 1)
 	{
 		// check for var to see if already given
-		if (PS_GetLocalInt(oEssence, "DAISHO_WEAPONS_GRANTED") != 1)
+		if (GetLocalInt(oEssence, "DAISHO_WEAPONS_GRANTED") != 1)
 		{
-			PS_SetLocalInt(oEssence, "DAISHO_WEAPONS_GRANTED", 1);
+			SetLocalInt(oEssence, "DAISHO_WEAPONS_GRANTED", 1);
 			CreateItemOnObject("class_it_dkatana", oPC); 
 			CreateItemOnObject("class_it_dwakazashi", oPC);
 			SendMessageToPC(oPC, "<color=gold>You have been granted your Daisho weapons");

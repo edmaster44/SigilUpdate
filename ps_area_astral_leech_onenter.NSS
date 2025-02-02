@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -10,10 +8,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("LeechEnterLock");
+ int iLock = GetGlobalInt("LeechEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("LeechEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("LeechEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("astral_leech_ghyris") == OBJECT_INVALID)
   {
@@ -36,6 +34,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "astral_leech_rak2", lSpawnpoint);    
   }
 
-  PS_SetGlobalInt("LeechEnterLock", 0);
+  SetGlobalInt("LeechEnterLock", 0);
  }
 }

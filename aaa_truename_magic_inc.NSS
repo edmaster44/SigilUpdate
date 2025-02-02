@@ -183,8 +183,8 @@ void PS_Ability_WordOfPeace_Enemy(object oPC, object oTarget, int nSpell)
 		{	SendMessageToPC(oPC, "Waypoint location invalid!");		}
 		if (GetIsPC(oTarget))
 		{	oEss = GetItemPossessedBy(oTarget,"ps_essence");
-			PS_SetLocalLocation(oEss, "ExtraDim", lTarg);
-			DelayCommand(30.1f, PS_DeleteLocalLocation(oEss, "ExtraDim"));
+			SetLocalLocation(oEss, "ExtraDim", lTarg);
+			DelayCommand(30.1f, DeleteLocalLocation(oEss, "ExtraDim"));
 			AssignCommand(oTarget, ClearAllActions());
 			AssignCommand(oTarget, ActionJumpToLocation(lWP));
 			AssignCommand(oTarget, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));

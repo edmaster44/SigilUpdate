@@ -1,14 +1,12 @@
-#include "ff_safevar"
-
 #include "ps_ship_generic_inc"
 void main ()
 {
-	object ship_controller = GetObjectByTag(PS_GetLocalString(OBJECT_SELF, "ship_controller_tag"));
+	object ship_controller = GetObjectByTag(GetLocalString(OBJECT_SELF, "ship_controller_tag"));
 	PlaySound("as_cv_gongring2", TRUE);
-	if (GetDestinationIsInQueue(ship_controller, PS_GetLocalString(OBJECT_SELF, "ship_this_location")))
+	if (GetDestinationIsInQueue(ship_controller, GetLocalString(OBJECT_SELF, "ship_this_location")))
 	{
-		int currentPosInQueue = PS_GetLocalInt(ship_controller, "ship_queue_pos");
-		int nextDestinationTime = PS_GetLocalInt(ship_controller, "ship_time_"+IntToString(currentPosInQueue));
+		int currentPosInQueue = GetLocalInt(ship_controller, "ship_queue_pos");
+		int nextDestinationTime = GetLocalInt(ship_controller, "ship_time_"+IntToString(currentPosInQueue));
 		int diff = nextDestinationTime-ShipTimeStamp();
 		diff += 30;
 		if (diff < 30)
@@ -20,6 +18,6 @@ void main ()
 		return;
 	}
 	else
-		AddDestinationToQueue(ship_controller, PS_GetLocalString(OBJECT_SELF, "ship_this_location"));
-	SpeakString(PS_GetLocalString(OBJECT_SELF, "ship_call_message"));
+		AddDestinationToQueue(ship_controller, GetLocalString(OBJECT_SELF, "ship_this_location"));
+	SpeakString(GetLocalString(OBJECT_SELF, "ship_call_message"));
 }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Default On Heartbeat
 //:: NW_C2_DEFAULT1
@@ -18,7 +16,7 @@
 
 void main()
 {
-	object playerTag = PS_GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
+	object playerTag = GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
 	if (GetIsObjectValid(playerTag))
 	{
 		if (GetArea(playerTag) != GetArea(OBJECT_SELF))
@@ -31,7 +29,7 @@ void main()
 		return;
 	}	
 
-	string anim = PS_GetLocalString(OBJECT_SELF, "ANIMATION");
+	string anim = GetLocalString(OBJECT_SELF, "ANIMATION");
 	if (anim != "")
 	{
 		PlayCustomAnimation(OBJECT_SELF, anim, TRUE);
@@ -78,7 +76,7 @@ void main()
     else if (GetHenchOption(HENCH_OPTION_DISABLE_HB_DETECTION) ||
 		!GetIsObjectValid(GetNearestSeenOrHeardEnemyNotDead(GetHenchOption(HENCH_OPTION_DISABLE_HB_HEARING))))
     {
-        if (PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
             // continue to move to target
 	        if (GetBehaviorState(NW_FLAG_BEHAVIOR_SPECIAL))
@@ -93,7 +91,7 @@ void main()
         else
         {
         	CleanCombatVars();
-            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
             if (DoStealthAndWander())
             {
                 // nothing to do here

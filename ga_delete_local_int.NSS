@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // ga_local_int(string sVariable, string sChange, string sTarget)
 /*
    This script changes a local int variable's value
@@ -32,6 +30,6 @@ void main(string sVariable, float fDelay, string sTarget)
 	if (GetIsObjectValid(oTarg) == FALSE) 
 		PrintString("ga_local_int: " + sTarget + " is invalid");
 
-	DelayCommand(fDelay, PS_DeleteLocalInt(oTarg, sVariable));
+	DelayCommand(fDelay, DeleteLocalInt(oTarg, sVariable));
 	
 }

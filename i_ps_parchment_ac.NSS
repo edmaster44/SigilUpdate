@@ -33,7 +33,7 @@ void main()
     location lTarget = GetItemActivatedTargetLocation();
 
 	// mark the item for the conversation
-	PS_SetLocalObject(oPC, parchmentVarName, oItem);
+	SetLocalObject(oPC, parchmentVarName, oItem);
 	
 	//The PC will technically start a conversation with himself
 	//You should add some odd little sound to the first line in the

@@ -46,18 +46,18 @@ void ListAchievements(object oPC) {
 			
 		AddListBoxRow(oPC, sAchievementWindow, "SCOD_ACHIEVEMENT_LIST", "ACHIEVEMENTROW_"+IntToString(nCount), "AchievementEntryName="+quest_name+";", "", "5="+IntToString(nCount), "");
 		
-		PS_SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ID", entry_id);
-		PS_SetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_NAME", quest_name);
-		PS_SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ICON", quest_icon);
-		PS_SetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_DESCRIPTION", quest_description);
-		PS_SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_STATUS", quest_status);	
+		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ID", entry_id);
+		SetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_NAME", quest_name);
+		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_ICON", quest_icon);
+		SetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_DESCRIPTION", quest_description);
+		SetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nCount)+"_STATUS", quest_status);	
 		
 	}
 	
 	if (nCount > 0)
 		DisplayAchievement(oPC, 1);
 		
-	PS_SetLocalInt(oPC, "ACHIEVEMENT_COUNT", nCount);
+	SetLocalInt(oPC, "ACHIEVEMENT_COUNT", nCount);
 
 }
 
@@ -65,11 +65,11 @@ void DisplayAchievement(object oPC, int nIndex) {
 
 	//SendMessageToPC(oPC, "Displaying achievement #"+IntToString(nIndex));
 		
-	int entry_id = PS_GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_ID");
-	string quest_name = PS_GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_NAME");
-	int quest_icon = PS_GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_ICON");
-	string quest_description = PS_GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_DESCRIPTION");
-	int quest_status = PS_GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_STATUS");
+	int entry_id = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_ID");
+	string quest_name = GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_NAME");
+	int quest_icon = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_ICON");
+	string quest_description = GetLocalString(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_DESCRIPTION");
+	int quest_status = GetLocalInt(oPC, "ACHIEVEMENT_"+IntToString(nIndex)+"_STATUS");
 	
 	SetGUIObjectText(oPC, sAchievementWindow, "Achievement_Title", -1, quest_name);
 	SetGUIObjectText(oPC, sAchievementWindow, "Achievement_Description", -1, quest_description);

@@ -147,14 +147,14 @@ else
 	//Door stuff going first to try and avoid multiple spawns if two players hit trigger
 	//at almost same time... spawns will cause a little delay.
 	oEntryDoor = GetObjectByTag("ps_chessboard_door_enter",0);
-	if (PS_GetLocalInt(oEntryDoor, "GameStarted") == TRUE)
+	if (GetLocalInt(oEntryDoor, "GameStarted") == TRUE)
 		{
 		return;
 		}
 	else
 		{
 		//Going to set a var on the door which will be checked in future to stop multiple spawns.
-		PS_SetLocalInt(oEntryDoor, "GameStarted", TRUE);
+		SetLocalInt(oEntryDoor, "GameStarted", TRUE);
 		
 		// Make sure we don't double-spawn
 		if (GetIsObjectValid(GetObjectByTag("ps_monster_chess_king_enemy")))
@@ -170,7 +170,7 @@ else
 		//SendMessageToPC(oPC, "I'm a PC");
 		//iChessQuestState = GetJournalQuestEntry("ps_quest_chessboard", oPC);
 		//SendMessageToPC(oPC, IntToString(GetJournalQuestEntry("ps_quest_chessboard", oPC)));
-		sSideChosen = GetStringLowerCase(PS_GetLocalString(OBJECT_SELF, "sChessColour"));
+		sSideChosen = GetStringLowerCase(GetLocalString(OBJECT_SELF, "sChessColour"));
 		//SendMessageToPC(oPC, sSideChosen);
 		if (sSideChosen=="black")
 			{
@@ -216,7 +216,7 @@ else
 			oEnemyKing = CreateObject(OBJECT_TYPE_CREATURE, "ps_monster_chess_" + sSideOpposing + "king", GetLocation (GetWaypointByTag ("chess_enemy_queen")), FALSE, "ps_monster_chess_king_enemy");
 			DelayCommand(0.5, ChessPieceSpawn(sSideOpposing, "enemy", "queen", GetLocation (GetWaypointByTag ("chess_enemy_king"))));
 			}
-		PS_SetLocalString(oEnemyKing, "sChessSideChosen", sSideChosen);
+		SetLocalString(oEnemyKing, "sChessSideChosen", sSideChosen);
 
 		// Now setup the ally side
 		// big long chain checking size of party and total levels... could probably loop it with a function...
@@ -362,5 +362,5 @@ else
 		}
 	}	
 //Just check the local var has been set
-//SendMessageToPC(oPC, "Variable set on king was: " + PS_GetLocalString(oEnemyKing, "sChessSideChosen"));
+//SendMessageToPC(oPC, "Variable set on king was: " + GetLocalString(oEnemyKing, "sChessSideChosen"));
 }

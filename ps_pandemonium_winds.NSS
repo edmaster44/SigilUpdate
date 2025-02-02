@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_training"
 #include "ps_inc_achievements"
 
@@ -55,9 +53,9 @@ void DoSonicDamage(object oPC) {
 	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
 	ApplyEffectToObject(0, eDam, oPC);
 	
-	int nTimes = PS_GetLocalInt(oPC, "pandemonium_time");
+	int nTimes = GetLocalInt(oPC, "pandemonium_time");
 	DecreaseSavingThrow(oPC, nTimes);
-	PS_SetLocalInt(oPC, "pandemonium_time", nTimes+1);
+	SetLocalInt(oPC, "pandemonium_time", nTimes+1);
 	
 }
 
@@ -77,9 +75,9 @@ void DoWindEffect(object oPC) {
 	eKnock = ExtraordinaryEffect(eKnock);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
 	
-	int nTimes = PS_GetLocalInt(oPC, "pandemonium_time");
+	int nTimes = GetLocalInt(oPC, "pandemonium_time");
 	DecreaseSavingThrow(oPC, nTimes);
-	PS_SetLocalInt(oPC, "pandemonium_time", nTimes+1);
+	SetLocalInt(oPC, "pandemonium_time", nTimes+1);
 	
 }
 
@@ -87,7 +85,7 @@ void DoWindEffect(object oPC) {
 //DC Will 30
 void DoConfusionEffect(object oPC) {
 
-	int nTimes = PS_GetLocalInt(oPC, "pandemonium_time");
+	int nTimes = GetLocalInt(oPC, "pandemonium_time");
 	if (nTimes < 3) {
 		DoWindEffect(oPC);
 		return;
@@ -96,7 +94,7 @@ void DoConfusionEffect(object oPC) {
 		return;
 	}
 
-	int nExp = PS_GetLocalInt(oPC, "pandemonium_exp");
+	int nExp = GetLocalInt(oPC, "pandemonium_exp");
 	if (nExp > 0) {
 		if (WillSave(oPC, 30, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF)) {
 			SendMessageToPC(oPC, "<i>You think you see something in the shadows, beckoning to you, crying out. . . but you resist the siren call of the winds.</i>");
@@ -104,7 +102,7 @@ void DoConfusionEffect(object oPC) {
 		}
 	} else {
 		if (GetIsTrainingSavingThrowSuccessful(oPC, SAVING_THROW_WILL, 30, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF)) {
-			PS_SetLocalInt(oPC, "pandemonium_exp", 1);
+			SetLocalInt(oPC, "pandemonium_exp", 1);
 			SendMessageToPC(oPC, "<i>You think you see something in the shadows, beckoning to you, crying out. . . but you resist the siren call of the winds.</i>");
 			return;
 		}
@@ -118,13 +116,13 @@ void DoConfusionEffect(object oPC) {
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfus, oPC, 6.0f);
 	
 	DecreaseSavingThrow(oPC, nTimes);
-	PS_SetLocalInt(oPC, "pandemonium_time", nTimes+1);
+	SetLocalInt(oPC, "pandemonium_time", nTimes+1);
 	
 }
 
 void main () {
 
-	int nRun = PS_GetLocalInt(OBJECT_SELF, "winds_run");
+	int nRun = GetLocalInt(OBJECT_SELF, "winds_run");
 	if (nRun > 5) {
 		DestroyObject(OBJECT_SELF, 0.2f);
 		return;
@@ -143,6 +141,6 @@ void main () {
 		oPC = GetNextObjectInShape(SHAPE_SPHERE, 5.0f, GetLocation(OBJECT_SELF));
 	}
 	
-	PS_SetLocalInt(OBJECT_SELF, "winds_run", nRun+1);
+	SetLocalInt(OBJECT_SELF, "winds_run", nRun+1);
 
 }

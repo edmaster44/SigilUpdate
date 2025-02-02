@@ -74,14 +74,14 @@ object PC()
 // * his henchman after finding him again.
 void SetDidDie(int bDie)
 {
-   PS_SetLocalInt(OBJECT_SELF, "NW_L_HEN_I_DIED", bDie);
+   SetLocalInt(OBJECT_SELF, "NW_L_HEN_I_DIED", bDie);
 }
 int GetDidDie()
 {
-    int oDied = PS_GetLocalInt(OBJECT_SELF, "NW_L_HEN_I_DIED");
+    int oDied = GetLocalInt(OBJECT_SELF, "NW_L_HEN_I_DIED");
     if (oDied == 1)
     {
-        PS_SetLocalInt(OBJECT_SELF,  "NW_L_HEN_I_DIED", 0);
+        SetLocalInt(OBJECT_SELF,  "NW_L_HEN_I_DIED", 0);
         return TRUE;
     }
     return FALSE;
@@ -104,33 +104,33 @@ int GetDidDie()
 //:://////////////////////////////////////////////
 void SetBeenHired(int bHired=TRUE, object oTarget=OBJECT_SELF)
 {
-    PS_SetLocalInt(oTarget,"NW_L_HENHIRED",10);
+    SetLocalInt(oTarget,"NW_L_HENHIRED",10);
 }
 int GetBeenHired(object oTarget=OBJECT_SELF)
 {
-    return PS_GetLocalInt(oTarget,"NW_L_HENHIRED") == 10;
+    return GetLocalInt(oTarget,"NW_L_HENHIRED") == 10;
 }
 // * This local is on the player
 // * it is true if this particular henchman
 // * is working for the player
 void SetWorkingForPlayer(object oPC)
 {
-    PS_SetLocalInt(oPC,"NW_L_HIRED" + GetTag(OBJECT_SELF),10);
+    SetLocalInt(oPC,"NW_L_HIRED" + GetTag(OBJECT_SELF),10);
 }
 int GetWorkingForPlayer(object oPC)
 {
-    return PS_GetLocalInt(oPC,"NW_L_HIRED" + GetTag(OBJECT_SELF)) == 10;
+    return GetLocalInt(oPC,"NW_L_HIRED" + GetTag(OBJECT_SELF)) == 10;
 }
 // * Had to fix NW_CH_CHECK_37 so that it checks
 // * to see if the player is the former master of the henchman
 
 object GetFormerMaster(object oHench = OBJECT_SELF)
 {
-   return PS_GetLocalObject(oHench,"NW_L_FORMERMASTER");
+   return GetLocalObject(oHench,"NW_L_FORMERMASTER");
 }
 void SetFormerMaster(object oPC, object oHench)
 {
-   PS_SetLocalObject(oHench,"NW_L_FORMERMASTER", oPC);
+   SetLocalObject(oHench,"NW_L_FORMERMASTER", oPC);
 }
 
 //::///////////////////////////////////////////////
@@ -151,12 +151,12 @@ void SetFormerMaster(object oPC, object oHench)
 //:://////////////////////////////////////////////
 void SetStoryVar(int nChapter, int nVal, object oTarget=OBJECT_SELF)
 {
-    PS_SetLocalInt(oTarget, "NW_L_HENSTORYC" + IntToString(nChapter), nVal);
+    SetLocalInt(oTarget, "NW_L_HENSTORYC" + IntToString(nChapter), nVal);
 }
 
 int GetStoryVar(int nChapter, object oTarget=OBJECT_SELF)
 {
-    return PS_GetLocalInt(oTarget, "NW_L_HENSTORYC" + IntToString(nChapter));
+    return GetLocalInt(oTarget, "NW_L_HENSTORYC" + IntToString(nChapter));
 }
 
 //::///////////////////////////////////////////////
@@ -175,11 +175,11 @@ int GetStoryVar(int nChapter, object oTarget=OBJECT_SELF)
 //:://////////////////////////////////////////////
 void SetGreetingVar(int nChapter, object oPC)
 {
-  PS_SetLocalInt(oPC, "NW_L_HEN"+GetTag(OBJECT_SELF) + IntToString(nChapter), 10);
+  SetLocalInt(oPC, "NW_L_HEN"+GetTag(OBJECT_SELF) + IntToString(nChapter), 10);
 }
 int GetGreetingVar(int nChapter, object oPC)
 {
-  return PS_GetLocalInt(oPC, "NW_L_HEN"+GetTag(OBJECT_SELF) + IntToString(nChapter)) == 10;
+  return GetLocalInt(oPC, "NW_L_HEN"+GetTag(OBJECT_SELF) + IntToString(nChapter)) == 10;
 }
 
 //::///////////////////////////////////////////////
@@ -395,9 +395,9 @@ void CopyLocals(object oSource, object oTarget)
   SetStoryVar(1, GetStoryVar(1, oSource), oTarget);
   SetStoryVar(2, GetStoryVar(2, oSource), oTarget);
   SetStoryVar(3, GetStoryVar(3, oSource), oTarget);
-  PS_SetLocalInt(oTarget, "NW_ASSOCIATE_MASTER", PS_GetLocalInt(oSource, "NW_ASSOCIATE_MASTER"));
-//  AssignCommand(PC(),SpeakString(IntToString(PS_GetLocalInt(oSource, "NW_ASSOCIATE_MASTER"))));
-//  AssignCommand(PC(),SpeakString(IntToString(PS_GetLocalInt(oTarget, "NW_ASSOCIATE_MASTER"))));
+  SetLocalInt(oTarget, "NW_ASSOCIATE_MASTER", GetLocalInt(oSource, "NW_ASSOCIATE_MASTER"));
+//  AssignCommand(PC(),SpeakString(IntToString(GetLocalInt(oSource, "NW_ASSOCIATE_MASTER"))));
+//  AssignCommand(PC(),SpeakString(IntToString(GetLocalInt(oTarget, "NW_ASSOCIATE_MASTER"))));
 
 
 }
@@ -543,7 +543,7 @@ int GetChapter()
     string sChapter =  GetTag(GetModule());
 
   // * Just for testing
- //  string sChapter = PS_GetLocalString(GetModule(),"CHAPTER");
+ //  string sChapter = GetLocalString(GetModule(),"CHAPTER");
     int nChapter = 1;
 
     if (sChapter == "Prelude")
@@ -606,7 +606,7 @@ void SpawnHenchman()
         sLevel = "10";
     }
 
-    if (PS_GetLocalInt(oPC, "NW_L_SPAWNCHAPTERENDHENCHMENONCE") == 0)
+    if (GetLocalInt(oPC, "NW_L_SPAWNCHAPTERENDHENCHMENONCE") == 0)
     if (GetIsPC(oPC) == TRUE)
     {
         string sTestHench = "";
@@ -693,7 +693,7 @@ void SpawnHenchman()
         if (GetIsObjectValid(oHen) == TRUE)
         {
             AssignCommand(oHen, SetWorkingForPlayer(oPC));
-            PS_SetLocalInt(oPC, "NW_L_SPAWNCHAPTERENDHENCHMENONCE", 1);
+            SetLocalInt(oPC, "NW_L_SPAWNCHAPTERENDHENCHMENONCE", 1);
             AddHenchman(oPC, oHen);
         }
 

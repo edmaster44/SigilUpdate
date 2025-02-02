@@ -273,7 +273,7 @@ void CheckAndApplyUnarmedRage(int iDuration)
 
 	// use the bite slot to store whether this feat has already run
 	// saves scanning for essence or the totem amulet
-	PS_SetLocalInt(oCreWep, "TOTEMBACKGROUNDSET", 1);
+	SetLocalInt(oCreWep, "TOTEMBACKGROUNDSET", 1);
 	
 	oCreWep = GetItemInSlot(INVENTORY_SLOT_CWEAPON_L, OBJECT_SELF);
 	if (!GetIsObjectValid(oCreWep)) oCreWep = CreateItemOnObject("nw_it_crewps010", OBJECT_SELF, 1, "", FALSE);
@@ -310,7 +310,7 @@ void CheckAndApplyRageFeats(int iDuration)
 	if (GetHasFeat(2316, OBJECT_SELF, TRUE))
 	{
 		// check to see if this has already been run once on the character
-		if (PS_GetLocalInt(GetItemInSlot(INVENTORY_SLOT_CWEAPON_B, OBJECT_SELF), "TOTEMBACKGROUNDSET") != 1)
+		if (GetLocalInt(GetItemInSlot(INVENTORY_SLOT_CWEAPON_B, OBJECT_SELF), "TOTEMBACKGROUNDSET") != 1)
 			CheckAndApplyUnarmedRage(iDuration); // Totem barbs are better at unarmed
 		
 		if (GetHasFeat(2311, OBJECT_SELF, TRUE)) eLink = EffectLinkEffects(eLink, ApplyDodgeACRage());

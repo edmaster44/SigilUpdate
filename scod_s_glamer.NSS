@@ -20,13 +20,13 @@ void CreateGlamer(object oCaster, location lLoc, float fDur) {
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
 	string sImmune = "Immunity_"+IntToString(Random(10000));
-	PS_SetLocalString(oClone, "Immunity_String", sImmune);
-	PS_SetLocalFloat(oClone, "Duration", fDur);
-	PS_SetLocalObject(oClone, "Caster", oCaster);
-	PS_SetLocalInt(oClone, "SaveDC", GetSpellSaveDC());
+	SetLocalString(oClone, "Immunity_String", sImmune);
+	SetLocalFloat(oClone, "Duration", fDur);
+	SetLocalObject(oClone, "Caster", oCaster);
+	SetLocalInt(oClone, "SaveDC", GetSpellSaveDC());
 	PS_Timestamp_UNIX(oClone, "Glamer_Timestamp");
-	PS_SetLocalInt(oClone, "Spell_ID", GetSpellId());
-	PS_SetLocalObject(oCaster, "Glamer", oClone);
+	SetLocalInt(oClone, "Spell_ID", GetSpellId());
+	SetLocalObject(oCaster, "Glamer", oClone);
 	
 	AssignCommand(oClone, ActionRandomWalk());
 	
@@ -43,7 +43,7 @@ void main() {
 	
 	object oCaster = OBJECT_SELF;
 	
-	object oGlamer = PS_GetLocalObject(oCaster, "Glamer");
+	object oGlamer = GetLocalObject(oCaster, "Glamer");
 	if (GetIsObjectValid(oGlamer)) {
 		SendMessageToPC(oCaster, "You may not have more than one Glamer active at a time!");
 		DestroyObject(oGlamer);

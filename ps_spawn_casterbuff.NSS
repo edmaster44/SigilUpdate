@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // ps_spawn_casterbuff by Ceremorph 3/1/2012
 /*
 Custom creature spawn script.
@@ -15,19 +13,19 @@ be a caster, with the specified spells known or memorized, depending on class sp
 void main()
 {
 	// These will specify which spells are cast. 
-	int iSpell1 = PS_GetLocalInt(OBJECT_SELF,"Sp1");
-	int iSpell2 = PS_GetLocalInt(OBJECT_SELF,"Sp2");
-	int iSpell3 = PS_GetLocalInt(OBJECT_SELF,"Sp3");
+	int iSpell1 = GetLocalInt(OBJECT_SELF,"Sp1");
+	int iSpell2 = GetLocalInt(OBJECT_SELF,"Sp2");
+	int iSpell3 = GetLocalInt(OBJECT_SELF,"Sp3");
 	/* This determines if the spell is cast with metamagic. If Cheat is set to 0, be very careful to ensure the NPC has the
 	   necessary feats, as well as having the metamagic version of the spell memorized if applicable. Blank if none.
 	   Metamagic values:
 	   Empower = 1, Extend = 2, Maximuze = 4, Quicken = 8, Silent = 16, Still = 32, Persistent = 64, Permanent = 128 */
-	int iMeta = PS_GetLocalInt(OBJECT_SELF,"Meta");
+	int iMeta = GetLocalInt(OBJECT_SELF,"Meta");
 	// This determines whether or not the monster actually has to know the spell to use it. Default is
 	// 0, which requires the spell to be known and castable. 1 allows the spawn to "cheat".
-	int iCheat = PS_GetLocalInt(OBJECT_SELF,"Cheat");
+	int iCheat = GetLocalInt(OBJECT_SELF,"Cheat");
 	// This determines whether spells are cast normally (0) or instantly (1). Default is 0.
-	int iInstant = PS_GetLocalInt(OBJECT_SELF,"Instant");
+	int iInstant = GetLocalInt(OBJECT_SELF,"Instant");
 
 	// **** OPTIONAL BEHAVIORS (Comment In or Out to Activate ) ****
 	//SetSpawnInCondition(NW_FLAG_SPECIAL_CONVERSATION);
@@ -110,9 +108,9 @@ void main()
 	// SetCombatCondition(X0_COMBAT_FLAG_COWARDLY);	// Cowardly creatures will attempt to flee attackers.
 	
 	// * Exclude use of items, abilities, and/or spells
-	// PS_SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ITEM); 	
-	// PS_SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY); 	
-	// PS_SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_SPELL); 	
+	// SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ITEM); 	
+	// SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY); 	
+	// SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_SPELL); 	
 	
 	// ===================================================================
 	// Now run the standard spawn.  This may run other scripts, create treasure, and set various flags

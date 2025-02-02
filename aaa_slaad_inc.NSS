@@ -264,7 +264,7 @@ void PS_SlaadDiminution_Gray(object oPC, object oItem, int nSpell)
 		
 		
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_SetLocalInt(oItem, "Diminution", 1);
+	SetLocalInt(oItem, "Diminution", 1);
 	DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
 	
 	// Refresh appearance
@@ -285,7 +285,7 @@ void PS_SlaadDiminution_Gray(object oPC, object oItem, int nSpell)
 
 void PS_SlaadChaoticCrafting(object oPC, object oItem, int nSpell)
 {
-	int iHasBonus	= PS_GetLocalInt(oItem, "SGC1");
+	int iHasBonus	= GetLocalInt(oItem, "SGC1");
 
 	if (iHasBonus != 0)
 	{	return;		}
@@ -295,7 +295,7 @@ void PS_SlaadChaoticCrafting(object oPC, object oItem, int nSpell)
 	AddScriptParameterString("");
 	ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
-	PS_SetLocalInt(oItem, "SGC1", 1);
+	SetLocalInt(oItem, "SGC1", 1);
 }
 
 void PS_SlaadApotheosis(object oPC, object oItem, int nSpell)
@@ -340,7 +340,7 @@ void PS_SlaadCircleOfDeath(object oPC, int nSpell)
         oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE);
         while (GetIsObjectValid(oTarget))
         {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
-        	{	bAlreadyAffected = PS_GetLocalInt(oTarget, "bDEATH" + sIdentifier);
+        	{	bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);
                 if (!bAlreadyAffected)
                 {	nCurrentHD = GetHitDice(oTarget);
                      if(nCurrentHD < nLow && nCurrentHD <= nHD)
@@ -361,8 +361,8 @@ void PS_SlaadCircleOfDeath(object oPC, int nSpell)
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest));
                 }
             }
-            PS_SetLocalInt(oLowest, "bDEATH" + sIdentifier, TRUE);
-            DelayCommand(fDelay + 0.25, PS_DeleteLocalInt(oLowest, "bDEATH" + sIdentifier));
+            SetLocalInt(oLowest, "bDEATH" + sIdentifier, TRUE);
+            DelayCommand(fDelay + 0.25, DeleteLocalInt(oLowest, "bDEATH" + sIdentifier));
             nHD = nHD - GetHitDice(oLowest);
             oLowest = OBJECT_INVALID;
         }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_experimentaleffects"
 
 void main () {
@@ -9,9 +7,9 @@ void main () {
 	
 	SendMessageToPC(oPC, "You drink the questionable potion. . ");
 	
-	int nLevel = PS_GetLocalInt(oItem, "Item_Level");
-	int nHelpful = PS_GetLocalInt(oItem, "Item_Effect_Helpful");
-	int nHarmful = PS_GetLocalInt(oItem, "Item_Effect_Harmful");
+	int nLevel = GetLocalInt(oItem, "Item_Level");
+	int nHelpful = GetLocalInt(oItem, "Item_Effect_Helpful");
+	int nHarmful = GetLocalInt(oItem, "Item_Effect_Harmful");
 	
 	//If no saved information. . .
 	if (nLevel <= 0) nLevel = d3(); //setting to random level

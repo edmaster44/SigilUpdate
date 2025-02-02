@@ -33,7 +33,7 @@ void main()
 	int nDice = GetSkillAdjustedTrapDamageDice(6, oCaster, 4);
 	//Base DC 20
 	int nDC = GetSkillAdjustedTrapDC(18, oCaster, 5) + GetATTrapAbilityModifier(oCaster);
-    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_frosttrap");
+    int nFire = GetLocalInt(OBJECT_SELF, "scod_frosttrap");
 	int nATLevels = GetArcaneTricksterLevels(oCaster);
 	int nLevelDrain = nATLevels / 2;
 	if (nLevelDrain < 1) {
@@ -53,7 +53,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            PS_SetLocalInt(OBJECT_SELF, "scod_frosttrap",TRUE);
+            SetLocalInt(OBJECT_SELF, "scod_frosttrap",TRUE);
 
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ELEMENTAL_TRAP_ICE));

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ///////////////////////////////////////////////////////////////
 // ps_coffin_spawns (or sarcophagi, whatever)
 //
@@ -69,13 +67,13 @@ object SpawnUndeadMonster(object oArea, location loc_spawn_location)
 		
 		case 6: //// Mummy! Just to make it serious every once in awhile
 
-			if (PS_GetLocalInt(oArea, "MUMMY_SPAWNED") != TRUE)
+			if (GetLocalInt(oArea, "MUMMY_SPAWNED") != TRUE)
 			{
 				oSummon = CreateObject(OBJECT_TYPE_CREATURE, "c_mummy", loc_spawn_location);
 				
 				/// Mummy's are tough for this area, so only allow once in awhile. 
-				PS_SetLocalInt(oArea, "MUMMY_SPAWNED", TRUE);
-				AssignCommand(oArea, DelayCommand(1800.5f, PS_DeleteLocalInt(oArea, "MUMMY_SPAWNED")));	
+				SetLocalInt(oArea, "MUMMY_SPAWNED", TRUE);
+				AssignCommand(oArea, DelayCommand(1800.5f, DeleteLocalInt(oArea, "MUMMY_SPAWNED")));	
 			}
 			else
 				oSummon =  CreateObject(OBJECT_TYPE_CREATURE, "c_skeletonwarrior", loc_spawn_location);
@@ -115,11 +113,11 @@ void main()
 	// Player has opened a sarcophagus or coffin
 	// Determine if there's treasure, monster, both, or neither. 
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "COFFIN_SPAWN_DONE") == TRUE)
+	if (GetLocalInt(OBJECT_SELF, "COFFIN_SPAWN_DONE") == TRUE)
 		return;
 		
-	PS_SetLocalInt(OBJECT_SELF, "COFFIN_SPAWN_DONE", TRUE);
-	DelayCommand(900.0f, PS_DeleteLocalInt(OBJECT_SELF, "COFFIN_SPAWN_DONE"));
+	SetLocalInt(OBJECT_SELF, "COFFIN_SPAWN_DONE", TRUE);
+	DelayCommand(900.0f, DeleteLocalInt(OBJECT_SELF, "COFFIN_SPAWN_DONE"));
 	
 	/////////////////////////////////////////
 	//////////// TREASURE? /////////////////
@@ -128,9 +126,9 @@ void main()
 	if (d100() < IS_TREASURE)
 	{
 		// This requires variables that ps_chest expects
-		PS_SetLocalInt(OBJECT_SELF, "GOLDDICE", d6());
-		PS_SetLocalInt(OBJECT_SELF, "GOLDNR", d4());
-		PS_SetLocalInt(OBJECT_SELF, "GOLDCONS", 15);
+		SetLocalInt(OBJECT_SELF, "GOLDDICE", d6());
+		SetLocalInt(OBJECT_SELF, "GOLDNR", d4());
+		SetLocalInt(OBJECT_SELF, "GOLDCONS", 15);
 		if (d100() > 90 || d100() < 15)
 		{
 			int nRandomItem = d10();
@@ -148,21 +146,21 @@ void main()
 			
 			}
 
-			PS_SetLocalString(OBJECT_SELF, "TREASURE1", sTreasure);
+			SetLocalString(OBJECT_SELF, "TREASURE1", sTreasure);
 			if (d100() > 90)
-				PS_SetLocalInt(OBJECT_SELF, "TREASURE1N", 2); // for a lucky 2 objects
+				SetLocalInt(OBJECT_SELF, "TREASURE1N", 2); // for a lucky 2 objects
 			
 
 		} // determines treasure type		
 	
 		ExecuteScript("ps_chest", OBJECT_SELF);
 		
-		DelayCommand(10.0f, PS_DeleteLocalInt(OBJECT_SELF, "GOLDDICE"));
-		DelayCommand(10.0f, PS_DeleteLocalInt(OBJECT_SELF, "GOLDNR"));		
-		DelayCommand(10.0f, PS_DeleteLocalInt(OBJECT_SELF, "GOLDCONS"));	
-		DelayCommand(10.0f, PS_DeleteLocalInt(OBJECT_SELF, "TREASURE1"));
-		DelayCommand(10.0f, PS_DeleteLocalInt(OBJECT_SELF, "TREASURE1N"));
-		PS_DeleteLocalInt(OBJECT_SELF, GetTag(OBJECT_SELF)+"_s");
+		DelayCommand(10.0f, DeleteLocalInt(OBJECT_SELF, "GOLDDICE"));
+		DelayCommand(10.0f, DeleteLocalInt(OBJECT_SELF, "GOLDNR"));		
+		DelayCommand(10.0f, DeleteLocalInt(OBJECT_SELF, "GOLDCONS"));	
+		DelayCommand(10.0f, DeleteLocalInt(OBJECT_SELF, "TREASURE1"));
+		DelayCommand(10.0f, DeleteLocalInt(OBJECT_SELF, "TREASURE1N"));
+		DeleteLocalInt(OBJECT_SELF, GetTag(OBJECT_SELF)+"_s");
 			
 	} // is treasure
 	

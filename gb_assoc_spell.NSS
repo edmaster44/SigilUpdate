@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Henchmen: On Spell Cast At
 //:: gb_assoc_spell
@@ -25,7 +23,7 @@ void main()
 	if ( GetIsHenchmanDying() 
 		&& GetIsHealingRelatedSpell(nSpellID))
 	{
-		PS_SetLocalInt( OBJECT_SELF, "X0_L_WAS_HEALED", 10 );
+		SetLocalInt( OBJECT_SELF, "X0_L_WAS_HEALED", 10 );
 		WrapCommandable( TRUE, OBJECT_SELF );
 		DoRespawn( oCaster, OBJECT_SELF );
 	}
