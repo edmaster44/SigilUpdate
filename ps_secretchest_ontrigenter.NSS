@@ -39,7 +39,7 @@ void main()
 	location lLocation		= GetLocation(GetNearestObjectByTag(sTag, oEnteringObject));
 	object oCreatedObject;
 		
-	if (!IsMarkedAsDone(OBJECT_SELF) && GetIsOwnedByPlayer(oEnteringObject))
+	if (!PS_IsMarkedAsDone(OBJECT_SELF) && GetIsOwnedByPlayer(oEnteringObject))
 		if ((GetDetectMode(oEnteringObject)==DETECT_MODE_ACTIVE
 			|| GetRacialType(oEnteringObject)==RACIAL_TYPE_ELF)
 			&& GetSkillRank(SKILL_SEARCH, oEnteringObject)>=nSearchDC)
@@ -47,7 +47,7 @@ void main()
 			AssignCommand(oEnteringObject, PlayVoiceChat(VOICE_CHAT_LOOKHERE));
 			oCreatedObject = CreateObject(OBJECT_TYPE_ITEM, sSecretObject, lLocation);
 			SendMessageToPC(oEnteringObject, "You've found something of interest.");
-			MarkAsDone(OBJECT_SELF);
+			PS_MarkAsDone(OBJECT_SELF);
 			
 			// Destroy the object and ourselves  - for one time server reboot appearance only
 			if (GetHasInventory(oCreatedObject))

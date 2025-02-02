@@ -162,7 +162,7 @@ void FF_ScrubVars(object oObject, int bForceOnObject = FALSE, int nIteration = 0
 
 int PS_GetLocalInt(object oObject, string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalInt(oObject, sVarName);
+	return GetLocalInt(oObject, sVarName);
 }
 
 // sets the bit flags on or off in the local int
@@ -183,22 +183,22 @@ int PS_GetLocalIntState(object oObject, string sVarName, int iBitFlags){
 
 float PS_GetLocalFloat(object oObject, string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalFloat(oObject, sVarName);
+	return GetLocalFloat(oObject, sVarName);
 }
 
 string PS_GetLocalString(object oObject, string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalString(oObject, sVarName);
+	return GetLocalString(oObject, sVarName);
 }
 
 object PS_GetLocalObject(object oObject, string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalObject(oObject, sVarName);
+	return GetLocalObject(oObject, sVarName);
 }
 
 location PS_GetLocalLocation(object oObject, string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalLocation(oObject, sVarName);
+	return GetLocalLocation(oObject, sVarName);
 }
 
 void PS_SetLocalInt(object oObject, string sVarName, int nValue){
@@ -261,25 +261,25 @@ int PS_SetGlobalFloat(string sVarName, float fValue){
 int PS_GetGlobalInt(string sVarName){
 	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalInt(oMod, sVarName);
+	return GetLocalInt(oMod, sVarName);
 }
 
 int PS_GetGlobalBool(string sVarName){
 	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalInt(oMod, sVarName);
+	return GetLocalInt(oMod, sVarName);
 }
 
 string PS_GetGlobalString(string sVarName){
 	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalString(oMod, sVarName);
+	return GetLocalString(oMod, sVarName);
 }
 
 float PS_GetGlobalFloat(string sVarName){
 	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return PS_GetLocalFloat(oMod, sVarName);
+	return GetLocalFloat(oMod, sVarName);
 }
 
 
@@ -318,17 +318,22 @@ int PS_SetGlobalLocation(string sVarName, location lValue){
 
 location PS_GetGlobalLocation(string sVarName){
 	object oMod = GetModule();
-	return PS_GetLocalLocation(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	return GetLocalLocation(oMod, sVarName);
 	
 }
 
 float PS_GetGlobalIntAsFloat(string sVarName){
-	return (IntToFloat(PS_GetGlobalInt(sVarName)));
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+	return (IntToFloat(GetLocalInt(oMod, sVarName)));
 }
 
 int PS_ModifyGlobalInt(string sVarName, int iDelta){
-	int iNewVal = PS_GetGlobalInt(sVarName) + iDelta;
-	PS_SetGlobalInt(sVarName, iNewVal);
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+	int iNewVal = GetLocalInt(oMod, sVarName) + iDelta;
+	SetLocalInt(oMod, sVarName, iNewVal);
 	return (iNewVal);
 }
 
@@ -349,43 +354,89 @@ void PS_ModifyLocalIntOnFaction(object oPC, string sVarName, int iDelta, int bPC
 
 object PS_GetGlobalObject(string sVarName){
 	object oMod = GetModule();
-	return PS_GetLocalObject(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	return GetLocalObject(oMod, sVarName);
 }
 
 int PS_SetGlobalObject(string sVarName, object oObj){
 	object oMod = GetModule();
-	PS_SetLocalObject(oMod, sVarName, oObj);
-	if (PS_GetLocalObject(oMod, sVarName) == oObj) return TRUE;
+	sVarName = FF_ScrubVarName(sVarName);
+	SetLocalObject(oMod, sVarName, oObj);
+	if (GetLocalObject(oMod, sVarName) == oObj) return TRUE;
 	return FALSE;
 }
 
 void PS_DeleteGlobalInt(string sVarName){
 	object oMod = GetModule();
-	PS_DeleteLocalInt(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	DeleteLocalInt(oMod, sVarName);
 }
 
 void PS_DeleteGlobalBool(string sVarName){
-	PS_DeleteGlobalInt(sVarName);
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+	DeleteLocalInt(oMod, sVarName);
 }
 
 void PS_DeleteGlobalFloat(string sVarName){
 	object oMod = GetModule();
-	PS_DeleteLocalFloat(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	DeleteLocalFloat(oMod, sVarName);
 }
 
 void PS_DeleteGlobalString(string sVarName){
 	object oMod = GetModule();
-	PS_DeleteLocalString(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	DeleteLocalString(oMod, sVarName);
 }
 
 void PS_DeleteGlobalLocation(string sVarName){
 	object oMod = GetModule();
-	PS_DeleteLocalLocation(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	DeleteLocalLocation(oMod, sVarName);
 }
 
 void PS_DeleteGlobalObject(string sVarName){
 	object oMod = GetModule();
-	PS_DeleteLocalObject(oMod, sVarName);
+	sVarName = FF_ScrubVarName(sVarName);
+	DeleteLocalObject(oMod, sVarName);
+}
+
+void PS_MarkAsUndone(object oObject=OBJECT_SELF, int iFlag=0){
+	DoneFlagSanityCheck(oObject);
+	PS_SetLocalInt(oObject, PS_GetDoneFlag(iFlag), FALSE);
+}
+
+string PS_GetGlobalArrayString(string sVarName, int nVarNum){
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+    string sFullVarName = sVarName + IntToString(nVarNum) ;
+    return GetLocalString(oMod, sFullVarName);
+}
+
+void PS_SetGlobalArrayString(string sVarName, int nVarNum, string nValue){
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+    string sFullVarName = sVarName + IntToString(nVarNum) ;
+    SetLocalString(oMod, sFullVarName, nValue);
+}
+
+int PS_GetGlobalArrayInt(string sVarName, int nVarNum){
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+    string sFullVarName = sVarName + IntToString(nVarNum) ;
+    return GetLocalInt(oMod, sFullVarName);
+}
+
+void PS_SetGlobalArrayInt(string sVarName, int nVarNum, int nValue){
+	object oMod = GetModule();
+	sVarName = FF_ScrubVarName(sVarName);
+    string sFullVarName = sVarName + IntToString(nVarNum) ;
+    SetLocalInt(oMod, sFullVarName, nValue);
+}
+
+string PS_GetDoneFlag(int iFlag=0){
+	return FF_ScrubVarName(DONE_ONCE + (iFlag==0?"":IntToString(iFlag)));
 }
 
 int PS_IsMarkedAsDone(object oObject=OBJECT_SELF, int iFlag=0){
@@ -397,35 +448,6 @@ int PS_IsMarkedAsDone(object oObject=OBJECT_SELF, int iFlag=0){
 void PS_MarkAsDone(object oObject=OBJECT_SELF, int iFlag=0){
 	DoneFlagSanityCheck(oObject);
 	PS_SetLocalInt(oObject, PS_GetDoneFlag(iFlag), TRUE);
-}
-
-void PS_MarkAsUndone(object oObject=OBJECT_SELF, int iFlag=0){
-	DoneFlagSanityCheck(oObject);
-	PS_SetLocalInt(oObject, PS_GetDoneFlag(iFlag), FALSE);
-}
-
-string PS_GetGlobalArrayString(string sVarName, int nVarNum){
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    return PS_GetGlobalString(sFullVarName);
-}
-
-void PS_SetGlobalArrayString(string sVarName, int nVarNum, string nValue){
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    PS_SetGlobalString(sFullVarName, nValue);
-}
-
-int PS_GetGlobalArrayInt(string sVarName, int nVarNum){
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    return PS_GetGlobalInt(sFullVarName);
-}
-
-void PS_SetGlobalArrayInt(string sVarName, int nVarNum, int nValue){
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    PS_SetGlobalInt(sFullVarName, nValue);
-}
-
-string PS_GetDoneFlag(int iFlag=0){
-	return FF_ScrubVarName(DONE_ONCE + (iFlag==0?"":IntToString(iFlag)));
 }
 
 string FF_ScrubVarName(string sString){
@@ -451,8 +473,8 @@ string FF_GetStringFingerprint(string sString){
         int nAscii = FF_GetAsciiValue(sChar);
         nHash = (nHash * 33) + nAscii;
     }
-    // return "FP" + the length of the original string and the
-	// absolute value of the resulting ascii value "fingerprint" 
+    // return "FP" + the length of the original string and
+	// the resulting ascii value "fingerprint" 
 	// integer as a hex string
     return "FP" + IntToString(nLength) + IntToHexString(nHash);
    
@@ -478,7 +500,7 @@ string FF_ValidChars(string sString){
 	int nLength = GetStringLength(sString);
 	int i;
 	string sChar;
-	// remove characters that are not _ or alphanumeric
+	// remove characters that are not alphanumeric
 	for (i = 0; i < nLength; i++){
 		sChar = GetSubString(sString, i, 1);
 		if (FindSubString(sValidChars, sChar) != -1)
@@ -486,6 +508,5 @@ string FF_ValidChars(string sString){
 	}
 	return sScrubbedString;
 }
-
 
 
