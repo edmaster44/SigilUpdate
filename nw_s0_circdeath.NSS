@@ -85,7 +85,7 @@ void main()
         	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
         	{
                 //Get a local set on the creature that checks if the spell has already allowed them to save
-                bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);
+                bAlreadyAffected = PS_GetLocalInt(oTarget, "bDEATH" + sIdentifier);
                 if (!bAlreadyAffected)
                 {
                      nCurrentHD = GetHitDice(oTarget);
@@ -119,10 +119,10 @@ void main()
                 }
             }
             //Even if the target made their save mark them as having been affected by the spell
-            SetLocalInt(oLowest, "bDEATH" + sIdentifier, TRUE);
+            PS_SetLocalInt(oLowest, "bDEATH" + sIdentifier, TRUE);
             //Destroy the local after 1/4 of a second in case other Circles of Death are cast on
             //the creature laster
-            DelayCommand(fDelay + 0.25, DeleteLocalInt(oLowest, "bDEATH" + sIdentifier));
+            DelayCommand(fDelay + 0.25, PS_DeleteLocalInt(oLowest, "bDEATH" + sIdentifier));
             //Adjust the number of HD that have been affected by the spell
             nHD = nHD - GetHitDice(oLowest);
             oLowest = OBJECT_INVALID;

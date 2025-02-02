@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////
 // ps_lib-trashcollector
 //
@@ -40,7 +42,7 @@ TrashCollectedChat(object oTrash)
 	if (d10() != 1)
 		return;
 
-	string sEmote = GetLocalString(OBJECT_SELF, "EATING_TALK");
+	string sEmote = PS_GetLocalString(OBJECT_SELF, "EATING_TALK");
 	
 	if (sEmote == "")
 		return;			
@@ -81,7 +83,7 @@ DestroyTrashObject(object oTrash)
 void
 GetTrash()
 {
-	object oTrash = GetLocalObject(OBJECT_SELF, "TRASH_OBJECT");
+	object oTrash = PS_GetLocalObject(OBJECT_SELF, "TRASH_OBJECT");
 
 	ActionForceMoveToObject(oTrash, TRUE, 0.5f);
 	ActionPickUpItem(oTrash);

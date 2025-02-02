@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // NW_C2_DEFAULT9
 /*
     Default OnSpawn handler
@@ -25,7 +27,7 @@
 void main()
 {
     // Run this campaign's standard creature spawn modifications script (set in module load)
-    string sScriptSpawnCreature = GetGlobalString("N2_SCRIPT_SPAWN_CREATURE");
+    string sScriptSpawnCreature = PS_GetGlobalString("N2_SCRIPT_SPAWN_CREATURE");
     if (sScriptSpawnCreature != "")
     {
 		ExecuteScript(sScriptSpawnCreature, OBJECT_SELF);
@@ -49,7 +51,7 @@ void main()
     WalkWayPoints(FALSE, "spawn");
     
 	//* Create weapon for creatures that need one
-//	if(GetLocalInt(OBJECT_SELF, "WEAPON_SPAWN") > 0)
+//	if(PS_GetLocalInt(OBJECT_SELF, "WEAPON_SPAWN") > 0)
 //	{
 //		CTG_GetSpecificBaseTypeTreasureItem(OBJECT_SELF,TREASURE_BASE_TYPE_WEAPON_NOAMMO, 
 //	}
@@ -66,8 +68,8 @@ void main()
 	}
 	
     //* Create a small amount of treasure on the creature
-    if (GetLocalInt(GetModule(), "X2_L_NOTREASURE") == FALSE
-        && GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
+    if (PS_GetLocalInt(GetModule(), "X2_L_NOTREASURE") == FALSE
+        && PS_GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
 		&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_ANIMAL
 		&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_BEAST
 		&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_CONSTRUCT
@@ -115,7 +117,7 @@ void main()
 	DelayCommand(0.3f, ApplySRFix(OBJECT_SELF));
 	
 	//DBR 2/03/06 - added option for a spawn script (ease of AI hookup)
-	string sSpawnScript=GetLocalString(OBJECT_SELF,"SpawnScript");
+	string sSpawnScript=PS_GetLocalString(OBJECT_SELF,"SpawnScript");
 	if (sSpawnScript!="")
 		ExecuteScript(sSpawnScript,OBJECT_SELF);
 }

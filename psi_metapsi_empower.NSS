@@ -23,15 +23,15 @@ void main()
 	effect eVis = EffectNWN2SpecialEffectFile("psi_metapsi_empower.sef", OBJECT_SELF);
 	
 	
-	if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 0)
+	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 0)
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 1);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Empower Power");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, OBJECT_SELF);
 	}
 	else
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Empower Power");
 		RemoveEffectsFromSpell(oTarget, GetSpellId());
 	}

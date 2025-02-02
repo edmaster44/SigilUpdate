@@ -1,16 +1,18 @@
+#include "ff_safevar"
+
 void main () {
 
-	if (GetLocalInt(OBJECT_SELF, "initialized") == 0)
+	if (PS_GetLocalInt(OBJECT_SELF, "initialized") == 0)
 	{
 		effect spawn = EffectNWN2SpecialEffectFile("fx_magical_explosion", OBJECT_SELF);
 		ApplyEffectToObject(0, spawn, OBJECT_SELF);
-		SetLocalInt(OBJECT_SELF, "initialized", 1);
+		PS_SetLocalInt(OBJECT_SELF, "initialized", 1);
 		return;
 	}
 
 	object potentialHostile = GetFirstObjectInShape(SHAPE_SPHERE, 20.0f, GetLocation(OBJECT_SELF), TRUE, OBJECT_TYPE_CREATURE);
-	int attackBonus = GetLocalInt(OBJECT_SELF, "AB");
-	int damageDice = GetLocalInt(OBJECT_SELF, "DAMAGE");
+	int attackBonus = PS_GetLocalInt(OBJECT_SELF, "AB");
+	int damageDice = PS_GetLocalInt(OBJECT_SELF, "DAMAGE");
 	while (GetIsObjectValid(potentialHostile))
 	{
 		if (GetFactionEqual(OBJECT_SELF, potentialHostile))

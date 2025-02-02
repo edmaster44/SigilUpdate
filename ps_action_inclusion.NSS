@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nwnx_sql"
 
 int IsEthereal(object oTarget)
@@ -17,7 +19,7 @@ return FALSE;
 void ToggleRooted(object oUser)
 {
 
-	if (GetLocalInt(oUser, "set_root"))
+	if (PS_GetLocalInt(oUser, "set_root"))
 	{
 		effect ePCEffect = GetFirstEffect(oUser);
 		while(GetIsEffectValid(ePCEffect))
@@ -25,8 +27,8 @@ void ToggleRooted(object oUser)
 	    	if (GetEffectType(ePCEffect) == EFFECT_TYPE_CUTSCENEIMMOBILIZE)
 			{
 				RemoveEffect(oUser, ePCEffect);
-				SetLocalInt(oUser, "set_root", 0);
-				DeleteLocalInt(oUser, "set_root");
+				PS_SetLocalInt(oUser, "set_root", 0);
+				PS_DeleteLocalInt(oUser, "set_root");
 				SendMessageToPC(oUser, "You are now free to move again.");
 				return;
 			}	
@@ -36,7 +38,7 @@ void ToggleRooted(object oUser)
 	else
 	{
 		effect eRoot = EffectCutsceneImmobilize();
-		SetLocalInt(oUser, "set_root", 1);
+		PS_SetLocalInt(oUser, "set_root", 1);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRoot, oUser, 10000.0f);
 		SendMessageToPC(oUser, "You are now rooted in place.");
 	}
@@ -46,7 +48,7 @@ void ToggleRooted(object oUser)
 
 void ToggleCloseness(object oUser)
 {
-	int nExploit = GetLocalInt(oUser, "DoorExploitPrevent");
+	int nExploit = PS_GetLocalInt(oUser, "DoorExploitPrevent");
 
 	if (nExploit == 1)
 	{	SendMessageToPC(oUser, "You may not turn on closeness at this time.");
@@ -69,14 +71,14 @@ void ToggleCloseness(object oUser)
 
 void ToggleFreeze(object oUser)
 {
-	if (GetLocalInt(oUser, "set_freeze"))
+	if (PS_GetLocalInt(oUser, "set_freeze"))
 	{
 		effect eFreeze = GetFirstEffect(oUser);
 		while (GetIsEffectValid(eFreeze))
 		{
 			if (GetEffectSpellId(eFreeze) == 3000)
 			{
-				DeleteLocalInt(oUser, "set_freeze");
+				PS_DeleteLocalInt(oUser, "set_freeze");
 				RemoveEffect(oUser, eFreeze);
 				SendMessageToPC(oUser, "Your animation is now unfrozen.");
 				return;
@@ -86,7 +88,7 @@ void ToggleFreeze(object oUser)
 	}
 	else
 	{
-		SetLocalInt(oUser, "set_freeze", 1);
+		PS_SetLocalInt(oUser, "set_freeze", 1);
 		effect eFreeze = SupernaturalEffect(SetEffectSpellId(EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION), 3000));
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFreeze, oUser);  
 		SendMessageToPC(oUser, "Your animation is now frozen.");
@@ -204,7 +206,7 @@ void DoGrappleTarget(object oUser)
 //Releases minions like the beasts of the warlock invocation Call of the Beast
 void ReleaseCalledCreatures(object oPC) {
 	
-	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
+	int nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
 	
 	if (nNumberCalled > 0) {
 		SendMessageToPC(oPC, "Releasing called beasts.");
@@ -212,26 +214,26 @@ void ReleaseCalledCreatures(object oPC) {
 
 	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		object oSummon = PS_GetLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 		DestroyObject(oSummon, 0.1f);
-		DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
+		PS_DeleteLocalObject(oPC, "WARLOCK_ANIMAL_"+IntToString(n));
 	}
 	
-	DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	PS_DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 	
-	nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 	
 	if (nNumberCalled > 0) {
 		SendMessageToPC(oPC, "Releasing created undead.");
 	}
 
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+		object oSummon = PS_GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 		DestroyObject(oSummon, 0.1f);
-		DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+		PS_DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 	}
 	
-	DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	PS_DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 
 }
 

@@ -34,10 +34,10 @@ void main()
     if ( GetIsObjectValid(oTarget) && 
 		 spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && 
 		 GetImmortal(oTarget) &&
-		 !GetLocalInt(oTarget, IMMUNE_TO_TRUE_NAME) )
+		 !PS_GetLocalInt(oTarget, IMMUNE_TO_TRUE_NAME) )
     {
 /*		
-		SetLocalObject( OBJECT_SELF, "NWN2_TRUE_NAME_TARGET", oTarget );
+		PS_SetLocalObject( OBJECT_SELF, "NWN2_TRUE_NAME_TARGET", oTarget );
 		ActionCastSpellAtObject( 989, oTarget, METAMAGIC_ANY, TRUE );
 */		
 		

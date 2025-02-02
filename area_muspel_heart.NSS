@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "sigil_enemy_inc"
 #include "x0_i0_position"
 
@@ -42,8 +44,8 @@ void ExecuteCustomMeteorSwarm(object oTarget)
 void main()
 {
 	object oAREA = OBJECT_SELF;
-	if (GetLocalInt(oAREA, "WRECK_HAVOC") != TRUE) return;
-	int nDIFF = GetLocalInt(oAREA, "ENEMY_DIFF");
+	if (PS_GetLocalInt(oAREA, "WRECK_HAVOC") != TRUE) return;
+	int nDIFF = PS_GetLocalInt(oAREA, "ENEMY_DIFF");
 	if (nDIFF < 1) nDIFF = 1;
 	else if (nDIFF > 4) nDIFF = 4;
 	int nCOUNT;

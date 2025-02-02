@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Put this script OnEnter
 void ps_delayspawnMino()
 {
@@ -41,7 +43,7 @@ void main()
 object oPC = GetEnteringObject();
 object oTrigger = GetObjectByTag("ps_bjevent_trigger"); 
 
-if (GetLocalInt(oTrigger, "Used") != TRUE)
+if (PS_GetLocalInt(oTrigger, "Used") != TRUE)
 
 {
 if (!GetIsPC(oPC)) return;
@@ -52,7 +54,7 @@ if (!GetIsPC(oPC)) return;
 	object oWyvscr = GetObjectByTag("ps_bjevent_wyvscr");
 	object oHoxun = GetObjectByTag("wp_bjevent_hoxmove");
 
-	SetLocalInt(oTrigger,"Used",TRUE);
+	PS_SetLocalInt(oTrigger,"Used",TRUE);
 	
 	DelayCommand(4.0, AssignCommand(oSpeaker, ActionSpeakString
 		("Berks, cutters, and bloods of all shape an' sort... I'm Barl Hoxun, and welcome to this week's Special Fight Night at the Bottle & Jug!")));

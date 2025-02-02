@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //*********************************************************************
 //ga_store_openplanar
 //MimiFearthegn 3-22-20
@@ -13,12 +15,12 @@ void main(string sStoreTag) {
 	object oStore = GetStoreFromStoreArea(sStoreTag);
 	
 	int nCurrentTime = PS_GetTime();
-	int nTimestamp = GetLocalInt(oStore, "LastPopulated");
+	int nTimestamp = PS_GetLocalInt(oStore, "LastPopulated");
 	
 	if (nTimestamp > 0 && nCurrentTime-nTimestamp > CLEAN_TIME) {
 		ClearStore(oStore);
-		SetLocalInt(oStore, "Initialized", 0);
-	} else if (GetLocalInt(oStore, "Initialized") <= 0) {
+		PS_SetLocalInt(oStore, "Initialized", 0);
+	} else if (PS_GetLocalInt(oStore, "Initialized") <= 0) {
 	
 		AddMustHaveItems(oStore);
 		
@@ -32,8 +34,8 @@ void main(string sStoreTag) {
 			n++;
 		}
 		
-		SetLocalInt(oStore, "LastPopulated", nCurrentTime);
-		SetLocalInt(oStore, "Initialized", 1);
+		PS_SetLocalInt(oStore, "LastPopulated", nCurrentTime);
+		PS_SetLocalInt(oStore, "Initialized", 1);
 	}
 	
 	int iPCAppraise = FloatToInt(IntToFloat(GetSkillRank(SKILL_APPRAISE, oPC)) / APPRAISE_DIVISOR);

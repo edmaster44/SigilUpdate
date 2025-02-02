@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*************************************************************************************
 Written by Dethia	-	03/12/2011
 
@@ -97,8 +99,8 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
 		
 		//If theft is enabled, allow stealing from the shop
-		if((DS_THEFT_ENABLE && !GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
-			(!DS_THEFT_ENABLE && GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
+		if((DS_THEFT_ENABLE && !PS_GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
+			(!DS_THEFT_ENABLE && PS_GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
 		{	SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", FALSE);	}
 		//Convert the various values for use
 		int	iMarkUp		= StringToInt(sUp);
@@ -182,7 +184,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		
 		//We will populate the shop gui with all non-cursed items and allowed items
 		object	oItem		= GetFirstItemInInventory(oPC);
-		int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket buy rate
+		int		iBlkMark	= PS_GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket buy rate
 		int		iRowID		= 0;	//The listbox row ID for a particular item
 		//Before we populate the listbox we must first clear it
 		ClearListBox(oPC, "dethia_shop", "store_items");
@@ -205,7 +207,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
 					string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
 					int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
-											GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
+											PS_GetLocalInt(oStore, "DS_BLACKMARKET"), PS_GetLocalFloat(oStore, "DS_BUY_MOD"));
 											
 					if (iItemCost > nMaxBuy)
 						iItemCost = nMaxBuy;			
@@ -233,7 +235,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		}
 		
 		int nMaxPage = FloatToInt(IntToFloat(nCount)/IntToFloat(nPageLength));
-		SetLocalInt(oPC, "shop_max_pages", nMaxPage);
+		PS_SetLocalInt(oPC, "shop_max_pages", nMaxPage);
 		
 		//Add Pagination
 		SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page "+IntToString(nCurrentPage+1)+" of "+IntToString(nMaxPage+1));
@@ -267,7 +269,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		DS_TakeCoinsFromCreature(oPC, iCost);
 		DS_UpdateStoreCurrency(oStore, oPC, iCost);
 		SetIdentified(oItem, TRUE);
-		int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
+		int		iBlkMark	= PS_GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
 		int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown), iBlkMark);
 		SetLocalGUIVariable(oPC, "dethia_shop", 4, IntToString(iItemCost));	//Update price
 		ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
@@ -348,9 +350,9 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		//Disable the buy gui for 0.5 seconds to prevent it from being spammed
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
 		DelayCommand(0.5f, SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE));
-		string	sNoBuyList	= GetLocalString(oStore, "DS_WILL_NOT_BUY");
-		string	sBuyOnlyLst	= GetLocalString(oStore, "DS_WILL_ONLY_BUY");
-		int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
+		string	sNoBuyList	= PS_GetLocalString(oStore, "DS_WILL_NOT_BUY");
+		string	sBuyOnlyLst	= PS_GetLocalString(oStore, "DS_WILL_ONLY_BUY");
+		int		iBlkMark	= PS_GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
 
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
 		else if(GetPlotFlag(oItem))
@@ -432,7 +434,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		DS_GiveCoinsToCreature(oPC, iSellPrice);
 		DS_UpdateStoreCurrency(oStore, oPC, iSellPrice, FALSE);
 		//Lastly save the sell-price on the item, it can be bought back at that price
-		SetLocalInt(oSoldItem, "DS_SELL_PRICE", iSellPrice);
+		PS_SetLocalInt(oSoldItem, "DS_SELL_PRICE", iSellPrice);
 	}
 
 	else if(iEvent == 12)	//Player is trying to steal a selected item
@@ -466,7 +468,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		}
 		else	//Player failed to steal the item, time to punish them
 		{//First set a local int on them labeling them as a thief for this shop
-			SetLocalInt(oPC, "DS_THIEF_" + GetTag(oStore), TRUE);
+			PS_SetLocalInt(oPC, "DS_THIEF_" + GetTag(oStore), TRUE);
 			//Yell at the player
 			FloatingTextStringOnCreature("Why you dirty scoundrel get out of here before I call the guards!", oPC);
 			DS_CloseShop(oPC, oStore);	//Close the store
@@ -533,7 +535,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	} 
 	else if (iEvent == 17) { //Player clicked the next page button
 		int nPage = StringToInt(sExtra);
-		int nMaxPage = GetLocalInt(oPC, "shop_max_pages");
+		int nMaxPage = PS_GetLocalInt(oPC, "shop_max_pages");
 		//SendMessageToPC(oPC, "Clicked next page button, current page: "+sExtra);
 		if (nPage >= nMaxPage)
 			nPage = (nMaxPage-1);

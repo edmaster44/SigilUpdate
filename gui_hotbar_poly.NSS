@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////
 //:: Created By: Clangeddin 
 //:: Created On: 2016
@@ -23,7 +25,7 @@ effect CheckPoly(object oPC)
 
 void PolyCast(object oPC, string sVAR)
 {
-	int nCAST = GetLocalInt(oPC, "POLY_SPELL_"+sVAR);
+	int nCAST = PS_GetLocalInt(oPC, "POLY_SPELL_"+sVAR);
 	if (nCAST == 0) return;
 	string sFEAT = Get2DAString("spells", "FeatID",	nCAST);
 	int	nFEAT =	StringToInt(sFEAT);
@@ -75,7 +77,7 @@ void main(string sCOMMAND)
 			if (sSPELL!="")
 			{
 				nSPELL = StringToInt(sSPELL);
-				SetLocalInt(oPC, "POLY_SPELL_"+sCOUNT, nSPELL);
+				PS_SetLocalInt(oPC, "POLY_SPELL_"+sCOUNT, nSPELL);
 				sNAME = Get2DAString("spells","Name", nSPELL);
 				sICON = Get2DAString("spells","IconResRef", nSPELL);
 				sDESC = Get2DAString("spells","SpellDesc", nSPELL);

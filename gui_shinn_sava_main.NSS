@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // gui_shinn_sava_main
 // Original Scripter:  Shinn      Design: Shinn
@@ -15,8 +17,8 @@ void main(string sPar1, string sPar2, string sPar3, string sPar4)
 {
 
 object oPC = OBJECT_SELF;
-object oHub = GetLocalObject(oPC,"GAME_HUB");
-int iPlayerSeat = GetLocalInt(oPC,"GAME_SEAT");
+object oHub = PS_GetLocalObject(oPC,"GAME_HUB");
+int iPlayerSeat = PS_GetLocalInt(oPC,"GAME_SEAT");
 
 int iOppSeat;
 if(iPlayerSeat == 1) iOppSeat = 2; else iOppSeat = 1;
@@ -26,10 +28,10 @@ if(iPlayerSeat == 1) iOppSeat = 2; else iOppSeat = 1;
 if(sPar1 == "Heartbeat")
 {
 
-object oPlayer1 = GetLocalObject(oHub,"PLR_1");
-object oPlayer2 = GetLocalObject(oHub,"PLR_2");
+object oPlayer1 = PS_GetLocalObject(oHub,"PLR_1");
+object oPlayer2 = PS_GetLocalObject(oHub,"PLR_2");
 
-if(GetLocalInt(oHub,"GAME_IN_PROGERSS") == FALSE )return;
+if(PS_GetLocalInt(oHub,"GAME_IN_PROGERSS") == FALSE )return;
 
 if(GetIsObjectValid(oPlayer1) != TRUE)
 {
@@ -61,7 +63,7 @@ if(iPlayerSeat == 1) sName = "<c=lime>"+sName+"</c>";
 else
 sName = "<c=gold>"+sName+"</c>";
 
-object oOpponent = GetLocalObject(oHub,"PLR_"+IntToString(iOppSeat));
+object oOpponent = PS_GetLocalObject(oHub,"PLR_"+IntToString(iOppSeat));
 
 // kamal comment out the below if for single player testing, leave the contents of the if itself
 if(GetIsObjectValid(oOpponent)) 
@@ -88,7 +90,7 @@ SetGUIObjectText(oPC,"SAVA_MAIN","Player_"+IntToString(iOppSeat)+"_BoxB",-1,sOpp
 SetGUIObjectText(oPC,"SAVA_MAIN","Player_"+IntToString(iPlayerSeat)+"_BoxA",-1,sName);
 SetGUIObjectText(oPC,"SAVA_MAIN","Player_"+IntToString(iPlayerSeat)+"_BoxB",-1,sName);
 
-SetLocalInt(oHub,"Reseted", FALSE);
+PS_SetLocalInt(oHub,"Reseted", FALSE);
 
 return;
 }
@@ -101,11 +103,11 @@ EndGameCleanUp(oHub);
 
 //original code
 
-object oPlayer1 = GetLocalObject(oHub,"PLR_1");
-object oPlayer2 = GetLocalObject(oHub,"PLR_2");
+object oPlayer1 = PS_GetLocalObject(oHub,"PLR_1");
+object oPlayer2 = PS_GetLocalObject(oHub,"PLR_2");
 
 object oOpponent;
-DeleteLocalObject(oHub,"PLR_"+IntToString(iPlayerSeat));
+PS_DeleteLocalObject(oHub,"PLR_"+IntToString(iPlayerSeat));
 
 int i;
 
@@ -116,20 +118,20 @@ if(oPC == oPlayer1) oOpponent = oPlayer2; else oOpponent = oPlayer1;
 	
 		for(i=11 ; i <= 88 ; i++)
 		{
-		DeleteLocalInt(oHub,"FIELD_"+IntToString(i)+"_VT");
-		DeleteLocalInt(oHub, "FIELD_"+IntToString(i)+"_Piece");
-		DeleteLocalInt(oHub, "FIELD_"+IntToString(i)+"_Owner");
+		PS_DeleteLocalInt(oHub,"FIELD_"+IntToString(i)+"_VT");
+		PS_DeleteLocalInt(oHub, "FIELD_"+IntToString(i)+"_Piece");
+		PS_DeleteLocalInt(oHub, "FIELD_"+IntToString(i)+"_Owner");
 		}
 		
-	DeleteLocalObject(oHub,"PLR_1");
-	DeleteLocalObject(oHub,"PLR_2");
+	PS_DeleteLocalObject(oHub,"PLR_1");
+	PS_DeleteLocalObject(oHub,"PLR_2");
 	
 	SetUseableFlag(GetNearestObjectByTag("sava_ctrl_1"),TRUE);
 	SetUseableFlag(GetNearestObjectByTag("sava_ctrl_2"),TRUE);	
-	SetLocalInt(oHub,"GAME_IN_PROGERSS", FALSE);
+	PS_SetLocalInt(oHub,"GAME_IN_PROGERSS", FALSE);
 	
-	SetLocalInt(oHub,"Kill_Count_1",0);
-	SetLocalInt(oHub,"Kill_Count_2",0);
+	PS_SetLocalInt(oHub,"Kill_Count_1",0);
+	PS_SetLocalInt(oHub,"Kill_Count_2",0);
 	
 	
 	}
@@ -143,13 +145,13 @@ return;
 
 if(sPar1 == "Start")
 {
-object oOpponent = GetLocalObject(oHub,"PLR_"+IntToString(iOppSeat));
+object oOpponent = PS_GetLocalObject(oHub,"PLR_"+IntToString(iOppSeat));
 
 SetGUIObjectHidden(oPC,"SAVA_MAIN","BLOCK",TRUE);
 SetGUIObjectHidden(oOpponent,"SAVA_MAIN","BLOCK",TRUE);
 
-object oPlayer1 = GetLocalObject(oHub,"PLR_1");
-object oPlayer2 = GetLocalObject(oHub,"PLR_2");
+object oPlayer1 = PS_GetLocalObject(oHub,"PLR_1");
+object oPlayer2 = PS_GetLocalObject(oHub,"PLR_2");
 
 string sLog;
 
@@ -165,11 +167,11 @@ ChangeRound(oPlayer2,oHub);
 sLog = GetFirstName(oPlayer1)+STARTS_GAME;
 }
 
-SetLocalString(oHub,"GAME_LOG",sLog);
+PS_SetLocalString(oHub,"GAME_LOG",sLog);
 SetGUIObjectText(oPlayer1, "SAVA_MAIN", "GameLog", -1, sLog);
 SetGUIObjectText(oPlayer2, "SAVA_MAIN", "GameLog", -1, sLog);
 
-SetLocalInt(oHub,"GAME_IN_PROGERSS",TRUE);
+PS_SetLocalInt(oHub,"GAME_IN_PROGERSS",TRUE);
 
 SetupGUIPieces(oPC, oOpponent, oHub);
 
@@ -186,28 +188,28 @@ if(sPar1 == "FieldClick")
 
 
 int iTargetPos = StringToInt(sPar2);
-int iValid = GetLocalInt(oHub,"FIELD_"+sPar2+"_VT");
-int iSelect = GetLocalInt(oHub,"SELECT_"+IntToString(iPlayerSeat));
+int iValid = PS_GetLocalInt(oHub,"FIELD_"+sPar2+"_VT");
+int iSelect = PS_GetLocalInt(oHub,"SELECT_"+IntToString(iPlayerSeat));
 int iPiece;
-int iOwner = GetLocalInt(oHub, "FIELD_"+sPar2+"_Owner");
-int iLider = GetLocalInt(oHub, "FIELD_"+IntToString(iTargetPos)+"_Lider");
+int iOwner = PS_GetLocalInt(oHub, "FIELD_"+sPar2+"_Owner");
+int iLider = PS_GetLocalInt(oHub, "FIELD_"+IntToString(iTargetPos)+"_Lider");
 
 if(iOwner == iPlayerSeat)
-iPiece = GetLocalInt(oHub, "FIELD_"+sPar2+"_Piece");
+iPiece = PS_GetLocalInt(oHub, "FIELD_"+sPar2+"_Piece");
 
 if(iOwner >= 1 && iOwner != iPlayerSeat)
-iPiece = GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
+iPiece = PS_GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
 
 if(iOwner <= 0 )
-iPiece = GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
+iPiece = PS_GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
 
 /* // kamal commented out for chess, include for SAVA
-	if(GetLocalInt(oHub,"KILLER_SWITCH_PLR_"+IntToString(iPlayerSeat))== TRUE && iOwner != 0 && iValid == TRUE)
+	if(PS_GetLocalInt(oHub,"KILLER_SWITCH_PLR_"+IntToString(iPlayerSeat))== TRUE && iOwner != 0 && iValid == TRUE)
 	{
 
 		int iRows = GetNum2DARows(sSpider2da);
 		int index = 0; 
-		int iDieces = GetLocalInt(oHub,"Throw_"+IntToString(iPlayerSeat));
+		int iDieces = PS_GetLocalInt(oHub,"Throw_"+IntToString(iPlayerSeat));
 		
 		
 		while(StringToInt(Get2DAString(sSpider2da, "Number", index)) != iDieces && index <= iRows-1 )
@@ -242,8 +244,8 @@ iPiece = GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
 	if(iOwner == iPlayerSeat)
 	{
 	CleanSelection(oPC,oHub);
-//	if(iPiece == -1) iPiece = GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
-	SetLocalInt(oHub,"SELECT_"+IntToString(iPlayerSeat),iTargetPos);
+//	if(iPiece == -1) iPiece = PS_GetLocalInt(oHub, "FIELD_"+IntToString(iSelect)+"_Piece");
+	PS_SetLocalInt(oHub,"SELECT_"+IntToString(iPlayerSeat),iTargetPos);
 	ShowMoveOptions(iPiece,iTargetPos,oPC,oHub);
 	return;
 	}
@@ -290,9 +292,9 @@ SetGUIObjectText(oPC,"SAVA_MAIN","D2",-1,"<c=red>"+IntToString(D2)+"</c>");
 SetGUIObjectHidden(oPC,"SAVA_MAIN","Dices",TRUE);
 SetGUIObjectHidden(oPC,"SAVA_MAIN","Killer_Spider",FALSE);
 
-SetLocalInt(oHub,"Throw_"+IntToString(iPlayerSeat), D1+D2);
-SetLocalInt(oHub,"D1_"+IntToString(iPlayerSeat), D1);
-SetLocalInt(oHub,"D2_"+IntToString(iPlayerSeat), D2);
+PS_SetLocalInt(oHub,"Throw_"+IntToString(iPlayerSeat), D1+D2);
+PS_SetLocalInt(oHub,"D1_"+IntToString(iPlayerSeat), D1);
+PS_SetLocalInt(oHub,"D2_"+IntToString(iPlayerSeat), D2);
 
 ShowKillerSpiderTooltip(oPC, D1+D2, oHub);
 
@@ -306,9 +308,9 @@ return;
 if(sPar1 == "Killer_Spider")
 {
 /*
-SetLocalInt(oHub,"KILLER_SWITCH_PLR_"+IntToString(iPlayerSeat), TRUE);
+PS_SetLocalInt(oHub,"KILLER_SWITCH_PLR_"+IntToString(iPlayerSeat), TRUE);
 
-int iDieces = GetLocalInt(oHub,"Throw_"+IntToString(iPlayerSeat));
+int iDieces = PS_GetLocalInt(oHub,"Throw_"+IntToString(iPlayerSeat));
 
 KillerSpiderButton(oPC, iDieces, oHub);
 
@@ -358,8 +360,8 @@ return;
 if(sPar1 == "LoadThisGame")
 {
 object oSave = IntToObject(StringToInt(sPar2));
-object oPlayer1 = GetLocalObject(oHub,"PLR_1");
-object oPlayer2 = GetLocalObject(oHub,"PLR_2");
+object oPlayer1 = PS_GetLocalObject(oHub,"PLR_1");
+object oPlayer2 = PS_GetLocalObject(oHub,"PLR_2");
 
 string sTGA;
 
@@ -369,22 +371,22 @@ int iOwner, iPiece, iP1_D1, iP1_D2, iP2_D1, iP2_D2, iP1_Spider_Used, iP2_Spider_
 	//Na początek figury
 	for(i=11; i <= 88; i++)
 	{
-	iOwner = GetLocalInt(oSave,"OWNER_"+IntToString(i));
+	iOwner = PS_GetLocalInt(oSave,"OWNER_"+IntToString(i));
 		if(iOwner != 0)	
 		{
-		iPiece = GetLocalInt(oSave,"PIECE_"+IntToString(i));
+		iPiece = PS_GetLocalInt(oSave,"PIECE_"+IntToString(i));
 		SetGUIPiece(iPiece,i,iOwner,oHub);
 		}
 	
 	}
 
-iP1_D1 = 			GetLocalInt(oSave,"Player1_D1");
-// testing commented out iP1_D2 = 			GetLocalInt(oSave,"Player1_D2");
-iP1_Spider_Used =	GetLocalInt(oSave,"Player1_SP_USED");
+iP1_D1 = 			PS_GetLocalInt(oSave,"Player1_D1");
+// testing commented out iP1_D2 = 			PS_GetLocalInt(oSave,"Player1_D2");
+iP1_Spider_Used =	PS_GetLocalInt(oSave,"Player1_SP_USED");
 
-iP2_D1 =			GetLocalInt(oSave,"Player2_D1");
-// testing commented out iP2_D2 =			GetLocalInt(oSave,"Player2_D2");
-// testing commented out iP2_Spider_Used =	GetLocalInt(oSave,"Player2_SP_USED");
+iP2_D1 =			PS_GetLocalInt(oSave,"Player2_D1");
+// testing commented out iP2_D2 =			PS_GetLocalInt(oSave,"Player2_D2");
+// testing commented out iP2_Spider_Used =	PS_GetLocalInt(oSave,"Player2_SP_USED");
 
 
 //Pająk gracza 1
@@ -409,9 +411,9 @@ if(iP1_Spider_Used != TRUE)
 	SetGUIObjectHidden(oPlayer1,"SAVA_MAIN","Dices",TRUE);
 	SetGUIObjectHidden(oPlayer1,"SAVA_MAIN","Killer_Spider",FALSE);
 	
-	SetLocalInt(oHub,"Throw_1", iP1_D1+iP1_D2);
-	SetLocalInt(oHub,"D1_1", iP1_D1);
-	SetLocalInt(oHub,"D2_1", iP1_D2);
+	PS_SetLocalInt(oHub,"Throw_1", iP1_D1+iP1_D2);
+	PS_SetLocalInt(oHub,"D1_1", iP1_D1);
+	PS_SetLocalInt(oHub,"D2_1", iP1_D2);
 
 	ShowKillerSpiderTooltip(oPlayer1, iP1_D1+iP1_D2, oHub);
 	}
@@ -453,9 +455,9 @@ if(iP2_Spider_Used != TRUE)
 	SetGUIObjectHidden(oPlayer2,"SAVA_MAIN","Dices",TRUE);
 	SetGUIObjectHidden(oPlayer2,"SAVA_MAIN","Killer_Spider",FALSE);
 	
-	SetLocalInt(oHub,"Throw_2", iP2_D1+iP2_D2);
-	SetLocalInt(oHub,"D1_2", iP2_D1);
-	SetLocalInt(oHub,"D2_2", iP2_D2);
+	PS_SetLocalInt(oHub,"Throw_2", iP2_D1+iP2_D2);
+	PS_SetLocalInt(oHub,"D1_2", iP2_D1);
+	PS_SetLocalInt(oHub,"D2_2", iP2_D2);
 
 	ShowKillerSpiderTooltip(oPlayer2, iP2_D1+iP2_D2, oHub);
 	}
@@ -479,7 +481,7 @@ SetLocalGUIVariable(oPlayer2,"SAVA_MAIN",2,SPIDER_USED);
 
 	for(i=1; i <= 16; i++)
 	{
-	iTaken = GetLocalInt(oSave,"Player1_T_"+IntToString(i));
+	iTaken = PS_GetLocalInt(oSave,"Player1_T_"+IntToString(i));
 	
 		if(iTaken > 0)
 		{
@@ -492,7 +494,7 @@ SetLocalGUIVariable(oPlayer2,"SAVA_MAIN",2,SPIDER_USED);
 
 	for(i=1; i <= 16; i++)
 	{
-	iTaken = GetLocalInt(oSave,"Player2_T_"+IntToString(i));
+	iTaken = PS_GetLocalInt(oSave,"Player2_T_"+IntToString(i));
 	
 		if(iTaken > 0)
 		{
@@ -503,8 +505,8 @@ SetLocalGUIVariable(oPlayer2,"SAVA_MAIN",2,SPIDER_USED);
 		
 	}
 
-	SetLocalInt(oHub,"Kill_Count_1",GetLocalInt(oSave,"Kill_Count_1"));
-	SetLocalInt(oHub,"Kill_Count_2",GetLocalInt(oSave,"Kill_Count_2"));	
+	PS_SetLocalInt(oHub,"Kill_Count_1",PS_GetLocalInt(oSave,"Kill_Count_1"));
+	PS_SetLocalInt(oHub,"Kill_Count_2",PS_GetLocalInt(oSave,"Kill_Count_2"));	
 	
 		
 string sLog;
@@ -522,12 +524,12 @@ sLog = GetFirstName(oPlayer1)+CONT_GAME;
 
 
 
-SetLocalString(oHub,"GAME_LOG",sLog);
+PS_SetLocalString(oHub,"GAME_LOG",sLog);
 
 SetGUIObjectText(oPlayer1, "SAVA_MAIN", "GameLog", -1, sLog);
 // testing commented out  SetGUIObjectText(oPlayer2, "SAVA_MAIN", "GameLog", -1, sLog);
 
-SetLocalInt(oHub,"GAME_IN_PROGERSS",TRUE);
+PS_SetLocalInt(oHub,"GAME_IN_PROGERSS",TRUE);
 
 SetGUIObjectText(oPlayer1,"SAVA_MAIN","Save_Name", -1, GetFirstName(oPlayer1)+" VS "+GetFirstName(oPlayer2) );
 // testing commented out  SetGUIObjectText(oPlayer2,"SAVA_MAIN","Save_Name", -1, GetFirstName(oPlayer1)+" VS "+GetFirstName(oPlayer2) );	

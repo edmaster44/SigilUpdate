@@ -27,7 +27,7 @@ if(oPC == OBJECT_INVALID)
 
 
 if (!GetIsPC(oPC)) return;
-int iSpawnWait = GetLocalInt(oTrigger,"RESPAWN");
+int iSpawnWait = PS_GetLocalInt(oTrigger,"RESPAWN");
 if(iSpawnWait == 0)
  iSpawnWait = cSpawnWait;
  
@@ -48,29 +48,29 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 {
  TimeStamp(oTrigger,"TIMESTAMP");
  
- object oWP1 = GetWaypointByTag(GetLocalString(oTrigger,"WP1"));
+ object oWP1 = GetWaypointByTag(PS_GetLocalString(oTrigger,"WP1"));
  location lSpawnpoint1 = GetLocation(oWP1); 
-  object oWP2 = GetWaypointByTag(GetLocalString(oTrigger,"WP2"));
+  object oWP2 = GetWaypointByTag(PS_GetLocalString(oTrigger,"WP2"));
  location lSpawnpoint2 = GetLocation(oWP2); 
-  object oWP3 = GetWaypointByTag(GetLocalString(oTrigger,"WP3"));
+  object oWP3 = GetWaypointByTag(PS_GetLocalString(oTrigger,"WP3"));
  location lSpawnpoint3 = GetLocation(oWP3); 
-  object oWP4 = GetWaypointByTag(GetLocalString(oTrigger,"WP4"));
+  object oWP4 = GetWaypointByTag(PS_GetLocalString(oTrigger,"WP4"));
  location lSpawnpoint4 = GetLocation(oWP4); 
  
  object oSpawn;
   
- string m1 = GetLocalString(oTrigger,"M1");
- string m2 = GetLocalString(oTrigger,"M2");
- string b1 = GetLocalString(oTrigger,"B1");
- string b2 = GetLocalString(oTrigger,"B2");
+ string m1 = PS_GetLocalString(oTrigger,"M1");
+ string m2 = PS_GetLocalString(oTrigger,"M2");
+ string b1 = PS_GetLocalString(oTrigger,"B1");
+ string b2 = PS_GetLocalString(oTrigger,"B2");
   
   string elitetype="";
   string elitelevel="";
   int i = 0;
   object oItem;
   
-  float low = IntToFloat(GetLocalInt(oTrigger,"LOW"));
-  float high = IntToFloat(GetLocalInt(oTrigger,"HIGH"));
+  float low = IntToFloat(PS_GetLocalInt(oTrigger,"LOW"));
+  float high = IntToFloat(PS_GetLocalInt(oTrigger,"HIGH"));
    
   string mod = "";
  
@@ -96,7 +96,7 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 			SetDroppableFlag(oItem, FALSE);	
 			SetLastName(oSpawn,"("+elitetype+")");
 			ForceRest(oSpawn);					
-			SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
+			PS_SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
    }
 }
 }

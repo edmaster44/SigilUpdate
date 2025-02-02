@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /******************************************************************************
 *****                         	 nwnx_craft                               *****
 *****                               V 1.0                                 *****
@@ -221,7 +223,7 @@ object XPCraft_RetrieveAndEquipCraftedItem(object oPC, object oOldItem, int iSlo
 	object oCraftedItem;
 	object oInventoryItem;
 	
-	object oHiddenContainer = GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER");
+	object oHiddenContainer = PS_GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER");
 	if(oHiddenContainer!= OBJECT_INVALID)
 	{
 		oCraftedItem =  XPCraft_RetrieveCraftedItem(oPC, GetLocation(oHiddenContainer));
@@ -244,7 +246,7 @@ object XPCraft_RetrieveAndEquipCraftedItem(object oPC, object oOldItem, int iSlo
 		//Equip the copied Item
 		AssignCommand(oPC,ActionEquipItem(oInventoryItem, iSlotToEquip));
 		//cryptc: set the TSO on the new copy to make it still craftable
-		SetLocalString(oInventoryItem,"TSO",GetLocalString(oPC,"TSO"));
+		PS_SetLocalString(oInventoryItem,"TSO",PS_GetLocalString(oPC,"TSO"));
 		
 		//destroy the one on the ground		
 		DestroyObject(oCraftedItem);		
@@ -518,8 +520,8 @@ string InvokeCraftEmulator(string Function, string Param1, int Param2, string Va
 	AddScriptParameterString(Value);
 	ExecuteScriptEnhanced("Sigil.CraftEmulator", Module, TRUE);
 
-	ReturnValue = GetLocalString(Module, "CRAFT_EMULATOR_RET");
-	DeleteLocalString(Module, "CRAFT_EMULATOR_RET");
+	ReturnValue = PS_GetLocalString(Module, "CRAFT_EMULATOR_RET");
+	PS_DeleteLocalString(Module, "CRAFT_EMULATOR_RET");
 
 	return ReturnValue;
 }

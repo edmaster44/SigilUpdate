@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Swap out the model's clothes every time she goes to the back
 string GetClothing();
 void ChangeClothing(object oModel);
@@ -8,7 +10,7 @@ void main() {
 
 	object oModel = OBJECT_SELF;
 	
-	int nWP = GetLocalInt(oModel, "Current_Waypoint");
+	int nWP = PS_GetLocalInt(oModel, "Current_Waypoint");
 	if (nWP <= 0 || nWP >= 9) //clamp value
 		nWP = 1;
 		
@@ -23,7 +25,7 @@ void main() {
 	}
 		
 	nWP++;
-	SetLocalInt(oModel, "Current_Waypoint", nWP);
+	PS_SetLocalInt(oModel, "Current_Waypoint", nWP);
 
 }
 

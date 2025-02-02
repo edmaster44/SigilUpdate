@@ -41,7 +41,7 @@ void main()
     object oTarget = GetSpellTargetObject();
 
     //Check to make sure the creature has not been set up to be a statue.
-    if (GetLocalInt(oTarget, "NW_STATUE") != 1)
+    if (PS_GetLocalInt(oTarget, "NW_STATUE") != 1)
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 486, FALSE));

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //A script for creating objects on death. . for instance, chests
 //Ideally this should be called from the default ondeath script
 //by setting the DeathScript variable on the creature to this script
@@ -15,8 +17,8 @@ void main () {
    	}
 	
 	string sTag = GetTag(OBJECT_SELF); //basing waypoint naming convention around monster tag
-	string sPlac  = GetLocalString(OBJECT_SELF, "Placeable_ResRef");
-	int nNum = GetLocalInt(OBJECT_SELF, "Placeable_Num");
+	string sPlac  = PS_GetLocalString(OBJECT_SELF, "Placeable_ResRef");
+	int nNum = PS_GetLocalInt(OBJECT_SELF, "Placeable_Num");
 	
 	if (sPlac == "")
 		return;

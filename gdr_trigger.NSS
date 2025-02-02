@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //
 // GDR - Grin, Duck and Run
 //
@@ -1561,7 +1563,7 @@ int runTest(object oPC) {
 
     // What are we testing?
 
-    int test = GetLocalInt(OBJECT_SELF, "gdr_skill");
+    int test = PS_GetLocalInt(OBJECT_SELF, "gdr_skill");
 
     // Home run?
 
@@ -1575,7 +1577,7 @@ int runTest(object oPC) {
 
     // How hard?
 
-    int dc = GetLocalInt(OBJECT_SELF, "gdr_dc");
+    int dc = PS_GetLocalInt(OBJECT_SELF, "gdr_dc");
 	int nShadowAdept = GetHasFeat(294, OBJECT_SELF, TRUE);
 
     if (dc <= 0) {
@@ -1586,7 +1588,7 @@ int runTest(object oPC) {
 		dc = dc - 2;
 	}
 
-    int enc_pen = GetLocalInt(OBJECT_SELF, "gdr_encumberance_penalty");
+    int enc_pen = PS_GetLocalInt(OBJECT_SELF, "gdr_encumberance_penalty");
 
     if (enc_pen > 0) {
 	
@@ -2467,7 +2469,7 @@ void unsuspend_gdr(object trigger) {
 
     // Clear the suspended flag
 
-    SetLocalInt(OBJECT_SELF, "gdr_suspended", 0);
+    PS_SetLocalInt(OBJECT_SELF, "gdr_suspended", 0);
 
     // All done
 
@@ -2508,13 +2510,13 @@ void main() {
 
     // Bail if we're suspended
 
-    if (GetLocalInt(OBJECT_SELF, "gdr_suspended") == 1) {
+    if (PS_GetLocalInt(OBJECT_SELF, "gdr_suspended") == 1) {
         return;
     }
 
     // Got the required item?
 
-    sTag = GetLocalString(OBJECT_SELF, "gdr_requires");
+    sTag = PS_GetLocalString(OBJECT_SELF, "gdr_requires");
 
     if (sTag != "") {
 
@@ -2522,7 +2524,7 @@ void main() {
 
             // Send player message
 
-            sMsg = GetLocalString(OBJECT_SELF, "gdr_requires_msg");
+            sMsg = PS_GetLocalString(OBJECT_SELF, "gdr_requires_msg");
 
             if (sMsg != "") {
                 SendMessageToPC(oPC, sMsg);
@@ -2536,24 +2538,24 @@ void main() {
 
     // Check triggerer total usage...
 
-    iVal1 = GetLocalInt(OBJECT_SELF, "gdr_usage_limit");
+    iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_usage_limit");
 
     if (iVal1 > 0) {
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_usage_token");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_usage_token");
 
         if (sTag == "") {
 
             sTag =  GetTag(OBJECT_SELF);
         }
 
-        iVal2 = GetLocalInt(oPC, sTag);
+        iVal2 = PS_GetLocalInt(oPC, sTag);
 
         if (iVal2 >= iVal1) {
 
             // Send player message
 
-            sMsg = GetLocalString(OBJECT_SELF, "gdr_usage_msg");
+            sMsg = PS_GetLocalString(OBJECT_SELF, "gdr_usage_msg");
 
             if (sMsg != "") {
                 SendMessageToPC(oPC, sMsg);
@@ -2566,7 +2568,7 @@ void main() {
 
         iVal2 = iVal2 + 1;
 
-        SetLocalInt(oPC, sTag, iVal2);
+        PS_SetLocalInt(oPC, sTag, iVal2);
 
     }
 
@@ -2576,7 +2578,7 @@ void main() {
 
         // Jump to waypoint
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_wp");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_wp");
 
         if (sTag != "" ) {
             playerToWP( oPC, sTag );
@@ -2584,7 +2586,7 @@ void main() {
 
         // Loose invisability & stealth
 
-        if (GetLocalInt(OBJECT_SELF, "gdr_fail_strip") != 1) {
+        if (PS_GetLocalInt(OBJECT_SELF, "gdr_fail_strip") != 1) {
 
             RemoveSpecificEffect(EFFECT_TYPE_INVISIBILITY, oPC);
 
@@ -2593,7 +2595,7 @@ void main() {
 
         // Apply visual effect
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_fail_effect");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_fail_effect");
 
         if (iVal1 != 0) {
             DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(iVal1), oPC));
@@ -2601,7 +2603,7 @@ void main() {
 
         // Sound effects?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_sound");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_sound");
 
         if (sTag != "") {
             oThing = GetObjectByTag(sTag);
@@ -2613,7 +2615,7 @@ void main() {
 
         // How much damage?
 
-        int fDice = GetLocalInt(OBJECT_SELF, "gdr_fail_dice");
+        int fDice = PS_GetLocalInt(OBJECT_SELF, "gdr_fail_dice");
 
         if (fDice > 0) {
 
@@ -2621,7 +2623,7 @@ void main() {
 
             int dType, dSave;
 
-            switch (GetLocalInt(OBJECT_SELF, "gdr_fail_damtype")) {
+            switch (PS_GetLocalInt(OBJECT_SELF, "gdr_fail_damtype")) {
 
                 default:
                     dType = DAMAGE_TYPE_BLUDGEONING;
@@ -2688,7 +2690,7 @@ void main() {
 
             int dPower;
 
-            if (GetLocalInt(OBJECT_SELF, "gdr_fail_damSoft") == 1) {
+            if (PS_GetLocalInt(OBJECT_SELF, "gdr_fail_damSoft") == 1) {
                 dPower = DAMAGE_POWER_NORMAL;
             } else {
                 dPower = DAMAGE_POWER_PLUS_TWENTY;
@@ -2702,16 +2704,16 @@ void main() {
 
         // Any spell like effects?
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_fail_spell");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_fail_spell");
 
         if (iVal1 > 0) {
-            Enchant(oPC, iVal1, GetLocalInt(OBJECT_SELF, "gdr_fail_spell_power"),
-                                GetLocalFloat(OBJECT_SELF, "gdr_fail_spell_duration"));
+            Enchant(oPC, iVal1, PS_GetLocalInt(OBJECT_SELF, "gdr_fail_spell_power"),
+                                PS_GetLocalFloat(OBJECT_SELF, "gdr_fail_spell_duration"));
         }
 
         // Play an animation...
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_fail_animation");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_fail_animation");
 
         if (iVal1 == 0) {
             iVal1 = 2;
@@ -2721,7 +2723,7 @@ void main() {
 
         // Tell them they failed...
 
-        sMsg = GetLocalString(OBJECT_SELF, "gdr_fail_msg");
+        sMsg = PS_GetLocalString(OBJECT_SELF, "gdr_fail_msg");
 
         if (sMsg != "") {
             SendMessageToPC(oPC, sMsg);
@@ -2729,7 +2731,7 @@ void main() {
 
         // Who do we annoy?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_annoy");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_annoy");
 
         if (sTag != "") {
 
@@ -2744,7 +2746,7 @@ void main() {
 
         // Who do we pacify?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_pacify");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_pacify");
 
         if (sTag != "") {
 
@@ -2759,7 +2761,7 @@ void main() {
 
         // Alignment shift
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_fail_alignGE");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_fail_alignGE");
 
         if (iVal1 > 0) {
             AdjustAlignment(oPC, ALIGNMENT_EVIL, iVal1);
@@ -2767,7 +2769,7 @@ void main() {
             AdjustAlignment(oPC, ALIGNMENT_GOOD, -iVal1);
         }
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_fail_alignLC");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_fail_alignLC");
 
         if (iVal1 > 0) {
             AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, iVal1);
@@ -2781,7 +2783,7 @@ void main() {
 
         // Port to mirror area?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_port_to_mirror");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_port_to_mirror");
 
         if (sTag != "") {
             PortToMirror(oPC, sTag);
@@ -2789,7 +2791,7 @@ void main() {
 
         // Drop an object
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_drop");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_drop");
 
         if (sTag != "") {
 
@@ -2804,7 +2806,7 @@ void main() {
 
         // Trash an object
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_fail_trash");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_fail_trash");
 
         if (sTag != "") {
 
@@ -2819,7 +2821,7 @@ void main() {
 
         // Angry hordes
 
-        if (GetLocalInt(OBJECT_SELF, "gdr_fail_all_hostile") == 1) {
+        if (PS_GetLocalInt(OBJECT_SELF, "gdr_fail_all_hostile") == 1) {
 
             // Kick out of party
 
@@ -2850,7 +2852,7 @@ void main() {
 
         // Jump to waypoint
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_wp");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_wp");
 
         if (sTag != "") {
             playerToWP(oPC, sTag);
@@ -2858,7 +2860,7 @@ void main() {
 
         // Apply passing fx
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_pass_effect");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_pass_effect");
 
         if (iVal1 != 0) {
             DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(iVal1), oPC));
@@ -2866,7 +2868,7 @@ void main() {
 
         // Sound effects?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_sound");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_sound");
 
         if (sTag != "") {
             oThing = GetObjectByTag(sTag);
@@ -2878,16 +2880,16 @@ void main() {
 
         // Any spell like effects?
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_pass_spell");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_pass_spell");
 
         if (iVal1 > 0) {
-            Enchant(oPC, iVal1, GetLocalInt(OBJECT_SELF, "gdr_pass_spell_power"),
-                                GetLocalFloat(OBJECT_SELF, "gdr_pass_spell_duration"));
+            Enchant(oPC, iVal1, PS_GetLocalInt(OBJECT_SELF, "gdr_pass_spell_power"),
+                                PS_GetLocalFloat(OBJECT_SELF, "gdr_pass_spell_duration"));
         }
 
         // Send player message
 
-        sMsg = GetLocalString(OBJECT_SELF, "gdr_pass_msg");
+        sMsg = PS_GetLocalString(OBJECT_SELF, "gdr_pass_msg");
 
         if (sMsg != "") {
             SendMessageToPC(oPC, sMsg);
@@ -2895,7 +2897,7 @@ void main() {
 
         // Play an animation...
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_pass_animation");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_pass_animation");
 
         if (iVal1 == 0) {
             iVal1 = 1;
@@ -2905,7 +2907,7 @@ void main() {
 
         // Who do we annoy?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_annoy");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_annoy");
 
         if (sTag != "") {
 
@@ -2920,7 +2922,7 @@ void main() {
 
         // Who do we pacify?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_pacify");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_pacify");
 
         if (sTag != "") {
 
@@ -2935,7 +2937,7 @@ void main() {
 
         // Alignment shift
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_pass_alignGE");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_pass_alignGE");
 
         if (iVal1 > 0) {
             AdjustAlignment(oPC, ALIGNMENT_EVIL, iVal1);
@@ -2943,7 +2945,7 @@ void main() {
             AdjustAlignment(oPC, ALIGNMENT_GOOD, -iVal1);
         }
 
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_pass_alignLC");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_pass_alignLC");
 
         if (iVal1 > 0) {
             AdjustAlignment(oPC, ALIGNMENT_CHAOTIC, iVal1);
@@ -2956,7 +2958,7 @@ void main() {
         
         // Port to mirror area?
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_port_to_mirror");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_port_to_mirror");
 
         if (sTag != "") {
             PortToMirror(oPC, sTag);
@@ -2964,7 +2966,7 @@ void main() {
 
         // Drop an object
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_drop");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_drop");
 
         if (sTag != "") {
 
@@ -2979,7 +2981,7 @@ void main() {
 
         // Trash an object
 
-        sTag = GetLocalString(OBJECT_SELF, "gdr_pass_trash");
+        sTag = PS_GetLocalString(OBJECT_SELF, "gdr_pass_trash");
 
         if (sTag != "") {
 
@@ -2996,32 +2998,32 @@ void main() {
 
     // Check total usage
 
-    iVal1 = GetLocalInt(OBJECT_SELF, "gdr_uses_left");
+    iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_uses_left");
 
     if (iVal1 == 0) {
-        iVal1 = GetLocalInt(OBJECT_SELF, "gdr_max_uses");
+        iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_max_uses");
     }
 
     if (iVal1 > 1) {
         iVal1 = iVal1 - 1;
-        SetLocalInt(OBJECT_SELF, "gdr_uses_left", iVal1);
+        PS_SetLocalInt(OBJECT_SELF, "gdr_uses_left", iVal1);
     } else if (iVal1 == 1) {
 
         // Suspend indefinetly...
 
-        SetLocalInt(OBJECT_SELF, "gdr_suspended", 1);
-        SetLocalInt(OBJECT_SELF, "gdr_uses_left", 0);
+        PS_SetLocalInt(OBJECT_SELF, "gdr_suspended", 1);
+        PS_SetLocalInt(OBJECT_SELF, "gdr_uses_left", 0);
     }
 
     // Suspend for a while?
 
-    iVal1 = GetLocalInt(OBJECT_SELF, "gdr_reuse_delay_min");
+    iVal1 = PS_GetLocalInt(OBJECT_SELF, "gdr_reuse_delay_min");
 
     if (iVal1 > 0) {
 
         iVal3 = iVal1;
 
-        iVal2 = GetLocalInt(OBJECT_SELF, "gdr_reuse_delay_max");
+        iVal2 = PS_GetLocalInt(OBJECT_SELF, "gdr_reuse_delay_max");
 
         if (iVal2 > iVal1) {
            iVal3 += Random(iVal2 - iVal1) + 1;
@@ -3033,7 +3035,7 @@ void main() {
 
         // Mark suspended
 
-        SetLocalInt(OBJECT_SELF, "gdr_suspended", 1);
+        PS_SetLocalInt(OBJECT_SELF, "gdr_suspended", 1);
     }
 
     // All done

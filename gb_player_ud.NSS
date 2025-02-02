@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // gb_player_ud
 /*
 	 user defined events template
@@ -21,7 +23,7 @@ void main()
 //	Jug_Debug(GetName(OBJECT_SELF) + " event num " + IntToString(iEvent));
 
 	//execute custom user-defined script from local string if it exists
-	string sUDScript=GetLocalString(OBJECT_SELF, "ud_script");
+	string sUDScript=PS_GetLocalString(OBJECT_SELF, "ud_script");
 	if (sUDScript != "")
 	{
 		ExecuteScript(sUDScript, OBJECT_SELF);
@@ -60,7 +62,7 @@ void main()
 			if(GetIsOverlandMap(GetArea(OBJECT_SELF)))
 			{
 //				PrettyDebug("gb_player_ud firing for" + GetName(OBJECT_SELF));
-				object oOldActor = GetLocalObject(GetModule(), "oPartyLeader");
+				object oOldActor = PS_GetLocalObject(GetModule(), "oPartyLeader");
 				if(GetIsPC(OBJECT_SELF) && oOldActor != OBJECT_SELF)
 				{
 					if(GetCommandable(OBJECT_SELF) && !GetIsDead(OBJECT_SELF) &&

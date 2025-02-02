@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////
 /*
    Baleful Geas - Dragon Magic
@@ -105,11 +107,11 @@ void main() {
 			if (GetHasFeat(FEAT_HEXEN_BALEFUL_GEAS, OBJECT_SELF)) {
 				SendMessageToPC(oCaster, "Explosion set.");
 				int nDamage = GetEldritchBlastDmg(OBJECT_SELF, oTarget);
-				SetLocalString(oTarget, "DeathScript", "ps_ondeath_eldritchblast");
+				PS_SetLocalString(oTarget, "DeathScript", "ps_ondeath_eldritchblast");
 				
-				SetLocalInt(oTarget, "EldritchBlast_Damage", nDamage);
-				SetLocalInt(oTarget, "EldritchBlast_DC", nDC);
-				SetLocalObject(oTarget, "EldritchBlast_Caster", oCaster);
+				PS_SetLocalInt(oTarget, "EldritchBlast_Damage", nDamage);
+				PS_SetLocalInt(oTarget, "EldritchBlast_DC", nDC);
+				PS_SetLocalObject(oTarget, "EldritchBlast_Caster", oCaster);
 			}
 			
 			SendMessageToPC(oCaster, "The curse dominates the affected enemy.");

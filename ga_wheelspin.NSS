@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_randomlootgenerator"
 #include "gm_include"
 
@@ -12,10 +14,10 @@ void GoldenSquare(object oPC, int money);
 void main () {
 
 	object oPC = GetPCSpeaker();
-	int nGoldAmount = GetLocalInt(OBJECT_SELF, "money_wagered");
-	DeleteLocalInt(OBJECT_SELF, "money_wagered");
-	SetLocalInt(OBJECT_SELF, "SPINNING", 1);
-	int netWorth = GetLocalInt(oPC, "fw_mynetworth");
+	int nGoldAmount = PS_GetLocalInt(OBJECT_SELF, "money_wagered");
+	PS_DeleteLocalInt(OBJECT_SELF, "money_wagered");
+	PS_SetLocalInt(OBJECT_SELF, "SPINNING", 1);
+	int netWorth = PS_GetLocalInt(oPC, "fw_mynetworth");
 	int randomNum = Random(1000); //Golden square roll
 	//Note: The golden square can only be won if your bet is 500 or less; this 
 	//ensures that no more than 500,000 is ever given out here.
@@ -57,7 +59,7 @@ void main () {
 			DelayCommand(7.5f, TripleMoney(oPC, nGoldAmount));
 		else if (randomNum == 3)
 			DelayCommand(7.5f, specialDrop(oPC));
-		else if (randomNum <= 5 || GetLocalInt(oPC, "HASWON") == 0)
+		else if (randomNum <= 5 || PS_GetLocalInt(oPC, "HASWON") == 0)
 			DelayCommand(7.5f, GiveSpecialItem(oPC, "pl_fw_ordinary", "Magician's"));
 		else
 			DelayCommand(7.5f, GiveNothing());
@@ -72,7 +74,7 @@ void main () {
 			DelayCommand(7.5f, TripleMoney(oPC, nGoldAmount));
 		else if (randomNum <= 5)
 			DelayCommand(7.5f, specialDrop(oPC));
-		else if (randomNum <= 8 || GetLocalInt(oPC, "HASWON") == 0)
+		else if (randomNum <= 8 || PS_GetLocalInt(oPC, "HASWON") == 0)
 			DelayCommand(7.5f, GiveSpecialItem(oPC, "pl_fw_ordinary", "Magician's"));
 		else if (randomNum <= 10)
 			DelayCommand(7.5f, GiveSpecialItem(oPC, "pl_fw_purples", "Royal"));
@@ -84,7 +86,7 @@ void main () {
 	else
 		DelayCommand(7.5f,	GiveNothing());
 		
-	DelayCommand(7.5f, DeleteLocalInt(OBJECT_SELF, "SPINNING"));
+	DelayCommand(7.5f, PS_DeleteLocalInt(OBJECT_SELF, "SPINNING"));
 }
 
 //***********************************************************************8
@@ -122,7 +124,7 @@ void specialDrop(object oPC){
 	object oItem = CreateItemOnObject( sIngot, oPC);
 	// error catching
 	if (sIngot != "" && sIngot != "****"){
-		SetLocalInt(oPC, "HASWON", 1);
+		PS_SetLocalInt(oPC, "HASWON", 1);
 		SpeakString("Congratulations, "+GetName(oPC)+", you win one " + sIngotName + " from the Crafter's Square!");
 	} else SpeakString("Too bad, "+GetName(oPC)+", try again!");
 	
@@ -171,7 +173,7 @@ void specialDrop(object oPC){
 	}
 	
 	object oItem = CreateItemOnObject( sIngot, oPC);
-	SetLocalInt(oPC, "HASWON", 1);
+	PS_SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Crafter's Square!");
 	*/
 }
@@ -182,14 +184,14 @@ void specialDrop(object oPC){
 //pl_fw_ordinary
 void GiveSpecialItem(object oPC, string sStore, string squareName) {
 	object oStore = GetObjectByTag(sStore);
-	int count = GetLocalInt(oStore, "count");
+	int count = PS_GetLocalInt(oStore, "count");
 	if (count <= 0) {
 		object oItem = GetFirstItemInInventory(oStore);
 		while (GetIsObjectValid(oItem)) {
 			count++;
 			oItem = GetNextItemInInventory(oStore);
 		}
-		SetLocalInt(oStore, "count", count);
+		PS_SetLocalInt(oStore, "count", count);
 	}
 	int chosen = Random(count);
 	count = 0;
@@ -204,7 +206,7 @@ void GiveSpecialItem(object oPC, string sStore, string squareName) {
 		oItem = GetNextItemInInventory(oStore);
 	}
 	if (GetIsObjectValid(oGiven)) {
-		SetLocalInt(oPC, "HASWON", 1);
+		PS_SetLocalInt(oPC, "HASWON", 1);
 		SpeakString("Congratulations, "+GetName(oPC)+", you have won the "+squareName+" Square!");
 	}
 	else
@@ -306,28 +308,28 @@ void GiveRandomItem(object oPC) {
 	else if (rand == 44)
 		nType = BASE_ITEM_WARMACE;
 	oItem = SRLG_GiveRandomLeveledItem(oPC, nType);
-	SetLocalInt(oPC, "HASWON", 1);
+	PS_SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Trickster's Square!");
 }
 
 void DoubleMoney(object oPC, int money) {
 	money = money*2;
 	GiveGoldToCreature(oPC, money, TRUE);
-	SetLocalInt(oPC, "HASWON", 1);
+	PS_SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Banker's Square!");
 }
 
 void TripleMoney(object oPC, int money) {
 	money = money*3;
 	GiveGoldToCreature(oPC, money, TRUE);
-	SetLocalInt(oPC, "HASWON", 1);
+	PS_SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Lord's Square!");
 }
 
 void GoldenSquare(object oPC, int money) {
 	SpeakString("Why, this IS your lucky day! Ladies and Gentlemen, "+GetName(oPC)+" has won the GOLDEN SQUARE!");
 	money = money*1000;
-	SetLocalInt(oPC, "HASWON", 1);
+	PS_SetLocalInt(oPC, "HASWON", 1);
 	GiveGoldToCreature(oPC, money, TRUE);
 }
 

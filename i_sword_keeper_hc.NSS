@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // This script controls the effects of the Keeper sword
 // For SCOD.
 // by Michel Remillard/Electrohydra
@@ -123,7 +125,7 @@ void main()
 		
 	object oSword = GetSpellCastItem();	
 	object oPC = GetItemPossessor(oSword);	
-	int kills = GetLocalInt(oSword, KILL_COUNT) + 1;
+	int kills = PS_GetLocalInt(oSword, KILL_COUNT) + 1;
 	
 	if (GetTag(oTarget) == "keeperdemon")
 	{
@@ -133,7 +135,7 @@ void main()
 	}	
 	
 	
-	SetLocalInt(oSword, KILL_COUNT, kills);
+	PS_SetLocalInt(oSword, KILL_COUNT, kills);
 	
 	if (kills == 1)
 		AddItemProperty(DURATION_TYPE_PERMANENT, ItemPropertyKeen(), oSword, 0.0f);

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:: bar_onareaexit
 //:: On Area Exit script:
 //:: - Cleans up loot bags, encounter creatures, dead creatures
@@ -51,9 +53,9 @@ void ActionCleanCheck()
 PrintString( "bar_onareaexit: ActionCleanCheck" );
 
 //:: Trash object additions:
-int iLock = GetGlobalInt("CleanUpLock");
+int iLock = PS_GetGlobalInt("CleanUpLock");
 if ( iLock == 0 ) {
-SetGlobalInt("CleanUpLock", 1); // Only allows one clean up at a time.
+PS_SetGlobalInt("CleanUpLock", 1); // Only allows one clean up at a time.
 PrintString( "bar_onareaexit: ActionCleanCheck: Inside lock" );
 
 //declarations
@@ -101,7 +103,7 @@ oItem = GetNextObjectInArea();
 }//end while
 }//end if PCinArea check
 
-SetGlobalInt("CleanUpLock", 0);
+PS_SetGlobalInt("CleanUpLock", 0);
 }
 }
 

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ///////////////////////////////////////////////////////////////
 // ps_secretchest_ontrigenter
 //
@@ -31,9 +33,9 @@ History of Changes
 void main()
 {
 	object oEnteringObject	= GetEnteringObject();
-	string sSecretObject	= GetLocalString(OBJECT_SELF, "sSecretItem");
-	string sTag				= GetLocalString(OBJECT_SELF, "sSpawnTag");
-	int	nSearchDC			= GetLocalInt(OBJECT_SELF, "nSearchDC");
+	string sSecretObject	= PS_GetLocalString(OBJECT_SELF, "sSecretItem");
+	string sTag				= PS_GetLocalString(OBJECT_SELF, "sSpawnTag");
+	int	nSearchDC			= PS_GetLocalInt(OBJECT_SELF, "nSearchDC");
 	location lLocation		= GetLocation(GetNearestObjectByTag(sTag, oEnteringObject));
 	object oCreatedObject;
 		

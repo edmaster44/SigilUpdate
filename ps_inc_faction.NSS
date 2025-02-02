@@ -441,14 +441,14 @@ int GetFaction(object oPC) {
 		object oItem = GetFactionBadgeObject(oPC);
 	    if(GetIsObjectValid(oItem))
 	    {
-		 	int nFaction = GetLocalInt(oItem,"Faction");
+		 	int nFaction = PS_GetLocalInt(oItem,"Faction");
 			return nFaction;
 	    }
 	}
 	
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
 	if(GetIsObjectValid(oItem)) {
-		int oldFaction = GetLocalInt(oItem, "Faction");
+		int oldFaction = PS_GetLocalInt(oItem, "Faction");
 		if (oldFaction == FACTION_QUIT)
 			return FACTION_QUIT;
 	}
@@ -471,7 +471,7 @@ int GetFactionRank(object oPC) {
 	if (!GetOnNewFactionSystem()) {
 	    if(GetIsObjectValid(oBadge))
 	    {
-		 	int nFactionRank = GetLocalInt(oBadge,"FactionRank");
+		 	int nFactionRank = PS_GetLocalInt(oBadge,"FactionRank");
 			return nFactionRank;
 	    }
 	}
@@ -482,8 +482,8 @@ int GetFactionRank(object oPC) {
 	if (SQLFetch() != SQL_ERROR) { 
 		int iFaction = StringToInt(SQLGetData(1));
 		int faction_rank = StringToInt(SQLGetData(2));
-		SetLocalInt(oBadge, "FactionRank", faction_rank);
-		SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, faction_rank));
+		PS_SetLocalInt(oBadge, "FactionRank", faction_rank);
+		PS_SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, faction_rank));
 		return faction_rank;
 	}
 	
@@ -505,7 +505,7 @@ int HasFactionBadge(object oPC) {
 //Get the Faction Badge itself
 object GetFactionBadgeObject(object oPC) {
 
-	object oBadge = GetLocalObject(oPC, "FactionBadgeUsed");
+	object oBadge = PS_GetLocalObject(oPC, "FactionBadgeUsed");
 	if (!GetIsObjectValid(oBadge)) {
 		oBadge = GetItemPossessedBy(oPC, "ps_faction_badge");
 	}
@@ -527,7 +527,7 @@ int GetIsFaction(int nFaction) {
 int GetOnNewFactionSystem(object oPC = OBJECT_INVALID) {
 
 	object oModule = GetModule();
-	string sSystem = GetLocalString(oModule, "FACTION_SYSTEM");
+	string sSystem = PS_GetLocalString(oModule, "FACTION_SYSTEM");
 	
 	if (sSystem == "") {
 	
@@ -537,9 +537,9 @@ int GetOnNewFactionSystem(object oPC = OBJECT_INVALID) {
 		if (SQLFetch() != SQL_ERROR) { 
 			string version = SQLGetData(1);
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Found faction version: "+version);
-			SetLocalString(oModule, "FACTION_SYSTEM", version);
+			PS_SetLocalString(oModule, "FACTION_SYSTEM", version);
 		}
-		sSystem = GetLocalString(oModule, "FACTION_SYSTEM");
+		sSystem = PS_GetLocalString(oModule, "FACTION_SYSTEM");
 		
 	}
 	
@@ -561,11 +561,11 @@ void ToggleFactionSystem(object oPC = OBJECT_INVALID) {
 	string sQuery = "";
 	if (GetOnNewFactionSystem()) {
 		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_OLD+"' WHERE row_id = "+IntToString(FACTION_VERSION_ROW);
-		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_OLD);
+		PS_SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_OLD);
 		SendMessageToPC(oPC, "Server is now using the old faction system");
 	} else {
 		sQuery = "UPDATE server_version SET version='"+FACTION_VERSION_NEW+"' WHERE row_id = "+IntToString(FACTION_VERSION_ROW);
-		SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_NEW);
+		PS_SetLocalString(oModule, "FACTION_SYSTEM", FACTION_VERSION_NEW);
 		SendMessageToPC(oPC, "Server is now using the new faction system");
 	}
 	
@@ -600,8 +600,8 @@ void PromoteInFaction(object oDM, object oPC) {
 			int newRank = faction_rank+1;
 			sQuery = "UPDATE characterfactions SET faction_rank="+IntToString(newRank)+" WHERE character_id = "+sID;
 			SQLExecDirect(sQuery);
-			SetLocalInt(oBadge, "FactionRank", newRank);
-			SetLocalString(oBadge, "FactionRankName", GetFactionRankName(faction_id, newRank));
+			PS_SetLocalInt(oBadge, "FactionRank", newRank);
+			PS_SetLocalString(oBadge, "FactionRankName", GetFactionRankName(faction_id, newRank));
 			
 			SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + GetName(oPC) + " has been promoted in the " 
 				+ sFactionName 
@@ -629,29 +629,29 @@ void PromoteInFaction(object oDM, object oPC) {
 //Promte in the faction - old code for backwards compatibility
 void PromoteInFactionOld(object oBadge, object oDM, object oTarget, string sTargetName) {
 
-	int iCurrentRank = GetLocalInt(oBadge, "FactionRank");
-	int iFaction = GetLocalInt(oBadge, "Faction");
+	int iCurrentRank = PS_GetLocalInt(oBadge, "FactionRank");
+	int iFaction = PS_GetLocalInt(oBadge, "Faction");
 	int iMaxRanks = GetFactionMaxRanks(iFaction);
 	
 	
 	if (iCurrentRank < iMaxRanks)
 	{			
-		SetLocalInt(oBadge, "FactionRank", iCurrentRank + 1);
-		SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, iCurrentRank + 1));
+		PS_SetLocalInt(oBadge, "FactionRank", iCurrentRank + 1);
+		PS_SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, iCurrentRank + 1));
 				
 		SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " has been promoted in the " 
-			+ GetLocalString(oBadge, "FactionName") 
+			+ PS_GetLocalString(oBadge, "FactionName") 
 			+ " from " + GetFactionRankName(iFaction, iCurrentRank) + " to "
 			+ GetFactionRankName(iFaction, iCurrentRank + 1) + ".");
 				
 		SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have been promoted in the " 
-			+ GetLocalString(oBadge, "FactionName") 
+			+ PS_GetLocalString(oBadge, "FactionName") 
 			+ " from " + GetFactionRankName(iFaction, iCurrentRank) + " to "
 			+ GetFactionRankName(iFaction, iCurrentRank + 1) + ".");
 	}
 	else
 	{
-		SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " is already maximum rank in the " + GetLocalString(oBadge, "FactionName") + ".");
+		SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " is already maximum rank in the " + PS_GetLocalString(oBadge, "FactionName") + ".");
 	}
 		
 }
@@ -681,8 +681,8 @@ void DemoteInFaction(object oDM, object oPC) {
 			int newRank = faction_rank-1;
 			sQuery = "UPDATE characterfactions SET faction_rank="+IntToString(newRank)+" WHERE character_id = "+sID;
 			SQLExecDirect(sQuery);
-			SetLocalInt(oBadge, "FactionRank", newRank);
-			SetLocalString(oBadge, "FactionRankName", GetFactionRankName(faction_id, newRank));
+			PS_SetLocalInt(oBadge, "FactionRank", newRank);
+			PS_SetLocalString(oBadge, "FactionRankName", GetFactionRankName(faction_id, newRank));
 			
 			SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + GetName(oPC) + " has been demoted in the " 
 				+ sFactionName 
@@ -709,27 +709,27 @@ void DemoteInFaction(object oDM, object oPC) {
 //Demote in the faction - old code for backwards compatibility
 void DemoteInFactionOld(object oBadge, object oDM, object oTarget, string sTargetName) {
 
-	int iCurrentRank = GetLocalInt(oBadge, "FactionRank");
-	int iFaction = GetLocalInt(oBadge, "Faction");
+	int iCurrentRank = PS_GetLocalInt(oBadge, "FactionRank");
+	int iFaction = PS_GetLocalInt(oBadge, "Faction");
 	
 	if (iCurrentRank > 1) //because if 1 then can't go lower!
 	{
-		SetLocalInt(oBadge, "FactionRank", iCurrentRank - 1);
-		SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, iCurrentRank - 1));
+		PS_SetLocalInt(oBadge, "FactionRank", iCurrentRank - 1);
+		PS_SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, iCurrentRank - 1));
 				
 		SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " has been demoted in the " 
-			+ GetLocalString(oBadge, "FactionName") 
+			+ PS_GetLocalString(oBadge, "FactionName") 
 			+ " from " + GetFactionRankName(iFaction, iCurrentRank) + " to "
 			+ GetFactionRankName(iFaction, iCurrentRank - 1) + ".");
 				
 		SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have been demoted in the " 
-			+ GetLocalString(oBadge, "FactionName") 
+			+ PS_GetLocalString(oBadge, "FactionName") 
 			+ " from " + GetFactionRankName(iFaction, iCurrentRank) + " to "
 			+ GetFactionRankName(iFaction, iCurrentRank - 1) + ".");
 	}
 	else
 	{
-		SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " is already minimum rank in the " + GetLocalString(oBadge, "FactionName") + ".");
+		SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " is already minimum rank in the " + PS_GetLocalString(oBadge, "FactionName") + ".");
 	}
 }
 
@@ -741,7 +741,7 @@ void JoinFaction(object oPC, int iFaction) {
 	//Make a note on the essence for quick finding later
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
 	if(GetIsObjectValid(oItem)) {
-		SetLocalInt(oItem, "Faction", iFaction);
+		PS_SetLocalInt(oItem, "Faction", iFaction);
 	}
 
 	//Now on to the real stuff:
@@ -785,101 +785,101 @@ void SetBadgeFaction(object oBadge, int iFaction)
 {
 	int iIconRow;
 	object oPC = GetItemPossessor(oBadge);
-	SetLocalInt(oBadge, "Faction", iFaction);
+	PS_SetLocalInt(oBadge, "Faction", iFaction);
 	
 	// rank 1 is Namer equivalent. 0 we may use for left/kicked out or something.
-	SetLocalInt(oBadge, "FactionRank", 1);
-	SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, 1));
+	PS_SetLocalInt(oBadge, "FactionRank", 1);
+	PS_SetLocalString(oBadge, "FactionRankName", GetFactionRankName(iFaction, 1));
 	switch (iFaction)
 		{
 			case 2:
 				//sFaction = "Free League";
 				iIconRow = 2203;
-				SetLocalString(oBadge, "FactionName", "Free League");
+				PS_SetLocalString(oBadge, "FactionName", "Free League");
 				break;
 			case 3:
 				//sFaction = "Athar";
 				iIconRow = 2196;
-				SetLocalString(oBadge, "FactionName", "Athar");
+				PS_SetLocalString(oBadge, "FactionName", "Athar");
 				break;
 			case 4:
 				//sFaction = "Believers of the Source";
 				iIconRow = 2204;
-				SetLocalString(oBadge, "FactionName", "Believers of the Source");
+				PS_SetLocalString(oBadge, "FactionName", "Believers of the Source");
 				break;
 			case 5:
 				//sFaction = "Bleak Cabal";
 				iIconRow = 2197;
-				SetLocalString(oBadge, "FactionName", "Bleak Cabal");
+				PS_SetLocalString(oBadge, "FactionName", "Bleak Cabal");
 				break;
 			case 6:
 				//sFaction = "Doomguard";
 				iIconRow = 2199;
-				SetLocalString(oBadge, "FactionName", "Doomguard");
+				PS_SetLocalString(oBadge, "FactionName", "Doomguard");
 				break;
 			case 7:
 				//sFaction = "Dustmen";
 				iIconRow = 2200;
-				SetLocalString(oBadge, "FactionName", "Dustmen");
+				PS_SetLocalString(oBadge, "FactionName", "Dustmen");
 				break;
 			case 8:
 				//sFaction = "Fated";
 				iIconRow = 2201;
-				SetLocalString(oBadge, "FactionName", "Fated");
+				PS_SetLocalString(oBadge, "FactionName", "Fated");
 				break;
 			case 9:
 				//sFaction = "Fraternity of Order";
 				iIconRow = 2202;
-				SetLocalString(oBadge, "FactionName", "Fraternity of Order");
+				PS_SetLocalString(oBadge, "FactionName", "Fraternity of Order");
 				break;
 			case 10:
 				//sFaction = "Harmonium"; 
 				iIconRow = 2205;
-				SetLocalString(oBadge, "FactionName", "Harmonium");
+				PS_SetLocalString(oBadge, "FactionName", "Harmonium");
 				GiveHarmoniumKit(oPC);
 				break;
 			case 11:
 				//sFaction = "Mercykillers";
 				iIconRow = 2206;
-				SetLocalString(oBadge, "FactionName", "Mercykillers");
+				PS_SetLocalString(oBadge, "FactionName", "Mercykillers");
 				GiveMercykillerKit(oPC);
 				break;
 			case 12:
 				//sFaction = "Revolutionary League";
 				iIconRow = 2195;
-				SetLocalString(oBadge, "FactionName", "Revolutionary League");
-				SetLocalInt(oBadge, "Infiltrated", FALSE);
-				SetLocalInt(oBadge, "InfiltratedFaction", 0);
+				PS_SetLocalString(oBadge, "FactionName", "Revolutionary League");
+				PS_SetLocalInt(oBadge, "Infiltrated", FALSE);
+				PS_SetLocalInt(oBadge, "InfiltratedFaction", 0);
 				break;
 			case 13:
 				//sFaction = "Sign of One";
 				iIconRow = 2208;
-				SetLocalString(oBadge, "FactionName", "Sign of One");
+				PS_SetLocalString(oBadge, "FactionName", "Sign of One");
 				break;
 			case 14:
 				//sFaction = "Society of Sensation";
 				iIconRow = 2207;
-				SetLocalString(oBadge, "FactionName", "Society of Sensation");
+				PS_SetLocalString(oBadge, "FactionName", "Society of Sensation");
 				break;
 			case 15:
 				//sFaction = "Transcendent Order";
 				iIconRow = 2198;
-				SetLocalString(oBadge, "FactionName", "Transcendent Order");
+				PS_SetLocalString(oBadge, "FactionName", "Transcendent Order");
 				break;
 			case 16:
 				//sFaction = "Xaositects";
 				iIconRow = 2209;
-				SetLocalString(oBadge, "FactionName", "Xaositects");
+				PS_SetLocalString(oBadge, "FactionName", "Xaositects");
 				break;
 			case 19:
 				//sFaction = "Ring-Givers";
 				iIconRow = 2212;
-				SetLocalString(oBadge, "FactionName", "Ring-Givers");
+				PS_SetLocalString(oBadge, "FactionName", "Ring-Givers");
 				break;
 		}
 		
 	SetItemIcon(oBadge, iIconRow);
-	SetFirstName(oBadge, GetLocalString(oBadge, "FactionName") + " Faction Badge");
+	SetFirstName(oBadge, PS_GetLocalString(oBadge, "FactionName") + " Faction Badge");
 }
 
 //Remove faction - new system
@@ -930,15 +930,15 @@ void RemoveFactionBadge(object oBadge, object oSource, object oTarget) {
 		}
 	}
 	
-	int nOldRank = GetLocalInt(oBadge,"FactionRank");
+	int nOldRank = PS_GetLocalInt(oBadge,"FactionRank");
 	
 	int iInfiltrated = 0;
-	string sFactionName = GetLocalString(oBadge, "FactionName");
+	string sFactionName = PS_GetLocalString(oBadge, "FactionName");
 	object oEssence = GetItemPossessedBy(oTarget, "ps_essence");
 	
-	if (GetLocalInt(oBadge, "Faction") == 12)
+	if (PS_GetLocalInt(oBadge, "Faction") == 12)
 	{
-		iInfiltrated = GetLocalInt(oBadge, "Infiltrated");
+		iInfiltrated = PS_GetLocalInt(oBadge, "Infiltrated");
 		int iInfiltrationConfirmed = FALSE;
 		
 		// if this is anything but 0 then we need to check a badge exists of that faction
@@ -948,7 +948,7 @@ void RemoveFactionBadge(object oBadge, object oSource, object oTarget) {
 		while (oItem != OBJECT_INVALID)
 		{
 			if (GetTag(oItem) == "ps_faction_badge")
-				if (GetLocalInt(oItem, "Faction") == iInfiltrated)
+				if (PS_GetLocalInt(oItem, "Faction") == iInfiltrated)
 					iInfiltrationConfirmed = TRUE;
 			
 			oItem = GetNextItemInInventory(oTarget);
@@ -956,18 +956,18 @@ void RemoveFactionBadge(object oBadge, object oSource, object oTarget) {
 		
 		
 		if (iInfiltrationConfirmed == TRUE)
-			SetLocalInt(oEssence, "Faction", iInfiltrated);
+			PS_SetLocalInt(oEssence, "Faction", iInfiltrated);
 		else if (nOldRank > 1)
-			SetLocalInt(oEssence, "Faction", FACTION_QUIT);
+			PS_SetLocalInt(oEssence, "Faction", FACTION_QUIT);
 		else
-			DeleteLocalInt(oEssence, "Faction");
+			PS_DeleteLocalInt(oEssence, "Faction");
 	}
 	else
 	{
 		if (nOldRank > 1)
-			SetLocalInt(oEssence, "Faction", FACTION_QUIT);
+			PS_SetLocalInt(oEssence, "Faction", FACTION_QUIT);
 		else
-			DeleteLocalInt(oEssence, "Faction");
+			PS_DeleteLocalInt(oEssence, "Faction");
 	}
 	
 	DestroyObject(oBadge, 0.0, TRUE);
@@ -997,7 +997,7 @@ void RemoveAllFactionData(object oDM, object oTarget) {
 	{
 		if (GetTag(oItem) == "ps_essence")
 		{
-			SetLocalInt(oItem, "Faction", 0);
+			PS_SetLocalInt(oItem, "Faction", 0);
 		}
 		else if (GetTag(oItem) == "ps_faction_badge")
 			DestroyObject(oItem, 0.0, TRUE);
@@ -1068,7 +1068,7 @@ int GetOtherFactioneerFaction(object oOtherPC, int iSeekingFaction) {
    	if(GetIsObjectValid(oEssence))
    	{
 		// use essence because quick to find and no checking of badge statuses required
-		iFaction = GetLocalInt(oEssence, "Faction");
+		iFaction = PS_GetLocalInt(oEssence, "Faction");
    	}
    	
    	if (((iFaction > 1) && (iFaction < 17)) || iFaction == 19)
@@ -1085,18 +1085,18 @@ int GetOtherFactioneerFaction(object oOtherPC, int iSeekingFaction) {
 				// let's check for infiltration
 				object oBadge = GetItemPossessedBy(oOtherPC,"ps_faction_badge");
 				// doesn't matter if it finds the Anarch badge or another, it should find one
-				int iCoverFaction = GetLocalInt(oBadge, "Faction");
+				int iCoverFaction = PS_GetLocalInt(oBadge, "Faction");
 				if (iCoverFaction == 12)
 				// we found the anarch badge
 				{
-					if (GetLocalInt(oBadge, "Infiltrated") == TRUE)
-						return GetLocalInt(oBadge, "InfiltratedFaction");
+					if (PS_GetLocalInt(oBadge, "Infiltrated") == TRUE)
+						return PS_GetLocalInt(oBadge, "InfiltratedFaction");
 					else
 						return iFaction;
 				}
 				else
 				{
-					return GetLocalInt(oBadge, "Faction");
+					return PS_GetLocalInt(oBadge, "Faction");
 				}
 			}
 		}
@@ -1186,7 +1186,7 @@ void CreateFactionSignItem(object oPC) {
 	{
 		SendMessageToPC(oPC, sTemplate);
 		SetFirstName(oItem, sItemName);
-		SetLocalString(oItem, "TEMPLATE_RESREF", sTemplate);
+		PS_SetLocalString(oItem, "TEMPLATE_RESREF", sTemplate);
 	}
 	else
 	{
@@ -1219,8 +1219,8 @@ void PortIntoNewFactionSystem(object oPC) {
 	}
 	
 	//Ok, we are in a faction but not transferred yet. Proceed.
-	int iCurrentRank = GetLocalInt(oBadge, "FactionRank");
-	int iFaction = GetLocalInt(oBadge, "Faction");
+	int iCurrentRank = PS_GetLocalInt(oBadge, "FactionRank");
+	int iFaction = PS_GetLocalInt(oBadge, "Faction");
 	
 	int newRank = TranslateOldRankToNewRank(iFaction, iCurrentRank);
 	
@@ -1571,11 +1571,11 @@ void FactionCohortEquipWeapons(object oHench)
 {
 	object oItem;
 	
-	oItem = GetLocalObject(oHench, FACTION_NPC_RIGHT_HAND);
+	oItem = PS_GetLocalObject(oHench, FACTION_NPC_RIGHT_HAND);
 	if (GetIsObjectValid(oItem) == TRUE)
 		AssignCommand(oHench, ActionEquipItem(oItem, INVENTORY_SLOT_RIGHTHAND));
 		
-	oItem = GetLocalObject(oHench, FACTION_NPC_LEFT_HAND);
+	oItem = PS_GetLocalObject(oHench, FACTION_NPC_LEFT_HAND);
 	if (GetIsObjectValid(oItem) == TRUE)
 		AssignCommand(oHench, ActionEquipItem(oItem, INVENTORY_SLOT_LEFTHAND));
 		
@@ -1587,7 +1587,7 @@ void FactionCohortUnequipWeapons(object oHench)
 	if (GetIsObjectValid(oItemLeft) == TRUE)
 		{
 			SetIdentified(oItemLeft, TRUE);
-			SetLocalObject(oHench, FACTION_NPC_LEFT_HAND, oItemLeft);
+			PS_SetLocalObject(oHench, FACTION_NPC_LEFT_HAND, oItemLeft);
 			AssignCommand(oHench, ActionUnequipItem(oItemLeft));
 		}
 	
@@ -1595,7 +1595,7 @@ void FactionCohortUnequipWeapons(object oHench)
 	if (GetIsObjectValid(oItemRight) == TRUE)
 		{
 			SetIdentified(oItemRight, TRUE);
-			SetLocalObject(oHench, FACTION_NPC_RIGHT_HAND, oItemRight);
+			PS_SetLocalObject(oHench, FACTION_NPC_RIGHT_HAND, oItemRight);
 			AssignCommand(oHench, ActionUnequipItem(oItemRight));
 		}
 }
@@ -1623,7 +1623,7 @@ void BoostFactionNPCItems(object oHench, int iBonus)
 
 void BoostFactionHenchman(object oBadge, object oPC)
 {
-	SetLocalInt(oBadge, "LastFactionHenchBoosted", TRUE);
+	PS_SetLocalInt(oBadge, "LastFactionHenchBoosted", TRUE);
 	int iFaction = GetFaction(oPC);
 	int iCurrentFactionRank = GetFactionRank(oPC);
 	int iFactionMaxRank = GetFactionMaxRanks(iFaction);
@@ -1670,7 +1670,7 @@ location FindHenchSpawnPoint(object oPC)
 int AllowRespawnHench(object oHenchObject)
 {
 	int iCurrentTime = GetRealTime();
-	int iSpawnTime = GetLocalInt(oHenchObject, "HenchSpawnTime");
+	int iSpawnTime = PS_GetLocalInt(oHenchObject, "HenchSpawnTime");
 	object oPC = GetItemPossessor(oHenchObject);
 	int iAllow;
 	
@@ -1695,18 +1695,18 @@ int AllowRespawnHench(object oHenchObject)
 void ClearHenchInfo(object oHenchObject)
 {
 	// only needs to be used on badges not feathers, as feathers destroy themselves.
-	SetLocalInt(oHenchObject, "LastFactionHenchBoosted", FALSE);
-	SetLocalObject(oHenchObject, "HenchObject", OBJECT_INVALID);
-	SetLocalInt(oHenchObject, "HenchSpawnTime", 0);
-	SetLocalString(oHenchObject, "HenchResRef", "");
+	PS_SetLocalInt(oHenchObject, "LastFactionHenchBoosted", FALSE);
+	PS_SetLocalObject(oHenchObject, "HenchObject", OBJECT_INVALID);
+	PS_SetLocalInt(oHenchObject, "HenchSpawnTime", 0);
+	PS_SetLocalString(oHenchObject, "HenchResRef", "");
 }
 
 void StoreHenchInfo(object oHenchObject, object oHench)
 {
 	//SendMessageToPC(GetItemPossessor(oHenchObject), "DEBUG:Hench stored as " + GetResRef(oHench));
-	SetLocalObject(oHenchObject, "HenchObject", oHench);
-	SetLocalInt(oHenchObject, "HenchSpawnTime", GetRealTime());
-	SetLocalString(oHenchObject, "HenchResRef", GetResRef(oHench));
+	PS_SetLocalObject(oHenchObject, "HenchObject", oHench);
+	PS_SetLocalInt(oHenchObject, "HenchSpawnTime", GetRealTime());
+	PS_SetLocalString(oHenchObject, "HenchResRef", GetResRef(oHench));
 }
 
 void DismissFactionCohort(object oHench)
@@ -1714,7 +1714,7 @@ void DismissFactionCohort(object oHench)
 	RemoveHenchman(GetMaster(oHench), oHench);
 	// make them dumb
 	SetCreatureScriptsToSet(oHench, 0);
-	AssignCommand(oHench, ActionSpeakString(GetLocalString(oHench, "Goodbye"), TALKVOLUME_TALK));
+	AssignCommand(oHench, ActionSpeakString(PS_GetLocalString(oHench, "Goodbye"), TALKVOLUME_TALK));
 	AssignCommand(oHench, ActionMoveToLocation(FindHenchSpawnPoint(oHench), FALSE));
 	AssignCommand(oHench, DestroyObject(oHench, 5.0));
 }
@@ -1745,8 +1745,8 @@ void SetUpHenchman(object oHench, object oPC)
 	IdentifyHenchObjects(oHench);
 	FactionCohortUnequipWeapons(oHench);
 	AssignCommand(oHench, ActionMoveToObject(oPC, FALSE, 2.0));
-	AssignCommand(oHench, ActionSpeakString(GetLocalString(oHench, "WelcomeStart") 
-		+ GetFirstName(oPC) + GetLocalString(oHench, "WelcomeEnd"), TALKVOLUME_TALK));		
+	AssignCommand(oHench, ActionSpeakString(PS_GetLocalString(oHench, "WelcomeStart") 
+		+ GetFirstName(oPC) + PS_GetLocalString(oHench, "WelcomeEnd"), TALKVOLUME_TALK));		
 }
 
 //Find or replace henchman
@@ -1754,8 +1754,8 @@ void FindOrReplaceHenchman(object oHenchObject)
 {
 	// Look for existing before spawning new
 	object oPC = GetItemPossessor(oHenchObject);
-	object oHench = GetLocalObject(oHenchObject, "HenchObject");
-	string oHenchType = GetLocalString(oHenchObject, "HenchResRef");
+	object oHench = PS_GetLocalObject(oHenchObject, "HenchObject");
+	string oHenchType = PS_GetLocalString(oHenchObject, "HenchResRef");
 	int iRecreate = FALSE;
 	
 	if (oHenchType != "")
@@ -1792,7 +1792,7 @@ void FindOrReplaceHenchman(object oHenchObject)
 			
 			int iIsCombat;
 			
-			if (GetLocalInt(oHenchObject, "LastFactionHenchBoosted") == TRUE)
+			if (PS_GetLocalInt(oHenchObject, "LastFactionHenchBoosted") == TRUE)
 				iIsCombat = TRUE;
 			else
 				iIsCombat = FALSE;
@@ -1835,7 +1835,7 @@ void SummonFactionCohort(object oBadge, object oPC, int iHenchNumber)
 	
 	//if (oHench == OBJECT_INVALID)
 		//SendMessageToPC(oPC, "DEBUG: Failed to create henchman");
-	SetLocalInt(oBadge, "LastFactionHenchBoosted", FALSE);
+	PS_SetLocalInt(oBadge, "LastFactionHenchBoosted", FALSE);
 	DelayCommand(0.2, SetCollision(oHench, FALSE));
 	DelayCommand(0.25, AddHenchman(oPC, oHench));
 	DelayCommand(0.3, StoreHenchInfo(oBadge, oHench));

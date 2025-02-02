@@ -43,7 +43,7 @@ void main()
 	{
 		int nConcealR = 40;
 		int nConcealM = 25;
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 		{
 			nConcealR = 50;
 			nConcealM = 35;
@@ -61,7 +61,7 @@ void main()
 	    
 	    int nDuration = 2;
 	
-	    if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+	    if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 		{
 			nDuration = nDuration * 2;
 			DelayCommand(12.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration)));

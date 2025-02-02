@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -7,10 +9,10 @@ void main()
  	string sDescrip = "";
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
   
- int iLock = GetGlobalInt("DaoTradeLock");
+ int iLock = PS_GetGlobalInt("DaoTradeLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("DaoTradeLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("DaoTradeLock", 1); // Only allows one clean up at a time.
    
   if(GetObjectByTag("ps_eearth_slave01") == OBJECT_INVALID)
   {
@@ -67,7 +69,7 @@ void main()
 	  object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_eearth_miner", lSpawnpoint);    
   }
   
-  SetGlobalInt("DaoTradeLock", 0);
+  PS_SetGlobalInt("DaoTradeLock", 0);
   
 }
 }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nwnx_scod_finesse"
 #include "nwnx_scod_monkweapon"
 #include "nwnx_scod_ac"
@@ -10,7 +12,7 @@ void FirstLogin(){
 	//object oMod = GetModule();
 	
 	// if we've already done this, bail
-	//if (GetLocalInt(oMod, "FirstLogin")) return;
+	//if (PS_GetLocalInt(oMod, "FirstLogin")) return;
 	
 	EnableFinesse();
 	EnableCreatureFinesse();
@@ -18,7 +20,7 @@ void FirstLogin(){
 	SetFeatAC();
 	
 	// show that we've done this
-	//SetLocalInt(oMod, "FirstLogin", TRUE);
+	//PS_SetLocalInt(oMod, "FirstLogin", TRUE);
 	
 }
 

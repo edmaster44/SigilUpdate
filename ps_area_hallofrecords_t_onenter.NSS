@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("HallrecordsTowerEnterLock");
+ int iLock = PS_GetGlobalInt("HallrecordsTowerEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("HallrecordsTowerEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("HallrecordsTowerEnterLock", 1); // Only allows one clean up at a time.
 
  
   
@@ -83,6 +85,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "fated_namer_013", lSpawnpoint);    
   }
   
-  SetGlobalInt("HallrecordsTowerEnterLock", 0);
+  PS_SetGlobalInt("HallrecordsTowerEnterLock", 0);
  }
 }

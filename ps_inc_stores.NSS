@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_gemstones"
 #include "ps_inc_randomitems"
 #include "ginc_param_const"
@@ -37,7 +39,7 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID);
 //*****************************************************
 object GetStoreFromStoreArea(string sTag)
 {
-	int iStoreArea = GetGlobalInt("STORE_AREA");
+	int iStoreArea = PS_GetGlobalInt("STORE_AREA");
 	object oStoreArea = IntToObject(iStoreArea);
 	
 	object oStore = GetFirstObjectInArea(oStoreArea);
@@ -110,10 +112,10 @@ void PopulateCardStore(object oStore, object oPC = OBJECT_INVALID) {
 
 void AddMustHaveItems(object oStore) {
 
-	int nMax = GetLocalInt(oStore, "MustHaveNum");
+	int nMax = PS_GetLocalInt(oStore, "MustHaveNum");
 	int nCount = 0;
 	while (nCount < nMax) {
-		string sHave = GetLocalString(oStore, "MustHaveItem_"+IntToString(nCount+1));
+		string sHave = PS_GetLocalString(oStore, "MustHaveItem_"+IntToString(nCount+1));
 		CreateItemOnObject(sHave, oStore);
 		CreateItemOnObject(sHave, oStore);
 		CreateItemOnObject(sHave, oStore);
@@ -126,17 +128,17 @@ void AddMustHaveItems(object oStore) {
 int GetStoreAppropriateEnchantmentIndex(string sType, object oStore) {
 	
 	if (sType == "W") {
-		int nNum = GetLocalInt(oStore, "NumWeaponEnchants");
+		int nNum = PS_GetLocalInt(oStore, "NumWeaponEnchants");
 		int nChosen = Random(nNum)+1;
-		return GetLocalInt(oStore, "WeaponEnchant_"+IntToString(nChosen));
+		return PS_GetLocalInt(oStore, "WeaponEnchant_"+IntToString(nChosen));
 	} else if (sType == "A") {
-		int nNum = GetLocalInt(oStore, "NumArmorEnchants");
+		int nNum = PS_GetLocalInt(oStore, "NumArmorEnchants");
 		int nChosen = Random(nNum)+1;
-		return GetLocalInt(oStore, "ArmorEnchant_"+IntToString(nChosen));
+		return PS_GetLocalInt(oStore, "ArmorEnchant_"+IntToString(nChosen));
 	} else if (sType == "M") {
-		int nNum = GetLocalInt(oStore, "NumMiscEnchants");
+		int nNum = PS_GetLocalInt(oStore, "NumMiscEnchants");
 		int nChosen = Random(nNum)+1;
-		return GetLocalInt(oStore, "MiscEnchant_"+IntToString(nChosen));
+		return PS_GetLocalInt(oStore, "MiscEnchant_"+IntToString(nChosen));
 	}
 	return -1;
 }
@@ -208,22 +210,22 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 		}
 	}
 	
-	string sMat = GetLocalString(oItem, "material_name");
+	string sMat = PS_GetLocalString(oItem, "material_name");
 	if (sMat == "Leather" || sMat == "Iron" || sMat == "Wood")
 		sMat = "";
 	else
 		sMat += " ";
 
-	string sItemName = GetItemNamePart(e.id, "prefix")+" "+sMat+GetLocalString(oItem, "base_name");
+	string sItemName = GetItemNamePart(e.id, "prefix")+" "+sMat+PS_GetLocalString(oItem, "base_name");
 	SetFirstName(oItem, sItemName);
 	
-	string sDescription = "This "+GetLocalString(oItem, "base_name")+" "+GetLocalString(oStore, "Item_Description");
+	string sDescription = "This "+PS_GetLocalString(oItem, "base_name")+" "+PS_GetLocalString(oStore, "Item_Description");
 	SetDescription(oItem, sDescription);
 	
 	int nBaseCost = GetGoldPieceValue(oItem);
-	SetLocalInt(oItem, "PRICE_OLD", nBaseCost);
+	PS_SetLocalInt(oItem, "PRICE_OLD", nBaseCost);
 	PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
 	int nNewCost = GetCostOfItem(oItem);
-	SetLocalInt(oItem, "PRICE", nNewCost);
+	PS_SetLocalInt(oItem, "PRICE", nNewCost);
 	
 }

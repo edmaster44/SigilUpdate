@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // i_temp_ac
 /*
    Template for an Activate item script.
@@ -44,9 +46,9 @@ void main()
 
 	string targetTag = GetTag(oTarget);
 	if(checkIsLarvaTag(targetTag)) {
-		if(GetLocalInt(oTarget, sIsFluxShunt) == 0) {
+		if(PS_GetLocalInt(oTarget, sIsFluxShunt) == 0) {
 			// Flag
-			SetLocalInt(oTarget, sIsFluxShunt, 1);
+			PS_SetLocalInt(oTarget, sIsFluxShunt, 1);
 			// Item
 			CreateItemOnObject("timequests_larva_head", oTarget);
 			// Rename

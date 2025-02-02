@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("HallofInformationLock");
+ int iLock = PS_GetGlobalInt("HallofInformationLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("HallofInformationLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("HallofInformationLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_foul_kobold") == OBJECT_INVALID) {
 		object oWP = GetWaypointByTag("wp_npc_foul_kobold");
@@ -93,6 +95,6 @@ void main()
 	   oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_hoi_mkbouncerm", lSpawnpoint, FALSE, "ps_hoi_bouncer4"); 
   }
 
-  SetGlobalInt("HallofInformationLock", 0);
+  PS_SetGlobalInt("HallofInformationLock", 0);
  }
 }

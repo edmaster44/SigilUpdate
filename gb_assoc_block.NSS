@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: On Blocked
 //:: gb_assoc_block
@@ -27,22 +29,22 @@ void main()
     object oRealMaster = GetCurrentMaster();
 
     if (GetObjectType(oDoor) == OBJECT_TYPE_DOOR && GetIsObjectValid(oRealMaster)
-        && !GetLocalInt(OBJECT_SELF, sHenchScoutingFlag) && !IsOnOppositeSideOfDoor(oDoor, oRealMaster, OBJECT_SELF))
+        && !PS_GetLocalInt(OBJECT_SELF, sHenchScoutingFlag) && !IsOnOppositeSideOfDoor(oDoor, oRealMaster, OBJECT_SELF))
     {
         ClearAllActions();
         ClearForceOptions();
-        if (GetIsObjectValid(GetLocalObject(OBJECT_SELF, sHenchLastTarget)) || GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        if (GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, sHenchLastTarget)) || PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
-            DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
+            PS_DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
             ClearEnemyLocation();
-            if (!GetLocalInt(oDoor, "tkDoorWarning"))
+            if (!PS_GetLocalInt(oDoor, "tkDoorWarning"))
             {
  				if (((GetAssociateType(OBJECT_SELF) == ASSOCIATE_TYPE_HENCHMAN) || (GetAssociateType(OBJECT_SELF) == ASSOCIATE_TYPE_NONE)))
 				{
 					//	"Something is on the other side of this door."
                 	SpeakStringByStrRef(230438);
 				}
-                SetLocalInt(oDoor, "tkDoorWarning", TRUE);
+                PS_SetLocalInt(oDoor, "tkDoorWarning", TRUE);
             }
         }
 		HenchFollowLeader();

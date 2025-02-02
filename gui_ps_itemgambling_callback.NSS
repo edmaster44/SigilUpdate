@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_randomlootgenerator"
 #include "ps_inc_achievements"
 
@@ -8,10 +10,10 @@ void main()
 	object oPC = OBJECT_SELF;
 
 	// read back the item type and the price from the local vars
-	int price = GetLocalInt(oPC, "SRLG_PRICE");
-	int nType = GetLocalInt(oPC, "SRLG_TYPE");
-	DeleteLocalInt(oPC, "SRLG_PRICE");
-	DeleteLocalInt(oPC, "SRLG_TYPE");
+	int price = PS_GetLocalInt(oPC, "SRLG_PRICE");
+	int nType = PS_GetLocalInt(oPC, "SRLG_TYPE");
+	PS_DeleteLocalInt(oPC, "SRLG_PRICE");
+	PS_DeleteLocalInt(oPC, "SRLG_TYPE");
 
 	// own enough money?
 	int playerGold = GetGold(oPC);

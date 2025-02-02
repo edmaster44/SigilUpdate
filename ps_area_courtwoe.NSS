@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oPC = GetEnteringObject();
@@ -9,7 +11,7 @@ void main()
 ("CourtWoeEnterLock");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("CourtWoeEnterLock", 1); 
+	  PS_SetGlobalInt("CourtWoeEnterLock", 1); 
 	  // Only allows one clean up at a time.
 
  if(GetObjectByTag("ps_commoner_courtwoe01") == OBJECT_INVALID)
@@ -271,5 +273,5 @@ void main()
 	  
 	}
 	
-SetGlobalInt("CourthouseEnterLock", 0);
+PS_SetGlobalInt("CourthouseEnterLock", 0);
   	}

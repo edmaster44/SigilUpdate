@@ -227,12 +227,12 @@ int GetFeatImmunityType (int nFeatId);
  // wrapper for GetCreatureTalentRandom() using flag specified on the creature.
 talent GetCreatureTalentRandomStd(int nCategory, object oCreature=OBJECT_SELF)
 {
-	return (GetCreatureTalentRandom(nCategory, oCreature, GetLocalInt(oCreature, N2_TALENT_EXCLUDE)));
+	return (GetCreatureTalentRandom(nCategory, oCreature, PS_GetLocalInt(oCreature, N2_TALENT_EXCLUDE)));
 }
 // wrapper for GetCreatureTalentBest() using flag specified on the creature.
 talent GetCreatureTalentBestStd(int nCategory, int nCRMax, object oCreature=OBJECT_SELF)
 {
-	return (GetCreatureTalentBest(nCategory, nCRMax, oCreature, GetLocalInt(oCreature, N2_TALENT_EXCLUDE)));
+	return (GetCreatureTalentBest(nCategory, nCRMax, oCreature, PS_GetLocalInt(oCreature, N2_TALENT_EXCLUDE)));
 }
 
 // * Wrapper function so that I could add a variable to allow randomization
@@ -247,7 +247,7 @@ talent GetCreatureTalent(int nCategory, int nCRMax, int bRandom=FALSE, object oC
     // * bRandom can be overridden by the variable X2_SPELL_RANDOM = 1
     if (bRandom == FALSE)
     {
-        bRandom = GetLocalInt(OBJECT_SELF, VAR_X2_SPELL_RANDOM);
+        bRandom = PS_GetLocalInt(OBJECT_SELF, VAR_X2_SPELL_RANDOM);
     }
 
     if (bRandom == FALSE)
@@ -268,7 +268,7 @@ void bkSetupBehavior(int nBehaviour)
     nHatedClass = nHatedClass + 1;     // for purposes of using 0 as a
                                        // unitialized value.
                                        // will decrement in bkAcquireTarget
-    SetLocalInt(OBJECT_SELF, VAR_NW_L_BEHAVIOUR1, nHatedClass);
+    PS_SetLocalInt(OBJECT_SELF, VAR_NW_L_BEHAVIOUR1, nHatedClass);
 }
 
 // Return the combat difficulty.
@@ -411,7 +411,7 @@ object bkAcquireTarget()
 // a class we hate.
 object ChooseNewTarget()
 {
-    int nHatedClass = GetLocalInt(OBJECT_SELF, VAR_NW_L_BEHAVIOUR1) - 1;
+    int nHatedClass = PS_GetLocalInt(OBJECT_SELF, VAR_NW_L_BEHAVIOUR1) - 1;
 
     // * if the object has no hated class, then assign it
     // * a random one.
@@ -419,7 +419,7 @@ object ChooseNewTarget()
     if (nHatedClass == -1)
     {
         bkSetupBehavior(1);
-        nHatedClass = GetLocalInt(OBJECT_SELF, VAR_NW_L_BEHAVIOUR1) - 1;
+        nHatedClass = PS_GetLocalInt(OBJECT_SELF, VAR_NW_L_BEHAVIOUR1) - 1;
     }
 
     //MyPrintString("I hate " + IntToString(nHatedClass));
@@ -510,12 +510,12 @@ int GetCRMax()
 
     // * retrieves the combat difficulty that has been stored
     // * from being set in DetermineCombatRound
-    //int nDiff =  GetLocalInt(OBJECT_SELF, "NW_L_COMBATDIFF");
+    //int nDiff =  PS_GetLocalInt(OBJECT_SELF, "NW_L_COMBATDIFF");
 
     if  (NO_SMART == TRUE)
         return 20;
    else
-       return GetLocalInt(OBJECT_SELF, VAR_NW_L_COMBATDIFF); // the max CR of any talent that is going to be used
+       return PS_GetLocalInt(OBJECT_SELF, VAR_NW_L_COMBATDIFF); // the max CR of any talent that is going to be used
 }
 
 
@@ -859,15 +859,15 @@ int TalentFilter(talent tUse, object oTarget, int bJustTest=FALSE)
 
 int GetLastGenericSpellCast()
 {
-    return GetLocalInt(OBJECT_SELF, "NW_GENERIC_LAST_SPELL");
+    return PS_GetLocalInt(OBJECT_SELF, "NW_GENERIC_LAST_SPELL");
 }
 
 void SetLastGenericSpellCast(int nSpell)
 {
-    SetLocalInt(OBJECT_SELF, "NW_GENERIC_LAST_SPELL", nSpell);
+    PS_SetLocalInt(OBJECT_SELF, "NW_GENERIC_LAST_SPELL", nSpell);
     // February 2003. Needed to add a way for this to reset itself, so that
     // spell might indeed be atempted later.
-    DelayCommand(8.0,SetLocalInt(OBJECT_SELF, "NW_GENERIC_LAST_SPELL", -1));
+    DelayCommand(8.0,PS_SetLocalInt(OBJECT_SELF, "NW_GENERIC_LAST_SPELL", -1));
 }
 
 int CompareLastSpellCast(int nSpell)
@@ -953,7 +953,7 @@ talent EvenGetCreatureTalent(int nCategory, int nCRMax, int bRandom, int CheckSi
 int CheckConfused() 
 {
 	if(!GetIsOwnedByPlayer(OBJECT_SELF) && !GetIsRosterMember(OBJECT_SELF)) {
-		SetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED, 1);
+		PS_SetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED, 1);
 		return TRUE;
 	}
     effect eff=GetFirstEffect(OBJECT_SELF);
@@ -961,12 +961,12 @@ int CheckConfused()
 		if(GetEffectType(eff)==EFFECT_TYPE_CONFUSED
 		|| GetEffectType(eff)==EFFECT_TYPE_CHARMED
 		|| GetEffectType(eff)==EFFECT_TYPE_DOMINATED) {
-			SetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED, 1);
+			PS_SetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED, 1);
 			return TRUE;
 		}
 		eff=GetNextEffect(OBJECT_SELF);	
 	}
-	DeleteLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED);
+	PS_DeleteLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED);
 	return FALSE;
 }
 
@@ -975,7 +975,7 @@ int ValidTarget(object oTarget)
 	if (GetIsObjectValid(oTarget) 
 		&& oTarget!=OBJECT_SELF 
 		&& GetIsEnemy(oTarget) 
-		&& (!GetFactionEqual(OBJECT_SELF, oTarget) || GetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED)) 
+		&& (!GetFactionEqual(OBJECT_SELF, oTarget) || PS_GetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED)) 
 		&& !GetAssociateState(NW_ASC_MODE_DYING, oTarget) 
 		&& !GetPlotFlag(oTarget) 
 		&& GetAssociateType(oTarget) != ASSOCIATE_TYPE_FAMILIAR)
@@ -990,7 +990,7 @@ int ValidTarget(object oTarget)
 	if (GetIsObjectValid(oTarget)) 
 		if (oTarget!=OBJECT_SELF)
 			if (GetIsEnemy(oTarget))
-				if (!GetFactionEqual(OBJECT_SELF, oTarget) || GetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED)) 
+				if (!GetFactionEqual(OBJECT_SELF, oTarget) || PS_GetLocalInt(OBJECT_SELF, EVENFLW_AI_CONFUSED)) 
 					if (!GetAssociateState(NW_ASC_MODE_DYING, oTarget))
 						//if (GetPlotFlag(oTarget) == FALSE)
 							if (GetAssociateType(oTarget) != ASSOCIATE_TYPE_FAMILIAR)
@@ -1007,7 +1007,7 @@ int InvisibleTrue(object oSelf=OBJECT_SELF)
 	object oTarget;
 	if(GetHasEffect(EFFECT_TYPE_SANCTUARY, oSelf) || GetHasEffect(EFFECT_TYPE_ETHEREAL, oSelf))
 		return TRUE;
-    if(GetLocalInt(oSelf, EVENFLW_AI_CLOSE)) return -1;
+    if(PS_GetLocalInt(oSelf, EVENFLW_AI_CLOSE)) return -1;
     if(GetActionMode(oSelf, ACTION_MODE_STEALTH)==TRUE)
         return TRUE;
     if(GetHasEffect(EFFECT_TYPE_INVISIBILITY, oSelf) || GetHasEffect(EFFECT_TYPE_GREATERINVISIBILITY, oSelf)

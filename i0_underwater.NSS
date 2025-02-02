@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Description: Underwater functions
 //Author: Epoxid, Wisdoom
 
@@ -20,13 +22,13 @@ int GetCanBreathUnderwater(object oPC)
 
 void DrownCheck(object oPC)
 {
-    int iRoundsWithoutAir = GetLocalInt(oPC, "wdDrowningRounds");
+    int iRoundsWithoutAir = PS_GetLocalInt(oPC, "wdDrowningRounds");
     int iMaxRounds = GetAbilityScore(oPC, ABILITY_CONSTITUTION) * 2;
     if(iRoundsWithoutAir < iMaxRounds) //Can hold breath
     {
         int iRemaining = iMaxRounds - iRoundsWithoutAir;
         SendMessageToPC(oPC, "You are holding your breath! You have "+IntToString(iRemaining)+" rounds left to find air!");
-        SetLocalInt(oPC, "wdDrowningRounds", ++iRoundsWithoutAir);
+        PS_SetLocalInt(oPC, "wdDrowningRounds", ++iRoundsWithoutAir);
     }
     else
     {
@@ -42,7 +44,7 @@ void DrownCheck(object oPC)
         }
         else
         {
-            int iDrownDCMod = GetLocalInt(oPC, "wdCurrentDrownDC");
+            int iDrownDCMod = PS_GetLocalInt(oPC, "wdCurrentDrownDC");
             int iRoll = d20(1);
             int iConMod = GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
             int iDC = 10 + iDrownDCMod;
@@ -51,7 +53,7 @@ void DrownCheck(object oPC)
                 string sSave = "<color=#1E90FF>"+GetName(oPC)+" : Constitution Save vs. Drowning : *success* : ("+IntToString(iRoll)+" + "+IntToString(iConMod)+" = "+IntToString(iRoll + iConMod)+" vs. DC: "+IntToString(iDC)+")</color>";
                 SendMessageToPC(oPC, sSave);
                 iDrownDCMod++;
-                SetLocalInt(oPC, "wdCurrentDrownDC", iDrownDCMod);
+                PS_SetLocalInt(oPC, "wdCurrentDrownDC", iDrownDCMod);
             }
             else
             {

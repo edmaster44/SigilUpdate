@@ -43,7 +43,7 @@ void main()
 {
     object oAoE     = OBJECT_SELF;
     object oCreator = GetAreaOfEffectCreator();
-    int nDamage     = GetLocalInt(oAoE, "PRC_EctoShambler_Damage");
+    int nDamage     = PS_GetLocalInt(oAoE, "PRC_EctoShambler_Damage");
     effect eDamage  =                            EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
            eDamage  = EffectLinkEffects(eDamage, EffectVisualEffect(VFX_IMP_HEAD_MIND));
 

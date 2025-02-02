@@ -602,13 +602,13 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		   //die number specific
 		   if (nString1 > 0)
 		      {
-			  SetLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM", nString1);
-			  SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_STANDARD);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM", nString1);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_STANDARD);
 			  HSS_PCTools_SetGUIDieRollType(oPC, HSS_PC_TOOLS_DIE_STANDARD);
 			  return;
 			  }
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM");
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM");
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
 		   HSS_PCTools_DeleteGUIDieRollType(oPC);		   
 		   break;
 		   
@@ -617,13 +617,13 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		   //die type specific
 		   if (nString1 > 0)
 		      {
-			  SetLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE", nString1);
-			  SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_STANDARD);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE", nString1);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_STANDARD);
 			  HSS_PCTools_SetGUIDieRollType(oPC, HSS_PC_TOOLS_DIE_STANDARD);
 			  return;
 			  }
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE");
-		   DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE");
+		   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
 		   HSS_PCTools_DeleteGUIDieRollType(oPC); 
 		   break;
 		   
@@ -632,13 +632,13 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		   //save type specific
 		   if (nString1 > 0)
 		      {
-			  SetLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE", nString1);
-			  SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_SAVE);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE", nString1);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_SAVE);
 			  HSS_PCTools_SetGUIDieRollType(oPC, HSS_PC_TOOLS_DIE_SAVE);
 			  return;
 			  }
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE");
-		   DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE");
+		   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
 		   HSS_PCTools_DeleteGUIDieRollType(oPC); 
 		   break;
 		   
@@ -647,37 +647,37 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		   //ability type specific
 		   if (nString1 > 0)
 		      {
-			  SetLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE", nString1);
-			  SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_ABILITY);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE", nString1);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_ABILITY);
 			  HSS_PCTools_SetGUIDieRollType(oPC, HSS_PC_TOOLS_DIE_ABILITY);
 			  return;
 			  }
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE");
-		   DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE");
+		   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
 		   HSS_PCTools_DeleteGUIDieRollType(oPC); 
 		   break;
 		   //skill check header
 		   case 104:
 		   if (nString1 > 0)
 		      {
-			  SetLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE", nString1);
-			  SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_SKILL);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE", nString1);
+			  PS_SetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE", HSS_PC_TOOLS_DIE_SKILL);
 			  HSS_PCTools_SetGUIDieRollType(oPC, HSS_PC_TOOLS_DIE_SKILL);
 			  return;
 			  }
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE");
-		   DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE");
+		   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
 		   HSS_PCTools_DeleteGUIDieRollType(oPC); 
 		   break;
 		   
 		   //public button chosen
 		   case 998:
-           DeleteLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE");		   
+           PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE");		   
 		   break;
 		   
 		   //private button chosen
 		   case 999:
-           SetLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE", 1);
+           PS_SetLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE", 1);
 		   break;
 		   
 		   //roll button chosen
@@ -692,8 +692,8 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 	   //emote type chosen 
 	   if (nEventSub < 100 && nEventSub > 0)
 	      {
-		  SetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE", sParamString1);
-		  SetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE_2", sParamString2);
+		  PS_SetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE", sParamString1);
+		  PS_SetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE_2", sParamString2);
 		  //using nEventSub as delay for second animation call if
 		  //a second animation is given (workaround since the float param
 		  //is used for the main event types -- second animation was an
@@ -707,7 +707,7 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		     //this caused the looping option to fail -- bug fix.		 
 		     if (sParamString2 != "0")
 			    {
-				SetLocalFloat(oPC, "HSS_PC_TOOLS_ANIM_DELAY", IntToFloat(nEventSub)/10.0);
+				PS_SetLocalFloat(oPC, "HSS_PC_TOOLS_ANIM_DELAY", IntToFloat(nEventSub)/10.0);
 				}
 			 }		  
 		  return;
@@ -717,23 +717,23 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 	       {   
 		   //clear emote
 		   case 100:
-		   DeleteLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE");
+		   PS_DeleteLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE");
 		   break;
 		   
 		   //cease emote
 		   case 101:
-		   SetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE", sParamString1);
+		   PS_SetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE", sParamString1);
            HSS_PCTools_DoEmote(oPC);
      	   break;
 		   
 		   //one-shot emote
 		   case 102:
-           DeleteLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP");
+           PS_DeleteLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP");
 		   break;
 		   
 		   //looping emote
 		   case 103:
-           SetLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP", 1);
+           PS_SetLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP", 1);
 		   break;
 		   		   		   		   		   		   		   
 		   //do emote
@@ -879,8 +879,8 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 	       {   
 		   //
 		   case 1:
-           SpeakString(GetLocalString(oPC, sParamString1),
-		              GetLocalInt(oPC, sParamString1 + "_VOLUME"));
+           SpeakString(PS_GetLocalString(oPC, sParamString1),
+		              PS_GetLocalInt(oPC, sParamString1 + "_VOLUME"));
 
 		   break;
 
@@ -913,7 +913,7 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		      {
 			  sParamString1 = "Colour tags have been disallowed.";
 			  }		   
-           SetLocalString(oPC, sParamString2, sParamString1);
+           PS_SetLocalString(oPC, sParamString2, sParamString1);
 		   HSS_PCTools_StorePersistentData(oPC, sParamString2, "pctools--" + sPCID,
 		                                  HSS_PC_TOOLS_STRING, sParamString1);
 										  
@@ -930,7 +930,7 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		   		   		   
 		   //macro volume		   
 		   case 110:
-           SetLocalInt(oPC, sParamString2 + "_VOLUME", nString1);
+           PS_SetLocalInt(oPC, sParamString2 + "_VOLUME", nString1);
 		   HSS_PCTools_StorePersistentData(oPC, sParamString2 + "_VOLUME", "pctools--" + sPCID,
 		                                  HSS_PC_TOOLS_INT, IntToString(nString1));
 										  				 		   
@@ -953,13 +953,13 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 				 return;
 				 }
 			  
-			  if (GetLocalInt(oPC, "HSS_TIMERS_TOTAL") >= 3)
+			  if (PS_GetLocalInt(oPC, "HSS_TIMERS_TOTAL") >= 3)
 			     {
 				 SendMessageToPC(oPC, HSS_PCTOOLS_COLOUR1 + "You may only have a maximum of three concurrent timers active.");
 				 return;				 
 				 }	 
 				 
-			  SetLocalInt(oPC, "HSS_TIMERS_TOTAL", GetLocalInt(oPC, "HSS_TIMERS_TOTAL") + 1);
+			  PS_SetLocalInt(oPC, "HSS_TIMERS_TOTAL", PS_GetLocalInt(oPC, "HSS_TIMERS_TOTAL") + 1);
 			  
               SendMessageToPC(oPC, HSS_PCTOOLS_COLOUR1 + 
 			  "PC Tools Timer Started -- Timer " + HSS_PCTOOLS_COLOUR2 +
@@ -1006,20 +1006,20 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 
 void HSS_PCTools_CleanPCLocals(object oPC, int nBroadcast = TRUE)
 {
-   DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");   
-   DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM");
-   DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE");   
-   DeleteLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE");
-   DeleteLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE");
-   DeleteLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE");
-   DeleteLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE"); 
-   DeleteLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE_2");      
-   DeleteLocalFloat(oPC, "HSS_PC_TOOLS_ANIM_DELAY");
+   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");   
+   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM");
+   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE");   
+   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE");
+   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE");
+   PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE");
+   PS_DeleteLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE"); 
+   PS_DeleteLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE_2");      
+   PS_DeleteLocalFloat(oPC, "HSS_PC_TOOLS_ANIM_DELAY");
    
    if (nBroadcast)
       {	     
-      DeleteLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE");
-      DeleteLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP");	  
+      PS_DeleteLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE");
+      PS_DeleteLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP");	  
       }
 }
 
@@ -1422,14 +1422,14 @@ void HSS_PCTools_OnGUICreate(object oPC, int nGUI = 1)
 						       HSS_IntToLeadingZeroString(nCount), "pctools--" + sPCID, HSS_PC_TOOLS_STRING);
 		   if (sHelp != "")
 		      {
-			  SetLocalString(oPC, "PC_TOOLS_MACRO_BUTTON_" + HSS_IntToLeadingZeroString(nCount), sHelp);				  			  
+			  PS_SetLocalString(oPC, "PC_TOOLS_MACRO_BUTTON_" + HSS_IntToLeadingZeroString(nCount), sHelp);				  			  
 			  }
 
 		   sHelp = HSS_PCTools_RetrievePersistentData(oPC, "PC_TOOLS_MACRO_BUTTON_" +
 						       HSS_IntToLeadingZeroString(nCount) + "_VOLUME", "pctools--" + sPCID, HSS_PC_TOOLS_INT);
 		   if (sHelp != "")
 		      {
-			  SetLocalInt(oPC, "PC_TOOLS_MACRO_BUTTON_" + HSS_IntToLeadingZeroString(nCount) + "_VOLUME", StringToInt(sHelp));				  			  
+			  PS_SetLocalInt(oPC, "PC_TOOLS_MACRO_BUTTON_" + HSS_IntToLeadingZeroString(nCount) + "_VOLUME", StringToInt(sHelp));				  			  
 			  }
 			  							   			  			  			  					
 		   nCount++;
@@ -1802,8 +1802,8 @@ void HSS_PCTools_GetTime(object oPC)
 
 void HSS_PCTools_MakeSafeLocation(object oPC)
 {
-   if (GetLocalInt(oPC, "HSS_PCTOOLS_NO_MAKESAFE") ||
-      GetLocalInt(GetArea(oPC), "HSS_PCTOOLS_NO_MAKESAFE"))
+   if (PS_GetLocalInt(oPC, "HSS_PCTOOLS_NO_MAKESAFE") ||
+      PS_GetLocalInt(GetArea(oPC), "HSS_PCTOOLS_NO_MAKESAFE"))
       {
       SendMessageToPC(oPC, HSS_PCTOOLS_COLOUR1 + HSS_NO_MAKESAFE_MESSAGE);
       return;      
@@ -1823,8 +1823,8 @@ void HSS_PCTools_Create(object oPC, string sItem = "Tent")
    object oArea = GetArea(oPC);
    object oMod = GetModule();
    string sPCID = GetPCPlayerName(oPC) + "_" + GetName(oPC);
-   int nTentCount = GetLocalInt(oMod, "HSS_PCTOOLS_TENT_ITEM_COUNT_" + sPCID);
-   int nFireCount = GetLocalInt(oMod, "HSS_PCTOOLS_CAMPFIRE_ITEM_COUNT_" + sPCID);
+   int nTentCount = PS_GetLocalInt(oMod, "HSS_PCTOOLS_TENT_ITEM_COUNT_" + sPCID);
+   int nFireCount = PS_GetLocalInt(oMod, "HSS_PCTOOLS_CAMPFIRE_ITEM_COUNT_" + sPCID);
 
    if (HSS_PCTOOLS_OBJECT_CREATE_RESTRICT == 1 && !GetIsDM(oPC) && GetIsPC(oPC))
       {
@@ -1866,9 +1866,9 @@ void HSS_PCTools_Create(object oPC, string sItem = "Tent")
                 0.1,FALSE, FALSE);
       oCreate = CreateObject(OBJECT_TYPE_PLACEABLE, "hss_campfire_01",
                      lLoc, FALSE, sID);
-      SetLocalInt(oMod, "HSS_PCTOOLS_CAMPFIRE_ITEM_COUNT_" + sPCID,
+      PS_SetLocalInt(oMod, "HSS_PCTOOLS_CAMPFIRE_ITEM_COUNT_" + sPCID,
       nFireCount + 1);
-      SetLocalString(oCreate, "HSS_PCTOOLS_CREATOR", 
+      PS_SetLocalString(oCreate, "HSS_PCTOOLS_CREATOR", 
       "HSS_PCTOOLS_CAMPFIRE_ITEM_COUNT_" + sPCID);
       				  
       DelayCommand(HSS_OBJECT_DECAY, HSS_DestroyAllInventory(oCreate));
@@ -1904,9 +1904,9 @@ void HSS_PCTools_Create(object oPC, string sItem = "Tent")
                    0.1,FALSE, FALSE);
       oCreate = CreateObject(OBJECT_TYPE_PLACEABLE, "hss_tent_01",
                      lLoc, FALSE, sID);
-      SetLocalInt(oMod, "HSS_PCTOOLS_TENT_ITEM_COUNT_" + sPCID,
+      PS_SetLocalInt(oMod, "HSS_PCTOOLS_TENT_ITEM_COUNT_" + sPCID,
       nTentCount + 1);
-      SetLocalString(oCreate, "HSS_PCTOOLS_CREATOR", 
+      PS_SetLocalString(oCreate, "HSS_PCTOOLS_CREATOR", 
       "HSS_PCTOOLS_TENT_ITEM_COUNT_" + sPCID);      
       				  
       DelayCommand(HSS_OBJECT_DECAY, HSS_PCTools_DestroyAndDecrement(oMod,
@@ -1970,16 +1970,16 @@ void HSS_PCTools_ToggleAFK(object oPC)
 
 void HSS_PCToools_RollDie(object oPC)
 {
-   int nRollType = GetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
+   int nRollType = PS_GetLocalInt(oPC, "HSS_PCTOOLS_ROLL_TYPE");
    
-   int nDieNum = GetLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM");
-   int nDieType = GetLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE");
+   int nDieNum = PS_GetLocalInt(oPC, "HSS_PCTOOLS_DIE_NUM");
+   int nDieType = PS_GetLocalInt(oPC, "HSS_PCTOOLS_DIE_TYPE");
    
-   int nSaveType = GetLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE");
-   int nAbilityType = GetLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE");
-   int nSkillType = GetLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE");
+   int nSaveType = PS_GetLocalInt(oPC, "HSS_PCTOOLS_SAVE_TYPE");
+   int nAbilityType = PS_GetLocalInt(oPC, "HSS_PCTOOLS_ABILITY_TYPE");
+   int nSkillType = PS_GetLocalInt(oPC, "HSS_PCTOOLS_SKILL_TYPE");
    
-   int nBroadcast = GetLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE");
+   int nBroadcast = PS_GetLocalInt(oPC, "HSS_PCTOOLS_BROADCAST_TYPE");
 
    int nVal1;
    int nRoll;
@@ -2385,10 +2385,10 @@ void HSS_PCTools_DeleteGUIDieRollType(object oPC)
 
 void HSS_PCTools_DoEmote(object oPC)
 {
-   string sEmote = GetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE");
-   string sEmote2 = GetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE_2");   
-   int nLoop = GetLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP");
-   float fDelay = GetLocalFloat(oPC, "HSS_PC_TOOLS_ANIM_DELAY");
+   string sEmote = PS_GetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE");
+   string sEmote2 = PS_GetLocalString(oPC, "HSS_PC_TOOLS_ANIM_TYPE_2");   
+   int nLoop = PS_GetLocalInt(oPC, "HSS_PC_TOOLS_ANIM_LOOP");
+   float fDelay = PS_GetLocalFloat(oPC, "HSS_PC_TOOLS_ANIM_DELAY");
 
 
    if (sEmote != "")
@@ -2536,7 +2536,7 @@ void HSS_PCTools_Remove(object oPC, int nObject)
    object oTarget = IntToObject(nObject);
    string sTag = GetTag(oTarget);
    object oMod = GetModule();
-   string sPCID = GetLocalString(oTarget, "HSS_PCTOOLS_CREATOR");
+   string sPCID = PS_GetLocalString(oTarget, "HSS_PCTOOLS_CREATOR");
    string sMsg;
    string sAnim;
 
@@ -3013,7 +3013,7 @@ return sResult;
 
 object HSS_GetItemPossessedBy_Cached(object oCreature, string sItemTag)
 {
-   object oItem = GetLocalObject(oCreature, "HSS_CACHED_ITEM_" + sItemTag);
+   object oItem = PS_GetLocalObject(oCreature, "HSS_CACHED_ITEM_" + sItemTag);
 
    //not sure if GetItemPossessor()is more efficient than GetItemPossessedBy()   
    if (GetIsObjectValid(oItem) && GetItemPossessor(oItem) == oCreature)
@@ -3025,7 +3025,7 @@ object HSS_GetItemPossessedBy_Cached(object oCreature, string sItemTag)
    
    if (GetIsObjectValid(oItem))
       {
-      SetLocalObject(oCreature, "HSS_CACHED_ITEM_" + sItemTag, oItem);
+      PS_SetLocalObject(oCreature, "HSS_CACHED_ITEM_" + sItemTag, oItem);
       return oItem;
       }
 
@@ -3041,7 +3041,7 @@ void HSS_PCTools_DestroyAndDecrement(object oPC, object oObject, string sVar)
    if (GetIsObjectValid(oObject))
       {
       DestroyObject(oObject);
-      SetLocalInt(oPC, sVar, GetLocalInt(oPC, sVar) - 1);
+      PS_SetLocalInt(oPC, sVar, PS_GetLocalInt(oPC, sVar) - 1);
       }
 }
 
@@ -3141,19 +3141,19 @@ void HSS_PCTools_StorePersistentData(object oObject, string sVarName, string sDB
 	   switch (nDataType)
 	       {
 		   case HSS_PC_TOOLS_INT:
-		   SetLocalInt(oObject, sVarName, StringToInt(sValue));
+		   PS_SetLocalInt(oObject, sVarName, StringToInt(sValue));
 		   break;
 		   
 		   case HSS_PC_TOOLS_STRING:
-		   SetLocalString(oObject, sVarName, sValue);		   
+		   PS_SetLocalString(oObject, sVarName, sValue);		   
 		   break;
 		   
 		   case HSS_PC_TOOLS_FLOAT:
-		   SetLocalFloat(oObject, sVarName, StringToFloat(sValue));		   
+		   PS_SetLocalFloat(oObject, sVarName, StringToFloat(sValue));		   
 		   break;
 		   
 		   case HSS_PC_TOOLS_LOC:
-		   SetLocalLocation(oObject, sVarName, HSS_StringToLocation(sValue));		   
+		   PS_SetLocalLocation(oObject, sVarName, HSS_StringToLocation(sValue));		   
 		   break;
 		   
 		   case HSS_PC_TOOLS_VEC:
@@ -3161,7 +3161,7 @@ void HSS_PCTools_StorePersistentData(object oObject, string sVarName, string sDB
 		   break;
 		   
 		   case HSS_PC_TOOLS_OBJ:
-		   SetLocalObject(oObject, sVarName, StringToObject(sValue));		   
+		   PS_SetLocalObject(oObject, sVarName, StringToObject(sValue));		   
 		   break;		   		   		   		   		   
 		   }
 		   	   
@@ -3248,19 +3248,19 @@ string HSS_PCTools_RetrievePersistentData(object oObject, string sVarName, strin
 	   switch (nDataType)
 	       {
 		   case HSS_PC_TOOLS_INT:
-		   sResult = IntToString(GetLocalInt(oObject, sVarName));
+		   sResult = IntToString(PS_GetLocalInt(oObject, sVarName));
 		   break;
 		   
 		   case HSS_PC_TOOLS_STRING:
-		   sResult = GetLocalString(oObject, sVarName);		   
+		   sResult = PS_GetLocalString(oObject, sVarName);		   
 		   break;
 		   
 		   case HSS_PC_TOOLS_FLOAT:
-		   sResult = FloatToString(GetLocalFloat(oObject, sVarName));		   
+		   sResult = FloatToString(PS_GetLocalFloat(oObject, sVarName));		   
 		   break;
 		   
 		   case HSS_PC_TOOLS_LOC:
-		   sResult = LocationToString(GetLocalLocation(oObject, sVarName));		   
+		   sResult = LocationToString(PS_GetLocalLocation(oObject, sVarName));		   
 		   break;
 		   
 		   case HSS_PC_TOOLS_VEC:
@@ -3268,7 +3268,7 @@ string HSS_PCTools_RetrievePersistentData(object oObject, string sVarName, strin
 		   break;
 		   
 		   case HSS_PC_TOOLS_OBJ:
-		   sResult = ObjectToString(GetLocalObject(oObject, sVarName));		   
+		   sResult = ObjectToString(PS_GetLocalObject(oObject, sVarName));		   
 		   break;		   		   		   		   		   
 		   }
 		   	   
@@ -3331,7 +3331,7 @@ int HSS_PCTools_IsStringColoured(string sString)
 
 void HSS_PCTools_StartTimer(object oPC, int nTime, string sLabel, string sAlarm)
 {
-   SetLocalInt(oPC, "HSS_TIMERS_TOTAL", GetLocalInt(oPC, "HSS_TIMERS_TOTAL") - 1);
+   PS_SetLocalInt(oPC, "HSS_TIMERS_TOTAL", PS_GetLocalInt(oPC, "HSS_TIMERS_TOTAL") - 1);
    
    SendMessageToPC(oPC, HSS_PCTOOLS_COLOUR2 + "######--Timer Notification");
 			   		   			  

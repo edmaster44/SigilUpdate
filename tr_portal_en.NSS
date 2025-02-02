@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_achievements"
 
 void main()
@@ -12,12 +14,12 @@ void main()
 	int iPrevCounter;
 	int iSpawnCounter;
 	
-	sKeyTag = GetLocalString(OBJECT_SELF, "KeyTag");
-	sWPTag = GetLocalString(OBJECT_SELF, "WPTag");
-	iPrevCounter = GetLocalInt(OBJECT_SELF, "Counter");
+	sKeyTag = PS_GetLocalString(OBJECT_SELF, "KeyTag");
+	sWPTag = PS_GetLocalString(OBJECT_SELF, "WPTag");
+	iPrevCounter = PS_GetLocalInt(OBJECT_SELF, "Counter");
 	
-	sFXTag = GetLocalString(OBJECT_SELF, "FXTag");
-	sPortalTag = GetLocalString(OBJECT_SELF, "PortalTag");
+	sFXTag = PS_GetLocalString(OBJECT_SELF, "FXTag");
+	sPortalTag = PS_GetLocalString(OBJECT_SELF, "PortalTag");
 	
 	//Determine how many pcs with key are in the trigger at the present time
 	iSpawnCounter=0;
@@ -64,7 +66,7 @@ void main()
 		location lPortal = GetLocation(GetObjectByTag(sWPTag));
 		CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFXTag, lPortal);
 		CreateObject(OBJECT_TYPE_PLACEABLE, sPortalTag, lPortal);
-		SetLocalInt(OBJECT_SELF, "Counter", iSpawnCounter);
+		PS_SetLocalInt(OBJECT_SELF, "Counter", iSpawnCounter);
 	}
 	else if (iSpawnCounter==0 && iPrevCounter>0)
 	{
@@ -84,6 +86,6 @@ void main()
 			oPortalEffect=GetNearestObjectByTag(sFXTag, GetObjectByTag(sWPTag), iLoop);
 		}
 		DestroyObject(oPortal,30.0f);
-		SetLocalInt(OBJECT_SELF, "Counter", 0);
+		PS_SetLocalInt(OBJECT_SELF, "Counter", 0);
 	}
 }

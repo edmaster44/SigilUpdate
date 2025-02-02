@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Stone Serpent Heartbeat
 //:: ps_custom_serpent_hrt
@@ -233,7 +235,7 @@ void main()
     else if (GetHenchOption(HENCH_OPTION_DISABLE_HB_DETECTION) ||
 		!GetIsObjectValid(GetNearestSeenOrHeardEnemyNotDead(GetHenchOption(HENCH_OPTION_DISABLE_HB_HEARING))))
     {
-        if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        if (PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
             // continue to move to target
 	        if (GetBehaviorState(NW_FLAG_BEHAVIOR_SPECIAL)) {
@@ -245,7 +247,7 @@ void main()
         else
         {
         	CleanCombatVars();
-            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
             if (DoStealthAndWander())
             {
                 // nothing to do here

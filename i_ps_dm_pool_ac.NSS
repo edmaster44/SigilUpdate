@@ -37,8 +37,8 @@ void main()
 	object oItem = GetItemPossessedBy(oTarget,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-	 	int nID = GetLocalInt(oItem,"ID");
-		string sECL = GetLocalString(oItem,"ECL");
+	 	int nID = PS_GetLocalInt(oItem,"ID");
+		string sECL = PS_GetLocalString(oItem,"ECL");
 		int nDMpool = 0;
 		
 		SQLExecDirect("SELECT dm_pool FROM characterdata WHERE id="+IntToString(nID));

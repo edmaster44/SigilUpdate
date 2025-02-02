@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: SetListeningPatterns
 //:: NW_C2_DEFAULT4
@@ -31,10 +33,10 @@ void main()
     }
 
     // notify walkwaypoints that we've been stopped and need to restart.
-    SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
+    PS_SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
 	
 	//Gets any conversation set as variable previously
-	string sConversation = GetLocalString(OBJECT_SELF, "DEFAULT_CONVERSATION");
+	string sConversation = PS_GetLocalString(OBJECT_SELF, "DEFAULT_CONVERSATION");
 
     int nMatch = GetListenPatternNumber();
     object oShouter = GetLastSpeaker();
@@ -48,7 +50,7 @@ void main()
 		  // conversation and command them to begin it again, but in private
 		  // mode.
 		  //
-        if (GetIsPC(oShouter) && GetLocalInt(OBJECT_SELF, "PS_CONV_PRIVATE") != FALSE)
+        if (GetIsPC(oShouter) && PS_GetLocalInt(OBJECT_SELF, "PS_CONV_PRIVATE") != FALSE)
 		  {
 				ActionStartConversation(oShouter, sConversation, TRUE);
 				return;
@@ -58,7 +60,7 @@ void main()
         {
             ClearAllActions();
 			// hack to detect SoZ
-			if (GetStringLength(GetGlobalString("co_beluethHangOut")) > 1)
+			if (GetStringLength(PS_GetGlobalString("co_beluethHangOut")) > 1)
 			{
             	BeginConversation(sConversation, OBJECT_INVALID, TRUE);
 			}
@@ -76,7 +78,7 @@ void main()
         {
             ClearActions(CLEAR_NW_C2_DEFAULT4_29);
 			// hack to detect SoZ
-			if (GetStringLength(GetGlobalString("co_beluethHangOut")) > 1)
+			if (GetStringLength(PS_GetGlobalString("co_beluethHangOut")) > 1)
 			{
             	BeginConversation(sConversation, OBJECT_INVALID, TRUE);
 			}
@@ -93,11 +95,11 @@ void main()
     {
         if(nMatch == 4)
         {
-            oIntruder = GetLocalObject(oShouter, "NW_BLOCKER_INTRUDER");
+            oIntruder = PS_GetLocalObject(oShouter, "NW_BLOCKER_INTRUDER");
         }
         else if (nMatch == 5 || nMatch == 1)
         {
-            oIntruder = GetLocalObject(oShouter, sHenchLastTarget);
+            oIntruder = PS_GetLocalObject(oShouter, sHenchLastTarget);
             if(!GetIsObjectValid(oIntruder))
             {
                 oIntruder = GetLastHostileActor(oShouter);

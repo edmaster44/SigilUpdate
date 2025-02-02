@@ -559,7 +559,7 @@ int GetBestAOEBehavior(int nSpellID, int iCasterLevel=-1)
 			
         if (GetModuleSwitchValue(MODULE_SWITCH_DISABLE_AI_DISPEL_AOE) == 0 )
         {
-            if (d100() > GetLocalInt(GetModule(),MODULE_VAR_AI_NO_DISPEL_AOE_CHANCE))
+            if (d100() > PS_GetLocalInt(GetModule(),MODULE_VAR_AI_NO_DISPEL_AOE_CHANCE))
             {
                 if (GetHasSpell(SPELL_LESSER_DISPEL) && iCasterLevel<7)
                     return X2_SPELL_AOEBEHAVIOR_DISPEL_L;
@@ -618,7 +618,7 @@ int GZGetDelayedSpellEffectsExpired(int nSpell_ID, object oTarget, object oCaste
 
     if (!GetHasSpellEffect(nSpell_ID,oTarget) )
     {
-        DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpell_ID));
+        PS_DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (nSpell_ID));
         return TRUE;
     }
 
@@ -630,18 +630,18 @@ int GZGetDelayedSpellEffectsExpired(int nSpell_ID, object oTarget, object oCaste
     if( !GetIsObjectValid(oCaster))
     {
         GZRemoveSpellEffects(nSpell_ID, oTarget);
-        DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(nSpell_ID));
+        PS_DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(nSpell_ID));
         return TRUE;
     }
 
     if (GetIsDead(oCaster) || GetIsDead(oTarget) )	// added a check to see if the target is dead so that effects don't persist on corpses
     {
-        DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(nSpell_ID));
+        PS_DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(nSpell_ID));
         GZRemoveSpellEffects(nSpell_ID, oTarget);
         return TRUE;
     }
     
-    if(!GetGlobalInt(CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION) && !GetIsEnemy(oCaster,oTarget))
+    if(!PS_GetGlobalInt(CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION) && !GetIsEnemy(oCaster,oTarget))
     {
         return TRUE;
     }

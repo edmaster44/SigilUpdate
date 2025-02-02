@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_dmtool - DM Friendly Initiative - GUI script for running "tool" level commands
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -35,63 +37,63 @@ void main(string sInput)
 	else if (sInput=="context_time")
 	{
 		DMFI_ClearUIData(oPC);
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_TIME + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_24);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_TIME);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_TIME + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_24);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_TIME);
 		DMFI_ShowDMListUI(oPC);
 	}
 	else if (sInput=="context_grant")
 	{
 		DMFI_ClearUIData(oPC);
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_GRANT + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_DMLANGUAGE);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_GRANT);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_GRANT + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_DMLANGUAGE);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_GRANT);
 		DMFI_ShowDMListUI(oPC);
 	}
 	else if (sInput=="context_remove")
 	{
 		DMFI_ClearUIData(oPC);
 		DeleteList(PG_LIST_LANGUAGE, oTool);
-		SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
+		PS_SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
 		DMFI_UITarget(oPC, oTool);
-		oTarget = GetLocalObject(oTool, DMFI_TARGET);
+		oTarget = PS_GetLocalObject(oTool, DMFI_TARGET);
 		DMFI_BuildLanguageList(oTool, oTarget);
 		
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_REMOVE + PRM_ + PRM_LANGUAGE + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_LANGUAGE);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_REMOVE);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_REMOVE + PRM_ + PRM_LANGUAGE + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_LANGUAGE);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_REMOVE);
 		DMFI_ShowDMListUI(oPC);	
 	}
 	else if (sInput=="context_effects")
 	{
 		DMFI_ClearUIData(oPC);
 		DeleteList(PG_TARGET_EFFECT, oTool);
-		SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
+		PS_SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
 		DMFI_UITarget(oPC, oTool);
-		oTarget = GetLocalObject(oTool, DMFI_TARGET);
+		oTarget = PS_GetLocalObject(oTool, DMFI_TARGET);
 		DMFI_BuildEffectList(oTool, oTarget);
 		
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_REMOVE + PRM_ + PRM_EFFECT + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_TARGET_EFFECT);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_EFFECTS);
-		SetLocalInt(oPC, DMFI_REQ_INT, 2);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_REMOVE + PRM_ + PRM_EFFECT + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_TARGET_EFFECT);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_EFFECTS);
+		PS_SetLocalInt(oPC, DMFI_REQ_INT, 2);
 		DMFI_ShowDMListUI(oPC);	
 	}
 	else if (sInput=="context_scale")
 	{
 		DMFI_ClearUIData(oPC);
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SCALE + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_300);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_SCALE);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SCALE + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_300);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_SCALE);
 		DMFI_ShowDMListUI(oPC);
 	}
 	else if (sInput=="context_appearance")
 	{
 		DMFI_ClearUIData(oPC);
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_APPEARANCE + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_APPEARANCE);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_APPEARANCE);
-		SetLocalInt(oPC, DMFI_REQ_INT, 1);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_APPEARANCE + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_APPEARANCE);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_APPEARANCE);
+		PS_SetLocalInt(oPC, DMFI_REQ_INT, 1);
 		DMFI_ShowDMListUI(oPC);
 	}	
 	
@@ -101,7 +103,7 @@ void main(string sInput)
 	else if (FindSubString(sInput,"update_")!=-1)
 	{
 		DMFI_ClearUIData(oPC);
-		SetLocalString(oPC, DMFI_LAST_UI_COM, sInput);
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, sInput);
 		
 		if (FindSubString(sInput, "dc")!=-1)
 		{
@@ -124,14 +126,14 @@ void main(string sInput)
 			sTitle = CV_PROMPT_VOLUME;
 		}	
 							
-		SetLocalString(oPC, DMFI_UI_PAGE, sList);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, sTitle);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, sList);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, sTitle);
 		DMFI_ShowDMListUI(oPC);
 	}	
 		
 	else if (FindSubString(sInput,"toggle_")!=-1)
 	{
-		sScreen = GetLocalString(oPC, "DMFI_UI_USE");
+		sScreen = PS_GetLocalString(oPC, "DMFI_UI_USE");
 		sScreen = SCREEN_DMFI + sScreen;	
 		
 		sCommand = GetStringRight(sInput, GetStringLength(sInput)-7);
@@ -141,7 +143,7 @@ void main(string sInput)
 		if (sCommand == "musictime")
 		{
 			// Special exception code to add the music type to the prompt for the list.
-			sTest = DMFI_CapitalizeWord(GetLocalString(oTool, DMFI_MUSIC_TIME));
+			sTest = DMFI_CapitalizeWord(PS_GetLocalString(oTool, DMFI_MUSIC_TIME));
 			sTest = ColorText("Music " + sTest, COLOR_CYAN);
 			SetGUIObjectText(oPC, SCREEN_DMFI_DMLIST, "DMListTitle", -1, sTest + CV_PROMPT_MS_TRACK);
 		}	
@@ -149,7 +151,7 @@ void main(string sInput)
 	
 	else
 	{
-		sScreen = GetLocalString(oPC, "DMFI_UI_USE");
+		sScreen = PS_GetLocalString(oPC, "DMFI_UI_USE");
 		sScreen = SCREEN_DMFI + sScreen;	
 	
 		if (sInput=="close")
@@ -166,104 +168,104 @@ void main(string sInput)
 			{
 				if (sInput=="sub1")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_ABILITY);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_ABILITY);
 					sTest = CV_PROMPT_ABILITY;
 				}	
 				else if (sInput=="sub2")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_SKILL);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_SKILL);
 					sTest = CV_PROMPT_SV;
 				}	
 				else if (sInput=="sub3")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_10);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_10);
 					sTest = CV_PROMPT_DICE;
 				}
-				SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_ROLL + PRM_);
+				PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_ROLL + PRM_);
 			}
 			else if (sScreen==SCREEN_DMFI_MUSICTOOL)
 			{		
 				if (sInput=="sub1")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_NWN2);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_NWN2);
 				else if (sInput=="sub2")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_NWN1);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_NWN1);
 				else if (sInput=="sub3")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_XP);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_XP);
 				else if (sInput=="sub4")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_BATTLE);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_BATTLE);
 				else if (sInput=="sub5")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_MOTB);	
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_MUSIC_MOTB);	
 				
-				sTest = DMFI_CapitalizeWord(GetLocalString(oTool, DMFI_MUSIC_TIME));
+				sTest = DMFI_CapitalizeWord(PS_GetLocalString(oTool, DMFI_MUSIC_TIME));
 				sTest = ColorText("Music " + sTest, COLOR_CYAN);
 				sTest = sTest + CV_PROMPT_MS_TRACK;
-				SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SET + PRM_ + PRM_MUSIC + PRM_); 
-				SetLocalInt(oPC, DMFI_REQ_INT, 1);
+				PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SET + PRM_ + PRM_MUSIC + PRM_); 
+				PS_SetLocalInt(oPC, DMFI_REQ_INT, 1);
 			}
 			else if (sScreen==SCREEN_DMFI_VFXTOOL)
 			{
 				if (sInput=="sub1")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_SPELL);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_SPELL);
 				else if (sInput=="sub2")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_IMP);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_IMP);
 				else if (sInput=="sub3")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_DUR);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_DUR);
 				else if (sInput=="sub4")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_MISC);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_MISC);
 				else if (sInput=="sub5")
 				{//Special code to build the list dynamically
 					DeleteList(PG_LIST_VFX_RECENT, oTool);
-					SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
+					PS_SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
 					DMFI_BuildRecentVFXList(oTool);
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_RECENT);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_VFX_RECENT);
 				}
 				sTest = CV_PROMPT_VFX;
-				SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_VFX + PRM_);
-				SetLocalInt(oPC, DMFI_REQ_INT, 1);
+				PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_VFX + PRM_);
+				PS_SetLocalInt(oPC, DMFI_REQ_INT, 1);
 			}	
 			else if (sScreen==SCREEN_DMFI_AMBTOOL)
 			{
 				if (sInput=="sub1")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_CAVE);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_CAVE);
 				else if (sInput=="sub2")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_MAGIC);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_MAGIC);
 				else if (sInput=="sub3")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_PEOPLE);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_PEOPLE);
 				else if (sInput=="sub4")
-					SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_MISC);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_AMBIENT_MISC);
 				
 				sTest =  CV_PROMPT_VOLUME;
-				SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SET + PRM_ + PRM_AMBIENT + PRM_); 
-				SetLocalInt(oPC, DMFI_REQ_INT, 1);
+				PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SET + PRM_ + PRM_AMBIENT + PRM_); 
+				PS_SetLocalInt(oPC, DMFI_REQ_INT, 1);
 			}
 			else if (sScreen==SCREEN_DMFI_SNDTOOL)
 			{
 				if (sInput=="sub1")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_CITY);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_CITY);
 					sCommand = PRM_CITY;
 				}	
 				else if (sInput=="sub2")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_MAGICAL);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_MAGICAL);
 					sCommand = PRM_MAGICAL;
 				}	
 				else if (sInput=="sub3")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_NATURE);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_NATURE);
 					sCommand = PRM_NATURE;
 				}
 				else if (sInput=="sub4")
 				{
-					SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_PEOPLE);
+					PS_SetLocalString(oPC, DMFI_UI_PAGE, "DISPLAY" + PG_LIST_SOUND_PEOPLE);
 					sCommand = PRM_PEOPLE;
 				}	
 				sTest = CV_PROMPT_SOUND;
-				SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SOUND + PRM_ + sCommand + PRM_); 
-				SetLocalInt(oPC, DMFI_REQ_INT, 2);  // 2 use THE actual selction - not ref int - not string
+				PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_SOUND + PRM_ + sCommand + PRM_); 
+				PS_SetLocalInt(oPC, DMFI_REQ_INT, 2);  // 2 use THE actual selction - not ref int - not string
 			}		
 			
-			SetLocalString(oPC, DMFI_UI_LIST_TITLE, sTest);
+			PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, sTest);
 			DMFI_ShowDMListUI(oPC);	
 		}
 	}	

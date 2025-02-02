@@ -1,13 +1,15 @@
+#include "ff_safevar"
+
 void main()
 {
  object oPC = GetEnteringObject();
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("ScriptoriumEnterLock1");
+ int iLock = PS_GetGlobalInt("ScriptoriumEnterLock1");
  if ( iLock == 0 )
  {
-  SetGlobalInt("ScriptoriumEnterLock1", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("ScriptoriumEnterLock1", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("npc_scriptorium01") == OBJECT_INVALID)
   {
@@ -105,6 +107,6 @@ void main()
    location lSpawnpoint = GetLocation(oWP);  
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "npc_scriptorium15", lSpawnpoint);    
   } 
-  SetGlobalInt("ScriptoriumEnterLock1", 0);
+  PS_SetGlobalInt("ScriptoriumEnterLock1", 0);
  }
 }

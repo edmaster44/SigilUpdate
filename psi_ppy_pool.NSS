@@ -32,12 +32,12 @@ void main()
     object oTarget = GetSpellTargetObject();
 	
 	
-	if (GetLocalInt(OBJECT_SELF, "PSI_PP") == 0 || GetLocalInt(OBJECT_SELF, "PSI_PP") != 0 && GetLastPCRested() == OBJECT_SELF)
+	if (PS_GetLocalInt(OBJECT_SELF, "PSI_PP") == 0 || PS_GetLocalInt(OBJECT_SELF, "PSI_PP") != 0 && GetLastPCRested() == OBJECT_SELF)
 	//This keeps the power point total from replenishing automatically on leveling. Done to prevent leveling during battle
 	//as an exploit to regain lost power points.
 	    if (!GetHasSpellEffect(GetSpellId(), oTarget) && !GetIsInCombat(OBJECT_SELF))
 		{
-			int nPP = GetLocalInt(OBJECT_SELF, "PSI_PP");
+			int nPP = PS_GetLocalInt(OBJECT_SELF, "PSI_PP");
 			int i = 1;
 			object oPC = OBJECT_SELF;
 			//Defines the local variable that will represent power points.
@@ -351,8 +351,8 @@ void main()
 			//
 
 			
-			SetLocalInt(OBJECT_SELF, "PSI_PP", nPPvalue);
-			SetLocalInt(OBJECT_SELF, "PSI_PP_MAX", nPPvalue);
+			PS_SetLocalInt(OBJECT_SELF, "PSI_PP", nPPvalue);
+			PS_SetLocalInt(OBJECT_SELF, "PSI_PP_MAX", nPPvalue);
 			SendMessageToPC(OBJECT_SELF, "Power Point Pool:  " + IntToString(nPPvalue));
 			
 			//The following populates the player's screen with a GUI (full credit for development to MimiFearthegn)
@@ -362,7 +362,7 @@ void main()
 			DisplayGuiScreen(OBJECT_SELF, "SCREEN_SPIRITBAR_PSION", FALSE, "powerpointscreen.xml");
 			
 			//Use the below command to update your powerpoints
-			nPP = GetLocalInt(OBJECT_SELF, "PSI_PP");
+			nPP = PS_GetLocalInt(OBJECT_SELF, "PSI_PP");
 			SetGUIObjectText(OBJECT_SELF, "SCREEN_SPIRITBAR_PSION", "PPRatioTXT", -1, IntToString(nPPvalue));
 			
 			

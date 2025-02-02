@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oPC = GetEnteringObject();
@@ -9,7 +11,7 @@ void main()
 ("CourthouseEnterLock");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("CourthouseEnterLock", 1); 
+	  PS_SetGlobalInt("CourthouseEnterLock", 1); 
 	  // Only allows one clean up at a time.
 
  if(GetObjectByTag("cc_guva2") == OBJECT_INVALID)
@@ -90,6 +92,6 @@ if(GetObjectByTag("cc_judge03") == OBJECT_INVALID)
 		   object oSpawn = CreateObject (OBJECT_TYPE_CREATURE, "cc_judge03", lSpawnpoint);    
 	}
 	
-SetGlobalInt("CourthouseEnterLock", 0);
+PS_SetGlobalInt("CourthouseEnterLock", 0);
   	}
 }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ff_combat_mods"
 
 
@@ -9,13 +11,13 @@ void main(){
 	int nAction = NULL;
 
 	if (nId ==  MODE_DEF){
-		if (GetLocalInt(oEss, DEF_STATE_ON)) nAction = DEF_OFF;
+		if (PS_GetLocalInt(oEss, DEF_STATE_ON)) nAction = DEF_OFF;
 		else nAction = DEF_ON;
 	} else if (nId == MODE_STRIKE){
-		if (GetLocalInt(oEss, STRIKE_STATE_ON)) nAction = STRIKE_OFF;
+		if (PS_GetLocalInt(oEss, STRIKE_STATE_ON)) nAction = STRIKE_OFF;
 		else nAction = STRIKE_ON;
 	} else if (nId == MODE_STAFF){
-		if (GetLocalInt(oEss, STAFF_STATE_ON))  nAction = STAFF_OFF;
+		if (PS_GetLocalInt(oEss, STAFF_STATE_ON))  nAction = STAFF_OFF;
 		else nAction = STAFF_ON;
 	}
 	UpdateCombatMods(oPC, nAction);

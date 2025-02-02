@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -8,10 +10,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("FireBirdLock");
+ int iLock = PS_GetGlobalInt("FireBirdLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("FireBirdLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("FireBirdLock", 1); // Only allows one clean up at a time.
   if(GetObjectByTag("ps_fire_tiger") == OBJECT_INVALID)
   {
   	CreateObject(OBJECT_TYPE_CREATURE, "ps_fire_tiger", GetLocation(GetWaypointByTag("WP_ps_fire_tiger")));  
@@ -64,6 +66,6 @@ void main()
 		}
   }
   
-  SetGlobalInt("FireBirdLock", 0);
+  PS_SetGlobalInt("FireBirdLock", 0);
  }
 }

@@ -9,7 +9,7 @@
 void main(string sIcon)
 {
 	object oObj		= OBJECT_SELF; //GetOwnedCharacter(OBJECT_SELF); 
-	object oItem	= GetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
+	object oItem	= PS_GetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
 		sIcon		= ParseTellDescription(sIcon);
 	int nIcon		= StringToInt(sIcon);
 	
@@ -21,5 +21,5 @@ void main(string sIcon)
 		SendMessageToPC(oPC, "Icon changed. You will need to either drop and retrieve the item or transition to see the new icon.");
 	}
 	
-	DeleteLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
+	PS_DeleteLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
 }

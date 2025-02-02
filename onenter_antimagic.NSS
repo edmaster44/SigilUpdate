@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void RemoveCreatureEffects(object creature)
 {
 	effect eEffect = GetFirstEffect(creature);
@@ -70,25 +72,25 @@ void DoAntimagic(object creature)
 	// create a supernatural silence effect that is not removed by resting
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectSilence()), creature);
 	
-	SetLocalInt(creature, "ps_anti_magic_zone", 1);
+	PS_SetLocalInt(creature, "ps_anti_magic_zone", 1);
 	
 	//warlock buddy fix
-	if (GetLocalInt(creature,"HideousBlow")==TRUE)
-		SetLocalInt(creature,"HideousBlow",FALSE);
+	if (PS_GetLocalInt(creature,"HideousBlow")==TRUE)
+		PS_SetLocalInt(creature,"HideousBlow",FALSE);
 
-	if (GetLocalInt(creature,"TwentyFour")==TRUE)
-		SetLocalInt(creature,"TwentyFour",FALSE);
+	if (PS_GetLocalInt(creature,"TwentyFour")==TRUE)
+		PS_SetLocalInt(creature,"TwentyFour",FALSE);
 
-	if (GetLocalInt(creature,"Invisibility")==TRUE)
-		SetLocalInt(creature,"Invisibility",FALSE);
+	if (PS_GetLocalInt(creature,"Invisibility")==TRUE)
+		PS_SetLocalInt(creature,"Invisibility",FALSE);
 
-	if (GetLocalInt(creature,"FleeTheScene")==TRUE)
-		SetLocalInt(creature,"FleeTheScene",FALSE);
+	if (PS_GetLocalInt(creature,"FleeTheScene")==TRUE)
+		PS_SetLocalInt(creature,"FleeTheScene",FALSE);
 					
-	if (GetLocalInt(creature,"DarkForesight")==TRUE)
-		SetLocalInt(creature,"DarkForesight",FALSE);
+	if (PS_GetLocalInt(creature,"DarkForesight")==TRUE)
+		PS_SetLocalInt(creature,"DarkForesight",FALSE);
 			
-	SetLocalInt(creature,"AllreadyRunning",FALSE);
+	PS_SetLocalInt(creature,"AllreadyRunning",FALSE);
 }
 
 void main()

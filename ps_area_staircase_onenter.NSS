@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void DoSpawn(string sCreature, string sWP)
 {
@@ -14,10 +16,10 @@ void main()
 {
  object oPC = GetEnteringObject();
 
- int iLock = GetGlobalInt("StaircaseEnterLock");
+ int iLock = PS_GetGlobalInt("StaircaseEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("StaircaseEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("StaircaseEnterLock", 1); // Only allows one clean up at a time.
 
   DoSpawn("scod_x_djinniplaneswalker", "wp_staircase_alij");
   DoSpawn("scod_x_movanicdevaplaneswalker", "wp_staircase_deva");
@@ -30,6 +32,6 @@ void main()
   DoSpawn("scod_x_stairazer", "wp_staircase_azer");
  
    
-  SetGlobalInt("StaircaseEnterLock", 0);
+  PS_SetGlobalInt("StaircaseEnterLock", 0);
  }
 }

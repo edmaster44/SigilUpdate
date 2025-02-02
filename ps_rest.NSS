@@ -7,15 +7,15 @@ const int cSaveWait = 300;
 const int ASSS_FX 	= -5894;
 
 void DismissSpellHenchmen(object oPC) {
-	if (GetIsObjectValid(GetLocalObject(oPC, "simulacrum"))) {
+	if (GetIsObjectValid(PS_GetLocalObject(oPC, "simulacrum"))) {
 	
-		object oSim = GetLocalObject(oPC, "simulacrum");
+		object oSim = PS_GetLocalObject(oPC, "simulacrum");
 		RemoveHenchman(oPC, oSim);
 		DestroyObject(oSim, 0.1f);
 		
-	} if (GetIsObjectValid(GetLocalObject(oPC, "rainbow_dweomer"))) {
+	} if (GetIsObjectValid(PS_GetLocalObject(oPC, "rainbow_dweomer"))) {
 	
-		object oRain = GetLocalObject(oPC, "rainbow_dweomer");
+		object oRain = PS_GetLocalObject(oPC, "rainbow_dweomer");
 		RemoveHenchman(oPC, oRain);
 		DestroyObject(oRain, 0.1f);
 		
@@ -36,9 +36,9 @@ void AddEPForDeathDice(object oPC)
 	
 	if (GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0)
 	{
-		DeleteLocalInt(oEssence, "WildWis");
-		DeleteLocalInt(oEssence, "WildInt");
-		DeleteLocalInt(oEssence, "WildCha");	
+		PS_DeleteLocalInt(oEssence, "WildWis");
+		PS_DeleteLocalInt(oEssence, "WildInt");
+		PS_DeleteLocalInt(oEssence, "WildCha");	
 		if ((nORDER != ALIGNMENT_NEUTRAL) && (nMORAL != ALIGNMENT_NEUTRAL))
    		{	
 			SendMessageToPC(oPC, "You have taken a side in the natural order of things.");
@@ -235,7 +235,7 @@ void RestFinish(object oPC)
 
 	 TemplateRacialAdjust(oPC, oESSENCE, TRUE);
 	
-	if (GetLocalInt(oESSENCE, "TempChange") != 1)
+	if (PS_GetLocalInt(oESSENCE, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
@@ -263,7 +263,7 @@ int IsInSafeRestZone(object oPC) {
 
 	//Check if we're in a limited rest zone
 	object oArea = GetArea(oPC);
-	int nLimitedRest = GetLocalInt(oArea, "LIMITED_REST");
+	int nLimitedRest = PS_GetLocalInt(oArea, "LIMITED_REST");
 	if (!nLimitedRest)
 		return TRUE;
 

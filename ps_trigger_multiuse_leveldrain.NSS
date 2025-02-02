@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Script by Dedic8ed
 //This script is designed to be used by a placed trigger.
 
@@ -7,12 +9,12 @@ void main()
 	
 	if (!GetIsPC(oPC)) return;
 
-	int iDrain = GetLocalInt(OBJECT_SELF,"drainamount");
-	string sVFX = GetLocalString(OBJECT_SELF,"vfx");
+	int iDrain = PS_GetLocalInt(OBJECT_SELF,"drainamount");
+	string sVFX = PS_GetLocalString(OBJECT_SELF,"vfx");
 //Setting the visual effect that will apply; must have the .sef extension
 	effect eDrain = EffectNegativeLevel(iDrain, FALSE);
 //Pulls together the previous integers and strings to define the effect
-	string sFloaty = GetLocalString(OBJECT_SELF,"floaty");
+	string sFloaty = PS_GetLocalString(OBJECT_SELF,"floaty");
 //the "floaty" variable will be generated as floaty text over the head of the character pulling the lever
 	
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), oPC);

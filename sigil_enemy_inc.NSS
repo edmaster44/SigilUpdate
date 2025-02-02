@@ -33,10 +33,10 @@ void InflictDamage(object oTARGET, int nDAMAGE, int nTYPE = DAMAGE_TYPE_MAGICAL,
 void EncounterReset(object oENEMY)
 {
 	object oAREA = GetArea(oENEMY);
-	DeleteLocalInt(oAREA, "SPECIAL_PHASE");
+	PS_DeleteLocalInt(oAREA, "SPECIAL_PHASE");
 	effect eRES = EffectResurrection();
-	object oSTARTER = GetLocalObject(oENEMY, "START_NPC");
-	object oRESPAWN = GetLocalObject(oENEMY, "RESPAWN_POINT");
+	object oSTARTER = PS_GetLocalObject(oENEMY, "START_NPC");
+	object oRESPAWN = PS_GetLocalObject(oENEMY, "RESPAWN_POINT");
 	object oPC = GetFirstObjectInArea(oAREA);
 	while (oPC != OBJECT_INVALID)
 	{
@@ -60,7 +60,7 @@ void EncounterReset(object oENEMY)
 
 void EnemyCutscene(object oENEMY, float fDUR)
 {
-	SetLocalInt(oENEMY, "ENEMY_CUTSCENE", TRUE);
+	PS_SetLocalInt(oENEMY, "ENEMY_CUTSCENE", TRUE);
 	location lENEMY = GetLocation(oENEMY);
 	effect eFX = EffectCutsceneParalyze();
 	eFX = ExtraordinaryEffect(eFX);
@@ -71,7 +71,7 @@ void EnemyCutscene(object oENEMY, float fDUR)
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oANY, fDUR);
 		oANY = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lENEMY, TRUE);
 	}
-	DelayCommand(fDUR, DeleteLocalInt(oENEMY, "ENEMY_CUTSCENE"));
+	DelayCommand(fDUR, PS_DeleteLocalInt(oENEMY, "ENEMY_CUTSCENE"));
 }
 
 void EnemySpeak(object oENEMY, string sTEXT, int nVOLUME = TALKVOLUME_TALK, int nCLEAR = FALSE)
@@ -82,16 +82,16 @@ void EnemySpeak(object oENEMY, string sTEXT, int nVOLUME = TALKVOLUME_TALK, int 
 
 void EnemyReward(object oPC, object oENEMY)
 {
-	int nRANK = GetLocalInt(oENEMY, "ENEMY_RANK");
+	int nRANK = PS_GetLocalInt(oENEMY, "ENEMY_RANK");
 	if (nRANK < 1) nRANK = 1;
-	int nDIFF = GetLocalInt(oENEMY, "ENEMY_DIFF");
+	int nDIFF = PS_GetLocalInt(oENEMY, "ENEMY_DIFF");
 	if (nDIFF < 1) nDIFF = 1;
 	else if (nDIFF > 4) nDIFF = 4;
 	int nHD = GetHitDice(oENEMY);
 	int nGAP;
 	int nXP;
 	int nXP_BASE = nDIFF * nHD * nRANK * 2;
-	string sDROP = GetLocalString(oENEMY, "ENEMY_DROP");
+	string sDROP = PS_GetLocalString(oENEMY, "ENEMY_DROP");
 	int nDROP = nDIFF * nRANK;
 	int nSTACK;
 	object oDROP;

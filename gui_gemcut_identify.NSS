@@ -5,7 +5,7 @@ void main () {
 
 	object oPC = OBJECT_SELF;
 	InitializeGemstoneBox();
-	object oGem = GetLocalObject(oPC, "selected_gem");
+	object oGem = PS_GetLocalObject(oPC, "selected_gem");
 	
 	string sEffect = "gem_identify_effect";
 	location lEffect = GetLocation(GetWaypointByTag("wp_gembench_effect"));
@@ -44,7 +44,7 @@ void main () {
 	
 	SetItemIcon(oItem, GetItemIconSafe(oGem));
 	SetDescription(oItem, GetGemstoneFullDescription(oItem));
-	SetLocalObject(oPC, "selected_gem", oItem);
+	PS_SetLocalObject(oPC, "selected_gem", oItem);
 	TakeNumCraftingMaterials(oPC, GetTag(oGem), 1);
 	
 	//Redo the listbox

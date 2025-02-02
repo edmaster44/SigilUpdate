@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // shinn_sava_start
 // Original Scripter:  Shinn      Design: Shinn
@@ -22,16 +24,16 @@ void main()
 		return;	
 	}
 	
-	int PlayerSeat = GetLocalInt(OBJECT_SELF, "Player");
+	int PlayerSeat = PS_GetLocalInt(OBJECT_SELF, "Player");
 	
 	if(PlayerSeat == 0) {
 		SendMessageToPC(oPC, VAR_ERROR);
 		return;
 	}
 	
-	SetLocalObject(oHub,"PLR_"+IntToString(PlayerSeat),oPC);
-	SetLocalObject(oPC,"GAME_HUB", oHub);
-	SetLocalInt(oPC,"GAME_SEAT", PlayerSeat);
+	PS_SetLocalObject(oHub,"PLR_"+IntToString(PlayerSeat),oPC);
+	PS_SetLocalObject(oPC,"GAME_HUB", oHub);
+	PS_SetLocalInt(oPC,"GAME_SEAT", PlayerSeat);
 	
 	SetUseableFlag(OBJECT_SELF, FALSE);
 	

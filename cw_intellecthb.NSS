@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Default On Heartbeat
 //:: NW_C2_DEFAULT1
@@ -41,33 +43,33 @@ void CW_IntellectCorpse()
  while(GetIsObjectValid(o))
   {
    if(GetIsDead(o) &&//Has to be dead
-      GetLocalInt(o, "CW_INTCORPSE")==1 &&
-	  GetLocalInt(o, "CW_NODEVOUR")!=1)
+      PS_GetLocalInt(o, "CW_INTCORPSE")==1 &&
+	  PS_GetLocalInt(o, "CW_NODEVOUR")!=1)
     {
 	 AssignCommand(OBJECT_SELF, ClearAllActions(TRUE));
 	 AssignCommand(OBJECT_SELF, ActionMoveToLocation(GetLocation(o), TRUE));
-	 SetLocalString(OBJECT_SELF, "X2_SPECIAL_COMBAT_AI_SCRIPT", "cw_intellectai");
-	 SetLocalObject(OBJECT_SELF, "CW_CORPSE", o);
+	 PS_SetLocalString(OBJECT_SELF, "X2_SPECIAL_COMBAT_AI_SCRIPT", "cw_intellectai");
+	 PS_SetLocalObject(OBJECT_SELF, "CW_CORPSE", o);
 	 return;
 	}
    else if(CW_Helpless(o) &&//Has to be incapacitated
-	  GetLocalInt(o, "CW_NODEVOUR")!=1 &&
+	  PS_GetLocalInt(o, "CW_NODEVOUR")!=1 &&
 	  !GetFactionEqual(o, OBJECT_SELF))
     {
 	 AssignCommand(OBJECT_SELF, ClearAllActions(TRUE));
 	 AssignCommand(OBJECT_SELF, ActionMoveToLocation(GetLocation(o), TRUE));
-	 SetLocalString(OBJECT_SELF, "X2_SPECIAL_COMBAT_AI_SCRIPT", "cw_intellectai");
-	 SetLocalObject(OBJECT_SELF, "CW_CORPSE", o);
+	 PS_SetLocalString(OBJECT_SELF, "X2_SPECIAL_COMBAT_AI_SCRIPT", "cw_intellectai");
+	 PS_SetLocalObject(OBJECT_SELF, "CW_CORPSE", o);
 	 return;
 	}
    else//Now, if the enemy is part of our faction and not a devourer, mark them as being possible to raise
     {
 	 if(GetFactionEqual(o, OBJECT_SELF) &&
 	    GetAppearanceType(o)!=GetAppearanceType(OBJECT_SELF) &&
-		GetLocalInt(o, "CW_NODEVOUR")!=1 &&
-		GetLocalString(o, "DeathScript")!="cw_spawnintellect")
+		PS_GetLocalInt(o, "CW_NODEVOUR")!=1 &&
+		PS_GetLocalString(o, "DeathScript")!="cw_spawnintellect")
 		 {
-		  SetLocalInt(o, "CW_INTCORPSE", 1);
+		  PS_SetLocalInt(o, "CW_INTCORPSE", 1);
 		  ExecuteScript("cw_intellectrespawn", o);
 		 }
 	}
@@ -78,7 +80,7 @@ void CW_IntellectCorpse()
 
 void CW_FindCorpse()
 {
- object o=GetLocalObject(OBJECT_SELF, "CW_CORPSE");
+ object o=PS_GetLocalObject(OBJECT_SELF, "CW_CORPSE");
 
  AssignCommand(OBJECT_SELF, ClearAllActions(TRUE));
  AssignCommand(OBJECT_SELF, ActionMoveToLocation(GetLocation(o)));
@@ -99,9 +101,9 @@ void main()
     if (GetAILevel() == AI_LEVEL_VERY_LOW) return;
 	
 	
-	if(GetLocalInt(OBJECT_SELF, "CW_HBONCE")!=1)
+	if(PS_GetLocalInt(OBJECT_SELF, "CW_HBONCE")!=1)
 	 {
-	  SetLocalInt(OBJECT_SELF, "CW_HBONCE", 1);
+	  PS_SetLocalInt(OBJECT_SELF, "CW_HBONCE", 1);
 	  SetCustomHeartbeat(OBJECT_SELF, 3000);
 	 }	
 
@@ -110,11 +112,11 @@ void main()
 //      Jug_Debug("*****" + GetName(OBJECT_SELF) + " heartbeat action " + IntToString(GetCurrentAction()));
 //    }
 
-	if(!GetIsObjectValid(GetLocalObject(OBJECT_SELF, "CW_CORPSE")) || //We don't have a corpse
-	   GetLocalInt(GetLocalObject(OBJECT_SELF, "CW_CORPSE"), "CW_NODEVOUR")==1)//Or the corpse has been devoured
+	if(!GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, "CW_CORPSE")) || //We don't have a corpse
+	   PS_GetLocalInt(PS_GetLocalObject(OBJECT_SELF, "CW_CORPSE"), "CW_NODEVOUR")==1)//Or the corpse has been devoured
 	 {
-	  DeleteLocalString(OBJECT_SELF, "X2_SPECIAL_COMBAT_AI_SCRIPT");
-	  DeleteLocalObject(OBJECT_SELF, "CW_CORPSE");
+	  PS_DeleteLocalString(OBJECT_SELF, "X2_SPECIAL_COMBAT_AI_SCRIPT");
+	  PS_DeleteLocalObject(OBJECT_SELF, "CW_CORPSE");
 	 }
 	else//We do!
 	 {
@@ -157,14 +159,14 @@ void main()
         {
             HenchDetermineSpecialBehavior();
         }
-        else if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        else if (PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
             // continue to move to target
             MoveToLastSeenOrHeard();
         }
         else
         {
-            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
             if (DoStealthAndWander())
             {
                 // nothing to do here

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -8,14 +10,14 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = GetGlobalInt("AstralGithIntLock");
+ int iLock = PS_GetGlobalInt("AstralGithIntLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("AstralGithIntLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("AstralGithIntLock", 1); // Only allows one clean up at a time.
 
   //DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  SetGlobalInt("AstralGithIntLock", 0);
+  PS_SetGlobalInt("AstralGithIntLock", 0);
  }
  
  // Initialize traps on chests in area of do not already exist

@@ -66,7 +66,7 @@ void main()
 //Determine validity of Target and then apply effects.
 	if (GetIsObjectValid(oTarget))
 	{
-		if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 3)
+		if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 3)
 		{
 			SendMessageToPC(OBJECT_SELF, "You find that it is impossible to cast water-based spells on this plane!");
 			SetModuleOverrideSpellScriptFinished();

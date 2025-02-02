@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Associate: On Dialogue
 //:: gb_assoc_conv
@@ -33,7 +35,7 @@ void main()
 			HenchGetDefSettings();
             // * if in XP2, use an alternative dialog file
             string sDialog = "";
-            if (GetLocalInt(GetModule(), "X2_L_XP2") == 1)
+            if (PS_GetLocalInt(GetModule(), "X2_L_XP2") == 1)
             {
                 sDialog = "x2_associate";
             }

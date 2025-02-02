@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////////
 //:: dr_quiet_conv
 /*
@@ -25,10 +27,10 @@ void main()
     }
 
     // notify walkwaypoints that we've been stopped and need to restart.
-    SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
+    PS_SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
 	
 	//Gets any conversation set as variable previously
-	string sConversation = GetLocalString(OBJECT_SELF, "DEFAULT_CONVERSATION");
+	string sConversation = PS_GetLocalString(OBJECT_SELF, "DEFAULT_CONVERSATION");
 
     // See if what we just 'heard' matches any of our
     // predefined patterns
@@ -65,7 +67,7 @@ void main()
         // Determine the intruder if any
         if(nMatch == 4)
         {
-            oIntruder = GetLocalObject(oShouter, "NW_BLOCKER_INTRUDER");
+            oIntruder = PS_GetLocalObject(oShouter, "NW_BLOCKER_INTRUDER");
         }
         else if (nMatch == 5)
         {

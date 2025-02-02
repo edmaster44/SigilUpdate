@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ginc_crafting"
 #include "x2_inc_itemprop"
 #include "x2_inc_craft"
@@ -106,11 +108,11 @@ string GetFireDescription(object oItem)
 //pull it all together!
 void main ()
 {
-	if (GetLocalInt(OBJECT_SELF, "filled") == 1)
+	if (PS_GetLocalInt(OBJECT_SELF, "filled") == 1)
 		return;
 
 	object oChest = GetNearestObjectByTag("chest_"+GetTag(OBJECT_SELF));
-	int maxItems = GetLocalInt(OBJECT_SELF, "max_items");
+	int maxItems = PS_GetLocalInt(OBJECT_SELF, "max_items");
 	object oItem = GetFirstItemInInventory(oChest);
 	int count = 0;
 	int numCopied = 0;
@@ -133,5 +135,5 @@ void main ()
 		count++;
 		oItem = GetNextItemInInventory(oChest);
 	}
-	SetLocalInt(OBJECT_SELF, "filled", 1);
+	PS_SetLocalInt(OBJECT_SELF, "filled", 1);
 }

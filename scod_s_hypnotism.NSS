@@ -75,7 +75,7 @@ void main() {
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
 					
 						//Make sure being damaged breaks the spell
-						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
+						PS_SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
 					
 	                    maxCreatures--;
 	                }

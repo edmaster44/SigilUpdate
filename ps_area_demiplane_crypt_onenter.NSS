@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -10,14 +12,14 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("DPCREnterLock");
+ int iLock = PS_GetGlobalInt("DPCREnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("DPCREnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("DPCREnterLock", 1); // Only allows one clean up at a time.
 
 //  DelayCommand(300.0, ExecuteScript("ps_chest_treasure",oPC));
     
-  SetGlobalInt("DPCREnterLock", 0);
+  PS_SetGlobalInt("DPCREnterLock", 0);
  }
  
 }

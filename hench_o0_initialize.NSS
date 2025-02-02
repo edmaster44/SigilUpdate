@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -338,7 +340,7 @@ void HenchQuickCastBuffs(int bMediumDuration)
         {
             break;
         }
-        oFriend = GetLocalObject(oFriend, sAllySeen);
+        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
     }
     TryCastInstantBuffFeat(FEAT_AURA_OF_COURAGE, SPELLABILITY_AURA_OF_COURAGE);
     TryCastInstantBuffFeat(1805, SPELLABILITY_PROTECTIVE_AURA);

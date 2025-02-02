@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void SpawnOrbsForGroup(object oHolder, string sButton) {
 
 	string sFire = "pl_mechanus_fire";
@@ -11,7 +13,7 @@ void SpawnOrbsForGroup(object oHolder, string sButton) {
 		string sWP = "wp_mechanus_"+sButton+IntToString(n);
 		object oWP = GetWaypointByTag(sWP);
 		string sVar = sButton+IntToString(n);
-		int nElement = GetLocalInt(oHolder, sVar);
+		int nElement = PS_GetLocalInt(oHolder, sVar);
 		if (nElement == 0) {
 			CreateObject(OBJECT_TYPE_PLACEABLE, sFire, GetLocation(oWP));
 		} else if (nElement == 1) {
@@ -37,13 +39,13 @@ void SpawnHints(object oHolder) {
 
 void SetButtonValues(object oHolder, int nStarter, string sButton) {
 
-	SetLocalInt(oHolder, sButton+"1", nStarter);
+	PS_SetLocalInt(oHolder, sButton+"1", nStarter);
 	int nRand = Random(4);
-	SetLocalInt(oHolder, sButton+"2", nRand);
+	PS_SetLocalInt(oHolder, sButton+"2", nRand);
 	nRand = Random(4);
-	SetLocalInt(oHolder, sButton+"3", nRand);
+	PS_SetLocalInt(oHolder, sButton+"3", nRand);
 	nRand = Random(4);
-	SetLocalInt(oHolder, sButton+"4", nRand);
+	PS_SetLocalInt(oHolder, sButton+"4", nRand);
 	
 }
 
@@ -51,9 +53,9 @@ void main () {
 	
 	object oHolder = GetNearestObjectByTag("pl_mechanus_controlpanel");
 	
-	if (GetLocalInt(oHolder, "buttonsSet") > 0)
+	if (PS_GetLocalInt(oHolder, "buttonsSet") > 0)
 		return;
-	SetLocalInt(oHolder, "buttonsSet", 1);
+	PS_SetLocalInt(oHolder, "buttonsSet", 1);
 	
 	//Set buttons
 	//Values are sequential so that they are never repeated

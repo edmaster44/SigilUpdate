@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // i_ps_creatureeffect_ac
 /*
 Created 2012 by Dedic8ed for the Sigic: City of Doors persistant world.
@@ -10,7 +12,7 @@ void main()
 {
     object oPC  = GetItemActivator();
 	object oItem = GetItemActivated();
-	string sEffect = GetLocalString(oItem,"Effect");
+	string sEffect = PS_GetLocalString(oItem,"Effect");
 	effect eEffect = EffectNWN2SpecialEffectFile(sEffect, oPC);
 
  	//Your code goes here

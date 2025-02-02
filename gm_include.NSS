@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Gambling Include
 
 // Amount of gold in the house at the start of the server.
@@ -26,12 +28,12 @@ object oMod=GetModule();
 
 void SetHouse(int nAmt)
 {
-    SetLocalInt(oMod,"HOUSETOTAL",nAmt);
+    PS_SetLocalInt(oMod,"HOUSETOTAL",nAmt);
 }
 
 int GetHouse()
 {
-    return GetLocalInt(oMod,"HOUSETOTAL");
+    return PS_GetLocalInt(oMod,"HOUSETOTAL");
 }
 
 int CheckPayout(int nAmt)

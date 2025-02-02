@@ -30,8 +30,8 @@ int GetAppropriateSkill(object oPC) {
 
 void SpawnPlant(object oTrigger, object oPC) {
 
-	string sWP = GetLocalString(oTrigger, "PlaceToSpawn");
-	string sPlant = GetLocalString(oTrigger, "PlantToSpawn");
+	string sWP = PS_GetLocalString(oTrigger, "PlaceToSpawn");
+	string sPlant = PS_GetLocalString(oTrigger, "PlantToSpawn");
 	
 	object oWP = GetWaypointByTag(sWP);
 	if (!GetIsObjectValid(oWP))
@@ -59,13 +59,13 @@ void main() {
 	if (d100() < 75) //don't have all triggers fire all the time, randomize
 		return;
 		
-	string sPlant = GetLocalString(OBJECT_SELF, "PlantToSpawn");
+	string sPlant = PS_GetLocalString(OBJECT_SELF, "PlantToSpawn");
 	object nearbyPlant = GetNearestObjectByTag(sPlant);
 	if (GetIsObjectValid(nearbyPlant) && GetDistanceBetween(OBJECT_SELF, nearbyPlant) < 20.0f) //another plant too close!
 		return;
 
 	int nSkill = GetAppropriateSkill(oPC);
-	int nDC = GetLocalInt(OBJECT_SELF, "DC");
+	int nDC = PS_GetLocalInt(OBJECT_SELF, "DC");
 	
 	if (nSkill != SKILL_SURVIVAL) //Spot checks have a higher DC
 		nDC += 5;

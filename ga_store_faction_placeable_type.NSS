@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -7,5 +9,5 @@
 void main(string sTemplate)
 {
 	object oPC = OBJECT_SELF;
-	SetLocalString(oPC, "FACTION_PLACEABLE", sTemplate);
+	PS_SetLocalString(oPC, "FACTION_PLACEABLE", sTemplate);
 }

@@ -37,7 +37,7 @@ void main()
 
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
-	int nPP = GetLocalInt(OBJECT_SELF, "PSI_PP");
+	int nPP = PS_GetLocalInt(OBJECT_SELF, "PSI_PP");
 	int nPPCost;
 	int nManifesterTier = GetLevelByClass(90, OBJECT_SELF);
     int nCasterLevel = GetLevelByClass(90, OBJECT_SELF);
@@ -77,7 +77,7 @@ void main()
 			nPPCost = 17;
 			break;}
 	}
-	if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 	{
 		nDuration = nDuration * 2;
 		nPPCost = nPPCost + 2;
@@ -89,7 +89,7 @@ void main()
     if (nPP > nPPCost || nPP == nPPCost)
 	{
 	    ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eSummon, GetSpellTargetLocation(), HoursToSeconds(nDuration));
-		SetLocalInt(OBJECT_SELF, "PSI_PP", nPPFinal);
+		PS_SetLocalInt(OBJECT_SELF, "PSI_PP", nPPFinal);
 		SendMessageToPC(OBJECT_SELF, "Power Points Remaining:  " + IntToString(nPPFinal));
 		SetGUIObjectText(OBJECT_SELF, "SCREEN_SPIRITBAR_PSION", "PPRatioTXT", -1, IntToString(nPPFinal));
 		

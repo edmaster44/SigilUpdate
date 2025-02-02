@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("HallrecordsEnterLock");
+ int iLock = PS_GetGlobalInt("HallrecordsEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("HallrecordsEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("HallrecordsEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("fated_lobby_attendant") == OBJECT_INVALID)
   {
@@ -187,6 +189,6 @@ void main()
   }
   
   
-  SetGlobalInt("HallrecordsEnterLock", 0);
+  PS_SetGlobalInt("HallrecordsEnterLock", 0);
  }
 }

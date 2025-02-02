@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Script by Dedic8ed
 //This script is designed to be used by the "usable lever" placeable. However, it should be compatible
 //with any other usable placeable in the game; however, the animation will not occur unless it is a placeable that
@@ -13,29 +15,29 @@ void main()
 	if (!GetIsPC(oPC)) return;
 	
 //the "open" variable will open a door with this tag 
-	string sOpen = GetLocalString(OBJECT_SELF,"open");
+	string sOpen = PS_GetLocalString(OBJECT_SELF,"open");
 //the "open2" variable will open a door with this tag
-	string sOpen2 = GetLocalString(OBJECT_SELF, "open2");
+	string sOpen2 = PS_GetLocalString(OBJECT_SELF, "open2");
 //the "close" variable will close a door with this tag
-	string sClose = GetLocalString(OBJECT_SELF,"close");
+	string sClose = PS_GetLocalString(OBJECT_SELF,"close");
 // the "close2" variable will close a door with this tag
-	string sClose2 = GetLocalString(OBJECT_SELF, "close2");
+	string sClose2 = PS_GetLocalString(OBJECT_SELF, "close2");
 //the "sound" variable will play the sound with this name
-	string sSound = GetLocalString(OBJECT_SELF,"sound");
+	string sSound = PS_GetLocalString(OBJECT_SELF,"sound");
 //the "soundremote" variable will cause the sound object with this tag to play
-	string sSoundRemote = GetLocalString(OBJECT_SELF,"soundremote");
+	string sSoundRemote = PS_GetLocalString(OBJECT_SELF,"soundremote");
 //the "vfx" variable will apply this visual effect to the lever's puller; ; the full filename (xxxx.sef) must be used
-	string sVFX = GetLocalString(OBJECT_SELF,"vfx");
+	string sVFX = PS_GetLocalString(OBJECT_SELF,"vfx");
 //the "vfxremote variable will apply this visual effect to a remote waypoint; ; the full filename (xxxx.sef) must be used
-	string sVFXRemote = GetLocalString(OBJECT_SELF,"vfxremote");
+	string sVFXRemote = PS_GetLocalString(OBJECT_SELF,"vfxremote");
 //the "destroy" variable will destroy a placeable with this tag; the placeable must NOT be set to static
-	string sDestroy = GetLocalString(OBJECT_SELF,"destroy");
+	string sDestroy = PS_GetLocalString(OBJECT_SELF,"destroy");
 //the "waypoint" variable will set the default waypoint for functions
-	string sWaypoint = GetLocalString(OBJECT_SELF,"waypoint");
+	string sWaypoint = PS_GetLocalString(OBJECT_SELF,"waypoint");
 //the "teleport" variable is an integer. 1=teleport is activated, 0=no teleport
-	int iTeleport = GetLocalInt(OBJECT_SELF,"teleport");
+	int iTeleport = PS_GetLocalInt(OBJECT_SELF,"teleport");
 //the "floaty" variable will be generated as floaty text over the head of the character pulling the lever
-	string sFloaty = GetLocalString(OBJECT_SELF,"floaty");
+	string sFloaty = PS_GetLocalString(OBJECT_SELF,"floaty");
 	
 //Definition
 	object oDoorOpen;

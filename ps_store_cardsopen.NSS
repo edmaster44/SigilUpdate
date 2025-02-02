@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*******************************************************/
 // A copy of ga_open_store
 // that populates the gemstone store with common
@@ -19,19 +21,19 @@ void main(int nMarkUp, int nMarkDown)
 	}
 	
 	int nCurrentTime = PS_GetTime();
-	int nTimestamp = GetLocalInt(oStore, "LastPopulated");
-	int nPopulated = GetLocalInt(oStore, "IsPopulated");
+	int nTimestamp = PS_GetLocalInt(oStore, "LastPopulated");
+	int nPopulated = PS_GetLocalInt(oStore, "IsPopulated");
 	
 	if (nTimestamp > 0 && nCurrentTime-nTimestamp > CLEAN_TIME) {
 		ClearStore(oStore);
-		SetLocalInt(oStore, "IsPopulated", 0);
+		PS_SetLocalInt(oStore, "IsPopulated", 0);
 	} 
 	
-	nPopulated = GetLocalInt(oStore, "IsPopulated");
+	nPopulated = PS_GetLocalInt(oStore, "IsPopulated");
 	if (!nPopulated) {
 		PopulateCardStore(oStore);
-		SetLocalInt(oStore, "LastPopulated", nCurrentTime);
-		SetLocalInt(oStore, "IsPopulated", 1);
+		PS_SetLocalInt(oStore, "LastPopulated", nCurrentTime);
+		PS_SetLocalInt(oStore, "IsPopulated", 1);
 	}
 	
 	int iPCAppraise = FloatToInt(IntToFloat(GetSkillRank(SKILL_APPRAISE, oPC)) / APPRAISE_DIVISOR);

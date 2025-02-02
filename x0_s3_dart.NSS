@@ -26,7 +26,7 @@ void main()
         nCasterLevel = GetReflexSavingThrow( OBJECT_SELF );
 		if ( nCasterLevel <= 0 )
 		{
-			nCasterLevel = GetLocalInt( OBJECT_SELF, "NWN2_PROJECTILE_TRAP_CASTER_LEVEL" );
+			nCasterLevel = PS_GetLocalInt( OBJECT_SELF, "NWN2_PROJECTILE_TRAP_CASTER_LEVEL" );
 		}
     }
 	else nCasterLevel = PS_GetCasterLevel( OBJECT_SELF );

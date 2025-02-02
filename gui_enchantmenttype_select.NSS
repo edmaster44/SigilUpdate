@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_newenchanting"
 
 void main (string sNum) {
@@ -5,7 +7,7 @@ void main (string sNum) {
 	object oPC = OBJECT_SELF;
 	
 	//Clear Enchantment. Picking new type here
-	DeleteLocalInt(oPC, "EnchantmentToApply");
+	PS_DeleteLocalInt(oPC, "EnchantmentToApply");
 	//Clear Requirement List
 	SetGUIObjectText(oPC, sEnchantingScreen, "ENCHANTING_ITEM_REQUIREMENTS", -1, "");
 	

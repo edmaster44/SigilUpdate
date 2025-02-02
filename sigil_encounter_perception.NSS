@@ -1,8 +1,10 @@
+#include "ff_safevar"
+
 void SpawnProperGroup(object oSPAWN, location lSPAWN)
 {
-	if (GetLocalInt(oSPAWN, "SPAWNED") == TRUE) return;
-	SetLocalInt(oSPAWN, "SPAWNED", TRUE);
-	DelayCommand(1.0, DeleteLocalInt(oSPAWN, "SPAWNED")); //To avoid double spawns.
+	if (PS_GetLocalInt(oSPAWN, "SPAWNED") == TRUE) return;
+	PS_SetLocalInt(oSPAWN, "SPAWNED", TRUE);
+	DelayCommand(1.0, PS_DeleteLocalInt(oSPAWN, "SPAWNED")); //To avoid double spawns.
 	string sENEMY;
 	object oENEMY;
 	int nSPAWN;
@@ -10,11 +12,11 @@ void SpawnProperGroup(object oSPAWN, location lSPAWN)
 	int nCOUNT = 1;
 	while (nCOUNT < 5)
 	{
-		nENEMY = GetLocalInt(oSPAWN, "ENEMY_QTY_" + IntToString(nCOUNT));
+		nENEMY = PS_GetLocalInt(oSPAWN, "ENEMY_QTY_" + IntToString(nCOUNT));
 		if (nENEMY < 1) return;
 		if (nENEMY > 10) nENEMY = 10; //Sanity Check
 		nSPAWN = 0;
-		sENEMY = GetLocalString(oSPAWN, "ENEMY_TAG_" + IntToString(nCOUNT));
+		sENEMY = PS_GetLocalString(oSPAWN, "ENEMY_TAG_" + IntToString(nCOUNT));
 		while (nSPAWN < nENEMY)
 		{
 			oENEMY = CreateObject(OBJECT_TYPE_CREATURE, sENEMY, lSPAWN);
@@ -44,12 +46,12 @@ void main()
 		oNPC = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_VAST, lSPAWN);
 	}
 	if (GetIsPC(oPC) == FALSE) return;
-	float fRESPAWN = GetLocalFloat(oSPAWN, "RESPAWN");
+	float fRESPAWN = PS_GetLocalFloat(oSPAWN, "RESPAWN");
 	if (fRESPAWN <= 0.0f) fRESPAWN = 300.0;
-	int nDIFF = GetLocalInt(oPC, "DIFF");
+	int nDIFF = PS_GetLocalInt(oPC, "DIFF");
 	if (nDIFF < 1) nDIFF = 1;
 	else if (nDIFF > 4) nDIFF = 4;
-	SetLocalInt(oSPAWN, "ENEMY_DIFF", nDIFF);
+	PS_SetLocalInt(oSPAWN, "ENEMY_DIFF", nDIFF);
 	DelayCommand(0.0f, SpawnProperGroup(oSPAWN, lSPAWN));
 	DelayCommand(fRESPAWN, SetScriptHidden(oSPAWN, FALSE));	
 }

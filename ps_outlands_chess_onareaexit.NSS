@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Cleanup on area exit if there are no other PCs in the area
 
 // Check if there are other PC's in the area.
@@ -27,8 +29,8 @@ void main()
 	AssignCommand(oExitDoor, ActionCloseDoor(oExitDoor));
 	SetLocked(oEntryDoor, TRUE);
 	SetLocked(oExitDoor, TRUE);
-	SetLocalInt(oEntryDoor, "GameStarted", FALSE);
-	SetLocalInt(oEntryDoor, "FightStarted", FALSE);
+	PS_SetLocalInt(oEntryDoor, "GameStarted", FALSE);
+	PS_SetLocalInt(oEntryDoor, "FightStarted", FALSE);
 	
 	// bit of a clean up just in case some other player takes the quest before it cleans up.
 	object oCurrentArea = GetArea(OBJECT_SELF);

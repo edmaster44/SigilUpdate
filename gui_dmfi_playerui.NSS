@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_playerui - DM Friendly Initiative - GUI script for Player UI
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -25,7 +27,7 @@ void main(string sInput, string sInput2)
 	if (GetStringLeft(sInput, 1)!=".")
 	{  // ONLY options for players are code to run commands OR change names
 	   // so if we aren't running a command, we are changing a name.
-		object oRename = GetLocalObject(oTool, DMFI_TARGET);
+		object oRename = PS_GetLocalObject(oTool, DMFI_TARGET);
 		
 		if (GetObjectType(oRename)==OBJECT_TYPE_CREATURE)
 		{
@@ -36,7 +38,7 @@ void main(string sInput, string sInput2)
 		}
 		else
 		{
-			oRef = GetLocalObject(oRename, DMFI_INVENTORY_TARGET);
+			oRef = PS_GetLocalObject(oRename, DMFI_INVENTORY_TARGET);
 			SetFirstName(oRef, sInput);
 			SetFirstName(oRename, sInput);
 			SendText(oPC, TXT_RENAME_ITM_SUCCESS, TRUE, COLOR_GREEN);	
@@ -52,13 +54,13 @@ void main(string sInput, string sInput2)
 		
 		if (sInput==DMFI_UI_ABILITY)
 		{		
-			SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_ABILITY);
+			PS_SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_ABILITY);
 			DisplayGuiScreen(oPC, SCREEN_DMFI_LIST, TRUE, "dmfilist.xml");
 			SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LISTTITLE, -1, TXT_CHOOSE_ABILITY);
 			n=0;
 			while (n<10)
 			{
-				sText = GetLocalString(oTool, LIST_PREFIX + PG_LIST_ABILITY + "." + IntToString(n));
+				sText = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_ABILITY + "." + IntToString(n));
 				SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LIST + IntToString(n+1), -1, sText);
 				n++;
 			}		
@@ -70,7 +72,7 @@ void main(string sInput, string sInput2)
 			n = 0;
 			while (n<28)
 			{
-				sText = GetLocalString(oTool, LIST_PREFIX + PG_LIST_SKILL + "." + IntToString(n));
+				sText = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_SKILL + "." + IntToString(n));
 				SetGUIObjectText(oPC, SCREEN_DMFI_SKILLS, "skill"+IntToString(n+1), -1, sText);				
 				n++;
 			}
@@ -80,7 +82,7 @@ void main(string sInput, string sInput2)
 		}
 		else if (sInput==DMFI_UI_LANGUAGE)	
 		{		
-			SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_LANG);
+			PS_SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_LANG);
 			DeleteList(PG_LIST_LANGUAGE, oTool);
             DMFI_BuildLanguageList(oTool, oPC);
 		
@@ -89,7 +91,7 @@ void main(string sInput, string sInput2)
 			n=0;
 			while (n<=20)
 			{
-				sText = GetLocalString(oTool, LIST_PREFIX + PG_LIST_LANGUAGE + "." + IntToString(n));
+				sText = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_LANGUAGE + "." + IntToString(n));
 				if (sText!="") 
 					SetGUIObjectText(oPC, SCREEN_DMFI_LIST_LANG, DMFI_UI_LIST  +IntToString(n+1), -1, sText);
 				else
@@ -99,7 +101,7 @@ void main(string sInput, string sInput2)
 		}
 		else if (sInput==DMFI_UI_DICE)
 		{
-			SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_NUMBER);	
+			PS_SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_NUMBER);	
 			DisplayGuiScreen(oPC, SCREEN_DMFI_LIST, TRUE, "dmfilist.xml");
 			SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LISTTITLE, -1, TXT_CHOOSE_NUMBER);
 			n=1;

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Default On Heartbeat
 //:: NW_C2_DEFAULT1
@@ -21,7 +23,7 @@ void main()
 	//Check if we've been commanded to follow someone (i.e. fake summon)
 	//If so, then make sure we stay in the same area
 	//Should allow enough freedom that they can go fight; unlike with mimi_npc_heartbeat setup
-	object playerTag = GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
+	object playerTag = PS_GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
 	if (GetIsObjectValid(playerTag))
 	{
 		if (GetArea(playerTag) != GetArea(OBJECT_SELF)) {
@@ -32,12 +34,12 @@ void main()
 			ActionForceFollowObject(playerTag);
 		}
 		return;
-	} else if (GetLocalInt(OBJECT_SELF, "IS_SUMMONED") > 0) {
+	} else if (PS_GetLocalInt(OBJECT_SELF, "IS_SUMMONED") > 0) {
 		DestroyObject(OBJECT_SELF, 0.2f);
 	}
 	
 	//Script hook
-	string sHBScript = GetLocalString(OBJECT_SELF, "HeartbeatScript");
+	string sHBScript = PS_GetLocalString(OBJECT_SELF, "HeartbeatScript");
 	if (sHBScript != "")
 		ExecuteScript(sHBScript, OBJECT_SELF);
 
@@ -72,7 +74,7 @@ void main()
     else if (GetHenchOption(HENCH_OPTION_DISABLE_HB_DETECTION) ||
 		!GetIsObjectValid(GetNearestSeenOrHeardEnemyNotDead(GetHenchOption(HENCH_OPTION_DISABLE_HB_HEARING))))
     {
-        if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        if (PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
             // continue to move to target
 	        if (GetBehaviorState(NW_FLAG_BEHAVIOR_SPECIAL))
@@ -87,7 +89,7 @@ void main()
         else
         {
         	CleanCombatVars();
-            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
             if (DoStealthAndWander())
             {
                 // nothing to do here

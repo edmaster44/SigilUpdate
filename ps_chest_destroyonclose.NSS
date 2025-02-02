@@ -1,11 +1,13 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oChest = OBJECT_SELF;
 	object oItem = GetFirstItemInInventory(oChest);
 	
 	//If the looting was denied, don't destroy!
-	if (GetLocalInt(OBJECT_SELF, "LOOT_CANCELED") > 0) {
-		SetLocalInt(OBJECT_SELF, "LOOT_CANCELED", 0);
+	if (PS_GetLocalInt(OBJECT_SELF, "LOOT_CANCELED") > 0) {
+		PS_SetLocalInt(OBJECT_SELF, "LOOT_CANCELED", 0);
 		return;
 	}
 	

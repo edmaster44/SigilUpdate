@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main() {
 
@@ -6,9 +8,9 @@ void main() {
 	string sDescrip = "";
 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	
-	int iLock = GetGlobalInt("OutlandsCloverbrookEnterLock");
+	int iLock = PS_GetGlobalInt("OutlandsCloverbrookEnterLock");
 	if ( iLock == 0 ) {
-		SetGlobalInt("OutlandsCloverbrookEnterLock", 1); // Only allows one clean up at a time.
+		PS_SetGlobalInt("OutlandsCloverbrookEnterLock", 1); // Only allows one clean up at a time.
 		
 		if(GetObjectByTag("ps_npc_dori") == OBJECT_INVALID) { 
 			object oWP = GetWaypointByTag("wp_ps_npc_dori");
@@ -39,6 +41,6 @@ void main() {
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cloverbrook_sensateguard", GetLocation(oWP), FALSE, "cloverbrook_sensateguard_2");  
 		}
 		   
-		SetGlobalInt("OutlandsCloverbrookEnterLock", 0);
+		PS_SetGlobalInt("OutlandsCloverbrookEnterLock", 0);
 	}
 }

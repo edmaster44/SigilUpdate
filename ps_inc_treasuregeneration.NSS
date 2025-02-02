@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //***************************************************
 //Handles new loot generation
 //Created 11-2-18 - Mimi Fearthegn
@@ -50,7 +52,7 @@ void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTrea
 
 int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
 	object oHolder = GetModule();
-	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
+	int nMax = PS_GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
 	if (nMax > 0)
 		return nMax;
 		
@@ -67,7 +69,7 @@ int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTab
 		nMax = StringToInt(SQLGetData(1));
 	}
 	
-	SetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel), nMax);
+	PS_SetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel), nMax);
 	return nMax;
 }
 
@@ -428,8 +430,8 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 //creature_drop_chance = drop chance
 void CreateCreatureDrop(object oCreature) {
 
-	int nChance = GetLocalInt(oCreature, "creature_drop_chance");
-	string sItem = GetLocalString(oCreature, "creature_drop");
+	int nChance = PS_GetLocalInt(oCreature, "creature_drop_chance");
+	string sItem = PS_GetLocalString(oCreature, "creature_drop");
 	object oItem;
 	
 	if (d100() < nChance) {
@@ -904,7 +906,7 @@ int PickCRFromTreasureLevel(int nTreasureLevel) {
 void GenerateQuestRewardOnTarget(object oTarget, int nTreasureLevel, int allowRandom = FALSE) {
 
 	int nCR = PickCRFromTreasureLevel(nTreasureLevel);
-	SetLocalInt(oTarget, "QUEST_CR", nCR);
+	PS_SetLocalInt(oTarget, "QUEST_CR", nCR);
 
 	//Default to standard system for lower level quests
 	if (nTreasureLevel <= TREASURE_EPIC) {
@@ -932,6 +934,6 @@ void GenerateQuestRewardOnTarget(object oTarget, int nTreasureLevel, int allowRa
 			CreateTreasureItemOnTarget(sItem, oTarget, 1);
 	}
 	
-	DelayCommand(0.2f, DeleteLocalInt(oTarget, "QUEST_CR"));
+	DelayCommand(0.2f, PS_DeleteLocalInt(oTarget, "QUEST_CR"));
 
 }

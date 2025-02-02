@@ -33,7 +33,7 @@ void main()
     int nMetaMagic   = GetMetaMagicFeat();
 	
 	object oTarget = GetSpellTargetObject();
-	if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 3)
+	if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 3)
 	{
 		SendMessageToPC(OBJECT_SELF, "You find that it is impossible to cast water-based spells on this plane!");
 		SetModuleOverrideSpellScriptFinished();

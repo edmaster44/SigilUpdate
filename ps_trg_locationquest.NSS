@@ -3,16 +3,16 @@
 
 int GetHasJournalEntry(object oPC, string sQuestTag, string sCheck)
 {
-    int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
+    int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
  	return (CompareInts(iQuestEntry, sCheck));
 }
 
 void main () {
 
 	object oPC = GetEnteringObject();
-	string sLocation = GetLocalString(OBJECT_SELF, "loc_place");
-	int nMax = GetLocalInt(OBJECT_SELF, "loc_max");
-	string sQuestName = GetLocalString(OBJECT_SELF, "loc_name");
+	string sLocation = PS_GetLocalString(OBJECT_SELF, "loc_place");
+	int nMax = PS_GetLocalInt(OBJECT_SELF, "loc_max");
+	string sQuestName = PS_GetLocalString(OBJECT_SELF, "loc_name");
 	
 	if (!GetIsPC(oPC))
 		return;
@@ -20,12 +20,12 @@ void main () {
 	if (GetHasJournalEntry(oPC, sQuestName, "=0"))
 		return;
 		
-	if (GetLocalInt(OBJECT_SELF, GetName(oPC)) > 0)
+	if (PS_GetLocalInt(OBJECT_SELF, GetName(oPC)) > 0)
 		return;
 	
 	SendMessageToPC(oPC, "You have found "+sLocation+".");
-	SetLocalInt(oPC, sQuestName, GetLocalInt(oPC, sQuestName)+1);
-	if (GetLocalInt(oPC, sQuestName) >= nMax) {
+	PS_SetLocalInt(oPC, sQuestName, PS_GetLocalInt(oPC, sQuestName)+1);
+	if (PS_GetLocalInt(oPC, sQuestName) >= nMax) {
 		AddJournalQuestEntry(sQuestName, 2, oPC);
 		int nXP = 50*nMax;
 		SendMessageToPC(oPC, "You've found everything on the map. Congratulations!");
@@ -35,5 +35,5 @@ void main () {
 	}
 	
 	
-	SetLocalInt(OBJECT_SELF, GetName(oPC), 1);
+	PS_SetLocalInt(OBJECT_SELF, GetName(oPC), 1);
 }

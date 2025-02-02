@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oPC = GetEnteringObject();
@@ -9,7 +11,7 @@ void main()
 ("PoAPalaceEnterLock");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("PoAPalaceEnterLock", 1); 
+	  PS_SetGlobalInt("PoAPalaceEnterLock", 1); 
 	  // Only allows one clean up at a time.
 
  if(GetObjectByTag("poa_npc60") == OBJECT_INVALID)
@@ -68,6 +70,6 @@ void main()
 
 
 
-SetGlobalInt("PoAPalaceEnterLock", 0);
+PS_SetGlobalInt("PoAPalaceEnterLock", 0);
   	}
 }

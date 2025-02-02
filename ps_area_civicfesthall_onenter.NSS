@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("CivicEnterLock");
+ int iLock = PS_GetGlobalInt("CivicEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("CivicEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("CivicEnterLock", 1); // Only allows one clean up at a time.
 
   //Item Cloner Guy
   if(GetObjectByTag("festhallnpc_itemcloner") == OBJECT_INVALID) {
@@ -108,6 +110,6 @@ void main()
    	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "festhallnpc_model_female", lSpawnpoint, FALSE, "festhallnpc_model");    
   } 
   
-  SetGlobalInt("CivicEnterLock", 0);
+  PS_SetGlobalInt("CivicEnterLock", 0);
  }
 }

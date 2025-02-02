@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // i_ps_it_factionitem_drop_eq
 /*
 Created by Dedic8ed for the Sigil:City of Doors persistant world
@@ -33,7 +35,7 @@ void main()
 {
     object oPC      = GetPCItemLastEquippedBy();
     object oItem    = GetPCItemLastEquipped();
-	int nObjfaction	= GetLocalInt(oItem, "Faction");
+	int nObjfaction	= PS_GetLocalInt(oItem, "Faction");
  	int nFaction = GetFaction(oPC);
 	
 	if(nFaction != nObjfaction) {

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "enft_freeze_rlf"
 #include "enft_cnsts"
 #include "nw_i0_spells"
@@ -14,11 +16,11 @@ void main()
 
 
     // Check to make sure still in freeze region
-    if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 1)
+    if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 1)
     {
-        SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", 0);
-        SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", 0);
-        SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", 0);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
         SendMessageToPC(OBJECT_SELF, "You feel relief at long last.");
 
         // Remove frozen effect if applied
@@ -31,14 +33,14 @@ void main()
     if(freezeRelief(OBJECT_SELF))
     {
         // Throws are set back to 0 because body temperature has returned to normal.
-        if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > 0)
+        if(PS_GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > 0)
         {
             SendMessageToPC(OBJECT_SELF, "You feel relief at long last.");
             SendMessageToPC(OBJECT_SELF, "Subdual damage:  " + IntToString(0));
         }
-        SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", 0);
-        SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", 0);
-        SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", 0);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
 
         // Remove frozen effect if applied
         RemoveSpecificEffect(EFFECT_TYPE_CUTSCENE_PARALYZE, OBJECT_SELF);
@@ -49,17 +51,17 @@ void main()
     }
 
     // Collect freeze effects variables on character
-    freezeDamage = GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE");
-    pastThrows = GetLocalInt(OBJECT_SELF, "FREEZE_THROWS");
+    freezeDamage = PS_GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE");
+    pastThrows = PS_GetLocalInt(OBJECT_SELF, "FREEZE_THROWS");
 
     // Check to see if character is already unconscious
-    if(GetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS") != 0)
+    if(PS_GetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS") != 0)
     {
         // Check if conscious again
         if(freezeDamage <= GetCurrentHitPoints( ))
         {
             // Signify that character is no longer unconscious
-            SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
+            PS_SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
             RemoveEffect(OBJECT_SELF, eIceSlow);
         }
         // Attempt freeze damage if still unconscious
@@ -70,8 +72,8 @@ void main()
         // The number of throws, however, is not reduced.  Body has not gotten warmer yet.
         if(GetIsDead(OBJECT_SELF))
             {
-                SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", 0);
-                SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
+                PS_SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", 0);
+                PS_SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 0);
                 RemoveEffect(OBJECT_SELF, eIceSlow);
             }
     }
@@ -87,7 +89,7 @@ void main()
         afterHP = GetCurrentHitPoints( );
         newFreezeDamage = beforeHP - afterHP;
         RemoveEffect(OBJECT_SELF, eff);
-        SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", freezeDamage + newFreezeDamage);
+        PS_SetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE", freezeDamage + newFreezeDamage);
 
         // Sent message to PC
         if(newFreezeDamage > 0)
@@ -100,7 +102,7 @@ void main()
         if((freezeDamage + newFreezeDamage) > GetCurrentHitPoints( ))
         {
             // Signify that character is unconscious
-            SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 1);
+            PS_SetLocalInt(OBJECT_SELF, "FREEZE_UNCONSCIOUS", 1);
 
             // Sent message to PC
             SendMessageToPC(OBJECT_SELF, "You can take no more of this exposure and are now beginning to freeze to death.");
@@ -113,22 +115,22 @@ void main()
     }
 
     // Apply fatigue to character
-    if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > 0)
+    if(PS_GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > 0)
     {
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, freezeTime);
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, freezeTime);
     }
 
     // Apply frozen special affect if frozen
-    if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > GetCurrentHitPoints( ))
+    if(PS_GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > GetCurrentHitPoints( ))
         DelayCommand(5.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ICESKIN), OBJECT_SELF, freezeTime));
 
     // If the character is just barely conscious apply dazing effects for an hour
-    if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
+    if(PS_GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, freezeTime);
 
     // Increase the number of throws done
-    SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", pastThrows + 1);
+    PS_SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", pastThrows + 1);
 
     // Check for freezing damage in an hour.
     DelayCommand(freezeTime, ExecuteScript("enft_freeze_ftg", OBJECT_SELF));

@@ -89,10 +89,10 @@ void ReportMuling(object oBY, object oFROM, object oITEM)
 	string sBY_NAME = GetName(oBY);
 	string sBY_PLAY = GetPCPlayerName(oBY);
 	
-	string sVAR_A1 = GetLocalString(oITEM, "A1");
-	string sVAR_A2 = GetLocalString(oITEM, "A2");
-	string sVAR_N1 = GetLocalString(oITEM, "N1");
-	string sVAR_N2 = GetLocalString(oITEM, "N2");
+	string sVAR_A1 = PS_GetLocalString(oITEM, "A1");
+	string sVAR_A2 = PS_GetLocalString(oITEM, "A2");
+	string sVAR_N1 = PS_GetLocalString(oITEM, "N1");
+	string sVAR_N2 = PS_GetLocalString(oITEM, "N2");
 	
 	SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + SQLEncodeSpecialChars(sBY_PLAY) + 
 	"','" + SQLEncodeSpecialChars(sBY_NAME) + "','" + SQLEncodeSpecialChars(sIT_NAME) + " (" + 
@@ -102,11 +102,11 @@ void ReportMuling(object oBY, object oFROM, object oITEM)
 	
 	//SpeakString("<C=TOMATO>[POSSIBLE MULING] " + sVAR_A1 + "/" + sVAR_N1 + " just gave " +  sBY_PLAY + "/" + sBY_NAME + " following: " + sIT_NAME + "/" + sIT_TAG + ", which was last owned by: " + sVAR_A2 + "/" + sVAR_N2, TALKVOLUME_SILENT_SHOUT);
 	
-	SetLocalString(oITEM, "A2", "");
-	SetLocalString(oITEM, "N2", "");
-	SetLocalString(oITEM, "A1", sBY_PLAY);
-	SetLocalString(oITEM, "N1", sBY_NAME);
-	SetLocalString(oITEM, "M", "Muling logged");
+	PS_SetLocalString(oITEM, "A2", "");
+	PS_SetLocalString(oITEM, "N2", "");
+	PS_SetLocalString(oITEM, "A1", sBY_PLAY);
+	PS_SetLocalString(oITEM, "N1", sBY_NAME);
+	PS_SetLocalString(oITEM, "M", "Muling logged");
 }
 
 //Check if muling is happening.
@@ -119,20 +119,20 @@ int CheckMuling(object oBY, object oFROM, object oITEM)
 	string sBY_PLAYER = GetPCPlayerName(oBY);
 	
 	//First case of Muling. A Player gives an item to another player with character X, and then gets it back with character Y.
-	if (GetLocalString(oITEM, "A2") == sBY_PLAYER && GetLocalString(oITEM, "N2") != sBY_NAME) return TRUE;
+	if (PS_GetLocalString(oITEM, "A2") == sBY_PLAYER && PS_GetLocalString(oITEM, "N2") != sBY_NAME) return TRUE;
 	
-	string sPREV_NAME = GetLocalString(oITEM, "N1");
-	string sPREV_PLAYER = GetLocalString(oITEM, "A1");
+	string sPREV_NAME = PS_GetLocalString(oITEM, "N1");
+	string sPREV_PLAYER = PS_GetLocalString(oITEM, "A1");
 	
 	//Second case of Muling. A Player drops an item on the ground with Character X and picks it up with Character Y
 	if (sPREV_PLAYER == sBY_PLAYER && sPREV_NAME != sBY_NAME) return TRUE;
 	
 	if (sPREV_NAME != sBY_NAME)
 	{
-		SetLocalString(oITEM, "A2", sPREV_PLAYER);
-		SetLocalString(oITEM, "N2", sPREV_NAME);
-		SetLocalString(oITEM, "A1", sBY_PLAYER);
-		SetLocalString(oITEM, "N1", sBY_NAME);
+		PS_SetLocalString(oITEM, "A2", sPREV_PLAYER);
+		PS_SetLocalString(oITEM, "N2", sPREV_NAME);
+		PS_SetLocalString(oITEM, "A1", sBY_PLAYER);
+		PS_SetLocalString(oITEM, "N1", sBY_NAME);
 	}
 	return FALSE;
 }
@@ -163,7 +163,7 @@ void CheckAndPlaceItemInContainer(object oBY, object oFROM, object oITEM)
 	
 	// extra check to make sure container belongs to PC and that it is a container
 	// at least hopefully stop items disappearing to god knows where...
-	object oTo = GetLocalObject(oBY, sTo);
+	object oTo = PS_GetLocalObject(oBY, sTo);
 	if (GetBaseItemType(oTo) != BASE_ITEM_LARGEBOX) return;
 	if (GetItemPossessor(oTo) != oBY) return;
 	AssignCommand(oBY, ActionGiveItem(oITEM, oTo, TRUE));

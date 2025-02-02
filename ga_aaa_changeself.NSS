@@ -36,7 +36,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 	object oPC		= OBJECT_SELF;
 	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
 	
-	SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 
 	switch(iParam)

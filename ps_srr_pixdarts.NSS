@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Pixies can magically create darts which have sleep enchantment on them.
 
 void main()
@@ -6,7 +8,7 @@ void main()
 	
 	object oItem = CreateItemOnObject("pssrrpixdarts", oPC, 50);
 	int iLevels = GetTotalLevels(oPC, TRUE);
-	SetLocalInt(oItem, "CLEVEL", iLevels); // store the caster level on the dart itself.
+	PS_SetLocalInt(oItem, "CLEVEL", iLevels); // store the caster level on the dart itself.
 	
 	// this didn't work for some unknown reason, so making it a unique on-hit property.
 	/*int iDur;

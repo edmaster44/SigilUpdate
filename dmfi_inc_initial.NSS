@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_initial - DM Friendly Initiative -  Initialization Functions
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -105,7 +107,7 @@ void DMFI_ClientEnter(object oPC)
 	int nAppear;
   
 	// Delete this just in case
-	DeleteLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
+	PS_DeleteLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
 
   	if (!GetIsPC(oPC))
   		return;
@@ -117,16 +119,16 @@ void DMFI_ClientEnter(object oPC)
 		//added Qk for targetscreen
 		DisplayGuiScreen(oPC,SCREEN_DMFI_TRGTOOL, FALSE, "dmfitrgtool.xml");
 		//end added
-		SetLocalInt(oPC, DMFI_PC_UI_STATE, TRUE);
+		PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, TRUE);
 	}	
 	else
 	{
 		DisplayGuiScreen(oPC, SCREEN_DMFI_PLAYER, FALSE, "dmfiplayerui.xml");
-		SetLocalInt(oPC, DMFI_PC_UI_STATE, TRUE);
+		PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, TRUE);
 	}		
 	
 	oTool = GetItemPossessedBy(oPC, DMFI_ITEM_TAG);
-	sVersion = GetLocalString(oTool, DMFI_TOOL_VERSION);
+	sVersion = PS_GetLocalString(oTool, DMFI_TOOL_VERSION);
 	sResRef = GetResRef(oTool);
 	
 	// This block ensures PCs and DMs don't have each others tools.
@@ -184,9 +186,9 @@ void DMFI_ClientEnter(object oPC)
 				}
 			}
 			// clear any invalid dynamic data just in case   
-			DeleteLocalInt(oTool, DMFI_VFX_RECENT);				
-			SetLocalObject(oTool, DMFI_TOOL_PC, oPC);
-	        SetLocalObject(oPC, DMFI_TOOL, oTool);
+			PS_DeleteLocalInt(oTool, DMFI_VFX_RECENT);				
+			PS_SetLocalObject(oTool, DMFI_TOOL_PC, oPC);
+	        PS_SetLocalObject(oPC, DMFI_TOOL, oTool);
 			SetDroppableFlag(oTool, FALSE);
       }
       else
@@ -211,16 +213,16 @@ void DMFI_ClientEnter(object oPC)
 				}
 			}	
 			
-			SetLocalObject(oTool, DMFI_TOOL_PC, oPC);
-	        SetLocalObject(oPC, DMFI_TOOL, oTool);
+			PS_SetLocalObject(oTool, DMFI_TOOL_PC, oPC);
+	        PS_SetLocalObject(oPC, DMFI_TOOL, oTool);
 			SetDroppableFlag(oTool, FALSE);
       }
   	} // Invalid Tool
   
 	else 
   	{ // Valid Tool - simply link.
-  	    SetLocalObject(oTool, DMFI_TOOL_PC, oPC);
-        SetLocalObject(oPC, DMFI_TOOL, oTool);
+  	    PS_SetLocalObject(oTool, DMFI_TOOL_PC, oPC);
+        PS_SetLocalObject(oPC, DMFI_TOOL, oTool);
 		SetDroppableFlag(oTool, FALSE);
   	}
 	 
@@ -241,11 +243,11 @@ void DMFI_InitializeLanguage(object oPC,  object oTool, object oDM=OBJECT_INVALI
    object oWPLocker;
    
    // Is the tool initialized?
-   nKnown = GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+   nKnown = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
    if (nKnown==0)
    {	// Not initialized:  Need to check for temp list and initialize
    		DMFI_TransferTempLangData(oPC, oTool);
-   		nKnown = GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+   		nKnown = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
 		
 		if (nKnown==0)
 		{	
@@ -276,20 +278,20 @@ void DMFI_InitializeLanguage(object oPC,  object oTool, object oDM=OBJECT_INVALI
     
 	n=0;
     oWPLocker = GetObjectByTag(DMFI_FILE_LOCKER);
-    sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
     while (sName!="")
     { // Run through Plugins for rules
     	if (sName==DMFI_STRING_RULE)
         {
-        	sExecute = GetLocalString(oWPLocker, DMFI_PC + DMFI_LANGUAGE + DMFI_STRING_EXECUTE + sName);
+        	sExecute = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_LANGUAGE + DMFI_STRING_EXECUTE + sName);
             ExecuteScript(sExecute, oPC);
         }
         n++;
-        sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
     } // Run through Plugins for rules
    
 	// Check for valid server configuration.
-	nKnown = GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+	nKnown = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
 	if ((nKnown==0) && DMFI_PCLANGUAGES_ENABLED && (!DMFI_CHOOSE_LANGUAGES) && (!DMFI_GetIsDM(oPC)))
 		SendText(oPC, TXT_LANGUAGES_SERVER_ERROR, TRUE, COLOR_RED);
 }
@@ -323,21 +325,21 @@ void DMFI_InitializeEmotePlugins(object oPC, object oWPLocker)
 
     while (oWP!=OBJECT_INVALID)
     {
-        sExecute =  GetLocalString(oWP, DMFI_STRING_EXECUTE);
-        fPriority = GetLocalFloat(oWP, DMFI_STRING_PRIORITY);
-        sName =     GetLocalString(oWP, DMFI_STRING_NAME);
+        sExecute =  PS_GetLocalString(oWP, DMFI_STRING_EXECUTE);
+        fPriority = PS_GetLocalFloat(oWP, DMFI_STRING_PRIORITY);
+        sName =     PS_GetLocalString(oWP, DMFI_STRING_NAME);
 
         // All are loaded onto the DM List
-        SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_NAME       + IntToString(nDMSlot), sName);
-        SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE    + sName, sExecute);
-        SetLocalFloat(oWPLocker,  DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_PRIORITY   + sName, fPriority);
+        PS_SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_NAME       + IntToString(nDMSlot), sName);
+        PS_SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE    + sName, sExecute);
+        PS_SetLocalFloat(oWPLocker,  DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_PRIORITY   + sName, fPriority);
         nDMSlot++;
 
-        if (GetLocalInt(oWP, DMFI_STRING_DMONLY)!=1)
+        if (PS_GetLocalInt(oWP, DMFI_STRING_DMONLY)!=1)
         { // Non-DM only ones are loaded for PCs
-            SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_NAME       + IntToString(nPCSlot), sName);
-            SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE    + sName, sExecute);
-            SetLocalFloat(oWPLocker,  DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_PRIORITY   + sName, fPriority);
+            PS_SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_NAME       + IntToString(nPCSlot), sName);
+            PS_SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE    + sName, sExecute);
+            PS_SetLocalFloat(oWPLocker,  DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_PRIORITY   + sName, fPriority);
             nPCSlot++;
         }
         n++;
@@ -363,20 +365,20 @@ void DMFI_InitializeCommandPlugins(object oPC, object oWPLocker)
 
     while (oWP!=OBJECT_INVALID)
     {
-        sExecute =  GetLocalString(oWP, DMFI_STRING_EXECUTE);
-        fPriority = GetLocalFloat(oWP, DMFI_STRING_PRIORITY);
-        sName =     GetLocalString(oWP, DMFI_STRING_NAME);
+        sExecute =  PS_GetLocalString(oWP, DMFI_STRING_EXECUTE);
+        fPriority = PS_GetLocalFloat(oWP, DMFI_STRING_PRIORITY);
+        sName =     PS_GetLocalString(oWP, DMFI_STRING_NAME);
 
-        SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_NAME       + IntToString(nDMSlot), sName);
-        SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE    + sName, sExecute);
-        SetLocalFloat(oWPLocker,  DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_PRIORITY   + sName, fPriority);
+        PS_SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_NAME       + IntToString(nDMSlot), sName);
+        PS_SetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE    + sName, sExecute);
+        PS_SetLocalFloat(oWPLocker,  DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_PRIORITY   + sName, fPriority);
         nDMSlot++;
 
-        if (GetLocalInt(oWP, DMFI_STRING_DMONLY)!=1)
+        if (PS_GetLocalInt(oWP, DMFI_STRING_DMONLY)!=1)
         { // Non-DM only ones are loaded for PCs
-            SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_NAME       + IntToString(nPCSlot), sName);
-            SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE    + sName, sExecute);
-            SetLocalFloat(oWPLocker,  DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_PRIORITY   + sName, fPriority);
+            PS_SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_NAME       + IntToString(nPCSlot), sName);
+            PS_SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE    + sName, sExecute);
+            PS_SetLocalFloat(oWPLocker,  DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_PRIORITY   + sName, fPriority);
             nPCSlot++;
         }
         n++;
@@ -402,20 +404,20 @@ void DMFI_InitializeLanguagePlugins(object oPC, object oWPLocker)
 
     while (oWP!=OBJECT_INVALID)
     {
-        sExecute =  GetLocalString(oWP, DMFI_STRING_EXECUTE);
-        fPriority = GetLocalFloat(oWP, DMFI_STRING_PRIORITY);
-        sName =     GetLocalString(oWP, DMFI_STRING_NAME);
+        sExecute =  PS_GetLocalString(oWP, DMFI_STRING_EXECUTE);
+        fPriority = PS_GetLocalFloat(oWP, DMFI_STRING_PRIORITY);
+        sName =     PS_GetLocalString(oWP, DMFI_STRING_NAME);
 
         sPrefix = DMFI_Parse(sExecute, PRM_);
         if (sPrefix == DMFI_STRING_LANGUAGE)
         { // Special code to allow for renaming languages via plugins
             sTest = DMFI_RemoveParsed(sExecute, sPrefix, PRM_);
-            SetLocalString(GetModule(), GetStringLowerCase(sName), GetStringLowerCase(sTest));
+            PS_SetLocalString(GetModule(), GetStringLowerCase(sName), GetStringLowerCase(sTest));
         }
 
-        SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n), sName);
-        SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_EXECUTE + sName, sExecute);
-        SetLocalFloat(oWPLocker,  DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_PRIORITY + sName, fPriority);
+        PS_SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n), sName);
+        PS_SetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_EXECUTE + sName, sExecute);
+        PS_SetLocalFloat(oWPLocker,  DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_PRIORITY + sName, fPriority);
 
         n++;
         oWP = GetObjectByTag(DMFI_PLUGIN_TAG + DMFI_STRING_LANGUAGE, n);
@@ -452,19 +454,19 @@ void DMFI_InsertionSort(object oWPLocker, string sPrefix, int nMax)
 
   for (i=1; i < nMax; i++)
   {
-    sPluginName = GetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(i));
-    fSortPriority = GetLocalFloat(oWPLocker, sPrefix + DMFI_STRING_PRIORITY + sPluginName);
+    sPluginName = PS_GetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(i));
+    fSortPriority = PS_GetLocalFloat(oWPLocker, sPrefix + DMFI_STRING_PRIORITY + sPluginName);
 
     j = i;
-    while ((j > 0) && ( fSortPriority > GetLocalFloat(
+    while ((j > 0) && ( fSortPriority > PS_GetLocalFloat(
            oWPLocker, sPrefix + DMFI_STRING_PRIORITY +
-           GetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j-1)))))
+           PS_GetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j-1)))))
     {
-        SetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j),
-           GetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j-1)));
+        PS_SetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j),
+           PS_GetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j-1)));
         j=j-1;
     }
-    SetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j), sPluginName);
+    PS_SetLocalString(oWPLocker, sPrefix + DMFI_STRING_NAME + IntToString(j), sPluginName);
   }
 }
 
@@ -480,7 +482,7 @@ void DMFI_InitializeTool(object oPC, object oTool)
 	
 	SetPlotFlag(oTool, FALSE);
 	DestroyObject(oTool);
-	object oListener = GetLocalObject(oPC, DMFI_LISTENER);
+	object oListener = PS_GetLocalObject(oPC, DMFI_LISTENER);
 	DestroyObject(oListener);
 	SendText(oPC, TXT_INITIALIZE_TOOL, TRUE, COLOR_GREEN);
 	DelayCommand(3.0, DMFI_ClientEnter(oPC));
@@ -504,36 +506,36 @@ void DMFI_ListPlugins(object oPC)
     else                    sList = DMFI_PC;
 
     n=0;
-    sName = GetLocalString(oWPLocker, sList + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, sList + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
 
     while (sName!="")
     {
         sReturn = sReturn + TXT_PLUGIN_COMMAND + sName + "\n";
         n++;
-        sName = GetLocalString(oWPLocker, sList + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, sList + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
     }
 
     n=0;
-    sName = GetLocalString(oWPLocker, sList + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, sList + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
     while (sName!="")
     {
         sReturn = sReturn + TXT_PLUGIN_EMOTE + sName + "\n";
         n++;
-        sName = GetLocalString(oWPLocker, sList + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, sList + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
     }
 
     sList = DMFI_PC; // ALL Language Plugins are PC oriented so there is no DM List.
-    sName = GetLocalString(oWPLocker, sList + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, sList + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
     while (sName!="")
     {
-        sExecute = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_EXECUTE + sName);
+        sExecute = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_EXECUTE + sName);
         if ((DMFI_Parse(sExecute, PRM_)!=DMFI_STRING_LANGUAGE))
             sReturn = sReturn + TXT_PLUGIN_LANGUAGE + sName + "\n";
         else if (sName!=DMFI_STRING_RULE)
             sReturn = sReturn + TXT_PLUGIN_LANG_ADDED + sName + "\n";
 
         n++;
-        sName = GetLocalString(oWPLocker, sList + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, sList + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
     }
     SendText(oPC, sReturn, FALSE, COLOR_CYAN);
 }
@@ -547,37 +549,37 @@ int DMFI_RunCommandPlugins(object oPC)
     string sExecute;
 
     object oWPLocker = GetObjectByTag(DMFI_FILE_LOCKER);
-    sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
 
     if (DMFI_GetIsDM(oPC))
     {
         n=0;
-        sName = GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
         while (sName!="")
         {
-            sExecute = GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE + sName);
+            sExecute = PS_GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE + sName);
             ExecuteScript(sExecute, oPC);
 
-            if (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
+            if (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
 
             n++;
-            sName = GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
+            sName = PS_GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
         }
     }
     else
     {
         while (sName!="")
         {
-            sExecute = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE + sName);
+            sExecute = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_EXECUTE + sName);
             ExecuteScript(sExecute, oPC);
 
-            if (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
+            if (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
 
             n++;
-            sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
+            sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_COMMAND + DMFI_STRING_NAME + IntToString(n));
         }
     }
-    return (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE));
+    return (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE));
 }
 
 int DMFI_RunEmotePlugins(object oPC)
@@ -589,37 +591,37 @@ int DMFI_RunEmotePlugins(object oPC)
     string sExecute;
 
     object oWPLocker = GetObjectByTag(DMFI_FILE_LOCKER);
-    sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
 
     if (DMFI_GetIsDM(oPC))
     {
         n=0;
-        sName = GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
         while (sName!="")
         {
-            sExecute = GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE + sName);
+            sExecute = PS_GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE + sName);
             ExecuteScript(sExecute, oPC);
 
-            if (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
+            if (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
 
             n++;
-            sName = GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
+            sName = PS_GetLocalString(oWPLocker, DMFI_DM + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
         }
     }
     else
     {
         while (sName!="")
         {
-            sExecute = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE + sName);
+            sExecute = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_EXECUTE + sName);
             ExecuteScript(sExecute, oPC);
 
-            if (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
+            if (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
 
             n++;
-            sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
+            sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_EMOTE + DMFI_STRING_NAME + IntToString(n));
         }
     }
-    return (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE));
+    return (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE));
 }
 
 int DMFI_RunLanguagePlugins(object oPC)
@@ -631,20 +633,20 @@ int DMFI_RunLanguagePlugins(object oPC)
     string sExecute;
 
     object oWPLocker = GetObjectByTag(DMFI_FILE_LOCKER);
-    sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
+    sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
 
     while (sName!="")
     {
-        sExecute = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_EXECUTE + sName);
+        sExecute = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_EXECUTE + sName);
         if ((DMFI_Parse(sExecute, PRM_)!=DMFI_STRING_LANGUAGE) && (sName!=DMFI_STRING_RULE))
             ExecuteScript(sExecute, oPC);
 
-        if (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
+        if (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE)) break;
 
         n++;
-        sName = GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
+        sName = PS_GetLocalString(oWPLocker, DMFI_PC + DMFI_STRING_LANGUAGE + DMFI_STRING_NAME + IntToString(n));
     }
-    return (GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE));
+    return (PS_GetLocalInt(GetModule(), DMFI_STRING_OVERRIDE));
 }
 
 void DMFI_StoreTool(object oPC, string sResRef, object oTool)
@@ -663,13 +665,13 @@ void DMFI_TransferTempLangData(object oStart, object oFinish)
 	int n, nKnown;
 	string sLang;
 	
-	nKnown = GetLocalInt(oStart, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+	nKnown = PS_GetLocalInt(oStart, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
 	for (n=0; n<nKnown; n++)
 	{
-		sLang = GetLocalString(oStart, DMFI_STRING_LANGUAGE + IntToString(n));	
-		SetLocalString(oFinish, DMFI_STRING_LANGUAGE + IntToString(n), sLang);
+		sLang = PS_GetLocalString(oStart, DMFI_STRING_LANGUAGE + IntToString(n));	
+		PS_SetLocalString(oFinish, DMFI_STRING_LANGUAGE + IntToString(n), sLang);
 	}
-	SetLocalInt(oFinish, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX, nKnown);
+	PS_SetLocalInt(oFinish, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX, nKnown);
 }	
 
 void DMFI_VerifyToolData(object oPC, object oTool)

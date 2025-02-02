@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 #include "ginc_var_ops"
@@ -8,7 +10,7 @@ const int maxExp = 100;
 int HasJournalEntry(string sQuestTag, string sCheck)
 {
 	object oPC = GetPCSpeaker();
-    int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
+    int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
  	return (CompareInts(iQuestEntry, sCheck));
 }
 
@@ -23,7 +25,7 @@ void main() {
 	if (!GetIsObjectValid(oRat) || GetArea(oRat) != GetArea(oPC))
 		return;
 		
-	int nDone = GetLocalInt(oPC, "thieftrigger");
+	int nDone = PS_GetLocalInt(oPC, "thieftrigger");
 	if (nDone > 0)
 		return;
 		
@@ -59,10 +61,10 @@ void main() {
 		AddJournalQuestEntry("ps_quest_chirperskulls", 2, oPC, TRUE);
 	} else {
 		AssignCommand(oRat, ActionMoveToLocation(GetLocation(GetWaypointByTag("wp_chirpers_wererat_2")), FALSE));
-		DelayCommand(3.0f, SetLocalInt(oRat, "Thief", 1));
+		DelayCommand(3.0f, PS_SetLocalInt(oRat, "Thief", 1));
 		DelayCommand(3.0f, AssignCommand(oRat, ActionMoveToLocation(GetLocation(GetWaypointByTag("wp_chirpers_wererat_2")), FALSE)));
 	}
 
-	SetLocalInt(oPC, "thieftrigger", 1);
+	PS_SetLocalInt(oPC, "thieftrigger", 1);
 
 }

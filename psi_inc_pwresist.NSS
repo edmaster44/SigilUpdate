@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
    ----------------
    prc_inc_psionics
@@ -56,7 +58,7 @@ PRCGetPowerResistance(object oTarget, object oCaster)
         iPowerRes = iRacialPowerRes;
 
     // Exalted Companion, can also be used for Celestial Template
-    if (GetLocalInt(oTarget, "CelestialTemplate"))
+    if (PS_GetLocalInt(oTarget, "CelestialTemplate"))
     {
         int nHD = GetHitDice(oTarget);
         int nSR = nHD * 2;
@@ -65,24 +67,24 @@ PRCGetPowerResistance(object oTarget, object oCaster)
     }
 
     // Thought Shield, 13 + augment vs Mind-Affecting
-    /*if(GetLocalInt(oTarget, "PRC_Power_ThoughtShield_PR") &&
+    /*if(PS_GetLocalInt(oTarget, "PRC_Power_ThoughtShield_PR") &&
        Get2DACache("spells", "ImmunityType", PRCGetSpellId()) == "Mind_Affecting")
     {
         // Only use the PR given by the power if it's higher than the previous
-        iPowerRes = max(iPowerRes, GetLocalInt(oTarget, "PRC_Power_ThoughtShield_PR"));
+        iPowerRes = max(iPowerRes, PS_GetLocalInt(oTarget, "PRC_Power_ThoughtShield_PR"));
     }
     // Tower of Iron Will, 19 + augment vs Mind-Affecting
-    if(GetLocalInt(oTarget, "PRC_Power_TowerOfIronWill_PR") &&
+    if(PS_GetLocalInt(oTarget, "PRC_Power_TowerOfIronWill_PR") &&
        Get2DACache("spells", "ImmunityType", PRCGetSpellId()) == "Mind_Affecting"
        )
     {
         // Only use the PR given by the power if it's higher than the previous
-        iPowerRes = max(iPowerRes, GetLocalInt(oTarget, "PRC_Power_TowerOfIronWill_PR"));
+        iPowerRes = max(iPowerRes, PS_GetLocalInt(oTarget, "PRC_Power_TowerOfIronWill_PR"));
     }*/
 
     // Foe Hunter SR stacks with normal SR
     // when a Power is cast by their hated enemy
-    /*if(GetHasFeat(FEAT_HATED_ENEMY_SR, oTarget) && GetLocalInt(oTarget, "HatedFoe") == GetRacialType(oCaster) )
+    /*if(GetHasFeat(FEAT_HATED_ENEMY_SR, oTarget) && PS_GetLocalInt(oTarget, "HatedFoe") == GetRacialType(oCaster) )
     {
          iPowerRes += 15 + GetLevelByClass(CLASS_TYPE_FOE_HUNTER, oTarget);
     }*/

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_astral_inc"
 #include "ps_inc_planarlocations"
 
@@ -10,10 +12,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = GetGlobalInt("AstralShipEnterLock");
+ int iLock = PS_GetGlobalInt("AstralShipEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("AstralShipEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("AstralShipEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("astral_captain") == OBJECT_INVALID)
   {
@@ -99,6 +101,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_seasonalreindeer5", lSpawnpoint);    
   }
   */  
-  SetGlobalInt("AstralShipEnterLock", 0);
+  PS_SetGlobalInt("AstralShipEnterLock", 0);
  }
 }

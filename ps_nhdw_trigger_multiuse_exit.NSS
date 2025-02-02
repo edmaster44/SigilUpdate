@@ -11,23 +11,23 @@ void main()
 	if (!GetIsPC(oPC2)) return;
 
 //the "open2" variable will open a door with this tag 
-	string sOpen2 = GetLocalString(OBJECT_SELF,"open2");
+	string sOpen2 = PS_GetLocalString(OBJECT_SELF,"open2");
 //the "close2" variable will close a door with this tag
-	string sClose2 = GetLocalString(OBJECT_SELF,"close2");
+	string sClose2 = PS_GetLocalString(OBJECT_SELF,"close2");
 //the "vfx2" variable will apply this visual effect to the lever's puller; the full filename (xxxx.sef) must be used
-	string sVFX2 = GetLocalString(OBJECT_SELF,"vfx2");
+	string sVFX2 = PS_GetLocalString(OBJECT_SELF,"vfx2");
 //the "floaty2" variable will be generated as floaty text over the head of the character pulling the lever
-	string sFloaty2 = GetLocalString(OBJECT_SELF,"floaty2");
+	string sFloaty2 = PS_GetLocalString(OBJECT_SELF,"floaty2");
 // objects 1-4 to apply object vfx to
-	string sObj1 		= GetLocalString(OBJECT_SELF, "obj1");
-	string sObj2 		= GetLocalString(OBJECT_SELF, "obj2");
-	string sObj3 		= GetLocalString(OBJECT_SELF, "obj3");
-	string sObj4 		= GetLocalString(OBJECT_SELF, "obj4");
+	string sObj1 		= PS_GetLocalString(OBJECT_SELF, "obj1");
+	string sObj2 		= PS_GetLocalString(OBJECT_SELF, "obj2");
+	string sObj3 		= PS_GetLocalString(OBJECT_SELF, "obj3");
+	string sObj4 		= PS_GetLocalString(OBJECT_SELF, "obj4");
 //the "beam#" variable will be generated (use values from VFX_BEAM_*) as a beam between object # and the nearest creature.
-	int nBeam1			= GetLocalInt(OBJECT_SELF, "beam1");
-	int nBeam2			= GetLocalInt(OBJECT_SELF, "beam2");
-	int nBeam3			= GetLocalInt(OBJECT_SELF, "beam3");
-	int nBeam4			= GetLocalInt(OBJECT_SELF, "beam4");
+	int nBeam1			= PS_GetLocalInt(OBJECT_SELF, "beam1");
+	int nBeam2			= PS_GetLocalInt(OBJECT_SELF, "beam2");
+	int nBeam3			= PS_GetLocalInt(OBJECT_SELF, "beam3");
+	int nBeam4			= PS_GetLocalInt(OBJECT_SELF, "beam4");
 	
 //Definition
 	object oDoorOpen2	= GetObjectByTag(sOpen2);

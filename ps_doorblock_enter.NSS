@@ -8,7 +8,7 @@ void main()
 		{	PS_CollisionControl(oPC,1);
 			SendMessageToPC(oPC, "You have been made OOC unwalkable.");
 		}	
-		SetLocalInt(oPC,"ExploitBlocker",1);
-		SetLocalInt(oPC,"DoorExploitPrevent",1);
+		PS_SetLocalInt(oPC,"ExploitBlocker",1);
+		PS_SetLocalInt(oPC,"DoorExploitPrevent",1);
 	}
 }

@@ -58,7 +58,7 @@ if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
 
 }
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
@@ -68,7 +68,7 @@ if (iHit == 2)
 {
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
@@ -128,7 +128,7 @@ if(!WillSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
 
 }
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
@@ -138,7 +138,7 @@ if (iHit == 2)
 {
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
@@ -197,7 +197,7 @@ if(!ReflexSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eKD,oTarget,fDur);
 
 }
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
@@ -207,7 +207,7 @@ if (iHit == 2)
 {
 ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 DoWildMagic(oPC, oTarget, GetSpellId());
 			
 
@@ -225,11 +225,11 @@ void DeactivateArcaneBash(object oPC, int id, int idneeded)
 {
 	AssignCommand(oPC, ClearAllActions());
 
-	if (id != GetLocalInt(oPC, "ArcaneBashId") && idneeded == 1 || GetLocalInt(oPC, "ArcaneBashOn") == 0)
+	if (id != PS_GetLocalInt(oPC, "ArcaneBashId") && idneeded == 1 || PS_GetLocalInt(oPC, "ArcaneBashOn") == 0)
 		return;
-	if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+	if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 		FloatingTextStringOnCreature("*Arcane Bash Deactivated!*", oPC, TRUE, 3.0f);
-		DeleteLocalInt(oPC, "ArcaneBashOn");
+		PS_DeleteLocalInt(oPC, "ArcaneBashOn");
 
 	RemoveAnySpellEffects(SPELLFEAT_ARCANEBASH, oPC);
 
@@ -243,7 +243,7 @@ RemoveAnySpellEffects(SPELLFEAT_ARCANEBASH, oPC);
 
 	AssignCommand(oPC, ClearAllActions());
 
-	if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+	if (PS_GetLocalInt(oPC, "ArcaneBashOn") == 1)
 	{
 		SendMessageToPC(oPC, "Arcane Bash is already activated. Please wait 45 seconds.");
 		return;
@@ -260,8 +260,8 @@ RemoveAnySpellEffects(SPELLFEAT_ARCANEBASH, oPC);
 	int id = Random(1000);
 
 	if (nSpell == SPELLFEAT_ARCANEBASH)
-		SetLocalInt(oPC, "ArcaneBashOn", 1);
-	SetLocalInt(oPC, "ArcaneBashId", id);
+		PS_SetLocalInt(oPC, "ArcaneBashOn", 1);
+	PS_SetLocalInt(oPC, "ArcaneBashId", id);
 
 	DelayCommand(45.0f, DeactivateArcaneBash(oPC, id, 1));	
 	

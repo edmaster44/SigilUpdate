@@ -1,13 +1,15 @@
+#include "ff_safevar"
+
 void main()
 {
  object oPC = GetEnteringObject();
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("HallSpeakers3EnterLock");
+ int iLock = PS_GetGlobalInt("HallSpeakers3EnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("HallSpeakers3EnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("HallSpeakers3EnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_speaker_npc13") == OBJECT_INVALID)
   {
@@ -42,6 +44,6 @@ void main()
   
    
   
-  SetGlobalInt("HallSpeakers3EnterLock", 0);
+  PS_SetGlobalInt("HallSpeakers3EnterLock", 0);
  }
 }

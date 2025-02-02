@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Name     : NWNX SQL include
 // Purpose  : Scripting functions for NWNX SQL plugins
 // Author   : Ingmar Stieger
@@ -460,7 +462,7 @@ void SetPersistentObject(object oOwner, string sVarName, object oObject, int iEx
         // row exists
         sSQL = "UPDATE " + sTable + " SET val=%s,expire=" + IntToString(iExpiration) +
             " WHERE player='" + sPlayer + "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-        SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
+        PS_SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
         StoreCampaignObject ("NWNX", "-", oObject);
     }
     else
@@ -468,7 +470,7 @@ void SetPersistentObject(object oOwner, string sVarName, object oObject, int iEx
         // row doesn't exist
         sSQL = "INSERT INTO " + sTable + " (player,tag,name,val,expire) VALUES" +
             "('" + sPlayer + "','" + sTag + "','" + sVarName + "',%s," + IntToString(iExpiration) + ")";
-        SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
+        PS_SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
         StoreCampaignObject ("NWNX", "-", oObject);
     }
 }
@@ -493,7 +495,7 @@ object GetPersistentObject(object oObject, string sVarName, object oOwner = OBJE
 
     string sSQL = "SELECT val FROM " + sTable + " WHERE player='" + sPlayer +
         "' AND tag='" + sTag + "' AND name='" + sVarName + "'";
-    SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
+    PS_SetLocalString(GetModule(), "NWNX!SQL!SETSCORCOSQL", sSQL);
 
     if (!GetIsObjectValid(oOwner))
         oOwner = oObject;

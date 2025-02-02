@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 string GetStorageItemIcon(object oItem)
 {
@@ -23,10 +25,10 @@ void main()
 	
 	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_DEPOSIT");
 
-	if ( GetLocalString(oPC, "kemo_storage_mode") != "deposit" )
+	if ( PS_GetLocalString(oPC, "kemo_storage_mode") != "deposit" )
 	{
-		SetLocalInt(oPC, "kemo_storage_page", 1);
-		SetLocalString(oPC, "kemo_storage_mode", "deposit");
+		PS_SetLocalInt(oPC, "kemo_storage_page", 1);
+		PS_SetLocalString(oPC, "kemo_storage_mode", "deposit");
 	}
 
 	object oItem = GetFirstItemInInventory(oPC);
@@ -40,7 +42,7 @@ void main()
 		return;
 	}
 
-	int page = GetLocalInt(oPC, "kemo_storage_page");
+	int page = PS_GetLocalInt(oPC, "kemo_storage_page");
 	if (page < 1) page = 1;
 	
 	int resultCount = 0;
@@ -62,7 +64,7 @@ void main()
 				sVariables = "7="+sCounter;
 
 				AddListBoxRow(oPC,"KEMO_STORAGE","KEMO_STORAGE_DEPOSIT","Row"+sCounter,sName,sIcon,sVariables,"");
-				SetLocalObject(oPC,sStorageVar,oItem);
+				PS_SetLocalObject(oPC,sStorageVar,oItem);
 			}
 			resultCount++;
 		}
@@ -73,5 +75,5 @@ void main()
 	if (iCounter == 0 && page == 1) SetGUIObjectHidden(oPC,"KEMO_STORAGE","PagePane",TRUE);
 	else SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,sItemOfTotal);
 	
-	SetLocalInt(oPC, "kemo_storage_list_size", resultCount);
+	PS_SetLocalInt(oPC, "kemo_storage_list_size", resultCount);
 }

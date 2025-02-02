@@ -57,7 +57,7 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
         {
             bHit = 1;
 			nDamage = d8(nNumberOfDice) ;
-			if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+			if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 			            {
 			                nDamage = nDamage * 2;
 			            }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("MerkhantEnterLock");
+ int iLock = PS_GetGlobalInt("MerkhantEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("MerkhantEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("MerkhantEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_merkh_rootofnine") == OBJECT_INVALID)
   {
@@ -31,6 +33,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_merkh_teamster2", lSpawnpoint);    
   }
 
-  SetGlobalInt("MerkhantEnterLock", 0);
+  PS_SetGlobalInt("MerkhantEnterLock", 0);
  }
 }

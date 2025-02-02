@@ -33,7 +33,7 @@ void main()
 	//Base DC 23
 	int nDC = GetSkillAdjustedTrapDC(23, oCaster, 4);
 	int nParaDur = 5;
-    int nFire = GetLocalInt(OBJECT_SELF, "scod_corrosivetrap");
+    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_corrosivetrap");
     
 	effect ePara = EffectParalyze();
 	effect eACDown = ExtraordinaryEffect(EffectACDecrease(2, AC_NATURAL_BONUS));
@@ -46,7 +46,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            SetLocalInt(OBJECT_SELF, "scod_corrosivetrap",TRUE);
+            PS_SetLocalInt(OBJECT_SELF, "scod_corrosivetrap",TRUE);
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CORROSIVE_TRAP));
 			

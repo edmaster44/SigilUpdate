@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
    ----------------
    Null Psionics Field - OnEnter
@@ -104,7 +106,7 @@ void main()
     {
 	
         // Set the marker variable
-        SetLocalInt(oEnter, "NullPsionicsField", TRUE);
+        PS_SetLocalInt(oEnter, "NullPsionicsField", TRUE);
         
         // Remove all non-extraordinary effects
         RemoveEffectsNPF(oEnter);

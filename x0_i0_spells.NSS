@@ -502,7 +502,7 @@ void DoDirgeEffect(object oTarget)
             //Make a Fortitude Save to avoid the effects of the movement hit.
             if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_ALL, GetAreaOfEffectCreator()))
             {
-                int nGetLastPenalty = GetLocalInt(oTarget, "X0_L_LASTPENALTY");
+                int nGetLastPenalty = PS_GetLocalInt(oTarget, "X0_L_LASTPENALTY");
                 // * increase penalty by 2
                 nGetLastPenalty = nGetLastPenalty + 2;
 
@@ -516,7 +516,7 @@ void DoDirgeEffect(object oTarget)
                 //Apply damage and visuals
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-                SetLocalInt(oTarget, "X0_L_LASTPENALTY", nGetLastPenalty);
+                PS_SetLocalInt(oTarget, "X0_L_LASTPENALTY", nGetLastPenalty);
             }
 
         }
@@ -1061,15 +1061,15 @@ void DoCaltropEffect(object oTarget)
             //Apply damage and visuals
             //DelayCommand(fDelay, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget)));
             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-            int nDamageDone = GetLocalInt(OBJECT_SELF, "NW_L_TOTAL_DAMAGE");
+            int nDamageDone = PS_GetLocalInt(OBJECT_SELF, "NW_L_TOTAL_DAMAGE");
             nDamageDone++;
 
             //  * storing variable on area of effect object
-            SetLocalInt(OBJECT_SELF, "NW_L_TOTAL_DAMAGE", nDamageDone);
+            PS_SetLocalInt(OBJECT_SELF, "NW_L_TOTAL_DAMAGE", nDamageDone);
             if (nDamageDone == 25)
             {
                 DestroyObject(OBJECT_SELF);
-                object oImpactNode = GetLocalObject(OBJECT_SELF, "X0_L_IMPACT");
+                object oImpactNode = PS_GetLocalObject(OBJECT_SELF, "X0_L_IMPACT");
                 if (GetIsObjectValid(oImpactNode) == TRUE)
                 {
                     DestroyObject(oImpactNode);
@@ -1855,7 +1855,7 @@ void spellsDispelMagic(object oTarget, int nCasterLevel, effect eVis, effect eIm
     // creatures. Also creature can be scripted to be immune to dispel
     // magic as well.
     //--------------------------------------------------------------------------
-    if (GetHasEffect(EFFECT_TYPE_PETRIFY, oTarget) == TRUE || GetLocalInt(oTarget, "X1_L_IMMUNE_TO_DISPEL") == 10)
+    if (GetHasEffect(EFFECT_TYPE_PETRIFY, oTarget) == TRUE || PS_GetLocalInt(oTarget, "X1_L_IMMUNE_TO_DISPEL") == 10)
     {
         return;
     }

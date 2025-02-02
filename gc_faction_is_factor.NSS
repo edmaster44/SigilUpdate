@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
 1 - Prime
@@ -26,9 +28,9 @@
 int StartingConditional()
 {
 	object oPC = GetPCSpeaker();
-	object oStoredBadge = GetLocalObject(oPC, "FactionBadgeUsed");
-	int iRank = GetLocalInt(oStoredBadge, "FactionRank");
-	int nFaction = GetLocalInt(oStoredBadge,"Faction");
+	object oStoredBadge = PS_GetLocalObject(oPC, "FactionBadgeUsed");
+	int iRank = PS_GetLocalInt(oStoredBadge, "FactionRank");
+	int nFaction = PS_GetLocalInt(oStoredBadge,"Faction");
 	
 	if (nFaction == 3 && iRank >= 5) //Athar
 		return TRUE;

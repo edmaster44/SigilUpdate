@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -8,10 +10,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = GetGlobalInt("CatsprowlEnterLock");
+ int iLock = PS_GetGlobalInt("CatsprowlEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("CatsprowlEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("CatsprowlEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("quest_catlord_kellar") == OBJECT_INVALID)
   { 
@@ -43,6 +45,6 @@ void main()
   
 //  DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  SetGlobalInt("CatsprowlEnterLock", 0);
+  PS_SetGlobalInt("CatsprowlEnterLock", 0);
  }
 }

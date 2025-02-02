@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "x2_inc_itemprop"
 
 //You only get one at a time
@@ -33,8 +35,8 @@ void main () {
 		return;
 	}
 	
-	int RuinFeat = GetLocalInt(oItem, "ruin_feat_id");
-	float Duration = GetLocalFloat(oItem, "ruin_feat_duration");
+	int RuinFeat = PS_GetLocalInt(oItem, "ruin_feat_id");
+	float Duration = PS_GetLocalFloat(oItem, "ruin_feat_duration");
 	itemproperty ip = ItemPropertyBonusFeat(RuinFeat);
 	
 	EnforceOneRuinFeat(oPC, RuinFeat, oTarget);

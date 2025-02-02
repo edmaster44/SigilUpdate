@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: OnUse: Sit
 //:://////////////////////////////////////////////
@@ -7,8 +9,8 @@ void main()
     object oChair = OBJECT_SELF;
     object oSitter = GetLastUsedBy();
     location lChair = GetLocation(oChair);
-    int heading = GetLocalInt(oChair, "degree");
-    int PC_size = GetLocalInt(oChair, "size");
+    int heading = PS_GetLocalInt(oChair, "degree");
+    int PC_size = PS_GetLocalInt(oChair, "size");
     
     //Check for Character Race with original Creature Size
     switch (PC_size)

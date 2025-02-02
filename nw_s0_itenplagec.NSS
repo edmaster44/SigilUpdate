@@ -38,8 +38,8 @@ void main()
     object oTarget = GetEnteringObject();
     string sConstant1 = "NW_SPELL_CONSTANT_CREEPING_DOOM1" + ObjectToString(GetAreaOfEffectCreator());
     string sConstant2 = "NW_SPELL_CONSTANT_CREEPING_DOOM2" + ObjectToString(GetAreaOfEffectCreator());
-    int nSwarm = GetLocalInt(OBJECT_SELF, sConstant1);
-    int nDamCount = GetLocalInt(OBJECT_SELF, sConstant2);
+    int nSwarm = PS_GetLocalInt(OBJECT_SELF, sConstant1);
+    int nDamCount = PS_GetLocalInt(OBJECT_SELF, sConstant2);
     float fDelay;
     if(nSwarm < 1)
     {
@@ -101,8 +101,8 @@ void main()
 		}
 		else
 		{
-	        SetLocalInt(OBJECT_SELF, sConstant1, nSwarm);
-	        SetLocalInt(OBJECT_SELF, sConstant2, nDamCount);
+	        PS_SetLocalInt(OBJECT_SELF, sConstant1, nSwarm);
+	        PS_SetLocalInt(OBJECT_SELF, sConstant2, nDamCount);
 		}
     }
 }

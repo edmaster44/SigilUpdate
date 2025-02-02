@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // gb_comp_heart
 /*
 	companion heartbeat
@@ -48,19 +50,19 @@ void main()
 				Jug_Debug(varName + " is untyped");
 				break;
 			case VARIABLE_TYPE_INT:
-				Jug_Debug(varName + " int value " + IntToString(GetLocalInt(OBJECT_SELF, varName)));
+				Jug_Debug(varName + " int value " + IntToString(PS_GetLocalInt(OBJECT_SELF, varName)));
 				break;
 			case VARIABLE_TYPE_FLOAT:
-				Jug_Debug(varName + " float value " + FloatToString(GetLocalFloat(OBJECT_SELF, varName)));
+				Jug_Debug(varName + " float value " + FloatToString(PS_GetLocalFloat(OBJECT_SELF, varName)));
 				break;
 			case VARIABLE_TYPE_STRING:
-				Jug_Debug(varName + " string value " + GetLocalString(OBJECT_SELF, varName));
+				Jug_Debug(varName + " string value " + PS_GetLocalString(OBJECT_SELF, varName));
 				break;
 			case VARIABLE_TYPE_DWORD:
-				Jug_Debug(varName + " object value " + GetName(GetLocalObject(OBJECT_SELF, varName)));
+				Jug_Debug(varName + " object value " + GetName(PS_GetLocalObject(OBJECT_SELF, varName)));
 				break;
 			case VARIABLE_TYPE_LOCATION:
-				Jug_Debug(varName + " location value " + LocationToString(GetLocalLocation(OBJECT_SELF, varName)));
+				Jug_Debug(varName + " location value " + LocationToString(PS_GetLocalLocation(OBJECT_SELF, varName)));
 				break;
 			default:
 				Jug_Debug(varName + " unknown type");
@@ -70,7 +72,7 @@ void main()
 	} */
 
 	//option for a custom hb script (ease of AI hookup)
-	string sHBScript=GetLocalString(OBJECT_SELF, "hb_script");
+	string sHBScript=PS_GetLocalString(OBJECT_SELF, "hb_script");
 	if (sHBScript != "")
 	{
 		ExecuteScript(sHBScript, OBJECT_SELF);

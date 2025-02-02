@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////////
 //:: X0_I0_MODES
 /*
@@ -57,7 +59,7 @@ int GetModeActive(int nMode, object oCreature=OBJECT_SELF)
     }
     else
     {  //dummy
-        return (GetLocalInt(oCreature, sModeVarname) & nMode);
+        return (PS_GetLocalInt(oCreature, sModeVarname) & nMode);
     }
 }
 
@@ -75,11 +77,11 @@ void SetModeActive(int nMode, int bActive=TRUE, object oCreature=OBJECT_SELF)
     }
     else //dummy
     {
-        int nCurrentModes = GetLocalInt(oCreature, sModeVarname);
+        int nCurrentModes = PS_GetLocalInt(oCreature, sModeVarname);
         if (bActive) {
-            SetLocalInt(oCreature, sModeVarname, nCurrentModes | nMode);
+            PS_SetLocalInt(oCreature, sModeVarname, nCurrentModes | nMode);
         } else {
-            SetLocalInt(oCreature, sModeVarname, nCurrentModes & ~nMode);
+            PS_SetLocalInt(oCreature, sModeVarname, nCurrentModes & ~nMode);
         }
     }
 }
