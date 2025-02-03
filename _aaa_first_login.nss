@@ -9,18 +9,18 @@
 // once, not once per person logging in
 
 void FirstLogin(){
-
-	// call Dae's plugin functions
+	//object oMod = GetModule();
+	
+	// if we've already done this, bail
+	//if (PS_GetLocalInt(oMod, "FirstLogin")) return;
+	
 	EnableFinesse();
 	EnableCreatureFinesse();
 	EnableMonkNew();
 	SetFeatAC();
 	
-	// now copy the variable set in the toolset to a local variable set on the 
-	// module with fully legal variable name. If we've already done this, bail
-	if (PS_GetGlobalString("X2_S_UD_SPELLSCRIPT") == "antimagic_spell_cast") return;
-	PS_SetGlobalString("X2_S_UD_SPELLSCRIPT", "antimagic_spell_cast");
-
+	// show that we've done this
+	//PS_SetLocalInt(oMod, "FirstLogin", TRUE);
 	
 }
 
