@@ -61,7 +61,7 @@ void main()
         nDuration = 1;
     }
     //Check Extend metamagic feat.
-    if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+    if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 	{
 		nDuration = nDuration * 2;
 	}

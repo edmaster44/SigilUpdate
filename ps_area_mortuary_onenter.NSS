@@ -1,13 +1,11 @@
-#include "ff_safevar"
-
 void main() {
 
 	object oPC = GetEnteringObject();
   
-	int iLock = PS_GetGlobalInt("MortuaryEnterLock");
+	int iLock = GetGlobalInt("MortuaryEnterLock");
 	if ( iLock == 0 ) {
 	
-		PS_SetGlobalInt("MortuaryEnterLock", 1); // Only allows one clean up at a time.
+		SetGlobalInt("MortuaryEnterLock", 1); // Only allows one clean up at a time.
 
 		if(GetObjectByTag("ps_mortuary_zombie") == OBJECT_INVALID) {
 			object oWP = GetWaypointByTag("ps_mortuary_zombie_a");
@@ -101,7 +99,7 @@ void main() {
 			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mortuary_skeletonguard", GetLocation(oWP));     
   		}
     
-  		PS_SetGlobalInt("MortuaryEnterLock", 0);
+  		SetGlobalInt("MortuaryEnterLock", 0);
 		
  	}
 }

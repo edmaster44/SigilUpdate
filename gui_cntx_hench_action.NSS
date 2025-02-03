@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // gui_cntx_hench_action
 /*
 	Behavior script for the character sheet behavior sub-panel
@@ -23,10 +21,10 @@ void StartUpCommands(object oSelf, object oTarget, int nType)
 {
     SetPlayerQueuedTarget(oSelf, OBJECT_INVALID);
 	HenchResetHenchmenState();
-    PS_SetLocalInt(oSelf, henchHealCountStr, 1);
-    PS_SetLocalObject(oSelf, henchHealSpellTarget, oTarget);
-    PS_SetLocalInt(oSelf, henchHealTypeStr, nType);
-    PS_SetLocalInt(oSelf, henchHealStateStr, HENCH_CNTX_MENU_BUFF_LONG);
+    SetLocalInt(oSelf, henchHealCountStr, 1);
+    SetLocalObject(oSelf, henchHealSpellTarget, oTarget);
+    SetLocalInt(oSelf, henchHealTypeStr, nType);
+    SetLocalInt(oSelf, henchHealStateStr, HENCH_CNTX_MENU_BUFF_LONG);
     ExecuteScript("hench_o0_heal", oSelf);
 }
             
@@ -73,8 +71,8 @@ void HenchDoScout(object oSpeaker)
                         oSpeaker, 1);
     if (GetIsObjectValid(oClosest) && GetDistanceBetween(oClosest, oSpeaker) <= henchMaxScoutDistance)
     {
-        PS_SetLocalInt(OBJECT_SELF, sHenchScoutingFlag, TRUE);
-        PS_SetLocalObject(OBJECT_SELF, sHenchScoutTarget, oClosest);
+        SetLocalInt(OBJECT_SELF, sHenchScoutingFlag, TRUE);
+        SetLocalObject(OBJECT_SELF, sHenchScoutTarget, oClosest);
         ClearAllActions();
         if (CheckStealth())
         {
@@ -89,7 +87,7 @@ void HenchDoScout(object oSpeaker)
 		//	indicate failure?
 		//	"This area looks safe enough."
 		SendMessageToPC(oSpeaker, GetStringByStrRef(230437));
-        PS_DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
+        DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
     }
 }
 
@@ -137,7 +135,7 @@ void HenchResetGuard()
 void HenchSetAutoSetFollow(object oLeader, int columns)
 {
 	// sort party members by BAB
-	PS_DeleteLocalObject(oLeader, sAllyLineOfSight);
+	DeleteLocalObject(oLeader, sAllyLineOfSight);
     object oPartyMember = GetFirstFactionMember(oLeader, FALSE);
     while(GetIsObjectValid(oPartyMember))
     {
@@ -147,7 +145,7 @@ void HenchSetAutoSetFollow(object oLeader, int columns)
 			int memberBAB = GetBaseAttackBonus(oPartyMember);
 			int memberAC = GetAC(oPartyMember);
 			object oPrevTestObject = oLeader;
-			object oTestObject = PS_GetLocalObject(oLeader, sAllyLineOfSight);
+			object oTestObject = GetLocalObject(oLeader, sAllyLineOfSight);
 	  		while (GetIsObjectValid(oTestObject))
 			{
 				int testBAB = GetBaseAttackBonus(oTestObject);
@@ -160,10 +158,10 @@ void HenchSetAutoSetFollow(object oLeader, int columns)
 					break;
 				}
 				oPrevTestObject = oTestObject;
-				oTestObject = PS_GetLocalObject(oTestObject, sAllyLineOfSight);
+				oTestObject = GetLocalObject(oTestObject, sAllyLineOfSight);
 			}
-			PS_SetLocalObject(oPrevTestObject, sAllyLineOfSight, oPartyMember);
-			PS_SetLocalObject(oPartyMember, sAllyLineOfSight, oTestObject);
+			SetLocalObject(oPrevTestObject, sAllyLineOfSight, oPartyMember);
+			SetLocalObject(oPartyMember, sAllyLineOfSight, oTestObject);
 		}
         oPartyMember = GetNextFactionMember(oLeader, FALSE);
     }
@@ -175,7 +173,7 @@ void HenchSetAutoSetFollow(object oLeader, int columns)
 		object oCurLeader = oLeader;
 		int curMemberCount;
 	
-		oPartyMember = PS_GetLocalObject(oLeader, sAllyLineOfSight);
+		oPartyMember = GetLocalObject(oLeader, sAllyLineOfSight);
 		while (GetIsObjectValid(oPartyMember))
 		{
 //			Jug_Debug("checking " + GetName(oPartyMember));
@@ -189,7 +187,7 @@ void HenchSetAutoSetFollow(object oLeader, int columns)
 				oCurLeader = oPartyMember;
 			}
 			curMemberCount ++;
-			oPartyMember = PS_GetLocalObject(oPartyMember, sAllyLineOfSight);
+			oPartyMember = GetLocalObject(oPartyMember, sAllyLineOfSight);
 		}
 	}
 }
@@ -202,7 +200,7 @@ void ResetWeaponPreference(object oTarget, int iWeaponType)
 	switch (iWeaponType)
 	{
 		case HENCH_AI_STORED_MELEE_FLAG:
-			PS_DeleteLocalInt(oTarget, weaponPrefString);			
+			DeleteLocalInt(oTarget, weaponPrefString);			
 		case HENCH_AI_STORED_RANGED_FLAG:
 			oTest = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oTarget);
 			break;
@@ -213,19 +211,19 @@ void ResetWeaponPreference(object oTarget, int iWeaponType)
 	}
 	if (GetIsObjectValid(oTest))
 	{
-		if (PS_GetLocalInt(oTest, weaponPrefString) == iWeaponType)
+		if (GetLocalInt(oTest, weaponPrefString) == iWeaponType)
 		{
 //			Jug_Debug("deleting weapon pref for " + GetName(oTest));
-			PS_DeleteLocalInt(oTest, weaponPrefString);
+			DeleteLocalInt(oTest, weaponPrefString);
 		}
 	}
 	oTest = GetFirstItemInInventory(oTarget);
 	while (GetIsObjectValid(oTest))
 	{
-		if (PS_GetLocalInt(oTest, weaponPrefString) == iWeaponType)
+		if (GetLocalInt(oTest, weaponPrefString) == iWeaponType)
 		{
 //			Jug_Debug("deleting weapon pref for " + GetName(oTest));
-			PS_DeleteLocalInt(oTest, weaponPrefString);
+			DeleteLocalInt(oTest, weaponPrefString);
 		}
 		oTest = GetNextItemInInventory(oTarget);	
 	}
@@ -254,7 +252,7 @@ void HenchSetAIWeapons(object oTarget, object oWeapon, int iWeaponType)
 			SpeakString(GetName(oWeapon) + GetStringByStrRef(230440));
 			return;
 		}		
-		PS_SetLocalObject(oTarget, HENCH_AI_STORED_MELEE, oWeapon);	
+		SetLocalObject(oTarget, HENCH_AI_STORED_MELEE, oWeapon);	
 	}
 	else if (iWeaponType == HENCH_AI_STORED_RANGED_FLAG)
 	{
@@ -264,7 +262,7 @@ void HenchSetAIWeapons(object oTarget, object oWeapon, int iWeaponType)
 			SpeakString(GetName(oWeapon) + GetStringByStrRef(230441));
 			return;
 		}		
-		PS_SetLocalObject(oTarget, HENCH_AI_STORED_RANGED, oWeapon);		
+		SetLocalObject(oTarget, HENCH_AI_STORED_RANGED, oWeapon);		
 	}
 	else if (iWeaponType == HENCH_AI_STORED_SHIELD_FLAG)
 	{
@@ -276,7 +274,7 @@ void HenchSetAIWeapons(object oTarget, object oWeapon, int iWeaponType)
 			SpeakString(GetName(oWeapon) + GetStringByStrRef(230442));
 			return;
 		}		
-		PS_SetLocalObject(oTarget, HENCH_AI_STORED_SHIELD, oWeapon);
+		SetLocalObject(oTarget, HENCH_AI_STORED_SHIELD, oWeapon);
 	}
 	else if (iWeaponType == HENCH_AI_STORED_OFF_HAND_FLAG)
 	{
@@ -286,7 +284,7 @@ void HenchSetAIWeapons(object oTarget, object oWeapon, int iWeaponType)
 			SpeakString(GetName(oWeapon) + GetStringByStrRef(230440));
 			return;
 		}		
-		PS_SetLocalObject(oTarget, HENCH_AI_STORED_OFF_HAND, oWeapon);	
+		SetLocalObject(oTarget, HENCH_AI_STORED_OFF_HAND, oWeapon);	
 	}	
 	else
 	{
@@ -296,8 +294,8 @@ void HenchSetAIWeapons(object oTarget, object oWeapon, int iWeaponType)
 	
 	ResetWeaponPreference(oTarget, iWeaponType);
 	string weaponPrefString = GetTag(oTarget) + HENCH_AI_STORED_PREF_WEAPON;
-	PS_SetLocalInt(oWeapon, weaponPrefString, iWeaponType);
-	PS_SetLocalInt(oTarget, HENCH_AI_STORED_PREF_WEAPON, PS_GetLocalInt(oTarget, HENCH_AI_STORED_PREF_WEAPON) | iWeaponType);
+	SetLocalInt(oWeapon, weaponPrefString, iWeaponType);
+	SetLocalInt(oTarget, HENCH_AI_STORED_PREF_WEAPON, GetLocalInt(oTarget, HENCH_AI_STORED_PREF_WEAPON) | iWeaponType);
 }
 
 
@@ -316,17 +314,17 @@ void main(int nType, int nKind, int nTarget)
 //		Jug_Debug(GetName(oSpeaker) + " attack nearest");
         SetAssociateState(NW_ASC_MODE_DEFEND_MASTER, FALSE, oSpeaker);
         SetAssociateState(NW_ASC_MODE_STAND_GROUND, FALSE, oSpeaker);
-		PS_DeleteLocalInt(oSpeaker, sHenchDontAttackFlag);
+		DeleteLocalInt(oSpeaker, sHenchDontAttackFlag);
 		break;
 	case HENCH_CNTX_MENU_PC_FOLLOW_MASTER:
 //		Jug_Debug(GetName(oSpeaker) + " follow");	
-		PS_SetLocalInt(oSpeaker, sHenchDontAttackFlag, TRUE);
-		PS_DeleteLocalInt(oSpeaker, sHenchScoutingFlag);
+		SetLocalInt(oSpeaker, sHenchDontAttackFlag, TRUE);
+		DeleteLocalInt(oSpeaker, sHenchScoutingFlag);
 		SetAssociateState(NW_ASC_MODE_STAND_GROUND, FALSE, oSpeaker);
 		break;
 	case HENCH_CNTX_MENU_PC_GUARD_MASTER:
 //		Jug_Debug(GetName(oSpeaker) + " guard");
-		PS_DeleteLocalInt(oSpeaker, sHenchDontAttackFlag);
+		DeleteLocalInt(oSpeaker, sHenchDontAttackFlag);
 		//Companions will only attack the Masters Last Attacker
 		SetAssociateState(NW_ASC_MODE_DEFEND_MASTER, TRUE, oSpeaker);
 		SetAssociateState(NW_ASC_MODE_STAND_GROUND, FALSE, oSpeaker);
@@ -404,7 +402,7 @@ void main(int nType, int nKind, int nTarget)
 		ResetWeaponPreference(oSpeaker, HENCH_AI_STORED_RANGED_FLAG);
 		ResetWeaponPreference(oSpeaker, HENCH_AI_STORED_SHIELD_FLAG);
 		ResetWeaponPreference(oSpeaker, HENCH_AI_STORED_OFF_HAND_FLAG);
-		PS_DeleteLocalInt(oSpeaker, HENCH_AI_STORED_PREF_WEAPON);		
+		DeleteLocalInt(oSpeaker, HENCH_AI_STORED_PREF_WEAPON);		
 		ChangeEquippedWeapons(oSpeaker);
 		break;
 		
@@ -418,11 +416,11 @@ void main(int nType, int nKind, int nTarget)
 		{
 			int nResult;
 			// global settings
-			nResult = PS_GetGlobalInt(HenchGlobalOptionsStr);
+			nResult = GetGlobalInt(HenchGlobalOptionsStr);
 			SetCampaignInt(HENCH_CAMPAIGN_DB, HenchGlobalOptionsStr, nResult);
 			// party settings
     		object oPlayerCharacter = GetOwnedCharacter(GetFactionLeader(oSpeaker));
-    		nResult = PS_GetLocalInt(oPlayerCharacter, henchPartySettings);
+    		nResult = GetLocalInt(oPlayerCharacter, henchPartySettings);
 			SetCampaignInt(HENCH_CAMPAIGN_DB, henchPartySettings, nResult);
 		}
 		break;
@@ -432,12 +430,12 @@ void main(int nType, int nKind, int nTarget)
 			// global settings
 			nResult = GetCampaignInt(HENCH_CAMPAIGN_DB, HenchGlobalOptionsStr);
 			nResult |= HENCH_OPTION_SET_ONCE;
-    		PS_SetGlobalInt(HenchGlobalOptionsStr, nResult);
+    		SetGlobalInt(HenchGlobalOptionsStr, nResult);
 			// party settings
 			nResult = GetCampaignInt(HENCH_CAMPAIGN_DB, henchPartySettings);
 			nResult |= HENCH_OPTION_SET_ONCE;
     		object oPlayerCharacter = GetOwnedCharacter(GetFactionLeader(oSpeaker));
-    		PS_SetLocalInt(oPlayerCharacter, henchPartySettings, nResult);
+    		SetLocalInt(oPlayerCharacter, henchPartySettings, nResult);
 		}
 		break;
 	case HENCH_RESET_GLOBAL_SETTINGS:
@@ -446,12 +444,12 @@ void main(int nType, int nKind, int nTarget)
 			// global settings
 			SetCampaignInt(HENCH_CAMPAIGN_DB, HenchGlobalOptionsStr, 0);
 			nResult = HENCH_OPTION_SET_ONCE;
-    		PS_SetGlobalInt(HenchGlobalOptionsStr, nResult);
+    		SetGlobalInt(HenchGlobalOptionsStr, nResult);
 			// party settings
 			SetCampaignInt(HENCH_CAMPAIGN_DB, henchPartySettings, 0);
 			nResult = HENCH_OPTION_SET_ONCE;
     		object oPlayerCharacter = GetOwnedCharacter(GetFactionLeader(oSpeaker));
-    		PS_SetLocalInt(oPlayerCharacter, henchPartySettings, nResult);
+    		SetLocalInt(oPlayerCharacter, henchPartySettings, nResult);
 		}
 		break;
 	default:

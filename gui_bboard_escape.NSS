@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 const string MSGBOARD_XML = "bboard.xml";
 const string MSGBOARD_XML2 = "bboard_msg.xml";
 const string SCREEN_MSGBOARD = "SCREEN_BBOARD"; //main board
@@ -10,7 +8,7 @@ const string MSG_IMG = "BBOARD_MSG_";
 
 int HasJournalEntry(object oPC, string sJournal) {
 
-	return PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sJournal);
+	return GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sJournal);
 
 }
 
@@ -24,7 +22,7 @@ void main (int N1, int N2, string sVar) {
 	
 	object oBoard = GetNearestObjectByTag("questboard");
 	
-	int nMax = PS_GetLocalInt(oBoard, "quest_max");
+	int nMax = GetLocalInt(oBoard, "quest_max");
 	int n = 0;
 	int assigned = 1;
 	int nPCLevel = GetHitDice(oPC);
@@ -35,10 +33,10 @@ void main (int N1, int N2, string sVar) {
 			break;
 	
 		string sNum = IntToString(n);
-		string sText = PS_GetLocalString(oBoard, "quest_msg_"+sNum);
-		string sTitle = PS_GetLocalString(oBoard, "quest_title_"+sNum);
-		int nLevel = PS_GetLocalInt(oBoard, "quest_level_"+sNum);
-		string sJournal = PS_GetLocalString(oBoard, "quest_journal_"+sNum);
+		string sText = GetLocalString(oBoard, "quest_msg_"+sNum);
+		string sTitle = GetLocalString(oBoard, "quest_title_"+sNum);
+		int nLevel = GetLocalInt(oBoard, "quest_level_"+sNum);
+		string sJournal = GetLocalString(oBoard, "quest_journal_"+sNum);
 		
 		//Don't show missions we've already found!
 		if (sJournal != "" && HasJournalEntry(oPC, sJournal) > 0)
@@ -55,9 +53,9 @@ void main (int N1, int N2, string sVar) {
 			
 			//AssignCommand(oBoard, ActionSpeakString("showing: "+MSG_IMG+sIndex));
 			
-			string sImg = PS_GetLocalString(oPC, "quest_img_"+IntToString(assigned));
-			PS_SetLocalString(oPC, "quest_msg_"+IntToString(assigned), sText);
-			PS_SetLocalString(oPC, "quest_title_"+IntToString(assigned), sTitle);
+			string sImg = GetLocalString(oPC, "quest_img_"+IntToString(assigned));
+			SetLocalString(oPC, "quest_msg_"+IntToString(assigned), sText);
+			SetLocalString(oPC, "quest_title_"+IntToString(assigned), sTitle);
 			if (sImg != "")
 				SetGUITexture(oPC, SCREEN_MSGBOARD, MSG_IMG+sIndex, sImg);
 			

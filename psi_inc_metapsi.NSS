@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //////////////////////////////////////////////////
 /*                  Includes                    */
 //////////////////////////////////////////////////
@@ -165,31 +163,31 @@ struct manifestation EvaluateMetapsionicsNew(struct manifestation manif, int nMe
 	
     /* Calculate the added cost from metapsionics and set the use markers for the powers used */
 	if((nMetaPsiFlags & METAPSIONIC_AUGMENT) &&
-        PS_GetLocalInt(manif.oManifester, METAPSIONIC_AUGMENT_VAR))
+        GetLocalInt(manif.oManifester, METAPSIONIC_AUGMENT_VAR))
     {
         nMetaPsiPP = max(1, manif.nPPCost/2); //forces cost to be at least 1
         manif.bAugment = TRUE;
     }
     if((nMetaPsiFlags & METAPSIONIC_EMPOWER) &&
-        PS_GetLocalInt(manif.oManifester, METAPSIONIC_EMPOWER_VAR))
+        GetLocalInt(manif.oManifester, METAPSIONIC_EMPOWER_VAR))
     {
         nMetaPsiPP += _GetMetaPsiPPCost(METAPSIONIC_EMPOWER_COST, nImpMetapsiReduction, bUseSum);
         manif.bEmpower = TRUE;
     }
     if((nMetaPsiFlags & METAPSIONIC_EXTEND)  &&
-       PS_GetLocalInt(manif.oManifester, METAPSIONIC_EXTEND_VAR))
+       GetLocalInt(manif.oManifester, METAPSIONIC_EXTEND_VAR))
     {
         nMetaPsiPP += _GetMetaPsiPPCost(METAPSIONIC_EXTEND_COST, nImpMetapsiReduction, bUseSum);
         manif.bExtend = TRUE;
     }
     if((nMetaPsiFlags & METAPSIONIC_MAXIMIZE) &&
-       PS_GetLocalInt(manif.oManifester, METAPSIONIC_MAXIMIZE_VAR))
+       GetLocalInt(manif.oManifester, METAPSIONIC_MAXIMIZE_VAR))
     {
         nMetaPsiPP += _GetMetaPsiPPCost(METAPSIONIC_MAXIMIZE_COST, nImpMetapsiReduction, bUseSum);
         manif.bMaximize = TRUE;
     }
     if((nMetaPsiFlags & METAPSIONIC_TWIN)      &&
-       PS_GetLocalInt(manif.oManifester, METAPSIONIC_TWIN_VAR))
+       GetLocalInt(manif.oManifester, METAPSIONIC_TWIN_VAR))
     {
         nMetaPsiPP += _GetMetaPsiPPCost(METAPSIONIC_TWIN_COST, nImpMetapsiReduction, bUseSum);
         manif.bTwin = TRUE;

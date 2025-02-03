@@ -111,8 +111,8 @@ void main(){
 		
 		SetCustomToken(4001, sItemName);
 		SetCustomToken(4002, sMetalName);
-		PS_SetLocalString(oPC, "melt_ingotRes", sIngot);
-		PS_SetLocalObject(oPC, "melt_itemObject", oTarget);
+		SetLocalString(oPC, "melt_ingotRes", sIngot);
+		SetLocalObject(oPC, "melt_itemObject", oTarget);
 		AssignCommand(oPC, ActionStartConversation(oPC, "confirm_meltdown_dialog", TRUE, FALSE, TRUE, TRUE));
 	}
 
@@ -124,7 +124,7 @@ void main(){
     object oTarget  = GetItemActivatedTarget();
     location lTarget = GetItemActivatedTargetLocation();
     string sTargetTag  = GetTag(oItem);
-	int bSmithHammerRenameItem = PS_GetGlobalInt(CAMPAIGN_SWITCH_SMITH_HAMMER_RENAME_ITEM);
+	int bSmithHammerRenameItem = GetGlobalInt(CAMPAIGN_SWITCH_SMITH_HAMMER_RENAME_ITEM);
 	
 	PrettyDebug("oPC = " + GetName(oPC));
 	PrettyDebug("oItem = " + GetName(oItem));

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // SIGIS gui function called from sigisread.xml when page change buttons are clicked - SIGIS News Submission and Reader - by Agony_Aunt/Loki
 // sFunction is expected to be either "+" or "-"
 
@@ -8,10 +6,10 @@
 void main(string sFunction)
 {
 	object oPC = OBJECT_SELF; // hopefully
-	object oItem = PS_GetLocalObject(oPC, "SIGIS_EDITION");
+	object oItem = GetLocalObject(oPC, "SIGIS_EDITION");
 		
-	int iCurrentPage = PS_GetLocalInt(oItem, "CURRENT_PAGE");
-	int iMaxPage = PS_GetLocalInt(oItem, "SIGIS_PAGES");
+	int iCurrentPage = GetLocalInt(oItem, "CURRENT_PAGE");
+	int iMaxPage = GetLocalInt(oItem, "SIGIS_PAGES");
 	
 	if (sFunction == "BACK")
 	{

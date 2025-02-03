@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //
 /*
    Template for an Activate item script.
@@ -17,7 +15,7 @@ void main()
     object oPC      = GetItemActivator();
     object oItem    = GetItemActivated();
 	
-	if (PS_GetLocalInt(oPC, "STRANGE_BADGE") > 0) {
+	if (GetLocalInt(oPC, "STRANGE_BADGE") > 0) {
 		SendMessageToPC(oPC, "You are unable to place the faction this badge belongs to.");
 		return;
 	}
@@ -42,6 +40,6 @@ void main()
 		SendMessageToPC(oPC, "You are unable to place the faction this badge belongs to.");
 	}
 	
-	PS_SetLocalInt(oPC, "STRANGE_BADGE", 1);
+	SetLocalInt(oPC, "STRANGE_BADGE", 1);
 	
 }

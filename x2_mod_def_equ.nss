@@ -39,7 +39,7 @@ void main()
         // prevent players from reequipping their weapon in
         if (IWGetIsInIntelligentWeaponConversation(oPC))
         {
-			object oConv = PS_GetLocalObject(oPC, "X2_O_INTWEAPON_SPIRIT");
+			object oConv = GetLocalObject(oPC, "X2_O_INTWEAPON_SPIRIT");
             IWEndIntelligentWeaponConversation(oConv, oPC);
         }
         else
@@ -47,7 +47,7 @@ void main()
             //------------------------------------------------------------------
             // Trigger Drain Health Event
             //------------------------------------------------------------------
-            if (PS_GetLocalInt(oPC, "X2_L_ENSERRIC_ASKED_Q3") == 1) ExecuteScript ("x2_ens_dodrain", oPC);
+            if (GetLocalInt(oPC, "X2_L_ENSERRIC_ASKED_Q3") == 1) ExecuteScript ("x2_ens_dodrain", oPC);
             else IWPlayRandomEquipComment(oPC, oItem);
         }
     }

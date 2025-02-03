@@ -61,8 +61,8 @@ void main() {
 						DelayCommand((fDuration-0.1f), CheckAndDoMagicDamage(oTarget, nAwakeDice)); //for PCs, just check when the duration runs out
 					} else {
 						ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-						PS_SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
-						PS_SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
+						SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
+						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
 					}
 						
 				} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -119,7 +119,7 @@ void main() {
 void DoMagicDamageOnWaking(object oTarget, int nAwake = 2) {
 	effect eDamage = EffectDamage(d6(nAwake));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-	PS_SetLocalString(oTarget, "DamagedScript", "");
+	SetLocalString(oTarget, "DamagedScript", "");
 }
 
 void CheckAndDoMagicDamage(object oTarget, int nAwake = 2) {

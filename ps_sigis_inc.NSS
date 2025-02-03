@@ -197,9 +197,9 @@ string SigisDate(int iSQLTime, int iDetailed=FALSE)
 
 void SIGISAddEntry(object oItem)
 {
-	string sHeadline = PS_GetLocalString(oItem, "SIGIS_HEADLINE"); 
-	string sAuthor = PS_GetLocalString(oItem, "SIGIS_AUTHOR");
-	string sText = PS_GetLocalString(oItem, "SIGIS_TEXT");
+	string sHeadline = GetLocalString(oItem, "SIGIS_HEADLINE"); 
+	string sAuthor = GetLocalString(oItem, "SIGIS_AUTHOR");
+	string sText = GetLocalString(oItem, "SIGIS_TEXT");
 	int iDate = GetRealTime();
 	string sPCID = PS_GetCharID(GetItemPossessor(oItem));
 	
@@ -216,7 +216,7 @@ Table column 'Author' -> local string on oItem "SIGIS_AUTHOR_[i]1[/i]"
 Table column 'ArticleText' -> local string on oItem "SIGIS_TEXT_[i]1[/i]"
 
 As each row is added the local variable number (in italics) is incremented.
-eg: int iCounter; [i]do while loop[/i] iCounter++; PS_SetLocalInt(oItem, "SIGIS_DATE_" + IntToString(iCounter), [i]timestamp[/i]);
+eg: int iCounter; [i]do while loop[/i] iCounter++; SetLocalInt(oItem, "SIGIS_DATE_" + IntToString(iCounter), [i]timestamp[/i]);
 
 int return value = TRUE if any entries were found, FALSE if no entries were found.  Therefore if no news entries, i can drop some random or default news in.
 */
@@ -240,14 +240,14 @@ int SIGISGetEntries(object oItem)
 		sArticleText = SQLGetData(4);
 		
 		iLoop++;
-		PS_SetLocalInt(oItem, "SIGIS_DATE_" + IntToString(iLoop), iDate);
-		PS_SetLocalString(oItem, "SIGIS_HEADLINE_" + IntToString(iLoop), sHeadline);	
-		PS_SetLocalString(oItem, "SIGIS_AUTHOR_" + IntToString(iLoop), sAuthor);	
-		PS_SetLocalString(oItem, "SIGIS_TEXT_" + IntToString(iLoop), sArticleText);		
+		SetLocalInt(oItem, "SIGIS_DATE_" + IntToString(iLoop), iDate);
+		SetLocalString(oItem, "SIGIS_HEADLINE_" + IntToString(iLoop), sHeadline);	
+		SetLocalString(oItem, "SIGIS_AUTHOR_" + IntToString(iLoop), sAuthor);	
+		SetLocalString(oItem, "SIGIS_TEXT_" + IntToString(iLoop), sArticleText);		
 	}
 	
 	// Stores the max number of pages
-	PS_SetLocalInt(oItem, "SIGIS_PAGES", iLoop);
+	SetLocalInt(oItem, "SIGIS_PAGES", iLoop);
 	
 	if (iLoop == 0)
 		iFound = FALSE;
@@ -263,13 +263,13 @@ void SIGISReadChangePage(object oPC, object oItem, int iPage)
 
 	//SendMessageToPC(oPC, "Displaying Page: " + sPage);
 	
-	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_HEADLINE", -1, PS_GetLocalString(oItem, "SIGIS_HEADLINE_" + sPage));
-	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_AUTHOR", -1, "Submitted By: " + PS_GetLocalString(oItem, "SIGIS_AUTHOR_" + sPage));
-	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_DATE", -1, "Submit Date: " + SigisDate(PS_GetLocalInt(oItem, "SIGIS_DATE_" + sPage)));
-	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_TEXT", -1, PS_GetLocalString(oItem, "SIGIS_TEXT_" + sPage));
+	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_HEADLINE", -1, GetLocalString(oItem, "SIGIS_HEADLINE_" + sPage));
+	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_AUTHOR", -1, "Submitted By: " + GetLocalString(oItem, "SIGIS_AUTHOR_" + sPage));
+	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_DATE", -1, "Submit Date: " + SigisDate(GetLocalInt(oItem, "SIGIS_DATE_" + sPage)));
+	SetGUIObjectText(oPC, "SIGIS_READ_SCENE", "SRLB_TEXT", -1, GetLocalString(oItem, "SIGIS_TEXT_" + sPage));
 	
-	PS_SetLocalInt(oItem, "CURRENT_PAGE", iPage);
-	int iMaxPage = PS_GetLocalInt(oItem, "SIGIS_PAGES");
+	SetLocalInt(oItem, "CURRENT_PAGE", iPage);
+	int iMaxPage = GetLocalInt(oItem, "SIGIS_PAGES");
 	string sPageText = IntToString(iPage) + " of " + IntToString(iMaxPage);
 	
 	if (iPage == 1)

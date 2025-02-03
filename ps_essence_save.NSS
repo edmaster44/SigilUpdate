@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 const int cMidnight = 86400;
 const int cSaveWait = 300;
 
@@ -34,7 +32,7 @@ int GetTimePassed(int iBegin, int iEnd)
 void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 {
   if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-   PS_SetLocalInt(oObject, sTimeStampVariable, GetTime());
+   SetLocalInt(oObject, sTimeStampVariable, GetTime());
 }
 
 //CheckTimeStamp(object)  self explanatory no?
@@ -43,7 +41,7 @@ void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 {
   if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-  int iOld = PS_GetLocalInt(oObject, sTimeStampVariable);
+  int iOld = GetLocalInt(oObject, sTimeStampVariable);
   int iNew = GetTime();
   return GetTimePassed(iOld, iNew);
 }

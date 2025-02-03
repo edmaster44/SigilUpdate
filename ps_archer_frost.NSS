@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_onhit" 
 
 void main() {
@@ -43,7 +41,7 @@ void main() {
 		return;	
 	}
 	
-	if (PS_GetLocalInt(oItem, "elemental") == 1 && GetItemHasTemporaryProperties(oItem)){ //cannot be magical ammunition
+	if (GetLocalInt(oItem, "elemental") == 1 && GetItemHasTemporaryProperties(oItem)){ //cannot be magical ammunition
 		SendMessageToPC(oCaster, "You may only have one type of damage active at a time!");
 		return;	
 	}
@@ -57,7 +55,7 @@ void main() {
 	// AFW-OEI 06/27/2007: Add a "cast" effect.
 	effect eCast = EffectNWN2SpecialEffectFile("fx_spell_creeping_cold");
 	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, OBJECT_SELF);
-	PS_SetLocalInt(oItem, "elemental", 1);
+	SetLocalInt(oItem, "elemental", 1);
 	
 	object rangedWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oCaster);
 	if (GetHasFeat(2762, oCaster, TRUE) && !GetItemHasItemProperty(rangedWeapon, ITEM_PROPERTY_MASSIVE_CRITICALS)) {

@@ -1,12 +1,10 @@
-#include "ff_safevar"
-
 void main(){
 object oPC = GetItemActivator();
 object oItem = GetItemActivated();
 object oTarget = oPC;
-int nPoly = PS_GetLocalInt(oItem, "polymorph");
-int nDuration = PS_GetLocalInt(oItem, "duration");
-string sEffect = PS_GetLocalString(oItem, "Effect");
+int nPoly = GetLocalInt(oItem, "polymorph");
+int nDuration = GetLocalInt(oItem, "duration");
+string sEffect = GetLocalString(oItem, "Effect");
 effect eEffect = EffectNWN2SpecialEffectFile(sEffect, oPC);
 effect ePoly = EffectPolymorph(nPoly);
 effect eVis = EffectNWN2SpecialEffectFile("sp_enlarge_person_hit");

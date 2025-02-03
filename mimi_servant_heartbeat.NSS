@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "hench_i0_ai"
 
 int HasInstrumentEquipped() {
@@ -20,16 +18,16 @@ int HasInstrumentEquipped() {
 void SetCorrectMusicalAnimation(object oItem) {
 
 	if (GetBaseItemType(oItem) == BASE_ITEM_DRUM)
-		PS_SetLocalString(OBJECT_SELF, "ANIMATION", "idledrum");
+		SetLocalString(OBJECT_SELF, "ANIMATION", "idledrum");
 	else if (GetBaseItemType(oItem) == BASE_ITEM_MANDOLIN)
-		PS_SetLocalString(OBJECT_SELF, "ANIMATION", "idleguitar");
+		SetLocalString(OBJECT_SELF, "ANIMATION", "idleguitar");
 	else if (GetBaseItemType(oItem) == BASE_ITEM_FLUTE)
 	{
 		if (GetTag(oItem) == "ps_music_bagpipe" ||
 			GetTag(oItem) == "ps_it_bagpipe")
-			PS_SetLocalString(OBJECT_SELF, "ANIMATION", "bagpipe");
+			SetLocalString(OBJECT_SELF, "ANIMATION", "bagpipe");
 		else
-			PS_SetLocalString(OBJECT_SELF, "ANIMATION", "idleflute");
+			SetLocalString(OBJECT_SELF, "ANIMATION", "idleflute");
 	}
 }
 
@@ -53,7 +51,7 @@ void EquipInstrument() {
 
 void main()
 {
-	object playerTag = PS_GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
+	object playerTag = GetLocalObject(OBJECT_SELF, "FOLLOW_MASTER");
 	if (GetIsObjectValid(playerTag))
 	{
 		if (GetArea(playerTag) != GetArea(OBJECT_SELF))
@@ -66,26 +64,26 @@ void main()
 		return;
 	}	
 	
-	int wanderBool = PS_GetLocalInt(OBJECT_SELF, "WANDER");
+	int wanderBool = GetLocalInt(OBJECT_SELF, "WANDER");
 	if (wanderBool == 1)
 	{
 		AssignCommand(OBJECT_SELF, ActionRandomWalk());
 		return;
 	}
 	
-	int playMusic = PS_GetLocalInt(OBJECT_SELF, "PLAY_INSTRUMENT");
+	int playMusic = GetLocalInt(OBJECT_SELF, "PLAY_INSTRUMENT");
 	if (playMusic == 1)
 	{
 		if (HasInstrumentEquipped())
 		{
-			PlayCustomAnimation(OBJECT_SELF,  PS_GetLocalString(OBJECT_SELF, "ANIMATION"), TRUE);
+			PlayCustomAnimation(OBJECT_SELF,  GetLocalString(OBJECT_SELF, "ANIMATION"), TRUE);
 			return;
 		}
 		else
 			EquipInstrument();
 	}
 
-	string anim = PS_GetLocalString(OBJECT_SELF, "ANIMATION");
+	string anim = GetLocalString(OBJECT_SELF, "ANIMATION");
 	if (anim != "")
 	{
 		if (GetNumActions(OBJECT_SELF) <= 0)
@@ -133,7 +131,7 @@ void main()
     else if (GetHenchOption(HENCH_OPTION_DISABLE_HB_DETECTION) ||
 		!GetIsObjectValid(GetNearestSeenOrHeardEnemyNotDead(GetHenchOption(HENCH_OPTION_DISABLE_HB_HEARING))))
     {
-        if (PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
             // continue to move to target
 	        if (GetBehaviorState(NW_FLAG_BEHAVIOR_SPECIAL))
@@ -148,7 +146,7 @@ void main()
         else
         {
         	CleanCombatVars();
-            PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+            SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
             if (DoStealthAndWander())
             {
                 // nothing to do here

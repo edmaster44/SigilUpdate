@@ -8,5 +8,5 @@ void main() {
 	int iMAX = PS_GetMaxPartylevel(oPC);
 	int nLevel = FloatToInt(PS_GetAvgPartylevel(oPC, iMAX));
 	
-	PS_SetLocalInt(OBJECT_SELF, "QUEST_CR", nLevel);
+	SetLocalInt(OBJECT_SELF, "QUEST_CR", nLevel);
 }

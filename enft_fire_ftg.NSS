@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "enft_heat_rlf"
 #include "enft_cnsts"
 #include "nw_i0_spells"
@@ -13,19 +11,19 @@ void main()
     effect eff;
 	
 	SpeakString("heat script running", TALKVOLUME_SHOUT);
-	int lastRun = PS_GetLocalInt(OBJECT_SELF, "heat_timestamp");
+	int lastRun = GetLocalInt(OBJECT_SELF, "heat_timestamp");
 	float diff = IntToFloat(abs(TimeStampT()-lastRun));
 	if (diff < heatTime)
 		return;
-	PS_SetLocalInt(OBJECT_SELF, "heat_timestamp", TimeStampT());
+	SetLocalInt(OBJECT_SELF, "heat_timestamp", TimeStampT());
 	SpeakString("heat script accepted", TALKVOLUME_SHOUT);
 	
     // Check to make sure still in hot region
-    if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 2)
+    if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 2)
     {
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", 0);
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
         SendMessageToPC(OBJECT_SELF, "You feel relief at long last.");
 
         // Remove unconscious effect if applied
@@ -38,14 +36,14 @@ void main()
     if(heatRelief(OBJECT_SELF))
     {
         // Throws are set back to 0 because body temperature has returned to normal.
-        if(PS_GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") > 0)
+        if(GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") > 0)
         {
             SendMessageToPC(OBJECT_SELF, "You feel relief at long last.");
             SendMessageToPC(OBJECT_SELF, "Subdual damage:  " + IntToString(0));
         }
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", 0);
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
 
         // Remove unconscious effect if applied
         RemoveSpecificEffect(EFFECT_TYPE_CUTSCENE_PARALYZE, OBJECT_SELF);
@@ -56,17 +54,17 @@ void main()
     }
 
     // Collect heat effects variables on character
-    heatDamage = PS_GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE");
-    pastThrows = PS_GetLocalInt(OBJECT_SELF, "HEAT_THROWS");
+    heatDamage = GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE");
+    pastThrows = GetLocalInt(OBJECT_SELF, "HEAT_THROWS");
 
     // Check to see if character is already unconscious
-    if(PS_GetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS") != 0)
+    if(GetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS") != 0)
     {
         // Check if conscious again
         if(heatDamage <= GetCurrentHitPoints( ))
         {
             // Signify that character is no longer unconscious
-            PS_SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
+            SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
             RemoveSpecificEffect(EFFECT_TYPE_CUTSCENE_PARALYZE, OBJECT_SELF);
         }
         // Attempt heat damage if still unconscious
@@ -77,8 +75,8 @@ void main()
         // The number of throws, however, is not reduced.  Body has not gotten cooler yet.
         if(GetIsDead(OBJECT_SELF))
             {
-                PS_SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", 0);
-                PS_SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
+                SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", 0);
+                SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 0);
                 RemoveSpecificEffect(EFFECT_TYPE_CUTSCENE_PARALYZE, OBJECT_SELF);
             }
     }
@@ -94,7 +92,7 @@ void main()
         afterHP = GetCurrentHitPoints( );
         newHeatDamage = beforeHP - afterHP;
         RemoveEffect(OBJECT_SELF, eff);
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", heatDamage + newHeatDamage);
+        SetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE", heatDamage + newHeatDamage);
 
         // Sent message to PC
         if(newHeatDamage > 0)
@@ -107,7 +105,7 @@ void main()
         if((heatDamage + newHeatDamage) > GetCurrentHitPoints( ))
         {
             // Signify that character is unconscious
-            PS_SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 1);
+            SetLocalInt(OBJECT_SELF, "HEAT_UNCONSCIOUS", 1);
 
             // Sent message to PC
             SendMessageToPC(OBJECT_SELF, "You can take no more of this exposure and are now unconscious.");
@@ -120,18 +118,18 @@ void main()
     }
 
     // Apply fatigue to character
-    if(PS_GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") > 0)
+    if(GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") > 0)
     {
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, heatTime);
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, heatTime);
     }
 
     // If the character is just barely conscious apply dazing effects for an hour
-    if(PS_GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
+    if(GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, heatTime);
 
     // Increase the number of throws done
-    PS_SetLocalInt(OBJECT_SELF, "HEAT_THROWS", pastThrows + 1);
+    SetLocalInt(OBJECT_SELF, "HEAT_THROWS", pastThrows + 1);
 
     // Check for heat damage in an hour.
     DelayCommand(heatTime, ExecuteScript("enft_heat_ftg", OBJECT_SELF));

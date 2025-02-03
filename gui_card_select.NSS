@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /********************************************************
 * Script that handles feedback from card selection gui  *
 * by Agony_Aunt/Loki_999                                *
@@ -50,7 +48,7 @@ void main(string sSelect)
 	}
 	else if (sFunction == "HAND")
 	{
-		PS_SetLocalInt(oBoard, "P" + sPos + "_" + IntToString(iSelect), 0);
+		SetLocalInt(oBoard, "P" + sPos + "_" + IntToString(iSelect), 0);
 		CardsGUIClearCardInPosition(oPC, CARD_SCREEN_SELECTION_SCENE, CARD + IntToString(iSelect));
 		SetGUIObjectDisabled(oPC, CARD_SCREEN_SELECTION_SCENE, "TT_BUTTON_DONE", TRUE); // because we definitely have less than 5 cards now
 	}
@@ -74,11 +72,11 @@ void main(string sSelect)
 			CardsStoreSelectedCardOnBoard(oBoard, oDeck, iCard, iNextSlot, iPos);
 			CardsGUIDisplayCardInPositionFromDeck(oPC, oDeck, iCard, CARD_SCREEN_SELECTION_SCENE, CARD + IntToString(iNextSlot));
 			
-			if (PS_GetLocalInt(oBoard, "P" + sPos + "_" + "1") != 0 &&
-				PS_GetLocalInt(oBoard, "P" + sPos + "_" + "2") != 0 &&
-				PS_GetLocalInt(oBoard, "P" + sPos + "_" + "3") != 0 &&
-				PS_GetLocalInt(oBoard, "P" + sPos + "_" + "4") != 0 &&
-				PS_GetLocalInt(oBoard, "P" + sPos + "_" + "5") != 0)
+			if (GetLocalInt(oBoard, "P" + sPos + "_" + "1") != 0 &&
+				GetLocalInt(oBoard, "P" + sPos + "_" + "2") != 0 &&
+				GetLocalInt(oBoard, "P" + sPos + "_" + "3") != 0 &&
+				GetLocalInt(oBoard, "P" + sPos + "_" + "4") != 0 &&
+				GetLocalInt(oBoard, "P" + sPos + "_" + "5") != 0)
 			{
 				SetGUIObjectDisabled(oPC, CARD_SCREEN_SELECTION_SCENE, "TT_BUTTON_DONE", FALSE);
 			}
@@ -92,12 +90,12 @@ void main(string sSelect)
 			
 			if (iGameState == GAME_STATE_CARD_SELECTION_1)
 			{
-				PS_SetLocalInt(oBoard, LAST_PLAYER_CARDS_SELECTED, iPos);
+				SetLocalInt(oBoard, LAST_PLAYER_CARDS_SELECTED, iPos);
 				CardsChangeGameState(oBoard, GAME_STATE_CARD_SELECTION_2);
 			}
 			else if (iGameState == GAME_STATE_CARD_SELECTION_2)
 			{
-				PS_SetLocalInt(oBoard, LAST_PLAYER_CARDS_SELECTED, iPos);
+				SetLocalInt(oBoard, LAST_PLAYER_CARDS_SELECTED, iPos);
 				CloseGUIScreen(oPC, CARD_SCREEN_WAITING_SCENE); // saves determining whose screen should be closed next
 				CardsChangeGameState(oBoard, GAME_STATE_GAME_STARTING);
 			}

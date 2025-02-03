@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Spell Hook Include File
 //:: x2_inc_spellhook
@@ -77,7 +75,7 @@ int X2PreSpellCastCode()
    //---------------------------------------------------------------------------
    if (!GetIsPC(OBJECT_SELF))
    {
-       if( !GetIsDMPossessed(OBJECT_SELF) && !PS_GetLocalInt(GetArea(OBJECT_SELF), "X2_L_WILD_MAGIC"))
+       if( !GetIsDMPossessed(OBJECT_SELF) && !GetLocalInt(GetArea(OBJECT_SELF), "X2_L_WILD_MAGIC"))
        {
             return TRUE;
        }
@@ -255,7 +253,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
         return TRUE; // no hostile spells on sequencers, sorry ya munchkins :)
     }
 
-    int nNumberOfTriggers = PS_GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
+    int nNumberOfTriggers = GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
     // is there still space left on the sequencer?
     if (nNumberOfTriggers < nMaxSeqSpells)
     {
@@ -264,8 +262,8 @@ int X2GetSpellCastOnSequencerItem(object oItem)
         nNumberOfTriggers++;
         //NOTE: I add +1 to the SpellId to spell 0 can be used to trap failure
         int nSID = GetSpellId()+1;
-        PS_SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
-        PS_SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
+        SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
+        SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
         FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
     }
@@ -310,7 +308,7 @@ void X2BreakConcentrationSpells()
     {
         if(GetTag(oAssoc) == "x2_s_bblade") // black blade of disaster
         {
-            if (PS_GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
+            if (GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
             {
                 SignalEvent(oAssoc,EventUserDefined(X2_EVENT_CONCENTRATION_BROKEN));
             }
@@ -346,7 +344,7 @@ int X2GetBreakConcentrationCondition(object oPlayer)
 void X2DoBreakConcentrationCheck()
 {
     object oMaster = GetMaster();
-    if (PS_GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
+    if (GetLocalInt(OBJECT_SELF,"X2_L_CREATURE_NEEDS_CONCENTRATION"))
     {
          if (GetIsObjectValid(oMaster))
          {

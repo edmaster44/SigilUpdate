@@ -44,7 +44,7 @@ void main()
 {
     object oAoE    = OBJECT_SELF;
     object oTarget = GetEnteringObject();
-    int nDamage    = PS_GetLocalInt(oAoE, "PRC_EctoShambler_Damage");
+    int nDamage    = GetLocalInt(oAoE, "PRC_EctoShambler_Damage");
     effect eDamage =                            EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
            eDamage = EffectLinkEffects(eDamage, EffectVisualEffect(VFX_IMP_HEAD_MIND));
     effect eBlind  = EffectBlindness();
@@ -63,7 +63,7 @@ void main()
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	// Increase the value of the marker informing a creature is inside Ectoplasmic Shambler
-	PS_SetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler", PS_GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") + 1);
+	SetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler", GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") + 1);
     }
 
 }

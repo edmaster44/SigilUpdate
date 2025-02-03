@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_dmlist - DM Friendly Initiative - GUI script for the DM 30 Entry List
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -21,20 +19,20 @@ void main(string sInput)
 	string sCommand, sNum, sPage, sValue, sTest, sScreen;
 	int nNum, nPage, nCurrent, n;
 		
-	sPage = PS_GetLocalString(OBJECT_SELF, DMFI_UI_PAGE);
+	sPage = GetLocalString(OBJECT_SELF, DMFI_UI_PAGE);
 	
 	// HANDLE NEXT AND PREVIOUS BUTTONS
 	if (sInput=="next")
 	{
-		nNum = PS_GetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT);
-		PS_SetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT, nNum+1);
+		nNum = GetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT);
+		SetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT, nNum+1);
 		DMFI_ShowDMListUI(OBJECT_SELF);
 		return;
 	}	
 	if (sInput=="prev")
 	{
-		nNum = PS_GetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT);
-		PS_SetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT, nNum-1);
+		nNum = GetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT);
+		SetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT, nNum-1);
 		DMFI_ShowDMListUI(OBJECT_SELF);
 		return;
 	}	
@@ -42,18 +40,18 @@ void main(string sInput)
 	sNum = GetStringRight(sInput, (GetStringLength(sInput)-4));  // Remove 'list'
 	nNum = StringToInt(sNum);	
 	
-	sCommand = PS_GetLocalString(OBJECT_SELF, DMFI_LAST_UI_COM);
+	sCommand = GetLocalString(OBJECT_SELF, DMFI_LAST_UI_COM);
 	
 	// SPECIAL EXCEPTION FOR A LIST CALLING A SUB-LIST:  Number >> Dice >> ACTION
 	if ((sPage==PG_LIST_10) && (sCommand==PRM_ROLL + PRM_))
 	{
-		PS_SetLocalString(OBJECT_SELF, DMFI_LAST_UI_COM, sCommand + sNum);		
-		PS_SetLocalString(OBJECT_SELF, DMFI_UI_PAGE, PG_LIST_DICE);
+		SetLocalString(OBJECT_SELF, DMFI_LAST_UI_COM, sCommand + sNum);		
+		SetLocalString(OBJECT_SELF, DMFI_UI_PAGE, PG_LIST_DICE);
 		SetGUIObjectText(OBJECT_SELF, SCREEN_DMFI_DMLIST, "DMListTitle", -1, TXT_CHOOSE_TYPE);
 		n=0;
 		while (n<10)
 		{
-			sTest = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_DICE + "." + IntToString(n));
+			sTest = GetLocalString(oTool, LIST_PREFIX + PG_LIST_DICE + "." + IntToString(n));
 			SetGUIObjectText(OBJECT_SELF, SCREEN_DMFI_DMLIST, "dmlist"+IntToString(n+1), -1, sTest);
 			n++;
 		}		
@@ -65,32 +63,32 @@ void main(string sInput)
 	// SPECIAL EXCEPTIONS WHERE WE HAVE TO UPDATE THE COMMAND FROM "ABOVE"
 	if (sCommand==PRM_SET + PRM_ + PRM_AMBIENT + PRM_)
 	{
-		sCommand = sCommand + PS_GetLocalString(oTool, DMFI_AMB_NIGHT) + PRM_;
+		sCommand = sCommand + GetLocalString(oTool, DMFI_AMB_NIGHT) + PRM_;
 	}
 	else if (sCommand==PRM_SET + PRM_ + PRM_MUSIC + PRM_)
 	{
-		sCommand = sCommand + PS_GetLocalString(oTool, DMFI_MUSIC_TIME) + PRM_;
+		sCommand = sCommand + GetLocalString(oTool, DMFI_MUSIC_TIME) + PRM_;
 	}				
 	
-	sPage = PS_GetLocalString(OBJECT_SELF, DMFI_UI_PAGE);
-	nPage = PS_GetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT);
+	sPage = GetLocalString(OBJECT_SELF, DMFI_UI_PAGE);
+	nPage = GetLocalInt(OBJECT_SELF, sPage + DMFI_CURRENT);
 	nCurrent = (nPage*30) + nNum-1;
 
 	// SPECIAL EXCEPTION FOR UPDATING NUMERIC VALUES THAT ARE CURRENTLY DISPLAYED ON THE UI		
 	if (FindSubString(sCommand, PRM_UPDATE)!=-1)
 	{
 		// Get the screen because we need it to update the values
-		sScreen = PS_GetLocalString(OBJECT_SELF, "DMFI_UI_USE");
+		sScreen = GetLocalString(OBJECT_SELF, "DMFI_UI_USE");
 		sScreen = SCREEN_DMFI + sScreen;
 	
 		sTest = GetStringRight(sCommand, GetStringLength(sCommand)-7);
 				
-		if (PS_GetLocalInt(OBJECT_SELF, DMFI_REQ_INT)==2)
+		if (GetLocalInt(OBJECT_SELF, DMFI_REQ_INT)==2)
 			sValue = IntToString(nCurrent);
-		else if (PS_GetLocalInt(OBJECT_SELF, DMFI_REQ_INT))
-			sValue = IntToString(PS_GetLocalInt(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent)));
+		else if (GetLocalInt(OBJECT_SELF, DMFI_REQ_INT))
+			sValue = IntToString(GetLocalInt(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent)));
 		else	
-			sValue = PS_GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
+			sValue = GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
 				
 		DMFI_UpdateNumberToken(oTool, sTest, sValue);
 		SetGUIObjectText(OBJECT_SELF, sScreen, "update_" + sTest, -1, sValue);  // GUI Buttons must be named "update_PARAM"
@@ -107,17 +105,17 @@ void main(string sInput)
 		SetGUIObjectHidden(OBJECT_SELF, SCREEN_DMFI_CHOOSE, "btn"+IntToString(nCurrent+1), TRUE);	
 	
 	// FINALLY FINISHED WITH EXCEPTIONS... We grab the result and run the command.
-	if (PS_GetLocalInt(OBJECT_SELF, DMFI_REQ_INT)==2)		// actual list location
+	if (GetLocalInt(OBJECT_SELF, DMFI_REQ_INT)==2)		// actual list location
 		sCommand = sCommand + IntToString(nCurrent);
-	else if (PS_GetLocalInt(OBJECT_SELF, DMFI_REQ_INT))		// replaced int value
-		sCommand = sCommand + IntToString(PS_GetLocalInt(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent)));
+	else if (GetLocalInt(OBJECT_SELF, DMFI_REQ_INT))		// replaced int value
+		sCommand = sCommand + IntToString(GetLocalInt(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent)));
 	else						// string value
-		sCommand = sCommand + PS_GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
+		sCommand = sCommand + GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
 
 	if (sPage==PG_LIST_DMLANGUAGE)
 	{  // We have to set this BEFORE the command code because we loose access to OBJECT_SELF
-		sTest =  PS_GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
-		PS_SetLocalString(OBJECT_SELF, DMFI_LANGUAGE_TOGGLE, GetStringLowerCase(sTest));	
+		sTest =  GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
+		SetLocalString(OBJECT_SELF, DMFI_LANGUAGE_TOGGLE, GetStringLowerCase(sTest));	
 	}	
 		
 		

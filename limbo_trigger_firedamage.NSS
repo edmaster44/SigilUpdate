@@ -1,9 +1,7 @@
-#include "ff_safevar"
-
 void main ()
 {
 	object oObject = GetEnteringObject();
-	if (PS_GetLocalInt(oObject, "LIMBO_IMMUNE") > 0)
+	if (GetLocalInt(oObject, "LIMBO_IMMUNE") > 0)
 		return;
 		
 	int nDam = d6(6);

@@ -33,14 +33,14 @@ int PS_OutsiderLevels(object oPC)
 void PS_SetWingNumber(object oPC, int nVar)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	PS_SetLocalInt(oEssence, "PC_Wing", nVar);
+	SetLocalInt(oEssence, "PC_Wing", nVar);
 }
 
 // Returns the value from the essence variable PC_Wing
 int PS_GetWingNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWing		= PS_GetLocalInt(oEssence, "PC_Wing");
+	int nWing		= GetLocalInt(oEssence, "PC_Wing");
 	return nWing;
 }
 
@@ -49,14 +49,14 @@ int PS_GetWingNumber(object oPC)
 void PS_SetTailNumber(object oPC, int nVar)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	PS_SetLocalInt(oEssence, "PC_Tail", nVar);
+	SetLocalInt(oEssence, "PC_Tail", nVar);
 }
 
 // Returns the value from the essence variable PC_Tail
 int PS_GetTailNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nTail		= PS_GetLocalInt(oEssence, "PC_Tail");
+	int nTail		= GetLocalInt(oEssence, "PC_Tail");
 	return nTail;
 }
 
@@ -81,8 +81,8 @@ int PS_GetRacialWingType(object oPC)
 int PS_Get_WingRace(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nRace		= PS_GetLocalInt(oEssence, "OldRace");
-	int nSubrace	= PS_GetLocalInt(oEssence, "OldSubrace");
+	int nRace		= GetLocalInt(oEssence, "OldRace");
+	int nSubrace	= GetLocalInt(oEssence, "OldSubrace");
 	switch (nRace)
 	{	
 		case 0: return WING_VARIATION_DWARF;
@@ -281,7 +281,7 @@ int PS_GetWing_HalfDragon(object oPC)
 int PS_GetWing_Template(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWingRace = PS_GetLocalInt(oEssence, "OldSubrace");
+	int nWingRace = GetLocalInt(oEssence, "OldSubrace");
 	
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nWingRace);
 	int nMWing		= StringToInt(sMWing);
@@ -380,7 +380,7 @@ void PS_WingTailSetup(object oPC)
 	int nWing;
 	
 	object oEssence		= GetItemPossessedBy(oPC,"ps_essence");
-	int nOverride		= PS_GetLocalInt(oEssence, "WingOverride");
+	int nOverride		= GetLocalInt(oEssence, "WingOverride");
 	int nRacialWing		= PS_GetRacialWingType(oPC);
 	int nTemplateWing	= PS_GetWing_Template(oPC);
 	int nFeatWing		= PS_GetFeatWingType(oPC);
@@ -408,9 +408,9 @@ void PS_ApplyPCWings(object oPC)
 	int nWing		= PS_GetWingNumber(oPC);
 	object oEssence	= GetItemPossessedBy(oPC,"ps_essence");	
 	
-	if (PS_GetLocalInt(oEssence, "WingSwitch") == 1)
+	if (GetLocalInt(oEssence, "WingSwitch") == 1)
 	{	return;		}
-	if (PS_GetLocalInt(oEssence, "TempChange") == 1)
+	if (GetLocalInt(oEssence, "TempChange") == 1)
 	{	return;		}
 
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
@@ -427,7 +427,7 @@ void PS_ApplyPCTail(object oPC)
 	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
 	PS_TintFixer(oPC); //Fix the tint first!
 	
-	if (PS_GetLocalInt(oEssence, "TempChange") == 1)
+	if (GetLocalInt(oEssence, "TempChange") == 1)
 	{	return;		}
 
 	int nTail = PS_GetTailNumber(oPC);

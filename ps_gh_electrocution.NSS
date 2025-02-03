@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // ps_gh_electrocution
 //
 // Looks for creatures within a certain radius of a waypoint,
@@ -38,6 +36,6 @@ void main()
 		SpeakString("*Recharging electricity nodes...*",TALKVOLUME_TALK);
 	}
       // * Store New State
-	PS_SetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE",!nActive);
+	SetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE",!nActive);
 
 }

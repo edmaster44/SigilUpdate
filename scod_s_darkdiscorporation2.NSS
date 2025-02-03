@@ -53,7 +53,7 @@ void DoDiscorporation(object oPC) {
 
 void DiscorporationRefresh(object oPC)
 {
-	if (PS_GetLocalInt(oPC,"DarkDiscorporation")==FALSE) return;
+	if (GetLocalInt(oPC,"DarkDiscorporation")==FALSE) return;
 	
 	DoDiscorporation(oPC);
 	DelayCommand(fDiscorpDuration+0.1f, DiscorporationRefresh(oPC));

@@ -39,7 +39,7 @@ void CheckAndPlaceItemInContainer(object oItem, object oPC, object oFrom)
 		
 		if (GetWeaponType(oItem) != WEAPON_TYPE_NONE) sTo = VAR_TYPE_WEAPONS;
 		
-		oTo = PS_GetLocalObject(oPC, sTo);
+		oTo = GetLocalObject(oPC, sTo);
 		
 		// extra check to make sure container belongs to PC and that it is a container - at least hopefully stop items disappearing to god knows where...
 		if (GetIsObjectValid(oTo) && GetItemPossessor(oTo) == oPC && GetBaseItemType(oTo) == BASE_ITEM_LARGEBOX) 
@@ -86,43 +86,43 @@ void main() {
 		}
 	}
 
-	previousOwner = PS_GetLocalString(item, "A1");
+	previousOwner = GetLocalString(item, "A1");
 	
 	//Anti cheat logging
-	if(PS_GetLocalString(item,"A2") == GetPCPlayerName(acquirer) && PS_GetLocalString(item,"N2") != GetName(acquirer) || 
-		(previousOwner == GetPCPlayerName(acquirer) && PS_GetLocalString(item,"N1") != GetName(acquirer)))
+	if(GetLocalString(item,"A2") == GetPCPlayerName(acquirer) && GetLocalString(item,"N2") != GetName(acquirer) || 
+		(previousOwner == GetPCPlayerName(acquirer) && GetLocalString(item,"N1") != GetName(acquirer)))
 	{
 		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
 			SQLEncodeSpecialChars(GetPCPlayerName(acquirer)) + "','" + 
 			SQLEncodeSpecialChars(GetName(acquirer)) + "','" + 
 			SQLEncodeSpecialChars(GetName(item)) + " (" + 
 			SQLEncodeSpecialChars(GetTag(item)) + ") given from " + 
-			SQLEncodeSpecialChars(PS_GetLocalString(item,"A1")) + "/" + 
-			SQLEncodeSpecialChars(PS_GetLocalString(item,"N1")) + " and original owner: " + 
-			SQLEncodeSpecialChars(PS_GetLocalString(item,"A2")) + "/" + 
-			SQLEncodeSpecialChars(PS_GetLocalString(item,"N2")) + " (" + 
+			SQLEncodeSpecialChars(GetLocalString(item,"A1")) + "/" + 
+			SQLEncodeSpecialChars(GetLocalString(item,"N1")) + " and original owner: " + 
+			SQLEncodeSpecialChars(GetLocalString(item,"A2")) + "/" + 
+			SQLEncodeSpecialChars(GetLocalString(item,"N2")) + " (" + 
 			SQLEncodeSpecialChars(GetTag(aFrom)) + ")',105)");
 
 		//SpeakString("Possible muling",TALKVOLUME_SILENT_SHOUT);
-		//SpeakString("<C=TOMATO>[POSSIBLE MULING] " + PS_GetLocalString(item,"A1") + "/" + PS_GetLocalString(item,"N1") + " just gave " + GetPCPlayerName(acquirer) + "/" + GetName(acquirer) + " following: " + GetName(item) + "/" + GetTag(item) + ", which was last owned by: " + PS_GetLocalString(item,"A2") + "/" + PS_GetLocalString(item,"N2"),TALKVOLUME_SILENT_SHOUT);
+		//SpeakString("<C=TOMATO>[POSSIBLE MULING] " + GetLocalString(item,"A1") + "/" + GetLocalString(item,"N1") + " just gave " + GetPCPlayerName(acquirer) + "/" + GetName(acquirer) + " following: " + GetName(item) + "/" + GetTag(item) + ", which was last owned by: " + GetLocalString(item,"A2") + "/" + GetLocalString(item,"N2"),TALKVOLUME_SILENT_SHOUT);
 
-		PS_SetLocalString(item,"A2","");
-		PS_SetLocalString(item,"N2","");
-		PS_SetLocalString(item,"A1",GetPCPlayerName(acquirer));
-		PS_SetLocalString(item,"N1",GetName(acquirer));
-		PS_SetLocalString(item,"M","Muling logged");		
+		SetLocalString(item,"A2","");
+		SetLocalString(item,"N2","");
+		SetLocalString(item,"A1",GetPCPlayerName(acquirer));
+		SetLocalString(item,"N1",GetName(acquirer));
+		SetLocalString(item,"M","Muling logged");		
 	}
 	
-	//SpeakString(PS_GetLocalString(item,"N1"),TALKVOLUME_SILENT_SHOUT);
+	//SpeakString(GetLocalString(item,"N1"),TALKVOLUME_SILENT_SHOUT);
 	//SpeakString(GetName(acquirer),TALKVOLUME_SILENT_SHOUT);
 	
-	if(PS_GetLocalString(item,"N1") != GetName(acquirer))
+	if(GetLocalString(item,"N1") != GetName(acquirer))
 	{
 		//SpeakString("SETTING VARS",TALKVOLUME_SILENT_SHOUT);
-		PS_SetLocalString(item,"A2",PS_GetLocalString(item,"A1"));
-		PS_SetLocalString(item,"N2",PS_GetLocalString(item,"N1"));
-		PS_SetLocalString(item,"A1",GetPCPlayerName(acquirer));
-		PS_SetLocalString(item,"N1",GetName(acquirer));
+		SetLocalString(item,"A2",GetLocalString(item,"A1"));
+		SetLocalString(item,"N2",GetLocalString(item,"N1"));
+		SetLocalString(item,"A1",GetPCPlayerName(acquirer));
+		SetLocalString(item,"N1",GetName(acquirer));
 	}	
 		
 	while (GetIsObjectValid(oPartyMember) == TRUE) {

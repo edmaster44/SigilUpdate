@@ -49,10 +49,10 @@ void main()
     float fDelay;
     location lTarget;
 	int DC = GetSpellSaveDC();
-	int DCbonus_2 = PS_GetLocalInt(OBJECT_SELF, "WailDCBonus_2");
+	int DCbonus_2 = GetLocalInt(OBJECT_SELF, "WailDCBonus_2");
 	if (DCbonus_2 > 0)
 	{
-		PS_SetLocalInt(OBJECT_SELF, "WailDCBonus_2", DCbonus_2 - 1);
+		SetLocalInt(OBJECT_SELF, "WailDCBonus_2", DCbonus_2 - 1);
 		DC = DC + 2;
 	}
    //effect eVis = EffectVisualEffect(VFX_IMP_DEATH);//NWN1 vfx, this works but doesn't look as cool

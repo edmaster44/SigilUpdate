@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "enft_startengine" 
 #include "ps_inc_planarlocations"
 void main()
@@ -13,10 +11,10 @@ void main()
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	
   
- int iLock = PS_GetGlobalInt("IceEnterLock");
+ int iLock = GetGlobalInt("IceEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("IceEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("IceEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_etnek") == OBJECT_INVALID)
   {
@@ -25,7 +23,7 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_etnek", lSpawnpoint);    
   }
  
-  PS_SetGlobalInt("IceEnterLock", 0);
+  SetGlobalInt("IceEnterLock", 0);
  }
  object oEnterer = GetEnteringObject( );
  startEngine(oEnterer);

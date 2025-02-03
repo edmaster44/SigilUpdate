@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -10,10 +8,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("DeadGodLock");
+ int iLock = GetGlobalInt("DeadGodLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("DeadGodLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("DeadGodLock", 1); // Only allows one clean up at a time.
   if(GetObjectByTag("astral_reaver") == OBJECT_INVALID)
   {
   	CreateObject(OBJECT_TYPE_CREATURE, "astral_reaver", GetLocation(GetWaypointByTag("wp_astralreaver_spawn1")));  
@@ -24,6 +22,6 @@ void main()
 	CreateObject(OBJECT_TYPE_CREATURE, "astral_reaver", GetLocation(GetWaypointByTag("wp_astralreaver_spawn6")));  
   }
   
-  PS_SetGlobalInt("DeadGodLock", 0);
+  SetGlobalInt("DeadGodLock", 0);
  }
 }

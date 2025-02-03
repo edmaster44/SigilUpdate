@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 	// if (!GetIsPC(oPC) && !GetIsDM(oPC))
 	//  return;
 	  
-	int iLock = PS_GetGlobalInt("ArchivesEnterLock");
+	int iLock = GetGlobalInt("ArchivesEnterLock");
 	if ( iLock == 0 )
  	{
-	  PS_SetGlobalInt("ArchivesEnterLock", 1); // Only allows one clean up at a time.
+	  SetGlobalInt("ArchivesEnterLock", 1); // Only allows one clean up at a time.
 	
 	  if(GetObjectByTag("cc_guva2") == OBJECT_INVALID)
 	  {
@@ -24,6 +22,6 @@ void main()
 		   location lSpawnpoint = GetLocation(oWP);  
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "cc_guva5", lSpawnpoint);    
 	  }
-	  PS_SetGlobalInt("ArchivesEnterLock", 0);
+	  SetGlobalInt("ArchivesEnterLock", 0);
   	}
 }

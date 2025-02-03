@@ -34,7 +34,7 @@ void main()
     object oCreator = GetAreaOfEffectCreator();
     object oAoE     = OBJECT_SELF;
     object oTarget;
-    int nDC         = PS_GetLocalInt(oAoE, "PRC_EctoSheen_DC");
+    int nDC         = GetLocalInt(oAoE, "PRC_EctoSheen_DC");
     effect eFall    = EffectKnockdown();
     float fDelay;
 

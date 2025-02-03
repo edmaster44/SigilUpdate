@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // script called from sort convo that defines what goes where.
 
 #include "ps_wandofsort_inc"
@@ -8,56 +6,56 @@ void main(string sStore)
 {
 	object oPC = GetPCSpeaker();
 	
-	object oSelected = PS_GetLocalObject(oPC, VAR_TEMP_OBJECT);
+	object oSelected = GetLocalObject(oPC, VAR_TEMP_OBJECT);
 	
 	if (GetBaseItemType(oSelected) == BASE_ITEM_LARGEBOX && GetItemPossessor(oSelected) == oPC) // apparently a container
 	{
 		if (sStore == VAR_RESET)
 		{
-			/*//string sTemp = PS_GetLocalString(oSelected, VAR_TYPE_CONT);
+			/*//string sTemp = GetLocalString(oSelected, VAR_TYPE_CONT);
 			if (sTemp != "")
 			{
-				PS_DeleteLocalObject(oPC, sTemp);
-				PS_DeleteLocalString(oSelected, VAR_TYPE_CONT);
+				DeleteLocalObject(oPC, sTemp);
+				DeleteLocalString(oSelected, VAR_TYPE_CONT);
 				if (GetStringRight(GetFirstName(oSelected), 13) == " (AUTO_STORE)")
 					SetFirstName(oSelected, GetStringLeft(GetFirstName(oSelected), GetStringLength(GetFirstName(oSelected)) - 13));
 			}*/
-			string sTemp = PS_GetLocalString(oSelected, VAR_CONT_ORIG_NAME);
+			string sTemp = GetLocalString(oSelected, VAR_CONT_ORIG_NAME);
 			if (sTemp != "") SetFirstName(oSelected, sTemp);
 			
-			sTemp = PS_GetLocalString(oSelected, VAR_CONT_ORIG_TAG);
+			sTemp = GetLocalString(oSelected, VAR_CONT_ORIG_TAG);
 			if (sTemp != "") SetTag(oSelected, sTemp);
 			
-			PS_DeleteLocalObject(oPC, VAR_TYPE_GEMS);
-			PS_DeleteLocalObject(oPC, VAR_TYPE_BOOKS);
-			PS_DeleteLocalObject(oPC, VAR_TYPE_SCROLLS);
-			PS_DeleteLocalObject(oPC, VAR_TYPE_AMMO);
-			PS_DeleteLocalObject(oPC, VAR_TYPE_WEAPONS);
-			PS_DeleteLocalObject(oPC, VAR_TYPE_ARMOUR);
-			PS_DeleteLocalObject(oPC, VAR_TYPE_OTHER);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_GEMS);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_BOOKS);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_SCROLLS);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_AMMO);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_WEAPONS);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_ARMOUR);
-			PS_DeleteLocalInt(oSelected, VAR_TYPE_OTHER);
+			DeleteLocalObject(oPC, VAR_TYPE_GEMS);
+			DeleteLocalObject(oPC, VAR_TYPE_BOOKS);
+			DeleteLocalObject(oPC, VAR_TYPE_SCROLLS);
+			DeleteLocalObject(oPC, VAR_TYPE_AMMO);
+			DeleteLocalObject(oPC, VAR_TYPE_WEAPONS);
+			DeleteLocalObject(oPC, VAR_TYPE_ARMOUR);
+			DeleteLocalObject(oPC, VAR_TYPE_OTHER);
+			DeleteLocalInt(oSelected, VAR_TYPE_GEMS);
+			DeleteLocalInt(oSelected, VAR_TYPE_BOOKS);
+			DeleteLocalInt(oSelected, VAR_TYPE_SCROLLS);
+			DeleteLocalInt(oSelected, VAR_TYPE_AMMO);
+			DeleteLocalInt(oSelected, VAR_TYPE_WEAPONS);
+			DeleteLocalInt(oSelected, VAR_TYPE_ARMOUR);
+			DeleteLocalInt(oSelected, VAR_TYPE_OTHER);
 		}
 		else
 		{
-			PS_SetLocalInt(oSelected, sStore, 1);
-			PS_SetLocalObject(oPC, sStore, oSelected);
+			SetLocalInt(oSelected, sStore, 1);
+			SetLocalObject(oPC, sStore, oSelected);
 			
 			if (GetTag(oSelected) != VAR_NEWTAG)
 			{
-				PS_SetLocalString(oSelected, VAR_CONT_ORIG_TAG, GetTag(oSelected));
+				SetLocalString(oSelected, VAR_CONT_ORIG_TAG, GetTag(oSelected));
 				SetTag(oSelected, VAR_NEWTAG);
 			}
 			
 			string sName = GetFirstName(oSelected);
 			if (GetStringLeft(sName, GetStringLength(VAR_NEW_NAME)) != VAR_NEW_NAME)
 			{
-				PS_SetLocalString(oSelected, VAR_CONT_ORIG_NAME, sName);
+				SetLocalString(oSelected, VAR_CONT_ORIG_NAME, sName);
 				SetFirstName(oSelected, VAR_NEW_NAME);
 			}
 			else

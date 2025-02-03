@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // ginc_death.nss
 /*
 	NWN2 Knock Out/Wake Up death system functions
@@ -376,13 +374,13 @@ void WakeUpCreature( object oCreature )
 // Determine if Death screen is visible
 int GetIsDeathPopUpDisplayed( object oPC=OBJECT_SELF )
 {
-	return ( PS_GetLocalInt( oPC, KNOCKOUT_POPUP_DISPLAYED ) );
+	return ( GetLocalInt( oPC, KNOCKOUT_POPUP_DISPLAYED ) );
 }
 
 // Set var to identify Death screen as visible
 void SetIsDeathPopUpDisplayed( object oPC, int bDisplayed )
 {
-	PS_SetLocalInt( oPC, KNOCKOUT_POPUP_DISPLAYED, bDisplayed );
+	SetLocalInt( oPC, KNOCKOUT_POPUP_DISPLAYED, bDisplayed );
 }
 
 // Show appropriate Death screen for Single & Multiplayer

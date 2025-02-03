@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 #include "ps_inc_dynamicencounters"
 void main() {
@@ -9,9 +7,9 @@ void main() {
 	string sDescrip = "The portal leads you to a castle, fortified by the Harmonium. In the distance, you can make out the infinite height of the Spire.";
 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	
-	int iLock = PS_GetGlobalInt("OutlandsCastleEnterLock");
+	int iLock = GetGlobalInt("OutlandsCastleEnterLock");
 	if ( iLock == 0 ) {
-		PS_SetGlobalInt("OutlandsCastleEnterLock", 1); // Only allows one clean up at a time.
+		SetGlobalInt("OutlandsCastleEnterLock", 1); // Only allows one clean up at a time.
 		
 		if(GetObjectByTag("ps_outcamp_harmarcher") == OBJECT_INVALID) { 
 			object oWP = GetWaypointByTag("wp_outcamp_harmarcher1");
@@ -40,6 +38,6 @@ void main() {
 			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_notary_brint", GetLocation(oWP));  
 		}
 		   
-		PS_SetGlobalInt("OutlandsCastleEnterLock", 0);
+		SetGlobalInt("OutlandsCastleEnterLock", 0);
 	}
 }

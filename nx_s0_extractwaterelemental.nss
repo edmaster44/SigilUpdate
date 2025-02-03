@@ -62,7 +62,7 @@ void main()
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
  
 		//Make SR check
-		if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 3)
+		if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") == 3)
 		{
 			SendMessageToPC(OBJECT_SELF, "You find that it is impossible to cast water-based spells on this plane!");
 			SetModuleOverrideSpellScriptFinished();

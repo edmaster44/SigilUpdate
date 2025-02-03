@@ -145,7 +145,7 @@ void AttackSingleTarget(object oTarget, object oPC, object oItem, object oSword)
 	float fDelay;
 	int nRandomAnimation;
 	string sAttackAnimation;
-	int nTimesHit = PS_GetLocalInt(oSword, "TimesHit");
+	int nTimesHit = GetLocalInt(oSword, "TimesHit");
 	
 	object oSlotItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	
@@ -155,7 +155,7 @@ void AttackSingleTarget(object oTarget, object oPC, object oItem, object oSword)
         return;
     }
 	
-	if (PS_GetLocalInt(oItem, "SS_Stop_Ability") == 1)
+	if (GetLocalInt(oItem, "SS_Stop_Ability") == 1)
 	{
 		EndAttack(oPC, oItem, oSword);
 		return;
@@ -182,8 +182,8 @@ void AttackSingleTarget(object oTarget, object oPC, object oItem, object oSword)
 	{			
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
 		{
-			PS_SetLocalInt(oSword, "TimesHit", nTimesHit + 1);
-			nTimesHit = PS_GetLocalInt(oSword, "TimesHit");
+			SetLocalInt(oSword, "TimesHit", nTimesHit + 1);
+			nTimesHit = GetLocalInt(oSword, "TimesHit");
 			
 			nDamage = d6();		
 			eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_ENERGY);
@@ -300,7 +300,7 @@ void JumpAndAttack(object oTarget, location lTarget, object oPC, object oItem, o
 	string sAttackAnimation;
 	location lJumpLocation;
 	float fDelay;
-	int nTimesHit = PS_GetLocalInt(oSword, "TimesHit");
+	int nTimesHit = GetLocalInt(oSword, "TimesHit");
 	
 	object oSlotItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	
@@ -310,7 +310,7 @@ void JumpAndAttack(object oTarget, location lTarget, object oPC, object oItem, o
         return;
     }
 	
-	if (PS_GetLocalInt(oItem, "SS_Stop_Ability") == 1)
+	if (GetLocalInt(oItem, "SS_Stop_Ability") == 1)
 	{
 		EndAttack(oPC, oItem, oSword);
 		return;
@@ -339,9 +339,9 @@ void JumpAndAttack(object oTarget, location lTarget, object oPC, object oItem, o
 //		if (GetIsEnemy(oTarget, oPC) == TRUE)
 		{
 			PrettyDebug("Enemy evaluation is " + IntToString(GetIsEnemy(oTarget, oPC)));
-			PS_SetLocalInt(oSword, "NoTargetsFound", 0);
-			PS_SetLocalInt(oSword, "TimesHit", nTimesHit + 1);
-			nTimesHit = PS_GetLocalInt(oSword, "TimesHit");
+			SetLocalInt(oSword, "NoTargetsFound", 0);
+			SetLocalInt(oSword, "TimesHit", nTimesHit + 1);
+			nTimesHit = GetLocalInt(oSword, "TimesHit");
 										
 			if (oLastAttacked == oTarget)
 			{
@@ -470,9 +470,9 @@ void JumpAndAttack(object oTarget, location lTarget, object oPC, object oItem, o
 		
 		else
 		{
-			if (PS_GetLocalInt(oSword, "NoTargetsFound") == 0)
+			if (GetLocalInt(oSword, "NoTargetsFound") == 0)
 			{
-				PS_SetLocalInt(oSword, "NoTargetsFound", 1);
+				SetLocalInt(oSword, "NoTargetsFound", 1);
 				DelayCommand(0.25f, JumpAndAttack(oTarget, lTarget, oPC, oItem, oLastAttacked, oSword));				
 			}	
 
@@ -527,7 +527,7 @@ void EndAttack(object oPC, object oItem, object oSword)
 	DelayCommand(0.2f, DestroyObject(oSword));
 	RevealWeapon(oPC, oItem);
 	DelayCommand(2.5f, RestoreItemAbilities(oItem));
-	PS_SetLocalInt(oItem, "SS_Stop_Ability", 0);
+	SetLocalInt(oItem, "SS_Stop_Ability", 0);
 }	
 
 void EndAttackDead(object oPC, object oItem, object oSword)
@@ -536,7 +536,7 @@ void EndAttackDead(object oPC, object oItem, object oSword)
 	DelayCommand(0.2f, DestroyObject(oSword));
 	RevealWeapon(oPC, oItem);
 	DelayCommand(2.5f, RestoreItemAbilities(oItem));
-	PS_SetLocalInt(oItem, "SS_Stop_Ability", 0);
+	SetLocalInt(oItem, "SS_Stop_Ability", 0);
 }
 
 void RestoreItemAbilities(object oItem)

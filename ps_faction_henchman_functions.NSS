@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -10,7 +8,7 @@ void main(int iFunction)
 {
 	object oHench = OBJECT_SELF;
 	object oPC = GetPCSpeaker();
-	object oBadge = PS_GetLocalObject(oPC, "FactionBadgeUsed");
+	object oBadge = GetLocalObject(oPC, "FactionBadgeUsed");
 	
 	// 1 = Equip, 2= unequip, 3 = dismiss
 	switch (iFunction)

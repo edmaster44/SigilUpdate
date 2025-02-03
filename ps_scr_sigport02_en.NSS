@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "NW_I0_TOOL"
 
 void main()
@@ -11,9 +9,9 @@ if(CheckPartyForItem(oEnter, "NW_IT_MSMLMISC23") || GetHasFeat(2380, oEnter, FAL
 {
 string SPAWNED = "nSpawned";
 location lPortal = GetLocation(GetObjectByTag("ps_wp_sigport_02en"));
-if(!PS_GetLocalInt(OBJECT_SELF, SPAWNED))
+if(!GetLocalInt(OBJECT_SELF, SPAWNED))
 {
-PS_SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
+SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
 
 CreateObject(OBJECT_TYPE_PLACED_EFFECT, "fx_betrayers_gate_planescape", lPortal);
 CreateObject(OBJECT_TYPE_PLACEABLE, "ps_plac_port_sig02", lPortal);

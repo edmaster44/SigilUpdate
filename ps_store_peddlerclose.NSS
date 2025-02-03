@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_gemstones"
 #include "ps_inc_time"
 //Removes non-crafting items from the store so they don't torment players
@@ -12,11 +10,11 @@ void main () {
 	
 		int nCurrentTime = PS_GetTime();
 		if (!GetIsGemstone(oItem) && GetBaseItemType(oItem) != BASE_ITEM_CRAFTMATERIALMED && GetBaseItemType(oItem) != BASE_ITEM_CRAFTMATERIALSML) {
-			int nTimestamp = PS_GetLocalInt(oItem,"MTS");	
+			int nTimestamp = GetLocalInt(oItem,"MTS");	
 			if (nTimestamp > 0 && nCurrentTime-nTimestamp > nWaitTime) {
 				DestroyObject(oItem, 0.1f);
 			} else {
-				PS_SetLocalInt(oItem, "MTS", nCurrentTime);
+				SetLocalInt(oItem, "MTS", nCurrentTime);
 			}
 		}
 	

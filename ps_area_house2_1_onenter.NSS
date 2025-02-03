@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("H11EnterLock");
+ int iLock = GetGlobalInt("H11EnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("H11EnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("H11EnterLock", 1); // Only allows one clean up at a time.
 
 
   if(GetObjectByTag("ps_npc_ulbart") == OBJECT_INVALID)
@@ -21,6 +19,6 @@ void main()
   }
 
 
-  PS_SetGlobalInt("H11EnterLock", 0);
+  SetGlobalInt("H11EnterLock", 0);
  }
 }

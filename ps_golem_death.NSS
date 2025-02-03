@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //////////////////////////////////////////////////////////////////////
 // ps_golem_death													//
 // Created by Ceremorph for Sigil:City of Doors persistant world	//
@@ -18,7 +16,7 @@ void main()
 	//string sSPEAK = "Heavily damaged, the golem drops to the ground and deactivates itself.";
 	
 	//does not destroy the device if golem is killed by another golem or player
-	object oDevice = PS_GetLocalObject(oGolem, "ControlObject");
+	object oDevice = GetLocalObject(oGolem, "ControlObject");
 	if (oDevice == OBJECT_INVALID)
 	{
 		SendMessageToPC(oPC, sMSG);

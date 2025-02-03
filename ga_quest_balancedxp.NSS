@@ -5,7 +5,7 @@ void main (float fCR) {
 	object oPC = GetLastSpeaker();
 	
 	if (fCR <= 0.0f) {
-		fCR = IntToFloat(PS_GetLocalInt(OBJECT_SELF, "QUEST_CR"));
+		fCR = IntToFloat(GetLocalInt(OBJECT_SELF, "QUEST_CR"));
 	}
 	
 	int BASEQUESTXP = 100;

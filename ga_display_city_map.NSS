@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //	ga_display_city_map
 /*
 	Brings up the worldmap for a city location. Meant to be called from within a dialog and
@@ -18,12 +16,12 @@ void main(int nLocation)
 		return;
 	}
 
-	string sMap = PS_GetLocalString(OBJECT_SELF, "sMap");
-	string sOrigin = PS_GetLocalString(OBJECT_SELF, "sOrigin");
+	string sMap = GetLocalString(OBJECT_SELF, "sMap");
+	string sOrigin = GetLocalString(OBJECT_SELF, "sOrigin");
 
 	
 	// BMA-OEI 7/04/06 - Check if using remove dominated campaign flag
-	if ( PS_GetGlobalInt(CAMPAIGN_SWITCH_REMOVE_DOMINATED_ON_TRANSITION) == TRUE )
+	if ( GetGlobalInt(CAMPAIGN_SWITCH_REMOVE_DOMINATED_ON_TRANSITION) == TRUE )
 	{
 		int nRemoved = 0;
 		object oFM = GetFirstFactionMember( oPC, FALSE );
@@ -41,7 +39,7 @@ void main(int nLocation)
 	}
 
 	// BMA-OEI 6/24/06
-	if ( PS_GetGlobalInt( VAR_GLOBAL_GATHER_PARTY ) == 1 )
+	if ( GetGlobalInt( VAR_GLOBAL_GATHER_PARTY ) == 1 )
 	{
 		if ( IsPartyGathered( oPC ) == FALSE )
 		{
@@ -52,8 +50,8 @@ void main(int nLocation)
 
 	/*	Sets a global int since NX2 has multiple PCs, any of whom can access the exit
 		transition.	*/
-	PS_SetGlobalString("00_sMap", sMap);
-	PS_SetGlobalString("00_sOrigin", sOrigin);
+	SetGlobalString("00_sMap", sMap);
+	SetGlobalString("00_sOrigin", sOrigin);
 	
 	DoShowWorldMap(sMap, oPC, sOrigin);
 	SetLocalGUIVariable( oPC, "SCREEN_WORLDMAPCUSTOM", 1000, IntToString(nLocation) );

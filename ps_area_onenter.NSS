@@ -1,12 +1,10 @@
-#include "ff_safevar"
-
 #include "ps_inc_advscript"
 
 const string PS_AREA_ONENTER = "PS_AREA_ONENTER";
 
 void main()
 {
-	string PreviousScript = PS_GetLocalString(OBJECT_SELF, PS_AREA_ONENTER);
+	string PreviousScript = GetLocalString(OBJECT_SELF, PS_AREA_ONENTER);
 	object EnteringObject = GetEnteringObject();
 
 	//

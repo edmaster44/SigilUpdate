@@ -53,17 +53,17 @@ string GenerateUniqueSpellDCString( int nSpellID, object oCaster )
 
 void SaveDelayedSpellInfo( int nSpellID, object oTarget, object oCaster, int nDC )
 {
-	PS_SetLocalInt( oTarget, GenerateUniqueSpellDCString(nSpellID, oCaster), nDC );
+	SetLocalInt( oTarget, GenerateUniqueSpellDCString(nSpellID, oCaster), nDC );
 }
 
 void RemoveDelayedSpellInfo( int nSpellID, object oTarget, object oCaster )
 {
-    PS_DeleteLocalInt( oTarget, GenerateUniqueSpellDCString(nSpellID, oCaster) );
+    DeleteLocalInt( oTarget, GenerateUniqueSpellDCString(nSpellID, oCaster) );
 }
 
 int GetDelayedSpellInfoSaveDC( int nSpellID, object oTarget, object oCaster )
 {
-	return PS_GetLocalInt( oTarget, GenerateUniqueSpellDCString(nSpellID, oCaster) );
+	return GetLocalInt( oTarget, GenerateUniqueSpellDCString(nSpellID, oCaster) );
 }
 
 
@@ -258,7 +258,7 @@ void DispelMagicWithCallback( object oTarget, object oCaster, int nCasterLevel, 
     // magic as well.
     //--------------------------------------------------------------------------
     if ( GetHasEffect(EFFECT_TYPE_PETRIFY, oTarget) == TRUE || 
-		 PS_GetLocalInt(oTarget, "X1_L_IMMUNE_TO_DISPEL") == 10)
+		 GetLocalInt(oTarget, "X1_L_IMMUNE_TO_DISPEL") == 10)
     {
         return;
     }
@@ -836,13 +836,13 @@ int GetNumMeteorSwarmProjectilesToSpawnA( location lCenterOfAOE )
 				if ( GetDistanceBetweenLocations(lTargetLocation, lCenterOfAOE) <= (RADIUS_SIZE_VAST / 3.0f) )
 				{
 					nCounter = nCounter + 2;
-					PS_SetLocalInt(oTarget, "MeteorSwarmCentralTarget", 1);
+					SetLocalInt(oTarget, "MeteorSwarmCentralTarget", 1);
 				}
 				
 				else if ( GetDistanceBetweenLocations(lTargetLocation, lCenterOfAOE) <= (RADIUS_SIZE_VAST / 2.0f) )
 				{
 					nCounter = nCounter+1;
-					PS_SetLocalInt(oTarget, "MeteorSwarmNormalTarget", 1);					
+					SetLocalInt(oTarget, "MeteorSwarmNormalTarget", 1);					
 				}
 				
 				else

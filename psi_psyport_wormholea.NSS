@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Acid Fog: On Enter
 //:: NW_S0_AcidFogA.nss
@@ -45,7 +43,7 @@ void main()
 				object oDestination = GetNearestObjectByTag("psi_wormhole_wp", oTarget);
 				location lTarget = GetLocation(oTarget);
                 //slowing effect
-				if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+				if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 				{
 					SendMessageToPC(oTarget, "A Dimensional Anchor makes it impossible to teleport.");
 					return;	

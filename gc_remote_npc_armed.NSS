@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -7,7 +5,7 @@
 
 int StartingConditional()
 {
-	object oNPC = PS_GetLocalObject(OBJECT_SELF, "RCTag"); 
+	object oNPC = GetLocalObject(OBJECT_SELF, "RCTag"); 
 	
 	if (oNPC == OBJECT_INVALID)
 	{

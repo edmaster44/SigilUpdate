@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // V1.00
 /*
 rapsam2003 06/20/2018: Added a call to PS_GiveSpellFeat,
@@ -33,7 +31,7 @@ void main()
 	// Send a warning to a player that logs in when a reset is pending so that
 	// they know what's going on.
 	//
-	if (PS_GetLocalInt(GetModule(), "reboot") != 0)
+	if (GetLocalInt(GetModule(), "reboot") != 0)
 	{
 		DelayCommand(20.0f, SendMessageToPC(oPC, "=========== 24 hour server reset ==========="));
 		DelayCommand(20.1f, SendMessageToPC(oPC, "=Server will restart in less than 5 minutes="));

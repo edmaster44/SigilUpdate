@@ -1,11 +1,9 @@
-#include "ff_safevar"
-
 void main () {
 	
-	int iLock = PS_GetGlobalInt("MWTUNNELLOCK");
+	int iLock = GetGlobalInt("MWTUNNELLOCK");
 	if ( iLock == 0 )
 	{
-	  	PS_SetGlobalInt("MWTUNNELLOCK", 1);
+	  	SetGlobalInt("MWTUNNELLOCK", 1);
 		
 		if (GetObjectByTag("bzr_corpse_a") == OBJECT_INVALID) {
 		
@@ -39,6 +37,6 @@ void main () {
 			
 	  	}
 		
-  		PS_SetGlobalInt("MWTUNNELLOCK", 0);
+  		SetGlobalInt("MWTUNNELLOCK", 0);
 	}
 }

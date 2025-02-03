@@ -1,15 +1,13 @@
-#include "ff_safevar"
-
 void main()
 {
 	object oTrigger = OBJECT_SELF;
 	object oPC = GetEnteringObject();
 	if (GetIsPC(oPC) == FALSE) return;
-	string M_tag = PS_GetLocalString(oTrigger,"M_Tag");
-	string WP_succ = PS_GetLocalString(oTrigger,"WP_Success");
-	string MSG_succ = PS_GetLocalString(oTrigger,"Message_Success");
- 	string WP_fail = PS_GetLocalString(oTrigger,"WP_Fail");
-	string MSG_fail = PS_GetLocalString(oTrigger,"Message_Fail");
+	string M_tag = GetLocalString(oTrigger,"M_Tag");
+	string WP_succ = GetLocalString(oTrigger,"WP_Success");
+	string MSG_succ = GetLocalString(oTrigger,"Message_Success");
+ 	string WP_fail = GetLocalString(oTrigger,"WP_Fail");
+	string MSG_fail = GetLocalString(oTrigger,"Message_Fail");
 	
 	object oWP_succ = GetWaypointByTag(WP_succ);
 	object oWP_fail = GetWaypointByTag(WP_fail);

@@ -37,7 +37,7 @@ void main () {
 	if (!GetIsPC(oPC))
 		return;
 	
-	object myBerk = PS_GetLocalObject(OBJECT_SELF, "BERK_SPAWNED");
+	object myBerk = GetLocalObject(OBJECT_SELF, "BERK_SPAWNED");
 	if (GetIsObjectValid(myBerk)) {
 		return;
 	}
@@ -93,30 +93,30 @@ void main () {
 					lLoc = CalcSafeLocation(oPC, GetRandomLocation(GetArea(oPC), oWP, MAX_BERK_DISTANCE), MAX_BERK_DISTANCE, TRUE, FALSE);
 				object oBerk = SpawnEventer(lLoc, event_id, oPC);
 				
-				PS_SetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n), oBerk);
+				SetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n), oBerk);
 				DetailRioter(oBerk);
 				EquipBerk(oBerk);
 				
-				PS_SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk);
+				SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk);
 				
 				SetConversation(oBerk, conversation_file);
-				PS_SetLocalString(oBerk, "Slogan_1", slogan_1);
-				PS_SetLocalString(oBerk, "Slogan_2", slogan_2);
-				PS_SetLocalString(oBerk, "Slogan_3", slogan_3);
-				PS_SetLocalString(oBerk, "Explanation", explanation);
-				PS_SetLocalInt(oBerk, "NUM_RIOTERS", nBerkNum);
+				SetLocalString(oBerk, "Slogan_1", slogan_1);
+				SetLocalString(oBerk, "Slogan_2", slogan_2);
+				SetLocalString(oBerk, "Slogan_3", slogan_3);
+				SetLocalString(oBerk, "Explanation", explanation);
+				SetLocalInt(oBerk, "NUM_RIOTERS", nBerkNum);
 				
 				if (n > 1) {
-					DelayCommand(2.0f, TurnToFaceObject(PS_GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_1"), oBerk));
+					DelayCommand(2.0f, TurnToFaceObject(GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_1"), oBerk));
 				}
 			}
 				
 			for (n = 1; n <= nBerkNum; n++) {
-				object oBerk = PS_GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n));
+				object oBerk = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(n));
 				int k;
 				for (k = 1; k <= nBerkNum; k++) {
-					object oFellow = PS_GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(k));
-					PS_SetLocalObject(oBerk, "FELLOW_RIOTER_"+IntToString(k), oFellow);
+					object oFellow = GetLocalObject(OBJECT_SELF, "FELLOW_RIOTER_"+IntToString(k));
+					SetLocalObject(oBerk, "FELLOW_RIOTER_"+IntToString(k), oFellow);
 				}
 			}
 			
@@ -137,16 +137,16 @@ void main () {
 			
 			int debtorIndex = ShouldTriggerDebtorQuest(oPC, oBerk); //returns 1, 2, or 3 if this should trigger a debtor berk
 			if (debtorIndex > 0) {
-				PS_SetLocalInt(oBerk, "IS_DEBTOR", 1);
-				PS_SetLocalInt(oBerk, "DEBTOR_INDEX", debtorIndex);
-				PS_SetLocalObject(oBerk, "DEBT_HOLDER", oPC);
+				SetLocalInt(oBerk, "IS_DEBTOR", 1);
+				SetLocalInt(oBerk, "DEBTOR_INDEX", debtorIndex);
+				SetLocalObject(oBerk, "DEBT_HOLDER", oPC);
 				SetFirstName(oBerk, "Suspicious Berk");
 				SetLastName(oBerk, "");
 				SetConversation(oBerk, "_somedebtorconvo_");
 			}
 		}
 		
-		PS_SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk);
+		SetLocalObject(OBJECT_SELF, "BERK_SPAWNED", oBerk);
 	}
 
 }
@@ -176,13 +176,13 @@ object SpawnSomeBerk(object oWP, object oPC) {
 
 	int nRand = Random(4)+1;
 	switch(nRand) {
-		case 1: PS_SetLocalString(oBerk, "Berk_Type", "Clueless_1"); break;
-		case 2: PS_SetLocalString(oBerk, "Berk_Type", "Clueless_2"); break;
-		case 3: PS_SetLocalString(oBerk, "Berk_Type", "Clueless_3"); break;
-		case 4: PS_SetLocalString(oBerk, "Berk_Type", "Clueless_4"); break;
+		case 1: SetLocalString(oBerk, "Berk_Type", "Clueless_1"); break;
+		case 2: SetLocalString(oBerk, "Berk_Type", "Clueless_2"); break;
+		case 3: SetLocalString(oBerk, "Berk_Type", "Clueless_3"); break;
+		case 4: SetLocalString(oBerk, "Berk_Type", "Clueless_4"); break;
 	}
 	
-	PS_SetLocalInt(oBerk, "QUEST_CR", nLevel);
+	SetLocalInt(oBerk, "QUEST_CR", nLevel);
 	
 	return oBerk;
 
@@ -190,12 +190,12 @@ object SpawnSomeBerk(object oWP, object oPC) {
 
 void DetailBerk(object oBerk) {
 
-	string berkType = PS_GetLocalString(oBerk, "Berk_Type");
+	string berkType = GetLocalString(oBerk, "Berk_Type");
 	
 	int nGender = Random(2);
 	if (berkType == "Clueless_3")
 		nGender = GENDER_MALE;
-	PS_SetLocalInt(oBerk, "GENDER", nGender);
+	SetLocalInt(oBerk, "GENDER", nGender);
 		
 	int nHead = Random(7);
 	int nHair = Random(26);
@@ -253,29 +253,29 @@ object SpawnEventer(location lLoc, int nEvent, object oPC) {
 	
 	int nAnim = Random(6)+1;
 	switch(nAnim) {
-		case 1: PS_SetLocalString(oBerk, "ANIMATION", "talkforce01"); break;
-		case 2: PS_SetLocalString(oBerk, "ANIMATION", "talkcheer"); break;
-		case 3: PS_SetLocalString(oBerk, "ANIMATION", "talkforce"); break;
-		case 4: PS_SetLocalString(oBerk, "ANIMATION", "torchidle"); break;
-		case 5: PS_SetLocalString(oBerk, "ANIMATION", "talkforce02"); break;
-		case 6: PS_SetLocalString(oBerk, "ANIMATION", "talkforce03"); break;
+		case 1: SetLocalString(oBerk, "ANIMATION", "talkforce01"); break;
+		case 2: SetLocalString(oBerk, "ANIMATION", "talkcheer"); break;
+		case 3: SetLocalString(oBerk, "ANIMATION", "talkforce"); break;
+		case 4: SetLocalString(oBerk, "ANIMATION", "torchidle"); break;
+		case 5: SetLocalString(oBerk, "ANIMATION", "talkforce02"); break;
+		case 6: SetLocalString(oBerk, "ANIMATION", "talkforce03"); break;
 	}
 	
 	int nSound = Random(7)+1;
 	switch (nSound) {
-		case 1: PS_SetLocalString(oBerk, "SOUND", "as_pl_tauntingf1"); break;
-		case 2: PS_SetLocalString(oBerk, "SOUND", "as_pl_tauntingf2"); break;
-		case 3: PS_SetLocalString(oBerk, "SOUND", "as_pl_tauntingf3"); break;
-		case 4: PS_SetLocalString(oBerk, "SOUND", "as_pl_prisinmob1"); break;
-		case 5: PS_SetLocalString(oBerk, "SOUND", "as_pl_prisinmob2"); break;
-		case 6: PS_SetLocalString(oBerk, "SOUND", "as_pl_prisinmob3"); break;
-		case 7: PS_SetLocalString(oBerk, "SOUND", "as_pl_prisinmob4"); break;
+		case 1: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf1"); break;
+		case 2: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf2"); break;
+		case 3: SetLocalString(oBerk, "SOUND", "as_pl_tauntingf3"); break;
+		case 4: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob1"); break;
+		case 5: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob2"); break;
+		case 6: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob3"); break;
+		case 7: SetLocalString(oBerk, "SOUND", "as_pl_prisinmob4"); break;
 	}
 	
 	if (nEvent == 1)
-		PS_SetLocalString(oBerk, "Berk_Type", "Rioter");
+		SetLocalString(oBerk, "Berk_Type", "Rioter");
 	
-	PS_SetLocalInt(oBerk, "QUEST_CR", nLevel);
+	SetLocalInt(oBerk, "QUEST_CR", nLevel);
 	
 	return oBerk;
 
@@ -284,7 +284,7 @@ object SpawnEventer(location lLoc, int nEvent, object oPC) {
 void DetailRioter(object oBerk) {
 
 	int nGender = Random(2);
-	PS_SetLocalInt(oBerk, "GENDER", nGender);
+	SetLocalInt(oBerk, "GENDER", nGender);
 		
 	int nHead = Random(7);
 	int nHair = Random(26);
@@ -316,7 +316,7 @@ void DetailRioter(object oBerk) {
 
 void EquipBerk(object oBerk) {
 
-	string berkType = PS_GetLocalString(oBerk, "Berk_Type");
+	string berkType = GetLocalString(oBerk, "Berk_Type");
 	
 	if (berkType == "Clueless_3") {
 		assignProtectiveItems(oBerk, TRUE);
@@ -339,7 +339,7 @@ void EquipBerk(object oBerk) {
 int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 
 	string sDebtorQuest = "ps_quest_debtorspole";
-	int nHasDebtorQuest = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
+	int nHasDebtorQuest = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sDebtorQuest);
 	
 	//Making it prioritize suspicious berk over standard berk, because testing
 	//if (d100() < 50)
@@ -351,14 +351,14 @@ int ShouldTriggerDebtorQuest(object oPC, object oBerk) {
 		return FALSE;
 		
 	int nDebtor = 0;
-	if (PS_GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == PS_GetLocalString(oPC, "DEBTOR_1_LOCATION"))) 
+	if (GetLocalInt(oPC, "DEBTOR_1_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_1_LOCATION"))) 
 		nDebtor = 1;
-	if (PS_GetLocalInt(oPC, "DEBTOR_2_DONE") <= 0 && (GetTag(GetArea(oPC)) == PS_GetLocalString(oPC, "DEBTOR_2_LOCATION"))) 
+	if (GetLocalInt(oPC, "DEBTOR_2_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_2_LOCATION"))) 
 		nDebtor = 2;
-	if (PS_GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == PS_GetLocalString(oPC, "DEBTOR_3_LOCATION"))) 
+	if (GetLocalInt(oPC, "DEBTOR_3_DONE") <= 0 && (GetTag(GetArea(oPC)) == GetLocalString(oPC, "DEBTOR_3_LOCATION"))) 
 		nDebtor = 3;
 		
-	if (PS_GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == PS_GetLocalInt(oBerk, "GENDER")) {
+	if (GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_GENDER") == GetLocalInt(oBerk, "GENDER")) {
 		return nDebtor;
 	} else {
 		return FALSE;

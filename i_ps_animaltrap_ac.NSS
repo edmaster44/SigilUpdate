@@ -1,8 +1,6 @@
-#include "ff_safevar"
-
 void CreateTrap(object oPC, string sPlaceable, location lLoc, string sScript) {
 	object oTrap = CreateObject(OBJECT_TYPE_PLACEABLE, sPlaceable, lLoc);
-	PS_SetLocalObject(oTrap, "creator", oPC);
+	SetLocalObject(oTrap, "creator", oPC);
 	DelayCommand(6.0f, ExecuteScript(sScript, oTrap));
 }
 
@@ -23,8 +21,8 @@ void main () {
 	object oPC = GetItemActivator();
 	location lLoc = GetLocation(oPC);
 	
-	string sPlaceable = PS_GetLocalString(oItem, "trapPlaceable");
-	string sScript = PS_GetLocalString(oItem, "trapScript");
+	string sPlaceable = GetLocalString(oItem, "trapPlaceable");
+	string sScript = GetLocalString(oItem, "trapScript");
 	if (CheckForTraps(oPC, 15.0f)) {
 		SendMessageToPC(oPC, "<Color=DarkOliveGreen>Traps cannot be placed next to each other, or too close to NPCs. Move and try again.</Color>");
 		SetItemCharges(oItem, GetItemCharges(oItem)+1);

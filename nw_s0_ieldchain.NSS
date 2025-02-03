@@ -138,7 +138,7 @@ void main() {
     location lSpellLocation;
 
     //setting this to non-zero will trigger collecting touch attack success info from DoEldritchCombinedEffects
-    PS_SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", 1);
+    SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", 1);
 
     //Apply effect to the first target and the VFX impact.
     if(DoChainEffect(nID, oFirstTarget))
@@ -173,8 +173,8 @@ void main() {
     //Get the first target in the spell shape
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oFirstTarget), TRUE, OBJECT_TYPE_CREATURE );
 
-    int nTouch = PS_GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
-    PS_DeleteLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
+    int nTouch = GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
+    DeleteLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
     if ( nTouch == TOUCH_ATTACK_RESULT_MISS )
     {
 	    // Failed

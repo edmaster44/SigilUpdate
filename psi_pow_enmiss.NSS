@@ -71,10 +71,10 @@ void main()
 		location lTarget = GetLocation( oTarget );
 	    int nCnt;
 		float fTravelTime;
-		int nAugment = PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT");
+		int nAugment = GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT");
 		int nLimit = 5;
 		
-		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+		if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 		{
 			nLimit = 7;
 		}
@@ -128,16 +128,16 @@ void main()
 	                //Roll damage
 	                int nDam = d6(1);
 	     	          //Enter Metamagic conditions
-	                if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+	                if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
 					{
 						nDam = d6(1) + 1;
-						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
+						if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
 						{
 							nDam = 7;
 						}
 					}
 					
-					if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
+					if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
 					{
 						nDam = 6;
 					}

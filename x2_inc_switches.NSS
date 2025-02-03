@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //------------------------------------------------------------------------------
 //   x2_inc_switches::   Interface for switching subsystem functionality
 //------------------------------------------------------------------------------
@@ -537,12 +535,12 @@ int GetItemFlag(object oItem, string  sItemFlagConstant)
 
 void SetModuleOverrideSpellscript(string sScriptName)
 {
-    PS_SetLocalString(GetModule(),MODULE_VAR_OVERRIDE_SPELLSCRIPT,sScriptName);
+    SetLocalString(GetModule(),MODULE_VAR_OVERRIDE_SPELLSCRIPT,sScriptName);
 }
 
 string GetModuleOverrideSpellscript()
 {
-     string  sScript = PS_GetLocalString(GetModule(),"X2_S_UD_SPELLSCRIPT");
+     string  sScript = GetLocalString(GetModule(),"X2_S_UD_SPELLSCRIPT");
      return sScript;
 }
 
@@ -554,36 +552,36 @@ string GetModuleOverrideSpellscript()
 //------------------------------------------------------------------------------
 void SetModuleOverrideSpellScriptFinished()
 {
-    PS_SetLocalInt(OBJECT_SELF,"X2_L_BLOCK_LAST_SPELL",TRUE);
+    SetLocalInt(OBJECT_SELF,"X2_L_BLOCK_LAST_SPELL",TRUE);
 }
 
 int GetModuleOverrideSpellScriptFinished()
 {
-    int nRet = PS_GetLocalInt(OBJECT_SELF,"X2_L_BLOCK_LAST_SPELL");
-    PS_DeleteLocalInt(OBJECT_SELF,"X2_L_BLOCK_LAST_SPELL");
+    int nRet = GetLocalInt(OBJECT_SELF,"X2_L_BLOCK_LAST_SPELL");
+    DeleteLocalInt(OBJECT_SELF,"X2_L_BLOCK_LAST_SPELL");
     return nRet;
 }
 
 void SetCreatureOverrideAIScript(object oCreature, string sScriptName)
 {
-    PS_SetLocalString(oCreature,CREATURE_VAR_CUSTOM_AISCRIPT,sScriptName);
+    SetLocalString(oCreature,CREATURE_VAR_CUSTOM_AISCRIPT,sScriptName);
 }
 
 void SetCreatureOverrideAIScriptFinished(object oCreature = OBJECT_SELF)
 {
  //   WriteTimestampedLogEntry("Custom AI Finished");
-    PS_SetLocalInt(oCreature,"X2_SPECIAL_COMBAT_AI_SCRIPT_OK",TRUE);
+    SetLocalInt(oCreature,"X2_SPECIAL_COMBAT_AI_SCRIPT_OK",TRUE);
 }
 
 object GetCreatureOverrideAIScriptTarget(object oCreature = OBJECT_SELF)
 {
-    object oRet= PS_GetLocalObject(oCreature,"X2_NW_I0_GENERIC_INTRUDER");
+    object oRet= GetLocalObject(oCreature,"X2_NW_I0_GENERIC_INTRUDER");
     return oRet;
 }
 
 void ClearCreatureOverrideAIScriptTarget(object oCreature = OBJECT_SELF)
 {
-    PS_DeleteLocalObject(oCreature,"X2_NW_I0_GENERIC_INTRUDER");
+    DeleteLocalObject(oCreature,"X2_NW_I0_GENERIC_INTRUDER");
 }
 
 void SetCreatureFlag(object oCreature, string sFlag, int nValue)
@@ -596,12 +594,12 @@ void SetCreatureFlag(object oCreature, string sFlag, int nValue)
         }
     }
 
-    PS_SetLocalInt(oCreature,sFlag ,nValue);
+    SetLocalInt(oCreature,sFlag ,nValue);
 }
 
 int GetCreatureFlag(object oCreature, string sFlag)
 {
-    int nRet = PS_GetLocalInt(oCreature,sFlag);
+    int nRet = GetLocalInt(oCreature,sFlag);
     return nRet;
 }
 
@@ -617,7 +615,7 @@ int GetCreatureFlag(object oCreature, string sFlag)
 //----------------------------------------------------------------------------
 int GetUserDefinedItemEventNumber()
 {
-    return PS_GetLocalInt(OBJECT_SELF, "X2_L_LAST_ITEM_EVENT");
+    return GetLocalInt(OBJECT_SELF, "X2_L_LAST_ITEM_EVENT");
 }
 
 //----------------------------------------------------------------------------
@@ -632,7 +630,7 @@ int GetUserDefinedItemEventNumber()
 //----------------------------------------------------------------------------
 void SetUserDefinedItemEventNumber(int nEvent)
 {
-    PS_SetLocalInt(OBJECT_SELF,"X2_L_LAST_ITEM_EVENT",nEvent);
+    SetLocalInt(OBJECT_SELF,"X2_L_LAST_ITEM_EVENT",nEvent);
 }
 	
 		
@@ -674,11 +672,11 @@ string GetEventPostfix()
 //----------------------------------------------------------------------------
 string GetUserDefinedItemEventScriptName(object oItem)
 {
-    string sPrefix = PS_GetLocalString(GetModule(), MODULE_VAR_TAGBASED_SCRIPT_PREFIX);
+    string sPrefix = GetLocalString(GetModule(), MODULE_VAR_TAGBASED_SCRIPT_PREFIX);
 	string sTag = sPrefix + GetTag(oItem);
 	int iMaxPreExtensionLength = SCRIPT_MAX_STRING_LENGTH - SCRIPT_ITEM_EXTENSION_LENGTH;
 
-	if (PS_GetLocalInt(GetModule(), MODULE_SWITCH_ENABLE_SEPERATE_ITEM_SCRIPTS))
+	if (GetLocalInt(GetModule(), MODULE_SWITCH_ENABLE_SEPERATE_ITEM_SCRIPTS))
 	{
 	    if (GetStringLength(sTag) > iMaxPreExtensionLength)
 		{
@@ -697,7 +695,7 @@ string GetUserDefinedItemEventScriptName(object oItem)
 //----------------------------------------------------------------------------
 void SetUserDefinedItemEventPrefix(string sPrefix="")
 {
-    PS_SetLocalString(GetModule(), MODULE_VAR_TAGBASED_SCRIPT_PREFIX, sPrefix);
+    SetLocalString(GetModule(), MODULE_VAR_TAGBASED_SCRIPT_PREFIX, sPrefix);
 }
 
 //----------------------------------------------------------------------------
@@ -706,10 +704,10 @@ void SetUserDefinedItemEventPrefix(string sPrefix="")
 //----------------------------------------------------------------------------
 int ExecuteScriptAndReturnInt(string sScript, object oTarget)
 {
-    PS_DeleteLocalInt(oTarget,"X2_L_LAST_RETVAR");
+    DeleteLocalInt(oTarget,"X2_L_LAST_RETVAR");
     ExecuteScript(sScript,oTarget);
-    int nRet = PS_GetLocalInt(oTarget,"X2_L_LAST_RETVAR");
-    PS_DeleteLocalInt(oTarget,"X2_L_LAST_RETVAR");
+    int nRet = GetLocalInt(oTarget,"X2_L_LAST_RETVAR");
+    DeleteLocalInt(oTarget,"X2_L_LAST_RETVAR");
     return nRet;
 }
 
@@ -718,7 +716,7 @@ int ExecuteScriptAndReturnInt(string sScript, object oTarget)
 //----------------------------------------------------------------------------
 void  SetExecutedScriptReturnValue(int nValue = X2_EXECUTE_SCRIPT_END)
 {
-    PS_SetLocalInt(OBJECT_SELF,"X2_L_LAST_RETVAR",nValue);
+    SetLocalInt(OBJECT_SELF,"X2_L_LAST_RETVAR",nValue);
 }
 
 

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // delays reset by up to 3 hours - 1 hour per use.
 // if 3 hour limit is reached, then no further delay possible
 
@@ -12,9 +10,9 @@ void main()
 	if (GetIsDM(oDM))
 	{
 		object oMod = GetModule();
-		int iResetCountdownStarted = PS_GetLocalInt(oMod, "reboot");
-		int iBoottime = PS_GetLocalInt(oMod, "boottime");
-		int iDelayCount = PS_GetLocalInt(oMod, "delaycount");
+		int iResetCountdownStarted = GetLocalInt(oMod, "reboot");
+		int iBoottime = GetLocalInt(oMod, "boottime");
+		int iDelayCount = GetLocalInt(oMod, "delaycount");
 		int utc;
 		
 		SQLExecDirect("SELECT UNIX_TIMESTAMP()");
@@ -31,14 +29,14 @@ void main()
 		{
 			iDelayCount += 1;
 
-			PS_SetLocalInt(oMod, "delaycount", iDelayCount);
+			SetLocalInt(oMod, "delaycount", iDelayCount);
 			
 			int iNext = utc - iBoottime + 86400 + (iDelayCount * 60 * 60);
 			SendMessageToPC(oDM, "Reset delayed " + IntToString(iDelayCount) + " times. Next scheduled reset now in " + IntToString(iNext) + " seconds.");
 				
 			if (iResetCountdownStarted == TRUE)
 			{
-				PS_SetLocalInt(oMod, "reboot", 0);
+				SetLocalInt(oMod, "reboot", 0);
 				SendMessageToPC(oDM, "<c=red><b><i>Current reset countdown aborted");
 	
 				// need to counter countdown 1 min warning

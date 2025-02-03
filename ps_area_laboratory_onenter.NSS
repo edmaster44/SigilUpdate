@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("LaboratoryEnterLock");
+ int iLock = GetGlobalInt("LaboratoryEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("LaboratoryEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("LaboratoryEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_labcommoner1") == OBJECT_INVALID)
   {
@@ -62,6 +60,6 @@ void main()
   }  
   
    
-  PS_SetGlobalInt("LaboratoryEnterLock", 0);
+  SetGlobalInt("LaboratoryEnterLock", 0);
  }
 }

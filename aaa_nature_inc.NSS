@@ -148,7 +148,7 @@ void DimensionDoor(object oSelf)
 	effect eVis = EffectVisualEffect(VFX_TELEPORT_1);
 
 	if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
-	if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+	if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 	{
 		SendMessageToPC(oTarget, "A Dimensional Anchor makes it impossible to teleport.");
 		return;	
@@ -343,9 +343,9 @@ void HuntingLope(object oPC, int nIncrease, int nSpell)
 	eSpeed = SetEffectSpellId(eSpeed, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
-	if (!PS_GetLocalInt(oPC, "HuntingLope")){
+	if (!GetLocalInt(oPC, "HuntingLope")){
 		SendMessageToPC(oPC, "Speed increased by " + IntToString(nIncrease) + "%.");
-		PS_SetLocalInt(oPC, "HuntingLope", TRUE);
+		SetLocalInt(oPC, "HuntingLope", TRUE);
 	}
 	
 }

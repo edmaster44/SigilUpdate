@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // KEMO 11/08
 // This script creates a stool from the Portable Stool item.
 
@@ -15,7 +13,7 @@ void main()
 
 	object oChair = CreateObject(OBJECT_TYPE_PLACEABLE,"kemo_chair_4",lPCloc,FALSE,"kemo_chair_4");
 	DelayCommand(1.0f,SetFirstName(oChair,"Portable Stool"));
-	DelayCommand(2.0f,PS_SetLocalInt(oChair,"Portable",1));
+	DelayCommand(2.0f,SetLocalInt(oChair,"Portable",1));
 	DelayCommand(3.0f,DestroyObject(oItem,0.0f,FALSE));
 
 }

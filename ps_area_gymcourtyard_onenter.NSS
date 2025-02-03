@@ -1,13 +1,11 @@
-#include "ff_safevar"
-
 
 void main()
 {
 
- int iLock = PS_GetGlobalInt("GymnasiumEnterLock");
+ int iLock = GetGlobalInt("GymnasiumEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("GymnasiumEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("GymnasiumEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_gymnasiumcommoner1") == OBJECT_INVALID)
   {
@@ -117,6 +115,6 @@ void main()
    	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_gymnasiumguardm", lSpawnpoint, FALSE, "ps_gym_outsideguard4");    
   }
   
-  PS_SetGlobalInt("GymnasiumEnterLock", 0);
+  SetGlobalInt("GymnasiumEnterLock", 0);
  }
 }

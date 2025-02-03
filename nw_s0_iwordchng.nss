@@ -181,7 +181,7 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 	
 	PS_SetCreatureCoreAppearance(oCaster, Appearance);
 	PS_RefreshAppearance(oCaster);
-	PS_SetLocalInt(oEssence, "TempChange", 1);
+	SetLocalInt(oEssence, "TempChange", 1);
 }
 
 struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID) {

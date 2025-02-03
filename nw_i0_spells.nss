@@ -205,7 +205,7 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
 
     // * Local Override is just an out for end users who want
     // * the area effect spells to hurt 'neutrals'
-    if (PS_GetLocalInt(GetModule(), "X0_G_ALLOWSPELLSTOHURT") == 10)
+    if (GetLocalInt(GetModule(), "X0_G_ALLOWSPELLSTOHURT") == 10)
     {
         bTargetIsPC = TRUE;
     }
@@ -262,7 +262,7 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
 		// AWD-OEI only do the following check if we are playing hardcore
 	    if (GetGameDifficulty() > GAME_DIFFICULTY_NORMAL)
 		{
-			if (PS_GetGlobalInt(CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION) )
+			if (GetGlobalInt(CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION) )
 			{
 				if (GetIsReactionTypeFriendly(oTargetMaster,oSource) == FALSE && GetIsPC(oTargetMaster) == TRUE)
 				{
@@ -576,7 +576,7 @@ void spellsHealOrHarmTarget(object oTarget, int nDamageTotal, int vfx_impactNorm
 	int bHarmful = FALSE;
 	
     // abort for creatures immune to heal.
-    if (PS_GetLocalInt(oTarget, VAR_IMMUNE_TO_HEAL))
+    if (GetLocalInt(oTarget, VAR_IMMUNE_TO_HEAL))
         return;
 		
 		
@@ -1323,11 +1323,11 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary)
 // Returns -1 if the entry is not in the list.
 int IgnoreTargetRulesGetFirstIndex(object oCaster, object oTarget)
 {
-	int nITREntries = PS_GetLocalInt(oCaster, ITR_NUM_ENTRIES), i;
+	int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES), i;
 	object oEntry;
 	for (i=1; i<=nITREntries; i++)
 	{
-		oEntry = PS_GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(i));
+		oEntry = GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(i));
 		if (oEntry == oTarget)
 			return i;
 	}
@@ -1338,13 +1338,13 @@ int IgnoreTargetRulesGetFirstIndex(object oCaster, object oTarget)
 // side affect is that it changes the order of the list. But order is not important with the ITR object list.
 void IgnoreTargetRulesRemoveEntry(object oCaster, int nEntry)
 {
-	int nITREntries = PS_GetLocalInt(oCaster, ITR_NUM_ENTRIES);
+	int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES);
 	if ((nITREntries>0) && (nEntry>0) && (nEntry<=nITREntries))
 	{
-		object oEntry = PS_GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
-		PS_SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nEntry), PS_GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries))); //replace nEntry with last object in list.
-		PS_DeleteLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
-		PS_SetLocalInt(oCaster, ITR_NUM_ENTRIES, nITREntries-1); //decrement list total
+		object oEntry = GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
+		SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nEntry), GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries))); //replace nEntry with last object in list.
+		DeleteLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
+		SetLocalInt(oCaster, ITR_NUM_ENTRIES, nITREntries-1); //decrement list total
 	}
 }
 
@@ -1353,9 +1353,9 @@ void IgnoreTargetRulesRemoveEntry(object oCaster, int nEntry)
 // oTarget - the spell target.
 void IgnoreTargetRulesEnqueueTarget(object oCaster, object oTarget)
 {
-	int nITREntries = PS_GetLocalInt(oCaster, ITR_NUM_ENTRIES) + 1;
-	PS_SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries), oTarget);
-	PS_SetLocalInt(oCaster,ITR_NUM_ENTRIES,nITREntries);
+	int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES) + 1;
+	SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries), oTarget);
+	SetLocalInt(oCaster,ITR_NUM_ENTRIES,nITREntries);
 }
 
 

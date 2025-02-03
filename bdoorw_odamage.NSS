@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // bdoorw_odamage
 /*
 	Description: This calls from the On Damaged section of a door, it is
@@ -23,7 +21,7 @@ void fResetDoor()
     object oDoor = OBJECT_SELF;
     ActionCloseDoor(oDoor);
     SetLocked(oDoor, TRUE);
-    PS_SetLocalInt(oDoor, "hit_damage", 0);
+    SetLocalInt(oDoor, "hit_damage", 0);
     SetPlotFlag(oDoor, FALSE);
 	SetImmortal(oDoor, TRUE);
 
@@ -56,16 +54,16 @@ if (GetLocked(oDoor)==FALSE)
     return;
     }
 
-if (PS_GetLocalInt(OBJECT_SELF, "SHOUT_ONCE")==0)
+if (GetLocalInt(OBJECT_SELF, "SHOUT_ONCE")==0)
     {
-    PS_SetLocalInt(OBJECT_SELF, "SHOUT_ONCE", 1);
-    DelayCommand(10.0, PS_DeleteLocalInt(OBJECT_SELF, "SHOUT_ONCE"));
+    SetLocalInt(OBJECT_SELF, "SHOUT_ONCE", 1);
+    DelayCommand(10.0, DeleteLocalInt(OBJECT_SELF, "SHOUT_ONCE"));
     SpeakString("NW_I_WAS_ATTACKED", TALKVOLUME_SILENT_TALK);
     }
 
-PS_SetLocalInt(oDoor, "hit_damage", PS_GetLocalInt(oDoor, "hit_damage")+GetTotalDamageDealt());
+SetLocalInt(oDoor, "hit_damage", GetLocalInt(oDoor, "hit_damage")+GetTotalDamageDealt());
 //SpeakString("Total Damage Dealt: " + IntToString(GetTotalDamageDealt()));
-int iDamage=PS_GetLocalInt(oDoor, "hit_damage");
+int iDamage=GetLocalInt(oDoor, "hit_damage");
 
 if (iDamage>=iMaxHP || GetLocked(oDoor)==0)
     {
@@ -97,10 +95,10 @@ if (iPercent>=100)
     }
 
 //Takes the # of damage from the door and assigns a percentage in the speak string.
-int iText = PS_GetLocalInt(oDoor, "damage_meter");
+int iText = GetLocalInt(oDoor, "damage_meter");
 if (iText!=(iPercent/5))
     {
-    PS_SetLocalInt(oDoor, "damage_meter",iPercent/5);
+    SetLocalInt(oDoor, "damage_meter",iPercent/5);
     SpeakString(IntToString(iPercent) + "% damage");
     }
 

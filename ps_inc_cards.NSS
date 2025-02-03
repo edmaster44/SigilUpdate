@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*********************************************************
 * Include file for Triple Triad like card game for SCoD  *
 * by Agony_Aunt/Loki_999                                 *
@@ -23,60 +21,60 @@ void CardsPlaceableRemoveCardFromPosition(object oBoard, string sCardPos);
 
 void CardsSetLastCardPlayedOwner(object oBoard, int iPlayer)
 {
-	PS_SetLocalInt(oBoard, "LAST_CARD_PLAYED", iPlayer);
+	SetLocalInt(oBoard, "LAST_CARD_PLAYED", iPlayer);
 }
 
 int CardsGetLastCardPlayedOwner(object oBoard)
 {
-	return PS_GetLocalInt(oBoard, "LAST_CARD_PLAYED");
+	return GetLocalInt(oBoard, "LAST_CARD_PLAYED");
 }
 
 void CardsSetBoardOnPlayer(object oPC, object oBoard)
 {
-	PS_SetLocalObject(oPC, CARD_TABLE_OBJECT, oBoard);
+	SetLocalObject(oPC, CARD_TABLE_OBJECT, oBoard);
 }
 object CardsGetBoardFromPlayer(object oPC)
 {
-	return PS_GetLocalObject(oPC, CARD_TABLE_OBJECT);
+	return GetLocalObject(oPC, CARD_TABLE_OBJECT);
 }
 
 void CardsSetPlayer(object oBoard, int iPlayer, object oPC)
 {
-	PS_SetLocalObject(oBoard, CARD_PLAYER + IntToString(iPlayer), oPC);
+	SetLocalObject(oBoard, CARD_PLAYER + IntToString(iPlayer), oPC);
 }
 object CardsGetPlayer(object oBoard, int iPlayer)
 {
-	return PS_GetLocalObject(oBoard, CARD_PLAYER + IntToString(iPlayer));
+	return GetLocalObject(oBoard, CARD_PLAYER + IntToString(iPlayer));
 }
 
 string CardsGetObserverName(object oBoard, int iObserver)
 {
-	return PS_GetLocalString(oBoard, CARD_OBSERVER_NAME + IntToString(iObserver));
+	return GetLocalString(oBoard, CARD_OBSERVER_NAME + IntToString(iObserver));
 }
 
 void CardsSetObserverName(object oBoard, int iObserver, object oPC)
 {
-	PS_SetLocalString(oBoard, CARD_OBSERVER_NAME + IntToString(iObserver), GetName(oPC));
+	SetLocalString(oBoard, CARD_OBSERVER_NAME + IntToString(iObserver), GetName(oPC));
 }
 
 object CardsGetObserver(object oBoard, int iObserver)
 {
-	return PS_GetLocalObject(oBoard, CARD_OBSERVER + IntToString(iObserver));
+	return GetLocalObject(oBoard, CARD_OBSERVER + IntToString(iObserver));
 }
 
 void CardsSetObserver(object oBoard, int iObserver, object oPC)
 {
-	PS_SetLocalObject(oBoard, CARD_OBSERVER + IntToString(iObserver), oPC);
+	SetLocalObject(oBoard, CARD_OBSERVER + IntToString(iObserver), oPC);
 }
 
 string CardsGetPlayerNameFromBoard(object oBoard, int iPlayer)
 {
-	return PS_GetLocalString(oBoard, CARD_PLAYER + IntToString(iPlayer) + CARD_PLAYER_NAME);
+	return GetLocalString(oBoard, CARD_PLAYER + IntToString(iPlayer) + CARD_PLAYER_NAME);
 }
 
 void CardsSetPlayerNameOnBoard(object oBoard, int iPlayer, object oPC)
 {
-	PS_SetLocalString(oBoard, CARD_PLAYER + IntToString(iPlayer) + CARD_PLAYER_NAME, GetName(oPC));
+	SetLocalString(oBoard, CARD_PLAYER + IntToString(iPlayer) + CARD_PLAYER_NAME, GetName(oPC));
 }
 
 // Sends a message to all participants specificed
@@ -112,8 +110,8 @@ void CardsSendMessageToPlayers(object oBoard, string sMessage, int iPlayers=TRUE
 // clears all vars stored on PCs after they have left the game.  Could also perhaps use when someone joins to double check
 void CardsClearVarsOnPC(object oPC)
 {
-	PS_DeleteLocalObject(oPC, CARD_TABLE_OBJECT);
-	PS_DeleteLocalString(oPC, CARD_TABLE_POSITION);
+	DeleteLocalObject(oPC, CARD_TABLE_OBJECT);
+	DeleteLocalString(oPC, CARD_TABLE_POSITION);
 }
 
 void CardsClearVarsOnBoard(object oBoard)
@@ -125,18 +123,18 @@ void CardsClearVarsOnBoard(object oBoard)
 	string sY;
 	string sPos;
 	
-	PS_DeleteLocalObject(oBoard, CARD_PLAYER1);
-	PS_DeleteLocalString(oBoard, CARD_PLAYER1 + CARD_PLAYER_NAME);
-	PS_DeleteLocalInt(oBoard, SCORE_PLAYER1);
-	PS_DeleteLocalObject(oBoard, CARD_PLAYER2);
-	PS_DeleteLocalString(oBoard, CARD_PLAYER2 + CARD_PLAYER_NAME);
-	PS_DeleteLocalInt(oBoard, SCORE_PLAYER2);
-	PS_DeleteLocalString(oBoard, SELECTED_CARD);
+	DeleteLocalObject(oBoard, CARD_PLAYER1);
+	DeleteLocalString(oBoard, CARD_PLAYER1 + CARD_PLAYER_NAME);
+	DeleteLocalInt(oBoard, SCORE_PLAYER1);
+	DeleteLocalObject(oBoard, CARD_PLAYER2);
+	DeleteLocalString(oBoard, CARD_PLAYER2 + CARD_PLAYER_NAME);
+	DeleteLocalInt(oBoard, SCORE_PLAYER2);
+	DeleteLocalString(oBoard, SELECTED_CARD);
 
 	for(iCount = 1; iCount <= CARD_MAX_OBSERVERS; iCount++)
 	{
-		PS_DeleteLocalObject(oBoard, CARD_OBSERVER + IntToString(iCount));
-		PS_DeleteLocalObject(oBoard, CARD_OBSERVER_NAME + IntToString(iCount));
+		DeleteLocalObject(oBoard, CARD_OBSERVER + IntToString(iCount));
+		DeleteLocalObject(oBoard, CARD_OBSERVER_NAME + IntToString(iCount));
 	}
 	
 	for (y=1; y<=3; y++)
@@ -146,15 +144,15 @@ void CardsClearVarsOnBoard(object oBoard)
 			sX = IntToString(x);
 			sY = IntToString(y);
 			sPos = BOARD_ROW + sX + BOARD_COL + sY;
-			PS_DeleteLocalInt(oBoard, sPos);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_OWNER);
-			//PS_DeleteLocalObject(oBoard, sPos + PLACEABLE);
-			PS_DeleteLocalString(oBoard, sPos + CARD_NAME);
-			PS_DeleteLocalString(oBoard, sPos + CARD_PICTURE);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_UP);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_DOWN);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_LEFT);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_RIGHT);
+			DeleteLocalInt(oBoard, sPos);
+			DeleteLocalInt(oBoard, sPos + CARD_OWNER);
+			//DeleteLocalObject(oBoard, sPos + PLACEABLE);
+			DeleteLocalString(oBoard, sPos + CARD_NAME);
+			DeleteLocalString(oBoard, sPos + CARD_PICTURE);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_UP);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_DOWN);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_LEFT);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_RIGHT);
 		}
 	}
 	
@@ -165,31 +163,31 @@ void CardsClearVarsOnBoard(object oBoard)
 			sX = IntToString(x);
 			sY = IntToString(y);
 			sPos = CARD_P + sY + _HAND_ + sX;
-			PS_DeleteLocalInt(oBoard, sPos);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_OWNER);
-			//PS_DeleteLocalObject(oBoard, sPos + PLACEABLE);
-			PS_DeleteLocalString(oBoard, sPos + CARD_NAME);
-			PS_DeleteLocalString(oBoard, sPos + CARD_PICTURE);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_UP);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_DOWN);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_LEFT);
-			PS_DeleteLocalInt(oBoard, sPos + CARD_VALUE_RIGHT);
+			DeleteLocalInt(oBoard, sPos);
+			DeleteLocalInt(oBoard, sPos + CARD_OWNER);
+			//DeleteLocalObject(oBoard, sPos + PLACEABLE);
+			DeleteLocalString(oBoard, sPos + CARD_NAME);
+			DeleteLocalString(oBoard, sPos + CARD_PICTURE);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_UP);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_DOWN);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_LEFT);
+			DeleteLocalInt(oBoard, sPos + CARD_VALUE_RIGHT);
 		}
 	}	
 	
 	// delete rules
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_OPEN);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_RANDOM);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_SAME);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_PLUS);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_WALL);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_READY);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_OPEN);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_RANDOM);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_SAME);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_PLUS);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_WALL);
-	PS_DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_READY);
+	DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_OPEN);
+	DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_RANDOM);
+	DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_SAME);
+	DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_PLUS);
+	DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_WALL);
+	DeleteLocalInt(oBoard, CARD_PLAYER1 + RULE_READY);
+	DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_OPEN);
+	DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_RANDOM);
+	DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_SAME);
+	DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_PLUS);
+	DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_WALL);
+	DeleteLocalInt(oBoard, CARD_PLAYER2 + RULE_READY);
 	
 	// delete selected cards
 	
@@ -222,7 +220,7 @@ int CardsGetObserverNumberFromBoard(object oBoard, object oPC)
 	
 	for (n=1; n<=CARD_MAX_OBSERVERS; n++)
 	{
-		if (PS_GetLocalObject(oBoard, CARD_OBSERVER + IntToString(n)) == oPC)
+		if (GetLocalObject(oBoard, CARD_OBSERVER + IntToString(n)) == oPC)
 		iRet = n;
 	}
 	
@@ -290,22 +288,22 @@ object GetPlayerDeck(object oPC)
 // returns the current size of the deck
 int CardsGetDeckSize(object oDeck)
 {
-	return PS_GetLocalInt(oDeck, CARD_DECK_SIZE);
+	return GetLocalInt(oDeck, CARD_DECK_SIZE);
 }
 
 void CardsSetDeckSize(object oDeck, int iSize)
 {
-	PS_SetLocalInt(oDeck, CARD_DECK_SIZE, iSize);
+	SetLocalInt(oDeck, CARD_DECK_SIZE, iSize);
 }
 
 int CardsGetGameState(object oBoard)
 {
-	return PS_GetLocalInt(oBoard, GAME_STATE);
+	return GetLocalInt(oBoard, GAME_STATE);
 }
 
 void CardsSetGameState(object oBoard, int iState)
 {
-	PS_SetLocalInt(oBoard, GAME_STATE, iState);
+	SetLocalInt(oBoard, GAME_STATE, iState);
 }
 
 
@@ -319,11 +317,11 @@ int CardsGetFirstFreeCardSlotInHand(object oBoard, int iPos)
 	string sVarLeft = "P" + IntToString(iPos) + _HAND_;
 	// new feature, basic var of hand variables (without values or textures) states whether
 	// card is in hand - this will come useful for quick checks, especially later
-	if (PS_GetLocalInt(oBoard, sVarLeft + "1") == 0) iCardPos = 1;
-	else if (PS_GetLocalInt(oBoard, sVarLeft + "2") == 0) iCardPos = 2;
-	else if (PS_GetLocalInt(oBoard, sVarLeft + "3") == 0) iCardPos = 3;
-	else if (PS_GetLocalInt(oBoard, sVarLeft + "4") == 0) iCardPos = 4;
-	else if (PS_GetLocalInt(oBoard, sVarLeft + "5") == 0) iCardPos = 5;
+	if (GetLocalInt(oBoard, sVarLeft + "1") == 0) iCardPos = 1;
+	else if (GetLocalInt(oBoard, sVarLeft + "2") == 0) iCardPos = 2;
+	else if (GetLocalInt(oBoard, sVarLeft + "3") == 0) iCardPos = 3;
+	else if (GetLocalInt(oBoard, sVarLeft + "4") == 0) iCardPos = 4;
+	else if (GetLocalInt(oBoard, sVarLeft + "5") == 0) iCardPos = 5;
 	
 	return iCardPos;
 }
@@ -332,11 +330,11 @@ int CardsGetFirstFreeCardSlotInHand(object oBoard, int iPos)
 // only of use on card selection screen
 int CardsIsCardSelectedForHand(object oBoard, int iCardNum, string sPos)
 {
-	if (PS_GetLocalInt(oBoard, "P" + sPos + "_1") == iCardNum || 
-		PS_GetLocalInt(oBoard, "P" + sPos + "_2") == iCardNum || 
-		PS_GetLocalInt(oBoard, "P" + sPos + "_3") == iCardNum || 
-		PS_GetLocalInt(oBoard, "P" + sPos + "_4") == iCardNum || 
-		PS_GetLocalInt(oBoard, "P" + sPos + "_5") == iCardNum)
+	if (GetLocalInt(oBoard, "P" + sPos + "_1") == iCardNum || 
+		GetLocalInt(oBoard, "P" + sPos + "_2") == iCardNum || 
+		GetLocalInt(oBoard, "P" + sPos + "_3") == iCardNum || 
+		GetLocalInt(oBoard, "P" + sPos + "_4") == iCardNum || 
+		GetLocalInt(oBoard, "P" + sPos + "_5") == iCardNum)
 	{
 		return TRUE;
 	}
@@ -402,8 +400,8 @@ void CardsGUISetPlayerNamesAllPlayers(object oBoard, string sNameP1, string sNam
 
 void CardsSetPlayerScores(object oBoard, int iScorePlayer1, int iScorePlayer2)
 {
-	PS_SetLocalInt(oBoard, SCORE_PLAYER1, iScorePlayer1);
-	PS_SetLocalInt(oBoard, SCORE_PLAYER2, iScorePlayer2);
+	SetLocalInt(oBoard, SCORE_PLAYER1, iScorePlayer1);
+	SetLocalInt(oBoard, SCORE_PLAYER2, iScorePlayer2);
 }
 
 int CardsGetPlayerScore(object oBoard, int iPlayer)
@@ -411,9 +409,9 @@ int CardsGetPlayerScore(object oBoard, int iPlayer)
 	int iRet;
 	
 	if (iPlayer == 1)
-		iRet = PS_GetLocalInt(oBoard, SCORE_PLAYER1);
+		iRet = GetLocalInt(oBoard, SCORE_PLAYER1);
 	else if (iPlayer == 2)
-		iRet = PS_GetLocalInt(oBoard, SCORE_PLAYER2);
+		iRet = GetLocalInt(oBoard, SCORE_PLAYER2);
 	else
 		iRet = 0; // error
 	
@@ -469,8 +467,8 @@ void CardsDestroyBoard(object oBoard)
 {
 	// handled by game over function which calls this function anyway  - CardsClearTablePlaceableOfCards(oBoard);
 	CardsClearTablePlaceableOfCards(oBoard);
-	DestroyObject(PS_GetLocalObject(oBoard, CARD_CHAIR_BLUE), 0.0, FALSE);
-	DestroyObject(PS_GetLocalObject(oBoard, CARD_CHAIR_RED), 0.0, FALSE);
+	DestroyObject(GetLocalObject(oBoard, CARD_CHAIR_BLUE), 0.0, FALSE);
+	DestroyObject(GetLocalObject(oBoard, CARD_CHAIR_RED), 0.0, FALSE);
 	DestroyObject(oBoard, 0.0, FALSE);
 }
 
@@ -626,19 +624,19 @@ void CardsCheckObservers(object oBoard)
 	{
 		sCount = IntToString(iCount);
 		oPC = CardsGetObserver(oBoard, iCount);
-		sObserverName = PS_GetLocalString(oBoard, CARD_OBSERVER_NAME + sCount);
+		sObserverName = GetLocalString(oBoard, CARD_OBSERVER_NAME + sCount);
 		if (!GetIsObjectValid(oPC))
 		{
 			//CardsSendMessageToPlayers(oBoard, sObserverName + " has stopped observing the game.");
-			PS_DeleteLocalObject(oBoard, CARD_OBSERVER + sCount);
-			PS_DeleteLocalString(oBoard, CARD_OBSERVER_NAME + sCount);
+			DeleteLocalObject(oBoard, CARD_OBSERVER + sCount);
+			DeleteLocalString(oBoard, CARD_OBSERVER_NAME + sCount);
 			CardsGUIUpdateObserverList(oBoard);
 		}
 		else if (CardsParticipantInRange(oPC, oBoard, CARD_PLAYER_TYPE_OBSERVER) == FALSE)
 		{
 			SendMessageToPC(oPC, CARD_GAME_FEEDBACK_COLOUR + "You are too far from the board to see what is happening!");
-			PS_DeleteLocalObject(oBoard, CARD_OBSERVER + sCount);
-			PS_DeleteLocalString(oBoard, CARD_OBSERVER_NAME + sCount);
+			DeleteLocalObject(oBoard, CARD_OBSERVER + sCount);
+			DeleteLocalString(oBoard, CARD_OBSERVER_NAME + sCount);
 			CardsGUIUpdateObserverList(oBoard);
 		}
 	}
@@ -808,7 +806,7 @@ void GUI_Display_Card_Game_Rule_Selection(object oBoard)
 
 void CardsSetRule(object oBoard, string sRule, int iValue, string sPlayer="1")
 {
-	PS_SetLocalInt(oBoard, CARD_PLAYER + sPlayer + sRule, iValue);
+	SetLocalInt(oBoard, CARD_PLAYER + sPlayer + sRule, iValue);
 }
 
 // sPlayer is used from the rule screen to allow quick checking of rules for both players
@@ -816,7 +814,7 @@ void CardsSetRule(object oBoard, string sRule, int iValue, string sPlayer="1")
 int CardsGetRule(object oBoard, string sRule, string sPlayer="1")
 {
 	// doesn't matter whether we modify the string with "1" or "2" as both sets of rules should be equal at this stage
-	return PS_GetLocalInt(oBoard, CARD_PLAYER + sPlayer + sRule);
+	return GetLocalInt(oBoard, CARD_PLAYER + sPlayer + sRule);
 }
 
 // displayed to observers or players when waiting for players to join and select rules.
@@ -829,32 +827,32 @@ void GUI_Display_Card_Board_Waiting(object oBoard, object oPC)
 // sOld will always be from hand, sNew will always be a place on the board in-play
 void CardsMoveCardVariables(object oBoard, string sOld, string sNew)
 {
-	PS_SetLocalInt(oBoard, sNew, PS_GetLocalInt(oBoard, sOld)); // remember, the base variable without extension is the card number.
-	PS_SetLocalInt(oBoard, sOld, 0);
+	SetLocalInt(oBoard, sNew, GetLocalInt(oBoard, sOld)); // remember, the base variable without extension is the card number.
+	SetLocalInt(oBoard, sOld, 0);
 	
-	PS_SetLocalInt(oBoard, sNew + CARD_ID, PS_GetLocalInt(oBoard, sOld + CARD_ID));
-	PS_SetLocalInt(oBoard, sOld + CARD_ID, 0);
+	SetLocalInt(oBoard, sNew + CARD_ID, GetLocalInt(oBoard, sOld + CARD_ID));
+	SetLocalInt(oBoard, sOld + CARD_ID, 0);
 	
-	PS_SetLocalInt(oBoard, sNew + CARD_OWNER, PS_GetLocalInt(oBoard, sOld + CARD_OWNER));
-	PS_SetLocalInt(oBoard, sOld + CARD_OWNER, 0);
+	SetLocalInt(oBoard, sNew + CARD_OWNER, GetLocalInt(oBoard, sOld + CARD_OWNER));
+	SetLocalInt(oBoard, sOld + CARD_OWNER, 0);
 	
-	PS_SetLocalString(oBoard, sNew + CARD_NAME, PS_GetLocalString(oBoard, sOld + CARD_NAME));
-	PS_SetLocalString(oBoard, sOld + CARD_NAME, "");
+	SetLocalString(oBoard, sNew + CARD_NAME, GetLocalString(oBoard, sOld + CARD_NAME));
+	SetLocalString(oBoard, sOld + CARD_NAME, "");
 
-	PS_SetLocalString(oBoard, sNew + CARD_PICTURE, PS_GetLocalString(oBoard, sOld + CARD_PICTURE));
-	PS_SetLocalString(oBoard, sOld + CARD_PICTURE, "");
+	SetLocalString(oBoard, sNew + CARD_PICTURE, GetLocalString(oBoard, sOld + CARD_PICTURE));
+	SetLocalString(oBoard, sOld + CARD_PICTURE, "");
 
-	PS_SetLocalInt(oBoard, sNew + CARD_VALUE_UP, PS_GetLocalInt(oBoard, sOld + CARD_VALUE_UP));
-	PS_SetLocalInt(oBoard, sOld + CARD_VALUE_UP, 0);
+	SetLocalInt(oBoard, sNew + CARD_VALUE_UP, GetLocalInt(oBoard, sOld + CARD_VALUE_UP));
+	SetLocalInt(oBoard, sOld + CARD_VALUE_UP, 0);
 	
-	PS_SetLocalInt(oBoard, sNew + CARD_VALUE_DOWN, PS_GetLocalInt(oBoard, sOld + CARD_VALUE_DOWN));
-	PS_SetLocalInt(oBoard, sOld + CARD_VALUE_DOWN, 0);
+	SetLocalInt(oBoard, sNew + CARD_VALUE_DOWN, GetLocalInt(oBoard, sOld + CARD_VALUE_DOWN));
+	SetLocalInt(oBoard, sOld + CARD_VALUE_DOWN, 0);
 	
-	PS_SetLocalInt(oBoard, sNew + CARD_VALUE_LEFT, PS_GetLocalInt(oBoard, sOld + CARD_VALUE_LEFT));
-	PS_SetLocalInt(oBoard, sOld + CARD_VALUE_LEFT, 0);
+	SetLocalInt(oBoard, sNew + CARD_VALUE_LEFT, GetLocalInt(oBoard, sOld + CARD_VALUE_LEFT));
+	SetLocalInt(oBoard, sOld + CARD_VALUE_LEFT, 0);
 	
-	PS_SetLocalInt(oBoard, sNew + CARD_VALUE_RIGHT, PS_GetLocalInt(oBoard, sOld + CARD_VALUE_RIGHT));
-	PS_SetLocalInt(oBoard, sOld + CARD_VALUE_RIGHT, 0);
+	SetLocalInt(oBoard, sNew + CARD_VALUE_RIGHT, GetLocalInt(oBoard, sOld + CARD_VALUE_RIGHT));
+	SetLocalInt(oBoard, sOld + CARD_VALUE_RIGHT, 0);
 }
 
 // iPosition is the position of the card in the hand (ie: 1-5), return value is the number of the card
@@ -864,7 +862,7 @@ void CardsMoveCardVariables(object oBoard, string sOld, string sNew)
 	string sPosition = IntToString(iPosition);
 	string sPlayer = IntToString(iPlayer);
 	
-	return PS_GetLocalInt(oBoard, "P" + sPlayer + "_" + sPosition);
+	return GetLocalInt(oBoard, "P" + sPlayer + "_" + sPosition);
 }*/
 
 // iPosition is the position of the card in the hand (ie: 1-5), iCard is the selected card from CardsSelectRandomCardsForPlayer() or selection screen
@@ -873,20 +871,20 @@ void CardsStoreSelectedCardOnBoard(object oBoard, object oDeck, int iCard, int i
 	string sPosition = CARD_P + IntToString(iPlayer) + _HAND_ + IntToString(iPosition);
 	string sCard = IntToString(iCard);
 	
-	PS_SetLocalInt(oBoard, sPosition + CARD_ID, PS_GetLocalInt(oDeck, CARD_ID + sCard));
-	PS_SetLocalInt(oBoard, sPosition, iCard);
-	PS_SetLocalString(oBoard, sPosition + CARD_NAME, PS_GetLocalString(oDeck, CARD_NAME + sCard));
-	PS_SetLocalString(oBoard, sPosition + CARD_PICTURE, PS_GetLocalString(oDeck, CARD_PICTURE + sCard));
-	PS_SetLocalInt(oBoard, sPosition + CARD_VALUE_UP, PS_GetLocalInt(oDeck, CARD_VALUE_UP + sCard));
-	PS_SetLocalInt(oBoard, sPosition + CARD_VALUE_DOWN, PS_GetLocalInt(oDeck, CARD_VALUE_DOWN + sCard));
-	PS_SetLocalInt(oBoard, sPosition + CARD_VALUE_LEFT, PS_GetLocalInt(oDeck, CARD_VALUE_LEFT + sCard));
-	PS_SetLocalInt(oBoard, sPosition + CARD_VALUE_RIGHT, PS_GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCard));
-	PS_SetLocalInt(oBoard, sPosition + CARD_OWNER, iPlayer);
+	SetLocalInt(oBoard, sPosition + CARD_ID, GetLocalInt(oDeck, CARD_ID + sCard));
+	SetLocalInt(oBoard, sPosition, iCard);
+	SetLocalString(oBoard, sPosition + CARD_NAME, GetLocalString(oDeck, CARD_NAME + sCard));
+	SetLocalString(oBoard, sPosition + CARD_PICTURE, GetLocalString(oDeck, CARD_PICTURE + sCard));
+	SetLocalInt(oBoard, sPosition + CARD_VALUE_UP, GetLocalInt(oDeck, CARD_VALUE_UP + sCard));
+	SetLocalInt(oBoard, sPosition + CARD_VALUE_DOWN, GetLocalInt(oDeck, CARD_VALUE_DOWN + sCard));
+	SetLocalInt(oBoard, sPosition + CARD_VALUE_LEFT, GetLocalInt(oDeck, CARD_VALUE_LEFT + sCard));
+	SetLocalInt(oBoard, sPosition + CARD_VALUE_RIGHT, GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCard));
+	SetLocalInt(oBoard, sPosition + CARD_OWNER, iPlayer);
 }
 
 void CardsSelectRandomCardsForPlayer(object oBoard, int iPlayer)
 {
-	object oDeck = PS_GetLocalObject(oBoard, CARD_PLAYER_DECK + IntToString(iPlayer));
+	object oDeck = GetLocalObject(oBoard, CARD_PLAYER_DECK + IntToString(iPlayer));
 	int iDeckSize = CardsGetDeckSize(oDeck);
 	int iCard1; int iCard2; int iCard3; int iCard4; int iCard5;
 	int iCount;
@@ -995,7 +993,7 @@ void GUI_CardsSetBackgroundColourAllPlayers(object oBoard, string sPosition, int
 // creates a placeable of the required type in the position specified
 void CardsPlaceableDisplayCardInPosition(object oBoard, string sCardPos)
 {
-	int iOwner = PS_GetLocalInt(oBoard, sCardPos + CARD_OWNER);
+	int iOwner = GetLocalInt(oBoard, sCardPos + CARD_OWNER);
 	string sTemplate;
 	
 	float x;
@@ -1037,14 +1035,14 @@ void CardsPlaceableDisplayCardInPosition(object oBoard, string sCardPos)
 	z = vTable.z + CARDS_HEIGHT_Z;
 	
 	oCard = CreateObject(OBJECT_TYPE_PLACEABLE, sTemplate, Location(GetArea(oBoard), Vector(x, y, z), CARDS_ROTATION), FALSE);
-	PS_SetLocalObject(oBoard, sCardPos + PLACEABLE, oCard);
+	SetLocalObject(oBoard, sCardPos + PLACEABLE, oCard);
 }
 
 // removes the specified placeable from its position
 void CardsPlaceableRemoveCardFromPosition(object oBoard, string sCardPos)
 {
-	DestroyObject(PS_GetLocalObject(oBoard, sCardPos + PLACEABLE), 0.0, FALSE);
-	PS_DeleteLocalObject(oBoard, sCardPos + PLACEABLE);
+	DestroyObject(GetLocalObject(oBoard, sCardPos + PLACEABLE), 0.0, FALSE);
+	DeleteLocalObject(oBoard, sCardPos + PLACEABLE);
 }
 
 // oTarget is the PC whose screen needs modifying
@@ -1091,15 +1089,15 @@ void CardsGUIDisplayCardInPositionFromDeck(object oTarget, object oDeck, int iCa
 {
 	string sCardNum = IntToString(iCardNum);
 	
-	string sCardName = PS_GetLocalString(oDeck, CARD_NAME + sCardNum);
+	string sCardName = GetLocalString(oDeck, CARD_NAME + sCardNum);
 	
 	//SendMessageToPC(oTarget, "DEBUG: Selected card was named: " + sCardName);
 	
-	string sCardImage = PS_GetLocalString(oDeck, CARD_PICTURE + sCardNum);
-	string sUp = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_UP + sCardNum));
-	string sDown = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_DOWN + sCardNum));
-	string sLeft = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_LEFT + sCardNum));
-	string sRight = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCardNum));
+	string sCardImage = GetLocalString(oDeck, CARD_PICTURE + sCardNum);
+	string sUp = IntToString(GetLocalInt(oDeck, CARD_VALUE_UP + sCardNum));
+	string sDown = IntToString(GetLocalInt(oDeck, CARD_VALUE_DOWN + sCardNum));
+	string sLeft = IntToString(GetLocalInt(oDeck, CARD_VALUE_LEFT + sCardNum));
+	string sRight = IntToString(GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCardNum));
 	
 	SetGUITexture(oTarget, sScreen, sPosPrefix + CARD_BORDER, CARD_BORDER_UNSELECTED);
 	SetGUITexture(oTarget, sScreen, sPosPrefix + CARD_BACKGROUND, sFrame);
@@ -1122,15 +1120,15 @@ void CardsGUIDisplayCardInPositionFromBoard(object oPC, object oBoard, string sC
 {
 	string sFrame;
 	
-	int iCardNo = PS_GetLocalInt(oBoard, sCardPosition);
-	string sCardName = PS_GetLocalString(oBoard, sCardPosition + CARD_NAME);
-	string sCardImage = PS_GetLocalString(oBoard, sCardPosition + CARD_PICTURE);
-	string sUp = IntToString(PS_GetLocalInt(oBoard, sCardPosition + CARD_VALUE_UP));
-	string sDown = IntToString(PS_GetLocalInt(oBoard, sCardPosition + CARD_VALUE_DOWN));
-	string sLeft = IntToString(PS_GetLocalInt(oBoard, sCardPosition + CARD_VALUE_LEFT));
-	string sRight = IntToString(PS_GetLocalInt(oBoard, sCardPosition + CARD_VALUE_RIGHT));
+	int iCardNo = GetLocalInt(oBoard, sCardPosition);
+	string sCardName = GetLocalString(oBoard, sCardPosition + CARD_NAME);
+	string sCardImage = GetLocalString(oBoard, sCardPosition + CARD_PICTURE);
+	string sUp = IntToString(GetLocalInt(oBoard, sCardPosition + CARD_VALUE_UP));
+	string sDown = IntToString(GetLocalInt(oBoard, sCardPosition + CARD_VALUE_DOWN));
+	string sLeft = IntToString(GetLocalInt(oBoard, sCardPosition + CARD_VALUE_LEFT));
+	string sRight = IntToString(GetLocalInt(oBoard, sCardPosition + CARD_VALUE_RIGHT));
 	
-	int iOwner = PS_GetLocalInt(oBoard, sCardPosition + CARD_OWNER);
+	int iOwner = GetLocalInt(oBoard, sCardPosition + CARD_OWNER);
 	int iPos = CardsGetPlayerNumberFromBoard(oBoard, oPC);
 	string sLocation = GetStringLeft(sCardPosition, 1); // gives us P if player hand or R if on board (due to RnCn format)
 	
@@ -1263,7 +1261,7 @@ void GUI_Display_Initial_Card_Board_To_All(object oBoard)
 	
 	for (iCount=1;iCount<=10;iCount++)
 	{
-		oObserver = PS_GetLocalObject(oBoard, CARD_OBSERVER + IntToString(iCount));
+		oObserver = GetLocalObject(oBoard, CARD_OBSERVER + IntToString(iCount));
 		CloseGUIScreen(oObserver, CARD_SCREEN_WAITING_SCENE);
 		GUI_Display_Card_Board_In_CurrentState(oBoard, oObserver);
 	}
@@ -1289,12 +1287,12 @@ void GUI_Display_Initial_Card_Board_To_All(object oBoard)
 
 void CardsSelectionSetScrollOffset(object oPC, int iOffset)
 {
-	PS_SetLocalInt(oPC, "CARDSGUIOFFSET", iOffset);
+	SetLocalInt(oPC, "CARDSGUIOFFSET", iOffset);
 }
 
 int CardsSelectionGetScrollOffset(object oPC)
 {
-	return PS_GetLocalInt(oPC, "CARDSGUIOFFSET");
+	return GetLocalInt(oPC, "CARDSGUIOFFSET");
 }
 
 // used to calculate current "scroll" of deck and determine which buttons need disabling and enabling
@@ -1427,7 +1425,7 @@ void CardsChangeGameState(object oBoard, int iNewGameState, int iExitCode=0)
 				{
 					// find which player has completed their hand and show them waiting screen...
 
-					if (PS_GetLocalInt(oBoard, LAST_PLAYER_CARDS_SELECTED) == 1)
+					if (GetLocalInt(oBoard, LAST_PLAYER_CARDS_SELECTED) == 1)
 					{
 						oReadyPC = oPC1;
 					}
@@ -1458,8 +1456,8 @@ void CardsChangeGameState(object oBoard, int iNewGameState, int iExitCode=0)
 					}
 					
 					GUI_Display_Initial_Card_Board_To_All(oBoard);
-					PS_SetLocalInt(oBoard, SCORE_PLAYER1, 5);
-					PS_SetLocalInt(oBoard, SCORE_PLAYER2, 5);
+					SetLocalInt(oBoard, SCORE_PLAYER1, 5);
+					SetLocalInt(oBoard, SCORE_PLAYER2, 5);
 					break;
 				}
 			
@@ -1488,12 +1486,12 @@ void CardsChangeGameState(object oBoard, int iNewGameState, int iExitCode=0)
 
 void CardsGUIDisplaySingleCard(object oTarget, object oCard)
 {
-	string sCardName = PS_GetLocalString(oCard, CARD_NAME);
-	string sCardImage = PS_GetLocalString(oCard, CARD_PICTURE);
-	int iUp = PS_GetLocalInt(oCard, CARD_VALUE_UP);
-	int iDown = PS_GetLocalInt(oCard, CARD_VALUE_DOWN);
-	int iLeft = PS_GetLocalInt(oCard, CARD_VALUE_LEFT);
-	int iRight = PS_GetLocalInt(oCard, CARD_VALUE_RIGHT);
+	string sCardName = GetLocalString(oCard, CARD_NAME);
+	string sCardImage = GetLocalString(oCard, CARD_PICTURE);
+	int iUp = GetLocalInt(oCard, CARD_VALUE_UP);
+	int iDown = GetLocalInt(oCard, CARD_VALUE_DOWN);
+	int iLeft = GetLocalInt(oCard, CARD_VALUE_LEFT);
+	int iRight = GetLocalInt(oCard, CARD_VALUE_RIGHT);
 	
 	DisplayGuiScreen(oTarget, "TT_GUI_SINGLE_CARD", FALSE, "cardssingle.xml");
 
@@ -1524,12 +1522,12 @@ void CardsGUIFillDeckListBox(object oPC, object oDeck, string sScreen)
 	for (iCount = 1; iCount <= iDeckSize; iCount++)
 	{
 		sCount = IntToString(iCount);
-		sCardName = PS_GetLocalString(oDeck, CARD_NAME + sCount);
-		sCardImage = PS_GetLocalString(oDeck, CARD_PICTURE + sCount);
-		sUp = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_UP + sCount));
-		sDown = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_DOWN + sCount));
-		sLeft = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_LEFT + sCount));
-		sRight = IntToString(PS_GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCount));
+		sCardName = GetLocalString(oDeck, CARD_NAME + sCount);
+		sCardImage = GetLocalString(oDeck, CARD_PICTURE + sCount);
+		sUp = IntToString(GetLocalInt(oDeck, CARD_VALUE_UP + sCount));
+		sDown = IntToString(GetLocalInt(oDeck, CARD_VALUE_DOWN + sCount));
+		sLeft = IntToString(GetLocalInt(oDeck, CARD_VALUE_LEFT + sCount));
+		sRight = IntToString(GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCount));
 	
 		AddListBoxRow(oPC, sScreen, "TT_LIST_BOX", sCount, 
 		"CARD" + CARD_NAME + "=" + sCardName + 
@@ -1562,39 +1560,39 @@ void CardsGUIViewCards(object oPC, object oDeck)
 // sValue is CARD_VALUE_UP etc
 int CardsGetCardOnBoardValueFromPosition(object oBoard, string sPosition, string sValue)
 {
-	return PS_GetLocalInt(oBoard, sPosition + sValue);
+	return GetLocalInt(oBoard, sPosition + sValue);
 }
 
 int CardsGetCardOnBoardOwnerFromPosition(object oBoard, string sPosition)
 {
-	return PS_GetLocalInt(oBoard, sPosition + CARD_OWNER); // if sPosition is not for a valid var then it will return 0. Possibly inefficient as GetLocalInt will have to search through all vars.
+	return GetLocalInt(oBoard, sPosition + CARD_OWNER); // if sPosition is not for a valid var then it will return 0. Possibly inefficient as GetLocalInt will have to search through all vars.
 }
 
 void CardsToggleCardOwner(object oBoard, string sPosition)
 {
-	int iOwner = PS_GetLocalInt(oBoard, sPosition + CARD_OWNER);
+	int iOwner = GetLocalInt(oBoard, sPosition + CARD_OWNER);
 	if (iOwner == 1) iOwner = 2;
 	else iOwner = 1;
 	
 	//CardsSendMessageToPlayers(oBoard, "DEBUG: Setting owner of card in position " + sPosition + " to " + IntToString(iOwner));
-	PS_SetLocalInt(oBoard, sPosition + CARD_OWNER, iOwner);
+	SetLocalInt(oBoard, sPosition + CARD_OWNER, iOwner);
 }
 
 int CardsGetIterationFlipsMax(object oBoard)
 {
-	return PS_GetLocalInt(oBoard, "ITERATIONFLIPSMAX");
+	return GetLocalInt(oBoard, "ITERATIONFLIPSMAX");
 }
 
 void CardsResetIterationFlipsMax(object oBoard)
 {
-	PS_SetLocalInt(oBoard, "ITERATIONFLIPSMAX", 0);
+	SetLocalInt(oBoard, "ITERATIONFLIPSMAX", 0);
 }
 
 void CardsSetIterationFlipsMax(object oBoard, int iIteration)
 {
 	//CardsSendMessageToPlayers(oBoard, "DEBUG: Setting iterations to " + IntToString(iIteration));
 	if (iIteration > CardsGetIterationFlipsMax(oBoard))
-		PS_SetLocalInt(oBoard, "ITERATIONFLIPSMAX", iIteration);
+		SetLocalInt(oBoard, "ITERATIONFLIPSMAX", iIteration);
 }
 
 // iIterations is the level you want to go down to.
@@ -1617,15 +1615,15 @@ void CardsUpdateScores(object oBoard)
 	for (iCount=1; iCount <= 5; iCount++)
 	{
 		sTemp = IntToString(iCount);
-		if (PS_GetLocalInt(oBoard, "P1_" + sTemp) > 0) iTotalP1++;
-		if (PS_GetLocalInt(oBoard, "P2_" + sTemp) > 0) iTotalP2++;
+		if (GetLocalInt(oBoard, "P1_" + sTemp) > 0) iTotalP1++;
+		if (GetLocalInt(oBoard, "P2_" + sTemp) > 0) iTotalP2++;
 	}
 	
 	for (iCol=1; iCol<=3; iCol++)
 	{
 		for (iRow=1; iRow<=3; iRow++)
 		{
-			iTemp = PS_GetLocalInt(oBoard, "R" + IntToString(iRow) + "C" + IntToString(iCol) + CARD_OWNER);
+			iTemp = GetLocalInt(oBoard, "R" + IntToString(iRow) + "C" + IntToString(iCol) + CARD_OWNER);
 			if (iTemp == 1) iTotalP1++;
 			else if (iTemp == 2) iTotalP2++;
 			// otherwise its 0 and no card there.
@@ -2329,12 +2327,12 @@ int CheckPlayerAlreadyIn(object oBoard, object oPC)
 	int iFound = FALSE;
 	int iCount;
 	
-	if (PS_GetLocalObject(oBoard, CARD_PLAYER + "1") == oPC) iFound = TRUE;
-	if (PS_GetLocalObject(oBoard, CARD_PLAYER + "2") == oPC) iFound = TRUE;
+	if (GetLocalObject(oBoard, CARD_PLAYER + "1") == oPC) iFound = TRUE;
+	if (GetLocalObject(oBoard, CARD_PLAYER + "2") == oPC) iFound = TRUE;
 	
 	for(iCount=1;iCount<=10;iCount++)
 	{
-		if (PS_GetLocalObject(oBoard, CARD_OBSERVER + IntToString(iCount)) == oPC) iFound = TRUE;
+		if (GetLocalObject(oBoard, CARD_OBSERVER + IntToString(iCount)) == oPC) iFound = TRUE;
 	}
 	
 	return iFound;
@@ -2346,9 +2344,9 @@ int CheckGameSlotOpen(object oBoard, string sPlayerPos)
 {
 	if (sPlayerPos == CARD_PLAYER)
 	{
-		if (PS_GetLocalObject(oBoard, CARD_PLAYER + "1") == OBJECT_INVALID)
+		if (GetLocalObject(oBoard, CARD_PLAYER + "1") == OBJECT_INVALID)
 			return 1;
-		else if (PS_GetLocalObject(oBoard, CARD_PLAYER + "2") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_PLAYER + "2") == OBJECT_INVALID)
 			return 2;
 		else
 			return 0;
@@ -2356,25 +2354,25 @@ int CheckGameSlotOpen(object oBoard, string sPlayerPos)
 	else if (sPlayerPos == CARD_OBSERVER)
 	{
 		// yeah, lazy, but also lazy anyway setting max observers to 10 and hardcoded.  Shoot me.
-		if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "1") == OBJECT_INVALID)
+		if (GetLocalObject(oBoard, CARD_OBSERVER + "1") == OBJECT_INVALID)
 			return 1;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "2") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "2") == OBJECT_INVALID)
 			return 2;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "3") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "3") == OBJECT_INVALID)
 			return 3;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "4") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "4") == OBJECT_INVALID)
 			return 4;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "5") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "5") == OBJECT_INVALID)
 			return 5;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "6") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "6") == OBJECT_INVALID)
 			return 6;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "7") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "7") == OBJECT_INVALID)
 			return 7;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "8") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "8") == OBJECT_INVALID)
 			return 8;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "9") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "9") == OBJECT_INVALID)
 			return 9;
-		else if (PS_GetLocalObject(oBoard, CARD_OBSERVER + "10") == OBJECT_INVALID)
+		else if (GetLocalObject(oBoard, CARD_OBSERVER + "10") == OBJECT_INVALID)
 			return 10;
 		else
 			return 0;
@@ -2385,7 +2383,7 @@ int CheckGameSlotOpen(object oBoard, string sPlayerPos)
 		// houston, we have a problem
 	}
 
-	if (PS_GetLocalObject(oBoard, sPlayerPos) == OBJECT_INVALID)
+	if (GetLocalObject(oBoard, sPlayerPos) == OBJECT_INVALID)
 		return TRUE;
 	else
 		return FALSE;
@@ -2473,7 +2471,7 @@ void JoinPlayerToGame(object oBoard, int iPlayerType, object oPC)
 			{
 				//SendMessageToPC(oPC, CARD_GAME_FEEDBACK_COLOUR + "DEBUG: Joining game as Player " + sPos + " <c=red>There should be a 1 or 2 here, if not, bug!");
 				CardsSetPlayer(oBoard, iPos, oPC);
-				PS_SetLocalObject(oBoard, CARD_PLAYER_DECK + sPos, oDeck);
+				SetLocalObject(oBoard, CARD_PLAYER_DECK + sPos, oDeck);
 				CardsSetBoardOnPlayer(oPC, oBoard);
 				CardsSetPlayer(oBoard, iPos, oPC);
 				CardsSetPlayerNameOnBoard(oBoard, iPos, oPC);
@@ -2501,10 +2499,10 @@ void JoinPlayerToGame(object oBoard, int iPlayerType, object oPC)
 		{
 			SendMessageToPC(oPC, CARD_GAME_FEEDBACK_COLOUR + "Joining game as an observer.");
 			sPos = IntToString(iPos);
-			PS_SetLocalObject(oBoard, CARD_OBSERVER + sPos, oPC);
-			PS_SetLocalObject(oPC, CARD_TABLE_OBJECT, oBoard);
-			PS_SetLocalString(oPC, CARD_TABLE_POSITION, CARD_OBSERVER + sPos);
-			PS_SetLocalString(oBoard, CARD_OBSERVER_NAME + sPos, GetName(oPC));
+			SetLocalObject(oBoard, CARD_OBSERVER + sPos, oPC);
+			SetLocalObject(oPC, CARD_TABLE_OBJECT, oBoard);
+			SetLocalString(oPC, CARD_TABLE_POSITION, CARD_OBSERVER + sPos);
+			SetLocalString(oBoard, CARD_OBSERVER_NAME + sPos, GetName(oPC));
 			//GUI_DisplayNewJoinGUIBasedOnType(oPC, oBoard, CARD_OBSERVER, sPos);
 			
 			int iState = CardsGetGameState(oBoard);
@@ -2532,8 +2530,8 @@ void JoinPlayerToGame(object oBoard, int iPlayerType, object oPC)
 
 int IsBoardOwner(object oPC, object oBoard)
 {
-	string sStoredPCName = PS_GetLocalString(oBoard, GAME_OWNER_NAME);
-	object oStoredPCObject = PS_GetLocalObject(oBoard, GAME_OWNER_OBJECT);
+	string sStoredPCName = GetLocalString(oBoard, GAME_OWNER_NAME);
+	object oStoredPCObject = GetLocalObject(oBoard, GAME_OWNER_OBJECT);
 	
 	if (GetName(oPC) == sStoredPCName)
 	{
@@ -2567,12 +2565,12 @@ void CardsCreateBoard(object oPC, location lTarget)
 	object oChair1 = CreateObject(OBJECT_TYPE_PLACEABLE, CARD_CHAIR_BLUE, Location(GetArea(oPC), vChair1, CARDS_BLUE_CHAIR_ORIENT), FALSE);
 	object oChair2 = CreateObject(OBJECT_TYPE_PLACEABLE, CARD_CHAIR_RED, Location(GetArea(oPC), vChair2, CARDS_RED_CHAIR_ORIENT), FALSE);
 
-	PS_SetLocalInt(oTable, GAME_STATE, GAME_STATE_NO_PLAYERS);
-	PS_SetLocalString(oTable, GAME_OWNER_NAME, GetName(oPC));
-	PS_SetLocalObject(oTable, GAME_OWNER_OBJECT, oPC);
+	SetLocalInt(oTable, GAME_STATE, GAME_STATE_NO_PLAYERS);
+	SetLocalString(oTable, GAME_OWNER_NAME, GetName(oPC));
+	SetLocalObject(oTable, GAME_OWNER_OBJECT, oPC);
 
-	PS_SetLocalObject(oTable, CARD_CHAIR_BLUE, oChair1);
-	PS_SetLocalObject(oTable, CARD_CHAIR_RED, oChair2);
+	SetLocalObject(oTable, CARD_CHAIR_BLUE, oChair1);
+	SetLocalObject(oTable, CARD_CHAIR_RED, oChair2);
 }
 
 // Destroys the card table. Notifies players. Closes GUIs (possible, or just goes to end game by calling end of game function).
@@ -2590,7 +2588,7 @@ int CardsCardExistsInDeck(object oDeck, object oCard)
 	int iCount;
 	int iFound = FALSE;
 	
-	int iID = PS_GetLocalInt(oCard, CARD_ID);
+	int iID = GetLocalInt(oCard, CARD_ID);
 	int iCardInDeckID;
 	
 	if (iMaxCount == 0)
@@ -2599,7 +2597,7 @@ int CardsCardExistsInDeck(object oDeck, object oCard)
 	{
 		for (iCount = 1; iCount <= iMaxCount; iCount++)
 		{
-			iCardInDeckID = PS_GetLocalInt(oDeck, CARD_ID + IntToString(iCount));
+			iCardInDeckID = GetLocalInt(oDeck, CARD_ID + IntToString(iCount));
 			
 			if (iCardInDeckID == iID)
 				iFound = TRUE;
@@ -2611,25 +2609,25 @@ int CardsCardExistsInDeck(object oDeck, object oCard)
 
 void CardsStoreCardInDeck(object oPC, object oCard, object oDeck)
 {
-	string sCardName = PS_GetLocalString(oCard, CARD_NAME);
-	string sCardImage = PS_GetLocalString(oCard, CARD_PICTURE);
-	int iUp = PS_GetLocalInt(oCard, CARD_VALUE_UP);
-	int iDown = PS_GetLocalInt(oCard, CARD_VALUE_DOWN);
-	int iLeft = PS_GetLocalInt(oCard, CARD_VALUE_LEFT);
-	int iRight = PS_GetLocalInt(oCard, CARD_VALUE_RIGHT);
-	int iID = PS_GetLocalInt(oCard, CARD_ID);
+	string sCardName = GetLocalString(oCard, CARD_NAME);
+	string sCardImage = GetLocalString(oCard, CARD_PICTURE);
+	int iUp = GetLocalInt(oCard, CARD_VALUE_UP);
+	int iDown = GetLocalInt(oCard, CARD_VALUE_DOWN);
+	int iLeft = GetLocalInt(oCard, CARD_VALUE_LEFT);
+	int iRight = GetLocalInt(oCard, CARD_VALUE_RIGHT);
+	int iID = GetLocalInt(oCard, CARD_ID);
 
 	int iDeckSize = CardsGetDeckSize(oDeck);
 	string sCardPos = IntToString(iDeckSize + 1);
 	CardsSetDeckSize(oDeck, iDeckSize + 1);
 	
-	PS_SetLocalInt(oDeck, CARD_VALUE_UP + sCardPos, iUp);
-	PS_SetLocalInt(oDeck, CARD_VALUE_DOWN + sCardPos, iDown);
-	PS_SetLocalInt(oDeck, CARD_VALUE_LEFT + sCardPos, iLeft);
-	PS_SetLocalInt(oDeck, CARD_VALUE_RIGHT + sCardPos, iRight);
-	PS_SetLocalString(oDeck, CARD_NAME + sCardPos, sCardName);
-	PS_SetLocalString(oDeck, CARD_PICTURE + sCardPos, sCardImage);
-	PS_SetLocalInt(oDeck, CARD_ID + sCardPos, iID);
+	SetLocalInt(oDeck, CARD_VALUE_UP + sCardPos, iUp);
+	SetLocalInt(oDeck, CARD_VALUE_DOWN + sCardPos, iDown);
+	SetLocalInt(oDeck, CARD_VALUE_LEFT + sCardPos, iLeft);
+	SetLocalInt(oDeck, CARD_VALUE_RIGHT + sCardPos, iRight);
+	SetLocalString(oDeck, CARD_NAME + sCardPos, sCardName);
+	SetLocalString(oDeck, CARD_PICTURE + sCardPos, sCardImage);
+	SetLocalInt(oDeck, CARD_ID + sCardPos, iID);
 		
 	DestroyObject(oCard, 0.0, FALSE);
 	
@@ -2680,13 +2678,13 @@ object CardsCreateCard(object oTarget, int i2daRow)
 	{
 		sName = CardsStripUnderscore(Get2DAString(CARD_2DA, CARD_2DA_COL_NAME, i2daRow));
 		SetFirstName(oCard, "<c=gold>Card: " + sName);
-		PS_SetLocalString(oCard, CARD_NAME, sName);
-		PS_SetLocalString(oCard, CARD_PICTURE, Get2DAString(CARD_2DA, CARD_2DA_COL_IMAGE, i2daRow));
-		PS_SetLocalInt(oCard, CARD_VALUE_UP, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_UP, i2daRow)));
-		PS_SetLocalInt(oCard, CARD_VALUE_DOWN, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_DOWN, i2daRow)));
-		PS_SetLocalInt(oCard, CARD_VALUE_LEFT, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_LEFT, i2daRow)));
-		PS_SetLocalInt(oCard, CARD_VALUE_RIGHT, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_RIGHT, i2daRow)));
-		PS_SetLocalInt(oCard, CARD_ID, i2daRow);
+		SetLocalString(oCard, CARD_NAME, sName);
+		SetLocalString(oCard, CARD_PICTURE, Get2DAString(CARD_2DA, CARD_2DA_COL_IMAGE, i2daRow));
+		SetLocalInt(oCard, CARD_VALUE_UP, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_UP, i2daRow)));
+		SetLocalInt(oCard, CARD_VALUE_DOWN, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_DOWN, i2daRow)));
+		SetLocalInt(oCard, CARD_VALUE_LEFT, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_LEFT, i2daRow)));
+		SetLocalInt(oCard, CARD_VALUE_RIGHT, StringToInt(Get2DAString(CARD_2DA, CARD_2DA_COL_RIGHT, i2daRow)));
+		SetLocalInt(oCard, CARD_ID, i2daRow);
 		SetItemCostVariables(oCard);
 	}
 	
@@ -2770,13 +2768,13 @@ void CardsCreateCardOnSpawnOrChest(object oTarget, object oPC = OBJECT_INVALID)
 // used by CardsSwapCardsInDeckPositions to transfer via temp var
 void CardsSwapCardValuesWithStrings(object oDeck, string sSource, string sDest)
 {
-	PS_SetLocalInt(oDeck, CARD_VALUE_UP + sDest, PS_GetLocalInt(oDeck, CARD_VALUE_UP + sSource));
-	PS_SetLocalInt(oDeck, CARD_VALUE_DOWN + sDest, PS_GetLocalInt(oDeck, CARD_VALUE_DOWN + sSource));
-	PS_SetLocalInt(oDeck, CARD_VALUE_LEFT + sDest, PS_GetLocalInt(oDeck, CARD_VALUE_LEFT + sSource));
-	PS_SetLocalInt(oDeck, CARD_VALUE_RIGHT + sDest, PS_GetLocalInt(oDeck, CARD_VALUE_RIGHT + sSource));
-	PS_SetLocalString(oDeck, CARD_NAME + sDest, PS_GetLocalString(oDeck, CARD_NAME + sSource));
-	PS_SetLocalString(oDeck, CARD_PICTURE + sDest, PS_GetLocalString(oDeck, CARD_PICTURE + sSource));
-	PS_SetLocalInt(oDeck, CARD_ID + sDest, PS_GetLocalInt(oDeck, CARD_ID + sSource));
+	SetLocalInt(oDeck, CARD_VALUE_UP + sDest, GetLocalInt(oDeck, CARD_VALUE_UP + sSource));
+	SetLocalInt(oDeck, CARD_VALUE_DOWN + sDest, GetLocalInt(oDeck, CARD_VALUE_DOWN + sSource));
+	SetLocalInt(oDeck, CARD_VALUE_LEFT + sDest, GetLocalInt(oDeck, CARD_VALUE_LEFT + sSource));
+	SetLocalInt(oDeck, CARD_VALUE_RIGHT + sDest, GetLocalInt(oDeck, CARD_VALUE_RIGHT + sSource));
+	SetLocalString(oDeck, CARD_NAME + sDest, GetLocalString(oDeck, CARD_NAME + sSource));
+	SetLocalString(oDeck, CARD_PICTURE + sDest, GetLocalString(oDeck, CARD_PICTURE + sSource));
+	SetLocalInt(oDeck, CARD_ID + sDest, GetLocalInt(oDeck, CARD_ID + sSource));
 }
 
 // swaps all the variables of the cards in the two positions specified, storing in a set of temp variables.
@@ -2794,8 +2792,8 @@ void CardsSwapCardsInDeckPositions(object oDeck, int iFirst, int iSecond)
 // returns 1 (TRUE) if first is bigger (higher Alpha) than second, else FALSE
 int CardsCompareAlpha(object oDeck, int iFirst, int iSecond)
 {
-	string sFirst = PS_GetLocalString(oDeck, CARD_NAME + IntToString(iFirst));
-	string sSecond = PS_GetLocalString(oDeck, CARD_NAME + IntToString(iSecond));
+	string sFirst = GetLocalString(oDeck, CARD_NAME + IntToString(iFirst));
+	string sSecond = GetLocalString(oDeck, CARD_NAME + IntToString(iSecond));
 
 	if (StringCompare(sFirst, sSecond) > 0)
 	{
@@ -2814,7 +2812,7 @@ int CardsCompareAlpha(object oDeck, int iFirst, int iSecond)
 int CardsCalcTotalValue(object oDeck, int iCard)
 {
 	string sCardPos = IntToString(iCard);
-	int iTotal = PS_GetLocalInt(oDeck, CARD_VALUE_UP + sCardPos) + PS_GetLocalInt(oDeck, CARD_VALUE_DOWN + sCardPos) + PS_GetLocalInt(oDeck, CARD_VALUE_LEFT + sCardPos) + PS_GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCardPos);
+	int iTotal = GetLocalInt(oDeck, CARD_VALUE_UP + sCardPos) + GetLocalInt(oDeck, CARD_VALUE_DOWN + sCardPos) + GetLocalInt(oDeck, CARD_VALUE_LEFT + sCardPos) + GetLocalInt(oDeck, CARD_VALUE_RIGHT + sCardPos);
 	//SendMessageToPC(GetItemPossessor(oDeck), "DEBUG: Total Value of card being compared = " + IntToString(iTotal));
 	return iTotal;
 }
@@ -2852,7 +2850,7 @@ void CardsDeckSort(object oPC, object oDeck, int iSortType)
 	while (iPos <= iDeckSize)
 	{
 		iResult = FALSE;
-		//SendMessageToPC(oPC, "DEBUG: Comparing Cards with iPos=" + IntToString(iPos) + " (iLast=" + IntToString(iLast) + ") Cards are: " + PS_GetLocalString(oDeck, CARD_NAME + IntToString(iPos)) + " and " + PS_GetLocalString(oDeck, CARD_NAME + IntToString(iPos-1)));
+		//SendMessageToPC(oPC, "DEBUG: Comparing Cards with iPos=" + IntToString(iPos) + " (iLast=" + IntToString(iLast) + ") Cards are: " + GetLocalString(oDeck, CARD_NAME + IntToString(iPos)) + " and " + GetLocalString(oDeck, CARD_NAME + IntToString(iPos-1)));
 		switch (iSortType)
 		{
 			case DECK_SORT_ALPHA: if (CardsCompareAlpha(oDeck, iPos, iPos - 1) == TRUE) iResult = TRUE; break;
@@ -2900,7 +2898,7 @@ int CardsAllPositionsFilled(object oDeck)
 	{
 		for (x=1; x<=3; x++)
 		{
-			if (PS_GetLocalInt(oDeck, "R" + IntToString(x) + "C" + IntToString(y)) == 0)
+			if (GetLocalInt(oDeck, "R" + IntToString(x) + "C" + IntToString(y)) == 0)
 				iFound = FALSE; // and so we have found an empty slot
 		}
 	}

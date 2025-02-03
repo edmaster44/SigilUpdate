@@ -68,7 +68,7 @@ void main()
 		{
 			float fDelay = 0.25 * fDist;
 			
-			if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+			if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 			{
 				SendMessageToPC(oTarget, "A Dimensional Anchor makes it impossible to teleport.");
 				return;	

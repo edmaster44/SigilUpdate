@@ -38,14 +38,14 @@ void main()
 	object oItem = GetItemPossessedBy(oTarget,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-//SendMessageToPC(GetFirstPC(), "has essence "+PS_GetLocalString(oItem,"LEGAL"));
-	 	string sLegal = PS_GetLocalString(oItem,"LEGAL");
+//SendMessageToPC(GetFirstPC(), "has essence "+GetLocalString(oItem,"LEGAL"));
+	 	string sLegal = GetLocalString(oItem,"LEGAL");
 
 		if(sLegal == "TRUE")
 		{
 //SendMessageToPC(GetFirstPC(), "setting to false");		
 			SendMessageToPC(oPC,"Character " + GetName(oTarget) + " is now no longer legal");
-			PS_SetLocalString(oItem,"LEGAL","");
+			SetLocalString(oItem,"LEGAL","");
 			SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
 				SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
 				SQLEncodeSpecialChars(GetName(oPC)) + "','Following character set to be NO LONGER LEGAL: " + 
@@ -56,7 +56,7 @@ void main()
 		{
 //SendMessageToPC(GetFirstPC(), "setting to true");		
 			SendMessageToPC(oPC,"Character " + GetName(oTarget) + " is set legal");
-			PS_SetLocalString(oItem,"LEGAL","TRUE");
+			SetLocalString(oItem,"LEGAL","TRUE");
 			SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
 				SQLEncodeSpecialChars(GetPCPlayerName(oPC)) + "','" + 
 				SQLEncodeSpecialChars(GetName(oPC)) + "','Following character set to LEGAL: " + 

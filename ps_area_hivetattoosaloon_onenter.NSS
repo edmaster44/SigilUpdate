@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("TattooSaloonEnterLock");
+ int iLock = GetGlobalInt("TattooSaloonEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("TattooSaloonEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("TattooSaloonEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_lervakkhin") == OBJECT_INVALID)
   {
@@ -19,6 +17,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_lervakkhin", lSpawnpoint);    
   }
     
-  PS_SetGlobalInt("TattooSaloonEnterLock", 0);
+  SetGlobalInt("TattooSaloonEnterLock", 0);
  }
 }

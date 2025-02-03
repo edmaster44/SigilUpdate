@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -10,13 +8,13 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = PS_GetGlobalInt("abyssEndlessmazeLock");
+ int iLock = GetGlobalInt("abyssEndlessmazeLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("abyssEndlessmazeLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("abyssEndlessmazeLock", 1); // Only allows one clean up at a time.
 
   DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  PS_SetGlobalInt("abyssEndlessmazeLock", 0);
+  SetGlobalInt("abyssEndlessmazeLock", 0);
  }
 }

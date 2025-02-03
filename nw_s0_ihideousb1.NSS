@@ -21,10 +21,10 @@ const float THIRSTING_DELAY = 3.0f;
 
 void DoHideousBlow(object oPC)
 {
-	if (PS_GetLocalInt(oPC,"HideousBlow")==FALSE) return;
+	if (GetLocalInt(oPC,"HideousBlow")==FALSE) return;
 	
 	//Declare major variables
-	int nMetaMagic = PS_GetLocalInt(oPC,"HideousMeta");
+	int nMetaMagic = GetLocalInt(oPC,"HideousMeta");
 	//SendMessageToPC(oPC, "Executing hideous blow: "+IntToString(nMetaMagic));
 	
 	int nDurVFX = VFX_INVOCATION_HIDEOUS_BLOW;
@@ -85,17 +85,17 @@ void DoHideousBlow(object oPC)
 
 void RedoHideousBlow(object oPC)
 {
-	if (PS_GetLocalInt(oPC,"HideousBlow")==FALSE) return;
-	if (PS_GetLocalInt(oPC,"AllreadyRunning")==TRUE) return;
-	else PS_SetLocalInt(oPC,"AllreadyRunning",TRUE);
+	if (GetLocalInt(oPC,"HideousBlow")==FALSE) return;
+	if (GetLocalInt(oPC,"AllreadyRunning")==TRUE) return;
+	else SetLocalInt(oPC,"AllreadyRunning",TRUE);
 	
 	DoHideousBlow(oPC);
 	
 	if (GetHasFeat(FEAT_FELLBLADE_THIRSTING_BLADE, oPC, TRUE)) {
-		DelayCommand(THIRSTING_DELAY-0.1f, PS_SetLocalInt(oPC,"AllreadyRunning",FALSE));
+		DelayCommand(THIRSTING_DELAY-0.1f, SetLocalInt(oPC,"AllreadyRunning",FALSE));
 		DelayCommand(THIRSTING_DELAY, RedoHideousBlow(oPC));
 	} else {
-		DelayCommand(HIDEOUS_DELAY-0.1f, PS_SetLocalInt(oPC,"AllreadyRunning",FALSE));
+		DelayCommand(HIDEOUS_DELAY-0.1f, SetLocalInt(oPC,"AllreadyRunning",FALSE));
 		DelayCommand(HIDEOUS_DELAY, RedoHideousBlow(oPC));
 	}
 }
@@ -120,5 +120,5 @@ void main()
 // End of Spell Cast Hook
 	if (!GetIsInCombat(oPC)) DoHideousBlow(oPC);
 	else if (GetHasSpellEffect(SPELL_I_HIDEOUS_BLOW)) DoHideousBlow(oPC);
-	if (PS_GetLocalInt(oPC,"AllreadyRunning")==FALSE) RedoHideousBlow(oPC);
+	if (GetLocalInt(oPC,"AllreadyRunning")==FALSE) RedoHideousBlow(oPC);
 }

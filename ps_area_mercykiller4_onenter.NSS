@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("Mercykiller4Lock");
+ int iLock = GetGlobalInt("Mercykiller4Lock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("Mercykiller4Lock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("Mercykiller4Lock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_mkp4") == OBJECT_INVALID)
   {
@@ -27,6 +25,6 @@ void main()
   }
 
    
-  PS_SetGlobalInt("Mercykiller4Lock", 0);
+  SetGlobalInt("Mercykiller4Lock", 0);
  }
 }

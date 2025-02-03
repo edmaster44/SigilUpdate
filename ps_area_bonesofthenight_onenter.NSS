@@ -1,12 +1,10 @@
-#include "ff_safevar"
-
 void main() {
  object oPC = GetEnteringObject();
   
- int iLock = PS_GetGlobalInt("BonesNightLock");
+ int iLock = GetGlobalInt("BonesNightLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("BonesNightLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("BonesNightLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_low_bonespatron1") == OBJECT_INVALID)
   {
@@ -36,6 +34,6 @@ void main() {
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_low_bonesassistant", lSpawnpoint);    
   }  
   
-  PS_SetGlobalInt("BonesNightLock", 0);
+  SetGlobalInt("BonesNightLock", 0);
  }
 }

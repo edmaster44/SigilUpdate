@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_skills - DM Friendly Initiative - GUI script for SKILL UI
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -28,7 +26,7 @@ void main(string sInput)
 
 	CloseGUIScreen(oPC, SCREEN_DMFI_SKILLS);
 	
-	sValue = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_SKILL + "." + IntToString(nNum-1));
+	sValue = GetLocalString(oTool, LIST_PREFIX + PG_LIST_SKILL + "." + IntToString(nNum-1));
 	sValue = GetStringLowerCase(sValue);
 			
 	sCommand = PRM_ROLL + PRM_ + sValue;

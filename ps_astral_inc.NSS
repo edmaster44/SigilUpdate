@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /************************************************************
 * Include file for all functions relating to astral travel. *
 * Created by Agony_Aunt for SCoD PW                         *
@@ -105,7 +103,7 @@ object GetAstralAreaObjectFromTag(string sTag)
 int GetIsAstralShipDocked()
 {
 	object oShip = GetAstralShipObject();
-	if (PS_GetLocalInt(oShip, "DOCKED_STATUS") == SHIP_DOCKED)
+	if (GetLocalInt(oShip, "DOCKED_STATUS") == SHIP_DOCKED)
 	{
 		//AstralDebug("Checking Docked Status.  Ship Docked");
 		return 1;
@@ -121,14 +119,14 @@ int GetIsAstralShipDocked()
 void SetAstralShipDockedStatus(int iStatus)
 {
 	object oShip = GetAstralShipObject();
-	PS_SetLocalInt(oShip, "DOCKED_STATUS", iStatus);
+	SetLocalInt(oShip, "DOCKED_STATUS", iStatus);
 }
 
 // Function may not be needed, as we seek the object based on location of PC or other...
 object GetAstralShipDockedArea()
 {
 	object oShip = GetAstralShipObject();
-	object oArea = PS_GetLocalObject(oShip, "DOCKED_AREA_OBJECT");
+	object oArea = GetLocalObject(oShip, "DOCKED_AREA_OBJECT");
 	
 	//AstralDebug("Checking for docked area from local var. Ship docked area tag (from object) is: " + GetTag(oArea));
 	
@@ -140,14 +138,14 @@ void SetAstralShipDockedArea(object oArea)
 {
 	object oShip = GetAstralShipObject();
 	
-	PS_SetLocalObject(oShip, "DOCKED_AREA_OBJECT", oArea);
+	SetLocalObject(oShip, "DOCKED_AREA_OBJECT", oArea);
 }
  
 // Tests to see if a particular numbered queue entry exists.
 int CheckSpecificAstralQueueExists(int iPos)
 {
 	object oShip = GetAstralShipObject();
-	object oDest = PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iPos));
+	object oDest = GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iPos));
 	
 	//AstralDebug("Checking variable <COLOR=WHITE>" + ASTRAL_QUEUE_DESTINATION + IntToString(iPos) + "<COLOR=RED> to see if destination already exists.  Found: " + GetTag(oDest));
 	
@@ -242,7 +240,7 @@ int AstralTimeStampDiff(int iTime)
 int GetAstralDestinationTimeStamp(int iPos)
 {
 	object oShip = GetAstralShipObject();
-	int iTimeStamp = PS_GetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iPos));
+	int iTimeStamp = GetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iPos));
 	////AstralDebug("Getting time stamp for position " + IntToString(iPos) + " value is: " + AstralTimeToString(iTimeStamp));
 	return iTimeStamp;
 }
@@ -279,7 +277,7 @@ void SetAstralDestinationTimeStamp(int iPos)
 	
 	////AstralDebug("Setting time to destination <COLOR=GREEN>" + IntToString(iPos) + " to <COLOR=YELLOW>" + AstralTimeToString(iTimeTotal) + " <COLOR=RED>and current time is " + AstralTimeToString(AstralTimeStamp()));
 		
-	PS_SetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iPos), iTimeTotal);
+	SetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iPos), iTimeTotal);
 }
 
 // Return 0 if destination not in queue, otherwise the position of the entry.
@@ -300,7 +298,7 @@ int CheckAstralShipQueueForDestination(object oDestination)
 	{
 		while (iCounter <= iQueueSize)
 		{
-			if (PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCounter)) == oDestination)
+			if (GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCounter)) == oDestination)
 			{
 				//AstralDebug("Checking queue for destination, found match for tag: " + GetTag(oDestination) + " in position: <COLOR=GREEN>" + IntToString(iCounter));
 				return iCounter;
@@ -324,14 +322,14 @@ void RemoveFromAstralShipQueue()
 	{
 		while (iCurrentPos < iQueueSize + 1)
 		{
-			PS_SetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCurrentPos), 
-				PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCurrentPos + 1)));
-			PS_SetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iCurrentPos), 
-				PS_GetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iCurrentPos + 1)));	
+			SetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCurrentPos), 
+				GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCurrentPos + 1)));
+			SetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iCurrentPos), 
+				GetLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iCurrentPos + 1)));	
 			iCurrentPos++;
 		}
-		PS_DeleteLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCurrentPos));
-		PS_DeleteLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iCurrentPos));
+		DeleteLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iCurrentPos));
+		DeleteLocalInt(oShip, ASTRAL_QUEUE_TIMESTAMP + IntToString(iCurrentPos));
 	}
 	//AstralDebug("Removing last entry from queue. Queue size was: " + IntToString(iQueueSize) + ". Size now: " + IntToString(GetCurrentAstralQueueLength()));
 }
@@ -405,7 +403,7 @@ void AddToAstralShipQueue(object oDestination)
 	object oBell = GetAstralObjectByTagFromArea(oDestination, ASTRAL_BELL_TAG);
 	string sAreaName = GetName(oDestination);
 	
-	PS_SetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iPosition), oDestination);
+	SetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + IntToString(iPosition), oDestination);
 	SetAstralDestinationTimeStamp(iPosition);
 	
 	int iDelay = AstralTimeStampDiff(GetAstralDestinationTimeStamp(iPosition));
@@ -413,10 +411,10 @@ void AddToAstralShipQueue(object oDestination)
 	
 	//AstralDebug("Adding to queue in position <COLOR=GREEN>" + IntToString(iPosition) + " <COLOR=RED>and delaying actions with common iDelay of " + AstralTimeToString(iDelay));
 	////AstralDebug("Current queue entries look like this...");
-	////AstralDebug("<COLOR=ORANGE>Queue 0: Destination = " + GetTag(PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "0" + " - Should not exist!!!")));
-	////AstralDebug("<COLOR=ORANGE>Queue 1: Destination = " + GetTag(PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "1")));
-	////AstralDebug("<COLOR=ORANGE>Queue 2: Destination = " + GetTag(PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "2")));
-	////AstralDebug("<COLOR=ORANGE>Queue 3: Destination = " + GetTag(PS_GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "3")));
+	////AstralDebug("<COLOR=ORANGE>Queue 0: Destination = " + GetTag(GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "0" + " - Should not exist!!!")));
+	////AstralDebug("<COLOR=ORANGE>Queue 1: Destination = " + GetTag(GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "1")));
+	////AstralDebug("<COLOR=ORANGE>Queue 2: Destination = " + GetTag(GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "2")));
+	////AstralDebug("<COLOR=ORANGE>Queue 3: Destination = " + GetTag(GetLocalObject(oShip, ASTRAL_QUEUE_DESTINATION + "3")));
 
 	DelayCommand(fDelay - IntToFloat(ASTRAL_TRAVEL_ETA_ANNOUNCE1), 
 		AstralAnnounce(oShipAnnounce, ASTRAL_TRAVEL_ETA_ANNOUNCE1, sAreaName, "until ship arrives at"));

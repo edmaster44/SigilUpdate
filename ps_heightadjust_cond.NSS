@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_heightadjust_includes"
 
 	int StartingConditional(int selection)
@@ -18,7 +16,7 @@
 		else return FALSE;	
 	}
 	
-	int iMax = PS_GetLocalInt(oPC,"heightmax");
+	int iMax = GetLocalInt(oPC,"heightmax");
 	
 	if (selection > iMax) return FALSE;
 	else return TRUE;

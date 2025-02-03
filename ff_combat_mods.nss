@@ -88,9 +88,9 @@ void UpdateCombatMods(object oPC, int nAction = NULL, object oChanged = OBJECT_I
 	object oSkin = PS_GetCreatureSkin(oPC);
 	object oEss = PS_GetEssence(oPC);
 	// get current state of modes
-	int bUsingDef = PS_GetLocalInt(oEss, DEF_STATE_ON);
-	int bUsingStrike = PS_GetLocalInt(oEss, STRIKE_STATE_ON);
-	int bUsingStaff = PS_GetLocalInt(oEss, STAFF_STATE_ON);
+	int bUsingDef = GetLocalInt(oEss, DEF_STATE_ON);
+	int bUsingStrike = GetLocalInt(oEss, STRIKE_STATE_ON);
+	int bUsingStaff = GetLocalInt(oEss, STAFF_STATE_ON);
 
 	
 	// remove all fx and confirm for intentional ones that will not 
@@ -146,9 +146,9 @@ void UpdateCombatMods(object oPC, int nAction = NULL, object oChanged = OBJECT_I
 	data.bUsingStaff = bUsingStaff;
 	
 	if (nAction == ALL_OFF){
-		PS_SetLocalInt(oEss, DEF_STATE_ON, FALSE);
-		PS_SetLocalInt(oEss, STRIKE_STATE_ON, FALSE);
-		PS_SetLocalInt(oEss, STAFF_STATE_ON, FALSE);
+		SetLocalInt(oEss, DEF_STATE_ON, FALSE);
+		SetLocalInt(oEss, STRIKE_STATE_ON, FALSE);
+		SetLocalInt(oEss, STAFF_STATE_ON, FALSE);
 		data = PerformNonToggleFunctions(data);
 		ApplyCombatMods(data);
 		return;
@@ -158,9 +158,9 @@ void UpdateCombatMods(object oPC, int nAction = NULL, object oChanged = OBJECT_I
 	data = PerformNonToggleFunctions(data);
 	
 	// now align the local integers with our results
-	PS_SetLocalInt(oEss, DEF_STATE_ON, data.bUsingDef);
-	PS_SetLocalInt(oEss, STRIKE_STATE_ON, data.bUsingStrike);
-	PS_SetLocalInt(oEss, STAFF_STATE_ON, data.bUsingStaff);
+	SetLocalInt(oEss, DEF_STATE_ON, data.bUsingDef);
+	SetLocalInt(oEss, STRIKE_STATE_ON, data.bUsingStrike);
+	SetLocalInt(oEss, STAFF_STATE_ON, data.bUsingStaff);
 	
 	ApplyCombatMods(data);
 	
@@ -491,11 +491,11 @@ int GetHalfAttacks(object oPC, object oRHAND){
 }
 
 void GiveFeedback(object oPC, string sMessage){
-	string sPrevious = PS_GetLocalString(oPC, "previous_toggle_message");
+	string sPrevious = GetLocalString(oPC, "previous_toggle_message");
 	if (sMessage != sPrevious){
 		FloatingTextStringOnCreature(sMessage, oPC);
 		//SendMessageToPC(oPC, sMessage);
-		PS_SetLocalString(oPC, "previous_toggle_message", sMessage);
+		SetLocalString(oPC, "previous_toggle_message", sMessage);
 	}
 }
 

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*#include "nwnx_sql"
 #include "gui_kemo_storage_list_open"
 
@@ -84,7 +82,7 @@ void main()
 	object oWand = GetItemActivated();
 	object oPC = GetItemActivator();
 	object oTarget = GetItemActivatedTarget();
-	string sDB = GetGuildID(oPC, PS_GetLocalString(oWand,"kemo_storage_mode_guildname"));	
+	string sDB = GetGuildID(oPC, GetLocalString(oWand,"kemo_storage_mode_guildname"));	
 		
 	if(!GetIsObjectValid(oTarget) || GetBaseItemType(oTarget) != BASE_ITEM_LARGEBOX)
 	{

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_dmui - DM Friendly Initiative - GUI script for top level DM UI
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -37,9 +35,9 @@ void main(string sInput)
 		SetGUIObjectText(oPC, SCREEN_DMFI_VFXTOOL, "ListTitle", -1, CV_VFX + "\n" + CV_TOOL);
 		DisplayGuiScreen(oPC, SCREEN_DMFI_VFXTOOL, FALSE, "dmfivfxtool.xml");
 		
-		PS_SetLocalString(oPC, "DMFI_UI_USE", "VFXTOOL");
+		SetLocalString(oPC, "DMFI_UI_USE", "VFXTOOL");
 				
-		sTest = PS_GetLocalString(oTool, DMFI_VFX_DURATION);
+		sTest = GetLocalString(oTool, DMFI_VFX_DURATION);
 		SetGUIObjectText(oPC, SCREEN_DMFI_VFXTOOL, "update_dur", -1, sTest);
 						
 		SetGUIObjectText(oPC, SCREEN_DMFI_VFXTOOL, "sub1", -1, CV_VF_SPELLS);
@@ -54,14 +52,14 @@ void main(string sInput)
 		SetGUIObjectText(oPC, SCREEN_DMFI_AMBTOOL, "ListTitle", -1, CV_AMBIENT + "\n" + CV_TOOL);
 		DisplayGuiScreen(oPC, SCREEN_DMFI_AMBTOOL, FALSE, "dmfiambtool.xml");
 		
-		sTest = PS_GetLocalString(oTool, DMFI_AMB_NIGHT);
+		sTest = GetLocalString(oTool, DMFI_AMB_NIGHT);
 		sTest = DMFI_CapitalizeWord(sTest);
 		SetGUIObjectText(oPC, SCREEN_DMFI_AMBTOOL, "toggle_ambdaynight", -1, sTest);
 		
-		sTest = PS_GetLocalString(oTool, DMFI_AMBIENT_VOLUME);
+		sTest = GetLocalString(oTool, DMFI_AMBIENT_VOLUME);
 		SetGUIObjectText(oPC, SCREEN_DMFI_AMBTOOL, "update_vol", -1, sTest);	
 				
-		PS_SetLocalString(oPC, "DMFI_UI_USE", "AMBTOOL");
+		SetLocalString(oPC, "DMFI_UI_USE", "AMBTOOL");
 		
 		SetGUIObjectText(oPC, SCREEN_DMFI_AMBTOOL, "sub1", -1,CV_AM_CAVE);
 		SetGUIObjectText(oPC, SCREEN_DMFI_AMBTOOL, "sub2", -1,CV_AM_MAGIC);
@@ -76,10 +74,10 @@ void main(string sInput)
 		SetGUIObjectText(oPC, SCREEN_DMFI_SNDTOOL, "ListTitle", -1, CV_SOUND + "\n" + CV_TOOL);
 		DisplayGuiScreen(oPC, SCREEN_DMFI_SNDTOOL, FALSE, "dmfisndtool.xml");
 		
-		sTest = PS_GetLocalString(oTool, DMFI_SOUND_DELAY);
+		sTest = GetLocalString(oTool, DMFI_SOUND_DELAY);
 		SetGUIObjectText(oPC, SCREEN_DMFI_SNDTOOL, "update_delay", -1, sTest);	
 				
-		PS_SetLocalString(oPC, "DMFI_UI_USE", "SNDTOOL");
+		SetLocalString(oPC, "DMFI_UI_USE", "SNDTOOL");
 		SetGUIObjectText(oPC, SCREEN_DMFI_SNDTOOL, "sub1", -1, CV_SD_CITY);
 		SetGUIObjectText(oPC, SCREEN_DMFI_SNDTOOL, "sub2", -1, CV_SD_MAGIC);
 		SetGUIObjectText(oPC, SCREEN_DMFI_SNDTOOL, "sub3", -1, CV_SD_NATURE);
@@ -92,11 +90,11 @@ void main(string sInput)
 		SetGUIObjectText(oPC, SCREEN_DMFI_MUSICTOOL, "ListTitle", -1, CV_MUSIC + "\n" + CV_TOOL);
 		DisplayGuiScreen(oPC, SCREEN_DMFI_MUSICTOOL, FALSE, "dmfimusictool.xml");
 		
-		sTest = PS_GetLocalString(oTool, DMFI_MUSIC_TIME);
+		sTest = GetLocalString(oTool, DMFI_MUSIC_TIME);
 		sTest = DMFI_CapitalizeWord(sTest);
 		SetGUIObjectText(oPC, SCREEN_DMFI_MUSICTOOL, "toggle_musictime", -1, sTest);
 				
-		PS_SetLocalString(oPC, "DMFI_UI_USE", "MUSICTOOL");
+		SetLocalString(oPC, "DMFI_UI_USE", "MUSICTOOL");
 		SetGUIObjectText(oPC, SCREEN_DMFI_MUSICTOOL, "sub1", -1, CV_MC_NWN2);
 		SetGUIObjectText(oPC, SCREEN_DMFI_MUSICTOOL, "sub2", -1, CV_MC_NWN1);
 		SetGUIObjectText(oPC, SCREEN_DMFI_MUSICTOOL, "sub3", -1, CV_MC_XP);
@@ -110,22 +108,22 @@ void main(string sInput)
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "ListTitle", -1, CV_DICE + "\n" + CV_TOOL);
 		DisplayGuiScreen(oPC, SCREEN_DMFI_DICETOOL, FALSE, "dmfidicetool.xml");
 		
-		sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_DC);
+		sTest = GetLocalString(oTool, DMFI_DICEBAG_DC);
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "update_dc", -1, sTest);
 		
-		sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_DETAIL);
+		sTest = GetLocalString(oTool, DMFI_DICEBAG_DETAIL);
 		sTest = DMFI_CapitalizeWord(sTest);
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "toggle_detail", -1, sTest);	
 			
-		sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_REPORT);
+		sTest = GetLocalString(oTool, DMFI_DICEBAG_REPORT);
 		sTest = DMFI_CapitalizeWord(sTest);
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "toggle_report", -1, sTest);
 		
-		sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_ROLL);
+		sTest = GetLocalString(oTool, DMFI_DICEBAG_ROLL);
 		sTest = DMFI_CapitalizeWord(sTest);
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "toggle_roll", -1, sTest);	
 			
-		PS_SetLocalString(oPC, "DMFI_UI_USE", "DICETOOL");
+		SetLocalString(oPC, "DMFI_UI_USE", "DICETOOL");
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "sub1", -1, CV_DI_ABIL);
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "sub2", -1, CV_DI_SKILL);
 		SetGUIObjectText(oPC, SCREEN_DMFI_DICETOOL, "sub3", -1, CV_DI_DICE);	
@@ -133,9 +131,9 @@ void main(string sInput)
 	// Follow On runs straight via here.	
 	else
 	{
-		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_LANGUAGE + PRM_);
-		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_DMLANGUAGE);
-		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, TXT_CHOOSE_LANGUAGE);
+		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_LANGUAGE + PRM_);
+		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_DMLANGUAGE);
+		SetLocalString(oPC, DMFI_UI_LIST_TITLE, TXT_CHOOSE_LANGUAGE);
 		DMFI_ShowDMListUI(oPC);
 	}
 }			

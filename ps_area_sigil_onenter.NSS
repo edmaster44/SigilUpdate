@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_achievements"
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("SigilEnterLock");
+ int iLock = GetGlobalInt("SigilEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("SigilEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("SigilEnterLock", 1); // Only allows one clean up at a time.
    
   //************************************
   //Fishy Alex
@@ -308,6 +306,6 @@ void main()
   
   DelayCommand(7.0f, CheckToutAchievement(oPC));
   
-  PS_SetGlobalInt("SigilEnterLock", 0);
+  SetGlobalInt("SigilEnterLock", 0);
  }
 }

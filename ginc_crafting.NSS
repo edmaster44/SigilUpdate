@@ -276,7 +276,7 @@ int IsMagicalWorkbench(object oTarget)
 		(sTargetTag == TAG_MAGICAL_BENCH3) || (sTargetTag == TAG_MAGICAL_BENCH4) )
 		return TRUE;
 		
-	if (PS_GetLocalInt(oTarget, VAR_MAGICAL) == TRUE)
+	if (GetLocalInt(oTarget, VAR_MAGICAL) == TRUE)
 		return TRUE;
 		
 	return FALSE;	
@@ -295,7 +295,7 @@ int IsSmithWorkbench(object oTarget)
 		(sTargetTag == TAG_WORKBENCH3) || (sTargetTag == TAG_WORKBENCH4) )
 		return TRUE;
 		
-	if (PS_GetLocalInt(oTarget, VAR_BLACKSMITH) == TRUE)
+	if (GetLocalInt(oTarget, VAR_BLACKSMITH) == TRUE)
 		return TRUE;
 		
 	return FALSE;		
@@ -315,7 +315,7 @@ int IsAlchemyWorkbench(object oTarget)
 		(sTargetTag == TAG_ALCHEMY_BENCH3) || (sTargetTag == TAG_ALCHEMY_BENCH4) )
 		return TRUE;
 		
-	if (PS_GetLocalInt(oTarget, VAR_ALCHEMY) == TRUE)
+	if (GetLocalInt(oTarget, VAR_ALCHEMY) == TRUE)
 		return TRUE;
 		
 	return FALSE;		
@@ -396,19 +396,19 @@ string GetRecipeVar(string sRecipeType, string sRecipeVar, string sCategory)
 string GetRecipeStringElement(string sRecipeType, string sRecipeVar, string sCategory, int iCount)
 {
     string sVarRecipeList = GetRecipeVar(sRecipeType, sRecipeVar, sCategory);
-    return (PS_GetGlobalArrayString(sVarRecipeList, iCount));
+    return (GetGlobalArrayString(sVarRecipeList, iCount));
 }
 
 // Get Specific RecipeElement from global var
 int GetRecipeIntElement(string sRecipeType, string sRecipeVar, string sCategory, int iCount)
 {
     string sVarRecipeList = GetRecipeVar(sRecipeType, sRecipeVar, sCategory);
-    return (PS_GetGlobalArrayInt(sVarRecipeList, iCount));
+    return (GetGlobalArrayInt(sVarRecipeList, iCount));
 }
 
 int UsingVariables()
 {	
-	return (PS_GetGlobalInt(VAR_REC_SET));
+	return (GetGlobalInt(VAR_REC_SET));
 }
 
 // unified crafting data retrieval from global variables or 2da files.
@@ -423,7 +423,7 @@ string GetCraftingStringData(string sRecipeType, string sCategory, string sColum
 	if (UsingVariables())
 	{
     	//string sGlobalArrayVar = GetRecipeVar(sRecipeType, sColumn, sCategory);
-    	//sStringData = PS_GetGlobalArrayString(sGlobalArrayVar, iCount);
+    	//sStringData = GetGlobalArrayString(sGlobalArrayVar, iCount);
 		sStringData = GetRecipeStringElement(sRecipeType, sColumn, sCategory, iCount);
 		
 	}
@@ -763,7 +763,7 @@ void CreateEnchantRecipe(int iFeat, int iSpellId, string sEffect, string sItemsA
 	string sNewList = AppendGlobalList(VAR_RECIPE_SPELLID_LIST, IntToString(iSpellId), TRUE);
 	//output("new spellid list:" + sNewList);
     string sVarRecipeCount = GetMagicalRecipeVar(VAR_RECIPE_COUNT, iSpellId);
-	int iCount = PS_ModifyGlobalInt(sVarRecipeCount, 1);
+	int iCount = ModifyGlobalInt(sVarRecipeCount, 1);
 
     string sVarRecipeReagents   = GetMagicalRecipeVar(COL_CRAFTING_REAGENTS, iSpellId);
     string sVarRecipeTags       = GetMagicalRecipeVar(COL_CRAFTING_TAGS, iSpellId);
@@ -774,12 +774,12 @@ void CreateEnchantRecipe(int iFeat, int iSpellId, string sEffect, string sItemsA
     sReagentList = Sort(sReagentList);
 	//output("CreateMagicalRecipe: Add " + sReagentList);
 
-    PS_SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
-    //PS_SetGlobalArrayInt(sVarRecipeTags, iCount, iItemCategory);
-    PS_SetGlobalArrayString(sVarRecipeTags, iCount, sItemsAffected);
-    PS_SetGlobalArrayString(sVarRecipeEffect, iCount, sEffect);
-    PS_SetGlobalArrayInt(sVarRecipeCraftFeat, iCount, iFeat);
-    PS_SetGlobalArrayInt(sVarRecipeCasterLevel, iCount, iCasterLevel);
+    SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
+    //SetGlobalArrayInt(sVarRecipeTags, iCount, iItemCategory);
+    SetGlobalArrayString(sVarRecipeTags, iCount, sItemsAffected);
+    SetGlobalArrayString(sVarRecipeEffect, iCount, sEffect);
+    SetGlobalArrayInt(sVarRecipeCraftFeat, iCount, iFeat);
+    SetGlobalArrayInt(sVarRecipeCasterLevel, iCount, iCasterLevel);
 	
 //    output ("sVarRecipeEffect = " + sVarRecipeEffect);
 //    output ("sEffect = " + sEffect);
@@ -805,7 +805,7 @@ void CreateConstructItemRecipe(int iFeat, int iSpellId, string sReagentList, str
 	string sNewList = AppendGlobalList(VAR_RECIPE_SPELLID_LIST, IntToString(iSpellId), TRUE);
 	//output("new spellid list:" + sNewList);
     string sVarRecipeCount = GetMagicalRecipeVar(VAR_RECIPE_COUNT, iSpellId);
-	int iCount = PS_ModifyGlobalInt(sVarRecipeCount, 1);
+	int iCount = ModifyGlobalInt(sVarRecipeCount, 1);
 
     string sVarRecipeReagents   = GetMagicalRecipeVar(COL_CRAFTING_REAGENTS, iSpellId);
     string sVarRecipeOutput   	= GetMagicalRecipeVar(COL_CRAFTING_OUTPUT, iSpellId);
@@ -815,10 +815,10 @@ void CreateConstructItemRecipe(int iFeat, int iSpellId, string sReagentList, str
     sReagentList = Sort(sReagentList);
 	//output("CreateWondrousRecipe: Add " + sReagentList);
 
-    PS_SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
-    PS_SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRef);
-    PS_SetGlobalArrayInt(sVarRecipeCraftFeat, iCount, iFeat);
-    PS_SetGlobalArrayInt(sVarRecipeCasterLevel, iCount, iCasterLevel);
+    SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
+    SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRef);
+    SetGlobalArrayInt(sVarRecipeCraftFeat, iCount, iFeat);
+    SetGlobalArrayInt(sVarRecipeCasterLevel, iCount, iCasterLevel);
 }
 
 
@@ -834,7 +834,7 @@ void CreateMundaneRecipe(string sMoldTag, int iCraftSkill, int iSkillLevel, stri
 	//output("new resref list:" + sNewList);
 	//output("new resref list:" + AppendGlobalList(VAR_RECIPE_RESREF_LIST, sMoldTag, TRUE));
     string sVarRecipeCount = GetMundaneRecipeVar(VAR_RECIPE_COUNT, sMoldTag);
-	int iCount = PS_ModifyGlobalInt(sVarRecipeCount, 1);
+	int iCount = ModifyGlobalInt(sVarRecipeCount, 1);
 
     string sVarRecipeReagents   = GetMundaneRecipeVar(COL_CRAFTING_REAGENTS, sMoldTag);
     string sVarRecipeOutput   	= GetMundaneRecipeVar(COL_CRAFTING_OUTPUT, sMoldTag);
@@ -845,10 +845,10 @@ void CreateMundaneRecipe(string sMoldTag, int iCraftSkill, int iSkillLevel, stri
     sReagentList = Sort(sReagentList);
 	//output("CreateMundaneRecipe: Add recipe [" + IntToString(iCount) + "] - " + sReagentList);
 
-    PS_SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
-    PS_SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRef);
-    PS_SetGlobalArrayInt(sVarRecipeCraftSkill, iCount, iCraftSkill);
-    PS_SetGlobalArrayInt(sVarRecipeSkillLevel, iCount, iSkillLevel);
+    SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
+    SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRef);
+    SetGlobalArrayInt(sVarRecipeCraftSkill, iCount, iCraftSkill);
+    SetGlobalArrayInt(sVarRecipeSkillLevel, iCount, iSkillLevel);
 }
 
 
@@ -857,7 +857,7 @@ void CreateMundaneRecipe(string sMoldTag, int iCraftSkill, int iSkillLevel, stri
 void CreateAlchemyRecipe(int iSkillLevel, string sReagentList, string sOutputResRef)
 {
     string sVarRecipeCount = GetAlchemyRecipeVar(VAR_RECIPE_COUNT);
-	int iCount = PS_ModifyGlobalInt(sVarRecipeCount, 1);
+	int iCount = ModifyGlobalInt(sVarRecipeCount, 1);
 
     string sVarRecipeReagents   = GetAlchemyRecipeVar(COL_CRAFTING_REAGENTS);
     string sVarRecipeOutput   	= GetAlchemyRecipeVar(COL_CRAFTING_OUTPUT);
@@ -865,9 +865,9 @@ void CreateAlchemyRecipe(int iSkillLevel, string sReagentList, string sOutputRes
 
     sReagentList = Sort(sReagentList);
 
-    PS_SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
-    PS_SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRef);
-    PS_SetGlobalArrayInt(sVarRecipeSkillLevel, iCount, iSkillLevel);
+    SetGlobalArrayString(sVarRecipeReagents, iCount, sReagentList);
+    SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRef);
+    SetGlobalArrayInt(sVarRecipeSkillLevel, iCount, iSkillLevel);
 }
 
 
@@ -875,15 +875,15 @@ void CreateAlchemyRecipe(int iSkillLevel, string sReagentList, string sOutputRes
 void CreateDistillationRecipe(int iSkillLevel, string sReagent, string sOutputResRefList)
 {
     string sVarRecipeCount = GetDistillationRecipeVar(VAR_RECIPE_COUNT);
-	int iCount = PS_ModifyGlobalInt(sVarRecipeCount, 1);
+	int iCount = ModifyGlobalInt(sVarRecipeCount, 1);
 
     string sVarRecipeReagents   = GetDistillationRecipeVar(COL_CRAFTING_REAGENTS);
     string sVarRecipeOutput   	= GetDistillationRecipeVar(COL_CRAFTING_OUTPUT);
     string sVarRecipeSkillLevel	= GetDistillationRecipeVar(COL_CRAFTING_SKILL_LEVEL);
 
-    PS_SetGlobalArrayString(sVarRecipeReagents, iCount, sReagent);
-    PS_SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRefList);
-    PS_SetGlobalArrayInt(sVarRecipeSkillLevel, iCount, iSkillLevel);
+    SetGlobalArrayString(sVarRecipeReagents, iCount, sReagent);
+    SetGlobalArrayString(sVarRecipeOutput, iCount, sOutputResRefList);
+    SetGlobalArrayInt(sVarRecipeSkillLevel, iCount, iSkillLevel);
 }
 
 // ====================================================================================
@@ -895,7 +895,7 @@ string FormatHeaderRow()
 {
 	PrintString("2DA V2.0");
 	PrintString(" ");
-	PS_SetGlobalInt(VAR_ROW_NUMBER, -1);
+	SetGlobalInt(VAR_ROW_NUMBER, -1);
 
 	string sOut = "";
 	sOut += PadString(5, " ");   
@@ -915,7 +915,7 @@ string FormatHeaderRow()
 string FormatRecipeRow(string sRecipePrefix, string sCategory, int iCount)
 {
 	//output ("*** *** FormatRecipeRow: sRecipePrefix: " + sRecipePrefix + " sCategory:" + sCategory + " iCount:" + IntToString(iCount));
-	int iRow = PS_ModifyGlobalInt(VAR_ROW_NUMBER, 1);
+	int iRow = ModifyGlobalInt(VAR_ROW_NUMBER, 1);
 	string sOut = "";
 	sOut += PadString(5, IntToString(iRow));   
 	sOut += PadString(15, sCategory);   
@@ -933,9 +933,9 @@ string FormatRecipeRow(string sRecipePrefix, string sCategory, int iCount)
 // output all recipes for sRecipePrefix of a specific sIndex
 int OutputRecipeSet(string sRecipePrefix, string sIndex)
 {
-	//AppendGlobalList(VAR_RECIPE_2DA_INDEXES, IntToString(PS_GetGlobalInt(VAR_ROW_NUMBER)));
+	//AppendGlobalList(VAR_RECIPE_2DA_INDEXES, IntToString(GetGlobalInt(VAR_ROW_NUMBER)));
 	AppendGlobalList(VAR_RECIPE_2DA_INDEXES, sIndex);
-	AppendGlobalList(VAR_RECIPE_2DA_INDEXES, IntToString(1+PS_GetGlobalInt(VAR_ROW_NUMBER)));
+	AppendGlobalList(VAR_RECIPE_2DA_INDEXES, IntToString(1+GetGlobalInt(VAR_ROW_NUMBER)));
 
 	//output ("*** OutputRecipeSet: sRecipePrefix: " + sRecipePrefix + " sIndex:" + sIndex);
     int iCount = 1;
@@ -943,14 +943,14 @@ int OutputRecipeSet(string sRecipePrefix, string sIndex)
     string sRecipeList;
     int bMatch = FALSE;
 
-    sRecipeList = PS_GetGlobalArrayString(sVarRecipeList, iCount);
+    sRecipeList = GetGlobalArrayString(sVarRecipeList, iCount);
     //output ("sRecipeList[" + IntToString(iCount) + "] = " + sRecipeList);
 
     while (sRecipeList != "") 
     {
 		FormatRecipeRow(sRecipePrefix, sIndex, iCount);
 		iCount++;
-		sRecipeList = PS_GetGlobalArrayString(sVarRecipeList, iCount);
+		sRecipeList = GetGlobalArrayString(sVarRecipeList, iCount);
 		//output ("sRecipeList[" + IntToString(iCount) + "] = " + sRecipeList);
     }
     return (iCount);
@@ -979,8 +979,8 @@ int OutputRecipes()
 	PrintString("===================================================");
 
 	FormatHeaderRow();
-	OutputRecipeType(MAGICAL_RECIPE_PREFIX, PS_GetGlobalString(VAR_RECIPE_SPELLID_LIST));  	
-	OutputRecipeType(MUNDANE_RECIPE_PREFIX, PS_GetGlobalString(VAR_RECIPE_RESREF_LIST));	
+	OutputRecipeType(MAGICAL_RECIPE_PREFIX, GetGlobalString(VAR_RECIPE_SPELLID_LIST));  	
+	OutputRecipeType(MUNDANE_RECIPE_PREFIX, GetGlobalString(VAR_RECIPE_RESREF_LIST));	
 	OutputRecipeType(ALCHEMY_RECIPE_PREFIX, ALCHEMY_RECIPE_SUFFIX);
 	OutputRecipeType(DISTILLATION_RECIPE_PREFIX, DISTILLATION_RECIPE_SUFFIX);
 
@@ -1023,7 +1023,7 @@ int OutputRecipeIndex()
 	PrintString("===================================================");
 
 	FormatIndexHeaderRow();
-	string s2DAIndexList = PS_GetGlobalString(VAR_RECIPE_2DA_INDEXES);
+	string s2DAIndexList = GetGlobalString(VAR_RECIPE_2DA_INDEXES);
 	string sCategory, sRowIndex;
     struct sStringTokenizer stTok = GetStringTokenizer(s2DAIndexList, ",");
 	// loop through recipe index list
@@ -1236,14 +1236,14 @@ int GetGlobalVarRecipeMatch(string sSortedItemList, string sRecipePrefix, string
     int bMatch = FALSE;
 	string sItemsAffected;
 
-    sRecipeList = PS_GetGlobalArrayString(sVarRecipeList, iCount);
+    sRecipeList = GetGlobalArrayString(sVarRecipeList, iCount);
     //output ("sRecipeList[" + IntToString(iCount) + "] = " + sRecipeList);
 
     while ((sRecipeList != "") && (bMatch == FALSE))
     {
         if (sSortedItemList == sRecipeList)
 		{	// check if itemtype is also a match 
-    		sItemsAffected = PS_GetGlobalArrayString(sVarAffectedItems, iCount);
+    		sItemsAffected = GetGlobalArrayString(sVarAffectedItems, iCount);
 			// note that if this is category 0 (ITEM_CATEGORY_NONE) then OBJECT_INVALID will match.
 			if (GetMatchesAffectedItems(oItem, sItemsAffected))
 			{
@@ -1252,7 +1252,7 @@ int GetGlobalVarRecipeMatch(string sSortedItemList, string sRecipePrefix, string
 			}
         }
         iCount++;
-        sRecipeList = PS_GetGlobalArrayString(sVarRecipeList, iCount);
+        sRecipeList = GetGlobalArrayString(sVarRecipeList, iCount);
         //output ("sRecipeList[" + IntToString(iCount) + "] = " + sRecipeList);
     }
     if (bMatch == FALSE)
@@ -1477,7 +1477,7 @@ void DoMagicCrafting(int iSpellID, object oPC)
 		
 	}
 	int nCasterLevel = PS_GetCasterLevel(oPC);
-	if (PS_GetGlobalInt(CAMPAIGN_SWITCH_CRAFTING_USE_TOTAL_LEVEL) == TRUE)
+	if (GetGlobalInt(CAMPAIGN_SWITCH_CRAFTING_USE_TOTAL_LEVEL) == TRUE)
 	{
 		int nTotalLevel = GetTotalLevels(oPC, FALSE);
 		if (nCasterLevel < nTotalLevel)
@@ -1720,7 +1720,7 @@ void SetEnchantedItemName(object oPC, object oItem)
 
 	// the gui script will always run on the owned PC, regardless of who the player has possessed.
 	object oObj = GetOwnedCharacter(oPC);
-	PS_SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
+	SetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT, oItem);
 
 	DisplayInputBox( oPC, nMessageStrRef, sMessage, sOkCB, sCancelCB, bShowCancel, 
                      sScreenName, nOkStrRef, sOkString, nCancelStrRef, sCancelString,

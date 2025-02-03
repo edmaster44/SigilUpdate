@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 // FlattedFifth, June 30, 2024
 // Script to check pc inventory for a specific items and either add or remove item properties.
@@ -98,7 +96,7 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 		else oNewItem = CreateItemOnObject("ps_golem_mithral", oPC, nStack, "ps_golem_mithral", 0);
 		
 		// this does nothing. All it's for is to delay things by half a sec to make sure the new item is created
-		DelayCommand(0.5f, PS_SetLocalInt(oPC, "GotACraftIngot", TRUE));
+		DelayCommand(0.5f, SetLocalInt(oPC, "GotACraftIngot", TRUE));
 		
 		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem, 0.3f, FALSE);
 	}

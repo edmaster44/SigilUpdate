@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // constants for variables for different types of objects
 const string VAR_TYPE_GEMS = "ASTOREGEMSIN";
 const string VAR_TYPE_BOOKS = "ASTOREBOOKSIN";
@@ -34,13 +32,13 @@ const string STRING_OTHER = "Other";
 void ResetSortValuesOnPC(object oPC, object oItem)
 {
 	int nMask = 0;
-	if (PS_GetLocalInt(oItem, VAR_TYPE_GEMS) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_GEMS, oItem); nMask |= 1; }
-	if (PS_GetLocalInt(oItem, VAR_TYPE_BOOKS) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_BOOKS, oItem); nMask |= 2; }
-	if (PS_GetLocalInt(oItem, VAR_TYPE_SCROLLS) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_SCROLLS, oItem); nMask |= 4; }
-	if (PS_GetLocalInt(oItem, VAR_TYPE_AMMO) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_AMMO, oItem); nMask |= 8; }
-	if (PS_GetLocalInt(oItem, VAR_TYPE_WEAPONS) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_WEAPONS, oItem); nMask |= 16; }
-	if (PS_GetLocalInt(oItem, VAR_TYPE_ARMOUR) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_ARMOUR, oItem); nMask |= 32; }
-	if (PS_GetLocalInt(oItem, VAR_TYPE_OTHER) == 1) { PS_SetLocalObject(oPC, VAR_TYPE_OTHER, oItem); nMask |= 64; }
+	if (GetLocalInt(oItem, VAR_TYPE_GEMS) == 1) { SetLocalObject(oPC, VAR_TYPE_GEMS, oItem); nMask |= 1; }
+	if (GetLocalInt(oItem, VAR_TYPE_BOOKS) == 1) { SetLocalObject(oPC, VAR_TYPE_BOOKS, oItem); nMask |= 2; }
+	if (GetLocalInt(oItem, VAR_TYPE_SCROLLS) == 1) { SetLocalObject(oPC, VAR_TYPE_SCROLLS, oItem); nMask |= 4; }
+	if (GetLocalInt(oItem, VAR_TYPE_AMMO) == 1) { SetLocalObject(oPC, VAR_TYPE_AMMO, oItem); nMask |= 8; }
+	if (GetLocalInt(oItem, VAR_TYPE_WEAPONS) == 1) { SetLocalObject(oPC, VAR_TYPE_WEAPONS, oItem); nMask |= 16; }
+	if (GetLocalInt(oItem, VAR_TYPE_ARMOUR) == 1) { SetLocalObject(oPC, VAR_TYPE_ARMOUR, oItem); nMask |= 32; }
+	if (GetLocalInt(oItem, VAR_TYPE_OTHER) == 1) { SetLocalObject(oPC, VAR_TYPE_OTHER, oItem); nMask |= 64; }
 
 /*
 	if (nMask != 0)

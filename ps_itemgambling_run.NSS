@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_randomlootgenerator"
 
 const int increasePerLevel = 175;
@@ -9,7 +7,7 @@ const int minimumPrice = 350;
 void main(int nType)
 {
 	object oPC = ((GetPCSpeaker() == OBJECT_INVALID) ? OBJECT_SELF : GetPCSpeaker());
-	int itemPrice = PS_GetLocalInt(oPC, "SRLG_PRICE");
+	int itemPrice = GetLocalInt(oPC, "SRLG_PRICE");
 	string convoFeedback = "";
 	if(itemPrice == 0) {
 		int pcLevel = GetTotalLevels(oPC, 0);
@@ -74,7 +72,7 @@ void main(int nType)
 		itemPrice = itemPrice + Random(50);
 		if(itemPrice < minimumPrice)
 			itemPrice = minimumPrice;
-		PS_SetLocalInt(oPC, "SRLG_PRICE", itemPrice);
+		SetLocalInt(oPC, "SRLG_PRICE", itemPrice);
 		convoFeedback = "Alright basher, my price is " + IntToString(itemPrice) + " jink. Take it or leave it, no refunds, and you got to decide right now. You want it?";
 	}
 	else {
@@ -82,5 +80,5 @@ void main(int nType)
 	}
 
 	SetCustomToken(12345, convoFeedback);
-	PS_SetLocalInt(oPC, "SRLG_TYPE", nType);
+	SetLocalInt(oPC, "SRLG_TYPE", nType);
 }

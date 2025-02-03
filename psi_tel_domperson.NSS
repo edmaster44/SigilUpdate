@@ -69,7 +69,7 @@ void main()
 	    //Make sure the target is a humanoid
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 		{
-	        if(PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+	        if(GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 	        {
 			   nDC = nDC + 1;
 	           //Make SR Check
@@ -79,7 +79,7 @@ void main()
 	                if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, 1.0))
 	                {
 	                    //Check for metamagic extension
-	                    if(PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+	                    if(GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 	                    {
 	                        nDuration = nDuration * 2;
 	                    }
@@ -106,7 +106,7 @@ void main()
 	                if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, 1.0))
 	                {
 	                    //Check for metamagic extension
-	                    if(PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+	                    if(GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 	                    {
 	                        nDuration = nDuration * 2;
 	                    }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -22,7 +20,7 @@ void NPCRemoteDestroyWeapon(object oHench, object oPC)
 	else
 	{
 		SendMessageToPC(oPC, NPC_REMOTE_FEEDBACK_PREFIX + GetName(oHench) + " is destroying " + GetName(oWeapon));
-		PS_SetLocalObject(oHench, FACTION_NPC_RIGHT_HAND, OBJECT_INVALID);
+		SetLocalObject(oHench, FACTION_NPC_RIGHT_HAND, OBJECT_INVALID);
 		DestroyObject(oWeapon, 0.1);
 	}
 }
@@ -93,8 +91,8 @@ void NPCRemoteEquipAnyRangedDelay(object oHench, object oPC)
 
 void NPCRemoteEquipWeapons(object oHench, object oPC)
 {
-	object oItemRight = PS_GetLocalObject(oHench, FACTION_NPC_RIGHT_HAND);
-	object oItemLeft = PS_GetLocalObject(oHench, FACTION_NPC_LEFT_HAND);
+	object oItemRight = GetLocalObject(oHench, FACTION_NPC_RIGHT_HAND);
+	object oItemLeft = GetLocalObject(oHench, FACTION_NPC_LEFT_HAND);
 	
 	if (oItemRight != OBJECT_INVALID)
 	{
@@ -143,7 +141,7 @@ void NPCRemoteUnequipWeapons(object oHench, object oPC)
 	if (GetIsObjectValid(oItemLeft) == TRUE)
 		{
 			SetIdentified(oItemLeft, TRUE);
-			PS_SetLocalObject(oHench, FACTION_NPC_LEFT_HAND, oItemLeft);
+			SetLocalObject(oHench, FACTION_NPC_LEFT_HAND, oItemLeft);
 			AssignCommand(oHench, ActionUnequipItem(oItemLeft));
 		}
 	
@@ -151,7 +149,7 @@ void NPCRemoteUnequipWeapons(object oHench, object oPC)
 	if (GetIsObjectValid(oItemRight) == TRUE)
 		{
 			SetIdentified(oItemRight, TRUE);
-			PS_SetLocalObject(oHench, FACTION_NPC_RIGHT_HAND, oItemRight);
+			SetLocalObject(oHench, FACTION_NPC_RIGHT_HAND, oItemRight);
 			AssignCommand(oHench, ActionUnequipItem(oItemRight));
 		}
 
@@ -190,7 +188,7 @@ void NPCToolPlayAnim(object oSummon, object oPC, int iParam)
 void main(int iFunction, int iParam)
 {
 	object oPC = OBJECT_SELF;
-	object oSummon = PS_GetLocalObject(oPC, "RCTag");
+	object oSummon = GetLocalObject(oPC, "RCTag");
 	
 	// modify the distance
 	float fRange;

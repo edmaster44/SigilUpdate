@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //***************************************************************************
 //	If the PC is searching in the area, then they might find something!
 // Mimi Fearthegn
@@ -9,12 +7,12 @@
 
 void RevealObject(object oSelf, object oPC) {
 
-	string sWP 		= PS_GetLocalString(oSelf, "WaypointToSpawn");
-	string sObj 	= PS_GetLocalString(oSelf, "ResrefToSpawn");
-	string sMessage = PS_GetLocalString(oSelf, "MessageToSend");
+	string sWP 		= GetLocalString(oSelf, "WaypointToSpawn");
+	string sObj 	= GetLocalString(oSelf, "ResrefToSpawn");
+	string sMessage = GetLocalString(oSelf, "MessageToSend");
 	object oWP 		= GetWaypointByTag(sObj);
 	
-	int nDC = PS_GetLocalInt(oSelf, "SkillDC");
+	int nDC = GetLocalInt(oSelf, "SkillDC");
 	
 	if (GetIsSkillSuccessful(oPC, SKILL_SEARCH, nDC, TRUE)) {
 	
@@ -30,7 +28,7 @@ void main()
 {
 	object oPC = GetEnteringObject();
 	
-	int nTime = PS_GetLocalInt(OBJECT_SELF, "RespawnTime");
+	int nTime = GetLocalInt(OBJECT_SELF, "RespawnTime");
 	
 	if (!GetIsPC(oPC)) 
 		return;

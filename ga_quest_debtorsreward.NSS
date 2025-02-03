@@ -1,26 +1,24 @@
-#include "ff_safevar"
-
 //Gives you the appropriate gold reward for the debtor's pole quests
 
 void main() {
 
 	object oPC = GetPCSpeaker();
 	string sQuestTag = "ps_quest_debtorspole";
-	int nQuestStage = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
+	int nQuestStage = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuestTag);
 	AddJournalQuestEntry(sQuestTag, nQuestStage+1, oPC);
 	
-	int nDebtor = PS_GetLocalInt(OBJECT_SELF, "DEBTOR_INDEX");
-	PS_SetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_DONE", 1);
-	int nBounty = PS_GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY");
+	int nDebtor = GetLocalInt(OBJECT_SELF, "DEBTOR_INDEX");
+	SetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_DONE", 1);
+	int nBounty = GetLocalInt(oPC, "DEBTOR_"+IntToString(nDebtor)+"_BOUNTY");
 	int nAmount = nBounty*3;
-	string sOwedTo = PS_GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO");
+	string sOwedTo = GetLocalString(oPC, "DEBTOR_"+IntToString(nDebtor)+"_OWED_TO");
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "DEBTOR_FAIL") > 0) {
+	if (GetLocalInt(OBJECT_SELF, "DEBTOR_FAIL") > 0) {
 		SendMessageToPC(oPC, "You recovered none of the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", and so collect no bounty.");
-	} else if (PS_GetLocalInt(OBJECT_SELF, "DEBTOR_EXCHANGE") > 0) {
+	} else if (GetLocalInt(OBJECT_SELF, "DEBTOR_EXCHANGE") > 0) {
 		SendMessageToPC(oPC, "You return the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", collect the bounty, and keep the magical item.");
 		TakeGoldFromCreature(nAmount-nBounty, oPC, TRUE);
-	} else if (PS_GetLocalInt(OBJECT_SELF, "DEBTOR_PARTIAL") > 0) {
+	} else if (GetLocalInt(OBJECT_SELF, "DEBTOR_PARTIAL") > 0) {
 		int nRand = d3();
 		int nReturned = nAmount;
 		if (nRand == 1) {

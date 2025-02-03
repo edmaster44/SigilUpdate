@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //Script by Dedic8ed
 /*This script is designed to be used by a placed trigger, and will be fired by all entering objects
   which match the designated racial type (i.e., elf, goblinoid, vermin, etc.) It can actually be assigned up 
@@ -12,12 +10,12 @@ void main()
 	int iPCRace = GetRacialType(oPC);
 //These designate the placeable object from which the spell will originate. The placeable must be set to "hostile".
 
-	int iRace = PS_GetLocalInt(OBJECT_SELF,"race");
+	int iRace = GetLocalInt(OBJECT_SELF,"race");
 //Designates the subrace this trigger will work for
 
-	int iSpell = PS_GetLocalInt(OBJECT_SELF,"spell1");
-	int iSpell2 = PS_GetLocalInt(OBJECT_SELF,"spell2");
-	int iSpell3 = PS_GetLocalInt(OBJECT_SELF,"spell3");
+	int iSpell = GetLocalInt(OBJECT_SELF,"spell1");
+	int iSpell2 = GetLocalInt(OBJECT_SELF,"spell2");
+	int iSpell3 = GetLocalInt(OBJECT_SELF,"spell3");
 //Designates what spells will be cast. Use spell IDs from spells.2da
 
 	if (iRace != iPCRace) return;

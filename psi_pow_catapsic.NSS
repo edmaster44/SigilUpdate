@@ -45,24 +45,24 @@ void main()
 {
 	object oManifester = GetAreaOfEffectCreator();
 	object oAoE        = OBJECT_SELF;
-    int nDC  = PS_GetLocalInt(oAoE, "PRC_Catapsi_DC");
-    int nPen = PS_GetLocalInt(oAoE, "PRC_Catapsi_PowerPenetration");
+    int nDC  = GetLocalInt(oAoE, "PRC_Catapsi_DC");
+    int nPen = GetLocalInt(oAoE, "PRC_Catapsi_PowerPenetration");
 
 	object oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget))
     {
         // Some target validity checking
         if(oTarget != oManifester                   && // The field does not affect the manifester
-           !PS_GetLocalInt(oTarget, "PRC_IsInCatapsi")    // And the target is not already affected by another Catapsi field. This is done to prevent ugly concurrency issues
+           !GetLocalInt(oTarget, "PRC_IsInCatapsi")    // And the target is not already affected by another Catapsi field. This is done to prevent ugly concurrency issues
            )
         {
 
             // Check for Power Resistance
             if(PRCMyResistPower(oManifester, oTarget, nPen))
             {
-                PS_SetLocalInt(oTarget, "PRC_IsInCatapsi", TRUE);
-                PS_SetLocalInt(oTarget, "PRC_Catapsi_DC", nDC);
-                PS_SetLocalObject(oTarget, "PRC_Catapsi_Manifester", oManifester);
+                SetLocalInt(oTarget, "PRC_IsInCatapsi", TRUE);
+                SetLocalInt(oTarget, "PRC_Catapsi_DC", nDC);
+                SetLocalObject(oTarget, "PRC_Catapsi_Manifester", oManifester);
             }// end if - SR check
         }// end if - Target validity check
         oTarget = GetNextInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE);

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //////////////////////////////////////////////////////////////////
 //
 //  Plot Wizard Header file
@@ -80,7 +78,7 @@ void PWSetLocalIntParty(object oPC, string sVarName, int nValue)
   object oPartyMember = GetFirstFactionMember(oPC, TRUE);
   while (oPartyMember != OBJECT_INVALID)
   {
-    PS_SetLocalInt(oPartyMember, sVarName, nValue);
+    SetLocalInt(oPartyMember, sVarName, nValue);
     oPartyMember = GetNextFactionMember(oPC, TRUE);
   }
 }
@@ -95,9 +93,9 @@ void PWSetMinLocalIntParty(object oPC, string sVarName, int nValue)
   object oPartyMember = GetFirstFactionMember(oPC, TRUE);
   while (oPartyMember != OBJECT_INVALID)
   {
-    if (PS_GetLocalInt(oPartyMember, sVarName) < nValue)
+    if (GetLocalInt(oPartyMember, sVarName) < nValue)
     {
-      PS_SetLocalInt(oPartyMember, sVarName, nValue);
+      SetLocalInt(oPartyMember, sVarName, nValue);
     }
     oPartyMember = GetNextFactionMember(oPC, TRUE);
   }
@@ -123,11 +121,11 @@ void PWSetMinLocalIntAndJournalForItemAcquired(string sVarName, string sJournalT
     object oPartyMember = GetFirstFactionMember(oPC, TRUE);
     while (oPartyMember != OBJECT_INVALID)
     {
-      nOriginalState = PS_GetLocalInt(oPartyMember, sVarName);
+      nOriginalState = GetLocalInt(oPartyMember, sVarName);
       if (nOriginalState < nState)
       {
         PS_GiveXPRewardNoReturn(oPartyMember, nExperience);
-        PS_SetLocalInt(oPartyMember, sVarName, nState);
+        SetLocalInt(oPartyMember, sVarName, nState);
       }
       oPartyMember = GetNextFactionMember(oPC, TRUE);
     }
@@ -151,11 +149,11 @@ void PWSetMinLocalIntAndJournalForOpenerParty(string sVarName, string sJournalTa
     object oPartyMember = GetFirstFactionMember(oPC, TRUE);
     while (oPartyMember != OBJECT_INVALID)
     {
-      nOriginalState = PS_GetLocalInt(oPartyMember, sVarName);
+      nOriginalState = GetLocalInt(oPartyMember, sVarName);
       if (nOriginalState < nState)
       {
         PS_GiveXPRewardNoReturn(oPartyMember, nExperience);
-        PS_SetLocalInt(oPartyMember, sVarName, nState);
+        SetLocalInt(oPartyMember, sVarName, nState);
       }
       oPartyMember = GetNextFactionMember(oPC, TRUE);
     }

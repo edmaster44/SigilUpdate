@@ -1,12 +1,10 @@
-#include "ff_safevar"
-
 void main() {
 	object oPC = GetEnteringObject();
   
-  	int iLock = PS_GetGlobalInt("Mercykiller1Lock");
+  	int iLock = GetGlobalInt("Mercykiller1Lock");
    	if ( iLock == 0 ) {
 	
-  		PS_SetGlobalInt("Mercykiller1Lock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("Mercykiller1Lock", 1); // Only allows one clean up at a time.
 		
 		object oSpawn;
   		if(GetObjectByTag("mk_prison_frontdoorguard") == OBJECT_INVALID) {
@@ -110,6 +108,6 @@ void main() {
    			oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "mk_prison_visitorclerk_pass", GetLocation(GetWaypointByTag("wp_mk_prison_visitorclerk_pass")));    
   		}
 		
-  		PS_SetGlobalInt("Mercykiller1Lock", 0);
+  		SetGlobalInt("Mercykiller1Lock", 0);
  	}
 }

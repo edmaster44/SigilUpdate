@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_newcrafting"
 #include "dethia_shop_sys"
 
@@ -22,10 +20,10 @@ void main () {
 
 	object oPC = OBJECT_SELF;
 	
-	int nBase = PS_GetLocalInt(oPC, "Craft_BaseItemType");
-	int nMat1 = PS_GetLocalInt(oPC, "Craft_Mat1");
-	int nMat2 = PS_GetLocalInt(oPC, "Craft_Mat2");
-	int nMat3 = PS_GetLocalInt(oPC, "Craft_Mat3");
+	int nBase = GetLocalInt(oPC, "Craft_BaseItemType");
+	int nMat1 = GetLocalInt(oPC, "Craft_Mat1");
+	int nMat2 = GetLocalInt(oPC, "Craft_Mat2");
+	int nMat3 = GetLocalInt(oPC, "Craft_Mat3");
 	
 	struct baseitem i = LoadBaseItem(nBase);
 	struct material m1 = LoadMaterial(nMat1, i.matlist_1);
@@ -66,12 +64,12 @@ void main () {
 	SetDescription(oItem, sDescrip);
 	//SetItemCostVariables(oItem, FALSE, oPC);
 	
-	PS_SetLocalObject(oPC, "crafted_item", oItem);
+	SetLocalObject(oPC, "crafted_item", oItem);
 	
-	PS_DeleteLocalInt(oPC, "Craft_BaseItemType"); 
-	PS_DeleteLocalInt(oPC, "Craft_Mat1"); 
-	PS_DeleteLocalInt(oPC, "Craft_Mat2"); 
-	PS_DeleteLocalInt(oPC, "Craft_Mat3"); 
+	DeleteLocalInt(oPC, "Craft_BaseItemType"); 
+	DeleteLocalInt(oPC, "Craft_Mat1"); 
+	DeleteLocalInt(oPC, "Craft_Mat2"); 
+	DeleteLocalInt(oPC, "Craft_Mat3"); 
 	
 	CloseGUIScreen(oPC, sCraftingScreen);
 	

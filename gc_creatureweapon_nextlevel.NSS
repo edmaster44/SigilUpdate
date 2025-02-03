@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 gc_creatureweapon_nextlevel by Ceremorph for the Sigil: City of Doors PW
 */
@@ -10,7 +8,7 @@ int GetNext(object oPC)
 
 	if(GetIsObjectValid(oItem))
     	{
-   		int iNext = PS_GetLocalInt(oItem,"NextLevel");
+   		int iNext = GetLocalInt(oItem,"NextLevel");
 			return iNext;
     	}
 	return 0;

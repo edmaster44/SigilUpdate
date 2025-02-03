@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
     Companion and Monster AI
@@ -398,27 +396,27 @@ const string sPersistSpellMarkerTag = "persist_spell_marker";
 
 float GetCurrentSpellEffectWeight()
 {
-    return PS_GetLocalFloat(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_WEIGHT_COLUMN_NAME);
+    return GetLocalFloat(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_WEIGHT_COLUMN_NAME);
 }
 
 int GetCurrentSpellEffectTypes()
 {
-    return PS_GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_TYPES_COLUMN_NAME);
+    return GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_TYPES_COLUMN_NAME);
 }
 
 int GetCurrentSpellDamageInfo()
 {
-    return PS_GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_DAMAGE_INFO_COLUMN_NAME);
+    return GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_DAMAGE_INFO_COLUMN_NAME);
 }
 
 int GetCurrentSpellSaveType()
 {
-    return PS_GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_TYPE_COLUMN_NAME);
+    return GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_TYPE_COLUMN_NAME);
 }
 
 int GetCurrentSpellSaveDCType()
 {
-    return PS_GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_DC_TYPE_COLUMN_NAME);
+    return GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_DC_TYPE_COLUMN_NAME);
 }
 
 
@@ -1203,7 +1201,7 @@ struct sDamageInformation GetCurrentSpellDamage(int casterLevel, int bIsItem)
 
 float GetDamageResistImmunityAdjustment(object oTarget, float damageAmount, int damageType, int count)
 {
-    if (PS_GetLocalInt(oTarget, damageInformationStr) & damageType)
+    if (GetLocalInt(oTarget, damageInformationStr) & damageType)
     {
 //		Jug_Debug(GetName(oTarget) + " doing damage adjust start " + FloatToString(damageAmount) + " damage type " + IntToHexString(damageType));
         damageAmount *= GetFloatArray(oTarget, HENCH_DAMAGE_IMMUNITY_STR, damageType);
@@ -1267,7 +1265,7 @@ int GetSpellInformation(int nSpellID)
 {
     gCurrentSpellInfoStr = HENCH_SPELL_ID_INFO + IntToString(nSpellID);
 
-    int spellIDInfo = PS_GetLocalInt(GetModule(), gCurrentSpellInfoStr);
+    int spellIDInfo = GetLocalInt(GetModule(), gCurrentSpellInfoStr);
 
     if ((spellIDInfo & HENCH_SPELL_INFO_VERSION_MASK) != HENCH_SPELL_INFO_VERSION)
     {
@@ -1291,34 +1289,34 @@ int GetSpellInformation(int nSpellID)
 //  Jug_Debug(GetName(OBJECT_SELF) + "init sub spell " + IntToString(subSpellID));
                 if (subSpellID <= 0)
                 {
-                	PS_DeleteLocalInt(GetModule(), gCurrentSpellInfoStr + subSpellStr);
+                	DeleteLocalInt(GetModule(), gCurrentSpellInfoStr + subSpellStr);
                     break;
                 }
-                PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr + subSpellStr, subSpellID);
+                SetLocalInt(GetModule(), gCurrentSpellInfoStr + subSpellStr, subSpellID);
                 currentIndex++;
             }
         }
         else
         {
             string targetInfoStr = Get2DAString(HENCH_SPELL_ID_TABLE, HENCH_SPELL_TARGET_COLUMN_NAME, nSpellID);
-            PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_TARGET_COLUMN_NAME, StringToInt(targetInfoStr));
+            SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_TARGET_COLUMN_NAME, StringToInt(targetInfoStr));
 
             targetInfoStr = Get2DAString(HENCH_SPELL_ID_TABLE, HENCH_SPELL_EFFECT_WEIGHT_COLUMN_NAME, nSpellID);
-            PS_SetLocalFloat(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_WEIGHT_COLUMN_NAME, StringToFloat(targetInfoStr));
+            SetLocalFloat(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_WEIGHT_COLUMN_NAME, StringToFloat(targetInfoStr));
 
             targetInfoStr = Get2DAString(HENCH_SPELL_ID_TABLE, HENCH_SPELL_EFFECT_TYPES_COLUMN_NAME, nSpellID);
-            PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_TYPES_COLUMN_NAME, StringToInt(targetInfoStr));
+            SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_EFFECT_TYPES_COLUMN_NAME, StringToInt(targetInfoStr));
 
             targetInfoStr = Get2DAString(HENCH_SPELL_ID_TABLE, HENCH_SPELL_DAMAGE_INFO_COLUMN_NAME, nSpellID);
-            PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_DAMAGE_INFO_COLUMN_NAME, StringToInt(targetInfoStr));
+            SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_DAMAGE_INFO_COLUMN_NAME, StringToInt(targetInfoStr));
 
             targetInfoStr = Get2DAString(HENCH_SPELL_ID_TABLE, HENCH_SPELL_SAVE_TYPE_COLUMN_NAME, nSpellID);
-            PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_TYPE_COLUMN_NAME, StringToInt(targetInfoStr));
+            SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_TYPE_COLUMN_NAME, StringToInt(targetInfoStr));
 
             targetInfoStr = Get2DAString(HENCH_SPELL_ID_TABLE, HENCH_SPELL_SAVE_DC_TYPE_COLUMN_NAME, nSpellID);
-            PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_DC_TYPE_COLUMN_NAME, StringToInt(targetInfoStr));
+            SetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_SAVE_DC_TYPE_COLUMN_NAME, StringToInt(targetInfoStr));
         }
-        PS_SetLocalInt(GetModule(), gCurrentSpellInfoStr, spellIDInfo);
+        SetLocalInt(GetModule(), gCurrentSpellInfoStr, spellIDInfo);
     }
 
     return spellIDInfo;
@@ -1340,7 +1338,7 @@ int HenchPerceiveSpellcasterThreat()
         clericThreshold = 15;
     }
 	
-    goBestSpellCaster = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    goBestSpellCaster = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
 
     while (GetIsObjectValid(goBestSpellCaster))
     {
@@ -1373,7 +1371,7 @@ int HenchPerceiveSpellcasterThreat()
         {
             return TRUE;
         }
-        goBestSpellCaster = PS_GetLocalObject(goBestSpellCaster, sEnemyLineOfSight);
+        goBestSpellCaster = GetLocalObject(goBestSpellCaster, sEnemyLineOfSight);
     }
 //	Jug_Debug(GetName(OBJECT_SELF) + " no spellcaster found");
     return FALSE;
@@ -1471,7 +1469,7 @@ void HenchCheckDetectInvisibility()
     {
 //		Jug_Debug("||" + GetName(OBJECT_SELF) + " testing detect invis target " + GetName(oFriend) + " spell " + IntToString(gsCurrentspInfo.spellID));
 
-		if (!(PS_GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED))
+		if (!(GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED))
 		{
 			float curEffectWeight = effectWeight;
 			if (curLoopCount == 1)
@@ -1514,7 +1512,7 @@ void HenchCheckDetectInvisibility()
 				}
 			}
 		}
-        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+        oFriend = GetLocalObject(oFriend, sAllySeen);
         curLoopCount ++;
     }
 	
@@ -1707,146 +1705,146 @@ const int sHenchPersistSpellVersion = 2;
 void HenchInitiailizePersistentSpellInfo()
 {
 	object oModule = GetModule();
-	if (PS_GetLocalInt(oModule, sHenchPersistSpellInitialized) < sHenchPersistSpellVersion)
+	if (GetLocalInt(oModule, sHenchPersistSpellInitialized) < sHenchPersistSpellVersion)
 	{
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGACID", 0x46CF0000);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID0", 0x46CF0000);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID745", 0x46CF0000);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGKILL", 0x45CF0017);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID23", 0x45CF0017);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_DARKNESS", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID36", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID345", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID606", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID810", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID941", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1196", 0x42450024);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_DELAY_BLAST_FIREBALL", 0x474F0027);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID39", 0x474F0027);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID971", 0x474F0027);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_ENTANGLE", 0x41470035);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID53", 0x41470035);
-        PS_SetLocalInt(oModule, "HenchPersistTagx2_s0_vinementc", 0x43460212);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID530", 0x43460212);
-        PS_SetLocalInt(oModule, "HenchPersistTagx2_s0_vinemhmpc", 0x43460213);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID531", 0x43460213);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGGHOUL", 0x42670040);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID64", 0x42670040);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_GREASE", 0x41470042);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID66", 0x41470042);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGFIRE", 0x48CF0059);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID89", 0x48CF0059);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID744", 0x48CF0059);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_INVISIBILITY_PURGE", 0x4365005B);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID91", 0x4365005B);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_INVIS_SPHERE", 0x4361005C);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID92", 0x4361005C);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_CIRCGOOD", 0x43410068);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID104", 0x43410068);
-        PS_SetLocalInt(oModule, "HenchPersistTagx0_s0_dirgehb", 0x466601BD);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID445", 0x466601BD);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_CIRCEVIL", 0x43410069);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID105", 0x43410069);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGMIND", 0x45C70076);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID118", 0x45C70076);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_SILENCE", 0x424F00A3);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID163", 0x424F00A3);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGSTINK", 0x43CF00AB);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID171", 0x43CF00AB);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_STORM", 0x494B00AD);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID173", 0x494B00AD);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALLFIRE", 0x444F00BF);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID191", 0x444F00BF);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID343", 0x444F00BF);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_WEB", 0x424700C0);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID192", 0x424700C0);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID352", 0x424700C0);
-        PS_SetLocalInt(oModule, "HenchPersistTagx2_s1_bebwebc", 0x490602DB);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID731", 0x490602DB);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BLINDING", 0x452300C3);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID195", 0x452300C3);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_FROST", 0x442300C4);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID196", 0x442300C4);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_ELECTRICAL", 0x442300C5);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID197", 0x442300C5);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_FEAR", 0x442300C6);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID198", 0x442300C6);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_FIRE", 0x442300C7);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID199", 0x442300C7);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_MENACE", 0x432300C8);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID200", 0x432300C8);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_PROTECTION", 0x412100C9);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID201", 0x412100C9);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_STUN", 0x452300CA);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID202", 0x452300CA);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_UNEARTHLY", 0x472300CB);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID203", 0x472300CB);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_UNNATURAL", 0x432300CC);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID204", 0x432300CC);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_TYRANT_FOG", 0x43A30132);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID306", 0x43A30132);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_AURA_OF_COURAGE", 0x4121013A);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID314", 0x4121013A);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_DROWNED", 0x43270145);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID325", 0x43270145);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_EVARDS_BLACK_TENTACLES", 0x444F0177);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID375", 0x444F0177);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_DRAGON_FEAR", 0x4723019C);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID412", 0x4723019C);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_SPIKE_GROWTH", 0x434F01C6);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID454", 0x434F01C6);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_CHOKE_POWDER", 0x434F01D3);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID467", 0x434F01D3);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BATTLETIDE", 0x45630205);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID517", 0x45630205);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID963", 0x45630205);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_STONEHOLD", 0x464F0223);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID547", 0x464F0223);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_GLYPH", 0x434F0225);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID549", 0x434F0225);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGBEWILDERMENT", 0x42CF0239);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID569", 0x42CF0239);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_CHILLING_TENTACLES", 0x454F033F);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID831", 0x454F033F);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALL_PERILOUS_FLAME", 0x454F0345);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID837", 0x454F0345);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_SHADOW_PLAGUE", 0x412703AA);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID938", 0x412703AA);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_PROTECTIVE_AURA", 0x412103BD);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID957", 0x412103BD);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_WAR_GLORY", 0x416703BF);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID959", 0x416703BF);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_AURA_OF_DESPAIR", 0x412303C8);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID968", 0x412303C8);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_HEZROU_STENCH", 0x492303D5);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID981", 0x492303D5);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_GHAST_STENCH", 0x442303D6);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID982", 0x442303D6);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALLBLADE", 0x464F03DA);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID986", 0x464F03DA);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BLADE_BARRIER", 0x466F03DB);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID987", 0x466F03DB);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BODY_SUN", 0x426703E9);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1001", 0x426703E9);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALL_DISPEL_MAGIC", 0x45570409);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1033", 0x45570409);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_GREAT_WALL_DISPEL_MAGIC", 0x4857040A);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1034", 0x4857040A);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_REACH_TO_THE_BLAZE", 0x42670419);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1049", 0x42670419);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_SHROUDING_FOG", 0x42C5041A);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1050", 0x42C5041A);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_KELEMVORS_GRACE", 0x4161049F);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1183", 0x4161049F);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_HELLFIRE_SHIELD", 0x416304A3);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1187", 0x416304A3);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_PER_PRC_DARKNESS", 0x424506A8);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1704", 0x424506A8);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1722", 0x424506A8);
-        PS_SetLocalInt(oModule, "HenchPersistTagVFX_MOB_PRC_CIRCEVIL", 0x434106AD);
-        PS_SetLocalInt(oModule, "HenchPersistSpellID1709", 0x434106AD);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGACID", 0x46CF0000);
+        SetLocalInt(oModule, "HenchPersistSpellID0", 0x46CF0000);
+        SetLocalInt(oModule, "HenchPersistSpellID745", 0x46CF0000);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGKILL", 0x45CF0017);
+        SetLocalInt(oModule, "HenchPersistSpellID23", 0x45CF0017);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_DARKNESS", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistSpellID36", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistSpellID345", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistSpellID606", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistSpellID810", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistSpellID941", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistSpellID1196", 0x42450024);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_DELAY_BLAST_FIREBALL", 0x474F0027);
+        SetLocalInt(oModule, "HenchPersistSpellID39", 0x474F0027);
+        SetLocalInt(oModule, "HenchPersistSpellID971", 0x474F0027);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_ENTANGLE", 0x41470035);
+        SetLocalInt(oModule, "HenchPersistSpellID53", 0x41470035);
+        SetLocalInt(oModule, "HenchPersistTagx2_s0_vinementc", 0x43460212);
+        SetLocalInt(oModule, "HenchPersistSpellID530", 0x43460212);
+        SetLocalInt(oModule, "HenchPersistTagx2_s0_vinemhmpc", 0x43460213);
+        SetLocalInt(oModule, "HenchPersistSpellID531", 0x43460213);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGGHOUL", 0x42670040);
+        SetLocalInt(oModule, "HenchPersistSpellID64", 0x42670040);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_GREASE", 0x41470042);
+        SetLocalInt(oModule, "HenchPersistSpellID66", 0x41470042);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGFIRE", 0x48CF0059);
+        SetLocalInt(oModule, "HenchPersistSpellID89", 0x48CF0059);
+        SetLocalInt(oModule, "HenchPersistSpellID744", 0x48CF0059);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_INVISIBILITY_PURGE", 0x4365005B);
+        SetLocalInt(oModule, "HenchPersistSpellID91", 0x4365005B);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_INVIS_SPHERE", 0x4361005C);
+        SetLocalInt(oModule, "HenchPersistSpellID92", 0x4361005C);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_CIRCGOOD", 0x43410068);
+        SetLocalInt(oModule, "HenchPersistSpellID104", 0x43410068);
+        SetLocalInt(oModule, "HenchPersistTagx0_s0_dirgehb", 0x466601BD);
+        SetLocalInt(oModule, "HenchPersistSpellID445", 0x466601BD);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_CIRCEVIL", 0x43410069);
+        SetLocalInt(oModule, "HenchPersistSpellID105", 0x43410069);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGMIND", 0x45C70076);
+        SetLocalInt(oModule, "HenchPersistSpellID118", 0x45C70076);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_SILENCE", 0x424F00A3);
+        SetLocalInt(oModule, "HenchPersistSpellID163", 0x424F00A3);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGSTINK", 0x43CF00AB);
+        SetLocalInt(oModule, "HenchPersistSpellID171", 0x43CF00AB);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_STORM", 0x494B00AD);
+        SetLocalInt(oModule, "HenchPersistSpellID173", 0x494B00AD);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALLFIRE", 0x444F00BF);
+        SetLocalInt(oModule, "HenchPersistSpellID191", 0x444F00BF);
+        SetLocalInt(oModule, "HenchPersistSpellID343", 0x444F00BF);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_WEB", 0x424700C0);
+        SetLocalInt(oModule, "HenchPersistSpellID192", 0x424700C0);
+        SetLocalInt(oModule, "HenchPersistSpellID352", 0x424700C0);
+        SetLocalInt(oModule, "HenchPersistTagx2_s1_bebwebc", 0x490602DB);
+        SetLocalInt(oModule, "HenchPersistSpellID731", 0x490602DB);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BLINDING", 0x452300C3);
+        SetLocalInt(oModule, "HenchPersistSpellID195", 0x452300C3);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_FROST", 0x442300C4);
+        SetLocalInt(oModule, "HenchPersistSpellID196", 0x442300C4);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_ELECTRICAL", 0x442300C5);
+        SetLocalInt(oModule, "HenchPersistSpellID197", 0x442300C5);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_FEAR", 0x442300C6);
+        SetLocalInt(oModule, "HenchPersistSpellID198", 0x442300C6);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_FIRE", 0x442300C7);
+        SetLocalInt(oModule, "HenchPersistSpellID199", 0x442300C7);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_MENACE", 0x432300C8);
+        SetLocalInt(oModule, "HenchPersistSpellID200", 0x432300C8);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_PROTECTION", 0x412100C9);
+        SetLocalInt(oModule, "HenchPersistSpellID201", 0x412100C9);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_STUN", 0x452300CA);
+        SetLocalInt(oModule, "HenchPersistSpellID202", 0x452300CA);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_UNEARTHLY", 0x472300CB);
+        SetLocalInt(oModule, "HenchPersistSpellID203", 0x472300CB);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_UNNATURAL", 0x432300CC);
+        SetLocalInt(oModule, "HenchPersistSpellID204", 0x432300CC);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_TYRANT_FOG", 0x43A30132);
+        SetLocalInt(oModule, "HenchPersistSpellID306", 0x43A30132);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_AURA_OF_COURAGE", 0x4121013A);
+        SetLocalInt(oModule, "HenchPersistSpellID314", 0x4121013A);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_DROWNED", 0x43270145);
+        SetLocalInt(oModule, "HenchPersistSpellID325", 0x43270145);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_EVARDS_BLACK_TENTACLES", 0x444F0177);
+        SetLocalInt(oModule, "HenchPersistSpellID375", 0x444F0177);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_DRAGON_FEAR", 0x4723019C);
+        SetLocalInt(oModule, "HenchPersistSpellID412", 0x4723019C);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_SPIKE_GROWTH", 0x434F01C6);
+        SetLocalInt(oModule, "HenchPersistSpellID454", 0x434F01C6);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_CHOKE_POWDER", 0x434F01D3);
+        SetLocalInt(oModule, "HenchPersistSpellID467", 0x434F01D3);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BATTLETIDE", 0x45630205);
+        SetLocalInt(oModule, "HenchPersistSpellID517", 0x45630205);
+        SetLocalInt(oModule, "HenchPersistSpellID963", 0x45630205);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_STONEHOLD", 0x464F0223);
+        SetLocalInt(oModule, "HenchPersistSpellID547", 0x464F0223);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_GLYPH", 0x434F0225);
+        SetLocalInt(oModule, "HenchPersistSpellID549", 0x434F0225);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_FOGBEWILDERMENT", 0x42CF0239);
+        SetLocalInt(oModule, "HenchPersistSpellID569", 0x42CF0239);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_CHILLING_TENTACLES", 0x454F033F);
+        SetLocalInt(oModule, "HenchPersistSpellID831", 0x454F033F);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALL_PERILOUS_FLAME", 0x454F0345);
+        SetLocalInt(oModule, "HenchPersistSpellID837", 0x454F0345);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_SHADOW_PLAGUE", 0x412703AA);
+        SetLocalInt(oModule, "HenchPersistSpellID938", 0x412703AA);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_PROTECTIVE_AURA", 0x412103BD);
+        SetLocalInt(oModule, "HenchPersistSpellID957", 0x412103BD);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_WAR_GLORY", 0x416703BF);
+        SetLocalInt(oModule, "HenchPersistSpellID959", 0x416703BF);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_AURA_OF_DESPAIR", 0x412303C8);
+        SetLocalInt(oModule, "HenchPersistSpellID968", 0x412303C8);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_HEZROU_STENCH", 0x492303D5);
+        SetLocalInt(oModule, "HenchPersistSpellID981", 0x492303D5);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_GHAST_STENCH", 0x442303D6);
+        SetLocalInt(oModule, "HenchPersistSpellID982", 0x442303D6);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALLBLADE", 0x464F03DA);
+        SetLocalInt(oModule, "HenchPersistSpellID986", 0x464F03DA);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BLADE_BARRIER", 0x466F03DB);
+        SetLocalInt(oModule, "HenchPersistSpellID987", 0x466F03DB);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_BODY_SUN", 0x426703E9);
+        SetLocalInt(oModule, "HenchPersistSpellID1001", 0x426703E9);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_WALL_DISPEL_MAGIC", 0x45570409);
+        SetLocalInt(oModule, "HenchPersistSpellID1033", 0x45570409);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_GREAT_WALL_DISPEL_MAGIC", 0x4857040A);
+        SetLocalInt(oModule, "HenchPersistSpellID1034", 0x4857040A);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_REACH_TO_THE_BLAZE", 0x42670419);
+        SetLocalInt(oModule, "HenchPersistSpellID1049", 0x42670419);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_SHROUDING_FOG", 0x42C5041A);
+        SetLocalInt(oModule, "HenchPersistSpellID1050", 0x42C5041A);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_KELEMVORS_GRACE", 0x4161049F);
+        SetLocalInt(oModule, "HenchPersistSpellID1183", 0x4161049F);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_HELLFIRE_SHIELD", 0x416304A3);
+        SetLocalInt(oModule, "HenchPersistSpellID1187", 0x416304A3);
+        SetLocalInt(oModule, "HenchPersistTagVFX_PER_PRC_DARKNESS", 0x424506A8);
+        SetLocalInt(oModule, "HenchPersistSpellID1704", 0x424506A8);
+        SetLocalInt(oModule, "HenchPersistSpellID1722", 0x424506A8);
+        SetLocalInt(oModule, "HenchPersistTagVFX_MOB_PRC_CIRCEVIL", 0x434106AD);
+        SetLocalInt(oModule, "HenchPersistSpellID1709", 0x434106AD);
 
-		PS_SetLocalInt(oModule, sHenchPersistSpellInitialized, sHenchPersistSpellVersion);
+		SetLocalInt(oModule, sHenchPersistSpellInitialized, sHenchPersistSpellVersion);
 	}
 }
 
@@ -1873,7 +1871,7 @@ const string sHenchPersistSpellIDInfo = "HenchPersistSpellID";
 
 int HenchGetAoESpellInfo(object oAreaOfEffect)
 {
-	int result = PS_GetLocalInt(oAreaOfEffect, sHenchPersistTagInfo);
+	int result = GetLocalInt(oAreaOfEffect, sHenchPersistTagInfo);
 	if (result & HENCH_PERSIST_SPELL_FLAG)
 	{
 		return result;
@@ -1883,12 +1881,12 @@ int HenchGetAoESpellInfo(object oAreaOfEffect)
 	if (spellID > 0)
 	{	
 //		Jug_Debug(GetName(OBJECT_SELF) + " found persist spell id " + IntToString(spellID) + " for " + GetTag(oAreaOfEffect));
-		result = PS_GetLocalInt(oModule, sHenchPersistSpellIDInfo + IntToString(spellID));
+		result = GetLocalInt(oModule, sHenchPersistSpellIDInfo + IntToString(spellID));
 	}
 	if (!result)
 	{		
 		string sTag = GetTag(oAreaOfEffect);
-		result = PS_GetLocalInt(oModule, sHenchPersistTagInfo + sTag);
+		result = GetLocalInt(oModule, sHenchPersistTagInfo + sTag);
 		if (!result)
 		{
 			result = HENCH_PERSIST_SPELL_FLAG;
@@ -1899,14 +1897,14 @@ int HenchGetAoESpellInfo(object oAreaOfEffect)
 				if (iStrLen > 0)
 				{	
 					string sLookup = GetStringRight(sTag, iStrLen);
-					result = PS_GetLocalInt(oModule, sHenchPersistSpellIDInfo + sLookup);
+					result = GetLocalInt(oModule, sHenchPersistSpellIDInfo + sLookup);
 				}
 			}
 		}
 		if (result & HENCH_PERSIST_CHECK_HEARTBEAT)
 		{
 			sTag = GetStringLowerCase(GetEventHandler(oAreaOfEffect, SCRIPT_AOE_ON_HEARTBEAT));
-			int testResult = PS_GetLocalInt(oModule, sHenchPersistTagInfo + sTag);
+			int testResult = GetLocalInt(oModule, sHenchPersistTagInfo + sTag);
 			if (testResult)
 			{
 				result = testResult;
@@ -1914,7 +1912,7 @@ int HenchGetAoESpellInfo(object oAreaOfEffect)
 		}
 	}
 //	Jug_Debug(GetName(OBJECT_SELF) + " result for " + sTag + " is " + IntToHexString(result));
-	PS_SetLocalInt(oAreaOfEffect, sHenchPersistTagInfo, result);
+	SetLocalInt(oAreaOfEffect, sHenchPersistTagInfo, result);
 	return result;
 }
 
@@ -1936,18 +1934,18 @@ void CheckHealingListInit()
     while (GetIsObjectValid(oFriend))
     {	
 		int iBase = GetMaxHitPoints(oFriend);
-		int currentRegenerateAmount = PS_GetLocalInt(oFriend, regenerationRateStr);		
+		int currentRegenerateAmount = GetLocalInt(oFriend, regenerationRateStr);		
 		int iCurrent = GetCurrentHitPoints(oFriend) + currentRegenerateAmount * giRegenHealScaleAmount;		
 		float healthRatio = IntToFloat(iCurrent) / IntToFloat(iBase);			
 		if (healthRatio < gfHealingThreshold)
 		{
-			PS_SetLocalInt(oFriend, sHealingCurrentInfo, iCurrent); 
+			SetLocalInt(oFriend, sHealingCurrentInfo, iCurrent); 
 		}
 		else
 		{
-			PS_SetLocalInt(oFriend, sHealingCurrentInfo, iHealingNotNeeded); 
+			SetLocalInt(oFriend, sHealingCurrentInfo, iHealingNotNeeded); 
 		}		
-		oFriend = PS_GetLocalObject(oFriend, sAllyLineOfSight);
+		oFriend = GetLocalObject(oFriend, sAllyLineOfSight);
     }
 	
 	if (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_UNDEAD)

@@ -41,7 +41,7 @@ void main()
 	//Base DC 17
 	int nDC = GetSkillAdjustedTrapDC(17, oCaster, 4);
 	int nDuration = 5;
-    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_beetrap");
+    int nFire = GetLocalInt(OBJECT_SELF, "scod_beetrap");
     
 	effect eVis = EffectVisualEffect(VFX_FNF_GAS_EXPLOSION_NATURE);
 	effect eVis2 = ExtraordinaryEffect(EffectVisualEffect(VFX_DUR_SPELL_CREEPING_DOOM));
@@ -52,7 +52,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            PS_SetLocalInt(OBJECT_SELF, "scod_beetrap",TRUE);
+            SetLocalInt(OBJECT_SELF, "scod_beetrap",TRUE);
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_BEE_TRAP));
 			

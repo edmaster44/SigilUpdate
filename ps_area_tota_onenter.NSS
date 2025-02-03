@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("TotAEnterLock");
+ int iLock = GetGlobalInt("TotAEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("TotAEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("TotAEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_tota_noshteroth") == OBJECT_INVALID)
   {
@@ -90,6 +88,6 @@ void main()
   }  
   
 
-  PS_SetGlobalInt("TotAEnterLock", 0);
+  SetGlobalInt("TotAEnterLock", 0);
  }
 }

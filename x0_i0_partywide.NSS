@@ -197,10 +197,10 @@ void SetLocalStringOnAll(object oPC, string sVarname, string value)
 {
     object oPartyMem = GetFirstFactionMember(oPC, FALSE);
     while (GetIsObjectValid(oPartyMem)) {
-        PS_SetLocalString(oPartyMem, sVarname, value);
+        SetLocalString(oPartyMem, sVarname, value);
         oPartyMem = GetNextFactionMember(oPC, FALSE);
     }
-    //PS_SetLocalString(oPC, sVarname, value);
+    //SetLocalString(oPC, sVarname, value);
 }
 
 // Given a varname, value, and PC, sets the variable on 
@@ -210,10 +210,10 @@ void SetLocalIntOnAll(object oPC, string sVarname, int value)
 {
     object oPartyMem = GetFirstFactionMember(oPC, FALSE);
     while (GetIsObjectValid(oPartyMem)) {
-        PS_SetLocalInt(oPartyMem, sVarname, value);
+        SetLocalInt(oPartyMem, sVarname, value);
         oPartyMem = GetNextFactionMember(oPC, FALSE);
     }
-    //PS_SetLocalInt(oPC, sVarname, value);
+    //SetLocalInt(oPC, sVarname, value);
 }
 
 // Given a varname, value, and PC, sets the variable on 
@@ -223,10 +223,10 @@ void SetLocalFloatOnAll(object oPC, string sVarname, float value)
 {
     object oPartyMem = GetFirstFactionMember(oPC, FALSE);
     while (GetIsObjectValid(oPartyMem)) {
-        PS_SetLocalFloat(oPartyMem, sVarname, value);
+        SetLocalFloat(oPartyMem, sVarname, value);
         oPartyMem = GetNextFactionMember(oPC, FALSE);
     }
-    //PS_SetLocalFloat(oPC, sVarname, value);
+    //SetLocalFloat(oPC, sVarname, value);
 }
 
 // Given a varname, value, and PC, sets the variable on 
@@ -236,10 +236,10 @@ void SetLocalLocationOnAll(object oPC, string sVarname, location value)
 {
     object oPartyMem = GetFirstFactionMember(oPC, FALSE);
     while (GetIsObjectValid(oPartyMem)) {
-        PS_SetLocalLocation(oPartyMem, sVarname, value);
+        SetLocalLocation(oPartyMem, sVarname, value);
         oPartyMem = GetNextFactionMember(oPC, FALSE);
     }
-    //PS_SetLocalLocation(oPC, sVarname, value);
+    //SetLocalLocation(oPC, sVarname, value);
 }
 
 // Given a varname, value, and PC, sets the variable on 
@@ -249,10 +249,10 @@ void SetLocalObjectOnAll(object oPC, string sVarname, object value)
 {
     object oPartyMem = GetFirstFactionMember(oPC, FALSE);
     while (GetIsObjectValid(oPartyMem)) {
-        PS_SetLocalObject(oPartyMem, sVarname, value);
+        SetLocalObject(oPartyMem, sVarname, value);
         oPartyMem = GetNextFactionMember(oPC, FALSE);
     }
-    //PS_SetLocalObject(oPC, sVarname, value);
+    //SetLocalObject(oPC, sVarname, value);
 }
 
 

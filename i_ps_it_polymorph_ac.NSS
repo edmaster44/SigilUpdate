@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // i_ps_polymorph_ac
 
 /* Created by Dedic8ed 5/24/2010
@@ -19,8 +17,8 @@ void main()
     object oPC = GetItemActivator();
 	object oItem = GetItemActivated();
     object oTarget = oPC;
-	int nPoly = PS_GetLocalInt(oItem, "polymorph");
-	int nDuration = PS_GetLocalInt(oItem, "duration");
+	int nPoly = GetLocalInt(oItem, "polymorph");
+	int nDuration = GetLocalInt(oItem, "duration");
 	effect ePoly = EffectPolymorph(nPoly);
     effect eVis = EffectNWN2SpecialEffectFile("sp_enlarge_person_hit");
 

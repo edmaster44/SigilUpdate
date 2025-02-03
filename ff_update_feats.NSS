@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 		Feat Update Script by FlattedFifth, May 27, 2024
@@ -182,7 +180,7 @@ void GiveCreatureWeaponFinesse(object oPC){
 void AdjustAbilityScores(object oPC){
 	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (PS_GetLocalInt(oEss, "startability")){
+	if (GetLocalInt(oEss, "startability")){
 		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
 		return;
 	} else {

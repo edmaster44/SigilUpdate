@@ -55,9 +55,9 @@ void ActionCleanCheck()
 PrintString( "bar_onareaexit: ActionCleanCheck" );
 
 //:: Trash object additions:
-int iLock = PS_GetGlobalInt("CleanUpLock");
+int iLock = GetGlobalInt("CleanUpLock");
 if ( iLock == 0 ) {
-PS_SetGlobalInt("CleanUpLock", 1); // Only allows one clean up at a time.
+SetGlobalInt("CleanUpLock", 1); // Only allows one clean up at a time.
 PrintString( "bar_onareaexit: ActionCleanCheck: Inside lock" );
 
 //declarations
@@ -105,7 +105,7 @@ oItem = GetNextObjectInArea();
 }//end while
 }//end if PCinArea check
 
-PS_SetGlobalInt("CleanUpLock", 0);
+SetGlobalInt("CleanUpLock", 0);
 }
 }
 
@@ -124,7 +124,7 @@ if ( GetIsPC(oPC) && !GetIsDM(oPC)) { // Make sure is a PC.
 // Log character transition.
 PrintString( GetName(oPC) + "((" + GetPCPlayerName(oPC) + ")) exiting area " + GetName(OBJECT_SELF) );
 
-if (PS_GetLocalInt(oPC, "AutoSave") != 1) // 1 means do NOT save
+if (GetLocalInt(oPC, "AutoSave") != 1) // 1 means do NOT save
 {
 	if (CheckTimeStamp(oPC,"REST")>cSaveWait && CheckTimeStamp(GetModule(),"SAVE")>cModuleSaveWait)
 	{

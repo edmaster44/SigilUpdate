@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
     Companion and Monster AI
@@ -126,7 +124,7 @@ void HenchCheckBuff()
     if (saveType & HENCH_SPELL_SAVE_TYPE_NOTSELF_FLAG)
     {
 //  Jug_Debug(GetName(OBJECT_SELF) + " not self");
-        oFriend = PS_GetLocalObject(OBJECT_SELF, sTargetList);
+        oFriend = GetLocalObject(OBJECT_SELF, sTargetList);
     }
     else
     {
@@ -145,7 +143,7 @@ void HenchCheckBuff()
     {
 //		Jug_Debug("||" + GetName(OBJECT_SELF) + " testing buff target " + GetName(oFriend) + " spell " + IntToString(gsCurrentspInfo.spellID));
         int  skip;
-		if (PS_GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED)
+		if (GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED)
 		{
 			skip = TRUE;
 		}
@@ -166,7 +164,7 @@ void HenchCheckBuff()
                 if (effectTypes != 0)
                 {
 //					Jug_Debug("||" + GetName(OBJECT_SELF) + " testing buff target 3 " + GetName(oFriend) + " pos effects result " + IntToHexString(GetCreaturePosEffects(oFriend)));
-                    int maskResult = PS_GetLocalInt(oFriend, curPostiveEffectsStr) & effectTypes;
+                    int maskResult = GetLocalInt(oFriend, curPostiveEffectsStr) & effectTypes;
 //					Jug_Debug("||" + GetName(OBJECT_SELF) + " testing buff target " + GetName(oFriend) + " mask result " + IntToHexString(maskResult));
                     if (maskResult == effectTypes)
                     {
@@ -202,7 +200,7 @@ void HenchCheckBuff()
                 }
             }
         }
-        oFriend = PS_GetLocalObject(oFriend, sTargetList);
+        oFriend = GetLocalObject(oFriend, sTargetList);
         curLoopCount ++;
     }
 
@@ -226,12 +224,12 @@ void HenchInitMeleeAttackers()
         return;
     }
     gbMeleeTargetInit = 1;
-    PS_DeleteLocalObject(OBJECT_SELF, friendMeleeTargetStr);
-    PS_DeleteLocalFloat(OBJECT_SELF, friendMeleeTargetStr);
-	PS_DeleteLocalObject(OBJECT_SELF, friendMeleeWeaponTargetStr);
+    DeleteLocalObject(OBJECT_SELF, friendMeleeTargetStr);
+    DeleteLocalFloat(OBJECT_SELF, friendMeleeTargetStr);
+	DeleteLocalObject(OBJECT_SELF, friendMeleeWeaponTargetStr);
     float fDistanceThreshold = bgMeleeAttackers ? 5.0 : 20.0;
 
-    object oEnemy = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    object oEnemy = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
     while (GetIsObjectValid(oEnemy))
     {
         object oFriend = GetAttackTarget(oEnemy);		
@@ -250,54 +248,54 @@ void HenchInitMeleeAttackers()
                     {
                         break;
                     }
-                    oList = PS_GetLocalObject(oList, friendMeleeTargetStr);
+                    oList = GetLocalObject(oList, friendMeleeTargetStr);
                 }
                 float currentValue;
                 if (GetIsObjectValid(oList))
                 {
-                    currentValue = PS_GetLocalFloat(oFriend, friendMeleeTargetStr);
+                    currentValue = GetLocalFloat(oFriend, friendMeleeTargetStr);
                 }
                 else
                 {
-                    oList = PS_GetLocalObject(OBJECT_SELF, friendMeleeTargetStr);
-                    PS_SetLocalObject(oFriend, friendMeleeTargetStr, oList);
-                    PS_SetLocalObject(OBJECT_SELF, friendMeleeTargetStr, oFriend);
+                    oList = GetLocalObject(OBJECT_SELF, friendMeleeTargetStr);
+                    SetLocalObject(oFriend, friendMeleeTargetStr, oList);
+                    SetLocalObject(OBJECT_SELF, friendMeleeTargetStr, oFriend);
                     gbMeleeTargetInit ++;					
 					
-                	PS_DeleteLocalObject(oFriend, friendMeleeWeaponTargetStr);
+                	DeleteLocalObject(oFriend, friendMeleeWeaponTargetStr);
                 }
 				float meleeChance = Getd20ChanceLimited(GetBaseAttackBonus(oEnemy) +
                     GetAttackBonus(oEnemy, oFriend).attackBonus - GetAC(oFriend) + 21);
 //				Jug_Debug(GetName(OBJECT_SELF) + " enemy " + GetName(oEnemy) + " melee chance " + FloatToString(meleeChance));		
 				if (!GetWeaponRanged(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oEnemy)))
 				{
-					meleeChance *= (1.0 - PS_GetLocalFloat(oFriend, meleeConcealmentStr));				
-                	object oFirstEnemy = PS_GetLocalObject(oFriend, friendMeleeWeaponTargetStr);
-                	PS_SetLocalObject(oFriend, friendMeleeWeaponTargetStr, oEnemy);
-                	PS_SetLocalObject(oEnemy, friendMeleeWeaponTargetStr, oFirstEnemy);				
-                	PS_SetLocalFloat(oEnemy, friendMeleeWeaponTargetStr, meleeChance);
+					meleeChance *= (1.0 - GetLocalFloat(oFriend, meleeConcealmentStr));				
+                	object oFirstEnemy = GetLocalObject(oFriend, friendMeleeWeaponTargetStr);
+                	SetLocalObject(oFriend, friendMeleeWeaponTargetStr, oEnemy);
+                	SetLocalObject(oEnemy, friendMeleeWeaponTargetStr, oFirstEnemy);				
+                	SetLocalFloat(oEnemy, friendMeleeWeaponTargetStr, meleeChance);
 				}
 				else
 				{
-					meleeChance *= (1.0 - PS_GetLocalFloat(oFriend, rangedConcealmentStr));				
+					meleeChance *= (1.0 - GetLocalFloat(oFriend, rangedConcealmentStr));				
 				}
                 currentValue += (1.0 - currentValue) * meleeChance;
-                PS_SetLocalFloat(oFriend, friendMeleeTargetStr, currentValue);
+                SetLocalFloat(oFriend, friendMeleeTargetStr, currentValue);
                 if (oFriend == OBJECT_SELF)
                 {
                     gbIAmMeleeTarget++;
                 }
             }
         }
-        oEnemy = PS_GetLocalObject(oEnemy, sEnemyLineOfSight);
+        oEnemy = GetLocalObject(oEnemy, sEnemyLineOfSight);
     }
 //  Jug_Debug(GetName(OBJECT_SELF) + " found melee target friends " + IntToString(gbMeleeTargetInit));
 
 /*  object oFriend = OBJECT_SELF;
     while (GetIsObjectValid(oFriend))
     {
-        Jug_Debug(GetName(OBJECT_SELF) + " friend " + GetName(oFriend) + " is melee target chance " + FloatToString( PS_GetLocalFloat(oFriend, friendMeleeTargetStr)));
-        oFriend = PS_GetLocalObject(oFriend, friendMeleeTargetStr);
+        Jug_Debug(GetName(OBJECT_SELF) + " friend " + GetName(oFriend) + " is melee target chance " + FloatToString( GetLocalFloat(oFriend, friendMeleeTargetStr)));
+        oFriend = GetLocalObject(oFriend, friendMeleeTargetStr);
     }   */
 }
 
@@ -335,7 +333,7 @@ void HenchCheckACBuff()
 
     if (saveType & HENCH_SPELL_SAVE_TYPE_NOTSELF_FLAG)
     {
-        oFriend = PS_GetLocalObject(oFriend, friendMeleeTargetStr);
+        oFriend = GetLocalObject(oFriend, friendMeleeTargetStr);
     }
 
 //  Jug_Debug(GetName(OBJECT_SELF) + " checking ac buff " + IntToString(spellID) + " amount " + IntToString(amount) + " ac type " + IntToString(acType) + " weight " + FloatToString(effectWeight));
@@ -388,7 +386,7 @@ void HenchCheckACBuff()
 		}
         if (curACBonus > 1)
         {
-            float targetChance = PS_GetLocalFloat(oFriend, friendMeleeTargetStr);
+            float targetChance = GetLocalFloat(oFriend, friendMeleeTargetStr);
             if (oFriend == OBJECT_SELF && targetChance < 0.01)
             {
 //          Jug_Debug("||" + GetName(OBJECT_SELF) + " setting melee ac buff target " + GetName(oFriend) + " spell " + IntToString(spellID));
@@ -426,7 +424,7 @@ void HenchCheckACBuff()
         {
             break;
         }
-        oFriend = PS_GetLocalObject(oFriend, friendMeleeTargetStr);
+        oFriend = GetLocalObject(oFriend, friendMeleeTargetStr);
     }
     if (maxEffectWeight > 0.0)
     {
@@ -457,7 +455,7 @@ void HenchCheckDRBuff()
 
     if (saveType & HENCH_SPELL_SAVE_TYPE_NOTSELF_FLAG)
     {
-        oFriend = PS_GetLocalObject(oFriend, friendMeleeTargetStr);
+        oFriend = GetLocalObject(oFriend, friendMeleeTargetStr);
     }
 
 //	Jug_Debug(GetName(OBJECT_SELF) + " checking dr buff " + IntToString(gsCurrentspInfo.spellID) + " weight " + FloatToString(effectWeight));
@@ -466,7 +464,7 @@ void HenchCheckDRBuff()
     {
         if (!(GetCreaturePosEffects(oFriend) & HENCH_EFFECT_TYPE_DAMAGE_REDUCTION))
         {
-            float targetChance = PS_GetLocalFloat(oFriend, friendMeleeTargetStr);
+            float targetChance = GetLocalFloat(oFriend, friendMeleeTargetStr);
             if (oFriend == OBJECT_SELF && targetChance < 0.01)
             {
 //				Jug_Debug("||" + GetName(OBJECT_SELF) + " setting melee ac buff target " + GetName(oFriend) + " spell " + IntToString(gsCurrentspInfo.spellID));
@@ -502,7 +500,7 @@ void HenchCheckDRBuff()
         {
             break;
         }
-        oFriend = PS_GetLocalObject(oFriend, friendMeleeTargetStr);
+        oFriend = GetLocalObject(oFriend, friendMeleeTargetStr);
     }
     if (maxEffectWeight > 0.0)
     {
@@ -544,7 +542,7 @@ void HenchCheckSpellProtections()
             // adjust for compassion
             maxEffectWeight *= gfBuffOthersWeight;
         }
-		if ((GetDistanceToObject(oFriend) <= fRange) && !(PS_GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED))
+		if ((GetDistanceToObject(oFriend) <= fRange) && !(GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED))
 		{
 	        if (protMask == 0)
 	        {
@@ -563,7 +561,7 @@ void HenchCheckSpellProtections()
 	            }
 	        }
 		}
-        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+        oFriend = GetLocalObject(oFriend, sAllySeen);
         curLoopCount ++;
     }
     if (GetIsObjectValid(oBestTarget))
@@ -665,7 +663,7 @@ void HenchMeleeAttackBuff()
 	            }
 	        }
 		}
-        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+        oFriend = GetLocalObject(oFriend, sAllySeen);
         curLoopCount ++;
     }
 
@@ -798,7 +796,7 @@ void HenchCheckElementalShield()
 	
 	float curEffectWeight;
 	
-	object oEnemy = PS_GetLocalObject(OBJECT_SELF, friendMeleeWeaponTargetStr);
+	object oEnemy = GetLocalObject(OBJECT_SELF, friendMeleeWeaponTargetStr);
 	if (GetIsObjectValid(oEnemy))
 	{
 		int spellLevel = gsCurrentspInfo.spellLevel;
@@ -814,10 +812,10 @@ void HenchCheckElementalShield()
 			int testCount = (GetBaseAttackBonus(oEnemy) / 7 + 1) * 3;	
 			float damageAmount = GetDamageResistImmunityAdjustment(oEnemy, spellDamageAmount * testCount, spellDamageType, testCount);
 			float damageWeight = CalculateDamageWeight(damageAmount, oEnemy);
-			curEffectWeight += damageWeight * GetThreatRating(oEnemy) * PS_GetLocalFloat(oEnemy, friendMeleeWeaponTargetStr);
-//			Jug_Debug(GetName(OBJECT_SELF) + " cur dam weight " + FloatToString(curEffectWeight) + " damage weight " + FloatToString(damageWeight) + " damage amount " + FloatToString(damageAmount) + " attack chance " + FloatToString(PS_GetLocalFloat(OBJECT_SELF, friendMeleeWeaponTargetStr)));	
+			curEffectWeight += damageWeight * GetThreatRating(oEnemy) * GetLocalFloat(oEnemy, friendMeleeWeaponTargetStr);
+//			Jug_Debug(GetName(OBJECT_SELF) + " cur dam weight " + FloatToString(curEffectWeight) + " damage weight " + FloatToString(damageWeight) + " damage amount " + FloatToString(damageAmount) + " attack chance " + FloatToString(GetLocalFloat(OBJECT_SELF, friendMeleeWeaponTargetStr)));	
 		
-			oEnemy = PS_GetLocalObject(oEnemy, friendMeleeWeaponTargetStr);			
+			oEnemy = GetLocalObject(oEnemy, friendMeleeWeaponTargetStr);			
 		} while (GetIsObjectValid(oEnemy));
 		
 		curEffectWeight += HenchGetEnergyImmunityWeight(OBJECT_SELF, GetCurrentSpellSaveType());
@@ -859,7 +857,7 @@ void HenchCheckEnergyProt()
 				oBestTarget = oFriend;
 	        }
 		}
-        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+        oFriend = GetLocalObject(oFriend, sAllySeen);
         curLoopCount ++;
     }	
 	if (maxEffectWeight > 0.0)
@@ -1088,7 +1086,7 @@ void HenchCheckAttrBuff()
 			    }
             }
         }
-		oFriend = PS_GetLocalObject(oFriend, sTargetList);
+		oFriend = GetLocalObject(oFriend, sTargetList);
 		curLoopCount ++;
     }
 
@@ -1176,7 +1174,7 @@ void HenchCheckSummons()
 void HenchCheckProtEvil()
 {
 //Jug_Debug(GetName(OBJECT_SELF) + " putting in prot evil");
-    object oBestEnemy = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    object oBestEnemy = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
     if (gbDoingBuff ||
         (GetIsObjectValid(oBestEnemy) && (GetAlignmentGoodEvil(oBestEnemy) == ALIGNMENT_EVIL)))
     {
@@ -1188,7 +1186,7 @@ void HenchCheckProtEvil()
 
 void HenchCheckProtGood()
 {
-    object oBestEnemy = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    object oBestEnemy = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
     if (GetIsObjectValid(oBestEnemy) && (GetAlignmentGoodEvil(oBestEnemy) == ALIGNMENT_GOOD))
     {
         HenchCheckBuff();
@@ -1446,7 +1444,7 @@ void HenchCheckWeaponBuff()
                 }
             }
         }
-        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+        oFriend = GetLocalObject(oFriend, sAllySeen);
         curLoopCount ++;
     }
 
@@ -1508,7 +1506,7 @@ void HenchCheckPolymorph()
     	HenchInitMeleeAttackers();
 		if (gbIAmMeleeTarget)
 		{
-            float targetChance = PS_GetLocalFloat(OBJECT_SELF, friendMeleeTargetStr);
+            float targetChance = GetLocalFloat(OBJECT_SELF, friendMeleeTargetStr);
             if (targetChance >= 0.01)
 			{
 //				Jug_Debug("||" + GetName(OBJECT_SELF) + " testing dr buff target " + GetName(OBJECT_SELF) + " spell " + IntToString(spellID));
@@ -1555,11 +1553,11 @@ void HenchCheckConcealment(float fConcealAmount, float fWeight)
 	
     while (GetIsObjectValid(oFriend))
     {	
-        float curConcealment = fConcealAmount - PS_GetLocalFloat(oFriend, rangedConcealmentStr);
+        float curConcealment = fConcealAmount - GetLocalFloat(oFriend, rangedConcealmentStr);
 		
         if (curConcealment > 0.15)
         {
-            float targetChance = PS_GetLocalFloat(oFriend, friendMeleeTargetStr);
+            float targetChance = GetLocalFloat(oFriend, friendMeleeTargetStr);
 //          Jug_Debug("||" + GetName(OBJECT_SELF) + " testing ac buff target " + GetName(oFriend) + " spell " + IntToString(spellID));
 			float curEffectWeight = fWeight * curConcealment * targetChance;
 
@@ -1586,7 +1584,7 @@ void HenchCheckConcealment(float fConcealAmount, float fWeight)
         {
             break;
         }
-        oFriend = PS_GetLocalObject(oFriend, friendMeleeTargetStr);
+        oFriend = GetLocalObject(oFriend, friendMeleeTargetStr);
     }
     if (maxEffectWeight > 0.0)
     {
@@ -1612,7 +1610,7 @@ void HenchConcealment()
 			if (!GetActionMode(OBJECT_SELF, ACTION_MODE_STEALTH))
 	        {
 	            HenchInitMeleeAttackers();
-	            if (gbIAmMeleeTarget && (PS_GetLocalFloat(OBJECT_SELF, friendMeleeTargetStr) > 0.5))
+	            if (gbIAmMeleeTarget && (GetLocalFloat(OBJECT_SELF, friendMeleeTargetStr) > 0.5))
 	            {
 	                giDarknessCheck = HENCH_DARKNESS_CHECK_ENABLE;
 	            }
@@ -1753,7 +1751,7 @@ void HenchCheckInvisibility()
 			{
 				saveDC = GetCurrentSpellSaveDC(gsCurrentspInfo.spellInfo & HENCH_SPELL_INFO_ITEM_FLAG, 1);
 			}
-			object oTarget = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+			object oTarget = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
 			if (!GetIsObjectValid(oTarget))
 			{			
 				oTarget = ogClosestSeenOrHeardEnemy;

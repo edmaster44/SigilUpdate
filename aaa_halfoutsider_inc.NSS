@@ -45,7 +45,7 @@ void PS_OutsiderBloodlineCelestial(object oPC, int nSpell)
 
 void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 {
-	string sFiend		= PS_GetLocalString(oItem, "Planar");
+	string sFiend		= GetLocalString(oItem, "Planar");
 	int nOldECL 		= PS_GetEssenceECL(oPC);
 	int iOutsider 		= 0;
 	int iNewECL;
@@ -53,22 +53,22 @@ void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 	
 	if (PS_OutsiderLevels(oPC) > 0)
 	{	iOutsider = PS_OutsiderLevels(oPC);	}
-{	PS_SetLocalString(oItem, "Planar", "HalfFiend"); }
+{	SetLocalString(oItem, "Planar", "HalfFiend"); }
 
 	//if (sFiend != "HalfFiend")
 	//{	if (iOutsider != 0)
 		//{	iNewECL = nOldECL + 3;
 			//sNewECL = IntToString(iNewECL);
-			//PS_SetLocalInt(oItem, "OldECL", nOldECL);
-			//PS_SetLocalString(oPC, "ECL", sNewECL);
-			//PS_SetLocalString(oItem, "ECL", sNewECL);
-			//PS_SetLocalString(oItem, "Planar", "HalfFiend");	}
+			//SetLocalInt(oItem, "OldECL", nOldECL);
+			//SetLocalString(oPC, "ECL", sNewECL);
+			//SetLocalString(oItem, "ECL", sNewECL);
+			//SetLocalString(oItem, "Planar", "HalfFiend");	}
 	//}	
 }
 
 void PS_HO_PlanarHeritageCelestial(object oPC, object oItem)
 {
-	string sCelest	= PS_GetLocalString(oItem, "Planar");
+	string sCelest	= GetLocalString(oItem, "Planar");
 	int nOldECL 	= PS_GetEssenceECL(oPC);
 	int iOutsider 	= 0;
 	int iNewECL;
@@ -76,16 +76,16 @@ void PS_HO_PlanarHeritageCelestial(object oPC, object oItem)
 	
 	if (PS_OutsiderLevels(oPC) > 0)
 	{	iOutsider = PS_OutsiderLevels(oPC);	}
-	PS_SetLocalString(oItem, "Planar", "HalfCelestial");
+	SetLocalString(oItem, "Planar", "HalfCelestial");
 
 	//if (sCelest != "HalfCelestial")
 	//{	if (iOutsider != 0)
 		//{	iNewECL = nOldECL + 3;
 			//sNewECL = IntToString(iNewECL);
-			//PS_SetLocalInt(oItem, "OldECL", nOldECL);
-			//PS_SetLocalString(oPC, "ECL", sNewECL);
-			//PS_SetLocalString(oItem, "ECL", sNewECL);
-			//PS_SetLocalString(oItem, "Planar", "HalfCelestial");	}
+			//SetLocalInt(oItem, "OldECL", nOldECL);
+			//SetLocalString(oPC, "ECL", sNewECL);
+			//SetLocalString(oItem, "ECL", sNewECL);
+			//SetLocalString(oItem, "Planar", "HalfCelestial");	}
 	//}
 }
 
@@ -147,11 +147,11 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	int nLevel = PS_OutsiderLevels(oPC);
 	int nOrigin = GetRacialType(oPC);
 	int nOriSub = GetSubRace(oPC);
-	int iWings = PS_GetLocalInt(oItem, "DarkFlight");
-	int iHasBonus = PS_GetLocalInt(oItem, "HO1");
+	int iWings = GetLocalInt(oItem, "DarkFlight");
+	int iHasBonus = GetLocalInt(oItem, "HO1");
 	
 	if(GetIsObjectValid(oItem))
-	{	sHeritage = PS_GetLocalString(oItem, "Planar");	}
+	{	sHeritage = GetLocalString(oItem, "Planar");	}
 	else
 	{	SendMessageToPC(oPC, "You appear to be missing your Essence. Unable to access Planar Heritage. Contact a member of staff.");	}
 
@@ -165,11 +165,11 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	
 	if (GetRacialType(oPC) != RACIAL_TYPE_OUTSIDER)
 	{	if (nLevel >= 6)
-		{	PS_SetLocalString(oItem, "Template", "HalfOutsider");
-			PS_SetLocalInt(oItem, "OldRace", nOrigin);
-			PS_SetLocalInt(oItem, "OldSubrace", nOriSub);
-			PS_SetLocalString(oItem, "RaceChange", "Outsider");
-			PS_SetLocalInt(oItem, "TemplateFix", 0);
+		{	SetLocalString(oItem, "Template", "HalfOutsider");
+			SetLocalInt(oItem, "OldRace", nOrigin);
+			SetLocalInt(oItem, "OldSubrace", nOriSub);
+			SetLocalString(oItem, "RaceChange", "Outsider");
+			SetLocalInt(oItem, "TemplateFix", 0);
 			PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);
 			PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_OUTSIDER);	}	}
 			
@@ -181,7 +181,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	AddScriptParameterString("");
 	ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
-	PS_SetLocalInt(oItem, "HO1", 1);
+	SetLocalInt(oItem, "HO1", 1);
 	
 /*	if (iWings == 1 && !GetHasFeat(2120, oPC))
 	{	FeatAdd(oPC, 2120, FALSE);	}		
@@ -192,7 +192,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
 	if (GetHasFeat(2556, oPC))
-	{	PS_SetLocalInt(oItem, "SupSight", 1);	} */
+	{	SetLocalInt(oItem, "SupSight", 1);	} */
 }
 
 void PS_HOM_FiendishSmiting(object oPC, int nSpell)
@@ -315,7 +315,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 void PS_RunRuptureOngoing(object oTarget, int nCasterLevel)
 {
 	int nHP				= GetCurrentHitPoints(oTarget);
-	int nRuptureHP		= PS_GetLocalInt(oTarget, "RuptureHP");
+	int nRuptureHP		= GetLocalInt(oTarget, "RuptureHP");
 	
 	int nOngoing		= d6(1);
 	int nSaveDC			= 10 + nCasterLevel;
@@ -331,7 +331,7 @@ void PS_RunRuptureOngoing(object oTarget, int nCasterLevel)
 		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(1));
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eStunIcon, oTarget);	}
 		if (!GetIsSkillSuccessful(oTarget, SKILL_HEAL, nSaveDC))
-		{	PS_SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
+		{	SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
 			PS_RunRuptureOngoing(oTarget, nSaveDC);	}
 	}
 }
@@ -359,7 +359,7 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
     			eRupture	= EffectLinkEffects(eRupture, eImpact);
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRupture, oTarget);
 				if (nSave == 0)
-				{	PS_SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
+				{	SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
 					DelayCommand(1.0f, PS_RunRuptureOngoing(oTarget, nCasterLevel));	}
 
             }
@@ -668,7 +668,7 @@ void PS_HOM_Resurrection(object oPC, int nSpell, object oTarget)
             ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));	}
         else
         {   if (GetObjectType(oTarget) == OBJECT_TYPE_PLACEABLE)
-            {	int nStrRef = PS_GetLocalInt(oTarget,"X2_L_RESURRECT_SPELL_MSG_RESREF");
+            {	int nStrRef = GetLocalInt(oTarget,"X2_L_RESURRECT_SPELL_MSG_RESREF");
                 if (nStrRef == 0)
                 {	nStrRef = 83861;	}
                 if (nStrRef != -1)
@@ -715,7 +715,7 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	int nLevel	= GetHitDice(oPC);
 	
 	if(GetIsObjectValid(oItem))
-	{	sHeritage = PS_GetLocalString(oItem, "Planar");	}
+	{	sHeritage = GetLocalString(oItem, "Planar");	}
 	else
 	{	SendMessageToPC(oPC, "You appear to be missing your Essence. Unable to access Planar Heritage. Contact a member of staff.");	}
 

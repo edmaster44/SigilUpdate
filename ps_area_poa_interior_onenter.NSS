@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -16,7 +14,7 @@ void main()
 ("PoAInteriorEnterLock");
 	if ( iLock == 0 )
  	{
-	  PS_SetGlobalInt("PoAInteriorEnterLock", 1); 
+	  SetGlobalInt("PoAInteriorEnterLock", 1); 
 	  // Only allows one clean up at a time.
 
 if(GetObjectByTag("poa_npc18") == OBJECT_INVALID)
@@ -142,6 +140,6 @@ if(GetObjectByTag("poa_npc70") == OBJECT_INVALID)
 
 
 
-PS_SetGlobalInt("PoAInteriorEnterLock", 0);
+SetGlobalInt("PoAInteriorEnterLock", 0);
   	}
 }

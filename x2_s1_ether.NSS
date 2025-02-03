@@ -49,7 +49,7 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
-	if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+	if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 	{
 		SendMessageToPC(oTarget, "A Dimensional Anchor makes it impossible to teleport.");
 		return;	

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ginc_param_const"
 
 string GetPCID(object oPC)
@@ -54,15 +52,15 @@ void main()
 
 	ClearListBox(oPC,"KEMO_STORAGE","KEMO_STORAGE_RETRIEVE");
 
-	if ( PS_GetLocalString(oPC, "kemo_storage_mode") != "retrieve" )
+	if ( GetLocalString(oPC, "kemo_storage_mode") != "retrieve" )
 	{
-		PS_SetLocalInt(oPC, "kemo_storage_page", 1);
-		PS_SetLocalString(oPC, "kemo_storage_mode", "retrieve");
+		SetLocalInt(oPC, "kemo_storage_page", 1);
+		SetLocalString(oPC, "kemo_storage_mode", "retrieve");
 	}
 
-	string sFilter = GetStringUpperCase(PS_GetLocalString(oPC,"StorageFilter"));
+	string sFilter = GetStringUpperCase(GetLocalString(oPC,"StorageFilter"));
 	
-	int page = PS_GetLocalInt(oPC, "kemo_storage_page");
+	int page = GetLocalInt(oPC, "kemo_storage_page");
 	if (page < 1) page = 1;
 	
 	int resultCount = 0;
@@ -108,5 +106,5 @@ void main()
 	if (pageCount == 0 && page == 1) SetGUIObjectHidden(oPC,"KEMO_STORAGE","PagePane",TRUE);
 	else SetGUIObjectText(oPC,"KEMO_STORAGE","ItemsOfTotal",-1,sItemOfTotal);
 	
-	PS_SetLocalInt(oPC, "kemo_storage_list_size", resultCount);
+	SetLocalInt(oPC, "kemo_storage_list_size", resultCount);
 }

@@ -45,11 +45,11 @@ void main() {
 	
 	//Set up object and variables
 	object oRainbow = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_rainbow", lTarget);
-	PS_SetLocalObject(oCaster, "rainbow_dweomer", oRainbow);
-	PS_SetLocalObject(oRainbow, "Caster", oCaster);
+	SetLocalObject(oCaster, "rainbow_dweomer", oRainbow);
+	SetLocalObject(oRainbow, "Caster", oCaster);
 	PS_Timestamp_UNIX(oRainbow, "Rainbow_Timestamp");
-	PS_SetLocalInt(oRainbow, "Duration", nDuration);
-	PS_SetLocalInt(oRainbow, "SaveDC", GetSpellSaveDC());
+	SetLocalInt(oRainbow, "Duration", nDuration);
+	SetLocalInt(oRainbow, "SaveDC", GetSpellSaveDC());
 	
 	DelayCommand(0.3f, AddHenchman(oCaster, oRainbow));
 }

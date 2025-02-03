@@ -1,9 +1,7 @@
-#include "ff_safevar"
-
 void main ()
 {
 	object oPC = GetEnteringObject();
-	int nStatus = PS_GetLocalInt(oPC, "dr_"+GetTag(OBJECT_SELF));
+	int nStatus = GetLocalInt(oPC, "dr_"+GetTag(OBJECT_SELF));
 	object oDoor = GetNearestObjectByTag("dr_"+GetTag(OBJECT_SELF));
 	if (nStatus != 1 && GetIsObjectValid(oDoor))
 	{
@@ -22,7 +20,7 @@ void main ()
 		else
 		{
 			SendMessageToPC(oPC, "Wisdom Roll: "+IntToString(nWis)+"+"+IntToString(nRoll)+"="+IntToString(nWis+nRoll)+" Failure.");
-			PS_SetLocalInt(oPC, "dr_"+GetTag(OBJECT_SELF), 1);
+			SetLocalInt(oPC, "dr_"+GetTag(OBJECT_SELF), 1);
 		}
 	}
 }

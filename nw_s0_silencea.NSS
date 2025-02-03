@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: Silence: On Enter
 //:: NW_S0_SilenceA.nss
@@ -57,8 +55,8 @@ void main()
         SignalEvent( oTarget, EventSpellCastAt(oCaster, SPELL_SILENCE, FALSE) );
 		//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 	}
-	if(!PS_GetLocalInt(oTarget, EVENFLW_SILENCE))
-		PS_SetLocalObject(oTarget, EVENFLW_SILENCE, OBJECT_SELF);
+	if(!GetLocalInt(oTarget, EVENFLW_SILENCE))
+		SetLocalObject(oTarget, EVENFLW_SILENCE, OBJECT_SELF);
 	else 
-		PS_SetLocalObject(oTarget, EVENFLW_SILENCE, OBJECT_INVALID);
+		SetLocalObject(oTarget, EVENFLW_SILENCE, OBJECT_INVALID);
 }

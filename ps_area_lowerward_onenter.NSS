@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_achievements"
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("LowerwardEnterLock");
+ int iLock = GetGlobalInt("LowerwardEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("LowerwardEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("LowerwardEnterLock", 1); // Only allows one clean up at a time.
   
   if(GetObjectByTag("ps_atcorpse_01") == OBJECT_INVALID)
   {
@@ -211,6 +209,6 @@ void main()
   
   DelayCommand(7.0f, CheckToutAchievement(oPC));
   
-  PS_SetGlobalInt("LowerwardEnterLock", 0);
+  SetGlobalInt("LowerwardEnterLock", 0);
  }
 }

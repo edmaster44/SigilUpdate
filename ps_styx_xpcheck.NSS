@@ -42,8 +42,8 @@ void main()
 	
 	} else {
 		object oSpeaker = GetLastSpeaker();
-		sDMXP = IntToString(PS_GetLocalInt(oSpeaker, sID+"dm"));
-		sRPXP = IntToString(PS_GetLocalInt(oSpeaker, sID+"rp"));
+		sDMXP = IntToString(GetLocalInt(oSpeaker, sID+"dm"));
+		sRPXP = IntToString(GetLocalInt(oSpeaker, sID+"rp"));
 		
 	}
 		SetCustomToken(4001, sRPXP);
@@ -128,7 +128,7 @@ void UpdatePCID(object oPC) {
 	if (SQLFetch() != SQL_ERROR) {
 		int nID = StringToInt(SQLGetData(1));
 		
-		PS_SetLocalInt(oItem,"ID",nID);
-		PS_SetLocalInt(oPC,"ID",nID);
+		SetLocalInt(oItem,"ID",nID);
+		SetLocalInt(oPC,"ID",nID);
 	}
 }

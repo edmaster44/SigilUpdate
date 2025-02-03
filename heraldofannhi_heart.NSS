@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 #include "aaa_constants"
 
@@ -100,7 +98,7 @@ void FinalChampions(object oBOSS)
 
 void CallChampions(object oBOSS)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
 	int nRANDOM = Random(3);
 	object oPORTAL = GetObjectByTag("wp_herald_annhi", nRANDOM);
 	object oCHAMP = CreateObject(OBJECT_TYPE_CREATURE, "heraldannhi_add", GetLocation(oPORTAL), TRUE);
@@ -112,8 +110,8 @@ void CallChampions(object oBOSS)
 
 void ShockWave(object oBOSS)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
 	location lBOSS = GetLocation(oBOSS);
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_AOE_ETHEREAL_PURGE), oBOSS);
@@ -139,8 +137,8 @@ void ShockWave(object oBOSS)
 
 void SharePain(object oBOSS)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
 	float fDUR = RoundsToSeconds(1);
 	location lBOSS = GetLocation(oBOSS);
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
@@ -162,7 +160,7 @@ void SharePain(object oBOSS)
 
 void SoulFire(object oBOSS, int nPHASE)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
 	location lBOSS = GetLocation(oBOSS);
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
 	int nDMG;
@@ -222,7 +220,7 @@ void FontsOfLife(object oBOSS, int nPHASE)
 
 void BurstLife(object oBOSS)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
 	location lBOSS = GetLocation(oBOSS);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_AOE_CONJURATION), oBOSS);
 	effect eDIS = EffectSlow();
@@ -257,8 +255,8 @@ void AnnounceNova(object oBOSS)
 
 void CleanseNova(object oBOSS, int nPHASE)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
 	int nDMG;
 	int nFONT;
 	object oFONT = GetObjectByTag("heraldannhi_font", nFONT);
@@ -299,7 +297,7 @@ void CleanseNova(object oBOSS, int nPHASE)
 
 void TotalDarkness(object oBOSS)
 {
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_AOE_CRADLE_OF_RIME), oBOSS);
 	float fDUR = RoundsToSeconds(1);
 	effect eDARK = EffectDarkness();
@@ -320,8 +318,8 @@ void TotalDarkness(object oBOSS)
 
 void CueWarning(object oBOSS, int nPHASE, int nTYPE)
 {	
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
-	int nORDER = PS_GetLocalInt(oBOSS, "BOSS_FINAL_ORDER");
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
+	int nORDER = GetLocalInt(oBOSS, "BOSS_FINAL_ORDER");
 	int nVFX = -1;
 	switch (nPHASE)
 	{
@@ -360,7 +358,7 @@ void CueWarning(object oBOSS, int nPHASE, int nTYPE)
 
 void ExecuteSpecial(object oBOSS, int nPHASE, int nTYPE)
 {
-	int nORDER = PS_GetLocalInt(oBOSS, "BOSS_FINAL_ORDER");
+	int nORDER = GetLocalInt(oBOSS, "BOSS_FINAL_ORDER");
 	float fDELAY = RoundsToSeconds(1);
 	switch (nPHASE)
 	{
@@ -379,9 +377,9 @@ void ExecuteSpecial(object oBOSS, int nPHASE, int nTYPE)
 		case 3:
 			if (nTYPE == 1) switch (nORDER)
 			{
-				case 0: ShockWave(oBOSS); PS_SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", nORDER + 1); break;
-				case 1: SharePain(oBOSS); PS_SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", nORDER + 1); break;
-				case 2: CleanseNova(oBOSS, nPHASE); PS_SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", 0); break;
+				case 0: ShockWave(oBOSS); SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", nORDER + 1); break;
+				case 1: SharePain(oBOSS); SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", nORDER + 1); break;
+				case 2: CleanseNova(oBOSS, nPHASE); SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", 0); break;
 			}
 			else TotalDarkness(oBOSS);
 	}
@@ -389,7 +387,7 @@ void ExecuteSpecial(object oBOSS, int nPHASE, int nTYPE)
 
 void BeginPhase(object oBOSS, int nPHASE)
 {
-	PS_SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
+	SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
 	ResetFight(oBOSS, TRUE);
 	DelayCommand(3.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(1), oBOSS));
 	float fDELAY = RoundsToSeconds(1);
@@ -413,7 +411,7 @@ void BeginPhase(object oBOSS, int nPHASE)
 void main()
 {
 	object oBOSS = OBJECT_SELF;
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
 	int nHP = GetCurrentHitPoints(oBOSS);
 	int nMAX = GetMaxHitPoints(oBOSS);
 	if (GetIsInCombat(oBOSS) == FALSE)
@@ -425,21 +423,21 @@ void main()
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oBOSS);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nBHP), oBOSS);
 		}
-		if ((nHP == nMAX)&&(PS_GetLocalInt(oBOSS, "BOSS_PHASE_STARTED") == 0)) return;
+		if ((nHP == nMAX)&&(GetLocalInt(oBOSS, "BOSS_PHASE_STARTED") == 0)) return;
 		ResetFight(oBOSS, FALSE);
 		ForceRest(oBOSS);
-		PS_SetLocalInt(oBOSS, "BOSS_PHASE", 0);
-		PS_SetLocalInt(oBOSS, "BOSS_PHASE_STARTED", 0);
-		PS_SetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE", 0);
-		PS_SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", 0);
-		PS_SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
+		SetLocalInt(oBOSS, "BOSS_PHASE", 0);
+		SetLocalInt(oBOSS, "BOSS_PHASE_STARTED", 0);
+		SetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE", 0);
+		SetLocalInt(oBOSS, "BOSS_FINAL_ORDER", 0);
+		SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
 		object oCENTER = GetObjectByTag("wp_herald_center");
 		AssignCommand(oBOSS, ActionJumpToObject(oCENTER));
 		ChangeToStandardFaction(oBOSS, STANDARD_FACTION_HOSTILE);
 		return;
 	}
 	float fSWITCH;
-	int nPHASE = PS_GetLocalInt(oBOSS, "BOSS_PHASE");
+	int nPHASE = GetLocalInt(oBOSS, "BOSS_PHASE");
 	switch (nPHASE)
 	{
 		case 0: fSWITCH = 0.75; break;
@@ -449,19 +447,19 @@ void main()
 	float fHEALTH = (IntToFloat(nHP))/(IntToFloat(nMAX));
 	if (fHEALTH <= fSWITCH)
 	{
-		PS_SetLocalInt(oBOSS, "BOSS_PHASE", nPHASE + 1);
+		SetLocalInt(oBOSS, "BOSS_PHASE", nPHASE + 1);
 		nPHASE = nPHASE + 1;
 	}
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_STARTED") < nPHASE + 1)
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_STARTED") < nPHASE + 1)
 	{
 		BeginPhase(oBOSS, nPHASE + 1);
-		PS_SetLocalInt(oBOSS, "BOSS_PHASE_STARTED", nPHASE + 1);
-		PS_SetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE", 1);
-		DelayCommand(RoundsToSeconds(1), PS_SetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE", 0));
+		SetLocalInt(oBOSS, "BOSS_PHASE_STARTED", nPHASE + 1);
+		SetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE", 1);
+		DelayCommand(RoundsToSeconds(1), SetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE", 0));
 		return;
 	}
-	if (PS_GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
-	int nSPECIAL = PS_GetLocalInt(oBOSS, "BOSS_SPECIAL");
+	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
+	int nSPECIAL = GetLocalInt(oBOSS, "BOSS_SPECIAL");
 	switch (nSPECIAL)
 	{
 		case 0: CueWarning(oBOSS, nPHASE, 1); break;
@@ -469,6 +467,6 @@ void main()
 		case 2: CueWarning(oBOSS, nPHASE, 2); break;
 		case 3: ExecuteSpecial(oBOSS, nPHASE, 2); break;
 	}
-	if (nSPECIAL < 3) PS_SetLocalInt(oBOSS, "BOSS_SPECIAL", nSPECIAL + 1);
-	else PS_SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
+	if (nSPECIAL < 3) SetLocalInt(oBOSS, "BOSS_SPECIAL", nSPECIAL + 1);
+	else SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
 }

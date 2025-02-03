@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "dethia_shop_sys"
 
 void UpdateItem(object oItem, object oPC);
@@ -8,7 +6,7 @@ void main() {
 
 	object oPC = GetLastUsedBy();
 	
-	string sTarget = PS_GetLocalString(OBJECT_SELF, "TARGET");
+	string sTarget = GetLocalString(OBJECT_SELF, "TARGET");
 	if (sTarget == "")
 		sTarget = "item_addition_chest";
 

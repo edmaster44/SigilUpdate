@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_conv_def - DM Friendly Initiative -  Defines DM Conversation Tokens
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -13,7 +11,7 @@ void main()
 {
 object oTool = OBJECT_SELF;
 int n;
-PS_SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
+SetLocalObject(oTool, "DLG_HOLDER", oTool);  // Required for new CTDS functions
 ///////////////////////////// INTRODUCTION PAGE ////////////////////////////////
 
 //////////////////////////////////// TARGET_MUSIC PAGE /////////////////////////
@@ -108,7 +106,7 @@ DMFI_BuildLanguageDMList(oTool);
 ///////////////////////////////////// DURATION VALUE PAGE //////////////////////////
 
 DMFI_AddPage(oTool, PG_LIST_DURATIONS);
-PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_DURATIONS);
+SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_DURATIONS);
 AddReplyLinkInt("5", "", -1, 5);
 AddReplyLinkInt("10", "", -1, 10);
 AddReplyLinkInt("20", "", -1, 20);

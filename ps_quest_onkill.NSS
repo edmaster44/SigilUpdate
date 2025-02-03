@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //A script for incrementing journal entries on kill
 //Ideally this should be called from the default ondeath script
 //by setting the DeathScript variable on the creature to this script
@@ -15,11 +13,11 @@ void main () {
    		oPC=GetMaster(oPC);
    	}
 
-	string sQuest = PS_GetLocalString(OBJECT_SELF, "Quest_Tag");
-	int nCurrent = PS_GetLocalInt(OBJECT_SELF, "Quest_Stage_Required");
-	int nStage = PS_GetLocalInt(OBJECT_SELF, "Quest_Stage");
+	string sQuest = GetLocalString(OBJECT_SELF, "Quest_Tag");
+	int nCurrent = GetLocalInt(OBJECT_SELF, "Quest_Stage_Required");
+	int nStage = GetLocalInt(OBJECT_SELF, "Quest_Stage");
 	
-	int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuest);
+	int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sQuest);
 	if (iQuestEntry >= nCurrent) {
 		AddJournalQuestEntry(sQuest, nStage, oPC, 1, 0, 0);
 	}

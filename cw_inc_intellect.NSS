@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 9-24-10
 Intellect Devourer
@@ -40,7 +38,7 @@ The other script, "cw_spawnintellect", is for a possessed creature
 //For the chance of making a devourer spawn while keeping the body around
 void CW_DelayedSpawn(object self)
 {
- if(GetIsDead(self) || PS_GetLocalString(self, "DeathScript")!="cw_spawnintellect")
+ if(GetIsDead(self) || GetLocalString(self, "DeathScript")!="cw_spawnintellect")
   return;
 
  ExecuteScript("cw_spawnintellect", self);
@@ -50,7 +48,7 @@ void CW_DelayedSpawn(object self)
 void CW_SpawnIntellect(object killer, object self, int comp)
 {
  ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile("fx_blood_red1_L"), GetLocation(self));
- PS_SetLocalInt(self, "CW_NODEVOUR", 1);
+ SetLocalInt(self, "CW_NODEVOUR", 1);
  
  if(comp==FALSE)//Not a companion
   {
@@ -62,11 +60,11 @@ void CW_SpawnIntellect(object killer, object self, int comp)
    AssignCommand(self, DetermineCombatRound());
    DestroyObject(killer);
    SetScriptHidden(killer, TRUE);
-   //PS_SetLocalString(self, "CW_DeathScript", PS_GetLocalString(self, "DeathScript"));
-   if(PS_GetLocalString(self, "CW_DeathScript")=="")
-	PS_SetLocalString(self, "CW_DeathScript", PS_GetLocalString(self, "DeathScript"));
+   //SetLocalString(self, "CW_DeathScript", GetLocalString(self, "DeathScript"));
+   if(GetLocalString(self, "CW_DeathScript")=="")
+	SetLocalString(self, "CW_DeathScript", GetLocalString(self, "DeathScript"));
 
-   PS_SetLocalString(self, "DeathScript", "cw_spawnintellect");
+   SetLocalString(self, "DeathScript", "cw_spawnintellect");
    //To change things up, sometimes the devourer will burst out *and* keep the host alive(the above implies it can)
    //But, it doesn't always happen, so let's say 40% is a good chance for that
    //Change if you see fit
@@ -78,7 +76,7 @@ void CW_SpawnIntellect(object killer, object self, int comp)
    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInsane(), self, 60.0f);
    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), self);
    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(self)), self);
-   PS_SetLocalObject(killer, "CW_INSANE", self);
+   SetLocalObject(killer, "CW_INSANE", self);
   }
 }
 

@@ -1,13 +1,11 @@
-#include "ff_safevar"
-
 void main() {
  
 	object oPC = GetEnteringObject();
   
- 	int iLock = PS_GetGlobalInt("UndersigilGuildhouseLock");
+ 	int iLock = GetGlobalInt("UndersigilGuildhouseLock");
  	if ( iLock == 0 ) {
 	
-  		PS_SetGlobalInt("UndersigilGuildhouseLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("UndersigilGuildhouseLock", 1); // Only allows one clean up at a time.
   
 	  	if(GetObjectByTag("ps_us_gwsigiseditor") == OBJECT_INVALID) {
 		
@@ -181,7 +179,7 @@ void main() {
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_spirithunter", lSpawnpoint);    
   		}
 	
-  		PS_SetGlobalInt("UndersigilGuildhouseLock", 0); // Only allows one clean up at a time.
+  		SetGlobalInt("UndersigilGuildhouseLock", 0); // Only allows one clean up at a time.
 		
 	}
 	

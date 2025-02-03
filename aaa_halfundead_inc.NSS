@@ -31,9 +31,9 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 				eLink = SetEffectSpellId(eLink, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);		
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		if (!PS_GetLocalInt(oPC, "halfUndeadDR")){
+		if (!GetLocalInt(oPC, "halfUndeadDR")){
 			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
-			PS_SetLocalInt(oPC, "halfUndeadDR", TRUE);
+			SetLocalInt(oPC, "halfUndeadDR", TRUE);
 		}	
 }
 

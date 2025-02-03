@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -10,10 +8,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = PS_GetGlobalInt("BeastlandsfallsEnterLock");
+ int iLock = GetGlobalInt("BeastlandsfallsEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("BeastlandsfallsEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("BeastlandsfallsEnterLock", 1); // Only allows one clean up at a time.
 
 //  DelayCommand(300.0, ExecuteScript("ps_chest_treasure",oPC));
 
@@ -32,6 +30,6 @@ void main()
 		object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_fish_barnaclebob", lSpawnpoint);    
 	}
    
-  PS_SetGlobalInt("BeastlandsfallsEnterLock", 0);
+  SetGlobalInt("BeastlandsfallsEnterLock", 0);
  }
 }

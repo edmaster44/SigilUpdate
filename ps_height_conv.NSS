@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_heightadjust_includes"
 
 void main()
@@ -23,7 +21,7 @@ void main()
 	float iMin = GetCMMin(oPC); string sMin = FloatToString(iMin);
 	string cm; string foot; string inch; string sMessage; string sCM;
 	
-	PS_SetLocalInt(oPC,"heightmax",iLoop);
+	SetLocalInt(oPC,"heightmax",iLoop);
 	
 	while (iLoop + 1 > nCount)
 	{

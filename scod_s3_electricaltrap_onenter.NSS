@@ -33,7 +33,7 @@ void main()
 	int nDice = GetSkillAdjustedTrapDamageDice(10, oCaster, 2);
 	//Base DC 20
 	int nDC = GetSkillAdjustedTrapDC(18, oCaster, 5) + GetATTrapAbilityModifier(oCaster);
-    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_electricaltrap");
+    int nFire = GetLocalInt(OBJECT_SELF, "scod_electricaltrap");
 	int nOrgDamage;
 	int nElecDamage;
 	int nDivineDamage;
@@ -52,7 +52,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            PS_SetLocalInt(OBJECT_SELF, "scod_electricaltrap",TRUE);
+            SetLocalInt(OBJECT_SELF, "scod_electricaltrap",TRUE);
 
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ELEMENTAL_TRAP_LIGHTNING));

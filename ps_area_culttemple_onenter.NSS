@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("TharizdunLock");
+ int iLock = GetGlobalInt("TharizdunLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("TharizdunLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("TharizdunLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_manifestation_tharizdun") == OBJECT_INVALID)
   {
@@ -20,6 +18,6 @@ void main()
   }
  
    
-  PS_SetGlobalInt("TharizdunLock", 0);
+  SetGlobalInt("TharizdunLock", 0);
  }
 }

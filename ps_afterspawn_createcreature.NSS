@@ -1,10 +1,8 @@
-#include "ff_safevar"
-
 #include "ps_inc_time"
 void main() {
 
 	object oTrigger = OBJECT_SELF;
-	object oPC = PS_GetLocalObject(oTrigger, "SAVED_PC");
+	object oPC = GetLocalObject(oTrigger, "SAVED_PC");
 	//SendMessageToPC(oPC, "Running after spawn");
 	
 	float timeInterval = 6.0f;
@@ -14,8 +12,8 @@ void main() {
 		return;*/
 	//SendMessageToPC(oPC, "Valid time");
 	
-	string sMonster1 = PS_GetLocalString(oTrigger, "M1");
-	string sMonster2 = PS_GetLocalString(oTrigger, "M2");
+	string sMonster1 = GetLocalString(oTrigger, "M1");
+	string sMonster2 = GetLocalString(oTrigger, "M2");
 	
 	//Check to see if there are monsters left
 	if (sMonster1 != "") {
@@ -58,15 +56,15 @@ void main() {
 	
 	//Probably no monsters left, spawning creature
 	
-	string sCreatureToSpawn = PS_GetLocalString(oTrigger, "CreatureToSpawn");
-	string sWP = PS_GetLocalString(oTrigger, "WaypointToUse");
+	string sCreatureToSpawn = GetLocalString(oTrigger, "CreatureToSpawn");
+	string sWP = GetLocalString(oTrigger, "WaypointToUse");
 	
 	//SendMessageToPC(oPC, "Spawning "+sCreatureToSpawn+" at "+sWP);
 	if (sCreatureToSpawn != "" && sWP != "") {
 		object oWP = GetWaypointByTag(sWP);
 		if (GetIsObjectValid(oWP)) {
 			object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sCreatureToSpawn, GetLocation(oWP));
-			PS_DeleteLocalInt(oTrigger, "afterspawn_check");
+			DeleteLocalInt(oTrigger, "afterspawn_check");
 		}
 	}
 

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /* ps_trg_multipurposexploration version 1.3
 This script is a multipurpose trigger OnEnter script.
 It has been intended for the utility of rewarding exploration.
@@ -17,23 +15,23 @@ void main ()
 {
 
 object oTrigger = OBJECT_SELF;
-if (PS_GetLocalInt(oTrigger, "COOLDOWN") == TRUE) return;
+if (GetLocalInt(oTrigger, "COOLDOWN") == TRUE) return;
 object oPC = GetEnteringObject();
 if (!GetIsPC(oPC)) return;
 
 //Allows setting a different respawn time.
-float triggerdelay = PS_GetLocalFloat(oTrigger, "TRIGGERDELAY");
+float triggerdelay = GetLocalFloat(oTrigger, "TRIGGERDELAY");
 if (triggerdelay <= 0.0f) triggerdelay = 900.0;
-PS_SetLocalInt(oTrigger, "COOLDOWN", TRUE);
-DelayCommand(triggerdelay, PS_DeleteLocalInt(oTrigger, "COOLDOWN"));
+SetLocalInt(oTrigger, "COOLDOWN", TRUE);
+DelayCommand(triggerdelay, DeleteLocalInt(oTrigger, "COOLDOWN"));
 
 
 
 //Quest entry checks, and ability to give quest entry to progress a quest.
-string questTAG = PS_GetLocalString(oTrigger,"QUESTTAG");
-int hasQuest = PS_GetLocalInt(oTrigger,"HASQUESTENTRY");
-int iQuestEntry = PS_GetLocalInt(oPC,"NW_JOURNAL_ENTRY" + questTAG);
-int giveQuest = PS_GetLocalInt(oTrigger,"GIVEQUESTENTRY");
+string questTAG = GetLocalString(oTrigger,"QUESTTAG");
+int hasQuest = GetLocalInt(oTrigger,"HASQUESTENTRY");
+int iQuestEntry = GetLocalInt(oPC,"NW_JOURNAL_ENTRY" + questTAG);
+int giveQuest = GetLocalInt(oTrigger,"GIVEQUESTENTRY");
 
 if (questTAG != "") {
 
@@ -42,7 +40,7 @@ if ( hasQuest == 0 || iQuestEntry == hasQuest ) {
 	}
 else { 
 	// Incase you lack the prequesite quest, maybe you want it to inform it. Not mandatory.
- 	string failMessage = PS_GetLocalString(oTrigger, "FAILMESSAGE");
+ 	string failMessage = GetLocalString(oTrigger, "FAILMESSAGE");
  	SendMessageToPC(oPC, failMessage);
  	return; 
 	}
@@ -50,7 +48,7 @@ else {
 
 // Ability to backtrack on quest progress for the purpose of easy puzzles.
 // This is practically a quest override, so you can override earlier progress by forcing them to go backwards.
-int takeQuest = PS_GetLocalInt(oTrigger,"BACKTRACKQUEST");
+int takeQuest = GetLocalInt(oTrigger,"BACKTRACKQUEST");
 
 if (takeQuest > 0) {
 	AddJournalQuestEntry( questTAG,takeQuest,oPC,1,0,1 );
@@ -70,52 +68,52 @@ if (takeQuest > 0) {
 11 = Perform  		21 = Tumble
 */
 
-int skillType = PS_GetLocalInt(oTrigger,"SKILLTYPE");
+int skillType = GetLocalInt(oTrigger,"SKILLTYPE");
 if (skillType > 0)
 {
- int skillDC = PS_GetLocalInt(oTrigger,"SKILLDC");
+ int skillDC = GetLocalInt(oTrigger,"SKILLDC");
  if (GetIsTrainingSkillSuccessful(oPC, skillType, skillDC) == FALSE) 
  {	
  	// Incase you fail, maybe you want it to inform it. Not mandatory.
-	 	string failMessage = PS_GetLocalString(oTrigger, "FAILMESSAGE");
+	 	string failMessage = GetLocalString(oTrigger, "FAILMESSAGE");
  	SendMessageToPC(oPC, failMessage);
 	// Dish out unresistible magic damage incase you fail a skill roll.
-	int damage = PS_GetLocalInt(oTrigger,"DAMAGE");
+	int damage = GetLocalInt(oTrigger,"DAMAGE");
 	if (damage > 0) ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDamage(damage,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,TRUE),oPC,0.0);
 	// cause ability damage to defined ability.
 	// 0 = strength		| 1 = Dexterity	| 2 = Constitution
 	// 3 = Intelligence	| 4 = Wisdom	| 5 = Charisma
-	int abiDamageType = PS_GetLocalInt(oTrigger,"ABIDAMTYPE");
-	int abilityDamage = PS_GetLocalInt(oTrigger,"ABIDAMAGE");
+	int abiDamageType = GetLocalInt(oTrigger,"ABIDAMTYPE");
+	int abilityDamage = GetLocalInt(oTrigger,"ABIDAMAGE");
 	if (abilityDamage > 0) ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectAbilityDecrease( abiDamageType,abilityDamage ),oPC,900.0);
 	// cause negative levels to the person.
-	int negLevel = PS_GetLocalInt(oTrigger,"NEGATIVELEVEL");
+	int negLevel = GetLocalInt(oTrigger,"NEGATIVELEVEL");
 	if ( negLevel > 0 ) ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectNegativeLevel( negLevel ),oPC,900.0);	
  	return;
  }
 }
 
 //Decide what kind of message you want the trigger to tell if successful
-string message = PS_GetLocalString(oTrigger, "MESSAGE");
+string message = GetLocalString(oTrigger, "MESSAGE");
 // If successful, give this much gold. Not mandatory.
-int gold = PS_GetLocalInt(oTrigger,"GOLD");
+int gold = GetLocalInt(oTrigger,"GOLD");
 // If successful skill roll, give specific item by tag & quantity. Not mandatory.
-string itemTAG = PS_GetLocalString(oTrigger,"ITEMTAG");
-int quantity = PS_GetLocalInt(oTrigger,"ITEMQUANTITY");
+string itemTAG = GetLocalString(oTrigger,"ITEMTAG");
+int quantity = GetLocalInt(oTrigger,"ITEMQUANTITY");
 if (quantity < 1) quantity = 1;
 // Define how much exp a person can get by succeeding a skill roll.
-int exp = PS_GetLocalInt(oTrigger,"EXP");
+int exp = GetLocalInt(oTrigger,"EXP");
 // Triggers a conversation if the "convo" string is not empty.
-string convo = PS_GetLocalString(oTrigger,"CONVO");
+string convo = GetLocalString(oTrigger,"CONVO");
 // Perhaps you'd like to port people? This ports people to waypoint by tag.
 // if "waypoint" is not an empty string and "destination" is a valid object then it will.	
-string waypoint = PS_GetLocalString(oTrigger,"WP");
+string waypoint = GetLocalString(oTrigger,"WP");
 object destination = GetWaypointByTag(waypoint);
 // This allows to create an effect to a waypoint. It will despawn within (default 30 seconds).
-string waypointeff = PS_GetLocalString(oTrigger,"WPEFF");
+string waypointeff = GetLocalString(oTrigger,"WPEFF");
 object destinationeff = GetWaypointByTag(waypointeff);
-string aEffect = PS_GetLocalString(oTrigger,"EFFECT");
-float effDur = PS_GetLocalFloat(oTrigger,"EFFECTDURATION");
+string aEffect = GetLocalString(oTrigger,"EFFECT");
+float effDur = GetLocalFloat(oTrigger,"EFFECTDURATION");
 if (effDur <= 0.0f) effDur = 30.0;
 
 if (aEffect != "") {
@@ -125,10 +123,10 @@ if (aEffect != "") {
 	}
 	
 // This allows to create a placeable to a waypoint. It will despawn within (default 300 seconds).
-string waypointpla = PS_GetLocalString(oTrigger,"WPPLA");
+string waypointpla = GetLocalString(oTrigger,"WPPLA");
 object destinationpla = GetWaypointByTag(waypointpla);
-string placeable = PS_GetLocalString(oTrigger,"PLACEABLE");
-float plaDur = PS_GetLocalFloat(oTrigger,"PLADURATION");
+string placeable = GetLocalString(oTrigger,"PLACEABLE");
+float plaDur = GetLocalFloat(oTrigger,"PLADURATION");
 if (plaDur <= 0.0f) plaDur = 300.0;
 
 if (placeable != "") {
@@ -137,10 +135,10 @@ if (placeable != "") {
 	}
 
 // This allows to create a creature to a waypoint. It will despawn within (default 300 seconds).
-string waypointcre = PS_GetLocalString(oTrigger,"WPCRE");
+string waypointcre = GetLocalString(oTrigger,"WPCRE");
 object destinationcre = GetWaypointByTag(waypointcre);
-string creature = PS_GetLocalString(oTrigger,"CREATURE");
-float creDur = PS_GetLocalFloat(oTrigger,"CREDURATION");
+string creature = GetLocalString(oTrigger,"CREATURE");
+float creDur = GetLocalFloat(oTrigger,"CREDURATION");
 if (creDur <= 0.0f) creDur = 300.0;
 
 if (creature != "") {

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //kinc_crafting
 //Crafting include w/ Trade system excised.
 //NLC 10/28/08
@@ -99,7 +97,7 @@ int CheckLocalInts(int nIndex, object oPC, string sTable)
 	
 	while(sParam != "")
 	{
-		if( PS_GetLocalInt(oPC, sParam) != TRUE )		//We want to iterate through the list of local ints and verify that they are all
+		if( GetLocalInt(oPC, sParam) != TRUE )		//We want to iterate through the list of local ints and verify that they are all
 		{
 			DoCraftingFailureFeedback(CRAFTING_FAILURE_RECIPE, oPC);
 			return FALSE;							//TRUE on the PC who is attempting to craft the item.
@@ -679,7 +677,7 @@ void CreateCraftedItem(int nIndex, object oPC, string sTable)
 			SetIdentified(oItem, TRUE);
 			// Setting a local int on the resulting item so that the spellhook can see that it's 
 			// a crafted item, for allowing mageslayer to use it.
-			PS_SetLocalInt(oItem, "bIsCrafted", TRUE);
+			SetLocalInt(oItem, "bIsCrafted", TRUE);
 		
 			i += 2;												//We want to increment i by 2 in this case to skip the iterator.
 		}
@@ -688,7 +686,7 @@ void CreateCraftedItem(int nIndex, object oPC, string sTable)
 		{
 			object oItem = CreateItemOnObject(sParam, oPC);
 			SetIdentified(oItem, TRUE);
-			PS_SetLocalInt(oItem, "bIsCrafted", TRUE);
+			SetLocalInt(oItem, "bIsCrafted", TRUE);
 			++i;
 		}
 

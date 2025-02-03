@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_time"
 
 //Checks the timestamp set by ga_timestamp
@@ -18,7 +16,7 @@ int StartingConditional(string stampName, int secondsToCheck) {
 	if (secondsToCheck == 0) secondsToCheck = 60;
 	object oHolder = GetModule();
 	
-	if (PS_GetLocalInt(oHolder, stampName) <= 0)
+	if (GetLocalInt(oHolder, stampName) <= 0)
 		return TRUE;
 	
 	if (PS_GetTimestamp_Age_Seconds(oHolder, stampName) >= secondsToCheck)

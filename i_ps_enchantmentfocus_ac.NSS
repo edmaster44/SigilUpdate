@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 #include "ps_inc_newenchanting"
 
 void PlayEnchantingAnimation(object oPC) {
@@ -17,8 +15,8 @@ void main () {
 	CloseGUIScreen(oPC, sEnchantingScreen);
 	
 	//Clear enchanting focus before we start the GUI
-	PS_DeleteLocalObject(oPC, "ObjectToEnchant");
-	PS_DeleteLocalInt(oPC, "EnchantmentToApply");
+	DeleteLocalObject(oPC, "ObjectToEnchant");
+	DeleteLocalInt(oPC, "EnchantmentToApply");
 	
 	//SendMessageToPC(oPC, GetName(oItem)+" base item type = "+IntToString(GetBaseItemType(oItem)));
 	
@@ -62,7 +60,7 @@ void main () {
 	}
 	SetFirstName(oTarget, sName);
 	
-	PS_SetLocalObject(oPC, "ObjectToEnchant", oTarget);
+	SetLocalObject(oPC, "ObjectToEnchant", oTarget);
 	
 	DisplayGuiScreen(oPC, sEnchantingScreen, TRUE, xmlEnchantingFile);
 	

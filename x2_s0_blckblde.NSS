@@ -58,7 +58,7 @@ void spellsCreateItemForSummoned()
 
     object oSummon = GetAssociate(ASSOCIATE_TYPE_SUMMONED);
     // Make the blade require concentration
-    PS_SetLocalInt(oSummon,"X2_L_CREATURE_NEEDS_CONCENTRATION",TRUE);
+    SetLocalInt(oSummon,"X2_L_CREATURE_NEEDS_CONCENTRATION",TRUE);
     SetPlotFlag (oSummon,TRUE);
     object oWeapon;
     //Create item on the creature, epuip it and add properties.

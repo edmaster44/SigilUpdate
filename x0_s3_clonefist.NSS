@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //::///////////////////////////////////////////////
 //:: x0_s3_clonefist
 //:: Copyright (c) 2001 Bioware Corp.
@@ -18,8 +16,8 @@
 {
 	/*effect eFlame = EffectVisualEffect(VFX_IMP_FLAME_M);
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eFlame, OBJECT_SELF);
-    int nExplode = PS_GetLocalInt(OBJECT_SELF, "X0_L_MYTIMERTOEXPLODE");
-    object oMaster = PS_GetLocalObject(OBJECT_SELF, "X0_L_MYMASTER");
+    int nExplode = GetLocalInt(OBJECT_SELF, "X0_L_MYTIMERTOEXPLODE");
+    object oMaster = GetLocalObject(OBJECT_SELF, "X0_L_MYMASTER");
     if (nExplode == 6)
     {
 
@@ -42,8 +40,8 @@
             DetermineCombatRound(oEnemy);
         }
 
-        ActionMoveToObject(PS_GetLocalObject(OBJECT_SELF, "X0_L_MYMASTER"), TRUE);
-        PS_SetLocalInt(OBJECT_SELF, "X0_L_MYTIMERTOEXPLODE", nExplode + 1);
+        ActionMoveToObject(GetLocalObject(OBJECT_SELF, "X0_L_MYMASTER"), TRUE);
+        SetLocalInt(OBJECT_SELF, "X0_L_MYTIMERTOEXPLODE", nExplode + 1);
         DelayCommand(3.0, FakeHB());
     }
 }*/
@@ -56,8 +54,8 @@ void main()
     object oPC = OBJECT_SELF;
     object oFireGuy = CopyObject(oPC, GetLocation(OBJECT_SELF), OBJECT_INVALID, GetName(oPC) + "CLONEFROMFISTS");
 
-    PS_SetLocalInt(oFireGuy, "X0_L_MYTIMERTOEXPLODE",1);
-    PS_SetLocalObject(oFireGuy, "X0_L_MYMASTER", oPC);
+    SetLocalInt(oFireGuy, "X0_L_MYTIMERTOEXPLODE",1);
+    SetLocalObject(oFireGuy, "X0_L_MYMASTER", oPC);
     ChangeToStandardFaction(oFireGuy, STANDARD_FACTION_COMMONER);
     SetPCLike(oPC, oFireGuy);
     DelayCommand(0.5, SetPlotFlag(oFireGuy, TRUE)); // * so items don't drop, I can destroy myself.

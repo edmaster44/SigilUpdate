@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 //*/////////////////////////////////////////////////////////////////////////////
 //------------------------------------------------------------------------------ 
 // gui_color_tls - Elechos - Script de GUI : Calcule une couleur RGB grace 
@@ -20,7 +18,7 @@ void main (int iTeinte, int iLuminosite, int iSaturation)
 
 	// Make sure that the item still exists so that the slot zero item isn't
 	// destroyed when trying to change colors after backing out of the menu.
-	if (PS_GetLocalObject(oPC, "XC_ITEM_TO_CRAFT") == OBJECT_INVALID)
+	if (GetLocalObject(oPC, "XC_ITEM_TO_CRAFT") == OBJECT_INVALID)
 	{
 		XPCraft_Debug(oPC, "No item selected for color change, aborted.");
 		return;
@@ -28,6 +26,6 @@ void main (int iTeinte, int iLuminosite, int iSaturation)
 	
 	struct strTint strMyTint = XPCraft_HLSToTintStruct(iTeinte, iLuminosite, iSaturation);
 	int iNewColorValue =  XPCraft_strTintToInt(strMyTint);
-	PS_SetLocalObject(oPC, "XC_ITEM_TO_CRAFT", XPCraft_ActionChangeColor(oPC, iNewColorValue));
+	SetLocalObject(oPC, "XC_ITEM_TO_CRAFT", XPCraft_ActionChangeColor(oPC, iNewColorValue));
 		
 }

@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 void main()
 {
@@ -7,10 +5,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("GreengageEnterLock");
+ int iLock = GetGlobalInt("GreengageEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("GreengageEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("GreengageEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_marda") == OBJECT_INVALID)
   {
@@ -19,6 +17,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_marda", lSpawnpoint);    
   }
    
-  PS_SetGlobalInt("GreengageEnterLock", 0);
+  SetGlobalInt("GreengageEnterLock", 0);
  }
 }

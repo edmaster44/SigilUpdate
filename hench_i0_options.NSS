@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /*
 
      Companion and Monster AI
@@ -65,7 +63,7 @@ const string HENCH_CAMPAIGN_DB = "compaisettings";
 
 void SetHenchOption(int nCondition, int bValid)
 {
-    int nPlot = PS_GetGlobalInt(HenchGlobalOptionsStr);
+    int nPlot = GetGlobalInt(HenchGlobalOptionsStr);
     if(bValid)
     {
         nPlot = nPlot | nCondition;
@@ -74,18 +72,18 @@ void SetHenchOption(int nCondition, int bValid)
     {
         nPlot = nPlot & ~nCondition;
     }
-    PS_SetGlobalInt(HenchGlobalOptionsStr, nPlot);
+    SetGlobalInt(HenchGlobalOptionsStr, nPlot);
 }
 
 
 int GetHenchOption(int nSel)
 {
-	int nResult = PS_GetGlobalInt(HenchGlobalOptionsStr);
+	int nResult = GetGlobalInt(HenchGlobalOptionsStr);
 	if (!nResult)
 	{
 		nResult = GetCampaignInt(HENCH_CAMPAIGN_DB, HenchGlobalOptionsStr);
 		nResult |= HENCH_OPTION_SET_ONCE;
-    	PS_SetGlobalInt(HenchGlobalOptionsStr, nResult);
+    	SetGlobalInt(HenchGlobalOptionsStr, nResult);
 	}
 	return nResult & nSel;
 }

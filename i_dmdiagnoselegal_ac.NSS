@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // gc_is_legal v1.02
 
 int iCheckitem(object oItem, object oUser)
@@ -148,7 +146,7 @@ void main()
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-	 	string sLegal = PS_GetLocalString(oItem,"LEGAL");
+	 	string sLegal = GetLocalString(oItem,"LEGAL");
 		if(sLegal == "TRUE")
 		{
 			SendMessageToPC( oUser, "Is set to LEGAL." );

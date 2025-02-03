@@ -17,11 +17,11 @@ int DM_GetIsOffensiveSpell(int spellid)
 
 void DoWildMagic(object oCaster, object oTarget, int nSpellID)
 {
-	if (DM_GetIsOffensiveSpell(nSpellID) == 0 || PS_GetLocalInt(oCaster, "NoWildMagic") == 1)
+	if (DM_GetIsOffensiveSpell(nSpellID) == 0 || GetLocalInt(oCaster, "NoWildMagic") == 1)
 		return;
 
-	PS_SetLocalInt(oCaster, "NoWildMagic", 1);
-	DelayCommand(3.0f, PS_DeleteLocalInt(oCaster, "NoWildMagic"));
+	SetLocalInt(oCaster, "NoWildMagic", 1);
+	DelayCommand(3.0f, DeleteLocalInt(oCaster, "NoWildMagic"));
 
 	int iCastLvl = GetSpellLevel(nSpellID);
 	if (nSpellID == 1521)

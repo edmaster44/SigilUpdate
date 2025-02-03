@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 // Created by Agony_Aunt/Loki.
 // in creature spawn script chance to call the main function here to make a unique random item for drop similar to 
 // the gambler (using same code), but with addition of interesting names and descriptions.
@@ -86,9 +84,9 @@ void SetRandomItemIcon(object oItem)
 
 void GenerateItemDescription(object oItem)
 {
-	string sTitle = PS_GetLocalString(oItem, "RANDOM_TITLE");
-	string sName = PS_GetLocalString(oItem, "RANDOM_NAME");
-	string sNick = PS_GetLocalString(oItem, "RANDOM_NICK");
+	string sTitle = GetLocalString(oItem, "RANDOM_TITLE");
+	string sName = GetLocalString(oItem, "RANDOM_NAME");
+	string sNick = GetLocalString(oItem, "RANDOM_NICK");
 	string sDesc;
 	
 	// intro
@@ -560,8 +558,8 @@ void GenerateItemPropertyName(object oItem)
 		sPropertySuffix = "Wonder"; 
 	}
 	
-	PS_SetLocalString(oItem, "PROPERTY_SUFFIX", sPropertySuffix);
-	PS_SetLocalString(oItem, "PROPERTY_PREFIX", sPropertyPrefix);
+	SetLocalString(oItem, "PROPERTY_SUFFIX", sPropertySuffix);
+	SetLocalString(oItem, "PROPERTY_PREFIX", sPropertyPrefix);
 }
 
 string GenerateNPCName(object oItem, int iGender)
@@ -588,7 +586,7 @@ string GenerateNPCName(object oItem, int iGender)
 		}
 	}
 	
-	PS_SetLocalString(oItem, "RANDOM_TITLE", sTitle);
+	SetLocalString(oItem, "RANDOM_TITLE", sTitle);
 	
 	// Generate first name
 	if (iGender == GENDER_MALE)
@@ -630,7 +628,7 @@ string GenerateNPCName(object oItem, int iGender)
 		}
 	}
 	
-	PS_SetLocalString(oItem, "RANDOM_NAME", sName);
+	SetLocalString(oItem, "RANDOM_NAME", sName);
 	if (sTitle == "")
 		sName = sName + " the ";
 	else
@@ -655,7 +653,7 @@ string GenerateNPCName(object oItem, int iGender)
 		default: sNick = "Lost"; break;
 	}
 	
-	PS_SetLocalString(oItem, "RANDOM_NICK", sNick);
+	SetLocalString(oItem, "RANDOM_NICK", sNick);
 	sName = sName + " " + sNick;
 	
 	return sName;
@@ -673,15 +671,15 @@ void NameAndDescribeRandomItem(object oItem)
 	4. Set Item Description with backstory.
 	5. Chose random icon from those available. Perhaps easiest using stock 1-5 variants for enchantments, but if detecting things like cold, fire, etc, could also work in those.
 	*/
-	PS_SetLocalString(oItem, "RANDOM_ITEM_TYPE", GetName(oItem));
+	SetLocalString(oItem, "RANDOM_ITEM_TYPE", GetName(oItem));
 	int iGender = Random(2); // GENDER_MALE = 0, GENDER_FEMALE = 1.  Used for sentence structure in description.
 	string sNPCName = GenerateNPCName(oItem, iGender);
 		
 	// code now for property part of the name
 	GenerateItemPropertyName(oItem);
 	
-	string sPropertyPrefix = PS_GetLocalString(oItem, "PROPERTY_PREFIX");
-	string sPropertySuffix = PS_GetLocalString(oItem, "PROPERTY_SUFFIX");
+	string sPropertyPrefix = GetLocalString(oItem, "PROPERTY_PREFIX");
+	string sPropertySuffix = GetLocalString(oItem, "PROPERTY_SUFFIX");
 	string sItemName = RANDOM_DROP_COLOUR + sNPCName + "'s ";
 	if (sPropertyPrefix != "") sItemName = sItemName + sPropertyPrefix + " ";
 	sItemName = sItemName + GetName(oItem);

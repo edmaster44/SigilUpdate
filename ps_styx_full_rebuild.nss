@@ -19,8 +19,8 @@ void main(){
 	SQLExecDirect("SELECT dm_pool,rp_pool FROM characterdata WHERE id=" + sID);
 	if (SQLFetch() == SQL_ERROR){
 		object oSpeaker = GetLastSpeaker();
-		nXP += PS_GetLocalInt(oSpeaker, sID+"dm");
-		nXP += PS_GetLocalInt(oSpeaker, sID+"rp");
+		nXP += GetLocalInt(oSpeaker, sID+"dm");
+		nXP += GetLocalInt(oSpeaker, sID+"rp");
 	} else {
 		nXP += StringToInt(SQLGetData(1));
 		nXP += StringToInt(SQLGetData(2));

@@ -1,12 +1,10 @@
-#include "ff_safevar"
-
 #include "ginc_param_const"
 #include "ginc_item"
 #include "dethia_shop_sys"
 
 object GetStoreFromStoreArea(string sTag)
 {
-	int iStoreArea = PS_GetGlobalInt("STORE_AREA");
+	int iStoreArea = GetGlobalInt("STORE_AREA");
 	object oStoreArea = IntToObject(iStoreArea);
 	
 	object oStore = GetFirstObjectInArea(oStoreArea);

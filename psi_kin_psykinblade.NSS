@@ -71,10 +71,10 @@ void main()
 		location lTarget = GetLocation( oTarget );
 	    int nCnt;
 		float fTravelTime;
-		int nAugment = PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT");
+		int nAugment = GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT");
 		int nLimit = 5;
 		
-		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+		if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
 		{
 			nLimit = 7;
 		}

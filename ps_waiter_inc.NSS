@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 /* Script Created by Agony_Aunt/Loki for SCoD PW. Waiter who can be summoned to provide refreshments for a party*/
 
 #include "x0_i0_position"
@@ -24,7 +22,7 @@ void WaiterSpeakToClient(object oWaiter, object oClient)
 	int iClientGender = GetGender(oClient);
 	string sClientGender;
 	int iWaiterGender = GetGender(oWaiter);
-	string sWaiterType = PS_GetLocalString(oWaiter, "WaiterType");
+	string sWaiterType = GetLocalString(oWaiter, "WaiterType");
 	string sSpeak;
 	int iTalkVolume = TALKVOLUME_TALK;
 	int iRoll;
@@ -101,17 +99,17 @@ void WaiterMoveToClient(object oWaiter, object oTarget)
 void WaiterMoveToBar(object oWaiter)
 {	
 	AssignCommand(oWaiter, ClearAllActions(TRUE));
-	AssignCommand(oWaiter, ActionMoveToLocation(PS_GetLocalLocation(oWaiter, "BarLocation"), FALSE));
+	AssignCommand(oWaiter, ActionMoveToLocation(GetLocalLocation(oWaiter, "BarLocation"), FALSE));
 }
 
 object WaiterSelectClientInLocalArea()
 {
-	location lSpawnLocation = PS_GetLocalLocation(OBJECT_SELF, "SpawnLocation");
-	object oLastClient = PS_GetLocalObject(OBJECT_SELF, "LastClient");
+	location lSpawnLocation = GetLocalLocation(OBJECT_SELF, "SpawnLocation");
+	object oLastClient = GetLocalObject(OBJECT_SELF, "LastClient");
 	
 	/*if (GetArea(OBJECT_SELF) != GetAreaFromLocation(lSpawnLocation))
 	{
-		SendMessageToPC(PS_GetLocalObject(OBJECT_SELF, "Owner"), "Your waiter has somehow left their service area and is trying to serve clients. Please speak to it and tell it to stop");
+		SendMessageToPC(GetLocalObject(OBJECT_SELF, "Owner"), "Your waiter has somehow left their service area and is trying to serve clients. Please speak to it and tell it to stop");
 		return OBJECT_INVALID;
 	}*/
 	
@@ -119,7 +117,7 @@ object WaiterSelectClientInLocalArea()
 	int iNumClients = 0;
 	
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, WAITER_RADIUS, lSpawnLocation, FALSE, OBJECT_TYPE_CREATURE);
-	object oOwner = PS_GetLocalObject(OBJECT_SELF, "Owner");
+	object oOwner = GetLocalObject(OBJECT_SELF, "Owner");
 	while (oTarget != OBJECT_INVALID)
 	{
 		if (oTarget != oLastClient && oTarget != OBJECT_SELF)	
@@ -127,7 +125,7 @@ object WaiterSelectClientInLocalArea()
 			iNumClients += 1;
 			//SendMessageToPC(oOwner, "Found " + GetName(oTarget) + " at position " + IntToString(iNumClients));
 			// and now we store all object IDs of all valid clients.
-			PS_SetLocalObject(OBJECT_SELF, "ClientListEntry" + IntToString(iNumClients), oTarget);
+			SetLocalObject(OBJECT_SELF, "ClientListEntry" + IntToString(iNumClients), oTarget);
 		}
 		
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, WAITER_RADIUS, lSpawnLocation, FALSE, OBJECT_TYPE_CREATURE);
@@ -140,7 +138,7 @@ object WaiterSelectClientInLocalArea()
 	else
 	{
 		// pick a client at random
-		oTarget = PS_GetLocalObject(OBJECT_SELF, "ClientListEntry" + IntToString(Random(iNumClients) + 1));
+		oTarget = GetLocalObject(OBJECT_SELF, "ClientListEntry" + IntToString(Random(iNumClients) + 1));
 		return oTarget;
 	}
 }
