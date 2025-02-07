@@ -266,6 +266,7 @@ void main()
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	DoPsiProgression(oPC);
+	DoPsyFeatProgression(oPC);
 	// redundant, ff_update_feats does this
 //	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
