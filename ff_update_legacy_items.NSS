@@ -48,9 +48,11 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	if (sNewRes != ""){
 		object oNewItem = CreateItemOnObject(sNewRes, oPC);
 		DelayCommand(0.5f, SendMessageToPC(oPC, "Replacing banned item '" + sRef + "' with " + sNewRes));
-		if (GetIsObjectValid(oNewItem)){
-			DestroyObject(oItem);
-		} else SendMessageToPC(oPC, "Error replacing banned item. Please contact a DM");
+		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem);
+		else {
+			SendMessageToPC(oPC, "Error replacing banned item. Please contact a DM");
+			return;
+		}
 	}
 
 	// make sure scrolls and wands are usuable by all classes that have the same spellbook or 
