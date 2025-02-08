@@ -21,8 +21,8 @@
 		case FACTION_MERCYKILLERS: return "Mercykillers"; break;
 		case FACTION_REVOLUTIONARY_LEAGUE: //Anarchists can infiltrate
 			oBadge = GetItemPossessedBy(oPC ,"ps_faction_badge");
-			if ((GetLocalInt(oBadge, "Faction") == 12)&&(GetLocalInt(oBadge, "Infiltrated") == TRUE)) nINF = GetLocalInt(oBadge, "InfiltratedFaction");
-			else nINF = GetLocalInt(oBadge, "Faction");
+			if ((PS_GetLocalInt(oBadge, "Faction") == 12)&&(PS_GetLocalInt(oBadge, "Infiltrated") == TRUE)) nINF = PS_GetLocalInt(oBadge, "InfiltratedFaction");
+			else nINF = PS_GetLocalInt(oBadge, "Faction");
 			switch (nINF)
 			{
 				case 1: return "Prime"; break;
@@ -70,17 +70,17 @@ string GetSortRelevant(object oPC, object oList, string sSORT)
 		case 1: sTXT = GetFirstName(oList);
 				break; //SortByName
 		case 2: sTXT = FactionIdToName(GetFaction(oList));
-				if (GetLocalInt(oESS,"KScry_Faction")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
+				if (PS_GetLocalInt(oESS,"KScry_Faction")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByFaction
 		case 3: sTXT = GetName(GetArea(oList));
-				if (GetLocalInt(oESS,"KScry_Location")==1&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
+				if (PS_GetLocalInt(oESS,"KScry_Location")==1&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByArea
 		case 4: nLVL = PS_GetLevel(oList);
 				sTXT = IntToString(nLVL);
 				if (nLVL < 10) sTXT = "0"+sTXT;
-				if (GetLocalInt(oESS,"KScry_Level")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
+				if (PS_GetLocalInt(oESS,"KScry_Level")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByLevel
-		case 5: sTXT = GetLocalString(oList, "KScry_Status");
+		case 5: sTXT = PS_GetLocalString(oList, "KScry_Status");
 				if (sTXT == "") sTXT = "   ";
 				break; //SortByStatus
 	}
@@ -91,10 +91,10 @@ string GetSortRelevant(object oPC, object oList, string sSORT)
 void ChangeList(int nANON, object oPC, object oList, string sRow, int nSTART)
 {
 	object oESS = GetItemPossessedBy(oList,"ps_essence");
-	int	nPCLevel = GetLocalInt(oESS, "KScry_Level");
-	int	nPCFaction = GetLocalInt(oESS, "KScry_Faction");
-	int	nPCLocation = GetLocalInt(oESS, "KScry_Location");
-	string sPCStatus = GetLocalString(oList, "KScry_Status");
+	int	nPCLevel = PS_GetLocalInt(oESS, "KScry_Level");
+	int	nPCFaction = PS_GetLocalInt(oESS, "KScry_Faction");
+	int	nPCLocation = PS_GetLocalInt(oESS, "KScry_Location");
+	string sPCStatus = PS_GetLocalString(oList, "KScry_Status");
 	if (sPCStatus == "") sPCStatus = "    ";
 	string sPCName = GetFirstName(oList);
 	string sPlayerName = GetPCPlayerName(oList);

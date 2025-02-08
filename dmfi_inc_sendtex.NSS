@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_sendtex - DM Friendly Initiative -  SendText Include File
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -144,11 +146,11 @@ void SendDMText(object oDM, string sText, int bFloat=FALSE, int nColor=-1, int b
         }
     } // All or One only Code
 
-    else if (GetLocalInt(oListening, "DMFIListenOn")==1)
+    else if (PS_GetLocalInt(oListening, "DMFIListenOn")==1)
     { // DM LISTENING CODE - Send the Text to any DM
         n=1;
         nNull = 0;
-        oTest = GetLocalObject(oListening, "DMFIListen"+IntToString(n));
+        oTest = PS_GetLocalObject(oListening, "DMFIListen"+IntToString(n));
         while ((n<10) && (nNull<2))
         { // max of 9 targets can be preset
             if (GetIsObjectValid(oTest) && (!GetObjectHeard(oListening, oTest)))
@@ -160,7 +162,7 @@ void SendDMText(object oDM, string sText, int bFloat=FALSE, int nColor=-1, int b
             }
             else nNull++;
             n++;
-            oTest = GetLocalObject(oListening, "DMFIListen" + IntToString(n));
+            oTest = PS_GetLocalObject(oListening, "DMFIListen" + IntToString(n));
         } // max of 9 targets can be preset
     }
 }
@@ -175,7 +177,7 @@ void SendVarBasedText(object oPC, string sText, int bFloat= FALSE, int nColor=-1
 	
 	if (nLevel==0)
 	{ // PC Only message
-		if (((nValue==-1) && (GetLocalInt(oPC, sVar)!=0)) || (GetLocalInt(oPC, sVar)==nValue))
+		if (((nValue==-1) && (PS_GetLocalInt(oPC, sVar)!=0)) || (PS_GetLocalInt(oPC, sVar)==nValue))
 		{
 			if (bFloat)
 				FloatingTextStringOnCreature(sText, oPC, FALSE, 3.0);
@@ -189,7 +191,7 @@ void SendVarBasedText(object oPC, string sText, int bFloat= FALSE, int nColor=-1
 	
 		while (oTest!=OBJECT_INVALID)
 		{
-			if (((nValue==-1) && (GetLocalInt(oPC, sVar)!=0)) || (GetLocalInt(oPC, sVar)==nValue))
+			if (((nValue==-1) && (PS_GetLocalInt(oPC, sVar)!=0)) || (PS_GetLocalInt(oPC, sVar)==nValue))
 			{
 				if (bFloat)
 					FloatingTextStringOnCreature(sText, oTest, FALSE, 3.0);
@@ -205,7 +207,7 @@ void SendVarBasedText(object oPC, string sText, int bFloat= FALSE, int nColor=-1
 		
 		while (oTest!=OBJECT_INVALID)
 		{ // cycle through all PCs
-			if (((nValue==-1) && (GetLocalInt(oPC, sVar)!=0)) || (GetLocalInt(oPC, sVar)==nValue))
+			if (((nValue==-1) && (PS_GetLocalInt(oPC, sVar)!=0)) || (PS_GetLocalInt(oPC, sVar)==nValue))
 			{
 				if (bFloat)
 					FloatingTextStringOnCreature(sText, oTest, FALSE, 3.0);

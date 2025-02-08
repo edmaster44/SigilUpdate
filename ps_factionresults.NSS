@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 string IntToFaction(string nFact) {
 
 	if (nFact == "faction_1") 
@@ -40,7 +42,7 @@ void main (int clear) {
 		int count = 0; 
 		for (count = 1; count <= 15; count++) {
 			string sFaction = "faction_"+IntToString(count);
-			DeleteLocalInt(oPC, sFaction);
+			PS_DeleteLocalInt(oPC, sFaction);
 			
 		}
 		return;
@@ -51,7 +53,7 @@ void main (int clear) {
 		string winningFaction = "";
 		for (count = 1; count <= 15; count++) {
 			string sFaction = "faction_"+IntToString(count);
-			int nValue = GetLocalInt(oPC, sFaction);
+			int nValue = PS_GetLocalInt(oPC, sFaction);
 			if (nValue >= largestValue) {
 				largestValue = nValue;
 				winningFaction = IntToFaction(sFaction);

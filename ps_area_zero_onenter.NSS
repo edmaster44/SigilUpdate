@@ -1,12 +1,14 @@
+#include "ff_safevar"
+
 #include "ps_inc_achievements"
 
 void main() {
  	object oPC = GetEnteringObject();
   
- 	int iLock = GetGlobalInt("ZeroEnterLock");
+ 	int iLock = PS_GetGlobalInt("ZeroEnterLock");
  	if ( iLock == 0 ) {
   
-		SetGlobalInt("ZeroEnterLock", 1); // Only allows one clean up at a time.
+		PS_SetGlobalInt("ZeroEnterLock", 1); // Only allows one clean up at a time.
 
   		if(GetObjectByTag("ps_zero_morvun") == OBJECT_INVALID) {
    			object oWP = GetWaypointByTag("WP_ps_zero_morvun");
@@ -44,6 +46,6 @@ void main() {
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_zero_bleaknikartist", lSpawnpoint);    
   		} 
   
-  		SetGlobalInt("ZeroEnterLock", 0);
+  		PS_SetGlobalInt("ZeroEnterLock", 0);
  	}
 }

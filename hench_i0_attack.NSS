@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -230,7 +232,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 		}
 		else
 		{
-			int persistentSpellStr = GetLocalInt(GetModule(), sHenchPersistSpellIDInfo + IntToString(spellID)) & HENCH_PERSIST_SPELL_LEVEL_MASK;		
+			int persistentSpellStr = PS_GetLocalInt(GetModule(), sHenchPersistSpellIDInfo + IntToString(spellID)) & HENCH_PERSIST_SPELL_LEVEL_MASK;		
 //			Jug_Debug(GetName(OBJECT_SELF) + " persistent spell str " + IntToHexString(persistentSpellStr));
 		    int curLoopCount = 1;
 		    object oAOE = GetNearestObject(OBJECT_TYPE_AREA_OF_EFFECT, OBJECT_SELF, curLoopCount++);
@@ -263,11 +265,11 @@ void HenchSpellAttack(int saveType, int targetInformation)
 		    oAOE = GetNearestObjectByTag(sPersistSpellMarkerTag, OBJECT_SELF, curLoopCount++);
 		    while (GetIsObjectValid(oAOE) && GetDistanceToObject(oAOE) <= fCheckRange)
 		    {
-//				Jug_Debug(GetName(OBJECT_SELF) + " found persistent area of effect " + GetTag(oAOE) + " distance " + FloatToString(GetDistanceToObject(oAOE)) + " creator " + GetName(GetLocalObject(oAOE, sPersistSpellMarkerTag)));		
-				object oAOECreator = GetLocalObject(oAOE, sPersistSpellMarkerTag);		
+//				Jug_Debug(GetName(OBJECT_SELF) + " found persistent area of effect " + GetTag(oAOE) + " distance " + FloatToString(GetDistanceToObject(oAOE)) + " creator " + GetName(PS_GetLocalObject(oAOE, sPersistSpellMarkerTag)));		
+				object oAOECreator = PS_GetLocalObject(oAOE, sPersistSpellMarkerTag);		
 				if (GetFactionEqual(oAOECreator) || GetIsFriend(oAOECreator))
 				{		
-					int persistSpellFlags = GetLocalInt(oAOE, sPersistSpellMarkerTag);		
+					int persistSpellFlags = PS_GetLocalInt(oAOE, sPersistSpellMarkerTag);		
 					if (persistSpellFlags & HENCH_PERSIST_HARMFUL)
 					{
 //						Jug_Debug(GetName(OBJECT_SELF) + " found damaging persistent area of effect");			
@@ -406,7 +408,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 	        while (GetIsObjectValid(oTestTarget))
 	        {
 	       			// reset flag on nearby creatures
-	            DeleteLocalInt(oTestTarget, HENCH_RANGED_TOUCH_SAVEINFO);
+	            PS_DeleteLocalInt(oTestTarget, HENCH_RANGED_TOUCH_SAVEINFO);
 	            oTestTarget = GetNextObjectInShape(SHAPE_SPHERE, 53.0, selfLoc, FALSE, OBJECT_TYPE_CREATURE);
 	        }
 			gbRangedTouchAttackInit = TRUE;
@@ -474,7 +476,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 	        while (GetIsObjectValid(oTestTarget))
 	        {
 	       			// reset flag on nearby creatures
-	            SetLocalFloat(oTestTarget, sCreatureSaveResultStr, HENCH_CREATURE_SAVE_UNKNOWN);
+	            PS_SetLocalFloat(oTestTarget, sCreatureSaveResultStr, HENCH_CREATURE_SAVE_UNKNOWN);
 	            oTestTarget = GetNextObjectInShape(SHAPE_SPHERE, testRadius, selfLoc, FALSE, OBJECT_TYPE_CREATURE);
 	        }
 		}
@@ -501,7 +503,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
     {
 		if (GetIsObjectValid(oCurTarget))
 		{
-			oCurTarget = GetLocalObject(oCurTarget, sTargetList);
+			oCurTarget = PS_GetLocalObject(oCurTarget, sTargetList);
 		}	
 	 	if (!GetIsObjectValid(oCurTarget) || (curLoopCount > iLoopLimit))
 		{			
@@ -520,7 +522,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 	//					Jug_Debug("target self ");
 						if (!bDoLoop)
 						{
-							if (GetLocalInt(OBJECT_SELF, sHealingCurrentInfo) == iHealingNotNeeded)
+							if (PS_GetLocalInt(OBJECT_SELF, sHealingCurrentInfo) == iHealingNotNeeded)
 							{
 								return;
 							}
@@ -553,7 +555,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
             		
             		if (bNotSelf)
             		{	
-            			oCurTarget = GetLocalObject(oCurTarget, sTargetList);
+            			oCurTarget = PS_GetLocalObject(oCurTarget, sTargetList);
 						if (GetIsObjectValid(oCurTarget))
             			{
             				curLoopCount = 2;
@@ -626,7 +628,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 //					Jug_Debug("setting line of sight targets");
 		            sTargetList = sEnemyLineOfSight;
 		        }
-				oCurTarget = GetLocalObject(OBJECT_SELF, sTargetList);
+				oCurTarget = PS_GetLocalObject(OBJECT_SELF, sTargetList);
 				if (!GetIsObjectValid(oCurTarget))
 				{
 					break;
@@ -639,7 +641,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 
 		if (nTargetType == HENCH_ATTACK_TARGET_ALLIES)
 		{		
-			if (GetLocalInt(oCurTarget, sHealingCurrentInfo) == iHealingNotNeeded)
+			if (PS_GetLocalInt(oCurTarget, sHealingCurrentInfo) == iHealingNotNeeded)
 			{
 				continue;
 			}
@@ -764,7 +766,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 		
 			if (bAllowWeightSave)
             {
-                curTargetWeight = GetLocalFloat(oTestTarget, sCreatureSaveResultStr);
+                curTargetWeight = PS_GetLocalFloat(oTestTarget, sCreatureSaveResultStr);
             }
             else
             {
@@ -810,7 +812,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					{
 //						Jug_Debug(GetName(OBJECT_SELF) + " ignore 1 not self" + IntToString(bNotSelf));
 						curTargetWeight = 0.0;
-	                    SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
+	                    PS_SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
 					}
 					else
 					{
@@ -821,7 +823,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 		                {
 //							Jug_Debug(GetName(OBJECT_SELF) + " ignore 2");
 		                    curTargetWeight = 0.0;
-		                    SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
+		                    PS_SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
 		                }
 	                    else if (bIsFriend && checkFriendly)
 	                    {
@@ -833,7 +835,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 								{
 		                            // a hostile spell on a dominated creature breaks the domination                        
 			                        curTargetWeight = -1.5 * GetThreatRating(oTestTarget);
-			                        SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
+			                        PS_SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
 								}
 	                        }
 	                    }
@@ -887,7 +889,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
                 case HENCH_ATTACK_NO_CHECK:
                     break;
                 case HENCH_ATTACK_CHECK_HEAL:
-					if (GetLocalInt(oTestTarget, VAR_IMMUNE_TO_HEAL))
+					if (PS_GetLocalInt(oTestTarget, VAR_IMMUNE_TO_HEAL))
 					{
 						nTempResult = TRUE;
 					}
@@ -913,7 +915,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					}
 					break;
                 case HENCH_ATTACK_CHECK_NEG_HEALING:
-					if (GetLocalInt(oTestTarget, VAR_IMMUNE_TO_HEAL))
+					if (PS_GetLocalInt(oTestTarget, VAR_IMMUNE_TO_HEAL))
 					{
 						nTempResult = TRUE;
 					}
@@ -1061,7 +1063,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 							nAssocType == ASSOCIATE_TYPE_ANIMALCOMPANION ||
 							nRacial == RACIAL_TYPE_OUTSIDER ||
 							(!bBanish && (nRacial == RACIAL_TYPE_ELEMENTAL))) /*||
-							GetLocalInt(oTestTarget, sHenchPseudoSummon))*/;
+							PS_GetLocalInt(oTestTarget, sHenchPseudoSummon))*/;
 						if (!nTempResult && !bBanish)
 						{
 							currentSaveDC += nCasterLevel - GetHitDice(oTestTarget);
@@ -1292,7 +1294,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						(GetHasFeat(FEAT_EVASION, oTestTarget) || GetHasFeat(FEAT_IMPROVED_EVASION, oTestTarget)))
 					{
 							// if you get no damage with these spells, effect doesn't happen					
-						currentEffectWeight *= Getd20ChanceLimited(currentSaveDC - GetReflexSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+						currentEffectWeight *= Getd20ChanceLimited(currentSaveDC - GetReflexSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 					}
 					// shapes don't stack
 					if ((gsCurrentspInfo.otherID) > 0 ? GetHasSpellEffect(gsCurrentspInfo.otherID, oTestTarget) :
@@ -1545,7 +1547,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 				if (nTempResult || fCurChance <= 0.0)
 				{
 					// GetLocalInt can only be used because GetCreatureNegEffects has been already called
-					if (bIsEnemy && bCheckSR && GetLocalInt(oTestTarget, curPostiveEffectsStr) & HENCH_EFFECT_TYPE_SPELL_SHIELD)
+					if (bIsEnemy && bCheckSR && PS_GetLocalInt(oTestTarget, curPostiveEffectsStr) & HENCH_EFFECT_TYPE_SPELL_SHIELD)
 					{
 							// even though the spell is ineffective, it is useful for tearing down the spell shield
 						curTargetWeight = 0.25;
@@ -1563,16 +1565,16 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						{
 							if (bCheckNecromancy &&
 								// GetLocalInt can only be used because GetCreatureNegEffects has been already called
-								(GetLocalInt(oTestTarget, curPostiveEffectsStr) & HENCH_EFFECT_TYPE_IMMUNE_NECROMANCY))
+								(PS_GetLocalInt(oTestTarget, curPostiveEffectsStr) & HENCH_EFFECT_TYPE_IMMUNE_NECROMANCY))
 							{
 								fCurChance = 0.0;
 							}
-							else if (GetLocalInt(oTestTarget, spellLevelProtStr) >= spellLevel)
+							else if (PS_GetLocalInt(oTestTarget, spellLevelProtStr) >= spellLevel)
 							{
-//								Jug_Debug(GetName(OBJECT_SELF) + " spell level removal " + GetName(oTestTarget) + " val " + IntToString(GetLocalInt(oTestTarget, spellLevelProtStr)));
+//								Jug_Debug(GetName(OBJECT_SELF) + " spell level removal " + GetName(oTestTarget) + " val " + IntToString(PS_GetLocalInt(oTestTarget, spellLevelProtStr)));
 								fCurChance = 0.0;
 							}
-							else if (bIsEnemy && GetLocalInt(oTestTarget, curPostiveEffectsStr) & HENCH_EFFECT_TYPE_SPELL_SHIELD)
+							else if (bIsEnemy && PS_GetLocalInt(oTestTarget, curPostiveEffectsStr) & HENCH_EFFECT_TYPE_SPELL_SHIELD)
 							{
 									// spell is useful for tearing down the spell shield
 								fCurChance = (1.0 - fCurChance) / 4.0;
@@ -1587,7 +1589,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 				
 						// adjust damage based on immunities and resistances
 						// TODO this should be below in the code for resistances, but too many branches						
-						int curTargetDamageInfo = GetLocalInt(oTestTarget, damageInformationStr) & spellDamage.damageTypeMask;
+						int curTargetDamageInfo = PS_GetLocalInt(oTestTarget, damageInformationStr) & spellDamage.damageTypeMask;
 						if (curTargetDamageInfo)
 						{
 							// do some damage adjusting!
@@ -1618,13 +1620,13 @@ void HenchSpellAttack(int saveType, int targetInformation)
 							switch (currentFirstSaveType)
 							{
 							case HENCH_SPELL_SAVE_TYPE_SAVE1_FORT:
-								ratio = Getd20ChanceLimited(currentSaveDC - GetFortitudeSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+								ratio = Getd20ChanceLimited(currentSaveDC - GetFortitudeSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 								break;
 							case HENCH_SPELL_SAVE_TYPE_SAVE1_REFLEX:
-								ratio = Getd20ChanceLimited(currentSaveDC - GetReflexSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+								ratio = Getd20ChanceLimited(currentSaveDC - GetReflexSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 								break;
 							case HENCH_SPELL_SAVE_TYPE_SAVE1_WILL:
-								ratio = Getd20ChanceLimited(currentSaveDC - GetWillSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+								ratio = Getd20ChanceLimited(currentSaveDC - GetWillSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 								break;
 							}
 //							Jug_Debug(" ratio is " + FloatToString(ratio) + " firstSaveKind = " + IntToHexString(firstSaveKind) + " firstSaveType " + IntToHexString(firstSaveType));
@@ -1678,13 +1680,13 @@ void HenchSpellAttack(int saveType, int targetInformation)
 									switch (secondSaveType)
 									{
 									case HENCH_SPELL_SAVE_TYPE_SAVE2_FORT:
-										ratio = Getd20ChanceLimited(currentSaveDC - GetFortitudeSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+										ratio = Getd20ChanceLimited(currentSaveDC - GetFortitudeSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 										break;
 									case HENCH_SPELL_SAVE_TYPE_SAVE2_REFLEX:
-										ratio = Getd20ChanceLimited(currentSaveDC - GetReflexSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+										ratio = Getd20ChanceLimited(currentSaveDC - GetReflexSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 										break;
 									case HENCH_SPELL_SAVE_TYPE_SAVE2_WILL:
-										ratio = Getd20ChanceLimited(currentSaveDC - GetWillSavingThrow(oTestTarget) - (bRegularSpell ? GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
+										ratio = Getd20ChanceLimited(currentSaveDC - GetWillSavingThrow(oTestTarget) - (bRegularSpell ? PS_GetLocalInt(oTestTarget, spellSaveBonusStr) : 0));
 										break;
 									}
 								}
@@ -1783,7 +1785,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 	                }
 					else
 					{
-						int currentRegenerateAmount = GetLocalInt(oTestTarget, regenerationRateStr);
+						int currentRegenerateAmount = PS_GetLocalInt(oTestTarget, regenerationRateStr);
 						int iCurrent = GetCurrentHitPoints(oTestTarget) + currentRegenerateAmount * giRegenHealScaleAmount;
 					    int iBase = GetMaxHitPoints(oTestTarget);
 						
@@ -1796,7 +1798,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						if ((healthRatio < gfHealingThreshold) &&
 							(currentDamageAmount >= IntToFloat(iBase / giHealingDivisor)))
 						{
-							if (gbDisableNonHealorCure || (GetLocalInt(oTestTarget, HENCH_HEAL_SELF_STATE) <= HENCH_HEAL_SELF_CANT) || GetIsPC(oTestTarget))
+							if (gbDisableNonHealorCure || (PS_GetLocalInt(oTestTarget, HENCH_HEAL_SELF_STATE) <= HENCH_HEAL_SELF_CANT) || GetIsPC(oTestTarget))
 							{
 								// this actually heals the target (a friend)
 								curTargetWeight = currentDamageAmount / IntToFloat(iBase - iCurrent);
@@ -1830,7 +1832,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 							curTargetWeight = 0.0;
 							if ((oTestTarget == OBJECT_SELF) && (currentDamageAmount >= IntToFloat(iBase / giHealingDivisor)))
 							{
-    							SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_WAIT);
+    							PS_SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_WAIT);
 							}
 						}
 //						Jug_Debug(GetName(oTestTarget) + " target weight " + FloatToString(curTargetWeight));
@@ -1838,7 +1840,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 				}
 				if (bAllowWeightSave)
 				{
-					SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
+					PS_SetLocalFloat(oTestTarget, sCreatureSaveResultStr, curTargetWeight);
 				}				
             }
 			
@@ -1863,10 +1865,10 @@ void HenchSpellAttack(int saveType, int targetInformation)
 				else
 				{
 					float fTouchChance;
-					int touchFlags = GetLocalInt(oTestTarget, HENCH_RANGED_TOUCH_SAVEINFO);
+					int touchFlags = PS_GetLocalInt(oTestTarget, HENCH_RANGED_TOUCH_SAVEINFO);
 					if (touchFlags & iCheckTouch)
 					{
-						fTouchChance = GetLocalFloat(oTestTarget, gsRangeSaveStr);
+						fTouchChance = PS_GetLocalFloat(oTestTarget, gsRangeSaveStr);
 //						Jug_Debug("Check touch attack saved " + GetName(oTestTarget) + " cur chance " + FloatToString(fTouchChance));					
 					}
 					else
@@ -1877,15 +1879,15 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						fTouchChance = Getd20ChanceLimited(nTouchCheck - touchAC);								
 						if (iCheckTouch & (HENCH_MELEE_TOUCH_REGULAR | HENCH_MELEE_TOUCH_PLUS_TWO))
 						{
-							fTouchChance *= 1.0 - GetLocalFloat(oTestTarget, meleeConcealmentStr);
+							fTouchChance *= 1.0 - PS_GetLocalFloat(oTestTarget, meleeConcealmentStr);
 						}
 						else
 						{
-							fTouchChance *= 1.0 - GetLocalFloat(oTestTarget, rangedConcealmentStr);
+							fTouchChance *= 1.0 - PS_GetLocalFloat(oTestTarget, rangedConcealmentStr);
 						}
-						SetLocalFloat(oTestTarget, gsRangeSaveStr, fTouchChance);
+						PS_SetLocalFloat(oTestTarget, gsRangeSaveStr, fTouchChance);
 						touchFlags |= iCheckTouch;
-						SetLocalInt(oTestTarget, HENCH_RANGED_TOUCH_SAVEINFO, touchFlags);
+						PS_SetLocalInt(oTestTarget, HENCH_RANGED_TOUCH_SAVEINFO, touchFlags);
 //						Jug_Debug("Check touch attack " + GetName(oTestTarget) + " cur chance " + FloatToString(fTouchChance));					
 					}
 					
@@ -2111,7 +2113,7 @@ void HenchSpellAttackSpecial()
 		
 //	Jug_Debug(GetName(OBJECT_SELF) + " HenchSpellAttackSpecial " + Get2DAString("spells", "Label", spellID) + " " + IntToString(spellID) + " level " + IntToString(gsCurrentspInfo.spellLevel) + " save type " + IntToString(saveType) + " is item " + IntToString(bFoundItemSpell));
 
-	object oTestTarget = GetLocalObject(OBJECT_SELF, sEnemySeen);	
+	object oTestTarget = PS_GetLocalObject(OBJECT_SELF, sEnemySeen);	
 	object oBestTarget;
 	float maxEffectWeight;
 	int totalTargetsTested;
@@ -2306,9 +2308,9 @@ void HenchSpellAttackSpecial()
 				}
 				else if (bCheckSR)
 				{
-					if (GetLocalInt(oTestTarget, spellLevelProtStr) >= spellLevel)
+					if (PS_GetLocalInt(oTestTarget, spellLevelProtStr) >= spellLevel)
 					{
-//						Jug_Debug(GetName(OBJECT_SELF) + " spell level removal " + GetName(oTestTarget) + " val " + IntToString(GetLocalInt(oTestTarget, spellLevelProtStr)));
+//						Jug_Debug(GetName(OBJECT_SELF) + " spell level removal " + GetName(oTestTarget) + " val " + IntToString(PS_GetLocalInt(oTestTarget, spellLevelProtStr)));
 						curEffectWeight = 0.0;
 					}
 					else
@@ -2328,7 +2330,7 @@ void HenchSpellAttackSpecial()
 				}
 			}
 		}
-		oTestTarget = GetLocalObject(oTestTarget, sEnemySeen);	
+		oTestTarget = PS_GetLocalObject(oTestTarget, sEnemySeen);	
 	}
 	if (maxEffectWeight > 0.0)
 	{	
@@ -2355,7 +2357,7 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
     if (!GetIsObjectValid(oTarget))
     {
         float curMaxThreatRating;
-		object oTestTarget = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+		object oTestTarget = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
 		
 	    if (GetIsObjectValid(ogClosestNonActiveEnemy) &&
 			(oTestTarget != ogClosestNonActiveEnemy) &&
@@ -2366,7 +2368,7 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
 	        if (GetCreatureNegEffects(ogClosestNonActiveEnemy) & HENCH_EFFECT_DISABLED_INACTIVE_SHORT_DURATION)
 	        {
 				// insert ourselves into the list
-				SetLocalObject(ogClosestNonActiveEnemy, sEnemyLineOfSight, oTestTarget);
+				PS_SetLocalObject(ogClosestNonActiveEnemy, sEnemyLineOfSight, oTestTarget);
 				oTestTarget = ogClosestNonActiveEnemy;
 	//     Jug_Debug(GetName(OBJECT_SELF) + " start target2 " + GetName(oTarget) + " max range " + FloatToString(fMaxRange));
 			}
@@ -2378,7 +2380,7 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
 			float fDistanceToTarget = GetDistanceToObject(oTestTarget);
             if (fDistanceToTarget <= fMaxRange)
             {
-                float curThreatRating = GetLocalFloat(oTestTarget, sThreatRating);
+                float curThreatRating = PS_GetLocalFloat(oTestTarget, sThreatRating);
 
                 if (!GetObjectSeen(oTestTarget))
                 {
@@ -2386,11 +2388,11 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
                 }
 				else if (bWeaponIsRanged)
 				{
-					curThreatRating *= 1.0 - GetLocalFloat(oTestTarget, rangedConcealmentStr);
+					curThreatRating *= 1.0 - PS_GetLocalFloat(oTestTarget, rangedConcealmentStr);
 				}
 				else
 				{
-					curThreatRating *= 1.0 - GetLocalFloat(oTestTarget, meleeConcealmentStr);
+					curThreatRating *= 1.0 - PS_GetLocalFloat(oTestTarget, meleeConcealmentStr);
 				}
 				if (GetIsWeaponEffective(oTestTarget))
 				{
@@ -2402,12 +2404,12 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
 							!GetIsImmune(oTestTarget, IMMUNITY_TYPE_SNEAK_ATTACK, OBJECT_SELF) &&
 							(fDistanceToTarget <= HENCH_MAX_SNEAK_ATTACK_DISTANCE) &&
 							(bIsInvisible || (GetAttackTarget(oTestTarget) != OBJECT_SELF) ||
-							(GetLocalInt(oTestTarget, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED)))
+							(PS_GetLocalInt(oTestTarget, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED)))
                     {
                         curThreatRating *= 2.0;
                     }
 					// encentive to finish off disabled opponents
-					else if (GetLocalInt(oTestTarget, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED)
+					else if (PS_GetLocalInt(oTestTarget, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED)
 					{
                         curThreatRating *= 1.5;
 	                }
@@ -2426,7 +2428,7 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
                     curMaxThreatRating = curThreatRating;
                 }
             }
- 			oTestTarget = GetLocalObject(oTestTarget, sEnemyLineOfSight);
+ 			oTestTarget = PS_GetLocalObject(oTestTarget, sEnemyLineOfSight);
 		}
     }
 	
@@ -2483,11 +2485,11 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
 	}
 	if (bWeaponIsRanged)
 	{
-		result *= 1.0 - GetLocalFloat(oTarget, rangedConcealmentStr);
+		result *= 1.0 - PS_GetLocalFloat(oTarget, rangedConcealmentStr);
 	}
 	else
 	{
-		result *= 1.0 - GetLocalFloat(oTarget, meleeConcealmentStr);
+		result *= 1.0 - PS_GetLocalFloat(oTarget, meleeConcealmentStr);
 	}
 	result *= damageGuess;
 //	Jug_Debug(GetName(OBJECT_SELF) + " estimated damage for " + GetName(oTarget) + " is " + FloatToString(result));		
@@ -2499,8 +2501,8 @@ void HenchCheckTurnUndead()
 {
 //	Jug_Debug(GetName(OBJECT_SELF) + " in turn undead");
     // don't turn again until five checks have passed
-    int combatRoundCount = GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
-    int lastTurning = GetLocalInt(OBJECT_SELF, henchLastTurnStr);
+    int combatRoundCount = PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
+    int lastTurning = PS_GetLocalInt(OBJECT_SELF, henchLastTurnStr);
     if (lastTurning != 0 && lastTurning > combatRoundCount - 5)
     {
 //		Jug_Debug(GetName(OBJECT_SELF) + " exit turn undead last turning " + IntToString(lastTurning));

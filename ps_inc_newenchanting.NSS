@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_newcraft_include"
 
 const string xmlEnchantingFile = "scod_enchanting_window.xml";
@@ -406,7 +408,7 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST");
 	
-	if (oItem == OBJECT_INVALID) oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	if (oItem == OBJECT_INVALID) oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 	
 	if (CRAFT_DIRECT_FROM_2DA){
 		GenerateEnchantmentTypeListFrom2DA(oPC, oItem);
@@ -422,10 +424,10 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	int index = 0;
 	int max = SQLGetAffectedRows();
 	//SendMessageToPC(oPC, "returned: "+IntToString(max));
-	SetLocalInt(oPC, "enchant_types_num", max);
+	PS_SetLocalInt(oPC, "enchant_types_num", max);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		int n = StringToInt(SQLGetData(1));
-		SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
+		PS_SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
 		index++;
 	}
 	
@@ -434,14 +436,14 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	int nDisplayed = 0;
 	for (index = 0; index < max; index++) {
 	
-		int n = GetLocalInt(oPC, "enchant_type_"+IntToString(index));
+		int n = PS_GetLocalInt(oPC, "enchant_type_"+IntToString(index));
 		struct enchantment e = LoadEnchantment(n, oPC);
 		string sName = GetTypeName(e);
 		int nType = e.type;
 		
-		if (GetLocalInt(oPC, sName) == 0) {
-			SetLocalInt(oPC, sName, 1);
-			SetLocalString(oPC, "enchantment_"+IntToString(nDisplayed), sName);
+		if (PS_GetLocalInt(oPC, sName) == 0) {
+			PS_SetLocalInt(oPC, sName, 1);
+			PS_SetLocalString(oPC, "enchantment_"+IntToString(nDisplayed), sName);
 			nDisplayed++;
 		
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(n), "EnchantTypeName="+sName+";", "", "5="+IntToString(n), "");
@@ -449,17 +451,17 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 				SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANTTROW_"+IntToString(index), TRUE);
 			}*/
 		}
-		DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
+		PS_DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
 	}
-	DeleteLocalInt(oPC, "enchant_types_num");
+	PS_DeleteLocalInt(oPC, "enchant_types_num");
 	
 	//remove those markers set above
 	index = 0;
 	max = nDisplayed;
 	while (index < max) {
-		if (GetLocalString(oPC, "enchantment_"+IntToString(index)) != "") {
-			DeleteLocalInt(oPC, GetLocalString(oPC, "enchantment_"+IntToString(index)));
-			DeleteLocalString(oPC, "enchantment_"+IntToString(index));
+		if (PS_GetLocalString(oPC, "enchantment_"+IntToString(index)) != "") {
+			PS_DeleteLocalInt(oPC, PS_GetLocalString(oPC, "enchantment_"+IntToString(index)));
+			PS_DeleteLocalString(oPC, "enchantment_"+IntToString(index));
 		}
 		index++;
 	}
@@ -471,7 +473,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 
 		//Clear the box
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST");
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 	
 	if (CRAFT_DIRECT_FROM_2DA){
 		GenerateParamTypeListFrom2DA(oPC, oItem, enchant);
@@ -491,10 +493,10 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 	int index = 0;
 	int max = SQLGetAffectedRows();
 	//SendMessageToPC(oPC, "returned: "+IntToString(max));
-	SetLocalInt(oPC, "enchant_types_num", max);
+	PS_SetLocalInt(oPC, "enchant_types_num", max);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		int n = StringToInt(SQLGetData(1));
-		SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
+		PS_SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
 		index++;
 	}
 	
@@ -502,7 +504,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 	//loose its place.
 	for (index = 0; index < max; index++) {
 	
-		int n = GetLocalInt(oPC, "enchant_type_"+IntToString(index));
+		int n = PS_GetLocalInt(oPC, "enchant_type_"+IntToString(index));
 		struct enchantment e = LoadEnchantment(n, oPC);
 		
 		int type = e.type;
@@ -515,9 +517,9 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 				SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANTPROW_"+IntToString(n), TRUE);
 			}*/
 		}
-		DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
+		PS_DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
 	}
-	DeleteLocalInt(oPC, "enchant_types_num");
+	PS_DeleteLocalInt(oPC, "enchant_types_num");
 	
 }
 
@@ -840,7 +842,7 @@ void DisplayItemDescription(object oPC, object oItem) {
 //Prints out the details of the requirement
 string DisplaySpecialRequirement(string sReq) {
 	object oPC = OBJECT_SELF;
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 	string line = "";
 	if (sReq == "CL_DIVINE") {
 		line = "Must be Cleric, Paladin, or Favored Soul.";
@@ -872,7 +874,7 @@ string DisplaySpecialRequirement(string sReq) {
 
 //Defines / Implements the custom requirements field
 int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID) {
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 	if (sReq == "CL_DIVINE") {
 		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) ||
@@ -956,7 +958,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 				int nQuality = GetGemQuality(oItem);
 				if (nQReq == nQuality) {
 					//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-					SetLocalObject(oPC, "GemstoneToTake", oItem);
+					PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
 					return TRUE;
 				}
 			} 
@@ -966,7 +968,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
 						//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-						SetLocalObject(oPC, "GemstoneToTake", oItem);
+						PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
@@ -976,7 +978,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
 						//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-						SetLocalObject(oPC, "GemstoneToTake", oItem);
+						PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
@@ -986,7 +988,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
 						//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-						SetLocalObject(oPC, "GemstoneToTake", oItem);
+						PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
@@ -1008,7 +1010,7 @@ int GetHasRequiredEssence(object oPC, string sReq, int giveFeedback = FALSE) {
 		
 	object oItem = GetItemPossessedBy(oPC, sReq);
 	if (GetIsObjectValid(oItem)) {
-		SetLocalObject(oPC, "EssenceToTake", oItem);
+		PS_SetLocalObject(oPC, "EssenceToTake", oItem);
 		return TRUE;
 	}
 	
@@ -1020,10 +1022,10 @@ int GetHasRequiredEssence(object oPC, string sReq, int giveFeedback = FALSE) {
 //This MUST be called AFTER getting the regular essence requirement
 int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence){
 	if (sAddEssence == "") return TRUE;
-	object oMainEssence = GetLocalObject(oPC, "EssenceToTake");
+	object oMainEssence = PS_GetLocalObject(oPC, "EssenceToTake");
 	if (sAddEssence == sMainEssence && GetIsObjectValid(oMainEssence)){
 		if (GetItemStackSize(oMainEssence) > 1){
-			SetLocalObject(oPC, "AddEssenceToTake", oMainEssence);
+			PS_SetLocalObject(oPC, "AddEssenceToTake", oMainEssence);
 			return TRUE;
 		}	
 	}
@@ -1034,7 +1036,7 @@ int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence){
 		// num of items a pc could have if inv full of full bags, including the bags
 		if (i > 27072) break;
 		if (GetResRef(oItem) == sAddEssence && oItem != oMainEssence){
-			SetLocalObject(oPC, "AddEssenceToTake", oItem);
+			PS_SetLocalObject(oPC, "AddEssenceToTake", oItem);
 			return TRUE;
 		}
 		oItem = GetNextItemInInventory(oPC);
@@ -1072,7 +1074,7 @@ int MeetsMinimumRequirements(object oPC) {
 	if (GetIsDM(oPC))
 		return TRUE;
 
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 
 	int nGold = 300; //minimum amount of gold for 1 point ability
 	int nCL = 3; //minimum CL for 1 point ability
@@ -1121,20 +1123,20 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant) {
 
 	int nGold = enchant.gold;
 	TakeGoldFromCreature(nGold, oPC, TRUE, TRUE);
-	object oGem = GetLocalObject(oPC, "GemstoneToTake");
+	object oGem = PS_GetLocalObject(oPC, "GemstoneToTake");
 	if (GetIsObjectValid(oGem)) {
 		string sTag = GetTag(oGem);
 		TakeNumCraftingMaterials(oPC, sTag, 1);
 	} else {
 		SendMessageToPC(oPC, "no gem required");
 	}
-	object oEssence = GetLocalObject(oPC, "EssenceToTake");
+	object oEssence = PS_GetLocalObject(oPC, "EssenceToTake");
 	if (GetIsObjectValid(oEssence)) {
 		string sTag = GetTag(oEssence);
 		TakeNumCraftingMaterials(oPC, sTag, 1);
 	} 
 	if (enchant.add_essence != ""){
-		object oAddEssence = GetLocalObject(oPC, "AddEssenceToTake");
+		object oAddEssence = PS_GetLocalObject(oPC, "AddEssenceToTake");
 		if (GetIsObjectValid(oAddEssence)) {
 			string sAddTag = GetTag(oAddEssence);
 			TakeNumCraftingMaterials(oPC, sAddTag, 1);
@@ -1150,152 +1152,125 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
 	
 	int nPoints = 0; // this will be our ultimate return value. May as well set it up first thing.
-
 	int nItem = GetBaseItemType(oItem);
 	if (nItem == 111) nItem = 202; // there are 2 whip ids. The scod_craft_baseitems uses 202
 	
-	// Crafted items have item properties that are either more powerful than what can be done with enchanting
-	// or cost fewer points than enchaning versions, otherwise what's the point in using the special mats?
-	// Under the old system making a pandemic silver sword with an automatic +1d6 vs lawful cost more than
-	// just buying a regular alchemical silver ingot from Layla and enchanting it with +1d6 vs law, resulting
-	// in the same points for the same mechanical stats but less $$$. So now we need to identify the base
-	// material item property so that we can assign our own points for it instead of matching it to scodenchantments.2da
-	
-	
-	// to start, lets just get an item property variable for the material. When we find what this is 
-	// we'll set the points to what is set for this material in the 2da
 	itemproperty ipMatPower;
-
-	// now we need a variable to hold the row for scod_craft_baseitems
-	int nCraftId = -1;
-
-	// now let's go ahead and figure out what we're dealing with. Although every weapon and other base item is craftable,
-	// not every armor is (such as masterwork and elven mithral), so if it's an armor we need to find it by it's 
-	// armorrulesstats id. There's 2 columns for that in scod_craft_baseitems, one for sigilian (golem) mithral and one for
-	// everything else. 
-	int i;
-	int nNumRows = GetNum2DARows("scod_craft_baseitems");
-	if (nItem == 16){ // armor/clothing
-		// going to compare strings instead of using StringToInt in the 2da because "****" in the 2da 
-		// would be converted to 0 as integer, which would match with clothing rulesstat
-		string sArmorStat = IntToString(GetArmorRulesType(oItem));
-		for (i = 0; i < nNumRows; i++){
-			if (Get2DAString("scod_craft_baseitems", "ARMORSTAT_ID", i) == sArmorStat ||
-				Get2DAString("scod_craft_baseitems", "MITH_ARMORSTAT_ID", i) == sArmorStat){
-					nCraftId = i;
-					break;
-				}
-		}
-	} else {
-		// the base item id listed in scod_craft_baseitems for quivers is the id for the weapon
-		// the quiver produces, not the quiver itself, so we need to look for the actual 
-		// arrow/dart/etc id
-		int nConvertedId;
-		switch(nItem){
-			case 90: nConvertedId = 31; break; // dart quiver to dart
-			case 91: nConvertedId = 63; break; // throwing axe quiver to taxe
-			case 92: nConvertedId = 59; break; // shuriken quiver to shuriken
-			case 93: nConvertedId = 20; break; // arrow quiver to arrow
-			case 94: nConvertedId = 25; break; // bolt quiver to bolt
-			case 95: nConvertedId = 27; break; // bullet quiver to bullet
-			default: nConvertedId = nItem; break; // anything else
-		}
-	
-		for (i = 0; i < nNumRows; i++){
-			if (StringToInt(Get2DAString("scod_craft_baseitems", "ID", i)) == nConvertedId){
-				nCraftId = i;
-				break;
-			}
-		}
-	}
-	// we should have a craft id now. If we don't then whatever oItem is it's not something we can craft, so screw it.
-	// Kidding. We just skip getting the material itemprop. But if we DO have a scod_craft_baseitems id, then we
-	// go ahead and do what we have to do to get that ipMatPower. ofc just because it CAN be crafted doesn't mean
-	// it was, but if we don't get valid materials and ipMatPower we don't assign points based on the ipMatPower.
 	itemproperty ip;
 	int nIpType;
 	int nIpSub;
-	if (nCraftId != -1){
-		struct baseitem dItem = LoadBaseItem(nCraftId);
-		string sMat2da = GetStringLowerCase(dItem.matlist_1);
-		int nIpRpBaseMatId = -1; // this will be the id of mat1 in iprp_specialmat, NOT the id within scod_craft_leather, etc
-		// So now we try to find the base material. If the item is metalline, then that makes it easy.
-		if (GetTag(oItem) == "nw_metalline"){
-			nIpRpBaseMatId = SPECIAL_MAT_METALLINE;
-			sMat2da = "scod_craft_metal"; // wood and leather melee weapons with metalline get metalline shift property, so set this
+	string sTypeColumn = "IP_MELEE_TYPE";
+	string sSubColumn =  "IP_MELEE_SUBTYPE";
+	string sParamColumn = "IP_MELEE_PARAM";
+	string sSpecColumn = "IP_M_SPECIAL";
+	string sPointsColumn = "M_POINTS";
+	int nIpMatType;
+	int nIpMatSub;
+	int nIpMatParam;
+	int nIpMatSpec;
+	string sMat2da = "";
+	int nNumRows;
+	int i;
+	if (GetTag(oItem) == "nw_metalline") {
+		sMat2da = "scod_craft_metal";
+		nNumRows = GetNum2DARows(sMat2da);
+		for (i = 0; i < nNumRows; i++){
+			if (StringToInt(Get2DAString(sMat2da, "IP_DESCRIPTION_ID", i)) == SPECIAL_MAT_METALLINE){
+				nIpMatType = StringToInt(Get2DAString(sMat2da, sTypeColumn, i));
+				nIpMatSub = StringToInt(Get2DAString(sMat2da, sSubColumn, i));
+				nIpMatParam = StringToInt(Get2DAString(sMat2da, sParamColumn, i));
+				nIpMatSpec = StringToInt(Get2DAString(sMat2da, sSpecColumn, i));
+				nPoints += StringToInt(Get2DAString(sMat2da, sPointsColumn, i));
+				ipMatPower = IpArgsToItemProperty(nIpMatType, nIpMatSub, nIpMatParam,nIpMatSpec);
+				break;
+			}
+		}
+	} else {
+		string sCat = "other"; // is this an armor, a ranged launcher, meleee/ammo/thrown, or other?
+		string sLookupColumn = ""; // this and the one below will be used to find our item in scod_craft_baseitems
+		int nLookupValue = NULL;
+		if (nItem == 16){
+			sCat = "armor";
+			sLookupColumn = "ARMORSTAT_ID";
+			nLookupValue = GetArmorRulesType(oItem);
+			if (nLookupValue >= 42) sLookupColumn = "MITH_ARMORSTAT_ID"; // crafted mithral
 		} else {
-			// now find the right base material. iprp_specialmat now has a column to say which material list a special
-			// material shows up in. Although the precious metals like gold, electrum, etc can now be either mat1 for
-			// jewelry or mat 3 for weapons and armor, it only matters in this case for mat1 so they're assigned to 
-			// scod_craft_metal. (not that they provide any matpower anyway).
-			ip = GetFirstItemProperty(oItem);
-			while (GetIsItemPropertyValid(ip)){
-				if (GetItemPropertyType(ip) == 100){
-					nIpSub = GetItemPropertySubType(ip);
-					// if the special mat item property subtype row matches the mat1 for oItem, bingo. We have iprpmatid
-					if (GetStringLowerCase(Get2DAString("iprp_specialmat", "Mat_2da", nIpSub)) == sMat2da){
-						nIpRpBaseMatId = nIpSub; // this is the row of iprp_specialmat for our item's base material
+			sLookupColumn = "ID";
+			// the 2da lists the quivers by the items they produce, not the quivers themselves
+			switch(nItem){
+				case 90: nLookupValue = 31; break; // dart quiver to dart
+				case 91: nLookupValue = 63; break; // throwing axe quiver to taxe
+				case 92: nLookupValue = 59; break; // shuriken quiver to shuriken
+				case 93: nLookupValue = 20; break; // arrow quiver to arrow
+				case 94: nLookupValue = 25; break; // bolt quiver to bolt
+				case 95: nLookupValue = 27; break; // bullet quiver to bullet
+				default: nLookupValue = nItem; break;
+			}
+			if (nItem == BASE_ITEM_SMALLSHIELD || nItem == BASE_ITEM_LARGESHIELD ||
+				nItem == BASE_ITEM_TOWERSHIELD)
+					sCat = "armor";
+			else if (nItem == BASE_ITEM_SLING || nItem == BASE_ITEM_SHORTBOW || 
+				nItem == BASE_ITEM_LONGBOW || nItem == BASE_ITEM_LIGHTCROSSBOW ||
+				nItem == BASE_ITEM_HEAVYCROSSBOW)
+					sCat = "launcher";
+			else if (IPGetIsWeapon(OBJECT_INVALID, nItem) || IPGetIsProjectile(OBJECT_INVALID, nItem))
+				sCat = "melee"; // ammo and thrown weapons also use the melee base mat powers
+		}
+
+		if (sCat != "other"){ // misc items do not have a material power, so don't try to find it 
+
+			if (sCat == "armor"){
+				sTypeColumn = "IP_ARMOR_TYPE";
+				sSubColumn =  "IP_ARMOR_SUBTYPE";
+				sParamColumn = "IP_ARMOR_PARAM";
+				sSpecColumn = "IP_A_SPECIAL";
+				sPointsColumn = "A_POINTS";
+			} else if (sCat == "launcher"){
+				sTypeColumn = "IP_RANGED_TYPE";
+				sSubColumn =  "IP_RANGED_SUBTYPE";
+				sParamColumn = "IP_RANGED_PARAM";
+				sSpecColumn = "IP_R_SPECIAL";
+				sPointsColumn = "R_POINTS";
+			}
+			
+			if (sLookupColumn != "" && nLookupValue != NULL){
+				nNumRows = GetNum2DARows("scod_craft_baseitems");
+				for (i = 0; i < nNumRows; i++){
+					if (StringToInt(Get2DAString("scod_craft_baseitems", sLookupColumn, i)) == nLookupValue){
+						sMat2da = Get2DAString("scod_craft_baseitems", "MATERIAL_1", i);
 						break;
 					}
 				}
-				ip = GetNextItemProperty(oItem);
 			}
-		}
-		// now we need to cycle through our material 2da to get the id within that 2da for our material,
-		// assuming of course we found an iprp value
-		if (nIpRpBaseMatId != -1){
-			int nMatIndex = -1;
-			nNumRows = GetNum2DARows(sMat2da);
-			for (i = 0; i < nNumRows; i++){
-				if (StringToInt(Get2DAString(sMat2da, "IP_DESCRIPTION_ID", i)) == nIpRpBaseMatId){
-					nMatIndex = i;
-					break;
+			if (sMat2da != ""){
+				nNumRows = GetNum2DARows(sMat2da);
+				ip = GetFirstItemProperty(oItem);
+				int bFoundIp = FALSE;
+				while (GetIsItemPropertyValid(ip) && !bFoundIp){
+					nIpType = GetItemPropertyType(ip);
+					if (nIpType == 100){
+						nIpSub = GetItemPropertySubType(ip);
+						for (i = 0; i < nNumRows; i++){
+							if (StringToInt(Get2DAString(sMat2da, "IP_DESCRIPTION_ID", i)) == nIpSub){
+								nPoints += StringToInt(Get2DAString(sMat2da, sPointsColumn, i));
+								if (Get2DAString(sMat2da, sTypeColumn, i) != "****"){
+									nIpMatType = StringToInt(Get2DAString(sMat2da, sTypeColumn, i));
+									nIpMatSub = StringToInt(Get2DAString(sMat2da, sSubColumn, i));
+									nIpMatParam = StringToInt(Get2DAString(sMat2da, sParamColumn, i));
+									nIpMatSpec = StringToInt(Get2DAString(sMat2da, sSpecColumn, i));
+									ipMatPower = IpArgsToItemProperty(nIpMatType, nIpMatSub, nIpMatParam, nIpMatSpec);
+								}
+								bFoundIp = TRUE;
+								break;
+							}
+						}	
+					}
+					ip = GetNextItemProperty(oItem);
 				}
 			}
-			// now load our material if we have a matindex
-			if (nMatIndex != -1){
-				struct material dMat = LoadMaterial(nMatIndex, sMat2da);
-				// finally we can get the special mat ip. maybe. Of course, we don't KNOW 
-				// that there is one even if we got to this point. For example physical DR armors 
-				// have no item property because it's set in the toolset (thank you, bioware, for creating
-				// dr functions that don't function), but we'll try to get the special mat property
-				// and if we've found a special mat that corresponds to what the base mat is supposed to be 
-				// then we'll assign the points as if the mat power is there. Should be safe enough unless
-				// someone starts adding special mat properties to drop items. Riverine items in the Armory
-				// should be safe enough because I haven't changed what item property riverine gets, so those 
-				// should get the correct points.
-				ip = GetSpecialMaterialItemProperty(dItem, dMat);
-				if (GetIsItemPropertyValid(ip)) ipMatPower = ip;
-				// now lets figure out the points. I've created columns for those, too, in iprp_specialmat
-				string sPointsColumn = "";
-				if (dItem.type == "W"){
-					if (IPGetIsLauncher(oItem)) sPointsColumn = "R_POINTS"; // bows, xbows, slings
-					else sPointsColumn = "M_POINTS"; // all other weapons and ammo
-				} else if (dItem.type == "A"){ sPointsColumn = "A_POINTS";
-				} else if (nItem == BASE_ITEM_GLOVES && CRAFTED_GLOVES_GET_MAT_POWER)
-					sPointsColumn = "M_POINTS";
-				// misc items other than gloves don't get a base mat power, so they don't cost points.
-				
-				// Now we add the points for the mat power. We don't wait till we see if the item has the mat
-				// power because some items, like DR armors, don't have the mat power defined in the 2da.
-				// We just hope no dev does anything silly like giving a loot drop item a Forged Of property
-				// without giving the mat power.
-				if (sPointsColumn != "")
-					nPoints += StringToInt(Get2DAString(sMat2da, sPointsColumn, nMatIndex));
-			}
 		}
-	} // end if (nCraftId != -1)
-	
-	// ok, that was a lot of work to get the points and matpower. Maybe that should be stored on a 
-	// local int on the item at creation? How reliable would that be? No idea.
-	
-	// there's 5 more item properties to account for that cost specific points based on circumstance:
-	// material synergy bonus for special materials, 
-	// rapid reload for crossbows that were made with a crossbow cocking lever
-	// weapon focus for crossbows that were made with a self-adjusting sight
-	// bonus feat imp crit unarmed or for specific ranged weapons is applied instead of keen, so we'll
-	// check for that.
-	// and ofc 50% weight costs nothing so why scan the 2da for that one?
+	}
+
 	struct synergyBonus dSynergy = GetItemMaterialSynergyBonus(oItem);
 	itemproperty ipSynergy = dSynergy.ip;
 	int nSynergyPoints = dSynergy.nPoints;
@@ -1308,7 +1283,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		ipCrit = GetImpCritItemPropertyForRanged(nItem);
 	itemproperty ipWeight = ItemPropertyWeightReduction(IP_CONST_REDUCEDWEIGHT_50_PERCENT);
 	
-	string sTypeColumn = GetItemColumn(nItem); // the column in scodenchantments for a valid enchantment for this item, 0_Melee, etc
+	sTypeColumn = GetItemColumn(nItem); // the column in scodenchantments for a valid enchantment for this item, 0_Melee, etc
 	struct enchantment eFrom2da; // the enchantment in scodenchantments that might be the one on our item
 	itemproperty ipFrom2da; // the item property from above, we'll compare it to the one on the item
 	int bFoundMatch; // boolean, did we find a matching enchantment?
@@ -1322,7 +1297,23 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		nAddPoints = 0;
 		nIpType = GetItemPropertyType(ip);
 		nIpSub = GetItemPropertySubType(ip);
-		
+			
+		//debug 
+		/*
+		string sDebug = "\nComparison\n";
+		sDebug += "Item type: " + IntToString(nIpType);
+		sDebug += ", 2da type: " +IntToString(GetItemPropertyType(ipFrom2da)) + "\n";
+		sDebug += "Item sub: " +IntToString(GetItemPropertySubType(ip));
+		sDebug += ", 2da sub: " +IntToString(GetItemPropertySubType(ipFrom2da)) + "\n";
+		sDebug += "Item table: " +IntToString(GetItemPropertyCostTable(ip));
+		sDebug += ", 2da table: " +IntToString(GetItemPropertyCostTable(ipFrom2da)) + "\n";
+		sDebug += "Item num: " +IntToString(GetItemPropertyCostTableValue(ip));
+		sDebug += ", 2da num: " +IntToString(GetItemPropertyCostTableValue(ipFrom2da)) + "\n";
+		sDebug += "Item spec: " +IntToString(GetItemPropertyParam1Value(ip));
+		sDebug += ", 2da spec: " +IntToString(GetItemPropertyParam1Value(ipFrom2da)) + "\n\n";					
+		SendMessageToPC(oPC, sDebug);
+		*/
+
 		// skip temp enchantments like from light spell or magic vestment spell
 		if (GetItemPropertyDurationType(ip) !=  DURATION_TYPE_PERMANENT)
 			bSkipIp = TRUE;
@@ -1346,25 +1337,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		if (!bSkipIp && nIpType == 45 && nItem == BASE_ITEM_SLING)
 			bSkipIp = TRUE;
 		
-		// armors with physical DR don't have their matpower set via script with 
-		// numbers from 2da because the function for that doesn't work. Instead 
-		// we have to catch it here
-		if (!bSkipIp && nItem == 16 && nIpType == 22){
-			int nMat = GetArmorBaseMaterial(oItem);
-			if (nMat != NULL){
-				string s2da = Get2DAString("iprp_specialmat", "Mat_2da", nMat);
-				int nRows = GetNum2DARows(s2da);
-				int index;
-				for (index = 0; index < nRows; index++){
-					if (StringToInt(Get2DAString(s2da, "IP_DESCRIPTION_ID", index)) == nMat){
-						nPoints += StringToInt(Get2DAString(s2da, "A_POINTS", index));
-						bSkipIp = TRUE;
-						break;
-					}
-				}
-			}
-		}
-		
+
 		// reload and aim features granted by materials a crossbow is made with do not cost points
 		// (because they don't grant any either)
 		if (!bSkipIp && GetIsItemPropertyValid(ipMechReload)){
@@ -1377,7 +1350,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		// synergy bonus
 		if (!bSkipIp && GetIsItemPropertyValid(ipSynergy)){
 			if (IPGetItemPropertiesIdentical(ipSynergy, ip)){
-				nAddPoints = nSynergyPoints;
+				nAddPoints += nSynergyPoints;
 				bSkipIp = TRUE;
 			}
 		}
@@ -1389,23 +1362,20 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		
 		// checking for keen/imp crit last in case it was already the matpower
 		if (!bSkipIp && IPGetItemPropertiesIdentical(ipCrit, ip)){
-				nAddPoints = 1;
 				bSkipIp = TRUE;
 		}
 		
-		// if a ranged weapon has bonus feat imp crit, that is equivalent to keen
-		// because you cannot dual wield ranged weapons. Therefore we add 1 point and move on
-		if (!bSkipIp && nIpType == 12){ // type 12 = bonus feat
 			// for reasons I don't understand there are 2 entries in iprp_feats
-			// for each imp crit for ranged weapons
+			// for each imp crit for ranged weapons, so we'll check for them all
+		if (!bSkipIp && nIpType == 12){ // type 12 = bonus feat
 			if ((nItem == BASE_ITEM_LONGBOW && (nIpSub == 59 || nIpSub == 1318)) ||
 				(nItem == BASE_ITEM_SHORTBOW && (nIpSub == 60 || nIpSub == 1317)) ||
 				(nItem == BASE_ITEM_HEAVYCROSSBOW && (nIpSub == 50 || nIpSub == 1320)) ||
 				(nItem == BASE_ITEM_LIGHTCROSSBOW && (nIpSub == 51 || nIpSub == 1319)) ||
 				(nItem == BASE_ITEM_SLING && (nIpSub == 57 || nIpSub == 1316)) ||
-				(nItem == BASE_ITEM_DART && (nIpSub == 49 || nIpSub == 1321)) ||
-				(nItem == BASE_ITEM_SHURIKEN && (nIpSub == 77 || nIpSub == 1322)) ||
-				(nItem == BASE_ITEM_THROWINGAXE && (nIpSub == 67 || nIpSub == 1323))){
+				((nItem == BASE_ITEM_DART || nItem == 90) && (nIpSub == 49 || nIpSub == 1321)) ||
+				((nItem == BASE_ITEM_SHURIKEN || nItem == 92)&& (nIpSub == 77 || nIpSub == 1322)) ||
+				((nItem == BASE_ITEM_THROWINGAXE || nItem == 91) && (nIpSub == 67 || nIpSub == 1323))){
 				nAddPoints = 1;
 				bSkipIp = TRUE;
 			}
@@ -1445,7 +1415,8 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 			}
 			if (!bFoundMatch) nAddPoints = EstimateItemPropertyPointValue(ip);
 		}
-		if (nAddPoints > 5) nAddPoints = 5;
+		if (nAddPoints > 6) nAddPoints = 6;
+		else if (nAddPoints < 0) nAddPoints = 0;
 		nPoints += nAddPoints;
 		ip = GetNextItemProperty(oItem);
 	}	

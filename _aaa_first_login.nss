@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nwnx_scod_finesse"
 #include "nwnx_scod_monkweapon"
 #include "nwnx_scod_ac"
@@ -7,18 +9,18 @@
 // once, not once per person logging in
 
 void FirstLogin(){
-	//object oMod = GetModule();
-	
-	// if we've already done this, bail
-	//if (GetLocalInt(oMod, "FirstLogin")) return;
-	
+
+	// call Dae's plugin functions
 	EnableFinesse();
 	EnableCreatureFinesse();
 	EnableMonkNew();
 	SetFeatAC();
 	
-	// show that we've done this
-	//SetLocalInt(oMod, "FirstLogin", TRUE);
+	// now copy the variable set in the toolset to a local variable set on the 
+	// module with fully legal variable name. If we've already done this, bail
+	if (GetGlobalString("X2_S_UD_SPELLSCRIPT") == "antimagic_spell_cast") return;
+	PS_SetGlobalString("X2_S_UD_SPELLSCRIPT", "antimagic_spell_cast");
+
 	
 }
 

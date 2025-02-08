@@ -52,7 +52,7 @@ struct xbowMechanicals{
 int GetWorkbenchInRange(object oPC, object oBench);
 object GetNearestEnchantingWorkbench(object oPC);
 object GetNearestSmithingWorkbench(object oPC);
-
+itemproperty IpArgsToItemProperty(int nType, int nSub, int nParam, int nSpecial);
 struct xbowMechanicals GetXbowMechanicals(object oItem);
 
 int GetArmorBaseMaterial(object oItem);
@@ -552,7 +552,15 @@ int GetParamIndex(int index){
 int GetGoldCost(int index){
 	object oPC = OBJECT_SELF;
 	if (GetIsCraftingFree(oPC)) return 0;
-	int nGold = StringToInt(Get2DAString("scodenchantments", "Gold", index));  
+	int nGold = StringToInt(Get2DAString("scodenchantments", "Gold", index));
+		// 10% discount for craft magic arms and armor, since psi and lock get imbue for free
+	if (GetHasFeat(FEAT_CRAFT_MAGIC_ARMS_AND_ARMOR, oPC, TRUE)){
+		if (nGold >= 10){
+			float fGold = IntToFloat(nGold);
+			fGold = fGold * 0.9f;
+			nGold = FloatToInt(fGold);
+		}
+	}
 	return nGold;
 }
 
@@ -608,14 +616,7 @@ int GetArmorBaseMaterial(object oItem){
 	return NULL;
 }
 
-//Converts between type/subtype/param/special and the actual property
-itemproperty EnchantmentIndexToItemProp(struct enchantment enchant) {
-
-	int nType = enchant.type;
-	int nSub = enchant.subtype;
-	int nParam = enchant.numerical;
-	int nSpecial = enchant.special;
-
+itemproperty IpArgsToItemProperty(int nType, int nSub, int nParam, int nSpecial){
 	switch(nType) {
 		case 0: return ItemPropertyAbilityBonus(nSub, nParam);
 		case 1: return ItemPropertyACBonus(nParam);
@@ -694,6 +695,18 @@ itemproperty EnchantmentIndexToItemProp(struct enchantment enchant) {
 		default: return ItemPropertyEnhancementBonus(nParam);
 	}
 	return ItemPropertyEnhancementBonus(nParam);
+}
+
+//Converts between type/subtype/param/special and the actual property
+itemproperty EnchantmentIndexToItemProp(struct enchantment enchant) {
+	
+	/*
+	int nType = enchant.type;
+	int nSub = enchant.subtype;
+	int nParam = enchant.numerical;
+	int nSpecial = enchant.special;*/
+
+	return IpArgsToItemProperty(enchant.type, enchant.subtype, enchant.numerical, enchant.special);
 }
 
 string GetMLabel(int n, string s2da) {

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -8,7 +10,7 @@
 void main()
 {
     object oPC 		= GetItemActivator();
-	object oSummon 	= GetLocalObject(oPC, "RCTag");
+	object oSummon 	= PS_GetLocalObject(oPC, "RCTag");
 	location lPC	= GetLocation(oPC) ;
 
 	if (GetIsInCombat(oSummon) == FALSE)

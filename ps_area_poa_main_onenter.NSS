@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -9,11 +11,11 @@ void main()
  	string sDescrip = "";
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	  
-	int iLock = GetGlobalInt("PoAEnterLock");
+	int iLock = PS_GetGlobalInt("PoAEnterLock");
 	
 	if ( iLock == 0 ) {
 	
-	  	SetGlobalInt("PoAEnterLock", 1); 
+	  	PS_SetGlobalInt("PoAEnterLock", 1); 
 	  	// Only allows one clean up at a time.
 
 	  	if(GetObjectByTag("poa_npc01") == OBJECT_INVALID)
@@ -229,6 +231,6 @@ void main()
 			object oSpawn = CreateObject (OBJECT_TYPE_CREATURE, "poa_npc39", lSpawnpoint);    
 		}
 	
-		SetGlobalInt("PoAEnterLock", 0);
+		PS_SetGlobalInt("PoAEnterLock", 0);
   	}
 }

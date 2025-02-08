@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // ginc_journal
 /*
     journal/quest related functions
@@ -76,7 +78,7 @@ GetIsJournalQuestFinished(string sPlotID, object oCreature)
 
 int GetJournalQuestEntry(string sPlotID, object oCreature)
 {
-    int iQuestEntry = GetLocalInt(oCreature, "NW_JOURNAL_ENTRY" + sPlotID);
+    int iQuestEntry = PS_GetLocalInt(oCreature, "NW_JOURNAL_ENTRY" + sPlotID);
  	return (iQuestEntry);
 }
 
@@ -84,7 +86,7 @@ int GetJournalQuestEntry(string sPlotID, object oCreature)
 int GetQuestXPPercentRewarded(object oPC, string sQuestTag)
 {
     string sXPQuestPercentRewarded = sQuestTag + QPR_SUFFIX;
-	int iQuestXPPercentRewarded = GetLocalInt(oPC, sXPQuestPercentRewarded);
+	int iQuestXPPercentRewarded = PS_GetLocalInt(oPC, sXPQuestPercentRewarded);
 	return (iQuestXPPercentRewarded);
 
 }
@@ -109,7 +111,7 @@ int RewardCappedQuestXP(object oPC, string sQuestTag, int iQuestXPPercent = 100,
     string sXPQuestPercentRewarded = sQuestTag + QPR_SUFFIX;
 	int iQuestXPReward =  (GetJournalQuestExperience(sQuestTag) * iQuestXPPercent)/100;
 	PS_GiveXPRewardNoReturn(oPC, iQuestXPReward);
-	ModifyLocalInt(oPC, sXPQuestPercentRewarded, iQuestXPPercent);
+	PS_ModifyLocalInt(oPC, sXPQuestPercentRewarded, iQuestXPPercent);
 
 	return (iQuestXPReward);
 }
@@ -155,7 +157,7 @@ int RewardPartyQuestXP(object oPC, string sQuestTag, int iQuestXPPercent = 100)
 
 	// track amount given
     string sXPQuestPercentRewarded = sQuestTag + QPR_SUFFIX;
-	ModifyLocalIntOnFaction(oPC, sXPQuestPercentRewarded, iQuestXPPercent);
+	PS_ModifyLocalIntOnFaction(oPC, sXPQuestPercentRewarded, iQuestXPPercent);
 
 	return (iQuestXPReward);
 }

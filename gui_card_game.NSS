@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*********************************************************
 * Script that handles feedback from the card game screen *
 * by Agony_Aunt/Loki_999                                 *
@@ -8,12 +10,12 @@
 void main(string sSelect)
 {
 	object oPC = OBJECT_SELF;
-	object oBoard = GetLocalObject(oPC, CARD_TABLE_OBJECT);
+	object oBoard = PS_GetLocalObject(oPC, CARD_TABLE_OBJECT);
 	int iPos = CardsGetPlayerNumberFromBoard(oBoard, oPC);
 	string sPos = IntToString(iPos);
-	object oDeck = GetLocalObject(oBoard, CARD_PLAYER_DECK + sPos);
+	object oDeck = PS_GetLocalObject(oBoard, CARD_PLAYER_DECK + sPos);
 	int iCardNum;
-	string sPreSelectedCard = GetLocalString(oBoard, SELECTED_CARD);
+	string sPreSelectedCard = PS_GetLocalString(oBoard, SELECTED_CARD);
 	
 	//SendMessageToPC(oPC, "DEBUG: sSelect = " + sSelect + "and Position is: " + sPos + ". Also, preselected card is: " + sPreSelectedCard);
 	
@@ -39,7 +41,7 @@ void main(string sSelect)
 				if (sPreSelectedCard == sSelect)
 				{
 					// deselect
-					SetLocalString(oBoard, SELECTED_CARD, "");
+					PS_SetLocalString(oBoard, SELECTED_CARD, "");
 					GUI_CardsSetSelected(oPC, sSelect, FALSE);
 				}
 				else
@@ -49,7 +51,7 @@ void main(string sSelect)
 					
 					if (CardsGetCardOnBoardOwnerFromPosition(oBoard, sSelect) != 0) // basically, check there is a card there
 					{
-						SetLocalString(oBoard, SELECTED_CARD, sSelect);
+						PS_SetLocalString(oBoard, SELECTED_CARD, sSelect);
 						GUI_CardsSetSelected(oPC, sSelect, TRUE);
 					}
 				}
@@ -73,7 +75,7 @@ void main(string sSelect)
 					
 					CardsChangeGameState(oBoard, GAME_STATE_GAME_IN_PROGRESS_PROCESSING_RULES);
 					
-					//sPreSelectedCard = GetLocalString(oBoard, SELECTED_CARD);
+					//sPreSelectedCard = PS_GetLocalString(oBoard, SELECTED_CARD);
 
 					// moves all values
 					CardsMoveCardVariables(oBoard, sPreSelectedCard, sSelect);
@@ -85,7 +87,7 @@ void main(string sSelect)
 					CardsPlaceableDisplayCardInPosition(oBoard, sSelect);
 										
 					// clear this now because it needs to be clear for next player
-					SetLocalString(oBoard, SELECTED_CARD, "");
+					PS_SetLocalString(oBoard, SELECTED_CARD, "");
 					
 					
 					// do rules

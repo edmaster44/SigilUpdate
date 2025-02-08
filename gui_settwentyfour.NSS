@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nw_i0_spells"
 
 const int SPELL_I_OTHERWORLDLY_WHISPERS = 1059;
@@ -15,12 +17,12 @@ void main(string status)
 		GetHasSpell(SPELL_I_OTHERWORLDLY_WHISPERS, oPC)>0
 		)) 
 	{
-		SetLocalInt(oPC,"TwentyFour",TRUE);
+		PS_SetLocalInt(oPC,"TwentyFour",TRUE);
 		if (!GetIsInCombat()) ExecuteScript("nw_s0_itwentyfour",oPC);
 	}
 	else 
 	{
-		SetLocalInt(oPC,"TwentyFour",FALSE);
+		PS_SetLocalInt(oPC,"TwentyFour",FALSE);
 		RemoveEffectsFromSpell(oPC, SPELL_I_BEGUILING_INFLUENCE);
 		RemoveEffectsFromSpell(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
 		RemoveEffectsFromSpell(oPC, SPELL_I_ENTROPIC_WARDING);

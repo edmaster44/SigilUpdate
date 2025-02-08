@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //*********************************************
 //BOSS EVENT
 // Mimi Fearthegn
@@ -29,11 +31,11 @@ void main () {
 
 	float fRadius = 5.0f;
 	string sAnim = "C2h_whirlwind";
-	int nDC = GetLocalInt(OBJECT_SELF, "KnockdownWhirl_DC");
-	int nDice = GetLocalInt(OBJECT_SELF, "KnockdownWhirl_Dice");
-	int nDamType = GetLocalInt(OBJECT_SELF, "KnockdownWhirl_DamageType");
-	string sVFX = GetLocalString(OBJECT_SELF, "KnockdownWhirl_VFX");
-	string sMessage = GetLocalString(OBJECT_SELF, "KnockdownWhirl_Message");
+	int nDC = PS_GetLocalInt(OBJECT_SELF, "KnockdownWhirl_DC");
+	int nDice = PS_GetLocalInt(OBJECT_SELF, "KnockdownWhirl_Dice");
+	int nDamType = PS_GetLocalInt(OBJECT_SELF, "KnockdownWhirl_DamageType");
+	string sVFX = PS_GetLocalString(OBJECT_SELF, "KnockdownWhirl_VFX");
+	string sMessage = PS_GetLocalString(OBJECT_SELF, "KnockdownWhirl_Message");
 	float fDur = 3.0f;
 	
 	ClearAllActions();

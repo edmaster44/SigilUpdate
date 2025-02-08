@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Dominate Heartbeat
 //:: NW_G0_Dominate
@@ -50,7 +52,7 @@ void main()
     //Disable the ability to give commands
     SetCommandable(FALSE);
     // BMA-OEI 7/04/06 - Check if in group and using group campaign flag
-    if ( GetGlobalInt(CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP) == TRUE )
+    if ( PS_GetGlobalInt(CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP) == TRUE )
     {
         string sGroupName = GetGroupName( OBJECT_SELF );
         if ( sGroupName != "" )

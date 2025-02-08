@@ -25,7 +25,7 @@ void main()
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	float fDur = RoundsToSeconds(nCasterLevel);
 	
-	if (GetLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE") > 0) {
+	if (PS_GetLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE") > 0) {
 		SendMessageToPC(oCaster, "You have cast Hungry Darkness within the last 60 seconds. Please wait before casting again.");
 		return;
 	}
@@ -41,7 +41,7 @@ void main()
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lLoc, fDur);
 	
 	//Make sure we only have one hungry darkness active at a time
-	SetLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE", 1);
-	DelayCommand(60.0f, DeleteLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE"));
+	PS_SetLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE", 1);
+	DelayCommand(60.0f, PS_DeleteLocalInt(oCaster, "HUNGRY_DARKNESS_ACTIVE"));
 
 }

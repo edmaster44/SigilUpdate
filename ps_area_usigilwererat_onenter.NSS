@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -6,13 +8,13 @@ void main()
 //  return;
 
 
- int iLock = GetGlobalInt("usigilwereratEnterLock");
+ int iLock = PS_GetGlobalInt("usigilwereratEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("usigilwereratEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("usigilwereratEnterLock", 1); // Only allows one clean up at a time.
 
   DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  SetGlobalInt("usigilwereratEnterLock", 0);
+  PS_SetGlobalInt("usigilwereratEnterLock", 0);
  }
 }

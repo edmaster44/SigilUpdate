@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // ps_gh_electrocution
 //
 // Looks for creatures within a certain radius of a waypoint,
@@ -12,7 +14,7 @@ void main()
 	PlaySound("as_sw_lever1");
 	// * note that nActive == 1 does  not necessarily mean the placeable is active
 	// * that depends on the initial state of the object
-	int nActive = GetLocalInt (OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE");
+	int nActive = PS_GetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE");
 	// * Play Appropriate Animation
 	if (!nActive)
    {
@@ -36,6 +38,6 @@ void main()
 		SpeakString("*Recharging electricity nodes...*",TALKVOLUME_TALK);
 	}
       // * Store New State
-	SetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE",!nActive);
+	PS_SetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE",!nActive);
 
 }

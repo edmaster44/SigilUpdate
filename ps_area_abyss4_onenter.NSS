@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,13 +7,13 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = GetGlobalInt("abyss4EnterLock");
+ int iLock = PS_GetGlobalInt("abyss4EnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("abyss4EnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("abyss4EnterLock", 1); // Only allows one clean up at a time.
 
   DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  SetGlobalInt("abyss4EnterLock", 0);
+  PS_SetGlobalInt("abyss4EnterLock", 0);
  }
 }

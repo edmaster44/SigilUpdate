@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "aaa_constants"
 
 const int SPELL_I_HINDERING_BLAST=1130;
@@ -44,7 +46,7 @@ void main(int nMetaMagic)
 		if (GetHasSpell(SPELL_I_HINDERING_BLAST, oPC)==0 && nMetaMagic==METAMAGIC_INVOC_HINDERING_BLAST)
 			return;
 
-		SetLocalInt(oPC,"HideousMeta",nMetaMagic);
+		PS_SetLocalInt(oPC,"HideousMeta",nMetaMagic);
 		//SendMessageToPC(oPC, "Setting hideous blow to: "+IntToString(nMetaMagic));
 		
 		ExecuteScript("nw_s0_ihideousb1",oPC);

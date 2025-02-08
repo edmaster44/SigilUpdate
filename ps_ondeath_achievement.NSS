@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_achievements"
 void main() {
     
@@ -9,13 +11,13 @@ void main() {
 	if (!GetIsPC(oPC))
 		return;
 		
-	string sPQuest = GetLocalString(OBJECT_SELF, "PQUEST_NAME");
+	string sPQuest = PS_GetLocalString(OBJECT_SELF, "PQUEST_NAME");
 	if (sPQuest != "") {
 		string sID = PS_GetCharID(oPC);
 		IncrementPermanentInt(sID, sPQuest, 1);
 	}
 	
-	int nAchieve = GetLocalInt(OBJECT_SELF, "ACHIEVEMENT_INDEX");
+	int nAchieve = PS_GetLocalInt(OBJECT_SELF, "ACHIEVEMENT_INDEX");
 	if (nAchieve > 0) {
 		AddAchievement(oPC, nAchieve);
 	}

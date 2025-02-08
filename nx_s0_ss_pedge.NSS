@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Penetrating Edge Script for NX1 Silver Sword of Gith
 // Simulates bypassing DR for physical attacks.
 // CGaw OEI 6/19/07
@@ -17,7 +19,7 @@ void ApplyEdge()
 	object oCaster = OBJECT_SELF;
 	int nRandomInt = RandomIntBetween(100000, 999999);
 	
-	SetLocalInt(oItem, "Effect_ID", nRandomInt);
+	PS_SetLocalInt(oItem, "Effect_ID", nRandomInt);
 	effect eID = SetEffectSpellId(eMaxDamage, nRandomInt);
 
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eID, oCaster, 60.0f);

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_langexe - DM Friendly Initiative - Code for /Languages
 // Original Scripter:  Demetrious      Design: DMFI Design Team
@@ -349,11 +351,11 @@ void DMFI_GrantChoosenLanguages(object oPC)
 		// build a current list
 		DMFI_BuildChoosenList(oPC);
 		
-		SetLocalInt(oPC, DMFI_CHOOSE, nMod);
+		PS_SetLocalInt(oPC, DMFI_CHOOSE, nMod);
 		DMFI_ClearUIData(oPC);
-		SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_GRANT + PRM_);
-		SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_POSSLANGUAGE);
-		SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_CHOOSE + IntToString(nMod));
+		PS_SetLocalString(oPC, DMFI_LAST_UI_COM, PRM_GRANT + PRM_);
+		PS_SetLocalString(oPC, DMFI_UI_PAGE, PG_LIST_POSSLANGUAGE);
+		PS_SetLocalString(oPC, DMFI_UI_LIST_TITLE, CV_PROMPT_CHOOSE + IntToString(nMod));
 		DMFI_ShowDMListUI(oPC, SCREEN_DMFI_CHOOSE);
 	}
 }
@@ -365,12 +367,12 @@ void DMFI_GrantLanguage(object oPC, string sLang)
    	object oTool = DMFI_GetTool(oPC);
    	if (!DMFI_IsLanguageKnown(oPC, sLang))
    	{   
-   		int n = GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+   		int n = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
    		SendText(oPC, TXT_LANGUAGE + DMFI_CapitalizeWord(sLang), FALSE, COLOR_GREY);
    		sLang = GetStringLowerCase(sLang);
-   		SetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n), sLang);
+   		PS_SetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n), sLang);
    		n++;
-   		SetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX, n);
+   		PS_SetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX, n);
 	}
 	else
 	    SendText(oPC, TXT_LANGUAGE_KNOWN + DMFI_CapitalizeWord(sLang), FALSE, COLOR_GREY);
@@ -383,14 +385,14 @@ int DMFI_IsLanguageKnown(object oPC, string sLang)
   //Last Modified By: Demetrious 6/28/6
   object oTool = DMFI_GetTool(oPC);
   int n;
-  int nMax = GetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX);
+  int nMax = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX);
   string sTest;
   // All languages stored in lower case strings.
   sLang = GetStringLowerCase(sLang);
 
   for (n=0; n<nMax; n++)
   {
-    sTest = GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n));
+    sTest = PS_GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n));
     if (sTest==sLang) return TRUE;
   }
   return FALSE;
@@ -414,10 +416,10 @@ void DMFI_ListLanguages(object oDM, object oTarget)
 		return;
 	}	
 
-	nMax = GetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX);
+	nMax = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX);
     for (n=0; n<nMax; n++)
     {
-        sLang = DMFI_CapitalizeWord(GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n)));
+        sLang = DMFI_CapitalizeWord(PS_GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n)));
         sMess = sMess + TXT_LANGUAGE + sLang + "\n";
     }
     if (nMax==0) sMess = TXT_NO_LANGUAGE;
@@ -430,7 +432,7 @@ string DMFI_NewLanguage(string sLang)
   //a plugin.
   //Original Scripter: Demetrious
   //Last Modified By: Demetrious 6/28/6
-    string sDefault = GetLocalString(GetModule(), sLang);
+    string sDefault = PS_GetLocalString(GetModule(), sLang);
 	if (sDefault!="") return sDefault;
 	
     return sLang;
@@ -445,23 +447,23 @@ int DMFI_RemoveLanguage(object oPC, string sLang)
    string sTemp;
    int nReturn = FALSE;
    int n=0;
-   int nMax = GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+   int nMax = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
    sLang = GetStringLowerCase(sLang);
   
    while (n<nMax)
    {
-        if (GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n))==sLang)
+        if (PS_GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n))==sLang)
         { // Match - remove language
             CloseGUIScreen(oPC, SCREEN_DMFI_TEXT);
 		
 			nReturn=TRUE;
-   			SetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX, nMax-1);
+   			PS_SetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX, nMax-1);
 			SendText(oPC, TXT_LANGUAGE_REMOVED + sLang, TRUE, COLOR_GREY);
 			
             while (n<nMax)
             {
-                sTemp = GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n+1));
-                SetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n), sTemp);
+                sTemp = PS_GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n+1));
+                PS_SetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n), sTemp);
                 n++;
             }
         }

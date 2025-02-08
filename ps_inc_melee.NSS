@@ -1267,7 +1267,7 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 			featid = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
 			DelayCommand(1.5f,ResetFeatUses(oAttacker,featid,TRUE,TRUE));
 			AssignCommand(oAttacker, ClearAllActions(FALSE));
-//			if(GetLocalInt(oAttacker,"HIPSTIMER") == 1)
+//			if(PS_GetLocalInt(oAttacker,"HIPSTIMER") == 1)
 //			{
 //				SendMessageToPC(oAttacker,"In Stealth!");
 //				DelayCommand(0.5f,SetActionMode(oAttacker,ACTION_MODE_STEALTH,TRUE));
@@ -1279,7 +1279,7 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	
 	if(givefeedback == 1 && nSpellID > 0)
 	{
-	int iTime = GetLocalInt(oAttacker,"GCDOWN"); int uTime = PS_GetTime();
+	int iTime = PS_GetLocalInt(oAttacker,"GCDOWN"); int uTime = PS_GetTime();
 	{	
 		//SendMessageToPC(oAttacker,"Debug GCD: "+IntToString(iTime));
 		//SendMessageToPC(oAttacker,"Time: "+IntToString(uTime));	
@@ -1296,7 +1296,7 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 			return 0;
 		}
 	}
-	SetLocalInt(oAttacker,"GCDOWN",PS_GetTime());
+	PS_SetLocalInt(oAttacker,"GCDOWN",PS_GetTime());
 	}
 	
 	int conceal = ConcealmentCheck(oTarget,ranged); int imiss;

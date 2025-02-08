@@ -1,3 +1,4 @@
+#include "ff_safevar"
 /*
    ----------------
    Ectoplasmic Sheen, OnEnter
@@ -35,7 +36,7 @@ void main()
     object oCreator = GetAreaOfEffectCreator();
     object oTarget  = GetEnteringObject();
     object oAoE     = OBJECT_SELF;
-    int nDC         = GetLocalInt(oAoE, "PRC_EctoSheen_DC");
+    int nDC         = PS_GetLocalInt(oAoE, "PRC_EctoSheen_DC");
     effect eLink    = EffectLinkEffects(EffectMovementSpeedDecrease(50),
                                         EffectVisualEffect(VFX_IMP_SLOW)
                                         );

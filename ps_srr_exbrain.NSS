@@ -10,7 +10,7 @@ void AttachTentacle(object oPC, object oTarget)
 {
 	
 	// do you succeed on a touch attack?
-	int iTentacles = GetLocalInt(oTarget, EXBRAIN);
+	int iTentacles = PS_GetLocalInt(oTarget, EXBRAIN);
 	int iHit = TouchAttackMelee(oTarget, FALSE, iTentacles*2); // 2 points bonus for every tentacle attached and +2 base.
 	//Auto-success if stunned.
 	int nEffectType;
@@ -28,10 +28,10 @@ void AttachTentacle(object oPC, object oTarget)
 					int iIntel = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
 					if (iIntel > 0)
 					{
-						int currentPP = GetLocalInt(oPC, "PSI_PP");
+						int currentPP = PS_GetLocalInt(oPC, "PSI_PP");
 						int finalPP = currentPP + (2 * iIntel);
 	                    
-	                       SetLocalInt(oPC, "PSI_PP", currentPP+(2 * iIntel));
+	                       PS_SetLocalInt(oPC, "PSI_PP", currentPP+(2 * iIntel));
 						   SetGUIObjectText(oPC, "powerpointscreen", "PPRatioTXT", -1, IntToString(finalPP));
 	                    
 					}
@@ -73,10 +73,10 @@ void AttachTentacle(object oPC, object oTarget)
 				int iIntel = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
 				if (iIntel > 0)
 				{
-					int currentPP = GetLocalInt(oPC, "PSI_PP");
+					int currentPP = PS_GetLocalInt(oPC, "PSI_PP");
 					int finalPP = currentPP + (2 * iIntel);
 	                    
-	                SetLocalInt(oPC, "PSI_PP", currentPP+(2 * iIntel));
+	                PS_SetLocalInt(oPC, "PSI_PP", currentPP+(2 * iIntel));
 					SetGUIObjectText(oPC, "powerpointscreen", "PPRatioTXT", -1, IntToString(finalPP));
 				}
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(TRUE, TRUE, TRUE, TRUE), oTarget);
@@ -93,7 +93,7 @@ void AttachTentacle(object oPC, object oTarget)
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer walking away while extracting brainssssss
 				//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
 				
-				SetLocalInt(oTarget, EXBRAIN, iTentacles);
+				PS_SetLocalInt(oTarget, EXBRAIN, iTentacles);
 				DelayCommand(6.0, AttachTentacle(oPC, oTarget));
 			}
 		}
@@ -101,14 +101,14 @@ void AttachTentacle(object oPC, object oTarget)
 		{
 			SendMessageToPC(oPC, "Target's will is stronger than your own! Your tentacles recoil!");
 			// its all failed, try again.
-			SetLocalInt(oTarget, EXBRAIN, 0);
+			PS_SetLocalInt(oTarget, EXBRAIN, 0);
 		}		
 	}
 	else
 	{
 		SendMessageToPC(oPC, "You failed to attach a tentacle, the target recovers!!!");
 		// its all failed, try again.
-		SetLocalInt(oTarget, EXBRAIN, 0);
+		PS_SetLocalInt(oTarget, EXBRAIN, 0);
 	}
 }
 

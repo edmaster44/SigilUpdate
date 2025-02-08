@@ -26,7 +26,7 @@ void main()
 
 		
 	object oTarget = GetSpellTargetObject();
-	int nPP = GetLocalInt(oTarget, "PSI_PP");
+	int nPP = PS_GetLocalInt(oTarget, "PSI_PP");
 	//Fetch the Power Point Pool of target, if any.
     int nCasterLevel = GetLevelByClass(90, OBJECT_SELF);
 	if(GetLevelByClass(152, OBJECT_SELF) > 0)
@@ -157,7 +157,7 @@ void main()
 				}
 				else
 				{
-					SetLocalInt(oTarget, "PSI_PP", nPPFinal);
+					PS_SetLocalInt(oTarget, "PSI_PP", nPPFinal);
 					SendMessageToPC(OBJECT_SELF, "Psionic Lash Drained  " + IntToString(nPPDamage) + " Power Points!");
 					SendMessageToPC(oTarget, "Enemy Psionic Lash Drained  " + IntToString(nPPDamage) + " Power Points!");
 					SetGUIObjectText(oTarget, "powerpointscreen", "PPRatioTXT", -1, IntToString(nPPFinal));

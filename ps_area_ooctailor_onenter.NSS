@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main() {
 
 	int isHolidays = TRUE; //do something more sophisticated later
@@ -10,10 +12,10 @@ void main() {
 	string sWPTag;
 	object oWP;
 	
- 	int iLock = GetGlobalInt(lockVariable);
+ 	int iLock = PS_GetGlobalInt(lockVariable);
  	if ( iLock == 0 )
  	{
-  		SetGlobalInt(lockVariable, 1); // Makes sure the script doesn't retrigger while still running
+  		PS_SetGlobalInt(lockVariable, 1); // Makes sure the script doesn't retrigger while still running
   
 		//*******************************************************
 		sNPCTag = "ps_npc_oocbarber"; //the resref of the creature to spawn
@@ -43,6 +45,6 @@ void main() {
 		//*******************************************************
 		
     
-  		SetGlobalInt(lockVariable, 0); //release area for future spawning
+  		PS_SetGlobalInt(lockVariable, 0); //release area for future spawning
  	}
 }

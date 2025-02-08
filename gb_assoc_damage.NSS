@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Associate: On Damaged
 //:: gb_assoc_damage
@@ -24,7 +26,7 @@ void main()
         if(!GetAssociateState(NW_ASC_MODE_STAND_GROUND) && (GetCurrentAction() != ACTION_FOLLOW)
             && (GetCurrentAction() != ACTION_TAUNT))
         {
-            if ((GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
+            if ((PS_GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
                 (GetPercentageHPLoss(OBJECT_SELF) < 30))
             {
                 // force heal

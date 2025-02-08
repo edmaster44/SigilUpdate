@@ -1,3 +1,4 @@
+#include "ff_safevar"
 /*
    ----------------
    Bestow Power
@@ -79,9 +80,9 @@ void main()
         nPPGiven = min(nPPGiven, nTargetManifesterLevel);
 
         // Apply the PP Boost to target
-        SetLocalInt(oTarget, "PSI_PP", GetLocalInt(oTarget, "PSI_PP")+nPPGiven);
+        PS_SetLocalInt(oTarget, "PSI_PP", PS_GetLocalInt(oTarget, "PSI_PP")+nPPGiven);
         if(manif.bTwin)
-        	SetLocalInt(oTarget, "PSI_PP", GetLocalInt(oTarget, "PSI_PP")+nPPGiven);
+        	PS_SetLocalInt(oTarget, "PSI_PP", PS_GetLocalInt(oTarget, "PSI_PP")+nPPGiven);
 
         // Do VFX
         effect eVis = EffectVisualEffect(VFX_DUR_MIND_AFFECTING_POSITIVE);

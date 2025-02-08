@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // include file for merging item appearance with properties from another source.
 
 #include "x2_inc_itemprop"
@@ -149,10 +151,10 @@ void DoCloning(object oPropSource, object oAppSource)
 		{
 			switch (iType)
 			{
-				case VARIABLE_TYPE_INT: SetLocalInt(oNew, sName, GetLocalInt(oPropSource, sName)); break;
-				case VARIABLE_TYPE_STRING: SetLocalString(oNew, sName, GetLocalString(oPropSource, sName)); break;
-				case VARIABLE_TYPE_FLOAT: SetLocalFloat(oNew, sName, GetLocalFloat(oPropSource, sName)); break;
-				case VARIABLE_TYPE_LOCATION: SetLocalLocation(oNew, sName, GetLocalLocation(oPropSource, sName)); break;
+				case VARIABLE_TYPE_INT: PS_SetLocalInt(oNew, sName, PS_GetLocalInt(oPropSource, sName)); break;
+				case VARIABLE_TYPE_STRING: PS_SetLocalString(oNew, sName, PS_GetLocalString(oPropSource, sName)); break;
+				case VARIABLE_TYPE_FLOAT: PS_SetLocalFloat(oNew, sName, PS_GetLocalFloat(oPropSource, sName)); break;
+				case VARIABLE_TYPE_LOCATION: PS_SetLocalLocation(oNew, sName, PS_GetLocalLocation(oPropSource, sName)); break;
 				default: SendMessageToPC(GetPCSpeaker(), "WARNING: Item failed to copy unknown datatype for variable '" + sName + "'"); break; // not sure whether GetPCSpeaker will work here
 			}
 		}

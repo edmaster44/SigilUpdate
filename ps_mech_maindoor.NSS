@@ -1,6 +1,8 @@
+#include "ff_safevar"
+
 void main () {
 
-	string sDoor = GetLocalString(OBJECT_SELF, "doorToOpen");
+	string sDoor = PS_GetLocalString(OBJECT_SELF, "doorToOpen");
 	
 	object oDoorAir = GetNearestObjectByTag("dr_mechanus_airdoor_in");
 	object oDoorWater = GetNearestObjectByTag("dr_mechanus_waterdoor_in");

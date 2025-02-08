@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 // FlattedFifth, June 30, 2024
 // Script to check pc inventory for a specific items and either add or remove item properties.
@@ -30,6 +32,27 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 		FF_ModifyItemProperty(oItem, ipNewAlert, TRUE);
 	}
 	
+	// replace banned items with their counterparts
+	string sNewRes = "";
+	if (sRef == "ps_gad_dreadaxe") sNewRes = "ps_gad_dreadaxe2";
+	else if (sRef == "ps_xbow_chokuno") sNewRes = "ps_xbow_chokuno2";
+	else if (sRef == "ps_gad_serene") sNewRes = "ps_gad_serene2";
+	else if (sRef == "ps_longsword_wideblade") sNewRes = "ps_longsword_wideblade2";
+	else if (sRef == "ps_katana_momentum") sNewRes = "ps_katana_momentum2";
+	else if (sRef == "ps_qstaff_philosophysolidified") sNewRes = "ps_qstaff_philosophysolidified2";
+	else if (sRef == "ps_ed_bloodcleaver") sNewRes = "ps_ed_bloodcleaver2";
+	else if (sRef == "ps_wmace_cripplinghammer") sNewRes = "ps_wmace_cripplinghammer2";
+	else if (sRef == "ps_luca_rukus") sNewRes = "ps_luca_rukus2";
+	else if (sRef == "ps_luca_sunlightseeker") sNewRes = "ps_luca_sunlightseeker2";
+	else if (sRef == "ps_boots_avoidance") sNewRes = "ps_boots_avoidance1";
+	if (sNewRes != ""){
+		object oNewItem = CreateItemOnObject(sNewRes, oPC);
+		DelayCommand(0.5f, SendMessageToPC(oPC, "Replacing banned item '" + sRef + "' with " + sNewRes));
+		if (GetIsObjectValid(oNewItem)){
+			DestroyObject(oItem);
+		} else SendMessageToPC(oPC, "Error replacing banned item. Please contact a DM");
+	}
+
 	// make sure scrolls and wands are usuable by all classes that have the same spellbook or 
 	// are supposed to be allowed to use scrolls and wands of another spellbook
 	if (nType == 102 || nType == 105 || nType == 103 || nType == 106){
@@ -96,7 +119,7 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 		else oNewItem = CreateItemOnObject("ps_golem_mithral", oPC, nStack, "ps_golem_mithral", 0);
 		
 		// this does nothing. All it's for is to delay things by half a sec to make sure the new item is created
-		DelayCommand(0.5f, SetLocalInt(oPC, "GotACraftIngot", TRUE));
+		DelayCommand(0.5f, PS_SetLocalInt(oPC, "GotACraftIngot", TRUE));
 		
 		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem, 0.3f, FALSE);
 	}

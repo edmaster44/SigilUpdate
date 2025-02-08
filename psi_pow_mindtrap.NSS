@@ -1,3 +1,4 @@
+#include "ff_safevar"
 /*
    ----------------
    Mind Trap
@@ -74,7 +75,7 @@ void main()
         if(manif.bExtend) fDuration *= 2;
 
         // Set the marker local
-        SetLocalInt(oTarget, "PRC_Power_MindTrap_Active", TRUE);
+        PS_SetLocalInt(oTarget, "PRC_Power_MindTrap_Active", TRUE);
 
         // Set a VFX for the monitor to watch
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
@@ -91,7 +92,7 @@ void DispelMonitor(object oManifester, object oTarget, int nSpellID, int nBeatsR
        GetHasSpellEffect(nSpellID, oTarget))
     {
         // Clear the marker
-        DeleteLocalInt(oTarget, "PRC_Power_MindTrap_Active");
+        PS_DeleteLocalInt(oTarget, "PRC_Power_MindTrap_Active");
     }
     else
        DelayCommand(6.0f, DispelMonitor(oManifester, oTarget, nSpellID, nBeatsRemaining));

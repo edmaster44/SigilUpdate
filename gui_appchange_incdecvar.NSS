@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 int jumpID(int newValue, int nFrom, int nTo)
 {
 	if (newValue < nFrom || newValue > nTo)
@@ -16,8 +18,8 @@ void main(int nType, int nVarIndex, string sVarValue, string sTextFieldName)
 int newValue;
 int nAdj;
 
-int nGenderID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIGenderID"); //0-male; 1-female; gui_appchange_setvar
-int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID");
+int nGenderID = PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIGenderID"); //0-male; 1-female; gui_appchange_setvar
+int nAppearanceID = PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID");
 
 	switch (nType)
 	{
@@ -97,7 +99,7 @@ int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppear
 			if (newValue > 1041) newValue = 1041;
 		}
 			
-		SetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID", newValue); //for limits
+		PS_SetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID", newValue); //for limits
 		SetLocalGUIVariable(OBJECT_SELF, "CharacterAppearanceChangeGUI", 0, IntToString(newValue));
 	}
 	
@@ -523,7 +525,7 @@ int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppear
 	}
 	else if (sTextFieldName == "TailTextField")
 	{
-		if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID") == 564)
+		if (PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID") == 564)
 			{
 				if (nGenderID == 0)
 					{
@@ -540,7 +542,7 @@ int nAppearanceID = GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppear
 	}
 	else if (sTextFieldName == "WingsTextField")
 	{
-		if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID") == 70)
+		if (PS_GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIAppearanceID") == 70)
 			{
 				if (nGenderID == 0)
 					{

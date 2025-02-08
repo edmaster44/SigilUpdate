@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Name     : NWNX Character include
 // Purpose  : Functions that modify character (BIC) files.
 // Authors  : Ingmar Stieger (Papillon)
@@ -153,10 +155,10 @@ void BootAndUpdateCharacter( object oPC ){
 	// Variables.
 	object oModule			= GetModule( );
 	string sBIC_Filename	= GetBICFilename( oPC );
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );
 
 	// Purge the BIC commands off of the character file.
-	DeleteLocalString( oPC, BIC_COMMANDS );
+	PS_DeleteLocalString( oPC, BIC_COMMANDS );
 	// Persist the character.
 	SaveCharacter( oPC );
 	// Boot the player from the Server to ensure that the changes are saved.
@@ -211,7 +213,7 @@ string ParseAbility( int nAbility ){
 void SetAbilityScore( object oPC, int nAbility, int nScore ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	string sAbility			= ParseAbility( nAbility );
 	string sScore			= IntToString( nScore );
@@ -226,7 +228,7 @@ void SetAbilityScore( object oPC, int nAbility, int nScore ){
 		
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 		
 	return;
 	
@@ -237,7 +239,7 @@ void SetAbilityScore( object oPC, int nAbility, int nScore ){
 void SetBaseSkillRank( object oPC, int nSkill, int nRank ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );
 	string sBIC_Command		= "";
 	string sSkill			= IntToString( nSkill );
 	string sRank			= IntToString( nRank );
@@ -257,7 +259,7 @@ void SetBaseSkillRank( object oPC, int nSkill, int nRank ){
 		
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -324,7 +326,7 @@ void EnterCharacter( object oPC ){
 void SetHead( object oPC, int iHeadID ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	string sHeadID			= IntToString( iHeadID );
 	
@@ -334,7 +336,7 @@ void SetHead( object oPC, int iHeadID ){
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -344,7 +346,7 @@ void SetHead( object oPC, int iHeadID ){
 // This method sets the character's hair type.
 void SetHair( object oPC, int iHairID ) {
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	string sHairID			= IntToString( iHairID );
 	
@@ -354,7 +356,7 @@ void SetHair( object oPC, int iHairID ) {
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -366,7 +368,7 @@ void SetHair( object oPC, int iHairID ) {
 void SetWing( object oPC, int nWingType ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	string sWingType		= IntToString( nWingType );
 	
@@ -375,7 +377,7 @@ void SetWing( object oPC, int nWingType ){
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -387,7 +389,7 @@ void SetWing( object oPC, int nWingType ){
 void SetTail( object oPC, int nTailType ) {
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	string sTailType		= IntToString( nTailType );
 	
@@ -396,7 +398,7 @@ void SetTail( object oPC, int nTailType ) {
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	SendMessageToPC( oPC, "SetTail( oPC, " + IntToString( nTailType ) + " );" );
 	
@@ -408,7 +410,7 @@ void SetTail( object oPC, int nTailType ) {
 // This method retints the character.
 void Retint( object oPC ) {
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	
 	// Form the BIC command.
@@ -416,7 +418,7 @@ void Retint( object oPC ) {
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -426,7 +428,7 @@ void Retint( object oPC ) {
 void SetHairTint( object oPC, int part1R, int part1G, int part1B, int part2R, int part2G, int part2B, int part3R, int part3G, int part3B ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	
 	// Parse the integer argument into a string for this tint.
@@ -441,7 +443,7 @@ void SetHairTint( object oPC, int part1R, int part1G, int part1B, int part2R, in
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -452,7 +454,7 @@ void SetHairTint( object oPC, int part1R, int part1G, int part1B, int part2R, in
 void SetHeadTint( object oPC, int part1R, int part1G, int part1B, int part2R, int part2G, int part2B, int part3R, int part3G, int part3B ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	
 	// Parse the integer argument into a string for this tint.
@@ -466,7 +468,7 @@ void SetHeadTint( object oPC, int part1R, int part1G, int part1B, int part2R, in
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	
@@ -477,7 +479,7 @@ void SetHeadTint( object oPC, int part1R, int part1G, int part1B, int part2R, in
 void SetBodyTint( object oPC, int part1R, int part1G, int part1B, int part2R, int part2G, int part2B, int part3R, int part3G, int part3B ){
 
 	// Variables.
-	string sBIC_Commands	= GetLocalString( oPC, BIC_COMMANDS );	
+	string sBIC_Commands	= PS_GetLocalString( oPC, BIC_COMMANDS );	
 	string sBIC_Command		= "";
 	
 	// Parse the integer argument into a string for this tint.
@@ -491,7 +493,7 @@ void SetBodyTint( object oPC, int part1R, int part1G, int part1B, int part2R, in
 	
 	// Append the BIC command to the player object.
 	sBIC_Commands += sBIC_Command;
-	SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
+	PS_SetLocalString( oPC, BIC_COMMANDS, sBIC_Commands );
 	
 	return;
 	

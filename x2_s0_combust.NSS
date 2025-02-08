@@ -146,7 +146,7 @@ void main()
             //------------------------------------------------------------------
             // Save the spell save DC as a variable for later retrieval
             //------------------------------------------------------------------
-            SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_COMBUST), nDC);
+            PS_SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_COMBUST), nDC);
 
             //------------------------------------------------------------------
             // Tick damage after 6 seconds again
@@ -169,7 +169,7 @@ void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic
     if (GetIsDead(oTarget) == FALSE)
     {
 
-        int nDC = GetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_COMBUST));
+        int nDC = PS_GetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_COMBUST));
 
         if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_FIRE))
         {
@@ -205,7 +205,7 @@ void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic
         }
         else
         {
-            DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_COMBUST));
+            PS_DeleteLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString (SPELL_COMBUST));
             GZRemoveSpellEffects(SPELL_COMBUST, oTarget);
         }
 

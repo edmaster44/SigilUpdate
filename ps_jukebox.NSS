@@ -1,9 +1,11 @@
+#include "ff_safevar"
+
 const string SONGS = "248|022|023|024|056|077|090|110|104|130|164|165|166|183|191|192|195|209";
 
 void main()
 {
 object this_area = GetArea(OBJECT_SELF);
-int nSongnr = GetLocalInt(OBJECT_SELF,"MUSIC");
+int nSongnr = PS_GetLocalInt(OBJECT_SELF,"MUSIC");
 
 int nMusic = StringToInt(GetSubString(SONGS, (nSongnr - 1) * 4, 3));
 
@@ -20,5 +22,5 @@ MusicBackgroundChangeDay(this_area, nMusic);
 MusicBackgroundChangeNight(this_area, nMusic);
 
 nSongnr += 1;
-SetLocalInt(OBJECT_SELF,"MUSIC",nSongnr);
+PS_SetLocalInt(OBJECT_SELF,"MUSIC",nSongnr);
 }

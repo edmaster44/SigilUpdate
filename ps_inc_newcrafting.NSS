@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_newenchanting"
 
 
@@ -42,8 +44,8 @@ object CreateCraftedItem(object oPC, struct baseitem i, struct material m1, stru
 	itemproperty ipMat3 = ItemPropertySpecialMaterial(m3.ipForgedOf);
 	
 	// DEBUG
-	if (m2.ipForgedOf == 64) SendMessageToPC(oPC, "Lever");
-	if (m3.ipForgedOf == 65) SendMessageToPC(oPC, "Sight");
+	//if (m2.ipForgedOf == 64) SendMessageToPC(oPC, "Lever");
+	//if (m3.ipForgedOf == 65) SendMessageToPC(oPC, "Sight");
 	
 	if (GetIsItemPropertyValid(ipMat1)) {
 		IPSafeAddItemProperty(oItem, ipMat1);
@@ -238,10 +240,10 @@ int GetCraftedItemCost(object oPC, struct baseitem i, struct material m1, struct
 
 void GenerateCraftDetails(object oPC) {
 
-	int nBase = GetLocalInt(oPC, "Craft_BaseItemType");
-	int nMat1 = GetLocalInt(oPC, "Craft_Mat1");
-	int nMat2 = GetLocalInt(oPC, "Craft_Mat2");
-	int nMat3 = GetLocalInt(oPC, "Craft_Mat3");
+	int nBase = PS_GetLocalInt(oPC, "Craft_BaseItemType");
+	int nMat1 = PS_GetLocalInt(oPC, "Craft_Mat1");
+	int nMat2 = PS_GetLocalInt(oPC, "Craft_Mat2");
+	int nMat3 = PS_GetLocalInt(oPC, "Craft_Mat3");
 	
 	struct baseitem i = LoadBaseItem(nBase);
 	struct material m1 = LoadMaterial(nMat1, i.matlist_1);

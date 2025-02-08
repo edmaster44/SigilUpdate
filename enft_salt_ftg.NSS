@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "enft_salt_rlf"
 #include "enft_cnsts"
 #include "nw_i0_spells"
@@ -14,11 +16,11 @@ void main()
 
 	
     // Check to make sure still in hot region
-    if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 3)
+    if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 3)
     {
-        SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", 0);
-        SetLocalInt(OBJECT_SELF, "SALT_THROWS", 0);
-        SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", 0);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_THROWS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
         SendMessageToPC(OBJECT_SELF, "You feel relief at long last.");
 
         // Remove unconscious effect if applied
@@ -31,14 +33,14 @@ void main()
     if(saltRelief(OBJECT_SELF))
     {
         // Throws are set back to 0 because body temperature has returned to normal.
-        if(GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") > 0)
+        if(PS_GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") > 0)
         {
             SendMessageToPC(OBJECT_SELF, "You feel relief at long last.");
             SendMessageToPC(OBJECT_SELF, "Subdual damage:  " + IntToString(0));
         }
-        SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", 0);
-        SetLocalInt(OBJECT_SELF, "SALT_THROWS", 0);
-        SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", 0);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_THROWS", 0);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
 
         // Remove unconscious effect if applied
         RemoveSpecificEffect(EFFECT_TYPE_PETRIFY, OBJECT_SELF);
@@ -49,17 +51,17 @@ void main()
     }
 
     // Collect heat effects variables on character
-    saltDamage = GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE");
-    pastThrows = GetLocalInt(OBJECT_SELF, "SALT_THROWS");
+    saltDamage = PS_GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE");
+    pastThrows = PS_GetLocalInt(OBJECT_SELF, "SALT_THROWS");
 
     // Check to see if character is already unconscious
-    if(GetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS") != 0)
+    if(PS_GetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS") != 0)
     {
         // Check if conscious again
         if(saltDamage <= GetCurrentHitPoints( ))
         {
             // Signify that character is no longer unconscious
-            SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
+            PS_SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
             RemoveSpecificEffect(EFFECT_TYPE_PETRIFY, OBJECT_SELF);
         }
         // Attempt heat damage if still unconscious
@@ -70,8 +72,8 @@ void main()
         // The number of throws, however, is not reduced.  Body has not gotten cooler yet.
         if(GetIsDead(OBJECT_SELF))
             {
-                SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", 0);
-                SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
+                PS_SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", 0);
+                PS_SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 0);
                 RemoveSpecificEffect(EFFECT_TYPE_PETRIFY, OBJECT_SELF);
             }
     }
@@ -110,7 +112,7 @@ void main()
         afterHP = GetCurrentHitPoints( );
         newsaltDamage = beforeHP - afterHP;
         RemoveEffect(OBJECT_SELF, eff);
-        SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", saltDamage + newsaltDamage);
+        PS_SetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE", saltDamage + newsaltDamage);
 
         // Sent message to PC
         if(newsaltDamage > 0)
@@ -123,7 +125,7 @@ void main()
         if((saltDamage + newsaltDamage) > GetCurrentHitPoints( ))
         {
             // Signify that character is unconscious
-            SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 1);
+            PS_SetLocalInt(OBJECT_SELF, "SALT_UNCONSCIOUS", 1);
 
             // Sent message to PC
             SendMessageToPC(OBJECT_SELF, "You can take no more of this exposure and are now unconscious, dying of thirst.");
@@ -136,7 +138,7 @@ void main()
     }
 
     // Apply fatigue to character
-    if(GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") > 0)
+    if(PS_GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") > 0)
     {
 		int nBlindDur = 3;
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, saltTime);
@@ -145,11 +147,11 @@ void main()
     }
 
     // If the character is just barely conscious apply dazing effects for an hour
-    if(GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
+    if(PS_GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, saltTime);
 
     // Increase the number of throws done
-    SetLocalInt(OBJECT_SELF, "SALT_THROWS", pastThrows + 1);
+    PS_SetLocalInt(OBJECT_SELF, "SALT_THROWS", pastThrows + 1);
 
     // Check for heat damage in an hour.
     DelayCommand(saltTime, ExecuteScript("enft_salt_ftg", OBJECT_SELF));

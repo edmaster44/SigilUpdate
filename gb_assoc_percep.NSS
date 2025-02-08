@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Associate: On Perceive
 //:: gb_assoc_percep
@@ -37,11 +39,11 @@ void main()
             {
                 // add check if target - prevents creature from following the target
                 // due to ActionAttack without actually perceiving them
-                if (GetLocalObject(OBJECT_SELF, sHenchLastTarget) == oLastPerceived)
+                if (PS_GetLocalObject(OBJECT_SELF, sHenchLastTarget) == oLastPerceived)
                 {
 //      Jug_Debug(GetName(OBJECT_SELF) + " perceive lost determine combat round");
                     ClearAllActions();
-                    DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
+                    PS_DeleteLocalObject(OBJECT_SELF, sHenchLastTarget);
                     HenchDetermineCombatRound(oLastPerceived, TRUE);
                 }
             }

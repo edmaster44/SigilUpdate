@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Script by Ceremorph. Reviewed by Clangeddin.
 // Created for use in the Sigil: City of Doors PW
 // Inclusion script for all golem creation scripts
@@ -64,7 +66,7 @@ void AdjustGolem(object oPC, object oGolem, object oItem = OBJECT_INVALID)
 	else SendMessageToPC(oPC, "To release it from service, use the Golem Control Device");
 	
 	AddHenchman(oPC, oGolem);
-	if (oItem != OBJECT_INVALID) SetLocalObject(oGolem, "ControlObject", oItem);
+	if (oItem != OBJECT_INVALID) PS_SetLocalObject(oGolem, "ControlObject", oItem);
 	
 	
 	// Add bonuses from the Golem Master prestige class

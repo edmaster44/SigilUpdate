@@ -1,15 +1,17 @@
+#include "ff_safevar"
+
 #include "ps_inc_newcrafting"
 
 void main () {
 
 	object oPC = GetLastUsedBy();
-	string sType = GetLocalString(OBJECT_SELF, "CraftType");
+	string sType = PS_GetLocalString(OBJECT_SELF, "CraftType");
 	
-	DeleteLocalInt(oPC, "Craft_BaseItemType"); 
-	DeleteLocalInt(oPC, "Craft_Mat1"); 
-	DeleteLocalInt(oPC, "Craft_Mat2"); 
-	DeleteLocalInt(oPC, "Craft_Mat3"); 
-	DeleteLocalObject(oPC, "crafted_item");
+	PS_DeleteLocalInt(oPC, "Craft_BaseItemType"); 
+	PS_DeleteLocalInt(oPC, "Craft_Mat1"); 
+	PS_DeleteLocalInt(oPC, "Craft_Mat2"); 
+	PS_DeleteLocalInt(oPC, "Craft_Mat3"); 
+	PS_DeleteLocalObject(oPC, "crafted_item");
 		
 	DisplayGuiScreen(oPC, sCraftingScreen, TRUE, xmlCraftingFile);
 	

@@ -35,7 +35,7 @@ void main()
 	//Base DC 18
 	int nDC = GetSkillAdjustedTrapDC(18, oCaster, 5) + GetATTrapAbilityModifier(oCaster);
 	int nKDDur = 1 + (GetArcaneTricksterLevels(oCaster) / 5);
-    int nFire = GetLocalInt(OBJECT_SELF, "scod_firetrap");
+    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_firetrap");
     
 	effect eVisTarget = EffectVisualEffect(VFX_IMP_FLAME_M);
 	effect eVisArea = EffectVisualEffect(VFX_HIT_SPELL_FLAMESTRIKE);
@@ -48,7 +48,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            SetLocalInt(OBJECT_SELF, "scod_firetrap",TRUE);
+            PS_SetLocalInt(OBJECT_SELF, "scod_firetrap",TRUE);
 
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ELEMENTAL_TRAP_FIRE));

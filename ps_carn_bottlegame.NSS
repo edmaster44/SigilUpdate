@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
 
@@ -12,9 +14,9 @@ void main () {
 
 	string sTag = GetTag(OBJECT_SELF);
 	object oDamager = GetLastDamager();
-	int hasPlayed = GetLocalInt(oDamager, "cipher_game_played");
-	int score = GetLocalInt(oDamager, "cipher_game");
-	int shots = GetLocalInt(oDamager, "cipher_hits");
+	int hasPlayed = PS_GetLocalInt(oDamager, "cipher_game_played");
+	int score = PS_GetLocalInt(oDamager, "cipher_game");
+	int shots = PS_GetLocalInt(oDamager, "cipher_hits");
 	object oCipher = GetNearestObjectByTag("ps_npc_carncipher");
 	if (hasPlayed) {
 		AssignCommand(oCipher, ActionSpeakString("I'm sorry, you've already had your shot. Come back again tomorrow!", TALKVOLUME_TALK));
@@ -44,8 +46,8 @@ void main () {
 	}
 	shots++;
 	
-	SetLocalInt(oDamager, "cipher_game", score);
-	SetLocalInt(oDamager, "cipher_hits", shots);
+	PS_SetLocalInt(oDamager, "cipher_game", score);
+	PS_SetLocalInt(oDamager, "cipher_hits", shots);
 	
 	SendMessageToPC(oDamager, sText);
 	AssignCommand(OBJECT_SELF, ActionSpeakString(sBottle, TALKVOLUME_TALK));
@@ -80,7 +82,7 @@ void main () {
 			DelayCommand(2.5f, PS_GiveXPRewardNoReturn(oDamager, nExp));
 		if (nGold > 0)
 			DelayCommand(2.5f, GiveGoldToCreature(oDamager, nGold));
-		SetLocalInt(oDamager, "cipher_game_played", 1);
+		PS_SetLocalInt(oDamager, "cipher_game_played", 1);
 	}
 	
 	DelayCommand(30.0f, ResetBottle(GetLocation(OBJECT_SELF)));

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Default: On Spell Cast At
 //:: NW_C2_DEFAULTB
@@ -24,7 +26,7 @@ void main()
 	// spell cast at me so no longer partially focused
 	if (iFocused == FOCUSED_PARTIAL)
 	{
-		SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
+		PS_SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
 	}
 
     if (iFocused == FOCUSED_FULL)

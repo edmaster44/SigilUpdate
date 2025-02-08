@@ -1,3 +1,4 @@
+#include "ff_safevar"
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
@@ -34,7 +35,7 @@ if (nPsywar(oManifester)>12)
 if (nPsywar(oManifester)>15)
 {nNumberOfDice = 5;}
 
-if(GetLocalInt(oManifester,"METAPSI_AUGMENT"))
+if(PS_GetLocalInt(oManifester,"METAPSI_AUGMENT"))
 {
 nNumberOfDice = nNumberOfDice+1;	}
 

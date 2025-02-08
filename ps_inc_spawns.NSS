@@ -18,7 +18,7 @@ int PS_GetDifficulty(object oPC)
 	//diff 2 = normal (0 defaults to this)
 	//diff 3 = high
 	//diff 4 = extra high
-	int iDiff=GetLocalInt(oPC,"DIFF");
+	int iDiff=PS_GetLocalInt(oPC,"DIFF");
 	if (iDiff==0)
 		iDiff=2;
 	int tempDiff=0;
@@ -27,7 +27,7 @@ int PS_GetDifficulty(object oPC)
 
     while(GetIsObjectValid(oPartyMember) == TRUE)
     {
-		tempDiff = GetLocalInt(oPartyMember,"DIFF");
+		tempDiff = PS_GetLocalInt(oPartyMember,"DIFF");
 		if (tempDiff==0)
 			tempDiff=2;
 			
@@ -53,7 +53,7 @@ string sNearestMonster(location lSpawnpoint)
 //Log the spawn failure to the server logs
 void LogSpawnFailure(object oTrigger, string sTemplate)
 {
-	string sWPName = GetLocalString(oTrigger, "WP");
+	string sWPName = PS_GetLocalString(oTrigger, "WP");
 	object oWP = GetWaypointByTag(sWPName);
 	string sText = "Spawn failure! Waypoint:" + sWPName;
 	if (oWP == OBJECT_INVALID)
@@ -82,7 +82,7 @@ void SpawnMonsterAtLocation(object oTrigger, string toSpawn, location lSpawnpoin
 		SetDroppableFlag(oItem, FALSE);	
 		SetLastName(oSpawn,"("+elitetype+")");
 		ForceRest(oSpawn);					
-		SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
+		PS_SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
    	} 
 	
 }
@@ -93,7 +93,7 @@ void SpawnMonster(object oTrigger, string toSpawn, object oWP, float avg, int iE
 
 void PlayVFX(object oTrigger, object oWP) {
 
-	string vfx = GetLocalString(oTrigger, "VFX");
+	string vfx = PS_GetLocalString(oTrigger, "VFX");
 	
 	if (vfx != "") {
 		effect eEffect = EffectNWN2SpecialEffectFile(vfx);
@@ -109,10 +109,10 @@ void SpawnEncounterCreature(object oTrigger, object oPC, location lSpawn, string
 	string elitelevel="";
 		
 	int iDiff = PS_GetDifficulty(oPC);
-	float avg = PS_GetAvgPartylevel(oPC,PS_GetMaxPartylevel(oPC));
+	float avg = PS_GetAvgPartylevel(oPC, PS_GetMaxPartylevel(oPC));
 	
-	float low = IntToFloat(GetLocalInt(oTrigger,"LOW"));
-	float high = IntToFloat(GetLocalInt(oTrigger,"HIGH"));
+	float low = IntToFloat(PS_GetLocalInt(oTrigger,"LOW"));
+	float high = IntToFloat(PS_GetLocalInt(oTrigger,"HIGH"));
 	string mod = "";
 	
 	if(low==0.0 || high==0.0 || iDiff == DIFFLOW)
@@ -133,7 +133,7 @@ void SpawnEncounterCreature(object oTrigger, object oPC, location lSpawn, string
 }
 
 void SpawnEncounter(object oTrigger, object oPC) {
-	int iSpawnWait = GetLocalInt(oTrigger,"RESPAWN");
+	int iSpawnWait = PS_GetLocalInt(oTrigger,"RESPAWN");
 	if(iSpawnWait == 0)
 	 iSpawnWait = cSpawnWait;
 	
@@ -143,37 +143,37 @@ void SpawnEncounter(object oTrigger, object oPC) {
 		
 	 TimeStamp(oTrigger,"TIMESTAMP");
 	 
-	 object oWP = GetWaypointByTag(GetLocalString(oTrigger,"WP"));
+	 object oWP = GetWaypointByTag(PS_GetLocalString(oTrigger,"WP"));
 	 location lSpawnpoint = GetLocation(oWP); 
 	 
 	 object oSpawn;
 	  
-	 string m1 = GetLocalString(oTrigger,"M1");
-	 string b1 = GetLocalString(oTrigger,"B1");
+	 string m1 = PS_GetLocalString(oTrigger,"M1");
+	 string b1 = PS_GetLocalString(oTrigger,"B1");
 	 
 	 if(GetIsObjectValid(oWP) == TRUE && (m1 != "" || b1 != "")) {
 	 
 	 	PlayVFX(oTrigger, oWP);
 	
-	 	string m2 = GetLocalString(oTrigger,"M2");
-	 	string b2 = GetLocalString(oTrigger,"B2");
-	  	string b3 = GetLocalString(oTrigger,"B3");
+	 	string m2 = PS_GetLocalString(oTrigger,"M2");
+	 	string b2 = PS_GetLocalString(oTrigger,"B2");
+	  	string b3 = PS_GetLocalString(oTrigger,"B3");
 	
 		string elitetype="";
 		string elitelevel="";
 		
 		int iDiff = PS_GetDifficulty(oPC);
 		
-	  	int m1c = GetLocalInt(oTrigger,"M1C");
-	  	int m2c = GetLocalInt(oTrigger,"M2C");
-	  	int b1c = GetLocalInt(oTrigger,"B1C");
-	  	int b2c = GetLocalInt(oTrigger,"B2C");
-	  	int b3c = GetLocalInt(oTrigger,"B3C");
+	  	int m1c = PS_GetLocalInt(oTrigger,"M1C");
+	  	int m2c = PS_GetLocalInt(oTrigger,"M2C");
+	  	int b1c = PS_GetLocalInt(oTrigger,"B1C");
+	  	int b2c = PS_GetLocalInt(oTrigger,"B2C");
+	  	int b3c = PS_GetLocalInt(oTrigger,"B3C");
 	  	int i = 0;
 	  	object oItem;
 	  
-	  	float low = IntToFloat(GetLocalInt(oTrigger,"LOW"));
-	  	float high = IntToFloat(GetLocalInt(oTrigger,"HIGH"));
+	  	float low = IntToFloat(PS_GetLocalInt(oTrigger,"LOW"));
+	  	float high = IntToFloat(PS_GetLocalInt(oTrigger,"HIGH"));
 	   
 	  	string mod = "";
 	 
@@ -259,17 +259,17 @@ void SpawnEncounter(object oTrigger, object oPC) {
 }
 
 void SpawnGradualEncounter(object oTrigger, object oPC) {
-	string sMonster1 = GetLocalString(oTrigger, "M1");
-	string sMonster2 = GetLocalString(oTrigger, "M2");
-	string sMonster3 = GetLocalString(oTrigger, "M3");
+	string sMonster1 = PS_GetLocalString(oTrigger, "M1");
+	string sMonster2 = PS_GetLocalString(oTrigger, "M2");
+	string sMonster3 = PS_GetLocalString(oTrigger, "M3");
 	
 	string elitetype="";
 	string elitelevel="";
 	
 	int iDiff = PS_GetDifficulty(oPC);
 	
-	float low = IntToFloat(GetLocalInt(oTrigger,"LOW"));
-  	float high = IntToFloat(GetLocalInt(oTrigger,"HIGH"));
+	float low = IntToFloat(PS_GetLocalInt(oTrigger,"LOW"));
+  	float high = IntToFloat(PS_GetLocalInt(oTrigger,"HIGH"));
 	
 	string mod = "";
  
@@ -318,7 +318,7 @@ void SpawnGradualEncounter(object oTrigger, object oPC) {
 		default: toSpawn = sMonster1;
 	}
 	
-	string sWP = GetLocalString(oTrigger, "WP1");
+	string sWP = PS_GetLocalString(oTrigger, "WP1");
 	object oWP;
 	float fDelay = 0.0f; 
 	if (sWP != "") {
@@ -334,7 +334,7 @@ void SpawnGradualEncounter(object oTrigger, object oPC) {
 		case 3: toSpawn = sMonster3;
 		default: toSpawn = sMonster1;
 	}
-	sWP = GetLocalString(oTrigger, "WP2");
+	sWP = PS_GetLocalString(oTrigger, "WP2");
    	if (sWP != "") {
 		oWP = GetWaypointByTag(sWP);
 		fDelay = IntToFloat(Random(8))/2.5f;
@@ -349,7 +349,7 @@ void SpawnGradualEncounter(object oTrigger, object oPC) {
 		case 3: toSpawn = sMonster3;
 		default: toSpawn = sMonster1;
 	}
-	sWP = GetLocalString(oTrigger, "WP3");
+	sWP = PS_GetLocalString(oTrigger, "WP3");
    	if (sWP != "") {
 		oWP = GetWaypointByTag(sWP);
 		fDelay = IntToFloat(Random(8))/2.5f;
@@ -364,7 +364,7 @@ void SpawnGradualEncounter(object oTrigger, object oPC) {
 		case 3: toSpawn = sMonster3;
 		default: toSpawn = sMonster1;
 	}
-	sWP = GetLocalString(oTrigger, "WP4");
+	sWP = PS_GetLocalString(oTrigger, "WP4");
    	if (sWP != "") {
 		oWP = GetWaypointByTag(sWP);
 		fDelay = IntToFloat(Random(8))/2.5f;

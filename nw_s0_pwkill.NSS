@@ -110,7 +110,7 @@ void main()
                         //Make sure the target avoids all allies.
                         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
                     	{
-                              bKill = GetLocalInt(oTarget, "NW_SPELL_PW_KILL_" + GetTag(OBJECT_SELF));
+                              bKill = PS_GetLocalInt(oTarget, "NW_SPELL_PW_KILL_" + GetTag(OBJECT_SELF));
                               //Get the HP of the current target
                               nHitpoints = GetCurrentHitPoints(oTarget);
                               //Check if the currently selected target is lower in HP than the weakest stored creature
@@ -131,7 +131,7 @@ void main()
             	  else
             	  {
                         fDelay = GetRandomDelay(0.75, 2.0);
-                        SetLocalInt(oWeakest, "NW_SPELL_PW_KILL_" + GetTag(OBJECT_SELF), TRUE);
+                        PS_SetLocalInt(oWeakest, "NW_SPELL_PW_KILL_" + GetTag(OBJECT_SELF), TRUE);
                         //Fire cast spell at event for the specified target
                         SignalEvent(oWeakest, EventSpellCastAt(OBJECT_SELF, SPELL_POWER_WORD_KILL));
                         if(!MyResistSpell(OBJECT_SELF, oWeakest, fDelay))
@@ -145,7 +145,7 @@ void main()
                             //Add the creatures HP to the total
                             nDamageDealt = nDamageDealt + nMin;
                             string sTag = "NW_SPELL_PW_KILL_" + GetTag(OBJECT_SELF);
-                            DelayCommand(fDelay + 0.25, DeleteLocalInt(oWeakest, sTag));
+                            DelayCommand(fDelay + 0.25, PS_DeleteLocalInt(oWeakest, sTag));
                         }
             	  }
              }

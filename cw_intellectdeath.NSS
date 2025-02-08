@@ -1,7 +1,9 @@
+#include "ff_safevar"
+
 //Remove insanity
 void main()
 {
- object o=GetLocalObject(OBJECT_SELF, "CW_INSANE");
+ object o=PS_GetLocalObject(OBJECT_SELF, "CW_INSANE");
  
  if(GetIsObjectValid(o))
   {

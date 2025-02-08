@@ -1,3 +1,4 @@
+#include "ff_safevar"
 /** @file psi_pow_psyvamp
 
     Psychic Vampire
@@ -57,7 +58,7 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
                 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                 {
                     // Check if the target has PP to lose
-					int currentPP = GetLocalInt(oTarget, "PSI_PP");
+					int currentPP = PS_GetLocalInt(oTarget, "PSI_PP");
 					int finalPP = currentPP-(2 * manif.nManifesterLevel);
 					if(finalPP < 0)
 					{
@@ -65,7 +66,7 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
 					}
                     if(currentPP != 0)
                     {
-                       SetLocalInt(oTarget, "PSI_PP", finalPP);
+                       PS_SetLocalInt(oTarget, "PSI_PP", finalPP);
 					   SetGUIObjectText(oTarget, "powerpointscreen", "PPRatioTXT", -1, IntToString(finalPP));
                     }
                     // No PP, do ability damage

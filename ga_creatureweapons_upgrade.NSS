@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 ga_creatureweapon_upgrade by Ceremorph for the Sigil: City of Doors PW
 	For use with "equippable" creature weapons	
@@ -10,7 +12,7 @@ void main()
 {
 	object oPC = GetPCSpeaker();
 	object oItem = GetItemInSlot(4, oPC);
-	string sUpgrade = GetLocalString(oItem, "NextTag");
+	string sUpgrade = PS_GetLocalString(oItem, "NextTag");
 
 	
 	DestroyObject(oItem,0.0, TRUE);

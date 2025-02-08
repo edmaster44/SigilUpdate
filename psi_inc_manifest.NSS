@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "psi_inc_metapsi"
 #include "nwn2_inc_spells"
 #include "aaa_constants"
@@ -82,12 +84,12 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     int nPowerLevel      = GetSpellLevel(spellID);
 	// elfsight is 1 pp for psywar
 	if (GetLevelByClass(110, oManifester) > 0 && spellID == 14419) nPowerLevel = 1;
-    int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
-	if (GetLocalInt(oManifester, "PSI_SPAWN"))
+    int nManifesterPP    = PS_GetLocalInt(oManifester, "PSI_PP");
+	if (PS_GetLocalInt(oManifester, "PSI_SPAWN"))
 	{
 		nManifesterLevel = GetHitDice(oManifester);
 	}
-	int nCatapsiDC = GetLocalInt(oManifester, "PRC_Catapsi_DC");
+	int nCatapsiDC = PS_GetLocalInt(oManifester, "PRC_Catapsi_DC");
     // Target-specific stuff
 
     /* Initialise the manifestation structure */
@@ -96,7 +98,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     manif.bCanManifest      = TRUE;                         // Assume successfull manifestation by default
     manif.nPPCost           = nPowerLevel * 2 - 1;          // Initialise the cost to the base cost of the power
 	
-	if(GetLocalInt(oTarget, "PRC_IsInCatapsi") == TRUE)
+	if(PS_GetLocalInt(oTarget, "PRC_IsInCatapsi") == TRUE)
 	{
 		if(!MySavingThrow(SAVING_THROW_WILL, oManifester, nCatapsiDC, SAVING_THROW_TYPE_MIND_SPELLS))
 		{
@@ -127,7 +129,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     if(manif.bCanManifest)
     {
 		//No PP cost if Metamind's Font of Power is active
-		if(GetLocalInt(OBJECT_SELF, "METAMIND_FONT_ACTIVE") == 1)
+		if(PS_GetLocalInt(OBJECT_SELF, "METAMIND_FONT_ACTIVE") == 1)
 		{
 			return manif;
 		}
@@ -149,9 +151,9 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 		}
         else
         {
-			SetLocalInt(oManifester, "PSI_PP", nManifesterPP-manif.nPPCost);
+			PS_SetLocalInt(oManifester, "PSI_PP", nManifesterPP-manif.nPPCost);
 			int nPPFinal = nManifesterPP-manif.nPPCost;
-			nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
+			nManifesterPP    = PS_GetLocalInt(oManifester, "PSI_PP");
 			//Debug message
 			
 		

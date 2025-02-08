@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //gb_golem_dmg	
 
 //Damge script for trolls, making them un-killable by anything but fire or acid.
@@ -18,7 +20,7 @@ void GolemDeath()
 	//string sSPEAK = "Heavily damaged, the golem drops to the ground and deactivates itself.";
 	
 	//does not destroy the device if golem is killed by another golem or player
-	object oDevice = GetLocalObject(oGolem, "ControlObject");
+	object oDevice = PS_GetLocalObject(oGolem, "ControlObject");
 	if (oDevice == OBJECT_INVALID)
 	{
 		SendMessageToPC(oPC, sMSG);
@@ -31,7 +33,7 @@ void GolemDeath()
 	{
 		SendMessageToPC(oPC, sMSG);
 	}
-	if (GetLocalInt(oDevice, "AbidingMasterwork") == 1) //Golem Master with Abiding Masterwork does not lose their golem control device.
+	if (PS_GetLocalInt(oDevice, "AbidingMasterwork") == 1) //Golem Master with Abiding Masterwork does not lose their golem control device.
 	{
 		SendMessageToPC(oPC, sMSG);
 	}				
@@ -50,7 +52,7 @@ void main()
 {
 
 	//If I'm down, put out a fake "weapon ineffective" message.
-	if (GetLocalInt(OBJECT_SELF,"gb_troll_dmg_down")==1)
+	if (PS_GetLocalInt(OBJECT_SELF,"gb_troll_dmg_down")==1)
 	{
 		FloatingTextStrRefOnCreature(4725,GetLastDamager(),FALSE);	
 	}
@@ -58,7 +60,7 @@ void main()
 	{	
 		int nDuration = 1;		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectKnockdown(),OBJECT_SELF,IntToFloat(nDuration));		
-		SetLocalInt(OBJECT_SELF,"gb_troll_dmg_down",1);
+		PS_SetLocalInt(OBJECT_SELF,"gb_troll_dmg_down",1);
 		DelayCommand(IntToFloat(nDuration+1),GolemDeath());
 		DelayCommand(IntToFloat(nDuration+2), ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDeath(),OBJECT_SELF));
 		return;

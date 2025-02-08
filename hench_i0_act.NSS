@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -38,8 +40,8 @@ const string sItemDropped = "tk_item_dropped";
 
 void ClearForceOptions()
 {
-    DeleteLocalObject(OBJECT_SELF, sLockMasterFailed);
-    DeleteLocalInt(OBJECT_SELF, sForceTrap);
+    PS_DeleteLocalObject(OBJECT_SELF, sLockMasterFailed);
+    PS_DeleteLocalInt(OBJECT_SELF, sForceTrap);
 }
 
 
@@ -47,7 +49,7 @@ void OpenLock(object oLock)
 {
     if (GetIsObjectValid(oLock))
     {
-        SetLocalObject(OBJECT_SELF, sLockMasterFailed, oLock);
+        PS_SetLocalObject(OBJECT_SELF, sLockMasterFailed, oLock);
         ExecuteScript("hench_o0_act", OBJECT_SELF);
     }
 }
@@ -57,8 +59,8 @@ void ForceTrap(object oTrap)
 {
     if (GetIsObjectValid(oTrap))
     {
-        SetLocalObject(OBJECT_SELF, sLockMasterFailed, oTrap);
-        SetLocalInt(OBJECT_SELF, sForceTrap, TRUE);
+        PS_SetLocalObject(OBJECT_SELF, sLockMasterFailed, oTrap);
+        PS_SetLocalInt(OBJECT_SELF, sForceTrap, TRUE);
         ExecuteScript("hench_o0_act", OBJECT_SELF);
     }
 }
@@ -88,16 +90,16 @@ int HenchCheckArea(int nClearActions = FALSE)
     //    only execute if we have something to do
     if (!GetAssociateState(NW_ASC_MODE_STAND_GROUND) &&
 		(!GetAssociateState(NW_ASC_MODE_PUPPET) || GetHenchPartyState(HENCH_PARTY_ENABLE_PUPPET_FOLLOW)) &&
-		!GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
+		!PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
         GetIAmNotDoingAnything() &&
         ((GetHasSkill(SKILL_DISABLE_TRAP) && GetAssociateState(NW_ASC_DISARM_TRAPS)) ||				
 		GetHenchAssociateState(HENCH_ASC_AUTO_OPEN_LOCKS | HENCH_ASC_AUTO_PICKUP) ||		
-        GetIsObjectValid(GetLocalObject(OBJECT_SELF, sLockMasterFailed))))
+        GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, sLockMasterFailed))))
     {
-        if (!GetLocalInt(OBJECT_SELF, "tk_doing_action"))
+        if (!PS_GetLocalInt(OBJECT_SELF, "tk_doing_action"))
         {
             ExecuteScript("hench_o0_act", OBJECT_SELF);
-            return GetLocalInt(OBJECT_SELF, "tk_action_result");
+            return PS_GetLocalInt(OBJECT_SELF, "tk_action_result");
         }
         else
         {

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //:://////////////////////////////////////////////
 //
 // Handles the sandstorm wandering minethys
@@ -9,7 +11,7 @@
 
 void DoSandstorm(float fDis) {
 	
-	if (!GetIsObjectValid(GetLocalObject(OBJECT_SELF, "entrance"))) {
+	if (!GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, "entrance"))) {
 	
 		object oEnt;
 		int nGenerated = FALSE;
@@ -17,7 +19,7 @@ void DoSandstorm(float fDis) {
 		float fDistanceTo = GetDistanceBetween(oWP, OBJECT_SELF);
 		if (GetIsObjectValid(oWP) && GetDistanceBetween(oWP, OBJECT_SELF) <= fDis && !nGenerated) {
 			oEnt = CreateObject(OBJECT_TYPE_PLACEABLE, "ps_minethys_ruinentrance", GetLocation(oWP));
-			SetLocalObject(OBJECT_SELF, "entrance", oEnt);
+			PS_SetLocalObject(OBJECT_SELF, "entrance", oEnt);
 			SetMapPinEnabled(oWP, TRUE);
 			DelayCommand(600.0f, SetMapPinEnabled(oWP, FALSE));
 			nGenerated = TRUE;
@@ -27,7 +29,7 @@ void DoSandstorm(float fDis) {
 		fDistanceTo = GetDistanceBetween(oWP, OBJECT_SELF);
 		if (GetIsObjectValid(oWP) && GetDistanceBetween(oWP, OBJECT_SELF) <= fDis && !nGenerated) {
 			oEnt = CreateObject(OBJECT_TYPE_PLACEABLE, "ps_minethys_ruinentrance", GetLocation(oWP));
-			SetLocalObject(OBJECT_SELF, "entrance", oEnt);
+			PS_SetLocalObject(OBJECT_SELF, "entrance", oEnt);
 			SetMapPinEnabled(oWP, TRUE);
 			DelayCommand(600.0f, SetMapPinEnabled(oWP, FALSE));
 			nGenerated = TRUE;
@@ -37,7 +39,7 @@ void DoSandstorm(float fDis) {
 		fDistanceTo = GetDistanceBetween(oWP, OBJECT_SELF);
 		if (GetIsObjectValid(oWP) && GetDistanceBetween(oWP, OBJECT_SELF) <= fDis && !nGenerated) {
 			oEnt = CreateObject(OBJECT_TYPE_PLACEABLE, "ps_minethys_ruinentrance", GetLocation(oWP));
-			SetLocalObject(OBJECT_SELF, "entrance", oEnt);
+			PS_SetLocalObject(OBJECT_SELF, "entrance", oEnt);
 			SetMapPinEnabled(oWP, TRUE);
 			DelayCommand(600.0f, SetMapPinEnabled(oWP, FALSE));
 			nGenerated = TRUE;
@@ -46,7 +48,7 @@ void DoSandstorm(float fDis) {
 		if (nGenerated) {
 			FloatingTextStringOnCreature("*The winds uncover a previously buried entrance to the ruins below. . .*", OBJECT_SELF, FALSE);
 			DestroyObject(oEnt, 600.0f);
-			DelayCommand(600.0f, DeleteLocalObject(OBJECT_SELF, "entrance"));
+			DelayCommand(600.0f, PS_DeleteLocalObject(OBJECT_SELF, "entrance"));
 		}
 		
 	}
@@ -120,7 +122,7 @@ void main () {
 	
 	//No combat
 	CleanCombatVars();
-    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
     if (DoStealthAndWander()) {
     	// nothing to do here
     } else if (GetWalkCondition(NW_WALK_FLAG_CONSTANT)) {

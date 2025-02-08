@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ginc_var_ops"
 
 void main()
@@ -8,7 +10,7 @@ void main()
    		oPC=GetMaster(oPC);
    	}
 	
-    int iQuestEntry = GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + "ps_quest_wildlife");
+    int iQuestEntry = PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + "ps_quest_wildlife");
  	if (iQuestEntry==1)
 	{
 		AddJournalQuestEntry("ps_quest_wildlife", 11, oPC, 1, 0, 0);

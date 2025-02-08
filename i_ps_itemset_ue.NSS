@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //i_ps_itemset_ue
 /*	Script by Dedic8ed
 	Created for use in the Sigil: City of Doors PW
@@ -13,7 +15,7 @@ void main()
     object oPC      = GetPCItemLastUnequippedBy();
     object oItem    = GetPCItemLastUnequipped();
 
-switch (GetLocalInt(oItem,"vSetID"))
+switch (PS_GetLocalInt(oItem,"vSetID"))
 {	
 
 /////////////////////////////////////////////////////////////////////////////////////////

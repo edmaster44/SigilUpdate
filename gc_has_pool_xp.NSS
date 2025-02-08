@@ -8,7 +8,7 @@ int StartingConditional()
 	object oPC = GetPCSpeaker();
 	object oNPC = OBJECT_SELF;
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-	int nID = GetLocalInt(oItem,"ID");
+	int nID = PS_GetLocalInt(oItem,"ID");
 	int dm_pool, rp_pool, availableXP;
 	
 	SQLExecDirect("SELECT id,dm_pool,rp_pool,Day(Now()) FROM characterdata WHERE id=" + IntToString(nID));

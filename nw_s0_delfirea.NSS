@@ -34,7 +34,7 @@ void main()
     int nCasterLevel = PS_GetCasterLevel(oCaster);
 
 	
-    int nFire = GetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL");
+    int nFire = PS_GetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL");
     /*Limit caster level
     if (nCasterLevel > 20)
     {
@@ -49,7 +49,7 @@ void main()
         //if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            SetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL",TRUE);
+            PS_SetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL",TRUE);
             ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
             //Cycle through the targets in the explosion area
             oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

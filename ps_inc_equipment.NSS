@@ -27,7 +27,6 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip);
 void ConDrainProtection(object oItem, object oPC);
 int GetACProvidedByShield(object oShield);
 void DrunkMasterImprovised(object oPC, int nRIGHT);
-void FrightfulPresence(object oPC);
 void FIX_BLINDFIGHT(object oPC);
 void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
@@ -55,6 +54,9 @@ void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND);
 void BucklerFinesse(object oPC, object oLHAND);
 void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor);
 void FlorentineTWF(object oPC, object oRHAND, object oLHAND);
+void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND);
+void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip);
+void FrightfulPresence(object oPC, int nCHA);
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0);
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip);
 
@@ -156,45 +158,178 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
 }
 
-// because EffectAttackIncrease() doesn't stack and multiple conditions could result
-// in multiple applications (forexample, a samurai drawing a katana while using
-// oversized twf feat, all functions that involve an attack bonus have been moved
-// to ff_combat_mods (which also does the heavy lifting for Methodical Strike, Considered Strike,
-// and Staff Fighting). This function checks if it's necessary and then calls it if it is.
-// Likewise we call the script that adds the tactical bonus feats from here, if needed.
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
 
 	PS_RemoveEffects(oPC, FF_AC_FX);
 	BucklerFinesse(oPC, oLHAND);
 	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
-	
+
 	//the rest only relate to weapons
 	if (!IPGetIsWeapon(oChanged)) return;
 	
 	MurderousIntent(oPC, oRHAND);
 	FlorentineTWF(oPC, oRHAND, oLHAND);
-	UpdateCombatMods(oPC, NULL, oChanged, bOnEquip);
+	TwoSwordsAsOne(oPC, oRHAND, oLHAND);
+	IajaitsuMaster(oPC, oRHAND, oChanged, bOnEquip);
+	UpdateCombatMods(oPC, NULL);
 	object oSkin = PS_GetCreatureSkin(oPC);
 	CheckTacticalWeapons(oPC, oSkin);
 }
 
+
+//Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword or ninjato in off hand.
+void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
+
+    int nSAMURAI = GetLevelByClass(65, oPC);
+    if (nSAMURAI < 2) return;
+
+	int nPCsize = GetCreatureSize(oPC);
+	int bRightQualifies = FALSE;
+	int bLeftQualifies = FALSE;
+	
+	if (oRHAND == OBJECT_INVALID || oLHAND == OBJECT_INVALID)
+		return;
+	
+	int nRIGHT = GetBaseItemType(oRHAND);
+	int nLEFT = GetBaseItemType(oLHAND);
+	
+	// Whoever came up with the rules for TSAO didn't think about the fact that in nwn weapons do not
+	// change size to accomodate the character. So I fix that here.
+	
+	// large Samurai can use a falchion, greatsword, or odachi in the right hand
+	// and katana, longsword, ninjato, or shortsword in left
+	if (nPCsize > 3){
+		bRightQualifies = (nRIGHT == BASE_ITEM_FALCHION || nRIGHT == BASE_ITEM_GREATSWORD ||
+			nRIGHT == BASE_ITEM_ODACHI );
+		bLeftQualifies = (nLEFT == BASE_ITEM_KATANA || nLEFT == BASE_ITEM_LONGSWORD ||
+			nLEFT == BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO);
+	// small samurai can use a ninjato, shortsword, katana, or longsword in the right hand 
+	// and dagger or kukri in the left otherwise they would have -2 penalties making 
+	// a small samurai unfairly penalized
+	} else if (nPCsize < 3){
+		bRightQualifies = (nRIGHT == BASE_ITEM_NINJATO || nRIGHT == BASE_ITEM_SHORTSWORD || 
+			nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD);
+		bLeftQualifies = (nLEFT == BASE_ITEM_DAGGER || nLEFT == BASE_ITEM_KUKRI);
+	} else { //medium characters
+		bRightQualifies = (nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD);
+		bLeftQualifies = (nLEFT == BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO || 
+		nLEFT == BASE_ITEM_DAGGER || nLEFT == BASE_ITEM_KUKRI);
+	}
+	
+	if (!bRightQualifies || !bLeftQualifies) return;
+	
+	int nDMG_TYPE = DAMAGE_TYPE_BLUDGEONING;
+	if (nSAMURAI >= 30) nDMG_TYPE = DAMAGE_TYPE_DIVINE;
+	
+	int nBonus = (nSAMURAI - 1) / 5;
+	if (nBonus < 1) nBonus = 1;
+	
+	effect eAB = EffectAttackIncrease(nBonus);
+	eAB = EffectLinkEffects(EffectDamageIncrease(nBonus, nDMG_TYPE), eAB);
+	ApplyEquipmentEffect(oPC, eAB);
+}
+
+//At level 5, when the Samurai draws a longsword or katana (in right hand) they gain an attack bonus 
+//equal to their charisma bonus for 1 round. They also gain 1 extra attack for that round as well. 
+// Because attack bonuses do not stack this need to be last and take the longer duration bonuses
+// into account when applying the 1 round bonus. EffectModifyAttacks also doesn't stack, so the
+// character won't get the bonus attack if using methodical defense or considered strike, which makes
+// sense, considering that those are supposed to grant their bonuses because the character is moving
+// cautiously
+void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
+
+    if (GetLevelByClass(65, oPC) < 5) return;
+	if (!GetHasFeat(2414, oPC, TRUE)) return;
+
+	if (!bOnEquip) return;
+	if (oChanged != oRHAND) return;
+	
+	// don't allow ppl to spam this ability by constantly swapping between two katanas
+	if (PS_GetLocalInt(oPC, "Iajaitsu")) return;
+	
+	// set the int that shows we've done this recently
+	PS_SetLocalInt(oPC, "Iajaitsu", TRUE);
+	
+	int bQualifies = FALSE;
+	int nPCsize = GetCreatureSize(oPC);
+	int nITEM = GetBaseItemType(oRHAND);
+    if ((nITEM == BASE_ITEM_KATANA) || (nITEM == BASE_ITEM_LONGSWORD) || 
+		(nITEM == BASE_ITEM_ODACHI) || nITEM == (BASE_ITEM_NINJATO))
+			bQualifies = TRUE;
+	if (nPCsize > 3 && (nITEM == BASE_ITEM_FALCHION || nITEM == BASE_ITEM_GREATSWORD || 
+		nITEM == BASE_ITEM_ODACHI)) bQualifies == TRUE;
+	if (nPCsize < 3 && (nITEM == BASE_ITEM_SHORTSWORD)) bQualifies = TRUE;
+	if (!bQualifies) return;
+	
+    
+	int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
+	float fDUR = RoundsToSeconds(1);
+	effect eFX_4 = EffectModifyAttacks(1);
+	if (nCHA > 0){
+		int nBonus = GetWeaponBonus(oRHAND) + nCHA;
+		eFX_4 = EffectLinkEffects(EffectAttackIncrease(nBonus, ATTACK_BONUS_ONHAND), eFX_4);
+	}
+	eFX_4 = SetEffectSpellId(eFX_4, 1839);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_4, oPC, fDUR);
+    DelayCommand(0.01f, FrightfulPresence(oPC, nCHA));
+	// set the int that shows we've done this recently to false
+	DelayCommand(30.0f, PS_SetLocalInt(oPC, "Iajaitsu", FALSE));
+}
+
+//When a Samurai draws their weapon (a katana or longsword) foes can be frightened by it.
+void FrightfulPresence(object oPC, int nCHA){
+	if (nCHA < 1) return;
+    if (GetHasFeat(2419, oPC, TRUE) == FALSE) return;
+    location lPC = GetLocation(oPC);
+    float fDUR = RoundsToSeconds(nCHA);
+    int nDC = 20 + nCHA;
+    int nHD;
+    effect eFX_1 = EffectLinkEffects(EffectStunned(), EffectVisualEffect(VFX_DUR_STUN));
+    effect eFX_2 = EffectLinkEffects(EffectFrightened(), EffectVisualEffect(VFX_DUR_SPELL_FEAR));
+    effect eFX_3 = EffectLinkEffects(EffectLinkEffects(EffectACDecrease(2), EffectAttackDecrease(2)), EffectVisualEffect(VFX_DUR_SPELL_DOOM));
+	eFX_1 = SetEffectSpellId(eFX_1, NULL);
+	eFX_2 = SetEffectSpellId(eFX_2, NULL);
+	eFX_3 = SetEffectSpellId(eFX_3, NULL);
+    object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
+    while (oTARGET != OBJECT_INVALID)
+    {
+        if (GetIsEnemy(oTARGET, oPC) == TRUE)
+        {
+            if (WillSave(oTARGET, nDC, SAVING_THROW_TYPE_FEAR, oPC) == SAVING_THROW_CHECK_FAILED)
+            {
+                nHD = GetHitDice(oTARGET);
+                if (nHD >= 20) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_3, oTARGET, fDUR);
+                else if (nHD >= 5) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_2, oTARGET, fDUR);
+                else ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_1, oTARGET, fDUR);    
+            }
+        }
+        oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
+    }
+}
+
+
+
+
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
-	int nType;
+	int nTac;
 	object oRHAND;
 	// There appears to be a slight delay when adding or removing item properties
 	// so make sure this waits a bit if it's doing that in case of rapid calls,
 	// such as equipping 2 items at once from hotbar
-    if (nCount >= 2000 || !GetLocalInt(oPC, "tacbusy")){
+    if (nCount >= 2000 || !PS_GetLocalInt(oPC, "tacbusy")){
 		oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-		nType = GetBaseItemType(oRHAND);
-		// don't change tac weapons feat if the base item type of weapon has
-		// not changed
-		if (GetLocalInt(oPC, "tacweapon") != nType){
-			SetLocalInt(oPC, "tacbusy", TRUE);
-			SetLocalInt(oPC, "tacweapon", nType);
+		nTac = GetTacSuiteByWeaponCategory(oPC, oRHAND);
+		// don't change tac weapons feat if the feat granted by the weapons doesn't change
+		if (PS_GetLocalInt(oPC, "tacweapon") != nTac){
+			PS_SetLocalInt(oPC, "tacbusy", TRUE);
+			PS_SetLocalInt(oPC, "tacweapon", nTac);
 			RemoveBonusFeats(oSkin);
+			if (!GetHasFeat(FEAT_COMBAT_EXPERTISE, oPC, TRUE))
+				SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
+			if (!GetHasFeat(FEAT_POWER_ATTACK, oPC, TRUE))
+				SetActionMode(oPC, ACTION_MODE_POWER_ATTACK, FALSE);
 			FF_TacticalWeapons(oPC, oRHAND, oSkin);
-			DelayCommand(0.1, SetLocalInt(oPC, "tacbusy", FALSE));
+			DelayCommand(0.1, PS_SetLocalInt(oPC, "tacbusy", FALSE));
 		}
         return;
     }
@@ -424,10 +559,13 @@ void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND){
 }
 
 //This gets the weapons that qualify for Meditative Strikes
-int GetMonkWeapon(object oItem)
-{ 
+int GetMonkWeapon(object oItem){ 
     int iBaseItem = GetBaseItemType(oItem);
-    return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES ||    iBaseItem == BASE_ITEM_KAMA || iBaseItem == BASE_ITEM_QUARTERSTAFF;
+	if (IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, iBaseItem)) return TRUE;
+	
+    return iBaseItem ==  BASE_ITEM_SHURIKEN || iBaseItem == BASE_ITEM_GLOVES || iBaseItem == BASE_ITEM_KAMA || 
+		iBaseItem == BASE_ITEM_QUARTERSTAFF || iBaseItem == BASE_ITEM_SHORT_STAFF || iBaseItem == BASE_ITEM_GIANT_STAFF ||
+		iBaseItem == BASE_ITEM_STILETTO || iBaseItem == BASE_ITEM_DAGGER || iBaseItem == BASE_ITEM_KUKRI;
 }
 
 
@@ -766,14 +904,14 @@ int MonkeyGripAbuse(object oPC, object oITEM){
 void CheckForTempProperties(object oItem, object oPC)
 {
     string sID = ObjectToString(oItem);
-    if (GetLocalInt(oPC, sID) == TRUE) return;
+    if (PS_GetLocalInt(oPC, sID) == TRUE) return;
     itemproperty ipProp = GetFirstItemProperty(oItem);
     while (GetIsItemPropertyValid(ipProp))
     {
         if (GetItemPropertyDurationType(ipProp) == DURATION_TYPE_TEMPORARY) RemoveItemProperty(oItem, ipProp);
         ipProp = GetNextItemProperty(oItem);
     }
-    SetLocalInt(oPC, sID, TRUE);
+    PS_SetLocalInt(oPC, sID, TRUE);
 }
 
 // Check No Manual Dexterity. With it you can only equip creature weapons.
@@ -833,7 +971,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
-    if (GetLocalInt(oESSENCE, "TempChange") == 1)
+    if (PS_GetLocalInt(oESSENCE, "TempChange") == 1)
     {
         if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE)
         {

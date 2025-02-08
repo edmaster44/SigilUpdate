@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -8,12 +10,12 @@ void main()
 {
 	object oPlaceable = OBJECT_SELF;
 	object oPC = GetLastUsedBy();
-	string sOwner = GetLocalString(oPlaceable,"OWNER_NAME");
+	string sOwner = PS_GetLocalString(oPlaceable,"OWNER_NAME");
 	
 	if (sOwner == GetName(oPC))
 	{
 		// spawn convo with PC to decide what to do, rotate, destroy, etc.
-		SetLocalObject(oPC, "LASTSIGNTALK", oPlaceable);
+		PS_SetLocalObject(oPC, "LASTSIGNTALK", oPlaceable);
 		AssignCommand(oPC, ActionStartConversation(oPC, "ps_conv_sign", TRUE, FALSE, TRUE, TRUE));
 	}
 	else
@@ -47,7 +49,7 @@ void main()
 		}
 		else
 		{
-			SetLocalObject(oPC, "LASTSIGNTALK", oPlaceable);
+			PS_SetLocalObject(oPC, "LASTSIGNTALK", oPlaceable);
 			AssignCommand(oPC, ActionStartConversation(oPC, "ps_conv_sign_no", TRUE, FALSE, TRUE, TRUE));
 		}
 	}

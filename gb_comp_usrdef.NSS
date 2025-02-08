@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // gb_comp_userdef
 /*
     companion On User Defined
@@ -73,7 +75,7 @@ int ACTION_MODE_DIRTY_FIGHTING          = 11;
 void main()
 {
     int nEvent = GetUserDefinedEventNumber();
-    string sUDScript=GetLocalString(OBJECT_SELF,"ud_script");
+    string sUDScript=PS_GetLocalString(OBJECT_SELF,"ud_script");
     if (sUDScript != "")
     {
         ExecuteScript(sUDScript, OBJECT_SELF);
@@ -148,7 +150,7 @@ void main()
 			if(GetIsOverlandMap(GetArea(OBJECT_SELF)))
 			{
 //				PrettyDebug("gb_comp_userdef firing for" + GetName(OBJECT_SELF));
-				object oOldActor = GetLocalObject(GetModule(), "oPartyLeader");
+				object oOldActor = PS_GetLocalObject(GetModule(), "oPartyLeader");
 				if(GetIsPC(OBJECT_SELF) && oOldActor != OBJECT_SELF)
 				{
 					if(GetCommandable(OBJECT_SELF) && !GetIsDead(OBJECT_SELF) &&
@@ -169,7 +171,7 @@ void main()
             HenchHandlePlayerControlChanged(OBJECT_SELF);
             HenchResetCombatRound();
             ClearEnemyLocation();
-            DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
+            PS_DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
             break;
         }
 
@@ -268,7 +270,7 @@ void CheckCreature(object oCreature)
         if(CheckSpell(SPELL_GREATER_RESTORATION, oCreature)) return;
         if(CheckSpell(SPELL_RESTORATION, oCreature)) return;
         if(HasDisablingMagicalEffect(oCreature) &&
-            GetLocalInt(OBJECT_SELF, "X2_HENCH_DO_NOT_DISPEL") == 0)
+            PS_GetLocalInt(OBJECT_SELF, "X2_HENCH_DO_NOT_DISPEL") == 0)
         {
             if(CheckSpell(SPELL_GREATER_DISPELLING, oCreature)) return;
             if(CheckSpell(SPELL_DISPEL_MAGIC, oCreature)) return;
@@ -305,7 +307,7 @@ void CheckForDisabledPartyMembers()
 void HandleRosterSpawnIn()
 {
     // Campaign flag set OnModuleLoad
-    if ( GetGlobalInt( CAMPAIGN_SWITCH_UNPLOT_ON_ROSTER_SPAWN ) == TRUE )
+    if ( PS_GetGlobalInt( CAMPAIGN_SWITCH_UNPLOT_ON_ROSTER_SPAWN ) == TRUE )
     {
         // If OBJECT_SELF is in FirstPC's Party
         if ( GetIsObjectInParty( OBJECT_SELF ) == TRUE )

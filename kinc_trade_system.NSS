@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //kinc_trade_system
 //Trade System - System sub-include
 //NLC 7/21/08
@@ -98,7 +100,7 @@ int EstablishTradingPost(int iLocation)
 	if(sLocLabel != "")
 	{
 		PrettyDebug(sLocLabel+ "_TRADEPOST = True");
-		SetGlobalInt(sLocLabel+ "_TRADEPOST", TRUE);
+		PS_SetGlobalInt(sLocLabel+ "_TRADEPOST", TRUE);
 		return TRUE;
 	}
 	
@@ -151,7 +153,7 @@ int GetHasTradingPost(int nLocation)
 		return TRUE;
 	
 	string sLocLabel = GetLocationLabel(nLocation);
-	int nResult = GetGlobalInt(sLocLabel + "_TRADEPOST");
+	int nResult = PS_GetGlobalInt(sLocLabel + "_TRADEPOST");
 	return nResult;
 }
 
@@ -170,13 +172,13 @@ int GiveCargo(int nIndex, int nAmount, int bGood = TRUE, int bCheck= FALSE, int 
 	
 	if ( bTemp )
 	{	
-		nPartyStockOfGood = GetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX);
-		nPartyCargo = GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
+		nPartyStockOfGood = PS_GetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX);
+		nPartyCargo = PS_GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
 	}
 	else
 	{
-		nPartyStockOfGood = GetGlobalInt("PARTY_" + sLabel);
-		nPartyCargo = GetGlobalInt ("PARTY_CARGO");
+		nPartyStockOfGood = PS_GetGlobalInt("PARTY_" + sLabel);
+		nPartyCargo = PS_GetGlobalInt("PARTY_CARGO");
 	}
 	
 	if( sLabel == "")						// If the good we're dealing with isn't in the 2DA, abort.
@@ -199,8 +201,8 @@ int GiveCargo(int nIndex, int nAmount, int bGood = TRUE, int bCheck= FALSE, int 
 		//PrettyDebug("Temp Giving:" + IntToString(nAmount) + " " + sLabel );
 		nPartyStockOfGood += nAmount;		//Subtract the good/resource from the player's stock.
 		nPartyCargo += nAmount;				//Subtract the space from the player's cargo.
-		SetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX, nPartyStockOfGood);
-		SetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX, nPartyCargo);
+		PS_SetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX, nPartyStockOfGood);
+		PS_SetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX, nPartyCargo);
 		return TRUE;
 	}
 	
@@ -228,8 +230,8 @@ int GiveCargo(int nIndex, int nAmount, int bGood = TRUE, int bCheck= FALSE, int 
 			SendMessageToPC(oPC, sFeedback);
 			oPC = GetNextPC(FALSE);
 		}
-		SetGlobalInt(PARTY_PREFIX + sLabel, nPartyStockOfGood);
-		SetGlobalInt("PARTY_CARGO", nPartyCargo);
+		PS_SetGlobalInt(PARTY_PREFIX + sLabel, nPartyStockOfGood);
+		PS_SetGlobalInt("PARTY_CARGO", nPartyCargo);
 		
 		return TRUE;
 	}
@@ -247,13 +249,13 @@ int TakeCargo(int nIndex, int nAmount, int bGood = TRUE, int bCheck = FALSE, int
 	
 	if ( bTemp )
 	{	
-		nPartyStockOfGood = GetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX);
-		nPartyCargo = GetGlobalInt ("PARTY_CARGO" + TEMP_SUFFIX);
+		nPartyStockOfGood = PS_GetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX);
+		nPartyCargo = PS_GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
 	}
 	else
 	{
-		nPartyStockOfGood = GetGlobalInt(PARTY_PREFIX + sLabel);
-		nPartyCargo = GetGlobalInt ("PARTY_CARGO");
+		nPartyStockOfGood = PS_GetGlobalInt(PARTY_PREFIX + sLabel);
+		nPartyCargo = PS_GetGlobalInt("PARTY_CARGO");
 	}
 	
 	if( sLabel == "")						// If the good we're dealing with isn't in the 2DA, abort.
@@ -273,13 +275,13 @@ int TakeCargo(int nIndex, int nAmount, int bGood = TRUE, int bCheck = FALSE, int
 	
 	else if ( bTemp )									//You've got the good - but we're only altering the TEMP value
 	{
-		nPartyStockOfGood = GetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX);
-		nPartyCargo = GetGlobalInt ("PARTY_CARGO" + TEMP_SUFFIX);
+		nPartyStockOfGood = PS_GetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX);
+		nPartyCargo = PS_GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
 		PrettyDebug("Temp Taking:" + IntToString(nAmount) + " " + sLabel );
 		nPartyStockOfGood -= nAmount;		//Subtract the good/resource from the player's stock.
 		nPartyCargo -= nAmount;				//Subtract the space from the player's cargo.
-		SetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX, nPartyStockOfGood);
-		SetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX, nPartyCargo);
+		PS_SetGlobalInt(PARTY_PREFIX + sLabel + TEMP_SUFFIX, nPartyStockOfGood);
+		PS_SetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX, nPartyCargo);
 		return TRUE;
 	}
 	
@@ -308,8 +310,8 @@ int TakeCargo(int nIndex, int nAmount, int bGood = TRUE, int bCheck = FALSE, int
 			SendMessageToPC(oFM, sFeedback);
 			oFM = GetNextFactionMember(oPC);
 		}
-		SetGlobalInt("PARTY_" + sLabel, nPartyStockOfGood);
-		SetGlobalInt("PARTY_CARGO", nPartyCargo);
+		PS_SetGlobalInt("PARTY_" + sLabel, nPartyStockOfGood);
+		PS_SetGlobalInt("PARTY_CARGO", nPartyCargo);
 		return TRUE;
 	}
 	return FALSE;
@@ -323,10 +325,10 @@ int BuyCargo(int iIndex, int nAmount, int iPrice, int bGood = TRUE, int bCheck= 
 		sLookup = RES_2DA;						// Use the Rare Resources 2da.
 	
 	int iTotalPrice = nAmount * iPrice;
-	int iPartyBars = GetGlobalInt("PARTY_BARS");
+	int iPartyBars = PS_GetGlobalInt("PARTY_BARS");
 	
 	if (bTemp)
-		iPartyBars = GetGlobalInt("PARTY_BARS" + TEMP_SUFFIX);
+		iPartyBars = PS_GetGlobalInt("PARTY_BARS" + TEMP_SUFFIX);
 		
 	string sLabel = Get2DAString(sLookup, "LABEL", iIndex);
 
@@ -470,9 +472,9 @@ int StoreCargo(int nIndex, int nAmount, int bGood = TRUE)
 	string sLabel = Get2DAString(sLookup, "LABEL", nIndex);
 	int nPartyStockOfGood, nPartyCargo, nStorageStock;
 	
-	nPartyStockOfGood = GetGlobalInt(PARTY_PREFIX + sLabel);
-	nStorageStock = GetGlobalInt(STORAGE_PREFIX + sLabel);
-	nPartyCargo = GetGlobalInt ("PARTY_CARGO");
+	nPartyStockOfGood = PS_GetGlobalInt(PARTY_PREFIX + sLabel);
+	nStorageStock = PS_GetGlobalInt(STORAGE_PREFIX + sLabel);
+	nPartyCargo = PS_GetGlobalInt("PARTY_CARGO");
 		
 	if( sLabel == "")						// If the good we're dealing with isn't in the 2DA, abort.
 	{
@@ -492,9 +494,9 @@ int StoreCargo(int nIndex, int nAmount, int bGood = TRUE)
 		nPartyStockOfGood -= nAmount;		
 		nPartyCargo -= nAmount;
 		nStorageStock += nAmount;				
-		SetGlobalInt(PARTY_PREFIX + sLabel, nPartyStockOfGood);
-		SetGlobalInt("PARTY_CARGO", nPartyCargo);
-		SetGlobalInt(STORAGE_PREFIX + sLabel, nStorageStock);
+		PS_SetGlobalInt(PARTY_PREFIX + sLabel, nPartyStockOfGood);
+		PS_SetGlobalInt("PARTY_CARGO", nPartyCargo);
+		PS_SetGlobalInt(STORAGE_PREFIX + sLabel, nStorageStock);
 		
 		return TRUE;
 	}
@@ -510,9 +512,9 @@ int WithdrawCargo(int nIndex, int nAmount, int bGood = TRUE)
 	string sLabel = Get2DAString(sLookup, "LABEL", nIndex);
 	int nPartyStockOfGood, nPartyCargo, nStorageStock;
 	
-	nPartyStockOfGood = GetGlobalInt(PARTY_PREFIX + sLabel);
-	nStorageStock = GetGlobalInt(STORAGE_PREFIX + sLabel);
-	nPartyCargo = GetGlobalInt ("PARTY_CARGO");
+	nPartyStockOfGood = PS_GetGlobalInt(PARTY_PREFIX + sLabel);
+	nStorageStock = PS_GetGlobalInt(STORAGE_PREFIX + sLabel);
+	nPartyCargo = PS_GetGlobalInt("PARTY_CARGO");
 		
 	if( sLabel == "")						// If the good we're dealing with isn't in the 2DA, abort.
 	{
@@ -538,9 +540,9 @@ int WithdrawCargo(int nIndex, int nAmount, int bGood = TRUE)
 		nPartyStockOfGood += nAmount;		
 		nPartyCargo += nAmount;
 		nStorageStock -= nAmount;				
-		SetGlobalInt(PARTY_PREFIX + sLabel, nPartyStockOfGood);
-		SetGlobalInt("PARTY_CARGO", nPartyCargo);
-		SetGlobalInt(STORAGE_PREFIX + sLabel, nStorageStock);
+		PS_SetGlobalInt(PARTY_PREFIX + sLabel, nPartyStockOfGood);
+		PS_SetGlobalInt("PARTY_CARGO", nPartyCargo);
+		PS_SetGlobalInt(STORAGE_PREFIX + sLabel, nStorageStock);
 		
 		return TRUE;
 	}
@@ -553,17 +555,17 @@ int GiveBars(int nBarsToGive, int bTemp = FALSE)
 {
 	if (bTemp)
 	{
-		int nPartyBars = GetGlobalInt("PARTY_BARS" + TEMP_SUFFIX);
+		int nPartyBars = PS_GetGlobalInt("PARTY_BARS" + TEMP_SUFFIX);
 		nPartyBars += nBarsToGive;
-		SetGlobalInt("PARTY_BARS" + TEMP_SUFFIX, nPartyBars);
+		PS_SetGlobalInt("PARTY_BARS" + TEMP_SUFFIX, nPartyBars);
 		return nPartyBars;
 	}
 	
 	else
 	{
-		int nPartyBars = GetGlobalInt("PARTY_BARS");
+		int nPartyBars = PS_GetGlobalInt("PARTY_BARS");
 		nPartyBars += nBarsToGive;
-		SetGlobalInt("PARTY_BARS", nPartyBars);
+		PS_SetGlobalInt("PARTY_BARS", nPartyBars);
 		
 		string sFeedback = GetStringByStrRef(STRREF_GAINED_CARGO_FEEDBACK);
 		string sAmount = " " + IntToString(nBarsToGive) + " ";
@@ -592,7 +594,7 @@ int TakeBars(int nBarsToTake, int bCheck = FALSE, int bTemp = FALSE)
 	
 	if(bTemp)
 	{
-		int nPartyBars = GetGlobalInt("PARTY_BARS" + TEMP_SUFFIX);
+		int nPartyBars = PS_GetGlobalInt("PARTY_BARS" + TEMP_SUFFIX);
 		
 		if (nPartyBars < nBarsToTake)
 			return FALSE;
@@ -603,7 +605,7 @@ int TakeBars(int nBarsToTake, int bCheck = FALSE, int bTemp = FALSE)
 		else
 		{
 			nPartyBars -= nBarsToTake;
-			SetGlobalInt("PARTY_BARS" + TEMP_SUFFIX, nPartyBars);
+			PS_SetGlobalInt("PARTY_BARS" + TEMP_SUFFIX, nPartyBars);
 			return nPartyBars;
 		}
 		
@@ -611,7 +613,7 @@ int TakeBars(int nBarsToTake, int bCheck = FALSE, int bTemp = FALSE)
 	
 	else
 	{
-		int nPartyBars = GetGlobalInt("PARTY_BARS");
+		int nPartyBars = PS_GetGlobalInt("PARTY_BARS");
 
 		if (nPartyBars < nBarsToTake)
 			return FALSE;
@@ -622,7 +624,7 @@ int TakeBars(int nBarsToTake, int bCheck = FALSE, int bTemp = FALSE)
 		else
 		{
 			nPartyBars -= nBarsToTake;
-			SetGlobalInt("PARTY_BARS", nPartyBars);
+			PS_SetGlobalInt("PARTY_BARS", nPartyBars);
 			return nPartyBars;
 		}
 	}
@@ -630,9 +632,9 @@ int TakeBars(int nBarsToTake, int bCheck = FALSE, int bTemp = FALSE)
 
 int GiveCompanyBars(int nBarsToGive)
 {
-	int nCompanyBars = GetGlobalInt("COMPANY_BARS");
+	int nCompanyBars = PS_GetGlobalInt("COMPANY_BARS");
 	nCompanyBars += nBarsToGive;
-	SetGlobalInt("COMPANY_BARS", nCompanyBars);
+	PS_SetGlobalInt("COMPANY_BARS", nCompanyBars);
 	return nCompanyBars;
 }
 
@@ -650,7 +652,7 @@ int TurnInBars(int nBarsToTurnIn, int bDonate)
 		if(!bDonate)
 			GiveGoldToCreature( GetFactionLeader(GetFirstPC()), nBarsToTurnIn * TRADE_BAR_EXCHANGE_RATE);
 		
-		else if(GetGlobalInt("00_nStoryStep") >= 2)
+		else if(PS_GetGlobalInt("00_nStoryStep") >= 2)
 		{
 			GiveCompanyBars(nBarsToTurnIn);
 			while(CompanyReadyToLevel())
@@ -664,7 +666,7 @@ int TurnInBars(int nBarsToTurnIn, int bDonate)
 
 int GetPartyBars()
 {
-	int nResult = GetGlobalInt("PARTY_BARS");
+	int nResult = PS_GetGlobalInt("PARTY_BARS");
 	return nResult;
 }
 
@@ -673,7 +675,7 @@ int GetPartyBars()
 \----------------------*/
 int SetWagon(int iNewWagon)
 {
-	int iCurrent = GetGlobalInt("PARTY_WAGON");
+	int iCurrent = PS_GetGlobalInt("PARTY_WAGON");
 	
 	if (iCurrent > iNewWagon) //Players cannot downgrade their wagon.
 	{
@@ -684,7 +686,7 @@ int SetWagon(int iNewWagon)
 	{
 		if( Get2DAString(WAGON_2DA, "LABEL", iNewWagon) != "" )	//If the choice is a valid entry in the nx2_wagons.2da...
 		{
-			SetGlobalInt("PARTY_WAGON", iNewWagon);					//set the player's wagon to the new value.	
+			PS_SetGlobalInt("PARTY_WAGON", iNewWagon);					//set the player's wagon to the new value.	
 			return iNewWagon;
 		}
 		else														//Otherwise, don't do it.
@@ -713,14 +715,14 @@ string GetWagonName(int iWagon) //NOTE:  This will need to be converted to use S
 
 int GetIsPartyCargoFull(int bTemp = FALSE)
 {
-	int iPartyWagon = GetGlobalInt("PARTY_WAGON");
+	int iPartyWagon = PS_GetGlobalInt("PARTY_WAGON");
 	int iMaxCargo = GetWagonMaxCargo(iPartyWagon);
 	int iPartyCargo;
 	if(bTemp)
-		iPartyCargo = GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
+		iPartyCargo = PS_GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
 	
 	else
-		iPartyCargo = GetGlobalInt("PARTY_CARGO");
+		iPartyCargo = PS_GetGlobalInt("PARTY_CARGO");
 		
 	if (iPartyCargo >= iMaxCargo)			//If the player has no more space, return TRUE (The cargo IS full)
 		return TRUE;
@@ -731,15 +733,15 @@ int GetIsPartyCargoFull(int bTemp = FALSE)
 
 int GetPartyCargoFreeSpace(int bTemp = FALSE)
 {
-	int iPartyWagon = GetGlobalInt("PARTY_WAGON");
+	int iPartyWagon = PS_GetGlobalInt("PARTY_WAGON");
 	int iMaxCargo = GetWagonMaxCargo(iPartyWagon);
 	int iPartyCargo;
 	
 	if(bTemp)
-		iPartyCargo = GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
+		iPartyCargo = PS_GetGlobalInt("PARTY_CARGO" + TEMP_SUFFIX);
 	
 	else
-		iPartyCargo = GetGlobalInt("PARTY_CARGO");
+		iPartyCargo = PS_GetGlobalInt("PARTY_CARGO");
 	
 	int iResult = iMaxCargo - iPartyCargo;
 	return iResult;
@@ -756,7 +758,7 @@ int GetStorageStock(int nIndex, int bGood=TRUE)
 	else
 		sLabel = GetRareResourceLabel(nIndex);
 		
-	int nResult = GetGlobalInt(STORAGE_PREFIX + sLabel);
+	int nResult = PS_GetGlobalInt(STORAGE_PREFIX + sLabel);
 	
 	return nResult;
 }
@@ -798,7 +800,7 @@ int GetPartyStock(int nIndex, int bGood = TRUE, int bTemp = FALSE)
 	if(bTemp)
 		sResult += TEMP_SUFFIX;
 	
-	int nResult = GetGlobalInt(sResult);	
+	int nResult = PS_GetGlobalInt(sResult);	
 	return nResult;
 }
 
@@ -813,7 +815,7 @@ void SetPartyStock(int nIndex, int nAmount, int bGood = TRUE, int bTemp = FALSE)
 	if(bTemp)
 		sCargo += TEMP_SUFFIX;
 	
-	SetGlobalInt(sCargo, nAmount);
+	PS_SetGlobalInt(sCargo, nAmount);
 }
 
 int GetTradeGoodPrice(int iGood, int iLocation)
@@ -869,8 +871,8 @@ void ClearTradeGoodEventsAtLocation(int nGood, int nLocation)
 	string sGoodLabel = Get2DAString(GOODS_2DA, "LABEL", nGood);
 	string sLocationLabel = Get2DAString(ECON_2DA, "LABEL", nLocation);
 	
-	SetGlobalInt(sLocationLabel + "_" + sGoodLabel + "_SURPLUS", FALSE);
-	SetGlobalInt(sLocationLabel + "_" + sGoodLabel + "_SHORTAGE", FALSE);
+	PS_SetGlobalInt(sLocationLabel + "_" + sGoodLabel + "_SURPLUS", FALSE);
+	PS_SetGlobalInt(sLocationLabel + "_" + sGoodLabel + "_SHORTAGE", FALSE);
 }
 
 void ClearRareResourceEventsAtLocation(int nResource, int nLocation)
@@ -878,8 +880,8 @@ void ClearRareResourceEventsAtLocation(int nResource, int nLocation)
 	string sResourceLabel = Get2DAString(RES_2DA, "LABEL", nResource);
 	string sLocationLabel = Get2DAString(ECON_2DA, "LABEL", nLocation);
 			
-	SetGlobalInt(sLocationLabel + "_" + sResourceLabel + "_SURPLUS", FALSE);
-	SetGlobalInt(sLocationLabel + "_" + sResourceLabel + "_SHORTAGE", FALSE);
+	PS_SetGlobalInt(sLocationLabel + "_" + sResourceLabel + "_SURPLUS", FALSE);
+	PS_SetGlobalInt(sLocationLabel + "_" + sResourceLabel + "_SHORTAGE", FALSE);
 }
 
 string GetTradeGoodPriceString(int nGood, int nLocation)
@@ -914,7 +916,7 @@ int GetTradeGoodStock(int nGood, int nLocation, int bTemp = FALSE)
 	
 	if (bTemp)
 		sLocationLabel = sLocationLabel + TEMP_SUFFIX;
-	int nResult = GetGlobalInt(sLocationLabel + "_" + sGoodLabel);
+	int nResult = PS_GetGlobalInt(sLocationLabel + "_" + sGoodLabel);
 	return nResult;
 }
 
@@ -925,7 +927,7 @@ int GetRareResourceStock(int nResource, int nLocation, int bTemp = FALSE)
 	if (bTemp)
 		sLocationLabel = sLocationLabel + TEMP_SUFFIX;
 			
-	int nResult = GetGlobalInt(sLocationLabel + "_" + sResourceLabel);
+	int nResult = PS_GetGlobalInt(sLocationLabel + "_" + sResourceLabel);
 	return nResult;
 }
 
@@ -938,7 +940,7 @@ int SetTradeGoodStock(int nGood, int nLocation, int nAmount, int bTemp = FALSE)
 	
 	PrettyDebug("Setting " + sLocationLabel + "_" + sGoodLabel + " to " + IntToString(nAmount));
 			
-	SetGlobalInt(sLocationLabel + "_" + sGoodLabel, nAmount);
+	PS_SetGlobalInt(sLocationLabel + "_" + sGoodLabel, nAmount);
 	return nAmount;
 }
 
@@ -951,7 +953,7 @@ int SetRareResourceStock(int nResource, int nLocation, int nAmount, int bTemp = 
 	
 	PrettyDebug("Setting " + sLocationLabel + "_" + sResourceLabel + " to " + IntToString(nAmount));
 	
-	SetGlobalInt(sLocationLabel + "_" + sResourceLabel, nAmount);
+	PS_SetGlobalInt(sLocationLabel + "_" + sResourceLabel, nAmount);
 	return nAmount;
 }
 /*------------------------------\
@@ -961,7 +963,7 @@ int GetResourceNodeDiscovered(int iIndex)
 {
 	string sNodeTag = Get2DAString(RES_NODE_2DA, "TAG", iIndex);
 	string sVarName = sNodeTag + "_DISCOVERED";						//The variable name = the node tag + _DISCOVERED
-	int bNodeDiscovered = GetGlobalInt(sVarName);
+	int bNodeDiscovered = PS_GetGlobalInt(sVarName);
 	
 	if(bNodeDiscovered)
 		return TRUE;
@@ -974,7 +976,7 @@ int SetResourceNodeDiscovered(int iIndex)
 {
 	string sNodeTag = Get2DAString(RES_NODE_2DA, "TAG", iIndex);
 	string sVarName = sNodeTag + "_DISCOVERED";						//The variable name = the node tag + _DISCOVERED
-	int bNodeDiscovered = GetGlobalInt(sVarName);
+	int bNodeDiscovered = PS_GetGlobalInt(sVarName);
 	
 	if(bNodeDiscovered)
 	{
@@ -983,7 +985,7 @@ int SetResourceNodeDiscovered(int iIndex)
 	
 	else
 	{
-		SetGlobalInt(sVarName, 1);
+		PS_SetGlobalInt(sVarName, 1);
 		return TRUE;
 	}
 }
@@ -993,13 +995,13 @@ int SetResourceNodeDiscovered(int iIndex)
 \----------------------*/
 int GetCompanyBars()
 {
-	int nResult = GetGlobalInt("COMPANY_BARS");
+	int nResult = PS_GetGlobalInt("COMPANY_BARS");
 	return nResult;
 }
 
 int GetCompanyLevel()
 {
-	int nResult = GetGlobalInt(VAR_COMPANY_LEVEL);
+	int nResult = PS_GetGlobalInt(VAR_COMPANY_LEVEL);
 	return nResult;
 }
 
@@ -1007,13 +1009,13 @@ int IncrementCompanyLevel()
 {
 	int nCurrentLevel = GetCompanyLevel();
 	int nNewLevel = nCurrentLevel + 1;
-	SetGlobalInt(VAR_COMPANY_LEVEL, nNewLevel);
+	PS_SetGlobalInt(VAR_COMPANY_LEVEL, nNewLevel);
 	return nNewLevel;
 }
 
 int GetAvailableUpgrades()
 {
-	int nResult = GetGlobalInt("00_nAvailableUpgrades");
+	int nResult = PS_GetGlobalInt("00_nAvailableUpgrades");
 	return nResult;
 }
 
@@ -1021,7 +1023,7 @@ int IncrementAvailableUpgrades()
 {
 	int nCurrentUpgrades = GetAvailableUpgrades();
 	int nNewUpgrades = nCurrentUpgrades + 1;
-	SetGlobalInt("00_nAvailableUpgrades", nNewUpgrades);
+	PS_SetGlobalInt("00_nAvailableUpgrades", nNewUpgrades);
 	return nNewUpgrades;
 }
 
@@ -1030,7 +1032,7 @@ int SpendAvailableUpgrade()
 {
 	int nCurrentUpgrades = GetAvailableUpgrades();
 	int nNewUpgrades = nCurrentUpgrades - 1;
-	SetGlobalInt("00_nAvailableUpgrades", nNewUpgrades);
+	PS_SetGlobalInt("00_nAvailableUpgrades", nNewUpgrades);
 	return nNewUpgrades;
 }
 
@@ -1116,32 +1118,32 @@ int CompanyReadyToLevel()
 
 void ProcessCompanyIncome()
 {
-	int nReserve = GetGlobalInt(VAR_COMPANY_RESERVE);
+	int nReserve = PS_GetGlobalInt(VAR_COMPANY_RESERVE);
 	int nIncome;
-	int nTradingPostIncome = 5*GetGlobalInt("00_nTradingPosts");
+	int nTradingPostIncome = 5*PS_GetGlobalInt("00_nTradingPosts");
 	
 	nIncome += BASE_INCOME;				//The company always receives the base income each month.
 		
 	nReserve += nTradingPostIncome;
 	
 	//	20% increase for Shrine of Waukeen at Crossroad Keep.
-	if (GetGlobalInt("00_bShrineUpgraded")==TRUE)
+	if (PS_GetGlobalInt("00_bShrineUpgraded")==TRUE)
 		nIncome += (nTradingPostIncome/5);
 	
 	//	10% increase for Greycloak patrol weapon upgrades.
-	if (GetGlobalInt("00_bWeaponsUpgraded")==TRUE)
+	if (PS_GetGlobalInt("00_bWeaponsUpgraded")==TRUE)
 		nIncome += (nTradingPostIncome/10);
 		
 	//	Another 10% increase for Greycloak patrol armor upgrades.
-	if (GetGlobalInt("00_bArmorUpgraded")==TRUE)
+	if (PS_GetGlobalInt("00_bArmorUpgraded")==TRUE)
 		nIncome += (nTradingPostIncome/10);
 		
 	//	Another 10% increase for a modified portal.
-	if (GetGlobalInt("00_bPortalUpgraded")==TRUE)
+	if (PS_GetGlobalInt("00_bPortalUpgraded")==TRUE)
 		nIncome += (nTradingPostIncome/10);
 		
 	//	20% increase for propaganda campaign.
-	if (GetGlobalInt("00_bPropagandaUpgraded")==TRUE)
+	if (PS_GetGlobalInt("00_bPropagandaUpgraded")==TRUE)
 		nIncome += (nTradingPostIncome/5);
 	
 	nReserve += nIncome;	
@@ -1152,7 +1154,7 @@ void ProcessCompanyIncome()
 
 void AwardCompanyIncome()
 {
-	int nReserve = GetGlobalInt(VAR_COMPANY_RESERVE);
+	int nReserve = PS_GetGlobalInt(VAR_COMPANY_RESERVE);
 	PrettyDebug("Awarding " + IntToString(nReserve) + " bars of income.");
 	GiveBars(nReserve);
 	SetCompanyReserve(0);
@@ -1160,18 +1162,18 @@ void AwardCompanyIncome()
 
 int GetCompanyReserve()
 {
-	int nResult = GetGlobalInt(VAR_COMPANY_RESERVE);
+	int nResult = PS_GetGlobalInt(VAR_COMPANY_RESERVE);
 	return nResult;
 }
 
 void AddToIncome(int nIncome)
 {
-	int nReserve = GetGlobalInt(VAR_COMPANY_RESERVE);
+	int nReserve = PS_GetGlobalInt(VAR_COMPANY_RESERVE);
 	nReserve += nIncome;
-	SetGlobalInt(VAR_COMPANY_RESERVE, nReserve);
+	PS_SetGlobalInt(VAR_COMPANY_RESERVE, nReserve);
 }
 
 void SetCompanyReserve(int nNewReserve)
 {
-	SetGlobalInt(VAR_COMPANY_RESERVE, nNewReserve);
+	PS_SetGlobalInt(VAR_COMPANY_RESERVE, nNewReserve);
 }

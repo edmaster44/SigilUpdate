@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main (string msgtext)
 {
 	msgtext = GetSubString(msgtext, 0, 200);
@@ -6,19 +8,19 @@ void main (string msgtext)
 	string parchmentWritingVarName = "writing";
 
 	object oPC = OBJECT_SELF;
-	object parchmentObject = GetLocalObject(oPC, parchmentVarName);
+	object parchmentObject = PS_GetLocalObject(oPC, parchmentVarName);
 	if(parchmentObject != OBJECT_INVALID)
 	{
 		if (msgtext != "")
 		{
-			SetLocalString(parchmentObject, parchmentWritingVarName, msgtext);
+			PS_SetLocalString(parchmentObject, parchmentWritingVarName, msgtext);
 		}
 		else
 		{
-			SetLocalString(parchmentObject, parchmentWritingVarName, "(no text)");
+			PS_SetLocalString(parchmentObject, parchmentWritingVarName, "(no text)");
 		}
 	}
 	
 	// delete the item mark	
-	DeleteLocalObject(oPC, parchmentVarName);
+	PS_DeleteLocalObject(oPC, parchmentVarName);
 }

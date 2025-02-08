@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*  
 DMFI MANAGER TOOL
 Qk library scripts for the DMFI Manager tool
@@ -24,7 +26,7 @@ void main(string sValue, int nObj, float nX, float nY, float nZ)
 		{
 		sValue = GetSubString(sValue,5,2);
 		//SendMessageToPC(oPC,sValue);
-		SetLocalInt(oPC,"DMFI_MNGR_TOOL",StringToInt(sValue));
+		PS_SetLocalInt(oPC,"DMFI_MNGR_TOOL",StringToInt(sValue));
 		}
 		
 	else if (sValue == "BUT_STORE")
@@ -34,7 +36,7 @@ void main(string sValue, int nObj, float nX, float nY, float nZ)
 			   SendMessageToPC(oPC,ONLY_ITEMCREAT);	
 			   return;
 			   }
-	    nString=GetLocalInt(oPC,"DMFI_MNGR_TOOL");
+	    nString=PS_GetLocalInt(oPC,"DMFI_MNGR_TOOL");
 	    if (nString<1)
 			{
 			SendMessageToPC(oPC,"Must select a slot");
@@ -53,7 +55,7 @@ void main(string sValue, int nObj, float nX, float nY, float nZ)
 		 object oLoc = IntToObject(nObj);
          location lLoc = Location(oArea,Vector(nX,nY,nZ),GetFacing(oPC));
 		 object oLod;
-		 nString=GetLocalInt(oPC,"DMFI_MNGR_TOOL");
+		 nString=PS_GetLocalInt(oPC,"DMFI_MNGR_TOOL");
 		 
 		 if(GetObjectType(oLoc)==1)
 		 	 oLod = RetrieveCampaignObject(DMFI_STORE_DB,"SLOT_"+IntToString(nString),GetLocation(oLoc),oLoc);

@@ -430,7 +430,7 @@ void PS_Cast_SU_LilitusGift(object oPC, object oTarget, int nSpell)
 	if (oTarget == oPC)
 	{	SendMessageToPC(oPC, "You may not confer this gift upon yourself.");
 		return;	}
-	if (GetLocalInt(oPC, "GiftGiven") == 1)
+	if (PS_GetLocalInt(oPC, "GiftGiven") == 1)
 	{	SendMessageToPC(oPC, "This ability requires five minutes to pass between uses.");
 		return;	}
     int nBonus 		= 2;
@@ -453,8 +453,8 @@ void PS_Cast_SU_LilitusGift(object oPC, object oTarget, int nSpell)
     {	SignalEvent(GetItemPossessor(oLeft), EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
   		itemproperty ipChaosL = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_LAWFUL, IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1);
 		IPSafeAddItemProperty(oLeft, ipChaosL, fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING);	}
-	SetLocalInt(oPC, "GiftGiven", 1);
-	DelayCommand(RoundsToSeconds(30), DeleteLocalInt(oPC, "GiftGiven"));
+	PS_SetLocalInt(oPC, "GiftGiven", 1);
+	DelayCommand(RoundsToSeconds(30), PS_DeleteLocalInt(oPC, "GiftGiven"));
 }
 
 void PS_Cast_DR_Clairvoyance(object oTarget, int iLevel)
@@ -507,7 +507,7 @@ void PS_Cast_DR_SummonSwarm(object oPC)
     effect eSummon = EffectSummonCreature("rh_swarm_drider_les");
     effect eVis = EffectVisualEffect(VFX_DUR_WEB);
 	
-	SetLocalInt(oPC, "swarm_summoner", 1);
+	PS_SetLocalInt(oPC, "swarm_summoner", 1);
 
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, GetSpellTargetLocation());
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eSummon, GetSpellTargetLocation(), TurnsToSeconds(nDuration));
@@ -999,7 +999,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
         while (GetIsObjectValid(oTarget))
         {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
-        	{	bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
+        	{	bAlreadyAffected = PS_GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
                 {	nCurrentHD = GetHitDice(oTarget);
                     if(nCurrentHD < nLow && nCurrentHD <= nHD && nCurrentHD < 6)
@@ -1022,9 +1022,9 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
                 }
             }
         }
-        SetLocalInt(oLowest, sSpellLocal, TRUE);
-        DelayCommand(0.5, SetLocalInt(oLowest, sSpellLocal, FALSE));
-        DelayCommand(0.5, DeleteLocalInt(oLowest, sSpellLocal));
+        PS_SetLocalInt(oLowest, sSpellLocal, TRUE);
+        DelayCommand(0.5, PS_SetLocalInt(oLowest, sSpellLocal, FALSE));
+        DelayCommand(0.5, PS_DeleteLocalInt(oLowest, sSpellLocal));
         nHD = nHD - GetHitDice(oLowest);
         oLowest = OBJECT_INVALID;
     }    while ((nHD > 0) && (bContinueLoop))
@@ -1034,7 +1034,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
         while (GetIsObjectValid(oTarget))
         {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
-        	{	bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
+        	{	bAlreadyAffected = PS_GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
                 {	nCurrentHD = GetHitDice(oTarget);
                      if (nCurrentHD < nLow && nCurrentHD <= nHD && nCurrentHD < 6)
@@ -1056,9 +1056,9 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
                 }
             }
         }
-        SetLocalInt(oLowest, sSpellLocal, TRUE);
-        DelayCommand(0.5, SetLocalInt(oLowest, sSpellLocal, FALSE));
-        DelayCommand(0.5, DeleteLocalInt(oLowest, sSpellLocal));
+        PS_SetLocalInt(oLowest, sSpellLocal, TRUE);
+        DelayCommand(0.5, PS_SetLocalInt(oLowest, sSpellLocal, FALSE));
+        DelayCommand(0.5, PS_DeleteLocalInt(oLowest, sSpellLocal));
         nHD = nHD - GetHitDice(oLowest);
         oLowest = OBJECT_INVALID;
     }
@@ -1153,7 +1153,7 @@ void PS_Cast_MOTC_Etherealness(object oPC, int nSpell)
 
 	float  fDuration = TurnsToSeconds(20);
  	int nTargets = 0;
-	if (GetLocalInt(oPC, "DIMENSIONAL_ACHORED"))
+	if (PS_GetLocalInt(oPC, "DIMENSIONAL_ACHORED"))
 	{	SendMessageToPC(oPC, "A Dimensional Anchor makes it impossible to become ethereal.");
 		return;		}
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -1206,7 +1206,7 @@ void PS_Cast_MOTC_SoulBind(object oPC, object oTarget, int nSpell)
 		else
 		{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
-		SetLocalString(oPrism, "SoulBind", sName);	}
+		PS_SetLocalString(oPrism, "SoulBind", sName);	}
 	}
 }
 

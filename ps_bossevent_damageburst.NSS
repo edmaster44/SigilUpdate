@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //*********************************************
 //BOSS EVENT
 // Mimi Fearthegn
@@ -29,16 +31,16 @@
 //their fort save, are knocked down.
 void main () {
 
-	float fRadius = GetLocalFloat(OBJECT_SELF, "DamageBurst_DamageRadius");
-	string sAnim = GetLocalString(OBJECT_SELF, "DamageBurst_Anim");
+	float fRadius = PS_GetLocalFloat(OBJECT_SELF, "DamageBurst_DamageRadius");
+	string sAnim = PS_GetLocalString(OBJECT_SELF, "DamageBurst_Anim");
 	if (sAnim == "")
 		sAnim = "mjr_cast";
 		
-	int nDC = GetLocalInt(OBJECT_SELF, "DamageBurst_DC");
-	int nDice = GetLocalInt(OBJECT_SELF, "DamageBurst_Dice");
-	int nDamType = GetLocalInt(OBJECT_SELF, "DamageBurst_DamageType");
-	string sVFX = GetLocalString(OBJECT_SELF, "DamageBurst_VFX");
-	string sMessage = GetLocalString(OBJECT_SELF, "DamageBurst_Message");
+	int nDC = PS_GetLocalInt(OBJECT_SELF, "DamageBurst_DC");
+	int nDice = PS_GetLocalInt(OBJECT_SELF, "DamageBurst_Dice");
+	int nDamType = PS_GetLocalInt(OBJECT_SELF, "DamageBurst_DamageType");
+	string sVFX = PS_GetLocalString(OBJECT_SELF, "DamageBurst_VFX");
+	string sMessage = PS_GetLocalString(OBJECT_SELF, "DamageBurst_Message");
 	
 	ClearAllActions();
 	

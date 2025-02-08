@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // b_<creature>_sp
 /*
   This is the custom creature spawn script template.
@@ -104,9 +106,9 @@ void main()
 	SetCombatCondition(X0_COMBAT_FLAG_COWARDLY);	// Cowardly creatures will attempt to flee attackers.
 	
 	// * Exclude use of items, abilities, and/or spells
-	// SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ITEM); 	
-	// SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY); 	
-	// SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_SPELL); 	
+	// PS_SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ITEM); 	
+	// PS_SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY); 	
+	// PS_SetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_SPELL); 	
 	
 	// ===================================================================
 	// Now run the standard spawn.  This may run other scripts, create treasure, and set various flags

@@ -23,15 +23,15 @@ void main()
 	effect eDur     = EffectNWN2SpecialEffectFile("psi_metapsi_maximize.sef");
 	
 	
-	if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 0)
+	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 0)
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 1);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Maximize Power");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDur, OBJECT_SELF);
 	}
 	else
 	{
-		SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);
+		PS_SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Maximize Power");
 		RemoveEffectsFromSpell(oTarget, GetSpellId());
 	}

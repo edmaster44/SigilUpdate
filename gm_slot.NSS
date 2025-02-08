@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // Gambling Slots
 // Part of the Gambling System designed by:
 // Archaegeo July 26 2002
@@ -18,7 +20,7 @@ int nT;
 void main()
 {
     oPC=GetLastUsedBy();
-    if(GetLocalInt(OBJECT_SELF,"IN-USE"))
+    if(PS_GetLocalInt(OBJECT_SELF,"IN-USE"))
     {
         SendMessageToPC(oPC, "This is being used, please wait.");
         return;
@@ -29,7 +31,7 @@ void main()
         return;
     }
     nT=1;
-    SetLocalInt(OBJECT_SELF,"IN-USE",nT);
+    PS_SetLocalInt(OBJECT_SELF,"IN-USE",nT);
     AssignCommand(OBJECT_SELF,ActionPlayAnimation(ANIMATION_PLACEABLE_ACTIVATE));
     GetToken();
 }
@@ -88,7 +90,7 @@ void GivePayout(int nMult)
     SendMessageToPC(oPC,"You win "+IntToString(nPayout)+" gold!");
     effect eVis = EffectVisualEffect(VFX_IMP_GOOD_HELP);
     ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,OBJECT_SELF);
-    DeleteLocalInt(OBJECT_SELF,"IN-USE");
+    PS_DeleteLocalInt(OBJECT_SELF,"IN-USE");
     AssignCommand(OBJECT_SELF,ActionPlayAnimation(ANIMATION_PLACEABLE_DEACTIVATE));
     GiveGoldToCreature(oPC, nPayout);
 }
@@ -127,5 +129,5 @@ void DetermineResults()
     AddHouse(BASECOST);
     AssignCommand(OBJECT_SELF, TakeGoldFromCreature(BASECOST, oPC, TRUE));
     AssignCommand(OBJECT_SELF,ActionPlayAnimation(ANIMATION_PLACEABLE_DEACTIVATE));
-    DeleteLocalInt(OBJECT_SELF,"IN-USE");
+    PS_DeleteLocalInt(OBJECT_SELF,"IN-USE");
 }

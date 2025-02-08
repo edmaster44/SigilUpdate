@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // ga_local_int(string sVariable, string sChange, string sTarget)
 /*
    This script changes a local int variable's value
@@ -28,10 +30,10 @@ void main(string sVariable, string sChange)
 {
     object oTarg = GetPCSpeaker();
 
-	int nOldValue = GetLocalInt(oTarg, sVariable);
+	int nOldValue = PS_GetLocalInt(oTarg, sVariable);
 	int nNewValue = CalcNewIntValue(nOldValue, sChange);
 
-	SetLocalInt(oTarg, sVariable, nNewValue);
+	PS_SetLocalInt(oTarg, sVariable, nNewValue);
 	
     //PrintString(sTarget + "'s variable " + sVariable + " is now set to " + IntToString(nNewValue) );
 }

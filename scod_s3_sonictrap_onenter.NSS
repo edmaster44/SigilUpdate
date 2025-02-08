@@ -32,7 +32,7 @@ void main()
 	//Base DC 21
 	int nDC = GetSkillAdjustedTrapDC(21, oCaster, 4);
 	int nStunDur = 5;
-    int nFire = GetLocalInt(OBJECT_SELF, "scod_sonictrap");
+    int nFire = PS_GetLocalInt(OBJECT_SELF, "scod_sonictrap");
     
 	effect eStun = ExtraordinaryEffect(EffectStunned());
 	effect eVis = EffectVisualEffect(VFX_HIT_AOE_SONIC);
@@ -44,7 +44,7 @@ void main()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
-            SetLocalInt(OBJECT_SELF, "scod_sonictrap",TRUE);
+            PS_SetLocalInt(OBJECT_SELF, "scod_sonictrap",TRUE);
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SONIC_TRAP));
 			

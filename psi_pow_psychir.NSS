@@ -1,3 +1,4 @@
+#include "ff_safevar"
 /*
    ----------------
    Psychic Chirurgery - Repair Psychic Damage
@@ -133,7 +134,7 @@ void main()
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
         // Set a marker local and schedule it's removal
-        SetLocalInt(oTarget, "WasRestored", TRUE);
-    	DelayCommand(HoursToSeconds(1), DeleteLocalInt(oTarget, "WasRestored"));
+        PS_SetLocalInt(oTarget, "WasRestored", TRUE);
+    	DelayCommand(HoursToSeconds(1), PS_DeleteLocalInt(oTarget, "WasRestored"));
     }// end if - Successfull manifestation
 }

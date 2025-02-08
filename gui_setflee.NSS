@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "nw_i0_spells"
 
 void main(string status)
@@ -6,12 +8,12 @@ void main(string status)
 
 	if (status=="On" && GetHasSpell(SPELL_I_FLEE_THE_SCENE, oPC)>0) 
 	{
-		SetLocalInt(oPC,"FleeTheScene",TRUE);
+		PS_SetLocalInt(oPC,"FleeTheScene",TRUE);
 		ExecuteScript("nw_s0_ifleescen2",oPC);
 	}
 	else 
 	{
-		SetLocalInt(oPC,"FleeTheScene",FALSE);
+		PS_SetLocalInt(oPC,"FleeTheScene",FALSE);
 		RemoveEffectsFromSpell(oPC, SPELL_I_FLEE_THE_SCENE);
 	}
 }

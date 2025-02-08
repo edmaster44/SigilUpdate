@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // i_ps_familiarchg_ac
 
 /* Created by Dedic8ed 6/8/2011
@@ -20,7 +22,7 @@ void main()
 	object oItem = GetItemActivated();
     object oTarget = oPC;
 	object oFamiliar = GetAssociate(3,oPC);
-	int nPoly = GetLocalInt(oItem, "polymorph");
+	int nPoly = PS_GetLocalInt(oItem, "polymorph");
 	effect ePoly = EffectPolymorph(nPoly);
     effect eVis = EffectNWN2SpecialEffectFile("sp_enlarge_person_hit");
 

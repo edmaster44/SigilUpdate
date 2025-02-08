@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*Created by Shaughn
 for the Risen Hero Campaign
 http://neverwinter.nexusmods.com/mods/10
@@ -12,7 +14,7 @@ void main()
 {
 	
 	
-	string sEffect	=	GetLocalString(OBJECT_SELF,"swarm_vfx");
+	string sEffect	=	PS_GetLocalString(OBJECT_SELF,"swarm_vfx");
 	effect eVisual	=	SupernaturalEffect(EffectNWN2SpecialEffectFile(sEffect));
 	
 	string sTag		=	GetTag(OBJECT_SELF);

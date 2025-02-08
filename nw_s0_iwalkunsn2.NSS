@@ -121,7 +121,7 @@ void WalkUnseen(object oTarget)
 
 void StayUnseen(object oPC)
 {
-	if (GetLocalInt(oPC,"Invisibility")==FALSE) return;
+	if (PS_GetLocalInt(oPC,"Invisibility")==FALSE) return;
 	
 	if (GetHasSpell(SPELL_I_WALK_UNSEEN,oPC))    
 		if (!GetHasSpellEffect(SPELL_I_WALK_UNSEEN,oPC))	

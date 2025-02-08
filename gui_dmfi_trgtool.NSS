@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**************************************************
 //DMFI
 //gui_dmfi_trgtool por Qk
@@ -68,12 +70,12 @@ void main(string sValue, int n )
 		}
 	else if (sValue =="MSGALL_POPUP")
 	{
-		SetLocalInt(oPC,"DMFIPOPUPMODE",0);
+		PS_SetLocalInt(oPC,"DMFIPOPUPMODE",0);
 		DisplayGuiScreen(oPC,SCREEN_DMFI_DESC,FALSE,"dmfitextdesc.xml");
 	}
 	else if (sValue =="MSGPARTY_POPUP")
 	{
-		SetLocalInt(oPC,"DMFIPOPUPMODE",1);
+		PS_SetLocalInt(oPC,"DMFIPOPUPMODE",1);
 		DisplayGuiScreen(oPC,SCREEN_DMFI_DESC,FALSE,"dmfitextdesc.xml");
 	}
 	else if (sValue == "JUMP_PARTY")
@@ -100,8 +102,8 @@ void main(string sValue, int n )
 	   string sText = DMFI_POPUPMESSAGE+sValue;
 	   SetGUIObjectText(oPC,SCREEN_DMFI_DESC, "inputdescbox", -1, "");
 	   CloseGUIScreen(oPC,SCREEN_DMFI_DESC);
-	   int iMode = GetLocalInt(oPC,"DMFIPOPUPMODE");
-	   DeleteLocalInt(oPC,"DMFIPOPUPMODE");
+	   int iMode = PS_GetLocalInt(oPC,"DMFIPOPUPMODE");
+	   PS_DeleteLocalInt(oPC,"DMFIPOPUPMODE");
 	   if(iMode == 0)
 	  	 SendPopupAllPlayers(sText);
 	   else if(iMode ==1)
@@ -155,19 +157,19 @@ void DoPortal(location lLoc, int nMode)
    object oPortal,oAntport;
    if (nMode ==1)
    {
-   oAntport = GetLocalObject(oMOD,"DMFI_PORTAL_A");
-    if (GetIsObjectValid(oAntport)){ DestroyObject(oAntport); DeleteLocalObject(oMOD,"DMFI_PORTAL_A");}	
+   oAntport = PS_GetLocalObject(oMOD,"DMFI_PORTAL_A");
+    if (GetIsObjectValid(oAntport)){ DestroyObject(oAntport); PS_DeleteLocalObject(oMOD,"DMFI_PORTAL_A");}	
    oPortal = CreateObject(OBJECT_TYPE_PLACEABLE,DMFI_PORTAL,lLoc,FALSE,"dmfi_portal_a");
-   SetLocalObject(oMOD,"DMFI_PORTAL_A",oPortal);
-   SetLocalInt(oPortal,"DMFI_DESTINATION",1);
+   PS_SetLocalObject(oMOD,"DMFI_PORTAL_A",oPortal);
+   PS_SetLocalInt(oPortal,"DMFI_DESTINATION",1);
    }
    else
    {
-   oAntport = GetLocalObject(oMOD,"DMFI_PORTAL_B");
-   if (GetIsObjectValid(oAntport)) { DestroyObject(oAntport); DeleteLocalObject(oMOD,"DMFI_PORTAL_b");}
+   oAntport = PS_GetLocalObject(oMOD,"DMFI_PORTAL_B");
+   if (GetIsObjectValid(oAntport)) { DestroyObject(oAntport); PS_DeleteLocalObject(oMOD,"DMFI_PORTAL_b");}
    oPortal = CreateObject(OBJECT_TYPE_PLACEABLE,DMFI_PORTAL,lLoc,FALSE,"dmfi_portal_b");
-   SetLocalObject(oMOD,"DMFI_PORTAL_B",oPortal);
-   SetLocalInt(oPortal,"DMFI_DESTINATION",0);
+   PS_SetLocalObject(oMOD,"DMFI_PORTAL_B",oPortal);
+   PS_SetLocalInt(oPortal,"DMFI_DESTINATION",0);
    }
   ApplyEffectToObject(2,ePortal2,oPortal);
   ApplyEffectToObject(2,ePortal1,oPortal);
@@ -176,12 +178,12 @@ void DoPortal(location lLoc, int nMode)
 void DestroyPortals()
 {
 	object oMOD = GetModule();
-	object oPort1 = GetLocalObject(oMOD,"DMFI_PORTAL_A");
-	object oPort2 = GetLocalObject(oMOD,"DMFI_PORTAL_B");
+	object oPort1 = PS_GetLocalObject(oMOD,"DMFI_PORTAL_A");
+	object oPort2 = PS_GetLocalObject(oMOD,"DMFI_PORTAL_B");
 	DestroyObject(oPort1);
 	DestroyObject(oPort2);
-	DeleteLocalObject(oMOD,"DMFI_PORTAL_A");
-	DeleteLocalObject(oMOD,"DMFI_PORTAL_A");
+	PS_DeleteLocalObject(oMOD,"DMFI_PORTAL_A");
+	PS_DeleteLocalObject(oMOD,"DMFI_PORTAL_A");
 }
 
 void SendPopupAllPlayers(string sTexto)

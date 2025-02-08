@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oPC = GetLastUsedBy();
@@ -11,7 +13,7 @@ void main()
 	string sSELF = GetTag(OBJECT_SELF);
 	if (sSELF == "portal_in") 
 	{
-		if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1)
+		if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1)
 		{
 			oWAY = GetObjectByTag("wp_herald_annhi_start");
 			AssignCommand(oPC, ActionJumpToObject(oWAY));

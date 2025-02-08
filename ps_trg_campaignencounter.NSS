@@ -22,7 +22,7 @@ void main() {
 	if (!GetIsPC(oPC))
 		return;
 	
-	object oEncounter = GetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED");
+	object oEncounter = PS_GetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED");
 	if (GetIsObjectValid(oEncounter)) {
 		return;
 	}
@@ -41,7 +41,7 @@ void main() {
 	nLevel -= 2; //lower slightly because we don't want max challenge
 	
 	object oWP = GetWaypointByTag("wp_"+GetTag(OBJECT_SELF));
-	int nSpawnType = GetLocalInt(OBJECT_SELF, "CAMPAIGN_SPAWN_TYPE");
+	int nSpawnType = PS_GetLocalInt(OBJECT_SELF, "CAMPAIGN_SPAWN_TYPE");
 	
 	if (nSpawnType == 1) {
 		SpawnCommonerEncounter(oWP, nLevel);
@@ -65,8 +65,8 @@ void SpawnTreasureChest(object oWP, int nLevel) {
 	object oChest;
 	if (!GetIsObjectValid(GetNearestObjectByTag("chest_"+GetTag(OBJECT_SELF)))) {
 		oChest = CreateObject(OBJECT_TYPE_PLACEABLE, toGen, GetLocation(oWP), FALSE, "chest_"+GetTag(OBJECT_SELF));
-		SetLocalString(oChest, "TAG", "mirror_cdcorrespondance");
-		SetLocalInt(oChest, "TAGCHANCE", 33);
+		PS_SetLocalString(oChest, "TAG", "mirror_cdcorrespondance");
+		PS_SetLocalInt(oChest, "TAGCHANCE", 33);
 	}
 }
 
@@ -132,9 +132,9 @@ void SpawnHarmoniumScout(object oWP, int nLevel, object oPC = OBJECT_INVALID) {
 	SetDescription(oBerk, "The red armor marks this scout as Harmonium. . . but they definitely aren't wearing the current Harmonium uniform that you know.");
 	
 	if (nClass == CLASS_TYPE_FIGHTER)
-		SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1);
+		PS_SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1);
 	else
-		SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM_SCOUT", 1); //have this give them the correct armor/weapon once we have it
+		PS_SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM_SCOUT", 1); //have this give them the correct armor/weapon once we have it
 	
 	//Have to have the right alignment!
 	if (d100() > 50)
@@ -184,7 +184,7 @@ void SpawnHarmoniumEncounter(object oWP, int nLevel, object oPC = OBJECT_INVALID
 	SetFirstName(oBerk, "Crimson Dawn Patroller");
 	SetLastName(oBerk, "");
 	SetDescription(oBerk, "The red armor marks this patrol as Harmonium. . . but they definitely aren't wearing the current Harmonium uniform that you know.");
-	SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1); //have this give them the correct armor/weapon once we have it
+	PS_SetLocalInt(oBerk, "CAMPAIGN_HARMONIUM", 1); //have this give them the correct armor/weapon once we have it
 	
 	//Have to have the right alignment!
 	if (d100() > 50)

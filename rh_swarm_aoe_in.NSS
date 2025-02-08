@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*Created by Shaughn
 for the Risen Hero Campaign
 http://neverwinter.nexusmods.com/mods/10
@@ -10,9 +12,9 @@ void main()
 	
 	object oCaster 	= 	GetAreaOfEffectCreator();
 	object oTarget 	= 	GetEnteringObject();
-	string sIgnore	=	GetLocalString(oCaster, "swarm_ignore");
-	string sSummon	=	GetLocalString(oTarget, "swarm_summoner"); //if swarm is created by a spell
-	object oSummoner = GetLocalObject(oCaster, "SUMMONER");
+	string sIgnore	=	PS_GetLocalString(oCaster, "swarm_ignore");
+	string sSummon	=	PS_GetLocalString(oTarget, "swarm_summoner"); //if swarm is created by a spell
+	object oSummoner = PS_GetLocalObject(oCaster, "SUMMONER");
 	
 		if (GetIsObjectValid(oSummoner) && oTarget == oSummoner) {
 			//do nothing : Don't kill summoner!
@@ -30,7 +32,7 @@ void main()
 		}
 		else
 		{
-			string	sEffect	=	GetLocalString(oCaster,"swarm_enter");
+			string	sEffect	=	PS_GetLocalString(oCaster,"swarm_enter");
 			effect	eEffect = 	SupernaturalEffect(EffectNWN2SpecialEffectFile(sEffect));
 			
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT,eEffect,oTarget);

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main() {
 
@@ -10,10 +12,10 @@ void main() {
 	string sDescrip = "";
 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
   
- 	int iLock = GetGlobalInt("MinethysDesertLock");
+ 	int iLock = PS_GetGlobalInt("MinethysDesertLock");
 	if ( iLock == 0 ) {
 	
-	  	SetGlobalInt("MinethysDesertLock", 1);
+	  	PS_SetGlobalInt("MinethysDesertLock", 1);
 	  
 	  	if(GetObjectByTag("ps_minethys_ana") == OBJECT_INVALID)
 	  	{
@@ -73,6 +75,6 @@ void main() {
 			   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "c_colothys_portallistener", lSpawnpoint, FALSE, "c_minethys_portallistener");    
 	    }
 		
-	  	SetGlobalInt("MinethysDesertLock", 0);
+	  	PS_SetGlobalInt("MinethysDesertLock", 0);
 	}
 }

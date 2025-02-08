@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "enft_startengine"
 #include "ps_inc_planarlocations"
 void main()
@@ -8,10 +10,10 @@ void main()
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	
   
- int iLock = GetGlobalInt("MercShrineEnterLock");
+ int iLock = PS_GetGlobalInt("MercShrineEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("MercShrineEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("MercShrineEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_mercuria_radangel") == OBJECT_INVALID)
   {
@@ -20,6 +22,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_mercuria_radangel", lSpawnpoint);    
   }
 
-  SetGlobalInt("MercShrineEnterLock", 0);
+  PS_SetGlobalInt("MercShrineEnterLock", 0);
  }
 }

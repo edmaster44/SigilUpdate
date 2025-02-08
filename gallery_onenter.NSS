@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 const string COLLISION_BALL_TAG = "plc_collbox";
 
@@ -7,12 +9,11 @@ void main()
 	// if (!GetIsPC(oPC) && !GetIsDM(oPC))
 	//  return;
 	  
-	int iLock = GetGlobalInt
+	int iLock = PS_GetGlobalInt("player_house_neerephaEnterLock");
 
-("player_house_neerephaEnterLock");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("player_house_neerephaEnterLock", 1); 
+	  PS_SetGlobalInt("player_house_neerephaEnterLock", 1); 
 	  
 	  // Only allows one clean up at a time.
 	 
@@ -55,6 +56,6 @@ void main()
   	}
 
 	 
-SetGlobalInt("player_house_neerephaEnterLock", 0);
+PS_SetGlobalInt("player_house_neerephaEnterLock", 0);
  }
 }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 // gb_comp_spawn
 /*
 	companion On Spawn
@@ -43,7 +45,7 @@ void main()
     bkSetListeningPatterns();
 	
 	// check if initialization of settings has already been done	
-	int result = GetLocalInt(OBJECT_SELF, henchAssociateSettings);
+	int result = PS_GetLocalInt(OBJECT_SELF, henchAssociateSettings);
 	if (!result)
 	{
 //		Jug_Debug(GetName(OBJECT_SELF) + " run first time init");
@@ -74,7 +76,7 @@ void main()
 	    	SetAssociateState(NW_ASC_MODE_DEFEND_MASTER, TRUE);
 			
 			// BMA-OEI 10/19/06 - Disable combat mode switching during combat
-			SetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED, TRUE);
+			PS_SetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED, TRUE);
 		} */
 			
 //	    SetAssociateState(NW_ASC_DISTANCE_2_METERS);
@@ -103,7 +105,7 @@ void main()
 	SetIsDestroyable( FALSE, TRUE, TRUE );
     
 	//option for a spawn script (ease of AI hookup)
-	string sSpawnScript=GetLocalString(OBJECT_SELF,"SpawnScript");
+	string sSpawnScript=PS_GetLocalString(OBJECT_SELF,"SpawnScript");
 	if (sSpawnScript!="")
 		ExecuteScript(sSpawnScript,OBJECT_SELF);
    

@@ -830,7 +830,7 @@ void PS_VengeanceHaloContingency(object oTarget, int nDuration, int nLevel, int 
 
 	if (!PS_GetHasTimePassed_Seconds(oTarget, "HaloVeng", nDuration))
 	{	if (GetIsDead (oTarget))
-		{	DeleteLocalInt(oTarget, "HaloVeng");
+		{	PS_DeleteLocalInt(oTarget, "HaloVeng");
 			if (!MyResistSpell(oTarget, oKiller))
 			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eBeam, oTarget);
 				if (MySavingThrow(SAVING_THROW_REFLEX, oKiller, nSaveDC) == 1)

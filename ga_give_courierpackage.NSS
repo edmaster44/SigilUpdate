@@ -1,9 +1,11 @@
+#include "ff_safevar"
+
 int GetFaction(object oPC)
 {
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-	 	int nFaction = GetLocalInt(oItem,"Faction");
+	 	int nFaction = PS_GetLocalInt(oItem,"Faction");
 		return nFaction;
     }
 	
@@ -16,7 +18,7 @@ void main() {
 
 	object oItem = CreateItemOnObject("ps_crft_basemisc", OBJECT_SELF);
 	
-	string sLocation = GetLocalString(OBJECT_SELF, "Destination");
+	string sLocation = PS_GetLocalString(OBJECT_SELF, "Destination");
 	
 	string sTag = "ps_package_fated";
 	string sDescription = "You took this package from an unfortunate berk, who claimed it was their only way out of Sigil. They had been geas'ed by a powerful wizard to deliver the package to the "+sLocation+". \n\nNo doubt the package would be worth a great deal to the right person.";

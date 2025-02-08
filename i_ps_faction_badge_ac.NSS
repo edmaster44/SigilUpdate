@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -17,7 +19,7 @@ void main()
 		// and long range i think can also target self.
 		
 		// sture the object for retrieval by convos/scripts
-		SetLocalObject(oPC, "FactionBadgeUsed", oItem);
+		PS_SetLocalObject(oPC, "FactionBadgeUsed", oItem);
 		AssignCommand(oPC, ActionStartConversation(oPC, "ps_conv_faction_badge", TRUE, FALSE, FALSE, TRUE));
 	}
 	else if (GetIsPC(oTarget)) //discrete display

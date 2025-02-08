@@ -1,10 +1,12 @@
+#include "ff_safevar"
+
 
 void main () {
 	
-	int iLock = GetGlobalInt("FortunesWheelLock");
+	int iLock = PS_GetGlobalInt("FortunesWheelLock");
 	if ( iLock == 0 )
 	{
-		 SetGlobalInt("FortunesWheelLock", 1); // Only allows one clean up at a time.
+		 PS_SetGlobalInt("FortunesWheelLock", 1); // Only allows one clean up at a time.
 		
 		 if(GetObjectByTag("ps_fw_dicegith") == OBJECT_INVALID)
 		 {
@@ -108,6 +110,6 @@ void main () {
 		   location lSpawnpoint = GetLocation(oWP);  
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_fw_itemlottery", lSpawnpoint);    
 		 }
-		 SetGlobalInt("FortunesWheelLock", 0);
+		 PS_SetGlobalInt("FortunesWheelLock", 0);
 	}	
 }

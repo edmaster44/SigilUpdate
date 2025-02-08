@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*//////////////////////////////////////////////////
 //Exists just in case we ever want to implement
 //Some sort of check on whether or not you can
@@ -10,12 +12,12 @@
 //Checks for the existence of the Dimensional Achor spell
 //*****************************************************
 int isAnchored(object oTarget) {
-	if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED") &&
+	if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED") &&
 		GetHasSpellEffect(14520, oTarget)) { //psion's dimensional anchor spell
 		return TRUE;
 	}
 	else
-		SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", FALSE);
+		PS_SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", FALSE);
 	return FALSE;
 }
 

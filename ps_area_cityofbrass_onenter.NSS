@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -8,10 +10,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("BrassLock");
+ int iLock = PS_GetGlobalInt("BrassLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("BrassLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("BrassLock", 1); // Only allows one clean up at a time.
   if(GetObjectByTag("ps_fire_efreetiguard") == OBJECT_INVALID)
   {
   	CreateObject(OBJECT_TYPE_CREATURE, "ps_fire_efreetiguard", GetLocation(GetWaypointByTag("WP_ps_fire_efreetiguard_A")));  
@@ -93,6 +95,6 @@ void main()
   	CreateObject(OBJECT_TYPE_CREATURE, "ps_fire_azercommonerf", GetLocation(GetWaypointByTag("WP_ps_fire_azercommonerf")));  
   }
   
-  SetGlobalInt("BrassLock", 0);
+  PS_SetGlobalInt("BrassLock", 0);
  }
 }

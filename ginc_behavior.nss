@@ -40,7 +40,7 @@ void ReactToHarmfulSpell(object oCaster, int nSpellID, int bPlayerInterruptible,
 // ---------------------------------------------	
 int GetIsFocused(object oTarget=OBJECT_SELF)
 {
-    int iFocused = GetLocalInt(oTarget, VAR_FOCUSED);
+    int iFocused = PS_GetLocalInt(oTarget, VAR_FOCUSED);
 	if (IsInConversation(oTarget)  && iFocused != FOCUSED_NONE)
 	{
 		iFocused = FOCUSED_FULL;
@@ -51,20 +51,20 @@ int GetIsFocused(object oTarget=OBJECT_SELF)
 // Set a creature to be focused     DBR 5/30/06
 void SetIsFocused(int nFocusLevel, object oTarget=OBJECT_SELF)
 {
-	SetLocalInt(oTarget, VAR_FOCUSED, nFocusLevel);
+	PS_SetLocalInt(oTarget, VAR_FOCUSED, nFocusLevel);
 }	
 	
 // Flag creature's behavior to be stopped
 void StopBehavior(object oObject)
 {
-    SetLocalInt(oObject, "Behavior", 1);
+    PS_SetLocalInt(oObject, "Behavior", 1);
 }
 
 // Flag creature's behavior to be started
 // (on by defualt)
 void StartBehavior(object oObject)
 {
-    SetLocalInt(oObject, "Behavior", 0);
+    PS_SetLocalInt(oObject, "Behavior", 0);
 }
 
 
@@ -73,10 +73,10 @@ void StartBehavior(object oObject)
 int IsBusy(object oCreature = OBJECT_SELF)
 {
     // Behavior flagged to be stopped?
-    if (GetLocalInt(oCreature, "Behavior") == 1)
+    if (PS_GetLocalInt(oCreature, "Behavior") == 1)
         return FALSE;
 				
-	if (GetLocalInt(oCreature, "NW_ASSOCAMIBUSY") == TRUE)
+	if (PS_GetLocalInt(oCreature, "NW_ASSOCAMIBUSY") == TRUE)
 		return TRUE;
 		
     if (GetIsInCombat(oCreature))
@@ -142,7 +142,7 @@ int GetIsOkayToCastSpell()
 	if (GetHasEffect( EFFECT_TYPE_POLYMORPH ) 
 		|| GetHasEffect(EFFECT_TYPE_SILENCE)
 		|| GetHasFeatEffect(FEAT_BARBARIAN_RAGE) 
-		|| GetLocalInt(OBJECT_SELF, "X2_L_STOPCASTING") == 10
+		|| PS_GetLocalInt(OBJECT_SELF, "X2_L_STOPCASTING") == 10
 		|| GetHasFeatEffect(FEAT_FRENZY_1) 
 		|| GetHasSpellEffect(SPELL_TENSERS_TRANSFORMATION))
 	{

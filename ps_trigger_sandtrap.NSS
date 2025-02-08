@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_time"
 #include "x0_i0_transport"
 
@@ -7,10 +9,10 @@ void main () {
 	if (!GetIsPC(oPC))
 		return;
 	
-	object oEscapeWP = GetWaypointByTag(GetLocalString(OBJECT_SELF, "EscapeWP"));
-	int nDC = GetLocalInt(OBJECT_SELF, "ReflexSave");
-	string sSuccessMessage = GetLocalString(OBJECT_SELF, "SuccessMessage");
-	string sFailMessage = GetLocalString(OBJECT_SELF, "FailMessage");
+	object oEscapeWP = GetWaypointByTag(PS_GetLocalString(OBJECT_SELF, "EscapeWP"));
+	int nDC = PS_GetLocalInt(OBJECT_SELF, "ReflexSave");
+	string sSuccessMessage = PS_GetLocalString(OBJECT_SELF, "SuccessMessage");
+	string sFailMessage = PS_GetLocalString(OBJECT_SELF, "FailMessage");
 		
 	int nDam = d6(15);
 	

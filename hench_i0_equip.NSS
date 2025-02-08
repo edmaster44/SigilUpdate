@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -88,16 +90,16 @@ void SetWeaponPreference(object oWeapon, int iWeaponType)
     switch (iWeaponType)
     {
         case HENCH_AI_STORED_MELEE_FLAG:
-            SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE, oWeapon);
+            PS_SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE, oWeapon);
             break;
         case HENCH_AI_STORED_RANGED_FLAG:
-            SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED, oWeapon);
+            PS_SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED, oWeapon);
             break;
         case HENCH_AI_STORED_SHIELD_FLAG:
-            SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD, oWeapon);
+            PS_SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD, oWeapon);
             break;
         case HENCH_AI_STORED_OFF_HAND_FLAG:
-            SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND, oWeapon);
+            PS_SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND, oWeapon);
             break;
     }
 }
@@ -110,27 +112,27 @@ void RegetWeaponPreference()
     int weaponFlags;
     int allWeaponFlags;
 
-    DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE);
-    DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED);
-    DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
-    DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
+    PS_DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE);
+    PS_DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED);
+    PS_DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
+    PS_DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
 
     oTest = OBJECT_SELF;
-    weaponFlags = GetLocalInt(oTest, weaponPrefString);
+    weaponFlags = PS_GetLocalInt(oTest, weaponPrefString);
     if (weaponFlags)
     {
         SetWeaponPreference(oTest, weaponFlags);
         allWeaponFlags |= weaponFlags;
     }
     oTest = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, OBJECT_SELF);
-    weaponFlags = GetLocalInt(oTest, weaponPrefString);
+    weaponFlags = PS_GetLocalInt(oTest, weaponPrefString);
     if (weaponFlags)
     {
         SetWeaponPreference(oTest, weaponFlags);
         allWeaponFlags |= weaponFlags;
     }
     oTest = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, OBJECT_SELF);
-    weaponFlags = GetLocalInt(oTest, weaponPrefString);
+    weaponFlags = PS_GetLocalInt(oTest, weaponPrefString);
     if (weaponFlags)
     {
         SetWeaponPreference(oTest, weaponFlags);
@@ -139,7 +141,7 @@ void RegetWeaponPreference()
     oTest = GetFirstItemInInventory(OBJECT_SELF);
     while (GetIsObjectValid(oTest))
     {
-        weaponFlags = GetLocalInt(oTest, weaponPrefString);
+        weaponFlags = PS_GetLocalInt(oTest, weaponPrefString);
         if (weaponFlags)
         {
             SetWeaponPreference(oTest, weaponFlags);
@@ -147,22 +149,22 @@ void RegetWeaponPreference()
         }
         oTest = GetNextItemInInventory(OBJECT_SELF);
     }
-    SetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON, allWeaponFlags);
+    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON, allWeaponFlags);
 }
 
 
 void SetWeaponState(int nCondition, int bValid = TRUE)
 {
-    int nStatus = GetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON);
+    int nStatus = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON);
     if (bValid)
     {
         nStatus = nStatus | nCondition;
-        SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nStatus);
+        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nStatus);
     }
     else
     {
         nStatus = nStatus & ~nCondition;
-        SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nStatus);
+        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nStatus);
     }
 }
 
@@ -199,7 +201,7 @@ void UnequipWeapons()
 
 void EquipShield(int bIndicateStatus)
 {
-    int iHaveShieldStatus = GetLocalInt(OBJECT_SELF, HENCH_AI_SHIELD_STATUS);
+    int iHaveShieldStatus = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SHIELD_STATUS);
     object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND);
     if (GetHenchAssociateState(HENCH_ASC_DISABLE_SHIELD_USE))
     {
@@ -225,17 +227,17 @@ void EquipShield(int bIndicateStatus)
         }
         return;
     }
-    if ((iHaveShieldStatus == 1) || (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_SHIELD_FLAG))
+    if ((iHaveShieldStatus == 1) || (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_SHIELD_FLAG))
     {
-        object oStoredShield = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
+        object oStoredShield = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
         if (GetIsObjectValid(oShield) && (oStoredShield == oShield))
         {
             return;
         }
-        if (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_SHIELD_FLAG)
+        if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_SHIELD_FLAG)
         {
             RegetWeaponPreference();
-            oStoredShield = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
+            oStoredShield = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
         }
 //      Jug_Debug(GetName(OBJECT_SELF) + " using stored shield " + GetName(oStoredShield));
         if (GetIsObjectValid(oStoredShield) && (GetItemPossessor(oStoredShield) == OBJECT_SELF) &&
@@ -372,13 +374,13 @@ void EquipShield(int bIndicateStatus)
     }
     if (nMaxValue > 0)
     {
-        SetLocalInt(OBJECT_SELF, HENCH_AI_SHIELD_STATUS, 1);
-        SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD, oShield);
+        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SHIELD_STATUS, 1);
+        PS_SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD, oShield);
     }
     else
     {
-        SetLocalInt(OBJECT_SELF, HENCH_AI_SHIELD_STATUS, 2);
-        DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
+        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SHIELD_STATUS, 2);
+        PS_DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_SHIELD);
     }
     if (iNewShield)
     {
@@ -394,7 +396,7 @@ void EquipShield(int bIndicateStatus)
 
 int GetInitWeaponStatus()
 {
-    int nResult = GetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON);
+    int nResult = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON);
     if (nResult)
     {
         return nResult;
@@ -483,7 +485,7 @@ int GetInitWeaponStatus()
         nResult = nResult | HENCH_AI_HAS_RANGED_WEAPON;
     }
 
-    SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nResult);
+    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nResult);
     return nResult;
 }
 
@@ -500,13 +502,13 @@ int EquipMeleeWeapons(object oTarget, int bIndicateStatus, int iCallNumber)
 //	Jug_Debug(GetName(OBJECT_SELF) + " has weapon " + GetName(oRight) + " effective " + IntToString(GetIsWeaponEffective(oTarget, FALSE)) + " vs. " + GetName(oTarget));
     if (iCallNumber == 1)
     {
-	    if (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_MELEE_FLAG)
+	    if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_MELEE_FLAG)
 	    {
-	        object oStoredMeleeWeapon = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE);
+	        object oStoredMeleeWeapon = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE);
             if (!GetIsObjectValid(oStoredMeleeWeapon) || (GetItemPossessor(oStoredMeleeWeapon) != OBJECT_SELF))
             {
                 RegetWeaponPreference();
-                oStoredMeleeWeapon = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE);
+                oStoredMeleeWeapon = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_MELEE);
             }
 			if (oStoredMeleeWeapon == OBJECT_SELF)
 			{			
@@ -558,7 +560,7 @@ int EquipMeleeWeapons(object oTarget, int bIndicateStatus, int iCallNumber)
 	            }
 	            else
 	            {
-	                SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nWeaponStatus | HENCH_AI_WEAPON_INIT | HENCH_AI_HAS_MELEE );
+	                PS_SetLocalInt(OBJECT_SELF, HENCH_AI_WEAPON, nWeaponStatus | HENCH_AI_WEAPON_INIT | HENCH_AI_HAS_MELEE );
 	            }
 	        }
 //			Jug_Debug(GetName(OBJECT_SELF) + " start equip 3");
@@ -627,23 +629,23 @@ int EquipMeleeWeapons(object oTarget, int bIndicateStatus, int iCallNumber)
     }
     // already have something in left
     object oOrigLeft = GetItemInSlot(INVENTORY_SLOT_LEFTHAND);
-    int iHaveOffHandStatus = GetLocalInt(OBJECT_SELF, HENCH_AI_OFF_HAND_STATUS);
+    int iHaveOffHandStatus = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_OFF_HAND_STATUS);
     if (iHaveOffHandStatus == 2)
     {
         EquipShield(bIndicateStatus);
         return TRUE;
     }
-    if ((iHaveOffHandStatus == 1) || (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_OFF_HAND_FLAG))
+    if ((iHaveOffHandStatus == 1) || (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_OFF_HAND_FLAG))
     {
-        object oStoredOffHand = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
+        object oStoredOffHand = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
         if (GetIsObjectValid(oOrigLeft) && (oStoredOffHand == oOrigLeft))
         {
             return TRUE;
         }
-        if (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_OFF_HAND_FLAG)
+        if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_OFF_HAND_FLAG)
         {
             RegetWeaponPreference();
-            oStoredOffHand = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
+            oStoredOffHand = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
         }
 //      Jug_Debug(GetName(OBJECT_SELF) + " using stored offhand " + GetName(oStoredOffHand));
         if (GetIsObjectValid(oStoredOffHand) && (GetItemPossessor(oStoredOffHand) == OBJECT_SELF) &&
@@ -744,13 +746,13 @@ int EquipMeleeWeapons(object oTarget, int bIndicateStatus, int iCallNumber)
     }
     if (nMaxValue > 0)
     {
-        SetLocalInt(OBJECT_SELF, HENCH_AI_OFF_HAND_STATUS, 1);
-        SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND, oLeft);
+        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_OFF_HAND_STATUS, 1);
+        PS_SetLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND, oLeft);
     }
     else
     {
-        SetLocalInt(OBJECT_SELF, HENCH_AI_OFF_HAND_STATUS, 2);
-        DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
+        PS_SetLocalInt(OBJECT_SELF, HENCH_AI_OFF_HAND_STATUS, 2);
+        PS_DeleteLocalObject(OBJECT_SELF, HENCH_AI_STORED_OFF_HAND);
     }
     if (iNewOffHand)
     {
@@ -776,16 +778,16 @@ int EquipRangedWeapon(object oTarget, int bIndicateStatus, int iCallNumber)
 
     if (iCallNumber == 1)
     {
-		if (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_RANGED_FLAG)
+		if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_RANGED_FLAG)
 	    {
-	        object oStoredRangedWeapon = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED);
+	        object oStoredRangedWeapon = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED);
 	        if (!GetIsObjectValid(oRight) || (oRight != oStoredRangedWeapon))
 	        {
 //          	Jug_Debug(GetName(OBJECT_SELF) + " using ranged weapon " + GetName(oStoredRangedWeapon));
 	            if (!GetIsObjectValid(oStoredRangedWeapon) || (GetItemPossessor(oStoredRangedWeapon) != OBJECT_SELF))
 	            {
 	                RegetWeaponPreference();
-	                oStoredRangedWeapon = GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED);
+	                oStoredRangedWeapon = PS_GetLocalObject(OBJECT_SELF, HENCH_AI_STORED_RANGED);
 	            }
 	            if (GetIsObjectValid(oStoredRangedWeapon) && (oStoredRangedWeapon != oRight))
 	            {
@@ -812,7 +814,7 @@ int EquipRangedWeapon(object oTarget, int bIndicateStatus, int iCallNumber)
         if (iCallNumber == 2)
         {
 //      	Jug_Debug(GetName(OBJECT_SELF) + " doing wait");
-			if (GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_RANGED_FLAG)
+			if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_STORED_PREF_WEAPON) & HENCH_AI_STORED_RANGED_FLAG)
 			{
 	        	ActionEquipMostDamagingRanged(oTarget);
 			}
@@ -826,7 +828,7 @@ int EquipRangedWeapon(object oTarget, int bIndicateStatus, int iCallNumber)
 //        }
 //      Jug_Debug(GetName(OBJECT_SELF) + " turning off ranged weapons");
         SetWeaponState(HENCH_AI_HAS_RANGED_WEAPON, FALSE);
-        SetLocalInt(OBJECT_SELF, "UseRangedWeapons", FALSE);
+        PS_SetLocalInt(OBJECT_SELF, "UseRangedWeapons", FALSE);
         return EquipMeleeWeapons(oTarget, bIndicateStatus, 1);
     }
 
@@ -915,43 +917,43 @@ int HenchEquipAppropriateWeapons(object oTarget, float fThresholdDistance, int b
     {
         if (!(nWeaponStatus & HENCH_AI_HAS_RANGED_WEAPON))
         {
-            DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE);
-            DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED);
+            PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE);
+            PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED);
         }
         else if (bRangedOverride && !GetAssociateState(NW_ASC_USE_RANGED_WEAPON))
         {
-            int bSwitchedToRanged = GetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED);
+            int bSwitchedToRanged = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED);
             if (bUseRanged && !bSwitchedToRanged)
             {
 				//	"I'm stuck. Switching to my missile weapon."
                 SpeakStringByStrRef(230395);
-                SetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED, TRUE);
+                PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED, TRUE);
             }
             else if (!bUseRanged && bSwitchedToRanged)
             {
 				//	"I'm switching back to my melee weapon for now."
                 SpeakStringByStrRef(230396);
-                DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED);
+                PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_RANGED);
             }
         }
         else
         {
-            int bSwitchedToMelee = GetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE);
+            int bSwitchedToMelee = PS_GetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE);
             if (bUseRanged && bSwitchedToMelee)
             {
 				//	"I'm switching back to my missile weapon."
                 SpeakStringByStrRef(230393);
-                DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE);
+                PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE);
             }
             else if (!bUseRanged && !bSwitchedToMelee)
             {
 				//	"I'm switching to my melee weapon for now."
                 SpeakStringByStrRef(230394);
-                SetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE, TRUE);
+                PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SWITCHED_TO_MELEE, TRUE);
             }
         }
     }
-    SetLocalInt(OBJECT_SELF, "UseRangedWeapons", bUseRanged);
+    PS_SetLocalInt(OBJECT_SELF, "UseRangedWeapons", bUseRanged);
     if (bUseRanged)
     {
         return EquipRangedWeapon(oTarget, bIndicateSwitch, 1);
@@ -965,7 +967,7 @@ int HenchEquipAppropriateWeapons(object oTarget, float fThresholdDistance, int b
 
 void ActionContinueEquip(object oTarget, int bIndicateStatus, int iCallNumber)
 {
-    if (GetLocalInt(OBJECT_SELF, "UseRangedWeapons"))
+    if (PS_GetLocalInt(OBJECT_SELF, "UseRangedWeapons"))
     {
         if (!EquipRangedWeapon(oTarget, bIndicateStatus, iCallNumber))
         {
@@ -988,7 +990,7 @@ void HenchEquipDefaultWeapons(object oCreature = OBJECT_SELF, int bShowStatus = 
 {
     if (bShowStatus)
     {
-        SetLocalInt(oCreature, sHenchShowWeaponStatus, TRUE);
+        PS_SetLocalInt(oCreature, sHenchShowWeaponStatus, TRUE);
     }
     ExecuteScript("hench_o0_equip", oCreature);
 }
@@ -996,13 +998,13 @@ void HenchEquipDefaultWeapons(object oCreature = OBJECT_SELF, int bShowStatus = 
 
 void ClearWeaponStates(object oCreature = OBJECT_SELF)
 {
-    DeleteLocalInt(oCreature, HENCH_AI_SWITCHED_TO_MELEE);
-    DeleteLocalInt(oCreature, HENCH_AI_SWITCHED_TO_RANGED);
-    DeleteLocalInt(oCreature, HENCH_AI_SHIELD_STATUS);
-    DeleteLocalObject(oCreature, HENCH_AI_STORED_SHIELD);
-    DeleteLocalInt(oCreature, HENCH_AI_OFF_HAND_STATUS);
-    DeleteLocalObject(oCreature, HENCH_AI_STORED_OFF_HAND);
-    DeleteLocalInt(oCreature, HENCH_AI_WEAPON);
+    PS_DeleteLocalInt(oCreature, HENCH_AI_SWITCHED_TO_MELEE);
+    PS_DeleteLocalInt(oCreature, HENCH_AI_SWITCHED_TO_RANGED);
+    PS_DeleteLocalInt(oCreature, HENCH_AI_SHIELD_STATUS);
+    PS_DeleteLocalObject(oCreature, HENCH_AI_STORED_SHIELD);
+    PS_DeleteLocalInt(oCreature, HENCH_AI_OFF_HAND_STATUS);
+    PS_DeleteLocalObject(oCreature, HENCH_AI_STORED_OFF_HAND);
+    PS_DeleteLocalInt(oCreature, HENCH_AI_WEAPON);
 }
 
 

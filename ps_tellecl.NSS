@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	object oPC = OBJECT_SELF;
@@ -5,7 +7,7 @@ void main()
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-		string sECL = GetLocalString(oItem,"ECL");
+		string sECL = PS_GetLocalString(oItem,"ECL");
 		
 		if(sECL != "")
 		{

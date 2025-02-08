@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void main()
 {
 	string parchmentVarName = "parchmentObject";
@@ -7,19 +9,19 @@ void main()
 	if (oPC == OBJECT_INVALID)
 		return;
 
-	object parchmentObject = GetLocalObject(oPC, parchmentVarName);
+	object parchmentObject = PS_GetLocalObject(oPC, parchmentVarName);
 	if(parchmentObject != OBJECT_INVALID)
 	{
 		// is there already writing on this?
-		string writtenText = GetLocalString(parchmentObject, parchmentWritingVarName);
+		string writtenText = PS_GetLocalString(parchmentObject, parchmentWritingVarName);
 		if (writtenText != "")
 		{
 			// there is already something written on this
 			SendMessageToPC(oPC, "This parchment was already written on! You read: '" + writtenText + "'");
-			// SendMessageToPC(oPC, "writer: " + GetLocalString(parchmentObject, "writer_char") + ", account: " + GetLocalString(parchmentObject, "writer_account"));
+			// SendMessageToPC(oPC, "writer: " + PS_GetLocalString(parchmentObject, "writer_char") + ", account: " + PS_GetLocalString(parchmentObject, "writer_account"));
 			
 			// delete the item mark	
-			DeleteLocalObject(oPC, parchmentVarName);
+			PS_DeleteLocalObject(oPC, parchmentVarName);
 		}
 		else
 		{
@@ -29,8 +31,8 @@ void main()
 			SetPlotFlag(parchmentObject, TRUE);
 			
 			// mark the character and account name on the item for accountability
-			SetLocalString(parchmentObject, "writer_char", GetName(oPC));
-			SetLocalString(parchmentObject, "writer_account", GetPCPlayerName(oPC));
+			PS_SetLocalString(parchmentObject, "writer_char", GetName(oPC));
+			PS_SetLocalString(parchmentObject, "writer_account", GetPCPlayerName(oPC));
 			
 			// get the title
 		    int msgref = 0;
@@ -42,6 +44,6 @@ void main()
 	{
 		// did not find parchment object
 		// delete the item mark	
-		DeleteLocalObject(oPC, parchmentVarName);
+		PS_DeleteLocalObject(oPC, parchmentVarName);
 	}
 }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -20,13 +22,13 @@ void main()
 			if (GetIsFaction(iFaction)) 
 				iFactionFound = TRUE;
 			
-			SetLocalObject(oDM, "TargetObject", oTarget);
+			PS_SetLocalObject(oDM, "TargetObject", oTarget);
 			SendMessageToPC(oDM,"DEBUG: Targetted Player is " + GetName(oTarget));
 			string sTargetName = GetName(oTarget);
-			SetLocalString(oDM, "TargetName", sTargetName);
-			SetLocalInt(oDM, "TargetFaction", iFaction);
+			PS_SetLocalString(oDM, "TargetName", sTargetName);
+			PS_SetLocalInt(oDM, "TargetFaction", iFaction);
 			// just in case of previous target, let's clear this one.
-			SetLocalInt(oDM, "TargetSecondaryFaction", 0);
+			PS_SetLocalInt(oDM, "TargetSecondaryFaction", 0);
 			SendMessageToPC(oDM, "DEBUG: Faction Found is: " + IntToString(iFaction));
 			if (iFactionFound == TRUE)
 			{
@@ -42,20 +44,20 @@ void main()
 					object oBadge = GetItemPossessedBy(oTarget,"ps_faction_badge");
    					if(GetIsObjectValid(oBadge))
 					{
-						if (GetLocalInt(oBadge, "Faction") == 12)
+						if (PS_GetLocalInt(oBadge, "Faction") == 12)
 						{
-							if (GetLocalInt(oBadge, "Infiltrated") == TRUE) // this is on the first badge found, so works if it is anarchist
-								iSecondaryFaction = GetLocalInt(oBadge, "InfiltratedFaction");
+							if (PS_GetLocalInt(oBadge, "Infiltrated") == TRUE) // this is on the first badge found, so works if it is anarchist
+								iSecondaryFaction = PS_GetLocalInt(oBadge, "InfiltratedFaction");
 							else
 								iSecondaryFaction = 0; // FALSE, no infiltrated faction
 						}
 						else
 						{
 							// so we have found the non-anarch badge
-							iSecondaryFaction = GetLocalInt(oBadge, "Faction");
+							iSecondaryFaction = PS_GetLocalInt(oBadge, "Faction");
 						}
 											
-						SetLocalInt(oDM, "TargetSecondaryFaction", iSecondaryFaction);
+						PS_SetLocalInt(oDM, "TargetSecondaryFaction", iSecondaryFaction);
 					}
 					else
 					{

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*********************************************************
 * Script for Triple Triad like card game for SCoD        *
 * by Agony_Aunt/Loki_999                                 *
@@ -9,7 +11,7 @@
 void main(int iFunction)
 {
 	object oPC = GetPCSpeaker();
-	object oDeck = GetLocalObject(oPC, "DECK_TALK");
+	object oDeck = PS_GetLocalObject(oPC, "DECK_TALK");
 	
 	if (iFunction == DECK_VIEW)
 	{

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -9,12 +11,10 @@ void main()
  	string sDescrip = "";
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	  
-	int iLock = GetGlobalInt
-
-("PoAInteriorEnterLock");
+	int iLock = PS_GetGlobalInt("PoAInteriorEnterLock");
 	if ( iLock == 0 )
  	{
-	  SetGlobalInt("PoAInteriorEnterLock", 1); 
+	  PS_SetGlobalInt("PoAInteriorEnterLock", 1); 
 	  // Only allows one clean up at a time.
 
 if(GetObjectByTag("poa_npc18") == OBJECT_INVALID)
@@ -140,6 +140,6 @@ if(GetObjectByTag("poa_npc70") == OBJECT_INVALID)
 
 
 
-SetGlobalInt("PoAInteriorEnterLock", 0);
+PS_SetGlobalInt("PoAInteriorEnterLock", 0);
   	}
 }

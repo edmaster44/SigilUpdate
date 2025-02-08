@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
     Companion and Monster AI
@@ -54,7 +56,7 @@ void HenchMonRespondToShout(object oShouter, int nShoutIndex, object oIntruder =
 {
     // Pausanias: Do not respond to shouts if you've surrendered.
 	// don't respond to shouts if flagged as plot
-    if (GetLocalInt(OBJECT_SELF, "Generic_Surrender") || GetPlotFlag())
+    if (PS_GetLocalInt(OBJECT_SELF, "Generic_Surrender") || GetPlotFlag())
 	{
 		return;
 	}
@@ -70,7 +72,7 @@ void HenchMonRespondToShout(object oShouter, int nShoutIndex, object oIntruder =
                     oTarget = GetLastHostileActor(oShouter);
                     if (!GetIsObjectValid(oTarget))
                     {
-                        oTarget = GetLocalObject(oShouter, sHenchLastTarget);
+                        oTarget = PS_GetLocalObject(oShouter, sHenchLastTarget);
                     }
                 }
                 if (!GetBehaviorState(NW_FLAG_BEHAVIOR_SPECIAL))

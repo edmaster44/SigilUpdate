@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 //
 // Define tint mask values used to avoid accumulating conversion error for
@@ -387,7 +389,7 @@ void PS_ActivateCounterSpell(object TargetObject)
 
 int PS_GetAreaWeatherSystemId(object Area)
 {
-	return GetLocalInt(Area, "PS_WEATHER_ID");
+	return PS_GetLocalInt(Area, "PS_WEATHER_ID");
 }
 
 struct CreatureCoreAppearance PS_GetCreatureCoreAppearance(object Creature)
@@ -410,24 +412,24 @@ string PS_GetObjectAppearanceSEF(object ObjectId)
 
 void PS_SetObjectAppearanceSEF(object ObjectId, string AppearanceSEF)
 {
-	SetLocalString(ObjectId, "MarshalAppearanceSEF", AppearanceSEF);
+	PS_SetLocalString(ObjectId, "MarshalAppearanceSEF", AppearanceSEF);
 	PS_CallExtensionsScript(PS_Ext_SetObjectAppearanceSEF, ObjectId);
 }
 
 float PS_ComputeHeight(object AreaObjectId, float x, float y)
 {
-	SetLocalFloat(AreaObjectId, "MarshalX", x);
-	SetLocalFloat(AreaObjectId, "MarshalY", y);
+	PS_SetLocalFloat(AreaObjectId, "MarshalX", x);
+	PS_SetLocalFloat(AreaObjectId, "MarshalY", y);
 	PS_CallExtensionsScript(PS_Ext_ComputeHeight, AreaObjectId);
 	return PS_UnmarshalFloat(AreaObjectId, "MarshalHeight");
 }
 
 int PS_CalcPath(object AreaObjectId, vector From, vector To)
 {
-	SetLocalFloat(AreaObjectId, "MarshalFrom.x", From.x);
-	SetLocalFloat(AreaObjectId, "MarshalFrom.y", From.y);
-	SetLocalFloat(AreaObjectId, "MarshalTo.x", To.x);
-	SetLocalFloat(AreaObjectId, "MarshalTo.y", To.y);
+	PS_SetLocalFloat(AreaObjectId, "MarshalFrom.x", From.x);
+	PS_SetLocalFloat(AreaObjectId, "MarshalFrom.y", From.y);
+	PS_SetLocalFloat(AreaObjectId, "MarshalTo.x", To.x);
+	PS_SetLocalFloat(AreaObjectId, "MarshalTo.y", To.y);
 	PS_CallExtensionsScript(PS_Ext_CalcPath, AreaObjectId);
 	return PS_UnmarshalInt(AreaObjectId, "MarshalPathSegments.Count");
 }
@@ -495,10 +497,10 @@ vector PS_GetPathWaypoint(object AreaObjectId, int WaypointIndex, int ComputeHei
 
 int PS_StraightPathExists(object AreaObjectId, vector From, vector To)
 {
-	SetLocalFloat(AreaObjectId, "MarshalFrom.x", From.x);
-	SetLocalFloat(AreaObjectId, "MarshalFrom.y", From.y);
-	SetLocalFloat(AreaObjectId, "MarshalTo.x", To.x);
-	SetLocalFloat(AreaObjectId, "MarshalTo.y", To.y);
+	PS_SetLocalFloat(AreaObjectId, "MarshalFrom.x", From.x);
+	PS_SetLocalFloat(AreaObjectId, "MarshalFrom.y", From.y);
+	PS_SetLocalFloat(AreaObjectId, "MarshalTo.x", To.x);
+	PS_SetLocalFloat(AreaObjectId, "MarshalTo.y", To.y);
 	PS_CallExtensionsScript(PS_Ext_StraightPathExists, AreaObjectId);
 	return PS_UnmarshalInt(AreaObjectId, "MarshalStraightPathExists");
 }
@@ -536,22 +538,22 @@ int PS_GetTick()
 
 float PS_UnmarshalFloat(object ObjectId, string Name)
 {
-	float Value = GetLocalFloat(ObjectId, Name);
-	DeleteLocalFloat(ObjectId, Name);
+	float Value = PS_GetLocalFloat(ObjectId, Name);
+	PS_DeleteLocalFloat(ObjectId, Name);
 	return Value;
 }
 
 int PS_UnmarshalInt(object ObjectId, string Name)
 {
-	int Value = GetLocalInt(ObjectId, Name);
-	DeleteLocalInt(ObjectId, Name);
+	int Value = PS_GetLocalInt(ObjectId, Name);
+	PS_DeleteLocalInt(ObjectId, Name);
 	return Value;
 }
 
 string PS_UnmarshalString(object ObjectId, string Name)
 {
-	string Value = GetLocalString(ObjectId, Name);
-	DeleteLocalString(ObjectId, Name);
+	string Value = PS_GetLocalString(ObjectId, Name);
+	PS_DeleteLocalString(ObjectId, Name);
 	return Value;
 }
 
@@ -575,10 +577,10 @@ int PS_ScriptVariablesToAppearanceColor(object ObjectId, string Prefix)
 
 void PS_AppearanceColorToScriptVariables(object ObjectId, string Prefix, int Color)
 {
-	SetLocalFloat(ObjectId, Prefix + ".r", IntToFloat((Color >>> 24) & 0xFF) / 255.0f);
-	SetLocalFloat(ObjectId, Prefix + ".g", IntToFloat((Color >>> 16) & 0xFF) / 255.0f);
-	SetLocalFloat(ObjectId, Prefix + ".b", IntToFloat((Color >>> 8) & 0xFF) / 255.0f);
-	SetLocalFloat(ObjectId, Prefix + ".a", IntToFloat(Color & 0xFF) / 255.0f);
+	PS_SetLocalFloat(ObjectId, Prefix + ".r", IntToFloat((Color >>> 24) & 0xFF) / 255.0f);
+	PS_SetLocalFloat(ObjectId, Prefix + ".g", IntToFloat((Color >>> 16) & 0xFF) / 255.0f);
+	PS_SetLocalFloat(ObjectId, Prefix + ".b", IntToFloat((Color >>> 8) & 0xFF) / 255.0f);
+	PS_SetLocalFloat(ObjectId, Prefix + ".a", IntToFloat(Color & 0xFF) / 255.0f);
 }
 
 struct TintSet PS_ScriptVariablesToTintSet(object ObjectId, string Prefix)
@@ -598,7 +600,7 @@ void PS_TintSetToScriptVariables(object ObjectId, string Prefix, struct TintSet 
 	PS_AppearanceColorToScriptVariables(ObjectId, Prefix + ".Color0", Tint.Color0);
 	PS_AppearanceColorToScriptVariables(ObjectId, Prefix + ".Color1", Tint.Color1);
 	PS_AppearanceColorToScriptVariables(ObjectId, Prefix + ".Color2", Tint.Color2);
-	SetLocalInt(ObjectId, Prefix + ".Mask", Tint.Mask);
+	PS_SetLocalInt(ObjectId, Prefix + ".Mask", Tint.Mask);
 }
 
 struct CreatureCoreAppearance PS_ScriptVariablesToCreatureCoreAppearance(object ObjectId, string Prefix)
@@ -644,16 +646,16 @@ void PS_CreatureCoreAppearanceToScriptVariables(object ObjectId, string Prefix, 
 {
 	struct TintSet Tint;
 
-	SetLocalInt(ObjectId, Prefix + ".AppearanceType", CoreAppearance.AppearanceType);
-	SetLocalInt(ObjectId, Prefix + ".Gender", CoreAppearance.Gender);
-	SetLocalInt(ObjectId, Prefix + ".SkinColor", CoreAppearance.SkinColor);
-	SetLocalInt(ObjectId, Prefix + ".TattooColor1", CoreAppearance.TattooColor1);
-	SetLocalInt(ObjectId, Prefix + ".TattooColor2", CoreAppearance.TattooColor2);
-	SetLocalInt(ObjectId, Prefix + ".HeadVariation", CoreAppearance.HeadVariation);
-	SetLocalInt(ObjectId, Prefix + ".TailVariation", CoreAppearance.TailVariation);
-	SetLocalInt(ObjectId, Prefix + ".WingVariation", CoreAppearance.WingVariation);
-	SetLocalInt(ObjectId, Prefix + ".HairVariation", CoreAppearance.HairVariation);
-	SetLocalInt(ObjectId, Prefix + ".FacialHairVariation", CoreAppearance.FacialHairVariation);
+	PS_SetLocalInt(ObjectId, Prefix + ".AppearanceType", CoreAppearance.AppearanceType);
+	PS_SetLocalInt(ObjectId, Prefix + ".Gender", CoreAppearance.Gender);
+	PS_SetLocalInt(ObjectId, Prefix + ".SkinColor", CoreAppearance.SkinColor);
+	PS_SetLocalInt(ObjectId, Prefix + ".TattooColor1", CoreAppearance.TattooColor1);
+	PS_SetLocalInt(ObjectId, Prefix + ".TattooColor2", CoreAppearance.TattooColor2);
+	PS_SetLocalInt(ObjectId, Prefix + ".HeadVariation", CoreAppearance.HeadVariation);
+	PS_SetLocalInt(ObjectId, Prefix + ".TailVariation", CoreAppearance.TailVariation);
+	PS_SetLocalInt(ObjectId, Prefix + ".WingVariation", CoreAppearance.WingVariation);
+	PS_SetLocalInt(ObjectId, Prefix + ".HairVariation", CoreAppearance.HairVariation);
+	PS_SetLocalInt(ObjectId, Prefix + ".FacialHairVariation", CoreAppearance.FacialHairVariation);
 
 	Tint.Color0 = CoreAppearance.Tint_Color0;
 	Tint.Color1 = CoreAppearance.Tint_Color1;
@@ -673,7 +675,7 @@ void PS_CreatureCoreAppearanceToScriptVariables(object ObjectId, string Prefix, 
 	Tint.Mask = CoreAppearance.HairTint_Mask;
 	PS_TintSetToScriptVariables(ObjectId, Prefix + ".HairTint", Tint);
 
-	SetLocalInt(ObjectId, Prefix + ".NeverDrawHelmet", CoreAppearance.NeverDrawHelmet);
+	PS_SetLocalInt(ObjectId, Prefix + ".NeverDrawHelmet", CoreAppearance.NeverDrawHelmet);
 }
 
 int PS_CallExtensionsScript(int Cmd, object Self, object P0, int P1, int P2, string P3, string P4)

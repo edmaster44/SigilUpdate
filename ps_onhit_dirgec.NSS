@@ -35,7 +35,7 @@ void main()
 	            //Make a Fortitude Save to avoid the effects of the movement hit.
 	            if(!OnHitSavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_ALL, oCaster))
 	            {
-	                int nGetLastPenalty = GetLocalInt(oTarget, "X0_L_LASTPENALTY");
+	                int nGetLastPenalty = PS_GetLocalInt(oTarget, "X0_L_LASTPENALTY");
 	                // * increase penalty by 2
 	                nGetLastPenalty = nGetLastPenalty + 2;
 	
@@ -51,7 +51,7 @@ void main()
 	                //Apply damage and visuals
 	                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-	                SetLocalInt(oTarget, "X0_L_LASTPENALTY", nGetLastPenalty);
+	                PS_SetLocalInt(oTarget, "X0_L_LASTPENALTY", nGetLastPenalty);
 	            }
 	
 	        }

@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("GBEnterLock1");
+ int iLock = PS_GetGlobalInt("GBEnterLock1");
  if ( iLock == 0 )
  {
-  SetGlobalInt("GBEnterLock1", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("GBEnterLock1", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_gb_goldenmane") == OBJECT_INVALID)
   {
@@ -71,6 +73,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_gb_pierre", lSpawnpoint);    
   }
   
-  SetGlobalInt("GBEnterLock1", 0);
+  PS_SetGlobalInt("GBEnterLock1", 0);
  }
 }

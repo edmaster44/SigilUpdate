@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("ShatteredLock");
+ int iLock = PS_GetGlobalInt("ShatteredLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("ShatteredLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("ShatteredLock", 1); // Only allows one clean up at a time.
 
   
   if(GetObjectByTag("ps_shattered_atharguard1") == OBJECT_INVALID)
@@ -62,6 +64,6 @@ void main()
 	   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_shattered_hobard", lSpawnpoint);
    } 
     
-  SetGlobalInt("ShatteredLock", 0);
+  PS_SetGlobalInt("ShatteredLock", 0);
  }
 }

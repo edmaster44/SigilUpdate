@@ -1,3 +1,4 @@
+#include "ff_safevar"
 void main()
 {
   object oDoor ;
@@ -7,19 +8,19 @@ void main()
   oDoor=GetNearestObjectByTag ("CELL_DOOR",OBJECT_SELF,1);
   if ( GetIsObjectValid (oDoor) == TRUE )
   {
-    sDoorTag = GetTag (oDoor);
-    nDoorLocked = GetLocked (oDoor);
-    nDoorOpen = GetIsOpen (oDoor);
+    sDoorTag = GetTag(oDoor);
+    nDoorLocked = GetLocked(oDoor);
+    nDoorOpen = GetIsOpen(oDoor);
 //This part simply switches the graphics on the lever from activate to
 //deactivate or vice versa.
-  if ( GetLocalInt ( OBJECT_SELF, "m_bActivated" )==TRUE)
+  if (PS_GetLocalInt(OBJECT_SELF, "m_bActivated" )==TRUE)
    {
-    SetLocalInt (OBJECT_SELF,"m_bActivated",FALSE);
+    PS_SetLocalInt (OBJECT_SELF,"m_bActivated",FALSE);
     ActionPlayAnimation ( ANIMATION_PLACEABLE_ACTIVATE);
    }
-   else if ( GetLocalInt (OBJECT_SELF,"m_bActivated") ==FALSE)
+   else if (PS_GetLocalInt (OBJECT_SELF,"m_bActivated") ==FALSE)
    {
-    SetLocalInt (OBJECT_SELF,"m_bActivated",TRUE);
+    PS_SetLocalInt (OBJECT_SELF,"m_bActivated",TRUE);
     ActionPlayAnimation (ANIMATION_PLACEABLE_DEACTIVATE);
    }
 /* this part checks if the door is locked and close if it is it unlocks and opens.

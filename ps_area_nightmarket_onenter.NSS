@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_achievements"
 
 void main() {
@@ -5,10 +7,10 @@ void main() {
 	
  AddAchievement(oPC, 6);
   
- int iLock = GetGlobalInt("NightMarketEnterLock");
+ int iLock = PS_GetGlobalInt("NightMarketEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("NightMarketEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("NightMarketEnterLock", 1); // Only allows one clean up at a time.
   
   if(GetObjectByTag("ps_commoner_hiveward4") == OBJECT_INVALID)
   {
@@ -69,6 +71,6 @@ void main() {
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_nightmarket_tout", lSpawnpoint);    
   } 
   
-  SetGlobalInt("NightMarketEnterLock", 0);
+  PS_SetGlobalInt("NightMarketEnterLock", 0);
  }
 }

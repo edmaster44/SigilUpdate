@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 void RemoveAntimagic(object creature)
 {
 	effect eEffect = GetFirstEffect(creature);
@@ -18,7 +20,7 @@ void RemoveAntimagic(object creature)
 		eEffect = GetNextEffect(creature);
 	}
 	
-	SetLocalInt(creature, "ps_anti_magic_zone", 0);
+	PS_SetLocalInt(creature, "ps_anti_magic_zone", 0);
 }
 
 void main()

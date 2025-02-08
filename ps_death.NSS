@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Death Script
 //:: NW_O0_DEATH.NSS
@@ -33,11 +35,11 @@ void main()
 	//CreateItemOnObject("ps_deathtoken", oPlayer);
 	
 	// * increment global tracking number of times that I died
-	SetLocalInt(oPlayer, "NW_L_PLAYER_DIED", GetLocalInt(oPlayer, "NW_L_PLAYER_DIED") + 1);
+	PS_SetLocalInt(oPlayer, "NW_L_PLAYER_DIED", PS_GetLocalInt(oPlayer, "NW_L_PLAYER_DIED") + 1);
 
 	// * BK: Automation Control. Autopcs ignore death
 /*
-	if (GetLocalInt(oPlayer, "NW_L_AUTOMATION") == 10)
+	if (PS_GetLocalInt(oPlayer, "NW_L_AUTOMATION") == 10)
 	{
 		Raise(oPlayer);
 		//DelayCommand(1.0, ExecuteScript("crawl", OBJECT_SELF));
@@ -48,8 +50,8 @@ void main()
 	object oEssence =  GetItemPossessedBy(oPlayer, "ps_essence");
 	if (oArea != OBJECT_INVALID)
 	{
-		SetLocalString(oEssence, "PC_DEATH_AREA", GetTag(oArea));
-		SetLocalLocation(oEssence, "Deathsite", GetLocation(oPlayer));
+		PS_SetLocalString(oEssence, "PC_DEATH_AREA", GetTag(oArea));
+		PS_SetLocalLocation(oEssence, "Deathsite", GetLocation(oPlayer));
 		PS_Timestamp_UNIX(oEssence, "Deathstamp");
 	}
 	DelayCommand( 2.5f, ShowDefaultDeathScreen( oPlayer ) );
@@ -57,7 +59,7 @@ void main()
     // * Handle Spirit of the Wood Death
      string sArea = GetTag(GetArea(oPlayer));
 
-    if (sArea == "MAP_M2Q2F2" && GetDistanceBetweenLocations(GetLocation(GetObjectByTag("M2Q2F2_M2Q2G")), GetLocation(oPlayer)) < 5.0 && GetLocalInt(GetModule(),"NW_M2Q2E_WoodsFreed") == 0)
+    if (sArea == "MAP_M2Q2F2" && GetDistanceBetweenLocations(GetLocation(GetObjectByTag("M2Q2F2_M2Q2G")), GetLocation(oPlayer)) < 5.0 && PS_GetLocalInt(GetModule(),"NW_M2Q2E_WoodsFreed") == 0)
     {
         int bValid;
 
@@ -88,15 +90,15 @@ void main()
     AssignCommand(oPlayer, ClearAllActions());
     // * Note: waiting for Sophia to make SetStandardFactionReptuation to clear all personal reputation
     if (GetStandardFactionReputation(STANDARD_FACTION_COMMONER, oPlayer) <= 10)
-    {   SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
+    {   PS_SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
         SetStandardFactionReputation(STANDARD_FACTION_COMMONER, 80, oPlayer);
     }
     if (GetStandardFactionReputation(STANDARD_FACTION_MERCHANT, oPlayer) <= 10)
-    {   SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
+    {   PS_SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
         SetStandardFactionReputation(STANDARD_FACTION_MERCHANT, 80, oPlayer);
     }
     if (GetStandardFactionReputation(STANDARD_FACTION_DEFENDER, oPlayer) <= 10)
-    {   SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
+    {   PS_SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
         SetStandardFactionReputation(STANDARD_FACTION_DEFENDER, 80, oPlayer);
     }
 
@@ -109,7 +111,7 @@ void ClearAllFactionMembers(object oMember, object oPlayer)
 {
 //    AssignCommand(oMember, SpeakString("here"));
     AdjustReputation(oPlayer, oMember, 100);
-    SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
+    PS_SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
     object oClear = GetFirstFactionMember(oMember, FALSE);
     while (GetIsObjectValid(oClear) == TRUE)
     {

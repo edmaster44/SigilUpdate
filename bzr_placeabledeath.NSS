@@ -6,7 +6,7 @@ void main()
 	effect spawn = EffectNWN2SpecialEffectFile("fx_wooden_explosion_big", OBJECT_SELF);
 	ApplyEffectToObject(0, spawn, OBJECT_SELF);
 	
-	/*string sTrap = GetLocalString(OBJECT_SELF, "ASSOCIATED_TRAP");
+	/*string sTrap = PS_GetLocalString(OBJECT_SELF, "ASSOCIATED_TRAP");
 	if (sTrap != "") {
 		object oTrap = GetNearestObjectByTag(sTrap);
 		if (GetIsObjectValid(oTrap)) {
@@ -27,7 +27,7 @@ void main()
 		
 	object oDead = (OBJECT_SELF);
 
-	float fCR = IntToFloat(GetLocalInt(OBJECT_SELF, "CR"));
+	float fCR = IntToFloat(PS_GetLocalInt(OBJECT_SELF, "CR"));
 	
 	int iMAX = PS_GetMaxPartylevel(oKiller);
 	float fAVG = PS_GetAvgPartylevel(oKiller, iMAX);	
@@ -49,7 +49,7 @@ void main()
     {
 		if (oArea == GetArea(oPartyMember))
 		{
-	    	if (GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
+	    	if (PS_GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_ANIMAL
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_BEAST
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_CONSTRUCT

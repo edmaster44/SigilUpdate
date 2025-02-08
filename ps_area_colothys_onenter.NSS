@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main () {
 
@@ -5,16 +7,16 @@ void main () {
 	if (!GetIsPC(oPC))
 		return;
 		
-	string sDescrip = GetLocalString(GetArea(oPC), "planar_description");
+	string sDescrip = PS_GetLocalString(GetArea(oPC), "planar_description");
 	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, "Carceri", sDescrip));
 	
 	object oDoor = GetNearestObjectByTag("gardentemple_in");
 	SetUseableFlag(oDoor, TRUE);
 	
-	int iLock = GetGlobalInt("ColothysEnterLock");
+	int iLock = PS_GetGlobalInt("ColothysEnterLock");
 	if ( iLock == 0 ) {
 	
-	  SetGlobalInt("ColothysEnterLock", 1);
+	  PS_SetGlobalInt("ColothysEnterLock", 1);
 	  
 	  //Portal Listener
 	  /*object oListener = GetObjectByTag("c_colothys_portallistener");
@@ -28,7 +30,7 @@ void main () {
 		   oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "c_colothys_portallistener", lSpawnpoint);   
 	  }*/
 	  
-  	  SetGlobalInt("ColothysEnterLock", 0);
+  	  PS_SetGlobalInt("ColothysEnterLock", 0);
 	  
 	}
 

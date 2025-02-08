@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_newcrafting"
 
 void main (string sNum) {
@@ -7,7 +9,7 @@ void main (string sNum) {
 	//SendMessageToPC(oPC, "material 2: "+sNum);
 	
 	int nIndex = StringToInt(sNum);
-	SetLocalInt(oPC, "Craft_Mat2", nIndex);
+	PS_SetLocalInt(oPC, "Craft_Mat2", nIndex);
 	
 	GenerateCraftDetails(oPC);
 

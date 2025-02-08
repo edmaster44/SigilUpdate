@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("CarnivalEnterLock");
+ int iLock = PS_GetGlobalInt("CarnivalEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("CarnivalEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("CarnivalEnterLock", 1); // Only allows one clean up at a time.
   
   if(GetObjectByTag("ps_npc_carnfortune") == OBJECT_INVALID)
   {
@@ -202,6 +204,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_carnnpc14", lSpawnpoint);    
   }
  
-  SetGlobalInt("CarnivalEnterLock", 0);
+  PS_SetGlobalInt("CarnivalEnterLock", 0);
  }
 }

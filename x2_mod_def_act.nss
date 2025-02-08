@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Example XP2 OnActivate Script Script
 //:: x2_mod_def_act
@@ -26,7 +28,12 @@ void main()
 	object oPC = GetItemActivator();
 	int nItemID = GetBaseItemType(oItem);
 	int idCraftedPotion = 49;
-
+	
+	if (GetResRef(oItem) == "lvlup"){	
+		int nLvl = GetHitDice(oPC);
+		GiveXPToCreature(oPC, GetXP(oPC) + (nLvl * 1000));
+		GiveGoldToCreature(oPC, 50000);
+	}
 	
 	// workaround for inflict wounds potions not working in no pvp areas due to the hostile flag.
 	// the craft potion feat now creates neg energy potions with UNIQUE_POWER_SELF_ONLY spell, so that they
@@ -67,6 +74,7 @@ void main()
 	}
 
 	string sTag = GetTag(oItem);
+	
 	if(nItemID == 145 && GetTag(oItem) != "sigisedition") //Recipes are itemtype 145
  	{ 
 		if(TestStringAgainstPattern("**_r_g_**", sTag) ||
@@ -92,7 +100,7 @@ void main()
 			TestStringAgainstPattern("**_spi**", sTag) ||
 			TestStringAgainstPattern("**_tan**", sTag)) {
 		
-			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
+			PS_SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			int nRecipeIndex = Search2DA(NX2_CRAFTING_2DA, "RECIPE_TAG", sTag, 1);
 		
 			if(CheckCanCraft(nRecipeIndex, oPC, NX2_CRAFTING_2DA) )
@@ -111,7 +119,7 @@ void main()
 		if(GetObjectType(oItemToEnchant) == OBJECT_TYPE_ITEM)
 		{
 			string sTag = GetTag(oItem);
-			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
+			PS_SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			
 				//	SpeakString("searching 2da for: " + sTag,TALKVOLUME_SHOUT); 
 			int nIncantIndex = Search2DA(NX2_ENCHANTING_2DA, "INCANTATION_TAG", sTag, 1);

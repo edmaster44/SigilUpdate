@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ///////////////////////////////////////////////////////////////
 // ps_floortrap-triggered-respawn
 //
@@ -118,19 +120,19 @@ void main ()
 					
 	// If TRAP_TYPE is configured on us, get that,
 	// otherwise, get whatever type we're configured to currently
-	string sTrapType = GetLocalString(oTrapConfiguredObject, "TRAP_TYPE");
+	string sTrapType = PS_GetLocalString(oTrapConfiguredObject, "TRAP_TYPE");
 	if (sTrapType == "")	
 		nTrapType = GetTrapBaseType(OBJECT_SELF);
 	else if (sTrapType == "TRAP_BASE_TYPE_RANDOM")
 	{
-		string sRandom = GetLocalString(oTrapConfiguredObject, "TRAP_STRENGTH");		
+		string sRandom = PS_GetLocalString(oTrapConfiguredObject, "TRAP_STRENGTH");		
 		nTrapType =  GetRandomTrapBaseType(StringTrapStrengthToInt(sRandom));		
 	}
 	else /// configured but not random
 		nTrapType = StringTrapBaseTypeToInt(sTrapType);
 				
 	// Trap size - builder defined, or defaults to 2.0f
-	float fTrapSize = GetLocalFloat(oTrapConfiguredObject, "TRAP_SIZE");	
+	float fTrapSize = PS_GetLocalFloat(oTrapConfiguredObject, "TRAP_SIZE");	
 	
 		
 	// We have to reference an associated waypoint as trying to grab or store
@@ -148,14 +150,14 @@ void main ()
 
 	//// Recoverable?
 	int bIsRecoverable = FALSE;
-	if (bIsDisarmable && d100() < GetLocalInt(oTrapConfiguredObject, "TRAP_RECOVERABLE_PERCENTAGE"))
+	if (bIsDisarmable && d100() < PS_GetLocalInt(oTrapConfiguredObject, "TRAP_RECOVERABLE_PERCENTAGE"))
 		bIsRecoverable = TRUE;
 
 	
 	// ask the Area to respawn us after TRAP_RESPAWN_DELAY time has passed
 	// Note that this variable is set on the WAYPOINT, not the area or the trap!//
 
-	float fRespawnDelay = GetLocalFloat(oTrapConfiguredObject, "TRAP_RESPAWN_DELAY");
+	float fRespawnDelay = PS_GetLocalFloat(oTrapConfiguredObject, "TRAP_RESPAWN_DELAY");
 	if (fRespawnDelay == 0.0f)
 		fRespawnDelay = 600.0f;  // defaults to 10 minutes	
 	

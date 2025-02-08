@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/
@@ -32,14 +34,14 @@ void main()
 	object oOldItemInSlot;
 	object oOriginal;
 				
-	if (GetMaster(oTarget) == oPC || GetLocalString(oTarget, "OwnerName") == GetName(oPC))
+	if (GetMaster(oTarget) == oPC || PS_GetLocalString(oTarget, "OwnerName") == GetName(oPC))
 	{
-		SetLocalObject(oPC, "RCTag", oTarget);
+		PS_SetLocalObject(oPC, "RCTag", oTarget);
 		AssignCommand(oPC, ActionStartConversation(oPC, "ps_conv_npc_remote", TRUE, FALSE, TRUE, TRUE));
 	}
 	else if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM & GetItemPossessor(oTarget) == oPC)
 	{
-		oSummon = GetLocalObject(oPC, "RCTag");
+		oSummon = PS_GetLocalObject(oPC, "RCTag");
 		if (GetIsObjectValid(oSummon) == TRUE)
 		{
 			switch (iBaseItemType)

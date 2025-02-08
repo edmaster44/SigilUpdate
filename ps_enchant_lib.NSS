@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "x2_inc_itemprop"
 
 void Enforce(int result, string msg, string file, int line){
@@ -508,12 +510,12 @@ int EnchantItem(object oItem, itemproperty iprp, int nCost)
 		RemoveItemProperty(oItem, ipToAdd.ip_res);
 	}
 
-	SetLocalInt(oItem, "hagbe_ench", TRUE);
-	SetLocalInt(oItem, "hagbe_iprp_t", GetItemPropertyType(ipToAdd.ip_diff));
-	SetLocalInt(oItem, "hagbe_iprp_st", GetItemPropertySubType(ipToAdd.ip_diff));
-	SetLocalInt(oItem, "hagbe_iprp_c", GetItemPropertyCostTableValue(ipToAdd.ip_diff));
-	SetLocalInt(oItem, "hagbe_iprp_p1", GetItemPropertyParam1Value(ipToAdd.ip_diff));
-	SetLocalInt(oItem, "hagbe_cost", nCost);
+	PS_SetLocalInt(oItem, "hagbe_ench", TRUE);
+	PS_SetLocalInt(oItem, "hagbe_iprp_t", GetItemPropertyType(ipToAdd.ip_diff));
+	PS_SetLocalInt(oItem, "hagbe_iprp_st", GetItemPropertySubType(ipToAdd.ip_diff));
+	PS_SetLocalInt(oItem, "hagbe_iprp_c", GetItemPropertyCostTableValue(ipToAdd.ip_diff));
+	PS_SetLocalInt(oItem, "hagbe_iprp_p1", GetItemPropertyParam1Value(ipToAdd.ip_diff));
+	PS_SetLocalInt(oItem, "hagbe_cost", nCost);
 	SetFirstName(oItem, GetName(oItem) + " <c=#9257FF>*</c>");
 	return TRUE;
 }
@@ -523,6 +525,6 @@ int EnchantItem(object oItem, itemproperty iprp, int nCost)
 
 int GetIsItemEnchanted(object oItem)
 {
-	return GetLocalInt(oItem, "hagbe_ench");
+	return PS_GetLocalInt(oItem, "hagbe_ench");
 }
 

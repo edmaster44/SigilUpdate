@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 #include "ps_inc_planarlocations"
 void main()
 {
@@ -8,10 +10,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("BrokenreachEnterLock");
+ int iLock = PS_GetGlobalInt("BrokenreachEnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("BrokenreachEnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("BrokenreachEnterLock", 1); // Only allows one clean up at a time.
 
    if(GetObjectByTag("ps_broken_guard1") == OBJECT_INVALID)  // Hezrou Guards
   {
@@ -212,6 +214,6 @@ void main()
 	CreateObject(OBJECT_TYPE_CREATURE, "ps_broken_comm31", GetLocation(GetWaypointByTag("ps_wp_broken_comm31")));
   }  
                               
-  SetGlobalInt("BrokenreachEnterLock", 0);
+  PS_SetGlobalInt("BrokenreachEnterLock", 0);
  }
 }

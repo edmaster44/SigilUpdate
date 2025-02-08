@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ///////////////////////////////////////////////////////////////////////
 // SCoD Random Loot Generator (SRLG)
 //
@@ -347,7 +349,7 @@ object SRLG_ApplyRandomProperties(object oItem, int itemType, int points)
 {
 	AddRandomProperties(oItem, itemType, points);
 	CleanItemProperties(oItem); // remove any redundant properties (+1 vs X when already +1 or greater)
-	SetLocalInt(oItem, "ISGAMBLED", 1);
+	PS_SetLocalInt(oItem, "ISGAMBLED", 1);
 	return oItem;
 }
 
@@ -513,25 +515,25 @@ int GetPointEquivalent(object oPC)
 // current total points available for item properties
 int GetTotalPoints(object oItem)
 {
-	return GetLocalInt(oItem, "totalPoints");
+	return PS_GetLocalInt(oItem, "totalPoints");
 }
 
 // current total points available for item properties
 void SetTotalPoints(object oItem, int points)
 {
-	SetLocalInt(oItem, "totalPoints", points);
+	PS_SetLocalInt(oItem, "totalPoints", points);
 }
 
 // for counting how many properties have been assigned already
 int GetTotalProperties(object oItem)
 {
-	return GetLocalInt(oItem, "totalProperties");
+	return PS_GetLocalInt(oItem, "totalProperties");
 }
 
 // for counting how many properties have been assigned already
 void SetTotalProperties(object oItem, int properties)
 {
-	SetLocalInt(oItem, "totalProperties", properties);
+	PS_SetLocalInt(oItem, "totalProperties", properties);
 }
 
 //---------------------------------------------------------------------

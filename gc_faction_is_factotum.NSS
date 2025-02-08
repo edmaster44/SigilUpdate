@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 
 1 - Prime
@@ -25,9 +27,9 @@
 int StartingConditional()
 {
 	object oPC = GetPCSpeaker();
-	object oStoredBadge = GetLocalObject(oPC, "FactionBadgeUsed");
-	int iRank = GetLocalInt(oStoredBadge, "FactionRank");
-	int nFaction = GetLocalInt(oStoredBadge,"Faction");
+	object oStoredBadge = PS_GetLocalObject(oPC, "FactionBadgeUsed");
+	int iRank = PS_GetLocalInt(oStoredBadge, "FactionRank");
+	int nFaction = PS_GetLocalInt(oStoredBadge,"Faction");
 	
 	if ((nFaction == 2 || nFaction == 6 || nFaction == 7 || nFaction == 11 || nFaction == 12 || nFaction == 15) && 
 	(iRank >= 2 && iRank <= 3)) //Free League / Doomguard / Dustmen / Mercykillers / Anarchists / Transcendent Order

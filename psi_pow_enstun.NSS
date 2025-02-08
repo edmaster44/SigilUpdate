@@ -1,3 +1,4 @@
+#include "ff_safevar"
 /*
    ----------------
    Energy Stun
@@ -119,11 +120,11 @@ void main()
                         bStun = FALSE;
                         // Roll damage
 						nDamage = d6(nNumberOfDice)+(enAdj.nBonusPerDie*nNumberOfDice);
-						if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
+						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXMIZE") == 1)
 						{
 							nDamage = 6 + (enAdj.nBonusPerDie*nNumberOfDice);
 						}
-						if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+						if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
 			            {
 			                nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
 			            }

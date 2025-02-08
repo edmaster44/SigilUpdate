@@ -10,7 +10,7 @@
 void main(string sName)
 {
 	object oObj = OBJECT_SELF; //GetOwnedCharacter(OBJECT_SELF); 
-	object oItem = GetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
+	object oItem = PS_GetLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
 	
 	if ((sName != "") && (GetIsObjectValid(oItem)))
 	{
@@ -18,5 +18,5 @@ void main(string sName)
 				SetFirstName(oItem, sName);
 	}
 	
-	DeleteLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
+	PS_DeleteLocalObject(oObj, VAR_ENCHANTED_ITEM_OBJECT);
 }

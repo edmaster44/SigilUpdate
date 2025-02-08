@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 ///////////////////////////////////////////////////////////////
 // ps_area_abyss3_onenter
 //
@@ -29,8 +31,8 @@ ProcessAreaTraps(object oArea, object oPC)
     // if these are null strings the funcs will revert to defaults,
     // i.e., "rtdoor" and "rtfloor"
 
-    string sAreaDoorTrapToken = GetLocalString(OBJECT_SELF, "TRAP_DOOR_TOKEN");
-    string sAreaFloorTrapToken = GetLocalString(OBJECT_SELF, "TRAP_FLOOR_TOKEN");
+    string sAreaDoorTrapToken = PS_GetLocalString(OBJECT_SELF, "TRAP_DOOR_TOKEN");
+    string sAreaFloorTrapToken = PS_GetLocalString(OBJECT_SELF, "TRAP_FLOOR_TOKEN");
 
 	// Door traps respawn themselves
 	//RespawnAreaDoorTraps(OBJECT_SELF, oPC, sAreaDoorTrapToken);
@@ -55,14 +57,14 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = GetGlobalInt("abyss3EnterLock");
+ int iLock = PS_GetGlobalInt("abyss3EnterLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("abyss3EnterLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("abyss3EnterLock", 1); // Only allows one clean up at a time.
 
   DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  SetGlobalInt("abyss3EnterLock", 0);
+  PS_SetGlobalInt("abyss3EnterLock", 0);
  }
   
    	//////////////////////////////////////////
@@ -77,10 +79,10 @@ void main()
 
 	// . . . and we don't have our "we're busy" semaphore set
 	// Put any calls that where we don't care about the timeout BEFORE this
-	if (GetLocalInt(OBJECT_SELF, sBusyFlag) == TRUE)
+	if (PS_GetLocalInt(OBJECT_SELF, sBusyFlag) == TRUE)
 		return;
 
-	SetLocalInt(OBJECT_SELF, sBusyFlag, TRUE);	
+	PS_SetLocalInt(OBJECT_SELF, sBusyFlag, TRUE);	
 	
     // Area NPC spawner, other cleanup funcs, whatever
     //ExecuteScript("scod_npc_spawner", OBJECT_SELF);	
@@ -89,11 +91,11 @@ void main()
 	ProcessAreaTraps(OBJECT_SELF, oPC);
 
 	/// We're done, reset our "busy" flag - on a delayed timer
-	float fProcessDelay = GetLocalFloat(OBJECT_SELF, "TRAP_RESPAWN_DELAY");
+	float fProcessDelay = PS_GetLocalFloat(OBJECT_SELF, "TRAP_RESPAWN_DELAY");
 	if (fProcessDelay <= 0.0f)
 		fProcessDelay = 600.0f; //defaults to 10 minutes
 		 
-	DelayCommand(fProcessDelay, DeleteLocalInt(OBJECT_SELF, sBusyFlag));
+	DelayCommand(fProcessDelay, PS_DeleteLocalInt(OBJECT_SELF, sBusyFlag));
   
   
  

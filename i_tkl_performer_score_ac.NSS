@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 Author: brockfanning
 Date: Early 2008...
@@ -16,7 +18,7 @@ void main()
 {
     object oPC      = GetItemActivator();
     object oScore    = GetItemActivated();
-	object oInstrument = GetLocalObject(oPC, "TKL_PERFORMER_INSTRUMENT");
+	object oInstrument = PS_GetLocalObject(oPC, "TKL_PERFORMER_INSTRUMENT");
 	// If the user is not holding an instrument, then they will simply read the lyrics (if any)
 	if (GetIsObjectValid(oInstrument) == FALSE)
 	{
@@ -28,41 +30,41 @@ void main()
 		SetGUIObjectDisabled(oPC, "TKL_PERFORMER_LYRICS", "LyricMuteButton", TRUE);
 		SetGUIObjectHidden(oPC, "TKL_PERFORMER_LYRICS", "LyricText3", TRUE);
 		SetGUIObjectHidden(oPC, "TKL_PERFORMER_LYRICS", "LyricText4", TRUE);
-		SetLocalObject(oPC, "TKL_PERFORMER_SCORE", oScore);
+		PS_SetLocalObject(oPC, "TKL_PERFORMER_SCORE", oScore);
 		return;
 	}
 	
 	// If the score is a "blueprint score" then read local strings on the score to create music
 	// using the "write" function
-	else if (GetLocalInt(oScore, "BLUEPRINT_SCORE") == TRUE)
+	else if (PS_GetLocalInt(oScore, "BLUEPRINT_SCORE") == TRUE)
 	{
 		// We'll be modifying this variable, so let's get the current value so we can set it back
-		string sGUIFile = GetLocalString(oInstrument, "GUI_FILE");
+		string sGUIFile = PS_GetLocalString(oInstrument, "GUI_FILE");
 		
-		float fSecondsPerBeat = GetLocalFloat(oScore, "SECONDS_PER_BEAT");
+		float fSecondsPerBeat = PS_GetLocalFloat(oScore, "SECONDS_PER_BEAT");
 		if (fSecondsPerBeat <= 0.0f) fSecondsPerBeat = 1.0f;
 		int iMetronome = FloatToInt(60.0f / fSecondsPerBeat);
-		//int iMetronome = GetLocalInt(oScore, "METRONOME");
+		//int iMetronome = PS_GetLocalInt(oScore, "METRONOME");
 		//if (iMetronome == 0) iMetronome = 60;
-		SetLocalInt(oInstrument, "METRONOME", iMetronome);
+		PS_SetLocalInt(oInstrument, "METRONOME", iMetronome);
 		
 		int iTrack;
 		float fDelay;
 		// Cycle through each track, and write it.
 		for (iTrack = 1; iTrack <= 4; iTrack++)
 		{
-			string sInstrument = GetLocalString(oScore, "INSTRUMENT" + IntToString(iTrack));
+			string sInstrument = PS_GetLocalString(oScore, "INSTRUMENT" + IntToString(iTrack));
 			string sGUIFile = "tkl_performer_lute.xml";
 			if (GetStringLowerCase(sInstrument) == "flute")
 				sGUIFile = "tkl_performer_flute.xml";
 			else if (GetStringLowerCase(sInstrument) == "drum" || GetStringLowerCase(sInstrument) == "drums")
 				sGUIFile = "tkl_performer_drum.xml";	
 		
-			string sInput = GetLocalString(oScore, "NOTES" + IntToString(iTrack));
+			string sInput = PS_GetLocalString(oScore, "NOTES" + IntToString(iTrack));
 			if (sInput != "")
 			{
-				SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iTrack), iMetronome);
-				SetLocalString(oInstrument, "TRACK_" + IntToString(iTrack) + "_NAME", sInstrument);
+				PS_SetLocalInt(oInstrument, "METRONOME_RECORDED_TRACK" + IntToString(iTrack), iMetronome);
+				PS_SetLocalString(oInstrument, "TRACK_" + IntToString(iTrack) + "_NAME", sInstrument);
 				AssignCommand(oPC, DelayCommand(fDelay, WriteTrack(oPC, oInstrument, iTrack, sInput, sGUIFile)));
 				fDelay += 1.0f;
 			}
@@ -74,29 +76,29 @@ void main()
 		for (iLyric = 1; iLyric <= 64; iLyric++)
 		{
 			sLyric = IntToString(iLyric);
-			sText = GetLocalString(oScore, "LYRIC" + sLyric);
+			sText = PS_GetLocalString(oScore, "LYRIC" + sLyric);
 			if (sText != "")
-				SetLocalString(oInstrument, "LYRIC" + sLyric, sText);
+				PS_SetLocalString(oInstrument, "LYRIC" + sLyric, sText);
 		}
 		
 		// Check for a Lyric "Write" track
-		string sLyricWrite = GetLocalString(oScore, "WRITE_LYRICS");
+		string sLyricWrite = PS_GetLocalString(oScore, "WRITE_LYRICS");
 		if (sLyricWrite != "")
 		{
-			float fSecondsPerLyric = GetLocalFloat(oScore, "SECONDS_PER_LYRIC");
+			float fSecondsPerLyric = PS_GetLocalFloat(oScore, "SECONDS_PER_LYRIC");
 			if (fSecondsPerLyric <= 0.0f) fSecondsPerLyric = 1.0f;
-			SetLocalFloat(oInstrument, "SECONDS_PER_LYRIC", fSecondsPerLyric);
-			SetLocalString(oInstrument, "WRITE_LYRICS", sLyricWrite);
+			PS_SetLocalFloat(oInstrument, "SECONDS_PER_LYRIC", fSecondsPerLyric);
+			PS_SetLocalString(oInstrument, "WRITE_LYRICS", sLyricWrite);
 			AssignCommand(oPC, DelayCommand(fDelay + 0.5f, WriteLyrics(oPC, oInstrument, sLyricWrite))); 
 		}
 		
 		// Transfer a few variables
-		SetLocalString(oInstrument, "SONG_NAME", GetName(oScore));
-		SetLocalString(oInstrument, "ORIGINAL_COMPOSER", GetLocalString(oScore, "ORIGINAL_COMPOSER"));
+		PS_SetLocalString(oInstrument, "SONG_NAME", GetName(oScore));
+		PS_SetLocalString(oInstrument, "ORIGINAL_COMPOSER", PS_GetLocalString(oScore, "ORIGINAL_COMPOSER"));
 		RefreshNames(oPC, oInstrument);
 		
 		// Finish up by reseting the GUI_FILE string, setting the song length, and giving feedback
-		SetLocalString(oInstrument, "GUI_FILE", sGUIFile);
+		PS_SetLocalString(oInstrument, "GUI_FILE", sGUIFile);
 		SendMessageToPC(oPC, "Learning song...");
 	}
 	

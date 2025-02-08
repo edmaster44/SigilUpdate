@@ -16,12 +16,12 @@ void main()
 	if (!GetFactionEqual(oTrigger, oPC) && oTrigger != oPC )
 		return;// Abort if not a party member
 		
-	SetLocalObject(OBJECT_SELF, "TriggeredBy", oPC);
+	PS_SetLocalObject(OBJECT_SELF, "TriggeredBy", oPC);
 		
-	int nTime = GetLocalInt(OBJECT_SELF, "last_spawned");
+	int nTime = PS_GetLocalInt(OBJECT_SELF, "last_spawned");
 	if (!GetIsObjectValid(GetNearestObjectByTag("c_colothys_vulture", OBJECT_SELF)) && GetTime()-nTime > 120) {
 		
-		SetLocalInt(OBJECT_SELF, "last_spawned", GetTime());
+		PS_SetLocalInt(OBJECT_SELF, "last_spawned", GetTime());
 		location lTarget = GetRandomLocation(GetArea(oTrigger), oTrigger, 5.0);
 		lTarget = CalcSafeLocation(oTrigger, lTarget, 5.0, TRUE, FALSE);
 		vector vPosition = GetPositionFromLocation(lTarget);

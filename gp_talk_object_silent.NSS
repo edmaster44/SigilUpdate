@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //
 // gp_talk_object_silent.nss
 //
@@ -21,7 +23,7 @@ const string PS_CONV_OWNER = "PS_CONV_OWNER";
 
 void StartConversationWith(object ConverseWith)
 {
-	SetLocalObject(OBJECT_SELF, PS_CONV_OWNER, ConverseWith);
+	PS_SetLocalObject(OBJECT_SELF, PS_CONV_OWNER, ConverseWith);
 	ActionStartConversation(ConverseWith, "", TRUE);
 }
 
@@ -35,7 +37,7 @@ void CancelPreviousConversation()
 	// object, so break the current object out of its conversation.
 	//
 
-	ConversationOwner = GetLocalObject(OBJECT_SELF, PS_CONV_OWNER);
+	ConversationOwner = PS_GetLocalObject(OBJECT_SELF, PS_CONV_OWNER);
 	if (!GetIsObjectValid(ConversationOwner) || !IsInConversation(ConversationOwner))
 		return;
 

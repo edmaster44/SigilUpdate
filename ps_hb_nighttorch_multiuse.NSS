@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 /*
 ps_hb_nighttorch_multiuse
 by Dedic8ed, 3/2/11
@@ -19,20 +21,20 @@ void main()
 	object oTorch;
 	object oOld;
 	string sOld;
-	int iTorchOn		= GetLocalInt(OBJECT_SELF,"torchon");
-	string sTorch 		= GetLocalString(OBJECT_SELF, "nighttorch");
+	int iTorchOn		= PS_GetLocalInt(OBJECT_SELF,"torchon");
+	string sTorch 		= PS_GetLocalString(OBJECT_SELF, "nighttorch");
 
 
 	if(GetIsDay() || GetIsDawn())
 	{
 		// Put torch away if holding one
 		oItem = GetItemInSlot (INVENTORY_SLOT_LEFTHAND);
-		sOld = GetLocalString(OBJECT_SELF, "oldobject");
+		sOld = PS_GetLocalString(OBJECT_SELF, "oldobject");
 		oOld = GetItemPossessedBy(OBJECT_SELF, sOld);
 		if (iTorchOn == 1)
 		{
 			ActionUnequipItem (oItem);
-			SetLocalInt (OBJECT_SELF, "torchon", 0);
+			PS_SetLocalInt(OBJECT_SELF, "torchon", 0);
 			// Get the item held in left hand and equip it.
 			ActionEquipItem (oOld, INVENTORY_SLOT_LEFTHAND);
 		}
@@ -41,7 +43,7 @@ void main()
 	else
 	{
 		// check to see if torch equipped
-		int iTorchOn = GetLocalInt (OBJECT_SELF, "torchon");
+		int iTorchOn = PS_GetLocalInt(OBJECT_SELF, "torchon");
 		if (iTorchOn == 0)
 		{
 			oTorch = CreateItemOnObject("nighttorch");
@@ -50,9 +52,9 @@ void main()
 				// Get the current item in the left hand and store it for later use
 				oOld = GetItemInSlot (INVENTORY_SLOT_LEFTHAND);
 				sOld = GetTag(oOld);
-				SetLocalString(OBJECT_SELF, "oldobject", sOld);
+				PS_SetLocalString(OBJECT_SELF, "oldobject", sOld);
 				ActionEquipItem (oTorch, INVENTORY_SLOT_LEFTHAND);
-				SetLocalInt (OBJECT_SELF, "torchon", 1);
+				PS_SetLocalInt(OBJECT_SELF, "torchon", 1);
 			}
 		}
 		else

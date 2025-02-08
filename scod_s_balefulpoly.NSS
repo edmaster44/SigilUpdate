@@ -92,9 +92,9 @@ void main() {
 				
 				if (GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, oCaster)) {
 					ChangeToStandardFaction(oTarget, STANDARD_FACTION_DEFENDER);
-					SetLocalObject(oTarget, abilityCaster, oCaster);
-					SetLocalObject(oTarget, "FOLLOW_MASTER", oCaster);
-					SetLocalInt(oTarget, "IS_SUMMONED", 1);
+					PS_SetLocalObject(oTarget, abilityCaster, oCaster);
+					PS_SetLocalObject(oTarget, "FOLLOW_MASTER", oCaster);
+					PS_SetLocalInt(oTarget, "IS_SUMMONED", 1);
 				} else {
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfuse, oTarget, TurnsToSeconds(nDuration));
 				}

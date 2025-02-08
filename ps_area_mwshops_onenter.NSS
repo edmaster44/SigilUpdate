@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 
 void main()
 {
@@ -5,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = GetGlobalInt("MWShopsLock");
+ int iLock = PS_GetGlobalInt("MWShopsLock");
  if ( iLock == 0 )
  {
-  SetGlobalInt("MWShopsLock", 1); // Only allows one clean up at a time.
+  PS_SetGlobalInt("MWShopsLock", 1); // Only allows one clean up at a time.
   
   //Fat Candle
   if(GetObjectByTag("ps_npc_fatcandle1") == OBJECT_INVALID)
@@ -112,6 +114,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_zakkcorpse2", lSpawnpoint);    
   }
    
-  SetGlobalInt("MWShopsLock", 0);
+  PS_SetGlobalInt("MWShopsLock", 0);
  }
 }

@@ -235,7 +235,7 @@ void GetAttentionOfHostiles(object oCaller, float fRadius, int nSpellID = -1, st
 				//Only call if you're not already doing the desired behavior
 				if (GetAttackTarget(oTarget) != oCaller) {
 					//Only works on creatures who haven't seen through the illusion already
-					if (sImmuneMarker != "" && GetLocalInt(oTarget, sImmuneMarker) > 0) {
+					if (sImmuneMarker != "" && PS_GetLocalInt(oTarget, sImmuneMarker) > 0) {
 						AssignCommand(oTarget, ClearActions());
 						AssignCommand(oTarget, ActionAttack(oCaller));
 						if (nSpellID >= 0) {

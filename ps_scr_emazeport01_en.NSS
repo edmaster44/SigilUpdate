@@ -1,3 +1,5 @@
+#include "ff_safevar"
+
 //Endless Maze to Sigil
 
 #include "NW_I0_TOOL"
@@ -11,9 +13,9 @@ if(CheckPartyForItem(oEnter, "ps_i_balltwine") || GetHasFeat(2380, oEnter, FALSE
 {
 string SPAWNED = "nSpawned";
 location lPortal = GetLocation(GetObjectByTag("ps_sigmazeportalinsig"));
-if(!GetLocalInt(OBJECT_SELF, SPAWNED))
+if(!PS_GetLocalInt(OBJECT_SELF, SPAWNED))
 {
-SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
+PS_SetLocalInt(OBJECT_SELF, SPAWNED,TRUE);
 
 CreateObject(OBJECT_TYPE_PLACED_EFFECT, "fx_gem_energy_green", lPortal);
 CreateObject(OBJECT_TYPE_PLACEABLE, "ps_plac_port_maze_in1", lPortal);

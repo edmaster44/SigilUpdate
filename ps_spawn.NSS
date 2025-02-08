@@ -40,7 +40,7 @@ int GetTimePassed(int iBegin, int iEnd)
 void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 {
   if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-   SetLocalInt(oObject, sTimeStampVariable, GetTime());
+   PS_SetLocalInt(oObject, sTimeStampVariable, GetTime());
 }
 
 //CheckTimeStamp(object)  self explanatory no?
@@ -49,7 +49,7 @@ void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 {
   if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-  int iOld = GetLocalInt(oObject, sTimeStampVariable);
+  int iOld = PS_GetLocalInt(oObject, sTimeStampVariable);
   int iNew = GetTime();
   return GetTimePassed(iOld, iNew);
 }
@@ -100,7 +100,7 @@ int PS_GetDifficulty(object oPC)
 	//diff 2 = normal (0 defaults to this)
 	//diff 3 = high
 	//diff 4 = extra high
-	int iDiff=GetLocalInt(oPC,"DIFF");
+	int iDiff=PS_GetLocalInt(oPC,"DIFF");
 	if (iDiff==0)
 		iDiff=2;
 	int tempDiff=0;
@@ -109,7 +109,7 @@ int PS_GetDifficulty(object oPC)
 
     while(GetIsObjectValid(oPartyMember) == TRUE)
     {
-		tempDiff = GetLocalInt(oPartyMember,"DIFF");
+		tempDiff = PS_GetLocalInt(oPartyMember,"DIFF");
 		if (tempDiff==0)
 			tempDiff=2;
 			
@@ -132,7 +132,7 @@ string sNearestMonster(location lSpawnpoint)
 
 void LogSpawnFailure(object oTrigger, string sTemplate)
 {
-	string sWPName = GetLocalString(oTrigger, "WP");
+	string sWPName = PS_GetLocalString(oTrigger, "WP");
 	object oWP = GetWaypointByTag(sWPName);
 	string sText = "Spawn failure! Waypoint:" + sWPName;
 	if (oWP == OBJECT_INVALID)
@@ -159,7 +159,7 @@ if(oPC == OBJECT_INVALID)
 
 
 if (!GetIsPC(oPC)) return;
-int iSpawnWait = GetLocalInt(oTrigger,"RESPAWN");
+int iSpawnWait = PS_GetLocalInt(oTrigger,"RESPAWN");
 if(iSpawnWait == 0)
  iSpawnWait = cSpawnWait;
 
@@ -171,20 +171,20 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
  TimeStamp(oTrigger,"TIMESTAMP");
 // SpeakString("1",TALKVOLUME_SHOUT);
  
- object oWP = GetWaypointByTag(GetLocalString(oTrigger,"WP"));
+ object oWP = GetWaypointByTag(PS_GetLocalString(oTrigger,"WP"));
  location lSpawnpoint = GetLocation(oWP); 
  
  object oSpawn;
   
- string m1 = GetLocalString(oTrigger,"M1");
- string b1 = GetLocalString(oTrigger,"B1");
+ string m1 = PS_GetLocalString(oTrigger,"M1");
+ string b1 = PS_GetLocalString(oTrigger,"B1");
  if(GetIsObjectValid(oWP) == TRUE && (m1 != "" || b1 != ""))
  {
 //  SpeakString("2",TALKVOLUME_SHOUT);
 
-  string m2 = GetLocalString(oTrigger,"M2");
-  string b2 = GetLocalString(oTrigger,"B2");
-  string b3 = GetLocalString(oTrigger,"B3");
+  string m2 = PS_GetLocalString(oTrigger,"M2");
+  string b2 = PS_GetLocalString(oTrigger,"B2");
+  string b3 = PS_GetLocalString(oTrigger,"B3");
 
 /* will do exact check instead
   //Failsafe to exit if monster is already spawned
@@ -207,16 +207,16 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 	
 	int iDiff = PS_GetDifficulty(oPC);
 	
-  int m1c = GetLocalInt(oTrigger,"M1C");
-  int m2c = GetLocalInt(oTrigger,"M2C");
-  int b1c = GetLocalInt(oTrigger,"B1C");
-  int b2c = GetLocalInt(oTrigger,"B2C");
-  int b3c = GetLocalInt(oTrigger,"B3C");
+  int m1c = PS_GetLocalInt(oTrigger,"M1C");
+  int m2c = PS_GetLocalInt(oTrigger,"M2C");
+  int b1c = PS_GetLocalInt(oTrigger,"B1C");
+  int b2c = PS_GetLocalInt(oTrigger,"B2C");
+  int b3c = PS_GetLocalInt(oTrigger,"B3C");
   int i = 0;
   object oItem;
   
-  float low = IntToFloat(GetLocalInt(oTrigger,"LOW"));
-  float high = IntToFloat(GetLocalInt(oTrigger,"HIGH"));
+  float low = IntToFloat(PS_GetLocalInt(oTrigger,"LOW"));
+  float high = IntToFloat(PS_GetLocalInt(oTrigger,"HIGH"));
    
   string mod = "";
  
@@ -280,7 +280,7 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 			SetDroppableFlag(oItem, FALSE);	
 			SetLastName(oSpawn,"("+elitetype+")");
 			ForceRest(oSpawn);					
-			SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
+			PS_SetLocalString(oSpawn,"ELITE",elitelevel);	 	    
    }
    //elitetest end
   }	   
@@ -303,7 +303,7 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 			SetDroppableFlag(oItem, FALSE);	
 			SetLastName(oSpawn,"("+elitetype+")");
 			ForceRest(oSpawn);		
-			SetLocalString(oSpawn,"ELITE",elitelevel); 	 	   
+			PS_SetLocalString(oSpawn,"ELITE",elitelevel); 	 	   
    }
    //elitetest end
   }
@@ -326,7 +326,7 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 			SetDroppableFlag(oItem, FALSE);	
 			SetLastName(oSpawn,"("+elitetype+")");
 			ForceRest(oSpawn);		
-			SetLocalString(oSpawn,"ELITE",elitelevel); 	 	   
+			PS_SetLocalString(oSpawn,"ELITE",elitelevel); 	 	   
    }
    //elitetest end
   }
@@ -388,7 +388,7 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 			SetDroppableFlag(oItem, FALSE);
 			SetLastName(oSpawn,"("+elitetype+")");
 			ForceRest(oSpawn);			
-			SetLocalString(oSpawn,"ELITE",elitelevel);	   
+			PS_SetLocalString(oSpawn,"ELITE",elitelevel);	   
 	   }
 	   //elitetest end
 	   

@@ -171,46 +171,46 @@ int GetBestSpellID(int nSpell, object oCaster) {
 	return nSpell;
 }
 void SetTempOnHitProperty(object oItem, object oCaster, int nAbilityID, int nDC, float fDuration) {
-	SetLocalInt(oItem, abilityID, nAbilityID);
-	SetLocalInt(oItem, abilityDC, nDC);
-	SetLocalObject(oItem, abilityCaster, oCaster);
+	PS_SetLocalInt(oItem, abilityID, nAbilityID);
+	PS_SetLocalInt(oItem, abilityDC, nDC);
+	PS_SetLocalObject(oItem, abilityCaster, oCaster);
 	
 	itemproperty ip = ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_ONHIT_UNIQUEPOWER, 1);
 	IPSafeAddItemProperty(oItem, ip, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
 }
 
 int GetOnHitAbilityID(object oObject) {
-	return GetLocalInt(oObject, abilityID);
+	return PS_GetLocalInt(oObject, abilityID);
 }
 
 int GetOnHitAbilityDC(object oObject) {
-	return GetLocalInt(oObject, abilityDC);
+	return PS_GetLocalInt(oObject, abilityDC);
 }
 
 object GetOnHitAbilityCaster(object oObject) {
-	return GetLocalObject(oObject, abilityCaster);
+	return PS_GetLocalObject(oObject, abilityCaster);
 }
 
 void ClearOnHitInfo(object oObject) {
 
-	DeleteLocalInt(oObject, abilityID);
-	DeleteLocalInt(oObject, abilityDC);
-	DeleteLocalObject(oObject, abilityCaster);
+	PS_DeleteLocalInt(oObject, abilityID);
+	PS_DeleteLocalInt(oObject, abilityDC);
+	PS_DeleteLocalObject(oObject, abilityCaster);
 	
 }
 
 void TransferProperties(object oItem, object oTarget) {
 
-	SetLocalInt(oTarget, abilityID, GetOnHitAbilityID(oItem));
-	SetLocalInt(oTarget, abilityDC, GetOnHitAbilityDC(oItem));
-	SetLocalObject(oTarget, abilityCaster, GetOnHitAbilityCaster(oItem));
+	PS_SetLocalInt(oTarget, abilityID, GetOnHitAbilityID(oItem));
+	PS_SetLocalInt(oTarget, abilityDC, GetOnHitAbilityDC(oItem));
+	PS_SetLocalObject(oTarget, abilityCaster, GetOnHitAbilityCaster(oItem));
 	
 }
 
 void RemoveTempOnHitProperty(object oItem) {
-	DeleteLocalInt(oItem, abilityID);
-	DeleteLocalInt(oItem, abilityDC);
-	DeleteLocalInt(oItem, abilityCaster);
+	PS_DeleteLocalInt(oItem, abilityID);
+	PS_DeleteLocalInt(oItem, abilityDC);
+	PS_DeleteLocalInt(oItem, abilityCaster);
 	
 	itemproperty iProp = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(iProp)) {
@@ -287,11 +287,11 @@ void DoElementalDamage(object oPC, object oTarget, int critical) {
 	}
 	if (nArcherLevel >= 3) {
 		effect eEnergy;
-		if (GetLocalInt(oPC, "aa_elemental_flaming"))
+		if (PS_GetLocalInt(oPC, "aa_elemental_flaming"))
 			eEnergy = EffectDamage(d6(), DAMAGE_TYPE_FIRE, DAMAGE_POWER_ENERGY);
-		else if (GetLocalInt(oPC, "aa_elemental_frost"))
+		else if (PS_GetLocalInt(oPC, "aa_elemental_frost"))
 			eEnergy = EffectDamage(d6(), DAMAGE_TYPE_COLD, DAMAGE_POWER_ENERGY);
-		else if (GetLocalInt(oPC, "aa_elemental_shock"))
+		else if (PS_GetLocalInt(oPC, "aa_elemental_shock"))
 			eEnergy = EffectDamage(d6(), DAMAGE_TYPE_ELECTRICAL, DAMAGE_POWER_ENERGY);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eEnergy, oTarget);
 	}

@@ -276,10 +276,10 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
 		if (!BonusDamageAdded)
 		{
 			BonusDamageAdded = TRUE;
-			int BlastBonus2 = GetLocalInt(oCaster, "BlastBonus_2");
+			int BlastBonus2 = PS_GetLocalInt(oCaster, "BlastBonus_2");
 			if (BlastBonus2 > 0)
 			{
-				SetLocalInt(oCaster, "BlastBonus_2", BlastBonus2 -1);
+				PS_SetLocalInt(oCaster, "BlastBonus_2", BlastBonus2 -1);
 				BonusDamageDice = BonusDamageDice + 2;
 			}			
 		}
@@ -383,9 +383,9 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
         }
     
 		nTouch      = TouchAttackRanged(oTarget, TRUE, nBonus);
-		if (GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT")) //collect only when requested
+		if (PS_GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT")) //collect only when requested
 		{
-		    SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", nTouch);
+		    PS_SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", nTouch);
 		}
 		
         //if ( TouchAttackRanged( oTarget, TRUE, nBonus ) == TOUCH_ATTACK_RESULT_MISS )
@@ -956,28 +956,28 @@ int DoEssenceVitriolicBlast(object oCaster, object oTarget, int bCalledFromShape
 
 void CheckNumberOfShadows(object oPC) {
 	
-	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	int nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 	int currentNumber = 0;
 
 	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+		object oSummon = PS_GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
 			currentNumber++;
 		}
 	}
 
-	SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", currentNumber);
+	PS_SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", currentNumber);
 
 	int newCount = 0;
 	if (currentNumber != nNumberCalled) {
 		for(n = 0; n <= nNumberCalled; n++) {
-			object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+			object oSummon = PS_GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 			if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
-				SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(newCount), oSummon);
+				PS_SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(newCount), oSummon);
 				newCount++;
 			} else {
-				DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+				PS_DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 			}
 		}
 	}
@@ -994,16 +994,16 @@ void DoWraithExtraction(object oCaster, object oTarget, location lTarget, float 
 			
 			CheckNumberOfShadows(oCaster);
 		
-			int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
+			int nNumberCalled = PS_GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
 			if (nNumberCalled < 8) {
 			
 				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
-				SetLocalObject(oCreature, abilityCaster, oCaster);
-				SetLocalObject(oCreature, "FOLLOW_MASTER", oCaster);
-				SetLocalInt(oCreature, "IS_SUMMONED", 1);
+				PS_SetLocalObject(oCreature, abilityCaster, oCaster);
+				PS_SetLocalObject(oCreature, "FOLLOW_MASTER", oCaster);
+				PS_SetLocalInt(oCreature, "IS_SUMMONED", 1);
 				
-				SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
-				SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+				PS_SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
+				PS_SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
 				
 				DestroyObject(oCreature, fDuration); //Sanity destroy so you can keep summoning more
 				
@@ -1252,7 +1252,7 @@ int DoShapeEldritchChain()
     //}
 
     //setting this to non-zero will trigger collecting touch attack success info from DoEldritchCombinedEffects
-    SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", 1);
+    PS_SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", 1);
 
     //Apply effect to the first target and the VFX impact.
     if(DoEldritchCombinedEffects(oFirstTarget))
@@ -1292,8 +1292,8 @@ int DoShapeEldritchChain()
     //Get the first target in the spell shape
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oFirstTarget), TRUE, OBJECT_TYPE_CREATURE );
 
-    int nTouch = GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
-    DeleteLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
+    int nTouch = PS_GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
+    PS_DeleteLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
     if ( nTouch == TOUCH_ATTACK_RESULT_MISS )
     {
 	    // Failed

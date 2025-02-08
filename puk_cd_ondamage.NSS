@@ -134,7 +134,7 @@ void main()
     int nReq    = nTrainerDPS;
     int nGive   = 0;
     int nDamage = GetTotalDamageDealt();
-    int nTally  = GetLocalInt(oPC, "TDTALLY");
+    int nTally  = PS_GetLocalInt(oPC, "TDTALLY");
     int nMessage = 0;
 
     //These are the Messages given during the Session
@@ -148,11 +148,11 @@ void main()
     //NO CHEATING =) ...the Weapon you start the session with is what you must finish with
     if(nTally == 0)
     {
-      SetLocalString(oPC,"SESSIONMELEE",sWeapon);
+      PS_SetLocalString(oPC,"SESSIONMELEE",sWeapon);
     }
     if(nTally >= 1)
     {
-      string sOWeapon = GetLocalString(oPC,"SESSIONMELEE");
+      string sOWeapon = PS_GetLocalString(oPC,"SESSIONMELEE");
       object oNWeapon = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
       string sNWeapon = GetResRef(oWeapon);
 
@@ -171,12 +171,12 @@ void main()
     if(nTally >= nReq)
     {
       nGive = 1;
-      SetLocalInt(oPC,"TDTALLY",0);
+      PS_SetLocalInt(oPC,"TDTALLY",0);
     }
     else if(nTally < nReq)
     {
       nGive = 0;
-      SetLocalInt(oPC,"TDTALLY",nTally);
+      PS_SetLocalInt(oPC,"TDTALLY",nTally);
     }
 
     //Give the Player information about the progress
