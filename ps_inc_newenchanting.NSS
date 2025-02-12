@@ -845,13 +845,13 @@ string DisplaySpecialRequirement(string sReq) {
 	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 	string line = "";
 	if (sReq == "CL_DIVINE") {
-		line = "Must be Cleric, Paladin, or Favored Soul.";
+		line = "Must be Cleric, Paladin, Favored Soul, or have Concentration 5 or Spellcraft 25.";
 	} else if (sReq == "CL_ARCANE") {
-		line = "Must be Wizard, Sorcerer, Bard, or have the Magic domain.";
+		line = "Must be Wizard, Sorcerer, Bard, Warlock, or have the Magic domain, Lore 5, or Spellcraft 15.";
 	} else if (sReq == "CL_NATURE") {
-		line = "Must be Druid, Ranger, Spirit Shaman, or have either the Animal or Plant domain.";
+		line = "Must be Druid, Ranger, Spirit Shaman, or have either the Animal or Plant domain or Survival 5 or Spellcraft 15.";
 	} else if (sReq == "CL_BARD") {
-		line = "Must be Bard or have either the Knowledge, Travel, or Trickery domain.";
+		line = "Must be Bard or have either the Knowledge, Travel, or Trickery domain or have Perform 5 or Spellcraft 15.";
 	} else if (sReq == "CREATURE") {
 		line = "On Creature weapons only.";
 	} else if (sReq == "PLAYERMADE_STRONG_MATERIAL_BOOTS") {
@@ -877,17 +877,22 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
 	if (sReq == "CL_DIVINE") {
 		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) ||
-		GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC)) {
+		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) > 0 ||
+		GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) > 0 ||
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
+		GetSkillRank(SKILL_CONCENTRATION, oPC, TRUE) >= 5){
 			return TRUE;
 		} else {
 			return FALSE;
 		}
 	} else if (sReq == "CL_ARCANE") {
 		if (GetLevelByClass(CLASS_TYPE_WIZARD, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_SORCERER, oPC) ||
-		GetLevelByClass(CLASS_TYPE_BARD, oPC) ||
-		GetHasFeat(1844, oPC, TRUE)){ // magic domain
+		GetLevelByClass(CLASS_TYPE_SORCERER, oPC) > 0 ||
+		GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
+		GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0 ||
+		GetHasFeat(1844, oPC, TRUE) ||
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
+		GetSkillRank(SKILL_LORE, oPC, TRUE) >= 5){
 			return TRUE;
 		} else {
 			return FALSE;
@@ -896,7 +901,9 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 		if (GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_RANGER, oPC) ||
 		GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) ||
-		GetHasFeat(1835, oPC, TRUE) || GetHasFeat(1845, oPC, TRUE)){//plant and animal domains
+		GetHasFeat(1835, oPC, TRUE) || GetHasFeat(1845, oPC, TRUE) ||
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
+		GetSkillRank(SKILL_SURVIVAL, oPC, TRUE) >= 5){
 			return TRUE;
 		} else {
 			return FALSE;
@@ -904,10 +911,13 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	} else if (sReq == "CL_BARD") {
 		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
 			GetHasFeat(1849, oPC, TRUE) || GetHasFeat(1850, oPC, TRUE) ||
-			GetHasFeat(1843, oPC, TRUE))// Knowledge, travel, and trickery domains
+			GetHasFeat(1843, oPC, TRUE) ||
+			GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
+			GetSkillRank(SKILL_PERFORM, oPC, TRUE) >= 5){
 			return TRUE;
-		else
+		} else {
 			return FALSE;
+		}
 	} else if (sReq == "CREATURE") {
 		if (IPGetIsCreatureEquippedWeapon(oItem))
 			return TRUE;

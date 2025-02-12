@@ -474,17 +474,20 @@ int GetECLXP(int nXP, int nLevel, int nECL){
 
 	if (nECL == 0) return nXP;
 	// nLevel is the character's current level, not next.
-	int nXpToNext = 500 * nLevel * (nLevel + 1);
 	
-	int nDiv = 500 * (nLevel + nECL) * (nLevel + nECL + 1);
+	int nAdjusted;
+	if (nECL > nLevel -1 ) nAdjusted = nLevel - 1;
+    else nAdjusted = nECL;
+
+	if (nAdjusted == 0) return nXP;
 	
-	/* math checked based on ecl 3 needing to earn 10k xp to get to lvl 2
-		as per the character progression chart at https://nwn2.fandom.com/wiki/ 
-		
-	*/
+	int nBase = 30 - nECL;
 	
-	float fBase = IntToFloat(nXpToNext);
-	float fDiv = IntToFloat(nDiv);
+	int numeratorXP = 500 * nBase * (nBase + 1);
+    int denominatorXP = 500 * (nBase + nAdjusted) * (nBase + nAdjusted + 1);
+	
+	float fBase = IntToFloat(numeratorXP);
+	float fDiv = IntToFloat(denominatorXP);
 	float fPercentage = fBase / fDiv;
 	// get the xp to apply, rounded to nearest integer
 	int nAppliedXP = PS_RoundToInt(IntToFloat(nXP) * fPercentage);
@@ -4456,8 +4459,12 @@ int PS_GiveXPReward(object oPC, int nXP) {
 	if (ALLOW_CRAFT_PROGRESSION_FOR_ECL){
 		 PS_EclCraftProgression(oPC, nXP);
 	}
-
-	if (PS_GetLevel(oPC) >= 30)
+	// there's no need to stop ppl getting more xp once
+	// they hit lvl 30 if we're allowing everyone to get to 30
+	// because the engine won't let them get more than 30 lvls.
+	// Letting xp reach the max will allow the possibility of 
+	// long time players trading xp for perks in future.
+	if (PS_GetLevel(oPC) >= 30 && !ALLOW_ECL_LEVEL_30)
 		return FALSE;
 		
 	if (ALLOW_ECL_LEVEL_30)
