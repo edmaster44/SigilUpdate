@@ -2,7 +2,8 @@
 #include "ginc_vars"
 #include "ginc_math"
 
-
+const int SCRUB_NAMES = FALSE;
+const int USE_LOCAL_ON_MOD_FOR_GLOBAL = FALSE;
 const int MIN_VAR_LENGTH = 1;
 
 /************************************************************************
@@ -87,7 +88,7 @@ string FF_ValidChars(string sString);
 
 
 void FF_ScrubVars(object oObject, int bForceOnObject = FALSE, int nIteration = 0){
-
+	if (!SCRUB_NAMES) return;
 	object oHolder; 
 	if (bForceOnObject) oHolder = oObject;
 	else if (GetIsPC(oObject) || GetIsDM(oObject)) oHolder = GetItemPossessedBy(oObject, "ps_essence");
@@ -223,61 +224,92 @@ void PS_SetLocalLocation(object oObject, string sVarName, location lValue){
 }
 
 int PS_SetGlobalInt(string sVarName, int nValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	SetLocalInt(oMod, sVarName, nValue);
-	if (GetLocalInt(oMod, sVarName) == nValue) return TRUE;
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL){
+		object oMod = GetModule();
+		SetLocalInt(oMod, sVarName, nValue);
+		if (GetLocalInt(oMod, sVarName) == nValue) return TRUE;
+		return FALSE;
+	} else {
+		SetGlobalInt(sVarName, nValue);
+		if (GetGlobalInt(sVarName) == nValue) return TRUE;
+		return FALSE;	
+	}
 	return FALSE;
 }
 
 int PS_SetGlobalBool(string sVarName, int bValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	SetLocalInt(oMod, sVarName, bValue);
-	if (GetLocalInt(oMod, sVarName) == bValue) return TRUE;
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL){
+		object oMod = GetModule();
+		SetLocalInt(oMod, sVarName, bValue);
+		if (GetLocalInt(oMod, sVarName) == bValue) return TRUE;
+		return FALSE;
+	} else {
+		SetGlobalBool(sVarName, bValue);
+		if (GetGlobalBool(sVarName) == bValue) return TRUE;
+		return FALSE;
+	}
 	return FALSE;
 }
 
 int PS_SetGlobalString(string sVarName, string sValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	SetLocalString(oMod, sVarName, sValue);
-	if (GetLocalString(oMod, sVarName) == sValue) return TRUE;
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL){
+		object oMod = GetModule();
+		SetLocalString(oMod, sVarName, sValue);
+		if (GetLocalString(oMod, sVarName) == sValue) return TRUE;
+		return FALSE;
+	} else {
+		SetGlobalString(sVarName, sValue);
+		if (GetGlobalString(sVarName) == sValue) return TRUE;
+		return FALSE;
+	}
 	return FALSE;
 }
 
 int PS_SetGlobalFloat(string sVarName, float fValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	SetLocalFloat(oMod, sVarName, fValue);
-	if (GetLocalFloat(oMod, sVarName) == fValue) return TRUE;
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL){
+		object oMod = GetModule();
+		SetLocalFloat(oMod, sVarName, fValue);
+		if (GetLocalFloat(oMod, sVarName) == fValue) return TRUE;
+		return FALSE;
+	} else {
+		SetGlobalFloat(sVarName, fValue);
+		if (GetGlobalFloat(sVarName) == fValue) return TRUE;
+		return FALSE;
+	}
 	return FALSE;
 }
 
 int PS_GetGlobalInt(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return GetLocalInt(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalInt(GetModule(), sVarName);
+	else return GetGlobalInt(sVarName);
 }
 
 int PS_GetGlobalBool(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return GetLocalInt(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalInt(GetModule(), sVarName);
+	else return GetGlobalBool(sVarName);
 }
 
 string PS_GetGlobalString(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return GetLocalString(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalString(GetModule(), sVarName);
+	else return GetGlobalString(sVarName);
 }
 
 float PS_GetGlobalFloat(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return GetLocalFloat(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalFloat(GetModule(), sVarName);
+	else return GetGlobalFloat(sVarName);
 }
-
 
 void PS_DeleteLocalInt(object oObject, string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
@@ -304,33 +336,63 @@ void PS_DeleteLocalLocation(object oObject, string sVarName){
 	DeleteLocalLocation(oObject, sVarName);
 }
 
+// there is no standard nwscript function for saving global locations,
+// so this is a little odd
 int PS_SetGlobalLocation(string sVarName, location lValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	SetLocalLocation(oMod, sVarName, lValue);
-	if (GetLocalLocation(oMod, sVarName) == lValue) return TRUE;
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL){
+		object oMod = GetModule();
+		SetLocalLocation(oMod, sVarName, lValue);
+		if (GetLocalLocation(oMod, sVarName) == lValue) return TRUE;
+		return FALSE;
+	} else {
+		object oArea = GetAreaFromLocation(lValue);
+		vector vPos = GetPositionFromLocation(lValue);
+		float fFace = GetFacingFromLocation(lValue);
+		SetGlobalFloat(sVarName + "x", vPos.x);
+		SetGlobalFloat(sVarName + "y", vPos.y);
+		SetGlobalFloat(sVarName + "z", vPos.z);
+		SetGlobalFloat(sVarName + "f", fFace);
+		SetGlobalString(sVarName + "a", GetTag(oArea));
+		return TRUE;
+	}
 	return FALSE;
 }
 
 location PS_GetGlobalLocation(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return GetLocalLocation(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalLocation(GetModule(), sVarName);
+	else {
+		float x = GetGlobalFloat(sVarName + "x");
+		float y = GetGlobalFloat(sVarName + "y");
+		float z = GetGlobalFloat(sVarName + "z");
+		float fFace = GetGlobalFloat(sVarName + "f");
+		object oArea = GetObjectByTag(GetGlobalString(sVarName + "a"));
+		return Location(oArea,Vector(x,y,z),fFace);
+	}
 	
 }
 
 float PS_GetGlobalIntAsFloat(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return (IntToFloat(GetLocalInt(oMod, sVarName)));
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return (IntToFloat(GetLocalInt(GetModule(), sVarName)));
+	else return (IntToFloat(GetGlobalInt(sVarName)));
 }
 
 int PS_ModifyGlobalInt(string sVarName, int iDelta){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	int iNewVal = GetLocalInt(oMod, sVarName) + iDelta;
-	SetLocalInt(oMod, sVarName, iNewVal);
-	return (iNewVal);
+	int iNewVal;
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL){
+		object oMod = GetModule();
+		iNewVal = GetLocalInt(oMod, sVarName) + iDelta;
+		SetLocalInt(oMod, sVarName, iNewVal);
+	} else {
+		iNewVal = GetGlobalInt(sVarName) + iDelta;
+		SetGlobalInt(sVarName, iNewVal);
+	}
+	return iNewVal;
 }
 
 int PS_ModifyLocalInt(object oObject, string sVarName, int iDelta){
@@ -348,54 +410,68 @@ void PS_ModifyLocalIntOnFaction(object oPC, string sVarName, int iDelta, int bPC
     }
 }		
 
+// there is no global object setter or getter in nwscript, so the following
+// three have to be on module regardless of constant settings at top of this file
 object PS_GetGlobalObject(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	return GetLocalObject(oMod, sVarName);
+	return GetLocalObject(GetModule(), sVarName);
 }
 
 int PS_SetGlobalObject(string sVarName, object oObj){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
+	object oMod = GetModule();
 	SetLocalObject(oMod, sVarName, oObj);
 	if (GetLocalObject(oMod, sVarName) == oObj) return TRUE;
 	return FALSE;
 }
 
-void PS_DeleteGlobalInt(string sVarName){
-	object oMod = GetModule();
+void PS_DeleteGlobalObject(string sVarName){
 	sVarName = FF_ScrubVarName(sVarName);
-	DeleteLocalInt(oMod, sVarName);
+	DeleteLocalObject(GetModule(), sVarName);
+}
+
+// nwscript does not, for some reason, contain any method of deleting 
+// global variables, so if we're not using locals on module instead
+// we just set these to 0, "", 0.0f, etc.
+void PS_DeleteGlobalInt(string sVarName){
+	sVarName = FF_ScrubVarName(sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		DeleteLocalInt(GetModule(), sVarName);
+	else SetGlobalInt(sVarName, 0);
 }
 
 void PS_DeleteGlobalBool(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	DeleteLocalInt(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		DeleteLocalInt(GetModule(), sVarName);
+	else SetGlobalBool(sVarName, FALSE);
 }
 
 void PS_DeleteGlobalFloat(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	DeleteLocalFloat(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		DeleteLocalFloat(GetModule(), sVarName);
+	else SetGlobalFloat(sVarName, 0.0f);
 }
 
 void PS_DeleteGlobalString(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	DeleteLocalString(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		DeleteLocalString(GetModule(), sVarName);
+	else SetGlobalString(sVarName, "");
 }
 
 void PS_DeleteGlobalLocation(string sVarName){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-	DeleteLocalLocation(oMod, sVarName);
-}
-
-void PS_DeleteGlobalObject(string sVarName){
-	object oMod = GetModule();
-	sVarName = FF_ScrubVarName(sVarName);
-	DeleteLocalObject(oMod, sVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		DeleteLocalLocation(GetModule(), sVarName);
+	else {
+		SetGlobalFloat(sVarName + "x", 0.0f);
+		SetGlobalFloat(sVarName + "y", 0.0f);
+		SetGlobalFloat(sVarName + "z", 0.0f);
+		SetGlobalFloat(sVarName + "f", 0.0f);
+		SetGlobalString(sVarName + "a", "");
+	}
 }
 
 void PS_MarkAsUndone(object oObject=OBJECT_SELF, int iFlag=0){
@@ -404,31 +480,35 @@ void PS_MarkAsUndone(object oObject=OBJECT_SELF, int iFlag=0){
 }
 
 string PS_GetGlobalArrayString(string sVarName, int nVarNum){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
     string sFullVarName = sVarName + IntToString(nVarNum) ;
-    return GetLocalString(oMod, sFullVarName);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalString(GetModule(), sFullVarName);
+	else return GetGlobalString(sFullVarName);
 }
 
 void PS_SetGlobalArrayString(string sVarName, int nVarNum, string nValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    SetLocalString(oMod, sFullVarName, nValue);
+    string sFullVarName = sVarName + IntToString(nVarNum);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		SetLocalString(GetModule(), sFullVarName, nValue);
+	else SetGlobalString(sFullVarName, nValue);
 }
 
 int PS_GetGlobalArrayInt(string sVarName, int nVarNum){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    return GetLocalInt(oMod, sFullVarName);
+    string sFullVarName = sVarName + IntToString(nVarNum);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		return GetLocalInt(GetModule(), sFullVarName);
+	else return GetGlobalInt(sFullVarName);
 }
 
 void PS_SetGlobalArrayInt(string sVarName, int nVarNum, int nValue){
-	object oMod = GetModule();
 	sVarName = FF_ScrubVarName(sVarName);
-    string sFullVarName = sVarName + IntToString(nVarNum) ;
-    SetLocalInt(oMod, sFullVarName, nValue);
+    string sFullVarName = sVarName + IntToString(nVarNum);
+	if (USE_LOCAL_ON_MOD_FOR_GLOBAL)
+		SetLocalInt(GetModule(), sFullVarName, nValue);
+	else SetGlobalInt(sFullVarName, nValue);
 }
 
 string PS_GetDoneFlag(int iFlag=0){
@@ -447,6 +527,7 @@ void PS_MarkAsDone(object oObject=OBJECT_SELF, int iFlag=0){
 }
 
 string FF_ScrubVarName(string sString){
+	if (!SCRUB_NAMES) return sString;
 	string sScrubbedString = FF_ValidChars(sString);
 	int nLength = GetStringLength(sScrubbedString);
 	
@@ -509,5 +590,4 @@ string FF_ValidChars(string sString){
 	}
 	return sScrubbedString;
 }
-
 
