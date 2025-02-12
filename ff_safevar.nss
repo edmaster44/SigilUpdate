@@ -3,7 +3,7 @@
 #include "ginc_math"
 
 
-const int MIN_VAR_LENGTH = 6;
+const int MIN_VAR_LENGTH = 1;
 
 /************************************************************************
 				PROTOTYPES
