@@ -378,9 +378,6 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
 
 void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {	return;		}
-
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
     effect eFiend;
     int nFiend;
@@ -517,9 +514,6 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 											
 void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 	{
-	
-	 if (!X2PreSpellCastCode())
-    {	return;		}
 	
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
 		{PS_RestoreOriginalAppearance(oPC);
