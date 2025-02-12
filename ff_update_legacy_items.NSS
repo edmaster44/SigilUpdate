@@ -24,14 +24,6 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
 	
-	//replace old bug-inducing bonus feat alertness with new version
-	itemproperty ipOldAlert = ItemPropertyBonusFeat(0);
-	itemproperty ipNewAlert = ItemPropertyBonusFeat(1324);
-	if (IPGetItemHasProperty(oItem, ipOldAlert, DURATION_TYPE_PERMANENT)){
-		FF_ModifyItemProperty(oItem, ipOldAlert);
-		FF_ModifyItemProperty(oItem, ipNewAlert, TRUE);
-	}
-	
 	// replace banned items with their counterparts
 	string sNewRes = "";
 	if (sRef == "ps_gad_dreadaxe") sNewRes = "ps_gad_dreadaxe2";
@@ -53,6 +45,14 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 			SendMessageToPC(oPC, "Error replacing banned item. Please contact a DM");
 			return;
 		}
+	}
+	
+	//replace old bug-inducing bonus feat alertness with new version
+	itemproperty ipOldAlert = ItemPropertyBonusFeat(0);
+	itemproperty ipNewAlert = ItemPropertyBonusFeat(1324);
+	if (IPGetItemHasProperty(oItem, ipOldAlert, DURATION_TYPE_PERMANENT)){
+		FF_ModifyItemProperty(oItem, ipOldAlert);
+		FF_ModifyItemProperty(oItem, ipNewAlert, TRUE);
 	}
 
 	// make sure scrolls and wands are usuable by all classes that have the same spellbook or 
