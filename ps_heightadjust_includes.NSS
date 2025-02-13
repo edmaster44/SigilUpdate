@@ -26,6 +26,7 @@ string GetRace(object oPC)
 	if (iSubrace == 53) race = "human";//Night Hag new
 	if (iSubrace == 149) race = "elf";//Old Nymph
 	if (iSubrace == 150) race = "elf";//Old Killoren
+	if (iSubrace == 100) race = "halfling";//Kenku
 		
 	if (iRace == RACIAL_TYPE_DWARF) race = "dwarf";
 	if (iRace == RACIAL_TYPE_HALFORC || iRace == RACIAL_TYPE_GRAYORC || iSubrace == 76) race = "halforc";
