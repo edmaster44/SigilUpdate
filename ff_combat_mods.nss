@@ -280,7 +280,7 @@ int GetIsStaffFighting(struct CombatMods ModData){
 	
 	int bQualifies = GetQualifiesForStaffFighting(ModData.oPC, ModData.oRHAND, ModData.oLHAND);
 	if (!bQualifies){
-		SendMessageToPC(ModData.oPC, "You can only use Staff-Fighting Mode while wielding a Staff or Spear that is a normal size for your character in both hands. If you are using a Scythe or Halberd, you also need Weapon Focus in that weapon.");
+		SendMessageToPC(ModData.oPC, "You can only use Staff-Fighting Mode while wielding a Staff or Spear that is a normal size for your character in both hands. If you are using a Scythe or Halberd, you also need Weapon Focus in that weapon. You also need either Two Weapon Fighting or at least 1 level of Monk, Samurai, or Kensai");
 		GiveFeedback(ModData.oPC, sStaffOffFb);
 		return FALSE;
 	}
@@ -440,6 +440,12 @@ int GetQualifiesForStaffFighting(object oPC, object oRHAND, object oLHAND){
 	if (IPGetWeaponSize(oRHAND) - GetCreatureSize(oPC) >= 2) return FALSE;
 	
 	if (!GetWeaponIsTwoHanded(oPC, oRHAND, oLHAND)) return FALSE;
+	
+	if (!GetHasFeat(1734, oPC, TRUE) && !GetHasFeat(41, oPC, TRUE) && 
+		(GetLevelByClass(CLASS_TYPE_MONK, oPC) + 
+		GetLevelByClass(CLASS_SAMURAI, oPC) +
+		GetLevelByClass(CLASS_KENSAI, oPC) < 1))
+			return FALSE;
 	
 	int nType = GetBaseItemType(oRHAND);
 	

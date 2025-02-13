@@ -146,15 +146,11 @@ void fUpdateOtherFeats(object oPC){
 			FeatRemove(oPC, FEAT_CONSIDERED_STRIKE);
 		
 	}
-	// give staff fighting if they have twf of either kind, or are a monk, samurai
-	// or kensai, or remove staff fighting if a de-leveled pc no longer qualifies.
-	int bQualifiesForStaffFighting = (GetHasFeat(1734, oPC, TRUE) || GetHasFeat(41, oPC, TRUE) || 
-		(GetLevelByClass(CLASS_TYPE_MONK, oPC) + GetLevelByClass(CLASS_SAMURAI, oPC) +
-		GetLevelByClass(CLASS_KENSAI, oPC) > 0));
-	int bHasStaffFighting = GetHasFeat(21911, oPC, TRUE);
-	if (bQualifiesForStaffFighting && !bHasStaffFighting) FeatAdd(oPC, 21911, FALSE);
-	else if (!bQualifiesForStaffFighting && bHasStaffFighting) FeatRemove(oPC, 21911);
-	
+	// give staff fighting, though they can only use it if they meet
+	// qaulifications.  See GetQualifiesForStaffFighting() in ff_combat_mods
+	if (!GetHasFeat(21911, oPC, TRUE))
+		FeatAdd(oPC, 21911, FALSE);
+
 	// update any ongoing effects for methdef, constrike, and staff
 	UpdateCombatMods(oPC);
 }
