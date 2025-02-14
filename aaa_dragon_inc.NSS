@@ -25,37 +25,34 @@
 // Applies Shield AC based on characterlevel
 //---------------------------------------------------------------------------------------------------------------------------
 
-void PS_ShieldArmor_Dragon(object oPC, int nSpell)
-{	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-    if (!X2PreSpellCastCode())
-    {	return;	}
+void DragonFeedback(object oPC, int nSpell){
+	if (!GetHasSpellEffect(nSpell, oPC))
+		SendMessageToPC(oPC, "Applying Draconic Immunities");
+
+}
+
+void PS_ShieldArmor_Dragon(object oPC, int nSpell){	
+	object oItem = GetItemPossessedBy(oPC, "ps_essence");
 
 	int iHD = GetTotalLevels(oPC, TRUE);
 	int iShield;
+		
+	PS_RemoveEffects(oPC, nSpell);
 
-	if (GetHasFeat(260, oPC))
-		{	
-			iShield = 4;  // +0 bonus if monk class is taken 						  
-		}
-	else
-		{					
-		if (iHD >= 20) 			//+0 bonus at 20th level
-			{	iShield = 9;		} 
-		else if (iHD >= 10)		//+0 bonus at 10th level
-			{	iShield = 8;		} 
-		else 					//+0 bonus below 10th level
-			{	iShield = 7;		}									
-		}
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{	
-			
-			SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humanoid Form .");
-			return;
-		}
-	else 		
-
-	{	effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
-			eAC = SupernaturalEffect(eAC);
+	if (GetHasFeat(260, oPC)) iShield = 4;  //  monk						  
+	else {					
+		if (iHD >= 20) iShield = 9;
+		else if (iHD >= 10)	iShield = 8;
+		else iShield = 7;									
+	}
+	
+	if (PS_GetLocalInt(oItem, "TempChange") == 1){	
+		SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humanoid Form.</c>");
+		return;
+	} else {	
+		effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
+		eAC = SupernaturalEffect(eAC);
+		eAC = SetEffectSpellId(eAC, nSpell);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
 	}
 }
@@ -69,9 +66,7 @@ void PS_Immunity_Electricity(object oPC)
 	int iImmElec = 9999;
 	int iSpellId = 2624; 
 	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
+	
 	//Apply Immunity
 	effect eElec    = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iImmElec);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
@@ -80,10 +75,11 @@ void PS_Immunity_Electricity(object oPC)
 	effect eBronze 	= EffectLinkEffects(eElec, eImmu);
 		eBronze = SupernaturalEffect(eBronze);
 		eBronze = SetEffectSpellId(eBronze, iSpellId);
+	
+	DragonFeedback(oPC, iSpellId);
+	PS_RemoveEffects(oPC, iSpellId);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBronze, oPC);
 		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBronze, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to electricity, sleep and paralysis applied.");	}
 }
 
 
@@ -95,11 +91,7 @@ void PS_Immunity_Acid(object oPC)
 { 
 	int iImmAcid = 9999;
 	int iSpellId = 2628; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
-	//Apply Immunity
+	
 	effect eAcid    = EffectDamageResistance(DAMAGE_TYPE_ACID, iImmAcid);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -107,10 +99,9 @@ void PS_Immunity_Acid(object oPC)
 	effect eBlack 	= EffectLinkEffects(eAcid, eImmu);
 		eBlack = SupernaturalEffect(eBlack);
 		eBlack = SetEffectSpellId(eBlack, iSpellId);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to acid, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, iSpellId);
+	PS_RemoveEffects(oPC, iSpellId);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -121,11 +112,7 @@ void PS_Immunity_Sonic(object oPC)
 { 
 	int iImmSonic = 9999;
 	int iSpellId = 2658; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
-	//Apply Immunity
+	
 	effect eSonic    = EffectDamageResistance(DAMAGE_TYPE_SONIC, iImmSonic);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -133,10 +120,9 @@ void PS_Immunity_Sonic(object oPC)
 	effect eEmerald 	= EffectLinkEffects(eSonic, eImmu);
 		eEmerald = SupernaturalEffect(eEmerald);
 		eEmerald = SetEffectSpellId(eEmerald, 2658);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEmerald, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to sonic, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, iSpellId);
+	PS_RemoveEffects(oPC, iSpellId);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEmerald, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -147,11 +133,7 @@ void PS_Immunity_Cold(object oPC)
 { 
 	int iImmCold = 9999;
 	int iSpellId = 2659; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
 
-	//Apply Immunity
 	effect eCold    = EffectDamageResistance(DAMAGE_TYPE_COLD, iImmCold);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -159,11 +141,9 @@ void PS_Immunity_Cold(object oPC)
 	effect eTopaz 	= EffectLinkEffects(eCold, eImmu);
 		eTopaz = SupernaturalEffect(eTopaz);
 		eTopaz = SetEffectSpellId(eTopaz, iSpellId);
-
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTopaz, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to cold, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, iSpellId);
+	PS_RemoveEffects(oPC, iSpellId);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTopaz, oPC);
 }
 
 
@@ -171,29 +151,26 @@ void PS_Immunity_Cold(object oPC)
 // Applies Fire Immunity to Red and Brass Dragons. Also Vulnerability to cold
 //---------------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Fire(object oPC)
-{ 
+void PS_Immunity_Fire(object oPC){ 
 	int iImmFire = 9999;
 	int iVulCold = 50;
 	int iSpellId = 2629; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
 
 	//Apply Immunity
-	effect eFire    = EffectDamageResistance(DAMAGE_TYPE_FIRE, iImmFire);
-	effect eCold    = EffectDamageImmunityDecrease(DAMAGE_TYPE_COLD, iVulCold);
-	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
-	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu2	= EffectLinkEffects(eSlep, ePara);
-	effect eImmu    = EffectLinkEffects(eImmu2, eCold);		
-	effect eRed 	= EffectLinkEffects(eFire, eImmu);
-		eRed = SupernaturalEffect(eRed);
-		eRed = SetEffectSpellId(eRed, iSpellId);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to fire, sleep and paralysis applied. Cold Vulnerability applied.");	}
+	effect eFire = EffectDamageResistance(DAMAGE_TYPE_FIRE, iImmFire);
+	effect eCold = EffectDamageImmunityDecrease(DAMAGE_TYPE_COLD, iVulCold);
+	effect eSlep = EffectImmunity(IMMUNITY_TYPE_SLEEP);
+	effect ePara = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
+	
+	effect eRed = EffectLinkEffects(eCold, eFire);
+	eRed = EffectLinkEffects(eSlep, eRed);
+	eRed = EffectLinkEffects(ePara, eRed);
+	
+	eRed = SupernaturalEffect(eRed);
+	eRed = SetEffectSpellId(eRed, iSpellId);
+	DragonFeedback(oPC, iSpellId);
+	PS_RemoveEffects(oPC, iSpellId);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -205,11 +182,7 @@ void PS_Immunity_Cold_White(object oPC)
 	int iImmFire = 100;
 	int iVulCold = 50;
 	int iSpellId = 2663; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
-	//Apply Immunity
+	
 	effect eFire    = EffectDamageResistance(DAMAGE_TYPE_COLD, iImmFire);
 	effect eCold    = EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, iVulCold);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
@@ -219,10 +192,9 @@ void PS_Immunity_Cold_White(object oPC)
 	effect eRed 	= EffectLinkEffects(eFire, eImmu);
 		eRed = SupernaturalEffect(eRed);
 		eRed = SetEffectSpellId(eRed, iSpellId);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to cold, sleep and paralysis applied. Fire Vulnerability applied.");	}
+	DragonFeedback(oPC, iSpellId);	
+	PS_RemoveEffects(oPC, iSpellId);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -233,11 +205,7 @@ void PS_Immunity_Negative(object oPC)
 { 
 	int iImmNeg = 9999;
 	int iSpellId = 2630; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
-	//Apply Immunity
+	
 	effect eNeg     = EffectDamageResistance(DAMAGE_TYPE_NEGATIVE, iImmNeg);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -245,10 +213,9 @@ void PS_Immunity_Negative(object oPC)
 	effect eShadow 	= EffectLinkEffects(eNeg, eImmu);
 		eShadow = SupernaturalEffect(eShadow);
 		eShadow = SetEffectSpellId(eShadow, iSpellId);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to negative energy, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, iSpellId);
+    PS_RemoveEffects(oPC, iSpellId);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -259,11 +226,7 @@ void PS_Immunity_Radiant(object oPC)
 { 
 	
 	int nSpell = GetSpellId(); 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
-	//Apply Spell Immunities
 	effect eSunbeam     = EffectSpellImmunity(183);
 	effect eSunburst     = EffectSpellImmunity(427);
 	effect eSunburstArrow     = EffectSpellImmunity(1789);
@@ -286,11 +249,10 @@ void PS_Immunity_Radiant(object oPC)
 		eLight = SupernaturalEffect(eLight);
 		eRadiant = SetEffectSpellId(eRadiant, nSpell);
 		eLight = SetEffectSpellId(eLight, nSpell);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRadiant, oPC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLight, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to light magic, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, nSpell);
+	PS_RemoveEffects(oPC, nSpell);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRadiant, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLight, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -301,11 +263,7 @@ void PS_Immunity_Acid_Poison(object oPC)
 { 
 	int iImmAcid = 9999;
 	int iSpellId = 2628; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
-	//Apply Immunity
+	
 	effect eAcid    = EffectDamageResistance(DAMAGE_TYPE_ACID, iImmAcid);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -315,10 +273,9 @@ void PS_Immunity_Acid_Poison(object oPC)
 	effect eBlack 	= EffectLinkEffects(eImmu, eImmu2);
 		eBlack = SupernaturalEffect(eBlack);
 		eBlack = SetEffectSpellId(eBlack, iSpellId);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to acid, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, iSpellId);
+	PS_RemoveEffects(oPC, iSpellId);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -329,11 +286,6 @@ void PS_Immunity_Force(object oPC)
 { 
 	
 	int iSpellId =2657; 
-	//Remove existing immunity of these types
-	if (GetHasSpellEffect(iSpellId,oPC))	
-	{	RemoveSpellEffects(iSpellId, oPC, oPC);	}
-
-	//Apply Immunity
 	
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -343,10 +295,9 @@ void PS_Immunity_Force(object oPC)
 	effect eBlack 	= EffectLinkEffects(eImmu, ePois);
 		eBlack = SupernaturalEffect(eBlack);
 		eBlack = SetEffectSpellId(eBlack, iSpellId);
-		
-    if (!GetHasSpellEffect(GetSpellId(), oPC))
-	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
-		SendMessageToPC(oPC, "Draconic - Immunity to poison, sleep and paralysis applied.");	}
+	DragonFeedback(oPC, iSpellId);	
+	PS_RemoveEffects(oPC, iSpellId);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
