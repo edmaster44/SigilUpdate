@@ -24,31 +24,31 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2624 :		//Dragon Immunity, Elecricity
-			PS_Immunity_Electricity(oPC);						
+			PS_Immunity_Electricity(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2625 :		//Dragon Breath, Line, Electricity
-			PS_Dragon_Breath_Bronze(oPC);						
+			PS_Dragon_Breath_Bronze(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2660 :		//Dragon Breath, Line, Force
-			PS_Dragon_Breath_Amethyst(oPC);						
+			PS_Dragon_Breath_Amethyst(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2661 :		//Dragon Breath, Cone, Sonic (NEEDS 2da look)
-			PS_Dragon_Breath_Emerald(oPC);						
+			PS_Dragon_Breath_Emerald(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2662 :		//Dragon Breath, Cone, Cold (Dehydrating) 
-			PS_Dragon_Breath_Topaz(oPC);						
+			PS_Dragon_Breath_Topaz(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2664 :		//Dragon Breath, Cone, Cold  
-			PS_Dragon_Breath_White(oPC);						
+			PS_Dragon_Breath_White(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2626 :		//Dragon Breath, Cone, Gas
-			PS_Dragon_Breath_Bronze_Gas(oPC);						
+			PS_Dragon_Breath_Bronze_Gas(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2627 :		//Dragon Size
@@ -56,55 +56,55 @@ void main()
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2628 :		//Dragon Immunity, Acid
-			PS_Immunity_Acid(oPC);						
+			PS_Immunity_Acid(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2657 :		//Dragon Immunity, Force
-			PS_Immunity_Force(oPC);						
+			PS_Immunity_Force(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2658 :		//Dragon Immunity, Sonic
-			PS_Immunity_Sonic(oPC);						
+			PS_Immunity_Sonic(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2659 :		//Dragon Immunity, Cold (Topaz)
-			PS_Immunity_Cold(oPC);						
+			PS_Immunity_Cold(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2663 :		//Dragon Immunity, Cold (White)
-			PS_Immunity_Cold_White(oPC);						
+			PS_Immunity_Cold_White(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2629 :		//Dragon Immunity, Fire
-			PS_Immunity_Fire(oPC);						
+			PS_Immunity_Fire(oPC, nSpell);						
 		break;		
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2630 :		//Dragon Immunity, Negative
-			PS_Immunity_Negative(oPC);						
+			PS_Immunity_Negative(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2666 :		//Dragon Immunity, Light
-			PS_Immunity_Radiant(oPC);						
+			PS_Immunity_Radiant(oPC, nSpell);						
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2667 :		//Dragon Breath, Cone, Light (Radiant)
-			PS_Dragon_Breath_Radiant_Light(oPC);
+			PS_Dragon_Breath_Radiant_Light(oPC, nSpell);
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2631 :		//Dragon Breath,Line, Acid
-			PS_Dragon_Breath_Black(oPC);						
+			PS_Dragon_Breath_Black(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2632 :		//Dragon Breath, Cone, Fire
-			PS_Dragon_Breath_Red(oPC);						
+			PS_Dragon_Breath_Red(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2633 :		//Dragon Breath, Cone, Negative
-			PS_Dragon_Breath_Shadow(oPC);						
+			PS_Dragon_Breath_Shadow(oPC, nSpell);						
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2634 :		//Dragon Breath, Line, Electricity (Blue)
-			PS_Dragon_Breath_Bronze(oPC);						
+			PS_Dragon_Breath_Bronze(oPC, nSpell);						
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2635 :		//Shadow Dragon - Shadow Blend
@@ -140,15 +140,15 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2651 :		//Dragon Breath, Line, Acid (Copper)
-			PS_Dragon_Breath_Copper(oPC);
+			PS_Dragon_Breath_Copper(oPC, nSpell);
 		break;		
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2652 :		//Dragon Breath, Cone, Slow (Copper)
-			PS_Dragon_Breath_Copper_Gas(oPC);
+			PS_Dragon_Breath_Copper_Gas(oPC, nSpell);
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2653 :		//Dragon Immunity, Acid and Poison (Copper)
-			PS_Immunity_Acid_Poison(oPC);						
+			PS_Immunity_Acid_Poison(oPC, nSpell);						
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2654 :		//Copper Dragon - Stone to Mud (Copper)
@@ -156,15 +156,14 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2655 :		//Dragon Breath, Cone, Spark (Iron)
-			PS_Dragon_Breath_Iron(oPC);
+			PS_Dragon_Breath_Iron(oPC, nSpell);
 		break;	
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2656 :		//Dragon Breath, Cone, Sleep (Iron)
-			PS_Dragon_Breath_Iron_Gas(oPC);
+			PS_Dragon_Breath_Iron_Gas(oPC, nSpell);
 		break;										
 ////////////////////////////////////////////////////////////////////////////////////
 //																				  //
-//		Dragons cannot wear armor, this has been done in x2_mod_def_equ			  //
 //																		   	 	  //
 //		Bronze Dragons get Change Self, this has been done in ps_levelup		  //
 //																				  //

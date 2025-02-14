@@ -21,15 +21,19 @@
 		
 */
 
-//---------------------------------------------------------------------------------------------------------------------------
-// Applies Shield AC based on characterlevel
-//---------------------------------------------------------------------------------------------------------------------------
 
-void DragonFeedback(object oPC, int nSpell){
+void ApplyDraconicImmunities(object oPC, int nSpell, effect eFX){
 	if (!GetHasSpellEffect(nSpell, oPC))
 		SendMessageToPC(oPC, "Applying Draconic Immunities");
-
+	eFX = SupernaturalEffect(eFX);
+	eFX = SetEffectSpellId(eFX, nSpell);
+	PS_RemoveEffects(oPC, nSpell);	
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
+
+//-------------------------------------------------------------------------------------------------------------------
+// Applies Shield AC based on characterlevel
+//-------------------------------------------------------------------------------------------------------------------
 
 void PS_ShieldArmor_Dragon(object oPC, int nSpell){	
 	object oItem = GetItemPossessedBy(oPC, "ps_essence");
@@ -57,106 +61,79 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell){
 	}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 // Applies Electricity Immunity to Bronze and Blue Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Electricity(object oPC)
+void PS_Immunity_Electricity(object oPC, int nSpell)
 { 
 	int iImmElec = 9999;
-	int iSpellId = 2624; 
-	//Remove existing immunity of these types
-	
-	//Apply Immunity
+
 	effect eElec    = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iImmElec);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
-	effect eBronze 	= EffectLinkEffects(eElec, eImmu);
-		eBronze = SupernaturalEffect(eBronze);
-		eBronze = SetEffectSpellId(eBronze, iSpellId);
-	
-	DragonFeedback(oPC, iSpellId);
-	PS_RemoveEffects(oPC, iSpellId);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBronze, oPC);
-		
+	effect eBronze	= EffectLinkEffects(eSlep, ePara);		
+	eBronze 	= EffectLinkEffects(eElec, eBronze);
+	ApplyDraconicImmunities(oPC, nSpell, eBronze);		
 }
 
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Acid Immunity to Black and Copper Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Acid(object oPC)
+void PS_Immunity_Acid(object oPC, int nSpell)
 { 
 	int iImmAcid = 9999;
-	int iSpellId = 2628; 
 	
 	effect eAcid    = EffectDamageResistance(DAMAGE_TYPE_ACID, iImmAcid);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
-	effect eBlack 	= EffectLinkEffects(eAcid, eImmu);
-		eBlack = SupernaturalEffect(eBlack);
-		eBlack = SetEffectSpellId(eBlack, iSpellId);
-	DragonFeedback(oPC, iSpellId);
-	PS_RemoveEffects(oPC, iSpellId);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
+	effect eBlack	= EffectLinkEffects(eSlep, ePara);		
+	eBlack 	= EffectLinkEffects(eAcid, eBlack);
+	ApplyDraconicImmunities(oPC, nSpell, eBlack);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Sonic Immunity to Emerald Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Sonic(object oPC)
+void PS_Immunity_Sonic(object oPC, int nSpell)
 { 
 	int iImmSonic = 9999;
-	int iSpellId = 2658; 
-	
+
 	effect eSonic    = EffectDamageResistance(DAMAGE_TYPE_SONIC, iImmSonic);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
-	effect eEmerald 	= EffectLinkEffects(eSonic, eImmu);
-		eEmerald = SupernaturalEffect(eEmerald);
-		eEmerald = SetEffectSpellId(eEmerald, 2658);
-	DragonFeedback(oPC, iSpellId);
-	PS_RemoveEffects(oPC, iSpellId);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEmerald, oPC);
+	effect eEmerald	= EffectLinkEffects(eSlep, ePara);		
+	eEmerald 	= EffectLinkEffects(eSonic, eEmerald);
+	ApplyDraconicImmunities(oPC, nSpell, eEmerald);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Cold Immunity to Topaz Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Cold(object oPC)
+void PS_Immunity_Cold(object oPC, int nSpell)
 { 
 	int iImmCold = 9999;
-	int iSpellId = 2659; 
 
 	effect eCold    = EffectDamageResistance(DAMAGE_TYPE_COLD, iImmCold);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
-	effect eTopaz 	= EffectLinkEffects(eCold, eImmu);
-		eTopaz = SupernaturalEffect(eTopaz);
-		eTopaz = SetEffectSpellId(eTopaz, iSpellId);
-	DragonFeedback(oPC, iSpellId);
-	PS_RemoveEffects(oPC, iSpellId);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTopaz, oPC);
+	effect eTopaz	= EffectLinkEffects(eSlep, ePara);		
+	eTopaz 	= EffectLinkEffects(eCold, eTopaz);
+	ApplyDraconicImmunities(oPC, nSpell, eTopaz);
 }
 
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Fire Immunity to Red and Brass Dragons. Also Vulnerability to cold
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Fire(object oPC){ 
+void PS_Immunity_Fire(object oPC, int nSpell){ 
 	int iImmFire = 9999;
 	int iVulCold = 50;
-	int iSpellId = 2629; 
-
-	//Apply Immunity
 	effect eFire = EffectDamageResistance(DAMAGE_TYPE_FIRE, iImmFire);
 	effect eCold = EffectDamageImmunityDecrease(DAMAGE_TYPE_COLD, iVulCold);
 	effect eSlep = EffectImmunity(IMMUNITY_TYPE_SLEEP);
@@ -165,146 +142,137 @@ void PS_Immunity_Fire(object oPC){
 	effect eRed = EffectLinkEffects(eCold, eFire);
 	eRed = EffectLinkEffects(eSlep, eRed);
 	eRed = EffectLinkEffects(ePara, eRed);
-	
-	eRed = SupernaturalEffect(eRed);
-	eRed = SetEffectSpellId(eRed, iSpellId);
-	DragonFeedback(oPC, iSpellId);
-	PS_RemoveEffects(oPC, iSpellId);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
+	ApplyDraconicImmunities(oPC, nSpell, eRed);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Cold Immunity to White and Silver Dragons. Also Vulnerability to cold
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Cold_White(object oPC)
+void PS_Immunity_Cold_White(object oPC, int nSpell)
 { 
 	int iImmFire = 100;
 	int iVulCold = 50;
-	int iSpellId = 2663; 
 	
 	effect eFire    = EffectDamageResistance(DAMAGE_TYPE_COLD, iImmFire);
 	effect eCold    = EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, iVulCold);
-	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
+	effect eSleep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu2	= EffectLinkEffects(eSlep, ePara);
-	effect eImmu    = EffectLinkEffects(eImmu2, eCold);		
-	effect eRed 	= EffectLinkEffects(eFire, eImmu);
-		eRed = SupernaturalEffect(eRed);
-		eRed = SetEffectSpellId(eRed, iSpellId);
-	DragonFeedback(oPC, iSpellId);	
-	PS_RemoveEffects(oPC, iSpellId);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRed, oPC);
+	effect eWhite	= EffectLinkEffects(eFire, eCold);
+	eWhite   = EffectLinkEffects(eSleep, eWhite);		
+	eWhite 	= EffectLinkEffects(ePara, eWhite);
+	ApplyDraconicImmunities(oPC, nSpell, eWhite);	
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Negative Energy Immunity to Shadow Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Negative(object oPC)
+void PS_Immunity_Negative(object oPC, int nSpell)
 { 
 	int iImmNeg = 9999;
-	int iSpellId = 2630; 
 	
 	effect eNeg     = EffectDamageResistance(DAMAGE_TYPE_NEGATIVE, iImmNeg);
 	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
-	effect eShadow 	= EffectLinkEffects(eNeg, eImmu);
-		eShadow = SupernaturalEffect(eShadow);
-		eShadow = SetEffectSpellId(eShadow, iSpellId);
-	DragonFeedback(oPC, iSpellId);
-    PS_RemoveEffects(oPC, iSpellId);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oPC);
+	effect eShadow	= EffectLinkEffects(eSlep, ePara);		
+	eShadow = EffectLinkEffects(eNeg, eShadow);
+	ApplyDraconicImmunities(oPC, nSpell, eShadow);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Light Magic Immunity to Radiant Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Radiant(object oPC)
-{ 
-	
-	int nSpell = GetSpellId(); 
-
+void PS_Immunity_Radiant(object oPC, int nSpell)
+{  
 	effect eSunbeam     = EffectSpellImmunity(183);
 	effect eSunburst     = EffectSpellImmunity(427);
 	effect eSunburstArrow     = EffectSpellImmunity(1789);
 	effect eSearingLight     = EffectSpellImmunity(906);
 	effect eLightBreath     = EffectSpellImmunity(2667);
 	effect ePrismaticSpray     = EffectSpellImmunity(135);
-	effect eSun	= EffectLinkEffects(eSunbeam, eSunburst);		
-	effect eSearing	= EffectLinkEffects(eSunburstArrow, eSearingLight);
-	effect eBreath	= EffectLinkEffects(eLightBreath, ePrismaticSpray);
-	effect eLight2 = EffectLinkEffects(eSun, eSearing);
-	effect eLight = EffectLinkEffects(eLight2, eBreath);
-	
-	//Apply Immunity
 	effect eBlind	= EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
-	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
+	effect eSleep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);		
-	effect eRadiant	= EffectLinkEffects(eBlind, eImmu);
-		eRadiant = SupernaturalEffect(eRadiant);
-		eLight = SupernaturalEffect(eLight);
-		eRadiant = SetEffectSpellId(eRadiant, nSpell);
-		eLight = SetEffectSpellId(eLight, nSpell);
-	DragonFeedback(oPC, nSpell);
-	PS_RemoveEffects(oPC, nSpell);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRadiant, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLight, oPC);
+	
+	effect eRadiant	= EffectLinkEffects(eSunbeam, eSunburst);
+	eRadiant	= EffectLinkEffects(eSunburstArrow, eRadiant);
+	eRadiant	= EffectLinkEffects(eSearingLight, eRadiant);
+	eRadiant	= EffectLinkEffects(eLightBreath, eRadiant);
+	eRadiant	= EffectLinkEffects(ePrismaticSpray, eRadiant);
+	eRadiant	= EffectLinkEffects(eBlind, eRadiant);
+	eRadiant	= EffectLinkEffects(eSleep, eRadiant);
+	eRadiant	= EffectLinkEffects(ePara, eRadiant);
+	ApplyDraconicImmunities(oPC, nSpell, eRadiant);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Acid and Poison Immunity to Copper Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Acid_Poison(object oPC)
+void PS_Immunity_Acid_Poison(object oPC, int nSpell)
 { 
 	int iImmAcid = 9999;
-	int iSpellId = 2628; 
-	
+
 	effect eAcid    = EffectDamageResistance(DAMAGE_TYPE_ACID, iImmAcid);
-	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
+	effect eSleep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect ePois    = EffectImmunity(IMMUNITY_TYPE_POISON);	
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);
-	effect eImmu2	= EffectLinkEffects(ePois, eAcid);		
-	effect eBlack 	= EffectLinkEffects(eImmu, eImmu2);
-		eBlack = SupernaturalEffect(eBlack);
-		eBlack = SetEffectSpellId(eBlack, iSpellId);
-	DragonFeedback(oPC, iSpellId);
-	PS_RemoveEffects(oPC, iSpellId);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
+	effect eBlack	= EffectLinkEffects(eSleep, ePara);
+	eBlack	= EffectLinkEffects(eAcid, eBlack);		
+	eBlack	= EffectLinkEffects(ePois, eBlack);	
+	ApplyDraconicImmunities(oPC, nSpell, eBlack);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Applies Force Immunity to Amethyst Dragons
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Immunity_Force(object oPC)
+void PS_Immunity_Force(object oPC, int nSpell)
 { 
+	int nLvl = GetHitDice(oPC);
 	
-	int iSpellId =2657; 
-	
-	effect eSlep    = EffectImmunity(IMMUNITY_TYPE_SLEEP);
+	effect eSleep   = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect ePois    = EffectImmunity(IMMUNITY_TYPE_POISON);	
-	effect eImmu	= EffectLinkEffects(eSlep, ePara);
-			
-	effect eBlack 	= EffectLinkEffects(eImmu, ePois);
-		eBlack = SupernaturalEffect(eBlack);
-		eBlack = SetEffectSpellId(eBlack, iSpellId);
-	DragonFeedback(oPC, iSpellId);	
-	PS_RemoveEffects(oPC, iSpellId);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlack, oPC);
+	effect eMissile = EffectSpellImmunity(SPELL_MAGIC_MISSILE);
+	effect eBlades 	= EffectSpellImmunity(14332); // Psychokinetic Blades
+	effect eForce	= EffectLinkEffects(eSleep, ePara);
+	eForce = EffectLinkEffects(ePois, eForce);
+	eForce = EffectLinkEffects(eMissile, eForce);
+	eForce = EffectLinkEffects(eBlades, eForce);
+	
+	
+	if (nLvl >= 4){
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_BIGBYS_INTERPOSING_HAND), eForce);
+		eForce = EffectLinkEffects(EffectSpellImmunity(14414), eForce); // Concussion Blast
+	}
+	if (nLvl >= 8){
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_BIGBYS_FORCEFUL_HAND), eForce);
+		eForce = EffectLinkEffects(EffectSpellImmunity(14519), eForce); // Telekinetic Maneuver
+	}
+	if (nLvl >= 12){
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_BIGBYS_GRASPING_HAND), eForce);
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_ISAACS_LESSER_MISSILE_STORM), eForce);
+	}
+	if (nLvl >= 16){
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_BIGBYS_CLENCHED_FIST), eForce);
+		eForce = EffectLinkEffects(EffectSpellImmunity(14672), eForce); // Force Beam
+	}
+	if (nLvl >= 20){
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_BIGBYS_CRUSHING_HAND), eForce);
+		eForce = EffectLinkEffects(EffectSpellImmunity(SPELL_ISAACS_GREATER_MISSILE_STORM), eForce);
+	}
+
+	ApplyDraconicImmunities(oPC, nSpell, eForce);	
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Electricity, Line (Bronze)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Bronze(object oPC)
+void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
 
 {
     int nType;
@@ -312,7 +280,6 @@ void PS_Dragon_Breath_Bronze(object oPC)
     int nDamageDie;
     int nVfx;
     int nSave;
-    int nSpell;
     int nDice;
 	int nBreath;
 	int nBonus;
@@ -355,7 +322,6 @@ void PS_Dragon_Breath_Bronze(object oPC)
 		    float fDelay;
 		    object oTarget;
 			effect eDamage;
-		    nSpell 			= GetSpellId();
 			vector vOrigin  = GetPosition(oPC);
 
 	//--------------------------------------------------------------------------
@@ -384,11 +350,11 @@ void PS_Dragon_Breath_Bronze(object oPC)
 }
 
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Concussive Force, Line (Amethyst)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Amethyst(object oPC)
+void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
 
 {
     int nType;
@@ -397,7 +363,6 @@ void PS_Dragon_Breath_Amethyst(object oPC)
     int nDamageDie;
     int nVfx;
     int nSave;
-    int nSpell;
     int nDice;
 	int nBreath;
 	int nBonus;
@@ -442,7 +407,6 @@ void PS_Dragon_Breath_Amethyst(object oPC)
 		    object oTarget;
 			effect eDamage;
 			effect eDamage2;
-		    nSpell 			= GetSpellId();
 			vector vOrigin  = GetPosition(oPC);
 
 	//--------------------------------------------------------------------------
@@ -472,11 +436,11 @@ void PS_Dragon_Breath_Amethyst(object oPC)
 	}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, repulsive Gas, Cone (Bronze)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Bronze_Gas(object oPC)
+void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -494,7 +458,6 @@ void PS_Dragon_Breath_Bronze_Gas(object oPC)
 	// ---------------------------------------------------------------------------
  	*/
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_MIND_SPELLS;	
@@ -580,11 +543,11 @@ void PS_Dragon_Breath_Bronze_Gas(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Acid, Line (Black)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Black(object oPC)
+void PS_Dragon_Breath_Black(object oPC, int nSpell)
 
 {
     int nType;
@@ -592,7 +555,6 @@ void PS_Dragon_Breath_Black(object oPC)
     int nDamageDie;
     int nVfx;
     int nSave;
-    int nSpell;
     int nDice;
 	int nBreath;
 	int nBonus;
@@ -636,7 +598,6 @@ void PS_Dragon_Breath_Black(object oPC)
 		    float fDelay;
 		    object oTarget;
 			effect eDamage;
-		    nSpell 			= GetSpellId();
 			vector vOrigin  = GetPosition(oPC);
 
 	//--------------------------------------------------------------------------
@@ -664,11 +625,11 @@ void PS_Dragon_Breath_Black(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Fire, Cone (Red)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Red(object oPC)
+void PS_Dragon_Breath_Red(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -682,7 +643,6 @@ void PS_Dragon_Breath_Red(object oPC)
     int nDamageDie;
 	int nBonus;
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_FIRE;	
@@ -746,11 +706,11 @@ void PS_Dragon_Breath_Red(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Sonic, Cone (Emerald)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Emerald(object oPC)
+void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -765,7 +725,6 @@ void PS_Dragon_Breath_Emerald(object oPC)
 	int nBonus;
 	int  nDuration = d6(1) + 5;
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_SONIC;	
@@ -835,11 +794,11 @@ void PS_Dragon_Breath_Emerald(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Cold (Dehydrating), Cone (Topaz)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Topaz(object oPC)
+void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -856,7 +815,6 @@ void PS_Dragon_Breath_Topaz(object oPC)
 	int  nDuration = d6(1) + 5;
 	int nDrainDice;
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_COLD;	
@@ -933,11 +891,11 @@ void PS_Dragon_Breath_Topaz(object oPC)
 			}
 		}
 }
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Cold, Cone (White)
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_White(object oPC)
+void PS_Dragon_Breath_White(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -954,7 +912,6 @@ void PS_Dragon_Breath_White(object oPC)
 	int  nDuration = d6(1) + 5;
 	int nDrainDice;
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_COLD;	
@@ -1018,11 +975,11 @@ void PS_Dragon_Breath_White(object oPC)
 			}
 		}
 }
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Negative, Cone (Shadow)
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Shadow(object oPC)
+void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -1040,7 +997,6 @@ void PS_Dragon_Breath_Shadow(object oPC)
 	// ---------------------------------------------------------------------------
  	*/
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_NEGATIVE;	
@@ -1136,7 +1092,7 @@ void PS_Dragon_Breath_Shadow(object oPC)
 // Dragon Breath, Electricity, Line (Blue)
 //---------------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Blue(object oPC)
+void PS_Dragon_Breath_Blue(object oPC, int nSpell)
 
 {
     int nType;
@@ -1144,7 +1100,6 @@ void PS_Dragon_Breath_Blue(object oPC)
     int nDamageDie;
     int nVfx;
     int nSave;
-    int nSpell;
     int nDice;
 	int nBreath;
 	int nBonus;
@@ -1187,7 +1142,6 @@ void PS_Dragon_Breath_Blue(object oPC)
 		    float fDelay;
 		    object oTarget;
 			effect eDamage;
-		    nSpell 			= GetSpellId();
 			vector vOrigin  = GetPosition(oPC);
 
 	//--------------------------------------------------------------------------
@@ -1219,7 +1173,7 @@ void PS_Dragon_Breath_Blue(object oPC)
 // Dragon Breath, Acid, Line (Copper)
 //---------------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Copper(object oPC)
+void PS_Dragon_Breath_Copper(object oPC, int nSpell)
 
 {
     int nType;
@@ -1227,7 +1181,6 @@ void PS_Dragon_Breath_Copper(object oPC)
     int nDamageDie;
     int nVfx;
     int nSave;
-    int nSpell;
     int nDice;
 	int nBreath;
 	int nBonus;
@@ -1271,7 +1224,6 @@ void PS_Dragon_Breath_Copper(object oPC)
 		    float fDelay;
 		    object oTarget;
 			effect eDamage;
-		    nSpell 			= GetSpellId();
 			vector vOrigin  = GetPosition(oPC);
 
 	//--------------------------------------------------------------------------
@@ -1299,11 +1251,11 @@ void PS_Dragon_Breath_Copper(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Slow Gas, Cone (Copper)
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Copper_Gas(object oPC)
+void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -1321,7 +1273,6 @@ void PS_Dragon_Breath_Copper_Gas(object oPC)
 	// ---------------------------------------------------------------------------
  	*/
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_SPELL;	
@@ -1406,11 +1357,11 @@ void PS_Dragon_Breath_Copper_Gas(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // Dragon Breath, Blinding Light, Cone (Radiant)
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Radiant_Light(object oPC)
+void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -1428,7 +1379,6 @@ void PS_Dragon_Breath_Radiant_Light(object oPC)
 	// ---------------------------------------------------------------------------
  	*/
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_SPELL;	
@@ -1534,7 +1484,7 @@ void PS_Dragon_Breath_Radiant_Light(object oPC)
 // Dragon Breath, Sparks, Cone (Iron)
 //---------------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Iron(object oPC)
+void PS_Dragon_Breath_Iron(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -1551,7 +1501,6 @@ void PS_Dragon_Breath_Iron(object oPC)
     int nDamageDie;
 	int nBonus;
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_FIRE;	
@@ -1624,7 +1573,7 @@ void PS_Dragon_Breath_Iron(object oPC)
 // Dragon Breath, Sleep Gas, Cone (Iron)
 //---------------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Breath_Iron_Gas(object oPC)
+void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
 
 {
 	float fDelay;	
@@ -1642,7 +1591,6 @@ void PS_Dragon_Breath_Iron_Gas(object oPC)
 	// ---------------------------------------------------------------------------
  	*/
 	
-	int nSpell 	   = GetSpellId();
 	vector vOrigin = GetPosition(oPC);
 	
 	int  nSave     = SAVING_THROW_TYPE_SPELL;	
@@ -1725,9 +1673,9 @@ void PS_Dragon_Breath_Iron_Gas(object oPC)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // Shadow Blend
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
 void PS_Dragon_Shadow_Blend(object oPC, int nSpell)
 {
@@ -1859,9 +1807,6 @@ void PS_Dragon_Size(object oPC, int nSpell)
 
 void PS_Hardening_Scales(object oPC, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {	return;	}
-	
 	int iDragon1 = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
 	int iDragon2 = GetLevelByClass(128, oPC);
 	int iLevel = iDragon1 + iDragon2;
@@ -1920,19 +1865,22 @@ void PS_Hardening_Scales(object oPC, int nSpell)
 				iPower = DAMAGE_POWER_NORMAL;		}			
 	}	
 			
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	effect eAC		= EffectACIncrease(iNatural, AC_NATURAL_BONUS);
-		effect eMagic	= EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
-		effect ePierc	= EffectDamageReduction(iDR, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
-		effect eDR		= EffectLinkEffects(eMagic, ePierc);
-				eDR		= SupernaturalEffect(eDR);
-				eAC 	= SupernaturalEffect(eAC);
-	
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
+	if (!GetHasSpellEffect(nSpell, oPC)){	
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/piercing and +" + IntToString(iPower) + " applied.");
-		SendMessageToPC(oPC, "Natural Armor of " + IntToString(iNatural) + " is applied.");		
-	}				
+		SendMessageToPC(oPC, "Natural Armor of " + IntToString(iNatural) + " is applied.");	
+	}
+	
+	effect eAC		= EffectACIncrease(iNatural, AC_NATURAL_BONUS);
+	effect eMagic	= EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
+	effect ePierc	= EffectDamageReduction(iDR, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
+	effect eDR		= EffectLinkEffects(eMagic, ePierc);
+			eDR		= SupernaturalEffect(eDR);
+			eAC 	= SupernaturalEffect(eAC);
+
+	PS_RemoveEffects(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
+					
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -1941,13 +1889,7 @@ void PS_Hardening_Scales(object oPC, int nSpell)
 
 void PS_Dragon_Senses(object oPC, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {	return;	}
-	
-	if (GetHasSpellEffect(nSpell,oPC))	
-	{	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
-	
 	int iDragon1 = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
 	int iDragon2 = GetLevelByClass(128, oPC);
 	int iLevel = iDragon1 + iDragon2;
@@ -1957,6 +1899,7 @@ void PS_Dragon_Senses(object oPC, int nSpell)
 	int iSkill2 = SKILL_LISTEN;
 	int iSkill3;
 	int iSkill4;
+	string sMessage = "";
 	
 	switch (nSubRace)
 	{	case 0: //Debug
@@ -2014,12 +1957,12 @@ void PS_Dragon_Senses(object oPC, int nSpell)
 	
 	if (iLevel >= 10)			//+6 bonus
 	{	iSkillboni = 6;
-		SendMessageToPC(oPC, "Draconic - Greater Skill Bonuses are applied.");	
+		sMessage = "Draconic - Greater Skill Bonuses are applied.";	
 			} 
 	
 	else if (iLevel >= 4)		//+3 bonus
 	{	iSkillboni = 3;
-		SendMessageToPC(oPC, "Draconic - Skill Bonuses are applied.");	
+		sMessage = "Draconic - Skill Bonuses are applied.";	
 			} 
 
 	else 						//+0 bonus
@@ -2034,11 +1977,12 @@ void PS_Dragon_Senses(object oPC, int nSpell)
 	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
 	effect eSense	=	EffectLinkEffects(eLink1,eLink2);
 			eSense	=	SupernaturalEffect(eSense);
-		
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{			
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSense, oPC);			
-	}
+	
+	if (!GetHasSpellEffect(nSpell,oPC) && sMessage != "")
+		SendMessageToPC(oPC, sMessage);
+	PS_RemoveEffects(oPC, nSpell);			
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSense, oPC);			
+
 }
 
 
@@ -2132,9 +2076,9 @@ void PS_Dragon_Roar(object oPC, int nSpell)
 	}	
 }	
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // PRC: Frightful Presence or Dragon Presence
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
 void PS_Dragon_Presence(object oPC, int nSpell)
 {
