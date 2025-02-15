@@ -148,14 +148,14 @@ void respawn(object xPC)
    
    // re-equip left and right hand equip
    
-   object oRhand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, xPC);
+   /*object oRhand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, xPC);
    object oLhand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, xPC);
    AssignCommand(xPC, ActionUnequipItem(oRhand));
    DelayCommand(0.5f, ActionEquipItem(oRhand, INVENTORY_SLOT_RIGHTHAND));
       AssignCommand(xPC, ActionUnequipItem(oLhand));
-   DelayCommand(0.5f, ActionEquipItem(oLhand, INVENTORY_SLOT_LEFTHAND));
+   DelayCommand(0.5f, ActionEquipItem(oLhand, INVENTORY_SLOT_LEFTHAND));*/
    
-   	AssignCommand(xPC,ActionJumpToLocation(xStart));
+   AssignCommand(xPC,ActionJumpToLocation(xStart));
 	PS_CalculateECL(xPC);
 }
 
