@@ -300,6 +300,8 @@ string GetClassSpellLevelColumn(int iClass)
 int GetSpellLevelForClass(int iSpell, int iClass)
 {
 	int iSpellLevel;
+	int nMasterSpell = StringToInt(Get2DAString(SPELLS_2DA, "Master", iSpell));
+	if (nMasterSpell > 0) iSpell = nMasterSpell;
 	string sCol = GetClassSpellLevelColumn(iClass);
 	string sSpellLevel = Get2DAString(SPELLS_2DA, sCol, iSpell);
 	
@@ -311,7 +313,7 @@ int GetSpellLevelForClass(int iSpell, int iClass)
 	//PrettyDebug ("GetSpellLevelForClass: For Spell " + IntToString(iSpell) + " and class of " +
 	//			 IntToString(iClass) + " Level is: " + IntToString(iSpellLevel));
 		
-	return (iSpellLevel);
+	return iSpellLevel;
 }
 
 int IsOnSpellList(int iSpell, int iClass)
@@ -824,11 +826,11 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
 	else if (IsOnSpellList(nSpellId, CLASS_TYPE_RANGER)) sClass = "Ranger";
 	else if (IsOnSpellList(nSpellId, CLASS_TYPE_BARD)) sClass = "Bard";
 	else {
-	string sSpellId = IntToString(nSpellId);
+		string sSpellId = IntToString(nSpellId);
 		SendMessageToPC(oCreator, "x2_inc_craft::CICraftScribeScroll(), Unable to find scroll ID number " + sSpellId);
 		SendMessageToPC(oCreator, "Please screenshot the above message and contact the dev team on our Discord.");
 		WriteTimestampedLogEntry("x2_inc_craft::CICraftScribeScroll failed - SpellId " + sSpellId);
-		return OBJECT_INVALID;
+		//return OBJECT_INVALID;
 	}
 	
 	string sGenericScrollRef = "X2_IT_SPDVSCR201";
