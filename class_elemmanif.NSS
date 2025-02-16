@@ -20,7 +20,7 @@ else if (GetHasFeat(FEAT_ELEMWAR_AFFINITY_WATER,oPC)) eDur = EffectVisualEffect(
 	int nSpellID = SPELLABILITY_ELEMWAR_MANIFESTATION;
 	object oTarget	= GetSpellTargetObject();
 	effect eHaste = EffectHaste();
-	effect eCleanse = EffectRegenerate(3,1.0f);
+	effect eCleanse = EffectRegenerate(5, 6.0f);
 	itemproperty eSlow = ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_SLOW,nLevel*2);
 
 	RemoveSpellEffects(nSpellID, OBJECT_SELF, OBJECT_SELF);
