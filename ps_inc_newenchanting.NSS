@@ -1332,6 +1332,24 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		if (!bSkipIp && (nIpType == 100 || nIpType == 101))
 			bSkipIp = TRUE; 
 		
+		// skip all malus item properties
+		if (!bSkipIp && (nIpType == 10 // attack penalty
+			|| nIpType == 21 //damage penalty
+			|| nIpType == 24 //damage vulner
+			|| nIpType == 27 //ability penalty
+			|| nIpType == 28 //ac penalty
+			|| nIpType == 29 //skill penalty
+			|| nIpType == 47 //no damage
+			|| nIpType == 49 //save penalty
+			|| nIpType == 50 //save penalty, specific
+			|| nIpType == 60 //to hit penalty
+			|| nIpType == 62 //usage restriction
+			|| nIpType == 63 //usage restriction
+			|| nIpType == 64 //usage restriction
+			|| nIpType == 65 //usage restriction
+			|| nIpType == 83)) //vfx
+			bSkipIp = TRUE; 
+		
 		// the special material power
 		if (!bSkipIp && GetIsItemPropertyValid(ipMatPower)){
 			if (IPGetItemPropertiesIdentical(ipMatPower, ip))
