@@ -132,6 +132,7 @@ int GetWeaponCanWrapAroundorHook(int nType){
 		case BASE_ITEM_FLAIL: 
 		case BASE_ITEM_TINYFLAIL:
 		case BASE_ITEM_INFANTRYFLAIL:
+		case BASE_ITEM_MEDIUMFLAIL:
 		case BASE_ITEM_SEIGEFLAIL:
 		case BASE_ITEM_KAMA: 
 		case BASE_ITEM_SICKLE:

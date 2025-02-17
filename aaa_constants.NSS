@@ -1116,6 +1116,7 @@ const int BASE_ITEM_SRR_GIANT_CLUB 						= 152;
 const int BASE_ITEM_GIANT_WARMACE 						= 153;
 const int BASE_ITEM_INFANTRYFLAIL						= 203;
 const int BASE_ITEM_SEIGEFLAIL 							= 175;
+const int BASE_ITEM_MEDIUMFLAIL							= 147;
 
 // the following are already defined in nwscript, they are unimplemented 
 // weapons that I re-implemented. -FlattedFifth
