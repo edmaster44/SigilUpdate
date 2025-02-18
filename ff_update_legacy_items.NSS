@@ -112,6 +112,17 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 		}
 	}
 	
+	if (sRef == "ps_flail_chainshatred"){
+		if (IPGetItemHasProperty(oItem, ItemPropertyEnhancementBonus(6), DURATION_TYPE_PERMANENT)){
+			FF_ModifyItemProperty(oItem, ItemPropertyEnhancementBonus(6));
+			FF_ModifyItemProperty(oItem, ItemPropertyEnhancementBonus(5), TRUE);
+		}
+		itemproperty ipDrain = ItemPropertyOnHitProps(IP_CONST_ONHIT_ABILITYDRAIN, 24, IP_CONST_ABILITY_CON);
+		if (IPGetItemHasProperty(oItem, ipDrain, DURATION_TYPE_PERMANENT))
+			FF_ModifyItemProperty(oItem, ipDrain);
+		return;
+	}
+	
 	// make sure that people get the mithral and adamantine ingots used in crafting here instead of
 	// the default ones that might be lingering in treasure tables
 	if (sRef == "n2_crft_ingadamant" || sRef == "n2_crft_ingmithral"){
