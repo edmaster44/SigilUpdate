@@ -31,6 +31,10 @@ const int ALLOW_ECL_LEVEL_30 = TRUE;
 // to marroweater according to ecl. If ecl isn't getting to lvl 30 this doesn't matter
 const int TAX_RUNES_FOR_ECL = FALSE;
 
+// if ALLOW_ECL_LEVEL_30 = true then this would reduce the xp gained from turning machine parts in
+// to astral plane according to ecl. If ecl isn't getting to lvl 30 this doesn't matter
+const int TAX_ASTRAL_FOR_ECL = FALSE;
+
 // as above, but for the gems with the dao in the central part of elemental earth
 const int TAX_GEMS_FOR_ECL = FALSE;
 

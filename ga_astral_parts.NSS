@@ -28,7 +28,9 @@ void main (int iRewarder)
 	else if (iRewarder == 2)
 	{
 		iAmount = (31 - iLevel) * iLoreMod * iTotalItems;
-		PS_GiveXPReward(oPC, iAmount);
+		if (ALLOW_ECL_LEVEL_30 && !TAX_ASTRAL_FOR_ECL)
+			GiveXPToCreature(oPC, iAmount);
+		else PS_GiveXPReward(oPC, iAmount);
 	}
 	else
 	{
