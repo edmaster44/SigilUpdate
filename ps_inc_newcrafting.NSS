@@ -1,4 +1,3 @@
-#include "ff_safevar"
 
 #include "ps_inc_newenchanting"
 
@@ -240,10 +239,10 @@ int GetCraftedItemCost(object oPC, struct baseitem i, struct material m1, struct
 
 void GenerateCraftDetails(object oPC) {
 
-	int nBase = PS_GetLocalInt(oPC, "Craft_BaseItemType");
-	int nMat1 = PS_GetLocalInt(oPC, "Craft_Mat1");
-	int nMat2 = PS_GetLocalInt(oPC, "Craft_Mat2");
-	int nMat3 = PS_GetLocalInt(oPC, "Craft_Mat3");
+	int nBase = GetLocalInt(oPC, "Craft_BaseItemType");
+	int nMat1 = GetLocalInt(oPC, "Craft_Mat1");
+	int nMat2 = GetLocalInt(oPC, "Craft_Mat2");
+	int nMat3 = GetLocalInt(oPC, "Craft_Mat3");
 	
 	struct baseitem i = LoadBaseItem(nBase);
 	struct material m1 = LoadMaterial(nMat1, i.matlist_1);
@@ -289,7 +288,7 @@ void GenerateCraftDetails(object oPC) {
 			}
 			string sNumDice = Get2DAString("baseitems", "NumDice", i.id);
 			string sDieToRoll = Get2DAString("baseitems", "DieToRoll", i.id);
-			sInfoText = sNumDice + "d" + sDieToRoll + ", ";
+			sInfoText = " " + sNumDice + "d" + sDieToRoll + ", ";
 			int nCritRange = StringToInt(Get2DAString("baseitems", "CritThreat", i.id));
 			int nLowRange = 21 - nCritRange;
 			if (nLowRange > 20) nLowRange = 20; // in case someone messes up the 2da
@@ -367,11 +366,11 @@ void GenerateCraftDetails(object oPC) {
 	//Manually adding DR notes since they're on the items, not itemproperties
 	if (i.type == "A") {
 		if (m1.label == "Demonscale" || m1.label == "Abyssal Bloodiron"){
-			sFeatures += "<i>Damage Reduction 5/Cold Iron or Good</i>";
+			sFeatures += "<i>Damage Reduction 5/Cold Iron + Good</i>";
 		} else if (m1.label == "Devilscale") {
-			sFeatures += "<i>Damage Reduction 5/Silver or Good</i>";
+			sFeatures += "<i>Damage Reduction 5/Silver + Good</i>";
 		} else if (m1.label == "Celestial Plumes") {
-			sFeatures += "<i>Damage Reduction 5/Mithral or Evil</i>";
+			sFeatures += "<i>Damage Reduction 5/Mithral + Evil</i>";
 		} else if (m1.label == "Glassteel") {
 			sFeatures += "<i>Damage Reduction 5/Slashing or Bludgeoning</i>";
 		} else if (m1.label == "Alchemic Platinum") {
