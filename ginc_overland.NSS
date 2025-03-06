@@ -16,7 +16,7 @@
 #include "ginc_param_const"
 #include "ginc_combat"
 #include "ginc_time"
-#include "ff_safevar"
+
 
 //Function Prototypes------------------------------
 
@@ -56,8 +56,8 @@ int GetPartyChallengeRating();
 //Player Location Functions
 void StorePlayerMapLocation(object oPC);
 void RestorePlayerMapLocation(object oPC);
-//location GetGlobalLocation(string sVar);
-//void SetGlobalLocation(string sVar, location lTarget);
+location GetGlobalLocation(string sVar);
+void SetGlobalLocation(string sVar, location lTarget);
 void SetCurrentPCTerrain(int nTerrain);
 
 //Random Encounter Setup Functions
@@ -118,7 +118,7 @@ void DeactivateOLMapUI(object oPC);
 \----------------------*/
 int GetCurrentPCTerrain()
 {
-	return PS_GetGlobalInt(VAR_PC_TERRAIN);
+	return GetGlobalInt(VAR_PC_TERRAIN);
 }
 
 int GetNumTerrainMaps(int nTerrain)
@@ -148,7 +148,7 @@ int GetNumTerrainMaps(int nTerrain)
 
 int GetTerrainType(object oTrigger)
 {
-	return PS_GetLocalInt(oTrigger,"nTerrain");
+	return GetLocalInt(oTrigger,"nTerrain");
 }
 
 int GetTerrainAtLocation(location lLocation)
@@ -161,7 +161,7 @@ int GetTerrainAtLocation(location lLocation)
 		oTrigger = GetNextSubArea(oArea);
 	}
 	
-	int nResult = PS_GetLocalInt(oTrigger,"nTerrain");
+	int nResult = GetLocalInt(oTrigger,"nTerrain");
 	return nResult;
 }
 
@@ -217,18 +217,18 @@ float GetTerrainModifiedRate(object oCreature, int nTerrainType)
 		fNewRate += NX2_TERRAIN_SPD_FAV_ROAD_BONUS;
 	}
 	
-	if (PS_GetLocalInt(oCreature, "bHostile") && !PS_GetLocalInt(oCreature, "bAfraid") )
+	if (GetLocalInt(oCreature, "bHostile") && !GetLocalInt(oCreature, "bAfraid") )
 	{
 		fNewRate *= NX2_TERRAIN_SPD_HOSTILE_MULT;
 	}
 	
 	/*	Neutral encounters move slightly slower than the party.	*/
-	if (PS_GetLocalInt(oCreature, "bNeutral"))
+	if (GetLocalInt(oCreature, "bNeutral"))
 	{
 		fNewRate *= NX2_TERRAIN_SPD_NEUTRAL_MULT;
 	}
 	
-	if (PS_GetLocalInt(oCreature, "bAfraid"))
+	if (GetLocalInt(oCreature, "bAfraid"))
 	{
 		fNewRate *= NX2_TERRAIN_SPD_AFRAID_MULT;
 	}
@@ -323,7 +323,7 @@ int GetEncounterRow(string sTable)
 	
 	nEncounterRow = Random(GetNumValidRows(sTable))+1;
 	sShutoffVariable = Get2DAString(sTable, SHUTOFF_COLUMN, nEncounterRow);
-	nEncounterShutoff = PS_GetGlobalInt(sShutoffVariable);
+	nEncounterShutoff = GetGlobalInt(sShutoffVariable);
 	if(nEncounterShutoff)
 		return FALSE;
 	
@@ -345,7 +345,7 @@ string GetEncounterRR(string sTable, int nEncounterRow)
 /*	Check to see which Encounter List Table 2DA to pull monsters from.	*/
 string GetEncounterTable(object oEncounterSource)
 {
-	int nRow		= PS_GetLocalInt(oEncounterSource, "nEncounterTable");
+	int nRow		= GetLocalInt(oEncounterSource, "nEncounterTable");
 	string sCol		= ENC_2DA;
 	
 	string sTable 	= Get2DAString(ENCOUNTER_AREAS_2DA, sCol, nRow);
@@ -401,21 +401,21 @@ int SetEncounterBribeValue(object oEncounter)
 		nResult = 10;
 	
 	SetCustomToken( 1000, IntToString(nResult));
-	PS_SetGlobalInt("BRIBE_AMOUNT", nResult);
+	SetGlobalInt("BRIBE_AMOUNT", nResult);
 	
 	return nResult;
 }
 
 int ModEncounterBribeValue(float fModPercent)
 {
-	int nCurrentAmount = PS_GetGlobalInt("BRIBE_AMOUNT");
+	int nCurrentAmount = GetGlobalInt("BRIBE_AMOUNT");
 	float fCurrentAmount = IntToFloat(nCurrentAmount);
 	PrettyDebug(FloatToString(fModPercent) + " percent of " + FloatToString(fCurrentAmount));			
 	float fResult = (fCurrentAmount * fModPercent * 0.01f);
 	int nResult = FloatToInt(fResult);
 	PrettyDebug("New Bribe Value:" + IntToString(nResult));
 	SetCustomToken( 1000, IntToString(nResult));
-	PS_SetGlobalInt("BRIBE_AMOUNT", nResult);
+	SetGlobalInt("BRIBE_AMOUNT", nResult);
 	
 	return nResult;
 }
@@ -429,7 +429,7 @@ object SetPartyActor(object oNewActor, object oCurrentOverride = OBJECT_INVALID)
 	int bOverride;
 	if(oCurrentOverride == OBJECT_INVALID)
 	{
-		oCurrentActor = PS_GetLocalObject(GetModule(), "oPartyLeader");
+		oCurrentActor = GetLocalObject(GetModule(), "oPartyLeader");
 		bOverride = FALSE;
 	}	
 	
@@ -452,7 +452,7 @@ object SetPartyActor(object oNewActor, object oCurrentOverride = OBJECT_INVALID)
 	
 	DelayCommand(0.1f, SetFactionLeader(oNewActor));
 	SetOwnersControlledCompanion( oCurrentActor, oNewActor );
-	PS_SetLocalObject(GetModule(), "oPartyLeader", oNewActor);
+	SetLocalObject(GetModule(), "oPartyLeader", oNewActor);
 	return oNewActor;
 }
 
@@ -524,7 +524,7 @@ void DisplayChallengeRating(object oPC, object oCreature)
 \------------------------------*/
 string GetSpecialEncounterTable(object oArea = OBJECT_SELF)
 {
-	string sTable 	= PS_GetLocalString(oArea, VAR_SE_TABLE);
+	string sTable 	= GetLocalString(oArea, VAR_SE_TABLE);
 	
 	PrettyDebug("Special Encounter Table: " + sTable);
 
@@ -538,11 +538,11 @@ object SpawnSpecialEncounter(string sTable, location lLocation)
 	string sResRef = Get2DAString(sTable, "ENC_RESREF", nEncounterRow);
 	
 	int nValidTerrain = StringToInt(Get2DAString(sTable, "nTerrain", nEncounterRow));
-	int bSEFired = PS_GetGlobalInt(sResRef + "_FIRED");
+	int bSEFired = GetGlobalInt(sResRef + "_FIRED");
 	
 	if( GetTerrainAtLocation(lLocation) == nValidTerrain && !bSEFired)
 	{
-		PS_SetGlobalInt(sResRef + "_FIRED", TRUE);
+		SetGlobalInt(sResRef + "_FIRED", TRUE);
 		PrettyDebug("Spawning sEncounterRR:"+sResRef);
 		object oSE = CreateObject(OBJECT_TYPE_CREATURE, sResRef, lLocation);
 		
@@ -550,7 +550,7 @@ object SpawnSpecialEncounter(string sTable, location lLocation)
 			SetEncounterLocalVariables(oSE, sTable, nEncounterRow);
 		
 		SetSEStartLocation(lLocation, oSE);
-		PS_SetLocalInt(OBJECT_SELF, VAR_SE_FLAG, TRUE);
+		SetLocalInt(OBJECT_SELF, VAR_SE_FLAG, TRUE);
 		return oSE;
 	}
 	
@@ -559,11 +559,11 @@ object SpawnSpecialEncounter(string sTable, location lLocation)
 
 void SetSEStartLocation(location lLocation, object oSE = OBJECT_SELF)
 {
-	PS_SetLocalLocation(oSE, VAR_SE_START_LOC, lLocation);
+	SetLocalLocation(oSE, VAR_SE_START_LOC, lLocation);
 }
 location GetSEStartLocation(object oSE = OBJECT_SELF)
 {
-	return PS_GetLocalLocation(oSE, VAR_SE_START_LOC);
+	return GetLocalLocation(oSE, VAR_SE_START_LOC);
 }
 
 /*------------------------------\
@@ -572,40 +572,45 @@ location GetSEStartLocation(object oSE = OBJECT_SELF)
 void SetCurrentPCTerrain(int nTerrain)
 {
 //	PrettyDebug("PC terrain type = " + IntToString(nTerrain));
-	PS_SetGlobalInt(VAR_PC_TERRAIN, nTerrain);
+	SetGlobalInt(VAR_PC_TERRAIN, nTerrain);
 }
-/* replaced by function in ff_safevar
-void SetGlobalLocation(string sVar, location lTarget)
-{
+
+void SetGlobalLocation(string sVar, location lTarget){
+	/* This is unnecessarily complicated
 	object oArea = GetAreaFromLocation(lTarget);
 	vector vTarg = GetPositionFromLocation(lTarget);
 	float fFace = GetFacingFromLocation(lTarget);
 	
-	PS_SetGlobalFloat(sVar + "x", vTarg.x);
-	PS_SetGlobalFloat(sVar + "y", vTarg.y);
-	PS_SetGlobalFloat(sVar + "z", vTarg.z);
-	PS_SetGlobalFloat(sVar + "f", fFace);
-	PS_SetGlobalString(sVar + "a", GetTag(oArea));
-}*/
+	SetGlobalFloat(sVar + "x", vTarg.x);
+	SetGlobalFloat(sVar + "y", vTarg.y);
+	SetGlobalFloat(sVar + "z", vTarg.z);
+	SetGlobalFloat(sVar + "f", fFace);
+	SetGlobalString(sVar + "a", GetTag(oArea));
+	*/
+	
+	SetLocalLocation(GetModule(), sVar, lTarget);
+}
 
-/* replaced by function in ff_safevar
-location GetGlobalLocation(string sVar)
-{
-	float x = PS_GetGlobalFloat(sVar + "x");
-	float y = PS_GetGlobalFloat(sVar + "y");
-	float z = PS_GetGlobalFloat(sVar + "z");
-	float fFace = PS_GetGlobalFloat(sVar + "f");
-	object oArea = GetObjectByTag(PS_GetGlobalString(sVar + "a"));
+
+location GetGlobalLocation(string sVar){
+		/* This is unnecessarily complicated
+	float x = GetGlobalFloat(sVar + "x");
+	float y = GetGlobalFloat(sVar + "y");
+	float z = GetGlobalFloat(sVar + "z");
+	float fFace = GetGlobalFloat(sVar + "f");
+	object oArea = GetObjectByTag(GetGlobalString(sVar + "a"));
 	
 	return Location(oArea,Vector(x,y,z),fFace);
+	*/
+	return GetLocalLocation(GetModule(), sVar);
 }
-*/
+
 
 /*	Stores the party's current location on the Overland Map.	*/
 void StorePlayerMapLocation(object oPC)
 {
 	PrettyDebug("Storing Overland Map location.");
-	PS_SetGlobalLocation(VAR_PARTY_LOCATION, GetLocation(oPC));
+	SetGlobalLocation(VAR_PARTY_LOCATION, GetLocation(oPC));
 	object oPlayerMarker = GetObjectByTag(TAG_PLAYER_MARKER);
 	
 	/*	Remove the previous marker.	*/		
@@ -619,7 +624,7 @@ void StorePlayerMapLocation(object oPC)
 void RestorePlayerMapLocation(object oPC)
 {
 	PrettyDebug("Overland Map location restored.");
-	location lPC = PS_GetGlobalLocation(VAR_PARTY_LOCATION);
+	location lPC = GetGlobalLocation(VAR_PARTY_LOCATION);
 	object oPlayerMarker = CreateObject(OBJECT_TYPE_WAYPOINT, TAG_PLAYER_MARKER, lPC);
 	object oFailSafe = GetObjectByTag(TAG_HOSTILE_SPAWN);
 	
@@ -653,8 +658,8 @@ void RestorePlayerMapLocation(object oPC)
 
 string GetEncounterConversation()
 {
-	PrettyDebug(PS_GetLocalString(OBJECT_SELF, "sConv"));
-	return PS_GetLocalString(OBJECT_SELF, "sConv");
+	PrettyDebug(GetLocalString(OBJECT_SELF, "sConv"));
+	return GetLocalString(OBJECT_SELF, "sConv");
 }
 
 
@@ -761,8 +766,8 @@ void SpawnEncounterCreatures(object oWP, int nDialogSkill, int nSkillMargin, int
 {
 	/*	Retrieve the values of the Encounter List 2DA and row stored on the
 		overland map creature.	*/
-	string sEncounterList2DA	= PS_GetLocalString(OBJECT_SELF, "sEncounterList2DA");
-	int nEncounterIndex			= PS_GetLocalInt(OBJECT_SELF, "nRow");
+	string sEncounterList2DA	= GetLocalString(OBJECT_SELF, "sEncounterList2DA");
+	int nEncounterIndex			= GetLocalInt(OBJECT_SELF, "nRow");
 	
 	string sCreatureCol	= "CREATURE_RESREF_";
 	string sMinCol 		= "MIN_RR_";
@@ -903,7 +908,7 @@ void InitiateEncounter(int nDialogSkill, int nSkillDC, int bGroup1ForceHostile =
 	StorePlayerMapLocation(oPC);
 	object oEncArea = GetArea(oPartyWP);
 	SetCurrentPCTerrain(0);
-	PS_SetLocalInt(oEncArea, "nEncounterEL", FloatToInt(GetChallengeRating(OBJECT_SELF)));
+	SetLocalInt(oEncArea, "nEncounterEL", FloatToInt(GetChallengeRating(OBJECT_SELF)));
 	ExitOverlandMap(oPC);
 	JumpPartyToArea(oPC, oPartyWP);
 }
@@ -948,7 +953,7 @@ object GetNearestTerrainTrigger(object oPC)
 \--------------------------*/
 int InitializeEncounter(object oPC)
 {
-	if(PS_GetGlobalInt(VAR_ENC_IGNORE))
+	if(GetGlobalInt(VAR_ENC_IGNORE))
 	{
 		return FALSE;
 	}
@@ -959,7 +964,7 @@ int InitializeEncounter(object oPC)
 	{
 		effect eSpawn = EffectNWN2SpecialEffectFile(VFX_HOSTILE_ENC_SPAWN);
 		effect eHostile = EffectNWN2SpecialEffectFile(VFX_HOSTILE_ENC);
-		PS_SetLocalInt(oEncounter, "bHostile", TRUE);
+		SetLocalInt(oEncounter, "bHostile", TRUE);
 		SetCustomHeartbeat(oEncounter, 6000);		//Initialize the custom heartbeat system... this could cause a weird problem if it failed for whatever reasons...
 		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSpawn, oEncounter));
 		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHostile, oEncounter));
@@ -992,10 +997,10 @@ float DetermineEncounterDistance(object oPC)
 	if( GetSkillRank(SKILL_LISTEN, oPC) > GetSkillRank(SKILL_SPOT, oPC))
 		nSkillToUse = SKILL_LISTEN;
 	
-	int nDC = PS_GetLocalInt(GetNearestTerrainTrigger(oPC), "nDetectDC");
+	int nDC = GetLocalInt(GetNearestTerrainTrigger(oPC), "nDetectDC");
 	
 	if(nDC == 0)
-		nDC = PS_GetLocalInt(oArea, "nDetectDC");
+		nDC = GetLocalInt(oArea, "nDetectDC");
 		
 	if(GetIsSkillSuccessful(oPC, nSkillToUse, nDC))
 		return RandomFloatBetween(9.0f, 12.0f);
@@ -1104,16 +1109,16 @@ void SetEncounterLocalVariables(object oEncounter, string sEncounterTable, int n
 		Encounter List 2DA and draw creatures from the appropriate row.	*/
 	/* Store the Overland Map Gameplay Variables on the Creature. */
 	
-	PS_SetLocalString(oEncounter, "sEncounterList2DA", sEncounterTable);
-	PS_SetLocalInt(oEncounter, "nRow", nRow);
-	PS_SetLocalString(oEncounter, "sConv", sConv);
+	SetLocalString(oEncounter, "sEncounterList2DA", sEncounterTable);
+	SetLocalInt(oEncounter, "nRow", nRow);
+	SetLocalString(oEncounter, "sConv", sConv);
 	
 //	PrettyDebug("Encounter Conversation:"+sConv);
 //	PrettyDebug("Encounter Lifespan:"+IntToString(nLifespan));
 	
-	PS_SetLocalInt(oEncounter, VAR_ENC_LIFESPAN, nLifespan);
-	PS_SetLocalFloat(oEncounter, "fSearchDist", fSearchDist);
-	PS_SetLocalInt(oEncounter, "nSurvivalDC", nSurvivalDC);
+	SetLocalInt(oEncounter, VAR_ENC_LIFESPAN, nLifespan);
+	SetLocalFloat(oEncounter, "fSearchDist", fSearchDist);
+	SetLocalInt(oEncounter, "nSurvivalDC", nSurvivalDC);
 }
 
 location CreateTestEncounterSpawnLocation(object oPC, float fDist = 8.0f)
@@ -1161,7 +1166,7 @@ void InitializeNeutralEncounter(object oPC, object oArea = OBJECT_SELF)
 					object oEnc = CreateObject(OBJECT_TYPE_CREATURE, sEncounterRR, GetLocation(oWP));
 					
 					DisplayChallengeRating(oPC, oEnc);
-					PS_SetLocalInt(oEnc, "bNeutral", TRUE);
+					SetLocalInt(oEnc, "bNeutral", TRUE);
 					SetEncounterLocalVariables(oEnc, sTable, i);
 				}
 			}
@@ -1186,7 +1191,7 @@ void InitializeNeutralEncounter(object oPC, object oArea = OBJECT_SELF)
 		object oWP = GetNearestObjectByTag(TAG_NEUTRAL_SPAWN, oPC);
 
 		object oEnc = CreateObject(OBJECT_TYPE_CREATURE, sEncounterRR, GetLocation(oWP));
-		PS_SetLocalInt(oEnc, "bNeutral", TRUE);
+		SetLocalInt(oEnc, "bNeutral", TRUE);
 		SetEncounterLocalVariables(oEnc, sTable, nRow);
 	}
 }
@@ -1219,7 +1224,7 @@ int GetEncounterMaxPopulation(string sTable, int nRow)
 
 void InitializeSpecialEncounter(object oPC)
 {
-	if(!PS_GetGlobalInt(VAR_ENC_IGNORE))
+	if(!GetGlobalInt(VAR_ENC_IGNORE))
 	{
 		PrettyDebug("Spawning a Special Encounter.");
 		string sTable = GetSpecialEncounterTable(GetArea(oPC));
@@ -1231,7 +1236,7 @@ void InitializeSpecialEncounter(object oPC)
 void ResetSpecialEncounterTimer(object oArea = OBJECT_SELF)
 {
 	int nSpecialEncounterCooldown = Random(SE_RATE_VARIANCE) + (SE_RATE_MINIMUM) + 1;
-	PS_SetLocalInt(oArea, VAR_ENC_SPECIAL_COOLDOWN, nSpecialEncounterCooldown);
+	SetLocalInt(oArea, VAR_ENC_SPECIAL_COOLDOWN, nSpecialEncounterCooldown);
 }
 
 string GetTravelPlaceableResRef(object oIpoint = OBJECT_SELF)
@@ -1294,7 +1299,7 @@ void ExitOverlandMap(object oPC)
 			DeactivateOLMapUI(oParty);
 		}
 				
-		PS_SetLocalInt(oParty, "bLoaded", FALSE); 
+		SetLocalInt(oParty, "bLoaded", FALSE); 
 		/* Restore the PC's default movement rate	*/
 		//float fCurrentRate = GetMovementRateFactor(oParty);
 		//float fRestoredRate = (1.00f - fCurrentRate) + fCurrentRate;
@@ -1304,7 +1309,7 @@ void ExitOverlandMap(object oPC)
 			SetScriptHidden(oParty, FALSE);
 		
 		SetCurrentPCTerrain(0);
-		PS_SetLocalInt(oParty, "pcshrunk", FALSE);
+		SetLocalInt(oParty, "pcshrunk", FALSE);
 		oParty = GetNextFactionMember(oPC, FALSE);
 	}
 }
@@ -1326,7 +1331,7 @@ void GerminateGoodies(int nTotal, object oArea = OBJECT_SELF)
 	int i = 0;
 	while(nGoodiesSpawned <= nTotal)		//Repeat this process until we've hit the cap for total goodies.
 	{
-		int nWeight = PS_GetLocalInt(oSeed, VAR_GOODIES_WEIGHT);
+		int nWeight = GetLocalInt(oSeed, VAR_GOODIES_WEIGHT);
 		int j=0;
 		while(j < nWeight)				//Create a number of goodies equal to the seed's weight. This allows us to have some
 		{
@@ -1354,7 +1359,7 @@ void GerminateGoodies(int nTotal, object oArea = OBJECT_SELF)
 int CreateGoodie(object oSeed)
 {
 	object oResult;
-	string sGoodieTable = PS_GetLocalString(oSeed, VAR_GOODIES_TABLE);
+	string sGoodieTable = GetLocalString(oSeed, VAR_GOODIES_TABLE);
 	PrettyDebug("Creating a goodie from the following table:" + sGoodieTable);
 	object oArea = GetArea(oSeed);
 	
@@ -1399,12 +1404,12 @@ int CreateGoodie(object oSeed)
 	int nDiscoveryDC = Get2DAInt(sGoodieTable, "DISCOVERY_DC", nRow);
 	string sDiscovery = GetStringByStrRef(Get2DAInt(sGoodieTable, "DISCOVERY_STRREF", nRow));
 
-	PS_SetLocalInt(oResult, VAR_GOODIES_DISC_SKILL, nDiscoverySkill);
-	PS_SetLocalInt(oResult, VAR_GOODIES_DISC_DC, nDiscoveryDC);
-	PS_SetLocalInt(oResult, "nRow", nRow);					//Set the proper variables on the object
-	PS_SetLocalString(oResult, "sGoodieTable", sGoodieTable);
+	SetLocalInt(oResult, VAR_GOODIES_DISC_SKILL, nDiscoverySkill);
+	SetLocalInt(oResult, VAR_GOODIES_DISC_DC, nDiscoveryDC);
+	SetLocalInt(oResult, "nRow", nRow);					//Set the proper variables on the object
+	SetLocalString(oResult, "sGoodieTable", sGoodieTable);
 	
-	PS_SetLocalString(oResult, VAR_GOODIES_DISC_STR, sDiscovery);
+	SetLocalString(oResult, VAR_GOODIES_DISC_STR, sDiscovery);
 		
 	return TRUE;
 }
@@ -1421,15 +1426,15 @@ void SetGoodieData(object oGoodie, string sGoodieTable, int nRow)
 	string sRewardGoods = Get2DAString(sGoodieTable, "REWARD_GOODS", nRow);
 	string sRewardRareRes = Get2DAString(sGoodieTable, "REWARD_RARERES", nRow);
 	
-	PS_SetLocalString(oGoodie, VAR_GOODIES_NAME, sName);	
+	SetLocalString(oGoodie, VAR_GOODIES_NAME, sName);	
 		
-	PS_SetLocalString(oGoodie, VAR_GOODIES_AC_STR, sActivate);
+	SetLocalString(oGoodie, VAR_GOODIES_AC_STR, sActivate);
 	
-	PS_SetLocalInt(oGoodie, VAR_GOODIES_GOLD, nRewardGold);
-	PS_SetLocalInt(oGoodie, VAR_GOODIES_XP, nRewardXP);
-	PS_SetLocalString(oGoodie, VAR_GOODIES_ITEMS, sRewardItems);
-	PS_SetLocalString(oGoodie, VAR_GOODIES_GOODS, sRewardGoods);
-	PS_SetLocalString(oGoodie, VAR_GOODIES_RARERES, sRewardRareRes);
+	SetLocalInt(oGoodie, VAR_GOODIES_GOLD, nRewardGold);
+	SetLocalInt(oGoodie, VAR_GOODIES_XP, nRewardXP);
+	SetLocalString(oGoodie, VAR_GOODIES_ITEMS, sRewardItems);
+	SetLocalString(oGoodie, VAR_GOODIES_GOODS, sRewardGoods);
+	SetLocalString(oGoodie, VAR_GOODIES_RARERES, sRewardRareRes);
 }
 
 int GetIsGoodieValidForTerrain(string sGoodieTable, int nRow, int nTerrain)
@@ -1488,7 +1493,7 @@ location GetGoodieLocation(object oSeed)
 {
 	location lLocation, lSafe;
 	vector vTest, vSafe;
-	float fRadius = PS_GetLocalFloat(oSeed, VAR_GOODIES_RADIUS);		
+	float fRadius = GetLocalFloat(oSeed, VAR_GOODIES_RADIUS);		
 	do{
 		lLocation = GetRandomLocationAroundObject(fRadius, oSeed, FALSE);
 		lSafe = CalcSafeLocation(GetFirstPC(), lLocation, 1.0, FALSE, FALSE);
