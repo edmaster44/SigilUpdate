@@ -535,4 +535,3 @@ void fRemoveSneakFeats(object oPC)
 // End remove feats
 
 
-
