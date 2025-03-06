@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_newcraft_include"
 
@@ -408,7 +408,7 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST");
 	
-	if (oItem == OBJECT_INVALID) oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	if (oItem == OBJECT_INVALID) oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	
 	if (CRAFT_DIRECT_FROM_2DA){
 		GenerateEnchantmentTypeListFrom2DA(oPC, oItem);
@@ -424,10 +424,10 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	int index = 0;
 	int max = SQLGetAffectedRows();
 	//SendMessageToPC(oPC, "returned: "+IntToString(max));
-	PS_SetLocalInt(oPC, "enchant_types_num", max);
+	SetLocalInt(oPC, "enchant_types_num", max);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		int n = StringToInt(SQLGetData(1));
-		PS_SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
+		SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
 		index++;
 	}
 	
@@ -436,14 +436,14 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 	int nDisplayed = 0;
 	for (index = 0; index < max; index++) {
 	
-		int n = PS_GetLocalInt(oPC, "enchant_type_"+IntToString(index));
+		int n = GetLocalInt(oPC, "enchant_type_"+IntToString(index));
 		struct enchantment e = LoadEnchantment(n, oPC);
 		string sName = GetTypeName(e);
 		int nType = e.type;
 		
-		if (PS_GetLocalInt(oPC, sName) == 0) {
-			PS_SetLocalInt(oPC, sName, 1);
-			PS_SetLocalString(oPC, "enchantment_"+IntToString(nDisplayed), sName);
+		if (GetLocalInt(oPC, sName) == 0) {
+			SetLocalInt(oPC, sName, 1);
+			SetLocalString(oPC, "enchantment_"+IntToString(nDisplayed), sName);
 			nDisplayed++;
 		
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(n), "EnchantTypeName="+sName+";", "", "5="+IntToString(n), "");
@@ -451,17 +451,17 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 				SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANTTROW_"+IntToString(index), TRUE);
 			}*/
 		}
-		PS_DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
+		DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
 	}
-	PS_DeleteLocalInt(oPC, "enchant_types_num");
+	DeleteLocalInt(oPC, "enchant_types_num");
 	
 	//remove those markers set above
 	index = 0;
 	max = nDisplayed;
 	while (index < max) {
-		if (PS_GetLocalString(oPC, "enchantment_"+IntToString(index)) != "") {
-			PS_DeleteLocalInt(oPC, PS_GetLocalString(oPC, "enchantment_"+IntToString(index)));
-			PS_DeleteLocalString(oPC, "enchantment_"+IntToString(index));
+		if (GetLocalString(oPC, "enchantment_"+IntToString(index)) != "") {
+			DeleteLocalInt(oPC, GetLocalString(oPC, "enchantment_"+IntToString(index)));
+			DeleteLocalString(oPC, "enchantment_"+IntToString(index));
 		}
 		index++;
 	}
@@ -473,7 +473,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 
 		//Clear the box
 	ClearListBox(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST");
-	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	
 	if (CRAFT_DIRECT_FROM_2DA){
 		GenerateParamTypeListFrom2DA(oPC, oItem, enchant);
@@ -493,10 +493,10 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 	int index = 0;
 	int max = SQLGetAffectedRows();
 	//SendMessageToPC(oPC, "returned: "+IntToString(max));
-	PS_SetLocalInt(oPC, "enchant_types_num", max);
+	SetLocalInt(oPC, "enchant_types_num", max);
 	while (SQLFetch() != SQL_ERROR) { //Fetch sql id's and store it
 		int n = StringToInt(SQLGetData(1));
-		PS_SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
+		SetLocalInt(oPC, "enchant_type_"+IntToString(index), n);
 		index++;
 	}
 	
@@ -504,7 +504,7 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 	//loose its place.
 	for (index = 0; index < max; index++) {
 	
-		int n = PS_GetLocalInt(oPC, "enchant_type_"+IntToString(index));
+		int n = GetLocalInt(oPC, "enchant_type_"+IntToString(index));
 		struct enchantment e = LoadEnchantment(n, oPC);
 		
 		int type = e.type;
@@ -517,9 +517,9 @@ void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 				SetGUIObjectDisabled(oPC, sEnchantingScreen, "ENCHANTPROW_"+IntToString(n), TRUE);
 			}*/
 		}
-		PS_DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
+		DeleteLocalInt(oPC, "enchant_type_"+IntToString(index)); //remove the evidence!
 	}
-	PS_DeleteLocalInt(oPC, "enchant_types_num");
+	DeleteLocalInt(oPC, "enchant_types_num");
 	
 }
 
@@ -842,7 +842,7 @@ void DisplayItemDescription(object oPC, object oItem) {
 //Prints out the details of the requirement
 string DisplaySpecialRequirement(string sReq) {
 	object oPC = OBJECT_SELF;
-	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	string line = "";
 	if (sReq == "CL_DIVINE") {
 		line = "Must be Cleric, Paladin, Favored Soul, or have Concentration 5 or Spellcraft 25.";
@@ -874,7 +874,7 @@ string DisplaySpecialRequirement(string sReq) {
 
 //Defines / Implements the custom requirements field
 int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID) {
-	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	if (sReq == "CL_DIVINE") {
 		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) > 0 ||
@@ -968,7 +968,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 				int nQuality = GetGemQuality(oItem);
 				if (nQReq == nQuality) {
 					//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-					PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
+					SetLocalObject(oPC, "GemstoneToTake", oItem);
 					return TRUE;
 				}
 			} 
@@ -978,7 +978,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
 						//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-						PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
+						SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
@@ -988,7 +988,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
 						//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-						PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
+						SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
@@ -998,7 +998,7 @@ int GetHasRequiredGemstone(object oPC, string sReq, int giveFeedback = FALSE) {
 					int nQuality = GetGemQuality(oItem);
 					if (nQReq == nQuality) {
 						//SpeakString("This item has base: "+sTag, TALKVOLUME_SHOUT);
-						PS_SetLocalObject(oPC, "GemstoneToTake", oItem);
+						SetLocalObject(oPC, "GemstoneToTake", oItem);
 						return TRUE;
 					}
 				}
@@ -1020,7 +1020,7 @@ int GetHasRequiredEssence(object oPC, string sReq, int giveFeedback = FALSE) {
 		
 	object oItem = GetItemPossessedBy(oPC, sReq);
 	if (GetIsObjectValid(oItem)) {
-		PS_SetLocalObject(oPC, "EssenceToTake", oItem);
+		SetLocalObject(oPC, "EssenceToTake", oItem);
 		return TRUE;
 	}
 	
@@ -1032,10 +1032,10 @@ int GetHasRequiredEssence(object oPC, string sReq, int giveFeedback = FALSE) {
 //This MUST be called AFTER getting the regular essence requirement
 int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence){
 	if (sAddEssence == "") return TRUE;
-	object oMainEssence = PS_GetLocalObject(oPC, "EssenceToTake");
+	object oMainEssence = GetLocalObject(oPC, "EssenceToTake");
 	if (sAddEssence == sMainEssence && GetIsObjectValid(oMainEssence)){
 		if (GetItemStackSize(oMainEssence) > 1){
-			PS_SetLocalObject(oPC, "AddEssenceToTake", oMainEssence);
+			SetLocalObject(oPC, "AddEssenceToTake", oMainEssence);
 			return TRUE;
 		}	
 	}
@@ -1046,7 +1046,7 @@ int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence){
 		// num of items a pc could have if inv full of full bags, including the bags
 		if (i > 27072) break;
 		if (GetResRef(oItem) == sAddEssence && oItem != oMainEssence){
-			PS_SetLocalObject(oPC, "AddEssenceToTake", oItem);
+			SetLocalObject(oPC, "AddEssenceToTake", oItem);
 			return TRUE;
 		}
 		oItem = GetNextItemInInventory(oPC);
@@ -1084,7 +1084,7 @@ int MeetsMinimumRequirements(object oPC) {
 	if (GetIsDM(oPC))
 		return TRUE;
 
-	object oItem = PS_GetLocalObject(oPC, "ObjectToEnchant");
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 
 	int nGold = 300; //minimum amount of gold for 1 point ability
 	int nCL = 3; //minimum CL for 1 point ability
@@ -1133,20 +1133,20 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant) {
 
 	int nGold = enchant.gold;
 	TakeGoldFromCreature(nGold, oPC, TRUE, TRUE);
-	object oGem = PS_GetLocalObject(oPC, "GemstoneToTake");
+	object oGem = GetLocalObject(oPC, "GemstoneToTake");
 	if (GetIsObjectValid(oGem)) {
 		string sTag = GetTag(oGem);
 		TakeNumCraftingMaterials(oPC, sTag, 1);
 	} else {
 		SendMessageToPC(oPC, "no gem required");
 	}
-	object oEssence = PS_GetLocalObject(oPC, "EssenceToTake");
+	object oEssence = GetLocalObject(oPC, "EssenceToTake");
 	if (GetIsObjectValid(oEssence)) {
 		string sTag = GetTag(oEssence);
 		TakeNumCraftingMaterials(oPC, sTag, 1);
 	} 
 	if (enchant.add_essence != ""){
-		object oAddEssence = PS_GetLocalObject(oPC, "AddEssenceToTake");
+		object oAddEssence = GetLocalObject(oPC, "AddEssenceToTake");
 		if (GetIsObjectValid(oAddEssence)) {
 			string sAddTag = GetTag(oAddEssence);
 			TakeNumCraftingMaterials(oPC, sAddTag, 1);
@@ -1507,7 +1507,8 @@ int GetItemTotalPointsAllowed(object oItem) {
 		}
 		ip = GetNextItemProperty(oItem);
 	}
-
+/* Retroactively applying player-made to old items with 3 special materials was based on 
+	assumption that loot items do not ever have 3 materials. Since learned that this is wrong.
 	if (bIsThrownOrMelee){
 		if (GetIsPlayerMade(oItem)) nBase += 2;
 		else if (nNumMaterials >= 3){ // if it's made with 3 special materials we will assume it's a player-made from before this change
@@ -1515,6 +1516,7 @@ int GetItemTotalPointsAllowed(object oItem) {
 			ApplyPlayerMade(oItem);
 		}
 	}
+	*/
 
 	if (nNumMaterials > 0) nNumMaterials -= 1;
 	int nTotal = nBase + nNumMaterials;
