@@ -576,6 +576,8 @@ void main()
 		// to check the items first otherwise we could get a false positive when
 		// checking the character
 		FF_UpdateLegacyItems(oPC);
+		EnableFinesse();
+		EnableCreatureFinesse();
 		CheckTattoos(oPC);
 		ScaleAdjust(oPC);
 		SetClockOnForPlayer(oPC, TRUE);
