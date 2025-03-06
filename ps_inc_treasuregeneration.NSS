@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //***************************************************
 //Handles new loot generation
@@ -52,7 +52,7 @@ void UploadItemToDatabase(string sItem, string sTable, object oTarget, int nTrea
 
 int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTable = "", int nCombineLevels = FALSE) {
 	object oHolder = GetModule();
-	int nMax = PS_GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
+	int nMax = GetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel));
 	if (nMax > 0)
 		return nMax;
 		
@@ -69,7 +69,7 @@ int GetMaxItemsInDatabaseTable(string sTable, int nTreasureLevel, string sSubTab
 		nMax = StringToInt(SQLGetData(1));
 	}
 	
-	PS_SetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel), nMax);
+	SetLocalInt(oHolder, sTable+sSubTable+"_"+IntToString(nTreasureLevel), nMax);
 	return nMax;
 }
 
@@ -134,278 +134,226 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 	} else if (TestStringAgainstPattern("**mechanus**", sAREA)){
 		nChance = 3;
-		if (Random(9) > 2){
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
-				case 1: nMat = SPECIAL_MAT_NEUMANNIC_FLYWHEEL; break;
-				case 2: nMat = SPECIAL_MAT_REGULAN_GEARSPRING; break;
-			}
-		} else {
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_FORMIC_AMBER; break;
-				case 1: nMat = SPECIAL_MAT_AXIOMATIC_BRASS; break;
-			}
-		}
-		
+		switch (Random(5)){
+			case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
+			case 1: nMat = SPECIAL_MAT_NEUMANNIC_FLYWHEEL; break;
+			case 2: nMat = SPECIAL_MAT_REGULAN_GEARSPRING; break;
+			case 3: nMat = SPECIAL_MAT_FORMIC_AMBER; break;
+			case 4: nMat = SPECIAL_MAT_AXIOMATIC_BRASS; break;
+		}	
 	} else 	if (TestStringAgainstPattern("**outland**", sAREA)){
 		nChance = 3;
-		if (Random(9) > 2){
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_DUSKWOOD; break;
-				case 1: nMat = SPECIAL_MAT_SHEDERRAN; break;
-				case 2: nMat = SPECIAL_MAT_ZALANTAR; break; 
-			}
-		} else {
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
-				case 1: nMat = SPECIAL_MAT_TWELVETREES_BARK; break;
-				case 2: nMat = SPECIAL_MAT_IRONWOOD; break;
-				case 3: nMat = SPECIAL_MAT_ROWANWOOD; break;
-			}
+
+		switch (Random(7)){
+			case 0: nMat = SPECIAL_MAT_DUSKWOOD; break;
+			case 1: nMat = SPECIAL_MAT_SHEDERRAN; break;
+			case 2: nMat = SPECIAL_MAT_ZALANTAR; break; 
+			case 3: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
+			case 4: nMat = SPECIAL_MAT_TWELVETREES_BARK; break;
+			case 5: nMat = SPECIAL_MAT_IRONWOOD; break;
+			case 6: nMat = SPECIAL_MAT_ROWANWOOD; break;
 		}
+
 	}
 	// mid level areas
 	else if (TestStringAgainstPattern("**beastlands**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_MANTICORE_HIDE; break;
-				case 1: nMat = SPECIAL_MAT_CHIMERA_HIDE; break;
-				case 2: nMat = SPECIAL_MAT_MOON_PEARL; break;
-				case 3: nMat = SPECIAL_MAT_ROWANWOOD; break;
-			}		
-		} else {
-			switch (Random(5)){
-				case 0: nMat = SPECIAL_MAT_DHIDE_BLACK; break; 
-				case 1: nMat = SPECIAL_MAT_DHIDE_BLUE; break; 
-				case 2: nMat = SPECIAL_MAT_DHIDE_RED; break; 
-				case 3: nMat = SPECIAL_MAT_DRAGON_BONE; break;
-				case 4: nMat = SPECIAL_MAT_DRAGON_SINEW; break; 
-			}
+
+		switch (Random(9)){
+			case 0: nMat = SPECIAL_MAT_MANTICORE_HIDE; break;
+			case 1: nMat = SPECIAL_MAT_CHIMERA_HIDE; break;
+			case 2: nMat = SPECIAL_MAT_MOON_PEARL; break;
+			case 3: nMat = SPECIAL_MAT_ROWANWOOD; break;
+			case 4: nMat = SPECIAL_MAT_DHIDE_BLACK; break; 
+			case 5: nMat = SPECIAL_MAT_DHIDE_BLUE; break; 
+			case 6: nMat = SPECIAL_MAT_DHIDE_RED; break; 
+			case 7: nMat = SPECIAL_MAT_DRAGON_BONE; break;
+			case 8: nMat = SPECIAL_MAT_DRAGON_SINEW; break; 
 		}
+
 	} else if (TestStringAgainstPattern("**earth**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(6)){ 
-				case 0: nMat = SPECIAL_MAT_GOLD; break; 
-				case 1: nMat = SPECIAL_MAT_OPHIDIAN; break; 
-				case 2: nMat = SPECIAL_MAT_SILVER_REG; break;
-				case 3: nMat = SPECIAL_MAT_PYRITE; break;
-				case 4: nMat = SPECIAL_MAT_METALLINE; break;
-				case 5: nMat = SPECIAL_MAT_GLASSTEEL; break;
-			}
-		} else {
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_BLOOD_GLASS; break;
-				case 1: nMat = SPECIAL_MAT_BYESHK; break;
-			}
+	
+		switch (Random(8)){ 
+			case 0: nMat = SPECIAL_MAT_GOLD; break; 
+			case 1: nMat = SPECIAL_MAT_OPHIDIAN; break; 
+			case 2: nMat = SPECIAL_MAT_SILVER_REG; break;
+			case 3: nMat = SPECIAL_MAT_PYRITE; break;
+			case 4: nMat = SPECIAL_MAT_METALLINE; break;
+			case 5: nMat = SPECIAL_MAT_GLASSTEEL; break;
+			case 6: nMat = SPECIAL_MAT_BLOOD_GLASS; break;
+			case 7: nMat = SPECIAL_MAT_BYESHK; break;
 		}
+	
 	} else if (TestStringAgainstPattern("**fire**", sAREA) || 
 		TestStringAgainstPattern("**magma**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			int nRoll = 4;
-			if (TestStringAgainstPattern("**salamander**", sAREA) ||
-				TestStringAgainstPattern("**obsidian**", sAREA))
-					nRoll += 1;
-			switch (Random(nRoll)){
-				case 0: nMat = SPECIAL_MAT_PYRITE; break;
-				case 1: nMat = SPECIAL_MAT_GOLD; break;
-				case 2: nMat = SPECIAL_MAT_DARKSTEEL; break;
-				case 3: nMat = SPECIAL_MAT_OERTHBLOOD; break;
-				case 4: nMat = SPECIAL_MAT_OPHIDIAN; break;
-			}
-		} else {
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_BLOOD_GLASS; break;
-				case 1: nMat = SPECIAL_MAT_BYESHK; break;
-			}
-		}	
+		nRoll = 6;
+		if (TestStringAgainstPattern("**salamander**", sAREA) ||
+			TestStringAgainstPattern("**obsidian**", sAREA))
+				nRoll += 1;
+		switch (Random(nRoll)){
+			case 0: nMat = SPECIAL_MAT_PYRITE; break;
+			case 1: nMat = SPECIAL_MAT_GOLD; break;
+			case 2: nMat = SPECIAL_MAT_DARKSTEEL; break;
+			case 3: nMat = SPECIAL_MAT_OERTHBLOOD; break;
+			case 4: nMat = SPECIAL_MAT_BLOOD_GLASS; break;
+			case 5: nMat = SPECIAL_MAT_BYESHK; break;
+			case 6: nMat = SPECIAL_MAT_OPHIDIAN; break;
+		}
+
 	} else if (TestStringAgainstPattern("**water**", sAREA) || 
 		TestStringAgainstPattern("**ooze**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_SILVER_REG; break;
-				case 1: nMat = SPECIAL_MAT_SILVER_ALCH; break;
-				case 2: nMat = SPECIAL_MAT_RIVERINE; break; 
-				case 3: nMat = SPECIAL_MAT_OPHIDIAN; break;
-			}
-		} else {
-			switch(Random(2)){
-				case 0: nMat = SPECIAL_MAT_GLASSTEEL; break;
-				case 1: nMat = SPECIAL_MAT_ALCHEMIC_PLATINUM; break;
-			}
+	
+		switch (Random(6)){
+			case 0: nMat = SPECIAL_MAT_SILVER_REG; break;
+			case 1: nMat = SPECIAL_MAT_SILVER_ALCH; break;
+			case 2: nMat = SPECIAL_MAT_RIVERINE; break; 
+			case 3: nMat = SPECIAL_MAT_OPHIDIAN; break;
+			case 4: nMat = SPECIAL_MAT_GLASSTEEL; break;
+			case 5: nMat = SPECIAL_MAT_ALCHEMIC_PLATINUM; break;
 		}
+	
 	} else if (TestStringAgainstPattern("**ice**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_RIVERINE; break;
-				case 1: nMat = SPECIAL_MAT_SILVER_ALCH; break;
-				case 2: nMat = SPECIAL_MAT_SILVER_REG; break;
-				case 3: nMat = SPECIAL_MAT_MOON_PEARL; break; 
-			}
-		} else {
-			int nRoll = 2;
-			if (TestStringAgainstPattern("**giant**", sAREA)) nChance += 1;
-			else if (TestStringAgainstPattern("**mountain**", sAREA)) nChance += 4;
-			switch (Random(nRoll)){
-				case 0: nMat = SPECIAL_MAT_RIVERINE; break; 
-				case 1: nMat = SPECIAL_MAT_MOON_PEARL; break; 
-				case 2: nMat = SPECIAL_MAT_GIANT_BONE; break; 
-				case 3: nMat = SPECIAL_MAT_DHIDE_WHITE; break; 
-				case 4: nMat = SPECIAL_MAT_DRAGON_BONE; break; 
-				case 5: nMat = SPECIAL_MAT_DRAGON_SINEW; break; 
-			}
+		nRoll = 6;
+		if (TestStringAgainstPattern("**giant**", sAREA)) nChance += 1;
+		else if (TestStringAgainstPattern("**mountain**", sAREA)) nChance += 4;
+
+		switch (Random(nRoll)){
+			case 0: nMat = SPECIAL_MAT_RIVERINE; break;
+			case 1: nMat = SPECIAL_MAT_SILVER_ALCH; break;
+			case 2: nMat = SPECIAL_MAT_SILVER_REG; break;
+			case 3: nMat = SPECIAL_MAT_MOON_PEARL; break; 
+			case 4: nMat = SPECIAL_MAT_RIVERINE; break; 
+			case 5: nMat = SPECIAL_MAT_MOON_PEARL; break; 
+			case 6: nMat = SPECIAL_MAT_GIANT_BONE; break; 
+			case 7: nMat = SPECIAL_MAT_DHIDE_WHITE; break; 
+			case 8: nMat = SPECIAL_MAT_DRAGON_BONE; break; 
+			case 9: nMat = SPECIAL_MAT_DRAGON_SINEW; break; 
 		}
+
 	} else 	if (TestStringAgainstPattern("**maldomini**", sAREA) || 
 		TestStringAgainstPattern("**minauros**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
-				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
-				case 2: nMat = SPECIAL_MAT_METEORIC_IRON; break;			
-			}
-		} else {
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-				case 1: nMat = SPECIAL_MAT_TANTULHOR; break; 
-				case 2: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
-			}
+
+		switch (Random(6)){
+			case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
+			case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
+			case 2: nMat = SPECIAL_MAT_METEORIC_IRON; break;			
+			case 3: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
+			case 4: nMat = SPECIAL_MAT_TANTULHOR; break; 
+			case 5: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
 		}
+
 	} else 	if (TestStringAgainstPattern("**mercuria**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_PLATINUM; break; 
-				case 1: nMat = SPECIAL_MAT_WHITE_GOLD; break; 
-				case 2: nMat = SPECIAL_MAT_MERCURIAN_ROSE; break;
-			}
-		} else {
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
-				case 1: nMat = SPECIAL_MAT_SOLANION_TRUESTEEL; break;
-				case 2: nMat = SPECIAL_MAT_CELESTIAL_PLUMES; break; 
-			}
+	
+		switch (Random(6)){
+			case 0: nMat = SPECIAL_MAT_PLATINUM; break; 
+			case 1: nMat = SPECIAL_MAT_WHITE_GOLD; break; 
+			case 2: nMat = SPECIAL_MAT_MERCURIAN_ROSE; break;
+			case 3: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
+			case 4: nMat = SPECIAL_MAT_SOLANION_TRUESTEEL; break;
+			case 5: nMat = SPECIAL_MAT_CELESTIAL_PLUMES; break; 
 		}
+		
 	} else if (TestStringAgainstPattern("**astral**", sAREA) ||
 		TestStringAgainstPattern("**limbo**", sAREA)){
 		nChance = 4;
-		if (Random(9) > 2){
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_METALLINE; break;
-				case 1: nMat = SPECIAL_MAT_MITHRAL_FOR_GOLEM; break;
-				case 2: nMat = SPECIAL_MAT_ELECTRUM; break; 
-				case 3: nMat = SPECIAL_MAT_ALCHEMIC_PLATINUM; break; 
-			}
-		} else {
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break;
-				case 1: nMat = SPECIAL_MAT_MINDSILVER; break;
-				case 2: nMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;  
-			}
+
+		switch (Random(7)){
+			case 0: nMat = SPECIAL_MAT_METALLINE; break;
+			case 1: nMat = SPECIAL_MAT_MITHRAL_FOR_GOLEM; break;
+			case 2: nMat = SPECIAL_MAT_ELECTRUM; break; 
+			case 3: nMat = SPECIAL_MAT_ALCHEMIC_PLATINUM; break; 
+			case 4: nMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break;
+			case 5: nMat = SPECIAL_MAT_MINDSILVER; break;
+			case 6: nMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;  
 		}
+	
 	}
 	// mid-high and high level areas
 	else if (TestStringAgainstPattern("**plateau**", sAREA)){
 		nChance = 5;
-		if (Random(9) > 2){
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
-				case 1: nMat = SPECIAL_MAT_AURORUM; break; 
-				case 2: nMat = SPECIAL_MAT_TWELVETREES_BARK; break; 
-			}
-		} else {
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_DRAGON_BONE; break;
-				case 1: nMat = SPECIAL_MAT_IRONWOOD; break;
-				case 2: nMat = SPECIAL_MAT_DHIDE_GREEN; break; 
-			}
+	
+		switch (Random(7)){
+			case 0: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
+			case 1: nMat = SPECIAL_MAT_AURORUM; break; 
+			case 2: nMat = SPECIAL_MAT_TWELVETREES_BARK; break; 
+			case 4: nMat = SPECIAL_MAT_DRAGON_BONE; break;
+			case 5: nMat = SPECIAL_MAT_IRONWOOD; break;
+			case 6: nMat = SPECIAL_MAT_DHIDE_GREEN; break; 
 		}
+		
 	} else if (TestStringAgainstPattern("**phlegethon**", sAREA) ||
 		TestStringAgainstPattern("**abyss**", sAREA)){
 		nChance = 5;
-		if (Random(9) > 2){
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
-				case 1: nMat = SPECIAL_MAT_DEMON_HORN; break;
-				case 2: nMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;				
-			}
-		} else {
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-				case 1: nMat = SPECIAL_MAT_ABYSSAL_BLOODIRON; break; 
-			}
+
+		switch (Random(5)){
+			case 0: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
+			case 1: nMat = SPECIAL_MAT_DEMON_HORN; break;
+			case 2: nMat = SPECIAL_MAT_PANDEMONIC_SILVER; break;				
+			case 3: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
+			case 4: nMat = SPECIAL_MAT_ABYSSAL_BLOODIRON; break; 
 		}
+		
 	} else if (TestStringAgainstPattern("**carceri**", sAREA)){
 		nChance = 5;
-		if (Random(9) > 2){
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
-				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break;  
-				case 2: nMat = SPECIAL_MAT_METEORIC_IRON; break; 
-				case 3: nMat = SPECIAL_MAT_MORGUTH_IRON; break; 
-			}
-		} else {
-			int nAltMat = SPECIAL_MAT_TANTULHOR;
-			if (TestStringAgainstPattern("**minethys**", sAREA))
-				nAltMat = SPECIAL_MAT_GIANT_BONE; 
-			else if (TestStringAgainstPattern("**prison**", sAREA) || 
-				TestStringAgainstPattern("**garden**", sAREA))
-					nAltMat = SPECIAL_MAT_PURE_ADAMANTINE; 
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_FIENDISH_IVORY; break;
-				case 1: nMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break; 
-				case 2: nMat = SPECIAL_MAT_AURORUM; break; 
-				case 3: nMat = nAltMat; break;
-			}
+		int nAltMat = SPECIAL_MAT_TANTULHOR;
+		if (TestStringAgainstPattern("**minethys**", sAREA))
+			nAltMat = SPECIAL_MAT_GIANT_BONE; 
+		else if (TestStringAgainstPattern("**prison**", sAREA) || 
+			TestStringAgainstPattern("**garden**", sAREA))
+				nAltMat = SPECIAL_MAT_PURE_ADAMANTINE; 
+
+		switch (Random(8)){
+			case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break; 
+			case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break;  
+			case 2: nMat = SPECIAL_MAT_METEORIC_IRON; break; 
+			case 3: nMat = SPECIAL_MAT_MORGUTH_IRON; break; 
+			case 4: nMat = SPECIAL_MAT_FIENDISH_IVORY; break;
+			case 5: nMat = SPECIAL_MAT_ASTRAL_DRIFTMETAL; break; 
+			case 6: nMat = SPECIAL_MAT_AURORUM; break; 
+			case 7: nMat = nAltMat; break;
 		}
+		
 	} else if (TestStringAgainstPattern("**clangor**", sAREA)){
 		nChance = 5;
-		if (Random(9) > 2){
-			switch (Random(3)){ 
-				case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
-				case 1: nMat = SPECIAL_MAT_AXIOMATIC_BRASS; break; 
-				case 2: nMat = SPECIAL_MAT_BYESHK; break;
-			}
-		} else {
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_ABYSSAL_BLOODIRON; break; 
-				case 1: nMat = SPECIAL_MAT_BLOOD_GLASS; break; 
-				case 2: nMat = SPECIAL_MAT_TANTULHOR; break;
-			}
+
+		switch (Random(6)){ 
+			case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
+			case 1: nMat = SPECIAL_MAT_AXIOMATIC_BRASS; break; 
+			case 2: nMat = SPECIAL_MAT_BYESHK; break;
+			case 3: nMat = SPECIAL_MAT_ABYSSAL_BLOODIRON; break; 
+			case 4: nMat = SPECIAL_MAT_BLOOD_GLASS; break; 
+			case 5: nMat = SPECIAL_MAT_TANTULHOR; break;
 		}
+		
 	} else if (TestStringAgainstPattern("**niflheim**", sAREA)){
 		nChance = 5;
-		if (Random(9) > 2){
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_TWELVETREES_BARK; break;
-				case 1: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
-			}
-		} else {
-			switch (Random(2)){
-				case 0: nMat = SPECIAL_MAT_FLESH_GOLEM_HIDE; break;
-				case 1: nMat = SPECIAL_MAT_GIANT_BONE; break;
-			}
+
+		switch (Random(4)){
+			case 0: nMat = SPECIAL_MAT_TWELVETREES_BARK; break;
+			case 1: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
+			case 2: nMat = SPECIAL_MAT_FLESH_GOLEM_HIDE; break;
+			case 3: nMat = SPECIAL_MAT_GIANT_BONE; break;
 		}
+		
 	} else if (TestStringAgainstPattern("**gehenna**", sAREA)){
 		nChance = 5;
-		if (Random(9) > 2){
-			switch (Random(4)){
-				case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break;
-				case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
-				case 2: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
-				case 3: nMat = SPECIAL_MAT_DEMON_HORN; break; 
-			}
-		} else {
-			switch (Random(3)){
-				case 0: nMat = SPECIAL_MAT_OERTHBLOOD; break; 
-				case 1: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
-				case 2: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
-			}
+
+		switch (Random(7)){
+			case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break;
+			case 1: nMat = SPECIAL_MAT_DEVIL_SCALE; break; 
+			case 2: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
+			case 3: nMat = SPECIAL_MAT_DEMON_HORN; break; 
+			case 4: nMat = SPECIAL_MAT_OERTHBLOOD; break; 
+			case 5: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
+			case 6: nMat = SPECIAL_MAT_FIENDISH_IVORY; break; 
 		}
+
 	}
 	// undersigil
 	else if (TestStringAgainstPattern("**undersigil**", sAREA)) {
@@ -430,8 +378,8 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 //creature_drop_chance = drop chance
 void CreateCreatureDrop(object oCreature) {
 
-	int nChance = PS_GetLocalInt(oCreature, "creature_drop_chance");
-	string sItem = PS_GetLocalString(oCreature, "creature_drop");
+	int nChance = GetLocalInt(oCreature, "creature_drop_chance");
+	string sItem = GetLocalString(oCreature, "creature_drop");
 	object oItem;
 	
 	if (d100() < nChance) {
@@ -906,7 +854,7 @@ int PickCRFromTreasureLevel(int nTreasureLevel) {
 void GenerateQuestRewardOnTarget(object oTarget, int nTreasureLevel, int allowRandom = FALSE) {
 
 	int nCR = PickCRFromTreasureLevel(nTreasureLevel);
-	PS_SetLocalInt(oTarget, "QUEST_CR", nCR);
+	SetLocalInt(oTarget, "QUEST_CR", nCR);
 
 	//Default to standard system for lower level quests
 	if (nTreasureLevel <= TREASURE_EPIC) {
@@ -934,6 +882,6 @@ void GenerateQuestRewardOnTarget(object oTarget, int nTreasureLevel, int allowRa
 			CreateTreasureItemOnTarget(sItem, oTarget, 1);
 	}
 	
-	DelayCommand(0.2f, PS_DeleteLocalInt(oTarget, "QUEST_CR"));
+	DelayCommand(0.2f, DeleteLocalInt(oTarget, "QUEST_CR"));
 
 }
