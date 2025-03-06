@@ -407,6 +407,7 @@ struct synergyBonus GetItemMaterialSynergyBonus(object oItem){
 	int vsGoblin = 0; 
 	int vsOutsider = 0; 
 	int vsUndead = 0; 
+	int vsShapeshifter = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)){
 		if (GetItemPropertyType(ip) == 100){
@@ -441,8 +442,13 @@ struct synergyBonus GetItemMaterialSynergyBonus(object oItem){
 					break;
 				}
 				case SPECIAL_MAT_FORMIC_AMBER: case SPECIAL_MAT_REGULAN_GEARSPRING:
-				case SPECIAL_MAT_NEUMANNIC_FLYWHEEL:{
+				case SPECIAL_MAT_NEUMANNIC_FLYWHEEL: case SPECIAL_MAT_FLESH_GOLEM_HIDE:{
 					vsElemental += 1;
+					break;
+				}
+				case SPECIAL_MAT_OPHIDIAN: case SPECIAL_MAT_DUSKWOOD:
+				case SPECIAL_MAT_SILVER_REG:{
+					vsShapeshifter += 1;
 					break;
 				}
 			}	
@@ -457,6 +463,7 @@ struct synergyBonus GetItemMaterialSynergyBonus(object oItem){
 	else if (vsGoblin >= 2) nRace = IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID;
 	else if (vsOutsider >= 2) nRace = IP_CONST_RACIALTYPE_OUTSIDER;
 	else if (vsUndead >= 2) nRace = IP_CONST_RACIALTYPE_UNDEAD;
+	else if (vsShapeshifter >= 2) nRace = IP_CONST_RACIALTYPE_SHAPECHANGER;
 	
 	if (nRace == -1) return dSynergy;
 	else {
