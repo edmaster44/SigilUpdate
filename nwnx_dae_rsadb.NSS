@@ -91,7 +91,8 @@ void main()
 
 			if(GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)
 			{
-			nAmount = KnightLevels(oAttacker);
+				nAmount = KnightLevels(oAttacker);
+				nAmount += GetLevelByClass(CLASS_TYPE_DIVINECHAMPION, oAttacker);
 				nAmount *= GreatSmiteMultiplier(oAttacker);
 			}
 		break;
