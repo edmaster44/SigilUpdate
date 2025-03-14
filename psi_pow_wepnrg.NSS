@@ -77,7 +77,7 @@ void main()
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),
-                              METAPSIONIC_EXTEND||METAPSIONIC_AUGMENT
+                              METAPSIONIC_EXTEND|METAPSIONIC_AUGMENT
                               );
 							  
 
@@ -93,7 +93,7 @@ void main()
 		int nDamage = IP_CONST_DAMAGEBONUS_1d8;
         effect eVis     = EffectVisualEffect(VFX_IMP_SUPER_HEROISM);
         float fDuration = 60.0f * manif.nManifesterLevel;
-        if(manif.bExtend) fDuration *= 2;
+        if(manif.bExtend) fDuration *= 2.0f;
 		if (manif.bAugment){ nDamage = IP_CONST_DAMAGEBONUS_1d10;}
 		int DamageType = IP_CONST_DAMAGETYPE_POSITIVE;
 		itemproperty iPEnergy = ItemPropertyDamageBonus(DamageType,nDamage);  
