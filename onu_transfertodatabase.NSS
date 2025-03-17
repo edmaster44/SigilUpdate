@@ -99,84 +99,84 @@ void LoadEnchantmentsIntoDatabase(object oPC) {
 	SQLExecDirect("TRUNCATE TABLE recipes");
 	
 	int n;
-	int max = GetNum2DARows("scodenchantments");
+	int max = GetNum2DARows("store_item_enchants");
 	for (n = 0; n < max; n++) {
 		//string recipe_id 	= IntToString(n);
-		string label		= SQLEncodeSpecialChars(Get2DAString("scodenchantments", "Label", n));
+		string label		= SQLEncodeSpecialChars(Get2DAString("store_item_enchants", "Label", n));
 		
-		string type	 		= Get2DAString("scodenchantments", "Type", n);
+		string type	 		= Get2DAString("store_item_enchants", "Type", n);
 		if (type == "")		type = "0";
 		
-		string subtype 		= Get2DAString("scodenchantments", "Subtype", n);
+		string subtype 		= Get2DAString("store_item_enchants", "Subtype", n);
 		if (subtype == "")	subtype = "0";
 		
-		string numerical 	= Get2DAString("scodenchantments", "Numerical", n);
+		string numerical 	= Get2DAString("store_item_enchants", "Numerical", n);
 		if (numerical == "")numerical = "0";
 		
-		string special 		= Get2DAString("scodenchantments", "Special", n);
+		string special 		= Get2DAString("store_item_enchants", "Special", n);
 		if (special == "")	special = "0";
 		
-		string points 		= Get2DAString("scodenchantments", "Points", n);
+		string points 		= Get2DAString("store_item_enchants", "Points", n);
 		if (points == "")	points = "0";
 		
-		string gold 		= Get2DAString("scodenchantments", "Gold", n);
+		string gold 		= Get2DAString("store_item_enchants", "Gold", n);
 		if (gold == "")		gold = "0";
 		
-		string essence 		= SQLEncodeSpecialChars(Get2DAString("scodenchantments", "Essence", n));
-		string gemstone 	= SQLEncodeSpecialChars(Get2DAString("scodenchantments", "Gemstone", n));
+		string essence 		= SQLEncodeSpecialChars(Get2DAString("store_item_enchants", "Essence", n));
+		string gemstone 	= SQLEncodeSpecialChars(Get2DAString("store_item_enchants", "Gemstone", n));
 		
-		string melee 		= Get2DAString("scodenchantments", "0_Melee", n);
+		string melee 		= Get2DAString("store_item_enchants", "0_Melee", n);
 		if (melee == "")	melee = "0";
 		
-		string ranged 		= Get2DAString("scodenchantments", "1_Ranged", n);
+		string ranged 		= Get2DAString("store_item_enchants", "1_Ranged", n);
 		if (ranged == "")	ranged = "0";
 		
-		string ammo			= Get2DAString("scodenchantments", "2_Ammo", n);
+		string ammo			= Get2DAString("store_item_enchants", "2_Ammo", n);
 		if (ammo == "")		ammo = "0";
 		
-		string thrown 		= Get2DAString("scodenchantments", "3_Thrown", n);
+		string thrown 		= Get2DAString("store_item_enchants", "3_Thrown", n);
 		if (thrown == "")	thrown = "0";
 		
-		string armor 		= Get2DAString("scodenchantments", "4_Armor", n);
+		string armor 		= Get2DAString("store_item_enchants", "4_Armor", n);
 		if (armor == "")	armor = "0";
 		
-		string glove 		= Get2DAString("scodenchantments", "5_Glove", n);
+		string glove 		= Get2DAString("store_item_enchants", "5_Glove", n);
 		if (glove == "")	glove = "0";
 		
-		string bracer 		= Get2DAString("scodenchantments", "6_Bracer", n);
+		string bracer 		= Get2DAString("store_item_enchants", "6_Bracer", n);
 		if (bracer == "")	bracer = "0";
 		
-		string helm 		= Get2DAString("scodenchantments", "7_Helm", n);
+		string helm 		= Get2DAString("store_item_enchants", "7_Helm", n);
 		if (helm == "")		helm = "0";
 		
-		string amulet 		= Get2DAString("scodenchantments", "8_Amulet", n);
+		string amulet 		= Get2DAString("store_item_enchants", "8_Amulet", n);
 		if (amulet == "")	amulet = "0";
 		
-		string ring 		= Get2DAString("scodenchantments", "9_Ring", n);
+		string ring 		= Get2DAString("store_item_enchants", "9_Ring", n);
 		if (ring == "")		ring = "0";
 		
-		string boots 		= Get2DAString("scodenchantments", "10_Boots", n);
+		string boots 		= Get2DAString("store_item_enchants", "10_Boots", n);
 		if (boots == "")	boots = "0";
 		
-		string belt 		= Get2DAString("scodenchantments", "11_Belt", n);
+		string belt 		= Get2DAString("store_item_enchants", "11_Belt", n);
 		if (belt == "") 	belt = "0";
 		
-		string cloak 	= Get2DAString("scodenchantments", "12_Cloak", n);
+		string cloak 	= Get2DAString("store_item_enchants", "12_Cloak", n);
 		if (cloak == "") cloak = "0";
 		
-		string container 	= Get2DAString("scodenchantments", "13_Container", n);
+		string container 	= Get2DAString("store_item_enchants", "13_Container", n);
 		if (container == "") container = "0";
 		
-		string instrument 	= Get2DAString("scodenchantments", "14_Instrument", n);
+		string instrument 	= Get2DAString("store_item_enchants", "14_Instrument", n);
 		if (instrument == "") instrument = "0";
 		
-		string misc 		= Get2DAString("scodenchantments", "15_Misc", n);
+		string misc 		= Get2DAString("store_item_enchants", "15_Misc", n);
 		if (misc == "")		misc = "0";
 		
-		string custom 		= Get2DAString("scodenchantments", "Custom_Requirement", n);
+		string custom 		= Get2DAString("store_item_enchants", "Custom_Requirement", n);
 		if (custom == "")		custom = "0";
 		
-		string can_enchant 	= Get2DAString("scodenchantments", "Can_Enchant", n);
+		string can_enchant 	= Get2DAString("store_item_enchants", "Can_Enchant", n);
 		if (can_enchant == "")		can_enchant = "0";
 		
 		string sQuery = "INSERT INTO recipes SET Label='"+label+"', Type='"+type+"', Subtype='"+subtype+"'";
