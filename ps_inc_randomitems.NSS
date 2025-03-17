@@ -1,4 +1,3 @@
-#include "ff_safevar"
 
 #include "ps_inc_flavortext"
 #include "ps_inc_experimentaleffects"
