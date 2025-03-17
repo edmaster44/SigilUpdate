@@ -7,7 +7,7 @@ const string sEnchantingScreen = "SCOD_ENCHANTING";
 
 
 struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID);
-struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID, int bUseLegacy = FALSE);
+struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID);
 struct enchantment LoadEnchantmentFromSQL(int index, object oPC = OBJECT_INVALID);
 
 //Enchant the chosen item
@@ -150,24 +150,21 @@ struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID){
 }
 
 
-struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID, int bUseLegacy = FALSE){
+struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID){
 
 	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
-	
-	string sEnchant2da = "scodenchantments";
-	if (bUseLegacy) sEnchant2da = "store_item_enchants";
-	
+
     struct enchantment enchant;
 	enchant.id = index;
-	enchant.type = GetTypeIndex(index, bUseLegacy);
-	enchant.subtype = GetSubTypeIndex(index, bUseLegacy);
-	enchant.numerical = GetParamIndex(index, bUseLegacy);
-	enchant.special = GetSpecialIndex(index, bUseLegacy);
-	enchant.points = GetPointValue(index, bUseLegacy);
-	enchant.gold = GetGoldCost(index, bUseLegacy);
-	enchant.essence = GetEssenceRequirement(index, bUseLegacy);
-	enchant.gemstone = GetGemRequirement(index, bUseLegacy);
-	enchant.special_req = Get2DAString(sEnchant2da, "Custom_Requirement", index); 
+	enchant.type = GetTypeIndex(index);
+	enchant.subtype = GetSubTypeIndex(index);
+	enchant.numerical = GetParamIndex(index);
+	enchant.special = GetSpecialIndex(index);
+	enchant.points = GetPointValue(index);
+	enchant.gold = GetGoldCost(index);
+	enchant.essence = GetEssenceRequirement(index);
+	enchant.gemstone = GetGemRequirement(index);
+	enchant.special_req = Get2DAString("scodenchantments", "Custom_Requirement", index); 
 	if (GetIsObjectValid(oPC)) enchant.add_essence = GetAdditionalEssenceReq(oPC, enchant.points);
 	else enchant.add_essence = "";
 	return enchant;
@@ -1355,17 +1352,6 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		
 		// the special material power
 		if (!bSkipIp && GetIsItemPropertyValid(ipMatPower)){
-			// the special mat power for the physical damage adamantines can
-			// change depending on base weapon damage and physical damage is
-			// not available with enchanting, just crafting, so if we find
-			// one physical damage, we skip all to avoid incorrect points
-			if (GetItemPropertyType(ipMatPower) == 16 && nIpType == 16){
-				int nMatSub =  GetItemPropertySubType(ipMatPower);
-				if ((nMatSub == 0 || nMatSub == 1 || nMatSub == 2) &&
-					(nIpSub == 0 || nIpSub == 1 || nIpSub == 2))
-						bSkipIp = TRUE;
-			
-			}
 			if (IPGetItemPropertiesIdentical(ipMatPower, ip))
 				bSkipIp = TRUE; // we've already added the points for the mat power
 		}
@@ -1521,7 +1507,8 @@ int GetItemTotalPointsAllowed(object oItem) {
 		}
 		ip = GetNextItemProperty(oItem);
 	}
-
+/* Retroactively applying player-made to old items with 3 special materials was based on 
+	assumption that loot items do not ever have 3 materials. Since learned that this is wrong.
 	if (bIsThrownOrMelee){
 		if (GetIsPlayerMade(oItem)) nBase += 2;
 		else if (nNumMaterials >= 3){ // if it's made with 3 special materials we will assume it's a player-made from before this change
@@ -1529,6 +1516,7 @@ int GetItemTotalPointsAllowed(object oItem) {
 			ApplyPlayerMade(oItem);
 		}
 	}
+	*/
 
 	if (nNumMaterials > 0) nNumMaterials -= 1;
 	int nTotal = nBase + nNumMaterials;

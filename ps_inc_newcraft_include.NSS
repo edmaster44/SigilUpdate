@@ -208,14 +208,14 @@ int GetCostTierOfMaterial(itemproperty iProp);
 string GetItemColumn(int nType);
 
 // simple 2da val retrieval from scodenchantments
-int GetTypeIndex(int index, int bUseLegacy = FALSE);
-int GetSubTypeIndex(int index, int bUseLegacy = FALSE);
-int GetParamIndex(int index, int bUseLegacy = FALSE);
-int GetGoldCost(int index, int bUseLegacy = FALSE);
-int GetPointValue(int index, int bUseLegacy = FALSE);
-int GetSpecialIndex(int index, int bUseLegacy = FALSE);
-string GetGemRequirement(int index, int bUseLegacy = FALSE);
-string GetEssenceRequirement(int index, int bUseLegacy = FALSE);
+int GetTypeIndex(int index);
+int GetSubTypeIndex(int index);
+int GetParamIndex(int index);
+int GetGoldCost(int index);
+int GetPointValue(int index);
+int GetSpecialIndex(int index);
+string GetGemRequirement(int index);
+string GetEssenceRequirement(int index);
 
 
 //************************************************
@@ -538,36 +538,28 @@ string GetItemColumn(int nType){
 }
 
 //Get Index from 2da
-int GetTypeIndex(int index, int bUseLegacy = FALSE){
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	int nIndex = StringToInt(Get2DAString(s2da, "Type", index));  
+int GetTypeIndex(int index){
+	int nIndex = StringToInt(Get2DAString("scodenchantments", "Type", index));  
 	return nIndex;
 }
 
 //Get Subtype Index from 2da
-int GetSubTypeIndex(int index, int bUseLegacy = FALSE){
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	int nIndex = StringToInt(Get2DAString(s2da, "Subtype", index));  
+int GetSubTypeIndex(int index){
+	int nIndex = StringToInt(Get2DAString("scodenchantments", "Subtype", index));  
 	return nIndex;
 }
 
 //Get Numerical index from 2da
-int GetParamIndex(int index, int bUseLegacy = FALSE){
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	int nIndex = StringToInt(Get2DAString(s2da, "Numerical", index));  
+int GetParamIndex(int index){
+	int nIndex = StringToInt(Get2DAString("scodenchantments", "Numerical", index));  
 	return nIndex;
 }
 
 //Get Gold cost from 2da
-int GetGoldCost(int index, int bUseLegacy = FALSE){
+int GetGoldCost(int index){
 	object oPC = OBJECT_SELF;
 	if (GetIsCraftingFree(oPC)) return 0;
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	int nGold = StringToInt(Get2DAString(s2da, "Gold", index));
+	int nGold = StringToInt(Get2DAString("scodenchantments", "Gold", index));
 		// 10% discount for craft magic arms and armor, since psi and lock get imbue for free
 	if (GetHasFeat(FEAT_CRAFT_MAGIC_ARMS_AND_ARMOR, oPC, TRUE)){
 		if (nGold >= 10){
@@ -580,37 +572,31 @@ int GetGoldCost(int index, int bUseLegacy = FALSE){
 }
 
 //Get Point value from 2da
-int GetPointValue(int index, int bUseLegacy = FALSE){
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	return StringToInt(Get2DAString(s2da, "Points", index));  
+int GetPointValue(int index){
+	int nPoint = StringToInt(Get2DAString("scodenchantments", "Points", index));  
+	return nPoint;
 }
 
 //Get Special index cost from 2da
-int GetSpecialIndex(int index, int bUseLegacy = FALSE){
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	return StringToInt(Get2DAString(s2da, "Special", index));  
+int GetSpecialIndex(int index){
+	int nPoint = StringToInt(Get2DAString("scodenchantments", "Special", index));  
+	return nPoint;
 }
 
 //Get Gem requirement from 2da
-string GetGemRequirement(int index, int bUseLegacy = FALSE){
+string GetGemRequirement(int index){
 	object oPC = OBJECT_SELF;
 	if (GetIsCraftingFree(oPC)) return "";
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	return Get2DAString(s2da, "Gemstone", index);  
-
+	string sGem = Get2DAString("scodenchantments", "Gemstone", index);  
+	return sGem;
 }
 
 //Get essence requirement from 2da
-string GetEssenceRequirement(int index, int bUseLegacy = FALSE){
+string GetEssenceRequirement(int index){
 	object oPC = OBJECT_SELF;
 	if (GetIsCraftingFree(oPC)) return "";
-	string s2da = "scodenchantments";
-	if (bUseLegacy) s2da = "store_item_enchants";
-	return Get2DAString(s2da, "Essence", index);  
-
+	string sEssence = Get2DAString("scodenchantments", "Essence", index);  
+	return sEssence;
 }
 
 int GetArmorBaseMaterial(object oItem){

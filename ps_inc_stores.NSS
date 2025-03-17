@@ -31,7 +31,7 @@ void AddMustHaveItems(object oStore);
 
 //Fetch the enchantment index saved on the store itself
 //Enchantment indices are defined in the DB and in scodenchantments.2da
-int GetStoreAppropriateEnchantmentIndex(string sType, object oStore, int nTries = 0);
+int GetStoreAppropriateEnchantmentIndex(string sType, object oStore);
 
 //Add an appropriate item to one of the planar stores
 void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID);
@@ -125,30 +125,22 @@ void AddMustHaveItems(object oStore) {
 
 }
 
-int GetStoreAppropriateEnchantmentIndex(string sType, object oStore, int nTries = 0) {
+int GetStoreAppropriateEnchantmentIndex(string sType, object oStore) {
 	
-	int nIndex = 0;
 	if (sType == "W") {
 		int nNum = GetLocalInt(oStore, "NumWeaponEnchants");
 		int nChosen = Random(nNum)+1;
-		nIndex = GetLocalInt(oStore, "WeaponEnchant_"+IntToString(nChosen));
+		return GetLocalInt(oStore, "WeaponEnchant_"+IntToString(nChosen));
 	} else if (sType == "A") {
 		int nNum = GetLocalInt(oStore, "NumArmorEnchants");
 		int nChosen = Random(nNum)+1;
-		nIndex = GetLocalInt(oStore, "ArmorEnchant_"+IntToString(nChosen));
+		return GetLocalInt(oStore, "ArmorEnchant_"+IntToString(nChosen));
 	} else if (sType == "M") {
 		int nNum = GetLocalInt(oStore, "NumMiscEnchants");
 		int nChosen = Random(nNum)+1;
-		nIndex = GetLocalInt(oStore, "MiscEnchant_"+IntToString(nChosen));
+		return GetLocalInt(oStore, "MiscEnchant_"+IntToString(nChosen));
 	}
-	nIndex--;
-	if (nIndex > GetNum2DARows("store_item_enchants") || nIndex < 0){
-		if (nTries < 5){
-			nTries++;
-			nIndex = GetStoreAppropriateEnchantmentIndex(sType, oStore, nTries);
-		} else return -1;
-	}
-	return nIndex;
+	return -1;
 }
 
 void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
@@ -202,8 +194,8 @@ void CreateItemForStore(object oStore, object oPC = OBJECT_INVALID) {
 	if (GetIsObjectValid(oPC)) {
 		SendMessageToPC(oPC, "About to enchant. . ");
 	}
-
-	struct enchantment e = LoadEnchantmentFrom2DA(nEnchant, oPC, TRUE);
+	
+	struct enchantment e = LoadEnchantmentFromSQL(nEnchant, oPC);
 	
 	if (GetIsObjectValid(oPC)) {
 		SendMessageToPC(oPC, "Enchantment chosen: "+IntToString(e.id));
