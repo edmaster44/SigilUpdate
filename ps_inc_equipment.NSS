@@ -973,7 +973,8 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (PS_GetLocalInt(oESSENCE, "TempChange") == 1)
     {
-        if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE)
+        if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE &&
+			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE))
         {
             SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
             AssignCommand(oPC, ClearAllActions());
