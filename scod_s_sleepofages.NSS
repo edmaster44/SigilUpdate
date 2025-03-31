@@ -20,7 +20,8 @@ void main() {
     location 	lTarget 	= 	GetSpellTargetLocation();
 	object 		oCaster 	=	OBJECT_SELF;
     object 		oTarget 	= 	GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE,OBJECT_TYPE_CREATURE);
-    effect 		eDur 		= 	EffectNWN2SpecialEffectFile("sp_sleep_hit");
+    //effect 		eDur 		= 	EffectNWN2SpecialEffectFile("sp_sleep_hit");
+	effect eDur = EffectVisualEffect(VFX_DUR_SLEEP);
 	effect		eSleep		=	EffectSleep();
 	effect		eLink		=	EffectLinkEffects(eSleep, eDur);
 	float		fDuration	=	RoundsToSeconds(GetWarlockCasterLevel(oCaster));
@@ -29,7 +30,8 @@ void main() {
 	
 	fDuration		=	ApplyMetamagicDurationMods(fDuration);
 	
-	effect eFX = EffectNWN2SpecialEffectFile("sp_abjuration_aoe");
+	//effect eFX = EffectNWN2SpecialEffectFile("sp_abjuration_aoe");
+	effect eFX = EffectVisualEffect(VFX_IMP_SLEEP);
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFX, lTarget);
 	
 	if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
@@ -61,8 +63,8 @@ void main() {
 						DelayCommand((fDuration-0.1f), CheckAndDoMagicDamage(oTarget, nAwakeDice)); //for PCs, just check when the duration runs out
 					} else {
 						ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-						PS_SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
-						PS_SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
+						SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
+						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
 					}
 						
 				} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster) || GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -119,7 +121,7 @@ void main() {
 void DoMagicDamageOnWaking(object oTarget, int nAwake = 2) {
 	effect eDamage = EffectDamage(d6(nAwake));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-	PS_SetLocalString(oTarget, "DamagedScript", "");
+	SetLocalString(oTarget, "DamagedScript", "");
 }
 
 void CheckAndDoMagicDamage(object oTarget, int nAwake = 2) {
