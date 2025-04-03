@@ -24,9 +24,14 @@ void main() {
 	effect eDur = EffectVisualEffect(VFX_DUR_SLEEP);
 	effect		eSleep		=	EffectSleep();
 	effect		eLink		=	EffectLinkEffects(eSleep, eDur);
-	float		fDuration	=	RoundsToSeconds(GetWarlockCasterLevel(oCaster));
+	int 		nLvl 		= 	GetWarlockCasterLevel(oCaster);
+	float		fDuration	=	RoundsToSeconds(nLvl);
 	int	 		nAwakeDice 	= 	2;
 	int 		nDC			= 	GetSpellSaveDC();
+	int 		nCount 		= 	0;
+	int 		nMaxAffected = 4 + (nLvl / 2);
+	
+	if (nMaxAffected > 12) nMaxAffected = 12;
 	
 	fDuration		=	ApplyMetamagicDurationMods(fDuration);
 	
@@ -49,8 +54,9 @@ void main() {
 	}
 
     while (GetIsObjectValid(oTarget)) {
+		if (nCount >= nMaxAffected) return;
 	
-		if (oTarget != oCaster) {
+		if (oTarget != oCaster && GetIsReactionTypeHostile(oTarget, oCaster)) {
 		
 			if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster) || !DoWarlockMyResistSpell(oCaster, oTarget)) {	
 			
@@ -59,9 +65,11 @@ void main() {
 		            SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), TRUE));
 					eLink = EffectLinkEffects(eLink, EffectOnDispel(0.1f, DoMagicDamageOnWaking(oTarget))); //if dispelled, do magic damage
 					if (GetIsPC(oTarget)) {
+						nCount++;
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 						DelayCommand((fDuration-0.1f), CheckAndDoMagicDamage(oTarget, nAwakeDice)); //for PCs, just check when the duration runs out
 					} else {
+						nCount++;
 						ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 						SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
 						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
@@ -99,10 +107,12 @@ void main() {
 						
 						if (GetIsPC(oTarget)) {
 							if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) {
+								nCount++;
 					    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 							}
 						}
 						else { // No save for monsters.
+							nCount++;
 					        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 						}
 					

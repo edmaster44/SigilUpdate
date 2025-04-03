@@ -63,6 +63,9 @@ int nHellfireConDmg = 0;
 int BonusDamageDice = 0;
 int BonusDamageAdded = FALSE;
 
+//FlattedFifth custom save DC calculation that uses CL to get a spell level
+int GetCustomWarlockDC(object oCaster);
+
 // JWR - OEI 06/18/2008 -- Hellfire Warlock Damage Bonus functions
 void HellfireShieldFeedbackMsg(int x, int strref, object oCaster);
 int IsHellfireBlastActive(object oCaster=OBJECT_SELF);
@@ -266,6 +269,7 @@ int nIsCritcalAttack = 0; //Remembering if attack was critical for HellfireBlast
 int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, int nIgnoreResists, int nHalfDmg, int nTouch/*=1*/)
 {
     int nDmg = 0;
+	int nDC = GetCustomWarlockDC(oCaster);
 
     // Note: Caster Lvl is /2 for purposes of Spell Resistance (done internally in code)
     //Make SR Check
@@ -276,10 +280,10 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
 		if (!BonusDamageAdded)
 		{
 			BonusDamageAdded = TRUE;
-			int BlastBonus2 = PS_GetLocalInt(oCaster, "BlastBonus_2");
+			int BlastBonus2 = GetLocalInt(oCaster, "BlastBonus_2");
 			if (BlastBonus2 > 0)
 			{
-				PS_SetLocalInt(oCaster, "BlastBonus_2", BlastBonus2 -1);
+				SetLocalInt(oCaster, "BlastBonus_2", BlastBonus2 -1);
 				BonusDamageDice = BonusDamageDice + 2;
 			}			
 		}
@@ -316,11 +320,11 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
 			int nMetaMagic = GetMetaMagicFeat();
 			if ( nMetaMagic & METAMAGIC_INVOC_HELLRIME_BLAST ) {
 				SendMessageToPC(oCaster, "Hellrime turned reflex save to fortitude");
-				if (FortitudeSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oCaster)) {
+				if (FortitudeSave(oTarget, nDC, SAVING_THROW_TYPE_NONE, oCaster)) {
 					nDmg = nDmg/2;
 				}
 			} else {
-            	nDmg = GetReflexAdjustedDamage(nDmg, oTarget, GetSpellSaveDC());
+            	nDmg = GetReflexAdjustedDamage(nDmg, oTarget, nDC);
 			}
         }
     }
@@ -346,6 +350,7 @@ int nDmg = 0;
 
 int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nDmgType, int nAllowReflexSave, int nIgnoreResists, int nHalfDmg, int nVFX)
 {
+	int nDC = GetCustomWarlockDC(oCaster);
     // Default Blast w/no mods
     int nMetaMagic = GetMetaMagicFeat();
 	int nHitVFX = VFX_INVOCATION_ELDRITCH_HIT;	// default is Edlritch
@@ -383,9 +388,9 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
         }
     
 		nTouch      = TouchAttackRanged(oTarget, TRUE, nBonus);
-		if (PS_GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT")) //collect only when requested
+		if (GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT")) //collect only when requested
 		{
-		    PS_SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", nTouch);
+		    SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", nTouch);
 		}
 		
         //if ( TouchAttackRanged( oTarget, TRUE, nBonus ) == TOUCH_ATTACK_RESULT_MISS )
@@ -440,7 +445,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 				//This is similiar to the already existing burn damage system, but should take place sliiightly faster
 				//And includes the magic damage total in the calculation
 				if (nDmg > (GetMaxHitPoints(oTarget)/5)) {
-					if (!WillSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR, oCaster)) {
+					if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster)) {
 						effect eFear = EffectFrightened();
 						int nDur = (GetWarlockCasterLevel(oCaster)/5);
 						if (nDur <= 0) nDur = 1;
@@ -540,7 +545,7 @@ void DoEldritchCombinedEffectsWrapper(object oTarget, int nAllowReflexSave=FALSE
 // Eldritch Essence Effects:
 int DoEssenceDrainingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
-	int nDC = GetSpellSaveDC();
+	int nDC = GetCustomWarlockDC(oCaster);
     if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
 		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -584,7 +589,7 @@ int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape
 {
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	
-	int nDC = GetSpellSaveDC();
+	int nDC = GetCustomWarlockDC(oCaster);
     if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
 		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -624,7 +629,7 @@ int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape
 
 int DoEssenceBeshadowedBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
-	int nDC = GetSpellSaveDC();
+	int nDC = GetCustomWarlockDC(oCaster);
     if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
 		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -717,7 +722,7 @@ int DoEssenceBrimstoneBlast(object oCaster, object oTarget, int bCalledFromShape
 {
 	//SpeakString("DoEssenceBrimstoneBlast(...): Entering function.");	// DEBUG!
 	int nHasSpellEffect = GetHasSpellEffect(GetSpellId(), oTarget);
-
+	int nDC = GetCustomWarlockDC(oCaster);
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_FIRE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_BRIMSTONE_RAY) )
     {
@@ -741,7 +746,6 @@ int DoEssenceBrimstoneBlast(object oCaster, object oTarget, int bCalledFromShape
             else if ( nCasterLvl >= 10 )  { nRoundsLeft = 2; }
             else                          { nRoundsLeft = 1; }
 
-            int nDC = GetSpellSaveDC();
             SaveDelayedSpellInfo(SPELL_I_BRIMSTONE_BLAST, oTarget, oCaster, nDC);
 			effect eVFX = ExtraordinaryEffect(EffectVisualEffect(894));
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, RoundsToSeconds(nRoundsLeft));	
@@ -756,13 +760,14 @@ int DoEssenceBrimstoneBlast(object oCaster, object oTarget, int bCalledFromShape
 
 int DoEssenceHellrimeBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
+	int nDC = GetCustomWarlockDC(oCaster);
     // First, do Base Effects:
     if (DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_COLD, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_HELLRIME_RAY) )
     {
         // Additional Effects: (Dex Penalty)
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
+            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
             {
                 float fDuration = RoundsToSeconds(3);
 
@@ -787,7 +792,7 @@ int DoEssenceHellrimeBlast(object oCaster, object oTarget, int bCalledFromShape,
 
 int DoEssenceBewitchingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
-	int nDC = GetSpellSaveDC();
+	int nDC = GetCustomWarlockDC(oCaster);
     if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
 		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -832,7 +837,7 @@ int DoEssenceBewitchingBlast(object oCaster, object oTarget, int bCalledFromShap
 
 int DoEssenceNoxiousBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
-	int nDC = GetSpellSaveDC();
+	int nDC = GetCustomWarlockDC(oCaster);
     if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
 		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -921,7 +926,7 @@ int DoEssenceVitriolicBlast(object oCaster, object oTarget, int bCalledFromShape
         // Additional Effects: (Acid)
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            int nDC = GetSpellSaveDC();
+            int nDC = GetCustomWarlockDC(oCaster);
             {
                 // Doesn't Stack!
                 //if (GetHasSpellEffect(GetSpellId(),oTarget))    // JLR-OEI 06/30/06: This will always return true due to above eldritch blast dmg effect that gets applied
@@ -956,28 +961,28 @@ int DoEssenceVitriolicBlast(object oCaster, object oTarget, int bCalledFromShape
 
 void CheckNumberOfShadows(object oPC) {
 	
-	int nNumberCalled = PS_GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
+	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
 	int currentNumber = 0;
 
 	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = PS_GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+		object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
 			currentNumber++;
 		}
 	}
 
-	PS_SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", currentNumber);
+	SetLocalInt(oPC, "WARLOCK_UNDEAD_CALLED", currentNumber);
 
 	int newCount = 0;
 	if (currentNumber != nNumberCalled) {
 		for(n = 0; n <= nNumberCalled; n++) {
-			object oSummon = PS_GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+			object oSummon = GetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 			if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
-				PS_SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(newCount), oSummon);
+				SetLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(newCount), oSummon);
 				newCount++;
 			} else {
-				PS_DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
+				DeleteLocalObject(oPC, "WARLOCK_UNDEAD_"+IntToString(n));
 			}
 		}
 	}
@@ -994,16 +999,16 @@ void DoWraithExtraction(object oCaster, object oTarget, location lTarget, float 
 			
 			CheckNumberOfShadows(oCaster);
 		
-			int nNumberCalled = PS_GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
+			int nNumberCalled = GetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED");
 			if (nNumberCalled < 8) {
 			
 				object oCreature = CreateObject(OBJECT_TYPE_CREATURE, "ps_summon_warlockshadow", lTarget);
-				PS_SetLocalObject(oCreature, abilityCaster, oCaster);
-				PS_SetLocalObject(oCreature, "FOLLOW_MASTER", oCaster);
-				PS_SetLocalInt(oCreature, "IS_SUMMONED", 1);
+				SetLocalObject(oCreature, abilityCaster, oCaster);
+				SetLocalObject(oCreature, "FOLLOW_MASTER", oCaster);
+				SetLocalInt(oCreature, "IS_SUMMONED", 1);
 				
-				PS_SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
-				PS_SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
+				SetLocalObject(oCaster, "WARLOCK_UNDEAD_"+IntToString(nNumberCalled), oCreature);
+				SetLocalInt(oCaster, "WARLOCK_UNDEAD_CALLED", nNumberCalled+1);
 				
 				DestroyObject(oCreature, fDuration); //Sanity destroy so you can keep summoning more
 				
@@ -1019,6 +1024,7 @@ void DoWraithExtraction(object oCaster, object oTarget, location lTarget, float 
 
 int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
+	int nDC = GetCustomWarlockDC(oCaster);
 	location lTarget = GetLocation(oTarget);
     // First, do Base Effects:
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_NEGATIVE, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_UTTERDARK_RAY) )
@@ -1028,7 +1034,7 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
 		}
 		
 	
-        if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
+        if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
         {
             effect eVis = EffectVisualEffect( VFX_DUR_SPELL_ENERGY_DRAIN );
             effect eDrain = EffectNegativeLevel(2);
@@ -1065,7 +1071,7 @@ int DoEssenceHinderingBlast(object oCaster, object oTarget, int bCalledFromShape
 int DoEssenceBindingBlast(object oCaster, object oTarget, int bCalledFromShape, int bDoTouchTest, int nAllowReflexSave, int nHalfDmg)
 {
 	//SpeakString("nw_i0_invocatns: DoEssenceBindingBlast");
-	int nDC = GetSpellSaveDC();
+	int nDC = GetCustomWarlockDC(oCaster);
     if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {	
 		nDC += 4;
 	} else if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
@@ -1252,7 +1258,7 @@ int DoShapeEldritchChain()
     //}
 
     //setting this to non-zero will trigger collecting touch attack success info from DoEldritchCombinedEffects
-    PS_SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", 1);
+    SetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT", 1);
 
     //Apply effect to the first target and the VFX impact.
     if(DoEldritchCombinedEffects(oFirstTarget))
@@ -1292,8 +1298,8 @@ int DoShapeEldritchChain()
     //Get the first target in the spell shape
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oFirstTarget), TRUE, OBJECT_TYPE_CREATURE );
 
-    int nTouch = PS_GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
-    PS_DeleteLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
+    int nTouch = GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
+    DeleteLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT");
     if ( nTouch == TOUCH_ATTACK_RESULT_MISS )
     {
 	    // Failed
@@ -1461,6 +1467,14 @@ int DoShapeEldritchDoom()
 	}
 	DoHellfireDamage();
     return TRUE;
+}
+
+int GetCustomWarlockDC(object oCaster){
+	int nSpell = GetWarlockCasterLevel(oCaster) / 2;
+	if (nSpell < 1) nSpell = 1;
+	else if (nSpell > 9) nSpell = 9;
+	
+	return 10 + nSpell + GetAbilityModifier(ABILITY_CHARISMA, oCaster);
 }
 
 //void main() {}	// keep this line uncommented before saving/checking in; used only for compiling purposes
