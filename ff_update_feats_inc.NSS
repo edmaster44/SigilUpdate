@@ -110,7 +110,7 @@ void SituationalAwareness(object oPC){
 	// Add situational awareness feat
 	if (GRANT_SITUATIONAL_AWARENESS){
 		int nLvlAC = (GetHitDice(oPC) + 3) / 10;
-		int nTumbleAC = GetSkillRank(SKILL_TUMBLE, oPC, TRUE);
+		int nTumbleAC = GetSkillRank(SKILL_TUMBLE, oPC, TRUE) / 10;
 		int nAC = nLvlAC - nTumbleAC;
 		switch (nAC){
 			case 3: {
