@@ -129,6 +129,8 @@ int GetBaseCostOfItem(int nBaseID) {
 
 int GetHasRequiredCraftingItems(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3){
 
+	if (GetIsCraftingFree(oPC)) return TRUE;
+	
 	string sRequired1 = m1.rResref;
 	string sRequired2 = m2.rResref;
 	string sRequired3 = m3.rResref;
@@ -146,6 +148,8 @@ int GetHasRequiredCraftingItems(object oPC, struct baseitem i, struct material m
 }
 
 void TakeRequiredCraftingItems(object oPC, struct baseitem i, struct material m1, struct material m2, struct material m3) {
+
+	if (GetIsCraftingFree(oPC)) return;
 
 	string sTag;
 	object oItem;
