@@ -1,5 +1,3 @@
-#include "ff_safevar"
-
 
 // FlattedFifth, June 30, 2024
 // Script to check pc inventory for a specific items and either add or remove item properties.
@@ -24,6 +22,8 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
 	
+	object oNewItem;
+	
 	// replace banned items with their counterparts
 	string sNewRes = "";
 	if (sRef == "ps_gad_dreadaxe") sNewRes = "ps_gad_dreadaxe2";
@@ -38,7 +38,7 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	else if (sRef == "ps_luca_sunlightseeker") sNewRes = "ps_luca_sunlightseeker2";
 	else if (sRef == "ps_boots_avoidance") sNewRes = "ps_boots_avoidance1";
 	if (sNewRes != ""){
-		object oNewItem = CreateItemOnObject(sNewRes, oPC);
+		oNewItem = CreateItemOnObject(sNewRes, oPC);
 		DelayCommand(0.5f, SendMessageToPC(oPC, "Replacing banned item '" + sRef + "' with " + sNewRes));
 		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem);
 		else {
@@ -127,12 +127,11 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	// the default ones that might be lingering in treasure tables
 	if (sRef == "n2_crft_ingadamant" || sRef == "n2_crft_ingmithral"){
 		int nStack = GetNumStackedItems(oItem);
-		object oNewItem;
 		if (sRef == "n2_crft_ingadamant") oNewItem = CreateItemOnObject("ps_crft_ing_ada", oPC, nStack, "ps_crft_ing_ada", 0);
 		else oNewItem = CreateItemOnObject("ps_golem_mithral", oPC, nStack, "ps_golem_mithral", 0);
 		
-		// this does nothing. All it's for is to delay things by half a sec to make sure the new item is created
-		DelayCommand(0.5f, PS_SetLocalInt(oPC, "GotACraftIngot", TRUE));
+		// this does nothing but delay things by half a sec to make sure the new item is created
+		DelayCommand(0.5f, SetLocalInt(oPC, "GotACraftIngot", TRUE));
 		
 		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem, 0.3f, FALSE);
 	}
@@ -141,6 +140,14 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 	if (sRef == "ps_itemset_swordsaint3")
 	{
 		FF_ModifyItemProperty(oItem, ItemPropertyDecreaseAC(IP_CONST_ACMODIFIERTYPE_SHIELD, 2), TRUE);
+	}
+	
+	// update Bit o' Larry
+	if (sRef == "ps_amor_bitolarry"){
+		oNewItem = CreateItemOnObject("ps_amor_bitolarry_new", oPC);
+		// this does nothing but delay things by half a sec to make sure the new item is created
+		DelayCommand(0.5f, SetLocalInt(oPC, "GotABitOLarry", TRUE));
+		if (GetIsObjectValid(oNewItem)) DestroyObject(oItem, 0.3f, FALSE);
 	}
 	
 	// change blackguard use limitation properties to knight blackguard path
