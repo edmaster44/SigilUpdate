@@ -3593,10 +3593,14 @@ int GetBardicClassLevelForUses(object oPC)
 int GetBardicClassLevelForSongs(object oPC)
 {	
 	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-	nBARD = nBARD + GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);
-	if (GetHasFeat(2678, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
-	return nBARD;
-	if (GetHasFeat(2841, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
+	nBARD += GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);
+	
+	if (GetHasFeat(2678, oPC, TRUE))
+		nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
+
+	if (GetHasFeat(2841, oPC, TRUE)) 
+		nBARD += (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
+		
 	return nBARD;
 }
 
