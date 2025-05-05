@@ -57,15 +57,15 @@ void TakeNumCraftingMaterials(object oPC, string sTag, int nNum) {
 int GetNumberOfGemstonesOfColor(string sColor) {
 
 	object oChest = GetObjectByTag(gemstoneBox);
-	return PS_GetLocalInt(oChest, sColor+"_Num");
+	return GetLocalInt(oChest, sColor+"_Num");
 }
 
 string GetGemstoneColor(object oGem) {
-	return PS_GetLocalString(oGem, "Color");
+	return GetLocalString(oGem, "Color");
 }
 
 string GetGemstoneMineral(object oGem) {
-	return PS_GetLocalString(oGem, "Mineral");
+	return GetLocalString(oGem, "Mineral");
 }
 
 string GetGemstoneDescription(object oGem) {
@@ -92,6 +92,21 @@ string GetGemstoneFullDescription(object oGem) {
 
 //The database should tell us how many entries there are, since nwn2 doesn't understand arrays
 //or counting arrays. . .
+int InitializeGemstoneNumber(string sColor, int bExcludeUseless = FALSE) {
+	int nCount = 0;
+	string sQuery = "SELECT COUNT(*) FROM gemstones WHERE color='"+sColor+"'";
+	if (bExcludeUseless)
+		sQuery += " AND resref <> 'gemstone_value_vfx'";
+	SQLExecDirect(sQuery);
+	
+	if (SQLFetch() != SQL_ERROR) { 
+		nCount = StringToInt(SQLGetData(1));
+	} else {
+		nCount = 0;
+	}
+	return nCount;
+}
+/* old version
 int InitializeGemstoneNumber(string sColor) {
 	int nCount = 0;
 	SQLExecDirect("SELECT COUNT(*) FROM gemstones WHERE color='"+sColor+"'");
@@ -102,16 +117,48 @@ int InitializeGemstoneNumber(string sColor) {
 	}
 	return nCount;
 }
-
+*/
+// new version only returns useless gems in earth plane, other areas get only useful
 string RollGemstoneOfColor(string sColor) {
 
 	string sResult = "";
 	object oChest = GetObjectByTag(gemstoneBox);
-	int nNum = PS_GetLocalInt(oChest, sColor+"_num");
+	int nNum;
+	object oArea = GetArea(oChest);
+	string sTag = GetTag(oArea);
+
+	string sQuery = "SELECT tag FROM gemstones WHERE color='"+sColor+"'";
+	if (FindSubString(sTag, "earth") == -1){
+		sQuery += " AND resref <> 'gemstone_value_vfx'";
+		nNum = InitializeGemstoneNumber(sColor, TRUE);
+	} else nNum = InitializeGemstoneNumber(sColor);
+	
+	
+	SetLocalInt(oChest, sColor+"_num", nNum);
+	int nRand = Random(nNum);
+	
+	sQuery += " LIMIT "+IntToString(nRand)+", 1";
+	
+	SQLExecDirect(sQuery);
+	if (SQLFetch() != SQL_ERROR) { 
+		sResult = SQLGetData(1);
+	} else {
+		sResult = "";
+	}
+	return sResult;
+	
+}
+
+/* Old version
+string RollGemstoneOfColor(string sColor) {
+
+	string sResult = "";
+	object oChest = GetObjectByTag(gemstoneBox);
+	int nNum = GetLocalInt(oChest, sColor+"_num");
 	if (nNum <= 0) {
 		nNum = InitializeGemstoneNumber(sColor);
 	}
-	PS_SetLocalInt(oChest, sColor+"_num", nNum);
+	SetLocalInt(oChest, sColor+"_num", nNum);
 	int nRand = Random(nNum);
 	SQLExecDirect("SELECT tag FROM gemstones WHERE color='"+sColor+"' LIMIT "+IntToString(nRand)+", 1");
 	if (SQLFetch() != SQL_ERROR) { 
@@ -121,6 +168,7 @@ string RollGemstoneOfColor(string sColor) {
 	}
 	return sResult;
 }
+*/
 
 //Returns the tag of the identified gemstone
 string RollGemstoneType(object oRough) {
@@ -281,7 +329,7 @@ void SetCaratOfGemstone(object oGem, int nSize) {
 void InitializeGemstoneBox() {
 	
 	object oChest = GetObjectByTag(gemstoneBox);
-	if (PS_GetLocalInt(oChest, "Initialized") > 0)
+	if (GetLocalInt(oChest, "Initialized") > 0)
 		return;
 	
 	int nCount = 0;
@@ -290,19 +338,19 @@ void InitializeGemstoneBox() {
 	
 		//Iterate for gemstone color list
 		string sColor = GetGemstoneColor(oGem);
-		int nNum = PS_GetLocalInt(oChest, sColor+"_Num");
-		PS_SetLocalString(oChest, sColor+"_"+IntToString(nNum), GetTag(oGem));
-		PS_SetLocalInt(oChest, sColor+"_Num", nNum+1);
+		int nNum = GetLocalInt(oChest, sColor+"_Num");
+		SetLocalString(oChest, sColor+"_"+IntToString(nNum), GetTag(oGem));
+		SetLocalInt(oChest, sColor+"_Num", nNum+1);
 		
 		//Iterate for full gemstone list
 		//AssignCommand(oChest, ActionSpeakString("setting Gemstone_"+IntToString(nCount)+" to "+GetTag(oGem), TALKVOLUME_SHOUT));
-		PS_SetLocalString(oChest, "Gemstone_"+IntToString(nCount), GetTag(oGem));
+		SetLocalString(oChest, "Gemstone_"+IntToString(nCount), GetTag(oGem));
 		nCount++;
 		
 		oGem = GetNextItemInInventory(oChest);
 	}
-	PS_SetLocalInt(oChest,  "Gemstone_Num", nCount);
-	PS_SetLocalInt(oChest, "Initialized", 1);
+	SetLocalInt(oChest,  "Gemstone_Num", nCount);
+	SetLocalInt(oChest, "Initialized", 1);
 	
 }
 
@@ -379,11 +427,11 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 	if (sColor == "")
 		sColor = PickRandomGemColor();
 
-	int nNum = PS_GetLocalInt(oChest, sColor+"_num");
+	int nNum = GetLocalInt(oChest, sColor+"_num");
 	if (nNum <= 0) {
 		nNum = InitializeGemstoneNumber(sColor);
 	}
-	PS_SetLocalInt(oChest, sColor+"_num", nNum);
+	SetLocalInt(oChest, sColor+"_num", nNum);
 	
 	int nRand = Random(nNum);
 	object oGem;
@@ -408,8 +456,8 @@ object GetRandomGemstoneToSpawn(object oTarget, string sColor = "") {
 			}
 			SetItemIcon(oGem, nIcon);
 			SetDescription(oGem, sDescrip);
-			PS_SetLocalString(oGem, "VFX", sVFX);
-			PS_SetLocalFloat(oGem, "Duration", fDur);
+			SetLocalString(oGem, "VFX", sVFX);
+			SetLocalFloat(oGem, "Duration", fDur);
 		}
 	}
 	return oGem;
@@ -443,8 +491,8 @@ object CreateGemstoneOfType(string sTag, int nQuality = 0, int nSize = 0, object
 			}
 			SetItemIcon(oGem, nIcon);
 			SetDescription(oGem, sDescrip);
-			PS_SetLocalString(oGem, "VFX", sVFX);
-			PS_SetLocalFloat(oGem, "Duration", fDur);
+			SetLocalString(oGem, "VFX", sVFX);
+			SetLocalFloat(oGem, "Duration", fDur);
 		}
 	}
 	
@@ -509,7 +557,7 @@ void RegenerateGemList(object oPC) {
 			if (GetTag(oGem) != "gemstone_gravel" && GetIsGemstone(oGem) && IsGemRough(oGem)) { 
 				int iconIndex = GetItemIconSafe(oGem);
 				string sIcon = Get2DAString("nwn2_icons", "ICON", iconIndex);
-				PS_SetLocalObject(oPC, "gemrow_"+IntToString(nCount), oGem);
+				SetLocalObject(oPC, "gemrow_"+IntToString(nCount), oGem);
 				AddListBoxRow(oPC, sGemScreen, "SCOD_GEM_INVENTORY", "GEMROW_"+IntToString(nCount), "GemEntryName="+GetName(oGem)+";", "GemEntryIcon="+sIcon+".tga;", "5=" + IntToString(nCount), "");
 				nCount++;
 			}
@@ -524,7 +572,7 @@ void RegenerateGemList(object oPC) {
 
 //GUI Updates Gem Selected Screen
 void UpdateSelectedGem(object oPC) {
-	object oGem = PS_GetLocalObject(oPC, "selected_gem");
+	object oGem = GetLocalObject(oPC, "selected_gem");
 	if (GetTag(oGem) == "gemstone_gravel") {
 		SetGUITexture(oPC, sGemScreen, "MAINGEM_ICON", "");
 		SetGUIObjectText(oPC, sGemScreen, "MAINGEM_NAME", -1, "");
