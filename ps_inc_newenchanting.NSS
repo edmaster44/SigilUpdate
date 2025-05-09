@@ -1060,7 +1060,7 @@ int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence){
 //Checks gold + gives failure message
 int GetHasRequiredGold(object oPC, int nGold, int giveFeedback = FALSE) {
 	
-	if (GetGold(oPC) > nGold)
+	if (GetGold(oPC) >= nGold)
 		return TRUE;
 		
 	if (giveFeedback)
@@ -1096,7 +1096,7 @@ int MeetsMinimumRequirements(object oPC) {
 	int nAllowed = GetItemTotalPointsAllowed(oItem);
 	
 	if (nPoints < nAllowed &&
-	GetGold(oPC) > nGold &&
+	GetGold(oPC) >= nGold &&
 	GetRealCasterLevel(oPC, TRUE) >= nCL)
 		return TRUE;
 	return FALSE;
@@ -1404,7 +1404,8 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		
 		// checking for keen/imp crit last in case it was already the matpower
 		if (!bSkipIp && IPGetItemPropertiesIdentical(ipCrit, ip)){
-				bSkipIp = TRUE;
+			nAddPoints = 1;
+			bSkipIp = TRUE;
 		}
 		
 			// for reasons I don't understand there are 2 entries in iprp_feats
