@@ -1,13 +1,13 @@
 #include "x2_inc_spellhook"
+#include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
-#include "ps_inc_functions"
-#include "ps_inc_advscript"
-#include "aaa_constants"
 #include "nw_i0_spells"
 #include "aaa_changeself_inc"
 #include "x0_i0_match"
 #include "x0_i0_position"
 #include "ginc_math"
+//#include "ps_inc_functions"
+//#include "ps_inc_advscript"
 
 /*	This is the include file for all dragon features.
 	Every individual feature in spells.2da will need its own script created in here, which will in turn be called by 
@@ -32,33 +32,53 @@ void ApplyDraconicImmunities(object oPC, int nSpell, effect eFX){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// Applies Shield AC based on characterlevel
+// Applies Shield AC based on characterlevel and DR (new as per FlattedFifth, May 7, 2025)
 //-------------------------------------------------------------------------------------------------------------------
 
 void PS_ShieldArmor_Dragon(object oPC, int nSpell){	
-	object oItem = GetItemPossessedBy(oPC, "ps_essence");
-
-	int iHD = GetTotalLevels(oPC, TRUE);
-	int iShield;
-		
-	PS_RemoveEffects(oPC, nSpell);
-
-	if (GetHasFeat(260, oPC)) iShield = 4;  //  monk						  
-	else {					
-		if (iHD >= 20) iShield = 9;
-		else if (iHD >= 10)	iShield = 8;
-		else iShield = 7;									
+	
+	int nDR = 5;
+	// if has melee path of new dragon prc, dr increases by 1 per lvl beyond first
+	// for a total of 10 at lvl 6.
+	if (GetHasFeat(3670, oPC, TRUE)){ // melee path of new dragon prc
+		int nDragonPrcDr = GetLevelByClass(129, oPC) - 1; // new dragon prc
+		if (nDragonPrcDr > 0) nDR += nDragonPrcDr;
 	}
 	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1){	
-		SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humanoid Form.</c>");
-		return;
-	} else {	
-		effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
-		eAC = SupernaturalEffect(eAC);
-		eAC = SetEffectSpellId(eAC, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
+	// chaotic species of dragons are Black, Copper, Red, Shadow, Topaz, and White.
+	// They and Amethyst (TN) will get DR / cold iron. The rest will get DR / silver.
+	int nMat = GMATERIAL_METAL_ALCHEMICAL_SILVER;
+	switch (GetSubRace(oPC)){
+		case 223: //Red
+		case 225: //Shadow
+		case 226: //Black
+		case 227: //Copper
+		case 237: //Amethyst
+		case 239: //Topaz
+		case 240:{ //White
+			nMat = GMATERIAL_METAL_COLD_IRON;
+			break;
+		}
 	}
+	effect eDR = EffectDamageReduction(nDR, DR_TYPE_GMATERIAL, 0, nMat);
+	
+	if (!GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
+		int iHD = GetTotalLevels(oPC, TRUE);
+		int iShield;
+		if (GetHasFeat(260, oPC)) iShield = 4;  //  monk						  
+		else {					
+			if (iHD >= 20) iShield = 9;
+			else if (iHD >= 10)	iShield = 8;
+			else iShield = 7;
+		}
+		effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
+		eDR = EffectLinkEffects(eAC, eDR);
+	} else SendMessageToPC(oPC, "<c=red>Shield AC bonus for Dragons does not work in Humanoid Form.</c>");
+
+	eDR = SupernaturalEffect(eDR);
+	eDR = SetEffectSpellId(eDR, nSpell);
+	PS_RemoveEffects(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);		
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -268,1410 +288,6 @@ void PS_Immunity_Force(object oPC, int nSpell)
 	ApplyDraconicImmunities(oPC, nSpell, eForce);	
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Electricity, Line (Bronze)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
-
-{
-    int nType;
-    int nDamageType;
-    int nDamageDie;
-    int nVfx;
-    int nSave;
-    int nDice;
-	int nBreath;
-	int nBonus;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	nDamageType = DAMAGE_TYPE_ELECTRICAL;
-	nVfx        = VFX_HIT_SPELL_LIGHTNING;
-	nSave       = SAVING_THROW_TYPE_ELECTRICITY;
-		
-	nDice = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-	{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-	}
-	else 
-	{
-			effect eVis = EffectVisualEffect(nVfx);
-			effect eBreath = EffectNWN2SpecialEffectFile("fx_lightningdragonbreath");	
- /*		 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); */
-						
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-		    int nDamage;
-		    int nDamStrike;
-		    float fDelay;
-		    object oTarget;
-			effect eDamage;
-			vector vOrigin  = GetPosition(oPC);
-
-	//--------------------------------------------------------------------------
-	//Loop through all targets and do damage
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			while(GetIsObjectValid(oTarget))
-			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-				{
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d6(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-				 	}
-				}
-				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			}
-	}
-}
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Concussive Force, Line (Amethyst)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
-
-{
-    int nType;
-    int nDamageType;
-	int nDamageType2;
-    int nDamageDie;
-    int nVfx;
-    int nSave;
-    int nDice;
-	int nBreath;
-	int nBonus;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	nDamageType = DAMAGE_TYPE_MAGICAL;
-	nDamageType2 = DAMAGE_TYPE_BLUDGEONING;
-	nVfx        = VFX_HIT_SPELL_MAGIC;
-	nSave       = SAVING_THROW_TYPE_SPELL;
-		
-	nDice = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-	{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-	}
-	else 
-	{
-			effect eVis = EffectVisualEffect(nVfx);
-			effect eBreath = EffectNWN2SpecialEffectFile("fx_amethystdragonbreath");	
- /*		 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); */
-						
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-		    int nDamage;
-		    int nDamStrike;
-		    float fDelay;
-		    object oTarget;
-			effect eDamage;
-			effect eDamage2;
-			vector vOrigin  = GetPosition(oPC);
-
-	//--------------------------------------------------------------------------
-	//Loop through all targets and do damage
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			while(GetIsObjectValid(oTarget))
-			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-				{
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d4(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-					    eDamage = EffectDamage(nDamStrike, nDamageType);
-						eDamage2 = EffectDamage(nDamStrike, nDamageType2);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
-				 	}
-				}
-				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			}
-	}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, repulsive Gas, Cone (Bronze)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	/*
-	// Damage Breath Variables ---------------------------------------------------
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageType;
-    int nDamageDie;
-	// ---------------------------------------------------------------------------
- 	*/
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_MIND_SPELLS;	
-	int  nType	   = SAVING_THROW_WILL;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	int  nDuration = d6(1) + 5;
-	int  nBonus;
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonrepulsebreath");	
-	effect eVis = EffectVisualEffect(VFX_IMP_DAZED_S);
-    effect eDaze = EffectDazed();
-    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-    effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
-
-    effect eLink = EffectLinkEffects(eDaze, eDur);
-    eLink = EffectLinkEffects(eLink, eDur2);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   		  
-			 
-					 // Daze Breath --------------------------------------------------------------
-					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-   					 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay))
-       			     {
-                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-       		         }
-			// ---------------------------------------------------------------------------
-			
-			/*	 
-			
-			// Damage Breath -------------------------------------------------------------
-			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-			fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
-			nDamage = d10(nDice);
-			nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-			if (nDamStrike > 0)
-			{
-			    eDamage = EffectDamage(nDamStrike, nDamageType);
-		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 	}
-			// ---------------------------------------------------------------------------
-			
-			*/
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Acid, Line (Black)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Black(object oPC, int nSpell)
-
-{
-    int nType;
-    int nDamageType;
-    int nDamageDie;
-    int nVfx;
-    int nSave;
-    int nDice;
-	int nBreath;
-	int nBonus;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	nDamageType = DAMAGE_TYPE_ACID;
-	nVfx        = VFX_HIT_SPELL_ACID;
-	nSave       = SAVING_THROW_TYPE_ACID;
-		
-	nDice = GetTotalLevels(oPC, TRUE);
-	
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			effect eVis = EffectVisualEffect(nVfx);
-			effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonacidbreath");	
-	/*		effect eBreath = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_CHEST); */
-
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-		    int nDamage;
-		    int nDamStrike;
-		    float fDelay;
-		    object oTarget;
-			effect eDamage;
-			vector vOrigin  = GetPosition(oPC);
-
-	//--------------------------------------------------------------------------
-	//Loop through all targets and do damage
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			while(GetIsObjectValid(oTarget))
-			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-				{
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d8(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-				 	}
-				}
-				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			}
-		}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Fire, Cone (Red)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Red(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageDie;
-	int nBonus;
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_FIRE;	
-	int  nType	   = SAVING_THROW_REFLEX;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	int  nDamageType = DAMAGE_TYPE_FIRE;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_red_dragon_breath.sef");
-	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{ 
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   				
-					// Damage Breath -------------------------------------------------------------
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d10(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 			}
-			
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Sonic, Cone (Emerald)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageDie;
-	int nBonus;
-	int  nDuration = d6(1) + 5;
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_SONIC;	
-	int  nType	   = SAVING_THROW_FORT;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	int  nDamageType = DAMAGE_TYPE_SONIC;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath.sef");
-	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{ 
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   				
-					// Damage Breath -------------------------------------------------------------
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d6(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 			}
-					if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nType, OBJECT_SELF, fDelay))
-       			     {
-                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDeaf(), oTarget, RoundsToSeconds(nDuration)));
-      		            
-       		         }
-			
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Cold (Dehydrating), Cone (Topaz)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-	effect eDrain;
-    int nDamageDie;
-	int nBonus;
-	int  nDuration = d6(1) + 5;
-	int nDrainDice;
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_COLD;	
-	int  nType	   = SAVING_THROW_REFLEX;
-	int  nType2	   = SAVING_THROW_FORT;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	int  nDamageType = DAMAGE_TYPE_COLD;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
-	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{ 
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   				
-					// Damage Breath -------------------------------------------------------------
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d8(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 			}
-					if(!GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT && !GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && !GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL)
-					{
-						if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nType, OBJECT_SELF, fDelay))
-	       			     {
-						 	nDrainDice = d6(1) + GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
-							if(GetRacialType(oTarget) == RACIAL_TYPE_OOZE || GetRacialType(oTarget) == RACIAL_SUBTYPE_PLANT)
-							{
-								nDrainDice = nDrainDice * 2;
-							}
-	                		eDrain = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDrainDice);
-							DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(nDuration)));
-	      		            
-	       		         }
-					}
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-//----------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Cold, Cone (White)
-//----------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_White(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-	effect eDrain;
-    int nDamageDie;
-	int nBonus;
-	int  nDuration = d6(1) + 5;
-	int nDrainDice;
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_COLD;	
-	int  nType	   = SAVING_THROW_REFLEX;
-	int  nType2	   = SAVING_THROW_FORT;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	int  nDamageType = DAMAGE_TYPE_COLD;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
-	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{ 
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   				
-					// Damage Breath -------------------------------------------------------------
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d8(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 			}
-					
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-//---------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Negative, Cone (Shadow)
-//---------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	/*
-	// Damage Breath Variables ---------------------------------------------------
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageType;
-    int nDamageDie;
-	// ---------------------------------------------------------------------------
- 	*/
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_NEGATIVE;	
-	int  nType	   = SAVING_THROW_REFLEX;	
-	int  nDice     = 2 + (GetTotalLevels(oPC, TRUE)/5);
-	int  nDuration = d6(1) + 5;
-	int  nBonus;
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_shadowdragonbreath");
-	effect eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
-    effect eNeg = EffectNegativeLevel(nDice);
-	effect eNeg2 = EffectNegativeLevel(nDice/2);
-    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-    effect eDur2 = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-
-    effect eLink = EffectLinkEffects(eNeg, eDur);
-	effect eLink2 = EffectLinkEffects(eNeg2, eDur2);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	EffectVisualEffect (VFX_DUR_CONE_EVIL
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f)); 
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   		  
-			 
-					 // Level Drain Breath --------------------------------------------------------------
-					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-   					 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NEGATIVE, OBJECT_SELF, fDelay))
-       			     {
-                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-       		         }
-					 else 
-					 {
-					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, HoursToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));      		 
-					 }
-			// ---------------------------------------------------------------------------
-			
-			/*	 
-			
-			// Damage Breath -------------------------------------------------------------
-			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-			fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
-			nDamage = d10(nDice);
-			nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-			if (nDamStrike > 0)
-			{
-			    eDamage = EffectDamage(nDamStrike, nDamageType);
-		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 	}
-			// ---------------------------------------------------------------------------
-			
-			*/
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//---------------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Electricity, Line (Blue)
-//---------------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Blue(object oPC, int nSpell)
-
-{
-    int nType;
-    int nDamageType;
-    int nDamageDie;
-    int nVfx;
-    int nSave;
-    int nDice;
-	int nBreath;
-	int nBonus;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	nDamageType = DAMAGE_TYPE_ELECTRICAL;
-	nVfx        = VFX_HIT_SPELL_LIGHTNING;
-	nSave       = SAVING_THROW_TYPE_ELECTRICITY;
-		
-	nDice = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			effect eVis = EffectVisualEffect(nVfx);
-			effect eBreath = EffectNWN2SpecialEffectFile("fx_lightningdragonbreath");	
- 	/*	 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); */
-
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-		    int nDamage;
-		    int nDamStrike;
-		    float fDelay;
-		    object oTarget;
-			effect eDamage;
-			vector vOrigin  = GetPosition(oPC);
-
-	//--------------------------------------------------------------------------
-	//Loop through all targets and do damage
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			while(GetIsObjectValid(oTarget))
-			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-				{
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d8(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-				 	}
-				}
-				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			}
-		}
-}
-
-//---------------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Acid, Line (Copper)
-//---------------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Copper(object oPC, int nSpell)
-
-{
-    int nType;
-    int nDamageType;
-    int nDamageDie;
-    int nVfx;
-    int nSave;
-    int nDice;
-	int nBreath;
-	int nBonus;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	nDamageType = DAMAGE_TYPE_ACID;
-	nVfx        = VFX_HIT_SPELL_ACID;
-	nSave       = SAVING_THROW_TYPE_ACID;
-		
-	nDice = GetTotalLevels(oPC, TRUE);
-	
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			effect eVis = EffectVisualEffect(nVfx);
-			effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonacidbreath");	
-	/*		effect eBreath = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_CHEST); */
-
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-		    int nDamage;
-		    int nDamStrike;
-		    float fDelay;
-		    object oTarget;
-			effect eDamage;
-			vector vOrigin  = GetPosition(oPC);
-
-	//--------------------------------------------------------------------------
-	//Loop through all targets and do damage
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			while(GetIsObjectValid(oTarget))
-			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-				{
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d8(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-				 	}
-				}
-				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
-			}
-		}
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Slow Gas, Cone (Copper)
-//---------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	/*
-	// Damage Breath Variables ---------------------------------------------------
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageType;
-    int nDamageDie;
-	// ---------------------------------------------------------------------------
- 	*/
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_SPELL;	
-	int  nType	   = SAVING_THROW_FORT;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	int  nDuration = d4(1) + 5;
-	int  nBonus;
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");	
-	effect eVis = EffectVisualEffect(VFX_IMP_SLOW);
-    effect eSlow = EffectSlow();
-    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-    effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_SLOW);
-
-    effect eLink = EffectLinkEffects(eSlow, eDur);
-    eLink = EffectLinkEffects(eLink, eDur2);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   		  
-			 
-					 // Daze Breath --------------------------------------------------------------
-					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-   					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
-       			     {                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-       		         }
-			// ---------------------------------------------------------------------------
-			
-			/*	 
-			
-			// Damage Breath -------------------------------------------------------------
-			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-			fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
-			nDamage = d10(nDice);
-			nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-			if (nDamStrike > 0)
-			{
-			    eDamage = EffectDamage(nDamStrike, nDamageType);
-		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 	}
-			// ---------------------------------------------------------------------------
-			
-			*/
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Blinding Light, Cone (Radiant)
-//---------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	/*
-	// Damage Breath Variables ---------------------------------------------------
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageType;
-    int nDamageDie;
-	// ---------------------------------------------------------------------------
- 	*/
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_SPELL;	
-	int  nType	   = SAVING_THROW_FORT;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	int  nDuration = d4(1) + 5;
-	int  nBonus;
-	
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");	
-	effect eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
-    effect eSlow = EffectBlindness();
-    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-    effect eDur2 = EffectVisualEffect(VFX_DUR_BLIND);
-
-    effect eLink = EffectLinkEffects(eSlow, eDur);
-    eLink = EffectLinkEffects(eLink, eDur2);
-	
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   		  
-			 
-					 // Blind Breath --------------------------------------------------------------
-					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-   					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
-       			     {                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-       		         }
-					 //Divine Damage ---------------------------------------------------------------
-					 int	 nDamage = d6(1);
-					 int	 nDamageUndead = d6(nDice);
-					 effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE, FALSE);
-					 effect eDamageUndead = EffectDamage(nDamageUndead, DAMAGE_TYPE_DIVINE, FALSE);
-	
-					 if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
-					 {
-					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamageUndead, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-					 }
-					 if(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
-					 {
-					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-					 }
-			// ---------------------------------------------------------------------------
-			
-			/*	 
-			
-			// Damage Breath -------------------------------------------------------------
-			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-			fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
-			nDamage = d10(nDice);
-			nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-			if (nDamStrike > 0)
-			{
-			    eDamage = EffectDamage(nDamStrike, nDamageType);
-		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 	}
-			// ---------------------------------------------------------------------------
-			
-			*/
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//---------------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Sparks, Cone (Iron)
-//---------------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Iron(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	int nDamage;
-	int nDamage2;
-    int nDamStrike;
-	int nDamStrike2;
-	effect eDamage;
-	effect eDamage2;
-    int nDamageDie;
-	int nBonus;
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_FIRE;	
-	int  nType	   = SAVING_THROW_REFLEX;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	int  nDamageType = DAMAGE_TYPE_FIRE;
-	int  nDamageType2 = DAMAGE_TYPE_ELECTRICAL;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_irondragonbreath");
-	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{ 
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    			
-	   				
-					// Damage Breath -------------------------------------------------------------
-					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					nDamage = d6(nDice);
-					nDamage2 = d4(nDice);
-					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					nDamStrike2 =  GetReflexAdjustedDamage(nDamage2, oTarget, nDC);
-					if (nDamStrike > 0)
-					{
-			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-			 	   		eDamage2 = EffectDamage(nDamStrike, nDamageType2);
-						effect eDam = EffectLinkEffects(eDamage, eDamage2);				
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 			}
-			
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
-
-//---------------------------------------------------------------------------------------------------------------------------
-// Dragon Breath, Sleep Gas, Cone (Iron)
-//---------------------------------------------------------------------------------------------------------------------------
-
-void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
-
-{
-	float fDelay;	
-    object oTarget;
-	object oPC 		= OBJECT_SELF;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	
-	/*
-	// Damage Breath Variables ---------------------------------------------------
-	int nDamage;
-    int nDamStrike;
-	effect eDamage;
-    int nDamageType;
-    int nDamageDie;
-	// ---------------------------------------------------------------------------
- 	*/
-	
-	vector vOrigin = GetPosition(oPC);
-	
-	int  nSave     = SAVING_THROW_TYPE_SPELL;	
-	int  nType	   = SAVING_THROW_FORT;	
-	int  nDice     = GetTotalLevels(oPC, TRUE);
-	int  nDuration = d6(1) + 5;
-	int  nBonus;
-	
-	if (GetHasFeat(3649, oPC))
-	{	
-		nBonus = 4;
-	}
-	else
-	{	
-		nBonus = 0;
-	}	
-	
-	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
-	
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");	
-	effect eVis = EffectVisualEffect(VFX_IMP_SLEEP);
-    effect eSleep = EffectSleep();
-    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-    effect eDur2 = EffectVisualEffect(VFX_DUR_SLEEP);
-
-    effect eLink = EffectLinkEffects(eSleep, eDur);
-    eLink = EffectLinkEffects(eLink, eDur2);
-	
-	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-		{
-			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
-		}
-	else 
-		{
-			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
-   	
-	//--------------------------------------------------------------------------
-	//Loop through all targets and add effect.
-	//--------------------------------------------------------------------------
-
-			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-			while(GetIsObjectValid(oTarget))
-			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
-				{    				   			 
-					 // Sleep Breath --------------------------------------------------------------
-					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-   					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
-       			     {                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-       		         }
-			// ---------------------------------------------------------------------------
-			
-			/*	 
-			
-			// Damage Breath -------------------------------------------------------------
-			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-			fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
-			nDamage = d10(nDice);
-			nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-			if (nDamStrike > 0)
-			{
-			    eDamage = EffectDamage(nDamStrike, nDamageType);
-		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		 	}
-			// ---------------------------------------------------------------------------
-			
-			*/
-				}	 
-			         
-     		   //Get next target in spell area
-	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
-  
-			}
-		}
-}
 
 //---------------------------------------------------------------------------------------------------------------------
 // Shadow Blend
@@ -1791,7 +407,7 @@ void PS_Dragon_Size(object oPC, int nSpell)
     {	return;	}
 	
 		// Disallows conversation if in humanoid form.	
-		if (PS_GetLocalInt(oItem, "TempChange") == 0)
+		if (GetLocalInt(oItem, "TempChange") == 0)
 		{
 			AssignCommand(oPC, ActionStartConversation(oPC, "dragon_conv", TRUE, FALSE, TRUE, FALSE));
 		}
@@ -1801,278 +417,264 @@ void PS_Dragon_Size(object oPC, int nSpell)
 		}
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // PRC: Hardening Scales (Applies Natural Armor)
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
-void PS_Hardening_Scales(object oPC, int nSpell)
-{
-	int iDragon1 = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
-	int iDragon2 = GetLevelByClass(128, oPC);
-	int iLevel = iDragon1 + iDragon2;
+void PS_Hardening_Scales(object oPC, int nSpell){
+	int iLevel = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC); //old dragon prc
+	iLevel += GetLevelByClass(128, oPC); // old gem dragon prc
+	int iLevelNew = GetLevelByClass(129, oPC);
 	int iNatural;
 	int iDR;
 	int iPower;
-
-	if (GetHasFeat(3649, oPC))
-	{			
-		if (iLevel >= 10) 			//+10 bonus at level 10
-			{	iNatural = 10;
-				iDR = 10;
-				iPower = DAMAGE_POWER_PLUS_THREE;	} 
-		else if (iLevel >= 8)		//+8 bonus at level 8
-			{	iNatural = 8;
-				iDR = 5;
-				iPower = DAMAGE_POWER_PLUS_ONE;		} 
-		else if (iLevel >= 6)		//+6 bonus at level 6
-			{	iNatural = 6;
-				iDR = 5;
-				iPower = DAMAGE_POWER_PLUS_ONE;		} 
-		else if (iLevel >= 4)		//+4 bonus at level 4
-			{	iNatural = 4;
-				iDR = 5;
-				iPower = DAMAGE_POWER_PLUS_ONE;		} 
-		else if (iLevel >= 2)		//+2 bonus at level 2
-			{	iNatural = 2;	
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		} 
-		else 						//+0 at level 1
-			{	iNatural = 0;
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		}
-	}
-	else
-	{		
-		if (iLevel >= 10) 			//+8 bonus at level 10
-			{	iNatural = 8;
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		} 
-		else if (iLevel >= 6)		//+6 bonus at level 6
-			{	iNatural = 6;
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		} 
-		else if (iLevel >= 4)		//+4 bonus at level 4
-			{	iNatural = 4;
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		} 
-		else if (iLevel >= 2)		//+2 bonus at level 2
-			{	iNatural = 2;
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		} 
-		else 						//+0 at level 1
-			{	iNatural = 0;
-				iDR = 0;
-				iPower = DAMAGE_POWER_NORMAL;		}			
-	}	
-			
-	if (!GetHasSpellEffect(nSpell, oPC)){	
-		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/piercing and +" + IntToString(iPower) + " applied.");
-		SendMessageToPC(oPC, "Natural Armor of " + IntToString(iNatural) + " is applied.");	
-	}
+	effect eAC;
 	
-	effect eAC		= EffectACIncrease(iNatural, AC_NATURAL_BONUS);
-	effect eMagic	= EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
-	effect ePierc	= EffectDamageReduction(iDR, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
-	effect eDR		= EffectLinkEffects(eMagic, ePierc);
-			eDR		= SupernaturalEffect(eDR);
-			eAC 	= SupernaturalEffect(eAC);
-
+	// OLD PRC FX
+	if (iLevel > 0 && iLevelNew < 1){
+		if (GetHasFeat(3649, oPC)){ //Path of the claw
+			if (iLevel >= 10) 			//+10 bonus at level 10
+				{	iNatural = 10;
+					iDR = 10;
+					iPower = DAMAGE_POWER_PLUS_THREE;	} 
+			else if (iLevel >= 8)		//+8 bonus at level 8
+				{	iNatural = 8;
+					iDR = 5;
+					iPower = DAMAGE_POWER_PLUS_ONE;		} 
+			else if (iLevel >= 6)		//+6 bonus at level 6
+				{	iNatural = 6;
+					iDR = 5;
+					iPower = DAMAGE_POWER_PLUS_ONE;		} 
+			else if (iLevel >= 4)		//+4 bonus at level 4
+				{	iNatural = 4;
+					iDR = 5;
+					iPower = DAMAGE_POWER_PLUS_ONE;		} 
+			else if (iLevel >= 2)		//+2 bonus at level 2
+				{	iNatural = 2;	
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		} 
+			else 						//+0 at level 1
+				{	iNatural = 0;
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		}
+		}else{		
+			if (iLevel >= 10) 			//+8 bonus at level 10
+				{	iNatural = 8;
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		} 
+			else if (iLevel >= 6)		//+6 bonus at level 6
+				{	iNatural = 6;
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		} 
+			else if (iLevel >= 4)		//+4 bonus at level 4
+				{	iNatural = 4;
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		} 
+			else if (iLevel >= 2)		//+2 bonus at level 2
+				{	iNatural = 2;
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		} 
+			else 						//+0 at level 1
+				{	iNatural = 0;
+					iDR = 0;
+					iPower = DAMAGE_POWER_NORMAL;		}			
+		}	
+			
+		if (!GetHasSpellEffect(nSpell, oPC)){	
+			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/piercing and +" + IntToString(iPower) + " applied.");
+			SendMessageToPC(oPC, "Natural Armor of " + IntToString(iNatural) + " is applied.");	
+		}
+		
+		eAC	= EffectACIncrease(iNatural, AC_NATURAL_BONUS);
+		effect eMagic = EffectDamageReduction(iDR, iPower, 0, DR_TYPE_MAGICBONUS);
+		effect ePierc = EffectDamageReduction(iDR, DAMAGE_TYPE_PIERCING, 0, DR_TYPE_DMGTYPE);
+		effect eDR = EffectLinkEffects(eMagic, ePierc);
+		eAC = EffectLinkEffects(eDR, eAC);
+				
+	} // END OLD PRC FX
+	else { //NEW PRC FX
+		if (iLevelNew >= 6 && GetHasFeat(3670, oPC))
+			iNatural = 10;
+		else iNatural = 2 + iLevelNew;
+		eAC	= EffectACIncrease(iNatural, AC_NATURAL_BONUS);
+	}
+	eAC = SupernaturalEffect(eAC);
+	eAC	= SetEffectSpellId(eAC, nSpell);
 	PS_RemoveEffects(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
-					
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);					
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
-// PRC: Dragon Senses (Applies Skill Boni)
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
+// PRC: Dragon Senses (Applies Skill Bonuses)
+//---------------------------------------------------------------------------------------------------------------------
+void PS_Dragon_Senses(object oPC, int nSpell){
+	int iLevel = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC); // old dragon PrC
+	iLevel += GetLevelByClass(128, oPC); // old gem Dragon
+	int iLevelNew = GetLevelByClass(129, oPC); // new dragon PrC
 
-void PS_Dragon_Senses(object oPC, int nSpell)
-{
-
-	int iDragon1 = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
-	int iDragon2 = GetLevelByClass(128, oPC);
-	int iLevel = iDragon1 + iDragon2;
 	int nSubRace = GetSubRace(oPC);
-	int iSkillboni;
-	int iSkill1 = SKILL_SPOT;
-	int iSkill2 = SKILL_LISTEN;
-	int iSkill3;
-	int iSkill4;
+	int iSkillBonus = 0;
+	int iSkill1;
+	int iSkill2;
 	string sMessage = "";
 	
-	switch (nSubRace)
-	{	case 0: //Debug
-		SendMessageToPC(oPC, "Something is wrong.");	
-		break;
-		case 222: //Bronze
-			iSkill3 = SKILL_BLUFF;
-			iSkill4 = SKILL_SURVIVAL;
-		break;
-		case 223: //Red
-			iSkill3 = SKILL_INTIMIDATE;
-			iSkill4 = SKILL_APPRAISE;
-		break;
-		case 224: //Blue
-			iSkill3 = SKILL_BLUFF;
-			iSkill4 = SKILL_HIDE;
-		break;
-		case 225: //Shadow
-			iSkill3 = SKILL_HIDE;
-			iSkill4 = SKILL_MOVE_SILENTLY;
-		break;
-		case 226: //Black
-			iSkill3 = SKILL_HIDE;
-			iSkill4 = SKILL_MOVE_SILENTLY;
-		break;
-		case 227: //Copper
-			iSkill3 = SKILL_BLUFF;
-			iSkill4 = SKILL_SLEIGHT_OF_HAND;
-		break;
-		case 228: //Iron
-			iSkill3 = SKILL_DIPLOMACY;
-			iSkill4 = SKILL_INTIMIDATE;
-		break;
-		case 237: //Amethyst
-			iSkill3 = SKILL_BLUFF;
-			iSkill4 = SKILL_DIPLOMACY;
-		break;
-		case 238: //Emerald
-			iSkill3 = SKILL_LORE;
-			iSkill4 = SKILL_SEARCH;
-		break;
-		case 239: //Topaz
-			iSkill3 = SKILL_TUMBLE;
-			iSkill4 = SKILL_SURVIVAL;
-		break;	
-		case 240: //White
-			iSkill3 = SKILL_SEARCH;
-			iSkill4 = SKILL_SURVIVAL;
-		break; 
-		case 244: //Radiant
-			iSkill3 = SKILL_HEAL;
-			iSkill4 = SKILL_DIPLOMACY;
-		break; 
+	if (iLevel >= 10 || iLevelNew >= 6){	
+		iSkillBonus = 6;
+		sMessage = "Draconic - Greater Skill Bonuses are applied.";			
+	} else if (iLevel >= 4 || iLevelNew >= 3){	
+		iSkillBonus = 3;
+		sMessage = "Draconic - Skill Bonuses are applied.";	
+	} else {	
+		return; // If they don't have any bonus then don't apply a skill bonus effect, just bail
 	}
 	
-	if (iLevel >= 10)			//+6 bonus
-	{	iSkillboni = 6;
-		sMessage = "Draconic - Greater Skill Bonuses are applied.";	
-			} 
+	switch (nSubRace){
+		case 0:{ //Debug
+			SendMessageToPC(oPC, "Unknown Dragon Subrace for Feat Dragon Senses. Contact Dev team.");
+			return;
+		}
+		case 222:{ //Bronze
+			iSkill1 = SKILL_BLUFF;
+			iSkill2 = SKILL_SURVIVAL;
+			break;
+		}
+		case 223:{ //Red
+			iSkill1 = SKILL_INTIMIDATE;
+			iSkill2 = SKILL_APPRAISE;
+			break;
+		}
+		case 224:{ //Blue
+			iSkill1 = SKILL_BLUFF;
+			iSkill2 = SKILL_HIDE;
+			break;
+		}
+		case 225: case 226:{ //Shadow & black
+			iSkill1 = SKILL_HIDE;
+			iSkill2 = SKILL_MOVE_SILENTLY;
+			break;
+		}
+		case 227:{ //Copper
+			iSkill1 = SKILL_BLUFF;
+			iSkill2 = SKILL_SLEIGHT_OF_HAND;
+			break;
+		}
+		case 228:{ //Iron
+			iSkill1 = SKILL_DIPLOMACY;
+			iSkill2 = SKILL_INTIMIDATE;
+			break;
+		}
+		case 237:{ //Amethyst
+			iSkill1 = SKILL_BLUFF;
+			iSkill2 = SKILL_DIPLOMACY;
+			break;
+		}
+		case 238:{ //Emerald
+			iSkill1 = SKILL_LORE;
+			iSkill2 = SKILL_SEARCH;
+			break;
+		}
+		case 239:{ //Topaz
+			iSkill1 = SKILL_TUMBLE;
+			iSkill2 = SKILL_SURVIVAL;
+			break;	
+		}
+		case 240:{ //White
+			iSkill1 = SKILL_SEARCH;
+			iSkill2 = SKILL_SURVIVAL;
+			break; 
+		}
+		case 244: {//Radiant
+			iSkill1 = SKILL_HEAL;
+			iSkill2 = SKILL_DIPLOMACY;
+			break; 
+		}
+		default:{
+			iSkill1 = SKILL_DIPLOMACY;
+			iSkill2 = SKILL_INTIMIDATE;
+			break;
+		}
+	}
 	
-	else if (iLevel >= 4)		//+3 bonus
-	{	iSkillboni = 3;
-		sMessage = "Draconic - Skill Bonuses are applied.";	
-			} 
-
-	else 						//+0 bonus
-	{	iSkillboni = 0;
-			}
-		
-	effect eSk1		=	EffectSkillIncrease(iSkill1, iSkillboni);
-	effect eSk2 	=	EffectSkillIncrease(iSkill2, iSkillboni);
-	effect eSk3 	=	EffectSkillIncrease(iSkill3, iSkillboni);
-	effect eSk4 	=	EffectSkillIncrease(iSkill4, iSkillboni);
+	effect eSk1		=	EffectSkillIncrease(SKILL_SPOT, iSkillBonus);
+	effect eSk2 	=	EffectSkillIncrease(SKILL_LISTEN, iSkillBonus);
+	effect eSk3 	=	EffectSkillIncrease(iSkill1, iSkillBonus);
+	effect eSk4 	=	EffectSkillIncrease(iSkill2, iSkillBonus);
 	effect eLink1	=	EffectLinkEffects(eSk1,eSk2);
 	effect eLink2	=	EffectLinkEffects(eSk3,eSk4);
 	effect eSense	=	EffectLinkEffects(eLink1,eLink2);
+			eSense 	= 	SetEffectSpellId(eSense, nSpell);
 			eSense	=	SupernaturalEffect(eSense);
 	
 	if (!GetHasSpellEffect(nSpell,oPC) && sMessage != "")
-		SendMessageToPC(oPC, sMessage);
-	PS_RemoveEffects(oPC, nSpell);			
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSense, oPC);			
-
+		SendMessageToPC(oPC, sMessage);	
+	PS_RemoveEffects(oPC, nSpell);		
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSense, oPC);	
 }
 
 
 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 // PRC: Dragon Roar 
-//---------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Roar(object oPC, int nSpell)
-{	
-	string sSound;
+void PS_Dragon_Roar(object oPC, int nSpell){
+		// Dragon Roar does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
+		SendMessageToPC(oPC, "<c=red>Your lung is not strong enough in humanoid form!");
+		return;
+	}
+	string sSound = "dragon_roar4";
 	int nRoar = d6(1);
 
-	switch (nRoar)
-	{	case 1: 
-			sSound = "dragon_roar1";	
-		break;
-		case 2:
-			sSound = "dragon_roar2";		 
-		break;
-		case 3:
-			sSound = "dragon_roar3";
-		break;
-		case 4: 
-			sSound = "dragon_roar4";
-		break;
-		case 5:
-			sSound = "dragon_roar5";
-		break;
-		case 6:
-			sSound = "dragon_roar4";
-		break;	 	 
+	switch (nRoar){	
+		case 1: sSound = "dragon_roar1"; break;
+		case 2: sSound = "dragon_roar2"; break;
+		case 3: sSound = "dragon_roar3"; break;
+		case 4: sSound = "dragon_roar4"; break;
+		case 5: sSound = "dragon_roar5"; break;
+		case 6: sSound = "dragon_roar4"; break;	 	 
 	}
 	
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	ClearAllActions();
+	PlaySound(sSound, TRUE);
+	DelayCommand(0.2f, AssignCommand(oPC, ActionPlayAnimation(ANIMATION_FIREFORGET_TAUNT, 1.0, 3.0)));	
+
+	effect eAttack	= EffectAttackIncrease(2);
+	effect eDmg		= EffectDamageIncrease(2);
+	effect eFear 	= EffectSavingThrowIncrease(SAVING_THROW_TYPE_FEAR, 5, SAVING_THROW_TYPE_FEAR);
+	effect eDur 	= EffectVisualEffect(VFX_DUR_SPELL_HEROISM);		    
+	effect eLink1 	= EffectLinkEffects(eAttack, eDmg);
+	effect eLink2 	= EffectLinkEffects(eDur, eFear);
+	effect eAlly 	= EffectLinkEffects(eLink1, eLink2);
+ 
+	effect eAttackPen	= EffectAttackDecrease(2, ATTACK_BONUS_MISC);
+	effect eDur2 		= EffectVisualEffect(VFX_DUR_SPELL_DOOM);
+	effect eEnemy	 	= EffectLinkEffects(eAttackPen, eDur2);
+ 
+	int iHD = GetTotalLevels(oPC, TRUE) - 2;
 	
-	// Dragon Roar does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
-	{
-			SendMessageToPC(oPC, "<c=red>Your lung is not strong enough in humanoid form!");
-	}
-	else 
-	{	
-		ClearAllActions();
-		PlaySound(sSound, TRUE);
-		DelayCommand(0.2f, AssignCommand(oPC, ActionPlayAnimation(ANIMATION_FIREFORGET_TAUNT, 1.0, 3.0)));	
-	
-    	effect eAttack	= EffectAttackIncrease(2);
-   		effect eDmg		= EffectDamageIncrease(2);
-   		effect eFear 	= EffectSavingThrowIncrease(SAVING_THROW_TYPE_FEAR, 5, SAVING_THROW_TYPE_FEAR);
-   		effect eDur 	= EffectVisualEffect(VFX_DUR_SPELL_HEROISM);		    
-    	effect eLink1 	= EffectLinkEffects(eAttack, eDmg);
-    	effect eLink2 	= EffectLinkEffects(eDur, eFear);
-		effect eAlly 	= EffectLinkEffects(eLink1, eLink2);
-	 
-		effect eAttackPen	= EffectAttackDecrease(2, ATTACK_BONUS_MISC);
-		effect eDur2 		= EffectVisualEffect(VFX_DUR_SPELL_DOOM);
-		effect eEnemy	 	= EffectLinkEffects(eAttackPen, eDur2);
-	 
-		int iHD 	= GetTotalLevels(oPC, TRUE) - 2;
-		
-    	int nDuration 	= 10 + GetAbilityModifier(ABILITY_CHARISMA, oPC);		
-    	location lLoc 	= GetSpellTargetLocation();
-    	float fDelay;
-    
-    	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_ASTRONOMIC, lLoc);
-    	while(GetIsObjectValid(oTarget))
-    	{
-        	if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
-        	{
-           		fDelay = GetRandomDelay(0.8, 2.0);
-            	SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
-            	DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
-            	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlly, oTarget, RoundsToSeconds(nDuration)));
-       		}
-			else if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) 
-			{						
-				if (GetHitDice(oTarget) < iHD)	
-		    	{	
-					if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS))
-					{		
-						fDelay = GetRandomDelay(0.8, 2.0);
-          	 			SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
-            			DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
-	       			 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEnemy, oTarget, RoundsToSeconds(nDuration)));				
-					}
+	int nDuration 	= 10 + GetAbilityModifier(ABILITY_CHARISMA, oPC);		
+	location lLoc 	= GetSpellTargetLocation();
+	float fDelay;
+
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_ASTRONOMIC, lLoc);
+	while(GetIsObjectValid(oTarget)){
+		if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC)){
+			fDelay = GetRandomDelay(0.8, 2.0);
+			SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
+			DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlly, oTarget, RoundsToSeconds(nDuration)));
+		} else if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)){
+			if (GetHitDice(oTarget) < iHD)	{	
+				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)){		
+					fDelay = GetRandomDelay(0.8, 2.0);
+					SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
+					DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEnemy, oTarget, RoundsToSeconds(nDuration)));				
 				}
-			}		
-        	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_ASTRONOMIC, lLoc);
-		}
+			}
+		}		
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_ASTRONOMIC, lLoc);
 	}	
 }	
 
@@ -2080,96 +682,1597 @@ void PS_Dragon_Roar(object oPC, int nSpell)
 // PRC: Frightful Presence or Dragon Presence
 //---------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Presence(object oPC, int nSpell)
-{
-
-	if (!X2PreSpellCastCode())
-    {	return;	}
-
-		if (!GetHasSpellEffect(nSpell, OBJECT_SELF))
-		{
-			effect eAOE 	= EffectAreaOfEffect(VFX_MOB_DRAGON_FEAR_PC);
-			SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, 2647, FALSE));	
-    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, HoursToSeconds(100));
-		}
-
+void PS_Dragon_Presence(object oPC, int nSpell){
+	effect eAOE = EffectAreaOfEffect(VFX_MOB_DRAGON_FEAR_PC);
+	eAOE = SetEffectSpellId(eAOE, nSpell);
+	eAOE = SupernaturalEffect(eAOE);
+	PS_RemoveEffects(oPC, nSpell);
+	
+	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange"))
+		return;
+	
+	SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));	
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, HoursToSeconds(100));
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 // PRC: Dragon Tail Slap
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
-void PS_Dragon_Swipe(object oPC, int nSpell)
-{
+void PS_Dragon_Swipe(object oPC, int nSpell){
+
+	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
+		SendMessageToPC(oPC, "<c=red>You dont have a dragon tail in humanoid form.");
+		return;
+	}
     int nHD 	= GetHitDice(oPC);
 	int nSize	= GetCreatureSize(oPC);
     int nDamage;
-	float nArea;
-	int nDamageType = DAMAGE_TYPE_BLUDGEONING;
-	int nDamStrike;
-	int nDC  	= 10 + nHD/2 + GetAbilityModifier(ABILITY_STRENGTH, oPC);
-
-		
+	float fArea = RADIUS_SIZE_LARGE;
+	if (nSize <= 3) fArea = RADIUS_SIZE_MEDIUM;
+	int nDC  = 10 + (nHD/2) + GetAbilityModifier(ABILITY_STRENGTH, oPC);
+	
     float fDelay;
-	float fFacing = GetFacing(OBJECT_SELF);
 	float fRandomDuration;	
-    object oTarget;
-	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
 	location lLocation = GetBehindLocation(OBJECT_SELF, 3.0f);
 	
     effect eVis = EffectNWN2SpecialEffectFile("sp_sonic_hit.sef");
 	effect eKnockdown = EffectKnockdown();
 	effect eDamage;
+
 	
-	if (nSize <= 3)
-	{
-		nArea = RADIUS_SIZE_MEDIUM; 
+	AssignCommand(oPC, ClearAllActions());
+	PlayCustomAnimation(OBJECT_SELF, "Una_tailslap", 0, 0.4f);	
+	
+	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fArea, lLocation, FALSE, OBJECT_TYPE_CREATURE);
+	while(GetIsObjectValid(oTarget)){
+		if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)){
+			if(GetCreatureSize(oTarget) <= nSize){
+				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+				fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+				if (GetHasFeat(3649, oPC) || GetHasFeat(3670, oPC))
+					nDamage = d6(nHD);
+				else nDamage = d4(nHD);				
+				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+				fRandomDuration = RandomFloatBetween(6.0, 12.0);
+				if (nDamage > 0){
+					eDamage = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fRandomDuration));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+				}
+			} else SendMessageToPC(oPC, "<c=yellow>Your target is too large to be affected.");				
+		}				
+		oTarget = GetNextObjectInShape(SHAPE_SPHERE, fArea, lLocation, FALSE, OBJECT_TYPE_CREATURE);
+	}	
+}
+
+void DoBreathWeapon(object oPC, int nSpell){
+	object oPC 	= OBJECT_SELF;
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
+		SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		return;
 	}
-	else if (nSize >=4)
-	{
-		nArea = RADIUS_SIZE_LARGE;
+	
+	int nDice = GetTotalLevels(oPC, TRUE);
+	int nDC = 10 + (nDice / 2) + GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
+	if (GetHasFeat(3649, oPC) || GetHasFeat(3670, oPC)) nDC += 4;// melee path feats for old & new prc
+	
+	// Breath weapon variable declarations, default values are for red dragon, except nDamageType
+	effect eSecondary; // must be an effect that has a duration
+	effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+	int bSecondaryIsDrain = FALSE;
+	int nAbilityDrained = ABILITY_CONSTITUTION;
+	float fDur = 300.0f;
+	string sDrainTag = "drain" + IntToString(nSpell);
+	
+	int nDamageType = NULL; // default value of NULL because some breath attacks do only secondary fx, not dmg
+	int nDamageType2 = NULL;
+	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_red_dragon_breath.sef");
+	int nShape = SHAPE_SPELLCONE;
+	float fShapeSize = RADIUS_SIZE_TREMENDOUS;
+	int nDieType = 10;
+	int nSave = SAVING_THROW_REFLEX;
+	int nSaveType = SAVING_THROW_TYPE_FIRE;
+	// End breath weapon variables
+	
+	// Set variables according to breath weapon
+	switch (nSpell){
+		case 2625: case 2634:{	//bronze and blue lightning
+			nDamageType = DAMAGE_TYPE_ELECTRICAL;
+			eVis = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
+			eBreath = EffectNWN2SpecialEffectFile("fx_lightningdragonbreath");
+			nShape = SHAPE_SPELLCYLINDER;
+			fShapeSize = 16.0f;
+			nDieType = 8;
+			nSaveType = SAVING_THROW_TYPE_ELECTRICITY;
+			break;						
+		}
+		case 2660:{	//amethyst and radiant magic + blunt
+			nDamageType = DAMAGE_TYPE_MAGICAL;
+			nDamageType2 = DAMAGE_TYPE_BLUDGEONING;
+			eVis = EffectVisualEffect(VFX_HIT_SPELL_MAGIC);
+			eBreath = EffectNWN2SpecialEffectFile("fx_amethystdragonbreath");
+			nShape = SHAPE_SPELLCYLINDER;
+			fShapeSize = 16.0f;
+			nDieType = 4;
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_SPELL;
+			break;					
+		}
+		case 2661:{ // emerald sonic
+			nDamageType = DAMAGE_TYPE_SONIC;
+			eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
+			eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath.sef");
+			nDieType = 6;
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_SONIC;	
+			break;					
+		}
+		case 2662:{	//topaze dehydrating cold
+			nDamageType = DAMAGE_TYPE_COLD;
+			eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
+			eSecondary = EffectAbilityDecrease(ABILITY_CONSTITUTION, 1); // drain amount randomized in loop
+			bSecondaryIsDrain = TRUE;
+			fDur = HoursToSeconds(d6(1) + 5);
+			nDieType = 6;
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_COLD;	
+			break;
+		}
+		case 2664:{	//white cold  
+			nDamageType = DAMAGE_TYPE_COLD;
+			eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
+			nDieType = 8;
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_COLD;	
+			break;
+		}
+		case 2626:{ // bronze gas
+			eVis = EffectVisualEffect(VFX_IMP_DAZED_S);
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonrepulsebreath");
+			eSecondary = EffectDazed();
+			effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
+			eDur = EffectLinkEffects(eDur2, eDur);
+			nSave = SAVING_THROW_WILL;
+			nSaveType = SAVING_THROW_TYPE_MIND_SPELLS;
+			break;						
+		}
+		case 2667:{	//radiant light
+			nDamageType = DAMAGE_TYPE_DIVINE;
+			eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
+			eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");	
+			eSecondary = EffectBlindness();
+			eDur = EffectVisualEffect(VFX_DUR_BLIND);
+			eSecondary = EffectLinkEffects(eDur, eSecondary);
+			fDur = RoundsToSeconds(d4(1) + 5);
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_DIVINE;
+			//RACIAL_TYPE_UNDEAD=24. This will signal loop to do 1d6 dmg to non undead and 1d6/lvl to undead
+			nDieType = RACIAL_TYPE_UNDEAD; 
+			break;
+		}	
+		case 2631: case 2651:{	//black and copper acid
+			nDamageType = DAMAGE_TYPE_ACID;
+			eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonacidbreath");
+			nShape = SHAPE_SPELLCYLINDER;
+			fShapeSize = 16.0f;
+			nDieType = 8;
+			nSaveType = SAVING_THROW_TYPE_ACID;
+			break;						
+		}
+		case 2632:{	//red dragon
+			nDamageType = DAMAGE_TYPE_FIRE;
+			break;
+		}
+		case 2633:{	//shadow dragon 
+			nDamageType = DAMAGE_TYPE_NEGATIVE;
+			eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
+			EffectNWN2SpecialEffectFile("fx_shadowdragonbreath");
+			eSecondary = EffectAbilityDecrease(ABILITY_CONSTITUTION, 1); // drain amount randomized in loop
+			bSecondaryIsDrain = TRUE;
+			fDur = HoursToSeconds(d6(1) + 5);
+			nDieType = 6;
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_NEGATIVE;
+			break;
+		}
+		case 2652:{	//copper slow
+			eVis = EffectVisualEffect(VFX_IMP_SLOW);
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");
+			eSecondary = EffectSlow();
+			effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_SLOW);
+			eSecondary = EffectLinkEffects(eDur, eSecondary);
+			eSecondary = EffectLinkEffects(eDur2, eSecondary);
+			fDur = RoundsToSeconds(d4(1) + 5);
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_SPELL;
+			break;
+		}
+		case 2655:{	//iron dragon spark
+			nDamageType = DAMAGE_TYPE_FIRE;
+			nDamageType2 = DAMAGE_TYPE_ELECTRICAL;
+			eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
+			eBreath = EffectNWN2SpecialEffectFile("fx_irondragonbreath");
+			nDieType = 4;
+			break;
+		}
+		case 2656:{	//iron gas
+			eVis = EffectVisualEffect(VFX_IMP_SLEEP);
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");
+			eSecondary = EffectSleep();
+			effect eDur2 = EffectVisualEffect(VFX_DUR_SLEEP);
+			eSecondary = EffectLinkEffects(eDur, eSecondary);
+			eSecondary = EffectLinkEffects(eDur2, eSecondary);
+			fDur = RoundsToSeconds(d6(1) + 5);
+			nSave = SAVING_THROW_FORT;
+			nSaveType = SAVING_THROW_TYPE_SPELL;
+			break;
+		}
+		default:{
+			nDamageType = DAMAGE_TYPE_FIRE;
+			break;
+		}
 	}
+	
+	PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
+	DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+	
+	int nRace;
+	int nDamage = 0;
+	float fDelay;
+	effect eDamage;
+	effect eDamage2;
+	vector vOrigin  = GetPosition(oPC);
+	int bImmuneSecondary = FALSE;
+
+	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and do damage and apply effects, if any
+	//--------------------------------------------------------------------------
+
+	object oTarget = GetFirstObjectInShape(nShape, fShapeSize, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+	
+	while(GetIsObjectValid(oTarget)){
+		if(oTarget != oPC && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)){
+			nRace = GetRacialType(oTarget);
+			SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
+			fDelay = GetDistanceBetween(oPC, oTarget)/15;
+			
+			// Apply damage, if any
+			if (nDamageType != NULL){
+				if (nDieType == RACIAL_TYPE_UNDEAD){
+					if (nRace == RACIAL_TYPE_UNDEAD) nDieType = 6;
+					else nDieType = 1;
+				}
+				if (nDieType == 10) nDamage = d10(nDice);
+				else if (nDieType == 8) nDamage = d8(nDice);
+				else if (nDieType == 6) nDamage = d6(nDice);
+				else if (nDieType == 1) nDamage = d6(1);
+				else nDamage = d4(nDice);
+				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+				if (nDamage > 0){
+					eDamage = EffectDamage(nDamage, nDamageType);
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+					if (nDamageType2 != NULL){
+						eDamage2 = EffectDamage(nDamage, nDamageType2);
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+					}
+				}
+			}
+			
+			// apply secondary effect, if any
+			if (GetIsEffectValid(eSecondary)){
+				if (bSecondaryIsDrain){
+					// the ability drain breaths will have no effect on constructs, undead, elementals, 
+					// anything that has already been drained by the same breath weapon and anything 
+					// immune to the main damage.
+					bImmuneSecondary = (nRace == RACIAL_TYPE_CONSTRUCT || nRace == RACIAL_TYPE_UNDEAD || 
+					nRace == RACIAL_TYPE_ELEMENTAL || GetLocalInt(oTarget, sDrainTag));
+					if (nDamageType != NULL && !bImmuneSecondary) 
+						bImmuneSecondary = IsImmuneToDamage(oPC, nDamageType, TRUE);
+					
+					if (!bImmuneSecondary){
+						int nDrain = d4(1) + 1;
+						// topaz cold drains 2x from plants and oozes
+						if (nSpell == 2662 && (nRace == RACIAL_TYPE_OOZE || nRace == RACIAL_SUBTYPE_PLANT))
+							nDrain *= 2;
+						eSecondary = EffectAbilityDecrease(nAbilityDrained, nDrain);
+						eSecondary = EffectLinkEffects(eDur, eSecondary);
+					}
+				// creatures immune to divine damage, if there are any, will be immune to radiant blinding breath
+				} else if (nSpell == 2667) bImmuneSecondary = IsImmuneToDamage(oPC, nDamageType, TRUE);
+				if(!bImmuneSecondary && !MySavingThrow(nSave, oTarget, nDC, nSaveType, OBJECT_SELF, fDelay)){
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDur));
+					// tag the target with the spell id if it's a con drain from shadow or topaz
+					// so that the same target cannot suffer multiple con drains from the same breath weapon
+					if (bSecondaryIsDrain) SetLocalInt(oTarget, sDrainTag, TRUE);
+					// only apply the impact effect if it hasn't already been applied in damage part
+					if (nDamage <= 0) DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+       		    }
+			}
+		}
+		oTarget = GetNextObjectInShape(nShape, fShapeSize, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+	}
+}
+
+/* ORIGINAL DRAGON BREATH WEAPONS
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Electricity, Line (Bronze)
+//----------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
+
+{
+    int nType;
+    int nDamageType;
+    int nDamageDie;
+    int nVfx;
+    int nSave;
+    int nDice;
+	int nBreath;
+	int nBonus;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	nDamageType = DAMAGE_TYPE_ELECTRICAL;
+	nVfx        = VFX_HIT_SPELL_LIGHTNING;
+	nSave       = SAVING_THROW_TYPE_ELECTRICITY;
 		
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	nDice = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
 	{
-		SendMessageToPC(oPC, "<c=red>You dont have a dragon tail in humanoid form.");
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 	}
 	else 
 	{
-		AssignCommand(oPC, ClearAllActions());
-		PlayCustomAnimation(OBJECT_SELF, "Una_tailslap", 0, 0.4f);	
-  		object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, nArea, lLocation, FALSE, OBJECT_TYPE_CREATURE);
-    	while(GetIsObjectValid(oTarget))
-    	{
-        	if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-        	{
-				if(GetCreatureSize(oTarget) <= GetCreatureSize(oPC))				
+			effect eVis = EffectVisualEffect(nVfx);
+			effect eBreath = EffectNWN2SpecialEffectFile("fx_lightningdragonbreath");	
+ 
+						
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+		    int nDamage;
+		    int nDamStrike;
+		    float fDelay;
+		    object oTarget;
+			effect eDamage;
+			vector vOrigin  = GetPosition(oPC);
+
+	//--------------------------------------------------------------------------
+	//Loop through all targets and do damage
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			while(GetIsObjectValid(oTarget))
+			{
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 				{
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
-					if (GetHasFeat(3649, oPC))
-						{	nDamage = d6(nHD);	}
-					else
-						{	nDamage = d4(nHD);	}					
+					nDamage = d6(nDice);
 					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					fRandomDuration = RandomFloatBetween(6.0, 12.0);
 					if (nDamStrike > 0)
 					{
 					    eDamage = EffectDamage(nDamStrike, nDamageType);
-	              		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f));
- 	              		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fRandomDuration));
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-					}
-				}		            	
-				else
-				{
-					SendMessageToPC(oPC, "<c=yellow>Your target is too large to be affected.");
-				}														 
-			}				
-			oTarget = GetNextObjectInShape(SHAPE_SPHERE, nArea, lLocation, FALSE, OBJECT_TYPE_CREATURE);
-		}
+		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+				 	}
+				}
+				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			}
 	}
-}	
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Concussive Force, Line (Amethyst)
+//----------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
+
+{
+    int nType;
+    int nDamageType;
+	int nDamageType2;
+    int nDamageDie;
+    int nVfx;
+    int nSave;
+    int nDice;
+	int nBreath;
+	int nBonus;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	nDamageType = DAMAGE_TYPE_MAGICAL;
+	nDamageType2 = DAMAGE_TYPE_BLUDGEONING;
+	nVfx        = VFX_HIT_SPELL_MAGIC;
+	nSave       = SAVING_THROW_TYPE_SPELL;
+		
+	nDice = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+	{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+	}
+	else 
+	{
+			effect eVis = EffectVisualEffect(nVfx);
+			effect eBreath = EffectNWN2SpecialEffectFile("fx_amethystdragonbreath");	
+ //	 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); 
+						
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+		    int nDamage;
+		    int nDamStrike;
+		    float fDelay;
+		    object oTarget;
+			effect eDamage;
+			effect eDamage2;
+			vector vOrigin  = GetPosition(oPC);
+
+	//--------------------------------------------------------------------------
+	//Loop through all targets and do damage
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			while(GetIsObjectValid(oTarget))
+			{
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				{
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d4(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+					    eDamage = EffectDamage(nDamStrike, nDamageType);
+						eDamage2 = EffectDamage(nDamStrike, nDamageType2);
+		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+				 	}
+				}
+				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			}
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, repulsive Gas, Cone (Bronze)
+//----------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_MIND_SPELLS;	
+	int  nType	   = SAVING_THROW_WILL;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	int  nDuration = d6(1) + 5;
+	int  nBonus;
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonrepulsebreath");	
+	effect eVis = EffectVisualEffect(VFX_IMP_DAZED_S);
+    effect eDaze = EffectDazed();
+    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+    effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
+
+    effect eLink = EffectLinkEffects(eDaze, eDur);
+    eLink = EffectLinkEffects(eLink, eDur2);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   		  
+			 
+					 // Daze Breath --------------------------------------------------------------
+					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+   					 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay))
+       			     {
+                
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+       		         }
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Acid, Line (Black)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Black(object oPC, int nSpell)
+
+{
+    int nType;
+    int nDamageType;
+    int nDamageDie;
+    int nVfx;
+    int nSave;
+    int nDice;
+	int nBreath;
+	int nBonus;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	nDamageType = DAMAGE_TYPE_ACID;
+	nVfx        = VFX_HIT_SPELL_ACID;
+	nSave       = SAVING_THROW_TYPE_ACID;
+		
+	nDice = GetTotalLevels(oPC, TRUE);
+	
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			effect eVis = EffectVisualEffect(nVfx);
+			effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonacidbreath");	
+	//		effect eBreath = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_CHEST); 
+
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+		    int nDamage;
+		    int nDamStrike;
+		    float fDelay;
+		    object oTarget;
+			effect eDamage;
+			vector vOrigin  = GetPosition(oPC);
+
+	//--------------------------------------------------------------------------
+	//Loop through all targets and do damage
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			while(GetIsObjectValid(oTarget))
+			{
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				{
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d8(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+					    eDamage = EffectDamage(nDamStrike, nDamageType);
+		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+				 	}
+				}
+				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Fire, Cone (Red)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Red(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	int nDamage;
+    int nDamStrike;
+	effect eDamage;
+    int nDamageDie;
+	int nBonus;
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_FIRE;	
+	int  nType	   = SAVING_THROW_REFLEX;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	int  nDamageType = DAMAGE_TYPE_FIRE;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_red_dragon_breath.sef");
+	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{ 
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   				
+					// Damage Breath -------------------------------------------------------------
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d10(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
+		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		 			}
+			
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Sonic, Cone (Emerald)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	int nDamage;
+    int nDamStrike;
+	effect eDamage;
+    int nDamageDie;
+	int nBonus;
+	int  nDuration = d6(1) + 5;
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_SONIC;	
+	int  nType	   = SAVING_THROW_FORT;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	int  nDamageType = DAMAGE_TYPE_SONIC;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath.sef");
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{ 
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   				
+					// Damage Breath -------------------------------------------------------------
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d6(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
+		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		 			}
+					if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nType, OBJECT_SELF, fDelay))
+       			     {
+                
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDeaf(), oTarget, RoundsToSeconds(nDuration)));
+      		            
+       		         }
+			
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Cold (Dehydrating), Cone (Topaz)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	int nDamage;
+    int nDamStrike;
+	effect eDamage;
+	effect eDrain;
+    int nDamageDie;
+	int nBonus;
+	int  nDuration = d6(1) + 5;
+	int nDrainDice;
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_COLD;	
+	int  nType	   = SAVING_THROW_REFLEX;
+	int  nType2	   = SAVING_THROW_FORT;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	int  nDamageType = DAMAGE_TYPE_COLD;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{ 
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   				
+					// Damage Breath -------------------------------------------------------------
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d8(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
+		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		 			}
+					if(!GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT && !GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && !GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL)
+					{
+						if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nType, OBJECT_SELF, fDelay))
+	       			     {
+						 	nDrainDice = d6(1) + GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
+							if(GetRacialType(oTarget) == RACIAL_TYPE_OOZE || GetRacialType(oTarget) == RACIAL_SUBTYPE_PLANT)
+							{
+								nDrainDice = nDrainDice * 2;
+							}
+	                		eDrain = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDrainDice);
+							DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(nDuration)));
+	      		            
+	       		         }
+					}
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Cold, Cone (White)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_White(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	int nDamage;
+    int nDamStrike;
+	effect eDamage;
+	effect eDrain;
+    int nDamageDie;
+	int nBonus;
+	int  nDuration = d6(1) + 5;
+	int nDrainDice;
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_COLD;	
+	int  nType	   = SAVING_THROW_REFLEX;
+	int  nType2	   = SAVING_THROW_FORT;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	int  nDamageType = DAMAGE_TYPE_COLD;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{ 
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   				
+					// Damage Breath -------------------------------------------------------------
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d8(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
+		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		 			}
+					
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Negative, Cone (Shadow)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_NEGATIVE;	
+	int  nType	   = SAVING_THROW_REFLEX;	
+	int  nDice     = 2 + (GetTotalLevels(oPC, TRUE)/5);
+	int  nDuration = d6(1) + 5;
+	int  nBonus;
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_shadowdragonbreath");
+	effect eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
+    effect eNeg = EffectNegativeLevel(nDice);
+	effect eNeg2 = EffectNegativeLevel(nDice/2);
+    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+    effect eDur2 = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+
+    effect eLink = EffectLinkEffects(eNeg, eDur);
+	effect eLink2 = EffectLinkEffects(eNeg2, eDur2);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	EffectVisualEffect (VFX_DUR_CONE_EVIL
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f)); 
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   		  
+			 
+					 // Level Drain Breath --------------------------------------------------------------
+					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+   					 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NEGATIVE, OBJECT_SELF, fDelay))
+       			     {
+                
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+       		         }
+					 else 
+					 {
+					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, HoursToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));      		 
+					 }
+			
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Electricity, Line (Blue)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Blue(object oPC, int nSpell)
+
+{
+    int nType;
+    int nDamageType;
+    int nDamageDie;
+    int nVfx;
+    int nSave;
+    int nDice;
+	int nBreath;
+	int nBonus;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	nDamageType = DAMAGE_TYPE_ELECTRICAL;
+	nVfx        = VFX_HIT_SPELL_LIGHTNING;
+	nSave       = SAVING_THROW_TYPE_ELECTRICITY;
+		
+	nDice = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			effect eVis = EffectVisualEffect(nVfx);
+			effect eBreath = EffectNWN2SpecialEffectFile("fx_lightningdragonbreath");	
+ 	//	 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); 
+
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+		    int nDamage;
+		    int nDamStrike;
+		    float fDelay;
+		    object oTarget;
+			effect eDamage;
+			vector vOrigin  = GetPosition(oPC);
+
+	//--------------------------------------------------------------------------
+	//Loop through all targets and do damage
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			while(GetIsObjectValid(oTarget))
+			{
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				{
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d8(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+					    eDamage = EffectDamage(nDamStrike, nDamageType);
+		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+				 	}
+				}
+				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Acid, Line (Copper)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Copper(object oPC, int nSpell)
+
+{
+    int nType;
+    int nDamageType;
+    int nDamageDie;
+    int nVfx;
+    int nSave;
+    int nDice;
+	int nBreath;
+	int nBonus;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	nDamageType = DAMAGE_TYPE_ACID;
+	nVfx        = VFX_HIT_SPELL_ACID;
+	nSave       = SAVING_THROW_TYPE_ACID;
+		
+	nDice = GetTotalLevels(oPC, TRUE);
+	
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			effect eVis = EffectVisualEffect(nVfx);
+			effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonacidbreath");	
+
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+		    int nDamage;
+		    int nDamStrike;
+		    float fDelay;
+		    object oTarget;
+			effect eDamage;
+			vector vOrigin  = GetPosition(oPC);
+
+	//--------------------------------------------------------------------------
+	//Loop through all targets and do damage
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			while(GetIsObjectValid(oTarget))
+			{
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				{
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d8(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+					    eDamage = EffectDamage(nDamStrike, nDamageType);
+		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+				 	}
+				}
+				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Slow Gas, Cone (Copper)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_SPELL;	
+	int  nType	   = SAVING_THROW_FORT;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	int  nDuration = d4(1) + 5;
+	int  nBonus;
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");	
+	effect eVis = EffectVisualEffect(VFX_IMP_SLOW);
+    effect eSlow = EffectSlow();
+    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+    effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_SLOW);
+
+    effect eLink = EffectLinkEffects(eSlow, eDur);
+    eLink = EffectLinkEffects(eLink, eDur2);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   		  
+			 
+					 // Daze Breath --------------------------------------------------------------
+					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+   					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
+       			     {                
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+       		         }
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Blinding Light, Cone (Radiant)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_SPELL;	
+	int  nType	   = SAVING_THROW_FORT;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	int  nDuration = d4(1) + 5;
+	int  nBonus;
+	
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");	
+	effect eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
+    effect eSlow = EffectBlindness();
+    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+    effect eDur2 = EffectVisualEffect(VFX_DUR_BLIND);
+
+    effect eLink = EffectLinkEffects(eSlow, eDur);
+    eLink = EffectLinkEffects(eLink, eDur2);
+	
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   		  
+			 
+					 // Blind Breath --------------------------------------------------------------
+					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+   					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
+       			     {                
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+       		         }
+					 //Divine Damage ---------------------------------------------------------------
+					 int	 nDamage = d6(1);
+					 int	 nDamageUndead = d6(nDice);
+					 effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE, FALSE);
+					 effect eDamageUndead = EffectDamage(nDamageUndead, DAMAGE_TYPE_DIVINE, FALSE);
+	
+					 if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
+					 {
+					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamageUndead, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					 }
+					 if(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
+					 {
+					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					 }
+		
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Sparks, Cone (Iron)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Iron(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	int nDamage;
+	int nDamage2;
+    int nDamStrike;
+	int nDamStrike2;
+	effect eDamage;
+	effect eDamage2;
+    int nDamageDie;
+	int nBonus;
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_FIRE;	
+	int  nType	   = SAVING_THROW_REFLEX;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	int  nDamageType = DAMAGE_TYPE_FIRE;
+	int  nDamageType2 = DAMAGE_TYPE_ELECTRICAL;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_irondragonbreath");
+	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{ 
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    			
+	   				
+					// Damage Breath -------------------------------------------------------------
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+					nDamage = d6(nDice);
+					nDamage2 = d4(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					nDamStrike2 =  GetReflexAdjustedDamage(nDamage2, oTarget, nDC);
+					if (nDamStrike > 0)
+					{
+			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
+			 	   		eDamage2 = EffectDamage(nDamStrike, nDamageType2);
+						effect eDam = EffectLinkEffects(eDamage, eDamage2);				
+		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		 			}
+			
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+// Dragon Breath, Sleep Gas, Cone (Iron)
+//---------------------------------------------------------------------------------------------------------------------
+
+void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
+
+{
+	float fDelay;	
+    object oTarget;
+	object oPC 		= OBJECT_SELF;
+	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
+	
+	vector vOrigin = GetPosition(oPC);
+	
+	int  nSave     = SAVING_THROW_TYPE_SPELL;	
+	int  nType	   = SAVING_THROW_FORT;	
+	int  nDice     = GetTotalLevels(oPC, TRUE);
+	int  nDuration = d6(1) + 5;
+	int  nBonus;
+	
+	if (GetHasFeat(3649, oPC))
+	{	
+		nBonus = 4;
+	}
+	else
+	{	
+		nBonus = 0;
+	}	
+	
+	int  nDC	  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
+	
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");	
+	effect eVis = EffectVisualEffect(VFX_IMP_SLEEP);
+    effect eSleep = EffectSleep();
+    effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+    effect eDur2 = EffectVisualEffect(VFX_DUR_SLEEP);
+
+    effect eLink = EffectLinkEffects(eSleep, eDur);
+    eLink = EffectLinkEffects(eLink, eDur2);
+	
+	// Breath Weapon does not work when in humanoid form (Temp = 1)	
+	if (GetLocalInt(oItem, "TempChange") == 1)
+		{
+			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		}
+	else 
+		{
+			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+   	
+	//--------------------------------------------------------------------------
+	//Loop through all targets and add effect.
+	//--------------------------------------------------------------------------
+
+			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+			while(GetIsObjectValid(oTarget))
+			{     
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				{    				   			 
+					 // Sleep Breath --------------------------------------------------------------
+					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
+   					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
+       			     {                
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+       		         }
+	
+				}	 
+			         
+     		   //Get next target in spell area
+	  		   oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
+  
+			}
+		}
+}
+
+*/
 
 
 					

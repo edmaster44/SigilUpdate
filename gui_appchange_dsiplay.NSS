@@ -1,5 +1,7 @@
 //#include "nwnx_craft"
 //#include "nwnx_craft_system"
+
+// This is the GUI for setting alternate form for the first time
 #include "gui_appchange_inc"
 #include "aaa_changeself_inc"
 #include "ps_inc_functions"
@@ -142,7 +144,7 @@ void main(int nType)
 	
 	if (nType == 0)
 	{
-		PS_SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIType", 0);
+		SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIType", 0);
 		if (GetSubRace(oPlayer) != 233) //DOPPELGANGER 233
 		{
 			SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "STORESAVE", TRUE);
@@ -156,8 +158,8 @@ void main(int nType)
 	
 	else if (nType == 1)
 	{
-		PS_SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIAppearanceID", GetAppearanceType(oPlayer));
-		PS_SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIGenderID", GetGender(oPlayer));
+		SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIAppearanceID", GetAppearanceType(oPlayer));
+		SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIGenderID", GetGender(oPlayer));
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "SlotID_Container", TRUE);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "AppearanceID_Container", TRUE);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "GenderID_Container", TRUE);
@@ -172,12 +174,12 @@ void main(int nType)
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "ScaleZ_Container", TRUE);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "SAVE", TRUE);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "LOAD", TRUE);
-		PS_SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIType", 1);
+		SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIType", 1);
 	}
 	
 	else if (nType == 2)
 	{
-		PS_SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIType", 2);
+		SetLocalInt(oPlayer, "CharacterAppearanceChangeGUIType", 2);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "STORESAVE", TRUE);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "SAVE", TRUE);
 		SetGUIObjectHidden(oPlayer, "CharacterAppearanceChangeGUI", "LOAD", TRUE);

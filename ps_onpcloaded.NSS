@@ -582,6 +582,12 @@ void main()
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
 		PS_KnightLevels(oPC);
+		// if the character is a dragon they automatically are in nat form on login, 
+		// so if they have the nat multiattack feat from prc give them multiattack on
+		// login. 4000 = nat multiattack, 1784 = multiattack in actuality
+		if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
+			if (GetHasFeat(4000, oPC, TRUE)) FeatAdd(oPC, 1784, FALSE);
+		}
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
 	}
