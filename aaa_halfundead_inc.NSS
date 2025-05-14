@@ -21,19 +21,21 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 		effect eVul1   =  EffectDamageImmunityDecrease(DAMAGE_TYPE_DIVINE,nVulD);
 		effect eNeg		=EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,nAmount);
 		effect eDR		= EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
-		
+		// redundant to make them individually SN and then make the linked fx SN
+		/*
 			eDR			= SupernaturalEffect(eDR);
 			eNeg		= SupernaturalEffect(eNeg);
 			eVul1		= SupernaturalEffect(eVul1);
+		*/
 		effect	eLink    =EffectLinkEffects(eDR,eNeg);
 				eLink    =EffectLinkEffects(eLink,eVul1);
 				eLink = SupernaturalEffect(eLink);
 				eLink = SetEffectSpellId(eLink, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);		
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		if (!PS_GetLocalInt(oPC, "halfUndeadDR")){
+		if (!GetLocalInt(oPC, "halfUndeadDR")){
 			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
-			PS_SetLocalInt(oPC, "halfUndeadDR", TRUE);
+			SetLocalInt(oPC, "halfUndeadDR", TRUE);
 		}	
 }
 
