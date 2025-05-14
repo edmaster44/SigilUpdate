@@ -4725,7 +4725,7 @@ int PsyWarLevels(object oPC)
 	int nGemDragon = GetLevelByClass(128, oPC);
 	if (nGemDragon > 0) nGemDragon = nGemDragon / 2 + 1;
 	if (GetHasFeat(3680, oPC, TRUE)){ // if has new psy path feat for new dragon prc
-		int nDragonLevel = GetLevelByClass(129, oPC) - 2;
+		int nDragonLevel = GetLevelByClass(130, oPC) - 2;
 		if (nDragonLevel > 0) nPsywar += nDragonLevel;
 	}
 	int	iTotal = nPsywar + nWarMind + nGemDragon;

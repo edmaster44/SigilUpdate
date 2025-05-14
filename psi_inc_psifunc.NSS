@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Psionics include: Misceallenous
@@ -300,7 +300,7 @@ int GetManifestingClass(object oManifester = OBJECT_SELF)
 int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVALID)
 {
     int nLevel;
-    int nAdjust = 0; //PS_GetLocalInt(oManifester, PRC_CASTERLEVEL_ADJUSTMENT); //Disabled - Mimi
+    int nAdjust = 0; //GetLocalInt(oManifester, PRC_CASTERLEVEL_ADJUSTMENT); //Disabled - Mimi
 
     // The function user needs to know the character's manifester level in a specific class
     // instead of whatever the character last manifested a power as
@@ -329,12 +329,12 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
     }
 
     // For when you want to assign the caster level.
-    /*else if(PS_GetLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE) != 0)
+    /*else if(GetLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE) != 0)
     {
         if(DEBUG) SendMessageToPC(oManifester, "Forced-level manifesting at level " + IntToString(GetCasterLevel(oManifester)));
 
-        DelayCommand(1.0, PS_DeleteLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE));
-        nLevel = PS_GetLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE);
+        DelayCommand(1.0, DeleteLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE));
+        nLevel = GetLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE);
     }*/
     else if(GetManifestingClass(oManifester) != CLASS_TYPE_INVALID)
     {
@@ -358,14 +358,14 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
 
 
     // The bonuses inside only apply to normal manifestation
-    /*if(!PS_GetLocalInt(oManifester, PRC_IS_PSILIKE))
+    /*if(!GetLocalInt(oManifester, PRC_IS_PSILIKE))
     {
         //Adding wild surge
         int nSurge = GetWildSurge(oManifester);
         if (nSurge > 0) nLevel += nSurge;
 
         // Adding overchannel
-        int nOverchannel = PS_GetLocalInt(oManifester, PRC_OVERCHANNEL);
+        int nOverchannel = GetLocalInt(oManifester, PRC_OVERCHANNEL);
         if(nOverchannel > 0) nLevel += nOverchannel;
     }*/
 
@@ -387,7 +387,7 @@ int GetHighestManifesterLevel(object oCreature)
 }
 int GetPowerLevel(object oManifester)
 {
-    return GetSpellLevel(GetSpellId()); //PS_GetLocalInt(oManifester, PRC_POWER_LEVEL);
+    return GetSpellLevel(GetSpellId()); //GetLocalInt(oManifester, PRC_POWER_LEVEL);
 }
 
 int GetAbilityScoreOfClass(object oManifester, int nClass)
@@ -460,8 +460,8 @@ int GetManifesterDC(object oManifester = OBJECT_SELF)
 	}
 	int nSpellID = GetSpellId();
 	object oTarget = GetSpellTargetObject();
-	int nManifesterPP    = PS_GetLocalInt(oManifester, "PSI_PP");
-	int nMTrap = PS_GetLocalInt(oTarget, "PRC_Power_MindTrap_Active");
+	int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
+	int nMTrap = GetLocalInt(oTarget, "PRC_Power_MindTrap_Active");
 	int nDiscipline = GetPowerDiscipline(nSpellID);
 	
 	if (!nDiscipline == 0)
@@ -581,16 +581,16 @@ int GetManifesterDC(object oManifester = OBJECT_SELF)
 			}
 			if (nMTrap == TRUE)
 			{
-				PS_SetLocalInt(oManifester, "PSI_PP", nManifesterPP-d6(1));
-				nManifesterPP    = PS_GetLocalInt(oManifester, "PSI_PP");
+				SetLocalInt(oManifester, "PSI_PP", nManifesterPP-d6(1));
+				nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 				SendMessageToPC(oManifester, "Your foe is protected by a 'Mind Trap' power, causing telepathy powers to cost an additional 1d6 power points.");
 			}
 		}
 	}
     // Stuff that applies only to powers, not psi-like abilities goes inside
-    /*if(!PS_GetLocalInt(oManifester, PRC_IS_PSILIKE))
+    /*if(!GetLocalInt(oManifester, PRC_IS_PSILIKE))
     {
-        if (PS_GetLocalInt(oManifester, "PsionicEndowmentActive") == TRUE && UsePsionicFocus(oManifester))
+        if (GetLocalInt(oManifester, "PsionicEndowmentActive") == TRUE && UsePsionicFocus(oManifester))
         {
             nDC += GetHasFeat(FEAT_GREATER_PSIONIC_ENDOWMENT, oManifester) ? 4 : 2;
         }
@@ -695,10 +695,10 @@ int GetPsiPenetration(object oManifester = OBJECT_SELF)
     int nPen = GetManifesterLevel(oManifester);
 
     /*/ The stuff inside applies only to normal manifestation, not psi-like abilities
-    /if(!PS_GetLocalInt(oManifester, PRC_IS_PSILIKE))
+    /if(!GetLocalInt(oManifester, PRC_IS_PSILIKE))
     {
         // Check for Power Pen feats being used
-        if(PS_GetLocalInt(oManifester, "PowerPenetrationActive") == TRUE && UsePsionicFocus(oManifester))
+        if(GetLocalInt(oManifester, "PowerPenetrationActive") == TRUE && UsePsionicFocus(oManifester))
         {
             nPen += GetHasFeat(FEAT_GREATER_POWER_PENETRATION, oManifester) ? 8 : 4;
         }
@@ -735,6 +735,10 @@ int GetPsionicPRCLevels(object oCreature)
 
     nLevel += GetLevelByClass(CLASS_TYPE_WARMIND,oCreature);
 	nLevel +=  GetLevelByClass(CLASS_TYPE_DRAGON_PSION, oCreature);
+	if (GetHasFeat(3679, oCreature, TRUE)){ // if has new psi path feat for new dragon prc
+		int nDragonLevel = GetLevelByClass(130, oCreature) - 2;
+		if (nDragonLevel > 0) nLevel += nDragonLevel;
+	}
     // Cerebremancer and Psychic Theurge add manifester levels on each level
     //nLevel += GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
     //nLevel += GetLevelByClass(CLASS_TYPE_PSYCHIC_THEURGE, oCreature);
@@ -844,9 +848,9 @@ object GetPsionicCreatureWeapon(object oCreature, string sResRef, int nInventory
     DelayCommand(6.0f, LocalCleanExtraFists(oCreature));
 
     // Weapon finesse or intuitive attack?
-    PS_SetLocalInt(oCreature, "UsingCreature", TRUE);
+    SetLocalInt(oCreature, "UsingCreature", TRUE);
     ExecuteScript("prc_intuiatk", oCreature);
-    DelayCommand(1.0f, PS_DeleteLocalInt(oCreature, "UsingCreature"));
+    DelayCommand(1.0f, DeleteLocalInt(oCreature, "UsingCreature"));
 
     // Add OnHitCast: Unique if necessary
     if(GetHasFeat(FEAT_REND, oCreature))
@@ -864,9 +868,9 @@ object GetPsionicCreatureWeapon(object oCreature, string sResRef, int nInventory
 
 int GetWildSurge(object oManifester)
 {
-    /*int nWildSurge = PS_GetLocalInt(oManifester, PRC_IS_PSILIKE) ?
+    /*int nWildSurge = GetLocalInt(oManifester, PRC_IS_PSILIKE) ?
                       0 :                                       // Wild Surge does not apply to psi-like abilities
-                      PS_GetLocalInt(oManifester, PRC_WILD_SURGE);*/
+                      GetLocalInt(oManifester, PRC_WILD_SURGE);*/
 
     /*if(FALSE) DoDebug("GetWildSurge():\n"
                     + "oManifester = " + DebugObject2Str(oManifester) + "\n"
@@ -886,7 +890,7 @@ int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDa
        )
             nDamage += 2;
     // Intellect Fortress - Halve damage dealt by powers that allow PR. Goes before DR (-like) reductions
-    if(PS_GetLocalInt(oTarget, "PRC_Power_IntellectFortress_Active")    &&
+    if(GetLocalInt(oTarget, "PRC_Power_IntellectFortress_Active")    &&
        Get2DAString("spells", "ItemImmunity", GetSpellId()) == "1"
        )
         nDamage /= 2;

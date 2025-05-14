@@ -774,6 +774,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 	int nShape = SHAPE_SPELLCONE;
 	float fShapeSize = RADIUS_SIZE_TREMENDOUS;
 	int nDieType = 10;
+	int nDieType2 = NULL;
 	int nSave = SAVING_THROW_REFLEX;
 	int nSaveType = SAVING_THROW_TYPE_FIRE;
 	// End breath weapon variables
@@ -807,11 +808,14 @@ void DoBreathWeapon(object oPC, int nSpell){
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
 			eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath.sef");
 			nDieType = 6;
+			eSecondary = EffectDeaf();
+			eDur = EffectVisualEffect(VFX_DUR_BLIND);
+			fDur = RoundsToSeconds(d6(1) + 5);
 			nSave = SAVING_THROW_FORT;
 			nSaveType = SAVING_THROW_TYPE_SONIC;	
 			break;					
 		}
-		case 2662:{	//topaze dehydrating cold
+		case 2662:{	//topaz dehydrating cold
 			nDamageType = DAMAGE_TYPE_COLD;
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
 			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
@@ -838,6 +842,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			eSecondary = EffectDazed();
 			effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
 			eDur = EffectLinkEffects(eDur2, eDur);
+			fDur = RoundsToSeconds(d6(1) + 5);
 			nSave = SAVING_THROW_WILL;
 			nSaveType = SAVING_THROW_TYPE_MIND_SPELLS;
 			break;						
@@ -899,7 +904,8 @@ void DoBreathWeapon(object oPC, int nSpell){
 			nDamageType2 = DAMAGE_TYPE_ELECTRICAL;
 			eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
 			eBreath = EffectNWN2SpecialEffectFile("fx_irondragonbreath");
-			nDieType = 4;
+			nDieType = 6;
+			nDieType2 = 4;
 			break;
 		}
 		case 2656:{	//iron gas
@@ -925,6 +931,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 	
 	int nRace;
 	int nDamage = 0;
+	int nAdjustedDmgType;
 	float fDelay;
 	effect eDamage;
 	effect eDamage2;
@@ -957,15 +964,36 @@ void DoBreathWeapon(object oPC, int nSpell){
 				else nDamage = d4(nDice);
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC);
 				if (nDamage > 0){
-					eDamage = EffectDamage(nDamage, nDamageType);
+					nAdjustedDmgType = nDamageType;
+					// convert neg damage to 1/2 magic so we don't heal undead with it
+					if (nRace == RACIAL_TYPE_UNDEAD && nDamageType == DAMAGE_TYPE_NEGATIVE){
+						nAdjustedDmgType = DAMAGE_TYPE_MAGICAL;
+						nDamage = nDamage / 2;
+						if (nDamage < 1) nDamage = 1;
+					}
+					eDamage = EffectDamage(nDamage, nAdjustedDmgType);
 					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 					if (nDamageType2 != NULL){
-						eDamage2 = EffectDamage(nDamage, nDamageType2);
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+						if (nDieType2 == NULL) nDieType2 = nDieType;
+						if (nDieType2 == 10) nDamage = d10(nDice);
+						else if (nDieType2 == 8) nDamage = d8(nDice);
+						else if (nDieType2 == 6) nDamage = d6(nDice);
+						else if (nDieType2 == 1) nDamage = d6(1);
+						else nDamage = d4(nDice);
 					}
+					nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					// convert neg damage to 1/2 magic so we don't heal undead with it
+					if (nRace == RACIAL_TYPE_UNDEAD && nDamageType2 == DAMAGE_TYPE_NEGATIVE){
+						nAdjustedDmgType = DAMAGE_TYPE_MAGICAL;
+						nDamage = nDamage / 2;
+						if (nDamage < 1) nDamage = 1;
+					} else nAdjustedDmgType = nDamageType2;
+					eDamage2 = EffectDamage(nDamage, nAdjustedDmgType);
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
 				}
 			}
+			
 			
 			// apply secondary effect, if any
 			if (GetIsEffectValid(eSecondary)){

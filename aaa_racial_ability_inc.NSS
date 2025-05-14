@@ -476,11 +476,14 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 	
 	int bIsInAltForm = GetLocalInt(oEssence, "TempChange");
 	
-	//ClearScriptParams();
-	if (!GetLocalInt(oEssence, "AltFormSet")){
+	if (GetLocalInt(oEssence, "AltFormSet") != TRUE){
+		//debug
+		SendMessageToPC(oPC, "ALT NOT SET");
 		AddScriptParameterInt(2);
 		ExecuteScriptEnhanced("gui_appchange_dsiplay", oPC);
 	} else {
+		//debug
+		SendMessageToPC(oPC, "ALT SET");
 		if (!bIsInAltForm) AddScriptParameterInt(15);
 		else AddScriptParameterInt(0);
 		AddScriptParameterInt(0);
@@ -490,13 +493,10 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 		AddScriptParameterFloat(0.0f);
 		ExecuteScriptEnhanced("ga_aaa_changeself", oPC);
 	}
-	//ClearScriptParams();
-		
-	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
-		//debug
-		//SendMessageToPC(oPC, "YOU ARE A DRAGON");
-		PS_ShieldArmor_Dragon(oPC, 2623);
-	}
+
+	// reset dragon ac	
+	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
+		PS_ShieldArmor_Dragon(oPC, 2623);	
 }
 
 void PS_Ability_MarqCambAlignedStrike(object oPC, int nSpell)
