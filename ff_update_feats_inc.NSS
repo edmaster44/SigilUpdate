@@ -112,20 +112,23 @@ void AdjustDragonPrC(object oPC){
 	int nPsyLvl = GetLevelByClass(130, oPC); // new psy dragon prc
 	if (nPsyLvl == 1){
 		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) >= 1)
-			FeatAdd(oPC, 3679, FALSE); 
+			FeatAdd(oPC, 3679, FALSE); //psion path
 		else if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) >= 1) 
-			FeatAdd(oPC, 3680, FALSE); 
+			FeatAdd(oPC, 3680, FALSE); //psywar path
 	}
 	nLvl += nPsyLvl;
 	if (nLvl < 1) return;
 	
-	// add trapfinding where applicable, ability scores, and cosmo skill feats
+	// add trapfinding where applicable and ability scores
 	if (GetHasFeat(3670, oPC)){ // melee path
 		if (nLvl >= 2){
 			FeatAdd(oPC, 784, FALSE); // Great Dex 1
 			FeatAdd(oPC, 785, FALSE); // Great Dex 2
 		}
 	}else if (GetHasFeat(3671, oPC)){ // rogue path
+		/* cosmo feats don't work like I thought, they work like
+		 Able Learner for specific skills. They dont actually grant
+		 the class skill.
 		FeatAdd(oPC, 1255, FALSE); // cosmo disable device
 		FeatAdd(oPC, 1258, FALSE); // cosmo hide
 		FeatAdd(oPC, 1261, FALSE); // cosmo ms
@@ -133,16 +136,19 @@ void AdjustDragonPrC(object oPC){
 		FeatAdd(oPC, 1266, FALSE); // cosmo sleight of hand
 		FeatAdd(oPC, 1268, FALSE); // cosmo set trap
 		FeatAdd(oPC, 1273, FALSE);// cosmo appraise
+		*/
 		if (nLvl >= 2){
 			FeatAdd(oPC, 1857, FALSE); // trapfinding
 			FeatAdd(oPC, 784, FALSE); // Great Dex 1
 			FeatAdd(oPC, 785, FALSE); // Great Dex 2
 		}
 	} else if (GetHasFeat(3672, oPC)){	// ranger path
+		/*
 		FeatAdd(oPC, 1255, FALSE); // cosmo disable device
 		FeatAdd(oPC, 1258, FALSE); // cosmo hide
 		FeatAdd(oPC, 1261, FALSE); // cosmo ms
 		FeatAdd(oPC, 1282, FALSE); // cosmo survival
+		*/
 		if (nLvl >= 2){
 			FeatAdd(oPC, 2178, FALSE); // scent
 			FeatAdd(oPC, 784, FALSE); // Great Dex 1
@@ -173,11 +179,13 @@ void AdjustDragonPrC(object oPC){
 			FeatAdd(oPC, 765, FALSE); // Great Cha 2
 		}
 	} else if (GetHasFeat(3677, oPC)){ // bard path
+		/*
 		FeatAdd(oPC, 1264, FALSE); // cosmo perform 
 		FeatAdd(oPC, 1273, FALSE);// cosmo appraise
 		FeatAdd(oPC, 1258, FALSE); // cosmo hide
 		FeatAdd(oPC, 1261, FALSE); // cosmo ms
 		FeatAdd(oPC, 1266, FALSE); // cosmo sleight of hand
+		*/
 		if (nLvl >= 2){
 			FeatAdd(oPC, 423, FALSE); // extra music
 			FeatAdd(oPC, 764, FALSE); // Great Cha 1
