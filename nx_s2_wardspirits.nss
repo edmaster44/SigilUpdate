@@ -42,13 +42,13 @@ void main()
     while (GetIsObjectValid(oTarget)){
         // Does not stack with itself or with Blessing of the Spirits, skips those with Blessing,
 		// removes previous applications of itself
-        if (!GetHasSpellEffect(nBless, oTarget){
+        if (!GetHasSpellEffect(nBless, oTarget)){
 			PS_RemoveEffects(oTarget, nId);
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
         
             //Apply the VFX impact and effects
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oTarget, fDuration);
         }
         
         oTarget = GetNextFactionMember(oLeader, bPCOnly);
