@@ -97,6 +97,7 @@ int fCalcOtherSneakFeats(object oPC);
 string fCheckForTempSneakDice(object oPC);
 void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
+void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 
 void fFixAlertness(object oPC){
 	if (GetHasFeat(FEAT_ALERTNESS, oPC, TRUE)){
@@ -119,116 +120,58 @@ void AdjustDragonPrC(object oPC){
 	nLvl += nPsyLvl;
 	if (nLvl < 1) return;
 	
-	// add trapfinding where applicable and ability scores
-	if (GetHasFeat(3670, oPC)){ // melee path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 784, FALSE); // Great Dex 1
-			FeatAdd(oPC, 785, FALSE); // Great Dex 2
-		}
-	}else if (GetHasFeat(3671, oPC)){ // rogue path
-		/* cosmo feats don't work like I thought, they work like
-		 Able Learner for specific skills. They dont actually grant
-		 the class skill.
-		FeatAdd(oPC, 1255, FALSE); // cosmo disable device
-		FeatAdd(oPC, 1258, FALSE); // cosmo hide
-		FeatAdd(oPC, 1261, FALSE); // cosmo ms
-		FeatAdd(oPC, 1262, FALSE); // cosmo open lock
-		FeatAdd(oPC, 1266, FALSE); // cosmo sleight of hand
-		FeatAdd(oPC, 1268, FALSE); // cosmo set trap
-		FeatAdd(oPC, 1273, FALSE);// cosmo appraise
-		*/
-		if (nLvl >= 2){
+	// add path specific ability scores and feats
+	if (nLvl == 2){
+		if (GetHasFeat(3670, oPC)){ // melee path
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		}else if (GetHasFeat(3671, oPC)){ // rogue path	
 			FeatAdd(oPC, 1857, FALSE); // trapfinding
-			FeatAdd(oPC, 784, FALSE); // Great Dex 1
-			FeatAdd(oPC, 785, FALSE); // Great Dex 2
-		}
-	} else if (GetHasFeat(3672, oPC)){	// ranger path
-		/*
-		FeatAdd(oPC, 1255, FALSE); // cosmo disable device
-		FeatAdd(oPC, 1258, FALSE); // cosmo hide
-		FeatAdd(oPC, 1261, FALSE); // cosmo ms
-		FeatAdd(oPC, 1282, FALSE); // cosmo survival
-		*/
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		} else if (GetHasFeat(3672, oPC)){	// ranger path
 			FeatAdd(oPC, 2178, FALSE); // scent
-			FeatAdd(oPC, 784, FALSE); // Great Dex 1
-			FeatAdd(oPC, 785, FALSE); // Great Dex 2
-		}
-	} else if (GetHasFeat(3673, oPC)){ // sorc path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		} else if (GetHasFeat(3673, oPC)){ // sorc path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3674, oPC)){ // warlock path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3674, oPC)){ // warlock path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3675, oPC)){ // fs path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3675, oPC)){ // fs path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3676, oPC)){ // knight path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3676, oPC)){ // knight path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3677, oPC)){ // bard path
-		/*
-		FeatAdd(oPC, 1264, FALSE); // cosmo perform 
-		FeatAdd(oPC, 1273, FALSE);// cosmo appraise
-		FeatAdd(oPC, 1258, FALSE); // cosmo hide
-		FeatAdd(oPC, 1261, FALSE); // cosmo ms
-		FeatAdd(oPC, 1266, FALSE); // cosmo sleight of hand
-		*/
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3677, oPC)){ // bard path
 			FeatAdd(oPC, 423, FALSE); // extra music
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3678, oPC)){ // wiz path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3678, oPC)){ // wiz path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 794, FALSE); // Great Int 1
-			FeatAdd(oPC, 795, FALSE); // Great Int 2
-		}
-	} else if (GetHasFeat(3679, oPC)){ // psi path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_INTELLIGENCE, 2);
+		} else if (GetHasFeat(3679, oPC)){ // psi path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 794, FALSE); // Great Int 1
-			FeatAdd(oPC, 795, FALSE); // Great Int 2
-		}
-	} else if (GetHasFeat(3680, oPC)){ // psy path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_INTELLIGENCE, 2);
+		} else if (GetHasFeat(3680, oPC)){ // psy path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	} else if (GetHasFeat(3681, oPC)){ // cleric path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		} else if (GetHasFeat(3681, oPC)){ // cleric path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	} else if (GetHasFeat(3682, oPC)){ // shaman path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		} else if (GetHasFeat(3682, oPC)){ // shaman path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	} else if (GetHasFeat(3683, oPC)){ // druid path
-		if (nLvl >= 2){
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		} else if (GetHasFeat(3683, oPC)){ // druid path
 			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
 		}
 	}
+}
 
+void AdjustAbilityScore(object oPC, int nAbility, int nAmount){
+
+int nScore = GetAbilityScore(oPC, nAbility, TRUE);
+nScore += nAmount;
+SetBaseAbilityScore(oPC, nAbility, nScore);
 }
 
 void SituationalAwareness(object oPC){
