@@ -1,7 +1,8 @@
 #include "ps_inc_advscript"
 #include "ginc_math"
 #include "ps_inc_functions"
-//#include "aaa_constants"
+#include "aaa_constants"
+#include "aaa_dragon_inc"
 
 
 /*	This is the include file for CreatureCoreAppearance functions.
@@ -250,6 +251,10 @@ void PS_HumForm_DragonUE(object oPC){
 		AssignCommand(oPC, ActionUnequipItem(oLHAND));
 	if (IPGetIsCreatureEquippedWeapon(oRHAND))
 		AssignCommand(oPC, ActionUnequipItem(oRHAND));
+		
+		// reset dragon ac	
+	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
+		PS_ShieldArmor_Dragon(oPC, 2623);	
 }
 
 // Dragons assuming their natural Dragon form have any non-creature weapons unequipped when doing so.
@@ -263,4 +268,8 @@ void PS_DragForm_DragonUE(object oPC){
 		AssignCommand(oPC, ActionUnequipItem(oLHAND));
 	if (!IPGetIsCreatureEquippedWeapon(oRHAND))
 		AssignCommand(oPC, ActionUnequipItem(oRHAND));	
+		
+		// reset dragon ac	
+	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
+		PS_ShieldArmor_Dragon(oPC, 2623);	
 }
