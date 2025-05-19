@@ -30,24 +30,21 @@
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
-const string sIpDelimeter = "^";
 
 //notify players of shared routers, called from function below this one, LookForSharedRouters() 
 void NotifySharedRouters(string sFlaggedIp){
-	string sThisIp = "";
+	string sThisIp;
     string sMessage = "<c=red>You are sharing a router with another player.";
-    sMessage += "\nPlease adjust your ports in your config files to avoid bugs.";
-    sMessage += "\nSee 'https://nwn2planescape.com/viewtopic.php?t=39'</c>";
+	sMessage += "\nPlease adjust your ports in your config files to avoid bugs.";
+	sMessage += "\nSee 'https://nwn2planescape.com/viewtopic.php?t=39'";
+	sMessage += "\nor contact admin staff on discord.</c>";
 
 	//cycle through logged in players
 	object oPC = GetFirstPC();
     while (GetIsObjectValid(oPC)){
         sThisIp = GetPCIPAddress(oPC); //get ip address of player
-        if (sThisIp != ""){
-            sThisIp = sIpDelimeter + sThisIp + sIpDelimeter; //wrap ip in delimeters
-			if (sThisIp == sFlaggedIp)
-				SendMessageToPC(oPC, sMessage);  // display warning
-        }
+        if (sThisIp != "" && sThisIp == sFlaggedIp)
+            SendMessageToPC(oPC, sMessage);  // display warning
         oPC = GetNextPC();
     }
 }
@@ -55,19 +52,23 @@ void NotifySharedRouters(string sFlaggedIp){
 //look for players who have the same IP address
 void LookForSharedRouters(){
     string sIpList = "";
-    string sThisIp = "";
-    string sFlaggedIpList = "";
-
+	string sFlaggedIpList = "";
+    string sThisIp;
+	string sWrappedIp;
+    
 	//cycle through logged in players
 	object oPC = GetFirstPC();
     while (GetIsObjectValid(oPC)){
         sThisIp = GetPCIPAddress(oPC); //get ip address of player
         if (sThisIp != ""){
-            sThisIp = sIpDelimeter + sThisIp + sIpDelimeter; //wrap ip in delimeters
-            if (FindSubString(sIpList, sThisIp) == -1){
-                sIpList += sThisIp; // if delimited ip is not found already, add it to string
-            } else if (FindSubString(sFlaggedIpList, sThisIp) == -1){ //else check if we've flagged it already
-				sFlaggedIpList += sThisIp;
+			//wrap ip in delimeters to prevent false matches, e.g. 192.168.123.2 would
+			// match 192.168.123.25 without delimeters, but ^192.168.123.2^ would not
+			// match ^192.168.123.25^
+            sWrappedIp = "^" + sThisIp + "^";
+            if (FindSubString(sIpList, sWrappedIp) == -1){
+                sIpList += sWrappedIp; // if delimited ip is not found already, add it to string
+            } else if (FindSubString(sFlaggedIpList, sWrappedIp) == -1){ //else check if we've flagged it already
+				sFlaggedIpList += sWrappedIp;
 				NotifySharedRouters(sThisIp);	
 			}
         }
