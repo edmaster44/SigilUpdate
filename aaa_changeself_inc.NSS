@@ -1,8 +1,7 @@
-#include "ps_inc_advscript"
-#include "ginc_math"
 #include "ps_inc_functions"
-#include "aaa_constants"
-
+#include "ps_inc_advscript"
+//#include "aaa_constants" redundant include, this is included in ps_inc_functions
+#include "ginc_math"
 
 /*	This is the include file for CreatureCoreAppearance functions.
 	Created by Ceremorph 12/25/2015
@@ -234,8 +233,7 @@ void PS_AltForm_Assume(object oPC)
 	SetLocalInt(oEssence, "TempChange", 1);
 }
 
-// Dragons assuming Alternate Form have their creature weapons unequipped when doing so UNLESS
-// they are psywars with feral path
+// Dragons assuming Alternate Form have their creature weapons unequipped when doing so.
 // This script should be used in conjunction with PS_AltForm_Assume or PS_ChangeForm_AppearanceType.
 void PS_HumForm_DragonUE(object oPC){
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
@@ -251,9 +249,39 @@ void PS_HumForm_DragonUE(object oPC){
 		if (IPGetIsCreatureEquippedWeapon(oRHAND))
 			AssignCommand(oPC, ActionUnequipItem(oRHAND));
 	}
+
+	/*object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	object oWpn7 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	int iType6 = GetBaseItemType(oWpn6);
+	int iType7 = GetBaseItemType(oWpn7);	
+
+	if (GetHasFeat(3625, oPC, TRUE))
+	{	if (iType6 > 160 || iType6 < 180) // Unequipps creature weapons if PC changes into humanoid form. Dragon only.
+		{	if (GetIsObjectValid(oWpn6))
+			{	AssignCommand(oPC, ActionUnequipItem(oWpn6));
+				SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form");
+			}
+		}
+				
+		if (iType7 > 160 || iType7 < 180) // Slot2
+		{	if (GetIsObjectValid(oWpn7))
+			{	AssignCommand(oPC, ActionUnequipItem(oWpn7));
+				SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form");
+			}
+		}
+	}
+
+	// removes multiattack from "claw" dragons when assuming humanoid form.
+	int iDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
+		
+	if (GetHasFeat(3649, oPC, FALSE))
+	{	
+		FeatRemove(oPC, 1784);
+	}
+	*/
 }
 
-// Dragons assuming their natural Dragon form have any non-creature weapons unequipped when doing so.
+// Dragons assuming their natural Dragon form have any melee weapons unequipped when doing so.
 // This script should be used in conjunction with PS_RestoreOriginalAppearance.
 void PS_DragForm_DragonUE(object oPC){
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
@@ -265,4 +293,34 @@ void PS_DragForm_DragonUE(object oPC){
 		if (!IPGetIsCreatureEquippedWeapon(oRHAND))
 			AssignCommand(oPC, ActionUnequipItem(oRHAND));	
 	}
+	/*
+	object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	object oWpn7 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	int iType6 = GetBaseItemType(oWpn6);
+	int iType7 = GetBaseItemType(oWpn7);
+
+	if (GetHasFeat(3625, oPC, TRUE))
+	{	if (iType6 < 160 || iType6 > 180) // Slot1: Unequipps every weapon except creature weapons.
+		{	if (GetIsObjectValid(oWpn6))
+			{	AssignCommand(oPC, ActionUnequipItem(oWpn6));
+				SendMessageToPC(oPC, "<c=red>You cannot wield humanoid weapons in your natural form.");
+			}
+		}
+				
+		if (iType7 < 160 || iType7 > 180) // Slot2
+		{	if (GetIsObjectValid(oWpn7))
+			{	AssignCommand(oPC, ActionUnequipItem(oWpn7));
+				SendMessageToPC(oPC, "<c=red>You cannot wield humanoid weapons or shields in your natural form.");
+			}
+		}
+	}
+
+	// applies multiattack to "claw" dragons	
+	int iDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);  
+		
+	if (GetHasFeat(3649, oPC, FALSE) && iDragon >= 6)
+	{	
+		FeatAdd(oPC, 1784, 0, 1, 1);
+	}	
+	*/
 }

@@ -1,16 +1,14 @@
-
+#include "ps_inc_functions"			
+#include "x2_inc_spellhook"
+//#include "aaa_constants" redundant include, this is included in ps_inc_functions
+#include "X0_I0_SPELLS"
+#include "nw_i0_spells"
+#include "x2_inc_itemprop"
 #include "nwn2_inc_spells"
+#include "ps_inc_advscript"
 #include "ginc_item"
 #include "ps_inc_wingtail"
 #include "aaa_dragon_inc"
-//#include "x2_inc_itemprop"
-//#include "aaa_changeself_inc"
-//#include "ps_inc_advscript"
-//#include "ps_inc_functions"
-//#include "x2_inc_spellhook"
-//#include "aaa_constants"
-//#include "X0_I0_SPELLS"
-//#include "nw_i0_spells"
 
 void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
 void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
@@ -45,12 +43,11 @@ void PS_Ability_GiantStride(object oPC, int iLevel, int iClass, int nSpell)
 		{	iSpeed = 0;		}
 	}
     //Calculate and apply movement rate bonus
-	effect eSpeed = EffectMovementSpeedIncrease(iSpeed);
-	eSpeed = SupernaturalEffect(eSpeed);
-	eSpeed = SetEffectSpellId(eSpeed, nSpell);
-	PS_RemoveEffects(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
-	SendMessageToPC(oPC, "Speed increased by " + IntToString(iSpeed) + "%.");	
+	if (!GetHasSpellEffect(nSpell, oPC))
+	{	effect eSpeed = EffectMovementSpeedIncrease(iSpeed);
+			eSpeed = ExtraordinaryEffect(eSpeed);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
+		SendMessageToPC(oPC, "Speed increased by " + IntToString(iSpeed) + "%.");	}
 }
 
 void PS_Ability_DevaAura(object oPC, int nSpell)
@@ -58,21 +55,19 @@ void PS_Ability_DevaAura(object oPC, int nSpell)
 	float fDur		= RoundsToSeconds(GetTotalLevels(OBJECT_SELF, FALSE) + 20);
 	if (!X2PreSpellCastCode())
     {	return;	}
-	if (!GetHasSpellEffect(nSpell, OBJECT_SELF)){
-		effect eAOE 	= EffectAreaOfEffect(AOE_MOB_PROTECTION);
+	if (!GetHasSpellEffect(nSpell, OBJECT_SELF))
+	{	effect eAOE 	= EffectAreaOfEffect(AOE_MOB_PROTECTION);
 		effect eSpell 	= EffectSpellLevelAbsorption(3, 0);
 		effect eLink 	= EffectLinkEffects(eAOE, eSpell);
-		eLink = SupernaturalEffect(eLink);
-		eLink = SetEffectSpellId(eLink, nSpell);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, 1446, FALSE));
-    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	
-	}
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	}
 }
 
 void PS_Ability_AstralDevaWeapon(object oPC, int nSpell)
 {	
 	float fDuration = RoundsToSeconds(50);
-	if (GetHasSpellEffect(nSpell,oPC)){
+	if (GetHasSpellEffect(nSpell,oPC))	
+	{
 		RemoveSpellEffects(nSpell, oPC, oPC);
 		return;	
 	}
@@ -241,9 +236,10 @@ void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
 	}
 }
 
-void PS_Ability_ChangeSelf(object oPC, int nSpell){
-	if (!X2PreSpellCastCode()) return;
-	
+void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
+{
+	if (!X2PreSpellCastCode())
+    {	return;	}
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_changeself", TRUE, FALSE));
 }
 
@@ -456,8 +452,8 @@ void PS_Ability_UnholyApothesis(object oPC)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = iWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "UnholyApothesis", 1);
-	PS_DeleteLocalInt(oItem, "DarkFlight");
+	SetLocalInt(oItem, "UnholyApothesis", 1); // apothesis is not a word. They mean apotheosis
+	DeleteLocalInt(oItem, "DarkFlight");
 	PS_RefreshAppearance(oPC);
 	FeatAdd(oPC, FEAT_LILITUS_GIFT, FALSE, TRUE, FALSE);
 	FeatRemove(oPC, FEAT_DARK_FLIGHT);
@@ -465,41 +461,14 @@ void PS_Ability_UnholyApothesis(object oPC)
 }
 
 
-void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
-	// original code
-	if (!X2PreSpellCastCode()) return;
+void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell) //also to be tweaked
+{
+	if (!X2PreSpellCastCode())
+    {	return;	}
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
-
-	// the following scheme to affect changes without a dialog didn't work and I don't 
-	// know why. Must take a look later when there's not more pressing concerns 
-	//  	-FlattedFifth
-	/*
-	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
-	
-	int bIsInAltForm = GetLocalInt(oEssence, "TempChange");
-	
-	if (GetLocalInt(oEssence, "AltFormSet") != TRUE){
-		//debug
-		SendMessageToPC(oPC, "ALT NOT SET");
-		AddScriptParameterInt(2);
-		ExecuteScriptEnhanced("gui_appchange_dsiplay", oPC);
-	} else {
-		//debug
-		SendMessageToPC(oPC, "ALT SET");
-		if (!bIsInAltForm) AddScriptParameterInt(15);
-		else AddScriptParameterInt(0);
-		AddScriptParameterInt(0);
-		AddScriptParameterString("");
-		AddScriptParameterFloat(0.0f);
-		AddScriptParameterFloat(0.0f);
-		AddScriptParameterFloat(0.0f);
-		ExecuteScriptEnhanced("ga_aaa_changeself", oPC);
-	}
-	*/
-
-	// reset dragon ac	
+		// reset dragon ac	
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
-		PS_ShieldArmor_Dragon(oPC, 2623);	
+		PS_ShieldArmor_Dragon(oPC, 2623);
 }
 
 void PS_Ability_MarqCambAlignedStrike(object oPC, int nSpell)

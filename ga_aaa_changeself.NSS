@@ -27,12 +27,9 @@
 */
 
 #include "aaa_changeself_inc"
-//#include "ps_inc_functions"
-//#include "ps_inc_advscript"
-//#include "aaa_constants"
-
-// Params for dragon alt form are (15, 0, "", 0.0, 0.0, 0.0)
-// Params for dragon true form are (0, 0, "", 0.0, 0.0, 0.0)
+#include "ps_inc_functions"
+#include "ps_inc_advscript"
+//#include "aaa_constants" redundant include, this is included in ps_inc_functions
 	
 void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, float fValue3)
 {
@@ -46,9 +43,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 	{	case 0:
 			PS_RestoreOriginalAppearance(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			DelayCommand(1.0f, PS_DragForm_DragonUE(oPC));
-			//PS_DragForm_DragonUE(oPC);
-			//SetLocalInt(oItem, "TempChange", 0);
+			PS_DragForm_DragonUE(oPC);
 			//DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 		break;	
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */		
@@ -113,7 +108,6 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 			PS_AltForm_Assume(oPC);
 			PS_HumForm_DragonUE(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			SetLocalInt(oItem, "TempChange", 1);
 		break;	
 	}
 }
