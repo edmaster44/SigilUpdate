@@ -30,6 +30,9 @@
 #include "ps_inc_functions"
 #include "ps_inc_advscript"
 //#include "aaa_constants" redundant include, this is included in ps_inc_functions
+
+// dragon human form is 15, 0, "", 0.0, 0.0, 0.0
+// dragon nat form is 15, 0, "", 0.0, 0.0, 0.0
 	
 void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, float fValue3)
 {
@@ -41,6 +44,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 
 	switch(iParam)
 	{	case 0:
+			SetLocalInt(oItem, "TempChange", FALSE);
 			PS_RestoreOriginalAppearance(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 			PS_DragForm_DragonUE(oPC);
@@ -105,6 +109,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 		break;
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		case 15:
+			SetLocalInt(oItem, "TempChange", TRUE);
 			PS_AltForm_Assume(oPC);
 			PS_HumForm_DragonUE(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
