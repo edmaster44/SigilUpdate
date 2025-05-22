@@ -112,7 +112,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 			PS_AltForm_Assume(oPC);
 			PS_HumForm_DragonUE(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			//SetLocalInt(oItem, "TempChange", 1);
+			SetLocalInt(oItem, "TempChange", 1);
 		break;	
 	}
 }
