@@ -238,29 +238,31 @@ void PS_AltForm_Assume(object oPC)
 // they are psywars with feral path
 // This script should be used in conjunction with PS_AltForm_Assume or PS_ChangeForm_AppearanceType.
 void PS_HumForm_DragonUE(object oPC){
-
-	// remove creature weapons from dragons assuming human form UNLESS they are psywars
-	// with feral path
-	if (GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)) return;
-	
-	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	
-	if (IPGetIsCreatureEquippedWeapon(oLHAND))
-		AssignCommand(oPC, ActionUnequipItem(oLHAND));
-	if (IPGetIsCreatureEquippedWeapon(oRHAND))
-		AssignCommand(oPC, ActionUnequipItem(oRHAND));
+	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
+		// remove creature weapons from dragons assuming human form UNLESS they are psywars
+		// with feral path
+		if (GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)) return;
+		
+		object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+		object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+		
+		if (IPGetIsCreatureEquippedWeapon(oLHAND))
+			AssignCommand(oPC, ActionUnequipItem(oLHAND));
+		if (IPGetIsCreatureEquippedWeapon(oRHAND))
+			AssignCommand(oPC, ActionUnequipItem(oRHAND));
+	}
 }
 
 // Dragons assuming their natural Dragon form have any non-creature weapons unequipped when doing so.
 // This script should be used in conjunction with PS_RestoreOriginalAppearance.
 void PS_DragForm_DragonUE(object oPC){
-
-	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	// remove non-creature weapons
-	if (!IPGetIsCreatureEquippedWeapon(oLHAND))
-		AssignCommand(oPC, ActionUnequipItem(oLHAND));
-	if (!IPGetIsCreatureEquippedWeapon(oRHAND))
-		AssignCommand(oPC, ActionUnequipItem(oRHAND));	
+	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
+		object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+		object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+		// remove non-creature weapons
+		if (!IPGetIsCreatureEquippedWeapon(oLHAND))
+			AssignCommand(oPC, ActionUnequipItem(oLHAND));
+		if (!IPGetIsCreatureEquippedWeapon(oRHAND))
+			AssignCommand(oPC, ActionUnequipItem(oRHAND));	
+	}
 }
