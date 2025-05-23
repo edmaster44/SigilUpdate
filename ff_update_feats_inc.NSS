@@ -120,12 +120,8 @@ void AdjustDragonPrC(object oPC){
 	nLvl += nPsyLvl;
 	if (nLvl < 1) return;
 	
-	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	
-	// add path specific ability scores and feats, IF we haven't done so
-	if (nLvl == 2 && !GetLocalInt(oEss, "DragonAbilityScoreAdded")){
-		//set a flag on essence to show that this bit has been done
-		SetLocalInt(oEss, "DragonAbilityScoreAdded", TRUE);
+	// add path specific ability scores and feats
+	if (nLvl == 2){
 		if (GetHasFeat(3670, oPC)){ // melee path
 			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
 		}else if (GetHasFeat(3671, oPC)){ // rogue path	
