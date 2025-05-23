@@ -211,7 +211,7 @@ int prepChar(object oPC)
 	object oItem = PS_GetEssence(oPC);
 	object oINVALID = OBJECT_INVALID;
 
-	int nID = GetLocalInt(oItem,"ID");
+	int nID = PS_GetLocalInt(oItem,"ID");
 	string sAccount = "";
 	string sName = "";
 	int sECL = PS_GetEssenceECL(oPC); //Edit by Clangeddin, this will take care of setting the proper ECL at login.
@@ -252,10 +252,10 @@ int prepChar(object oPC)
 		
 	}
 		
-	SetLocalInt(oItem,"ID",nID);
-	SetLocalInt(oPC,"ID",nID);
+	PS_SetLocalInt(oItem,"ID",nID);
+	PS_SetLocalInt(oPC,"ID",nID);
 			
-	string sDay = GetLocalString(oItem, "XPDay");
+	string sDay = PS_GetLocalString(oItem, "XPDay");
 	//DebugMessageToPC(oPC, "id:" + IntToString(nID));
 	//DebugMessageToPC(oPC, "last day xp given:" + sDay);
 
@@ -272,8 +272,8 @@ int prepChar(object oPC)
 						
 		if ( sDay != SQLGetData(4) && availableXP > 0 ) {
 			
-			SetLocalString(oItem,"XPDay",SQLGetData(4));
-			//DebugMessageToPC(oPC,"xpday:" + GetLocalString(oItem,"XPDay"));
+			PS_SetLocalString(oItem,"XPDay",SQLGetData(4));
+			//DebugMessageToPC(oPC,"xpday:" + PS_GetLocalString(oItem,"XPDay"));
 				
 			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * GetHitDice(oPC)) * PS_GetXPModifier(sECL));
 			if (dm_pool > nModifiedXP)
@@ -328,24 +328,24 @@ int prepChar(object oPC)
 	PS_CalculateECL(oPC);
 		
 	//Run check to see if character's original appearance is saved. If not, save it.
-	if (GetLocalInt(oItem, "AppInitialized") != 1)
+	if (PS_GetLocalInt(oItem, "AppInitialized") != 1)
 	{	
 		PS_SaveOriginalAppearance(oPC);
-		SetLocalInt(oItem, "AppInitialized", 1);
+		PS_SetLocalInt(oItem, "AppInitialized", 1);
 	}
 
 	//Run check to see if any temp appearance changes are applied, and if so revert to Original.
-	if (GetLocalInt(oItem, "TempChange") != 0)
+	if (PS_GetLocalInt(oItem, "TempChange") != 0)
 	{	
 		PS_RestoreOriginalAppearance(oPC);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 	}
 
 	int iSUB = GetSubRace(oPC);
 			
 	//sECL = Get2DAString("racialsubtypes", "LA", iSUB);
-	//SetLocalString(oItem,"ECL", sECL);	
-	//SetLocalString(oPC,"ECL", sECL);
+	//PS_SetLocalString(oItem,"ECL", sECL);	
+	//PS_SetLocalString(oPC,"ECL", sECL);
 	// and while we are here, give creature weapons/hides and wings as required.
 	
 	string s2DA = "racialsubtypes";
@@ -385,7 +385,7 @@ int prepChar(object oPC)
 	PS_ApplyPCTail(oPC);
 		
 	//if (GetIsObjectValid(oEssence))
-	//{	SetLocalInt(oEssence, "FIXSRR", 1);
+	//{	PS_SetLocalInt(oEssence, "FIXSRR", 1);
 		//DisplayMessageBox(oPC, 0, "IMPORTANT NOTICE: Your character has the opportunity to have wings or a tail. Visit the Styx Oarsman in the OOC room if you wish to receive these.");
 		//PS_TintFixer(oPC);	}
 	//else
@@ -398,7 +398,7 @@ int prepChar(object oPC)
 		ActionStartConversation(oPC, "ps_srr_conv_dbreath", TRUE, FALSE, TRUE, TRUE);
 		
 		// now set appropriate immunity
-		int iType = GetLocalInt(oItem, "DRAGONTYPE");
+		int iType = PS_GetLocalInt(oItem, "DRAGONTYPE");
 		int iImmunity;
 		if (iType < 1)
 		SendMessageToPC(oPC, "Cannot set Immunity type as Dragon heritage not selected. Use your breath ability to fix or if that fails, contact a member of the staff.");
@@ -435,8 +435,8 @@ int prepChar(object oPC)
 		while (SQLFetch() != SQL_ERROR)
 		{ 
 			nID = StringToInt(SQLGetData(1));
-			SetLocalInt(oItem,"ID",nID);
-			SetLocalInt(oPC,"ID",nID);
+			PS_SetLocalInt(oItem,"ID",nID);
+			PS_SetLocalInt(oPC,"ID",nID);
 		}				
 	}
 		
@@ -461,7 +461,7 @@ void main()
 	int Booted = FALSE;
 	FF_ScrubVars(oPC);
 	
-	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
+	if (PS_GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
@@ -474,8 +474,8 @@ void main()
 		if(GetIsObjectValid(oItem))
 		{	
 			//SendMessageToPC(GetFirstPC(), "has valid templace object");
-			Legal = GetLocalString(oItem,"LEGAL");
-			ECL = GetLocalString(oItem,VAR_ECL);
+			Legal = PS_GetLocalString(oItem,"LEGAL");
+			ECL = PS_GetLocalString(oItem,VAR_ECL);
 			Template = 1;
 			DestroyObject(oItem);
 			//SendMessageToPC(GetFirstPC(), Legal+ECL+IntToString(Template));
@@ -494,9 +494,9 @@ void main()
 		{	
 			//SendMessageToPC(GetFirstPC(), "setting to essence");
 			oItem = PS_GetEssence(oPC);
-			SetLocalString(oItem, "LEGAL", Legal);
-			//SetLocalString(oItem, "ECL", ECL);
-			SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC)); 
+			PS_SetLocalString(oItem, "LEGAL", Legal);
+			//PS_SetLocalString(oItem, "ECL", ECL);
+			PS_SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC)); 
 			SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));			
 		}
 		
@@ -523,15 +523,15 @@ void main()
 	object oCheck =  GetItemPossessedBy(oPC, "ps_essence");
 	
 	// If OldSubrace is not already set, set it!
-	if (GetLocalInt(oCheck, "OldSubrace") == 0 && GetLocalString(oCheck, "Template") == "")
-	{	SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
+	if (PS_GetLocalInt(oCheck, "OldSubrace") == 0 && PS_GetLocalString(oCheck, "Template") == "")
+	{	PS_SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
 	
 	/*	Victim of crash during Word of Peace imprisonment effect is sent back to where they came from.	*/
-	location lExdim = GetLocalLocation(oCheck, "ExtraDim");
+	location lExdim = PS_GetLocalLocation(oCheck, "ExtraDim");
 	if (GetIsLocationValid(lExdim))
 	{	
 		AssignCommand(oPC, JumpToLocation(lExdim));
-		DelayCommand(3.0f, DeleteLocalLocation(oCheck, "ExtraDim"));
+		DelayCommand(3.0f, PS_DeleteLocalLocation(oCheck, "ExtraDim"));
 	}
 	
 	/* 	If the character died less than 4 hours ago, is still dead, ensure they wind up where they died and 
@@ -545,8 +545,8 @@ void main()
 		SendMessageToPC(oPC, "The module booted " + IntToString(iSinceBoot) + " hours ago.");
 		int iSinceDied		= PS_GetTimestamp_Age_Hours(oCheck, "Deathstamp");
 		SendMessageToPC(oPC, "You died " + IntToString(iSinceDied) + " hours ago.");
-		location lDied		= GetLocalLocation(oCheck, "Deathsite");
-		string sAreaDied	= GetLocalString(oCheck, "PC_DEATH_AREA");
+		location lDied		= PS_GetLocalLocation(oCheck, "Deathsite");
+		string sAreaDied	= PS_GetLocalString(oCheck, "PC_DEATH_AREA");
 		//SendMessageToPC(oPC, "You died in " + sAreaDied + ".");
 		location lStart		= GetStartingLocation();
 		location lReturn	= GetLocation(GetWaypointByTag("wp_ooc_death"));
@@ -562,8 +562,8 @@ void main()
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRez, oPC);
 				AssignCommand(oPC, JumpToLocation(lDied));
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oPC);
-				DelayCommand(3.0f, SetLocalLocation(oCheck, "Deathsite", lDied));
-				DelayCommand(3.0f, SetLocalString(oCheck, "PC_DEATH_AREA", sAreaDied));	
+				DelayCommand(3.0f, PS_SetLocalLocation(oCheck, "Deathsite", lDied));
+				DelayCommand(3.0f, PS_SetLocalString(oCheck, "PC_DEATH_AREA", sAreaDied));	
 			}
 		}
 		else
@@ -583,7 +583,7 @@ void main()
 	PS_EnforceMaxLevel(oPC);
 	
 	object oEssence	= GetItemPossessedBy(oPC,"ps_essence");
-	if (GetLocalInt(oEssence, "TempChange") != 1)
+	if (PS_GetLocalInt(oEssence, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
