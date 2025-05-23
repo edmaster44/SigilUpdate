@@ -1,16 +1,14 @@
-
+			
+#include "x2_inc_spellhook"
+#include "aaa_constants"
+#include "X0_I0_SPELLS"
+#include "nw_i0_spells"
+#include "ps_inc_functions"
+#include "x2_inc_itemprop"
 #include "nwn2_inc_spells"
+#include "ps_inc_advscript"
 #include "ginc_item"
 #include "ps_inc_wingtail"
-#include "aaa_dragon_inc"
-//#include "x2_inc_itemprop"
-//#include "aaa_changeself_inc"
-//#include "ps_inc_advscript"
-//#include "ps_inc_functions"
-//#include "x2_inc_spellhook"
-//#include "aaa_constants"
-//#include "X0_I0_SPELLS"
-//#include "nw_i0_spells"
 
 void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
 void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
@@ -45,12 +43,11 @@ void PS_Ability_GiantStride(object oPC, int iLevel, int iClass, int nSpell)
 		{	iSpeed = 0;		}
 	}
     //Calculate and apply movement rate bonus
-	effect eSpeed = EffectMovementSpeedIncrease(iSpeed);
-	eSpeed = SupernaturalEffect(eSpeed);
-	eSpeed = SetEffectSpellId(eSpeed, nSpell);
-	PS_RemoveEffects(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
-	SendMessageToPC(oPC, "Speed increased by " + IntToString(iSpeed) + "%.");	
+	if (!GetHasSpellEffect(nSpell, oPC))
+	{	effect eSpeed = EffectMovementSpeedIncrease(iSpeed);
+			eSpeed = ExtraordinaryEffect(eSpeed);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
+		SendMessageToPC(oPC, "Speed increased by " + IntToString(iSpeed) + "%.");	}
 }
 
 void PS_Ability_DevaAura(object oPC, int nSpell)
@@ -58,21 +55,19 @@ void PS_Ability_DevaAura(object oPC, int nSpell)
 	float fDur		= RoundsToSeconds(GetTotalLevels(OBJECT_SELF, FALSE) + 20);
 	if (!X2PreSpellCastCode())
     {	return;	}
-	if (!GetHasSpellEffect(nSpell, OBJECT_SELF)){
-		effect eAOE 	= EffectAreaOfEffect(AOE_MOB_PROTECTION);
+	if (!GetHasSpellEffect(nSpell, OBJECT_SELF))
+	{	effect eAOE 	= EffectAreaOfEffect(AOE_MOB_PROTECTION);
 		effect eSpell 	= EffectSpellLevelAbsorption(3, 0);
 		effect eLink 	= EffectLinkEffects(eAOE, eSpell);
-		eLink = SupernaturalEffect(eLink);
-		eLink = SetEffectSpellId(eLink, nSpell);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, 1446, FALSE));
-    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	
-	}
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	}
 }
 
 void PS_Ability_AstralDevaWeapon(object oPC, int nSpell)
 {	
 	float fDuration = RoundsToSeconds(50);
-	if (GetHasSpellEffect(nSpell,oPC)){
+	if (GetHasSpellEffect(nSpell,oPC))	
+	{
 		RemoveSpellEffects(nSpell, oPC, oPC);
 		return;	
 	}
@@ -241,17 +236,18 @@ void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
 	}
 }
 
-void PS_Ability_ChangeSelf(object oPC, int nSpell){
-	if (!X2PreSpellCastCode()) return;
-	
+void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
+{
+	if (!X2PreSpellCastCode())
+    {	return;	}
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_changeself", TRUE, FALSE));
 }
 
 void PS_Ability_DarkFlight(object oPC)
 {
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
-	int iCheck		= GetLocalInt(oItem, "DarkFlight");
-	int iTemp		= GetLocalInt(oItem, "TempChange");
+	int iCheck		= PS_GetLocalInt(oItem, "DarkFlight");
+	int iTemp		= PS_GetLocalInt(oItem, "TempChange");
 	if (iTemp == 1)
 	{	return;	}
 	int iWing;
@@ -297,7 +293,7 @@ void PS_Ability_DarkFlight(object oPC)
 			app.WingVariation = iWing;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
-		SetLocalInt(oItem, "DarkFlight", 1);
+		PS_SetLocalInt(oItem, "DarkFlight", 1);
 		DelayCommand(0.1f, PS_TintFixer(oPC));
 		DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 		DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));	}
@@ -456,7 +452,7 @@ void PS_Ability_UnholyApothesis(object oPC)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = iWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	SetLocalInt(oItem, "UnholyApothesis", 1);
+	PS_SetLocalInt(oItem, "UnholyApothesis", 1);
 	PS_DeleteLocalInt(oItem, "DarkFlight");
 	PS_RefreshAppearance(oPC);
 	FeatAdd(oPC, FEAT_LILITUS_GIFT, FALSE, TRUE, FALSE);
@@ -465,38 +461,11 @@ void PS_Ability_UnholyApothesis(object oPC)
 }
 
 
-void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
-	// original code
-	/*
+void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell) //also to be tweaked
+{
 	if (!X2PreSpellCastCode())
     {	return;	}
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
-	*/
-	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
-	
-	int bIsInAltForm = GetLocalInt(oEssence, "TempChange");
-	
-	//ClearScriptParams();
-	if (!GetLocalInt(oEssence, "AltFormSet")){
-		AddScriptParameterInt(2);
-		ExecuteScriptEnhanced("gui_appchange_dsiplay", oPC);
-	} else {
-		if (!bIsInAltForm) AddScriptParameterInt(15);
-		else AddScriptParameterInt(0);
-		AddScriptParameterInt(0);
-		AddScriptParameterString("");
-		AddScriptParameterFloat(0.0f);
-		AddScriptParameterFloat(0.0f);
-		AddScriptParameterFloat(0.0f);
-		ExecuteScriptEnhanced("ga_aaa_changeself", oPC);
-	}
-	//ClearScriptParams();
-		
-	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON){
-		//debug
-		//SendMessageToPC(oPC, "YOU ARE A DRAGON");
-		PS_ShieldArmor_Dragon(oPC, 2623);
-	}
 }
 
 void PS_Ability_MarqCambAlignedStrike(object oPC, int nSpell)
@@ -595,13 +564,13 @@ void PS_FamiliarForm_Bat(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -623,13 +592,13 @@ void PS_FamiliarForm_Cat(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -651,13 +620,13 @@ void PS_FamiliarForm_Rat(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -681,13 +650,13 @@ void PS_FamiliarForm_Spider(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -709,13 +678,13 @@ void PS_FamiliarForm_Weasel(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -1077,13 +1046,13 @@ void PS_Ability_GhaeleGlow(object oPC, int nSpell)
 void PS_Ability_TArchonTrumpet(object oPC)
 {
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
-	int iCheck		= GetLocalInt(oItem, "HasTrumpet");
+	int iCheck		= PS_GetLocalInt(oItem, "HasTrumpet");
 	
 	if (!X2PreSpellCastCode())
 	{	return;	}
 	if (iCheck != 1)
 	{	CreateItemOnObject("ps_rprc_archtrump", oPC);
-		DelayCommand(0.2, SetLocalInt(oItem, "HasTrumpet", 1));
+		DelayCommand(0.2, PS_SetLocalInt(oItem, "HasTrumpet", 1));
 	}
 }
 
@@ -1224,7 +1193,7 @@ void PS_Ability_MOTCCraftHeartstone(object oPC, object oTarget)
 	 	{
  		DestroyObject(oTarget, 0.0f, TRUE);
    		object oHeartstone = CreateItemOnObject("ps_motc_heartstone", oPC);
-    	SetLocalString(oHeartstone, "Creator", sCrafter);
+    	PS_SetLocalString(oHeartstone, "Creator", sCrafter);
 		}
 
 }
@@ -1295,9 +1264,9 @@ void PS_Ability_Rakshasa_SR(object oPC)
 void PS_Ability_Reincarnate(object oPC)
 {
  	object oItem  = GetItemPossessedBy(oPC,"ps_essence");
- 	int nContingency	= GetLocalInt(oPC, "Contingency");
+ 	int nContingency	= PS_GetLocalInt(oPC, "Contingency");
  	if(nContingency == 0)
-   		SetLocalInt(oPC, "Contingency", 1);
+   		PS_SetLocalInt(oPC, "Contingency", 1);
 }
 void PS_Ability_Austere_AC(object oPC, int nSpell)
 {

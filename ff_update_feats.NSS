@@ -1,3 +1,4 @@
+#include "ff_safevar"
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -114,8 +115,6 @@ void fUpdateOtherFeats(object oPC){
 	
 	fFixAlertness(oPC);
 	
-	AdjustDragonPrC(oPC);
-	
 	//Since the racial feat skill affinity craft alchemy is useless
 	//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
 	if (GetHasFeat(1754, oPC))
@@ -175,14 +174,11 @@ void GiveCreatureWeaponFinesse(object oPC){
 	}
 }
 
+
 void AdjustAbilityScores(object oPC){
-	int nRace = GetSubRace(oPC);
-	if (nRace != RACIAL_SUBTYPE_HUMAN && nRace != RACIAL_SUBTYPE_HALFELF && 
-		nRace != RACIAL_SUBTYPE_HALFDROW)
-			return;
 	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (GetLocalInt(oEss, "startability")){
+	if (PS_GetLocalInt(oEss, "startability")){
 		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
 		return;
 	} else {

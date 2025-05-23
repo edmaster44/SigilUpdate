@@ -38,8 +38,8 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM);
 int CheckManualDexterity(object oPC, object oITEM, int nITEM);
 void CheckForTempProperties(object oItem, object oPC);
 int MonkeyGripAbuse(object oPC, object oITEM);
-void FixARMOR(object oPC, object oARMOR);
-void FixSHIELD(object oPC, object oSHIELD, int nSHIELD);
+int FixARMOR(object oPC, object oARMOR);
+int FixSHIELD(object oPC, object oSHIELD, int nSHIELD);
 void RemoveElementalWeapon(object oPC,object oItem);
 void ApplyElementalWeapon(object oPC, object oItem);
 void RemoveAustereStrikes(object oPC,object oItem);
@@ -59,7 +59,6 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip);
 void FrightfulPresence(object oPC, int nCHA);
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0);
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip);
-void NaturalMultiattack(object oPC, object oRHAND, object oLHAND);
 
 
 //int GetCreatureWeapons(object oItem);
@@ -132,12 +131,16 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP){
 void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 {
     object oCHEST = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-	FixARMOR(oPC, oCHEST);
-	
+	if (oCHEST != OBJECT_INVALID){
+		if (FixARMOR(oPC, oCHEST) == TRUE) return; // why are we exiting here?
+	}
+    
     object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	int nLEFT = GetBaseItemType(oLHAND);
-	FixSHIELD(oPC, oLHAND, nLEFT);
-	
+	if (oLHAND != OBJECT_INVALID){
+		if (FixSHIELD(oPC, oLHAND, nLEFT) == TRUE ) return; // why are we exiting here?
+	}
+    
     object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
     int nRIGHT = GetBaseItemType(oRHAND);   
     SpellResistFix(oPC);
@@ -160,10 +163,6 @@ void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHES
 	PS_RemoveEffects(oPC, FF_AC_FX);
 	BucklerFinesse(oPC, oLHAND);
 	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
-	
-	// this only relates to weapons, but we want it called every time to correct
-	// legacy applications of multiattack feat 1784 instead of nat multi feat 4000
-	NaturalMultiattack(oPC, oRHAND, oLHAND);
 
 	//the rest only relate to weapons
 	if (!IPGetIsWeapon(oChanged)) return;
@@ -177,15 +176,6 @@ void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHES
 	CheckTacticalWeapons(oPC, oSkin);
 }
 
-void NaturalMultiattack(object oPC, object oRHAND, object oLHAND){
-	if (GetHasFeat(1784, oPC, TRUE)) FeatRemove(oPC, 1784);
-	
-	if (!GetHasFeat(4000, oPC, TRUE)) return;
-
-	if ((IPGetIsCreatureEquippedWeapon(oRHAND) || oRHAND == OBJECT_INVALID) && 
-		(IPGetIsCreatureEquippedWeapon(oLHAND) || oLHAND == OBJECT_INVALID))
-			FeatAdd(oPC, 1784, FALSE);
-}
 
 //Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword or ninjato in off hand.
 void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
@@ -255,10 +245,10 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	if (oChanged != oRHAND) return;
 	
 	// don't allow ppl to spam this ability by constantly swapping between two katanas
-	if (GetLocalInt(oPC, "Iajaitsu")) return;
+	if (PS_GetLocalInt(oPC, "Iajaitsu")) return;
 	
 	// set the int that shows we've done this recently
-	SetLocalInt(oPC, "Iajaitsu", TRUE);
+	PS_SetLocalInt(oPC, "Iajaitsu", TRUE);
 	
 	int bQualifies = FALSE;
 	int nPCsize = GetCreatureSize(oPC);
@@ -283,7 +273,7 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_4, oPC, fDUR);
     DelayCommand(0.01f, FrightfulPresence(oPC, nCHA));
 	// set the int that shows we've done this recently to false
-	DelayCommand(30.0f, SetLocalInt(oPC, "Iajaitsu", FALSE));
+	DelayCommand(30.0f, PS_SetLocalInt(oPC, "Iajaitsu", FALSE));
 }
 
 //When a Samurai draws their weapon (a katana or longsword) foes can be frightened by it.
@@ -326,20 +316,20 @@ void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 	// There appears to be a slight delay when adding or removing item properties
 	// so make sure this waits a bit if it's doing that in case of rapid calls,
 	// such as equipping 2 items at once from hotbar
-    if (nCount >= 2000 || !GetLocalInt(oPC, "tacbusy")){
+    if (nCount >= 2000 || !PS_GetLocalInt(oPC, "tacbusy")){
 		oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 		nTac = GetTacSuiteByWeaponCategory(oPC, oRHAND);
 		// don't change tac weapons feat if the feat granted by the weapons doesn't change
-		if (GetLocalInt(oPC, "tacweapon") != nTac){
-			SetLocalInt(oPC, "tacbusy", TRUE);
-			SetLocalInt(oPC, "tacweapon", nTac);
+		if (PS_GetLocalInt(oPC, "tacweapon") != nTac){
+			PS_SetLocalInt(oPC, "tacbusy", TRUE);
+			PS_SetLocalInt(oPC, "tacweapon", nTac);
 			RemoveBonusFeats(oSkin);
 			if (!GetHasFeat(FEAT_COMBAT_EXPERTISE, oPC, TRUE))
 				SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
 			if (!GetHasFeat(FEAT_POWER_ATTACK, oPC, TRUE))
 				SetActionMode(oPC, ACTION_MODE_POWER_ATTACK, FALSE);
 			FF_TacticalWeapons(oPC, oRHAND, oSkin);
-			DelayCommand(0.1, SetLocalInt(oPC, "tacbusy", FALSE));
+			DelayCommand(0.1, PS_SetLocalInt(oPC, "tacbusy", FALSE));
 		}
         return;
     }
@@ -368,13 +358,11 @@ void FlorentineTWF(object oPC, object oRHAND, object oLHAND){
 	int bIsMainGauche = FALSE;
 	int nLeftId = GetBaseItemType(oLHAND);
 	if (nPCsize > 3){
-		if (nLeftId == BASE_ITEM_SHORTSWORD || nLeftId == BASE_ITEM_LIGHTMACE ||
-			nLeftId ==  BASE_ITEM_CREATURECLAW_SML || nLeftId == BASE_ITEM_CREATURESLAM_SML) 
-				bIsMainGauche = TRUE;
+	if (nLeftId == BASE_ITEM_SHORTSWORD || nLeftId == BASE_ITEM_LIGHTMACE ||
+		nLeftId ==  BASE_ITEM_CREATURECLAW_SML) bIsMainGauche = TRUE;
 	} else {
 		if (nLeftId == BASE_ITEM_DAGGER || nLeftId == BASE_ITEM_LIGHTHAMMER ||
-			nLeftId ==  BASE_ITEM_CREATURECLAW_TINY  || nLeftId == BASE_ITEM_CREATURESLAM_TINY) 
-				bIsMainGauche = TRUE;
+		nLeftId ==  BASE_ITEM_CREATURECLAW_TINY) bIsMainGauche = TRUE;
 	}
 	int nMiss = 10;
 	if (GetHasFeat(FEAT_IMPROVED_TWO_WEAPON_DEFENSE, oPC, TRUE)) nMiss += 10;
@@ -833,15 +821,13 @@ void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMA
 }
 
 //Removes Shield if you don't have the feat required for it. To prevent exploit.
-void FixSHIELD(object oPC, object oSHIELD, int nSHIELD)
+int FixSHIELD(object oPC, object oSHIELD, int nSHIELD)
 {
-	if (oSHIELD == OBJECT_INVALID) return;
-	
 	// new rogue and swash only feat allows use of small shields without
 	// full shield profi, but does not allow use of any other shields
 	if (nSHIELD == BASE_ITEM_SMALLSHIELD && 
 		GetHasFeat(FEAT_BUCKLER_PROFICIENCY, oPC, TRUE))
-			return;
+			return FALSE;
 			
     int nFEAT;
     switch (nSHIELD)
@@ -849,17 +835,17 @@ void FixSHIELD(object oPC, object oSHIELD, int nSHIELD)
         case BASE_ITEM_SMALLSHIELD: nFEAT = FEAT_SHIELD_PROFICIENCY; break;
         case BASE_ITEM_LARGESHIELD: nFEAT = FEAT_SHIELD_PROFICIENCY; break;
         case BASE_ITEM_TOWERSHIELD: nFEAT = FEAT_TOWER_SHIELD_PROFICIENCY; break;
-        default: return;
+        default: return FALSE;
     }
-    if (GetHasFeat(nFEAT, oPC, TRUE) == TRUE) return;
+    if (GetHasFeat(nFEAT, oPC, TRUE) == TRUE) return FALSE;
     AssignCommand(oPC, ClearAllActions());
     AssignCommand(oPC, ActionUnequipItem(oSHIELD));
+    return TRUE;
 }
 
 //Removes Armor if you don't have the feat required for it. To prevent exploit.
-void FixARMOR(object oPC, object oARMOR)
+int FixARMOR(object oPC, object oARMOR)
 {
-	if (oARMOR == OBJECT_INVALID) return;
     int nARMOR = GetArmorRank(oARMOR);
     int nFEAT;
     switch (nARMOR)
@@ -867,11 +853,12 @@ void FixARMOR(object oPC, object oARMOR)
         case ARMOR_RANK_LIGHT: nFEAT = FEAT_ARMOR_PROFICIENCY_LIGHT; break;
         case ARMOR_RANK_MEDIUM: nFEAT = FEAT_ARMOR_PROFICIENCY_MEDIUM; break;
         case ARMOR_RANK_HEAVY: nFEAT = FEAT_ARMOR_PROFICIENCY_HEAVY; break;
-        default: return;
+        default: return FALSE;
     }
-    if (GetHasFeat(nFEAT, oPC, TRUE) == TRUE) return;
+    if (GetHasFeat(nFEAT, oPC, TRUE) == TRUE) return FALSE;
     AssignCommand(oPC, ClearAllActions(TRUE));
     AssignCommand(oPC, ActionUnequipItem(oARMOR));
+    return TRUE;
 }
 
 // Check for giant weapons and monkey grip abuse
@@ -917,14 +904,14 @@ int MonkeyGripAbuse(object oPC, object oITEM){
 void CheckForTempProperties(object oItem, object oPC)
 {
     string sID = ObjectToString(oItem);
-    if (GetLocalInt(oPC, sID) == TRUE) return;
+    if (PS_GetLocalInt(oPC, sID) == TRUE) return;
     itemproperty ipProp = GetFirstItemProperty(oItem);
     while (GetIsItemPropertyValid(ipProp))
     {
         if (GetItemPropertyDurationType(ipProp) == DURATION_TYPE_TEMPORARY) RemoveItemProperty(oItem, ipProp);
         ipProp = GetNextItemProperty(oItem);
     }
-    SetLocalInt(oPC, sID, TRUE);
+    PS_SetLocalInt(oPC, sID, TRUE);
 }
 
 // Check No Manual Dexterity. With it you can only equip creature weapons.
@@ -960,13 +947,10 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
     return TRUE;    
 }
 
-// No Weapons and Shields for Dragons in Natural Form
+// No Weapons and Shields for Dragons in Natural Form and no Armor in both forms (exept clothes)
 // Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
-int CheckDragonForms(object oPC, object oITEM, int nITEM){	
-
-	if (GetRacialType(oPC) != RACIAL_TYPE_DRAGON)
-		return FALSE;
-		
+int CheckDragonForms(object oPC, object oITEM, int nITEM)
+{		//TODO ADD EXCEPTION FOR CREATURE SKIN AND CHECK FOR OTHER PROBS, TEST WRAITH
     switch (nITEM)
     {
         case BASE_ITEM_AMULET:
@@ -987,15 +971,19 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM){
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
-    if (GetLocalInt(oESSENCE, "TempChange") == 1){
+    if (PS_GetLocalInt(oESSENCE, "TempChange") == 1)
+    {
         if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE &&
-			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)){
+			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE))
+        {
             SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
             AssignCommand(oPC, ClearAllActions());
             AssignCommand(oPC, ActionUnequipItem(oITEM));
             return TRUE;
         }
-    } else if (IPGetIsCreatureEquippedWeapon(oITEM) == FALSE){
+    }
+    else if (IPGetIsCreatureEquippedWeapon(oITEM) == FALSE)
+    {
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
         AssignCommand(oPC, ActionUnequipItem(oITEM));

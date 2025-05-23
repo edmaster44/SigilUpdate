@@ -22,7 +22,7 @@ May 30, 2024: FlattedFifth
 
 void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)	
 {
-	int nAfflict = GetLocalInt(oItem, "Lycan_Affliction");
+	int nAfflict = PS_GetLocalInt(oItem, "Lycan_Affliction");
 	
 	int nOldECL = PS_GetEssenceECL(oPC);
 	
@@ -34,8 +34,8 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 		AddScriptParameterString("");
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
-	SetLocalString(oItem, "Template", "Lycan");
-	SetLocalInt(oItem, "Lycan_Affliction", 1);  
+	PS_SetLocalString(oItem, "Template", "Lycan");
+	PS_SetLocalInt(oItem, "Lycan_Afflication", 1);
 }
 
 
@@ -93,7 +93,7 @@ void PS_Lycan_HybridWeaponAdd(object oPC, object oItem)
 	object oWeapon1		= CreateItemOnObject(sWeapon1, oPC);
 	object oWeapon2		= CreateItemOnObject(sWeapon2, oPC);
 	object oWeapon3		= CreateItemOnObject(sWeapon3, oPC);
-	SetLocalInt(oItem, "LycanWeapons", 1);
+	PS_SetLocalInt(oItem, "LycanWeapons", 1);
 	SendMessageToPC(oPC, "Equippable creature weapons added to inventory!");
 }
 
@@ -143,28 +143,26 @@ void PS_Lycan_ScaledWeapons(object oPC)
 	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponB, oPC));	}
 }
 
-// Helper feat for adding and removing multiattack in animal/hybrid form
-void PS_Lycan_Multiattack(object oPC, int bHasMultiattack = FALSE){
-	/*
+// Helper feat for adding multiattack in animal form
+void PS_Lycan_Multiattack(object oPC)
+{
 	itemproperty ipMA	= ItemPropertyBonusFeat(1315);
 	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	
 	IPSafeAddItemProperty(oSkin, ipMA, HoursToSeconds(24));
-	*/
-	if (bHasMultiattack) FeatAdd(oPC, 4000, FALSE);
-	else FeatRemove(oPC, 4000);
-
-	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	NaturalMultiattack(oPC, oRHAND, oLHAND);
 }
 
-
+// Helper feat for removing multiattack
+void PS_Lycan_Multiattack_No(object oPC)
+{
+	if (GetHasFeat(1784, oPC))
+	{	FeatRemove(oPC, 1784);	}
+}
 
 void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 {
-	int nCheck		= GetLocalInt(oItem, "Hybrid");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
+	int nCheck		= PS_GetLocalInt(oItem, "Hybrid");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
 		
     if (!X2PreSpellCastCode())
     {	return;		}
@@ -185,8 +183,8 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 334);
-		SetLocalInt(oItem, "Hybrid", 0);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "Hybrid", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 		PS_Wererat_SneakRemove(oPC);
 		//FeatRemove(oPC, 289);
 	}	
@@ -197,7 +195,7 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 	PS_RefreshAppearance(oPC);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	PS_Wererat_AnimalSneakApply(oPC);
-	PS_Lycan_Multiattack(oPC, TRUE);
+	PS_Lycan_Multiattack(oPC);
 	PS_Lycan_ScaledWeapons(oPC);
 	
 }
@@ -214,17 +212,17 @@ void PS_Lycan_DR(object oPC, int nSpell)
 		eDR			= SetEffectSpellId(eDR, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
-	if (GetLocalInt(oPC, "lycanDR") != nAmount){
+	if (PS_GetLocalInt(oPC, "lycanDR") != nAmount){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
-		SetLocalInt(oPC, "lycanDR", nAmount);
+		PS_SetLocalInt(oPC, "lycanDR", nAmount);
 	}
 }
 
 void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 {
-	int nCheck		= GetLocalInt(oItem, "Hybrid");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
-	int nWeapons	= GetLocalInt(oItem, "LycanWeapons");
+	int nCheck		= PS_GetLocalInt(oItem, "Hybrid");
+	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nWeapons	= PS_GetLocalInt(oItem, "LycanWeapons");
 	int nAfflict;
 	int nStr;
 	int nDex;
@@ -269,10 +267,10 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		SetLocalInt(oItem, "Hybrid", 0);
-		SetLocalInt(oItem, "TempChange", 0);
+		PS_SetLocalInt(oItem, "Hybrid", 0);
+		PS_SetLocalInt(oItem, "TempChange", 0);
 		PS_Wererat_SneakRemove(oPC);
-		PS_Lycan_Multiattack(oPC, FALSE);
+		PS_Lycan_Multiattack_No(oPC);
 		//FeatRemove(oPC, 289);
 	}
 	else 
@@ -280,11 +278,11 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAfflict;
 			PS_SetCreatureCoreAppearance(oPC, app);
-		SetLocalInt(oItem, "TempChange", 1);
+		PS_SetLocalInt(oItem, "TempChange", 1);
 		PS_RefreshAppearance(oPC);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		SetLocalInt(oItem, "Hybrid", 1);
+		PS_SetLocalInt(oItem, "Hybrid", 1);
 		PS_Wererat_SneakAdd(oPC);
 	}
 	
@@ -296,7 +294,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 {
 	
 	int nIsAnimal		= GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC);
-	int nIsHybrid		= GetLocalInt(oItem, "Hybrid");
+	int nIsHybrid		= PS_GetLocalInt(oItem, "Hybrid");
 	int nDamage			= 0;
 	int nAttack;
 	object oWeapon		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
@@ -395,7 +393,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 {
 	int nIsAnimal		= GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC);
-	int nIsHybrid		= GetLocalInt(oItem, "Hybrid");
+	int nIsHybrid		= PS_GetLocalInt(oItem, "Hybrid");
 	int nLevel			= PS_GetLevel(oPC); 
 	effect eTempHP		= EffectTemporaryHitpoints(nLevel * 2);
 	itemproperty ipDam	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, d4(2));
@@ -443,7 +441,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 {
 	
 	int nIsAnimal		= GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC);
-	int nIsHybrid		= GetLocalInt(oItem, "Hybrid");
+	int nIsHybrid		= PS_GetLocalInt(oItem, "Hybrid");
 	int nDamage			= 0;
 	int nRake			= 0;
 	int nAttack;

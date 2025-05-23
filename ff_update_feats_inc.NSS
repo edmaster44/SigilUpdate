@@ -84,7 +84,6 @@ const int idFeatWererat = 2593;
 const int idFeatBlackguardPath = 3019;
 
 void fFixAlertness(object oPC);
-void AdjustDragonPrC(object oPC);
 int fFindSneakFeat(int dice);
 int fFindDeathFeat(int dice);
 int fFindBgFeat(int dice);
@@ -105,122 +104,6 @@ void fFixAlertness(object oPC){
 		// have it as a bonus feat on equipment we will get a false positive
 		FeatAdd(oPC, FEAT_ALERTNESS_NEW, FALSE);
 	}
-}
-
-void AdjustDragonPrC(object oPC){
-	int nLvl = GetLevelByClass(129, oPC); // new dragon prc
-	int nPsyLvl = GetLevelByClass(130, oPC); // new psy dragon prc
-	if (nPsyLvl == 1){
-		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) >= 1)
-			FeatAdd(oPC, 3679, FALSE); 
-		else if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) >= 1) 
-			FeatAdd(oPC, 3680, FALSE); 
-	}
-	nLvl += nPsyLvl;
-	if (nLvl < 1) return;
-	
-	// add trapfinding where applicable, ability scores, and cosmo skill feats
-	if (GetHasFeat(3670, oPC)){ // melee path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 784, FALSE); // Great Dex 1
-			FeatAdd(oPC, 785, FALSE); // Great Dex 2
-		}
-	}else if (GetHasFeat(3671, oPC)){ // rogue path
-		FeatAdd(oPC, 1255, FALSE); // cosmo disable device
-		FeatAdd(oPC, 1258, FALSE); // cosmo hide
-		FeatAdd(oPC, 1261, FALSE); // cosmo ms
-		FeatAdd(oPC, 1262, FALSE); // cosmo open lock
-		FeatAdd(oPC, 1266, FALSE); // cosmo sleight of hand
-		FeatAdd(oPC, 1268, FALSE); // cosmo set trap
-		FeatAdd(oPC, 1273, FALSE);// cosmo appraise
-		if (nLvl >= 2){
-			FeatAdd(oPC, 1857, FALSE); // trapfinding
-			FeatAdd(oPC, 784, FALSE); // Great Dex 1
-			FeatAdd(oPC, 785, FALSE); // Great Dex 2
-		}
-	} else if (GetHasFeat(3672, oPC)){	// ranger path
-		FeatAdd(oPC, 1255, FALSE); // cosmo disable device
-		FeatAdd(oPC, 1258, FALSE); // cosmo hide
-		FeatAdd(oPC, 1261, FALSE); // cosmo ms
-		FeatAdd(oPC, 1282, FALSE); // cosmo survival
-		if (nLvl >= 2){
-			FeatAdd(oPC, 2178, FALSE); // scent
-			FeatAdd(oPC, 784, FALSE); // Great Dex 1
-			FeatAdd(oPC, 785, FALSE); // Great Dex 2
-		}
-	} else if (GetHasFeat(3673, oPC)){ // sorc path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3674, oPC)){ // warlock path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3675, oPC)){ // fs path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3676, oPC)){ // knight path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3677, oPC)){ // bard path
-		FeatAdd(oPC, 1264, FALSE); // cosmo perform 
-		FeatAdd(oPC, 1273, FALSE);// cosmo appraise
-		FeatAdd(oPC, 1258, FALSE); // cosmo hide
-		FeatAdd(oPC, 1261, FALSE); // cosmo ms
-		FeatAdd(oPC, 1266, FALSE); // cosmo sleight of hand
-		if (nLvl >= 2){
-			FeatAdd(oPC, 423, FALSE); // extra music
-			FeatAdd(oPC, 764, FALSE); // Great Cha 1
-			FeatAdd(oPC, 765, FALSE); // Great Cha 2
-		}
-	} else if (GetHasFeat(3678, oPC)){ // wiz path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 794, FALSE); // Great Int 1
-			FeatAdd(oPC, 795, FALSE); // Great Int 2
-		}
-	} else if (GetHasFeat(3679, oPC)){ // psi path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 794, FALSE); // Great Int 1
-			FeatAdd(oPC, 795, FALSE); // Great Int 2
-		}
-	} else if (GetHasFeat(3680, oPC)){ // psy path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	} else if (GetHasFeat(3681, oPC)){ // cleric path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	} else if (GetHasFeat(3682, oPC)){ // shaman path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	} else if (GetHasFeat(3683, oPC)){ // druid path
-		if (nLvl >= 2){
-			FeatAdd(oPC, 7, FALSE); // combat casting
-			FeatAdd(oPC, 804, FALSE); // Great Wis 1
-			FeatAdd(oPC, 805, FALSE); // Great Wis 2
-		}
-	}
-
 }
 
 void SituationalAwareness(object oPC){
@@ -286,6 +169,7 @@ void SituationalAwareness(object oPC){
 			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
 	}
 }
+
 
 void ImprovedDefense(object oPC){
 
@@ -386,11 +270,7 @@ int fCalcSneakDice(object oPC)
 	// This is also controlled by a boolean
 	if (bIncludeLegacyBlackguard)
 		nSneakDice += (GetLevelByClass(idClassBlackguard, oPC) -1) / 3;
-		
-	// new dragon prc by flatted fifth
-	if (GetHasFeat(3671, oPC)) // rogue path for dragon prc
-		nSneakDice += (GetLevelByClass(129, oPC) / 2);
-	
+
 	// next half outsider
 	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE))
 		nSneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) /2;

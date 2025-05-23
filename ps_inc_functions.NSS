@@ -92,37 +92,6 @@ const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
 const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 
-// Returns TRUE if target has damage resistance of >= 9000
-// or damage immunity >= 100% for a given type of damage.
-// Possible values for nType are:
-//    DAMAGE_TYPE_BLUDGEONING
-//    DAMAGE_TYPE_PIERCING
-//    DAMAGE_TYPE_SLASHING
-//    DAMAGE_TYPE_MAGICAL
-//    DAMAGE_TYPE_ACID
-//    DAMAGE_TYPE_COLD
-//    DAMAGE_TYPE_DIVINE
-//    DAMAGE_TYPE_ELECTRICAL
-//    DAMAGE_TYPE_FIRE
-//    DAMAGE_TYPE_NEGATIVE
-//    DAMAGE_TYPE_POSITIVE
-//    DAMAGE_TYPE_SONIC
-//
-// Note that the use of DAMAGE_TYPE_ALL is deprecated for
-// EffectDamageImmunity() and EffectDamageResistance()
-// so best not to check for it.
-int IsImmuneToDamage(object oTarget, int nDmgType, int bShowFeedback = FALSE);
-
-// The following 4 are utils to clean up illegal chars in variable names,
-// useful for non-static variable names such as a character name.
-// To do this, call PS_ScrubVarName() and the other three are helper
-// functions. Be sure to use it both in setters and getters.
-string PS_ScrubVarName(string sString);
-string PS_ValidChars(string sString);
-int PS_GetAsciiValue(string sChar);
-string PS_GetStringFingerprint(string sString);
-
-
 // GetDistanceBetween measures centre to center, not edge to edge
 // so to get that I will subtract the radius of each creature
 float PS_GetDistanceBetween(object oObject1, object oObject2);
@@ -330,124 +299,10 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem);
 
 void DebugMessageToPC(object oPC, string sMessage);
 
-int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
+int DevMode = PS_GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 
 // gets whether to ignore craft material and gold costs if test server or crafter is dm
 int GetIsCraftingFree(object oPC);
-
-
-string PS_ScrubVarName(string sString){
-	string sScrubbedString = PS_ValidChars(sString);
-	int nLength = GetStringLength(sScrubbedString);
-	
-	// if removing the invalid characers results in a string that is too short
-	// or too long then get "fingerpint" from the original string
-	// consisting of it's length and a hex value based on the ascii values
-	if (nLength < 3 || nLength > 32) 
-		return PS_GetStringFingerprint(sString);
-	
-	return sScrubbedString;
-}
-
-string PS_GetStringFingerprint(string sString){
-
-    int nLength = GetStringLength(sString);
-    int nHash = nLength;
-	if (nHash < 1) nHash = 1;
-	if (nLength > 0){
-		int i;
-		string sChar;
-		int nAscii;
-		for (i = 0; i < nLength; i++){
-			sChar = GetSubString(sString, i, 1);
-			nAscii = PS_GetAsciiValue(sChar);
-			nHash = (nHash * 33) + nAscii;
-		}
-	}
-    // return "FP" + the length of the original string and
-	// the resulting ascii value "fingerprint" 
-	// integer as a hex string
-    return "FP" + IntToString(nLength) + IntToHexString(nHash);
-   
-}
-
-int PS_GetAsciiValue(string sChar){
-
-	if (sChar == " ") return 32;
-	else if (sChar == "!") return 33;
-	
-    string sAsciiChars = "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    int nIndex = FindSubString(sAsciiChars, sChar);
-    
-    if (nIndex != -1) return nIndex + 35; // ascii starts at 32 for space and we're skipping up to ", which is 3rd
-    else return 34; // Return 34 for ", I shouldnt think it possible that we would have any non-ascii characers
-}
-
-string PS_ValidChars(string sString){
-	string sValidChars = "abcdefghijklmnopqrstuvwxyz";
-	sValidChars += "ABCDEGHIJKLMNOPQRSTUVWXYZ";
-	sValidChars += "_1234567890";
-	string sScrubbedString = "";
-	int nLength = GetStringLength(sString);
-	int i;
-	string sChar;
-	// remove characters that are not alphanumeric or underscores
-	for (i = 0; i < nLength; i++){
-		sChar = GetSubString(sString, i, 1);
-		if (FindSubString(sValidChars, sChar) != -1)
-			sScrubbedString += sChar;
-	}
-	return sScrubbedString;
-}
-
-int IsImmuneToDamage(object oTarget, int nDmgType, int bShowFeedback = FALSE){
-	
-	string sFeedback = "";
-
-	switch (nDmgType){
-		case DAMAGE_TYPE_BLUDGEONING: sFeedback = "Blunt"; break;
-		case DAMAGE_TYPE_PIERCING: sFeedback = "Piercing"; break;
-		case DAMAGE_TYPE_SLASHING: sFeedback = "Slashing"; break;
-		case DAMAGE_TYPE_MAGICAL: sFeedback = "Magical"; break;
-		case DAMAGE_TYPE_ACID: sFeedback = "Acid"; break;
-		case DAMAGE_TYPE_COLD: sFeedback = "Cold"; break;
-		case DAMAGE_TYPE_DIVINE: sFeedback = "Divine"; break;
-		case DAMAGE_TYPE_ELECTRICAL: sFeedback = "Electrical"; break;
-		case DAMAGE_TYPE_FIRE: sFeedback = "Fire"; break;
-		case DAMAGE_TYPE_NEGATIVE: sFeedback = "Negative"; break;
-		case DAMAGE_TYPE_POSITIVE: sFeedback = "Positive"; break;
-		case DAMAGE_TYPE_SONIC: sFeedback = "Sonic"; break;
-	}
-	
-	// if sFeedback is still "" at this point, then that means that nDmgType arg
-	// was given an invalid value, so we will exit out to prevent unnecessary 
-	// processing and possible runtime errors
-	if (sFeedback == "") return FALSE;
-	
-	int nEffType;
-	int bImmune = FALSE;
-    effect eEff = GetFirstEffect(oTarget);
-    while (GetIsEffectValid(eEff)){
-		nEffType = GetEffectType(eEff);
-        if (nEffType == EFFECT_TYPE_DAMAGE_RESISTANCE){
-            if (GetEffectInteger(eEff, 0) == nDmgType && GetEffectInteger(eEff, 1) >= 9000){
-				bImmune = TRUE;
-				break;
-			}
-        } else if (nEffType == EFFECT_TYPE_IMMUNITY){
-            if (GetEffectInteger(eEff, 0) == nDmgType && GetEffectInteger(eEff, 1) >= 100){
-				bImmune = TRUE;
-				break;
-			}
-        }
-        eEff = GetNextEffect(oTarget);
-    }
-	if (bImmune && bShowFeedback){
-		sFeedback = "Target Immune to " + sFeedback + " Damage";
-		FloatingTextStringOnCreature(sFeedback, oTarget, FALSE);
-	}
-    return bImmune;
-}
 
 object PS_GetEssence(object oPC = OBJECT_SELF)
 {
@@ -456,7 +311,7 @@ object PS_GetEssence(object oPC = OBJECT_SELF)
 
 
 int GetIsCraftingFree(object oPC){
-	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")) return TRUE;
+	if (PS_GetLocalInt(GetModule(), "SIGIL_DEV_MODE")) return TRUE;
 	if (GetIsDM(oPC)) return TRUE;
 	if (GetIsDMPossessed(oPC)) return TRUE;
 	return FALSE;
@@ -538,6 +393,9 @@ float GetCreatureFootprint(object oCreature){
 }
 
 
+
+
+
 // remove unspent xp, prevents people from grinding away at a more advantageous
 // lvl for the xp before leveling up.
 void PS_TrimXP(object oPC){
@@ -581,11 +439,11 @@ void SetXPpools(object oPC, int nAmount, int bAll = TRUE, int bEmptyPool = FALSE
 	if (SQLFetch() == SQL_ERROR){
 		object oSpeaker = GetLastSpeaker();
 		if (!bEmptyPool){
-			dm_pool += GetLocalInt(oSpeaker, sID+"dm");
-			rp_pool += GetLocalInt(oSpeaker, sID+"rp");
+			dm_pool += PS_GetLocalInt(oSpeaker, sID+"dm");
+			rp_pool += PS_GetLocalInt(oSpeaker, sID+"rp");
 		}
-		SetLocalInt(oSpeaker, sID+"dm", dm_pool);
-		SetLocalInt(oSpeaker, sID+"rp", rp_pool);
+		PS_SetLocalInt(oSpeaker, sID+"dm", dm_pool);
+		PS_SetLocalInt(oSpeaker, sID+"rp", rp_pool);
 	
 	} else {
 		if (!bEmptyPool){
@@ -708,7 +566,7 @@ void PS_SetEclCraftBonus(object oPC, int nXP, int nSkill)
 		
 		// Get how much xp has been saved up towards craft bonus
 		string sCurrentEclCraftXP = ECL_CRAFT_BONUS_PREFIX + IntToString(nSkill) + "_current_xp";
-		int nCurrentXP = GetLocalInt(oEss, sCurrentEclCraftXP);
+		int nCurrentXP = PS_GetLocalInt(oEss, sCurrentEclCraftXP);
 		// if this is the first time we check this, then set this to the xp of the character,
 		// keeping in mind that they won't have enough xp to get to the next real character level.
 		// This way at least all xp they gained until they stopped gaining any will count.
@@ -718,7 +576,7 @@ void PS_SetEclCraftBonus(object oPC, int nXP, int nSkill)
 		if (nCurrentXP == 0) nCurrentXP = GetXP(oPC); 
 		// add the xp gained to our tracking for the craft bonus
 		nCurrentXP += nXP;
-		SetLocalInt(oEss, sCurrentEclCraftXP, nCurrentXP);
+		PS_SetLocalInt(oEss, sCurrentEclCraftXP, nCurrentXP);
 		int nSkillNameRef = StringToInt(Get2DAString("skills", "Name", nSkill));
 		string sSkillName = GetStringByStrRef(nSkillNameRef);
 		string sMessage = "You have gained " + IntToString(nXP) + " experience points towards " + sSkillName;
@@ -731,7 +589,7 @@ void PS_SetEclCraftBonus(object oPC, int nXP, int nSkill)
 		{
 			nCurrentBonus += 1;
 			string sEclCraftBonus = ECL_CRAFT_BONUS_PREFIX + IntToString(nSkill);
-			SetLocalInt(oEss, sEclCraftBonus, nCurrentBonus);
+			PS_SetLocalInt(oEss, sEclCraftBonus, nCurrentBonus);
 			sMessage =  "You have gained a rank in " + sSkillName + "\n";
 			sMessage += "You now have a bonus of +" + IntToString(nCurrentBonus) + " to " + sSkillName + "\n";
 			sMessage += "This will not be reflected in your character sheet but will be counted when crafting.";
@@ -753,7 +611,7 @@ int PS_GetEclCraftBonus(object oPC, int nSkill, int nEcl, object oEss)
 	if (nEcl < 1) return 0;
 	
 	string sEclCraftBonus = ECL_CRAFT_BONUS_PREFIX + IntToString(nSkill);
-	int nBonus = GetLocalInt(oEss, sEclCraftBonus);
+	int nBonus = PS_GetLocalInt(oEss, sEclCraftBonus);
 	// do not return a value higher than the ecl. Shouldn't be possible, but lets be certain.
 	if (nBonus > nEcl) return nEcl;
 	else return nBonus;
@@ -2642,7 +2500,7 @@ int PS_GetEssenceECL(object oPC)
 	if (ALLOW_ECL_LEVEL_30) return GetNewECL(oPC);
 	
 	
-	return StringToInt(GetLocalString(PS_GetEssence(oPC), VAR_ECL));
+	return StringToInt(PS_GetLocalString(PS_GetEssence(oPC), VAR_ECL));
 	
 
 	//if (sECL == "")
@@ -2655,8 +2513,8 @@ int PS_GetEssenceECL(object oPC)
  		//}
  		
 		//object oESS = GetItemPossessedBy(oPC,"ps_essence");
- 		//if (GetLocalInt(oESS, "SPECIAL_ECL") == 1)
- 		//{	sECL = GetLocalString(oESS, "ECL"); //For old Special Characters
+ 		//if (PS_GetLocalInt(oESS, "SPECIAL_ECL") == 1)
+ 		//{	sECL = PS_GetLocalString(oESS, "ECL"); //For old Special Characters
  			//SendMessageToPC(oPC, "This is an old special character."); 	}
  		//else
  		//{	int nRACE = GetSubRace(oPC);
@@ -2676,7 +2534,7 @@ int PS_GetEssenceECL(object oPC)
    					//case 93: nECL = nECL + 3;		}
    				//nPOSITION = nPOSITION + 1;	}
  			//sECL = IntToString(nECL);		}
- 		//SetLocalString(oPC, "NEW_ECL", sECL);
+ 		//PS_SetLocalString(oPC, "NEW_ECL", sECL);
  		//SendMessageToPC(oPC, "Final LA: " + sECL);	}
 }
 
@@ -2685,14 +2543,14 @@ string PS_GetScryStatus(object oPC)
 {
 	string sStatus = "";
 	
-	sStatus = GetLocalString(oPC,"SCRY");
+	sStatus = PS_GetLocalString(oPC,"SCRY");
 	if(sStatus != "")
 		return sStatus;
 		
 	object oEssence = PS_GetEssence(oPC);
 	if(GetIsObjectValid(oEssence))
-	{	sStatus = GetLocalString(oEssence,"SCRY");
-		SetLocalString(oPC,"SCRY",sStatus);
+	{	sStatus = PS_GetLocalString(oEssence,"SCRY");
+		PS_SetLocalString(oPC,"SCRY",sStatus);
 		return sStatus;		}
 	
 	return "";
@@ -2811,7 +2669,7 @@ int PS_GetXPForLevel(int iLevel){
 
 string PS_GetCharID(object oPC){
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-    if(GetIsObjectValid(oItem)) return IntToString(GetLocalInt(oPC,"ID"));
+    if(GetIsObjectValid(oItem)) return IntToString(PS_GetLocalInt(oPC,"ID"));
 	else return "NULL";
 	return "0";
 }
@@ -2826,7 +2684,7 @@ void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
 	if (sTimeStampVariable == "") 
 		sTimeStampVariable = GetTag(oObject)+"_s";
 		
-  	SetLocalInt(oObject, sTimeStampVariable, GetTime());
+  	PS_SetLocalInt(oObject, sTimeStampVariable, GetTime());
 }
 
 int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
@@ -2834,7 +2692,7 @@ int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
   	if (sTimeStampVariable == "") 
 		sTimeStampVariable = GetTag(oObject)+"_s";
 		
-  	int iOld = GetLocalInt(oObject, sTimeStampVariable);
+  	int iOld = PS_GetLocalInt(oObject, sTimeStampVariable);
   	int iNew = GetTime();
   
   	if (iNew < iOld) {	
@@ -2876,20 +2734,20 @@ void DoPsiDeLevelCheck(object oPC)
 		if(GetHasFeat(21337, oPC))
 		{	n9FeatTotal++;	}
 		
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Augment Power");	}
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Empower Power");	}
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Extend Power");		}
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);	
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);	
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Maximize Power");	}
-		if (GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
+		if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");		}
 			
 		//Manifesting Tier Tracking Feats
@@ -3280,7 +3138,7 @@ int PS_CalcSneakDamage(object oPC, object oTarget, int iDamageType)
 					// Lycan Wererat calc
 					if (iLevelsLrat >= 1 && GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC))
 					{	iSneakDie += 2;	}
-					else if (iLevelsLrat >= 1 && GetLocalInt(oItem, "Hybrid") == 1)
+					else if (iLevelsLrat >= 1 && PS_GetLocalInt(oItem, "Hybrid") == 1)
 					{	iSneakDie += 2;	}
 					
 					// and now for improved sneak attack - feats 834 to 843.
@@ -3414,7 +3272,7 @@ int PS_IsObjectImmuneToSpell(object Target, int SpellId)
 	// item properties do not result in script enumerable effects being created.
 	//
 
-	Refs = GetLocalInt(Target, "SIM_" + IntToString(SpellId));
+	Refs = PS_GetLocalInt(Target, "SIM_" + IntToString(SpellId));
 
 //	WriteTimestampedLogEntry("PS_IsObjectImmuneToSpell: Spell " + IntToString(SpellId) + " immunity refs: " + IntToString(Refs));
 
@@ -3465,7 +3323,7 @@ void PS_InitializeItemImmunityLookup()
 
 		if (GetStringLength(SpellIndexValue) > 1)
 		{
-			SetLocalInt(Module, "IPI_" + IntToString(ImmunityValue), StringToInt(SpellIndexValue));
+			PS_SetLocalInt(Module, "IPI_" + IntToString(ImmunityValue), StringToInt(SpellIndexValue));
 		}
 		else if (GetStringLength(Get2DAString("iprp_spellcost", "Label", ImmunityValue)) < 1)
 		{
@@ -3483,7 +3341,7 @@ void PS_InitializeItemImmunityLookup()
 
 int PS_GetSpellIdFromImmunityValue(int ImmunityValue, object Module)
 {
-	return GetLocalInt(Module, "IPI_" + IntToString(ImmunityValue));
+	return PS_GetLocalInt(Module, "IPI_" + IntToString(ImmunityValue));
 }
 
 void PS_ManageItemImmunities(object oItem, object EquippedTo, int Equipping)
@@ -3514,8 +3372,8 @@ void PS_ManageItemImmunities(object oItem, object EquippedTo, int Equipping)
 			SpellId = PS_GetSpellIdFromImmunityValue(ImmunityValue, Module);
 			SpellImmunityName = "SIM_" + IntToString(SpellId);
 
-			RefCount = GetLocalInt(EquippedTo, SpellImmunityName);
-			SetLocalInt(EquippedTo, SpellImmunityName, RefCount + RefDelta);
+			RefCount = PS_GetLocalInt(EquippedTo, SpellImmunityName);
+			PS_SetLocalInt(EquippedTo, SpellImmunityName, RefCount + RefDelta);
 
 //			WriteTimestampedLogEntry("PS_ManageItemImmunities: Set " + SpellImmunityName + " from " + IntToString(RefCount) + " to " + IntToString(RefCount + RefDelta));
 		}
@@ -3550,7 +3408,7 @@ int PS_GetPCFlags(object PCObject)
 	// Just read the flags directly from the value cached on the PC object.
 	//
 
-	return GetLocalInt(PCObject, PS_PC_FLAGS_VAR);
+	return PS_GetLocalInt(PCObject, PS_PC_FLAGS_VAR);
 }
 
 void PS_SetPCFlags(object PCObject, int PCFlags)
@@ -3570,7 +3428,7 @@ void PS_SetPCFlags(object PCObject, int PCFlags)
 
 	if (PCFlags != 0)
 	{
-		SetLocalInt(PCObject, PS_PC_FLAGS_VAR, PCFlags);
+		PS_SetLocalInt(PCObject, PS_PC_FLAGS_VAR, PCFlags);
 	}
 	else
 	{
@@ -3582,7 +3440,7 @@ void PS_SetPCFlags(object PCObject, int PCFlags)
 	{
 		if (PCFlags != 0)
 		{
-			SetLocalInt(EssenceItem, PS_PC_FLAGS_VAR, PCFlags);
+			PS_SetLocalInt(EssenceItem, PS_PC_FLAGS_VAR, PCFlags);
 		}
 		else
 		{
@@ -3621,7 +3479,7 @@ void PS_LoadEssenceState(object PCObject, object EssenceItem)
 
 void PS_CopyIntVar(object To, string Var, object From)
 {
-	int Value = GetLocalInt(From, Var);
+	int Value = PS_GetLocalInt(From, Var);
 
 	if (Value == 0)
 	{
@@ -3629,7 +3487,7 @@ void PS_CopyIntVar(object To, string Var, object From)
 	}
 	else
 	{
-		SetLocalInt(To, Var, Value);
+		PS_SetLocalInt(To, Var, Value);
 	}
 }
 
@@ -3720,30 +3578,14 @@ string PS_ColorizeChatMessage(string Text)
 }
 
 //For simple uses/day
-int GetBardicClassLevelForUses(object oPC){
-
-	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-	
-	if (GetHasFeat(2481, oPC, TRUE)) 
-		nBARD += (GetLevelByClass(CLASS_TYPE_FIRRE_PRC,oPC));
-		
-	if (GetHasFeat(2787, oPC, TRUE)) 
-		nBARD += (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_BRACHINA, oPC))*0.8f));
-		
-	if (GetHasFeat(2678, oPC, TRUE))
-		nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
-		
-	if (GetHasFeat(2841, oPC, TRUE))
-		nBARD += (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
-		
-	if (GetHasFeat(2572, oPC, TRUE)) 
-		nBARD += (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC))*0.8));
-	
-	if (GetHasFeat(3677, oPC, TRUE)){//new dragon prc bard path
-		int nDragon = (GetLevelByClass(129, oPC) - 2);
-		if (nDragon >= 1) nBARD += nDragon;
-	}
-		
+int GetBardicClassLevelForUses(object oPC)
+{
+	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC); //FloatToInt(IntToFloat(nBrachina)*0.8f)
+	if (GetHasFeat(2481, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_FIRRE_PRC,oPC));
+	if (GetHasFeat(2787, oPC, TRUE) == TRUE) nBARD = nBARD + (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_BRACHINA, oPC))*0.8f));
+	if (GetHasFeat(2678, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
+	if (GetHasFeat(2841, oPC, TRUE) == TRUE) nBARD = nBARD + (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
+	if (GetHasFeat(2572, oPC, TRUE) == TRUE) nBARD = nBARD + (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC))*0.8));
 	return nBARD;
 }
 
@@ -3758,11 +3600,7 @@ int GetBardicClassLevelForSongs(object oPC)
 
 	if (GetHasFeat(2841, oPC, TRUE)) 
 		nBARD += (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
-	
-	if (GetHasFeat(3677, oPC, TRUE)){//new dragon prc bard path
-		int nDragon = (GetLevelByClass(129, oPC) - 2);
-		if (nDragon >= 1) nBARD += nDragon;
-	}	
+		
 	return nBARD;
 }
 
@@ -4015,17 +3853,17 @@ void PS_UndeadRaceFix(object oPC)
 	object oItem = GetItemPossessedBy(oPC, "ps_essence");
 	if (GetIsObjectValid(oItem))
 	{
-		int nUndead = GetLocalInt(oItem, "IsUndead");
+		int nUndead = PS_GetLocalInt(oItem, "IsUndead");
 		if (nUndead == 1)
 		{
-			//int iOldECL	= GetLocalInt(oItem, "OldECL");
+			//int iOldECL	= PS_GetLocalInt(oItem, "OldECL");
 			//string sOldECL = IntToString(iOldECL);
-			int iOldRace = GetLocalInt(oItem, VAR_OLD_RACE);
-			int iOldSub = GetLocalInt(oItem, "OldSubrace");
-			int iOldGoodEvil = GetLocalInt(oItem, "OldGoodEvil");
+			int iOldRace = PS_GetLocalInt(oItem, VAR_OLD_RACE);
+			int iOldSub = PS_GetLocalInt(oItem, "OldSubrace");
+			int iOldGoodEvil = PS_GetLocalInt(oItem, "OldGoodEvil");
 			
 			// Fix for Liches and Vampires
-			if (GetLocalString(oItem, "Template") == "Lich" || GetLocalString(oItem, "Template") == "Vampire")
+			if (PS_GetLocalString(oItem, "Template") == "Lich" || PS_GetLocalString(oItem, "Template") == "Vampire")
 			{	int iUndeadLevel = 0;
 				if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0 )
 				{	iUndeadLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
@@ -4041,8 +3879,8 @@ void PS_UndeadRaceFix(object oPC)
 				{	iUndeadLevel = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);	}
 				
 				if (iUndeadLevel == 0)
-				{	//SetLocalString(oItem, "ECL", sOldECL);
-					//SetLocalString(oPC, "ECL", sOldECL);
+				{	//PS_SetLocalString(oItem, "ECL", sOldECL);
+					//PS_SetLocalString(oPC, "ECL", sOldECL);
 					PS_SetRacialType(oPC, iOldRace);
 					PS_SetSubRacialType(oPC, iOldSub);
 					if(iOldGoodEvil >= 31)
@@ -4059,14 +3897,14 @@ void PS_UndeadRaceFix(object oPC)
 				}
 			}
 			// Fix for Death Knights
-			if (GetLocalString(oItem, "Template") == "DeathKnight")
+			if (PS_GetLocalString(oItem, "Template") == "DeathKnight")
 			{	int iUndeadLevel = 0;
 				if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
 				{	iUndeadLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
 				
 				if (iUndeadLevel == 0)					
-				{	//SetLocalString(oItem, "ECL", sOldECL);
-					//SetLocalString(oPC, "ECL", sOldECL);
+				{	//PS_SetLocalString(oItem, "ECL", sOldECL);
+					//PS_SetLocalString(oPC, "ECL", sOldECL);
 					PS_SetRacialType(oPC, iOldRace);
 					PS_SetSubRacialType(oPC, iOldSub);
 					if(iOldGoodEvil >= 31)
@@ -4115,7 +3953,7 @@ void PS_SaveOriginalAppearance(object oPC)
 	object oEssence = PS_GetEssence(oPC);
 	
 	PS_CreatureCoreAppearanceToScriptVariables(oEssence, "OriginalApp", Appearance);
-	SetLocalInt(oEssence, "TempChange", 0);
+	PS_SetLocalInt(oEssence, "TempChange", 0);
 	SendMessageToPC(oPC, "Core appearance information saved.");
 }
 
@@ -4126,7 +3964,7 @@ void PS_RestoreOriginalAppearance(object oPC)
 	PS_SetCreatureCoreAppearance(oPC, Appearance);
 	SendMessageToPC(oPC, "Original appearance restored");
 	ServerExts_RefreshCreatureAppearance(oPC,oPC);
-	SetLocalInt(oEssence, "TempChange", 0);
+	PS_SetLocalInt(oEssence, "TempChange", 0);
 }
 
 void PS_ClassAppearanceDeleveling(object oPC)
@@ -4135,7 +3973,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 	
 	// Add a new entry to this list for each necessary reversion.
 	
-	if ((GetLocalInt(oItem, "DarkFlight") != 0) && (!GetHasFeat(2781, oPC)))
+	if ((PS_GetLocalInt(oItem, "DarkFlight") != 0) && (!GetHasFeat(2781, oPC)))
 	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = 0;
 		PS_SetCreatureCoreAppearance(oPC, app);
@@ -4143,7 +3981,7 @@ void PS_ClassAppearanceDeleveling(object oPC)
 		DelayCommand(0.1f, PS_DeleteLocalInt(oItem, "DarkFlight"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 
-	if ((GetLocalInt(oItem, "DragonFlight") != 0) && (!GetHasFeat(288, oPC)))
+	if ((PS_GetLocalInt(oItem, "DragonFlight") != 0) && (!GetHasFeat(288, oPC)))
 	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = 0;
 		PS_SetCreatureCoreAppearance(oPC, app);
@@ -4151,11 +3989,11 @@ void PS_ClassAppearanceDeleveling(object oPC)
 		DelayCommand(0.1f, PS_DeleteLocalInt(oItem, "DragonFlight"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 	
-	if ((GetLocalInt(oItem, "AltFormSet") != 0) && (!GetHasFeat(2828)))
+	if ((PS_GetLocalInt(oItem, "AltFormSet") != 0) && (!GetHasFeat(2828)))
 	{	PS_RestoreOriginalAppearance(oPC);
 		DelayCommand(0.1f, PS_DeleteLocalInt(oItem, "AltFormSet"));	}
 	
-	if ((GetLocalInt(oItem, "UnholyApothesis") != 0) && (!GetHasFeat(2833, oPC)))
+	if ((PS_GetLocalInt(oItem, "UnholyApothesis") != 0) && (!GetHasFeat(2833, oPC)))
 	{	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = 0;
 		PS_SetCreatureCoreAppearance(oPC, app);
@@ -4164,15 +4002,15 @@ void PS_ClassAppearanceDeleveling(object oPC)
 		DelayCommand(0.1f, PS_DeleteLocalInt(oItem, "UnholyApothesis"));
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	}
 		
-	if ((GetLocalString(oItem, "Template") == "DeathKnight") && (!GetHasFeat(2690)))
-	{	int iAppearance = GetLocalInt(oItem, "OldAppearance");
+	if ((PS_GetLocalString(oItem, "Template") == "DeathKnight") && (!GetHasFeat(2690)))
+	{	int iAppearance = PS_GetLocalInt(oItem, "OldAppearance");
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = iAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));		}
 		
-	if ((GetLocalInt(oItem, "Diminution") != 0) && (!GetHasFeat(4012, oPC)))
+	if ((PS_GetLocalInt(oItem, "Diminution") != 0) && (!GetHasFeat(4012, oPC)))
 	{	int iAppearance = 3411;
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = iAppearance;
@@ -4201,20 +4039,20 @@ int PS_NeedsTemplateClassAbilityFix(object oPC)
 void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 {
 	int nSUBRACE;
-	int nVAR = GetLocalInt(oESSENCE, "TemplateFix");
+	int nVAR = PS_GetLocalInt(oESSENCE, "TemplateFix");
 
 	if (nREVERSE == TRUE)
 	{
 		if (nVAR != TRUE) return;
-		nSUBRACE = GetLocalInt(oESSENCE, "OldSubrace");
+		nSUBRACE = PS_GetLocalInt(oESSENCE, "OldSubrace");
 		DelayCommand(0.0f, PS_DeleteLocalInt(oESSENCE, "TemplateFix"));
 	}
 	else
 	{
 		if (nVAR == TRUE) return;
 		nSUBRACE = GetSubRace(oPC);
-		SetLocalInt(oESSENCE, "OldSubrace", nSUBRACE);
-		SetLocalInt(oESSENCE, "TemplateFix", TRUE);
+		PS_SetLocalInt(oESSENCE, "OldSubrace", nSUBRACE);
+		PS_SetLocalInt(oESSENCE, "TemplateFix", TRUE);
 	}
 	string s2DA = "racialsubtypes";
 	string sSTAT;
@@ -4273,9 +4111,9 @@ void PS_Template_DelevelFix(object oPC, object oItem)
 
 void PS_VampMal_DelevelFix(object oPC, object oItem)
 {
-	int iVMal			= GetLocalInt(oItem, "VML5");
+	int iVMal			= PS_GetLocalInt(oItem, "VML5");
 	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) < 5 && iVMal == 1 )
-	{	SetLocalInt(oItem, "VML5", 0);	}
+	{	PS_SetLocalInt(oItem, "VML5", 0);	}
 }
 
 
@@ -4357,25 +4195,25 @@ void PS_RemoveDraconicMagic(object oPC)
 void PS_HalfDragonRaceFix(object oPC)
 {
 	object oItem 			= PS_GetEssence(oPC);
-	string sTemplate		= GetLocalString(oItem, "Template");
+	string sTemplate		= PS_GetLocalString(oItem, "Template");
 	int iGEDiff, iLCDiff;
 	if (GetIsObjectValid(oItem))
 	{	if (sTemplate == "HalfDragon") 
-		{	//string sECL			= GetLocalString(oItem, "ECL");
+		{	//string sECL			= PS_GetLocalString(oItem, "ECL");
 			//int iECL			= StringToInt(sECL);
-			string sRaceChg		= GetLocalString(oItem, "RaceChange");
-			int iOldRace 		= GetLocalInt(oItem, VAR_OLD_RACE);
-			int iOldSub 		= GetLocalInt(oItem, "OldSubrace");
-			int iOldGoodEvil 	= GetLocalInt(oItem, "OldGoodEvil");
-			string sInBlood		= GetLocalString(oItem, "InBlood");
-			int iHeritage		= GetLocalInt(oItem, "Draconic_Heritage");
+			string sRaceChg		= PS_GetLocalString(oItem, "RaceChange");
+			int iOldRace 		= PS_GetLocalInt(oItem, VAR_OLD_RACE);
+			int iOldSub 		= PS_GetLocalInt(oItem, "OldSubrace");
+			int iOldGoodEvil 	= PS_GetLocalInt(oItem, "OldGoodEvil");
+			string sInBlood		= PS_GetLocalString(oItem, "InBlood");
+			int iHeritage		= PS_GetLocalInt(oItem, "Draconic_Heritage");
 			int iNewGoodEvil	= GetAlignmentGoodEvil(oPC);
-			int iOldLawChaos 	= GetLocalInt(oItem, "OldLawChaos"); 
+			int iOldLawChaos 	= PS_GetLocalInt(oItem, "OldLawChaos"); 
 			int iNewLawChaos	= GetAlignmentLawChaos(oPC);
 			int iHDLevel 		= GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC);
-			int iFlight		= GetLocalInt(oItem, "DragonFlight");
-			int iWingless		= GetLocalInt(oItem, "Wingless");
-			int iMagic			= GetLocalInt(oItem, "Draconic Magic");
+			int iFlight		= PS_GetLocalInt(oItem, "DragonFlight");
+			int iWingless		= PS_GetLocalInt(oItem, "Wingless");
+			int iMagic			= PS_GetLocalInt(oItem, "Draconic Magic");
 			
 			if (iHDLevel != 6 && sRaceChg != "")
 			{	PS_SetRacialType(oPC, iOldRace);
@@ -4404,22 +4242,22 @@ void PS_HalfDragonRaceFix(object oPC)
 			if (iHDLevel < 6 && iHDLevel >= 1)
 			{	if (sInBlood == "HD+2")
 				{	//iECL = iECL - 1;
-					//SetLocalString(oItem, "ECL", IntToString(iECL));
-					//SetLocalString(oPC, "ECL", IntToString(iECL));
-					SetLocalString(oItem, "InBlood", "HD+1");
+					//PS_SetLocalString(oItem, "ECL", IntToString(iECL));
+					//PS_SetLocalString(oPC, "ECL", IntToString(iECL));
+					PS_SetLocalString(oItem, "InBlood", "HD+1");
 					SendMessageToPC(oPC, "Half-dragon level adjustment is now +1");	}	}
 			
 			if (iHDLevel == 0)
 			{	if (sInBlood == "HD+2")
 				{	//iECL = iECL - 2;
-					//SetLocalString(oItem, "ECL", IntToString(iECL));
-					//SetLocalString(oPC, "ECL", IntToString(iECL));
+					//PS_SetLocalString(oItem, "ECL", IntToString(iECL));
+					//PS_SetLocalString(oPC, "ECL", IntToString(iECL));
 					PS_DeleteLocalString(oItem, "InBlood");
 					SendMessageToPC(oPC, "Half-dragon level adjustment removed.");	}
 				else if (sInBlood == "HD+1")
 				{	//iECL = iECL - 1;
-					//SetLocalString(oItem, "ECL", IntToString(iECL));
-					//SetLocalString(oPC, "ECL", IntToString(iECL));
+					//PS_SetLocalString(oItem, "ECL", IntToString(iECL));
+					//PS_SetLocalString(oPC, "ECL", IntToString(iECL));
 					PS_DeleteLocalString(oItem, "InBlood");
 					SendMessageToPC(oPC, "Half-dragon level adjustment removed.");	}
 				
@@ -4458,20 +4296,20 @@ void PS_HalfDragonRaceFix(object oPC)
 void PS_HalfOutsiderRaceFix(object oPC)
 {
 	object oItem 			= GetItemPossessedBy(oPC, "ps_essence");
-	string sTemplate		= GetLocalString(oItem, "Planar");
+	string sTemplate		= PS_GetLocalString(oItem, "Planar");
 	int iGEDiff, iLCDiff;
 	if (GetIsObjectValid(oItem))
 	{	if (sTemplate == "HalfFiend" || sTemplate == "HalfCelestial") 
-		{	//string sECL			= GetLocalString(oItem, "ECL");
+		{	//string sECL			= PS_GetLocalString(oItem, "ECL");
 			//int iECL			= StringToInt(sECL);
-			//int iOldECL			= GetLocalInt(oItem, "OldECL");
+			//int iOldECL			= PS_GetLocalInt(oItem, "OldECL");
 			//string sOldECL 		= IntToString(iOldECL);
-			string sRaceChg		= GetLocalString(oItem, "RaceChange");
-			int iOldRace 		= GetLocalInt(oItem, VAR_OLD_RACE);
-			int iOldSub 		= GetLocalInt(oItem, "OldSubrace");
+			string sRaceChg		= PS_GetLocalString(oItem, "RaceChange");
+			int iOldRace 		= PS_GetLocalInt(oItem, VAR_OLD_RACE);
+			int iOldSub 		= PS_GetLocalInt(oItem, "OldSubrace");
 			int iHDLevel 		= GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
-			int iFlight			= GetLocalInt(oItem, "DarkFlight");
-			int iSight			= GetLocalInt(oItem, "SupSight");
+			int iFlight			= PS_GetLocalInt(oItem, "DarkFlight");
+			int iSight			= PS_GetLocalInt(oItem, "SupSight");
 			
 			if (iHDLevel != 6 && sRaceChg != "")
 			{	PS_SetRacialType(oPC, iOldRace);
@@ -4492,8 +4330,8 @@ void PS_HalfOutsiderRaceFix(object oPC)
 				PS_DeleteLocalInt(oItem, "SupSight");	}
 			
 			if (iHDLevel == 0)
-			{	//SetLocalString(oItem, "ECL", sOldECL);
-				//SetLocalString(oPC, "ECL", sOldECL);
+			{	//PS_SetLocalString(oItem, "ECL", sOldECL);
+				//PS_SetLocalString(oPC, "ECL", sOldECL);
 				PS_DeleteLocalString(oItem, "Planar");
 				PS_DeleteLocalString(oItem, "Template");
 				//PS_DeleteLocalInt(oItem, "OldECL");
@@ -4509,7 +4347,7 @@ void PS_HalfOutsiderRaceFix(object oPC)
 int PS_GetAppWingType(object oPC)
 {	
 	object oItem = GetItemPossessedBy(oPC, "ps_essence");
-	int iWing = GetLocalInt(oItem, "OriginalApp.WingVariation");
+	int iWing = PS_GetLocalInt(oItem, "OriginalApp.WingVariation");
 	return iWing;
 }
 
@@ -4610,7 +4448,7 @@ effect EffectElementalPiercingDamage(object oPC, int nDamage, int nDamageType)
 
 void DebugMessageToPC(object oPC, string sMessage)
 {
-	int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
+	int DevMode = PS_GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 	
 	if (DevMode == FALSE)
 	{	return;		}
@@ -4682,7 +4520,7 @@ void Assumenewform(object oPC, struct CreatureCoreAppearance Appearance) {
     
     PS_SetCreatureCoreAppearance(oPC, Appearance);
     ServerExts_RefreshCreatureAppearance(oPC,oPC);
-    SetLocalInt(oEssence, "TempChange", 1);
+    PS_SetLocalInt(oEssence, "TempChange", 1);
 }
 
 void FiendformBoni(object oPC, string sVFX = "") {
@@ -4707,10 +4545,10 @@ void FiendformBoni(object oPC, string sVFX = "") {
 void RecordPCAction(object oTarget, string sVar, object oPC) {
 
 	string sName = GetPCPublicCDKey(oPC)+GetFirstName(oPC);
-	int nMax = GetLocalInt(oTarget, sVar+"_Num");
+	int nMax = PS_GetLocalInt(oTarget, sVar+"_Num");
 	int nIndex = nMax+1;
-	SetLocalString(oTarget, sVar+"_"+IntToString(nIndex), sName);
-	SetLocalInt(oTarget, sVar+"_Num", nIndex);
+	PS_SetLocalString(oTarget, sVar+"_"+IntToString(nIndex), sName);
+	PS_SetLocalInt(oTarget, sVar+"_Num", nIndex);
 }
 
 //Calculuates Psychic Warrior Levels
@@ -4724,10 +4562,6 @@ int PsyWarLevels(object oPC)
 	// instead we'll do this:
 	int nGemDragon = GetLevelByClass(128, oPC);
 	if (nGemDragon > 0) nGemDragon = nGemDragon / 2 + 1;
-	if (GetHasFeat(3680, oPC, TRUE)){ // if has new psy path feat for new dragon prc
-		int nDragonLevel = GetLevelByClass(129, oPC) - 2;
-		if (nDragonLevel > 0) nPsywar += nDragonLevel;
-	}
 	int	iTotal = nPsywar + nWarMind + nGemDragon;
 	
 	return iTotal;	
@@ -4742,7 +4576,7 @@ int iPsy = PsyWarLevels(oPC);
 // Give Psy their first tier feat in case they do not rest before reaching lvl 2
 if (bCharCreation)
 {
-	if (iPsy == 1 && GetXP(oPC) < 2)
+	if (iPsy == 1 && GetXP(oPC) == 0)
 	{
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 	}
@@ -4787,20 +4621,20 @@ else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){
 FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 }
 	
-if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
-{	SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
+if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
+{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
 SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Augment Power");	}
-if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
-	{	SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
+if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
+	{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Empower Power");	}
-if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
+if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Extend Power");		}
-if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);	
+if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);	
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Maximize Power");	}
-if (GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
-		{	SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
+if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
+		{	PS_SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
 			SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");		}
 
 }
@@ -4890,11 +4724,11 @@ int PS_GetPureMageCL(object oPC)
 int GetPCActionRecorded(object oTarget, string sVar, object oPC) {
 
 	string sName = GetPCPublicCDKey(oPC)+GetFirstName(oPC);
-	int nMax = GetLocalInt(oTarget, sVar+"_Num");
+	int nMax = PS_GetLocalInt(oTarget, sVar+"_Num");
 	
 	int n = 0;
 	for(n = 1; n <= nMax; n++) {
-		string sFound = GetLocalString(oTarget, sVar+"_"+IntToString(n));
+		string sFound = PS_GetLocalString(oTarget, sVar+"_"+IntToString(n));
 		//SendMessageToPC(oPC, "found: "+sFound);
 		if (sFound == sName) 
 			return TRUE;
@@ -4953,11 +4787,11 @@ string CheckServerVersion(int versionRow) {
 int GetIsChristmas() {
 
 	object oMod = GetModule();
-	string version = GetLocalString(oMod, "HOLIDAY_MODE");
+	string version = PS_GetLocalString(oMod, "HOLIDAY_MODE");
 	if (version == "")
 		version = CheckServerVersion(HOLIDAY_VERSION_ROW);
 		
-	SetLocalString(oMod, "HOLIDAY_MODE", version);
+	PS_SetLocalString(oMod, "HOLIDAY_MODE", version);
 	
 	return (version == HOLIDAY_XMAS);
 	

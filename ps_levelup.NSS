@@ -152,14 +152,12 @@ void GiveEvilClericFeats (object oPC)
 	if (GetHasFeat(2458, oPC, TRUE) == FALSE) FeatAdd(oPC, 2458, FALSE, TRUE, TRUE);
 }
 
-// redundant
 //If Dragon + Class 5 add Multiattack
 //Change Self Feats for level 6+ of Dragon and Dragon Psion.
-/*
 void GiveDragonFeats(object oPC)
 {	
 	int nDRAGON = (GetLevelByClass(127, oPC));
-	if (GetHasFeat(4000, oPC, TRUE))  
+	if (GetHasFeat(3649, oPC, TRUE) && nDRAGON >= 5)  
 	{	
 		if (GetHasFeat(1784, oPC, TRUE) == FALSE) FeatAdd(oPC, 1784, FALSE, TRUE, TRUE);
 	}
@@ -174,7 +172,6 @@ void GiveDragonFeats(object oPC)
 		if (nSUB == 239) FeatAdd(oPC, 2797, FALSE, TRUE, TRUE); //Topaz Dragon Psion PrC
 	}
 }
-*/
 
 void GiveWarlockBlastShapes(object oPC) {
 
@@ -203,7 +200,7 @@ void main()
 	object oPC = GetPCLevellingUp();
 	object oItem = PS_GetEssence(oPC);
 	
-	//DeleteLocalString(oPC, "ECL"); //Clang's fix on 3-31-16
+	//PS_DeleteLocalString(oPC, "ECL"); //Clang's fix on 3-31-16
 
 	//Remove XP from xp-saving players
 	//Disabled on Jeg Training Sigil Edition Preparation Room.
@@ -225,12 +222,12 @@ void main()
 
 	// Template classes - apply fix to racial ability bonuses
 	// Add new templates to this list when created
-	string sTemplate	= GetLocalString(oItem, "Template");
-	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	int iOldSub			= GetLocalInt(oItem, "OldSubrace");
+	string sTemplate	= PS_GetLocalString(oItem, "Template");
+	int iStop			= PS_GetLocalInt(oItem, "TemplateFix");
+	int iOldSub			= PS_GetLocalInt(oItem, "OldSubrace");
 	if (PS_NeedsTemplateClassAbilityFix(oPC))
 	{	
-		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
+		if (iStop != 1)	PS_SetLocalInt(oItem, "TemplateFix", 0);
 		SendMessageToPC(oPC, "Your character has levels in a template class.");
 		if (iStop == 0)
 		{	
@@ -240,7 +237,7 @@ void main()
 		}
 	}
 	
-	if (GetLocalInt(oItem, "TempChange") != 1)
+	if (PS_GetLocalInt(oItem, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
@@ -273,7 +270,7 @@ void main()
 	// redundant, ff_update_feats does this
 //	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
-//	GiveDragonFeats(oPC); redundant now
+	GiveDragonFeats(oPC);
 	KnightLevels(oPC);
 	// redundant, ff_update_feats does all of this
 //	PS_AdjustSneakAttack(oPC);
@@ -302,7 +299,7 @@ void CheckDragonBreath(object oPC, object oItem)
 		SendMessageToPC(oPC, "You appear to be missing your essence. Contact a member of staff");
 		return;
 	}
-	int nTYPE = GetLocalInt(oItem, "DRAGONTYPE");
+	int nTYPE = PS_GetLocalInt(oItem, "DRAGONTYPE");
 	if (nTYPE < 1)
 	{
 		ActionStartConversation(oPC, "ps_srr_conv_dbreath", TRUE, FALSE, TRUE, TRUE);

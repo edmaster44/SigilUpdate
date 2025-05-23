@@ -30,16 +30,13 @@
 #include "ps_inc_functions"
 #include "ps_inc_advscript"
 #include "aaa_constants"
-
-// Params for dragon alt form are (15, 0, "", 0.0, 0.0, 0.0)
-// Params for dragon true form are (0, 0, "", 0.0, 0.0, 0.0)
 	
 void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, float fValue3)
 {
 	object oPC		= OBJECT_SELF;
 	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
 	
-	//SetLocalInt(oItem, "TempChange", 1);
+	PS_SetLocalInt(oItem, "TempChange", 1);
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 
 	switch(iParam)
@@ -47,8 +44,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 			PS_RestoreOriginalAppearance(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 			PS_DragForm_DragonUE(oPC);
-			SetLocalInt(oItem, "TempChange", 0);
-			//DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
+			DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 		break;	
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */		
 		case 1:
@@ -112,7 +108,6 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 			PS_AltForm_Assume(oPC);
 			PS_HumForm_DragonUE(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			SetLocalInt(oItem, "TempChange", 1);
 		break;	
 	}
 }
