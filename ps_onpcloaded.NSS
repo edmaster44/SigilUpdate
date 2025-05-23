@@ -31,27 +31,6 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
-void LookForSharedRouters(){
-    string sIPs = "";
-    string sThisIp = "";
-    object oPC = GetFirstPC();
-    string sMessage = "<c=red>You are sharing a router with another player.";
-    sMessage += "\nPlease adjust your ports in your config files to avoid bugs.";
-    sMessage += "\nSee 'https://nwn2planescape.com/viewtopic.php?t=39'</c>";
-
-	//cycle through logged in players
-    while (GetIsObjectValid(oPC)){
-        sThisIp = GetPCIPAddress(oPC); //get ip address of player
-        if (sThisIp != ""){
-            sThisIp = "^" + sThisIp + "^"; //wrap ip in delimeters to prevent false matches
-            if (FindSubString(sIPs, sThisIp) == -1){
-                sIPs += sThisIp; // if delimited ip is not found already, add it to string
-            } else SendMessageToPC(oPC, sMessage);  // else send warning
-        }
-        oPC = GetNextPC();
-    }
-}
-
 //remove all bonus feats added to the creature skin by spells or Tactical Weapon feat 
 // or ps_inc_equipment in case any got stuck by a poorly timed player or server crash or 
 // some other ill-fated event. Note that currently none of the tattoos use a bonus feat on
@@ -611,6 +590,5 @@ void main()
 		}
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
-		LookForSharedRouters();
 	}
 }
