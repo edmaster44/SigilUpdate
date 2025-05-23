@@ -1,4 +1,4 @@
-
+#include "ff_safevar"
 
 #include "psi_inc_metapsi"
 #include "nwn2_inc_spells"
@@ -12,8 +12,9 @@ int PS_PsionicClasses(object oPC)
 	int iPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
 	int iTotal = iPsion + iPsywar;
 	return iTotal;
-}
 
+
+}
 int nPsion(object oPC)
 {
 int nPsion = GetLevelByClass(CLASS_TYPE_PSION,oPC);
@@ -22,10 +23,6 @@ int nMentalist = GetLevelByClass(CLASS_TYPE_ILLITHID_MENTALIST_PRC,oPC);
 int nCere	   = GetLevelByClass(CLASS_TYPE_CEREBREMANCER,oPC);
 int nTheruge	   = GetLevelByClass(CLASS_TYPE_PSYCHIC_THERUGE,oPC);
 int nPsyKnight = GetLevelByClass(CLASS_PSYCHIC_KNIGHT,oPC);
-if (GetHasFeat(3679, oPC, TRUE)){ // if has new psi path feat for new dragon prc
-		int nDragonLevel = GetLevelByClass(130, oPC) - 2;
-		if (nDragonLevel > 0) nPsion += nDragonLevel;
-	}
 int iTotal = nPsion + nDragon + nMentalist + nCere + nPsyKnight + nTheruge ;
 return iTotal;
 
@@ -36,10 +33,6 @@ int nPsywar(object oPC)
 int nPsywar= GetLevelByClass(CLASS_PSYCHIC_WARRIOR,oPC);
 int nWarmind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
 int nDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PSION,oPC);
-if (GetHasFeat(3680, oPC, TRUE)){ // if has new psy path feat for new dragon prc
-		int nDragonLevel = GetLevelByClass(130, oPC) - 2;
-		if (nDragonLevel > 0) nPsywar += nDragonLevel;
-	}
 int iTotal = nPsywar +nWarmind;
 return iTotal;
 
@@ -91,12 +84,12 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     int nPowerLevel      = GetSpellLevel(spellID);
 	// elfsight is 1 pp for psywar
 	if (GetLevelByClass(110, oManifester) > 0 && spellID == 14419) nPowerLevel = 1;
-    int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
-	if (GetLocalInt(oManifester, "PSI_SPAWN"))
+    int nManifesterPP    = PS_GetLocalInt(oManifester, "PSI_PP");
+	if (PS_GetLocalInt(oManifester, "PSI_SPAWN"))
 	{
 		nManifesterLevel = GetHitDice(oManifester);
 	}
-	int nCatapsiDC = GetLocalInt(oManifester, "PRC_Catapsi_DC");
+	int nCatapsiDC = PS_GetLocalInt(oManifester, "PRC_Catapsi_DC");
     // Target-specific stuff
 
     /* Initialise the manifestation structure */
@@ -105,7 +98,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     manif.bCanManifest      = TRUE;                         // Assume successfull manifestation by default
     manif.nPPCost           = nPowerLevel * 2 - 1;          // Initialise the cost to the base cost of the power
 	
-	if(GetLocalInt(oTarget, "PRC_IsInCatapsi") == TRUE)
+	if(PS_GetLocalInt(oTarget, "PRC_IsInCatapsi") == TRUE)
 	{
 		if(!MySavingThrow(SAVING_THROW_WILL, oManifester, nCatapsiDC, SAVING_THROW_TYPE_MIND_SPELLS))
 		{
@@ -136,7 +129,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
     if(manif.bCanManifest)
     {
 		//No PP cost if Metamind's Font of Power is active
-		if(GetLocalInt(OBJECT_SELF, "METAMIND_FONT_ACTIVE") == 1)
+		if(PS_GetLocalInt(OBJECT_SELF, "METAMIND_FONT_ACTIVE") == 1)
 		{
 			return manif;
 		}
@@ -158,9 +151,9 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 		}
         else
         {
-			SetLocalInt(oManifester, "PSI_PP", nManifesterPP-manif.nPPCost);
+			PS_SetLocalInt(oManifester, "PSI_PP", nManifesterPP-manif.nPPCost);
 			int nPPFinal = nManifesterPP-manif.nPPCost;
-			nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
+			nManifesterPP    = PS_GetLocalInt(oManifester, "PSI_PP");
 			//Debug message
 			
 		
