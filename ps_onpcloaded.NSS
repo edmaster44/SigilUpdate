@@ -30,46 +30,23 @@
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
-const string sIpDelimeter = "^";
 
-//notify players of shared routers, called from function below this one, LookForSharedRouters() 
-void NotifySharedRouters(string sFlaggedIp){
-	string sThisIp = "";
+void LookForSharedRouters(){
+    string sIPs = "";
+    string sThisIp = "";
+    object oPC = GetFirstPC();
     string sMessage = "<c=red>You are sharing a router with another player.";
     sMessage += "\nPlease adjust your ports in your config files to avoid bugs.";
     sMessage += "\nSee 'https://nwn2planescape.com/viewtopic.php?t=39'</c>";
 
 	//cycle through logged in players
-	object oPC = GetFirstPC();
     while (GetIsObjectValid(oPC)){
         sThisIp = GetPCIPAddress(oPC); //get ip address of player
         if (sThisIp != ""){
-            sThisIp = sIpDelimeter + sThisIp + sIpDelimeter; //wrap ip in delimeters
-			if (sThisIp == sFlaggedIp)
-				SendMessageToPC(oPC, sMessage);  // display warning
-        }
-        oPC = GetNextPC();
-    }
-}
-
-//look for players who have the same IP address
-void LookForSharedRouters(){
-    string sIpList = "";
-    string sThisIp = "";
-    string sFlaggedIpList = "";
-
-	//cycle through logged in players
-	object oPC = GetFirstPC();
-    while (GetIsObjectValid(oPC)){
-        sThisIp = GetPCIPAddress(oPC); //get ip address of player
-        if (sThisIp != ""){
-            sThisIp = sIpDelimeter + sThisIp + sIpDelimeter; //wrap ip in delimeters
-            if (FindSubString(sIpList, sThisIp) == -1){
-                sIpList += sThisIp; // if delimited ip is not found already, add it to string
-            } else if (FindSubString(sFlaggedIpList, sThisIp) == -1){ //else check if we've flagged it already
-				sFlaggedIpList += sThisIp;
-				NotifySharedRouters(sThisIp);	
-			}
+            sThisIp = "^" + sThisIp + "^"; //wrap ip in delimeters to prevent false matches
+            if (FindSubString(sIPs, sThisIp) == -1){
+                sIPs += sThisIp; // if delimited ip is not found already, add it to string
+            } else SendMessageToPC(oPC, sMessage);  // else send warning
         }
         oPC = GetNextPC();
     }
@@ -81,7 +58,7 @@ void LookForSharedRouters(){
 // a skin like they used to. There are also 3 feats that are added directly to the pc in
 // ps_inc_equipment instead of the skin because they are feats that cannot be gained
 // through any normal means; therefore the safety of the skin isn't needed. But remove
-// those also in case any got stuck. Called from GiveCreatureSkin() below
+// those also in case any got stuck.
 void RemoveTempFeatsAndFX(object oPC, object oSkin){
 	itemproperty ip = GetFirstItemProperty(oSkin);
 	while (GetIsItemPropertyValid(ip)){
