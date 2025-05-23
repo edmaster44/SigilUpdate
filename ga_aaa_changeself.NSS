@@ -46,9 +46,8 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 	{	case 0:
 			PS_RestoreOriginalAppearance(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			DelayCommand(1.0f, PS_DragForm_DragonUE(oPC));
-			//PS_DragForm_DragonUE(oPC);
-			//SetLocalInt(oItem, "TempChange", 0);
+			PS_DragForm_DragonUE(oPC);
+			SetLocalInt(oItem, "TempChange", 0);
 			//DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 		break;	
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */		
