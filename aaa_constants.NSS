@@ -470,7 +470,6 @@ const int CLASS_TYPE_VAMPIRE_MAL_PRC			= 106;
 const int CLASS_TYPE_CHAMPION_OF_CHAOS			= 107;
 const int CLASS_TYPE_GRAY_SLAAD					= 108;
 const int CLASS_TYPE_HALF_UNDEAD				= 114;
-const int CLASS_TYPE_WARCHANTER					= 117;
 const int CLASS_TYPE_HEZROU						= 126;
 const int CLASS_TYPE_DRAGON_PRC					= 127;
 const int CLASS_TYPE_DRAGON_PSION				= 128;
