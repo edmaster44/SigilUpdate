@@ -23,29 +23,33 @@
 
 void main()
 {
-    if (!X2PreSpellCastCode()) return;
+    if (!X2PreSpellCastCode())
+    {   // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+        return;
+    }
     
     //Declare major variables
-	int nId = GetSpellId();
-	int nBless = 1096; // blessing of the spirits
     int bPCOnly     = FALSE;
     int nShamanLvl  = GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, OBJECT_SELF);
     float fDuration = TurnsToSeconds(10*nShamanLvl);    // 10 minutes per shaman level
     object oLeader  = GetFactionLeader(OBJECT_SELF);
-	
-	effect eAC = EffectACIncrease(2, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
-    effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
-    eAC = EffectLinkEffects(eSave, eAC);
-	eAC = SetEffectSpellId(eAC, nId);
-	
     object oTarget  = GetFirstFactionMember(oLeader, bPCOnly);
-    while (GetIsObjectValid(oTarget)){
-        // Does not stack with itself or with Blessing of the Spirits, skips those with Blessing,
-		// removes previous applications of itself
-        if (!GetHasSpellEffect(nBless, oTarget){
-			PS_RemoveEffects(oTarget, nId);
+
+	// SendMessageToPC(OBJECT_SELF, "TESTING WARDING OF THE SPIRITS");
+
+    while (GetIsObjectValid(oTarget))
+    {
+        // Does not stack with itself or with Warding of the Spirits
+        if (!GetHasSpellEffect(SPELLABILITY_BLESSING_OF_THE_SPIRITS, oTarget) &&
+            !GetHasSpellEffect(SPELLABILITY_WARDING_OF_THE_SPIRITS, oTarget) )
+        {
+            effect eAC   = EffectACIncrease(2, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
+            effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
+        
+            effect eLink = EffectLinkEffects(eAC, eSave);
+        
             //Fire cast spell at event for the specified target
-            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
+            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_WARDING_OF_THE_SPIRITS, FALSE));
         
             //Apply the VFX impact and effects
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);

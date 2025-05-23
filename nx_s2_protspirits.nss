@@ -22,27 +22,8 @@
 #include "nwn2_inc_spells"
 #include "x2_inc_spellhook"
 
-void main(){
-	if (!X2PreSpellCastCode()) return;
-	
-	object oPC = OBJECT_SELF;
-	int nId = GetSpellId();
-	int nWard = 1101; // warding of the spirits
-	
-	effect eAC = EffectACIncrease(2, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
-	effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
-	eAC = EffectLinkEffects(eSave, eAC);
-	eAC = SupernaturalEffect(eAC);
-	eAC = SetEffectSpellId(eAC, nId);
-	// does not stack with itself or with warding of the spirits,
-	// removes previous applications of both
-	PS_RemoveEffects(oPC, nId);
-	PS_RemoveEffects(oPC, nWard);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
-
-
-// Old code
-/*
+void main()
+{
     if (!X2PreSpellCastCode())
     {   // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
@@ -60,7 +41,6 @@ void main(){
         effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
     
         effect eLink = EffectLinkEffects(eAC, eSave);
-		eLink = Effect
     
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
@@ -68,5 +48,4 @@ void main(){
         //Apply the VFX impact and effects
         ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
     }
-	*/
 }
