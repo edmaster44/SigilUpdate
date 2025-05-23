@@ -2,7 +2,7 @@
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
 #include "nw_i0_spells"
-//#include "aaa_changeself_inc"
+#include "aaa_changeself_inc"
 #include "x0_i0_match"
 #include "x0_i0_position"
 #include "ginc_math"
@@ -815,7 +815,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			nSaveType = SAVING_THROW_TYPE_SONIC;	
 			break;					
 		}
-		case 2662:{	//topaz dehydrating cold
+		case 2662: case 2664:{	//topaz and white dehydrating cold
 			nDamageType = DAMAGE_TYPE_COLD;
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
 			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
@@ -823,15 +823,6 @@ void DoBreathWeapon(object oPC, int nSpell){
 			bSecondaryIsDrain = TRUE;
 			fDur = HoursToSeconds(d6(1) + 5);
 			nDieType = 6;
-			nSave = SAVING_THROW_FORT;
-			nSaveType = SAVING_THROW_TYPE_COLD;	
-			break;
-		}
-		case 2664:{	//white cold  
-			nDamageType = DAMAGE_TYPE_COLD;
-			eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
-			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
-			nDieType = 8;
 			nSave = SAVING_THROW_FORT;
 			nSaveType = SAVING_THROW_TYPE_COLD;	
 			break;
