@@ -467,13 +467,11 @@ void PS_Ability_UnholyApothesis(object oPC)
 
 void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 	// original code
-	if (!X2PreSpellCastCode()) return;
-	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
-
-	// the following scheme to affect changes without a dialog didn't work and I don't 
-	// know why. Must take a look later when there's not more pressing concerns 
-	//  	-FlattedFifth
 	/*
+	if (!X2PreSpellCastCode())
+    {	return;	}
+	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
+	*/
 	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
 	
 	int bIsInAltForm = GetLocalInt(oEssence, "TempChange");
@@ -495,7 +493,6 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 		AddScriptParameterFloat(0.0f);
 		ExecuteScriptEnhanced("ga_aaa_changeself", oPC);
 	}
-	*/
 
 	// reset dragon ac	
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
