@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /**************************************/
 /* Scripts for adding music switching */
@@ -46,15 +46,15 @@ int ShouldMusicSwitch(object oArea, object oPC = OBJECT_INVALID) {
 	int shouldSwitch = TRUE;
 
 	int nMin = PS_GetTimestamp_Age_Minutes(oArea, MUSIC_TIMESTAMP);
-	if (PS_GetLocalInt(oArea, MUSIC_TIMESTAMP) != 0 && nMin < MUSIC_SWAP_TIMEOUT)
+	if (GetLocalInt(oArea, MUSIC_TIMESTAMP) != 0 && nMin < MUSIC_SWAP_TIMEOUT)
 		shouldSwitch = FALSE;
 		
 	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Num of minutes: "+IntToString(nMin));
 		
-	if (PS_GetLocalInt(oArea, MUSIC_NUMBER_VARIABLE) <= 0)
+	if (GetLocalInt(oArea, MUSIC_NUMBER_VARIABLE) <= 0)
 		shouldSwitch = FALSE;
 		
-	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Num of tracks to choose: "+IntToString(PS_GetLocalInt(oArea, MUSIC_NUMBER_VARIABLE)));
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Num of tracks to choose: "+IntToString(GetLocalInt(oArea, MUSIC_NUMBER_VARIABLE)));
 		
 	return shouldSwitch;
 
@@ -62,10 +62,10 @@ int ShouldMusicSwitch(object oArea, object oPC = OBJECT_INVALID) {
 
 int GetNewMusicTrack(object oArea, object oPC = OBJECT_INVALID) {
 
-	int nMusicNum = PS_GetLocalInt(oArea, MUSIC_NUMBER_VARIABLE);
+	int nMusicNum = GetLocalInt(oArea, MUSIC_NUMBER_VARIABLE);
 	
 	int nNewTrack = Random(nMusicNum)+1;
 	
-	return PS_GetLocalInt(oArea, MUSIC_VARIABLE+IntToString(nNewTrack));
+	return GetLocalInt(oArea, MUSIC_VARIABLE+IntToString(nNewTrack));
 
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //*******************************************
 //ps_inc_dynamicencounters
@@ -174,7 +174,7 @@ int GetNearestCreatureLevelAvailable(int nLevel, int classType = CLASS_TYPE_FIGH
 
 void SetConversation(object oCreature, string sConversation) {
 
-	PS_SetLocalString(oCreature, "DEFAULT_CONVERSATION", sConversation);
+	SetLocalString(oCreature, "DEFAULT_CONVERSATION", sConversation);
 
 }
 
@@ -183,9 +183,9 @@ string GetArmor(object oCreature) {
 	int nClass = GetClassByPosition(1, oCreature);
 	int nDexMod = GetAbilityModifier(ABILITY_DEXTERITY, oCreature); 
 	
-	if (PS_GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
 		return "ps_darkharmonium_plate";
-	} else if (PS_GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM_SCOUT") > 0) {
+	} else if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM_SCOUT") > 0) {
 		return "ps_darkharmonium_chain";
 	}
 	
@@ -483,7 +483,7 @@ object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typ
 	int nLevel = GetChallengeRatingOfTarget(oCreature);
 	
 	object oWeapon;
-	if (PS_GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM_SCOUT") > 0) {
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM_SCOUT") > 0) {
 	
 		 object oMelee = CreateItemOnObject("ps_darkharmonium_glad", oCreature);
 		 object oRanged = CreateItemOnObject("ps_darkharmonium_bow", oCreature);
@@ -494,17 +494,17 @@ object assignWeaponToCreature(object oCreature, int shouldEquip = FALSE, int typ
 		 else
 		 	oWeapon = oRanged;
 	
-	} else if (PS_GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
+	} else if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
 		int nRand = Random(3)+1;
 		switch(nRand) {
 			case 1: oWeapon = CreateItemOnObject("ps_darkharmonium_spic", oCreature); break;
 			case 2: oWeapon = CreateItemOnObject("ps_darkharmonium_kop", oCreature); break;
 			case 3: oWeapon = CreateItemOnObject("ps_darkharmonium_glad", oCreature); break;
 		}
-	} else if (PS_GetLocalString(oCreature, "Berk_Type") == "Rioter") {
+	} else if (GetLocalString(oCreature, "Berk_Type") == "Rioter") {
 		
 		AssignCommand(oCreature, SpeakString("giving rioter items", TALKVOLUME_SHOUT));
-		if (PS_GetLocalString(oCreature, "ANIMATION") == "torchidle") {
+		if (GetLocalString(oCreature, "ANIMATION") == "torchidle") {
 			oWeapon = CreateItemOnObject("nw_it_torch001", oCreature);
 			AssignCommand(oCreature, SpeakString("giving torch", TALKVOLUME_SHOUT));
 		} else {
@@ -655,7 +655,7 @@ void assignProtectiveItems(object oCreature, int shouldHaveArmor = FALSE) {
 	}
 	
 	//Give harmonium their shields
-	if (PS_GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
+	if (GetLocalInt(oCreature, "CAMPAIGN_HARMONIUM") > 0) {
 		object oShield = CreateItemOnObject("ps_darkharmonium_shield", oCreature);
 		DelayCommand(0.1f, AssignCommand(oCreature, ActionEquipItem(oShield, INVENTORY_SLOT_LEFTHAND)));
 	}

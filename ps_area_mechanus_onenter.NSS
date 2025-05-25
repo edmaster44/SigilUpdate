@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_planarlocations"
 
@@ -21,15 +21,15 @@ void main()
  	 string sDescrip = "A crisp white light illuminates a land of giant spinning cogs and gears, as far as the eye can see. The larger cogs support land and buildings on their surfaces.";
  	 DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 
-	 int iLock = PS_GetGlobalInt("MechanusEnterLock");
+	 int iLock = GetGlobalInt("MechanusEnterLock");
 	 if ( iLock == 0 )
 	 {
-	  PS_SetGlobalInt("MechanusEnterLock", 1); // Only allows one clean up at a time.
+	  SetGlobalInt("MechanusEnterLock", 1); // Only allows one clean up at a time.
 	
 	  DoSpawn("ps_mechanus_3of22", "wp_mechanus_3of22");
 	  DoSpawn("ps_mechanus_guvner", "wp_ps_mechanus_guvner");
 	  DoSpawn("ps_mechanus_threebyfive", "wp_ps_mechanus_threebyfive");
 	   
-	  PS_SetGlobalInt("MechanusEnterLock", 0);
+	  SetGlobalInt("MechanusEnterLock", 0);
 	 }
 }

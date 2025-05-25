@@ -87,8 +87,8 @@ void main()
                 DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
                 DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisFire, oTarget, 1.0) );
 				
-				if (PS_GetLocalInt(oTarget, "WALL_FIRE") <= 0) {
-					PS_SetLocalInt(oTarget, "WALL_FIRE", 1);
+				if (GetLocalInt(oTarget, "WALL_FIRE") <= 0) {
+					SetLocalInt(oTarget, "WALL_FIRE", 1);
 					DelayCommand(6.0f, DoBurningDamage(oTarget, 3));
 				}
             }
@@ -115,5 +115,5 @@ void DoBurningDamage(object oTarget, int nCounter)
   	if (nCounter > 1)
           DelayCommand(6.0f, DoBurningDamage(oTarget, nCounter - 1));		  
 	else
-		PS_SetLocalInt(oTarget, "WALL_FIRE", 0);
+		SetLocalInt(oTarget, "WALL_FIRE", 0);
 }

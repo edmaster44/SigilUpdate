@@ -21,13 +21,13 @@
 void main () {
 
 	//Remove me if there is no caster
-	object oCaster = PS_GetLocalObject(OBJECT_SELF, "Caster");
+	object oCaster = GetLocalObject(OBJECT_SELF, "Caster");
 	if (!GetIsObjectValid(oCaster)) {
 		DestroyObject(OBJECT_SELF, 0.1f);
 	}
 	
 	//Remove me if the duration has run out
-	float fDur = PS_GetLocalFloat(OBJECT_SELF, "Duration");
+	float fDur = GetLocalFloat(OBJECT_SELF, "Duration");
 	if (PS_GetTimestamp_Age_Seconds(OBJECT_SELF, "Simulacrum_Timestamp") >= FloatToInt(fDur)) {
 		RemoveHenchman(oCaster, OBJECT_SELF);
 		DestroyObject(OBJECT_SELF, 0.1f);
@@ -35,7 +35,7 @@ void main () {
 	
 	// BMA-OEI 7/04/06 - Check if in group and using group campaign flag
     // May not be needed if we change nwn2_scriptsets.2da PCDominate entry to use nw_g0_dominate
-    if (PS_GetGlobalInt(CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP) == TRUE )
+    if (GetGlobalInt(CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP) == TRUE )
     {
         string sGroupName = GetGroupName( OBJECT_SELF );
         if ( sGroupName != "" )
@@ -128,7 +128,7 @@ void main () {
             HenchDetermineCombatRound();
             return;
         }
-        if (PS_GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
+        if (GetLocalInt(OBJECT_SELF, sHenchLastHeardOrSeen))
         {
             HenchDetermineCombatRound();
             return;
@@ -142,12 +142,12 @@ void main () {
         return;
     }
 
-    if ((PS_GetLocalObject(OBJECT_SELF,"NW_L_FORMERMASTER") != OBJECT_INVALID)
-        && (PS_GetLocalInt(OBJECT_SELF, "haveCheckedFM") != 1))
+    if ((GetLocalObject(OBJECT_SELF,"NW_L_FORMERMASTER") != OBJECT_INVALID)
+        && (GetLocalInt(OBJECT_SELF, "haveCheckedFM") != 1))
     {
-        PS_SetLocalInt(OBJECT_SELF, "haveCheckedFM", 1);
+        SetLocalInt(OBJECT_SELF, "haveCheckedFM", 1);
         SetAssociateState(NW_ASC_AGGRESSIVE_SEARCH, FALSE);
-        PS_SetLocalInt(OBJECT_SELF, sHenchStealthMode, 0);
+        SetLocalInt(OBJECT_SELF, sHenchStealthMode, 0);
         SetActionMode(OBJECT_SELF, ACTION_MODE_STEALTH, FALSE);
         SetActionMode(OBJECT_SELF, ACTION_MODE_DETECT, FALSE);
     }
@@ -155,11 +155,11 @@ void main () {
 	HenchCheckOutOfCombatStealth(oRealMaster);
 
     CleanCombatVars();
-    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
 
-    if (PS_GetLocalInt(OBJECT_SELF, henchHealCountStr))
+    if (GetLocalInt(OBJECT_SELF, henchHealCountStr))
     {
-//        Jug_Debug(GetName(OBJECT_SELF) + " HB checking heal count " + IntToString(PS_GetLocalInt(OBJECT_SELF, henchHealCountStr)));
+//        Jug_Debug(GetName(OBJECT_SELF) + " HB checking heal count " + IntToString(GetLocalInt(OBJECT_SELF, henchHealCountStr)));
         ActionDoCommand(ActionWait(2.5));
         ActionDoCommand(ExecuteScript("hench_o0_heal", OBJECT_SELF));
         return;
@@ -168,10 +168,10 @@ void main () {
         //25% chance that..
     if ((d4() == 1) &&
         !GetAssociateState(NW_ASC_MODE_PUPPET) &&
-        (PS_GetLocalInt(OBJECT_SELF, sHenchStopCasting) != 10) &&
-        !PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
+        (GetLocalInt(OBJECT_SELF, sHenchStopCasting) != 10) &&
+        !GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
         // if we're not excluding the ability to use feats and abilities
-        !PS_GetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY))
+        !GetLocalIntState(OBJECT_SELF, N2_TALENT_EXCLUDE, TALENT_EXCLUDE_ABILITY))
     {
         //and if we have the summon familiar feat
         if (GetHenchPartyState(HENCH_PARTY_SUMMON_FAMILIARS) && (GetHasFeat(FEAT_SUMMON_FAMILIAR, OBJECT_SELF) || GetHasSpell(SPELLABILITY_SUMMON_FAMILIAR, OBJECT_SELF)))
@@ -202,14 +202,14 @@ void main () {
 
     if (!GetHenchAssociateState(HENCH_ASC_DISABLE_INFINITE_BUFF) &&
         !GetAssociateState(NW_ASC_MODE_PUPPET) &&
-        (PS_GetLocalInt(OBJECT_SELF, sHenchStopCasting) != 10) &&
-        !PS_GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
+        (GetLocalInt(OBJECT_SELF, sHenchStopCasting) != 10) &&
+        !GetLocalInt(OBJECT_SELF, sHenchDontAttackFlag) &&
         (GetDistanceToObject(oRealMaster) <= 10.0) &&
 		!GetIsOverlandMap(GetArea(OBJECT_SELF)))
     {
         if (GetLevelByClass(CLASS_TYPE_WARLOCK))
         {
-            if (!(PS_GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_SPELL))
+            if (!(GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_SPELL))
             {
                 if (TryCastWarlockBuffSpells(FALSE))
                 {
@@ -224,7 +224,7 @@ void main () {
         if (GetLevelByClass(CLASS_TYPE_BARD) &&
             !(GetCreatureNegEffects(OBJECT_SELF) & HENCH_EFFECT_TYPE_SILENCE))
         {
-            if (!(PS_GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_ABILITY))
+            if (!(GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE) & TALENT_EXCLUDE_ABILITY))
             {
                 if (TryCastBardBuffSpells())
                 {
@@ -251,9 +251,9 @@ void main () {
 
     ClearWeaponStates();
 
-    if (PS_GetLocalInt(OBJECT_SELF, HENCH_AI_COMBAT_EQUIP))
+    if (GetLocalInt(OBJECT_SELF, HENCH_AI_COMBAT_EQUIP))
     {
-        PS_DeleteLocalInt(OBJECT_SELF, HENCH_AI_COMBAT_EQUIP);
+        DeleteLocalInt(OBJECT_SELF, HENCH_AI_COMBAT_EQUIP);
         if (!GetHenchAssociateState(HENCH_ASC_DISABLE_AUTO_WEAPON_SWITCH) && !GetAssociateState(NW_ASC_MODE_PUPPET))
         {
             ClearAllActions();
@@ -269,7 +269,7 @@ void main () {
         }
     }
 
-    int bIsScouting = PS_GetLocalInt(OBJECT_SELF, sHenchScoutingFlag);
+    int bIsScouting = GetLocalInt(OBJECT_SELF, sHenchScoutingFlag);
     if (bIsScouting)
     {
         if (GetDistanceToObject(oRealMaster) < 6.0)
@@ -277,10 +277,10 @@ void main () {
 			//	"Please get out of my way."
             SpeakStringByStrRef(230435);
         }
-        object oScoutTarget = PS_GetLocalObject(OBJECT_SELF, sHenchScoutTarget);
+        object oScoutTarget = GetLocalObject(OBJECT_SELF, sHenchScoutTarget);
         if (GetDistanceBetween(oScoutTarget, oRealMaster) > henchMaxScoutDistance)
         {
-            PS_DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
+            DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
             bIsScouting = FALSE;
         }
         else

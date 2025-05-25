@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // ga_open_store
 /*
@@ -18,7 +18,7 @@
 
 object GetStoreFromStoreArea(string sTag)
 {
-	int iStoreArea = PS_GetGlobalInt("STORE_AREA");
+	int iStoreArea = GetGlobalInt("STORE_AREA");
 	object oStoreArea = IntToObject(iStoreArea);
 	
 	object oStore = GetFirstObjectInArea(oStoreArea);

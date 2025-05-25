@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_planarlocations"
 void main()
@@ -7,10 +7,10 @@ void main()
  
  ExecuteScript("onenter_antimagic",OBJECT_SELF);
   
- int iLock = PS_GetGlobalInt("DPT1EnterLock");
+ int iLock = GetGlobalInt("DPT1EnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("DPT1EnterLock", 1); 
+  SetGlobalInt("DPT1EnterLock", 1); 
   
   if(GetObjectByTag("ps_slags_ghost") == OBJECT_INVALID) {
 	   object oWP = GetWaypointByTag("wp_slags_ghost");
@@ -60,7 +60,7 @@ void main()
 	   object oSpawn = CreateObject(OBJECT_TYPE_PLACEABLE, "ps_spawnchest_mimic", lSpawnpoint, FALSE, "ps_slagstower_mimic7");    
   }
     
-  PS_SetGlobalInt("DPT1EnterLock", 0);
+  SetGlobalInt("DPT1EnterLock", 0);
  }
 
 }

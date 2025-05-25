@@ -1,12 +1,12 @@
-#include "ff_safevar"
+
 
 void main() {
 
 	object oPC = GetEnteringObject();
 
-	int iLock = PS_GetGlobalInt("crypt1EnterLock");
+	int iLock = GetGlobalInt("crypt1EnterLock");
 	if ( iLock == 0 ) {
-		PS_SetGlobalInt("crypt1EnterLock", 1); // Only allows one clean up at a time.
+		SetGlobalInt("crypt1EnterLock", 1); // Only allows one clean up at a time.
    		if(GetObjectByTag("ps_prop_statuekelemvor") == OBJECT_INVALID) {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_prop_statuekelemvor", GetLocation(GetWaypointByTag("wp_prop_statuekelemvor")));
 		}
@@ -30,7 +30,7 @@ void main() {
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_us_imtiyaz", GetLocation(GetWaypointByTag("wp_undersigil_imtiyaz")));
 		}
 		
-		PS_SetGlobalInt("crypt1EnterLock", 0);
+		SetGlobalInt("crypt1EnterLock", 0);
  	}
 	
 }

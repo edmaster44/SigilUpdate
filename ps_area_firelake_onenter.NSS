@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "enft_startengine"
 #include "ps_inc_planarlocations"
@@ -11,10 +11,10 @@ void main()
 	if (GetIsPC(oPC))
 		startEngine(oPC);
 		
- 	int iLock = PS_GetGlobalInt("FireLakeLock");
+ 	int iLock = GetGlobalInt("FireLakeLock");
  	if ( iLock == 0 )
  	{
-  		PS_SetGlobalInt("FireLakeLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("FireLakeLock", 1); // Only allows one clean up at a time.
   		if(GetObjectByTag("ps_fire_pilot") == OBJECT_INVALID)
   		{
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_fire_pilot", GetLocation(GetWaypointByTag("WP_ps_fire_pilot")));  
@@ -23,6 +23,6 @@ void main()
   		{
   			CreateObject(OBJECT_TYPE_CREATURE, "ps_fire_lookout", GetLocation(GetWaypointByTag("WP_ps_fire_lookout")));  
   		}
-  		PS_SetGlobalInt("FireLakeLock", 0);
+  		SetGlobalInt("FireLakeLock", 0);
  	}
 }

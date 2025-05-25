@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 /*
    ----------------
    Catapsi
@@ -88,7 +88,7 @@ void main()
         {
             // Test if we found the correct AoE
             if(GetTag(oAoE) == Get2DAString("vfx_persistent", "LABEL", AOE_MOB_CATAPSI) &&
-               !PS_GetLocalInt(oAoE, "PRC_Catapsi_Inited"))
+               !GetLocalInt(oAoE, "PRC_Catapsi_Inited"))
             {
                 break;
             }
@@ -98,9 +98,9 @@ void main()
         //if(DEBUG) if(!GetIsObjectValid(oAoE)) DoDebug("ERROR: Can't find area of effect for Catapsi!");
 
         // Store DC and manifester level in regards to power penetration
-        PS_SetLocalInt(oAoE, "PRC_Catapsi_DC", nDC);
-        PS_SetLocalInt(oAoE, "PRC_Catapsi_PowerPenetration", nPen);
+        SetLocalInt(oAoE, "PRC_Catapsi_DC", nDC);
+        SetLocalInt(oAoE, "PRC_Catapsi_PowerPenetration", nPen);
 
-        PS_SetLocalInt(oAoE, "PRC_Catapsi_Inited", TRUE);
+        SetLocalInt(oAoE, "PRC_Catapsi_Inited", TRUE);
     }// end if - Successfull manifestation
 }

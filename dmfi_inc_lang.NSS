@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_lang - DM Friendly Initiative -  Language Include File
@@ -4185,7 +4185,7 @@ string DMFI_ProcessLanguage(string sPhrase, string sLang, object oTool)
     	
 	if (sLang==LNG_COMMON) return sPhrase;
 	
-	int nSort = PS_GetLocalInt(oTool, sLang);
+	int nSort = GetLocalInt(oTool, sLang);
 	
 	if (nSort==1)
     {

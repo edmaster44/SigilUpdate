@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
@@ -12,13 +12,13 @@
 void main(int iToolFunction, int iUseAnarchistCover)
 {
 	object oDM = OBJECT_SELF;
-	string sTargetName = PS_GetLocalString(oDM, "TargetName");
-	int iTargetFaction = PS_GetLocalInt(oDM, "TargetFaction");
-	int iTargetSecondaryFaction = PS_GetLocalInt(oDM, "TargetSecondaryFaction");
+	string sTargetName = GetLocalString(oDM, "TargetName");
+	int iTargetFaction = GetLocalInt(oDM, "TargetFaction");
+	int iTargetSecondaryFaction = GetLocalInt(oDM, "TargetSecondaryFaction");
 	int iFaction;
 	object oBadge;
 	
-	object oTarget = PS_GetLocalObject(oDM, "TargetObject");
+	object oTarget = GetLocalObject(oDM, "TargetObject");
 	
 	if (oTarget == OBJECT_INVALID)
 	{
@@ -34,7 +34,7 @@ void main(int iToolFunction, int iUseAnarchistCover)
 		{
 			if (GetTag(oItem) == "ps_faction_badge")
 			{
-				iFaction = PS_GetLocalInt(oItem, "Faction");
+				iFaction = GetLocalInt(oItem, "Faction");
 				if ((iUseAnarchistCover == 1 & iFaction == iTargetSecondaryFaction) | (iUseAnarchistCover == 0 & iFaction == iTargetFaction))
 				{
 					oBadge = oItem; // Wasn't sure about loop iterating once again, so store
@@ -63,26 +63,26 @@ void main(int iToolFunction, int iUseAnarchistCover)
 			
 			case 3:
 				// How many points?
-				SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " has " + IntToString(PS_GetLocalInt(oBadge, "FactionPoints")) +
-					"in the " + PS_GetLocalString(oBadge, "FactionName") + ".");
+				SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + sTargetName + " has " + IntToString(GetLocalInt(oBadge, "FactionPoints")) +
+					"in the " + GetLocalString(oBadge, "FactionName") + ".");
 				break;
 			
 			case 4:
 				// Give points
-				PS_SetLocalInt(oBadge, "FactionPoints", PS_GetLocalInt(oBadge, "FactionPoints") + 1);
+				SetLocalInt(oBadge, "FactionPoints", GetLocalInt(oBadge, "FactionPoints") + 1);
 				SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + "Granted 1 faction point to " + sTargetName + ". They now have "
-					+ IntToString(PS_GetLocalInt(oBadge, "FactionPoints")) + " points.");
-				SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have received a Faction Point from the " + PS_GetLocalString(oBadge, "FactionName") + ".");
+					+ IntToString(GetLocalInt(oBadge, "FactionPoints")) + " points.");
+				SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have received a Faction Point from the " + GetLocalString(oBadge, "FactionName") + ".");
 				break;
 		
 			case 5:
 				// Take points (just in case)
-				if (PS_GetLocalInt(oBadge, "FactionPoints") > 0)
+				if (GetLocalInt(oBadge, "FactionPoints") > 0)
 				{
-					PS_SetLocalInt(oBadge, "FactionPoints", PS_GetLocalInt(oBadge, "FactionPoints") - 1);
+					SetLocalInt(oBadge, "FactionPoints", GetLocalInt(oBadge, "FactionPoints") - 1);
 					SendMessageToPC(oDM, FACTION_MESSAGE_TEXT_COLOUR + "Removed 1 faction point from " + sTargetName + ". They now have "
-						+ IntToString(PS_GetLocalInt(oBadge, "FactionPoints")) + " points.");
-					SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have been deducted a Faction Point by the " + PS_GetLocalString(oBadge, "FactionName") + ".");
+						+ IntToString(GetLocalInt(oBadge, "FactionPoints")) + " points.");
+					SendMessageToPC(oTarget, FACTION_MESSAGE_TEXT_COLOUR + "You have been deducted a Faction Point by the " + GetLocalString(oBadge, "FactionName") + ".");
 				}
 				else
 				{

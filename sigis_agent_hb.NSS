@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Script for SIGIS paper seller (agent) who will randomly announce latest news
 
@@ -19,7 +19,7 @@ void main()
 	if (iRandom == 1)
 	{
 		PS_Timestamp_UNIX(OBJECT_SELF, "LAST_TALK");
-		string sHeadline = PS_GetGlobalString("LATEST_NEWS");
+		string sHeadline = GetGlobalString("LATEST_NEWS");
 		if (sHeadline != "")
 		{
 			SpeakString("Extra! Extra! Read all about it! Hot off the presses!" + sHeadline, TALKVOLUME_TALK);

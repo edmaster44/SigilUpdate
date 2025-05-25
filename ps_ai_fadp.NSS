@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "nw_i0_generic"
 #include "x0_i0_spells"
@@ -32,7 +32,7 @@ int GetTargetHasBuff(object oTarget, int nSpellEffect)
 
 int GetBuffedMyself()
 {
-	return PS_GetLocalInt(OBJECT_SELF, "Buffed");
+	return GetLocalInt(OBJECT_SELF, "Buffed");
 }
 
 void CastSpells(object oTarget, object oEnemy)
@@ -43,10 +43,10 @@ int nSpell = 0;
 	if (GetTargetHasBuff(OBJECT_SELF, SPELL_ETHEREALNESS) == 0)
 		{ ActionCastSpellAtObject(SPELL_ETHEREALNESS, oTarget, METAMAGIC_ANY, TRUE); return; }
 	
-	if (GetHPPercentage(oTarget) < 25 && PS_GetLocalInt(oTarget, "Restorated") != 1)
+	if (GetHPPercentage(oTarget) < 25 && GetLocalInt(oTarget, "Restorated") != 1)
 		{ 
 			ActionCastSpellAtObject(SPELL_GREATER_RESTORATION, oTarget, METAMAGIC_ANY, TRUE); 
-			PS_SetLocalInt(oTarget, "Restorated", 1);
+			SetLocalInt(oTarget, "Restorated", 1);
 			return; 
 		}
 			

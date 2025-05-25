@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "aaa_constants"
 #include "nw_i0_spells"
@@ -54,7 +54,7 @@ void RespawnBoss(object oBOSS)
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oBOSS);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nBHP), oBOSS);
 	}
-	PS_DeleteLocalInt(oBOSS, "BOSS_DEFEATED");
+	DeleteLocalInt(oBOSS, "BOSS_DEFEATED");
 	object oPLAYER = GetFirstPC();
 	while (oPLAYER != OBJECT_INVALID)
 	{
@@ -67,8 +67,8 @@ void main()
 {
 	object oBOSS = OBJECT_SELF;
 	if (GetCurrentHitPoints(oBOSS) > 1) return;
-	if (PS_GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return; //To avoid multiple.
-	PS_SetLocalInt(oBOSS, "BOSS_DEFEATED", 1);
+	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return; //To avoid multiple.
+	SetLocalInt(oBOSS, "BOSS_DEFEATED", 1);
 	RemoveEffectsFromSpell(oBOSS, BOSS_EFFECTS);
 	ChangeToStandardFaction(oBOSS, STANDARD_FACTION_COMMONER);
 	ClearAllActions(TRUE);

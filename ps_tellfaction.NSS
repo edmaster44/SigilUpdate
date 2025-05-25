@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /* v1.00 Checks faction on the Essence object
 
@@ -30,7 +30,7 @@ void main()
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
     if(GetIsObjectValid(oItem))
     {
-		int nFaction = PS_GetLocalInt(oItem,"Faction");
+		int nFaction = GetLocalInt(oItem,"Faction");
 		string sFaction = "";
 		
 		switch(nFaction)

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("Gatehouse2Lock");
+ int iLock = GetGlobalInt("Gatehouse2Lock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("Gatehouse2Lock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("Gatehouse2Lock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("modelskelly") == OBJECT_INVALID)
   {
@@ -43,6 +43,6 @@ void main()
 
      
    
-  PS_SetGlobalInt("Gatehouse2Lock", 0);
+  SetGlobalInt("Gatehouse2Lock", 0);
  }
 }

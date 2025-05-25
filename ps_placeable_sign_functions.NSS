@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
@@ -9,7 +9,7 @@
 void main(int iFunction, int iParam)
 {
 	object oPC = GetPCSpeaker();
-	object oPlaceable = PS_GetLocalObject(oPC, "LASTSIGNTALK");
+	object oPlaceable = GetLocalObject(oPC, "LASTSIGNTALK");
 	
 	switch (iFunction)
 	{

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "enft_heat_rlf"
 #include "enft_cnsts"
@@ -13,16 +13,16 @@ void main()
     int beforeHP, afterHP;
     effect eff;
 	
-	int lastRun = PS_GetLocalInt(OBJECT_SELF, "heat_timestamp");
+	int lastRun = GetLocalInt(OBJECT_SELF, "heat_timestamp");
 	float diff = IntToFloat(abs(TimeStampT()-lastRun));
 	if (diff < heatTime)
 		return;
-	PS_SetLocalInt(OBJECT_SELF, "heat_timestamp", ShipTimeStamp());
-	pastThrows = PS_GetLocalInt(OBJECT_SELF, "HEAT_THROWS");
+	SetLocalInt(OBJECT_SELF, "heat_timestamp", ShipTimeStamp());
+	pastThrows = GetLocalInt(OBJECT_SELF, "HEAT_THROWS");
 	
-	if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 2)
+	if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 2)
     {
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);
+        SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);
 		return;
 	}
 	
@@ -38,11 +38,11 @@ void main()
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
 		ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 	} else {
-        PS_SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);		
+        SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);		
 	}
 
     // Increase the number of throws done
-    PS_SetLocalInt(OBJECT_SELF, "HEAT_THROWS", pastThrows + 1);
+    SetLocalInt(OBJECT_SELF, "HEAT_THROWS", pastThrows + 1);
 
     // Check for heat damage in an hour.
     DelayCommand(heatTime, ExecuteScript("enft_heat_ftg", OBJECT_SELF));

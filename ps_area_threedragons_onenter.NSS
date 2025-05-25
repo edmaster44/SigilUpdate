@@ -1,13 +1,13 @@
-#include "ff_safevar"
+
 
 void main() {
 
  	object oPC = GetEnteringObject();
   
- 	int iLock = PS_GetGlobalInt("ThreeDragonsLock");
+ 	int iLock = GetGlobalInt("ThreeDragonsLock");
  	if ( iLock == 0 ) {
 	
-  		PS_SetGlobalInt("ThreeDragonsLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("ThreeDragonsLock", 1); // Only allows one clean up at a time.
 
   		if(GetObjectByTag("ps_3dragons_penelope") == OBJECT_INVALID) {
    			object oWP = GetWaypointByTag("wp_ps_3dragons_penelope");
@@ -22,6 +22,6 @@ void main() {
   		}
 
   
-  		PS_SetGlobalInt("ThreeDragonsLock", 0);
+  		SetGlobalInt("ThreeDragonsLock", 0);
 	}
 }

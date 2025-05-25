@@ -1,9 +1,9 @@
-#include "ff_safevar"
+
 
 string GetDifficultyName(object oPC)
 {
 	string sTXT = "Your current difficulty is ";
-	int nDIFF = PS_GetLocalInt(oPC, "DIFF");
+	int nDIFF = GetLocalInt(oPC, "DIFF");
 	switch (nDIFF)
 	{
 		case 1: sTXT = sTXT + "Clueless"; break;
@@ -17,7 +17,7 @@ string GetDifficultyName(object oPC)
 string GetDifficultyDescription(object oPC)
 {
 	string sTXT;
-	int nDIFF = PS_GetLocalInt(oPC, "DIFF");
+	int nDIFF = GetLocalInt(oPC, "DIFF");
 	switch (nDIFF)
 	{
 		case 1: sTXT = "Spawns the lowest tier monster of a plane, regardless of your character level.  Useful if you have high ECL or your build is having problem with some place."; break;
@@ -40,7 +40,7 @@ void main(string sCOMMAND)
 	else
 	{
 		int nDIFF = StringToInt(sCOMMAND);
-		PS_SetLocalInt(oPC,"DIFF",nDIFF);
+		SetLocalInt(oPC,"DIFF",nDIFF);
 		SetGUIObjectText(oPC, sSCREEN, "CURRENT_DIFFICULTY", -1, GetDifficultyName(oPC));
 		SetGUIObjectText(oPC, sSCREEN, "DESCRIPTION_DIFFICULTY", -1, GetDifficultyDescription(oPC));
 	}	

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_heightadjust_includes"
 
@@ -37,7 +37,7 @@ void main(int selection)
 		return;
 	}
 	
-	PS_SetLocalInt(oPC,"heightadjust",selection);
+	SetLocalInt(oPC,"heightadjust",selection);
 
 	string sMessage;
 	//if(FirstTime(oPC))

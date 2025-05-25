@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 #include "ps_astral_inc"
@@ -13,11 +13,11 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = PS_GetGlobalInt("AstralShipIntEnterLock");
+ int iLock = GetGlobalInt("AstralShipIntEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("AstralShipIntEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("AstralShipIntEnterLock", 1); // Only allows one clean up at a time.
 
-  PS_SetGlobalInt("AstralShipIntEnterLock", 0);
+  SetGlobalInt("AstralShipIntEnterLock", 0);
  }
 }

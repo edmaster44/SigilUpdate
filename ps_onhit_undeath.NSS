@@ -24,7 +24,7 @@
 void DoUndeadToDeath(object oCreature, object oCaster, int nDC)
 {
     SignalEvent(oCreature, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-    PS_SetLocalInt(oCreature,"X2_EBLIGHT_I_AM_DEAD", TRUE);
+    SetLocalInt(oCreature,"X2_EBLIGHT_I_AM_DEAD", TRUE);
 
     if (!OnHitSavingThrow(SAVING_THROW_WILL,oCreature,nDC,SAVING_THROW_TYPE_NONE,oCaster))
     {
@@ -40,12 +40,12 @@ void DoUndeadToDeath(object oCreature, object oCaster, int nDC)
        }
        else
        {
-            DelayCommand(1.0f,PS_DeleteLocalInt(oCreature,"X2_EBLIGHT_I_AM_DEAD"));
+            DelayCommand(1.0f,DeleteLocalInt(oCreature,"X2_EBLIGHT_I_AM_DEAD"));
        }
    }
           else
        {
-            DelayCommand(1.0f,PS_DeleteLocalInt(oCreature,"X2_EBLIGHT_I_AM_DEAD"));
+            DelayCommand(1.0f,DeleteLocalInt(oCreature,"X2_EBLIGHT_I_AM_DEAD"));
        }
 }
 
@@ -83,7 +83,7 @@ void main()
                     if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
                     {
                         // ignore creatures already affected
-                        if (PS_GetLocalInt(oTarget,"X2_EBLIGHT_I_AM_DEAD") == 0 && !GetPlotFlag(oTarget) && !GetIsDead(oTarget))
+                        if (GetLocalInt(oTarget,"X2_EBLIGHT_I_AM_DEAD") == 0 && !GetPlotFlag(oTarget) && !GetIsDead(oTarget))
                         {
                             // store the creature with the lowest HD
                             if (GetHitDice(oTarget) <= nLow)

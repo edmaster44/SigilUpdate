@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //*********************************************
 // This trigger blocks entry to a room until the "AllowPassage" int is set to 1
@@ -14,10 +14,10 @@ void main () {
 	if (!GetIsPC(oPC) && GetControlledCharacter(oPC) == OBJECT_INVALID)
 		return;
 		
-	string sWP = PS_GetLocalString(OBJECT_SELF, "ExitWP");
+	string sWP = GetLocalString(OBJECT_SELF, "ExitWP");
 	object oWP = GetWaypointByTag(sWP);
 	
-	if (!PS_GetLocalInt(OBJECT_SELF, "AllowPassage")) {
+	if (!GetLocalInt(OBJECT_SELF, "AllowPassage")) {
 		TransportToWaypoint(oPC, oWP);
 	}
 

@@ -63,13 +63,13 @@ void main()
 {
 
 	//Remove me if there is no caster
-	object oCaster = PS_GetLocalObject(OBJECT_SELF, "Caster");
+	object oCaster = GetLocalObject(OBJECT_SELF, "Caster");
 	if (!GetIsObjectValid(oCaster)) {
 		DestroyObject(OBJECT_SELF, 0.1f);
 	}
 	
 	//Remove me if the duration has run out
-	int nDuration = PS_GetLocalInt(OBJECT_SELF, "Duration");
+	int nDuration = GetLocalInt(OBJECT_SELF, "Duration");
 	float fDur = RoundsToSeconds(nDuration);
 	if (PS_GetTimestamp_Age_Seconds(OBJECT_SELF, "Rainbow_Timestamp") >= FloatToInt(fDur)) {
 		RemoveHenchman(oCaster, OBJECT_SELF);
@@ -77,7 +77,7 @@ void main()
 	}
 	
 	//Set DC
-	int nSaveDC = PS_GetLocalInt(OBJECT_SELF, "SaveDC");
+	int nSaveDC = GetLocalInt(OBJECT_SELF, "SaveDC");
 	
 	//Target location
 	location lTarget = GetLocation(OBJECT_SELF);
@@ -120,7 +120,7 @@ void main()
 							MoveTargetToSpell(oTarget, lTarget);
 					
 						//Make sure being damaged breaks the spell
-						PS_SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
+						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
 					
 	                }
 	            }
@@ -133,7 +133,7 @@ void main()
 	
     // BMA-OEI 7/04/06 - Check if in group and using group campaign flag
     // May not be needed if we change nwn2_scriptsets.2da PCDominate entry to use nw_g0_dominate
-    if (PS_GetGlobalInt(CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP) == TRUE )
+    if (GetGlobalInt(CAMPAIGN_SWITCH_FORCE_KILL_DOMINATED_GROUP) == TRUE )
     {
         string sGroupName = GetGroupName( OBJECT_SELF );
         if ( sGroupName != "" )
@@ -221,12 +221,12 @@ void main()
         return;
     }
 
-    if ((PS_GetLocalObject(OBJECT_SELF,"NW_L_FORMERMASTER") != OBJECT_INVALID)
-        && (PS_GetLocalInt(OBJECT_SELF, "haveCheckedFM") != 1))
+    if ((GetLocalObject(OBJECT_SELF,"NW_L_FORMERMASTER") != OBJECT_INVALID)
+        && (GetLocalInt(OBJECT_SELF, "haveCheckedFM") != 1))
     {
-        PS_SetLocalInt(OBJECT_SELF, "haveCheckedFM", 1);
+        SetLocalInt(OBJECT_SELF, "haveCheckedFM", 1);
         SetAssociateState(NW_ASC_AGGRESSIVE_SEARCH, FALSE);
-        PS_SetLocalInt(OBJECT_SELF, sHenchStealthMode, 0);
+        SetLocalInt(OBJECT_SELF, sHenchStealthMode, 0);
         SetActionMode(OBJECT_SELF, ACTION_MODE_STEALTH, FALSE);
         SetActionMode(OBJECT_SELF, ACTION_MODE_DETECT, FALSE);
     }
@@ -234,9 +234,9 @@ void main()
 	HenchCheckOutOfCombatStealth(oRealMaster);
 
     CleanCombatVars();
-    PS_SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
+    SetLocalInt(OBJECT_SELF, HENCH_AI_SCRIPT_POLL, FALSE);
 
-    int bIsScouting = PS_GetLocalInt(OBJECT_SELF, sHenchScoutingFlag);
+    int bIsScouting = GetLocalInt(OBJECT_SELF, sHenchScoutingFlag);
     if (bIsScouting)
     {
         if (GetDistanceToObject(oRealMaster) < 6.0)
@@ -244,10 +244,10 @@ void main()
 			//	"Please get out of my way."
             SpeakStringByStrRef(230435);
         }
-        object oScoutTarget = PS_GetLocalObject(OBJECT_SELF, sHenchScoutTarget);
+        object oScoutTarget = GetLocalObject(OBJECT_SELF, sHenchScoutTarget);
         if (GetDistanceBetween(oScoutTarget, oRealMaster) > henchMaxScoutDistance)
         {
-            PS_DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
+            DeleteLocalInt(OBJECT_SELF, sHenchScoutingFlag);
             bIsScouting = FALSE;
         }
         else

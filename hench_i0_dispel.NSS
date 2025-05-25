@@ -553,7 +553,7 @@ void HenchGetBestDispelTarget()
 	object oBestTarget;
 	int bUseBreach;
 	
-    if ((gsBestDispel.spellID > 0) && !gbDisabledAllyFound && !PS_GetLocalInt(OBJECT_SELF, sHenchDontDispel))
+    if ((gsBestDispel.spellID > 0) && !gbDisabledAllyFound && !GetLocalInt(OBJECT_SELF, sHenchDontDispel))
     {
 //	Jug_Debug(GetName(OBJECT_SELF) + " checking dispel");
 		object oFriend;
@@ -563,7 +563,7 @@ void HenchGetBestDispelTarget()
 		{
 			iLoopLimit = 10;
 			int curLoopCount = 1;
-			oFriend = PS_GetLocalObject(OBJECT_SELF, sEnemySeen);
+			oFriend = GetLocalObject(OBJECT_SELF, sEnemySeen);
 			while (curLoopCount <= iLoopLimit && GetIsObjectValid(oFriend))
 			{
 				if (GetCreatureNegEffects(oFriend) & HENCH_EFFECT_TYPE_DOMINATED)
@@ -588,7 +588,7 @@ void HenchGetBestDispelTarget()
 						oBestTarget = oFriend;
 					}
 				} 
-				oFriend = PS_GetLocalObject(oFriend, sEnemySeen);	
+				oFriend = GetLocalObject(oFriend, sEnemySeen);	
 			}
 			if (GetIsObjectValid(ogCharmedAlly))
 			{			
@@ -624,7 +624,7 @@ void HenchGetBestDispelTarget()
 		while (curLoopCount <= iLoopLimit && GetIsObjectValid(oFriend))
 		{
 //			Jug_Debug("%%" + GetName(OBJECT_SELF) + " testing cure target " + GetName(oFriend) + " spell " + IntToString(gsBestDispel.spellID)); 		
-			if (PS_GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED_NO_PETRIFY)
+			if (GetLocalInt(oFriend, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED_NO_PETRIFY)
 			{
                 effect eEffect = GetFirstEffect(oFriend);
 				int bFound;
@@ -660,7 +660,7 @@ void HenchGetBestDispelTarget()
 					break;
 				}		
 	        }
-			oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+			oFriend = GetLocalObject(oFriend, sAllySeen);
 			curLoopCount ++;
 		}
 	}
@@ -668,11 +668,11 @@ void HenchGetBestDispelTarget()
 	if (!gbDisableNonHealorCure)
 	{
 	        // try to limit the casting of dispel/breach in case it fails
-	    int combatRoundCount = PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
-	    int lastDispel = PS_GetLocalInt(OBJECT_SELF, henchLastDispelStr);
+	    int combatRoundCount = GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
+	    int lastDispel = GetLocalInt(OBJECT_SELF, henchLastDispelStr);
 	    if ((lastDispel == 0) || (lastDispel < combatRoundCount - 5))
 	    {			
-			object oTarget = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+			object oTarget = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
 			while (GetIsObjectValid(oTarget))
 			{
 				if ((GetDistanceToObject(oTarget) <= 20.0) && !(GetCreatureNegEffects(oTarget) & HENCH_EFFECT_DISABLED_OR_IMMOBILE))
@@ -694,7 +694,7 @@ void HenchGetBestDispelTarget()
 						bUseBreach = FALSE;
 					}
 				}
-				oTarget = PS_GetLocalObject(oTarget, sEnemyLineOfSight);
+				oTarget = GetLocalObject(oTarget, sEnemyLineOfSight);
 		    }			
 		    // TODO removed for now
 		/*

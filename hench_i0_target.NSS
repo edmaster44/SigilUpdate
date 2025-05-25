@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 
@@ -105,7 +105,7 @@ void SetNonActiveEnemy(object oTarget)
 	if (GetFactionEqual(oTarget, OBJECT_SELF))
 	{
 		// ignore faction members that somehow have been marked hostile
-		if (GetObjectSeen(oTarget) && (PS_GetLocalInt(oTarget, curNegativeEffectsStr) & HENCH_EFFECT_TYPE_CHARMED))
+		if (GetObjectSeen(oTarget) && (GetLocalInt(oTarget, curNegativeEffectsStr) & HENCH_EFFECT_TYPE_CHARMED))
 		{
 			if (!GetIsObjectValid(ogCharmedAlly) ||
 				(GetRawThreatRating(oTarget) > GetRawThreatRating(ogCharmedAlly)))
@@ -134,11 +134,11 @@ void SetNonActiveEnemy(object oTarget)
         ogClosestNonActiveEnemy = oTarget;
         return;
     }
-    if (PS_GetLocalInt(oTarget, sHenchRunningAway))
+    if (GetLocalInt(oTarget, sHenchRunningAway))
     {
         return;
     }
-    if (PS_GetLocalInt(ogClosestNonActiveEnemy, sHenchRunningAway))
+    if (GetLocalInt(ogClosestNonActiveEnemy, sHenchRunningAway))
     {
         ogClosestNonActiveEnemy = oTarget;
         return;
@@ -190,7 +190,7 @@ void InitializeBasicTargetInfo()
             	SetNonActiveEnemy(ogClosestSeenEnemy);
 			}
 		}
-		else if(PS_GetLocalInt(ogClosestSeenEnemy, sHenchRunningAway) || ((igIntelligenceLevel > HENCH_INT_LOW) ?
+		else if(GetLocalInt(ogClosestSeenEnemy, sHenchRunningAway) || ((igIntelligenceLevel > HENCH_INT_LOW) ?
             (GetCreatureNegEffects(ogClosestSeenEnemy) & HENCH_EFFECT_DISABLED) :
 			(GetCreatureNegEffects(ogClosestSeenEnemy) & HENCH_EFFECT_TYPE_CHARMED)))
         {
@@ -222,7 +222,7 @@ void InitializeBasicTargetInfo()
             break;  // don't keep checking
         }
         else if (GetPlotFlag(ogClosestHeardEnemy) ||
-            PS_GetLocalInt(ogClosestHeardEnemy, sHenchRunningAway) || ((igIntelligenceLevel > HENCH_INT_LOW) ?
+            GetLocalInt(ogClosestHeardEnemy, sHenchRunningAway) || ((igIntelligenceLevel > HENCH_INT_LOW) ?
             (GetCreatureNegEffects(ogClosestHeardEnemy) & HENCH_EFFECT_DISABLED) :
 			(GetCreatureNegEffects(ogClosestHeardEnemy) & HENCH_EFFECT_TYPE_CHARMED)))
         {
@@ -343,21 +343,21 @@ int InitializeSingleAlly(object oAlly)
     ogOverrideTarget = oAlly;
     if (oAlly == OBJECT_SELF)
     {
-        PS_DeleteLocalObject(OBJECT_SELF, sAllySeen);
-        PS_DeleteLocalObject(OBJECT_SELF, sAllyLineOfSight);
+        DeleteLocalObject(OBJECT_SELF, sAllySeen);
+        DeleteLocalObject(OBJECT_SELF, sAllyLineOfSight);
     }
     else
     {
         myAdjustedThreatRating = 0.0;
-        PS_SetLocalObject(OBJECT_SELF, sAllyLineOfSight, oAlly);
-        PS_DeleteLocalObject(oAlly, sAllyLineOfSight);
+        SetLocalObject(OBJECT_SELF, sAllyLineOfSight, oAlly);
+        DeleteLocalObject(oAlly, sAllyLineOfSight);
         if (!GetObjectSeen(oAlly))
         {
-            PS_DeleteLocalObject(OBJECT_SELF, sAllySeen);
+            DeleteLocalObject(OBJECT_SELF, sAllySeen);
             return FALSE;
         }
-        PS_SetLocalObject(OBJECT_SELF, sAllySeen, oAlly);
-        PS_DeleteLocalObject(oAlly, sAllySeen);
+        SetLocalObject(OBJECT_SELF, sAllySeen, oAlly);
+        DeleteLocalObject(oAlly, sAllySeen);
     }
     return TRUE;
 }
@@ -367,7 +367,7 @@ void InitializeAllyList(int bUseThreshold = TRUE)
 {
 //SpawnScriptDebugger();
     float myThreatRating = GetRawThreatRating(OBJECT_SELF);
-    PS_DeleteLocalObject(OBJECT_SELF, sAllyLineOfSight);
+    DeleteLocalObject(OBJECT_SELF, sAllyLineOfSight);
     float fThresHold = bUseThreshold ? myThreatRating * 0.50 : -1000.0;
     int nMaxNumAlliesToFind = bUseThreshold ? 5 : 15;
     int alliesFound;
@@ -401,7 +401,7 @@ void InitializeAllyList(int bUseThreshold = TRUE)
 					continue;
 				}			
 				negEffects |= HENCH_EFFECT_TYPE_DYING;
-    			PS_SetLocalInt(oFriend, curNegativeEffectsStr, negEffects);
+    			SetLocalInt(oFriend, curNegativeEffectsStr, negEffects);
 			}
             int nAssocType = GetAssociateType(oFriend);
             if ((nAssocType != ASSOCIATE_TYPE_FAMILIAR) && !(negEffects & HENCH_EFFECT_DISABLED))
@@ -420,7 +420,7 @@ void InitializeAllyList(int bUseThreshold = TRUE)
                 if (curThreatRating >= fThresHold)
                 {
                     object oPrevTestObject = OBJECT_SELF;
-                    object oTestObject = PS_GetLocalObject(OBJECT_SELF, sAllyLineOfSight);
+                    object oTestObject = GetLocalObject(OBJECT_SELF, sAllyLineOfSight);
                     while (GetIsObjectValid(oTestObject))
                     {
                         if (GetRawThreatRating(oTestObject) < curThreatRating)
@@ -428,11 +428,11 @@ void InitializeAllyList(int bUseThreshold = TRUE)
                             break;
                         }
                         oPrevTestObject = oTestObject;
-                        oTestObject = PS_GetLocalObject(oTestObject, sAllyLineOfSight);
+                        oTestObject = GetLocalObject(oTestObject, sAllyLineOfSight);
                     }
 //					Jug_Debug("adding to friend list " + GetName(oFriend) + " threat " + FloatToString(curThreatRating));
-                    PS_SetLocalObject(oPrevTestObject, sAllyLineOfSight, oFriend);
-                    PS_SetLocalObject(oFriend, sAllyLineOfSight, oTestObject);
+                    SetLocalObject(oPrevTestObject, sAllyLineOfSight, oFriend);
+                    SetLocalObject(oFriend, sAllyLineOfSight, oTestObject);
 
                     alliesFound++;
                 }
@@ -440,7 +440,7 @@ void InitializeAllyList(int bUseThreshold = TRUE)
         }
     }
     // make ourselves better than our strongest friend
-    object oBestFriend = PS_GetLocalObject(OBJECT_SELF, sAllyLineOfSight);
+    object oBestFriend = GetLocalObject(OBJECT_SELF, sAllyLineOfSight);
     if (GetIsObjectValid(oBestFriend))
     {
         float friendRating = GetRawThreatRating(oBestFriend) * 1.05;
@@ -457,13 +457,13 @@ void InitializeAllyList(int bUseThreshold = TRUE)
 //		Jug_Debug(GetName(OBJECT_SELF) + " seen or heard found " + GetName(oCurObject));
 		if (GetObjectSeen(oCurObject))
 		{
-	        PS_SetLocalObject(oCurObjectSeen, sAllySeen, oCurObject);
+	        SetLocalObject(oCurObjectSeen, sAllySeen, oCurObject);
 	        oCurObjectSeen = oCurObject;
 //			Jug_Debug(GetName(OBJECT_SELF) + " seen found " + GetName(oCurObjectSeen));
 		}
-		oCurObject = PS_GetLocalObject(oCurObject, sAllyLineOfSight);
+		oCurObject = GetLocalObject(oCurObject, sAllyLineOfSight);
     }
-    PS_DeleteLocalObject(oCurObjectSeen, sAllySeen);
+    DeleteLocalObject(oCurObjectSeen, sAllySeen);
 }
 
 
@@ -471,7 +471,7 @@ void InitializeTargetLists(object oIntruder)
 {
     InitializeAllyList();
 
-    ogLastTarget = PS_GetLocalObject(OBJECT_SELF, sHenchLastTarget);
+    ogLastTarget = GetLocalObject(OBJECT_SELF, sHenchLastTarget);
     if (GetIsObjectValid(oIntruder))
     {
         ogOverrideTarget = oIntruder;
@@ -488,38 +488,38 @@ void InitializeTargetLists(object oIntruder)
     {
         if (GetIsObjectValid(ogClosestSeenEnemy))
         {
-            PS_SetLocalObject(OBJECT_SELF, sEnemySeen, ogClosestSeenEnemy);
-            PS_DeleteLocalObject(ogClosestSeenEnemy, sEnemySeen);
+            SetLocalObject(OBJECT_SELF, sEnemySeen, ogClosestSeenEnemy);
+            DeleteLocalObject(ogClosestSeenEnemy, sEnemySeen);
             GetThreatRating(ogClosestSeenEnemy);
         }
         else
         {
-            PS_DeleteLocalObject(OBJECT_SELF, sEnemySeen);
+            DeleteLocalObject(OBJECT_SELF, sEnemySeen);
         }
         if (GetIsObjectValid(ogClosestSeenOrHeardEnemy) && ((ogClosestSeenOrHeardEnemy == ogClosestSeenEnemy) || bgLineOfSightHeardEnemy))
         {
-            PS_SetLocalObject(OBJECT_SELF, sEnemyLineOfSight, ogClosestSeenOrHeardEnemy);
-            PS_DeleteLocalObject(ogClosestSeenOrHeardEnemy, sEnemyLineOfSight);
+            SetLocalObject(OBJECT_SELF, sEnemyLineOfSight, ogClosestSeenOrHeardEnemy);
+            DeleteLocalObject(ogClosestSeenOrHeardEnemy, sEnemyLineOfSight);
             GetThreatRating(ogClosestSeenOrHeardEnemy);
         }
         else
         {
-            PS_DeleteLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+            DeleteLocalObject(OBJECT_SELF, sEnemyLineOfSight);
         }
         // low int can still remember last target if seen
         if (igIntelligenceLevel == HENCH_INT_LOW && GetIsObjectValid(ogLastTarget)
-            && !GetIsDead(ogLastTarget) && !PS_GetLocalInt(ogLastTarget, sHenchRunningAway) && GetObjectSeen(ogLastTarget))
+            && !GetIsDead(ogLastTarget) && !GetLocalInt(ogLastTarget, sHenchRunningAway) && GetObjectSeen(ogLastTarget))
         {
             GetThreatRating(ogLastTarget);
             if (ogLastTarget != ogClosestSeenEnemy)
             {
-                PS_SetLocalObject(ogClosestSeenEnemy, sEnemySeen, ogLastTarget);
-                PS_DeleteLocalObject(ogLastTarget, sEnemySeen);
+                SetLocalObject(ogClosestSeenEnemy, sEnemySeen, ogLastTarget);
+                DeleteLocalObject(ogLastTarget, sEnemySeen);
             }
             if (ogLastTarget != ogClosestSeenOrHeardEnemy)
             {
-                PS_SetLocalObject(ogClosestSeenOrHeardEnemy, sEnemyLineOfSight, ogLastTarget);
-                PS_DeleteLocalObject(ogLastTarget, sEnemyLineOfSight);
+                SetLocalObject(ogClosestSeenOrHeardEnemy, sEnemyLineOfSight, ogLastTarget);
+                DeleteLocalObject(ogLastTarget, sEnemyLineOfSight);
             }
         }
         return;
@@ -533,8 +533,8 @@ void InitializeTargetLists(object oIntruder)
 
     if (GetIsObjectValid(ogClosestSeenEnemy))
     {
-        PS_SetLocalObject(OBJECT_SELF, sEnemySeen, ogClosestSeenEnemy);
-        PS_DeleteLocalObject(ogClosestSeenEnemy, sEnemySeen);
+        SetLocalObject(OBJECT_SELF, sEnemySeen, ogClosestSeenEnemy);
+        DeleteLocalObject(ogClosestSeenEnemy, sEnemySeen);
         GetThreatRating(ogClosestSeenEnemy);
  //     Jug_Debug("adding seen " + GetName(ogClosestSeenEnemy) + " threat " + FloatToString(GetThreatRating(ogClosestSeenEnemy)));
 
@@ -552,7 +552,7 @@ void InitializeTargetLists(object oIntruder)
                 // ignore dying creatures
             }
             else if (GetPlotFlag(oCurSeen) ||
-                PS_GetLocalInt(oCurSeen, sHenchRunningAway) ||
+                GetLocalInt(oCurSeen, sHenchRunningAway) ||
                 (GetCreatureNegEffects(oCurSeen) & HENCH_EFFECT_DISABLED))
             {
                 SetNonActiveEnemy(oCurSeen);
@@ -561,7 +561,7 @@ void InitializeTargetLists(object oIntruder)
             {
                 float curThreat = GetThreatRating(oCurSeen);
                 object oPrevTestObject = OBJECT_SELF;
-                object oTestObject = PS_GetLocalObject(OBJECT_SELF, sEnemySeen);
+                object oTestObject = GetLocalObject(OBJECT_SELF, sEnemySeen);
                 while (GetIsObjectValid(oTestObject))
                 {
                     if (GetThreatRating(oTestObject) < curThreat)
@@ -569,11 +569,11 @@ void InitializeTargetLists(object oIntruder)
                         break;
                     }
                     oPrevTestObject = oTestObject;
-                    oTestObject = PS_GetLocalObject(oTestObject, sEnemySeen);
+                    oTestObject = GetLocalObject(oTestObject, sEnemySeen);
                 }
 //              Jug_Debug("adding seen " + GetName(oCurSeen) + " threat " + FloatToString(curThreat));
-                PS_SetLocalObject(oPrevTestObject, sEnemySeen, oCurSeen);
-                PS_SetLocalObject(oCurSeen, sEnemySeen, oTestObject);
+                SetLocalObject(oPrevTestObject, sEnemySeen, oCurSeen);
+                SetLocalObject(oCurSeen, sEnemySeen, oTestObject);
             }
         }
     }
@@ -581,24 +581,24 @@ void InitializeTargetLists(object oIntruder)
     {
         if (GetIsObjectValid(ogClosestNonActiveEnemy) && GetObjectSeen(ogClosestNonActiveEnemy))
         {
-            PS_SetLocalObject(OBJECT_SELF, sEnemySeen, ogClosestNonActiveEnemy);
-            PS_DeleteLocalObject(ogClosestNonActiveEnemy, sEnemySeen);
+            SetLocalObject(OBJECT_SELF, sEnemySeen, ogClosestNonActiveEnemy);
+            DeleteLocalObject(ogClosestNonActiveEnemy, sEnemySeen);
         }
         else
         {
-            PS_DeleteLocalObject(OBJECT_SELF, sEnemySeen);
+            DeleteLocalObject(OBJECT_SELF, sEnemySeen);
         }
     }
 
     object oCurObject = OBJECT_SELF;
     while (GetIsObjectValid(oCurObject))
     {
-		object oNext = PS_GetLocalObject(oCurObject, sEnemySeen);
+		object oNext = GetLocalObject(oCurObject, sEnemySeen);
 /*		if (GetIsObjectValid(oNext))
 		{
 			Jug_Debug(GetName(OBJECT_SELF) + " seen found " + GetName(oNext));
 		} */
-        PS_SetLocalObject(oCurObject, sEnemyLineOfSight, oNext);
+        SetLocalObject(oCurObject, sEnemyLineOfSight, oNext);
         oCurObject = oNext;
     }
 
@@ -609,7 +609,7 @@ void InitializeTargetLists(object oIntruder)
             float curThreat = GetThreatRating(ogClosestHeardEnemy);
 
             object oPrevTestObject = OBJECT_SELF;
-            object oTestObject = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+            object oTestObject = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
             while (GetIsObjectValid(oTestObject))
             {
                 if (GetThreatRating(oTestObject) < curThreat)
@@ -617,11 +617,11 @@ void InitializeTargetLists(object oIntruder)
                     break;
                 }
                 oPrevTestObject = oTestObject;
-                oTestObject = PS_GetLocalObject(oTestObject, sEnemyLineOfSight);
+                oTestObject = GetLocalObject(oTestObject, sEnemyLineOfSight);
             }
 //          Jug_Debug("adding to line of sight " + GetName(ogClosestHeardEnemy) + " threat " + FloatToString(curThreat));
-            PS_SetLocalObject(oPrevTestObject, sEnemyLineOfSight, ogClosestHeardEnemy);
-            PS_SetLocalObject(ogClosestHeardEnemy, sEnemyLineOfSight, oTestObject);
+            SetLocalObject(oPrevTestObject, sEnemyLineOfSight, ogClosestHeardEnemy);
+            SetLocalObject(ogClosestHeardEnemy, sEnemyLineOfSight, oTestObject);
         }
 
         // limit the max number of heard targets to find, limit in any case to 3
@@ -645,7 +645,7 @@ void InitializeTargetLists(object oIntruder)
                 // ignore dying creatures, not line of sight
             }
             else if (GetPlotFlag(oCurHeard) ||
-                PS_GetLocalInt(oCurHeard, sHenchRunningAway) ||
+                GetLocalInt(oCurHeard, sHenchRunningAway) ||
                 (GetCreatureNegEffects(oCurHeard) & HENCH_EFFECT_DISABLED))
             {
                 SetNonActiveEnemy(oCurHeard);
@@ -655,7 +655,7 @@ void InitializeTargetLists(object oIntruder)
                 float curThreat = GetThreatRating(oCurHeard);
 
                 object oPrevTestObject = OBJECT_SELF;
-                object oTestObject = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+                object oTestObject = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
                 while (GetIsObjectValid(oTestObject))
                 {
                     if (GetThreatRating(oTestObject) < curThreat)
@@ -663,22 +663,22 @@ void InitializeTargetLists(object oIntruder)
                         break;
                     }
                     oPrevTestObject = oTestObject;
-                    oTestObject = PS_GetLocalObject(oTestObject, sEnemyLineOfSight);
+                    oTestObject = GetLocalObject(oTestObject, sEnemyLineOfSight);
                 }
     //          Jug_Debug("adding to line of sight " + GetName(ogClosestHeardEnemy) + " threat " + FloatToString(curThreat));
-                PS_SetLocalObject(oPrevTestObject, sEnemyLineOfSight, oCurHeard);
-                PS_SetLocalObject(oCurHeard, sEnemyLineOfSight, oTestObject);
+                SetLocalObject(oPrevTestObject, sEnemyLineOfSight, oCurHeard);
+                SetLocalObject(oCurHeard, sEnemyLineOfSight, oTestObject);
             }
         }
     }
 
-    if (!GetIsObjectValid(PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight)))
+    if (!GetIsObjectValid(GetLocalObject(OBJECT_SELF, sEnemyLineOfSight)))
     {
         if (GetIsObjectValid(ogClosestNonActiveEnemy) && !GetObjectSeen(ogClosestNonActiveEnemy) &&
             LineOfSightObject(OBJECT_SELF, ogClosestNonActiveEnemy))
         {
-            PS_SetLocalObject(OBJECT_SELF, sEnemyLineOfSight, ogClosestNonActiveEnemy);
-            PS_DeleteLocalObject(ogClosestNonActiveEnemy, sEnemyLineOfSight);
+            SetLocalObject(OBJECT_SELF, sEnemyLineOfSight, ogClosestNonActiveEnemy);
+            DeleteLocalObject(ogClosestNonActiveEnemy, sEnemyLineOfSight);
         }
     }
 
@@ -686,7 +686,7 @@ void InitializeTargetLists(object oIntruder)
 /*	oCurObject = OBJECT_SELF;
     while (GetIsObjectValid(oCurObject))
     {
-        object oNext = PS_GetLocalObject(oCurObject, sEnemyLineOfSight);
+        object oNext = GetLocalObject(oCurObject, sEnemyLineOfSight);
         if (GetIsObjectValid(oNext))
         {
             Jug_Debug(GetName(OBJECT_SELF) + " line of sight found " + GetName(oNext) + " faction equal " + IntToString(GetFactionEqual(oNext, OBJECT_SELF)));
@@ -713,11 +713,11 @@ float GetEnemyChallenge(object oRelativeTo=OBJECT_SELF)
 	{
         fChallenge += GetRawThreatRating(ogClosestHeardEnemy);
 	}
-    object oTarget = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    object oTarget = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
     while (GetIsObjectValid(oTarget))
     {
         fChallenge += GetRawThreatRating(oTarget);
-        oTarget = PS_GetLocalObject(oTarget, sEnemyLineOfSight);
+        oTarget = GetLocalObject(oTarget, sEnemyLineOfSight);
     }
     // get remaining seen and heard enemies - don't check disabled
     while (TRUE)
@@ -879,10 +879,10 @@ int CheckMoveAwayFromEnemies()
 
 //	Jug_Debug(GetName(OBJECT_SELF) + " move from enemies");
 	int bReturnResult;
-    object oEnemy = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    object oEnemy = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
     while (GetIsObjectValid(oEnemy))
     {
-        if (!(PS_GetLocalInt(oEnemy, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED_AND_IMMOBILE))
+        if (!(GetLocalInt(oEnemy, curNegativeEffectsStr) & HENCH_EFFECT_DISABLED_AND_IMMOBILE))
         {
 			bReturnResult = TRUE;
             if ((GetDistanceToObject(oEnemy) < fMaxDistance) &&
@@ -895,7 +895,7 @@ int CheckMoveAwayFromEnemies()
                 }
             }
         }
-        oEnemy = PS_GetLocalObject(oEnemy, sEnemyLineOfSight);
+        oEnemy = GetLocalObject(oEnemy, sEnemyLineOfSight);
     }
     return bReturnResult;
 }

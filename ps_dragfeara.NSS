@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Dragon Fear OnEnter
@@ -16,7 +16,7 @@ void main()
 	object oTarget 	= GetEnteringObject();
 	object oCreator = GetAreaOfEffectCreator();
 	object oItem	= GetItemPossessedBy(oCreator, "ps_essence");
-	int iAffected 	= PS_GetLocalInt(oTarget, "DRAGONFEAR");
+	int iAffected 	= GetLocalInt(oTarget, "DRAGONFEAR");
 
     effect eDur  = EffectVisualEffect( VFX_DUR_SPELL_FEAR );
     effect eFear = EffectFrightened();
@@ -40,7 +40,7 @@ void main()
 	int nDuraImm = 24;
 	
 		
-	if (PS_GetLocalInt(oItem, "TempChange") != 1)
+	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
  		if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
   		{	
@@ -64,13 +64,13 @@ void main()
 							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 						}
 					}
-					PS_SetLocalInt(oTarget, "DRAGONFEAR", 1);
+					SetLocalInt(oTarget, "DRAGONFEAR", 1);
 				}
    			}
 			else
 			{
 				SendMessageToPC(oCreator, "<c=yellow>Other Dragons are immune to your frightful presence.");
-				PS_SetLocalInt(oTarget, "DRAGONFEAR", 1);
+				SetLocalInt(oTarget, "DRAGONFEAR", 1);
 			}
 		}
 	}	

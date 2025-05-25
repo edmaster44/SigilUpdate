@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_faction"
 #include "ps_inc_randomitems"
@@ -16,10 +16,10 @@ void GuardExit(object oPC, object oGuard);
 void main() {
 
 	object oPC = OBJECT_SELF;
-	object oGuard = PS_GetLocalObject(oPC, "HARMONIUM");
+	object oGuard = GetLocalObject(oPC, "HARMONIUM");
 	
-	int nStage = PS_GetLocalInt(oPC, "HARMONIUM_PURSUIT");
-	PS_SetLocalInt(oPC, "HARMONIUM_PURSUIT", nStage+1); 
+	int nStage = GetLocalInt(oPC, "HARMONIUM_PURSUIT");
+	SetLocalInt(oPC, "HARMONIUM_PURSUIT", nStage+1); 
 	
 	ApprehendPC(oPC, oGuard);
 	
@@ -37,7 +37,7 @@ string GetRandomGuardSpeak(object oPC, object oGuard) {
 	int nRand = Random(3)+1;
 	
 	if (nRand == 1) {
-		if (PS_GetLocalString(oGuard, "CRIME") == "Pickpocket")
+		if (GetLocalString(oGuard, "CRIME") == "Pickpocket")
 			return "Now then. . where's that pickpocket got to. .";
 		else
 			return "Now then. . which way did "+sPronoun+" go?";
@@ -54,7 +54,7 @@ string GetRandomGuardSpeak(object oPC, object oGuard) {
 void ApprehendPC(object oPC, object oGuard) {
 
 	//If we've already apprehended the pc, skip this
-	if (PS_GetLocalInt(oGuard, "HAS_APPREHENDED") > 0)
+	if (GetLocalInt(oGuard, "HAS_APPREHENDED") > 0)
 		return;
 		
 	AssignCommand(oGuard, ActionSpeakString("Apprehending PC", TALKVOLUME_SHOUT));
@@ -116,7 +116,7 @@ void ApprehendPC(object oPC, object oGuard) {
 
 void GuardExit(object oPC, object oGuard) {
 
-	if (PS_GetLocalInt(oGuard, "HAS_APPREHENDED") == 0 && IsInConversation(oPC)) {
+	if (GetLocalInt(oGuard, "HAS_APPREHENDED") == 0 && IsInConversation(oPC)) {
 		//you're probably cheating to avoid being fined, so just fine you anyway
 		SendMessageToPC(oPC, "The Harmonium fine you 100 jink for pickpocketing.");
 		TakeGoldFromCreature(100, oPC, TRUE);
@@ -124,7 +124,7 @@ void GuardExit(object oPC, object oGuard) {
 
 	AssignCommand(oGuard, ActionSpeakString("Guard leaving", TALKVOLUME_SHOUT));
 	
-	PS_SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
+	SetLocalInt(oGuard, "HAS_APPREHENDED", 1);
 
 	if (IsInConversation(oGuard)) {
 		DelayCommand(6.0f, GuardExit(oPC, oGuard));

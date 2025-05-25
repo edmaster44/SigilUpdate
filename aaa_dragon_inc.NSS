@@ -50,7 +50,7 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell){
 		else iShield = 7;									
 	}
 	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1){	
+	if (GetLocalInt(oItem, "TempChange") == 1){	
 		SendMessageToPC(oPC, "<c=red>Bonus Shield for Dragons does not work in Humanoid Form.</c>");
 		return;
 	} else {	
@@ -304,7 +304,7 @@ void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
 	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
 
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 	{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 	}
@@ -388,7 +388,7 @@ void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
 	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
 
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 	{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 	}
@@ -487,7 +487,7 @@ void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
     eLink = EffectLinkEffects(eLink, eDur2);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -580,7 +580,7 @@ void PS_Dragon_Breath_Black(object oPC, int nSpell)
 	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
 
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -665,7 +665,7 @@ void PS_Dragon_Breath_Red(object oPC, int nSpell)
 	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -747,7 +747,7 @@ void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -838,7 +838,7 @@ void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -935,7 +935,7 @@ void PS_Dragon_Breath_White(object oPC, int nSpell)
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1027,7 +1027,7 @@ void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
 	effect eLink2 = EffectLinkEffects(eNeg2, eDur2);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	EffectVisualEffect (VFX_DUR_CONE_EVIL
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1124,7 +1124,7 @@ void PS_Dragon_Breath_Blue(object oPC, int nSpell)
 	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
 
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1206,7 +1206,7 @@ void PS_Dragon_Breath_Copper(object oPC, int nSpell)
 	int  nDC  = 10 + nDice/2 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC) + nBonus;
 
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1302,7 +1302,7 @@ void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
     eLink = EffectLinkEffects(eLink, eDur2);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1410,7 +1410,7 @@ void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 	
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1524,7 +1524,7 @@ void PS_Dragon_Breath_Iron(object oPC, int nSpell)
 	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1620,7 +1620,7 @@ void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
     eLink = EffectLinkEffects(eLink, eDur2);
 	
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 		{
 			SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
 		}
@@ -1791,7 +1791,7 @@ void PS_Dragon_Size(object oPC, int nSpell)
     {	return;	}
 	
 		// Disallows conversation if in humanoid form.	
-		if (PS_GetLocalInt(oItem, "TempChange") == 0)
+		if (GetLocalInt(oItem, "TempChange") == 0)
 		{
 			AssignCommand(oPC, ActionStartConversation(oPC, "dragon_conv", TRUE, FALSE, TRUE, FALSE));
 		}
@@ -2020,7 +2020,7 @@ void PS_Dragon_Roar(object oPC, int nSpell)
 	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
 	
 	// Dragon Roar does not work when in humanoid form (Temp = 1)	
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 	{
 			SendMessageToPC(oPC, "<c=red>Your lung is not strong enough in humanoid form!");
 	}
@@ -2130,7 +2130,7 @@ void PS_Dragon_Swipe(object oPC, int nSpell)
 		nArea = RADIUS_SIZE_LARGE;
 	}
 		
-	if (PS_GetLocalInt(oItem, "TempChange") == 1)
+	if (GetLocalInt(oItem, "TempChange") == 1)
 	{
 		SendMessageToPC(oPC, "<c=red>You dont have a dragon tail in humanoid form.");
 	}

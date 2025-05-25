@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 
@@ -13,10 +13,10 @@
 
 void main()
 {
-	int bShowStatus = PS_GetLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
+	int bShowStatus = GetLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
 	if (bShowStatus)
 	{
-		PS_DeleteLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
+		DeleteLocalInt(OBJECT_SELF, sHenchShowWeaponStatus);
 	}
     if (!HenchEquipAppropriateWeapons(OBJECT_INVALID, -5., bShowStatus, GetHasEffect(EFFECT_TYPE_POLYMORPH)))
     {

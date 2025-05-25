@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Example XP2 OnItemUnAcquireScript
@@ -22,7 +22,7 @@ void main()
      object oItem = GetModuleItemLost();
 
 //   Jug_Debug(GetName(OBJECT_SELF) + " has just lost " + GetName(oItem));
-     PS_SetLocalInt(oItem, sItemDropped, TRUE);
+     SetLocalInt(oItem, sItemDropped, TRUE);
 
      // * Generic Item Script Execution Code
      // * If MODULE_SWITCH_EXECUTE_TAGBASED_SCRIPTS is set to TRUE on the module,

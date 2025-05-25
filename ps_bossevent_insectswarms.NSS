@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //*********************************************
 //BOSS EVENT
@@ -31,16 +31,16 @@ void SwarmAttack(object oTarget, int nDice);
 
 void main () {
 
-	float fRadius = PS_GetLocalFloat(OBJECT_SELF, "InsectSwarm_Radius");
-	string sAnim = PS_GetLocalString(OBJECT_SELF, "InsectSwarm_Anim");
+	float fRadius = GetLocalFloat(OBJECT_SELF, "InsectSwarm_Radius");
+	string sAnim = GetLocalString(OBJECT_SELF, "InsectSwarm_Anim");
 	if (sAnim == "")
 		sAnim = "mjr_cast";
 		
-	int nDC = PS_GetLocalInt(OBJECT_SELF, "InsectSwarm_DC");
-	int nDice = PS_GetLocalInt(OBJECT_SELF, "InsectSwarm_Dice");
+	int nDC = GetLocalInt(OBJECT_SELF, "InsectSwarm_DC");
+	int nDice = GetLocalInt(OBJECT_SELF, "InsectSwarm_Dice");
 	int nDamType = DAMAGE_TYPE_MAGICAL;
-	string sVFX = PS_GetLocalString(OBJECT_SELF, "InsectSwarm_VFX");
-	string sMessage = PS_GetLocalString(OBJECT_SELF, "InsectSwarm_Message");
+	string sVFX = GetLocalString(OBJECT_SELF, "InsectSwarm_VFX");
+	string sMessage = GetLocalString(OBJECT_SELF, "InsectSwarm_Message");
 	
 	ClearAllActions();
 	

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 void main()
 {
@@ -6,11 +6,11 @@ void main()
 	// if (!GetIsPC(oPC) && !GetIsDM(oPC))
 	//  return;
 	  
-	int iLock = PS_GetGlobalInt("CourtWoeEnterLock");
+	int iLock = GetGlobalInt("CourtWoeEnterLock");
 	
 	if ( iLock == 0 )
  	{
-	  PS_SetGlobalInt("CourtWoeEnterLock", 1); 
+	  SetGlobalInt("CourtWoeEnterLock", 1); 
 	  // Only allows one clean up at a time.
 
  if(GetObjectByTag("ps_commoner_courtwoe01") == OBJECT_INVALID)
@@ -272,5 +272,5 @@ void main()
 	  
 	}
 	
-PS_SetGlobalInt("CourthouseEnterLock", 0);
+SetGlobalInt("CourthouseEnterLock", 0);
   	}

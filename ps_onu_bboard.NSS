@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 const string MSGBOARD_XML = "bboard.xml";
 const string MSGBOARD_XML2 = "bboard_msg.xml";
@@ -10,7 +10,7 @@ const string MSG_IMG = "BBOARD_MSG_";
 
 int HasJournalEntry(object oPC, string sJournal) {
 
-	return PS_GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sJournal);
+	return GetLocalInt(oPC, "NW_JOURNAL_ENTRY" + sJournal);
 
 }
 
@@ -45,7 +45,7 @@ void main () {
 	//DisplayGuiScreen(oPC, SCREEN_BOARD_MESSAGE, FALSE, MSGBOARD_XML2);
 	ClearBoard(oPC);
 	
-	int nMax = PS_GetLocalInt(OBJECT_SELF, "quest_max");
+	int nMax = GetLocalInt(OBJECT_SELF, "quest_max");
 	int n = 0;
 	int assigned = 1;
 	int nPCLevel = GetHitDice(oPC);
@@ -56,10 +56,10 @@ void main () {
 			break;
 	
 		string sNum = IntToString(n);
-		string sText = PS_GetLocalString(OBJECT_SELF, "quest_msg_"+sNum);
-		string sTitle = PS_GetLocalString(OBJECT_SELF, "quest_title_"+sNum);
-		int nLevel = PS_GetLocalInt(OBJECT_SELF, "quest_level_"+sNum);
-		string sJournal = PS_GetLocalString(OBJECT_SELF, "quest_journal_"+sNum);
+		string sText = GetLocalString(OBJECT_SELF, "quest_msg_"+sNum);
+		string sTitle = GetLocalString(OBJECT_SELF, "quest_title_"+sNum);
+		int nLevel = GetLocalInt(OBJECT_SELF, "quest_level_"+sNum);
+		string sJournal = GetLocalString(OBJECT_SELF, "quest_journal_"+sNum);
 		
 		//Don't show missions we've already found!
 		if (sJournal != "" && HasJournalEntry(oPC, sJournal) > 0)
@@ -75,9 +75,9 @@ void main () {
 			string sRand = IntToString(Random(4)+1);
 			SetGUIObjectHidden(oPC, SCREEN_MSGBOARD, MSG_IMG+sIndex, FALSE);
 		//	AssignCommand(OBJECT_SELF, ActionSpeakString("showing: "+MSG_IMG+sIndex));
-			PS_SetLocalString(oPC, "quest_img_"+IntToString(assigned), "bboard_notelg_"+sRand+".tga");
-			PS_SetLocalString(oPC, "quest_msg_"+IntToString(assigned), sText);
-			PS_SetLocalString(oPC, "quest_title_"+IntToString(assigned), sTitle);
+			SetLocalString(oPC, "quest_img_"+IntToString(assigned), "bboard_notelg_"+sRand+".tga");
+			SetLocalString(oPC, "quest_msg_"+IntToString(assigned), sText);
+			SetLocalString(oPC, "quest_title_"+IntToString(assigned), sTitle);
 			SetGUITexture(oPC, SCREEN_MSGBOARD, MSG_IMG+sIndex, "bboard_note_"+sRand+".tga");
 		/*	AssignCommand(OBJECT_SELF, ActionSpeakString("showing: bboard_note_"+sRand+".tga"));
 			AssignCommand(OBJECT_SELF, ActionSpeakString("setting quest_img_"+IntToString(assigned)+" to bboard_notelg_"+sRand+".tga"));

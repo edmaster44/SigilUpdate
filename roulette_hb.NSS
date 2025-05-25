@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //Roulette modified by Stephen Spann  (sspann@worldnet.att.net)
 //originally from Charles Adam's 'Casino Bertix' module
@@ -39,15 +39,15 @@ void main()
         {
             nDay = TRUE;
         }
-        if(PS_GetLocalInt(OBJECT_SELF, "NW_GENERIC_DAY_NIGHT") != nDay)
+        if(GetLocalInt(OBJECT_SELF, "NW_GENERIC_DAY_NIGHT") != nDay)
         {
             if(nDay == TRUE)
             {
-                PS_SetLocalInt(OBJECT_SELF, "NW_GENERIC_DAY_NIGHT", TRUE);
+                SetLocalInt(OBJECT_SELF, "NW_GENERIC_DAY_NIGHT", TRUE);
             }
             else
             {
-                PS_SetLocalInt(OBJECT_SELF, "NW_GENERIC_DAY_NIGHT", FALSE);
+                SetLocalInt(OBJECT_SELF, "NW_GENERIC_DAY_NIGHT", FALSE);
             }
             WalkWayPoints();
         }
@@ -108,14 +108,14 @@ void main()
 int TIMER=1;
 if(TIMER)
     {
-        if(PS_GetLocalInt(OBJECT_SELF,"ROULETTE") < (TIMER * nBetweenSpins))
+        if(GetLocalInt(OBJECT_SELF,"ROULETTE") < (TIMER * nBetweenSpins))
             {
-                PS_SetLocalInt(OBJECT_SELF,"ROULETTE",
-                    PS_GetLocalInt(OBJECT_SELF,"ROULETTE")+1);
+                SetLocalInt(OBJECT_SELF,"ROULETTE",
+                    GetLocalInt(OBJECT_SELF,"ROULETTE")+1);
                 return;
             }
-        PS_DeleteLocalInt(OBJECT_SELF,"ROULETTE");
-        PS_SetLocalInt(OBJECT_SELF,"DEALING",1);
+        DeleteLocalInt(OBJECT_SELF,"ROULETTE");
+        SetLocalInt(OBJECT_SELF,"DEALING",1);
         SpeakString ("All bets off!  Spinning the wheel!");
         ActionMoveToObject(GetObjectByTag("roulettewheel"));
         ActionInteractObject(GetObjectByTag("roulettewheel"));
@@ -129,17 +129,17 @@ if(TIMER)
         EndRouletteRound(OBJECT_SELF,nRandom);
         while(GetIsObjectValid(oPC))
             {
-                if (PS_GetLocalInt(oPC,"iBet")!=0)
+                if (GetLocalInt(oPC,"iBet")!=0)
                     {
                     if (GetHouse() > 0)
 						EndRouletteRound(oPC,nRandom);
-                    PS_SetLocalInt(oPC,"iBet",0);
+                    SetLocalInt(oPC,"iBet",0);
                     }
                 oPC=GetNextPC();
             }
 		if (GetHouse() > 0) {
        		ActionDoCommand(DelayCommand(fSpin,SpeakString("Opening bets up for the next round!")));
-        	PS_SetLocalInt(OBJECT_SELF,"DEALING",0);
+        	SetLocalInt(OBJECT_SELF,"DEALING",0);
 		}
     }
 }

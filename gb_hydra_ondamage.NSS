@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //gb_hydra_ondamage - Hydra On Damage script
 //
@@ -17,18 +17,18 @@ void HealthCheck(object oTarget);
 
 void main() {
 
-	if (PS_GetLocalInt(OBJECT_SELF, "KeepHeads") != 1)
+	if (GetLocalInt(OBJECT_SELF, "KeepHeads") != 1)
 		HealthCheck(OBJECT_SELF);
 		
 	//Both of these damage types will slow down his regen
 	//These variables -must- be set on the creature
-	int nDamageVulnerability1 = PS_GetLocalInt(OBJECT_SELF, "DamageVulnerabilityType1");
-	int nDamageVulnerability2 = PS_GetLocalInt(OBJECT_SELF, "DamageVulnerabilityType2");
+	int nDamageVulnerability1 = GetLocalInt(OBJECT_SELF, "DamageVulnerabilityType1");
+	int nDamageVulnerability2 = GetLocalInt(OBJECT_SELF, "DamageVulnerabilityType2");
 	
 	int nAcid = GetDamageDealtByType(nDamageVulnerability1)+1; //returns -1 if none is dealt, 0 if acid damage was dealt, but a very meager amount
 	int nFire = GetDamageDealtByType(nDamageVulnerability2)+1;
 	
-	if (PS_GetLocalString(OBJECT_SELF, "Breath") == "fire")//pyrohydra
+	if (GetLocalString(OBJECT_SELF, "Breath") == "fire")//pyrohydra
 		nFire = GetDamageDealtByType(DAMAGE_TYPE_COLD)+1;
 	
 	if (nAcid < 3 && nFire < 3) {
@@ -39,16 +39,16 @@ void main() {
 	int iDmg = nAcid;	
 	if (nFire > nAcid) iDmg = nFire;
 	
-	int iWait = PS_GetLocalInt(OBJECT_SELF, "Wait");
+	int iWait = GetLocalInt(OBJECT_SELF, "Wait");
 	if (iWait < 0) iWait = 0;
-	int iCounter = PS_GetLocalInt(OBJECT_SELF, "Counter");
+	int iCounter = GetLocalInt(OBJECT_SELF, "Counter");
 	int iRounds = iDmg / 3;
 	if (iRounds > 5) iRounds = 5;
 	iRounds = iWait + iRounds;
 	if (iCounter < 0) 
-		PS_SetLocalInt(OBJECT_SELF, "Counter", 0);
+		SetLocalInt(OBJECT_SELF, "Counter", 0);
 	
-	PS_SetLocalInt(OBJECT_SELF, "Wait", iRounds);
+	SetLocalInt(OBJECT_SELF, "Wait", iRounds);
 	
 	object oHide = GetItemInSlot(INVENTORY_SLOT_CARMOUR, OBJECT_SELF);
 	int iHasRegen = GetItemHasItemProperty(oHide, ITEM_PROPERTY_REGENERATION);
@@ -87,14 +87,14 @@ void HealthCheck(object oTarget) {
 	}
 	
 	int iHPperc = GetHealthPercent(oTarget);
-	int iHeadsGone = PS_GetLocalInt(oTarget, "HeadsGone");
+	int iHeadsGone = GetLocalInt(oTarget, "HeadsGone");
 	int iHP1 = ( iHPperc / 20 ) + 1;
 	if (iHP1 > 5) iHP1 = 5;
 	int iHP2 = 5 - iHP1;
 	
 	if (iHP2 == iHeadsGone) return;
 	iHeadsGone = iHP2;
-	PS_SetLocalInt(oTarget, "HeadsGone", iHeadsGone);
+	SetLocalInt(oTarget, "HeadsGone", iHeadsGone);
 	RemoveAnySpellEffects(100, oTarget);
 	if (iHeadsGone == 0) return;
 	string sEffect = "fx_hydra_blood"+IntToString(iHeadsGone)+".sef";

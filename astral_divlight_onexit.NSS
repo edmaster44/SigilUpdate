@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Created by Agony_Aunt/Loki_666
 // used for Astral Plane - Divinty Leech
@@ -10,7 +10,7 @@ void main()
 	if (GetIsPC(oPC))
 	{
 		SendMessageToPC(oPC, "<COLOR=YELLOW><i>As you leave the light you feel the energy gained slowly start to leave you.");
-		PS_SetLocalInt(oPC, "ASTRAL_LIGHT", 0);
+		SetLocalInt(oPC, "ASTRAL_LIGHT", 0);
 		/*
 		effect eEffect = GetFirstEffect(oPC);
 		

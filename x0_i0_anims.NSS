@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //:://////////////////////////////////////////////////
 //:: X0_I0_ANIMS
@@ -433,17 +433,17 @@ void AnimDebug(string sMsg)
 // TRUE if the given creature has the given condition set
 int GetAnimationCondition(int nCondition, object oCreature=OBJECT_SELF)
 {
-    return (PS_GetLocalInt(oCreature, sAnimCondVarname) & nCondition);
+    return (GetLocalInt(oCreature, sAnimCondVarname) & nCondition);
 }
 
 // Mark that the given creature has the given condition set
 void SetAnimationCondition(int nCondition, int bValid=TRUE, object oCreature=OBJECT_SELF)
 {
-    int nCurrentCond = PS_GetLocalInt(oCreature, sAnimCondVarname);
+    int nCurrentCond = GetLocalInt(oCreature, sAnimCondVarname);
     if (bValid) {
-        PS_SetLocalInt(oCreature, sAnimCondVarname, nCurrentCond | nCondition);
+        SetLocalInt(oCreature, sAnimCondVarname, nCurrentCond | nCondition);
     } else {
-        PS_SetLocalInt(oCreature, sAnimCondVarname, nCurrentCond & ~nCondition);
+        SetLocalInt(oCreature, sAnimCondVarname, nCurrentCond & ~nCondition);
     }
 }
 
@@ -557,23 +557,23 @@ object GetRandomStop(float fMaxDistance)
 {
     object oStop;
     object oArea = GetArea(OBJECT_SELF);
-    if (! PS_GetLocalInt(oArea, "ANIM_STOPS_INITIALIZED") ) {
+    if (! GetLocalInt(oArea, "ANIM_STOPS_INITIALIZED") ) {
         //AnimDebug("Initializing stops in area " + GetName(oArea));
         // first time -- look up all the stops in the area and store them
         int nNth = 1;
         oStop = GetNearestObjectByTag("NW_STOP");
         while (GetIsObjectValid(oStop)) {
             //AnimDebug("Stop found");
-            PS_SetLocalObject(oArea, "ANIM_STOP_" + IntToString(nNth), oStop);
+            SetLocalObject(oArea, "ANIM_STOP_" + IntToString(nNth), oStop);
             nNth++;
             oStop = GetNearestObjectByTag("NW_STOP", OBJECT_SELF, nNth);
         }
-        PS_SetLocalInt(oArea, "ANIM_STOPS", nNth-1);
-        PS_SetLocalInt(oArea, "ANIM_STOPS_INITIALIZED", TRUE);
+        SetLocalInt(oArea, "ANIM_STOPS", nNth-1);
+        SetLocalInt(oArea, "ANIM_STOPS_INITIALIZED", TRUE);
     }
 
-    int nStop = Random(PS_GetLocalInt(oArea, "ANIM_STOPS")) + 1;
-    oStop = PS_GetLocalObject(oArea, "ANIM_STOP_" + IntToString(nStop));
+    int nStop = Random(GetLocalInt(oArea, "ANIM_STOPS")) + 1;
+    oStop = GetLocalObject(oArea, "ANIM_STOP_" + IntToString(nStop));
     //AnimDebug("Stop: " + IntToString(nStop)
     //            + ": " + GetTag(oStop)
     //            + ": " + FloatToString(GetDistanceToObject(oStop)));
@@ -589,7 +589,7 @@ void SetCreatureHomeWaypoint()
     object oHome = GetNearestObjectByTag("NW_HOME");
     if (GetIsObjectValid(oHome)) {
         SetAnimationCondition(NW_ANIM_FLAG_HAS_HOME);
-        PS_SetLocalObject(OBJECT_SELF, "NW_ANIM_HOME", oHome);
+        SetLocalObject(OBJECT_SELF, "NW_ANIM_HOME", oHome);
     }
 }
 
@@ -597,7 +597,7 @@ void SetCreatureHomeWaypoint()
 object GetCreatureHomeWaypoint()
 {
     if (GetAnimationCondition(NW_ANIM_FLAG_HAS_HOME)) {
-        return PS_GetLocalObject(OBJECT_SELF, "NW_ANIM_HOME");
+        return GetLocalObject(OBJECT_SELF, "NW_ANIM_HOME");
     }
     return OBJECT_INVALID;
 }
@@ -607,16 +607,16 @@ object GetCreatureHomeWaypoint()
 void SetCurrentFriend(object oFriend)
 {
     if (!GetIsObjectValid(oFriend)) {
-        PS_DeleteLocalObject(OBJECT_SELF, "NW_ANIM_FRIEND");
+        DeleteLocalObject(OBJECT_SELF, "NW_ANIM_FRIEND");
     } else {
-        PS_SetLocalObject(OBJECT_SELF, "NW_ANIM_FRIEND", oFriend);
+        SetLocalObject(OBJECT_SELF, "NW_ANIM_FRIEND", oFriend);
     }
 }
 
 // Get the caller's current friend, if set; OBJECT_INVALID otherwise
 object GetCurrentFriend()
 {
-    return PS_GetLocalObject(OBJECT_SELF, "NW_ANIM_FRIEND");
+    return GetLocalObject(OBJECT_SELF, "NW_ANIM_FRIEND");
 }
 
 // Set an object (or OBJECT_INVALID to clear) as the caller's interactive
@@ -624,16 +624,16 @@ object GetCurrentFriend()
 void SetCurrentInteractionTarget(object oTarget)
 {
     if (!GetIsObjectValid(oTarget)) {
-        PS_DeleteLocalObject(OBJECT_SELF, "NW_ANIM_TARGET");
+        DeleteLocalObject(OBJECT_SELF, "NW_ANIM_TARGET");
     } else {
-        PS_SetLocalObject(OBJECT_SELF, "NW_ANIM_TARGET", oTarget);
+        SetLocalObject(OBJECT_SELF, "NW_ANIM_TARGET", oTarget);
     }
 }
 
 // Get the caller's current interaction target, if set; OBJECT_INVALID otherwise
 object GetCurrentInteractionTarget()
 {
-    return PS_GetLocalObject(OBJECT_SELF, "NW_ANIM_TARGET");
+    return GetLocalObject(OBJECT_SELF, "NW_ANIM_TARGET");
 }
 
 
@@ -920,7 +920,7 @@ void PlayImmobileAmbientAnimations()
         }
 
         // also save our starting location
-        PS_SetLocalLocation(OBJECT_SELF,
+        SetLocalLocation(OBJECT_SELF,
                          "ANIM_START_LOCATION",
                          GetLocation(OBJECT_SELF));
     }
@@ -1109,7 +1109,7 @@ void AnimActionPlayRandomCloseRange()
 
     if (nRoll == 5 && !GetAnimationCondition(NW_ANIM_FLAG_IS_MOBILE)) {
         // Move back to starting point, saved at initialization
-        ActionMoveToLocation(PS_GetLocalLocation(OBJECT_SELF,
+        ActionMoveToLocation(GetLocalLocation(OBJECT_SELF,
                                               "ANIM_START_LOCATION"));
         return;
     }
@@ -1366,13 +1366,13 @@ void AnimActionTurnAround()
 void AnimActionGoThroughDoor(object oDoor)
 {
     //AnimDebug("going through door " + GetTag(oDoor));
-    PS_SetLocalInt(oDoor, "BEING_CLOSED", TRUE);
+    SetLocalInt(oDoor, "BEING_CLOSED", TRUE);
     object oDest = GetTransitionTarget(oDoor);
     ActionMoveToObject(oDest);
     ActionDoCommand(AssignCommand(oDest, ActionCloseDoor(oDest)));
     ActionDoCommand(AssignCommand(oDoor, ActionCloseDoor(oDoor)));
-    ActionDoCommand(PS_SetLocalInt(oDoor, "BEING_CLOSED", FALSE));
-    DelayCommand(10.0, PS_SetLocalInt(oDoor, "BEING_CLOSED", FALSE));
+    ActionDoCommand(SetLocalInt(oDoor, "BEING_CLOSED", FALSE));
+    DelayCommand(10.0, SetLocalInt(oDoor, "BEING_CLOSED", FALSE));
     AnimActionRandomMoveAway(oDest, DISTANCE_MEDIUM);
 }
 
@@ -1395,11 +1395,11 @@ int AnimActionCloseRandomDoor()
     location locCurrent = GetLocation(OBJECT_SELF);
     while (GetIsObjectValid(oDoor)) {
         // make sure everyone doesn't run to close the same door
-        if (GetIsOpen(oDoor) && !PS_GetLocalInt(oDoor, "BEING_CLOSED")) {
+        if (GetIsOpen(oDoor) && !GetLocalInt(oDoor, "BEING_CLOSED")) {
             //AnimDebug("closing door: " + GetTag(oDoor));
-            PS_SetLocalInt(oDoor, "BEING_CLOSED", TRUE);
+            SetLocalInt(oDoor, "BEING_CLOSED", TRUE);
             ActionCloseDoor(oDoor);
-            ActionDoCommand(PS_SetLocalInt(oDoor, "BEING_CLOSED", FALSE));
+            ActionDoCommand(SetLocalInt(oDoor, "BEING_CLOSED", FALSE));
             ActionMoveToLocation(locCurrent);
             return TRUE;
         }// else {
@@ -1467,7 +1467,7 @@ int AnimActionGoInside()
         //AnimDebug("Valid waypoint found: " + GetTag(oWay));
         AnimActionGoThroughDoor(oDoor);
         SetAnimationCondition(NW_ANIM_FLAG_IS_INSIDE);
-        PS_SetLocalObject(OBJECT_SELF, "NW_ANIM_DOOR", oDest);
+        SetLocalObject(OBJECT_SELF, "NW_ANIM_DOOR", oDest);
         return TRUE;
     }
 
@@ -1483,9 +1483,9 @@ int AnimActionGoInside()
 int AnimActionGoOutside()
 {
     if (GetAnimationCondition(NW_ANIM_FLAG_IS_INSIDE)) {
-        object oDoor = PS_GetLocalObject(OBJECT_SELF, "NW_ANIM_DOOR");
+        object oDoor = GetLocalObject(OBJECT_SELF, "NW_ANIM_DOOR");
         if (GetIsObjectValid(oDoor)) {
-            PS_DeleteLocalObject(OBJECT_SELF, "NW_ANIM_DOOR");
+            DeleteLocalObject(OBJECT_SELF, "NW_ANIM_DOOR");
             AnimActionGoThroughDoor(oDoor);
             SetAnimationCondition(NW_ANIM_FLAG_IS_INSIDE, FALSE);
             return TRUE;
@@ -1565,7 +1565,7 @@ int AnimActionRest()
 			//ActionDoCommand(ActionRest()); 
             return TRUE;
         } else {
-            location lStart = PS_GetLocalLocation(OBJECT_SELF, "ANIM_START_LOCATION");
+            location lStart = GetLocalLocation(OBJECT_SELF, "ANIM_START_LOCATION");
             ClearActions(CLEAR_X0_I0_ANIMS_AnimActionRest2);
             ActionMoveToLocation(lStart);
             //ActionRest();
@@ -1587,7 +1587,7 @@ int AnimActionGoHome()
     if ( GetIsObjectValid(oHome) && !GetIsDay() && GetArea(OBJECT_SELF) != GetArea(oHome)) {
         ClearActions(CLEAR_X0_I0_ANIMS_GoHome);
         AnimActionGoOutside();
-        AnimActionGoThroughDoor(PS_GetLocalObject(OBJECT_SELF,
+        AnimActionGoThroughDoor(GetLocalObject(OBJECT_SELF,
                                                "NW_ANIM_DOOR_HOME"));
         return TRUE;
     }
@@ -1609,7 +1609,7 @@ int AnimActionLeaveHome()
 
         object oDest = GetTransitionTarget(oDoor);
         if (GetIsObjectValid(oDest)) {
-            PS_SetLocalObject(OBJECT_SELF, "NW_ANIM_DOOR_HOME", oDest);
+            SetLocalObject(OBJECT_SELF, "NW_ANIM_DOOR_HOME", oDest);
             AnimActionGoThroughDoor(oDoor);
             return TRUE;
         }
@@ -1628,11 +1628,11 @@ int AnimActionChallengeIntruder()
     object oHome = GetCreatureHomeWaypoint();
     if (GetIsObjectValid(oHome) && GetArea(OBJECT_SELF) == GetArea(oHome)) {
         object oPC = GetNearestCreature(CREATURE_TYPE_PLAYER_CHAR, PLAYER_CHAR_IS_PC);
-        if (GetIsObjectValid(oPC) && !PS_GetLocalInt(OBJECT_SELF, GetName(oPC) + "_CHALLENGED")) {
+        if (GetIsObjectValid(oPC) && !GetLocalInt(OBJECT_SELF, GetName(oPC) + "_CHALLENGED")) {
             ClearActions(CLEAR_X0_I0_ANIMS_AnimActionChallengeIntruder);
             ActionDoCommand(SetFacingPoint(GetPosition(oPC)));
             ActionDoCommand(SpeakOneLinerConversation(ANIM_CONVERSATION, oPC));
-            PS_SetLocalInt(OBJECT_SELF, GetName(oPC) + "_CHALLENGED", TRUE);
+            SetLocalInt(OBJECT_SELF, GetName(oPC) + "_CHALLENGED", TRUE);
             return TRUE;
         }
     }
@@ -1696,17 +1696,17 @@ void AnimActionPlayRandomInteractAnimation(object oPlaceable)
                                        ActionPlayAnimation(ANIMATION_PLACEABLE_OPEN)));
         }
     } else {
-        int bIsActive = PS_GetLocalInt(oPlaceable, "NW_ANIM_PLACEABLE_ACTIVE");
+        int bIsActive = GetLocalInt(oPlaceable, "NW_ANIM_PLACEABLE_ACTIVE");
         if (bIsActive) {
             AssignCommand(oPlaceable,
                           DelayCommand(ANIM_LOOPING_LENGTH,
                                        ActionPlayAnimation(ANIMATION_PLACEABLE_DEACTIVATE)));
-            PS_SetLocalInt(oPlaceable, "NW_ANIM_PLACEABLE_ACTIVE", FALSE);
+            SetLocalInt(oPlaceable, "NW_ANIM_PLACEABLE_ACTIVE", FALSE);
         } else {
             AssignCommand(oPlaceable,
                           DelayCommand(ANIM_LOOPING_LENGTH,
                                        ActionPlayAnimation(ANIMATION_PLACEABLE_ACTIVATE)));
-            PS_SetLocalInt(oPlaceable, "NW_ANIM_PLACEABLE_ACTIVE", TRUE);
+            SetLocalInt(oPlaceable, "NW_ANIM_PLACEABLE_ACTIVE", TRUE);
         }
     }
 
@@ -1721,7 +1721,7 @@ void AnimActionPlayRandomInteractAnimation(object oPlaceable)
 void AnimActionPlayRandomTalkAnimation(int nHDiff)
 {
 	// 0-2 subtracted from random roll, angry stuff at end.
-	int iSerenity = PS_GetLocalInt(OBJECT_SELF, "Serenity");
+	int iSerenity = GetLocalInt(OBJECT_SELF, "Serenity");
 	
     int nRoll = Random(9 - iSerenity);
 	//SpeakString("Talk " + IntToString(nRoll));

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ///////////////////////////////////////////////////////
 //:: Name - x2_inc_cutscene
@@ -358,30 +358,30 @@ float CutGetConvDuration(string sConvName)
 void CutSetActiveCutscene(int nCutsceneNumber, int nDelayType, int bSetCutsceneObject = TRUE)
 {
     // Storing the delay type.
-    PS_SetLocalInt(GetModule(), "X2_DelayType" + IntToString(nCutsceneNumber), nDelayType);
+    SetLocalInt(GetModule(), "X2_DelayType" + IntToString(nCutsceneNumber), nDelayType);
     // Setting the active object, which is the object that applies all the effects for this cutscene.
     // This object is used in the cutscene abort script and at the end of the cutscene to remove all
     // the effects that this object had created.
     if(bSetCutsceneObject == TRUE)
-        PS_SetLocalObject(GetModule(), "X2_Cut" + IntToString(nCutsceneNumber) + "ActiveObject", OBJECT_SELF);
-    PS_SetLocalInt(GetModule(), "X2_ActiveCutsceneNumber", nCutsceneNumber);
+        SetLocalObject(GetModule(), "X2_Cut" + IntToString(nCutsceneNumber) + "ActiveObject", OBJECT_SELF);
+    SetLocalInt(GetModule(), "X2_ActiveCutsceneNumber", nCutsceneNumber);
 }
 
 int GetActiveCutsceneNum()
 {
-    return PS_GetLocalInt(GetModule(), "X2_ActiveCutsceneNumber");
+    return GetLocalInt(GetModule(), "X2_ActiveCutsceneNumber");
 }
 
 // Calculates the "real" delay to execute a cut* action (can be a comulative delay or a constant one)
 float CutCalculateCurrentDelay(float fDelayModifier, int nCutsceneNumber)
 {
-    if(PS_GetLocalInt(GetModule(), "X2_DelayType" + IntToString(nCutsceneNumber)) == CUT_DELAY_TYPE_CONSTANT)
+    if(GetLocalInt(GetModule(), "X2_DelayType" + IntToString(nCutsceneNumber)) == CUT_DELAY_TYPE_CONSTANT)
         return fDelayModifier; // support for old system - leaving the delay the same
     // new system - each delay is the difference from the previous one.
     string sDelayVariable = "X2_fCutscene" + IntToString(nCutsceneNumber) + "Delay";
-    float fCurrentDelay = PS_GetLocalFloat(GetModule(), sDelayVariable);
+    float fCurrentDelay = GetLocalFloat(GetModule(), sDelayVariable);
     fCurrentDelay = fCurrentDelay + fDelayModifier;
-    PS_SetLocalFloat(GetModule(), sDelayVariable, fCurrentDelay);
+    SetLocalFloat(GetModule(), sDelayVariable, fCurrentDelay);
     return fCurrentDelay;
 }
 
@@ -389,7 +389,7 @@ float GetShift(object oObject, int iShift)
 {
         float fShift;
         if(iShift != FALSE)
-             fShift = PS_GetLocalFloat(GetArea(oObject), "cut_shift");
+             fShift = GetLocalFloat(GetArea(oObject), "cut_shift");
         else
              fShift = 0.0;
         return fShift;
@@ -399,12 +399,12 @@ float GetShift(object oObject, int iShift)
 // a cutscene (probably for short cutscenes).
 void CutDisableAbort(int nCutscene)
 {
-    PS_SetLocalInt(GetModule(), "X2_CutAbortDisabled" + IntToString(nCutscene), 1);
+    SetLocalInt(GetModule(), "X2_CutAbortDisabled" + IntToString(nCutscene), 1);
 }
 
 int CutGetIsAbortDisabled(int nCutscene)
 {
-    return PS_GetLocalInt(GetModule(), "X2_CutAbortDisabled" + IntToString(nCutscene));
+    return GetLocalInt(GetModule(), "X2_CutAbortDisabled" + IntToString(nCutscene));
 }
 
 int CutSetActiveCutsceneForObject(object oObject, int nCutNum, int bMainPC = FALSE)
@@ -422,14 +422,14 @@ int CutSetActiveCutsceneForObject(object oObject, int nCutNum, int bMainPC = FAL
 
     // if trying to set a new cutscene number for a player and the old value is not zero
     // than the oObject is already in another cutscene and returning with failure.
-    if(GetIsPC(oObject) && nCutNum != 0 && PS_GetLocalInt(oObject, "nCutsceneNumber") != 0)
+    if(GetIsPC(oObject) && nCutNum != 0 && GetLocalInt(oObject, "nCutsceneNumber") != 0)
         return -1;
 
-    PS_SetLocalInt(oObject, "nCutsceneNumber", nCutNum);
+    SetLocalInt(oObject, "nCutsceneNumber", nCutNum);
     if(bMainPC == TRUE)
-        PS_SetLocalInt(oObject, "nCutMainPC", 1);
+        SetLocalInt(oObject, "nCutMainPC", 1);
     else
-        PS_SetLocalInt(oObject, "nCutMainPC", 0);
+        SetLocalInt(oObject, "nCutMainPC", 0);
 
 
     if(nCutNum == 0 || GetIsPC(oObject))
@@ -437,19 +437,19 @@ int CutSetActiveCutsceneForObject(object oObject, int nCutNum, int bMainPC = FAL
 
     // Storing the object, so that the generic abort could find it and reset it.
     // First, getting the global index for this cutscene (virtual array).
-    int nCurrentIndex = PS_GetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutNum));
+    int nCurrentIndex = GetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutNum));
     // Next, storing the object.
-    PS_SetLocalObject(GetModule(),
+    SetLocalObject(GetModule(),
         "X2_Cutscene" + IntToString(nCutNum) + "Object" + IntToString(nCurrentIndex), oObject);
     // Finally, updating the index.
     nCurrentIndex++;
-    PS_SetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutNum), nCurrentIndex);
+    SetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutNum), nCurrentIndex);
     return 0;
 }
 
 int CutGetActiveCutsceneForObject(object oObject)
 {
-    return PS_GetLocalInt(oObject, "nCutsceneNumber");
+    return GetLocalInt(oObject, "nCutsceneNumber");
 }
 
 // This function is used internally by the generic abort script.
@@ -460,26 +460,26 @@ void CutResetActiveObjectsForCutscene(int nCutscene)
     // Getting the size of the virtual array that stores the cutscene objects.
     // This would return an index for the "next object to be stored", so there would be no
     // object in that index
-    int nMaxIndex = PS_GetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutscene));
+    int nMaxIndex = GetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutscene));
     int i;
     object oCurrentObject;
     // Iterating through all the cutscene objects
     for(i = 0; i < nMaxIndex; i++)
     {
-        oCurrentObject = PS_GetLocalObject(GetModule(),
+        oCurrentObject = GetLocalObject(GetModule(),
             "X2_Cutscene" + IntToString(nCutscene) + "Object" + IntToString(i));
         CutSetActiveCutsceneForObject(oCurrentObject, 0);
     }
     // Initializing the index
-    PS_SetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutscene), 0);
+    SetLocalInt(GetModule(), "X2_CutsceneObjectsIndex" + IntToString(nCutscene), 0);
 }
 
 void CallRestorePCCopyLocation(int nCutscene, object oPC)
 {
     if(CutGetActiveCutsceneForObject(oPC) == nCutscene)
     {
-        location lLoc = PS_GetLocalLocation(oPC, "X2_PCLocation");
-        PS_DeleteLocalLocation(oPC, "X2_PCLocation");
+        location lLoc = GetLocalLocation(oPC, "X2_PCLocation");
+        DeleteLocalLocation(oPC, "X2_PCLocation");
         AssignCommand(oPC, JumpToLocation(lLoc));
     }
 }
@@ -488,7 +488,7 @@ void CallRemoveEffects(int nCutscene, object oObject)
 {
     if(CutGetActiveCutsceneForObject(oObject) == nCutscene)
     {   // first, get the object that created all the effects
-        object oCreator = PS_GetLocalObject(GetModule(), "X2_Cut" + IntToString(nCutscene) + "ActiveObject");
+        object oCreator = GetLocalObject(GetModule(), "X2_Cut" + IntToString(nCutscene) + "ActiveObject");
 
         effect eEff = GetFirstEffect(oObject);
         while(GetIsEffectValid(eEff))
@@ -579,7 +579,7 @@ void CutJumpAssociateToLocation(float fDelay, object oPC, location lLoc, int iSh
 
 void CallDestroyPCCopy(int nCutscene, object oPC, int bRestorePCLocation)
 {
-    object oCopy = PS_GetLocalObject(oPC, "X2_PCCopy" + IntToString(nCutscene));
+    object oCopy = GetLocalObject(oPC, "X2_PCCopy" + IntToString(nCutscene));
     if(oCopy == OBJECT_INVALID)
         return;
     if(bRestorePCLocation == TRUE)
@@ -610,8 +610,8 @@ object CutCreatePCCopy(object oPC, location lLoc, string sTag)
     object oNewPC = CopyObject(oPC, lLoc, OBJECT_INVALID, sTag);
     //SetPlotFlag(oNewPC, TRUE);
     CutSetActiveCutsceneForObject(oNewPC, nCutscene);
-    PS_SetLocalObject(oPC, "X2_PCCopy" + IntToString(nCutscene), oNewPC);
-    PS_SetLocalLocation(oPC, "X2_PCLocation", GetLocation(oPC)); // Keeping location of PC so it can be restored when the copy is destroyed
+    SetLocalObject(oPC, "X2_PCCopy" + IntToString(nCutscene), oNewPC);
+    SetLocalLocation(oPC, "X2_PCLocation", GetLocation(oPC)); // Keeping location of PC so it can be restored when the copy is destroyed
     ChangeToStandardFaction(oNewPC, STANDARD_FACTION_COMMONER);
     SetActionMode(oNewPC, ACTION_MODE_STEALTH, FALSE);
     SetActionMode(oNewPC, ACTION_MODE_DETECT, FALSE);
@@ -637,39 +637,39 @@ void CutCreateObjectCopy(float fDelay, object oObject, location lLoc, string sTa
 // returns TRUE whether the pc is the main pc for his current cutscene, FALSE otherwise.
 int CutGetIsMainPC(object oPC)
 {
-    if(PS_GetLocalInt(oPC, "nCutsceneNumber") == 0)
+    if(GetLocalInt(oPC, "nCutsceneNumber") == 0)
         return FALSE; // a player is not a part of any cutscene
-    return PS_GetLocalInt(oPC, "nCutMainPC");
+    return GetLocalInt(oPC, "nCutMainPC");
 }
 
 // set delay for removal of pc copy in the generic abort script (should be used
 // at the begining of a cutscene)
 void CutSetDestroyCopyDelay(int nCutscene, float fDelay)
 {
-    PS_SetLocalFloat(GetModule(), "X2_CutDestroyCopyDelay" + IntToString(nCutscene), fDelay);
+    SetLocalFloat(GetModule(), "X2_CutDestroyCopyDelay" + IntToString(nCutscene), fDelay);
 }
 
 float CutGetDestroyCopyDelay(int nCutscene)
 {
-    return PS_GetLocalFloat(GetModule(), "X2_CutDestroyCopyDelay" + IntToString(nCutscene));
+    return GetLocalFloat(GetModule(), "X2_CutDestroyCopyDelay" + IntToString(nCutscene));
 }
 
 void CutSetAbortDelay(int nCutscene, float fDelay)
 {
-    PS_SetLocalFloat(GetModule(), "X2_CutAbortDelay" + IntToString(nCutscene), fDelay);
+    SetLocalFloat(GetModule(), "X2_CutAbortDelay" + IntToString(nCutscene), fDelay);
 }
 
 // get the delay for cutscene-disable funcions in the generic abort script (used only there)
 float CutGetAbortDelay(int nCutscene)
 {
-    return PS_GetLocalFloat(GetModule(), "X2_CutAbortDelay" + IntToString(nCutscene));
+    return GetLocalFloat(GetModule(), "X2_CutAbortDelay" + IntToString(nCutscene));
 }
 
 void RemoveAssociateEffects(object oCreature)
 {
     int nCutscene = GetActiveCutsceneNum();
     effect eEff1 = GetFirstEffect(oCreature);
-    object oCreator = PS_GetLocalObject(GetModule(), "X2_Cut" + IntToString(nCutscene) + "ActiveObject");
+    object oCreator = GetLocalObject(GetModule(), "X2_Cut" + IntToString(nCutscene) + "ActiveObject");
 
     while(GetIsEffectValid(eEff1))
     {
@@ -752,7 +752,7 @@ void UnFreezeAssociate(object oPlayers)
     object oSummon = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oPlayers);
     if (oSummon != OBJECT_INVALID)
        RemoveAssociateEffects(oSummon);
-    object oDominated = PS_GetLocalObject(oPlayers, "oDominated");
+    object oDominated = GetLocalObject(oPlayers, "oDominated");
     if (oDominated != OBJECT_INVALID)
        RemoveAssociateEffects(oDominated);
 }
@@ -771,7 +771,7 @@ void Talk(string sConvFile, object oTalkTo)
 
 void CallBeginConversation(int nCutscene, object oTalker, object oTalkTo, string sConvFile)
 {
-        if(nCutscene == PS_GetLocalInt(oTalker, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oTalker, "nCutsceneNumber"))
         {
             AssignCommand(oTalker, Talk(sConvFile, oTalkTo));
         }
@@ -786,7 +786,7 @@ void CutBeginConversation(float fDelay, object oTalker, object oTalkTo, string s
 
 void CallActionStartConversation(int nCutscene, object oNPC, object oPC, string szConversationFile)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
             //CutRemoveEffects(0.0, oPC);
             //SetCommandable(TRUE, oPC);
@@ -811,7 +811,7 @@ void CutActionStartConversation(float fDelay, object oNPC, object oPC, string sz
 */
 void CallSpeakString(int nCutscene, object oSpeaker, string szString)
 {
-    if(nCutscene == PS_GetLocalInt(oSpeaker, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oSpeaker, "nCutsceneNumber"))
     {
         AssignCommand(oSpeaker, SpeakString(szString));
     }
@@ -819,7 +819,7 @@ void CallSpeakString(int nCutscene, object oSpeaker, string szString)
 
 void CallSpeakStringByStrRef(int nCutscene, object oSpeaker, int nStrRef)
 {
-    if(nCutscene == PS_GetLocalInt(oSpeaker, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oSpeaker, "nCutsceneNumber"))
     {
         AssignCommand(oSpeaker, SpeakStringByStrRef(nStrRef));
         AssignCommand(oSpeaker, PlaySoundByStrRef(nStrRef, FALSE));
@@ -847,7 +847,7 @@ void CutSpeakStringByStrRef(float fDelay, object oSpeaker, int nStrRef, int iShi
 */
 void CallPlayAnimation(int nCutscene, object oObject, int nAnimation, float fLength)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, PlayAnimation(nAnimation, 1.0, fLength));
     }
@@ -867,7 +867,7 @@ void CutPlayAnimation(float fDelay, object oObject, int nAnimation, float fLengt
 */
 void CallJumpToLocation(int nCutscene, object oPC, location lLoc)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
             AssignCommand(oPC, ActionJumpToLocation(lLoc));
         }
@@ -888,7 +888,7 @@ void CutJumpToLocation(float fDelay, object oPC, location lLoc, int iShift = TRU
 */
 void CallJumpToObject(int nCutscene, object oPC, object oObject)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
            if(GetCommandable(oPC) == FALSE)
            {
@@ -913,7 +913,7 @@ void CutJumpToObject(float fDelay, object oPC, object oObject, int iShift = TRUE
 // Used to force move the PC or NPC to an object.
 void CallActionForceMoveToObject(int nCutscene, object oPC, object oTarget, int iRun, float fRange, float fTimeout)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
          if(GetCommandable(oPC) == FALSE)
          {
@@ -939,7 +939,7 @@ void CutActionForceMoveToObject(float fDelay, object oPC, object oTarget, int iR
 */
 void CallActionMoveToObject(int nCutscene, object oPC, object oTarget, int iRun)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
          if(GetCommandable(oPC) == FALSE)
          {
@@ -962,7 +962,7 @@ void CutActionMoveToObject(float fDelay, object oPC, object oTarget, int iRun, i
 // Used to force move the PC or NPC to a location.
 void CallActionForceMoveToLocation(int nCutscene, object oPC, location lLoc, int iRun, float fTimeout)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         if(GetCommandable(oPC) == FALSE)
         {
@@ -989,7 +989,7 @@ void CutActionForceMoveToLocation(float fDelay, object oPC, location lLoc, int i
 */
 void CallActionMoveToLocation(int nCutscene, object oPC, location lLoc, int iRun)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         if(GetCommandable(oPC) == FALSE)
         {
@@ -1019,7 +1019,7 @@ void CutActionMoveToLocation(float fDelay, object oPC, location lLoc, int iRun, 
 */
 void CallCreateObject(int nCutscene, int iType, object oPC, string sName, location lLoc, int iEffect, int nSetActive)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
          ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectVisualEffect(iEffect), lLoc);
          object oObject = CreateObject(iType, sName, lLoc);
@@ -1045,7 +1045,7 @@ void CutCreateObject(float fDelay, object oPC, int iType, string sName, location
 */
 void CallSetFacingPoint(int nCutscene, object oPC, string szTag)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         AssignCommand(oPC, SetFacingPoint(GetPosition(GetObjectByTag(szTag))));
     }
@@ -1060,7 +1060,7 @@ void CutSetFacingPoint(float fDelay, object oPC, string szTag, int iShift = TRUE
 
 void CallAdjustReputation(int nCutscene, object oTarget, object oSource, int nAdjustment)
 {
-    if(nCutscene == PS_GetLocalInt(oTarget, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oTarget, "nCutsceneNumber"))
     {
         AdjustReputation(oTarget, oSource, nAdjustment);
         if(GetIsPossessedFamiliar(oTarget))
@@ -1089,7 +1089,7 @@ void CutAdjustReputation(float fDelay, object oTarget, object oSource, int nAdju
 */
 void CallFadeOutAndIn(int nCutscene, object oObject, float fFadeLen, float fFadeSpeed)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         FadeToBlack(oObject, fFadeSpeed);
         //DelayCommand(2.3, BlackScreen(oObject));
@@ -1110,7 +1110,7 @@ void CutFadeOutAndIn(float fDelay, object oObject, float fFadeLen = 4.3, float f
 */
 void CallFadeToBlack(int nCutscene, object oObject, float fFadeSpeed)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         FadeToBlack(oObject, fFadeSpeed);
     }
@@ -1129,7 +1129,7 @@ void CutFadeToBlack(float fDelay, object oObject, float fFadeSpeed = FADE_SPEED_
 */
 void CallFadeFromBlack(int nCutscene, object oObject, float fFadeSpeed)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         FadeFromBlack(oObject, fFadeSpeed);
     }
@@ -1156,7 +1156,7 @@ void CutFadeFromBlack(float fDelay, object oObject, float fFadeSpeed  = FADE_SPE
 */
 void CallSetCamera(int nCutscene, object oObject, int iCameraType, float fFacing, float fZoom, float fPitch, int nSpeed)
 {
-     if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+     if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
      {
         SetCameraMode(oObject, iCameraType);
         DelayCommand(0.1, AssignCommand(oObject, SetCameraFacing(fFacing, fZoom, fPitch, nSpeed)));
@@ -1176,7 +1176,7 @@ void CutSetCamera(float fDelay, object oObject, int iCameraType, float fFacing, 
 */
 void CallClearAllActions(int nCutscene, object oObject, int nClearCombatState = FALSE)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ClearAllActions(nClearCombatState));
     }
@@ -1198,7 +1198,7 @@ void CutClearAllActions(float fDelay, object oObject, int nClearCombatState, int
 */
 void CallApplyEffectAtLocation(int nCutscene, object oObject, int iDur, int iEffect, location lLoc, float fDur)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         effect eEffect = EffectVisualEffect(iEffect);
         ApplyEffectAtLocation(iDur, eEffect, lLoc, fDur);
@@ -1221,7 +1221,7 @@ void CutApplyEffectAtLocation(float fDelay, object oObject, int iDur, int iEffec
 */
 void CallApplyEffectToObject(int nCutscene, int iDur, int iEffect, object oObject, float fDur)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         effect eEffect = EffectVisualEffect(iEffect);
         ApplyEffectToObject(iDur, eEffect, oObject, fDur);
@@ -1239,7 +1239,7 @@ void CutApplyEffectToObject(float fDelay, int iDur, int iEffect, object oObject,
 //Used to apply a NON visual effect to an object.
 void CallApplyEffectToObject2(int nCutscene, int iDur, effect eEffect, object oObject, float fDur)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         ApplyEffectToObject(iDur, eEffect, oObject, fDur);
     }
@@ -1259,7 +1259,7 @@ void CutApplyEffectToObject2(float fDelay, int iDur, effect eEffect, object oObj
 */
 void CallKnockdown(int nCutscene, object oObject, float fDur)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         effect eEffect = EffectKnockdown();
         int nTest = 0;
@@ -1283,7 +1283,7 @@ void CutKnockdown(float fDelay, object oObject, float fDur = 3.0, int iShift = T
 
 void CallActionAttack(int nCutscene, object oAttacker, object oAttackee, int bPassive = FALSE)
 {
-    if(nCutscene == PS_GetLocalInt(oAttacker, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oAttacker, "nCutsceneNumber"))
     {
         AssignCommand(oAttacker, ActionAttack(oAttackee, bPassive));
     }
@@ -1305,7 +1305,7 @@ void CutActionAttack(float fDelay, object oAttacker, object oAttackee, int bPass
 
 void CallDeath(int nCutscene, object oObject, int iSpec)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         effect eEffect = EffectDeath(iSpec, TRUE);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oObject);
@@ -1323,7 +1323,7 @@ void CutDeath(float fDelay, object oObject, int iSpec = FALSE, int iShift = TRUE
 // oObject would unlock oTarget
 void CallActionUnlockObject(int nCutscene, object oObject, object oTarget)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionUnlockObject(oTarget));
     }
@@ -1340,7 +1340,7 @@ void CutActionUnlockObject(float fDelay, object oObject, object oTarget, int iSh
 // oObject would lock oTarget
 void CallActionLockObject(int nCutscene, object oObject, object oTarget)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionLockObject(oTarget));
     }
@@ -1356,7 +1356,7 @@ void CutActionLockObject(float fDelay, object oObject, object oTarget, int iShif
 // oObject would flee lLoc
 void CallActionMoveAwayFromLocation(int nCutscene, object oObject, location lLoc, int bRun, float fDistance)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionMoveAwayFromLocation(lLoc, bRun, fDistance));
     }
@@ -1372,7 +1372,7 @@ void CutActionMoveAwayFromLocation(float fDelay, object oObject, location lLoc, 
 // oObject would flee oTarget
 void CallActionMoveAwayFromObject(int nCutscene, object oObject, object oTarget, int bRun, float fDistance)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionMoveAwayFromObject(oTarget, bRun, fDistance));
     }
@@ -1389,7 +1389,7 @@ void CutActionMoveAwayFromObject(float fDelay, object oObject, object oTarget, i
 // oObject would follow oFollow
 void CallActionForceFollowObject(int nCutscene, object oObject, object oFollow, float fFollowDistance)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionForceFollowObject(oFollow, fFollowDistance));
     }
@@ -1406,7 +1406,7 @@ void CutActionForceFollowObject(float fDelay, object oObject, object oFollow, fl
 // oObject unequips oItem
 void CallActionUnequipItem(int nCutscene, object oObject, object oItem)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionUnequipItem(oItem));
     }
@@ -1423,7 +1423,7 @@ void CutActionUnequipItem(float fDelay, object oObject, object oItem, int iShift
 // oObject equips oItem in InvSlot
 void CallActionEquipItem(int nCutscene, object oObject, object oItem, int nInvSlot)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionEquipItem(oItem, nInvSlot));
     }
@@ -1440,7 +1440,7 @@ void CutActionEquipItem(float fDelay, object oObject, object oItem, int nInvSlot
 // oObject would sit on oChair
 void CallActionSit(int nCutscene, object oObject, object oChair)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionSit(oChair));
     }
@@ -1457,7 +1457,7 @@ void CutActionSit(float fDelay, object oObject, object oChair, int iShift = TRUE
 // oObject would open oDoor
 void CallActionOpenDoor(int nCutscene, object oObject, object oDoor)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionOpenDoor(oDoor));
     }
@@ -1472,7 +1472,7 @@ void CutActionOpenDoor(float fDelay, object oObject, object oDoor, int iShift = 
 
 void CallActionCloseDoor(int nCutscene, object oCloser, object oDoor)
 {
-    if(nCutscene == PS_GetLocalInt(oCloser, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oCloser, "nCutsceneNumber"))
     {
         AssignCommand(oCloser, ActionCloseDoor(oDoor));
     }
@@ -1494,7 +1494,7 @@ void CutActionCloseDoor(float fDelay, object oCloser, object oDoor, int iShift =
 */
 void CallActionCastFakeSpellAtObject(int nCutscene, int iSpell, object oObject, object oTarget, int iPath)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionCastFakeSpellAtObject(iSpell, oTarget, iPath));
     }
@@ -1510,7 +1510,7 @@ void CutActionCastFakeSpellAtObject(float fDelay, int iSpell, object oObject, ob
 // Used to cast a  spell at an object.
 void CallActionCastSpellAtObject(int nCutscene, int iSpell, object oObject, object oTarget, int nMetaMagic, int bCheat, int nDomainLevel, int iPath, int bInstantSpell)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionCastSpellAtObject(iSpell, oTarget, nMetaMagic, nDomainLevel, iPath, bInstantSpell));
     }
@@ -1532,7 +1532,7 @@ void CutActionCastSpellAtObject(float fDelay, int iSpell, object oObject, object
 */
 void CallActionCastFakeSpellAtLocation(int nCutscene, int iSpell, object oObject, location lLoc, int iPath)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionCastFakeSpellAtLocation(iSpell, lLoc, iPath));
     }
@@ -1549,7 +1549,7 @@ void CutActionCastFakeSpellAtLocation(float fDelay, int iSpell, object oObject, 
 
 void CallActionCastSpellAtLocation(int nCutscene, int iSpell, object oObject, location lLoc, int nMetaMagic, int bCheat, int iPath, int bInstantSpell)
 {
-    if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         AssignCommand(oObject, ActionCastSpellAtLocation(iSpell, lLoc, nMetaMagic, bCheat, iPath, bInstantSpell));
     }
@@ -1570,10 +1570,10 @@ void CutActionCastSpellAtLocation(float fDelay, int iSpell, object oObject, loca
 */
 void CallSetLocation(int nCutscene, object oPC)
 {
-   if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+   if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
    {
-       PS_SetLocalLocation(oPC, "cut_jump_location", GetLocation(oPC));
-       PS_SetLocalInt(oPC, "X2_HasStoredLocation", 1);
+       SetLocalLocation(oPC, "cut_jump_location", GetLocation(oPC));
+       SetLocalInt(oPC, "X2_HasStoredLocation", 1);
    }
 }
 
@@ -1594,9 +1594,9 @@ void CallRestoreLocation(int nCutscene, object oPC)
     if(CutGetActiveCutsceneForObject(oPC) == nCutscene)
     {
         // Restoring location only if the pc has had a valid location set earlier.
-        if(PS_GetLocalInt(oPC, "X2_HasStoredLocation") == 1)
+        if(GetLocalInt(oPC, "X2_HasStoredLocation") == 1)
         {
-            location lLoc = PS_GetLocalLocation(oPC, "cut_jump_location");
+            location lLoc = GetLocalLocation(oPC, "cut_jump_location");
             if(GetCommandable(oPC) == FALSE)
             {
                SetCommandable(TRUE, oPC);
@@ -1605,7 +1605,7 @@ void CallRestoreLocation(int nCutscene, object oPC)
             }
             else
                AssignCommand(oPC, JumpToLocation(lLoc));
-            PS_SetLocalInt(oPC, "X2_HasStoredLocation", 0);
+            SetLocalInt(oPC, "X2_HasStoredLocation", 0);
         }
 
     }
@@ -1627,13 +1627,13 @@ void CutRestorePCAppearance(int nCutscene, object oPC)
     
     /*if(CutGetActiveCutsceneForObject(oPC) == nCutscene)
     {
-        int nChangedApp = PS_GetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene));
+        int nChangedApp = GetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene));
         if(nChangedApp == 0) // stay here only if the pc has changed in appearance by the cutscene system
             return;
-        PS_SetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene), 0);
+        SetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene), 0);
         // getting original appearance of pc
-        int nOldApp = PS_GetLocalInt(oPC, "X2_CUT_APPEARANCE");
-        PS_SetLocalInt(oPC, "X2_CUT_APPEARANCE", -1); // initializing
+        int nOldApp = GetLocalInt(oPC, "X2_CUT_APPEARANCE");
+        SetLocalInt(oPC, "X2_CUT_APPEARANCE", -1); // initializing
         if(GetAppearanceType(oPC) == nOldApp) // current appearance is the same as before changing it
         // the player has changed his appearance during the cutscene so there is no need to restore it
         // (the change was probably a run-off polymorph effect)
@@ -1697,7 +1697,7 @@ void CutRemoveHenchmenAssociates(object oPC)
 
 void CallSetCutsceneMode(int nCutscene, object oPC, int iValue, int bInv, int bKeepAssociate = TRUE, int bFreezeAssociate = TRUE)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
              if(iValue == FALSE) // Disable cutscene mode
              {
@@ -1710,15 +1710,15 @@ void CallSetCutsceneMode(int nCutscene, object oPC, int iValue, int bInv, int bK
              }
              else // enable cutscene mode
              {
-                  //PS_SetLocalInt(oPC, "X2_CUT_APPEARANCE", -1);
+                  //SetLocalInt(oPC, "X2_CUT_APPEARANCE", -1);
                   AssignCommand(oPC, ClearAllActions(TRUE));
                   SetActionMode(oPC, ACTION_MODE_DETECT, FALSE);
                   SetActionMode(oPC, ACTION_MODE_STEALTH, FALSE);
                   if(bInv >= TRUE)
                   {
 
-                    //PS_SetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene), 1); // flagging pc as changed appearance
-                    //PS_SetLocalInt(oPC, "X2_CUT_APPEARANCE", GetAppearanceType(oPC));
+                    //SetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene), 1); // flagging pc as changed appearance
+                    //SetLocalInt(oPC, "X2_CUT_APPEARANCE", GetAppearanceType(oPC));
 
                     DelayCommand(0.2, ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY),
                         oPC, 9999.0));
@@ -1747,7 +1747,7 @@ void CallSetCutsceneMode(int nCutscene, object oPC, int iValue, int bInv, int bK
                           bVanish = TRUE;
                       object oDominated = FreezeAssociate(oPC, bVanish);
                       if (GetIsObjectValid(oDominated) == TRUE)
-                         PS_SetLocalObject(oPC, "oDominated", oDominated);
+                         SetLocalObject(oPC, "oDominated", oDominated);
                   }
                   // Destroy associates.
                   if (bKeepAssociate == FALSE)
@@ -1780,7 +1780,7 @@ void CutSetCutsceneMode(float fDelay, object oPC, int iValue, int bInv, int bKee
 */
 void CallSetPlotFlag(int nCutscene, object oObject, int iValue)
 {
-        if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
         {
 
              SetPlotFlag(oObject, iValue);
@@ -1802,7 +1802,7 @@ void CutSetPlotFlag(float fDelay, object oObject, int iValue, int iShift = TRUE)
 */
 void CallDestroyObject(int nCutscene, object oObject)
 {
-        if(nCutscene == PS_GetLocalInt(oObject, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
         {
 
              DestroyObject(oObject);
@@ -1823,7 +1823,7 @@ void CutDestroyObject(float fDelay, object oObject, int iShift = TRUE)
 */
 void CallStoreCameraFacing(int nCutscene, object oPC)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
 
              StoreCameraFacing();
@@ -1844,7 +1844,7 @@ void CutStoreCameraFacing(float fDelay, object oPC, int iShift = TRUE)
 */
 void CallRestoreCameraFacing(int nCutscene, object oPC)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
 
              RestoreCameraFacing();
@@ -1866,7 +1866,7 @@ void CutRestoreCameraFacing(float fDelay, object oPC, int iShift = TRUE)
 */
 void CallBlackScreen(int nCutscene, object oPC)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
 
              BlackScreen(oPC);
@@ -1887,7 +1887,7 @@ void CutBlackScreen(float fDelay, object oPC, int iShift = TRUE)
 */
 void CallStopFade(int nCutscene, object oPC)
 {
-        if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+        if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
         {
 
              StopFade(oPC);
@@ -1904,7 +1904,7 @@ void CutStopFade(float fDelay, object oPC, int iShift = TRUE)
 
 void CallPlayVoiceChat(int nCutscene, object oPC, int nChatID)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         AssignCommand(oPC, PlayVoiceChat(nChatID));
     }
@@ -1919,7 +1919,7 @@ void CutPlayVoiceChat(float fDelay, object oPC, int nChatID, int iShift = TRUE)
 
 void CallPlaySound(int nCutscene, object oPC, string szSound)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         AssignCommand(oPC, PlaySound(szSound));
     }
@@ -1935,7 +1935,7 @@ void CutPlaySound(float fDelay, object oPC, string szSound, int iShift = TRUE)
 // Setting a background ambient sounds and playing it for the area where oPC is in.
 void CallSetAmbient(int nCutscene, object oPC, int nTrack)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         // change for both day and night
         AmbientSoundChangeDay(GetArea(oPC), nTrack);
@@ -1956,7 +1956,7 @@ void CutSetAmbient(float fDelay, object oPC, int nTrack, int iShift = TRUE)
 // Setting a background music and playing it for the area where oPC is in.
 void CallSetMusic(int nCutscene, object oPC, int nTrack)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         // change for both day and night
         MusicBackgroundChangeDay(GetArea(oPC), nTrack);
@@ -1979,10 +1979,10 @@ void CutSetMusic(float fDelay, object oPC, int nTrack, int iShift = TRUE)
 // keep old background music
 void CallStoreMusic(int nCutscene, object oPC)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
-        PS_SetLocalInt(GetArea(oPC), "X2_MUSIC_DAY", MusicBackgroundGetDayTrack(GetArea(oPC)));
-        PS_SetLocalInt(GetArea(oPC), "X2_MUSIC_NIGHT", MusicBackgroundGetNightTrack(GetArea(oPC)));
+        SetLocalInt(GetArea(oPC), "X2_MUSIC_DAY", MusicBackgroundGetDayTrack(GetArea(oPC)));
+        SetLocalInt(GetArea(oPC), "X2_MUSIC_NIGHT", MusicBackgroundGetNightTrack(GetArea(oPC)));
     }
 }
 
@@ -1997,8 +1997,8 @@ void CutStoreMusic(float fDelay, object oPC, int iShift = TRUE)
 // be restoed after aborting a cutscene
 void CallRestoreMusic(int nCutscene, object oPC)
 {
-    MusicBackgroundChangeDay(GetArea(oPC), PS_GetLocalInt(GetArea(oPC), "X2_MUSIC_DAY"));
-    MusicBackgroundChangeNight(GetArea(oPC), PS_GetLocalInt(GetArea(oPC), "X2_MUSIC_NIGHT"));
+    MusicBackgroundChangeDay(GetArea(oPC), GetLocalInt(GetArea(oPC), "X2_MUSIC_DAY"));
+    MusicBackgroundChangeNight(GetArea(oPC), GetLocalInt(GetArea(oPC), "X2_MUSIC_NIGHT"));
 }
 
 void CutRestoreMusic(float fDelay, object oPC, int iShift = TRUE)
@@ -2010,7 +2010,7 @@ void CutRestoreMusic(float fDelay, object oPC, int iShift = TRUE)
 
 void CallSetTileMainColor(int nCutscene, object oPC, location lLoc, int nMainColor1, int nMainColor2)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         vector vPos = GetPositionFromLocation(lLoc);
         vPos.x /= 10;
@@ -2030,7 +2030,7 @@ void CutSetTileMainColor(float fDelay, object oPC, location lLoc, int nMainColor
 
 void CallSetTileSourceColor(int nCutscene, object oPC, location lLoc, int nSourceColor1, int nSourceColor2)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         vector vPos = GetPositionFromLocation(lLoc);
         vPos.x /= 10;
@@ -2050,7 +2050,7 @@ void CutSetTileSourceColor(float fDelay, object oPC, location lLoc, int nSourceC
 
 void CallSetWeather(int nCutscene, object oPC, int nWeather)
 {
-    if(nCutscene == PS_GetLocalInt(oPC, "nCutsceneNumber"))
+    if(nCutscene == GetLocalInt(oPC, "nCutsceneNumber"))
     {
         SetWeather(GetArea(oPC), nWeather);
     }
@@ -2081,7 +2081,7 @@ void CutSetCameraSpeed(float fDelay, object oPC, float fMovementRateFactor, int 
 
 void CutDisableCutscene(int nCutscene, float fCleanupDelay, float fDestPCCopyDelay, int nRestoreType = RESTORE_TYPE_NORMAL)
 {
-    if(PS_GetLocalInt(GetModule(), "X2_DelayType" + IntToString(nCutscene)) != CUT_DELAY_TYPE_CONSTANT)
+    if(GetLocalInt(GetModule(), "X2_DelayType" + IntToString(nCutscene)) != CUT_DELAY_TYPE_CONSTANT)
     {
         fCleanupDelay = CutCalculateCurrentDelay(fCleanupDelay, nCutscene);
         fDestPCCopyDelay = CutCalculateCurrentDelay(fDestPCCopyDelay, nCutscene);
@@ -2103,7 +2103,7 @@ void CutDisableCutscene(int nCutscene, float fCleanupDelay, float fDestPCCopyDel
             string sDelayVariable = "X2_fCutscene" + IntToString(nCutscene) + "Delay";
 
             //DelayCommand(fCleanupDelay - 1.0, CutRestorePCAppearance(nCutscene, oPC));
-            DelayCommand(fCleanupDelay, PS_SetLocalFloat(GetModule(), sDelayVariable, 0.0));
+            DelayCommand(fCleanupDelay, SetLocalFloat(GetModule(), sDelayVariable, 0.0));
             DelayCommand(fCleanupDelay, CallRemoveAssociatesEffects(nCutscene, oPC));
             DelayCommand(fCleanupDelay, CallRemoveEffects(nCutscene, oPC));
             if(nRestoreType == RESTORE_TYPE_NORMAL)

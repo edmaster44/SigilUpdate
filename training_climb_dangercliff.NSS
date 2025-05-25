@@ -5,12 +5,12 @@
 void main () {
 
 	object oPC = GetLastUsedBy();
-	int nDC = PS_GetLocalInt(OBJECT_SELF, "climb_dc");
-	string sTarget = PS_GetLocalString(OBJECT_SELF, "climb_target");
-	string sSelf = PS_GetLocalString(OBJECT_SELF, "climb_fail_loc"); //the place to fall when you have a minor failure; its down when you're going down
-	string sFallback1 = PS_GetLocalString(OBJECT_SELF, "climb_fallback_1");
-	string sFallback2 = PS_GetLocalString(OBJECT_SELF, "climb_fallback_2");
-	string sFallback3 = PS_GetLocalString(OBJECT_SELF, "climb_fallback_3");
+	int nDC = GetLocalInt(OBJECT_SELF, "climb_dc");
+	string sTarget = GetLocalString(OBJECT_SELF, "climb_target");
+	string sSelf = GetLocalString(OBJECT_SELF, "climb_fail_loc"); //the place to fall when you have a minor failure; its down when you're going down
+	string sFallback1 = GetLocalString(OBJECT_SELF, "climb_fallback_1");
+	string sFallback2 = GetLocalString(OBJECT_SELF, "climb_fallback_2");
+	string sFallback3 = GetLocalString(OBJECT_SELF, "climb_fallback_3");
 	
 	//Because you can increase in skill, we need
 	//to determine what difficulty this dc really is
@@ -46,11 +46,11 @@ void main () {
 		sResult = "Success!";
 		int nXP = GetXPForAbilityTrainingQuest(oPC, ABILITY_STRENGTH, nDifficulty);
 		
-		int nTime = PS_GetLocalInt(OBJECT_SELF, GetName(oPC));
+		int nTime = GetLocalInt(OBJECT_SELF, GetName(oPC));
 		if (GetTime()-nTime > 10)
 			GiveTrainingQuestXP(oPC, nXP);
 			
-		PS_SetLocalInt(OBJECT_SELF, GetName(oPC), GetTime());
+		SetLocalInt(OBJECT_SELF, GetName(oPC), GetTime());
 		
 		object oWP = GetWaypointByTag(sTarget);
 		SendMessageToPC(oPC, sTarget);

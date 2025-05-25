@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Sacrificial dagger on activate script script. Deals 10d10 negative energy damage
 // on a touch attack. If it kills the target, gain bonuses to spells and blasts
@@ -26,8 +26,8 @@ void main()
 	if (GetIsDead(oTarget))
 	{
 		SendMessageToPC(oPC, "You absorb a part of your victim's life force, bolstering your dark magics.");
-		PS_SetLocalInt(oPC, "BlastBonus_2", 5);
-		PS_SetLocalInt(oPC, "FingerDCBonus_2", 3);
-		PS_SetLocalInt(oPC, "WailDCBonus_2", 1);
+		SetLocalInt(oPC, "BlastBonus_2", 5);
+		SetLocalInt(oPC, "FingerDCBonus_2", 3);
+		SetLocalInt(oPC, "WailDCBonus_2", 1);
 	}
 }

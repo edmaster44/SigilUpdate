@@ -30,10 +30,10 @@ void SetECL(object oPC, object oTarget, string nECL)
    if(GetIsObjectValid(oItem))
    {
 //SendMessageToPC(GetFirstPC(), "setting on essence"+nECL);   
-		//SpeakString(PS_GetLocalString(oItem,"ECL"));
-		PS_SetLocalString(oItem,"ECL",nECL);
-		PS_SetLocalString(oTarget,"ECL",nECL);
-		PS_SetLocalString(oItem, "ECL_Manual",nECL);
+		//SpeakString(GetLocalString(oItem,"ECL"));
+		SetLocalString(oItem,"ECL",nECL);
+		SetLocalString(oTarget,"ECL",nECL);
+		SetLocalString(oItem, "ECL_Manual",nECL);
 		//SpeakString("ECL" + nECL,TALKVOLUME_SHOUT);
 
 		SQLExecDirect("INSERT INTO logging (account,name,event,type) VALUES ('" + 
@@ -71,7 +71,7 @@ void main()
 	}
 	else
 	{ //set target ECL
-//SendMessageToPC(GetFirstPC(), "setting ecl on player" + PS_GetLocalString(oItem, "ECL"));
-		SetECL(oPC, oTarget, PS_GetLocalString(oItem, "ECL"));
+//SendMessageToPC(GetFirstPC(), "setting ecl on player" + GetLocalString(oItem, "ECL"));
+		SetECL(oPC, oTarget, GetLocalString(oItem, "ECL"));
 	}
 }

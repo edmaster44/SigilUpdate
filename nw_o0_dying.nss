@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Dying Script
@@ -21,7 +21,7 @@ void main()
 // Contingency heal at 0 hit points by Ceremorph 11/7/16
 object oDying  	= GetLastPlayerDying();
 object oItem  = GetItemPossessedBy(oDying,"ps_essence");
-int nContingency	= PS_GetLocalInt(oDying, "Contingency");
+int nContingency	= GetLocalInt(oDying, "Contingency");
 int nHPHeal  	= GetMaxHitPoints(oDying);
 effect eRestore, eSafety, eHeal, eVis1, eVis2;
 
@@ -37,7 +37,7 @@ if (nContingency == 1)
 	DelayCommand(12.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDying));
 	DelayCommand(12.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSafety, oDying, 6.0f));
 	DelayCommand(12.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oDying, 6.0f));
- 	PS_SetLocalInt(oDying, "Contingency", 0);
+ 	SetLocalInt(oDying, "Contingency", 0);
  	return;  }
 
 

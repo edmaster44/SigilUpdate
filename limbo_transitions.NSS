@@ -1,10 +1,10 @@
-#include "ff_safevar"
+
 
 #include "x0_i0_transport"
 string GetLimboTransition(string sTag)
 {
 	object oHolder = GetObjectByTag("limbo_transitionmanager");
-	return (PS_GetLocalString(oHolder, sTag));
+	return (GetLocalString(oHolder, sTag));
 }
 
 string GetLimboDescription(string sTag)

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /* Script Created by Agony_Aunt/Loki for SCoD PW. Waiter who can be summoned to provide refreshments for a party*/
 
@@ -32,35 +32,35 @@ Also set tag based on owner name upon summon to ensure they are unique
 
 void main()
 {
-	object oOwner = PS_GetLocalObject(OBJECT_SELF, "Owner");
+	object oOwner = GetLocalObject(OBJECT_SELF, "Owner");
 	
 	if (GetAILevel() == AI_LEVEL_VERY_LOW) return;
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "ServiceStatus") == WAITER_ACTIVE)
+	if (GetLocalInt(OBJECT_SELF, "ServiceStatus") == WAITER_ACTIVE)
 	{
-		if (PS_GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_ACTION_WALK_TO_CLIENT)
+		if (GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_ACTION_WALK_TO_CLIENT)
 		{
 			// then we should now speak to them using a list of possible things to say.
-			object oClient = PS_GetLocalObject(OBJECT_SELF, "LastClient");
+			object oClient = GetLocalObject(OBJECT_SELF, "LastClient");
 			TurnToFaceObject(oClient, OBJECT_SELF);
 			WaiterSpeakToClient(OBJECT_SELF, oClient);
-			PS_SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_SPEAK_TO_CLIENT);
+			SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_SPEAK_TO_CLIENT);
 		}
-		else if (PS_GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_ACTION_SPEAK_TO_CLIENT)
+		else if (GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_ACTION_SPEAK_TO_CLIENT)
 		{
 			// wait for one round, ie: do nothing
-			PS_SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WAIT);
+			SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WAIT);
 		}
-		else if (PS_GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_ACTION_RETURN_TO_BAR)
+		else if (GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_ACTION_RETURN_TO_BAR)
 		{
 			// wait for one round, ie: do nothing
-			SetFacing(GetFacingFromLocation(PS_GetLocalLocation(OBJECT_SELF, "BarLocation")));
-			PS_SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WAIT);
+			SetFacing(GetFacingFromLocation(GetLocalLocation(OBJECT_SELF, "BarLocation")));
+			SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WAIT);
 		}
-		else if (PS_GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_IN_CONVO)
+		else if (GetLocalInt(OBJECT_SELF, "LastAction") == WAITER_IN_CONVO)
 		{
 			// wait for one round, ie: do nothing
-			PS_SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WAIT);
+			SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WAIT);
 		}
 		else
 		{
@@ -74,8 +74,8 @@ void main()
 				//SendMessageToPC(oOwner, "DEBUG: Looking for a client and found: " + GetName(oTarget));
 				if (oTarget != OBJECT_INVALID)
 				{
-					PS_SetLocalObject(OBJECT_SELF, "LastClient", oTarget);
-					PS_SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WALK_TO_CLIENT);
+					SetLocalObject(OBJECT_SELF, "LastClient", oTarget);
+					SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_WALK_TO_CLIENT);
 					WaiterMoveToClient(OBJECT_SELF, oTarget);
 				}
 			}
@@ -83,13 +83,13 @@ void main()
 			{
 				// walk around a little
 				// locks onto nearest object next to spawn location as GetRandomLocation requires an object not a location
-				location lNewLoc = GetRandomLocation(GetArea(OBJECT_SELF), GetNearestObjectToLocation(OBJECT_TYPE_ALL, PS_GetLocalLocation(OBJECT_SELF, "SpawnLocation")), WAITER_RADIUS);
+				location lNewLoc = GetRandomLocation(GetArea(OBJECT_SELF), GetNearestObjectToLocation(OBJECT_TYPE_ALL, GetLocalLocation(OBJECT_SELF, "SpawnLocation")), WAITER_RADIUS);
 				ActionMoveToLocation(lNewLoc, FALSE);
 			}
 			else if (iAction < 9)
 			{
 				//return to bar
-				PS_SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_RETURN_TO_BAR);
+				SetLocalInt(OBJECT_SELF, "LastAction", WAITER_ACTION_RETURN_TO_BAR);
 				WaiterMoveToBar(OBJECT_SELF);
 			}
 			else // 5 or 6

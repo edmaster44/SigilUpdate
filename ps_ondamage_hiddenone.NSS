@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "hench_i0_ai"
 #include "ginc_behavior"
@@ -8,11 +8,11 @@ void main()
 	object oDamager = GetLastDamager();
 	int nDamage = GetTotalDamageDealt();
 	int nMax = GetMaxHitPoints();
-	int nPreviousDamage = PS_GetLocalInt(OBJECT_SELF, "damageTaken");
+	int nPreviousDamage = GetLocalInt(OBJECT_SELF, "damageTaken");
 	
 	object oWeapon = GetItemInSlot(4, oDamager);
 	if (GetTag(oWeapon) == "ps_sword_godkiller")
-		PS_SetLocalInt(OBJECT_SELF, "damageTaken", nPreviousDamage+nDamage);
+		SetLocalInt(OBJECT_SELF, "damageTaken", nPreviousDamage+nDamage);
 	
 	if (nPreviousDamage > nMax)
 		SetImmortal(OBJECT_SELF, FALSE);
@@ -20,7 +20,7 @@ void main()
 	// I've been damaged so no longer partially focused
 	if (iFocused == FOCUSED_PARTIAL)
 	{
-	  PS_SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
+	  SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
 	}
 	    if (iFocused == FOCUSED_FULL)
 	{
@@ -43,7 +43,7 @@ void main()
         }
         else if (!GetIsFighting(OBJECT_SELF))
         {
-            if ((PS_GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
+            if ((GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
                 (GetPercentageHPLoss(OBJECT_SELF) < 30))
             {
                 // force heal

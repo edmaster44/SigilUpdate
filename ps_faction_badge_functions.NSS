@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
@@ -30,8 +30,8 @@ void main(int iBadgeFunction, int iParameter)
 			break;
 		 	
 		case 3:
-		//	SendMessageToPC(oPC, FACTION_MESSAGE_TEXT_COLOUR + "You have " + IntToString(PS_GetLocalInt(oBadge, "FactionPoints")) +
-		//		" Faction Points in the " + PS_GetLocalString(oBadge, "FactionName") + ".");
+		//	SendMessageToPC(oPC, FACTION_MESSAGE_TEXT_COLOUR + "You have " + IntToString(GetLocalInt(oBadge, "FactionPoints")) +
+		//		" Faction Points in the " + GetLocalString(oBadge, "FactionName") + ".");
 			break;
 			
 		case 4:
@@ -50,10 +50,10 @@ void main(int iBadgeFunction, int iParameter)
 				if (GetIsObjectValid(oCoverBadge))
 				{
 					SetBadgeFaction(oCoverBadge, iParameter);
-					PS_SetLocalInt(oBadge, "Infiltrated", TRUE);
-					PS_SetLocalInt(oBadge, "InfiltratedFaction", iParameter);
+					SetLocalInt(oBadge, "Infiltrated", TRUE);
+					SetLocalInt(oBadge, "InfiltratedFaction", iParameter);
 					SendMessageToPC(oPC, FACTION_MESSAGE_TEXT_COLOUR + "Sucessfully infiltrated the " 
-						+ PS_GetLocalString(oCoverBadge, "FactionName") + ".");
+						+ GetLocalString(oCoverBadge, "FactionName") + ".");
 				}
 				else
 				{
@@ -108,8 +108,8 @@ void main(int iBadgeFunction, int iParameter)
 		
 		case 13:
 			// Create faction specific placeable item on PC
-			CreateItemOnObject(PS_GetLocalString(oPC, "FACTION_PLACEABLE"), oPC);
-			PS_DeleteLocalString(oPC, "FACTION_PLACEABLE");
+			CreateItemOnObject(GetLocalString(oPC, "FACTION_PLACEABLE"), oPC);
+			DeleteLocalString(oPC, "FACTION_PLACEABLE");
 			break;
 	}
 }

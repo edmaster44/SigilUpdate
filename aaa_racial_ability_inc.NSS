@@ -9,6 +9,7 @@
 #include "ps_inc_advscript"
 #include "ginc_item"
 #include "ps_inc_wingtail"
+#include "aaa_dragon_inc"
 
 void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
 void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
@@ -246,8 +247,8 @@ void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
 void PS_Ability_DarkFlight(object oPC)
 {
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
-	int iCheck		= PS_GetLocalInt(oItem, "DarkFlight");
-	int iTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int iCheck		= GetLocalInt(oItem, "DarkFlight");
+	int iTemp		= GetLocalInt(oItem, "TempChange");
 	if (iTemp == 1)
 	{	return;	}
 	int iWing;
@@ -293,7 +294,7 @@ void PS_Ability_DarkFlight(object oPC)
 			app.WingVariation = iWing;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
-		PS_SetLocalInt(oItem, "DarkFlight", 1);
+		SetLocalInt(oItem, "DarkFlight", 1);
 		DelayCommand(0.1f, PS_TintFixer(oPC));
 		DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 		DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));	}
@@ -452,8 +453,8 @@ void PS_Ability_UnholyApothesis(object oPC)
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.WingVariation = iWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
-	PS_SetLocalInt(oItem, "UnholyApothesis", 1);
-	PS_DeleteLocalInt(oItem, "DarkFlight");
+	SetLocalInt(oItem, "UnholyApothesis", 1);
+	DeleteLocalInt(oItem, "DarkFlight");
 	PS_RefreshAppearance(oPC);
 	FeatAdd(oPC, FEAT_LILITUS_GIFT, FALSE, TRUE, FALSE);
 	FeatRemove(oPC, FEAT_DARK_FLIGHT);
@@ -466,6 +467,10 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell) //also to be tweak
 	if (!X2PreSpellCastCode())
     {	return;	}
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
+	
+	//reset dragon ac
+	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
+		PS_ShieldArmor_Dragon(oPC, 2623);
 }
 
 void PS_Ability_MarqCambAlignedStrike(object oPC, int nSpell)
@@ -564,13 +569,13 @@ void PS_FamiliarForm_Bat(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nTemp		= GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		PS_SetLocalInt(oItem, "TempChange", 0);
+		SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -592,13 +597,13 @@ void PS_FamiliarForm_Cat(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nTemp		= GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		PS_SetLocalInt(oItem, "TempChange", 0);
+		SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -620,13 +625,13 @@ void PS_FamiliarForm_Rat(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nTemp		= GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		PS_SetLocalInt(oItem, "TempChange", 0);
+		SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -650,13 +655,13 @@ void PS_FamiliarForm_Spider(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nTemp		= GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		PS_SetLocalInt(oItem, "TempChange", 0);
+		SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -678,13 +683,13 @@ void PS_FamiliarForm_Weasel(object oPC)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
 
 	object 	oItem	= GetItemPossessedBy(oPC,"ps_essence");
-	int nTemp		= PS_GetLocalInt(oItem, "TempChange");
+	int nTemp		= GetLocalInt(oItem, "TempChange");
 		
 		if (nTemp == 1) 	
 	{	PS_RestoreOriginalAppearance(oPC);
 		PS_RefreshAppearance(oPC);
 		RemoveEffectsFromSpell(oPC, 1880);
-		PS_SetLocalInt(oItem, "TempChange", 0);
+		SetLocalInt(oItem, "TempChange", 0);
 	}	
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
@@ -1046,13 +1051,13 @@ void PS_Ability_GhaeleGlow(object oPC, int nSpell)
 void PS_Ability_TArchonTrumpet(object oPC)
 {
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
-	int iCheck		= PS_GetLocalInt(oItem, "HasTrumpet");
+	int iCheck		= GetLocalInt(oItem, "HasTrumpet");
 	
 	if (!X2PreSpellCastCode())
 	{	return;	}
 	if (iCheck != 1)
 	{	CreateItemOnObject("ps_rprc_archtrump", oPC);
-		DelayCommand(0.2, PS_SetLocalInt(oItem, "HasTrumpet", 1));
+		DelayCommand(0.2, SetLocalInt(oItem, "HasTrumpet", 1));
 	}
 }
 
@@ -1193,7 +1198,7 @@ void PS_Ability_MOTCCraftHeartstone(object oPC, object oTarget)
 	 	{
  		DestroyObject(oTarget, 0.0f, TRUE);
    		object oHeartstone = CreateItemOnObject("ps_motc_heartstone", oPC);
-    	PS_SetLocalString(oHeartstone, "Creator", sCrafter);
+    	SetLocalString(oHeartstone, "Creator", sCrafter);
 		}
 
 }
@@ -1264,9 +1269,9 @@ void PS_Ability_Rakshasa_SR(object oPC)
 void PS_Ability_Reincarnate(object oPC)
 {
  	object oItem  = GetItemPossessedBy(oPC,"ps_essence");
- 	int nContingency	= PS_GetLocalInt(oPC, "Contingency");
+ 	int nContingency	= GetLocalInt(oPC, "Contingency");
  	if(nContingency == 0)
-   		PS_SetLocalInt(oPC, "Contingency", 1);
+   		SetLocalInt(oPC, "Contingency", 1);
 }
 void PS_Ability_Austere_AC(object oPC, int nSpell)
 {

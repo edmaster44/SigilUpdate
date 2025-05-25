@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // i_ps_bt_quickling_ac
 //	Script created 10/24/2015 by Ceremorph for use in the Sigil: City of Doors PW  
@@ -7,8 +7,8 @@ void main()
 {
     object oPC      = GetItemActivator();
     object oItem    = GetItemActivated();
-	int iBoost		= PS_GetLocalInt(oItem,"Boost");
-	int iDuration	= PS_GetLocalInt(oItem,"Duration");
+	int iBoost		= GetLocalInt(oItem,"Boost");
+	int iDuration	= GetLocalInt(oItem,"Duration");
 	effect eQuick	= EffectMovementSpeedIncrease(iBoost);
 	effect eVis 	= EffectVisualEffect(VFX_IMP_HASTE);
 	float fDuration = HoursToSeconds(iDuration);

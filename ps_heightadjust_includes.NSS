@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "nwnx_sql"
 #include "x0_i0_spells"
@@ -202,7 +202,7 @@ void AdjustToAdjustedHeight(object oPC)
 	
 	SetScale(oPC, x, y, z);
 	
-	PS_SetLocalFloat(oPC,"ScaledAdjust",z);
+	SetLocalFloat(oPC,"ScaledAdjust",z);
 	
 	SQLExecDirect("UPDATE `ps_barber_height_history` SET `active`='1' WHERE `name`='"+name+"' AND `act`='"+act+"';");	
 }

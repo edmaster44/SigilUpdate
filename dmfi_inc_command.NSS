@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_command - DM Friendly Initiative - Code for .Commands
@@ -85,16 +85,16 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
   itemproperty ipProp;
 
   sHeard = GetStringLowerCase(sOriginal);
-  oTarget = PS_GetLocalObject(oTool, DMFI_TARGET);
-  lTargetLoc = PS_GetLocalLocation(oTool, DMFI_TARGET_LOC);
-  //oItemTarget = PS_GetLocalObject(oTool, DMFI_ITEM_TARGET);
+  oTarget = GetLocalObject(oTool, DMFI_TARGET);
+  lTargetLoc = GetLocalLocation(oTool, DMFI_TARGET_LOC);
+  //oItemTarget = GetLocalObject(oTool, DMFI_ITEM_TARGET);
   oItemTarget = oTarget;
-  oSpeaker = PS_GetLocalObject(oTool, DMFI_SPEAKER);
+  oSpeaker = GetLocalObject(oTool, DMFI_SPEAKER);
     
-  sTool = PS_GetLocalString(oPC, DMFI_sTool);
-  sCommand = PS_GetLocalString(oPC, DMFI_sCommand);
-  sParam1 = PS_GetLocalString(oPC, DMFI_sParam1);
-  sParam2 = PS_GetLocalString(oPC, DMFI_sParam2);
+  sTool = GetLocalString(oPC, DMFI_sTool);
+  sCommand = GetLocalString(oPC, DMFI_sCommand);
+  sParam1 = GetLocalString(oPC, DMFI_sParam1);
+  sParam2 = GetLocalString(oPC, DMFI_sParam2);
 
 //***************************************************************************
 // Format Note: .set target right here
@@ -113,43 +113,43 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 	{
 		if (!DMFI_GetIsDM(oPC))
 		{  // PC side
-			if (PS_GetLocalInt(oPC, DMFI_PC_UI_STATE))
+			if (GetLocalInt(oPC, DMFI_PC_UI_STATE))
 			{
 				CloseGUIScreen(oPC, SCREEN_DMFI_PLAYER);
-				PS_DeleteLocalInt(oPC, DMFI_PC_UI_STATE);
+				DeleteLocalInt(oPC, DMFI_PC_UI_STATE);
 			}	
 			else
 			{
 				DisplayGuiScreen(oPC, SCREEN_DMFI_PLAYER, FALSE, "dmfiplayerui.xml");
-				PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, TRUE);
+				SetLocalInt(oPC, DMFI_PC_UI_STATE, TRUE);
 			}
 		}
 		else
 		{ // DM Side
-			if (PS_GetLocalInt(oPC, DMFI_PC_UI_STATE)==1)
+			if (GetLocalInt(oPC, DMFI_PC_UI_STATE)==1)
 			{
 				CloseGUIScreen(oPC, SCREEN_DMFI_DM);
 				CloseGUIScreen(oPC, SCREEN_DMFI_BATTLE);
-				PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, 2);
+				SetLocalInt(oPC, DMFI_PC_UI_STATE, 2);
 			}	
-			else if (PS_GetLocalInt(oPC, DMFI_PC_UI_STATE)==0)
+			else if (GetLocalInt(oPC, DMFI_PC_UI_STATE)==0)
 			{
 				DisplayGuiScreen(oPC, SCREEN_DMFI_DM, FALSE, "dmfidmui.xml");
 				//DisplayGuiScreen(oPC, SCREEN_DMFI_BATTLE, FALSE, "dmfibattle.xml");
 				DisplayGuiScreen(oPC, SCREEN_DMFI_TRGTOOL, FALSE, "dmfitrgtool.xml");
-				PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, 1);
+				SetLocalInt(oPC, DMFI_PC_UI_STATE, 1);
 			}
-			else if (PS_GetLocalInt(oPC, DMFI_PC_UI_STATE)==2)
+			else if (GetLocalInt(oPC, DMFI_PC_UI_STATE)==2)
 			{
 				DisplayGuiScreen(oPC, SCREEN_DMFI_DM, FALSE, "dmfidmui.xml");
 				CloseGUIScreen(oPC, SCREEN_DMFI_TRGTOOL);	
-				PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, 3);
+				SetLocalInt(oPC, DMFI_PC_UI_STATE, 3);
 			}
 			else
 			{
 				DisplayGuiScreen(oPC, SCREEN_DMFI_TRGTOOL, FALSE, "dmfitrgtool.xml");
 				CloseGUIScreen(oPC, SCREEN_DMFI_DM);
-				PS_SetLocalInt(oPC, DMFI_PC_UI_STATE, 0);
+				SetLocalInt(oPC, DMFI_PC_UI_STATE, 0);
 			}	
 							
 		}
@@ -161,7 +161,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 	  {
         if ((GetObjectType(oTarget)==OBJECT_TYPE_CREATURE) && (oTarget!=oPC))
         {
-            PS_SetLocalObject(oTool, DMFI_FOLLOW, oTarget);
+            SetLocalObject(oTool, DMFI_FOLLOW, oTarget);
             DMFI_Follow(oPC);
             SendText(oPC, TXT_FOLLOW_ON + GetName(oTarget), TRUE, COLOR_GREEN);
 			DisplayGuiScreen(oPC, SCREEN_DMFI_FOLLOWOFF, FALSE, "dmfifollowoff.xml");
@@ -185,7 +185,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     }
     else if (sHeard== PRM_FOLLOW + PRM_ + PRM_OFF)
     {
-        PS_DeleteLocalObject(oTool, DMFI_FOLLOW);
+        DeleteLocalObject(oTool, DMFI_FOLLOW);
         AssignCommand(oPC, ClearAllActions(TRUE));
 		CloseGUIScreen(oPC, SCREEN_DMFI_FOLLOWOFF);
         SendText(oPC, TXT_FOLLOW_OFF, TRUE, COLOR_GREEN);
@@ -206,14 +206,14 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 		
 			bNumber = DMFI_IsNumber(sCommand);
             if (bNumber)
-                sCommand = PS_GetLocalString(oTool, DMFI_STRING_LANGUAGE + sCommand);
+                sCommand = GetLocalString(oTool, DMFI_STRING_LANGUAGE + sCommand);
 			
             sConvertUsing = DMFI_NewLanguage(sCommand);
             nTest = DMFI_IsLanguageKnown(oPC, sCommand);
 				
             if (DMFI_GetIsDM(oPC) || nTest)
             { // valid language and can speak it.
-				PS_SetLocalString(oPC, DMFI_LANGUAGE_TOGGLE, sCommand);				
+				SetLocalString(oPC, DMFI_LANGUAGE_TOGGLE, sCommand);				
 				SetGUIObjectText(oPC, SCREEN_DMFI_TEXT, "Language", -1, DMFI_CapitalizeWord(sCommand) + ":");
 				DisplayGuiScreen(oPC, SCREEN_DMFI_TEXT, FALSE, "dmfitext.xml");
 			} // valid language and can speak it.
@@ -236,8 +236,8 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 			}			
 			if (sSkill!="")
 			{
-				PS_SetLocalString(oTool, DMFI_LAST_ROLL, sSkill);			
-				PS_SetLocalObject(oTool, DMFI_LAST_ROLLER, oTest);
+				SetLocalString(oTool, DMFI_LAST_ROLL, sSkill);			
+				SetLocalObject(oTool, DMFI_LAST_ROLLER, oTest);
                 DMFI_RollCheck(oTest, sSkill, TRUE, oPC, oTool);
 			}
 			else
@@ -247,8 +247,8 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 		{// PC Code
 			if (sSkill!="")
 			{
-				PS_SetLocalString(oTool, DMFI_LAST_ROLL, sSkill);	
-				PS_SetLocalObject(oTool, DMFI_LAST_ROLLER, oSpeaker);
+				SetLocalString(oTool, DMFI_LAST_ROLL, sSkill);	
+				SetLocalObject(oTool, DMFI_LAST_ROLLER, oSpeaker);
                 DMFI_RollCheck(oSpeaker, sSkill, FALSE, OBJECT_INVALID, oTool);
 				
 			}
@@ -266,10 +266,10 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     {
         if (!DMFI_GetIsDM(oPC))
 		{
-			n = PS_GetLocalInt(oPC, DMFI_CHOOSE);
+			n = GetLocalInt(oPC, DMFI_CHOOSE);
 			if (n>0)
 			{
-				PS_SetLocalInt(oPC, DMFI_CHOOSE, n-1);
+				SetLocalInt(oPC, DMFI_CHOOSE, n-1);
 				DMFI_GrantLanguage(oPC, sCommand);
 				
 				if (n>1)	
@@ -304,7 +304,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 	
 	if (sTool==PRM_VOICE)
 	{
-		sTest = PS_GetLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
+		sTest = GetLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
 		if (sTest=="") sTest = LNG_COMMON;
 		SetGUIObjectText(oPC, SCREEN_DMFI_TEXT, "Language", -1, DMFI_CapitalizeWord(sTest) + ":");
 		DisplayGuiScreen(oPC, SCREEN_DMFI_TEXT, FALSE, "dmfitext.xml");
@@ -318,7 +318,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 			// the targets tool.
 			CloseGUIScreen(oTarget, SCREEN_DMFI_TEXT);
 			oTargetTool=DMFI_GetTool(oTarget);
-			PS_DeleteLocalInt(oTargetTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
+			DeleteLocalInt(oTargetTool, DMFI_STRING_LANGUAGE+DMFI_STRING_MAX);
 			SendText(oTarget, TXT_LANGUAGES_RESET, TRUE, COLOR_GREY);
 			SendText(oPC, TXT_LANGUAGES_DMRESET, TRUE, COLOR_GREY); 
 			DelayCommand(2.0, DMFI_InitializeLanguage(oTarget, oTargetTool, oPC));
@@ -341,7 +341,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     {
         if (sCommand==PRM_PC)
         {
-            PS_SetLocalObject(oTool, DMFI_STORE + IntToString(1), oTarget);
+            SetLocalObject(oTool, DMFI_STORE + IntToString(1), oTarget);
             SendText(oPC, TXT_STORE_PC, TRUE, COLOR_GREEN);
         }
         else if (sCommand==PRM_PARTY)
@@ -356,7 +356,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             while (oName1!=OBJECT_INVALID)
             {
                 n++;
-                PS_SetLocalObject(oTool, DMFI_STORE + IntToString(n), oName1);
+                SetLocalObject(oTool, DMFI_STORE + IntToString(n), oName1);
                 oName1 = GetNextFactionMember(oTarget, TRUE);
             }
             SendText(oPC, TXT_STORE_PARTY, TRUE, COLOR_GREEN);
@@ -367,21 +367,21 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     else if (sTool==PRM_PASTE)
     {
        	n=1;
-        oTest = PS_GetLocalObject(oTool, DMFI_STORE + IntToString(n));
+        oTest = GetLocalObject(oTool, DMFI_STORE + IntToString(n));
         if (GetIsObjectValid(oTest))
 		{
 			while (oTest!=OBJECT_INVALID)
 	        {
 	           // oName1 = CopyObject(oTest, GetLocation(oPC));
 	           // n++;
-	           // oTest = PS_GetLocalObject(oTool, DMFI_STORE + IntToString(n));
+	           // oTest = GetLocalObject(oTool, DMFI_STORE + IntToString(n));
 			   // Qk: Fix for NWN2 v1.10 thx to Dragonsbane
                string sTag = "some_random_tag_" + IntToString(Random(65536)); 
           	   CopyObject(oTest, GetLocation(oPC), OBJECT_INVALID, sTag); 
                oName1 = GetNearestObjectByTag(sTag, oPC); 
                // End Update  
                n++; 
-               oTest = PS_GetLocalObject(oTool, DMFI_STORE + IntToString(n)); 
+               oTest = GetLocalObject(oTool, DMFI_STORE + IntToString(n)); 
 	        }
 	        SendText(oPC, TXT_RECALL, TRUE, COLOR_GREEN);
 		}
@@ -411,8 +411,8 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     {
        if (sCommand==PRM_ROLL)
        {
-            sSkill = PS_GetLocalString(oTool, DMFI_LAST_ROLL);
-            oTest = PS_GetLocalObject(oTool, DMFI_LAST_ROLLER);
+            sSkill = GetLocalString(oTool, DMFI_LAST_ROLL);
+            oTest = GetLocalObject(oTool, DMFI_LAST_ROLLER);
 
             if (!DMFI_GetIsDM(oPC))
                 DMFI_RollCheck(oTest, sSkill);
@@ -423,14 +423,14 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
        {
        		if (DMFI_IsNumber(sParam1) && (StringToInt(sParam1)<11))
 			{
-				nLastVFX = PS_GetLocalInt(oTool, DMFI_VFX_RECENT + sParam1);
+				nLastVFX = GetLocalInt(oTool, DMFI_VFX_RECENT + sParam1);
 				sVFXLabel = Get2DAString(DMFI_2DA_VFX, DMFI_2DA_COLUMN, nLastVFX);
 				DMFI_CreateVFX(oTool, oSpeaker, sVFXLabel, IntToString(nLastVFX));
 				SendText(oPC, TXT_VFX_PLAYED + IntToString(nLastVFX) + TXT_VFX_LABEL + sVFXLabel, TRUE, COLOR_GREEN);
 			}	   
 	        else
 			{
-				nLastVFX = PS_GetLocalInt(oTool, DMFI_VFX_LAST);
+				nLastVFX = GetLocalInt(oTool, DMFI_VFX_LAST);
 	            sVFXLabel = Get2DAString(DMFI_2DA_VFX, DMFI_2DA_COLUMN, nLastVFX);
 	            DMFI_CreateVFX(oTool, oSpeaker, sVFXLabel, IntToString(nLastVFX));
 				SendText(oPC, TXT_VFX_PLAYED + IntToString(nLastVFX) + TXT_VFX_LABEL + sVFXLabel, TRUE, COLOR_GREEN);
@@ -438,8 +438,8 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
        }
 	   else if (sCommand==PRM_SOUND)
 	   {
-	   		sCommand = PS_GetLocalString(oTool, DMFI_SOUND_LAST);
-			sParam1 = PS_GetLocalString(oTool, DMFI_SOUND_LAST_PRM);		
+	   		sCommand = GetLocalString(oTool, DMFI_SOUND_LAST);
+			sParam1 = GetLocalString(oTool, DMFI_SOUND_LAST_PRM);		
 	   		DMFI_CreateSound(oTool, oPC, oTarget, oSpeaker, lTargetLoc, sCommand, sParam1);
 	   }	
 
@@ -593,7 +593,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             }
             else
             {
-                PS_SetLocalString( oPC, DLG_PAGE_ID, PG_LIST_50);
+                SetLocalString( oPC, DLG_PAGE_ID, PG_LIST_50);
                 StartDlg( oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
                 return DMFI_STATE_ERROR;
             }
@@ -642,7 +642,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
                     SendText(oPC, TXT_PARAM_MISSING + TXT_DAY_NIGHT_BATTLE, FALSE, COLOR_BLUE);
                     return DMFI_STATE_ERROR;
                 }
-                PS_SetLocalString( oPC, DLG_PAGE_ID, PG_MUSIC_CATEGORY);
+                SetLocalString( oPC, DLG_PAGE_ID, PG_MUSIC_CATEGORY);
                 StartDlg( oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
                 return DMFI_STATE_SUCCESS;
             }
@@ -660,7 +660,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 						sParam2="100";
 					AmbientSoundSetDayVolume(GetArea(oPC), StringToInt(sParam2));
 					AmbientSoundSetNightVolume(GetArea(oPC), StringToInt(sParam2));
-					PS_SetLocalString(oTool, DMFI_AMBIENT_VOLUME, sParam2);
+					SetLocalString(oTool, DMFI_AMBIENT_VOLUME, sParam2);
 					SendText(oPC, TXT_SET_AMBIENT_VOLUME + sParam2, TRUE, COLOR_GREEN);
 					//SetGUIObjectText(oPC, SCREEN_DMFI_AMBTOOL, "ambvol", -1, sParam2);
 				}
@@ -673,7 +673,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 	                {
 	                    AmbientSoundStop(oArea);
 	                    AmbientSoundChangeDay(oArea, StringToInt(sParam2));
-						nNum = StringToInt(PS_GetLocalString(oTool, DMFI_AMBIENT_VOLUME));
+						nNum = StringToInt(GetLocalString(oTool, DMFI_AMBIENT_VOLUME));
 						AmbientSoundSetDayVolume(oArea, nNum);
 	                    DelayCommand(2.0, AmbientSoundPlay(oArea));
 	                    SendText(oPC, TXT_SET_AMBIENT_DAY + sSoundName, TRUE, COLOR_GREEN);
@@ -682,7 +682,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 	                {
 	                    AmbientSoundStop(oArea);
 	                    AmbientSoundChangeNight(oArea, StringToInt(sParam2));
-						nNum = StringToInt(PS_GetLocalString(oTool, DMFI_AMBIENT_VOLUME));
+						nNum = StringToInt(GetLocalString(oTool, DMFI_AMBIENT_VOLUME));
 						AmbientSoundSetNightVolume(oArea, nNum);
 	                    DelayCommand(2.0, AmbientSoundPlay(oArea));
 	                    SendText(oPC, TXT_SET_AMBIENT_NIGHT + sSoundName, TRUE, COLOR_GREEN);
@@ -696,7 +696,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
                     SendText(oPC, TXT_PARAM_MISSING + TXT_DAY_NIGHT, FALSE, COLOR_BLUE);
                     return DMFI_STATE_ERROR;
                 } // return if sParam1 not valid
-                PS_SetLocalString( oPC, DLG_PAGE_ID, PG_AMBIENT_CATEGORY);
+                SetLocalString( oPC, DLG_PAGE_ID, PG_AMBIENT_CATEGORY);
                 StartDlg( oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
                 return DMFI_STATE_SUCCESS;
             }
@@ -708,7 +708,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             { // DELAY
                 if (DMFI_IsNumber(sParam2))
                 {// valid command            
-                    PS_SetLocalString(oTool, DMFI_SOUND_DELAY, sParam2);
+                    SetLocalString(oTool, DMFI_SOUND_DELAY, sParam2);
                     SendText(oPC, TXT_SET_SOUND_DELAY + sParam2, TRUE, COLOR_GREEN);
 					//SetGUIObjectText(oPC, SCREEN_DMFI_SNDTOOL, "sounddelay", -1, sParam2);
                 }
@@ -727,7 +727,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             { // DURATION
                 if (DMFI_IsNumber(sParam2))
                 {// valid command            {
-                    PS_SetLocalString(oTool, DMFI_VFX_DURATION, sParam2);
+                    SetLocalString(oTool, DMFI_VFX_DURATION, sParam2);
                     SendText(oPC, TXT_SET_VFX_DURATION + sParam2, TRUE, COLOR_GREEN);
 					//SetGUIObjectText(oPC, SCREEN_DMFI_VFXTOOL, "changedur", -1, sParam2);
 					//CloseGUIScreen(oPC, SCREEN_DMFI_DMLIST);
@@ -767,7 +767,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             }
             else
             {
-                PS_SetLocalString( oPC, DLG_PAGE_ID, PG_LIST_50);
+                SetLocalString( oPC, DLG_PAGE_ID, PG_LIST_50);
                 StartDlg( oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
                 return DMFI_STATE_SUCCESS;
             }
@@ -779,30 +779,30 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 			object oArea = GetArea(oPC);
             SetWeather(GetArea(oPC), WEATHER_TYPE_RAIN,-1);
             SendText(oPC, TXT_WEATHER_CLEAR, FALSE, COLOR_GREEN);
-			PS_SetLocalInt(oArea,"DMFI_WEATHER",-1);
+			SetLocalInt(oArea,"DMFI_WEATHER",-1);
     }
   else if (sTool == PRM_RAIN)
   	{
 		object oArea = GetArea(oPC);
-		nWeather = PS_GetLocalInt(oArea,"DMFI_WEATHER");
+		nWeather = GetLocalInt(oArea,"DMFI_WEATHER");
 		if (nWeather<0) nWeather=0;
 		nWeather=nWeather+1;
 		if (nWeather>5) nWeather=5;
 		    SetWeather(oArea, WEATHER_TYPE_RAIN,nWeather);
             SendText(oPC, TXT_WEATHER_RAIN, FALSE, COLOR_GREEN);
-			PS_SetLocalInt(oArea,"DMFI_WEATHER",nWeather);
+			SetLocalInt(oArea,"DMFI_WEATHER",nWeather);
 		
 	}
 	
    else if (sTool == PRM_NORAIN)
   	{ 
 		object oArea = GetArea(oPC);
-		nWeather = PS_GetLocalInt(oArea,"DMFI_WEATHER");
+		nWeather = GetLocalInt(oArea,"DMFI_WEATHER");
 		nWeather=nWeather-1;
     	if (nWeather<0) nWeather=0;
 		    SetWeather(oArea, WEATHER_TYPE_RAIN,nWeather);
             SendText(oPC, TXT_WEATHER_CLEAR, FALSE, COLOR_GREEN);
-		    PS_SetLocalInt(oArea,"DMFI_WEATHER",nWeather);
+		    SetLocalInt(oArea,"DMFI_WEATHER",nWeather);
 	}
 
 // MUSIC COMMANDS
@@ -835,11 +835,11 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 
             MusicBackgroundStop(oArea);
             MusicBattleStop(oArea);
-            nMusic = PS_GetLocalInt(oArea, DMFI_MUSIC_BATTLE);
+            nMusic = GetLocalInt(oArea, DMFI_MUSIC_BATTLE);
             MusicBattleChange(oArea, nMusic);
-            nMusic = PS_GetLocalInt(oArea, DMFI_MUSIC_DAY);
+            nMusic = GetLocalInt(oArea, DMFI_MUSIC_DAY);
             MusicBackgroundChangeDay(oArea, nMusic);
-            nMusic = PS_GetLocalInt(oArea, DMFI_MUSIC_NIGHT);
+            nMusic = GetLocalInt(oArea, DMFI_MUSIC_NIGHT);
             MusicBackgroundChangeNight(oArea, nMusic);
 
             MusicBattleStop(oArea);
@@ -848,7 +848,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
         }
         else if (FindSubString(sHeard, PRM_DEFAULT)!=-1)
         {
-            PS_DeleteLocalInt(GetArea(oPC), DMFI_MUSIC_INITIALIZED);
+            DeleteLocalInt(GetArea(oPC), DMFI_MUSIC_INITIALIZED);
             DMFI_InitializeAreaMusic(oPC);
             SendText(oPC, TXT_MUSIC_DEFAULT, TRUE, COLOR_GREEN);
         }
@@ -859,7 +859,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     {
         if (FindSubString(sHeard, PRM_PLAY)!=-1)
         {
-            sTest = PS_GetLocalString(oTool, DMFI_AMBIENT_VOLUME);
+            sTest = GetLocalString(oTool, DMFI_AMBIENT_VOLUME);
 			AmbientSoundSetDayVolume(GetArea(oPC), StringToInt(sTest));
 			AmbientSoundSetNightVolume(GetArea(oPC), StringToInt(sTest));
 			AmbientSoundSetDayVolume(GetArea(oPC),100);
@@ -887,18 +887,18 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             DMFI_CreateVFX(oTool, oSpeaker, sVFXLabel, sCommand);
 
             SendText(oPC, TXT_VFX_PLAYED + sCommand + TXT_VFX_LABEL + sVFXLabel, TRUE, COLOR_GREEN);
-            PS_SetLocalInt(oTool, DMFI_VFX_LAST, StringToInt(sCommand));
+            SetLocalInt(oTool, DMFI_VFX_LAST, StringToInt(sCommand));
 			
 			// Build list of recently used vfxs
-			nNum = PS_GetLocalInt(oTool, DMFI_VFX_RECENT);
-			PS_SetLocalInt(oTool, DMFI_VFX_RECENT + IntToString(nNum), StringToInt(sCommand));
+			nNum = GetLocalInt(oTool, DMFI_VFX_RECENT);
+			SetLocalInt(oTool, DMFI_VFX_RECENT + IntToString(nNum), StringToInt(sCommand));
 			nNum++;
 			if (nNum>29) nNum = 1;
-			PS_SetLocalInt(oTool, DMFI_VFX_RECENT, nNum);
+			SetLocalInt(oTool, DMFI_VFX_RECENT, nNum);
 		}
         else
         {
-            PS_SetLocalString(oPC, DLG_PAGE_ID,PG_VFX);
+            SetLocalString(oPC, DLG_PAGE_ID,PG_VFX);
             StartDlg(oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
             return DMFI_STATE_SUCCESS;
         }
@@ -981,7 +981,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
         }
         else
         {
-            PS_SetLocalString(oPC, DLG_PAGE_ID,PG_LIST_DISEASE);
+            SetLocalString(oPC, DLG_PAGE_ID,PG_LIST_DISEASE);
             StartDlg(oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
             return DMFI_STATE_SUCCESS;
         }
@@ -1003,7 +1003,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
         }
         else
         {
-            PS_SetLocalString(oPC, DLG_PAGE_ID,PG_LIST_DISEASE);
+            SetLocalString(oPC, DLG_PAGE_ID,PG_LIST_DISEASE);
             StartDlg(oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
             return DMFI_STATE_SUCCESS;
         }
@@ -1016,12 +1016,12 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
         if (bNumber)
         {
             DMFI_CreateSound(oTool, oPC, oTarget, oSpeaker, lTargetLoc, sCommand, sParam1);
-		    PS_SetLocalString(oTool, DMFI_SOUND_LAST, sCommand);
-			PS_SetLocalString(oTool, DMFI_SOUND_LAST_PRM, sParam1);
+		    SetLocalString(oTool, DMFI_SOUND_LAST, sCommand);
+			SetLocalString(oTool, DMFI_SOUND_LAST_PRM, sParam1);
         }
         else
         {
-            PS_SetLocalString( oPC, DLG_PAGE_ID, PG_LIST_SOUND);
+            SetLocalString( oPC, DLG_PAGE_ID, PG_LIST_SOUND);
             StartDlg( oPC, oTool, DMFI_EXE_CONV, TRUE, FALSE, FALSE );
             return DMFI_STATE_SUCCESS;
         }
@@ -1065,7 +1065,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 			if (sCommand==PRM_TOGGLE)
 			{
 				DMFI_ToggleItemPrefs(sHeard, oPC, oTarget);
-				oRef = PS_GetLocalObject(oTarget, DMFI_INVENTORY_TARGET);
+				oRef = GetLocalObject(oTarget, DMFI_INVENTORY_TARGET);
 				if (GetIsObjectValid(oRef) && DMFI_UPDATE_INVENTORY)
 				{
 					oTarget = GetItemPossessor(oRef);
@@ -1074,7 +1074,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 			}
 			else if (sCommand==PRM_IDENTIFY)
 			{
-				oRef = PS_GetLocalObject(oItemTarget, DMFI_INVENTORY_TARGET);
+				oRef = GetLocalObject(oItemTarget, DMFI_INVENTORY_TARGET);
 				sTest = GetName(oItemTarget);
 				SetIdentified(oItemTarget, TRUE);
 				SetIdentified(oRef, TRUE);
@@ -1094,7 +1094,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 					SendText(oPC, TXT_INVENTORY_ONLY, FALSE, COLOR_RED);
 					return DMFI_STATE_ERROR;
 				}			
-				oRef = PS_GetLocalObject(oItemTarget, DMFI_INVENTORY_TARGET);
+				oRef = GetLocalObject(oItemTarget, DMFI_INVENTORY_TARGET);
 				oTarget = GetItemPossessor(oRef);
 				
 				if ((!GetIsObjectValid(oRef)) || (!GetIsObjectValid(oTarget)))
@@ -1116,7 +1116,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
     		}
 			else if (sCommand==PRM_GIVE)
 			{
-				oTarget = PS_GetLocalObject(oPC, DMFI_INVENTORY_TARGET);
+				oTarget = GetLocalObject(oPC, DMFI_INVENTORY_TARGET);
 				if (GetItemPossessor(oItemTarget)!=oPC)
 				{
 					SendText(oPC, TXT_INVENTORY_ONLY, FALSE, COLOR_RED);
@@ -1221,11 +1221,11 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 	else if (sTool==PRM_APPEARANCE)
 	{
 		if (sCommand=="-1")
-			SetCreatureAppearanceType(oTarget, PS_GetLocalInt(oTarget, DMFI_DEF_APP));
+			SetCreatureAppearanceType(oTarget, GetLocalInt(oTarget, DMFI_DEF_APP));
 		else			
 		{
-			if (PS_GetLocalInt(oTarget, DMFI_DEF_APP)==0)
-				PS_SetLocalInt(oTarget, DMFI_DEF_APP, GetAppearanceType(oTarget));
+			if (GetLocalInt(oTarget, DMFI_DEF_APP)==0)
+				SetLocalInt(oTarget, DMFI_DEF_APP, GetAppearanceType(oTarget));
 			
 			SetCreatureAppearanceType(oTarget, StringToInt(sCommand));
 			eVFX = EffectVisualEffect(896, FALSE);

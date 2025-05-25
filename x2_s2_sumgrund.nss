@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Summon Greater Undead
@@ -129,7 +129,7 @@ void main()
 
     // * If the character has a special pale master item equipped (variable set via OnEquip)
     // * run a script on the summoned monster.
-    string sScript = PS_GetLocalString(OBJECT_SELF,"X2_S_PM_SPECIAL_ITEM");
+    string sScript = GetLocalString(OBJECT_SELF,"X2_S_PM_SPECIAL_ITEM");
     if (sScript != "")
     {
         object oSelf = OBJECT_SELF;

@@ -17,7 +17,7 @@ void main () {
 	
 
 	object oPC = OBJECT_SELF;
-	object oGem = PS_GetLocalObject(oPC, "selected_gem");
+	object oGem = GetLocalObject(oPC, "selected_gem");
 	
 	int lastDone = CheckTimeStamp(oPC, "Last_Gem_Cut");
 	if (lastDone < 1) {
@@ -125,7 +125,7 @@ void main () {
 		sEffect = "fx_hit_spark_crit";
 	}
 	
-	PS_SetLocalObject(oPC, "selected_gem", oGem);
+	SetLocalObject(oPC, "selected_gem", oGem);
 	
 	if (sEffect != "")
 		DelayCommand(0.5f, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sEffect), lEffect));

@@ -49,7 +49,7 @@ void CheckArenaFight(object oPC) {
 			continue;
 		}
 			
-		if (PS_GetLocalInt(oPC, "IN_ARENA") == 0) {
+		if (GetLocalInt(oPC, "IN_ARENA") == 0) {
 			oViewer = GetNextObjectInShape(SHAPE_SPHERE, fRadius, GetLocation(oPC));
 			continue;
 		}
@@ -92,9 +92,9 @@ void respawn(object xPC)
    location xStart;
    effect xRez, xHeal, xVisual, xBad;
    //Populate variables
-   //xPC = PS_GetLocalObject(OBJECT_SELF, "LAST_RESPAWN_BUTTON_PRESSER");                     //Player respawning
+   //xPC = GetLocalObject(OBJECT_SELF, "LAST_RESPAWN_BUTTON_PRESSER");                     //Player respawning
    
-   PS_SetLocalLocation(xPC, "DEATH_LOCATION", GetLocation(xPC));
+   SetLocalLocation(xPC, "DEATH_LOCATION", GetLocation(xPC));
    object oEssence =  GetItemPossessedBy(xPC, "ps_essence");
 
    xHP = GetMaxHitPoints(xPC);                               //Player's Max HP
@@ -103,7 +103,7 @@ void respawn(object xPC)
    xHeal = EffectHeal(xHP);                                  //Heal effect
 
    string sCurrentArea = GetTag(GetArea(xPC));
-   string sDeathArea = PS_GetLocalString(oEssence, "PC_DEATH_AREA");
+   string sDeathArea = GetLocalString(oEssence, "PC_DEATH_AREA");
    int iAreaChange;
    
    // as discussed, AF to arena will now trigger proper penalty
@@ -165,7 +165,7 @@ void main() {
 	// THIS LINE IS TO HANDLE A BUG IN v1.0, v1.01, v1.02
 	// WHERE THE OnPlayerRespawn EVENT WAS ONLY FIRING THE SCRIPT "gui_death_respawn_self"
 	if (oPC == OBJECT_INVALID)
-	{	oPC = PS_GetLocalObject(GetModule(), "LAST_RESPAWN_BUTTON_PRESSER");	}
+	{	oPC = GetLocalObject(GetModule(), "LAST_RESPAWN_BUTTON_PRESSER");	}
 		
 	// IF THE oPC OBJECT IS STILL INVALID, THEN  gui_death_respawn_self  IS NOT BEING CALLED FOR SOME REASON
 	if (oPC == OBJECT_INVALID)
@@ -177,7 +177,7 @@ void main() {
 	if (GetPermanentInt(sID, "FirstDeath") == 0) {
 		int nHD = GetHitDice(oPC);
 		SetPermanentInt(sID, "FirstDeath", nHD);
-		PS_SetLocalInt(oPC, "FirstDeath", 1);
+		SetLocalInt(oPC, "FirstDeath", 1);
 		AddAchievement(oPC, 9);
 	}
 	

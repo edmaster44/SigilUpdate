@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "aaa_constants"
 
@@ -12,7 +12,7 @@ struct MatDetails{
 //Cycles through objects in the DM area until it finds the correct one
 object GetObjectFromDMArea(string sTag)
 {
-	int iDMArea = PS_GetGlobalInt("DM_AREA");
+	int iDMArea = GetGlobalInt("DM_AREA");
 	object oDMArea = IntToObject(iDMArea);
 	
 	object oObj = GetFirstObjectInArea(oDMArea);

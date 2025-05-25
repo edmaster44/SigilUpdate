@@ -328,7 +328,7 @@ void DS_CloseShop(object oPC, object oStore)
 	object	oItem	= GetFirstItemInInventory(oStore);
 	while(GetIsObjectValid(oItem))
 	{
-		PS_DeleteLocalInt(oItem, "DS_SELL_PRICE");
+		DeleteLocalInt(oItem, "DS_SELL_PRICE");
 		oItem	= GetNextItemInInventory(oStore);
 	}
 
@@ -337,24 +337,24 @@ void DS_CloseShop(object oPC, object oStore)
 	//Close the shop GUI
 	CloseGUIScreen(oPC, "dethia_shop");
 
-	if(PS_GetLocalInt(oStore, "DS_INFINITE_GOLD"))
+	if(GetLocalInt(oStore, "DS_INFINITE_GOLD"))
 	{//If the store had infinite gold we reset its gold to infinite
 		SetStoreGold(oStore, -1);
-		PS_DeleteLocalInt(oStore, "DS_INFINITE_GOLD");
+		DeleteLocalInt(oStore, "DS_INFINITE_GOLD");
 	}
 	
 	//Lastly we set the store as closed and execute the OnClose event script
-	PS_SetLocalInt(oStore, "DS_OPEN", FALSE);
+	SetLocalInt(oStore, "DS_OPEN", FALSE);
 	ExecuteScript(GetEventHandler(oStore, STORE_CLOSE), oStore);
 }
 
 void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 {//First we check if the shop is already open
 	//SendMessageToPC(oPC, "opening new shop");
-	object	oCustomer	= PS_GetLocalObject(oStore, "DS_CUSTOMER");	//The currently registered customer
+	object	oCustomer	= GetLocalObject(oStore, "DS_CUSTOMER");	//The currently registered customer
 	
 	//Another person who isn't the currently registered customer wants to open the store
-	if (PS_GetLocalInt(oStore, "DS_OPEN") && GetIsObjectValid(oCustomer) && (oCustomer != oPC))  {
+	if (GetLocalInt(oStore, "DS_OPEN") && GetIsObjectValid(oCustomer) && (oCustomer != oPC))  {
 	
 		//original customer is still close enough and active
 		if ((PS_GetTimestamp_Age_Minutes(oStore, STORE_TIMESTAMP) < 5) && (DS_DistanceCheck(oCustomer, oStore))) { 
@@ -367,20 +367,20 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 		}
 	}
 	//Player tried to steal from here before and failed, tell him to get lost
-	else if(PS_GetLocalInt(oPC, "DS_THIEF_" + GetTag(oStore)))
+	else if(GetLocalInt(oPC, "DS_THIEF_" + GetTag(oStore)))
 	{
 		FloatingTextStringOnCreature("Dirty thief I'm not showing you my wares, go away.", oPC);
 		return;
 	}
 	
 	//Safe to proceed - mark store as open and register new customer
-	PS_SetLocalObject(oStore, "DS_CUSTOMER", oPC);
-	PS_SetLocalInt(oStore, "DS_OPEN", TRUE);
+	SetLocalObject(oStore, "DS_CUSTOMER", oPC);
+	SetLocalInt(oStore, "DS_OPEN", TRUE);
 	
 	PS_Timestamp_UNIX(oStore, STORE_TIMESTAMP);
 
 	//Open the shop GUI, store some vars and populate the shop
-	PS_SetLocalObject(oStore, "DS_SHOP_KEEPER", OBJECT_SELF);	//Store the shop keeper
+	SetLocalObject(oStore, "DS_SHOP_KEEPER", OBJECT_SELF);	//Store the shop keeper
 	DisplayGuiScreen(oPC, "dethia_shop", FALSE, "dethia_shop.xml");
 	//Set the store and mark up/mark down values as local variables in the gui
 	SetLocalGUIVariable(oPC, "dethia_shop", 0, IntToString(ObjectToInt(oStore)));
@@ -396,8 +396,8 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 	SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
 	SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
 	
-	if((DS_THEFT_ENABLE && PS_GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
-		(!DS_THEFT_ENABLE && !PS_GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
+	if((DS_THEFT_ENABLE && GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
+		(!DS_THEFT_ENABLE && !GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
 	{	SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);	}
 
 	//Set the max-buy price values
@@ -433,7 +433,7 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 	{//If the store has infinite gold we set a local int indicating that it does
 		iStoreGold	= 500000;	//And set the store gold to 500,000
 		SetStoreGold(oStore, iStoreGold);
-		PS_SetLocalInt(oStore, "DS_INFINITE_GOLD", TRUE);
+		SetLocalInt(oStore, "DS_INFINITE_GOLD", TRUE);
 	}
 	SetGUIObjectText(oPC, "dethia_shop", "sg_cc", -1, DS_ConvertCoinsToCopper(iStoreGold));
 	SetGUIObjectText(oPC, "dethia_shop", "sg_sc", -1, DS_ConvertCoinsToSilver(iStoreGold));
@@ -447,7 +447,7 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 }
 
 object DS_GetStoreKeeper(object oStore)
-{	return PS_GetLocalObject(oStore, "DS_SHOP_KEEPER");	}
+{	return GetLocalObject(oStore, "DS_SHOP_KEEPER");	}
 
 string DS_ConvertCoinsToCopper(int iCoins)
 {	return	IntToString(iCoins%AgC);	}
@@ -462,7 +462,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 {//We first empty the shop of currently available items
 	ClearListBox(oPC, "dethia_shop", "store_items");
 	
-	int nShouldUpdateDB = (PS_GetLocalInt(oStore, "STORE_SHOULD_NOT_UPDATE_DB") == FALSE);
+	int nShouldUpdateDB = (GetLocalInt(oStore, "STORE_SHOULD_NOT_UPDATE_DB") == FALSE);
 
 	int		iRowID	= 0;	//The listbox row item ID
 	object	oItem	= GetFirstItemInInventory(oStore);	//Get the first item in the store
@@ -484,7 +484,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		if (nShouldUpdateDB)
 			AddItemToDB(oItem);
 		
-		float	fCostMod	= PS_GetLocalFloat(oStore, "DS_SELL_MOD");
+		float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 		if(fCostMod == 0.0f)	{	fCostMod	= 1.0f;	}	//If no value is set, set the value to 100%
 		fCostMod	+= (iMarkUp + iMarkDown)/200.0f;
 		
@@ -497,8 +497,8 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
-		if(PS_GetLocalInt(oItem, "DS_SELL_PRICE") > 0)
-		{	iItemCost	= PS_GetLocalInt(oItem, "DS_SELL_PRICE");	}
+		if(GetLocalInt(oItem, "DS_SELL_PRICE") > 0)
+		{	iItemCost	= GetLocalInt(oItem, "DS_SELL_PRICE");	}
 		//Finally add the item details into the GUI
 		
 		//Debug Stuff
@@ -537,7 +537,7 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		oItem	= GetNextItemInInventory(oStore);	//Get the next item in the store
 	}
 	
-	PS_SetLocalInt(oStore, "STORE_SHOULD_NOT_UPDATE_DB", 1);
+	SetLocalInt(oStore, "STORE_SHOULD_NOT_UPDATE_DB", 1);
 }
 
 int DS_WillNotBuy(object oItem, string sNoBuyList)
@@ -985,10 +985,10 @@ int GetItemUseable(object oItem, object oPC)
 int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
 	SetItemCostVariables(oItem, FALSE, oPC);
-	int nCost = PS_GetLocalInt(oItem, "PRICE");
+	int nCost = GetLocalInt(oItem, "PRICE");
 	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
 		nCost *= GetItemStackSize(oItem);
-	else if (PS_GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
+	else if (GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
 		nCost *= GetItemStackSize(oItem);
 		
 	return nCost;
@@ -1016,7 +1016,7 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 
 	SendMessageToPC(oPC, "Adding items to store");
 
-	float	fCostMod	= PS_GetLocalFloat(oStore, "DS_SELL_MOD");
+	float	fCostMod	= GetLocalFloat(oStore, "DS_SELL_MOD");
 	object oItem = GetFirstItemInInventory(oStore);
 	while(GetIsObjectValid(oItem)) {
 	
@@ -1032,8 +1032,8 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID) {
 			SQLExecDirect(sQuery);
 		} else {
 			SetItemCostVariables(oItem);
-			int nOldCost = PS_GetLocalInt(oItem, "PRICE_OLD");
-			int nPoints = PS_GetLocalInt(oItem, "PRICE_POINTS");
+			int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+			int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
 			
 			string sQuery = "UPDATE item_prices SET item_points='"+IntToString(nPoints)+"', item_oldvalue='"+IntToString(nOldCost)+"' WHERE item_tag='"+sTag+"'";
 			SendMessageToPC(oPC, sQuery);
@@ -1170,11 +1170,11 @@ void AddPropertyToDB(itemproperty iProp) {
 //Checks whether we need to recalculate the price for an item
 int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 		
-	int nCost = PS_GetLocalInt(oItem, "PRICE");
-	int nDirty = PS_GetLocalInt(oItem, "PRICE_DIRTY");
-	int nTime = PS_GetLocalInt(oItem, "PRICE_TIMESTAMP");
-	int nOldCost = PS_GetLocalInt(oItem, "PRICE_OLD");
-	int nPoints = PS_GetLocalInt(oItem, "PRICE_POINTS");
+	int nCost = GetLocalInt(oItem, "PRICE");
+	int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
+	int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
+	int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+	int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
 	int nBaseGold = GetGoldPieceValue(oItem); //may not be reliable, so we're going to also compare with properties
 	
 	//We haven't run SetItemCostVariables at ALL on this item, so we probably should
@@ -1226,14 +1226,14 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 	if (GetItemCostUpdated(oItem, oPC)) {
 	
 		int	iOldCost	= FloatToInt((GetGoldPieceValue(oItem)*1.0f)/GetItemStackSize(oItem));
-		PS_SetLocalInt(oItem, "PRICE_POINTS", GetItemTotalPoints(oItem));
-		PS_SetLocalInt(oItem, "PRICE_OLD", iOldCost);
+		SetLocalInt(oItem, "PRICE_POINTS", GetItemTotalPoints(oItem));
+		SetLocalInt(oItem, "PRICE_OLD", iOldCost);
 	
-		int nCost = PS_GetLocalInt(oItem, "PRICE");
-		int nDirty = PS_GetLocalInt(oItem, "PRICE_DIRTY");
-		int nTime = PS_GetLocalInt(oItem, "PRICE_TIMESTAMP");
-		int nOldCost = PS_GetLocalInt(oItem, "PRICE_OLD");
-		int nPoints = PS_GetLocalInt(oItem, "PRICE_POINTS");
+		int nCost = GetLocalInt(oItem, "PRICE");
+		int nDirty = GetLocalInt(oItem, "PRICE_DIRTY");
+		int nTime = GetLocalInt(oItem, "PRICE_TIMESTAMP");
+		int nOldCost = GetLocalInt(oItem, "PRICE_OLD");
+		int nPoints = GetLocalInt(oItem, "PRICE_POINTS");
 	
 		int nDBCost = 0;
 		int nDBOldCost = 0;
@@ -1269,9 +1269,9 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 			if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch because no DB info.");		
 		}
 	
-		PS_SetLocalInt(oItem, "PRICE", nCost);
+		SetLocalInt(oItem, "PRICE", nCost);
 		PS_Timestamp_UNIX(oItem, "PRICE_TIMESTAMP");
-		PS_SetLocalInt(oItem, "PRICE_DIRTY", 0);
+		SetLocalInt(oItem, "PRICE_DIRTY", 0);
 	}
 	
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("HallSpeakersEnterLock");
+ int iLock = GetGlobalInt("HallSpeakersEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("HallSpeakersEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("HallSpeakersEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_speaker_npc1") == OBJECT_INVALID)
   {
@@ -79,6 +79,6 @@ void main()
   
   
   
-  PS_SetGlobalInt("HallSpeakersEnterLock", 0);
+  SetGlobalInt("HallSpeakersEnterLock", 0);
  }
 }

@@ -1,13 +1,13 @@
-#include "ff_safevar"
+
 
 void main() {
 
  	object oPC = GetEnteringObject();
   
- 	int iLock = PS_GetGlobalInt("USigilEnterLock");
+ 	int iLock = GetGlobalInt("USigilEnterLock");
  	if ( iLock == 0 ) {
 	
-  		PS_SetGlobalInt("USigilEnterLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("USigilEnterLock", 1); // Only allows one clean up at a time.
 
   		if(GetObjectByTag("ps_us_mniitvak") == OBJECT_INVALID) {
    			object oWP = GetWaypointByTag("wp_us_mniitvak");
@@ -51,7 +51,7 @@ void main() {
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_us_smugglermerchant", lSpawnpoint);    
   		}
     
-  		PS_SetGlobalInt("USigilEnterLock", 0);
+  		SetGlobalInt("USigilEnterLock", 0);
  	}
 	
 }

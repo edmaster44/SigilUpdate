@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //ps_inc_time
 
@@ -19,7 +19,7 @@
 void PS_Timestamp_UNIX(object oObject, string sVariable)
 {
 	int nTime		= PS_GetTime();
-	PS_SetLocalInt(oObject, sVariable, nTime);
+	SetLocalInt(oObject, sVariable, nTime);
 }
 
 // ------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ void PS_Timestamp_UNIX(object oObject, string sVariable)
 // ------------------------------------------------------------------------------------
 int PS_GetTimestamp_Age_Seconds(object oObject, string sVariable)
 {
-	int nStamp 		= PS_GetLocalInt(oObject, sVariable);
+	int nStamp 		= GetLocalInt(oObject, sVariable);
 	if (nStamp == 0)
 	{	return 0;	}
 	int nNow		= PS_GetTime();
@@ -248,7 +248,7 @@ struct TimeFields TimeToTimeFields(int Time)
 int GetIsServerResetTime(object oPC = OBJECT_INVALID) {
 
     object oMod = GetModule();
-    int nBoottime = PS_GetLocalInt(oMod, "boottime");
+    int nBoottime = GetLocalInt(oMod, "boottime");
 	int nHour = 60*60;
 	
 	SQLExecDirect("SELECT UNIX_TIMESTAMP()");
@@ -259,7 +259,7 @@ int GetIsServerResetTime(object oPC = OBJECT_INVALID) {
 		
 		if (GetIsObjectValid(oPC)) DelayCommand(22.0f, SendMessageToPC(oPC, "Current hour: "+IntToString(timeStruct.Hour)));
 		
-		int iDelay = PS_GetLocalInt(oMod, "delaycount");
+		int iDelay = GetLocalInt(oMod, "delaycount");
 		iDelay *= nHour; // so we now check to see if a DM has delayed reboot with widget, 1 hour per delay.
 		
 		//Reset should take place between 4-6AM EST

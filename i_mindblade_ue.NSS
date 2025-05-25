@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Mind Blade unequip script.
 // By Electrohydra
@@ -22,7 +22,7 @@ void main()
 	if(!GetUsingMindblade(oPC))
 	{
 		effect mindShield = GetFirstEffect(oPC);
-		int amount = PS_GetLocalInt(oPC, VAR_MIND_SHIELD);
+		int amount = GetLocalInt(oPC, VAR_MIND_SHIELD);
 		while (GetIsEffectValid(mindShield))
 		{
 			int SpellID = GetEffectSpellId(mindShield);

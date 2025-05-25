@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //
 //  Turn Lights On Off
@@ -35,27 +35,27 @@ void main()
 	
 
 		//define the type of light in local string
-	if (PS_GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="candle")
+	if (GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="candle")
 		{
 		FX_SEF="fx_candle";
 		iLightEffect=VFX_DUR_LIGHT_YELLOW_5;
 		}
-	else if (PS_GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="torch")
+	else if (GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="torch")
 		{
 		FX_SEF="fx_torchglow";
 		iLightEffect=VFX_DUR_LIGHT_ORANGE_10;
 		}
-	else if (PS_GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="fireplace")
+	else if (GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="fireplace")
 		{
 		FX_SEF="fx_fireplace";
 		iLightEffect=VFX_DUR_LIGHT_ORANGE_15;
 		}
-	else if (PS_GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="bonfire")
+	else if (GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="bonfire")
 		{
 		FX_SEF="fx_bonfire";
 		iLightEffect=VFX_DUR_LIGHT_ORANGE_20;
 		}
-	else if (PS_GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="lamp")
+	else if (GetLocalString(OBJECT_SELF,"LIGHT_TYPE")=="lamp")
 		{
 		FX_SEF="fx_lampglow";
 		iLightEffect=VFX_DUR_LIGHT_ORANGE_20;
@@ -65,7 +65,7 @@ void main()
 	else
 		{
 		//default
-		PS_SetLocalString(oSelf,"LIGHT_TYPE","default");
+		SetLocalString(oSelf,"LIGHT_TYPE","default");
 		FX_SEF="fx_candle";
 		iLightEffect=VFX_DUR_LIGHT_ORANGE_10;
 		}
@@ -73,7 +73,7 @@ void main()
 		
 		
 	//if not currently on
-    if (PS_GetLocalInt(OBJECT_SELF,"NW_L_AMION") == 0)
+    if (GetLocalInt(OBJECT_SELF,"NW_L_AMION") == 0)
     {
 		SendMessageToPC(oCaller,"You light the flame.");
 					
@@ -81,7 +81,7 @@ void main()
 	    //turn on light from the placeable and play animation if any
 		PlayAnimation(ANIMATION_PLACEABLE_ACTIVATE);
       	DelayCommand(0.4,SetPlaceableIllumination(oSelf, TRUE));
-      	PS_SetLocalInt(oSelf,"NW_L_AMION",1);
+      	SetLocalInt(oSelf,"NW_L_AMION",1);
       	DelayCommand(0.5,RecomputeStaticLighting(GetArea(oSelf)));
 			
 		//apply lighting
@@ -94,7 +94,7 @@ void main()
 		//debug
 			
 		//apply flame effect to x_object ipoints within a small radius
-		iNumberOfFlames=PS_GetLocalInt(oSelf,"NUMBER_FLAMES");
+		iNumberOfFlames=GetLocalInt(oSelf,"NUMBER_FLAMES");
 		if (iNumberOfFlames<1) 
 		{
 		iNumberOfFlames=1;
@@ -121,10 +121,10 @@ void main()
       	DelayCommand(0.4,SetPlaceableIllumination(oSelf, FALSE));
 		
 		//set local variable to off
-      	PS_SetLocalInt(OBJECT_SELF,"NW_L_AMION",0);
+      	SetLocalInt(OBJECT_SELF,"NW_L_AMION",0);
 
 		//remove flame effect to x_object ipoints within a small radius
-		iNumberOfFlames=PS_GetLocalInt(oSelf,"NUMBER_FLAMES");
+		iNumberOfFlames=GetLocalInt(oSelf,"NUMBER_FLAMES");
 		if (iNumberOfFlames<1) 
 			{
 			iNumberOfFlames=1;

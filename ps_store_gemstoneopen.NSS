@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*******************************************************/
 // A copy of ga_open_store
@@ -17,13 +17,13 @@ void main(int nMarkUp, int nMarkDown)
 	object oStore = GetStoreFromStoreArea("ps_store_zharak_gemstones");
 	
 	int nCurrentTime = PS_GetTime();
-	int nTimestamp = PS_GetLocalInt(oStore, "LastPopulated");
+	int nTimestamp = GetLocalInt(oStore, "LastPopulated");
 	
 	if (nTimestamp > 0 && nCurrentTime-nTimestamp > CLEAN_TIME) {
 		ClearStore(oStore);
 	} else {
 		PopulateGemstoneStore(oStore);
-		PS_SetLocalInt(oStore, "LastPopulated", nCurrentTime);
+		SetLocalInt(oStore, "LastPopulated", nCurrentTime);
 	}
 	
 	int iPCAppraise = FloatToInt(IntToFloat(GetSkillRank(SKILL_APPRAISE, oPC)) / APPRAISE_DIVISOR);

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //:://////////////////////////////////////////////////
 //:: NW_C2_DEFAULT7
@@ -26,7 +26,7 @@ void main()
 {
 	ExecuteScript("ps_xp_script",OBJECT_SELF);
 
-	string sDeathScript = PS_GetLocalString(OBJECT_SELF, "DeathScript");
+	string sDeathScript = GetLocalString(OBJECT_SELF, "DeathScript");
 	if (sDeathScript != "")
 		ExecuteScript(sDeathScript, OBJECT_SELF);
 

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // V1.00
 
@@ -9,7 +9,7 @@
 
 void Reboot_ShutdownNwn2server()
 {
-	if (PS_GetLocalInt(GetModule(), "reboot") == 0)
+	if (GetLocalInt(GetModule(), "reboot") == 0)
 		return;
 
 	ShutdownNwn2server();
@@ -17,7 +17,7 @@ void Reboot_ShutdownNwn2server()
 
 void Reboot_SendMessageToPC(object oPC, string sMessage)
 {
-	if (PS_GetLocalInt(GetModule(), "reboot") == 0)
+	if (GetLocalInt(GetModule(), "reboot") == 0)
 		return;
 
 	SendMessageToPC(oPC, sMessage);
@@ -31,13 +31,13 @@ void main()
 
 	PS_OnPCLeave(GetExitingObject());
 	
-	if( PS_GetLocalInt(oMod, "reboot") == 1 )
+	if( GetLocalInt(oMod, "reboot") == 1 )
 	{
 		return;
 	}
 	
 	if (GetIsServerResetTime()) {
-		PS_SetLocalInt(oMod, "reboot", 1);
+		SetLocalInt(oMod, "reboot", 1);
 			
 		DelayCommand(300.0,Reboot_ShutdownNwn2server());
 		

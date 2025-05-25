@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 ps_convo_multiuse
@@ -19,12 +19,12 @@ void main() {
 		return;
 
 	//	Determine how many responses will be available to this NPC.
-	int iResponses	= PS_GetLocalInt(OBJECT_SELF, "responses");
-	string sSay1	= PS_GetLocalString(OBJECT_SELF, "say1");
-	string sSay2	= PS_GetLocalString(OBJECT_SELF, "say2");
-	string sSay3	= PS_GetLocalString(OBJECT_SELF, "say3");
-	string sSay4	= PS_GetLocalString(OBJECT_SELF, "say4");
-	string sSay5	= PS_GetLocalString(OBJECT_SELF, "say5");
+	int iResponses	= GetLocalInt(OBJECT_SELF, "responses");
+	string sSay1	= GetLocalString(OBJECT_SELF, "say1");
+	string sSay2	= GetLocalString(OBJECT_SELF, "say2");
+	string sSay3	= GetLocalString(OBJECT_SELF, "say3");
+	string sSay4	= GetLocalString(OBJECT_SELF, "say4");
+	string sSay5	= GetLocalString(OBJECT_SELF, "say5");
 
 	switch (Random(iResponses)) {
 	

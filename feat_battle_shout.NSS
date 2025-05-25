@@ -1,19 +1,19 @@
-#include "ff_safevar"
+
 
 void RunTaunt(object oPC, object oTARGET, float fDUR, int nINTERRUPT = TRUE, int nPVP = TRUE, int nSTART = TRUE)
 {	
 	if (nSTART == TRUE)
 	{
 		if ((nPVP != TRUE) && (GetIsPC(oTARGET) == TRUE)) return;
-		if (PS_GetLocalObject(oTARGET, "TAUNT_SOURCE") != OBJECT_INVALID) return;
+		if (GetLocalObject(oTARGET, "TAUNT_SOURCE") != OBJECT_INVALID) return;
 		if (nINTERRUPT == TRUE) AssignCommand(oTARGET, ClearAllActions());
 		effect eTAUNT = ExtraordinaryEffect(EffectVisualEffect(VFX_DUR_TAUNT));
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTAUNT, oTARGET, fDUR);
-		PS_SetLocalObject(oTARGET, "TAUNT_SOURCE", oPC);	
+		SetLocalObject(oTARGET, "TAUNT_SOURCE", oPC);	
 	}
 	if (fDUR <= 0.0f)
 	{
-		PS_DeleteLocalObject(oTARGET, "TAUNT_SOURCE");
+		DeleteLocalObject(oTARGET, "TAUNT_SOURCE");
 		return;
 	}
 	if ((GetAttackTarget(oTARGET) != oPC))

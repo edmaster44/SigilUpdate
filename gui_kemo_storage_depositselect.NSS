@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 string GetStorageItemIcon(object oItem)
 {
@@ -16,7 +16,7 @@ string GetPCID(object oPC)
 object GetItemFromList(object oPC, string sItemNumber)
 {
 	string sStorageVar = "TempStorageObject" + sItemNumber;
-	return PS_GetLocalObject(oPC,sStorageVar);
+	return GetLocalObject(oPC,sStorageVar);
 }
 
 int CheckTag(object oItem)
@@ -74,19 +74,19 @@ void main (string sItemNumber)
 
 	if (FindSubString(sItemName,";") > -1)
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit items with semicolons in their names.");
 		return;		
 	}
 	else if (!CheckTag(oItem)) //checks for forbidden items, prevents listing
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit this item.");
 		return;		
 	}
 	else if (iCounter > 1000) //checks if storage full
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"Your storage is full. You can't store more.");
 		return;		
 	}
@@ -116,7 +116,7 @@ void main (string sItemNumber)
 object GetItemFromList(object oPC, string sItemNumber)
 {
 	string sStorageVar = "TempStorageObject" + sItemNumber;
-	return PS_GetLocalObject(oPC,sStorageVar);
+	return GetLocalObject(oPC,sStorageVar);
 }
 
 int CheckTag(object oItem)
@@ -149,13 +149,13 @@ void main (string sItemNumber)
 	string sQuery;
 	//WriteTimestampedLogEntry(GetName(oPC) + " is selecting an item to deposit at the storage banker.");
 
-	/*if(PS_GetLocalInt(oPC,"DepositDelay") == 1)
+	/*if(GetLocalInt(oPC,"DepositDelay") == 1)
 	{
 		SendMessageToPC(oPC,"You must wait before depositing the next item.");
 		return;
 	}
 	
-	PS_SetLocalInt(oPC,"DepositDelay",1); 
+	SetLocalInt(oPC,"DepositDelay",1); 
 	SetGUIObjectHidden(oPC,"KEMO_STORAGE","DepositButtonB",TRUE);
 
 	object oItem = GetItemFromList(oPC, sItemNumber); //find the sale item from the list
@@ -173,7 +173,7 @@ void main (string sItemNumber)
 	}
 	
 	string sDB;
-	string guildname = PS_GetLocalString(oPC,"kemo_storage_mode_guildname");
+	string guildname = GetLocalString(oPC,"kemo_storage_mode_guildname");
 
 	if (guildname == "") sDB = GetPCID(oPC);
 	else sDB = GetGuildID(oPC, guildname);
@@ -182,13 +182,13 @@ void main (string sItemNumber)
 
 	if (FindSubString(sItemName,";") > -1)
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit items with semicolons in their names.");
 		return;		
 	}
 	else if (!CheckTag(oItem)) //checks for forbidden items, prevents listing
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit this item.");
 		return;		
 	}
@@ -235,7 +235,7 @@ void main (string sItemNumber)
 	if (!GetIsObjectValid(oItem)) return;
 	string sDB;
 
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
 	{
 	sDB = GetPCID(oPC);
 	sQuery="SELECT itemid + 1 available_id FROM new_storage t WHERE storageid='"+sDB+"'"+
@@ -243,9 +243,9 @@ void main (string sItemNumber)
 	" storageid = '"+sDB+"') ORDER BY itemid LIMIT 1";
 	}
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
-	sDB = GetGuildID(oPC, PS_GetLocalString(oPC,"kemo_storage_mode_guildname"));
+	sDB = GetGuildID(oPC, GetLocalString(oPC,"kemo_storage_mode_guildname"));
 	sQuery="SELECT itemid + 1 available_id FROM new_storage_guildstorage t WHERE storageid='"+sDB+"'"+
 	" and NOT EXISTS(SELECT * FROM new_storage_guildstorage WHERE itemid = t.itemid + 1 and"+
 	" storageid = '"+sDB+"') ORDER BY itemid LIMIT 1";
@@ -263,19 +263,19 @@ void main (string sItemNumber)
 
 	if (FindSubString(sItemName,";") > -1)
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit items with semicolons in their names.");
 		return;		
 	}
 	else if (!CheckTag(oItem)) //checks for forbidden items, prevents listing
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"You may not deposit this item.");
 		return;		
 	}
 	else if (iCounter > 1000) //checks if storage full
 	{
-		PS_DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
+		DeleteLocalObject(oPC,"TempStorageObject" + sItemNumber);
 		SendMessageToPC(oPC,"Your storage is full. You can't store more.");
 		return;		
 	}
@@ -285,7 +285,7 @@ void main (string sItemNumber)
 		string sIcon = GetStorageItemIcon(oItem);
 		int sCategory = GetBaseItemType(oItem);
 
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
 	{
 	sQuery = "INSERT INTO new_storage VALUES ('"+sDB+"', '"+IntToString(iCounter)+"', '"+SQLEncodeSpecialChars(sItemName)+"', "+
 	" '"+sStackSize+"', '"+sIcon+"', '"+SQLEncodeSpecialChars(IntToString(sCategory))+"', %s);";
@@ -296,7 +296,7 @@ void main (string sItemNumber)
 	string cdkey = SQLEncodeSpecialChars(GetPCPublicCDKey(oPC));
 	string ipaddress = SQLEncodeSpecialChars(GetPCIPAddress(oPC));
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
 	sQuery = "INSERT INTO new_storage_guildstorage VALUES ('"+sDB+"', '"+IntToString(iCounter)+"', '"+SQLEncodeSpecialChars(sItemName)+"', "+
 	" '"+sStackSize+"', '"+sIcon+"', '"+SQLEncodeSpecialChars(IntToString(sCategory))+"', %s, '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
@@ -309,7 +309,7 @@ void main (string sItemNumber)
 		sQuery = "INSERT INTO new_storage_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
 	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
 		sQuery = "INSERT INTO new_storage_guild_history VALUES (NOW(), 'deposited', '"+sDB+"', "+
 	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";

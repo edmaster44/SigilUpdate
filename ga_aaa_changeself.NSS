@@ -29,14 +29,14 @@
 #include "aaa_changeself_inc"
 #include "ps_inc_functions"
 #include "ps_inc_advscript"
-#include "aaa_constants"
+//#include "aaa_constants" redundant include, is included in ps_inc_functions
 	
 void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, float fValue3)
 {
 	object oPC		= OBJECT_SELF;
 	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
 	
-	PS_SetLocalInt(oItem, "TempChange", 1);
+	SetLocalInt(oItem, "TempChange", 1);
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 
 	switch(iParam)

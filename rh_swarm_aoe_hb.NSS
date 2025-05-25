@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*Created by Shaughn
 for the Risen Hero Campaign
@@ -12,7 +12,7 @@ void main()
 {
 	object oTarget = GetFirstInPersistentObject();
 	object oCaster = GetAreaOfEffectCreator();
-	object oSummoner = PS_GetLocalObject(oCaster, "SUMMONER");
+	object oSummoner = GetLocalObject(oCaster, "SUMMONER");
 	
 	//debug
 	//FloatingTextStringOnCreature("object: oCaster",oCaster);
@@ -20,12 +20,12 @@ void main()
 	
 	
 	int nHD			=	GetHitDice(oCaster);
-	int nDisease	=	PS_GetLocalInt(oCaster,"swarm_disease");
-	int nPoison		=	PS_GetLocalInt(oCaster,"swarm_poison");
-	int nDC			=	PS_GetLocalInt(oCaster,"swarm_dc");
-	int nWound		=	PS_GetLocalInt(oCaster,"swarm_wound");
-	int nBonus		=	PS_GetLocalInt(oCaster,"swarm_bonus");
-	string sIgnore	=	PS_GetLocalString(oCaster,"swarm_ignore");
+	int nDisease	=	GetLocalInt(oCaster,"swarm_disease");
+	int nPoison		=	GetLocalInt(oCaster,"swarm_poison");
+	int nDC			=	GetLocalInt(oCaster,"swarm_dc");
+	int nWound		=	GetLocalInt(oCaster,"swarm_wound");
+	int nBonus		=	GetLocalInt(oCaster,"swarm_bonus");
+	string sIgnore	=	GetLocalString(oCaster,"swarm_ignore");
 	
 	effect eDamage;
 	
@@ -84,7 +84,7 @@ void main()
 				effect eWound;
 				int nDone = FALSE;
 				
-				if(PS_GetLocalInt(oCaster,""+GetFirstName(oTarget)+""+GetLastName(oTarget)+"") != 0)nDone == TRUE;
+				if(GetLocalInt(oCaster,""+GetFirstName(oTarget)+""+GetLastName(oTarget)+"") != 0)nDone == TRUE;
 				
 				if(nWound == 1 && nDone == FALSE)//Wounding
 				{
@@ -98,7 +98,7 @@ void main()
 				
 				if(FortitudeSave(oTarget,nDC,SAVING_THROW_TYPE_NONE,oCaster) == SAVING_THROW_CHECK_FAILED)
 				{
-					PS_SetLocalInt(oCaster,""+GetFirstName(oTarget)+""+GetLastName(oTarget)+"",1);
+					SetLocalInt(oCaster,""+GetFirstName(oTarget)+""+GetLastName(oTarget)+"",1);
 					ApplyEffectToObject(DURATION_TYPE_PERMANENT,eWound,oTarget);
 				}
 					

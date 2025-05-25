@@ -31,7 +31,7 @@ void main()
     }
 	
 	object oCaster = OBJECT_SELF;
-	if (PS_GetLocalInt(oCaster, "PERILOUS_FLAME_ACTIVE") > 0) {
+	if (GetLocalInt(oCaster, "PERILOUS_FLAME_ACTIVE") > 0) {
 		SendMessageToPC(oCaster, "You have cast Wall of Perilous Flame within the last 60 seconds. Please wait before casting again.");
 		return;
 	}
@@ -54,6 +54,6 @@ void main()
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 	
 	//Make sure we only have one hungry darkness active at a time
-	PS_SetLocalInt(oCaster, "PERILOUS_FLAME_ACTIVE", 1);
-	DelayCommand(60.0f, PS_DeleteLocalInt(oCaster, "PERILOUS_FLAME_ACTIVE"));
+	SetLocalInt(oCaster, "PERILOUS_FLAME_ACTIVE", 1);
+	DelayCommand(60.0f, DeleteLocalInt(oCaster, "PERILOUS_FLAME_ACTIVE"));
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Gambling Slots
 // Part of the Gambling System designed by:
@@ -20,7 +20,7 @@ int nT;
 void main()
 {
     oPC=GetLastUsedBy();
-    if(PS_GetLocalInt(OBJECT_SELF,"IN-USE"))
+    if(GetLocalInt(OBJECT_SELF,"IN-USE"))
     {
         SendMessageToPC(oPC, "This is being used, please wait.");
         return;
@@ -31,7 +31,7 @@ void main()
         return;
     }
     nT=1;
-    PS_SetLocalInt(OBJECT_SELF,"IN-USE",nT);
+    SetLocalInt(OBJECT_SELF,"IN-USE",nT);
     AssignCommand(OBJECT_SELF,ActionPlayAnimation(ANIMATION_PLACEABLE_ACTIVATE));
     DelayCommand(0.2,AssignCommand(oPC, ActionPlayAnimation(ANIMATION_LOOPING_GET_LOW)));
     SendMessageToPC(oPC,"You roll the dice one at a time....");
@@ -79,7 +79,7 @@ void GivePayout(int nMult)
     SendMessageToPC(oPC,"You win "+IntToString(nPayout)+" gold!");
     effect eVis = EffectVisualEffect(VFX_IMP_EVIL_HELP);
     ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,OBJECT_SELF);
-    PS_DeleteLocalInt(OBJECT_SELF,"IN-USE");
+    DeleteLocalInt(OBJECT_SELF,"IN-USE");
     GiveGoldToCreature(oPC, nPayout);
 }
 
@@ -95,5 +95,5 @@ void DetermineResults()
     SendMessageToPC(oPC, "You win nothing this time, try again.");
     AddHouse(BASECOST);
     AssignCommand(OBJECT_SELF, TakeGoldFromCreature(BASECOST, oPC, TRUE));
-    PS_DeleteLocalInt(OBJECT_SELF,"IN-USE");
+    DeleteLocalInt(OBJECT_SELF,"IN-USE");
 }

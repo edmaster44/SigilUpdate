@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // gui_dmfi_list - DM Friendly Initiative - GUI script for LIST UI
@@ -26,22 +26,22 @@ void main(string sInput)
 	int n;
 	
 	int nNum = StringToInt(GetStringRight(sInput, 1));
-	int nPrior = PS_GetLocalInt(oPC, DMFI_LIST_PRIOR);
+	int nPrior = GetLocalInt(oPC, DMFI_LIST_PRIOR);
 	
 	if (nPrior == DMFI_LIST_NUMBER)
 	{
-		PS_SetLocalString(oPC, DMFI_LAST_COMMAND, PRM_ROLL + PRM_ + IntToString(nNum));		
-		PS_SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_TYPE);
+		SetLocalString(oPC, DMFI_LAST_COMMAND, PRM_ROLL + PRM_ + IntToString(nNum));		
+		SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_TYPE);
 		
 		SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LISTTITLE, -1, TXT_CHOOSE_TYPE);
 		n=0;
 		while (n<10)
 		{
-			sText = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_DICE + "." + IntToString(n));
+			sText = GetLocalString(oTool, LIST_PREFIX + PG_LIST_DICE + "." + IntToString(n));
 			SetGUIObjectText(oPC, SCREEN_DMFI_LIST, DMFI_UI_LIST+IntToString(n+1), -1, sText);
 			n++;
 		}		
-		PS_SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_TYPE);
+		SetLocalInt(oPC, DMFI_LIST_PRIOR, DMFI_LIST_TYPE);
 	}
 	else
 	{	
@@ -49,12 +49,12 @@ void main(string sInput)
 		
 		if (nPrior == DMFI_LIST_TYPE)
 		{
-			sCommand = PS_GetLocalString(oPC, DMFI_LAST_COMMAND);
-			sCommand = sCommand + PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_DICE + "." + IntToString(nNum-1));
+			sCommand = GetLocalString(oPC, DMFI_LAST_COMMAND);
+			sCommand = sCommand + GetLocalString(oTool, LIST_PREFIX + PG_LIST_DICE + "." + IntToString(nNum-1));
 		}
 		else if (nPrior == DMFI_LIST_ABILITY)
 		{
-			sValue = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_ABILITY + "." + IntToString(nNum-1));
+			sValue = GetLocalString(oTool, LIST_PREFIX + PG_LIST_ABILITY + "." + IntToString(nNum-1));
 			sValue = GetStringLowerCase(sValue);
 				
 			sCommand = PRM_ROLL + PRM_ + sValue;
@@ -67,7 +67,7 @@ void main(string sInput)
 			if (GetStringLength(sInput) > 5) {
 				nNum = StringToInt(GetStringRight(sInput, 2));
 			}
-			sValue = PS_GetLocalString(oTool, LIST_PREFIX + PG_LIST_LANGUAGE + "." + IntToString(nNum-1));
+			sValue = GetLocalString(oTool, LIST_PREFIX + PG_LIST_LANGUAGE + "." + IntToString(nNum-1));
 			sValue = GetStringLowerCase(sValue);
 				
 			sCommand = PRM_LANGUAGE + PRM_ + sValue;

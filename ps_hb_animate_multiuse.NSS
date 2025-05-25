@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 ps_hb_animate_multiuse
@@ -18,8 +18,8 @@ P_DDM for dwarf males, etc.
 void main()
 {
 	//	Get the string for the animation name from the NPC's variables
-	string sAnim	= PS_GetLocalString(OBJECT_SELF, "anim");
-	float fSpeed	= PS_GetLocalFloat(OBJECT_SELF, "speed");
+	string sAnim	= GetLocalString(OBJECT_SELF, "anim");
+	float fSpeed	= GetLocalFloat(OBJECT_SELF, "speed");
 
 	/*	Verify the NPC is not currently involved in conversation. If this is so, the script
 		will cease running*/

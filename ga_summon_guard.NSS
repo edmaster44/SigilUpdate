@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_faction"
 #include "ps_inc_randomitems"
@@ -27,12 +27,12 @@ void main(string sCause) {
 	AssignCommand(oGuard, ActionSpeakString("Guard created!", TALKVOLUME_SHOUT));
 
 	//Set the appropriate variables
-	PS_SetLocalInt(oPC, "HARMONIUM_PURSUIT", 0);
-	PS_SetLocalObject(oPC, "HARMONIUM", oGuard);
-	PS_SetLocalObject(oGuard, "CRIMINAL", oPC);
-	PS_SetLocalString(oGuard, "CRIME", sCause);
-	PS_SetLocalInt(oGuard, "QUEST_CR", nCR); //pass CR to guard npc
-	PS_SetLocalInt(oGuard, "HAS_APPREHENDED", 0);
+	SetLocalInt(oPC, "HARMONIUM_PURSUIT", 0);
+	SetLocalObject(oPC, "HARMONIUM", oGuard);
+	SetLocalObject(oGuard, "CRIMINAL", oPC);
+	SetLocalString(oGuard, "CRIME", sCause);
+	SetLocalInt(oGuard, "QUEST_CR", nCR); //pass CR to guard npc
+	SetLocalInt(oGuard, "HAS_APPREHENDED", 0);
 	
 	//Move to the PC
 	DelayCommand(0.1f, SetImmortal(oGuard, TRUE));

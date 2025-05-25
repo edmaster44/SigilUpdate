@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_achievements"
 #include "ps_inc_faction"
@@ -12,7 +12,7 @@ void main () {
 	object oPC = GetEnteringObject();
 	object oModule = GetModule();
 	
-	if (PS_GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
+	if (GetLocalInt(oPC, "LAST_OOC_PORTAL") == 0) {
 		PS_Timestamp_UNIX(oPC, "LAST_OOC_PORTAL");
 	}
 	
@@ -20,12 +20,12 @@ void main () {
 	DelayCommand(1.0f, CheckForAchievements(oPC));
 	
 	//Test server vs. production switch
-	string sVersion = PS_GetLocalString(oModule, "serverVersion");
+	string sVersion = GetLocalString(oModule, "serverVersion");
 	if (sVersion != "")
 		return;
 		
 	string version = CheckServerVersion(SERVER_VERSION_ROW);
-	PS_SetLocalString(oModule, "serverVersion", version);
+	SetLocalString(oModule, "serverVersion", version);
 	if (version == "Testing") {
 			if (GetObjectByTag("testing_portal_out") == OBJECT_INVALID) {
 				object oWP = GetWaypointByTag("wp_testing_portal_in_2"); //normal version
@@ -39,7 +39,7 @@ void main () {
 //check for achievments on delay
 void CheckForAchievements(object oPC) {
 
-	int nChecked = PS_GetLocalInt(oPC, "ACHIEVEMENTS_CHECKED");
+	int nChecked = GetLocalInt(oPC, "ACHIEVEMENTS_CHECKED");
 	string sID = PS_GetCharID(oPC);
 	//SendMessageToPC(oPC, "Checking for achievements");
 	
@@ -190,7 +190,7 @@ void CheckForAchievements(object oPC) {
 		return;
 	}
 	
-	PS_SetLocalInt(oPC, "ACHIEVEMENTS_CHECKED", nChecked+1);
+	SetLocalInt(oPC, "ACHIEVEMENTS_CHECKED", nChecked+1);
 	DelayCommand(0.5f, CheckForAchievements(oPC));
 
 }

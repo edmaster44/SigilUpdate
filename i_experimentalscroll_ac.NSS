@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_experimentaleffects"
 const int EXPERIMENTAL_SPELLTYPE_SINGLE = 1;
@@ -15,10 +15,10 @@ void main () {
 	
 	SendMessageToPC(oPC, "You read from the unorthodox scroll. . .");
 	
-	int nLevel = PS_GetLocalInt(oItem, "Item_Level");
-	int nType = PS_GetLocalInt(oItem, "Item_Effect_Type");
-	int nHelpful = PS_GetLocalInt(oItem, "Item_Effect_Helpful");
-	int nHarmful = PS_GetLocalInt(oItem, "Item_Effect_Harmful");
+	int nLevel = GetLocalInt(oItem, "Item_Level");
+	int nType = GetLocalInt(oItem, "Item_Effect_Type");
+	int nHelpful = GetLocalInt(oItem, "Item_Effect_Helpful");
+	int nHarmful = GetLocalInt(oItem, "Item_Effect_Harmful");
 	float fRadius = 5.0f*nLevel;
 	
 	//If no saved information. . .

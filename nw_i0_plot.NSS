@@ -210,17 +210,17 @@ void gplotAppraiseOpenStore(object oStore, object oPC, int nBonusMarkUp = 0, int
     */
 
     int nState = 0;
-    int nPreviousRank = PS_GetLocalInt(oPC, "X0_APPRAISERANK"+ sTag);
+    int nPreviousRank = GetLocalInt(oPC, "X0_APPRAISERANK"+ sTag);
 
     // * if the player's rank has improved, let them have another appraise check
     // * against this merchant
 
 
 
-    if ( (nPlayerSkillRank > nPreviousRank) || !PS_GetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag) )
+    if ( (nPlayerSkillRank > nPreviousRank) || !GetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag) )
     {
-       PS_SetLocalInt(oPC, "X0_APPRAISERANK"+ sTag, nPlayerSkillRank);
-       PS_SetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag, 1);
+       SetLocalInt(oPC, "X0_APPRAISERANK"+ sTag, nPlayerSkillRank);
+       SetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag, 1);
 
         nPlayerSkillRank = nPlayerSkillRank + d10();
         nNPCSkillRank = nNPCSkillRank + d10();
@@ -244,7 +244,7 @@ void gplotAppraiseOpenStore(object oStore, object oPC, int nBonusMarkUp = 0, int
     else
     {
         // * recover last reaction
-        nAdjust  = PS_GetLocalInt(oPC, "X0_APPRAISEADJUST" + sTag);
+        nAdjust  = GetLocalInt(oPC, "X0_APPRAISEADJUST" + sTag);
 
         if (nAdjust > 0)
         {
@@ -278,7 +278,7 @@ void gplotAppraiseOpenStore(object oStore, object oPC, int nBonusMarkUp = 0, int
         FloatingTextStrRefOnCreature(182469, oPC, FALSE);
     }
 
-    PS_SetLocalInt(oPC, "X0_APPRAISEADJUST"+ sTag, nAdjust);
+    SetLocalInt(oPC, "X0_APPRAISEADJUST"+ sTag, nAdjust);
   //  SpawnScriptDebugger();
 
 
@@ -321,17 +321,17 @@ void gplotAppraiseFavOpenStore(object oStore, object oPC, int nBonusMarkUp = 0, 
     int nAdjust = 0;
 
     int nState = STATE_WON;
-    int nPreviousRank = PS_GetLocalInt(oPC, "X0_APPRAISERANK"+ sTag);
+    int nPreviousRank = GetLocalInt(oPC, "X0_APPRAISERANK"+ sTag);
 
     // * if the player's rank has improved, let them have another appraise check
     // * against this merchant
 
 
 
-    if ( (nPlayerSkillRank > nPreviousRank) || !PS_GetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag) )
+    if ( (nPlayerSkillRank > nPreviousRank) || !GetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag) )
     {
-       PS_SetLocalInt(oPC, "X0_APPRAISERANK"+ sTag, nPlayerSkillRank);
-       PS_SetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag, 1);
+       SetLocalInt(oPC, "X0_APPRAISERANK"+ sTag, nPlayerSkillRank);
+       SetLocalInt(oPC, "X0_APPRAISEVISITED"+sTag, 1);
 
         nPlayerSkillRank = nPlayerSkillRank + d10();
 
@@ -341,13 +341,13 @@ void gplotAppraiseFavOpenStore(object oStore, object oPC, int nBonusMarkUp = 0, 
     else
     {
         // * recover last reaction
-        nAdjust  = PS_GetLocalInt(oPC, "X0_APPRAISEADJUST" + sTag);
+        nAdjust  = GetLocalInt(oPC, "X0_APPRAISEADJUST" + sTag);
     }
 
     FloatingTextStrRefOnCreature(8965, oPC, FALSE);
 
 
-    PS_SetLocalInt(oPC, "X0_APPRAISEADJUST"+ sTag, nAdjust);
+    SetLocalInt(oPC, "X0_APPRAISEADJUST"+ sTag, nAdjust);
 
     // * Hard cap of 30% max up or down
     if (nAdjust > 30)
@@ -370,8 +370,8 @@ void PlayCharacterTheme(int nTheme)
     int nMusicDay = MusicBackgroundGetDayTrack(oArea);
    // AssignCommand(GetNearestCreature(CREATURE_TYPE_PLAYER_CHAR, PLAYER_CHAR_IS_PC), SpeakString(IntToString(nMusic)));
     //* stores the last music track
-    PS_SetLocalInt(oArea, "NW_L_MYLASTTRACKNight", nMusicNight);
-    PS_SetLocalInt(oArea, "NW_L_MYLASTTRACKDay", nMusicDay);
+    SetLocalInt(oArea, "NW_L_MYLASTTRACKNight", nMusicNight);
+    SetLocalInt(oArea, "NW_L_MYLASTTRACKDay", nMusicDay);
     MusicBackgroundStop(oArea);
     MusicBackgroundChangeNight(oArea, nTheme);
     MusicBackgroundChangeDay(oArea, nTheme);
@@ -385,8 +385,8 @@ void PlayOldTheme()
 {
     object oArea =GetArea(OBJECT_SELF);
     //* stores the last music track
-    int nMusicNight = PS_GetLocalInt(oArea, "NW_L_MYLASTTRACKNight");
-    int nMusicDay = PS_GetLocalInt(oArea, "NW_L_MYLASTTRACKDay");
+    int nMusicNight = GetLocalInt(oArea, "NW_L_MYLASTTRACKNight");
+    int nMusicDay = GetLocalInt(oArea, "NW_L_MYLASTTRACKDay");
     MusicBackgroundStop(oArea);
     MusicBackgroundChangeNight(oArea, nMusicNight);
     MusicBackgroundChangeDay(oArea, nMusicDay);
@@ -427,9 +427,9 @@ int DoOnce()
 {
     int bResult = FALSE;
 
-    if (PS_GetLocalInt(OBJECT_SELF,"NW_L_DOONCE999") == 0)
+    if (GetLocalInt(OBJECT_SELF,"NW_L_DOONCE999") == 0)
     {
-        PS_SetLocalInt(OBJECT_SELF,"NW_L_DOONCE999",1);
+        SetLocalInt(OBJECT_SELF,"NW_L_DOONCE999",1);
         bResult = TRUE;
     }
     return bResult;
@@ -492,7 +492,7 @@ int IsRecall()
        }
        else */
        // * May 2002: Checking a global to see if Haedraline is around as well
-       if (        PS_GetLocalInt(GetModule(),"NW_G_RECALL_HAED") == 10
+       if (        GetLocalInt(GetModule(),"NW_G_RECALL_HAED") == 10
        || GetIsObjectValid(GetNearestObjectByTag("Haedraline3Q11", GetItemActivator())) == TRUE)
        {
         AssignCommand(GetItemActivator(), ActionSpeakStringByStrRef(10612));
@@ -503,8 +503,8 @@ int IsRecall()
            object oPortal = GetObjectByTag("NW_RECALL_PORTAL");
            if (GetIsObjectValid(oPortal) == TRUE)
            {
-             PS_SetLocalInt(GetItemActivator(), "NW_L_USED_RECALL", 1);
-             PS_SetLocalLocation(GetItemActivator(), "NW_L_LOC_RECALL", GetLocation(GetItemActivator()));
+             SetLocalInt(GetItemActivator(), "NW_L_USED_RECALL", 1);
+             SetLocalLocation(GetItemActivator(), "NW_L_LOC_RECALL", GetLocation(GetItemActivator()));
              string sTag =  "NW_RECALL_PORTAL";
               object oClicker = GetItemActivator();
               object oTarget = GetObjectByTag(sTag);
@@ -1312,9 +1312,9 @@ int GetPLocalInt(object oPC,string sLocalName)
 
     while (GetIsObjectValid(oMember))
     {
-        if (PS_GetLocalInt(oPC,sLocalName) > nValue)
+        if (GetLocalInt(oPC,sLocalName) > nValue)
         {
-            nValue = PS_GetLocalInt(oMember,sLocalName);
+            nValue = GetLocalInt(oMember,sLocalName);
         }
         oMember = GetNextFactionMember(oPC);
     }
@@ -1340,7 +1340,7 @@ void SetPLocalInt(object oPC,string sLocalName, int nValue)
 
     while (GetIsObjectValid(oMember))
     {
-        PS_SetLocalInt(oMember,sLocalName,nValue);
+        SetLocalInt(oMember,sLocalName,nValue);
          oMember = GetNextFactionMember(oPC);
     }
 

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "enft_heat_rlf"
 #include "enft_cnsts"
@@ -30,11 +30,11 @@ void KadyxApproachMessage(object oPC, int nKadyx) {
 	FloatingTextStringOnCreature(sMessage, oPC);
 	object oPlayer = GetFirstFactionMember(oPC, TRUE);
 	while (GetIsObjectValid(oPlayer)) {
-		if (PS_GetLocalInt(GetArea(oPlayer), "ENV_FATIGUE_AREA") == 5) { //Is in the slags
+		if (GetLocalInt(GetArea(oPlayer), "ENV_FATIGUE_AREA") == 5) { //Is in the slags
 			SendMessageToPC(oPlayer, sMessage);
-			int pcKadyx = PS_GetLocalInt(oPlayer, "KadyxCount");
+			int pcKadyx = GetLocalInt(oPlayer, "KadyxCount");
 			if (pcKadyx < nKadyx)
-				PS_SetLocalInt(oPlayer, "KadyxCount", nKadyx);
+				SetLocalInt(oPlayer, "KadyxCount", nKadyx);
 		}
 		oPlayer = GetNextFactionMember(oPC, TRUE);
 	}
@@ -43,10 +43,10 @@ void KadyxApproachMessage(object oPC, int nKadyx) {
 //Kadyx eating effect
 void KadyxEats(object oPC) {
 
-	int eaten = PS_GetLocalInt(oPC, "Kadyx_Eaten");
+	int eaten = GetLocalInt(oPC, "Kadyx_Eaten");
 	if (eaten > 0)
 		return;
-	PS_SetLocalInt(oPC, "Kadyx_Eaten", 1);
+	SetLocalInt(oPC, "Kadyx_Eaten", 1);
 
 	object oWP = GetWaypointByTag("ps_death_respawn_wp");
 	//effect eKnock = EffectKnockdown();
@@ -74,7 +74,7 @@ void KadyxArrives(object oPC) {
 		if (nCount > 20)
 			return;
 		if (GetIsPC(oPlayer)) {
-			if (PS_GetLocalInt(GetArea(oPlayer), "ENV_FATIGUE_AREA") == 5) //Only happens in the Slags
+			if (GetLocalInt(GetArea(oPlayer), "ENV_FATIGUE_AREA") == 5) //Only happens in the Slags
 				KadyxEats(oPlayer);
 		}
 		nCount++;
@@ -142,14 +142,14 @@ void main () {
 	if (!CanRunEnvironmentLoop("slags_timestamp", slagsTime))
 		return;
 	
-	if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 5) {
+	if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 5) {
 		SendMessageToPC(OBJECT_SELF, "You have left the slags. You are safe.");
-        PS_SetLocalInt(OBJECT_SELF, "KadyxCount", 0);
+        SetLocalInt(OBJECT_SELF, "KadyxCount", 0);
 		return;
 	}
 	
-	int nKadyx = PS_GetLocalInt(OBJECT_SELF, "KadyxCount");
-	int nKadyxComes = PS_GetLocalInt(OBJECT_SELF, "KadyxComing");
+	int nKadyx = GetLocalInt(OBJECT_SELF, "KadyxCount");
+	int nKadyxComes = GetLocalInt(OBJECT_SELF, "KadyxComing");
 	//SendMessageToPC(OBJECT_SELF, IntToString(nKadyx)+" vs. "+IntToString(nKadyxComes));
 	if (nKadyx == nKadyxComes) {
 		KadyxArrives(OBJECT_SELF);
@@ -166,7 +166,7 @@ void main () {
 	}
 	
 
-	PS_SetLocalInt(OBJECT_SELF, "KadyxCount", nKadyx+1);
+	SetLocalInt(OBJECT_SELF, "KadyxCount", nKadyx+1);
     DelayCommand(slagsTime, ExecuteScript("enft_slags_ftg", OBJECT_SELF));
 
 }

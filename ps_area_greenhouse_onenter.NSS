@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("GreenhouseEnterLock");
+ int iLock = GetGlobalInt("GreenhouseEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("GreenhouseEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("GreenhouseEnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_lowergreen_laborer1") == OBJECT_INVALID)
   {
@@ -91,6 +91,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_lowergreen_bard", lSpawnpoint);    
   }
    
-  PS_SetGlobalInt("GreenhouseEnterLock", 0);
+  SetGlobalInt("GreenhouseEnterLock", 0);
  }
 }

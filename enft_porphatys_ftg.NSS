@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "enft_heat_rlf"
 #include "enft_cnsts"
@@ -16,18 +16,18 @@ int carceriRelief(object oPC) {
 
 void main() {
 
-	int nAcidThrows = PS_GetLocalInt(OBJECT_SELF, "CarceriAcid");
+	int nAcidThrows = GetLocalInt(OBJECT_SELF, "CarceriAcid");
 	float carceriTime = 60.0f;
 	
-	int lastRun = PS_GetLocalInt(OBJECT_SELF, "porphatys_timestamp");
+	int lastRun = GetLocalInt(OBJECT_SELF, "porphatys_timestamp");
 	float diff = IntToFloat(abs(TimeStampT()-lastRun));
 	if (diff < carceriTime)
 		return;
 		
-	PS_SetLocalInt(OBJECT_SELF, "porphatys_timestamp", ShipTimeStamp());
+	SetLocalInt(OBJECT_SELF, "porphatys_timestamp", ShipTimeStamp());
 	
-	if(PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 6) {
-		PS_DeleteLocalInt(OBJECT_SELF, "CarceriAcid");
+	if(GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA") != 6) {
+		DeleteLocalInt(OBJECT_SELF, "CarceriAcid");
 		return;
 	}
 	
@@ -48,9 +48,9 @@ void main() {
 		}
 		
 		nAcidThrows++;
-		PS_SetLocalInt(OBJECT_SELF, "CarceriAcid", nAcidThrows);
+		SetLocalInt(OBJECT_SELF, "CarceriAcid", nAcidThrows);
 	} else {
-		PS_DeleteLocalInt(OBJECT_SELF, "CarceriAcid");
+		DeleteLocalInt(OBJECT_SELF, "CarceriAcid");
 	}
 
     // Check for heat damage in an hour.

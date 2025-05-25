@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: XP2 Disposeable Treasure System
@@ -159,7 +159,7 @@ string DTSGet2DANameByType(int nType)
     }
 
 	// this is to allow overriding of 2DA tables (I think) -CM
-    string sRet = PS_GetLocalString(GetModule(),sLookUp);
+    string sRet = GetLocalString(GetModule(),sLookUp);
     if (sRet == "")
     {
         sRet = sDefault;
@@ -195,14 +195,14 @@ int DTSGetNoOfRowsInTreasureTable(int nType, int nClass = 1, string sCol = "")
     else
     {
         string sColName = DTSGet2DAColNameByClass(nClass);
-        nRet =PS_GetLocalInt(GetModule(),"X2_DTS_CACHE_"+s2DA+sColName);
+        nRet =GetLocalInt(GetModule(),"X2_DTS_CACHE_"+s2DA+sColName);
         if (nRet !=0)
         {
             return nRet;
         }
         // Row 0 always holds the total number of entries.
         nRet = StringToInt(Get2DAString(s2DA,sColName,0));
-        PS_SetLocalInt(GetModule(),"X2_DTS_CACHE_"+s2DA+sColName,nRet);
+        SetLocalInt(GetModule(),"X2_DTS_CACHE_"+s2DA+sColName,nRet);
     }
     return nRet;
 }
@@ -212,10 +212,10 @@ int DTSGetBaseChance(object oArea)
 {
 
    // Check for override on area
-   int nChance = PS_GetLocalInt(oArea,"X2_DTS_BASECHANCE");
+   int nChance = GetLocalInt(oArea,"X2_DTS_BASECHANCE");
    if (nChance == 0) //check configuration
    {
-       nChance = PS_GetLocalInt(GetModule(),"X2_DTS_BASECHANCE");
+       nChance = GetLocalInt(GetModule(),"X2_DTS_BASECHANCE");
        if (nChance == 0) //take default
        {
            //DTSDebug("++WARNING++ not initialized, using defaults");
@@ -233,7 +233,7 @@ int DTSGetBaseChance(object oArea)
 // If no configuration is used, default is X2_DTS_MAXITEMS (2)
 int DTSGetMaxItems()
 {
-   int nItems= PS_GetLocalInt(GetModule(),"X2_DTS_MAXITEMS");
+   int nItems= GetLocalInt(GetModule(),"X2_DTS_MAXITEMS");
    if (nItems == 0)
    {
        //DTSDebug("++WARNING++ not initialized, using defaults");
@@ -247,7 +247,7 @@ int DTSGetMaxItems()
 // Stacks are calculated (Stack* X2_DTS_STACKVAR) + Random (Stack *X2_DTS_STACKVAR)
 float DTSGetStackVariation()
 {
-   float fStackV = PS_GetLocalFloat(GetModule(),"X2_DTS_STACKVAR");
+   float fStackV = GetLocalFloat(GetModule(),"X2_DTS_STACKVAR");
    if (fStackV == 0.0f)
    {
        //DTSDebug("++WARNING++ not initialized, using defaults");
@@ -603,20 +603,20 @@ int DTSGenerateTreasureItems(object oContainer, object oOpener, int nClass, int 
    	{
     	// regardless how often this function is called, only one char
         // specific treasure item will be created ... ever
-        if (!PS_GetLocalInt(oContainer, "X2_DTS_HAS_CHAR_SPECIFIC_TREASURE"))
+        if (!GetLocalInt(oContainer, "X2_DTS_HAS_CHAR_SPECIFIC_TREASURE"))
         {
         	DTSGenerateCharSpecificTreasure(oContainer, oOpener);
-            PS_SetLocalInt(oContainer, "X2_DTS_HAS_CHAR_SPECIFIC_TREASURE", TRUE);
+            SetLocalInt(oContainer, "X2_DTS_HAS_CHAR_SPECIFIC_TREASURE", TRUE);
 			iNumGenerated++;
      	}
     }
    	if ((nType & X2_DTS_TYPE_GOLD) && nChance > d100())
    	{
-	    if (!PS_GetLocalInt(oContainer, "X2_DTS_HAS_GOLD"))
+	    if (!GetLocalInt(oContainer, "X2_DTS_HAS_GOLD"))
 	    {
 			sItem = DTSGetRandomItemResRef(X2_DTS_TYPE_GOLD, nClass);
 			DTSCreateItemOnObject(sItem, oContainer);
-			PS_SetLocalInt(oContainer, "X2_DTS_HAS_GOLD", TRUE);
+			SetLocalInt(oContainer, "X2_DTS_HAS_GOLD", TRUE);
 			iNumGenerated++;
     	}
 	}
@@ -699,8 +699,8 @@ int DTSGenerateTreasureOnContainer (object oContainer, object oOpener, int nClas
     }
 
     // Remove flags set within DTSGenerateTreasureItems
-    PS_DeleteLocalInt(oContainer, "X2_DTS_HAS_CHAR_SPECIFIC_TREASURE");
-    PS_DeleteLocalInt(oContainer, "X2_DTS_HAS_GOLD");
+    DeleteLocalInt(oContainer, "X2_DTS_HAS_CHAR_SPECIFIC_TREASURE");
+    DeleteLocalInt(oContainer, "X2_DTS_HAS_GOLD");
 	return(iNumGenerated);
 }
 
@@ -757,26 +757,26 @@ void DTSInitialize( int nConfigIndex = 0)
     }
 
     string s2DA = DTSGet2DAStringOrDefault(X2_DTS_2DA_CONF, "Gold2da", nConfigIndex,X2_DTS_2DA_GOLD );
-    PS_SetLocalString(GetModule(),"X2_DTS_2DA_GOLD", s2DA);
+    SetLocalString(GetModule(),"X2_DTS_2DA_GOLD", s2DA);
 	
     s2DA = DTSGet2DAStringOrDefault(X2_DTS_2DA_CONF, "Item2DA",nConfigIndex,X2_DTS_2DA_ITEM );
-    PS_SetLocalString(GetModule(),"X2_DTS_2DA_ITEM", s2DA);
+    SetLocalString(GetModule(),"X2_DTS_2DA_ITEM", s2DA);
 	
     s2DA = DTSGet2DAStringOrDefault(X2_DTS_2DA_CONF, "Ammo2DA", nConfigIndex,X2_DTS_2DA_AMMO );
-    PS_SetLocalString(GetModule(),"X2_DTS_2DA_AMMO", s2DA);
+    SetLocalString(GetModule(),"X2_DTS_2DA_AMMO", s2DA);
 	
     s2DA = DTSGet2DAStringOrDefault(X2_DTS_2DA_CONF, "Disp2DA", nConfigIndex,X2_DTS_2DA_DISP );
-    PS_SetLocalString(GetModule(),"X2_DTS_2DA_DISP", s2DA);
+    SetLocalString(GetModule(),"X2_DTS_2DA_DISP", s2DA);
 
     s2DA = DTSGet2DAStringOrDefault(X2_DTS_2DA_CONF, "Magic2DA", nConfigIndex,X2_DTS_2DA_MAGIC );
-    PS_SetLocalString(GetModule(),"X2_DTS_2DA_MAGIC", s2DA);
+    SetLocalString(GetModule(),"X2_DTS_2DA_MAGIC", s2DA);
 
     s2DA = DTSGet2DAStringOrDefault(X2_DTS_2DA_CONF, "Mundane2DA", nConfigIndex,X2_DTS_2DA_MUNDANE );
-    PS_SetLocalString(GetModule(),"X2_DTS_2DA_MUNDANE", s2DA);
+    SetLocalString(GetModule(),"X2_DTS_2DA_MUNDANE", s2DA);
 
-    PS_SetLocalInt(GetModule(),"X2_DTS_BASECHANCE",nBaseChance);
-    PS_SetLocalFloat(GetModule(),"X2_DTS_STACKVAR",fStackVariation);
-    PS_SetLocalInt(GetModule(),"X2_DTS_MAXITEMS",nMaxItems);
+    SetLocalInt(GetModule(),"X2_DTS_BASECHANCE",nBaseChance);
+    SetLocalFloat(GetModule(),"X2_DTS_STACKVAR",fStackVariation);
+    SetLocalInt(GetModule(),"X2_DTS_MAXITEMS",nMaxItems);
 
     //DTSDebug("DTS Initialized - BaseChance: " + IntToString(nBaseChance) + " StackVar: " + FloatToString(fStackVariation) + " MaxItems: " + IntToString(nMaxItems));
 }
@@ -786,8 +786,8 @@ void DTSInitialize( int nConfigIndex = 0)
 void DTSSetAreaTreasureProbability(object oArea, int nBaseChance, int bDisabled = FALSE)
 {
     if (bDisabled)
-        PS_SetLocalInt(oArea,"X2_DTS_BASECHANCE",-1); // -1 = no treasure
+        SetLocalInt(oArea,"X2_DTS_BASECHANCE",-1); // -1 = no treasure
     else
-        PS_SetLocalInt(oArea,"X2_DTS_BASECHANCE",nBaseChance);
+        SetLocalInt(oArea,"X2_DTS_BASECHANCE",nBaseChance);
 
 }

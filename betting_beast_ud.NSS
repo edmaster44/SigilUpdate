@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //Roulette modified by Stephen Spann  (sspann@worldnet.att.net)
 //originally from Charles Adam's 'Casino Bertix' module
@@ -11,7 +11,7 @@ void MakeBet(object oPC, int nBet, string nCreature);
 void main() {
     int nUser = GetUserDefinedEventNumber();
 	
-	if (PS_GetLocalInt(OBJECT_SELF,"FIGHTING") > 0) {
+	if (GetLocalInt(OBJECT_SELF,"FIGHTING") > 0) {
 		SpeakString ("You'll have to wait to place your bet until next round.");
 		return;
 	}		
@@ -180,21 +180,21 @@ void main() {
 
 void MakeBet(object oPC, int nBet, string sCreature) {
 
-	string sFighter1 = PS_GetLocalString(OBJECT_SELF, "MONSTER1");
-	string sFighter2 = PS_GetLocalString(OBJECT_SELF, "MONSTER2");
+	string sFighter1 = GetLocalString(OBJECT_SELF, "MONSTER1");
+	string sFighter2 = GetLocalString(OBJECT_SELF, "MONSTER2");
 	if (GetArea(oPC) != GetArea(OBJECT_SELF)) {
 		return;
 	}
-	if (PS_GetLocalInt(OBJECT_SELF,"FIGHTING") > 0) {
+	if (GetLocalInt(OBJECT_SELF,"FIGHTING") > 0) {
 		SpeakString ("You'll have to wait to place your bet until next round.");
 		return;
 	}
-	if (PS_GetLocalInt(oPC, "BEAST_BET") > (MAXBET-nBet)) {
+	if (GetLocalInt(oPC, "BEAST_BET") > (MAXBET-nBet)) {
 		SpeakString("I'm sorry, "+GetName(oPC)+" you cannot bet more than "+IntToString(MAXBET)+" jink.");
 		return;
 	}
-	if (PS_GetLocalString(oPC, "BEAST_BET_ON") != "" && PS_GetLocalString(oPC, "BEAST_BET_ON") != sCreature) {
-		SpeakString("I'm sorry, "+GetName(oPC)+" you've already decided to bet on the "+PS_GetLocalString(oPC, "BEAST_BET_ON")+", and cannot change your bet.");
+	if (GetLocalString(oPC, "BEAST_BET_ON") != "" && GetLocalString(oPC, "BEAST_BET_ON") != sCreature) {
+		SpeakString("I'm sorry, "+GetName(oPC)+" you've already decided to bet on the "+GetLocalString(oPC, "BEAST_BET_ON")+", and cannot change your bet.");
 		return;
 	}
 	if (sCreature != sFighter1 && sCreature != sFighter2) {
@@ -207,9 +207,9 @@ void MakeBet(object oPC, int nBet, string sCreature) {
      	TakeGoldFromCreature(nBet, oPC, TRUE);
 		AddHouse(nBet);
         SpeakString (GetName(oPC)+" has placed a "+IntToString(nBet)+" jink bet on the "+sCreature+"!");
-		int amountBet = PS_GetLocalInt(oPC, "BEAST_BET");
-		PS_SetLocalString(oPC, "BEAST_BET_ON", sCreature);
-		PS_SetLocalInt(oPC, "BEAST_BET", amountBet+nBet);
+		int amountBet = GetLocalInt(oPC, "BEAST_BET");
+		SetLocalString(oPC, "BEAST_BET_ON", sCreature);
+		SetLocalInt(oPC, "BEAST_BET", amountBet+nBet);
     }
     else 
 	 	SpeakString (GetName(oPC)+", you don't have that much gold.");

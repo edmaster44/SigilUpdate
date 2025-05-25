@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 /*
    ----------------
    Ectoplasmic Shambler, OnExit
@@ -66,9 +66,9 @@ void main()
     }
 
     // Decrease the value of the marker informing a creature is inside Ectoplasmic Shambler
-    PS_SetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler", PS_GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") - 1);
+    SetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler", GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") - 1);
 
     // Delete the marker if it's reached zero. ie, the creature is no longer inside any shamblers
-    if(PS_GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") <= 0)
-        PS_DeleteLocalInt(oTarget, "PRC_IsInEctoplasmicShambler");
+    if(GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") <= 0)
+        DeleteLocalInt(oTarget, "PRC_IsInEctoplasmicShambler");
 }

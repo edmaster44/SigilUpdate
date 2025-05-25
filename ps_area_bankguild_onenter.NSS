@@ -1,13 +1,13 @@
-#include "ff_safevar"
+
 
 void main() {
 
  	object oPC = GetEnteringObject();
   
- 	int iLock = PS_GetGlobalInt("ClerksWardBankLock");
+ 	int iLock = GetGlobalInt("ClerksWardBankLock");
  	if ( iLock == 0 ) {
 	
-  		PS_SetGlobalInt("ClerksWardBankLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("ClerksWardBankLock", 1); // Only allows one clean up at a time.
 
   		if(GetObjectByTag("ps_cw_bankerclerk1") == OBJECT_INVALID) {
    			object oWP = GetWaypointByTag("wp_cw_bankerclerk1");
@@ -51,6 +51,6 @@ void main() {
    			object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_cw_bankercommoner3", lSpawnpoint);    
   		}
   
-  		PS_SetGlobalInt("ClerksWardBankLock", 0);
+  		SetGlobalInt("ClerksWardBankLock", 0);
 	}
 }

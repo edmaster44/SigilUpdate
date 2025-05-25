@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("GreatFoundryEnterLock");
+ int iLock = GetGlobalInt("GreatFoundryEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("GreatFoundryEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("GreatFoundryEnterLock", 1); // Only allows one clean up at a time.
 
   
   if(GetObjectByTag("ps_npc_gfcommoner1") == OBJECT_INVALID)
@@ -183,6 +183,6 @@ void main()
   } 
   
   
-  PS_SetGlobalInt("GreatFoundryEnterLock", 0);
+  SetGlobalInt("GreatFoundryEnterLock", 0);
  }
 }

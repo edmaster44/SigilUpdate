@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_mod_pcload - DM Friendly Initiative - On PC Loaded Script : Module Event
@@ -15,6 +15,6 @@
 
 void main()
 {
-	//PS_SetLocalInt(GetEnteringObject(), DMFI_DM_STATE,1);  //QA Testing purposes only.
+	//SetLocalInt(GetEnteringObject(), DMFI_DM_STATE,1);  //QA Testing purposes only.
 	DMFI_ClientEnter(GetEnteringObject());
 }

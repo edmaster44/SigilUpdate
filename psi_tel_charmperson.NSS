@@ -65,7 +65,7 @@ void main()
 	    int nCasterLevel = manif.nManifesterLevel;
 	    int nDuration = nCasterLevel/2;
 		
-		int nAugment = PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT");
+		int nAugment = GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT");
 		
 		int nDC = GetManifesterDC(oManifester);
 	    
@@ -89,7 +89,7 @@ void main()
 	            nRacial = GetRacialType(oTarget);
 	            fDelay = GetRandomDelay();
 	            //Check that the target is humanoid or animal
-	            if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)  
+	            if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)  
 	            {
 	                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(GetHitDice(oTarget)));
 	               		nDC = nDC + 1;

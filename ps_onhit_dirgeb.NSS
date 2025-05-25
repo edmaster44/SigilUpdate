@@ -25,7 +25,7 @@ void main()
  //   SpawnScriptDebugger();
     if(GetHasSpellEffect(SPELL_DIRGE, oTarget))
     {
-        PS_DeleteLocalInt(oTarget, "X0_L_LASTPENALTY");
+        DeleteLocalInt(oTarget, "X0_L_LASTPENALTY");
 
         //Search through the valid effects on the target.
         eAOE = GetFirstEffect(oTarget);

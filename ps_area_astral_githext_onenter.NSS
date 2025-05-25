@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_planarlocations"
 void main()
@@ -10,13 +10,13 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = PS_GetGlobalInt("AstralGithExtLock");
+ int iLock = GetGlobalInt("AstralGithExtLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("AstralGithExtLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("AstralGithExtLock", 1); // Only allows one clean up at a time.
 
   //DelayCommand(30.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  PS_SetGlobalInt("AstralGithExtLock", 0);
+  SetGlobalInt("AstralGithExtLock", 0);
  }
 }

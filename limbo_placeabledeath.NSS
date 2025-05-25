@@ -19,7 +19,7 @@ void main()
 		
 	object oDead = (OBJECT_SELF);
 
-	float fCR = IntToFloat(PS_GetLocalInt(OBJECT_SELF, "CR"));
+	float fCR = IntToFloat(GetLocalInt(OBJECT_SELF, "CR"));
 	
 	int iMAX = PS_GetMaxPartylevel(oKiller);
 	float fAVG = PS_GetAvgPartylevel(oKiller, iMAX);	
@@ -41,7 +41,7 @@ void main()
     {
 		if (oArea == GetArea(oPartyMember))
 		{
-	    	if (PS_GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
+	    	if (GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_ANIMAL
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_BEAST
 				&& GetRacialType(OBJECT_SELF) != RACIAL_TYPE_CONSTRUCT

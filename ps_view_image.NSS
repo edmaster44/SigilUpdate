@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // script to view a TGA in a GUI when a placeable is clicked on.
 // Image can only be a max of 1024x768 and will not be scaled.
@@ -27,8 +27,8 @@ void main()
 	object oPlaceable = OBJECT_SELF;
 	object oPC = GetPlaceableLastClickedBy();
 	
-	string sImage = PS_GetLocalString(oPlaceable, PLACEABLE_VAR_IMAGE);
-	string sSize = PS_GetLocalString(oPlaceable, PLACEABLE_VAR_SIZE);
+	string sImage = GetLocalString(oPlaceable, PLACEABLE_VAR_IMAGE);
+	string sSize = GetLocalString(oPlaceable, PLACEABLE_VAR_SIZE);
 	
 	DisplayGuiScreen(oPC, "SCREEN_IMAGE", FALSE, XML_PIC_PREFIX + sSize + XML_PIC_SUFFIX);
 	SetGUITexture(oPC, "SCREEN_IMAGE", XML_SCREEN_IMAGE, sImage);

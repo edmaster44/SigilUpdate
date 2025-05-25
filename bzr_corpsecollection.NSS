@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 void Respawn(string sTag, location lLoc) {
 	CreateObject(OBJECT_TYPE_PLACEABLE, sTag,lLoc);
@@ -8,9 +8,9 @@ void main () {
 
 	object oPC = GetLastUsedBy();
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "used") > 0)
+	if (GetLocalInt(OBJECT_SELF, "used") > 0)
 		return;
-	PS_SetLocalInt(OBJECT_SELF, "used", 1);
+	SetLocalInt(OBJECT_SELF, "used", 1);
 	
 	CreateItemOnObject("ps_questobject_corpse", oPC, 1 );
 	

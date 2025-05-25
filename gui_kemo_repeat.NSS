@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // KEMO 2/09 --- called from KEMO_ANIM GUI
 
@@ -7,10 +7,10 @@
 void main(int bFull)
 {
 	object oPC = OBJECT_SELF;
-	string sAnim = PS_GetLocalString(oPC,"StoredAnimation");
-	string sAnimB = PS_GetLocalString(oPC,"StoredAnimationIdle");
-	float fDelay = PS_GetLocalFloat(oPC,"StoredDelay");
-	PS_SetLocalLocation(oPC,"AnimationLocation",GetLocation(oPC));
+	string sAnim = GetLocalString(oPC,"StoredAnimation");
+	string sAnimB = GetLocalString(oPC,"StoredAnimationIdle");
+	float fDelay = GetLocalFloat(oPC,"StoredDelay");
+	SetLocalLocation(oPC,"AnimationLocation",GetLocation(oPC));
 	
 	if (!bFull)
 	{

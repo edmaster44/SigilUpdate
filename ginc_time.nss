@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // ginc_time
 /*
@@ -304,8 +304,8 @@ struct CHoursPassed HasHourChanged()
 	// and when returning to a module, all the registered objects need to be notified of 
 	// the amount of time that has passed.
     object oModule = GetModule();
-	int nPreviousModuleHour = PS_GetLocalInt(oModule, VAR_PREVIOUS_HOUR);
-	int nPreviousCampaignHour = PS_GetGlobalInt(VAR_PREVIOUS_HOUR);
+	int nPreviousModuleHour = GetLocalInt(oModule, VAR_PREVIOUS_HOUR);
+	int nPreviousCampaignHour = GetGlobalInt(VAR_PREVIOUS_HOUR);
 
 	PrettyDebug ("nCurrentHour = " + IntToString(nCurrentHour));
 	PrettyDebug ("nPreviousModuleHour = " + IntToString(nPreviousModuleHour));
@@ -316,7 +316,7 @@ struct CHoursPassed HasHourChanged()
 	{
 		// initialize previous hour as being the current hour
 		nPreviousModuleHour = nCurrentHour;
-		PS_SetLocalInt(oModule, VAR_PREVIOUS_HOUR, nPreviousModuleHour);
+		SetLocalInt(oModule, VAR_PREVIOUS_HOUR, nPreviousModuleHour);
 	}
 	
 	// time updates are never 0, so this campaign has not been initialized yet.
@@ -324,7 +324,7 @@ struct CHoursPassed HasHourChanged()
 	{
 		// initialize previous hour as being the current hour
 		nPreviousCampaignHour = nCurrentHour;
-		PS_SetGlobalInt(VAR_PREVIOUS_HOUR, nPreviousCampaignHour);
+		SetGlobalInt(VAR_PREVIOUS_HOUR, nPreviousCampaignHour);
 	}
 	
 	
@@ -337,18 +337,18 @@ struct CHoursPassed HasHourChanged()
 	{
 		// return true if time has changed, and note the new "previous hour"
         // and number of hours passed
-		PS_SetLocalInt(oModule, VAR_PREVIOUS_HOUR, nCurrentHour);
+		SetLocalInt(oModule, VAR_PREVIOUS_HOUR, nCurrentHour);
       	nNumModuleHoursPassed = GetTimeHashDifference(nCurrentHour, nPreviousModuleHour);
-		PS_SetLocalInt(oModule, VAR_HOURS_PASSED, nNumModuleHoursPassed);
+		SetLocalInt(oModule, VAR_HOURS_PASSED, nNumModuleHoursPassed);
 	}
 	
 	if (nCurrentHour == nPreviousCampaignHour)
 		nNumCampaignHoursPassed = 0;
 	else
 	{				
-		PS_SetGlobalInt(VAR_PREVIOUS_HOUR, nCurrentHour);
+		SetGlobalInt(VAR_PREVIOUS_HOUR, nCurrentHour);
       	nNumCampaignHoursPassed = GetTimeHashDifference(nCurrentHour, nPreviousCampaignHour);
-		PS_SetGlobalInt(VAR_HOURS_PASSED, nNumCampaignHoursPassed);
+		SetGlobalInt(VAR_HOURS_PASSED, nNumCampaignHoursPassed);
 	}		
 
 	rHP.nNumModuleHoursPassed = nNumModuleHoursPassed;
@@ -360,14 +360,14 @@ struct CHoursPassed HasHourChanged()
 /*
 int GetPreviousHour()
 {
-	int iPreviousHour = PS_GetLocalInt(OBJECT_SELF, VAR_PREVIOUS_HOUR);
+	int iPreviousHour = GetLocalInt(OBJECT_SELF, VAR_PREVIOUS_HOUR);
     
 	// if Previous hour is 0, then it  has not been initialized yet.
 	if (iPreviousHour == 0)
 	{
 		// initialize previous hour as being the current hour
 		iPreviousHour = GetCurrentTimeHash();
-		PS_SetLocalInt(oModule, VAR_PREVIOUS_HOUR, iPreviousHour);
+		SetLocalInt(oModule, VAR_PREVIOUS_HOUR, iPreviousHour);
 	}
     
     return (iPreviousHour);
@@ -378,11 +378,11 @@ int GetNumHoursPassed()
     object oModule = GetModule();
 	//int iCurrentHour = GetCurrentTimeHash();
     // this is not returning correct thing.
-	//int iPreviousHour = PS_GetLocalInt(OBJECT_SELF, VAR_PREVIOUS_HOUR);
+	//int iPreviousHour = GetLocalInt(OBJECT_SELF, VAR_PREVIOUS_HOUR);
 	//int iNumHoursPassed = GetTimeHashDifference(iCurrentHour, iPreviousHour);
 	//PrettyDebug ("GetNumHoursPassed(): iCurrentHour = " + IntToString(iCurrentHour) + "iPreviousHour = " + IntToString(iPreviousHour));
 	//PrettyDebug("GetNumHoursPassed(): iNumHoursPassed = " + IntToString(iNumHoursPassed));
-    int iNumHoursPassed = PS_GetLocalInt(oModule, VAR_HOURS_PASSED);
+    int iNumHoursPassed = GetLocalInt(oModule, VAR_HOURS_PASSED);
 	return (iNumHoursPassed);
 }
 
@@ -503,7 +503,7 @@ void SetClockOnForAllPlayers(int bClockOn=TRUE, int bOLMap = FALSE)
 // update clock for a specific Player
 void UpdateClockForPlayer(object oPC)
 {
-	int bTimeOnly = PS_GetGlobalInt(CAMPAIGN_SWITCH_ONLY_SHOW_TIME);
+	int bTimeOnly = GetGlobalInt(CAMPAIGN_SWITCH_ONLY_SHOW_TIME);
 	struct CTimeDate rTimeDate = GetCurrentCTimeDate();
 	string sTime = GetClockDisplay(rTimeDate, bTimeOnly);
 	SetLocalGUIVariable(oPC, GUI_SCREEN_PLAYERMENU, 1, sTime);
@@ -519,7 +519,7 @@ void UpdateClockForPlayer(object oPC)
 // if clock is off (hidden), updates won't take effect.
 void UpdateClockForAllPlayers()
 {	
-	int bTimeOnly = PS_GetGlobalInt(CAMPAIGN_SWITCH_ONLY_SHOW_TIME);
+	int bTimeOnly = GetGlobalInt(CAMPAIGN_SWITCH_ONLY_SHOW_TIME);
 	struct CTimeDate rTimeDate = GetCurrentCTimeDate();
 	string sTime = GetClockDisplay(rTimeDate, bTimeOnly);
 	string sImage = Get2DAString(TIME_2DA, TIME_IMAGE_COL, GetTimeHour());

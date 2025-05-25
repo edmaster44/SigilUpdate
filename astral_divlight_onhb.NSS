@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Created by Agony_Aunt/Loki_666
 // used for Astral Plane - Divinty Leech
@@ -18,8 +18,8 @@ void main()
 		{
 			iCurrentHP = GetCurrentHitPoints(oPC);
 			iMaxHP = GetMaxHitPoints(oPC);
-			iBonus = PS_GetLocalInt(oPC, "ASTRAL_LIGHT") + 1;
-			PS_SetLocalInt(oPC, "ASTRAL_LIGHT", iBonus);
+			iBonus = GetLocalInt(oPC, "ASTRAL_LIGHT") + 1;
+			SetLocalInt(oPC, "ASTRAL_LIGHT", iBonus);
 
 			eHP = EffectTemporaryHitpoints(iBonus);
 	 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oPC, RoundsToSeconds(iBonus));

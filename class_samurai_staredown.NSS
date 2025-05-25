@@ -1,11 +1,11 @@
-#include "ff_safevar"
+
 
 // script for handling Staredown feats.
 #include "ps_class_inc"
 
 void DoStaredownOnTarget(object oTarget, object oPC, int iIntimidate, int iCHA)
 {
-	int iAffected = PS_GetLocalInt(oTarget, "SAMURAISTAREDOWN");
+	int iAffected = GetLocalInt(oTarget, "SAMURAISTAREDOWN");
 	effect eEffect;
 	if (iAffected != 1)
 	{
@@ -21,7 +21,7 @@ void DoStaredownOnTarget(object oTarget, object oPC, int iIntimidate, int iCHA)
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, RoundsToSeconds(iCHA));
 		}
 	
-		PS_SetLocalInt(oTarget, "SAMURAISTAREDOWN", 1);
+		SetLocalInt(oTarget, "SAMURAISTAREDOWN", 1);
 	}
 }
 

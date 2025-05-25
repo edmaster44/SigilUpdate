@@ -1,27 +1,27 @@
-#include "ff_safevar"
+
 
 void main(string nSlot)
 {
 	//object oObject = OBJECT_SELF;
 	object oObject = GetItemPossessedBy(OBJECT_SELF, "ps_essence");
-	int nAppearanceID = PS_GetLocalInt(oObject, "ChangeSelfAppearanceID" + nSlot);
-	int nGenderID = PS_GetLocalInt(oObject, "ChangeSelfGenderID" + nSlot);
-	int nHeadID = PS_GetLocalInt(oObject, "ChangeSelfHeadID" + nSlot);
-	int nTailID = PS_GetLocalInt(oObject, "ChangeSelfTailID" + nSlot);
-	int nWingsID = PS_GetLocalInt(oObject, "ChangeSelfWingsID" + nSlot);
-	int nHairID = PS_GetLocalInt(oObject, "ChangeSelfHairID" + nSlot);
-	int nFacialHairID = PS_GetLocalInt(oObject, "ChangeSelfFacialHairID" + nSlot);
+	int nAppearanceID = GetLocalInt(oObject, "ChangeSelfAppearanceID" + nSlot);
+	int nGenderID = GetLocalInt(oObject, "ChangeSelfGenderID" + nSlot);
+	int nHeadID = GetLocalInt(oObject, "ChangeSelfHeadID" + nSlot);
+	int nTailID = GetLocalInt(oObject, "ChangeSelfTailID" + nSlot);
+	int nWingsID = GetLocalInt(oObject, "ChangeSelfWingsID" + nSlot);
+	int nHairID = GetLocalInt(oObject, "ChangeSelfHairID" + nSlot);
+	int nFacialHairID = GetLocalInt(oObject, "ChangeSelfFacialHairID" + nSlot);
 	
-	string sAccessory = PS_GetLocalString(oObject, "ChangeSelfAccessoryHex" + nSlot);
-	string sHairColor = PS_GetLocalString(oObject, "ChangeSelfHairHex" + nSlot);
-	string sHairHighlight = PS_GetLocalString(oObject, "ChangeSelfHairHighlightHex" + nSlot);
-	string sSkinColor = PS_GetLocalString(oObject, "ChangeSelfSkinHex" + nSlot);
-	string sEyeColor = PS_GetLocalString(oObject, "ChangeSelfEyeHex" + nSlot);
-	string sEyebrowColor = PS_GetLocalString(oObject, "ChangeSelfEyebrowHex" + nSlot);
+	string sAccessory = GetLocalString(oObject, "ChangeSelfAccessoryHex" + nSlot);
+	string sHairColor = GetLocalString(oObject, "ChangeSelfHairHex" + nSlot);
+	string sHairHighlight = GetLocalString(oObject, "ChangeSelfHairHighlightHex" + nSlot);
+	string sSkinColor = GetLocalString(oObject, "ChangeSelfSkinHex" + nSlot);
+	string sEyeColor = GetLocalString(oObject, "ChangeSelfEyeHex" + nSlot);
+	string sEyebrowColor = GetLocalString(oObject, "ChangeSelfEyebrowHex" + nSlot);
 	
-	string sScaleX = PS_GetLocalString(oObject, "ScaleX" + nSlot);
-	string sScaleY = PS_GetLocalString(oObject, "ScaleY" + nSlot);
-	string sScaleZ = PS_GetLocalString(oObject, "ScaleZ" + nSlot);
+	string sScaleX = GetLocalString(oObject, "ScaleX" + nSlot);
+	string sScaleY = GetLocalString(oObject, "ScaleY" + nSlot);
+	string sScaleZ = GetLocalString(oObject, "ScaleZ" + nSlot);
 	
 	AddScriptParameterInt(-1);
 	AddScriptParameterInt(70);

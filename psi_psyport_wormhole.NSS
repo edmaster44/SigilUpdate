@@ -24,7 +24,7 @@ void main()
 		SendMessageToPC(oManifester, "Manifesting Psionic Wormhole");
 		
 		float fDuration = 6.0f * manif.nManifesterLevel; 
-		if (PS_GetLocalInt(oManifester, "METAPSI_EXTEND") == 1)
+		if (GetLocalInt(oManifester, "METAPSI_EXTEND") == 1)
 		{
 			fDuration = fDuration * 2;
 		}
@@ -36,7 +36,7 @@ void main()
 		effect eVis2 = EffectNWN2SpecialEffectFile("psi_wormhole_exit.sef");
 		
 		if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
-		if (PS_GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
+		if (GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 		{
 			SendMessageToPC(oTarget, "A Dimensional Anchor makes it impossible to teleport.");
 			return;	

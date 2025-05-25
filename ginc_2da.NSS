@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // ginc_2da
 /*
@@ -182,7 +182,7 @@ string GetCacheVarName(string s2DA, string sColumn, string sEntry)
 int GetCached2DAIndex(string s2DA, string sColumn, string sEntry)
 {
 	string sVarName = GetCacheVarName(s2DA, sColumn, sEntry);
-	int nRow = PS_GetGlobalInt(sVarName);
+	int nRow = GetGlobalInt(sVarName);
 	return (nRow);
 }
 
@@ -194,7 +194,7 @@ string SetCached2DAIndex(string s2DA, string sColumn, int nRow)
 	if (sEntry != "") // sEntry not allowed to be empty string
 	{
 		string sVarName = GetCacheVarName(s2DA, sColumn, sEntry);
-		PS_SetGlobalInt(sVarName, nRow);
+		SetGlobalInt(sVarName, nRow);
 	}		
 	return (sEntry);
 }
@@ -203,7 +203,7 @@ string SetCached2DAIndex(string s2DA, string sColumn, int nRow)
 string GetCached2DAEntry(string s2DA, string sColumn, int nRow)
 {
 	string sVarName = GetCacheVarName(s2DA, sColumn, IntToString(nRow));
-	string sCachedEntry = PS_GetGlobalString(sVarName);
+	string sCachedEntry = GetGlobalString(sVarName);
 	return (sCachedEntry);
 }
 
@@ -215,7 +215,7 @@ void SetCached2DAEntry(string s2DA, string sColumn, int nRow)
 		
 	string sEntry = Get2DAString(s2DA, sColumn, nRow);
 	string sVarName = GetCacheVarName(s2DA, sColumn, IntToString(nRow));
-	PS_SetGlobalString(sVarName, sEntry);
+	SetGlobalString(sVarName, sEntry);
 }
 
 

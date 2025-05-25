@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 const int FREEZE_SPELL_ID = -2999;
 void main() {
@@ -23,7 +23,7 @@ void main() {
 	}
 	
 	//re-applying vfx, just in case
-	string sVFX = PS_GetLocalString(OBJECT_SELF, "PERMANENT_VFX");
+	string sVFX = GetLocalString(OBJECT_SELF, "PERMANENT_VFX");
 	if (sVFX != "") {
 		effect eVFX = EffectNWN2SpecialEffectFile(sVFX);
 		eVFX = SupernaturalEffect(eVFX);
@@ -32,8 +32,8 @@ void main() {
 		
 	//SendMessageToPC(oPC, "On percieved fired for "+GetName(OBJECT_SELF));
 	
-	string sAnim = PS_GetLocalString(OBJECT_SELF, "TransitionAnimation");
-	float fSpeed = PS_GetLocalFloat(OBJECT_SELF, "TransitionAnimationSpeed");
+	string sAnim = GetLocalString(OBJECT_SELF, "TransitionAnimation");
+	float fSpeed = GetLocalFloat(OBJECT_SELF, "TransitionAnimationSpeed");
 	
 	//SendMessageToPC(oPC, sAnim+", "+FloatToString(fSpeed));
 	
@@ -43,11 +43,11 @@ void main() {
 		PlayCustomAnimation(OBJECT_SELF, sAnim, FALSE, fSpeed);
 	}
 	
-	PS_DeleteLocalInt(OBJECT_SELF, "ANIMATION");
-	PS_DeleteLocalInt(OBJECT_SELF, "STOP_ANIMATION");
+	DeleteLocalInt(OBJECT_SELF, "ANIMATION");
+	DeleteLocalInt(OBJECT_SELF, "STOP_ANIMATION");
 	ClearAllActions();
 	
 	DelayCommand(1.0f, ChangeToStandardFaction(OBJECT_SELF, STANDARD_FACTION_HOSTILE));
-	DelayCommand(1.0f, PS_DeleteLocalString(OBJECT_SELF, "PercievedScript"));
+	DelayCommand(1.0f, DeleteLocalString(OBJECT_SELF, "PercievedScript"));
 
 }

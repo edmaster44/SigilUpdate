@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 //::///////////////////////////////////////////////
 //:: Acid Fog: Heartbeat
 //:: NW_S0_AcidFogC.nss
@@ -34,7 +34,7 @@ void main()
     float fDelay;
 	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, GetAreaOfEffectCreator());
 	int nDC = GetManifesterDC(GetAreaOfEffectCreator());
-	if (PS_GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_AUGMENT") == 1)
+	if (GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_AUGMENT") == 1)
     {
         nDC = nDC + 2;
     }
@@ -65,11 +65,11 @@ void main()
             nDamage = d6(2);
 
         //Enter Metamagic conditions
-        if (PS_GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_MAXIMIZE") == 1)
+        if (GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_MAXIMIZE") == 1)
         {
             nDamage = 12;//Damage is at max
         }
-        if (PS_GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_EMPOWER") == 1)
+        if (GetLocalInt(GetAreaOfEffectCreator(), "METAPSI_EMPOWER") == 1)
         {
             nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
         }

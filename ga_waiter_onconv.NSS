@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /* Script Created by Agony_Aunt/Loki for SCoD PW. Waiter who can be summoned to provide refreshments for a party*/
 
@@ -8,5 +8,5 @@
 void main()
 {
 	object oWaiter = OBJECT_SELF;
-	PS_SetLocalInt(oWaiter, "LastAction", WAITER_IN_CONVO);
+	SetLocalInt(oWaiter, "LastAction", WAITER_IN_CONVO);
 }

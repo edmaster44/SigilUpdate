@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // NW_C2_DEFAULT9
 /*
@@ -28,7 +28,7 @@ void main()
     // Run this campaign's standard creature spawn modifications script (set in module load)
 	object oSPAWN = OBJECT_SELF;
 	object oINVALID = OBJECT_INVALID;
-    string sScriptSpawnCreature = PS_GetGlobalString("N2_SCRIPT_SPAWN_CREATURE");
+    string sScriptSpawnCreature = GetGlobalString("N2_SCRIPT_SPAWN_CREATURE");
     if (sScriptSpawnCreature != "")	ExecuteScript(sScriptSpawnCreature, oSPAWN);
 	
 	// ***** Spawn-In Conditions ***** //
@@ -71,7 +71,7 @@ void main()
     WalkWayPoints(FALSE, "spawn");
     
 	/* Create weapon for creatures that need one
-	if(PS_GetLocalInt(oSPAWN, "WEAPON_SPAWN") > 0)
+	if(GetLocalInt(oSPAWN, "WEAPON_SPAWN") > 0)
 	{
 		CTG_GetSpecificBaseTypeTreasureItem(oSPAWN,TREASURE_BASE_TYPE_WEAPON_NOAMMO, 
 	}*/
@@ -88,8 +88,8 @@ void main()
 	}
 	
 	// Create a small amount of treasure on the creature
-	int nNODROP = PS_GetLocalInt(GetModule(), "X2_L_NOTREASURE");
-	nNODROP = PS_GetLocalInt(oSPAWN, "X2_L_NOTREASURE");
+	int nNODROP = GetLocalInt(GetModule(), "X2_L_NOTREASURE");
+	nNODROP = GetLocalInt(oSPAWN, "X2_L_NOTREASURE");
 	
 	int nRACE = GetRacialType(oSPAWN);
 	switch (nRACE)
@@ -153,7 +153,7 @@ void main()
 	DelayCommand(0.0f, ApplySRFix(oSPAWN));
 	
 	//DBR 2/03/06 - added option for a spawn script (ease of AI hookup)
-	string sSpawnScript=PS_GetLocalString(oSPAWN, "SpawnScript");
+	string sSpawnScript=GetLocalString(oSPAWN, "SpawnScript");
 	if (sSpawnScript!="") ExecuteScript(sSpawnScript, oSPAWN);
 }
 

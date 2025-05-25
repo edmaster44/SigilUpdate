@@ -1,13 +1,13 @@
-#include "ff_safevar"
+
 
 #include "kemo_includes"
 
 void QuickNormalizeHeight(object oPC)
 {
 	float fPCHeight = GetScale(oPC,SCALE_Z);
-	float fPCNaturalZ = PS_GetLocalFloat(oPC,"CharacterHeight");
-	float fPCNaturalX = PS_GetLocalFloat(oPC,"CharacterX");
-	float fPCNaturalY = PS_GetLocalFloat(oPC,"CharacterY");
+	float fPCNaturalZ = GetLocalFloat(oPC,"CharacterHeight");
+	float fPCNaturalX = GetLocalFloat(oPC,"CharacterX");
+	float fPCNaturalY = GetLocalFloat(oPC,"CharacterY");
 
 	if (fPCNaturalZ != 1.0f && fPCHeight == 1.0f && fPCNaturalZ > 0.0f) // if the character is currently at normalized height, return to natural
 	{
@@ -17,8 +17,8 @@ void QuickNormalizeHeight(object oPC)
 
 void main()
 {
-	object oPC = PS_GetLocalObject(OBJECT_SELF,"StoredAnimationPC");
-	string sAnim = PS_GetLocalString(OBJECT_SELF,"StoredAnimationIdle");
+	object oPC = GetLocalObject(OBJECT_SELF,"StoredAnimationPC");
+	string sAnim = GetLocalString(OBJECT_SELF,"StoredAnimationIdle");
 	location lSpotPC = GetLocation(oPC);
 	location lSpotPoint = GetLocation(OBJECT_SELF);
 	vector vSpotPC = GetPositionFromLocation(lSpotPC);
@@ -34,7 +34,7 @@ void main()
 	{
 		QuickNormalizeHeight(oPC);
 		SetCollision(oPC,1); //turns collision back on.
-		PS_DeleteLocalObject(oPC,"AnimationPoint");
+		DeleteLocalObject(oPC,"AnimationPoint");
 		DestroyObject(OBJECT_SELF,1.0,FALSE);
 	}
 	else

@@ -59,7 +59,7 @@ void awardXP(object oPC, int XPamount)
 		SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
 
 		if (SQLFetch() != SQL_ERROR) { 
-			int nECL = StringToInt(PS_GetLocalString(oItem,"ECL"));
+			int nECL = StringToInt(GetLocalString(oItem,"ECL"));
 			int nRPpool = StringToInt(SQLGetData(1));
 
 			nRPpool += FloatToInt(XPamount*PS_GetXPModifier(nECL));
@@ -160,7 +160,7 @@ void ApplyRPXP(object oSender, object oTarget, int nChannel, string sMessage)
 // to be used for debugging purposes. 
 void SixSecondTick(object oPC, int nRound = 1){
 
-	if (PS_GetLocalInt(oPC, "6secondtick")){
+	if (GetLocalInt(oPC, "6secondtick")){
 		// Send the message to the player
 		SendMessageToPC(oPC, "<c=cyan>Tick " + IntToString(nRound) + "</c>");
 		nRound += 1;
@@ -182,13 +182,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	if (sInput == "#scribemin"){
 		bFFcommand = TRUE;
-		if (PS_GetLocalInt(oSender, "bScribeAtMinLvl")){
-			PS_SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
+		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
+			SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
 			sFeedback = "ScribeMin OFF\n";
 			sFeedback += "You will now scribe scrolls as normal until next login ";
 			sFeedback += "or until ScribeMin turned on.";
 		} else {
-			PS_SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
+			SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
 			sFeedback = "ScribeMin ON\n";
 			sFeedback += "You will now scribe scrolls at minimum caster level until next login ";
 			sFeedback += "or until ScribeMin turned off.";
@@ -223,12 +223,12 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// note that this is NOT synced to combat rounds but is simply every 6 seconds.
 	} else if (sInput == "#tick"){
 		bFFcommand = TRUE;
-		if (!PS_GetLocalInt(oSender, "6secondtick")){
-			PS_SetLocalInt(oSender, "6secondtick", TRUE);
+		if (!GetLocalInt(oSender, "6secondtick")){
+			SetLocalInt(oSender, "6secondtick", TRUE);
 			SendMessageToPC(oSender, "Starting Tick");
 			SixSecondTick(oSender);
 		} else {
-			PS_SetLocalInt(oSender, "6secondtick", FALSE);
+			SetLocalInt(oSender, "6secondtick", FALSE);
 			SendMessageToPC(oSender, "Stopping Tick");	
 		}
 	}
@@ -280,18 +280,18 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 			{
 				if (sMessage == "notell" || sMessage == "notell " || sMessage == "notell on")
 				{
-					PS_SetLocalString(oSender, "NO_TELL", "This player isn't accepting tells at this moment.");
+					SetLocalString(oSender, "NO_TELL", "This player isn't accepting tells at this moment.");
 					SendMessageToPC(oSender, "<C=GOLD>Auto-response is active and set to default message. To disable use <i>notell off</i>.");
 				}
 				else if (sMessage == "notell off")
 				{
 					SendMessageToPC(oSender, "<C=GOLD>Auto-response disabled.");
-					PS_SetLocalString(oSender, "NO_TELL", "");
+					SetLocalString(oSender, "NO_TELL", "");
 				}
 				else
 				{
 					string sNoTellMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 7);
-					PS_SetLocalString(oSender, "NO_TELL", sNoTellMessage);
+					SetLocalString(oSender, "NO_TELL", sNoTellMessage);
 					SendMessageToPC(oSender, "<C=GOLD>Auto-response set to: " + sNoTellMessage);
 				} 	
 			}
@@ -306,12 +306,12 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 			{
 				if (sMessage == "autosave on" | sMessage == "autosave" | sMessage == "autosave ")
 				{
-					PS_SetLocalInt(oSender, "AutoSave", 0); // yes, we use 0 because if someone hasn't specified we want default to be autosave
+					SetLocalInt(oSender, "AutoSave", 0); // yes, we use 0 because if someone hasn't specified we want default to be autosave
 					SendMessageToPC(oSender, "<C=GOLD>Auto-save on area transition enabled.");
 				}
 				else if (sMessage == "autosave off")
 				{
-					PS_SetLocalInt(oSender, "AutoSave", 1);
+					SetLocalInt(oSender, "AutoSave", 1);
 					SendMessageToPC(oSender, "<C=GOLD>Auto-save on area transition disabled. To enable use <i>autosave on</i>.");
 					SendMessageToPC(oSender, "<C=CRIMSON><b>WARNING!!!: Do not complain to DMs about loss of gold/items/XP in event of server crash if you are using this option.");
 					SendMessageToPC(oSender, "<C=CRIMSON><b>WARNING!!!: Remember to save your character manually before exiting the server if using this option.");
@@ -330,7 +330,7 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 				int iStringLength; 
 				iStringLength = GetStringLength(sMessage);
 				sMessage = GetStringRight(sMessage,iStringLength-11);
-				PS_SetLocalInt(oSender, "areashout", 1);
+				SetLocalInt(oSender, "areashout", 1);
 				SendTellMessageToAllPlayersInArea(oSender,"<I><C=yellow>Area Shout:</C></i> "+sMessage);    
 				}
 			
@@ -408,7 +408,7 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 		// so oSender != oTarget
 		else
 		{
-			string sNoTellMessage = PS_GetLocalString(oTarget, "NO_TELL");
+			string sNoTellMessage = GetLocalString(oTarget, "NO_TELL");
 			if (sNoTellMessage != "")
 				SendMessageToPC(oSender, "<C=GOLD>[AUTO-RESPONSE]: " + sNoTellMessage);
 		}

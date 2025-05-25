@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // i_ps_multisummon_ac
 /*	Script created by Dedic8ed for use in the Sigil: City of Doors PW
@@ -24,7 +24,7 @@ void main()
 	object oPC		= GetItemActivator();
 	object oItem	= GetItemActivated();
 //	Collect variable from the calling item to determine what will be summonned
-	string sCritter	= PS_GetLocalString(oItem, "summon");
+	string sCritter	= GetLocalString(oItem, "summon");
 	location oLoc 	= GetItemActivatedTargetLocation();
 	object oBad		= GetFirstItemInInventory(oPC);
 	int oLVL		= GetHitDice(oPC);
@@ -57,12 +57,12 @@ void main()
 //	Create the new henchman as an object
 
 if (oLVL >= 15 && oLVL <= 26) {
-	PS_SetLocalString(oItem, sCritter, (sCritter+"2"));
+	SetLocalString(oItem, sCritter, (sCritter+"2"));
 	SendMessageToPC(oPC,"It should now be stage two summon. sCritter value: " + sCritter);
 	}
 	
 else if (oLVL >= 27) {
-	PS_SetLocalString(oItem, sCritter, (sCritter+"3"));
+	SetLocalString(oItem, sCritter, (sCritter+"3"));
 	SendMessageToPC(oPC,"It is now a stage three summon. sCritter value: " + sCritter);
 	}
 	

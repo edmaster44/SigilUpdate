@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 /*	
@@ -32,8 +32,8 @@ void main()
 	
 	
 	int nEvent = GetUserDefinedEventNumber();
-	int iTimes = PS_GetLocalInt(OBJECT_SELF,"boulder_times");
-	int iRock  = PS_GetLocalInt(OBJECT_SELF,"boulder_attack");
+	int iTimes = GetLocalInt(OBJECT_SELF,"boulder_times");
+	int iRock  = GetLocalInt(OBJECT_SELF,"boulder_attack");
 	//Used to check if boulder throw used in current combat round. 
 	//1 boulder attack per round, Reset at end of combat round
 	
@@ -56,9 +56,9 @@ void main()
 					ClearAllActions(TRUE);
 					//SuspendAI(OBJECT_SELF,FALSE,0.0);
 					AIIgnoreCombat(OBJECT_SELF);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+					SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 					BoulderThrow(lPrec);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+					SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 					break;
 				}
 				else
@@ -91,9 +91,9 @@ void main()
 					ClearAllActions(TRUE);
 					//SuspendAI(OBJECT_SELF,FALSE,0.0);
 					AIIgnoreCombat(OBJECT_SELF);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+					SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 					BoulderThrow(lAtt);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+					SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 					break;
 				}
 				else
@@ -123,9 +123,9 @@ void main()
 					ClearAllActions(TRUE);
 					//SuspendAI(OBJECT_SELF,FALSE,0.0);
 					AIIgnoreCombat(OBJECT_SELF);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+					SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 					BoulderThrow(lDam);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+					SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 					break;
 				}
 				else
@@ -145,7 +145,7 @@ void main()
 		case EVENT_END_COMBAT_ROUND:
 		{
 			object oLast	=	GetAttackTarget(OBJECT_SELF);
-			PS_SetLocalInt(OBJECT_SELF,"boulder_attack",0);//resets boulder attack for 1 per round
+			SetLocalInt(OBJECT_SELF,"boulder_attack",0);//resets boulder attack for 1 per round
 			if (GetIsObjectValid(oLast))
 			{
 			   	location lLast	=	GetLocation(oLast);
@@ -158,9 +158,9 @@ void main()
 						ClearAllActions(TRUE);
 						//SuspendAI(OBJECT_SELF,FALSE,0.0);
 						AIIgnoreCombat(OBJECT_SELF);
-						PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+						SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 						BoulderThrow(lLast);
-						PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+						SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 						break;
 					}
 					else
@@ -186,9 +186,9 @@ void main()
 							ClearAllActions(TRUE);
 							//SuspendAI(OBJECT_SELF,FALSE,0.0);
 							AIIgnoreCombat(OBJECT_SELF);
-							PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+							SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 							BoulderThrow(lLast);
-							PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+							SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 							break;
 						}
 					}
@@ -196,7 +196,7 @@ void main()
 					nNth++;
 					oLast = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, CREATURE_ALIVE_TRUE, OBJECT_SELF, nNth);					
 				}
-				if(PS_GetLocalInt(OBJECT_SELF,"boulder_attack") == 0)
+				if(GetLocalInt(OBJECT_SELF,"boulder_attack") == 0)
 				{
 					//ResumeAI(OBJECT_SELF);
 					AIResetType(OBJECT_SELF);	
@@ -218,9 +218,9 @@ void main()
 					ClearAllActions(TRUE);
 					//SuspendAI(OBJECT_SELF,FALSE,0.0);
 					AIIgnoreCombat(OBJECT_SELF);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+					SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 					BoulderThrow(lCast);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+					SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 					break;
 				}
 				else
@@ -264,9 +264,9 @@ void main()
 					ClearAllActions(TRUE);
 					//SuspendAI(OBJECT_SELF,FALSE,0.0);
 					AIIgnoreCombat(OBJECT_SELF);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
+					SetLocalInt(OBJECT_SELF,"boulder_times",iTimes+1);
 					BoulderThrow(lTarget);
-					PS_SetLocalInt(OBJECT_SELF,"boulder_attack",1);
+					SetLocalInt(OBJECT_SELF,"boulder_attack",1);
 					break;
 				} 
 				else

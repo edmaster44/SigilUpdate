@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 /** @file psi_pow_assim
 
     Assimilate
@@ -116,8 +116,8 @@ void main()
 	
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
-	int nPP = PS_GetLocalInt(oManifester, "PSI_PP");
-	int nPPt = PS_GetLocalInt(oTarget, "PSI_PP");
+	int nPP = GetLocalInt(oManifester, "PSI_PP");
+	int nPPt = GetLocalInt(oTarget, "PSI_PP");
     struct manifestation manif =
         EvaluateManifestationNew(oManifester, oTarget,
                               GetSpellId(),

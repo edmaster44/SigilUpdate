@@ -1,11 +1,11 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_randomitems"
 void main() {
 
 	//SpeakString("here we are", TALKVOLUME_SHOUT);
 	object oPC = GetLastUsedBy();
-	int nType = PS_GetLocalInt(OBJECT_SELF, "type");
+	int nType = GetLocalInt(OBJECT_SELF, "type");
 	//AssignCommand(OBJECT_SELF, SpeakString("generating an item of type: "+IntToString(nType), TALKVOLUME_SHOUT));
 	
 	if (nType == 1) {

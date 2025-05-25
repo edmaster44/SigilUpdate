@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ginc_event_handlers"
 #include "ps_inc_time"
@@ -48,10 +48,10 @@ void UnstoneWarriors(object oPC) {
 
 	PlaySound("as_pl_horngood1", TRUE);
 
-	int nUnstoned = PS_GetLocalInt(OBJECT_SELF, "Unstoned");
+	int nUnstoned = GetLocalInt(OBJECT_SELF, "Unstoned");
 	if (nUnstoned)
 		return;
-	PS_SetLocalInt(OBJECT_SELF, "Unstoned", 1);
+	SetLocalInt(OBJECT_SELF, "Unstoned", 1);
 	
 	object oSound = GetNearestObjectByTag("minethys_city_battle");
 	SoundObjectPlay(oSound);
@@ -68,7 +68,7 @@ void UnstoneWarriors(object oPC) {
 			return;
 			
 		effect eVFX = EffectNWN2SpecialEffectFile("fx_wooden_explosion");
-		if (PS_GetLocalString(oObj, "SpawnScript") == "statue_from_creature") {
+		if (GetLocalString(oObj, "SpawnScript") == "statue_from_creature") {
 			DelayCommand(fDelay, RemoveEffects(oObj));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oObj));
 			DelayCommand(fDelay, SetPlotFlag(oObj, FALSE));
@@ -83,7 +83,7 @@ void UnstoneWarriors(object oPC) {
 	if (nCreaturesFound > 1)
 		DelayCommand(3.0f, SummonAvatar(oPC));
 
-	DelayCommand(60.0f, PS_DeleteLocalInt(OBJECT_SELF, "Unstoned"));
+	DelayCommand(60.0f, DeleteLocalInt(OBJECT_SELF, "Unstoned"));
 	DelayCommand(600.0f, SoundObjectStop(oSound));
 }
 
@@ -122,7 +122,7 @@ void main() {
  	int nRand = Random(10);
 	float fDelay = 10.0f+IntToFloat(nRand);
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "lightfires") > 0) {
+	if (GetLocalInt(OBJECT_SELF, "lightfires") > 0) {
 		DelayCommand(6.0f, LightFires("minethysfire_1"));
 		DelayCommand(7.0f, LightFires("minethysfire_2"));
 		DelayCommand(8.0f, LightFires("minethysfire_3"));

@@ -343,7 +343,7 @@ void main(string sCOMMAND, string sFEAT)
 {
 	object oPC = OBJECT_SELF;
 	int nCLASS = GetRelevantClass(oPC);
-	int nPAGE = PS_GetLocalInt(oPC, "EXTRA_UI_PAGE");
+	int nPAGE = GetLocalInt(oPC, "EXTRA_UI_PAGE");
 	if (nCLASS == -1) return;
 	string sSCREEN = "SCREEN_EXTRA_CHOICES";
 	if (sCOMMAND == "START") 
@@ -353,7 +353,7 @@ void main(string sCOMMAND, string sFEAT)
 		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TITLE", nTITLE, "");
 		SetGUIObjectText(oPC, sSCREEN, "CHOICE_SUBTITLE", -1, GetClassSubtitle(nCLASS));
 		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", TRUE);
-		PS_SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
+		SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
 		PopulateList(oPC, nCLASS, 0, sSCREEN);
 	}
 	else if (sCOMMAND == "SELECT")
@@ -361,26 +361,26 @@ void main(string sCOMMAND, string sFEAT)
 		int nFEAT = StringToInt(sFEAT);
 		string sDESC = GetEpitethDescription(nFEAT);
 		SetGUIObjectText(oPC, sSCREEN, "CHOICE_DESCRIPTION", -1, sDESC);
-		PS_SetLocalInt(oPC, "EXTRA_CHOICES_ADD", nFEAT);
+		SetLocalInt(oPC, "EXTRA_CHOICES_ADD", nFEAT);
 		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", FALSE);
 	}
 	else if (sCOMMAND == "CONFIRM")
 	{
-		int nADD = PS_GetLocalInt(oPC, "EXTRA_CHOICES_ADD");
+		int nADD = GetLocalInt(oPC, "EXTRA_CHOICES_ADD");
 		CloseGUIScreen(oPC, sSCREEN);
 		AddEpithetFeat(oPC, nADD);
-		PS_DeleteLocalInt(oPC, "EXTRA_UI_PAGE");
+		DeleteLocalInt(oPC, "EXTRA_UI_PAGE");
 	}
 	else if (sCOMMAND == "PREV")
 	{
 		nPAGE = nPAGE - 1;
-		PS_SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
+		SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
 		DelayCommand(0.0f, PopulateList(oPC, nCLASS, nPAGE, sSCREEN));
 	}
 	else if (sCOMMAND == "NEXT")
 	{
 		nPAGE = nPAGE + 1;
-		PS_SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
+		SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
 		DelayCommand(0.0f, PopulateList(oPC, nCLASS, nPAGE, sSCREEN));
 	}
 }

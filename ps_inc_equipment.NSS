@@ -245,10 +245,10 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	if (oChanged != oRHAND) return;
 	
 	// don't allow ppl to spam this ability by constantly swapping between two katanas
-	if (PS_GetLocalInt(oPC, "Iajaitsu")) return;
+	if (GetLocalInt(oPC, "Iajaitsu")) return;
 	
 	// set the int that shows we've done this recently
-	PS_SetLocalInt(oPC, "Iajaitsu", TRUE);
+	SetLocalInt(oPC, "Iajaitsu", TRUE);
 	
 	int bQualifies = FALSE;
 	int nPCsize = GetCreatureSize(oPC);
@@ -273,7 +273,7 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_4, oPC, fDUR);
     DelayCommand(0.01f, FrightfulPresence(oPC, nCHA));
 	// set the int that shows we've done this recently to false
-	DelayCommand(30.0f, PS_SetLocalInt(oPC, "Iajaitsu", FALSE));
+	DelayCommand(30.0f, SetLocalInt(oPC, "Iajaitsu", FALSE));
 }
 
 //When a Samurai draws their weapon (a katana or longsword) foes can be frightened by it.
@@ -316,20 +316,20 @@ void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 	// There appears to be a slight delay when adding or removing item properties
 	// so make sure this waits a bit if it's doing that in case of rapid calls,
 	// such as equipping 2 items at once from hotbar
-    if (nCount >= 2000 || !PS_GetLocalInt(oPC, "tacbusy")){
+    if (nCount >= 2000 || !GetLocalInt(oPC, "tacbusy")){
 		oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 		nTac = GetTacSuiteByWeaponCategory(oPC, oRHAND);
 		// don't change tac weapons feat if the feat granted by the weapons doesn't change
-		if (PS_GetLocalInt(oPC, "tacweapon") != nTac){
-			PS_SetLocalInt(oPC, "tacbusy", TRUE);
-			PS_SetLocalInt(oPC, "tacweapon", nTac);
+		if (GetLocalInt(oPC, "tacweapon") != nTac){
+			SetLocalInt(oPC, "tacbusy", TRUE);
+			SetLocalInt(oPC, "tacweapon", nTac);
 			RemoveBonusFeats(oSkin);
 			if (!GetHasFeat(FEAT_COMBAT_EXPERTISE, oPC, TRUE))
 				SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
 			if (!GetHasFeat(FEAT_POWER_ATTACK, oPC, TRUE))
 				SetActionMode(oPC, ACTION_MODE_POWER_ATTACK, FALSE);
 			FF_TacticalWeapons(oPC, oRHAND, oSkin);
-			DelayCommand(0.1, PS_SetLocalInt(oPC, "tacbusy", FALSE));
+			DelayCommand(0.1, SetLocalInt(oPC, "tacbusy", FALSE));
 		}
         return;
     }
@@ -904,14 +904,14 @@ int MonkeyGripAbuse(object oPC, object oITEM){
 void CheckForTempProperties(object oItem, object oPC)
 {
     string sID = ObjectToString(oItem);
-    if (PS_GetLocalInt(oPC, sID) == TRUE) return;
+    if (GetLocalInt(oPC, sID) == TRUE) return;
     itemproperty ipProp = GetFirstItemProperty(oItem);
     while (GetIsItemPropertyValid(ipProp))
     {
         if (GetItemPropertyDurationType(ipProp) == DURATION_TYPE_TEMPORARY) RemoveItemProperty(oItem, ipProp);
         ipProp = GetNextItemProperty(oItem);
     }
-    PS_SetLocalInt(oPC, sID, TRUE);
+    SetLocalInt(oPC, sID, TRUE);
 }
 
 // Check No Manual Dexterity. With it you can only equip creature weapons.
@@ -971,7 +971,7 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM)
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
-    if (PS_GetLocalInt(oESSENCE, "TempChange") == 1)
+    if (GetLocalInt(oESSENCE, "TempChange") == 1)
     {
         if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE &&
 			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE))

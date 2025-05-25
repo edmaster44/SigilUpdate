@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ///////////////////////////////////////////////////////////////
 // ps_floortrap-randomteleport
@@ -48,7 +48,7 @@ void main()
 	string sMyTag = GetTag(OBJECT_SELF);
 	object oWaypoint = OBJECT_INVALID;
 	int i;
-	int nNumberWPs = PS_GetLocalInt(OBJECT_SELF, "NUMBER_IN_SET");
+	int nNumberWPs = GetLocalInt(OBJECT_SELF, "NUMBER_IN_SET");
 	
 	if (!nNumberWPs)
 		nNumberWPs = 1;

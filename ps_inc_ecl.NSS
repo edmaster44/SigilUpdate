@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "x0_i0_position"
 #include "x0_i0_match"
@@ -44,7 +44,7 @@ void PS_CalculateECL(object oPC)
 	int nRacialECL		= PS_CalculateRacialECL(oPC);				// Current Racial LA
 	int nOriginalECL	= PS_CalculateOriginalECL(oPC, oEssence);	// Original Racial LA
 	int nTemplateECL	= PS_CalculateTemplateECL(oPC);				// Template LA
-	string sManualECL	= PS_GetLocalString(oEssence, "ECL_Manual");
+	string sManualECL	= GetLocalString(oEssence, "ECL_Manual");
 	int nManualECL		= StringToInt(sManualECL);
 	int nECL			= 0;
 	
@@ -63,13 +63,13 @@ void PS_CalculateECL(object oPC)
 	string sECL = IntToString(nECL);
 			
 	if (nManualECL > 0)
-	{	PS_SetLocalString(oEssence, "ECL", sManualECL);
-		PS_SetLocalString(oPC, "ECL", sManualECL);
+	{	SetLocalString(oEssence, "ECL", sManualECL);
+		SetLocalString(oPC, "ECL", sManualECL);
 		SendMessageToPC(oPC, "Level adjustment of +" + sManualECL + " stored on Essence; this was manually edited.");
 	}
 	else
-	{	PS_SetLocalString(oEssence, "ECL", sECL);
-		PS_SetLocalString(oPC, "ECL", sECL);
+	{	SetLocalString(oEssence, "ECL", sECL);
+		SetLocalString(oPC, "ECL", sECL);
 		//SendMessageToPC(oPC, "Level adjustment of +" + sECL + " stored on Essence");
 	}
 }
@@ -96,15 +96,15 @@ int PS_CalculateOriginalECL(object oPC, object oEssence)
 {
 	if (ALLOW_ECL_LEVEL_30) return 0;
 	
-	int nOldSub			= PS_GetLocalInt(oEssence, "OldSubrace");
+	int nOldSub			= GetLocalInt(oEssence, "OldSubrace");
 	string s2da			= "racialsubtypes";
 	string sColumn		= "LA";
 	
 	string sAdjustment	= Get2DAString(s2da, sColumn, nOldSub);
 	int nAdjustment		= StringToInt(sAdjustment);
 
-	if (PS_GetLocalInt(oEssence, "SPECIAL_ECL") == 1)
- 	{	string sECL 	= PS_GetLocalString(oEssence, "ECL"); //For old Special Characters
+	if (GetLocalInt(oEssence, "SPECIAL_ECL") == 1)
+ 	{	string sECL 	= GetLocalString(oEssence, "ECL"); //For old Special Characters
  		//SendMessageToPC(oPC, "This is an old special character.");
 		nAdjustment = StringToInt(sECL);	}
 			
@@ -168,7 +168,7 @@ void PS_EnforceMaxLevel(object oPC)
 	if (ALLOW_ECL_LEVEL_30) return;
 	
 	object oEssence		= GetItemPossessedBy(oPC, "ps_essence");
-	string sECL			= PS_GetLocalString(oEssence, "ECL");
+	string sECL			= GetLocalString(oEssence, "ECL");
 	int nECL			= StringToInt(sECL);
 	int nLevels			= GetHitDice(oPC);
 	int nTotal;

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "nwnx_craft_system"
 //************************************************
@@ -72,11 +72,11 @@ int StartingConditional(object oPC, int iCondition, int iInventorySlot, int iVis
 			// in order to control what's being done by your players.
 			//currently only dealing with special behaviours on Armor/Clothes, you can extend the system to helms and boots if you wish
 			
-			if(PS_GetLocalInt(oPC,"XC_INVENT_SLOT")==1) //item is an armor/clothe 
+			if(GetLocalInt(oPC,"XC_INVENT_SLOT")==1) //item is an armor/clothe 
 			{
-				bReturn = (FindSubString(PS_GetLocalString(GetModule(),PS_GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
+				bReturn = (FindSubString(GetLocalString(GetModule(),GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
 			}
-			else bReturn = (FindSubString(PS_GetLocalString(GetModule(),PS_GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
+			else bReturn = (FindSubString(GetLocalString(GetModule(),GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
 			break;
 		
 		// Does the edited item have this (default) auxiliary armor piece?
@@ -94,15 +94,15 @@ void InitializeItem(object oPC, int bStore, int iInventorySlot, string sRoadMap)
 		if (oItemToCraft!=OBJECT_INVALID) //never too carefull
 		{	
 			XPCraft_StoreItemToCraft(oPC,oItemToCraft);
-			PS_SetLocalInt(oPC,"XC_INVENT_SLOT",iInventorySlot);
-			PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", oItemToCraft);
-			object oSavedItem = CopyItem(oItemToCraft,PS_GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER"),TRUE);
-			PS_SetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC),oSavedItem);
+			SetLocalInt(oPC,"XC_INVENT_SLOT",iInventorySlot);
+			SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", oItemToCraft);
+			object oSavedItem = CopyItem(oItemToCraft,GetLocalObject(GetModule(),"XC_HIDDEN_CONTAINER"),TRUE);
+			SetLocalObject(GetModule(),"XC_TEMP_" + XPCraft_GetPCID(oPC),oSavedItem);
 			
 			//cryptc: Added "timestamp" variable to be unique identifier accepting that its same item to be modified.
 			string tso = ClangStamp();
-			PS_SetLocalString(oPC,"TSO",tso);
-			PS_SetLocalString(oItemToCraft,"TSO",tso);
+			SetLocalString(oPC,"TSO",tso);
+			SetLocalString(oItemToCraft,"TSO",tso);
 			//SendMessageToPC(oPC, "Item stamp set.");
 			
 			// Figure out which armor pieces are part of this items armor set in case
@@ -114,7 +114,7 @@ void InitializeItem(object oPC, int bStore, int iInventorySlot, string sRoadMap)
 	}
 
 	//initialisation of local vars
-	PS_SetLocalString(oPC,"XC_ROAD_MAP",sRoadMap);	
+	SetLocalString(oPC,"XC_ROAD_MAP",sRoadMap);	
 	string sSubAction = GetStringLeft(sRoadMap,2);
 	if(sSubAction =="Va") XPCraft_InitVariationValues(oPC); //initialising the Variation 
 	else if(sSubAction =="Ar") XPCraft_InitArmorVisualTypeValues(oPC); //initialising the ArmorVisualType 
@@ -135,11 +135,11 @@ void RemovePolymorph(object oPC)
 void CraftAction(object oPC, int iAction, int iAvtValue)
 {
 	//Check for the object to craft
-	int iInventorySlot = PS_GetLocalInt(oPC,"XC_INVENT_SLOT");
+	int iInventorySlot = GetLocalInt(oPC,"XC_INVENT_SLOT");
 	object oItemToCraft = GetItemInSlot(iInventorySlot,oPC);
 
 	//cryptc: this is where to check for identical TSO.
-	if(	PS_GetLocalString(oPC,"TSO") != PS_GetLocalString(oItemToCraft,"TSO")) {
+	if(	GetLocalString(oPC,"TSO") != GetLocalString(oItemToCraft,"TSO")) {
 		//XPCraft_Debug(oPC,"No Item In Slot : " + IntToString(iInventorySlot)+ "- restoring last unchanged Item");
 		//SendMessageToPC(oPC, "Not the same item!");
 		XPCraft_ActionCancelChanges(oPC);		
@@ -156,7 +156,7 @@ void CraftAction(object oPC, int iAction, int iAvtValue)
 	
 	//ACTION MANGEMENT
 	//since we can't declare a variable into a case statement, we do it here though it won't be used in every case.
-	string sSubAction =  GetStringLeft( PS_GetLocalString(oPC,"XC_ROAD_MAP"),2);
+	string sSubAction =  GetStringLeft( GetLocalString(oPC,"XC_ROAD_MAP"),2);
 	//sub action we be like "Va" for Variation, "Ar" for ArmorVisualType, "AC" for ArmorParts and "Mo" for ModelParts 
 	
 	switch(iAction)
@@ -182,7 +182,7 @@ void CraftAction(object oPC, int iAction, int iAvtValue)
 		case XP_CRAFT_ACTION_TINT_1 ://change colors (without a break once it enters the statement
 		case XP_CRAFT_ACTION_TINT_2 ://it'll execute whatever comes after ;) )
 		case XP_CRAFT_ACTION_TINT_3 :
-			PS_SetLocalInt(oPC,"XC_ACTION_TINT",iAction);
+			SetLocalInt(oPC,"XC_ACTION_TINT",iAction);
 			DisplayGuiScreen(oPC,"SCREEN_COLOR_TLS",TRUE,"elechos_colortls.xml");
 			break;
 		
@@ -191,7 +191,7 @@ void CraftAction(object oPC, int iAction, int iAvtValue)
 		//I've changed for this approach in order to make it more readeable for the end user
 		//since AVTypes are number that truly means something (unlike Variations, ArmorParts or ModelParts)
 		case XP_CRAFT_ACTION_SET_AVT : 
-			PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorVisualType(oPC, oItemToCraft, iAvtValue)); 
+			SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorVisualType(oPC, oItemToCraft, iAvtValue)); 
 			break;
 			
 		// Choose an armor piece in this items armor set to edit.
@@ -199,9 +199,9 @@ void CraftAction(object oPC, int iAction, int iAvtValue)
 		
 		//any other action (next or previous, since First and Last weren't displayed in the dialog)
 		default:
-			if(sSubAction == "Va") PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeVariation(oPC, oItemToCraft, iAction));
-			else if(sSubAction == "AC")	PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorPart(oPC, oItemToCraft, iAction));
-			else if(sSubAction == "Mo")	PS_SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeModelPart(oPC, oItemToCraft, iAction));	
+			if(sSubAction == "Va") SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeVariation(oPC, oItemToCraft, iAction));
+			else if(sSubAction == "AC")	SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeArmorPart(oPC, oItemToCraft, iAction));
+			else if(sSubAction == "Mo")	SetLocalObject(oPC,"XC_ITEM_TO_CRAFT", XPCraft_ActionChangeModelPart(oPC, oItemToCraft, iAction));	
 	}
 }
 
@@ -209,7 +209,7 @@ void ColotTint(object oPC, int iTeinte, int iLuminosite, int iSaturation)
 {	
 	// Make sure that the item still exists so that the slot zero item isn't
 	// destroyed when trying to change colors after backing out of the menu.
-	if (PS_GetLocalObject(oPC, "XC_ITEM_TO_CRAFT") == OBJECT_INVALID)
+	if (GetLocalObject(oPC, "XC_ITEM_TO_CRAFT") == OBJECT_INVALID)
 	{
 		//XPCraft_Debug(oPC, "No item selected for color change, aborted.");
 		return;
@@ -217,16 +217,16 @@ void ColotTint(object oPC, int iTeinte, int iLuminosite, int iSaturation)
 	
 	struct strTint strMyTint = XPCraft_HLSToTintStruct(iTeinte, iLuminosite, iSaturation);
 	int iNewColorValue =  XPCraft_strTintToInt(strMyTint);
-	PS_SetLocalObject(oPC, "XC_ITEM_TO_CRAFT", XPCraft_ActionChangeColor(oPC, iNewColorValue));		
+	SetLocalObject(oPC, "XC_ITEM_TO_CRAFT", XPCraft_ActionChangeColor(oPC, iNewColorValue));		
 }
 
 void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 {
-	string sROAD = PS_GetLocalString(oPC, "APPEAR_ROADMAP");
+	string sROAD = GetLocalString(oPC, "APPEAR_ROADMAP");
 	object oITEM = GetItemInSlot(nSLOT, oPC);
 	string sNAME = GetName(oITEM);
-	int nEXTRA = PS_GetLocalInt(oPC, "APPEAR_EXTRA"); //Parts (1) or Defaults (2)
-	int nRETURN = PS_GetLocalInt(oPC, "APPEAR_RETURN"); //To know that if we are using Confirm/Cancel or Return
+	int nEXTRA = GetLocalInt(oPC, "APPEAR_EXTRA"); //Parts (1) or Defaults (2)
+	int nRETURN = GetLocalInt(oPC, "APPEAR_RETURN"); //To know that if we are using Confirm/Cancel or Return
 	SetGUIObjectHidden(oPC, sSCREEN, "EQUIPMENT_PANE", TRUE);
 	SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE", TRUE);
 	SetGUIObjectHidden(oPC, sSCREEN, "VARIATION_PANE", TRUE);
@@ -238,7 +238,7 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 	switch (nSTAGE)
 	{
 		case 1: //The Choice Pane
-			PS_SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME);
+			SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME);
 			SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE", FALSE);
 			SetGUIObjectHidden(oPC, sSCREEN, "ARMOR_PARTS", TRUE);
 			SetGUIObjectHidden(oPC, sSCREEN, "DEFAULT_PIECES", TRUE);
@@ -252,16 +252,16 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 			{		
 				if (nEXTRA == 1) //Parts
 				{
-					PS_SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Parts > "+sROAD);
+					SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Parts > "+sROAD);
 					SetLocalGUIVariable(oPC, sSCREEN, 1, "2");
 					SetGUIObjectHidden(oPC, sSCREEN, "STYLE", TRUE);
 					DelayCommand(0.1, InitializeItem(oPC, 0, 1, sROAD));
 				}
 				else if (nEXTRA == 2) //Default
 				{
-					PS_SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Default > "+sROAD);
+					SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Default > "+sROAD);
 					SetLocalGUIVariable(oPC, sSCREEN, 1, "3");
-					DelayCommand(0.1, CraftAction(oPC, 11, PS_GetLocalInt(oPC, "APPEAR_DEFAULT")));
+					DelayCommand(0.1, CraftAction(oPC, 11, GetLocalInt(oPC, "APPEAR_DEFAULT")));
 				}
 				else
 				{
@@ -279,15 +279,15 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 			}
 			break;
 		case 2: //The Parts Pane
-			PS_SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Parts");
-			PS_SetLocalInt(oPC, "APPEAR_EXTRA", 0);
+			SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Parts");
+			SetLocalInt(oPC, "APPEAR_EXTRA", 0);
 			SetLocalGUIVariable(oPC, sSCREEN, 1, "0");
 			SetGUIObjectHidden(oPC, sSCREEN, "PARTS_PANE", FALSE);
 			DelayCommand(0.1, InitializeItem(oPC, 1, 1, ""));
 			break;
 		case 3://The Default Pane
-			PS_SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Default");
-			PS_SetLocalInt(oPC, "APPEAR_EXTRA", 0);
+			SetLocalString(oPC, "APPEAR_ITEMTEXT", sNAME+" > Default");
+			SetLocalInt(oPC, "APPEAR_EXTRA", 0);
 			SetLocalGUIVariable(oPC, sSCREEN, 1, "0");
 			SetGUIObjectHidden(oPC, sSCREEN, "DEFAULT_PANE", FALSE);
 			DelayCommand(0.1, InitializeItem(oPC, 1, 1, ""));
@@ -295,12 +295,12 @@ void RewindUI(object oPC, string sSCREEN, int nSTAGE, int nSLOT)
 		default: 
 			RemovePolymorph(oPC); // The Equipment Pane
 			SetGUIObjectHidden(oPC, sSCREEN, "EQUIPMENT_PANE", FALSE);
-			PS_SetLocalString(oPC, "APPEAR_ITEMTEXT", "");
-			PS_SetLocalInt(oPC, "APPEARENCE_SLOT_TOMOD", -1);
+			SetLocalString(oPC, "APPEAR_ITEMTEXT", "");
+			SetLocalInt(oPC, "APPEARENCE_SLOT_TOMOD", -1);
 			SetLocalGUIVariable(oPC, sSCREEN, 1, "0");
 			XPCraft_CleanLocals(oPC);
 	}
-	string sTEXT = PS_GetLocalString(oPC, "APPEAR_ITEMTEXT");
+	string sTEXT = GetLocalString(oPC, "APPEAR_ITEMTEXT");
 	DelayCommand(0.0f, SetGUIObjectText(oPC, sSCREEN, "ITEM_NAME", -1, sTEXT));
 }
 
@@ -312,30 +312,30 @@ void main(string sCOMMAND, string sINPUT)
 	if (sCOMMAND == "START")
 	{
 		RewindUI(oPC, sSCREEN, 0, 0);
-		PS_SetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT", 0);
+		SetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT", 0);
 		return;
 	}
 	else if (sCOMMAND == "EXIT")
 	{
-		PS_DeleteLocalInt(oPC, "APPEARENCE_SLOT_TOMOD");
-		PS_DeleteLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT");
-		PS_DeleteLocalInt(oPC, "APPEAR_EXTRA");
-		PS_DeleteLocalInt(oPC, "APPEAR_RETURN");
-		PS_DeleteLocalString(oPC, "APPEAR_ROADMAP");
-		PS_DeleteLocalString(oPC, "APPEAR_ITEMTEXT");
-		PS_DeleteLocalString(oPC, "APPEAR_DEFAULT");
+		DeleteLocalInt(oPC, "APPEARENCE_SLOT_TOMOD");
+		DeleteLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT");
+		DeleteLocalInt(oPC, "APPEAR_EXTRA");
+		DeleteLocalInt(oPC, "APPEAR_RETURN");
+		DeleteLocalString(oPC, "APPEAR_ROADMAP");
+		DeleteLocalString(oPC, "APPEAR_ITEMTEXT");
+		DeleteLocalString(oPC, "APPEAR_DEFAULT");
 		XPCraft_ActionCancelChanges(oPC);
 		CloseGUIScreen(oPC, sSCREEN);
 		return;
 	}
 	
-	if (PS_GetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT") == 1) return; //This is to prevent duplication
+	if (GetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT") == 1) return; //This is to prevent duplication
 	
-	PS_SetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT", 1);
-	PS_SetLocalInt(oPC, "APPEAR_RETURN", 0);
+	SetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT", 1);
+	SetLocalInt(oPC, "APPEAR_RETURN", 0);
 	
-	int nSLOT = PS_GetLocalInt(oPC, "APPEARENCE_SLOT_TOMOD");
-	string sTEXT = PS_GetLocalString(oPC, "APPEAR_ITEMTEXT");
+	int nSLOT = GetLocalInt(oPC, "APPEARENCE_SLOT_TOMOD");
+	string sTEXT = GetLocalString(oPC, "APPEAR_ITEMTEXT");
 	int nCOMMAND = StringToInt(sCOMMAND);
 	int nINPUT = StringToInt(sINPUT);
 	object oITEM = GetItemInSlot(nINPUT, oPC);
@@ -348,7 +348,7 @@ void main(string sCOMMAND, string sINPUT)
 			else
 			{
 				SetGUIObjectText(oPC, sSCREEN, "ITEM_NAME", -1, GetName(oITEM));
-				PS_SetLocalInt(oPC, "APPEARENCE_SLOT_TOMOD", nINPUT);
+				SetLocalInt(oPC, "APPEARENCE_SLOT_TOMOD", nINPUT);
 				RewindUI(oPC, sSCREEN, 1, nINPUT);
 			}
 			break;
@@ -363,7 +363,7 @@ void main(string sCOMMAND, string sINPUT)
 			{
 				case 1: //VARIATION
 					SetGUIObjectText(oPC, sSCREEN, "ITEM_NAME", -1, sTEXT + " > Variation");
-					if (PS_GetLocalInt(oPC, "APPEAR_EXTRA")!=1) InitializeItem(oPC, 0, 0, "Variation"); //Exclude Armor Parts
+					if (GetLocalInt(oPC, "APPEAR_EXTRA")!=1) InitializeItem(oPC, 0, 0, "Variation"); //Exclude Armor Parts
 					SetGUIObjectHidden(oPC, sSCREEN, "VARIATION_PANE", FALSE);
 					break;
 				case 2: //STYLE
@@ -390,8 +390,8 @@ void main(string sCOMMAND, string sINPUT)
 			}
 			break;
 		case 3: //PARTS
-			PS_SetLocalInt(oPC, "APPEAR_EXTRA", 1);
-			PS_SetLocalString(oPC, "APPEAR_ROADMAP", sINPUT);
+			SetLocalInt(oPC, "APPEAR_EXTRA", 1);
+			SetLocalString(oPC, "APPEAR_ROADMAP", sINPUT);
 			RewindUI(oPC, sSCREEN, 1, 1);
 			break;
 		case 4: //STYLE
@@ -404,14 +404,14 @@ void main(string sCOMMAND, string sINPUT)
 			{
 				switch (nINPUT)
 				{
-					case 1: PS_SetLocalString(oPC, "APPEAR_ROADMAP", " Helm"); break;
-					case 2: PS_SetLocalString(oPC, "APPEAR_ROADMAP", " Gloves"); break;
-					case 4: PS_SetLocalString(oPC, "APPEAR_ROADMAP", " Boots"); break;
-					case 8: PS_SetLocalString(oPC, "APPEAR_ROADMAP", " Belt"); break;
-					case 16: PS_SetLocalString(oPC, "APPEAR_ROADMAP", " Cloak"); break;
+					case 1: SetLocalString(oPC, "APPEAR_ROADMAP", " Helm"); break;
+					case 2: SetLocalString(oPC, "APPEAR_ROADMAP", " Gloves"); break;
+					case 4: SetLocalString(oPC, "APPEAR_ROADMAP", " Boots"); break;
+					case 8: SetLocalString(oPC, "APPEAR_ROADMAP", " Belt"); break;
+					case 16: SetLocalString(oPC, "APPEAR_ROADMAP", " Cloak"); break;
 				}
-				PS_SetLocalInt(oPC, "APPEAR_DEFAULT", nINPUT);
-				PS_SetLocalInt(oPC, "APPEAR_EXTRA", 2);
+				SetLocalInt(oPC, "APPEAR_DEFAULT", nINPUT);
+				SetLocalInt(oPC, "APPEAR_EXTRA", 2);
 				RewindUI(oPC, sSCREEN, 1, 1);
 			}
 			break;
@@ -426,16 +426,16 @@ void main(string sCOMMAND, string sINPUT)
 			if (StartingConditional(oPC, 5, nSLOT, 0) == FALSE) SendMessageToPC(oPC, "You're not allowed to modify this item.");
 			else
 			{
-				PS_SetLocalInt(oPC, "APPEAR_RETURN", 1);
+				SetLocalInt(oPC, "APPEAR_RETURN", 1);
 				CraftAction(oPC, 9, 0);
 				DelayCommand(0.1, RewindUI(oPC, sSCREEN, nINPUT, nSLOT));
 			}
 			break;
 		case 9: //CANCEL
-			PS_SetLocalInt(oPC, "APPEAR_RETURN", 1);
+			SetLocalInt(oPC, "APPEAR_RETURN", 1);
 			CraftAction(oPC, 0, 0);
 			DelayCommand(0.1, RewindUI(oPC, sSCREEN, nINPUT, nSLOT));
 			break;
 	}
-	DelayCommand(0.0f, PS_SetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT", 0));
+	DelayCommand(0.0f, SetLocalInt(oPC, "APPEARCHANGE_ANTIEXPLOIT", 0));
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 
@@ -17,14 +17,14 @@ void main()
 {
 //    Jug_Debug(GetName(OBJECT_SELF) + " healing code start");
 
-    int nHealingType = PS_GetLocalInt(OBJECT_SELF, henchHealTypeStr);
+    int nHealingType = GetLocalInt(OBJECT_SELF, henchHealTypeStr);
 
     if (nHealingType == HENCH_CNTX_MENU_OFF)
     {    
-        PS_DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
-        PS_DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
-        PS_DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
-        PS_DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
+        DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
+        DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
+        DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
+        DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
         return;
     }
 
@@ -39,8 +39,8 @@ void main()
 
     InitializeBasicTargetInfo();
     // clear enemy target lists
-    PS_DeleteLocalObject(OBJECT_SELF, sEnemySeen);
-    PS_DeleteLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+    DeleteLocalObject(OBJECT_SELF, sEnemySeen);
+    DeleteLocalObject(OBJECT_SELF, sEnemyLineOfSight);
 	
 	gsAttackTargetInfo.spellID = -1;	// SPELL_ACID_FOG is zero
 	gsBuffTargetInfo.spellID = -1;	// SPELL_ACID_FOG is zero
@@ -49,8 +49,8 @@ void main()
 	int iPosEffectsOnSelf = GetCreaturePosEffects(OBJECT_SELF);
     int nClass = HenchDetermineClassToUse();    
     
-    object oHealTarget = PS_GetLocalObject(OBJECT_SELF, henchHealSpellTarget);
-    int curHealCount = PS_GetLocalInt(OBJECT_SELF, henchHealCountStr);
+    object oHealTarget = GetLocalObject(OBJECT_SELF, henchHealSpellTarget);
+    int curHealCount = GetLocalInt(OBJECT_SELF, henchHealCountStr);
 
     if (!GetIsObjectValid(oHealTarget))
     {
@@ -74,7 +74,7 @@ void main()
     {    
 	    gbDisableNonHealorCure = TRUE;        
         gbSpellInfoCastMask = HENCH_SPELL_INFO_HEAL_OR_CURE;
-        PS_DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
+        DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
     }
     else
     {
@@ -83,10 +83,10 @@ void main()
         object oFriend = OBJECT_SELF;
         while (GetIsObjectValid(oFriend))
         {
-    	    PS_SetLocalFloat(oFriend, friendMeleeTargetStr, 1.0);
+    	    SetLocalFloat(oFriend, friendMeleeTargetStr, 1.0);
             object oLast = oFriend;
-	    	oFriend = PS_GetLocalObject(oFriend, sAllyLineOfSight);
-            PS_SetLocalObject(oLast, friendMeleeTargetStr, oFriend);
+	    	oFriend = GetLocalObject(oFriend, sAllyLineOfSight);
+            SetLocalObject(oLast, friendMeleeTargetStr, oFriend);
         }
                 
         gHenchUseSpellProtectionsChecked = HENCH_GLOBAL_FLAG_TRUE;
@@ -94,7 +94,7 @@ void main()
         gbMeleeTargetInit = TRUE;
         gbIAmMeleeTarget = TRUE;
         
-        int currentBuffState = PS_GetLocalInt(OBJECT_SELF, henchHealStateStr);        
+        int currentBuffState = GetLocalInt(OBJECT_SELF, henchHealStateStr);        
         if (currentBuffState == HENCH_CNTX_MENU_BUFF_LONG)
         {    
             gbSpellInfoCastMask = HENCH_SPELL_INFO_LONG_DUR_BUFF;
@@ -109,10 +109,10 @@ void main()
         }
         else
         {
-            PS_DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
-            PS_DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
-            PS_DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
-            PS_DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
+            DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
+            DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
+            DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
+            DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
             return;
         }
     }
@@ -122,7 +122,7 @@ void main()
       
     if ((nHealingType == HENCH_CNTX_MENU_BUFF_MEDIUM) || (nHealingType == HENCH_CNTX_MENU_BUFF_SHORT))
     {
-        int currentBuffState = PS_GetLocalInt(OBJECT_SELF, henchHealStateStr);
+        int currentBuffState = GetLocalInt(OBJECT_SELF, henchHealStateStr);
         if (!HenchCheckSpellToCast(0, TRUE))
         {
             // try the next shorter duration        
@@ -130,16 +130,16 @@ void main()
             if (currentBuffState == HENCH_CNTX_MENU_BUFF_LONG)
             {
 //                Jug_Debug(GetName(OBJECT_SELF) + " try medium");
-                PS_SetLocalInt(OBJECT_SELF, henchHealCountStr, curHealCount + 1);
-                PS_SetLocalInt(OBJECT_SELF, henchHealStateStr, HENCH_CNTX_MENU_BUFF_MEDIUM);
+                SetLocalInt(OBJECT_SELF, henchHealCountStr, curHealCount + 1);
+                SetLocalInt(OBJECT_SELF, henchHealStateStr, HENCH_CNTX_MENU_BUFF_MEDIUM);
                 DelayCommand(0.01, ExecuteScript("hench_o0_heal", OBJECT_SELF));
                 return;
             }
             if ((currentBuffState == HENCH_CNTX_MENU_BUFF_MEDIUM) && (nHealingType == HENCH_CNTX_MENU_BUFF_SHORT))
             {
 //                Jug_Debug(GetName(OBJECT_SELF) + " try short");
-                PS_SetLocalInt(OBJECT_SELF, henchHealCountStr, curHealCount + 1);
-                PS_SetLocalInt(OBJECT_SELF, henchHealStateStr, HENCH_CNTX_MENU_BUFF_SHORT);
+                SetLocalInt(OBJECT_SELF, henchHealCountStr, curHealCount + 1);
+                SetLocalInt(OBJECT_SELF, henchHealStateStr, HENCH_CNTX_MENU_BUFF_SHORT);
                 DelayCommand(0.01, ExecuteScript("hench_o0_heal", OBJECT_SELF));
                 return;
             }
@@ -155,7 +155,7 @@ void main()
          		if (!(GetIsPC(oPartyMember) && GetHenchPartyState(HENCH_PARTY_DISABLE_SELF_HEAL_OR_BUFF))
 					&& (oPartyMember != OBJECT_SELF))
         		{
-                    int partyMemberHealState = PS_GetLocalInt(oPartyMember, henchHealStateStr);
+                    int partyMemberHealState = GetLocalInt(oPartyMember, henchHealStateStr);
                     if (partyMemberHealState && (partyMemberHealState < currentBuffState))
                     {
                         // need to wait
@@ -174,7 +174,7 @@ void main()
         {
             DelayCommand(2.0, VoiceCanDo());
         }
-        PS_SetLocalInt(OBJECT_SELF, henchHealCountStr, curHealCount + 10);
+        SetLocalInt(OBJECT_SELF, henchHealCountStr, curHealCount + 10);
 		
 		if (GetIsPC(OBJECT_SELF))
 		{		
@@ -195,8 +195,8 @@ void main()
         VoiceTaskComplete(TRUE);
     }
     
-    PS_DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
-    PS_DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
-    PS_DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
+    DeleteLocalInt(OBJECT_SELF, henchHealCountStr);
+    DeleteLocalInt(OBJECT_SELF, henchHealTypeStr);
+    DeleteLocalInt(OBJECT_SELF, henchHealStateStr);
+    DeleteLocalObject(OBJECT_SELF, henchHealSpellTarget);
 }

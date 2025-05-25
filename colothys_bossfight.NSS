@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_spawns"
 
@@ -8,10 +8,10 @@ int GetEbolakhanAlive();
 
 void main () {
 
-	int nStage = PS_GetLocalInt(OBJECT_SELF, "stage");
+	int nStage = GetLocalInt(OBJECT_SELF, "stage");
 	object oWP;
 	
-	object oPC = PS_GetLocalObject(OBJECT_SELF, "TriggeredBy");
+	object oPC = GetLocalObject(OBJECT_SELF, "TriggeredBy");
 	
 	if (nStage <= 1) {
 		oWP = GetWaypointByTag("wp_gardenboss_guardian1");
@@ -26,7 +26,7 @@ void main () {
 		oWP = GetWaypointByTag("wp_gardenboss_vine2");
 		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_greenvise");
 		
-		PS_SetLocalInt(OBJECT_SELF, "stage", nStage+1);
+		SetLocalInt(OBJECT_SELF, "stage", nStage+1);
 		DelayCommand(12.0f, ExecuteScript("colothys_bossfight", OBJECT_SELF));
 	}
 	else if (nStage <= 2) {
@@ -39,7 +39,7 @@ void main () {
 		oWP = GetWaypointByTag("wp_gardenboss_guardian2");
 		SpawnWyvern(OBJECT_SELF, GetLocation(oWP));
 		
-		PS_SetLocalInt(OBJECT_SELF, "stage", nStage+1);
+		SetLocalInt(OBJECT_SELF, "stage", nStage+1);
 		DelayCommand(12.0f, ExecuteScript("colothys_bossfight", OBJECT_SELF));
 	}
 	else if (nStage <= 3) {
@@ -62,7 +62,7 @@ void main () {
 		oWP = GetWaypointByTag("wp_gardenboss_main");
 		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_ebolakhan");
 		
-		PS_SetLocalInt(OBJECT_SELF, "stage", nStage+1);
+		SetLocalInt(OBJECT_SELF, "stage", nStage+1);
 		DelayCommand(12.0f, ExecuteScript("colothys_bossfight", OBJECT_SELF));
 	
 	} else if (GetEbolakhanAlive()) {
@@ -92,7 +92,7 @@ void main () {
 			
 		}
 		
-		PS_SetLocalInt(OBJECT_SELF, "stage", nStage+1);
+		SetLocalInt(OBJECT_SELF, "stage", nStage+1);
 		DelayCommand(12.0f, ExecuteScript("colothys_bossfight", OBJECT_SELF));
 	
 	} else {
@@ -100,12 +100,12 @@ void main () {
 		object oFruit2 = GetObjectByTag("pl_gardenfruit_2");
 		SetUseableFlag(oFruit1, TRUE);
 		SetUseableFlag(oFruit2, TRUE);
-		PS_SetLocalInt(oFruit1, "reward", 1);
-		PS_SetLocalInt(oFruit2, "reward", 1);
+		SetLocalInt(oFruit1, "reward", 1);
+		SetLocalInt(oFruit2, "reward", 1);
 		
 		int nTime = PS_GetTime();
-		PS_SetLocalInt(oFruit1, "lastlooted", nTime);
-		PS_SetLocalInt(oFruit2, "lastlooted", nTime);
+		SetLocalInt(oFruit1, "lastlooted", nTime);
+		SetLocalInt(oFruit2, "lastlooted", nTime);
 	}
 }
 

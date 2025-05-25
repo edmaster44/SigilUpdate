@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 void main () {
 
@@ -6,8 +6,8 @@ void main () {
 	if (!GetIsObjectValid(oHolder))
 		return;
 		
-	string sTitle = PS_GetLocalString(oHolder, "Victim_Pamphlet_Title");
-	string sContent = PS_GetLocalString(oHolder, "Victim_Pamphlet");
+	string sTitle = GetLocalString(oHolder, "Victim_Pamphlet_Title");
+	string sContent = GetLocalString(oHolder, "Victim_Pamphlet");
 	
 	object oItem = CreateItemOnObject("ps_ladys_mkpamphlet", GetPCSpeaker());
 	SetFirstName(oItem, "<i>"+sTitle+"</i>");

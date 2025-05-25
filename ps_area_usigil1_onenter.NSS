@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = PS_GetGlobalInt("usigil1EnterLock");
+ int iLock = GetGlobalInt("usigil1EnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("usigil1EnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("usigil1EnterLock", 1); // Only allows one clean up at a time.
   
 	 if(GetObjectByTag("ps_quest_spiderspider1") == OBJECT_INVALID) {
 		object oWP = GetWaypointByTag("wp_quest_littlespiders");
@@ -20,6 +20,6 @@ void main()
 
   //DelayCommand(300.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  PS_SetGlobalInt("usigil1EnterLock", 0);
+  SetGlobalInt("usigil1EnterLock", 0);
  }
 }

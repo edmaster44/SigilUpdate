@@ -43,7 +43,7 @@ void FleeTheScene(object oCaster)
 
 void FleeRefresh(object oPC)
 {
-	if (PS_GetLocalInt(oPC,"FleeTheScene")==FALSE) return;
+	if (GetLocalInt(oPC,"FleeTheScene")==FALSE) return;
 	
 	FleeTheScene(oPC);
 	DelayCommand(30.1, FleeRefresh(oPC));

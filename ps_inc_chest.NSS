@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_treasuregeneration"
 #include "ps_inc_time"
@@ -11,9 +11,9 @@ const float cChestDistance = 8.0f; //the distance monsters must be from chest fo
 //GOLDDICE, GOLDNR, GOLDCONS
 void FillChestWithGold(object oChest) {
 
-	int iGolddice = PS_GetLocalInt(oChest,"GOLDDICE");
-	int iGoldnr = PS_GetLocalInt(oChest,"GOLDNR");
-	int iGoldcons = PS_GetLocalInt(oChest,"GOLDCONS");
+	int iGolddice = GetLocalInt(oChest,"GOLDDICE");
+	int iGoldnr = GetLocalInt(oChest,"GOLDNR");
+	int iGoldcons = GetLocalInt(oChest,"GOLDCONS");
 	int iGoldAmount = 0;
 		
 	if(iGolddice > 0 && iGoldnr > 0) {
@@ -117,41 +117,41 @@ void FillChestWithItems(object oChest) {
 	int nAmount=0;
 	int i=0;
 	
-	string sItem = PS_GetLocalString(oChest,"TAG");
-	int nChance = PS_GetLocalInt(oChest, "TAGCHANCE");
+	string sItem = GetLocalString(oChest,"TAG");
+	int nChance = GetLocalInt(oChest, "TAGCHANCE");
 	if ( sItem != "") {
 		if (nChance == 0 || d100() < nChance)
 			CreateTreasureItemOnTarget(sItem, oChest, 1);
 	}
 	
-	int nType = PS_GetLocalInt(oChest,"TYPE");
+	int nType = GetLocalInt(oChest,"TYPE");
 	if (nType == 0)
 		nType = 1;
 		
-	int nCR = PS_GetLocalInt(oChest, "CR");
+	int nCR = GetLocalInt(oChest, "CR");
 	if (nCR == 0) {
 		nCR = nType*7;
-		PS_SetLocalInt(oChest, "CR", nCR);
+		SetLocalInt(oChest, "CR", nCR);
 	}
 		
-	sItem = PS_GetLocalString(oChest,"TREASURE1");
-	nAmount = PS_GetLocalInt(oChest,"TREASURE1N");
+	sItem = GetLocalString(oChest,"TREASURE1");
+	nAmount = GetLocalInt(oChest,"TREASURE1N");
 	if ( nAmount == 0 ) nAmount = 1;
 	
 	for ( i = 0; i < nAmount; i++ ) {
 		FillChestWithSpecificItem(oChest, sItem, nType);
 	}
 	
-	sItem = PS_GetLocalString(oChest,"TREASURE2");
-	nAmount = PS_GetLocalInt(oChest,"TREASURE2N");
+	sItem = GetLocalString(oChest,"TREASURE2");
+	nAmount = GetLocalInt(oChest,"TREASURE2N");
 	if (nAmount == 0) nAmount = 1;
 	
 	for ( i = 0; i < nAmount; i++ ) {
 		FillChestWithSpecificItem(oChest, sItem, nType);
 	}
 	
-	sItem = PS_GetLocalString(oChest,"TREASURE3");
-	nAmount = PS_GetLocalInt(oChest,"TREASURE3N");
+	sItem = GetLocalString(oChest,"TREASURE3");
+	nAmount = GetLocalInt(oChest,"TREASURE3N");
 	if (nAmount == 0) nAmount = 1;
 	
 	for ( i = 0; i < nAmount; i++ ) {

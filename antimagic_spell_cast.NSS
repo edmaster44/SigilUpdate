@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "x2_inc_switches"
 
@@ -18,7 +18,7 @@ void main()
 	{
 		int done = FALSE;
 		
-		if(PS_GetLocalInt(caster, "ps_anti_magic_zone") != 0)
+		if(GetLocalInt(caster, "ps_anti_magic_zone") != 0)
 		{
 			SendMessageToPC(caster, "You are in an anti-magic zone where spells do not work!");
 			SetModuleOverrideSpellScriptFinished();
@@ -31,7 +31,7 @@ void main()
 			object target = GetSpellTargetObject();
 			if (target != OBJECT_INVALID)
 			{
-				if(PS_GetLocalInt(target, "ps_anti_magic_zone") != 0)
+				if(GetLocalInt(target, "ps_anti_magic_zone") != 0)
 				{
 					SendMessageToPC(caster, "Your target is in an anti-magic zone where spells do not work!");
 					SetModuleOverrideSpellScriptFinished();

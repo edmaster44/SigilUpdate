@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ///////////////////////////////////////////////////////////////
 // ps_secretchest_ontrigenter
@@ -33,13 +33,13 @@ History of Changes
 void main()
 {
 	object oEnteringObject	= GetEnteringObject();
-	string sSecretObject	= PS_GetLocalString(OBJECT_SELF, "sSecretItem");
-	string sTag				= PS_GetLocalString(OBJECT_SELF, "sSpawnTag");
-	int	nSearchDC			= PS_GetLocalInt(OBJECT_SELF, "nSearchDC");
+	string sSecretObject	= GetLocalString(OBJECT_SELF, "sSecretItem");
+	string sTag				= GetLocalString(OBJECT_SELF, "sSpawnTag");
+	int	nSearchDC			= GetLocalInt(OBJECT_SELF, "nSearchDC");
 	location lLocation		= GetLocation(GetNearestObjectByTag(sTag, oEnteringObject));
 	object oCreatedObject;
 		
-	if (!PS_IsMarkedAsDone(OBJECT_SELF) && GetIsOwnedByPlayer(oEnteringObject))
+	if (!IsMarkedAsDone(OBJECT_SELF) && GetIsOwnedByPlayer(oEnteringObject))
 		if ((GetDetectMode(oEnteringObject)==DETECT_MODE_ACTIVE
 			|| GetRacialType(oEnteringObject)==RACIAL_TYPE_ELF)
 			&& GetSkillRank(SKILL_SEARCH, oEnteringObject)>=nSearchDC)
@@ -47,7 +47,7 @@ void main()
 			AssignCommand(oEnteringObject, PlayVoiceChat(VOICE_CHAT_LOOKHERE));
 			oCreatedObject = CreateObject(OBJECT_TYPE_ITEM, sSecretObject, lLocation);
 			SendMessageToPC(oEnteringObject, "You've found something of interest.");
-			PS_MarkAsDone(OBJECT_SELF);
+			MarkAsDone(OBJECT_SELF);
 			
 			// Destroy the object and ourselves  - for one time server reboot appearance only
 			if (GetHasInventory(oCreatedObject))

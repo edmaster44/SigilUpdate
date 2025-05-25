@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Custom User Defined Event
@@ -84,9 +84,9 @@ if(nClass > 0 && (nAlign == ALIGNMENT_GOOD || nAlign == ALIGNMENT_NEUTRAL))
 AdjustReputation(oKiller, OBJECT_SELF, -1);
 //AddJournalQuestEntry("peoplekillby_opc", 1, oKiller, FALSE, FALSE, TRUE);
 int nInt;
-nInt = PS_GetLocalInt(oKiller, "peoplekillby_opc");
+nInt = GetLocalInt(oKiller, "peoplekillby_opc");
 nInt += 1;
-PS_SetLocalInt(oKiller, "peoplekillby_opc", nInt);
+SetLocalInt(oKiller, "peoplekillby_opc", nInt);
 AssignCommand(oKiller, ActionSpeakString("Si je tue des innocents, je vais probablement me faire intercepter par les autoritées locales.", TALKVOLUME_WHISPER));
 ////////////////////////////////////////////////////////////////////////////////
     }

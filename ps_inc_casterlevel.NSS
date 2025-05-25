@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 
@@ -137,7 +137,7 @@ int GetRealCasterLevel(object oPC, int bIncludeAlch = FALSE) {
 		// not the other way around and cyclical inclusions cause problems
 		int nLevel = GetHitDice(oPC);
 		object oEss = GetItemPossessedBy(oPC, "ps_essence");
-		int nECL = StringToInt(PS_GetLocalString(oEss, "ECL"));
+		int nECL = StringToInt(GetLocalString(oEss, "ECL"));
 		if (nECL > 0) nLevel += nECL;
 		// cannot have an Alchemical casting lvl higher than adjusted char lvl
 		if (nAlchLevel > nLevel) nAlchLevel = nLevel;

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Rod of Seven Parts activation script
 // Merges two different parts of the rod together
@@ -12,7 +12,7 @@ void main()
     object oItem1    = GetItemActivated();
     object oItem2  = GetItemActivatedTarget();
 	
-	if (oItem1 == oItem2 && PS_GetLocalInt(oItem1, "staffcomplete") == TRUE)
+	if (oItem1 == oItem2 && GetLocalInt(oItem1, "staffcomplete") == TRUE)
 	{
 		object area = GetArea(oPC);
 		float fDur = RoundsToSeconds(d4() + 1);
@@ -193,7 +193,7 @@ void main()
 		
 		if (numberOfParts == 7)
 		{
-			PS_SetLocalInt(staff, "staffComplete", TRUE);
+			SetLocalInt(staff, "staffComplete", TRUE);
 			SetDescription(staff, "This five foot long crystalline rod features an intricate pattern of dimples and depressions along its surface. For the first time since you found your first piece, the artifact finally feels whole. The finished piece is positively bursting with magical power, and you sense that it would be difficult to conceal its presence from any seeking to find it.");
 		}
 		

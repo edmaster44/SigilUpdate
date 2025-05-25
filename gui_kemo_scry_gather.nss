@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "gui_kemo_scry_inc"
 
@@ -14,11 +14,11 @@ void main()
 	while (oLIST!=OBJECT_INVALID)
 	{
 		nTOT = nTOT + 1;
-		nANON = PS_GetLocalInt(oLIST,"KScry_Anon");
+		nANON = GetLocalInt(oLIST,"KScry_Anon");
 		if ((GetFirstName(oLIST) != "") && (nANON != 1 || GetIsDM(oPC)))
 		{
 			nVIS = nVIS + 1;
-			PS_SetLocalObject(oPC, "ScryObject_"+IntToString(nVIS), oLIST);
+			SetLocalObject(oPC, "ScryObject_"+IntToString(nVIS), oLIST);
 			sROW = "ScryRow"+IntToString(nVIS);
 			ChangeList(nANON, oPC, oLIST, sROW, 0);			
 		}
@@ -26,5 +26,5 @@ void main()
 	}
 	string sTOTAL = "Showing " + IntToString(nVIS) + " out of " + IntToString(nTOT);
 	SetGUIObjectText(oPC,"KEMO_SCRY_PANEL","KEMO_SCRY_TOTALS",-1,sTOTAL);
-	PS_SetLocalInt(oPC, "SCRY_TOTAL", nVIS);
+	SetLocalInt(oPC, "SCRY_TOTAL", nVIS);
 }

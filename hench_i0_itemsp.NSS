@@ -277,7 +277,7 @@ void HenchCheckCastAuraSpell()
 
 void DispatchSpell(int nItemType)
 {
-    int targetInformation = PS_GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_TARGET_COLUMN_NAME);
+    int targetInformation = GetLocalInt(GetModule(), gCurrentSpellInfoStr + HENCH_SPELL_TARGET_COLUMN_NAME);
     gsCurrentspInfo.shape = targetInformation & HENCH_SPELL_TARGET_SHAPE_MASK;
     switch (targetInformation & HENCH_SPELL_TARGET_RANGE_MASK)
     {
@@ -395,8 +395,8 @@ void DispatchSpell(int nItemType)
         break;
     case HENCH_SPELL_INFO_SPELL_TYPE_DRAGON_BREATH:
         {
-            int combatRoundCount = PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
-            int lastDragonBreath = PS_GetLocalInt(OBJECT_SELF, henchLastDraBrStr);
+            int combatRoundCount = GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
+            int lastDragonBreath = GetLocalInt(OBJECT_SELF, henchLastDraBrStr);
             if (lastDragonBreath == 0 || lastDragonBreath < combatRoundCount - 2)
             {
                 // breath is unlimited
@@ -412,8 +412,8 @@ void DispatchSpell(int nItemType)
     case HENCH_SPELL_INFO_SPELL_TYPE_DOMINATE:
         if (!GetIsObjectValid(GetAssociate(ASSOCIATE_TYPE_DOMINATED)))
         {
-            int lastDominate = PS_GetLocalInt(OBJECT_SELF, henchLastDomStr);
-            int combatRoundCount = PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
+            int lastDominate = GetLocalInt(OBJECT_SELF, henchLastDomStr);
+            int combatRoundCount = GetLocalInt(OBJECT_SELF, henchCombatRoundStr);
             if (lastDominate == 0 && lastDominate >= combatRoundCount - 7)
             {
                 HenchSpellAttack(GetCurrentSpellSaveType(), targetInformation);
@@ -486,7 +486,7 @@ void HenchTalentSpellDispatch(talent tTalent, int nSpellID, int spellIDInfo, int
         while (currentIndex <= 5)
         {
 //			Jug_Debug(GetName(OBJECT_SELF) + " running sub spell code index " + IntToString(currentIndex));
-            int subSpellID = PS_GetLocalInt(GetModule(), HENCH_SPELL_ID_INFO + IntToString(nSpellID) + "SubRadSpell" + IntToString(currentIndex));
+            int subSpellID = GetLocalInt(GetModule(), HENCH_SPELL_ID_INFO + IntToString(nSpellID) + "SubRadSpell" + IntToString(currentIndex));
             if (subSpellID <= 0)
             {
                 break;
@@ -613,7 +613,7 @@ int FindItemSpellTalentsByCategory(int nCategory, int maximumToFind, int talentE
 				if (giCheckSpontaneousFlags == talentExclude)
 				{
 					string cacheName = gsSpontaneousClassCache + IntToString(nNewSpellID);
-					int cacheValue = PS_GetLocalInt(GetModule(), cacheName);
+					int cacheValue = GetLocalInt(GetModule(), cacheName);
 					if (!cacheValue)
 					{
 	                	string columnInfo = Get2DAString("spells", gsSpontaneousClassColumn , nNewSpellID);
@@ -628,7 +628,7 @@ int FindItemSpellTalentsByCategory(int nCategory, int maximumToFind, int talentE
 							cacheValue = 0x80000000;
 	//						Jug_Debug(GetName(OBJECT_SELF) + " spontaneous no match " + Get2DAString("spells", "Label", nNewSpellID));					
 						}
-						PS_SetLocalInt(GetModule(), cacheName, cacheValue);
+						SetLocalInt(GetModule(), cacheName, cacheValue);
 					}
 					giCheckSpontaneousLevels |= cacheValue;				
 				}
@@ -1527,7 +1527,7 @@ void InitializeFeats()
 
     if (GetLevelByClass(CLASS_TYPE_BARD) > 0)
     {
-        if (!(PS_GetLocalInt(OBJECT_SELF, curNegativeEffectsStr) & HENCH_EFFECT_TYPE_SILENCE))
+        if (!(GetLocalInt(OBJECT_SELF, curNegativeEffectsStr) & HENCH_EFFECT_TYPE_SILENCE))
         {
             if (GetHasFeat(FEAT_BARD_SONGS))
             {
@@ -1567,7 +1567,7 @@ void InitializeFeats()
                 }
                 if (GetHasFeat(FEAT_CURSE_SONG))
 				{
-					object oTest = PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
+					object oTest = GetLocalObject(OBJECT_SELF, sEnemyLineOfSight);
 					int bUseCurseSong;
 					while (GetIsObjectValid(oTest))
 					{
@@ -1577,7 +1577,7 @@ void InitializeFeats()
 							break;
 						}					
 						bUseCurseSong = TRUE;
-						oTest = PS_GetLocalObject(oTest, sEnemyLineOfSight);					
+						oTest = GetLocalObject(oTest, sEnemyLineOfSight);					
 					}
         			if (bUseCurseSong)
 	                {
@@ -1623,7 +1623,7 @@ void InitializeFeats()
 
     if (GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN) > 0)
     {
-        if (GetIsSpirit(PS_GetLocalObject(OBJECT_SELF, sEnemyLineOfSight)))
+        if (GetIsSpirit(GetLocalObject(OBJECT_SELF, sEnemyLineOfSight)))
         {
 //          Jug_Debug(GetName(OBJECT_SELF) + " checking spirit shaman abilities");
             if (GetHasFeat(FEAT_CHASTISE_SPIRITS))
@@ -2123,7 +2123,7 @@ int InitializeSpellCasting()
         nMySpellCastingConcentration += 4;
     }
 
-    nMyRangedTouchAttack = GetBaseAttackBonus(OBJECT_SELF) + PS_GetLocalInt(OBJECT_SELF, attackBonusStr) + 11 /* 21 - 10 */;
+    nMyRangedTouchAttack = GetBaseAttackBonus(OBJECT_SELF) + GetLocalInt(OBJECT_SELF, attackBonusStr) + 11 /* 21 - 10 */;
     nMyMeleeTouchAttack = nMyRangedTouchAttack + GetAbilityModifier(ABILITY_STRENGTH);
     nMyRangedTouchAttack += GetAbilityModifier(ABILITY_DEXTERITY);
 
@@ -2133,7 +2133,7 @@ int InitializeSpellCasting()
 
 void InitializeItemSpells(int nClass, int negativeEffects, int positiveEffects)
 {
-    PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
+    SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
 
     int itemSpellsFound = FALSE;
 
@@ -2162,7 +2162,7 @@ void InitializeItemSpells(int nClass, int negativeEffects, int positiveEffects)
 
     int bSpellCastingProblem = InitializeSpellCasting();
 
-    gExcludedItemTalents = PS_GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE);
+    gExcludedItemTalents = GetLocalInt(OBJECT_SELF, N2_TALENT_EXCLUDE);
 
 //  Jug_Debug(GetName(OBJECT_SELF) + " start exclude " + IntToString(gExcludedItemTalents));
     //Jug_Debug(GetName(OBJECT_SELF) + " spell failure chance " + FloatToString(gfSpellFailureChance));
@@ -2198,7 +2198,7 @@ void InitializeItemSpells(int nClass, int negativeEffects, int positiveEffects)
         gExcludedItemTalents |= TALENT_EXCLUDE_ABILITY;
 /*
         no polymorph spell use in NWN2
-        int polymorphShape = PS_GetLocalInt(OBJECT_SELF, sPolymorphTypeStr);
+        int polymorphShape = GetLocalInt(OBJECT_SELF, sPolymorphTypeStr);
         int polymorphSpellIndex;
         for (polymorphSpellIndex = 1; polymorphSpellIndex <= 3; polymorphSpellIndex++)
         {
@@ -2365,7 +2365,7 @@ void HenchCastSpell(struct sSpellInformation spInfo)
     case HENCH_SPELL_INFO_SPELL_TYPE_HARM:
     case HENCH_SPELL_INFO_SPELL_TYPE_REGENERATE:
     case HENCH_SPELL_INFO_TYPE_HEAL_SPECIAL:
-        if (spInfo.oTarget == OBJECT_SELF && PS_GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_CANT)
+        if (spInfo.oTarget == OBJECT_SELF && GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_CANT)
         {
             if (bgAnyValidTarget && (gsBestSelfInvisibility.spellID > 0))
             {
@@ -2374,7 +2374,7 @@ void HenchCastSpell(struct sSpellInformation spInfo)
                 spInfo.oTarget = OBJECT_SELF;
             }
             // indicate to others that going to heal self
-            PS_SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_IN_PROG);
+            SetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE, HENCH_HEAL_SELF_IN_PROG);
         }
         break;
     case HENCH_SPELL_INFO_SPELL_TYPE_SUMMON:
@@ -2423,7 +2423,7 @@ void HenchCastSpell(struct sSpellInformation spInfo)
     if ((spInfo.spellInfo & HENCH_SPELL_INFO_CONCENTRATION_FLAG) &&
         !(spInfo.spellInfo & HENCH_SPELL_INFO_ITEM_FLAG))
     {
-		if (!PS_GetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED))
+		if (!GetLocalInt(OBJECT_SELF, N2_COMBAT_MODE_USE_DISABLED))
 		{
 	        int bCurrentDefCastMode = GetActionMode(OBJECT_SELF, ACTION_MODE_DEFENSIVE_CAST);
 	        int bNewDefCastMode = bgMeleeAttackers && (Getd20Chance(nMySpellCastingConcentration - 15 - spInfo.spellLevel) > 0.67);
@@ -2460,10 +2460,10 @@ void HenchCastSpell(struct sSpellInformation spInfo)
         if (GetIsObjectValid(spInfo.oTarget))
         {
 //			Jug_Debug(GetName(OBJECT_SELF) + " attempt to cast spell on object " + IntToString(spInfo.spellID) + " on " + GetName(spInfo.oTarget));
-            PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
+            SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
             if (GetIsEnemy(spInfo.oTarget))
             {
-                PS_SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
+                SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
             }
             ActionUseTalentOnObject(spInfo.tTalent, spInfo.oTarget);
         }
@@ -2477,10 +2477,10 @@ void HenchCastSpell(struct sSpellInformation spInfo)
     {
         if (GetIsObjectValid(spInfo.oTarget))
         {
-            PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
+            SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
             if (GetIsEnemy(spInfo.oTarget))
             {
-                PS_SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
+                SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
             }
             if (spInfo.castingInfo & HENCH_CASTING_INFO_CHEAT_CAST_FLAG)
             {
@@ -2513,8 +2513,8 @@ void HenchCastSpell(struct sSpellInformation spInfo)
     {
         if (GetIsObjectValid(spInfo.oTarget))
         {
-            PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
-            PS_SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
+            SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
+            SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
         }
         if (spInfo.otherID > 0)
         {
@@ -2592,10 +2592,10 @@ void HenchCastSpell(struct sSpellInformation spInfo)
         if (GetIsObjectValid(spInfo.oTarget))
         {
 //  Jug_Debug("^^^^^^^^" + GetName(OBJECT_SELF) + " attempt to cast spontaneous spell on object " + IntToString(spInfo.spellID) + " on " + GetName(spInfo.oTarget));
-            PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
+            SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, spInfo.oTarget);
             if (GetIsEnemy(spInfo.oTarget))
             {
-                PS_SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
+                SetLocalObject(OBJECT_SELF, sHenchLastTarget, spInfo.oTarget);
             }
             ActionCastSpellAtObject(spInfo.spellID, spInfo.oTarget, spInfo.otherID, spInfo.castingInfo & HENCH_CASTING_INFO_CHEAT_CAST_FLAG);
         }
@@ -2634,22 +2634,22 @@ void HenchCastSpell(struct sSpellInformation spInfo)
 	        }
 			object oMarker = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_ipoint ", lTarget, FALSE, sPersistSpellMarkerTag);
 			DestroyObject(oMarker, 4.0);
-			PS_SetLocalObject(oMarker, sPersistSpellMarkerTag, OBJECT_SELF);
-			PS_SetLocalInt(oMarker, sPersistSpellMarkerTag, PS_GetLocalInt(GetModule(), sHenchPersistSpellIDInfo + IntToString(spInfo.spellID)));
+			SetLocalObject(oMarker, sPersistSpellMarkerTag, OBJECT_SELF);
+			SetLocalInt(oMarker, sPersistSpellMarkerTag, GetLocalInt(GetModule(), sHenchPersistSpellIDInfo + IntToString(spInfo.spellID)));
 		}
 		break;
     case HENCH_SPELL_INFO_SPELL_TYPE_DISPEL:
-        PS_SetLocalInt(OBJECT_SELF, henchLastDispelStr, PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
+        SetLocalInt(OBJECT_SELF, henchLastDispelStr, GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
         break;
     case HENCH_SPELL_INFO_SPELL_TYPE_DRAGON_BREATH:
-       PS_SetLocalInt(OBJECT_SELF, henchLastDraBrStr, PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
+       SetLocalInt(OBJECT_SELF, henchLastDraBrStr, GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
 //     Jug_Debug("@@@@" + GetName(OBJECT_SELF) + " doing dragon breath");
        break;
     case HENCH_SPELL_INFO_SPELL_TYPE_DOMINATE:
-        PS_SetLocalInt(OBJECT_SELF, henchLastDomStr, PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
+        SetLocalInt(OBJECT_SELF, henchLastDomStr, GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
         break;
     case HENCH_SPELL_INFO_SPELL_TYPE_TURN_UNDEAD:
-        PS_SetLocalInt(OBJECT_SELF, henchLastTurnStr,  PS_GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
+        SetLocalInt(OBJECT_SELF, henchLastTurnStr,  GetLocalInt(OBJECT_SELF, henchCombatRoundStr));
         break;
     }
 }
@@ -2755,7 +2755,7 @@ int CheckAOEForSelf(int currentNegEffects, int currentPosEffects)
 	        HenchCastSpell(gsGustOfWind);
 	        return TRUE;
 	    }
-	    if ((persistSpellFlags & HENCH_PERSIST_CAN_DISPEL) && (gsBestDispel.spellID > 0) && !PS_GetLocalInt(OBJECT_SELF, sHenchDontDispel))
+	    if ((persistSpellFlags & HENCH_PERSIST_CAN_DISPEL) && (gsBestDispel.spellID > 0) && !GetLocalInt(OBJECT_SELF, sHenchDontDispel))
 	    {		
 			int nSpellInformation = GetSpellInformation(persistSpellFlags & HENCH_PERSIST_SPELL_MASK);		
     		if ((nSpellInformation & HENCH_SPELL_TARGET_RANGE_MASK) == HENCH_SPELL_TARGET_RANGE_PERSONAL)

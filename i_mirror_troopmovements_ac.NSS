@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //
 /*
@@ -17,7 +17,7 @@ void main()
     object oPC      = GetItemActivator();
     object oItem    = GetItemActivated();
 	
-	if (PS_GetLocalInt(oPC, "STRANGE_BOOK") > 0) {
+	if (GetLocalInt(oPC, "STRANGE_BOOK") > 0) {
 		SendMessageToPC(oPC, "The pages of the book remain unchanged.");
 		return;
 	}
@@ -69,6 +69,6 @@ void main()
 	
 	SetDescription(oItem, sResult);
 	
-	PS_SetLocalInt(oPC, "STRANGE_BOOK", 1);
+	SetLocalInt(oPC, "STRANGE_BOOK", 1);
 	
 }

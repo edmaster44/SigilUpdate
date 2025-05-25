@@ -1,5 +1,5 @@
 #include "x2_inc_itemprop"
-#include "ff_safevar"
+
 
 const string IPR_TYPE = "IPR_TYPE";
 const string IPR_COST = "IPR_COST";
@@ -49,13 +49,13 @@ itemproperty GetItemPropertyByHash(object oItem, int nHash, int nNtn=0){
 //Saves the Item Property Reference using a set of Local Integers
 void SaveItemPropertyReference(object Obj,string Name,itemproperty Prop)
 {
-    PS_SetLocalInt(Obj, IPR_EXISTS + Name, TRUE);
-    PS_SetLocalInt(Obj, IPR_TYPE + Name, GetItemPropertyType (Prop));
-    PS_SetLocalInt(Obj, IPR_COST + Name, GetItemPropertyCostTable (Prop));
-    PS_SetLocalInt(Obj, IPR_COSTVALUE + Name, GetItemPropertyCostTableValue (Prop));
-    PS_SetLocalInt(Obj, IPR_PARAM1 + Name, GetItemPropertyParam1 (Prop));
-    PS_SetLocalInt(Obj, IPR_PARAM1VALUE + Name, GetItemPropertyParam1Value (Prop));
-    PS_SetLocalInt(Obj, IPR_SUBTYPE + Name, GetItemPropertySubType (Prop));
+    SetLocalInt(Obj, IPR_EXISTS + Name, TRUE);
+    SetLocalInt(Obj, IPR_TYPE + Name, GetItemPropertyType (Prop));
+    SetLocalInt(Obj, IPR_COST + Name, GetItemPropertyCostTable (Prop));
+    SetLocalInt(Obj, IPR_COSTVALUE + Name, GetItemPropertyCostTableValue (Prop));
+    SetLocalInt(Obj, IPR_PARAM1 + Name, GetItemPropertyParam1 (Prop));
+    SetLocalInt(Obj, IPR_PARAM1VALUE + Name, GetItemPropertyParam1Value (Prop));
+    SetLocalInt(Obj, IPR_SUBTYPE + Name, GetItemPropertySubType (Prop));
 }
 //Gets the Item Property by Reference, and usage as well as the Object itself
 
@@ -64,7 +64,7 @@ itemproperty GetItemPropertyReference(object Obj, string Name)
     int i;
     itemproperty Prop;
 
-    if (PS_GetLocalInt(Obj, IPR_EXISTS + Name) == FALSE)
+    if (GetLocalInt(Obj, IPR_EXISTS + Name) == FALSE)
     {
        // WriteTimestampedLogEntry ("GetItemPropertyReference: Attempted to remove nonexistant itemprop " + Name + " from object " + GetName (Obj) + ".");
         return Prop;
@@ -74,12 +74,12 @@ itemproperty GetItemPropertyReference(object Obj, string Name)
     Prop = GetFirstItemProperty (Obj);
     while (GetIsItemPropertyValid (Prop) != FALSE)
     {
-        if ((PS_GetLocalInt(Obj, IPR_TYPE + Name) == GetItemPropertyType (Prop)) &&
-            (PS_GetLocalInt(Obj, IPR_COST + Name) == GetItemPropertyCostTable (Prop)) &&
-            (PS_GetLocalInt(Obj, IPR_COSTVALUE + Name) == GetItemPropertyCostTableValue (Prop)) &&
-            (PS_GetLocalInt(Obj, IPR_PARAM1 + Name) == GetItemPropertyParam1 (Prop)) &&
-            (PS_GetLocalInt(Obj, IPR_PARAM1VALUE + Name) == GetItemPropertyParam1Value (Prop)) &&
-            (PS_GetLocalInt(Obj, IPR_SUBTYPE + Name) == GetItemPropertySubType (Prop)))
+        if ((GetLocalInt(Obj, IPR_TYPE + Name) == GetItemPropertyType (Prop)) &&
+            (GetLocalInt(Obj, IPR_COST + Name) == GetItemPropertyCostTable (Prop)) &&
+            (GetLocalInt(Obj, IPR_COSTVALUE + Name) == GetItemPropertyCostTableValue (Prop)) &&
+            (GetLocalInt(Obj, IPR_PARAM1 + Name) == GetItemPropertyParam1 (Prop)) &&
+            (GetLocalInt(Obj, IPR_PARAM1VALUE + Name) == GetItemPropertyParam1Value (Prop)) &&
+            (GetLocalInt(Obj, IPR_SUBTYPE + Name) == GetItemPropertySubType (Prop)))
         {
             return Prop;
         }
@@ -102,11 +102,11 @@ void DeleteItemPropertyReference(object Obj,string Name)
 
     RemoveItemProperty (Obj, Prop);
 
-    PS_DeleteLocalInt(Obj, IPR_TYPE + Name);
-    PS_DeleteLocalInt(Obj, IPR_COST + Name);
-    PS_DeleteLocalInt(Obj, IPR_COSTVALUE + Name);
-    PS_DeleteLocalInt(Obj, IPR_PARAM1 + Name);
-    PS_DeleteLocalInt(Obj, IPR_PARAM1VALUE + Name);
-    PS_DeleteLocalInt(Obj, IPR_SUBTYPE + Name);
-    PS_DeleteLocalInt(Obj, IPR_EXISTS + Name);
+    DeleteLocalInt(Obj, IPR_TYPE + Name);
+    DeleteLocalInt(Obj, IPR_COST + Name);
+    DeleteLocalInt(Obj, IPR_COSTVALUE + Name);
+    DeleteLocalInt(Obj, IPR_PARAM1 + Name);
+    DeleteLocalInt(Obj, IPR_PARAM1VALUE + Name);
+    DeleteLocalInt(Obj, IPR_SUBTYPE + Name);
+    DeleteLocalInt(Obj, IPR_EXISTS + Name);
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_advscript"
 
@@ -119,9 +119,9 @@ void changeHairColor(object oPC, int currentSeason)
 void main()
 {
 	object oPC = OBJECT_SELF;
-	int currentSeason = PS_GetLocalInt(oPC, "currentSeason") + 1;
+	int currentSeason = GetLocalInt(oPC, "currentSeason") + 1;
 	if (currentSeason == 4) currentSeason = 0;
-	PS_SetLocalInt(oPC, "currentSeason", currentSeason);
+	SetLocalInt(oPC, "currentSeason", currentSeason);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ENTANGLE), oPC, 1.0f);
 	
 	//temporary

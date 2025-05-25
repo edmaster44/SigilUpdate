@@ -15,7 +15,7 @@ void main(object oPC)
     
 	int nLevel 			= GetTotalLevels(oPC, FALSE);
 	object 	oItem		= GetItemPossessedBy(oPC,"ps_essence");
-	string sLA 			= PS_GetLocalString(oItem, "ECL");
+	string sLA 			= GetLocalString(oItem, "ECL");
 	int nLA 			= StringToInt(sLA);
 		nLevel = nLevel + nLA;
 	

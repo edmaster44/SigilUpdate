@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // This script will cycle through all non-PC creatures in the area which start with ps_monster_chess_
 // and will do two things:
@@ -25,7 +25,7 @@ if (!GetIsPC(oPC))
 	{
 	return;
 	}
-else if (PS_GetLocalInt(oEntryDoor, "FightStarted") == TRUE)
+else if (GetLocalInt(oEntryDoor, "FightStarted") == TRUE)
 	{
 	//SendMessageToPC(oPC, "Fight has already begun");
 	return;
@@ -33,14 +33,14 @@ else if (PS_GetLocalInt(oEntryDoor, "FightStarted") == TRUE)
 else
 	{
 	oEnemyKing = GetObjectByTag("ps_monster_chess_king_enemy", 0);
-	sSideChosen = PS_GetLocalString(oEnemyKing, "sChessSideChosen");
+	sSideChosen = GetLocalString(oEnemyKing, "sChessSideChosen");
 	//SendMessageToPC(oPC, "Starting with " + sSideChosen + " as ally and enemy king tag is " + GetTag(oEnemyKing));
 	//SendMessageToPC(oPC, "You are standing on " + GetTag(OBJECT_SELF));
 	if ((sSideChosen == "black" && GetTag(OBJECT_SELF) == "PS_chessboard_trigger_blackally")
 		||
 		(sSideChosen == "white" && GetTag(OBJECT_SELF) == "PS_chessboard_trigger_whiteally"))
 		{
-		PS_SetLocalInt(oEntryDoor, "FightStarted", TRUE);
+		SetLocalInt(oEntryDoor, "FightStarted", TRUE);
 		oCurrentArea = GetArea(oEnemyKing);
 		oCurrentCreature = GetFirstObjectInArea(oCurrentArea);
 		//SendMessageToPC(oPC, "In the faction set loop");

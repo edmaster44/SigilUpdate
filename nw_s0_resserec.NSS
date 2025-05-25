@@ -62,7 +62,7 @@ void main()
         {
             if (GetObjectType(oTarget) == OBJECT_TYPE_PLACEABLE)
             {
-                int nStrRef = PS_GetLocalInt(oTarget,"X2_L_RESURRECT_SPELL_MSG_RESREF");
+                int nStrRef = GetLocalInt(oTarget,"X2_L_RESURRECT_SPELL_MSG_RESREF");
                 if (nStrRef == 0)
                 {
                     nStrRef = 83861;

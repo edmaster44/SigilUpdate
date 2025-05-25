@@ -23,12 +23,12 @@ void CreateGlamer(object oCaster, location lLoc) {
 	AssignCommand(oClone, ActionMoveAwayFromObject(oCaster, TRUE, 100.0f));
 	
 	string sImmune = "Immunity_"+IntToString(Random(10000));
-	PS_SetLocalString(oClone, "Immunity_String", sImmune);
-	PS_SetLocalFloat(oClone, "Duration", RoundsToSeconds(3));
-	PS_SetLocalObject(oClone, "Caster", oCaster);
-	PS_SetLocalInt(oClone, "SaveDC", GetSpellSaveDC());
+	SetLocalString(oClone, "Immunity_String", sImmune);
+	SetLocalFloat(oClone, "Duration", RoundsToSeconds(3));
+	SetLocalObject(oClone, "Caster", oCaster);
+	SetLocalInt(oClone, "SaveDC", GetSpellSaveDC());
 	PS_Timestamp_UNIX(oClone, "Glamer_Timestamp");
-	PS_SetLocalInt(oClone, "Spell_ID", GetSpellId());
+	SetLocalInt(oClone, "Spell_ID", GetSpellId());
 	
 	GetAttentionOfHostiles(oClone, RADIUS_SIZE_SMALL, SPELL_MISLEAD, sImmune);
 	
@@ -55,7 +55,7 @@ void main() {
 	
 	//No teleporting in a dimensional anchor
 	if (GetAreaFromLocation(lTarget)==OBJECT_INVALID) return;
-	if (PS_GetLocalInt(oCaster, "DIMENSIONAL_ACHORED")) {
+	if (GetLocalInt(oCaster, "DIMENSIONAL_ACHORED")) {
 		SendMessageToPC(oCaster, "A Dimensional Anchor makes it impossible to teleport.");
 		return;	
 	}

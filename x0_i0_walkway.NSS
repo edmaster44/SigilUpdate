@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //:://////////////////////////////////////////////////
 //:: X0_I0_WALKWAY
@@ -205,8 +205,8 @@ object SetWWPController(string sWalkWayPointsTag, object oCreature=OBJECT_SELF)
 		oWWPController = CreateWWPController(sWalkWayPointsTag);
 	}
 	// store the Waypoint Controller object (and associated tag) on the creature
-	PS_SetLocalObject(oCreature, VAR_WWP_CONTROLLER, oWWPController);
-	PS_SetLocalString(oCreature, VAR_WP_TAG, sWalkWayPointsTag);
+	SetLocalObject(oCreature, VAR_WWP_CONTROLLER, oWWPController);
+	SetLocalString(oCreature, VAR_WP_TAG, sWalkWayPointsTag);
 
 	// if creature's controller has waypoints, then set walk flag and find nearest in set.
 	int iNumWaypoints = GetNumWaypoints(oCreature);
@@ -217,7 +217,7 @@ object SetWWPController(string sWalkWayPointsTag, object oCreature=OBJECT_SELF)
 		SetWalkCondition(NW_WALK_FLAG_CONSTANT);
 		
 		// default next to closest wp.
-	    PS_SetLocalInt(oCreature, VAR_WP_NEXT, GetNearestWalkWayPoint(oCreature));
+	    SetLocalInt(oCreature, VAR_WP_NEXT, GetNearestWalkWayPoint(oCreature));
 	}	
 
 	//PrettyDebug("SetWWPController() - Tag = " + GetTag(oWWPController)); 
@@ -228,7 +228,7 @@ object SetWWPController(string sWalkWayPointsTag, object oCreature=OBJECT_SELF)
 // return creature's current wwp controller
 object GetWWPController(object oCreature=OBJECT_SELF)
 {
-	object oWWPController = PS_GetLocalObject(oCreature, VAR_WWP_CONTROLLER);
+	object oWWPController = GetLocalObject(oCreature, VAR_WWP_CONTROLLER);
 	//PrettyDebug("GetWWPController() - Tag = " + GetTag(oWWPController)); 
 	return (oWWPController);
 }
@@ -238,7 +238,7 @@ object GetWWPController(object oCreature=OBJECT_SELF)
 // will walk directly to current waypoint - scripted waypoint script won't be called
 void ForceResumeWWP(object oCreature=OBJECT_SELF)
 {
-    PS_SetLocalInt(oCreature, VAR_FORCE_RESUME, TRUE);
+    SetLocalInt(oCreature, VAR_FORCE_RESUME, TRUE);
     WalkWayPoints(TRUE, "Force Resume");
 }
 
@@ -246,14 +246,14 @@ void ForceResumeWWP(object oCreature=OBJECT_SELF)
 int GetNumWaypointsByPrefix(string sPrefix=WW_WP_PREFIX, object oCreature=OBJECT_SELF)
 {
 	object oWWPController = GetWWPController(oCreature);
-    return (PS_GetLocalInt(oWWPController, sPrefix + WW_NUM));
+    return (GetLocalInt(oWWPController, sPrefix + WW_NUM));
 }
 
 // returns the number of waypoints for creature's walkwaypoint controller, according to the current time of day
 int GetNumWaypoints(object oCreature=OBJECT_SELF)
 {
 	object oWWPController = GetWWPController(oCreature);
-	int iNumWaypoints = PS_GetLocalInt(oWWPController, GetWPPrefix() + WW_NUM);
+	int iNumWaypoints = GetLocalInt(oWWPController, GetWPPrefix() + WW_NUM);
     return (iNumWaypoints);
 }
 
@@ -262,32 +262,32 @@ int GetNumWaypoints(object oCreature=OBJECT_SELF)
 // set waypoint we intend to travel to.
 void SetNextWaypoint(int iNextWP)
 {
-    PS_SetLocalInt(OBJECT_SELF, VAR_WP_NEXT, iNextWP);
+    SetLocalInt(OBJECT_SELF, VAR_WP_NEXT, iNextWP);
 }
 
 // get waypoint we are currently en route to
 int GetNextWaypoint()
 {
-    return (PS_GetLocalInt(OBJECT_SELF, VAR_WP_NEXT));
+    return (GetLocalInt(OBJECT_SELF, VAR_WP_NEXT));
 }
 
 // get waypoint we're currently at
 int GetCurrentWaypoint()
 {
-    return (PS_GetLocalInt(OBJECT_SELF, VAR_WP_CURRENT));
+    return (GetLocalInt(OBJECT_SELF, VAR_WP_CURRENT));
 }
 
 // get waypoint we were at previously
 int GetPreviousWaypoint()
 {
-    return (PS_GetLocalInt(OBJECT_SELF, VAR_WP_PREVIOUS));
+    return (GetLocalInt(OBJECT_SELF, VAR_WP_PREVIOUS));
 }
 
 // Retrieves specified WP object for oCreature's WWP Controller
 object GetWaypointByNum(int iWayPoint, string sPrefix=WW_WP_PREFIX, object oCreature=OBJECT_SELF)
 {
 	object oWWPController = GetWWPController(oCreature);
-    object oRet = PS_GetLocalObject(oWWPController, GetWPPrefix() + IntToString(iWayPoint));
+    object oRet = GetLocalObject(oWWPController, GetWPPrefix() + IntToString(iWayPoint));
     return (oRet);
 }
 
@@ -308,20 +308,20 @@ string GetWPPrefix(object oCreature = OBJECT_SELF)
 // Get whether the specified WalkWayPoints condition is set
 int GetWalkCondition(int nCondition, object oCreature=OBJECT_SELF)
 {
-    return (PS_GetLocalInt(oCreature, sWalkwayVarname) & nCondition);
+    return (GetLocalInt(oCreature, sWalkwayVarname) & nCondition);
 }
 
 // Set a given WalkWayPoints condition
 void SetWalkCondition(int nCondition, int bValid=TRUE, object oCreature=OBJECT_SELF)
 {
-    int nCurrentCond = PS_GetLocalInt(oCreature, sWalkwayVarname);
+    int nCurrentCond = GetLocalInt(oCreature, sWalkwayVarname);
     if (bValid) {
         // the bit that is true will be set to true in the result
-        PS_SetLocalInt(oCreature, sWalkwayVarname, nCurrentCond | nCondition);
+        SetLocalInt(oCreature, sWalkwayVarname, nCurrentCond | nCondition);
     } else {
         // take complement of condition and "and" it with current conditions which means
         // everything preserved except the bit passed in which will be set to 0
-        PS_SetLocalInt(oCreature, sWalkwayVarname, nCurrentCond & ~nCondition);
+        SetLocalInt(oCreature, sWalkwayVarname, nCurrentCond & ~nCondition);
     }
 }
 
@@ -348,9 +348,9 @@ object CreateWWPController(string sWalkWayPointsTag)
 	// we need unique tag for locating waypoints controllers: "WC_<tag>"
 	string sWaypointControllerTag = WAYPOINT_CONTROLLER_PREFIX + sWalkWayPointsTag;
 	object oWWPController = CreateObject(OBJECT_TYPE_WAYPOINT, RR_WAYPOINT_CONTROLLER, GetLocation(OBJECT_SELF), FALSE, sWaypointControllerTag);
-	PS_SetLocalString(oWWPController, VAR_WC_TAG, sWalkWayPointsTag);
+	SetLocalString(oWWPController, VAR_WC_TAG, sWalkWayPointsTag);
 	LookUpWalkWayPoints(oWWPController);
-	//PrettyDebug("CreateWWPController(" + sWalkWayPointsTag + ") - WP_NUM = " + IntToString(PS_GetLocalInt(oWWPController, "WP_NUM")));
+	//PrettyDebug("CreateWWPController(" + sWalkWayPointsTag + ") - WP_NUM = " + IntToString(GetLocalInt(oWWPController, "WP_NUM")));
 	
 	return (oWWPController);
 }
@@ -366,7 +366,7 @@ void LookUpWalkWayPoints(object oWWPController)
 	if( !GetSpawnInCondition(NW_FLAG_DAY_NIGHT_POSTING)) 
 	{
 	    // no night-time waypoints: set number of night time waypoints to -1
-	    PS_SetLocalInt(oWWPController, WW_WN_PREFIX + WW_NUM, -1); // WW_WN_PREFIX + WW_NUM = "WN_NUM"
+	    SetLocalInt(oWWPController, WW_WN_PREFIX + WW_NUM, -1); // WW_WN_PREFIX + WW_NUM = "WN_NUM"
 	} 
 	else 
 	{
@@ -380,9 +380,9 @@ void LookUpWalkWayPoints(object oWWPController)
 void LookUpWalkWayPointsSet(object oWWPController, string sPrefix, string sPost)
 {
     // check if the module enables area transitions for walkwaypoints
-    int bCrossAreas = PS_GetLocalInt(GetModule(),"X2_SWITCH_CROSSAREA_WALKWAYPOINTS");
+    int bCrossAreas = GetLocalInt(GetModule(),"X2_SWITCH_CROSSAREA_WALKWAYPOINTS");
 					
-    string sTag = sPrefix + PS_GetLocalString(oWWPController, VAR_WC_TAG) + "_"; // sPrefix will be "WP_" or "WN_"
+    string sTag = sPrefix + GetLocalString(oWWPController, VAR_WC_TAG) + "_"; // sPrefix will be "WP_" or "WN_"
 
     int nNth=1;
     object oWay;
@@ -408,11 +408,11 @@ void LookUpWalkWayPointsSet(object oWWPController, string sPrefix, string sPost)
         }
         if (GetIsObjectValid(oWay)) {
             // no waypoints but a post
-            PS_SetLocalInt(oWWPController, sPrefix + WW_NUM, 1);
-            PS_SetLocalObject(oWWPController, sPrefix + "1", oWay);
+            SetLocalInt(oWWPController, sPrefix + WW_NUM, 1);
+            SetLocalObject(oWWPController, sPrefix + "1", oWay);
         } else {
             // no waypoints or post
-            PS_SetLocalInt(oWWPController, sPrefix +WW_NUM, -1);
+            SetLocalInt(oWWPController, sPrefix +WW_NUM, -1);
         }
     } 
 	else 
@@ -420,7 +420,7 @@ void LookUpWalkWayPointsSet(object oWWPController, string sPrefix, string sPost)
         // look up and store all the waypoints
         while (GetIsObjectValid(oWay)) 
 		{
-            PS_SetLocalObject(oWWPController, sPrefix + IntToString(nNth), oWay);
+            SetLocalObject(oWWPController, sPrefix + IntToString(nNth), oWay);
             nNth++;
             if (!bCrossAreas)
             {
@@ -432,7 +432,7 @@ void LookUpWalkWayPointsSet(object oWWPController, string sPrefix, string sPost)
             }
         }
         nNth--;
-        PS_SetLocalInt(oWWPController, sPrefix + WW_NUM, nNth);
+        SetLocalInt(oWWPController, sPrefix + WW_NUM, nNth);
     }
 }
 
@@ -451,12 +451,12 @@ object GetNextWalkWayPoint(object oCreature=OBJECT_SELF)
 	int nPoints = GetNumWaypointsByPrefix(sPrefix);
 
     // Get the new current waypoint
-	int nPrevWay 	= PS_GetLocalInt(oCreature, VAR_WP_CURRENT);
-    int nCurWay 	= PS_GetLocalInt(oCreature, VAR_WP_NEXT);
+	int nPrevWay 	= GetLocalInt(oCreature, VAR_WP_CURRENT);
+    int nCurWay 	= GetLocalInt(oCreature, VAR_WP_NEXT);
     int nNextWay	= nCurWay; // this will be incremented or decremented below.
 
 	// save previous waypoint for use in determining other actions.
-   	//PS_SetLocalInt(oCreature, VAR_WP_CURRENT, nCurWay);
+   	//SetLocalInt(oCreature, VAR_WP_CURRENT, nCurWay);
 
     // Check to see if this is the first time
     if (nCurWay == -1) {
@@ -480,18 +480,18 @@ object GetNextWalkWayPoint(object oCreature=OBJECT_SELF)
     }
 
     // update the points
-    PS_SetLocalInt(oCreature, VAR_WP_NEXT, nNextWay);
-    PS_SetLocalInt(oCreature, VAR_WP_CURRENT, nCurWay);
-    PS_SetLocalInt(oCreature, VAR_WP_PREVIOUS, nPrevWay);
+    SetLocalInt(oCreature, VAR_WP_NEXT, nNextWay);
+    SetLocalInt(oCreature, VAR_WP_CURRENT, nCurWay);
+    SetLocalInt(oCreature, VAR_WP_PREVIOUS, nPrevWay);
 
 	// don't execute scripted waypoints when switching from day to night 
 	// as this could cause weirdness.
 	if (!bDayNightSwitch)
 	{
 		// script can update WP_NEXT to override next waypoint location
-	    string sScript = sPrefix + PS_GetLocalString(OBJECT_SELF, VAR_WP_TAG);
+	    string sScript = sPrefix + GetLocalString(OBJECT_SELF, VAR_WP_TAG);
 	    ExecuteScript(sScript, oCreature);
-	    nNextWay = PS_GetLocalInt(oCreature, VAR_WP_NEXT); // check in case script changed this value
+	    nNextWay = GetLocalInt(oCreature, VAR_WP_NEXT); // check in case script changed this value
 	}
 
 	// not sure what this is protecting against...
@@ -511,7 +511,7 @@ int GetNearestWalkWayPoint(object oCreature=OBJECT_SELF)
 	object oWWPController = GetWWPController(oCreature);
 
     string sPrefix = GetWPPrefix();
-    int nNumPoints = PS_GetLocalInt(oWWPController, sPrefix + WW_NUM);
+    int nNumPoints = GetLocalInt(oWWPController, sPrefix + WW_NUM);
 
 	if (nNumPoints < 1) 
 		return -1;
@@ -523,7 +523,7 @@ int GetNearestWalkWayPoint(object oCreature=OBJECT_SELF)
     float fTmpDist;
     for (i=1; i <= nNumPoints; i++) 
 	{
-        oTmp = PS_GetLocalObject(oWWPController, sPrefix + IntToString(i));
+        oTmp = GetLocalObject(oWWPController, sPrefix + IntToString(i));
         fTmpDist = GetDistanceBetween(oTmp, oCreature);
         if (fTmpDist >= 0.0 && fTmpDist < fDist) 
 		{
@@ -537,13 +537,13 @@ int GetNearestWalkWayPoint(object oCreature=OBJECT_SELF)
 // Does the basic walking actions for WalkWayPoints
 void DoWalkWayPointStandardActions(object oWay, int bKickStart)
 {
-	int isRunner = PS_GetLocalInt(OBJECT_SELF, "RUN_WAYPOINTS");
+	int isRunner = GetLocalInt(OBJECT_SELF, "RUN_WAYPOINTS");
 
     if (GetIsObjectValid(oWay) == TRUE)
     {
         SetWalkCondition(NW_WALK_FLAG_CONSTANT);
 		
-        if((bKickStart == TRUE) || (PS_GetLocalInt(OBJECT_SELF,"N2_OVERRIDE_MOVE") == 0))
+        if((bKickStart == TRUE) || (GetLocalInt(OBJECT_SELF,"N2_OVERRIDE_MOVE") == 0))
         {
         	ActionMoveToObject(oWay, isRunner);
         }
@@ -557,7 +557,7 @@ void DoWalkWayPointStandardActions(object oWay, int bKickStart)
     {
         if(GetSpawnInCondition(NW_FLAG_SLEEPING_AT_NIGHT))
         {
-            string sScript = PS_GetLocalString(GetModule(),"X2_S_SLEEP_AT_NIGHT_SCRIPT");
+            string sScript = GetLocalString(GetModule(),"X2_S_SLEEP_AT_NIGHT_SCRIPT");
             if (sScript != "")
             {
                 ExecuteScript(sScript,OBJECT_SELF);
@@ -586,7 +586,7 @@ int IsOkToWalkWayPoints()
     if (GetIsFighting(OBJECT_SELF) || IsInConversation(OBJECT_SELF))
 	{
 		//PrettyDebug(GetName(OBJECT_SELF) + "--- aborted WalkWayPoints due to convo or fight called by --");
-		PS_SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
+		SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 100);
         return FALSE;
 	}
 
@@ -606,12 +606,12 @@ void MoveToNextWaypoint(int bKickStart=FALSE, int bForcResumeOverride=FALSE)
     int iCurrentAction = GetCurrentAction(OBJECT_SELF);
 
 	// Force resume will interrupt actions such as sitting.  
-    int bForceResume = PS_GetLocalInt(OBJECT_SELF, VAR_FORCE_RESUME) || bForcResumeOverride;
+    int bForceResume = GetLocalInt(OBJECT_SELF, VAR_FORCE_RESUME) || bForcResumeOverride;
 
     if (bForceResume == TRUE)
     {
 		bKickStart = TRUE;
-        PS_SetLocalInt(OBJECT_SELF, VAR_FORCE_RESUME, FALSE);
+        SetLocalInt(OBJECT_SELF, VAR_FORCE_RESUME, FALSE);
         if ((iCurrentAction != ACTION_SIT) && (iCurrentAction != ACTION_INVALID))
         {
             // we're busy doing some action other than sitting so no need to resume.
@@ -626,15 +626,15 @@ void MoveToNextWaypoint(int bKickStart=FALSE, int bForcResumeOverride=FALSE)
 		// only kickstart if we are known to need it or if it's happened three times in a row
 		if (bKickStart == TRUE)
 		{
-			int iKickStartRepeatCount = PS_GetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT) + 1;
-			PS_SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, iKickStartRepeatCount);
+			int iKickStartRepeatCount = GetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT) + 1;
+			SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, iKickStartRepeatCount);
 			if (iKickStartRepeatCount < 3)
 				return;
 		}
 	}
 
 	// we made it, so we no longer need a kickstart
-	PS_SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 0);
+	SetLocalInt(OBJECT_SELF, VAR_KICKSTART_REPEAT_COUNT, 0);
 
 //    PrintString ("WalkWayPoints: iCurrentAction = " + IntToString(iCurrentAction));
 //    PrintString ("WalkWayPoints: Not busy, so doing WWP. invalid = " + IntToString(ACTION_INVALID) + "; iCurrentAction = " + IntToString(iCurrentAction));
@@ -689,7 +689,7 @@ void WalkWayPoints(int bKickStart=FALSE, string sWhoCalled="unknown", int bForcR
 // returns tag to use for purpose of initializing waypoints.
 string GetWPTag(object oCreature=OBJECT_SELF)
 {
-	string sWPTag = PS_GetLocalString(oCreature, VAR_WP_TAG);
+	string sWPTag = GetLocalString(oCreature, VAR_WP_TAG);
 	if (sWPTag == "")
 		sWPTag = GetTag(oCreature);
 
@@ -725,7 +725,7 @@ int CheckWayPoints(object oWalker = OBJECT_SELF)
         AssignCommand(oWalker, LookUpWalkWayPoints());
     }
 
-    if (PS_GetLocalInt(oWalker, "WP_NUM") > 0 || PS_GetLocalInt(oWalker, "WN_NUM") > 0)
+    if (GetLocalInt(oWalker, "WP_NUM") > 0 || GetLocalInt(oWalker, "WN_NUM") > 0)
         return TRUE;
     return FALSE;
 }
@@ -739,7 +739,7 @@ int GetIsPostOrWalking(object oWalker = OBJECT_SELF)
     }
 
 	string sPrefix = GetWPPrefix();
-    if (PS_GetLocalInt(oWalker, sPrefix +WW_NUM) > 0)
+    if (GetLocalInt(oWalker, sPrefix +WW_NUM) > 0)
     	return TRUE;
 
     return FALSE;
@@ -764,7 +764,7 @@ int GetDayNightSwitch(object oCreature=OBJECT_SELF)
 			SetWalkCondition(NW_WALK_FLAG_IS_DAY, !bIsWalkingDay, oCreature);
 
 			// reset next which will send us off to the nearest wp in other set
-			PS_SetLocalInt(oCreature, VAR_WP_NEXT, -1);
+			SetLocalInt(oCreature, VAR_WP_NEXT, -1);
 		}
 	}
 	return (bTimeToSwitch);
@@ -776,7 +776,7 @@ int GetIsPosted(object oCreature=OBJECT_SELF)
 {
 	string sPrefix = GetWPPrefix();
 	int nPoints = GetNumWaypointsByPrefix(sPrefix);
-	if ((nPoints == 1) && (PS_GetLocalInt(oCreature, VAR_WP_SINGLE_POINT_OVERRIDE)==FALSE))
+	if ((nPoints == 1) && (GetLocalInt(oCreature, VAR_WP_SINGLE_POINT_OVERRIDE)==FALSE))
 	{
 		//PrettyDebug(GetName(OBJECT_SELF) + ": only found 1 wp");
 		object oWay = GetWaypointByNum(1, sPrefix);

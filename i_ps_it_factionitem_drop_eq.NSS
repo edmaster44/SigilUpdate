@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // i_ps_it_factionitem_drop_eq
 /*
@@ -35,7 +35,7 @@ void main()
 {
     object oPC      = GetPCItemLastEquippedBy();
     object oItem    = GetPCItemLastEquipped();
-	int nObjfaction	= PS_GetLocalInt(oItem, "Faction");
+	int nObjfaction	= GetLocalInt(oItem, "Faction");
  	int nFaction = GetFaction(oPC);
 	
 	if(nFaction != nObjfaction) {

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 void main ()
 {
@@ -10,13 +10,13 @@ void main ()
 	if (!GetIsObjectValid(oDoorKeeper))
 		return;
 
-	int lastTime = PS_GetLocalInt(OBJECT_SELF, "timestamp");
+	int lastTime = GetLocalInt(OBJECT_SELF, "timestamp");
 	if (lastTime == GetTimeMinute())
 		return;
 		
 	if ((GetRacialType(oPC) == RACIAL_TYPE_OUTSIDER) && GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
 	{
 		AssignCommand(oDoorKeeper, ActionSpeakString("I'm keeping my eye on you. . . you better not cause any trouble. *eyes follow "+GetName(oPC)+" around the room*"));
-		PS_SetLocalInt(OBJECT_SELF, "timestamp", GetTimeMinute());
+		SetLocalInt(OBJECT_SELF, "timestamp", GetTimeMinute());
 	}
 }

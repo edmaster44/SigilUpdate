@@ -63,7 +63,7 @@ void CreateFinalExplosion(object oPC) {
 //Start collapsing the treasure room on everyone's heads!
 void CollapseRoom(object oHolder, object oPC) {
 
-	int nStage = PS_GetLocalInt(oHolder, "CollapseStage");
+	int nStage = GetLocalInt(oHolder, "CollapseStage");
 	
 	if (nStage == 0) {
 		SendMessageToPC(oPC, "The room shakes as you lift an item from the pile of treasure, as if in warning.");
@@ -75,12 +75,12 @@ void CollapseRoom(object oHolder, object oPC) {
 		CreateFinalExplosion(oPC);
 	}
 	
-	int nMax = PS_GetLocalInt(oHolder, "MaxTreasure");
+	int nMax = GetLocalInt(oHolder, "MaxTreasure");
 	if (nMax < MAX_STAGES) { 
 		//progress 2x as fast if the party size is significantly smaller
 		nStage += 1;
 	}
-	PS_SetLocalInt(oHolder, "CollapseStage", nStage+1);
+	SetLocalInt(oHolder, "CollapseStage", nStage+1);
 	
 }
 
@@ -100,32 +100,32 @@ void main () {
 	if (nMax > 6)
 		nMax = 6;
 	
-	if (PS_GetLocalInt(oHolder, "MaxTreasure") <= 0)
-		PS_SetLocalInt(oHolder, "MaxTreasure", nMax);
-	nMax = PS_GetLocalInt(oHolder, "MaxTreasure");
+	if (GetLocalInt(oHolder, "MaxTreasure") <= 0)
+		SetLocalInt(oHolder, "MaxTreasure", nMax);
+	nMax = GetLocalInt(oHolder, "MaxTreasure");
 	
 	//Get / set the current number of pieces of treasure taken
-	int nCurrent = PS_GetLocalInt(oHolder, "TreasureTaken");
-	PS_SetLocalInt(oHolder, "TreasureTaken", nCurrent+1);
-	nCurrent = PS_GetLocalInt(oHolder, "TreasureTaken");
+	int nCurrent = GetLocalInt(oHolder, "TreasureTaken");
+	SetLocalInt(oHolder, "TreasureTaken", nCurrent+1);
+	nCurrent = GetLocalInt(oHolder, "TreasureTaken");
 	
 	//Get / set the current number of pieces this PC has taken
-	int nTaken = PS_GetLocalInt(oPC, "TreasureTaken");
-	PS_SetLocalInt(oPC, "TreasureTaken", nTaken+1);
-	nTaken = PS_GetLocalInt(oPC, "TreasureTaken");
+	int nTaken = GetLocalInt(oPC, "TreasureTaken");
+	SetLocalInt(oPC, "TreasureTaken", nTaken+1);
+	nTaken = GetLocalInt(oPC, "TreasureTaken");
 	
 	if (nTaken > 1 || nCurrent >= nMax) {
 		DestroyObject(oItem, 0.8f);
-		PS_SetLocalInt(oHolder, "CollapseStage", MAX_STAGES);
+		SetLocalInt(oHolder, "CollapseStage", MAX_STAGES);
 	}
 	
 	if (nCurrent > 0) {
 		DelayCommand(1.0f, CollapseRoom(oHolder, oPC));
 	}
 	
-	DelayCommand(900.0f, PS_DeleteLocalInt(oHolder, "MaxTreasure"));
-	DelayCommand(900.0f, PS_DeleteLocalInt(oHolder, "TreasureTaken"));
-	DelayCommand(900.0f, PS_DeleteLocalInt(oHolder, "CollapseStage"));
-	DelayCommand(900.0f, PS_DeleteLocalInt(oPC, "TreasureTaken"));
+	DelayCommand(900.0f, DeleteLocalInt(oHolder, "MaxTreasure"));
+	DelayCommand(900.0f, DeleteLocalInt(oHolder, "TreasureTaken"));
+	DelayCommand(900.0f, DeleteLocalInt(oHolder, "CollapseStage"));
+	DelayCommand(900.0f, DeleteLocalInt(oPC, "TreasureTaken"));
 
 }

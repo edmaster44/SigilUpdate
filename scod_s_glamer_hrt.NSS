@@ -15,13 +15,13 @@
 void main () {
 
 	//Remove me if there is no caster
-	object oCaster = PS_GetLocalObject(OBJECT_SELF, "Caster");
+	object oCaster = GetLocalObject(OBJECT_SELF, "Caster");
 	if (!GetIsObjectValid(oCaster)) {
 		DestroyObject(OBJECT_SELF, 0.1f);
 	}
 	
 	//Remove me if the duration has run out
-	float fDur = PS_GetLocalFloat(OBJECT_SELF, "Duration");
+	float fDur = GetLocalFloat(OBJECT_SELF, "Duration");
 	if (PS_GetTimestamp_Age_Seconds(OBJECT_SELF, "Glamer_Timestamp") >= FloatToInt(fDur)) {
 		DestroyObject(OBJECT_SELF, 0.1f);
 	}
@@ -29,8 +29,8 @@ void main () {
 	ClearAllActions();
 	PlayCustomAnimation(OBJECT_SELF, "taunt", FALSE);
 	DelayCommand(3.0f, AssignCommand(OBJECT_SELF, ActionRandomWalk()));
-	string immunityString = PS_GetLocalString(OBJECT_SELF, "Immunity_String");
-	int nSpellID = PS_GetLocalInt(OBJECT_SELF, "Spell_ID");
+	string immunityString = GetLocalString(OBJECT_SELF, "Immunity_String");
+	int nSpellID = GetLocalInt(OBJECT_SELF, "Spell_ID");
 	
 	GetAttentionOfHostiles(OBJECT_SELF, RADIUS_SIZE_COLOSSAL, nSpellID, immunityString);
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // when placeable is used, transition to WP defined tag on variable WP.
 
@@ -8,7 +8,7 @@ void main()
 {
 	object oPC = GetLastUsedBy();
 	object oPlaceable = OBJECT_SELF;
-	string sDest = PS_GetLocalString(oPlaceable, "WP");
+	string sDest = GetLocalString(oPlaceable, "WP");
 	object oWP = GetWaypointByTag(sDest);
 	
 	TransportToWaypoint(oPC, oWP);

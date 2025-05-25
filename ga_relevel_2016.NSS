@@ -6,7 +6,7 @@ void main ()
 {
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	object oItem = GetItemPossessedBy(oPC,"ps_essence");
-	string sID = IntToString(PS_GetLocalInt(oItem,"ID"));
+	string sID = IntToString(GetLocalInt(oItem,"ID"));
 	
 	SQLExecDirect("SELECT id,dm_pool,rp_pool,Day(Now()) FROM characterdata WHERE id=" + sID);
 	if (SQLFetch() != SQL_ERROR) 

@@ -1,14 +1,14 @@
-#include "ff_safevar"
+
 
 
 void main()
 {
 	 object oPC = GetEnteringObject();
 	
-	 int iLock = PS_GetGlobalInt("chirpersRoomsLock");
+	 int iLock = GetGlobalInt("chirpersRoomsLock");
 	 if ( iLock == 0 )
 	 {
-		  PS_SetGlobalInt("chirpersRoomsLock", 1); // Only allows one clean up at a time.
+		  SetGlobalInt("chirpersRoomsLock", 1); // Only allows one clean up at a time.
 		
 		  
 		if(GetObjectByTag("ps_chirpers_gregor") == OBJECT_INVALID)
@@ -18,6 +18,6 @@ void main()
 		   object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_chirpers_gregor", lSpawnpoint);    
 		}
 		   
-		  PS_SetGlobalInt("chirpersRoomsLock", 0);
+		  SetGlobalInt("chirpersRoomsLock", 0);
 	 }
 }

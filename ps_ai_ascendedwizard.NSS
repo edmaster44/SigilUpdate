@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "nw_i0_generic"
 #include "x0_i0_spells"
@@ -55,7 +55,7 @@ int GetTargetBigbyRes(object oTarget)
 
 int GetBuffedMyself()
 {
-	return PS_GetLocalInt(OBJECT_SELF, "Buffed");
+	return GetLocalInt(OBJECT_SELF, "Buffed");
 }
 
 void CastSpells(object oTarget)
@@ -196,7 +196,7 @@ void BuffSequence(object oTarget)
 	ActionCastSpellAtObject(SPELL_TRUE_SEEING, oTarget, METAMAGIC_QUICKEN, TRUE);
 	ActionCastSpellAtObject(SPELL_SUPERIOR_RESISTANCE, oTarget, METAMAGIC_QUICKEN);
 	ActionCastSpellAtObject(SPELL_PROTECTION_FROM_GOOD, oTarget, METAMAGIC_QUICKEN);
-	PS_SetLocalInt(oTarget, "Buffed", 1);
+	SetLocalInt(oTarget, "Buffed", 1);
 }
 
 void main()

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //********************************************
 //Allows PC to harvest off of a plant
@@ -23,13 +23,13 @@ void main() {
 
 	object oPC = GetLastUsedBy();
 	
-	int nHarvested = PS_GetLocalInt(OBJECT_SELF, "HARVESTED");
+	int nHarvested = GetLocalInt(OBJECT_SELF, "HARVESTED");
 	if (nHarvested > 0)
 		return;
 	
-	PS_SetLocalInt(OBJECT_SELF, "HARVESTED", 1);
+	SetLocalInt(OBJECT_SELF, "HARVESTED", 1);
 
-	string sToGive = PS_GetLocalString(OBJECT_SELF, "ItemToGive");
+	string sToGive = GetLocalString(OBJECT_SELF, "ItemToGive");
 	
 	AssignCommand(oPC, ActionMoveToObject(OBJECT_SELF));
 	

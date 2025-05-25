@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // ginc_group
 /*
@@ -37,7 +37,7 @@
 // ChazM 6/21/05 added SpawnCreaturesInGroupAtWP()
 // ChazM 6/27/05 modified ResetGroup(), renamed bunch of "private" functions and all references, modified AddToGroup(), added InsertIntoGroup()
 //				added some "how to use" comments, modified GetPartyGroup()
-// ChazM 6/28/05 added PS_DeleteGlobalObject(), modified GroupDeleteObjectIndex()
+// ChazM 6/28/05 added DeleteGlobalObject(), modified GroupDeleteObjectIndex()
 //  			added GroupActionForceExit(), GroupChangeFaction, GroupChangeToStandardFaction
 // ChazM 7/1/05 added AddNearestWithTagToGroup(), GroupMoveToFormationLocation(), GroupActionMoveToObject(), 
 //				modified GroupMoveToWP()
@@ -64,7 +64,7 @@
 // ChazM 9/15/05 added GroupMoveToObject(), GroupActionCastFakeSpellAtObject(), SendDebugMessage();
 //				changed GroupJumpToObject() to GroupJumpToWP; modified AddToGroup(), FactionToGroup(), EncounterToGroup(), AddNearestWithTagToGroup()
 // ChazM 9/15/05 added GroupApplyEffectToObject() and GroupRemoveEffectOfType()
-// ChazM 9/29/05 added 3 new includes, removed SendDebugMessage, moved out PS_GetGlobalObject( ), PS_SetGlobalObject(), PS_DeleteGlobalObject() to ginc_vars;
+// ChazM 9/29/05 added 3 new includes, removed SendDebugMessage, moved out GetGlobalObject( ), SetGlobalObject(), DeleteGlobalObject() to ginc_vars;
 //				RandomDelta(), RandomFloat(), GetNearbyLocation() to ginc_math
 // BMA-OEI 10/26/05 added GroupSetLineFormation(), GetLineLocation(), modified GroupForceMoveToLocation(), GroupSpawnAtLocation(), GroupMoveToFormationLocation()
 // BMA-OEI 11/06/05 added GroupSignalEvent()
@@ -409,7 +409,7 @@ int	GetIsGroupValid(string sGroupName, int bNotDying = FALSE)
 //		NOTE: may be some problem with creatures who were formerly in a group having the residual variable
 string GetGroupName(object oMember)
 {
-	return PS_GetLocalString(oMember,OBJ_GROUP_MY_GROUP);	
+	return GetLocalString(oMember,OBJ_GROUP_MY_GROUP);	
 }
 
 // Return TRUE, if all remaining members are dominated
@@ -441,7 +441,7 @@ int GetIsGroupDominated( string sGroupName )
 object GroupGetObjectIndex(string sGroupName, int iIndex)
 {
 	string sThisObj = OBJ_GROUP_PREFIX + sGroupName + IntToString(iIndex);
-	return (PS_GetGlobalObject( sThisObj));
+	return (GetGlobalObject( sThisObj));
 }
 
 void GroupSetObjectIndex(string sGroupName, int iIndex, object oObject)
@@ -463,19 +463,19 @@ void GroupDeleteObjectIndex(string sGroupName, int iIndex)
 int GetGroupInt(string sGroupName, string sVarName)
 {
 	string sThisInt = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	return (PS_GetGlobalInt(sThisInt));
+	return (GetGlobalInt(sThisInt));
 }
 
 void SetGroupInt(string sGroupName, string sVarName, int iValue)
 {
 	string sThisInt = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	PS_SetGlobalInt(sThisInt, iValue);
+	SetGlobalInt(sThisInt, iValue);
 }
 
 void DeleteGroupInt(string sGroupName, string sVarName)
 {
 	string sThisInt = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	PS_SetGlobalInt(sThisInt, 0);
+	SetGlobalInt(sThisInt, 0);
 }
 
 //---------------------------------------------------------------
@@ -484,19 +484,19 @@ void DeleteGroupInt(string sGroupName, string sVarName)
 float GetGroupFloat(string sGroupName, string sVarName)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	return (PS_GetGlobalFloat(sThisVar));
+	return (GetGlobalFloat(sThisVar));
 }
 
 void SetGroupFloat(string sGroupName, string sVarName, float fValue)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	PS_SetGlobalFloat(sThisVar, fValue);
+	SetGlobalFloat(sThisVar, fValue);
 }
 
 void DeleteGroupFloat(string sGroupName, string sVarName)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	PS_SetGlobalFloat(sThisVar, 0.0f);
+	SetGlobalFloat(sThisVar, 0.0f);
 }
 
 //---------------------------------------------------------------
@@ -505,13 +505,13 @@ void DeleteGroupFloat(string sGroupName, string sVarName)
 string GetGroupString(string sGroupName, string sVarName)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	return (PS_GetGlobalString(sThisVar));
+	return (GetGlobalString(sThisVar));
 }
 
 void SetGroupString(string sGroupName, string sVarName, string sValue)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	PS_SetGlobalString(sThisVar, sValue);
+	SetGlobalString(sThisVar, sValue);
 }
 
 
@@ -521,13 +521,13 @@ void SetGroupString(string sGroupName, string sVarName, string sValue)
 object GetGroupObject(string sGroupName, string sVarName)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	return (PS_GetGlobalObject( sThisVar));
+	return (GetGlobalObject( sThisVar));
 }
 
 void SetGroupObject(string sGroupName, string sVarName, object oValue)
 {
 	string sThisVar = OBJ_GROUP_PREFIX + sGroupName + sVarName;
-	PS_SetGlobalObject(sThisVar, oValue);
+	SetGlobalObject(sThisVar, oValue);
 }
 
 
@@ -623,7 +623,7 @@ int InsertIntoGroup(string sGroupName, object oObject, int bOverridePrevGroup = 
 	// if not ok to override, then check if already in group.
 	if (!bOverridePrevGroup)
 	{
-		if (PS_GetLocalString(oObject, OBJ_GROUP_MY_GROUP) != ""){
+		if (GetLocalString(oObject, OBJ_GROUP_MY_GROUP) != ""){
 			PrintString ("ginc_group: InsertIntoGroup - failed - " + GetName(oObject) + " already in another group");
 			return 0;
 		}
@@ -638,7 +638,7 @@ int InsertIntoGroup(string sGroupName, object oObject, int bOverridePrevGroup = 
 	GroupSetObjectIndex(sGroupName, iNumObjects, oObject);
 
 	// let object know what group he is in.
-	PS_SetLocalString(oObject, OBJ_GROUP_MY_GROUP, sGroupName);
+	SetLocalString(oObject, OBJ_GROUP_MY_GROUP, sGroupName);
 
 	return (iNumObjects);
 }
@@ -868,7 +868,7 @@ void ResetGroup(string sGroupName)
 		{	
 			if ( GetGroupName(oObject) == sGroupName )
 			{
-				PS_DeleteLocalString( oObject, OBJ_GROUP_MY_GROUP );
+				DeleteLocalString( oObject, OBJ_GROUP_MY_GROUP );
 			}
 		}
 		GroupDeleteObjectIndex(sGroupName, i);
@@ -1638,7 +1638,7 @@ void GroupSetLocalString (string sGroupName, string sVarName, string sValue)
 	while (GetIsObjectValid(oMember))
 	{
 		PrintString("ginc_group: GroupSetLocalString() group " + sGroupName + " object " + GetName(oMember) + " var " + sVarName + " = " + sValue);
-		PS_SetLocalString(oMember, sVarName, sValue);
+		SetLocalString(oMember, sVarName, sValue);
 		oMember = GetNextInGroup(sGroupName);
 	}
 }
@@ -1652,7 +1652,7 @@ void GroupSetLocalObject (string sGroupName, string sVarName, object oValue)
 	while (GetIsObjectValid(oMember))
 	{
 		//PrintString("ginc_group: GroupSetLocalObject() group " + sGroupName + " object " + GetName(oMember) + " var " + sVarName + " = " + GetName(oValue));
-		PS_SetLocalObject(oMember, sVarName, oValue);
+		SetLocalObject(oMember, sVarName, oValue);
 		oMember = GetNextInGroup(sGroupName);
 	}
 }
@@ -1665,7 +1665,7 @@ void GroupSetLocalInt (string sGroupName, string sVarName, int iValue)
 	while (GetIsObjectValid(oMember))
 	{
 		//PrintString("ginc_group: GroupSetLocalObject() group " + sGroupName + " object " + GetName(oMember) + " var " + sVarName + " = " + GetName(oValue));
-		PS_SetLocalInt(oMember, sVarName, iValue);
+		SetLocalInt(oMember, sVarName, iValue);
 		oMember = GetNextInGroup(sGroupName);
 	}
 }
@@ -1679,7 +1679,7 @@ void GroupSetLocalFloat (string sGroupName, string sVarName, float fValue)
 	while (GetIsObjectValid(oMember))
 	{
 		//PrintString("ginc_group: GroupSetLocalFloat() group " + sGroupName + " object " + GetName(oMember) + " var " + sVarName + " = " + GetName(oValue));
-		PS_SetLocalFloat(oMember, sVarName, fValue);
+		SetLocalFloat(oMember, sVarName, fValue);
 		oMember = GetNextInGroup(sGroupName);
 	}
 }

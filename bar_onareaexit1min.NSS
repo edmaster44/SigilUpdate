@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //:: bar_onareaexit
 //:: On Area Exit script:
@@ -53,9 +53,9 @@ void ActionCleanCheck()
 PrintString( "bar_onareaexit: ActionCleanCheck" );
 
 //:: Trash object additions:
-int iLock = PS_GetGlobalInt("CleanUpLock");
+int iLock = GetGlobalInt("CleanUpLock");
 if ( iLock == 0 ) {
-PS_SetGlobalInt("CleanUpLock", 1); // Only allows one clean up at a time.
+SetGlobalInt("CleanUpLock", 1); // Only allows one clean up at a time.
 PrintString( "bar_onareaexit: ActionCleanCheck: Inside lock" );
 
 //declarations
@@ -103,7 +103,7 @@ oItem = GetNextObjectInArea();
 }//end while
 }//end if PCinArea check
 
-PS_SetGlobalInt("CleanUpLock", 0);
+SetGlobalInt("CleanUpLock", 0);
 }
 }
 

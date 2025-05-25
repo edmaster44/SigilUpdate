@@ -6,21 +6,35 @@
 const int cSaveWait = 300;
 const int ASSS_FX 	= -5894;
 
-void DismissSpellHenchmen(object oPC) {
-	if (GetIsObjectValid(PS_GetLocalObject(oPC, "simulacrum"))) {
+//debug function
+void IncrementalDebug(object oPC, string sStage){
+	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
+	int nTempChange = GetLocalInt(oESSENCE, "TempChange");
 	
-		object oSim = PS_GetLocalObject(oPC, "simulacrum");
+	string sMessage = "<c=red>This is " + sStage + " stage of rest";
+	sMessage += "\nThe value of TempChange is " + IntToString(nTempChange);
+	SendMessageToPC(oPC, sMessage);
+
+}
+
+void DismissSpellHenchmen(object oPC) {
+	if (GetIsObjectValid(GetLocalObject(oPC, "simulacrum"))) {
+	
+		object oSim = GetLocalObject(oPC, "simulacrum");
 		RemoveHenchman(oPC, oSim);
 		DestroyObject(oSim, 0.1f);
 		
-	} if (GetIsObjectValid(PS_GetLocalObject(oPC, "rainbow_dweomer"))) {
+	} if (GetIsObjectValid(GetLocalObject(oPC, "rainbow_dweomer"))) {
 	
-		object oRain = PS_GetLocalObject(oPC, "rainbow_dweomer");
+		object oRain = GetLocalObject(oPC, "rainbow_dweomer");
 		RemoveHenchman(oPC, oRain);
 		DestroyObject(oRain, 0.1f);
 		
 	}
 }
+
+//redundant function, this is handled in ff_update_feats
+/*
 void AddEPForDeathDice(object oPC)
 {
 		if (GetHasFeat(459,oPC))
@@ -28,7 +42,7 @@ void AddEPForDeathDice(object oPC)
 
 
 }
-
+*/
 /*int HasToWipeAbilities(object oPC, object oEssence)
 {
 	int nORDER = GetAlignmentLawChaos(oPC);
@@ -36,9 +50,9 @@ void AddEPForDeathDice(object oPC)
 	
 	if (GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0)
 	{
-		PS_DeleteLocalInt(oEssence, "WildWis");
-		PS_DeleteLocalInt(oEssence, "WildInt");
-		PS_DeleteLocalInt(oEssence, "WildCha");	
+		DeleteLocalInt(oEssence, "WildWis");
+		DeleteLocalInt(oEssence, "WildInt");
+		DeleteLocalInt(oEssence, "WildCha");	
 		if ((nORDER != ALIGNMENT_NEUTRAL) && (nMORAL != ALIGNMENT_NEUTRAL))
    		{	
 			SendMessageToPC(oPC, "You have taken a side in the natural order of things.");
@@ -167,10 +181,12 @@ void GiveDruidMonkPenaltyFeat (object oPC)
 
 void RestStart(object oPC)
 {
+	IncrementalDebug(oPC, "start: top");
 	RemoveBuffs(oPC);
 	object oRIGHT = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);	
 	if (GetTag(oRIGHT) == "barbancestoraxe") DestroyAncestralWeapon(oRIGHT);
 	DismissSpellHenchmen(oPC);
+	IncrementalDebug(oPC, "start: bottom");
 }
 
 void AlternativeSkillStatScaling (object oPC)
@@ -228,21 +244,24 @@ void AlternativeSkillStatScaling (object oPC)
 
 void RestFinish(object oPC)
 {
+	IncrementalDebug(oPC, "finish: top");
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
 	//if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
 	
 	
 
 	 TemplateRacialAdjust(oPC, oESSENCE, TRUE);
+	 
+	 IncrementalDebug(oPC, "finish: middle");
 	
-	if (PS_GetLocalInt(oESSENCE, "TempChange") != 1)
+	if (GetLocalInt(oESSENCE, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}
 	
-	AddEPForDeathDice(oPC);
+	//AddEPForDeathDice(oPC); redundant, this is handled by ff_update_feats
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
 	DoPsyFeatProgression(oPC);
@@ -256,6 +275,7 @@ void RestFinish(object oPC)
 		SendMessageToPC(oPC, "Character saved.");
 		DelayCommand(0.0f, ExportSingleCharacter(oPC));	
 	}
+	IncrementalDebug(oPC, "finish: bottom");
 }	
 
 //Allows you to designate spaces in a "non-rest" area as safe to rest
@@ -263,7 +283,7 @@ int IsInSafeRestZone(object oPC) {
 
 	//Check if we're in a limited rest zone
 	object oArea = GetArea(oPC);
-	int nLimitedRest = PS_GetLocalInt(oArea, "LIMITED_REST");
+	int nLimitedRest = GetLocalInt(oArea, "LIMITED_REST");
 	if (!nLimitedRest)
 		return TRUE;
 
@@ -292,10 +312,17 @@ int IsInSafeRestZone(object oPC) {
     return bPCInTrigger;
 }
 
+
+
 void main()
 {
+	
 	object oPC = GetLastPCRested();
+	
+	IncrementalDebug(oPC, "main: top");
 	int nREST = GetLastRestEventType();
+	
+	
 	
 	//Raise if DM rests you???
 	if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
@@ -315,6 +342,6 @@ void main()
 	if (nREST == REST_EVENTTYPE_REST_STARTED) DelayCommand(0.0f, RestStart(oPC));
 	else if (nREST == REST_EVENTTYPE_REST_FINISHED) DelayCommand(0.0f, RestFinish(oPC));
 
-	
+	IncrementalDebug(oPC, "main: bottom");
 		
 }

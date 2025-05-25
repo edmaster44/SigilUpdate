@@ -1,13 +1,13 @@
-#include "ff_safevar"
+
 
 void main() {
 
 	object oPC = GetEnteringObject();
   
- 	int iLock = PS_GetGlobalInt("ArmoryEnterLock");
+ 	int iLock = GetGlobalInt("ArmoryEnterLock");
  	if ( iLock == 0 ) {
 	
-  		PS_SetGlobalInt("ArmoryEnterLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("ArmoryEnterLock", 1); // Only allows one clean up at a time.
 
 	  	if(GetObjectByTag("ps_armory_receptionist") == OBJECT_INVALID) {
 		
@@ -108,6 +108,6 @@ void main() {
 	  	}
 		
 		
-  		PS_SetGlobalInt("ArmoryEnterLock", 0);
+  		SetGlobalInt("ArmoryEnterLock", 0);
  	}
 }

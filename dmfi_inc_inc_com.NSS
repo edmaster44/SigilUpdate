@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_inc_com - DM Friendly Initiative - Include file for functions in dmfi_inc_command
@@ -210,7 +210,7 @@ void DMFI_CreateSound(object oTool, object oPC, object oTarget, object oSpeaker,
 
     sSound = DMFI_GetSoundString(StringToInt(sParam1), sCommand);
     //SendText(oPC, "DEBUG sSound: " + sSound);
-	nDelay = StringToInt(PS_GetLocalString(oTool, DMFI_SOUND_DELAY));
+	nDelay = StringToInt(GetLocalString(oTool, DMFI_SOUND_DELAY));
     
 	//SendText(oPC, "DEBUG sLoc: " + sLoc);
     
@@ -257,12 +257,12 @@ void DMFI_CreateVFX(object oTool, object oSpeaker, string sText, string sParam)
     string sDur;
     location lTargetLoc;
 	
-	sDur = PS_GetLocalString(oTool, DMFI_VFX_DURATION);
+	sDur = GetLocalString(oTool, DMFI_VFX_DURATION);
 	fDur = StringToFloat(sDur);
 	
 	if (fDur<5.0) fDur=5.0;
     
-	oTarget = PS_GetLocalObject(oTool, DMFI_TARGET);
+	oTarget = GetLocalObject(oTool, DMFI_TARGET);
 	
 	if (FindSubString(sText, "_FNF_")!=-1)
     {  //Simply apply these to a location
@@ -301,10 +301,10 @@ void DMFI_DefineStructure(object oPC, string sOriginal)
   sParam1=DMFI_Parse(sRemains, " ");
   sParam2=DMFI_RemoveParsed(sRemains, sParam1, " ");
 
-  PS_SetLocalString(oPC, DMFI_sTool, sTool);
-  PS_SetLocalString(oPC, DMFI_sCommand, sCommand);
-  PS_SetLocalString(oPC, DMFI_sParam1, sParam1);
-  PS_SetLocalString(oPC, DMFI_sParam2, sParam2);
+  SetLocalString(oPC, DMFI_sTool, sTool);
+  SetLocalString(oPC, DMFI_sCommand, sCommand);
+  SetLocalString(oPC, DMFI_sParam1, sParam1);
+  SetLocalString(oPC, DMFI_sParam2, sParam2);
 }
 
 string DMFI_FindPartialSkill(string sCommand)
@@ -365,7 +365,7 @@ void DMFI_Follow(object oPC)
    // Original scripter: Demetrious
    // Last Modified by:  Demetrious 1/19/7
     object oTool = DMFI_GetTool(oPC);
-    object oFollow = PS_GetLocalObject(oTool, DMFI_FOLLOW);
+    object oFollow = GetLocalObject(oTool, DMFI_FOLLOW);
 
     if (oFollow!=OBJECT_INVALID)
     {
@@ -450,22 +450,22 @@ void DMFI_InitializeAreaMusic(object oPC)
     int nMusic;
     object oArea = GetArea(oPC);
 
-    if (PS_GetLocalInt(oArea, DMFI_MUSIC_INITIALIZED)!=1)
+    if (GetLocalInt(oArea, DMFI_MUSIC_INITIALIZED)!=1)
     {
-        PS_SetLocalInt(oArea, DMFI_MUSIC_INITIALIZED, 1);
+        SetLocalInt(oArea, DMFI_MUSIC_INITIALIZED, 1);
         nMusic = MusicBackgroundGetBattleTrack(oArea);
-        PS_SetLocalInt(oArea, DMFI_MUSIC_BATTLE, nMusic);
+        SetLocalInt(oArea, DMFI_MUSIC_BATTLE, nMusic);
         nMusic = MusicBackgroundGetDayTrack(oArea);
-        PS_SetLocalInt(oArea, DMFI_MUSIC_DAY, nMusic);
+        SetLocalInt(oArea, DMFI_MUSIC_DAY, nMusic);
         nMusic = MusicBackgroundGetNightTrack(oArea);
-        PS_SetLocalInt(oArea, DMFI_MUSIC_NIGHT, nMusic);
+        SetLocalInt(oArea, DMFI_MUSIC_NIGHT, nMusic);
     }
     return;
 }
 
 void DMFI_LanguageOff(object oPC)
 {
-	PS_DeleteLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
+	DeleteLocalString(oPC, DMFI_LANGUAGE_TOGGLE);
 	CloseGUIScreen(oPC, SCREEN_DMFI_TEXT);
 }
 
@@ -476,8 +476,8 @@ void DMFI_NPCFollow(object oPC)
    // Last Modified by:  Demetrious 8/13/6
     object oTool = DMFI_GetTool(oPC);
 
-    object oNPCFollow = PS_GetLocalObject(oTool, DMFI_FOLLOW_NPC);
-    object oNPCFollowTarget = PS_GetLocalObject(oTool, DMFI_FOLLOW_TARGET);
+    object oNPCFollow = GetLocalObject(oTool, DMFI_FOLLOW_NPC);
+    object oNPCFollowTarget = GetLocalObject(oTool, DMFI_FOLLOW_TARGET);
 
     if (oNPCFollow!=OBJECT_INVALID)
     {
@@ -647,8 +647,8 @@ void DMFI_RollBones(object oPC, object oTarget, string sCommand)
         if (DMFI_GetIsDM(oPC))
         {   // DM Code
             oTool = DMFI_GetTool(oPC);
-            sReport = GetStringLowerCase(PS_GetLocalString(oTool, DMFI_DICEBAG_REPORT));
-            sRoll = GetStringLowerCase(PS_GetLocalString(oTool, DMFI_DICEBAG_ROLL));
+            sReport = GetStringLowerCase(GetLocalString(oTool, DMFI_DICEBAG_REPORT));
+            sRoll = GetStringLowerCase(GetLocalString(oTool, DMFI_DICEBAG_ROLL));
 
             if (sReport==PRM_PARTY)
                 oTest = GetFirstFactionMember(oTarget, FALSE);
@@ -771,7 +771,7 @@ void DMFI_RollCheck(object oSpeaker, string sSkill, int bDMRequest=FALSE, object
 
     if (!bDMRequest)
     { // PLAYER CODE
-       	oAgainst = PS_GetLocalObject(oTool, DMFI_TARGET);
+       	oAgainst = GetLocalObject(oTool, DMFI_TARGET);
 		if (bSkill==1)
         {// get the skill
             nMod = GetSkillRank(nConstant, oSpeaker);
@@ -800,15 +800,15 @@ void DMFI_RollCheck(object oSpeaker, string sSkill, int bDMRequest=FALSE, object
 		
 		sText = sText + "\n" + ColorText(TXT_ROLL + DMFI_CapitalizeWord(sSkill) + TXT_MODIFIER + IntToString(nMod) + TXT_TOTAL + IntToString(nRoll+nMod), COLOR_CYAN);
         AssignCommand(oSpeaker, SpeakString(PRM_ + sText));
-        PS_SetLocalObject(GetModule(), DMFI_LAST_ROLLER, oSpeaker);
+        SetLocalObject(GetModule(), DMFI_LAST_ROLLER, oSpeaker);
     } // PLAYER CODE
     
 	else
     { // DM CODE
-        sDC = GetStringLowerCase(PS_GetLocalString(oTool, DMFI_DICEBAG_DC));
-        sDetail = GetStringLowerCase(PS_GetLocalString(oTool, DMFI_DICEBAG_DETAIL));
-        sReport = GetStringLowerCase(PS_GetLocalString(oTool, DMFI_DICEBAG_REPORT));
-        sRoll = GetStringLowerCase(PS_GetLocalString(oTool, DMFI_DICEBAG_ROLL));
+        sDC = GetStringLowerCase(GetLocalString(oTool, DMFI_DICEBAG_DC));
+        sDetail = GetStringLowerCase(GetLocalString(oTool, DMFI_DICEBAG_DETAIL));
+        sReport = GetStringLowerCase(GetLocalString(oTool, DMFI_DICEBAG_REPORT));
+        sRoll = GetStringLowerCase(GetLocalString(oTool, DMFI_DICEBAG_ROLL));
 
         if (sRoll==PRM_PARTY)
             oRoller = GetFirstFactionMember(oSpeaker, FALSE);
@@ -973,14 +973,14 @@ void DMFI_ManageInventory(object oTarget, object oPC)
 	      // End Update
 	SetFirstName(oStorage, DMFI_INVEN_TEMP + GetName(oTarget));
 	SetIdentified(oStorage, TRUE);
-	PS_SetLocalObject(oPC, DMFI_INVENTORY_TARGET, oTarget);
+	SetLocalObject(oPC, DMFI_INVENTORY_TARGET, oTarget);
 	
 	// Get Target's Inventory	
 	oTest = GetFirstItemInInventory(oTarget);
 	while (oTest!=OBJECT_INVALID)
     { // strip inventory items
 		oNew = CopyItem(oTest, oStorage, TRUE);
-		PS_SetLocalObject(oNew, DMFI_INVENTORY_TARGET, oTest);	
+		SetLocalObject(oNew, DMFI_INVENTORY_TARGET, oTest);	
 		oTest = GetNextItemInInventory(oTarget);
     }
     for (n=0; n<18; n++)
@@ -989,7 +989,7 @@ void DMFI_ManageInventory(object oTarget, object oPC)
         if (oTest!=OBJECT_INVALID)
         {
 			oNew = CopyItem(oTest, oStorage, TRUE);
-			PS_SetLocalObject(oNew, DMFI_INVENTORY_TARGET, oTest);	
+			SetLocalObject(oNew, DMFI_INVENTORY_TARGET, oTest);	
         }
     }
 	AssignCommand(oPC, ActionPickUpItem(oStorage));

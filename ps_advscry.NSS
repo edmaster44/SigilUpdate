@@ -94,10 +94,10 @@ string GetClassString(object oPC, int iPos)
 void GenerateScryRow(object oCaller, object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int iDispLevel = PS_GetLocalInt(oEssence,SCRYLEVEL); 
-	int iDispBuild = PS_GetLocalInt(oEssence,SCRYBUILD); 
-	int iDispLoc = PS_GetLocalInt(oEssence,SCRYLOCATION);
-	int iDispPref = PS_GetLocalInt(oEssence,SCRYPREF);
+	int iDispLevel = GetLocalInt(oEssence,SCRYLEVEL); 
+	int iDispBuild = GetLocalInt(oEssence,SCRYBUILD); 
+	int iDispLoc = GetLocalInt(oEssence,SCRYLOCATION);
+	int iDispPref = GetLocalInt(oEssence,SCRYPREF);
 	object oArea;
 	string sLevel;
 	string sBuild;
@@ -187,24 +187,24 @@ void main(int iFunction, int iVar)
 	{
 		// set time vars
 		case DISPLIST: DisplayAdvancedScry(oPC); break;
-		case SETDISPLEVEL: PS_SetLocalInt(oEssence,SCRYLEVEL, iVar); break;
-		case SETDISPBUILD: PS_SetLocalInt(oEssence,SCRYBUILD, iVar); break;
-		case SETDISPLOC: PS_SetLocalInt(oEssence,SCRYLOCATION, iVar); break;
-		case SETDISPPREF: PS_SetLocalInt(oEssence,SCRYPREF, iVar); break;
+		case SETDISPLEVEL: SetLocalInt(oEssence,SCRYLEVEL, iVar); break;
+		case SETDISPBUILD: SetLocalInt(oEssence,SCRYBUILD, iVar); break;
+		case SETDISPLOC: SetLocalInt(oEssence,SCRYLOCATION, iVar); break;
+		case SETDISPPREF: SetLocalInt(oEssence,SCRYPREF, iVar); break;
 		case SETDISPALL:
 			{
-				PS_SetLocalInt(oEssence,SCRYLEVEL, 1); 
-				PS_SetLocalInt(oEssence,SCRYBUILD, 1);
-				PS_SetLocalInt(oEssence,SCRYLOCATION, 1);
-				PS_SetLocalInt(oEssence,SCRYPREF, 5); // anything
+				SetLocalInt(oEssence,SCRYLEVEL, 1); 
+				SetLocalInt(oEssence,SCRYBUILD, 1);
+				SetLocalInt(oEssence,SCRYLOCATION, 1);
+				SetLocalInt(oEssence,SCRYPREF, 5); // anything
 			}
 			break;
 		case SETDISPNONE:
 			{
-				PS_SetLocalInt(oEssence,SCRYLEVEL, 0); 
-				PS_SetLocalInt(oEssence,SCRYBUILD, 0);
-				PS_SetLocalInt(oEssence,SCRYLOCATION, 0);
-				PS_SetLocalInt(oEssence,SCRYPREF, 0); // anything
+				SetLocalInt(oEssence,SCRYLEVEL, 0); 
+				SetLocalInt(oEssence,SCRYBUILD, 0);
+				SetLocalInt(oEssence,SCRYLOCATION, 0);
+				SetLocalInt(oEssence,SCRYPREF, 0); // anything
 			}
 			break;
 		default: break; 

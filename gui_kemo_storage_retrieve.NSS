@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 // called from the kemo_storage GUI
@@ -49,22 +49,22 @@ void main(string sItemNumber)
 	string sDB;
 	string stillexists;
 	
-	string guildname = PS_GetLocalString(oPC,"kemo_storage_mode_guildname");
+	string guildname = GetLocalString(oPC,"kemo_storage_mode_guildname");
 	
-	if ( PS_GetLocalString(oPC, "kemo_storage_mode_guild") == "yes")
+	if ( GetLocalString(oPC, "kemo_storage_mode_guild") == "yes")
 	{
 	if (sItemNumber == GetName(oPC))
 	{
-		PS_DeleteLocalString(oPC, "kemo_storage_mode_guild");
-		PS_DeleteLocalString(oPC, "kemo_storage_mode_guildname");
-		PS_DeleteLocalInt(oPC,"kemo_storage_mode_guild_accesslevel");
+		DeleteLocalString(oPC, "kemo_storage_mode_guild");
+		DeleteLocalString(oPC, "kemo_storage_mode_guildname");
+		DeleteLocalInt(oPC,"kemo_storage_mode_guild_accesslevel");
 		ExecuteScript("gui_kemo_storage_list",oPC);	
 		return;
 	}
 	else
 	{
-		PS_SetLocalString(oPC, "kemo_storage_mode_guildname",sItemNumber);
-		PS_DeleteLocalString(oPC, "kemo_storage_mode_guild");
+		SetLocalString(oPC, "kemo_storage_mode_guildname",sItemNumber);
+		DeleteLocalString(oPC, "kemo_storage_mode_guild");
 		ExecuteScript("gui_kemo_storage_list",oPC);		
 		return;
 	}
@@ -161,24 +161,24 @@ void main(string sItemNumber)
 	string sDB;
 	string stillexists;
 	
-	if ( PS_GetLocalString(oPC, "kemo_storage_mode_guild") == "yes" )
+	if ( GetLocalString(oPC, "kemo_storage_mode_guild") == "yes" )
 	{
 	if (sItemNumber == GetName(oPC))
 	{
-	PS_DeleteLocalString(oPC, "kemo_storage_mode_guild");
-	PS_DeleteLocalString(oPC, "kemo_storage_mode_guildname");
-	PS_DeleteLocalInt(oPC,"kemo_storage_mode_guild_accesslevel");
+	DeleteLocalString(oPC, "kemo_storage_mode_guild");
+	DeleteLocalString(oPC, "kemo_storage_mode_guildname");
+	DeleteLocalInt(oPC,"kemo_storage_mode_guild_accesslevel");
 	ExecuteScript("gui_kemo_storage_list",oPC);
 	return;
 	}
 	else
-	PS_SetLocalString(oPC, "kemo_storage_mode_guildname",sItemNumber);
-	PS_DeleteLocalString(oPC, "kemo_storage_mode_guild");
+	SetLocalString(oPC, "kemo_storage_mode_guildname",sItemNumber);
+	DeleteLocalString(oPC, "kemo_storage_mode_guild");
 	ExecuteScript("gui_kemo_storage_list",oPC);
 	return;
 	}
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") == "")
 	{	
 	sDB = GetPCID(oPC);
 	sQuery = "SELECT itemname FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
@@ -194,9 +194,9 @@ void main(string sItemNumber)
 	sQuery = "SELECT campaignstring FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	}
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
-	sDB = GetGuildID(oPC, PS_GetLocalString(oPC,"kemo_storage_mode_guildname"));
+	sDB = GetGuildID(oPC, GetLocalString(oPC,"kemo_storage_mode_guildname"));
 	sQuery = "SELECT itemname FROM new_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	SQLExecDirect(sQuery); SQLFetch();
 	stillexists = SQLGetData(1);
@@ -229,7 +229,7 @@ void main(string sItemNumber)
 		sQuery = "INSERT INTO new_storage_history VALUES (NOW(), 'withdrawn', '"+sDB+"', "+
 	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
 	sQuery = "INSERT INTO new_storage_guild_history VALUES (NOW(), 'withdrawn', '"+sDB+"', "+
 	" '"+SQLEncodeSpecialChars(sItemName)+"', '"+sStackSize+"', '"+name+"', '"+player+"', '"+cdkey+"', '"+ipaddress+"');";
@@ -240,9 +240,9 @@ void main(string sItemNumber)
 	//Remove the stored item from the slot
 	sQuery = "DELETE FROM new_storage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	
-	if (PS_GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
+	if (GetLocalString(oPC,"kemo_storage_mode_guildname") != "")
 	{
-	sDB = GetGuildID(oPC, PS_GetLocalString(oPC,"kemo_storage_mode_guildname"));
+	sDB = GetGuildID(oPC, GetLocalString(oPC,"kemo_storage_mode_guildname"));
 	sQuery = "DELETE FROM new_storage_guildstorage where storageid='"+sDB+"' and itemid='"+sItemNumber+"';";
 	}
 	

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "gm_include"
 
@@ -11,9 +11,9 @@ void main() {
 	object oMonster1 = CreateObject(OBJECT_TYPE_CREATURE, "ps_fw_monster1", GetLocation(oWP1));
 	object oWP2 = GetWaypointByTag("wp_fw_monster2");
 	object oMonster2 = CreateObject(OBJECT_TYPE_CREATURE, "ps_fw_monster2", GetLocation(oWP2));
-	string sWinner = PS_GetLocalString(OBJECT_SELF, "POTENTIAL_WINNER");
-	string sMon1 = PS_GetLocalString(OBJECT_SELF, "MONSTER1");
-	string sMon2 = PS_GetLocalString(OBJECT_SELF, "MONSTER2");
+	string sWinner = GetLocalString(OBJECT_SELF, "POTENTIAL_WINNER");
+	string sMon1 = GetLocalString(OBJECT_SELF, "MONSTER1");
+	string sMon2 = GetLocalString(OBJECT_SELF, "MONSTER2");
 	int nMon1 = GetMonsterNumber(sMon1);
 	int nMon2 = GetMonsterNumber(sMon2);
 	
@@ -28,9 +28,9 @@ void main() {
 	AssignCommand(oMonster2, ActionAttack(oMonster1));
 	
 	if (GetFirstName(oMonster2) == sWinner)
-		PS_SetLocalInt(oMonster2, "Winner", 1);
+		SetLocalInt(oMonster2, "Winner", 1);
 	else
-		PS_SetLocalInt(oMonster1, "Winner", 1);
+		SetLocalInt(oMonster1, "Winner", 1);
 }
 
 int GetMonsterNumber(string sMon) {

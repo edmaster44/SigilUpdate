@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("Gatehouse3Lock");
+ int iLock = GetGlobalInt("Gatehouse3Lock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("Gatehouse3Lock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("Gatehouse3Lock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ghrollk") == OBJECT_INVALID)
   {
@@ -76,6 +76,6 @@ void main()
   }
      
    
-  PS_SetGlobalInt("Gatehouse3Lock", 0);
+  SetGlobalInt("Gatehouse3Lock", 0);
  }
 }

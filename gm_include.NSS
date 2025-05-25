@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Gambling Include
 
@@ -28,12 +28,12 @@ object oMod=GetModule();
 
 void SetHouse(int nAmt)
 {
-    PS_SetLocalInt(oMod,"HOUSETOTAL",nAmt);
+    SetLocalInt(oMod,"HOUSETOTAL",nAmt);
 }
 
 int GetHouse()
 {
-    return PS_GetLocalInt(oMod,"HOUSETOTAL");
+    return GetLocalInt(oMod,"HOUSETOTAL");
 }
 
 int CheckPayout(int nAmt)

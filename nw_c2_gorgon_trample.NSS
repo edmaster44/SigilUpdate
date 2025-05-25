@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // nw_c2_gorgon_trample
 //
@@ -38,7 +38,7 @@ if (oTarget == oSelf//Don't trample yourself
 
 AssignCommand(oTarget, ClearAllActions(TRUE));
 
-if (oTarget == PS_GetLocalObject(oSelf, "Charge"))
+if (oTarget == GetLocalObject(oSelf, "Charge"))
 	{
 	SetCollision(oSelf, 1);
 	DelayCommand(0.35, SetAILevel(oSelf, AI_LEVEL_DEFAULT));

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 //::///////////////////////////////////////////////
@@ -36,7 +36,7 @@ void HandleBossEvents(object oSelf);
 void main() {
 
 	//Script hook
-	string sDamageScript = PS_GetLocalString(OBJECT_SELF, "DamagedScript");
+	string sDamageScript = GetLocalString(OBJECT_SELF, "DamagedScript");
 	if (sDamageScript != "")
 		ExecuteScript(sDamageScript, OBJECT_SELF);
 	HandleBossEvents(OBJECT_SELF);
@@ -59,7 +59,7 @@ void main() {
 	
 	// I've been damaged so no longer partially focused
 	if (iFocused == FOCUSED_PARTIAL) {
-	  PS_SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
+	  SetLocalInt(OBJECT_SELF, VAR_FOCUSED, FOCUSED_STANDARD); // no longer focused
 	}
     if (iFocused == FOCUSED_FULL) {
         // remain focused
@@ -76,7 +76,7 @@ void main() {
         }
         else if (!GetIsFighting(OBJECT_SELF))
         {
-            if ((PS_GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
+            if ((GetLocalInt(OBJECT_SELF, HENCH_HEAL_SELF_STATE) == HENCH_HEAL_SELF_WAIT) &&
                 (GetPercentageHPLoss(OBJECT_SELF) < 30))
             {
                 // force heal
@@ -134,7 +134,7 @@ void TimedDamage(object oTarget, int nCounter) {
   			if (nCounter > 1)
           		DelayCommand(6.0f,TimedDamage(oTarget, nCounter - 1));
   			else
-    			PS_SetLocalInt(OBJECT_SELF, strVarnameBurning, FALSE);
+    			SetLocalInt(OBJECT_SELF, strVarnameBurning, FALSE);
   		}
     }
 }
@@ -221,7 +221,7 @@ void ApplySpecialElementalEffects() {
 	
 	  // minimum 5 damage to cause burning and fear
 	  // (INFINITE LOOP with timeddamage possible otherwise)
-		if (PS_GetLocalInt(OBJECT_SELF, strVarnameBurning) == FALSE) {
+		if (GetLocalInt(OBJECT_SELF, strVarnameBurning) == FALSE) {
 	  
 			// does not have burning effect yet
 		  	int nDmgRange = nFireDmg / 10;
@@ -254,7 +254,7 @@ void ApplySpecialElementalEffects() {
 	  		DelayCommand(fBurnRounds + 0.0 * 6.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, OBJECT_SELF, 6.0));
 	 
 	  		// mark this creature as burning already, dont burn again while this runs
-	  		PS_SetLocalInt(OBJECT_SELF, strVarnameBurning, TRUE);
+	  		SetLocalInt(OBJECT_SELF, strVarnameBurning, TRUE);
 	 
 	  		// damage over time
 	  		//TimedDamage(OBJECT_SELF, nBurnRounds);
@@ -264,39 +264,39 @@ void ApplySpecialElementalEffects() {
 
 void HandleBossEvents(object oSelf) {
 
-	string sEvent1 		= PS_GetLocalString(oSelf, "BossEvent_1");
-	int nEventDone1		= PS_GetLocalInt(oSelf, "BossEvent_1Done");
-	string sEvent2 		= PS_GetLocalString(oSelf, "BossEvent_2");
-	int nEventDone2		= PS_GetLocalInt(oSelf, "BossEvent_2Done");
-	string sEvent3 		= PS_GetLocalString(oSelf, "BossEvent_3");
-	int nEventDone3		= PS_GetLocalInt(oSelf, "BossEvent_3Done");
-	string sEvent4 		= PS_GetLocalString(oSelf, "BossEvent_4");
-	int nEventDone4		= PS_GetLocalInt(oSelf, "BossEvent_4Done");
-	string sEvent5 		= PS_GetLocalString(oSelf, "BossEvent_5");
-	int nEventDone5		= PS_GetLocalInt(oSelf, "BossEvent_5Done");
+	string sEvent1 		= GetLocalString(oSelf, "BossEvent_1");
+	int nEventDone1		= GetLocalInt(oSelf, "BossEvent_1Done");
+	string sEvent2 		= GetLocalString(oSelf, "BossEvent_2");
+	int nEventDone2		= GetLocalInt(oSelf, "BossEvent_2Done");
+	string sEvent3 		= GetLocalString(oSelf, "BossEvent_3");
+	int nEventDone3		= GetLocalInt(oSelf, "BossEvent_3Done");
+	string sEvent4 		= GetLocalString(oSelf, "BossEvent_4");
+	int nEventDone4		= GetLocalInt(oSelf, "BossEvent_4Done");
+	string sEvent5 		= GetLocalString(oSelf, "BossEvent_5");
+	int nEventDone5		= GetLocalInt(oSelf, "BossEvent_5Done");
 	
 	float hpPercentage = IntToFloat(GetCurrentHitPoints(oSelf))/IntToFloat(GetMaxHitPoints(oSelf));
 	
 	if (hpPercentage <= 0.95f && sEvent1 != "" && !nEventDone1) {
 		//SpeakString("Event 1", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent1, oSelf);
-		PS_SetLocalInt(oSelf, "BossEvent_1Done", 1);
+		SetLocalInt(oSelf, "BossEvent_1Done", 1);
 	} else if (hpPercentage <= 0.75f && sEvent2 != "" && !nEventDone2) {
 		//SpeakString("Event 2", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent2, oSelf);
-		PS_SetLocalInt(oSelf, "BossEvent_2Done", 1);
+		SetLocalInt(oSelf, "BossEvent_2Done", 1);
 	} else if (hpPercentage <= 0.55f && sEvent3 != "" && !nEventDone3) {
 		//SpeakString("Event 3", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent3, oSelf);
-		PS_SetLocalInt(oSelf, "BossEvent_3Done", 1);
+		SetLocalInt(oSelf, "BossEvent_3Done", 1);
 	} else if (hpPercentage <= 0.35f && sEvent4 != "" && !nEventDone4) {
 		//SpeakString("Event 4", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent4, oSelf);
-		PS_SetLocalInt(oSelf, "BossEvent_4Done", 1);
+		SetLocalInt(oSelf, "BossEvent_4Done", 1);
 	} else if (hpPercentage <= 0.15f && sEvent5 != "" && !nEventDone5) {
 		//SpeakString("Event 5", TALKVOLUME_SHOUT);
 		ExecuteScript(sEvent5, oSelf);
-		PS_SetLocalInt(oSelf, "BossEvent_5Done", 1);
+		SetLocalInt(oSelf, "BossEvent_5Done", 1);
 	} 
 
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Created by Agony_Aunt/Loki for SCoD
 // Initially created to handle Grinnie and Shezz convo options by placing/checking vars on Essence
@@ -14,6 +14,6 @@ void main(string sVariable, int iValue)
 	
 	if (GetIsObjectValid(oEssence))
 	{
-		PS_SetLocalInt(oEssence, sVariable, iValue);
+		SetLocalInt(oEssence, sVariable, iValue);
 	}
 }

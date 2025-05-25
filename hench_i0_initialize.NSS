@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 
@@ -38,7 +38,7 @@ int TryCastWarlockBuffSpell(int nSpellID, int bCheat)
             }
 //            Jug_Debug(GetName(OBJECT_SELF) + " casting spell on self " + IntToString(nSpellID) + " " + Get2DAString("spells", "Label", nSpellID));
             ActionCastSpellAtObject(nSpellID, OBJECT_SELF, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, bCheat);
-            PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
+            SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
             return !bCheat;
         }
     }
@@ -97,10 +97,10 @@ int TryCastWarlockBuffSpells(int bCheat)
             {
                 ClearAllActions();
                 ActionCastSpellAtObject(SPELL_I_FLEE_THE_SCENE, OBJECT_SELF, METAMAGIC_NONE);
-                PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
+                SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
                 return TRUE;
             }
-            oFriend = PS_GetLocalObject(oFriend, sAllyLineOfSight);
+            oFriend = GetLocalObject(oFriend, sAllyLineOfSight);
         }
     }
     if (TryCastWarlockBuffSpell(SPELL_I_BEGUILING_INFLUENCE, bCheat))
@@ -143,10 +143,10 @@ int TryCastBardBuffSpells()
                 }
                 ClearAllActions();
                 ActionUseFeat(FEAT_BARDSONG_INSPIRE_REGENERATION, OBJECT_SELF);
-                PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
+                SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
                 return TRUE;
             }
-            oFriend = PS_GetLocalObject(oFriend, sAllyLineOfSight);
+            oFriend = GetLocalObject(oFriend, sAllyLineOfSight);
         }
     }
     if (GetHasFeat(FEAT_BARDSONG_INSPIRE_COMPETENCE))
@@ -159,7 +159,7 @@ int TryCastBardBuffSpells()
         }
         ClearAllActions();
         ActionUseFeat(FEAT_BARDSONG_INSPIRE_COMPETENCE, OBJECT_SELF);
-        PS_SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
+        SetLocalObject(OBJECT_SELF, sLastSpellTargetObject, OBJECT_SELF);
         return TRUE;
     }
     return FALSE;

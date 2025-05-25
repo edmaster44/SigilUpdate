@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 int ShipTimeStamp()
 {
@@ -17,14 +17,14 @@ int GetWithinTimeWindow(int destTime)
 
 int GetDestinationIsInQueue(object ship, string dest)
 {
-	int nextInQueue = PS_GetLocalInt(ship, "ship_queue_pos");
-	string nextDestination = PS_GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
+	int nextInQueue = GetLocalInt(ship, "ship_queue_pos");
+	string nextDestination = GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
 	while (nextDestination != "")
 	{
 		if (nextDestination == dest)
 			return TRUE;
 		nextInQueue++;
-		nextDestination = PS_GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
+		nextDestination = GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
 	}
 	return FALSE;
 }
@@ -34,13 +34,13 @@ void AddDestinationToQueue(object ship, string dest)
 	if (GetDestinationIsInQueue(ship, dest))
 		return;
 
-	int nextInQueue = PS_GetLocalInt(ship, "ship_queue_pos");
-	string nextDestination = PS_GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
+	int nextInQueue = GetLocalInt(ship, "ship_queue_pos");
+	string nextDestination = GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
 	while (nextDestination != "")
 	{
 		nextInQueue++;
-		nextDestination = PS_GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
+		nextDestination = GetLocalString(ship, "ship_queue_"+IntToString(nextInQueue));
 	}
-	PS_SetLocalString(ship, "ship_queue_"+IntToString(nextInQueue), dest);
-	PS_SetLocalInt(ship, "ship_time_"+IntToString(nextInQueue), (ShipTimeStamp()+60));
+	SetLocalString(ship, "ship_queue_"+IntToString(nextInQueue), dest);
+	SetLocalInt(ship, "ship_time_"+IntToString(nextInQueue), (ShipTimeStamp()+60));
 }

@@ -74,7 +74,7 @@ void main()
 	
 	   
 	    float fDuration = RoundsToSeconds(manif.nManifesterLevel);
-	    if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
+	    if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 		{
 			fDuration = fDuration * 2;
 		}

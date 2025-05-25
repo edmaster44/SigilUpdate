@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /******************************************************************************
 *****                     Dialog_nwnx_craft_condition                     *****
@@ -91,7 +91,7 @@ int StartingConditional(int iCondition, int iInventorySlot, int iVisualType)
 			// in order to control what's being done by your players.
 			//currently only dealing with special behaviours on Armor/Clothes, you can extend the system to helms and boots if you wish
 			
-			if(PS_GetLocalInt(oPC,"XC_INVENT_SLOT")==1)
+			if(GetLocalInt(oPC,"XC_INVENT_SLOT")==1)
 			{//item is an armor/clothe 
 				if((XP_CRAFT_AVT_DISALLOW_NAKED_BODY==1) && (iVisualType ==10))
 				{//no naked avt allowed	
@@ -99,7 +99,7 @@ int StartingConditional(int iCondition, int iInventorySlot, int iVisualType)
 				}
 				else if(XP_CRAFT_AVT_LIGHT_AGAINST_METAL==1)
 				{//group "light" material appearanes against "metal-like" appearances
-					int iAVT_CurrentValue = PS_GetLocalInt(oPC,"XC_AVT_VALUE");
+					int iAVT_CurrentValue = GetLocalInt(oPC,"XC_AVT_VALUE");
 					switch(iAVT_CurrentValue)
 					{
 						case 0 : //Cloth
@@ -118,7 +118,7 @@ int StartingConditional(int iCondition, int iInventorySlot, int iVisualType)
 								case 9 : //Hide 
 								case 10: //Naked
 									//same material group : "light" -> do the condition as usual, using the lists
-									bReturn = (FindSubString(PS_GetLocalString(GetModule(),PS_GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
+									bReturn = (FindSubString(GetLocalString(GetModule(),GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
 									break;
 									
 								case 4 : //Chainmail
@@ -156,7 +156,7 @@ int StartingConditional(int iCondition, int iInventorySlot, int iVisualType)
 								case 7 : //Half-Plate
 								case 8 : //Full-Plate
 									//same material group : "metal-like" -> do the condition as usual, using the lists
-									bReturn = (FindSubString(PS_GetLocalString(GetModule(),PS_GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
+									bReturn = (FindSubString(GetLocalString(GetModule(),GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
 									break;
 							}								
 							break;
@@ -165,13 +165,13 @@ int StartingConditional(int iCondition, int iInventorySlot, int iVisualType)
 				}
 				else
 				{//no special switch to care about, do the condition as usual, using the lists
-					bReturn = (FindSubString(PS_GetLocalString(GetModule(),PS_GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
+					bReturn = (FindSubString(GetLocalString(GetModule(),GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
 				}
 			
 			}
 			else
 			{			
-				bReturn = (FindSubString(PS_GetLocalString(GetModule(),PS_GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
+				bReturn = (FindSubString(GetLocalString(GetModule(),GetLocalString(oPC,"XC_AVT_LISTNAME")),"#" + IntToString(iVisualType) + "#") !=-1);
 			}
 			break;
 			

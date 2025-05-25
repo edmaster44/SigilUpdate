@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // On-hit special property for Mind Blades
 // Psychic Strike and almost all Blade Skills are applied here
@@ -29,19 +29,19 @@ void main()
 	int levels = GetLevelByClass(SOULKNIFE_ID, oPC);
 	
 	// Apply Psychic Strike
-	if (PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON) && !GetIsDead(oTarget))
+	if (GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON) && !GetIsDead(oTarget))
 	{
 		if (ApplyPsychicStrike(oPC, oTarget))
 		{
-			PS_SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, FALSE);
-			int DC = PS_GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC);
+			SetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON, FALSE);
+			int DC = GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC);
 			if (DC == 20)
 				DelayCommand(5.99f, AttemptRecharge(oPC));
 		}
 	}
 	
 	// Apply Wing Clip
-	if (PS_GetLocalInt(oPC, VAR_WINGCLIP))
+	if (GetLocalInt(oPC, VAR_WINGCLIP))
 	{
 		if (!FortitudeSave(oTarget, (10 + ((levels + 1) / 2) + 2 * CHA)))
 		{
@@ -55,7 +55,7 @@ void main()
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectMovementSpeedDecrease(50)), oTarget, RoundsToSeconds(1));
 		}
 		
-		PS_SetLocalInt(oPC, VAR_WINGCLIP, FALSE);
+		SetLocalInt(oPC, VAR_WINGCLIP, FALSE);
 	}
 	
 	// Apply Reaper's Blade
@@ -84,9 +84,9 @@ void main()
 	// Apply One Thousand Cuts
 	if (GetHasFeat(FEAT_ONE_THOUSAND_CUTS, oPC))
 	{
-		int cuts = PS_GetLocalInt(oTarget, VAR_CUT_COUNT) + 1;
+		int cuts = GetLocalInt(oTarget, VAR_CUT_COUNT) + 1;
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(cuts / 2, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE), oTarget, 0.0f);
-		PS_SetLocalInt(oTarget, VAR_CUT_COUNT, cuts);
+		SetLocalInt(oTarget, VAR_CUT_COUNT, cuts);
 	}
 	
 	// Apply Delirium Strikes
@@ -104,7 +104,7 @@ void main()
 	}
 	
 	// Apply Mind Crush
-	if (GetHasFeat(FEAT_MIND_CRUSH, oPC) && PS_GetLocalInt(oTarget, VAR_MIND_CRUSH) != TRUE)
+	if (GetHasFeat(FEAT_MIND_CRUSH, oPC) && GetLocalInt(oTarget, VAR_MIND_CRUSH) != TRUE)
 	{
 		int DC = 10 + ((levels + 1) / 2) + CHA;
 		if (GetIsTwoHanding(oPC))
@@ -116,7 +116,7 @@ void main()
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, knockdown, oTarget, RoundsToSeconds(1));
 		}
 			
-		PS_SetLocalInt(oTarget, VAR_MIND_CRUSH, TRUE);
-		DelayCommand(RoundsToSeconds(10), PS_SetLocalInt(oTarget, VAR_MIND_CRUSH, FALSE));
+		SetLocalInt(oTarget, VAR_MIND_CRUSH, TRUE);
+		DelayCommand(RoundsToSeconds(10), SetLocalInt(oTarget, VAR_MIND_CRUSH, FALSE));
 	}
 }

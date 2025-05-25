@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_tool - DM Friendly Initiative -  Tool oriented subroutines
@@ -138,14 +138,14 @@ int DMFI_AddConversationElement(object oHolder, string sPage, string sResponse, 
 		// CODE currently removed because of bug with color coding in conversations.
 
     int nCount = GetElementCount( sPage, oHolder );
-    PS_SetLocalString(oHolder, IndexToString(nCount, sPage ), sResponse);
+    SetLocalString(oHolder, IndexToString(nCount, sPage ), sResponse);
     if (sCommand!="")
     {
-        PS_SetLocalString(oHolder, IndexToString(nCount, sPage + PRM_COM), sCommand);
-        PS_SetLocalInt(oHolder, LIST_PREFIX + sPage + PRM_COM, nCount+1);
+        SetLocalString(oHolder, IndexToString(nCount, sPage + PRM_COM), sCommand);
+        SetLocalInt(oHolder, LIST_PREFIX + sPage + PRM_COM, nCount+1);
     }
     nCount++;
-    PS_SetLocalInt( oHolder, LIST_PREFIX + sPage, nCount);
+    SetLocalInt( oHolder, LIST_PREFIX + sPage, nCount);
     return (nCount);
 }
 
@@ -153,9 +153,9 @@ int DMFI_AddPage(object oHolder, string sPage)
 {  //Purpose: Adds a new page to the DMFI Conversation
    //Original Scripter: Demetrious
    //Last Modified By: Demetrious 6/21/6
-   int n = PS_GetLocalInt(oHolder, DMFI_PAGES);
-   PS_SetLocalString(oHolder, DMFI_PAGE + IntToString(n), sPage);
-   PS_SetLocalInt(oHolder, DMFI_PAGES, n+1);
+   int n = GetLocalInt(oHolder, DMFI_PAGES);
+   SetLocalString(oHolder, DMFI_PAGE + IntToString(n), sPage);
+   SetLocalInt(oHolder, DMFI_PAGES, n+1);
    return n+1;
 }
 
@@ -396,22 +396,22 @@ void DMFI_Build2DAASoundsList()
 		sResult=GetStringByStrRef(StringToInt(sResult));
 		if (FindSubString(sResource, "_pl_")!=-1)
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_PEOPLE);	
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_PEOPLE);	
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		else if (FindSubString(sResource, "_cv_")!=-1)
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_CAVE);	
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_CAVE);	
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		else if ((FindSubString(sResource, "_na_")!=-1) || (FindSubString(sResource, "_mg_")!=-1))
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_MAGIC);	
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_MAGIC);	
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		else
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_MISC);	
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_AMBIENT_MISC);	
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		
@@ -432,28 +432,28 @@ void DMFI_Build2DAAMusicList()
 		sResult=GetStringByStrRef(StringToInt(sResult));
 		if (n<34)
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_NWN1);
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_NWN1);
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		else if (((n>33) &&  (n<49))  || (n==60) || (n==57) || ((n>69) &&  (n<76)))
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_BATTLE);
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_BATTLE);
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		else if ((n>94)&&(n<117))
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_NWN2);
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_NWN2);
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		//modified qk 10/07/07
 		else if ((n>125))
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_MOTB);
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_MOTB);
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 		else 
 		{
-			PS_SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_XP);
+			SetLocalString(OBJECT_SELF, "DLG_CURRENT_PAGE", PG_LIST_MUSIC_XP);
 			AddReplyLinkInt(sResult, "", -1, n);
 		}
 	
@@ -493,7 +493,7 @@ void DMFI_Build2DAList(object oTool, string sPage, string sFileName)
         }
         // Assume right here that the 2da file is stagnant while the server is up.
         // May need to add a command to reset a 2da data file - ie delete this int.
-        PS_SetLocalInt(oTool, DMFI_2DA_ON_TOOL + sPage, 1);
+        SetLocalInt(oTool, DMFI_2DA_ON_TOOL + sPage, 1);
 }
 
 void DMFI_BuildEffectList(object oTool, object oTarget)
@@ -535,63 +535,63 @@ void DMFI_BuildEffectsPossList(object oTool)
 void DMFI_BuildLanguageDMList(object oTool)
 {  // Complete listing of languages AND grouping data
 
-	PS_SetLocalInt(oTool, LNG_COMMON, 0);
-	PS_SetLocalInt(oTool, LNG_ABYSSAL, 1);	
-	PS_SetLocalInt(oTool, LNG_ALGARONDAN, 1);	
-	PS_SetLocalInt(oTool, LNG_ALZHEDO, 1);	
-	PS_SetLocalInt(oTool, LNG_ANIMAL, 1);
-	PS_SetLocalInt(oTool, LNG_AQUAN, 1);
-	PS_SetLocalInt(oTool, LNG_ASSASSIN, 1);	
-	PS_SetLocalInt(oTool, LNG_AURAN, 1);	
-	PS_SetLocalInt(oTool, LNG_CANT, 2);	
-	PS_SetLocalInt(oTool, LNG_CELESTIAL, 2);	
-	PS_SetLocalInt(oTool, LNG_CHESSENTAN, 2);
-	PS_SetLocalInt(oTool, LNG_CHONDATHAN, 2);	
-	PS_SetLocalInt(oTool, LNG_CHULTAN, 2);	
-	PS_SetLocalInt(oTool, LNG_DAMARAN, 3);	
-	PS_SetLocalInt(oTool, LNG_DAMBRATHAN, 3);	
-	PS_SetLocalInt(oTool, LNG_DRACONIC, 3);
-	PS_SetLocalInt(oTool, LNG_DROW, 3);	
-	PS_SetLocalInt(oTool, LNG_DROWSIGN, 3);	
-	PS_SetLocalInt(oTool, LNG_DRUIDIC, 3);	
-	PS_SetLocalInt(oTool, LNG_DURPARI, 3);	
-	PS_SetLocalInt(oTool, LNG_DWARF, 3);
-	PS_SetLocalInt(oTool, LNG_ELVEN, 4);	
-	PS_SetLocalInt(oTool, LNG_GIANT, 4);	
-	PS_SetLocalInt(oTool, LNG_GNOLL, 4);	
-	PS_SetLocalInt(oTool, LNG_GNOME, 4);	
-	PS_SetLocalInt(oTool, LNG_GOBLIN, 4);
-	PS_SetLocalInt(oTool, LNG_HALARDRIM, 5);	
-	PS_SetLocalInt(oTool, LNG_HALFLING, 5);	
-	PS_SetLocalInt(oTool, LNG_HALRUAAN, 5);	
-	PS_SetLocalInt(oTool, LNG_IGNAN, 5);
-	PS_SetLocalInt(oTool, LNG_ILLUSKAN, 5);
-	PS_SetLocalInt(oTool, LNG_IMASKAR, 5);	
-	PS_SetLocalInt(oTool, LNG_INFERNAL, 5);	
-	PS_SetLocalInt(oTool, LNG_LANTANESE, 6);	
-	PS_SetLocalInt(oTool, LNG_LEETSPEAK, 6);	
-	PS_SetLocalInt(oTool, LNG_MIDANI, 6);
-	PS_SetLocalInt(oTool, LNG_MULHORANDI, 6);	
-	PS_SetLocalInt(oTool, LNG_NEXALAN, 9);	
-	PS_SetLocalInt(oTool, LNG_OILLUSK, 9);	
-	PS_SetLocalInt(oTool, LNG_ORC, 9);	
-	PS_SetLocalInt(oTool, LNG_RASHEMI, 7);
-	PS_SetLocalInt(oTool, LNG_RAUMVIRA, 7);	
-	PS_SetLocalInt(oTool, LNG_SERUSAN, 7);	
-	PS_SetLocalInt(oTool, LNG_SHAARAN, 7);	
-	PS_SetLocalInt(oTool, LNG_SHOU, 7);	
-	PS_SetLocalInt(oTool, LNG_SYLVAN, 7);
-	PS_SetLocalInt(oTool, LNG_TALFIRIC, 8);	
-	PS_SetLocalInt(oTool, LNG_TASHALAN, 8);	
-	PS_SetLocalInt(oTool, LNG_TERRAN, 8);	
-	PS_SetLocalInt(oTool, LNG_TREANT, 8);	
-	PS_SetLocalInt(oTool, LNG_TUIGAN, 8);	
-	PS_SetLocalInt(oTool, LNG_TURMIC, 8);
-	PS_SetLocalInt(oTool, LNG_ULUIK, 9);	
-	PS_SetLocalInt(oTool, LNG_UNDERCOMMON, 9);	
-	PS_SetLocalInt(oTool, LNG_UNTHERIC, 9);	
-	PS_SetLocalInt(oTool, LNG_VAASAN, 9);
-	PS_SetLocalInt(oTool, LNG_YUANTI, 9);	
+	SetLocalInt(oTool, LNG_COMMON, 0);
+	SetLocalInt(oTool, LNG_ABYSSAL, 1);	
+	SetLocalInt(oTool, LNG_ALGARONDAN, 1);	
+	SetLocalInt(oTool, LNG_ALZHEDO, 1);	
+	SetLocalInt(oTool, LNG_ANIMAL, 1);
+	SetLocalInt(oTool, LNG_AQUAN, 1);
+	SetLocalInt(oTool, LNG_ASSASSIN, 1);	
+	SetLocalInt(oTool, LNG_AURAN, 1);	
+	SetLocalInt(oTool, LNG_CANT, 2);	
+	SetLocalInt(oTool, LNG_CELESTIAL, 2);	
+	SetLocalInt(oTool, LNG_CHESSENTAN, 2);
+	SetLocalInt(oTool, LNG_CHONDATHAN, 2);	
+	SetLocalInt(oTool, LNG_CHULTAN, 2);	
+	SetLocalInt(oTool, LNG_DAMARAN, 3);	
+	SetLocalInt(oTool, LNG_DAMBRATHAN, 3);	
+	SetLocalInt(oTool, LNG_DRACONIC, 3);
+	SetLocalInt(oTool, LNG_DROW, 3);	
+	SetLocalInt(oTool, LNG_DROWSIGN, 3);	
+	SetLocalInt(oTool, LNG_DRUIDIC, 3);	
+	SetLocalInt(oTool, LNG_DURPARI, 3);	
+	SetLocalInt(oTool, LNG_DWARF, 3);
+	SetLocalInt(oTool, LNG_ELVEN, 4);	
+	SetLocalInt(oTool, LNG_GIANT, 4);	
+	SetLocalInt(oTool, LNG_GNOLL, 4);	
+	SetLocalInt(oTool, LNG_GNOME, 4);	
+	SetLocalInt(oTool, LNG_GOBLIN, 4);
+	SetLocalInt(oTool, LNG_HALARDRIM, 5);	
+	SetLocalInt(oTool, LNG_HALFLING, 5);	
+	SetLocalInt(oTool, LNG_HALRUAAN, 5);	
+	SetLocalInt(oTool, LNG_IGNAN, 5);
+	SetLocalInt(oTool, LNG_ILLUSKAN, 5);
+	SetLocalInt(oTool, LNG_IMASKAR, 5);	
+	SetLocalInt(oTool, LNG_INFERNAL, 5);	
+	SetLocalInt(oTool, LNG_LANTANESE, 6);	
+	SetLocalInt(oTool, LNG_LEETSPEAK, 6);	
+	SetLocalInt(oTool, LNG_MIDANI, 6);
+	SetLocalInt(oTool, LNG_MULHORANDI, 6);	
+	SetLocalInt(oTool, LNG_NEXALAN, 9);	
+	SetLocalInt(oTool, LNG_OILLUSK, 9);	
+	SetLocalInt(oTool, LNG_ORC, 9);	
+	SetLocalInt(oTool, LNG_RASHEMI, 7);
+	SetLocalInt(oTool, LNG_RAUMVIRA, 7);	
+	SetLocalInt(oTool, LNG_SERUSAN, 7);	
+	SetLocalInt(oTool, LNG_SHAARAN, 7);	
+	SetLocalInt(oTool, LNG_SHOU, 7);	
+	SetLocalInt(oTool, LNG_SYLVAN, 7);
+	SetLocalInt(oTool, LNG_TALFIRIC, 8);	
+	SetLocalInt(oTool, LNG_TASHALAN, 8);	
+	SetLocalInt(oTool, LNG_TERRAN, 8);	
+	SetLocalInt(oTool, LNG_TREANT, 8);	
+	SetLocalInt(oTool, LNG_TUIGAN, 8);	
+	SetLocalInt(oTool, LNG_TURMIC, 8);
+	SetLocalInt(oTool, LNG_ULUIK, 9);	
+	SetLocalInt(oTool, LNG_UNDERCOMMON, 9);	
+	SetLocalInt(oTool, LNG_UNTHERIC, 9);	
+	SetLocalInt(oTool, LNG_VAASAN, 9);
+	SetLocalInt(oTool, LNG_YUANTI, 9);	
 	
 	AddStringElement(DMFI_CapitalizeWord(LNG_COMMON), PG_LIST_DMLANGUAGE, oTool);
 	AddStringElement(DMFI_CapitalizeWord(LNG_ABYSSAL), PG_LIST_DMLANGUAGE, oTool);	
@@ -658,10 +658,10 @@ void DMFI_BuildLanguageList(object oTool, object oPC)
     //Last Modified By: Demetrious 7/10/6
     int n;
     string sLang;
-    int nMax = PS_GetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX);
+    int nMax = GetLocalInt(oTool, DMFI_STRING_LANGUAGE + DMFI_STRING_MAX);
     for (n=0; n<nMax; n=n+1)
     {
-        sLang = DMFI_CapitalizeWord(PS_GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n)));
+        sLang = DMFI_CapitalizeWord(GetLocalString(oTool, DMFI_STRING_LANGUAGE + IntToString(n)));
         AddStringElement(sLang, PG_LIST_LANGUAGE, oTool);
     }
     if (nMax<1)
@@ -680,21 +680,21 @@ void DMFI_BuildPlaceableSoundList(object oTool)
 	{
 		sSound = DMFI_GetSoundString(n, PRM_CITY);
 		AddStringElement(sSound, PG_LIST_SOUND_CITY, oTool);
-		AddStringElement(PS_GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_CITY, oTool);
+		AddStringElement(GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_CITY, oTool);
 	}
 	n=0;
 	for (n=0; n<38; n++)
 	{
 		sSound = DMFI_GetSoundString(n, PRM_NATURE);
 		AddStringElement(sSound, PG_LIST_SOUND_NATURE, oTool);
-		AddStringElement(PS_GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_NATURE, oTool);
+		AddStringElement(GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_NATURE, oTool);
 	}
 	n=0;
 	for (n=0; n<30; n++)
 	{
 		sSound = DMFI_GetSoundString(n, PRM_PEOPLE);
 		AddStringElement(sSound, PG_LIST_SOUND_PEOPLE, oTool);
-		AddStringElement(PS_GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_PEOPLE, oTool);
+		AddStringElement(GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_PEOPLE, oTool);
 		
 	}	
 	n=0;
@@ -702,7 +702,7 @@ void DMFI_BuildPlaceableSoundList(object oTool)
 	{
 		sSound = DMFI_GetSoundString(n, PRM_MAGICAL);
 		AddStringElement(sSound, PG_LIST_SOUND_MAGICAL, oTool);
-		AddStringElement(PS_GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_MAGICAL, oTool);
+		AddStringElement(GetLocalString(GetModule(), DMFI_TEMP), "DISPLAY" + PG_LIST_SOUND_MAGICAL, oTool);
 	}	
 }
 
@@ -715,7 +715,7 @@ void DMFI_BuildRecentVFXList(object oTool)
 	string sVFXLabel;
 	while (n<30)
 	{
-		nTest = PS_GetLocalInt(oTool, DMFI_VFX_RECENT + IntToString(n));
+		nTest = GetLocalInt(oTool, DMFI_VFX_RECENT + IntToString(n));
 	    if (nTest==0) break;
 		
 		sVFXLabel = Get2DAString(DMFI_2DA_VFX, DMFI_2DA_COLUMN, nTest);
@@ -852,9 +852,9 @@ string DMFI_CapitalizeWord(string sWord)
 
 void DMFI_ClearUIData(object oPC)
 {
-	PS_DeleteLocalInt(oPC, DMFI_REQ_INT);
-	PS_DeleteLocalString(oPC, DMFI_LAST_UI_COM);
-	PS_DeleteLocalString(oPC, DMFI_UI_PAGE);
+	DeleteLocalInt(oPC, DMFI_REQ_INT);
+	DeleteLocalString(oPC, DMFI_LAST_UI_COM);
+	DeleteLocalString(oPC, DMFI_UI_PAGE);
 }	
 
 
@@ -862,7 +862,7 @@ int DMFI_GetIsDM(object oPC)
 {   //Purpose: Returns true if oPC is a DM or possessing a creature
     //Original Scripter: Demetrious
     //Last Modified By: Demetrious 11/6/6
-    int nTemp = PS_GetLocalInt(oPC, DMFI_DM_STATE);
+    int nTemp = GetLocalInt(oPC, DMFI_DM_STATE);
 	
 	int nReturn = nTemp || (GetIsDM(oPC) || (GetIsDMPossessed(oPC)));
     return nReturn;
@@ -877,17 +877,17 @@ object DMFI_GetTool(object oPC)
   {
 	  
   	  if (GetIsDMPossessed(oPC))
-	        oTool = PS_GetLocalObject(GetMaster(oPC), DMFI_TOOL);
+	        oTool = GetLocalObject(GetMaster(oPC), DMFI_TOOL);
 	  else
-	        oTool = PS_GetLocalObject(oPC, DMFI_TOOL);
+	        oTool = GetLocalObject(oPC, DMFI_TOOL);
 	  //SendText(oPC, "DEBUG: DM GetTool: " + GetName(oTool));		
   }	
   else
   {
   	if (GetIsPossessedFamiliar(oPC))
-		oTool = PS_GetLocalObject(GetMaster(oPC), DMFI_TOOL);
+		oTool = GetLocalObject(GetMaster(oPC), DMFI_TOOL);
 	else
-		oTool = PS_GetLocalObject(oPC, DMFI_TOOL);
+		oTool = GetLocalObject(oPC, DMFI_TOOL);
 	//SendText(oPC, "DEBUG: PC GetTool: " + GetName(oTool));		
   }			
  		
@@ -967,7 +967,7 @@ void DMFI_SetItemPrompt(object oTool, object oItem)
 	if (GetStolenFlag(oItem))
 		sItemProps = sItemProps + TXT_STOLEN;
 				
-	PS_SetLocalString(oTool, DMFI_ITEM_PROPS, sItemProps);
+	SetLocalString(oTool, DMFI_ITEM_PROPS, sItemProps);
 }	
 
 void DMFI_ShowDMListUI(object oPC, string sScreen=SCREEN_DMFI_DMLIST)
@@ -986,17 +986,17 @@ void DMFI_ShowDMListUI(object oPC, string sScreen=SCREEN_DMFI_DMLIST)
 		nModal=FALSE;
 			
 	DisplayGuiScreen(oPC, sScreen, nModal, "dmfidmlist.xml");
-	sPage = PS_GetLocalString(oPC, DMFI_UI_PAGE);
-	sTitle = PS_GetLocalString(oPC, DMFI_UI_LIST_TITLE);
+	sPage = GetLocalString(oPC, DMFI_UI_PAGE);
+	sTitle = GetLocalString(oPC, DMFI_UI_LIST_TITLE);
 	SetGUIObjectText(oPC, sScreen, "DMListTitle", -1, sTitle);
 	
-	nPage = PS_GetLocalInt(oPC, sPage + DMFI_CURRENT);
+	nPage = GetLocalInt(oPC, sPage + DMFI_CURRENT);
 		
 	n = 0;
 	while (n<31)
 	{
 		nCurrent = (nPage*30) + n;
-		sTest = PS_GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
+		sTest = GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
 		
 		if (sTest!="")
 		{
@@ -1012,7 +1012,7 @@ void DMFI_ShowDMListUI(object oPC, string sScreen=SCREEN_DMFI_DMLIST)
 	}
 		
 	//next and previous buttons
-	sTest = PS_GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
+	sTest = GetLocalString(oTool, LIST_PREFIX + sPage + "." + IntToString(nCurrent));
 	
 	if ((sTest=="")	|| (sScreen!=SCREEN_DMFI_DMLIST))
 		SetGUIObjectHidden(oPC, sScreen, "btn-next", TRUE);
@@ -1073,7 +1073,7 @@ void DMFI_ToggleItemPrefs(string sCommand, object oPC, object oTarget)
    //Last Modified By: Demetrious 11/26/6
     int nTest;
    	string sItemProps, sText;
-	object oRef = PS_GetLocalObject(oTarget, DMFI_INVENTORY_TARGET);
+	object oRef = GetLocalObject(oTarget, DMFI_INVENTORY_TARGET);
 		
 	if (FindSubString(sCommand, PRM_CURSED)!=-1) 
 	{
@@ -1125,7 +1125,7 @@ string DMFI_TogglePreferences(object oTool, string sCommand)
 
     if (sCommand == PRM_DETAIL)
     {
-        sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_DETAIL);
+        sTest = GetLocalString(oTool, DMFI_DICEBAG_DETAIL);
         if (sTest==PRM_HIGH)
         {
             sTest = PRM_LOW;
@@ -1141,13 +1141,13 @@ string DMFI_TogglePreferences(object oTool, string sCommand)
             sTest = PRM_MED;
             sMessage = TXT_SET_DETAILMED;
         }
-        PS_SetLocalString(oTool, DMFI_DICEBAG_DETAIL, sTest);
+        SetLocalString(oTool, DMFI_DICEBAG_DETAIL, sTest);
         //SendText(oPC, sMessage, TRUE, COLOR_GREEN);
     }
 
     else if (sCommand == PRM_REPORT)
     {
-        sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_REPORT);
+        sTest = GetLocalString(oTool, DMFI_DICEBAG_REPORT);
         if (sTest==PRM_PC)
         {
             sTest = PRM_PARTY;
@@ -1163,12 +1163,12 @@ string DMFI_TogglePreferences(object oTool, string sCommand)
             sTest = PRM_PC;
             sMessage = TXT_SET_REPORTPC;
         }
-        PS_SetLocalString(oTool, DMFI_DICEBAG_REPORT, sTest);
+        SetLocalString(oTool, DMFI_DICEBAG_REPORT, sTest);
         //SendText(oPC, sMessage, TRUE, COLOR_GREEN);
     }
     else if (sCommand == PRM_ROLL)
     {
-        sTest = PS_GetLocalString(oTool, DMFI_DICEBAG_ROLL);
+        sTest = GetLocalString(oTool, DMFI_DICEBAG_ROLL);
         if (sTest==PRM_PC)
         {
             sTest = PRM_PARTY;
@@ -1184,12 +1184,12 @@ string DMFI_TogglePreferences(object oTool, string sCommand)
             sTest = PRM_PC;
             sMessage = TXT_SET_ROLLPC;
         }
-        PS_SetLocalString(oTool, DMFI_DICEBAG_ROLL, sTest);
+        SetLocalString(oTool, DMFI_DICEBAG_ROLL, sTest);
         //SendText(oPC, sMessage, TRUE, COLOR_GREEN);
     }
     else if (sCommand=="musictime")
 	{
-		sTest = PS_GetLocalString(oTool, DMFI_MUSIC_TIME);
+		sTest = GetLocalString(oTool, DMFI_MUSIC_TIME);
 		if (sTest==PRM_DAY)
 			sTest=PRM_NIGHT;
 		else if (sTest==PRM_NIGHT)
@@ -1198,16 +1198,16 @@ string DMFI_TogglePreferences(object oTool, string sCommand)
 			sTest=PRM_BATTLE;
 		else if (sTest==PRM_BATTLE)
 			sTest=PRM_DAY;
-		PS_SetLocalString(oTool, DMFI_MUSIC_TIME, sTest);
+		SetLocalString(oTool, DMFI_MUSIC_TIME, sTest);
 	}
 	else if (sCommand=="ambdaynight")
 	{
-		sTest = PS_GetLocalString(oTool, DMFI_AMB_NIGHT);
+		sTest = GetLocalString(oTool, DMFI_AMB_NIGHT);
 		if (sTest==PRM_DAY)
 			sTest=PRM_NIGHT;
 		else
 			sTest=PRM_DAY;
-		PS_SetLocalString(oTool, DMFI_AMB_NIGHT, sTest);
+		SetLocalString(oTool, DMFI_AMB_NIGHT, sTest);
 	}	
 
 	return sTest;
@@ -1234,8 +1234,8 @@ object DMFI_UITarget(object oPC, object oTool)
 			oRightClick=oSpeaker;
 	}		
 	
-	PS_SetLocalObject(oTool, DMFI_TARGET, oRightClick);
-  	PS_SetLocalObject(oTool, DMFI_SPEAKER, oSpeaker);	
+	SetLocalObject(oTool, DMFI_TARGET, oRightClick);
+  	SetLocalObject(oTool, DMFI_SPEAKER, oSpeaker);	
 	/*	
 	//SendText(oPossess, "DEBUG UI PC: " + GetName(oPC));
 	//SendText(oPossess, "DEBUG UI Controlled: " + GetName(oPossess));
@@ -1271,23 +1271,23 @@ void DMFI_UpdateNumberToken(object oTool, string sCommand, string sNewValue)
 
     if (sCommand == "dc")
     {
-        PS_SetLocalString(oTool, DMFI_DICEBAG_DC, sNewValue);
+        SetLocalString(oTool, DMFI_DICEBAG_DC, sNewValue);
         //SendText(oPC, TXT_SET_DICEBAG_DC + sNewValue, TRUE, COLOR_GREEN);
     }
 	else if (sCommand == "vol")
 	{
-		PS_SetLocalString(oTool, DMFI_AMBIENT_VOLUME, sNewValue);
+		SetLocalString(oTool, DMFI_AMBIENT_VOLUME, sNewValue);
 		//SendText(oPC, TXT_SET_AMBIENT_VOLUME + sNewValue, TRUE, COLOR_GREEN);
 		
 	}		
 	else if (sCommand == "delay")
 	{
-		PS_SetLocalString(oTool, DMFI_SOUND_DELAY, sNewValue);
+		SetLocalString(oTool, DMFI_SOUND_DELAY, sNewValue);
 		//SendText(oPC, TXT_SET_SOUND_DELAY + sNewValue, TRUE, COLOR_GREEN);
 	}	
 	else if (sCommand == "dur")
 	{
-		PS_SetLocalString(oTool, DMFI_VFX_DURATION, sNewValue);
+		SetLocalString(oTool, DMFI_VFX_DURATION, sNewValue);
 		//SendText(oPC, TXT_SET_VFX_DURATION + sNewValue, TRUE, COLOR_GREEN);
 	}	
 }
@@ -1442,27 +1442,27 @@ string DMFI_GetSoundString(int nValue, string sParam)
  {
     switch(nValue)
 	{
-    case 0: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_bell_church01); return  "as_bell_church01"; break; }
-    case 1: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_belltower1); return  "as_cv_belltower1"; break; }
-   	case 2: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_boilergrn1); return  "as_cv_boilergrn1"; break; }
-	case 3: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_boomdist1); return  "as_cv_boomdist1"; break; }
-    case 4: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_claybreak1); return  "as_cv_claybreak1"; break; }
-    case 5: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2chnratl1); return  "as_hr_x2chnratl1"; break; }
-    case 6: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_crank1); return  "as_cv_crank1"; break; }
-    case 7: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_cv_firecamp1); return  "al_cv_firecamp1"; break; }
-    case 8: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_firelarge2); return  "al_na_firelarge2"; break; }
-    case 9: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_cv_firesmldr1); return  "al_cv_firesmldr1"; break; }
-    case 10: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_glasbreak1); return  "as_cv_glasbreak1"; break; }
-    case 11: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_x2lowrum2); return  "as_na_x2lowrum2"; break; }
-    case 12: { PS_SetLocalString(GetModule(), DMFI_TEMP, amb_metal_creaking_1); return  "amb_metal_creaking_1"; break; }
-    case 13: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_cv_millwheel1); return  "al_cv_millwheel1"; break; }
-    case 14: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_minepick1); return  "as_cv_minepick1"; break; }
-    case 15: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_mineshovl1); return  "as_cv_mineshovl1"; break; }
-    case 16: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2drnoise4); return  "as_hr_x2drnoise4"; break; }
-    case 17: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2drnoise); return  "as_hr_x2drnoise"; break; }
-    case 18: { PS_SetLocalString(GetModule(), DMFI_TEMP, cs_shipsink_long); return  "cs_shipsink_long"; break; }
-    case 19: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_smithhamr1); return  "as_cv_smithhamr1"; break; }
-    case 20: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_woodbreak1); return  "as_cv_woodbreak1"; break; }
+    case 0: { SetLocalString(GetModule(), DMFI_TEMP, as_bell_church01); return  "as_bell_church01"; break; }
+    case 1: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_belltower1); return  "as_cv_belltower1"; break; }
+   	case 2: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_boilergrn1); return  "as_cv_boilergrn1"; break; }
+	case 3: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_boomdist1); return  "as_cv_boomdist1"; break; }
+    case 4: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_claybreak1); return  "as_cv_claybreak1"; break; }
+    case 5: { SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2chnratl1); return  "as_hr_x2chnratl1"; break; }
+    case 6: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_crank1); return  "as_cv_crank1"; break; }
+    case 7: { SetLocalString(GetModule(), DMFI_TEMP, al_cv_firecamp1); return  "al_cv_firecamp1"; break; }
+    case 8: { SetLocalString(GetModule(), DMFI_TEMP, al_na_firelarge2); return  "al_na_firelarge2"; break; }
+    case 9: { SetLocalString(GetModule(), DMFI_TEMP, al_cv_firesmldr1); return  "al_cv_firesmldr1"; break; }
+    case 10: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_glasbreak1); return  "as_cv_glasbreak1"; break; }
+    case 11: { SetLocalString(GetModule(), DMFI_TEMP, as_na_x2lowrum2); return  "as_na_x2lowrum2"; break; }
+    case 12: { SetLocalString(GetModule(), DMFI_TEMP, amb_metal_creaking_1); return  "amb_metal_creaking_1"; break; }
+    case 13: { SetLocalString(GetModule(), DMFI_TEMP, al_cv_millwheel1); return  "al_cv_millwheel1"; break; }
+    case 14: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_minepick1); return  "as_cv_minepick1"; break; }
+    case 15: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_mineshovl1); return  "as_cv_mineshovl1"; break; }
+    case 16: { SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2drnoise4); return  "as_hr_x2drnoise4"; break; }
+    case 17: { SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2drnoise); return  "as_hr_x2drnoise"; break; }
+    case 18: { SetLocalString(GetModule(), DMFI_TEMP, cs_shipsink_long); return  "cs_shipsink_long"; break; }
+    case 19: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_smithhamr1); return  "as_cv_smithhamr1"; break; }
+    case 20: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_woodbreak1); return  "as_cv_woodbreak1"; break; }
 
     return "";
 	}
@@ -1472,44 +1472,44 @@ string DMFI_GetSoundString(int nValue, string sParam)
  {
     switch(nValue)
 	{
-    case 0: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_bldgcrumb1); return  "as_cv_bldgcrumb1"; break; }
-    case 1: { PS_SetLocalString(GetModule(), DMFI_TEMP, amb_caverumb_01); return  "amb_caverumb_01"; break; }
-    case 2: { PS_SetLocalString(GetModule(), DMFI_TEMP, amb_caverumb_02); return  "amb_caverumb_02"; break; }
-    case 3: { PS_SetLocalString(GetModule(), DMFI_TEMP, amb_cavewind_03); return  "amb_cavewind_03"; break; }
-    case 4: { PS_SetLocalString(GetModule(), DMFI_TEMP, amb_cavewind_04); return  "amb_cavewind_04"; break; }
-    case 5: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_wt_gustcavrn1); return  "al_wt_gustcavrn1"; break; }
-    case 6: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_wt_gustchasm1); return  "al_wt_gustchasm1"; break; }
-    case 7: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_wt_gustgrass1); return  "al_wt_gustgrass1"; break; }
-    case 8: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_wt_gustdraft1); return  "as_wt_gustdraft1"; break; }
-    case 9: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_wt_gusforst1); return  "as_wt_gusforst1"; break; }
-    case 10: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_wt_gustsoft1); return  "as_wt_gustsoft1"; break; }
-    case 11: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_wt_guststrng1); return  "as_wt_guststrng1"; break; }
-    case 12: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_lavaburst1); return  "as_na_lavaburst1"; break; }
-    case 13: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_lavafire1); return  "al_na_lavafire1"; break; }
-    case 14: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_lavagyser1); return  "al_na_lavagyser1"; break; }
-    case 15: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_lavalake1); return  "al_na_lavalake1"; break; }
-    case 16: { PS_SetLocalString(GetModule(), DMFI_TEMP, amb_ocean_lp1); return  "amb_ocean_lp1"; break; }
-    case 17: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_wt_rainlight1); return  "al_wt_rainlight1"; break; }
-    case 18: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_wt_rainhard1); return  "al_wt_rainhard1"; break; }
-    case 19: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_rockfallg1); return  "as_na_rockfallg1"; break; }
-    case 20: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_rockcavsm1); return  "as_na_rockcavsm1"; break; }
-    case 21: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_sludglake1); return  "al_na_sludglake1"; break; }
-    case 22: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_steamsm1); return  "al_na_steamsm1"; break; }
-    case 23: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_steamlong1); return  "as_na_steamlong1"; break; }
-    case 24: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_steamlg1); return  "al_na_steamlg1"; break; }
-    case 25: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_stream4); return  "al_na_stream4"; break; }
-    case 26: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_cvstream2); return  "al_na_cvstream2"; break; }
-    case 27: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_cvstream1); return  "al_na_cvstream1"; break; }
-    case 28: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_surf1); return  "as_na_surf1"; break; }
-    case 29: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_surf2); return  "as_na_surf2"; break; }
-    case 30: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_wt_thundercl1); return  "as_wt_thunderds1"; break; }
-    case 31: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_wt_thunderds1); return  "as_wt_thundercl1"; break; }
-    case 32: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_waterfall2); return  "al_na_waterfall2"; break; }
-    case 33: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_na_waterlap3); return  "as_na_waterlap3"; break; }
-    case 34: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_wtrflvoid1); return  "al_na_wtrflvoid1"; break; }
-    case 35: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_waterpipe1); return  "al_na_waterpipe1"; break; }
-    case 36: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_na_watertunl1); return  "al_na_watertunl1"; break; }
-    case 37: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_wind_leaves); return  "al_wind_leaves"; break; }
+    case 0: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_bldgcrumb1); return  "as_cv_bldgcrumb1"; break; }
+    case 1: { SetLocalString(GetModule(), DMFI_TEMP, amb_caverumb_01); return  "amb_caverumb_01"; break; }
+    case 2: { SetLocalString(GetModule(), DMFI_TEMP, amb_caverumb_02); return  "amb_caverumb_02"; break; }
+    case 3: { SetLocalString(GetModule(), DMFI_TEMP, amb_cavewind_03); return  "amb_cavewind_03"; break; }
+    case 4: { SetLocalString(GetModule(), DMFI_TEMP, amb_cavewind_04); return  "amb_cavewind_04"; break; }
+    case 5: { SetLocalString(GetModule(), DMFI_TEMP, al_wt_gustcavrn1); return  "al_wt_gustcavrn1"; break; }
+    case 6: { SetLocalString(GetModule(), DMFI_TEMP, al_wt_gustchasm1); return  "al_wt_gustchasm1"; break; }
+    case 7: { SetLocalString(GetModule(), DMFI_TEMP, al_wt_gustgrass1); return  "al_wt_gustgrass1"; break; }
+    case 8: { SetLocalString(GetModule(), DMFI_TEMP, as_wt_gustdraft1); return  "as_wt_gustdraft1"; break; }
+    case 9: { SetLocalString(GetModule(), DMFI_TEMP, as_wt_gusforst1); return  "as_wt_gusforst1"; break; }
+    case 10: { SetLocalString(GetModule(), DMFI_TEMP, as_wt_gustsoft1); return  "as_wt_gustsoft1"; break; }
+    case 11: { SetLocalString(GetModule(), DMFI_TEMP, as_wt_guststrng1); return  "as_wt_guststrng1"; break; }
+    case 12: { SetLocalString(GetModule(), DMFI_TEMP, as_na_lavaburst1); return  "as_na_lavaburst1"; break; }
+    case 13: { SetLocalString(GetModule(), DMFI_TEMP, al_na_lavafire1); return  "al_na_lavafire1"; break; }
+    case 14: { SetLocalString(GetModule(), DMFI_TEMP, al_na_lavagyser1); return  "al_na_lavagyser1"; break; }
+    case 15: { SetLocalString(GetModule(), DMFI_TEMP, al_na_lavalake1); return  "al_na_lavalake1"; break; }
+    case 16: { SetLocalString(GetModule(), DMFI_TEMP, amb_ocean_lp1); return  "amb_ocean_lp1"; break; }
+    case 17: { SetLocalString(GetModule(), DMFI_TEMP, al_wt_rainlight1); return  "al_wt_rainlight1"; break; }
+    case 18: { SetLocalString(GetModule(), DMFI_TEMP, al_wt_rainhard1); return  "al_wt_rainhard1"; break; }
+    case 19: { SetLocalString(GetModule(), DMFI_TEMP, as_na_rockfallg1); return  "as_na_rockfallg1"; break; }
+    case 20: { SetLocalString(GetModule(), DMFI_TEMP, as_na_rockcavsm1); return  "as_na_rockcavsm1"; break; }
+    case 21: { SetLocalString(GetModule(), DMFI_TEMP, al_na_sludglake1); return  "al_na_sludglake1"; break; }
+    case 22: { SetLocalString(GetModule(), DMFI_TEMP, al_na_steamsm1); return  "al_na_steamsm1"; break; }
+    case 23: { SetLocalString(GetModule(), DMFI_TEMP, as_na_steamlong1); return  "as_na_steamlong1"; break; }
+    case 24: { SetLocalString(GetModule(), DMFI_TEMP, al_na_steamlg1); return  "al_na_steamlg1"; break; }
+    case 25: { SetLocalString(GetModule(), DMFI_TEMP, al_na_stream4); return  "al_na_stream4"; break; }
+    case 26: { SetLocalString(GetModule(), DMFI_TEMP, al_na_cvstream2); return  "al_na_cvstream2"; break; }
+    case 27: { SetLocalString(GetModule(), DMFI_TEMP, al_na_cvstream1); return  "al_na_cvstream1"; break; }
+    case 28: { SetLocalString(GetModule(), DMFI_TEMP, as_na_surf1); return  "as_na_surf1"; break; }
+    case 29: { SetLocalString(GetModule(), DMFI_TEMP, as_na_surf2); return  "as_na_surf2"; break; }
+    case 30: { SetLocalString(GetModule(), DMFI_TEMP, as_wt_thundercl1); return  "as_wt_thunderds1"; break; }
+    case 31: { SetLocalString(GetModule(), DMFI_TEMP, as_wt_thunderds1); return  "as_wt_thundercl1"; break; }
+    case 32: { SetLocalString(GetModule(), DMFI_TEMP, al_na_waterfall2); return  "al_na_waterfall2"; break; }
+    case 33: { SetLocalString(GetModule(), DMFI_TEMP, as_na_waterlap3); return  "as_na_waterlap3"; break; }
+    case 34: { SetLocalString(GetModule(), DMFI_TEMP, al_na_wtrflvoid1); return  "al_na_wtrflvoid1"; break; }
+    case 35: { SetLocalString(GetModule(), DMFI_TEMP, al_na_waterpipe1); return  "al_na_waterpipe1"; break; }
+    case 36: { SetLocalString(GetModule(), DMFI_TEMP, al_na_watertunl1); return  "al_na_watertunl1"; break; }
+    case 37: { SetLocalString(GetModule(), DMFI_TEMP, al_wind_leaves); return  "al_wind_leaves"; break; }
 
     return "";
 	}
@@ -1519,35 +1519,35 @@ string DMFI_GetSoundString(int nValue, string sParam)
  {
     switch(nValue)
 	{
-    case 0: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_ailingm1); return  "as_pl_ailingm1"; break; }
-    case 1: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_ailingf1); return  "as_pl_ailingf1"; break; }
-    case 2: { PS_SetLocalString(GetModule(), DMFI_TEMP, c_orc_atk1); return  "c_orc_atk1"; break; }
-    case 3: { PS_SetLocalString(GetModule(), DMFI_TEMP, c_orc_bat1); return  "c_orc_bat1"; break; }
-    case 4: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_battlegrp1); return  "as_pl_battlegrp1"; break; }
-    case 5: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_chantingm1); return  "as_pl_chantingm1"; break; }
-    case 6: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_comyaygrp1); return  "as_pl_comyaygrp1"; break; }
-    case 7: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_crptvoice1); return  "as_pl_crptvoice1"; break; }
-    case 8: { PS_SetLocalString(GetModule(), DMFI_TEMP, cs_kos_death); return  "cs_kos_death"; break; }
-    case 9: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_despairm1); return  "as_pl_despairm1"; break; }
-    case 10: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_an_dragonror1); return  "as_an_dragonror1"; break; }
-    case 11: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_evilchantm); return  "as_pl_evilchantm"; break; }
-    case 12: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_flute1); return  "as_cv_flute1"; break; }
-    case 13: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2ghost4); return  "as_hr_x2ghost4"; break; }
-    case 14: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2ghost2); return  "as_hr_x2ghost2"; break; }
-    case 15: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_an_lizrdhiss1); return  "as_an_lizrdhiss1"; break; }
-    case 16: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_lute1); return  "as_cv_lute1"; break; }
-    case 17: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_marketgrp1); return  "as_pl_marketgrp1"; break; }
-    case 18: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_an_mephgrunt1); return  "as_an_mephgrunt1"; break; }
-    case 19: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_officerm1); return  "as_pl_officerm1"; break; }
-    case 20: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_an_ogregrunt1); return  "as_an_ogregrunt1"; break; }
-    case 21: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_an_orcgrunt1); return  "as_an_orcgrunt1"; break; }
-    case 22: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_cv_shopfruit1); return  "as_cv_shopfruit1"; break; }
-    case 23: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_taverngrp1); return  "as_pl_taverngrp1"; break; }
-    case 24: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_towncrym1); return  "as_pl_towncrym1"; break; }
-    case 25: { PS_SetLocalString(GetModule(), DMFI_TEMP, wilhelm_scream); return  "wilhelm_scream"; break; }
-    case 26: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_yelcitycf1); return  "as_pl_yelcitycf1"; break; }
-    case 27: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_yellcitym1); return  "as_pl_yellcitym1"; break; }
-    case 28: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_pl_zombief1); return  "as_pl_zombief1"; break; }
+    case 0: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_ailingm1); return  "as_pl_ailingm1"; break; }
+    case 1: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_ailingf1); return  "as_pl_ailingf1"; break; }
+    case 2: { SetLocalString(GetModule(), DMFI_TEMP, c_orc_atk1); return  "c_orc_atk1"; break; }
+    case 3: { SetLocalString(GetModule(), DMFI_TEMP, c_orc_bat1); return  "c_orc_bat1"; break; }
+    case 4: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_battlegrp1); return  "as_pl_battlegrp1"; break; }
+    case 5: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_chantingm1); return  "as_pl_chantingm1"; break; }
+    case 6: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_comyaygrp1); return  "as_pl_comyaygrp1"; break; }
+    case 7: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_crptvoice1); return  "as_pl_crptvoice1"; break; }
+    case 8: { SetLocalString(GetModule(), DMFI_TEMP, cs_kos_death); return  "cs_kos_death"; break; }
+    case 9: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_despairm1); return  "as_pl_despairm1"; break; }
+    case 10: { SetLocalString(GetModule(), DMFI_TEMP, as_an_dragonror1); return  "as_an_dragonror1"; break; }
+    case 11: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_evilchantm); return  "as_pl_evilchantm"; break; }
+    case 12: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_flute1); return  "as_cv_flute1"; break; }
+    case 13: { SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2ghost4); return  "as_hr_x2ghost4"; break; }
+    case 14: { SetLocalString(GetModule(), DMFI_TEMP, as_hr_x2ghost2); return  "as_hr_x2ghost2"; break; }
+    case 15: { SetLocalString(GetModule(), DMFI_TEMP, as_an_lizrdhiss1); return  "as_an_lizrdhiss1"; break; }
+    case 16: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_lute1); return  "as_cv_lute1"; break; }
+    case 17: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_marketgrp1); return  "as_pl_marketgrp1"; break; }
+    case 18: { SetLocalString(GetModule(), DMFI_TEMP, as_an_mephgrunt1); return  "as_an_mephgrunt1"; break; }
+    case 19: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_officerm1); return  "as_pl_officerm1"; break; }
+    case 20: { SetLocalString(GetModule(), DMFI_TEMP, as_an_ogregrunt1); return  "as_an_ogregrunt1"; break; }
+    case 21: { SetLocalString(GetModule(), DMFI_TEMP, as_an_orcgrunt1); return  "as_an_orcgrunt1"; break; }
+    case 22: { SetLocalString(GetModule(), DMFI_TEMP, as_cv_shopfruit1); return  "as_cv_shopfruit1"; break; }
+    case 23: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_taverngrp1); return  "as_pl_taverngrp1"; break; }
+    case 24: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_towncrym1); return  "as_pl_towncrym1"; break; }
+    case 25: { SetLocalString(GetModule(), DMFI_TEMP, wilhelm_scream); return  "wilhelm_scream"; break; }
+    case 26: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_yelcitycf1); return  "as_pl_yelcitycf1"; break; }
+    case 27: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_yellcitym1); return  "as_pl_yellcitym1"; break; }
+    case 28: { SetLocalString(GetModule(), DMFI_TEMP, as_pl_zombief1); return  "as_pl_zombief1"; break; }
 
     return "";
 	}
@@ -1557,29 +1557,29 @@ string DMFI_GetSoundString(int nValue, string sParam)
  {
     switch(nValue)
 	{
-	case 0: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_ballmagic1); return  "al_mg_ballmagic1"; break; }
-    case 1: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_cauldron1); return  "al_mg_cauldron1"; break; }
-    case 2: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalev1); return  "al_mg_crystalev1"; break; }
-    case 3: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalgd1); return  "al_mg_crystalgd1"; break; }
-    case 4: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalic1); return  "al_mg_crystalic1"; break; }
-    case 5: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystallv1); return  "al_mg_crystallv1"; break; }
-    case 6: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalnt1); return  "al_mg_crystalnt1"; break; }
-    case 7: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_eerie_caveloop1); return  "al_eerie_caveloop1"; break; }
-    case 8: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_eerie_caveloop2); return  "al_eerie_caveloop2"; break; }
-    case 9: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_eerie_caveloop4); return  "al_eerie_caveloop4"; break; }
-    case 10: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_eerie_droneloop1); return  "al_eerie_droneloop1"; break; }
-    case 11: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_entrevil1); return  "al_mg_entrevil1"; break; }
-    case 12: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_entrmyst1); return  "al_mg_entrmyst1"; break; }
-    case 13: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_entrscry1); return  "al_mg_entrscry1"; break; }
-    case 14: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_mg_frstmagic1); return  "as_mg_frstmagic1"; break; }
-    case 15: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_pillrlght1); return  "al_mg_pillrlght1"; break; }
-    case 16: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_portal3); return  "al_mg_portal3"; break; }
-    case 17: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_portal4); return  "al_mg_portal4"; break; }
-    case 18: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_portal2); return  "al_mg_portal2"; break; }
-    case 19: { PS_SetLocalString(GetModule(), DMFI_TEMP, as_mg_telepin1); return  "as_mg_telepin1"; break; }
-    case 20: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_mg_spirtbarrow_01); return  "al_mg_spirtbarrow_01"; break; }
-	case 21: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_en_deathgodamb); return  "al_en_deathgodamb"; break; }
-	case 22: { PS_SetLocalString(GetModule(), DMFI_TEMP, al_en_roomtone); return  "al_en_roomtone"; break; }
+	case 0: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_ballmagic1); return  "al_mg_ballmagic1"; break; }
+    case 1: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_cauldron1); return  "al_mg_cauldron1"; break; }
+    case 2: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalev1); return  "al_mg_crystalev1"; break; }
+    case 3: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalgd1); return  "al_mg_crystalgd1"; break; }
+    case 4: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalic1); return  "al_mg_crystalic1"; break; }
+    case 5: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystallv1); return  "al_mg_crystallv1"; break; }
+    case 6: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_crystalnt1); return  "al_mg_crystalnt1"; break; }
+    case 7: { SetLocalString(GetModule(), DMFI_TEMP, al_eerie_caveloop1); return  "al_eerie_caveloop1"; break; }
+    case 8: { SetLocalString(GetModule(), DMFI_TEMP, al_eerie_caveloop2); return  "al_eerie_caveloop2"; break; }
+    case 9: { SetLocalString(GetModule(), DMFI_TEMP, al_eerie_caveloop4); return  "al_eerie_caveloop4"; break; }
+    case 10: { SetLocalString(GetModule(), DMFI_TEMP, al_eerie_droneloop1); return  "al_eerie_droneloop1"; break; }
+    case 11: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_entrevil1); return  "al_mg_entrevil1"; break; }
+    case 12: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_entrmyst1); return  "al_mg_entrmyst1"; break; }
+    case 13: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_entrscry1); return  "al_mg_entrscry1"; break; }
+    case 14: { SetLocalString(GetModule(), DMFI_TEMP, as_mg_frstmagic1); return  "as_mg_frstmagic1"; break; }
+    case 15: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_pillrlght1); return  "al_mg_pillrlght1"; break; }
+    case 16: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_portal3); return  "al_mg_portal3"; break; }
+    case 17: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_portal4); return  "al_mg_portal4"; break; }
+    case 18: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_portal2); return  "al_mg_portal2"; break; }
+    case 19: { SetLocalString(GetModule(), DMFI_TEMP, as_mg_telepin1); return  "as_mg_telepin1"; break; }
+    case 20: { SetLocalString(GetModule(), DMFI_TEMP, al_mg_spirtbarrow_01); return  "al_mg_spirtbarrow_01"; break; }
+	case 21: { SetLocalString(GetModule(), DMFI_TEMP, al_en_deathgodamb); return  "al_en_deathgodamb"; break; }
+	case 22: { SetLocalString(GetModule(), DMFI_TEMP, al_en_roomtone); return  "al_en_roomtone"; break; }
     return "";
 	}
  }

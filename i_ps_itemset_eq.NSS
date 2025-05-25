@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //i_ps_itemset_eq
 /*	Script by Dedic8ed
@@ -28,7 +28,7 @@ void main()
     object oItem    = GetPCItemLastEquipped();
 	
 RestrictItemUse(oItem, oPC);
-switch (PS_GetLocalInt(oItem,"vSetID"))
+switch (GetLocalInt(oItem,"vSetID"))
 {	
 
 /////////////////////////////////////////////////////////////////////////////////////////

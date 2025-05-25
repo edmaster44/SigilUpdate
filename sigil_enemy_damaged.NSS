@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //#include "sigil_enemy_inc"
 
@@ -6,10 +6,10 @@
 //{
 //	object oENEMY = OBJECT_SELF;
 //	object oPC = GetLastDamager(oENEMY);
-//	int nENEMY = PS_GetLocalInt(oENEMY, "ENEMY_HEART");
-//	int nROUND = PS_GetLocalInt(oENEMY, "ENEMY_ROUND");
-//	int nPHASE = PS_GetLocalInt(oENEMY, "ENEMY_PHASE");
-//	int nDIFF = PS_GetLocalInt(oENEMY, "ENEMY_DIFF");
+//	int nENEMY = GetLocalInt(oENEMY, "ENEMY_HEART");
+//	int nROUND = GetLocalInt(oENEMY, "ENEMY_ROUND");
+//	int nPHASE = GetLocalInt(oENEMY, "ENEMY_PHASE");
+//	int nDIFF = GetLocalInt(oENEMY, "ENEMY_DIFF");
 //	if (nDIFF < 1) nDIFF = 1;
 //	else if (nDIFF > 4) nDIFF = 4;
 //	switch (nENEMY)

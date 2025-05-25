@@ -19,7 +19,7 @@ void main()
 	object oItem		= GetItemActivated();
 	
 	// Collect variable from the calling item to determine what type of golem is being made. This value is the row number in the file scod_golemcraft.2da
-	int iRow			= PS_GetLocalInt(oItem, "golem");
+	int iRow			= GetLocalInt(oItem, "golem");
 	string s2da			= "scod_golemcraft";
 	int nCACHE 			= GetNum2DARows(s2da); //Cache the 2da, so it's faster.
 	

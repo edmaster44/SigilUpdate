@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 
@@ -340,7 +340,7 @@ void HenchQuickCastBuffs(int bMediumDuration)
         {
             break;
         }
-        oFriend = PS_GetLocalObject(oFriend, sAllySeen);
+        oFriend = GetLocalObject(oFriend, sAllySeen);
     }
     TryCastInstantBuffFeat(FEAT_AURA_OF_COURAGE, SPELLABILITY_AURA_OF_COURAGE);
     TryCastInstantBuffFeat(1805, SPELLABILITY_PROTECTIVE_AURA);

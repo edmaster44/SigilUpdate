@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Hallucinatory Terrain
@@ -25,15 +25,15 @@ void main() {
 	object oCaster = OBJECT_SELF;
 	
 	//Checking that we don't have one already
-	if (PS_GetLocalString(oCaster, "HallucinatoryTerrainTag") != "") {
-		string sTag = PS_GetLocalString(oCaster, "HallucinatoryTerrainTag");
+	if (GetLocalString(oCaster, "HallucinatoryTerrainTag") != "") {
+		string sTag = GetLocalString(oCaster, "HallucinatoryTerrainTag");
 		if (GetIsObjectValid(GetNearestObjectByTag(sTag))) {
 			SendMessageToPC(oCaster, "You may not have more than one Hallucinatory Terrain active at a time!");
 			return;
 		}
 	}
 	string sHallucinatoryTag = "AOE_"+IntToString(Random(10000));
-	PS_SetLocalString(oCaster, "HallucinatoryTerrainTag", sHallucinatoryTag);
+	SetLocalString(oCaster, "HallucinatoryTerrainTag", sHallucinatoryTag);
 	
     //Declare major variables
     location lTarget = GetSpellTargetLocation();
@@ -74,5 +74,5 @@ void main() {
 		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVFX, lRand, fDur);
 	}
 	
-	DelayCommand(RoundsToSeconds(nDuration), PS_DeleteLocalInt(oCaster, "HallucinatoryActive"));
+	DelayCommand(RoundsToSeconds(nDuration), DeleteLocalInt(oCaster, "HallucinatoryActive"));
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
   
- int iLock = PS_GetGlobalInt("Smoking2EnterLock");
+ int iLock = GetGlobalInt("Smoking2EnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("Smoking2EnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("Smoking2EnterLock", 1); // Only allows one clean up at a time.
 
   if(GetObjectByTag("ps_npc_sage") == OBJECT_INVALID)
   {
@@ -19,6 +19,6 @@ void main()
    object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_npc_sage", lSpawnpoint);    
   }
   
-  PS_SetGlobalInt("Smoking2EnterLock", 0);
+  SetGlobalInt("Smoking2EnterLock", 0);
  }
 }

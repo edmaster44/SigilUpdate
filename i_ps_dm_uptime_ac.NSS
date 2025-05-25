@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // Created by Loki_999/Agony_Aunt for SCOD server
 // Tells how much time before next reset
@@ -13,9 +13,9 @@ void main()
 	if (GetIsDM(oDM))
 	{
 		object oMod = GetModule();
-		int nBootTime = PS_GetLocalInt(oMod, "boottime");
+		int nBootTime = GetLocalInt(oMod, "boottime");
     	int nCurrentTime;
-		int iDelayCount = PS_GetLocalInt(oMod, "delaycount");
+		int iDelayCount = GetLocalInt(oMod, "delaycount");
 		
 		SQLExecDirect("SELECT UNIX_TIMESTAMP()");
 	

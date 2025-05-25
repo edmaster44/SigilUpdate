@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "nwnx_scod_finesse"
 #include "nwnx_scod_monkweapon"
@@ -19,7 +19,7 @@ void FirstLogin(){
 	// now copy the variable set in the toolset to a local variable set on the 
 	// module with fully legal variable name. If we've already done this, bail
 	if (GetGlobalString("X2_S_UD_SPELLSCRIPT") == "antimagic_spell_cast") return;
-	PS_SetGlobalString("X2_S_UD_SPELLSCRIPT", "antimagic_spell_cast");
+	SetGlobalString("X2_S_UD_SPELLSCRIPT", "antimagic_spell_cast");
 
 	
 }

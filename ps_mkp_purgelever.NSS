@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // ps_mkp_purgelever
 //
@@ -11,7 +11,7 @@ void main()
 	PlaySound("as_sw_lever1");
 	// * note that nActive == 1 does  not necessarily mean the placeable is active
 	// * that depends on the initial state of the object
-	int nActive = PS_GetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE");
+	int nActive = GetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE");
 	// * Play Appropriate Animation
 	if (!nActive)
 	{
@@ -79,6 +79,6 @@ void main()
 		SpeakString("*Recharging Purge Nodes...*",TALKVOLUME_TALK);
 	}
    	// * Store New State
-	PS_SetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE",!nActive);
+	SetLocalInt(OBJECT_SELF,"X2_L_PLC_ACTIVATED_STATE",!nActive);
 
 }

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // SIGIS parchment item function when used - SIGIS News Submission and Reader - by Agony_Aunt/Loki
 // If target is self, then it brings up the write screen, if target is the "editor" then it will be submitted (this all needs testing, maybe best all handled via convo really)
@@ -12,11 +12,11 @@ void main()
     object	oItem   = GetItemActivated();
     object	oTarget = GetItemActivatedTarget();
 	
-	PS_SetLocalObject(oPC, "SIGIS_PARCHMENT", oItem); // store the item on PC for later use... depends if gui_sigis_write needs this for the item.
+	SetLocalObject(oPC, "SIGIS_PARCHMENT", oItem); // store the item on PC for later use... depends if gui_sigis_write needs this for the item.
 	
-	string sText = PS_GetLocalString(oItem, "SIGIS_TEXT");
-	string sHeadline = PS_GetLocalString(oItem, "SIGIS_HEADLINE");
-	string sAuthor = PS_GetLocalString(oItem, "SIGIS_AUTHOR");
+	string sText = GetLocalString(oItem, "SIGIS_TEXT");
+	string sHeadline = GetLocalString(oItem, "SIGIS_HEADLINE");
+	string sAuthor = GetLocalString(oItem, "SIGIS_AUTHOR");
 		
 	if (oPC == oTarget)
 	{
@@ -34,7 +34,7 @@ void main()
 		else
 		{
 			sAuthor = GetFirstName(oPC) + " " + GetLastName(oPC);
-			PS_SetLocalString(oItem, "SIGIS_TEXT", sAuthor); // since no guarantee this will be edited, the onlostfocus call will never be made, so store it by default on first use
+			SetLocalString(oItem, "SIGIS_TEXT", sAuthor); // since no guarantee this will be edited, the onlostfocus call will never be made, so store it by default on first use
 			SetGUIObjectText(oPC, "SIGIS_WRITE_SCENE", "SIGIS_WRITE_TEXT_SUBMITTER", -1, sAuthor);
 		}
 		
@@ -52,7 +52,7 @@ void main()
 			SIGISAddEntry(oItem);
 			DestroyObject(oItem);
 			AssignCommand(oTarget, SpeakString("Cheers cutter, ill get this right to print.", TALKVOLUME_TALK));
-			PS_SetGlobalString("LATEST_NEWS", sHeadline);
+			SetGlobalString("LATEST_NEWS", sHeadline);
 			IncrementAchievement(oPC, 22);
 		}
 		else

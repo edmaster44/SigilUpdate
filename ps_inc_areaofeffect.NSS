@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //:://////////////////////////////////////////////////////////////////////////
 //:: AOE Inc
@@ -13,34 +13,34 @@
 //For instances where we need to limit the number of them hanging around
 int CheckNumberOfAOE(object oPC) {
 	
-	int nNumberCalled = PS_GetLocalInt(oPC, "AOE_CAST");
+	int nNumberCalled = GetLocalInt(oPC, "AOE_CAST");
 	int currentNumber = 0;
 
 	SendMessageToPC(oPC, "Currently in Ledger: "+IntToString(nNumberCalled));
 	int n;
 	for(n = 0; n <= nNumberCalled; n++) {
-		object oSummon = PS_GetLocalObject(oPC, "AOE_CAST_"+IntToString(n));
+		object oSummon = GetLocalObject(oPC, "AOE_CAST_"+IntToString(n));
 		if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
 			currentNumber++;
 		}
 	}
 
-	PS_SetLocalInt(oPC, "AOE_CAST", currentNumber);
+	SetLocalInt(oPC, "AOE_CAST", currentNumber);
 
 	int newCount = 0;
 	if (currentNumber != nNumberCalled) {
 		for(n = 0; n <= nNumberCalled; n++) {
-			object oSummon = PS_GetLocalObject(oPC, "AOE_CAST_"+IntToString(n));
+			object oSummon = GetLocalObject(oPC, "AOE_CAST_"+IntToString(n));
 			if (GetIsObjectValid(oSummon) && !GetIsDead(oSummon)) {
-				PS_SetLocalObject(oPC, "AOE_CAST_"+IntToString(newCount), oSummon);
+				SetLocalObject(oPC, "AOE_CAST_"+IntToString(newCount), oSummon);
 				newCount++;
 			} else {
-				PS_DeleteLocalObject(oPC, "AOE_CAST_"+IntToString(n));
+				DeleteLocalObject(oPC, "AOE_CAST_"+IntToString(n));
 			}
 		}
 	}
 	
-	nNumberCalled = PS_GetLocalInt(oPC, "AOE_CAST");
+	nNumberCalled = GetLocalInt(oPC, "AOE_CAST");
 	
 	return nNumberCalled;
 
@@ -48,7 +48,7 @@ int CheckNumberOfAOE(object oPC) {
 
 //Basic get function; no extra figures
 int GetAOESInLedger(object oPC) {
-	return PS_GetLocalInt(oPC, "AOE_CAST");
+	return GetLocalInt(oPC, "AOE_CAST");
 }
 
 //Make note of this AOE so we can keep track of it
@@ -56,8 +56,8 @@ void AddAOEToLedger(object oPC, object oAoE) {
 
 	int nNumberCalled = GetAOESInLedger(oPC);
 	SendMessageToPC(oPC, "Currently in Ledger: "+IntToString(nNumberCalled));
-	PS_SetLocalObject(oPC, "AOE_CAST_"+IntToString(nNumberCalled), oAoE);
-	PS_SetLocalInt(oPC, "AOE_CAST", nNumberCalled+1);
+	SetLocalObject(oPC, "AOE_CAST_"+IntToString(nNumberCalled), oAoE);
+	SetLocalInt(oPC, "AOE_CAST", nNumberCalled+1);
 	
 	CheckNumberOfAOE(oPC);
 

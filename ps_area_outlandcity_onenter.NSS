@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,13 +7,13 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 
- int iLock = PS_GetGlobalInt("OutlandscityEnterLock");
+ int iLock = GetGlobalInt("OutlandscityEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("OutlandscityEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("OutlandscityEnterLock", 1); // Only allows one clean up at a time.
 
 //  DelayCommand(300.0, ExecuteScript("ps_chest_treasure",oPC));
    
-  PS_SetGlobalInt("OutlandscityEnterLock", 0);
+  SetGlobalInt("OutlandscityEnterLock", 0);
  }
 }

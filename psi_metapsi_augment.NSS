@@ -22,15 +22,15 @@ void main()
     object oTarget = GetSpellTargetObject();
 	effect eVis = EffectNWN2SpecialEffectFile("fx_helmedhorror_eyes.sef", OBJECT_SELF);
 	
-	if (PS_GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 0)
+	if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 0)
 	{
-		PS_SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 1);
+		SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Augment Power");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, OBJECT_SELF);
 	}
 	else
 	{
-		PS_SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
+		SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Augment Power");
 		RemoveEffectsFromSpell(oTarget, GetSpellId());
 	}

@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 /*
    ----------------
    Ectoplasmic Sheen
@@ -77,7 +77,7 @@ void main()
         {
             // Test if we found the correct AoE
             if(GetTag(oAoE) == Get2DAString("vfx_persistent", "LABEL", 32) &&
-               !PS_GetLocalInt(oAoE, "PRC_EctoSheen_Inited")
+               !GetLocalInt(oAoE, "PRC_EctoSheen_Inited")
                )
             {
                 break;
@@ -87,8 +87,8 @@ void main()
         }
 
         // Store data for use in the AoE scripts
-        PS_SetLocalInt(oAoE, "PRC_EctoSheen_DC", nDC);
+        SetLocalInt(oAoE, "PRC_EctoSheen_DC", nDC);
 
-        PS_SetLocalInt(oAoE, "PRC_EctoSheen_Inited", TRUE);
+        SetLocalInt(oAoE, "PRC_EctoSheen_Inited", TRUE);
     }// end if - Successfull manifestation
 }

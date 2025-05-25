@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 
 void main()
@@ -7,10 +7,10 @@ void main()
 // if (!GetIsPC(oPC) && !GetIsDM(oPC))
 //  return;
 	
- int iLock = PS_GetGlobalInt("OOCEnterLock");
+ int iLock = GetGlobalInt("OOCEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("OOCEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("OOCEnterLock", 1); // Only allows one clean up at a time.
   
   if(GetObjectByTag("ps_npc_custom0") == OBJECT_INVALID)
   {
@@ -103,6 +103,6 @@ void main()
 	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "kemo_storage_teller", lSpawnpoint);    
   }
     
-  PS_SetGlobalInt("OOCEnterLock", 0);
+  SetGlobalInt("OOCEnterLock", 0);
  }
 }

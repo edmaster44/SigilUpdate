@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // kemo_chair_anim
 // called by kemo_sitting_conv
@@ -21,16 +21,16 @@ void main(string sPose)
 	
 	string sAnim;
 	if (sPose == "0") // dwarves, gnomes and half-orcs
-		sAnim = PS_GetLocalString(oPC,"SittingPose");
-	else sAnim = PS_GetLocalString(oPC,"SittingPose") + sPose;
+		sAnim = GetLocalString(oPC,"SittingPose");
+	else sAnim = GetLocalString(oPC,"SittingPose") + sPose;
 	location lChairLoc = GetLocation(oPC);
-	object oChair = PS_GetLocalObject(oPC,"SittingChair");
-	int iOverlap = PS_GetLocalInt(oPC,"AnimationOverlap"); //animation count (to check overlapped animations)
-	iOverlap++; PS_SetLocalInt(oPC,"AnimationOverlap",iOverlap);
+	object oChair = GetLocalObject(oPC,"SittingChair");
+	int iOverlap = GetLocalInt(oPC,"AnimationOverlap"); //animation count (to check overlapped animations)
+	iOverlap++; SetLocalInt(oPC,"AnimationOverlap",iOverlap);
 	
 	SetCommandable(1,oPC); // allows the PC to move again after the interface closes
 	SetChairFacing(oPC,oChair);
-	PS_SetLocalLocation(oPC,"AnimationLocation",lChairLoc);
+	SetLocalLocation(oPC,"AnimationLocation",lChairLoc);
 
 	AssignCommand(oPC,StoreIdle(sAnim));
 

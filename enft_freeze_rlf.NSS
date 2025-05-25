@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "enft_cnsts"
 
@@ -21,7 +21,7 @@ int freezeRelief(object oColdPerson)
     while(GetDistanceBetween(oColdPerson, oNearest) < warmDistance)
     {
         // Determine if the object is a warming object
-        if(!PS_GetLocalInt(oNearest, "ENFT_NOT_WARMING"))
+        if(!GetLocalInt(oNearest, "ENFT_NOT_WARMING"))
         {
             sNearest = GetTag(oNearest);
             if(sNearest == "ENFT_RELIEF_SPOT") return 1;
@@ -40,7 +40,7 @@ int freezeRelief(object oColdPerson)
         // List sources of proximity heat relief as shown in examples above.
 
             // Not a warming object.  Flag it to save time next pass
-            PS_SetLocalInt(oNearest, "ENFT_NOT_WARMING", TRUE);
+            SetLocalInt(oNearest, "ENFT_NOT_WARMING", TRUE);
         }
 
         // This object is not a warming object.  Check next object.
@@ -52,7 +52,7 @@ int freezeRelief(object oColdPerson)
     for(i = 0; i < NUM_INVENTORY_SLOTS; i++)
     {
         oEquipedItem = GetItemInSlot(i, oColdPerson);
-        if(!PS_GetLocalInt(oEquipedItem, "ENFT_NOT_WARMING"))
+        if(!GetLocalInt(oEquipedItem, "ENFT_NOT_WARMING"))
         {
             if(GetResRef(oEquipedItem) == coldProtection1) return 1;
             if(GetResRef(oEquipedItem) == coldProtection2) return 1;
@@ -66,7 +66,7 @@ int freezeRelief(object oColdPerson)
             if(GetResRef(oEquipedItem) == coldProtection10) return 1;
 
             // Not a warming object.  Flag it to save time next pass
-            PS_SetLocalInt(oEquipedItem, "ENFT_NOT_WARMING", TRUE);
+            SetLocalInt(oEquipedItem, "ENFT_NOT_WARMING", TRUE);
         }
     }
 

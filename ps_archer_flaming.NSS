@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_onhit" 
 
@@ -43,7 +43,7 @@ void main() {
 		return;	
 	}
 	
-	if (PS_GetLocalInt(oItem, "elemental") == 1 && GetItemHasTemporaryProperties(oItem)){ //cannot be magical ammunition
+	if (GetLocalInt(oItem, "elemental") == 1 && GetItemHasTemporaryProperties(oItem)){ //cannot be magical ammunition
 		SendMessageToPC(oCaster, "You may only have one type of damage active at a time!");
 		return;	
 	}
@@ -54,7 +54,7 @@ void main() {
 	// AFW-OEI 06/27/2007: Add a "cast" effect.
 	effect eCast = EffectNWN2SpecialEffectFile("sp_fire_cast");
 	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, OBJECT_SELF);
-	PS_SetLocalInt(oItem, "elemental", 1);
+	SetLocalInt(oItem, "elemental", 1);
 	
 	SetPlotFlag(oItem, TRUE);
 	SetItemCursedFlag(oItem, TRUE);

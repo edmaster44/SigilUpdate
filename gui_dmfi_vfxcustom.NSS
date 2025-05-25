@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*  Qk 11/07
 	- DMFI_CUSTOMVFX
@@ -71,7 +71,7 @@ void DMFI_CreateCustomVFX(object oTool, object oSpeaker, string sText, location 
     string sDur;
     location lTargetLoc = lLoc;
 	
-	sDur = PS_GetLocalString(oTool, DMFI_VFX_DURATION);
+	sDur = GetLocalString(oTool, DMFI_VFX_DURATION);
 	fDur = StringToFloat(sDur);
 	
 	if (fDur<5.0) fDur=5.0;

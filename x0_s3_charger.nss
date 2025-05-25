@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //::///////////////////////////////////////////////
 //:: Name
@@ -30,7 +30,7 @@
 // * converts the stored cost to charges
 int ConvertCostToCharge()
 {
-    int nValue = PS_GetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER");
+    int nValue = GetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER");
     nValue = nValue / 4000;
 
     return nValue;
@@ -56,7 +56,7 @@ void main()
                     if (nNewCharges >= 1)
                     {
                         // * null the cost stored on item
-                        PS_SetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER", 0);
+                        SetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER", 0);
                         SetItemCharges(oItem, nCharges + nNewCharges);
                         SpeakStringByStrRef(40055);
                     }
@@ -69,8 +69,8 @@ void main()
             {
                 int nValue = GetGoldPieceValue(oItem);
                 SpeakStringByStrRef(40057);
-                int nPreviousValue = PS_GetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER");
-                PS_SetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER", nPreviousValue + nValue);
+                int nPreviousValue = GetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER");
+                SetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER", nPreviousValue + nValue);
                 effect eVis = EffectVisualEffect(VFX_IMP_DISPEL);
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
                 //SpeakString(IntToString(nPreviousValue + nValue));

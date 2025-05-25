@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_casterlevel"
 void main()
@@ -6,10 +6,10 @@ void main()
  object oPC = GetEnteringObject();
  int nLevel = GetRealCasterLevel(oPC);
 	
- int iLock = PS_GetGlobalInt("OOCEnterLock");
+ int iLock = GetGlobalInt("OOCEnterLock");
  if ( iLock == 0 )
  {
-  PS_SetGlobalInt("OOCEnterLock", 1); // Only allows one clean up at a time.
+  SetGlobalInt("OOCEnterLock", 1); // Only allows one clean up at a time.
   
   if(GetObjectByTag("ps_npc_custom0") == OBJECT_INVALID)
   {
@@ -85,7 +85,7 @@ void main()
 	object oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "kemo_storage_teller", lSpawnpoint);    
   }
   
-  PS_SetGlobalInt("OOCEnterLock", 0);
+  SetGlobalInt("OOCEnterLock", 0);
  }
  
  

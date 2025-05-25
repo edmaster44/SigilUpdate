@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "enft_cnsts"
 
@@ -8,7 +8,7 @@ void startEngine(object oEnterer)
 		SendMessageToPC(oEnterer, "OBJECT_INVALID");
 
     // Check for environmental damage
-	int nEnvironType = PS_GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA");
+	int nEnvironType = GetLocalInt(GetArea(OBJECT_SELF), "ENV_FATIGUE_AREA");
     if(nEnvironType > 0)
     {
 		switch(nEnvironType) {

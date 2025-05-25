@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //*********************************************
 //BOSS EVENT
@@ -30,9 +30,9 @@
 
 void SummonFriends(object oSelf) {
 
-	string sFriend = PS_GetLocalString(oSelf, "SummonFriends_ResRef");
-	int nNumber = PS_GetLocalInt(oSelf, "SummonFriends_Number");
-	string sVFX = PS_GetLocalString(oSelf, "SummonFriends_VFX");
+	string sFriend = GetLocalString(oSelf, "SummonFriends_ResRef");
+	int nNumber = GetLocalInt(oSelf, "SummonFriends_Number");
+	string sVFX = GetLocalString(oSelf, "SummonFriends_VFX");
 	float fRadius = 8.0f;
 	
 	int n;
@@ -50,11 +50,11 @@ void SummonFriends(object oSelf) {
 
 void main () {
 
-	string sAnim = PS_GetLocalString(OBJECT_SELF, "SummonFriends_Anim");
+	string sAnim = GetLocalString(OBJECT_SELF, "SummonFriends_Anim");
 	if (sAnim == "")
 		sAnim = "taunt";
 		
-	string sMessage = PS_GetLocalString(OBJECT_SELF, "SummonFriends_Message");
+	string sMessage = GetLocalString(OBJECT_SELF, "SummonFriends_Message");
 	
 	ClearAllActions();
 	

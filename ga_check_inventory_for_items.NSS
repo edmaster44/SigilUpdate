@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // ga_check_inventory_for_items
 // Mimi Fearthegn
@@ -23,12 +23,12 @@ void main() {
     object oPC = GetLastClosedBy();
 	object oChest = OBJECT_SELF;
 	
-	int nType = PS_GetLocalInt(oChest, "CheckType");
-	int nMinValue = PS_GetLocalInt(oChest, "MinimumValue");
-	string successString = PS_GetLocalString(oChest, "SuccessMessage");
-	string failString = PS_GetLocalString(oChest, "FailMessage");
+	int nType = GetLocalInt(oChest, "CheckType");
+	int nMinValue = GetLocalInt(oChest, "MinimumValue");
+	string successString = GetLocalString(oChest, "SuccessMessage");
+	string failString = GetLocalString(oChest, "FailMessage");
 	
-	string sVFX = PS_GetLocalString(oChest, "SuccessVFX");
+	string sVFX = GetLocalString(oChest, "SuccessVFX");
 	
 	if (nType == 1) {
 	
@@ -81,7 +81,7 @@ void main() {
 	
 	} else if (nType == 3) {
 		
-		string sSub = PS_GetLocalString(oChest, "SubstringToFind");
+		string sSub = GetLocalString(oChest, "SubstringToFind");
 		int nFound = FALSE;
 		object oItem = GetFirstItemInInventory(oChest);
 		while (GetIsObjectValid(oItem)) {
@@ -105,7 +105,7 @@ void main() {
 		
 	} else if (nType == 4) {
 		
-		int nType = PS_GetLocalInt(oChest, "BaseItemType");
+		int nType = GetLocalInt(oChest, "BaseItemType");
 		int nFound = FALSE;
 		object oItem = GetFirstItemInInventory(oChest);
 		while (GetIsObjectValid(oItem)) {
@@ -133,12 +133,12 @@ void main() {
 
 int CheckIfItemInList(object oItemToCompare, object oSelf) {
 
-	int nMax = PS_GetLocalInt(oSelf, "NumberOfItems");
+	int nMax = GetLocalInt(oSelf, "NumberOfItems");
 	string sTag = GetTag(oItemToCompare);
 	
 	int n;
 	for (n = 1; n <= nMax; n++) {
-		string sReq = PS_GetLocalString(oSelf, "Item_"+IntToString(n));
+		string sReq = GetLocalString(oSelf, "Item_"+IntToString(n));
 		if (sTag == sReq)
 			return TRUE;
 	}
@@ -150,10 +150,10 @@ int CheckIfItemInList(object oItemToCompare, object oSelf) {
 void ExecuteSuccessActions(object oSelf) {
 	
 	float fDelay = 0.1f;
-	int nActionMax = PS_GetLocalInt(oSelf, "NumberOfActions_Success");
+	int nActionMax = GetLocalInt(oSelf, "NumberOfActions_Success");
 	int n;
 	for (n = 1; n <= nActionMax; n++) {
-		string sScript = PS_GetLocalString(oSelf, "SuccessAction_"+IntToString(n));
+		string sScript = GetLocalString(oSelf, "SuccessAction_"+IntToString(n));
 		if (sScript == "")
 			return;
 		SpeakString("Executing success action "+sScript, TALKVOLUME_SHOUT);
@@ -165,10 +165,10 @@ void ExecuteSuccessActions(object oSelf) {
 void ExecuteFailureActions(object oSelf) {
 	
 	float fDelay = 0.1f;
-	int nActionMax = PS_GetLocalInt(oSelf, "NumberOfActions_Failure");
+	int nActionMax = GetLocalInt(oSelf, "NumberOfActions_Failure");
 	int n;
 	for (n = 1; n <= nActionMax; n++) {
-		string sScript = PS_GetLocalString(oSelf, "FailureAction_"+IntToString(n));
+		string sScript = GetLocalString(oSelf, "FailureAction_"+IntToString(n));
 		if (sScript == "")
 			return;
 		SpeakString("Executing failure action "+sScript, TALKVOLUME_SHOUT);

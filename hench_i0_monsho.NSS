@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 /*
 
@@ -56,7 +56,7 @@ void HenchMonRespondToShout(object oShouter, int nShoutIndex, object oIntruder =
 {
     // Pausanias: Do not respond to shouts if you've surrendered.
 	// don't respond to shouts if flagged as plot
-    if (PS_GetLocalInt(OBJECT_SELF, "Generic_Surrender") || GetPlotFlag())
+    if (GetLocalInt(OBJECT_SELF, "Generic_Surrender") || GetPlotFlag())
 	{
 		return;
 	}
@@ -72,7 +72,7 @@ void HenchMonRespondToShout(object oShouter, int nShoutIndex, object oIntruder =
                     oTarget = GetLastHostileActor(oShouter);
                     if (!GetIsObjectValid(oTarget))
                     {
-                        oTarget = PS_GetLocalObject(oShouter, sHenchLastTarget);
+                        oTarget = GetLocalObject(oShouter, sHenchLastTarget);
                     }
                 }
                 if (!GetBehaviorState(NW_FLAG_BEHAVIOR_SPECIAL))

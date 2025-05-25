@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //:://////////////////////////////////////////////
 //:: Created By: Clangeddin 
@@ -10,9 +10,9 @@ void main(string sCOMMAND)
 	object oPC = OBJECT_SELF;
 	if (sCOMMAND == "1") //refresh points
 	{
-		int nMAX = PS_GetLocalInt(oPC, "PSI_PP_MAX");
+		int nMAX = GetLocalInt(oPC, "PSI_PP_MAX");
 		if (nMAX <= 0) return;
-		int nPP = PS_GetLocalInt(oPC, "PSI_PP");
+		int nPP = GetLocalInt(oPC, "PSI_PP");
 		string sTEXT = IntToString(nPP) + "/" + IntToString(nMAX);
 		float fBAR = IntToFloat(nPP)/IntToFloat(nMAX);
   		SetGUIObjectText(oPC, "SCREEN_SPIRITBAR_PSION", "PP_TXT", -1, sTEXT);
@@ -33,10 +33,10 @@ void main(string sCOMMAND)
 		else if (sBUTTON=="6") {nFEAT = 21374; nSPELL = 14345; sVAR = "METAPSI_TWIN";}
 		if (sACTIVE=="a") //Activate
 		{
-			if (PS_GetLocalInt(oPC, sVAR) == 1) return; //Do nothing if it's already active.
+			if (GetLocalInt(oPC, sVAR) == 1) return; //Do nothing if it's already active.
 			if (GetHasFeat(nFEAT, oPC, TRUE)==FALSE) SendMessageToPC(oPC, "You don't have access to this metapsionic yet.");
 			else ActionCastSpellAtObject(nSPELL, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
 		}
-		else if (PS_GetLocalInt(oPC, sVAR) == 1) ActionCastSpellAtObject(nSPELL, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE); //Deactivate
+		else if (GetLocalInt(oPC, sVAR) == 1) ActionCastSpellAtObject(nSPELL, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE); //Deactivate
 	}
 }

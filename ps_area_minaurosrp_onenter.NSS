@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 #include "ps_inc_planarlocations"
 void main()
@@ -9,10 +9,10 @@ void main()
  	DelayCommand(3.0f, ApplyPlanarAlignmentEffects(oPC, sPlane, sDescrip));
 	
   
-	int iLock = PS_GetGlobalInt("MinaurosRPEnterLock");
+	int iLock = GetGlobalInt("MinaurosRPEnterLock");
  	if ( iLock == 0 ) {
  
-  		PS_SetGlobalInt("MinaurosRPEnterLock", 1); // Only allows one clean up at a time.
+  		SetGlobalInt("MinaurosRPEnterLock", 1); // Only allows one clean up at a time.
 
 		if(GetObjectByTag("ps_rpswampmonster") == OBJECT_INVALID) {
 		
@@ -34,6 +34,6 @@ void main()
 		   	oSpawn = CreateObject(OBJECT_TYPE_CREATURE, "ps_rpswamp_horneddevil", lSpawnpoint);    
 	  	}
     
-  		PS_SetGlobalInt("MinaurosRPEnterLock", 0);
+  		SetGlobalInt("MinaurosRPEnterLock", 0);
  	}
 }

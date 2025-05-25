@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //Checks if you have a rough gemstone, and set a local int if so
 //This can be kind of a heavy function, hence its inclusion as an action
@@ -7,7 +7,7 @@
 void main()
 {
 	object oPC = GetPCSpeaker();
-	PS_DeleteLocalInt(oPC, "hasrough");
+	DeleteLocalInt(oPC, "hasrough");
 	
 	object oItem = GetFirstItemInInventory(oPC);
 	while (GetIsObjectValid(oItem)) {
@@ -15,7 +15,7 @@ void main()
 		if (GetBaseItemType(oItem) == BASE_ITEM_GEM) {
 			string sTag = GetTag(oItem);
 			if (FindSubString(sTag, "gemstone_rough") >= 0) { //is a rough gemstone
-				PS_SetLocalInt(oPC, "hasrough", 1);
+				SetLocalInt(oPC, "hasrough", 1);
 				break;
 			}
 		}

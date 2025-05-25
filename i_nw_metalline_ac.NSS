@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 //i_nw_metalline_ac (tag-based OnActivated script)
 //
@@ -10,7 +10,7 @@ void main()
 {
 object oItem = GetItemActivated();
 object oUser = GetItemActivator();
-int iOldMat = PS_GetLocalInt(oItem, "Mat");
+int iOldMat = GetLocalInt(oItem, "Mat");
 //adamantine 1, coldiron 2, iron 4, silver 6
 int iNewMat;
 string sSuffix;
@@ -53,6 +53,6 @@ string sDesc = "The wielder can alter the composition of a metalline weapon from
 ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile("sp_transmutation_conjure.sef"), oUser);
 SendMessageToPC(oUser, "<i>Transmuting into "+sSuffix);
 SetDescription(oItem, sDesc);
-PS_SetLocalInt(oItem, "Mat", iNewMat);
+SetLocalInt(oItem, "Mat", iNewMat);
 SetItemBaseMaterialType(oItem, iNewMat);
 }

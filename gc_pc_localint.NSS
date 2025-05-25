@@ -1,4 +1,4 @@
-#include "ff_safevar"
+
 
 // gc_local_int(string sVariable, string sCheck, string sTarget)
 /* This script checks a local int variable's value.
@@ -26,7 +26,7 @@ int StartingConditional(string sVariable, string sCheck)
 {
     object oTarg = GetPCSpeaker();
     
-    int nValue = PS_GetLocalInt(oTarg, sVariable);
+    int nValue = GetLocalInt(oTarg, sVariable);
     int iRet = CompareInts(nValue, sCheck);
 
     return (iRet);
