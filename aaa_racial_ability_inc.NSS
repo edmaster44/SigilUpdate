@@ -469,13 +469,14 @@ void PS_Ability_UnholyApothesis(object oPC)
 
 void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 	
-	/* original code that launches dialog
-	if (!X2PreSpellCastCode())
-    {	return;	}
+	// original code that launches dialog
+	if (!X2PreSpellCastCode()) return;
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
-	*/
 
-	// new code that acts as a toggle
+
+	// new code that acts as a toggle. This didn't work and I don't know why, will
+	// come back to it another time
+	/*
 	object oEss	= GetItemPossessedBy(oPC, "ps_essence");
 	ClearScriptParams();
 	if (!GetLocalInt(oEss, "AltFormSet")){
@@ -492,6 +493,7 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 		ExecuteScriptEnhanced("ga_aaa_changeself", oPC, FALSE);
 	}
 	ClearScriptParams();
+	*/
 	//reset dragon ac
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
 		PS_ShieldArmor_Dragon(oPC, 2623);
