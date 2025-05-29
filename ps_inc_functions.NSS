@@ -4106,13 +4106,16 @@ void PS_RefreshAppearance(object oPC)
 
 void PS_SaveOriginalAppearance(object oPC)
 {
+	object oEssence = PS_GetEssence(oPC);
+	if (GetLocalInt(oEssence, "TempChange") != 0) return; // do not save appearance if not in nat form
+	
 	struct CreatureCoreAppearance Appearance = PS_GetCreatureCoreAppearance(oPC); 
 	// Set all the masks so that if we reset the appearance, we set everything.
 	Appearance.Tint_Mask = PS_CCA_TINT_ALL;
 	Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
 	Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
 	
-	object oEssence = PS_GetEssence(oPC);
+	
 	
 	PS_CreatureCoreAppearanceToScriptVariables(oEssence, "OriginalApp", Appearance);
 	//SetLocalInt(oEssence, "TempChange", 0); How do we know we're actually NOT in tempchange form?
@@ -4716,20 +4719,18 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
 //Calculuates Psychic Warrior Levels
 int PsyWarLevels(object oPC)
 {
-	int nPsywar = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-	int nWarMind = GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+	int iTotal = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	iTotal += GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
 	// bit of a math error here. If the gem dragon level is 0, then this is 
 	// adding 1. 
 	//int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1; 
 	// instead we'll do this:
-	int nGemDragon = GetLevelByClass(128, oPC);
-	if (nGemDragon > 0) nGemDragon = nGemDragon / 2 + 1;
+	int nGemDragon = GetLevelByClass(128, oPC); // old gemdragon
+	if (nGemDragon > 0) iTotal += nGemDragon / 2 + 1;
 	if (GetHasFeat(3680, oPC, TRUE)){ // if has new psy path feat for new dragon prc
 		int nDragonLevel = GetLevelByClass(130, oPC) - 2;
-		if (nDragonLevel > 0) nPsywar += nDragonLevel;
+		if (nDragonLevel > 0) iTotal += nDragonLevel;
 	}
-	int	iTotal = nPsywar + nWarMind + nGemDragon;
-	
 	return iTotal;	
 }
 
@@ -4739,13 +4740,10 @@ void DoPsyProgression(object oPC, int bCharCreation = FALSE)
 {	
 int iPsy = PsyWarLevels(oPC);
 
-// Give Psy their first tier feat in case they do not rest before reaching lvl 2
-if (bCharCreation)
-{
-	if (iPsy == 1 && GetXP(oPC) < 2)
-	{
+// Give Psy their first tier feat at char creation
+if (bCharCreation){
+	if (iPsy == 1 && !GetHasFeat(FEAT_PSYWAR_PROGRESSION_I, oPC))
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
-	}
 	return;
 }
 

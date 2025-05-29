@@ -84,6 +84,7 @@ const int idFeatWererat = 2593;
 const int idFeatBlackguardPath = 3019;
 
 void fFixAlertness(object oPC);
+void AdjustDragonPrC(object oPC);
 int fFindSneakFeat(int dice);
 int fFindDeathFeat(int dice);
 int fFindBgFeat(int dice);
@@ -96,6 +97,7 @@ int fCalcOtherSneakFeats(object oPC);
 string fCheckForTempSneakDice(object oPC);
 void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
+void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 
 void fFixAlertness(object oPC){
 	if (GetHasFeat(FEAT_ALERTNESS, oPC, TRUE)){
@@ -104,6 +106,76 @@ void fFixAlertness(object oPC){
 		// have it as a bonus feat on equipment we will get a false positive
 		FeatAdd(oPC, FEAT_ALERTNESS_NEW, FALSE);
 	}
+}
+
+void AdjustDragonPrC(object oPC){
+	int nLvl = GetLevelByClass(129, oPC); // new dragon prc
+	int nPsyLvl = GetLevelByClass(130, oPC); // new psy dragon prc
+	if (nPsyLvl == 1){
+		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) >= 1)
+			FeatAdd(oPC, 3679, FALSE); //psion path
+		else if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) >= 1) 
+			FeatAdd(oPC, 3680, FALSE); //psywar path
+	}
+	nLvl += nPsyLvl;
+	if (nLvl < 1) return;
+	
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	
+	// add path specific ability scores and feats, IF we haven't done so
+	if (nLvl == 2 && !GetLocalInt(oEss, "DragonAbilityScoreAdded")){
+		//set a flag on essence to show that this bit has been done
+		SetLocalInt(oEss, "DragonAbilityScoreAdded", TRUE);
+		if (GetHasFeat(3670, oPC)){ // melee path
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		}else if (GetHasFeat(3671, oPC)){ // rogue path	
+			FeatAdd(oPC, 1857, FALSE); // trapfinding
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		} else if (GetHasFeat(3672, oPC)){	// ranger path
+			FeatAdd(oPC, 2178, FALSE); // scent
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		} else if (GetHasFeat(3673, oPC)){ // sorc path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3674, oPC)){ // warlock path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3675, oPC)){ // fs path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3676, oPC)){ // knight path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3677, oPC)){ // bard path
+			FeatAdd(oPC, 423, FALSE); // extra music
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (GetHasFeat(3678, oPC)){ // wiz path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_INTELLIGENCE, 2);
+		} else if (GetHasFeat(3679, oPC)){ // psi path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_INTELLIGENCE, 2);
+		} else if (GetHasFeat(3680, oPC)){ // psy path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		} else if (GetHasFeat(3681, oPC)){ // cleric path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		} else if (GetHasFeat(3682, oPC)){ // shaman path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		} else if (GetHasFeat(3683, oPC)){ // druid path
+			FeatAdd(oPC, 7, FALSE); // combat casting
+			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
+		}
+	}
+}
+
+void AdjustAbilityScore(object oPC, int nAbility, int nAmount){
+
+int nScore = GetAbilityScore(oPC, nAbility, TRUE);
+nScore += nAmount;
+SetBaseAbilityScore(oPC, nAbility, nScore);
 }
 
 void SituationalAwareness(object oPC){
@@ -169,7 +241,6 @@ void SituationalAwareness(object oPC){
 			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
 	}
 }
-
 
 void ImprovedDefense(object oPC){
 
@@ -270,7 +341,11 @@ int fCalcSneakDice(object oPC)
 	// This is also controlled by a boolean
 	if (bIncludeLegacyBlackguard)
 		nSneakDice += (GetLevelByClass(idClassBlackguard, oPC) -1) / 3;
-
+		
+	// new dragon prc by flatted fifth
+	if (GetHasFeat(3671, oPC)) // rogue path for dragon prc
+		nSneakDice += (GetLevelByClass(129, oPC) / 2);
+	
 	// next half outsider
 	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE))
 		nSneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) /2;

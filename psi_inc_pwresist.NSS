@@ -9,7 +9,7 @@
 
    Calculates Power Resistance for Psionics and performs the checks.
 */
-#include "psi_inc_psifunc"
+#include "psi_inc_manifest"
 // Constants that dictate ResistPower results
 const int POWER_RESIST_FAIL = 1;
 const int POWER_RESIST_PASS = 0;

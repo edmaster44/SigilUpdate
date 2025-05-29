@@ -29,7 +29,6 @@
             by 1d6 points.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 //#include "spinc_common"

@@ -27,7 +27,6 @@ Metapsionics: None
 In manifesting this power, the psion is able to fix the time of their death to a specific point in the near future. By fixing the time of their own death, the laws of cause and effect, as well as those forces playing on time itself work against any attempt to bring the manifesters death about before its newly appointed time. This grants the psion a +8 bonus to their dodge AC, and immunity to death magic, level/ability drain, and critical hits for the duration of the power.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 //#include "prc_alterations"

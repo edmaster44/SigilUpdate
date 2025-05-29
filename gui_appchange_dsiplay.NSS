@@ -1,5 +1,7 @@
 //#include "nwnx_craft"
 //#include "nwnx_craft_system"
+
+// This is the GUI for setting alternate form for the first time
 #include "gui_appchange_inc"
 #include "aaa_changeself_inc"
 #include "ps_inc_functions"

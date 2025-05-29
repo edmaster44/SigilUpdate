@@ -26,7 +26,6 @@
              increases by 1.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 //#include "prc_alterations"

@@ -24,28 +24,24 @@
 
 void main()
 {
-    if (!X2PreSpellCastCode())
-    {   // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
+    if (!X2PreSpellCastCode()) return;
     
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-	// SendMessageToPC(oTarget, "TESTING BLESSING OF SPIRITS");
+	int nId = GetSpellId();
 
-    // Does not stack with itself or with Warding of the Spirits
-    if (!GetHasSpellEffect(SPELLABILITY_BLESSING_OF_THE_SPIRITS, oTarget) &&
-        !GetHasSpellEffect(SPELLABILITY_WARDING_OF_THE_SPIRITS, oTarget) )
-    {
-        effect eAC = EffectACIncrease(2, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
-        effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
+	effect eAC = EffectACIncrease(2, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
+	effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
+
+	effect eLink = EffectLinkEffects(eAC, eSave);
+	eLink = SupernaturalEffect(eLink);
+	eLink = SetEffectSpellId(eLink, nId);
+	PS_RemoveEffects(oTarget, nId);
+	PS_RemoveEffects(oTarget, 1101); // Warding of the Spirits non-persistent group effect
     
-        effect eLink = EffectLinkEffects(eAC, eSave);
-    
-        //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-    
-        //Apply the VFX impact and effects
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-    }
+	//Fire cast spell at event for the specified target
+	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
+
+	//Apply the effects
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 }

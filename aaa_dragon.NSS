@@ -1,9 +1,8 @@
 /* Feat created by Alersia
 All about dragons...  */
 
-#include "x2_inc_spellhook"
 #include "aaa_dragon_inc"
-#include "aaa_constants"
+
 
 void main()
 {
@@ -28,27 +27,33 @@ void main()
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2625 :		//Dragon Breath, Line, Electricity
-			PS_Dragon_Breath_Bronze(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Bronze(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2660 :		//Dragon Breath, Line, Force
-			PS_Dragon_Breath_Amethyst(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Amethyst(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2661 :		//Dragon Breath, Cone, Sonic (NEEDS 2da look)
-			PS_Dragon_Breath_Emerald(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Emerald(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2662 :		//Dragon Breath, Cone, Cold (Dehydrating) 
-			PS_Dragon_Breath_Topaz(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Topaz(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2664 :		//Dragon Breath, Cone, Cold  
-			PS_Dragon_Breath_White(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_White(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2626 :		//Dragon Breath, Cone, Gas
-			PS_Dragon_Breath_Bronze_Gas(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Bronze_Gas(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2627 :		//Dragon Size
@@ -88,23 +93,28 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2667 :		//Dragon Breath, Cone, Light (Radiant)
-			PS_Dragon_Breath_Radiant_Light(oPC, nSpell);
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Radiant_Light(oPC, nSpell);
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2631 :		//Dragon Breath,Line, Acid
-			PS_Dragon_Breath_Black(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Black(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2632 :		//Dragon Breath, Cone, Fire
-			PS_Dragon_Breath_Red(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Red(oPC, nSpell);						
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2633 :		//Dragon Breath, Cone, Negative
-			PS_Dragon_Breath_Shadow(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Shadow(oPC, nSpell);						
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2634 :		//Dragon Breath, Line, Electricity (Blue)
-			PS_Dragon_Breath_Bronze(oPC, nSpell);						
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Bronze(oPC, nSpell);						
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2635 :		//Shadow Dragon - Shadow Blend
@@ -140,11 +150,13 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2651 :		//Dragon Breath, Line, Acid (Copper)
-			PS_Dragon_Breath_Copper(oPC, nSpell);
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Copper(oPC, nSpell);
 		break;		
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2652 :		//Dragon Breath, Cone, Slow (Copper)
-			PS_Dragon_Breath_Copper_Gas(oPC, nSpell);
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Copper_Gas(oPC, nSpell);
 		break;
 ////////////////////////////////////////////////////////////////////////////////////
 		case 2653 :		//Dragon Immunity, Acid and Poison (Copper)
@@ -156,11 +168,13 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2655 :		//Dragon Breath, Cone, Spark (Iron)
-			PS_Dragon_Breath_Iron(oPC, nSpell);
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Iron(oPC, nSpell);
 		break;	
 ///////////////////////////////////////////////////////////////////////////////////
 		case 2656 :		//Dragon Breath, Cone, Sleep (Iron)
-			PS_Dragon_Breath_Iron_Gas(oPC, nSpell);
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Iron_Gas(oPC, nSpell);
 		break;										
 ////////////////////////////////////////////////////////////////////////////////////
 //																				  //

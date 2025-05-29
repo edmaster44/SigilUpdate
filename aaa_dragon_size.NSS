@@ -14,7 +14,7 @@ void PS_Dragon_Medium(object oPC)
 {
 	if(GetRacialType(oPC) == 11)  // Should only work for dragons ;)
 	{	
-		SendMessageToPC(oPC, "You are a dragon.");
+		//SendMessageToPC(oPC, "You are a dragon.");
 		effect eDragon 	= EffectNWN2SpecialEffectFile("fx_ritual_purification", oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
 
@@ -83,7 +83,7 @@ void PS_Dragon_Large(object oPC)
 {
 	if(GetRacialType(oPC) == 11)  // Should only work for dragons ;)
 	{	
-		SendMessageToPC(oPC, "You are a dragon.");
+		//SendMessageToPC(oPC, "You are a dragon.");
 		effect eDragon 	= EffectNWN2SpecialEffectFile("fx_ritual_purification", oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
 

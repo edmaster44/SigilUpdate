@@ -235,8 +235,19 @@ void PS_AltForm_Assume(object oPC)
 
 // Dragons assuming Alternate Form have their creature weapons unequipped when doing so.
 // This script should be used in conjunction with PS_AltForm_Assume or PS_ChangeForm_AppearanceType.
-void PS_HumForm_DragonUE(object oPC)
-{
+void PS_HumForm_DragonUE(object oPC){
+	// remove creature weapons from dragons assuming human form UNLESS they are psywars
+	// with feral path
+	if (GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)) return;
+	
+	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	
+	if (IPGetIsCreatureEquippedWeapon(oLHAND))
+		AssignCommand(oPC, ActionUnequipItem(oLHAND));
+	if (IPGetIsCreatureEquippedWeapon(oRHAND))
+		AssignCommand(oPC, ActionUnequipItem(oRHAND));
+
 	/*object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	object oWpn7 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	int iType6 = GetBaseItemType(oWpn6);
@@ -256,7 +267,7 @@ void PS_HumForm_DragonUE(object oPC)
 				SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form");
 			}
 		}
-	}*/
+	}
 
 	// removes multiattack from "claw" dragons when assuming humanoid form.
 	int iDragon = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC);
@@ -264,14 +275,22 @@ void PS_HumForm_DragonUE(object oPC)
 	if (GetHasFeat(3649, oPC, FALSE))
 	{	
 		FeatRemove(oPC, 1784);
-	}
+	}*/
 	
 }
 
 // Dragons assuming their natural Dragon form have any melee weapons unequipped when doing so.
 // This script should be used in conjunction with PS_RestoreOriginalAppearance.
-void PS_DragForm_DragonUE(object oPC)
-{
+void PS_DragForm_DragonUE(object oPC){
+
+	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	// remove non-creature weapons
+	if (!IPGetIsCreatureEquippedWeapon(oLHAND))
+		AssignCommand(oPC, ActionUnequipItem(oLHAND));
+	if (!IPGetIsCreatureEquippedWeapon(oRHAND))
+		AssignCommand(oPC, ActionUnequipItem(oRHAND));	
+	/*
 	object oWpn6 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	object oWpn7 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
 	int iType6 = GetBaseItemType(oWpn6);
@@ -299,5 +318,5 @@ void PS_DragForm_DragonUE(object oPC)
 	if (GetHasFeat(3649, oPC, FALSE) && iDragon >= 6)
 	{	
 		FeatAdd(oPC, 1784, 0, 1, 1);
-	}	
+	}	*/
 }

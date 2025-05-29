@@ -5,9 +5,13 @@
 
 const int cSaveWait = 300;
 const int ASSS_FX 	= -5894;
+const int bSHOW_REST_STAGE_DEBUG_MESSAGES = FALSE;
 
-//debug function
+//debug function used in May 2025 by Flatted Fifth to diagnose at what stage
+// of rest the TempChange local variable was being altered
 void IncrementalDebug(object oPC, string sStage){
+
+	if (!bSHOW_REST_STAGE_DEBUG_MESSAGES) return;
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
 	int nTempChange = GetLocalInt(oESSENCE, "TempChange");
 	

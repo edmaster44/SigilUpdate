@@ -27,7 +27,6 @@
     Otherwise, the target will die from the brain damage.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 #include "psi_inc_teleport"

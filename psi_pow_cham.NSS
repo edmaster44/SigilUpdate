@@ -23,7 +23,6 @@
     including floors and walls. You receive a +10 enhancement bonus on Hide checks.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 

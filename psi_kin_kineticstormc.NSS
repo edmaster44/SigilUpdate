@@ -16,7 +16,6 @@
 //:: RPGplayer1 08/29/2008: Will ignore SR check, in case of Acid Bomb (won't work otherwise)
 
 #include "X0_I0_SPELLS"
-#include "psi_inc_psifunc"
 #include "psi_inc_manifest"
 #include "psi_inc_metapsi"
 #include "psi_inc_fillin"

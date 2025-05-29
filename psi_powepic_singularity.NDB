@@ -1,5 +1,5 @@
 NDB V1.0
-0000057 0000017 0005942 0000209 0000641
+0000057 0000017 0005924 0000209 0000641
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -50,10 +50,10 @@ n46 ginc_vars
 n47 ginc_math
 n48 ginc_item
 n49 x2_inc_spellhook
-n50 psi_inc_fillin
-n51 nwn2_inc_spells
-n52 psi_inc_manifest
-n53 psi_inc_psifunc
+n50 nwn2_inc_spells
+n51 psi_inc_fillin
+n52 psi_inc_psifunc
+n53 psi_inc_manifest
 n54 psi_inc_pwresist
 n55 psi_spellhook
 N56 psi_powepic_singularity
@@ -2107,8 +2107,9 @@ fp o
 fp i
 f ffffffff ffffffff 001 i GetFeatGrantedCasterLevel
 fp o
-f ffffffff ffffffff 001 i GetPsionicCasterLevel
+f ffffffff ffffffff 002 i GetPsionicCasterLevel
 fp o
+fp i
 f ffffffff ffffffff 002 i GetRealCasterLevel
 fp o
 fp i
@@ -5552,66 +5553,146 @@ f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
 fp o
 f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
 f 0000042b 000007c6 000 i X2PreSpellCastCode
-f ffffffff ffffffff 000 s PRC_WILD_SURGE
-f ffffffff ffffffff 000 s PRC_OVERCHANNEL
-f ffffffff ffffffff 001 i GetManifestingClass
-fp o
-f ffffffff ffffffff 002 i GetManifesterLevel
-fp o
-fp i
-f ffffffff ffffffff 001 i GetHighestManifesterLevel
-fp o
-f ffffffff ffffffff 001 i GetPowerLevel
-fp o
-f ffffffff ffffffff 002 i GetAbilityScoreOfClass
-fp o
-fp i
-f ffffffff ffffffff 001 i GetAbilityOfClass
-fp i
-f ffffffff ffffffff 001 i GetManifesterDC
-fp o
-f ffffffff ffffffff 001 i DisciplineToSpellSchool
-fp i
-f ffffffff ffffffff 001 i SpellSchoolToDiscipline
-fp i
-f ffffffff ffffffff 001 i GetPowerDiscipline
-fp i
-f ffffffff ffffffff 001 i GetIsTelepathyPower
-fp i
-f ffffffff ffffffff 002 i CheckPowerPrereqs
+f ffffffff ffffffff 000 i STR_REF_FEEDBACK_SPELL_FAILED
+f ffffffff ffffffff 000 i STR_REF_FEEDBACK_SPELL_INVALID_TARGET
+f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS
+f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_BARDSONG_ATTEMPTS
+f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_FEAT_USES
+f ffffffff ffffffff 000 f METEOR_SWARM_SPELL_DURATION
+f ffffffff ffffffff 000 s RESREF_DEFAULT_WAYPOINT
+f ffffffff ffffffff 002 s GenerateUniqueSpellDCString
 fp i
 fp o
-f ffffffff ffffffff 001 i GetPsiPenetration
-fp o
-f ffffffff ffffffff 001 i GetIsPsionicCharacter
-fp o
-f ffffffff ffffffff 001 i GetPsionicPRCLevels
-fp o
-f ffffffff ffffffff 001 i GetIsPsionicClass
+f ffffffff ffffffff 004 v SaveDelayedSpellInfo
 fp i
-f ffffffff ffffffff 001 i GetFirstPsionicClass
 fp o
-f ffffffff ffffffff 001 i GetFirstPsionicClassPosition
 fp o
-f ffffffff ffffffff 004 o CreatePsionicCreatureWeapon
+fp i
+f ffffffff ffffffff 003 v RemoveDelayedSpellInfo
+fp i
 fp o
-fp s
+fp o
+f ffffffff ffffffff 003 i GetDelayedSpellInfoSaveDC
+fp i
+fp o
+fp o
+f ffffffff ffffffff 004 v RemoveSpellEffectsFromCaster
+fp i
+fp o
+fp o
+fp i
+f ffffffff ffffffff 001 i HasSizeIncreasingSpellEffect
+fp o
+f ffffffff ffffffff 003 i IsTargetValidForDelayedSpellEffect
+fp i
+fp o
+fp o
+f ffffffff ffffffff 003 i ClampInt
+fp i
+fp i
+fp i
+f ffffffff ffffffff 003 f ClampFloat
+fp f
+fp f
+fp f
+f ffffffff ffffffff 001 v RemovePermanencySpells
+fp o
+f ffffffff ffffffff 001 v DevourDispelCallback
+fp o
+f ffffffff ffffffff 002 v VoraciousDispelCallback
+fp o
+fp o
+f ffffffff ffffffff 000 v NullDispelCallback
+f ffffffff ffffffff 001 v PilferMagicCallback
+fp o
+f ffffffff ffffffff 007 v DispelMagicWithCallback
+fp o
+fp o
+fp i
+fp e0
+fp e0
+fp i
+fp i
+f ffffffff ffffffff 001 i GetCanBardSing
+fp o
+f ffffffff ffffffff 001 i GetIsObjectValidSongTarget
+fp o
+f ffffffff ffffffff 002 i ApplySongDurationFeatMods
+fp i
+fp o
+f ffffffff ffffffff 003 i GetHasMatchingEffect
+fp i
+fp i
+fp o
+f ffffffff ffffffff 002 i FindEffectSpellId
+fp i
+fp o
+f ffffffff ffffffff 002 v RemoveBardSongSingingEffect
+fp o
+fp i
+f ffffffff ffffffff 002 i AttemptNewSong
+fp o
+fp i
+f ffffffff ffffffff 005 v ApplyFriendlySongEffectsToArea
+fp o
 fp i
 fp f
-f ffffffff ffffffff 007 v DoPsiMissileStorm
-fp i
-fp i
-fp i
-fp i
-fp i
-fp i
-fp i
-f ffffffff ffffffff 001 i GetWildSurge
-fp o
-f ffffffff ffffffff 005 i GetTargetSpecificChangesToDamage
-fp o
+fp f
+fp e0
+f ffffffff ffffffff 004 v ApplyFriendlySongEffectsToParty
 fp o
 fp i
+fp f
+fp e0
+f ffffffff ffffffff 004 v ApplyFriendlySongEffectsToTarget
+fp o
+fp i
+fp f
+fp e0
+f ffffffff ffffffff 007 v ApplyHostileSongEffectsToArea
+fp o
+fp i
+fp f
+fp f
+fp e0
+fp i
+fp i
+f ffffffff ffffffff 002 v ExecuteDefaultMeteorSwarmBehavior
+fp o
+fp e2
+f ffffffff ffffffff 001 i GetNumMeteorSwarmProjectilesToSpawnA
+fp e2
+f ffffffff ffffffff 001 i GetNumMeteorSwarmProjectilesToSpawnB
+fp e2
+f ffffffff ffffffff 000 e0 EffectFatigue
+f ffffffff ffffffff 000 e0 EffectExhausted
+f ffffffff ffffffff 000 e0 EffectSickened
+f ffffffff ffffffff 003 v ApplyFatigue
+fp o
+fp i
+fp f
+f ffffffff ffffffff 005 v HealHarmTarget
+fp o
+fp i
+fp i
+fp i
+fp i
+f ffffffff ffffffff 005 i HealHarmObject
+fp o
+fp e0
+fp e0
+fp i
+fp i
+f ffffffff ffffffff 005 i HealHarmFaction
+fp i
+fp e0
+fp e0
+fp i
+fp i
+f ffffffff ffffffff 005 i HealHarmNearby
+fp i
+fp e0
+fp e0
 fp i
 fp i
 f ffffffff ffffffff 000 i POWER_BOLT
@@ -5871,203 +5952,6 @@ f ffffffff ffffffff 002 i max
 fp i
 fp i
 f ffffffff ffffffff 002 i min
-fp i
-fp i
-f ffffffff ffffffff 000 i METAPSIONIC_NONE
-f ffffffff ffffffff 000 i METAPSIONIC_CHAIN
-f ffffffff ffffffff 000 i METAPSIONIC_EMPOWER
-f ffffffff ffffffff 000 i METAPSIONIC_EXTEND
-f ffffffff ffffffff 000 i METAPSIONIC_MAXIMIZE
-f ffffffff ffffffff 000 i METAPSIONIC_SPLIT
-f ffffffff ffffffff 000 i METAPSIONIC_TWIN
-f ffffffff ffffffff 000 i METAPSIONIC_WIDEN
-f ffffffff ffffffff 000 i METAPSIONIC_QUICKEN
-f ffffffff ffffffff 000 i METAPSIONIC_AUGMENT
-f ffffffff ffffffff 000 i METAPSIONIC_CHAIN_COST
-f ffffffff ffffffff 000 i METAPSIONIC_EMPOWER_COST
-f ffffffff ffffffff 000 i METAPSIONIC_EXTEND_COST
-f ffffffff ffffffff 000 i METAPSIONIC_MAXIMIZE_COST
-f ffffffff ffffffff 000 i METAPSIONIC_SPLIT_COST
-f ffffffff ffffffff 000 i METAPSIONIC_TWIN_COST
-f ffffffff ffffffff 000 i METAPSIONIC_WIDEN_COST
-f ffffffff ffffffff 000 i METAPSIONIC_QUICKEN_COST
-f ffffffff ffffffff 000 i METAPSIONIC_MIN
-f ffffffff ffffffff 000 i METAPSIONIC_MAX
-f ffffffff ffffffff 000 s METAPSIONIC_CHAIN_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_EMPOWER_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_EXTEND_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_MAXIMIZE_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_SPLIT_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_TWIN_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_WIDEN_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_QUICKEN_VAR
-f ffffffff ffffffff 000 s METAPSIONIC_AUGMENT_VAR
-f ffffffff ffffffff 003 i _GetMetaPsiPPCost
-fp i
-fp i
-fp i
-f ffffffff ffffffff 007 i MetaPsionicsDamage
-fp t0016
-fp i
-fp i
-fp i
-fp i
-fp i
-fp i
-f ffffffff ffffffff 002 t0016 EvaluateMetapsionicsNew
-fp t0016
-fp i
-f ffffffff ffffffff 000 i STR_REF_FEEDBACK_SPELL_FAILED
-f ffffffff ffffffff 000 i STR_REF_FEEDBACK_SPELL_INVALID_TARGET
-f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS
-f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_BARDSONG_ATTEMPTS
-f ffffffff ffffffff 000 i STR_REF_FEEDBACK_NO_MORE_FEAT_USES
-f ffffffff ffffffff 000 f METEOR_SWARM_SPELL_DURATION
-f ffffffff ffffffff 000 s RESREF_DEFAULT_WAYPOINT
-f ffffffff ffffffff 002 s GenerateUniqueSpellDCString
-fp i
-fp o
-f ffffffff ffffffff 004 v SaveDelayedSpellInfo
-fp i
-fp o
-fp o
-fp i
-f ffffffff ffffffff 003 v RemoveDelayedSpellInfo
-fp i
-fp o
-fp o
-f ffffffff ffffffff 003 i GetDelayedSpellInfoSaveDC
-fp i
-fp o
-fp o
-f ffffffff ffffffff 004 v RemoveSpellEffectsFromCaster
-fp i
-fp o
-fp o
-fp i
-f ffffffff ffffffff 001 i HasSizeIncreasingSpellEffect
-fp o
-f ffffffff ffffffff 003 i IsTargetValidForDelayedSpellEffect
-fp i
-fp o
-fp o
-f ffffffff ffffffff 003 i ClampInt
-fp i
-fp i
-fp i
-f ffffffff ffffffff 003 f ClampFloat
-fp f
-fp f
-fp f
-f ffffffff ffffffff 001 v RemovePermanencySpells
-fp o
-f ffffffff ffffffff 001 v DevourDispelCallback
-fp o
-f ffffffff ffffffff 002 v VoraciousDispelCallback
-fp o
-fp o
-f ffffffff ffffffff 000 v NullDispelCallback
-f ffffffff ffffffff 001 v PilferMagicCallback
-fp o
-f ffffffff ffffffff 007 v DispelMagicWithCallback
-fp o
-fp o
-fp i
-fp e0
-fp e0
-fp i
-fp i
-f ffffffff ffffffff 001 i GetCanBardSing
-fp o
-f ffffffff ffffffff 001 i GetIsObjectValidSongTarget
-fp o
-f ffffffff ffffffff 002 i ApplySongDurationFeatMods
-fp i
-fp o
-f ffffffff ffffffff 003 i GetHasMatchingEffect
-fp i
-fp i
-fp o
-f ffffffff ffffffff 002 i FindEffectSpellId
-fp i
-fp o
-f ffffffff ffffffff 002 v RemoveBardSongSingingEffect
-fp o
-fp i
-f ffffffff ffffffff 002 i AttemptNewSong
-fp o
-fp i
-f ffffffff ffffffff 005 v ApplyFriendlySongEffectsToArea
-fp o
-fp i
-fp f
-fp f
-fp e0
-f ffffffff ffffffff 004 v ApplyFriendlySongEffectsToParty
-fp o
-fp i
-fp f
-fp e0
-f ffffffff ffffffff 004 v ApplyFriendlySongEffectsToTarget
-fp o
-fp i
-fp f
-fp e0
-f ffffffff ffffffff 007 v ApplyHostileSongEffectsToArea
-fp o
-fp i
-fp f
-fp f
-fp e0
-fp i
-fp i
-f ffffffff ffffffff 002 v ExecuteDefaultMeteorSwarmBehavior
-fp o
-fp e2
-f ffffffff ffffffff 001 i GetNumMeteorSwarmProjectilesToSpawnA
-fp e2
-f ffffffff ffffffff 001 i GetNumMeteorSwarmProjectilesToSpawnB
-fp e2
-f ffffffff ffffffff 000 e0 EffectFatigue
-f ffffffff ffffffff 000 e0 EffectExhausted
-f ffffffff ffffffff 000 e0 EffectSickened
-f ffffffff ffffffff 003 v ApplyFatigue
-fp o
-fp i
-fp f
-f ffffffff ffffffff 005 v HealHarmTarget
-fp o
-fp i
-fp i
-fp i
-fp i
-f ffffffff ffffffff 005 i HealHarmObject
-fp o
-fp e0
-fp e0
-fp i
-fp i
-f ffffffff ffffffff 005 i HealHarmFaction
-fp i
-fp e0
-fp e0
-fp i
-fp i
-f ffffffff ffffffff 005 i HealHarmNearby
-fp i
-fp e0
-fp e0
-fp i
-fp i
-f ffffffff ffffffff 001 i PS_PsionicClasses
-fp o
-f ffffffff ffffffff 001 i nPsion
-fp o
-f ffffffff ffffffff 001 i nPsywar
-fp o
-f ffffffff ffffffff 004 t0016 EvaluateManifestationNew
-fp o
-fp o
 fp i
 fp i
 f ffffffff ffffffff 000 i FEAT_JUMP
@@ -8674,13 +8558,88 @@ f ffffffff ffffffff 000 i FEAT_SS_DF_WF_SS
 f ffffffff ffffffff 000 i FEAT_SS_DF_WF_SH
 f ffffffff ffffffff 000 i FEAT_SS_DF_WF_SD
 f ffffffff ffffffff 000 i FEAT_SS_DF_WF_TC
-f ffffffff ffffffff 001 v LocalCleanExtraFists
-fp o
-f ffffffff ffffffff 004 o GetPsionicCreatureWeapon
-fp o
-fp s
+f ffffffff ffffffff 000 i METAPSIONIC_NONE
+f ffffffff ffffffff 000 i METAPSIONIC_CHAIN
+f ffffffff ffffffff 000 i METAPSIONIC_EMPOWER
+f ffffffff ffffffff 000 i METAPSIONIC_EXTEND
+f ffffffff ffffffff 000 i METAPSIONIC_MAXIMIZE
+f ffffffff ffffffff 000 i METAPSIONIC_SPLIT
+f ffffffff ffffffff 000 i METAPSIONIC_TWIN
+f ffffffff ffffffff 000 i METAPSIONIC_WIDEN
+f ffffffff ffffffff 000 i METAPSIONIC_QUICKEN
+f ffffffff ffffffff 000 i METAPSIONIC_AUGMENT
+f ffffffff ffffffff 000 i METAPSIONIC_CHAIN_COST
+f ffffffff ffffffff 000 i METAPSIONIC_EMPOWER_COST
+f ffffffff ffffffff 000 i METAPSIONIC_EXTEND_COST
+f ffffffff ffffffff 000 i METAPSIONIC_MAXIMIZE_COST
+f ffffffff ffffffff 000 i METAPSIONIC_SPLIT_COST
+f ffffffff ffffffff 000 i METAPSIONIC_TWIN_COST
+f ffffffff ffffffff 000 i METAPSIONIC_WIDEN_COST
+f ffffffff ffffffff 000 i METAPSIONIC_QUICKEN_COST
+f ffffffff ffffffff 000 i METAPSIONIC_MIN
+f ffffffff ffffffff 000 i METAPSIONIC_MAX
+f ffffffff ffffffff 000 s METAPSIONIC_CHAIN_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_EMPOWER_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_EXTEND_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_MAXIMIZE_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_SPLIT_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_TWIN_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_WIDEN_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_QUICKEN_VAR
+f ffffffff ffffffff 000 s METAPSIONIC_AUGMENT_VAR
+f ffffffff ffffffff 003 i _GetMetaPsiPPCost
 fp i
-fp f
+fp i
+fp i
+f ffffffff ffffffff 007 i MetaPsionicsDamage
+fp t0016
+fp i
+fp i
+fp i
+fp i
+fp i
+fp i
+f ffffffff ffffffff 002 t0016 EvaluateMetapsionicsNew
+fp t0016
+fp i
+f ffffffff ffffffff 001 i GetManifestingClass
+fp o
+f ffffffff ffffffff 002 i GetManifesterLevel
+fp o
+fp i
+f ffffffff ffffffff 001 i GetPowerLevel
+fp o
+f ffffffff ffffffff 001 i GetAbilityOfClass
+fp i
+f ffffffff ffffffff 001 i GetManifesterDC
+fp o
+f ffffffff ffffffff 001 i GetPowerDiscipline
+fp i
+f ffffffff ffffffff 001 i GetPsiPenetration
+fp o
+f ffffffff ffffffff 007 v DoPsiMissileStorm
+fp i
+fp i
+fp i
+fp i
+fp i
+fp i
+fp i
+f ffffffff ffffffff 005 i GetTargetSpecificChangesToDamage
+fp o
+fp o
+fp i
+fp i
+fp i
+f ffffffff ffffffff 001 i nPsion
+fp o
+f ffffffff ffffffff 001 i nPsywar
+fp o
+f ffffffff ffffffff 004 t0016 EvaluateManifestationNew
+fp o
+fp o
+fp i
+fp i
 f ffffffff ffffffff 000 i POWER_RESIST_FAIL
 f ffffffff ffffffff 000 i POWER_RESIST_PASS
 f ffffffff ffffffff 002 i PRCResistPower

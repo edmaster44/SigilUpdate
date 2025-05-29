@@ -35,7 +35,7 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
 	SetLocalString(oItem, "Template", "Lycan");
-	SetLocalInt(oItem, "Lycan_Afflication", 1);
+	SetLocalInt(oItem, "Lycan_Affliction", 1);  
 }
 
 
@@ -143,21 +143,23 @@ void PS_Lycan_ScaledWeapons(object oPC)
 	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponB, oPC));	}
 }
 
-// Helper feat for adding multiattack in animal form
-void PS_Lycan_Multiattack(object oPC)
-{
+// Helper feat for adding and removing multiattack in animal/hybrid form
+void PS_Lycan_Multiattack(object oPC, int bHasMultiattack = FALSE){
+	/*
 	itemproperty ipMA	= ItemPropertyBonusFeat(1315);
 	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	
 	IPSafeAddItemProperty(oSkin, ipMA, HoursToSeconds(24));
+	*/
+	if (bHasMultiattack) FeatAdd(oPC, 4000, FALSE);
+	else FeatRemove(oPC, 4000);
+
+	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	NaturalMultiattack(oPC, oRHAND, oLHAND);
 }
 
-// Helper feat for removing multiattack
-void PS_Lycan_Multiattack_No(object oPC)
-{
-	if (GetHasFeat(1784, oPC))
-	{	FeatRemove(oPC, 1784);	}
-}
+
 
 void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 {
@@ -195,7 +197,7 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 	PS_RefreshAppearance(oPC);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	PS_Wererat_AnimalSneakApply(oPC);
-	PS_Lycan_Multiattack(oPC);
+	PS_Lycan_Multiattack(oPC, TRUE);
 	PS_Lycan_ScaledWeapons(oPC);
 	
 }
@@ -270,7 +272,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		SetLocalInt(oItem, "Hybrid", 0);
 		SetLocalInt(oItem, "TempChange", 0);
 		PS_Wererat_SneakRemove(oPC);
-		PS_Lycan_Multiattack_No(oPC);
+		PS_Lycan_Multiattack(oPC, FALSE);
 		//FeatRemove(oPC, 289);
 	}
 	else 

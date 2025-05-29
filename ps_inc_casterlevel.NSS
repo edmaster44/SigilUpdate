@@ -1,4 +1,4 @@
-
+#include "aaa_constants"
 
 
 
@@ -57,36 +57,28 @@ int GetFeatGrantedCasterLevel(object oPC) {
 }
 
 //Pulled out of the manifestation struct for using more generically
-int GetPsionicCasterLevel(object oPC) {
-	int nPsionLevel = GetLevelByClass(90, oPC);
-	int nIllithidMentalistLevel = GetLevelByClass(100,oPC);
-	int nGemDragonLevel = GetLevelByClass(128, oPC);
-	int nCerebremancerLevel = GetLevelByClass(152, oPC);
-	int nPsyKnightLevel = GetLevelByClass(109, oPC);
-	int nPsyWarriorLevel = GetLevelByClass(110, oPC);
-	int nWarmindLevel = GetLevelByClass(111, oPC);
+int GetPsionicCasterLevel(object oPC, int nSpecific = CLASS_TYPE_INVALID) {
+	int nPsionLevel = GetLevelByClass(90, oPC); // psion
+	int nPsychicLevel = GetLevelByClass(110, oPC); // psychic warrior
+	if (nPsionLevel + nPsychicLevel == 0) return 0;
 	
-	return nPsionLevel + nIllithidMentalistLevel + nGemDragonLevel + nCerebremancerLevel + 
-		nPsyKnightLevel + nPsyWarriorLevel + nWarmindLevel;
-
-	/*
-	We don't need to make 2 function calls for each class, and there were some missing.
-	- FlattedFifth, June 3, 2024
-	int nManifesterLevel = GetLevelByClass(90, oPC);
-	if(GetLevelByClass(100, oPC) > 0)
-    {
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(100, oPC);
-    }
-	if(GetLevelByClass(152, oPC) > 0)
-	{
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(152, oPC);
-    }
-	if(GetLevelByClass(128, oPC) > 0)
-	{
-        nManifesterLevel = nManifesterLevel + GetLevelByClass(128, oPC);
-    }
-	return nManifesterLevel;
-	*/
+	nPsionLevel += GetLevelByClass(109, oPC); // psychic knight
+	nPsionLevel += GetLevelByClass(100,oPC); // illithid mentalist
+	nPsionLevel += GetLevelByClass(115, oPC); // psychic theurge
+	nPsionLevel += GetLevelByClass(152, oPC); // cerebremancer
+	
+	nPsychicLevel += GetLevelByClass(111, oPC); // warmind
+	
+	int nDragon = GetLevelByClass(128, oPC); // old gem dragon
+	if (GetHasFeat(3679, oPC) || GetHasFeat(3680, oPC)){ // new telepath dragon rprc psi/psy paths
+		int nNewDragon = GetLevelByClass(130, oPC) - 2;
+		if (nNewDragon > 0) nDragon += nNewDragon;
+	}
+	
+	if (nSpecific == CLASS_TYPE_PSION) return nPsionLevel + nDragon;
+	else if (nSpecific == CLASS_PSYCHIC_WARRIOR) return nPsychicLevel + nDragon;
+	
+	return nPsionLevel + nPsychicLevel + nDragon;
 }
 
 //Gets the PC's caster level, via 2da and feats

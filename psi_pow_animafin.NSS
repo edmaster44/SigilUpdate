@@ -32,7 +32,6 @@
     increase for the duration of this power.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 //#include "inc_dynconv"

@@ -9,7 +9,7 @@ July 3, 2024 FlattedFifth
  */ 
 #include "ps_inc_functions"
 #include "ps_class_inc"
-#include "aaa_constants"
+//#include "aaa_constants" redundant include
 #include "gui_add_psywarfeat"
 #include "gui_add_halfundeadfeat"
 #include "ps_inc_wingtail"
@@ -56,14 +56,17 @@ void UpgradeCreatureWeapons(object oPC)
 //Progression for Psionic classes.
 void DoPsiProgression(object oPC)
 {
-	int nPsion = GetLevelByClass(90, oPC);
-	if (nPsion < 1) return;
-	int nIlMentalist = GetLevelByClass(100, oPC) - 1;
-	int nCerebremancer = GetLevelByClass(152, oPC);
-	int nPknight	   = GetLevelByClass(109, oPC) - 1;
-	int nTheruge 	   = GetLevelByClass(115,oPC);
-	int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1;
-	int nLEVEL = nPsion + nIlMentalist + nCerebremancer + nGemDragon + nPknight + nTheruge;
+	int nLEVEL = GetLevelByClass(90, oPC);
+	if (nLEVEL < 1) return;
+	nLEVEL += GetLevelByClass(100, oPC) - 1; // illithid mentalist
+	nLEVEL += GetLevelByClass(152, oPC);   // cerebremancer
+	nLEVEL += GetLevelByClass(109, oPC) - 1; // psychic knight
+	nLEVEL += GetLevelByClass(115,oPC); // theurge
+	nLEVEL += GetLevelByClass(128, oPC) / 2 + 1; // old gem dragon
+	if (GetHasFeat(3679, oPC, TRUE)){//new dragon prc psion path
+		int nDragon = (GetLevelByClass(130, oPC) - 2);
+		if (nDragon > 0) nLEVEL += nDragon;
+	}
 	
 	if (nLEVEL > 16)
 	{
@@ -137,7 +140,11 @@ void CheckBardicSongs(object oPC)
 	else if ((GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0) && GetHasFeat(FEAT_ARTIST, oPC)) //Artist Feat
 	{
 		nSONG = TRUE;		
-	}	
+	}
+	else if (GetLevelByClass(129, oPC) > 2 && GetHasFeat(3677, oPC)){// new dragon rprc w/ bard path
+		nSONG = TRUE;
+		nMUSIC = TRUE;	
+	}
 	
 	if (nSONG == TRUE) StackBardicUses(oPC);
 	if (nMUSIC == TRUE) StackBardMusicUses(oPC);
@@ -152,12 +159,14 @@ void GiveEvilClericFeats (object oPC)
 	if (GetHasFeat(2458, oPC, TRUE) == FALSE) FeatAdd(oPC, 2458, FALSE, TRUE, TRUE);
 }
 
+// redundant
 //If Dragon + Class 5 add Multiattack
 //Change Self Feats for level 6+ of Dragon and Dragon Psion.
+/*
 void GiveDragonFeats(object oPC)
 {	
 	int nDRAGON = (GetLevelByClass(127, oPC));
-	if (GetHasFeat(3649, oPC, TRUE) && nDRAGON >= 5)  
+	if (GetHasFeat(4000, oPC, TRUE))  
 	{	
 		if (GetHasFeat(1784, oPC, TRUE) == FALSE) FeatAdd(oPC, 1784, FALSE, TRUE, TRUE);
 	}
@@ -172,6 +181,7 @@ void GiveDragonFeats(object oPC)
 		if (nSUB == 239) FeatAdd(oPC, 2797, FALSE, TRUE, TRUE); //Topaz Dragon Psion PrC
 	}
 }
+*/
 
 void GiveWarlockBlastShapes(object oPC) {
 
@@ -270,7 +280,7 @@ void main()
 	// redundant, ff_update_feats does this
 //	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
-	GiveDragonFeats(oPC);
+//	GiveDragonFeats(oPC); redundant now
 	KnightLevels(oPC);
 	// redundant, ff_update_feats does all of this
 //	PS_AdjustSneakAttack(oPC);

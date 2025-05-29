@@ -1,15 +1,16 @@
-			
-#include "x2_inc_spellhook"
-#include "aaa_constants"
-#include "X0_I0_SPELLS"
-#include "nw_i0_spells"
-#include "ps_inc_functions"
+
 #include "x2_inc_itemprop"
 #include "nwn2_inc_spells"
-#include "ps_inc_advscript"
 #include "ginc_item"
 #include "ps_inc_wingtail"
 #include "aaa_dragon_inc"
+//redundant include, already included in ps_inc_functions and/or aaa_dragon_inc
+//#include "aaa_constants" 
+//#include "ps_inc_advscript"	
+//#include "x2_inc_spellhook"
+//#include "X0_I0_SPELLS"
+//#include "nw_i0_spells"
+//#include "ps_inc_functions"
 
 void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
 void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, float fDuration);
@@ -190,20 +191,24 @@ void PS_Ability_TrollRegeneration(object oPC, int nSpell)
 
 void PS_Ability_BaatezuBlindsight(object oPC, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {	return;	}
-	if (!GetHasSpellEffect(nSpell, oPC))
-	{	object oTarget = oPC;
-    	effect eVis = EffectVisualEffect( VFX_DUR_SPELL_BLINDSIGHT );
-    	effect eSightInvis = EffectSeeInvisible();
-    	effect eSightDark = EffectUltravision();
-    	effect eLink = EffectLinkEffects(eVis, eSightInvis);
-    		eLink = EffectLinkEffects(eLink, eSightDark);
-			eLink = ExtraordinaryEffect(eLink);
-    	SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_BLINDSIGHT, FALSE));
-    	float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
-		//RemovePermanencySpells(oTarget);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, fDuration);	}
+    if (!X2PreSpellCastCode())return;	
+	
+	//effect eVis = EffectVisualEffect( VFX_DUR_SPELL_BLINDSIGHT );
+	effect eSightInvis = EffectSeeInvisible();
+	//effect eSightDark = EffectUltravision(); ultravision is biobugged. It does nothing
+	//effect eLink = EffectLinkEffects(eVis, eSightInvis);
+	//effect eLink = EffectLinkEffects(eSightInvis, eSightDark);
+	//eLink = SupernaturalEffect(eLink);
+	//eLink = SetEffectSpellId(eLink, nSpell);
+	eSightInvis = SupernaturalEffect(eSightInvis);
+	eSightInvis = SetEffectSpellId(eSightInvis, nSpell);
+	PS_RemoveEffects(oPC, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSightInvis, oPC);
+	// It's permanent AND has a duration? 
+	//SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_BLINDSIGHT, FALSE));
+	//float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
+	//RemovePermanencySpells(oTarget);
+	//ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, fDuration);	
 }
 
 void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
@@ -462,12 +467,31 @@ void PS_Ability_UnholyApothesis(object oPC)
 }
 
 
-void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell) //also to be tweaked
-{
+void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
+	
+	/* original code that launches dialog
 	if (!X2PreSpellCastCode())
     {	return;	}
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_mq_altform", TRUE, FALSE));
-	
+	*/
+
+	// new code that acts as a toggle
+	object oEss	= GetItemPossessedBy(oPC, "ps_essence");
+	ClearScriptParams();
+	if (!GetLocalInt(oEss, "AltFormSet")){
+		AddScriptParameterInt(2);
+		ExecuteScriptEnhanced("gui_appchange_dsiplay", oPC, FALSE);
+	} else {
+		if (GetLocalInt(oEss, "TempChange")) AddScriptParameterInt(0);
+		else AddScriptParameterInt(15);
+		AddScriptParameterInt(0);
+		AddScriptParameterString("");
+		AddScriptParameterFloat(0.0f);
+		AddScriptParameterFloat(0.0f);
+		AddScriptParameterFloat(0.0f);
+		ExecuteScriptEnhanced("ga_aaa_changeself", oPC, FALSE);
+	}
+	ClearScriptParams();
 	//reset dragon ac
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
 		PS_ShieldArmor_Dragon(oPC, 2623);

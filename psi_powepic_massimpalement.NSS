@@ -14,7 +14,7 @@
 
 // JLR - OEI 08/23/05 -- Metamagic changes
 #include "nwn2_inc_spells"
-#include "psi_inc_psifunc"
+#include "psi_inc_manifest"
 #include "psi_inc_pwresist"
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 

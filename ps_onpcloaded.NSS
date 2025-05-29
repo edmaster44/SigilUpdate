@@ -31,6 +31,53 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
+//notify players of shared routers, called from function below this one, LookForSharedRouters() 
+void NotifySharedRouters(string sFlaggedIp){
+    string sThisIp;
+    string sMessage = "<c=red>You are sharing a router with another player.";
+    sMessage += "\nEveryone's client port needs to be unique in order to avoid serious bugs";
+	sMessage += "\nDefault port is 5120, change 2nd computer to 5121 and third to 5122.";
+	sMessage += "\nDo this in your (your documents folder)/Neverwinter Nights 2/nwn2player.ini file";
+    sMessage += "\nSee 'https://nwn2planescape.com/viewtopic.php?t=39'";
+    sMessage += "\nor contact admin staff on discord.</c>";
+
+    //cycle through logged in players
+    object oPC = GetFirstPC();
+    while (GetIsObjectValid(oPC)){
+        sThisIp = GetPCIPAddress(oPC); //get ip address of player
+        if (sThisIp != "" && sThisIp == sFlaggedIp)
+            SendMessageToPC(oPC, sMessage);  // display warning
+        oPC = GetNextPC();
+    }
+}
+
+//look for players who have the same IP address
+void LookForSharedRouters(){
+    string sIpList = "";
+    string sFlaggedIpList = "";
+    string sThisIp;
+    string sWrappedIp;
+    
+    //cycle through logged in players
+    object oPC = GetFirstPC();
+    while (GetIsObjectValid(oPC)){
+        sThisIp = GetPCIPAddress(oPC); //get ip address of player
+        if (sThisIp != ""){
+            //wrap ip in delimeters to prevent false matches, e.g. 192.168.123.2 would
+            // match 192.168.123.25 without delimeters, but ^192.168.123.2^ would not
+            // match ^192.168.123.25^
+            sWrappedIp = "^" + sThisIp + "^";
+            if (FindSubString(sIpList, sWrappedIp) == -1){
+                sIpList += sWrappedIp; // if delimited ip is not found already, add it to string
+            } else if (FindSubString(sFlaggedIpList, sWrappedIp) == -1){ //else check if we've flagged it already
+                sFlaggedIpList += sWrappedIp;
+                NotifySharedRouters(sThisIp);    
+            }
+        }
+        oPC = GetNextPC();
+    }
+}
+
 //remove all bonus feats added to the creature skin by spells or Tactical Weapon feat 
 // or ps_inc_equipment in case any got stuck by a poorly timed player or server crash or 
 // some other ill-fated event. Note that currently none of the tattoos use a bonus feat on
@@ -584,5 +631,6 @@ void main()
 		PS_KnightLevels(oPC);
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
+		LookForSharedRouters();
 	}
 }

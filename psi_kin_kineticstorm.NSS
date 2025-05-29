@@ -20,7 +20,6 @@
 #include "psi_inc_metapsi"
 #include "psi_inc_fillin"
 #include "psi_spellhook"
-#include "psi_inc_psifunc"
 
 void main()
 {

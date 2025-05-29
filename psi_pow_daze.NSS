@@ -27,7 +27,6 @@
              target that has Hit Dice equal to 4 + the additional points.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 //#include "spinc_common"

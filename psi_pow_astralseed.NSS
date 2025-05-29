@@ -23,7 +23,6 @@
     well as a +4 bonus on Search and Spot checks.
 */
 #include "psi_inc_manifest"
-#include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 

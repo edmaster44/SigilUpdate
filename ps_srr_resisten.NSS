@@ -14,19 +14,21 @@ void main()
     }
 
     object oTarget = GetSpellTargetObject();
-	int iType;
+	int iType = DAMAGE_TYPE_FIRE;
 	int iFeat = GetSpellFeatId();
+	int nId = GetSpellId();
 	
-	if (iFeat == 2327) iType = DAMAGE_TYPE_FIRE;
-	else if (iFeat == 2328) iType = DAMAGE_TYPE_COLD;
+	//if (iFeat == 2327) iType = DAMAGE_TYPE_FIRE;
+	//else if (iFeat == 2328) iType = DAMAGE_TYPE_COLD;
+	if (iFeat == 2328) iType = DAMAGE_TYPE_COLD;
 	else if (iFeat == 2329) iType = DAMAGE_TYPE_ACID;
 	else if (iFeat == 2330) iType = DAMAGE_TYPE_ELECTRICAL;
 	else if (iFeat == 2331) iType = DAMAGE_TYPE_SONIC;
 	
-    if (!GetHasSpellEffect(GetSpellId(), oTarget))
-	{
-		effect eRes = EffectDamageResistance(iType, 10);
-		eRes = SupernaturalEffect(eRes);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
-	}	
+	PS_RemoveEffects(oTarget, nId);
+    
+	effect eRes = EffectDamageResistance(iType, 10);
+	eRes = SupernaturalEffect(eRes);
+	eRes = SetEffectSpellId(eRes, nId);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);	
 }

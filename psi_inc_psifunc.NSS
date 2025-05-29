@@ -1,5 +1,4 @@
 
-
 //::///////////////////////////////////////////////
 //:: Psionics include: Misceallenous
 //:: psi_inc_psifunc
@@ -8,25 +7,24 @@
     Defines various functions and other stuff that
     do something related to the psionics implementation.
 
-    Also acts as inclusion nexus for the general
-    psionics includes. In other words, don't include
-    them directly in your scripts, instead include this.
-
-    @author Stratovarius
-    @date   Created - 2004.10.19
+	Completely re-written by FlattedFifth, May 28, 2025
+	original Stratovarius code commented out at end of file
 */
 //:://////////////////////////////////////////////
 //:://////////////////////////////////////////////
-
 //////////////////////////////////////////////////
-/*                 Constants                    */
+/*                  Includes                    */
 //////////////////////////////////////////////////
 
-const string PRC_WILD_SURGE  = "PRC_WildSurge_Level";
-const string PRC_OVERCHANNEL = "PRC_Overchannel_Level";
-
-
-
+#include "psi_power_const"
+#include "psi_inc_fillin"
+#include "psi_feat_const"
+#include "x2_inc_itemprop"
+#include "aaa_constants"
+#include "X0_I0_SPELLS"   
+#include "ps_inc_casterlevel"
+#include "psi_inc_metapsi"
+#include "nwn2_inc_spells"
 
 //////////////////////////////////////////////////
 /*             Function prototypes              */
@@ -34,10 +32,11 @@ const string PRC_OVERCHANNEL = "PRC_Overchannel_Level";
 
 /**
  * Determines from what class's power list the currently being manifested
- * power is manifested from.
+ * power is manifested from. Returns only the base classes of Psion or Psywar,
+ * prcs of those classes are considered to be a continuation of the base.
  *
  * @param oManifester A creature manifesting a power at this moment
- * @return            CLASS_TYPE_* constant of the class
+ * @return            CLASS_TYPE_PSION or CLASS_PSYCHIC_WARRIOR
  */
 int GetManifestingClass(object oManifester = OBJECT_SELF);
 
@@ -57,15 +56,6 @@ int GetManifestingClass(object oManifester = OBJECT_SELF);
 int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVALID);
 
 /**
- * Determines the given creature's highest undmodified manifester level among it's
- * manifesting classes.
- *
- * @param oCreature Creature whose highest manifester level to determine
- * @return          The highest unmodified manifester level the creature can have
- */
-int GetHighestManifesterLevel(object oCreature);
-
-/**
  * Gets the level of the power being currently manifested.
  * WARNING: Return value is not defined when a power is not being manifested.
  *
@@ -74,22 +64,9 @@ int GetHighestManifesterLevel(object oCreature);
  */
 int GetPowerLevel(object oManifester);
 
-/**
- * Determines a creature's ability score in the manifesting ability of a given
- * class.
- *
- * @param oManifester Creature whose ability score to get
- * @param nClass      CLASS_TYPE_* constant of a manifesting class
- */
-int GetAbilityScoreOfClass(object oManifester, int nClass);
-
-/**
- * Determines the manifesting ability of a class.
- *
- * @param nClass CLASS_TYPE_* constant of the class to determine the manifesting stat of
- * @return       ABILITY_* of the manifesting stat. ABILITY_CHARISMA for non-manifester
- *               classes.
- */
+// Returns intelligence for psion or wisdom for psywar, default intelligence
+// Note that this is only used in conjunction with GetManifestingClass()
+// which only returns either the base classes of Psion or Psywar
 int GetAbilityOfClass(int nClass);
 
 /**
@@ -102,28 +79,6 @@ int GetAbilityOfClass(int nClass);
 int GetManifesterDC(object oManifester = OBJECT_SELF);
 
 /**
- * Determines the spell school matching a discipline according to the
- * standard transparency rules.
- * Disciplines which have no matching spell school are matched with
- * SPELL_SCHOOL_GENERAL.
- *
- * @param nDiscipline Discipline to find matching spell school for
- * @return            SPELL_SCHOOL_* of the match
- */
-int DisciplineToSpellSchool(int nDiscipline);
-
-/**
- * Determines the discipline matching a spell school according to the
- * standard transparency rules.
- * Spell schools that have no matching disciplines are matched with
- * DISCIPLINE_NONE.
- *
- * @param nSpellSchool Spell schools to find matching discipline for
- * @return             DISCIPLINE_* of the match
- */
-int SpellSchoolToDiscipline(int nSpellSchool);
-
-/**
  * Determines the discipline of a power, using the School column of spells.2da.
  *
  * @param nSpellID The spellID of the power to determine the discipline of
@@ -131,27 +86,6 @@ int SpellSchoolToDiscipline(int nSpellSchool);
  *                 School designation does not match any of the discipline's.
  */
 int GetPowerDiscipline(int nSpellID);
-
-/**
- * Determines whether a given power is a power of the Telepahty discipline.
- *
- * @param nSpellID The spells.2da row of the power. If left to default,
- *                 PRCGetSpellId() is used.
- * @return         TRUE if the power's discipline is Telepathy, FALSE otherwise
- */
-int GetIsTelepathyPower(int nSpellID = -1);
-
-/**
- * Checks whether the PC possesses the feats the given feat has as it's
- * prerequisites. Possession of a feat is checked using GetHasFeat().
- *
- *
- * @param nFeat The feat for which determine the possession of prerequisites
- * @param oPC   The creature whose feats to check
- * @return      TRUE if the PC possesses the prerequisite feats AND does not
- *              already posses nFeat, FALSE otherwise.
- */
-int CheckPowerPrereqs(int nFeat, object oPC);
 
 /**
  * Determines the manifester's level in regards to manifester checks to overcome
@@ -165,87 +99,7 @@ int CheckPowerPrereqs(int nFeat, object oPC);
  */
 int GetPsiPenetration(object oManifester = OBJECT_SELF);
 
-/**
- * Determines whether a given creature possesses the Psionic subtype.
- * Ways of possessing the subtype:
- * - Being of a naturally psionic race
- * - Having class levels in a psionic class
- * - Possessing the Wild Talent feat
- *
- * @param oCreature Creature to test
- * @return          TRUE if the creature is psionic, FALSE otherwise.
- */
-int GetIsPsionicCharacter(object oCreature);
-
-/**
- * Calculates how many manifester levels are gained by a given creature from
- * it's levels in prestige classes.
- *
- * @param oCreature Creature to calculate added manifester levels for
- * @return          The number of manifester levels gained
- */
-int GetPsionicPRCLevels(object oCreature);
-
-/**
- * Determines whether a given class is a psionic class or not. A psionic
- * class is defined as one that gives base manifesting.
- *
- * @param nClass CLASS_TYPE_* of the class to test
- * @return       TRUE if the class is a psionic class, FALSE otherwise
- */
-int GetIsPsionicClass(int nClass);
-
-/**
- * Determines which of the character's classes is their first psionic manifesting
- * class, if any. This is the one which gains manifester level raise benefits from
- * prestige classes.
- *
- * @param oCreature Creature whose classes to test
- * @return          CLASS_TYPE_* of the first psionic manifesting class,
- *                  CLASS_TYPE_INVALID if the creature does not posses any.
- */
-int GetFirstPsionicClass(object oCreature = OBJECT_SELF);
-
-/**
- * Determines the position of a creature's first psionic manifesting class, if any.
- *
- * @param oCreature Creature whose classes to test
- * @return          The position of the first psionic class {1, 2, 3} or 0 if
- *                  the creature possesses no levels in psionic classes.
- */
-int GetFirstPsionicClassPosition(object oCreature = OBJECT_SELF);
-
-/**
- * Creates the creature weapon for powers like Bite of the Wolf and Claws of the
- * Beast. If a creature weapon of the correct type is already present, it is
- * used instead of a new one.
- *
- * Preserving existing weapons may cause problems, if so, make the function instead delete the old object - Ornedan
- *
- * @param oCreature     Creatue whose creature weapons to mess with.
- * @param sResRef       Resref of the creature weapon. Assumed to be one of the
- *                      PRC creature weapons, so this considered to is also be
- *                      the tag.
- * @param nIventorySlot Inventory slot where the creature weapon is to be equipped.
- * @param fDuration     If a new weapon is created, it will be destroyed after
- *                      this duration.
- *
- * @return              The newly created creature weapon. Or an existing weapon,
- *                      if there was one.
- */
-object CreatePsionicCreatureWeapon(object oCreature, string sResRef, int nInventorySlot, float fDuration);
-
-/**
- * Gets the amount of manifester levels the given creature is Wild Surging by.
- *
- * @param oManifester The creature to test
- * @return            The number of manifester levels added by Wild Surge. 0 if
- *                    Wild Surge is not active.
- */
- 
 void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAGBLUE, int nDamageType = DAMAGE_TYPE_MAGICAL, int iReflexSaveType = -1, int nMaxHits = 10 );
- 
-int GetWildSurge(object oManifester);
 
 /**
  * Applies modifications to a power's damage that depend on some property
@@ -264,12 +118,301 @@ int GetWildSurge(object oManifester);
  *
  * @return The amount of damage, modified by oTarget's abilities
  */
+int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDamage, 
+	int bIsHitPointDamage = TRUE, int bIsEnergyDamage = FALSE);
+									 
+
+//////////////////////////////////////////////////
+/*             Function definitions             */
+//////////////////////////////////////////////////
+
+int GetManifestingClass(object oManifester = OBJECT_SELF){
+
+	int nPsion = GetPsionicCasterLevel(oManifester, CLASS_TYPE_PSION);
+	int nPsywar = GetPsionicCasterLevel(oManifester, CLASS_PSYCHIC_WARRIOR);
+	if (nPsion + nPsywar < 1) return CLASS_TYPE_INVALID;
+	
+	if (nPsion > nPsywar) return CLASS_TYPE_PSION;
+	else return CLASS_PSYCHIC_WARRIOR;	
+}
+
+int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVALID){	
+	if (GetItemPossessor(GetSpellCastItem()) == oManifester){
+		// if the effect is from an object, caster level is psy/psi caster lvl
+		// or 1/2 HD, whichever is higher
+		int nCL = GetPsionicCasterLevel(oManifester, nSpecificClass);
+		int nHD = GetHitDice(oManifester) / 2;
+		if (nHD > nCL) return nHD;
+		else return nCL;
+	}
+	else return GetPsionicCasterLevel(oManifester, nSpecificClass); 
+}
+
+int GetPowerLevel(object oManifester){
+    return GetSpellLevel(GetSpellId());
+}
+
+int GetAbilityOfClass(int nClass) {
+	if (nClass == CLASS_PSYCHIC_WARRIOR)
+		return ABILITY_WISDOM;
+	
+    return ABILITY_INTELLIGENCE;
+}
+
+int GetManifesterDC(object oManifester = OBJECT_SELF){
+    int nClass = GetManifestingClass(oManifester);
+	int nManifesterLvl = GetManifesterLevel(oManifester, nClass);
+	int nPowerLvl = GetPowerLevel(oManifester);
+	int nCastMod = GetAbilityModifier(GetAbilityOfClass(nClass), oManifester);
+    int nDC = 10 + nPowerLvl + nCastMod + (nManifesterLvl/3);
+	if (GetHasFeat(1114, oManifester)) nDC++;
+	if (nManifesterLvl >= 22) nDC++;
+	if (nManifesterLvl >= 25) nDC++;
+	if (nManifesterLvl >= 28) nDC++;
+	
+	object oTarget = GetSpellTargetObject();
+	int nDiscipline = GetPowerDiscipline(GetSpellId());
+	
+	if (nDiscipline != 0){
+		if (nDiscipline == 6 && GetHasFeat(21383, oManifester)){
+			if (GetHasFeat(21403, oManifester)) nDC += 3;
+			else if (GetHasFeat(21389, oManifester)) nDC += 2;
+			else nDC += 1;
+		} else if (nDiscipline == 1 && GetHasFeat(21384, oManifester)){
+			if (GetHasFeat(21404)) nDC += 3;
+			else if (GetHasFeat(21390, oManifester)) nDC += 2;
+			else nDC += 1;
+		} else if (nDiscipline == 5 && GetHasFeat(21385, oManifester)) {
+			if (GetHasFeat(21405)) nDC += 3;
+			else if (GetHasFeat(21391, oManifester)) nDC += 2;
+			else nDC += 1;
+		} else if (nDiscipline == 4 && GetHasFeat(21386, oManifester)){
+			if (GetHasFeat(21406, oManifester)) nDC += 3;
+			else if (GetHasFeat(21392, oManifester)) nDC += 2;
+			else nDC += 1;
+		} else if (nDiscipline == 2 && GetHasFeat(21387, oManifester)){
+			if (GetHasFeat(21407, oManifester)) nDC += 3;
+			else if (GetHasFeat(21393)) nDC += 2;
+			else nDC += 1;
+		} else if (nDiscipline == 3){
+			if (GetHasFeat(21388, oManifester)){
+				if (GetHasFeat(21408, oManifester)) nDC += 3;
+				else if (GetHasFeat(21394, oManifester)) nDC += 2;
+				else nDC += 1;
+			}
+			if (GetLocalInt(oTarget, "PRC_Power_MindTrap_Active")){
+				int nManifesterPP = GetLocalInt(oManifester, "PSI_PP");
+				SetLocalInt(oManifester, "PSI_PP", nManifesterPP - d6(1));
+				nManifesterPP = GetLocalInt(oManifester, "PSI_PP");
+				SendMessageToPC(oManifester, "Your target is protected by a 'Mind Trap' power, causing telepathy powers to cost an additional 1d6 power points.");
+			}
+		}
+	}
+    return nDC;
+}
+
+int GetPowerDiscipline(int nSpellID){
+    string sSpellSchool = Get2DAString("spells", "School", nSpellID);//lookup_spell_school(nSpellID);
+	sSpellSchool = GetStringUpperCase(sSpellSchool);
+    int nDiscipline = 0;
+
+    if (sSpellSchool == "C") nDiscipline = 1; //DISCIPLINE_METACREATIVITY
+    else if (sSpellSchool == "D") nDiscipline = 2; //DISCIPLINE_CLAIRSENTIENCE
+    else if (sSpellSchool == "E") nDiscipline = 3; //DISCIPLINE_TELEPATHY
+    else if (sSpellSchool == "V") nDiscipline = 4; //DISCIPLINE_PSYCHOKINESIS
+    else if (sSpellSchool == "T") nDiscipline = 5; //DISCIPLINE_PSYCHOMETABOLISM
+    else if (sSpellSchool == "G") nDiscipline = 6; //DISCIPLINE_PSYCHOPORTATION
+
+    return nDiscipline;
+}
+
+int GetPsiPenetration(object oManifester = OBJECT_SELF){
+    int nPen = GetManifesterLevel(oManifester);
+	if (GetHasFeat(21415, oManifester)) nPen += 6;
+	else if (GetHasFeat(21414, oManifester)) nPen += 4;
+	else if (GetHasFeat(21413, oManifester)) nPen += 2;
+    return nPen;
+}
+
+void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAGBLUE, int nDamageType = DAMAGE_TYPE_MAGICAL, int iReflexSaveType = -1, int nMaxHits = 10 ){
+
+	location lTargetLoc	= GetSpellTargetLocation(); // missile spread centered around target location
+	location lSourceLoc = GetLocation( OBJECT_SELF );
+	
+	int nSpellID 		= GetSpellId();
+    int nMetaMagic 		= GetMetaMagicFeat();
+    effect eVis 		= EffectVisualEffect(nVIS);
+	
+    float fDelay 		= 0.0;
+    int nMissiles; 
+	
+	if(nCap > GetManifesterLevel(OBJECT_SELF))
+		nMissiles = GetManifesterLevel(OBJECT_SELF);
+	else nMissiles = nCap;
+	
+	
+	int nPathType 		= PROJECTILE_PATH_TYPE_BURST;
+	int nEnemies 		= CountEnemies(lTargetLoc, RADIUS_SIZE_GARGANTUAN, nMissiles); // how many enemies (up to max number of missiles)
+
+     // * Exit if no enemies to hit
+     if (nEnemies == 0) 
+        return; 
+
+     // divide the missles evenly amongst the enemies;
+    int nMissilesPerTarget	= nMissiles / nEnemies;
+	int nExtraMissiles   	= nMissiles % nEnemies;
+	
+	int nMissilesForThisTarget 	= 0;
+	location lThisTargetLoc;
+    int nCnt 				= 1; // # of enemies processed
+	
+    //Cycle through the targets within the spell shape until an invalid object is captured.
+    object oTarget 			= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTargetLoc, TRUE, OBJECT_TYPE_CREATURE);
+    while (GetIsObjectValid(oTarget) && nCnt <= nEnemies)
+    {
+        // * caster cannot be harmed by this spell
+        if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF) && (oTarget != OBJECT_SELF) && (GetObjectSeen(oTarget,OBJECT_SELF)))
+        {
+			lThisTargetLoc = GetLocation( oTarget );
+			fDelay = GetProjectileTravelTime( lSourceLoc, lThisTargetLoc, nPathType );
+			
+			//Fire cast spell at event for the specified target
+			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
+			
+			// * determine the number of missles to fire at this target
+	    	nMissilesForThisTarget = nMissilesPerTarget;
+			if (nCnt <= nExtraMissiles)
+				nMissilesForThisTarget++;
+				
+			// ensure we observe cap
+			nMissilesForThisTarget = GetIntInRange(nMissilesForThisTarget, 0, nMaxHits);
+			
+			ShootMissilesAtTarget(oTarget, lSourceLoc, lThisTargetLoc, nSpell, nPathType, 
+							nMissilesForThisTarget, eVis, fDelay, nCnt, 
+							nD6Dice, nDamageType, nMetaMagic, iReflexSaveType);
+			
+			nCnt++;// * increment count of enemies processed
+        }
+        oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTargetLoc, TRUE, OBJECT_TYPE_CREATURE);
+    }
+}
+
+
+int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDamage,
+	int bIsHitPointDamage = TRUE, int bIsEnergyDamage = FALSE){
+    // Greater Power Specialization - +2 damage on all HP-damaging powers when target is within 30ft
+    if(bIsHitPointDamage                                                &&
+       GetHasFeat(FEAT_GREATER_POWER_SPECIALIZATION, oManifester)       &&
+       GetDistanceBetween(oTarget, oManifester) <= FeetToMeters(30.0f)
+       )
+            nDamage += 2;
+    // Intellect Fortress - Halve damage dealt by powers that allow PR. Goes before DR (-like) reductions
+    if(GetLocalInt(oTarget, "PRC_Power_IntellectFortress_Active")    &&
+       Get2DAString("spells", "ItemImmunity", GetSpellId()) == "1"
+       )
+        nDamage /= 2;
+    // Mental Resistance - 3 damage less for all non-energy damage and ability damage
+    if(GetHasFeat(FEAT_MENTAL_RESISTANCE, oTarget) && !bIsEnergyDamage)
+        nDamage -= 3;
+
+    // Reasonable return values only
+    if(nDamage < 0) nDamage = 0;
+
+    return nDamage;
+}
+
+/* ORIGINAL CODE BELOW
+
+
+
+//::///////////////////////////////////////////////
+//:: Psionics include: Misceallenous
+//:: psi_inc_psifunc
+//::///////////////////////////////////////////////
+
+//    Defines various functions and other stuff that
+//    do something related to the psionics implementation.
+
+
+//   Also acts as inclusion nexus for the general
+//   psionics includes. In other words, don't include
+//  them directly in your scripts, instead include this.
+
+//    @author Stratovarius
+//    @date   Created - 2004.10.19
+
+//:://////////////////////////////////////////////
+//:://////////////////////////////////////////////
+
+//////////////////////////////////////////////////
+//                 Constants              
+//////////////////////////////////////////////////
+
+const string PRC_WILD_SURGE  = "PRC_WildSurge_Level";
+const string PRC_OVERCHANNEL = "PRC_Overchannel_Level";
+
+
+
+
+//////////////////////////////////////////////////
+//            Function prototypes        
+//////////////////////////////////////////////////
+
+int GetManifestingClass(object oManifester = OBJECT_SELF);
+
+int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVALID);
+
+int GetHighestManifesterLevel(object oCreature);
+
+int GetPowerLevel(object oManifester);
+
+int GetAbilityScoreOfClass(object oManifester, int nClass);
+
+int GetAbilityOfClass(int nClass);
+
+int GetManifesterDC(object oManifester = OBJECT_SELF);
+
+int DisciplineToSpellSchool(int nDiscipline);
+
+int SpellSchoolToDiscipline(int nSpellSchool);
+
+int GetPowerDiscipline(int nSpellID);
+
+int GetIsTelepathyPower(int nSpellID = -1);
+
+int CheckPowerPrereqs(int nFeat, object oPC);
+
+int GetPsiPenetration(object oManifester = OBJECT_SELF);
+
+int GetIsPsionicCharacter(object oCreature);
+
+
+int GetPsionicPRCLevels(object oCreature);
+
+
+int GetIsPsionicClass(int nClass);
+
+
+int GetFirstPsionicClass(object oCreature = OBJECT_SELF);
+
+
+int GetFirstPsionicClassPosition(object oCreature = OBJECT_SELF);
+
+object CreatePsionicCreatureWeapon(object oCreature, string sResRef, int nInventorySlot, float fDuration);
+
+
+ 
+void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAGBLUE, int nDamageType = DAMAGE_TYPE_MAGICAL, int iReflexSaveType = -1, int nMaxHits = 10 );
+ 
+int GetWildSurge(object oManifester);
+
+
 int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDamage,
                                      int bIsHitPointDamage = TRUE, int bIsEnergyDamage = FALSE);									 
 
 
 //////////////////////////////////////////////////
-/*                  Includes                    */
+//                 Includes                 
 //////////////////////////////////////////////////
 
 #include "psi_power_const"
@@ -282,7 +425,7 @@ int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDa
 
 
 //////////////////////////////////////////////////
-/*             Function definitions             */
+//             Function definitions        
 //////////////////////////////////////////////////
 
 int GetManifestingClass(object oManifester = OBJECT_SELF)
@@ -329,13 +472,7 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
     }
 
     // For when you want to assign the caster level.
-    /*else if(GetLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE) != 0)
-    {
-        if(DEBUG) SendMessageToPC(oManifester, "Forced-level manifesting at level " + IntToString(GetCasterLevel(oManifester)));
-
-        DelayCommand(1.0, DeleteLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE));
-        nLevel = GetLocalInt(oManifester, PRC_CASTERLEVEL_OVERRIDE);
-    }*/
+   
     else if(GetManifestingClass(oManifester) != CLASS_TYPE_INVALID)
     {
         //Gets the level of the manifesting class
@@ -358,16 +495,7 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
 
 
     // The bonuses inside only apply to normal manifestation
-    /*if(!GetLocalInt(oManifester, PRC_IS_PSILIKE))
-    {
-        //Adding wild surge
-        int nSurge = GetWildSurge(oManifester);
-        if (nSurge > 0) nLevel += nSurge;
 
-        // Adding overchannel
-        int nOverchannel = GetLocalInt(oManifester, PRC_OVERCHANNEL);
-        if(nOverchannel > 0) nLevel += nOverchannel;
-    }*/
 
     nLevel += nAdjust;
 
@@ -588,13 +716,7 @@ int GetManifesterDC(object oManifester = OBJECT_SELF)
 		}
 	}
     // Stuff that applies only to powers, not psi-like abilities goes inside
-    /*if(!GetLocalInt(oManifester, PRC_IS_PSILIKE))
-    {
-        if (GetLocalInt(oManifester, "PsionicEndowmentActive") == TRUE && UsePsionicFocus(oManifester))
-        {
-            nDC += GetHasFeat(FEAT_GREATER_PSIONIC_ENDOWMENT, oManifester) ? 4 : 2;
-        }
-    }*/
+   
 
     return nDC;
 }
@@ -603,16 +725,7 @@ int DisciplineToSpellSchool(int nDiscipline)
 {
     int nSpellSchool = SPELL_SCHOOL_GENERAL;
 
-    /*switch(nDiscipline)
-    {
-        case DISCIPLINE_CLAIRSENTIENCE:   nSpellSchool = SPELL_SCHOOL_DIVINATION;    break;
-        case DISCIPLINE_METACREATIVITY:   nSpellSchool = SPELL_SCHOOL_CONJURATION;   break;
-        case DISCIPLINE_PSYCHOKINESIS:    nSpellSchool = SPELL_SCHOOL_EVOCATION;     break;
-        case DISCIPLINE_PSYCHOMETABOLISM: nSpellSchool = SPELL_SCHOOL_TRANSMUTATION; break;
-        case DISCIPLINE_TELEPATHY:        nSpellSchool = SPELL_SCHOOL_ENCHANTMENT;   break;
-
-        default: nSpellSchool = SPELL_SCHOOL_GENERAL; break;
-    }*/
+   
 
     return nSpellSchool;
 }
@@ -621,20 +734,6 @@ int SpellSchoolToDiscipline(int nSpellSchool)
 {
     int nDiscipline = 0;
 
-    /*switch(nSpellSchool)
-    {
-        case SPELL_SCHOOL_GENERAL:       nDiscipline = DISCIPLINE_NONE;             break;
-        case SPELL_SCHOOL_ABJURATION:    nDiscipline = DISCIPLINE_NONE;             break;
-        case SPELL_SCHOOL_CONJURATION:   nDiscipline = DISCIPLINE_METACREATIVITY;   break;
-        case SPELL_SCHOOL_DIVINATION:    nDiscipline = DISCIPLINE_CLAIRSENTIENCE;   break;
-        case SPELL_SCHOOL_ENCHANTMENT:   nDiscipline = DISCIPLINE_TELEPATHY;        break;
-        case SPELL_SCHOOL_EVOCATION:     nDiscipline = DISCIPLINE_PSYCHOKINESIS;    break;
-        case SPELL_SCHOOL_ILLUSION:      nDiscipline = DISCIPLINE_NONE;             break;
-        case SPELL_SCHOOL_NECROMANCY:    nDiscipline = DISCIPLINE_NONE;             break;
-        case SPELL_SCHOOL_TRANSMUTATION: nDiscipline = DISCIPLINE_PSYCHOMETABOLISM; break;
-
-        default: nDiscipline = DISCIPLINE_NONE;
-    }*/
 
     return nDiscipline;
 }
@@ -694,15 +793,6 @@ int GetPsiPenetration(object oManifester = OBJECT_SELF)
 {
     int nPen = GetManifesterLevel(oManifester);
 
-    /*/ The stuff inside applies only to normal manifestation, not psi-like abilities
-    /if(!GetLocalInt(oManifester, PRC_IS_PSILIKE))
-    {
-        // Check for Power Pen feats being used
-        if(GetLocalInt(oManifester, "PowerPenetrationActive") == TRUE && UsePsionicFocus(oManifester))
-        {
-            nPen += GetHasFeat(FEAT_GREATER_POWER_PENETRATION, oManifester) ? 8 : 4;
-        }
-    }*/
 
     return nPen;
 }
@@ -735,27 +825,7 @@ int GetPsionicPRCLevels(object oCreature)
 
     nLevel += GetLevelByClass(CLASS_TYPE_WARMIND,oCreature);
 	nLevel +=  GetLevelByClass(CLASS_TYPE_DRAGON_PSION, oCreature);
-    // Cerebremancer and Psychic Theurge add manifester levels on each level
-    //nLevel += GetLevelByClass(CLASS_TYPE_CEREBREMANCER, oCreature);
-    //nLevel += GetLevelByClass(CLASS_TYPE_PSYCHIC_THEURGE, oCreature);
-
-    // No manifester level boost at level 1 and 10 for Thrallherd
-    /*if(GetLevelByClass(CLASS_TYPE_THRALLHERD, oCreature))
-    {
-        nLevel += GetLevelByClass(CLASS_TYPE_THRALLHERD, oCreature) - 1;
-        if(GetLevelByClass(CLASS_TYPE_THRALLHERD, oCreature) >= 10) nLevel -= 1;
-    }*/
-    // No manifester level boost at level 1 and 6 for Iron Mind
-    /*if(GetLevelByClass(CLASS_TYPE_IRONMIND, oCreature))
-    {
-        nLevel += GetLevelByClass(CLASS_TYPE_IRONMIND, oCreature) - 1;
-        if(GetLevelByClass(CLASS_TYPE_IRONMIND, oCreature) >= 6) nLevel -= 1;
-    }*/
-    // No manifester level boost at level 1 for Sanctified Mind
-    /*if(GetLevelByClass(CLASS_TYPE_SANCTIFIED_MIND, oCreature))
-    {
-        nLevel += GetLevelByClass(CLASS_TYPE_SANCTIFIED_MIND, oCreature) - 1;
-    }*/
+   
 
     return nLevel;
 }
@@ -789,25 +859,7 @@ int GetFirstPsionicClassPosition(object oCreature = OBJECT_SELF)
 //DIsabled - Mimi
 void LocalCleanExtraFists(object oCreature)
 {
-   /* int iIsCWeap, iIsEquip;
-
-    object oClean = GetFirstItemInInventory(oCreature);
-
-    while (GetIsObjectValid(oClean))
-    {
-        iIsCWeap = GetIsPRCCreatureWeapon(oClean);
-
-        iIsEquip = oClean == GetItemInSlot(INVENTORY_SLOT_CWEAPON_L) ||
-                   oClean == GetItemInSlot(INVENTORY_SLOT_CWEAPON_R) ||
-                   oClean == GetItemInSlot(INVENTORY_SLOT_CWEAPON_B);
-
-        if (iIsCWeap && !iIsEquip)
-        {
-            DestroyObject(oClean);
-        }
-
-        oClean = GetNextItemInInventory(oCreature);
-    }*/
+  
 }
 object GetPsionicCreatureWeapon(object oCreature, string sResRef, int nInventorySlot, float fDuration)
 {
@@ -864,14 +916,7 @@ object GetPsionicCreatureWeapon(object oCreature, string sResRef, int nInventory
 
 int GetWildSurge(object oManifester)
 {
-    /*int nWildSurge = GetLocalInt(oManifester, PRC_IS_PSILIKE) ?
-                      0 :                                       // Wild Surge does not apply to psi-like abilities
-                      GetLocalInt(oManifester, PRC_WILD_SURGE);*/
-
-    /*if(FALSE) DoDebug("GetWildSurge():\n"
-                    + "oManifester = " + DebugObject2Str(oManifester) + "\n"
-                    + "nWildSurge = " + IntToString(nWildSurge) + "\n"
-                      );*/ //Disabled - Mimi
+  
 
     return 0;
 }
@@ -926,7 +971,7 @@ void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAG
 	int nPathType 		= PROJECTILE_PATH_TYPE_BURST;
 	int nEnemies 		= CountEnemies(lTargetLoc, RADIUS_SIZE_GARGANTUAN, nMissiles); // how many enemies (up to max number of missiles)
 
-     // * Exit if no enemies to hit
+     // Exit if no enemies to hit
      if (nEnemies == 0) 
         return; 
 
@@ -942,7 +987,7 @@ void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAG
     object oTarget 			= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTargetLoc, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget) && nCnt <= nEnemies)
     {
-        // * caster cannot be harmed by this spell
+        //  caster cannot be harmed by this spell
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF) && (oTarget != OBJECT_SELF) && (GetObjectSeen(oTarget,OBJECT_SELF)))
         {
 			lThisTargetLoc = GetLocation( oTarget );
@@ -951,7 +996,7 @@ void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAG
 			//Fire cast spell at event for the specified target
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 			
-			// * determine the number of missles to fire at this target
+			//  determine the number of missles to fire at this target
 	    	nMissilesForThisTarget = nMissilesPerTarget;
 			if (nCnt <= nExtraMissiles)
 				nMissilesForThisTarget++;
@@ -963,7 +1008,7 @@ void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAG
 							nMissilesForThisTarget, eVis, fDelay, nCnt, 
 							nD6Dice, nDamageType, nMetaMagic, iReflexSaveType);
 			
-			nCnt++;// * increment count of enemies processed
+			nCnt++;//  increment count of enemies processed
         }
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTargetLoc, TRUE, OBJECT_TYPE_CREATURE);
     }
@@ -971,3 +1016,4 @@ void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAG
 
 // Test main
 //void main(){}
+*/
