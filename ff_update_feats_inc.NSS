@@ -111,14 +111,27 @@ void fFixAlertness(object oPC){
 void AdjustDragonPrC(object oPC){
 	int nLvl = GetLevelByClass(129, oPC); // new dragon prc
 	int nPsyLvl = GetLevelByClass(130, oPC); // new psy dragon prc
-	if (nPsyLvl == 1){
-		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) >= 1)
-			FeatAdd(oPC, 3679, FALSE); //psion path
-		else if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) >= 1) 
-			FeatAdd(oPC, 3680, FALSE); //psywar path
-	}
+	
 	nLvl += nPsyLvl;
 	if (nLvl < 1) return;
+	
+	// Initially I had the psy/psi path feats granted automatically based on
+	// class because I mistakenly believed you couldn't be both psi and psy.
+	// Upon discovering this was false I changed the 2da to give the player
+	// the choice, but Ed is very busy and isn't prompt with hak updates
+	// so the following code will grant the feat automatically IF the
+	// player didn't get the chance to choose, and is ignored if they did.
+	// Once the new versions of CLS_BFEAT_DRAGON_PSI_NEW.2da and 
+	// CLS_FEAT_DRAGON_PSI_NEW.2da are in the haks this block can be removed.
+	// -FlattedFifth, May 30, 2025
+	if (nPsyLvl == 1){ 
+		if (!GetHasFeat(3679, oPC) && !GetHasFeat(3680, oPC)){
+			if (GetLevelByClass(CLASS_TYPE_PSION, oPC) >= 1)
+				FeatAdd(oPC, 3679, FALSE); //psion path
+			else if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) >= 1) 
+				FeatAdd(oPC, 3680, FALSE); //psywar path
+		}
+	} //end psy/psi path grant block
 	
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
 	
