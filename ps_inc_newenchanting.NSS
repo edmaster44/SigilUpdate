@@ -82,10 +82,6 @@ int GetHasAddEssence(object oPC, string sAddEssence, string sMainEssence);
 // Restricting to have the Forged Of property for dragonhide should mitigate that risk
 int GetIsAcEligibleBoots(object oItem);
 
-// Further restricting boots to only "Masterwork", ie, having 3 special materials, should further
-// mitigate the above described risk.
-int GetIsPlayerMade(object oItem);
-
 // Applies the "Masterwork" item property, which is used to denote items made with all 3 special mats.
 // Will allow for additional points for player-crafted weapons and new enchant options for other items
 void ApplyPlayerMade(object oItem);
@@ -1163,147 +1159,41 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant) {
 int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 
 	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+	int nItem = GetBaseItemType(oItem);
 	
 	int nPoints = 0; // this will be our ultimate return value. May as well set it up first thing.
-	int nItem = GetBaseItemType(oItem);
-	if (nItem == 111) nItem = 202; // there are 2 whip ids. The scod_craft_baseitems uses 202
 	
-	itemproperty ipMatPower;
-	itemproperty ip;
-	int nIpType;
-	int nIpSub;
-	string sTypeColumn = "IP_MELEE_TYPE";
-	string sSubColumn =  "IP_MELEE_SUBTYPE";
-	string sParamColumn = "IP_MELEE_PARAM";
-	string sSpecColumn = "IP_M_SPECIAL";
-	string sPointsColumn = "M_POINTS";
-	int nIpMatType;
-	int nIpMatSub;
-	int nIpMatParam;
-	int nIpMatSpec;
-	string sMat2da = "";
-	int nNumRows;
-	int i;
-	if (GetTag(oItem) == "nw_metalline") {
-		sMat2da = "scod_craft_metal";
-		nNumRows = GetNum2DARows(sMat2da);
-		for (i = 0; i < nNumRows; i++){
-			if (StringToInt(Get2DAString(sMat2da, "IP_DESCRIPTION_ID", i)) == SPECIAL_MAT_METALLINE){
-				nIpMatType = StringToInt(Get2DAString(sMat2da, sTypeColumn, i));
-				nIpMatSub = StringToInt(Get2DAString(sMat2da, sSubColumn, i));
-				nIpMatParam = StringToInt(Get2DAString(sMat2da, sParamColumn, i));
-				nIpMatSpec = StringToInt(Get2DAString(sMat2da, sSpecColumn, i));
-				nPoints += StringToInt(Get2DAString(sMat2da, sPointsColumn, i));
-				ipMatPower = IpArgsToItemProperty(nIpMatType, nIpMatSub, nIpMatParam,nIpMatSpec);
-				break;
-			}
-		}
-	} else {
-		string sCat = "other"; // is this an armor, a ranged launcher, meleee/ammo/thrown, or other?
-		string sLookupColumn = ""; // this and the one below will be used to find our item in scod_craft_baseitems
-		int nLookupValue = NULL;
-		if (nItem == 16){
-			sCat = "armor";
-			sLookupColumn = "ARMORSTAT_ID";
-			nLookupValue = GetArmorRulesType(oItem);
-			if (nLookupValue >= 42) sLookupColumn = "MITH_ARMORSTAT_ID"; // crafted mithral
-		} else {
-			sLookupColumn = "ID";
-			// the 2da lists the quivers by the items they produce, not the quivers themselves
-			switch(nItem){
-				case 90: nLookupValue = 31; break; // dart quiver to dart
-				case 91: nLookupValue = 63; break; // throwing axe quiver to taxe
-				case 92: nLookupValue = 59; break; // shuriken quiver to shuriken
-				case 93: nLookupValue = 20; break; // arrow quiver to arrow
-				case 94: nLookupValue = 25; break; // bolt quiver to bolt
-				case 95: nLookupValue = 27; break; // bullet quiver to bullet
-				default: nLookupValue = nItem; break;
-			}
-			if (nItem == BASE_ITEM_SMALLSHIELD || nItem == BASE_ITEM_LARGESHIELD ||
-				nItem == BASE_ITEM_TOWERSHIELD)
-					sCat = "armor";
-			else if (nItem == BASE_ITEM_SLING || nItem == BASE_ITEM_SHORTBOW || 
-				nItem == BASE_ITEM_LONGBOW || nItem == BASE_ITEM_LIGHTCROSSBOW ||
-				nItem == BASE_ITEM_HEAVYCROSSBOW)
-					sCat = "launcher";
-			else if (IPGetIsWeapon(OBJECT_INVALID, nItem) || IPGetIsProjectile(OBJECT_INVALID, nItem))
-				sCat = "melee"; // ammo and thrown weapons also use the melee base mat powers
-		}
-
-		if (sCat != "other"){ // misc items do not have a material power, so don't try to find it 
-
-			if (sCat == "armor"){
-				sTypeColumn = "IP_ARMOR_TYPE";
-				sSubColumn =  "IP_ARMOR_SUBTYPE";
-				sParamColumn = "IP_ARMOR_PARAM";
-				sSpecColumn = "IP_A_SPECIAL";
-				sPointsColumn = "A_POINTS";
-			} else if (sCat == "launcher"){
-				sTypeColumn = "IP_RANGED_TYPE";
-				sSubColumn =  "IP_RANGED_SUBTYPE";
-				sParamColumn = "IP_RANGED_PARAM";
-				sSpecColumn = "IP_R_SPECIAL";
-				sPointsColumn = "R_POINTS";
-			}
-			
-			if (sLookupColumn != "" && nLookupValue != NULL){
-				nNumRows = GetNum2DARows("scod_craft_baseitems");
-				for (i = 0; i < nNumRows; i++){
-					if (StringToInt(Get2DAString("scod_craft_baseitems", sLookupColumn, i)) == nLookupValue){
-						sMat2da = Get2DAString("scod_craft_baseitems", "MATERIAL_1", i);
-						break;
-					}
-				}
-			}
-			if (sMat2da != ""){
-				nNumRows = GetNum2DARows(sMat2da);
-				ip = GetFirstItemProperty(oItem);
-				int bFoundIp = FALSE;
-				while (GetIsItemPropertyValid(ip) && !bFoundIp){
-					nIpType = GetItemPropertyType(ip);
-					if (nIpType == 100){
-						nIpSub = GetItemPropertySubType(ip);
-						for (i = 0; i < nNumRows; i++){
-							if (StringToInt(Get2DAString(sMat2da, "IP_DESCRIPTION_ID", i)) == nIpSub){
-								nPoints += StringToInt(Get2DAString(sMat2da, sPointsColumn, i));
-								if (Get2DAString(sMat2da, sTypeColumn, i) != "****"){
-									nIpMatType = StringToInt(Get2DAString(sMat2da, sTypeColumn, i));
-									nIpMatSub = StringToInt(Get2DAString(sMat2da, sSubColumn, i));
-									nIpMatParam = StringToInt(Get2DAString(sMat2da, sParamColumn, i));
-									nIpMatSpec = StringToInt(Get2DAString(sMat2da, sSpecColumn, i));
-									ipMatPower = IpArgsToItemProperty(nIpMatType, nIpMatSub, nIpMatParam, nIpMatSpec);
-								}
-								bFoundIp = TRUE;
-								break;
-							}
-						}	
-					}
-					ip = GetNextItemProperty(oItem);
-				}
-			}
-		}
-	}
-
+	struct dMatProp dMatPowerData = GetMatPowerFromItem(oItem);
+	itemproperty ipMatPower = dMatPowerData.ip;
+	// go ahead and add the mat power points
+	nPoints += dMatPowerData.points;
+	
 	struct synergyBonus dSynergy = GetItemMaterialSynergyBonus(oItem);
 	itemproperty ipSynergy = dSynergy.ip;
 	int nSynergyPoints = dSynergy.nPoints;
+	
 	struct xbowMechanicals dXbow = GetXbowMechanicals(oItem);
 	itemproperty ipMechAim = dXbow.ipAim;
 	itemproperty ipMechReload = dXbow.ipReload;
+	
 	itemproperty ipCrit = ItemPropertyKeen();
 	if (nItem == BASE_ITEM_GLOVES) ipCrit = ItemPropertyBonusFeat(20);
 	else if (IPGetIsLauncher(OBJECT_INVALID, nItem) || IPGetIsThrownWeapon(OBJECT_INVALID, nItem))
 		ipCrit = GetImpCritItemPropertyForRanged(nItem);
+		
 	itemproperty ipWeight = ItemPropertyWeightReduction(IP_CONST_REDUCEDWEIGHT_50_PERCENT);
 	
-	sTypeColumn = GetItemColumn(nItem); // the column in scodenchantments for a valid enchantment for this item, 0_Melee, etc
+	string sTypeColumn = GetItemColumn(nItem); // the column in scodenchantments for a valid enchantment for this item, 0_Melee, etc
 	struct enchantment eFrom2da; // the enchantment in scodenchantments that might be the one on our item
 	itemproperty ipFrom2da; // the item property from above, we'll compare it to the one on the item
 	int bFoundMatch; // boolean, did we find a matching enchantment?
-	nNumRows = GetNum2DARows("scodenchantments");
+	int nNumRows = GetNum2DARows("scodenchantments");
 	int nAddPoints;
+	int nIpType;
+	int nIpSub;
+	int i;
 	int bSkipIp; // boolean to skip an ip that we know is 0 points or specific points already added.
-	ip = GetFirstItemProperty(oItem);
+	itemproperty ip = GetFirstItemProperty(oItem);
 	while (GetIsItemPropertyValid(ip)){
 		bSkipIp = FALSE;
 		bFoundMatch = FALSE;
@@ -1362,12 +1252,12 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 			if (GetItemPropertyType(ipMatPower) == 16 && nIpType == 16){
 				int nMatSub =  GetItemPropertySubType(ipMatPower);
 				if ((nMatSub == 0 || nMatSub == 1 || nMatSub == 2) &&
-					(nIpSub == 0 || nIpSub == 1 || nIpSub == 2))
+					(nIpSub == 0 || nIpSub == 1 || nIpSub == 2)){
 						bSkipIp = TRUE;
-			
+				}
+			} else if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
+				bSkipIp = TRUE;
 			}
-			if (IPGetItemPropertiesIdentical(ipMatPower, ip))
-				bSkipIp = TRUE; // we've already added the points for the mat power
 		}
 		
 		// skip the unique power self only on ammo and thrown quivers
@@ -1404,7 +1294,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		
 		// checking for keen/imp crit last in case it was already the matpower
 		if (!bSkipIp && IPGetItemPropertiesIdentical(ipCrit, ip)){
-			nAddPoints = 1;
+			nAddPoints += 1;
 			bSkipIp = TRUE;
 		}
 		
@@ -1419,7 +1309,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 				((nItem == BASE_ITEM_DART || nItem == 90) && (nIpSub == 49 || nIpSub == 1321)) ||
 				((nItem == BASE_ITEM_SHURIKEN || nItem == 92)&& (nIpSub == 77 || nIpSub == 1322)) ||
 				((nItem == BASE_ITEM_THROWINGAXE || nItem == 91) && (nIpSub == 67 || nIpSub == 1323))){
-				nAddPoints = 1;
+				nAddPoints += 1;
 				bSkipIp = TRUE;
 			}
 		}
@@ -1451,7 +1341,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 						//debug
 						//SendMessageToPC(oPC, "FOUND MATCH");
 						bFoundMatch = TRUE;
-						nAddPoints = StringToInt(Get2DAString("scodenchantments", "Points", i));
+						nAddPoints += StringToInt(Get2DAString("scodenchantments", "Points", i));
 						break;
 					}
 				}
@@ -1627,21 +1517,6 @@ int GetIsAcEligibleBoots(object oItem){
 		}
 	}
 	return FALSE;
-}
-
-int GetIsPlayerMade(object oItem){
-	int ipType;
-	int bRet = FALSE;
-	itemproperty ip = GetFirstItemProperty(oItem);
-    while (GetIsItemPropertyValid(ip)){
-		ipType = GetItemPropertyType(ip);
-        if (ipType == 101){ // "Cage-Forged" property to denote a player-made item
-			bRet = TRUE;
-			break;
-		} 
-		ip = GetNextItemProperty(oItem);
-    }
-    return bRet;
 }
 
 void ApplyPlayerMade(object oItem){

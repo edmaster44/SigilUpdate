@@ -1,5 +1,5 @@
 NDB V1.0
-0000035 0000014 0002622 0000046 0000174
+0000035 0000015 0002625 0000046 0000176
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -113,6 +113,9 @@ sf e4 ip
 s 02 xbowMechanicals
 sf e4 ipReload
 sf e4 ipAim
+s 02 dMatProp
+sf e4 ip
+sf i points
 s 10 baseitem
 sf i index
 sf s label
@@ -4080,6 +4083,20 @@ f ffffffff ffffffff 000 i SYN_DEF_DAMAGE
 f ffffffff ffffffff 000 i SYN_DEF_EB
 f ffffffff ffffffff 001 t0010 GetItemMaterialSynergyBonus
 fp o
+f ffffffff ffffffff 001 t0011 GetXbowMechanicals
+fp o
+f ffffffff ffffffff 001 t0012 GetMatPowerFromItem
+fp o
+f ffffffff ffffffff 001 i GetIsPlayerMade
+fp o
+f ffffffff ffffffff 002 i GetBaseMaterialOfType
+fp o
+fp s
+f ffffffff ffffffff 004 s SearchValIn2da
+fp s
+fp s
+fp s
+fp s
 f ffffffff ffffffff 002 i GetWorkbenchInRange
 fp o
 fp o
@@ -4092,8 +4109,6 @@ fp i
 fp i
 fp i
 fp i
-f ffffffff ffffffff 001 t0011 GetXbowMechanicals
-fp o
 f ffffffff ffffffff 001 i GetArmorBaseMaterial
 fp o
 f ffffffff ffffffff 001 e4 GetImpCritItemPropertyForRanged
@@ -4106,7 +4121,7 @@ f ffffffff ffffffff 001 e4 EnchantmentIndexToItemProp
 fp t0009
 f ffffffff ffffffff 001 i GetIsPowerfulMaterial
 fp i
-f ffffffff ffffffff 001 t0012 LoadBaseItem
+f ffffffff ffffffff 001 t0013 LoadBaseItem
 fp i
 f ffffffff ffffffff 001 s GetItemLabel
 fp i
@@ -4173,29 +4188,29 @@ fp i
 fp s
 f ffffffff ffffffff 003 v SetMaterialListHeader
 fp o
-fp t0012
+fp t0013
 fp i
 f ffffffff ffffffff 002 v GenerateItemIconList
 fp o
-fp t0012
-f ffffffff ffffffff 002 e4 GetSpecialMaterialItemProperty
-fp t0012
 fp t0013
+f ffffffff ffffffff 002 e4 GetSpecialMaterialItemProperty
+fp t0013
+fp t0014
 f ffffffff ffffffff 001 s GetDRMaterialString
 fp i
 f ffffffff ffffffff 004 i GetCraftingRankRequirement
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 001 i GetRequiredCraftSkill
-fp t0012
+fp t0013
 f ffffffff ffffffff 005 s GetCautionString
 fp o
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 001 i GetCostTierOfMaterial
 fp e4
 f ffffffff ffffffff 001 s GetItemColumn
@@ -4224,7 +4239,7 @@ fp i
 f ffffffff ffffffff 002 s GetEssenceRequirement
 fp i
 fp i
-f ffffffff ffffffff 002 t0013 LoadMaterial
+f ffffffff ffffffff 002 t0014 LoadMaterial
 fp i
 fp s
 f ffffffff ffffffff 002 v GenerateBaseItemList
@@ -4300,8 +4315,6 @@ fp s
 fp s
 f ffffffff ffffffff 001 i GetIsAcEligibleBoots
 fp o
-f ffffffff ffffffff 001 i GetIsPlayerMade
-fp o
 f ffffffff ffffffff 001 v ApplyPlayerMade
 fp o
 f ffffffff ffffffff 002 s GetAdditionalEssenceReq
@@ -4359,42 +4372,42 @@ f ffffffff ffffffff 001 v GenerateCraftDetails
 fp o
 f ffffffff ffffffff 006 o CreateCraftedItem
 fp o
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 fp i
 f ffffffff ffffffff 005 i GetCraftedItemCost
 fp o
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 005 v TakeRequiredCraftingItems
 fp o
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 004 s GetCraftingItemName
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 005 s GetCraftingNameDescription
 fp o
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 001 i GetBaseCostOfItem
 fp i
 f ffffffff ffffffff 005 i GetHasRequiredCraftingItems
 fp o
-fp t0012
 fp t0013
-fp t0013
-fp t0013
+fp t0014
+fp t0014
+fp t0014
 f ffffffff ffffffff 000 s STORE_TIMESTAMP
 f ffffffff ffffffff 000 i STORE_TIMEOUT
 f ffffffff ffffffff 002 v DS_CloseShop
@@ -4974,28 +4987,20 @@ l08 0000036 00000048 00000048
 l08 0000037 00000048 00000048
 l08 0000041 00000048 00000048
 l08 0000042 00000048 00000048
+l08 0000048 00000048 00000048
 l08 0000049 00000048 00000048
-l08 0000050 00000048 00000048
-l08 0000226 00000048 00000048
-l08 0000227 00000048 00000048
-l08 0000228 00000048 00000048
-l08 0000229 00000048 00000048
-l08 0000230 00000048 00000048
-l08 0000231 00000048 00000048
-l08 0000232 00000048 00000048
-l08 0000233 00000048 00000048
-l08 0000234 00000048 00000048
-l08 0000235 00000048 00000048
+l08 0000054 00000048 00000048
+l08 0000055 00000048 00000048
+l08 0000236 00000048 00000048
+l08 0000237 00000048 00000048
+l08 0000238 00000048 00000048
+l08 0000239 00000048 00000048
+l08 0000240 00000048 00000048
+l08 0000241 00000048 00000048
+l08 0000242 00000048 00000048
+l08 0000243 00000048 00000048
 l08 0000244 00000048 00000048
 l08 0000245 00000048 00000048
-l08 0000246 00000048 00000048
-l08 0000247 00000048 00000048
-l08 0000248 00000048 00000048
-l08 0000249 00000048 00000048
-l08 0000250 00000048 00000048
-l08 0000251 00000048 00000048
-l08 0000252 00000048 00000048
-l08 0000253 00000048 00000048
 l08 0000254 00000048 00000048
 l08 0000255 00000048 00000048
 l08 0000256 00000048 00000048
@@ -5006,6 +5011,16 @@ l08 0000260 00000048 00000048
 l08 0000261 00000048 00000048
 l08 0000262 00000048 00000048
 l08 0000263 00000048 00000048
+l08 0000264 00000048 00000048
+l08 0000265 00000048 00000048
+l08 0000266 00000048 00000048
+l08 0000267 00000048 00000048
+l08 0000268 00000048 00000048
+l08 0000269 00000048 00000048
+l08 0000270 00000048 00000048
+l08 0000271 00000048 00000048
+l08 0000272 00000048 00000048
+l08 0000273 00000048 00000048
 l09 0000101 00000048 00000059
 l09 0000134 00000059 0000005f
 l09 0000135 0000005f 00000065

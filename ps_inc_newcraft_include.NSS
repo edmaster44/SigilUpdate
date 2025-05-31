@@ -41,7 +41,6 @@ struct synergyBonus{
 	int nPoints;
 	itemproperty ip;
 };
-
 struct synergyBonus GetItemMaterialSynergyBonus(object oItem);
 
 
@@ -49,11 +48,22 @@ struct xbowMechanicals{
 	itemproperty ipReload;
 	itemproperty ipAim;
 };
+struct xbowMechanicals GetXbowMechanicals(object oItem);
+
+struct dMatProp{
+	itemproperty ip;
+	int points;
+};
+struct dMatProp GetMatPowerFromItem(object oItem);
+
+int GetIsPlayerMade(object oItem);
+int GetBaseMaterialOfType(object oItem, string sMat2da);
+string SearchValIn2da(string s2da, string sMatchColumn, string sMatchVal, string sFromColumn = "");
 int GetWorkbenchInRange(object oPC, object oBench);
 object GetNearestEnchantingWorkbench(object oPC);
 object GetNearestSmithingWorkbench(object oPC);
 itemproperty IpArgsToItemProperty(int nType, int nSub, int nParam, int nSpecial);
-struct xbowMechanicals GetXbowMechanicals(object oItem);
+
 
 int GetArmorBaseMaterial(object oItem);
 
@@ -284,6 +294,166 @@ int GetFactionItemAssociation(object oPC, object oItem){
 	
 }
 */
+
+
+// Returns the iprp_specialmat line that matches the basic material type defined
+// by the material 2da. sMat2da must be "scod_craft_metal", "scod_craft_leather", 
+// "scod_craft_wood", or "scod_craft_misc"
+int GetBaseMaterialOfType(object oItem, string sMat2da){
+	itemproperty ip = GetFirstItemProperty(oItem);
+	int nSub;
+	while (GetIsItemPropertyValid(ip)){
+		if (GetItemPropertyType(ip) == 100){
+			nSub = GetItemPropertySubType(ip);
+			if (Get2DAString("iprp_specialmat", "Mat_2da", nSub) == sMat2da)
+				return nSub;
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	return NULL;
+}
+
+
+string SearchValIn2da(string s2da, string sMatchColumn, string sMatchVal, string sFromColumn = ""){
+	int nRows = GetNum2DARows(s2da);
+	int i;
+	string sFoundVal;
+	for (i = 0; i <= nRows; i++){
+		sFoundVal = Get2DAString(s2da, sMatchColumn, i);
+		if (sFoundVal == sMatchVal){
+			if (sFromColumn == "") return IntToString(i);
+			else return Get2DAString(s2da, sFromColumn, i);
+		}
+	}
+	return "****";
+}
+
+struct dMatProp GetMatPowerFromItem(object oItem){
+	int nItem = GetBaseItemType(oItem);
+
+	// We'll set an intial item property of 50% weight reduction because in our system that 
+	// property costs 0 points.
+	struct dMatProp data;
+	data.ip = ItemPropertyWeightReduction(IP_CONST_REDUCEDWEIGHT_50_PERCENT);
+	data.points = 0;
+	
+	// non=player-made items don't have material powers, so return default values
+	if (!GetIsPlayerMade(oItem)) return data;
+	
+	string sLookupColumn = "ID";
+	int nLookupValue = nItem;
+	
+	// if it's an armor then we look it up by armorstat rule
+	if (nItem == 16){
+		sLookupColumn = "ARMORSTAT_ID";
+		nLookupValue = GetArmorRulesType(oItem);
+		if (nLookupValue >= 42) sLookupColumn = "MITH_ARMORSTAT_ID"; // crafted mithral
+	} else {
+		switch(nItem){
+			case 90: nLookupValue = 31; break; // dart quiver to dart
+			case 91: nLookupValue = 63; break; // throwing axe quiver to taxe
+			case 92: nLookupValue = 59; break; // shuriken quiver to shuriken
+			case 93: nLookupValue = 20; break; // arrow quiver to arrow
+			case 94: nLookupValue = 25; break; // bolt quiver to bolt
+			case 95: nLookupValue = 27; break; // bullet quiver to bullet
+			case 111: nLookupValue = 202; break; // there are 2 whip ids, this 2da uses 202
+			default: nLookupValue = nItem; break;
+		}
+	}
+	
+	string sBaseItemsRow = SearchValIn2da("scod_craft_baseitems", sLookupColumn, IntToString(nLookupValue));
+	if (sBaseItemsRow == "****") return data;
+	
+	int nBaseItemsRow = StringToInt(sBaseItemsRow);
+	
+	string sType = Get2DAString("scod_craft_baseitems", "TYPE", nBaseItemsRow);
+	int bIsMeleeGlove = (nItem == BASE_ITEM_GLOVES && CRAFTED_GLOVES_GET_MAT_POWER);
+	if (sType == "M" && !bIsMeleeGlove) return data; // misc items don't have material powers unless they're gloves
+	
+	string sCat = "";
+	if (sType == "A") sCat = "armor";
+	else if (sType == "W"){
+		if (nItem == BASE_ITEM_SLING || nItem == BASE_ITEM_SHORTBOW || 
+				nItem == BASE_ITEM_LONGBOW || nItem == BASE_ITEM_LIGHTCROSSBOW ||
+				nItem == BASE_ITEM_HEAVYCROSSBOW) sCat = "ranged";
+		else sCat = "melee"; // thrown weapons get same material powers as melee
+	}
+	
+	if (sCat == "") return data;
+	
+	// get the 2da that corresponds to the base material from which the item is crafted
+	// so that we can look up the material power from that 2da
+	string sMat2da = Get2DAString("scod_craft_baseitems", "MATERIAL_1", nBaseItemsRow);
+	sMat2da = GetStringLowerCase(sMat2da);
+	
+	int nMat = NULL;
+	// check for non-metal melee weapons that have metalline as their metal component
+	// if they do, then they get metalline's property instead
+	if (sCat == "melee" && sMat2da != "scod_craft_metal"){
+		if (GetBaseMaterialOfType(oItem, "scod_craft_metal") == SPECIAL_MAT_METALLINE){
+			data.ip = IpArgsToItemProperty(15, 335, 13, 0);
+			data.points = 1;
+			return data;
+		}
+	}
+	
+	nMat = GetBaseMaterialOfType(oItem, sMat2da);
+	
+	if (nMat == NULL) return data;
+	
+	string sMatRow = SearchValIn2da(sMat2da, "IP_DESCRIPTION_ID", IntToString(nMat));
+	if (sMatRow == "****") return data;
+	
+	int nMatRow = StringToInt(sMatRow);
+	
+	string sTypeColumn = "IP_MELEE_TYPE";
+	string sSubColumn = "IP_MELEE_SUBTYPE";
+	string sParamColumn = "IP_MELEE_PARAM";
+	string sSpecColumn = "IP_M_SPECIAL";
+	string sPointsColumn = "M_POINTS";
+	
+	if (sCat == "armor"){
+		sTypeColumn = "IP_ARMOR_TYPE";
+		sSubColumn = "IP_ARMOR_SUBTYPE";
+		sParamColumn = "IP_ARMOR_PARAM";
+		sSpecColumn = "IP_A_SPECIAL";
+		sPointsColumn = "A_POINTS";
+	} else if (sCat == "ranged"){
+		sTypeColumn = "IP_RANGED_TYPE";
+		sSubColumn = "IP_RANGED_SUBTYPE";
+		sParamColumn = "IP_RANGED_PARAM";
+		sSpecColumn = "IP_R_SPECIAL";
+		sPointsColumn = "R_POINTS";	
+	}
+	int nType = StringToInt(Get2DAString(sMat2da, sTypeColumn, nMatRow));
+	
+	// if it's a ranged weapon or glove whose mat power is keen, it gets bonus feature
+	// improved crit instead. If it's ammo whose mat power is keen, it gets nothing.
+	if (nType == 43){
+		// ammo cannot get keen so we return
+		if (IPGetIsProjectile(OBJECT_INVALID, nItem)) return data;
+		
+		if (IPGetIsThrownWeapon(OBJECT_INVALID, nItem) ||
+			IPGetIsLauncher(OBJECT_INVALID, nItem)){
+				data.ip = GetImpCritItemPropertyForRanged(nItem);
+		} else if (nItem == BASE_ITEM_GLOVES){
+			if (!CRAFTED_GLOVES_GET_MAT_POWER) return data;
+			else data.ip = ItemPropertyBonusFeat(20); // imp crit unarmed
+		} else data.ip = ItemPropertyKeen();
+
+		data.points = 1;
+		return data;
+	}
+	
+	int nSub = StringToInt(Get2DAString(sMat2da, sSubColumn, nMatRow));
+	int nParam = StringToInt(Get2DAString(sMat2da, sParamColumn, nMatRow));
+	int nSpecial = StringToInt(Get2DAString(sMat2da, sSpecColumn, nMatRow));
+	
+	data.points = StringToInt(Get2DAString(sMat2da, sPointsColumn, nMatRow));
+	data.ip = IpArgsToItemProperty(nType, nSub, nParam, nSpecial);
+	
+	return data;
+}
 
 int GetWorkbenchInRange(object oPC, object oBench){
 	if(GetIsObjectValid(oBench)) 
@@ -1228,4 +1398,17 @@ string RemoveWhitespace(string sInput){
         }
     }
     return sResult;
+}
+
+int GetIsPlayerMade(object oItem){
+	int ipType;
+	itemproperty ip = GetFirstItemProperty(oItem);
+    while (GetIsItemPropertyValid(ip)){
+		ipType = GetItemPropertyType(ip);
+        if (ipType == 101){ // "Cage-Forged" property to denote a player-made item
+			return TRUE;
+		} 
+		ip = GetNextItemProperty(oItem);
+    }
+    return FALSE;
 }
