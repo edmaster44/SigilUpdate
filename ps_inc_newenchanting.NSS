@@ -1161,12 +1161,15 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
 	int nItem = GetBaseItemType(oItem);
 	
+	//string sMessage = "Adding point at breakpoint ";
+	
 	int nPoints = 0; // this will be our ultimate return value. May as well set it up first thing.
 	
 	struct dMatProp dMatPowerData = GetMatPowerFromItem(oItem);
 	itemproperty ipMatPower = dMatPowerData.ip;
 	// go ahead and add the mat power points
 	nPoints += dMatPowerData.points;
+	//SendMessageToPC(oPC, "Added " + IntToString(nPoints) + " points at start");
 	
 	struct synergyBonus dSynergy = GetItemMaterialSynergyBonus(oItem);
 	itemproperty ipSynergy = dSynergy.ip;
@@ -1257,6 +1260,9 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 				}
 			} else if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
 				bSkipIp = TRUE;
+			} else if (ipMatPower == ItemPropertyKeen() &&
+				ip == ItemPropertyKeen()){
+				bSkipIp = TRUE;	
 			}
 		}
 		
@@ -1283,6 +1289,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		if (!bSkipIp && GetIsItemPropertyValid(ipSynergy)){
 			if (IPGetItemPropertiesIdentical(ipSynergy, ip)){
 				nAddPoints += nSynergyPoints;
+				//SendMessageToPC(oPC, sMessage + "1");
 				bSkipIp = TRUE;
 			}
 		}
@@ -1294,7 +1301,10 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		
 		// checking for keen/imp crit last in case it was already the matpower
 		if (!bSkipIp && IPGetItemPropertiesIdentical(ipCrit, ip)){
-			nAddPoints += 1;
+			if (!IPGetItemPropertiesIdentical(ipCrit, ipMatPower)){
+				nAddPoints += 1;
+				//SendMessageToPC(oPC, sMessage + "2");
+			}
 			bSkipIp = TRUE;
 		}
 		
@@ -1310,11 +1320,12 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 				((nItem == BASE_ITEM_SHURIKEN || nItem == 92)&& (nIpSub == 77 || nIpSub == 1322)) ||
 				((nItem == BASE_ITEM_THROWINGAXE || nItem == 91) && (nIpSub == 67 || nIpSub == 1323))){
 				nAddPoints += 1;
+				//SendMessageToPC(oPC, sMessage + "3");
 				bSkipIp = TRUE;
 			}
 		}
 		if (bSkipIp) bFoundMatch = TRUE;
-		else {
+		else if (!bSkipIp) {
 			for (i = 0; i < nNumRows; i++){
 				if (Get2DAString("scodenchantments", sTypeColumn, i) == "1" &&
 					StringToInt(Get2DAString("scodenchantments", "Type", i)) == nIpType){
@@ -1342,6 +1353,7 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 						//SendMessageToPC(oPC, "FOUND MATCH");
 						bFoundMatch = TRUE;
 						nAddPoints += StringToInt(Get2DAString("scodenchantments", "Points", i));
+						//SendMessageToPC(oPC, sMessage + "4");
 						break;
 					}
 				}

@@ -376,8 +376,8 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 		if (nItem == BASE_ITEM_SLING || nItem == BASE_ITEM_SHORTBOW || 
 				nItem == BASE_ITEM_LONGBOW || nItem == BASE_ITEM_LIGHTCROSSBOW ||
 				nItem == BASE_ITEM_HEAVYCROSSBOW) sCat = "ranged";
-		else sCat = "melee"; // thrown weapons get same material powers as melee
-	}
+		else sCat = "melee";
+	} else sCat = "melee"; // thrown weapons and gloves get same material powers as melee
 	
 	if (sCat == "") return data;
 	
@@ -425,7 +425,9 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 		sSpecColumn = "IP_R_SPECIAL";
 		sPointsColumn = "R_POINTS";	
 	}
+	
 	int nType = StringToInt(Get2DAString(sMat2da, sTypeColumn, nMatRow));
+	data.points = StringToInt(Get2DAString(sMat2da, sPointsColumn, nMatRow));
 	
 	// if it's a ranged weapon or glove whose mat power is keen, it gets bonus feature
 	// improved crit instead. If it's ammo whose mat power is keen, it gets nothing.
@@ -440,8 +442,6 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 			if (!CRAFTED_GLOVES_GET_MAT_POWER) return data;
 			else data.ip = ItemPropertyBonusFeat(20); // imp crit unarmed
 		} else data.ip = ItemPropertyKeen();
-
-		data.points = 1;
 		return data;
 	}
 	
@@ -449,7 +449,6 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	int nParam = StringToInt(Get2DAString(sMat2da, sParamColumn, nMatRow));
 	int nSpecial = StringToInt(Get2DAString(sMat2da, sSpecColumn, nMatRow));
 	
-	data.points = StringToInt(Get2DAString(sMat2da, sPointsColumn, nMatRow));
 	data.ip = IpArgsToItemProperty(nType, nSub, nParam, nSpecial);
 	
 	return data;
