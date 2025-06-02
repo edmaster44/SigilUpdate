@@ -333,7 +333,7 @@ void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 		if (GetLocalInt(oPC, "tacweapon") != nTac){
 			SetLocalInt(oPC, "tacbusy", TRUE);
 			SetLocalInt(oPC, "tacweapon", nTac);
-			RemoveBonusFeats(oSkin);
+			RemoveBonusFeats(oSkin, NULL, oPC);
 			if (!GetHasFeat(FEAT_COMBAT_EXPERTISE, oPC, TRUE))
 				SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
 			if (!GetHasFeat(FEAT_POWER_ATTACK, oPC, TRUE))

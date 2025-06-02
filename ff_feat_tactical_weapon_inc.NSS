@@ -10,7 +10,10 @@ const int TAC_SUITE_DISARM = 5;
 const int TAC_SUITE_KD = 6;
 const int TAC_BONUS_ONLY = -1;
 
-void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL);
+void SafeRemoveBonusFeat(object oSkin, itemproperty ip, object oPC);
+int HasIpOnEquipment(itemproperty ip, object oPC, int bIncludeSkin = FALSE);
+int ItemHasIp(object oItem, itemproperty ipWanted);
+void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL, object oPC = OBJECT_SELF);
 int GetFeatFromIprp(int iprp);
 int GetIsTacIprp(int iprp);
 int GetTacSuiteByDamageType(int nType);
@@ -21,22 +24,62 @@ int GetWeaponIsKick(int nType);
 int GetWeaponIsPolearm(int nType);
 int GetWeaponIsAccurateBlade(int nType);
 int GetWeaponIsSturdyBasher(int nType);
-void ApplyTacticalBonusFeat(object oSkin, int nFeat);
+void ApplyTacticalBonusFeat(object oSkin, int nFeat, object oPC = OBJECT_SELF);
 int GetWeaponIsTwoHanded(object oPC, object oRHAND, object oLHAND);
 
 
-void ApplyTacticalBonusFeat(object oSkin, int nFeat){
+void ApplyTacticalBonusFeat(object oSkin, int nFeat, object oPC = OBJECT_SELF){
+	if (GetHasFeat(nFeat, oPC, TRUE)) return;
 	int iprp = PS_GetIpBonusFeat(nFeat);
 	if (iprp == 19) return; // weapon finesse is default return if not found
 	itemproperty ip = ItemPropertyBonusFeat(iprp);
 	AddItemProperty(DURATION_TYPE_PERMANENT, ip, oSkin);
 }
 
-void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL){
+int ItemHasIp(object oItem, itemproperty ipWanted){
+	itemproperty ipFound = GetFirstItemProperty(oItem);
+	while (GetIsItemPropertyValid(ipFound)){
+		if (IPGetItemPropertiesIdentical(ipFound, ipWanted))
+			return TRUE;
+		ipFound = GetNextItemProperty(oItem);
+	}
+	return FALSE;
+}
+
+int HasIpOnEquipment(itemproperty ip, object oPC, int bIncludeSkin = FALSE){
+    int nSlot;
+	int nTotalSlots = 16;
+	if (bIncludeSkin) nTotalSlots = 17;
+    object oItem;
+    for (nSlot = 0; nSlot <= nTotalSlots; nSlot++){
+		 oItem = GetItemInSlot(nSlot, oPC);
+		 if (GetIsObjectValid(oItem)){
+			if (ItemHasIp(oItem, ip))
+				return TRUE;	
+		 }
+    }
+    return FALSE;
+}
+
+// nwn2 doesn't track multiple sources of a bonus feat through item property, 
+// it treats all instances as one, so if you have a ring with bonus feat CE
+// and bonus feat CE on your creature skin, and then remove it from one of them,
+// CE disappears from the mode bar even though the other is unaffected.
+// If I had known that before I made the whole tactical weapons thing, I wouldn'tactical
+// have had the weapons grant feats. So, now I check for the same bonus feat IP on
+// all other equipped gear and it it's there, I don't remove it from the skin
+// =FlattedFifth, June 1, 2025
+void SafeRemoveBonusFeat(object oSkin, itemproperty ip, object oPC){
+	if (!HasIpOnEquipment(ip, oPC))
+		RemoveItemProperty(oSkin, ip);
+}
+
+void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL, object oPC = OBJECT_SELF){
 	
 	int nSub;
 	int nIpSub;
 	int bRemove;
+	itemproperty ipNext;
 	itemproperty ip = GetFirstItemProperty(oSkin);
 	while (GetIsItemPropertyValid(ip)){
 		bRemove = FALSE;
@@ -47,12 +90,11 @@ void RemoveBonusFeats(object oSkin, int nSpecificFeat = NULL){
 				if (nSub == nIpSub) bRemove = TRUE;
 			} else if (GetIsTacIprp(nSub)) bRemove = TRUE;	
 		}
-		if (bRemove)RemoveItemProperty(oSkin, ip);
-
-		ip = GetNextItemProperty(oSkin);
+		ipNext = GetNextItemProperty(oSkin);
+		if (bRemove) SafeRemoveBonusFeat(oSkin, ip, oPC);
+		ip = ipNext;
 	}
 }
-
 
 int GetFeatFromIprp(int iprp){
 	switch (iprp){

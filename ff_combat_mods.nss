@@ -319,7 +319,7 @@ int GetXbowAndSharpshooterMods(struct CombatMods ModData){
 		nRightId == BASE_ITEM_LIGHTCROSSBOW);
 	int bSharpshooter = GetHasFeat(FEAT_SHARPSHOOTER, ModData.oPC, FALSE);
 	if (!bSharpshooter && !bIsXbow){
-		RemoveBonusFeats(ModData.oSkin, FEAT_RAPID_RELOAD);
+		RemoveBonusFeats(ModData.oSkin, FEAT_RAPID_RELOAD, ModData.oPC);
 		return 0;
 	}
 	int bGetsRR = FALSE;
@@ -342,8 +342,8 @@ int GetXbowAndSharpshooterMods(struct CombatMods ModData){
 			else nAB += nInt;
 		}
 	}
-	if (bGetsRR) ApplyTacticalBonusFeat(ModData.oSkin, FEAT_RAPID_RELOAD);
-	else RemoveBonusFeats(ModData.oSkin, FEAT_RAPID_RELOAD);
+	if (bGetsRR) ApplyTacticalBonusFeat(ModData.oSkin, FEAT_RAPID_RELOAD, ModData.oPC);
+	else RemoveBonusFeats(ModData.oSkin, FEAT_RAPID_RELOAD, ModData.oPC);
 										
 	return nAB;
 }
@@ -362,7 +362,7 @@ int GetCreatureTWFMod(struct CombatMods ModData){
 	
 	// bail if off hand is not a creature weap
 	if (!bLisCreature){
-		RemoveBonusFeats(ModData.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+		RemoveBonusFeats(ModData.oSkin, FEAT_TWO_WEAPON_FIGHTING, ModData.oPC);
 		return 0;
 	}
 	int nBonus = 0;
@@ -377,8 +377,8 @@ int GetCreatureTWFMod(struct CombatMods ModData){
 	// reduce penalty by 2 unless oversize twf is doing that already
 	if (nLWeaponSize == nPCsize && !GetHasFeat(FEAT_OVERSIZE_TWF, ModData.oPC, TRUE))
 		nBonus = 2;
-	if (bGetsTWF) ApplyTacticalBonusFeat(ModData.oSkin, FEAT_TWO_WEAPON_FIGHTING);
-	else RemoveBonusFeats(ModData.oSkin, FEAT_TWO_WEAPON_FIGHTING);
+	if (bGetsTWF) ApplyTacticalBonusFeat(ModData.oSkin, FEAT_TWO_WEAPON_FIGHTING, ModData.oPC);
+	else RemoveBonusFeats(ModData.oSkin, FEAT_TWO_WEAPON_FIGHTING, ModData.oPC);
 	return nBonus;
 }
 
