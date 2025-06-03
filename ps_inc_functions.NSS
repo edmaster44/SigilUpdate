@@ -456,6 +456,7 @@ object PS_GetEssence(object oPC = OBJECT_SELF)
 
 
 int GetIsCraftingFree(object oPC){
+	if (GetLocalInt(oPC, "TestCraftCost")) return FALSE;
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")) return TRUE;
 	if (GetIsDM(oPC)) return TRUE;
 	if (GetIsDMPossessed(oPC)) return TRUE;

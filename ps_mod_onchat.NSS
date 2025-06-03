@@ -231,6 +231,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SetLocalInt(oSender, "6secondtick", FALSE);
 			SendMessageToPC(oSender, "Stopping Tick");	
 		}
+	// toggles on and off force cost of crafting, cannot be used to craft for free on main
+	// but can be used to test costs on test server
+	} else if (sInput == "#testcraftcost"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(oSender, "TestCraftCost")){
+			SetLocalInt(oSender, "TestCraftCost", FALSE);
+			sFeedback = "Turning off craft costs on test server";
+		} else {
+			SetLocalInt(oSender, "TestCraftCost", TRUE);
+			sFeedback = "Turning on craft costs on test server";
+		}
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);

@@ -9,15 +9,81 @@
 // ChazM 8/16/06 moved stuff to ginc_crafting
 // ChazM 6/11/07 If campaign switch enabled, smith hammer can be used to rename any item.
 
+
 #include "ginc_crafting"
 #include "x2_inc_switches"
 #include "ps_inc_functions"
 #include "ps_inc_newcraft_include"
 
+void DoGemReCut(object oPC, object oTarget);
+void ReCutGem(object oPC, object oGem);
+void DoMeltDownItem(object oPC, object oTarget);
+
 void main(){
     object oPC = GetItemActivator();
     object oTarget = GetItemActivatedTarget();
+	string sRes = GetResRef(oTarget);
+	if (FindSubString(sRes, "gemstone_") != -1)
+		DoGemReCut(oPC, oTarget);
+	else DoMeltDownItem(oPC, oTarget);
+}
+
+void DoGemReCut(object oPC, object oTarget){
+	object oBench = GetNearestObjectByTag("PLC_MR_BSMITHG02", oPC);
+	
+	string sMessage = "<c=red>You must be near a gem cutting station and posses an";
+	sMessage += "\nadamantine dagger to use as a chisel in order";
+	sMessage += "\nto re-cut gems. (you do not have to have the dagger equipped)</c>";
+	//are we near a gem bench?
+	if (!GetWorkbenchInRange(oPC, oBench)){
+		SendMessageToPC(oPC, sMessage);
+		return;
+	}
+	// do we have an adamantine dagger to use as a chisel?
+	int bFoundChisel = FALSE;
+	object oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oItemL = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	if (GetBaseItemType(oItem) == BASE_ITEM_DAGGER &&
+		GetItemBaseMaterialType(oItem) == GMATERIAL_METAL_ADAMANTINE){
+			bFoundChisel = TRUE;
+			ReCutGem(oPC, oTarget);
+	} else if (GetBaseItemType(oItemL) == BASE_ITEM_DAGGER &&
+		GetItemBaseMaterialType(oItemL) == GMATERIAL_METAL_ADAMANTINE){
+			bFoundChisel = TRUE;
+			ReCutGem(oPC, oTarget);
+	} else {
+		int i = 0;
+		oItem = GetFirstItemInInventory(oPC);
+		while (GetIsObjectValid(oItem)){
+			i++;
+			if (GetBaseItemType(oItem) == BASE_ITEM_DAGGER &&
+				GetItemBaseMaterialType(oItem) == GMATERIAL_METAL_ADAMANTINE){
+				bFoundChisel = TRUE;
+				ReCutGem(oPC, oTarget);
+				break;
+			}
+			oItem = GetNextItemInInventory(oPC);
+			// num of items a pc could have if inv full of full bags, including the bags
+			if (i > 27072) return;
+		}
+	}
+	if (!bFoundChisel) SendMessageToPC(oPC, sMessage);
+}
+
+void ReCutGem(object oPC, object oGem){
+	//has this gem been recut already? If so, exit with notification
+	if (GetLocalInt(oGem, "recut")){
+		SendMessageToPC(oPC, "</c>This gem has been recut once, it cannot be cut a third time.</c>");
+		return;
+	}
+	SetLocalObject(oPC, "gem_to_be_recut", oGem);
+	AssignCommand(oPC, ActionStartConversation(oPC, "conv_gem_recut", TRUE, FALSE));
+}
+
+void DoMeltDownItem(object oPC, object oTarget){	
 	object oBench = GetNearestSmithingWorkbench(oPC);
+	
+	
 	if (!GetIsObjectValid(oBench)){
 		SendMessageToPC(oPC, "You must be near a crafting workstation to melt down items.");
 		return;
