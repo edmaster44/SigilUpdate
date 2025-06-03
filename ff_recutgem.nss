@@ -99,8 +99,11 @@ int GetGemQualityFromRes(object oPC, object oGem){
 		SendMessageToPC(oPC, "<c=red>You cannot re-cut uncut gems. Use gem cutting bench.</c>");
 		return 0;
 	}
-	//string sRes = GetResRef(oGem);
-	string sRes = GetTag(oGem);
+	string sRes = GetResRef(oGem);
+	string sTag = GetTag(oGem);
+		//debug
+	SendMessageToPC(oPC, "Gem res is " + sRes);
+	SendMessageToPC(oPC, "Gem tag is " + sTag);
 	if (FindSubString(sRes, "_q1") != -1) return 1;
 	else if (FindSubString(sRes, "_q2") != -1) return 2;
 	else if (FindSubString(sRes, "_q3") != -1) return 3;
