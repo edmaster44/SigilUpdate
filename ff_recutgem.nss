@@ -9,14 +9,14 @@
 #include "ps_inc_functions"
 #include "ps_inc_newcraft_include"
 
-int GetGemQualityFromRes(object oGem);
+int GetGemQualityFromRes(object oPC, object oGem);
 void RollForCut(object oPC, object oGem, int bImprove, int nQuality);
 
 void main(int bImprove){
 	object oPC = GetPCSpeaker();
 	object oGem = GetLocalObject(oPC, "gem_to_be_recut");
 
-	int nQuality = GetGemQualityFromRes(oGem);
+	int nQuality = GetGemQualityFromRes(oPC, oGem);
 	if (nQuality == 0){
 		SendMessageToPC(oPC, "<c=red>Error: Unrecognized Gem</c>");
 		return;
@@ -94,8 +94,13 @@ void RollForCut(object oPC, object oGem, int bImprove, int nQuality){
 }
 
 
-int GetGemQualityFromRes(object oGem){
-	string sRes = GetResRef(oGem);
+int GetGemQualityFromRes(object oPC, object oGem){
+	if (IsGemRough(oGem)){
+		SendMessageToPC(oPC, "<c=red>You cannot re-cut uncut gems. Use gem cutting bench.</c>");
+		return 0;
+	}
+	//string sRes = GetResRef(oGem);
+	string sRes = GetTag(oGem);
 	if (FindSubString(sRes, "_q1") != -1) return 1;
 	else if (FindSubString(sRes, "_q2") != -1) return 2;
 	else if (FindSubString(sRes, "_q3") != -1) return 3;
