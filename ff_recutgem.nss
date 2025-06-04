@@ -101,6 +101,11 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	sName += " <c=tomato>Re-Cut</c>";
 	SetFirstName(oGem, sName);
 	
+	//set new description for re-cut gem
+	string sDescrip = GetGemstoneDescription(oGem);
+	sDescrip += "\n\n" + GetGemstoneUses(GetBaseGemTagFromString(sNewTag), nNewQ);
+	SetDescription(oGem, sDescrip);
+	
 	//let the player know the result
 	sMessage = "<c=lightgreen>";
 	if (nRoll == NAT_20)
