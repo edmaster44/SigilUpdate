@@ -29,12 +29,12 @@ void main(int bImprove){
 	
 	if (bImprove){
 		if (nQuality == 2){
-			SendMessageToPC(oPC, "<c=red>Gem is already flawless.</c>");
+			SendMessageToPC(oPC, "<c=tomato>Gem is already flawless.</c>");
 			return;
 		}
 	} else {
 		if (nQuality == 0){
-			SendMessageToPC(oPC, "<c=red>Gem is already flawed</c>");
+			SendMessageToPC(oPC, "<c=tomato>Gem is already flawed</c>");
 			return;
 		}
 	}
@@ -45,7 +45,7 @@ void main(int bImprove){
 
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 
-	string sMessage = "<c=red>";
+	string sMessage = "<c=tomato>";
 	string sName;
 
 	if (nRoll == NAT_1){
@@ -60,7 +60,7 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 		sMessage += "You can tell that recutting this gem would destroy it.</c>";
 		SendMessageToPC(oPC, sMessage);
 		sName = GetFirstName(oGem);
-		sName += " <c=grey>Failed Recut</c>";
+		sName += " <c=tomato>Failed Recut</c>";
 		SetFirstName(oGem, sName);
  		return;
 	} 
@@ -70,7 +70,7 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	int nIndex = FindSubString(sTag, "_q", 12);
 	if (nIndex == -1){
 		//bail if the substring _q isn't found
-		SendMessageToPC(oPC, "<c=red>Error, unrecognized gem.</c>");
+		SendMessageToPC(oPC, "<c=tomato>Error, unrecognized gem.</c>");
 		return;
 	}
 	
@@ -98,11 +98,11 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	if (nNewQ == 0) sNewPrefix = "Flawed ";
 	else if (nNewQ == 2) sNewPrefix = "Flawless ";
 	if (sNewPrefix != "") sName = sNewPrefix + sName;
-	sName += " <c=grey>Re-Cut</c>";
+	sName += " <c=tomato>Re-Cut</c>";
 	SetFirstName(oGem, sName);
 	
 	//let the player know the result
-	sMessage = "<c=green>";
+	sMessage = "<c=lightgreen>";
 	if (nRoll == NAT_20)
 			sMessage += "You rolled a natural 20!/n";
 
@@ -126,7 +126,7 @@ int RollForCut(object oPC, int bImprove){
 		int nDC;
 		int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
 		if (bImprove)
-			nDC = 30 + d10(5);
+			nDC = 29 + d12(5) + d10();
 		else nDC = 30;
 		
 		if (nRoll + nMod >= nDC)
