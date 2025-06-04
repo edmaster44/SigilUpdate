@@ -23,7 +23,7 @@ void main(){
     object oPC = GetItemActivator();
     object oTarget = GetItemActivatedTarget();
 	string sRes = GetResRef(oTarget);
-	if (FindSubString(sRes, "gemstone_") != -1)
+	if (GetIsGemstone(oTarget))
 		DoGemReCut(oPC, oTarget);
 	else DoMeltDownItem(oPC, oTarget);
 }
@@ -74,6 +74,9 @@ void ReCutGem(object oPC, object oGem){
 	//has this gem been recut already? If so, exit with notification
 	if (GetLocalInt(oGem, "recut")){
 		SendMessageToPC(oPC, "</c>This gem has been recut once, it cannot be cut a third time.</c>");
+		return;
+	} else if (IsGemRough(oGem)){
+		SendMessageToPC(oPC, "<c=red>You cannot re-cut uncut gems. Use gem cutting bench.</c>");
 		return;
 	}
 	SetLocalObject(oPC, "gem_to_be_recut", oGem);

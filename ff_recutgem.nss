@@ -9,103 +9,128 @@
 #include "ps_inc_functions"
 #include "ps_inc_newcraft_include"
 
-int GetGemQualityFromRes(object oPC, object oGem);
-void RollForCut(object oPC, object oGem, int bImprove, int nQuality);
+const int NAT_1 = -1;
+const int NAT_20 = 20;
+const int SIMPLE_FAIL = FALSE;
+const int SIMPLE_SUCCESS = TRUE;
+
+
+void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
+int GetGemQualityFromTag(object oPC, object oGem);
+int RollForCut(object oPC, int bImprove);
 
 void main(int bImprove){
 	object oPC = GetPCSpeaker();
 	object oGem = GetLocalObject(oPC, "gem_to_be_recut");
-
-	int nQuality = GetGemQualityFromRes(oPC, oGem);
-	if (nQuality == 0){
-		SendMessageToPC(oPC, "<c=red>Error: Unrecognized Gem</c>");
-		return;
-	} else if (bImprove){
-		if (nQuality == 3){
+	
+	//tests that exclude rough gems and non-gems are in i_smithhammer_ac, 
+	// so we don't need them here
+	int nQuality = GetGemQuality(oGem);
+	
+	if (bImprove){
+		if (nQuality == 2){
 			SendMessageToPC(oPC, "<c=red>Gem is already flawless.</c>");
 			return;
 		}
 	} else {
-		if (nQuality == 1){
+		if (nQuality == 0){
 			SendMessageToPC(oPC, "<c=red>Gem is already flawed</c>");
 			return;
 		}
 	}
-	RollForCut(oPC, oGem, bImprove, nQuality);
+
+	int nRoll = RollForCut(oPC, bImprove);
+	PerformCut(oPC, oGem, nQuality, nRoll, bImprove);
 }
 
-void RollForCut(object oPC, object oGem, int bImprove, int nQuality){
-	int bSuccess;
-	string sMessage;
+void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
+
+	string sMessage = "<c=red>";
+	string sName;
+
+	if (nRoll == NAT_1){
+		sMessage += "You rolled a natural 1! You've shattered the gem.</c>";
+		SendMessageToPC(oPC, sMessage);
+		DestroyObject(oGem, 0.2f);
+		return;
+	}
+	//mark the gem so that i_smithhammer_ac won't let us recut a gem more than once
+	SetLocalInt(oGem, "recut", TRUE); 
+	if (nRoll == SIMPLE_FAIL){
+		sMessage += "You can tell that recutting this gem would destroy it.</c>";
+		SendMessageToPC(oPC, sMessage);
+		sName = GetFirstName(oGem);
+		sName += " <c=grey>Failed Recut</c>";
+		SetFirstName(oGem, sName);
+ 		return;
+	} 
+	
+	// we don't need an "else" because we've bailed before here in the failure cases
+	string sTag = GetTag(oGem);
+	int nIndex = FindSubString(sTag, "_q", 12);
+	if (nIndex == -1){
+		//bail if the substring _q isn't found
+		SendMessageToPC(oPC, "<c=red>Error, unrecognized gem.</c>");
+		return;
+	}
+	
+	// set up the new tag for our recut gem
+	string sNewTag = GetStringLeft(sTag, nIndex + 2);
+	int nNewQ = nQuality - 1;
+	if (bImprove) nNewQ = nQuality + 1;
+	sNewTag += IntToString(nNewQ);
+	int nRightChars = GetStringLength(sTag) - (nIndex + 3);
+	if (nRightChars > 0)
+		sNewTag += GetStringRight(sTag, nRightChars);
+	SetTag(oGem, sNewTag);	
+	
+	// set up the new name for our recut gem
+	sName = GetFirstName(oGem);
+	string sCurrentPrefix = "";
+	if (nQuality == 0) sCurrentPrefix = "Flawed ";
+	else if (nQuality == 2) sCurrentPrefix = "Flawless ";
+	if (sCurrentPrefix != ""){
+		int nTruncate = GetStringLength(sCurrentPrefix);
+		if (GetStringLeft(sName, nTruncate) == sCurrentPrefix)
+			sName = GetStringRight(sName, GetStringLength(sName) - nTruncate);
+	}
+	string sNewPrefix = "";
+	if (nNewQ == 0) sNewPrefix = "Flawed ";
+	else if (nNewQ == 2) sNewPrefix = "Flawless ";
+	if (sNewPrefix != "") sName = sNewPrefix + sName;
+	sName += " <c=grey>Re-Cut</c>";
+	SetFirstName(oGem, sName);
+	
+	//let the player know the result
+	sMessage = "<c=green>";
+	if (nRoll == NAT_20)
+			sMessage += "You rolled a natural 20!/n";
+
+	sMessage += "You've successfully recut the gem!</c>";
+	
+	SendMessageToPC(oPC, sMessage);
+}
+
+// roll for the recut
+// returns -1 if nat 1 roll (crit failure, destroys gem
+// returns 20 if nat 20 roll, auto success
+// returns true if simple success
+// returns false if simple failure
+int RollForCut(object oPC, int bImprove){
 	int nRoll = d20(1);
 	if (nRoll == 1){
-		bSuccess = FALSE;
-		sMessage =  "<c=red>You rolled a natural 1! You've shatterd the gem.</c>";
+		return NAT_1;
 	} else if (nRoll == 20){
-		bSuccess = TRUE;
-		sMessage =  "<c=green>You rolled a natural 20! You've successfully recut the gem.</c>";
+		return NAT_20;
 	} else {
 		int nDC;
 		int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
 		if (bImprove)
 			nDC = 30 + d10(5);
 		else nDC = 30;
-		if (nRoll + nMod >= nDC){
-			bSuccess = TRUE;
-			sMessage = "<c=green>You've successfully recut the gem!</c>";
-		} else {
-			bSuccess = FALSE;
-			sMessage = "<c=Red>You can tell that recutting this gem would destroy it.</c>";
-		}
-	}
-	
-	SendMessageToPC(oPC, sMessage);
-	if (nRoll == 1){
-		DestroyObject(oGem, 0.2f);
-	} else {
 		
-		SetLocalInt(oGem, "recut", TRUE);
-		string sName = GetName(oGem);
-		string sTag = GetTag(oGem);
-		if (bSuccess){
-			string sNewQ = "_q";
-			if (bImprove){
-				sNewQ += IntToString(nQuality + 1);
-				if (nQuality == 1){
-					if (GetStringLeft(sName, 7) == "Flawed ")
-						sName = GetStringRight(sName, GetStringLength(sName) - 7);
-				} else sName = "Flawless " + sName;
-			} else {
-				sNewQ += IntToString(nQuality - 1);
-				if (nQuality == 3){
-					if (GetStringLeft(sName, 9) == "Flawless ")
-						sName = GetStringRight(sName, GetStringLength(sName) - 9);
-					else sName = "Flawed " + sName;
-				}
-			}
-			sTag = GetStringLeft(sTag, GetStringLength(sTag) - 3) + sNewQ;
-			SetTag(oGem, sTag);
-			sName += " <c=grey>Re-Cut</c>";
-		} else {
-			sName += " <c=grey>Failed Recut</c>";
-		}
-		SetFirstName(oGem, sName);
+		if (nRoll + nMod >= nDC)
+			return SIMPLE_SUCCESS; 
 	}
-}
-
-
-int GetGemQualityFromRes(object oPC, object oGem){
-	if (IsGemRough(oGem)){
-		SendMessageToPC(oPC, "<c=red>You cannot re-cut uncut gems. Use gem cutting bench.</c>");
-		return 0;
-	}
-	string sRes = GetResRef(oGem);
-	string sTag = GetTag(oGem);
-		//debug
-	SendMessageToPC(oPC, "Gem res is " + sRes);
-	SendMessageToPC(oPC, "Gem tag is " + sTag);
-	if (FindSubString(sRes, "_q1") != -1) return 1;
-	else if (FindSubString(sRes, "_q2") != -1) return 2;
-	else if (FindSubString(sRes, "_q3") != -1) return 3;
-	return 0;
+	return SIMPLE_FAIL;
 }
