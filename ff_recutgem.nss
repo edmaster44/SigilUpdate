@@ -14,7 +14,8 @@ const int NAT_20 = 20;
 const int SIMPLE_FAIL = FALSE;
 const int SIMPLE_SUCCESS = TRUE;
 
-void VerifyNewGem(object oPC, object oOldGem, object oRecutGem, string sName, string sDescrip);
+void ShowRecutResult(object oPC, object oRecut, string sMessage);
+void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip);
 void GenerateNewGem(object oPC, object oGem, string sNewTag, string sName, string sDescrip);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
 int GetGemQualityFromTag(object oPC, object oGem);
@@ -47,28 +48,33 @@ void main(int bImprove){
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 
 	string sMessage = "<c=tomato>";
-	string sName;
+	string sName = GetFirstName(oGem);
+	string sDescrip = GetGemstoneDescription(oGem);
+	
+	string sTag = GetTag(oGem);
+	object oRecut;
 
 	if (nRoll == NAT_1){
 		sMessage += "You rolled a natural 1! You've shattered the gem.</c>";
 		SendMessageToPC(oPC, sMessage);
-		DestroyObject(oGem, 0.2f);
+		int nStack = GetItemStackSize(oGem);
+		if (nStack > 1) SetItemStackSize(oGem, nStack - 1);
+		else DestroyObject(oGem, 0.3f);
 		return;
 	}
-	//mark the gem so that i_smithhammer_ac won't let us recut a gem more than once
-	SetLocalInt(oGem, "recut", TRUE); 
+	
 	if (nRoll == SIMPLE_FAIL){
-		sMessage += "You can tell that recutting this gem would destroy it.</c>";
-		SendMessageToPC(oPC, sMessage);
-		sName = GetFirstName(oGem);
 		sName += " <c=tomato>Failed Recut</c>";
-		SetFirstName(oGem, sName);
+		sDescrip = GetDescription(oGem);
+		oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sTag);
+		DelayCommand(0.3f, VerifyNewGem(oPC, oGem, oRecut, sName, sDescrip));
+		sMessage += "You can tell that this gem cannot be recut without destroying it.</c>";
+		ShowRecutResult(oPC, oRecut, sMessage);
  		return;
 	} 
 	
 	// we don't need an "else" because we've bailed before here in the failure cases
 	
-	string sTag = GetTag(oGem);
 	int nIndex = FindSubString(sTag, "_q", 12);
 	if (nIndex == -1){
 		//bail if the substring _q isn't found
@@ -86,7 +92,6 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 		sNewTag += GetStringRight(sTag, nRightChars);
 	
 	// set up the new name for our recut gem, sName
-	sName = GetFirstName(oGem);
 	string sCurrentPrefix = "";
 	if (nQuality == 0) sCurrentPrefix = "Flawed ";
 	else if (nQuality == 2) sCurrentPrefix = "Flawless ";
@@ -101,42 +106,48 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	if (sNewPrefix != "") sName = sNewPrefix + sName;
 	sName += " <c=tomato>Re-Cut</c>";
 	
-	//set new description for re-cut gem, sDescrip
-	string sDescrip = GetGemstoneDescription(oGem);
+	//get new description for re-cut gem, sDescrip
 	sDescrip += GetGemstoneUses(GetBaseGemTagFromString(sNewTag), nNewQ);
 	
 	// create the newly recut gem, 
-	object oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sNewTag);
+	oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sNewTag);
 	//then make sure everything is kosher and clean up
 	DelayCommand(0.3f, VerifyNewGem(oPC, oGem, oRecut, sName, sDescrip));
 	
 	//let the player know the result
+
+	sMessage = "<c=lightgreen>";
+	if (nRoll == NAT_20)
+			sMessage += "You rolled a natural 20!/n";
+
+	sMessage += "You've successfully recut the gem!</c>";
+	
+	ShowRecutResult(oPC, oRecut, sMessage);
+}
+
+void ShowRecutResult(object oPC, object oRecut, string sMessage){
 	if (!GetIsObjectValid(oRecut)){
 		sMessage = "<c=tomato>Error generating re-cut gem.\n";
 		sMessage += "Please make sure you have an empty inventory slot.\n";
 		sMessage += "If you do have an empty slot and get this message, contact support.</c>";
-	} else {
-		sMessage = "<c=lightgreen>";
-		if (nRoll == NAT_20)
-				sMessage += "You rolled a natural 20!/n";
-
-		sMessage += "You've successfully recut the gem!</c>";
 	}
 	SendMessageToPC(oPC, sMessage);
 }
 
 
 
-void VerifyNewGem(object oPC, object oOldGem, object oRecutGem, string sName, string sDescrip){
+void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip){
 	
-	if (!GetIsObjectValid(oRecutGem))return;
+	if (!GetIsObjectValid(oRecut))return;
 
 	int nStack = GetItemStackSize(oOldGem);
 	if (nStack > 1) SetItemStackSize(oOldGem, nStack -1);
 	else DestroyObject(oOldGem);
 	
-	SetFirstName(oRecutGem, sName);
-	SetDescription(oRecutGem, sDescrip);
+	//mark the gem so that i_smithhammer_ac won't let us recut a gem more than once
+	SetLocalInt(oRecut, "recut", TRUE); 
+	SetFirstName(oRecut, sName);
+	SetDescription(oRecut, sDescrip);
 }
 
 // roll for the recut
