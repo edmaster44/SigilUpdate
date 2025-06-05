@@ -14,7 +14,8 @@ const int NAT_20 = 20;
 const int SIMPLE_FAIL = FALSE;
 const int SIMPLE_SUCCESS = TRUE;
 
-
+void VerifyNewGem(object oPC, object oOldGem, object oRecutGem, string sName, string sDescrip);
+void GenerateNewGem(object oPC, object oGem, string sNewTag, string sName, string sDescrip);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
 int GetGemQualityFromTag(object oPC, object oGem);
 int RollForCut(object oPC, int bImprove);
@@ -66,6 +67,7 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	} 
 	
 	// we don't need an "else" because we've bailed before here in the failure cases
+	
 	string sTag = GetTag(oGem);
 	int nIndex = FindSubString(sTag, "_q", 12);
 	if (nIndex == -1){
@@ -74,7 +76,7 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 		return;
 	}
 	
-	// set up the new tag for our recut gem
+	// set up the new tag for our recut gem, sNewTag
 	string sNewTag = GetStringLeft(sTag, nIndex + 2);
 	int nNewQ = nQuality - 1;
 	if (bImprove) nNewQ = nQuality + 1;
@@ -82,9 +84,8 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	int nRightChars = GetStringLength(sTag) - (nIndex + 3);
 	if (nRightChars > 0)
 		sNewTag += GetStringRight(sTag, nRightChars);
-	SetTag(oGem, sNewTag);	
 	
-	// set up the new name for our recut gem
+	// set up the new name for our recut gem, sName
 	sName = GetFirstName(oGem);
 	string sCurrentPrefix = "";
 	if (nQuality == 0) sCurrentPrefix = "Flawed ";
@@ -99,21 +100,43 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	else if (nNewQ == 2) sNewPrefix = "Flawless ";
 	if (sNewPrefix != "") sName = sNewPrefix + sName;
 	sName += " <c=tomato>Re-Cut</c>";
-	SetFirstName(oGem, sName);
 	
-	//set new description for re-cut gem
+	//set new description for re-cut gem, sDescrip
 	string sDescrip = GetGemstoneDescription(oGem);
 	sDescrip += GetGemstoneUses(GetBaseGemTagFromString(sNewTag), nNewQ);
-	SetDescription(oGem, sDescrip);
+	
+	// create the newly recut gem, 
+	object oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sNewTag);
+	//then make sure everything is kosher and clean up
+	DelayCommand(0.3f, VerifyNewGem(oPC, oGem, oRecut, sName, sDescrip));
 	
 	//let the player know the result
-	sMessage = "<c=lightgreen>";
-	if (nRoll == NAT_20)
-			sMessage += "You rolled a natural 20!/n";
+	if (!GetIsObjectValid(oRecut)){
+		sMessage = "<c=tomato>Error generating re-cut gem.\n";
+		sMessage += "Please make sure you have an empty inventory slot.\n";
+		sMessage += "If you do have an empty slot and get this message, contact support.</c>";
+	} else {
+		sMessage = "<c=lightgreen>";
+		if (nRoll == NAT_20)
+				sMessage += "You rolled a natural 20!/n";
 
-	sMessage += "You've successfully recut the gem!</c>";
-	
+		sMessage += "You've successfully recut the gem!</c>";
+	}
 	SendMessageToPC(oPC, sMessage);
+}
+
+
+
+void VerifyNewGem(object oPC, object oOldGem, object oRecutGem, string sName, string sDescrip){
+	
+	if (!GetIsObjectValid(oRecutGem))return;
+
+	int nStack = GetItemStackSize(oOldGem);
+	if (nStack > 1) SetItemStackSize(oOldGem, nStack -1);
+	else DestroyObject(oOldGem);
+	
+	SetFirstName(oRecutGem, sName);
+	SetDescription(oRecutGem, sDescrip);
 }
 
 // roll for the recut
@@ -122,20 +145,29 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 // returns true if simple success
 // returns false if simple failure
 int RollForCut(object oPC, int bImprove){
+	int nResult = SIMPLE_FAIL;
+	string sMessage;
+	int nDC = 30;
+	int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
+	if (bImprove)
+		nDC = 29 + d12(5) + d10();
 	int nRoll = d20(1);
+	
 	if (nRoll == 1){
-		return NAT_1;
+		sMessage = "<c=tomato>";
+		nResult = NAT_1;
 	} else if (nRoll == 20){
-		return NAT_20;
+		sMessage = "<c=lightgreen>";
+		nResult = NAT_20;
 	} else {
-		int nDC;
-		int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
-		if (bImprove)
-			nDC = 29 + d12(5) + d10();
-		else nDC = 30;
-		
-		if (nRoll + nMod >= nDC)
-			return SIMPLE_SUCCESS; 
+		if (nRoll + nMod >= nDC){
+			nResult = SIMPLE_SUCCESS; 
+			sMessage = "<c=lightgreen>";
+		} else sMessage = "<c=tomato>";
 	}
-	return SIMPLE_FAIL;
+	sMessage += "Roll: " + IntToString(nRoll) + " + " + IntToString(nMod);
+	sMessage += " = " + IntToString(nRoll + nMod);
+	sMessage += " vs DC: " + IntToString(nDC) + "</c>";
+	SendMessageToPC(oPC, sMessage);
+	return nResult;
 }
