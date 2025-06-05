@@ -235,13 +235,15 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// but can be used to test costs on test server
 	} else if (sInput == "#testcraftcost"){
 		bFFcommand = TRUE;
-		if (GetLocalInt(oSender, "TestCraftCost")){
-			SetLocalInt(oSender, "TestCraftCost", FALSE);
-			sFeedback = "Turning off craft costs on test server";
-		} else {
-			SetLocalInt(oSender, "TestCraftCost", TRUE);
-			sFeedback = "Turning on craft costs on test server";
-		}
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			if (GetLocalInt(oSender, "TestCraftCost")){
+				SetLocalInt(oSender, "TestCraftCost", FALSE);
+				sFeedback = "Turning off craft costs.";
+			} else {
+				SetLocalInt(oSender, "TestCraftCost", TRUE);
+				sFeedback = "Turning on craft costs.";
+			}
+		} else sFeedback = "This command only works on the test server.";
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
