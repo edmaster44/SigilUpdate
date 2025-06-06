@@ -16,10 +16,8 @@ const int SIMPLE_SUCCESS = TRUE;
 
 void ShowRecutResult(object oPC, object oRecut, string sMessage);
 void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip);
-void GenerateNewGem(object oPC, object oGem, string sNewTag, string sName, string sDescrip);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
-int GetGemQualityFromTag(object oPC, object oGem);
-int RollForCut(object oPC, int bImprove);
+int RollForCut(object oPC, object oGem, int bImprove);
 
 void main(int bImprove){
 	object oPC = GetPCSpeaker();
@@ -41,7 +39,7 @@ void main(int bImprove){
 		}
 	}
 
-	int nRoll = RollForCut(oPC, bImprove);
+	int nRoll = RollForCut(oPC, oGem, bImprove);
 	PerformCut(oPC, oGem, nQuality, nRoll, bImprove);
 }
 
@@ -134,8 +132,6 @@ void ShowRecutResult(object oPC, object oRecut, string sMessage){
 	SendMessageToPC(oPC, sMessage);
 }
 
-
-
 void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip){
 	
 	if (!GetIsObjectValid(oRecut))return;
@@ -155,13 +151,20 @@ void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, strin
 // returns 20 if nat 20 roll, auto success
 // returns true if simple success
 // returns false if simple failure
-int RollForCut(object oPC, int bImprove){
+int RollForCut(object oPC, object oGem, int bImprove){
 	int nResult = SIMPLE_FAIL;
 	string sMessage;
 	int nDC = 30;
 	int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
-	if (bImprove)
-		nDC = 29 + d12(5) + d10();
+	if (bImprove){
+		nDC += d12(5);
+		string sTag = GetTag(oGem);
+		sTag = GetStringLowerCase(sTag);
+		if (FindSubString(sTag, "diamond") >= 0 ||
+			FindSubString(sTag, "jasmal") >= 0){
+				nDC += d10() - 1;
+		}
+	}
 	int nRoll = d20(1);
 	
 	if (nRoll == 1){
