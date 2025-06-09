@@ -32,7 +32,8 @@ void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
 void MonkDruidPenalty(object oPC);
 //void UnearthlyGrace(object oPC, object oCHEST);
-void HeavyArmorOptimizations(object oPC, object oARMOR);
+int GetArmorQualifiesForArmorOpt(object oARMOR);
+void ArmorOptimizations(object oPC, object oARMOR);
 void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string s2DA = "armorrulestats", string sCOLUMN = "ACCHECK");
 int CheckDragonForms(object oPC, object oITEM, int nITEM);
 int CheckManualDexterity(object oPC, object oITEM, int nITEM);
@@ -144,7 +145,7 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
     ShieldRangedConceal(oPC, nLEFT);
 	FIX_BLINDFIGHT(oPC);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
-    HeavyArmorOptimizations(oPC, oCHEST);
+    ArmorOptimizations(oPC, oCHEST);
    // UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
 	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
@@ -316,9 +317,6 @@ void FrightfulPresence(object oPC, int nCHA){
         oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
     }
 }
-
-
-
 
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 	int nTac;
@@ -1034,9 +1032,32 @@ void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string 
     ApplyEquipmentEffect(oPC, eFX);
 }
 
+int GetArmorQualifiesForArmorOpt(object oARMOR){
+	int nArmorRulesRow = GetArmorRulesType(oARMOR);
 
-// Heavy Armor Optimization Feats
-void HeavyArmorOptimizations(object oPC, object oARMOR){
+	// basic armors, part 1
+	if (nArmorRulesRow >= 1 && nArmorRulesRow <= 8)
+		return TRUE;
+		
+	// basic armors, part 2
+	if (nArmorRulesRow >= 12 && nArmorRulesRow <= 15)
+		return TRUE;
+		
+	//masterwork armors
+	if (nArmorRulesRow >= 24 && nArmorRulesRow <= 35)
+		return TRUE;
+		
+	// crafted mithral, NOT base game mithral with enhanced dex
+	if (nArmorRulesRow >= 42 && nArmorRulesRow <= 46)
+		return TRUE;
+		
+	// base game mithral, shields
+	return FALSE;
+}
+
+
+// Armor Optimization Feats
+void ArmorOptimizations(object oPC, object oARMOR){
 
 	//Remove previous optimization skill effects
 	if (GetHasSpellEffect(ARMOR_OPT_FX, oPC)) 
@@ -1049,7 +1070,7 @@ void HeavyArmorOptimizations(object oPC, object oARMOR){
 	// remove the Armor Opt AC feats if the armor isn't heavy or they
 	// do not have Armor Opt
 	if (GetBaseItemType(oARMOR) != BASE_ITEM_ARMOR ||
-		GetArmorRank(oARMOR) != ARMOR_RANK_HEAVY ||
+		!GetArmorQualifiesForArmorOpt(oARMOR) ||
 		(!bHasEpicAO && !bHasGreaterAO && !bHasAO)){
 			if (GetHasFeat(FEAT_ARMOR_OPT_AC_4, oPC, TRUE))
 				FeatRemove(oPC, FEAT_ARMOR_OPT_AC_4);
@@ -1090,8 +1111,15 @@ void HeavyArmorOptimizations(object oPC, object oARMOR){
         nSKILL = 1;
     } else return;
 	
-    
+	//Make sure skill bonus does not exceed armor penalty
+	int nPENALTY = StringToInt(
+		Get2DAString("armorrulestats", "ACCHECK", GetArmorRulesType(oARMOR))
+		);
+	if (nSKILL > nPENALTY) nSKILL = nPENALTY;
+	
+ 
     //effect eFX = EffectACIncrease(nAC);
+	
     effect eFX = EffectSkillIncrease(SKILL_PARRY, nSKILL);
     eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSKILL));
     eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_TUMBLE, nSKILL));
