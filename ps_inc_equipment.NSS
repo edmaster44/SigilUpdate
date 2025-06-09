@@ -1115,22 +1115,25 @@ void ArmorOptimizations(object oPC, object oARMOR){
 	int nPENALTY = StringToInt(
 		Get2DAString("armorrulestats", "ACCHECK", GetArmorRulesType(oARMOR))
 		);
+	// convert penalty to positive and compare
+	if (nPENALTY < 0) nPENALTY *= -1;
 	if (nSKILL > nPENALTY) nSKILL = nPENALTY;
 	
  
     //effect eFX = EffectACIncrease(nAC);
-	
-    effect eFX = EffectSkillIncrease(SKILL_PARRY, nSKILL);
-    eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSKILL));
-    eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_TUMBLE, nSKILL));
-    if (GetHasFeat(FEAT_MARQCAMB_SILENT_METAL, oPC, TRUE) == FALSE){
-        eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HIDE, nSKILL));
-        eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_MOVE_SILENTLY, nSKILL));
-    }
-	
-    eFX = SupernaturalEffect(eFX);
-    eFX = SetEffectSpellId(eFX, ARMOR_OPT_FX);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	if (nSKILL > 0){
+		effect eFX = EffectSkillIncrease(SKILL_PARRY, nSKILL);
+		eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_SET_TRAP, nSKILL));
+		eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_TUMBLE, nSKILL));
+		if (GetHasFeat(FEAT_MARQCAMB_SILENT_METAL, oPC, TRUE) == FALSE){
+			eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_HIDE, nSKILL));
+			eFX = EffectLinkEffects(eFX, EffectSkillIncrease(SKILL_MOVE_SILENTLY, nSKILL));
+		}
+		
+		eFX = SupernaturalEffect(eFX);
+		eFX = SetEffectSpellId(eFX, ARMOR_OPT_FX);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	}
 }
 /* race removed
 // Unearthly grace feat for Nymphs. CHA bonus to Saves and Dodge AC.
