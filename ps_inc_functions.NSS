@@ -3725,6 +3725,8 @@ int GetBardicClassLevelForUses(object oPC){
 
 	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
 	
+	nBARD += GetLevelByClass(117, oPC); // warchanter
+	
 	if (GetHasFeat(2481, oPC, TRUE)) 
 		nBARD += (GetLevelByClass(CLASS_TYPE_FIRRE_PRC,oPC));
 		
@@ -3753,6 +3755,8 @@ int GetBardicClassLevelForSongs(object oPC)
 {	
 	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
 	nBARD += GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);
+	
+	nBARD += GetLevelByClass(117, oPC); //warchanter
 	
 	if (GetHasFeat(2678, oPC, TRUE))
 		nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
