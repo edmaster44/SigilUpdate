@@ -60,7 +60,8 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell){
 			break;
 		}
 	}
-	effect eDR = EffectDamageReduction(nDR, DR_TYPE_GMATERIAL, 0, nMat);
+
+	effect eDR = EffectDamageReduction(nDR, nMat, 0, DR_TYPE_GMATERIAL);
 	
 	if (!GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
 		int iHD = GetTotalLevels(oPC, TRUE);
