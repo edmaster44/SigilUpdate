@@ -120,7 +120,7 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 		sName += " <c=grey> -large</c>";
 	// mark a small gem as such
 	else if (FindSubString(sNewTag, "_c0", 12) >= 0)
-		sName += " <c=grey> -small</c>";
+		sName += " <c=gray> -small</c>";
 	sName += " <c=tomato>Re-Cut</c>";
 	
 	//get new description for re-cut gem, sDescrip
