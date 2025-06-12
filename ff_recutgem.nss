@@ -86,8 +86,19 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	if (bImprove) nNewQ = nQuality + 1;
 	sNewTag += IntToString(nNewQ);
 	int nRightChars = GetStringLength(sTag) - (nIndex + 3);
-	if (nRightChars > 0)
-		sNewTag += GetStringRight(sTag, nRightChars);
+	if (nRightChars > 0){
+		string sTagEnd = GetStringRight(sTag, nRightChars);
+		// attempt to downgrade the gem size by 1 category
+		// if this consistently works we may be able to do
+		// away with the local int and the name "re-cut", 
+		// at least on successful recuts
+		if (sTagEnd == "_c2")
+			sNewTag += "_c1";
+		else if (sTagEnd == "_c1")
+			sNewTag += "_c0";
+		else
+			sNewTag += sTagEnd;
+	}
 	
 	// set up the new name for our recut gem, sName
 	string sCurrentPrefix = "";
@@ -102,6 +113,14 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	if (nNewQ == 0) sNewPrefix = "Flawed ";
 	else if (nNewQ == 2) sNewPrefix = "Flawless ";
 	if (sNewPrefix != "") sName = sNewPrefix + sName;
+	// I don't see how a recut get could still be flagged as large at 
+	// this point but this is here so that, if it happens, I'll be 
+	// able to know and investigate
+	if (FindSubString(sNewTag, "_c2", 12) >= 0)
+		sName += " <c=grey> -large</c>";
+	// mark a small gem as such
+	else if (FindSubString(sNewTag, "_c0", 12) >= 0)
+		sName += " <c=grey> -small</c>";
 	sName += " <c=tomato>Re-Cut</c>";
 	
 	//get new description for re-cut gem, sDescrip

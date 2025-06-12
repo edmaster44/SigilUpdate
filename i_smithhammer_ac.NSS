@@ -76,11 +76,11 @@ void ReCutGem(object oPC, object oGem){
 		SendMessageToPC(oPC, "</c>This gem has been recut once, it cannot be cut a third time.</c>");
 		return;
 	} else if (IsGemRough(oGem)){
-		SendMessageToPC(oPC, "<c=red>You cannot re-cut uncut gems. Use gem cutting bench.</c>");
+		SendMessageToPC(oPC, "<c=red>You cannot recut uncut gems. Use gem cutting bench.</c>");
 		return;
-	} else if (FindSubString(GetTag(oGem), "_c0") >= 0 || 
+	} else if (FindSubString(GetTag(oGem), "_c0", 12) >= 0 || 
 		FindSubString(GetStringLowerCase(GetName(oGem)), "small") >= 0){
-			SendMessageToPC(oPC, "<c=red>You cannot re-cut small gems..</c>");
+			SendMessageToPC(oPC, "<c=red>You cannot recut small gems.</c>");
 			return;
 	
 	}
