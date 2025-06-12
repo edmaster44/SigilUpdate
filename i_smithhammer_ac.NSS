@@ -78,6 +78,11 @@ void ReCutGem(object oPC, object oGem){
 	} else if (IsGemRough(oGem)){
 		SendMessageToPC(oPC, "<c=red>You cannot re-cut uncut gems. Use gem cutting bench.</c>");
 		return;
+	} else if (FindSubString(GetTag(oGem), "_c0") >= 0 || 
+		FindSubString(GetStringLowerCase(GetName(oGem)), "small") >= 0){
+			SendMessageToPC(oPC, "<c=red>You cannot re-cut small gems..</c>");
+			return;
+	
 	}
 	SetLocalObject(oPC, "gem_to_be_recut", oGem);
 	AssignCommand(oPC, ActionStartConversation(oPC, "conv_gem_recut", TRUE, FALSE));

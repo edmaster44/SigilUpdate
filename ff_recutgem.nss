@@ -17,7 +17,7 @@ const int SIMPLE_SUCCESS = TRUE;
 void ShowRecutResult(object oPC, object oRecut, string sMessage);
 void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
-int RollForCut(object oPC, object oGem, int bImprove);
+int RollForCut(object oPC, object oGem, int nQuality, int bImprove);
 
 void main(int bImprove){
 	object oPC = GetPCSpeaker();
@@ -39,7 +39,7 @@ void main(int bImprove){
 		}
 	}
 
-	int nRoll = RollForCut(oPC, oGem, bImprove);
+	int nRoll = RollForCut(oPC, oGem, nQuality, bImprove);
 	PerformCut(oPC, oGem, nQuality, nRoll, bImprove);
 }
 
@@ -120,7 +120,7 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 
 	sMessage += "You've successfully recut the gem!</c>";
 	
-	ShowRecutResult(oPC, oRecut, sMessage);
+	DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
 }
 
 void ShowRecutResult(object oPC, object oRecut, string sMessage){
@@ -151,21 +151,65 @@ void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, strin
 // returns 20 if nat 20 roll, auto success
 // returns true if simple success
 // returns false if simple failure
-int RollForCut(object oPC, object oGem, int bImprove){
+int RollForCut(object oPC, object oGem, int nQuality, int bImprove){
 	int nResult = SIMPLE_FAIL;
 	string sMessage;
 	int nDC = 30;
 	int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
+	
+	// if we're improving gems, then the DC range is 35 - 99
+	// as expressed by 31 + 3d20 + 1d8.
+	// but it will be "weighted" towards higher numbers in the
+	// range depending upon the quality and rarity of the gem.
+	// For each factor, one d20 will be rolled an additional time
+	// and the higher result used. These factors are:
+	// going from regular quality to flawless = 1 die reroll
+	// sunstone or bloodstone = 1 die reroll
+	// jasmal or diamond = 2 die reroll. (but not black diamonds)
+	// So if we're improving a regular jasmal to flawless then 
+	// all 3 of the d20's will be rolled twice each and the higher
+	// result used each time.
 	if (bImprove){
-		nDC += d12(5);
-		string sTag = GetTag(oGem);
-		sTag = GetStringLowerCase(sTag);
-		if (FindSubString(sTag, "diamond") >= 0 ||
-			FindSubString(sTag, "jasmal") >= 0){
-				nDC += d10() - 1;
+		nDC += d8() + 1;
+		int nFirstDie = d20();
+		int nSecondDie = d20();
+		int nThirdDie = d20();
+		int nReRoll = 0;
+		
+		// find out what general category of the most used gems
+		string sTag = GetStringLowerCase(GetTag(oGem));
+		int bIsHealthGem = FALSE;
+		if (FindSubString(sTag, "sunstone") >= 0 ||
+			FindSubString(sTag, "bloodstone") >= 0)
+				bIsHealthGem = TRUE;
+		int bIsEnhanceGem = FALSE;
+		if ((FindSubString(sTag, "diamond") >= 0 ||
+			FindSubString(sTag, "jasmal") >= 0) &&
+			FindSubString(sTag, "black") == -1)
+				bIsEnhanceGem = TRUE;
+		
+		// now find out how many of the d20s will be weighted
+		
+		// First d20 is weighted if we're going from reg to flawless
+		if (nFirstDie < 20 && nQuality > 0){
+			nReRoll = d20();
+			if (nReRoll > nFirstDie) nFirstDie = nReRoll;
 		}
+	
+		// Second die is weighted if it's any of the 4 most sought after
+		if (nSecondDie < 20 && (bIsHealthGem || bIsEnhanceGem)){
+			nReRoll = d20();
+			if (nReRoll > nSecondDie) nSecondDie = nReRoll;
+		}
+		// Third die is weighted if it's a diamond or jasmal
+		if (nThirdDie < 20 && bIsEnhanceGem){
+			nReRoll = d20();
+			if (nReRoll > nThirdDie) nThirdDie = nReRoll;
+				
+		}
+		nDC += nFirstDie + nSecondDie + nThirdDie;		
 	}
-	int nRoll = d20(1);
+	int nRoll = d20();
 	
 	if (nRoll == 1){
 		sMessage = "<c=tomato>";

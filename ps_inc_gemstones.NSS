@@ -128,7 +128,9 @@ string RollGemstoneOfColor(string sColor) {
 	string sTag = GetTag(oArea);
 
 	string sQuery = "SELECT tag FROM gemstones WHERE color='"+sColor+"'";
-	if (FindSubString(sTag, "earth") == -1){
+	// if we're not digging in elemental earth there's a 50% chance that we
+	// will automatically exclude useless gems
+	if (FindSubString(sTag, "earth") == -1 && d10() <= 5){
 		sQuery += " AND resref <> 'gemstone_value_vfx'";
 		nNum = InitializeGemstoneNumber(sColor, TRUE);
 	} else nNum = InitializeGemstoneNumber(sColor);

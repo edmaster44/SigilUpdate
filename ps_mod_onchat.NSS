@@ -244,6 +244,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 				sFeedback = "Turning on craft costs.";
 			}
 		} else sFeedback = "This command only works on the test server.";
+	//debugging command that tells you the tag of the first item in inventory
+	} else if (sInput == "#gettag"){
+		bFFcommand = TRUE;
+		object oItem = GetFirstItemInInventory(oSender);
+		if (!GetIsObjectValid(oItem))
+			sFeedback = "Invalid item";
+		else sFeedback = "The item tag is " + GetTag(oItem);
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
