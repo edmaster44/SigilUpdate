@@ -115,21 +115,15 @@ void AdjustDragonPrC(object oPC){
 	nLvl += nPsyLvl;
 	if (nLvl < 1) return;
 	
-	// Initially I had the psy/psi path feats granted automatically based on
-	// class because I mistakenly believed you couldn't be both psi and psy.
-	// Upon discovering this was false I changed the 2da to give the player
-	// the choice, but Ed is very busy and isn't prompt with hak updates
-	// so the following code will grant the feat automatically IF the
-	// player didn't get the chance to choose, and is ignored if they did.
-	// Once the new versions of CLS_BFEAT_DRAGON_PSI_NEW.2da and 
-	// CLS_FEAT_DRAGON_PSI_NEW.2da are in the haks this block can be removed.
-	// -FlattedFifth, May 30, 2025
+	// psy/psi path feats have to be granted automatically based on which
+	// class they have more lvls of, because I can't make the 2da not give
+	// psy/psi power feats on a particular lvl
 	if (nPsyLvl == 1){ 
 		if (!GetHasFeat(3679, oPC) && !GetHasFeat(3680, oPC)){
-			if (GetLevelByClass(CLASS_TYPE_PSION, oPC) >= 1)
-				FeatAdd(oPC, 3679, FALSE); //psion path
-			else if (GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) >= 1) 
-				FeatAdd(oPC, 3680, FALSE); //psywar path
+			if (GetLevelByClass(CLASS_TYPE_PSION, oPC) > 
+				GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC))
+					FeatAdd(oPC, 3679, FALSE); //psion path
+			else FeatAdd(oPC, 3680, FALSE); //psywar path
 		}
 	} //end psy/psi path grant block
 	
@@ -141,30 +135,39 @@ void AdjustDragonPrC(object oPC){
 		SetLocalInt(oEss, "DragonAbilityScoreAdded", TRUE);
 		if (GetHasFeat(3670, oPC)){ // melee path
 			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+			
 		}else if (GetHasFeat(3671, oPC)){ // rogue path	
 			FeatAdd(oPC, 1857, FALSE); // trapfinding
 			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+			
 		} else if (GetHasFeat(3672, oPC)){	// ranger path
 			FeatAdd(oPC, 2178, FALSE); // scent
 			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+			
 		} else if (GetHasFeat(3673, oPC)){ // sorc path
 			FeatAdd(oPC, 7, FALSE); // combat casting
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+			
 		} else if (GetHasFeat(3674, oPC)){ // warlock path
 			FeatAdd(oPC, 7, FALSE); // combat casting
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+			
 		} else if (GetHasFeat(3675, oPC)){ // fs path
 			FeatAdd(oPC, 7, FALSE); // combat casting
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+			
 		} else if (GetHasFeat(3676, oPC)){ // knight path
 			FeatAdd(oPC, 7, FALSE); // combat casting
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+			
 		} else if (GetHasFeat(3677, oPC)){ // bard path
 			FeatAdd(oPC, 423, FALSE); // extra music
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+			
 		} else if (GetHasFeat(3678, oPC)){ // wiz path
 			FeatAdd(oPC, 7, FALSE); // combat casting
 			AdjustAbilityScore(oPC, ABILITY_INTELLIGENCE, 2);
+			
 		} else if (GetHasFeat(3679, oPC)){ // psi path
 			FeatAdd(oPC, 7, FALSE); // combat casting
 			AdjustAbilityScore(oPC, ABILITY_INTELLIGENCE, 2);

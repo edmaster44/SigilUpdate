@@ -426,6 +426,7 @@ void PS_Hardening_Scales(object oPC, int nSpell){
 	int iLevel = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC); //old dragon prc
 	iLevel += GetLevelByClass(128, oPC); // old gem dragon prc
 	int iLevelNew = GetLevelByClass(129, oPC);
+	iLevelNew += GetLevelByClass(130, oPC);
 	int iNatural;
 	int iDR;
 	int iPower;
@@ -512,6 +513,7 @@ void PS_Dragon_Senses(object oPC, int nSpell){
 	int iLevel = GetLevelByClass(CLASS_TYPE_DRAGON_PRC, oPC); // old dragon PrC
 	iLevel += GetLevelByClass(128, oPC); // old gem Dragon
 	int iLevelNew = GetLevelByClass(129, oPC); // new dragon PrC
+	iLevelNew += GetLevelByClass(130, oPC);
 
 	int nSubRace = GetSubRace(oPC);
 	int iSkillBonus = 0;
