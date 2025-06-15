@@ -4,8 +4,9 @@ void main(){
 	object oPC = OBJECT_SELF;
 	int nId = GetSpellId();
 	
-	effect eAlert = EffectSkillIncrease(SKILL_SPOT, 2);
-	eAlert = EffectLinkEffects(EffectSkillIncrease(SKILL_LISTEN, 2), eAlert);
+	effect eSpot = EffectSkillIncrease(SKILL_SPOT, 2);
+	effect eListen = EffectSkillIncrease(SKILL_LISTEN, 2);
+	effect eAlert = EffectLinkEffects(eSpot, eListen);
 	eAlert = SupernaturalEffect(eAlert);
 	eAlert = SetEffectSpellId(eAlert, nId);
 	
