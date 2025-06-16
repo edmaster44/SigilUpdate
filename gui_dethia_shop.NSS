@@ -69,12 +69,17 @@ Events:
 *************************************************************************************/
 #include "dethia_shop_sys"
 
+
 void main(string sEvent, string sItemID, string sItemCost, string sStackSize, string sStoreID, string sUp, string sDown, string sExtra)
 {//First we convert sEvent to an integer value
 	int		iEvent	= StringToInt(sEvent);
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
+	
+	// will return a custom value for player profit on crafted items, returns original value
+	// if not crafted or if this value is turned off in dethia_shop_sys
+	sItemCost = GetCraftedItemValue(oItem, sItemCost);
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions

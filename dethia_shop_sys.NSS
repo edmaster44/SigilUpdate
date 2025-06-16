@@ -119,6 +119,10 @@ int	STORE_CLOSE	= 1;	//The event handler for when a store closes
 int	PRICING_SYSTEM_OLD	= 0;	//Uses GetGoldPieceValue
 int	PRICING_SYSTEM_NEW	= 1;	//Uses new logic
 
+//Pricing options for players selling crafted items to npcs
+const int bCUSTOM_CRAFT_PRICING = TRUE;
+float fCraftProfit = 1.1f; // multiply crafted item value by this amount, so 1.1 = 10% profit over cost
+
 //Item categories
 int	DS_ARMOR			= 0;	//Shields and armor
 int	DS_WEAPON			= 1;	//Weapons
@@ -142,6 +146,10 @@ string	DS_BUY_FILTER_MISCELLANEOUS	= "-5";	//Filter for the miscellaneous catego
 //------------------------------FUNCTIONS--------------------------------//
 //------------------------------PROTOTYPES-------------------------------//
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
+
+//This function gets a special value for player-made items to control how
+// much profit can be made from crafters selling to npcs
+string GetCraftedItemValue(object oItem, string sCost);
 
 //This function closes the shop, it will clear the gui, close it and execute
 //the shop's OnClose script
@@ -322,6 +330,21 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 //------------------------------FUNCTIONS--------------------------------//
 //------------------------------IMPLEMENTATION---------------------------//
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
+
+
+string GetCraftedItemValue(object oItem, string sCost){
+	if (!GetIsPlayerMade(oItem) || bCUSTOM_CRAFT_PRICING != TRUE) 
+		return sCost;
+		
+	int nItem = GetBaseItemType(oItem);
+	
+	string sBaseCost = SearchValIn2da("scod_craft_baseitems", "ID", IntToString(nItem), "BASE_COST");
+	float fBaseCost = StringToFloat(sBaseCost);
+	fBaseCost *= fCraftProfit;
+	int nRoundedCost = PS_RoundToInt(fBaseCost);
+	
+	return IntToString(nRoundedCost);
+}
 
 void DS_CloseShop(object oPC, object oStore)
 {//First we remove the "DS_SELL_PRICE" variable from all items upon closing
