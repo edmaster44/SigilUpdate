@@ -31,6 +31,27 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
+// legacy characters may have actual multi-attack instead of 
+// natural multi-attack, so the absence of natural multi-attack
+// means that they get regular multi-attack removed in ps_inc_equipment
+// when they unequip their weapons, so we make sure that every race
+// that should have natural multi-attack does have it.
+void UpdateMultiattack(object oPC){
+	int nSub = GetSubRace(oPC);
+	
+	if (nSub == 235 || // winter wolf, new
+		nSub == 231 || // blink dog
+		nSub == 230 || // worg
+		nSub == 161 || // winter wolf, old
+		nSub == 158 || // umber hulk
+		nSub == 142 || // blade golem
+		nSub == 141 || // iron golem
+		nSub == 140){ // clay golem
+			if (!GetHasFeat(4000, oPC, TRUE))
+				FeatAdd(oPC, 4000, FALSE);	
+	}
+}
+
 //notify players of shared routers, called from function below this one, LookForSharedRouters() 
 void NotifySharedRouters(string sFlaggedIp){
     string sThisIp;
@@ -629,6 +650,7 @@ void main()
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
 		PS_KnightLevels(oPC);
+		UpdateMultiattack(oPC);
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
 		LookForSharedRouters();
