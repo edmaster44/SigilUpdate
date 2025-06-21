@@ -19,7 +19,7 @@ void main()
 			DelayCommand(0.0f, WarChanter_SingingShout(oPC, nSpell));
 		break;
 
-			case SPELLABILITY_WC_INSPIRE_RECKLESSNESS:		//Claws of the Grizzly
+			case SPELLABILITY_WC_INSPIRE_RECKLESSNESS:		//Inspire reckless
 			DelayCommand(0.0f, WarChanter_InspireRecklessness(oPC, nSpell));
 		break;
 		case SPELLABILITY_WC_INSPIRE_TOUGHNESS:		//Earth Resilience
@@ -29,7 +29,11 @@ void main()
 			case SPELLABILITY_WC_SNOWSONG:		//Snow Song
 			DelayCommand(0.0f, WarChanter_SnowSong(oPC, nSpell));
 		break;
-				case SPELLABILITY_WC_COMBINE_SONG:		//Combine Song
+				case SPELLABILITY_WC_COMBINE_SONG:		//Assign Combine Song
+			DelayCommand(0.0f, SPELLABILITY_WarChanter_COMBINE_SONG(oPC, nSpell));
+		break;
+		
+			case SPELLABILITY_WC_PLAY_COMBINE_SONG:		//Play Combine Song
 			DelayCommand(0.0f, SPELLABILITY_WarChanter_COMBINE_SONG(oPC, nSpell));
 		break;
 		

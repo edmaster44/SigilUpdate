@@ -1,6 +1,7 @@
 #include "aaa_constants"
 #include "x2_inc_spellhook"
 #include "ps_inc_melee"
+#include "ed_bardsongsinclude"
 
 void WarChanter_SingingShout(object oPC, int nSpellID)
 {
@@ -33,6 +34,11 @@ ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	
 void WarChanter_Inspire_Toughness(object oPC, int nSpellID)
 {
+int nBonus = 4;
+int iWarChanter = GetLevelByClass(CLASS_TYPE_WAR_CHANTER,oPC);
+int nTotal = iWarChanter * nBonus;
+effect nHP = EffectTemporaryHitpoints(nBonus);
+ApplyEffectToObject(DURATION_TYPE_PERMANENT, nHP, oPC);
 
 }
 
@@ -63,4 +69,14 @@ int CountFactionMembers(object oCaster)
 	return iCount;
 }
 void SPELLABILITY_WarChanter_COMBINE_SONG(object oPC, int nSpellID)
-{}
+{
+
+AssignCommand(oPC, ActionStartConversation(oPC, "dlg_combinesongs", TRUE));
+}
+
+
+void SPELLABILITY_WC_PLAY_COMBINE_SONG(object oPC, int nSpellID)
+{
+PlayCombinedSongs( oCaster,  nSpellID);
+}
+
