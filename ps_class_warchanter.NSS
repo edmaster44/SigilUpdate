@@ -34,10 +34,9 @@ void main()
 		break;
 		
 			case SPELLABILITY_WC_PLAY_COMBINE_SONG:		//Play Combine Song
-			DelayCommand(0.0f, SPELLABILITY_WC_PLAY_COMBINE_SONG(oPC, nSpell));
+			DelayCommand(0.0f, PlayCombinedSongs(oPC, nSpell));
 		break;
 		
 		}
 		}
-	
 	

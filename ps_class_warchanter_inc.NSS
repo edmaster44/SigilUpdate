@@ -55,28 +55,11 @@ void WarChanter_SnowSong(object oPC, int nSpellID)
 
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
 }
-int CountFactionMembers(object oCaster)
-{
-	object oFaction = GetFirstFactionMember(oCaster); int iCount;
-	while(GetIsObjectValid(oFaction))
-	{
-		if(GetArea(oFaction) == GetArea(oCaster) && !GetIsDead(oFaction)) iCount++;
-		if(iCount >= 2) return 2;
-			
-		oFaction = GetNextFactionMember(oCaster);
-	}
-		
-	return iCount;
-}
+
 void SPELLABILITY_WarChanter_COMBINE_SONG(object oPC, int nSpellID)
 {
 
 AssignCommand(oPC, ActionStartConversation(oPC, "dlg_combinesongs", TRUE));
 }
 
-
-void SPELLABILITY_WC_PLAY_COMBINE_SONG(object oPC, int nSpellID)
-{
-PlayCombinedSongs( oCaster,  nSpellID);
-}
 

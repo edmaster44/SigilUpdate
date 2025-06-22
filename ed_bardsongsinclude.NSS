@@ -7,6 +7,141 @@
 
 void ED_ApplyFriendlySongEffectsToParty( object oCaster, int nSpellId, effect eLink );
 
+int CM_GetBardicLevel(object oPC)
+{
+	int iBard = GetBardTRUECasterlevel(oPC); 
+	
+		 return iBard;
+}
+
+effect InspireCourage(object oCaster)
+{
+	int nLevel      = CM_GetBardicLevel(oCaster);
+	
+//	SendMessageToPC(oCaster,"Applying caster level to Inspire Courage of: "+IntToString(nLevel));
+		
+	int nBonus = 1; 
+       if (nLevel >= 8)
+       {   nBonus = nBonus + ((nLevel - 2) / 6);	}
+		
+        
+       int nDamage = IPGetDamageBonusConstantFromNumber(nBonus);   // Map raw bonus to a DAMAGE_BONUS_* constant.
+
+	    effect eAttack = ExtraordinaryEffect( EffectAttackIncrease(nBonus) );
+        effect eDamage = ExtraordinaryEffect( EffectDamageIncrease(nDamage, DAMAGE_TYPE_BLUDGEONING) );
+        effect eLink   = ExtraordinaryEffect( EffectLinkEffects(eAttack, eDamage) );
+		effect eDur    = ExtraordinaryEffect( EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE) );
+        eLink          = ExtraordinaryEffect( EffectLinkEffects(eLink, eDur) );
+
+		return eLink;		
+}
+
+effect InspireCompetence(object oCaster)
+{
+	int nLevel      = CM_GetBardicLevel(oCaster);
+		
+    int nSkill = 2;
+        
+    if (nLevel >= 11)
+     {	nSkill = nSkill + (2 * ((nLevel - 3) / 8));		}
+		
+	
+    effect eSkill  = ExtraordinaryEffect( EffectSkillIncrease(SKILL_ALL_SKILLS, nSkill) );
+    effect eDur    = ExtraordinaryEffect( EffectVisualEffect(VFX_HIT_BARD_INS_COMPETENCE) );
+    effect eLink   = ExtraordinaryEffect( EffectLinkEffects(eSkill, eDur) );
+    eLink          = ExtraordinaryEffect( EffectLinkEffects(eLink, eDur) );
+
+	return eLink;		
+}
+
+
+effect InspireDefense(object oCaster)
+{
+		int nLevel      = CM_GetBardicLevel(oCaster);
+
+//		SendMessageToPC(oCaster,"Applying caster level to Inspire Defense of: "+IntToString(nLevel));	
+				
+        int nAC = 2; 
+        
+        if (nLevel >= 10)
+        {	nAC = nAC + ((nLevel - 5) / 5);		}
+		
+
+        effect eAC     = ExtraordinaryEffect( EffectACIncrease(nAC, AC_DODGE_BONUS) );
+        effect eDur    = ExtraordinaryEffect( EffectVisualEffect(VFX_HIT_BARD_INS_DEFENSE) );
+        effect eLink   = ExtraordinaryEffect( EffectLinkEffects(eAC, eDur) );
+
+		return eLink;		
+}
+
+effect InspireRegen(object oCaster)
+{
+		int nLevel      = CM_GetBardicLevel(oCaster);
+		
+        float fDuration = 4.0;
+        int nRegen = Ceil(nLevel / 5.0);
+		if(nRegen < 1) nRegen = 1;
+       
+		
+
+        effect eRegen  = EffectRegenerate(nRegen, RoundsToSeconds(1));
+        effect eDur    = EffectVisualEffect(VFX_HIT_BARD_INS_REGENERATION);
+        effect eLink   = EffectLinkEffects(eRegen, eDur);
+
+		//In addition this inspiration gives a 10% hitpoints bonus for all allies. 
+		//This bonus increases by an additional 1% for 1/2 your Bardic levels up to a maximum of +20% (total including base bonus). 
+		//The bonus hitpoints granted is capped at your perform * 1.5.	
+	
+		int iPerform = GetSkillRank(SKILL_PERFORM,oCaster);	
+		
+		float iBase = 0.1 + ((nLevel / 2.0) * 0.01);
+		if(iBase > 0.2) iBase = 0.2;
+		
+		int iHP = Ceil(GetMaxHitPoints(oCaster) * iBase);
+		if(iHP > Ceil(iPerform * 1.5)) iHP = Ceil(iPerform * 1.5);
+
+		eLink   = EffectLinkEffects(EffectBonusHitpoints(iHP), eLink);
+		eLink = ExtraordinaryEffect( EffectLinkEffects(EffectHeal(iHP),eLink));	
+				
+		return eLink;		
+}
+
+effect InspireDamageReduction(int DRBonus)
+{
+	effect eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_BLUDGEONING,DRBonus),EffectDamageImmunityIncrease(DAMAGE_TYPE_SLASHING,DRBonus));
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_PIERCING,DRBonus),eLink);
+		
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID,DRBonus),eLink);
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD,DRBonus),eLink);		
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_DIVINE,DRBonus),eLink);
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL,DRBonus),eLink);
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE,DRBonus),eLink);
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_MAGICAL,DRBonus),eLink);
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,DRBonus),eLink);
+	eLink = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_SONIC,DRBonus),eLink);
+	return eLink;
+}
+
+effect InspireToughness(object oCaster)
+{
+	int nLevel      = CM_GetBardicLevel(oCaster);
+		
+       int nSave = Ceil(nLevel / 5.0);
+			
+
+
+		effect eSave   = EffectSavingThrowIncrease(SAVING_THROW_ALL, nSave);
+		effect eDur    = EffectVisualEffect(VFX_HIT_BARD_INS_TOUGHNESS);
+		effect eLink   = EffectLinkEffects(eSave, eDur);
+
+		float iBase = 0.1 + ((nLevel / 2.0) * 0.01);
+		if(iBase > 0.2) iBase = 0.2;
+				
+		effect eDR = ExtraordinaryEffect( EffectLinkEffects(InspireDamageReduction(FloatToInt(iBase * 100)),eLink));
+		
+		return eLink;
+}
+
 
 effect BardSongChoice(object oCaster, int nSpell)
 {
@@ -15,19 +150,19 @@ effect BardSongChoice(object oCaster, int nSpell)
 	switch (nSpell)
 	{
 		case 905 :		//Inspire Courage
-		return InspireCourage(oCaster,0);
+		return InspireCourage(oCaster);
 		break;
 		case 906 :		//Inspire Competence
-		return InspireCompetence(oCaster,0);
+		return InspireCompetence(oCaster);
 		break;
 		case 907 :		//Inspire Defense
-		return InspireDefense(oCaster,0);
+		return InspireDefense(oCaster);
 		break;
 		case 908 :		//Inspire Regen
-		return InspireRegen(oCaster,0);
+		return InspireRegen(oCaster);
 		break;
 		case 909 :		//Inspire Toughness
-		return InspireToughness(oCaster,0);
+		return InspireToughness(oCaster);
 		break;
 
 
@@ -144,12 +279,12 @@ void RunPersistentSong(object oCaster, int nSpellId)
 
 effect GetSongEffect(object oCaster, int selection)
 {
-	eFX = ExtraordinaryEffect(eFX);
-	if(selection == 1) return SetEffectSpellId(eFX,905);
-	else if(selection == 2) return SetEffectSpellId(eFX,906);
-	else if(selection == 3) return SetEffectSpellId(eFX,907);
-	else if(selection == 4) return SetEffectSpellId(eFX,908);
-	else if(selection == 5) return SetEffectSpellId(eFX,909);
+	
+	if(selection == 1) return SetEffectSpellId(InspireCourage(oCaster),905);
+	else if(selection == 2) return SetEffectSpellId(InspireCompetence(oCaster),906);
+	else if(selection == 3) return SetEffectSpellId(InspireDefense(oCaster),907);
+	else if(selection == 4) return SetEffectSpellId(InspireRegen(oCaster),908);
+	else if(selection == 5) return SetEffectSpellId(InspireToughness(oCaster),909);
 	else return EffectHeal(1);	
 }
 
@@ -181,27 +316,27 @@ void RunPersistentCombinedSong(object oCaster, int song1, int song2, int uniquei
 		if(song1 == 1 || song2 == 1)
 		{
 			
-			 ED_ApplyFriendlySongEffectsToParty(oCaster, 905, SPELLABILITY_SONG_INSPIRE_COURAGE(oCaster,1));
+			 ED_ApplyFriendlySongEffectsToParty(oCaster, 905, InspireCourage(oCaster));
 		}
 		if(song1 == 2 || song2 == 2)
 		{
 			
-			 ED_ApplyFriendlySongEffectsToParty(oCaster, 906, SPELLABILITY_SONG_INSPIRE_COMPETENCE(oCaster,1));		
+			 ED_ApplyFriendlySongEffectsToParty(oCaster, 906, InspireCompetence(oCaster));;		
 		}
 		if(song1 == 3 || song2 == 3)
 		{
 			
-			 ED_ApplyFriendlySongEffectsToParty(oCaster, 907, SPELLABILITY_SONG_INSPIRE_DEFENSE(oCaster,1));
+			 ED_ApplyFriendlySongEffectsToParty(oCaster, 907, InspireDefense(oCaster));
 		}
 		if(song1 == 4 || song2 == 4)
 		{
 		
-			 ED_ApplyFriendlySongEffectsToParty(oCaster, 908, SPELLABILITY_SONG_INSPIRE_REGENERATION(oCaster,1));
+			 ED_ApplyFriendlySongEffectsToParty(oCaster, 908, InspireToughness(oCaster));
 		}
 		if(song1 == 5 || song2 == 5)
 		{
 		
-			 ED_ApplyFriendlySongEffectsToParty(oCaster, 909, SPELLABILITY_SONG_INSPIRE_TOUGHNESS(oCaster,1));						
+			 ED_ApplyFriendlySongEffectsToParty(oCaster, 909, InspireRegen(oCaster));						
 		}
 
 										

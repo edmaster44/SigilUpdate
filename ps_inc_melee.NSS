@@ -19,6 +19,29 @@
 
 int GetEnhancementBonus(object oPC, object oWeapon);
 
+void ClearBardVariables(object oCaster, int choice)
+{
+	if (choice != 1)
+		DeleteLocalInt(oCaster, "DMODE");
+	if (choice != 2)
+		DeleteLocalInt(oCaster, "BGMODE");
+	if (choice != 3)
+		DeleteLocalInt(oCaster, "INFLAME");
+	if (choice != 4)
+		DeleteLocalInt(oCaster, "HEROICSHIELD");
+	if (choice != 5)
+	{
+		DeleteLocalInt(oCaster, "CombinedSongsOn");
+		DeleteLocalInt(oCaster, "CSONGID");
+	}
+	if (choice != 6)
+	{
+		DeleteLocalInt(oCaster, "FRENZY");
+		DeleteLocalInt(oCaster, "BLOODFRENZY");
+	}
+}
+
+
 int Ceil(float numb)
 {
     int cast = FloatToInt(numb);
