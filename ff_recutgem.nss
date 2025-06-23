@@ -9,19 +9,33 @@
 #include "ps_inc_functions"
 #include "ps_inc_newcraft_include"
 
+
+const int LOG_RECUT = TRUE; // turn logging on and off for gem recutting for debug purposes
+const int CRIT_FAIL = -1;
+
+/* FIRST VERSION
 const int NAT_1 = -1;
 const int NAT_20 = 20;
 const int SIMPLE_FAIL = FALSE;
 const int SIMPLE_SUCCESS = TRUE;
+*/
 
+void LogRecut(object oPC, string sResult);
 void ShowRecutResult(object oPC, object oRecut, string sMessage);
 void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
-int RollForCut(object oPC, object oGem, int nQuality, int bImprove);
+int RollForCut(object oPC, object oGem, int bImprove);
 
 void main(int bImprove){
 	object oPC = GetPCSpeaker();
 	object oGem = GetLocalObject(oPC, "gem_to_be_recut");
+	
+	if (LOG_RECUT){
+		string sFirstLog = "gem successfully retrieved from local variable";
+		if (!GetIsObjectValid(oGem))
+			sFirstLog = "failed to retrieve gem from local variable";
+		LogRecut(oPC, sFirstLog);
+	}
 	
 	//tests that exclude rough gems and non-gems are in i_smithhammer_ac, 
 	// so we don't need them here
@@ -39,9 +53,10 @@ void main(int bImprove){
 		}
 	}
 
-	int nRoll = RollForCut(oPC, oGem, nQuality, bImprove);
+	int nRoll = RollForCut(oPC, oGem, bImprove);
 	PerformCut(oPC, oGem, nQuality, nRoll, bImprove);
 }
+
 
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 
@@ -51,17 +66,17 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	
 	string sTag = GetTag(oGem);
 	object oRecut;
-
-	if (nRoll == NAT_1){
-		sMessage += "You rolled a natural 1! You've shattered the gem.</c>";
+	
+	if (nRoll == CRIT_FAIL){
+		sMessage += "You've shattered the gem!</c>";
 		SendMessageToPC(oPC, sMessage);
 		int nStack = GetItemStackSize(oGem);
 		if (nStack > 1) SetItemStackSize(oGem, nStack - 1);
 		else DestroyObject(oGem, 0.3f);
 		return;
 	}
-	
-	if (nRoll == SIMPLE_FAIL){
+
+	if (nRoll == FALSE){
 		sName += " <c=tomato>Failed Recut</c>";
 		sDescrip = GetDescription(oGem);
 		oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sTag);
@@ -127,18 +142,16 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	sDescrip += GetGemstoneUses(GetBaseGemTagFromString(sNewTag), nNewQ);
 	
 	// create the newly recut gem, 
-	oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sNewTag);
+	string sRes = GetResRef(oGem);
+	if (LOG_RECUT) LogRecut(oPC, "ResRef: " + sRes + ", Tag: " + sNewTag);
+	oRecut = CreateItemOnObject(sRes, oPC, 1, sNewTag);
 	//then make sure everything is kosher and clean up
 	DelayCommand(0.3f, VerifyNewGem(oPC, oGem, oRecut, sName, sDescrip));
 	
 	//let the player know the result
 
-	sMessage = "<c=lightgreen>";
-	if (nRoll == NAT_20)
-			sMessage += "You rolled a natural 20!/n";
+	sMessage = "<c=lightgreen>You've successfully recut the gem!</c>";
 
-	sMessage += "You've successfully recut the gem!</c>";
-	
 	DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
 }
 
@@ -148,13 +161,19 @@ void ShowRecutResult(object oPC, object oRecut, string sMessage){
 		sMessage += "Please make sure you have an empty inventory slot.\n";
 		sMessage += "If you do have an empty slot and get this message, contact support.</c>";
 	}
+	if (LOG_RECUT) LogRecut(oPC, "Recut validation stage with message: " + sMessage);
+	
 	SendMessageToPC(oPC, sMessage);
 }
 
 void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip){
 	
-	if (!GetIsObjectValid(oRecut))return;
-
+	if (!GetIsObjectValid(oRecut)){
+		if (LOG_RECUT) LogRecut(oPC, "failed in VerifyNewGem function");
+		return;
+	}
+	
+	if (LOG_RECUT) LogRecut(oPC, "success in VerifyNewGem function");
 	int nStack = GetItemStackSize(oOldGem);
 	if (nStack > 1) SetItemStackSize(oOldGem, nStack -1);
 	else DestroyObject(oOldGem);
@@ -165,11 +184,94 @@ void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, strin
 	SetDescription(oRecut, sDescrip);
 }
 
+void LogRecut(object oPC, string sResult){
+	string sPlayer = GetPCPlayerName(oPC);
+	string sCharacter = GetName(oPC);
+	
+	string sLog = "Gem Recut Debug: Player: " + sPlayer + ", ";
+	sLog += "Character: " + sCharacter + ", Result: " + sResult;
+	WriteTimestampedLogEntry(sLog);
+}
+
+// roll for the recut
+// appraise roll, dc = 30 if marring. 
+// improve dc = 35 + 5 for sunstone/bloodstone + 10 diamond/jasmal
+// if successful, there is still a fail chance because we don't want
+// anyone to be able to turn 100% of their regular jasmals, etc, to flawless
+// this precentile roll represents the luck of whether the gems flaws are
+// in a place where they can be cut around without resulting in a too-fragile gem
+// the fail rate is 50% for diamond/jasmal, 40% for sunstone/bloodstone, and 30%
+// for others.
+// returns true if success
+// returns false if failure
+// returns CRIT_FAIL if gem shatters
+int RollForCut(object oPC, object oGem, int bImprove){
+	int nResult = FALSE;
+	int nLuck = 30;
+	string sMessage;
+	int nDC = 30;
+	int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
+	
+	if (bImprove){
+		nDC += 5;
+		// find out what kind of gem
+		string sTag = GetStringLowerCase(GetTag(oGem));
+		if (FindSubString(sTag, "sunstone") >= 0 ||
+			FindSubString(sTag, "bloodstone") >= 0){
+				nDC += 5;
+				nLuck = 40;
+		} else if (FindSubString(sTag, "diamond") >= 0 ||
+			FindSubString(sTag, "jasmal") >= 0){
+				nDC += 10;
+				nLuck = 50;
+		}
+	}
+	int nRoll = d20();
+	int nLuckRoll = d100();
+	int bLucky = (nLuckRoll >= nLuck);
+	
+	if (nRoll + nMod >= nDC){
+		sMessage = "<c=lightgreen>";
+		if (LOG_RECUT) LogRecut(oPC, "successful analysis roll vs DC " + IntToString(nDC));
+		if (bLucky){
+			nResult = TRUE;
+		} else {
+			nResult = FALSE;
+		}
+	} else {
+		sMessage = "<c=tomato>";
+		if (LOG_RECUT) LogRecut(oPC, "failed analysis roll vs DC " + IntToString(nDC));
+		if (bLucky){
+			nResult = FALSE;
+		} else {
+			nResult = CRIT_FAIL;
+		}
+	}
+	
+	sMessage += "Skill Roll: " + IntToString(nRoll) + " + " + IntToString(nMod);
+	sMessage += " = " + IntToString(nRoll + nMod);
+	sMessage += " vs DC: " + IntToString(nDC) + "</c>\n";
+	
+	if (bLucky){
+		sMessage += "<c=lightgreen>";
+		if (LOG_RECUT) LogRecut(oPC, "successful luck roll vs " + IntToString(nLuck));
+	} else {
+		sMessage += "<c=tomato>";
+		if (LOG_RECUT) LogRecut(oPC, "Failed luck roll vs " + IntToString(nLuck));
+	}
+	sMessage += "Luck Roll: " + IntToString(nLuckRoll) + " vs " + IntToString(nLuck) +"%</c>";
+	SendMessageToPC(oPC, sMessage);
+	return nResult;
+}
+
+
+
+/* FIRST VERSION
 // roll for the recut
 // returns -1 if nat 1 roll (crit failure, destroys gem
 // returns 20 if nat 20 roll, auto success
-// returns true if simple success
-// returns false if simple failure
+// returns true if success
+// returns false if failure
 int RollForCut(object oPC, object oGem, int nQuality, int bImprove){
 	int nResult = SIMPLE_FAIL;
 	string sMessage;
@@ -233,14 +335,20 @@ int RollForCut(object oPC, object oGem, int nQuality, int bImprove){
 	if (nRoll == 1){
 		sMessage = "<c=tomato>";
 		nResult = NAT_1;
+		if (LOG_RECUT) LogRecut(oPC, "natural 1");
 	} else if (nRoll == 20){
 		sMessage = "<c=lightgreen>";
 		nResult = NAT_20;
+		if (LOG_RECUT) LogRecut(oPC, "natural 20");
 	} else {
 		if (nRoll + nMod >= nDC){
 			nResult = SIMPLE_SUCCESS; 
 			sMessage = "<c=lightgreen>";
-		} else sMessage = "<c=tomato>";
+			if (LOG_RECUT) LogRecut(oPC, "successful roll vs DC " + IntToString(nDC));
+		} else {
+			sMessage = "<c=tomato>";
+			if (LOG_RECUT) LogRecut(oPC, "failed roll vs DC " + IntToString(nDC));
+		}
 	}
 	sMessage += "Roll: " + IntToString(nRoll) + " + " + IntToString(nMod);
 	sMessage += " = " + IntToString(nRoll + nMod);
@@ -248,3 +356,4 @@ int RollForCut(object oPC, object oGem, int nQuality, int bImprove){
 	SendMessageToPC(oPC, sMessage);
 	return nResult;
 }
+*/

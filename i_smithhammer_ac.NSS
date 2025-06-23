@@ -22,6 +22,10 @@ void DoMeltDownItem(object oPC, object oTarget);
 void main(){
     object oPC = GetItemActivator();
     object oTarget = GetItemActivatedTarget();
+	if (GetItemPossessor(oTarget) != oPC){
+		SendMessageToPC(oPC, "Invalid Target");
+		return;
+	}
 	string sRes = GetResRef(oTarget);
 	if (GetIsGemstone(oTarget))
 		DoGemReCut(oPC, oTarget);
@@ -90,7 +94,6 @@ void ReCutGem(object oPC, object oGem){
 
 void DoMeltDownItem(object oPC, object oTarget){	
 	object oBench = GetNearestSmithingWorkbench(oPC);
-	
 	
 	if (!GetIsObjectValid(oBench)){
 		SendMessageToPC(oPC, "You must be near a crafting workstation to melt down items.");

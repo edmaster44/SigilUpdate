@@ -164,10 +164,8 @@ effect BardSongChoice(object oCaster, int nSpell)
 		case 909 :		//Inspire Toughness
 		return InspireToughness(oCaster);
 		break;
-
-
+	}
 	return eEffect;	
-}
 }
 
 int HasBardSpell( int nSpellId, object oTarget )
