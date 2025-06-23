@@ -156,7 +156,27 @@ if(oPC == OBJECT_INVALID)
 }
 
 //SpeakString("spawn triggered by: " + GetTag(oPC),TALKVOLUME_SHOUT);
-
+ 
+ string sWP = GetLocalString(oTrigger,"WP");
+  // special rules for the monsters in lowest undersigi crypt that
+ // spawn the 250xp quest item "interesting skull"
+ if (sWP == "wp_us_beserkerundead" || sWP == "wp_us_accursedpriest" ||
+	sWP == "wp_us_necromancerundead"){
+		string sVarname = "SkullBearerLastSpawn";
+		if (sWP == "wp_us_beserkerundead") sVarname += "0";
+		else if (sWP == "wp_us_accursedpriest") sVarname += "1";
+		else sVarname += "2";
+		int nDay = (GetCalendarYear() * 360) + ((GetCalendarMonth() - 1) * 30) + GetCalendarDay();
+		object oEss = PS_GetEssence(oPC);
+		int nLastSpawn = GetLocalInt(oEss, sVarname);
+		if (nLastSpawn >= nDay){
+			SendMessageToPC(oPC, "This tomb is empty. Try again tomorrow.");
+			return;
+		} else {
+			SetLocalInt(oEss, sVarname, nDay);
+		}
+	}
+ 
 
 if (!GetIsPC(oPC)) return;
 int iSpawnWait = GetLocalInt(oTrigger,"RESPAWN");
@@ -170,23 +190,7 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
 {
  TimeStamp(oTrigger,"TIMESTAMP");
 // SpeakString("1",TALKVOLUME_SHOUT);
- 
- string sWP = GetLocalString(oTrigger,"WP");
-  // special rules for the monsters in lowest undersigi crypt that
- // spawn the 250xp quest item "interesting skull"
- if (sWP == "wp_us_beserkerundead" || sWP == "wp_us_accursedpriest" ||
-	sWP == "wp_us_necromancerundead"){
-		int nDay = (GetCalendarYear() * 360) + ((GetCalendarMonth() - 1) * 30) + GetCalendarDay();
-		object oEss = PS_GetEssence(oPC);
-		int nLastSpawn = GetLocalInt(oEss, "SkullBearerLastSpawn");
-		if (nLastSpawn >= nDay){
-			SendMessageToPC(oPC, "This tomb is empty. Try again tomorrow.");
-			return;
-		} else {
-			SetLocalInt(oEss, "SkullBearerLastSpawn", nDay);
-		}
-	}
- 
+
  object oWP = GetWaypointByTag(sWP);
  
 
