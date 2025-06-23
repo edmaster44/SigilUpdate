@@ -33,6 +33,7 @@ const int UNEQUIPPABLE_SCROLL_CHANCE = 20;
 const int UNEQUIPPABLE_GOLD_CHANCE = 0;
 const int UNEQUIPPABLE_GEM_CHANCE = 2;
 const int UNEQUIPPABLE_CARD_CHANCE = 1;
+
 //***************************************************
 //Utility
 //***************************************************
@@ -276,7 +277,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	}
 	// mid-high and high level areas
 	else if (TestStringAgainstPattern("**plateau**", sAREA)){
-		nChance = 5;
+		nChance = 6;
 	
 		switch (Random(7)){
 			case 0: nMat = SPECIAL_MAT_ARBOREAL_OAK; break;
@@ -289,7 +290,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		
 	} else if (TestStringAgainstPattern("**phlegethon**", sAREA) ||
 		TestStringAgainstPattern("**abyss**", sAREA)){
-		nChance = 5;
+		nChance = 6;
 
 		switch (Random(5)){
 			case 0: nMat = SPECIAL_MAT_DEMON_SCALE; break; 
@@ -300,7 +301,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 		
 	} else if (TestStringAgainstPattern("**carceri**", sAREA)){
-		nChance = 5;
+		nChance = 6;
 		int nAltMat = SPECIAL_MAT_TANTULHOR;
 		if (TestStringAgainstPattern("**minethys**", sAREA))
 			nAltMat = SPECIAL_MAT_GIANT_BONE; 
@@ -320,7 +321,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 		
 	} else if (TestStringAgainstPattern("**clangor**", sAREA)){
-		nChance = 5;
+		nChance = 6;
 
 		switch (Random(6)){ 
 			case 0: nMat = SPECIAL_MAT_BRASS_FOR_GOLEM; break; 
@@ -332,17 +333,18 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		}
 		
 	} else if (TestStringAgainstPattern("**niflheim**", sAREA)){
-		nChance = 5;
+		nChance = 6;
 
-		switch (Random(4)){
+		switch (Random(5)){
 			case 0: nMat = SPECIAL_MAT_TWELVETREES_BARK; break;
 			case 1: nMat = SPECIAL_MAT_MORGUTH_IRON; break;
 			case 2: nMat = SPECIAL_MAT_FLESH_GOLEM_HIDE; break;
 			case 3: nMat = SPECIAL_MAT_GIANT_BONE; break;
+			case 4: sSpecial = "ps_questobject_interestingskull"; break;
 		}
 		
 	} else if (TestStringAgainstPattern("**gehenna**", sAREA)){
-		nChance = 5;
+		nChance = 6;
 
 		switch (Random(7)){
 			case 0: nMat = SPECIAL_MAT_DEVIL_HORN; break;

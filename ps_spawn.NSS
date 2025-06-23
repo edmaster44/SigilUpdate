@@ -171,7 +171,25 @@ if (CheckTimeStamp(oTrigger,"TIMESTAMP")>iSpawnWait)
  TimeStamp(oTrigger,"TIMESTAMP");
 // SpeakString("1",TALKVOLUME_SHOUT);
  
- object oWP = GetWaypointByTag(GetLocalString(oTrigger,"WP"));
+ string sWP = GetLocalString(oTrigger,"WP");
+  // special rules for the monsters in lowest undersigi crypt that
+ // spawn the 250xp quest item "interesting skull"
+ if (sWP == "wp_us_beserkerundead" || sWP == "wp_us_accursedpriest" ||
+	sWP == "wp_us_necromancerundead"){
+		int nDay = (GetCalendarYear() * 360) + ((GetCalendarMonth() - 1) * 30) + GetCalendarDay();
+		object oEss = PS_GetEssence(oPC);
+		int nLastSpawn = GetLocalInt(oEss, "SkullBearerLastSpawn");
+		if (nLastSpawn >= nDay){
+			SendMessageToPC(oPC, "This tomb is empty. Try again tomorrow.");
+			return;
+		} else {
+			SetLocalInt(oEss, "SkullBearerLastSpawn", nDay);
+		}
+	}
+ 
+ object oWP = GetWaypointByTag(sWP);
+ 
+
  location lSpawnpoint = GetLocation(oWP); 
  
  object oSpawn;
