@@ -19,6 +19,25 @@
 
 int GetEnhancementBonus(object oPC, object oWeapon);
 
+
+void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDuration, float fDistance = 0.0f)
+{
+	object oTarget = GetFirstFactionMember(oCaster);
+	object oAnimal;
+
+	// If this is triggered by Draconic Vigor we don't want to wipe out the target's existing buffs
+	// if they have one with the spellId of the triggering spell.
+	if (nSpellId > -1)
+		eLink = SetEffectSpellId(eLink, nSpellId);
+	eLink = ExtraordinaryEffect(eLink);
+
+	while (GetIsObjectValid(oTarget))
+	{
+		if (!GetIsDead(oTarget) && GetIsPC(oTarget) && GetIsObjectValid(oTarget) && GetArea(oTarget) == GetArea(oCaster))
+		oTarget = GetNextFactionMember(oCaster);
+	}
+}
+
 void ClearBardVariables(object oCaster, int choice)
 {
 	if (choice != 1)

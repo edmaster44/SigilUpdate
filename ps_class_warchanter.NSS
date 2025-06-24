@@ -8,6 +8,7 @@ void main()
     {	return;	}
     object oPC = OBJECT_SELF;
 	object oTarget	= GetSpellTargetObject();
+	location lTarget	= GetSpellTargetLocation();
 	int nSpell = GetSpellId();
 	
 

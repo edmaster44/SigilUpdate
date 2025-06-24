@@ -7,16 +7,10 @@
 
 void ED_ApplyFriendlySongEffectsToParty( object oCaster, int nSpellId, effect eLink );
 
-int CM_GetBardicLevel(object oPC)
-{
-	int iBard = GetBardTRUECasterlevel(oPC); 
-	
-		 return iBard;
-}
 
 effect InspireCourage(object oCaster)
 {
-	int nLevel      = CM_GetBardicLevel(oCaster);
+	int nLevel      = GetBardicClassLevelForUses(oCaster);
 	
 //	SendMessageToPC(oCaster,"Applying caster level to Inspire Courage of: "+IntToString(nLevel));
 		
@@ -38,7 +32,7 @@ effect InspireCourage(object oCaster)
 
 effect InspireCompetence(object oCaster)
 {
-	int nLevel      = CM_GetBardicLevel(oCaster);
+	int nLevel      = GetBardicClassLevelForUses(oCaster);
 		
     int nSkill = 2;
         
@@ -57,7 +51,7 @@ effect InspireCompetence(object oCaster)
 
 effect InspireDefense(object oCaster)
 {
-		int nLevel      = CM_GetBardicLevel(oCaster);
+		int nLevel      = GetBardicClassLevelForUses(oCaster);
 
 //		SendMessageToPC(oCaster,"Applying caster level to Inspire Defense of: "+IntToString(nLevel));	
 				
@@ -76,7 +70,7 @@ effect InspireDefense(object oCaster)
 
 effect InspireRegen(object oCaster)
 {
-		int nLevel      = CM_GetBardicLevel(oCaster);
+		int nLevel      = GetBardicClassLevelForUses(oCaster);
 		
         float fDuration = 4.0;
         int nRegen = Ceil(nLevel / 5.0);
@@ -124,7 +118,7 @@ effect InspireDamageReduction(int DRBonus)
 
 effect InspireToughness(object oCaster)
 {
-	int nLevel      = CM_GetBardicLevel(oCaster);
+	int nLevel      = GetBardicClassLevelForUses(oCaster);
 		
        int nSave = Ceil(nLevel / 5.0);
 			
@@ -261,7 +255,7 @@ void RunPersistentSong(object oCaster, int nSpellId)
 	}
 	
 
-	int nWillSave = 13 + (GetBardTRUECasterlevel(oCaster) / 2) + GetAbilityModifier(ABILITY_CHARISMA,oCaster);
+	int nWillSave = 13 + (GetBardicClassLevelForUses(oCaster) / 2) + GetAbilityModifier(ABILITY_CHARISMA,oCaster);
 	
     // Verify that we are still singing the same song...
     int nSingingSpellId = FindEffectSpellId(EFFECT_TYPE_BARDSONG_SINGING);
