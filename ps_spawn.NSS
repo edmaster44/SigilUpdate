@@ -154,7 +154,7 @@ if(oPC == OBJECT_INVALID)
 {
 	oPC = GetLastOpener();
 }
-
+if (!GetIsPC(oPC)) return;
 //SpeakString("spawn triggered by: " + GetTag(oPC),TALKVOLUME_SHOUT);
  
  string sWP = GetLocalString(oTrigger,"WP");
@@ -177,8 +177,6 @@ if(oPC == OBJECT_INVALID)
 		}
 	}
  
-
-if (!GetIsPC(oPC)) return;
 int iSpawnWait = GetLocalInt(oTrigger,"RESPAWN");
 if(iSpawnWait == 0)
  iSpawnWait = cSpawnWait;
