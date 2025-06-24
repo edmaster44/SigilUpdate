@@ -14,6 +14,15 @@ void main () {
 	object oItem = GetItemActivated();
 	object oTarget = GetItemActivatedTarget();
 	
+	//make sure that the item being targeted is in inventory, not
+	// the bench itself, the pc, etc
+	if (GetItemPossessor(oTarget) != oPC){
+		string sTargetWarning = "You must target an item in your inventory";
+		sTargetWarning += " while standing near an enchanting bench.";
+		SendMessageToPC(oPC, sTargetWarning);
+		return;
+	}
+	
 	CloseGUIScreen(oPC, sEnchantingScreen);
 	
 	//Clear enchanting focus before we start the GUI
