@@ -121,6 +121,12 @@ void CheckBardicSongs(object oPC)
 {
 	int nSONG;
 	int nMUSIC;
+
+	if (GetLevelByClass(CLASS_TYPE_WAR_CHANTER,oPC)	> 0 ) //Warchanter
+	{
+		nSONG = TRUE;
+		nMUSIC = TRUE;
+	}
 					
 	if (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) > 0) //Monadic Deva racial class
 	{
