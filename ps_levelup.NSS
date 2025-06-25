@@ -138,7 +138,7 @@ void CheckBardicSongs(object oPC)
 		nSONG = TRUE;
 		nMUSIC = TRUE;		
 	}
-	else if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) //Vampire Maleficus template class
+	else if ((GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) && GetHasFeat(2572,oPC)) //Vampire Maleficus template class w/ Bard Progression
 	{
 		nSONG = TRUE;
 		nMUSIC = TRUE;		
