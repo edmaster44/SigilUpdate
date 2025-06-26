@@ -23,6 +23,15 @@ void RunPersistentSong(object oCaster, int nSpellId)
 		return; // Awww :(	
 	}
 
+
+
+    if(GetLocalInt(oCaster,"CombinedSongsOn") == 1)
+    {
+        FloatingTextStringOnCreature("*Deactivate Combined Inspirations to use this song!*", oCaster, TRUE, 3.0f);
+        return;
+    }
+
+
     // Verify that we are still singing the same song...
     int nSingingSpellId = FindEffectSpellId(EFFECT_TYPE_BARDSONG_SINGING);
     if(nSingingSpellId == nSpellId)

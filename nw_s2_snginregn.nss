@@ -26,6 +26,12 @@ void RunPersistentSong(object oCaster, int nSpellId)
 		return; // Awww :(	
 	}
 	
+    if(GetLocalInt(oCaster,"CombinedSongsOn") == 1)
+    {
+        FloatingTextStringOnCreature("*Deactivate Combined Inspirations to use this song!*", oCaster, TRUE, 3.0f);
+        return;
+    }
+
 	int		nPerform	= GetSkillRank(SKILL_PERFORM);
 	 
 	if (nPerform < 3 ) //Checks your perform skill so nubs can't use this song
