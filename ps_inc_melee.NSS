@@ -20,6 +20,41 @@
 int GetEnhancementBonus(object oPC, object oWeapon);
 
 
+// edited version by FlattedFifth 6/26/2025
+void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDuration, float fDistance = 0.0f)
+{
+	//object oTarget = GetFirstFactionMember(oCaster); the second arg, pconly, defaults to true, which
+	// would mean that the effect doesn't affect summons.
+	object oTarget = GetFirstFactionMember(oCaster, FALSE); 
+	//object oAnimal; ?
+
+	if (nSpellId > -1)
+		eLink = SetEffectSpellId(eLink, nSpellId);
+		
+	eLink = ExtraordinaryEffect(eLink);
+	int bTargetValid;
+	while (GetIsObjectValid(oTarget))
+	{
+		//check if a valid target. Removed GetIsPC() because we should include summons
+		bTargetValid = (!GetIsDead(oTarget) && GetIsObjectValid(oTarget) && 
+			GetArea(oTarget) == GetArea(oCaster))
+		
+		// only check if the target is close enough to caster if fDistance is
+		// non-zero and the previous check passed
+		if (fDistance > 0.0f && bTargetValid){
+			if (GetDistanceBetween(oCaster, oTarget) > fDistance)
+				bTargetValid = FALSE;
+		}
+
+		if (bTargetValid){
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+		}
+		oTarget = GetNextFactionMember(oCaster, FALSE);
+	}
+}
+
+// Previous Version as of 6/26/2025
+/*
 void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDuration, float fDistance = 0.0f)
 {
 	object oTarget = GetFirstFactionMember(oCaster);
@@ -33,10 +68,12 @@ void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDurat
 
 	while (GetIsObjectValid(oTarget))
 	{
-		if (!GetIsDead(oTarget) && GetIsPC(oTarget) && GetIsObjectValid(oTarget) && GetArea(oTarget) == GetArea(oCaster))
+		if (!GetIsDead(oTarget) && GetIsPC(oTarget) && GetIsObjectValid(oTarget) && GetArea(oTarget) == 		GetArea(oCaster)){
+		
 		oTarget = GetNextFactionMember(oCaster);
 	}
 }
+*/
 
 void ClearBardVariables(object oCaster, int choice)
 {
