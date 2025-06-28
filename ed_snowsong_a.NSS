@@ -7,7 +7,9 @@ void main()
 {
     object oPC 		= GetAreaOfEffectCreator();	
 	int nChaBonus	= GetAbilityModifier(ABILITY_CHARISMA, oPC);
-	int nCasterLvl 	= GetCasterLevel(oPC);
+	//int nCasterLvl 	= GetCasterLevel(oPC); // original
+	//flattedfifth edit, would be 10 rounds. Could also use GetBardicClassLevelForUses() for up to 20 rounds
+	int nCasterLvl 	= GetLevelByClass(117, oPC); 
 	object oTarget 	= GetEnteringObject();
 	//flattedfifth edited effect declarations
 	effect eAllies		= EffectAttackIncrease(3);
