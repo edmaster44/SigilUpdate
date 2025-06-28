@@ -295,11 +295,11 @@ void RunPersistentCombinedSong(object oCaster, int song1, int song2, int uniquei
 		return;
 	}
 	
-	if(song1 == 5 && CountFactionMembers(oCaster) < 2 || song2 == 5 && CountFactionMembers(oCaster) < 2)
+	/*if(song1 == 6 && CountFactionMembers(oCaster) < 2 || song2 == 6 && CountFactionMembers(oCaster) < 2)
 	{
 		FloatingTextStringOnCreature("Inspire Recklessness requires you to be in a party!", oCaster, TRUE, 3.0f);
 		return;
-	}
+	}*/
 		
 	int id = GetLocalInt(oCaster,"CSONGID");
 	
