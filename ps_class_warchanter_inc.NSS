@@ -59,9 +59,9 @@ void WarChanter_SnowSong(object oPC, int nSpellID)
 	int nDuration = 20;
 	// FlattedFifth edit
 	
-	effect eSnow = EffectNWN2SpecialEffectFile("fx_enviro_snowmedium");
-	effect eAOE = EffectAreaOfEffect(84);
-	eAOE = EffectLinkEffects(eSnow, eAOE);
+	//effect eSnow = EffectNWN2SpecialEffectFile("fx_enviro_snowmedium"); // moved to vfx_persistent.2da
+	effect eAOE = EffectAreaOfEffect(84); // enter and exit scripts are named in 2da, no need to put them here
+	//eAOE = EffectLinkEffects(eSnow, eAOE);
 	float fDuration = RoundsToSeconds(nDuration);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
 	
