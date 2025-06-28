@@ -57,12 +57,21 @@ void WarChanter_SnowSong(object oPC, int nSpellID)
 
 
 	int nDuration = 20;
+	// FlattedFifth edit
+	effect eSnow = EffectNWN2SpecialEffectFile("fx_enviro_snowmedium");
+	effect eAOE = EffectAreaOfEffect(84);
+	float fDuration = RoundsToSeconds(nDuration);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eSnow, oPC);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
+	
+	/* Original
 	int nMetaMagic = GetMetaMagicFeat();
 	effect eSnow = EffectNWN2SpecialEffectFile("fx_enviro_snowmedium");
 	effect eAOE = EffectAreaOfEffect(84, "ed_snowsong_a", "", "ed_snowsong_c");
 	eAOE = EffectLinkEffects(eSnow, eAOE);
 	float fDuration = RoundsToSeconds(nDuration);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
+	*/
 }
 
 void SPELLABILITY_WarChanter_COMBINE_SONG(object oPC, int nSpellID)
