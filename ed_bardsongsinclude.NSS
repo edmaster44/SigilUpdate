@@ -187,28 +187,28 @@ void ED_ApplyFriendlySongEffectsToParty( object oCaster, int nSpellId, effect eL
     {
 	if(GetArea(oTarget) == GetArea(oCaster))
 	{
-		if ( GetIsObjectValidSongTarget(oTarget) && !GetIsDead(oTarget) && GetRacialType(oTarget))
+		if ( GetIsObjectValidSongTarget(oTarget) && !GetIsDead(oTarget))
 		{
 	  		if(!HasBardSpell(nSpellId, oTarget)) ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, 35.0 );
 	   		else RefreshSpellEffectDurations(oTarget, nSpellId, 35.0);
 		}
 		
 		oAnimal = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION,oTarget);
-		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal) && GetRacialType(oAnimal) != RACIAL_TYPE_DRAGON)
+		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal))
 		{
 		    if(!HasBardSpell(nSpellId, oAnimal)) ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oAnimal, 35.0 );
 	   		else RefreshSpellEffectDurations(oAnimal, nSpellId, 35.0);
 		}
 		
 		oAnimal = GetAssociate(ASSOCIATE_TYPE_SUMMONED,oTarget);
-		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal) && GetRacialType(oAnimal) != RACIAL_TYPE_DRAGON)
+		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal))
 		{
 		    if(!HasBardSpell(nSpellId, oAnimal)) ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oAnimal, 35.0 );
 	   		else RefreshSpellEffectDurations(oAnimal, nSpellId, 35.0);
 		}
 		
 		oAnimal = GetAssociate(ASSOCIATE_TYPE_FAMILIAR,oTarget);
-		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal) && GetRacialType(oAnimal) != RACIAL_TYPE_DRAGON)
+		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal))
 		{
 		    if(!HasBardSpell(nSpellId, oAnimal)) ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oAnimal, 35.0 );
 	   		else RefreshSpellEffectDurations(oAnimal, nSpellId, 35.0);

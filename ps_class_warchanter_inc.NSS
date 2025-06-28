@@ -14,7 +14,7 @@ void WarChanter_SingingShout(object oPC, int nSpellID)
 	PS_CustomAnimation(oPC,"*rage",0);	
 								
 	effect eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("fx_spell_shout01"),EffectAbilityIncrease(ABILITY_STRENGTH,iBonus));
-	ApplyEffectToGroup(oPC,nSpellID,eLink,60.0f);
+	ApplyEffectToGroup(oPC,nSpellID,eLink,180.0f);
 		
 	}
 		
@@ -27,8 +27,13 @@ int iWarChanter = GetLevelByClass(CLASS_TYPE_WAR_CHANTER,oPC);
 if(iWarChanter > 8) nBonus = 2;
 effect eAB = EffectAttackIncrease(nBonus,ATTACK_BONUS_MISC);
 effect eDam	=EffectDamageIncrease(nBonus,DAMAGE_TYPE_MAGICAL);
+effect eWill =EffectSavingThrowIncrease(SAVING_THROW_WILL,nBonus,SAVING_THROW_ALL);
+effect ePen = EffectACDecrease(1,AC_DODGE_BONUS);	
 effect eLink = EffectLinkEffects(eAB, eDam);
-ApplyEffectToGroup(oPC,nSpellID,eLink,60.0f);
+eLink = EffectLinkEffects(eWill,eLink);
+eLink = EffectLinkEffects(ePen,eLink);
+
+ApplyEffectToGroup(oPC,nSpellID,eLink,180.0f);
 	
 }
 
@@ -43,7 +48,7 @@ if (GetLevelByClass(iWarChanter,oPC)>6)
 }
 int nTotal = iWarChanter * nBonus;
 effect nHP = EffectTemporaryHitpoints(nBonus);
-ApplyEffectToGroup(oPC,nSpellID,nHP,60.0f);
+ApplyEffectToGroup(oPC,nSpellID,nHP,180.0f);
 
 }
 
