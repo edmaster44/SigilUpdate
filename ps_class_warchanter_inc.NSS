@@ -62,7 +62,6 @@ void WarChanter_SnowSong(object oPC, int nSpellID)
 	effect eAOE = EffectAreaOfEffect(84, "ed_snowsong_a", "", "ed_snowsong_c");
 	eAOE = EffectLinkEffects(eSnow, eAOE);
 	float fDuration = RoundsToSeconds(nDuration);
-
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
 }
 
