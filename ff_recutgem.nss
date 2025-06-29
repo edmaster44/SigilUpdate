@@ -216,8 +216,8 @@ int RollForCut(object oPC, object oGem, int bImprove){
 		nDC += 5;
 		// find out what kind of gem
 		string sTag = GetStringLowerCase(GetTag(oGem));
-		if (FindSubString(sTag, "sunstone") >= 0 ||
-			FindSubString(sTag, "bloodstone") >= 0){
+		if (FindSubString(sTag, "feldspar_yellow") >= 0 ||
+			FindSubString(sTag, "blood") >= 0){
 				nDC += 5;
 				nLuck = 40;
 		} else if (FindSubString(sTag, "diamond") >= 0 ||
