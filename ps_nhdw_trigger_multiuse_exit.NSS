@@ -20,7 +20,11 @@ void main()
 			return;
         oObject = GetNextInPersistentObject(OBJECT_SELF);
     }
-
+	
+	// if the entering object is a pc, then send messages to them
+	// otherwise send messages to the master of the entering object
+	object oPC = oPC2; // the recipient of messages
+	if (!GetIsPC(oPC2)) oPC = GetMaster(oPC2);
 
 
 //the "open2" variable will open a door with this tag 
@@ -60,11 +64,17 @@ void main()
 	effect eEffect4		= EffectRandomNerf();
 
 //Door unlock & open section
-	SetLocked(oDoorOpen2, FALSE);
-	AssignCommand(oDoorOpen2, ActionOpenDoor(oDoorOpen2));
+	if (GetIsObjectValid(oDoorOpen2)){
+		SetLocked(oDoorOpen2, FALSE);
+		AssignCommand(oDoorOpen2, ActionOpenDoor(oDoorOpen2));
+		SendMessageToPC(oPC, "You hear a door opening.");
+	}
 //Door lock & close section	
-	AssignCommand(oDoorClose2, ActionCloseDoor(oDoorClose2));
-	SetLocked(oDoorClose2, TRUE);
+	if (GetIsObjectValid(oDoorClose2)){
+		AssignCommand(oDoorClose2, ActionCloseDoor(oDoorClose2));
+		SetLocked(oDoorClose2, TRUE);
+		SendMessageToPC(oPC, "You hear a door closing.");
+	}
 //Visual effect section
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX2), oPC2);
 //Floaty Text section

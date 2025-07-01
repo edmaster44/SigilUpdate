@@ -251,6 +251,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (!GetIsObjectValid(oItem))
 			sFeedback = "Invalid item";
 		else sFeedback = "The item tag is " + GetTag(oItem);
+	//debugging command to give a black sapphire to test that quest's changes
+	// only works on test server
+	} else if (sInput == "#debug_sapphire"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			object oSapphire = CreateItemOnObject("ps_i_blacksapphire", oSender);
+			sFeedback = "Created sapphire";
+		} else sFeedback = "This command only works on the test server.";
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);

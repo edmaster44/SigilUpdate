@@ -9,10 +9,14 @@ void main()
 
 	object oPC1 = GetEnteringObject();
 	
-	
 	//if (!GetIsPC(oPC1)) return;
 	if (!GetIsPC(oPC1) && !GetIsPC(GetMaster(oPC1))) return;
 	
+	// if the entering object is a pc, then send messages to them
+	// otherwise send messages to the master of the entering object
+	object oPC = oPC1; // the recipient of messages
+	if (!GetIsPC(oPC1)) oPC = GetMaster(oPC1);
+
 
 
 
@@ -44,11 +48,17 @@ void main()
 	object oObj4		= GetObjectByTag(sObj4);
 	
 //Door unlock & open section
-	SetLocked(oDoorOpen1, FALSE);
-	AssignCommand(oDoorOpen1, ActionOpenDoor(oDoorOpen1));
+	if (GetIsObjectValid(oDoorOpen1)){
+		SetLocked(oDoorOpen1, FALSE);
+		AssignCommand(oDoorOpen1, ActionOpenDoor(oDoorOpen1));
+		SendMessageToPC(oPC, "You hear a door opening.");
+	}
 //Door lock & close section	
-	AssignCommand(oDoorClose1, ActionCloseDoor(oDoorClose1));
-	SetLocked(oDoorClose1, TRUE);
+	if (GetIsObjectValid(oDoorClose1)){
+		AssignCommand(oDoorClose1, ActionCloseDoor(oDoorClose1));
+		SetLocked(oDoorClose1, TRUE);
+		SendMessageToPC(oPC, "You hear a door closing.");
+	}
 //Visual effect section
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX1), oPC1);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo1), oObj1, 60.0f);
