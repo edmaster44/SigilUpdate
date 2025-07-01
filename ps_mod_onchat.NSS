@@ -259,6 +259,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			object oSapphire = CreateItemOnObject("ps_i_blacksapphire", oSender);
 			sFeedback = "Created sapphire";
 		} else sFeedback = "This command only works on the test server.";
+	//debugging command to give a treasure room key to test niflheim changes
+	// only works on test server
+	} else if (sInput == "#debug_niflheim"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			object oKey = CreateItemOnObject("ps_key_mystery", oSender);
+			sFeedback = "Created niflheim key";
+		} else sFeedback = "This command only works on the test server.";
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
