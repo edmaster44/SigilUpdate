@@ -7,9 +7,14 @@
 void main()
 {
 
-	object oPC1 = GetEnteringObject();;
+	object oPC1 = GetEnteringObject();
 	
-	if (!GetIsPC(oPC1)) return;
+	
+	//if (!GetIsPC(oPC1)) return;
+	if (!GetIsPC(oPC1) && !GetIsPC(GetMaster(oPC1))) return;
+	
+
+
 
 //the "open1" variable will open a door with this tag 
 	string sOpen1 		= GetLocalString(OBJECT_SELF,"open1");

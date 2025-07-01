@@ -6,6 +6,11 @@
 const int cChestWait = 915;
 const float cChestDistance = 8.0f; //the distance monsters must be from chest for chest to spawn loot
 
+// creates a random craft material from a craft 2da.
+// valid args for s2da are "SCOD_CRAFT_LEATHER", "SCOD_CRAFT_METAL", "SCOD_CRAFT_MISC", 
+// and "SCOD_CRAFT_WOOD"
+void CreateCraftItemOnObjectFrom2da(string s2da, object oObject);
+
 //Creates gold on chest
 //details depend on variables
 //GOLDDICE, GOLDNR, GOLDCONS
@@ -51,6 +56,7 @@ int CheckIfHostilesNearby(object oChest, object oPC) {
 //Options: BOOK, JUNK, GEM, ARCANE, AMMO, EQUIPPABLE, KIT, POTION, RANDOM
 void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLevel = 1)
 {
+	string sResref = "";
 	if ( sTreasure == "BOOK" ) {
 		CreatePaperItemsOnTarget(oChest, nTreasureLevel);
 	} else if ( sTreasure == "JUNK" ) {
@@ -61,7 +67,7 @@ void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLev
 		CreateScrollOnTarget(oChest, nTreasureLevel);
 	} else if ( sTreasure == "AMMO" ) {
 		int nStackSize = d10(4);
-		string sResref = PickItemFromDatabase("treasure_junk", nTreasureLevel, "ammo", TRUE);
+		sResref = PickItemFromDatabase("treasure_junk", nTreasureLevel, "ammo", TRUE);
 		CreateTreasureItemOnTarget(sResref, oChest, nStackSize);
 	} else if ( sTreasure == "EQUIPPABLE") { //New; use sparingly
 		int nRandom = Random(9)+1;
@@ -77,7 +83,6 @@ void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLev
 			case 9: CreateJewelryOnTarget(oChest, nTreasureLevel); break;  //jewelry
 		}
 	} else if ( sTreasure == "KIT" ) {
-		string sResref = "";
 		switch(d3()) {
 			case 1: sResref = PickItemFromDatabase("treasure_junk", nTreasureLevel, "healingkit", TRUE); break;
 			case 2: sResref = PickItemFromDatabase("treasure_junk", nTreasureLevel, "thieveskit", TRUE); break;
@@ -98,7 +103,59 @@ void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLev
 			case 6: FillChestWithSpecificItem(oChest, "KIT", nTreasureLevel); break;
 			case 7: FillChestWithSpecificItem(oChest, "POTION", nTreasureLevel); break;
         }
+	} else if (sTreasure == "CRAFT_UNDEAD") {
+		switch (Random(4)){
+			case 0: sResref = "ps_golem_bone"; break; // giant bone
+			case 1: sResref = "ps_crft_plk_tb"; break; // twelvetrees
+			case 2: sResref = "ps_crft_fleshgolem"; break;
+			case 3: sResref = "ps_cfrt_ing_gm"; break; // morguth iron
+		}
+		CreateTreasureItemOnTarget(sResref, oChest);
+	} else if (sTreasure == "CRAFT_MERCURIA") {
+		switch (Random(4)){
+			case 0: sResref = "ps_crft_celestplume"; break;
+			case 1: sResref = "ps_crft_plk_ao"; break; // arboreal oak
+			case 2: sResref = "ps_crft_mercrose"; break;
+			case 3: sResref = "ps_cfrt_ing_st"; break; //truesteel
+		}
+		CreateTreasureItemOnTarget(sResref, oChest);
+	} else if (sTreasure == "CRAFT_DRAGON") {
+		switch (Random(8)){
+			case 0: sResref = "ps_crft_plk_db"; break; // dragon bone
+			case 1: sResref = "ps_crft_drgsnw"; break; // dragon sinew
+			case 2: sResref = "ps_crft_dragonhide_blk"; break;
+			case 3: sResref = "ps_crft_dragonhide_red"; break;
+			case 4: sResref = "ps_crft_dragonhide_wht"; break;
+			case 5: sResref = "ps_crft_dragonhide_blu"; break;	
+			case 6: sResref = "ps_crft_dragonhide_grn"; break;
+			case 7: sResref = "ps_crft_ing_ada"; break; // pure adamantine
+		}
+		CreateTreasureItemOnTarget(sResref, oChest);
+	} else if (sTreasure == "CRAFT_FEYWILD"){
+		switch (Random(6)){
+			case 0: sResref = "ps_crft_moonpearl"; break;
+			case 1: sResref = "ps_crft_pyrite"; break;
+			case 2: sResref = "ps_crft_manticore"; break;
+			case 3: sResref = "ps_crft_chimera"; break;
+			case 4: sResref = "ps_crft_rowan"; break;
+			case 5: sResref = "ps_crft_ironwood"; break;
+		}
+		CreateTreasureItemOnTarget(sResref, oChest);
+	} else if (sTreasure == "CRAFT_WOOD") {
+		CreateCraftItemOnObjectFrom2da("SCOD_CRAFT_WOOD", oChest);
+	} else if (sTreasure == "CRAFT_LEATHER") {
+		CreateCraftItemOnObjectFrom2da("SCOD_CRAFT_LEATHER", oChest);
+	} else if (sTreasure == "CRAFT_METAL") {
+		CreateCraftItemOnObjectFrom2da("SCOD_CRAFT_METAL", oChest);
+	} else if (sTreasure == "CRAFT_MISC") {
+		CreateCraftItemOnObjectFrom2da("SCOD_CRAFT_MISC", oChest);
 	}
+}
+
+void CreateCraftItemOnObjectFrom2da(string s2da, object oObject){
+	int n2daRows = GetNum2DARows(s2da) - 1;
+	string sResref = Get2DAString(s2da, "BASE_RESREF", Random(n2daRows));
+	CreateTreasureItemOnTarget(sResref, oObject);
 }
 
 //astral_quest_obj 70%

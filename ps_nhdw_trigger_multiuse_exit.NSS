@@ -6,9 +6,22 @@
 void main()
 {
 
-	object oPC2 = GetExitingObject();;
+	object oPC2 = GetExitingObject();
 	
-	if (!GetIsPC(oPC2)) return;
+	//if (!GetIsPC(oPC2)) return;
+	if (!GetIsPC(oPC2) && !GetIsPC(GetMaster(oPC2))) return;
+	
+	//exit script will not execute if there's still a pc, summon, familiar, hench, etc
+	// still in the trigger
+	object oObject = GetFirstInPersistentObject(OBJECT_SELF);
+    while (GetIsObjectValid(oObject))
+    {
+        if (GetIsPC(oObject) || GetIsPC(GetMaster(oObject)))
+			return;
+        oObject = GetNextInPersistentObject(OBJECT_SELF);
+    }
+
+
 
 //the "open2" variable will open a door with this tag 
 	string sOpen2 = GetLocalString(OBJECT_SELF,"open2");
