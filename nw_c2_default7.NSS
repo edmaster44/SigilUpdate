@@ -22,8 +22,31 @@
 #include "x0_i0_spawncond"
 #include "ps_inc_scriptcall"
 
+void SpawnSpecificItem(string sRes, object oKiller, location lCrimeScene, string sDrop, string sFind){
+	object oPC = oKiller;
+	object oItem;
+	if (!GetIsPC(oKiller)) oPC = GetMaster(oKiller);
+	if (!GetIsPC(oPC)) oPC = GetFirstFactionMember(oKiller);
+	if (!GetIsPC(oPC)){
+		oItem = CreateObject(OBJECT_TYPE_ITEM, sRes, lCrimeScene);
+		AssignCommand(oItem, SpeakString(sDrop));
+	} else {
+		oItem = CreateItemOnObject(sRes, oPC);
+		SendMessageToPC(oPC, sFind);
+	}
+}
+
 void main()
 {
+	object oKiller = GetLastKiller();
+	
+		// Special rules for specific npcs death
+	string sTag = GetTag(OBJECT_SELF);
+	if (FindSubString(sTag, "ps_creature_ascended") != -1){//niflheim boss The Ascended
+		SpawnSpecificItem("ps_key_mystery", oKiller, GetLocation(OBJECT_SELF), 
+			"A key drops to the ground!", "You found a key!");//drops key to antechamber
+	}
+	
 	ExecuteScript("ps_xp_script",OBJECT_SELF);
 
 	string sDeathScript = GetLocalString(OBJECT_SELF, "DeathScript");
@@ -33,7 +56,7 @@ void main()
 	
     int nClass = GetLevelByClass(CLASS_TYPE_COMMONER);
     int nAlign = GetAlignmentGoodEvil(OBJECT_SELF);
-    object oKiller = GetLastKiller();
+	
 
     // If we're a good/neutral commoner,
     // adjust the killer's alignment evil
