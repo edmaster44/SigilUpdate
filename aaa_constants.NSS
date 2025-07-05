@@ -163,7 +163,7 @@ const int B_ALLOW_CRAFT_PLUS_10_MATCH = TRUE; // ditto, but for +10
 					
 					Begin Craft Weapon/Armor/Etc system constants
 **************************************************************************************************/
-
+// integers for iprp_specialmat rows
 const int SPECIAL_MAT_ABYSSAL_BLOODIRON = 0;
 const int SPECIAL_MAT_ALCHEMIC_PLATINUM = 1;
 const int SPECIAL_MAT_ARBOREAL_OAK = 31;
@@ -231,6 +231,70 @@ const int SPECIAL_MAT_ZALANTAR = 48;
 // the following 2 do not grant enchantment points, they grant a bonus feat instead
 const int SPECIAL_MAT_XBOW_LEVER = 64;
 const int SPECIAL_MAT_XBOW_SIGHT = 65;
+
+// res refs for crafting materials
+const string HIDE_CELESTIAL_PLUME = "ps_crft_celestplume";
+const string HIDE_CHIMERA = "ps_crft_chimera";
+const string HIDE_DEMON = "ps_crft_demonscale";
+const string HIDE_DEVIL = "ps_crft_devilscale";
+const string HIDE_DRAG_BLACK = "ps_crft_dragonhide_blk";
+const string HIDE_DRAG_BLUE = "ps_crft_dragonhide_blu";
+const string HIDE_DRAG_GREEN = "ps_crft_dragonhide_grn";
+const string HIDE_DRAG_RED = "ps_crft_dragonhide_red";
+const string HIDE_DRAG_WHITE = "ps_crft_dragonhide_wht";
+const string HIDE_FLESHGOLEM = "ps_crft_fleshgolem";
+const string HIDE_MANTICORE = "ps_crft_manticore";
+const string HIDE_OPHIDIAN = "ps_crft_ophidian";
+const string INGOT_ABYSSAL_BLOODIRON = "ps_cfrt_ing_bi";
+const string INGOT_ADAMANTINE = "ps_crft_ing_ada";
+const string INGOT_ALCHEMICAL_PLATINUM = "ps_crft_ing_ap";
+const string INGOT_ALCHEMICAL_SILVER = "n2_crft_ingsilver";
+const string INGOT_ASTRAL_DRIFTMETAL = "ps_crft_ing_asdrift";
+const string INGOT_AURORUM = "ps_crft_ing_au";
+const string INGOT_AXIOMATIC_BRASS = "ps_cfrt_ing_ab";
+const string INGOT_BLOODGLASS = "ps_cfrt_ing_bg";
+const string INGOT_BRASS = "ps_golem_brass";
+const string INGOT_BYESHK = "ps_cfrt_ing_by";
+const string INGOT_COLDIRON = "n2_crft_ingcldiron";
+const string INGOT_DARKSTEEL = "n2_crft_ingdrksteel";
+const string INGOT_ELECTRUM = "ps_crft_pm_electrum";
+const string INGOT_GLASSTEEL = "ps_crft_ing_gs";
+const string INGOT_GOLD = "ps_crft_pm_gold";
+const string INGOT_IRON = "n2_crft_ingiron";
+const string INGOT_METALLINE = "ps_cfrt_ing_ml";
+const string INGOT_METEORIC_IRON = "ps_cfrt_ing_mi";
+const string INGOT_MINDSILVER = "ps_crft_ing_ms";
+const string INGOT_MITHRAL = "ps_golem_mithral";
+const string INGOT_MORGUTH_IRON = "ps_cfrt_ing_gm";
+const string INGOT_OERTHBLOOD = "ps_crft_ing_ob";
+const string INGOT_PANDEMONIC_SILVER = "ps_cfrt_ing_pd";
+const string INGOT_PLATINUM = "ps_crft_pm_platinum";
+const string INGOT_RIVERINE = "ps_crft_ing_rv";
+const string INGOT_SILVER = "ps_crft_pm_silver";
+const string INGOT_TANTULHOR = "ps_cfrt_ing_tt";
+const string INGOT_TRUESTEEL = "ps_cfrt_ing_st";
+const string INGOT_WHITEGOLD = "ps_crft_pm_wgold";
+const string INGOT_XBOWLEVER = "ps_crft_xbowlever";
+const string MISC_DRAG_SINEW = "ps_crft_drgsnw";
+const string MISC_FIENDIVORY = "ps_crft_fiendtooth";
+const string MISC_FLYWHEEL = "ps_crft_neufly";
+const string MISC_GEARSPRING = "ps_crft_reggear";
+const string MISC_MERCROSE = "ps_crft_mercrose";
+const string MISC_MOONPEARL = "ps_crft_moonpearl";
+const string MISC_PYRITE = "ps_crft_pyrite";
+const string MISC_XBOWSIGHT = "ps_crft_xbowsight";
+const string WOOD_ARBOREAL_OAK = "ps_crft_plk_ao";
+const string WOOD_DEMON_HORN = "ps_crft_demonhorn";
+const string WOOD_DEVIL_HORN = "ps_crft_devilhorn";
+const string WOOD_DRAG_BONE = "ps_crft_plk_db";
+const string WOOD_DUSKWOOD = "n2_crft_plkdskwood";
+const string WOOD_FORMIC_AMBER = "ps_crft_formamb";
+const string WOOD_GIANT_BONE = "ps_golem_bone";
+const string WOOD_IRONWOOD = "ps_crft_ironwood";
+const string WOOD_ROWANWOOD = "ps_crft_rowan";
+const string WOOD_SHEDERRAN = "n2_crft_plkshed";
+const string WOOD_TWELVETREES = "ps_crft_plk_tb";
+const string WOOD_ZALANTAR = "n2_crft_plkzalantar";
 
 /*********************************************************************************************
 						End Craft Weapon/Armor/Etc system constants
