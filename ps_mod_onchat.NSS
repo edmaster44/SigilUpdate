@@ -245,12 +245,15 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			}
 		} else sFeedback = "This command only works on the test server.";
 	//debugging command that tells you the tag of the first item in inventory
-	} else if (sInput == "#gettag"){
+	} else if (sInput == "#iteminfo"){
 		bFFcommand = TRUE;
 		object oItem = GetFirstItemInInventory(oSender);
 		if (!GetIsObjectValid(oItem))
 			sFeedback = "Invalid item";
-		else sFeedback = "The item tag is " + GetTag(oItem);
+		else {
+			sFeedback = "The item Tag is " + GetTag(oItem);
+			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
+		}
 	//debugging command to give a black sapphire to test that quest's changes
 	// only works on test server
 	} else if (sInput == "#debug_sapphire"){
