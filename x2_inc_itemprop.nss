@@ -99,6 +99,10 @@ const int 	BASE_ITEM_CREEQ_BITE_LRG	= 185; //New large
 
 int IPGetIsWeapon(object oItem, int nItem = -1);
 
+
+//get the max stack size of the item
+int IPGetMaxStackSize(object oItem);
+
 // what it says on the box. returns true if the 2 itemproperties are the same
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE);
 
@@ -331,6 +335,10 @@ int IPGetIsWeapon(object oItem, int nItem = -1){
 	return TRUE;
 }
 
+int IPGetMaxStackSize(object oItem){
+	int nItem = GetBaseItemType(oItem);
+	return StringToInt(Get2DAString("baseitems", "Stacking", nItem));
+}
 
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE){
 	int nType = GetItemPropertyType(ip1);

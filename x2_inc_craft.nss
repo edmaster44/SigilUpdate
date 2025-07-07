@@ -649,7 +649,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 		FloatingTextStrRefOnCreature(84544,oCreator);
         return OBJECT_INVALID;
     }
-
+	
     if (nPropID != -1)
     {
 		// create a base game heal potion and then remove all properties and rename it.
@@ -664,7 +664,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 			ip = GetFirstItemProperty(oTarget);	
 		}
 		SetFirstName(oTarget, "Magical Potion");
-
+		
 		
         itemproperty ipProp = ItemPropertyCastSpell(nPropID,IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
         AddItemProperty(DURATION_TYPE_PERMANENT,ipProp,oTarget);
@@ -677,7 +677,7 @@ object CICraftBrewPotion(object oCreator, int nSpellId )
 			SetItemBaseMaterialType(oTarget, nMaterial);
 		}
 		SetItemIcon(oTarget, nIcon);
-		
+		SetTag(oTarget, "crafted_potion_iprp_" + IntToString(nPropID));
     }
     return oTarget;
 	
@@ -850,6 +850,7 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
 	}
 	itemproperty ipProp = ItemPropertyCastSpell(nPropID, IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE);
 	AddItemProperty(DURATION_TYPE_PERMANENT, ipProp, oTarget);
+	SetTag(oTarget, "crafted_scroll_iprp_" + IntToString(nPropID));
 	
     return oTarget;
 }

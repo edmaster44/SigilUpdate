@@ -1,4 +1,4 @@
-
+#include "ff_merge_items"
 
 
 //
@@ -354,7 +354,10 @@ const int PS_INVALID_WEATHER_ID = 0;
 
 void PS_MergeContainerStacks(object Container)
 {
-	PS_CallExtensionsScript(PS_Ext_MergeContainerStacks, Container);
+	if (USE_SERVEREXTS_STACK){
+		PS_CallExtensionsScript(PS_Ext_MergeContainerStacks, Container);
+	else 
+		ff_MergeStacksInContainer(oContainer);
 }
 
 void PS_SendAreaWeatherToPlayer(object Area, object Player)

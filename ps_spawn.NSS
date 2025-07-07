@@ -162,18 +162,23 @@ if (!GetIsPC(oPC)) return;
  // spawn the 250xp quest item "interesting skull"
  if (sWP == "wp_us_beserkerundead" || sWP == "wp_us_accursedpriest" ||
 	sWP == "wp_us_necromancerundead"){
-		string sVarname = "SkullBearerLastSpawn";
+		object oEss = PS_GetEssence(oPC);
+		DeleteLocalInt(oEss, "SkullBearerLastSpawn0");
+		DeleteLocalInt(oEss, "SkullBearerLastSpawn1");
+		DeleteLocalInt(oEss, "SkullBearerLastSpawn2");
+		
+		int nTimeNow = PS_GetTime();
+		string sVarname = "SkullLastSpawn";
 		if (sWP == "wp_us_beserkerundead") sVarname += "0";
 		else if (sWP == "wp_us_accursedpriest") sVarname += "1";
 		else sVarname += "2";
-		int nDay = (GetCalendarYear() * 360) + ((GetCalendarMonth() - 1) * 30) + GetCalendarDay();
-		object oEss = PS_GetEssence(oPC);
+		
 		int nLastSpawn = GetLocalInt(oEss, sVarname);
-		if (nLastSpawn >= nDay){
+		if (nLastSpawn != 0 && nTimeNow < nLastSpawn + 86400){
 			SendMessageToPC(oPC, "This tomb is empty. Try again tomorrow.");
 			return;
 		} else {
-			SetLocalInt(oEss, sVarname, nDay);
+			SetLocalInt(oEss, sVarname, nTimeNow);
 		}
 	}
  

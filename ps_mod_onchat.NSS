@@ -3,6 +3,7 @@
 #include "nwnx_sql"
 #include "ps_inc_functions"
 #include "ServerExts"
+#include "ff_merge_items"
 
 
 int IsAuthorizedToUseThisCmd(object oPC)
@@ -170,7 +171,7 @@ void SixSecondTick(object oPC, int nRound = 1){
 }
 
 // collection of simple chat commands by FlattedFifth
-int GetIsFFcommand(object oSender, int nChannel, string sMessage){
+int GetIsFFcommand(object oSender, int nChannel, string sMessage, object oTarget){
 
 	if (nChannel != CHAT_MODE_TALK || !GetIsPC(oSender))
 		return FALSE;
@@ -231,9 +232,28 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SetLocalInt(oSender, "6secondtick", FALSE);
 			SendMessageToPC(oSender, "Stopping Tick");	
 		}
+	//debugging command that tells you the tag and resref of the targeted item
+	} else if (sInput == "#iteminfo"){
+		bFFcommand = TRUE;
+		if (!GetIsObjectValid(oTarget))
+			sFeedback = "Invalid item";
+		else {
+			sFeedback = "The item Tag is " + GetTag(oTarget);
+			sFeedback += "\nThe ResRef is " + GetResRef(oTarget);
+		}
+	} else if (sInput == "#stacks"){
+		if (USE_SERVEREXTS_STACK) return FALSE;
+		bFFcommand = TRUE;
+		if (GetIsObjectValid(oTarget) && GetHasInventory(oTarget) &&
+				GetItemPossessor(oTarget) == oSender){
+					sMessage = "Merging items in container";
+					ff_MergeStacksInContainer(oTarget);
+		} else sMessage = "Please select a valid container that you own";
+	}
+	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
 	// toggles on and off force cost of crafting, cannot be used to craft for free on main
 	// but can be used to test costs on test server
-	} else if (sInput == "#testcraftcost"){
+	else if (sInput == "#testcraftcost"){
 		bFFcommand = TRUE;
 		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
 			if (GetLocalInt(oSender, "TestCraftCost")){
@@ -244,16 +264,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 				sFeedback = "Turning on craft costs.";
 			}
 		} else sFeedback = "This command only works on the test server.";
-	//debugging command that tells you the tag of the first item in inventory
-	} else if (sInput == "#iteminfo"){
-		bFFcommand = TRUE;
-		object oItem = GetFirstItemInInventory(oSender);
-		if (!GetIsObjectValid(oItem))
-			sFeedback = "Invalid item";
-		else {
-			sFeedback = "The item Tag is " + GetTag(oItem);
-			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
-		}
 	//debugging command to give a black sapphire to test that quest's changes
 	// only works on test server
 	} else if (sInput == "#debug_sapphire"){
@@ -270,7 +280,25 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			object oKey = CreateItemOnObject("ps_key_mystery", oSender);
 			sFeedback = "Created niflheim key";
 		} else sFeedback = "This command only works on the test server.";
+	//debugging command for testing timer on undersigil tombs
+	} else if (sInput == "#debug_tombs"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			object oEss = PS_GetEssence(oSender);
+			string sVarBase = "SkullLastSpawn";
+			string sVarName;
+			int i;
+			int nVar;
+			for (i = 0; i <= 2; i++){
+				sVarName = sVarBase + IntToString(i);
+				nVar = GetLocalInt(oEss, sVarName);
+				if (nVar != 0)
+					SetLocalInt(oEss, sVarName, nVar - 86401);
+			}
+			sFeedback = "Reset tomb timers to 24 hours ago";
+		} else sFeedback = "This command only works on the test server.";
 	}
+	//END DEBUGGING COMMANDS
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
 	return bFFcommand;
@@ -286,7 +314,7 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 	}
 	
 	// if message is a chat command by FlattedFifth, do not forward text to chat
-	if (GetIsFFcommand(oSender, nChannel, sMessage)) return FALSE;
+	if (GetIsFFcommand(oSender, nChannel, sMessage, oTarget)) return FALSE;
 	
 	string MessageToSend;
 
