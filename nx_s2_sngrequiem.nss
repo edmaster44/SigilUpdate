@@ -24,6 +24,7 @@
 // ChazM 5/31/07 renamed DoHealing() to DoPartyHealing() (DoHealing() is declared in nw_i0_spells)
 // AFW-OEI 07/20/2007: NX1 VFX.
 // Ariella - Fixed invisibility exploit and allowed songs to continue with requiem.
+// FlattedFifth, July 8, 2025: Returned to OC functionality except for invisibility exploit fix
 
 #include "x0_i0_spells"
 #include "nwn2_inc_spells"
@@ -47,27 +48,23 @@ void DoDamage(object oCaster, int nSpellId)
         	RemoveEffect(oCaster, eBad);
         }
         eBad = GetNextEffect(oCaster);
-		nNumEnemies++;
-		if(nNumEnemies>75)
+		nNumEnemies++; // this use of nNumEnemies is just to prevent stack overflow
+		if(nNumEnemies>75)  
 			break;
     }
     SetActionMode(oCaster, ACTION_MODE_STEALTH, FALSE);
     nNumEnemies=0;
 	
    
-    // Count up enemy targets so we can divide up damage evenly.  Stop if there's more than 6, since min damage is floored at Total/6.
+    // Count up enemy targets so we can divide up damage evenly.
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, locCaster );
     while(GetIsObjectValid(oTarget))
     {
         if ( GetIsObjectValidSongTarget( oTarget ) &&  GetIsEnemy( oTarget ) )
         {
-            nNumEnemies = nNumEnemies + 1;
+            nNumEnemies += 1;
         }
-        
-        if (nNumEnemies >= 6)
-        {   // Don't need to go higher than 6 enemies.
-            break;
-        }
+		if (nNumEnemies > 75) break;
 
     	oTarget = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_HUGE, locCaster );
     }
@@ -79,7 +76,10 @@ void DoDamage(object oCaster, int nSpellId)
     }
     
     int nPerformSkill = GetSkillRank(SKILL_PERFORM, oCaster);
-    int nDamage = nPerformSkill;    // Damage per target is (2*Perform)/Number of Enemies, capped at most 6 enemies.
+	 // Damage per target is (2*Perform)/Number of Enemies, min (Perform / 3)
+	int nMinDamage = nPerformSkill / 3;
+    int nDamage = (nPerformSkill * 2) / nNumEnemies;  
+	if (nDamage < nMinDamage) nDamage = nMinDamage;
     
     // Inflict Sonic damage.  No save.
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, locCaster );
@@ -102,11 +102,12 @@ void DoDamage(object oCaster, int nSpellId)
     }
     //SpeakString("nx_s2_SngRequiem: DoDamage: exiting function"); 
 }
+
 void DoPartyHealing(object oCaster, int nSpellId)
 {
     //SpeakString("nx_s2_SngRequiem: Entering DoHealing");
 
-    // Count up party members so we can divide up damage evenly.  Stop if there's more than 6, since min damage is floored at Total/6.
+    // Count up party members so we can divide up healing evenly.
     int nNumPartyMembers = 0;
     int bPCOnly    = FALSE;
     object oLeader = GetFactionLeader( oCaster );
@@ -115,13 +116,10 @@ void DoPartyHealing(object oCaster, int nSpellId)
     {
 		if ( GetIsObjectValidSongTarget(oTarget) )
 		{
-            nNumPartyMembers = nNumPartyMembers + 1;
+            nNumPartyMembers += 1;
         }
-        
-        if ( nNumPartyMembers >= 6 )
-        {
-            break;
-        }
+		
+		if (nNumPartyMembers > 75) break;
         
         oTarget = GetNextFactionMember( oLeader, bPCOnly );
     }
@@ -132,7 +130,9 @@ void DoPartyHealing(object oCaster, int nSpellId)
     }
     
     int nPerformSkill = GetSkillRank(SKILL_PERFORM, oCaster);
-    int nHeal = (nPerformSkill) / 2;
+	int nMinHeal = nPerformSkill / 3;
+    int nHeal = (nPerformSkill * 2) / nNumPartyMembers;
+	if (nHeal < nMinHeal) nHeal = nMinHeal;
     
     // Apply healing to party members
     oTarget = GetFirstFactionMember( oLeader, bPCOnly );
@@ -189,18 +189,19 @@ void RunSongEffects(int nCallCount, object oCaster, int nSpellId)
         {
             DoPartyHealing(oCaster, nSpellId);
         }
+		
+		
             
         // Schedule the next ping
-        nCallCount = nCallCount + 1;
-        if (nCallCount > ApplySongDurationFeatMods(5, OBJECT_SELF)) // Requiem is for 5 rounds.
+        nCallCount += 1;
+        if (nCallCount > ApplySongDurationFeatMods(5, oCaster)) 
         {
 			RemoveBardSongSingingEffect(oCaster, GetSpellId());	// AFW-OEI 07/19/2007: Terminate song.
             return;
         }
         else
-        {   // Run once per "round" (5.5 secs gives time for some processing lag).
-            //SpeakString ("nx_s2_SngRequiem: RunSongEffects: queuing up call to RunSongEffects.  Call count: " + IntToString(nCallCount));
-            DelayCommand(5.5f, RunSongEffects(nCallCount, oCaster, nSpellId));
+        {   // Run once per round
+            DelayCommand(6.0f, RunSongEffects(nCallCount, oCaster, nSpellId));
         }
     //}
 }
@@ -208,21 +209,22 @@ void RunSongEffects(int nCallCount, object oCaster, int nSpellId)
 
 void main()
 {
-    if ( !GetCanBardSing( OBJECT_SELF ) )
+	object oCaster = OBJECT_SELF;
+    if ( !GetCanBardSing( oCaster ) )
     {
 	return;	
     }
     
-    if (!GetHasFeat(FEAT_BARD_SONGS, OBJECT_SELF))
+    if (!GetHasFeat(FEAT_BARD_SONGS, oCaster))
     {
-        FloatingTextStrRefOnCreature(STR_REF_FEEDBACK_NO_MORE_BARDSONG_ATTEMPTS,OBJECT_SELF); // no more bardsong uses left
+        FloatingTextStrRefOnCreature(STR_REF_FEEDBACK_NO_MORE_BARDSONG_ATTEMPTS,oCaster); // no more bardsong uses left
         return;
     }
 
     effect eFNF = ExtraordinaryEffect( EffectVisualEffect(VFX_DUR_BARD_SONG) );
-    ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFNF, GetLocation(OBJECT_SELF));
+    ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFNF, GetLocation(oCaster));
 
-    DelayCommand(0.1f, RunSongEffects(1, OBJECT_SELF, GetSpellId()));
+    DelayCommand(0.1f, RunSongEffects(1, oCaster, GetSpellId()));
     
-    DecrementRemainingFeatUses(OBJECT_SELF, FEAT_BARD_SONGS);
+    DecrementRemainingFeatUses(oCaster, FEAT_BARD_SONGS);
 }
