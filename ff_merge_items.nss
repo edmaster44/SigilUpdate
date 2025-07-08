@@ -8,9 +8,10 @@ const int SHOW_STACKS_DEBUG = TRUE;
 
 int GetItemsIdentical(object oItem1, object oItem2);
 
-void ff_MergeStacksInContainer(object oContainer){
-	
-	//debug
+void ff_MergeStacksInContainer(object oContainer, int nIteration = 0){
+
+
+		//debug
 	if (SHOW_STACKS_DEBUG){
 		object oOwner = GetItemPossessor(oContainer);
 		if (GetIsObjectValid(oOwner) && (GetIsPC(oOwner) || GetIsDM(oOwner))){
@@ -18,44 +19,43 @@ void ff_MergeStacksInContainer(object oContainer){
 		}
 	}
 	//end debug
-
+	
+	//safeguard against infinite recursion. Max # items in a containter = 142
+	if (nIteration >= 142) return;
+	
+	nIteration += 1;
+	
     object oItem = GetFirstItemInInventory(oContainer);
 	object oOther;
-	int nMaxStack;
 	int nOtherStack;
-	int nFreeSpace;
-	int nNumToTransfer;
+    int nFreeSpace;
+    int nNumToTransfer;
+	int nMaxStack;
 	
     while (GetIsObjectValid(oItem)){
-        
-		nMaxStack = IPGetMaxStackSize(oItem);
-		// Only items not already a full stack
+	
+        nMaxStack = IPGetMaxStackSize(oItem);
         if (nMaxStack > 1 && GetItemStackSize(oItem) < nMaxStack){
-            
-			oOther = GetNextItemInInventory(oContainer);
-			
+            oOther = GetNextItemInInventory(oContainer);
             while (GetIsObjectValid(oOther)){
-                
-                if (oOther != oItem){
-					if (GetItemsIdentical(oItem, oOther)){
-						nOtherStack = GetItemStackSize(oOther);
-						nFreeSpace = nMaxStack - GetItemStackSize(oItem);
-						nNumToTransfer = nOtherStack;
-						if (nNumToTransfer > nFreeSpace) nNumToTransfer = nFreeSpace;
-						nOtherStack -= nNumToTransfer;
-						
-						if (nNumToTransfer > 0){
-							// Add to this stack
-							SetItemStackSize(oItem, GetItemStackSize(oItem) + nNumToTransfer);
-							if (nOtherStack > 0)
-								SetItemStackSize(oOther, nOtherStack);
-							else DestroyObject(oOther);
-						}
-						
-						// If this stack is now full, move on
-						if (GetItemStackSize(oItem) >= nMaxStack)
-							break;
-					}
+                if (oOther != oItem && GetItemsIdentical(oItem, oOther)){
+                    nOtherStack = GetItemStackSize(oOther);
+                    nFreeSpace = nMaxStack - GetItemStackSize(oItem);
+                    nNumToTransfer = nOtherStack;
+                    if (nNumToTransfer > nFreeSpace) nNumToTransfer = nFreeSpace;
+                    nOtherStack -= nNumToTransfer;
+
+                    if (nNumToTransfer > 0){
+                        SetItemStackSize(oItem, GetItemStackSize(oItem) + nNumToTransfer);
+                        if (nOtherStack > 0)
+                            SetItemStackSize(oOther, nOtherStack);
+                        else
+                            DestroyObject(oOther);
+
+                        // After any merge, recurse because inventory changed
+                        ff_MergeStacksInContainer(oContainer, nIteration);
+                        return; //return to avoid potentially iterating over items that no longer exist
+                    }
                 }
                 oOther = GetNextItemInInventory(oContainer);
             }
@@ -63,6 +63,7 @@ void ff_MergeStacksInContainer(object oContainer){
         oItem = GetNextItemInInventory(oContainer);
     }
 }
+
 
 int GetItemsIdentical(object oItem1, object oItem2){
     // Compare resref, tag, and base material
