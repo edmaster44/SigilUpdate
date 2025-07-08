@@ -171,7 +171,7 @@ void SixSecondTick(object oPC, int nRound = 1){
 }
 
 // collection of simple chat commands by FlattedFifth
-int GetIsFFcommand(object oSender, int nChannel, string sMessage, object oTarget){
+int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 
 	if (nChannel != CHAT_MODE_TALK || !GetIsPC(oSender))
 		return FALSE;
@@ -235,20 +235,22 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage, object oTarget
 	//debugging command that tells you the tag and resref of the targeted item
 	} else if (sInput == "#iteminfo"){
 		bFFcommand = TRUE;
-		if (!GetIsObjectValid(oTarget))
-			sFeedback = "Invalid item";
+		object oItem = GetPlayerCurrentTarget(oSender);
+		if (!GetIsObjectValid(oItem))
+			sFeedback = "No object selected";
 		else {
-			sFeedback = "The item Tag is " + GetTag(oTarget);
-			sFeedback += "\nThe ResRef is " + GetResRef(oTarget);
+			sFeedback = "The item Tag is " + GetTag(oItem);
+			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
 		}
 	} else if (sInput == "#stacks"){
 		if (USE_SERVEREXTS_STACK) return FALSE;
 		bFFcommand = TRUE;
-		if (GetIsObjectValid(oTarget) && GetHasInventory(oTarget) &&
-				GetItemPossessor(oTarget) == oSender){
+		object oItem = GetPlayerCurrentTarget(oSender);
+		if (GetIsObjectValid(oItem) && GetHasInventory(oItem) &&
+				GetItemPossessor(oItem) == oSender){
 					sMessage = "Merging items in container";
-					ff_MergeStacksInContainer(oTarget);
-		} else sMessage = "Please select a valid container that you own";
+					ff_MergeStacksInContainer(oItem);
+		} else sMessage = "You can only merge items in containers in your inventory";
 	}
 	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
 	// toggles on and off force cost of crafting, cannot be used to craft for free on main
@@ -314,7 +316,7 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 	}
 	
 	// if message is a chat command by FlattedFifth, do not forward text to chat
-	if (GetIsFFcommand(oSender, nChannel, sMessage, oTarget)) return FALSE;
+	if (GetIsFFcommand(oSender, nChannel, sMessage)) return FALSE;
 	
 	string MessageToSend;
 
