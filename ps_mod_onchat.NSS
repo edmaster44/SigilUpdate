@@ -3,7 +3,7 @@
 #include "nwnx_sql"
 #include "ps_inc_functions"
 #include "ServerExts"
-#include "ff_merge_items"
+
 
 
 int IsAuthorizedToUseThisCmd(object oPC)
@@ -242,15 +242,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback = "The item Tag is " + GetTag(oItem);
 			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
 		}
-	} else if (sInput == "#stacks"){
-		if (USE_SERVEREXTS_STACK) return FALSE;
-		bFFcommand = TRUE;
-		object oItem = GetPlayerCurrentTarget(oSender);
-		if (GetIsObjectValid(oItem) && GetHasInventory(oItem) &&
-				GetItemPossessor(oItem) == oSender){
-					sMessage = "Merging items in container";
-					ff_MergeStacksInContainer(oItem);
-		} else sMessage = "You can only merge items in containers in your inventory";
 	}
 	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
 	// toggles on and off force cost of crafting, cannot be used to craft for free on main
@@ -300,7 +291,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback = "Reset tomb timers to 24 hours ago";
 		} else sFeedback = "This command only works on the test server.";
 	}
-	//END DEBUGGING COMMANDS
+	//END SPECIFIC SYSTEM DEBUGGING COMMANDS
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
 	return bFFcommand;
