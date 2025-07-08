@@ -21,8 +21,8 @@ const int SIMPLE_SUCCESS = TRUE;
 */
 
 void LogRecut(object oPC, string sResult);
-void GenerateNewGem(object oPC, object oOldGem, string sName, string sDescrip, string sNewTag);
-void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip, string sNewTag, int nTries = 1);
+void GenerateNewGem(object oPC, object oOldGem, string sName, string sDescrip, string sNewTag, string sMessage);
+void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip, string sNewTag, string sMessage, int nTries = 1);
 void ShowRecutResult(object oPC, object oRecut, string sMessage);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
 int RollForCut(object oPC, object oGem, int bImprove);
@@ -82,9 +82,8 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	if (nRoll == FALSE){
 		sName += " <c=tomato>Failed Recut</c>";
 		sDescrip = GetDescription(oGem);
-		DelayCommand(0.3f, GenerateNewGem(oPC, oGem, sName, sDescrip, sTag));
 		sMessage += "You can tell that this gem cannot be recut without destroying it.</c>";
-		SendMessageToPC(oPC, sMessage);
+		DelayCommand(0.3f, GenerateNewGem(oPC, oGem, sName, sDescrip, sTag, sMessage));
  		return;
 	} 
 	
@@ -143,23 +142,23 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	//get new description for re-cut gem, sDescrip
 	sDescrip += GetGemstoneUses(GetBaseGemTagFromString(sNewTag), nNewQ);
 	
+	sMessage = "<c=lightgreen>You've successfully recut the gem!</c>";
 	// create the newly recut gem, 
-	DelayCommand(0.3f, GenerateNewGem(oPC, oGem, sName, sDescrip, sNewTag));
+	DelayCommand(0.3f, GenerateNewGem(oPC, oGem, sName, sDescrip, sNewTag, sMessage));
 }
 
-void GenerateNewGem(object oPC, object oOldGem, string sName, string sDescrip, string sNewTag){
+void GenerateNewGem(object oPC, object oOldGem, string sName, string sDescrip, string sNewTag, string sMessage){
 	
 	string sRes = GetResRef(oOldGem);
 	object oRecut = CreateItemOnObject(sRes, oPC, 1, sNewTag);
 	
 	if (LOG_RECUT) LogRecut(oPC, "ResRef: " + sRes + ", Tag: " + sNewTag);
 	
-	DelayCommand(0.3f, VerifyNewGem(oPC, oOldGem, oRecut, sName, sDescrip, sNewTag));
+	DelayCommand(0.3f, VerifyNewGem(oPC, oOldGem, oRecut, sName, sDescrip, sNewTag, sMessage));
 }
 
-void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip, string sNewTag, int nTries = 1){
+void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip, string sNewTag, string sMessage, int nTries = 1){
 
-	string sMessage;
 	if (!GetIsObjectValid(oRecut)){
 		if (nTries == 1){
 			// if we failed to create a new gem using the old one's resref, then
@@ -168,11 +167,10 @@ void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, strin
 			string sRes =  GetStringLeft(sNewTag, GetStringLength(sNewTag) - 6);
 			oRecut = CreateItemOnObject(sRes, oPC, 1, sNewTag);
 			if (LOG_RECUT) LogRecut(oPC, "Failed gem creation from original resref, tried tag res");
-			DelayCommand(0.3f, VerifyNewGem(oPC, oOldGem, oRecut, sName, sDescrip, sNewTag, nTries + 1));
+			DelayCommand(0.3f, VerifyNewGem(oPC, oOldGem, oRecut, sName, sDescrip, sNewTag, sMessage,  nTries + 1));
 		} else {
 			if (LOG_RECUT) LogRecut(oPC, "VerifyNewGem failed gem creation from original resref, tried tag res");
 			//let the player know the result
-			sMessage = "";// the gem is still invalid, so ShowRecutResult will supply the error message
 			DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
 			return;
 		}
@@ -188,7 +186,6 @@ void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, strin
 		SetDescription(oRecut, sDescrip);
 		
 		//let the player know the result
-		string sMessage = "<c=lightgreen>You've successfully recut the gem!</c>";
 		DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
 	}
 }
