@@ -21,8 +21,9 @@ const int SIMPLE_SUCCESS = TRUE;
 */
 
 void LogRecut(object oPC, string sResult);
+void GenerateNewGem(object oPC, object oOldGem, string sName, string sDescrip, string sNewTag);
+void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip, string sNewTag, int nTries = 1);
 void ShowRecutResult(object oPC, object oRecut, string sMessage);
-void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip);
 void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove);
 int RollForCut(object oPC, object oGem, int bImprove);
 
@@ -67,7 +68,9 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	string sTag = GetTag(oGem);
 	object oRecut;
 	
-	if (nRoll == CRIT_FAIL){
+	// in this case CRIT_FAIL is not a roll of 1, this is a failure on 
+	// the d100 luck roll AND appraise roll
+	if (nRoll == CRIT_FAIL){ 
 		sMessage += "You've shattered the gem!</c>";
 		SendMessageToPC(oPC, sMessage);
 		int nStack = GetItemStackSize(oGem);
@@ -79,10 +82,9 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	if (nRoll == FALSE){
 		sName += " <c=tomato>Failed Recut</c>";
 		sDescrip = GetDescription(oGem);
-		oRecut = CreateItemOnObject(GetResRef(oGem), oPC, 1, sTag);
-		DelayCommand(0.3f, VerifyNewGem(oPC, oGem, oRecut, sName, sDescrip));
+		DelayCommand(0.3f, GenerateNewGem(oPC, oGem, sName, sDescrip, sTag));
 		sMessage += "You can tell that this gem cannot be recut without destroying it.</c>";
-		ShowRecutResult(oPC, oRecut, sMessage);
+		SendMessageToPC(oPC, sMessage);
  		return;
 	} 
 	
@@ -142,48 +144,64 @@ void PerformCut(object oPC, object oGem, int nQuality, int nRoll, int bImprove){
 	sDescrip += GetGemstoneUses(GetBaseGemTagFromString(sNewTag), nNewQ);
 	
 	// create the newly recut gem, 
-	string sRes = GetResRef(oGem);
-	if (LOG_RECUT) LogRecut(oPC, "ResRef: " + sRes + ", Tag: " + sNewTag);
-	oRecut = CreateItemOnObject(sRes, oPC, 1, sNewTag);
-	//then make sure everything is kosher and clean up
-	DelayCommand(0.3f, VerifyNewGem(oPC, oGem, oRecut, sName, sDescrip));
+	DelayCommand(0.3f, GenerateNewGem(oPC, oGem, sName, sDescrip, sNewTag));
+}
+
+void GenerateNewGem(object oPC, object oOldGem, string sName, string sDescrip, string sNewTag){
 	
-	//let the player know the result
+	string sRes = GetResRef(oOldGem);
+	object oRecut = CreateItemOnObject(sRes, oPC, 1, sNewTag);
+	
+	if (LOG_RECUT) LogRecut(oPC, "ResRef: " + sRes + ", Tag: " + sNewTag);
+	
+	DelayCommand(0.3f, VerifyNewGem(oPC, oOldGem, oRecut, sName, sDescrip, sNewTag));
+}
 
-	sMessage = "<c=lightgreen>You've successfully recut the gem!</c>";
+void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip, string sNewTag, int nTries = 1){
 
-	DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
+	string sMessage;
+	if (!GetIsObjectValid(oRecut)){
+		if (nTries == 1){
+			// if we failed to create a new gem using the old one's resref, then
+			// we try using a resref based on the tag minus the quality and size parts
+			// of the tag, which constitute the last 6 characters of the tag
+			string sRes =  GetStringLeft(sNewTag, GetStringLength(sNewTag) - 6);
+			oRecut = CreateItemOnObject(sRes, oPC, 1, sNewTag);
+			if (LOG_RECUT) LogRecut(oPC, "Failed gem creation from original resref, tried tag res");
+			DelayCommand(0.3f, VerifyNewGem(oPC, oOldGem, oRecut, sName, sDescrip, sNewTag, nTries + 1));
+		} else {
+			if (LOG_RECUT) LogRecut(oPC, "VerifyNewGem failed gem creation from original resref, tried tag res");
+			//let the player know the result
+			sMessage = "";// the gem is still invalid, so ShowRecutResult will supply the error message
+			DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
+			return;
+		}
+	} else {
+		if (LOG_RECUT) LogRecut(oPC, "success in VerifyNewGem function");
+		int nStack = GetItemStackSize(oOldGem);
+		if (nStack > 1) SetItemStackSize(oOldGem, nStack -1);
+		else DestroyObject(oOldGem);
+		
+		//mark the gem so that i_smithhammer_ac won't let us recut a gem more than once
+		SetLocalInt(oRecut, "recut", TRUE); 
+		SetFirstName(oRecut, sName);
+		SetDescription(oRecut, sDescrip);
+		
+		//let the player know the result
+		string sMessage = "<c=lightgreen>You've successfully recut the gem!</c>";
+		DelayCommand(0.3f, ShowRecutResult(oPC, oRecut, sMessage));
+	}
 }
 
 void ShowRecutResult(object oPC, object oRecut, string sMessage){
 	if (!GetIsObjectValid(oRecut)){
-		sMessage = "<c=tomato>Error generating re-cut gem.\n";
-		sMessage += "Please make sure you have an empty inventory slot.\n";
-		sMessage += "If you do have an empty slot and get this message, contact support.</c>";
+		sMessage = "<c=tomato>Error generating re-cut gem. Full inventory?\n";
+		sMessage += "If your inventory is not full and you get this message, contact support.</c>";
 	}
-	if (LOG_RECUT) LogRecut(oPC, "Recut validation stage with message: " + sMessage);
+	if (LOG_RECUT) LogRecut(oPC, "ShowRecutResult function with message: " + sMessage);
 	
 	SendMessageToPC(oPC, sMessage);
 }
-
-void VerifyNewGem(object oPC, object oOldGem, object oRecut, string sName, string sDescrip){
-	
-	if (!GetIsObjectValid(oRecut)){
-		if (LOG_RECUT) LogRecut(oPC, "failed in VerifyNewGem function");
-		return;
-	}
-	
-	if (LOG_RECUT) LogRecut(oPC, "success in VerifyNewGem function");
-	int nStack = GetItemStackSize(oOldGem);
-	if (nStack > 1) SetItemStackSize(oOldGem, nStack -1);
-	else DestroyObject(oOldGem);
-	
-	//mark the gem so that i_smithhammer_ac won't let us recut a gem more than once
-	SetLocalInt(oRecut, "recut", TRUE); 
-	SetFirstName(oRecut, sName);
-	SetDescription(oRecut, sDescrip);
-}
-
 void LogRecut(object oPC, string sResult){
 	string sPlayer = GetPCPlayerName(oPC);
 	string sCharacter = GetName(oPC);
@@ -264,96 +282,3 @@ int RollForCut(object oPC, object oGem, int bImprove){
 	return nResult;
 }
 
-
-
-/* FIRST VERSION
-// roll for the recut
-// returns -1 if nat 1 roll (crit failure, destroys gem
-// returns 20 if nat 20 roll, auto success
-// returns true if success
-// returns false if failure
-int RollForCut(object oPC, object oGem, int nQuality, int bImprove){
-	int nResult = SIMPLE_FAIL;
-	string sMessage;
-	int nDC = 30;
-	int nMod = GetSkillRank(SKILL_APPRAISE, oPC, FALSE);
-	
-	// if we're improving gems, then the DC range is 35 - 99
-	// as expressed by 31 + 3d20 + 1d8.
-	// but it will be "weighted" towards higher numbers in the
-	// range depending upon the quality and rarity of the gem.
-	// For each factor, one d20 will be rolled an additional time
-	// and the higher result used. These factors are:
-	// going from regular quality to flawless = 1 die reroll
-	// sunstone or bloodstone = 1 die reroll
-	// jasmal or diamond = 2 die reroll. (but not black diamonds)
-	// So if we're improving a regular jasmal to flawless then 
-	// all 3 of the d20's will be rolled twice each and the higher
-	// result used each time.
-	if (bImprove){
-		nDC += d8() + 1;
-		int nFirstDie = d20();
-		int nSecondDie = d20();
-		int nThirdDie = d20();
-		int nReRoll = 0;
-		
-		// find out what general category of the most used gems
-		string sTag = GetStringLowerCase(GetTag(oGem));
-		int bIsHealthGem = FALSE;
-		if (FindSubString(sTag, "sunstone") >= 0 ||
-			FindSubString(sTag, "bloodstone") >= 0)
-				bIsHealthGem = TRUE;
-		int bIsEnhanceGem = FALSE;
-		if ((FindSubString(sTag, "diamond") >= 0 ||
-			FindSubString(sTag, "jasmal") >= 0) &&
-			FindSubString(sTag, "black") == -1)
-				bIsEnhanceGem = TRUE;
-		
-		// now find out how many of the d20s will be weighted
-		
-		// First d20 is weighted if we're going from reg to flawless
-		if (nFirstDie < 20 && nQuality > 0){
-			nReRoll = d20();
-			if (nReRoll > nFirstDie) nFirstDie = nReRoll;
-		}
-	
-		// Second die is weighted if it's any of the 4 most sought after
-		if (nSecondDie < 20 && (bIsHealthGem || bIsEnhanceGem)){
-			nReRoll = d20();
-			if (nReRoll > nSecondDie) nSecondDie = nReRoll;
-		}
-		// Third die is weighted if it's a diamond or jasmal
-		if (nThirdDie < 20 && bIsEnhanceGem){
-			nReRoll = d20();
-			if (nReRoll > nThirdDie) nThirdDie = nReRoll;
-				
-		}
-		nDC += nFirstDie + nSecondDie + nThirdDie;		
-	}
-	int nRoll = d20();
-	
-	if (nRoll == 1){
-		sMessage = "<c=tomato>";
-		nResult = NAT_1;
-		if (LOG_RECUT) LogRecut(oPC, "natural 1");
-	} else if (nRoll == 20){
-		sMessage = "<c=lightgreen>";
-		nResult = NAT_20;
-		if (LOG_RECUT) LogRecut(oPC, "natural 20");
-	} else {
-		if (nRoll + nMod >= nDC){
-			nResult = SIMPLE_SUCCESS; 
-			sMessage = "<c=lightgreen>";
-			if (LOG_RECUT) LogRecut(oPC, "successful roll vs DC " + IntToString(nDC));
-		} else {
-			sMessage = "<c=tomato>";
-			if (LOG_RECUT) LogRecut(oPC, "failed roll vs DC " + IntToString(nDC));
-		}
-	}
-	sMessage += "Roll: " + IntToString(nRoll) + " + " + IntToString(nMod);
-	sMessage += " = " + IntToString(nRoll + nMod);
-	sMessage += " vs DC: " + IntToString(nDC) + "</c>";
-	SendMessageToPC(oPC, sMessage);
-	return nResult;
-}
-*/
