@@ -367,12 +367,14 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	}
 	// undersigil
 	else if (TestStringAgainstPattern("**undersigil**", sAREA)) {
-		sSpecial = GetCampaignItemString();
-	} else return 0;	
+		if (bGetPercentage) return 2;
+		else sSpecial = GetCampaignItemString();
+	}
 	
-	if (sSpecial == "") sSpecial = INGOT_IRON;
-
-	CreateTreasureItemOnTarget(sSpecial, oSPAWN);
+	if (!bGetPercentage){
+		if (sSpecial == "") sSpecial = INGOT_IRON;
+		CreateTreasureItemOnTarget(sSpecial, oSPAWN);
+	}
 	return 0;
 
 }
