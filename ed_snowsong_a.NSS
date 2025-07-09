@@ -3,13 +3,16 @@
 #include "x0_i0_match"
 #include "aaa_constants"
 
+
+
 void main()
 {
     object oPC 		= GetAreaOfEffectCreator();	
 	int nChaBonus	= GetAbilityModifier(ABILITY_CHARISMA, oPC);
-	//int nCasterLvl 	= GetCasterLevel(oPC); // original
+	//int nCasterLvl 	= GetCasterLevel(oPC); // original, was an error, there is no caster lvl so dur was 0
 	//flattedfifth edit, would be up to 20 rounds. Could also use GetLevelByClass(117, oPC) for 10 rounds
-	int nCasterLvl = GetBardicClassLevelForUses(oPC);
+	int nDuration = GetBardicClassLevelForUses(oPC);
+	if (GetHasFeat(FEAT_LINGERING_SONG, oPC)) nDuration += 5;
 	object oTarget 	= GetEnteringObject();
 	//flattedfifth edited effect declarations
 	effect eAllies		= EffectAttackIncrease(4);
@@ -35,7 +38,7 @@ void main()
         if(!MyResistSpell(oPC, oTarget))
         {	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, 16 + nChaBonus, SAVING_THROW_TYPE_COLD, oPC))
 			{	
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFoes, oTarget, RoundsToSeconds(nCasterLvl));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFoes, oTarget, RoundsToSeconds(nDuration));
 				//added separate application of impact vfx as intant as per standard practice
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eFoesVFX, oTarget);
 			}
@@ -43,6 +46,6 @@ void main()
 	}
 	if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
     {	SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_WC_SNOWSONG, FALSE));
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAllies, oTarget, RoundsToSeconds(nCasterLvl));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAllies, oTarget, RoundsToSeconds(nDuration));
 	}
 }
