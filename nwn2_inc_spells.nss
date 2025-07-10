@@ -389,12 +389,12 @@ int GetIsObjectValidSongTarget( object oTarget )
 int ApplySongDurationFeatMods( int nDuration, object oBard )
 {
 
-    if(GetHasFeat(FEAT_EPIC_LASTING_INSPIRATION))
+    if(GetHasFeat(FEAT_EPIC_LASTING_INSPIRATION, oBard))
     {
         nDuration *= 10;
     }
 
-    if(GetHasFeat(FEAT_LINGERING_SONG)) 
+    if(GetHasFeat(FEAT_LINGERING_SONG, oBard)) 
     {
         nDuration += 5;
     }

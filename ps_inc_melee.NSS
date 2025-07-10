@@ -16,12 +16,14 @@
 #include "ps_inc_advscript"
 #include "ps_inc_functions"
 #include "nwnx_dae"
+#include "nwn2_inc_spells"
 
 int GetEnhancementBonus(object oPC, object oWeapon);
 
 
+
 // edited version by FlattedFifth 6/26/2025
-void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDuration, float fDistance = 0.0f)
+void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDuration, float fDistance = 0.0f, int bIsSong = FALSE)
 {
     //object oTarget = GetFirstFactionMember(oCaster); the second arg, pconly, defaults to true, which
     // would mean that the effect doesn't affect summons.
@@ -31,13 +33,15 @@ void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDurat
     if (nSpellId > -1)
         eLink = SetEffectSpellId(eLink, nSpellId);
         
-    eLink = ExtraordinaryEffect(eLink);
+   // eLink = ExtraordinaryEffect(eLink); //Why are we making this non-dispellable here? Should be done in calling function
     int bTargetValid;
     while (GetIsObjectValid(oTarget))
     {
         //check if a valid target. Removed GetIsPC() because we should include summons
         bTargetValid = (!GetIsDead(oTarget) && GetIsObjectValid(oTarget) && 
             GetArea(oTarget) == GetArea(oCaster));
+		
+		if (bTargetValid && bIsSong) bTargetValid = GetIsObjectValidSongTarget(oTarget);
         
         // only check if the target is close enough to caster if fDistance is
         // non-zero and the previous check passed
