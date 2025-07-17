@@ -109,11 +109,18 @@ void fFixAlertness(object oPC){
 }
 
 void AdjustDragonPrC(object oPC){
+	if (GetRacialType(oPC) == 11){ // if dragon
+		if (GetHitDice(oPC) >= 15){
+			if (!GetHasFeat(5022, oPC))
+				FeatAdd(oPC, 5022, FALSE); //advanced change self
+		}
+	} else return; //exit if not dragon
+	
 	int nLvl = GetLevelByClass(129, oPC); // new dragon prc
 	int nPsyLvl = GetLevelByClass(130, oPC); // new psy dragon prc
 	
 	nLvl += nPsyLvl;
-	if (nLvl < 1) return;
+	if (nLvl < 1) return;// exit if not dragon rprc
 	
 	// psy/psi path feats have to be granted automatically based on which
 	// class they have more lvls of, because I can't make the 2da not give
@@ -624,5 +631,4 @@ void fRemoveSneakFeats(object oPC)
 	}
 }
 // End remove feats
-
 
