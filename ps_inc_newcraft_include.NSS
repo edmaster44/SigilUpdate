@@ -62,6 +62,7 @@ string SearchValIn2da(string s2da, string sMatchColumn, string sMatchVal, string
 int GetWorkbenchInRange(object oPC, object oBench);
 object GetNearestEnchantingWorkbench(object oPC);
 object GetNearestSmithingWorkbench(object oPC);
+object GetNearestGemWorkbench(object oPC);
 itemproperty IpArgsToItemProperty(int nType, int nSub, int nParam, int nSpecial);
 
 
@@ -455,17 +456,14 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 }
 
 int GetWorkbenchInRange(object oPC, object oBench){
+	
 	if(GetIsObjectValid(oBench)) 
 	{
-		//if(LineOfSightObject(oPC, oBench)) {
-			if(GetDistanceBetween(oPC, oBench) <= ENCHANTING_DISTANCE)
-			{
-				return TRUE;
-			}
-		/*} else {
-			SendMessageToPC(oPC, "There must be no obstructions between you and the workbench.");
-		}*/
-	}
+		if(GetDistanceBetween(oPC, oBench) <= ENCHANTING_DISTANCE)
+		{
+			return TRUE;
+		}
+	} 
 	return FALSE;
 }
 
@@ -483,6 +481,18 @@ object GetNearestEnchantingWorkbench(object oPC){
 	oBench = GetNearestObjectByTag("nx2_mage_bench", oPC);
 	if (GetWorkbenchInRange(oPC, oBench)) 
 		return oBench;
+	return OBJECT_INVALID;
+}
+
+object GetNearestGemWorkbench(object oPC){
+	object oBench = GetNearestObjectByTag("PLC_MR_BSMITHG02", oPC);
+	if (GetWorkbenchInRange(oPC, oBench)) 
+		return oBench;
+	
+	oBench = GetNearestObjectByTag("wp_gembench_effect", oPC);
+	if (GetWorkbenchInRange(oPC, oBench)) 
+		return oBench;
+		
 	return OBJECT_INVALID;
 }
 

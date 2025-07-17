@@ -16,9 +16,7 @@
 */
 
 // JLR-OEI 03/16/06: For GDD Update
-
-
-#include "nw_s2_light_inc"
+#include "x2_inc_spellhook"
 
 void main(){
 
@@ -27,23 +25,22 @@ void main(){
 	object oCaster = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
 	int nTargetType = GetObjectType(oTarget);
-	effect eAOE = EffectAreaOfEffect(AOE_PER_LIGHT); // new aoe for light
 	
-	int nRounds = PS_GetCasterLevel(OBJECT_SELF);
- 
-	int bDivineLight = FALSE;
-	int nRace = GetSubRace(oCaster);
+	int nRounds;
 	int nId = GetSpellId();
 	if (nId == SPELL_RACIAL_LIGHT){
 		nRounds = GetTotalLevels(oCaster, TRUE); 
-		if (nRace == 13 || nRace == 203) bDivineLight = TRUE;
-			
-	}
-	if (GetMetaMagicFeat() == METAMAGIC_EXTEND) nRounds *= 2;
+	} else nRounds = PS_GetCasterLevel(oCaster);
+	int nMeta = GetMetaMagicFeat();
+	if (nRounds < 5) nRounds = 5;
+	if (nMeta == METAMAGIC_EXTEND) nRounds *= 2;
 	float fDur = HoursToSeconds(nRounds);
 	
+	effect eAOE = EffectAreaOfEffect(AOE_PER_LIGHT); // new aoe for light
+	SetEffectSpellId(eAOE, nId); 
+	
     // Handle spell cast on item....
-    if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM && !CIGetIsCraftFeatBaseItem(oTarget)){
+    if (nTargetType == OBJECT_TYPE_ITEM && !CIGetIsCraftFeatBaseItem(oTarget)){
         // Do not allow casting on not equippable items
         if (IPGetIsItemEquipable(oTarget)){
 			itemproperty ip = ItemPropertyLight(IP_CONST_LIGHTBRIGHTNESS_NORMAL, IP_CONST_LIGHTCOLOR_WHITE);
@@ -57,12 +54,13 @@ void main(){
 			
         AddItemProperty(DURATION_TYPE_TEMPORARY,ip,oTarget, fDur);
     } else {
-       if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
+		// store spell id and metamagic feat on caster for aoe to read because 
+		// GetSpellId() and GetMetaMagicFeat() do not work from within the aoe script
+		SetLocalInt(oCaster, "LightSpellId", nId);
+		SetLocalInt(oCaster, "LightMetaMagic", nMeta);
+		if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
 			nTargetType == OBJECT_TYPE_PLACEABLE || nTargetType == OBJECT_TYPE_ITEM){
-		
-			
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
-			ApplyLight(oCaster, oTarget, nId, fDur, bDivineLight);
 		} else {
 			location lLocation = GetSpellTargetLocation();
 			ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lLocation, fDur);

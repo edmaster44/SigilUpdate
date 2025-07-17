@@ -20,5 +20,7 @@
 #include "x2_inc_spellhook"
 
 void main(){
-    PS_RemoveEffects(GetExitingObject(), GetSpellId(), NULL, GetAreaOfEffectCreator());
+	object oCaster = GetAreaOfEffectCreator();
+	int nId = GetLocalInt(oCaster, "LightSpellId");
+    PS_RemoveEffects(GetExitingObject(), nId, NULL, oCaster);
 }

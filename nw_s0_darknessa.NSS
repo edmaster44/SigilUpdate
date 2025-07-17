@@ -19,36 +19,74 @@
 // impose the miss chance on the creator. The tief version the darkness is drawn from within, 
 // not cast as a spell, though it can still be dispelled, ofc. In other words, everyone in the cloud will
 // now have 50% conceal vs ranged, and those who are not immune become blind, thereby having a 50% miss chance
+#include "x2_inc_spellhook"
 
-#include "nw_s0_darkness_inc"
 
 void main(){
 
 	object oCaster = GetAreaOfEffectCreator();
 	object oTarget = GetEnteringObject();
 	
-	int nId = GetSpellId();
-	int bAbyssalDark = FALSE;
-	int nRace = GetSubRace(oCaster);
-	int nRounds = PS_GetCasterLevel(oCaster);
+	if (GetIsObjectValid(oTarget)){
 	
-	if (nId == SPELL_RACIAL_DARKNESS){
-		nRounds = GetTotalLevels(oCaster, TRUE);
-		if (nRace == 14 || nRace == 194)
+		int nId = GetLocalInt(oCaster, "DarknessSpellId");
+		int nMeta = GetLocalInt(oCaster, "DarknessMetaMagic");
+		int bAbyssalDark = FALSE;
+		int nRounds;
+		if (nId == SPELL_RACIAL_DARKNESS){
+			nRounds = GetTotalLevels(oCaster, TRUE);
+			int nRace = GetSubRace(oCaster);
+			if (nRace == 14 || nRace == 194)
 			bAbyssalDark = TRUE;
+		} else if (nId == SPELLABILITY_AS_DARKNESS){
+			nRounds = GetLevelByClass(CLASS_TYPE_ASSASSIN, OBJECT_SELF);
+		} else nRounds = PS_GetCasterLevel(oCaster);
+		if (nRounds < 5) nRounds = 5;
+		if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nRounds *= 2;
+		float fDur = RoundsToSeconds(nRounds);
+		
+		int nBonus = 10;
+		if (nMeta  == METAMAGIC_EMPOWER || bAbyssalDark) nBonus += nBonus / 2;
+		
+		//impact vfx
+		effect eHit = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
+		
+		//beneficial effects
+		effect eHide = EffectSkillIncrease(SKILL_HIDE, nBonus);
+		effect eConceal = EffectConcealment(50, MISS_CHANCE_TYPE_VS_RANGED);
+		eConceal = EffectLinkEffects(eHide, eConceal);
+		
+		// determine if immune to negative effects
+		int bImmuneNeg = (GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster) ||
+			(bAbyssalDark && oTarget == oCaster)); 
+		
+		// if not immune to negative effects, add them
+		if (!bImmuneNeg){
+			eConceal = EffectLinkEffects(EffectMissChance(50), eConceal);
+			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SEARCH, nBonus), eConceal);
+			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SPOT, nBonus), eConceal);
+		}
+
+		SetEffectSpellId(eConceal, nId); 
+		
+		if(bImmuneNeg) {// if no harmful effect, signal non-hostile cast
+			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
+		} else {
+			// if the target is the caster or the target cannot see caster,
+			// signal non-hostile cast
+			if (oTarget == oCaster || !GetObjectSeen(oCaster, oTarget)){
+				SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
+			} else {
+				// if target will get neg effects and can see caster,
+				// signal hostile cast
+				SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, TRUE));
+			}
+		} 
+		
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, fDur);
 	
-	} else if (nId == SPELLABILITY_AS_DARKNESS){
-		nRounds = GetLevelByClass(CLASS_TYPE_ASSASSIN, OBJECT_SELF);
 	}
-	
-    if (nRounds < 5) nRounds = 5;
-
-    if (GetMetaMagicFeat() == METAMAGIC_EXTEND || bAbyssalDark) nRounds *= 2;
-	float fDur = RoundsToSeconds(nRounds);
-
-
-    if (GetIsObjectValid(oTarget))
-		ApplyDarkness(oCaster, oTarget, nId, fDur, bAbyssalDark);
 }
 // previous code
 /*

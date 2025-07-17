@@ -26,18 +26,17 @@ void main(){
 		SendMessageToPC(oPC, "Invalid Target");
 		return;
 	}
-	string sRes = GetResRef(oTarget);
 	if (GetIsGemstone(oTarget))
 		DoGemReCut(oPC, oTarget);
 	else DoMeltDownItem(oPC, oTarget);
 }
 
 void DoGemReCut(object oPC, object oTarget){
-	object oBench = GetNearestObjectByTag("PLC_MR_BSMITHG02", oPC);
+	object oBench = GetNearestGemWorkbench(oPC);
 	
 	string sMessage = "<c=red>You must be near a gem cutting station and posses an";
 	sMessage += "\nadamantine dagger to use as a chisel in order";
-	sMessage += "\nto re-cut gems. (you do not have to have the dagger equipped)</c>";
+	sMessage += "\nto re-cut gems. (you do not need to have the dagger equipped)</c>";
 	//are we near a gem bench?
 	if (!GetWorkbenchInRange(oPC, oBench)){
 		SendMessageToPC(oPC, sMessage);
@@ -50,11 +49,9 @@ void DoGemReCut(object oPC, object oTarget){
 	if (GetBaseItemType(oItem) == BASE_ITEM_DAGGER &&
 		GetItemBaseMaterialType(oItem) == GMATERIAL_METAL_ADAMANTINE){
 			bFoundChisel = TRUE;
-			ReCutGem(oPC, oTarget);
 	} else if (GetBaseItemType(oItemL) == BASE_ITEM_DAGGER &&
 		GetItemBaseMaterialType(oItemL) == GMATERIAL_METAL_ADAMANTINE){
 			bFoundChisel = TRUE;
-			ReCutGem(oPC, oTarget);
 	} else {
 		int i = 0;
 		oItem = GetFirstItemInInventory(oPC);
@@ -63,7 +60,6 @@ void DoGemReCut(object oPC, object oTarget){
 			if (GetBaseItemType(oItem) == BASE_ITEM_DAGGER &&
 				GetItemBaseMaterialType(oItem) == GMATERIAL_METAL_ADAMANTINE){
 				bFoundChisel = TRUE;
-				ReCutGem(oPC, oTarget);
 				break;
 			}
 			oItem = GetNextItemInInventory(oPC);
@@ -72,6 +68,7 @@ void DoGemReCut(object oPC, object oTarget){
 		}
 	}
 	if (!bFoundChisel) SendMessageToPC(oPC, sMessage);
+	else ReCutGem(oPC, oTarget);
 }
 
 void ReCutGem(object oPC, object oGem){
@@ -95,7 +92,7 @@ void ReCutGem(object oPC, object oGem){
 void DoMeltDownItem(object oPC, object oTarget){	
 	object oBench = GetNearestSmithingWorkbench(oPC);
 	
-	if (!GetIsObjectValid(oBench)){
+	if (!GetWorkbenchInRange(oPC, oBench)){
 		SendMessageToPC(oPC, "You must be near a crafting workstation to melt down items.");
 		return;
 	} else if (GetItemCursedFlag(oTarget) || !IPGetIsForgedItem(oTarget)){

@@ -5,50 +5,39 @@
 //:://////////////////////////////////////////////
 
 
-#include "nw_s0_darkness_inc"
+#include "x2_inc_spellhook"
 
 void main(){
-	if (!X2PreSpellCastCode()) return;
 
+	if (!X2PreSpellCastCode()) return;
 
 	object oCaster = OBJECT_SELF;
 	object oTarget = GetSpellTargetObject();
 	int nTargetType = GetObjectType(oTarget);
-	
+
+	int nRounds;
 	int nId = GetSpellId();
-	int bAbyssalDark = FALSE;
-	int nRace = GetSubRace(oCaster);
-	int nRounds = PS_GetCasterLevel(oCaster);
-	
 	if (nId == SPELL_RACIAL_DARKNESS){
 		nRounds = GetTotalLevels(oCaster, TRUE);
-		if (nRace == 14 || nRace == 194)
-			bAbyssalDark = TRUE;
-	
 	} else if (nId == SPELLABILITY_AS_DARKNESS){
 		nRounds = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
-	}
-	
-    if (nRounds < 5) nRounds = 5;
-
-    if (GetMetaMagicFeat() == METAMAGIC_EXTEND || bAbyssalDark) nRounds *= 2;
-	float fDur = RoundsToSeconds(nRounds);
+	} else nRounds = PS_GetCasterLevel(oCaster);
+	int nMeta = GetMetaMagicFeat();
+	if (nMeta == METAMAGIC_EXTEND) nRounds *= 2;
+	float fDur = HoursToSeconds(nRounds);
 	
 	effect eAOE = EffectAreaOfEffect(AOE_PER_DARKNESS);
+	SetEffectSpellId(eAOE, nId); 
 	
-	//debug
-	//if (bAbyssalDark) SendMessageToPC(oCaster, "Abyssal");
-	//if (oCaster == oTarget) SendMessageToPC(oCaster, "Cast on self");
-
+	SetLocalInt(oCaster, "DarknessSpellId", nId);
+	SetLocalInt(oCaster, "DarknessMetaMagic", nMeta);
 	if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
 		nTargetType == OBJECT_TYPE_PLACEABLE || nTargetType == OBJECT_TYPE_ITEM){
-		
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
-		ApplyDarkness(oCaster, oTarget, nId, fDur, bAbyssalDark);
-		
 	} else {
-		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, GetSpellTargetLocation(), fDur);
-	}   
+		location lLocation = GetSpellTargetLocation();
+		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lLocation, fDur);
+	}  
 }
 
 // original Code
