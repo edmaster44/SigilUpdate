@@ -111,8 +111,8 @@ void fFixAlertness(object oPC){
 void AdjustDragonPrC(object oPC){
 	if (GetRacialType(oPC) == 11){ // if dragon
 		if (GetHitDice(oPC) >= 15){
-			if (!GetHasFeat(5022, oPC))
-				FeatAdd(oPC, 5022, FALSE); //advanced change self
+			if (!GetHasFeat(5023, oPC))
+				FeatAdd(oPC, 5023, FALSE); //advanced change self
 		}
 	} else return; //exit if not dragon
 	
