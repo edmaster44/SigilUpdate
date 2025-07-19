@@ -20,7 +20,15 @@
 #include "x2_inc_spellhook"
 
 void main(){
+	object oAOE = OBJECT_SELF;
 	object oCaster = GetAreaOfEffectCreator();
-	int nId = GetLocalInt(oCaster, "LightSpellId");
+	
+	int nId = GetLocalInt(oAOE, "LightSpellId");
+	if (nId == FALSE){
+		nId = GetLocalInt(oCaster, "LightSpellId");
+		if (nId == FALSE) nId = SPELL_LIGHT;
+		SetLocalInt(oAOE, "LightSpellId", nId);
+	}
+	
     PS_RemoveEffects(GetExitingObject(), nId, NULL, oCaster);
 }

@@ -41,6 +41,15 @@
 
 //void main(){}
 
+// FF_GetSpellSaveDC does not work properly on some cleric domain spells, so this function replaces it.
+// Note that this will NOT work properly within the scripts of an AoE, only during the initial casting,
+// UNLESS you pass all the arguments yourself. -FlattedFifth
+int FF_GetSpellSaveDC(object oCaster = OBJECT_INVALID, int nId = NULL, int nClass = NULL);
+
+//unlike function below, this tells you what the class is, not the level. Returns CLASS_TYPE_INVALID
+//if no base casting classes. -FlattedFifth
+int PS_GetHighestSpellCastingBaseClass(object oCaster);
+
 
 //* get the hightest spellcasting class level of oCreature)
 int GZGetHighestSpellcastingClassLevel(object oCreature);
@@ -158,6 +167,62 @@ int GetIntInRange(int iVal, int iMin, int iMax);
 int GetCappedCasterLevel(int nCap);
 int CountEnemies(location lTarget, float fRadius=RADIUS_SIZE_GARGANTUAN, int nMaxEnemies=100);
 
+
+
+int FF_GetSpellSaveDC(object oCaster = OBJECT_INVALID, int nId = NULL, int nClass = NULL){
+	if (oCaster == OBJECT_INVALID) oCaster = GetLastSpellCaster();
+	if (nId == NULL) nId = GetSpellId();
+	if (nClass == NULL) nClass = GetLastSpellCastClass();
+	//if a spell is cast by a wand or item, GetLastSpellCastClass() will return
+	//CLASS_TYPE_INVALID. Same if called from within an AoE on enter, heartbeat, etc,
+	// so we will get the highest base spell casting class, which will still be
+	//CLASS_TYPE_INVALID if they have no base casting classes
+	if (nClass == CLASS_TYPE_INVALID) nClass = PS_GetHighestSpellCastingBaseClass(oCaster);
+	
+	// now we find the correct ability score to use in the DC
+	int nAbilityMod;
+	string sAbility = Get2DAString("classes", "SpellAbil", nClass);
+	if (sAbility == "INT") nAbilityMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+	else if (sAbility == "WIS") nAbilityMod = GetAbilityModifier(ABILITY_WISDOM, oCaster);
+	else if (sAbility == "CHA") nAbilityMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
+	else {
+		int nIntMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+		int nWisMod = GetAbilityModifier(ABILITY_WISDOM, oCaster);
+		int nChaMod = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
+		if (nIntMod >= nWisMod && nIntMod >= nChaMod) nAbilityMod = nIntMod;
+		else if (nWisMod >= nIntMod && nWisMod >= nChaMod) nAbilityMod = nWisMod;
+		else nAbilityMod = nChaMod;
+	}
+	
+	//and finally the spell level
+	int nSpellLevel = StringToInt(Get2DAString("spells", "Innate", nId));
+	
+	return 10 + nSpellLevel + nAbilityMod;
+}
+
+int PS_GetHighestSpellCastingBaseClass(object oCaster){
+	int nClass;
+	int nClassLevel = 0;
+	int nMax = 0;
+	int nReturn = CLASS_TYPE_INVALID;
+	int i;
+	for (i = 1; i <= 3; i++){
+		nClass = GetClassByPosition(i, oCaster);
+		if (nClass == CLASS_TYPE_BARD || nClass == CLASS_TYPE_SORCERER ||
+		nClass == CLASS_TYPE_FAVORED_SOUL || nClass == CLASS_TYPE_WIZARD ||
+		nClass == CLASS_TYPE_PSION || nClass == CLASS_TYPE_CLERIC ||
+		nClass == CLASS_TYPE_DRUID || nClass == CLASS_TYPE_SPIRIT_SHAMAN ||
+		nClass == CLASS_TYPE_PALADIN ||nClass == CLASS_TYPE_RANGER || 
+		nClass == CLASS_PSYCHIC_WARRIOR){
+			nClassLevel = GetLevelByClass(nClass, oCaster);
+			if (nClassLevel > nMax){
+				nMax = nClassLevel;
+				nReturn = nClass;
+			}
+		}
+	}
+	return nReturn;
+}
 
 // return value within the bounds of iMin and iMax
 int GetIntInRange(int iVal, int iMin, int iMax)	
@@ -500,7 +565,7 @@ void DoDirgeEffect(object oTarget)
         {
 
             //Make a Fortitude Save to avoid the effects of the movement hit.
-            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_ALL, GetAreaOfEffectCreator()))
+            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, FF_GetSpellSaveDC(), SAVING_THROW_ALL, GetAreaOfEffectCreator()))
             {
                 int nGetLastPenalty = GetLocalInt(oTarget, "X0_L_LASTPENALTY");
                 // * increase penalty by 2
@@ -618,7 +683,7 @@ void DoSpikeGrowthEffect(object oTarget)
            if (GetHasSpellEffect(SPELL_SPIKE_GROWTH, oTarget) == FALSE)
            {
                 //Make a Reflex Save to avoid the effects of the movement hit.
-                if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC(), SAVING_THROW_ALL, GetAreaOfEffectCreator(), fDelay))
+                if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, FF_GetSpellSaveDC(), SAVING_THROW_ALL, GetAreaOfEffectCreator(), fDelay))
                 {
                     effect eSpeed = EffectMovementSpeedDecrease(30);
 					effect eVisSlow = EffectVisualEffect( VFX_DUR_SPELL_SLOW );
@@ -702,7 +767,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
             {
                 int nDamageTotal = nDamage + nExtraDamage;
                 // A succesful will save halves the damage
-                if(MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_ALL,OBJECT_SELF))
+                if(MySavingThrow(SAVING_THROW_WILL, oTarget, FF_GetSpellSaveDC(), SAVING_THROW_ALL,OBJECT_SELF))
                 {
                     nDamageTotal = nDamageTotal / 2;
                 }
@@ -749,7 +814,7 @@ int RollMissileDamage(object oTarget, int nD6Dice, int nMetaMagic, int iReflexSa
 	// Reflex save was not being calculated for Firebrand
 	if(iReflexSaveType != -1)
 	{
-	    nDam = GetReflexAdjustedDamage(nDam, oTarget, GetSpellSaveDC(), iReflexSaveType);
+	    nDam = GetReflexAdjustedDamage(nDam, oTarget, FF_GetSpellSaveDC(), iReflexSaveType);
 	}
 	return (nDam);
 }
@@ -1335,7 +1400,7 @@ void spellsGenericAreaOfEffect(
                 // * actually roll saving throw if told to
                 if (nSavingThrowType != SAVING_THROW_NONE)
                 {
-                  nSavingThrowSuccess = MySavingThrow(nSavingThrowType, oTarget, GetSpellSaveDC(), nSavingThrowSubType);
+                  nSavingThrowSuccess = MySavingThrow(nSavingThrowType, oTarget, FF_GetSpellSaveDC(), nSavingThrowSubType);
                 }
                 if (!nSavingThrowSuccess)
                 {

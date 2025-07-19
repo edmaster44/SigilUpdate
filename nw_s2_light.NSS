@@ -26,15 +26,19 @@ void main(){
     object oTarget = GetSpellTargetObject();
 	int nTargetType = GetObjectType(oTarget);
 	
-	int nRounds;
+	int nLevel;
 	int nId = GetSpellId();
+	int bDivineLight = FALSE;
 	if (nId == SPELL_RACIAL_LIGHT){
-		nRounds = GetTotalLevels(oCaster, TRUE); 
-	} else nRounds = PS_GetCasterLevel(oCaster);
+		int nRace = GetSubRace(oCaster);
+		if (nRace == 13 || nRace == 203) bDivineLight = 1;
+		nLevel = GetHitDice(oCaster); 
+	} else nLevel = PS_GetCasterLevel(oCaster);
+	if (nLevel < 1) nLevel = 1;
+	
 	int nMeta = GetMetaMagicFeat();
-	if (nRounds < 5) nRounds = 5;
-	if (nMeta == METAMAGIC_EXTEND) nRounds *= 2;
-	float fDur = HoursToSeconds(nRounds);
+	if (nMeta == METAMAGIC_EXTEND || bDivineLight == 1) nLevel *= 2;
+	float fDur = HoursToSeconds(nLevel);
 	
 	effect eAOE = EffectAreaOfEffect(AOE_PER_LIGHT); // new aoe for light
 	SetEffectSpellId(eAOE, nId); 
@@ -54,9 +58,12 @@ void main(){
 			
         AddItemProperty(DURATION_TYPE_TEMPORARY,ip,oTarget, fDur);
     } else {
-		// store spell id and metamagic feat on caster for aoe to read because 
-		// GetSpellId() and GetMetaMagicFeat() do not work from within the aoe script
+		// store spell info on caster for aoe to read because 
+		// GetSpellId() and GetMetaMagicFeat() and numerous other things do not 
+		// work reliably from within the aoe scripts
 		SetLocalInt(oCaster, "LightSpellId", nId);
+		SetLocalInt(oCaster, "LightCasterLevel", nLevel);
+		SetLocalInt(oCaster, "LightIsDivine", bDivineLight);
 		SetLocalInt(oCaster, "LightMetaMagic", nMeta);
 		if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
 			nTargetType == OBJECT_TYPE_PLACEABLE || nTargetType == OBJECT_TYPE_ITEM){

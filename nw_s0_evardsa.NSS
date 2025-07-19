@@ -17,58 +17,36 @@
 //:://////////////////////////////////////////////
 //:: GZ: Removed SR, its not there by the book
 
-#include "X0_I0_SPELLS"
-#include "x2_inc_spellhook"
-#include "ps_inc_functions"
+#include "nw_s0_evards_inc"
 
-void main()
-{
+void main(){
 
     object oTarget = GetEnteringObject();
-	int nSaveDC = GetSpellSaveDC();
-	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-	int PML = GetPureMageLevels(OBJECT_SELF);
-    effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
+	
+	if (!GetIsObjectValid(oTarget) || GetObjectType(oTarget) != OBJECT_TYPE_CREATURE)
+		return;
+	
+	object oAOE = OBJECT_SELF;
+	object oCaster = GetAreaOfEffectCreator();
+	
+	//stores caster level as data.nCL, 
+	// save dc as data.nDC
+	// Metamagic as data.nMeta
+	// and pure mage levels as data.nPML
+	struct dEvardsData data = GetEvardsData(oAOE, oCaster);
+	
+    effect eParal = EffectParalyze(data.nDC, SAVING_THROW_FORT);
     effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
     effect eLink = EffectLinkEffects(eDur, eParal);
     effect eDam;
 	
-
-	
-    int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     int nAC = GetAC(oTarget);
-    int nHits = d4();
+    int nHits;
     int nRoll;
     float fDelay;
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-    {
-        //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_EVARDS_BLACK_TENTACLES));
-        for (nHits = d4(); nHits > 0; nHits--)
-        {
-            fDelay = GetRandomDelay(1.0, 2.2);
-            nRoll = (30 + d20() + (PML/5));
-            if( ((nRoll >= nAC) || (nRoll == 25)) && (nRoll != 6) )
-            {
-                nDamage = d6() + (nCL/3);
-                //Enter Metamagic conditions
-                if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {
-                    nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
-                }
-                else if (nMetaMagic == METAMAGIC_EMPOWER)
-                {
-                    nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
-                }
-				
-				eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_PLUS_TWO);
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-	            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_NONE, OBJECT_SELF, fDelay))
-	            {
-	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1)));
-	            }
-            }      
-		}
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+		DoEvardsDamage(oCaster, oTarget, data);
 	}
+	
 }
