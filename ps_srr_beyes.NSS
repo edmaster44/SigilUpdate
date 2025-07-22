@@ -7,6 +7,11 @@
 
 
 void DoBeholderPetrify(int nDuration,object oSource, object oTarget, int nSpellID);
+void GiveImmunityFeedback(object oTarget, string sType){
+
+	string sMessage = "Target immune to " + sType + ".";
+	FloatingTextStringOnCreature(sMessage, oTarget); 
+}
 
 void main()
 {
@@ -24,42 +29,69 @@ void main()
     switch (nSpell)
     {
          case 1357:
+								if (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH, OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "death spells");
+									return;
+								}
                                   nSave = SAVING_THROW_FORT;      //BEHOLDER_RAY_DEATH
 								  iBeam = VFX_BEAM_EVIL;
 								  iPart = BODY_NODE_MONSTER_1;
                                   break;
 
         case  1358:
+								if (GetIsImmune(oTarget, IMMUNITY_TYPE_KNOCKDOWN ,OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "knockdown");
+									return;
+								}
                                   nSave = SAVING_THROW_WILL;     //BEHOLDER_RAY_TK
 								  iBeam = VFX_BEAM_ILLUSION;
 								  iPart = BODY_NODE_MONSTER_2;
                                   break;
 
-        case 1359:                                              //BEHOLDER_RAY_PETRI
+        case 1359:              
+								if (GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS ,OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "petrification");
+									return;
+								}									//BEHOLDER_RAY_PETRI
                                   nSave = SAVING_THROW_FORT;
 								  iBeam = VFX_BEAM_TRANSMUTATION;
 								  iPart = BODY_NODE_MONSTER_3;
                                   break;
 
-        case 1360:                                                   // BEHOLDER_RAY_CHARM
+        case 1360:              if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS ,OBJECT_SELF) ||
+									GetIsImmune(oTarget, IMMUNITY_TYPE_CHARM, OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "charm spells");
+									return;
+								}
+								// BEHOLDER_RAY_CHARM
                                   nSave = SAVING_THROW_WILL;
 								  iBeam = VFX_BEAM_ENCHANTMENT;
 								  iPart = BODY_NODE_MONSTER_4;
                                   break;
 
-        case 1361:                                                   //BEHOLDER_RAY_SLOW
+        case 1361:              if (GetIsImmune(oTarget, IMMUNITY_TYPE_SLOW ,OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "slow spells");
+									return;
+								}                                   //BEHOLDER_RAY_SLOW
                                   nSave = SAVING_THROW_WILL;
 								  iBeam = VFX_BEAM_MAGIC;
 								  iPart = BODY_NODE_MONSTER_1;
                                   break;
 
-       case 1362: // was 783 - gap of 2 from above.
+       case 1362: 				if (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH, OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "death spells");
+									return;
+								}// was 783 - gap of 2 from above.
                                   nSave = SAVING_THROW_FORT;        //BEHOLDER_RAY_WOUND
 								  iBeam = VFX_BEAM_NECROMANCY;
 								  iPart = BODY_NODE_MONSTER_2;
                                   break;
 
-       case 1363: // was 784                       				// BEHOLDER_RAY_FEAR
+       case 1363: 				if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS ,OBJECT_SELF) ||
+									GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, OBJECT_SELF)){
+									GiveImmunityFeedback(oTarget, "fear");
+									return;
+								}// was 784                       				// BEHOLDER_RAY_FEAR
                                   nSave = SAVING_THROW_WILL;
 								  iBeam = VFX_BEAM_MIND;
 								  iPart = BODY_NODE_MONSTER_0;

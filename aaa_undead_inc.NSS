@@ -223,35 +223,33 @@ void PS_UndeadProperties(object oPC, int nSpell)
 	if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
 	{	iLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
 
-	effect eSleep	= EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect eMindS	= EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
+	effect eSleep	= EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect eCharm	= EffectImmunity(IMMUNITY_TYPE_CHARM);
 	effect eDeath	= EffectImmunity(IMMUNITY_TYPE_DEATH);
 	effect eDrain	= EffectImmunity(IMMUNITY_TYPE_NEGATIVE_LEVEL);
-//	effect eRott	= EffectVisualEffect("TBD", oPC);
 	effect eIcon	= EffectEffectIcon(137);
 	effect eOne		= EffectLinkEffects(eSleep, eMindS);
-		eOne		= EffectLinkEffects(eOne, eCharm);
-		eOne		= EffectLinkEffects(eOne, eDeath);
-		eOne		= EffectLinkEffects(eOne, eDrain);
-//		eOne		= EffectLinkEffects(eOne, eRott);
-		eOne		= EffectLinkEffects(eOne, eIcon);
+		eOne		= EffectLinkEffects(eCharm, eOne);
+		eOne		= EffectLinkEffects(eDeath, eOne);
+		eOne		= EffectLinkEffects(eDrain, eOne);
+		eOne		= EffectLinkEffects(eIcon, eOne);
 	effect eOneGo	= SupernaturalEffect(eOne);
 		
 	effect ePoiso	= EffectImmunity(IMMUNITY_TYPE_POISON);
 	effect eDisea	= EffectImmunity(IMMUNITY_TYPE_DISEASE);
 	effect eParal	= EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eAblty	= EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE);
-	effect eFive	= EffectLinkEffects(eOne, ePoiso);
-		eFive		= EffectLinkEffects(eFive, eDisea);
-		eFive		= EffectLinkEffects(eFive, eParal);
-		eFive		= EffectLinkEffects(eFive, eAblty);
+	effect eFive	= EffectLinkEffects(ePoiso, eOne);
+		eFive		= EffectLinkEffects(eDisea, eFive);
+		eFive		= EffectLinkEffects(eParal, eFive);
+		eFive		= EffectLinkEffects(eAblty, eFive);
 	effect eFiveGo	= SupernaturalEffect(eFive);
 		
 	effect eCriti	= EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT);
 	effect eSneak	= EffectImmunity(IMMUNITY_TYPE_SNEAK_ATTACK);
-	effect eTen		= EffectLinkEffects(eFive, eCriti);
-		eTen		= EffectLinkEffects(eTen, eSneak);
+	effect eTen		= EffectLinkEffects(eCriti, eFive);
+		eTen		= EffectLinkEffects(eSneak, eTen);
 	effect eTenGo	= SupernaturalEffect(eTen);
 
 		if(iLevel >= 10 || iLevelV >= 7){
@@ -508,7 +506,9 @@ void PS_LichFearAura(object oPC, int nSpell)
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
     while(GetIsObjectValid(oTarget))
-    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
+    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && 
+			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
+			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
@@ -671,7 +671,9 @@ void PS_DKFearAura(object oPC, int nSpell)
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
     while(GetIsObjectValid(oTarget))
-    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
+    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && 
+			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
+			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
             if (GetHitDice(oTarget) <= 100)

@@ -29,39 +29,32 @@ void main()
 
     effect eLink = EffectLinkEffects(eHowl, eDur2);
     //eLink = EffectLinkEffects(eLink, eDur2);
-    int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
+    
     float fDelay;
-	
     int nHD = GetHitDice(OBJECT_SELF);
-    int nDC;
-    int nDuration = 1 + (nHD/2);
+    int nDC = 10 + (nHD/4);
+    int nDuration = 1 + (nHD/4);
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);
     //Get first target in spell area
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));
-	
     while(GetIsObjectValid(oTarget))
     {
     	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF && 
 			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
 			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
     	{
-			int nAlign = GetAlignmentGoodEvil(oTarget);
-			if(nAlign == ALIGNMENT_EVIL)
-			{
-				nDC = 14 + (nHD/2) + nCha;
-				fDelay = GetDistanceToObject(oTarget)/10;
-	            nDuration = GetScaledDuration(nDuration , oTarget);
-	            //Fire cast spell at event for the specified target
-	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1692));
-				if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
-	            {
-	                //Apply the VFX impact and effects
-	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-	            }
-			}
-			
-			
+            fDelay = GetDistanceToObject(oTarget)/10;
+            nDuration = GetScaledDuration(nDuration , oTarget);
+            //Fire cast spell at event for the specified target
+            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_HOWL_FEAR));
+
+            //Make a saving throw check
+            if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
+            {
+                //Apply the VFX impact and effects
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            }
         }
         //Get next target in spell area
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));

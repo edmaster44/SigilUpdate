@@ -149,7 +149,9 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
     {
 		if (GetHitDice(oTarget) < nCasterLevel) 
 		{
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC)
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC && 
+			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
+			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
 	    	{
 	            fDelay = GetRandomDelay();
 	            //Fire cast spell at event for the specified target

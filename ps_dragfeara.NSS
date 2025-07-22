@@ -29,9 +29,11 @@ void main()
 	effect eShakenLink2 = EffectLinkEffects(eSkillPen, eDur);
 	effect eLink2 = EffectLinkEffects(eShakenLink1, eShakenLink2);
 
-	
+	//not used
+	/*
 	effect eImm = EffectImmunity(IMMUNITY_TYPE_FEAR);
 		eImm = ExtraordinaryEffect(eImm);
+	*/
 	
     int nHD = GetTotalLevels(oCreator, TRUE);
 	int nCHRBonus = GetAbilityModifier(ABILITY_CHARISMA, oCreator);
@@ -42,27 +44,23 @@ void main()
 		
 	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
- 		if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
+ 		if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()) && 
+			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
+			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
   		{	
-			if (GetRacialType(oTarget) !=11) 
+			if (GetRacialType(oTarget) != 11) 
 			{
 				if (iAffected != 1)
-     	  		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 2647, TRUE));
+     	  		{	
+					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 2647, TRUE));
       		  		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
 	  				{
-						if (
-   							GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
-			    			GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, GetAreaOfEffectCreator())
-			    			)
-						{
-							// Shaken
-		    				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
-						}
-						else 
-						{
-							// Fear
-							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-						}
+						// Fear
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+						
+					} else {
+						// Shaken
+		    			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
 					}
 					SetLocalInt(oTarget, "DRAGONFEAR", 1);
 				}
