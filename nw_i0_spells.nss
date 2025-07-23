@@ -91,13 +91,15 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary);
 //   Return value if spell resisted via spell absorption: 3
 int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0);
 
+//Provides additional user feedback to MySavingThrow() -FlattedFifth, July 23, 2025
+void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay);
 // * Used to route the saving throws through this function to check for spell countering by a saving throw.
 //   Returns: 0 if the saving throw roll failed
 //   Returns: 1 if the saving throw roll succeeded
 //   Returns: 2 if the target was immune to the save type specified
 //   Note: If used within an Area of Effect Object Script (On Enter, OnExit, OnHeartbeat), you MUST pass
 //   GetAreaOfEffectCreator() into oSaveVersus!!    \
-int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.0);
+int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.1);
 
 // * Will pass back a linked effect for all the protection from alignment spells.  The power represents the multiplier of strength.
 // * That is instead of +3 AC and +2 Saves a  power of 2 will yield +6 AC and +4 Saves.
@@ -840,6 +842,93 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
     return nResist;
 }
 
+// returns SAVING_THROW_CHECK_FAILED, or 0 if the saving throw roll failed
+// Returns: SAVING_THROW_CHECK_SUCCEEDED, or 1, if the saving throw roll succeeded
+// Returns: SAVING_THROW_CHECK_IMMUNE, or 2, if the target is immune
+int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.1){
+	if (nDC<1) nDC = 1;
+    else if (nDC > 255) nDC = 255;
+	
+	int bSaved = FALSE;
+	int nId = GetSpellId();
+	
+	switch (nSaveType){
+		case SAVING_THROW_TYPE_MIND_SPELLS:{
+			if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oSaveVersus)){
+				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
+				return SAVING_THROW_CHECK_IMMUNE;
+			}
+			break;
+		}
+		case SAVING_THROW_TYPE_POISON:{
+			if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON, oSaveVersus)){
+				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
+				return SAVING_THROW_CHECK_IMMUNE;
+			}
+			break;
+		}
+		case SAVING_THROW_TYPE_DISEASE:{
+			if (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE, oSaveVersus)){
+				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
+				return SAVING_THROW_CHECK_IMMUNE;
+			}
+			break;
+		}
+		case SAVING_THROW_TYPE_FEAR:{
+			if (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oSaveVersus) ||
+				GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oSaveVersus)){
+				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
+				return SAVING_THROW_CHECK_IMMUNE;
+			}
+			break;
+		
+		}
+		case SAVING_THROW_TYPE_DEATH:{
+			if (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH, oSaveVersus)){
+				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
+				return SAVING_THROW_CHECK_IMMUNE;
+			}
+			break;
+		}
+	}
+	
+	int nSaveResult;
+	
+	switch (nSavingThrow){
+		case SAVING_THROW_FORT: nSaveResult = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus); break;
+		case SAVING_THROW_WILL: nSaveResult = WillSave(oTarget, nDC, nSaveType, oSaveVersus); break;
+		default: nSaveResult = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus); break;
+	}
+	
+	MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
+	return nSaveResult;
+}
+
+void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay){
+	int nSpell = StringToInt(Get2DAString("spells", "Name", nId));
+	string sSpell = GetStringByStrRef(nSpell);
+	string sMessage;
+	switch (nResult){
+		case SAVING_THROW_CHECK_IMMUNE: sMessage = "<c=lightgreen>Immune to"; break;
+		case SAVING_THROW_CHECK_SUCCEEDED: sMessage = "<c=gold>Succeeded save vs"; break;
+		default: sMessage = "c=tomato>Failed save vs"; break;
+	}
+	sMessage += " " + sSpell + ".</c>";
+	
+	if (nResult == SAVING_THROW_CHECK_IMMUNE){
+		effect eVis = EffectVisualEffect(VFX_IMP_MAGIC_PROTECTION);
+		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	} else if (nResult == SAVING_THROW_CHECK_FAILED){
+		if (nSaveType == SAVING_THROW_TYPE_DEATH || nId == SPELL_WEIRD || nId == SPELL_FINGER_OF_DEATH){ 
+            effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        }
+	}
+	SendMessageToPC(oTarget, sMessage);
+}
+
+
+/* Original MySavingThrow
 int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.0)
 {
     // -------------------------------------------------------------------------
@@ -884,11 +973,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 
     nSpellID = GetSpellId();
 
-    /*
-        return 0 = FAILED SAVE
-        return 1 = SAVE SUCCESSFUL
-        return 2 = IMMUNE TO WHAT WAS BEING SAVED AGAINST
-    */
+  
     if(bValid == 0)
     {
         if((nSaveType == SAVING_THROW_TYPE_DEATH
@@ -900,28 +985,25 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
     }
-    //redundant comparison on bValid, let's move the eVis line down below
-/*    if(bValid == 2)
-    {
-        eVis = EffectVisualEffect(VFX_IMP_MAGIC_RESISTANCE_USE);
-    }*/
+
     if(bValid == 1 || bValid == 2)
     {
         if(bValid == 2)
         {
             //eVis = EffectVisualEffect(VFX_IMP_MAGIC_RESISTANCE_USE);	// no longer using NWN1 VFX
 			eVis = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );	// makes use of NWN2 VFX
-            /*
-            If the spell is save immune then the link must be applied in order to get the true immunity
-            to be resisted.  That is the reason for returing false and not true.  True blocks the
-            application of effects.
-            */
+            
+            //If the spell is save immune then the link must be applied in order to get the true immunity
+            //to be resisted.  That is the reason for returing false and not true.  True blocks the
+            //application of effects.
+            //
             bValid = FALSE;
         }
         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
     return bValid;
 }
+*/
 
 effect CreateProtectionFromAlignmentLink(int nAlignment, int nPower = 1)
 {
