@@ -83,6 +83,7 @@ const int idFeatPsyWarLurk = 21470;
 const int idFeatWererat = 2593;
 const int idFeatBlackguardPath = 3019;
 
+void ApplyTurnResist(object oPC);
 void fFixAlertness(object oPC);
 void AdjustDragonPrC(object oPC);
 int fFindSneakFeat(int dice);
@@ -98,6 +99,28 @@ string fCheckForTempSneakDice(object oPC);
 void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
+
+// in DnD 3.5 vampires are supposed to get the same +4 vs turning as liches
+// so this function applies it at max vampire level for the vamp templates
+void ApplyTurnResist(object oPC){
+	int nVampClass = 105; //draco
+	int nVampLevel = GetLevelByClass(nVampClass, oPC);
+	if (nVampLevel < 1){
+		nVampClass = 78; //lupus
+		nVampLevel = GetLevelByClass(nVampClass, oPC);
+	}
+	if (nVampLevel < 1){
+		nVampClass = 106; //maleficus
+		nVampLevel = GetLevelByClass(nVampClass, oPC);
+	}
+	if (nVampLevel < 1) return;
+
+	int nMax = StringToInt(Get2DAString("classes", "MaxLevel", nVampClass));
+	if (nVampLevel >= nMax){
+		if (!GetHasFeat(2697, oPC))
+			FeatAdd(oPC, 2697, FALSE);
+	}
+}
 
 void fFixAlertness(object oPC){
 	if (GetHasFeat(FEAT_ALERTNESS, oPC, TRUE)){
@@ -624,5 +647,4 @@ void fRemoveSneakFeats(object oPC)
 	}
 }
 // End remove feats
-
 
