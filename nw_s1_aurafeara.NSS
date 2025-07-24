@@ -21,11 +21,16 @@ void main()
     object oTarget = GetEnteringObject();
 	object oCreator = GetAreaOfEffectCreator();
 	
+			//debug 
+	if (GetIsPC(oTarget))
+		SendMessageToPC(oTarget, "<c=cyan>This is NW_S1_AuraFearA</c>");
+	
 	//if the target is immune to fear or mind affecting, they should not be affected, duh
 	if (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
-			    GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCreator))
+		GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCreator)){
+			MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, 198, SAVING_THROW_TYPE_FEAR);
 				 return;
-	
+	}
    
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_FEAR );
     effect eFear = EffectFrightened();
@@ -45,21 +50,21 @@ void main()
     int nDuration = GetScaledDuration(nReduceHD, oTarget);
 		
 	if(GetIsEnemy(oTarget, oCreator)){
-        
-        SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_AURA_FEAR));
+       
+       
         //Make a saving throw check
 		
-        if(MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR) && 
-			nHD - GetHitDice(oTarget) >= 5){
+        if (MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR) == FALSE){
+			 // Apply Fear
+			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_AURA_FEAR));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nDuration));
+		} else if (nHD - GetHitDice(oTarget) >= 5){
+			//Apply Shaken Effect if target is 5 HD or more lower than caster
+			//Characters who are shaken take a -2 penalty on attack rolls, 
+			//saving throws, and skill checks
+			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_AURA_FEAR));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShaken, oTarget, RoundsToSeconds(nDuration));
 			
-				//Apply Shaken Effect 
-				//Characters who are shaken take a -2 penalty on attack rolls, 
-				//saving throws, and skill checks
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShaken, oTarget, RoundsToSeconds(nDuration));
-		} else {
-	            // Apply Fear
-	            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nDuration));
-
 		}
     }
 }

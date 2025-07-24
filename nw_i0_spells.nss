@@ -92,7 +92,7 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary);
 int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0);
 
 //Provides additional user feedback to MySavingThrow() -FlattedFifth, July 23, 2025
-void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay);
+void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay = 0.1f);
 // * Used to route the saving throws through this function to check for spell countering by a saving throw.
 //   Returns: 0 if the saving throw roll failed
 //   Returns: 1 if the saving throw roll succeeded
@@ -856,21 +856,23 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 		case SAVING_THROW_TYPE_MIND_SPELLS:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return SAVING_THROW_CHECK_IMMUNE;
+				// return SAVING_THROW_CHECK_IMMUNE doesn't seem to be working right, just return true
+				//return SAVING_THROW_CHECK_IMMUNE;
+				return TRUE;
 			}
 			break;
 		}
 		case SAVING_THROW_TYPE_POISON:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return SAVING_THROW_CHECK_IMMUNE;
+				return TRUE;
 			}
 			break;
 		}
 		case SAVING_THROW_TYPE_DISEASE:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return SAVING_THROW_CHECK_IMMUNE;
+				return TRUE;
 			}
 			break;
 		}
@@ -878,7 +880,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oSaveVersus) ||
 				GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return SAVING_THROW_CHECK_IMMUNE;
+				return TRUE;
 			}
 			break;
 		
@@ -886,7 +888,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 		case SAVING_THROW_TYPE_DEATH:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return SAVING_THROW_CHECK_IMMUNE;
+				return TRUE;
 			}
 			break;
 		}
@@ -900,16 +902,23 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 		default: nSaveResult = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus); break;
 	}
 	
-	MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-	return nSaveResult;
+	MySavingThrowFeedback(oTarget, nSaveResult, nId, nSaveType, fDelay);
+	if (nSaveResult == SAVING_THROW_CHECK_FAILED) return FALSE;
+	
+	return TRUE;
 }
 
-void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay){
+void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay = 0.1f){
+
+	if (!GetIsPC(oTarget)) return;
+	
 	int nSpell = StringToInt(Get2DAString("spells", "Name", nId));
-	string sSpell = GetStringByStrRef(nSpell);
+	string sSpell = "this effect";
+	if (nSpell != 0) sSpell = GetStringByStrRef(nSpell);
 	string sMessage;
+
 	switch (nResult){
-		case SAVING_THROW_CHECK_IMMUNE: sMessage = "<c=lightgreen>Immune to"; break;
+		case SAVING_THROW_CHECK_IMMUNE: sMessage = "<c=cyan>Immune to"; break;
 		case SAVING_THROW_CHECK_SUCCEEDED: sMessage = "<c=gold>Succeeded save vs"; break;
 		default: sMessage = "c=tomato>Failed save vs"; break;
 	}
