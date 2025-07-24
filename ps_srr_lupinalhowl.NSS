@@ -41,9 +41,7 @@ void main()
 	
     while(GetIsObjectValid(oTarget))
     {
-    	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF && 
-			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+    	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
     	{
 			int nAlign = GetAlignmentGoodEvil(oTarget);
 			if(nAlign == ALIGNMENT_EVIL)
@@ -53,7 +51,7 @@ void main()
 	            nDuration = GetScaledDuration(nDuration , oTarget);
 	            //Fire cast spell at event for the specified target
 	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1692));
-				if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
+				if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
 	            {
 	                //Apply the VFX impact and effects
 	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));

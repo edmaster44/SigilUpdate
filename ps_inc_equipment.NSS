@@ -304,10 +304,8 @@ void FrightfulPresence(object oPC, int nCHA){
     object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
     while (oTARGET != OBJECT_INVALID)
     {
-        if (GetIsEnemy(oTARGET, oPC) == TRUE)
-        {
-            if (WillSave(oTARGET, nDC, SAVING_THROW_TYPE_FEAR, oPC) == SAVING_THROW_CHECK_FAILED)
-            {
+        if (GetIsEnemy(oTARGET, oPC)){
+			if (!MySavingThrow(SAVING_THROW_WILL, oTARGET, nDC, SAVING_THROW_TYPE_FEAR, oPC, 0.1f, 1407)){
                 nHD = GetHitDice(oTARGET);
                 if (nHD >= 20) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_3, oTARGET, fDUR);
                 else if (nHD >= 5) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_2, oTARGET, fDUR);

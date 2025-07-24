@@ -164,7 +164,7 @@ void CastSpell()
                 if(!MyResistSpell(OBJECT_SELF, oTarget))
                 {
                     //Make Will save versus fear
-                    if(! MySavingThrow(SAVING_THROW_WILL, oTarget, 32, SAVING_THROW_TYPE_MIND_SPELLS))
+                    if(!MySavingThrow(SAVING_THROW_WILL, oTarget, 32, SAVING_THROW_TYPE_MIND_SPELLS))
                     {
                         //Apply linked effects and VFX impact
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSavePen, oTarget, fDurationPen);
@@ -172,7 +172,7 @@ void CastSpell()
 						ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisPen2, oTarget);
                     }
 					
-					if(! MySavingThrow(SAVING_THROW_WILL, oTarget, 26, SAVING_THROW_TYPE_FEAR))
+					if(!MySavingThrow(SAVING_THROW_WILL, oTarget, 26, SAVING_THROW_TYPE_FEAR))
 	                {
 	                    //Apply the linked effects and the VFX impact
 	                    DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFearPen, oTarget, fDurationPen));

@@ -88,8 +88,9 @@ void DoBattleHowl()
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && oTarget != oPC)
         {
-           if(MySavingThrow(SAVING_THROW_WILL, oTarget, nSpellSaveDC, SAVING_THROW_TYPE_FEAR) == FALSE)
+           if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nSpellSaveDC, SAVING_THROW_TYPE_FEAR))
             {
+				SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_FEAR));
                 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nCHA +3)));
             }
         }

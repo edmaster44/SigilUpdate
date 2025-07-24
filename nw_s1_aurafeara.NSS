@@ -21,17 +21,6 @@ void main()
     object oTarget = GetEnteringObject();
 	object oCreator = GetAreaOfEffectCreator();
 	
-			//debug 
-	if (GetIsPC(oTarget))
-		SendMessageToPC(oTarget, "<c=cyan>This is NW_S1_AuraFearA</c>");
-	
-	//if the target is immune to fear or mind affecting, they should not be affected, duh
-	if (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
-		GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCreator)){
-			MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, 198, SAVING_THROW_TYPE_FEAR);
-				 return;
-	}
-   
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_FEAR );
     effect eFear = EffectFrightened();
 		eFear = EffectLinkEffects(eDur, eFear);

@@ -92,14 +92,14 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary);
 int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0);
 
 //Provides additional user feedback to MySavingThrow() -FlattedFifth, July 23, 2025
-void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay = 0.1f);
+void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType = SAVING_THROW_TYPE_NONE, float fDelay = 0.1f);
 // * Used to route the saving throws through this function to check for spell countering by a saving throw.
 //   Returns: 0 if the saving throw roll failed
 //   Returns: 1 if the saving throw roll succeeded
 //   Returns: 2 if the target was immune to the save type specified
 //   Note: If used within an Area of Effect Object Script (On Enter, OnExit, OnHeartbeat), you MUST pass
 //   GetAreaOfEffectCreator() into oSaveVersus!!    \
-int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.1);
+int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.1, int nId = NULL);
 
 // * Will pass back a linked effect for all the protection from alignment spells.  The power represents the multiplier of strength.
 // * That is instead of +3 AC and +2 Saves a  power of 2 will yield +6 AC and +4 Saves.
@@ -842,15 +842,13 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
     return nResist;
 }
 
-// returns SAVING_THROW_CHECK_FAILED, or 0 if the saving throw roll failed
-// Returns: SAVING_THROW_CHECK_SUCCEEDED, or 1, if the saving throw roll succeeded
-// Returns: SAVING_THROW_CHECK_IMMUNE, or 2, if the target is immune
-int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.1){
+// returns TRUE if passed or immune, returns false if failed
+int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.1, int nId = NULL){
 	if (nDC<1) nDC = 1;
     else if (nDC > 255) nDC = 255;
 	
 	int bSaved = FALSE;
-	int nId = GetSpellId();
+	if (nId == NULL) nId = GetSpellId();
 	
 	switch (nSaveType){
 		case SAVING_THROW_TYPE_MIND_SPELLS:{
@@ -908,7 +906,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 	return TRUE;
 }
 
-void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType, float fDelay = 0.1f){
+void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType = SAVING_THROW_TYPE_NONE, float fDelay = 0.1f){
 
 	if (!GetIsPC(oTarget)) return;
 	

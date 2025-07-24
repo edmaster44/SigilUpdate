@@ -299,14 +299,15 @@ void ApplyFrightfulPresence(object oPC)
 	
 	while (GetIsObjectValid(oTarget))
 	{
-		if (GetIsEnemy(oTarget, oPC))
+		if (GetIsEnemy(oTarget, oPC) && !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
 		{
-			if (WillSave(oTarget, iDC, SAVING_THROW_TYPE_FEAR, oPC) == SAVING_THROW_CHECK_FAILED)
+			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, iDC, SAVING_THROW_TYPE_MIND_SPELLS))
 			{
 				iTargetLevel = GetHitDice(oTarget);
 			
 				if (iTargetLevel <5) eEffect = EffectLinkEffects(EffectStunned(), EffectVisualEffect(VFX_DUR_STUN));
-				else if (iTargetLevel < 20) eEffect = EffectLinkEffects(EffectFrightened(), EffectVisualEffect(VFX_DUR_SPELL_FEAR));
+				else if (iTargetLevel < 20 && !GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oPC)) 
+					eEffect = EffectLinkEffects(EffectFrightened(), EffectVisualEffect(VFX_DUR_SPELL_FEAR));
 				else eEffect = EffectLinkEffects(EffectLinkEffects(EffectACDecrease(2), EffectAttackDecrease(2)), EffectVisualEffect(VFX_DUR_SPELL_DOOM));
 				
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, RoundsToSeconds(iCHA));

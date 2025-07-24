@@ -549,7 +549,7 @@ int DoEssenceOnHitFrightfulBlast(object oCaster, object oTarget, int nDC, int nI
     {
 		if ((GetHitDice(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
-            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
+            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 815))
             {
                 float fDuration = RoundsToSeconds(10);
 

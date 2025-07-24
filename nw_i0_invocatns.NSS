@@ -445,7 +445,9 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 				//This is similiar to the already existing burn damage system, but should take place sliiightly faster
 				//And includes the magic damage total in the calculation
 				if (nDmg > (GetMaxHitPoints(oTarget)/5)) {
-					if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster)) {
+				
+						
+					if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster)) {
 						effect eFear = EffectFrightened();
 						int nDur = (GetWarlockCasterLevel(oCaster)/5);
 						if (nDur <= 0) nDur = 1;

@@ -44,7 +44,7 @@ void main()
             if(!OnHitResistSpell(oCaster, oTarget))
             {
                 //Make a will save
-                if(!OnHitSavingThrow(SAVING_THROW_WILL, oTarget, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_FEAR, oCaster, fDelay))
+				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 54))
                 {
                     //Apply the linked effects and the VFX impact
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));

@@ -46,9 +46,6 @@ void main()
     {
     	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
     	{
-			if (!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF)){
-
 				fDelay = GetDistanceToObject(oTarget)/10;
 				//Fire cast spell at event for the specified target
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_WARPRIEST_FEAR_AURA));
@@ -56,14 +53,14 @@ void main()
 				if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 				{
 				   //Make a saving throw check
-					if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
+					if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
 					{
 						//Apply the VFX impact and effects
 						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nLevel)));
 						//DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					}
 				}
-			}
+			
         }
         //Get next target in spell area
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(OBJECT_SELF));

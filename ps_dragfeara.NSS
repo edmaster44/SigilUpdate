@@ -44,16 +44,14 @@ void main()
 		
 	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
- 		if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()) && 
-			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+ 		if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
   		{	
 			if (GetRacialType(oTarget) != 11) 
 			{
 				if (iAffected != 1)
      	  		{	
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 2647, TRUE));
-      		  		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
+      		  		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCreator, 0.1f, 2647))
 	  				{
 						// Fear
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));

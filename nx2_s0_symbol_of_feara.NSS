@@ -35,6 +35,7 @@ void main()
 	effect eFear		= EffectFrightened();
 	effect eActivated 	= EffectNWN2SpecialEffectFile("fx_feat_chastisespirits_aoe01.sef");
 	effect eVisual		= EffectVisualEffect(VFX_DUR_SPELL_SYMBOL_OF_FEAR);
+	int nDC = FF_GetSpellSaveDC(oCaster, 1176);
 	float fDelay;
 	// to make sure the spell in not repeatedly added to a creature
 	SetEffectSpellId(eFear, SPELL_SYMBOL_OF_FEAR);
@@ -57,7 +58,8 @@ void main()
 					//Fire cast spell at event for the specified target
 			        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SYMBOL_OF_FEAR, TRUE));
 					// saving throw
-					int nSaved	= WillSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR, GetAreaOfEffectCreator());
+					//int nSaved	= WillSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR,
+					int nSaved = MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 1176);
 			     	if(nSaved == 2)
 					{
 						// spell resisted

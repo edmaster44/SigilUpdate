@@ -68,7 +68,7 @@ void main()
                 if(!MyResistSpell(OBJECT_SELF, oTarget))
                 {
                     //Make Will save versus fear
-                    if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR))
+                    if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR))
                     {
                         effect eScare = EffectFrightened();
                         effect eSave = EffectSavingThrowDecrease(SAVING_THROW_WILL, 2, SAVING_THROW_TYPE_MIND_SPELLS);
@@ -111,7 +111,7 @@ void main()
                 if(!MyResistSpell(OBJECT_SELF, oTarget))
                 {
                     //Make Will save versus fear
-                    if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR))
+                    if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FEAR))
                     {
                         effect eScare = EffectFrightened();
                         effect eSave = EffectSavingThrowDecrease(SAVING_THROW_WILL, 2, SAVING_THROW_TYPE_MIND_SPELLS);

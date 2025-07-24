@@ -23,11 +23,6 @@ void main()
     object oTarget = GetEnteringObject();
 	object oCreator = GetAreaOfEffectCreator();
 	
-	if (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) ||
-		GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCreator))
-			return;
-	
-	
     //effect eVis = EffectVisualEffect(VFX_IMP_FEAR_S);
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_FEAR );
     //effect eDur2 = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
@@ -75,7 +70,7 @@ void main()
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELLABILITY_AURA_FEAR));
         //Make a saving throw check
-        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
+        if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCreator, 0.0f, 238))
 	  	{
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 			

@@ -39,9 +39,7 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
         nDuration = GetScaledDuration(nDuration , oTarget);
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)  && 
-			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
         {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_GAZE_FEAR));

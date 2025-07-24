@@ -129,7 +129,7 @@ void PS_Fey_FeySleep(object oPC, location lTarget) {
     }
 }
 
-//Fey Sleep spell
+//Fey Fear spell
 void PS_Fey_FeyFear(object oPC, location lTarget) {
 
 	int nCasterLevel = GetHitDice(oPC);
@@ -149,19 +149,17 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
     {
 		if (GetHitDice(oTarget) < nCasterLevel) 
 		{
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC && 
-			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC)
 	    	{
-	            fDelay = GetRandomDelay();
-	            //Fire cast spell at event for the specified target
-	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_FEAR));
 	            //Make SR Check
 	            if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 	            {
 	                //Make a will save
-	                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oPC, fDelay))
+	                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oPC))
 	                {
+						fDelay = GetRandomDelay();
+						//Fire cast spell at event for the specified target
+						SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_FEAR));
 	                    //Apply the linked effects and the VFX impact
 	                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));
 						

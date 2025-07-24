@@ -46,7 +46,7 @@ void main()
         {
            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_WAR_CRY));
            //Make SR and Will saves
-           if(!OnHitResistSpell(oCaster, oTarget)  && !OnHitSavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster))
+           if(!OnHitResistSpell(oCaster, oTarget)  && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 54))
             {
                 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(4)));
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> frightens "+GetName(oTarget)+"</color>";

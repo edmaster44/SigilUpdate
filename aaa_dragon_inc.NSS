@@ -686,13 +686,15 @@ void PS_Dragon_Roar(object oPC, int nSpell){
 //---------------------------------------------------------------------------------------------------------------------
 
 void PS_Dragon_Presence(object oPC, int nSpell){
+	
+	PS_RemoveEffects(oPC, nSpell);
+	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
+		SendMessageToPC(oPC, "You can only use this ability in dragon form");
+		return;
+	}
 	effect eAOE = EffectAreaOfEffect(VFX_MOB_DRAGON_FEAR_PC);
 	eAOE = SetEffectSpellId(eAOE, nSpell);
 	eAOE = SupernaturalEffect(eAOE);
-	PS_RemoveEffects(oPC, nSpell);
-	
-	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange"))
-		return;
 	
 	SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));	
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, HoursToSeconds(100));

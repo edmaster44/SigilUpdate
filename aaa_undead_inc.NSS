@@ -506,9 +506,7 @@ void PS_LichFearAura(object oPC, int nSpell)
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
     while(GetIsObjectValid(oTarget))
-    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && 
-			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
@@ -671,9 +669,7 @@ void PS_DKFearAura(object oPC, int nSpell)
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
     while(GetIsObjectValid(oTarget))
-    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && 
-			!GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
-			    !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
             if (GetHitDice(oTarget) <= 100)
