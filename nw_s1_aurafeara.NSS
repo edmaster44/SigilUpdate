@@ -43,12 +43,14 @@ void main()
        
         //Make a saving throw check
 		
-        if (MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR) == FALSE){
+        if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCreator, 0.1f, 198)){
 			 // Apply Fear
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_AURA_FEAR));
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nDuration));
-		} else if (nHD - GetHitDice(oTarget) >= 5){
-			//Apply Shaken Effect if target is 5 HD or more lower than caster
+		} else if (nHD - GetHitDice(oTarget) >= 5 && !GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oCreator) &&
+				!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCreator)){
+			//Apply Shaken Effect if target is 5 HD or more lower than caster and is not immune to Fear
+			// or mind spells.
 			//Characters who are shaken take a -2 penalty on attack rolls, 
 			//saving throws, and skill checks
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_AURA_FEAR));
