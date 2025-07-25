@@ -23,6 +23,31 @@ void main(){
 
     object oTarget = GetEnteringObject();
 	
+		//Debug: Check if various functions that forum information reports do not work within
+		// aoe scripts actually work or not
+		string sName = GetName(GetAreaOfEffectCreator());
+		int nTestId = GetSpellId(); // does it work and if so for last spell or this spell
+		int nTestCL = GetCasterLevel(GetAreaOfEffectCreator()); // gets caster level of last spell or this spell?
+		int nTestMeta = GetMetaMagicFeat(); //does it work? If so, for last spell or this spell?
+		string sTestFeat;
+		switch (nTestMeta){
+			case METAMAGIC_NONE: sTestFeat = "None"; break;
+			case METAMAGIC_EMPOWER: sTestFeat = "Empower"; break;
+			case METAMAGIC_EXTEND: sTestFeat = "Extend"; break;
+			case METAMAGIC_MAXIMIZE: sTestFeat = "Maximize"; break;
+			case METAMAGIC_QUICKEN: sTestFeat = "Quicken"; break;
+			case METAMAGIC_SILENT: sTestFeat = "Silent"; break;
+			case METAMAGIC_STILL: sTestFeat = "Still"; break;
+			case METAMAGIC_PERSISTENT: sTestFeat = "Persistent"; break;
+			default: sTestFeat = IntToString(nTestMeta);
+		}
+		string sMessage = "<c=cyan>This spell was cast by " + sName;
+		sMessage += "\nThe spell id is " + IntToString(nTestId);
+		sMessage += "\nThe Caster Level is " + IntToString(nTestCL);
+		sMessage += "\nThe Metamagic used is " + sTestFeat;
+		SendMessageToPC(oTarget, sMessage);
+		// end debug
+	
 	if (!GetIsObjectValid(oTarget) || GetObjectType(oTarget) != OBJECT_TYPE_CREATURE)
 		return;
 	
