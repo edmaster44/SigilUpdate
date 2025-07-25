@@ -14,7 +14,7 @@ void main(){
 		// aoe scripts actually work or not
 		string sName = GetName(GetAreaOfEffectCreator());
 		int nTestId = GetSpellId(); // does it work and if so for last spell or this spell
-		int nTestCL = GetCasterLevel(oCaster); // gets caster level of last spell or this spell?
+		int nTestCL = GetCasterLevel(OBJECT_SELF); // gets caster level of last spell or this spell?
 		int nTestMeta = GetMetaMagicFeat(); //does it work? If so, for last spell or this spell?
 		string sTestFeat;
 		switch (nTestMeta){
