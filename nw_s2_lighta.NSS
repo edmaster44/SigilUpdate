@@ -9,10 +9,6 @@ void main(){
 	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE){
 		object oAOE = OBJECT_SELF;
 		object oCaster = GetAreaOfEffectCreator();
-		
-		//DEBUG test to see if GetMetaMagicFeat() works properly inside an aoe or not
-		int nMetaMagic = GetMetaMagicFeat();
-		SendMessageToPC(oTarget, "Metamagic feat is " + IntToString(nMetaMagic));
 	
 		// make sure we have the right spell id and if the id isn't set on the AoE object, 
 		// grab if from caster
