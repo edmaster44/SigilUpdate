@@ -1,7 +1,7 @@
 #include "aaa_constants"
 
 void PS_KnightLevels(object oPC);
-int KnightLevels(object oPC);
+int KnightLevels(object oPC, int bForSneakDice = FALSE);
 int LayOnHandsLevels(object oPC);
 
 void PS_KnightLevels(object oPC){
@@ -123,8 +123,11 @@ void PS_KnightLevels(object oPC){
 
 }
 
-
-int KnightLevels(object oPC){
+// get total knight levels. This is also used in ff_update_feats_inc to calc
+// blackguard sneak dice, but half-outsider is already being counted there if they
+// have the path of guile; so this is called with bForSneakDice = TRUE in the
+// sneak dice calculation for blackguard.
+int KnightLevels(object oPC, int bForSneakDice = FALSE){
 
 	int nLevel = GetLevelByClass(CLASS_TYPE_PALADIN, oPC);//Paladin, aka, Knight
 	if (nLevel < 1 ) return 0;
@@ -141,7 +144,7 @@ int KnightLevels(object oPC){
 	if(GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL){
 		nLevel += GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC)
 		+ GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC) + GetLevelByClass(CLASS_TYPE_ERINYES,oPC);
-		if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC)){
+		if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && !bForSneakDice){
 			nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);
 			if (GetHasFeat(3036,oPC)) nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);
 		}

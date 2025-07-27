@@ -12,7 +12,12 @@
 // FlattedFifth - July 28, 2024. Added bCharCreation arguement to DoPsyProgression() with default
 //			value of false. Calling that from ps_onpcloaded in the same conditional that 
 //			grants the starting gold for a new character.
-
+// FlattedFifth = July 27, 2025. Moved ManageImbueItem to ff_update_feats_inc where it really 
+//			belongs. Fixed logic error in GetWarlockCasterLevelBase() that was causing Practiced
+//			invoker to add more caster levels than the character has total levels. Also added
+//			option in PS_GetCasterLevel() to pass a specific class so that a caster level can
+//			be obtained outside of the context of a spell script (if you want to use it in a Spell
+//			script, just don't pass a class)
 
 
 #include "aaa_constants"
@@ -166,10 +171,6 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
 // accepts a feat id from feat.2da and returns the id to be used in ItemPropertyBonusFeat() from iprp_feats.2da
 int PS_GetIpBonusFeat(int nFeatId);
 
-// grant Imbue Item to psi and to warlocks with prcs that make lvl 12 warlock base more difficult.
-void PS_ManageImbueItem(object oPC);
-
-
 // The following 3 are not implemented yet
 // allow earned xp to continue to progress craft skills for ECL characters, if and only if their craft skills are maxed, 
 // up to the same as possible for a non-ecl character.
@@ -198,7 +199,7 @@ int GetRangerAndPRCClassLevels(object oPC);
 
 int PS_IsEquippableCW(object oItem);
 
-int PS_GetCasterLevel(object oPC);
+int PS_GetCasterLevel(object oPC, int nClass = NULL);
 
 //Safely retrieves the Icon Picture
 int GetItemIconSafe(object oItem);
@@ -981,27 +982,6 @@ object PS_GetCreatureSkin(object oPC){
 	return oSkin;
 }
 
-// Give Imbue Item to Psi if they have caster level 6 or higher. Remove it from 
-// deleveled pcs who no longer qualify. Give imbue item to warlock if their 
-// warlock + warlock-specific prcs >= 15. Warlock will still get it at base class 
-// 12 as per the 2da, I didn't change that. -FlattedFifth, July 3, 2024
-void PS_ManageImbueItem(object oPC)
-{
-	int idClassHexen = 112;
-	int nPsiCaster = GetPsionicCasterLevel(oPC);
-	int nWarlockClass = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC);
-	int nWarlockClassPlus = nWarlockClass + GetLevelByClass(CLASS_TYPE_HELLFIRE_WARLOCK, oPC) +
-		GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC) + GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) +
-		GetLevelByClass(CLASS_TYPE_FELLBLADE, oPC) + GetLevelByClass(idClassHexen, oPC);
-
-	int bQualifiesFree = (nPsiCaster >= 6 || nWarlockClass >= 12 || nWarlockClassPlus >= 15);
-	int bHasInbue = GetHasFeat(1430, oPC);
-	
-	if (bHasInbue && !bQualifiesFree) FeatRemove(oPC, 1430);
-	else if (!bHasInbue && bQualifiesFree) FeatAdd(oPC, 1430, FALSE);
-}
-
-
 // This function was declared but never defined, so made it a wrapper for Dae's function
 // without changing the arguments of either. -FlattedFifth
 
@@ -1479,8 +1459,9 @@ void GiveEssenceBlastShapes(object oPC) {
 }
 
 int GetWarlockCasterLevelBase(object oPC) {
-	int iSlotNumber; int iClass;
-	int iTotal; 
+	int iSlotNumber; 
+	int iClass;
+	int iTotal = 0; 
 	
 	if(GetLevelByClass(CLASS_TYPE_WARLOCK,oPC) == 0) return 0;
 	
@@ -1490,14 +1471,14 @@ int GetWarlockCasterLevelBase(object oPC) {
 		
 		if ( iClass == 255 ) break;
 			
-		if(iClass == CLASS_TYPE_WARLOCK) iTotal = iTotal + GetLevelByClass(iClass,oPC);
+		if(iClass == CLASS_TYPE_WARLOCK) iTotal += GetLevelByClass(iClass,oPC);
 		else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
 	}
 	
-	
+	int nHD = GetHitDice(oPC);
 	if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
-	if (iTotal > 30)
-	iTotal = 30;
+	if (iTotal > nHD)
+	iTotal = nHD;
 	
 	return iTotal;
 }
@@ -2608,12 +2589,15 @@ int iSlotNumber; int iClass;
 }
 
 
-int PS_GetCasterLevel(object oPC)
+int PS_GetCasterLevel(object oPC, int nPassedClass = NULL)
 {
- int iClass = GetLastSpellCastClass();
- int iCasterLevelTrue = GetCasterLevel(oPC);
- int iLevel;
-if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
+	int iClass;
+	if (nPassedClass == NULL) iClass = GetLastSpellCastClass();
+	else iClass = nPassedClass;
+	int iCasterLevelTrue = GetCasterLevel(oPC);
+	int iLevel;
+	if(GetSpellCastItem() != OBJECT_INVALID && nPassedClass == NULL)
+		return iCasterLevelTrue;
 
 	if (iClass == CLASS_TYPE_RANGER) iLevel = GetRangerTRUECasterlevel(oPC);
 	else if (iClass == CLASS_TYPE_PALADIN)iLevel = GetPaladinTRUECasterlevel(oPC);
@@ -2625,9 +2609,10 @@ if(GetSpellCastItem() != OBJECT_INVALID) return iCasterLevelTrue;
 	else if (iClass == CLASS_TYPE_FAVORED_SOUL)iLevel =GetFavoredSoulTRUECasterlevel(oPC);
 	else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
 	else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
-	
-	if(iCasterLevelTrue > iLevel) iLevel = iCasterLevelTrue;
-	
+
+	if(iCasterLevelTrue > iLevel && nPassedClass == NULL)
+		iLevel = iCasterLevelTrue;
+
 	return iLevel;
 }
 

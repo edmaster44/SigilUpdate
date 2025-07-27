@@ -21,9 +21,9 @@
 			That still leaves Arcane Trickster sneak attacks unused so if you need another sneak attack
 			that will stack with all the rest, there's that one. -FlattedFifth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-#include "aaa_constants"
+
 #include "ff_update_feats_inc"
-#include "ff_combat_mods"
+
 
 void ff_update_feats(object oPC);
 void fGrantSneakFeats(object oPC);

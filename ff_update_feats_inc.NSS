@@ -1,4 +1,6 @@
 #include "aaa_constants"
+#include "ff_combat_mods"
+#include "ps_adjust_knight"
 
 
 // constants to control optional epic precision qualifications
@@ -99,6 +101,7 @@ string fCheckForTempSneakDice(object oPC);
 void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
+void PS_ManageImbueItem(object oPC);
 
 // in DnD 3.5 vampires are supposed to get the same +4 vs turning as liches
 // so this function applies it at max vampire level for the vamp templates
@@ -120,6 +123,22 @@ void ApplyTurnResist(object oPC){
 		if (!GetHasFeat(2697, oPC))
 			FeatAdd(oPC, 2697, FALSE);
 	}
+}
+
+// Give Imbue Item to Psi if they have caster level 6 or higher. Remove it from 
+// deleveled pcs who no longer qualify. Give imbue item to warlock if their 
+// warlock base class >= 12 or total warlock CL >= 15. -FlattedFifth, July 27, 2025
+void PS_ManageImbueItem(object oPC)
+{
+	int nPsiCaster = GetPsionicCasterLevel(oPC);
+	int nWarlockClass = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC);
+	int nWarlockCaster = PS_GetCasterLevel(oPC, CLASS_TYPE_WARLOCK);
+
+	int bQualifies = (nPsiCaster >= 6 || nWarlockClass >= 12 || nWarlockCaster >= 15);
+	int bHasInbue = GetHasFeat(1430, oPC);
+	
+	if (bHasInbue && !bQualifies) FeatRemove(oPC, 1430);
+	else if (!bHasInbue && bQualifies) FeatAdd(oPC, 1430, FALSE);
 }
 
 void fFixAlertness(object oPC){
@@ -369,9 +388,9 @@ int fCalcSneakDice(object oPC)
 	if (GetHasFeat(idFeatBlackguardPath, oPC, TRUE)){
 		if (bOnlyEvilBlackguardSneakAttacks){
 			if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL)
-				nSneakDice += (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) -1) / 3;
+				nSneakDice += (KnightLevels(oPC, TRUE) -1) / 3;
 		} else {
-			nSneakDice += (GetLevelByClass(CLASS_TYPE_PALADIN, oPC) -1) / 3;
+			nSneakDice += (KnightLevels(oPC, TRUE) -1) / 3;
 		}
 	}
 
@@ -647,4 +666,3 @@ void fRemoveSneakFeats(object oPC)
 	}
 }
 // End remove feats
-
