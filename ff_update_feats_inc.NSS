@@ -142,12 +142,32 @@ void PS_ManageImbueItem(object oPC)
 }
 
 void fFixAlertness(object oPC){
+	/*
+		reverting back to original alertness now that we now the con ac bug
+		can be fixed by changing the following lines in xp_dae.ini from
+		#PhantomACFeat = 3616
+		#PhantomClassID = 144
+		#FistOfForestACFeat = 3541
+		to 
+		PhantomACFeat = -1
+		PhantomClassID = -1
+		FistOfForestACFeat = -1	
+	*/
+	if (GetHasFeat(FEAT_ALERTNESS_NEW, oPC, TRUE)){
+		FeatRemove(oPC, FEAT_ALERTNESS_NEW);
+		// we cannot check if they already have this because if they
+		// have it as a bonus feat on equipment we will get a false positive
+		FeatAdd(oPC, FEAT_ALERTNESS, FALSE);
+	}
+	
+	/*
 	if (GetHasFeat(FEAT_ALERTNESS, oPC, TRUE)){
 		FeatRemove(oPC, FEAT_ALERTNESS);
 		// we cannot check if they already have this because if they
 		// have it as a bonus feat on equipment we will get a false positive
 		FeatAdd(oPC, FEAT_ALERTNESS_NEW, FALSE);
 	}
+	*/
 }
 
 void AdjustDragonPrC(object oPC){
