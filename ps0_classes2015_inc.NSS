@@ -213,6 +213,41 @@ void PS_Feat_SHD_ShadowJump(object oPC, location lTarget, int nSpell)
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, lCaster, RoundsToSeconds(4));
 }
 
+
+void PS_Feat_GC_DODGE_AC(object oPC, int nSpell){
+
+	// Add Dodge AC for each level of gatecrasher beyond the first, max = int mod
+	int nGatecrasherAC = GetLevelByClass(63, oPC) - 1;// gatecrasher
+	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
+	if (nGatecrasherAC > nInt) nGatecrasherAC = nInt;
+	
+	PS_RemoveEffects(oPC, nSpell);
+	
+	if (nGatecrasherAC < 1) return;
+	
+	// Will not stack with Duelist or Invis Blade (which ofc only work in no armor).
+	// if they have duelist or ib and no armor, they get the highest of the 3 ac
+	object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+	if (GetArmorRank(oArmor) == ARMOR_RANK_NONE || oArmor == OBJECT_INVALID){
+		int nDuelist = GetLevelByClass(CLASS_TYPE_DUELIST, oPC);
+		int nIB = GetLevelByClass(CLASS_TYPE_INVISIBLE_BLADE, oPC);
+		if (nDuelist > 0 || nIB > 0){
+			int nOtherAC = nDuelist;
+			if (nIB > nOtherAC) nOtherAC = nIB;
+			if (nInt > nOtherAC) nOtherAC = nInt;
+			if (nOtherAC >= nGatecrasherAC) return;
+			else nGatecrasherAC -= nOtherAC;	
+		}
+	}
+
+	if (nGatecrasherAC > 0){
+		effect eAC = EffectACIncrease(nGatecrasherAC);
+		eAC = SupernaturalEffect(eAC);
+		eAC = SetEffectSpellId(eAC, nSpell);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
+	}
+}
+
 void PS_Feat_GC_FindPortal(object oPC, int nSpell)
 {
     if (!X2PreSpellCastCode())

@@ -256,6 +256,8 @@ nScore += nAmount;
 SetBaseAbilityScore(oPC, nAbility, nScore);
 }
 
+// Add AC = +1 at lvls 7, 17, and 27, and +1 for each level of gatecrasher beyond first
+// but with max int for the gatecrasher bit
 void SituationalAwareness(object oPC){
 	// Add situational awareness feat
 	if (GRANT_SITUATIONAL_AWARENESS){
@@ -317,7 +319,7 @@ void SituationalAwareness(object oPC){
 			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS_3_AC);
 		if (GetHasFeat(FEAT_SITUATIONAL_AWARENESS, oPC, TRUE))
 			FeatRemove(oPC, FEAT_SITUATIONAL_AWARENESS);
-	}
+	}	
 }
 
 void ImprovedDefense(object oPC){
@@ -464,6 +466,9 @@ int fCalcSneakDice(object oPC)
 
 	// warden frantic reactions
 	if (GetHasFeat(idFeatFranticReactions, oPC, TRUE)) nSneakDice += 2;
+	
+	// gatecrasher
+	nSneakDice += (GetLevelByClass(63, oPC) + 1) / 3;
 	
 	if (nSneakDice > nMaxAllowedSneakDice)nSneakDice = nMaxAllowedSneakDice;
 

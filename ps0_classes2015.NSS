@@ -31,6 +31,7 @@ void main()
 		
 		//GATECRASHER
 		case 1382 : PS_Feat_GC_FindPortal(oPC, nSpell);	break;
+		case 1817 : PS_Feat_GC_DODGE_AC(oPC, nSpell); break;
 
 		//DEMONOLOGIST
 		case 1616 :	PS_Feat_DMN_BinderOfFiends(oPC, nSpell); break;
