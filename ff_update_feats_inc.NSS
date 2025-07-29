@@ -85,6 +85,7 @@ const int idFeatPsyWarLurk = 21470;
 const int idFeatWererat = 2593;
 const int idFeatBlackguardPath = 3019;
 
+void ApplyGatecrasherAC(object oPC);
 void ApplyTurnResist(object oPC);
 void fFixAlertness(object oPC);
 void AdjustDragonPrC(object oPC);
@@ -103,9 +104,19 @@ void ImprovedDefense(object oPC);
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 void PS_ManageImbueItem(object oPC);
 
+// manually give gc the new dodge ac feat so that existing gc do not have to rebuild
+void ApplyGatecrasherAC(object oPC){
+	if (GetLevelByClass(63, oPC) < 2) return; // skip if not lvl 2 GC
+	if (GetHasFeat(21904, oPC)) return; // skip if already have feat
+	FeatAdd(oPC, 21904, FALSE);
+}
+
 // in DnD 3.5 vampires are supposed to get the same +4 vs turning as liches
-// so this function applies it at max vampire level for the vamp templates
+// so this function applies it at max vampire level for the vamp templates.
+// This has been added to the 2da but doing it here also will negate the need
+// for existing vampires to rebuild.
 void ApplyTurnResist(object oPC){
+	if (GetHasFeat(2697, oPC)) return; // skip if they already have turn resist
 	int nVampClass = 105; //draco
 	int nVampLevel = GetLevelByClass(nVampClass, oPC);
 	if (nVampLevel < 1){
@@ -256,8 +267,7 @@ nScore += nAmount;
 SetBaseAbilityScore(oPC, nAbility, nScore);
 }
 
-// Add AC = +1 at lvls 7, 17, and 27, and +1 for each level of gatecrasher beyond first
-// but with max int for the gatecrasher bit
+
 void SituationalAwareness(object oPC){
 	// Add situational awareness feat
 	if (GRANT_SITUATIONAL_AWARENESS){
@@ -468,7 +478,7 @@ int fCalcSneakDice(object oPC)
 	if (GetHasFeat(idFeatFranticReactions, oPC, TRUE)) nSneakDice += 2;
 	
 	// gatecrasher
-	nSneakDice += (GetLevelByClass(63, oPC) + 1) / 3;
+	nSneakDice += (GetLevelByClass(63, oPC) - 1) / 2;
 	
 	if (nSneakDice > nMaxAllowedSneakDice)nSneakDice = nMaxAllowedSneakDice;
 

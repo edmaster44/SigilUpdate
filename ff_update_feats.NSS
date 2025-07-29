@@ -108,6 +108,7 @@ void fUpdateOtherFeats(object oPC){
 	// call to ps_inc_functions to grant Imbue Item to psi and to warlocks with warlock prcs.
 	PS_ManageImbueItem(oPC);
 	
+	ApplyGatecrasherAC(oPC);
 	ApplyTurnResist(oPC);
 	
 	UpdateACFeats(oPC);
