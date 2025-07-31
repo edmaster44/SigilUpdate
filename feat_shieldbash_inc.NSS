@@ -10,75 +10,59 @@
 #include "x2_inc_itemprop"
 
 
-
-
 void Shield_Bash(object oPC, object oTarget, int nSpell )
 {
-int nDam;
-int nSize;
-int nTotal;
-int nSaveDC;
-object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+	int nDam;
+	int nSize;
+	int nTotal;
+	int nSaveDC;
+	object oShield = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
+	int nType = GetBaseItemType(oShield);
+	int nStrength = GetAbilityModifier(ABILITY_STRENGTH, oPC);
 	
-	if(GetWeaponRanged(oShield) || !GetIsObjectValid(oShield))
-	{
-		SendMessageToPC(oPC,"You require a Shield to use this");
-		return;
+	switch (nType){
+		case BASE_ITEM_SMALLSHIELD:{
+			nDam = d6(6);
+			nSize = 1;
+			break;
+		}
+		case BASE_ITEM_LARGESHIELD:{
+			nDam = d6(9);
+			nSize = 2;
+			break;
+		}
+		case BASE_ITEM_TOWERSHIELD:{
+			nDam = d6(12);
+			nSize = 4;
+		}
+		default:{
+			SendMessageToPC(oPC,"You require a shield to use this feat.");
+			return;
+		}
 	}
-int nStrength = GetAbilityModifier(ABILITY_STRENGTH,OBJECT_SELF);
-int shield = GetBaseItemType(oShield);
-effect eStun = EffectCutsceneParalyze();
-effect eStun1 = EffectParalyze();
-//For Damage
-if(shield = BASE_ITEM_LARGESHIELD)
-{nDam = d6(9)+ nStrength ;
-nSize = 2;}
-else if (shield = BASE_ITEM_TOWERSHIELD)
-{nDam = d6(12)+ nStrength;
-nSize = 4;}
-else if (shield = BASE_ITEM_SMALLSHIELD)
-{nDam = d6(6)+ nStrength;
-nSize = 1;}
-nTotal = nSize + ((nStrength)/2);
-nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
-if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC))
-{
-nDam = nDam + d6(3);
-nSaveDC = nSaveDC +4;
-}
-effect eHurt = EffectDamage(nDam,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
-int iHit = AttemptMeleeAttackMainHand(oPC, oTarget,"Shield Bash",1, "*shieldbash", 0, nSpell);
-float fDur = RoundsToSeconds(nSaveDC);
-if(iHit >0)
-{
- ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
- 
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
-{
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun1,oTarget,fDur);
-
-}
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-DoWildMagic(oPC, oTarget, GetSpellId());
-			
-
-}
-
-if (iHit == 2)
-{
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
-
-if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
-DoWildMagic(oPC, oTarget, GetSpellId());
-			
-
-if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE))
-{
-ApplyEffectToObject(DURATION_TYPE_INSTANT,eStun,oTarget,fDur);
-
-}
-
-}
+	nDam += nStrength;
+	nTotal = nSize + ((nStrength)/2);
+	nSaveDC = 10 +(GetBaseAttackBonus(oPC)/2) + nTotal;
+	if (GetHasFeat(FEAT_IMPROVED_SHIELDBASH,oPC)){
+		nDam += d6(3);
+		nSaveDC += 4;
+	}
+	
+	effect eStun = EffectCutsceneParalyze();
+	effect eStun1 = EffectParalyze();
+	effect eHurt = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
+	int iHit = AttemptMeleeAttackMainHand(oPC, oTarget, "Shield Bash", 1, "*shieldbash", 0, nSpell);
+	float fDur = RoundsToSeconds(nSaveDC);
+	if(iHit > 0){
+		if (iHit == 2) nDam *= 2;
+		effect eHurt = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+		if(!FortitudeSave(oTarget,nSaveDC,SAVING_THROW_TYPE_NONE)){
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun1, oTarget, fDur);
+		}
+		if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
+			DoWildMagic(oPC, oTarget, GetSpellId());
+	}
 }
 
 

@@ -16,19 +16,12 @@
 */
 
 // JLR-OEI 03/16/06: For GDD Update
-
 #include "x2_inc_spellhook"
 
 void main(){
-	object oAOE = OBJECT_SELF;
 	object oCaster = GetAreaOfEffectCreator();
 	
-	int nId = GetLocalInt(oAOE, "LightSpellId");
-	if (nId == FALSE){
-		nId = GetLocalInt(oCaster, "LightSpellId");
-		if (nId == FALSE) nId = SPELL_LIGHT;
-		SetLocalInt(oAOE, "LightSpellId", nId);
-	}
+	struct dSpellData data = GetSpellDataForAoE("Light", oCaster);
 	
-    PS_RemoveEffects(GetExitingObject(), nId, NULL, oCaster);
+    PS_RemoveEffects(GetExitingObject(), data.nId, NULL, oCaster);
 }

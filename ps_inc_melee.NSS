@@ -416,7 +416,36 @@ int SneakAttackCount(object oPC)
 
 	return sneak;
 }
+// Rewrote because was not differentiating between conceal vs ranged or melee or both
+// -Flatted Fifth, July 31, 2025
+int ConcealmentCheck(object oTarget, int bRanged){
 
+	int nVs; int nCurrentAmnt; int nConceal;
+	// get self conceal feats
+	if(GetHasFeat(752, oTarget)) nConceal = 50;	
+	else if(GetHasFeat(751, oTarget)) nConceal = 40;
+	else if(GetHasFeat(750, oTarget)) nConceal = 30;
+	else if(GetHasFeat(749, oTarget)) nConceal = 20;
+	else if(GetHasFeat(748, oTarget)) nConceal = 10;
+	else nConceal = 0;
+	
+	effect eConceal = GetFirstEffect(oTarget);
+	while (GetIsEffectValid(eConceal)){
+		if(GetEffectType(eConceal) == EFFECT_TYPE_CONCEALMENT){
+			nCurrentAmnt = GetEffectInteger(eConceal, 0); // get amount of conceal of this effect
+			nVs = GetEffectInteger(eConceal, 1); // get whether vs melee, ranged, or all
+			if ((nVs == MISS_CHANCE_TYPE_NORMAL) || //if the conceal is vs all
+				(bRanged && nVs == MISS_CHANCE_TYPE_VS_RANGED) || // or we use ranged & its vs ranged
+				(!bRanged && nVs == MISS_CHANCE_TYPE_VS_MELEE)){ // or we use melee & its vs melee
+					if (nCurrentAmnt > nConceal) nConceal = nCurrentAmnt; // we use the highest current conceal
+			}
+		}
+		eConceal = GetNextEffect(oTarget);
+	}
+	return nConceal;
+}
+
+/* original code
 int ConcealmentCheck(object oTarget, int ranged)
 {
 	int conceal; int IntAmt; int iConceal;
@@ -458,6 +487,7 @@ int ConcealmentCheck(object oTarget, int ranged)
 	
 	return conceal;	
 }
+*/
 
 int InvisibilityCheck(object oTarget)
 {
@@ -1174,9 +1204,14 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	int nFeatId = StringToInt(Get2DAString("spells", "FeatID", nSpellID));
 	
 	int bWeaponRange = TRUE;
+	int bShieldFinesse = FALSE;
+	//do not add main hand base weapon pref attack distance if shield bash
 	if (nSpellID == SPELLFEAT_SHIELDBASH || nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE ||
 		nSpellID == SPELLFEAT_SHIELDTHROW || nSpellID == SPELLFEAT_ARCANEBASH){
 		bWeaponRange = FALSE;
+		if (GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oAttacker)) == BASE_ITEM_SMALLSHIELD ||
+			nSpellID == SPELLFEAT_AGILE_SHIELDSTRIKE)
+				bShieldFinesse = TRUE;
 	}
 	
 	if (!PS_GetTargetInRange(oAttacker, oTarget, nFeatId, bWeaponRange)){
@@ -1260,6 +1295,15 @@ int AttemptMeleeAttackMainHand(object oAttacker, object oTarget, string abilityn
 	if(GetLevelByClass(CLASS_TYPE_RANGER,oAttacker) > 0 && GetIsRangerFavored(oAttacker, oTarget))
 	{
 		iAttackerAB = iAttackerAB + CalculateRangerBonus(oAttacker);
+	}
+	// use dex mod, if higher, if shield bashing with a light shield or agile bash
+	// regardless of whether main hand weapon is finessable
+	if (bShieldFinesse){
+		if (!GetIsFinessable(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oAttacker))){
+			int nStr = GetAbilityModifier(ABILITY_STRENGTH, oAttacker);
+			int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oAttacker);
+			if (nDex > nStr) iAttackerAB += nDex - nStr;
+		}
 	}
 	
 	int iAttack = roll + iAttackerAB; int confirmationRoll; int confirmationTotal;

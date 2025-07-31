@@ -1,5 +1,5 @@
 NDB V1.0
-0000057 0000016 0003220 0000110 0000315
+0000057 0000017 0003222 0000110 0000319
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -8,43 +8,43 @@ n04 x0_i0_enemy
 n05 x0_inc_generic
 n06 nwn2_inc_talent
 n07 nw_i0_generic
-n08 x2_inc_craft
-n09 x0_i0_stringlib
-n10 ginc_param_const
-n11 ginc_crafting
-n12 class_mageslayer_utils
-n13 ServerExts
-n14 x0_i0_petrify
-n15 nwnx_sql
-n16 x0_i0_position
-n17 x0_i0_match
-n18 x2_inc_itemprop
-n19 ps_inc_ecl
-n20 ps_inc_casterlevel
-n21 nwnx_dae
-n22 x2_inc_switches
-n23 x0_i0_assoc
-n24 NW_I0_SPELLS
-n25 x0_i0_partywide
-n26 x0_i0_transport
-n27 x0_i0_common
-n28 nw_i0_plot
-n29 x0_i0_behavior
-n30 x0_i0_modes
-n31 x0_i0_voice
-n32 x0_i0_debug
-n33 x0_i0_equip
-n34 ginc_2da
-n35 ginc_event_handlers
-n36 x0_i0_talent
-n37 x0_i0_combat
-n38 x0_i0_spawncond
-n39 x0_i0_walkway
-n40 x0_i0_anims
-n41 x0_i0_henchman
-n42 ps_adjust_knight
-n43 nwn2_inc_metmag
-n44 X0_I0_SPELLS
+n08 X0_I0_SPELLS
+n09 x2_inc_craft
+n10 x0_i0_stringlib
+n11 ginc_param_const
+n12 ginc_crafting
+n13 class_mageslayer_utils
+n14 ServerExts
+n15 x0_i0_petrify
+n16 nwnx_sql
+n17 x0_i0_position
+n18 x0_i0_match
+n19 x2_inc_itemprop
+n20 ps_inc_ecl
+n21 ps_inc_casterlevel
+n22 nwnx_dae
+n23 x2_inc_switches
+n24 x0_i0_assoc
+n25 NW_I0_SPELLS
+n26 x0_i0_partywide
+n27 x0_i0_transport
+n28 x0_i0_common
+n29 nw_i0_plot
+n30 x0_i0_behavior
+n31 x0_i0_modes
+n32 x0_i0_voice
+n33 x0_i0_debug
+n34 x0_i0_equip
+n35 ginc_2da
+n36 ginc_event_handlers
+n37 x0_i0_talent
+n38 x0_i0_combat
+n39 x0_i0_spawncond
+n40 x0_i0_walkway
+n41 x0_i0_anims
+n42 x0_i0_henchman
+n43 ps_adjust_knight
+n44 nwn2_inc_metmag
 n45 ginc_vars
 n46 ginc_math
 n47 ginc_item
@@ -124,6 +124,11 @@ sf i nMagicOld
 sf i nStealth
 sf i bScaredOfSilence
 sf i bTacticChosen
+s 04 dSpellData
+sf i nId
+sf i nClass
+sf i nCL
+sf i nDC
 s 05 craft_struct
 sf i nRow
 sf s sResRef
@@ -4515,6 +4520,13 @@ f ffffffff ffffffff 001 f ApplyMetamagicDurationMods
 fp f
 f ffffffff ffffffff 001 i ApplyMetamagicDurationTypeMods
 fp i
+f ffffffff ffffffff 003 v StoreSpellDataForAoE
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 t0009 GetSpellDataForAoE
+fp s
+fp o
 f ffffffff ffffffff 003 i FF_GetSpellSaveDC
 fp o
 fp i
@@ -4782,7 +4794,7 @@ fp o
 f ffffffff ffffffff 002 i CIGetIsSpellRestrictedFromCraftFeat
 fp i
 fp i
-f ffffffff ffffffff 003 t0009 CIGetCraftItemStructFrom2DA
+f ffffffff ffffffff 003 t0010 CIGetCraftItemStructFrom2DA
 fp s
 fp i
 fp i
@@ -4824,7 +4836,7 @@ fp i
 fp o
 fp o
 fp i
-f ffffffff ffffffff 003 t0010 CIGetCraftingModeFromTarget
+f ffffffff ffffffff 003 t0011 CIGetCraftingModeFromTarget
 fp o
 fp o
 fp o
@@ -4860,15 +4872,15 @@ fp i
 f ffffffff ffffffff 002 i CIGetWeaponModificationCost
 fp o
 fp o
-f ffffffff ffffffff 002 t0011 GetStringTokenizer
+f ffffffff ffffffff 002 t0012 GetStringTokenizer
 fp s
 fp s
 f ffffffff ffffffff 001 i HasMoreTokens
-fp t0011
-f ffffffff ffffffff 001 t0011 AdvanceToNextToken
-fp t0011
+fp t0012
+f ffffffff ffffffff 001 t0012 AdvanceToNextToken
+fp t0012
 f ffffffff ffffffff 001 s GetNextToken
-fp t0011
+fp t0012
 f ffffffff ffffffff 002 i GetNumberTokens
 fp s
 fp s
@@ -4876,7 +4888,7 @@ f ffffffff ffffffff 003 s GetTokenByPosition
 fp s
 fp s
 fp i
-f ffffffff ffffffff 002 t0012 GetFirstAlpha
+f ffffffff ffffffff 002 t0013 GetFirstAlpha
 fp s
 fp s
 f ffffffff ffffffff 003 s RemoveListElement
@@ -5206,7 +5218,7 @@ f ffffffff ffffffff 001 i GetSkillConstant
 fp i
 f ffffffff ffffffff 001 o GetSoundObjectByTag
 fp s
-f ffffffff ffffffff 002 t0013 GetNameValuePairStruct
+f ffffffff ffffffff 002 t0014 GetNameValuePairStruct
 fp s
 fp s
 f ffffffff ffffffff 002 s GetNVPValue
@@ -5459,7 +5471,7 @@ fp s
 fp s
 fp s
 fp o
-f ffffffff ffffffff 001 t0014 GetRowIndexes
+f ffffffff ffffffff 001 t0015 GetRowIndexes
 fp s
 f ffffffff ffffffff 004 i GetCrafting2DARecipeMatch
 fp s
@@ -5561,7 +5573,7 @@ f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_SCROLL_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_WAND_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_BUFFS
 f ffffffff ffffffff 000 i B_USE_VFX_FOR_MS_FAIL
-f ffffffff ffffffff 001 t0015 GetMageSlayerUsageData
+f ffffffff ffffffff 001 t0016 GetMageSlayerUsageData
 fp o
 f ffffffff ffffffff 002 i GetSpellIsHostile
 fp i
@@ -6318,31 +6330,35 @@ l07 0000210 00000078 00000078
 l07 0000211 00000078 00000078
 l07 0000213 00000078 00000078
 l07 0000214 00000078 00000078
-l08 0000077 00000078 00000078
-l08 0000078 00000078 00000078
-l08 0000079 00000078 00000078
-l08 0000080 00000078 00000078
-l08 0000081 00000078 00000078
-l08 0000086 00000078 00000078
-l08 0000087 00000078 00000078
-l08 0000088 00000078 00000078
-l09 0000021 00000078 00000078
-l09 0000022 00000078 00000078
-l09 0000023 00000078 00000078
-l09 0000024 00000078 00000078
-l09 0000025 00000078 00000078
-l09 0000031 00000078 00000078
-l09 0000032 00000078 00000078
-l10 0000055 00000078 00000078
-l10 0000056 00000078 00000078
-l11 0000164 00000078 00000078
-l11 0000165 00000078 00000078
-l11 0000166 00000078 00000078
-l12 0000069 00000078 00000078
-l12 0000070 00000078 00000078
-l12 0000071 00000078 00000078
-l12 0000072 00000078 00000078
-l12 0000073 00000078 00000078
+l08 0000044 00000078 00000078
+l08 0000045 00000078 00000078
+l08 0000046 00000078 00000078
+l08 0000047 00000078 00000078
+l09 0000077 00000078 00000078
+l09 0000078 00000078 00000078
+l09 0000079 00000078 00000078
+l09 0000080 00000078 00000078
+l09 0000081 00000078 00000078
+l09 0000086 00000078 00000078
+l09 0000087 00000078 00000078
+l09 0000088 00000078 00000078
+l10 0000021 00000078 00000078
+l10 0000022 00000078 00000078
+l10 0000023 00000078 00000078
+l10 0000024 00000078 00000078
+l10 0000025 00000078 00000078
+l10 0000031 00000078 00000078
+l10 0000032 00000078 00000078
+l11 0000055 00000078 00000078
+l11 0000056 00000078 00000078
+l12 0000164 00000078 00000078
+l12 0000165 00000078 00000078
+l12 0000166 00000078 00000078
+l13 0000069 00000078 00000078
+l13 0000070 00000078 00000078
+l13 0000071 00000078 00000078
+l13 0000072 00000078 00000078
+l13 0000073 00000078 00000078
 l56 0000009 0000008a 0000008f
 l56 0000010 0000008f 000000b0
 l56 0000011 000000b6 000000e0
@@ -6439,17 +6455,17 @@ l02 0002702 00000aed 00000af5
 l02 0002628 00000af5 00000b19
 l02 0002631 00000b19 00000b4e
 l02 0002667 00000b4e 00000b56
-l19 0000024 00000b56 00000b63
-l19 0000025 00000b63 00000b91
-l19 0000026 00000b91 00000b93
-l19 0000027 00000b93 00000b95
-l19 0000028 00000b95 00000ba9
-l19 0000029 00000bbf 00000be2
-l19 0000030 00000be2 00000bf2
-l19 0000031 00000bf8 00000c37
-l19 0000028 00000c37 00000c4b
-l19 0000034 00000c51 00000c6d
-l19 0000035 00000c73 00000c7b
+l20 0000024 00000b56 00000b63
+l20 0000025 00000b63 00000b91
+l20 0000026 00000b91 00000b93
+l20 0000027 00000b93 00000b95
+l20 0000028 00000b95 00000ba9
+l20 0000029 00000bbf 00000be2
+l20 0000030 00000be2 00000bf2
+l20 0000031 00000bf8 00000c37
+l20 0000028 00000c37 00000c4b
+l20 0000034 00000c51 00000c6d
+l20 0000035 00000c73 00000c7b
 l02 0000455 00000c7b 00000caa
 l02 0000456 00000caa 00000cb2
 l02 0002735 00000cb2 00000cb8
@@ -6489,12 +6505,12 @@ l02 0002800 0000107a 00001087
 l02 0002801 000010bf 000010c1
 l02 0002802 000010dd 000010f6
 l02 0002803 000010fc 00001104
-l15 0000154 00001104 0000112a
-l15 0000155 0000112a 00001132
-l15 0000159 00001132 00001169
-l15 0000160 00001169 00001171
-l15 0000164 00001171 000011b0
-l15 0000165 000011b0 000011b8
+l16 0000154 00001104 0000112a
+l16 0000155 0000112a 00001132
+l16 0000159 00001132 00001169
+l16 0000160 00001169 00001171
+l16 0000164 00001171 000011b0
+l16 0000165 000011b0 000011b8
 l02 0004626 000011b8 000011e6
 l02 0004627 000011ec 00001206
 l02 0004630 00001206 00001241

@@ -1,5 +1,5 @@
 NDB V1.0
-0000050 0000016 0003047 0000042 0000183
+0000050 0000017 0003049 0000042 0000187
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -7,30 +7,30 @@ n03 x2_inc_craft
 n04 x0_i0_stringlib
 n05 ginc_param_const
 n06 ginc_crafting
-n07 class_mageslayer_utils
-n08 x0_i0_campaign
-n09 x0_i0_enemy
-n10 x0_inc_generic
-n11 nwn2_inc_talent
-n12 nw_i0_generic
-n13 x0_i0_match
-n14 x2_inc_switches
-n15 x2_inc_itemprop
-n16 x0_i0_petrify
-n17 x0_i0_assoc
-n18 ServerExts
-n19 nwnx_sql
-n20 x0_i0_position
-n21 ps_inc_ecl
-n22 ps_inc_casterlevel
-n23 nwnx_dae
-n24 nw_i0_spells
-n25 ginc_2da
-n26 ginc_vars
-n27 ginc_math
-n28 ginc_item
-n29 nw_i0_plot
-n30 x2_inc_spellhook
+n07 x0_i0_campaign
+n08 x0_i0_enemy
+n09 x0_inc_generic
+n10 nwn2_inc_talent
+n11 nw_i0_generic
+n12 x0_i0_spells
+n13 class_mageslayer_utils
+n14 x0_i0_match
+n15 x2_inc_switches
+n16 x2_inc_itemprop
+n17 x0_i0_petrify
+n18 x0_i0_assoc
+n19 ServerExts
+n20 nwnx_sql
+n21 x0_i0_position
+n22 ps_inc_ecl
+n23 ps_inc_casterlevel
+n24 nwnx_dae
+n25 nw_i0_spells
+n26 ginc_2da
+n27 ginc_vars
+n28 ginc_math
+n29 ginc_item
+n30 nw_i0_plot
 n31 x0_i0_partywide
 n32 x0_i0_transport
 n33 x0_i0_common
@@ -48,7 +48,7 @@ n44 x0_i0_anims
 n45 x0_i0_henchman
 n46 ps_adjust_knight
 n47 nwn2_inc_metmag
-n48 X0_I0_SPELLS
+n48 x2_inc_spellhook
 N49 nw_s0_invspha
 s 03 vector
 sf f x
@@ -109,12 +109,6 @@ s 03 IntVector
 sf i x
 sf i y
 sf i z
-s 05 ItemUsage
-sf i nPotionUse
-sf i nTrinketUse
-sf i nScrollUse
-sf i nWandUse
-sf i nBuffs
 s 10 sEnemies
 sf i FIGHTERS
 sf i FIGHTER_LEVELS
@@ -149,6 +143,17 @@ sf i nMagicOld
 sf i nStealth
 sf i bScaredOfSilence
 sf i bTacticChosen
+s 04 dSpellData
+sf i nId
+sf i nClass
+sf i nCL
+sf i nDC
+s 05 ItemUsage
+sf i nPotionUse
+sf i nTrinketUse
+sf i nScrollUse
+sf i nWandUse
+sf i nBuffs
 f ffffffff ffffffff 000 i POST_COLOR_RED
 f ffffffff ffffffff 000 i POST_COLOR_GREEN
 f ffffffff ffffffff 000 i POST_COLOR_BLUE
@@ -3980,101 +3985,6 @@ f ffffffff ffffffff 003 i GetMaxProperties
 fp o
 fp i
 fp o
-f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE
-f ffffffff ffffffff 000 i MAGE_SLAYER_NORMAL
-f ffffffff ffffffff 000 i MAGE_SLAYER_ANTI_ARCANE
-f ffffffff ffffffff 000 i MAGE_SLAYER_ANTI_DIVINE
-f ffffffff ffffffff 000 i CLASS_TYPE_MAGE_SLAYER
-f ffffffff ffffffff 000 i SPELL_ID_MAGE_SLAYER_TYPE
-f ffffffff ffffffff 000 i MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS
-f ffffffff ffffffff 000 s S_ACTIVATED_POTION_IDENTIFIER
-f ffffffff ffffffff 000 i N_NONE
-f ffffffff ffffffff 000 i N_HEALING_ONLY
-f ffffffff ffffffff 000 i N_DIVINE
-f ffffffff ffffffff 000 i N_ARCANE
-f ffffffff ffffffff 000 i N_ARCANE_AND_HEALING
-f ffffffff ffffffff 000 i N_ANY
-f ffffffff ffffffff 000 i N_NORMAL_MS_POTION_USE
-f ffffffff ffffffff 000 i N_NORMAL_MS_TRINKET_USE
-f ffffffff ffffffff 000 i N_NORMAL_MS_SCROLL_USE
-f ffffffff ffffffff 000 i N_NORMAL_MS_WAND_USE
-f ffffffff ffffffff 000 i N_NORMAL_MS_BUFFS
-f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_POTION_USE
-f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_TRINKET_USE
-f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_SCROLL_USE
-f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_WAND_USE
-f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_BUFFS
-f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_POTION_USE
-f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_TRINKET_USE
-f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_SCROLL_USE
-f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_WAND_USE
-f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_BUFFS
-f ffffffff ffffffff 000 i B_USE_VFX_FOR_MS_FAIL
-f ffffffff ffffffff 001 t0009 GetMageSlayerUsageData
-fp o
-f ffffffff ffffffff 002 i GetSpellIsHostile
-fp i
-fp o
-f ffffffff ffffffff 001 v MageSlayerLevels
-fp o
-f ffffffff ffffffff 001 i GetSpellIsDivine
-fp i
-f ffffffff ffffffff 001 i GetSpellIsArcane
-fp i
-f ffffffff ffffffff 002 i GetSpellIsHealing
-fp i
-fp o
-f ffffffff ffffffff 001 i GetMageSlayerAllowedSpecificItems
-fp o
-f ffffffff ffffffff 001 i GetMageSlayerType
-fp o
-f ffffffff ffffffff 003 i GetMageSlayerItemOrSpell
-fp o
-fp o
-fp i
-f ffffffff ffffffff 005 i GetBypassMageSlayerRestriction
-fp o
-fp o
-fp o
-fp i
-fp i
-f ffffffff ffffffff 001 v SetMageSlayerSpecialItemBoolean
-fp o
-f ffffffff ffffffff 002 v CheckMakeItemUseableForMageSlayer
-fp o
-fp o
-f ffffffff ffffffff 002 i GetItemUseableByClass
-fp i
-fp o
-f ffffffff ffffffff 001 i GetItemUsuableByDivine
-fp o
-f ffffffff ffffffff 001 i GetItemUsuableByArcane
-fp o
-f ffffffff ffffffff 002 i GetIsActivated
-fp o
-fp i
-f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
-f ffffffff ffffffff 004 v PS_RemoveEffects
-fp o
-fp i
-fp i
-fp o
-f ffffffff ffffffff 002 i PS_GetHasEffectById
-fp o
-fp i
-f ffffffff ffffffff 000 i X2UseMagicDeviceCheck
-f ffffffff ffffffff 001 i X2GetSpellCastOnSequencerItem
-fp o
-f ffffffff ffffffff 000 i X2RunUserDefinedSpellScript
-f ffffffff ffffffff 001 i GetSkipByRestoration
-fp i
-f ffffffff ffffffff 001 i X2CastOnItemWasAllowed
-fp o
-f ffffffff ffffffff 000 v X2BreakConcentrationSpells
-f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
-fp o
-f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
-f ffffffff ffffffff 000 i X2PreSpellCastCode
 f ffffffff ffffffff 000 s GetCampaignDBName
 f ffffffff ffffffff 003 v SetCampaignDBString
 fp o
@@ -4499,12 +4409,12 @@ fp i
 f ffffffff ffffffff 002 o GetNearestSeenFriend
 fp o
 fp i
-f ffffffff ffffffff 002 t0011 CountEnemiesAndAllies
+f ffffffff ffffffff 002 t0010 CountEnemiesAndAllies
 fp f
 fp o
-f ffffffff ffffffff 000 t0010 DetermineEnemies
+f ffffffff ffffffff 000 t0009 DetermineEnemies
 f ffffffff ffffffff 001 s GetMostDangerousClass
-fp t0010
+fp t0009
 f ffffffff ffffffff 001 i GetIsMeleeAttacker
 fp o
 f ffffffff ffffffff 001 i GetIsRangedAttacker
@@ -4647,7 +4557,7 @@ f ffffffff ffffffff 000 i GetCRMax
 f ffffffff ffffffff 002 i bkEvaluationSanityCheck
 fp o
 fp f
-f ffffffff ffffffff 002 t0012 TalentSpellFilter
+f ffffffff ffffffff 002 t0011 TalentSpellFilter
 fp e3
 fp o
 f ffffffff ffffffff 003 i TalentFilter
@@ -4725,10 +4635,10 @@ fp o
 f ffffffff ffffffff 002 e3 MyGetCreatureTalent
 fp i
 fp i
-f ffffffff ffffffff 002 t0013 GetBestEldritchAOETarget
+f ffffffff ffffffff 002 t0012 GetBestEldritchAOETarget
 fp i
 fp f
-f ffffffff ffffffff 001 t0014 GetBestEldritchShape
+f ffffffff ffffffff 001 t0013 GetBestEldritchShape
 fp o
 f ffffffff ffffffff 001 i GetInvocationSpellFromMetamagic
 fp i
@@ -5207,7 +5117,7 @@ f ffffffff ffffffff 001 i GetHPPercentage
 fp o
 f ffffffff ffffffff 001 i GetCastingMode
 fp i
-f ffffffff ffffffff 007 t0015 CreateTactics
+f ffffffff ffffffff 007 t0014 CreateTactics
 fp i
 fp i
 fp i
@@ -5219,20 +5129,20 @@ f ffffffff ffffffff 003 i TryClassTactic
 fp o
 fp i
 fp i
-f ffffffff ffffffff 004 t0015 CalculateTacticsByClass
-fp t0015
+f ffffffff ffffffff 004 t0014 CalculateTacticsByClass
+fp t0014
 fp o
 fp i
 fp i
-f ffffffff ffffffff 006 t0015 CalculateTactics
-fp t0015
+f ffffffff ffffffff 006 t0014 CalculateTactics
+fp t0014
 fp o
 fp f
 fp i
 fp i
 fp i
 f ffffffff ffffffff 007 i DetermineActionFromTactics
-fp t0015
+fp t0014
 fp o
 fp f
 fp i
@@ -5449,6 +5359,13 @@ f ffffffff ffffffff 001 f ApplyMetamagicDurationMods
 fp f
 f ffffffff ffffffff 001 i ApplyMetamagicDurationTypeMods
 fp i
+f ffffffff ffffffff 003 v StoreSpellDataForAoE
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 t0015 GetSpellDataForAoE
+fp s
+fp o
 f ffffffff ffffffff 003 i FF_GetSpellSaveDC
 fp o
 fp i
@@ -5619,6 +5536,101 @@ fp o
 fp i
 f ffffffff ffffffff 001 i GZCanNotUseGazeAttackCheck
 fp o
+f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE
+f ffffffff ffffffff 000 i MAGE_SLAYER_NORMAL
+f ffffffff ffffffff 000 i MAGE_SLAYER_ANTI_ARCANE
+f ffffffff ffffffff 000 i MAGE_SLAYER_ANTI_DIVINE
+f ffffffff ffffffff 000 i CLASS_TYPE_MAGE_SLAYER
+f ffffffff ffffffff 000 i SPELL_ID_MAGE_SLAYER_TYPE
+f ffffffff ffffffff 000 i MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS
+f ffffffff ffffffff 000 s S_ACTIVATED_POTION_IDENTIFIER
+f ffffffff ffffffff 000 i N_NONE
+f ffffffff ffffffff 000 i N_HEALING_ONLY
+f ffffffff ffffffff 000 i N_DIVINE
+f ffffffff ffffffff 000 i N_ARCANE
+f ffffffff ffffffff 000 i N_ARCANE_AND_HEALING
+f ffffffff ffffffff 000 i N_ANY
+f ffffffff ffffffff 000 i N_NORMAL_MS_POTION_USE
+f ffffffff ffffffff 000 i N_NORMAL_MS_TRINKET_USE
+f ffffffff ffffffff 000 i N_NORMAL_MS_SCROLL_USE
+f ffffffff ffffffff 000 i N_NORMAL_MS_WAND_USE
+f ffffffff ffffffff 000 i N_NORMAL_MS_BUFFS
+f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_POTION_USE
+f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_TRINKET_USE
+f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_SCROLL_USE
+f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_WAND_USE
+f ffffffff ffffffff 000 i N_ANTI_ARCANE_MS_BUFFS
+f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_POTION_USE
+f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_TRINKET_USE
+f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_SCROLL_USE
+f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_WAND_USE
+f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_BUFFS
+f ffffffff ffffffff 000 i B_USE_VFX_FOR_MS_FAIL
+f ffffffff ffffffff 001 t0016 GetMageSlayerUsageData
+fp o
+f ffffffff ffffffff 002 i GetSpellIsHostile
+fp i
+fp o
+f ffffffff ffffffff 001 v MageSlayerLevels
+fp o
+f ffffffff ffffffff 001 i GetSpellIsDivine
+fp i
+f ffffffff ffffffff 001 i GetSpellIsArcane
+fp i
+f ffffffff ffffffff 002 i GetSpellIsHealing
+fp i
+fp o
+f ffffffff ffffffff 001 i GetMageSlayerAllowedSpecificItems
+fp o
+f ffffffff ffffffff 001 i GetMageSlayerType
+fp o
+f ffffffff ffffffff 003 i GetMageSlayerItemOrSpell
+fp o
+fp o
+fp i
+f ffffffff ffffffff 005 i GetBypassMageSlayerRestriction
+fp o
+fp o
+fp o
+fp i
+fp i
+f ffffffff ffffffff 001 v SetMageSlayerSpecialItemBoolean
+fp o
+f ffffffff ffffffff 002 v CheckMakeItemUseableForMageSlayer
+fp o
+fp o
+f ffffffff ffffffff 002 i GetItemUseableByClass
+fp i
+fp o
+f ffffffff ffffffff 001 i GetItemUsuableByDivine
+fp o
+f ffffffff ffffffff 001 i GetItemUsuableByArcane
+fp o
+f ffffffff ffffffff 002 i GetIsActivated
+fp o
+fp i
+f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
+f ffffffff ffffffff 004 v PS_RemoveEffects
+fp o
+fp i
+fp i
+fp o
+f ffffffff ffffffff 002 i PS_GetHasEffectById
+fp o
+fp i
+f ffffffff ffffffff 000 i X2UseMagicDeviceCheck
+f ffffffff ffffffff 001 i X2GetSpellCastOnSequencerItem
+fp o
+f ffffffff ffffffff 000 i X2RunUserDefinedSpellScript
+f ffffffff ffffffff 001 i GetSkipByRestoration
+fp i
+f ffffffff ffffffff 001 i X2CastOnItemWasAllowed
+fp o
+f ffffffff ffffffff 000 v X2BreakConcentrationSpells
+f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
+fp o
+f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
+f ffffffff ffffffff 000 i X2PreSpellCastCode
 f 0000008a 0000015f 000 v main
 f 0000000d 00000015 000 v #loader
 f 00000015 0000008a 000 v #globals
@@ -5713,41 +5725,45 @@ l05 0000056 00000048 00000048
 l06 0000164 00000048 00000048
 l06 0000165 00000048 00000048
 l06 0000166 00000048 00000048
-l07 0000069 00000048 00000048
-l07 0000070 00000048 00000048
-l07 0000071 00000048 00000048
-l07 0000072 00000048 00000048
-l07 0000073 00000048 00000048
-l08 0000051 00000048 00000062
-l08 0000053 00000062 00000078
-l09 0000042 00000078 00000078
-l09 0000043 00000078 00000078
-l09 0000044 00000078 00000078
-l09 0000045 00000078 00000078
-l09 0000046 00000078 00000078
-l09 0000047 00000078 00000078
-l09 0000048 00000078 00000078
-l09 0000049 00000078 00000078
-l09 0000050 00000078 00000078
-l09 0000051 00000078 00000078
-l09 0000058 00000078 00000078
-l09 0000059 00000078 00000078
-l09 0000060 00000078 00000078
-l09 0000061 00000078 00000078
-l10 0000086 00000078 00000078
-l10 0000088 00000078 00000078
-l10 0000089 00000078 00000078
-l11 0000023 00000078 00000078
-l11 0000024 00000078 00000078
-l11 0000029 00000078 00000078
-l11 0000030 00000078 00000078
-l12 0000207 00000078 00000078
-l12 0000208 00000078 00000078
-l12 0000209 00000078 00000078
-l12 0000210 00000078 00000078
-l12 0000211 00000078 00000078
-l12 0000213 00000078 00000078
-l12 0000214 00000078 00000078
+l07 0000051 00000048 00000062
+l07 0000053 00000062 00000078
+l08 0000042 00000078 00000078
+l08 0000043 00000078 00000078
+l08 0000044 00000078 00000078
+l08 0000045 00000078 00000078
+l08 0000046 00000078 00000078
+l08 0000047 00000078 00000078
+l08 0000048 00000078 00000078
+l08 0000049 00000078 00000078
+l08 0000050 00000078 00000078
+l08 0000051 00000078 00000078
+l08 0000058 00000078 00000078
+l08 0000059 00000078 00000078
+l08 0000060 00000078 00000078
+l08 0000061 00000078 00000078
+l09 0000086 00000078 00000078
+l09 0000088 00000078 00000078
+l09 0000089 00000078 00000078
+l10 0000023 00000078 00000078
+l10 0000024 00000078 00000078
+l10 0000029 00000078 00000078
+l10 0000030 00000078 00000078
+l11 0000207 00000078 00000078
+l11 0000208 00000078 00000078
+l11 0000209 00000078 00000078
+l11 0000210 00000078 00000078
+l11 0000211 00000078 00000078
+l11 0000213 00000078 00000078
+l11 0000214 00000078 00000078
+l12 0000044 00000078 00000078
+l12 0000045 00000078 00000078
+l12 0000046 00000078 00000078
+l12 0000047 00000078 00000078
+l13 0000069 00000078 00000078
+l13 0000070 00000078 00000078
+l13 0000071 00000078 00000078
+l13 0000072 00000078 00000078
+l13 0000073 00000078 00000078
 l49 0000020 0000008a 0000008f
 l49 0000021 0000008f 0000009a
 l49 0000023 0000009a 000000a5
@@ -5758,92 +5774,92 @@ l49 0000029 000000ef 0000010a
 l49 0000031 00000110 00000136
 l49 0000032 00000136 00000157
 l49 0000035 0000015d 0000015f
-l24 0000339 0000015f 00000174
-l24 0000341 0000017a 00000194
-l24 0000345 00000194 000001ac
-l24 0000346 000001ac 000001bc
-l24 0000348 000001c2 000001d8
-l24 0000349 000001d8 000001f2
-l24 0000354 000001f2 0000020d
-l24 0000356 00000213 0000022d
-l24 0000360 0000022d 0000023f
-l24 0000362 00000245 00000255
-l24 0000367 00000275 0000027b
-l24 0000369 0000027b 000002cb
-l24 0000373 000002cb 000002cb
-l24 0000376 000002cb 00000305
-l24 0000378 0000030b 0000031f
-l24 0000380 0000031f 00000325
-l24 0000382 00000325 00000325
-l24 0000384 00000325 0000034b
-l24 0000385 0000034b 00000351
-l24 0000390 00000351 00000351
-l24 0000393 00000351 0000038b
-l24 0000395 00000391 000003a5
-l24 0000397 000003a5 000003ab
-l24 0000424 000003b1 000003cd
-l24 0000425 000003d3 000003db
-l24 0001415 000003db 000003fd
-l24 0001416 000003fd 000003ff
-l24 0001417 000003ff 00000413
-l24 0001419 0000042b 00000469
-l24 0001420 00000469 0000047b
-l24 0001421 00000481 0000049d
-l24 0001417 0000049d 000004b1
-l24 0001423 000004b7 000004d1
-l24 0001424 000004d7 000004df
-l24 0001430 000004df 000004ff
-l24 0001431 000004ff 00000551
-l24 0001433 00000557 00000587
-l24 0001434 00000587 000005e7
-l24 0001435 000005e7 00000617
-l24 0001436 00000617 00000647
-l24 0001438 00000653 0000065b
-l24 0000197 0000065b 00000661
-l24 0000199 00000661 0000066e
-l24 0000200 0000066e 00000674
-l24 0000201 00000674 00000689
-l24 0000202 00000689 0000069e
-l24 0000203 0000069e 000006ce
-l24 0000205 000006d4 000006e8
-l24 0000210 000006e8 00000714
-l24 0000212 0000071a 0000072e
-l24 0000215 0000072e 00000734
-l24 0000216 00000734 00000744
-l24 0000217 00000744 00000754
-l24 0000221 00000754 00000761
-l24 0000227 00000767 00000796
-l24 0000229 0000079c 000007b0
-l24 0000231 000007b6 000007b8
-l24 0000233 000007b8 000007ca
-l24 0000235 000007d0 000007e4
-l24 0000239 000007ea 000007ec
-l24 0000243 0000083e 00000852
-l24 0000249 00000852 00000887
-l24 0000256 0000088d 000008aa
-l24 0000258 000008b0 000008c4
-l24 0000265 000008c4 000008d1
-l24 0000267 000008d7 000008f5
-l24 0000269 000008fb 0000093d
-l24 0000271 00000943 00000957
-l24 0000281 00000957 0000096c
-l24 0000283 00000972 00000986
-l24 0000285 0000098c 0000098e
-l24 0000287 000009a4 000009b8
-l24 0000289 000009be 000009c0
-l24 0000291 000009e6 000009fa
-l24 0000293 00000a00 00000a02
-l24 0000295 00000a2d 00000a41
-l24 0000297 00000a47 00000a49
-l24 0000299 00000a74 00000aac
-l24 0000301 00000ab2 00000ac6
-l24 0000304 00000ac6 00000ae2
-l24 0000305 00000ae8 00000af0
-l17 0000463 00000af0 00000afd
-l17 0000465 00000afd 00000b12
-l17 0000467 00000b18 00000b2e
-l17 0000470 00000b2e 00000b4a
-l17 0000471 00000b50 00000b58
-l14 0000502 00000b58 00000b6a
-l14 0000503 00000b6a 00000b86
-l14 0000504 00000b8c 00000b94
+l25 0000339 0000015f 00000174
+l25 0000341 0000017a 00000194
+l25 0000345 00000194 000001ac
+l25 0000346 000001ac 000001bc
+l25 0000348 000001c2 000001d8
+l25 0000349 000001d8 000001f2
+l25 0000354 000001f2 0000020d
+l25 0000356 00000213 0000022d
+l25 0000360 0000022d 0000023f
+l25 0000362 00000245 00000255
+l25 0000367 00000275 0000027b
+l25 0000369 0000027b 000002cb
+l25 0000373 000002cb 000002cb
+l25 0000376 000002cb 00000305
+l25 0000378 0000030b 0000031f
+l25 0000380 0000031f 00000325
+l25 0000382 00000325 00000325
+l25 0000384 00000325 0000034b
+l25 0000385 0000034b 00000351
+l25 0000390 00000351 00000351
+l25 0000393 00000351 0000038b
+l25 0000395 00000391 000003a5
+l25 0000397 000003a5 000003ab
+l25 0000424 000003b1 000003cd
+l25 0000425 000003d3 000003db
+l25 0001415 000003db 000003fd
+l25 0001416 000003fd 000003ff
+l25 0001417 000003ff 00000413
+l25 0001419 0000042b 00000469
+l25 0001420 00000469 0000047b
+l25 0001421 00000481 0000049d
+l25 0001417 0000049d 000004b1
+l25 0001423 000004b7 000004d1
+l25 0001424 000004d7 000004df
+l25 0001430 000004df 000004ff
+l25 0001431 000004ff 00000551
+l25 0001433 00000557 00000587
+l25 0001434 00000587 000005e7
+l25 0001435 000005e7 00000617
+l25 0001436 00000617 00000647
+l25 0001438 00000653 0000065b
+l25 0000197 0000065b 00000661
+l25 0000199 00000661 0000066e
+l25 0000200 0000066e 00000674
+l25 0000201 00000674 00000689
+l25 0000202 00000689 0000069e
+l25 0000203 0000069e 000006ce
+l25 0000205 000006d4 000006e8
+l25 0000210 000006e8 00000714
+l25 0000212 0000071a 0000072e
+l25 0000215 0000072e 00000734
+l25 0000216 00000734 00000744
+l25 0000217 00000744 00000754
+l25 0000221 00000754 00000761
+l25 0000227 00000767 00000796
+l25 0000229 0000079c 000007b0
+l25 0000231 000007b6 000007b8
+l25 0000233 000007b8 000007ca
+l25 0000235 000007d0 000007e4
+l25 0000239 000007ea 000007ec
+l25 0000243 0000083e 00000852
+l25 0000249 00000852 00000887
+l25 0000256 0000088d 000008aa
+l25 0000258 000008b0 000008c4
+l25 0000265 000008c4 000008d1
+l25 0000267 000008d7 000008f5
+l25 0000269 000008fb 0000093d
+l25 0000271 00000943 00000957
+l25 0000281 00000957 0000096c
+l25 0000283 00000972 00000986
+l25 0000285 0000098c 0000098e
+l25 0000287 000009a4 000009b8
+l25 0000289 000009be 000009c0
+l25 0000291 000009e6 000009fa
+l25 0000293 00000a00 00000a02
+l25 0000295 00000a2d 00000a41
+l25 0000297 00000a47 00000a49
+l25 0000299 00000a74 00000aac
+l25 0000301 00000ab2 00000ac6
+l25 0000304 00000ac6 00000ae2
+l25 0000305 00000ae8 00000af0
+l18 0000463 00000af0 00000afd
+l18 0000465 00000afd 00000b12
+l18 0000467 00000b18 00000b2e
+l18 0000470 00000b2e 00000b4a
+l18 0000471 00000b50 00000b58
+l15 0000502 00000b58 00000b6a
+l15 0000503 00000b6a 00000b86
+l15 0000504 00000b8c 00000b94

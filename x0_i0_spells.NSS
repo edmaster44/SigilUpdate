@@ -39,11 +39,28 @@
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_metmag"
 
-//void main(){}
+
+struct dSpellData{
+	int nId;
+	int nClass;
+	int nCL;
+	int nDC;
+};
+//store spell data on the caster so that it can be retrieved by an AoE object afterwards
+// to help correctly establish spell DC in an AoE for a cleric domain spell with FF_GetSpellSaveDC
+// and to apply metamagic mods to the AoE's internal scripts.
+// This is ONLY necessary for cleric domain spells that produce an AoE. Call this from within
+// the spell that creates the AoE, not from within the AoE's scripts. -FlattedFifth
+void StoreSpellDataForAoE(string sVarname, int nId = NULL, int nCL = NULL);
+
+//Retrieve the data saved above and apply it to the aoe object if it's not already. This is
+// ONLY necessary in the AoE on-enter, etc, scripts of cleric domain spells. -FlattedFifth
+struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_INVALID);
 
 // FF_GetSpellSaveDC does not work properly on some cleric domain spells, so this function replaces it.
 // Note that this will NOT work properly within the scripts of an AoE, only during the initial casting,
-// UNLESS you pass all the arguments yourself. -FlattedFifth
+// UNLESS you pass all the arguments yourself, which can be retrieved by the 2 functions above.
+// -FlattedFifth
 int FF_GetSpellSaveDC(object oCaster = OBJECT_INVALID, int nId = NULL, int nClass = NULL);
 
 //unlike function below, this tells you what the class is, not the level. Returns CLASS_TYPE_INVALID
@@ -166,6 +183,42 @@ void spellsDispelAoE(object oTargetAoE, object oCaster, int nCasterLevel);
 int GetIntInRange(int iVal, int iMin, int iMax);
 int GetCappedCasterLevel(int nCap);
 int CountEnemies(location lTarget, float fRadius=RADIUS_SIZE_GARGANTUAN, int nMaxEnemies=100);
+
+void StoreSpellDataForAoE(string sVarname, int nId = NULL, int nCL = NULL){
+	object oCaster = OBJECT_SELF;
+	if (nId == NULL) nId = GetSpellId();
+	if (nCL == NULL) nCL = PS_GetCasterLevel(oCaster);
+	SetLocalInt(oCaster, sVarname + "_id", nId);
+	SetLocalInt(oCaster, sVarname + "_class", GetLastSpellCastClass());
+	SetLocalInt(oCaster, sVarname + "_cl", nCL);
+}
+
+struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_INVALID){
+	
+	struct dSpellData data;
+	//if the data has already been retrieved from the caster and stored
+	// on the aoe object, get it from aoe object
+	if (GetLocalInt(OBJECT_SELF, sVarname + "_retrieved")){
+		data.nId = GetLocalInt(OBJECT_SELF, sVarname + "_id");// spell id
+		data.nClass = GetLocalInt(OBJECT_SELF, sVarname + "_class");// spell of class
+		data.nCL = GetLocalInt(OBJECT_SELF, sVarname + "_cl"); // caster level
+		data.nDC = GetLocalInt(OBJECT_SELF, sVarname + "_dc"); //save dc
+	//otherwise, get the data from the caster, store it on aoe, and
+	// set the local int on the aoe sVarname + "_retrieved" to true
+	} else {
+		if (oCaster == OBJECT_INVALID) oCaster = GetAreaOfEffectCreator();
+		data.nId = GetLocalInt(oCaster, sVarname + "_id");
+		data.nClass = GetLocalInt(oCaster, sVarname + "_class");
+		data.nCL = GetLocalInt(oCaster, sVarname + "_cl");
+		data.nDC = FF_GetSpellSaveDC(oCaster, data.nId, data.nClass);
+		SetLocalInt(OBJECT_SELF, sVarname + "_id", data.nId);
+		SetLocalInt(OBJECT_SELF, sVarname + "_class", data.nClass);
+		SetLocalInt(OBJECT_SELF, sVarname + "_cl", data.nCL);
+		SetLocalInt(OBJECT_SELF, sVarname + "_dc", data.nDC);
+		SetLocalInt(OBJECT_SELF, sVarname + "_retrieved", TRUE);
+	}
+	return data;
+}
 
 
 

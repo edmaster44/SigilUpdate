@@ -35,6 +35,7 @@
 //#include "x2_inc_itemprop" - Inherited from x2_inc_craft
 #include "x2_inc_craft"
 #include "ginc_crafting"
+#include "x0_i0_spells"
 #include "class_mageslayer_utils"
 
 

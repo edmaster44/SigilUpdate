@@ -11,23 +11,16 @@
 //:: Created By: Preston Watamaniuk
 //:: Created On: Feb 28, 2002
 //:://////////////////////////////////////////////
-
 #include "x2_inc_spellhook"
 
 void main()
 {
-	object oAOE = OBJECT_SELF;
+	
 	object oCaster = GetAreaOfEffectCreator();
 	
-	int nId = GetLocalInt(oAOE, "DarknessSpellId");
-	if (nId == FALSE){
-		nId = GetLocalInt(oCaster, "DarknessSpellId");
-		// if we still don't have a spell id, just assume normal spell id for darkness
-		if (nId == FALSE) nId = SPELL_DARKNESS;
-		SetLocalInt(oAOE, "DarknessSpellId", nId);
-	}
-		
-	PS_RemoveEffects(GetExitingObject(), nId, NULL, oCaster);
+	struct dSpellData data = GetSpellDataForAoE("Darkness", oCaster);
+	
+	PS_RemoveEffects(GetExitingObject(), data.nId, NULL, oCaster);
 }
 
 

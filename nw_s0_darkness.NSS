@@ -18,25 +18,18 @@ void main(){
 	int nLevel;
 	int nId = GetSpellId();
 	int bAbyssalDark = FALSE;
-	if (nId == SPELL_RACIAL_DARKNESS){
-		nLevel = GetHitDice(oCaster);
-		int nRace = GetSubRace(oCaster);
-		if (nRace == 14 || nRace == 194)
-		bAbyssalDark = TRUE;
-	} else if (nId == SPELLABILITY_AS_DARKNESS){
-		nLevel = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
-	} else nLevel = PS_GetCasterLevel(oCaster);
+	if (nId == SPELL_RACIAL_DARKNESS) nLevel = GetHitDice(oCaster);
+	else if (nId == SPELLABILITY_AS_DARKNESS)nLevel = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
+	else nLevel = PS_GetCasterLevel(oCaster);
+	int nDur = nLevel;
 	int nMeta = GetMetaMagicFeat();
-	if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nLevel *= 2;
-	float fDur = HoursToSeconds(nLevel);
+	if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nDur *= 2;
+	float fDur = HoursToSeconds(nDur);
 	
 	effect eAOE = EffectAreaOfEffect(AOE_PER_DARKNESS);
 	SetEffectSpellId(eAOE, nId); 
 	
-	SetLocalInt(oCaster, "DarknessSpellId", nId);
-	SetLocalInt(oCaster, "DarknessCasterLevel", nLevel);
-	SetLocalInt(oCaster, "DarknessIsAbyssal", bAbyssalDark);
-	SetLocalInt(oCaster, "DarknessMetaMagic", nMeta);
+	StoreSpellDataForAoE("Darkness", nId, nLevel);
 	
 	if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
 		nTargetType == OBJECT_TYPE_PLACEABLE || nTargetType == OBJECT_TYPE_ITEM){

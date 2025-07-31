@@ -14,84 +14,39 @@
 //:://////////////////////////////////////////////
 //:: RPGplayer1 08/29/2008: Will ignore SR check, in case of Acid Bomb (won't work otherwise)
 // Mymothersmeatloaf 6/21/2020 - Removed SR
-#include "X0_I0_SPELLS"
-#include "ps_inc_functions"
+#include "nw_s0_acidfog_inc"
 
-void main()
-{
+void main(){
 
-    //Declare major variables
-    int nMetaMagic = GetMetaMagicFeat();
-	int nCL = PS_GetCasterLevel(OBJECT_SELF);
-	int PML = GetPureMageLevels(OBJECT_SELF);
-    int nDamage = d4(nCL/3) + d4(PML/9);
-	if (nCL < 20 && !GetIsObjectValid(GetSpellCastItem())){
-	nDamage = d4(20/3) + d4(PML/9);
-	} 
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+	}
+	
+	struct dSpellData data = GetSpellDataForAoE("AcidFog", oCaster);
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
     object oTarget;
     float fDelay;
 	
-
+	int nDamage = GetAcidFogDamage(oCaster, data.nCL);
 	
-    int nIgnoreSR = FALSE;
-    if (GetTag(OBJECT_SELF) == "AOE_ACID_BOMB")
-    {
-        nIgnoreSR = TRUE;
-    }
-
-   //--------------------------------------------------------------------------
-    // GZ 2003-Oct-15
-    // When the caster is no longer there, all functions calling
-    // GetAreaOfEffectCreator will fail. Its better to remove the barrier then
-    //--------------------------------------------------------------------------
-    if (!GetIsObjectValid(GetAreaOfEffectCreator()))
-    {
-        DestroyObject(OBJECT_SELF);
-        return;
-    }
-
-
     //Start cycling through the AOE Object for viable targets including doors and placable objects.
     oTarget = GetFirstInPersistentObject(OBJECT_SELF);
-    while(GetIsObjectValid(oTarget))
-    {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-        {
-            if(MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ACID, GetAreaOfEffectCreator(), fDelay))
-            {
-                 nDamage = nDamage/2;
-            }
+    while(GetIsObjectValid(oTarget)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+            if(MySavingThrow(SAVING_THROW_FORT, oTarget, data.nDC, SAVING_THROW_TYPE_ACID, oCaster, fDelay))
+                 nDamage = nDamage / 2;
+   
+			eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
+			eDam = EffectLinkEffects(eVis, eDam);
 
-            
-        //Enter Metamagic conditions
-        if (nMetaMagic == METAMAGIC_MAXIMIZE)
-        {
-            nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
-        }
-        if (nMetaMagic == METAMAGIC_EMPOWER)
-        {
-            nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
-        }
+			fDelay = GetRandomDelay(0.4, 1.2);
+			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_ACID_FOG));
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 
-        //Set the damage effect
-        eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-		eDam = EffectLinkEffects(eVis, eDam);
-
-            fDelay = GetRandomDelay(0.4, 1.2);
-            //Fire cast spell at event for the affected target
-            SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_ACID_FOG));
-            //Spell resistance check
-           // if(nIgnoreSR || !MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
-            //{
-               //Apply damage and visuals
-                //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-           // }
         }
-        //Get next target.
         oTarget = GetNextInPersistentObject(OBJECT_SELF);
     }
 }

@@ -40,6 +40,7 @@ void main()
     //Capture the spell target location so that the AoE object can be created.
     location lTarget = GetSpellTargetLocation();
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);
+	StoreSpellDataForAoE("IncCloud", GetSpellId(), nDuration);
     if(nDuration < 1)
     {
         nDuration = 1;
@@ -50,6 +51,7 @@ void main()
 	{
 		nDuration = nDuration *2;	//Duration is +100%
 	}
+
     //Create the object at the location so that the objects scripts will start working.
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }

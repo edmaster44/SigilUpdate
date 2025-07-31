@@ -30,50 +30,21 @@ void main(){
 		object oAOE = OBJECT_SELF;
 		object oCaster = GetAreaOfEffectCreator();	
 	
-		// make sure we have the right spell id and if the id isn't set on the AoE object, 
-		// grab if from caster variable because GetSpellId() does NOT work within an aoe script
-		int nId = GetLocalInt(oAOE, "DarknessSpellId");
-		if (nId == FALSE){
-			nId = GetLocalInt(oCaster, "DarknessSpellId");
-			// if we still don't have a spell id, just assume normal spell id for darkness
-			if (nId == FALSE) nId = SPELL_DARKNESS;
-			SetLocalInt(oAOE, "DarknessSpellId", nId);
+		struct dSpellData data = GetSpellDataForAoE("Darkness", oCaster);
+		
+		int bAbyssalDark = FALSE;
+		if (data.nId == SPELL_RACIAL_DARKNESS){
+			int nRace = GetSubRace(oCaster);
+			if (nRace == 14 || nRace == 194) bAbyssalDark = TRUE;
 		}
 		
-		//now get the caster level the same way because PS_GetCasterLevel
-		//involves getting the last spell cast class, which might be different
-		//now if the caster has multiple caster classes or uses a feat or item
-		int nLevel = GetLocalInt(oAOE, "DarknessCasterLevel");
-		if (nLevel == FALSE){
-			nLevel = GetLocalInt(oCaster, "DarknessCasterLevel");
-			//minimum duration of 5 rounds
-			if (nLevel < 5) nLevel = 5;
-			SetLocalInt(oAOE, "DarknessCasterLevel", nLevel);
-		}
-		
-		
-		// find out if this was cast as a racial spell of an abyssal being
-		int bAbyssalDark = GetLocalInt(oAOE, "DarknessIsAbyssal");
-		if (bAbyssalDark == 0){// this would be the result of both a non-abyssal cast and not set
-			bAbyssalDark = GetLocalInt(oCaster, "DarknessIsAbyssal");
-			//so we'll set it to -1 if non-abyssal, to show that it is set and prevent unnecessary checks
-			if (bAbyssalDark == 0) bAbyssalDark = -1;
-			SetLocalInt(oAOE, "DarknessIsAbyssal", bAbyssalDark);
-		}
-		
-		int nMeta = GetLocalInt(oAOE, "DarknessMetaMagic");
-		if (nMeta == 0){ // this would be the result of both a no meta cast and not set
-			nMeta = GetLocalInt(oCaster, "DarknessMetaMagic");
-			//so we'll set it to -1 if no meta, to show that it is set and prevent unnecessary checks
-			if (nMeta == 0) nMeta = -1;
-			SetLocalInt(oAOE, "DarknessMetaMagic", nMeta);
-		}
-	
-		if (nMeta == METAMAGIC_EXTEND || bAbyssalDark == 1) nLevel *= 2;
-		float fDur = RoundsToSeconds(nLevel);
+		int nDur = data.nCL;
+		int nMeta = GetMetaMagicFeat();
+		if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nDur *= 2;
+		float fDur = RoundsToSeconds(nDur);
 		
 		int nBonus = 10;
-		if (nMeta  == METAMAGIC_EMPOWER || bAbyssalDark == 1) nBonus += nBonus / 2;
+		if (nMeta  == METAMAGIC_EMPOWER || bAbyssalDark) nBonus += nBonus / 2;
 		
 		//impact vfx
 		effect eHit = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
@@ -85,7 +56,7 @@ void main(){
 		
 		// determine if immune to negative effects
 		int bImmuneNeg = (GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster) ||
-			(bAbyssalDark == 1 && oTarget == oCaster)); 
+			(bAbyssalDark && oTarget == oCaster)); 
 		
 		// if not immune to negative effects, add them
 		if (!bImmuneNeg){
@@ -94,19 +65,19 @@ void main(){
 			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SPOT, nBonus), eConceal);
 		}
 
-		SetEffectSpellId(eConceal, nId); 
+		SetEffectSpellId(eConceal, data.nId); 
 		
 		if(bImmuneNeg) {// if no harmful effect, signal non-hostile cast
-			SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
+			SignalEvent(oTarget, EventSpellCastAt(oCaster, data.nId, FALSE));
 		} else {
 			// if the target is the caster or the target cannot see caster,
 			// signal non-hostile cast
 			if (oTarget == oCaster || !GetObjectSeen(oCaster, oTarget)){
-				SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, FALSE));
+				SignalEvent(oTarget, EventSpellCastAt(oCaster, data.nId, FALSE));
 			} else {
 				// if target will get neg effects and can see caster,
 				// signal hostile cast
-				SignalEvent(oTarget, EventSpellCastAt(oCaster, nId, TRUE));
+				SignalEvent(oTarget, EventSpellCastAt(oCaster, data.nId, TRUE));
 			}
 		} 
 		
