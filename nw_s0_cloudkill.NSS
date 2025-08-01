@@ -14,45 +14,27 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 
-#include "x2_inc_spellhook" 
-#include "ps_inc_functions"
+#include "nw_s0_cloudkill_inc"
 
-void main()
-{
-
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
-
-    if (!X2PreSpellCastCode())
-    {
+void main(){
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-
-
+    if (!X2PreSpellCastCode()) return;
+  
     //Declare major variables
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGKILL);
     location lTarget = GetSpellTargetLocation();
-    int nDuration = PS_GetCasterLevel(OBJECT_SELF) / 2;
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	StoreSpellDataForAoE("Cloudkill", GetSpellId(), nCL);
+	
+	
+    int nDuration = nCL / 2;
     //effect eImpact = EffectVisualEffect(258);	// no longer using NWN1 VFX
     //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpact, lTarget);	// no longer using NWN1 VFX
-    if(nDuration < 1)
-    {
-        nDuration = 1;
-    }
-    int nMetaMagic = GetMetaMagicFeat();
-        //Metamagic checks for entend
-		if (nMetaMagic == METAMAGIC_EXTEND)
-		{
-			nDuration = nDuration *2;	//Duration is +100%
-		}
+    if(nDuration < 1) nDuration = 1;
+   
+
+	if (GetMetaMagicFeat() == METAMAGIC_EXTEND) nDuration *= 2;
+		
     //Apply the AOE object to the specified location
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }

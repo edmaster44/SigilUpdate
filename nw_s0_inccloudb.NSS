@@ -13,9 +13,18 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 //:: Update Pass By: Preston W, On: July 20, 2001
+#include "nw_s0_inccloud_inc"
 
 void main()
 {
+
+
+// the movement speed decrease was previously removed by another dev
+// and without it, there is no need for an on-exit script
+
+	return;
+
+/*
 
     //Declare major variables
     //Get the object that is exiting the AOE
@@ -44,4 +53,5 @@ void main()
             eAOE = GetNextEffect(oTarget);
         }
     }
+	*/
 }

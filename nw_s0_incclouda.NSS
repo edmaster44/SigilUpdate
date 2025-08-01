@@ -12,60 +12,43 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 //:: March 2003: Removed movement speed penalty
-#include "X0_I0_SPELLS"
-#include "ps_inc_functions"
+#include "nw_s0_inccloud_inc"
 
 void main()
 {
 
     //Declare major variables
-	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-
-	int nMetaMagic = GetMetaMagicFeat();
-	int PML = GetPureMageLevels(OBJECT_SELF);
-    int nDamage;
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+    }
+	object oTarget = GetEnteringObject();
+	struct dSpellData data = GetSpellDataForAoE("IncCloud", oCaster);
+    int nDamage = GetIncCloudDamage(oCaster, data.nCL);
     effect eDam;
-    object oTarget;
+
     //Declare and assign personal impact visual effect.
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
     float fDelay;
-    //Capture the first target object in the shape.
-    oTarget = GetEnteringObject();
+    
     //Declare the spell shape, size and the location.
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-    {
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator())){
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_INCENDIARY_CLOUD));
-        //Make SR check, and appropriate saving throw(s).
-       // if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
-      //  {
-            fDelay = GetRandomDelay(0.5, 2.0);
-            //Roll damage.
-            nDamage = d6(nCasterLvl/3) + d6(PML/9);
-			if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
-			nDamage = d6(20/3) + d6(PML/9);
-			} 
-            //Enter Metamagic conditions
-                if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {
-                   nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
-                }
-                if (nMetaMagic == METAMAGIC_EMPOWER)
-                {
-                     nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
-                }
-            //Adjust damage for Reflex Save, Evasion and Improved Evasion
-            	if(MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator(), fDelay))
-         	    {
-                 nDamage = nDamage/2;
-        	    }
-            // Apply effects to the currently selected target.
-            eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-            if(nDamage > 0)
-            {
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-            }
-       // }
+      
+		fDelay = GetRandomDelay(0.5, 2.0);
+		
+		//Adjust damage for Reflex Save, Evasion and Improved Evasion
+		if(MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_FIRE, oCaster, fDelay))
+			 nDamage = nDamage/2;
+			
+		// Apply effects to the currently selected target.
+		eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
+		if(nDamage > 0)
+		{
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		}
     }
 }

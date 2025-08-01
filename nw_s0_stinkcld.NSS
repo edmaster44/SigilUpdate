@@ -14,30 +14,16 @@
 
 #include "x2_inc_spellhook" 
 
-void main()
-{
+void main(){
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-20 by Georg
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
-
-    if (!X2PreSpellCastCode())
-    {
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-
-
+    if (!X2PreSpellCastCode()) return;
+    
     //Declare major variables
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGSTINK);
     location lTarget = GetSpellTargetLocation();
     int nDuration = GetCasterLevel(OBJECT_SELF);
+	StoreSpellDataForAoE("StinkCloud", GetSpellId(), nDuration);
     //effect eImpact = EffectVisualEffect(259);
     //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpact, lTarget);
     if (nDuration < 1)

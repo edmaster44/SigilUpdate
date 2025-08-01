@@ -25,16 +25,9 @@ void main()
   check x2_inc_spellhook.nss to find out more
   
 */
-
-    if (!X2PreSpellCastCode())
-    {
 	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-
-
+    if (!X2PreSpellCastCode()) return;
+    
     //Declare major variables, including the Area of Effect object.
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGFIRE);
     //Capture the spell target location so that the AoE object can be created.
@@ -51,7 +44,6 @@ void main()
 	{
 		nDuration = nDuration *2;	//Duration is +100%
 	}
-
     //Create the object at the location so that the objects scripts will start working.
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }

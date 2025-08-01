@@ -12,78 +12,48 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 //:: Updated By: GeorgZ 2003-08-21: Now affects doors and placeables as well
-#include "X0_I0_SPELLS"
-#include "ps_inc_functions"
+#include "nw_s0_inccloud_inc"
 
 void main()
 {
 
     //Declare major variables
-	int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-	int PML = GetPureMageLevels(OBJECT_SELF);
-
+	object oCaster = GetAreaOfEffectCreator();
 	
-    int nMetaMagic = GetMetaMagicFeat();
-    int nDamage;
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+    }
+	
+	object oTarget;
+	struct dSpellData data = GetSpellDataForAoE("IncCloud", oCaster);
+    int nDamage = GetIncCloudDamage(oCaster, data.nCL);
     effect eDam;
-    object oTarget;
+
     //Declare and assign personal impact visual effect.
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
     float fDelay;
-    //Capture the first target object in the shape.
-
-    //--------------------------------------------------------------------------
-    // GZ 2003-Oct-15
-    // When the caster is no longer there, all functions calling
-    // GetAreaOfEffectCreator will fail. Its better to remove the barrier then
-    //--------------------------------------------------------------------------
-    if (!GetIsObjectValid(GetAreaOfEffectCreator()))
-    {
-        DestroyObject(OBJECT_SELF);
-        return;
-    }
-
-
-    oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-    //Declare the spell shape, size and the location.
-    while(GetIsObjectValid(oTarget))
-    {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-        {
+   
+    oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+    while(GetIsObjectValid(oTarget)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
             fDelay = GetRandomDelay(0.5, 2.0);
-            //Make SR check, and appropriate saving throw(s).
-            //if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget, fDelay))
-            //{
-                SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
-                //Roll damage.
-                nDamage = d6(nCasterLvl/3) + d6(PML/9);
-				if (nCasterLvl < 20 && !GetIsObjectValid(GetSpellCastItem()) && GetIsPC(OBJECT_SELF)){
-				nDamage = d6(20/3) + d6(PML/9);
-				} 
-                //Enter Metamagic conditions
-                if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {
-                   nDamage = nDamage + ((3*nDamage)/4);//Damage is at max
-                }
-                if (nMetaMagic == METAMAGIC_EMPOWER)
-                {
-                     nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
-                }
-                //Adjust damage for Reflex Save, Evasion and Improved Evasion
-            	if(MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator(), fDelay))
-         	    {
-                 nDamage = nDamage/2;
-        	    }
-                // Apply effects to the currently selected target.
-                eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-                if(nDamage > 0)
-                {
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                }
-           // }
+          
+			SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_INCENDIARY_CLOUD));
+			
+			//Adjust damage for Reflex Save, Evasion and Improved Evasion
+			if(MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_FIRE, oCaster, fDelay))
+				nDamage = nDamage/2;
+			
+			// Apply effects to the currently selected target.
+			eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
+			if(nDamage > 0)
+			{
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+			}
         }
         //Select the next target within the spell shape.
-        oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+        oTarget = GetNextInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     }
 }

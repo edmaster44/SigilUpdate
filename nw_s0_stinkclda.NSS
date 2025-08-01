@@ -14,9 +14,15 @@
 
 #include "X0_I0_SPELLS"
 
-void main()
-{
+void main(){
+	
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+    }
 
+	struct dSpellData data = GetSpellDataForAoE("StinkCloud", oCaster);
     //Declare major variables
     effect eStink = EffectDazed();
     effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
@@ -25,29 +31,24 @@ void main()
     //eLink = EffectLinkEffects(eLink, eDur);
 
     //effect eVis = EffectVisualEffect(VFX_IMP_DAZED_S);
-    effect eFind;
     object oTarget;
-    object oCreator;
     float fDelay;
     //Get the first object in the persistant area
     oTarget = GetEnteringObject();
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-    {
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_STINKING_CLOUD));
+        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_STINKING_CLOUD));
         //Make a SR check
-        if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
-        {
+        if(!MyResistSpell(oCaster, oTarget)){
             //Make a Fort Save
-            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_POISON))
-            {
+            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, data.nDC, SAVING_THROW_TYPE_POISON)){
                fDelay = GetRandomDelay(0.75, 1.75);
                //Apply the VFX impact and linked effects
-               if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON) == FALSE)
-               {
+			   //MySavingThrow now automatically succeeds if immune, so no need to check immunity
+               //if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON) == FALSE){
                    //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
-               }
+               //}
             }
         }
     }

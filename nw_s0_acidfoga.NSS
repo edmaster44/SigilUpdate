@@ -19,6 +19,10 @@
 void main(){
 
 	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+	}
 	object oTarget = GetEnteringObject();
 	
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){

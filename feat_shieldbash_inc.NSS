@@ -50,7 +50,6 @@ void Shield_Bash(object oPC, object oTarget, int nSpell )
 	
 	effect eStun = EffectCutsceneParalyze();
 	effect eStun1 = EffectParalyze();
-	effect eHurt = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
 	int iHit = AttemptMeleeAttackMainHand(oPC, oTarget, "Shield Bash", 1, "*shieldbash", 0, nSpell);
 	float fDur = RoundsToSeconds(nSaveDC);
 	if(iHit > 0){

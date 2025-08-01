@@ -13,36 +13,12 @@
 //:: Created On: May 17, 2001
 //:://////////////////////////////////////////////
 //:: Update Pass By: Preston W, On: July 20, 2001
+#include "nw_s0_cloudkill_inc"
 
-void main()
-{
+void main(){
 
-    //Declare major variables
-    //Get the object that is exiting the AOE
-    object oTarget = GetExitingObject();
-    int bValid = FALSE;
-    effect eAOE;
-    if(GetHasSpellEffect(SPELL_CLOUDKILL, oTarget))
-    {
-        //Search through the valid effects on the target.
-        eAOE = GetFirstEffect(oTarget);
-        while (GetIsEffectValid(eAOE) && bValid == FALSE)
-        {
-            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator())
-            {
-                if(GetEffectType(eAOE) == EFFECT_TYPE_MOVEMENT_SPEED_DECREASE)
-                {
-                    //If the effect was created by the spell then remove it
-                    if(GetEffectSpellId(eAOE) == SPELL_CLOUDKILL)
-                    {
-                        RemoveEffect(oTarget, eAOE);
-                        bValid = TRUE;
-                    }
-                }
-            }
-            //Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
-        }
-    }
+	object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("Cloudkill", oCaster);
+	PS_RemoveEffects(GetExitingObject(), data.nId, NULL, oCaster);
 }
 
