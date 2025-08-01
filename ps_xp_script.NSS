@@ -84,7 +84,7 @@ void main()
 			}
 			
 			//Stop characters from getting too much xp
-			if( iMemberlevel == 30 )
+			if( iMemberlevel == 30 && !ALLOW_ECL_LEVEL_30)
 			{
 				int xp = GetXP(oPartyMember);
 				

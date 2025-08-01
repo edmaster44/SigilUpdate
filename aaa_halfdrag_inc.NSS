@@ -171,7 +171,7 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 		SetLocalString(oItem, "InBlood", "HD+1");	}
 		
 	// Remove one level if total ECL results in a value greater than 30
-	if (PS_GetLevel(oPC) > 30 )
+	if (PS_GetLevel(oPC) > 30 && !ALLOW_ECL_LEVEL_30)
 	{	int nextlvl = 1000;
 		int totalxp = 0;
 		int whatlevel = GetHitDice(oPC) - 1; // decrease level by 1

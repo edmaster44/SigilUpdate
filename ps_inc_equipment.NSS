@@ -16,6 +16,7 @@
 #include "ff_feat_tactical_weapon_feat"
 #include "ff_update_feats_inc"
 #include "x2_inc_spellhook"
+#include "ps0_classes2015_inc"
 
 
 /*----------------------------------------------------------------------------------------
@@ -126,14 +127,21 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP){
         
     }
 	
-    DelayCommand(0.1f, EquipmentEffects(oPC, oITEM, nEQUIP));
+    DelayCommand(0.5f, EquipmentEffects(oPC, oITEM, nEQUIP));
+	
+
 }
 
 //When all is said and done, the various custom effects dependant on equipment are applied.
 void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 {
+
     object oCHEST = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	FixARMOR(oPC, oCHEST);
+	
+	//update gatecrasher ac to make sure it never stacks with duelist or
+	//invis blade
+	PS_Feat_GC_DODGE_AC(oPC, 1817);
 	
     object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
 	int nLEFT = GetBaseItemType(oLHAND);

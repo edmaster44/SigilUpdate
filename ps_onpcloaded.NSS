@@ -74,6 +74,8 @@ void NotifySharedRouters(string sFlaggedIp){
 
 //look for players who have the same IP address
 void LookForSharedRouters(){
+	
+	SetLocalInt(GetModule(), "SIGIL_DEV_MODE", TRUE);
     string sIpList = "";
     string sFlaggedIpList = "";
     string sThisIp;

@@ -30,7 +30,7 @@ void SendTellMessageToAllPlayersInArea(object oSender, string sMessage)
 
 void GiveXPTick(object oPC) {
 
-	if (PS_GetLevel(oPC) >= 30)
+	if (PS_GetLevel(oPC) >= 30  && !ALLOW_ECL_LEVEL_30)
 		return;
 
 	int lastDone = CheckTimeStamp(oPC, "RP_EXP_AWARDED_LAST");

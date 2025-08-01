@@ -216,8 +216,11 @@ void PS_Feat_SHD_ShadowJump(object oPC, location lTarget, int nSpell)
 
 void PS_Feat_GC_DODGE_AC(object oPC, int nSpell){
 
+	int nGC = GetLevelByClass(63, oPC); // gatecrasher
+	if (nGC < 2) return; //this feat isn't granted till lvl 2
+	
 	// Add Dodge AC for each level of gatecrasher beyond the first, max = int mod
-	int nGatecrasherAC = GetLevelByClass(63, oPC) - 1;// gatecrasher
+	int nGatecrasherAC = nGC - 1;
 	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
 	if (nGatecrasherAC > nInt) nGatecrasherAC = nInt;
 	

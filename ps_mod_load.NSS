@@ -50,6 +50,7 @@
 
 void main()
 {
+
    if (GetGameDifficulty() ==  GAME_DIFFICULTY_CORE_RULES || GetGameDifficulty() ==  GAME_DIFFICULTY_DIFFICULT)
    {
         // * Setting the switch below will enable a seperate Use Magic Device Skillcheck for
