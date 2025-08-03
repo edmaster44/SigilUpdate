@@ -17,6 +17,7 @@ Other VFX with a more "flat" appearance should also work well.
 */
 #include "NW_I0_TOOL"
 
+
 void main()
 
 {
@@ -38,22 +39,18 @@ void main()
 
 	if (!GetIsPC(oPC) && !GetIsDM(oPC) && !GetIsDMPossessed(oPC)) return;
 	
-	if(sKey != "")
-	{
-		if(GetItemPossessedBy(oPC, sKey) != OBJECT_INVALID)  {
-			object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
-			SetPlotFlag(oPortal,TRUE);												//Mark the portal as plot
-			if (sFX != "") CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);	//Generate the portal visual effect
-			SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);								//Mark the portal as spawned
-			DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));						//Close the door after fDelay seconds	
-		}
+	int bOpen = FALSE;
+	if (GetHasFeat(2380, oPC, TRUE)) bOpen = TRUE; //gatecrasher open portal feat
+	else if(sKey != ""){
+		 if (GetItemPossessedBy(oPC, sKey) != OBJECT_INVALID) bOpen = TRUE;
+	} else if(sKey == "") bOpen = TRUE;
 		
-	} else {
-		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);		//Create the portal
-		SetPlotFlag(oPortal,TRUE);													//Mark the portal as plot
-		if (sFX != "") CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);		//Generate the portal visual effect
-		SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);									//Mark the portal as spawned
-		DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));							//Close the door after fDelay seconds	
+	if (bOpen){
+		object oPortal = CreateObject(OBJECT_TYPE_PLACEABLE, sPortal, lPortal);	//Create the portal
+		SetPlotFlag(oPortal,TRUE);												//Mark the portal as plot
+		if (sFX != "") CreateObject(OBJECT_TYPE_PLACED_EFFECT, sFX, lPortal);	//Generate the portal visual effect
+		SetLocalInt(OBJECT_SELF, SPAWNED, TRUE);								//Mark the portal as spawned
+		DelayCommand(fDelay,ActionCloseDoor(OBJECT_SELF));						//Close the door after fDelay seconds
 	}	
 }
 // End
