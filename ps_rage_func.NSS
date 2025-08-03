@@ -8,7 +8,7 @@
 // iType is 1 for Blazing, 2 for Frozen, 3 for Both
 effect ApplyBlazingOrFrozenShield(int iType)
 {
-	int iAmount = BarbarianLevels(OBJECT_SELF) / 5;
+	int iAmount = GetBarbarianLevels(OBJECT_SELF) / 5;
 	int iRandom = DAMAGE_BONUS_1;
 	
     effect eDur = EffectVisualEffect(VFX_DUR_ELEMENTAL_SHIELD);
@@ -77,7 +77,7 @@ effect ApplyFearlessRage()
 
 void ApplyVigorousRage()
 {
-	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
+	int iBarbLevels = GetBarbarianLevels(OBJECT_SELF);
 	int iConMod = GetAbilityModifier(ABILITY_CONSTITUTION, OBJECT_SELF);
 
 	int iHeal = iBarbLevels + iConMod;
@@ -99,7 +99,7 @@ effect ApplyScentRage()
 
 effect ApplySuperstitiousRage()
 {
-	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
+	int iBarbLevels = GetBarbarianLevels(OBJECT_SELF);
 	// let's be sure we can't divide by zero if there is some error here...
 	if (iBarbLevels < 1) iBarbLevels = 1;
 	int iBonus = (iBarbLevels / 4);
@@ -133,7 +133,7 @@ effect ApplyNaturalACRage()
 
 effect ApplyAncestorRage()
 {
-	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
+	int iBarbLevels = GetBarbarianLevels(OBJECT_SELF);
 	int iConceal = (iBarbLevels / 5) + 1;
 	effect eSpirit = EffectDetectSpirits();
 	eSpirit = EffectLinkEffects(eSpirit, EffectConcealment(iConceal));
@@ -160,7 +160,7 @@ effect ApplyABRage()
 effect ApplyRegenRage()
 {
 	int iAmount;
-	int iBarbLevels = BarbarianLevels(OBJECT_SELF);
+	int iBarbLevels = GetBarbarianLevels(OBJECT_SELF);
 	if (iBarbLevels < 11) iAmount = 1;
 	else if (iBarbLevels < 21) iAmount = 2;
 	else iAmount = 3;
@@ -186,7 +186,7 @@ void DestroyAncestralWeapon(object oWeapon)
 
 void ApplyAncestralProperties(object oPC, object oWeapon, float fDuration)
 {
-	int iBarbLevels			= BarbarianLevels(OBJECT_SELF);
+	int iBarbLevels			= GetBarbarianLevels(OBJECT_SELF);
 	int iDamageBonus		= 10; //IP_CONST_DAMAGEBONUS_2d6
 	int iDC					= 0; //IP_CONST_ONHIT_SAVEDC_14
 	int iDur				= 7; //IP_CONST_ONHIT_DURATION_5_PERCENT_3_ROUNDS
