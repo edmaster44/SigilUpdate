@@ -34,6 +34,7 @@ void Shield_Bash(object oPC, object oTarget, int nSpell )
 		case BASE_ITEM_TOWERSHIELD:{
 			nDam = d6(12);
 			nSize = 4;
+			break;
 		}
 		default:{
 			SendMessageToPC(oPC,"You require a shield to use this feat.");
