@@ -24,6 +24,7 @@
 #include "ff_update_feats"
 #include "class_mageslayer_utils"
 #include "ps_adjust_knight"
+#include "ps_adjust_barbarian"
 #include "inc_tattoo"
 #include "ff_combat_mods"
 #include "_aaa_first_login"
@@ -652,6 +653,7 @@ void main()
 		// call to class_mageslayer_utils
 		MageSlayerLevels(oPC);
 		PS_KnightLevels(oPC);
+		PS_BarbarianLevels(oPC);
 		UpdateMultiattack(oPC);
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
