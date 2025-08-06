@@ -65,10 +65,14 @@ void PS_BarbarianLevels(object oPC){
 	}	
 	if (iBarb >= 10){
 		FeatAdd(oPC,FEAT_DAMAGE_REDUCTION2,FALSE);
-	}		
+	}	
+	// this feat, id 1396, is marked as removed in feat.2da, 
+	// both ours and base game
+	/*
 	if (iBarb >= 11){
 		FeatAdd(oPC,FEAT_GREATER_RAGE,FALSE);
 	}	
+	*/
 	if (iBarb >= 12){
 		FeatAdd(oPC,FEAT_BARBARIAN_RAGE_4,FALSE);
 	}	

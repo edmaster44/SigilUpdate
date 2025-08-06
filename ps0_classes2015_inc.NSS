@@ -217,28 +217,38 @@ void PS_Feat_SHD_ShadowJump(object oPC, location lTarget, int nSpell)
 void PS_Feat_GC_DODGE_AC(object oPC, int nSpell){
 
 	int nGC = GetLevelByClass(63, oPC); // gatecrasher
-	if (nGC < 2) return; //this feat isn't granted till lvl 2
-	
-	// Add Dodge AC for each level of gatecrasher beyond the first, max = int mod
-	int nGatecrasherAC = nGC - 1;
-	int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
-	if (nGatecrasherAC > nInt) nGatecrasherAC = nInt;
-	
 	PS_RemoveEffects(oPC, nSpell);
 	
+	if (nGC < 3) return; //this feat isn't granted till lvl 3
+	
+	// Add Dodge AC for each level of gatecrasher beyond the 2nd, 
+	// and an additional +1 if base int or wis score >= 13
+	int nGatecrasherAC = nGC - 2;
+	if (GetAbilityScore(oPC, ABILITY_INTELLIGENCE, TRUE) >= 13 ||
+		GetAbilityScore(oPC, ABILITY_WISDOM, TRUE) >= 13)
+			nGatecrasherAC += 1;
 	if (nGatecrasherAC < 1) return;
 	
 	// Will not stack with Duelist or Invis Blade (which ofc only work in no armor).
-	// if they have duelist or ib and no armor, they get the highest of the 3 ac
+	// if they have duelist or ib and no armor, they get the highest of the 3 ac.
+	// If they have Duelist and a shield equipped, that removes duelist ac so they
+	// get the Gatecrasher ac. Invis blade ac works with a shield.
 	object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	if (GetArmorRank(oArmor) == ARMOR_RANK_NONE || oArmor == OBJECT_INVALID){
 		int nDuelist = GetLevelByClass(CLASS_TYPE_DUELIST, oPC);
 		int nIB = GetLevelByClass(CLASS_TYPE_INVISIBLE_BLADE, oPC);
 		if (nDuelist > 0 || nIB > 0){
-			int nOtherAC = nDuelist;
-			if (nIB > nOtherAC) nOtherAC = nIB;
-			if (nInt > nOtherAC) nOtherAC = nInt;
-			if (nOtherAC >= nGatecrasherAC) return;
+			if (nDuelist > 0){
+				int nOffHand = GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC));
+				if (nOffHand == BASE_ITEM_SMALLSHIELD || nOffHand == BASE_ITEM_LARGESHIELD ||
+									nOffHand == BASE_ITEM_TOWERSHIELD)
+					nDuelist = 0;
+			}
+			int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
+			int nOtherAC = nIB;
+			if (nDuelist > nOtherAC) nOtherAC = nDuelist;
+			if (nOtherAC > nInt) nOtherAC = nInt;
+			if (nOtherAC >= nGatecrasherAC) return; // no GC AC for you!
 			else nGatecrasherAC -= nOtherAC;	
 		}
 	}

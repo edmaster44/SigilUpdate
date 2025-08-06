@@ -104,11 +104,40 @@ void ImprovedDefense(object oPC);
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 void PS_ManageImbueItem(object oPC);
 
+/* WIP: Do we want to change epic spells so that they require a custom
+ prereq feat since the engine recognizing favored soul having 9th lvl spells
+ is a known issue? Have not got the go ahead on this but it would be this 
+ easy -FlattedFifth
+void ApplyEpicSpellPrereq(object oPC){
+	// we want to give the prereq feat at lvl 20
+	// because the engine fires this script AFTER level up,
+	// so in order for the character to be able to choose
+	// an epic spell at lvl 21, they need to have it before then.
+	// However, if we give it too soon then ppl will think they
+	// can start picking epic spells b4 lvl 21 and report in discord
+	if (GetHitDice(oPC) < 20) return;
+	if (PS_GetCasterLevel(oPC, CLASS_TYPE_CLERIC) >= 18 ||
+		PS_GetCasterLevel(oPC, CLASS_TYPE_DRUID) >= 18 ||
+		PS_GetCasterLevel(oPC, CLASS_TYPE_SPIRIT_SHAMAN) >= 18 ||
+		PS_GetCasterLevel(oPC, CLASS_TYPE_FAVORED_SOUL) >= 18)
+			FeatAdd(oPC, FEAT_EPIC_SPELL_REQ_DIVINE, FALSE);
+			
+	if (PS_GetCasterLevel(oPC, CLASS_TYPE_SORCERER) >= 18 ||
+		PS_GetCasterLevel(oPC, CLASS_TYPE_WARLOCK) >= 18 ||
+		PS_GetCasterLevel(oPC, CLASS_TYPE_WIZARD) >= 18)
+			FeatAdd(oPC, FEAT_EPIC_SPELL_REQ_ARCANE, FALSE);
+}
+*/
+
 // manually give gc the new dodge ac feat so that existing gc do not have to rebuild
+// As per discussion with Jelkia this is changed from lvl 2 to lvl 3
 void ApplyGatecrasherAC(object oPC){
-	if (GetLevelByClass(63, oPC) < 2) return; // skip if not lvl 2 GC
-	if (GetHasFeat(21904, oPC)) return; // skip if already have feat
-	FeatAdd(oPC, 21904, FALSE);
+	int bHasGCAC = GetHasFeat(21904, oPC);
+	int bQualifies = (GetLevelByClass(63, oPC) >= 3);
+	if (bHasGCAC && !bQualifies)
+		FeatRemove(oPC, 21904);
+	else if (!bHasGCAC && bQualifies)
+		FeatAdd(oPC, 21904, FALSE);
 }
 
 // in DnD 3.5 vampires are supposed to get the same +4 vs turning as liches
