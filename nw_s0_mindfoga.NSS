@@ -20,15 +20,23 @@
 void main()
 {
 
-    //Declare major variables
+
     object oTarget = GetEnteringObject();
-    effect eVis = EffectVisualEffect( VFX_DUR_SPELL_MIND_FOG_VIC );
-    effect eLower = EffectSavingThrowDecrease(SAVING_THROW_WILL, 10);
-    effect eLink = EffectLinkEffects(eVis, eLower);
-    int bValid = FALSE;
-    float fDelay = GetRandomDelay(1.0, 2.2);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-    {
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+	}
+	
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+	
+		struct dSpellData data = GetSpellDataForAoE("Mindfog", oCaster);
+		effect eVis = EffectVisualEffect( VFX_DUR_SPELL_MIND_FOG_VIC );
+		effect eLower = EffectSavingThrowDecrease(SAVING_THROW_WILL, 10);
+		effect eLink = EffectLinkEffects(eVis, eLower);
+		int bValid = FALSE;
+		float fDelay = GetRandomDelay(1.0, 2.2);
+		
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MIND_FOG));
         //Make SR check
@@ -38,7 +46,7 @@ void main()
             while (GetIsEffectValid(eAOE))
             {
                 //If the effect was created by the Mind_Fog then remove it
-                if (GetEffectSpellId(eAOE) == SPELL_MIND_FOG && GetAreaOfEffectCreator() == GetEffectCreator(eAOE))
+                if (GetEffectSpellId(eAOE) == SPELL_MIND_FOG && oCaster == GetEffectCreator(eAOE))
                 {
                     if(GetEffectType(eAOE) == EFFECT_TYPE_SAVING_THROW_DECREASE)
                     {
@@ -54,13 +62,12 @@ void main()
         }
         if(bValid == FALSE)
         {
-            if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
+            if(!MyResistSpell(oCaster, oTarget))
             {
                 //Make Will save to negate
-                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
-                {
-                    if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, GetAreaOfEffectCreator()))
-                        return;
+                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, data.nDC, SAVING_THROW_TYPE_MIND_SPELLS))
+				{
+                    
 					//effect eHit = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
                     //Apply VFX impact and lowered save effect
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget));

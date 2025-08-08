@@ -15,68 +15,35 @@
 // (Update JLR - OEI 07/19/05) -- Changed Dmg to 2d6 + lvl (max 20), double dmg to Undead
 
 
-#include "X0_I0_SPELLS"
-#include "x2_inc_spellhook"
-#include "ps_inc_functions"
+#include "nw_s0_wallfire_inc"
 
-void main()
-{
+void main(){
 
-    //Declare major variables
-    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-    int nMetaMagic = GetMetaMagicFeat();
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
+		DestroyObject(OBJECT_SELF);
+		return;
+	}
+	object oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
+	struct dSpellData data = GetSpellDataForAoE("Walloffire", oCaster);
+	int PML = GetPureMageLevels(oCaster);
+	int nMetaMagic = GetMetaMagicFeat();
+   
+
     int nDamage;
-	int PML = GetPureMageLevels(OBJECT_SELF);
     effect eDam;
-    object oTarget;
-    //Declare and assign personal impact visual effect.
-    effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
-    //Capture the first target object in the shape.
-
-    //--------------------------------------------------------------------------
-    // GZ 2003-Oct-15
-    // When the caster is no longer there, all functions calling
-    // GetAreaOfEffectCreator will fail. Its better to remove the barrier then
-    //--------------------------------------------------------------------------
-    if (!GetIsObjectValid(GetAreaOfEffectCreator()))
-    {
-        DestroyObject(OBJECT_SELF);
-        return;
-    }
-
-    oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-    //Declare the spell shape, size and the location.
-    while(GetIsObjectValid(oTarget))
-    {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
-        {
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
+   
+    while(GetIsObjectValid(oTarget)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_WALL_OF_FIRE));
             //Make SR check, and appropriate saving throw(s).
-            if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
-            {
-                //Roll damage.
-                nDamage = d6(2) + (PML/3);;  // JLR - OEI 07/19/05
+            if(!MyResistSpell(oCaster, oTarget)){
+                nDamage = GetWallOfFireDamage(oCaster, oTarget, data, PML, nMetaMagic);
 
-                //Enter Metamagic conditions
-                if (nMetaMagic == METAMAGIC_MAXIMIZE)
-                {
-                   nDamage = nDamage + ((3*nDamage)/4);//Damage is at max  // JLR - OEI 07/19/05
-                }
-                if (nMetaMagic == METAMAGIC_EMPOWER)
-                {
-                     nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
-                }
-
-                nDamage += nCasterLvl;  // JLR - OEI 07/19/05
-                if ( GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD )
-                {
-                    nDamage *= 2;
-                }
-
-                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
-                if(nDamage > 0)
-                {
+                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, data.nDC, SAVING_THROW_TYPE_FIRE);
+                if(nDamage > 0){
                     // Apply effects to the currently selected target.
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);

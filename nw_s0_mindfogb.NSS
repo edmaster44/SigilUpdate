@@ -18,17 +18,17 @@ void main()
 {
 
     //Declare major variables
+	object oTarget = GetExitingObject();
+	object oCaster = GetAreaOfEffectCreator();
     effect eSave = EffectSavingThrowDecrease(SAVING_THROW_WILL, 10);
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_MIND_FOG_VIC );
-    //effect eVis = EffectVisualEffect(VFX_DUR_MIND_AFFECTING_NEGATIVE);
     effect eLink = EffectLinkEffects(eSave, eDur);
-    //eLink = EffectLinkEffects(eLink, eVis);
-
+  
     int nDuration = d6(2);
     int nMetaMagic = GetMetaMagicFeat();
     int bValid = FALSE;
-    //Get the object that is exiting the AOE
-    object oTarget = GetExitingObject();
+    
+    
     //Search through the valid effects on the target.
     effect eAOE = GetFirstEffect(oTarget);
     if(GetHasSpellEffect(SPELL_MIND_FOG, oTarget))
@@ -36,7 +36,7 @@ void main()
         while (GetIsEffectValid(eAOE))
         {
             //If the effect was created by the Mind_Fog then remove it
-            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator() && GetEffectSpellId(eAOE) == SPELL_MIND_FOG)
+            if (GetEffectCreator(eAOE) == oCaster && GetEffectSpellId(eAOE) == SPELL_MIND_FOG)
             {
                 if(GetEffectType(eAOE) == EFFECT_TYPE_SAVING_THROW_DECREASE)
                 {
@@ -57,11 +57,11 @@ void main()
         }
         else if (nMetaMagic == METAMAGIC_EMPOWER)
         {
-            nDuration = nDuration + (nDuration/2); //Damage/Healing is +50%
+            nDuration = nDuration + (nDuration/2);
         }
         else if (nMetaMagic == METAMAGIC_EXTEND)
         {
-            nDuration = nDuration * 2; //Duration is +100%
+            nDuration = nDuration * 2; 
         }
         //Apply the new temporary version of the effect
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));

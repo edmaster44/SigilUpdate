@@ -248,9 +248,26 @@ int FF_GetSpellSaveDC(object oCaster = OBJECT_INVALID, int nId = NULL, int nClas
 	}
 	
 	//and finally the spell level
-	int nSpellLevel = StringToInt(Get2DAString("spells", "Innate", nId));
+	string sColumn;
+	if (nClass == CLASS_TYPE_BARD) 
+		sColumn = "Bard";
+	else if (nClass == CLASS_TYPE_CLERIC || nClass == CLASS_TYPE_FAVORED_SOUL)
+		sColumn = "Cleric";
+	else if (nClass == CLASS_TYPE_DRUID || nClass == CLASS_TYPE_SPIRIT_SHAMAN)
+		sColumn = "Druid";
+	else if (nClass == CLASS_TYPE_PALADIN)
+		sColumn = "Paladin";
+	else if (nClass == CLASS_TYPE_RANGER)
+		sColumn = "Ranger";
+	else if (nClass == CLASS_TYPE_SORCERER || nClass == CLASS_TYPE_WIZARD)
+		sColumn = "Wiz_Sorc";
+	else sColumn = "Innate"; //warlocks spell levels are based on Innate for DC
 	
-	return 10 + nSpellLevel + nAbilityMod;
+	string sLvl = Get2DAString("spells", sColumn, nId);
+	if (sLvl == "****" || sLvl == "")
+		sLvl = Get2DAString("spells", "Innate", nId);
+	
+	return 10 + StringToInt(sLvl) + nAbilityMod;
 }
 
 int PS_GetHighestSpellCastingBaseClass(object oCaster){

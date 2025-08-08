@@ -41,6 +41,8 @@ void main()
     //Get the location where the wall is to be placed.
     location lTarget = GetSpellTargetLocation();
     int nDuration = PS_GetCasterLevel(OBJECT_SELF) / 2;
+	StoreSpellDataForAoE("Walloffire");
+	
     if(nDuration == 0)
     {
         nDuration = 1;

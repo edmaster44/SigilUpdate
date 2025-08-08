@@ -75,6 +75,7 @@ void NotifySharedRouters(string sFlaggedIp){
 
 //look for players who have the same IP address
 void LookForSharedRouters(){
+
     string sIpList = "";
     string sFlaggedIpList = "";
     string sThisIp;
