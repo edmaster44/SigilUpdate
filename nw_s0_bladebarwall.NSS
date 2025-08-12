@@ -21,26 +21,14 @@
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-20 by Georg
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
+    if (!X2PreSpellCastCode()) return;
 
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
 
 	//We need to make sure that this AOE isn't stackable, because it is super powerful
 	//First we need to generate the string that serves as the object ID for this AOE object
 	object oCaster = OBJECT_SELF;
-	string sWall = ObjectToString(oCaster) + IntToString(GetSpellId());
+	int nId = GetSpellId();
+	string sWall = ObjectToString(oCaster) + IntToString(nId);
 	//Now we need to see if anything with this tag already exists
 	object oWall = GetNearestObjectByTag(sWall);
 	//If it exists, kill it.
@@ -51,16 +39,16 @@ void main()
 
 
     //Declare major variables including Area of Effect Object
+	int nCL = PS_GetCasterLevel(oCaster);
+	StoreSpellDataForAoE("BladeBarrier", nId, nCL);
     effect eAOE = EffectAreaOfEffect(AOE_PER_WALLBLADE, "", "", "", sWall );
     location lTarget = GetSpellTargetLocation();
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = nCL;
     int nMetaMagic = GetMetaMagicFeat();
 
     //Check Extend metamagic feat.
-    if (nMetaMagic == METAMAGIC_EXTEND)
-    {
-	   nDuration = nDuration *2;	//Duration is +100%
-    }
+    if (nMetaMagic == METAMAGIC_EXTEND) nDuration *= 2;	
+
     //Create an instance of the AOE Object using the Apply Effect function
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }

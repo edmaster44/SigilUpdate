@@ -19,36 +19,33 @@
 
 void main()
 {
-
+	object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("Entangle", oCaster);
     //Declare major variables
     effect eHold = EffectEntangle();
     effect eEntangle = EffectVisualEffect(VFX_DUR_ENTANGLE);
     //Link Entangle and Hold effects
     effect eLink = EffectLinkEffects(eHold, eEntangle);
-    object oCreator;
-    int bValid;
 
     object oTarget = GetFirstInPersistentObject();
-    int nDC = GetSpellSaveDC();
+    int nDC;
 
 	if (GetTag(OBJECT_SELF) == "AOE_ENTANGLE_RACIAL")
 	{
 		nDC = 10 + GetSpellLevel(SPELL_ENTANGLE) + GetAbilityModifier(ABILITY_CHARISMA, GetAreaOfEffectCreator());
-	}
+	} else nDC = data.nDC;
 
     while(GetIsObjectValid(oTarget))
-    {  // SpawnScriptDebugger();
-       // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
-       if( (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
+    {  
+       if(GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE)
        {
             if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
             {
                 //Fire cast spell at event for the specified target
-                SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ENTANGLE));
-                //Make SR check
+                SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ENTANGLE));
                 if(!GetHasSpellEffect(SPELL_ENTANGLE, oTarget))
                 {
-                    if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
+                    if(!MyResistSpell(oCaster, oTarget))
                     {
                         //Make reflex save
                         if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC))

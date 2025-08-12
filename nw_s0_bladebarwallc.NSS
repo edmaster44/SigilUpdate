@@ -15,86 +15,42 @@
 //:://////////////////////////////////////////////
 //:: PKM-OEI 08.10.06 - Adapted to new functionality
 
-#include "X0_I0_SPELLS"
-#include "x2_inc_spellhook"
+
+#include "nw_s0_bladebarwall_inc"
 
 void main()
 {
-    //Declare major variables
-    object oTarget;
-	object oCreator = GetAreaOfEffectCreator();
-    effect eDam;
-    //effect eVis = EffectVisualEffect(VFX_COM_BLOOD_REG_RED);
-    int nMetaMagic = GetMetaMagicFeat();
-    int nLevel = PS_GetCasterLevel(oCreator);
-	
-	
-    //Make level check
-    if (nLevel > 15)
-    {
-        nLevel = 15;
-    }
-
-    //--------------------------------------------------------------------------
-    // GZ 2003-Oct-15
-    // Add damage to placeables/doors now that the command support bit fields
-    //--------------------------------------------------------------------------
-    oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE | OBJECT_TYPE_DOOR);
-
-    //--------------------------------------------------------------------------
-    // GZ 2003-Oct-15
-    // When the caster is no longer there, all functions calling
-    // GetAreaOfEffectCreator will fail. Its better to remove the barrier then
-    //--------------------------------------------------------------------------
-    if (!GetIsObjectValid(oCreator))
-    {
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){
         DestroyObject(OBJECT_SELF);
         return;
     }
+	
+    object oTarget;
+	struct dSpellData data = GetSpellDataForAoE("BladeBarrier", oCaster);
+    effect eDam;
+	
+    oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE | OBJECT_TYPE_DOOR);
 
-    while(GetIsObjectValid(oTarget))
-    {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator))
-        {
-            //Fire spell cast at event
-            SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_BLADE_BARRIER));
-            //Make SR Check
-            if (!MyResistSpell(oCreator, oTarget) )
-            {
-                //Roll Damage
-                int nDamage = d6(nLevel);
-                //Enter Metamagic conditions
-                if(nMetaMagic == METAMAGIC_MAXIMIZE)
-                {
-                    nDamage = nLevel * 6;//Damage is at max
-                }
-                else if (nMetaMagic == METAMAGIC_EMPOWER)
-                {
-                    nDamage = nDamage + (nDamage/2);
-                }
-                //if(MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC()))
-                //{
-                //    nDamage = nDamage/2;
-                //}
+    while(GetIsObjectValid(oTarget)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+  
+            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_BLADE_BARRIER));
 
-                //Adjust damage via Reflex Save or Evasion or Improved Evasion
-                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oCreator);
+            if (!MyResistSpell(oCaster, oTarget) ){
+               
+                int nDamage = GetBladeBarrierDamage(data.nCL);
+                
+                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, data.nDC, SAVING_THROW_TYPE_NONE, oCaster);
 
-            if (nDamage > 0)
-            {
-                //Set damage effect
-                eDam = EffectDamage(nDamage, DAMAGE_TYPE_SLASHING);
-				
-				//Link Effects
-				//effect eLink = EffectLinkEffects( eDam, eVis );
-                //Apply damage and VFX
-				//ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
-				SpawnBloodHit(oTarget, TRUE, OBJECT_INVALID);
-				ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget);
-				
-                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-            	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-            }
+				if (nDamage > 0){
+	 
+					eDam = EffectDamage(nDamage, DAMAGE_TYPE_SLASHING);
+					
+					SpawnBloodHit(oTarget, TRUE, OBJECT_INVALID);
+					ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget);
+					
+				}
             }
 		}
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE | OBJECT_TYPE_DOOR);

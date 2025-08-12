@@ -23,6 +23,8 @@ void main()
 {
 
     //Declare major variables
+	object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("Web", oCaster);
     effect eWeb = EffectEntangle();
     effect eVis = EffectVisualEffect(VFX_DUR_WEB);
     effect eLink = EffectLinkEffects(eWeb, eVis);
@@ -41,18 +43,18 @@ void main()
     }
 
     effect eSlow = EffectMovementSpeedDecrease(nSlow);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
     {
         // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
         if( (GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
         {
             //Fire cast spell at event for the target
-            SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_WEB));
+            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_WEB));
             //Spell resistance check
             //if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
             //{
                 //Make a Fortitude Save to avoid the effects of the entangle.
-                if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC()))
+                if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC))
                 {
                     //Entangle effect and Web VFX impact
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));

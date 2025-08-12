@@ -16,7 +16,8 @@
 
 void main()
 {
-
+	
+	object oCaster = GetAreaOfEffectCreator();
 
     //Declare major variables
     //Get the object that is exiting the AOE
@@ -28,7 +29,7 @@ void main()
         eAOE = GetFirstEffect(oTarget);
         while (GetIsEffectValid(eAOE))
         {
-            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator())
+            if (GetEffectCreator(eAOE) == oCaster)
             {
                 if(GetEffectType(eAOE) == EFFECT_TYPE_ENTANGLE)
                 {

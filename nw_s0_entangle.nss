@@ -20,26 +20,45 @@
 #include "x2_inc_spellhook" 
 #include "X0_I0_SPELLS"
 #include "ps_inc_functions"
- 
+
+void main(){
+
+    if (!X2PreSpellCastCode()) return;
+	
+	StoreSpellDataForAoE("Entangle");
+
+    //Declare major variables including Area of Effect Object
+    location lTarget = GetSpellTargetLocation();
+    int nDuration = 3 + PS_GetCasterLevel(OBJECT_SELF) / 2;
+    int nMetaMagic = GetMetaMagicFeat();
+	string sTag = "";
+	
+	//Has same SpellId as Entangle, not an item, but returns no valid class -> it's racial ability
+	if (GetSpellId() == SPELL_ENTANGLE && !GetIsObjectValid(GetSpellCastItem()) && GetLastSpellCastClass() == CLASS_TYPE_INVALID)
+	{
+		sTag = "AOE_ENTANGLE_RACIAL";
+		nDuration = 5;	//CL4 -> 3 + 4/2 = 5
+	} 
+	
+	effect eAOE = EffectAreaOfEffect(AOE_PER_ENTANGLE, "", "", "", sTag);
+
+    //Make sure duration does no equal 0
+    if (nDuration < 1)
+    {
+        nDuration = 1;
+    }
+    //Check Extend metamagic feat.
+    if (nMetaMagic == METAMAGIC_EXTEND) nDuration *= 2;
+    
+    //Create an instance of the AOE Object using the Apply Effect function
+    ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
+}
+
+/* original
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-20 by Georg
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
-
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-
+    if (!X2PreSpellCastCode()) return;
 
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_ENTANGLE);
@@ -105,3 +124,4 @@ void main()
         oTarget = GetNextObjectInShape( SHAPE_SPHERE, 5.0, lTarget );
     }
 }
+*/
