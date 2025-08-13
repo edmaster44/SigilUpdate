@@ -174,7 +174,6 @@ void main(){
 		if (CheckTimeStamp(oTrigger,"TIMESTAMP") > iSpawnWait){
 			TimeStamp(oTrigger,"TIMESTAMP");
 		} else { //bail if there has not been enough time since last spawn
-			SendMessageToPC(oPC, "There is nothing here. Try again later.");
 			return;
 		}
 	}
