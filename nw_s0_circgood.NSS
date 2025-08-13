@@ -29,7 +29,7 @@ void main()
     }
 
 // End of Spell Cast Hook
-
+	
 
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_MOB_CIRCEVIL);

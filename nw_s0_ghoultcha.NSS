@@ -16,13 +16,14 @@
 //:: Created On: Nov 7, 2001
 //:://////////////////////////////////////////////
 
-#include "NW_I0_SPELLS"
+#include "x2_inc_spellhook"
 
 void main()
 {
     //Declare major variables
     object oTarget = GetEnteringObject();
-	object oCreator = GetAreaOfEffectCreator();
+	object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("Entangle", oCaster);
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
     effect eAttack = EffectAttackDecrease(2);
     effect eDamage = EffectDamageDecrease(2);
@@ -36,9 +37,9 @@ void main()
     eLink = EffectLinkEffects(eLink, eSkill);
     eLink = EffectLinkEffects(eLink, eDur);
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator) && oTarget != oCreator)
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster)
     {
-        if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_POISON))
+        if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, data.nDC, SAVING_THROW_TYPE_POISON))
         {
             if (!GetIsImmune(oTarget, IMMUNITY_TYPE_POISON))
             {

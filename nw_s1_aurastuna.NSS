@@ -16,14 +16,15 @@
 void main()
 {
     //Declare major variables
+	object oCaster = GetAreaOfEffectCreator();
+	int nHD = GetHitDice(oCaster);
     object oTarget = GetEnteringObject();
     effect eVis = EffectVisualEffect( VFX_HIT_SPELL_ENCHANTMENT );
     effect eVis2 = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
     effect eDeath = EffectStunned();
     effect eLink = EffectLinkEffects(eVis2, eDeath);
-    int nDuration = GetHitDice(GetAreaOfEffectCreator());
-    nDuration = d4(2);
-    int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/3;
+    int nDuration = d4(2);
+    int nDC = 10 + nHD / 3;
     nDuration = GetScaledDuration(nDuration, oTarget);
 	
 	effect eImm = EffectSpellImmunity(202);
@@ -32,7 +33,7 @@ void main()
 	if(!GetIsFriend(oTarget))
 	{
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELLABILITY_AURA_STUN));
+        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELLABILITY_AURA_STUN));
         //Make a saving throw check
         if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
         {

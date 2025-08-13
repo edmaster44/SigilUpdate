@@ -17,21 +17,23 @@
 void main()
 {
     //Declare major variables
+	object oCaster = GetAreaOfEffectCreator();
+	int nHD = GetHitDice(oCaster);
     object oTarget = GetEnteringObject();
-    int nDuration = 1 + GetHitDice(GetAreaOfEffectCreator())/3;
+    int nDuration = 1 + nHD / 3;
     effect eVis = EffectVisualEffect(VFX_IMP_DOOM);
-    int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/3;
+    int nDC = 10 + nHD / 3;
 
     effect eLink = CreateDoomEffectsLink();
 
     int nLevel = PS_GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
-	if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
+	if(GetIsEnemy(oTarget, oCaster))
 	{
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_AURA_MENACE));
+        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELLABILITY_AURA_MENACE));
         //Spell Resistance and Saving throw
-        if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC))
+        if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC))
         {
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget, TurnsToSeconds(nDuration));

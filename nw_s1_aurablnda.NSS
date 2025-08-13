@@ -16,21 +16,23 @@
 void main()
 {
     //Declare major variables
+	object oCaster = GetAreaOfEffectCreator();
+	int nHD = GetHitDice(oCaster);
     effect eBlind = EffectBlindness();
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eVis = EffectVisualEffect(VFX_IMP_BLIND_DEAF_M);
     effect eLink = EffectLinkEffects(eBlind, eDur);
-    int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/3;
+    int nDC = 10 + nHD / 3;
 	
 	effect eImm = EffectSpellImmunity(195);
 	eImm = ExtraordinaryEffect(eImm);
 
     object oTarget = GetEnteringObject();
-    int nDuration = 1 + GetHitDice(GetAreaOfEffectCreator())/3;
+    int nDuration = 1 + nHD / 3;
     //Scale the duration according to the HD of the monster
     nDuration = d4(2);
     //Entering object must make a will save or be blinded for the duration.
-    if(GetIsEnemy(oTarget, GetAreaOfEffectCreator()))
+    if(GetIsEnemy(oTarget, oCaster))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_AURA_BLINDING));
