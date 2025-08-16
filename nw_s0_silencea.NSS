@@ -36,7 +36,7 @@ void main()
     eLink = EffectLinkEffects(eLink, eImmune);
 
     object oTarget = GetEnteringObject();
-    object oCaster = GetAreaOfEffectCreator();
+	object oCaster = GetAreaOfEffectCreator();
 	int bHostile = FALSE;
 
 	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) )

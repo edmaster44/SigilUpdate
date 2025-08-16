@@ -48,6 +48,7 @@ void main()
 
 	//SpawnScriptDebugger();
 
+
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect( AOE_MOB_SILENCE );
 	effect eHit = EffectVisualEffect( VFX_DUR_SPELL_SILENCE );

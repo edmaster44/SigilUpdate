@@ -23,7 +23,7 @@ void main()
     //Declare major variables
     object oTarget = GetEnteringObject();
 	object oCaster = GetAreaOfEffectCreator();
-	struct dSpellData data = GetSpellDataForAoE("Entangle", oCaster);
+	struct dSpellData data = GetSpellDataForAoE("GhoulTouch", oCaster);
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
     effect eAttack = EffectAttackDecrease(2);
     effect eDamage = EffectDamageDecrease(2);

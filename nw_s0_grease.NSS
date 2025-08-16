@@ -35,7 +35,7 @@ void main()
 
 // End of Spell Cast Hook
 
-
+	StoreSpellDataForAoE("Grease");
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_GREASE);
     location lTarget = GetSpellTargetLocation();

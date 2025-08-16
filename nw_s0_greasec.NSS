@@ -21,6 +21,8 @@ void main()
 
     //Declare major variables
     object oTarget;
+	object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("Grease", oCaster);
     effect eFall = EffectKnockdown();
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
 	effect eLink = EffectLinkEffects(eFall, eHit);
@@ -30,12 +32,12 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
        // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
-       if( (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
+       if(!GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL))	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
        {
             if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
             {
                 fDelay = GetRandomDelay(0.0, 2.0);
-                if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF, fDelay))
+                if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_NONE, oCaster, fDelay))
                 {
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 4.0));
                 }

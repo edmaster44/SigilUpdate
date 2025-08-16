@@ -27,11 +27,12 @@ void main()
     //Declare major variables
     object oTarget = GetEnteringObject();
     object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("DelayedFireball", oCaster);
     location lTarget = GetLocation(OBJECT_SELF);
     int nDamage;
-	int PML = GetPureMageLevels(OBJECT_SELF);
+	int PML = GetPureMageLevels(oCaster);
     int nMetaMagic = GetMetaMagicFeat();
-    int nCasterLevel = PS_GetCasterLevel(oCaster);
+    int nCasterLevel = data.nCL;
 
 	
     int nFire = GetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL");
@@ -76,7 +77,7 @@ void main()
                             nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%
                         }
                         //Change damage according to Reflex, Evasion and Improved Evasion
-                        nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator());
+                        nDamage = GetReflexAdjustedDamage(nDamage, oTarget, data.nDC, SAVING_THROW_TYPE_FIRE, oCaster);
                         //Set up the damage effect
                         eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
                         if(nDamage > 0)

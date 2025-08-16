@@ -29,19 +29,21 @@ void main()
     effect eLink = EffectLinkEffects(eVis, eSlow);
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
     object oTarget = GetEnteringObject();
+    object oCaster = GetAreaOfEffectCreator();
+	struct dSpellData data = GetSpellDataForAoE("Grease", oCaster);
     float fDelay = GetRandomDelay(1.0, 2.2);
-    if((spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator())) &&
+    if((spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) &&
 	    (PS_IsObjectImmuneToSpell(oTarget, SPELL_GREASE) == FALSE))
     {
         // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
-        if( (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
+        if(!GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL))	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
 		{
             //Fire cast spell at event for the target
-            SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_GREASE));
+            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_GREASE));
                //Spell resistance check
             //if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
             //{
-				//if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF))
+				if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_NONE, oCaster))
 				{
                 	//Apply reduced movement effect and VFX_Impact
                 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
