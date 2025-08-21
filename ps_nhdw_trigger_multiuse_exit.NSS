@@ -53,15 +53,19 @@ void main()
 	object oSource2		= GetObjectByTag(sObj2);
 	object oSource3		= GetObjectByTag(sObj3);	
 	object oSource4		= GetObjectByTag(sObj4);
+	object oTarget1, oTarget2, oTarget3, oTarget4;
+	effect eRay;
+	// we don't need to run these functions and store these vars before we even know if we need them
+	/*
 	effect eRay1		= EffectBeam(nBeam1, oSource1, BODY_NODE_HAND);
 	effect eRay2		= EffectBeam(nBeam2, oSource2, BODY_NODE_HAND);
 	effect eRay3		= EffectBeam(nBeam3, oSource3, BODY_NODE_HAND);
 	effect eRay4		= EffectBeam(nBeam4, oSource4, BODY_NODE_HAND);
-	object oTarget1, oTarget2, oTarget3, oTarget4;
 	effect eEffect1		= EffectRandomNerf();
 	effect eEffect2		= EffectRandomNerf();
 	effect eEffect3		= EffectRandomNerf();
 	effect eEffect4		= EffectRandomNerf();
+	*/
 
 //Door unlock & open section
 	if (GetIsObjectValid(oDoorOpen2)){
@@ -80,16 +84,29 @@ void main()
 //Floaty Text section
 	FloatingTextStringOnCreature(sFloaty2,oPC2);
 //Beam section
-	if (nBeam1 != 0)
-	{	oTarget1 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource1);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectLinkEffects(eRay1, eEffect1), oTarget1) ;	}
-	if (nBeam2 != 0)
-	{	oTarget2 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectLinkEffects(eRay2, eEffect2), oTarget2) ;	}
-	if (nBeam3 != 0)
-	{	oTarget3 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectLinkEffects(eRay3, eEffect3), oTarget3) ;	}
-	if (nBeam4 != 0)
-	{	oTarget4 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectLinkEffects(eRay4, eEffect4), oTarget4) ;	}
+
+	if (nBeam1 != 0){	
+		oTarget1 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource1);
+		eRay = EffectBeam(nBeam1, oSource1, BODY_NODE_HAND);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget1);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget1, RoundsToSeconds(d6()));
+	}
+	if (nBeam2 != 0){
+		oTarget2 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
+		eRay = EffectBeam(nBeam2, oSource2, BODY_NODE_HAND);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget2);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget2, RoundsToSeconds(d6()));
+	}
+	if (nBeam3 != 0){
+		oTarget3 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
+		eRay = EffectBeam(nBeam3, oSource3, BODY_NODE_HAND);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget3);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget3, RoundsToSeconds(d6()));
+	}
+	if (nBeam4 != 0){
+		oTarget4 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
+		eRay = EffectBeam(nBeam4, oSource4, BODY_NODE_HAND);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget4);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget4, RoundsToSeconds(d6()));
+	}
 }
