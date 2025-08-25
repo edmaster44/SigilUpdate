@@ -48,7 +48,7 @@ void main()
     int nDamage    = GetLocalInt(oAoE, "PRC_EctoShambler_Damage");
     effect eDamage =                            EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
            eDamage = EffectLinkEffects(eDamage, EffectVisualEffect(VFX_IMP_HEAD_MIND));
-    effect eBlind  = EffectBlindness();
+    effect eBlind  = EffectNewBlindness();
 	
 				//If The Targets are Friendly, it will not do nothing
 		if (GetIsReactionTypeFriendly(oTarget,oAoE))

@@ -37,7 +37,7 @@ void main()
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
     int nDuration = GetCasterLevel(OBJECT_SELF);
-    effect eBlind =  EffectBlindness();
+    effect eBlind =  EffectNewBlindness();
     effect eDeaf = EffectDeaf();
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLIND_DEAF);
 

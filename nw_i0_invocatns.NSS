@@ -656,7 +656,7 @@ int DoEssenceBeshadowedBlast(object oCaster, object oTarget, int bCalledFromShap
 				
 
                 //effect eDark = EffectDarkness();
-				effect eDark = EffectBlindness();
+				effect eDark = EffectNewBlindness();
 				effect eAC = EffectACDecrease( 2 );
 				effect eLink = EffectLinkEffects( eDark, eAC );
                 //effect eDur = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);	// handled by DoEldritchBlast()

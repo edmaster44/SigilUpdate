@@ -732,7 +732,7 @@ void Enchant(object oPC, int spell, int power, float duration)
             break;
 
         case 9:
-            eEffect = EffectBlindness();
+            eEffect = EffectNewBlindness();
             break;
 
         case 10:

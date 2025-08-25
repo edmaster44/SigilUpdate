@@ -93,7 +93,7 @@ void main()
 			nMaxHP += 80;
         effect eLink      =                          EffectCutsceneParalyze();
                eLink      = EffectLinkEffects(eLink, EffectKnockdown());
-               eLink      = EffectLinkEffects(eLink, EffectBlindness());
+               eLink      = EffectLinkEffects(eLink, EffectNewBlindness());
                eLink      = EffectLinkEffects(eLink, EffectDeaf());
                eLink      = EffectLinkEffects(eLink, EffectVisualEffect(VFX_IMP_SPELL_MANTLE_USE));
                eLink      = SupernaturalEffect(eLink);

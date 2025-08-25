@@ -44,7 +44,7 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
            ePrimary   = EffectLinkEffects(ePrimary, EffectVisualEffect(VFX_DUR_PARALYZED));
            ePrimary   = EffectLinkEffects(ePrimary, EffectVisualEffect(VFX_DUR_PARALYZE_HOLD));
            ePrimary   = EffectLinkEffects(ePrimary, EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE));
-    effect eSecondary =                               EffectBlindness();
+    effect eSecondary =                               EffectNewBlindness();
            eSecondary = EffectLinkEffects(eSecondary, EffectDeaf());
            eSecondary = EffectLinkEffects(eSecondary, EffectVisualEffect(VFX_IMP_BLIND_DEAF_M));
     float fDuration   = 6.0f * manif.nManifesterLevel;
@@ -106,7 +106,7 @@ void main()
            ePrimary   = EffectLinkEffects(ePrimary, EffectVisualEffect(VFX_DUR_PARALYZED));
            ePrimary   = EffectLinkEffects(ePrimary, EffectVisualEffect(VFX_DUR_PARALYZE_HOLD));
            ePrimary   = EffectLinkEffects(ePrimary, EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE));
-    effect eSecondary =                               EffectBlindness();
+    effect eSecondary =                               EffectNewBlindness();
            eSecondary = EffectLinkEffects(eSecondary, EffectDeaf());
            eSecondary = EffectLinkEffects(eSecondary, EffectVisualEffect(VFX_IMP_BLIND_DEAF_M));
     float fDuration   = 6.0f * manif.nManifesterLevel;

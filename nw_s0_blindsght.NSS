@@ -58,7 +58,7 @@ void main()
     //Apply the VFX impact and effects
 	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 	PS_RemoveEffects(oTarget, SPELL_BLINDSIGHT);
-	RemoveEffect(oTarget, EffectBlindness());
+	RemoveEffect(oTarget, EffectNewBlindness());
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_MISS_CHANCE);
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_SKILL_DECREASE);
 	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oTarget, eLink, fDuration);

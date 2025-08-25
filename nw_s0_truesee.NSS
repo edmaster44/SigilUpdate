@@ -55,7 +55,7 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_TRUE_SEEING, FALSE));
     
     //Apply the VFX impact and effects
-	RemoveEffect(oTarget, EffectBlindness());
+	RemoveEffect(oTarget, EffectNewBlindness());
 	PS_RemoveEffects(oTarget, nId);
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_MISS_CHANCE);
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_SKILL_DECREASE);

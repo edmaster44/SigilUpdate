@@ -13,19 +13,18 @@
 void main()
 {
 	object oTarget;
-	object oCaster		= GetAreaOfEffectCreator();
+	object oCaster = GetAreaOfEffectCreator();
+	if (!GetIsObjectValid(oCaster)){	
+		DestroyObject(OBJECT_SELF);
+        return;		
+	}
+	
 	effect eImpact		= EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 	eImpact				= EffectLinkEffects(eImpact, EffectVisualEffect(VFX_HIT_SPELL_HOLY));
-	effect eBlind 		= EffectBlindness();
+	effect eBlind 		= EffectNewBlindness();
 	effect eDam;
 	effect eLink;
 	
-	// Not really sure why this is here, a fix for some kind of bug I don't know about?
-	// Or removes the effect if the caster dies? Not sure.  Leaving it in just in case. 
-	// -FlattedFifth, June 17 2024
-	if (!GetIsObjectValid(oCaster))
-    {	DestroyObject(OBJECT_SELF);
-        return;		}
 	
 	// Get the first target in the AoE
 	oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
@@ -51,6 +50,9 @@ void main()
 			{
 				nNumDice += 1;
 			}
+			
+			if (bIsBlinded && GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
+				bIsBlinded = FALSE;
 			
 			eDam = EffectDamage(d8(nNumDice), DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);
 			eLink = EffectLinkEffects(eImpact, eDam);

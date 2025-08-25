@@ -918,7 +918,7 @@ void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType =
 	switch (nResult){
 		case SAVING_THROW_CHECK_IMMUNE: sMessage = "<c=cyan>Immune to"; break;
 		case SAVING_THROW_CHECK_SUCCEEDED: sMessage = "<c=gold>Succeeded save vs"; break;
-		default: sMessage = "c=tomato>Failed save vs"; break;
+		default: sMessage = "<c=tomato>Failed save vs"; break;
 	}
 	sMessage += " " + sSpell + ".</c>";
 	
@@ -1011,6 +1011,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
     return bValid;
 }
 */
+
 
 effect CreateProtectionFromAlignmentLink(int nAlignment, int nPower = 1)
 {

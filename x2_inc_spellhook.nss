@@ -38,11 +38,12 @@
 #include "x0_i0_spells"
 #include "class_mageslayer_utils"
 
-
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
+int GetMissChance(object oCaster);
+int GetSpellFailedBecauseMissChance(object oCaster);
 void PS_RemoveEffects(object oTarget, int nId = NULL, int nType = NULL, object oCreator = OBJECT_INVALID);
 int PS_GetHasEffectById(object oTarget, int nId);
 int X2UseMagicDeviceCheck();
@@ -53,9 +54,6 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-
-
-
 
 //------------------------------------------------------------------------------
 // PRIMARY FUNCTION
@@ -178,6 +176,7 @@ int X2PreSpellCastCode()
 			
 		}
 	}
+	if (GetSpellFailedBecauseMissChance(OBJECT_SELF)) nContinue = FALSE;
 
 	
    return nContinue;
@@ -439,4 +438,59 @@ int GetSkipByRestoration(int nSpellId){
 		default: return FALSE;
 	}
 	return FALSE;
+}
+
+
+int GetMissChance(object oCaster){
+
+	if (GetIsImmune(oCaster, IMMUNITY_TYPE_BLINDNESS)) return 0;
+	
+	int nReturn = 0;
+	int nMiss = 0;
+    effect eEff = GetFirstEffect(oCaster);
+    while (GetIsEffectValid(eEff)){
+		nMiss = 0;
+        if (GetEffectType(eEff) == EFFECT_TYPE_MISS_CHANCE){
+            nMiss = GetEffectInteger(eEff, 0);
+        } else if (GetEffectType(eEff) == EFFECT_TYPE_BLINDNESS){
+			nMiss = BLINDNESS_MISS_CHANCE;
+		}
+		if (nMiss > nReturn) nReturn = nMiss;
+        eEff = GetNextEffect(oCaster);
+    }
+    return nReturn;
+}
+
+//Check to see if a targeted spell fails due to the caster being unable to see
+int GetSpellFailedBecauseMissChance(object oCaster){
+
+	if (!B_TARGETED_SPELLS_FAIL_FOR_BLINDNESS_AND_MISSCHANCE)
+		return FALSE; // if this functionality is turned off in aaa_constants, the caster does not fail
+		
+	int nMiss = GetMissChance(oCaster);
+	// if caster does not have a miss chance, then ofc they don't fail. Values greater than 100 or less than 0 are invalid
+	if (nMiss <= 0 || nMiss > 100) return FALSE;
+	
+    object oTarget = GetSpellTargetObject();
+	location lTarget = GetSpellTargetLocation();
+	
+	if (GetIsObjectValid(oTarget)){
+		if (oTarget == oCaster) return FALSE; // if the caster is casting at themself, then they dont fail
+	} else {
+		if (GetIsObjectValid(GetAreaFromLocation(lTarget))){
+			if (GetDistanceBetweenLocations(GetLocation(oCaster), lTarget) <= 0.1)
+				return FALSE; // if the caster is targeting their own location, then they don't fail
+		} else return FALSE; // if the target is invalid AND the area from location is invalid, spell has no target so they don't fail
+	}
+	
+	int nRoll = d100();
+	
+	// if they roll low and have blind fight, they get another chance
+	if (nRoll <= nMiss && GetHasFeat(FEAT_BLIND_FIGHT, oCaster)) nRoll = d100();
+	
+	if (nRoll <= nMiss){
+		SendMessageToPC(oCaster, "Spell disrupted due to difficulty seeing target");
+		return TRUE; // caster rolled lower than their miss chance % so they failed
+	}
+	return FALSE; //otherwise they do not fail
 }

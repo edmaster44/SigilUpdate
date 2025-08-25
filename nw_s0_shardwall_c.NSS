@@ -17,7 +17,7 @@ void IntruderCheck()
     effect eDam;
 //    effect eVis = EffectVisualEffect(VFX_COM_BLOOD_REG_RED);
 	effect eVis = EffectNWN2SpecialEffectFile("sp_magic_hit.sef");
-	effect eBlindness = EffectBlindness();	
+	effect eBlindness = EffectNewBlindness();	
 	effect eDeaf = EffectDeaf();
 	effect eSlow = EffectSlow();
 

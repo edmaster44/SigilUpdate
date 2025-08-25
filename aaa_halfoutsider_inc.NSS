@@ -198,8 +198,8 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 void PS_HOM_FiendishSmiting(object oPC, int nSpell)
 {
 	int iHitDice 	= GetHitDice(oPC);
-	float fDuration = RoundsToSeconds(iHitDice + 5);
-	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d8, DAMAGE_TYPE_MAGICAL);
+	float fDuration = RoundsToSeconds(iHitDice * 5);
+	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d8, DAMAGE_TYPE_DIVINE);
 		eBonus = VersusAlignmentEffect(eBonus, ALIGNMENT_ALL, ALIGNMENT_GOOD);
 	effect eHands = EffectNWN2SpecialEffectFile("evil_hand_effect", oPC);
 	effect eLink = 	EffectLinkEffects(eBonus, eHands);
@@ -212,8 +212,8 @@ void PS_HOM_FiendishSmiting(object oPC, int nSpell)
 void PS_HOM_CelestialSmiting(object oPC, int nSpell)
 {
 	int iHitDice 	= GetHitDice(oPC);
-	float fDuration = RoundsToSeconds(iHitDice + 5);
-	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d8, DAMAGE_TYPE_MAGICAL);
+	float fDuration = RoundsToSeconds(iHitDice * 5);
+	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d8, DAMAGE_TYPE_DIVINE);
 		eBonus = VersusAlignmentEffect(eBonus, ALIGNMENT_ALL, ALIGNMENT_EVIL);
 	effect eHands = EffectNWN2SpecialEffectFile("holy_hand_effect", oPC);
 	effect eLink = 	EffectLinkEffects(eBonus, eHands);

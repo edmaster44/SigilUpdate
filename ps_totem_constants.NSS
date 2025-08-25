@@ -263,7 +263,7 @@ void ApplyTotemSpell(
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCreator) && !TotemEffectActive(oTarget, oCreator, nAoeSpellId)) {
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_ID_TOTEM_BLINDING, TRUE));
 			if(!(GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS) || GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS))) {
-				effect eBlind =  EffectBlindness();
+				effect eBlind =  EffectNewBlindness();
 				effect eDeaf = EffectDeaf();
 				effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLIND_DEAF);
 				effect eLink = EffectLinkEffects(eBlind, eDeaf);

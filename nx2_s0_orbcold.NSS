@@ -81,7 +81,7 @@ void main()
 			if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
 			{
 				// failed saving throw, uh oh! Blindness!
-				effect eBlindness = EffectBlindness();
+				effect eBlindness = EffectNewBlindness();
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, RoundsToSeconds(1));
 			}
 			

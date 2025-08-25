@@ -4,6 +4,7 @@
 // michel.remillard1@gmail.com
 // Last edit 31/05/2017
 #include "ps_inc_advscript"
+#include "ps_inc_functions"
 
 const string CLONE_TEMPLATE = "mirrorclone";
 
@@ -83,7 +84,7 @@ object CreateClone(object oCreature, location lLocation)
 	}
 	
 	// Cutscene Dominate lets you have multiple clones at once unlike summoning. Delayed so that it won't interrupt actions
-	effect eClone = ExtraordinaryEffect(EffectLinkEffects(EffectBlindness(), EffectCutsceneDominated()));
+	effect eClone = ExtraordinaryEffect(EffectLinkEffects(EffectNewBlindness(), EffectCutsceneDominated()));
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eClone, oClone));
 	
 	// Adds some hit points to the clone so they aren't made of paper

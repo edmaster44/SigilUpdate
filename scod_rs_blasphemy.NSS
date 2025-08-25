@@ -56,7 +56,7 @@ void main()
 			nCasterLevel = GetHitDice(OBJECT_SELF);
 		}
 		
-        effect eBlind = EffectBlindness();
+        effect eBlind = EffectNewBlindness();
         effect eStun = EffectStunned();
         effect eConfuse = EffectConfused();
         effect eDeath = EffectDeath();

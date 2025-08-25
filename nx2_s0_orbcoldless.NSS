@@ -79,7 +79,7 @@ void main()
 			/*if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
 			{
 				// failed saving throw, uh oh! Blinded!
-				effect eBlind = EffectBlindness();
+				effect eBlind = EffectNewBlindness();
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(1));
 			}*/
 			// If applicable adds any sneak damage to total to be inflicted and reports the damage.

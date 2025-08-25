@@ -2,6 +2,7 @@
 
 
 #include "aaa_constants"
+#include "ps_inc_functions"
 
 effect BossFX(int nBHP)
 {
@@ -276,7 +277,7 @@ void CleanseNova(object oBOSS, int nPHASE)
 	int nSAVE;
 	effect eDMG;
 	effect eNOVA = EffectVisualEffect(VFX_HIT_CLEANSING_NOVA);
-	effect eBLIND = EffectBlindness();
+	effect eBLIND = EffectNewBlindness();
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eNOVA, oBOSS);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nDMG), oBOSS);
 	while (oTARGET != OBJECT_INVALID)

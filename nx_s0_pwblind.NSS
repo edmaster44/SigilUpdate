@@ -69,7 +69,7 @@ void main()
 	object 	oCaster		=	OBJECT_SELF;
 	object	oTarget		=	GetSpellTargetObject();
 	int	nTargetHP	=	GetCurrentHitPoints(oTarget);
-	effect	eBlind	=	EffectBlindness();
+	effect	eBlind	=	EffectNewBlindness();
 	effect	eVis	=	EffectVisualEffect(VFX_DUR_SPELL_POWER_WORD_BLIND);
 	float	fDuration;
 	

@@ -53,7 +53,7 @@ void MakeDrunk(object oTarget, int nPoints)
 	else if (iCON - nPoints < 1)
 	{
 		SendMessageToPC(oTarget, "<color=lightgreen>You have drank so much you become incredibly sick and blind drunk.");
-		eDumb = EffectBlindness();
+		eDumb = EffectNewBlindness();
 		eDumb = EffectLinkEffects(eDumb, EffectKnockdown());
 	}
 	else

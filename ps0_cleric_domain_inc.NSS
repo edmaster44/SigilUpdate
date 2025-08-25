@@ -543,7 +543,7 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
     float fDelay;
     effect eVis 		= EffectVisualEffect(VFX_HIT_SPELL_HOLY);
     effect eDam;
-	effect eBlind 		= EffectBlindness();
+	effect eBlind 		= EffectNewBlindness();
     location lTarget 	= GetSpellTargetLocation();
     object oTarget 		= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 

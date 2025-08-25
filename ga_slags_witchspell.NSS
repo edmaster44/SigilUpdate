@@ -1,4 +1,5 @@
 #include "x0_i0_transport"
+#include "ps_inc_functions"
 void main() {
 
 	object oPC = GetPCSpeaker();
@@ -25,7 +26,7 @@ void main() {
 			DelayCommand(0.85f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
 		} 
 	} else {
-		eEffect = EffectBlindness();
+		eEffect = EffectNewBlindness();
 		if (FortitudeSave(oPC, 15, SAVING_THROW_TYPE_NONE, oWitch) == FALSE) {
 			DelayCommand(0.85f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
 		} 

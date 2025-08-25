@@ -4,6 +4,7 @@
 // Last Edited : 20/08/15
 
 #include "class_soulknife_global"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -16,7 +17,7 @@ void main()
 	int CHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int DC = 10 + CHA + (level+1) / 2;
 	
-	effect blind = EffectBlindness();
+	effect blind = EffectNewBlindness();
 	effect vfxblind = EffectVisualEffect(VFX_DUR_BLIND);
 	effect blindlink = ExtraordinaryEffect(EffectLinkEffects(blind, vfxblind));
 	

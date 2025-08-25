@@ -335,15 +335,26 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 	    {	if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	        {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 	            fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
-				nDamage = d10(nDice);
-	            nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-	            if (nDamStrike > 0)
-	            {	if (nHeritage == 2512)
-					{	eDamage = EffectAbilityDecrease(ABILITY_CONSTITUTION, (nDice / 2));	}
-					else
-					{	eDamage = EffectDamage(nDamStrike, nDamageType);	}
-	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
-	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));	}
+				string sSaved = GetName(oTarget) + " avoided the breath weapon!";
+				if (nHeritage == 2512){
+					if (!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_DEATH, oPC, 0.1, nSpell)){
+						eDamage = EffectAbilityDecrease(ABILITY_CONSTITUTION, (nDice / 2));
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, HoursToSeconds(24)));
+					} else {
+						FloatingTextStringOnCreature(sSaved, oTarget);
+					}
+				} else {
+					nDamage = d10(nDice);
+					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+					if (nDamStrike > 0){
+						eDamage = EffectDamage(nDamStrike, nDamageType);
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+					} else {
+						FloatingTextStringOnCreature(sSaved, oTarget);
+					}
+				}
 	        }
 	        oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation(), TRUE);
 	    }

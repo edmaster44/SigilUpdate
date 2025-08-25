@@ -240,7 +240,7 @@ void DoMediumAcidBomb()
 			
 			// Blindness chance
 			if (IntToFloat(Random(100) + 1) <= MED_ACID_BLIND_CHANCE * 100) {
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBlindness(), oTarget, RoundsToSeconds(MED_ACID_BLIND_DURATION));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(MED_ACID_BLIND_DURATION));
 			}		 
         }
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, MED_ACID_RADIUS, lTarget, TRUE,  OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

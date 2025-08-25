@@ -78,7 +78,7 @@ void main()
                 nHD = GetHitDice(oTarget);
                 if (nHD <= 8)
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBlindness(), oTarget, RoundsToSeconds(nCasterLevel));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(nCasterLevel));
                 }
 
                 //Determine if 1 or 2 effects are going to be applied

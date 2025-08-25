@@ -847,7 +847,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			nDamageType = DAMAGE_TYPE_DIVINE;
 			eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
 			eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");	
-			eSecondary = EffectBlindness();
+			eSecondary = EffectNewBlindness();
 			eDur = EffectVisualEffect(VFX_DUR_BLIND);
 			eSecondary = EffectLinkEffects(eDur, eSecondary);
 			fDur = RoundsToSeconds(d4(1) + 5);
@@ -2068,7 +2068,7 @@ void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 	
 	effect eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");	
 	effect eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
-    effect eSlow = EffectBlindness();
+    effect eSlow = EffectNewBlindness();
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eDur2 = EffectVisualEffect(VFX_DUR_BLIND);
 

@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 const int EXPERIMENTAL_EFFECTS_GOOD = 55;
 const int EXPERIMENTAL_EFFECTS_BAD = 31;
 const int EXPERIMENTAL_SPELLEFFECTS_GOOD = 70;
@@ -86,7 +88,7 @@ effect GetHarmfulEffect(object oPC, int nLevel = 1, int nIndex = -1) {
 		case 6: SendMessageToPC(oPC, "You feel less confident."); return EffectAbilityDecrease(5, nLevel*2);
 		case 7: SendMessageToPC(oPC, "You notice enemies hit you more often."); return EffectACDecrease(nLevel);
 		case 8: SendMessageToPC(oPC, "Your blows land less often."); return EffectAttackDecrease(nLevel);
-		case 9: SendMessageToPC(oPC, "You cannot see."); return EffectBlindness();
+		case 9: SendMessageToPC(oPC, "You cannot see."); return EffectNewBlindness();
 		case 10: SendMessageToPC(oPC, "You feel confused."); return EffectConfused();
 		case 11: SendMessageToPC(oPC, "Your blows are weak."); return EffectDamageDecrease(nLevel);
 		case 12: SendMessageToPC(oPC, "Your blows are weak."); return EffectDamageDecrease(4);

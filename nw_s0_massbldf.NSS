@@ -39,7 +39,7 @@ void main()
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
     int nDuration = GetCasterLevel(OBJECT_SELF);
-    effect eBlind =  EffectBlindness();
+    effect eBlind =  EffectNewBlindness();
     effect eDeaf = EffectDeaf();
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);	// NWN1 VFX
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_BLIND_DEAF );	// NWN2 VFX

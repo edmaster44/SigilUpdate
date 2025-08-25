@@ -227,6 +227,7 @@ int PsiPrePowerCastCode()
         DeleteLocalInt(oManifester, "PRC_SPELL_EVENT");
     }*/
 	
+	if (GetSpellFailedBecauseMissChance(OBJECT_SELF)) nContinue = FALSE;
 	
     return nContinue;
 	

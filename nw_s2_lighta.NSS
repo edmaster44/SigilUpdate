@@ -33,7 +33,7 @@ void main(){
 		SetEffectSpellId(eSearch, data.nId);
 		
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, data.nId, FALSE));
-		if (bDivineLight) RemoveEffect(oTarget, EffectBlindness());
+		if (bDivineLight) RemoveEffect(oTarget, EffectNewBlindness());
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, oTarget, HoursToSeconds(nLevel));
 	}	
 }

@@ -548,7 +548,7 @@ void PS_Cast_HE_Blasphemy(object oPC)
         object oTarget;
         int nCasterLevel = GetLevelByClass(CLASS_TYPE_HEZROU, oPC) * 2;
 		
-        effect eBlind = EffectBlindness();
+        effect eBlind = EffectNewBlindness();
         effect eStun = EffectStunned();
         effect eConfuse = EffectConfused();
         effect eDeath = EffectDeath();

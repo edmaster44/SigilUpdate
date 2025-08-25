@@ -143,7 +143,7 @@ void main()
 		int nBlindDur = 3;
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, saltTime);
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, saltTime);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBlindness(), OBJECT_SELF, RoundsToSeconds(nBlindDur));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), OBJECT_SELF, RoundsToSeconds(nBlindDur));
     }
 
     // If the character is just barely conscious apply dazing effects for an hour

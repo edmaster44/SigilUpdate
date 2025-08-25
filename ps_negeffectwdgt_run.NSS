@@ -1,4 +1,5 @@
 // ps_negeffectwdgt
+#include "ps_inc_functions"
 
 void  main (int effectid, int duration)
 {
@@ -21,7 +22,7 @@ void  main (int effectid, int duration)
 	switch(effectid)
 	{
 	case 0:
-		theEffect = EffectBlindness();
+		theEffect = EffectNewBlindness();
 		break;
 	case 1:
 		theEffect = EffectDeaf();
@@ -70,6 +71,5 @@ void  main (int effectid, int duration)
 	effect eLinkedEffect = ExtraordinaryEffect(theEffect);
 	ApplyEffectToObject (durType, eLinkedEffect, oPC, theDuration);
 }
-
 
 

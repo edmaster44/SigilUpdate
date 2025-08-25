@@ -30,6 +30,7 @@
 
 
 
+
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
 
@@ -92,6 +93,13 @@ const int SPELLLIKE_HEAVY_ARMOR_OPTIMIZATION_EPIC		= 1835;
 //
 // For use with PS_GetPCFlags/PS_SetPCFlags.
 //
+
+
+// OC Blindness effect makes npcs just wander around aimlessly. In a pnp game mobs that are blinded Will
+// try to unblind themselves or cast area of effect spells to try to hit their opponent or swing wildly to 
+// try to hit opponent, but in this game they just become sitting ducks, so we're replacing all instances
+// of blindness with a 50% miss chance
+effect EffectNewBlindness();
 
 const int PS_PC_FLAG_COLOR_EMOTES = 0x00000001;
 
@@ -336,6 +344,10 @@ int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 // gets whether to ignore craft material and gold costs if test server or crafter is dm
 int GetIsCraftingFree(object oPC);
 
+effect EffectNewBlindness(){
+	return EffectMissChance(BLINDNESS_MISS_CHANCE);
+	//effect EffectSpellFailure(int nPercent=100, int nSpellSchool=SPELL_SCHOOL_GENERAL);
+}
 
 string PS_ScrubVarName(string sString){
 	string sScrubbedString = PS_ValidChars(sString);
@@ -4572,7 +4584,7 @@ effect EffectRandomNerf()
 	
 	switch (nEffect)
 	{	case 0: eEffect = EffectSlow();			break;
-		case 1: eEffect = EffectBlindness();	break;
+		case 1: eEffect = EffectNewBlindness();	break;
 		case 2: eEffect = EffectConfused();		break;
 		case 3: eEffect = EffectDazed();		break;
 		case 4: eEffect = EffectDeaf();			break;

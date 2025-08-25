@@ -80,7 +80,7 @@ void main()
         effect eLink = GetIsImmune(oTarget, IMMUNITY_TYPE_DAZED) ?  // If the target is immune to normal paralysis
                          EffectCutsceneParalyze() :                      // use cutscene paralysis
                          EffectDazed();                               // Otherwise, normal paralysis
-        eLink = EffectLinkEffects(eLink, EffectBlindness());
+        eLink = EffectLinkEffects(eLink, EffectNewBlindness());
         eLink = EffectLinkEffects(eLink, EffectDeaf());
         eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_IMP_BLIND_DEAF_M));
         eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PARALYZE_HOLD));

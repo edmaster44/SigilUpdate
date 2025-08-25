@@ -32,7 +32,7 @@ void main()
 	int nBlindDur = GetSkillAdjustedTrapDC(5, oCaster, 4);
     int nFire = GetLocalInt(OBJECT_SELF, "scod_flashtrap");
     
-	effect eBlind = ExtraordinaryEffect(EffectBlindness());
+	effect eBlind = ExtraordinaryEffect(EffectNewBlindness());
 	effect eDetVis = EffectVisualEffect(VFX_HIT_AOE_HOLY);
 	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLIND_DEAF);
 	effect eLink = EffectLinkEffects(eBlind, eVis);

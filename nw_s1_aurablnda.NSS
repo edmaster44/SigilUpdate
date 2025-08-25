@@ -18,7 +18,7 @@ void main()
     //Declare major variables
 	object oCaster = GetAreaOfEffectCreator();
 	int nHD = GetHitDice(oCaster);
-    effect eBlind = EffectBlindness();
+    effect eBlind = EffectNewBlindness();
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eVis = EffectVisualEffect(VFX_IMP_BLIND_DEAF_M);
     effect eLink = EffectLinkEffects(eBlind, eDur);

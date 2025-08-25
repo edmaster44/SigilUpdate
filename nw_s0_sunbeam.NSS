@@ -45,7 +45,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     effect eVis2 = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
     effect eDam;
-    effect eBlind = EffectBlindness();
+    effect eBlind = EffectNewBlindness();
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eLink = EffectLinkEffects(eBlind, eDur);
 

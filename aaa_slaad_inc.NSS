@@ -428,7 +428,7 @@ void PS_SlaadPWBlind(object oPC, int nSpell)
 
 	object oTarget		= GetSpellTargetObject();
 	int nTargetHP		= GetCurrentHitPoints(oTarget);
-	effect eBlind		= EffectBlindness();
+	effect eBlind		= EffectNewBlindness();
 	effect eVis			= EffectVisualEffect(VFX_DUR_SPELL_POWER_WORD_BLIND);
 	effect eEyes		= EffectNWN2SpecialEffectFile("fx_wraith_eyes", oTarget);
 	effect eFail		= EffectNWN2SpecialEffectFile("fx_hit_spark_parry", oTarget);

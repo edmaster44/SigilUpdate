@@ -51,7 +51,7 @@ void main(){
 		
 		//beneficial effects
 		effect eHide = EffectSkillIncrease(SKILL_HIDE, nBonus);
-		effect eConceal = EffectConcealment(50, MISS_CHANCE_TYPE_VS_RANGED);
+		effect eConceal = EffectConcealment(40, MISS_CHANCE_TYPE_VS_RANGED);
 		eConceal = EffectLinkEffects(eHide, eConceal);
 		
 		// determine if immune to negative effects
@@ -60,7 +60,7 @@ void main(){
 		
 		// if not immune to negative effects, add them
 		if (!bImmuneNeg){
-			eConceal = EffectLinkEffects(EffectMissChance(50), eConceal);
+			eConceal = EffectLinkEffects(EffectMissChance(40), eConceal);
 			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SEARCH, nBonus), eConceal);
 			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SPOT, nBonus), eConceal);
 		}
@@ -99,7 +99,7 @@ void main()
     effect eLink2 =  EffectLinkEffects(eInvis, eDur);
 	SetEffectSpellId(eLink2, nId); 
 	
-    effect eBlindness = EffectBlindness();
+    effect eBlindness = EffectNewBlindness();
 	SetEffectSpellId(eBlindness, nId); 
 
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);

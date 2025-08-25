@@ -118,7 +118,7 @@ void main()
                     //if (!ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SPELL))
                     if (nDamage == nOrgDam || GetHasFeat(FEAT_IMPROVED_EVASION, oTarget))
                     {
-                        effect eBlindness = EffectBlindness();
+                        effect eBlindness = EffectNewBlindness();
                         ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlindness, oTarget);
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> blinds "+GetName(oTarget)+"</color>";
 						DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));

@@ -19,6 +19,19 @@ const int NULL = 50000;
 // there is a massive change to the server
 const int ALLOW_INSTANT_REBUILD = TRUE;
 
+// OC Blindness effect makes npcs just wander around aimlessly. In a pnp game mobs that are blinded Will
+// try to unblind themselves or cast area of effect spells to try to hit their opponent or swing wildly to 
+// try to hit opponent, but in this game they just become sitting ducks, so if true we're replacing all instances
+// of blindness with a miss chance
+const int REPLACE_BLINDNESS_WITH_MISS_CHANCE = TRUE;
+
+// If above is true above is true, then blindness becomes this miss chance instead
+const int BLINDNESS_MISS_CHANCE = 50;
+
+// if true, then spells that have a target other than the caster or the caster's immediate location
+// have the same miss chance as combat. This boolean is checked in the spellhook and the psi_spellhook
+const int B_TARGETED_SPELLS_FAIL_FOR_BLINDNESS_AND_MISSCHANCE = TRUE;
+
 // If this is true, then we no longer cap ECL characters below lvl 30.
 // Instead, we only apply a percentage of the xp they earn to their character 
 // depending upon the ECL, forcing them to have to earn the xp for their ECL

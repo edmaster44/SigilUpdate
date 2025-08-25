@@ -25,7 +25,7 @@ void main()
     //Declare major variables
     int nRounds;
     effect eStun = EffectStunned();
-    effect eBlind = EffectBlindness();
+    effect eBlind = EffectNewBlindness();
 	effect eDur = EffectVisualEffect( VFX_DUR_STUN );
     eStun = EffectLinkEffects(eBlind,eStun);
     eStun = EffectLinkEffects(eStun,eDur);

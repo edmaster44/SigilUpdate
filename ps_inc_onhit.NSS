@@ -411,7 +411,7 @@ int DoEssenceOnHitBeshadowedBlast(object oCaster, object oTarget, int nDC, int n
 				
 
                 //effect eDark = EffectDarkness();
-				effect eDark = EffectBlindness();
+				effect eDark = EffectNewBlindness();
 				effect eAC = EffectACDecrease( 2 );
 				effect eLink = EffectLinkEffects( eDark, eAC );
 

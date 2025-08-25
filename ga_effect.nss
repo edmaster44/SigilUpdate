@@ -89,7 +89,7 @@ void DoEffect(string sEffect, string sParams, string sDuration, int iVisualEffec
 		iVis = VFX_IMP_IMPROVE_ABILITY_SCORE;
 	} else		
 	if(sEffect == "blindness"){
-	    eEffect = EffectBlindness();
+	    eEffect = EffectNewBlindness();
 		iVis = VFX_IMP_BLIND_DEAF_M	;
 	} else		
 	if(sEffect == "damage"){

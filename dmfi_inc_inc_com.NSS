@@ -11,6 +11,7 @@
 
 #include "dmfi_inc_tool"
 #include "dmfi_inc_const"
+#include "ps_inc_functions"
 
 // ***************************** DECLARATIONS **********************************
 
@@ -153,7 +154,7 @@ void DMFI_CreateEffect(string sCommand, string sParam1, object oPC, object oTarg
     float fTime;
     effect eEffect;
 
-    if (FindSubString(sCommand, EFF_BLINDNESS))  eEffect = EffectBlindness();
+    if (FindSubString(sCommand, EFF_BLINDNESS))  eEffect = EffectNewBlindness();
     else if (FindSubString(sCommand, EFF_CHARMED))  eEffect = EffectCharmed();
     else if (FindSubString(sCommand, EFF_CONFUSED))  eEffect = EffectConfused();
     else if (FindSubString(sCommand, EFF_CUTDOMINATED))  eEffect = EffectCutsceneDominated();

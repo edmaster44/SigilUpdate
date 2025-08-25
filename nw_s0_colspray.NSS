@@ -47,7 +47,7 @@ void main()
     object oTarget;
     effect eSleep = EffectSleep();
     effect eStun = EffectStunned();
-    effect eBlind = EffectBlindness();
+    effect eBlind = EffectNewBlindness();
 	effect eCone = EffectVisualEffect(VFX_DUR_CONE_COLORSPRAY);
 
     effect eLink2 = EffectLinkEffects(eStun, eSleep);

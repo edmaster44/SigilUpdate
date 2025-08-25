@@ -24,7 +24,7 @@ void main()
     effect eLink2 =  EffectLinkEffects(eInvis, eDur);
 	SetEffectSpellId(eLink2, 821); 
 	
-    effect eBlindness = EffectBlindness();
+    effect eBlindness = EffectNewBlindness();
 	SetEffectSpellId(eBlindness, 821); 
 	
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
