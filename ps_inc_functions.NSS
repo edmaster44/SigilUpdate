@@ -345,8 +345,9 @@ int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 int GetIsCraftingFree(object oPC);
 
 effect EffectNewBlindness(){
-	return EffectMissChance(BLINDNESS_MISS_CHANCE);
-	//effect EffectSpellFailure(int nPercent=100, int nSpellSchool=SPELL_SCHOOL_GENERAL);
+	if (REPLACE_BLINDNESS_WITH_MISS_CHANCE)
+		return EffectMissChance(BLINDNESS_MISS_CHANCE);
+	return EffectBlindness();
 }
 
 string PS_ScrubVarName(string sString){

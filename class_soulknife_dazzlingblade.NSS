@@ -27,7 +27,7 @@ void main()
 	
 	while (GetIsObjectValid(oTarget))
 	{
-		if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && GetIsEnemy(oTarget, oPC))
+		if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && GetIsEnemy(oTarget, oPC) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
 		{
 			if (!FortitudeSave(oTarget, DC))
 			{

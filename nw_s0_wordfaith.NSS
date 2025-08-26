@@ -43,6 +43,7 @@ void main()
 
         //Declare major variables
         object oTarget;
+		int bImmuneBlind;
         int nCasterLevel = GetCasterLevel(OBJECT_SELF);
 		
 		if (GetSpellId() == SPELLABILITY_WORD_OF_FAITH)
@@ -66,6 +67,8 @@ void main()
         while (GetIsObjectValid(oTarget))
 		
         {	
+			bImmuneBlind = GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS);
+			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, OBJECT_SELF);
             //Make a faction check
             if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
@@ -108,23 +111,27 @@ void main()
                     }
                     else
                     {
+						
                         //Check the HD of the creature
                         nHD = GetHitDice(oTarget);
                         //Apply the appropriate effects based on HD
-                        if (nHD >= 12)
+                        if (nHD >= 12 && !bImmuneBlind)
                         {
                             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else if (nHD >= 8 && nHD < 12)
                         {
-                            eLink = EffectLinkEffects(eStun, eBlind);
+							if (!bImmuneBlind)
+								eLink = EffectLinkEffects(eStun, eBlind);
+							else eLink = eStun;
 
                             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else if (nHD > 4 && nHD < 8)
                         {
                             eLink = EffectLinkEffects(eStun, eConfuse);
-                            eLink = EffectLinkEffects(eLink, eBlind);
+							if (!bImmuneBlind)
+								eLink = EffectLinkEffects(eBlind, eLink);
 
                             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
                         }

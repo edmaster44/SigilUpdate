@@ -292,7 +292,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
     				eVis = EffectVisualEffect(VFX_HIT_SPELL_MAGIC);
 					eLink = EffectLinkEffects(eDam, eVis);
-					eBlind = EffectBlindness();
+					eBlind = EffectNewBlindness();
 					eGood = EffectVisualEffect(VFX_IMP_HEAD_HOLY);
 				
 					if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)
@@ -301,7 +301,7 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));	}
                     else
 					{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_GOOD))
+						if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_GOOD) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
 						{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(1)));	}
 					}
 				}

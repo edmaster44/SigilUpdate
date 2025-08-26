@@ -50,10 +50,6 @@ void main()
     effect eBlind = EffectNewBlindness();
 	effect eCone = EffectVisualEffect(VFX_DUR_CONE_COLORSPRAY);
 
-    effect eLink2 = EffectLinkEffects(eStun, eSleep);
-
-    effect eLink3 = EffectLinkEffects(eBlind, eSleep);
-
 	effect eHit = EffectVisualEffect(VFX_HIT_SPELL_ILLUSION);
 
     //Get first object in the spell cone
@@ -74,7 +70,7 @@ void main()
             //if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay) && oTarget != OBJECT_SELF)
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDelay)) //FIX: prevents caster from getting SR check against himself
             {
-                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay))
+                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay) && !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
                 {
                       nDuration = 3 + d4();
                       //Enter Metamagic conditions
@@ -100,7 +96,7 @@ void main()
                     }
                     //FIX: prevents blindness from being applied if immune to mind effects
                     // in that case, it's ok to apply stun in order to show immunity message
-                    else if(nHD > 2 && nHD < 5 && !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
+                    else if(nHD > 2 && nHD < 5 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                     {
                          nDuration = nDuration - 1;
                          //Apply the VFX impact and effects

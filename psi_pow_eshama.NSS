@@ -61,7 +61,8 @@ void main()
         // Let the AI know
 	//SPRaiseSpellCastAt(oTarget, TRUE, POWER_ECTOSHAMBLER, GetAreaOfEffectCreator());
 	// Apply effects
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget);
+	if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, GetAreaOfEffectCreator()))
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	// Increase the value of the marker informing a creature is inside Ectoplasmic Shambler
 	SetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler", GetLocalInt(oTarget, "PRC_IsInEctoplasmicShambler") + 1);

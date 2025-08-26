@@ -78,7 +78,7 @@ void main()
          	}
 			
 			// Savint throw for "sickened" effect
-			if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()))
+			if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC()) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
 			{
 				// failed saving throw, uh oh! Blindness!
 				effect eBlindness = EffectNewBlindness();

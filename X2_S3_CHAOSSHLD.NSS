@@ -109,14 +109,16 @@ void main()
                     break;
 
             case 3:
-                    eEffect = EffectNewBlindness();
-                    eDur = EffectBeam(VFX_BEAM_BLACK,OBJECT_SELF, BODY_NODE_CHEST);
-                    eDur2 =EffectVisualEffect(VFX_DUR_BLIND);
-                    eVis = EffectVisualEffect(VFX_IMP_BLIND_DEAF_M);
-                    eDur = EffectLinkEffects(eEffect,eDur);
-                    eDur = EffectLinkEffects(eDur2,eDur);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d2()));
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+					if (!GetIsImmune(oSpellTarget, IMMUNITY_TYPE_BLINDNESS, oSpellOrigin)){
+						eEffect = EffectNewBlindness();
+						eDur = EffectBeam(VFX_BEAM_BLACK,OBJECT_SELF, BODY_NODE_CHEST);
+						eDur2 =EffectVisualEffect(VFX_DUR_BLIND);
+						eVis = EffectVisualEffect(VFX_IMP_BLIND_DEAF_M);
+						eDur = EffectLinkEffects(eEffect,eDur);
+						eDur = EffectLinkEffects(eDur2,eDur);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d2()));
+						ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+					}
                              break;
 
 

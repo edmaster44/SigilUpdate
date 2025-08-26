@@ -68,6 +68,12 @@ void main()
 
 	object 	oCaster		=	OBJECT_SELF;
 	object	oTarget		=	GetSpellTargetObject();
+	
+	if (GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF)){
+		FloatingTextStringOnCreature("Target immune to Blindness", oTarget);
+		return;
+	}
+	
 	int	nTargetHP	=	GetCurrentHitPoints(oTarget);
 	effect	eBlind	=	EffectNewBlindness();
 	effect	eVis	=	EffectVisualEffect(VFX_DUR_SPELL_POWER_WORD_BLIND);

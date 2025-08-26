@@ -56,6 +56,7 @@ void main()
     
     //Apply the VFX impact and effects
 	RemoveEffect(oTarget, EffectNewBlindness());
+	RemoveEffect(oTarget, EffectBlindness());
 	PS_RemoveEffects(oTarget, nId);
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_MISS_CHANCE);
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_SKILL_DECREASE);

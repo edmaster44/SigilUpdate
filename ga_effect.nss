@@ -154,7 +154,13 @@ void DoEffect(string sEffect, string sParams, string sDuration, int iVisualEffec
 	    	eEffect = EffectLinkEffects(eEffect, eVis);
 		}			
 	}
-					
-    ApplyEffectToObject(iDurationType, eEffect, oTarget, fDuration);
-	PrintString ("Applied " + sEffect + " effect to " + GetName(oTarget) + " with Duration " + IntToString(iDurationType) + " " + FloatToString(fDuration));
+	
+	int bImmune = FALSE;
+	if (sEffect == "blindness" && GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
+		bImmune = TRUE;
+		
+	if (!bImmune){			
+		ApplyEffectToObject(iDurationType, eEffect, oTarget, fDuration);
+		PrintString ("Applied " + sEffect + " effect to " + GetName(oTarget) + " with Duration " + IntToString(iDurationType) + " " + FloatToString(fDuration));
+	}
 }

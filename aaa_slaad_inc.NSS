@@ -434,35 +434,36 @@ void PS_SlaadPWBlind(object oPC, int nSpell)
 	effect eFail		= EffectNWN2SpecialEffectFile("fx_hit_spark_parry", oTarget);
 	float fDuration;
 	effect	eLink		= EffectLinkEffects(eBlind, eVis);
-		eLink			= EffectLinkEffects(eLink, eEyes);
 		eLink			= SupernaturalEffect(eLink);
 
 	if (GetIsObjectValid(oTarget))
 	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
-		{	if (!MyResistSpell(oPC, oTarget))
-			{	int iTargetMaxHP = GetMaxHitPoints(oTarget);
+		{	if (!MyResistSpell(oPC, oTarget) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
+			{
+
+				int iTargetMaxHP = GetMaxHitPoints(oTarget);
 				int iTargetHPHigh = 200;
 				int iTargetHPMed = 100;
 				int iTargetHPLow = 50;
 	
 				if	(nTargetHP > iTargetHPHigh)
 				{	SendMessageToPC(oPC, "<COLOR=red>Target has too many HPs to be affected.");
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oTarget);
+					return;
 				}
-				else if (nTargetHP > iTargetHPMed)
-				{	fDuration = RoundsToSeconds(d4() + 1);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-					SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-				}
+				
+				if (nTargetHP > iTargetHPMed)
+					fDuration = RoundsToSeconds(d4() + 1);
 				else if (nTargetHP > iTargetHPLow)
-				{	fDuration = TurnsToSeconds(d4() + 1);
+					fDuration = TurnsToSeconds(d4() + 1);
+				else fDuration = 0.0f;
+
+				SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eEyes, oTarget);
+				if (fDuration == 0.0f)
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+				else 
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-					SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-				}
-				else
-				{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-					SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-				}
 			}
 		}
 	}

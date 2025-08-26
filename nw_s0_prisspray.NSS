@@ -76,7 +76,7 @@ void main()
             {
                 //Blind the target if they are less than 9 HD
                 nHD = GetHitDice(oTarget);
-                if (nHD <= 8)
+                if (nHD <= 8 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                 {
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(nCasterLevel));
                 }

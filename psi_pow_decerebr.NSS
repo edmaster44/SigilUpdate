@@ -75,18 +75,25 @@ void main()
     {
         int nDC      = GetManifesterDC(oManifester);
         int nPen     = GetPsiPenetration(oManifester);
+		int bImmuneBlind = GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oManifester);
+		int bImmuneDeaf = GetIsImmune(oTarget, IMMUNITY_TYPE_DEAFNESS, oManifester);
 		effect eVis = EffectNWN2SpecialEffectFile("psi_decerebrate.sef");
         // Create effects
         effect eLink = GetIsImmune(oTarget, IMMUNITY_TYPE_DAZED) ?  // If the target is immune to normal paralysis
                          EffectCutsceneParalyze() :                      // use cutscene paralysis
-                         EffectDazed();                               // Otherwise, normal paralysis
-        eLink = EffectLinkEffects(eLink, EffectNewBlindness());
-        eLink = EffectLinkEffects(eLink, EffectDeaf());
-        eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_IMP_BLIND_DEAF_M));
-        eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PARALYZE_HOLD));
+                         EffectDazed(); 
+						 // Otherwise, normal paralysis
+		if (!bImmuneBlind)
+			eLink = EffectLinkEffects(EffectNewBlindness(), eLink);
+		if (!bImmuneDeaf)
+			eLink = EffectLinkEffects(EffectDeaf(), eLink);
+		if (!bImmuneBlind && !bImmuneDeaf)
+			eLink = EffectLinkEffects(EffectVisualEffect(VFX_IMP_BLIND_DEAF_M), eLink);
+			
+        eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_PARALYZE_HOLD), eLink);
         
-        eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PARALYZED));
-        eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PARALYZE_HOLD));
+        eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_PARALYZED), eLink);
+        eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_PARALYZE_HOLD), eLink);
 
         // Handle Twin Power
         int nRepeats = manif.bTwin ? 2 : 1;

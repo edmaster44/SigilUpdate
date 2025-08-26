@@ -35,7 +35,7 @@ void main()
 	
     if(GetIsObjectValid(oTarget))
     {
-        if (GetIsEnemy(oTarget, oCaster)) {
+        if (GetIsEnemy(oTarget, oCaster) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF)) {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 			
 			//If you're an enemy, you get blinded!

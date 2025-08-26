@@ -125,7 +125,7 @@ void main()
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
                 if(nDamage > 0)
                 {
-                    if (nDamage == nOrgDam || GetHasFeat(FEAT_IMPROVED_EVASION, oTarget))
+                    if (nDamage == nOrgDam && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                         DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindLength)));
 
                     //Apply the damage effect and VFX impact

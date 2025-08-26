@@ -27,7 +27,7 @@ void main() {
 		} 
 	} else {
 		eEffect = EffectNewBlindness();
-		if (FortitudeSave(oPC, 15, SAVING_THROW_TYPE_NONE, oWitch) == FALSE) {
+		if (!FortitudeSave(oPC, 15, SAVING_THROW_TYPE_NONE, oWitch) && !GetIsImmune(oPC, IMMUNITY_TYPE_BLINDNESS, oWitch)) {
 			DelayCommand(0.85f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
 		} 
 	}

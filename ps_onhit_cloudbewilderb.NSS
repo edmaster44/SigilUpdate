@@ -27,7 +27,7 @@ void main()
     effect eStun = EffectStunned();
     effect eBlind = EffectNewBlindness();
 	effect eDur = EffectVisualEffect( VFX_DUR_STUN );
-    eStun = EffectLinkEffects(eBlind,eStun);
+   
     eStun = EffectLinkEffects(eStun,eDur);
 	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
 
@@ -72,6 +72,8 @@ void main()
                        	//Apply the VFX impact and linked effects
                        	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                        	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(nRounds)));
+						if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
+							DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nRounds)));
 						string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> stuns "+GetName(oTarget)+"</color>";
 						SendMessageToPC(oCaster, report);
                        }

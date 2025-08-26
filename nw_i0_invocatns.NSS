@@ -649,7 +649,7 @@ int DoEssenceBeshadowedBlast(object oCaster, object oTarget, int bCalledFromShap
         if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             //Make Fort save
-            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
+            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
             {
                 float fDuration = RoundsToSeconds(1);
 				int nDex = GetAbilityScore( oTarget, ABILITY_DEXTERITY );

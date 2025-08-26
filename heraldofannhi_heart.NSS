@@ -286,7 +286,7 @@ void CleanseNova(object oBOSS, int nPHASE)
 		else if ((GetIsEnemy(oTARGET, oBOSS) == TRUE) && (GetIsDead(oTARGET) == FALSE))
 		{
 			nSAVE = FortitudeSave(oTARGET, 20 + nDMG / 10, SAVING_THROW_TYPE_POSITIVE);
-			if (nSAVE == SAVING_THROW_CHECK_FAILED)
+			if (nSAVE == SAVING_THROW_CHECK_FAILED && !GetIsImmune(oTARGET, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
 			{
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBLIND, oTARGET, fDUR);
 			}

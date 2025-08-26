@@ -1545,6 +1545,9 @@ void Enchant(object oPC, int spell, int power, float duration)
             eEffect = EffectUltravision();
             break;
     }
+	
+	if (eEffect == EffectNewBlindness() && GetIsImmune(oPC, IMMUNITY_TYPE_BLINDNESS))
+		valid = FALSE;
 
     if (valid) {
         if (durType = DURATION_TYPE_PERMANENT) {

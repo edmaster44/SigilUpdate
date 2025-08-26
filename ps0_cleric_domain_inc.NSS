@@ -558,14 +558,12 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
                 {	nDamage = nDamage + (nDamage / 2);	}
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
 				if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)	
-                {	int nSave = FortitudeSave( oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC );                
-					if ( nSave == 0 ) // Saving Throw failed
-					{	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                		DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget));
-                		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	}
-					else if ( nSave == 1 )
-					{	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	}
+                {	
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+					if (!FortitudeSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC) &&
+						!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oPC))
+							DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget));
 				}
              }
         }

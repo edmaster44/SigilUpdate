@@ -39,10 +39,19 @@ void main()
     int nDuration = GetCasterLevel(OBJECT_SELF);
     effect eBlind =  EffectNewBlindness();
     effect eDeaf = EffectDeaf();
-    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLIND_DEAF);
+    effect eLink = EffectVisualEffect(VFX_DUR_SPELL_BLIND_DEAF);
+	
+	int bImmuneBlind = GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF);
+	int bImmuneDeaf = GetIsImmune(oTarget, IMMUNITY_TYPE_DEAFNESS, OBJECT_SELF);
+	if (bImmuneBlind && bImmuneDeaf){
+		FloatingTextStringOnCreature("Target Immune", oTarget);
+		return;
+	}
+	if (!bImmuneBlind)
+		eLink = EffectLinkEffects(eBlind, eLink);
+	if (!bImmuneDeaf)
+		eLink = EffectLinkEffects(eDeaf, eLink);
 
-    effect eLink = EffectLinkEffects(eBlind, eDeaf);
-    eLink = EffectLinkEffects(eLink, eVis);
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 	{
 		if( GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)

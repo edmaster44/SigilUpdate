@@ -116,7 +116,7 @@ void main()
 
                      // * if reflex saving throw fails apply blindness
                     //if (!ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SPELL))
-                    if (nDamage == nOrgDam || GetHasFeat(FEAT_IMPROVED_EVASION, oTarget))
+                    if (nDamage == nOrgDam && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
                     {
                         effect eBlindness = EffectNewBlindness();
                         ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlindness, oTarget);

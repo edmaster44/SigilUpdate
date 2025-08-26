@@ -34,8 +34,8 @@ void main()
     effect eSightInvis = EffectSeeInvisible();
     effect eSightDark = EffectUltravision();
     effect eLink = EffectLinkEffects(eVis, eSightInvis);
-    eLink = EffectLinkEffects(eLink, eSightDark);
-    eLink = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_BLINDNESS));
+    eLink = EffectLinkEffects(eSightDark, eLink);
+    eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_BLINDNESS), eLink);
 	eLink = SetEffectSpellId(eLink, SPELL_BLINDSIGHT);
 	
 	int nlvl = PS_GetCasterLevel(OBJECT_SELF);
@@ -59,6 +59,7 @@ void main()
 	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 	PS_RemoveEffects(oTarget, SPELL_BLINDSIGHT);
 	RemoveEffect(oTarget, EffectNewBlindness());
+	RemoveEffect(oTarget, EffectBlindness());
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_MISS_CHANCE);
 	PS_RemoveEffects(oTarget, SPELL_DARKNESS, EFFECT_TYPE_SKILL_DECREASE);
 	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oTarget, eLink, fDuration);

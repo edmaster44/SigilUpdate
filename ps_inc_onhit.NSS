@@ -419,7 +419,8 @@ int DoEssenceOnHitBeshadowedBlast(object oCaster, object oTarget, int nDC, int n
                 RemoveEffectsFromSpell(oTarget, nID);
 
                 //Apply the effect and VFX impact
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 				
 				if (nDex > 10)
 				{

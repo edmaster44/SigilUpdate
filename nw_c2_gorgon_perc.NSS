@@ -138,8 +138,10 @@ SetCollision(OBJECT_SELF, 0);
 SetAILevel(OBJECT_SELF, AI_LEVEL_VERY_LOW);
 effect eCharge = EffectHaste();
 eCharge = EffectLinkEffects(eCharge, EffectAreaOfEffect(AOE_PER_CUSTOM_AOE, "nw_c2_gorgon_trample", "ga_donothing", "ga_donothing"));
-eCharge = EffectLinkEffects(eCharge, EffectNewBlindness());
-eCharge = EffectLinkEffects(eCharge, EffectDeaf());
+if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
+	eCharge = EffectLinkEffects(EffectNewBlindness(), eCharge);
+if (!GetIsImmune(oTarget, IMMUNITY_TYPE_DEAFNESS))
+	eCharge = EffectLinkEffects(EffectDeaf(), eCharge);
 eCharge = SetEffectSpellId(eCharge, 100);
 AssignCommand(OBJECT_SELF, PlaySound("c_dragred_bat1"));
 AssignCommand(OBJECT_SELF, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCharge, OBJECT_SELF, 12.0));

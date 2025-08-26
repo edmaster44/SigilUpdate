@@ -1011,7 +1011,11 @@ void DoBreathWeapon(object oPC, int nSpell){
 						eSecondary = EffectLinkEffects(eDur, eSecondary);
 					}
 				// creatures immune to divine damage, if there are any, will be immune to radiant blinding breath
-				} else if (nSpell == 2667) bImmuneSecondary = IsImmuneToDamage(oPC, nDamageType, TRUE);
+				} else if (nSpell == 2667){
+					bImmuneSecondary = IsImmuneToDamage(oPC, nDamageType, TRUE);
+				}if (eSecondary == EffectNewBlindness()){
+					bImmuneSecondary = GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS);
+				}
 				if(!bImmuneSecondary && !MySavingThrow(nSave, oTarget, nDC, nSaveType, OBJECT_SELF, fDelay)){
 					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDur));
 					// tag the target with the spell id if it's a con drain from shadow or topaz

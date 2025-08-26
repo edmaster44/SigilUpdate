@@ -118,20 +118,23 @@ void main()
                         //Check the HD of the creature
                         nHD = GetHitDice(oTarget);
                         //Apply the appropriate effects based on HD
-                        if (nHD >= 12)
+                        if (nHD >= 12 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                         {
                             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else if (nHD >= 8 && nHD < 12)
                         {
-                            eLink = EffectLinkEffects(eStun, eBlind);
+							if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
+								eLink = EffectLinkEffects(eStun, eBlind);
+							else eLink = eStun;
 
                             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else if (nHD > 4 && nHD < 8)
                         {
                             eLink = EffectLinkEffects(eStun, eConfuse);
-                            eLink = EffectLinkEffects(eLink, eBlind);
+							if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
+								eLink = EffectLinkEffects(eBlind, eLink);
 
                             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
                         }

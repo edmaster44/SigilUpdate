@@ -51,7 +51,7 @@ void main()
 				nNumDice += 1;
 			}
 			
-			if (bIsBlinded && GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
+			if (bIsBlinded && GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
 				bIsBlinded = FALSE;
 			
 			eDam = EffectDamage(d8(nNumDice), DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);

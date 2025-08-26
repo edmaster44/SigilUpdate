@@ -23,20 +23,22 @@ void main()
 {
 
     //Declare major variables
+	object oTarget = GetEnteringObject();
+	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
     int nRounds;
     effect eStun = EffectStunned();
     effect eBlind = EffectNewBlindness();
 	effect eDur = EffectVisualEffect( VFX_DUR_STUN );
-    eStun = EffectLinkEffects(eBlind,eStun);
+	if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
+		eStun = EffectLinkEffects(eBlind,eStun);
     eStun = EffectLinkEffects(eStun,eDur);
     effect eVis = EffectVisualEffect(VFX_DUR_BLIND);
     effect eFind;
-    object oTarget;
-    object oCreator;
+    
+
     float fDelay;
-	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
+
     //Get the first object in the persistant area
-    oTarget = GetEnteringObject();
     if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
     {
         //Fire cast spell at event for the specified target

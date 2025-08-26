@@ -32,7 +32,7 @@ void main()
     //Scale the duration according to the HD of the monster
     nDuration = d4(2);
     //Entering object must make a will save or be blinded for the duration.
-    if(GetIsEnemy(oTarget, oCaster))
+    if(GetIsEnemy(oTarget, oCaster) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_AURA_BLINDING));
