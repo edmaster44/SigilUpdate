@@ -26,6 +26,45 @@
 #include "ps_inc_functions"
 
 
+void main(){
+
+	if (!GetHasFeat(FEAT_TURN_UNDEAD, OBJECT_SELF)){
+		SpeakStringByStrRef(STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS);
+		return;
+	}
+   
+	//Declare major variables
+	int nId = GetSpellId();
+	effect eVis = EffectVisualEffect( VFX_HIT_SPELL_EVOCATION );
+	effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
+	effect eDamage = EffectDamageIncrease(IP_CONST_DAMAGEBONUS_2d6, DAMAGE_TYPE_DIVINE, RACIAL_TYPE_UNDEAD);
+	effect eAb = EffectAttackIncrease(2);
+	eAb = VersusRacialTypeEffect(eAb, RACIAL_TYPE_UNDEAD);
+	effect eLink = EffectLinkEffects(eDamage, eDur);
+	eLink = EffectLinkEffects(eAb, eLink);
+	eLink = SupernaturalEffect(eLink);
+	eLink = SetEffectSpellId(eLink, nId);
+
+	int nCharismaBonus = GetAbilityModifier(ABILITY_CHARISMA);
+	if (nCharismaBonus < 0) nCharismaBonus = 0;
+	int nDuration = 3 + nCharismaBonus;
+	
+	// * Do not allow this to stack
+	RemoveEffectsFromSpell(OBJECT_SELF, nId);
+
+	//Fire cast spell at event for the specified target
+	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_VENGEANCE, FALSE));
+
+	//Apply Link and VFX effects to the target
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+
+	DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
+}
+
+
+/* original
+
 void main()
 {
 
@@ -37,7 +76,7 @@ void main()
    if(GetHasFeatEffect(2153) == FALSE)
    {
         //Declare major variables
-        object oTarget = GetSpellTargetObject();
+        object OBJECT_SELF = GetSpellTargetObject();
         int nLevel = PS_GetCasterLevel(OBJECT_SELF);
 
         effect eVis = EffectVisualEffect( VFX_HIT_SPELL_EVOCATION );
@@ -58,15 +97,16 @@ void main()
         eLink = SupernaturalEffect(eLink);
 
         // * Do not allow this to stack
-        RemoveEffectsFromSpell(oTarget, GetSpellId());
+        RemoveEffectsFromSpell(OBJECT_SELF, GetSpellId());
 
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_VENGEANCE, FALSE));
+        SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_VENGEANCE, FALSE));
 
         //Apply Link and VFX effects to the target
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCharismaBonus+1));
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nCharismaBonus+1));
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
        
         DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
     }
 }
+*/

@@ -22,43 +22,52 @@
 #include "nwn2_inc_spells"
 
 
-void main()
-{
+void main(){
 
-   if (!GetHasFeat(FEAT_TURN_UNDEAD, OBJECT_SELF))
-   {
-        SpeakStringByStrRef(STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS);
-   }
-   else 
-   {
-   // we have turn undead attempts left.
-   		object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, GetLocation(OBJECT_SELF), TRUE);
-		int nDam = d8(1);
-		int nBonus = GetAbilityModifier(ABILITY_CHARISMA);
-		int totalDamage = nDam + nBonus;
-		
-		while(GetIsObjectValid(oTarget))
-		{
-			if (GetRacialType(oTarget)==RACIAL_TYPE_UNDEAD)
-			{
-				effect e = EffectDamage(totalDamage, DAMAGE_TYPE_DIVINE);
-				effect ePlane = EffectVisualEffect( VFX_HIT_SPELL_HOLY );
-				effect eLink = EffectLinkEffects(e, ePlane);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
-			}
-			else if(spellsIsTarget( oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF ))
-			{
-				effect e = EffectHeal(totalDamage);
-				effect ePlane = EffectVisualEffect( VFX_HIT_CURE_AOE );
-				effect eLink = EffectLinkEffects(e, ePlane);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
-			
-			}
-			totalDamage = d8(1) + nBonus; //FIX: New roll for each target
-			oTarget = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, GetLocation(OBJECT_SELF), TRUE);
-		}
-	effect eImpactVis = EffectVisualEffect(VFX_FEAT_TURN_UNDEAD);
-    ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpactVis, GetLocation(OBJECT_SELF));	
-   	DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
+	if (!GetHasFeat(FEAT_TURN_UNDEAD, OBJECT_SELF)){
+		SpeakStringByStrRef(STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS);
+		return;
 	}
+	location lLoc = GetLocation(OBJECT_SELF);
+	int nId = GetSpellId();
+	int nRace;
+	effect eAmount;
+	effect eVis;
+	effect eLink;
+	int bApply;
+	int nBonus = GetAbilityModifier(ABILITY_CHARISMA);
+	if (nBonus < 0) nBonus = 0;
+	
+	object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, lLoc, TRUE);
+	while(GetIsObjectValid(oTarget)){
+		bApply = FALSE;
+		nRace = GetRacialType(oTarget);
+
+		if (nRace == RACIAL_TYPE_UNDEAD){
+			if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF)){
+				bApply = TRUE;
+				eAmount = EffectDamage(d6(2) + nBonus, DAMAGE_TYPE_DIVINE);
+				eVis = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
+				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, TRUE));
+			}
+		} else {
+			if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF) && nRace != RACIAL_TYPE_CONSTRUCT){
+				bApply = TRUE;
+				eAmount = EffectHeal(d6(2) + nBonus);
+				eVis = EffectVisualEffect(VFX_HIT_CURE_AOE);
+				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
+			}
+		}
+		
+		if (bApply){
+				eLink = EffectLinkEffects(eAmount, eVis);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+		}
+		
+		oTarget = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, lLoc, TRUE);
+	}
+	
+	effect eImpactVis = EffectVisualEffect(VFX_FEAT_TURN_UNDEAD);
+	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eImpactVis, lLoc);	
+	DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
 } 

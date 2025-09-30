@@ -126,12 +126,13 @@ void PS_HO_DR(object oPC, int nSpell)
 	int nReduct = 5;
 	int nDamagePower = DAMAGE_POWER_PLUS_ONE;
 	
-	if (PS_OutsiderLevels(oPC) >= 6)
-	{	nReduct = 10;
+	if (PS_OutsiderLevels(oPC) >= 6){	
+		nReduct = 10;
 		if (GetHitDice(oPC) >= 15)
-		{	nDamagePower = DAMAGE_POWER_PLUS_TWO;	}
+			nDamagePower = DAMAGE_POWER_PLUS_TWO;
 		if (GetHitDice(oPC) >= 23)
-		{	nDamagePower = DAMAGE_POWER_PLUS_THREE;	}	}
+			nDamagePower = DAMAGE_POWER_PLUS_THREE;
+	}
 	
 	effect eDR = EffectDamageReduction(nReduct, nDamagePower, 0, DR_TYPE_MAGICBONUS);
 		eDR = SupernaturalEffect(eDR);
@@ -199,7 +200,7 @@ void PS_HOM_FiendishSmiting(object oPC, int nSpell)
 {
 	int iHitDice 	= GetHitDice(oPC);
 	float fDuration = RoundsToSeconds(iHitDice * 5);
-	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d8, DAMAGE_TYPE_DIVINE);
+	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d6, DAMAGE_TYPE_NEGATIVE);
 		eBonus = VersusAlignmentEffect(eBonus, ALIGNMENT_ALL, ALIGNMENT_GOOD);
 	effect eHands = EffectNWN2SpecialEffectFile("evil_hand_effect", oPC);
 	effect eLink = 	EffectLinkEffects(eBonus, eHands);
@@ -213,7 +214,7 @@ void PS_HOM_CelestialSmiting(object oPC, int nSpell)
 {
 	int iHitDice 	= GetHitDice(oPC);
 	float fDuration = RoundsToSeconds(iHitDice * 5);
-	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d8, DAMAGE_TYPE_DIVINE);
+	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d6, DAMAGE_TYPE_POSITIVE);
 		eBonus = VersusAlignmentEffect(eBonus, ALIGNMENT_ALL, ALIGNMENT_EVIL);
 	effect eHands = EffectNWN2SpecialEffectFile("holy_hand_effect", oPC);
 	effect eLink = 	EffectLinkEffects(eBonus, eHands);
@@ -371,7 +372,7 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
 {
     int iDuration	= GetHitDice(oPC) * 5;
     effect eAOE		= EffectAreaOfEffect(VFX_MOB_CROWN_OF_FLAME);
-	
+	StoreSpellDataForAoE("CrownOfFlames", nSpell, iDuration);
 	
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(iDuration));
 }

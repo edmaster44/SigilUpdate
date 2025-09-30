@@ -24,31 +24,18 @@
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-20 by Georg
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
+    if (!X2PreSpellCastCode()) return;
 
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
 
 
     //Declare major variables
+	int nId = GetSpellId();
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
     
-    int nValue = 3 + (nCasterLvl)/10;
-    if (nValue > 5)
-     nValue = 5; // * Max of 5
+    int nValue = 3 + (nCasterLvl)/8;
+    if (nValue > 6) nValue = 6; // * Max of 6
     
     effect eDEF = EffectACIncrease(nValue, AC_DEFLECTION_BONUS);
 	effect eSHI = EffectACIncrease(nValue, AC_SHIELD_ENCHANTMENT_BONUS);
@@ -62,7 +49,7 @@ void main()
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Fire spell cast at event for target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 421, FALSE));
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
     //Apply VFX impact and bonus effects
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);

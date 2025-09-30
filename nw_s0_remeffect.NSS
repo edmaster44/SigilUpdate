@@ -94,8 +94,8 @@ void main()
     
     object oTarget = GetSpellTargetObject();
     int nEffect1;
-    int nEffect2;
-    int nEffect3;
+    int nEffect2 = 0;
+    int nEffect3 = 0;
     int bAreaOfEffect = FALSE;
     
     effect eVis;
@@ -105,6 +105,7 @@ void main()
     {
         nEffect1 = EFFECT_TYPE_BLINDNESS;
         nEffect2 = EFFECT_TYPE_DEAF;
+		nEffect3 = EFFECT_TYPE_MISS_CHANCE;
         bAreaOfEffect = TRUE;
 		eVis = EffectVisualEffect(VFX_HIT_SPELL_CONJURATION);
 		eImmune = EffectImmunity(IMMUNITY_TYPE_BLINDNESS); 

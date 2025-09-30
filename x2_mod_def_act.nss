@@ -29,12 +29,6 @@ void main()
 	int nItemID = GetBaseItemType(oItem);
 	int idCraftedPotion = 49;
 	
-	if (GetResRef(oItem) == "lvlup"){	
-		int nLvl = GetHitDice(oPC);
-		GiveXPToCreature(oPC, GetXP(oPC) + (nLvl * 1000));
-		GiveGoldToCreature(oPC, 50000);
-	}
-	
 	// workaround for inflict wounds potions not working in no pvp areas due to the hostile flag.
 	// the craft potion feat now creates neg energy potions with UNIQUE_POWER_SELF_ONLY spell, so that they
 	// register here, and the material is set so that the potion is identifiable to players even if the 

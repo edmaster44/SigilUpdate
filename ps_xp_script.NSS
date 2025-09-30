@@ -123,6 +123,10 @@ void main()
 
 				
 			nFinalXP = FloatToInt(fFinalXP);
+			
+			//a kill should be at least 1 xp if the CR of the creature is not more than 10
+			// less than the strongest party member -FlattedFifth, August 26, 2025
+			if (iMAX - PS_RoundToInt(fCR) <= 10 && nFinalXP < 1) nFinalXP = 1;
 				
 			if(nFinalXP > 0)
 			{

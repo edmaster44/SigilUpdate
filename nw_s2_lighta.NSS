@@ -34,8 +34,8 @@ void main(){
 		
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, data.nId, FALSE));
 		if (bDivineLight){
-			RemoveEffect(oTarget, EffectNewBlindness());
-			RemoveEffect(oTarget, EffectBlindness());
+			RemoveSpecificEffect(EFFECT_TYPE_BLINDNESS, oTarget);
+			RemoveSpecificEffect(EFFECT_TYPE_MISS_CHANCE, oTarget);
 		}
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, oTarget, HoursToSeconds(nLevel));
 	}	

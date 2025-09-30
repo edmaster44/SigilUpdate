@@ -628,7 +628,7 @@ int GetECLXP(int nXP, int nLevel, int nECL){
 	
 	if (nECL < 0) nECL = 0;
 	if (nECL > 20) nECL = 20;
-
+	if (nXP < 1) nXP = 1;
 	if (nECL == 0) return nXP;
 	// nLevel is the character's current level, not next.
 	
