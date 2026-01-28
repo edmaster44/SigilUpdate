@@ -39,6 +39,12 @@ void main () {
 	float Duration = GetLocalFloat(oItem, "ruin_feat_duration");
 	itemproperty ip = ItemPropertyBonusFeat(RuinFeat);
 	
+	//The duration set in the local floats for the ruin salves is only 6 minutes,
+	// not an hour like the description says, so rather than change the float
+	// and have to load new versions of the UTI files we'll just correct it here
+	// -FlattedFifth, Jan 28, 2026
+	Duration *= 10.0;
+	
 	EnforceOneRuinFeat(oPC, RuinFeat, oTarget);
 
 	IPSafeAddItemProperty(oTarget, ip, Duration);
