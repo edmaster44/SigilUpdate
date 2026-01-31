@@ -21,6 +21,7 @@ July 3, 2024 FlattedFifth
 #include "ff_update_feats"
 #include "ps_adjust_monk"
 #include "ps_adjust_knight"
+#include "ps_adjust_kensei"
 #include "ps_inc_bgspellfix"
 #include "class_mageslayer_utils"
 
@@ -291,6 +292,7 @@ void main()
 	// redundant, ff_update_feats does all of this
 //	PS_AdjustSneakAttack(oPC);
 	PS_KnightLevels(oPC);
+	PS_KenseiLevels(oPC);
 	MageSlayerLevels(oPC);
 	// moved to ff_update_feats
 	//PS_ManageImbueItem(oPC);
