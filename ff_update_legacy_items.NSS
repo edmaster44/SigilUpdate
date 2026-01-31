@@ -6,21 +6,29 @@
 #include "x2_inc_itemprop"
 #include "x2_inc_craft"
 #include "dmfi_inc_const"
+#include "ff_fix_item_sets"
 
 // function declarations
-void FF_UpdateLegacyItems(object oPC);
+void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE);
 void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
 
 
 // Edit this function to perform whatever operations need to be done to correct erroneous items.
 // This function is called from the function below it and should also be called from the on acquire 
 // item event script x2_mod_def_aqu.nss
-void FF_UpdateSingleLegacyItem(object oPC, object oItem){
+void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	// since multiple checks require knowing the res ref, we'll just get it here.
 	string sRef = GetResRef(oItem);
 	
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
+	
+	// repair the tags and local variables on set items damaged by appearance changer
+	// see ff_fix_item_sets.nss
+	FF_FixItemSets(oItem, sRef);
+	//bail if we're only looking at set items, from chat command #fixsetitems
+	// see ps_mod_onchat.nss
+	if (bSetsOnly) return; 
 	
 	object oNewItem;
 	
@@ -221,7 +229,9 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem){
 
 // MAIN, cycles through all of PC's items and sends them to FF_UpdateSingleLegacyItem function.
 // This should be called from the login script ps_onpcloaded.nss
-void FF_UpdateLegacyItems(object oPC)
+// Addendum Jan 30, 2026 by FlattedFifth, added functionality to fix broken set items and 
+// call this from chat commands with the bSetsOnly flag to limit processing to set items.
+void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE)
 {
 	int i = 0;
 	object oItem;
@@ -230,7 +240,7 @@ void FF_UpdateLegacyItems(object oPC)
 		if (i != INVENTORY_SLOT_CARMOUR)
 		{
 			oItem = GetItemInSlot(i, oPC);
-			DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oPC, oItem)));
+			DelayCommand(0.3f, AssignCommand(oPC, FF_UpdateSingleLegacyItem(oPC, oItem, bSetsOnly)));
 		}
 	}
 	int nNumDMFI = 0;
@@ -244,7 +254,7 @@ void FF_UpdateLegacyItems(object oPC)
 			nNumDMFI++;
 			if (nNumDMFI > 1) DestroyObject(oItem, 0.3f, FALSE);
 		} else {
-			FF_UpdateSingleLegacyItem(oPC, oItem);
+			FF_UpdateSingleLegacyItem(oPC, oItem, bSetsOnly);
 		}
         oItem = GetNextItemInInventory(oPC);
 		// num of items a pc could have if inv full of full bags, including the bags

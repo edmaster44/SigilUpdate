@@ -16,7 +16,14 @@
 	granted feats will need to be altered.
 */
 
+// -FlatteFifth, Jan 30, 2026. Gave 5 dodge AC to all sets that include boots with no AC, boosted
+// set properties that are lower than crafted max to be equal to crafted max (5 ability score instead of 4, etc)
 #include "x2_inc_itemprop"
+
+const int SET_DODGE_EFFECT_ID = 8675309; //Jenny's number
+void ApplySetBootsAC(object oItem, int nBonus);
+void RemoveSetBootsAC(object oItem);
+
 
 /* ///////////////////////////////////////////////////////////////////////////////////
 Sword Saint Item Set
@@ -52,6 +59,7 @@ void CelestialGloryEnhanced(object oItem)
 	IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1283),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyLimitUseBySAlign(IP_CONST_ALIGNMENT_LG),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1272),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+	IPSafeAddItemProperty(oItem, ItemPropertyAbilityBonus(ABILITY_CHARISMA, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
 void CelestialGloryStandard(object oItem)
@@ -114,6 +122,8 @@ void FallenShadowsEnhanced(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageReduction(4, 11),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1083),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(733),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		
+	ApplySetBootsAC(oItem, 5);
 }
 
 void FallenShadowsStandard(object oItem)
@@ -122,6 +132,8 @@ void FallenShadowsStandard(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyACBonus(3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyCastSpell(246, 8),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageReduction(2, 11),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		
+	RemoveSetBootsAC(oItem);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,6 +149,8 @@ void SlaadskinEnhanced(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageResistance(9, 1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageResistance(10, 1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyCastSpell(283, 8),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		
+		ApplySetBootsAC(oItem, 5);
 }
 
 void SlaadskinStandard(object oItem)
@@ -147,6 +161,8 @@ void SlaadskinStandard(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageResistance(9, 1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageResistance(10, 1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		
+		RemoveSetBootsAC(oItem);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -189,6 +205,8 @@ void BrazenEnhanced(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1171),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyLight(3, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageVulnerability(7, 3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		
+		ApplySetBootsAC(oItem, 2);
 }
 
 void BrazenStandard(object oItem)
@@ -198,6 +216,8 @@ void BrazenStandard(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyAbilityBonus(2, 3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusSpellResistance(0),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyLight(1, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		
+		RemoveSetBootsAC(oItem);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -226,6 +246,7 @@ void FighterSpecStandard(object oItem)
 ///////////////////////////////////////////////////////////////////////////////
 //Divine Champion-Specific Item Set
 
+/* this set does not seem to exist any more -FlattedFifth
 void ChampSpecEnhanced(object oItem)
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
@@ -245,5 +266,32 @@ void ChampSpecStandard(object oItem)
 		ItemPropertyBonusSpellResistance(5);
 		ItemPropertyLimitUseByClass(4);
 }
+*/
 
+
+//apply dodge ac to make up for lack of it on set boots
+void ApplySetBootsAC(object oItem, int nBonus){
+	object oOwner = GetItemPossessor(oItem);
+	if (!GetIsObjectValid(oOwner)) return;
+	effect eDodge = EffectACIncrease(nBonus);
+	eDodge = SupernaturalEffect(eDodge);
+	eDodge = SetEffectSpellId(eDodge, SET_DODGE_EFFECT_ID); 
+	float nDuration = HoursToSeconds(100);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDodge, oOwner, nDuration);
+}
+
+//remove dodge ac from set boots
+void RemoveSetBootsAC(object oItem){
+	object oOwner = GetItemPossessor(oItem);
+	if (!GetIsObjectValid(oOwner)) return;
+	
+	effect eFX = GetFirstEffect(oOwner);
+    while (GetIsEffectValid(eFX)) {
+        if (GetEffectSpellId(eFX) == SET_DODGE_EFFECT_ID) {
+            RemoveEffect(oOwner, eFX);
+			return;
+        }
+        eFX = GetNextEffect(oOwner);
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////

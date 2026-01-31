@@ -3,6 +3,7 @@
 #include "nwnx_sql"
 #include "ps_inc_functions"
 #include "ServerExts"
+#include "ff_update_legacy_items"
 
 
 
@@ -242,6 +243,15 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback = "The item Tag is " + GetTag(oItem);
 			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
 		}
+	}
+	else if (sInput == "#fixsetitems"){
+		bFFcommand = TRUE;
+		sFeedback = "Scanning inventory for set items and repairing their tags and variables.";
+		sFeedback += "\nThis should fix any set items broken by the appearance changer.";
+		sFeedback += "\nIf this does not work, contact a DM on our Discord server.";
+		SendMessageToPC(oSender, sFeedback);
+		FF_UpdateLegacyItems(oSender, TRUE);
+		sFeedback = "Finished repairing set items";
 	}
 	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
 	// toggles on and off force cost of crafting, cannot be used to craft for free on main
