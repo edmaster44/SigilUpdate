@@ -19,7 +19,8 @@ void main(){
 		//Prevent multiple auras from stacking
 		PS_RemoveEffects(oTarget, SPELLABILITY_KNIGHT_AURA, NULL, oCaster);
 	
-		int cScale = PS_GetCasterLevel(oCaster)/6 ;
+		int cScale = PS_GetCasterLevel(oCaster, CLASS_TYPE_PALADIN)/6;
+		if (cScale > 4) cScale = 4;
 		effect eSaves = EffectSavingThrowIncrease(SAVING_THROW_ALL, cScale, SAVING_THROW_TYPE_ALL, FALSE);
 		effect eAB = EffectAttackIncrease(cScale,ATTACK_BONUS_MISC);
 		effect	eBuffs = EffectLinkEffects(eSaves, eAB);
