@@ -27,7 +27,7 @@ void main(){
 	float fDur = HoursToSeconds(nDur);
 	
 	effect eAOE = EffectAreaOfEffect(AOE_PER_DARKNESS);
-	SetEffectSpellId(eAOE, nId); 
+	eAOE = SetEffectSpellId(eAOE, nId); 
 	
 	StoreSpellDataForAoE("Darkness", nId, nLevel);
 	

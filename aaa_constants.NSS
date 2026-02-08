@@ -857,6 +857,7 @@ const int VFX_MOB_CROWN_OF_FLAME				= 79;
 const int AOE_MOB_SCINTILLATING_PATTERN			= 80;
 const int VFX_MOB_DRAGON_FEAR_PC				= 83;
 const int VFX_MOB_ARCHON_MENACE					= 85;
+const int VFX_SENTINEL_KNIGHT_AURA				= 86;
 
 // Wing Variations
 const int WING_VARIATION_DWARF					= 1;
@@ -923,6 +924,7 @@ const int SPELL_BLEED							= 1508;
 const int SPELL_BLADE_OF_BLOOD					= 1509;
 const int SPELL_BLADE_OF_FEAR					= 1510;
 const int SPELLABILITY_DIVINE_RETRIBUTION		= 1931;
+
 
 //New Spell Like Abilities for Dervish
 const int SPELLABILITY_DERVISH_AC_BONUS			= 1926;

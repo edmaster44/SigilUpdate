@@ -8,33 +8,14 @@ This is based on the total Knight level, as well as PRC.
 #include "ps_inc_functions"
 
 
-void main()
-{
-object oPC = OBJECT_SELF;
-	int cScale = PS_GetCasterLevel(oPC)/6 ;
+void main(){
 
-
-
-	object oTarget = GetEnteringObject();
-	object oCaster = GetAreaOfEffectCreator();
+	object oCaster = OBJECT_SELF;
 	
-	effect eSaves  = EffectSavingThrowIncrease(SAVING_THROW_ALL, cScale,SAVING_THROW_TYPE_ALL,FALSE);
-	effect eAB =	EffectAttackIncrease(cScale,ATTACK_BONUS_MISC);
+	effect eAOE = EffectAreaOfEffect(VFX_SENTINEL_KNIGHT_AURA);
+	eAOE = SupernaturalEffect(eAOE);
+ 
 	
-effect	eBuffs = EffectLinkEffects(eSaves,eAB);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oCaster);
 
-
-
-
-		//SpeakString("nw_s2_auradespairA.nss: On Enter: target is not the same as the creator");
-
-		SignalEvent (oTarget, EventSpellCastAt(oCaster, SPELLABILITY_KNIGHT_AURA, FALSE));		
-
-	    //Faction Check
-		if (!GetIsDead(oTarget) && GetIsEnemy(oTarget, oCaster)) {
-		
-	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oTarget);
-	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oPC);				
-		}
-	
 }

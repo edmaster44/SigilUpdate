@@ -117,7 +117,7 @@ string PickEssentialItemReward(int nCR) {
 		}
 	} else {
 	
-		int nRand = Random(26)+1;
+		int nRand = Random(27)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck015"; //natural armor +5
 			case 2: return "nw_it_mneck015"; //natural armor +5
@@ -145,6 +145,7 @@ string PickEssentialItemReward(int nCR) {
 			case 24: return "ps_gad_trinket_restoration"; //trinket
 			case 25: return "ps_gad_trinket_protfromalign"; //trinket
 			case 26: return "ps_gad_trinket_deathward"; //trinket
+			case 27: return "ps_whip_razorvine"; //razorvine whip
 		}
 	}
 	
