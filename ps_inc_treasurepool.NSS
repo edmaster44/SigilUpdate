@@ -16,10 +16,11 @@ string PickFromQuestTreasureHigh();
 //AC items mostly; returns an electrifier as the default
 //nCR = the ideal PC's level (under 5, under 10, etc)
 string PickEssentialItemReward(int nCR) {
-
+	int nRand;
+	
 	if (nCR < 5) {
 	
-		int nRand = Random(17)+1;
+		nRand = Random(17)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck001"; //natural armor +1
 			case 2: return "nw_it_mneck001"; //natural armor +1
@@ -42,7 +43,7 @@ string PickEssentialItemReward(int nCR) {
 		
 	} else if (nCR < 10) {
 	
-		int nRand = Random(16)+1;
+		nRand = Random(16)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck012"; //natural armor +2
 			case 2: return "nw_it_mneck013"; //natural armor +3
@@ -63,7 +64,7 @@ string PickEssentialItemReward(int nCR) {
 		}
 	} else if (nCR < 15) {
 	
-		int nRand = Random(21)+1;
+		nRand = Random(21)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck014"; //natural armor +4
 			case 2: return "nw_it_mneck014"; //natural armor +4
@@ -89,7 +90,7 @@ string PickEssentialItemReward(int nCR) {
 		}
 	} else if (nCR < 20) {
 	
-		int nRand = Random(23)+1;
+		nRand = Random(23)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck015"; //natural armor +5
 			case 2: return "nw_it_mneck015"; //natural armor +5
@@ -115,9 +116,9 @@ string PickEssentialItemReward(int nCR) {
 			case 22: return "ps_gad_trinket_protfromalign"; //trinket
 			case 23: return "ps_gad_trinket_deathward"; //trinket
 		}
-	} else {
+	} else if (nCR < 25){
 	
-		int nRand = Random(27)+1;
+		nRand = Random(26)+1;
 		switch(nRand) {
 			case 1: return "nw_it_mneck015"; //natural armor +5
 			case 2: return "nw_it_mneck015"; //natural armor +5
@@ -145,7 +146,30 @@ string PickEssentialItemReward(int nCR) {
 			case 24: return "ps_gad_trinket_restoration"; //trinket
 			case 25: return "ps_gad_trinket_protfromalign"; //trinket
 			case 26: return "ps_gad_trinket_deathward"; //trinket
-			case 27: return "ps_whip_razorvine"; //razorvine whip
+		}
+	} else {
+		nRand = d20();
+		switch(nRand){
+			case 1: return "nw_it_mneck015"; //natural armor +5
+			case 2: return "nx2_boots_hardy_05"; //hardiness +5
+			case 3: return "nx2_cloat_prot_05"; //deflection cloak +5
+			case 4: return "nw_it_mring020"; //deflection ring +5
+			case 5: return "nw_it_mbracer010"; //bracers +5
+			case 6: return "nx2_cloak_resist_05"; //resist cloak +5
+			case 7: return "nx2_glove_dex_06"; //gloves of dex +5
+			case 8: return "nw_it_mbelt008"; //belt of strength +5
+			case 9: return "nw_it_mneck011"; //amulet of wisdom +5
+			case 10: return "nx2_helm_int_06"; //headband of intellect +5
+			case 11: return "ps_whip_razorvine"; //razorvine whip
+			case 12: return "nx2_cloak_cha_06"; //cloak of charisma +5
+			case 13: return "ps_randomitem_token30"; //gambling ticket level 30
+			case 14: return "ps_gad_trinket_shield"; //trinket
+			case 15: return "ps_gad_trinket_restoration"; //trinket
+			case 16: return "ps_gad_trinket_protfromalign"; //trinket
+			case 17: return "ps_gad_trinket_deathward"; //trinket
+			case 18: return "ps_belt_faraneyth"; //belt regen 1
+			case 19: return "ps_amulet_crimson"; //amulet regen 1
+			case 20: return "ps_ring_power"; //ring regen 1
 		}
 	}
 	
@@ -537,7 +561,7 @@ string PickFromQuestTreasureMed() {
 //Replace / modify list as needed
 string PickFromQuestTreasureHigh() {
 
-	int numOfItems = 177; //number of items in the list below
+	int numOfItems = 178; //number of items in the list below
 	
 	switch(Random(numOfItems)+1) {
 	
@@ -718,6 +742,7 @@ string PickFromQuestTreasureHigh() {
 		case 175: return "ps_ring_greenrhomboid";
 		case 176: return "ps_ring_bluesphere";
 		case 177: return "ps_ring_fieldsergeant";
+		case 178: return "ps_whip_razorvine"; //razorvine whip
 	}
 	
 	return "";
