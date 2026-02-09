@@ -13,10 +13,12 @@ void main(){
 		return;
 	}
 	
-	object oTarget = GetEnteringObject();
+	object oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);;
 	
-	ApplyAura(oTarget, oCaster);
-	
-	
+	while(GetIsObjectValid(oTarget)){
+		ApplyAura(oTarget, oCaster);
+		oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
+	}
+
 	
 }

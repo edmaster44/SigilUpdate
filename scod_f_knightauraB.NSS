@@ -3,9 +3,8 @@ This is based on the total Knight level, as well as PRC.
 */
 
 
-#include "x0_i0_spells"
-#include "x2_inc_spellhook"
-#include "ps_inc_functions"
+#include "scod_f_knightaura_inc"
+
 
 
 void main(){
