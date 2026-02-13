@@ -926,8 +926,6 @@ int PS_GetIpBonusFeat(int nFeatId){
         case 93: return 419; // weap foc lght xbow
         case 411: return 89; // rapid reload;
         case 41: return 17; // twf
-		case 867: return 29; // whirlwind
-		case 868: return 825; // improved whirlwind
         default: 
         {
             string sCheckString = IntToString(nFeatId);
