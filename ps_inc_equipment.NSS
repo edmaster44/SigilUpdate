@@ -17,6 +17,7 @@
 #include "ff_update_feats_inc"
 #include "x2_inc_spellhook"
 #include "ps0_classes2015_inc"
+#include "class_samurai_feats_inc"
 
 
 /*----------------------------------------------------------------------------------------
@@ -27,12 +28,10 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP);
 void EquipmentEffects(object oPC, object oChanged, int bOnEquip);
 void ConDrainProtection(object oItem, object oPC);
 int GetACProvidedByShield(object oShield);
-void DrunkMasterImprovised(object oPC, int nRIGHT);
 void FIX_BLINDFIGHT(object oPC);
 void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
 void MonkDruidPenalty(object oPC);
-//void UnearthlyGrace(object oPC, object oCHEST);
 int GetArmorQualifiesForArmorOpt(object oARMOR);
 void ArmorOptimizations(object oPC, object oARMOR);
 void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string s2DA = "armorrulestats", string sCOLUMN = "ACCHECK");
@@ -56,19 +55,20 @@ void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND);
 void BucklerFinesse(object oPC, object oLHAND);
 void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor);
 void FlorentineTWF(object oPC, object oRHAND, object oLHAND);
-void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND);
-void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip);
-void FrightfulPresence(object oPC, int nCHA);
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0);
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip);
 void NaturalMultiattack(object oPC, object oRHAND, object oLHAND);
+void RefreshSamuraiAbilities(object oPC, object oItem, int bOnEquip);
 
-
+//void UnearthlyGrace(object oPC, object oCHEST);
 //int GetCreatureWeapons(object oItem);
 //int GetIsSpecialFinessable(int nTYPE);
 //int GetIsShields(object oItem)
 //void TatooedMonk(object oPC, int nRIGHT, int nLEFT);
 //void DrunkMasterImprovised(object oPC, int nRIGHT);
+//void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND);
+//void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip);
+//void FrightfulPresence(object oPC, int nCHA);
 
 
 /*----------------------------------------------------------------------------------------
@@ -157,11 +157,31 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
    // UnearthlyGrace(oPC, oCHEST);
 	MonkDruidPenalty(oPC);
 	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
+	RefreshSamuraiAbilities(oPC, oChanged, bOnEquip);
 	UpdateWeaponBenefits(oPC, oRHAND, oLHAND, oCHEST, oChanged, bOnEquip);
 
 	
     //TatooedMonk(oPC, nRIGHT, nLEFT);
     //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
+}
+
+void RefreshSamuraiAbilities(object oPC, object oItem, int bOnEquip){
+	int nSam = GetSamKenLevel(oPC);
+	if (nSam < 1) return;
+	
+	if (GetHasFeat(SAMURAI_AGILE_WARRIOR_FEAT_ID, oPC, TRUE))
+		AgileWarrior(oPC, nSam);
+		
+	if (GetHasFeat(SAMURAI_STRIKETHROUGH_FEAT_ID, oPC, TRUE)){
+		itemproperty ipStrike = ItemPropertyOnHitCastSpell(SAMURAI_STRIKETHROUGH_IP_ID, nSam);
+		if (!bOnEquip) RemoveItemProperty(oItem, ipStrike);
+		else {
+			if (IPGetIsMeleeWeapon(oItem))
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipStrike, oItem);
+		}
+	}
+	
+
 }
 
 void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
@@ -179,8 +199,8 @@ void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHES
 	
 	MurderousIntent(oPC, oRHAND);
 	FlorentineTWF(oPC, oRHAND, oLHAND);
-	TwoSwordsAsOne(oPC, oRHAND, oLHAND);
-	IajaitsuMaster(oPC, oRHAND, oChanged, bOnEquip);
+	//TwoSwordsAsOne(oPC, oRHAND, oLHAND);
+	//IajaitsuMaster(oPC, oRHAND, oChanged, bOnEquip);
 	UpdateCombatMods(oPC, NULL);
 	object oSkin = PS_GetCreatureSkin(oPC);
 	CheckTacticalWeapons(oPC, oSkin);
@@ -196,7 +216,9 @@ void NaturalMultiattack(object oPC, object oRHAND, object oLHAND){
 			FeatAdd(oPC, 1784, FALSE);
 }
 
+// removed
 //Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword or ninjato in off hand.
+/*
 void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
 
     int nSAMURAI = GetLevelByClass(65, oPC);
@@ -247,7 +269,9 @@ void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
 	eAB = EffectLinkEffects(EffectDamageIncrease(nBonus, nDMG_TYPE), eAB);
 	ApplyEquipmentEffect(oPC, eAB);
 }
+*/
 
+//removed
 //At level 5, when the Samurai draws a longsword or katana (in right hand) they gain an attack bonus 
 //equal to their charisma bonus for 1 round. They also gain 1 extra attack for that round as well. 
 // Because attack bonuses do not stack this need to be last and take the longer duration bonuses
@@ -255,6 +279,7 @@ void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
 // character won't get the bonus attack if using methodical defense or considered strike, which makes
 // sense, considering that those are supposed to grant their bonuses because the character is moving
 // cautiously
+/*
 void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 
     if (GetLevelByClass(65, oPC) < 5) return;
@@ -294,8 +319,11 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	// set the int that shows we've done this recently to false
 	DelayCommand(30.0f, SetLocalInt(oPC, "Iajaitsu", FALSE));
 }
+*/
 
+// removed
 //When a Samurai draws their weapon (a katana or longsword) foes can be frightened by it.
+/*
 void FrightfulPresence(object oPC, int nCHA){
 	if (nCHA < 1) return;
     if (GetHasFeat(2419, oPC, TRUE) == FALSE) return;
@@ -323,6 +351,7 @@ void FrightfulPresence(object oPC, int nCHA){
         oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
     }
 }
+*/
 
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 	int nTac;

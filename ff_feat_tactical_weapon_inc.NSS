@@ -65,7 +65,7 @@ int HasIpOnEquipment(itemproperty ip, object oPC, int bIncludeSkin = FALSE){
 // it treats all instances as one, so if you have a ring with bonus feat CE
 // and bonus feat CE on your creature skin, and then remove it from one of them,
 // CE disappears from the mode bar even though the other is unaffected.
-// If I had known that before I made the whole tactical weapons thing, I wouldn'tactical
+// If I had known that before I made the whole tactical weapons thing, I wouldn't
 // have had the weapons grant feats. So, now I check for the same bonus feat IP on
 // all other equipped gear and it it's there, I don't remove it from the skin
 // =FlattedFifth, June 1, 2025
@@ -105,6 +105,8 @@ int GetFeatFromIprp(int iprp){
 		case 6: return FEAT_KNOCKDOWN;
 		case 16: return FEAT_POWER_ATTACK;
 		case 17: return FEAT_TWO_WEAPON_FIGHTING;
+		case 825: return FEAT_IMPROVED_WHIRLWIND;
+		case 29: return FEAT_WHIRLWIND_ATTACK;
 	}
 	return NULL;
 }
@@ -117,6 +119,8 @@ int GetIsTacIprp(int iprp){
 		case FEAT_CLEAVE: return TRUE;
 		case FEAT_KNOCKDOWN: return TRUE;
 		case FEAT_POWER_ATTACK: return TRUE;
+		case FEAT_WHIRLWIND_ATTACK: return TRUE;
+		case FEAT_IMPROVED_WHIRLWIND: return TRUE;
 	}
 	return FALSE;
 }

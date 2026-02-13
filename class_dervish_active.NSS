@@ -3,14 +3,6 @@
 #include "ps_inc_equipment"
 
 
-int Ceil(float numb)
-{
-    int cast = FloatToInt(numb);
-    return numb > 0.0 ? ((numb - cast) > 0.0 ? cast + 1 : cast) : ((numb - cast) > 0.0 ? cast - 1 : cast);
-}
-
-
-
 void ApplyDervishFatigue(object oPC){
 int DervishLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 	int iABPenalty = Ceil(5 - DervishLevel / 2.0);
