@@ -176,7 +176,7 @@ int GetEquippedItemPPBonus(object oManifester){
 						} else if (nType == BASE_ITEM_LARGESHIELD){
 							nPPBonus += MED_SHIELD_BONUS_PP;
 						} else if (nType == BASE_ITEM_TOWERSHIELD){
-									nPPBonus += TOWER_SHIELD_BONUS_PP;
+							nPPBonus += TOWER_SHIELD_BONUS_PP;
 						}
 					}
 				}
@@ -194,7 +194,7 @@ int GetEquippedItemPPBonus(object oManifester){
 			}
 		}
 	}
-	return nPPBonus;
+	return nPPBonus + nStaffBonus;
 
 }
 
