@@ -4,11 +4,11 @@
 #include "psi_inc_psifunc"
 
 int nPsion(object oPC){
-	return GetPsionicCasterLevel(oPC, CLASS_TYPE_PSION);
+	return GetPsyOrPsiCasterLevel(oPC, CLASS_TYPE_PSION);
 }
 
 int nPsywar(object oPC){
-	return GetPsionicCasterLevel(oPC, CLASS_PSYCHIC_WARRIOR);
+	return GetPsyOrPsiCasterLevel(oPC, CLASS_PSYCHIC_WARRIOR);
 }
 
 //*************************************************

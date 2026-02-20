@@ -19,6 +19,7 @@
 //:://////////////////////////////////////////////
 #include "x2_inc_spellhook"
 #include "psi_inc_psifunc"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -41,14 +42,18 @@ void main()
 			int i = 1;
 			object oPC = OBJECT_SELF;
 			//Defines the local variable that will represent power points.
-			int nPsion = GetLevelByClass(90, OBJECT_SELF);
-			int nMentalist = GetLevelByClass(100, OBJECT_SELF);
-			int nPsychicKnight = GetLevelByClass(109,OBJECT_SELF);
-			int nCerebremancer = GetLevelByClass(152, OBJECT_SELF);
-			int nPhyTheruge = GetLevelByClass(115,OBJECT_SELF);
-			int nGem = GetLevelByClass(128, OBJECT_SELF);
-			nPsion = nPsion + nMentalist + nCerebremancer + nGem + nPsychicKnight+ nPhyTheruge ;
+			// the below 7 lines are getting caster level class by class
+			// which omits, ofc, any new classes. As there is already a function
+			// to get caster level, we should use it.
+			// int nPsion = GetLevelByClass(90, OBJECT_SELF);
+			// int nMentalist = GetLevelByClass(100, OBJECT_SELF);
+			// int nPsychicKnight = GetLevelByClass(109,OBJECT_SELF);
+			// int nCerebremancer = GetLevelByClass(152, OBJECT_SELF);
+			// int nPhyTheruge = GetLevelByClass(115,OBJECT_SELF);
+			// int nGem = GetLevelByClass(128, OBJECT_SELF);
+			// nPsion = nPsion + nMentalist + nCerebremancer + nGem + nPsychicKnight+ nPhyTheruge ;
 			//Determines level in psion class.
+			int nPsion = PsionLevels(OBJECT_SELF);
 			int nPPvalue;
 			int nIntBonus = GetAbilityModifier(ABILITY_INTELLIGENCE, OBJECT_SELF);
 			int nPPBonus = nIntBonus * (nPsion/2);
@@ -60,31 +65,7 @@ void main()
 				//Psionic Heritage gateway feat grants a bonus of 4 power points.
 			}
 			//Checking for items that provide bonus power points when equipped.
-			for(i = 0; i < NUM_INVENTORY_SLOTS; i++)
-		    {
-		        object oEquipedItem = GetItemInSlot(i, oPC);
-		       
-		        if(GetResRef(oEquipedItem) == "ps_staff_mindsilver1")
-				{
-					nPPBonus = nPPBonus +10;
-				}
-				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver2")
-				{
-					nPPBonus = nPPBonus +20;
-				}
-				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver3")
-				{
-					nPPBonus = nPPBonus +30;
-				}
-				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver4")
-				{
-					nPPBonus = nPPBonus +40;
-				}
-				if(GetResRef(oEquipedItem) == "ps_staff_mindsilver5")
-				{
-					nPPBonus = nPPBonus +50;
-				}
-		    }
+			nPPBonus += GetEquippedItemPPBonus(OBJECT_SELF);
 			
 			switch (nPsion)
 			{
@@ -273,12 +254,18 @@ void main()
 			}
 			//Manifester Tier
 			int nPsion2 = GetLevelByClass(90, OBJECT_SELF);
+			int nMentalist = GetLevelByClass(100, OBJECT_SELF);
+			int nCerebremancer = GetLevelByClass(152, OBJECT_SELF);
+			int nGem = GetLevelByClass(128, OBJECT_SELF);
+			int nGem2 = GetLevelByClass(130, oPC) - 2;
 			if (nMentalist > 1)
 			{	nPsion2 = nPsion2 + (nMentalist - 1);	}
 			if (nCerebremancer >= 1)
 			{	nPsion2 = nPsion2 + nCerebremancer;	}
 			if (nGem > 1)
 			{	nPsion2 = nPsion2 + (nGem/2);	}
+			if (nGem2 > 1)
+			{	nPsion2 = nPsion2 + nGem2;	}
 			
 			
 			if (!GetHasFeat(21425, oPC) && nPsion2 > 0)

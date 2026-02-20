@@ -64,7 +64,7 @@ object GetNearestEnchantingWorkbench(object oPC);
 object GetNearestSmithingWorkbench(object oPC);
 object GetNearestGemWorkbench(object oPC);
 itemproperty IpArgsToItemProperty(int nType, int nSub, int nParam, int nSpecial);
-
+int GetContainsMaterial(object oItem, int nMaterial);
 
 int GetArmorBaseMaterial(object oItem);
 
@@ -312,6 +312,21 @@ int GetBaseMaterialOfType(object oItem, string sMat2da){
 		ip = GetNextItemProperty(oItem);
 	}
 	return NULL;
+}
+
+int GetContainsMaterial(object oItem, int nMaterial){
+
+	itemproperty ip = GetFirstItemProperty(oItem);
+	int nSub;
+	while (GetIsItemPropertyValid(ip)){
+		if (GetItemPropertyType(ip) == 100){
+			nSub = GetItemPropertySubType(ip);
+			if (nSub == nMaterial)
+				return TRUE;
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	return FALSE;
 }
 
 

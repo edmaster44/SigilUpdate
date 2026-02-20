@@ -28,8 +28,7 @@
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
 
-
-
+void DoPsionFeatProgression(object oPC);
 
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
@@ -290,7 +289,7 @@ int GetDisallowedLevelDownPRC(object oPC);
 
 void DoPsyProgression(object oPC, int bCharCreation = FALSE);
 
-int PsyWarLevels(object oPC);
+
 
 void StackBardicUses(object oPC);
 
@@ -4719,25 +4718,6 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
     SetLocalInt(oTarget, sVar+"_Num", nIndex);
 }
 
-//Calculuates Psychic Warrior Levels
-int PsyWarLevels(object oPC)
-{
-    int iTotal = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
-    iTotal += GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
-    // bit of a math error here. If the gem dragon level is 0, then this is 
-    // adding 1. 
-    //int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1; 
-    // instead we'll do this:
-    int nGemDragon = GetLevelByClass(128, oPC); // old gemdragon
-    if (nGemDragon > 0) iTotal += nGemDragon / 2 + 1;
-    if (GetHasFeat(3680, oPC, TRUE)){ // if has new psy path feat for new dragon prc
-        int nDragonLevel = GetLevelByClass(130, oPC) - 2;
-        if (nDragonLevel > 0) iTotal += nDragonLevel;
-    }
-    return iTotal;  
-}
-
-
 //This Determines Psychic Warrior Progression
 void DoPsyProgression(object oPC, int bCharCreation = FALSE)
 {   
@@ -4804,6 +4784,75 @@ if (GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
         {   SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
             SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");       }
 
+}
+
+
+//Progression for Psionic classes.
+void DoPsionFeatProgression(object oPC){
+
+	// why are we getting caster level here when we already have
+	// functions for this in ps_inc_casterlevel?
+	/*
+	int nLEVEL = GetLevelByClass(90, oPC);
+	if (nLEVEL < 1) return;
+	nLEVEL += GetLevelByClass(100, oPC) - 1; // illithid mentalist
+	nLEVEL += GetLevelByClass(152, oPC);   // cerebremancer
+	nLEVEL += GetLevelByClass(109, oPC) - 1; // psychic knight
+	nLEVEL += GetLevelByClass(115,oPC); // theurge
+	nLEVEL += GetLevelByClass(128, oPC) / 2 + 1; // old gem dragon
+	if (GetHasFeat(3679, oPC, TRUE)){//new dragon prc psion path
+		int nDragon = (GetLevelByClass(130, oPC) - 2);
+		if (nDragon > 0) nLEVEL += nDragon;
+	}*/
+	
+	int nLEVEL = PsionLevels(oPC);
+	if (nLEVEL < 1) return;
+	
+	if (nLEVEL > 16)
+	{
+		int nTOTAL = 0;
+		int nCOUNT = 21331;
+		while (nCOUNT < 21338)
+		{
+			if (nCOUNT != 21334) //This was excluded or was it an oversight?
+			{
+				if (GetHasFeat(nCOUNT, oPC, TRUE) == TRUE) nTOTAL = nTOTAL + 1;
+			}
+			nCOUNT = nCOUNT + 1;
+		}
+		if (nTOTAL == 4) FeatRemove(oPC, 21402);
+	}
+	else
+	{
+		int nADD;
+		int nREMOVE;
+		int nTHRESHOLD = 2;
+		while (nTHRESHOLD <= 16)
+		{
+			if (nLEVEL < nTHRESHOLD) break;
+			switch (nTHRESHOLD)
+			{
+				case 2: nADD = 21395; nREMOVE = 21409; break;
+				case 4: nADD = 21396; nREMOVE = 21395; break;
+				case 6: nADD = 21397; nREMOVE = 21396; break;
+				case 8: nADD = 21398; nREMOVE = 21397; break;
+				case 10: nADD = 21399; nREMOVE = 21398; break;
+				case 12: nADD = 21400; nREMOVE = 21399; break;
+				case 14: nADD = 21401; nREMOVE = 21400; break;
+				case 16: nADD = 21402; nREMOVE = 21401; break;
+				default: nADD = 0; nREMOVE = 0;
+			}
+			if (nREMOVE > 0)
+			{
+				if (GetHasFeat(nREMOVE, oPC, TRUE) == TRUE)
+				{
+					FeatAdd(oPC, nADD, FALSE, TRUE);
+					FeatRemove(oPC, nREMOVE);
+				}
+			}
+			nTHRESHOLD = nTHRESHOLD + 2;
+		}
+	}
 }
 
 void DoPsyFeatProgression(object oPC)

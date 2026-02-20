@@ -170,7 +170,7 @@ void ApplyTurnResist(object oPC){
 // warlock base class >= 12 or total warlock CL >= 15. -FlattedFifth, July 27, 2025
 void PS_ManageImbueItem(object oPC)
 {
-	int nPsiCaster = GetPsionicCasterLevel(oPC);
+	int nPsiCaster = GetPsyOrPsiCasterLevel(oPC);
 	int nWarlockClass = GetLevelByClass(CLASS_TYPE_WARLOCK, oPC);
 	int nWarlockCaster = PS_GetCasterLevel(oPC, CLASS_TYPE_WARLOCK);
 

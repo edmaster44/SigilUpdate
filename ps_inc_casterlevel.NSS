@@ -56,29 +56,63 @@ int GetFeatGrantedCasterLevel(object oPC) {
 	return nCasterLevel;
 }
 
-//Pulled out of the manifestation struct for using more generically
-int GetPsionicCasterLevel(object oPC, int nSpecific = CLASS_TYPE_INVALID) {
-	int nPsionLevel = GetLevelByClass(90, oPC); // psion
-	int nPsychicLevel = GetLevelByClass(110, oPC); // psychic warrior
-	if (nPsionLevel + nPsychicLevel == 0) return 0;
+int PsionLevels(object oPC){
+	int iTotal = GetLevelByClass(90, oPC); // psion
+	if (iTotal < 1) return 0;
 	
-	nPsionLevel += GetLevelByClass(109, oPC); // psychic knight
-	nPsionLevel += GetLevelByClass(100,oPC); // illithid mentalist
-	nPsionLevel += GetLevelByClass(115, oPC); // psychic theurge
-	nPsionLevel += GetLevelByClass(152, oPC); // cerebremancer
-	
-	nPsychicLevel += GetLevelByClass(111, oPC); // warmind
-	
+	iTotal += GetLevelByClass(109, oPC); // psychic knight
+	iTotal += GetLevelByClass(100,oPC); // illithid mentalist
+	iTotal += GetLevelByClass(115, oPC); // psychic theurge
+	iTotal += GetLevelByClass(152, oPC); // cerebremancer
 	int nDragon = GetLevelByClass(128, oPC); // old gem dragon
-	if (GetHasFeat(3679, oPC) || GetHasFeat(3680, oPC)){ // new telepath dragon rprc psi/psy paths
+	if (GetHasFeat(3679, oPC)){ // new telepath dragon rprc psi path
 		int nNewDragon = GetLevelByClass(130, oPC) - 2;
-		if (nNewDragon > 0) nDragon += nNewDragon;
+		if (nNewDragon > 0) iTotal += nNewDragon;
 	}
+	if (GetHasFeat(3684, oPC, TRUE)){ // if has practiced manifester psion feat
+		int nHD = GetHitDice(oPC);
+		iTotal += 4;
+		if (iTotal > nHD) iTotal = nHD;
+	}
+	return iTotal; 
+}
+
+
+//Calculates Psychic Warrior Levels
+int PsyWarLevels(object oPC){
+    int iTotal = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
+	if (iTotal < 1) return 0;
 	
-	if (nSpecific == CLASS_TYPE_PSION) return nPsionLevel + nDragon;
-	else if (nSpecific == CLASS_PSYCHIC_WARRIOR) return nPsychicLevel + nDragon;
+    iTotal += GetLevelByClass(CLASS_TYPE_WARMIND,oPC);
+    // bit of a math error here. If the gem dragon level is 0, then this is 
+    // adding 1. 
+    //int nGemDragon = GetLevelByClass(128, oPC) / 2 + 1; 
+    // instead we'll do this:
+    int nGemDragon = GetLevelByClass(128, oPC); // old gemdragon
+    if (nGemDragon > 0) iTotal += nGemDragon / 2 + 1;
+    if (GetHasFeat(3680, oPC, TRUE)){ // if has new psy path feat for new dragon prc
+        int nDragonLevel = GetLevelByClass(130, oPC) - 2;
+        if (nDragonLevel > 0) iTotal += nDragonLevel;
+    }
+	if (GetHasFeat(3685, oPC, TRUE)){ // if has practiced manifester psywar feat
+		int nHD = GetHitDice(oPC);
+		iTotal += 4;
+		if (iTotal > nHD) iTotal = nHD;
+	}
+    return iTotal;  
+}
+
+//Pulled out of the manifestation struct for using more generically
+int GetPsyOrPsiCasterLevel(object oPC, int nSpecific = CLASS_TYPE_INVALID){
 	
-	return nPsionLevel + nPsychicLevel + nDragon;
+	if (nSpecific == CLASS_TYPE_PSION) return PsionLevels(oPC);
+	else if (nSpecific == CLASS_PSYCHIC_WARRIOR) return PsyWarLevels(oPC);
+	
+	int nPsionLevel = PsionLevels(oPC); // psion
+	int nPsyWarLevel = PsyWarLevels(oPC); // psychic warrior
+	if (nPsionLevel + nPsyWarLevel == 0) return 0;
+	if (nPsionLevel > nPsyWarLevel) return nPsionLevel;
+	return nPsyWarLevel;
 }
 
 //Gets the PC's caster level, via 2da and feats
@@ -90,7 +124,7 @@ int GetRealCasterLevel(object oPC, int bIncludeAlch = FALSE) {
 	
 	int nRet;
 	int nCasterLevel = 0;
-	int nPsionicLevel = GetPsionicCasterLevel(oPC);
+	int nPsionLevel = GetPsyOrPsiCasterLevel(oPC);
 	
 	int class1 = GetClassByPosition(1, oPC);
 	nCasterLevel = GetCasterLevelFromClass(oPC, class1);
@@ -107,7 +141,7 @@ int GetRealCasterLevel(object oPC, int bIncludeAlch = FALSE) {
 	//Account for Practiced Spellcaster
 	nCasterLevel += GetFeatGrantedCasterLevel(oPC);
 	
-	if (nPsionicLevel > nCasterLevel) nRet = nPsionicLevel;
+	if (nPsionLevel > nCasterLevel) nRet = nPsionLevel;
 	else nRet = nCasterLevel;
 	
 	// Alchemical Infusion

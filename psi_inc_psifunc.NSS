@@ -16,6 +16,14 @@
 /*                  Includes                    */
 //////////////////////////////////////////////////
 
+const int JEWELRY_BONUS_PP = 5;
+const int HELM_BONUS_PP = 10;
+const int LIGHT_SHIELD_BONUS_PP = 5;
+const int MED_SHIELD_BONUS_PP = 7;
+const int TOWER_SHIELD_BONUS_PP = 10;
+const int ARMOR_BONUS_PP = 15;
+const int CRAFTED_STAFF_BONUS_PP = 10;
+
 #include "psi_power_const"
 #include "psi_inc_fillin"
 #include "psi_feat_const"
@@ -25,10 +33,20 @@
 #include "ps_inc_casterlevel"
 #include "psi_inc_metapsi"
 #include "nwn2_inc_spells"
+#include "ps_inc_newcraft_include"
 
 //////////////////////////////////////////////////
 /*             Function prototypes              */
 //////////////////////////////////////////////////
+
+// No longer get pp bonus for two staves by dual wielding them. Instead you
+// get the higher bonus;
+int GetStaffPPBonus(object oItem);
+
+
+// Used in the power point pool feats to calculate bonus points
+// for equipped mindsilver items
+int GetEquippedItemPPBonus(object oManifester);
 
 /**
  * Determines from what class's power list the currently being manifested
@@ -126,10 +144,87 @@ int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDa
 /*             Function definitions             */
 //////////////////////////////////////////////////
 
+int GetEquippedItemPPBonus(object oManifester){
+
+	int nPPBonus = 0;
+	object oEquipedItem;
+	string sResRef;
+	int nType;
+	int i;
+	int nStaffBonus = 0;
+	int nTempStaffBonus = 0;
+	for (i = 0; i < NUM_INVENTORY_SLOTS; i++){
+		
+		oEquipedItem = GetItemInSlot(i, oManifester);
+		if (GetIsObjectValid(oEquipedItem)){
+			
+			if (i == INVENTORY_SLOT_RIGHTHAND){
+				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
+				if (nTempStaffBonus > nStaffBonus)
+					nStaffBonus = nTempStaffBonus;
+					
+			} else if (i == INVENTORY_SLOT_LEFTHAND){
+				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
+				if (nTempStaffBonus > nStaffBonus)
+					nStaffBonus = nTempStaffBonus;
+				// check for shields if the left hand item wasnt a mindsilver staff
+				if (nTempStaffBonus == 0){
+					if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
+						nType = GetBaseItemType(oEquipedItem);
+						if (nType == BASE_ITEM_SMALLSHIELD){
+							nPPBonus += LIGHT_SHIELD_BONUS_PP;
+						} else if (nType == BASE_ITEM_LARGESHIELD){
+							nPPBonus += MED_SHIELD_BONUS_PP;
+						} else if (nType == BASE_ITEM_TOWERSHIELD){
+									nPPBonus += TOWER_SHIELD_BONUS_PP;
+						}
+					}
+				}
+				
+			} else if (i == INVENTORY_SLOT_HEAD){
+				if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER))
+							nPPBonus += HELM_BONUS_PP;
+			} else if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
+						i == INVENTORY_SLOT_RIGHTRING){
+						if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER))
+							nPPBonus += JEWELRY_BONUS_PP;
+			} else if (i == INVENTORY_SLOT_CHEST){
+						if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER))
+							nPPBonus += ARMOR_BONUS_PP;
+			}
+		}
+	}
+	return nPPBonus;
+
+}
+
+int GetStaffPPBonus(object oItem){
+	string sResRef = GetResRef(oItem);
+	int nType;
+	if (sResRef == "ps_staff_mindsilver1")
+		return 10;
+	else if (sResRef == "ps_staff_mindsilver2")
+		return 20;
+	else if (sResRef == "ps_staff_mindsilver3")
+		return 30;
+	else if (sResRef == "ps_staff_mindsilver4")
+		return 40;
+	else if (sResRef == "ps_staff_mindsilver5")
+		return 50;
+	else {
+		nType = GetBaseItemType(oItem);
+		if (nType == 45 || nType == 50 || nType == 98){ // short, regular, and giant staves
+			if (GetContainsMaterial(oItem, SPECIAL_MAT_MINDSILVER))
+				return CRAFTED_STAFF_BONUS_PP;
+		}
+	}
+	return 0;
+}
+
 int GetManifestingClass(object oManifester = OBJECT_SELF){
 
-	int nPsion = GetPsionicCasterLevel(oManifester, CLASS_TYPE_PSION);
-	int nPsywar = GetPsionicCasterLevel(oManifester, CLASS_PSYCHIC_WARRIOR);
+	int nPsion = GetPsyOrPsiCasterLevel(oManifester, CLASS_TYPE_PSION);
+	int nPsywar = GetPsyOrPsiCasterLevel(oManifester, CLASS_PSYCHIC_WARRIOR);
 	if (nPsion + nPsywar < 1) return CLASS_TYPE_INVALID;
 	
 	if (nPsion > nPsywar) return CLASS_TYPE_PSION;
@@ -140,12 +235,12 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
 	if (GetItemPossessor(GetSpellCastItem()) == oManifester){
 		// if the effect is from an object, caster level is psy/psi caster lvl
 		// or 1/2 HD, whichever is higher
-		int nCL = GetPsionicCasterLevel(oManifester, nSpecificClass);
-		int nHD = GetHitDice(oManifester) / 2;
-		if (nHD > nCL) return nHD;
+		int nCL = GetPsyOrPsiCasterLevel(oManifester, nSpecificClass);
+		int nHalfHD = GetHitDice(oManifester) / 2;
+		if (nHalfHD > nCL) return nHalfHD;
 		else return nCL;
 	}
-	else return GetPsionicCasterLevel(oManifester, nSpecificClass); 
+	else return GetPsyOrPsiCasterLevel(oManifester, nSpecificClass); 
 }
 
 int GetPowerLevel(object oManifester){

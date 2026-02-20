@@ -54,68 +54,6 @@ void UpgradeCreatureWeapons(object oPC)
 	}
 }
 
-//Progression for Psionic classes.
-void DoPsiProgression(object oPC)
-{
-	int nLEVEL = GetLevelByClass(90, oPC);
-	if (nLEVEL < 1) return;
-	nLEVEL += GetLevelByClass(100, oPC) - 1; // illithid mentalist
-	nLEVEL += GetLevelByClass(152, oPC);   // cerebremancer
-	nLEVEL += GetLevelByClass(109, oPC) - 1; // psychic knight
-	nLEVEL += GetLevelByClass(115,oPC); // theurge
-	nLEVEL += GetLevelByClass(128, oPC) / 2 + 1; // old gem dragon
-	if (GetHasFeat(3679, oPC, TRUE)){//new dragon prc psion path
-		int nDragon = (GetLevelByClass(130, oPC) - 2);
-		if (nDragon > 0) nLEVEL += nDragon;
-	}
-	
-	if (nLEVEL > 16)
-	{
-		int nTOTAL = 0;
-		int nCOUNT = 21331;
-		while (nCOUNT < 21338)
-		{
-			if (nCOUNT != 21334) //This was excluded or was it an oversight?
-			{
-				if (GetHasFeat(nCOUNT, oPC, TRUE) == TRUE) nTOTAL = nTOTAL + 1;
-			}
-			nCOUNT = nCOUNT + 1;
-		}
-		if (nTOTAL == 4) FeatRemove(oPC, 21402);
-	}
-	else
-	{
-		int nADD;
-		int nREMOVE;
-		int nTHRESHOLD = 2;
-		while (nTHRESHOLD <= 16)
-		{
-			if (nLEVEL < nTHRESHOLD) break;
-			switch (nTHRESHOLD)
-			{
-				case 2: nADD = 21395; nREMOVE = 21409; break;
-				case 4: nADD = 21396; nREMOVE = 21395; break;
-				case 6: nADD = 21397; nREMOVE = 21396; break;
-				case 8: nADD = 21398; nREMOVE = 21397; break;
-				case 10: nADD = 21399; nREMOVE = 21398; break;
-				case 12: nADD = 21400; nREMOVE = 21399; break;
-				case 14: nADD = 21401; nREMOVE = 21400; break;
-				case 16: nADD = 21402; nREMOVE = 21401; break;
-				default: nADD = 0; nREMOVE = 0;
-			}
-			if (nREMOVE > 0)
-			{
-				if (GetHasFeat(nREMOVE, oPC, TRUE) == TRUE)
-				{
-					FeatAdd(oPC, nADD, FALSE, TRUE);
-					FeatRemove(oPC, nREMOVE);
-				}
-			}
-			nTHRESHOLD = nTHRESHOLD + 2;
-		}
-	}
-}
-
 
 //Bardic music stacks
 void CheckBardicSongs(object oPC)
@@ -279,11 +217,12 @@ void main()
 	GetFavoredSoulWithoutFeat(oPC);
 	PS_MonkLevels(oPC);
 	PsyWarProgression(oPC);
+	DoPsionFeatProgression(oPC);
+	DoPsyFeatProgression(oPC);
 	HalfUndeadFeat(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
-	DoPsiProgression(oPC);
-	DoPsyFeatProgression(oPC);
+	
 	// redundant, ff_update_feats does this
 //	AddEPForDeathDice(oPC);
 	DoPsyProgression(oPC);
