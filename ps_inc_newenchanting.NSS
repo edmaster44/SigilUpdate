@@ -844,13 +844,13 @@ string DisplaySpecialRequirement(string sReq) {
 	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	string line = "";
 	if (sReq == "CL_DIVINE") {
-		line = "Must be Cleric, Paladin, Favored Soul, or have Concentration 5 or Spellcraft 25.";
+		line = "Must be Cleric, Paladin, Favored Soul, or have Spellcraft 15.";
 	} else if (sReq == "CL_ARCANE") {
-		line = "Must be Wizard, Sorcerer, Bard, Warlock, or have the Magic domain, Lore 5, or Spellcraft 15.";
+		line = "Must be Wizard, Sorcerer, Bard, Warlock, or have the Magic domain, or Spellcraft 15.";
 	} else if (sReq == "CL_NATURE") {
-		line = "Must be Druid, Ranger, Spirit Shaman, or have either the Animal or Plant domain or Survival 5 or Spellcraft 15.";
+		line = "Must be Druid, Ranger, Spirit Shaman, or have either the Animal or Plant domain, or Spellcraft 15.";
 	} else if (sReq == "CL_BARD") {
-		line = "Must be Bard or have either the Knowledge, Travel, or Trickery domain or have Perform 5 or Spellcraft 15.";
+		line = "Must be Bard or have either the Knowledge, Travel, or Trickery domain or have Spellcraft 15.";
 	} else if (sReq == "CREATURE") {
 		line = "On Creature weapons only.";
 	} else if (sReq == "PLAYERMADE_STRONG_MATERIAL_BOOTS") {
@@ -866,6 +866,8 @@ string DisplaySpecialRequirement(string sReq) {
 	} else if (sReq == "NO_SLINGS"){
 		if (GetBaseItemType(oItem) == BASE_ITEM_SLING)
 			line = "This enchantment is redunant on slings.";
+	} else if (sReq == "CL_MANIFESTER"){
+			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. This can also only be enchanted on staves and jewelry.";
 	}
 	return line;
 	
@@ -874,12 +876,12 @@ string DisplaySpecialRequirement(string sReq) {
 //Defines / Implements the custom requirements field
 int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID) {
 	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+	int nItem = GetBaseItemType(oItem);
 	if (sReq == "CL_DIVINE") {
 		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) > 0 ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
-		GetSkillRank(SKILL_CONCENTRATION, oPC, TRUE) >= 5){
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
 			return TRUE;
 		} else {
 			return FALSE;
@@ -890,8 +892,7 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 		GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
 		GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0 ||
 		GetHasFeat(1844, oPC, TRUE) ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
-		GetSkillRank(SKILL_LORE, oPC, TRUE) >= 5){
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
 			return TRUE;
 		} else {
 			return FALSE;
@@ -901,8 +902,7 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 		GetLevelByClass(CLASS_TYPE_RANGER, oPC) ||
 		GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) ||
 		GetHasFeat(1835, oPC, TRUE) || GetHasFeat(1845, oPC, TRUE) ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
-		GetSkillRank(SKILL_SURVIVAL, oPC, TRUE) >= 5){
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
 			return TRUE;
 		} else {
 			return FALSE;
@@ -911,12 +911,28 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
 			GetHasFeat(1849, oPC, TRUE) || GetHasFeat(1850, oPC, TRUE) ||
 			GetHasFeat(1843, oPC, TRUE) ||
-			GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15 ||
-			GetSkillRank(SKILL_PERFORM, oPC, TRUE) >= 5){
+			GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
 			return TRUE;
 		} else {
 			return FALSE;
 		}
+	} else if (sReq == "CL_MANIFESTER"){
+		int bItemQualifies = FALSE;
+		int bCasterQualifies = FALSE;
+		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) > 0 ||
+		GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) ||
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
+			bCasterQualifies = TRUE;
+		}
+		if (nItem == BASE_ITEM_AMULET || nItem == BASE_ITEM_RING ||
+			nItem == BASE_ITEM_SHORT_STAFF || nItem == BASE_ITEM_QUARTERSTAFF ||
+			nItem == BASE_ITEM_GIANT_STAFF){
+				bItemQualifies = TRUE;
+		}
+		if (bItemQualifies && bCasterQualifies)
+			return TRUE;
+		else 
+			return FALSE;
 	} else if (sReq == "CREATURE") {
 		if (IPGetIsCreatureEquippedWeapon(oItem))
 			return TRUE;
@@ -925,12 +941,12 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	// added special condition in scodenchantments.2da for the ac enchant rows. 
 	// This way we can enchant ac on player-made boots of golem, dragon, and outsider but not on others
 	} else if (sReq == "PLAYERMADE_STRONG_MATERIAL_BOOTS") {
-		if (GetBaseItemType(oItem) == BASE_ITEM_BOOTS){
+		if (nItem == BASE_ITEM_BOOTS){
 			if (GetIsAcEligibleBoots(oItem) && GetIsPlayerMade(oItem)) return TRUE;
 			else return FALSE;
 		} else return TRUE;
 	} else if (sReq == "PLAYER_MADE_ONLY_FOR_RINGS"){
-		if (GetBaseItemType(oItem) == BASE_ITEM_RING){
+		if (nItem == BASE_ITEM_RING){
 			return GetIsPlayerMade(oItem);
 		} else return TRUE;
 	} else if (sReq == "PLAYER_MADE"){
@@ -938,12 +954,12 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	} else if (sReq == "PLAYERMADE_XBOW_BRACER_GLOVE"){
 		if (!GetIsPlayerMade(oItem)) return FALSE;
 		if (IPGetIsLauncher(oItem)){
-			int nItem = GetBaseItemType(oItem);
-			if (nItem != BASE_ITEM_HEAVYCROSSBOW && nItem != BASE_ITEM_LIGHTCROSSBOW)
+			if (nItem != BASE_ITEM_HEAVYCROSSBOW && nItem != BASE_ITEM_LIGHTCROSSBOW &&
+				nItem != BASE_ITEM_BRACER && nItem != BASE_ITEM_GLOVES)
 				return FALSE;
 		}
 	} else if (sReq == "NO_SLINGS"){
-		if (GetBaseItemType(oItem) == BASE_ITEM_SLING) return FALSE;
+		if (nItem == BASE_ITEM_SLING) return FALSE;
 	}
 	return TRUE; //no special req, return true
 }

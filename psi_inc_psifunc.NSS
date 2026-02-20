@@ -39,6 +39,9 @@ const int CRAFTED_STAFF_BONUS_PP = 10;
 /*             Function prototypes              */
 //////////////////////////////////////////////////
 
+// get PP bonus for items enchanted with bonus pp
+int GetEnchantedPPBonus(object oItem);
+
 // No longer get pp bonus for two staves by dual wielding them. Instead you
 // get the higher bonus;
 int GetStaffPPBonus(object oItem);
@@ -157,6 +160,8 @@ int GetEquippedItemPPBonus(object oManifester){
 		
 		oEquipedItem = GetItemInSlot(i, oManifester);
 		if (GetIsObjectValid(oEquipedItem)){
+		
+			nPPBonus += GetEnchantedPPBonus(oEquipedItem);
 			
 			if (i == INVENTORY_SLOT_RIGHTHAND){
 				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
@@ -196,6 +201,27 @@ int GetEquippedItemPPBonus(object oManifester){
 	}
 	return nPPBonus + nStaffBonus;
 
+}
+
+int GetEnchantedPPBonus(object oItem){
+	int iSub;
+	int nBonus = 0;
+	itemproperty ip = GetFirstItemProperty(oItem);
+	while(GetIsItemPropertyValid(ip)) {
+		if (GetItemPropertyType(ip) == 99){
+			iSub = GetItemPropertySubType(ip);
+			switch (iSub){
+				case 0: nBonus += 1; break;
+				case 1: nBonus += 3; break;
+				case 2: nBonus += 5; break;
+				case 3: nBonus += 7; break;
+				case 4: nBonus += 9; break;
+				case 5: nBonus += 11; break;
+			}
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	return nBonus;
 }
 
 int GetStaffPPBonus(object oItem){

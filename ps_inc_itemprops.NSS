@@ -46,6 +46,27 @@ struct MatDetails Get2daAndRow(int nMat){
 
 }
 
+itemproperty ItemPropertyBonusPowerPoints(int nSub){
+	string sItem = "";
+	switch (nSub){
+		case 0: sItem = "ps_crft_utility_pp1"; break;
+		case 1: sItem = "ps_crft_utility_pp3"; break;
+		case 2: sItem = "ps_crft_utility_pp5"; break;
+		case 3: sItem = "ps_crft_utility_pp7"; break;
+		case 4: sItem = "ps_crft_utility_pp9"; break;
+		case 5: sItem = "ps_crft_utility_pp11"; break;
+	}
+	itemproperty ip;
+	if (sItem == "") return ip;
+	
+	object oChest = GetObjectFromDMArea("pc_utility_ipchest");
+	object oSpoon = CreateItemOnObject(sItem, oChest);
+	
+	ip = GetFirstItemProperty(oSpoon);	
+	DestroyObject(oSpoon, 1.0f);
+	return ip;
+}
+
 itemproperty ItemPropertySpecialMaterial(int nMat) {
 
 	object oChest = GetObjectFromDMArea("pc_utility_ipchest");
