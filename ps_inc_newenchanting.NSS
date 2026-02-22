@@ -223,8 +223,8 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 
 			nPropRes = StringToInt(Get2DAString("itempropdef", "Name", nType));
 			sName = GetStringByStrRef(nPropRes);
-			// don't include subtype in name if type is power points for bonus feat or cast spell
-			if (nSubType > -1 && nType != 12 && nType != 99 && nType != 15) {
+			// don't include subtype in name if type is power points for bonus feat
+			if (nSubType > -1 && nType != 12 && nType != 99) {
 				sSubTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
 				if (sSubTable != "" && sSubTable != "****") {
 					nSubRes = StringToInt(Get2DAString(sSubTable, "Name", nSubType));
@@ -232,8 +232,8 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 				}
 			}
 		
-			// if the type is either bonus feat or bonus power points or cast spell
-			if (((nLastType == 12 || nLastType == 99 || nLastType == 15) && nType == nLastType) ||
+			// if the type is either bonus feat or bonus power points
+			if (((nLastType == 12 || nLastType == 99) && nType == nLastType) ||
 				(nType == nLastType && nSubType == nLastSub)){ //or type and sub match
 				//then remove the last instance of the type as main menu
 				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
@@ -246,7 +246,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 		}
 	}
 }
-//TODO: Fix sub menu, and make chat command for getting armor appearance and head appearance. When targeting a PC, gets head. When targeting an armor, shows list of all appearance indexes (see nwscript entry at marked line number). Also make dm & me only chat command to clear all record of faction involvement. Also look into this extra domain thing and fix combine songs. Maybe at some point remake Ember to have only 20 total disable device and boost diplomacy
+
 
 //Generate the sub type list
 void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment enchant){
@@ -260,7 +260,6 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 	string sName;
 	int nType;
 	int nSub;
-	string sSubTable;
 	int bCanEnchant;
 	int bItemOk;
 	int nCostTableIndex;
@@ -273,29 +272,18 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 		nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
 		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
 		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
-		if (bItemOk && bCanEnchant){
-		
-			if ((nType == 12 || nType == 15 || nType == 99) ||
-				(nType == enchant.type && nSub == enchant.subtype)){
-				
-				if (nType == 12 || nType == 15 || nType == 99){
-					nNumIndex = StringToInt(Get2DAString(s2da, "Subtype", i));
-					sSubTable = Get2DAString("itempropdef", "SubTypeResRef", i);
-					nParam = StringToInt(Get2DAString(sSubTable, "Name", nNumIndex));
-					sParam = GetStringByStrRef(nParam);
-					sName = sParam;
-				} else if (nType == enchant.type && nSub == enchant.subtype){
-					nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
-					nCostTableIndex = StringToInt(Get2DAString("itempropdef", "CostTableResRef", nType));
-					sCostTable = Get2DAString("iprp_costtable", "Name", nCostTableIndex); 
-					nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
-					sParam = GetStringByStrRef(nParam);
-					sName = sParam;
-				}
-				if (sName == "" || GetStringLowerCase(sParam) == "bad strref" || 
-					GetStringLowerCase(sParam) == "bad_strref") sName = "Click for Details";
-				AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST", "ENCHANTPROW_"+IntToString(i), "ParamTypeName="+sName+";", "", "5="+IntToString(i), "");
-			}
+		if (nType == enchant.type && nSub == enchant.subtype && bItemOk && bCanEnchant){
+			nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
+			
+			nCostTableIndex = StringToInt(Get2DAString("itempropdef", "CostTableResRef", nType));
+			sCostTable = Get2DAString("iprp_costtable", "Name", nCostTableIndex); 
+			nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
+			sParam = GetStringByStrRef(nParam);
+			sName = sParam;
+			
+			if (sName == "" || GetStringLowerCase(sParam) == "bad strref" || 
+				GetStringLowerCase(sParam) == "bad_strref") sName = "Click for Details";
+			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST", "ENCHANTPROW_"+IntToString(i), "ParamTypeName="+sName+";", "", "5="+IntToString(i), "");
 		}
 	}
 }
