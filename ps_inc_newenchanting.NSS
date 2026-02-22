@@ -13,6 +13,11 @@ struct enchantment LoadEnchantmentFromSQL(int index, object oPC = OBJECT_INVALID
 //Enchant the chosen item
 void EnchantItem(object oItem, struct enchantment enchant);
 
+//custom function to remove all power point enchants from an item if a new one is being
+//attached, because if we can't have multiple spell slots on a crafted item we should
+// not have multiple power point enchants
+void RemovePPEnchant(object oItem);
+
 //Must be called after GetHasRequiredEssence and/or GetHasRequiredGemstone
 //If you want it to take the correct essence / gemstone 
 //Ideally called after CanEnchantItem
@@ -116,6 +121,10 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID);
 string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE);
 
 
+
+
+
+
 //Enchant the chosen item
 void EnchantItem(object oItem, struct enchantment enchant) {
 
@@ -130,11 +139,24 @@ void EnchantItem(object oItem, struct enchantment enchant) {
 			ip = ItemPropertyBonusFeat(20); // bonus feat imp crit unarmed
 		else ip = EnchantmentIndexToItemProp(enchant);
 	} else ip = EnchantmentIndexToItemProp(enchant);
+	
+	if (enchant.type == 99)
+		RemovePPEnchant(oItem);
 		
 	IPSafeAddItemProperty(oItem, ip);
 	
 	//spell cast / per day
 	if (enchant.type == 15) SetItemCharges(oItem, 50);
+}
+
+
+void RemovePPEnchant(object oItem){
+	itemproperty ip = GetFirstItemProperty(oItem);
+	while (GetIsItemPropertyValid(ip)){
+		if (GetItemPropertyType(ip) == 99)
+			RemoveItemProperty(oItem, ip);
+		ip = GetNextItemProperty(oItem);
+	}
 }
 
 //A structure to store the enchantment data
