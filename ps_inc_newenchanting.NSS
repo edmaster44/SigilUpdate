@@ -223,19 +223,15 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 
 			nPropRes = StringToInt(Get2DAString("itempropdef", "Name", nType));
 			sName = GetStringByStrRef(nPropRes);
-			// don't include subtype in name if type is power points for bonus feat
-			if (nSubType > -1 && nType != 12 && nType != 99) {
+			if (nSubType > -1) {
 				sSubTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
 				if (sSubTable != "" && sSubTable != "****") {
 					nSubRes = StringToInt(Get2DAString(sSubTable, "Name", nSubType));
 					sName += ": "+ GetStringByStrRef(nSubRes);
 				}
 			}
-		
-			// if the type is either bonus feat or bonus power points
-			if (((nLastType == 12 || nLastType == 99) && nType == nLastType) ||
-				(nType == nLastType && nSubType == nLastSub)){ //or type and sub match
-				//then remove the last instance of the type as main menu
+			
+			if (nType == nLastType && nSubType == nLastSub){
 				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
 			}
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(i), "EnchantTypeName="+sName+";", "", "5="+IntToString(i), "");
