@@ -162,38 +162,29 @@ int GetEquippedItemPPBonus(object oManifester){
 		if (GetIsObjectValid(oEquipedItem)){
 			nType = GetBaseItemType(oEquipedItem);
 			
-			if ((i == INVENTORY_SLOT_RIGHTHAND) &&
-				(nType == 45 || nType == 50 || nType == 98)){ //3 sizes of staves
-				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
-				if (nTempStaffBonus > nStaffBonus)
-					nStaffBonus = nTempStaffBonus;
-					
-			} else if (i == INVENTORY_SLOT_LEFTHAND){
-				if (nType == 45 || nType == 50 || nType == 98){ 
+			if (nType == 45 || nType == 50 || nType == 98 || //staves
+				IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, nType)){ //creature weapons
 					nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
 					if (nTempStaffBonus > nStaffBonus)
 						nStaffBonus = nTempStaffBonus;
-				}
-				else if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
-						if (nType == BASE_ITEM_SMALLSHIELD){
-							nPPBonus += LIGHT_SHIELD_BONUS_PP;
-						} else if (nType == BASE_ITEM_LARGESHIELD){
-							nPPBonus += MED_SHIELD_BONUS_PP;
-						} else if (nType == BASE_ITEM_TOWERSHIELD){
-							nPPBonus += TOWER_SHIELD_BONUS_PP;
-						}
-					}
-
-			} else {
+			}
+			else {
 				nPPBonus += GetEnchantedPPBonus(oEquipedItem);
 				if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
-					if (i == INVENTORY_SLOT_HEAD) 
+					if (nType == BASE_ITEM_SMALLSHIELD){
+						nPPBonus += LIGHT_SHIELD_BONUS_PP;
+					} else if (nType == BASE_ITEM_LARGESHIELD){
+						nPPBonus += MED_SHIELD_BONUS_PP;
+					} else if (nType == BASE_ITEM_TOWERSHIELD){
+						nPPBonus += TOWER_SHIELD_BONUS_PP;
+					} else if (i == INVENTORY_SLOT_HEAD){
 						nPPBonus += HELM_BONUS_PP;
-					else if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
+					} else if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
 							i == INVENTORY_SLOT_RIGHTRING){
 								nPPBonus += JEWELRY_BONUS_PP;
-					} if (i == INVENTORY_SLOT_CHEST)
+					} else if (i == INVENTORY_SLOT_CHEST){
 						nPPBonus += ARMOR_BONUS_PP;
+					}
 				
 				}
 			}
@@ -219,7 +210,7 @@ int GetEnchantedPPBonus(object oItem){
 int GetStaffPPBonus(object oItem){
 	int nBonus = GetEnchantedPPBonus(oItem);
 	string sResRef = GetResRef(oItem);
-	int nType;
+	int nType = GetBaseItemType(oItem);
 	if (sResRef == "ps_staff_mindsilver1")
 		nBonus += 10;
 	else if (sResRef == "ps_staff_mindsilver2")
@@ -230,12 +221,10 @@ int GetStaffPPBonus(object oItem){
 		nBonus += 40;
 	else if (sResRef == "ps_staff_mindsilver5")
 		nBonus += 50;
-	else {
-		nType = GetBaseItemType(oItem);
-		if (nType == 45 || nType == 50 || nType == 98){ // short, regular, and giant staves
+	else if (nType == 45 || nType == 50 || nType == 98 || // short, regular, and giant staves
+		IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, nType)){  //creature weapons
 			if (GetContainsMaterial(oItem, SPECIAL_MAT_MINDSILVER))
-				nBonus += CRAFTED_STAFF_BONUS_PP;
-		}
+					nBonus += CRAFTED_STAFF_BONUS_PP;
 	}
 	return nBonus;
 }

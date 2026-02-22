@@ -594,7 +594,13 @@ int HasSimilarProperty(object oPC, object oItem, struct enchantment enchant) {
 		int iSpecial = GetItemPropertyParam1Value(ip);
 		
 		//SendMessageToPC(oPC, "Checking type and subtype: "+IntToString(nType)+" vs. "+IntToString(iType)+", "+IntToString(nSub)+" vs. "+IntToString(iSub));
-		if (nType == iType && IndiciesAreEquivalent(nSub, iSub, oPC)) {
+		//custom code to prevent multiple power point enchant on same item because if we
+		//cant do it for spell slots it would be unfair to be able to do it for power points
+		if (nType == 99 && iType == 99){
+			if (nSub == iSub) return 2;
+			else if (nSub < iSub) return 3;
+			else return 1;
+		} else if (nType == iType && IndiciesAreEquivalent(nSub, iSub, oPC)) {
 			//SendMessageToPC(oPC, "Checking type and subtype: "+IntToString(nParam)+" vs. "+IntToString(iParam));
 			if (IndiciesAreEquivalent(nParam, iParam, oPC)) {
 				//SendMessageToPC(oPC, "Checking type and subtype: "+IntToString(nSpecial)+" vs. "+IntToString(iSpecial));
@@ -869,7 +875,7 @@ string DisplaySpecialRequirement(string sReq) {
 		if (GetBaseItemType(oItem) == BASE_ITEM_SLING)
 			line = "This enchantment is redunant on slings.";
 	} else if (sReq == "CL_MANIFESTER"){
-			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. This can also only be enchanted on staves and jewelry.";
+			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. This can also only be enchanted on staves, creature weapons, and jewelry.";
 	}
 	return line;
 	
@@ -928,7 +934,8 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 		}
 		if (nItem == BASE_ITEM_AMULET || nItem == BASE_ITEM_RING ||
 			nItem == BASE_ITEM_SHORT_STAFF || nItem == BASE_ITEM_QUARTERSTAFF ||
-			nItem == BASE_ITEM_GIANT_STAFF){
+			nItem == BASE_ITEM_GIANT_STAFF || 
+			IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, nItem)){
 				bItemQualifies = TRUE;
 		}
 		if (bItemQualifies && bCasterQualifies)
