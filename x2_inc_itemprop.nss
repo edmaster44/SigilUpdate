@@ -357,7 +357,7 @@ int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnore
 		nType == 71 || nType == 75){
 			return TRUE; // these ip types have no parameters
 	} else if (nType == 12 || (nType >= 62 && nType <= 65) || nType == 79 ||
-		nType == 83 || nType == 100){
+		nType == 83 || nType == 99 || nType == 100){
 			bCompSub = TRUE;
 	} else if (nType == 0 || (nType >= 2 && nType <= 5) || (nType >= 7 && nType <= 9) ||
 		(nType >= 13 && nType <= 20) || (nType >= 22 && nType <= 24) || 
