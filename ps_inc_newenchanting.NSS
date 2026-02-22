@@ -223,7 +223,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 
 			nPropRes = StringToInt(Get2DAString("itempropdef", "Name", nType));
 			sName = GetStringByStrRef(nPropRes);
-			if (nSubType > -1) {
+			if (nSubType > -1 && nType != 99) {
 				sSubTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
 				if (sSubTable != "" && sSubTable != "****") {
 					nSubRes = StringToInt(Get2DAString(sSubTable, "Name", nSubType));
@@ -269,14 +269,16 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
 		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
 		if (nType == enchant.type && nSub == enchant.subtype && bItemOk && bCanEnchant){
-			nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
-			
-			nCostTableIndex = StringToInt(Get2DAString("itempropdef", "CostTableResRef", nType));
-			sCostTable = Get2DAString("iprp_costtable", "Name", nCostTableIndex); 
-			nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
-			sParam = GetStringByStrRef(nParam);
-			sName = sParam;
-			
+			if (nType == 99){
+				sName = "Power Points: " + Get2DAString(s2da, "Numerical", i); 
+			} else {
+				nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
+				nCostTableIndex = StringToInt(Get2DAString("itempropdef", "CostTableResRef", nType));
+				sCostTable = Get2DAString("iprp_costtable", "Name", nCostTableIndex); 
+				nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
+				sParam = GetStringByStrRef(nParam);
+				sName = sParam;
+			}
 			if (sName == "" || GetStringLowerCase(sParam) == "bad strref" || 
 				GetStringLowerCase(sParam) == "bad_strref") sName = "Click for Details";
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST", "ENCHANTPROW_"+IntToString(i), "ParamTypeName="+sName+";", "", "5="+IntToString(i), "");

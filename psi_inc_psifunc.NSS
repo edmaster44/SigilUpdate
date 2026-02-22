@@ -160,22 +160,21 @@ int GetEquippedItemPPBonus(object oManifester){
 		
 		oEquipedItem = GetItemInSlot(i, oManifester);
 		if (GetIsObjectValid(oEquipedItem)){
-		
-			nPPBonus += GetEnchantedPPBonus(oEquipedItem);
+			nType = GetBaseItemType(oEquipedItem);
 			
-			if (i == INVENTORY_SLOT_RIGHTHAND){
+			if ((i == INVENTORY_SLOT_RIGHTHAND) &&
+				(nType == 45 || nType == 50 || nType == 98)){ //3 sizes of staves
 				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
 				if (nTempStaffBonus > nStaffBonus)
 					nStaffBonus = nTempStaffBonus;
 					
 			} else if (i == INVENTORY_SLOT_LEFTHAND){
-				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
-				if (nTempStaffBonus > nStaffBonus)
-					nStaffBonus = nTempStaffBonus;
-				// check for shields if the left hand item wasnt a mindsilver staff
-				if (nTempStaffBonus == 0){
-					if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
-						nType = GetBaseItemType(oEquipedItem);
+				if (nType == 45 || nType == 50 || nType == 98){ 
+					nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
+					if (nTempStaffBonus > nStaffBonus)
+						nStaffBonus = nTempStaffBonus;
+				}
+				else if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
 						if (nType == BASE_ITEM_SMALLSHIELD){
 							nPPBonus += LIGHT_SHIELD_BONUS_PP;
 						} else if (nType == BASE_ITEM_LARGESHIELD){
@@ -184,18 +183,19 @@ int GetEquippedItemPPBonus(object oManifester){
 							nPPBonus += TOWER_SHIELD_BONUS_PP;
 						}
 					}
-				}
+
+			} else {
+				nPPBonus += GetEnchantedPPBonus(oEquipedItem);
+				if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
+					if (i == INVENTORY_SLOT_HEAD) 
+						nPPBonus += HELM_BONUS_PP;
+					else if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
+							i == INVENTORY_SLOT_RIGHTRING){
+								nPPBonus += JEWELRY_BONUS_PP;
+					} if (i == INVENTORY_SLOT_CHEST)
+						nPPBonus += ARMOR_BONUS_PP;
 				
-			} else if (i == INVENTORY_SLOT_HEAD){
-				if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER))
-							nPPBonus += HELM_BONUS_PP;
-			} else if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
-						i == INVENTORY_SLOT_RIGHTRING){
-						if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER))
-							nPPBonus += JEWELRY_BONUS_PP;
-			} else if (i == INVENTORY_SLOT_CHEST){
-						if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER))
-							nPPBonus += ARMOR_BONUS_PP;
+				}
 			}
 		}
 	}
@@ -203,12 +203,13 @@ int GetEquippedItemPPBonus(object oManifester){
 
 }
 
+// See "NOTE REGARDING BONUS POWER POINT ITEM PROPERTY" in ps_inc_itemprops.nss
 int GetEnchantedPPBonus(object oItem){
 	int nBonus = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while(GetIsItemPropertyValid(ip)) {
 		if (GetItemPropertyType(ip) == 99){
-			nBonus += GetItemPropertySubType(ip);	
+			nBonus += GetItemPropertySubType(ip) + 1;	
 		}
 		ip = GetNextItemProperty(oItem);
 	}
@@ -216,26 +217,27 @@ int GetEnchantedPPBonus(object oItem){
 }
 
 int GetStaffPPBonus(object oItem){
+	int nBonus = GetEnchantedPPBonus(oItem);
 	string sResRef = GetResRef(oItem);
 	int nType;
 	if (sResRef == "ps_staff_mindsilver1")
-		return 10;
+		nBonus += 10;
 	else if (sResRef == "ps_staff_mindsilver2")
-		return 20;
+		nBonus += 20;
 	else if (sResRef == "ps_staff_mindsilver3")
-		return 30;
+		nBonus += 30;
 	else if (sResRef == "ps_staff_mindsilver4")
-		return 40;
+		nBonus += 40;
 	else if (sResRef == "ps_staff_mindsilver5")
-		return 50;
+		nBonus += 50;
 	else {
 		nType = GetBaseItemType(oItem);
 		if (nType == 45 || nType == 50 || nType == 98){ // short, regular, and giant staves
 			if (GetContainsMaterial(oItem, SPECIAL_MAT_MINDSILVER))
-				return CRAFTED_STAFF_BONUS_PP;
+				nBonus += CRAFTED_STAFF_BONUS_PP;
 		}
 	}
-	return 0;
+	return nBonus;
 }
 
 int GetManifestingClass(object oManifester = OBJECT_SELF){

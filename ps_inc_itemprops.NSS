@@ -1,5 +1,12 @@
+/* NOTE REGARDING BONUS POWER POINT ITEM PROPERTY:
+	When the new item property was set up as having a subtype in itempropdef.2da, the item property
+	behaved itself in the toolset but caused problems for the enchanting GUI. When set up as no 
+	subtype and having a cost table, gui behaved and toolset crashed. SO, for REAL the item property 
+	has a type and a subtype, but in scodenchantments.2da it's listed as having no subtype and a cost
+	table value instead. So when we retrieve data from the item property, we're looking for the 
+	subtype PLUS ONE to get how many points the item property provides, but when we're referencing scodenchantments.2da we're looking at the numerical column instead.
 
-
+*/
 #include "aaa_constants"
 
 struct MatDetails{
@@ -49,15 +56,15 @@ struct MatDetails Get2daAndRow(int nMat){
 itemproperty ItemPropertyBonusPowerPoints(int nNumerical){
 	string sItem = "";
 	switch (nNumerical){
-		case 0: case 1: sItem = "ps_crft_utility_pp1"; break;
-		case 2: sItem = "ps_crft_utility_pp2"; break;
-		case 3: sItem = "ps_crft_utility_pp3"; break;
-		case 4: sItem = "ps_crft_utility_pp4"; break;
-		case 5: sItem = "ps_crft_utility_pp5"; break;
-		case 6: sItem = "ps_crft_utility_pp6"; break;
-		case 7: sItem = "ps_crft_utility_pp7"; break;
-		case 8: sItem = "ps_crft_utility_pp8"; break;
-		case 9: sItem = "ps_crft_utility_pp9"; break;
+		case 1: sItem = "ps_crft_utility_pp01"; break;
+		case 2: sItem = "ps_crft_utility_pp02"; break;
+		case 3: sItem = "ps_crft_utility_pp03"; break;
+		case 4: sItem = "ps_crft_utility_pp04"; break;
+		case 5: sItem = "ps_crft_utility_pp05"; break;
+		case 6: sItem = "ps_crft_utility_pp06"; break;
+		case 7: sItem = "ps_crft_utility_pp07"; break;
+		case 8: sItem = "ps_crft_utility_pp08"; break;
+		case 9: sItem = "ps_crft_utility_pp09"; break;
 		case 10: sItem = "ps_crft_utility_pp10"; break;
 		case 11: sItem = "ps_crft_utility_pp11"; break;
 	}
