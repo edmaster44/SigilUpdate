@@ -204,20 +204,11 @@ int GetEquippedItemPPBonus(object oManifester){
 }
 
 int GetEnchantedPPBonus(object oItem){
-	int iSub;
 	int nBonus = 0;
 	itemproperty ip = GetFirstItemProperty(oItem);
 	while(GetIsItemPropertyValid(ip)) {
 		if (GetItemPropertyType(ip) == 99){
-			iSub = GetItemPropertySubType(ip);
-			switch (iSub){
-				case 0: nBonus += 1; break;
-				case 1: nBonus += 3; break;
-				case 2: nBonus += 5; break;
-				case 3: nBonus += 7; break;
-				case 4: nBonus += 9; break;
-				case 5: nBonus += 11; break;
-			}
+			nBonus += GetItemPropertySubType(ip);	
 		}
 		ip = GetNextItemProperty(oItem);
 	}

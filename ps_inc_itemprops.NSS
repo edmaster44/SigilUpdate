@@ -46,15 +46,20 @@ struct MatDetails Get2daAndRow(int nMat){
 
 }
 
-itemproperty ItemPropertyBonusPowerPoints(int nSub){
+itemproperty ItemPropertyBonusPowerPoints(int nNumerical){
 	string sItem = "";
-	switch (nSub){
-		case 0: sItem = "ps_crft_utility_pp1"; break;
-		case 1: sItem = "ps_crft_utility_pp3"; break;
-		case 2: sItem = "ps_crft_utility_pp5"; break;
-		case 3: sItem = "ps_crft_utility_pp7"; break;
-		case 4: sItem = "ps_crft_utility_pp9"; break;
-		case 5: sItem = "ps_crft_utility_pp11"; break;
+	switch (nNumerical){
+		case 0: case 1: sItem = "ps_crft_utility_pp1"; break;
+		case 2: sItem = "ps_crft_utility_pp2"; break;
+		case 3: sItem = "ps_crft_utility_pp3"; break;
+		case 4: sItem = "ps_crft_utility_pp4"; break;
+		case 5: sItem = "ps_crft_utility_pp5"; break;
+		case 6: sItem = "ps_crft_utility_pp6"; break;
+		case 7: sItem = "ps_crft_utility_pp7"; break;
+		case 8: sItem = "ps_crft_utility_pp8"; break;
+		case 9: sItem = "ps_crft_utility_pp9"; break;
+		case 10: sItem = "ps_crft_utility_pp10"; break;
+		case 11: sItem = "ps_crft_utility_pp11"; break;
 	}
 	itemproperty ip;
 	if (sItem == "") return ip;
