@@ -218,7 +218,7 @@ void main()
 	PS_MonkLevels(oPC);
 	PsyWarProgression(oPC);
 	DoPsionFeatProgression(oPC);
-	DoPsyFeatProgression(oPC);
+	DoPsyPathFeatProgression(oPC);
 	HalfUndeadFeat(oPC);
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);

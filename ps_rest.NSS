@@ -268,7 +268,7 @@ void RestFinish(object oPC)
 	//AddEPForDeathDice(oPC); redundant, this is handled by ff_update_feats
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
-	DoPsyFeatProgression(oPC);
+	DoPsyPathFeatProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
 	AlternativeSkillStatScaling(oPC);

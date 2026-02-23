@@ -16,12 +16,9 @@
 /*                  Includes                    */
 //////////////////////////////////////////////////
 
-const int JEWELRY_BONUS_PP = 5;
-const int HELM_BONUS_PP = 10;
-const int LIGHT_SHIELD_BONUS_PP = 5;
-const int MED_SHIELD_BONUS_PP = 7;
-const int TOWER_SHIELD_BONUS_PP = 10;
-const int ARMOR_BONUS_PP = 15;
+const int JEWELRY_BONUS_PP = 7;
+const int ACCESSORY_BONUS_PP = 9;
+const int ARMOR_BONUS_PP = 11;
 const int CRAFTED_STAFF_BONUS_PP = 10;
 
 #include "psi_power_const"
@@ -160,38 +157,33 @@ int GetEquippedItemPPBonus(object oManifester){
 		
 		oEquipedItem = GetItemInSlot(i, oManifester);
 		if (GetIsObjectValid(oEquipedItem)){
+		
 			nType = GetBaseItemType(oEquipedItem);
 			
-			if (nType == 45 || nType == 50 || nType == 98 || //staves
-				IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, nType)){ //creature weapons
-					nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
-					if (nTempStaffBonus > nStaffBonus)
+			// you only get the larger of two bonuses from 2 items in your hands
+			if (i == INVENTORY_SLOT_RIGHTHAND || i == INVENTORY_SLOT_LEFTHAND){
+				nTempStaffBonus = GetStaffPPBonus(oEquipedItem);
+				if (nTempStaffBonus > nStaffBonus)
 						nStaffBonus = nTempStaffBonus;
-			}
-			else {
+			
+			} else {
 				nPPBonus += GetEnchantedPPBonus(oEquipedItem);
 				if (GetContainsMaterial(oEquipedItem, SPECIAL_MAT_MINDSILVER)){
-					if (nType == BASE_ITEM_SMALLSHIELD){
-						nPPBonus += LIGHT_SHIELD_BONUS_PP;
-					} else if (nType == BASE_ITEM_LARGESHIELD){
-						nPPBonus += MED_SHIELD_BONUS_PP;
-					} else if (nType == BASE_ITEM_TOWERSHIELD){
-						nPPBonus += TOWER_SHIELD_BONUS_PP;
-					} else if (i == INVENTORY_SLOT_HEAD){
-						nPPBonus += HELM_BONUS_PP;
-					} else if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
+					if (i == INVENTORY_SLOT_NECK || i == INVENTORY_SLOT_LEFTRING ||
 							i == INVENTORY_SLOT_RIGHTRING){
 								nPPBonus += JEWELRY_BONUS_PP;
 					} else if (i == INVENTORY_SLOT_CHEST){
 						nPPBonus += ARMOR_BONUS_PP;
+					} else {
+						nPPBonus += ACCESSORY_BONUS_PP;
 					}
 				
 				}
 			}
+			
 		}
-	}
+	}	
 	return nPPBonus + nStaffBonus;
-
 }
 
 // See "NOTE REGARDING BONUS POWER POINT ITEM PROPERTY" in ps_inc_itemprops.nss
@@ -209,8 +201,18 @@ int GetEnchantedPPBonus(object oItem){
 
 int GetStaffPPBonus(object oItem){
 	int nBonus = GetEnchantedPPBonus(oItem);
-	string sResRef = GetResRef(oItem);
 	int nType = GetBaseItemType(oItem);
+	// staves and creature kicks are the only hand-equippable
+	// items that can get PP bonuses, other than enchantments
+	// (currently no other weapons can be  enchanted no drop items
+	// have it, but who knows what the future brings?
+	if (nType != 45 && nType != 50 && nType != 98 &&
+		nType != 192 && nType != 193 && nType != 194 &&
+		nType != 195 && nType != 196)
+			return nBonus;
+
+	string sResRef = GetResRef(oItem);
+
 	if (sResRef == "ps_staff_mindsilver1")
 		nBonus += 10;
 	else if (sResRef == "ps_staff_mindsilver2")
@@ -221,11 +223,8 @@ int GetStaffPPBonus(object oItem){
 		nBonus += 40;
 	else if (sResRef == "ps_staff_mindsilver5")
 		nBonus += 50;
-	else if (nType == 45 || nType == 50 || nType == 98 || // short, regular, and giant staves
-		IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, nType)){  //creature weapons
-			if (GetContainsMaterial(oItem, SPECIAL_MAT_MINDSILVER))
-					nBonus += CRAFTED_STAFF_BONUS_PP;
-	}
+	else nBonus += CRAFTED_STAFF_BONUS_PP;
+
 	return nBonus;
 }
 

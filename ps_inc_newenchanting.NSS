@@ -13,6 +13,11 @@ struct enchantment LoadEnchantmentFromSQL(int index, object oPC = OBJECT_INVALID
 //Enchant the chosen item
 void EnchantItem(object oItem, struct enchantment enchant);
 
+// in order to not encourage people to walk about with drawn weapons and shields on a role-player
+// server, bonus spell slots and power points can only be enchanted on certain items that go in 
+// the hand inv slots
+int GetHandHeldItemGetsSpells(int nItem);
+
 //custom function to remove all power point enchants from an item if a new one is being
 //attached, because if we can't have multiple spell slots on a crafted item we should
 // not have multiple power point enchants
@@ -27,7 +32,8 @@ void TakeEnchantmentRequirements(object oPC, struct enchantment enchant);
 int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int feedback = TRUE);
 
 //Meets the minimum requirements for the most basic enchantment
-int MeetsMinimumRequirements(object oPC);
+//deprecated
+//int MeetsMinimumRequirements(object oPC);
 
 //Checks gold + gives failure message
 int GetHasRequiredCasterLevel(object oPC, int nCL, int giveFeedback = FALSE);
@@ -245,15 +251,15 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 
 			nPropRes = StringToInt(Get2DAString("itempropdef", "Name", nType));
 			sName = GetStringByStrRef(nPropRes);
-			if (nSubType > -1 && nType != 99) {
+			if (nSubType > -1 && nType != 99 && nType != 12 && nType != 15) {
 				sSubTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
 				if (sSubTable != "" && sSubTable != "****") {
 					nSubRes = StringToInt(Get2DAString(sSubTable, "Name", nSubType));
 					sName += ": "+ GetStringByStrRef(nSubRes);
 				}
 			}
-			
-			if (nType == nLastType && nSubType == nLastSub){
+			if ((nType == nLastType) &&
+				(nType == 12 || nType == 15 || nSubType == nLastSub)){
 				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
 			}
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(i), "EnchantTypeName="+sName+";", "", "5="+IntToString(i), "");
@@ -275,7 +281,7 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 	string s2da = "scodenchantments";
 	int i = 0;
 	int nMax = GetNum2DARows(s2da);
-	string sName;
+	string sName = "";
 	int nType;
 	int nSub;
 	int bCanEnchant;
@@ -284,23 +290,33 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 	string sCostTable; 
 	int nNumIndex;
 	int nParam; 
-	string sParam;
+	string sParam = "";
 	for (i = 0; i < nMax; i++){
 		nType = StringToInt(Get2DAString(s2da, "Type", i));
 		nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
 		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
 		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
-		if (nType == enchant.type && nSub == enchant.subtype && bItemOk && bCanEnchant){
+		if ((nType == enchant.type && bItemOk && bCanEnchant) &&
+			(nType == 12 || nType == 15 || nType == 99 || nSub == enchant.subtype)){
 			if (nType == 99){
-				sName = "Power Points: " + Get2DAString(s2da, "Numerical", i); 
+				sParam = Get2DAString(s2da, "Numerical", i);
+				if (StringToInt(sParam) == 1)
+					sParam += " Power Point";
+				else
+					sParam  += " Power Points";
+			} else if (nType == 12 || nType == 15){
+				nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
+				sCostTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
+				nParam = StringToInt(Get2DAString(sCostTable, "Name", nSub));
+				sParam = GetStringByStrRef(nParam);
 			} else {
 				nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
 				nCostTableIndex = StringToInt(Get2DAString("itempropdef", "CostTableResRef", nType));
 				sCostTable = Get2DAString("iprp_costtable", "Name", nCostTableIndex); 
 				nParam = StringToInt(Get2DAString(sCostTable, "Name", nNumIndex)); 
 				sParam = GetStringByStrRef(nParam);
-				sName = sParam;
 			}
+			sName = sParam;
 			if (sName == "" || GetStringLowerCase(sParam) == "bad strref" || 
 				GetStringLowerCase(sParam) == "bad_strref") sName = "Click for Details";
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTPARAM_LIST", "ENCHANTPROW_"+IntToString(i), "ParamTypeName="+sName+";", "", "5="+IntToString(i), "");
@@ -491,7 +507,6 @@ void GenerateEnchantmentTypeList(object oPC, object oItem = OBJECT_INVALID){
 }
 
 //Generate the sub type list
-//will need refactoring for sql
 void GenerateParamTypeList(object oPC, struct enchantment enchant) {
 
 		//Clear the box
@@ -874,13 +889,13 @@ string DisplaySpecialRequirement(string sReq) {
 	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	string line = "";
 	if (sReq == "CL_DIVINE") {
-		line = "Must be Cleric, Paladin, Favored Soul, or have Spellcraft 15.";
+		line = "Must be Cleric, Paladin, Favored Soul, or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
 	} else if (sReq == "CL_ARCANE") {
-		line = "Must be Wizard, Sorcerer, Bard, Warlock, or have the Magic domain, or Spellcraft 15.";
+		line = "Must be Wizard, Sorcerer, Bard, Warlock, or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
 	} else if (sReq == "CL_NATURE") {
-		line = "Must be Druid, Ranger, Spirit Shaman, or have either the Animal or Plant domain, or Spellcraft 15.";
+		line = "Must be Druid, Ranger, Spirit Shaman, or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
 	} else if (sReq == "CL_BARD") {
-		line = "Must be Bard or have either the Knowledge, Travel, or Trickery domain or have Spellcraft 15.";
+		line = "Must be Bard or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
 	} else if (sReq == "CREATURE") {
 		line = "On Creature weapons only.";
 	} else if (sReq == "PLAYERMADE_STRONG_MATERIAL_BOOTS") {
@@ -897,73 +912,87 @@ string DisplaySpecialRequirement(string sReq) {
 		if (GetBaseItemType(oItem) == BASE_ITEM_SLING)
 			line = "This enchantment is redunant on slings.";
 	} else if (sReq == "CL_MANIFESTER"){
-			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. This can also only be enchanted on staves, creature weapons, and jewelry.";
+			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
 	}
 	return line;
 	
+}
+
+int GetHandHeldItemGetsSpells(int nType){
+	// no bonus spell slots on shields
+	if (nType == BASE_ITEM_SMALLSHIELD || nType == BASE_ITEM_LARGESHIELD || 
+		nType == BASE_ITEM_TOWERSHIELD){
+		return FALSE;
+	}
+	// no bonus spells slots on weapons other than staves and creature kicks
+	if (IPGetIsMeleeWeapon(OBJECT_INVALID, nType)){
+		if (nType != 45 && nType != 50 && nType != 98 &&
+			nType != 192 && nType != 193 && nType != 194 &&
+			nType != 195 && nType != 196)
+				return FALSE;	
+	}
+	return TRUE;
 }
 
 //Defines / Implements the custom requirements field
 int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT_INVALID) {
 	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
 	int nItem = GetBaseItemType(oItem);
+	int bItemQualifies = TRUE;
+	int bCasterQualifies = TRUE;
 	if (sReq == "CL_DIVINE") {
-		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) > 0 ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
-			return TRUE;
-		} else {
-			return FALSE;
+		if (GetLevelByClass(CLASS_TYPE_CLERIC, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_PALADIN, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) < 1 &&
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) < 15){
+			bCasterQualifies = FALSE;
 		}
+		bItemQualifies = GetHandHeldItemGetsSpells(nItem);
+		if (bItemQualifies && bCasterQualifies) return TRUE;
+		else return FALSE;
+		
 	} else if (sReq == "CL_ARCANE") {
-		if (GetLevelByClass(CLASS_TYPE_WIZARD, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_SORCERER, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0 ||
-		GetHasFeat(1844, oPC, TRUE) ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
-			return TRUE;
-		} else {
-			return FALSE;
+		if (GetLevelByClass(CLASS_TYPE_WIZARD, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_SORCERER, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_BARD, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) < 1 &&
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) < 15){
+			bCasterQualifies = FALSE;
 		}
+		bItemQualifies = GetHandHeldItemGetsSpells(nItem);
+		if (bItemQualifies && bCasterQualifies) return TRUE;
+		else return FALSE;
+		
 	} else if (sReq == "CL_NATURE") {
-		if (GetLevelByClass(CLASS_TYPE_DRUID, oPC) > 0 ||
-		GetLevelByClass(CLASS_TYPE_RANGER, oPC) ||
-		GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) ||
-		GetHasFeat(1835, oPC, TRUE) || GetHasFeat(1845, oPC, TRUE) ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
-			return TRUE;
-		} else {
-			return FALSE;
+		if (GetLevelByClass(CLASS_TYPE_DRUID, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_RANGER, oPC) < 1 &&
+		GetLevelByClass(CLASS_TYPE_SPIRIT_SHAMAN, oPC) < 1 &&
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) < 15){
+			bCasterQualifies = FALSE;
 		}
+		bItemQualifies = GetHandHeldItemGetsSpells(nItem);
+		if (bItemQualifies && bCasterQualifies) return TRUE;
+		else return FALSE;
+		
 	} else if (sReq == "CL_BARD") {
-		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) > 0 ||
-			GetHasFeat(1849, oPC, TRUE) || GetHasFeat(1850, oPC, TRUE) ||
-			GetHasFeat(1843, oPC, TRUE) ||
-			GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
-			return TRUE;
-		} else {
-			return FALSE;
+		if (GetLevelByClass(CLASS_TYPE_BARD, oPC) < 1 &&
+			GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) < 15){
+				bCasterQualifies = FALSE;
 		}
+		bItemQualifies = GetHandHeldItemGetsSpells(nItem);
+		if (bItemQualifies && bCasterQualifies) return TRUE;
+		else return FALSE;
+		
 	} else if (sReq == "CL_MANIFESTER"){
-		int bItemQualifies = FALSE;
-		int bCasterQualifies = FALSE;
-		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) > 0 ||
-		GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) ||
-		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) >= 15){
-			bCasterQualifies = TRUE;
+		if (GetLevelByClass(CLASS_TYPE_PSION, oPC) < 1 &&
+		GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC) < 1 &&
+		GetSkillRank(SKILL_SPELLCRAFT, oPC, TRUE) < 15){
+			bCasterQualifies = FALSE;
 		}
-		if (nItem == BASE_ITEM_AMULET || nItem == BASE_ITEM_RING ||
-			nItem == BASE_ITEM_SHORT_STAFF || nItem == BASE_ITEM_QUARTERSTAFF ||
-			nItem == BASE_ITEM_GIANT_STAFF || 
-			IPGetIsCreatureEquippedWeapon(OBJECT_INVALID, nItem)){
-				bItemQualifies = TRUE;
-		}
-		if (bItemQualifies && bCasterQualifies)
-			return TRUE;
-		else 
-			return FALSE;
+		bItemQualifies = GetHandHeldItemGetsSpells(nItem);
+		if (bItemQualifies && bCasterQualifies) return TRUE;
+		else return FALSE;
+		
 	} else if (sReq == "CREATURE") {
 		if (IPGetIsCreatureEquippedWeapon(oItem))
 			return TRUE;
@@ -1124,26 +1153,6 @@ int GetHasRequiredCasterLevel(object oPC, int nCL, int giveFeedback = FALSE) {
 	return FALSE;
 }
 
-//Meets the minimum requirements for the most basic enchantment
-int MeetsMinimumRequirements(object oPC) {
-
-	if (GetIsDM(oPC))
-		return TRUE;
-
-	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
-
-	int nGold = 300; //minimum amount of gold for 1 point ability
-	int nCL = 3; //minimum CL for 1 point ability
-	
-	int nPoints = GetItemTotalPoints(oItem, oPC);
-	int nAllowed = GetItemTotalPointsAllowed(oItem);
-	
-	if (nPoints < nAllowed &&
-	GetGold(oPC) >= nGold &&
-	GetRealCasterLevel(oPC, TRUE) >= nCL)
-		return TRUE;
-	return FALSE;
-}
 
 //Can you enchant this item with this enchantment 
 int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int feedback = TRUE) {
@@ -1638,5 +1647,29 @@ int IPGetIsThrownWeapon(object oItem) {
 		return TRUE;
 	return FALSE;
 }
+
+
+deprecated
+//Meets the minimum requirements for the most basic enchantment
+int MeetsMinimumRequirements(object oPC) {
+
+	if (GetIsDM(oPC))
+		return TRUE;
+
+	object oItem = GetLocalObject(oPC, "ObjectToEnchant");
+
+	int nGold = 300; //minimum amount of gold for 1 point ability
+	int nCL = 3; //minimum CL for 1 point ability
+	
+	int nPoints = GetItemTotalPoints(oItem, oPC);
+	int nAllowed = GetItemTotalPointsAllowed(oItem);
+	
+	if (nPoints < nAllowed &&
+	GetGold(oPC) >= nGold &&
+	GetRealCasterLevel(oPC, TRUE) >= nCL)
+		return TRUE;
+	return FALSE;
+}
+
 
 */

@@ -30,6 +30,8 @@
 
 void DoPsionFeatProgression(object oPC);
 
+void ShutdownMetaPsionics(object oPC);
+
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
 
@@ -4718,196 +4720,133 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
     SetLocalInt(oTarget, sVar+"_Num", nIndex);
 }
 
+void ShutdownMetaPsionics(object oPC){
+	if (GetLocalInt(oPC, "METAPSI_AUGMENT") == 1){   
+		SetLocalInt(oPC, "METAPSI_AUGMENT", 0);
+		SendMessageToPC(oPC, "Metapsionics Deactivated: Augment Power");    
+	}
+	if (GetLocalInt(oPC, "METAPSI_EMPOWER") == 1){   
+		SetLocalInt(oPC, "METAPSI_EMPOWER", 0);
+		SendMessageToPC(oPC, "Metapsionics Deactivated: Empower Power");    
+	}
+	if (GetLocalInt(oPC, "METAPSI_EXTEND") == 1){   
+		SetLocalInt(oPC, "METAPSI_EXTEND", 0);
+		SendMessageToPC(oPC, "Metapsionics Deactivated: Extend Power");     
+	}
+	if (GetLocalInt(oPC, "METAPSI_MAXIMIZE") == 1){   
+		SetLocalInt(oPC, "METAPSI_MAXIMIZE", 0);    
+		SendMessageToPC(oPC, "Metapsionics Deactivated: Maximize Power");   
+	}
+	if (GetLocalInt(oPC, "METAPSI_TWIN") == 1){   
+		SetLocalInt(oPC, "METAPSI_TWIN", 0);
+		SendMessageToPC(oPC, "Metapsionics Deactivated: Twin Power");       
+	}
+}
+
 //This Determines Psychic Warrior Progression
-void DoPsyProgression(object oPC, int bCharCreation = FALSE)
-{   
-int iPsy = PsyWarLevels(oPC);
+void DoPsyProgression(object oPC, int bCharCreation = FALSE){   
+	int iPsy = PsyWarLevels(oPC, TRUE);
 
-// Give Psy their first tier feat at char creation
-if (bCharCreation){
-    if (iPsy == 1 && !GetHasFeat(FEAT_PSYWAR_PROGRESSION_I, oPC))
-        FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
-    return;
-}
+	// Give Psy their first tier feat at char creation
+	if (bCharCreation){
+		if (iPsy == 1 && !GetHasFeat(FEAT_PSYWAR_PROGRESSION_I, oPC))
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
+		return;
+	}
 
-// The original intent of this was that it would fire at the start of
-// level up, but it doesn't. It fires at the end of level up.  So all the 
-// level checks need to be reduced by 1 to make sure the character gets 
-// access to the right powers at the right level  -FlattedFifth, July 28, 2024
+	// The original intent of this was that it would fire at the start of
+	// level up, but it doesn't. It fires at the end of level up.  So all the 
+	// level checks need to be reduced by 1 to make sure the character gets 
+	// access to the right powers at the right level  -FlattedFifth, July 28, 2024
 
-//if (iPsy >=21){
-if (iPsy >=20){
-    FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
-}
-//else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
-else if (iPsy >= 15 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
-    FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
-    FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
-}
-//else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
-else if (iPsy >= 13 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-    FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
-    FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
-}
-//else if (iPsy >= 11 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) { 
-else if (iPsy >= 10 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {    
-    FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
-    FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
-}
-// else if (iPsy >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE))
-else if (iPsy >= 6 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){
-    FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
-    FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
-}
-//else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-else if (iPsy >= 3 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
-FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
-}
-else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
-FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
-}
-    
-if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)
-{   SetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT", 0);
-SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Augment Power");    }
-if (GetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER") == 1)
-    {   SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 0);
-        SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Empower Power");    }
-if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
-        {   SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 0);
-            SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Extend Power");     }
-if (GetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE") == 1)
-        {   SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 0);    
-            SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Maximize Power");   }
-if (GetLocalInt(OBJECT_SELF, "METAPSI_TWIN") == 1)
-        {   SetLocalInt(OBJECT_SELF, "METAPSI_TWIN", 0);
-            SendMessageToPC(OBJECT_SELF, "Metapsionics Deactivated: Twin Power");       }
+	//if (iPsy >=21){
 
+	// stopping removing prereq feats for powers!!
+	/*
+	if (iPsy >=20){
+	//FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
+	}
+	//else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
+	else */
+	
+	if (iPsy >= 15 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
+		//  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
+	}
+	//else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
+	else if (iPsy >= 13 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
+		// FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
+	}
+	//else if (iPsy >= 11 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) { 
+	else if (iPsy >= 10 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {    
+		// FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
+	}
+	// else if (iPsy >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE))
+	else if (iPsy >= 6 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){
+		// FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
+	}
+	//else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
+	else if (iPsy >= 3 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
+		//FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
+	}
+	else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
+	}
+	ShutdownMetaPsionics(oPC);
+	
 }
 
 
 //Progression for Psionic classes.
 void DoPsionFeatProgression(object oPC){
+	int nLevel = PsionLevels(oPC, TRUE);
+	if (nLevel < 1) return;
+	// because this script fires at the END of the on level up event
+	// we give the power progression feats the level before they should
+	// be able to be chosen
+	if (nLevel >= 2)FeatAdd(oPC, 21395,FALSE); 
+	if (nLevel >= 4)FeatAdd(oPC, 21396,FALSE);
+	if (nLevel >= 6)FeatAdd(oPC, 21397,FALSE);
+	if (nLevel >= 8)FeatAdd(oPC, 21398,FALSE);
+	if (nLevel >= 10)FeatAdd(oPC, 21399,FALSE);
+	if (nLevel >= 12)FeatAdd(oPC, 21400,FALSE);
+	if (nLevel >= 14)FeatAdd(oPC, 21401,FALSE);
+	if (nLevel >= 16)FeatAdd(oPC, 21402,FALSE);	
+	ShutdownMetaPsionics(oPC);
+}
 
-	// why are we getting caster level here when we already have
-	// functions for this in ps_inc_casterlevel?
-	/*
-	int nLEVEL = GetLevelByClass(90, oPC);
-	if (nLEVEL < 1) return;
-	nLEVEL += GetLevelByClass(100, oPC) - 1; // illithid mentalist
-	nLEVEL += GetLevelByClass(152, oPC);   // cerebremancer
-	nLEVEL += GetLevelByClass(109, oPC) - 1; // psychic knight
-	nLEVEL += GetLevelByClass(115,oPC); // theurge
-	nLEVEL += GetLevelByClass(128, oPC) / 2 + 1; // old gem dragon
-	if (GetHasFeat(3679, oPC, TRUE)){//new dragon prc psion path
-		int nDragon = (GetLevelByClass(130, oPC) - 2);
-		if (nDragon > 0) nLEVEL += nDragon;
-	}*/
+void DoPsyPathFeatProgression(object oPC){
+
+	int iPsy = PsyWarLevels(oPC, TRUE);
+	if (iPsy < 1) return;
 	
-	int nLEVEL = PsionLevels(oPC);
-	if (nLEVEL < 1) return;
-	
-	if (nLEVEL > 16)
-	{
-		int nTOTAL = 0;
-		int nCOUNT = 21331;
-		while (nCOUNT < 21338)
-		{
-			if (nCOUNT != 21334) //This was excluded or was it an oversight?
-			{
-				if (GetHasFeat(nCOUNT, oPC, TRUE) == TRUE) nTOTAL = nTOTAL + 1;
-			}
-			nCOUNT = nCOUNT + 1;
+	if (GetHasFeat(FEAT_PSYWAR_LURK,oPC)){
+		if (iPsy >= 1){
+			FeatAdd(oPC,21079,FALSE,FALSE,FALSE);//Chameleon
+			FeatAdd(oPC,21003,FALSE,FALSE,FALSE);//Coneal Thought
+			FeatAdd(oPC,21011,FALSE,FALSE,FALSE);//Dissipating Touch
 		}
-		if (nTOTAL == 4) FeatRemove(oPC, 21402);
-	}
-	else
-	{
-		int nADD;
-		int nREMOVE;
-		int nTHRESHOLD = 2;
-		while (nTHRESHOLD <= 16)
-		{
-			if (nLEVEL < nTHRESHOLD) break;
-			switch (nTHRESHOLD)
-			{
-				case 2: nADD = 21395; nREMOVE = 21409; break;
-				case 4: nADD = 21396; nREMOVE = 21395; break;
-				case 6: nADD = 21397; nREMOVE = 21396; break;
-				case 8: nADD = 21398; nREMOVE = 21397; break;
-				case 10: nADD = 21399; nREMOVE = 21398; break;
-				case 12: nADD = 21400; nREMOVE = 21399; break;
-				case 14: nADD = 21401; nREMOVE = 21400; break;
-				case 16: nADD = 21402; nREMOVE = 21401; break;
-				default: nADD = 0; nREMOVE = 0;
-			}
-			if (nREMOVE > 0)
-			{
-				if (GetHasFeat(nREMOVE, oPC, TRUE) == TRUE)
-				{
-					FeatAdd(oPC, nADD, FALSE, TRUE);
-					FeatRemove(oPC, nREMOVE);
-				}
-			}
-			nTHRESHOLD = nTHRESHOLD + 2;
+		if (iPsy >= 9){
+			FeatAdd(oPC,21472,FALSE,FALSE,FALSE);//Shadow Play
 		}
 	}
-}
+	if (GetHasFeat(FEAT_PSYWAR_FERAL,oPC)){
+		if (iPsy >= 1) FeatAdd(oPC,21027,FALSE,FALSE,FALSE);//Vigor
+		if (iPsy >= 3){
+			FeatAdd(oPC,289,FALSE,FALSE,FALSE);//Weapon Prof. Creature
+			FeatAdd(oPC,291,FALSE,FALSE,FALSE);//Weapon Focus. Creature
+		}
+		if (iPsy >= 5) FeatAdd(oPC,290,FALSE,FALSE,FALSE);//Weapon creature, Specialization
+		if (iPsy >= 7) FeatAdd(oPC,1157,FALSE,FALSE,FALSE);//Greater Weapon Focus, Creature
+		if (iPsy >= 14) FeatAdd(oPC,1383,FALSE,FALSE,FALSE);//Power Critical, Creature
+		if (iPsy >= 15) FeatAdd(oPC,1197,FALSE,FALSE,FALSE);//Greater Weapon Specialization, Creature
+	}
 
-void DoPsyFeatProgression(object oPC)
-{
-
-
-int iPsy = PsyWarLevels(oPC);
-if (iPsy >= 1  && GetHasFeat(FEAT_PSYWAR_LURK,oPC))
-{FeatAdd(oPC,21079,FALSE,FALSE,FALSE);//Chameleon
-FeatAdd(oPC,21003,FALSE,FALSE,FALSE);//Coneal Thought
-FeatAdd(oPC,21011,FALSE,FALSE,FALSE);//Dissipating Touch
-}
-if (iPsy >= 9  && GetHasFeat(FEAT_PSYWAR_LURK,oPC))
-{
-FeatAdd(oPC,21472,FALSE,FALSE,FALSE);//Shadow Play
-}
-
-
-
-if (iPsy >= 1  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
-{
-FeatAdd(oPC,21027,FALSE,FALSE,FALSE);//Vigor
-}
-
-if (iPsy >= 3  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
-{
-FeatAdd(oPC,289,FALSE,FALSE,FALSE);//Weapon Prof. Creature
-FeatAdd(oPC,291,FALSE,FALSE,FALSE);//Weapon Focus. Creature
-}
-
-if (iPsy >= 5  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
-{
-FeatAdd(oPC,290,FALSE,FALSE,FALSE);//Weapon creature, Specialization
-
-}
-if (iPsy >= 7  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
-{
-FeatAdd(oPC,1157,FALSE,FALSE,FALSE);//Greater Weapon Focus, Creature
-
-}
-if (iPsy >= 14  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
-{
-FeatAdd(oPC,1383,FALSE,FALSE,FALSE);//Power Critical, Creature
-
-}
-if (iPsy >= 15  && GetHasFeat(FEAT_PSYWAR_FERAL,oPC))
-{
-FeatAdd(oPC,1197,FALSE,FALSE,FALSE);//Greater Weapon Specialization, Creature
-
-}
-if (iPsy >= 20 )
-{
-FeatAdd(oPC,21477,FALSE,FALSE,FALSE);//Eternal Warrior
-}
-
+	if (iPsy >= 20 )FeatAdd(oPC,21477,FALSE,FALSE,FALSE);//Eternal Warrior
 }
 
 // Return count of levels in low bab arcane classes.
@@ -5012,3 +4951,57 @@ int GetIsChristmas() {
     return (version == HOLIDAY_XMAS);
     
 }
+
+
+//Progression for Psionic classes. deprecated
+/*
+void DoPsionFeatProgression(object oPC){
+	int nLEVEL = PsionLevels(oPC, TRUE);
+	if (nLEVEL < 1) return;
+
+	if (nLEVEL > 16)
+	{
+		int nTOTAL = 0;
+		int nCOUNT = 21331;
+		while (nCOUNT < 21338)
+		{
+			if (nCOUNT != 21334) //This was excluded or was it an oversight?
+			{
+				if (GetHasFeat(nCOUNT, oPC, TRUE) == TRUE) nTOTAL = nTOTAL + 1;
+			}
+			nCOUNT = nCOUNT + 1;
+		}
+		if (nTOTAL == 4) FeatRemove(oPC, 21402);
+	}
+	else
+	{
+		int nADD;
+		int nREMOVE;
+		int nTHRESHOLD = 2;
+		while (nTHRESHOLD <= 16)
+		{
+			if (nLEVEL < nTHRESHOLD) break;
+			switch (nTHRESHOLD)
+			{
+				case 2: nADD = 21395; nREMOVE = 21409; break;
+				case 4: nADD = 21396; nREMOVE = 21395; break;
+				case 6: nADD = 21397; nREMOVE = 21396; break;
+				case 8: nADD = 21398; nREMOVE = 21397; break;
+				case 10: nADD = 21399; nREMOVE = 21398; break;
+				case 12: nADD = 21400; nREMOVE = 21399; break;
+				case 14: nADD = 21401; nREMOVE = 21400; break;
+				case 16: nADD = 21402; nREMOVE = 21401; break;
+				default: nADD = 0; nREMOVE = 0;
+			}
+			if (nREMOVE > 0)
+			{
+				if (GetHasFeat(nREMOVE, oPC, TRUE) == TRUE)
+				{
+					FeatAdd(oPC, nADD, FALSE, TRUE);
+					FeatRemove(oPC, nREMOVE);
+				}
+			}
+			nTHRESHOLD = nTHRESHOLD + 2;
+		}
+	}
+}*/

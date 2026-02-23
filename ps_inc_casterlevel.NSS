@@ -56,7 +56,7 @@ int GetFeatGrantedCasterLevel(object oPC) {
 	return nCasterLevel;
 }
 
-int PsionLevels(object oPC){
+int PsionLevels(object oPC, int bIgnorePracticed = FALSE){
 	int iTotal = GetLevelByClass(90, oPC); // psion
 	if (iTotal < 1) return 0;
 	
@@ -69,7 +69,7 @@ int PsionLevels(object oPC){
 		int nNewDragon = GetLevelByClass(130, oPC) - 2;
 		if (nNewDragon > 0) iTotal += nNewDragon;
 	}
-	if (GetHasFeat(3684, oPC, TRUE)){ // if has practiced manifester psion feat
+	if (GetHasFeat(3684, oPC, TRUE) && !bIgnorePracticed){ // if has practiced manifester psion feat
 		int nHD = GetHitDice(oPC);
 		iTotal += 4;
 		if (iTotal > nHD) iTotal = nHD;
@@ -79,7 +79,7 @@ int PsionLevels(object oPC){
 
 
 //Calculates Psychic Warrior Levels
-int PsyWarLevels(object oPC){
+int PsyWarLevels(object oPC, int bIgnorePracticed = FALSE){
     int iTotal = GetLevelByClass(CLASS_PSYCHIC_WARRIOR, oPC);
 	if (iTotal < 1) return 0;
 	
@@ -94,7 +94,7 @@ int PsyWarLevels(object oPC){
         int nDragonLevel = GetLevelByClass(130, oPC) - 2;
         if (nDragonLevel > 0) iTotal += nDragonLevel;
     }
-	if (GetHasFeat(3685, oPC, TRUE)){ // if has practiced manifester psywar feat
+	if (GetHasFeat(3685, oPC, TRUE) && !bIgnorePracticed){ // if has practiced manifester psywar feat
 		int nHD = GetHitDice(oPC);
 		iTotal += 4;
 		if (iTotal > nHD) iTotal = nHD;
@@ -103,13 +103,13 @@ int PsyWarLevels(object oPC){
 }
 
 //Pulled out of the manifestation struct for using more generically
-int GetPsyOrPsiCasterLevel(object oPC, int nSpecific = CLASS_TYPE_INVALID){
+int GetPsyOrPsiCasterLevel(object oPC, int nSpecific = CLASS_TYPE_INVALID, int bIgnorePracticed = FALSE){
 	
-	if (nSpecific == CLASS_TYPE_PSION) return PsionLevels(oPC);
-	else if (nSpecific == CLASS_PSYCHIC_WARRIOR) return PsyWarLevels(oPC);
+	if (nSpecific == CLASS_TYPE_PSION) return PsionLevels(oPC, bIgnorePracticed);
+	else if (nSpecific == CLASS_PSYCHIC_WARRIOR) return PsyWarLevels(oPC, bIgnorePracticed);
 	
-	int nPsionLevel = PsionLevels(oPC); // psion
-	int nPsyWarLevel = PsyWarLevels(oPC); // psychic warrior
+	int nPsionLevel = PsionLevels(oPC, bIgnorePracticed); // psion
+	int nPsyWarLevel = PsyWarLevels(oPC, bIgnorePracticed); // psychic warrior
 	if (nPsionLevel + nPsyWarLevel == 0) return 0;
 	if (nPsionLevel > nPsyWarLevel) return nPsionLevel;
 	return nPsyWarLevel;
