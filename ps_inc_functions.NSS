@@ -4747,53 +4747,37 @@ void ShutdownMetaPsionics(object oPC){
 void DoPsyProgression(object oPC, int bCharCreation = FALSE){   
 	int iPsy = PsyWarLevels(oPC, TRUE);
 
-	// Give Psy their first tier feat at char creation
 	if (bCharCreation){
 		if (iPsy == 1 && !GetHasFeat(FEAT_PSYWAR_PROGRESSION_I, oPC))
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 		return;
 	}
-
-	// The original intent of this was that it would fire at the start of
-	// level up, but it doesn't. It fires at the end of level up.  So all the 
-	// level checks need to be reduced by 1 to make sure the character gets 
-	// access to the right powers at the right level  -FlattedFifth, July 28, 2024
-
-	//if (iPsy >=21){
-
-	// stopping removing prereq feats for powers!!
-	/*
-	if (iPsy >=20){
-	//FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
-	}
-	//else if (iPsy >= 16 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
-	else */
+	if (iPsy < 1) return;
 	
-	if (iPsy >= 15 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {
-		//  FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
-		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
+	if (iPsy >=20){
+		FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_VI);
+		FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_V);
+		FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
+		FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
+		FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
+		FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
 	}
-	//else if (iPsy >= 14 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
-	else if (iPsy >= 13 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-		// FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_IV);
+	if (iPsy >= 15) {
+		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_VI, FALSE, FALSE, FALSE);
+	}    
+	if (iPsy >= 13){ 
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_V, FALSE, FALSE, FALSE);
 	}
-	//else if (iPsy >= 11 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) { 
-	else if (iPsy >= 10 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)) {    
-		// FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_III);
+	if (iPsy >= 10) {    
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_IV, FALSE, FALSE, FALSE);
 	}
-	// else if (iPsy >= 7 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE))
-	else if (iPsy >= 6 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){
-		// FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_II);
+	if (iPsy >= 6){
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_III, FALSE, FALSE, FALSE);
 	}
-	//else if (iPsy >= 4 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-	else if (iPsy >= 3 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){ 
-		//FeatRemove(oPC,FEAT_PSYWAR_PROGRESSION_I);
+	if (iPsy >= 3){ 
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_II, FALSE, FALSE, FALSE);
 	}
-	else if (iPsy >= 1 && GetHasFeat(POWER_POINT_POOL_PSYWAR,oPC,TRUE)){    
+	if (iPsy >= 1){    
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 	}
 	ShutdownMetaPsionics(oPC);
@@ -4816,6 +4800,16 @@ void DoPsionFeatProgression(object oPC){
 	if (nLevel >= 12)FeatAdd(oPC, 21400,FALSE);
 	if (nLevel >= 14)FeatAdd(oPC, 21401,FALSE);
 	if (nLevel >= 16)FeatAdd(oPC, 21402,FALSE);	
+	if (nLevel >= 20){
+		FeatRemove(oPC, 21395); 
+		FeatRemove(oPC, 21396);
+		FeatRemove(oPC, 21397);
+		FeatRemove(oPC, 21398);
+		FeatRemove(oPC, 21399);
+		FeatRemove(oPC, 21400);
+		FeatRemove(oPC, 21401);
+		FeatRemove(oPC, 21402);	
+	}
 	ShutdownMetaPsionics(oPC);
 }
 

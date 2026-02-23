@@ -1168,7 +1168,8 @@ int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int fee
 		nCL = 3;
 	int nPoints = GetItemTotalPoints(oItem, oPC);
 	int nAllowed = GetItemTotalPointsAllowed(oItem);
-	int bHasBaseReq = ((nPoints+enchant.points) <= nAllowed &&
+	int bPointsFit = (enchant.points == 0 || nPoints + enchant.points <= nAllowed);
+	int bHasBaseReq = (bPointsFit &&
 	GetHasRequiredCasterLevel(oPC, nCL, feedback) &&
 	GetHasRequiredGold(oPC, nGold, feedback) &&
 	GetHasRequiredEssence(oPC, sEssence, feedback) && 
