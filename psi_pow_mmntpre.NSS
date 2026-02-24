@@ -24,6 +24,12 @@
 
     Manifesting the power is a swift action, like manifesting a quickened power,
     and it counts toward the normal limit of one quickened power per round.
+	
+	How a 3rd level power so base 5 pp
+Cast reg it gives +6 to your choice of attack, ac, saves, or skills for 1 round
+Extended is same but 2 rounds.
+Twinned it gives +12 to your choice of attack, ac, saves, or skills for 2 rounds
+And Empowered is +3 to  your choice of attack, ac, saves, or skills for 10 minutes per CL
 */
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
