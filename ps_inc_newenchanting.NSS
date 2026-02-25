@@ -149,8 +149,7 @@ void EnchantItem(object oItem, struct enchantment enchant) {
 	if (enchant.type == 99)
 		RemovePPEnchant(oItem);
 		
-	if (enchant.type == 83) ApplyWeaponVFX(oItem, ip);
-	else IPSafeAddItemProperty(oItem, ip);
+	IPSafeAddItemProperty(oItem, ip);
 	
 	//spell cast / per day
 	if (enchant.type == 15) SetItemCharges(oItem, 50);
@@ -252,7 +251,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 
 			nPropRes = StringToInt(Get2DAString("itempropdef", "Name", nType));
 			sName = GetStringByStrRef(nPropRes);
-			if (nSubType > -1 && nType != 83 && nType != 99 && nType != 12 && nType != 15) {
+			if (nSubType > -1 && nType != 99 && nType != 12 && nType != 15) {
 				sSubTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
 				if (sSubTable != "" && sSubTable != "****") {
 					nSubRes = StringToInt(Get2DAString(sSubTable, "Name", nSubType));
@@ -260,7 +259,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 				}
 			}
 			if ((nType == nLastType) &&
-				(nType == 12 || nType == 15 || nSubType == nLastSub)){
+				(nType == 12 || nType == 15 || nType == 99 || nSubType == nLastSub)){
 				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
 			}
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(i), "EnchantTypeName="+sName+";", "", "5="+IntToString(i), "");
@@ -298,20 +297,15 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
 		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
 		if ((nType == enchant.type && bItemOk && bCanEnchant) &&
-			(nType == 12 || nType == 15 || nType == 99 || nType == 83 || nSub == enchant.subtype)){
-			if (nType == 12 || nType == 15 || nType == 83 || nType == 99){
+			(nType == 12 || nType == 15 || nType == 99 || nSub == enchant.subtype)){
+			if (nType == 12 || nType == 15 || nType == 99){
 				nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
-				if (nType == 83 && nSub > 6){
-					sParam = "Remove All";	
-				} else {
-					sCostTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
-					nParam = StringToInt(Get2DAString(sCostTable, "Name", nSub));
-					sParam = GetStringByStrRef(nParam);
-					if (nType == 99){
-						if (StringToInt(sParam) == 1) sParam += " Point";
-						else sParam += " Points";
-					
-					}
+				sCostTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
+				nParam = StringToInt(Get2DAString(sCostTable, "Name", nSub));
+				sParam = GetStringByStrRef(nParam);
+				if (nType == 99){
+					if (StringToInt(sParam) == 1) sParam += " Point";
+					else sParam += " Points";
 				}
 			} else {
 				nNumIndex = StringToInt(Get2DAString(s2da, "Numerical", i));
@@ -917,20 +911,6 @@ string DisplaySpecialRequirement(string sReq) {
 			line = "This enchantment is redunant on slings.";
 	} else if (sReq == "CL_MANIFESTER"){
 			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
-	} else if (sReq == "HAS_ACID"){
-			line = "Item must be enchanted with acid damage";
-	} else if (sReq == "HAS_COLD"){
-			line = "Item must be enchanted with cold damage";
-	} else if (sReq == "HAS_ELEC"){
-			line = "Item must be enchanted with electrical damage";
-	} else if (sReq == "HAS_FIRE"){
-			line = "Item must be enchanted with fire damage";
-	} else if (sReq == "HAS_SONIC"){
-			line = "Item must be enchanted with sonic damage";
-	} else if (sReq == "HAS_GOOD"){
-			line = "Item must be enchanted with magic damage, divine damage, positive damage, or damage vs evil";
-	} else if (sReq == "HAS_EVIL"){
-			line = "Item must be enchanted with magic damage, negative damage, or damage vs good";
 	}
 	return line;
 	
@@ -1039,20 +1019,6 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 	} else if (sReq == "NO_SLINGS"){
 		if (nItem == BASE_ITEM_SLING) return FALSE;
 		
-	} else if (sReq == "HAS_ACID"){
-		return GetWeaponQualifiesVFX(oItem, 0);
-	} else if (sReq == "HAS_COLD"){
-		return GetWeaponQualifiesVFX(oItem, 1);
-	} else if (sReq == "HAS_ELEC"){
-		return GetWeaponQualifiesVFX(oItem, 2);
-	} else if (sReq == "HAS_FIRE"){
-		return GetWeaponQualifiesVFX(oItem, 3);
-	} else if (sReq == "HAS_SONIC"){
-		return GetWeaponQualifiesVFX(oItem, 4);
-	} else if (sReq == "HAS_GOOD"){
-		return GetWeaponQualifiesVFX(oItem, 5);
-	} else if (sReq == "HAS_EVIL"){
-		return GetWeaponQualifiesVFX(oItem, 6);
 	}
 	return TRUE; //no special req, return true
 }

@@ -34,12 +34,22 @@ void main () {
 	
 	struct enchantment enchant = LoadEnchantment(nIndex, oPC);
 	
-	if (CanEnchantItem(oPC, oItem, enchant)) {
+	int bOkToEnchant = FALSE;
+	
+	// On test server crafting and enchanting is free and requires no skills or feats unless
+	// player has turned on cost testing with the chat command #testcraftcost and ofc free for dms
+	if ((GetLocalInt(GetModule(), "SIGIL_DEV_MODE") && !GetLocalInt(oPC, "TestCraftCost")) ||
+		GetIsDM(oPC) || GetIsDMPossessed(oPC)){
+		 bOkToEnchant = TRUE;
+	} else if (CanEnchantItem(oPC, oItem, enchant)){
 		TakeEnchantmentRequirements(oPC, enchant);
-		EnchantItem(oItem, enchant);
-		SetLocalInt(oItem, "PRICE_DIRTY", 1);
-		if (!CRAFT_DIRECT_FROM_2DA) SetItemCostVariables(oItem);
+		bOkToEnchant = TRUE;
 	}
+	if (!bOkToEnchant) return;
+	
+	EnchantItem(oItem, enchant);
+	SetLocalInt(oItem, "PRICE_DIRTY", 1);
+	if (!CRAFT_DIRECT_FROM_2DA) SetItemCostVariables(oItem);
 	
 	DisplayItemDescription(oPC, oItem);
 	

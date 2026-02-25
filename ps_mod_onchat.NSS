@@ -4,6 +4,7 @@
 #include "ps_inc_functions"
 #include "ServerExts"
 #include "ff_update_legacy_items"
+#include "ps_inc_advscript"
 
 
 
@@ -180,6 +181,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	int bFFcommand = FALSE; // return value, if TRUE then action will take place and text will not go to chat
 	string sFeedback = "";
 	string sInput = GetStringLowerCase(sMessage);
+	object oItem;
 	
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	if (sInput == "#scribemin"){
@@ -236,7 +238,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//debugging command that tells you the tag and resref of the targeted item
 	} else if (sInput == "#iteminfo"){
 		bFFcommand = TRUE;
-		object oItem = GetPlayerCurrentTarget(oSender);
+		oItem = GetPlayerCurrentTarget(oSender);
 		if (!GetIsObjectValid(oItem))
 			sFeedback = "No object selected";
 		else {
@@ -256,6 +258,45 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
 	// toggles on and off force cost of crafting, cannot be used to craft for free on main
 	// but can be used to test costs on test server
+	else if (sInput == "getcreatureappearance"){
+		bFFcommand = TRUE;
+		oItem = GetPlayerCurrentTarget(oSender);
+		if (GetObjectType(oItem) != OBJECT_TYPE_CREATURE){
+			oItem = oSender;
+			sFeedback = "Appearance data for this character:";
+		} else sFeedback = "Appearance data for targeted creature:";
+		
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oItem);
+		sFeedback += "\nAppearance Type = " + IntToString(app.AppearanceType);
+		sFeedback += "\nHead = " + IntToString(app.HeadVariation);
+		sFeedback += "\nHair = " + IntToString(app.HairVariation);
+		sFeedback += "\nBeard = " + IntToString(app.FacialHairVariation);
+		sFeedback += "\nTail = " + IntToString(app.TailVariation);
+		sFeedback += "\nWings = " + IntToString(app.WingVariation);
+		sFeedback += "\nGender = " + IntToString(app.Gender);
+		sFeedback += "\nSkin Colour = " + IntToString(app.SkinColor);
+		sFeedback += "\n";
+	}
+	else if (sInput == "#getarmorappearance"){
+		bFFcommand = TRUE;
+		oItem = GetPlayerCurrentTarget(oSender);
+		sFeedback = "Appearance index of targeted armor:\n";
+		if (GetObjectType(oItem) == OBJECT_TYPE_CREATURE){
+			oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, GetPlayerCurrentTarget(oSender));
+			sFeedback = "Appearance index of worn armor:\n";
+		}
+		if (!GetIsObjectValid(oItem)){ // if not targeting anything
+			oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oSender);
+			sFeedback = "Appearance index of worn armor:\n";
+		}
+		if (GetBaseItemType(oItem) != 16){
+			sFeedback = "Must be wearing an armor or targeting an armor or targeting a creature wearing armor";
+		} else {
+			string sTorso = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_TORSO));
+			string sRobe = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_ROBE));
+			sFeedback += "Torso = " + sTorso + "\nRobe = " + sRobe + "\n";
+		}
+	}
 	else if (sInput == "#testcraftcost"){
 		bFFcommand = TRUE;
 		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){

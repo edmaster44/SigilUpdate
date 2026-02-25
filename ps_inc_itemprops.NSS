@@ -45,95 +45,20 @@ struct MatDetails Get2daAndRow(int nMat){
 
 }
 
-int GetWeaponQualifiesVFX(object oItem, int nVFX){
-	/*
-	nVFX options from iprp_visualfx.2da
-	0 = acid
-	1 = cold
-	2 = electrical
-	3 = fire
-	4 = sonic
-	5 = good
-	6 = evil
-	*/
-	int nType;
-	int nSub;
-	itemproperty ip = GetFirstItemProperty(oItem);
-	while (GetIsItemPropertyValid(ip)){
-		nType = GetItemPropertyType(ip);
-		if (nType == 16){
-			nSub = GetItemPropertySubType(ip);
-			switch (nSub){
-				case 5: if (nVFX == 5 || nVFX == 6) return TRUE;// magic dmg = good or evil vfx
-				case 6: if (nVFX == 0) return TRUE;//acid dmg
-				case 7: if (nVFX == 1) return TRUE;//cold dmg 
-				case 8: if (nVFX == 5) return TRUE;//divine dmg
-				case 9: if (nVFX == 2) return TRUE;//electrical dmg
-				case 10: if (nVFX == 3) return TRUE;//fire dmg
-				case 11: if (nVFX == 6) return TRUE;//negative dmg
-				case 12: if (nVFX == 5) return TRUE;//positive dmg
-				case 13: if (nVFX == 4) return TRUE;//sonic dmg
-			}
-		} else if (nType == 17){
-			nSub = GetItemPropertySubType(ip);
-			if (nSub == 4 && nVFX == 6) return TRUE;
-			else if (nSub == 5 && nVFX == 5) return TRUE;
-		
-		}
-	}
-	return FALSE;
-}
-
-void ApplyWeaponVFX(object oItem, itemproperty ipVFX){
-	
-	itemproperty ip = GetFirstItemProperty(oItem);
-	while (GetIsItemPropertyValid(ip)){
-		if (GetItemPropertyType(ip) == 83)
-			RemoveItemProperty(oItem, ip);
-	}
-	if (!GetIsItemPropertyValid(ipVFX))
-		return;
-		
-	AddItemProperty(DURATION_TYPE_PERMANENT, ipVFX, oItem);
-}
-
-itemproperty ItemPropertyWeaponVFX(int nNumerical){
-	string sItem = "";
-	switch (nNumerical){
-		case 0: sItem = "ps_crft_utility_vfxacid"; break;
-		case 1: sItem = "ps_crft_utility_vfxcold"; break;
-		case 2: sItem = "ps_crft_utility_vfxelec"; break;
-		case 3: sItem = "ps_crft_utility_vfxfire"; break;
-		case 4: sItem = "ps_crft_utility_vfxsonic"; break;
-		case 5: sItem = "ps_crft_utility_vfxgood"; break;
-		case 6: sItem = "ps_crft_utility_vfxevil"; break;
-		case 7: sItem = ""; break;
-	}
-	itemproperty ip;
-	if (sItem == "") return ip;
-	
-	object oChest = GetObjectFromDMArea("pc_utility_ipchest");
-	object oSpoon = CreateItemOnObject(sItem, oChest);
-	
-	ip = GetFirstItemProperty(oSpoon);	
-	DestroyObject(oSpoon, 1.0f);
-	return ip;
-}
-
 itemproperty ItemPropertyBonusPowerPoints(int nSub){
 	string sItem = "";
 	switch (nSub){
-		case 1: sItem = "ps_crft_utility_pp01"; break;
-		case 2: sItem = "ps_crft_utility_pp02"; break;
-		case 3: sItem = "ps_crft_utility_pp03"; break;
-		case 4: sItem = "ps_crft_utility_pp04"; break;
-		case 5: sItem = "ps_crft_utility_pp05"; break;
-		case 6: sItem = "ps_crft_utility_pp06"; break;
-		case 7: sItem = "ps_crft_utility_pp07"; break;
-		case 8: sItem = "ps_crft_utility_pp08"; break;
-		case 9: sItem = "ps_crft_utility_pp09"; break;
-		case 10: sItem = "ps_crft_utility_pp10"; break;
-		case 11: sItem = "ps_crft_utility_pp11"; break;
+		case 0: sItem = "ps_crft_utility_pp01"; break;
+		case 1: sItem = "ps_crft_utility_pp02"; break;
+		case 2: sItem = "ps_crft_utility_pp03"; break;
+		case 3: sItem = "ps_crft_utility_pp04"; break;
+		case 4: sItem = "ps_crft_utility_pp05"; break;
+		case 5: sItem = "ps_crft_utility_pp06"; break;
+		case 6: sItem = "ps_crft_utility_pp07"; break;
+		case 7: sItem = "ps_crft_utility_pp08"; break;
+		case 8: sItem = "ps_crft_utility_pp09"; break;
+		case 9: sItem = "ps_crft_utility_pp10"; break;
+		case 10: sItem = "ps_crft_utility_pp11"; break;
 	}
 	itemproperty ip;
 	if (sItem == "") return ip;

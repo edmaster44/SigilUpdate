@@ -38,28 +38,35 @@ void main () {
 		SendMessageToPC(oPC, "You must target an item to start enchanting.");
 		return;
 	}
+	object oBench;
+	int bOkToEnchant = FALSE;
+	// On test server crafting and enchanting is free and requires no skills or feats unless
+	// player has turned on cost testing with the chat command #testcraftcost and ofc free for dms
+	if ((GetLocalInt(GetModule(), "SIGIL_DEV_MODE") && !GetLocalInt(oPC, "TestCraftCost")) ||
+		GetIsDM(oPC) || GetIsDMPossessed(oPC)){
+		bOkToEnchant = TRUE;
 	
-	if (!GetIsDM(oPC)) { //DMs get free pass!
-	
+	} else {
+		bOkToEnchant = TRUE;
 		//Must have enchantment feat
 		if (!GetHasFeat(FEAT_CRAFT_MAGIC_ARMS_AND_ARMOR, oPC, TRUE) && 
 			!GetHasFeat(FEAT_IMBUE_ITEM, oPC, TRUE) && 
 			!GetHasFeat(FEAT_ALCHEMICAL_INFUSION, oPC, TRUE)) {
 			SendMessageToPC(oPC, "You must have Craft Magic Arms and Armor, Imbue Item, or Alchemical Infusion in order to enchant.");
-			return;
+			bOkToEnchant = FALSE;
 		}
 	
-		object oBench = GetNearestEnchantingWorkbench(oPC);
+		oBench = GetNearestEnchantingWorkbench(oPC);
 		if (!GetIsObjectValid(oBench)) {
 			SendMessageToPC(oPC, "You must be next to a magician's workbench in order to enchant.");
-			return;
-		}
-	
-		AssignCommand(oPC, ActionMoveToObject(oBench, FALSE, 0.5f));
-		DelayCommand(1.0f, PlayEnchantingAnimation(oPC));
-		
+			bOkToEnchant = FALSE;
+		}	
 	}
 	
+	if (!bOkToEnchant) return;
+	
+	AssignCommand(oPC, ActionMoveToObject(oBench, FALSE, 0.5f));
+	DelayCommand(1.0f, PlayEnchantingAnimation(oPC));
 	SendMessageToPC(oPC, "Starting enchanting. . .");
 	
 	string sName = GetName(oTarget);

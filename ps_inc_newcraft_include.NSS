@@ -905,10 +905,7 @@ itemproperty IpArgsToItemProperty(int nType, int nSub, int nParam, int nSpecial)
 		case 80: return ItemPropertyHealersKit(nParam);
 		case 81: return ItemPropertyWeightIncrease(nSpecial);
 		case 82: return ItemPropertyOnHitCastSpell(nSub, nParam);
-		case 83:{
-					if (nSub > 6) return ip;
-					else return ItemPropertyVisualEffect(nSub);
-				}
+		case 83: return ItemPropertyVisualEffect(nSub);
 		case 84: return ItemPropertyArcaneSpellFailure(nParam);
 		case 99: return ItemPropertyBonusPowerPoints(nSub);
 		case 100: return ItemPropertySpecialMaterial(nSub);

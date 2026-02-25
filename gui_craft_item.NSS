@@ -32,30 +32,41 @@ void main () {
 	struct material m2 = LoadMaterial(nMat2, i.matlist_2);
 	struct material m3 = LoadMaterial(nMat3, i.matlist_3);
 	
-	int nRequiredRank = GetCraftingRankRequirement(i, m1, m2, m3);
-	int nSkill = GetRequiredCraftSkill(i);
-	if (PS_GetSkillRank(nSkill, oPC, TRUE) < nRequiredRank) {
-		SendMessageToPC(oPC, "You do not have the required skill rank.");
-		return;
+	int bOkToCraft = FALSE;
+	// On test server crafting and enchanting is free and requires no skills or feats unless
+	// player has turned on cost testing with the chat command #testcraftcost and ofc free for dms
+	if ((GetLocalInt(GetModule(), "SIGIL_DEV_MODE") && !GetLocalInt(oPC, "TestCraftCost")) ||
+		GetIsDM(oPC) || GetIsDMPossessed(oPC)){
+		bOkToCraft = TRUE;
+	} else {
+		bOkToCraft = TRUE;
+		
+		int nRequiredRank = GetCraftingRankRequirement(i, m1, m2, m3);
+		int nSkill = GetRequiredCraftSkill(i);
+		if (PS_GetSkillRank(nSkill, oPC, TRUE) < nRequiredRank) {
+			SendMessageToPC(oPC, "You do not have the required skill rank.");
+			 bOkToCraft = FALSE;
+		}
+		
+		int nCost = GetCraftedItemCost(oPC, i, m1, m2, m3);
+		if (GetGold(oPC) < nCost) {
+			SendMessageToPC(oPC, "You do not have the required gold.");
+			bOkToCraft = FALSE;
+		}
+		
+		if (!GetHasRequiredCraftingItems(oPC, i, m1, m2, m3)) {
+			SendMessageToPC(oPC, "You do not have the required items");
+			bOkToCraft = FALSE;
+		}
+		if (bOkToCraft){
+			TakeGoldFromCreature(nCost, oPC, TRUE);
+			TakeRequiredCraftingItems(oPC, i, m1, m2, m3);
+		}
 	}
 	
-	int nCost = GetCraftedItemCost(oPC, i, m1, m2, m3);
-	if (GetGold(oPC) < nCost) {
-		SendMessageToPC(oPC, "You do not have the required gold.");
-		return;
-	}
+	if (!bOkToCraft) return;
 	
-	if (!GetHasRequiredCraftingItems(oPC, i, m1, m2, m3)) {
-		SendMessageToPC(oPC, "You do not have the required items");
-		return;
-	}
-	
-	TakeGoldFromCreature(nCost, oPC, TRUE);
-	TakeRequiredCraftingItems(oPC, i, m1, m2, m3);
-	
-	//Create crafted item
 	object oItem = CreateCraftedItem(oPC, i, m1, m2, m3, TRUE);
-	
 	string sName = GetCraftingItemName(i, m1, m2, m3);
 	if (RemoveWhitespace(sName) == ""){
 		sName = GetStringByStrRef(StringToInt(Get2DAString("baseitems", "Name", GetBaseItemType(oItem))));
