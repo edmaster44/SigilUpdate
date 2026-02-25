@@ -258,7 +258,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
 	// toggles on and off force cost of crafting, cannot be used to craft for free on main
 	// but can be used to test costs on test server
-	else if (sInput == "getcreatureappearance"){
+	else if (sInput == "#getcreatureappearance"){
 		bFFcommand = TRUE;
 		oItem = GetPlayerCurrentTarget(oSender);
 		if (GetObjectType(oItem) != OBJECT_TYPE_CREATURE){
@@ -292,9 +292,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (GetBaseItemType(oItem) != 16){
 			sFeedback = "Must be wearing an armor or targeting an armor or targeting a creature wearing armor";
 		} else {
+			string sNum = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL,ITEM_APPR_ARMOR_NUM_MODELS));
 			string sTorso = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_TORSO));
 			string sRobe = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_ROBE));
-			sFeedback += "Torso = " + sTorso + "\nRobe = " + sRobe + "\n";
+			sFeedback += "Torso = " + sTorso + "\nRobe = " + sRobe + "\nModel = " + sNum + "\n";
 		}
 	}
 	else if (sInput == "#testcraftcost"){
