@@ -830,7 +830,7 @@ void PS_Ability_EladrinForm(object oPC)
 	{	iForm		= 85;	}
 	effect eVis 	= EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly	= EffectPolymorph(iForm, FALSE, TRUE);
-	effect eAOE 	= EffectAreaOfEffect(AOE_PER_LIGHT); // new aoe for light
+	effect eAOE 	= EffectAreaOfEffect(94); // new aoe Eladrin glow
 		ePoly		= EffectLinkEffects(eAOE, ePoly);
 		ePoly 		= ExtraordinaryEffect(ePoly);
 		ePoly 		= SetEffectSpellId(ePoly, 1246);
