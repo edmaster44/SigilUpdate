@@ -11,18 +11,18 @@ void main(){
 		
 		struct dSpellData data = GetSpellDataForAoE("Light", oCaster);
 		
-		int bDivineLight = FALSE;
-		if (data.nId == SPELL_RACIAL_LIGHT){
-			int nRace = GetSubRace(oCaster);
-			if (nRace == 13 || nRace == 203) bDivineLight = TRUE;
-		}
 		
-		int nLevel = data.nCL;
+		
+		int bDivineLight = FALSE;
+		if (data.nId == SPELL_RACIAL_LIGHT &&
+			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oCaster, TRUE))
+				bDivineLight = TRUE;
+		
+		int nDur = data.nCL;
 		int nMeta = GetMetaMagicFeat();
-		if (nMeta == METAMAGIC_EXTEND || bDivineLight) nLevel *= 2;
-		int nBonus = 5;
-		if (nMeta == METAMAGIC_EMPOWER) nBonus += nBonus / 2;
-		else if (bDivineLight) nBonus = 10;//can't be both divine & empowered, divine = racial feat
+		if (nMeta == METAMAGIC_EXTEND || bDivineLight) nDur *= 2;
+		int nBonus = 8;
+		if (nMeta == METAMAGIC_EMPOWER || bDivineLight) nBonus += nBonus / 2;
 		
 		effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nBonus);
 		effect eSpot = EffectSkillIncrease(SKILL_SPOT, nBonus);
@@ -37,6 +37,6 @@ void main(){
 			RemoveSpecificEffect(EFFECT_TYPE_BLINDNESS, oTarget);
 			RemoveSpecificEffect(EFFECT_TYPE_MISS_CHANCE, oTarget);
 		}
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, oTarget, HoursToSeconds(nLevel));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, oTarget, HoursToSeconds(nDur));
 	}	
 }

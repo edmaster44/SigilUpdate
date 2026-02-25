@@ -372,6 +372,7 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
 {
     int iDuration	= GetHitDice(oPC) * 5;
     effect eAOE		= EffectAreaOfEffect(VFX_MOB_CROWN_OF_FLAME);
+	eAOE 			= SetEffectSpellId(eAOE, nSpell);
 	StoreSpellDataForAoE("CrownOfFlames", nSpell, iDuration);
 	
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(iDuration));

@@ -31,19 +31,19 @@ void main(){
 		object oCaster = GetAreaOfEffectCreator();	
 	
 		struct dSpellData data = GetSpellDataForAoE("Darkness", oCaster);
-		
+
+
 		int bAbyssalDark = FALSE;
-		if (data.nId == SPELL_RACIAL_DARKNESS){
-			int nRace = GetSubRace(oCaster);
-			if (nRace == 14 || nRace == 194) bAbyssalDark = TRUE;
-		}
+		if (data.nId == SPELL_RACIAL_DARKNESS && 
+			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oCaster, TRUE))
+				bAbyssalDark = TRUE;
 		
 		int nDur = data.nCL;
 		int nMeta = GetMetaMagicFeat();
 		if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nDur *= 2;
 		float fDur = RoundsToSeconds(nDur);
 		
-		int nBonus = 10;
+		int nBonus = 8;
 		if (nMeta  == METAMAGIC_EMPOWER || bAbyssalDark) nBonus += nBonus / 2;
 		
 		//impact vfx

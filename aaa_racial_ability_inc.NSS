@@ -830,7 +830,10 @@ void PS_Ability_EladrinForm(object oPC)
 	{	iForm		= 85;	}
 	effect eVis 	= EffectVisualEffect(VFX_DUR_POLYMORPH);
     effect ePoly	= EffectPolymorph(iForm, FALSE, TRUE);
+	effect eAOE 	= EffectAreaOfEffect(AOE_PER_LIGHT); // new aoe for light
+		ePoly		= EffectLinkEffects(eAOE, ePoly);
 		ePoly 		= ExtraordinaryEffect(ePoly);
+		ePoly 		= SetEffectSpellId(ePoly, 1246);
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);

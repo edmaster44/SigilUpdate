@@ -275,6 +275,8 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		sFeedback += "\nWings = " + IntToString(app.WingVariation);
 		sFeedback += "\nGender = " + IntToString(app.Gender);
 		sFeedback += "\nSkin Colour = " + IntToString(app.SkinColor);
+		sFeedback += "\nRace = " + IntToString(GetRacialType(oItem));
+		sFeedback += "\nSubRace = " + IntToString(GetSubRace(oItem));
 		sFeedback += "\n";
 	}
 	else if (sInput == "#getarmorappearance"){

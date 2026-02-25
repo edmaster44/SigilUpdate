@@ -19,7 +19,7 @@ void main()
 	
 	struct dSpellData data = GetSpellDataForAoE("CrownOfFlames", oCaster);
 	
-	object oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
+	object oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget))
     {	
 		ApplyCoF(oTarget, oCaster, data.nId, data.nCL);
