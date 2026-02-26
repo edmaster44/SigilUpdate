@@ -46,57 +46,57 @@ void main(int nRewardType) {
 	PS_GiveXPReward(oPC, iXp);
 	
 	if (nRewardType == 1) {
-		GiveGoldToCreature(oPC, iGold);
+		PS_GiveGoldToCreature(oPC, iGold);
 	} else if (nRewardType == 2) { //Armor Reward
 		CreateArmorOnTarget(oPC, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 3) { //Weapon
 		CreateWeaponOnTarget(oPC, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 4) { //Boots
 		CreateWearableOnTarget(oPC, "treasure_boots", 71, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 5) { //Trinket
 		CreateJunkOnTarget(oPC, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 6) { //Jewelry
 		CreateJewelryOnTarget(oPC, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 7) { //Cloak
 		CreateWearableOnTarget(oPC, "treasure_cloaks", 12, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	}else if (nRewardType == 8) { //Belt
 		CreateWearableOnTarget(oPC, "treasure_belts", 5, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 9) { //Helmet
 		CreateWearableOnTarget(oPC, "treasure_helmets", 35, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 10) { //Shield
 		CreateShieldOnTarget(oPC, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	} else if (nRewardType == 11) { //Gloves
 		CreateGlovesOnTarget(oPC, TREASURE_LEVEL);
 		iGold -= 1500;
 		if (iGold > 0)
-			GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
+			PS_GiveGoldToCreature(oPC, iGold); //Give leftovers as gold
 	}
 
 }

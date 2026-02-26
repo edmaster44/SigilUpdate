@@ -65,7 +65,7 @@ void main()
                 && GetRacialType(OBJECT_SELF) != RACIAL_TYPE_CONSTRUCT
                 && GetRacialType(OBJECT_SELF) != RACIAL_TYPE_ELEMENTAL
                 && GetRacialType(OBJECT_SELF) != RACIAL_TYPE_VERMIN){
-                GiveGoldToCreature(oPartyMember,d20());
+                PS_GiveGoldToCreature(oPartyMember,d20());
             }
             
             iMemberlevel = PS_GetLevel(oPartyMember);

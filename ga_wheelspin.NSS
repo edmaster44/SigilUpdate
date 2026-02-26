@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_functions"
 #include "ps_randomlootgenerator"
 #include "gm_include"
 
@@ -314,14 +314,14 @@ void GiveRandomItem(object oPC) {
 
 void DoubleMoney(object oPC, int money) {
 	money = money*2;
-	GiveGoldToCreature(oPC, money, TRUE);
+	PS_GiveGoldToCreature(oPC, money, TRUE);
 	SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Banker's Square!");
 }
 
 void TripleMoney(object oPC, int money) {
 	money = money*3;
-	GiveGoldToCreature(oPC, money, TRUE);
+	PS_GiveGoldToCreature(oPC, money, TRUE);
 	SetLocalInt(oPC, "HASWON", 1);
 	SpeakString("Congratulations, "+GetName(oPC)+", you have won the Lord's Square!");
 }
@@ -330,7 +330,7 @@ void GoldenSquare(object oPC, int money) {
 	SpeakString("Why, this IS your lucky day! Ladies and Gentlemen, "+GetName(oPC)+" has won the GOLDEN SQUARE!");
 	money = money*1000;
 	SetLocalInt(oPC, "HASWON", 1);
-	GiveGoldToCreature(oPC, money, TRUE);
+	PS_GiveGoldToCreature(oPC, money, TRUE);
 }
 
 void GiveNothing() {

@@ -23,7 +23,7 @@ void main () {
      	oItem = GetNextItemInInventory(oPC);
     }
 	
-	GiveGoldToCreature(oPC, iGold);
+	PS_GiveGoldToCreature(oPC, iGold);
 	PS_GiveXPReward(oPC, iXp);
 
 }

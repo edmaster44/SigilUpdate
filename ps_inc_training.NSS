@@ -306,7 +306,7 @@ void GiveTrainingReward(object oPC, int nDifficulty) {
 		
 	nLevel = FloatToInt(IntToFloat(nLevel)*nModifier);
 	int nReward = nBaseGold*nLevel;
-	GiveGoldToCreature(oPC, nReward);
+	PS_GiveGoldToCreature(oPC, nReward);
 }
 
 /* Makes a skill check. If successful, it awards exp

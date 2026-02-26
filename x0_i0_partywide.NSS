@@ -360,7 +360,7 @@ void GiveGoldToAllEqually(object oPC, int nGoldToDivide)
 
     object oPartyMem = GetFirstFactionMember(oPC, TRUE);
     while (GetIsObjectValid(oPartyMem)) {
-        GiveGoldToCreature(oPartyMem, nEqualAmt);
+        PS_GiveGoldToCreature(oPartyMem, nEqualAmt);
         oPartyMem = GetNextFactionMember(oPC, TRUE);
     }
     //GiveGoldToCreature(oPC, nEqualAmt);
@@ -372,7 +372,7 @@ void GiveGoldToAll(object oPC, int nGold)
 {
     object oPartyMem = GetFirstFactionMember(oPC, TRUE);
     while (GetIsObjectValid(oPartyMem)) {
-        GiveGoldToCreature(oPartyMem, nGold);
+        PS_GiveGoldToCreature(oPartyMem, nGold);
         oPartyMem = GetNextFactionMember(oPC, TRUE);
     }
     //GiveGoldToCreature(oPC, nGold);

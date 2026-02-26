@@ -5,7 +5,7 @@
 //NLC 7/21/08
 //JSH-OEI 1/6/09: Fixed issue in ProcessCompanyIncome() which was causing
 //the reserve to be multiplied with upgrade bonusesinstead of trading post income.
-
+#include "ps_inc_functions"
 #include "ginc_debug"
 #include "ginc_param_const"
 #include "ginc_2da"
@@ -650,7 +650,7 @@ int TurnInBars(int nBarsToTurnIn, int bDonate)
 	{
 		TakeBars(nBarsToTurnIn);
 		if(!bDonate)
-			GiveGoldToCreature( GetFactionLeader(GetFirstPC()), nBarsToTurnIn * TRADE_BAR_EXCHANGE_RATE);
+			PS_GiveGoldToCreature( GetFactionLeader(GetFirstPC()), nBarsToTurnIn * TRADE_BAR_EXCHANGE_RATE);
 		
 		else if(GetGlobalInt("00_nStoryStep") >= 2)
 		{

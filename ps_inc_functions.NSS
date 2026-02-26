@@ -27,6 +27,7 @@
 #include "ps_inc_ecl"
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
+#include "ps_inc_financial"
 
 void DoPsionFeatProgression(object oPC);
 
@@ -290,8 +291,6 @@ int GetBardicClassLevelForSongs(object oPC);
 int GetDisallowedLevelDownPRC(object oPC);
 
 void DoPsyProgression(object oPC, int bCharCreation = FALSE);
-
-
 
 void StackBardicUses(object oPC);
 

@@ -15,6 +15,7 @@
 //:://////////////////////////////////////////////
 #include "NW_I0_GENERIC"
 #include "gm_include"
+#include "ps_inc_functions"
 
 string PickFighter(int pos);
 void DecideWinner(string sMon1, string sMon2);
@@ -122,7 +123,7 @@ void EndFight(string sWinner, float odds) {
 			if (betOn == sWinner) {
 				SpeakString("Congratulations, "+GetName(oPC)+", you've won "+IntToString(nBet)+"!");
 				SetLocalInt(oPC, "GAMBLE_WON", GetLocalInt(oPC, "GAMBLE_WON")+nBet);
-				GiveGoldToCreature(oPC, nBet);
+				PS_GiveGoldToCreature(oPC, nBet);
 			}
 			
 			DeleteLocalString(oPC, "BEAST_BET_ON");

@@ -2,6 +2,7 @@
 
 //requires ps_inc_functions, included in ps_inc_training
 #include "ps_inc_training"
+#include "ps_inc_functions"
 
 
 void ResetBottle(location lLoc) {
@@ -81,7 +82,7 @@ void main () {
 		if (nExp > 0)
 			DelayCommand(2.5f, PS_GiveXPRewardNoReturn(oDamager, nExp));
 		if (nGold > 0)
-			DelayCommand(2.5f, GiveGoldToCreature(oDamager, nGold));
+			DelayCommand(2.5f, PS_GiveGoldToCreature(oDamager, nGold));
 		SetLocalInt(oDamager, "cipher_game_played", 1);
 	}
 	

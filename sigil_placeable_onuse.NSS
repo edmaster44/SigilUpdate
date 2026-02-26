@@ -1,4 +1,4 @@
-
+#include "ps_inc_functions"
 
 void SpecialChest(object oPC, object oPLACE)
 {
@@ -25,7 +25,7 @@ void SpecialChest(object oPC, object oPLACE)
 			{
 				if (sTYPE == "")
 				{
-					GiveGoldToCreature(oPARTY, nQTY, FALSE);
+					PS_GiveGoldToCreature(oPARTY, nQTY, FALSE);
 					sTXT = "*You obtain " + IntToString(nQTY) + " gold pieces from the chest.*";
 				}
 				else

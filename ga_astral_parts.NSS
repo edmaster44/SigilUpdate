@@ -23,7 +23,7 @@ void main (int iRewarder)
 	if (iRewarder == 1)
 	{
 		iAmount = (31 - iLevel) * iAppraiseMod * iTotalItems;
-		GiveGoldToCreature(oPC, iAmount, TRUE);
+		PS_GiveGoldToCreature(oPC, iAmount, TRUE);
 	}
 	else if (iRewarder == 2)
 	{

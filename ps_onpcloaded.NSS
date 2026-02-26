@@ -170,7 +170,7 @@ void GiveStartingGold( object oPC, int nAmount )
 {
 	int nGold = GetGold(oPC);
 	TakeGoldFromCreature(nGold, oPC, TRUE);
-	GiveGoldToCreature(oPC, nAmount);
+	PS_GiveGoldToCreature(oPC, nAmount);
 }
 
 void RemoveAllItems(object oPC)

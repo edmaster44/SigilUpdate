@@ -924,13 +924,13 @@ void RewardGP(int GP, object oTarget,int bAllParty=TRUE)
         while (GetIsObjectValid(oPartyMember) == TRUE)
         {
             //AssignCommand(oPartyMember, SpeakString("MY GP reward is: " + IntToString(GP)));
-            GiveGoldToCreature(oPartyMember, GP);
+            PS_GiveGoldToCreature(oPartyMember, GP);
             oPartyMember = GetNextFactionMember(oTarget, TRUE);
         }
     }
     else
     {
-     GiveGoldToCreature(oTarget, GP);
+     PS_GiveGoldToCreature(oTarget, GP);
     }
 }
 

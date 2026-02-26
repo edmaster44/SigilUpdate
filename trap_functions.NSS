@@ -6,6 +6,7 @@
 3 - Capture Animal
 4 - Let Animal Free
 ////////////////////////////////////////////*/
+#include "ps_inc_functions"
 #include "ps_inc_faction"
 
 void ClearEffects(object oTarget) {
@@ -43,7 +44,7 @@ void main (int nFunction) {
 			int nGold = GetLocalInt(oCaught, "GoldValueKill");
 			string sItem = GetLocalString(oCaught, "ItemKill");
 			if (nGold > 0)
-				GiveGoldToCreature(oPC, nGold, TRUE);
+				PS_GiveGoldToCreature(oPC, nGold, TRUE);
 			if (sItem != "") {
 				CreateItemOnObject(sItem, oPC);
 			}
@@ -61,7 +62,7 @@ void main (int nFunction) {
 			int nGold = GetLocalInt(oCaught, "GoldValueCapture");
 			string sItem = GetLocalString(oCaught, "ItemCapture");
 			if (nGold > 0)
-				GiveGoldToCreature(oPC, nGold, TRUE);
+				PS_GiveGoldToCreature(oPC, nGold, TRUE);
 			if (GetTag(oCaught) == "ps_trap_unicorn") {
 				if (GetGender(oPC) == GENDER_FEMALE && GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD) {
 					CreateItemOnObject(sItem, oPC);
@@ -82,7 +83,7 @@ void main (int nFunction) {
 			int nGold = GetLocalInt(oCaught, "GoldValueFree");
 			string sItem = GetLocalString(oCaught, "ItemFree");
 			if (nGold > 0)
-				GiveGoldToCreature(oPC, nGold, TRUE);
+				PS_GiveGoldToCreature(oPC, nGold, TRUE);
 			if (sItem != "") {
 				CreateItemOnObject(sItem, oPC);
 			}

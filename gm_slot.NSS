@@ -3,7 +3,7 @@
 // Gambling Slots
 // Part of the Gambling System designed by:
 // Archaegeo July 26 2002
-
+#include "ps_inc_functions"
 #include "gm_include"
 
 int BASECOST=5;
@@ -92,7 +92,7 @@ void GivePayout(int nMult)
     ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,OBJECT_SELF);
     DeleteLocalInt(OBJECT_SELF,"IN-USE");
     AssignCommand(OBJECT_SELF,ActionPlayAnimation(ANIMATION_PLACEABLE_DEACTIVATE));
-    GiveGoldToCreature(oPC, nPayout);
+    PS_GiveGoldToCreature(oPC, nPayout);
 }
 
 void DetermineResults()

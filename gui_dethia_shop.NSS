@@ -262,7 +262,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 		int	iCost	= GetStoreIdentifyCost(oStore);
 		//Check if PC has enough gold to ID the item
-		if(DS_GetCoinsOnCreature(oPC) < iCost)
+		if(GetGold(oPC) < iCost)
 		{//If the player doesn't have enough currency let them know and end script
 			FloatingTextStringOnCreature("You don't have enough coins friend.", oPC, FALSE);
 			return;	
@@ -305,7 +305,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			FloatingTextStringOnCreature("Sorry, I don't think you can carry anymore things.", oPC);
 			return;
 		}*/
-		else if(DS_GetCoinsOnCreature(oPC) < iPrice)
+		else if(GetGold(oPC) < iPrice)
 		{//If the player doesn't have enough currency let them know and end script
 			FloatingTextStringOnCreature("You don't have enough coins friend.", oPC);
 			return;	
@@ -367,7 +367,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		}
 		else if(GetItemCursedFlag(oItem))
 		{//If the item is cursed don't buy it
-			FloatingTextStringOnCreature("I don't think I can take that of your hands.", oPC);
+			FloatingTextStringOnCreature("I don't think I can take that off your hands.", oPC);
 			return;
 		}
 		else if(GetStolenFlag(oItem) && !iBlkMark)
@@ -482,7 +482,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	}
 
 	else if(iEvent == 13)	//Update the player's coin values in the inventory
-	{	DS_UpdateIventoryCoinValues(oPC);	}
+	{	DS_UpdateInventoryCoinValues(oPC);	}
 
 	else if(iEvent == 14)	//Player is purchasing/selling an item using double click
 	{//First we check if the event passed is a purchase or a sale

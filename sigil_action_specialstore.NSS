@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 void main(string sINPUT, string sOUTPUT, int nINPUT, int nOUTPUT)
 {
 
@@ -16,6 +18,6 @@ void main(string sINPUT, string sOUTPUT, int nINPUT, int nOUTPUT)
 		nUSED = nSTACK;
 		DestroyObject(oINPUT);
 	}
-	if (sOUTPUT == "") GiveGoldToCreature(oPC, nUSED * nOUTPUT);
+	if (sOUTPUT == "") PS_GiveGoldToCreature(oPC, nUSED * nOUTPUT);
 	else CreateItemOnObject(sOUTPUT, oPC, nOUTPUT);
 }

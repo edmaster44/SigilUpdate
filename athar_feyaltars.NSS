@@ -1,4 +1,4 @@
-
+#include "ps_inc_functions"
 
 void main() 
 {
@@ -6,7 +6,7 @@ void main()
 	object oPC = GetPCSpeaker();
 	int nOfferings = GetLocalInt(OBJECT_SELF, "offerings");
 	
-	GiveGoldToCreature(oPC, nOfferings);
+	PS_GiveGoldToCreature(oPC, nOfferings);
 	SetLocalInt(OBJECT_SELF, "offerings", 0);
 	
 }

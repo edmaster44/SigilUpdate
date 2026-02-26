@@ -1,4 +1,4 @@
-
+#include "ps_inc_functions"
 
 //Gives you the appropriate gold reward for the debtor's pole quests
 
@@ -26,19 +26,19 @@ void main() {
 		if (nRand == 1) {
 			nReturned = nAmount/4;
 			SendMessageToPC(oPC, "You recover "+IntToString(nReturned)+" of the "+IntToString(nAmount)+" jink owed to "+sOwedTo+". You are awarded part of the bounty posted, proportional to the amount recovered.");
-			GiveGoldToCreature(oPC, nReturned/3);
+			PS_GiveGoldToCreature(oPC, nReturned/3);
 		} else if (nRand == 2) {
 			nReturned = nAmount/3;
 			SendMessageToPC(oPC, "You recover "+IntToString(nReturned)+" of the "+IntToString(nAmount)+" jink owed to "+sOwedTo+". You are awarded part of the bounty posted, proportional to the amount recovered.");
-			GiveGoldToCreature(oPC, nReturned/3);
+			PS_GiveGoldToCreature(oPC, nReturned/3);
 		} else if (nRand == 3) {
 			nReturned = nAmount/2;
 			SendMessageToPC(oPC, "You recover "+IntToString(nReturned)+" of the "+IntToString(nAmount)+" jink owed to "+sOwedTo+". You are awarded part of the bounty posted, proportional to the amount recovered.");
-			GiveGoldToCreature(oPC, nReturned/3);
+			PS_GiveGoldToCreature(oPC, nReturned/3);
 		}
 	} else {
 		SendMessageToPC(oPC, "You return the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", and collect the bounty.");
-		GiveGoldToCreature(oPC, nBounty);
+		PS_GiveGoldToCreature(oPC, nBounty);
 	}
 
 }

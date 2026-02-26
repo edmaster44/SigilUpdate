@@ -5,6 +5,7 @@
 
 #include "ps_inc_treasuregeneration"
 #include "nw_i0_plot"
+#include "ps_inc_functions"
 
 const float GPAWARD = 250.0f;
 
@@ -44,7 +45,7 @@ void main() {
 	if (goldPercen > 0.0f) {
 		int goldAmount = FloatToInt(GPAWARD*goldPercen);
 		if (goldAmount > 0) 
-			GiveGoldToCreature(oPC, goldAmount);
+			PS_GiveGoldToCreature(oPC, goldAmount);
 	}
 	
 	while (numGems > 0) {

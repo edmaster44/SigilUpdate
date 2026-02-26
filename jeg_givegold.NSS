@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 void main(int GiveALot)
 {
     object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
@@ -47,7 +49,7 @@ void main(int GiveALot)
 		    int hasgp = GetGold(oPC);
 		    if (hasgp) TakeGoldFromCreature(hasgp, oPC, TRUE);
 		}
-		GiveGoldToCreature(oPC, gp);
+		PS_GiveGoldToCreature(oPC, gp);
 	}
     	
 }

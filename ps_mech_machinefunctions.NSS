@@ -125,7 +125,7 @@ void main (int nAction, int nDC) {
 			GenerateStarterItem(oPC);
 		} else {
 			int nGold = gold_reward*nTotalItem;
-			GiveGoldToCreature(oPC, nGold);
+			PS_GiveGoldToCreature(oPC, nGold);
 		}
 		
 	}

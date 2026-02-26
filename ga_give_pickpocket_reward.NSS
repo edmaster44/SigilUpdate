@@ -1,4 +1,5 @@
 #include "ps_inc_treasuregeneration"
+#include "ps_inc_functions"
 //***********************************************************************
 //Creates a reasonable pickpocketing reward. This can run from 
 //a few gold pieces to an item which you could reasonable lift from
@@ -29,10 +30,10 @@ void main() {
 	switch (nRandom) {
 		case 1: CreateGoldOnTarget(oPC, TREASURE_LEVEL); break; //standard gold reward, based on loot table logic
 		case 2: CreateGoldOnTarget(oPC, TREASURE_LEVEL); break; //standard gold reward, based on loot table logic
-		case 3: GiveGoldToCreature(oPC, d8(10)); break; //small gold reward, 10-80
-		case 4: GiveGoldToCreature(oPC, d20(5)); break; //medium gold reward, 5-100
-		case 5: GiveGoldToCreature(oPC, d10(10)); break; //small gold reward, 10-100
-		case 6: GiveGoldToCreature(oPC, d20(10)); break; //large gold reward, 10-2000
+		case 3: PS_GiveGoldToCreature(oPC, d8(10)); break; //small gold reward, 10-80
+		case 4: PS_GiveGoldToCreature(oPC, d20(5)); break; //medium gold reward, 5-100
+		case 5: PS_GiveGoldToCreature(oPC, d10(10)); break; //small gold reward, 10-100
+		case 6: PS_GiveGoldToCreature(oPC, d20(10)); break; //large gold reward, 10-2000
 		case 7: CreateJewelryOnTarget(oPC, TREASURE_LEVEL); break; //jewelry spawn
 		case 8: CreateJewelryOnTarget(oPC, TREASURE_LEVEL); break; //jewelry spawn
 		case 9: CreateJunkOnTarget(oPC, TREASURE_LEVEL); break; //trinket spawn
@@ -42,7 +43,7 @@ void main() {
 		case 13: CreateJunkOnTarget(oPC, TREASURE_LEVEL); break; //trinket spawn
 		case 14: CreateGemOnTarget(oPC, TREASURE_LEVEL); break; //gem spawn
 		case 15: CreateGemOnTarget(oPC, TREASURE_LEVEL); break; //gem spawn
-		default: GiveGoldToCreature(oPC, d20(3)); break; //default gold reward, 3-60
+		default: PS_GiveGoldToCreature(oPC, d20(3)); break; //default gold reward, 3-60
 	}
 
 }

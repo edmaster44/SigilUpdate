@@ -148,7 +148,7 @@ if (creature != "") {
 	}
 
 if (exp > 0) PS_GiveXPReward(oPC, exp);
-if (gold > 0) GiveGoldToCreature(oPC, gold, TRUE);
+if (gold > 0) PS_GiveGoldToCreature(oPC, gold, TRUE);
 if (message != "") SendMessageToPC(oPC, message);
 if (convo != "") AssignCommand(oPC, ActionStartConversation(oPC, convo, TRUE, FALSE));
 if (itemTAG != "") CreateItemOnObject(itemTAG, oPC, quantity);

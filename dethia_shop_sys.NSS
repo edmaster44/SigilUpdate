@@ -99,9 +99,6 @@ displayed in the GUI files where gold usually appears.
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
 string	GOLD			= "nw_it_gold001";	//Resref of gold piece
-int		CuC				= 1;		//Copper coins (1 copper = 1 copper)
-int		AgC				= 10;		//Silver coins (1 silver = 10 copper)
-int		AuC				= 100;		//Gold coins, (1 gold = 100 copper)
 float	DS_BUY_RATE		= 0.5f;		//50%
 int		DS_THEFT_ENABLE	= FALSE;	//Enable/Disable theft from shops
 float	DS_THEFT_WEIGHT	= 10.0f;	//Maximum allowed weight for stolen items
@@ -168,21 +165,6 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0);
 //This function retrieves the NPC or placeable that is running oStore.
 object DS_GetStoreKeeper(object oStore);
 
-//This function converts the in-game gold value (default game system)
-//to a value of copper coins used by the Dethia Shop System
-//int	iCoins	= the in-game gold value (default gold system value)
-string DS_ConvertCoinsToCopper(int iCoins);
-
-//This function converts the in-game gold value (default game system)
-//to a value of silver coins used by the Dethia Shop System
-//int	iCoins	= the in-game gold value (default gold system value)
-string DS_ConvertCoinsToSilver(int iCoins);
-
-//This function converts the in-game gold value (default game system)
-//to a value of gold coins used by the Dethia Shop System
-//int	iCoins	= the in-game gold value (default gold system value)
-string DS_ConvertCoinsToGold(int iCoins);
-
 //This function adds actual items to the shop GUI that are of the
 //specified category
 //object	oStore		= the store from which items are drawn
@@ -215,10 +197,6 @@ int DS_WillOnlyBuy(object oItem, string sBuyOnlyList);
 //float		fSellMod		= Obtained from the local float variable "DS_BUY_MOD" on the store
 int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMarket = 0, float fSellMod = 0.0f);
 
-//This function gets the amount of currency oCreature has
-//object	oCreature	= creature whose current financial state we wish to know
-int	DS_GetCoinsOnCreature(object oCreature);
-
 //This function will remove an appropriate amount of coins from the specified creature
 //object	oCreature	= the creature / player from which we are removing gold
 //int		iCoins		= how many coins we are removing in terms of least valueable
@@ -238,10 +216,6 @@ void DS_GiveCoinsToCreature(object oCreature, int iCoins);
 //int		iCoins	= the value by how much the store's gold will increase/decrease
 //int		iAdd	= TRUE (increasing), FALSE indicates we are decreasing
 void DS_UpdateStoreCurrency(object oStore, object oPC, int iCoins, int iAdd = TRUE);
-
-//This function updates the player's coin values in the inventory screen
-//object	oPC	= the player whose coin values we are updating
-void DS_UpdateIventoryCoinValues(object oPC);
 
 //This function determines if the theft by oPC from oStore of oItem with a
 //iStackSize was successful or not.  Returns TRUE if yes, FALSE otherwise
@@ -472,15 +446,6 @@ void DS_OpenShop(object oStore, object oPC, int iMarkUp = 0, int iMarkDown = 0)
 object DS_GetStoreKeeper(object oStore)
 {	return GetLocalObject(oStore, "DS_SHOP_KEEPER");	}
 
-string DS_ConvertCoinsToCopper(int iCoins)
-{	return	IntToString(iCoins%AgC);	}
-
-string DS_ConvertCoinsToSilver(int iCoins)
-{	return IntToString((iCoins%AuC - iCoins%AgC)/AgC);	}
-
-string DS_ConvertCoinsToGold(int iCoins)
-{	return IntToString((iCoins - iCoins%AuC)/AuC);	}
-
 void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, int iMarkDown)
 {//We first empty the shop of currently available items
 	ClearListBox(oPC, "dethia_shop", "store_items");
@@ -642,9 +607,6 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	return iItemCost;
 }
 
-int	DS_GetCoinsOnCreature(object oCreature)
-{	return GetGold(oCreature);	}
-
 void DS_TakeCoinsFromCreature(object oCreature, int iCoins)
 {//We take the specified amount of gold (coins) from oCreature
 	TakeGoldFromCreature(iCoins, oCreature, TRUE, FALSE);
@@ -659,12 +621,12 @@ void DS_TakeCoinsFromCreature(object oCreature, int iCoins)
 	{		sCoinsLost	+= " <color=tan>" + DS_ConvertCoinsToCopper(iCoins) + "</color> copper";	}
 	SendMessageToPC(oCreature, sCoinsLost + " coins.");
 	//Lastly update oCreature's inventory screen
-	DS_UpdateIventoryCoinValues(oCreature);
+	DS_UpdateInventoryCoinValues(oCreature);
 }
 
 void DS_GiveCoinsToCreature(object oCreature, int iCoins)
 {//Give oCreature the specified value of coins
-	GiveGoldToCreature(oCreature, iCoins, FALSE);
+	PS_GiveGoldToCreature(oCreature, iCoins, FALSE);
 
 	//Give a feed-back message of how much curency the player acquired
 	string	sAcquiredCoins	= "Acquired";
@@ -676,7 +638,7 @@ void DS_GiveCoinsToCreature(object oCreature, int iCoins)
 	{		sAcquiredCoins	+= " <color=tan>" + DS_ConvertCoinsToCopper(iCoins) + "</color> copper";	}
 	SendMessageToPC(oCreature, sAcquiredCoins + " coins.");
 	//Lastly update oCreature's inventory screen
-	DS_UpdateIventoryCoinValues(oCreature);
+	DS_UpdateInventoryCoinValues(oCreature);
 }
 
 void DS_UpdateStoreCurrency(object oStore, object oPC, int iCoins, int iAdd = TRUE)
@@ -697,15 +659,6 @@ void DS_UpdateStoreCurrency(object oStore, object oPC, int iCoins, int iAdd = TR
 	SetGUIObjectText(oPC, "dethia_shop", "sg_cc", -1, DS_ConvertCoinsToCopper(iStoreGold));
 	SetGUIObjectText(oPC, "dethia_shop", "sg_sc", -1, DS_ConvertCoinsToSilver(iStoreGold));
 	SetGUIObjectText(oPC, "dethia_shop", "sg_gc", -1, DS_ConvertCoinsToGold(iStoreGold));
-}
-
-void DS_UpdateIventoryCoinValues(object oPC)
-{//First get how much gold the player has
-	int	iCoins	= DS_GetCoinsOnCreature(oPC);
-	//Next just set the coin values
-	SetGUIObjectText(oPC, "SCREEN_INVENTORY", "pc_gc", -1, DS_ConvertCoinsToGold(iCoins));
-	SetGUIObjectText(oPC, "SCREEN_INVENTORY", "pc_sc", -1, DS_ConvertCoinsToSilver(iCoins));
-	SetGUIObjectText(oPC, "SCREEN_INVENTORY", "pc_cc", -1, DS_ConvertCoinsToCopper(iCoins));
 }
 
 int	DS_GetIsTheftSuccessful(object oPC, object oStore, object oItem, int iCost, int iStackSize)

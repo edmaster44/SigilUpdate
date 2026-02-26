@@ -23,7 +23,7 @@ void main () {
      	oItem = GetNextItemInInventory(oPC);
     }
 	
-	GiveGoldToCreature(oPC, iGold);
+	PS_GiveGoldToCreature(oPC, iGold);
 	if (!ALLOW_ECL_LEVEL_30 || TAX_SKULLS_FOR_ECL) PS_GiveXPReward(oPC, iXp);
 	else GiveXPToCreature(oPC, iXp);
 

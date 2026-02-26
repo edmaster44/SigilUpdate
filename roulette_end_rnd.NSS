@@ -9,6 +9,8 @@
 //xezol@xezol.com
 //////////////////////////////////
 #include "gm_include"
+#include "ps_inc_functions"
+
 
 int EndRouletteRound(object PC, int random)
 {
@@ -454,11 +456,11 @@ switch(ixSpot1)
     sxSpot1Color = "Red";
     SetLocalString(OBJECT_SELF,"sSpot1Color","sxSpot1Color");
 	if (CheckPayout(ixRed*2)) {
-    	GiveGoldToCreature(oPC,ixRed*2);
+    	PS_GiveGoldToCreature(oPC,ixRed*2);
 		SubHouse(ixRed*2);
 	}
 	else {
-    	GiveGoldToCreature(oPC,ixRed*2);
+    	PS_GiveGoldToCreature(oPC,ixRed*2);
 		SubHouse(ixRed*2);
 		SpeakString("" + GetName(oPC) + "'s "+(sxSpot1Color)+" bet has broken the house! That's all for now, folks.");
 		return FALSE;
@@ -3358,7 +3360,7 @@ if (oPC == GetObjectByTag("roulettedealer"))
 else
     {
     string sResult = ""+sxRB+""+sxHL+""+sxEO+""+sxDoz+""+sxCol+""+sxLine+""+sxLine2+""+sxFive+""+sxCorner+""+sxCorner2+""+sxCorner3+""+sxCorner4+""+sxStreet+""+sxSUHit+""+sxSplit1+""+sxSplit2+""+sxSplit3+""+sxSplit4+""+sxSplit5+"";
-	GiveGoldToCreature(oPC,nMoney);
+	PS_GiveGoldToCreature(oPC,nMoney);
 	SetLocalInt(oPC, "GAMBLE_WON", GetLocalInt(oPC, "GAMBLE_WON")+nMoney);
     string sMoney = ""+IntToString(nMoney)+"";
     if (sResult != "")
