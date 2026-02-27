@@ -834,6 +834,7 @@ void PS_Ability_EladrinForm(object oPC)
 		ePoly		= EffectLinkEffects(eAOE, ePoly);
 		ePoly 		= ExtraordinaryEffect(ePoly);
 		ePoly 		= SetEffectSpellId(ePoly, 1246);
+	StoreSpellDataForAoE("Light", 1246, GetHitDice(oPC));
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);

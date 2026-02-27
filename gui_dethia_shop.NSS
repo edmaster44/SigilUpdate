@@ -147,7 +147,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		
 		//SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
-		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1) //Don't update price for base ammunition
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) < 1) //Don't update price for base ammunition
 		{	return;	}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));

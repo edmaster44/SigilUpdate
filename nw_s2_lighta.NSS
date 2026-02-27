@@ -14,8 +14,9 @@ void main(){
 		
 		
 		int bDivineLight = FALSE;
-		if (data.nId == SPELL_RACIAL_LIGHT &&
-			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oCaster, TRUE))
+		if ((data.nId == SPELL_RACIAL_LIGHT  &&
+			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oCaster, TRUE)) ||
+			data.nId == 1246)
 				bDivineLight = TRUE;
 		
 		int nDur = data.nCL;
@@ -23,6 +24,8 @@ void main(){
 		if (nMeta == METAMAGIC_EXTEND || bDivineLight) nDur *= 2;
 		int nBonus = 8;
 		if (nMeta == METAMAGIC_EMPOWER || bDivineLight) nBonus += nBonus / 2;
+		if (data.nId == 1246) nDur = 24; // Eladrin effect is 24 hours regardless of CL
+		
 		
 		effect eSearch = EffectSkillIncrease(SKILL_SEARCH, nBonus);
 		effect eSpot = EffectSkillIncrease(SKILL_SPOT, nBonus);
@@ -30,6 +33,7 @@ void main(){
 		eSearch = EffectLinkEffects(EffectSkillDecrease(SKILL_HIDE, nBonus), eSearch);
 		if (bDivineLight)
 			eSearch = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_BLINDNESS), eSearch);
+			
 		SetEffectSpellId(eSearch, data.nId);
 		
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, data.nId, FALSE));

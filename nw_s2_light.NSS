@@ -29,10 +29,13 @@ void main(){
 	int nLevel;
 	int nId = GetSpellId();
 	int bDivineLight = FALSE;
-	if (nId == SPELL_RACIAL_LIGHT){
+	if (nId == SPELL_RACIAL_LIGHT || nId == 1246){ //1246 = Eladrin light form spell id
 		nLevel = GetHitDice(oCaster);
 		int nRace = GetSubRace(oCaster);
-		if (nRace == 13 || nRace == 203) bDivineLight = TRUE;
+		if (nId == 1246 || 
+			(GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oCaster, TRUE) &&
+				nId == SPELL_RACIAL_LIGHT))
+					bDivineLight = TRUE;
 	} else nLevel = PS_GetCasterLevel(oCaster);
 	if (nLevel < 1) nLevel = 1;
 	int nDur = nLevel;

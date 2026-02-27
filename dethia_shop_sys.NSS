@@ -607,6 +607,8 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	return iItemCost;
 }
 
+
+
 void DS_TakeCoinsFromCreature(object oCreature, int iCoins)
 {//We take the specified amount of gold (coins) from oCreature
 	TakeGoldFromCreature(iCoins, oCreature, TRUE, FALSE);

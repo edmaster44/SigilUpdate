@@ -19,11 +19,12 @@
 // impose the miss chance on the creator. The tief version the darkness is drawn from within, 
 // not cast as a spell, though it can still be dispelled, ofc. In other words, everyone in the cloud will
 // now have 50% conceal vs ranged, and those who are not immune become blind, thereby having a 50% miss chance
-#include "x2_inc_spellhook"
+#include "nw_s0_darkness_inc"
 
 
 void main(){
 
+	ScanForLight();
 	object oTarget = GetEnteringObject();
 	
 	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE){
