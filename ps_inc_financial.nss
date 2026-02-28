@@ -1,4 +1,9 @@
-
+// A NOTE ABOUT CURRENCY: In order to keep consistent server messages for players when 
+// they pick up coins, please use PS_GiveGoldToCreature() function below in scripts awarding 
+// coin and use the item ps_it_copper001 when adding coinage to chests, loot piles, etc.
+// (there is a handler in x2_mod_def_aqu.nss to convert the item ps_it_copper001 into actual
+// money in the player's inventory).
+// -FlattedFifth, Feb 27, 2026
 
 //This function converts the in-game gold value (default game system)
 //to a value of copper coins used by the Dethia Shop System
