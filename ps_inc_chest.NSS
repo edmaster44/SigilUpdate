@@ -31,7 +31,7 @@ void FillChestWithGold(object oChest) {
 	iGoldAmount = iGoldAmount + iGoldcons;
 	
 	if ( iGoldAmount > 0 )
-		CreateTreasureItemOnTarget("NW_IT_GOLD001", oChest, iGoldAmount);
+		CreateTreasureItemOnTarget("PS_IT_COPPER001", oChest, iGoldAmount);
 		
 }
 

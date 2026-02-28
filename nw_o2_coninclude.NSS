@@ -160,7 +160,7 @@ void dbCreateItemOnObject(string sItemTemplate, object oTarget = OBJECT_SELF, in
     }
     object oItem = CreateItemOnObject(sItemTemplate, oTarget, nStackSize);
 	PrintString ("Created " + IntToString(nStackSize) + " of " + sItemTemplate + " on " + GetName(oTarget));
-    if (GetIsObjectValid(oItem) == FALSE && sItemTemplate != "NW_IT_GOLD001")
+    if (GetIsObjectValid(oItem) == FALSE && sItemTemplate != "PS_IT_COPPER001")
     {
 
         // * check to see if item is there in a stack, if not give warning
@@ -513,7 +513,7 @@ int GetNumberOfItems(int nTreasureType)
         if (nAmount <= 0) nAmount = 1;
 		
         //dbSpeak("gold");
-        dbCreateItemOnObject("NW_IT_GOLD001", oTarget, nAmount);
+        dbCreateItemOnObject("PS_IT_COPPER001", oTarget, nAmount);
     }
 	
 	//Gem drops will now be taken care of separately; Rewriting this to preserve

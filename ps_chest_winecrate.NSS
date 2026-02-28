@@ -32,7 +32,7 @@ void FillGold(object oChest)
 	iGoldAmount = iGoldAmount + iGoldcons;
 	
 	if ( iGoldAmount > 0 )
-		dbCreateItemOnObject("NW_IT_GOLD001", oChest, iGoldAmount);
+		dbCreateItemOnObject("PS_IT_COPPER001", oChest, iGoldAmount);
 		
 //	SpeakString(IntToString(iGoldAmount),TALKVOLUME_SHOUT);	
 }

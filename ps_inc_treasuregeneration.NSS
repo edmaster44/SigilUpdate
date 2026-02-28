@@ -641,7 +641,7 @@ void CreateGoldOnTarget(object oTarget, int nTreasureLevel) {
 	nAmount = FloatToInt(nAmount * nMod);
 	if (nAmount <= 0) nAmount = 1;
 		
-	CreateTreasureItemOnTarget("NW_IT_GOLD001", oTarget, nAmount);
+	CreateTreasureItemOnTarget("PS_IT_COPPER001", oTarget, nAmount);
 }
 //***************************************************
 //Main Treasure Generation Script

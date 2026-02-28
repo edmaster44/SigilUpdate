@@ -19,7 +19,7 @@ displayed in the GUI files where gold usually appears.
 		sell_icon.tga		Sell icon (the image used for the sell button)
 		inv_top_bg.tga		Modified from default inventory scren background
 		it_gold.tga			Modified from gold icon to look like copper
-		nw_it_gold001.uti	Modified from default gold piece blueprint
+		PS_IT_COPPER001.uti	Modified from default gold piece blueprint
 		dethia_shop.xml		The xml GUI file
 		inventoryscreen.xml	Modified from default inventory screen GUI file
 		splitgold.xml		Modified from default barter coin window
@@ -98,7 +98,7 @@ displayed in the GUI files where gold usually appears.
 
 //******************************CONSTANTS*******************************//
 //Constants, gold and various conversion rates (we use copper as base currency unit)
-string	GOLD			= "nw_it_gold001";	//Resref of gold piece
+string	GOLD			= "PS_IT_COPPER001";	//Resref of gold piece
 float	DS_BUY_RATE		= 0.5f;		//50%
 int		DS_THEFT_ENABLE	= FALSE;	//Enable/Disable theft from shops
 float	DS_THEFT_WEIGHT	= 10.0f;	//Maximum allowed weight for stolen items

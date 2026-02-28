@@ -13,6 +13,7 @@
 //				when it's allowed), though that might be better moved to x2_inc_switches at some point.
 // 				Also makes wands and scrolls useable by those mage slayers who can use them.
 //		ditto - June 30, added call to ff_update_legacy_items to fix any wrong items when the pc gets them.
+//      Feb 27, 2026 - added custom handler for new copper piece loot item ps_it_copper001
 #include "x2_inc_switches"
 #include "nwnx_sql"
 #include "ps_wandofsort_inc"
@@ -210,5 +211,14 @@ void HandleSigilAcquisition(object oBY, object oFROM, object oITEM)
 	}
 	if (sITEM_TAG == VAR_NEWTAG) ResetSortValuesOnPC(oBY, oITEM);
 	else if (sITEM_TAG == "ps_essence") PS_LoadEssenceState(oBY, oITEM);
+	
+	// new copper piece item
+	if (sITEM_TAG == "ps_it_copper001"){
+	// not sure which of these to use here, not sure it matters, let's try the generic
+	// GetModuleItemAcquiredStackSize();
+		int nCopper = GetItemStackSize(oITEM);
+		DestroyObject(oITEM, 0.1f, FALSE);
+		PS_GiveGoldToCreature(oBY, nCopper, FALSE);
+	}
 }
  

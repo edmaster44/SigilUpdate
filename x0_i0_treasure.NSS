@@ -204,7 +204,7 @@ string sContUniq =     "X0_TREASURE_UNIQ";
 string sContMonster =     "X0_TREASURE_MONSTER";
 
 // Gold item ResRef
-string sGoldResRef = "NW_IT_GOLD001";
+string sGoldResRef = "PS_IT_COPPER001";
 
 // Varname holding the number of treasure items
 string sNumTreasureItemsVarname = "X0_NUM_TREASURE_ITEMS";
