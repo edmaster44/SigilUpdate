@@ -7,6 +7,13 @@
 #include "ps_inc_advscript"
 
 
+int GetIsVamp(object oPC){
+	int nVamp = GetLevelByClass(78, oPC) + GetLevelByClass(105, oPC) 
+		+ GetLevelByClass(106, oPC);
+	if (nVamp >= 1) return TRUE;
+	return FALSE;
+}
+
 
 int IsAuthorizedToUseThisCmd(object oPC)
 {
@@ -278,6 +285,39 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		sFeedback += "\nRace = " + IntToString(GetRacialType(oItem));
 		sFeedback += "\nSubRace = " + IntToString(GetSubRace(oItem));
 		sFeedback += "\n";
+	}
+	else if (sInput == "#vampeyesbat"){
+		bFFcommand = TRUE;
+		if (!GetIsVamp(oSender)) sFeedback = "This command does nothing for non-vampires";
+		else {
+			object oEss = PS_GetEssence(oSender);
+			int nBat = !GetLocalInt(oEss, "vampeyesoffbat");
+			SetLocalInt(oEss, "vampeyesoffbat", nBat);
+			if (nBat) sFeedback = "Turning off eye glow for bat form";
+			else sFeedback = "Turning on eye glow for bat form";
+			}
+	}
+	else if (sInput == "#vampeyesbeast"){
+		bFFcommand = TRUE;
+		if (!GetIsVamp(oSender)) sFeedback = "This command does nothing for non-vampires";
+		else {
+			object oEss = PS_GetEssence(oSender);
+			int nBeast = !GetLocalInt(oEss, "vampeyesoffbeast");
+			SetLocalInt(oEss, "vampeyesoffbeast", nBeast);
+			if (nBeast) sFeedback = "Turning off eye glow for beast form";
+			else sFeedback = "Turning on eye glow for beast form";
+		}
+	}
+	else if (sInput == "#vampeyesgas"){
+		bFFcommand = TRUE;
+		if (!GetIsVamp(oSender)) sFeedback = "This command does nothing for non-vampires";
+		else {
+			object oEss = PS_GetEssence(oSender);
+			int nGas = !GetLocalInt(oEss, "vampeyesoffgas");
+			SetLocalInt(oEss, "vampeyesoffgas", nGas);
+			if (nGas) sFeedback = "Turning off eye glow for gaseous form";
+			else sFeedback = "Turning on eye glow for gaseous form";
+		}
 	}
 	else if (sInput == "#getarmorappearance"){
 		bFFcommand = TRUE;

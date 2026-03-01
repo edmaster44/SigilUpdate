@@ -311,7 +311,7 @@ void main() {
 	SetLocalString( oModule, "XC_P_EEF_NK_BODY", "#1#2#3#4#5#6#7#20#51#70#80#83#92#94#95#98#99#117#118#250#" );
 	SetLocalString( oModule, "XC_P_EEF_NK_BOOTS", "#1#19#84#89#" );
 	SetLocalString( oModule, "XC_P_EEF_NK_GLOVES", "#1#2#3#4#84#89#" );
-	SetLocalString( oModule, "XC_P_EEF_MP_BODY", "#1#2#3#4#5#6#8#9#10#11#12#13#14#15#16#17#19#22#23#24#27#54#55#56#58#101#102#108#109#110#111#112#113#114#115#116#117#118#119#120#");
+	SetLocalString( oModule, "XC_P_EEF_MP_BODY", "#1#2#3#4#5#6#8#9#10#11#12#13#14#15#16#17#19#22#23#24#27#54#55#56#58#101#102#108#109#110#111#112#113#114#115#116#118#119#120#");
 	SetLocalString( oModule, "XC_P_EEF_MP_BOOTS", "#1#2#3#4#5#6#10#11#12#13#14#15#16#17#" );
 	SetLocalString( oModule, "XC_P_EEF_MP_CLOAK", "#1#2#3#4#5#6#7#8#9#10#11#" );
 	SetLocalString( oModule, "XC_P_EEF_MP_GLOVES", "#1#2#3#4#5#6#7#10#11#12#13#14#15#17#" );

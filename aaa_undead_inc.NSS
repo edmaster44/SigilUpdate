@@ -856,7 +856,7 @@ void PS_VampAltForm_Bat(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
-	if (sVFX != "")
+	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbat"))
 	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
@@ -873,10 +873,12 @@ void PS_VampAltForm_Wolf(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	/*
 	if (sVFX != "")
 	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
-	if (sVFX != "")
-	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	*/
 }
 
 void PS_VampAltForm_Gas(object oPC, int nSpell)
@@ -898,7 +900,7 @@ void PS_VampAltForm_Gas(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
-	if (sVFX != "")
+	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffgas"))
 	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
@@ -915,7 +917,7 @@ void PS_VampAltForm_DireWolf(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
-	if (sVFX != "")
+	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
 	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
@@ -1069,7 +1071,7 @@ void PS_Vamp_AltForm_Wyvern(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
-	if (sVFX != "")
+	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
 	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
@@ -1086,7 +1088,7 @@ void PS_Vamp_AltForm_TerrorWolf(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
-	if (sVFX != "")
+	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
 	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
