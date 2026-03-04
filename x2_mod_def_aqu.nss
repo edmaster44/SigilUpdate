@@ -44,6 +44,8 @@ void main()
 	if (GetIsPC(oBY) == FALSE) return;
 	object oFROM = GetModuleItemAcquiredFrom();
 	object oITEM = GetModuleItemAcquired();
+	
+	
 	HandleSigilAcquisition(oBY, oFROM, oITEM);
 	
 	// call to ff_update_legacy_items
@@ -176,7 +178,8 @@ void BroadcastLoot(object oBY, object oFROM, object oITEM)
 {
 	string sTXT = GetName(oBY) + " picked up ";
 	int nTYPE = GetBaseItemType(oITEM);
-	if (nTYPE == 255) sTXT = sTXT + "some gold"; //Gold. BASE_ITEM_GOLD being 76 is a lie, it's 255. Or is it?
+	//Gold. BASE_ITEM_GOLD being 76 is a lie, it's 255. Or is it?
+	if (nTYPE == 255 || nTYPE == 76 || nTYPE == 155) sTXT = sTXT + "some coin"; 
 	else
 	{
 		int nSTACK = GetItemStackSize(oITEM);
@@ -213,12 +216,12 @@ void HandleSigilAcquisition(object oBY, object oFROM, object oITEM)
 	else if (sITEM_TAG == "ps_essence") PS_LoadEssenceState(oBY, oITEM);
 	
 	// new copper piece item
-	if (sITEM_TAG == "ps_it_copper001"){
-	// not sure which of these to use here, not sure it matters, let's try the generic
-	// GetModuleItemAcquiredStackSize();
-		int nCopper = GetItemStackSize(oITEM);
-		DestroyObject(oITEM, 0.1f, FALSE);
-		PS_GiveGoldToCreature(oBY, nCopper, FALSE);
+	if (GetResRef(oITEM) == "ps_it_copper001"){
+		// not sure which of these to use here, not sure it matters
+		//int nCopper = GetItemStackSize(oITEM);
+		int nCopper = GetModuleItemAcquiredStackSize();
+		DestroyObject(oITEM, 0.5f, FALSE);
+		PS_GiveGoldToCreature(oBY, nCopper, FALSE, TRUE);
 	}
 }
  

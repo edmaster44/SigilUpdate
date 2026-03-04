@@ -235,11 +235,6 @@ int DS_DistanceCheck(object oPC, object oStore);
 //object	oItem	= the item whose category we wish to retrieve
 int DS_GetItemCategory(object oItem);
 
-//This function checks whether an item is a projectile or not.  Returns TRUE if yes,
-//FALSE otherwise
-//object	oItem	= the item we are checking whether it is a projectile or not
-int DS_GetIsProjectile(object oItem);
-
 //This function gets the absolute value of fValue
 //float	fValue	= the floating point number of which we want the absolut value
 float DS_AbsoluteValue(float fValue);
@@ -682,7 +677,7 @@ int	DS_GetIsTheftSuccessful(object oPC, object oStore, object oItem, int iCost, 
 							1.4f*DS_AbsoluteValue(sin(iSilver*0.9f))	+
 							(100/(iGold + 1))*1.8*DS_AbsoluteValue(sin(iGold*0.9f));
 	//Next get the weight modifier (log fit for {(0, -0.5), (1, 0), (10, 1)})
-	if(DS_GetIsProjectile(oItem))
+	if(IPGetIsAmmo(oItem))
 	{	iStackSize	= 1;	}	//Projectiles are treated as 1 bulk item
 	float	fWeightMod	= 0.166667 + 0.325721*log(fWeight);
 			fWeightMod	*=iStackSize;	//Weight modifier depends on stack size!
@@ -749,7 +744,7 @@ int DS_GetItemCategory(object oItem)
 	{	iCategory	= DS_ARMOR;	}
 	else if(IPGetIsMeleeWeapon(oItem)	||
 			IPGetIsRangedWeapon(oItem)	||
-			DS_GetIsProjectile(oItem)	)
+			IPGetIsAmmo(oItem)	)
 	{	iCategory	= DS_WEAPON;	}
 	else if(iBaseType == BASE_ITEM_POTIONS			||
 			iBaseType == BASE_ITEM_SCROLL			||
@@ -772,17 +767,6 @@ int DS_GetItemCategory(object oItem)
 	{	iCategory	= DS_MISCELLANEOUS;	}
 	//Lastly return the determined category
 	return iCategory;
-}
-
-int DS_GetIsProjectile(object oItem)
-{//Simply do the check
-	if(IPGetIsProjectile(oItem)	||
-		GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE	||
-		GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN	||
-		GetBaseItemType(oItem) == BASE_ITEM_DART		)
-	{	return TRUE;	}
-	//If we got this far return FALSE
-	return FALSE;
 }
 
 float DS_AbsoluteValue(float fValue)
@@ -960,15 +944,26 @@ int GetItemUseable(object oItem, object oPC)
 }
 
 //A function to fetch the "real" gold piece value of an item
+// Now returns value of only 1 of a stack, and cuts the value of projectiles in two.
 int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 
+	// ammo created by crafted "quivers" have no value
+	if (GetTag(oItem) == "returnthrown") return 0;
+	
 	SetItemCostVariables(oItem, FALSE, oPC);
 	int nCost = GetLocalInt(oItem, "PRICE");
-	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
+	// projectiles can be quite valuable, which is silly because they're single use.
+	// lets nerf the sell price on projectiles
+	if (IPGetIsAmmo(oItem)){
+		nCost /= 2;
+		if (nCost < 1) nCost = 1;
+	}
+	/*
+	if (!IPGetIsAmmo(oItem)) //if we aren't a projectile, price should be the price of the stack
 		nCost *= GetItemStackSize(oItem);
 	else if (GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
 		nCost *= GetItemStackSize(oItem);
-		
+	*/
 	return nCost;
 
 }
