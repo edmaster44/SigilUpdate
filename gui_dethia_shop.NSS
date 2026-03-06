@@ -118,7 +118,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	else if(iEvent == 5)	//Item selected within the shop
 	{//First set the max stack value to quantity and update local:7 (quant-selected)
 		int nStack = StringToInt(sStackSize);
-		if(IPGetIsAmmo(oItem)) {
+		if(DS_GetIsProjectile(oItem)) {
 			if (nStack >= 99)
 				sStackSize = "99";
 			else 
@@ -132,7 +132,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 		//Next set the item's cost (ammunition is not affected by stack size)
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
-		if(IPGetIsAmmo(oItem) && PS_GetItemValue(oItem) <= 1)
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		{	iCost	/= StringToInt(sStackSize);	}
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
@@ -147,7 +147,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		
 		//SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
-		if(IPGetIsAmmo(oItem) && PS_GetItemValue(oItem) < 1) //Don't update price for base ammunition
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) < 1) //Don't update price for base ammunition
 		{	return;	}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
@@ -297,7 +297,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			iStack =  GetItemStackSize(oItem);
 		}
 		
-		if(IPGetIsAmmo(oItem) && PS_GetItemValue(oItem) <= 1)
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		{	iPrice	/= iAmount;	}
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
 		/*else if(!DoesPCHaveFreeInvSlots(oPC))
@@ -385,16 +385,12 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	//	int		iStackSize		= StringToInt(sStackSize);
 		int 	iStackSize 		= GetItemStackSize(oItem);
 		sStackSize = IntToString(iStackSize); 
-		//int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
+		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
 		
-		//if(IPGetIsAmmo(oItem) && PS_GetItemValue(oItem) <= 1)
-		//{		iSellPrice		/= iSellAmount;	}
-		int iSellPrice = PS_GetItemValue(oItem, oPC);
-		// above function now returns only the value of 1 item of a stack
-		if (iSellPrice > 0 && iStackSize > 1) iSellPrice *= iStackSize;
+		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
+		{		iSellPrice		/= iSellAmount;	}
 		
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
-		if (iStackSize > 1 && iMaxBuyPrice > 0) iMaxBuyPrice *= iStackSize;
 		int		iStoreGold		= GetStoreGold(oStore);
 		
 		if(iMaxBuyPrice != -1 && iStoreGold < iMaxBuyPrice && iSellPrice > iStoreGold)
@@ -402,21 +398,15 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			FloatingTextStringOnCreature("Sorry but I don't have the coin to pay for that.", oPC);
 			return;	
 		}
-
 		//If the player is selling nothing, nothing happens
-		else if(iSellAmount <= 0) return;	
-		
-		if (iSellPrice < 1){
-			FloatingTextStringOnCreature("Sorry, I'm not interested in buying that.", oPC);
-		}
+		else if(iSellAmount <= 0)
+		{	return;	}
 		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		/*
-		else if(IPGetIsAmmo(oItem)&& iSellAmount < 99 && PS_GetItemValue(oItem) <= 1)
+		else if(DS_GetIsProjectile(oItem)&& iSellAmount < 99 && PS_GetItemValue(oItem) <= 1)
 		{//If player is selling less than 99 units of ammunition tell them it's a no no
 			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
 			return;	
 		}
-		*/
 		//If selling price exceeds the max buying price, set it to max buying price
 		else if(iMaxBuyPrice != -1 && iSellPrice > iMaxBuyPrice)
 		{	iSellPrice	= iMaxBuyPrice;	}
@@ -504,7 +494,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			AddScriptParameterString(sStackSize);	//Item's maximum stack size
 			AddScriptParameterString(sStoreID);		//Store's ID
 			//Next we set the stack size, which is 1 unless the item is ammunition
-			if(IPGetIsAmmo(oItem))
+			if(DS_GetIsProjectile(oItem))
 			{	AddScriptParameterString(IntToString(GetItemStackSize(oItem)));	}
 			else	{	AddScriptParameterString("1");	}
 			AddScriptParameterString("");			//sDown is passed a blank value
@@ -519,7 +509,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			AddScriptParameterString(sStackSize);	//Item's maximum stack size
 			AddScriptParameterString(sStoreID);		//Store's ID
 			//Next we set the stack size, which is 1 unless the item is ammunition
-			if(IPGetIsAmmo(oItem))
+			if(DS_GetIsProjectile(oItem))
 			{	AddScriptParameterString(IntToString(GetItemStackSize(oItem)));	}
 			else	{	AddScriptParameterString("1");	}			
 			AddScriptParameterString("");			//sDown is passed a blank value
