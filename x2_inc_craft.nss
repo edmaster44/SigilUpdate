@@ -944,7 +944,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     if (GetIsObjectValid(oPotion))
     {
-        TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
+        PS_TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
 //        SetXP(oCaster, nNewXP);
         DestroyObject (oSpellTarget);
         FloatingTextStrRefOnCreature(STR_REF_IC_SUCCESS, oCaster); // Item Creation successful
@@ -1071,7 +1071,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 			SetStolenFlag(oScroll, TRUE);
 		}
         ActionPlayAnimation (ANIMATION_FIREFORGET_READ,1.0);
-        TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
+        PS_TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
 //        SetXP(oCaster, nNewXP);
         DestroyObject (oSpellTarget);
         FloatingTextStrRefOnCreature(STR_REF_IC_SUCCESS, oCaster); // Item Creation successful
@@ -1165,7 +1165,7 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     if (GetIsObjectValid(oWand))
     {
-        TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
+        PS_TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
 //        SetXP(oCaster, nNewXP);
         DestroyObject (oSpellTarget);
         FloatingTextStrRefOnCreature(STR_REF_IC_SUCCESS, oCaster); // Item Creation successful
@@ -1421,7 +1421,7 @@ int CIDoCraftItemFromConversation(int nNumber)
        }
        else
        {
-          TakeGoldFromCreature(stItem.nCost, oPC,TRUE);
+          PS_TakeGoldFromCreature(stItem.nCost, oPC,TRUE);
           IPCopyItemProperties(oMajor,oRet);
         }
       // set success variable for conversation
@@ -1429,7 +1429,7 @@ int CIDoCraftItemFromConversation(int nNumber)
   }
   else
   {
-      TakeGoldFromCreature(stItem.nCost / 4, oPC,TRUE);
+      PS_TakeGoldFromCreature(stItem.nCost / 4, oPC,TRUE);
       // make sure there is no success
       DeleteLocalInt(oPC,"X2_CRAFT_SUCCESS");
   }

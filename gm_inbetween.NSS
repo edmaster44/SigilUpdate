@@ -94,6 +94,6 @@ void DetermineResults()
     }
     SendMessageToPC(oPC, "You win nothing this time, try again.");
     AddHouse(BASECOST);
-    AssignCommand(OBJECT_SELF, TakeGoldFromCreature(BASECOST, oPC, TRUE));
+    AssignCommand(OBJECT_SELF, PS_TakeGoldFromCreature(BASECOST, oPC, TRUE));
     DeleteLocalInt(OBJECT_SELF,"IN-USE");
 }

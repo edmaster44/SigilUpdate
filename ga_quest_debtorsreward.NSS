@@ -19,7 +19,7 @@ void main() {
 		SendMessageToPC(oPC, "You recovered none of the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", and so collect no bounty.");
 	} else if (GetLocalInt(OBJECT_SELF, "DEBTOR_EXCHANGE") > 0) {
 		SendMessageToPC(oPC, "You return the "+IntToString(nAmount)+" jink owed to "+sOwedTo+", collect the bounty, and keep the magical item.");
-		TakeGoldFromCreature(nAmount-nBounty, oPC, TRUE);
+		PS_TakeGoldFromCreature(nAmount-nBounty, oPC, TRUE);
 	} else if (GetLocalInt(OBJECT_SELF, "DEBTOR_PARTIAL") > 0) {
 		int nRand = d3();
 		int nReturned = nAmount;

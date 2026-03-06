@@ -2,6 +2,7 @@
 
 #include "ps_randomlootgenerator"
 #include "ps_inc_achievements"
+#include "ps_inc_financial"
 
 void main()
 {
@@ -29,7 +30,7 @@ void main()
 	if (oItem != OBJECT_INVALID)
 	{
 		// subtract money
-		TakeGoldFromCreature(price, oPC, TRUE);
+		PS_TakeGoldFromCreature(price, oPC, TRUE);
 		
 		// Rename the created item	
 		string newName = "Stolen " + GetFirstName(oItem);

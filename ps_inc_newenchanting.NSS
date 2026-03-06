@@ -1,6 +1,7 @@
 
 
 #include "ps_inc_newcraft_include"
+#include "ps_inc_financial"
 
 const string xmlEnchantingFile = "scod_enchanting_window.xml";
 const string sEnchantingScreen = "SCOD_ENCHANTING";
@@ -1187,7 +1188,7 @@ int CanEnchantItem(object oPC, object oItem, struct enchantment enchant, int fee
 void TakeEnchantmentRequirements(object oPC, struct enchantment enchant) {
 
 	int nGold = enchant.gold;
-	TakeGoldFromCreature(nGold, oPC, TRUE, TRUE);
+	PS_TakeGoldFromCreature(nGold, oPC, TRUE, TRUE);
 	object oGem = GetLocalObject(oPC, "GemstoneToTake");
 	if (GetIsObjectValid(oGem)) {
 		string sTag = GetTag(oGem);

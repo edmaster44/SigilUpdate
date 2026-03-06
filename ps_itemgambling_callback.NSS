@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_financial"
 #include "ps_randomlootgenerator"
 
 void main()
@@ -47,7 +47,7 @@ void main()
 	if (oItem != OBJECT_INVALID)
 	{
 		if(price > 0) {
-			TakeGoldFromCreature(price, oPC, TRUE);
+			PS_TakeGoldFromCreature(price, oPC, TRUE);
 		}
 		else {
 			DestroyObject(GetItemPossessedBy(oPC, tokenTag));

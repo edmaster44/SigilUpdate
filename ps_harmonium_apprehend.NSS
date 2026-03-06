@@ -119,7 +119,7 @@ void GuardExit(object oPC, object oGuard) {
 	if (GetLocalInt(oGuard, "HAS_APPREHENDED") == 0 && IsInConversation(oPC)) {
 		//you're probably cheating to avoid being fined, so just fine you anyway
 		SendMessageToPC(oPC, "The Harmonium fine you 100 jink for pickpocketing.");
-		TakeGoldFromCreature(100, oPC, TRUE);
+		PS_TakeGoldFromCreature(100, oPC, TRUE);
 	}
 
 	AssignCommand(oGuard, ActionSpeakString("Guard leaving", TALKVOLUME_SHOUT));

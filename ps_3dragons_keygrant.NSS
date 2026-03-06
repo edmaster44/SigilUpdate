@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_financial"
 #include "ps_sigis_inc"
 #include "ps_inc_faction"
 #include "nw_i0_plot"
@@ -56,11 +56,11 @@ void main (int roomNum) {
 void TakeAppropriatePayment(object oPC) {
 
 	if (GetFaction(oPC) == 14 && GetGold(oPC) >= 800) {
-		TakeGoldFromCreature(800, oPC, TRUE, TRUE);
+		PS_TakeGoldFromCreature(800, oPC, TRUE, TRUE);
 	} else if (GetItemPossessedBy(oPC, "ps_miscstack_coinage-pcogcoin") != OBJECT_INVALID) {
 		TakeNumItems( oPC, "ps_miscstack_coinage-pcogcoin", 1 );
 	} else {
-		TakeGoldFromCreature(1200, oPC, TRUE, TRUE);
+		PS_TakeGoldFromCreature(1200, oPC, TRUE, TRUE);
 	}
 
 }

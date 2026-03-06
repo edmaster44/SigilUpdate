@@ -1,6 +1,7 @@
 
 
 #include "ps_sigis_inc"
+#include "ps_inc_financial"
 
 string TodaysDate() {
 	return SigisDate(GetRealTime());
@@ -12,7 +13,7 @@ void main (int roomNum) {
 	
 	if (roomNum == 3)
 	{
-		TakeGoldFromCreature(1000, oPC, TRUE, TRUE);
+		PS_TakeGoldFromCreature(1000, oPC, TRUE, TRUE);
 		object oItem = CreateItemOnObject("ps_fire_birdkey", oPC, 1, "ps_fire_birdkey_3", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nRoom#3 \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
@@ -25,7 +26,7 @@ void main (int roomNum) {
 		int room2 = GetLocalInt(OBJECT_SELF, "room_2");
 		if (!room1)
 		{
-			TakeGoldFromCreature(500, oPC, TRUE, TRUE);
+			PS_TakeGoldFromCreature(500, oPC, TRUE, TRUE);
 			object oItem = CreateItemOnObject("ps_fire_birdkey", oPC, 1, "ps_fire_birdkey_1", TRUE);
 			string sDescrip = GetDescription(oItem)+"\n\nRoom#1 \n\nGood for: "+TodaysDate();
 			SetDescription(oItem, sDescrip);
@@ -34,7 +35,7 @@ void main (int roomNum) {
 		}
 		else if (!room2)
 		{
-			TakeGoldFromCreature(500, oPC, TRUE, TRUE);
+			PS_TakeGoldFromCreature(500, oPC, TRUE, TRUE);
 			object oItem = CreateItemOnObject("ps_fire_birdkey", oPC, 1, "ps_fire_birdkey_2", TRUE);
 			string sDescrip = GetDescription(oItem)+"\n\nRoom#2 \n\nGood for: "+TodaysDate();
 			SetDescription(oItem, sDescrip);

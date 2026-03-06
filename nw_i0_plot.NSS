@@ -634,7 +634,7 @@ int HasItem(object oCreature, string s)
 //:://////////////////////////////////////////////
 void TakeGold(int nAmount, object oGoldHolder, int bDestroy=TRUE)
 {
-    TakeGoldFromCreature(nAmount, oGoldHolder, bDestroy);
+    PS_TakeGoldFromCreature(nAmount, oGoldHolder, bDestroy);
 }
 
 

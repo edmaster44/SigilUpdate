@@ -4,6 +4,7 @@
 * Include file for all functions relating to astral travel. *
 * Created by Agony_Aunt for SCoD PW                         *
 ************************************************************/
+#include "ps_inc_financial"
 
 const string ASTRAL_TRADER = "ps_astral_astraltrader_deck"; //tag of the ship placeable itself
 const string ASTRAL_TRADER_RESREF = "plc_bc_shipcar3_x2";
@@ -644,7 +645,7 @@ int AstralMakeTravelPayment(object oPC, int iPaymentMethod)
 		if (AstralCheckForGold(oPC) == 1)
 		{
 			AssignCommand(oCaptain, ClearAllActions(TRUE));
-			AssignCommand(oCaptain, TakeGoldFromCreature(PAYMENT_PRICE_GOLD, oPC, TRUE, TRUE));
+			AssignCommand(oCaptain, PS_TakeGoldFromCreature(PAYMENT_PRICE_GOLD, oPC, TRUE, TRUE));
 			iPaymentSuccess = 1;
 		}
 		else
@@ -656,7 +657,7 @@ int AstralMakeTravelPayment(object oPC, int iPaymentMethod)
 	else // PAYMENT_METHOD_BANKRUPT
 	{
 		AssignCommand(oCaptain, ClearAllActions(TRUE));
-		AssignCommand(oCaptain, TakeGoldFromCreature(PAYMENT_PRICE_GOLD, oPC, TRUE, TRUE));
+		AssignCommand(oCaptain, PS_TakeGoldFromCreature(PAYMENT_PRICE_GOLD, oPC, TRUE, TRUE));
 		iPaymentSuccess = 1; // reports success because agreed to take whatever gold for return to dead god area
 	}
 	

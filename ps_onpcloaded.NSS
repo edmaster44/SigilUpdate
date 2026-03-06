@@ -169,7 +169,7 @@ void GiveStartingFeats(object oPC)
 void GiveStartingGold( object oPC, int nAmount )
 {
 	int nGold = GetGold(oPC);
-	TakeGoldFromCreature(nGold, oPC, TRUE);
+	PS_TakeGoldFromCreature(nGold, oPC, TRUE);
 	PS_GiveGoldToCreature(oPC, nAmount);
 }
 

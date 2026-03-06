@@ -11,6 +11,7 @@
 #include "hench_i0_act"
 #include "hench_i0_melee"
 #include "hench_i0_assoc"
+#include "ps_inc_financial"
 
 
 const string sDisarmTried = "tk_disarm_tried";
@@ -988,7 +989,7 @@ int DoSearchLoop()
                 nAnyItemsFound = TRUE;
             }
             GiveGoldToCreature(oRealMaster, GetGold());
-            TakeGoldFromCreature(GetGold(), OBJECT_SELF, TRUE);
+            PS_TakeGoldFromCreature(GetGold(), OBJECT_SELF, TRUE);
         }
         if (nAnyItemsFound)
         {

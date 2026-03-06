@@ -175,7 +175,7 @@ void main()
 	int iGolemName		= Get2DAInt(s2da, "GolemNameStrf", iRow);
 	string sGolemName	= GetStringByStrRef(iGolemName);
 	string sDevice = GetName(oDevice);
-	AssignCommand(oPC, TakeGoldFromCreature(iGP, oPC, TRUE));
+	AssignCommand(oPC, PS_TakeGoldFromCreature(iGP, oPC, TRUE));
 	ConsumeItems(oPC, sMaterial1);
 	ConsumeItems(oPC, sMaterial2);
 	ConsumeItems(oPC, sMaterial3);

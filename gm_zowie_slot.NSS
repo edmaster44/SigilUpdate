@@ -133,7 +133,7 @@ void DetermineResults()
     }
     AddHouse(BASECOST);
     SendMessageToPC(oPC, "You win nothing this time, try again.");
-    AssignCommand(OBJECT_SELF, TakeGoldFromCreature(BASECOST, oPC, TRUE));
+    AssignCommand(OBJECT_SELF, PS_TakeGoldFromCreature(BASECOST, oPC, TRUE));
     AssignCommand(OBJECT_SELF,ActionPlayAnimation(ANIMATION_PLACEABLE_DEACTIVATE));
     DeleteLocalInt(OBJECT_SELF,"IN-USE");
 }

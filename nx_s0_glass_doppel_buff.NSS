@@ -42,6 +42,7 @@
 
 #include "nwn2_inc_spells"
 #include "x2_inc_spellhook"
+#include "ps_inc_financial"
 
 void main()
 {
@@ -79,5 +80,5 @@ void main()
 	//Apply the effects
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);	// Permanent duration is OK, since doppelganger will expire...
 
-	TakeGoldFromCreature(GetGold(OBJECT_SELF), OBJECT_SELF, TRUE);
+	PS_TakeGoldFromCreature(GetGold(OBJECT_SELF), OBJECT_SELF, TRUE);
 }

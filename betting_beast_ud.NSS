@@ -5,6 +5,7 @@
 //now includes the 00 slot, Five-Number bets, Corner Bets, and Split Bets.
 //and uses SetListeningPattern() cues instead of a conversation.
 #include "gm_include"
+#include "ps_inc_financial"
 
 void MakeBet(object oPC, int nBet, string nCreature);
 
@@ -204,7 +205,7 @@ void MakeBet(object oPC, int nBet, string sCreature) {
 	
     if (GetGold(oPC) >= nBet)
     {
-     	TakeGoldFromCreature(nBet, oPC, TRUE);
+     	PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 		AddHouse(nBet);
         SpeakString (GetName(oPC)+" has placed a "+IntToString(nBet)+" jink bet on the "+sCreature+"!");
 		int amountBet = GetLocalInt(oPC, "BEAST_BET");

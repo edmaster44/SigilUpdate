@@ -8,6 +8,7 @@
 #include "ginc_2da"
 #include "ginc_crafting"
 #include "kinc_trade_constants"
+#include "ps_inc_financial"
 
 //Utility Functions
 void DestroyItems(object oTarget,string sItem,int nNumItems, int bFeedback = TRUE);
@@ -571,7 +572,7 @@ void DeductGoldCost(int nIndex, object oPC, string sTable)
 	int nGoldCost = Get2DAInt(sTable, "COST_GOLD", nIndex);
 	PrettyDebug("Gold Cost=" + IntToString(nGoldCost));
 	PrettyDebug(GetName(oPC));
-	AssignCommand(oPC, TakeGoldFromCreature(nGoldCost, oPC, TRUE));
+	AssignCommand(oPC, PS_TakeGoldFromCreature(nGoldCost, oPC, TRUE));
 }
 
 void DestroyItems(object oTarget,string sItem,int nNumItems, int bFeedback = TRUE)

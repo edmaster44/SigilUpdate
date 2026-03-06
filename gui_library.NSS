@@ -6,6 +6,7 @@
 
 #include "nwnx_sql"
 #include "library_inc"
+#include "ps_inc_financial"
 
 
 string MakeBookDescription(string sText, string sAuthor, string sSource);
@@ -88,7 +89,7 @@ void main(string sAction, string sTag, string arg0)
 				int nPrice = StringToInt(SQLGetData(6));
 				if(GetGold(oPC)>=nPrice)
 				{
-				TakeGoldFromCreature(nPrice, oPC, TRUE);
+				PS_TakeGoldFromCreature(nPrice, oPC, TRUE);
 				
 				
 					SendMessageToPC(oPC, TEXT_YOU_HAVE_BOUGHT+" '"+SQLGetData(2)+"'");

@@ -6,7 +6,7 @@
 */
 // FAB 4/28/05
 // MDiekmann 4/9/07 -- using GetFirst and NextFactionMember() instead of GetFirst and NextPC(), changed nAllPCs to bAllPartyMembers
-#include "dethia_shop_sys"
+#include "ps_inc_financial"
 
 void main(int nGold, int bAllPartyMembers)
 {
@@ -16,14 +16,14 @@ void main(int nGold, int bAllPartyMembers)
 
     if ( bAllPartyMembers == 0 )
     {
-		DS_TakeCoinsFromCreature(oPC, nGold);
+        PS_TakeGoldFromCreature(nGold, oPC);
     }
     else    
     {// For multiple players
         oTarg = GetFirstFactionMember(oPC);
         while ( GetIsObjectValid(oTarg) )
         {
-			DS_TakeCoinsFromCreature(oTarg, nGold);
+            PS_TakeGoldFromCreature( nGold,oTarg );
             oTarg = GetNextFactionMember(oPC);
         }
     }

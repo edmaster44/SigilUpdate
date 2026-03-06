@@ -47,7 +47,7 @@ void main(int GiveALot)
 	    if (!GiveALot)
 		{
 		    int hasgp = GetGold(oPC);
-		    if (hasgp) TakeGoldFromCreature(hasgp, oPC, TRUE);
+		    if (hasgp) PS_TakeGoldFromCreature(hasgp, oPC, TRUE);
 		}
 		PS_GiveGoldToCreature(oPC, gp);
 	}

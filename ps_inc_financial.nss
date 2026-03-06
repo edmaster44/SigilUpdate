@@ -28,9 +28,14 @@ string DS_ConvertCoinsToGold(int iCoins);
 // moved from Dethia_shop_sys
 void DS_UpdateInventoryCoinValues(object oPC);
 
+string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot);
+
 // Wrapper for GiveGoldToCreature that gives the player a message in gold, silver, and copper
 // written by FlattedFifth
 void PS_GiveGoldToCreature(object oCreature, int nGP, int bDisplayFeedback=TRUE, int bFromLoot = FALSE);
+
+//As above, but for removing coin
+void PS_TakeGoldFromCreature(int nAmount, object oCreatureToTakeFrom, int bDestroy=FALSE, int bDisplayFeedback=TRUE);
 
 
 // for the following 3 I simplified Dethia's math. Because nwscript rounds down by default, 
@@ -55,38 +60,51 @@ void DS_UpdateInventoryCoinValues(object oPC){
 	SetGUIObjectText(oPC, "SCREEN_INVENTORY", "pc_cc", -1, DS_ConvertCoinsToCopper(iCoins));
 }
 
+string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot){
+	int nGold   = nGP / 100;
+	int nSilver = (nGP % 100) / 10;
+	int nCopper = nGP % 10;
+	
+	string sMessage = (bGained) ? "Acquired " : "Lost ";
+	if (bFromLoot && bGained){
+		sMessage = "Game engine doesn't always report large stacks correctly.\n";
+		sMessage += "You actually acquired ";
+	}
+	if (nGold > 0){
+		sMessage += IntToString(nGold) + " gold";
+		if (nSilver == 0 && nCopper == 0) sMessage += ".";
+	}
+	if (nSilver > 0){
+		if (nGold == 0 && nCopper == 0) sMessage += IntToString(nSilver)  + " silver.";
+		else if (nGold == 0 && nCopper > 0) sMessage += IntToString(nSilver)  + " silver and ";
+		else if (nGold > 0 && nCopper == 0) sMessage += " and " + IntToString(nSilver) + " silver.";
+		else if (nGold > 0 && nCopper > 0) sMessage += ", " + IntToString(nSilver) + " silver, and ";
+	}
+	if (nCopper > 0){
+		if (nGold > 0 && nSilver == 0) sMessage += " and "; 
+		sMessage += IntToString(nCopper) + " copper.";
+	}
+	return sMessage;
+}
+
 
 void PS_GiveGoldToCreature(object oCreature, int nGP, int bDisplayFeedback=TRUE, int bFromLoot = FALSE){
 	if (nGP < 1) return;
 	if (bFromLoot && nGP >= 200) bDisplayFeedback = TRUE;
 	if (bDisplayFeedback){
-
-		int nGold   = nGP / 100;
-		int nSilver = (nGP % 100) / 10;
-		int nCopper = nGP % 10;
-		
-		string sMessage = "Acquired ";
-		if (bFromLoot){
-			sMessage = "Game engine doesn't always report large stacks correctly.\n";
-			sMessage += "You actually acquired ";
-		}
-		if (nGold > 0){
-			sMessage += IntToString(nGold) + " gold";
-			if (nSilver == 0 && nCopper == 0) sMessage += ".";
-		}
-		if (nSilver > 0){
-			if (nGold == 0 && nCopper == 0) sMessage += IntToString(nSilver)  + " silver.";
-			else if (nGold == 0 && nCopper > 0) sMessage += IntToString(nSilver)  + " silver and ";
-			else if (nGold > 0 && nCopper == 0) sMessage += " and " + IntToString(nSilver) + " silver.";
-			else if (nGold > 0 && nCopper > 0) sMessage += ", " + IntToString(nSilver) + " silver, and ";
-		}
-		if (nCopper > 0){
-			if (nGold > 0 && nSilver == 0) sMessage += " and "; 
-			sMessage += IntToString(nCopper) + " copper.";
-		}
-		 
+		string sMessage = GetCurrencyFeedback(nGP, TRUE, bFromLoot);
 		SendMessageToPC(oCreature, sMessage);
 	}
 	GiveGoldToCreature(oCreature, nGP, FALSE);
+	DS_UpdateInventoryCoinValues(oCreature);
+}
+
+void PS_TakeGoldFromCreature(int nGP, object oCreature, int bDestroy=FALSE, int bDisplayFeedback=TRUE){
+	if (nGP < 1) return;
+	if (bDisplayFeedback){
+		string sMessage = GetCurrencyFeedback(nGP, FALSE, FALSE);
+		SendMessageToPC(oCreature, sMessage);
+	}
+	TakeGoldFromCreature(nGP, oCreature, bDestroy, FALSE);
 	DS_UpdateInventoryCoinValues(oCreature);
 }

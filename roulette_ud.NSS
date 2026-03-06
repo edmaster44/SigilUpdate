@@ -5,6 +5,7 @@
 //now includes the 00 slot, Five-Number bets, Corner Bets, and Split Bets.
 //and uses SetListeningPattern() cues instead of a conversation.
 #include "gm_include"
+#include "ps_inc_financial"
 
 //if you've already placed any sort of bet,
 //this will return the thing you have bet on
@@ -42,7 +43,7 @@ void main() {
                         ixFive += nBet;
                         SetLocalInt(oPC,"iFive", ixFive);
                         SetLocalInt(oPC,"iBet",1);
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold Five-Number bet.");
                     }
                     else SpeakString (GetName(oPC)+", you don't have that much gold.");
@@ -50,7 +51,7 @@ void main() {
                 case 10002:
                     if (GetGold(oPC) >= nBet)
                     {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold bet on Reds.");
                         int ixRed = GetLocalInt(oPC,"iRed");
@@ -63,7 +64,7 @@ void main() {
                 case 10003:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold bet on Blacks.");
                         int ixBlack = GetLocalInt(oPC,"iBlack");
@@ -76,7 +77,7 @@ void main() {
                 case 10004:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold bet on Odds.");
                         int ixOdd = GetLocalInt(oPC,"iOdd");
@@ -89,7 +90,7 @@ void main() {
                 case 10005:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold bet on Evens.");
                         int ixEven = GetLocalInt(oPC,"iEven");
@@ -102,7 +103,7 @@ void main() {
                 case 10006:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold bet on Highs.");
                         int ixHigh = GetLocalInt(oPC,"iHigh");
@@ -115,7 +116,7 @@ void main() {
                 case 10007:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a " + IntToString(nBet) + " gold bet on Lows.");
                         int ixLow = GetLocalInt(oPC,"iLow");
@@ -128,7 +129,7 @@ void main() {
                 case 10008:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Column bet of " + IntToString(nBet) + " gold.");
                         int ixCol1 = GetLocalInt(oPC,"iCol1");
@@ -141,7 +142,7 @@ void main() {
                 case 10009:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Column bet of " + IntToString(nBet) + " gold.");
                         int ixCol2 = GetLocalInt(oPC,"iCol2");
@@ -154,7 +155,7 @@ void main() {
                 case 10010:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Column bet of " + IntToString(nBet) + " gold.");
                         int ixCol3 = GetLocalInt(oPC,"iCol3");
@@ -167,7 +168,7 @@ void main() {
                 case 10011:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Dozen bet of " + IntToString(nBet) + " gold.");
                         int ixDoz1 = GetLocalInt(oPC,"iDoz1");
@@ -180,7 +181,7 @@ void main() {
                 case 10012:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Dozen bet of " + IntToString(nBet) + " gold.");
                         int ixDoz2 = GetLocalInt(oPC,"iDoz2");
@@ -193,7 +194,7 @@ void main() {
                 case 10013:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Dozen bet of " + IntToString(nBet) + " gold.");
                         int ixDoz3 = GetLocalInt(oPC,"iDoz3");
@@ -206,7 +207,7 @@ void main() {
                 case 10014:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine1 = GetLocalInt(oPC,"iLine1");
@@ -219,7 +220,7 @@ void main() {
                 case 10015:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine2 = GetLocalInt(oPC,"iLine2");
@@ -232,7 +233,7 @@ void main() {
                 case 10016:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine3 = GetLocalInt(oPC,"iLine3");
@@ -245,7 +246,7 @@ void main() {
                 case 10017:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine4 = GetLocalInt(oPC,"iLine4");
@@ -258,7 +259,7 @@ void main() {
                 case 10018:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine5 = GetLocalInt(oPC,"iLine5");
@@ -271,7 +272,7 @@ void main() {
                 case 10019:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine6 = GetLocalInt(oPC,"iLine6");
@@ -284,7 +285,7 @@ void main() {
                 case 10020:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine7 = GetLocalInt(oPC,"iLine7");
@@ -297,7 +298,7 @@ void main() {
                 case 10021:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine8 = GetLocalInt(oPC,"iLine8");
@@ -310,7 +311,7 @@ void main() {
                 case 10022:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine9 = GetLocalInt(oPC,"iLine9");
@@ -323,7 +324,7 @@ void main() {
                 case 10023:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine10 = GetLocalInt(oPC,"iLine10");
@@ -336,7 +337,7 @@ void main() {
                 case 10024:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Line bet of " + IntToString(nBet) + " gold.");
                         int ixLine11 = GetLocalInt(oPC,"iLine11");
@@ -349,7 +350,7 @@ void main() {
                 case 10025:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet1 = GetLocalInt(oPC,"iStreet1");
@@ -362,7 +363,7 @@ void main() {
                 case 10026:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet2 = GetLocalInt(oPC,"iStreet2");
@@ -375,7 +376,7 @@ void main() {
                 case 10027:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet3 = GetLocalInt(oPC,"iStreet3");
@@ -388,7 +389,7 @@ void main() {
                 case 10028:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet4 = GetLocalInt(oPC,"iStreet4");
@@ -401,7 +402,7 @@ void main() {
                 case 10029:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet5 = GetLocalInt(oPC,"iStreet5");
@@ -414,7 +415,7 @@ void main() {
                 case 10030:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet6 = GetLocalInt(oPC,"iStreet6");
@@ -427,7 +428,7 @@ void main() {
                 case 10031:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet7 = GetLocalInt(oPC,"iStreet7");
@@ -440,7 +441,7 @@ void main() {
                 case 10032:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet8 = GetLocalInt(oPC,"iStreet8");
@@ -453,7 +454,7 @@ void main() {
                 case 10033:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet9 = GetLocalInt(oPC,"iStreet9");
@@ -466,7 +467,7 @@ void main() {
                 case 10034:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet10 = GetLocalInt(oPC,"iStreet10");
@@ -479,7 +480,7 @@ void main() {
                 case 10035:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet11 = GetLocalInt(oPC,"iStreet11");
@@ -492,7 +493,7 @@ void main() {
                 case 10036:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Street bet of " + IntToString(nBet) + " gold.");
                         int ixStreet12 = GetLocalInt(oPC,"iStreet12");
@@ -505,7 +506,7 @@ void main() {
                 case 10037:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner1 = GetLocalInt(oPC,"iCorner1");
@@ -518,7 +519,7 @@ void main() {
                 case 10038:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner2 = GetLocalInt(oPC,"iCorner2");
@@ -531,7 +532,7 @@ void main() {
                 case 10039:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner3 = GetLocalInt(oPC,"iCorner3");
@@ -544,7 +545,7 @@ void main() {
                 case 10040:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner4 = GetLocalInt(oPC,"iCorner4");
@@ -557,7 +558,7 @@ void main() {
                 case 10041:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner5 = GetLocalInt(oPC,"iCorner5");
@@ -570,7 +571,7 @@ void main() {
                 case 10042:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner6 = GetLocalInt(oPC,"iCorner6");
@@ -583,7 +584,7 @@ void main() {
                 case 10043:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner7 = GetLocalInt(oPC,"iCorner7");
@@ -596,7 +597,7 @@ void main() {
                 case 10044:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner8 = GetLocalInt(oPC,"iCorner8");
@@ -609,7 +610,7 @@ void main() {
                 case 10045:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner9 = GetLocalInt(oPC,"iCorner9");
@@ -622,7 +623,7 @@ void main() {
                 case 10046:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner10 = GetLocalInt(oPC,"iCorner10");
@@ -635,7 +636,7 @@ void main() {
                 case 10047:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner11 = GetLocalInt(oPC,"iCorner11");
@@ -648,7 +649,7 @@ void main() {
                 case 10048:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner12 = GetLocalInt(oPC,"iCorner12");
@@ -661,7 +662,7 @@ void main() {
                 case 10049:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner13 = GetLocalInt(oPC,"iCorner13");
@@ -674,7 +675,7 @@ void main() {
                 case 10050:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner14 = GetLocalInt(oPC,"iCorner14");
@@ -687,7 +688,7 @@ void main() {
                 case 10051:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner15 = GetLocalInt(oPC,"iCorner15");
@@ -700,7 +701,7 @@ void main() {
                 case 10052:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner16 = GetLocalInt(oPC,"iCorner16");
@@ -713,7 +714,7 @@ void main() {
                 case 10053:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner17 = GetLocalInt(oPC,"iCorner17");
@@ -726,7 +727,7 @@ void main() {
                 case 10054:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner18 = GetLocalInt(oPC,"iCorner18");
@@ -739,7 +740,7 @@ void main() {
                 case 10055:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner19 = GetLocalInt(oPC,"iCorner19");
@@ -752,7 +753,7 @@ void main() {
                 case 10056:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner20 = GetLocalInt(oPC,"iCorner20");
@@ -765,7 +766,7 @@ void main() {
                 case 10057:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner21 = GetLocalInt(oPC,"iCorner21");
@@ -778,7 +779,7 @@ void main() {
                 case 10058:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Corner bet of " + IntToString(nBet) + " gold.");
                         int ixCorner22 = GetLocalInt(oPC,"iCorner22");
@@ -791,7 +792,7 @@ void main() {
                 case 10059:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix0su = GetLocalInt(oPC,"i0su");
@@ -804,7 +805,7 @@ void main() {
                 case 10060:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix00su = GetLocalInt(oPC,"i00su");
@@ -817,7 +818,7 @@ void main() {
                 case 10061:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix1su = GetLocalInt(oPC,"i1su");
@@ -830,7 +831,7 @@ void main() {
                 case 10062:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix2su = GetLocalInt(oPC,"i2su");
@@ -843,7 +844,7 @@ void main() {
                 case 10063:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix3su = GetLocalInt(oPC,"i3su");
@@ -856,7 +857,7 @@ void main() {
                 case 10064:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix4su = GetLocalInt(oPC,"i4su");
@@ -869,7 +870,7 @@ void main() {
                 case 10065:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix5su = GetLocalInt(oPC,"i5su");
@@ -882,7 +883,7 @@ void main() {
                 case 10066:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix6su = GetLocalInt(oPC,"i6su");
@@ -895,7 +896,7 @@ void main() {
                 case 10067:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix7su = GetLocalInt(oPC,"i7su");
@@ -908,7 +909,7 @@ void main() {
                 case 10068:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix8su = GetLocalInt(oPC,"i8su");
@@ -921,7 +922,7 @@ void main() {
                 case 10069:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix9su = GetLocalInt(oPC,"i9su");
@@ -934,7 +935,7 @@ void main() {
                 case 10070:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix10su = GetLocalInt(oPC,"i10su");
@@ -947,7 +948,7 @@ void main() {
                 case 10071:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix11su = GetLocalInt(oPC,"i11su");
@@ -960,7 +961,7 @@ void main() {
                 case 10072:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix12su = GetLocalInt(oPC,"i12su");
@@ -973,7 +974,7 @@ void main() {
                 case 10073:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix13su = GetLocalInt(oPC,"i13su");
@@ -986,7 +987,7 @@ void main() {
                 case 10074:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix14su = GetLocalInt(oPC,"i14su");
@@ -999,7 +1000,7 @@ void main() {
                 case 10075:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix15su = GetLocalInt(oPC,"i15su");
@@ -1012,7 +1013,7 @@ void main() {
                 case 10076:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix16su = GetLocalInt(oPC,"i16su");
@@ -1025,7 +1026,7 @@ void main() {
                 case 10077:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix17su = GetLocalInt(oPC,"i17su");
@@ -1038,7 +1039,7 @@ void main() {
                 case 10078:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix18su = GetLocalInt(oPC,"i18su");
@@ -1051,7 +1052,7 @@ void main() {
                 case 10079:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix19su = GetLocalInt(oPC,"i19su");
@@ -1064,7 +1065,7 @@ void main() {
                 case 10080:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix20su = GetLocalInt(oPC,"i20su");
@@ -1077,7 +1078,7 @@ void main() {
                 case 10081:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix21su = GetLocalInt(oPC,"i21su");
@@ -1090,7 +1091,7 @@ void main() {
                 case 10082:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix22su = GetLocalInt(oPC,"i22su");
@@ -1103,7 +1104,7 @@ void main() {
                 case 10083:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix23su = GetLocalInt(oPC,"i23su");
@@ -1116,7 +1117,7 @@ void main() {
                 case 10084:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix24su = GetLocalInt(oPC,"i24su");
@@ -1129,7 +1130,7 @@ void main() {
                 case 10085:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix25su = GetLocalInt(oPC,"i25su");
@@ -1142,7 +1143,7 @@ void main() {
                 case 10086:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix26su = GetLocalInt(oPC,"i26su");
@@ -1155,7 +1156,7 @@ void main() {
                 case 10087:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix27su = GetLocalInt(oPC,"i27su");
@@ -1168,7 +1169,7 @@ void main() {
                 case 10088:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix28su = GetLocalInt(oPC,"i28su");
@@ -1181,7 +1182,7 @@ void main() {
                 case 10089:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix29su = GetLocalInt(oPC,"i29su");
@@ -1194,7 +1195,7 @@ void main() {
                 case 10090:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix30su = GetLocalInt(oPC,"i30su");
@@ -1207,7 +1208,7 @@ void main() {
                 case 10091:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix31su = GetLocalInt(oPC,"i31su");
@@ -1220,7 +1221,7 @@ void main() {
                 case 10092:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix32su = GetLocalInt(oPC,"i32su");
@@ -1233,7 +1234,7 @@ void main() {
                 case 10093:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix33su = GetLocalInt(oPC,"i33su");
@@ -1246,7 +1247,7 @@ void main() {
                 case 10094:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix34su = GetLocalInt(oPC,"i34su");
@@ -1259,7 +1260,7 @@ void main() {
                 case 10095:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix35su = GetLocalInt(oPC,"i35su");
@@ -1272,7 +1273,7 @@ void main() {
                 case 10096:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Straight Up bet of " + IntToString(nBet) + " gold.");
                         int ix36su = GetLocalInt(oPC,"i36su");
@@ -1285,7 +1286,7 @@ void main() {
                 case 10097:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit1 = GetLocalInt(oPC,"iSplit1");
@@ -1298,7 +1299,7 @@ void main() {
                 case 10098:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit2 = GetLocalInt(oPC,"iSplit2");
@@ -1311,7 +1312,7 @@ void main() {
                 case 10099:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit3 = GetLocalInt(oPC,"iSplit3");
@@ -1324,7 +1325,7 @@ void main() {
                 case 10100:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit4 = GetLocalInt(oPC,"iSplit4");
@@ -1337,7 +1338,7 @@ void main() {
                 case 10101:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit5 = GetLocalInt(oPC,"iSplit5");
@@ -1350,7 +1351,7 @@ void main() {
                 case 10102:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit6 = GetLocalInt(oPC,"iSplit6");
@@ -1363,7 +1364,7 @@ void main() {
                 case 10103:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit7 = GetLocalInt(oPC,"iSplit7");
@@ -1376,7 +1377,7 @@ void main() {
                 case 10104:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit8 = GetLocalInt(oPC,"iSplit8");
@@ -1389,7 +1390,7 @@ void main() {
                 case 10105:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit9 = GetLocalInt(oPC,"iSplit9");
@@ -1402,7 +1403,7 @@ void main() {
                 case 10106:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit10 = GetLocalInt(oPC,"iSplit10");
@@ -1415,7 +1416,7 @@ void main() {
                 case 10107:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit11 = GetLocalInt(oPC,"iSplit11");
@@ -1428,7 +1429,7 @@ void main() {
                 case 10108:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit12 = GetLocalInt(oPC,"iSplit12");
@@ -1441,7 +1442,7 @@ void main() {
                 case 10109:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit13 = GetLocalInt(oPC,"iSplit13");
@@ -1454,7 +1455,7 @@ void main() {
                 case 10110:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit14 = GetLocalInt(oPC,"iSplit14");
@@ -1467,7 +1468,7 @@ void main() {
                 case 10111:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit15 = GetLocalInt(oPC,"iSplit15");
@@ -1480,7 +1481,7 @@ void main() {
                 case 10112:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit16 = GetLocalInt(oPC,"iSplit16");
@@ -1493,7 +1494,7 @@ void main() {
                 case 10113:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit17 = GetLocalInt(oPC,"iSplit17");
@@ -1506,7 +1507,7 @@ void main() {
                 case 10114:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit18 = GetLocalInt(oPC,"iSplit18");
@@ -1519,7 +1520,7 @@ void main() {
                 case 10115:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit19 = GetLocalInt(oPC,"iSplit19");
@@ -1532,7 +1533,7 @@ void main() {
                 case 10116:
                 if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit20 = GetLocalInt(oPC,"iSplit20");
@@ -1545,7 +1546,7 @@ void main() {
                 case 10117:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit21 = GetLocalInt(oPC,"iSplit21");
@@ -1558,7 +1559,7 @@ void main() {
                 case 10118:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit22 = GetLocalInt(oPC,"iSplit22");
@@ -1571,7 +1572,7 @@ void main() {
                 case 10119:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit23 = GetLocalInt(oPC,"iSplit23");
@@ -1584,7 +1585,7 @@ void main() {
                 case 10120:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit24 = GetLocalInt(oPC,"iSplit24");
@@ -1597,7 +1598,7 @@ void main() {
                 case 10121:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit25 = GetLocalInt(oPC,"iSplit25");
@@ -1610,7 +1611,7 @@ void main() {
                 case 10122:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit26 = GetLocalInt(oPC,"iSplit26");
@@ -1623,7 +1624,7 @@ void main() {
                 case 10123:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit27 = GetLocalInt(oPC,"iSplit27");
@@ -1636,7 +1637,7 @@ void main() {
                 case 10124:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit28 = GetLocalInt(oPC,"iSplit28");
@@ -1649,7 +1650,7 @@ void main() {
                 case 10125:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit29 = GetLocalInt(oPC,"iSplit29");
@@ -1662,7 +1663,7 @@ void main() {
                 case 10126:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit30 = GetLocalInt(oPC,"iSplit30");
@@ -1675,7 +1676,7 @@ void main() {
                 case 10127:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit31 = GetLocalInt(oPC,"iSplit31");
@@ -1688,7 +1689,7 @@ void main() {
                 case 10128:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit32 = GetLocalInt(oPC,"iSplit32");
@@ -1701,7 +1702,7 @@ void main() {
                 case 10129:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit33 = GetLocalInt(oPC,"iSplit33");
@@ -1714,7 +1715,7 @@ void main() {
                 case 10130:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit34 = GetLocalInt(oPC,"iSplit34");
@@ -1727,7 +1728,7 @@ void main() {
                 case 10131:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit35 = GetLocalInt(oPC,"iSplit35");
@@ -1740,7 +1741,7 @@ void main() {
                 case 10132:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit36 = GetLocalInt(oPC,"iSplit36");
@@ -1753,7 +1754,7 @@ void main() {
                 case 10133:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit37 = GetLocalInt(oPC,"iSplit37");
@@ -1766,7 +1767,7 @@ void main() {
                 case 10134:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit38 = GetLocalInt(oPC,"iSplit38");
@@ -1779,7 +1780,7 @@ void main() {
                 case 10135:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit39 = GetLocalInt(oPC,"iSplit39");
@@ -1792,7 +1793,7 @@ void main() {
                 case 10136:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit40 = GetLocalInt(oPC,"iSplit40");
@@ -1805,7 +1806,7 @@ void main() {
                 case 10137:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit41 = GetLocalInt(oPC,"iSplit41");
@@ -1818,7 +1819,7 @@ void main() {
                 case 10138:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit42 = GetLocalInt(oPC,"iSplit42");
@@ -1831,7 +1832,7 @@ void main() {
                 case 10139:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit43 = GetLocalInt(oPC,"iSplit43");
@@ -1844,7 +1845,7 @@ void main() {
                 case 10140:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit44 = GetLocalInt(oPC,"iSplit44");
@@ -1857,7 +1858,7 @@ void main() {
                 case 10141:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit45 = GetLocalInt(oPC,"iSplit45");
@@ -1870,7 +1871,7 @@ void main() {
                 case 10142:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit46 = GetLocalInt(oPC,"iSplit46");
@@ -1883,7 +1884,7 @@ void main() {
                 case 10143:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit47 = GetLocalInt(oPC,"iSplit47");
@@ -1896,7 +1897,7 @@ void main() {
                 case 10144:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit48 = GetLocalInt(oPC,"iSplit48");
@@ -1909,7 +1910,7 @@ void main() {
                 case 10145:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit49 = GetLocalInt(oPC,"iSplit49");
@@ -1922,7 +1923,7 @@ void main() {
                 case 10146:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit50 = GetLocalInt(oPC,"iSplit50");
@@ -1935,7 +1936,7 @@ void main() {
                 case 10147:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit51 = GetLocalInt(oPC,"iSplit51");
@@ -1948,7 +1949,7 @@ void main() {
                 case 10148:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit52 = GetLocalInt(oPC,"iSplit52");
@@ -1961,7 +1962,7 @@ void main() {
                 case 10149:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit53 = GetLocalInt(oPC,"iSplit53");
@@ -1974,7 +1975,7 @@ void main() {
                 case 10150:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit54 = GetLocalInt(oPC,"iSplit54");
@@ -1987,7 +1988,7 @@ void main() {
                 case 10151:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit55 = GetLocalInt(oPC,"iSplit55");
@@ -2000,7 +2001,7 @@ void main() {
                 case 10152:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit56 = GetLocalInt(oPC,"iSplit56");
@@ -2013,7 +2014,7 @@ void main() {
                 case 10153:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit57 = GetLocalInt(oPC,"iSplit57");
@@ -2026,7 +2027,7 @@ void main() {
                 case 10154:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit58 = GetLocalInt(oPC,"iSplit58");
@@ -2039,7 +2040,7 @@ void main() {
                 case 10155:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit59 = GetLocalInt(oPC,"iSplit59");
@@ -2052,7 +2053,7 @@ void main() {
                 case 10156:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit60 = GetLocalInt(oPC,"iSplit60");
@@ -2065,7 +2066,7 @@ void main() {
                 case 10157:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit61 = GetLocalInt(oPC,"iSplit61");
@@ -2078,7 +2079,7 @@ void main() {
                 case 10158:
                     if (GetGold(oPC) >= nBet)
                         {
-                        TakeGoldFromCreature(nBet, oPC, TRUE);
+                        PS_TakeGoldFromCreature(nBet, oPC, TRUE);
 						AddHouse(nBet);
                         SpeakString (GetName(oPC)+" has placed a Split bet of " + IntToString(nBet) + " gold.");
                         int ixSplit62 = GetLocalInt(oPC,"iSplit62");

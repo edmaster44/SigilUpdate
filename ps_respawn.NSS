@@ -77,7 +77,7 @@ void ApplyRespawnPenalties(object oPC)
 	{	SetXP(oPC, nXP-cXPpen);		}
 
    //gold loss
-   AssignCommand(oPC, TakeGoldFromCreature(cGPpen, oPC, TRUE)); 
+   AssignCommand(oPC, PS_TakeGoldFromCreature(cGPpen, oPC, TRUE)); 
 }
 
 void respawn(object xPC)
@@ -132,7 +132,7 @@ void respawn(object xPC)
 		{	cGPpen = 700;	}
 	
 		xStart = GetLocation(xPC);
-		AssignCommand(xPC, TakeGoldFromCreature(cGPpen, xPC, TRUE, TRUE));
+		AssignCommand(xPC, PS_TakeGoldFromCreature(cGPpen, xPC, TRUE, TRUE));
 		FloatingTextStringOnCreature("A dustman approaches and rummages in your pockets removing some gold from your pouch.", xPC, FALSE, 5.0);
 		DelayCommand(5.0,FloatingTextStringOnCreature("He then places a Coin of Life in your mouth and as the magic takes effect you are revived.", xPC, FALSE, 5.0));
 	}

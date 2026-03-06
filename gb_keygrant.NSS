@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_financial"
 #include "ps_sigis_inc"
 
 string TodaysDate() {
@@ -13,7 +13,7 @@ void main (int roomNum) {
 
 	if (roomNum == 1)
 	{
-		TakeGoldFromCreature(500, oPC, TRUE, TRUE);
+		PS_TakeGoldFromCreature(500, oPC, TRUE, TRUE);
 		object oItem = CreateItemOnObject("ps_gb_key", oPC, 1, "ps_gb_key_1", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nAzure Room \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
@@ -22,7 +22,7 @@ void main (int roomNum) {
 	}
 	else if (roomNum == 2)
 	{
-		TakeGoldFromCreature(750, oPC, TRUE, TRUE);
+		PS_TakeGoldFromCreature(750, oPC, TRUE, TRUE);
 		object oItem = CreateItemOnObject("ps_gb_key", oPC, 1, "ps_gb_key_2", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nGreen Room \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);
@@ -31,7 +31,7 @@ void main (int roomNum) {
 	}
 	else if (roomNum == 3)
 	{
-		TakeGoldFromCreature(1000, oPC, TRUE, TRUE);
+		PS_TakeGoldFromCreature(1000, oPC, TRUE, TRUE);
 		object oItem = CreateItemOnObject("ps_gb_key", oPC, 1, "ps_gb_key_3", TRUE);
 		string sDescrip = GetDescription(oItem)+"\n\nGolden Room \n\nGood for: "+TodaysDate();
 		SetDescription(oItem, sDescrip);

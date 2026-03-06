@@ -17,6 +17,7 @@ inventory and the Alchemy bonus effect removed. It is recommended to set the NPC
 #include "x2_inc_itemprop"
 #include "ginc_crafting"
 #include "nw_i0_plot"
+#include "ps_inc_financial"
 
 void main(int nAmount)
 {
@@ -32,7 +33,7 @@ void main(int nAmount)
 		
 		effect eAlchemy = EffectSkillIncrease(27,15);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlchemy, oPC, 10.0f);
-		TakeGoldFromCreature(nAmount, oPC);
+		PS_TakeGoldFromCreature(nAmount, oPC);
 		DoDistillation(oItem, oPC);
 		TakeNumItems(oPC, "mortar", 1);
 		RemoveEffect(oPC, eAlchemy);

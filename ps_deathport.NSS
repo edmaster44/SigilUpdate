@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_financial"
 // v1.00
 
 void main()
@@ -15,7 +15,7 @@ void main()
 
    int cGPpen = GetHitDice(oPC)*25;
    
-   AssignCommand(oPC, TakeGoldFromCreature(cGPpen, oPC, TRUE)); 
+   AssignCommand(oPC, PS_TakeGoldFromCreature(cGPpen, oPC, TRUE)); 
    AssignCommand(oPC, ActionJumpToLocation(lDeathloc));
    
 }

@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_financial"
 #include "ps_inc_newcrafting"
 #include "dethia_shop_sys"
 
@@ -59,7 +59,7 @@ void main () {
 			bOkToCraft = FALSE;
 		}
 		if (bOkToCraft){
-			TakeGoldFromCreature(nCost, oPC, TRUE);
+			PS_TakeGoldFromCreature(nCost, oPC, TRUE);
 			TakeRequiredCraftingItems(oPC, i, m1, m2, m3);
 		}
 	}
