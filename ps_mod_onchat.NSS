@@ -319,6 +319,27 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			else sFeedback = "Turning on eye glow for gaseous form";
 		}
 	}
+	else if (sInput == "#getarmorappearance"){
+		bFFcommand = TRUE;
+		oItem = GetPlayerCurrentTarget(oSender);
+		sFeedback = "Appearance index of targeted armor:\n";
+		if (GetObjectType(oItem) == OBJECT_TYPE_CREATURE){
+			oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, GetPlayerCurrentTarget(oSender));
+			sFeedback = "Appearance index of worn armor:\n";
+		}
+		if (!GetIsObjectValid(oItem)){ // if not targeting anything
+			oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oSender);
+			sFeedback = "Appearance index of worn armor:\n";
+		}
+		if (GetBaseItemType(oItem) != 16){
+			sFeedback = "Must be wearing an armor or targeting an armor or targeting a creature wearing armor";
+		} else {
+			string sNum = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL,ITEM_APPR_ARMOR_NUM_MODELS));
+			string sTorso = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_TORSO));
+			string sRobe = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_ROBE));
+			sFeedback += "Torso = " + sTorso + "\nRobe = " + sRobe + "\nModel = " + sNum + "\n";
+		}
+	}
 	else if (sInput == "#testcraftcost"){
 		bFFcommand = TRUE;
 		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
@@ -362,83 +383,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 					SetLocalInt(oEss, sVarName, nVar - 86401);
 			}
 			sFeedback = "Reset tomb timers to 24 hours ago";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_neg_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_holy_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_acid_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ACID);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_cold_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_COLD);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_elec_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ELECTRICAL);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_fire_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_sonic_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_SONIC);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
 		} else sFeedback = "This command only works on the test server.";
 	}
 	//END SPECIFIC SYSTEM DEBUGGING COMMANDS

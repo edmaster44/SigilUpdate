@@ -7,12 +7,10 @@
 #include "x2_inc_craft"
 #include "dmfi_inc_const"
 #include "ff_fix_item_sets"
-#include "ginc_crafting"
 
 // function declarations
 void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE);
 void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
-void UpdateUndeadRegeantDescription(object oRegeant);
 
 
 // Edit this function to perform whatever operations need to be done to correct erroneous items.
@@ -24,10 +22,6 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
-	
-	//if the item is a regeant that has had a % chance of producing a death essence, note that
-	// in the item's description
-	UpdateUndeadRegeantDescription(oItem);
 	
 	// repair the tags and local variables on set items damaged by appearance changer
 	// see ff_fix_item_sets.nss
@@ -284,15 +278,4 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FAL
 		int ipSubType = GetItemPropertySubType(ipProperty);
 		IPRemoveMatchingItemProperties(oItem, ipType, DURATION_TYPE_PERMANENT, ipSubType);
 	}
-}
-
-void UpdateUndeadRegeantDescription(object oRegeant){
-
-	int nChance = GetUndeadReagentDeathEssenceChance(GetTag(oRegeant));
-	if (nChance < 1) return;
-	
-	string sDesc = GetDescription(oRegeant);
-	sDesc += "\nThis item also has a " + IntToString(nChance) + "% chance of producing a faint death essence.";
-	
-	SetDescription(oRegeant, sDesc);
 }
