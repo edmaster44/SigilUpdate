@@ -286,13 +286,37 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FAL
 	}
 }
 
+// add or remove info regarding the % chance of getting a faint death essence, as 
+// determined by GetUndeadReagentDeathEssenceChance() in ginc_crafting
 void UpdateUndeadRegeantDescription(object oRegeant){
 
 	int nChance = GetUndeadReagentDeathEssenceChance(GetTag(oRegeant));
-	if (nChance < 1) return;
-	
 	string sDesc = GetDescription(oRegeant);
-	sDesc += "\nThis item also has a " + IntToString(nChance) + "% chance of producing a faint death essence.";
+	string sDescAdd = "\nThis reagent also has a ";
+	int nPos = FindSubString(sDesc, sDescAdd);
+	// if the chance of getting a faint death essence is zero...
+	if (nChance < 1){
+		// check to see if we have an addendum to the desc telling us about a chance
+		// because it used to not be zero. If so, remove it.
+		if (nPos != -1){
+			sDesc = GetSubString(sDesc, 0, nPos);
+			SetDescription(oRegeant, sDesc);
+		}
+		return;
+	}	
+	// else if there is a chance that we can get a faint death essence, then check to 
+	// see if the correct chance is in the desc
+	sDescAdd += IntToString(nChance) + "% chance of producing a faint death essence.";
+	int nFullPos = FindSubString(sDesc, sDescAdd);
 	
-	SetDescription(oRegeant, sDesc);
+	if (nPos != -1){// if the beginning of the addendum is there...
+		if (nFullPos == -1){ //...but the full info is wrong
+			sDesc = GetSubString(sDesc, 0, nPos); //remove the addendum
+			SetDescription(oRegeant, sDesc + sDescAdd); // and add the correct info
+		} else {
+			return; // but if the info is correct, bail
+		}
+	} else {
+		SetDescription(oRegeant, sDesc + sDescAdd); // otherwise add the full info
+	}
 }
