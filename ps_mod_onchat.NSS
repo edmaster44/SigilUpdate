@@ -279,7 +279,7 @@ void RollSocialCheck(object oPC, int nAction){
 	location lLoc = GetLocation(oPC);
 	object oListener = GetFirstObjectInShape(SHAPE_SPHERE, fRange, lLoc);
 	while (GetIsObjectValid(oListener)){
-		if (GetIsPC(oListener)){
+		if (GetIsPC(oListener) && oListener != oPC){
 			sListenerMessage = "";
 			bMindImmune = (GetIsImmune(oListener, IMMUNITY_TYPE_MIND_SPELLS, oPC) ||
 				GetIsImmune(oListener, IMMUNITY_TYPE_FEAR, oPC));
