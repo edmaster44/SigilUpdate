@@ -18,33 +18,39 @@
 // also by aasimar light spell). Also the tiefling version is now a self-only effect and doesn'target
 // impose the miss chance on the creator. The tief version the darkness is drawn from within, 
 // not cast as a spell, though it can still be dispelled, ofc. In other words, everyone in the cloud will
-// now have 50% conceal vs ranged, and those who are not immune become blind, thereby having a 50% miss chance
+// now have 40% conceal vs ranged, and those who are not immune become blind, thereby having a 40% miss chance
 #include "nw_s0_darkness_inc"
 
 
 void main(){
 
-	ScanForLight();
+	
 	object oTarget = GetEnteringObject();
-	
-	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE){
-		object oAOE = OBJECT_SELF;
-		object oCaster = GetAreaOfEffectCreator();	
-	
-		struct dSpellData data = GetSpellDataForAoE("Darkness", oCaster);
+	ScanForLight(oTarget);
+	object oCaster = GetAreaOfEffectCreator();	
+	object oAOE = OBJECT_SELF;
+	if (oTarget == OBJECT_INVALID || oCaster == OBJECT_INVALID || oAOE == OBJECT_INVALID)
+		return;
+		
 
+	struct dSpellData data = GetSpellDataForAoE("Darkness", oCaster);
+	
+	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && 
+		!GetHasSpellEffect(data.nId, oTarget)){
 
 		int bAbyssalDark = FALSE;
 		if (data.nId == SPELL_RACIAL_DARKNESS && 
 			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oCaster, TRUE))
 				bAbyssalDark = TRUE;
 		
+		int nConceal = 40;
 		int nDur = data.nCL;
+		if (nDur < 5) nDur = 5;
 		int nMeta = GetMetaMagicFeat();
 		if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nDur *= 2;
 		float fDur = RoundsToSeconds(nDur);
 		
-		int nBonus = 8;
+		int nBonus = 4;
 		if (nMeta  == METAMAGIC_EMPOWER || bAbyssalDark) nBonus += nBonus / 2;
 		
 		//impact vfx
@@ -52,7 +58,7 @@ void main(){
 		
 		//beneficial effects
 		effect eHide = EffectSkillIncrease(SKILL_HIDE, nBonus);
-		effect eConceal = EffectConcealment(40, MISS_CHANCE_TYPE_VS_RANGED);
+		effect eConceal = EffectConcealment(nConceal, MISS_CHANCE_TYPE_VS_RANGED);
 		eConceal = EffectLinkEffects(eHide, eConceal);
 		
 		// determine if immune to negative effects
@@ -61,7 +67,7 @@ void main(){
 		
 		// if not immune to negative effects, add them
 		if (!bImmuneNeg){
-			eConceal = EffectLinkEffects(EffectMissChance(40), eConceal);
+			eConceal = EffectLinkEffects(EffectMissChance(nConceal), eConceal);
 			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SEARCH, nBonus), eConceal);
 			eConceal = EffectLinkEffects(EffectSkillDecrease(SKILL_SPOT, nBonus), eConceal);
 		}

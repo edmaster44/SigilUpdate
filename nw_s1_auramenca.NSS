@@ -18,7 +18,7 @@ void main()
 {
     //Declare major variables
 	object oCaster = GetAreaOfEffectCreator();
-	int nHD = GetHitDice(oCaster);
+	int nHD = PS_GetLevel(oCaster);
     object oTarget = GetEnteringObject();
     int nDuration = 1 + nHD / 3;
     effect eVis = EffectVisualEffect(VFX_IMP_DOOM);

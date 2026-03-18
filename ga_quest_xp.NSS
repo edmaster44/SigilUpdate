@@ -11,7 +11,7 @@ void main(int nXP, int bAllPartyMembers, int nLevelvaried)
 	 iECL = PS_GetEssenceECL(oPC);
 	 if ( nLevelvaried > 0 )
 	 {
-	 	fXP = nXP * 3.0 / (2+GetHitDice(oPC)+iECL) * PS_GetXPModifier(iECL);
+	 	fXP = nXP * 3.0 / (2+PS_GetLevel(oPC)+iECL) * PS_GetXPModifier(iECL);
 	 }
 	 else
 	 {
@@ -27,7 +27,7 @@ void main(int nXP, int bAllPartyMembers, int nLevelvaried)
 			 iECL = PS_GetEssenceECL(oTarg);
 			 if ( nLevelvaried > 0 )
 			 {
-			 	fXP = nXP * 3.0 / (2+GetHitDice(oTarg)+iECL) * PS_GetXPModifier(iECL);
+			 	fXP = nXP * 3.0 / (2+PS_GetLevel(oTarg)+iECL) * PS_GetXPModifier(iECL);
 			 }
 			 else
 			 {

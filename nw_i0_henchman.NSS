@@ -348,8 +348,8 @@ void StripAllPersonalItemsFromEveryone()
 //:://////////////////////////////////////////////
 int GetCanLevelUp(object oPC, object meLevel = OBJECT_SELF)
 {
-    int nMasterLevel = GetHitDice(oPC);
-    int nMyLevel = GetHitDice(meLevel);
+    int nMasterLevel = PS_GetLevel(oPC);
+    int nMyLevel = PS_GetLevel(meLevel);
 // * April 9 2002
 // * Removed this so that if you are very high level
 // * you can still ask your henchman to level up
@@ -408,7 +408,7 @@ void CopyLocals(object oSource, object oTarget)
 // * returns the new creature
 object DoLevelUp(object oPC, object MeLevel = OBJECT_SELF)
 {
-   int nMasterLevel = GetHitDice(oPC);
+   int nMasterLevel = PS_GetLevel(oPC);
    int nLevel =  nMasterLevel -1 - INT_FUDGE;
 
 
@@ -422,7 +422,7 @@ object DoLevelUp(object oPC, object MeLevel = OBJECT_SELF)
 
    // * if already the highest level henchmen
    // * then do nothing.
-   if (GetHitDice(MeLevel) >= nLevel + INT_FUDGE)
+   if (PS_GetLevel(MeLevel) >= nLevel + INT_FUDGE)
    {
     return OBJECT_INVALID;
    }

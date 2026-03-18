@@ -385,7 +385,7 @@ string PS_CheckCharacterLegality(object PC, int ForceCheck)
 	else if (inventoryBugs > 0) {
 		errorMessage = "Uh oh, there's something wrong with your inventory. You either have an illegal item, or your inventory is too big. We don't allow items that grant immunities. Please remove any offending items before entering the world.";
 	}
-	else if (wellAligned == FALSE && GetHitDice(PC) == 1) {
+	else if (wellAligned == FALSE && PS_GetLevel(PC) == 1) {
 		errorMessage = "Uh oh, your character is an unacceptable alignment. For non-elemental outsider races, we require you to be within one step of the natural alignment of the race - for example a succubus can be NE, but not LE. Please remake your character with an acceptable alignment.";
 	}
 

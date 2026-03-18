@@ -206,6 +206,22 @@ void DoGrappleTarget(object oUser)
 //Releases minions like the beasts of the warlock invocation Call of the Beast
 void ReleaseCalledCreatures(object oPC) {
 	
+    object oArea   = GetArea(oPC);
+    
+    object oTarget = GetFirstObjectInArea(oArea);
+    while (GetIsObjectValid(oTarget))
+    {
+        if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+        {
+            if (GetLocalObject(oTarget, abilityCaster) == oPC)
+				DestroyObject(oTarget);
+        }
+        oTarget = GetNextObjectInArea(oArea);
+    }
+
+	//This is overly complicated and doesn't allow for the creation of new spells and effects
+	// that create unpartied summons. Simpler version above. -FlattedFifth
+	/*
 	int nNumberCalled = GetLocalInt(oPC, "WARLOCK_ANIMALS_CALLED");
 	
 	if (nNumberCalled > 0) {
@@ -234,63 +250,55 @@ void ReleaseCalledCreatures(object oPC) {
 	}
 	
 	DeleteLocalInt(oPC, "WARLOCK_UNDEAD_CALLED");
-
+*/
 }
 
 void DoReleaseSpells(object oPC)
 {
-	effect eBad = GetFirstEffect(oPC);
-	
+
 	if(GetIsInCombat(oPC) == TRUE)
 	{
 		SendMessageToPC(oPC, "You cannot release spells in combat.");
 		return;
 	}	
 	
-	ReleaseCalledCreatures(oPC);
+	//ReleaseCalledCreatures(oPC);
+	
+	effect eBad = GetFirstEffect(oPC);
+	int nType;
+	int nSub;
+
 	
 	SendMessageToPC(oPC, "Releasing Spells");	
 	while(GetIsEffectValid(eBad))
 	{
-	    if (GetEffectType(eBad) == EFFECT_TYPE_ABILITY_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_AC_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_ATTACK_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_SAVING_THROW_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_SKILL_DECREASE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS ||
-	        GetEffectType(eBad) == EFFECT_TYPE_DEAF ||
-	        GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-	        GetEffectType(eBad) == EFFECT_TYPE_NEGATIVELEVEL ||
-			GetEffectType(eBad) == EFFECT_TYPE_ARCANE_SPELL_FAILURE ||
-			GetEffectType(eBad) == EFFECT_TYPE_ASSAYRESISTANCE ||
-			GetEffectType(eBad) == EFFECT_TYPE_CHARMED ||
-			GetEffectType(eBad) == EFFECT_TYPE_CONFUSED ||
-			GetEffectType(eBad) == EFFECT_TYPE_CURSE ||
-			GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-			GetEffectType(eBad) == EFFECT_TYPE_DAZED ||
-			GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-			GetEffectType(eBad) == EFFECT_TYPE_DOMINATED ||
-			GetEffectType(eBad) == EFFECT_TYPE_ENTANGLE ||
-			GetEffectType(eBad) == EFFECT_TYPE_FRIGHTENED ||
-			GetEffectType(eBad) == EFFECT_TYPE_INSANE ||
-			GetEffectType(eBad) == EFFECT_TYPE_MOVEMENT_SPEED_DECREASE ||
-			GetEffectType(eBad) == EFFECT_TYPE_PETRIFY ||
-			GetEffectType(eBad) == EFFECT_TYPE_POISON ||
-			GetEffectType(eBad) == EFFECT_TYPE_SLEEP ||
-			GetEffectType(eBad) == EFFECT_TYPE_SILENCE ||
-			GetEffectType(eBad) == EFFECT_TYPE_SLOW ||
-			GetEffectType(eBad) == EFFECT_TYPE_SPELL_FAILURE ||
-			GetEffectType(eBad) == EFFECT_TYPE_STUNNED ||
-			GetEffectType(eBad) == EFFECT_TYPE_SWARM ||
-			GetEffectType(eBad) == EFFECT_TYPE_TURNED)
-	        {
-				eBad = GetNextEffect(oPC); 
-	        }
-		else
-		{//Remove effect if it isn't negative
+		nType = GetEffectType(eBad);
+		nSub = GetEffectSubType(eBad);
+		// do not remove negative effects, supernatural effects, extraordinary effects, or permanent
+		// effects. (those last three are likely racial persistent feat effects)
+	    if (nType == EFFECT_TYPE_ABILITY_DECREASE || nType == EFFECT_TYPE_AC_DECREASE ||
+	        nType == EFFECT_TYPE_ATTACK_DECREASE || nType == EFFECT_TYPE_DAMAGE_DECREASE ||
+	        nType == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE || nType == EFFECT_TYPE_SAVING_THROW_DECREASE ||
+	        nType == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE || nType == EFFECT_TYPE_SKILL_DECREASE ||
+	        nType == EFFECT_TYPE_BLINDNESS || nType == EFFECT_TYPE_DEAF ||
+	        nType == EFFECT_TYPE_PARALYZE || nType == EFFECT_TYPE_NEGATIVELEVEL ||
+			nType == EFFECT_TYPE_ARCANE_SPELL_FAILURE || nType == EFFECT_TYPE_ASSAYRESISTANCE ||
+			nType == EFFECT_TYPE_CHARMED || nType == EFFECT_TYPE_CONFUSED ||
+			nType == EFFECT_TYPE_CURSE || nType == EFFECT_TYPE_PARALYZE ||
+			nType == EFFECT_TYPE_DAZED || nType == EFFECT_TYPE_PARALYZE ||
+			nType == EFFECT_TYPE_DOMINATED || nType == EFFECT_TYPE_ENTANGLE ||
+			nType == EFFECT_TYPE_FRIGHTENED || nType == EFFECT_TYPE_INSANE ||
+			nType == EFFECT_TYPE_MOVEMENT_SPEED_DECREASE || nType == EFFECT_TYPE_PETRIFY ||
+			nType == EFFECT_TYPE_POISON || nType == EFFECT_TYPE_SLEEP ||
+			nType == EFFECT_TYPE_SILENCE || nType == EFFECT_TYPE_SLOW ||
+			nType == EFFECT_TYPE_SPELL_FAILURE || nType == EFFECT_TYPE_STUNNED ||
+			nType == EFFECT_TYPE_SWARM || nType == EFFECT_TYPE_TURNED ||
+			nSub == SUBTYPE_SUPERNATURAL || nSub == SUBTYPE_EXTRAORDINARY ||
+			GetEffectDurationType(eBad) == DURATION_TYPE_PERMANENT)
+	    {
+				eBad = GetNextEffect(oPC);
+		}
+		else {
 			RemoveEffect(oPC, eBad);
 			eBad = GetNextEffect(oPC);
 		}

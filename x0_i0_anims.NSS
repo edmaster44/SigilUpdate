@@ -988,7 +988,7 @@ void AnimActionPlayRandomImmobile()
     if (GetAnimationCondition(NW_ANIM_FLAG_IS_TALKING))	
 	{
         object oFriend = GetCurrentFriend();
-        int nHDiff = GetHitDice(OBJECT_SELF) - GetHitDice(oFriend);
+        int nHDiff = PS_GetLevel(OBJECT_SELF) - PS_GetLevel(oFriend);
 
         if (nRoll == 0) {
             AnimActionStopTalking(oFriend, nHDiff);
@@ -1525,7 +1525,7 @@ int AnimActionFindFriend(float fMaxDistance)
 		
         if (GetIsObjectValid(oFriend) && !GetIsBusyWithAnimation(oFriend)) 
 		{
-            int nHDiff = GetHitDice(OBJECT_SELF) - GetHitDice(oFriend);
+            int nHDiff = PS_GetLevel(OBJECT_SELF) - PS_GetLevel(oFriend);
             AnimActionStartTalking(oFriend, nHDiff);
             return 1;
         }

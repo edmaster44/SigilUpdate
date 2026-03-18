@@ -17,7 +17,7 @@ void main()
 	
     if (!GetHasSpellEffect(GetSpellId(), oTarget))
 	{
-		int nHD = GetHitDice(oTarget);
+		int nHD = PS_GetLevel(oTarget);
 		int nSR = 20 + nHD;
 		effect eDR = EffectDamageImmunityDecrease(DAMAGE_TYPE_PIERCING, 50);
 		effect eDR2 = EffectDamageReduction(15, ALIGNMENT_GOOD, 0, DR_TYPE_ALIGNMENT);

@@ -6,6 +6,9 @@
 /*
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
+// makes sure that non-partied summons, such as call of the beast, give xp to summoner when they make
+// a kill. Useage: SetLocalObject(oCreature, abilityCaster, oPC); This is checked for in ps_xp_script.nss
+const string abilityCaster = "abilityCaster";
 
 // value to be used as a placeholder that basically means "ignore this if the value is this".
 // Usually to be used as a default arg in a function that indicates no value was passed so
@@ -379,6 +382,7 @@ const int FEAT_STAL_DEF_STANCE_AC = 21890;
 const int FEAT_CROC_ARMOR_AC_1 = 21887;
 const int FEAT_CROC_ARMOR_AC_2 = 21888;
 const int FEAT_CROC_ARMOR_AC_3 = 21889;
+const int FEAT_CROC_ARMOR_AC_4 = 21886;
 
 //new half-outsider feats
 const int FEAT_HALFOUTSIDER_PATH_OF_GUILE  		= 3033;

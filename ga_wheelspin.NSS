@@ -45,10 +45,10 @@ void main () {
 		}
 		randomNum = Random(30);
 		if (randomNum == 0) {
-			if ((GetHitDice(oPC) <= 10 && nGoldAmount <= 500) ||
-				(GetHitDice(oPC) <= 15 && nGoldAmount <= 1000) ||
-				(GetHitDice(oPC) <= 20 && nGoldAmount <= 2500) ||
-				(GetHitDice(oPC) <= 25 && nGoldAmount <= 5000))
+			if ((PS_GetLevel(oPC) <= 10 && nGoldAmount <= 500) ||
+				(PS_GetLevel(oPC) <= 15 && nGoldAmount <= 1000) ||
+				(PS_GetLevel(oPC) <= 20 && nGoldAmount <= 2500) ||
+				(PS_GetLevel(oPC) <= 25 && nGoldAmount <= 5000))
 				DelayCommand(7.5f, GiveRandomItem(oPC));
 			else
 				DelayCommand(7.5f, specialDrop(oPC));

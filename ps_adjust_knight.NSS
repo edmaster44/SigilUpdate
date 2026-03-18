@@ -146,19 +146,17 @@ int KnightLevels(object oPC, int bForSneakDice = FALSE){
 		+ GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC) + GetLevelByClass(CLASS_TYPE_ERINYES,oPC);
 		if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH,oPC) && !bForSneakDice){
 			nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);
-			if (GetHasFeat(3036,oPC)) nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);
+			nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);
 		}
 	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD){
 		nLevel += GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);
-		if (GetHasFeat(2455)){
-			nLevel += GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC) + 
-				GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
-		}
+		nLevel += GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); 
+		nLevel += GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
+		
 		if (GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL,oPC)){
 			nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);
-			if (GetHasFeat(3036,oPC)){
-				nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);
-			}
+			nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);
+			
 		}
 	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL){
 		nLevel += GetLevelByClass(CLASS_NWNINE_WARDER,oPC) + 

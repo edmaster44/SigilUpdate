@@ -18,13 +18,14 @@ void main(){
 	int nLevel;
 	int nId = GetSpellId();
 	int bAbyssalDark = FALSE;
-	if (nId == SPELL_RACIAL_DARKNESS) nLevel = GetHitDice(oCaster);
+	if (nId == SPELL_RACIAL_DARKNESS) nLevel = PS_GetLevel(oCaster);
 	else if (nId == SPELLABILITY_AS_DARKNESS)nLevel = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
 	else nLevel = PS_GetCasterLevel(oCaster);
 	int nDur = nLevel;
+	if (nDur < 5) nDur = 5;
 	int nMeta = GetMetaMagicFeat();
 	if (nMeta == METAMAGIC_EXTEND || bAbyssalDark) nDur *= 2;
-	float fDur = HoursToSeconds(nDur);
+	float fDur = RoundsToSeconds(nDur);
 	
 	effect eAOE = EffectAreaOfEffect(AOE_PER_DARKNESS);
 	eAOE = SetEffectSpellId(eAOE, nId); 

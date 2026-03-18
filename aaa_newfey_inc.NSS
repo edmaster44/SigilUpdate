@@ -34,7 +34,7 @@ void PS_Fey_FeyTrait(object oPC) {
 //Fey Hypnotism
 void PS_Fey_FeyHypnotism(object oPC) {
 
-	int nCasterLevel = GetHitDice(oPC);
+	int nCasterLevel = PS_GetLevel(oPC);
 
 	int maxCreatures = nCasterLevel; //max creatures is Caster HD
 	int onlyOne = FALSE;
@@ -104,16 +104,16 @@ void PS_Fey_FeySleep(object oPC, location lTarget) {
     effect 		eDur 		= 	EffectVisualEffect(VFX_DUR_SPELL_HISS_OF_SLEEP);
 	effect		eSleep		=	EffectSleep();
 	effect		eLink		=	EffectLinkEffects(eSleep, eDur);
-	float		fDuration	=	RoundsToSeconds(GetHitDice(oCaster));
+	float		fDuration	=	RoundsToSeconds(PS_GetLevel(oCaster));
 	
-	int nMaxLevel = GetHitDice(oPC);
+	int nMaxLevel = PS_GetLevel(oPC);
 	int nDC = 10+(nMaxLevel/3)+GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	
 	fDuration		=	ApplyMetamagicDurationMods(fDuration);
 
     while (GetIsObjectValid(oTarget))
     {
-		if (GetHitDice(oTarget) < nMaxLevel) 
+		if (PS_GetLevel(oTarget) < nMaxLevel) 
 		{
 	        if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && oTarget != oPC)
 	        {
@@ -132,7 +132,7 @@ void PS_Fey_FeySleep(object oPC, location lTarget) {
 //Fey Fear spell
 void PS_Fey_FeyFear(object oPC, location lTarget) {
 
-	int nCasterLevel = GetHitDice(oPC);
+	int nCasterLevel = PS_GetLevel(oPC);
     float fDuration = RoundsToSeconds(nCasterLevel);
     int nDamage;
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_FEAR );	// NWN2 VFX
@@ -147,7 +147,7 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget, TRUE);
     while(GetIsObjectValid(oTarget))
     {
-		if (GetHitDice(oTarget) < nCasterLevel) 
+		if (PS_GetLevel(oTarget) < nCasterLevel) 
 		{
 	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC)
 	    	{
@@ -186,7 +186,7 @@ void PS_Fey_FeyInvisbility(object oPC) {
     //Fire cast spell at event for the specified target
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_INVISIBILITY, FALSE));
 
-	int nDuration = GetHitDice(oPC);
+	int nDuration = PS_GetLevel(oPC);
 	
     float fDuration = TurnsToSeconds(nDuration);
 
@@ -207,7 +207,7 @@ void PS_Fey_FeyGlamer(object oPC, location lTarget) {
 		DestroyObject(oGlamer);
 	}
 	
-    int nDuration = GetHitDice(oPC);
+    int nDuration = PS_GetLevel(oPC);
 	
 	object oClone = CreateIllusoryClone(oPC, "ps_summon_glamer", lTarget);
 	effect eShadow = EffectNWN2SpecialEffectFile("fx_shadowfiend_2");
@@ -300,7 +300,7 @@ void PS_Fey_Kiss(object oPC, object oTarget) {
 			if (iResult == 0)
 			{
 				// effect depends on relative level of target.
-				if (iLevels > GetHitDice(oTarget))
+				if (iLevels > PS_GetLevel(oTarget))
 				{
 					// dominate
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(d6(iLevels)));

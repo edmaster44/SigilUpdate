@@ -73,7 +73,7 @@ void main()
     if (nMetaMagic == METAMAGIC_EXTEND) nDuration = nCasterLevel * 2;
 	
 	//The actual spell
-    if ((GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)&&(GetHitDice(oTarget) <= nHD))
+    if ((GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)&&(PS_GetLevel(oTarget) <= nHD))
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
         {

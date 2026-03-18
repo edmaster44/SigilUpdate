@@ -108,7 +108,7 @@ void main()
 	if (nDIFF < 1) nDIFF = 1;
 	else if (nDIFF > 4) nDIFF = 4;
 	SetLocalInt(oENEMY, "ENEMY_DIFF", nDIFF);
-	int nLVL = GetHitDice(oENEMY);
+	int nLVL = PS_GetLevel(oENEMY);
 	int nRANK = GetLocalInt(oENEMY, "ENEMY_RANK");
 	if (nRANK < 1) nRANK = 1;
 	int nHP = GetLocalInt(oENEMY, "ENEMY_HP");

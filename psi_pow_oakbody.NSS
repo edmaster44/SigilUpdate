@@ -61,47 +61,40 @@ void main()
 
 // End of Spell Cast Hook
 
-   object oManifester = OBJECT_SELF;
-	object oTarget = GetSpellTargetObject();
+	object oManifester = OBJECT_SELF;
     struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
+        EvaluateManifestationNew(oManifester, oManifester,
                               GetSpellId(),
                               METAPSIONIC_AUGMENT | METAPSIONIC_EXTEND
                               );
 
-    if(manif.bCanManifest)
-    {
-        effect eLink    =                          EffectDamageResistance(DAMAGE_TYPE_SLASHING, 10);
-               eLink    = EffectLinkEffects(eLink, EffectACIncrease(5, AC_NATURAL_BONUS));
-               eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE));
-               eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_BLINDNESS));
-               eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_DEAFNESS));
-               eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_DISEASE));
-               eLink    = EffectLinkEffects(eLink, EffectSpellImmunity(SPELL_DROWN));
-               eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_POISON));
-               eLink    = EffectLinkEffects(eLink, EffectImmunity(IMMUNITY_TYPE_STUN));
-               eLink    = EffectLinkEffects(eLink, EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, 50));
-               eLink    = EffectLinkEffects(eLink, EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, 50));
-               eLink    = EffectLinkEffects(eLink, EffectAbilityIncrease(ABILITY_STRENGTH, 4));
-               eLink    = EffectLinkEffects(eLink, EffectMovementSpeedDecrease(50));
-//               eLink    = EffectLinkEffects(eLink, EffectSpellFailure(25, SPELL_SCHOOL_GENERAL));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_FREEDOM_OF_MOVEMENT));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_GLOBE_INVULNERABILITY));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PROT_BARKSKIN));
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_PROTECTION_ELEMENTS));
-        effect eVis     =                         EffectVisualEffect(VFX_IMP_HEAD_NATURE);
-               eVis     = EffectLinkEffects(eVis, EffectVisualEffect(VFX_FNF_NATURES_BALANCE));
-               eVis     = EffectLinkEffects(eVis, EffectVisualEffect(VFX_IMP_IMPROVE_ABILITY_SCORE));
-        float fDuration = 60.0f * manif.nManifesterLevel;
-		if (manif.bAugment)
-			fDuration += 360.0f; //last five extra minutes
-        if(manif.bExtend) fDuration *= 2;
-
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        //ApplyAbilityDamage(oTarget, ABILITY_DEXTERITY, 2, DURATION_TYPE_TEMPORARY, FALSE, fDuration, TRUE, manif.nSpellID, manif.nManifesterLevel);
-
-        // Apply ASF to hide
-        //AddItemProperty(DURATION_TYPE_TEMPORARY, ItemPropertyArcaneSpellFailure(IP_CONST_ARCANE_SPELL_FAILURE_PLUS_25_PERCENT), GetPCSkin(oTarget), fDuration);
-    }// end if - Successfull manifestation
+    if(!manif.bCanManifest) return;
+	
+	int nId = GetAreaOfEffectSpellId();
+    
+	effect eLink    = EffectDamageResistance(DAMAGE_TYPE_SLASHING, 10);
+		   eLink    = EffectLinkEffects(EffectACIncrease(6, AC_NATURAL_BONUS), eLink);
+		   eLink    = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE), eLink);
+		   eLink    = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_BLINDNESS), eLink);
+		   eLink    = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_DEAFNESS), eLink);
+		   eLink    = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_DISEASE), eLink);
+		   eLink    = EffectLinkEffects(EffectSpellImmunity(SPELL_DROWN), eLink);
+		   eLink    = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_POISON), eLink);
+		   eLink    = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_STUN), eLink);
+		   eLink    = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, 50), eLink);
+		   eLink    = EffectLinkEffects(EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, 50), eLink);
+		   eLink    = EffectLinkEffects(EffectVisualEffect(VFX_DUR_FREEDOM_OF_MOVEMENT), eLink);
+		   eLink    = EffectLinkEffects(EffectVisualEffect(VFX_DUR_GLOBE_INVULNERABILITY), eLink);
+		   eLink    = EffectLinkEffects(EffectVisualEffect(VFX_DUR_PROT_BARKSKIN), eLink);
+		   eLink    = EffectLinkEffects(EffectVisualEffect(VFX_DUR_PROTECTION_ELEMENTS), eLink);
+	effect eVis     = EffectVisualEffect(VFX_IMP_HEAD_NATURE);
+		   eVis     = EffectLinkEffects(EffectVisualEffect(VFX_FNF_NATURES_BALANCE), eVis);
+	float fDuration = 60.0f * manif.nManifesterLevel;
+	if (manif.bAugment)
+		fDuration += 360.0f; //last five extra minutes
+	if(manif.bExtend) fDuration *= 2;
+	
+	SignalAndApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+		oManifester, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
 }

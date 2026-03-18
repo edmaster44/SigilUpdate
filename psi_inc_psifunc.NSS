@@ -243,7 +243,7 @@ int GetManifesterLevel(object oManifester, int nSpecificClass = CLASS_TYPE_INVAL
 		// if the effect is from an object, caster level is psy/psi caster lvl
 		// or 1/2 HD, whichever is higher
 		int nCL = GetPsyOrPsiCasterLevel(oManifester, nSpecificClass);
-		int nHalfHD = GetHitDice(oManifester) / 2;
+		int nHalfHD = PS_GetLevel(oManifester) / 2;
 		if (nHalfHD > nCL) return nHalfHD;
 		else return nCL;
 	}

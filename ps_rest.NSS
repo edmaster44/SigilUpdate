@@ -116,7 +116,7 @@ void WipeSpecialAbilities(object oCreature)
 		//if(Get2DAString("feat", "USESPERDAY", nFeat) != "")
 	 	if (GetHasFeat(nFeat, oCreature))
 	    {	
-	    	for (nLevel = 0; nLevel < GetHitDice(oCreature); nLevel++)
+	    	for (nLevel = 0; nLevel < PS_GetLevel(oCreature); nLevel++)
 	      	{
 				DecrementRemainingFeatUses(oCreature, nFeat);
 			}

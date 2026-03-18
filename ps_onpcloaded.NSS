@@ -300,7 +300,7 @@ int prepChar(object oPC)
 			SetLocalString(oItem,"XPDay",SQLGetData(4));
 			//DebugMessageToPC(oPC,"xpday:" + GetLocalString(oItem,"XPDay"));
 				
-			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * GetHitDice(oPC)) * PS_GetXPModifier(sECL));
+			int nModifiedXP = FloatToInt((nDailyXP + nDailyXPlevel * PS_GetLevel(oPC)) * PS_GetXPModifier(sECL));
 			if (dm_pool > nModifiedXP)
 			{	
 				//SendMessageToPC(oPC, "Pulling from DM Pool");

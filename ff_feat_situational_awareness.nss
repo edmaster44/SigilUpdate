@@ -16,7 +16,7 @@ void main(){
 	
 	RemoveEffectsFromSpell(oPC, nId);
 	
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
     int nTumble = GetSkillRank(SKILL_TUMBLE, oPC, TRUE);
     int nAcFromLvl = (nLevel + 3) / 10;
     int nAcFromTumble = nTumble / 10;

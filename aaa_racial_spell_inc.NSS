@@ -608,7 +608,7 @@ void PS_Cast_HE_Blasphemy(object oPC)
                     else
                     {
                         //Check the HD of the creature
-                        nHD = GetHitDice(oTarget);
+                        nHD = PS_GetLevel(oTarget);
                         //Apply the appropriate effects based on HD
                         if (nHD >= 12 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
                         {
@@ -879,7 +879,7 @@ void PS_Cast_YTHBAnimalTrance(object oPC, int iLevel, location lTarget, int nSpe
 	while( oTarget != OBJECT_INVALID )
 	{	if ( CompareTranceRace(oTarget) )
 		{	nInt 		= GetAbilityScore(oTarget, ABILITY_INTELLIGENCE);
-			nHD 		= GetHitDice(oTarget);
+			nHD 		= PS_GetLevel(oTarget);
 			if ( nInt < 3 && (nCurrHD + nHD) <= nTotalHD )
 			{	if (!MyResistSpell(OBJECT_SELF, oTarget))
 				{	PrettyDebug("Animal Trance :: Applying Effect to "+GetName(oTarget));
@@ -1003,7 +1003,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
         	{	bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
-                {	nCurrentHD = GetHitDice(oTarget);
+                {	nCurrentHD = PS_GetLevel(oTarget);
                     if(nCurrentHD < nLow && nCurrentHD <= nHD && nCurrentHD < 6)
                     {	nLow = nCurrentHD;
                         oLowest = oTarget;
@@ -1027,7 +1027,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
         SetLocalInt(oLowest, sSpellLocal, TRUE);
         DelayCommand(0.5, SetLocalInt(oLowest, sSpellLocal, FALSE));
         DelayCommand(0.5, DeleteLocalInt(oLowest, sSpellLocal));
-        nHD = nHD - GetHitDice(oLowest);
+        nHD = nHD - PS_GetLevel(oLowest);
         oLowest = OBJECT_INVALID;
     }    while ((nHD > 0) && (bContinueLoop))
     {	nLow = nMax;
@@ -1038,7 +1038,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
         	{	bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
-                {	nCurrentHD = GetHitDice(oTarget);
+                {	nCurrentHD = PS_GetLevel(oTarget);
                      if (nCurrentHD < nLow && nCurrentHD <= nHD && nCurrentHD < 6)
                      {	nLow = nCurrentHD;
                         oLowest = oTarget;
@@ -1061,7 +1061,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
         SetLocalInt(oLowest, sSpellLocal, TRUE);
         DelayCommand(0.5, SetLocalInt(oLowest, sSpellLocal, FALSE));
         DelayCommand(0.5, DeleteLocalInt(oLowest, sSpellLocal));
-        nHD = nHD - GetHitDice(oLowest);
+        nHD = nHD - PS_GetLevel(oLowest);
         oLowest = OBJECT_INVALID;
     }
 }
@@ -1267,7 +1267,7 @@ void PS_Cast_Rakshasa_Pain_Wave(object oPC, object oTarget, int nSpell)
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetHitDice(oCaster);
+    int nCasterLvl = PS_GetLevel(oCaster);
     int nDamage;
     float fDelay;
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, oPC);
@@ -1371,7 +1371,7 @@ void PS_Cast_Rakshasa_Imperious_Command(object oPC, object oTarget, int nSpell)
 	object		oTarget		=	GetSpellTargetObject();
 	int 		nCasterSub  =   GetSubRace(oCaster);
 	int 		nTargetSub  =   GetSubRace(oTarget);
-	float		fDuration	=	RoundsToSeconds(GetHitDice(oCaster));
+	float		fDuration	=	RoundsToSeconds(PS_GetLevel(oCaster));
 	int			nDurType	=	ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 	
 	// AFW-OEI 06/27/2007: Add a hit effect.
@@ -1473,7 +1473,7 @@ void PS_Cast_Rakshasa_Mystic_Palm(object oPC, object oTarget, int nSpell)
 	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eBad, oTarget);
 				DecrementRemainingFeatUses(OBJECT_SELF, 39);
 				
-				int nHD = GetHitDice(OBJECT_SELF);
+				int nHD = PS_GetLevel(OBJECT_SELF);
 				
 				int nStun = GetHasFeat(39, OBJECT_SELF, FALSE);
 				int nDC = 10 + (nHD/2) + nWis;
@@ -1515,7 +1515,7 @@ void PS_Cast_Khayal_Shadow_Conjuration(object oPC, int nSpell)
 
     //Declare major variables
     int nMetaMagic = GetMetaMagicFeat();
-    int nCasterLevel = GetHitDice(oPC);
+    int nCasterLevel = PS_GetLevel(oPC);
     effect eSummon;
     //effect eVis = EffectVisualEffect(VFX_FNF_SUMMON_UNDEAD);
 
@@ -1544,7 +1544,7 @@ void PS_Cast_Khayal_Shadow_Conjuration(object oPC, int nSpell)
 void PS_Cast_Khayal_Shadow_Armor (object oPC, object oTarget, int nSpell)
 {
     object oTarget = GetSpellTargetObject();
-    float fDuration = HoursToSeconds(GetHitDice(oPC));
+    float fDuration = HoursToSeconds(PS_GetLevel(oPC));
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));

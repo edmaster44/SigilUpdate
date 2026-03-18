@@ -613,7 +613,7 @@ float CheckGrappleResult(object oTarget, int nCasterCheck, int nCheckType)
 int GetCreaturePoisonDC()
 {
     int nRacial = GetRacialType(OBJECT_SELF);
-    int nHD = GetHitDice(OBJECT_SELF);
+    int nHD = PS_GetLevel(OBJECT_SELF);
 
     //Determine the poison type based on the Racial Type and HD
     switch (nRacial)
@@ -695,7 +695,7 @@ int GetCreatureDiseaseDC(int checkType)
     int nRacial = GetRacialType(OBJECT_SELF);
     if (checkType == DISEASE_CHECK_CONE)
     {
-        int nHD = GetHitDice(OBJECT_SELF);
+        int nHD = PS_GetLevel(OBJECT_SELF);
         switch (nRacial)
         {
             case RACIAL_TYPE_OUTSIDER:
@@ -771,28 +771,28 @@ int GetCurrentSpellSaveDC(int bFoundItemSpell, int spellLevel)
         switch (saveDCType)
         {
         case HENCH_SAVEDC_HD_1:
-            saveDC = 10 + GetHitDice(OBJECT_SELF);
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF);
             break;
         case HENCH_SAVEDC_HD_2:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 2;
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 2;
             break;
         case HENCH_SAVEDC_HD_4:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 4;
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 4;
             break;
         case HENCH_SAVEDC_HD_2_CONST:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_CONSTITUTION);
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_CONSTITUTION);
             break;
         case HENCH_SAVEDC_HD_2_CONST_MINUS_5:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_CONSTITUTION) - 5;
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_CONSTITUTION) - 5;
             break;
         case HENCH_SAVEDC_HD_2_WIS:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_WISDOM);
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_WISDOM);
             break;
         case HENCH_SAVEDC_HD_2_PLUS_5:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 2 + 5;	
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 2 + 5;	
             break;
 		case HENCH_SAVEDC_HD_2_CHA:
-            saveDC = 10 + GetHitDice(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_CHARISMA);
+            saveDC = 10 + PS_GetLevel(OBJECT_SELF) / 2 + GetAbilityModifier(ABILITY_CHARISMA);
 			break;
         case HENCH_SAVEDC_DISEASE_BOLT:
             saveDC = GetCreatureDiseaseDC(DISEASE_CHECK_BOLT);
@@ -874,7 +874,7 @@ int GetCurrentSpellBuffAmount(int casterLevel)
     case HENCH_SPELL_INFO_BUFF_CASTER_LEVEL:
         break;
     case HENCH_SPELL_INFO_BUFF_HD_LEVEL:
-        casterLevel = GetHitDice(OBJECT_SELF);
+        casterLevel = PS_GetLevel(OBJECT_SELF);
         break;
     case HENCH_SPELL_INFO_BUFF_FIXED:
 //      Jug_Debug("buff amount " + IntToString(buffAmount));
@@ -885,7 +885,7 @@ int GetCurrentSpellBuffAmount(int casterLevel)
         casterLevel = GetBardicClassLevel(OBJECT_SELF);
         break;
     case HENCH_SPELL_INFO_BUFF_DRAGON:
-        casterLevel = GetHitDice(OBJECT_SELF);
+        casterLevel = PS_GetLevel(OBJECT_SELF);
         if (casterLevel > 37)
         {
             casterLevel = 12;
@@ -1006,7 +1006,7 @@ struct sDamageInformation GetCurrentSpellDamage(int casterLevel, int bIsItem)
     case HENCH_SPELL_INFO_DAMAGE_CURE:
         break;
     case HENCH_SPELL_INFO_DAMAGE_HD_LEVEL:
-        casterLevel = GetHitDice(OBJECT_SELF);
+        casterLevel = PS_GetLevel(OBJECT_SELF);
         break;
     case HENCH_SPELL_INFO_DAMAGE_FIXED:
         result.amount = IntToFloat(damageAmount);
@@ -1014,7 +1014,7 @@ struct sDamageInformation GetCurrentSpellDamage(int casterLevel, int bIsItem)
 //      Jug_Debug("damage amount " + IntToString(result.amount) + " count " + IntToString(result.count));
         return result;
     case HENCH_SPELL_INFO_DAMAGE_DRAGON:
-        casterLevel = GetHitDice(OBJECT_SELF);
+        casterLevel = PS_GetLevel(OBJECT_SELF);
         if (casterLevel > 37)
         {
             casterLevel = 12;
@@ -1329,12 +1329,12 @@ object goBestSpellCaster;
 
 int HenchPerceiveSpellcasterThreat()
 {
-    int mageThreshold = GetHitDice(OBJECT_SELF) * 2 / 3;
+    int mageThreshold = PS_GetLevel(OBJECT_SELF) * 2 / 3;
     if (mageThreshold > 15)
     {
         mageThreshold = 15;
     }
-    int clericThreshold = GetHitDice(OBJECT_SELF) * 4 / 5;
+    int clericThreshold = PS_GetLevel(OBJECT_SELF) * 4 / 5;
     if (clericThreshold > 15)
     {
         clericThreshold = 15;
@@ -1577,7 +1577,7 @@ void HenchTalentStealth()
         return;
     }
 
-    int nThreshold = GetHitDice(OBJECT_SELF) / 2;
+    int nThreshold = PS_GetLevel(OBJECT_SELF) / 2;
     if ((GetSkillRank(SKILL_HIDE, OBJECT_SELF, TRUE) <= nThreshold) &&
         (GetSkillRank(SKILL_MOVE_SILENTLY, OBJECT_SELF, TRUE) <= nThreshold))
     {

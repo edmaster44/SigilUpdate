@@ -14,7 +14,7 @@ void main(int nRewardType) {
 	object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	
 	//Decide how good the item is based on PC HD
-	int nCR = GetHitDice(oPC);
+	int nCR = PS_GetLevel(oPC);
 	int TREASURE_LEVEL = 0;
 	if (nCR < 10)
 		TREASURE_LEVEL = 1;

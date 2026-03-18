@@ -29,7 +29,7 @@ void main()
 
     effect   eVis         = EffectVisualEffect( VFX_HIT_SPELL_ABJURATION );
 	effect   eImpact; // Now handled by spells.2da, the ImpactSEF column, but effect required for spellsDispelMagic
-    int      nCasterLevel = GetHitDice( OBJECT_SELF );
+    int      nCasterLevel = PS_GetLevel( OBJECT_SELF );
     object   oTarget      = GetSpellTargetObject();
     location lLocal   =     GetSpellTargetLocation();
 

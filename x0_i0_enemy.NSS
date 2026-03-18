@@ -21,6 +21,7 @@
 
 #include "x0_i0_match"
 #include "x0_i0_assoc"
+#include "ps_inc_functions"
 
 //=====================================================================
 // CONSTANTS
@@ -275,14 +276,14 @@ struct sSituation CountEnemiesAndAllies(float fRadius=20.0, object oSource=OBJEC
         if (GetObjectSeen(oTarget)) {
             if (GetIsEnemy(oTarget)) {
                 if (GetIsPC(oTarget) == TRUE)
-                    sitCurrent.ENEMY_CR += GetHitDice(oTarget);
+                    sitCurrent.ENEMY_CR += PS_GetLevel(oTarget);
                 else
                     sitCurrent.ENEMY_CR += FloatToInt(GetChallengeRating(oTarget));
 
                 sitCurrent.ENEMY_NUM++;
             } else if (GetIsFriend(oTarget)) {
                 if (GetIsPC(oTarget) == TRUE)
-                    sitCurrent.ALLY_CR += GetHitDice(oTarget);
+                    sitCurrent.ALLY_CR += PS_GetLevel(oTarget);
                 else
                     sitCurrent.ALLY_CR += FloatToInt(GetChallengeRating(oTarget));
 
@@ -311,7 +312,7 @@ struct sEnemies DetermineEnemies()
     while(GetIsObjectValid(oTarget) && GetDistanceToObject(oTarget) <= 40.0)
     {
         nClass = GetClassByPosition(1, oTarget);
-        nHD = GetHitDice(oTarget);
+        nHD = PS_GetLevel(oTarget);
         if(nClass == CLASS_TYPE_ANIMAL ||
            nClass == CLASS_TYPE_BARBARIAN ||
            nClass == CLASS_TYPE_BEAST ||
@@ -558,13 +559,13 @@ int GetRacialTypeCount(int nRacial_Type)
 int CheckFriendlyFireOnTarget(object oTarget, float fDistance = 7.5)
 {
     int nCnt, nHD, nMyHD;
-    nMyHD = GetHitDice(OBJECT_SELF);
+    nMyHD = PS_GetLevel(OBJECT_SELF);
     object oCheck = GetFirstObjectInShape(SHAPE_SPHERE, fDistance, GetLocation(oTarget));
     while(GetIsObjectValid(oCheck))
     {
         //Use this instead of GetIsFriend to make sure that friendly casualties do not occur.
         //Formerlly GetIsReactionTypeFriendly(oCheck)
-        nHD = GetHitDice(oCheck);
+        nHD = PS_GetLevel(oCheck);
         if((GetIsFriend(oCheck)) &&
             oTarget != oCheck &&
             nMyHD <= (nHD * 2))

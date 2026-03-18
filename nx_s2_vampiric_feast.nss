@@ -73,7 +73,7 @@ void main()
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 			
-			//nHD = GetHitDice(oTarget);
+			//nHD = PS_GetLevel(oTarget);
 			nCurrentHP = GetCurrentHitPoints(oTarget);
 			fDelay = GetDistanceBetweenLocations(lCaster, GetLocation(oTarget))/20;	// Create a delay so that all creatures seem to be hit at the same time.
 			

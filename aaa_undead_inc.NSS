@@ -74,7 +74,7 @@ void PS_Template_LevelAdjustment(object oPC, object oItem)
 	if (PS_GetLevel(oPC) > 30 )
 	{	int nextlvl = 1000;
 		int totalxp = 0;
-		int whatlevel = GetHitDice(oPC) - 1; // decrease level by 1
+		int whatlevel = PS_GetLevel(oPC) - 1; // decrease level by 1
 		// set your level
 		int i=0;
 		for (i = 1; i < whatlevel; i++) 
@@ -510,7 +510,7 @@ void PS_LichFearAura(object oPC, int nSpell)
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
-            if (GetHitDice(oTarget) <= 100)
+            if (PS_GetLevel(oTarget) <= 100)
 			{	if(!MyResistSpell(oPC, oTarget, fDelay))
             	{	//Make a saving throw check
 	            	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
@@ -672,7 +672,7 @@ void PS_DKFearAura(object oPC, int nSpell)
     {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_AURA_FEAR));
-            if (GetHitDice(oTarget) <= 100)
+            if (PS_GetLevel(oTarget) <= 100)
 			{	if(!MyResistSpell(oPC, oTarget, fDelay))
             	{	//Make a saving throw check
 	            	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
@@ -1020,7 +1020,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
 	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
 	int nCasterLevel	= (iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal) * 2;
-	int nCharLevel		= GetHitDice(oPC);
+	int nCharLevel		= PS_GetLevel(oPC);
     int nDuration 		= nCasterLevel;
 	int iChaBonus		= GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	if (iPRCLvl_Mal > 0) iChaBonus += d6(1);

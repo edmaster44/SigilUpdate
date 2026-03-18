@@ -15,7 +15,7 @@ void DoPetrificationNew(int nPower, object oSource, object oTarget, int nSpellID
 void main()
 {
     object oTarget = GetSpellTargetObject();
-    int nHitDice = GetHitDice(OBJECT_SELF);
+    int nHitDice = PS_GetLevel(OBJECT_SELF);
 
 	effect eVis = EffectNWN2SpecialEffectFile("sp_noxious_cone.sef");
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, 2.0);
@@ -29,7 +29,7 @@ void main()
         float fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
         int nSpellID = GetSpellId();
         object oSelf = OBJECT_SELF;
-        DelayCommand(fDelay,  DoPetrificationNew(nHitDice, oSelf, oTarget, nSpellID, 10+GetHitDice(OBJECT_SELF)));
+        DelayCommand(fDelay,  DoPetrificationNew(nHitDice, oSelf, oTarget, nSpellID, 10+PS_GetLevel(OBJECT_SELF)));
 
         //Get next target in spell area
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 18.0, lTargetLocation, TRUE);

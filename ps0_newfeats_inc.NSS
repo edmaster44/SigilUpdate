@@ -71,7 +71,7 @@ void PS_Feat_ControlUndead(object oPC, object oTarget, int nSpell)
 			nClericLevel 	= nClericLevel + nDivineLich;	}
 	
 	int nControlMaxLevel 	= nClericLevel;
-	int nCreatureLevel 		= GetHitDice(oTarget);
+	int nCreatureLevel 		= PS_GetLevel(oTarget);
 	
 	object oAssoc			= GetAssociate(ASSOCIATE_TYPE_DOMINATED, oPC);
 	
@@ -118,7 +118,7 @@ void PS_Feat_ControlUndead(object oPC, object oTarget, int nSpell)
 		//**DEBUG END**
 	
 		DecrementRemainingFeatUses(oPC, FEAT_TURN_UNDEAD);
-    	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && GetHitDice(oTarget) <= nControlMaxLevel)
+    	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && PS_GetLevel(oTarget) <= nControlMaxLevel)
     	{	if (GetIsPC(oTarget) == 0)
 			{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
         		{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
@@ -134,7 +134,7 @@ void PS_Feat_ControlUndead(object oPC, object oTarget, int nSpell)
 
 void PS_Feat_BolsterUndead(object oPC, object oTarget, int nSpell)
 {
-	int nHD 		= GetHitDice(oPC);
+	int nHD 		= PS_GetLevel(oPC);
 	int nHDT 		= nHD / 4;
 	if (nHDT < 1)
 	{	nHDT = 1;	}
@@ -241,7 +241,7 @@ void PS_Feat_PsionicDominate(object oPC, object oTarget, int nSpell)
 void PS_Feat_PsionicBodyAdjustment(object oPC, int nSpell)
 {
     int nLevel 			= GetTotalLevels(oPC, 1) * 2;
-    effect eHeal 		= EffectHeal(d10(1) + nLevel);
+    effect eHeal 		= EffectHeal(d12(1) + nLevel);
     effect eVis 		= EffectVisualEffect(VFX_IMP_HEALING_M);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 

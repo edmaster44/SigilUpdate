@@ -41,6 +41,7 @@
 
 
 struct dSpellData{
+	object oCaster;
 	int nId;
 	int nClass;
 	int nCL;
@@ -53,9 +54,8 @@ struct dSpellData{
 // the spell that creates the AoE, not from within the AoE's scripts. -FlattedFifth
 void StoreSpellDataForAoE(string sVarname, int nId = NULL, int nCL = NULL);
 
-//Retrieve the data saved above and apply it to the aoe object if it's not already. This is
-// ONLY necessary in the AoE on-enter, etc, scripts of cleric domain spells. -FlattedFifth
-struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_INVALID);
+//Retrieve the data saved above and apply it to the aoe object if it's not already. -FlattedFifth
+struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_INVALID, object oAOE = OBJECT_SELF);
 
 // FF_GetSpellSaveDC does not work properly on some cleric domain spells, so this function replaces it.
 // Note that this will NOT work properly within the scripts of an AoE, only during the initial casting,
@@ -184,6 +184,8 @@ int GetIntInRange(int iVal, int iMin, int iMax);
 int GetCappedCasterLevel(int nCap);
 int CountEnemies(location lTarget, float fRadius=RADIUS_SIZE_GARGANTUAN, int nMaxEnemies=100);
 
+
+
 void StoreSpellDataForAoE(string sVarname, int nId = NULL, int nCL = NULL){
 	object oCaster = OBJECT_SELF;
 	if (nId == NULL) nId = GetSpellId();
@@ -193,16 +195,16 @@ void StoreSpellDataForAoE(string sVarname, int nId = NULL, int nCL = NULL){
 	SetLocalInt(oCaster, sVarname + "_cl", nCL);
 }
 
-struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_INVALID){
+struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_INVALID, object oAOE = OBJECT_SELF){
 	
 	struct dSpellData data;
 	//if the data has already been retrieved from the caster and stored
 	// on the aoe object, get it from aoe object
-	if (GetLocalInt(OBJECT_SELF, sVarname + "_retrieved")){
-		data.nId = GetLocalInt(OBJECT_SELF, sVarname + "_id");// spell id
-		data.nClass = GetLocalInt(OBJECT_SELF, sVarname + "_class");// spell of class
-		data.nCL = GetLocalInt(OBJECT_SELF, sVarname + "_cl"); // caster level
-		data.nDC = GetLocalInt(OBJECT_SELF, sVarname + "_dc"); //save dc
+	if (GetLocalInt(oAOE, sVarname + "_retrieved")){
+		data.nId = GetLocalInt(oAOE, sVarname + "_id");// spell id
+		data.nClass = GetLocalInt(oAOE, sVarname + "_class");// spell of class
+		data.nCL = GetLocalInt(oAOE, sVarname + "_cl"); // caster level
+		data.nDC = GetLocalInt(oAOE, sVarname + "_dc"); //save dc
 	//otherwise, get the data from the caster, store it on aoe, and
 	// set the local int on the aoe sVarname + "_retrieved" to true
 	} else {
@@ -211,16 +213,14 @@ struct dSpellData GetSpellDataForAoE(string sVarname, object oCaster = OBJECT_IN
 		data.nClass = GetLocalInt(oCaster, sVarname + "_class");
 		data.nCL = GetLocalInt(oCaster, sVarname + "_cl");
 		data.nDC = FF_GetSpellSaveDC(oCaster, data.nId, data.nClass);
-		SetLocalInt(OBJECT_SELF, sVarname + "_id", data.nId);
-		SetLocalInt(OBJECT_SELF, sVarname + "_class", data.nClass);
-		SetLocalInt(OBJECT_SELF, sVarname + "_cl", data.nCL);
-		SetLocalInt(OBJECT_SELF, sVarname + "_dc", data.nDC);
-		SetLocalInt(OBJECT_SELF, sVarname + "_retrieved", TRUE);
+		SetLocalInt(oAOE, sVarname + "_id", data.nId);
+		SetLocalInt(oAOE, sVarname + "_class", data.nClass);
+		SetLocalInt(oAOE, sVarname + "_cl", data.nCL);
+		SetLocalInt(oAOE, sVarname + "_dc", data.nDC);
+		SetLocalInt(oAOE, sVarname + "_retrieved", TRUE);
 	}
 	return data;
 }
-
-
 
 int FF_GetSpellSaveDC(object oCaster = OBJECT_INVALID, int nId = NULL, int nClass = NULL){
 	if (oCaster == OBJECT_INVALID) oCaster = GetLastSpellCaster();
@@ -284,7 +284,7 @@ int PS_GetHighestSpellCastingBaseClass(object oCaster){
 		nClass == CLASS_TYPE_DRUID || nClass == CLASS_TYPE_SPIRIT_SHAMAN ||
 		nClass == CLASS_TYPE_PALADIN ||nClass == CLASS_TYPE_RANGER || 
 		nClass == CLASS_PSYCHIC_WARRIOR){
-			nClassLevel = GetLevelByClass(nClass, oCaster);
+			nClassLevel = PS_GetCasterLevel(oCaster, nClass);
 			if (nClassLevel > nMax){
 				nMax = nClassLevel;
 				nReturn = nClass;
@@ -2078,7 +2078,7 @@ int GZGetHighestSpellcastingClassLevel(object oCreature)
     else
     {
         //* not a creature ... be unfair and count full HD :)
-        nMax = GetHitDice(oCreature);
+        nMax = PS_GetLevel(oCreature);
     }
 
     return nMax;

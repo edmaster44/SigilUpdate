@@ -17,7 +17,7 @@ void main()
 {
     //Declare major variables
 	object oCaster = GetAreaOfEffectCreator();
-	int nHD = GetHitDice(oCaster);
+	int nHD = PS_GetLevel(oCaster);
     object oTarget = GetEnteringObject();
     effect eVis = EffectVisualEffect( VFX_HIT_SPELL_ENCHANTMENT );
     effect eVis2 = EffectVisualEffect( VFX_DUR_SPELL_DAZE );

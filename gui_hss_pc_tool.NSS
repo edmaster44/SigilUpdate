@@ -492,10 +492,31 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 {
    object oPC = OBJECT_SELF;
    string sPCID = GetPCPlayerName(oPC) + "_" + GetName(oPC);
+   
+   // new code added in on March 17, 2026 by FlattedFifth, who did not have time to untangle this poorly
+   // commented and non-self explanatory code. At some point, for the sake of future devs, this file should
+   // get a bunch of constants that explain the event types clearly, such as if event "1" does FOO, then we
+   // should have const int DO_FOO = 1 and the main switch get those constants instead of the raw integers
+   if (sParamString1 == "release"){
+		switch (nParamInt){
+			case 1: DoReleaseSpells(oPC); break;
+			case 2: ReleaseCalledCreatures(oPC); break;
+			default:{
+				DoReleaseSpells(oPC);
+				ReleaseCalledCreatures(oPC);
+				break;
+			}
+		}
+		return;
+	}
+   
    int nEventType = FloatToInt(fParamFloat);
    int nEventSub = nParamInt;
    int nString1 = StringToInt(sParamString1);
    string sString;
+   
+   
+	
    
 
    //workaround code for the fact that the GUI call to execute the server

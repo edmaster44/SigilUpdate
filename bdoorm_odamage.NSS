@@ -86,7 +86,7 @@ if (iDamage>=iMaxHP || GetLocked(oDoor)==0) {
         DelayCommand(120.0, fResetDoor());
     }
 	
-	if (nExp > 0 && GetHitDice(oPC) <= 5)
+	if (nExp > 0 && PS_GetLevel(oPC) <= 5)
 		PS_GiveXPReward(oPC, nExp);
 }
 //Assigns the values to the below formula.

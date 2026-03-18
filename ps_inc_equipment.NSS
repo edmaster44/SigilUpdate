@@ -314,7 +314,7 @@ void FrightfulPresence(object oPC, int nCHA){
     {
         if (GetIsEnemy(oTARGET, oPC)){
 			if (!MySavingThrow(SAVING_THROW_WILL, oTARGET, nDC, SAVING_THROW_TYPE_FEAR, oPC, 0.1f, 1407)){
-                nHD = GetHitDice(oTARGET);
+                nHD = PS_GetLevel(oTARGET);
                 if (nHD >= 20) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_3, oTARGET, fDUR);
                 else if (nHD >= 5) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_2, oTARGET, fDUR);
                 else ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_1, oTARGET, fDUR);    

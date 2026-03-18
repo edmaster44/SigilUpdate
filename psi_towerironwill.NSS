@@ -17,7 +17,7 @@ void main()
 	
     if (!GetHasSpellEffect(GetSpellId(), oTarget))
 	{
-		int nHD = GetHitDice(oTarget);
+		int nHD = PS_GetLevel(oTarget);
 		int nSR = 20 + nHD;
 		
 		effect eSR = EffectSpellResistanceIncrease(nSR, -1);

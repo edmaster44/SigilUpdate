@@ -920,7 +920,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
         return TRUE;
     }
 
-//    int nHD = GetHitDice(oCaster);
+//    int nHD = PS_GetLevel(oCaster);
 //    int nMinXPForLevel = ((nHD * (nHD - 1)) / 2) * 1000;
 //    int nNewXP = FloatToInt(GetXP(oCaster) - nExperienceCost);
 
@@ -1014,7 +1014,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
         return TRUE;
     }
 
-//    int nHD = GetHitDice(oCaster);
+//    int nHD = PS_GetLevel(oCaster);
 //    int nMinXPForLevel = ((nHD * (nHD - 1)) / 2) * 1000;
 //    int nNewXP = FloatToInt(GetXP(oCaster) - fExperienceCost);
 
@@ -1142,7 +1142,7 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
     }
 
     // more calculations on XP cost
-//    int nHD = GetHitDice(oCaster);
+//    int nHD = PS_GetLevel(oCaster);
 //    int nMinXPForLevel = ((nHD * (nHD - 1)) / 2) * 1000;
 //    int nNewXP = FloatToInt(GetXP(oCaster) - nExperienceCost);
 

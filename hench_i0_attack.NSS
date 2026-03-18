@@ -994,7 +994,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
                 case HENCH_ATTACK_CHECK_SLEEP:
                     nTempResult = GetRacialType(oTestTarget) == RACIAL_TYPE_CONSTRUCT ||
                         GetRacialType(oTestTarget) == RACIAL_TYPE_UNDEAD ||
-                        GetHitDice(oTestTarget) > 5;
+                        PS_GetLevel(oTestTarget) > 5;
                     break;
                 case HENCH_ATTACK_CHECK_BIGBY:
 					if (spellID == SPELL_BIGBYS_INTERPOSING_HAND)
@@ -1066,7 +1066,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 							GetLocalInt(oTestTarget, sHenchPseudoSummon))*/;
 						if (!nTempResult && !bBanish)
 						{
-							currentSaveDC += nCasterLevel - GetHitDice(oTestTarget);
+							currentSaveDC += nCasterLevel - PS_GetLevel(oTestTarget);
 						}	
 					}				
                     break;
@@ -1202,7 +1202,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					}
 					else
 					{
-						int hitDice = GetHitDice(oTestTarget);
+						int hitDice = PS_GetLevel(oTestTarget);
 						if (hitDice <= 4)
 						{
 							currentEffectWeight = 1.00;
@@ -1233,7 +1233,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
                     break;
                 case HENCH_ATTACK_CHECK_CLOUDKILL:				
 					{
-						int hitDice = GetHitDice(oTestTarget);
+						int hitDice = PS_GetLevel(oTestTarget);
 						if (hitDice <= 3)
 						{
 							currentEffectWeight = 1.00;
@@ -1257,7 +1257,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					}
                     break;
                 case HENCH_ATTACK_CHECK_DAZE:
-					nTempResult = (GetHitDice(oTestTarget) > 5) || !GetIsHumanoid(GetRacialType(oTestTarget));
+					nTempResult = (PS_GetLevel(oTestTarget) > 5) || !GetIsHumanoid(GetRacialType(oTestTarget));
                     break;
                 case HENCH_ATTACK_CHECK_TASHAS:
 					nTempResult = GetHasSpellEffect(spellID, oTestTarget);
@@ -1267,7 +1267,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					}
                     break;
                 case HENCH_ATTACK_CHECK_CAUSE_FEAR:
-					nTempResult = GetHitDice(oTestTarget) > 5;
+					nTempResult = PS_GetLevel(oTestTarget) > 5;
                     break;
                 case HENCH_ATTACK_CHECK_PERCENTAGE:
                     currentDamageAmount = currentDamageAmount / 100.0 * IntToFloat(GetCurrentHitPoints(oTestTarget));
@@ -1313,7 +1313,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 //					Jug_Debug(GetName(OBJECT_SELF) + " extra for fire " + IntToString(gsCurrentspInfo.otherID) + " on " + GetName(oTestTarget));
 						currentDamageAmount += GetDamageResistImmunityAdjustment(oTestTarget, 7.0, DAMAGE_TYPE_FIRE, 1);					
 					}						
-					else if ((spellID == SPELL_I_FRIGHTFUL_BLAST) && (GetHitDice(oTestTarget) > 5))
+					else if ((spellID == SPELL_I_FRIGHTFUL_BLAST) && (PS_GetLevel(oTestTarget) > 5))
 					{					
 						currentEffectWeight = 0.0;
 					}
@@ -1362,7 +1362,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					break;
 				case HENCH_ATTACK_CHECK_COLOR_SPRAY:
 					{
-						int hitDice = GetHitDice(oTestTarget);
+						int hitDice = PS_GetLevel(oTestTarget);
 						if (hitDice < 2)
 						{
 							nTempResult = GetIsImmune(oTestTarget, IMMUNITY_TYPE_SLEEP, OBJECT_SELF);
@@ -1424,7 +1424,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 					}
 					break;
 				case HENCH_ATTACK_CHECK_FIGHTER:
-					nTempResult = GetBaseAttackBonus(oTestTarget) < (3 * GetHitDice(oTestTarget) / 4);
+					nTempResult = GetBaseAttackBonus(oTestTarget) < (3 * PS_GetLevel(oTestTarget) / 4);
 					if (!nTempResult)
 					{
 						if (GetAbilityScore(oTestTarget, ABILITY_STRENGTH) < GetAbilityScore(oTestTarget, ABILITY_DEXTERITY))
@@ -1453,7 +1453,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 							currentFirstSaveType = 0;
 							immunity1 = IMMUNITY_TYPE_DAZED;
 							immunityMind = TRUE;
-							int hitDiceDiff = GetHitDice(OBJECT_SELF) - GetHitDice(oTestTarget);
+							int hitDiceDiff = PS_GetLevel(OBJECT_SELF) - PS_GetLevel(oTestTarget);
 							if (hitDiceDiff < 0)
 							{
 								nTempResult = TRUE;
@@ -2273,7 +2273,7 @@ void HenchSpellAttackSpecial()
 			case 1133:		// Glass Doppelganger
 				if (!GetIsObjectValid(GetAssociate(ASSOCIATE_TYPE_SUMMONED)))
 				{				
-					int nTargetHD = GetHitDice(oTestTarget);
+					int nTargetHD = PS_GetLevel(oTestTarget);
 					if (spellID == 1132)
 					{
 						if (nTargetHD > (2 * nCasterLevel))
@@ -2454,7 +2454,7 @@ float HenchMeleeAttack(object oTarget, int iPosEffectsOnSelf, int bImmobileNoRan
 	int bHasted = iPosEffectsOnSelf & HENCH_EFFECT_TYPE_HASTE;
 	int bBABAbove20LevelAdjust; // according to notes from expansion, more than four attacks per round can happen at epic levels
 	/*
-	int bBABAbove20LevelAdjust = GetHitDice(OBJECT_SELF);
+	int bBABAbove20LevelAdjust = PS_GetLevel(OBJECT_SELF);
 	if (bBABAbove20LevelAdjust > 21)
 	{
 		bBABAbove20LevelAdjust -= 20;
@@ -2605,7 +2605,7 @@ void HenchCheckTurnUndead()
                 ((nRacial == RACIAL_TYPE_OUTSIDER) && (nOutsider > 0)))
 			{
 //				Jug_Debug(GetName(OBJECT_SELF) + " found undead " + GetName(oTarget) + " racial " + IntToString(nRacial));
-				int nHD = GetHitDice(oTarget) + GetTurnResistanceHD(oTarget);
+				int nHD = PS_GetLevel(oTarget) + GetTurnResistanceHD(oTarget);
 				if ((nHD <= nTurnLevel) && (nHD <= (nTurnHD - nHDCount)))
 				{
 //					Jug_Debug(GetName(OBJECT_SELF) + " adding found undead " + GetName(oTarget) + " racial " + IntToString(nRacial));

@@ -14,6 +14,7 @@
 //::	Default to fire elemental
 
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 void main()
 {
     //Declare major variables
@@ -23,7 +24,7 @@ void main()
 	eVis = SupernaturalEffect(eVis);	// AFW-OEI 12/07/2006: Make it so you can't dispel the visual effect, which was dispelling wildshape.
     effect ePoly;
     int nPoly;
-	int nLevel = GetHitDice(OBJECT_SELF);
+	int nLevel = PS_GetLevel(OBJECT_SELF);
     int nDuration = nLevel; //GetCasterLevel(OBJECT_SELF);
     int bElder = FALSE;
     

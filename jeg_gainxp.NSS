@@ -1,3 +1,5 @@
+#include "ps_inc_functions"
+
 void main(int whatlevel)
 {
     object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
@@ -11,7 +13,7 @@ void main(int whatlevel)
 	sECL = Get2DAString("racialsubtypes", "ECL", nRace);
 	nECL = StringToInt(sECL);
 		
-	if (whatlevel == 0) whatlevel = GetHitDice(oPC) + 1; // increase level by 1
+	if (whatlevel == 0) whatlevel = PS_GetLevel(oPC) + 1; // increase level by 1
 	if (whatlevel == 1) { // make level 1
 		SetXP(oPC, 0);
 		return;

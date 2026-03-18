@@ -77,7 +77,7 @@ void main()
 
             if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
             {
-                nCurHD = GetHitDice(oTarget);
+                nCurHD = PS_GetLevel(oTarget);
                 if (nCurHD <= nHDLeft )
                 {
                     if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
@@ -86,9 +86,9 @@ void main()
                         if (GetLocalInt(oTarget,"X2_EBLIGHT_I_AM_DEAD") == 0 && !GetPlotFlag(oTarget) && !GetIsDead(oTarget))
                         {
                             // store the creature with the lowest HD
-                            if (GetHitDice(oTarget) <= nLow)
+                            if (PS_GetLevel(oTarget) <= nLow)
                             {
-                                nLow = GetHitDice(oTarget);
+                                nLow = PS_GetLevel(oTarget);
                                 oLow = oTarget;
                             }
                         }

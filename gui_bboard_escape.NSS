@@ -27,7 +27,7 @@ void main (int N1, int N2, string sVar) {
 	int nMax = GetLocalInt(oBoard, "quest_max");
 	int n = 0;
 	int assigned = 1;
-	int nPCLevel = GetHitDice(oPC);
+	int nPCLevel = PS_GetLevel(oPC);
 	
 	for (n = 1; n <= nMax; n++) {
 	

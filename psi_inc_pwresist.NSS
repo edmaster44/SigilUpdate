@@ -37,30 +37,30 @@ PRCGetPowerResistance(object oTarget, object oCaster)
     //racial pack SR
     int iRacialPowerRes = 0;
     if(GetHasFeat(FEAT_SPELL27, oTarget))
-        iRacialPowerRes += 27+GetHitDice(oTarget);
+        iRacialPowerRes += 27+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL25, oTarget))
-        iRacialPowerRes += 25+GetHitDice(oTarget);
+        iRacialPowerRes += 25+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL18, oTarget))
-        iRacialPowerRes += 18+GetHitDice(oTarget);
+        iRacialPowerRes += 18+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL15, oTarget))
-        iRacialPowerRes += 15+GetHitDice(oTarget);
+        iRacialPowerRes += 15+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL14, oTarget))
-        iRacialPowerRes += 14+GetHitDice(oTarget);
+        iRacialPowerRes += 14+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL13, oTarget))
-        iRacialPowerRes += 13+GetHitDice(oTarget);
+        iRacialPowerRes += 13+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL11, oTarget))
-        iRacialPowerRes += 11+GetHitDice(oTarget);
+        iRacialPowerRes += 11+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL10, oTarget))
-        iRacialPowerRes += 10+GetHitDice(oTarget);
+        iRacialPowerRes += 10+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL5, oTarget))
-        iRacialPowerRes += 5+GetHitDice(oTarget);
+        iRacialPowerRes += 5+PS_GetLevel(oTarget);
     if(iRacialPowerRes > iPowerRes)
         iPowerRes = iRacialPowerRes;
 
     // Exalted Companion, can also be used for Celestial Template
     if (GetLocalInt(oTarget, "CelestialTemplate"))
     {
-        int nHD = GetHitDice(oTarget);
+        int nHD = PS_GetLevel(oTarget);
         int nSR = nHD * 2;
         if (nSR > 25) nSR = 25;
         if (nSR > iPowerRes) iPowerRes = nSR;

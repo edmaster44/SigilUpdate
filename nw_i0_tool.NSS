@@ -93,7 +93,7 @@ int AutoDC(int DC, int nSkill, object oTarget)
 	Moderate = 3/Lvl + Lvl ...rounded up
 	Difficult = Lvl * 1.5 + 6 ...rounded up
 	*/
-    int nLevel = GetHitDice(OBJECT_SELF);
+    int nLevel = PS_GetLevel(OBJECT_SELF);
     int nTest = 0;
 
     // * July 2

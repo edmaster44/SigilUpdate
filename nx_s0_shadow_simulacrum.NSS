@@ -43,7 +43,7 @@ void main()
 
 	object oTarget = GetSpellTargetObject();
 	object oCaster = OBJECT_SELF;
-	int nTargetHD = GetHitDice(oTarget);
+	int nTargetHD = PS_GetLevel(oTarget);
 	int nCasterLevel = GetCasterLevel(OBJECT_SELF);
 	
 	//FIX: double, not half

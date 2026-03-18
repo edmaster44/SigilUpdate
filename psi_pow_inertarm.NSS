@@ -53,26 +53,30 @@ void main()
 
     object oManifester = OBJECT_SELF;
     object oTarget     = GetSpellTargetObject();
-    struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
-                              GetSpellId(),
-                              METAPSIONIC_AUGMENT | METAPSIONIC_EXTEND
-                              );
+	int nId = GetSpellId();
+	
+    struct manifestation manif = EvaluateManifestationNew(oManifester, oTarget, nId, 
+			METAPSIONIC_AUGMENT | METAPSIONIC_EXTEND );
 
-    if(manif.bCanManifest)
-    {
-        int nBonus      = 4;
-		if (GetSubRace(oManifester) == 57 || GetSubRace(oManifester) == 58)
-		{
-			nBonus = 5;
-		}
-		if (manif.bAugment)
-			nBonus += 1;
-        effect eLink    =                          EffectACIncrease(nBonus, AC_ARMOUR_ENCHANTMENT_BONUS);
-               eLink    = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_GLOBE_MINOR));
-        float fDuration = HoursToSeconds(manif.nManifesterLevel);
-        if(manif.bExtend) fDuration *= 2;
-
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-    }
+    if(!manif.bCanManifest) return;
+	
+	int nBonus = 6;
+	
+	effect eLink = EffectACIncrease(nBonus, AC_ARMOUR_ENCHANTMENT_BONUS);
+	eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_GLOBE_MINOR), eLink);
+	
+	int bIsGith = (GetSubRace(oManifester) == 57 || GetSubRace(oManifester) == 58);
+	
+	if ((manif.bAugment && !bIsGith) || (!manif.bAugment && bIsGith)){
+		eLink = EffectLinkEffects(EffectConcealment(20), eLink);
+	} else if (manif.bAugment && bIsGith){
+		eLink = EffectLinkEffects(EffectConcealment(25), eLink);
+	}
+	
+	float fDuration = HoursToSeconds(manif.nManifesterLevel);
+	if(manif.bExtend) fDuration *= 2;
+	
+	SignalEvent(oTarget, EventSpellCastAt(oManifester, nId, FALSE));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+    
 }

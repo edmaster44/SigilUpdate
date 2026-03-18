@@ -10,7 +10,7 @@ void main()
 {
     object oTarget = GetEnteringObject();	
 	object oCreator = GetAreaOfEffectCreator();
-	int oCreatorLevels = GetHitDice(oCreator);
+	int oCreatorLevels = PS_GetLevel(oCreator);
 	effect eConceal;
 	
 	if (oTarget == oCreator)

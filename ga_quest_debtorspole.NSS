@@ -4,9 +4,23 @@
 //Sets up the variables and pretty text
 //3-12-20, Mimi Fearthegn
 #include "ps_inc_flavortext"
+#include "ps_inc_functions"
 
+// ever since jester's palace was put into place, the npcs for this quest have not spawned in
+// lady's ward. I'm too busy to spend time trying to figure out why, so for now lets just
+// remove lady's ward from possible locations.
 string GetLastSeenAreaTag() {
 
+	int nRand = Random(3)+1;
+	switch(nRand) {
+		case 1: return "ps_area_s_cw_clerksward";
+		case 2: return "ps_area_s_hw_hiveward";
+		case 3: return "ps_area_s_lo_lowerward";
+	}
+	
+	return "ps_area_s_cw_clerksward";
+	// original:
+	/* 
 	int nRand = Random(4)+1;
 	switch(nRand) {
 		case 1: return "ps_area_s_cw_clerksward";
@@ -16,6 +30,7 @@ string GetLastSeenAreaTag() {
 	}
 	
 	return "ps_area_s_cw_clerksward";
+	*/
 
 }
 
@@ -57,7 +72,7 @@ string GetMoneyOwedTo() {
 
 int GetGoldReward(object oPC) {
 
-	int nHD = GetHitDice(oPC)-d6();
+	int nHD = PS_GetLevel(oPC)-d6();
 	if (nHD < 3)
 		nHD = 3;
 		

@@ -72,7 +72,7 @@ void main() {
                 if (!bAlreadyAffected)
                 {
                      //Get the current HD of the target creature
-                     nCurrentHD = GetHitDice(oTarget);
+                     nCurrentHD = PS_GetLevel(oTarget);
                      //Check to see if the HD are lower than the current Lowest HD stored and that the
                      //HD of the monster are lower than the number of HD left to use up.
                      if(nCurrentHD < nLow && nCurrentHD <= nHD && nCurrentHD < nMax)
@@ -119,7 +119,7 @@ void main() {
         DelayCommand(0.5, SetLocalInt(oLowest, sSpellLocal, FALSE));
         DelayCommand(0.5, DeleteLocalInt(oLowest, sSpellLocal));
         //Remove the HD of the creature from the total
-        nHD = nHD - GetHitDice(oLowest);
+        nHD = nHD - PS_GetLevel(oLowest);
         oLowest = OBJECT_INVALID;
     }
 }

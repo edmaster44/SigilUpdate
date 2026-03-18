@@ -75,7 +75,7 @@ int GetAverageSkillPoints(object oPC) {
 	}
 	
 	int intMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
 	
 	int total = runningTotal+(intMod*nLevel);
 	total = total/nLevel;
@@ -86,7 +86,7 @@ int GetAverageSkillPoints(object oPC) {
 float GetAverageBABPerLevel(object oPC) {
 
 	float nBAB = IntToFloat(GetBaseAttackBonus(oPC));
-	float nLevel = IntToFloat(GetHitDice(oPC));
+	float nLevel = IntToFloat(PS_GetLevel(oPC));
 	return (nBAB/nLevel);
 
 }
@@ -182,7 +182,7 @@ nSkill = SAVING_THROW_* constant
 nDifficulty = TRAINING_DIFFICULTY_* constant
 */
 int GetXPForSaveTrainingQuest(object oPC, int nSave, int nDifficulty) {
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
 	int nScore = GetFortitudeSavingThrow(oPC);
 	if (nSave == SAVING_THROW_REFLEX)
 		nScore = GetReflexSavingThrow(oPC);
@@ -214,7 +214,7 @@ nSkill = ABILITY_* constant
 nDifficulty = TRAINING_DIFFICULTY_* constant
 */
 int GetXPForAbilityTrainingQuest(object oPC, int nAbility, int nDifficulty) {
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
 	int nScore = GetAbilityModifier(nAbility, oPC);
 	if (nScore > nLevel)
 		nScore = nLevel;
@@ -250,7 +250,7 @@ nDifficulty = TRAINING_DIFFICULTY_* constant
 int GetXPForSkillTrainingQuest(object oPC, int nSkill, int nDifficulty) {
 
 	//get level, according to skill ranks
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
 	int nRank = GetSkillRank(nSkill, oPC, TRUE);
 	if (nRank <= 0)
 		nRank = 1;
@@ -291,7 +291,7 @@ for completing a training task */
 void GiveTrainingReward(object oPC, int nDifficulty) {
 
 	int nBaseGold = 10;
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
 	
 	float nModifier = 1.0f;
 	nModifier = 1.0f;
@@ -413,7 +413,7 @@ nSaveType = Save Type constant
 oSaveVersus = the thing "attacking"*/
 int GetIsTrainingSavingThrowSuccessful(object oPC, int nSave, int nDC, int nSaveType, object oSaveVersus) {
 
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
 	int nScore = 0;
 	int nResult = 0;
 	if (nSave == SAVING_THROW_REFLEX) {

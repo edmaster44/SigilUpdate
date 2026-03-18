@@ -520,7 +520,7 @@ int CheckHasEnoughCasterLevels(int nIndex, object oPC, string sTable)
 	int nRequiredCasterLevel = Get2DAInt(sTable, "PREREQ_CASTER_LEVEL", nIndex);
 	int bHasLevels;
 	
-	int nCasterLevel = GetHitDice(oPC);
+	int nCasterLevel = PS_GetLevel(oPC);
 	
 	//SpeakString("casterlevel " + IntToString(nCasterLevel),TALKVOLUME_SHOUT);
 	//SpeakString("needed " + IntToString(nRequiredCasterLevel),TALKVOLUME_SHOUT);

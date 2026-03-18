@@ -1152,7 +1152,7 @@ void LevelHenchmanUpTo(object oHenchman, int nLevel, int nClass2=CLASS_TYPE_INVA
     int nPackageToUse = nPackageClass1;
 
 
-    if ( !GetIsObjectValid(oHenchman) || GetHitDice(oHenchman) >= nLevel)
+    if ( !GetIsObjectValid(oHenchman) || PS_GetLevel(oHenchman) >= nLevel)
         return;
 
     // * she has 3 rogue levels, decrement nLevel by this
@@ -1286,7 +1286,7 @@ void LevelUpXP1Henchman(object oPC)
             if (GetLocalInt(oAssociate, "X2_JUST_A_FOLLOWER") == FALSE)
             {
                 int nResult;
-                int nLevel = GetHitDice(oPC);
+                int nLevel = PS_GetLevel(oPC);
                 string sTag = GetStringLowerCase(GetTag(oAssociate));
 
 
@@ -1335,7 +1335,7 @@ void LevelUpXP1Henchman(object oPC)
                     // After one level of wizard
                     // she will take one level of rogue.
 
-                    if (GetHitDice(oAssociate) <= 6)
+                    if (PS_GetLevel(oAssociate) <= 6)
                     {
                         LevelHenchmanUpTo(oAssociate, 12, CLASS_TYPE_ROGUE, 3, 101, 8);
                         if (nLevel >= 14)

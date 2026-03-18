@@ -8,11 +8,10 @@
 // MDiekmann 4/9/07 using GetFirst and NextFactionMember() instead of GetFirst and NextPC(), changed nAllPCs to bAllPartyMembers
 #include "ps_inc_financial"
 
-void main(int nGP, int bAllPartyMembers = 0){
-	if (nGP < 0) return;
+void main(int nGP, int bAllPartyMembers){
     object oPC = GetPCSpeaker();
 	if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
-    if (bAllPartyMembers == 0) PS_GiveGoldToCreature(oPC, nGP);
+    if (!bAllPartyMembers) PS_GiveGoldToCreature(oPC, nGP);
     else
     {
         object oTarg = GetFirstFactionMember(oPC);

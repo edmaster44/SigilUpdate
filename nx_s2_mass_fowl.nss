@@ -64,7 +64,7 @@ void main()
 		    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
 		
             //Get the distance between the explosion and the target to calculate delay
-			//nHD = GetHitDice(oTarget);
+			//nHD = PS_GetLevel(oTarget);
 			nCreatureSize = GetCreatureSize(oTarget);	
             fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
 			

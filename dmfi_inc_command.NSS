@@ -497,7 +497,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
                 if (bNumber)
                     DMFI_RemoveUber(oPC, oTarget, sParam1);
 				else
-					DMFI_RemoveUber(oPC, oTarget, IntToString(GetHitDice(oTarget)));	
+					DMFI_RemoveUber(oPC, oTarget, IntToString(PS_GetLevel(oTarget)));	
             }
             else
                 SendText(oPC, TXT_CREATURE, FALSE, COLOR_RED);

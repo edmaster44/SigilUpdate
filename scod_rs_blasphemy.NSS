@@ -37,7 +37,7 @@ void main()
     // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
-	if (GetHitDice(OBJECT_SELF) < 11)
+	if (PS_GetLevel(OBJECT_SELF) < 11)
 	{
 		SendMessageToPC(OBJECT_SELF, "You cannot yet use this ability.");
 	}
@@ -53,7 +53,7 @@ void main()
 		
 		if (GetSpellId() == 1652)
 		{	// If using the racial version, use total HD for caster level.
-			nCasterLevel = GetHitDice(OBJECT_SELF);
+			nCasterLevel = PS_GetLevel(OBJECT_SELF);
 		}
 		
         effect eBlind = EffectNewBlindness();
@@ -116,7 +116,7 @@ void main()
                     else
                     {
                         //Check the HD of the creature
-                        nHD = GetHitDice(oTarget);
+                        nHD = PS_GetLevel(oTarget);
                         //Apply the appropriate effects based on HD
                         if (nHD >= 12 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                         {

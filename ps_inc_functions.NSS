@@ -209,7 +209,7 @@ int GetRangerAndPRCClassLevels(object oPC);
 
 int PS_IsEquippableCW(object oItem);
 
-int PS_GetCasterLevel(object oPC, int nClass = NULL);
+int PS_GetCasterLevel(object oPC, int nPassedClass = NULL);
 
 //Safely retrieves the Icon Picture
 int GetItemIconSafe(object oItem);
@@ -227,6 +227,11 @@ int MonkUnarmedDamage(object oPC, int iMonk);
 int IncreasedUnarmedDamageBonus(object oPC, object oItem);
 
 int PS_GetEssenceECL(object oPC);
+
+//returns what the character's level would be if they didn't "hold on to lvl while grinding", 
+// an exploit wherein a player deliberately refuses to level up so that they can grind away
+// at the xp returns of a lower level. An exploit I particularly hate. -FlattedFifth
+int PS_GetLevelByXP(object oPC);
 
 int PS_GetLevel(object oPC);
 
@@ -561,7 +566,7 @@ void PS_TrimXP(object oPC){
         sAREA == "ps_area_dmlair" || sAREA == "jeg_preparation_room")
         return;
         
-    int nHD = GetHitDice(oPC);
+    int nHD = PS_GetLevel(oPC);
 
     int nXpToNext = PS_GetXPForLevel(nHD + 1);
     int nXP = GetXP(oPC);
@@ -569,7 +574,7 @@ void PS_TrimXP(object oPC){
 }
 
 void PS_lose_one_level(object oPC){ 
-    int nLvl = GetHitDice(oPC);
+    int nLvl = PS_GetLevel(oPC);
     if (nLvl == 1) return;
     
     int nXP = GetXP(oPC);
@@ -625,7 +630,6 @@ int XPpoolAdjust(int nXP){
 // Called from PS_GiveXPReward().
 int GetECLXP(int nXP, int nLevel, int nECL){
     
-    
     if (nECL < 0) nECL = 0;
     if (nECL > 20) nECL = 20;
     if (nXP < 1) nXP = 1;
@@ -652,6 +656,29 @@ int GetECLXP(int nXP, int nLevel, int nECL){
     if (nAppliedXP < 1 && nXP > 0) nAppliedXP = 1;
     return nAppliedXP;
 }
+
+// This version is the real math that was not nerfed by Jelkia
+// Returns a true and accurate representation of what an ECL xp award should be for any ecl
+// with a curve that reduces ecl "tax" until their level reaches their ECL
+/*
+int GetAdjustedXPForECL(int nXP, int nLevel, int nECL)
+{
+    if (nXP <= 0) return 0;
+	if (nLevel <= nECL) nECL = nLevel - 1;
+    if (nECL <= 0) return nXP;
+	
+    // XP for effective level 30 + nECL
+    float fEffectiveLevel = 30.0 + IntToFloat(nECL);
+    float fECLXP = 1000.0 * nEffectiveLevel * (nEffectiveLevel - 1.0) / 2;
+    
+    // Tax factor = base lvl 30 xp / xp to reach effective level of 30 + ecl
+	float fTax = 435000.0 / fECLXP;
+	int nAdjusted = PS_RoundToInt(IntToFloat(nXP) * fTax);
+
+	return (nAdjusted > 1) ? nAdjusted : 1;
+}
+
+*/
 
 
 int PS_RoundToInt(float fNum, string RoundTo = "nearest"){  
@@ -705,7 +732,7 @@ void PS_SetEclCraftBonus(object oPC, int nXP, int nSkill)
     object oEss = PS_GetEssence(oPC);
     if (GetIsObjectValid(oEss))
     {
-        int nHD = GetHitDice(oPC);
+        int nHD = PS_GetLevel(oPC);
         int nEcl = PS_GetEssenceECL(oPC);
         // bail if not an ecl char or if the ecl char has not yet reached max level
         if (nEcl < 1 || nHD + nEcl < 30) return;
@@ -1067,31 +1094,19 @@ int GetRacialBonus(object oPC, int category)
 //Counts Spellcasting Progression from bsplvl file
 int GetClassBspLevel(object oPC, int nClass)
 {
-    //Counts spellcasting progression from bsplvl file.
     string BspLevelTable = Get2DAString("classes","BonusSpellCasterLevelTable",nClass);
+
+    int iMax = GetLevelByClass(nClass, oPC);
+	int iBSP;
+    int iTotal = 0;
+	int iLoop = 0;
     
-//  SendMessageToPC(oPC,"Debug BSP level table name "+BspLevelTable);   
-    
-    int iMax = GetLevelByClass(nClass,oPC);
-    int iTotal; int iLoop; int iBSP;
-    
-    if(iMax == 1) iTotal = StringToInt(Get2DAString(BspLevelTable,"GrantsBonusSpellcasterLevel",1));    
-    else
-    {
-        while(iMax > iLoop)
-        {
-            iBSP = StringToInt(Get2DAString(BspLevelTable,"GrantsBonusSpellcasterLevel",iLoop));
-            if(iBSP == 1)
-            {
-                iTotal++;
-            //  SendMessageToPC(oPC,"BspLevel "+IntToString(iTotal)+" gained at level "+IntToString(iLoop));    
-            }
-            iLoop++;
-        }
-    }
-    
-//  SendMessageToPC(oPC,"Debug cleric: BSPlevel progression of class ID "+IntToString(nClass)+" came to "+IntToString(iTotal)+".");
-    
+	while(iMax > iLoop)
+	{
+		iBSP = StringToInt(Get2DAString(BspLevelTable,"GrantsBonusSpellcasterLevel",iLoop));
+		if(iBSP == 1) iTotal++;
+		iLoop++;
+	}
     return iTotal;
 }
 
@@ -1488,10 +1503,12 @@ int GetWarlockCasterLevelBase(object oPC) {
         else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    int nHD = GetHitDice(oPC);
-    if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
-    if (iTotal > nHD)
-    iTotal = nHD;
+    int nHD = PS_GetLevel(oPC);
+    if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
     
     return iTotal;
 }
@@ -1514,10 +1531,6 @@ int GetWarlockCasterLevel(object oPC)
     
     int nDice;
     int nCount; 
-    
-    //1411-1419 1-9
-    //1948-1952 10-14
-    if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)) iTotal = iTotal +4;
     
     if (iTotal >= 0)
     {
@@ -1609,7 +1622,11 @@ int GetSpiritShamanTRUECasterlevel(object oPC)
         else if (GetHasSpiritShamanProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(2003,oPC,TRUE)) iTotal = iTotal + 4;
+    if(GetHasFeat(2003,oPC,TRUE)){
+		iTotal += 4;
+		int iLevel = PS_GetLevel(oPC);
+		if (iTotal > iLevel) iTotal = iLevel;
+	}
     if (iTotal >= 1)
     {
     if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
@@ -1732,8 +1749,11 @@ int GetPaladinTRUECasterlevel(object oPC)
         else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)) iTotal = iTotal + 4;
-    
+    if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)){
+		iTotal += 4;
+		int iLevel = PS_GetLevel(oPC);
+		if (iTotal > iLevel) iTotal = iLevel;
+	}
     
         if (iTotal >= 0)
     {
@@ -1852,8 +1872,11 @@ int GetRangerTRUECasterlevel(object oPC)
         else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)) iTotal = iTotal + 4;
-    
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
     
     return iTotal;
 }
@@ -1931,8 +1954,11 @@ int GetWizardTRUECasterlevel(object oPC)
         else if (GetHasWizardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_WIZARD,oPC,TRUE)) iTotal = iTotal + 4;
-    
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_WIZARD,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
     int iRedWizard = GetLevelByClass(53,oPC);
     if(iRedWizard > 0)
     {
@@ -2014,8 +2040,11 @@ int GetSorcererTRUECasterlevel(object oPC)
         else if (GetHasSorcererProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE)) iTotal = iTotal + 4;
-    
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
 
     return iTotal;
 }
@@ -2137,8 +2166,11 @@ int GetBardTRUECasterlevel(object oPC)
         else if (GetHasBardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE)) iTotal = iTotal + 4;
-    
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
     return iTotal;
 }
 
@@ -2241,8 +2273,11 @@ int GetDruidTRUECasterlevel(object oPC)
         else if (GetHasDruidProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)) iTotal = iTotal + 4;
-    
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
     return iTotal;
 }
 
@@ -2330,10 +2365,11 @@ int GetFavoredSoulAndPRCClassLevels(object oPC)
 
 int GetFavoredSoulTRUECasterlevel(object oPC)
 {
-    int iSlotNumber; int iClass;
-    int iTotal; int iTrue;
-    
-    if(GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) == 0) return 0;    
+	if(GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) == 0) return 0;   
+	
+    int iSlotNumber; int iClass; int iTrue;
+	int iTotal = 0;
+     
     
     for (iSlotNumber = 1; iSlotNumber <= 4; iSlotNumber++) 
     {
@@ -2341,34 +2377,33 @@ int GetFavoredSoulTRUECasterlevel(object oPC)
         
         if ( iClass == 255 ) break;
             
-        if(iClass == CLASS_TYPE_FAVORED_SOUL) iTotal = iTotal + GetLevelByClass(iClass,oPC);
-        else if (GetHasFavoredSoulProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
+        if(iClass == CLASS_TYPE_FAVORED_SOUL) iTotal += GetLevelByClass(iClass,oPC);
+        else if (GetHasFavoredSoulProgression(oPC,iClass)) iTotal += GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(2068,oPC,TRUE)) iTotal = iTotal + 4;
-        if (iTotal >= 1)
-    {
-    if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
-        FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+    if (GetHasFeat(2068,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
     }
-    if (iTotal >= 3)
-    {
-    if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
-        FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
+	
+    if (iTotal >= 1){
+		if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_I,oPC,TRUE))
+			FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_I,FALSE,FALSE,FALSE);
+	}
+    if (iTotal >= 3){
+		if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_II,oPC,TRUE))
+			FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_II,FALSE,FALSE,FALSE);
     }
-    
-    if (iTotal >= 6)
-    {
-    if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
-        FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
+    if (iTotal >= 6){
+		if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_III,oPC,TRUE))
+			FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_III,FALSE,FALSE,FALSE);
     }
-        if (iTotal >= 9)
-    {
-    if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
-        FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
+    if (iTotal >= 9){
+		if (!GetHasFeat(FEAT_SPELL_SORCFAVSHAMAN_IV,oPC,TRUE))
+			FeatAdd(oPC,FEAT_SPELL_SORCFAVSHAMAN_IV,FALSE,FALSE,FALSE);
     }
-    
-    
+
     return iTotal;
 }
 
@@ -2508,7 +2543,11 @@ int GetClericTRUECasterlevel(object oPC)
         else if (GetHasClericProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE)) iTotal = iTotal + 4;
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE)){
+		iTotal += 4;
+		int nLevel = PS_GetLevel(oPC);
+		if (iTotal > nLevel) iTotal = nLevel;
+    }
     if (iTotal >= 0)
     {
     if (!GetHasFeat(FEAT_SPELL_CLERDRU_I,oPC,TRUE))
@@ -2619,10 +2658,12 @@ int PS_GetCasterLevel(object oPC, int nPassedClass = NULL)
     else if (iClass == CLASS_TYPE_SORCERER)iLevel = GetSorcererTRUECasterlevel(oPC);
     else if (iClass == CLASS_TYPE_BARD)iLevel =GetBardTRUECasterlevel(oPC);
     else if (iClass == CLASS_TYPE_DRUID)iLevel = GetDruidTRUECasterlevel(oPC);
-    else if (iClass == CLASS_TYPE_FAVORED_SOUL)iLevel =GetFavoredSoulTRUECasterlevel(oPC);
+    else if (iClass == CLASS_TYPE_FAVORED_SOUL)iLevel = GetFavoredSoulTRUECasterlevel(oPC);
     else if (iClass == CLASS_TYPE_WARLOCK)iLevel = GetWarlockCasterLevelBase(oPC);
     else if (iClass == CLASS_TYPE_CLERIC)iLevel = GetClericTRUECasterlevel(oPC);
-
+	else if (iClass == CLASS_TYPE_PSION)iLevel = PsionLevels(oPC, FALSE);
+	else if (iClass == CLASS_PSYCHIC_WARRIOR)iLevel = PsyWarLevels(oPC, FALSE);
+	
     if(iCasterLevelTrue > iLevel && nPassedClass == NULL)
         iLevel = iCasterLevelTrue;
 
@@ -2697,11 +2738,47 @@ string PS_GetScryStatus(object oPC)
     return "";
 }
 
-
-
+int PS_GetLevelByXP(object oPC){
+	int nKXP = GetXP(oPC) / 1000; // get thousands of xp
+	if (nKXP >= 435) return 30;
+	if (nKXP < 435 && nKXP >= 406) return 29;
+	if (nKXP < 406 && nKXP >= 378) return 28;
+	if (nKXP < 378 && nKXP >= 351) return 27;
+	if (nKXP < 351 && nKXP >= 325) return 26;
+	if (nKXP < 325 && nKXP >= 300) return 25;
+	if (nKXP < 300 && nKXP >= 276) return 24;
+	if (nKXP < 276 && nKXP >= 253) return 23;
+	if (nKXP < 253 && nKXP >= 231) return 22;
+	if (nKXP < 231 && nKXP >= 210) return 21;
+	if (nKXP < 210 && nKXP >= 190) return 20;
+	if (nKXP < 190 && nKXP >= 171) return 19;
+	if (nKXP < 171 && nKXP >= 153) return 18;
+	if (nKXP < 153 && nKXP >= 136) return 17;
+	if (nKXP < 136 && nKXP >= 120) return 16;
+	if (nKXP < 120 && nKXP >= 105) return 15;
+	if (nKXP < 105 && nKXP >= 91) return 14;
+	if (nKXP < 91 && nKXP >= 78) return 13;
+	if (nKXP < 78 && nKXP >= 66) return 12;
+	if (nKXP < 66 && nKXP >= 55) return 11;
+	if (nKXP < 55 && nKXP >= 45) return 10;
+	if (nKXP < 45 && nKXP >= 36) return 9;
+	if (nKXP < 36 && nKXP >= 28) return 8;
+	if (nKXP < 28 && nKXP >= 21) return 7;
+	if (nKXP < 21 && nKXP >= 15) return 6;
+	if (nKXP < 15 && nKXP >= 10) return 5;
+	if (nKXP < 10 && nKXP >= 6) return 4;
+	if (nKXP < 6 && nKXP >= 3) return 3;
+	if (nKXP < 3 && nKXP >= 1) return 2;
+	return 1;
+}
 int PS_GetLevel(object oPC){
 //  ***New version by Clangeddin**  
-    int iHD     = GetHitDice(oPC);
+  //  int iHD     = GetHitDice(oPC);
+  // ***New version by FlattedFifth**
+	int iHD;
+	if (GetIsPC(oPC)) iHD = PS_GetLevelByXP(oPC);
+	else return GetHitDice(oPC);
+	
     if (ALLOW_ECL_LEVEL_30) return iHD;
     int iLA     = PS_GetEssenceECL(oPC);
     if (iHD <= iLA)
@@ -4311,7 +4388,7 @@ void PS_TintFixer(object PCObject)
 
 void PS_PullAggro(object oPC, object oTarget)
 {
-    int nDC = GetHitDice(oPC) + GetAbilityBonuses(oPC, ABILITY_CHARISMA);
+    int nDC = PS_GetLevel(oPC) + GetAbilityBonuses(oPC, ABILITY_CHARISMA);
 
     if (GetIsEnemy(oTarget, oPC))
     {   if (WillSave(oTarget, nDC) == 0)
@@ -4640,7 +4717,7 @@ int PS_GiveXPReward(object oPC, int nXP) {
         return FALSE;
         
     if (ALLOW_ECL_LEVEL_30)
-        nXP = GetECLXP(nXP, GetHitDice(oPC), PS_GetEssenceECL(oPC));
+        nXP = GetECLXP(nXP, PS_GetLevelByXP(oPC), PS_GetEssenceECL(oPC));
     
     GiveXPToCreature(oPC, nXP);
     return TRUE;

@@ -27,7 +27,7 @@ void main()
 	string sCritter	= GetLocalString(oItem, "summon");
 	location oLoc 	= GetItemActivatedTargetLocation();
 	object oBad		= GetFirstItemInInventory(oPC);
-	int oLVL		= GetHitDice(oPC);
+	int oLVL		= PS_GetLevel(oPC);
 
 		SendMessageToPC(oPC,"This is the normal sCritter value: " + sCritter);
 	

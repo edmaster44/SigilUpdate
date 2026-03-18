@@ -4,7 +4,7 @@ void main(int GiveALot)
 {
     object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());
 	
-	int hd = GetHitDice(oPC);
+	int hd = PS_GetLevel(oPC);
 	int gp = 0;
 	
 	if (GiveALot) gp = 1000000;

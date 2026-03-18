@@ -243,6 +243,8 @@ string FindMundaneIndexTag(string sTagSuffix, object oObject=OBJECT_SELF);
 
 // ------------------------
 // functions for using recipes
+int GetUndeadReagentDeathEssenceChance(string sTag);
+void GenerateDeathEssenceForUndeadReagents(string sTag, object oPC);
 void DoMagicCrafting(int iSpellID, object oPC);
 void DoMundaneCrafting(object oPC);
 void DoAlchemyCrafting(object oPC);
@@ -263,6 +265,31 @@ int IsAlchemyWorkbench(object oTarget);
 // *** Functions
 // ************************
 
+// this function is also called from ff_update_legacy_items to update regeant description
+int GetUndeadReagentDeathEssenceChance(string sTag){
+	//debug
+	if (sTag == "n2_crft_dist029") return 25;//skel rib
+	else if (sTag == "n2_crft_dist028") return 33;//ghostly essence:
+	else if (sTag == "n2_crft_dist035") return 50;//vamp tooth
+	else if (sTag == "n2_crft_dist017") return 66;//ghost residue
+	else if (sTag == "n2_crft_dist027") return 66;//shadow residue
+	else if (sTag == "n2_crft_dist023") return 75;//lich dust
+	else if (sTag == "n2_crft_dist016") return 25;//ghast claws
+	return 0;
+
+}
+
+void GenerateDeathEssenceForUndeadReagents(string sTag, object oPC){
+	//debug
+	SendMessageToPC(oPC, "Checking tag for regeant " + sTag);
+	int nChance = GetUndeadReagentDeathEssenceChance(sTag);
+	if (nChance == 0) return;
+
+	if (d100() + 1 <= nChance){
+		object oEss = CreateItemOnObject("cft_ess_death1", oPC);
+		SetIdentified(oEss, TRUE);
+	}
+}
 
 int IsMagicalWorkbench(object oTarget)
 {
@@ -1355,7 +1382,7 @@ int GetPropSlotsUsed(object oItem)
 int GetMaxProperties(object oItem, int iSpellID, object oPC)
 {
 	int nRet;
-	if (GetHitDice(oPC) < 20)
+	if (PS_GetLevel(oPC) < 20)
 		nRet = 3;
 	else
 		nRet = 4;
@@ -1642,13 +1669,16 @@ void ExecuteDistillation(int iSkillReq, object oItem, object oPC, string sItemTe
    		ErrorNotify(oPC, ERROR_INSUFFICIENT_CRAFT_ALCHEMY_SKILL);
 		return;
 	}
-
+	string sTag = GetTag(oItem);
 	int iStackSize = GetItemStackSize(oItem); // we can distill multiple objects at once.
 	DestroyObject(oItem);
 	int i;
 	for (i=1; i<= iStackSize; i++)
 	{
+		//debug
+		SendMessageToPC(oPC, "Distilling");
 		CreateListOfItemsInInventory(sItemTemplateList, oPC);
+		GenerateDeathEssenceForUndeadReagents(sTag, oPC);
 	}
 			
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), oPC);	

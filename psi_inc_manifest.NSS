@@ -22,7 +22,7 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 	if (GetLevelByClass(110, oManifester) > 0 && spellID == 14419) nPowerLevel = 1;
     int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 	if (GetLocalInt(oManifester, "PSI_SPAWN")){
-		nManifesterLevel = GetHitDice(oManifester);
+		nManifesterLevel = PS_GetLevel(oManifester);
 	}
 	int nCatapsiDC = GetLocalInt(oManifester, "PRC_Catapsi_DC");
     // Target-specific stuff

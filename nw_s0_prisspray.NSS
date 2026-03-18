@@ -75,7 +75,7 @@ void main()
             if(oTarget != OBJECT_SELF && !MyResistSpell(OBJECT_SELF, oTarget, fDelay)) //FIX: prevents caster from getting SR check against himself
             {
                 //Blind the target if they are less than 9 HD
-                nHD = GetHitDice(oTarget);
+                nHD = PS_GetLevel(oTarget);
                 if (nHD <= 8 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                 {
                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(nCasterLevel));

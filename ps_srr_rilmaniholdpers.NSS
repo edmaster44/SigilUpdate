@@ -42,7 +42,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetHitDice(OBJECT_SELF);
+    int nCasterLvl = PS_GetLevel(OBJECT_SELF);
     int nMeta = GetMetaMagicFeat();
     int nDuration = nCasterLvl;
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);

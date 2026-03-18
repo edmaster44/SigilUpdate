@@ -801,7 +801,7 @@ int gbDisableHighLevelSpells;
 
 void InitializeEpicSpells()
 {
-	if ((GetHitDice(OBJECT_SELF) <= 20) || gbDisableHighLevelSpells)
+	if ((PS_GetLevel(OBJECT_SELF) <= 20) || gbDisableHighLevelSpells)
 	{
 		return;
 	}
@@ -2067,9 +2067,9 @@ int InitializeClassByPosition(int iPosition)
             {
                 nMySpellCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
             }
-            else if (nMySpellCasterLevel < GetHitDice(OBJECT_SELF))
+            else if (nMySpellCasterLevel < PS_GetLevel(OBJECT_SELF))
             {
-                nMySpellCasterLevel = GetHitDice(OBJECT_SELF);
+                nMySpellCasterLevel = PS_GetLevel(OBJECT_SELF);
 /*                if (nMySpellCasterLevel > 15)
                 {
                     // special abilities now limited to 15
@@ -2092,9 +2092,9 @@ int InitializeSpellCasting()
     int bResult2 = InitializeClassByPosition(2);
     int bResult3 = InitializeClassByPosition(3);
     int bResult4 = InitializeClassByPosition(4);
-    if (nMySpellCasterLevel > GetHitDice(OBJECT_SELF))
+    if (nMySpellCasterLevel > PS_GetLevel(OBJECT_SELF))
     {
-        nMySpellCasterLevel = GetHitDice(OBJECT_SELF);
+        nMySpellCasterLevel = PS_GetLevel(OBJECT_SELF);
     }
     if (nMySpellCasterLevel > 22)
     {

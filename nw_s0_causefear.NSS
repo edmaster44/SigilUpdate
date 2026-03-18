@@ -70,7 +70,7 @@ void main()
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Check the Hit Dice of the creature
-    if ((GetHitDice(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+    if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
     {
         // * added rep check April 2003
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))

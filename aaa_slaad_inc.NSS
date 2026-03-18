@@ -342,7 +342,7 @@ void PS_SlaadCircleOfDeath(object oPC, int nSpell)
         {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
         	{	bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);
                 if (!bAlreadyAffected)
-                {	nCurrentHD = GetHitDice(oTarget);
+                {	nCurrentHD = PS_GetLevel(oTarget);
                      if(nCurrentHD < nLow && nCurrentHD <= nHD)
                      {	nLow = nCurrentHD;
                         oLowest = oTarget;
@@ -363,7 +363,7 @@ void PS_SlaadCircleOfDeath(object oPC, int nSpell)
             }
             SetLocalInt(oLowest, "bDEATH" + sIdentifier, TRUE);
             DelayCommand(fDelay + 0.25, DeleteLocalInt(oLowest, "bDEATH" + sIdentifier));
-            nHD = nHD - GetHitDice(oLowest);
+            nHD = nHD - PS_GetLevel(oLowest);
             oLowest = OBJECT_INVALID;
         }
     }

@@ -27,44 +27,43 @@
 
 void main()
 {
-    if (!PsiPrePowerCastCode())
-    {
-    // If code within the PrePowerCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-	// End of Spell Cast Hook
+    if (!PsiPrePowerCastCode()) return;
+
 	
     object oManifester = OBJECT_SELF;
-    object oTarget     = GetSpellTargetObject();
+	int nId = GetSpellId();
     struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
-                              GetSpellId(),
-                              METAPSIONIC_EMPOWER | METAPSIONIC_MAXIMIZE | METAPSIONIC_TWIN | METAPSIONIC_AUGMENT
-                              );
+        EvaluateManifestationNew(oManifester, oManifester, nId,
+            METAPSIONIC_EMPOWER | METAPSIONIC_MAXIMIZE | METAPSIONIC_TWIN | METAPSIONIC_AUGMENT);
 
-    if(manif.bCanManifest)
-    {
-		int nNumberOfDice = 1;
-		if (manif.bAugment)
-			nNumberOfDice += 1;
-	    int nHeal;
-	    effect eHeal, eHealVis = EffectVisualEffect(VFX_IMP_HEALING_L);
+    if(!manif.bCanManifest) return;
+  
+	int nNumberOfDice = 1;
+	if (manif.bAugment) nNumberOfDice += 1;
 	
-	    // Handle Twin Power
-	    int nRepeats = manif.bTwin ? 2 : 1;
-	    for(; nRepeats > 0; nRepeats--)
-	    {
-	        nHeal = d12(nNumberOfDice);
-			if (manif.bMaximize)
-				nHeal = 12*nNumberOfDice;
-			if (manif.bEmpower)
-				nHeal = FloatToInt(IntToFloat(nHeal)*1.5f);
-			
-				
-	        eHeal = EffectHeal(nHeal);
+	int nBonus = manif.nManifesterLevel;
+	if (nBonus > 10) nBonus = 10;
 	
-	        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal,    oTarget);
-	        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealVis, oTarget);
-	    }
+	
+	int nHeal;
+	effect eHeal, eHealVis = EffectVisualEffect(VFX_IMP_HEALING_L);
+	
+	SignalEvent(oManifester, EventSpellCastAt(oManifester, GetSpellId(), FALSE));
+
+	// Handle Twin Power
+	int nRepeats = manif.bTwin ? 2 : 1;
+	for(; nRepeats > 0; nRepeats--)
+	{
+		nHeal = d12(nNumberOfDice);
+		if (manif.bMaximize) nHeal = 12 * nNumberOfDice;
+		
+		nHeal += nBonus;
+		
+		if (manif.bEmpower) nHeal = FloatToInt(IntToFloat(nHeal)*1.5f);
+		
+		eHeal = EffectHeal(nHeal);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oManifester);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealVis, oManifester);
 	}
+
 }

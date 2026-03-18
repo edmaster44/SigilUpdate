@@ -116,7 +116,7 @@ void Ray_Mind(object oTarget, int nDC, int nPlayer, effect eEye, int Dur_VFX, in
 void Ray_Disintegrate(object oTarget, int nDC, int nPlayer)
 {
     int nCount;
-	int nHD = GetHitDice(OBJECT_SELF);
+	int nHD = PS_GetLevel(OBJECT_SELF);
     int nDamage = d6(nHD);
     int nTouch;
     effect eDamage;
@@ -284,7 +284,7 @@ void Ray_Stone(object oTarget, int nDC, int nPlayer)
 void Ray_Inflict(object oTarget, int nDC, int nPlayer)
 {
     int nCount;
-	int nHD = GetHitDice(OBJECT_SELF);
+	int nHD = PS_GetLevel(OBJECT_SELF);
     int nDamage = d8(4) + nHD;
     int nTouch;
     effect eDamage;

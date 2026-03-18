@@ -14,7 +14,7 @@ void main()
     }
 
     object oTarget = GetSpellTargetObject();
-	int nHD = GetHitDice(oTarget);
+	int nHD = PS_GetLevel(oTarget);
 	
     if (!GetHasSpellEffect(GetSpellId(), oTarget))
 	{

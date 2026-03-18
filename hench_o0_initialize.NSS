@@ -414,7 +414,7 @@ void HenchAllowUseofEquippedItemSpells()
 
 void HenchCreateItemsToUse()
 {
-    int nHitDice = GetHitDice(OBJECT_SELF);
+    int nHitDice = PS_GetLevel(OBJECT_SELF);
     int nIntel = GetAbilityScore(OBJECT_SELF, ABILITY_INTELLIGENCE);
     int nAdjustment = -3;
     if (nIntel < 10)

@@ -87,7 +87,7 @@ void EnemyReward(object oPC, object oENEMY)
 	int nDIFF = GetLocalInt(oENEMY, "ENEMY_DIFF");
 	if (nDIFF < 1) nDIFF = 1;
 	else if (nDIFF > 4) nDIFF = 4;
-	int nHD = GetHitDice(oENEMY);
+	int nHD = PS_GetLevel(oENEMY);
 	int nGAP;
 	int nXP;
 	int nXP_BASE = nDIFF * nHD * nRANK * 2;
@@ -103,7 +103,7 @@ void EnemyReward(object oPC, object oENEMY)
 		{
 			if (GetArea(oPARTY) == oAREA)
 			{
-				nGAP = GetHitDice(oPARTY) - nHD;
+				nGAP = PS_GetLevel(oPARTY) - nHD;
 				if (nGAP < 1) nXP = nXP_BASE;
 				else nXP = (nXP_BASE * (100 - nGAP * 20)) / 100;
 				if (nXP > 0) PS_GiveXPReward(oPARTY, nXP);

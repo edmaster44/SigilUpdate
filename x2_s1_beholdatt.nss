@@ -9,7 +9,7 @@ void main()
     object oTarget = GetSpellTargetObject();
     int bDamage = FALSE;
     int nCharisma = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
-	int nHD = GetHitDice(OBJECT_SELF);
+	int nHD = PS_GetLevel(OBJECT_SELF);
     int nCount;
     int nDamage;
     int Dis_Damage1 = d6(2 * nHD);

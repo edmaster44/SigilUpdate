@@ -55,7 +55,7 @@ void main()
     if ( GetIsObjectValid(oTarget) )
     {
         //Check the Hit Dice of the creature
-        if ((GetHitDice(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+        if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             // * added rep check April 2003
             if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) == TRUE)
@@ -98,7 +98,7 @@ void main()
     while (GetIsObjectValid(oTarget) && (nNumTargets > 0))
     {
         //Check the Hit Dice of the creature
-        if ((GetHitDice(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && (oOrigTgt != oTarget))
+        if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && (oOrigTgt != oTarget))
         {
             // * added rep check April 2003
             if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) == TRUE)

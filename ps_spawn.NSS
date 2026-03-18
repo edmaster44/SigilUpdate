@@ -65,7 +65,7 @@ object oPartyMember = GetFirstFactionMember(oPC, TRUE);
 
    while(GetIsObjectValid(oPartyMember) == TRUE)
    {
- iMemberlevel += GetHitDice(oPartyMember);
+ iMemberlevel += PS_GetLevel(oPartyMember);
  fMembers += 1.0;
        oPartyMember = GetNextFactionMember(oPC, TRUE);
    }

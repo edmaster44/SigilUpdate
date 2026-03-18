@@ -36,7 +36,7 @@ void UpgradeCreatureWeapons(object oPC)
 {
 	object oCW_OLD;
 	object oCW_NEW;
-	string sHD = IntToString(GetHitDice(oPC));
+	string sHD = IntToString(PS_GetLevel(oPC));
 	int nSLOT = INVENTORY_SLOT_CWEAPON_L;
 	while (nSLOT <= INVENTORY_SLOT_CWEAPON_B)
 	{

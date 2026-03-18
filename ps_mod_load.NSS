@@ -46,7 +46,6 @@
 #include "featload"
 #include "ps_inc_time"
 #include "ps_inc_bgspellfix"
-#include "onu_transfertodatabase"
 
 
 void main()
@@ -207,7 +206,6 @@ void main()
 	
 	OnSeverLoadPopulateSpellSQL();
 	OnSeverLoadPopulateFeatSQL(0, 2500);
-    
     OnSeverLoadPopulateFeatSQL(2501, 5000);
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");

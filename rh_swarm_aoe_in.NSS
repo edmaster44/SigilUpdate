@@ -5,7 +5,7 @@ for the Risen Hero Campaign
 http://neverwinter.nexusmods.com/mods/10
 3/3/2013
 */
-#include "aaa_constants"
+#include "ps_inc_functions"
 
 void main()
 {
@@ -37,7 +37,7 @@ void main()
 			
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT,eEffect,oTarget);
 			
-			int nHD	=	GetHitDice(oCaster);
+			int nHD	=	PS_GetLevel(oCaster);
 			int nCN	=	GetAbilityModifier(ABILITY_CONSTITUTION,oCaster);	
 			int nDC	=	10 + (nHD/2) + nCN;
 			

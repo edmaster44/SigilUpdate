@@ -65,7 +65,7 @@ void main()
 	int nWarPriestLevel = GetLevelByClass(CLASS_TYPE_WARPRIEST);
 	int nLichLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC);
 	int nGhaele 	= GetLevelByClass(CLASS_TYPE_GHAELE_PRC);
-    int nTotalLevel =  GetHitDice(OBJECT_SELF);
+    int nTotalLevel =  PS_GetLevel(OBJECT_SELF);
 	
     int nTurnLevel = nClericLevel;
     int nClassLevel = nClericLevel;
@@ -272,7 +272,7 @@ void main()
 			}
 			else
 			{
-				nHD = GetHitDice(oTarget) + GetTurnResistanceHD(oTarget);
+				nHD = PS_GetLevel(oTarget) + GetTurnResistanceHD(oTarget);
 			}
 			
             if(nHD <= nTurnLevel && nHD <= (nTurnHD - nHDCount))
@@ -440,7 +440,7 @@ void PrintTurningDamage( int n2d6, int nChrMod, int nClassLevel )
 void PrintTurningResult( object oTarget, int nClassLevel, int nTurnLevel, int nHDRemaining, int nResult = TURN_RESULT_FAILURE )
 {
 	string sName = GetName( OBJECT_SELF );
-	int nTargetHD = GetHitDice( oTarget ) + GetTurnResistanceHD( oTarget );
+	int nTargetHD = PS_GetLevel( oTarget ) + GetTurnResistanceHD( oTarget );
 	string sTargetHD = IntToString( nTargetHD );
 	string sTargetName = GetName( oTarget );
 	string sTurnLevel = IntToString( nTurnLevel );

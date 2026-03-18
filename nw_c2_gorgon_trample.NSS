@@ -46,7 +46,7 @@ if (oTarget == GetLocalObject(oSelf, "Charge"))
 	}
 
 int nDmg = d8(1)+7;//Full damage
-int nDC = 10+GetHitDice(oSelf);
+int nDC = 10+PS_GetLevel(oSelf);
 effect eKnock = EffectKnockdown();
 effect eVis = EffectNWN2SpecialEffectFile("sp_sonic_hit.sef");
 effect eBludgeon = EffectDamage(nDmg, DAMAGE_TYPE_BLUDGEONING);

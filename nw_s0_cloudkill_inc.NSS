@@ -17,7 +17,7 @@ void ApplyCloudKill(object oTarget, object oCaster, int nId, int nDC){
 	
 	if(GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)) return;
 	
-	int nHD = GetHitDice(oTarget);
+	int nHD = PS_GetLevel(oTarget);
 	int nDam  =GetCloudkillAbilityDamage();
 	float fDelay= GetRandomDelay(0.5, 1.5);
 	

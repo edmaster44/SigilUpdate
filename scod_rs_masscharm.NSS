@@ -79,8 +79,8 @@ void main()
             fDelay = GetRandomDelay();
             //Check that the target is humanoid or animal
             
-                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(GetHitDice(oTarget)));
-                if(nAmount > GetHitDice(oTarget))
+                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(PS_GetLevel(oTarget)));
+                if(nAmount > PS_GetLevel(oTarget))
                 {
                     //Fire cast spell at event for the specified target
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1664, FALSE));
@@ -96,8 +96,8 @@ void main()
                         }
                     }
                     //Add the creatures HD to the count of affected creatures
-                    //nCnt = nCnt + GetHitDice(oTarget);
-                    nAmount = nAmount - GetHitDice(oTarget);
+                    //nCnt = nCnt + PS_GetLevel(oTarget);
+                    nAmount = nAmount - PS_GetLevel(oTarget);
                 }
             }
         

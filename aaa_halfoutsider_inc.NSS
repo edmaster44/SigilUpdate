@@ -128,9 +128,9 @@ void PS_HO_DR(object oPC, int nSpell)
 	
 	if (PS_OutsiderLevels(oPC) >= 6){	
 		nReduct = 10;
-		if (GetHitDice(oPC) >= 15)
+		if (PS_GetLevel(oPC) >= 15)
 			nDamagePower = DAMAGE_POWER_PLUS_TWO;
-		if (GetHitDice(oPC) >= 23)
+		if (PS_GetLevel(oPC) >= 23)
 			nDamagePower = DAMAGE_POWER_PLUS_THREE;
 	}
 	
@@ -198,7 +198,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 
 void PS_HOM_FiendishSmiting(object oPC, int nSpell)
 {
-	int iHitDice 	= GetHitDice(oPC);
+	int iHitDice 	= PS_GetLevel(oPC);
 	float fDuration = RoundsToSeconds(iHitDice * 5);
 	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d6, DAMAGE_TYPE_NEGATIVE);
 		eBonus = VersusAlignmentEffect(eBonus, ALIGNMENT_ALL, ALIGNMENT_GOOD);
@@ -212,7 +212,7 @@ void PS_HOM_FiendishSmiting(object oPC, int nSpell)
 
 void PS_HOM_CelestialSmiting(object oPC, int nSpell)
 {
-	int iHitDice 	= GetHitDice(oPC);
+	int iHitDice 	= PS_GetLevel(oPC);
 	float fDuration = RoundsToSeconds(iHitDice * 5);
 	effect eBonus = EffectDamageIncrease(DAMAGE_BONUS_1d6, DAMAGE_TYPE_POSITIVE);
 		eBonus = VersusAlignmentEffect(eBonus, ALIGNMENT_ALL, ALIGNMENT_EVIL);
@@ -342,7 +342,7 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
     if (!X2PreSpellCastCode())
     {	return;		}
 
-	int nCasterLevel	= GetHitDice(oPC) / 2;
+	int nCasterLevel	= PS_GetLevel(oPC) / 2;
 	int nSaveDC			= 10 + nCasterLevel + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDam			= d6(6);
 	int nSave			= FortitudeSave(oTarget, nSaveDC, SAVING_THROW_TYPE_ALL, oPC);
@@ -370,11 +370,11 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
 
 void PS_HOM_CrownOfFlame(object oPC, int nSpell)
 {
-    int iDuration	= GetHitDice(oPC) * 5;
+	int nCasterLvl 	= PS_GetLevel(oPC);
+    int iDuration	= nCasterLvl * 5;
     effect eAOE		= EffectAreaOfEffect(VFX_MOB_CROWN_OF_FLAME);
 	eAOE 			= SetEffectSpellId(eAOE, nSpell);
-	StoreSpellDataForAoE("CrownOfFlames", nSpell, iDuration);
-	
+	StoreSpellDataForAoE("CrownOfFlames", nSpell, nCasterLvl);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(iDuration));
 }
 
@@ -383,7 +383,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
     effect eFiend;
     int nFiend;
-	int nLevel = GetHitDice(oPC);
+	int nLevel = PS_GetLevel(oPC);
     int nDuration = nLevel * 5;
 	
 	if (GetHasSpellEffect(1375)) {
@@ -545,8 +545,8 @@ void PS_HOM_RadiantShield(object oPC, int nSpell)
     effect eDur 		= EffectNWN2SpecialEffectFile("fx_aurora_chain_glow");
 	effect eLight		= EffectVisualEffect(VFX_DUR_LIGHT_YELLOW_20);
 		eDur			= EffectLinkEffects(eDur, eLight);
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
-	int nDamage			= GetHitDice(oPC) / 2;
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
+	int nDamage			= PS_GetLevel(oPC) / 2;
 	effect eRadiant		= EffectDamageShield(nDamage, DAMAGE_BONUS_1d6, DAMAGE_TYPE_ELECTRICAL);
 	effect eResist		= EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 50);
 	effect eLink		= EffectLinkEffects(eDur, eRadiant);
@@ -561,7 +561,7 @@ void PS_HOM_RadiantShield(object oPC, int nSpell)
 
 void PS_HOM_SummonFiend(object oPC, int nSpell, location lTarget)
 {
-	int nLevel 			= GetHitDice(oPC);
+	int nLevel 			= PS_GetLevel(oPC);
 	int nDuration		= 10 + nLevel;
 	string sFiend;
 	int nD2;
@@ -585,7 +585,7 @@ void PS_HOM_SummonFiend(object oPC, int nSpell, location lTarget)
 
 void PS_HOM_SummonCelestial(object oPC, int nSpell, location lTarget)
 {
-	int nLevel 			= GetHitDice(oPC);
+	int nLevel 			= PS_GetLevel(oPC);
 	int nDuration		= 10 + nLevel;
 	string sCelest;
 	int nD2;
@@ -620,7 +620,7 @@ void PS_HOM_Gutwrench(object oPC, int nSpell, object oTarget)
 	effect eAbsorb		= EffectNWN2SpecialEffectFile("fx_sp_vampiric_feast_hit01", oPC);
 	effect eAbsHeal		= EffectTemporaryHitpoints(d6(4));
 	effect eFail		= EffectNWN2SpecialEffectFile("fx_b_spell_failure", oPC);
-	int nCasterLevel	= GetHitDice(oPC) / 2;
+	int nCasterLevel	= PS_GetLevel(oPC) / 2;
 	int nSaveDC			= 10 + nCasterLevel + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDamage			= d6(10);
     effect eDam			= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE, DAMAGE_POWER_NORMAL, TRUE);
@@ -708,7 +708,7 @@ void PS_HO_OutsiderMagic(object oPC, object oItem)
 	int nSpell4, nSpell6, nSpell10, nSpell15, nSpell20, nSpell15_1, nSpell25;
 	string sHeritage;
 	int nClass	= PS_OutsiderLevels(oPC);
-	int nLevel	= GetHitDice(oPC);
+	int nLevel	= PS_GetLevel(oPC);
 	
 	if(GetIsObjectValid(oItem))
 	{	sHeritage = GetLocalString(oItem, "Planar");	}

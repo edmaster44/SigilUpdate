@@ -88,7 +88,7 @@ void main()
     		          }
 					
 					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
-                    nHD = GetHitDice(oTarget);
+                    nHD = PS_GetLevel(oTarget);
                     if(nHD <= 2)
                     {
                          //Apply the VFX impact and effects

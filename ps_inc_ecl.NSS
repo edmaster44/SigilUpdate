@@ -22,6 +22,10 @@ void PS_EnforceMaxLevel(object oPC);
 // now due to the backups and checking involved in doing so safely. -Flatted Fifth
 int GetNewECL(object oPC){
 	int nRace = GetSubRace(oPC);
+	if (nRace == 35){
+		object oEss = GetItemPossessedBy(oPC, "ps_essence");
+		nRace = GetLocalInt(oEss, "OldSubrace");
+	}
 	int nEcl = StringToInt(Get2DAString("racialsubtypes", "PS_ECL", nRace));
 	int i;
 	int nClass;
@@ -37,9 +41,8 @@ int GetNewECL(object oPC){
 // Calculates the character's complete ECL including racial and class-given, and writes it to the essence
 void PS_CalculateECL(object oPC)
 {
-
 	if (ALLOW_ECL_LEVEL_30) return;
-	
+
 	object oEssence		= GetItemPossessedBy(oPC, "ps_essence");
 	int nRacialECL		= PS_CalculateRacialECL(oPC);				// Current Racial LA
 	int nOriginalECL	= PS_CalculateOriginalECL(oPC, oEssence);	// Original Racial LA

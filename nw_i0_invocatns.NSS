@@ -44,7 +44,6 @@
 #include "ps_inc_functions"
 
 //#include "ps_inc_onhit"
-const string abilityCaster = "abilityCaster";
 
 const int STRREF_HELLFIRE_BONUS    		= 220796;  // Bonus Damage (Hellfire): ( in use )
 const int STRREF_HELLFIRE_SHIELD_NAME   = 220779;  // Hellfire Shield ( in use )
@@ -218,7 +217,7 @@ void DoHellfireDamage()
 		//_________________________________________________________________
 		
 		// replacement damage effect instead of CON damage
-		int iDmg = GetHitDice(OBJECT_SELF) / 2; // 0.5HP / level is equal to 1 point of CON damage.
+		int iDmg = PS_GetLevel(OBJECT_SELF) / 2; // 0.5HP / level is equal to 1 point of CON damage.
 		effect eDmg = EffectDamage(iDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE); // hopefully this will bypass resistances.
 		DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, OBJECT_SELF));
 	}	
@@ -606,7 +605,7 @@ int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape
     if ( DoEldritchBlast(oCaster, oTarget, bCalledFromShape, bDoTouchTest, DAMAGE_TYPE_MAGICAL, nAllowReflexSave, FALSE, nHalfDmg, VFX_INVOCATION_FRIGHTFUL_RAY) )
     {
         // Additional Effects: (Cause Fear Effect)
-        if ((GetHitDice(oTarget) <= nCasterLevel) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+        if ((PS_GetLevel(oTarget) <= nCasterLevel) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
             {

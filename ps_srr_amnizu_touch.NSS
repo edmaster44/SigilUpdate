@@ -49,7 +49,7 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
 	
-    float fDuration = TurnsToSeconds(10 * GetHitDice(OBJECT_SELF));
+    float fDuration = TurnsToSeconds(10 * PS_GetLevel(OBJECT_SELF));
 	
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);

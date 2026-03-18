@@ -41,7 +41,7 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
 	
     object oTarget = OBJECT_SELF;
-	int nDamage = GetHitDice(oTarget);
+	int nDamage = PS_GetLevel(oTarget);
 	effect eDur = EffectNWN2SpecialEffectFile("fx_balor_fire_aura", oTarget); 
 	//PKM OEI 09.29.06 - The following check is to make sure this spell maximizes properly
 	effect eShield = EffectDamageShield(nDamage, DAMAGE_BONUS_1d6, DAMAGE_TYPE_FIRE);

@@ -7,22 +7,26 @@ const int DESTROY_NONE = 3;
 const int ELADRIN_FORM_ID = 1246;
 const int CROWN_OF_FLAMES_ID =1656;
 
-int LvDRoll(int nLightCL, int nDarkCL, int bHoly){
+int LvDRoll(int nLightCL, int nDarkCL, int bHoly, int bAbyssal, int bForm){
 	nLightCL += d20();
 	nDarkCL += d20();
+	if (bHoly) nLightCL += 5;
+	if (bAbyssal) nDarkCL += 5;
 	int nDiff = nLightCL - nDarkCL;
-	if (nDiff > -3 && nDiff < 3){
-		if (!bHoly) return DESTROY_BOTH;
+	if (nDiff > -5 && nDiff < 5){
+		if (!bForm) return DESTROY_BOTH;
 		else return DESTROY_DARK;
 	}
 	else if (nLightCL > nDarkCL) 
 		return DESTROY_DARK;
-	
-	if (bHoly) return DESTROY_NONE;
-	return DESTROY_LIGHT;
+	else {
+		if (bForm) return DESTROY_NONE;
+		else return DESTROY_LIGHT;
+	}
+	return DESTROY_NONE;
 }
 
-void LvDResult(object oDark, object oLight, object oDarkCaster, object oLightCaster, int LvD){
+void LvDResultMessage(object oLightCaster, object oDarkCaster, int LvD){
 	string sLightMessage;
 	string sDarkMessage;
 	switch (LvD){
@@ -42,8 +46,8 @@ void LvDResult(object oDark, object oLight, object oDarkCaster, object oLightCas
 			break;
 		}
 		case DESTROY_NONE:{
-			sLightMessage = "Your Holy Light has failed to destroy the Darkness effect!";
-			sDarkMessage = "Your Darkness effect cannot destroy the Holy Light!";
+			sLightMessage = "Your Light has failed to destroy the Darkness effect!";
+			sDarkMessage = "Your Darkness effect cannot destroy the Light!";
 			break;
 		}
 	}
@@ -52,47 +56,75 @@ void LvDResult(object oDark, object oLight, object oDarkCaster, object oLightCas
 		SendMessageToPC(oLightCaster, sLightMessage);
 	if (GetIsObjectValid(oDarkCaster))
 		SendMessageToPC(oDarkCaster, sDarkMessage);
-		
-	if (LvD == DESTROY_LIGHT || LvD == DESTROY_BOTH)
-		DestroyObject(oLight);
-	if (LvD == DESTROY_DARK || LvD == DESTROY_BOTH)
-		DestroyObject(oDark);
 }
 
-void DoLightVsDarkness(object oDark, object oLight){
-
-	object oDarkCaster = GetAreaOfEffectCreator(oDark);
-	struct dSpellData DarkData = GetSpellDataForAoE("Darkness", oDarkCaster);
-	int nDarkId = DarkData.nId;
-	int nDarkCL = DarkData.nCL;
-	if (nDarkId == SPELL_RACIAL_DARKNESS && 
-		GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oDarkCaster, TRUE))
-			nDarkCL += 5;
-	
-	object oLightCaster = GetAreaOfEffectCreator(oLight);
-	struct dSpellData LightData = GetSpellDataForAoE("Light", oLightCaster);
-	int nLightId = LightData.nId;
-	int nLightCL = LightData.nCL;
-	int bHoly = (nLightId == ELADRIN_FORM_ID || nLightId == CROWN_OF_FLAMES_ID);
-	if (bHoly || (nLightId == SPELL_RACIAL_LIGHT && 
-		GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oLightCaster, TRUE)))
-			nLightCL += 5;
-			
-	int LvD = LvDRoll(nLightCL, nDarkCL, bHoly);
-	
-	LvDResult(oDark, oLight, oDarkCaster, oLightCaster, LvD);
-	
-}
-
-void ScanForLight(){
+void DoLightVsDarkness(object oTarget){
+	object oDarkCaster = GetAreaOfEffectCreator();
+	struct dSpellData dDarkData = GetSpellDataForAoE("Darkness", oDarkCaster);
+	int bAbyssal = (dDarkData.nId == SPELL_RACIAL_DARKNESS && 
+			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oDarkCaster, TRUE));
+	object oLightCaster;
 	int nLightId;
-    object oLight = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_AREA_OF_EFFECT);
-    while (GetIsObjectValid(oLight)) {
-		nLightId = GetAreaOfEffectSpellId(oLight);
-		if (nLightId == SPELL_LIGHT || nLightId == SPELL_RACIAL_LIGHT ||
-			nLightId == ELADRIN_FORM_ID || nLightId == CROWN_OF_FLAMES_ID)
-				DoLightVsDarkness(OBJECT_SELF, oLight);
-	
-	oLight = GetNextInPersistentObject(OBJECT_SELF, OBJECT_TYPE_AREA_OF_EFFECT);
+	int bForm = FALSE;
+	int bHoly = FALSE;
+	int nResult;
+	// if the entering object is a stand-alone AoE, check if it's light and if so, roll to see
+	// which, if either, banishes the other.
+	if (GetObjectType(oTarget) == OBJECT_TYPE_AREA_OF_EFFECT){
+		nLightId = GetAreaOfEffectSpellId(oTarget);
+		if (nLightId == SPELL_LIGHT || nLightId == SPELL_RACIAL_LIGHT){
+			oLightCaster = GetAreaOfEffectCreator(oTarget);
+			struct dSpellData dLightData = GetSpellDataForAoE("Light", oLightCaster, oTarget);
+			bHoly = (nLightId == SPELL_RACIAL_LIGHT && GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oLightCaster, TRUE));
+			nResult = LvDRoll(dLightData.nCL, dDarkData.nCL, bHoly, bAbyssal, bForm);
+			LvDResultMessage(oLightCaster, oDarkCaster, nResult);
+			if (nResult == DESTROY_LIGHT){
+				DestroyObject(oTarget, 0.1f, FALSE);
+			} else if (nResult == DESTROY_DARK){
+				DestroyObject(OBJECT_SELF, 0.1f, FALSE);
+				return;
+			} else if (nResult == DESTROY_BOTH){
+				DestroyObject(oTarget, 0.1f, FALSE);
+				DestroyObject(OBJECT_SELF, 0.1f, FALSE);
+				return;
+			}
+		}
+	//otherwise scan creatures and placeable for light effects on them and roll to see which, if either, 
+	// banishes the other.
+	} else {
+		effect eFX = GetFirstEffect(oTarget);
+		while (GetIsEffectValid(eFX)){
+			nLightId = GetEffectSpellId(eFX);
+			if (nLightId == SPELL_LIGHT || nLightId == SPELL_RACIAL_LIGHT ||
+				nLightId == ELADRIN_FORM_ID || nLightId == CROWN_OF_FLAMES_ID){
+					oLightCaster = GetEffectCreator(eFX);
+					bForm = (nLightId == ELADRIN_FORM_ID || nLightId == CROWN_OF_FLAMES_ID);
+					bHoly = ((nLightId == SPELL_RACIAL_LIGHT && GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oLightCaster, TRUE)) || bForm);
+					nResult = LvDRoll(PS_GetCasterLevel(oLightCaster), dDarkData.nCL, bHoly, bAbyssal, bForm);
+					LvDResultMessage(oLightCaster, oDarkCaster, nResult);
+					if (nResult == DESTROY_LIGHT){
+						PS_RemoveEffects(oTarget, nLightId);
+					} else if (nResult == DESTROY_DARK){
+						DestroyObject(OBJECT_SELF, 0.1f, FALSE);
+						return;
+					} else if (nResult == DESTROY_BOTH){
+						PS_RemoveEffects(oTarget, nLightId);
+						DestroyObject(OBJECT_SELF, 0.1f, FALSE);
+						return;
+					}
+				}
+			eFX = GetNextEffect(oTarget);
+		}
 	}
+}
+
+void ScanForLight(object oTarget = OBJECT_INVALID){
+	if (oTarget == OBJECT_INVALID){
+		oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_ALL);
+		while (GetIsObjectValid(oTarget)) {
+			DoLightVsDarkness(oTarget);
+			oTarget = GetNextInPersistentObject(OBJECT_SELF, OBJECT_TYPE_ALL);
+		}
+	}
+	else DoLightVsDarkness(oTarget);
 }

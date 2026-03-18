@@ -5,6 +5,7 @@ for the Risen Hero Campaign
 http://neverwinter.nexusmods.com/mods/10
 3/3/2013
 */
+#include "ps_inc_functions"
 
 void RunDistraction(object oCaster,object oTarget);
 
@@ -19,7 +20,7 @@ void main()
 	//FloatingTextStringOnCreature("object: oTarget",oCaster);
 	
 	
-	int nHD			=	GetHitDice(oCaster);
+	int nHD			=	PS_GetLevel(oCaster);
 	int nDisease	=	GetLocalInt(oCaster,"swarm_disease");
 	int nPoison		=	GetLocalInt(oCaster,"swarm_poison");
 	int nDC			=	GetLocalInt(oCaster,"swarm_dc");
@@ -119,7 +120,7 @@ void main()
 
 void RunDistraction(object oCaster,object oTarget)
 {
-	int nHD	=	GetHitDice(oCaster);
+	int nHD	=	PS_GetLevel(oCaster);
 	int nCN	=	GetAbilityModifier(ABILITY_CONSTITUTION,oCaster);	
 	int nDC	=	10 + (nHD/2) + nCN;
 	

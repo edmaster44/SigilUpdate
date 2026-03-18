@@ -112,6 +112,9 @@ int IPGetIsForgedItem(object oItem, int nItem = -1);
 // returns true if item is a thrown quiver or ammo quiver
 int IPGetIsQuiver(object oItem, int nItem = -1);
 
+// returns true on arros, darts, etc. Any kind of ammo but NOT on quivers
+int IPGetIsAmmo(object oItem, int nItem = -1);
+
 // *  returns true if weapon is blugeoning (used for poison)
 // If you only have the id because you're checking in the general instead 
 // of a specific object,enter OBJECT_INVALID for oItem. Set bOnly to FALSE
@@ -1045,6 +1048,16 @@ int IPGetIsThrownWeapon(object oItem, int nItem = -1){
 int IPGetIsLauncher(object oItem, int nItem = -1){
 	string sType = IPGetWeaponCategory(oItem, nItem);
 	if (FindSubString(sType, "launcher") != -1) return TRUE;
+	return FALSE;
+}
+
+int IPGetIsAmmo(object oItem, int nItem = -1){
+	if (nItem == -1) nItem = GetBaseItemType(oItem);
+	if (nItem == BASE_ITEM_THROWINGAXE || nItem == BASE_ITEM_SHURIKEN ||
+		nItem == BASE_ITEM_DART || nItem == BASE_ITEM_BULLET ||
+		nItem == BASE_ITEM_ARROW || nItem == BASE_ITEM_BOLT)
+			return TRUE;
+	//If we got this far return FALSE
 	return FALSE;
 }
 

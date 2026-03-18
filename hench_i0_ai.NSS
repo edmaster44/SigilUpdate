@@ -892,9 +892,9 @@ object GetNearestTougherFriend(object oSelf, object oPC)
         if (GetDistanceBetween(oSelf, oFriend) < 40.0 && oFriend != oSelf)
         {
             ++nNear;
-            if (GetHitDice(oFriend) > GetHitDice(oSelf))
+            if (PS_GetLevel(oFriend) > PS_GetLevel(oSelf))
                 return oFriend;
-            if (GetHitDice(oFriend) == GetHitDice(oSelf))
+            if (PS_GetLevel(oFriend) == PS_GetLevel(oSelf))
                 ++nEqual;
         }
         ++i;
@@ -904,7 +904,7 @@ object GetNearestTougherFriend(object oSelf, object oPC)
 
     SetLocalInt(OBJECT_SELF,"LocalBoss",FALSE);
     if (nEqual == 0)
-        if (nNear > 0 || GetHitDice(oPC) - GetHitDice(OBJECT_SELF) < 2)
+        if (nNear > 0 || PS_GetLevel(oPC) - PS_GetLevel(OBJECT_SELF) < 2)
     {
         SetLocalInt(OBJECT_SELF,"LocalBoss",TRUE);
     }

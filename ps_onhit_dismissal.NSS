@@ -46,14 +46,14 @@ void main() {
 	             	SignalEvent(oTarget, EventSpellCastAt(oCaster, 430));
 	                //Determine correct save
 	                // * Must be enough points in the pool to destroy target
-	                if (nPool >= GetHitDice(oTarget))
+	                if (nPool >= PS_GetLevel(oTarget))
 	                // * Make SR and will save checks
 	                if (!OnHitResistSpell(oCaster, oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nBaseSpellDC))
 	                {
 	                	//Apply the VFX and delay the destruction of the summoned monster so
 	                    //that the script and VFX can play.
 	
-	                    nPool = nPool - GetHitDice(oTarget);
+	                    nPool = nPool - PS_GetLevel(oTarget);
 	                    ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
 	                    if (CanCreatureBeDestroyed(oTarget) == TRUE)
 	                    {
@@ -85,7 +85,7 @@ void main() {
 	    { 	
 	        //does the creature have a master.
 	        oMaster = GetMaster(oTarget);
-			nHitDice = GetHitDice ( oTarget );
+			nHitDice = PS_GetLevel ( oTarget );
 			nAdjustedSpellDC = nBaseSpellDC - nHitDice;
 			nRacial = GetRacialType(oTarget);
 			

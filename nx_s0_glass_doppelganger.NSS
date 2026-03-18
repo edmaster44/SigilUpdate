@@ -48,7 +48,7 @@ void main()
     }
 	
 	object oTarget = GetSpellTargetObject();
-	int nTargetHD = GetHitDice(oTarget);
+	int nTargetHD = PS_GetLevel(oTarget);
 	int nCasterLevel = GetCasterLevel(OBJECT_SELF);
 	
 	if ((nTargetHD > nCasterLevel) || (nTargetHD > 15))

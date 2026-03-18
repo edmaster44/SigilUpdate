@@ -21,7 +21,7 @@ void main()
         return;
     }
 
-	if (GetHitDice(OBJECT_SELF) < 17 && GetIsPC(OBJECT_SELF)) // just so that only PC celestials are restricted - have no idea if we have any NPC half-celestials, but just to make sure
+	if (PS_GetLevel(OBJECT_SELF) < 17 && GetIsPC(OBJECT_SELF)) // just so that only PC celestials are restricted - have no idea if we have any NPC half-celestials, but just to make sure
 	{
 		SendMessageToPC(OBJECT_SELF, "You cannot use this ability until level 17.");
 	}
@@ -31,7 +31,7 @@ void main()
 		//SpeakString("Moo!  I am a planetar.  Or a placeholder creature template.  Take your pick.");
 		
 	    //Check for metamagic extend
-		int nDuration = GetHitDice(OBJECT_SELF) + 3;
+		int nDuration = PS_GetLevel(OBJECT_SELF) + 3;
 	    int nMetaMagic = GetMetaMagicFeat();
 	    if (nMetaMagic == METAMAGIC_EXTEND)
 	    {

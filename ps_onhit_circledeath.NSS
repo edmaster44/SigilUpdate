@@ -60,7 +60,7 @@ void main()
                 bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);
                 if (!bAlreadyAffected)
                 {
-                     nCurrentHD = GetHitDice(oTarget);
+                     nCurrentHD = PS_GetLevel(oTarget);
                      //If the selected creature is of lower HD then the current nLow value and
                      //the HD of the creature is of less HD than the number of HD available for
                      //the spell to affect then set the creature as the currect primary target
@@ -98,7 +98,7 @@ void main()
             //the creature laster
             DelayCommand(fDelay + 0.25, DeleteLocalInt(oLowest, "bDEATH" + sIdentifier));
             //Adjust the number of HD that have been affected by the spell
-            nHD = nHD - GetHitDice(oLowest);
+            nHD = nHD - PS_GetLevel(oLowest);
             oLowest = OBJECT_INVALID;
         }
     }

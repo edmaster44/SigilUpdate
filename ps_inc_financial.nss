@@ -72,18 +72,18 @@ string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot){
 	}
 	if (nGold > 0){
 		sMessage += IntToString(nGold) + " gold";
-		if (nSilver == 0 && nCopper == 0) sMessage += ".";
 	}
 	if (nSilver > 0){
-		if (nGold == 0 && nCopper == 0) sMessage += IntToString(nSilver)  + " silver.";
+		if (nGold == 0 && nCopper == 0) sMessage += IntToString(nSilver)  + " silver";
 		else if (nGold == 0 && nCopper > 0) sMessage += IntToString(nSilver)  + " silver and ";
-		else if (nGold > 0 && nCopper == 0) sMessage += " and " + IntToString(nSilver) + " silver.";
+		else if (nGold > 0 && nCopper == 0) sMessage += " and " + IntToString(nSilver) + " silver";
 		else if (nGold > 0 && nCopper > 0) sMessage += ", " + IntToString(nSilver) + " silver, and ";
 	}
 	if (nCopper > 0){
 		if (nGold > 0 && nSilver == 0) sMessage += " and "; 
-		sMessage += IntToString(nCopper) + " copper.";
+		sMessage += IntToString(nCopper) + " copper";
 	}
+	sMessage += ".";
 	return sMessage;
 }
 

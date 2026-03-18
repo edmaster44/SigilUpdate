@@ -252,7 +252,7 @@ void PS_Immunity_Acid_Poison(object oPC, int nSpell)
 
 void PS_Immunity_Force(object oPC, int nSpell)
 { 
-	int nLvl = GetHitDice(oPC);
+	int nLvl = PS_GetLevel(oPC);
 	
 	effect eSleep   = EffectImmunity(IMMUNITY_TYPE_SLEEP);
 	effect ePara    = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
@@ -668,7 +668,7 @@ void PS_Dragon_Roar(object oPC, int nSpell){
 			DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlly, oTarget, RoundsToSeconds(nDuration)));
 		} else if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)){
-			if (GetHitDice(oTarget) < iHD)	{	
+			if (PS_GetLevel(oTarget) < iHD)	{	
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)){		
 					fDelay = GetRandomDelay(0.8, 2.0);
 					SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
@@ -710,7 +710,7 @@ void PS_Dragon_Swipe(object oPC, int nSpell){
 		SendMessageToPC(oPC, "<c=red>You dont have a dragon tail in humanoid form.");
 		return;
 	}
-    int nHD 	= GetHitDice(oPC);
+    int nHD 	= PS_GetLevel(oPC);
 	int nSize	= GetCreatureSize(oPC);
     int nDamage;
 	float fArea = RADIUS_SIZE_LARGE;

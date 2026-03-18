@@ -54,7 +54,7 @@ float GetDispelChance(object oCreator)
 		int nCasterLevel = PS_GetCasterLevel(oCreator);	// this isn't always accurate (reset every spell)	
 		if (nCasterLevel <= 0)
 		{
-			nCasterLevel = GetHitDice(oCreator);
+			nCasterLevel = PS_GetLevel(oCreator);
 		}	
 		return Getd20Chance(giBestDispelCastingLevel - nCasterLevel - 11);
 	}
@@ -322,7 +322,7 @@ object HenchGetAOEProblem(int currentNegEffects, int currentPosEffects)
 					}
 					else if (effectTypes)
 					{
-						if ((nSpellID == SPELL_CLOUDKILL) && (GetHitDice(OBJECT_SELF) < 7))
+						if ((nSpellID == SPELL_CLOUDKILL) && (PS_GetLevel(OBJECT_SELF) < 7))
 						{						
 							effectTypes = HENCH_EFFECT_TYPE_DEATH;
 						}
@@ -341,7 +341,7 @@ object HenchGetAOEProblem(int currentNegEffects, int currentPosEffects)
 							int immunity2 = (saveType & HENCH_SPELL_SAVE_TYPE_IMMUNITY2_MASK) >> 12;
 							int immunityMind = saveType & HENCH_SPELL_SAVE_TYPE_MIND_SPELL_FLAG;
 							
-							if ((nSpellID == SPELL_CLOUDKILL) && (GetHitDice(OBJECT_SELF) < 7))
+							if ((nSpellID == SPELL_CLOUDKILL) && (PS_GetLevel(OBJECT_SELF) < 7))
 							{						
 								immunity2 = IMMUNITY_TYPE_DEATH;
 							}

@@ -65,7 +65,7 @@ void ApplyRespawnPenalties(object oPC)
 	//xp loss   
    	int nXP = GetXP(oPC);
    	int cXPpen = FloatToInt(IntToFloat(nXP)*0.007);
-   	int iHD = GetHitDice(oPC);
+   	int iHD = PS_GetLevel(oPC);
 	int cGPpen;
    	if (iHD > 3)
    	{	cGPpen = (iHD-3)*50;	}
@@ -122,7 +122,7 @@ void respawn(object xPC)
 	{	xStart = GetLocation(xPC);	}
 	
 	else if (sCurrentArea == LOC_MORTUARY) // we dont care if they AF'd here, they raise in same place with same cost
-	{	int iHD = GetHitDice(xPC);
+	{	int iHD = PS_GetLevel(xPC);
    		if (iHD > 3)
    		{	cGPpen = (iHD-3)*50;	}
 		else
@@ -175,7 +175,7 @@ void main() {
 	//And record how many HD you had
 	string sID = PS_GetCharID(oPC);
 	if (GetPermanentInt(sID, "FirstDeath") == 0) {
-		int nHD = GetHitDice(oPC);
+		int nHD = PS_GetLevel(oPC);
 		SetPermanentInt(sID, "FirstDeath", nHD);
 		SetLocalInt(oPC, "FirstDeath", 1);
 		AddAchievement(oPC, 9);

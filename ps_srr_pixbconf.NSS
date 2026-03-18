@@ -18,7 +18,7 @@ void main()
 {
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nHD = GetHitDice(OBJECT_SELF);
+    int nHD = PS_GetLevel(OBJECT_SELF);
     effect eVis2 = EffectVisualEffect(VFX_IMP_CONFUSION_S);
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_CONFUSION );
     effect eBolt = EffectConfused();

@@ -69,7 +69,7 @@ void main()
         int nMaxHD        = 11;
 		if (manif.bAugment)
 			nMaxHD += 6;
-        int nTargetHD     = GetHitDice(oTarget);
+        int nTargetHD     = PS_GetLevel(oTarget);
         int nDamage;
         effect eVisDeath  = EffectVisualEffect(VFX_IMP_DEATH_L);
         effect eVisDamage = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);

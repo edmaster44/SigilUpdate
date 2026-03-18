@@ -40,7 +40,7 @@ void main()
     int nDamage;
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
 	int nSave = 17 + nCha;
-	int nCasterLvl = GetHitDice(OBJECT_SELF);
+	int nCasterLvl = PS_GetLevel(OBJECT_SELF);
     effect eDeath = EffectDeath();
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_IMP_DESTRUCTION);

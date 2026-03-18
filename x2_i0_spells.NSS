@@ -429,7 +429,7 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
                 }
                 else
                 {
-                    nDamage = d6(GetHitDice(OBJECT_SELF)/2);
+                    nDamage = d6(PS_GetLevel(OBJECT_SELF)/2);
                 }
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage), oTarget);
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND), oTarget);
@@ -483,7 +483,7 @@ int  DoCubeParalyze(object oTarget, object oSource, int nSaveDC = 16)
 void EngulfAndDamage(object oTarget, object oSource)
 {
 
-  if (ReflexSave(oTarget, 13 + GetHitDice(oSource) - 4, SAVING_THROW_TYPE_NONE,oSource) == 0)
+  if (ReflexSave(oTarget, 13 + PS_GetLevel(oSource) - 4, SAVING_THROW_TYPE_NONE,oSource) == 0)
   {
 
       FloatingTextStrRefOnCreature(84610,oTarget); // * Engulfed

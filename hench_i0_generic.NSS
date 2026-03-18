@@ -1146,15 +1146,15 @@ const string sThreatRating = "HenchThreatRating";
 float GetRawThreatRating(object oTarget)
 {
     int lastTestHitDice = GetLocalInt(oTarget, sThreatRating);
-    int hitDice = GetHitDice(oTarget);
+    int hitDice = PS_GetLevel(oTarget);
     float fThreat;
-    if (GetHitDice(oTarget) == lastTestHitDice)
+    if (PS_GetLevel(oTarget) == lastTestHitDice)
     {
         fThreat = GetLocalFloat(oTarget, sThreatRating);
     }
     else
     {
-        fThreat = IntToFloat(GetHitDice(oTarget));
+        fThreat = IntToFloat(PS_GetLevel(oTarget));
         fThreat = pow(1.5, fThreat * HENCH_HITDICE_TO_CR);
         int iAssocType = GetAssociateType(oTarget);
         if (iAssocType == ASSOCIATE_TYPE_FAMILIAR)
@@ -1384,7 +1384,7 @@ int HenchConvertClass(int nClass, object oCharacter)
 int HenchDetermineClassToUse(object oCharacter = OBJECT_SELF)
 {
     int nClass;
-    int nTotal = GetHitDice(oCharacter);
+    int nTotal = PS_GetLevel(oCharacter);
     if (nTotal < 1)
     {
         nTotal = 1;
@@ -1477,7 +1477,7 @@ int CheckStealth()
     int nStealthCheck = GetLocalInt(OBJECT_SELF, "canStealth");
     if (nStealthCheck == 0)
     {
-        int nThreshold = GetHitDice(OBJECT_SELF) / 2;
+        int nThreshold = PS_GetLevel(OBJECT_SELF) / 2;
         nStealthCheck = ((GetSkillRank(SKILL_HIDE, OBJECT_SELF, TRUE) > nThreshold) ||
             (GetSkillRank(SKILL_MOVE_SILENTLY, OBJECT_SELF, TRUE) > nThreshold)) ? 1 : 2;
         SetLocalInt(OBJECT_SELF, "canStealth", nStealthCheck);
@@ -1591,7 +1591,7 @@ int GetHenchAssociateState(int nCondition, object oCreature = OBJECT_SELF)
             else
             {
                 int iBABTest = 10 * GetBaseAttackBonus(oCreature);
-	            int iHitDice = GetHitDice(oCreature);
+	            int iHitDice = PS_GetLevel(oCreature);
                 if (iBABTest >= 8 * iHitDice)
                 {
                     iBABLevel = 2;  // high BAB creature

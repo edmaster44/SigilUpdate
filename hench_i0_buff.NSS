@@ -630,7 +630,7 @@ void HenchMeleeAttackBuff()
 		{		
 	        int posEffects = GetCreaturePosEffects(oFriend);
 	        int bMeleeChar = (posEffects & HENCH_EFFECT_TYPE_POLYMORPH) ||
-	            (GetBaseAttackBonus(oFriend) >= (3 * GetHitDice(oFriend) / 4));
+	            (GetBaseAttackBonus(oFriend) >= (3 * PS_GetLevel(oFriend) / 4));
 	
 	        object oRightWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oFriend);
 	        int bRanged = GetWeaponRanged(oRightWeapon);
@@ -931,7 +931,7 @@ void HenchCheckAttrBuff()
 				if (abilityType < 3 /* str, dex, con */)
 				{	
 		            int bMeleeChar = (posEffects & HENCH_EFFECT_TYPE_POLYMORPH) ||
-		                (GetBaseAttackBonus(oFriend) >= (3 * GetHitDice(oFriend) / 4));
+		                (GetBaseAttackBonus(oFriend) >= (3 * PS_GetLevel(oFriend) / 4));
 		
 		            object oRightWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oFriend);
 		            int bRanged = GetWeaponRanged(oRightWeapon);
@@ -1417,7 +1417,7 @@ void HenchCheckWeaponBuff()
                         if (oFriend == OBJECT_SELF)
                         {
                             if (!((GetCreaturePosEffects(OBJECT_SELF) & HENCH_EFFECT_TYPE_POLYMORPH) ||
-                                (GetBaseAttackBonus(OBJECT_SELF) >= (3 * GetHitDice(OBJECT_SELF) / 4))))
+                                (GetBaseAttackBonus(OBJECT_SELF) >= (3 * PS_GetLevel(OBJECT_SELF) / 4))))
                             {
 //								Jug_Debug("||" + GetName(OBJECT_SELF) + " melee buff");
                                 curEffectWeight = -1.0;

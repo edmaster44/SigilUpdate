@@ -303,7 +303,7 @@ void ApplyFrightfulPresence(object oPC)
 		{
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, iDC, SAVING_THROW_TYPE_MIND_SPELLS))
 			{
-				iTargetLevel = GetHitDice(oTarget);
+				iTargetLevel = PS_GetLevel(oTarget);
 			
 				if (iTargetLevel <5) eEffect = EffectLinkEffects(EffectStunned(), EffectVisualEffect(VFX_DUR_STUN));
 				else if (iTargetLevel < 20 && !GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oPC)) 

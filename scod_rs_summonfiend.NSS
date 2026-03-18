@@ -25,8 +25,8 @@ void main()
 	//SpeakString("Moo!  I am a planetar.  Or a placeholder creature template.  Take your pick.");
 	
     //Check for metamagic extend
-	int nCasterLvl = GetHitDice(OBJECT_SELF);
-	int nDuration = GetHitDice(OBJECT_SELF) + 3;
+	int nCasterLvl = PS_GetLevel(OBJECT_SELF);
+	int nDuration = PS_GetLevel(OBJECT_SELF) + 3;
     if (nCasterLvl < 17)
 	{
 		SendMessageToPC(OBJECT_SELF, "You cannot use this ability until level 17.");

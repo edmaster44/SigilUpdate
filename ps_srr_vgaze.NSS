@@ -8,7 +8,7 @@ void main()
 	object oPC = OBJECT_SELF;
 	object oTarget = GetSpellTargetObject();
 	int iTargetRace = GetRacialType(oTarget);
-	int iTargetHD = GetHitDice(oTarget);
+	int iTargetHD = PS_GetLevel(oTarget);
 	int iLevel = GetTotalLevels(oPC, TRUE);
 	int iDC = 10 + iLevel / 2 + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	effect eDom = SupernaturalEffect(EffectDominated());

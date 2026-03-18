@@ -834,7 +834,7 @@ void PS_Ability_EladrinForm(object oPC)
 		ePoly		= EffectLinkEffects(eAOE, ePoly);
 		ePoly 		= ExtraordinaryEffect(ePoly);
 		ePoly 		= SetEffectSpellId(ePoly, 1246);
-	StoreSpellDataForAoE("Light", 1246, GetHitDice(oPC));
+	StoreSpellDataForAoE("Light", 1246, PS_GetLevel(oPC));
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
@@ -1283,7 +1283,7 @@ void PS_Ability_Austerity_Truth(object oPC)
 
 void PS_Ability_Rakshasa_SR(object oPC)
 {
-		int nHD = GetHitDice(oPC);
+		int nHD = PS_GetLevel(oPC);
 		int nSR = 11 + nHD;
 		
 		if(GetLevelByClass(213, oPC)> 7)

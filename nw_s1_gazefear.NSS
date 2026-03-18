@@ -22,7 +22,7 @@ void main()
 
 
     //Declare major variables
-    int nHD = GetHitDice(OBJECT_SELF);
+    int nHD = PS_GetLevel(OBJECT_SELF);
     int nDuration = 1 + (nHD / 3);
     int nDC = 10 + (nHD/2);
     location lTargetLocation = GetSpellTargetLocation();

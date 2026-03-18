@@ -7,10 +7,12 @@
 #include "x2_inc_craft"
 #include "dmfi_inc_const"
 #include "ff_fix_item_sets"
+#include "ginc_crafting"
 
 // function declarations
 void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE);
 void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
+void UpdateUndeadRegeantDescription(object oRegeant);
 
 
 // Edit this function to perform whatever operations need to be done to correct erroneous items.
@@ -22,6 +24,12 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
+	
+	//if the item is a regeant that has had a % chance of producing a death essence, note that
+	// in the item's description
+	//debug
+	SendMessageToPC(oPC, "Checking desc of " + GetTag(oItem));
+	UpdateUndeadRegeantDescription(oItem);
 	
 	// repair the tags and local variables on set items damaged by appearance changer
 	// see ff_fix_item_sets.nss
@@ -277,5 +285,40 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FAL
 		int ipType = GetItemPropertyType(ipProperty);
 		int ipSubType = GetItemPropertySubType(ipProperty);
 		IPRemoveMatchingItemProperties(oItem, ipType, DURATION_TYPE_PERMANENT, ipSubType);
+	}
+}
+
+// add or remove info regarding the % chance of getting a faint death essence, as 
+// determined by GetUndeadReagentDeathEssenceChance() in ginc_crafting
+void UpdateUndeadRegeantDescription(object oRegeant){
+
+	int nChance = GetUndeadReagentDeathEssenceChance(GetTag(oRegeant));
+	string sDesc = GetDescription(oRegeant);
+	string sDescAdd = "\nThis reagent also has a ";
+	int nPos = FindSubString(sDesc, sDescAdd);
+	// if the chance of getting a faint death essence is zero...
+	if (nChance < 1){
+		// check to see if we have an addendum to the desc telling us about a chance
+		// because it used to not be zero. If so, remove it.
+		if (nPos != -1){
+			sDesc = GetSubString(sDesc, 0, nPos);
+			SetDescription(oRegeant, sDesc);
+		}
+		return;
+	}	
+	// else if there is a chance that we can get a faint death essence, then check to 
+	// see if the correct chance is in the desc
+	sDescAdd += IntToString(nChance) + "% chance of producing a faint death essence.";
+	int nFullPos = FindSubString(sDesc, sDescAdd);
+	
+	if (nPos != -1){// if the beginning of the addendum is there...
+		if (nFullPos == -1){ //...but the full info is wrong
+			sDesc = GetSubString(sDesc, 0, nPos); //remove the addendum
+			SetDescription(oRegeant, sDesc + sDescAdd); // and add the correct info
+		} else {
+			return; // but if the info is correct, bail
+		}
+	} else {
+		SetDescription(oRegeant, sDesc + sDescAdd); // otherwise add the full info
 	}
 }

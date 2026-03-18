@@ -92,23 +92,23 @@ void main()
 	                   {
 	                       nDuration = nDuration * 2;
 	                   }
-					   if (GetHitDice(oTarget) > (GetCasterLevel(OBJECT_SELF) + 5))
+					   if (PS_GetLevel(oTarget) > (GetCasterLevel(OBJECT_SELF) + 5))
 					   {
 						   oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetSpellTargetLocation());
 					   } 
-					   if (GetHitDice(oTarget) < (GetCasterLevel(OBJECT_SELF) - 10))
+					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF) - 10))
 					   {
 					  	   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink1, oTarget, RoundsToSeconds(nDuration)));
 					   }
-					   if (GetHitDice(oTarget) < (GetCasterLevel(OBJECT_SELF) - 5))
+					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF) - 5))
 					   {
 					       DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, (RoundsToSeconds(nDuration) * 2)));
 					   }
-					   if (GetHitDice(oTarget) < (GetCasterLevel(OBJECT_SELF) + 5))
+					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF) + 5))
 					   {
 					   	   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink4, oTarget, (RoundsToSeconds(nDuration) + (RoundsToSeconds(3)))));	
 					   }
-					   if (GetHitDice(oTarget) < (GetCasterLevel(OBJECT_SELF)))
+					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF)))
 					   {
 					   		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink3, oTarget, (RoundsToSeconds(nDuration) + (RoundsToSeconds(2)))));
 					   }	

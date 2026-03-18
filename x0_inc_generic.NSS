@@ -658,7 +658,7 @@ struct rValidTalent TalentSpellFilter(talent tUse, object oTarget)
     // Check if the sleep spell is being used appropriately.
     if (iId == SPELL_SLEEP && !iAmDone)
     {
-        if (GetHitDice(oTarget) > 4)
+        if (PS_GetLevel(oTarget) > 4)
         {
             nNotValid = TRUE;
             iAmDone = TRUE;
@@ -1042,10 +1042,10 @@ int IsSpellEffectiveAgainstTarget(int iId, object oTarget)
 	// everyone knows these
 	if ((iId==SPELL_DOMINATE_ANIMAL || iId==SPELL_HOLD_ANIMAL) && nTargetRacialType!=RACIAL_TYPE_ANIMAL  
 		|| iId==SPELL_CRUMBLE && nTargetRacialType!=RACIAL_TYPE_CONSTRUCT 
-		|| iId==SPELL_CONTROL_UNDEAD && (GetHitDice(oTarget) >  PS_GetCasterLevel(OBJECT_SELF)*2 || nTargetRacialType != RACIAL_TYPE_UNDEAD) 
-		|| iId==SPELL_UNDEATH_TO_DEATH && (GetHitDice(oTarget)>8 || nTargetRacialType != RACIAL_TYPE_UNDEAD) 
+		|| iId==SPELL_CONTROL_UNDEAD && (PS_GetLevel(oTarget) >  PS_GetCasterLevel(OBJECT_SELF)*2 || nTargetRacialType != RACIAL_TYPE_UNDEAD) 
+		|| iId==SPELL_UNDEATH_TO_DEATH && (PS_GetLevel(oTarget)>8 || nTargetRacialType != RACIAL_TYPE_UNDEAD) 
 		|| (iId == SPELL_DROWN || iId==SPELL_FLESH_TO_STONE) && MatchNonliving(nTargetRacialType) == TRUE 
-		|| iId == SPELL_SLEEP && (GetHitDice(oTarget) > 4 || nTargetRacialType==RACIAL_TYPE_ELF || nTargetRacialType==RACIAL_TYPE_HALFELF) 
+		|| iId == SPELL_SLEEP && (PS_GetLevel(oTarget) > 4 || nTargetRacialType==RACIAL_TYPE_ELF || nTargetRacialType==RACIAL_TYPE_HALFELF) 
 		)		
 	{
 		iRet = FALSE;	
@@ -1055,7 +1055,7 @@ int IsSpellEffectiveAgainstTarget(int iId, object oTarget)
 	if (GetIsPC(GetFactionLeader(OBJECT_SELF)))
 	{ 
 		if (( (iId==SPELL_HAMMER_OF_THE_GODS && d4()==1 || iId==SPELL_WORD_OF_FAITH) && WrongAlign(oTarget)) // can't tell alignment by looking
-			|| (iId==SPELL_WORD_OF_FAITH && GetHitDice(oTarget)>GetLevelByClass(CLASS_TYPE_CLERIC)) 
+			|| (iId==SPELL_WORD_OF_FAITH && PS_GetLevel(oTarget)>GetLevelByClass(CLASS_TYPE_CLERIC)) 
 			|| iId == SPELL_ENERGY_DRAIN && GetIsImmune(oTarget, IMMUNITY_TYPE_NEGATIVE_LEVEL) 
 			|| iId == SPELL_POWER_WORD_KILL && GetCurrentHitPoints(oTarget) > 100 
 			|| (iId == SPELL_ENTANGLE || iId==SPELL_WEB) && (GetIsImmune(oTarget, IMMUNITY_TYPE_ENTANGLE) || GetLevelByClass(CLASS_TYPE_DRUID, oTarget)>1) // immunity won't be so obvious at fir
@@ -1453,7 +1453,7 @@ int EvenTalentCheck(talent tUse, object oTarget)
 			} 
 			else 
 			{
-				int chance		= GetHitDice(OBJECT_SELF)+d20();
+				int chance		= PS_GetLevel(OBJECT_SELF)+d20();
 				int negimmune 	= nTargetRacialType==RACIAL_TYPE_UNDEAD ||
 								  nTargetRacialType==RACIAL_TYPE_CONSTRUCT || 
 								  GetSubRace(oTarget)==RACIAL_SUBTYPE_CONSTRUCT;

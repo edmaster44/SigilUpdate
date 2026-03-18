@@ -122,7 +122,7 @@ void main()
           object oAttacker = GetLastHostileActor();
           if (GetIsObjectValid(oAttacker) && oTarget != oAttacker && GetIsEnemy(oAttacker) &&
              (GetTotalDamageDealt() > (GetMaxHitPoints(OBJECT_SELF) / 4) ||
-             (GetHitDice(oAttacker) - 2) > GetHitDice(oTarget) ) )
+             (PS_GetLevel(oAttacker) - 2) > PS_GetLevel(oTarget) ) )
           {
             DetermineCombatRound(oAttacker);
           }

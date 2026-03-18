@@ -31,7 +31,7 @@ void main()
     //eLink = EffectLinkEffects(eLink, eDur2);
     
     float fDelay;
-    int nHD = GetHitDice(OBJECT_SELF);
+    int nHD = PS_GetLevel(OBJECT_SELF);
     int nDC = 10 + (nHD/4);
     int nDuration = 1 + (nHD/4);
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);

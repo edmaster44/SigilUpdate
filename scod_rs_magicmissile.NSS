@@ -49,7 +49,7 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = GetHitDice(OBJECT_SELF);
+    int nCasterLvl = PS_GetLevel(OBJECT_SELF);
     int nMissiles = (nCasterLvl);
     //effect eMissile = EffectVisualEffect(VFX_IMP_MIRV);	// handled by SpawnSpellProjectile()
     effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);

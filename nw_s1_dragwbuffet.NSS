@@ -16,7 +16,7 @@
 void main()
 {
     //Declare major variables
-    int nAge = GetHitDice(OBJECT_SELF);
+    int nAge = PS_GetLevel(OBJECT_SELF);
 	int nDC;
     float fDelay;
 	float fRandomDuration;
@@ -143,7 +143,7 @@ void main()
     int nHP;
     int nCurrent = 0;
     object oVict;
-    int nDamage = GetHitDice(OBJECT_SELF);
+    int nDamage = PS_GetLevel(OBJECT_SELF);
     int nDC = nDamage;
     nDamage = Random(nDamage) + 11;
     effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);

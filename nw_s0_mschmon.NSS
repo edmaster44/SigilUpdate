@@ -38,7 +38,7 @@ void main()
 	
 	if (GetSpellId() == SPELLABILITY_MASS_CHARM_MONSTER)
 	{	// If using the racial version, use total HD for caster level.
-		nCasterLevel = GetHitDice(OBJECT_SELF);
+		nCasterLevel = PS_GetLevel(OBJECT_SELF);
 	}
 	
     int nDuration = nCasterLevel/2;
@@ -61,8 +61,8 @@ void main()
             //nRacial = GetRacialType(oTarget);	// the target can be any creature; this check is not relevant
             //Check that the target is humanoid or animal
             {
-                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(GetHitDice(oTarget)));
-                if(nAmount >= GetHitDice(oTarget))
+                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(PS_GetLevel(oTarget)));
+                if(nAmount >= PS_GetLevel(oTarget))
                 {
                     //Fire cast spell at event for the specified target
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MASS_CHARM, FALSE));
@@ -79,8 +79,8 @@ void main()
                         }
                     }
                     //Add the creatures HD to the count of affected creatures
-                    //nCnt = nCnt + GetHitDice(oTarget);
-                    nAmount = nAmount - GetHitDice(oTarget);
+                    //nCnt = nCnt + PS_GetLevel(oTarget);
+                    nAmount = nAmount - PS_GetLevel(oTarget);
                 }
             }
         }

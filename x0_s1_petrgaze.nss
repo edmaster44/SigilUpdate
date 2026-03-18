@@ -15,7 +15,7 @@
 void main()
 {
     object oTarget = GetSpellTargetObject();
-    int nHitDice = GetHitDice(OBJECT_SELF);
+    int nHitDice = PS_GetLevel(OBJECT_SELF);
 
 
     location lTargetLocation = GetSpellTargetLocation();

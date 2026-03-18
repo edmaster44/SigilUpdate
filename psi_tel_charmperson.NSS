@@ -91,7 +91,7 @@ void main()
 	            //Check that the target is humanoid or animal
 	            if (GetLocalInt(OBJECT_SELF, "METAPSI_AUGMENT") == 1)  
 	            {
-	                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(GetHitDice(oTarget)));
+	                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(PS_GetLevel(oTarget)));
 	               		nDC = nDC + 1;
 	                    //Fire cast spell at event for the specified target
 	                    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 14340, FALSE));
@@ -107,7 +107,7 @@ void main()
 	                        }
 	                    }
 	                    //Add the creatures HD to the count of affected creatures
-	                    //nCnt = nCnt + GetHitDice(oTarget);
+	                    //nCnt = nCnt + PS_GetLevel(oTarget);
 	                    nAmount = nAmount - 1;
 	                
 	            }
@@ -124,7 +124,7 @@ void main()
 	                (nRacial == RACIAL_TYPE_HUMANOID_ORC) ||
 	                (nRacial == RACIAL_TYPE_HUMANOID_REPTILIAN))
 	            {
-	                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(GetHitDice(oTarget)));
+	                //SpeakString(IntToString(nAmount) + " and HD of " + IntToString(PS_GetLevel(oTarget)));
 	               
 	                    //Fire cast spell at event for the specified target
 	                    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 14340, FALSE));
@@ -141,7 +141,7 @@ void main()
 	                        }
 	                    }
 	                    //Add the creatures HD to the count of affected creatures
-	                    //nCnt = nCnt + GetHitDice(oTarget);
+	                    //nCnt = nCnt + PS_GetLevel(oTarget);
 	                    nAmount = nAmount - 1;
 	                
 	            }

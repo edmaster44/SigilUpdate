@@ -1,5 +1,5 @@
 NDB V1.0
-0000053 0000017 0003130 0000020 0000150
+0000053 0000017 0003137 0000020 0000151
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -120,7 +120,8 @@ sf i nMagicOld
 sf i nStealth
 sf i bScaredOfSilence
 sf i bTacticChosen
-s 04 dSpellData
+s 05 dSpellData
+sf o oCaster
 sf i nId
 sf i nClass
 sf i nCL
@@ -409,6 +410,7 @@ f ffffffff ffffffff 000 i GetModuleOverrideSpellScriptFinished
 f ffffffff ffffffff 000 s GetEventPostfix
 f ffffffff ffffffff 001 s GetUserDefinedItemEventScriptName
 fp o
+f ffffffff ffffffff 000 s abilityCaster
 f ffffffff ffffffff 000 i NULL
 f ffffffff ffffffff 000 i ALLOW_INSTANT_REBUILD
 f ffffffff ffffffff 000 i REPLACE_BLINDNESS_WITH_MISS_CHANCE
@@ -622,6 +624,7 @@ f ffffffff ffffffff 000 i FEAT_STAL_DEF_STANCE_AC
 f ffffffff ffffffff 000 i FEAT_CROC_ARMOR_AC_1
 f ffffffff ffffffff 000 i FEAT_CROC_ARMOR_AC_2
 f ffffffff ffffffff 000 i FEAT_CROC_ARMOR_AC_3
+f ffffffff ffffffff 000 i FEAT_CROC_ARMOR_AC_4
 f ffffffff ffffffff 000 i FEAT_HALFOUTSIDER_PATH_OF_GUILE
 f ffffffff ffffffff 000 i FEAT_HALFOUTSIDER_PATH_OF_STRENGTH
 f ffffffff ffffffff 000 i FEAT_ERINYES_WINGS
@@ -1409,6 +1412,9 @@ f ffffffff ffffffff 002 i IPGetIsForgedItem
 fp o
 fp i
 f ffffffff ffffffff 002 i IPGetIsQuiver
+fp o
+fp i
+f ffffffff ffffffff 002 i IPGetIsAmmo
 fp o
 fp i
 f ffffffff ffffffff 003 i IPGetIsBludgeoningWeapon
@@ -2457,6 +2463,8 @@ f ffffffff ffffffff 002 i IncreasedUnarmedDamageBonus
 fp o
 fp o
 f ffffffff ffffffff 001 i PS_GetEssenceECL
+fp o
+f ffffffff ffffffff 001 i PS_GetLevelByXP
 fp o
 f ffffffff ffffffff 001 i PS_GetLevel
 fp o
@@ -4556,8 +4564,9 @@ f ffffffff ffffffff 003 v StoreSpellDataForAoE
 fp s
 fp i
 fp i
-f ffffffff ffffffff 002 t0009 GetSpellDataForAoE
+f ffffffff ffffffff 003 t0009 GetSpellDataForAoE
 fp s
+fp o
 fp o
 f ffffffff ffffffff 003 i FF_GetSpellSaveDC
 fp o
@@ -5666,6 +5675,11 @@ fp s
 f ffffffff ffffffff 002 s FindMundaneIndexTag
 fp s
 fp o
+f ffffffff ffffffff 001 i GetUndeadReagentDeathEssenceChance
+fp s
+f ffffffff ffffffff 002 v GenerateDeathEssenceForUndeadReagents
+fp s
+fp o
 f ffffffff ffffffff 002 v DoMagicCrafting
 fp i
 fp o
@@ -5791,6 +5805,14 @@ f ffffffff ffffffff 002 i GetIsActivated
 fp o
 fp i
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
+f ffffffff ffffffff 007 v SignalAndApplyEffectToObject
+fp o
+fp i
+fp i
+fp i
+fp e0
+fp o
+fp f
 f ffffffff ffffffff 001 i GetMissChance
 fp o
 f ffffffff ffffffff 001 i GetSpellFailedBecauseMissChance
@@ -5862,10 +5884,11 @@ v 000004be 0000058d 00000000 i nInfiltrLevel
 v 000004d1 0000058d 00000004 i nAC
 v 00000517 0000058d 00000008 e0 eDodge
 l00 0000048 00000015 0000002c
+l01 0000037 0000002c 0000002c
 l01 0000038 0000002c 0000002c
 l01 0000039 0000002c 0000002c
 l01 0000040 0000002c 0000002c
-l01 0000041 0000002c 0000002c
+l01 0000050 0000002c 0000002c
 l01 0000051 0000002c 0000002c
 l01 0000052 0000002c 0000002c
 l01 0000053 0000002c 0000002c
@@ -5875,24 +5898,22 @@ l01 0000056 0000002c 0000002c
 l01 0000057 0000002c 0000002c
 l01 0000058 0000002c 0000002c
 l01 0000059 0000002c 0000002c
-l01 0000060 0000002c 0000002c
+l01 0000065 0000002c 0000002c
 l01 0000066 0000002c 0000002c
 l01 0000067 0000002c 0000002c
 l01 0000068 0000002c 0000002c
-l01 0000069 0000002c 0000002c
+l01 0000070 0000002c 0000002c
 l01 0000071 0000002c 0000002c
 l01 0000072 0000002c 0000002c
 l01 0000073 0000002c 0000002c
-l01 0000074 0000002c 0000002c
+l01 0000075 0000002c 0000002c
 l01 0000076 0000002c 0000002c
 l01 0000077 0000002c 0000002c
 l01 0000078 0000002c 0000002c
-l01 0000079 0000002c 0000002c
-l01 0000081 0000002c 0000002c
-l02 0000342 0000002c 00000048
+l01 0000080 0000002c 0000002c
+l02 0000347 0000002c 00000048
 l03 0000051 00000048 00000062
 l03 0000053 00000062 00000078
-l04 0000042 00000078 00000078
 l04 0000043 00000078 00000078
 l04 0000044 00000078 00000078
 l04 0000045 00000078 00000078
@@ -5902,10 +5923,11 @@ l04 0000048 00000078 00000078
 l04 0000049 00000078 00000078
 l04 0000050 00000078 00000078
 l04 0000051 00000078 00000078
-l04 0000058 00000078 00000078
+l04 0000052 00000078 00000078
 l04 0000059 00000078 00000078
 l04 0000060 00000078 00000078
 l04 0000061 00000078 00000078
+l04 0000062 00000078 00000078
 l05 0000086 00000078 00000078
 l05 0000088 00000078 00000078
 l05 0000089 00000078 00000078
@@ -5924,6 +5946,7 @@ l08 0000044 00000078 00000078
 l08 0000045 00000078 00000078
 l08 0000046 00000078 00000078
 l08 0000047 00000078 00000078
+l08 0000048 00000078 00000078
 l09 0000077 00000078 00000078
 l09 0000078 00000078 00000078
 l09 0000079 00000078 00000078

@@ -75,7 +75,7 @@ void main()
 			{
 				if (GetSubRace(oPC) == 132) // if succubus, the kiss's effects are enhanced! -Electrohydra
 				{
-					if (iLevels + 10 >= GetHitDice(oTarget) && !GetIsPC(oTarget))
+					if (iLevels + 10 >= PS_GetLevel(oTarget) && !GetIsPC(oTarget))
 					{
 						// long duration dominate
 						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, HoursToSeconds(iLevels));
@@ -90,7 +90,7 @@ void main()
 				}
 			
 				// effect depends on relative level of target.
-				else if (iLevels > GetHitDice(oTarget))
+				else if (iLevels > PS_GetLevel(oTarget))
 				{
 					// dominate
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(d6(iLevels)));

@@ -46,7 +46,7 @@ void main()
     effect eLink = EffectLinkEffects(eDur, eSanc);
     //eLink = EffectLinkEffects(eLink, eDur);
 
-    int nDuration = GetHitDice(OBJECT_SELF);
+    int nDuration = PS_GetLevel(OBJECT_SELF);
     //Enter Metamagic conditions
     int nMetaMagic = GetMetaMagicFeat();
     if (nMetaMagic == METAMAGIC_EXTEND)

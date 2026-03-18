@@ -731,7 +731,7 @@ int AutoDC(int DC, int nSkill, object oTarget)
     Moderate = 3/Lvl + Lvl ...rounded up
     Difficult = Lvl * 1.5 + 6 ...rounded up
     */
-    int nLevel = GetHitDice(OBJECT_SELF);
+    int nLevel = PS_GetLevel(OBJECT_SELF);
     int nTest = 0;
 
     // * July 2
@@ -1398,7 +1398,7 @@ int CheckDCStr(int DC, int nSkill, object oTarget)
     Moderate = 3/Lvl + Lvl ...rounded up
     Difficult = Lvl * 1.5 + 6 ...rounded up
     */
-    int nLevel = GetHitDice(OBJECT_SELF);
+    int nLevel = PS_GetLevel(OBJECT_SELF);
     int nTest = 0;
 
     // * July 2
@@ -1433,7 +1433,7 @@ int CheckDCStr(int DC, int nSkill, object oTarget)
 int plotCanRemoveXP(object oPC, int nPenalty)
 {
     int nXP = GetXP(oPC);
-    int nHD = GetHitDice(oPC);
+    int nHD = PS_GetLevel(oPC);
     // * You can not lose a level with this
     int nMin = ((nHD * (nHD - 1)) / 2) * 1000;
 

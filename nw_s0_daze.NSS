@@ -58,7 +58,7 @@ void main()
     //Make sure the target is a humaniod
     if (AmIAHumanoid(oTarget) == TRUE || GetIsPlayableRacialType(oTarget))
     {
-        if(GetHitDice(oTarget) <= 5)
+        if(PS_GetLevel(oTarget) <= 5)
         {
             if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
         	{

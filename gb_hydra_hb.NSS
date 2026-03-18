@@ -29,7 +29,7 @@ if (iWait < 0)//if no countdown in progress, abort
 iCounter = iCounter +1;//continue the countdown
 SetLocalInt(OBJECT_SELF, "Counter", iCounter);
 object oHide = GetItemInSlot(INVENTORY_SLOT_CARMOUR, OBJECT_SELF);
-int iHD = GetHitDice(OBJECT_SELF);
+int iHD = PS_GetLevel(OBJECT_SELF);
 int iRegen = 10 + iHD;
 if (iRegen > 20) iRegen = 20;
 itemproperty ipRegen = ItemPropertyRegeneration(iRegen);

@@ -47,24 +47,25 @@ void main()
 // End of Spell Cast Hook
 
     object oManifester = OBJECT_SELF;
-    object oTarget     = GetSpellTargetObject();
+	int nId = GetSpellId();
     struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
-                              GetSpellId(),
+        EvaluateManifestationNew(oManifester, oManifester,
+                              nId,
                               METAPSIONIC_EXTEND
                               );
 
-    if(manif.bCanManifest)
-    {
-        effect eEntangle = EffectImmunity(IMMUNITY_TYPE_ENTANGLE);
-        effect eVis      = EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN);
-        
-        effect eLink     = EffectLinkEffects(eVis, eEntangle);
-              
+    if(!manif.bCanManifest) return;
+    
+	effect eEntangle = EffectImmunity(IMMUNITY_TYPE_ENTANGLE);
+	effect eVis      = EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN);
+	
+	effect eLink     = EffectLinkEffects(eVis, eEntangle);
+		  
 
-        float fDur = 600.0 * manif.nManifesterLevel;
-        if(manif.bExtend) fDur *= 2;
+	float fDur = 600.0 * manif.nManifesterLevel;
+	if(manif.bExtend) fDur *= 2;
 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
-    }
+	SignalAndApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+		oManifester, fDur);
+    
 }

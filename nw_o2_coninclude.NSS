@@ -15,6 +15,7 @@
 //:://////////////////////////////////////////////
 
 #include "ginc_debug"
+#include "ps_inc_functions"
 
 // * ---------
 // * CONSTANTS
@@ -493,7 +494,7 @@ int GetNumberOfItems(int nTreasureType)
     // * Scaling Treasure
     void CreateGold(object oTarget, object oAdventurer, int nTreasureType, int nModifier = 0)
     {
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
         int nAmount = 0;
 
         if (GetRange(1, nHD)) nAmount = d12(2);
@@ -549,7 +550,7 @@ int GetNumberOfItems(int nTreasureType)
 	
     void CreateJewel(object oTarget, object oAdventurer, int nTreasureType, int nModifier = 0)
     {
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
         string sJewel = "";
 
         if (GetRange(1, nHD))        // 15 gp avg; 75 gp max
@@ -715,7 +716,7 @@ int GetNW_ArcaneScrollRandom(int nLevel)
 void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
 {
 	//int nMaxSpells = 21;
-	int nHD = GetHitDice(oAdventurer) + nModifier;
+	int nHD = PS_GetLevel(oAdventurer) + nModifier;
 	int nScroll = 1;
 	int nLevel = 1;
 	
@@ -778,7 +779,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
 
     void CreateDivineScroll(object oTarget, object oAdventurer, int nModifier=0)
     {
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
         string sScroll = "";
         if (GetRange(1, nHD))
         {
@@ -851,7 +852,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
     }
     void CreateAmmo(object oTarget, object oAdventurer, int nModifier=0)
     {
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
         string sAmmo = "";
 
         if (GetRange(1, nHD))           // * 200 gp max
@@ -1021,7 +1022,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
 
     void CreateTrapKit(object oTarget, object oAdventurer, int nModifier = 0)
     {
-      int nHD = GetHitDice(oAdventurer) + nModifier;
+      int nHD = PS_GetLevel(oAdventurer) + nModifier;
       string sKit = "";
         if (GetRange(1, nHD))      // 200
         {
@@ -1172,7 +1173,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
     }
     void CreateHealingKit(object oTarget, object oAdventurer, int nModifier = 0)
     {
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
         string sKit = "";
         if (GetRange(1, nHD))      // 200
         {
@@ -1239,7 +1240,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
     }
     void CreateLockPick(object oTarget, object oAdventurer, int nModifier = 0)
     {
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
         string sKit = "";
         if (GetRange(1, nHD))      // 200
         {
@@ -1330,7 +1331,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
 		return;
 		
         string sPotion = "";
-        int nHD = GetHitDice(oAdventurer) + nModifier;
+        int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
         if (GetRange(1, nHD))
         {
@@ -3767,7 +3768,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
     //:://////////////////////////////////////////////
         void CreateGenericMiscItem(object oTarget, object oAdventurer, int nModifier=0)
         {
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
             string sItem = "";
             if (GetRange(1, nHD))    // * 200
             {
@@ -4100,7 +4101,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateGenericRodStaffWand(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -4176,7 +4177,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateGenericMonkWeapon(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -4292,7 +4293,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         {
 
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -4434,7 +4435,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateGenericDruidWeapon(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -4551,7 +4552,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         {
 
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -4628,7 +4629,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateGenericWizardWeapon(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -4714,7 +4715,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         {
 
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -4787,7 +4788,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateGenericSimple(object oTarget, object oAdventurer, int nModifier = 0)
         {
            string sItem = "";
-           int nHD = GetHitDice(oAdventurer) + nModifier;
+           int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -4955,7 +4956,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         {
            string sItem = "";
 
-            int nHD = GetHitDice(oAdventurer) +nModifier;
+            int nHD = PS_GetLevel(oAdventurer) +nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -5139,7 +5140,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
 
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -5271,7 +5272,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
 
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -5368,7 +5369,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         }
         void CreateGenericMediumArmor(object oTarget, object oAdventurer, int nModifier = 0)
         {
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
             string sItem = "";
             if (GetRange(1, nHD))    // * 200
             {
@@ -5496,7 +5497,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateGenericHeavyArmor(object oTarget, object oAdventurer, int nModifier = 0)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer) + nModifier;
+            int nHD = PS_GetLevel(oAdventurer) + nModifier;
 
             if (GetRange(1, nHD))    // * 200
             {
@@ -5605,7 +5606,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificMiscItem(object oTarget,object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -5727,7 +5728,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificRodStaffWand(object oTarget, object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -5803,7 +5804,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificSimple(object oTarget, object oAdventurer)
         {
            string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -5942,7 +5943,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificMartial(object oTarget, object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -6136,7 +6137,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificExotic(object oTarget, object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -6267,7 +6268,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificLightArmor(object oTarget, object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -6365,7 +6366,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificMediumArmor(object oTarget, object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -6452,7 +6453,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
         void CreateSpecificHeavyArmor(object oTarget, object oAdventurer)
         {
             string sItem = "";
-            int nHD = GetHitDice(oAdventurer);
+            int nHD = PS_GetLevel(oAdventurer);
 
             if (GetRange(1, nHD))    // * 800
             {
@@ -6972,7 +6973,7 @@ void ShoutDisturbed()
 int nDetermineClassToUse(object oCharacter)
 {
 	int nClass;
-    int nTotal = GetHitDice(oCharacter);
+    int nTotal = PS_GetLevel(oCharacter);
     //dbSpeak("Hit dice " + IntToString(nTotal));
     if (nTotal < 1)
     {

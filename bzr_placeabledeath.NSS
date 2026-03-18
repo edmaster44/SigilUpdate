@@ -60,7 +60,7 @@ void main()
 			}
 			
 			iMemberlevel = PS_GetLevel(oPartyMember);
-			iECL = iMemberlevel - GetHitDice(oPartyMember);
+			iECL = iMemberlevel - PS_GetLevel(oPartyMember);
 			
 			if(iMemberlevel<iMAX-MAXPARTYRANGE)
 			{

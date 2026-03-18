@@ -44,7 +44,7 @@ void main()
     effect eLink = EffectLinkEffects(eVis, eCharm);
 
     int nMetaMagic = GetMetaMagicFeat();
-    int nCasterLevel = GetHitDice(OBJECT_SELF);
+    int nCasterLevel = PS_GetLevel(OBJECT_SELF);
     int nDuration = 3 + nCasterLevel/2;
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
 	int nSave = 14 + nCha;

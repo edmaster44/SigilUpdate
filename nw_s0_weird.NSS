@@ -72,7 +72,7 @@ void main()
                          !GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR) &&
 						 !GetHasFeat(FEAT_IMMUNITY_PHANTASMS, oTarget) )	// AFW-OEI 04/20/2006: If I'm Immune to Phantasms, I'm immune to this spell
                     {
-                        if(GetHitDice(oTarget) >= 4)
+                        if(PS_GetLevel(oTarget) >= 4)
                         {
                             //Make a Will save against mind-affecting
                             if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF))

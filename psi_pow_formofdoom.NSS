@@ -59,76 +59,57 @@
 #include "psi_spellhook"
 #include "aaa_constants"
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 
 
 void main()
 {
-/*
-  Spellcast Hook Code
-  Added 2004-11-02 by Stratovarius
-  If you want to make changes to all powers,
-  check psi_spellhook to find out more
+	if (!PsiPrePowerCastCode()) return;
 
-*/
-
-    if (!PsiPrePowerCastCode())
-    {
-    // If code within the PrePowerCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-    object oManifester = OBJECT_SELF;
-    object oTarget     = GetSpellTargetObject();
-			object oWeapon	   = IPGetTargetedOrEquippedMeleeWeapon();
-    struct manifestation manif =
-       EvaluateManifestationNew(oManifester, oTarget,
-                              GetSpellId(),
-                              METAPSIONIC_EXTEND
-                              );
-
-    if(manif.bCanManifest)
-    {
-        effect eLink    =                          EffectAreaOfEffect(AOE_MOB_MENACE,"psi_pow_frmdment");
-               eLink    = EffectLinkEffects(eLink, EffectACIncrease(5, AC_NATURAL_BONUS));
-               eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_SLASHING,    5));
-               eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_PIERCING,    5));
-               eLink    = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_BLUDGEONING, 5));
-               eLink    = EffectLinkEffects(eLink, EffectAbilityIncrease(ABILITY_STRENGTH, 6));
-               eLink    = EffectLinkEffects(eLink, EffectMovementSpeedIncrease(33));
-               //eLink    = EffectLinkEffects(eLink, EffectSkillIncrease(SKILL_INTIMIDATE, 10));
-               eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"));
-        effect eTest;
-        float fDuration = 6.0f * (manif.nManifesterLevel);
-        if(manif.bExtend) fDuration *= 2;
-
-        // Will not work if under the effects of Polymorph. Also will not stack with itself
-        eTest = GetFirstEffect(oTarget);
-        while(GetIsEffectValid(eTest))
-        {
-            if(GetEffectType(eTest) == EFFECT_TYPE_POLYMORPH ||
-               GetEffectSpellId(eTest) == 14609
-               )
-                return;
-            eTest = GetNextEffect(oTarget);
-        }
-		
-		//Feral Path
-		if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester))
-		{	itemproperty iBonusFeat1 = ItemPropertyBonusFeat(1315);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration); 
-			IPSafeAddItemProperty(oWeapon, iBonusFeat1,fDuration,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING,FALSE,FALSE);
-        }
-	else
+	object oManifester = OBJECT_SELF;
+	int nId = GetSpellId();
 	
-        // Apply the effects
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration); 
-		
+	// Will not work if under the effects of Polymorph. Also will not stack with itself
+	effect eTest = GetFirstEffect(oManifester);
+	while(GetIsEffectValid(eTest))
+	{
+		if(GetEffectType(eTest) == EFFECT_TYPE_POLYMORPH){
+			SendMessageToPC(oManifester, "You cannot use this power while polymorphed");
+			return;
 		}
-       // string sResRef = "prc_fod_tent_";
-      //  sResRef += GetAffixForSize(PRCGetCreatureSize(oTarget));
-     //   AddNaturalSecondaryWeapon(oTarget, sResRef, 4);
-        // Start dispelling monitor and tentacles heartbeat
-        //DelayCommand(6.0f, 
-            //NaturalSecondaryWeaponTempCheck(oManifester, oTarget, manif.nSpellID, FloatToInt(fDuration) / 6, sResRef));
-    }// end if - Successfull manifestation
+		if (GetEffectSpellId(eTest) == nId){
+			SendMessageToPC(oManifester, "You are already using this power");
+			return;
+		}
+		eTest = GetNextEffect(oManifester);
+	}
+	struct manifestation manif = EvaluateManifestationNew(oManifester, oManifester, nId,
+			  METAPSIONIC_EXTEND | METAPSIONIC_AUGMENT);
+
+	if(!manif.bCanManifest) return;
+
+	string sTag = (manif.bAugment) ? "augmented" : "";
+	effect eLink = EffectAreaOfEffect(102, "", "", "", sTag);
+	eLink = EffectLinkEffects(EffectACIncrease(6, AC_NATURAL_BONUS), eLink);
+	eLink = EffectLinkEffects(EffectDamageResistance(DAMAGE_TYPE_SLASHING, 5), eLink);
+	eLink = EffectLinkEffects(EffectDamageResistance(DAMAGE_TYPE_PIERCING, 5), eLink);
+	eLink = EffectLinkEffects(EffectDamageResistance(DAMAGE_TYPE_BLUDGEONING, 5), eLink);
+	eLink = EffectLinkEffects(EffectAbilityIncrease(ABILITY_STRENGTH, 6), eLink);
+	eLink = EffectLinkEffects(EffectMovementSpeedIncrease(33), eLink);
+	eLink = EffectLinkEffects(EffectSkillIncrease(SKILL_INTIMIDATE, 10), eLink);
+	eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"), eLink);
+	eLink = SetEffectSpellId(eLink,nId);
+	float fDuration = 6.0f * (manif.nManifesterLevel);
+	if(manif.bExtend) fDuration *= 2;
+
+	//Feral Path gets multiattack
+	if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester)){	
+		object oSkin = PS_GetCreatureSkin(oManifester);
+		itemproperty iBonusFeat1 = ItemPropertyBonusFeat(1315);
+		IPSafeAddItemProperty(oSkin, iBonusFeat1, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);
+	}
+	
+	// Apply the effects
+	SignalAndApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+		oManifester, fDuration);
+}

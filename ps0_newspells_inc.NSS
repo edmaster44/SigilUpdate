@@ -50,7 +50,7 @@ void PS_Spell_Gutwrench(object oPC, object oTarget, int nSpell)
 	effect eAbsorb		= EffectNWN2SpecialEffectFile("fx_sp_vampiric_feast_hit01", oPC);
 	effect eAbsHeal		= EffectTemporaryHitpoints(d6(4));
 	effect eFail		= EffectNWN2SpecialEffectFile("fx_b_spell_failure", oPC);
-	int nCasterLevel	= GetHitDice(oPC) / 2;
+	int nCasterLevel	= PS_GetLevel(oPC) / 2;
 	int nSaveDC			= 10 + nCasterLevel + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDamage			= d6(10);
     effect eDam			= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE, DAMAGE_POWER_NORMAL, TRUE);

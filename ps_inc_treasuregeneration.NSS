@@ -402,7 +402,7 @@ void CreateCreatureDrop(object oCreature) {
 			SetDetailsOfGemstone(oGem, nQuality, nSize, oCreature);
 			oItem = oGem;
 		} else if (sItem == "ESSENTIAL_ITEM") {
-			string sResRef = PickEssentialItemReward(GetHitDice(oCreature));
+			string sResRef = PickEssentialItemReward(PS_GetLevel(oCreature));
 			oItem = CreateItemOnObject(sResRef, oCreature);
 		} else if (sItem == "EPIC_LOOT_1") {
 			string sResRef = PickFromQuestTreasureLow(); //special loot 1

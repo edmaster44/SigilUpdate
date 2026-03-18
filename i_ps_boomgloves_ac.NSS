@@ -43,7 +43,7 @@ void main()
 		return;		
 	}
 			
-    int nCasterLvl = GetHitDice(oPC);
+    int nCasterLvl = PS_GetLevel(oPC);
 	int nDamage;
 	float fDelay;
 	effect eDam;

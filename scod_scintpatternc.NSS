@@ -34,7 +34,7 @@ void main()
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
 		{	if (!MyResistSpell(oCaster, oTarget))
 			{	SignalEvent(oTarget, EventSpellCastAt(oCaster, 1482, TRUE));
-				nHitDice	= GetHitDice(oTarget);
+				nHitDice	= PS_GetLevel(oTarget);
 				if (nHitDice >= 17)
 				{	nDieRoll1 = d4(1);
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll1));	}

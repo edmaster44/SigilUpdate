@@ -38,6 +38,7 @@ void SetFeatAC(){
 	dae_AddInnateACFeat(FEAT_CROC_ARMOR_AC_1, 1);
 	dae_AddInnateACFeat(FEAT_CROC_ARMOR_AC_2, 2);
 	dae_AddInnateACFeat(FEAT_CROC_ARMOR_AC_3, 3);
+	dae_AddInnateACFeat(FEAT_CROC_ARMOR_AC_4, 4);
 
 }
 

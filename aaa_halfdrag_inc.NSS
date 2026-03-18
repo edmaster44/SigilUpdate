@@ -174,7 +174,7 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 	if (PS_GetLevel(oPC) > 30 && !ALLOW_ECL_LEVEL_30)
 	{	int nextlvl = 1000;
 		int totalxp = 0;
-		int whatlevel = GetHitDice(oPC) - 1; // decrease level by 1
+		int whatlevel = PS_GetLevel(oPC) - 1; // decrease level by 1
 		// set your level
 		int i=0;
 		for (i = 1; i < whatlevel; i++) 
@@ -306,7 +306,7 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 				break;	}
 		}
 		
-		int nLevel 		= GetHitDice(oPC);
+		int nLevel 		= PS_GetLevel(oPC);
 		int nHalfdrag	= GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC);
 		int nDC			= nLevel/2 + 10 + GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
 		int nDice;
@@ -586,7 +586,7 @@ void PS_HDM_SeeInvisibility(object oPC, int nSpell)
     effect eIcon 	= EffectEffectIcon(54);
     effect eSight 	= EffectSeeInvisible();
     effect eLink 	= EffectLinkEffects(eIcon, eSight);
-    float fDuration = RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration = RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_SEE_INVISIBILITY, FALSE));
     RemovePermanencySpells(oPC);
@@ -600,7 +600,7 @@ void PS_HDM_FreezingFog(object oPC, int nSpell)
 
     effect eAOE 		= EffectAreaOfEffect(AOE_PER_FREEZINGFOG);
     location lTarget 	= GetLocation(oPC);
-	float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, fDuration);
 }
@@ -611,8 +611,8 @@ void PS_HDM_ThornBody(object oPC, int nSpell)
     {	return;		}
 	
     effect eDur 		= EffectNWN2SpecialEffectFile("sp_skin_101");
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
-	int nDamage			= GetHitDice(oPC) / 2;
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
+	int nDamage			= PS_GetLevel(oPC) / 2;
 	effect eThorn		= EffectDamageShield(nDamage, DAMAGE_BONUS_1d6, DAMAGE_TYPE_PIERCING);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -631,7 +631,7 @@ void PS_HDM_ResinousSkin(object oPC, int nSpell)
 	effect eSticky			= EffectNWN2SpecialEffectFile("sp_skin_152", oPC);
 	effect eLink			= EffectLinkEffects(eDR, eSticky);
 	itemproperty ipStuck	= ItemPropertyOnHitCastSpell(131, 10);
-	float fDuration			= RoundsToSeconds(GetHitDice(oPC) * 5);
+	float fDuration			= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	object oSkin			= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -665,8 +665,8 @@ void PS_HDM_SparkShield(object oPC, int nSpell)
     {	return;		}
 	
     effect eDur 		= EffectNWN2SpecialEffectFile("sp_stormrage");
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
-	int nDamage			= GetHitDice(oPC) / 2;
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
+	int nDamage			= PS_GetLevel(oPC) / 2;
 	effect eSpark		= EffectDamageShield(nDamage, DAMAGE_BONUS_1d6, DAMAGE_TYPE_ELECTRICAL);
 	effect eLink		= EffectLinkEffects(eDur, eSpark);
 
@@ -683,8 +683,8 @@ void PS_HDM_FlameShield(object oPC, int nSpell)
     {	return;		}
 	
     effect eDur 		= EffectNWN2SpecialEffectFile("fire_bird");
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
-	int nDamage			= GetHitDice(oPC) / 2;
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
+	int nDamage			= PS_GetLevel(oPC) / 2;
 	effect eFlame		= EffectDamageShield(nDamage, DAMAGE_BONUS_1d6, DAMAGE_TYPE_FIRE);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -699,7 +699,7 @@ void PS_HDM_AvoidPlanarEffects(object oPC, int nSpell)
 	if (!X2PreSpellCastCode())
     {	return;		}
 	
-	float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
     int nResistance 	= 10;
     effect eCold 		= EffectDamageResistance(DAMAGE_TYPE_COLD, nResistance, 0);
     effect eFire 		= EffectDamageResistance(DAMAGE_TYPE_FIRE, nResistance, 0);
@@ -729,7 +729,7 @@ void PS_HDM_ScintillatingScales(object oPC, int nSpell)
 	effect eAC			= EffectACIncrease(nBonus, AC_DEFLECTION_BONUS);
 	effect eScint		= EffectNWN2SpecialEffectFile("fx_e_soul_glow", oPC);
 	effect eLink		= EffectLinkEffects(eAC, eScint);
-	float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
@@ -741,7 +741,7 @@ void PS_HDM_ObscuringMist(object oPC, location lTarget, int nSpell)
     {	return;		}
 	
     effect eAOE      	= EffectAreaOfEffect(AOE_PER_OBSCURINGMIST);
-   	float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+   	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
 	if (GetIsLocationValid(lTarget))
 	{	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell));	}
@@ -754,7 +754,7 @@ void PS_HDM_MagicCircleVsEvil(object oPC, int nSpell)
     {	return;	}
 
     effect eAOE 		= EffectAreaOfEffect(AOE_MOB_CIRCGOOD);
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
@@ -774,7 +774,7 @@ void PS_HDM_BahamutsPrayer(object oPC, int nSpell)
 		eLink			= EffectLinkEffects(eLink, eSkill);
 		eLink			= EffectLinkEffects(eLink, eSave);
 		eLink			= EffectLinkEffects(eLink, eVFX);
-	float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
@@ -788,7 +788,7 @@ void PS_HDM_ConcealingAmorpha(object oPC, int nSpell)
     effect eConceal = EffectConcealment(40);
     effect eDur     = EffectNWN2SpecialEffectFile("psi_concealing_amorpha", oPC);
     effect eLink    = EffectLinkEffects(eDur, eConceal);
-    float fDuration	= RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration	= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
@@ -802,7 +802,7 @@ void PS_HDM_InertialBarrier(object oPC, int nSpell)
     effect eDR		= EffectDamageReduction(5, DAMAGE_POWER_NORMAL, 0, DR_TYPE_NONE);
 	effect eVFX		= EffectNWN2SpecialEffectFile("psi_inertialbarrier");
 	effect eLink 	= EffectLinkEffects(eDR, eVFX);
-    float fDuration	= RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration	= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
@@ -842,7 +842,7 @@ void PS_HDM_EctoplasmicForm(object oPC, int nSpell)
 		eLink    	= EffectLinkEffects(eLink, eCon);
 		eLink    	= EffectLinkEffects(eLink, eDam);
 		eLink    	= EffectLinkEffects(eLink, ePois);
-    float fDuration	= RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration	= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	
 	int iRules		= GetArmorRulesType(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC));
 	string sAC 		= Get2DAString("armorrulestats", "ACBONUS", iRules);
@@ -868,7 +868,7 @@ void PS_HDM_MirrorImage(object oPC, int nSpell)
 			eEffect = GetNextEffect( OBJECT_SELF );		}
 	}
 
-    int nCasterLvl 		= GetHitDice(oPC) / 2;
+    int nCasterLvl 		= PS_GetLevel(oPC) / 2;
     float fDuration		= RoundsToSeconds(nCasterLvl * 5);	
 	int nACBonus 		= (10 + GetAbilityModifier(ABILITY_DEXTERITY, oPC));
     int nImages 		= d4( 1 ) + (nCasterLvl / 4);
@@ -900,13 +900,13 @@ void PS_HDM_ShieldGreater(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;	}
 	
-	int iArmor			= (GetHitDice(oPC))/10 + 5;
+	int iArmor			= (PS_GetLevel(oPC))/10 + 5;
 	effect eArmor 		= EffectACIncrease(iArmor, AC_SHIELD_ENCHANTMENT_BONUS);
     effect eSpell 		= EffectSpellImmunity(SPELL_MAGIC_MISSILE);
 //    effect eDur 		= EffectNWN2SpecialEffectFile("sp_shield_bk", oPC);
     effect eLink		= EffectLinkEffects(eArmor, eSpell);
 //    	eLink 			= EffectLinkEffects(eLink, eDur);
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
@@ -918,7 +918,7 @@ void PS_HDM_EnergyAdaptation(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;	}
 	
-	int nLevel			= GetHitDice(oPC) / 2;
+	int nLevel			= PS_GetLevel(oPC) / 2;
     int nResist;
     if (nLevel < 6)
 	{	nResist = 10;	}
@@ -939,7 +939,7 @@ void PS_HDM_EnergyAdaptation(object oPC, int nSpell)
 		eLink			= EffectLinkEffects(eLink, eSoni);
 		eLink			= EffectLinkEffects(eLink, eVFX);
 	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-    float fDuration		= RoundsToSeconds(GetHitDice(oPC) * 5);
+    float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	itemproperty ipShn	= ItemPropertyOnHitCastSpell(128, 10);
 		
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));

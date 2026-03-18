@@ -59,7 +59,7 @@ void main()
 		if ( CompareTranceRace(oTarget) )
 		{
 			nInt = GetAbilityScore(oTarget, ABILITY_INTELLIGENCE);
-			nHD = GetHitDice(oTarget);
+			nHD = PS_GetLevel(oTarget);
 			// only applies to creatures with low intelligence
 			if ( nInt < 3 && (nCurrHD + nHD) <= nTotalHD )
 			{

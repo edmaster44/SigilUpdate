@@ -32,7 +32,7 @@ void main()
     int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
     float fDelay;
 	
-    int nHD = GetHitDice(OBJECT_SELF);
+    int nHD = PS_GetLevel(OBJECT_SELF);
     int nDC;
     int nDuration = 1 + (nHD/2);
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);

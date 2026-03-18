@@ -58,7 +58,7 @@ void main()
 	//Has same SpellId as Charm Person, not an item, but returns no valid class -> it's racial ability
 	if (GetSpellId() == SPELL_CHARM_PERSON && !GetIsObjectValid(GetSpellCastItem()) && GetLastSpellCastClass() == CLASS_TYPE_INVALID)
 	{
-		nCasterLevel = GetHitDice(OBJECT_SELF);
+		nCasterLevel = PS_GetLevel(OBJECT_SELF);
 		nDC = 10 + GetSpellLevel(SPELL_CHARM_PERSON) + GetAbilityModifier(ABILITY_CHARISMA);
 	}
 

@@ -32,15 +32,15 @@ void main()
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_BLINDSIGHT );	// NWN2 VFX
     effect eSightInvis = EffectSeeInvisible();
-    effect eSightDark = EffectUltravision();
+    //effect eSightDark = EffectUltravision(); // does not work
     effect eLink = EffectLinkEffects(eVis, eSightInvis);
-    eLink = EffectLinkEffects(eSightDark, eLink);
+    //eLink = EffectLinkEffects(eSightDark, eLink);
     eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_BLINDNESS), eLink);
 	eLink = SetEffectSpellId(eLink, SPELL_BLINDSIGHT);
 	
 	int nlvl = PS_GetCasterLevel(OBJECT_SELF);
 	
-	if (GetSpellFeatId() == 21895){
+	if (GetSpellFeatId() == 21906){
 		nlvl = GetLevelByClass(CLASS_TYPE_ASSASSIN, OBJECT_SELF);
 	}
 	

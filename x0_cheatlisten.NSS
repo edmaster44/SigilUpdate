@@ -15,7 +15,7 @@ void main()
     {
         int i = 1;
         int nAddLevels = nListen - 1000;
-        int nHD = GetHitDice(oPC);
+        int nHD = PS_GetLevel(oPC);
 
 
         int nRequired = (( (nHD + nAddLevels) * ( (nHD + nAddLevels) - 1)) / 2) * 1000;

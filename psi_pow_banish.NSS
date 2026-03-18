@@ -146,7 +146,7 @@ void main()
 		            if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, manif.oManifester))
 		            {
 		                // * Must be enough points in the pool to destroy target
-		                if(nBanishableHD >= GetHitDice(oTarget))
+		                if(nBanishableHD >= PS_GetLevel(oTarget))
 		                {
 		                    // * Make SR and will save checks
 		                    if(PRCMyResistPower(manif.oManifester, oTarget, nPen) &&
@@ -158,7 +158,7 @@ void main()
 		                        ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
 		                        if(GetPlotFlag(oTarget) == FALSE)
 		                        {
-		                            nBanishableHD -= GetHitDice(oTarget);
+		                            nBanishableHD -= PS_GetLevel(oTarget);
 		                            //bugfix: Simply destroying the object won't fire it's OnDeath script.
 		                            //Which is bad when you have plot-specific things being done in that
 		                            //OnDeath script... so lets kill it.

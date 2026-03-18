@@ -175,7 +175,7 @@ void MoveToAndAttack(object oTarget, int bPlayerInterruptible, int bUseHenchAI)
 int DoAOEBehavior (int nBehavior, object oCaster, int bPlayerInterruptible, int bUseHenchAI)
 {
 	int bResponded = FALSE;
-	// int max=GetHitDice(OBJECT_SELF);
+	// int max=PS_GetLevel(OBJECT_SELF);
 	switch ( nBehavior )
 	{
 		case X2_SPELL_AOEBEHAVIOR_DISPEL_N:

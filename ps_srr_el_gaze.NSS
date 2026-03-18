@@ -7,7 +7,7 @@ Eladrin Gaze */
 
 void main()
 {
-    int nHD = GetHitDice(OBJECT_SELF);
+    int nHD = PS_GetLevel(OBJECT_SELF);
     int nDuration = nHD;
     int nDC = 10 + (nHD/2) + GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
     effect eVis = EffectVisualEffect(VFX_IMP_FEAR_S);
@@ -24,7 +24,7 @@ void main()
             {
                SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 				
-				if (GetHitDice(oTarget) < 6)
+				if (PS_GetLevel(oTarget) < 6)
 				{
 					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
 				}

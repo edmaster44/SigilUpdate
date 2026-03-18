@@ -96,17 +96,17 @@ void main()
 		break;
 ///////////////////////////////////////////////////////////////////////////////////		
 		case 1487 :		//Xeph - Burst
-		{	iLevel = GetHitDice(oPC);
+		{	iLevel = PS_GetLevel(oPC);
 			PS_Cast_XephBurst(oPC, iLevel, nSpell);	}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////		
 		case 1489 :		//Night Hag - Sleep
-		{	iLevel = GetHitDice(oPC);
+		{	iLevel = PS_GetLevel(oPC);
 			PS_Cast_Hag_Sleep(oPC, iLevel, nSpell);	}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////		
 		case 1490 :		//Night Hag - Ray of Enfeeblement
-		{	iLevel = GetHitDice(oPC);
+		{	iLevel = PS_GetLevel(oPC);
 			PS_Cast_Hag_Enfeeblement(oPC, iLevel, nSpell);	}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////		

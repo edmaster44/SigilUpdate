@@ -28,7 +28,7 @@ void main()
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetHitDice(oCaster);
+    int nCasterLvl = PS_GetLevel(oCaster);
     int nMetaMagic = GetMetaMagicFeat();
     int nDamage;
     float fDelay;

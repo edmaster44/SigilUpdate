@@ -111,7 +111,7 @@ void GenerateScryRow(object oCaller, object oPC)
 	}
 	
 	if (iDispLevel == 1)
-		sLevel = IntToString(GetHitDice(oPC)) + " (" + IntToString(PS_GetLevel(oPC)) + ")";
+		sLevel = IntToString(PS_GetLevel(oPC)) + " (" + IntToString(PS_GetLevel(oPC)) + ")";
 	else
 		sLevel = "? (?)";
 		

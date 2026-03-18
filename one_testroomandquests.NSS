@@ -91,7 +91,7 @@ void CheckForAchievements(object oPC) {
 		
 	} else if (nChecked == 6) {
 	
-		if (GetHitDice(oPC) > 1) {
+		if (PS_GetLevel(oPC) > 1) {
 			AddAchievement(oPC, 1);
 		}
 		

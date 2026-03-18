@@ -70,7 +70,7 @@ void main()
     { 	
         //does the creature have a master.
         oMaster = GetMaster(oTarget);
-		nHitDice = GetHitDice ( oTarget );
+		nHitDice = PS_GetLevel ( oTarget );
 		nAdjustedSpellDC = nBaseSpellDC - nHitDice;
 		nRacial = GetRacialType(oTarget);
 		

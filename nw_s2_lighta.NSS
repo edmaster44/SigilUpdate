@@ -4,15 +4,16 @@
 void main(){
 
     object oTarget = GetEnteringObject();
+	object oAOE = OBJECT_SELF;
+	object oCaster = GetAreaOfEffectCreator();
+	if (oTarget == OBJECT_INVALID || oCaster == OBJECT_INVALID || oAOE == OBJECT_INVALID)
+		return;
 	
-	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE){
-		object oAOE = OBJECT_SELF;
-		object oCaster = GetAreaOfEffectCreator();
-		
-		struct dSpellData data = GetSpellDataForAoE("Light", oCaster);
-		
-		
-		
+	struct dSpellData data = GetSpellDataForAoE("Light", oCaster);
+	
+	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && 
+		!GetHasSpellEffect(data.nId, oTarget)){
+
 		int bDivineLight = FALSE;
 		if ((data.nId == SPELL_RACIAL_LIGHT  &&
 			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oCaster, TRUE)) ||
@@ -22,7 +23,7 @@ void main(){
 		int nDur = data.nCL;
 		int nMeta = GetMetaMagicFeat();
 		if (nMeta == METAMAGIC_EXTEND || bDivineLight) nDur *= 2;
-		int nBonus = 8;
+		int nBonus = 4;
 		if (nMeta == METAMAGIC_EMPOWER || bDivineLight) nBonus += nBonus / 2;
 		if (data.nId == 1246) nDur = 24; // Eladrin effect is 24 hours regardless of CL
 		

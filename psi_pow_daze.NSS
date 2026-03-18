@@ -75,7 +75,7 @@ void main()
         if(AmIAHumanoid(oTarget))
         {
             // Hit Dice check
-            if(GetHitDice(oTarget) <= nMaxHD)
+            if(PS_GetLevel(oTarget) <= nMaxHD)
             {
                 // Handle Twin Power
                 int nRepeats = manif.bTwin ? 2 : 1;

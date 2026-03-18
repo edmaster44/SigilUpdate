@@ -548,7 +548,7 @@ int DoEssenceOnHitDrainingBlast(object oCaster, object oTarget, int nDC, int nID
 int DoEssenceOnHitFrightfulBlast(object oCaster, object oTarget, int nDC, int nID) {
 	if ( DoEldritchOnHitBlast(oCaster, oTarget, DAMAGE_TYPE_MAGICAL, VFX_INVOCATION_FRIGHTFUL_RAY, nDC, nID) )
     {
-		if ((GetHitDice(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+		if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 815))
             {

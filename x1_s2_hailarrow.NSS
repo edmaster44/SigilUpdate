@@ -76,7 +76,7 @@ void main()
 	int num = 0;
     while(GetIsObjectValid(oTarget))
     {
-		if (num > GetHitDice(OBJECT_SELF)) //don't target more people than we have levels, for sanity.
+		if (num > PS_GetLevel(OBJECT_SELF)) //don't target more people than we have levels, for sanity.
 			break;
 		if (!spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
 		{

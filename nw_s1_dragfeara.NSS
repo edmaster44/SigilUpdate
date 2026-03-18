@@ -36,11 +36,11 @@ void main()
 	effect eShakenLink2 = EffectLinkEffects(eSkillPen, eDur);
 	effect eLink2 = EffectLinkEffects(eShakenLink1, eShakenLink2);
 
-    int nHD = GetHitDice(oCreator);
+    int nHD = PS_GetLevel(oCreator);
 	int nCHRBonus = (GetCharisma(oCreator) - 10)/ 2;
 	int nDC = 10 + (nHD / 2) + nCHRBonus; 
-    //int nDC = GetDragonFearDC(GetHitDice(GetAreaOfEffectCreator()));
-	//10 + GetHitDice(GetAreaOfEffectCreator())/3;
+    //int nDC = GetDragonFearDC(PS_GetLevel(GetAreaOfEffectCreator()));
+	//10 + PS_GetLevel(GetAreaOfEffectCreator())/3;
 	
 	int nNumRounds = d6(4);
 	

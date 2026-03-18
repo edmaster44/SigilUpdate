@@ -48,7 +48,7 @@ void main()
 		
 		if (GetSpellId() == SPELLABILITY_WORD_OF_FAITH)
 		{	// If using the racial version, use total HD for caster level.
-			nCasterLevel = GetHitDice(OBJECT_SELF);
+			nCasterLevel = PS_GetLevel(OBJECT_SELF);
 		}
 		
         effect eBlind = EffectNewBlindness();
@@ -113,7 +113,7 @@ void main()
                     {
 						
                         //Check the HD of the creature
-                        nHD = GetHitDice(oTarget);
+                        nHD = PS_GetLevel(oTarget);
                         //Apply the appropriate effects based on HD
                         if (nHD >= 12 && !bImmuneBlind)
                         {

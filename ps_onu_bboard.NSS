@@ -36,7 +36,7 @@ void main () {
 
 	object oPC = GetLastUsedBy();
 	
-	if (GetHitDice(oPC) > 13) {
+	if (PS_GetLevel(oPC) > 13) {
 		SendMessageToPC(oPC, "There are no jobs available in your level range.");
 		return;
 	}
@@ -48,7 +48,7 @@ void main () {
 	int nMax = GetLocalInt(OBJECT_SELF, "quest_max");
 	int n = 0;
 	int assigned = 1;
-	int nPCLevel = GetHitDice(oPC);
+	int nPCLevel = PS_GetLevel(oPC);
 	
 	for (n = 1; n <= nMax; n++) {
 	

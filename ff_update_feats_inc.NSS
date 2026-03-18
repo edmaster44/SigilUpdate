@@ -115,7 +115,7 @@ void ApplyEpicSpellPrereq(object oPC){
 	// an epic spell at lvl 21, they need to have it before then.
 	// However, if we give it too soon then ppl will think they
 	// can start picking epic spells b4 lvl 21 and report in discord
-	if (GetHitDice(oPC) < 20) return;
+	if (PS_GetLevel(oPC) < 20) return;
 	if (PS_GetCasterLevel(oPC, CLASS_TYPE_CLERIC) >= 18 ||
 		PS_GetCasterLevel(oPC, CLASS_TYPE_DRUID) >= 18 ||
 		PS_GetCasterLevel(oPC, CLASS_TYPE_SPIRIT_SHAMAN) >= 18 ||
@@ -300,7 +300,7 @@ SetBaseAbilityScore(oPC, nAbility, nScore);
 void SituationalAwareness(object oPC){
 	// Add situational awareness feat
 	if (GRANT_SITUATIONAL_AWARENESS){
-		int nLvlAC = (GetHitDice(oPC) + 3) / 10;
+		int nLvlAC = (PS_GetLevel(oPC) + 3) / 10;
 		int nTumbleAC = GetSkillRank(SKILL_TUMBLE, oPC, TRUE) / 10;
 		int nAC = nLvlAC - nTumbleAC;
 		switch (nAC){

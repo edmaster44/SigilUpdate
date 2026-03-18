@@ -26,7 +26,7 @@ void main()
 	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
 
     object oTarget = GetEnteringObject();
-    int nHD = GetHitDice(oTarget);
+    int nHD = PS_GetLevel(oTarget);
     effect eDeath = EffectDeath();
     effect eVis =   EffectVisualEffect(VFX_IMP_DEATH);
     effect eNeg = EffectVisualEffect( VFX_HIT_SPELL_POISON );	// NWN2 VFX

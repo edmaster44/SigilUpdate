@@ -55,7 +55,7 @@ void main()
 
     while(GetIsObjectValid(oTarget))
     {	//Is this a half-outsider in Fiendform?
-		nTargetHD = GetHitDice(oTarget);
+		nTargetHD = PS_GetLevel(oTarget);
 		
 		//does the creature have a master.
         oMaster = GetMaster(oTarget);
@@ -88,14 +88,14 @@ void main()
                     //Determine correct save
                     nSpellDC = GetSpellSaveDC();// + 6;
                     // * Must be enough points in the pool to destroy target
-                    if (nPool >= GetHitDice(oTarget))
+                    if (nPool >= PS_GetLevel(oTarget))
                     // * Make SR and will save checks
                     if (!MyResistSpell(OBJECT_SELF, oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nSpellDC))
                     {
                          //Apply the VFX and delay the destruction of the summoned monster so
                          //that the script and VFX can play.
 
-                         nPool = nPool - GetHitDice(oTarget);
+                         nPool = nPool - PS_GetLevel(oTarget);
                          ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
                          if (CanCreatureBeDestroyed(oTarget) == TRUE)
                          {

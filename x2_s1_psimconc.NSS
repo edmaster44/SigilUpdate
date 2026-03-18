@@ -24,7 +24,7 @@ void main()
 {
     //Declare major variables
     object oCaster = OBJECT_SELF;
-    int nCasterLvl = GetHitDice(OBJECT_SELF);
+    int nCasterLvl = PS_GetLevel(OBJECT_SELF);
 
     int nDamage;
     float fDelay;

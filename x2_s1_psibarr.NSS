@@ -27,6 +27,7 @@
 //:://////////////////////////////////////////////
 
 #include "x2_inc_itemprop"
+#include "ps_inc_functions"
 void main()
 {
     //Declare major variables
@@ -34,13 +35,13 @@ void main()
     int nDamagePower;
     int nReduction;
 	
-	nDuration = GetHitDice(OBJECT_SELF);
+	nDuration = PS_GetLevel(OBJECT_SELF);
 	nDamagePower = DAMAGE_POWER_PLUS_TWENTY;
 	nReduction = nDuration;
 	
 /*    if (!GetIsPC(OBJECT_SELF))
     {
-        nDuration = GetHitDice(OBJECT_SELF);
+        nDuration = PS_GetLevel(OBJECT_SELF);
         nDamagePower =   DAMAGE_POWER_PLUS_TWENTY;
     }
     else // shifter

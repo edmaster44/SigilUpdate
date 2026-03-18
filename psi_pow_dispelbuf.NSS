@@ -13,21 +13,11 @@
 
     Dispelling Buffer
 
-    Psychokinesis
-    Level: Kineticist 6, psychic warrior 6
-    Manifesting Time: 1 standard action
-    Range: Personal or close (25 ft. + 5 ft./2 levels); see text
-    Target: You or one willing creature or one object; see text
-    Duration: 1 hour/level
-    Saving Throw: None
-    Power Resistance: No
-    Power Points: 11
-    Metapsionics: Extend
-	This adds Spell Resistence on the Psychic Warrior 
+  
 	
 	*/
 	
-	void main()
+void main()
 {
 
  /*Spellcast Hook Code
@@ -46,27 +36,33 @@
 // End of Spell Cast Hook
 
     object oManifester = OBJECT_SELF;
-	object oTarget = GetSpellTargetObject();
+	object oTarget = OBJECT_SELF;
+	int nId = GetSpellId();
     struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
-                              GetSpellId(),
-                              METAPSIONIC_EXTEND
+        EvaluateManifestationNew(oManifester, oTarget, nId,
+                              METAPSIONIC_AUGMENT | METAPSIONIC_EXTEND
                               );
 
-    if(manif.bCanManifest)
-    {
-		int nDuration = 60 * manif.nManifesterLevel;
-		if(manif.bExtend) nDuration *= 2;
-		
-    int nBonus = 15 + manif.nManifesterLevel;
+    if(!manif.bCanManifest) return;
+    
+	int nDuration = manif.nManifesterLevel;
+	if(manif.bExtend) nDuration *= 2;
+	int nBonus = 20;
+	int nMaxBonus = 40;
+	if (manif.bAugment){
+		nBonus += 5;
+		nMaxBonus += 5;
+	}	
+    nBonus += manif.nManifesterLevel;
+	if (nBonus > nMaxBonus) nBonus = nMaxBonus;
+	
     effect eSR = EffectSpellResistanceIncrease(nBonus);
-    //effect eVis = EffectVisualEffect(VFX_IMP_MAGIC_PROTECTION);
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );
-    //effect eDur2 = EffectVisualEffect(249);
-    effect eLink = EffectLinkEffects(eSR, eDur);
-    //eLink = EffectLinkEffects(eLink, eDur2);
+    effect eLink = EffectLinkEffects(eDur, eSR);
+
 
     //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SPELL_RESISTANCE, FALSE));
-	}
-	}
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
+	
+}

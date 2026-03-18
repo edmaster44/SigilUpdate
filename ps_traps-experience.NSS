@@ -18,7 +18,7 @@ void main()
 //Get PC who disarmed the trap 
 oPC = GetLastDisarmed(); 
 //Get level of PC 
-nlevel = GetHitDice(oPC); 
+nlevel = PS_GetLevel(oPC); 
 //Get DC for disarming trap (needed for calculation of XP) 
 nDC = GetTrapDisarmDC(OBJECT_SELF); 
 //Check, if trap was set by another PC. Otherwise give XP 

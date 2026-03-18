@@ -104,7 +104,7 @@ void main()
             if(nRacial == RACIAL_TYPE_OUTSIDER || nRacial == RACIAL_TYPE_ELEMENTAL)
             {
 				//Max HD possible
-				if(GetHitDice(oTarget) <= nHD)
+				if(PS_GetLevel(oTarget) <= nHD)
 				{
                 //Make a will save
 	                if(!WillSave(oTarget, nSaveDC))

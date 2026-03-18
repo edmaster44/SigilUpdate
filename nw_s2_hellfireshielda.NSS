@@ -97,7 +97,7 @@ void main()
 	if (nTotal > 0)
 	{
 
-		int iDmg = nTotal * GetHitDice(oCaster) / 2; // 0.5HP / level is equal to 1 point of CON damage.
+		int iDmg = nTotal * PS_GetLevel(oCaster) / 2; // 0.5HP / level is equal to 1 point of CON damage.
 		effect eDmg = EffectDamage(iDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE); // hopefully this will bypass resistances.
 		DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oCaster));
 		

@@ -49,7 +49,7 @@ void main()
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget);
 	int nSubRacial = GetSubRace(oTarget);
     // * the pool is the number of hit dice of creatures that can be banished
-    int nPool = 2* GetHitDice(OBJECT_SELF);
+    int nPool = 2* PS_GetLevel(OBJECT_SELF);
 
     while(GetIsObjectValid(oTarget))
     {
@@ -84,14 +84,14 @@ void main()
                     //Determine correct save
                     nSpellDC = 16 + nCha;// + 6;
                     // * Must be enough points in the pool to destroy target
-                    if (nPool >= GetHitDice(oTarget))
+                    if (nPool >= PS_GetLevel(oTarget))
                     // * Make SR and will save checks
                     if (!MyResistSpell(OBJECT_SELF, oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nSpellDC))
                     {
                          //Apply the VFX and delay the destruction of the summoned monster so
                          //that the script and VFX can play.
 
-                         nPool = nPool - GetHitDice(oTarget);
+                         nPool = nPool - PS_GetLevel(oTarget);
                          ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
                          if (CanCreatureBeDestroyed(oTarget) == TRUE)
                          {

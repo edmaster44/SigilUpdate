@@ -38,7 +38,7 @@ void main()
     // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
-	if (GetHitDice(OBJECT_SELF) < 15)
+	if (PS_GetLevel(OBJECT_SELF) < 15)
 	{
 		SendMessageToPC(OBJECT_SELF, "You cannot use this ability until level 15.");
 		return;

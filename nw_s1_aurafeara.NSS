@@ -31,9 +31,9 @@ void main()
 	effect eShaken = EffectLinkEffects(eAttackPen, eSavePen);
 		eShaken = EffectLinkEffects(eSkillPen, eShaken);
 
-    int nHD = GetHitDice(oCreator);
-//  int nDC = 10 + GetHitDice(GetAreaOfEffectCreator())/3;
-//  int nDC = 10 + GetHitDice(GetAreaOfEffectCreator());
+    int nHD = PS_GetLevel(oCreator);
+//  int nDC = 10 + PS_GetLevel(GetAreaOfEffectCreator())/3;
+//  int nDC = 10 + PS_GetLevel(GetAreaOfEffectCreator());
 	int nReduceHD = nHD / 2;
     int nDC = nReduceHD;
     int nDuration = GetScaledDuration(nReduceHD, oTarget);
@@ -47,7 +47,7 @@ void main()
 			 // Apply Fear
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_AURA_FEAR));
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nDuration));
-		} else if (nHD - GetHitDice(oTarget) >= 5 && !GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oCreator) &&
+		} else if (nHD - PS_GetLevel(oTarget) >= 5 && !GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oCreator) &&
 				!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCreator)){
 			//Apply Shaken Effect if target is 5 HD or more lower than caster and is not immune to Fear
 			// or mind spells.

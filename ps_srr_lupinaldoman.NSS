@@ -38,7 +38,7 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     effect eDom = EffectDominated();
-	int nCasterLevel = GetHitDice(OBJECT_SELF);
+	int nCasterLevel = PS_GetLevel(OBJECT_SELF);
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
 	int nDC = 13 + (nCasterLevel/3) + nCha;
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_DOM_ANIMAL);

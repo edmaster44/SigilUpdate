@@ -12,7 +12,7 @@ void UnsummonSpawn(object oPC, object oTarget)
 
 void CreateMyconid(object oPC, object oTarget, int iDC, int iSpellID)
 {
-	int iLevel = GetHitDice(oTarget);
+	int iLevel = PS_GetLevel(oTarget);
 	location lLoc = GetLocation(oTarget);
 	int iFeat;
 	//if (GetHasSpellEffect(iSpellID, oTarget)) // if target gets a remove disease or otherwise cured, then no further effect.

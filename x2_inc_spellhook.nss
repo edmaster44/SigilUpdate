@@ -42,6 +42,8 @@ const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
+void SignalAndApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
+	object oTarget, float fDuration=0.0f);
 int GetMissChance(object oCaster);
 int GetSpellFailedBecauseMissChance(object oCaster);
 void PS_RemoveEffects(object oTarget, int nId = NULL, int nType = NULL, object oCreator = OBJECT_INVALID);
@@ -366,6 +368,15 @@ void X2DoBreakConcentrationCheck()
          }
     }	
 }
+
+//got tired of having to write both signal event and apply effect, so made a wrapper that does both
+void SignalAndApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
+	object oTarget, float fDuration=0.0f){
+	
+	SignalEvent(oTarget, EventSpellCastAt(oCaster, nSpellId, bHostile));
+	ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
+}
+
 // More robust way to remove effects. Specify either the id, the type, the creator, or any combination
 // to remove all effects that match those criteria. If you do not specify any critera, all effects
 // are removed. -FlattedFifth, Nov 24, 2024

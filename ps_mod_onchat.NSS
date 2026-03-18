@@ -179,12 +179,231 @@ void SixSecondTick(object oPC, int nRound = 1){
 	}
 }
 
+void RollSocialCheck(object oPC, int nAction){
+	//int nNoSkillPenalty = 5;
+	int nSkill = -1;
+	int nOpSkill = -1; 
+	int nDC;
+	string sPlayerMessage = "<c=lightgreen>You attempt to ";
+	string sListenerMessage = "";
+	int bMindImmune;
+	int nBluff; int nDipl; int nPerf; int nOpSearch; int nOpSleight;
+	int nOpBluff; int nOpDipl; int nOpIntim; int nOpPerf; int nOpCon; int nOpSpot; int nOpListen; int nOpWill;
+	float fRange = RADIUS_SIZE_HUGE;
+	if (nAction == SKILL_SLEIGHT_OF_HAND || GetLocalInt(oPC, "LastChatChannel") == CHAT_MODE_WHISPER)
+		fRange = RADIUS_SIZE_MEDIUM;
+	string sName = GetFirstName(oPC) + " " + GetLastName(oPC);
+	string sWinMessage;
+	string sLoseMessage;
+	string sDmAddendum;
+	string sDmMessage = sName + " has attempted to ";
+
+	switch (nAction){
+		case SKILL_APPRAISE:{
+			sDmMessage += "HAGGLE";
+			sPlayerMessage += "HAGGLE";
+			nSkill = GetSkillRank(SKILL_APPRAISE, oPC);
+			nBluff = (GetSkillRank(SKILL_BLUFF, oPC) / 3) * 2;
+			nDipl = (GetSkillRank(SKILL_DIPLOMACY, oPC) / 3) * 2;
+			nPerf = (GetSkillRank(SKILL_PERFORM, oPC) / 3) * 2;
+			if (nBluff > nSkill) nSkill = nBluff;
+			if (nDipl > nSkill) nSkill = nDipl;
+			if (nPerf > nSkill) nSkill = nPerf;
+			break;
+		}
+		case SKILL_BLUFF:{
+			sDmMessage += "LIE";
+			sPlayerMessage += "LIE";
+			nSkill = GetSkillRank(SKILL_BLUFF, oPC);
+			nDipl = (GetSkillRank(SKILL_DIPLOMACY, oPC) / 3) * 2;
+			nPerf = (GetSkillRank(SKILL_PERFORM, oPC) / 3) * 2;
+			if (nDipl > nSkill) nSkill = nDipl;
+			if (nPerf > nSkill) nSkill = nPerf;
+			break;
+		}
+		case SKILL_DIPLOMACY:{
+			sDmMessage += "PERSUADE";
+			sPlayerMessage += "PERSUADE";
+			nSkill = GetSkillRank(SKILL_DIPLOMACY, oPC);
+			nBluff = (GetSkillRank(SKILL_BLUFF, oPC) / 3) * 2;
+			nPerf = (GetSkillRank(SKILL_PERFORM, oPC) / 3) * 2;
+			if (nBluff > nSkill) nSkill = nBluff;
+			if (nPerf > nSkill) nSkill = nPerf;
+			break;
+		}
+		case SKILL_INTIMIDATE:{
+			sDmMessage += "INTIMIDATE";
+			sPlayerMessage += "INTIMIDATE";
+			nSkill = GetSkillRank(SKILL_INTIMIDATE, oPC);
+			nBluff = (GetSkillRank(SKILL_BLUFF, oPC) / 3) * 2;
+			nDipl = (GetSkillRank(SKILL_DIPLOMACY, oPC) / 3) * 2;
+			nPerf = (GetSkillRank(SKILL_PERFORM, oPC) / 3) * 2;
+			if (nBluff > nSkill) nSkill = nBluff;
+			if (nDipl > nSkill) nSkill = nDipl;
+			if (nPerf > nSkill) nSkill = nPerf;
+			break;
+		}
+		case SKILL_SLEIGHT_OF_HAND:{
+			sDmMessage += "perform SLEIGHT OF HAND";
+			sPlayerMessage += "perform SLEIGHT OF HAND";
+			nSkill = GetSkillRank(SKILL_SLEIGHT_OF_HAND, oPC);
+			int nRefl = GetReflexSavingThrow(oPC) / 3;
+			if (nRefl > nSkill) nSkill = nRefl;
+			break;
+		}
+		default: break;
+	}
+	if (nSkill == -1) return;
+	
+	nDC = d20() + nSkill;
+	// OPTIONAL: Impose a penalty on anyone attempting to perform a skill in which they have 0 base points
+	//if (GetSkillRank(nAction, oPC, TRUE) == 0) nDC -= nNoSkillPenalty;
+	sPlayerMessage += " with a roll of " + IntToString(nDC) + ".\n";
+	sPlayerMessage += "Those around you will be given an opposing roll. You will not be notified of the result.";
+	sPlayerMessage += " Only the players making the rolls and any online DMs will know. Note that this roll is";
+	sPlayerMessage += " meant to serve as an aid to roleplay, not a <i>replacement</i> for roleplay. The majority";
+	sPlayerMessage += " of the reactions of those around you will be based upon your RP, not upon dice.";
+	sPlayerMessage += " Also note that this is NOT mind control. You cannot convince someone to ignore provable";
+	sPlayerMessage += " facts or behave in a manner outside their nature no matter how high you roll.";
+	sPlayerMessage += " Keep in mind that no player can tell another player how to RP any situation. Ever.</c>";
+	SendMessageToPC(oPC, sPlayerMessage);
+	
+	sDmMessage += " with a roll of " + IntToString(nDC) + ".\n";
+	sPlayerMessage += " with a roll of " + IntToString(nDC) + ".\n";
+	if (nAction != SKILL_SLEIGHT_OF_HAND){
+		if (fRange == RADIUS_SIZE_MEDIUM) sDmMessage += "They <i>whispered</i>";
+		else sDmMessage += "They <i>said</i>";
+		sDmMessage += " '" + GetLocalString(oPC, "LastChatMessage") + "'.\n\n";
+	}
+	
+	location lLoc = GetLocation(oPC);
+	object oListener = GetFirstObjectInShape(SHAPE_SPHERE, fRange, lLoc);
+	while (GetIsObjectValid(oListener)){
+		if (GetIsPC(oListener)){
+			sListenerMessage = "";
+			bMindImmune = (GetIsImmune(oListener, IMMUNITY_TYPE_MIND_SPELLS, oPC) ||
+				GetIsImmune(oListener, IMMUNITY_TYPE_FEAR, oPC));
+			
+			switch (nAction){
+				case SKILL_APPRAISE:{
+					nOpSkill = GetSkillRank(SKILL_APPRAISE, oListener);
+					nOpBluff = (GetSkillRank(SKILL_BLUFF, oListener) / 3) * 2;
+					nOpDipl = (GetSkillRank(SKILL_DIPLOMACY, oListener) / 3) * 2;
+					nOpCon = (GetSkillRank(SKILL_CONCENTRATION, oListener) / 3) * 2;
+					nOpWill = (GetWillSavingThrow(oListener) / 3) * 2;
+					if (nOpBluff > nOpSkill) nOpSkill = nOpBluff;
+					if (nOpDipl > nOpSkill) nOpSkill = nOpDipl;
+					if (nOpCon > nOpSkill) nOpSkill = nOpCon;
+					if (nOpWill > nOpSkill) nOpSkill = nOpWill;
+					sWinMessage = "You're not convinced that " + sName + " has any notion of true value.";
+					sLoseMessage = sName + " may have a point about the value.";
+					sDmAddendum = " on their barter roll ";
+					break;
+				}
+				case SKILL_BLUFF:{
+					nOpSkill = GetSkillRank(SKILL_BLUFF, oListener);
+					nOpDipl = (GetSkillRank(SKILL_DIPLOMACY, oListener) / 3) * 2;
+					nOpSpot = GetSkillRank(SKILL_SPOT, oListener);
+					nOpListen = GetSkillRank(SKILL_LISTEN, oListener);
+					if (nOpDipl > nOpSkill) nOpSkill = nOpDipl;
+					if (nOpSpot > nOpSkill) nOpSkill = nOpSpot;
+					if (nOpListen > nOpSkill) nOpSkill = nOpListen;
+					sWinMessage = "You suspect that " + sName + " is lying.";
+					sLoseMessage = "";
+					sDmAddendum = " on their roll to see through the lie ";
+					break;
+				}
+				case SKILL_DIPLOMACY:{
+					nOpSkill = GetSkillRank(SKILL_DIPLOMACY, oListener);
+					nOpBluff = (GetSkillRank(SKILL_BLUFF, oListener) / 3) * 2;
+					nOpCon = GetSkillRank(SKILL_CONCENTRATION, oListener);
+					nOpWill = (GetWillSavingThrow(oListener) / 3) * 2;
+					if (nOpBluff > nOpSkill) nOpSkill = nOpBluff;
+					if (nOpCon > nOpSkill) nOpSkill = nOpCon;
+					if (nOpWill > nOpSkill) nOpSkill = nOpWill;
+					sWinMessage = "You do not find " + sName + " very convincing.";
+					sLoseMessage = "You find " + sName + " very convincing.";
+					sDmAddendum = " on their roll to resist persuasion ";
+					break;
+				}
+				case SKILL_INTIMIDATE:{
+					nOpSkill = GetSkillRank(SKILL_INTIMIDATE, oListener);
+					nOpCon = GetSkillRank(SKILL_CONCENTRATION, oListener);
+					nOpDipl = (GetSkillRank(SKILL_DIPLOMACY, oListener) / 3) * 2;
+					nOpWill = (GetWillSavingThrow(oListener) / 3) * 2;
+					if (nOpCon > nOpSkill) nOpSkill = nOpCon;
+					if (nOpDipl > nOpSkill) nOpSkill = nOpDipl;
+					if (nOpWill > nOpSkill) nOpSkill = nOpWill;
+					sWinMessage = "You do not find " + sName + " very intimidating.";
+					if (bMindImmune){
+						sLoseMessage = "You would find " + sName + " very intimidating if you were not immune";
+						sLoseMessage += " to fear. However, you believe they are serious.";
+					} else sLoseMessage = "You find " + sName + " very intimidating.";
+					sDmAddendum = " on their roll to resist intimidation ";
+					break;
+				}
+				case SKILL_SLEIGHT_OF_HAND:{
+					nOpSkill = GetSkillRank(SKILL_SPOT, oListener);
+					nOpSearch = GetSkillRank(SKILL_SEARCH, oListener) / 2;
+					nOpSleight = (GetSkillRank(SKILL_SLEIGHT_OF_HAND, oListener) / 3) * 2;
+					if (nOpSearch > nOpSkill) nOpSkill = nOpSearch;
+					if (nOpSleight > nOpSkill) nOpSkill = nOpSleight;
+					sWinMessage = "You spot " + sName + " performing sleight of hand.";
+					sLoseMessage = "";
+					sDmAddendum = " on their roll to spot sleight of hand ";
+					break;
+				}
+				default: break;
+			
+			}
+			if (nOpSkill != -1){
+				nOpSkill += d20();
+				// OPTIONAL: Impose a penalty on anyone attempting to resist a skill in which they have 
+				// 0 base points
+				/*
+				if ((nAction == SKILL_SLEIGHT_OF_HAND && GetSkillRank(SKILL_SPOT, oListener, TRUE) == 0) ||
+					(nAction != SKILL_SLEIGHT_OF_HAND && GetSkillRank(nAction, oListener, TRUE) == 0)) 
+						nOpSkill -= nNoSkillPenalty;
+				*/
+				sDmMessage += GetFirstName(oListener) + " " + GetLastName(oListener);
+				sDmMessage += (nOpSkill >= nDC) ? " SUCCEEDED" : " FAILED";
+				sDmMessage += sDmAddendum;
+				sDmMessage += "with a roll of " + IntToString(nOpSkill);
+				if (nAction == SKILL_INTIMIDATE && nOpSkill < nDC && bMindImmune){
+					sDmMessage += " but is immune to fear";
+				}
+				sDmMessage += ".\n";
+				sListenerMessage = (nOpSkill >= nDC) ? sWinMessage : sLoseMessage;
+			
+				if (sListenerMessage != ""){
+					sListenerMessage = "<c=lightgreen>" + sListenerMessage;
+					sListenerMessage += "\n((Note that this is just a guide based on a dice roll and ";
+					sListenerMessage += "is less important than the actual RP happening.\n";
+					sListenerMessage += "If you feel that the RP should have a different result feel free to";
+					sListenerMessage += " ignore this dice roll. And remember nothing short of magic can make your";
+					sListenerMessage += " character behave in a way that is against their nature or forget things";
+					sListenerMessage += " that they know for certain.))";
+					SendMessageToPC(oListener, sListenerMessage);
+				}
+			}
+		}
+		oListener = GetNextObjectInShape(SHAPE_SPHERE, fRange, lLoc);
+	}
+	sDmMessage += "\n\n";
+	SendChatMessage(oPC, OBJECT_INVALID, CHAT_MODE_SILENT_SHOUT, sDmMessage);
+}
+
 // collection of simple chat commands by FlattedFifth
 int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 
-	if (nChannel != CHAT_MODE_TALK || !GetIsPC(oSender))
+	if ((nChannel != CHAT_MODE_TALK && nChannel != CHAT_MODE_WHISPER) || !GetIsPC(oSender))
 		return FALSE;
-			
+	
+	//store last non-command chat message for use in RollSocialCheck()
+	if (GetSubString(sMessage, 0, 1) != "#"){
+		SetLocalString(oSender, "LastChatMessage", sMessage);
+		SetLocalInt(oSender, "LastChatChannel", nChannel);
+	}		
 	int bFFcommand = FALSE; // return value, if TRUE then action will take place and text will not go to chat
 	string sFeedback = "";
 	string sInput = GetStringLowerCase(sMessage);
@@ -196,21 +415,27 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
 			SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
 			sFeedback = "ScribeMin OFF\n";
-			sFeedback += "You will now scribe scrolls as normal until next login ";
+			sFeedback += "You will now scribe scrolls as normal until next server reset ";
 			sFeedback += "or until ScribeMin turned on.";
 		} else {
 			SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
 			sFeedback = "ScribeMin ON\n";
-			sFeedback += "You will now scribe scrolls at minimum caster level until next login ";
+			sFeedback += "You will now scribe scrolls at minimum caster level until next server reset ";
 			sFeedback += "or until ScribeMin turned off.";
 		}
-		
-	 // command for showing caster level. uses GetRealCasterLevel() in ps_inc_casterlevel
-	 // which is not accurate, especially if theurge. GetRealCasterLevel needs fixing
+	} else if (sInput == "#appraise" || sInput == "#haggle"){
+		RollSocialCheck(oSender, SKILL_APPRAISE);
+	} else if (sInput == "#bluff" || sInput == "#lie"){
+		RollSocialCheck(oSender, SKILL_BLUFF);
+	} else if (sInput == "#diplomacy" || sInput == "#persuade"){
+		RollSocialCheck(oSender, SKILL_DIPLOMACY);
+	} else if (sInput == "#intimidate" || sInput == "#threat"){
+		RollSocialCheck(oSender, SKILL_INTIMIDATE);
+	} else if (sInput == "sleight"){
+		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND);
 	} else if (sInput == "#showcl"){
 		bFFcommand = TRUE;
 		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE));
-		
 	// as above but including Alchemical Infusion caster lvl where applicable
 	} else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
 		bFFcommand = TRUE;
@@ -319,27 +544,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			else sFeedback = "Turning on eye glow for gaseous form";
 		}
 	}
-	else if (sInput == "#getarmorappearance"){
-		bFFcommand = TRUE;
-		oItem = GetPlayerCurrentTarget(oSender);
-		sFeedback = "Appearance index of targeted armor:\n";
-		if (GetObjectType(oItem) == OBJECT_TYPE_CREATURE){
-			oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, GetPlayerCurrentTarget(oSender));
-			sFeedback = "Appearance index of worn armor:\n";
-		}
-		if (!GetIsObjectValid(oItem)){ // if not targeting anything
-			oItem = GetItemInSlot(INVENTORY_SLOT_CHEST, oSender);
-			sFeedback = "Appearance index of worn armor:\n";
-		}
-		if (GetBaseItemType(oItem) != 16){
-			sFeedback = "Must be wearing an armor or targeting an armor or targeting a creature wearing armor";
-		} else {
-			string sNum = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL,ITEM_APPR_ARMOR_NUM_MODELS));
-			string sTorso = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_TORSO));
-			string sRobe = IntToString(GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, ITEM_APPR_ARMOR_MODEL_ROBE));
-			sFeedback += "Torso = " + sTorso + "\nRobe = " + sRobe + "\nModel = " + sNum + "\n";
-		}
-	}
 	else if (sInput == "#testcraftcost"){
 		bFFcommand = TRUE;
 		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
@@ -383,6 +587,97 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 					SetLocalInt(oEss, sVarName, nVar - 86401);
 			}
 			sFeedback = "Reset tomb timers to 24 hours ago";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_neg_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_holy_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_acid_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ACID);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_cold_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_COLD);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_elec_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ELECTRICAL);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_fire_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#test_sonic_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_SONIC);
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
+				sFeedback = "VFX applied";
+			} else sFeedback = "No weapon in right hand";
+		} else sFeedback = "This command only works on the test server.";
+	}
+	else if (sInput == "#remove_vfx"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
+			if (GetIsObjectValid(oWeapon)){
+				itemproperty ip = GetFirstItemProperty(oWeapon);
+				while (GetIsItemPropertyValid(ip)){
+					if (GetItemPropertyType(ip) == 83)
+						RemoveItemProperty(oWeapon, ip);
+					ip = GetNextItemProperty(oWeapon);
+				}
+			} else sFeedback = "No weapon in right hand";
 		} else sFeedback = "This command only works on the test server.";
 	}
 	//END SPECIFIC SYSTEM DEBUGGING COMMANDS

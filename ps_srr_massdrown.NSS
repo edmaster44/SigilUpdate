@@ -49,7 +49,7 @@ void main()
 	location lTarget = GetSpellTargetLocation();
 	object oCaster = OBJECT_SELF;
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
-	int nCasterLevel = GetHitDice(OBJECT_SELF);
+	int nCasterLevel = PS_GetLevel(OBJECT_SELF);
     int nDam;
 	effect eVis = EffectVisualEffect( VFX_HIT_DROWN );
     effect eDam;

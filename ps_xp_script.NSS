@@ -57,6 +57,13 @@ void main()
     while(GetIsObjectValid(oPartyMember) == TRUE){
     
         fAdjustedCR = fCR;
+		int nActualLevel = PS_GetLevelByXP(oPartyMember);
+		if (nActualLevel > GetHitDice(oPartyMember)){
+			string sMetagaming = "You have surpassed the requied XP to level up.";
+			sMetagaming += "\nYour XP is now being calculated as though you were level ";
+			sMetagaming += IntToString(nActualLevel) + ".";
+			SendMessageToPC(oPartyMember, sMetagaming);
+		}
         
         if (oArea == GetArea(oPartyMember)){
             if (GetLocalInt(OBJECT_SELF, "X2_L_NOTREASURE") == FALSE
@@ -69,8 +76,7 @@ void main()
             }
             
             iMemberlevel = PS_GetLevel(oPartyMember);
-            iHD = GetHitDice(oPartyMember);
-            iECL = iMemberlevel - iHD;
+            iECL = GetNewECL(oPartyMember);
             
             
             if(iMemberlevel < iMAX-MAXPARTYRANGE){
@@ -95,6 +101,8 @@ void main()
             }
             //
             
+			// Removed level 25+ XP nerf as per Ed and Jelkia, -FlattedFifth
+			/*
             if(iMemberlevel > 24) //25th level and up get xp penalty
             {
                 fTooLow = fTooLow * (30 - iMemberlevel) / 6;
@@ -102,6 +110,7 @@ void main()
                 // so lets set a minimum
                 if (fTooLow < 0.05) fTooLow = 0.05;
             }
+			*/
             
             if(fAdjustedCR>=fPartylevel)
             {

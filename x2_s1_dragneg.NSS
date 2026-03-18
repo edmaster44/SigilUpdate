@@ -19,7 +19,7 @@ void NegativeFire(int nDamage, int nDamage2, int nDC);
 void main()
 {
     //Declare major variables
-    int nAge = GetHitDice(OBJECT_SELF);
+    int nAge = PS_GetLevel(OBJECT_SELF);
     int nDamage;// for level drain
     int nDamage2;// for negative energy
     int nDC;

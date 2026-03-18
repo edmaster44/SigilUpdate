@@ -12,7 +12,7 @@
 void main()
 {
     object oTarget = GetSpellTargetObject();
-    int nHitDice = GetHitDice(oTarget);
+    int nHitDice = PS_GetLevel(oTarget);
     
     DoPetrification(nHitDice, OBJECT_SELF, oTarget, GetSpellId(), 15);
 }

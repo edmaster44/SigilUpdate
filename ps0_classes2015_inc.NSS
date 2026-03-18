@@ -252,6 +252,15 @@ void PS_Feat_GC_DODGE_AC(object oPC, int nSpell){
 			else nGatecrasherAC -= nOtherAC;	
 		}
 	}
+	// Also doesn't stack with Armor of the Crocodile from Nature Warrior.
+	if (nGatecrasherAC > 0 && GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oPC) > 0){
+		int nCroc = 0;
+		//AotCroc was made +4 at lvl 5 when made incompatible with GC ac
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE)) nCroc = 4; 
+		else if (GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE)) nCroc = 2;
+		else if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE)) nCroc = 1;
+		nGatecrasherAC -= nCroc;
+	}
 
 	if (nGatecrasherAC > 0){
 		effect eAC = EffectACIncrease(nGatecrasherAC);

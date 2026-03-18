@@ -263,8 +263,8 @@ int HenchDoTalentMeleeAttack(object oTarget, float fThresholdDistance, int iCrea
     else
     {
     // TODO change to GetRawChallengeRating?
-        relativeChallenge = IntToFloat(GetHitDice(OBJECT_SELF)) * HENCH_HITDICE_TO_CR;
-        relativeChallenge -= IntToFloat(GetHitDice(oTarget)) * HENCH_HITDICE_TO_CR;
+        relativeChallenge = IntToFloat(PS_GetLevel(OBJECT_SELF)) * HENCH_HITDICE_TO_CR;
+        relativeChallenge -= IntToFloat(PS_GetLevel(oTarget)) * HENCH_HITDICE_TO_CR;
     }
 
     int preferredActionMode;
