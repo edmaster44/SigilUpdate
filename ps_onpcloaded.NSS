@@ -513,17 +513,19 @@ void main()
 		GiveStartingGold(oPC, 500);
 
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
-		CreateItemOnObject("ps_essence", oPC);
-		//template
-		if (Template == 1)
-		{	
+		oItem = CreateItemOnObject("ps_essence", oPC);
+		
+		// we need the original race stored regardless at char creation, 
+		// and at char creation no one has a template
+		//if (Template == 1)
+		//{	
 			//SendMessageToPC(GetFirstPC(), "setting to essence");
-			oItem = PS_GetEssence(oPC);
+			//oItem = PS_GetEssence(oPC);
 			SetLocalString(oItem, "LEGAL", Legal);
 			//SetLocalString(oItem, "ECL", ECL);
-			SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC)); 
+			SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC));			
 			SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));			
-		}
+		//}
 		
 
 		Booted = prepChar(oPC);

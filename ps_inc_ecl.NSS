@@ -21,11 +21,10 @@ void PS_EnforceMaxLevel(object oPC);
 // but using a file search and replace to correct it will take longer than I have right
 // now due to the backups and checking involved in doing so safely. -Flatted Fifth
 int GetNewECL(object oPC){
-	int nRace = GetSubRace(oPC);
-	if (nRace == 35){
-		object oEss = GetItemPossessedBy(oPC, "ps_essence");
-		nRace = GetLocalInt(oEss, "OldSubrace");
-	}
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	int nRace = GetLocalInt(oEss, "OldSubrace");
+	if (nRace == 0) nRace = GetSubRace(oPC);
+	
 	int nEcl = StringToInt(Get2DAString("racialsubtypes", "PS_ECL", nRace));
 	int i;
 	int nClass;
