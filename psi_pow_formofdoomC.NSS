@@ -8,13 +8,24 @@
 #include "aaa_constants"
 #include "x2_inc_itemprop"
 
+const int FEAT_WEAP_FOC_CR = 291;
+const int FEAT_WEAP_SPEC_CR = 290;
+const int FEAT_GREAT_WEAP_FOC_CR = 1157;
+const int FEAT_GREAT_WEAP_SPEC_CR = 1197;
+const int FEAT_EPIC_WEAP_FOC_CR = 656;
+const int FEAT_EPIC_WEAP_SPEC_CR = 694;
+
+effect EffectDamage(int nDamageAmount, int nDamageType=DAMAGE_TYPE_MAGICAL, int nDamagePower=DAMAGE_POWER_NORMAL, int nIgnoreResistances=FALSE);
+
 void DoTentacleAttack(object oEnemy, int nAB, int nBonus){
 	if (d20() + nAB < GetAC(oEnemy))
 		return;
-	int nDamage = d8(2) + nBonus;
-	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
+	int nDamage = d8() + nBonus;
+	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
+	effect eMagicDam = EffectDamage(d8(), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
 	effect eVis = EffectVisualEffect(VFX_IMP_DESTRUCTION);
 	effect eLink = EffectLinkEffects(eVis, eDam);
+	eLink = EffectLinkEffects(eMagicDam, eDam);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oEnemy);
 }
 
@@ -28,8 +39,15 @@ void main()
 		bAugmented = TRUE;
 	}
 	int nAB = GetBaseAttackBonus(oManifester);
+	if (GetHasFeat(FEAT_EPIC_WEAP_FOC_CR, oManifester)) nAB += 4;
+	else if (GetHasFeat(FEAT_GREAT_WEAP_FOC_CR, oManifester)) nAB += 2;
+	else if (GetHasFeat(FEAT_WEAP_FOC_CR, oManifester)) nAB += 1;
+	
 	int nBonus = GetAbilityScore(oManifester, ABILITY_STRENGTH) / 2;
 	if (nBonus < 0) nBonus = 0;
+	if (GetHasFeat(FEAT_EPIC_WEAP_SPEC_CR, oManifester)) nBonus += 6;
+	else if (GetHasFeat(FEAT_GREAT_WEAP_SPEC_CR, oManifester)) nBonus += 4;
+	else if (GetHasFeat(FEAT_WEAP_SPEC_CR, oManifester)) nBonus += 2;
 	
 	// count enemies
 	int nNumEnemies = 0;

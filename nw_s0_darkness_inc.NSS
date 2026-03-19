@@ -13,14 +13,14 @@ int LvDRoll(int nLightCL, int nDarkCL, int bHoly, int bAbyssal, int bForm){
 	if (bHoly) nLightCL += 5;
 	if (bAbyssal) nDarkCL += 5;
 	int nDiff = nLightCL - nDarkCL;
-	if (nDiff > -5 && nDiff < 5){
-		if (!bForm) return DESTROY_BOTH;
-		else return DESTROY_DARK;
+	if (nDiff == 0){
+		if (bForm) return DESTROY_DARK;
+		else return DESTROY_BOTH;
 	}
 	else if (nLightCL > nDarkCL) 
 		return DESTROY_DARK;
 	else {
-		if (bForm) return DESTROY_NONE;
+		if (bForm) return DESTROY_DARK;
 		else return DESTROY_LIGHT;
 	}
 	return DESTROY_NONE;
@@ -29,33 +29,41 @@ int LvDRoll(int nLightCL, int nDarkCL, int bHoly, int bAbyssal, int bForm){
 void LvDResultMessage(object oLightCaster, object oDarkCaster, int LvD){
 	string sLightMessage;
 	string sDarkMessage;
+	string sBothMessage;
 	switch (LvD){
 		case DESTROY_LIGHT:{
 			sLightMessage = "The Darkness effect has dispelled your Light!";
 			sDarkMessage = "Your Darkness effect has dispelled the Light!";
+			sBothMessage = "Your Darkness effect has dispelled your Light effect!";
 			break;
 		}
 		case DESTROY_DARK:{
 			sLightMessage = "Your Light effect has dispelled the Darkness!";
 			sDarkMessage = "The Light effect has dispelled your Darkness!";
+			sBothMessage = "Your Light effect has dispelled your Darkness effect!";
 			break;
 		}
 		case DESTROY_BOTH:{
 			sLightMessage = "The Darkness and your Light have cancelled each other!";
 			sDarkMessage = "The Light and your Darkness have cancelled each other!";
+			sBothMessage = "Your Light effect and Darkness effects have cancelled each other!";
 			break;
 		}
 		case DESTROY_NONE:{
 			sLightMessage = "Your Light has failed to destroy the Darkness effect!";
-			sDarkMessage = "Your Darkness effect cannot destroy the Light!";
+			sDarkMessage = "Your Darkness effect cannot destroy this Light!";
+			sBothMessage = "Your Darkness effect and Light effect cannot overcome each other!";
 			break;
 		}
 	}
-	
-	if (GetIsObjectValid(oLightCaster))
-		SendMessageToPC(oLightCaster, sLightMessage);
-	if (GetIsObjectValid(oDarkCaster))
-		SendMessageToPC(oDarkCaster, sDarkMessage);
+	if (GetIsObjectValid(oLightCaster) && GetIsObjectValid(oDarkCaster) && oLightCaster == oDarkCaster){
+		SendMessageToPC(oLightCaster, sBothMessage);
+	} else {
+		if (GetIsObjectValid(oLightCaster))
+			SendMessageToPC(oLightCaster, sLightMessage);
+		if (GetIsObjectValid(oDarkCaster))
+			SendMessageToPC(oDarkCaster, sDarkMessage);
+	}
 }
 
 void DoLightVsDarkness(object oTarget){
@@ -79,15 +87,16 @@ void DoLightVsDarkness(object oTarget){
 			nResult = LvDRoll(dLightData.nCL, dDarkData.nCL, bHoly, bAbyssal, bForm);
 			LvDResultMessage(oLightCaster, oDarkCaster, nResult);
 			if (nResult == DESTROY_LIGHT){
-				DestroyObject(oTarget, 0.1f, FALSE);
+				DestroyObject(oTarget, 0.0f, FALSE);
+				return;
 			} else if (nResult == DESTROY_DARK){
-				DestroyObject(OBJECT_SELF, 0.1f, FALSE);
+				DestroyObject(OBJECT_SELF, 0.0f, FALSE);
 				return;
 			} else if (nResult == DESTROY_BOTH){
-				DestroyObject(oTarget, 0.1f, FALSE);
-				DestroyObject(OBJECT_SELF, 0.1f, FALSE);
+				DestroyObject(oTarget, 0.0f, FALSE);
+				DestroyObject(OBJECT_SELF, 0.0f, FALSE);
 				return;
-			}
+			} else return;
 		}
 	//otherwise scan creatures and placeable for light effects on them and roll to see which, if either, 
 	// banishes the other.
@@ -104,14 +113,15 @@ void DoLightVsDarkness(object oTarget){
 					LvDResultMessage(oLightCaster, oDarkCaster, nResult);
 					if (nResult == DESTROY_LIGHT){
 						PS_RemoveEffects(oTarget, nLightId);
+						break;
 					} else if (nResult == DESTROY_DARK){
-						DestroyObject(OBJECT_SELF, 0.1f, FALSE);
-						return;
+						DestroyObject(OBJECT_SELF, 0.0f, FALSE);
+						break;
 					} else if (nResult == DESTROY_BOTH){
 						PS_RemoveEffects(oTarget, nLightId);
-						DestroyObject(OBJECT_SELF, 0.1f, FALSE);
-						return;
-					}
+						DestroyObject(OBJECT_SELF, 0.0f, FALSE);
+						break;
+					} else break;
 				}
 			eFX = GetNextEffect(oTarget);
 		}

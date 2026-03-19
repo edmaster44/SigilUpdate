@@ -4796,6 +4796,9 @@ void RecordPCAction(object oTarget, string sVar, object oPC) {
     SetLocalInt(oTarget, sVar+"_Num", nIndex);
 }
 
+// NOTE: This function has been commented out in the two places it was called because
+// turning off the local integers does not turn off the GUI indicators, causing confusion
+// -FlattedFifth, March 19, 2026
 void ShutdownMetaPsionics(object oPC){
 	if (GetLocalInt(oPC, "METAPSI_AUGMENT") == 1){   
 		SetLocalInt(oPC, "METAPSI_AUGMENT", 0);
@@ -4856,7 +4859,7 @@ void DoPsyProgression(object oPC, int bCharCreation = FALSE){
 	if (iPsy >= 1){    
 		FeatAdd(oPC, FEAT_PSYWAR_PROGRESSION_I, FALSE, FALSE, FALSE);
 	}
-	ShutdownMetaPsionics(oPC);
+	//ShutdownMetaPsionics(oPC);
 	
 }
 
@@ -4886,7 +4889,7 @@ void DoPsionFeatProgression(object oPC){
 		FeatRemove(oPC, 21401);
 		FeatRemove(oPC, 21402);	
 	}
-	ShutdownMetaPsionics(oPC);
+	//ShutdownMetaPsionics(oPC);
 }
 
 void DoPsyPathFeatProgression(object oPC){

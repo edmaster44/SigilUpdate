@@ -180,6 +180,40 @@ void SixSecondTick(object oPC, int nRound = 1){
 }
 
 void RollSocialCheck(object oPC, int nAction){
+	// this is the action that merely reports the rules for the social rolls.
+	if (nAction == 255){
+		string sRules = "<c=lightgreen>There are social skill roll chat commands you can use to facilitate";
+		sRules +=" adding dice rolls into your RP, but these are meant to ENHANCE RP, not REPLACE it. This is not ";
+		sRules +="mind control and other players are perfectly free to ignore the outcome of a dice roll if they believe";
+		sRules +=" that the RP does not warrant the outcome of the dice. No player can tell another player how to RP their";
+		sRules +=" character. Ever.\n\nThe commands are:\n\n";
+		sRules +="#Appraise or #Haggle:\n";
+		sRules +="You roll highest of: Appraise, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
+		sRules +="Nearby PCs roll highest of: Appraise, 2/3 Will Save, 2/3 Bluff, or  2/3 Diplomacy.\n\n";
+		sRules +="#Bluff or #Lie:\n";
+		sRules +="You roll highest of: Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
+		sRules +="Nearby PCs roll highest of: Bluff, Spot, Listen, or 2/3 Diplomacy.\n\n";
+		sRules +="#Diplomacy or #Persuade:\n";
+		sRules +="You roll highest of: Diplomacy, 2/3 Bluff, or 2/3 Perform.\n";
+		sRules +="Nearby PCs roll highest of: Concentration, Diplomacy, 2/3 Will Save, or 2/3 Bluff\n\n";
+		sRules +="#Intimidate or #Threat:\n";
+		sRules +="You roll highest of: Intimidate, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
+		sRules +="Nearby PCs roll highest of: Intimidate, Concentration, 2/3 Will, or 2/3 Diplomacy.\n\n";
+		sRules +="#Sleight:\n";
+		sRules +="You roll higher of: Sleight of Hand or 1/3 Reflex save.\n";
+		sRules +="Nearby PCs roll highest of: Spot, 2/3 Sleight of Hand, or 1/2 Search.\n\n"; 
+		sRules +="You will see the result of your roll. You will not see the result of other's rolls.";
+		sRules +=" Other PCs will see only whether they succeeded or failed vs your roll except for in the";
+		sRules +=" case of Bluff and Sleight of Hand; if they fail their rolls versus you in those skills then ";
+		sRules +="they will see no message. Keep in mind some important rules:\n";
+		sRules +="1: Again, you CANNOT force other players to abide by these rolls.\n";
+		sRules +="2: DMs see all of the outcomes of these rolls, so during DM events do NOT use ";
+		sRules +="them unless a DM ASKS you to. Otherwise you will spam up the DM channel and have an angry DM.\n";
+		sRules += "Please see sigil-nwn2.fandom.com/wiki/Chat_Commands for more chat command info.\n";
+		sRules +="Have fun and Happy Roleplaying! -FlattedFifth</c>";
+		SendMessageToPC(oPC, sRules);
+		return;
+	}
 	//int nNoSkillPenalty = 5;
 	int nSkill = -1;
 	int nOpSkill = -1; 
@@ -196,12 +230,12 @@ void RollSocialCheck(object oPC, int nAction){
 	string sWinMessage;
 	string sLoseMessage;
 	string sDmAddendum;
+	string sAction;
 	string sDmMessage = sName + " has attempted to ";
 
 	switch (nAction){
 		case SKILL_APPRAISE:{
-			sDmMessage += "HAGGLE";
-			sPlayerMessage += "HAGGLE";
+			sAction = "HAGGLE";
 			nSkill = GetSkillRank(SKILL_APPRAISE, oPC);
 			nBluff = (GetSkillRank(SKILL_BLUFF, oPC) / 3) * 2;
 			nDipl = (GetSkillRank(SKILL_DIPLOMACY, oPC) / 3) * 2;
@@ -212,8 +246,7 @@ void RollSocialCheck(object oPC, int nAction){
 			break;
 		}
 		case SKILL_BLUFF:{
-			sDmMessage += "LIE";
-			sPlayerMessage += "LIE";
+			sAction = "LIE";
 			nSkill = GetSkillRank(SKILL_BLUFF, oPC);
 			nDipl = (GetSkillRank(SKILL_DIPLOMACY, oPC) / 3) * 2;
 			nPerf = (GetSkillRank(SKILL_PERFORM, oPC) / 3) * 2;
@@ -222,8 +255,7 @@ void RollSocialCheck(object oPC, int nAction){
 			break;
 		}
 		case SKILL_DIPLOMACY:{
-			sDmMessage += "PERSUADE";
-			sPlayerMessage += "PERSUADE";
+			sAction = "PERSUADE";
 			nSkill = GetSkillRank(SKILL_DIPLOMACY, oPC);
 			nBluff = (GetSkillRank(SKILL_BLUFF, oPC) / 3) * 2;
 			nPerf = (GetSkillRank(SKILL_PERFORM, oPC) / 3) * 2;
@@ -232,8 +264,7 @@ void RollSocialCheck(object oPC, int nAction){
 			break;
 		}
 		case SKILL_INTIMIDATE:{
-			sDmMessage += "INTIMIDATE";
-			sPlayerMessage += "INTIMIDATE";
+			sAction = "INTIMIDATE";
 			nSkill = GetSkillRank(SKILL_INTIMIDATE, oPC);
 			nBluff = (GetSkillRank(SKILL_BLUFF, oPC) / 3) * 2;
 			nDipl = (GetSkillRank(SKILL_DIPLOMACY, oPC) / 3) * 2;
@@ -244,8 +275,7 @@ void RollSocialCheck(object oPC, int nAction){
 			break;
 		}
 		case SKILL_SLEIGHT_OF_HAND:{
-			sDmMessage += "perform SLEIGHT OF HAND";
-			sPlayerMessage += "perform SLEIGHT OF HAND";
+			sAction = "perform SLEIGHT OF HAND";
 			nSkill = GetSkillRank(SKILL_SLEIGHT_OF_HAND, oPC);
 			int nRefl = GetReflexSavingThrow(oPC) / 3;
 			if (nRefl > nSkill) nSkill = nRefl;
@@ -258,18 +288,14 @@ void RollSocialCheck(object oPC, int nAction){
 	nDC = d20() + nSkill;
 	// OPTIONAL: Impose a penalty on anyone attempting to perform a skill in which they have 0 base points
 	//if (GetSkillRank(nAction, oPC, TRUE) == 0) nDC -= nNoSkillPenalty;
-	sPlayerMessage += " with a roll of " + IntToString(nDC) + ".\n";
-	sPlayerMessage += "Those around you will be given an opposing roll. You will not be notified of the result.";
-	sPlayerMessage += " Only the players making the rolls and any online DMs will know. Note that this roll is";
-	sPlayerMessage += " meant to serve as an aid to roleplay, not a <i>replacement</i> for roleplay. The majority";
-	sPlayerMessage += " of the reactions of those around you will be based upon your RP, not upon dice.";
-	sPlayerMessage += " Also note that this is NOT mind control. You cannot convince someone to ignore provable";
-	sPlayerMessage += " facts or behave in a manner outside their nature no matter how high you roll.";
-	sPlayerMessage += " Keep in mind that no player can tell another player how to RP any situation. Ever.</c>";
+	sPlayerMessage += sAction + " with a roll of " + IntToString(nDC) + ".</c>\n";
+	if (!GetLocalInt(oPC, "ToldSocialRollRules")){
+		sPlayerMessage += "<c=red>( type #SocialRollRules for rules about this feature )</c>";
+		SetLocalInt(oPC, "ToldSocialRollRules", TRUE);
+	}
 	SendMessageToPC(oPC, sPlayerMessage);
 	
-	sDmMessage += " with a roll of " + IntToString(nDC) + ".\n";
-	sPlayerMessage += " with a roll of " + IntToString(nDC) + ".\n";
+	sDmMessage += sAction + " with a roll of " + IntToString(nDC) + ".\n";
 	if (nAction != SKILL_SLEIGHT_OF_HAND){
 		if (fRange == RADIUS_SIZE_MEDIUM) sDmMessage += "They <i>whispered</i>";
 		else sDmMessage += "They <i>said</i>";
@@ -376,13 +402,12 @@ void RollSocialCheck(object oPC, int nAction){
 				sListenerMessage = (nOpSkill >= nDC) ? sWinMessage : sLoseMessage;
 			
 				if (sListenerMessage != ""){
-					sListenerMessage = "<c=lightgreen>" + sListenerMessage;
-					sListenerMessage += "\n((Note that this is just a guide based on a dice roll and ";
-					sListenerMessage += "is less important than the actual RP happening.\n";
-					sListenerMessage += "If you feel that the RP should have a different result feel free to";
-					sListenerMessage += " ignore this dice roll. And remember nothing short of magic can make your";
-					sListenerMessage += " character behave in a way that is against their nature or forget things";
-					sListenerMessage += " that they know for certain.))";
+					sListenerMessage = "<c=lightgreen>" + sListenerMessage + "</c>\n";
+					if (!GetLocalInt(oListener, "ToldSocialRollRules")){
+						sListenerMessage += "<c=red>(This is a suggestion based on a dice roll, not a command)\n";
+						sListenerMessage += "( type #SocialRollRules for rules about this feature )</c>";
+						SetLocalInt(oListener, "ToldSocialRollRules", TRUE);
+					}
 					SendMessageToPC(oListener, sListenerMessage);
 				}
 			}
@@ -424,15 +449,23 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback += "or until ScribeMin turned off.";
 		}
 	} else if (sInput == "#appraise" || sInput == "#haggle"){
+		bFFcommand = TRUE;
 		RollSocialCheck(oSender, SKILL_APPRAISE);
 	} else if (sInput == "#bluff" || sInput == "#lie"){
+		bFFcommand = TRUE;
 		RollSocialCheck(oSender, SKILL_BLUFF);
 	} else if (sInput == "#diplomacy" || sInput == "#persuade"){
+		bFFcommand = TRUE;
 		RollSocialCheck(oSender, SKILL_DIPLOMACY);
 	} else if (sInput == "#intimidate" || sInput == "#threat"){
+		bFFcommand = TRUE;
 		RollSocialCheck(oSender, SKILL_INTIMIDATE);
-	} else if (sInput == "sleight"){
+	} else if (sInput == "#sleight"){
+		bFFcommand = TRUE;
 		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND);
+	} else if (sInput == "#socialrollrules"){
+		bFFcommand = TRUE;
+		RollSocialCheck(oSender, 255);
 	} else if (sInput == "#showcl"){
 		bFFcommand = TRUE;
 		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE));
@@ -704,6 +737,15 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 	// message then don't forward it on.
 	if (ForwardMessageToTextCommands(oSender, oTarget, nChannel, sMessage) == FALSE)
 	{
+		return FALSE;
+	}
+	
+	//at this point, any chat commands will have been processed so we can return an error message
+	// if the message starts with #
+	if (GetSubString(sMessage, 0, 1) == "#"){
+		string sError = "Invalid chat command. For a full list of chat commands, please see our wiki";
+		sError += " at sigil-nwn2.fandom.com/wiki/Chat_Commands";
+		SendMessageToPC(oSender, sError);
 		return FALSE;
 	}
 
