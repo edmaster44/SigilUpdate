@@ -187,10 +187,10 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 		sRules +="mind control and other players are perfectly free to ignore the outcome of a dice roll if they believe";
 		sRules +=" that the RP does not warrant the outcome of the dice. No player can tell another player how to RP their";
 		sRules +=" character. Ever.\n\n";
-		sRules +="Usage: Either say what you mean to say (if anything) and then type the command, such as:";
+		sRules +="Usage: Either say what you mean to say (if anything) and then type the command, such as:\n";
 		sRules +="'No, those trousers don't make your bottom look big'\n";
-		sRules +="#Lie";
-		sRules +="Or type the command followed by what you want to say, such as:";
+		sRules +="#Lie\n";
+		sRules +="Or type the command followed by what you want to say, such as:\n";
 		sRules +="#Lie This slaadi stew is delicious!\n\n";
 		sRules +="The commands are:\n\n";
 		sRules +="#Appraise or #Haggle:\n";
@@ -211,14 +211,23 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 		sRules +="You will see the result of your roll. You will not see the result of other's rolls.";
 		sRules +=" Other PCs will see only whether they succeeded or failed vs your roll except for in the";
 		sRules +=" case of Bluff and Sleight of Hand; if they fail their rolls versus you in those skills then ";
-		sRules +="they will see no message. Keep in mind some important rules:\n";
-		sRules +="1: Again, you CANNOT force other players to abide by these rolls.\n";
+		sRules +="they will see no message.\nKeep in mind some important rules:\n";
+		sRules +="1: Again, players are free to ignore the dice outcome. You can't tell them how to RP.\n";
 		sRules +="2: DMs see all of the outcomes of these rolls, so during DM events do NOT use ";
 		sRules +="them unless a DM ASKS you to. Otherwise you will spam up the DM channel and have an angry DM.\n";
 		sRules += "Please see sigil-nwn2.fandom.com/wiki/Chat_Commands for more chat command info.\n";
 		sRules +="Have fun and Happy Roleplaying! -FlattedFifth</c>";
 		SendMessageToPC(oPC, sRules);
 		return;
+	}
+	
+	// if the dm uses this while targeting a player or npc, then roll everything as if that player or npc
+	// used the command
+	if (GetIsDM(oPC)){
+		object oTarget = GetPlayerCurrentTarget(oPC);
+		if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
+		oPC = oTarget;
+		if (GetIsPC(oTarget)) sMessage = ""; // a DM should not be able to put words in a PCs mouth.
 	}
 	//strip leading spaces off of sMessage
 	if (sMessage != ""){
