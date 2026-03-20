@@ -1,3 +1,4 @@
+#include "ff_unarmored_ac"
 #include "nwn2_inc_spells"
 #include "aaa_constants"
 
@@ -7,31 +8,13 @@ effect eLink;
 
 void Armor_of_the_crocodile(object oPC, int nSpell){
 	
-	// doesn't stack with ac from duelist or invisible blade, for balance purposes.
-	int nIntelligenceAC = 0;
-	object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-	if (GetArmorRank(oArmor) == ARMOR_RANK_NONE || oArmor == OBJECT_INVALID){
-		int nDuelist = GetLevelByClass(CLASS_TYPE_DUELIST, oPC);
-		int nIntelligenceAC = GetLevelByClass(CLASS_TYPE_INVISIBLE_BLADE, oPC);
-		if (nDuelist > 0 || nIntelligenceAC > 0){
-			if (nDuelist > 0){
-				int nOffHand = GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC));
-				if (nOffHand == BASE_ITEM_SMALLSHIELD || nOffHand == BASE_ITEM_LARGESHIELD ||
-									nOffHand == BASE_ITEM_TOWERSHIELD)
-					nDuelist = 0;
-			}
-			int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
-			if (nDuelist > nIntelligenceAC) nIntelligenceAC = nDuelist;
-			if (nIntelligenceAC > nInt) nIntelligenceAC = nInt;
-		}
-	}
 	int nCrocAC = 0;
 	switch (iNaturesWarrior){
 		case 4: case 3: nCrocAC = 2; break;
 		case 2: case 1: nCrocAC = 1; break;
 		default: nCrocAC = 4; break;
 	}
-	nCrocAC -= nIntelligenceAC;
+	nCrocAC = nCrocAC - GetUnarmoredAC(oPC); //doesn't stack with duelist, invis blade, monk, or mystic
 
 	if (!GetHasFeat(2936, oPC, TRUE) || nCrocAC < 1){
 		if (GetHasFeat(FEAT_CROC_ARMOR_AC_4, oPC, TRUE))
@@ -42,7 +25,7 @@ void Armor_of_the_crocodile(object oPC, int nSpell){
 			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_2);
 		if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
 			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_1);
-	} else if (nCrocAC >= 4){
+	} else if (nCrocAC == 4){
 		if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
 			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_1);
 		if (GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE))

@@ -10,6 +10,7 @@
 #include "x2_inc_toollib"
 #include "nwn2_inc_metmag"
 #include "ps_inc_golem"
+#include "ff_unarmored_ac"
 
 /*	This is the include file for the classes Demonologist, Slayer of Domiel, Celestial Envoy, Gatecrasher, 
 	Golem Master, and adjusted features from Blackguard and Shadowdancer.
@@ -229,37 +230,19 @@ void PS_Feat_GC_DODGE_AC(object oPC, int nSpell){
 			nGatecrasherAC += 1;
 	if (nGatecrasherAC < 1) return;
 	
-	// Will not stack with Duelist or Invis Blade (which ofc only work in no armor).
-	// if they have duelist or ib and no armor, they get the highest of the 3 ac.
-	// If they have Duelist and a shield equipped, that removes duelist ac so they
-	// get the Gatecrasher ac. Invis blade ac works with a shield.
-	object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-	if (GetArmorRank(oArmor) == ARMOR_RANK_NONE || oArmor == OBJECT_INVALID){
-		int nDuelist = GetLevelByClass(CLASS_TYPE_DUELIST, oPC);
-		int nIB = GetLevelByClass(CLASS_TYPE_INVISIBLE_BLADE, oPC);
-		if (nDuelist > 0 || nIB > 0){
-			if (nDuelist > 0){
-				int nOffHand = GetBaseItemType(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC));
-				if (nOffHand == BASE_ITEM_SMALLSHIELD || nOffHand == BASE_ITEM_LARGESHIELD ||
-									nOffHand == BASE_ITEM_TOWERSHIELD)
-					nDuelist = 0;
-			}
-			int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
-			int nOtherAC = nIB;
-			if (nDuelist > nOtherAC) nOtherAC = nDuelist;
-			if (nOtherAC > nInt) nOtherAC = nInt;
-			if (nOtherAC >= nGatecrasherAC) return; // no GC AC for you!
-			else nGatecrasherAC -= nOtherAC;	
-		}
-	}
+	// Will not stack with Duelist or Invis Blade
+	nGatecrasherAC = nGatecrasherAC - GetUnarmoredAC(oPC);
+	if (nGatecrasherAC < 1) return;
+	
 	// Also doesn't stack with Armor of the Crocodile from Nature Warrior.
-	if (nGatecrasherAC > 0 && GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oPC) > 0){
+	if (GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oPC) > 0){
 		int nCroc = 0;
 		//AotCroc was made +4 at lvl 5 when made incompatible with GC ac
-		if (GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE)) nCroc = 4; 
+		if (GetHasFeat(FEAT_CROC_ARMOR_AC_4, oPC, TRUE)) nCroc = 4; 
+		else if (GetHasFeat(FEAT_CROC_ARMOR_AC_3, oPC, TRUE)) nCroc = 3; 
 		else if (GetHasFeat(FEAT_CROC_ARMOR_AC_2, oPC, TRUE)) nCroc = 2;
 		else if (GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE)) nCroc = 1;
-		nGatecrasherAC -= nCroc;
+		nGatecrasherAC = nGatecrasherAC - nCroc;
 	}
 
 	if (nGatecrasherAC > 0){

@@ -1,7 +1,6 @@
 // Feat created by Ceremorph 4/18/2016
 // Spell-like abilities granted by certain classes
 // Reviewed by Clangeddin 28/12/2017
-
 #include "x2_inc_spellhook"
 #include "ps0_classes2015_inc"
 #include "aaa_constants"
