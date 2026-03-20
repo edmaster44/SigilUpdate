@@ -182,51 +182,53 @@ void SixSecondTick(object oPC, int nRound = 1){
 void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = ""){
 	// this is the action that merely reports the rules for the social rolls.
 	if (nAction == 255){
-		string sRules = "<c=lightgreen>There are social skill roll chat commands you can use to facilitate";
-		sRules +=" adding dice rolls into your RP, but these are meant to ENHANCE RP, not REPLACE it. This is not ";
-		sRules +="mind control and other players are perfectly free to ignore the outcome of a dice roll if they believe";
-		sRules +=" that the RP does not warrant the outcome of the dice. No player can tell another player how to RP their";
-		sRules +=" character. Ever.\n\n";
-		sRules +="Usage: Either say what you mean to say (if anything) and then type the command, such as:\n";
-		sRules +="'No, those trousers don't make your bottom look big'\n";
-		sRules +="#Lie\n";
-		sRules +="Or type the command followed by what you want to say, such as:\n";
-		sRules +="#Lie This slaadi stew is delicious!\n\n";
-		sRules +="The commands are:\n\n";
-		sRules +="#Appraise or #Haggle:\n";
-		sRules +="You roll highest of: Appraise, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
-		sRules +="Nearby PCs roll highest of: Appraise, 2/3 Will Save, 2/3 Bluff, or  2/3 Diplomacy.\n\n";
-		sRules +="#Bluff or #Lie:\n";
-		sRules +="You roll highest of: Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
-		sRules +="Nearby PCs roll highest of: Bluff, Spot, Listen, or 2/3 Diplomacy.\n\n";
-		sRules +="#Diplomacy or #Persuade:\n";
-		sRules +="You roll highest of: Diplomacy, 2/3 Bluff, or 2/3 Perform.\n";
-		sRules +="Nearby PCs roll highest of: Concentration, Diplomacy, 2/3 Will Save, or 2/3 Bluff\n\n";
-		sRules +="#Intimidate or #Threat:\n";
-		sRules +="You roll highest of: Intimidate, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
-		sRules +="Nearby PCs roll highest of: Intimidate, Concentration, 2/3 Will, or 2/3 Diplomacy.\n\n";
-		sRules +="#Sleight:\n";
-		sRules +="You roll higher of: Sleight of Hand or 1/3 Reflex save.\n";
-		sRules +="Nearby PCs roll highest of: Spot, 2/3 Sleight of Hand, or 1/2 Search.\n\n"; 
-		sRules +="You will see the result of your roll. You will not see the result of other's rolls.";
-		sRules +=" Other PCs will see only whether they succeeded or failed vs your roll except for in the";
-		sRules +=" case of Bluff and Sleight of Hand; if they fail their rolls versus you in those skills then ";
-		sRules +="they will see no message.\nKeep in mind some important rules:\n";
-		sRules +="1: Again, players are free to ignore the dice outcome. You can't tell them how to RP.\n";
-		sRules +="2: DMs see all of the outcomes of these rolls, so during DM events do NOT use ";
-		sRules +="them unless a DM ASKS you to. Otherwise you will spam up the DM channel and have an angry DM.\n";
-		sRules += "Please see sigil-nwn2.fandom.com/wiki/Chat_Commands for more chat command info.\n";
-		sRules +="Have fun and Happy Roleplaying! -FlattedFifth</c>";
-		SendMessageToPC(oPC, sRules);
+		sMessage = "<c=lightgreen>There are social skill roll chat commands you can use to facilitate";
+		sMessage +=" adding dice rolls into your RP, but these are meant to ENHANCE RP, not REPLACE it. This is not ";
+		sMessage +="mind control and other players are perfectly free to ignore the outcome of a dice roll if they believe";
+		sMessage +=" that the RP does not warrant the outcome of the dice. No player can tell another player how to RP their";
+		sMessage +=" character. Ever.\n\n";
+		sMessage +="Usage: Either say what you mean to say (if anything) and then type the command, such as:\n";
+		sMessage +="'No, those trousers don't make your bottom look big'\n";
+		sMessage +="#Lie\n";
+		sMessage +="Or type the command followed by what you want to say, such as:\n";
+		sMessage +="#Lie This slaadi stew is delicious!\n\n";
+		sMessage +="The commands are:\n\n";
+		sMessage +="#Appraise or #Haggle:\n";
+		sMessage +="You roll highest of: Appraise, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
+		sMessage +="Nearby PCs roll highest of: Appraise, 2/3 Will Save, 2/3 Bluff, or  2/3 Diplomacy.\n\n";
+		sMessage +="#Bluff or #Lie:\n";
+		sMessage +="You roll highest of: Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
+		sMessage +="Nearby PCs roll highest of: Bluff, Spot, Listen, or 2/3 Diplomacy.\n\n";
+		sMessage +="#Diplomacy or #Persuade:\n";
+		sMessage +="You roll highest of: Diplomacy, 2/3 Bluff, or 2/3 Perform.\n";
+		sMessage +="Nearby PCs roll highest of: Concentration, Diplomacy, 2/3 Will Save, or 2/3 Bluff\n\n";
+		sMessage +="#Intimidate or #Threat:\n";
+		sMessage +="You roll highest of: Intimidate, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
+		sMessage +="Nearby PCs roll highest of: Intimidate, Concentration, 2/3 Will, or 2/3 Diplomacy.\n\n";
+		sMessage +="#Sleight:\n";
+		sMessage +="You roll higher of: Sleight of Hand or 1/3 Reflex save.\n";
+		sMessage +="Nearby PCs roll highest of: Spot, 2/3 Sleight of Hand, or 1/2 Search.\n\n"; 
+		sMessage +="You will see the result of your roll. You will not see the result of other's rolls.";
+		sMessage +=" Other PCs will see only whether they succeeded or failed vs your roll except for in the";
+		sMessage +=" case of Bluff and Sleight of Hand; if they fail their rolls versus you in those skills then ";
+		sMessage +="they will see no message.\nKeep in mind some important rules:\n";
+		sMessage +="1: Again, players are free to ignore the dice outcome. You can't tell them how to RP.\n";
+		sMessage +="2: DMs see all of the outcomes of these rolls, so during DM events do NOT use ";
+		sMessage +="them unless a DM ASKS you to. Otherwise you will spam up the DM channel and have an angry DM.\n";
+		sMessage += "Please see sigil-nwn2.fandom.com/wiki/Chat_Commands for more chat command info.\n";
+		sMessage +="Have fun and Happy Roleplaying! -FlattedFifth</c>";
+		SendMessageToPC(oPC, sMessage);
 		return;
 	}
 	
 	// if the dm uses this while targeting a player or npc, then roll everything as if that player or npc
 	// used the command
+	int bDMcommand = FALSE;
 	if (GetIsDM(oPC)){
 		object oTarget = GetPlayerCurrentTarget(oPC);
 		if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
 		oPC = oTarget;
+		bDMcommand = TRUE;
 		if (GetIsPC(oTarget)) sMessage = ""; // a DM should not be able to put words in a PCs mouth.
 	}
 	//strip leading spaces off of sMessage
@@ -310,12 +312,14 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 	nDC = d20() + nSkill;
 	// OPTIONAL: Impose a penalty on anyone attempting to perform a skill in which they have 0 base points
 	//if (GetSkillRank(nAction, oPC, TRUE) == 0) nDC -= nNoSkillPenalty;
-	sPlayerMessage += sAction + " with a roll of " + IntToString(nDC) + ".</c>\n";
-	if (!GetLocalInt(oPC, "ToldSocialRollRules")){
-		sPlayerMessage += "<c=red>( type #SocialRollRules for rules about this feature )</c>";
-		SetLocalInt(oPC, "ToldSocialRollRules", TRUE);
+	if (GetIsPC(oPC)){
+		sPlayerMessage += sAction + " with a roll of " + IntToString(nDC) + ".</c>\n";
+		if (!GetLocalInt(oPC, "ToldSocialRollRules")){
+			sPlayerMessage += "<c=red>( type #SocialRollRules for rules about this feature )</c>";
+			SetLocalInt(oPC, "ToldSocialRollRules", TRUE);
+		}
+		SendMessageToPC(oPC, sPlayerMessage);
 	}
-	SendMessageToPC(oPC, sPlayerMessage);
 	
 	sDmMessage += sAction + " with a roll of " + IntToString(nDC) + ".\n";
 	
@@ -323,7 +327,7 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 	// echo it back to the dm in case it's relevant
 	int bShowPreviousMessage = (PS_GetTime() - GetLocalInt(oPC, "LastTimeSpoke") <= 90) ? TRUE : FALSE;
 	string sLastMessage = GetLocalString(oPC, "LastChatMessage");
-	if (sLastMessage == "") bShowPreviousMessage = FALSE;
+	if (sLastMessage == "" && !bDMcommand) bShowPreviousMessage = FALSE;
 	if (bShowPreviousMessage){
 		if (sMessage != "") sDmMessage += "First they ";
 		else sDmMessage += "They ";
@@ -345,7 +349,7 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 	location lLoc = GetLocation(oPC);
 	object oListener = GetFirstObjectInShape(SHAPE_SPHERE, fRange, lLoc);
 	while (GetIsObjectValid(oListener)){
-		if (GetIsPC(oListener) && oListener != oPC){
+		if (oListener != oPC && !GetIsDM(oPC)){
 			sListenerMessage = "";
 			bMindImmune = (GetIsImmune(oListener, IMMUNITY_TYPE_MIND_SPELLS, oPC) ||
 				GetIsImmune(oListener, IMMUNITY_TYPE_FEAR, oPC));
@@ -441,7 +445,7 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 				sDmMessage += ".\n";
 				sListenerMessage = (nOpSkill >= nDC) ? sWinMessage : sLoseMessage;
 			
-				if (sListenerMessage != ""){
+				if (sListenerMessage != "" && GetIsPC(oListener)){
 					sListenerMessage = "<c=lightgreen>" + sListenerMessage + "</c>\n";
 					if (!GetLocalInt(oListener, "ToldSocialRollRules")){
 						sListenerMessage += "<c=red>(This is a suggestion based on a dice roll, not a command)\n";
