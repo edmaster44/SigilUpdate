@@ -179,14 +179,20 @@ void SixSecondTick(object oPC, int nRound = 1){
 	}
 }
 
-void RollSocialCheck(object oPC, int nAction){
+void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = ""){
 	// this is the action that merely reports the rules for the social rolls.
 	if (nAction == 255){
 		string sRules = "<c=lightgreen>There are social skill roll chat commands you can use to facilitate";
 		sRules +=" adding dice rolls into your RP, but these are meant to ENHANCE RP, not REPLACE it. This is not ";
 		sRules +="mind control and other players are perfectly free to ignore the outcome of a dice roll if they believe";
 		sRules +=" that the RP does not warrant the outcome of the dice. No player can tell another player how to RP their";
-		sRules +=" character. Ever.\n\nThe commands are:\n\n";
+		sRules +=" character. Ever.\n\n";
+		sRules +="Usage: Either say what you mean to say (if anything) and then type the command, such as:";
+		sRules +="'No, those trousers don't make your bottom look big'\n";
+		sRules +="#Lie";
+		sRules +="Or type the command followed by what you want to say, such as:";
+		sRules +="#Lie This slaadi stew is delicious!\n\n";
+		sRules +="The commands are:\n\n";
 		sRules +="#Appraise or #Haggle:\n";
 		sRules +="You roll highest of: Appraise, 2/3 Bluff, 2/3 Diplomacy, or 2/3 Perform.\n";
 		sRules +="Nearby PCs roll highest of: Appraise, 2/3 Will Save, 2/3 Bluff, or  2/3 Diplomacy.\n\n";
@@ -214,6 +220,13 @@ void RollSocialCheck(object oPC, int nAction){
 		SendMessageToPC(oPC, sRules);
 		return;
 	}
+	//strip leading spaces off of sMessage
+	if (sMessage != ""){
+		while (sMessage != "" && GetStringLeft(sMessage, 1) == " "){
+			sMessage = GetSubString(sMessage, 1, GetStringLength(sMessage) - 1);
+		}
+	}
+	
 	//int nNoSkillPenalty = 5;
 	int nSkill = -1;
 	int nOpSkill = -1; 
@@ -224,7 +237,7 @@ void RollSocialCheck(object oPC, int nAction){
 	int nBluff; int nDipl; int nPerf; int nOpSearch; int nOpSleight;
 	int nOpBluff; int nOpDipl; int nOpIntim; int nOpPerf; int nOpCon; int nOpSpot; int nOpListen; int nOpWill;
 	float fRange = RADIUS_SIZE_HUGE;
-	if (nAction == SKILL_SLEIGHT_OF_HAND || GetLocalInt(oPC, "LastChatChannel") == CHAT_MODE_WHISPER)
+	if (nAction == SKILL_SLEIGHT_OF_HAND || nChannel == CHAT_MODE_WHISPER)
 		fRange = RADIUS_SIZE_MEDIUM;
 	string sName = GetFirstName(oPC) + " " + GetLastName(oPC);
 	string sWinMessage;
@@ -296,11 +309,29 @@ void RollSocialCheck(object oPC, int nAction){
 	SendMessageToPC(oPC, sPlayerMessage);
 	
 	sDmMessage += sAction + " with a roll of " + IntToString(nDC) + ".\n";
-	if (nAction != SKILL_SLEIGHT_OF_HAND){
-		if (fRange == RADIUS_SIZE_MEDIUM) sDmMessage += "They <i>whispered</i>";
-		else sDmMessage += "They <i>said</i>";
-		sDmMessage += " '" + GetLocalString(oPC, "LastChatMessage") + "'.\n\n";
+	
+	// if the last time the pc spoke before invoking this command was less than 1.5 minutes ago, 
+	// echo it back to the dm in case it's relevant
+	int bShowPreviousMessage = (PS_GetTime() - GetLocalInt(oPC, "LastTimeSpoke") <= 90) ? TRUE : FALSE;
+	string sLastMessage = GetLocalString(oPC, "LastChatMessage");
+	if (sLastMessage == "") bShowPreviousMessage = FALSE;
+	if (bShowPreviousMessage){
+		if (sMessage != "") sDmMessage += "First they ";
+		else sDmMessage += "They ";
+		if (GetLocalInt(oPC, "LastChatChannel") == CHAT_MODE_WHISPER) sDmMessage += "<i>whispered</i> '";
+		else sDmMessage += "<i>said</i> '";
+		sDmMessage += sLastMessage + "'\n";
 	}
+	// if the sMessage arg is not empty then that means the player used the command in front of the text, 
+	// such as #Threat Give me your lunch money, punk!, and so we repeat that to the dm.
+	if (sMessage != ""){
+		if (bShowPreviousMessage) sDmMessage += "And then they ";
+		else sDmMessage += "They ";
+		if (nChannel == CHAT_MODE_WHISPER) sDmMessage += "<i>whispered</i> '";
+		else sDmMessage += "<i>said</i> '";
+		sDmMessage += sMessage + "'\n";
+	}
+	sDmMessage += "\n";
 	
 	location lLoc = GetLocation(oPC);
 	object oListener = GetFirstObjectInShape(SHAPE_SPHERE, fRange, lLoc);
@@ -416,6 +447,8 @@ void RollSocialCheck(object oPC, int nAction){
 	}
 	sDmMessage += "\n\n";
 	SendChatMessage(oPC, OBJECT_INVALID, CHAT_MODE_SILENT_SHOUT, sDmMessage);
+	if (sMessage != "")
+		SendChatMessage(oPC, OBJECT_INVALID, nChannel, sMessage);
 }
 
 // collection of simple chat commands by FlattedFifth
@@ -428,6 +461,8 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	if (GetSubString(sMessage, 0, 1) != "#"){
 		SetLocalString(oSender, "LastChatMessage", sMessage);
 		SetLocalInt(oSender, "LastChatChannel", nChannel);
+		SetLocalInt(oSender, "LastTimeSpoke", PS_GetTime());
+		return FALSE;
 	}		
 	int bFFcommand = FALSE; // return value, if TRUE then action will take place and text will not go to chat
 	string sFeedback = "";
@@ -448,24 +483,70 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback += "You will now scribe scrolls at minimum caster level until next server reset ";
 			sFeedback += "or until ScribeMin turned off.";
 		}
-	} else if (sInput == "#appraise" || sInput == "#haggle"){
+	// APPRAISE
+	} else if (sInput == "#appraise" || sInput == "#haggle"){ // command by itself
 		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_APPRAISE);
+		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel);
+	}else if (GetStringLeft(sInput, 9) == "#appraise"){  // as preface, ex "#appraise This item isn't worth what you ask"
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 9, GetStringLength(sMessage) - 9);
+		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel, sMessage);
+	}else if (GetStringLeft(sInput, 7) == "#haggle"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 7, GetStringLength(sMessage) - 7);
+		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel, sMessage);
+	//BLUFF
 	} else if (sInput == "#bluff" || sInput == "#lie"){
 		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_BLUFF);
+		RollSocialCheck(oSender, SKILL_BLUFF, nChannel);
+	}else if (GetStringLeft(sInput, 6) == "#bluff"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 6, GetStringLength(sMessage) - 6);
+		RollSocialCheck(oSender, SKILL_BLUFF, nChannel, sMessage);
+	}else if (GetStringLeft(sInput, 4) == "#lie"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 4, GetStringLength(sMessage) - 4);
+		RollSocialCheck(oSender, SKILL_BLUFF, nChannel, sMessage);
+	//DIPLOMACY
 	} else if (sInput == "#diplomacy" || sInput == "#persuade"){
 		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_DIPLOMACY);
-	} else if (sInput == "#intimidate" || sInput == "#threat"){
+		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel);
+	}else if (GetStringLeft(sInput, 10) == "#diplomacy"){
 		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_INTIMIDATE);
+		sMessage = GetSubString(sMessage, 10, GetStringLength(sMessage) - 10);
+		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel, sMessage);
+	}else if (GetStringLeft(sInput, 9) == "#persuade"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 9, GetStringLength(sMessage) - 9);
+		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel, sMessage);	
+	//INTIMIDATE
+	} else if (sInput == "#intimidate" || sInput == "#threat" || sInput == "threaten"){
+		bFFcommand = TRUE;
+		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel);
+	} else if (GetStringLeft(sInput, 11) == "#intimidate"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 11, GetStringLength(sMessage) - 11);
+		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
+	} else if (GetStringLeft(sInput, 7) == "#threat"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 7, GetStringLength(sMessage) - 7);
+		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
+	} else if (GetStringLeft(sInput, 9) == "#threaten"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 9, GetStringLength(sMessage) - 9);
+		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
+	//SLEIGHT_OF_HAND
 	} else if (sInput == "#sleight"){
 		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND);
+		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND, nChannel);
+	} else if (GetStringLeft(sInput, 8) == "#sleight"){
+		bFFcommand = TRUE;
+		sMessage = GetSubString(sMessage, 8, GetStringLength(sMessage) - 8);
+		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND, nChannel, sMessage);
+		
 	} else if (sInput == "#socialrollrules"){
 		bFFcommand = TRUE;
-		RollSocialCheck(oSender, 255);
+		RollSocialCheck(oSender, 255, nChannel);
 	} else if (sInput == "#showcl"){
 		bFFcommand = TRUE;
 		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE));

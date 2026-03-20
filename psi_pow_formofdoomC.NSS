@@ -1,6 +1,6 @@
 // vfx persist line 102
 
-
+#include "hench_i0_generic"
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
@@ -15,13 +15,14 @@ const int FEAT_GREAT_WEAP_SPEC_CR = 1197;
 const int FEAT_EPIC_WEAP_FOC_CR = 656;
 const int FEAT_EPIC_WEAP_SPEC_CR = 694;
 
-effect EffectDamage(int nDamageAmount, int nDamageType=DAMAGE_TYPE_MAGICAL, int nDamagePower=DAMAGE_POWER_NORMAL, int nIgnoreResistances=FALSE);
 
-void DoTentacleAttack(object oEnemy, int nAB, int nBonus){
-	if (d20() + nAB < GetAC(oEnemy))
+void DoTentacleAttack(object oEnemy, int nAB, int nPhysicalBonus, int nMagicalBonus){
+	
+	if (d20() + nAB < GetTouchAC(oEnemy))
 		return;
-	int nDamage = d8() + nBonus;
-	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
+	int nPhysDmg = d8() + nPhysicalBonus;
+	int nMagDmg = d8() + nMagicalBonus;
+	effect eDam = EffectDamage(nPhysDmg, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
 	effect eMagicDam = EffectDamage(d8(), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
 	effect eVis = EffectVisualEffect(VFX_IMP_DESTRUCTION);
 	effect eLink = EffectLinkEffects(eVis, eDam);
@@ -38,16 +39,21 @@ void main()
 		nTotalAttacks += 2;
 		bAugmented = TRUE;
 	}
-	int nAB = GetBaseAttackBonus(oManifester);
+	int nStr = GetAbilityScore(oManifester, ABILITY_STRENGTH) / 2;
+	int nDex = GetAbilityScore(oManifester, ABILITY_DEXTERITY) / 2;
+	int nAbBonus = (nStr > nDex) ? nStr : nDex;
+	int nAB = GetBaseAttackBonus(oManifester) + nAbBonus;
 	if (GetHasFeat(FEAT_EPIC_WEAP_FOC_CR, oManifester)) nAB += 4;
 	else if (GetHasFeat(FEAT_GREAT_WEAP_FOC_CR, oManifester)) nAB += 2;
 	else if (GetHasFeat(FEAT_WEAP_FOC_CR, oManifester)) nAB += 1;
 	
-	int nBonus = GetAbilityScore(oManifester, ABILITY_STRENGTH) / 2;
-	if (nBonus < 0) nBonus = 0;
-	if (GetHasFeat(FEAT_EPIC_WEAP_SPEC_CR, oManifester)) nBonus += 6;
-	else if (GetHasFeat(FEAT_GREAT_WEAP_SPEC_CR, oManifester)) nBonus += 4;
-	else if (GetHasFeat(FEAT_WEAP_SPEC_CR, oManifester)) nBonus += 2;
+	int nPhysBonus = nStr;
+	if (nPhysBonus < 0) nPhysBonus = 0;
+	if (GetHasFeat(FEAT_EPIC_WEAP_SPEC_CR, oManifester)) nPhysBonus += 6;
+	else if (GetHasFeat(FEAT_GREAT_WEAP_SPEC_CR, oManifester)) nPhysBonus += 4;
+	else if (GetHasFeat(FEAT_WEAP_SPEC_CR, oManifester)) nPhysBonus += 2;
+	
+	int nMagicalBonus = GetAbilityScore(oManifester, ABILITY_WISDOM) / 2;
 	
 	// count enemies
 	int nNumEnemies = 0;
@@ -71,11 +77,11 @@ void main()
 	while (GetIsObjectValid(oEnemy) && nAttacksMade < nTotalAttacks){
 		if(GetIsEnemy(oEnemy, oManifester)){
 			for (i = 0; i < nAttacksEach; i++){
-				DoTentacleAttack(oEnemy, nAB, nBonus);
+				DoTentacleAttack(oEnemy, nAB, nPhysBonus, nMagicalBonus);
 				nAttacksMade++;
 			}
 			if (nExtraAttacks > 0){
-				DoTentacleAttack(oEnemy, nAB, nBonus);
+				DoTentacleAttack(oEnemy, nAB, nPhysBonus, nMagicalBonus);
 				nAttacksMade++;
 				nExtraAttacks--;
 			}

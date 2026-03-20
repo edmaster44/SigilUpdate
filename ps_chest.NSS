@@ -17,8 +17,8 @@ void main()
 	object oPC = GetLastOpenedBy();
 	string sChestLoc = GetLocationString(oChest);
 	
-	// Per player loot: if this PC has already opened this chest within the cooldown time hours, 
-	// then bail with message.
+	// Per player loot: this will be the name of the local int that will store the time that
+	// this player looted this particular chest
     string sLootedTime = "LOOTED_" + sChestLoc;
 	
 	int nTime = PS_GetTime();

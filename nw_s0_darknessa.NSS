@@ -35,8 +35,7 @@ void main(){
 
 	struct dSpellData data = GetSpellDataForAoE("Darkness", oCaster);
 	
-	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && 
-		!GetHasSpellEffect(data.nId, oTarget)){
+	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE){
 
 		int bAbyssalDark = FALSE;
 		if (data.nId == SPELL_RACIAL_DARKNESS && 

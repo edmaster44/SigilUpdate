@@ -13,14 +13,14 @@ int LvDRoll(int nLightCL, int nDarkCL, int bHoly, int bAbyssal, int bForm){
 	if (bHoly) nLightCL += 5;
 	if (bAbyssal) nDarkCL += 5;
 	int nDiff = nLightCL - nDarkCL;
-	if (nDiff == 0){
+	if (nDiff > -3 && nDiff < 3){
 		if (bForm) return DESTROY_DARK;
 		else return DESTROY_BOTH;
 	}
 	else if (nLightCL > nDarkCL) 
 		return DESTROY_DARK;
 	else {
-		if (bForm) return DESTROY_DARK;
+		if (bForm) return DESTROY_NONE;
 		else return DESTROY_LIGHT;
 	}
 	return DESTROY_NONE;
@@ -71,8 +71,10 @@ void DoLightVsDarkness(object oTarget){
 	struct dSpellData dDarkData = GetSpellDataForAoE("Darkness", oDarkCaster);
 	int bAbyssal = (dDarkData.nId == SPELL_RACIAL_DARKNESS && 
 			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oDarkCaster, TRUE));
+	if (dDarkData.nId == SPELL_RACIAL_DARKNESS) dDarkData.nCL = PS_GetLevel(oDarkCaster);
 	object oLightCaster;
 	int nLightId;
+	int nLightCL;
 	int bForm = FALSE;
 	int bHoly = FALSE;
 	int nResult;
@@ -84,6 +86,7 @@ void DoLightVsDarkness(object oTarget){
 			oLightCaster = GetAreaOfEffectCreator(oTarget);
 			struct dSpellData dLightData = GetSpellDataForAoE("Light", oLightCaster, oTarget);
 			bHoly = (nLightId == SPELL_RACIAL_LIGHT && GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oLightCaster, TRUE));
+			if (nLightId == SPELL_RACIAL_LIGHT) dLightData.nCL = PS_GetLevel(oLightCaster);
 			nResult = LvDRoll(dLightData.nCL, dDarkData.nCL, bHoly, bAbyssal, bForm);
 			LvDResultMessage(oLightCaster, oDarkCaster, nResult);
 			if (nResult == DESTROY_LIGHT){
@@ -109,6 +112,9 @@ void DoLightVsDarkness(object oTarget){
 					oLightCaster = GetEffectCreator(eFX);
 					bForm = (nLightId == ELADRIN_FORM_ID || nLightId == CROWN_OF_FLAMES_ID);
 					bHoly = ((nLightId == SPELL_RACIAL_LIGHT && GetHasFeat(FEAT_OUTSIDER_BLOODLINE_CELESTIAL, oLightCaster, TRUE)) || bForm);
+					if (nLightCL == SPELL_RACIAL_LIGHT || bForm){
+						nLightCL = PS_GetLevel(oLightCaster);
+					} else nLightCL = PS_GetCasterLevel(oLightCaster);
 					nResult = LvDRoll(PS_GetCasterLevel(oLightCaster), dDarkData.nCL, bHoly, bAbyssal, bForm);
 					LvDResultMessage(oLightCaster, oDarkCaster, nResult);
 					if (nResult == DESTROY_LIGHT){
