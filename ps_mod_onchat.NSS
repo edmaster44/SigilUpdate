@@ -223,12 +223,10 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 	
 	// if the dm uses this while targeting a player or npc, then roll everything as if that player or npc
 	// used the command
-	int bDMcommand = FALSE;
 	if (GetIsDM(oPC)){
 		object oTarget = GetPlayerCurrentTarget(oPC);
 		if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
 		oPC = oTarget;
-		bDMcommand = TRUE;
 		if (GetIsPC(oTarget)) sMessage = ""; // a DM should not be able to put words in a PCs mouth.
 	}
 	//strip leading spaces off of sMessage
@@ -323,28 +321,30 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 	
 	sDmMessage += sAction + " with a roll of " + IntToString(nDC) + ".\n";
 	
-	// if the last time the pc spoke before invoking this command was less than 1.5 minutes ago, 
+	// if the last time the pc spoke before invoking this command was within 2 minutes ago, 
 	// echo it back to the dm in case it's relevant
-	int bShowPreviousMessage = (PS_GetTime() - GetLocalInt(oPC, "LastTimeSpoke") <= 90) ? TRUE : FALSE;
-	string sLastMessage = GetLocalString(oPC, "LastChatMessage");
-	if (sLastMessage == "" && !bDMcommand) bShowPreviousMessage = FALSE;
-	if (bShowPreviousMessage){
-		if (sMessage != "") sDmMessage += "First they ";
-		else sDmMessage += "They ";
-		if (GetLocalInt(oPC, "LastChatChannel") == CHAT_MODE_WHISPER) sDmMessage += "<i>whispered</i> '";
-		else sDmMessage += "<i>said</i> '";
-		sDmMessage += sLastMessage + "'\n";
+	if (GetIsPC(oPC)){
+		int bShowPreviousMessage = (PS_GetTime() - GetLocalInt(oPC, "LastTimeSpoke") <= 120) ? TRUE : FALSE;
+		string sLastMessage = GetLocalString(oPC, "LastChatMessage");
+		if (sLastMessage == "") bShowPreviousMessage = FALSE;
+		if (bShowPreviousMessage){
+			if (sMessage != "") sDmMessage += "First they ";
+			else sDmMessage += "They ";
+			if (GetLocalInt(oPC, "LastChatChannel") == CHAT_MODE_WHISPER) sDmMessage += "<i>whispered</i> '";
+			else sDmMessage += "<i>said</i> '";
+			sDmMessage += sLastMessage + "'\n";
+		}
+		// if the sMessage arg is not empty then that means the player used the command in front of the text, 
+		// such as #Threat Give me your lunch money, punk!, and so we repeat that to the dm.
+		if (sMessage != ""){
+			if (bShowPreviousMessage) sDmMessage += "And then they ";
+			else sDmMessage += "They ";
+			if (nChannel == CHAT_MODE_WHISPER) sDmMessage += "<i>whispered</i> '";
+			else sDmMessage += "<i>said</i> '";
+			sDmMessage += sMessage + "'\n";
+		}
 	}
-	// if the sMessage arg is not empty then that means the player used the command in front of the text, 
-	// such as #Threat Give me your lunch money, punk!, and so we repeat that to the dm.
-	if (sMessage != ""){
-		if (bShowPreviousMessage) sDmMessage += "And then they ";
-		else sDmMessage += "They ";
-		if (nChannel == CHAT_MODE_WHISPER) sDmMessage += "<i>whispered</i> '";
-		else sDmMessage += "<i>said</i> '";
-		sDmMessage += sMessage + "'\n";
-	}
-	sDmMessage += "\n";
+	
 	
 	location lLoc = GetLocation(oPC);
 	object oListener = GetFirstObjectInShape(SHAPE_SPHERE, fRange, lLoc);
@@ -458,7 +458,7 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 		}
 		oListener = GetNextObjectInShape(SHAPE_SPHERE, fRange, lLoc);
 	}
-	sDmMessage += "\n\n";
+	
 	SendChatMessage(oPC, OBJECT_INVALID, CHAT_MODE_SILENT_SHOUT, sDmMessage);
 	if (sMessage != "")
 		SendChatMessage(oPC, OBJECT_INVALID, nChannel, sMessage);
@@ -467,16 +467,18 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 // collection of simple chat commands by FlattedFifth
 int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 
-	if ((nChannel != CHAT_MODE_TALK && nChannel != CHAT_MODE_WHISPER) || !GetIsPC(oSender))
+	if (nChannel != CHAT_MODE_TALK && nChannel != CHAT_MODE_WHISPER)
 		return FALSE;
 	
 	//store last non-command chat message for use in RollSocialCheck()
-	if (GetSubString(sMessage, 0, 1) != "#"){
-		SetLocalString(oSender, "LastChatMessage", sMessage);
-		SetLocalInt(oSender, "LastChatChannel", nChannel);
-		SetLocalInt(oSender, "LastTimeSpoke", PS_GetTime());
-		return FALSE;
-	}		
+	if (GetIsPC(oSender)){
+		if (GetSubString(sMessage, 0, 1) != "#"){
+			SetLocalString(oSender, "LastChatMessage", sMessage);
+			SetLocalInt(oSender, "LastChatChannel", nChannel);
+			SetLocalInt(oSender, "LastTimeSpoke", PS_GetTime());
+			return FALSE;
+		}
+	}
 	int bFFcommand = FALSE; // return value, if TRUE then action will take place and text will not go to chat
 	string sFeedback = "";
 	string sInput = GetStringLowerCase(sMessage);
