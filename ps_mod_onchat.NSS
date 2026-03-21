@@ -458,10 +458,11 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 		}
 		oListener = GetNextObjectInShape(SHAPE_SPHERE, fRange, lLoc);
 	}
-	
-	SendChatMessage(oPC, OBJECT_INVALID, CHAT_MODE_SILENT_SHOUT, sDmMessage);
 	if (sMessage != "")
 		SendChatMessage(oPC, OBJECT_INVALID, nChannel, sMessage);
+	if (GetLocalInt(GetModule(), "MUTE_SOCIAL") == FALSE)
+		SendChatMessage(oPC, OBJECT_INVALID, CHAT_MODE_SILENT_SHOUT, sDmMessage);
+
 }
 
 // collection of simple chat commands by FlattedFifth
@@ -497,6 +498,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback = "ScribeMin ON\n";
 			sFeedback += "You will now scribe scrolls at minimum caster level until next server reset ";
 			sFeedback += "or until ScribeMin turned off.";
+		}
+	//turn dm channel reporting of social roll chat commands on or off
+	} else if (sInput == "#togglesocial" && GetIsDM(oSender)){
+		bFFcommand = TRUE;
+		int nMuted = GetLocalInt(GetModule(), "MUTE_SOCIAL");
+		if (nMuted){
+			SendMessageToPC(oSender, "Turning on dm channel reporting of social skill rolls");
+			SetLocalInt(GetModule(), "MUTE_SOCIAL", FALSE);
+		} else {
+			SendMessageToPC(oSender, "Turning off dm channel reporting of social skill rolls");
+			SetLocalInt(GetModule(), "MUTE_SOCIAL", TRUE);
 		}
 	// APPRAISE
 	} else if (sInput == "#appraise" || sInput == "#haggle"){ // command by itself

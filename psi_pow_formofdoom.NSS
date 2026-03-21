@@ -102,6 +102,7 @@ void main()
 	float fDuration = 6.0f * (manif.nManifesterLevel);
 	if(manif.bExtend) fDuration *= 2;
 
+	// should we add evard vfx sp_black_tentacles.sef ?
 	//Feral Path gets multiattack
 	if (GetHasFeat(FEAT_PSYWAR_FERAL,oManifester)){	
 		object oSkin = PS_GetCreatureSkin(oManifester);
