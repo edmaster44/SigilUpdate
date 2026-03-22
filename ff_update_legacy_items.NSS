@@ -293,36 +293,52 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FAL
 void UpdateUndeadRegeantDescription(object oRegeant){
 
 	int nBase = GetBaseItemType(oRegeant);
-	if (nBase != BASE_ITEM_CRAFTMATERIALMED && nBase != BASE_ITEM_CRAFTMATERIALSML)
-		return;
+	if (nBase != BASE_ITEM_CRAFTMATERIALMED && 
+		nBase != BASE_ITEM_CRAFTMATERIALSML)
+			return;
 
-	int nChance = GetUndeadReagentDeathEssenceChance(GetTag(oRegeant));
-	string sDesc = GetDescription(oRegeant);
-	string sDescAdd = " \nThis reagent also has a ";
-	int nPos = FindSubString(sDesc, sDescAdd);
-	// if the chance of getting a faint death essence is zero...
-	if (nChance < 1){
-		// check to see if we have an addendum to the desc telling us about a chance
-		// because it used to not be zero. If so, remove it.
-		if (nPos != -1){
-			sDesc = GetSubString(sDesc, 0, nPos + 1);
-			SetDescription(oRegeant, sDesc);
-		}
-		return;
-	}	
-	// else if there is a chance that we can get a faint death essence, then check to 
-	// see if the correct chance is in the desc
-	sDescAdd += IntToString(nChance) + "% chance of producing a faint death essence.";
-	int nFullPos = FindSubString(sDesc, sDescAdd);
+	string sDesc = "";
+	string sTag = GetStringLowerCase(GetTag(oRegeant));
 	
-	if (nPos != -1){// if the beginning of the addendum is there...
-		if (nFullPos == -1){ //...but the full info is wrong
-			sDesc = GetSubString(sDesc, 0, nPos + 1); //remove the addendum
-			SetDescription(oRegeant, sDesc + sDescAdd); // and add the correct info
-		} else {
-			return; // but if the info is correct, bail
-		}
-	} else {
-		SetDescription(oRegeant, sDesc + sDescAdd); // otherwise add the full info
+	if (sTag == "n2_crft_dist029"){ //skel rib 25
+		sDesc = "This is a rib-bone from a humanoid skeleton.\n\n";
+		sDesc += "Requirement: Craft Alchemy 4 ranks.\nYields: Faint ";
+		sDesc += "Earth Essence";
+	} else if (sTag == "n2_crft_dist028"){ //ghostly essence 
+		sDesc = "The residue left by a ghost.\n\n";
+		sDesc += "Requirement: Craft Alchemy 8 ranks.\nYields: Glowing ";
+		sDesc += "Power Essence, random Glowing or Radiant Elemental Essence";
+	} else if (sTag == "n2_crft_dist035"){//vamp tooth
+		sDesc = "The fang of a vampire.\n\n";
+		sDesc += "Requirement: Craft Alchemy 8 ranks.\nYields: Glowing ";
+		sDesc += "Power Essence, Glowing Fire Essence";	
+	} else if (sTag == "n2_crft_dist017"){//ghost residue
+		sDesc = "The ichor left behind by a defeated ghost.\n\n";
+		sDesc += "Requirement: Craft Alchemy 8 ranks.\nYields: Glowing ";
+		sDesc += "Air Essence";	
+	} else if (sTag == "n2_crft_dist027"){//shadow residue
+		sDesc = "The inky residue left behind by a shadow.\n\n";
+		sDesc += "Requirement: Craft Alchemy 8 ranks.\nYields: Radiant ";
+		sDesc += "Air Essence";		
+	} else if (sTag == "n2_crft_dist023"){//lich dust
+		sDesc = "The gray pile of dust is all that's left of a lich.\n\n";
+		sDesc += "Requirement: Craft Alchemy 10 ranks.\nYields: Radiant ";
+		sDesc += "Power Essence, Radiant Air Essence";			
+	} else if (sTag == "n2_crft_dist016"){//ghast claws
+		sDesc = "These sharp, filthy claws stink of decaying meat.\n\n";
+		sDesc += "Requirement: Craft Alchemy 8 ranks.\nYields: Glowing ";
+		sDesc += "Air Essence, Weak Power Essence";		
+	} else if (sTag == "n2_crft_dist015"){//ghoul claws
+		sDesc = "These sharp, filthy claws stink of decaying meat.\n\n";
+		sDesc += "Requirement: Craft Alchemy 6 ranks.\nYields: Weak ";
+		sDesc += "Air Essence, Faint Power Essence";		
 	}
+	
+	if (sDesc == "") return;
+	
+	int nChance = GetUndeadReagentDeathEssenceChance(sTag);
+	if (nChance > 0){
+		sDesc += ", " + IntToString(nChance) + "% chance of Faint Death Essence";
+	} 
+	SetDescription(oRegeant, sDesc);
 }

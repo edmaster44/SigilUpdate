@@ -275,6 +275,7 @@ int GetUndeadReagentDeathEssenceChance(string sTag){
 	else if (sTag == "n2_crft_dist027") return 50;//shadow residue
 	else if (sTag == "n2_crft_dist023") return 75;//lich dust
 	else if (sTag == "n2_crft_dist016") return 25;//ghast claws
+	else if (sTag == "n2_crft_dist015") return 25;//ghoul claws
 	return 0;
 
 }
