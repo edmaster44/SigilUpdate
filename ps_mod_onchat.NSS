@@ -460,9 +460,15 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 	}
 	if (sMessage != "")
 		SendChatMessage(oPC, OBJECT_INVALID, nChannel, sMessage);
-	if (GetLocalInt(GetModule(), "MUTE_SOCIAL") == FALSE)
-		SendChatMessage(oPC, OBJECT_INVALID, CHAT_MODE_SILENT_SHOUT, sDmMessage);
-
+		
+	object oDM = GetFirstPC();
+	while (GetIsObjectValid(oDM)){
+		if (GetIsDM(oDM)){
+			if (!GetLocalInt(oDM, "MUTE_SOCIAL"))
+				SendMessageToPC(oDM, sDmMessage);
+		}
+		oDM = GetNextPC();
+	}
 }
 
 // collection of simple chat commands by FlattedFifth
@@ -502,13 +508,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//turn dm channel reporting of social roll chat commands on or off
 	} else if (sInput == "#togglesocial" && GetIsDM(oSender)){
 		bFFcommand = TRUE;
-		int nMuted = GetLocalInt(GetModule(), "MUTE_SOCIAL");
+		int nMuted = GetLocalInt(oSender, "MUTE_SOCIAL");
 		if (nMuted){
-			SendMessageToPC(oSender, "Turning on dm channel reporting of social skill rolls");
-			SetLocalInt(GetModule(), "MUTE_SOCIAL", FALSE);
+			SendMessageToPC(oSender, "Turning on reporting of social skill chat commands");
+			SetLocalInt(oSender, "MUTE_SOCIAL", FALSE);
 		} else {
-			SendMessageToPC(oSender, "Turning off dm channel reporting of social skill rolls");
-			SetLocalInt(GetModule(), "MUTE_SOCIAL", TRUE);
+			SendMessageToPC(oSender, "Turning off reporting of social skill chat commands");
+			SetLocalInt(oSender, "MUTE_SOCIAL", TRUE);
 		}
 	// APPRAISE
 	} else if (sInput == "#appraise" || sInput == "#haggle"){ // command by itself

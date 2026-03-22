@@ -51,7 +51,9 @@ void main()
 
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_SEE_INVISIBILITY );
     effect eSight = EffectSeeInvisible();
+	effect eBlind = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
     effect eLink = EffectLinkEffects(eSight, eDur);
+	eLink = EffectLinkEffects(eBlind, eDur);
   
     RemoveEffectsFromSpell(oTarget, GetSpellId());
 

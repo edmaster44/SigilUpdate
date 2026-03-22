@@ -41,6 +41,14 @@
 
 const int IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON = 148;
 
+void ApplyDissWeapon(object oTarget, int bAug, float fDur){
+	if (bAug)
+		IPSafeAddItemProperty(oTarget, ItemPropertyDamageBonus(6, IP_CONST_DAMAGEBONUS_5d6), fDur);
+	else IPSafeAddItemProperty(oTarget, ItemPropertyDamageBonus(6, IP_CONST_DAMAGEBONUS_4d6), fDur);
+	IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON, 2), fDur);
+	IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_ACID), fDur);
+}
+
 
 void main()
 {
@@ -65,7 +73,8 @@ void main()
                               METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER |METAPSIONIC_EXTEND 
                               );
 							  
-
+	if(!manif.bCanManifest) return;
+	
     // Validity check
     if(!GetIsObjectValid(oTarget))
     {
@@ -74,13 +83,15 @@ void main()
     }
 	float fDur = 60.0f;
 
-    if(manif.bCanManifest)
-{
-        float fDuration = fDur * manif.nManifesterLevel;
-        if(manif.bExtend)  fDuration *= 2.0f;
-		IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON, 2), fDuration);
-		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_ACID), fDuration);
+	float fDuration = fDur * manif.nManifesterLevel;
+	if(manif.bExtend)  fDuration *= 2.0f;
+	
+	
+	ApplyDissWeapon(oTarget, manif.bAugment, fDuration);
+	
+	object oOff = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oManifester);
+	if (IPGetIsMeleeWeapon(oOff))
+        ApplyDissWeapon(oOff, manif.bAugment, fDuration);
         
-        
-    }
+    
 }

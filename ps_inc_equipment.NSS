@@ -28,7 +28,6 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip);
 void ConDrainProtection(object oItem, object oPC);
 int GetACProvidedByShield(object oShield);
 void DrunkMasterImprovised(object oPC, int nRIGHT);
-void FIX_BLINDFIGHT(object oPC);
 void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
 void MonkDruidPenalty(object oPC);
@@ -151,7 +150,6 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
     int nRIGHT = GetBaseItemType(oRHAND);   
     SpellResistFix(oPC);
     ShieldRangedConceal(oPC, nLEFT);
-	FIX_BLINDFIGHT(oPC);
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     ArmorOptimizations(oPC, oCHEST);
    // UnearthlyGrace(oPC, oCHEST);
@@ -1219,15 +1217,6 @@ void ShieldRangedConceal(object oPC, int nSHIELD)
     }
     effect eFX = EffectConcealment(nCONCEAL, MISS_CHANCE_TYPE_VS_RANGED);
     ApplyEquipmentEffect(oPC, eFX);
-}
-
-void FIX_BLINDFIGHT(object oPC)
-{
-	if (GetHasFeat(FEAT_BLIND_FIGHT,oPC, TRUE) == FALSE) return;
-	effect eEBLIND = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
-	eEBLIND = SupernaturalEffect(eEBLIND);
-	eEBLIND = SetEffectSpellId(eEBLIND, 9005);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEBLIND, oPC);
 }
 
 //Gets the AC provided by the equipped shield

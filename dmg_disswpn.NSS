@@ -4,10 +4,16 @@
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
 
+void main(){
+	object oManifester = OBJECT_SELF;
+	float fDur = TurnsToSeconds(nPsywar(oManifester));
+	object oTarget = GetSpellTargetObject();
+	effect eDam = EffectDamageOverTime(d6(),6.0,DAMAGE_TYPE_ACID,TRUE);  
+	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget, fDur);
 
-
-
-
+}
+/* old
 void main()
 {
 
@@ -50,6 +56,6 @@ float fDur = TurnsToSeconds(nPsywar(oManifester));
 	effect eDam = EffectDamageOverTime(d6(nNumberOfDice),6.0,DAMAGE_TYPE_ACID,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget,fDur);
-	}
-	
+}
+*/
  

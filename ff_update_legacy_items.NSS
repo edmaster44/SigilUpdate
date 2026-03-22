@@ -25,18 +25,18 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
 	
-	//if the item is a regeant that has had a % chance of producing a death essence, note that
-	// in the item's description
-	//debug
-	SendMessageToPC(oPC, "Checking desc of " + GetTag(oItem));
-	UpdateUndeadRegeantDescription(oItem);
-	
 	// repair the tags and local variables on set items damaged by appearance changer
 	// see ff_fix_item_sets.nss
 	FF_FixItemSets(oItem, sRef);
 	//bail if we're only looking at set items, from chat command #fixsetitems
 	// see ps_mod_onchat.nss
 	if (bSetsOnly) return; 
+	
+	//if the item is a regeant that has had a % chance of producing a death essence, note that
+	// in the item's description
+	//debug
+	//SendMessageToPC(oPC, "Checking desc of " + GetTag(oItem));
+	UpdateUndeadRegeantDescription(oItem);
 	
 	object oNewItem;
 	
@@ -292,16 +292,20 @@ void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FAL
 // determined by GetUndeadReagentDeathEssenceChance() in ginc_crafting
 void UpdateUndeadRegeantDescription(object oRegeant){
 
+	int nBase = GetBaseItemType(oRegeant);
+	if (nBase != BASE_ITEM_CRAFTMATERIALMED && nBase != BASE_ITEM_CRAFTMATERIALSML)
+		return;
+
 	int nChance = GetUndeadReagentDeathEssenceChance(GetTag(oRegeant));
 	string sDesc = GetDescription(oRegeant);
-	string sDescAdd = "\nThis reagent also has a ";
+	string sDescAdd = " \nThis reagent also has a ";
 	int nPos = FindSubString(sDesc, sDescAdd);
 	// if the chance of getting a faint death essence is zero...
 	if (nChance < 1){
 		// check to see if we have an addendum to the desc telling us about a chance
 		// because it used to not be zero. If so, remove it.
 		if (nPos != -1){
-			sDesc = GetSubString(sDesc, 0, nPos);
+			sDesc = GetSubString(sDesc, 0, nPos + 1);
 			SetDescription(oRegeant, sDesc);
 		}
 		return;
@@ -313,7 +317,7 @@ void UpdateUndeadRegeantDescription(object oRegeant){
 	
 	if (nPos != -1){// if the beginning of the addendum is there...
 		if (nFullPos == -1){ //...but the full info is wrong
-			sDesc = GetSubString(sDesc, 0, nPos); //remove the addendum
+			sDesc = GetSubString(sDesc, 0, nPos + 1); //remove the addendum
 			SetDescription(oRegeant, sDesc + sDescAdd); // and add the correct info
 		} else {
 			return; // but if the info is correct, bail
