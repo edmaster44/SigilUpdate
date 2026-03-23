@@ -48,32 +48,42 @@ void main(){
 		&& GetRacialType(oDead) != RACIAL_TYPE_VERMIN);
 	
 	int nGold;
+	if (fCR >= 30.0) nGold = d8(3);
+	else if (fCR < 30.0 && fCR >= 20.0) nGold = d12(2);
+	else if (fCR < 20.0 && fCR >= 10.0) nGold = d10(2);
+	else nGold = d20();
 
 	
-	
+	float fPartylevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fPartyXPB = 1.0 + log(IntToFloat(data.nNum)) / PARTYBONUS_XP_DIVIDER;
+	float fFinalXP = 0.0;
+	if(fCR >= fPartylevel){
+		fFinalXP = (BASEXP + (BASEXP * (fCR - fPartylevel) * CRBONUS)) * fPartyXPB;
+	} else { //For lower CR give xp penalty
+		fFinalXP = BASEXP * fPartyXPB / (fPartylevel - fCR + 1.0);
+	}
+		
+	// lets pad up the xp a tiny bit since we un-nerfed the ECL penalties, because we'd be getting 6xp for an epic
+	// boss otherwise. Still less generous that previous ECL
+	if (fFinalXP < BASEXP){
+		fFinalXP *= 1.5;
+		if (fFinalXP > BASEXP) 
+			fFinalXP = BASEXP;
+	} else if (fFinalXP > MAXMONSTERXP){
+		fFinalXP = MAXMONSTERXP;
+	}
     int nLevel = 0;
-	int nBaseLevel = 0;
-    float fFinalXP = 0.0;
     int nFinalXP = 0;
-    int nECL = 0;
     int rp_pool = 0;
     string sID = "";
-    int iHD;
-    float fPartylevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	string sMetagaming = "You have surpassed the required XP to level up.";
 	sMetagaming += "\nYour XP is now being calculated as though you were level ";
 	
 	object oMember = GetFirstFactionMember(oKiller, TRUE);
     while(GetIsObjectValid(oMember)){
-		if (oArea == GetArea(oMember) && bGiveGold){
-			if (fCR >= 30.0) nGold = d8(3);
-			else if (fCR < 30.0 && fCR >= 20.0) nGold = d12(2);
-			else if (fCR < 20.0 && fCR >= 10.0) nGold = d10(2);
-			else nGold = d20();
+		if (oArea == GetArea(oMember) && bGiveGold)
 			PS_GiveGoldToCreature(oMember,nGold);
-		}	
-		
+			
 		nLevel = PS_GetLevelByXP(oMember);
 		if (nLevel > GetHitDice(oMember)){
 			SendMessageToPC(oMember, sMetagaming + IntToString(nLevel) + ".");
@@ -85,15 +95,10 @@ void main(){
 			nLevel = data.nMax;
 		}
 		
-		if(fCR >= fPartylevel){
-			fFinalXP = (BASEXP + (BASEXP * (fCR - fPartylevel) * CRBONUS)) * fPartyXPB;
-        } else { //For lower CR give xp penalty
-			fFinalXP = BASEXP * fPartyXPB / (fPartylevel - fCR + 1.0);
-        }
-
-		if (fFinalXP > MAXMONSTERXP) fFinalXP = MAXMONSTERXP;
-		
 		nFinalXP = PS_RoundToInt(fFinalXP);
+		if (nFinalXP < 1 && PS_RoundToInt(fCR) >= nLevel - MAXPARTYRANGE)
+			nFinalXP = 1;
+			
 		if(nFinalXP > 0){
 			sID = PS_GetCharID(oMember);
 			//SendMessageToPC(oPartyMember,"id:" + sID);
