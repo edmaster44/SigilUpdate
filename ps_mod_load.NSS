@@ -210,6 +210,8 @@ void main()
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");
 	
+	ExecuteScript("ps_craft_updateenchantingtable", OBJECT_SELF);
+	
 
 	
 }

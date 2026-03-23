@@ -64,7 +64,7 @@ const float BASEXP = 65.0; //base xp for creature
 const float PARTYBONUS_XP_DIVIDER = 3.0; // multiplier is 1 + log(partysize)/divider
 const int MAXPARTYRANGE = 10; //PC's that are less than this number from highest level in group
                              //don't count for calculations of party average level
-const float MAXMONSTERXP = 500.0; //The absolute maximum xp any monster can yield
+const float MAXMONSTERXP = 300.0; //The absolute maximum xp any monster can yield
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
                             //CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
                             
@@ -4717,7 +4717,7 @@ int PS_GiveXPReward(object oPC, int nXP) {
         return FALSE;
         
     if (ALLOW_ECL_LEVEL_30)
-        nXP = GetECLXP(nXP, PS_GetLevelByXP(oPC), PS_GetEssenceECL(oPC));
+        nXP = GetECLXP(nXP, PS_GetLevelByXP(oPC), GetNewECL(oPC));
     
     GiveXPToCreature(oPC, nXP);
     return TRUE;

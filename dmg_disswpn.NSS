@@ -6,7 +6,9 @@
 
 void main(){
 	object oManifester = OBJECT_SELF;
-	float fDur = TurnsToSeconds(nPsywar(oManifester));
+	int bAug = GetLocalInt(oManifester, "AUGMENT_DISS_WEAP");
+	float fDur = RoundsToSeconds(8);
+	if (bAug) fDur = RoundsToSeconds(10);
 	object oTarget = GetSpellTargetObject();
 	effect eDam = EffectDamageOverTime(d6(),6.0,DAMAGE_TYPE_ACID,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));

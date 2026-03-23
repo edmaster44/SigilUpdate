@@ -44,7 +44,7 @@ void main()
     //Declare major variables
 	int nFeatDarkvision = 228;
     object oTarget = GetSpellTargetObject();
-    float fDuration = HoursToSeconds(24);  // Note: Might change this to Permanent?
+    float fDuration = HoursToSeconds(24); 
 
     fDuration = ApplyMetamagicDurationMods(fDuration);
    // int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);

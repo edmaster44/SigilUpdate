@@ -21,6 +21,11 @@ void main(){
 	if (nId == SPELL_RACIAL_DARKNESS) nLevel = PS_GetLevel(oCaster);
 	else if (nId == SPELLABILITY_AS_DARKNESS)nLevel = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
 	else nLevel = PS_GetCasterLevel(oCaster);
+	
+	if (nId == SPELL_RACIAL_DARKNESS && 
+		GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oCaster))
+			bAbyssalDark = TRUE;
+	
 	int nDur = nLevel;
 	if (nDur < 5) nDur = 5;
 	int nMeta = GetMetaMagicFeat();

@@ -4,27 +4,21 @@
 //:://////////////////////////////////////////////
 /** @file
 
-    Dissolving Weapon
+Dissolving Weapon
+Psychometabolism [Acid]
+Level: Psychic warrior 2
+Manifesting Time: 1 standard action
+Range: Personal
+Target: Held weapon(s); see text
+Duration: 60 Seconds Per Manifester Level, Twice that when extended
+Saving Throw: None
+Power Resistance: No
+Power Points: 3
+Metapsionics: Augment, Extend. 
 
-    Psychometabolism [Acid]
-    Level: Psychic warrior 2
-    Manifesting Time: 1 standard action
-    Range: Personal
-    Target: One held weapon; see text
-    Duration: Instantaneous
-    Saving Throw: None
-    Power Resistance: No
-    Power Points: 3
-    Metapsionics: Empower, Maximize, Twin
+Your weapon is corrosive, and sizzling moisture visibly oozes from it. You deal 4d6 points of acid damage to any creature you hit with your successful melee attack. Any creature struck by this takes an additional 1d6 irresistible acid damage each round for 8 rounds. If you cast this upon yourself while dual-wielding, the effect automatically applies to both weapons.
 
-    Your weapon is corrosive, and sizzling moisture visibly oozes from it.
-    You deal 4d6 points of acid damage to any creature or object you touch
-    with your successful melee attack. Your weapon is charged with acid until
-    you make a successful attack.
-
-    Augment: For every 2 additional power points you spend, this power’s damage
-             increases by 1d6 points.
-
+Augment: Grants +5d6 acid to weapon and 1d6 irresistible acid damage each round for 10 rounds.
 
     @author Ornedan
     @date   Created - 2005.01.19
@@ -85,6 +79,9 @@ void main()
 
 	float fDuration = fDur * manif.nManifesterLevel;
 	if(manif.bExtend)  fDuration *= 2.0f;
+	
+	if (manif.bAugment) SetLocalInt(oManifester, "AUGMENT_DISS_WEAP", TRUE);
+	else SetLocalInt(oManifester, "AUGMENT_DISS_WEAP", FALSE);
 	
 	
 	ApplyDissWeapon(oTarget, manif.bAugment, fDuration);

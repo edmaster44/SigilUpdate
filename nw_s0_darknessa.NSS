@@ -39,7 +39,7 @@ void main(){
 
 		int bAbyssalDark = FALSE;
 		if (data.nId == SPELL_RACIAL_DARKNESS && 
-			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oCaster, TRUE))
+			GetHasFeat(FEAT_OUTSIDER_BLOODLINE_FIENDISH, oCaster))
 				bAbyssalDark = TRUE;
 		
 		int nConceal = 40;
