@@ -154,7 +154,7 @@ int PS_RoundToInt(float fNum, string RoundTo = "nearest");
 // get only get 96.7% of the xp they earn applied to their character because 96.7% of 465k
 // is roughly 435k. In this way we can have any amount of ECL we need, not just up to 3 
 // (but for now I've capped it at ECL 20, which would be 36% of earned xp is applied)
-int GetECLXP(int nXP, int nLevel, int nECL);
+int GetECLXP(int nXP, object oPC);
 
 // The default GiveXPToCreature() has return type void, so int PS_GiveXPReward() doesn't always work in place of it.
 void PS_GiveXPRewardNoReturn(object oPC, int nXP);
@@ -628,57 +628,24 @@ int XPpoolAdjust(int nXP){
 }
 
 // Called from PS_GiveXPReward().
-int GetECLXP(int nXP, int nLevel, int nECL){
-    
+int GetECLXP(int nXP, object oPC){
+   
+	int nLevel = PS_GetLevelByXP(oPC);
+	int nECL = GetNewECL(oPC);
+	if (nXP < 1) return 0;
     if (nECL < 0) nECL = 0;
-    if (nECL > 20) nECL = 20;
-    if (nXP < 1) nXP = 1;
     if (nECL == 0) return nXP;
-    // nLevel is the character's current level, not next.
-    
-    int nAdjusted;
-    if (nECL > nLevel -1 ) nAdjusted = nLevel - 1;
-    else nAdjusted = nECL;
-
-    if (nAdjusted == 0) return nXP;
-    
-    int nBase = 30 - nECL;
-    
-    int numeratorXP = 500 * nBase * (nBase + 1);
-    int denominatorXP = 500 * (nBase + nAdjusted) * (nBase + nAdjusted + 1);
-    
-    float fBase = IntToFloat(numeratorXP);
-    float fDiv = IntToFloat(denominatorXP);
-    float fPercentage = fBase / fDiv;
-    // get the xp to apply, rounded to nearest integer
-    int nAppliedXP = PS_RoundToInt(IntToFloat(nXP) * fPercentage);
-    // be kind and give at least 1 xp, if they got at least 1 to begin with
-    if (nAppliedXP < 1 && nXP > 0) nAppliedXP = 1;
-    return nAppliedXP;
-}
-
-// This version is the real math that was not nerfed by Jelkia
-// Returns a true and accurate representation of what an ECL xp award should be for any ecl
-// with a curve that reduces ecl "tax" until their level reaches their ECL
-/*
-int GetAdjustedXPForECL(int nXP, int nLevel, int nECL)
-{
-    if (nXP <= 0) return 0;
-	if (nLevel <= nECL) nECL = nLevel - 1;
-    if (nECL <= 0) return nXP;
+	if (nECL > 20) nECL = 20;
 	
-    // XP for effective level 30 + nECL
+	// XP for effective level 30 + nECL
     float fEffectiveLevel = 30.0 + IntToFloat(nECL);
-    float fECLXP = 1000.0 * nEffectiveLevel * (nEffectiveLevel - 1.0) / 2;
+    float fECLXP = 1000.0 * fEffectiveLevel * (fEffectiveLevel - 1.0) / 2;
     
     // Tax factor = base lvl 30 xp / xp to reach effective level of 30 + ecl
 	float fTax = 435000.0 / fECLXP;
 	int nAdjusted = PS_RoundToInt(IntToFloat(nXP) * fTax);
-
-	return (nAdjusted > 1) ? nAdjusted : 1;
+	return (nAdjusted > 1) ? nAdjusted : 1; 
 }
-
-*/
 
 
 int PS_RoundToInt(float fNum, string RoundTo = "nearest"){  
@@ -4717,7 +4684,7 @@ int PS_GiveXPReward(object oPC, int nXP) {
         return FALSE;
         
     if (ALLOW_ECL_LEVEL_30)
-        nXP = GetECLXP(nXP, PS_GetLevelByXP(oPC), GetNewECL(oPC));
+        nXP = GetECLXP(nXP, oPC);
     
     GiveXPToCreature(oPC, nXP);
     return TRUE;
