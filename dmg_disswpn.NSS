@@ -1,17 +1,53 @@
-
+#include "aaa_constants"
 #include "psi_inc_manifest"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
+#include "psi_inc_psifunc"
+
+
+
+int HasDissWeapProp(object oWeapon){
+	if (!IPGetIsMeleeWeapon(oWeapon)) return FALSE;
+    itemproperty ip = GetFirstItemProperty(oWeapon);
+    while (GetIsItemPropertyValid(ip)){
+        if (GetItemPropertyType(ip) == ITEM_PROPERTY_ONHITCASTSPELL){
+            if (GetItemPropertySubType(ip) == IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON)
+                return TRUE;
+        }
+        ip = GetNextItemProperty(oWeapon);
+    }
+    return FALSE;
+}
+
 
 void main(){
 	object oManifester = OBJECT_SELF;
-	int bAug = GetLocalInt(oManifester, "AUGMENT_DISS_WEAP");
-	float fDur = RoundsToSeconds(8);
-	if (bAug) fDur = RoundsToSeconds(10);
+	int nId = GetSpellId();
 	object oTarget = GetSpellTargetObject();
-	effect eDam = EffectDamageOverTime(d6(),6.0,DAMAGE_TYPE_ACID,TRUE);  
+	int nBurns = 0;
+	int nDissWeaps = 0;
+	effect eFX = GetFirstEffect(oTarget);
+	while (GetIsEffectValid(eFX)){
+		if (GetEffectSpellId(eFX) == nId && GetEffectCreator(eFX) == oManifester)
+			nBurns++;
+		eFX = GetNextEffect(oTarget);
+	}
+	if (HasDissWeapProp(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oManifester)))
+		nDissWeaps++;
+	
+	if (HasDissWeapProp(GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oManifester)))
+		nDissWeaps++;
+	
+	// do not stack the DoT more times than the number of weapons with the on hit
+	if (nBurns >= nDissWeaps) return;
+	
+	float fDur = RoundsToSeconds(8);
+	if (GetLocalInt(oManifester, "AUGMENT_DISS_WEAP")) fDur = RoundsToSeconds(10);
+
+	effect eDam = EffectDamageOverTime(d6(),6.0, DAMAGE_TYPE_ACID, TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
+	eDam = SetEffectSpellId(eDam, nId);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget, fDur);
 
 }

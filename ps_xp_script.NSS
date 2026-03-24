@@ -62,6 +62,10 @@ void main(){
 	} else { //For lower CR give xp penalty
 		fFinalXP = BASEXP * fPartyXPB / (fPartylevel - fCR + 1.0);
 	}
+	// the more party members there are, the better the xp
+	if (data.nNum == 1) fFinalXP *= 0.25;
+	else if (data.nNum == 2) fFinalXP *= 0.5;
+	else if (data.nNum == 3) fFinalXP *= 0.75;
 		
 	// lets pad up the xp a tiny bit since we un-nerfed the ECL penalties, because we'd be getting 6xp for an epic
 	// boss otherwise. Still less generous that previous ECL
@@ -95,6 +99,10 @@ void main(){
 			nLevel = data.nMax;
 		}
 		
+		fFinalXP *= fCR / IntToFloat(nLevel);
+		
+		if (fFinalXP > MAXMONSTERXP) fFinalXP = MAXMONSTERXP;
+		
 		nFinalXP = PS_RoundToInt(fFinalXP);
 		if (nFinalXP < 1 && PS_RoundToInt(fCR) >= nLevel - MAXPARTYRANGE)
 			nFinalXP = 1;
@@ -122,6 +130,7 @@ void main(){
 
 
 struct PartyData GetPartyData(object oPC){
+	object oArea = GetArea(oPC);
 	struct PartyData data;
 	data.nMax = 0;
 	data.fAvg = 0.0;
@@ -130,11 +139,13 @@ struct PartyData GetPartyData(object oPC){
 	int nTotal = 0;
 	object oMember = GetFirstFactionMember(oPC, TRUE);
     while(GetIsObjectValid(oMember)){ 
-		data.nNum++;
-		nLvl = PS_GetLevel(oMember);
-		if (nLvl > data.nMax)
-			data.nMax = nLvl;
-		nTotal += nLvl;
+		if (GetArea(oMember) == oArea){
+			data.nNum++;
+			nLvl = PS_GetLevel(oMember);
+			if (nLvl > data.nMax)
+				data.nMax = nLvl;
+			nTotal += nLvl;
+		}
         oMember = GetNextFactionMember(oPC, TRUE);     
 	}
  

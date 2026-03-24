@@ -26,14 +26,14 @@ Augment: Grants +5d6 acid to weapon and 1d6 irresistible acid damage each round 
 //:://////////////////////////////////////////////
 //:://////////////////////////////////////////////
 
-
+#include "aaa_constants"
 #include "psi_inc_manifest"
 #include "psi_inc_psifunc"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
 #include "x2_inc_itemprop"
 
-const int IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON = 148;
+
 
 void ApplyDissWeapon(object oTarget, int bAug, float fDur){
 	if (bAug)
