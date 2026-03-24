@@ -162,6 +162,7 @@ void main()
 	}
 	
 	object oMod = GetModule();
+	ExecuteScript("ps_craft_updateenchantingtable", oMod);
 	
 	/*  load boot time into the boottime variable */
     SQLExecDirect("SELECT UNIX_TIMESTAMP()");
@@ -210,7 +211,7 @@ void main()
 	/* Record a Unix timestamp as a module variable for later comparison */
 	PS_Timestamp_UNIX(oMod, "BootStamp");
 	
-	ExecuteScript("ps_craft_updateenchantingtable", OBJECT_SELF);
+	
 	
 
 	
