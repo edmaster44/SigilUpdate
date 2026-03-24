@@ -29,7 +29,7 @@ int CheckEnchantmentNumber(int nIndex, object oItem, object oPC, string sTable);
 int CheckHasEnoughCasterLevels(int nIndex, object oPC, string sTable);
 
 void CraftItem(int nIndex, object oPC, string sTable);
-void EnchantItem(int nIndex, object oItem, object oPC, string sTable);
+void EnchantItemOld(int nIndex, object oItem, object oPC, string sTable);
 void DeductGoldCost(int nIndex, object oPC, string sTable);
 void ConsumeItemReagents(int nIndex, object oPC, string sTable);
 void ConsumeCraftingSpellUse(int nIndex, object oPC, string sTable);
@@ -557,7 +557,7 @@ void CraftItem(int nIndex, object oPC, string sTable)
 	CreateCraftedItem(nIndex, oPC, sTable);
 }
 
-void EnchantItem(int nIndex, object oItem, object oPC, string sTable)
+void EnchantItemOld(int nIndex, object oItem, object oPC, string sTable)
 {
 	DeductGoldCost(nIndex, oPC, sTable);
 	ConsumeItemReagents(nIndex, oPC, sTable);
