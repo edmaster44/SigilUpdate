@@ -92,14 +92,14 @@ void main(){
 		if (nLevel > GetHitDice(oMember)){
 			SendMessageToPC(oMember, sMetagaming + IntToString(nLevel) + ".");
 		}
-		
+		int nECL = GetNewECL(oMember);
 		// if the player is below the party range (excluding highest ecl, including their own, 
 		// then treat them, xp wise, same as the highest level party member
-		if (data.nMax - MAXPARTYRANGE > nLevel + GetNewECL(oMember)){
+		if (data.nMax - MAXPARTYRANGE > nLevel + nECL){
 			nLevel = data.nMax;
 		}
 		
-		fFinalXP *= fCR / IntToFloat(nLevel);
+		fFinalXP *= fCR / IntToFloat(nLevel + nECL);
 		
 		if (fFinalXP > MAXMONSTERXP) fFinalXP = MAXMONSTERXP;
 		
