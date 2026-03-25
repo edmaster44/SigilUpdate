@@ -37,8 +37,8 @@ Augment: Grants +5d6 acid to weapon and 1d6 irresistible acid damage each round 
 
 void ApplyDissWeapon(object oTarget, int bAug, float fDur){
 	if (bAug)
-		IPSafeAddItemProperty(oTarget, ItemPropertyDamageBonus(6, IP_CONST_DAMAGEBONUS_5d6), fDur);
-	else IPSafeAddItemProperty(oTarget, ItemPropertyDamageBonus(6, IP_CONST_DAMAGEBONUS_4d6), fDur);
+		IPSafeAddItemProperty(oTarget, ItemPropertyDamageBonus(6, IP_CONST_DAMAGEBONUS_4d6), fDur);
+	else IPSafeAddItemProperty(oTarget, ItemPropertyDamageBonus(6, IP_CONST_DAMAGEBONUS_3d6), fDur);
 	IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_DISSOLVING_WEAPON, 2), fDur);
 	IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_ACID), fDur);
 }
@@ -46,33 +46,24 @@ void ApplyDissWeapon(object oTarget, int bAug, float fDur){
 
 void main()
 {
-/*
-  Spellcast Hook Code
-  Added 2004-11-02 by Stratovarius
-  If you want to make changes to all powers,
-  check psi_spellhook to find out more
+	//NOTE: The local variable set and deleted in this script tells the on-hit script, dmg_disswpn.nss,
+	//whether or not the spell was augmented.
 
-*/
     if (!PsiPrePowerCastCode())
-    {
-    // If code within the PrePowerCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
-    }
+    
 
     object oManifester = OBJECT_SELF;
     object oTarget     = IPGetTargetedOrEquippedMeleeWeapon();
      struct manifestation manif =
-        EvaluateManifestationNew(oManifester, oTarget,
-                              GetSpellId(),
-                              METAPSIONIC_AUGMENT | METAPSIONIC_EMPOWER |METAPSIONIC_EXTEND 
-                              );
+        EvaluateManifestationNew(oManifester, oTarget, GetSpellId(), METAPSIONIC_AUGMENT | METAPSIONIC_EXTEND);
 							  
 	if(!manif.bCanManifest) return;
 	
     // Validity check
-    if(!GetIsObjectValid(oTarget))
-    {
-        SendMessageToPC(oManifester, "Target must be a weapon or creature holding a weapon!"); // Item must be weapon or creature holding a weapon
+    if(!GetIsObjectValid(oTarget)){// Item must be weapon or creature holding a weapon
+        SendMessageToPC(oManifester, "Target must be a weapon or creature holding a weapon!"); 
+		DeleteLocalInt(oManifester, "AUGMENT_DISS_WEAP");
     	return;
     }
 	float fDur = 60.0f;
@@ -81,14 +72,16 @@ void main()
 	if(manif.bExtend)  fDuration *= 2.0f;
 	
 	if (manif.bAugment) SetLocalInt(oManifester, "AUGMENT_DISS_WEAP", TRUE);
-	else SetLocalInt(oManifester, "AUGMENT_DISS_WEAP", FALSE);
+	else DeleteLocalInt(oManifester, "AUGMENT_DISS_WEAP");
 	
 	
 	ApplyDissWeapon(oTarget, manif.bAugment, fDuration);
 	
+	
 	object oOff = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oManifester);
 	if (IPGetIsMeleeWeapon(oOff))
         ApplyDissWeapon(oOff, manif.bAugment, fDuration);
+	
         
     
 }

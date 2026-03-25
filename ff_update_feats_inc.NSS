@@ -129,6 +129,16 @@ void ApplyEpicSpellPrereq(object oPC){
 }
 */
 
+//manually give creature weapon proficiency to any race or class that is meant to have it
+//but does not so they don't have to rebuild to get it from 2da. Only tanaari at the time 
+//of this function's creation
+void GiveCreatureWeaponProf(object oPC){
+	if (GetHasFeat(289, oPC)) return;
+	
+	if (GetSubRace(oPC) == 194) //tanaari
+		FeatAdd(oPC, 289, FALSE);
+}
+
 // manually give gc the new dodge ac feat so that existing gc do not have to rebuild
 // As per discussion with Jelkia this is changed from lvl 2 to lvl 3
 void ApplyGatecrasherAC(object oPC){

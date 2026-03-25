@@ -764,7 +764,7 @@ struct enchantment GetRandomTrinketEnchantment(int nValue) {
 		int n = StringToInt(SQLGetData(1));
 		return LoadEnchantmentFromSQL(n);
 	}
-	return LoadEnchantmentFromSQL(0);
+	return LoadEnchantmentFromSQL(1552);// defaults to faerie fire
 	
 }
 

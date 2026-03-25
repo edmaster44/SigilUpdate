@@ -110,7 +110,7 @@ void fUpdateOtherFeats(object oPC){
 	
 	ApplyGatecrasherAC(oPC);
 	ApplyTurnResist(oPC);
-	
+	GiveCreatureWeaponProf(oPC);
 	UpdateACFeats(oPC);
 	
 	GiveCreatureWeaponFinesse(oPC);

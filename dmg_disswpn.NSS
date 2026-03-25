@@ -41,11 +41,12 @@ void main(){
 	
 	// do not stack the DoT more times than the number of weapons with the on hit
 	if (nBurns >= nDissWeaps) return;
-	
-	float fDur = RoundsToSeconds(8);
-	if (GetLocalInt(oManifester, "AUGMENT_DISS_WEAP")) fDur = RoundsToSeconds(10);
-
-	effect eDam = EffectDamageOverTime(d6(),6.0, DAMAGE_TYPE_ACID, TRUE);  
+	int nDoT = 3;
+	if (GetLocalInt(oManifester, "AUGMENT_DISS_WEAP")){
+		nDoT = 4;
+	}
+	float fDur = RoundsToSeconds(nDoT * 2);
+	effect eDam = EffectDamageOverTime(nDoT, 6.0, DAMAGE_TYPE_ACID, TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
 	eDam = SetEffectSpellId(eDam, nId);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget, fDur);

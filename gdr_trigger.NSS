@@ -668,6 +668,11 @@ int StatCheck(object oPC, int stat, int dc, string short) {
 void GDROnDispelEffect( object oTarget ) {
 
 	// Do nothing for now
+	if (GetIsPC(oTarget)){
+		string sMessage = "Please inform admin staff on Discord that you were dispelled by ";
+		sMessage += "gdr_trigger.nss script. Also tell them <i>where</i> this occurred.";
+		SendMessageToPC(oTarget, sMessage);
+	}
 		
 	return;
 }
