@@ -142,6 +142,7 @@ void LevelUpGuiChoices(object oPC){
 		return;
 	}
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	
 	int nLastClassLevel = GetLevelByClass(nLastClass, oPC);
 	if (nLastClass == 62){ //half outsider rprc
 		//APOTHEOSIS
@@ -173,11 +174,15 @@ void LevelUpGuiChoices(object oPC){
 			AddScriptParameterString("START");
 			AddScriptParameterString("");
 			ExecuteScriptEnhanced("gui_extra_choices", oPC);
-		//PATH (gui_extra_choices has a check to make sure we don't do anything if they have a path already)
+		//PATH 
 		} else if (nLastClassLevel >= 2){
-			AddScriptParameterString("HO_PATH");
-			AddScriptParameterString("");
-			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+			// if they do not have a HalfOutsider path yet
+			if (!GetHasFeat(3033, oPC) && !GetHasFeat(3034, oPC) && !GetHasFeat(3038, oPC) && 
+				!GetHasFeat(3039, oPC) && !GetHasFeat(3040, oPC)){
+				AddScriptParameterString("HO_PATH");
+				AddScriptParameterString("");
+				ExecuteScriptEnhanced("gui_extra_choices", oPC);
+			}
 		}
 	}
 }
@@ -528,9 +533,13 @@ int fCalcSneakDice(object oPC)
 	if (GetHasFeat(3671, oPC)) // rogue path for dragon prc
 		nSneakDice += (GetLevelByClass(129, oPC) / 2);
 	
-	// next half outsider
-	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE))
-		nSneakDice += (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) + 1) /2;
+	// half outsider
+	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE)){
+		int nHOlev = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
+		if (nHOlev >= 5) nSneakDice += 3;
+		else if (nHOlev >= 4) nSneakDice += 2;
+		else if (nHOlev >= 3) nSneakDice += 1;
+	}
 
 	// psychic warrior
 	if (GetHasFeat(idFeatPsyWarLurk, oPC, TRUE))

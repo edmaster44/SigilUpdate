@@ -654,6 +654,8 @@ void main()
 		PS_KnightLevels(oPC);
 		PS_BarbarianLevels(oPC);
 		UpdateMultiattack(oPC);
+		if (!GetLocalInt(PS_GetEssence(oPC), "TRACKING_CLASSES"))
+			StoreClasses(oPC);
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
 		LookForSharedRouters();

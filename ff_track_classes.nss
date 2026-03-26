@@ -1,7 +1,7 @@
 
-//This is called on pc load for new characters only, and then at the end of ps_levelup and also in the mimic
-// deleveling scripts, to store the classes so that we can figure out which class was just leveled in the 
-// function below this
+//This is called on pc load for new characters (and for characters who have not had this done yet), 
+// and then at the end of ps_levelup and also in the mimic deleveling scripts. It stores the classes 
+// so that we can figure out which class was just leveled in the function below this
 void StoreClasses(object oPC){
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
 	if (!GetIsObjectValid(oEss)){
@@ -19,7 +19,9 @@ void StoreClasses(object oPC){
 		else nLevel = GetLevelByClass(nClass, oPC);
         SetLocalInt(oEss, sVarName + IntToString(i), nClass);
 		SetLocalInt(oEss, sVarName + IntToString(i) + "_LVL", nLevel);
-	}    
+	}
+	if (!GetLocalInt(oEss, "TRACKING_CLASSES"))
+		SetLocalInt(oEss, "TRACKING_CLASSES", TRUE);
 }
 
 //this is called on the level up event only in ff_update_feats before the above function is called.
@@ -37,6 +39,7 @@ int GetLastClassLeveledUp(object oPC){
 		SendMessageToPC(oPC, "Missing Essence! Please contact an administrator immediately on Discord.");
 		return -1;
 	}
+	if (!GetLocalInt(oEss, "TRACKING_CLASSES")) return -2;
 	int i;
 	int nClass;
 	int nLevel;
