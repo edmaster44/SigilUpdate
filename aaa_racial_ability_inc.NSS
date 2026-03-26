@@ -252,10 +252,9 @@ void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
 void PS_Ability_DarkFlight(object oPC)
 {
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
-	int iCheck		= GetLocalInt(oItem, "DarkFlight");
-	int iTemp		= GetLocalInt(oItem, "TempChange");
-	if (iTemp == 1)
-	{	return;	}
+	//int iCheck		= GetLocalInt(oItem, "DarkFlight"); // not used in this function
+	if (GetLocalInt(oItem, "TempChange") == 1)	return;
+	
 	int iWing;
 	int iWingRace;
 	{	if (GetLevelByClass(CLASS_TYPE_BRACHINA, oPC) != 0)
@@ -287,7 +286,7 @@ void PS_Ability_DarkFlight(object oPC)
 		{	iWingRace = PS_Get_WingRace(oPC);
 			if (GetHasFeat(2537))
 			{	iWing = PS_GetWing_Fiend(oPC);	}
-			if (GetHasFeat(2538))
+			if (GetHasFeat(2538) || GetHasFeat(3024))
 			{	iWing = PS_GetWing_Celestial(oPC);	}
 		}
 		

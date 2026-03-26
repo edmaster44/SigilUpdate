@@ -208,7 +208,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 		{
 			case 1: return 2179; //Bright Flight
 			case 2: return 2556; //Supernatural Sight
-			//case 3: return 3024; //New Celestial Wings
+			case 3: return 3024; //New Celestial Wings
 		}	break;
 		case 622: switch(nCOUNT) //Half-Outsider Path
 		{
@@ -268,12 +268,16 @@ int GetTitle(int nCLASS)
 }
 
 string GetEpitethName(int nFeat) {
-
 	//Scent feat w/ tail
 	if (nFeat == 2178) {
 		return "Fey Senses";
+	} else if (nFeat == 3033){
+		return "Planar Guile";
+	} else if (nFeat == 3034){
+		return "Planar Strength";
+	} else if (nFeat == 3024){
+		return "New Celestial Wings";
 	}
-	
 	int nNAME = StringToInt(Get2DAString("feat", "FEAT", nFeat));
 	return GetStringByStrRef(nNAME);
 }
@@ -319,12 +323,9 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 		
 		SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE_"+IntToString(nCOUNT), FALSE);
 		sICON = Get2DAString("feat", "ICON", nEPITETH) + ".tga";
-		nNameRef = StringToInt(Get2DAString("feat", "FEAT", nEPITETH));
 		SetGUITexture(oPC, sSCREEN, "CHOICE_ICON_"+IntToString(nCOUNT), sICON);
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), nNameRef, "");
-		// the below wasn't working for the first 2 feats in half outsider path selection
-		//sNAME = GetEpitethName(nEPITETH);
-		//SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), -1, sNAME);
+		sNAME = GetEpitethName(nEPITETH);
+		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), -1, sNAME);
 		SetLocalGUIVariable(oPC, sSCREEN, nCOUNT, IntToString(nEPITETH));
 		nCOUNT = nCOUNT + 1;
 	}
