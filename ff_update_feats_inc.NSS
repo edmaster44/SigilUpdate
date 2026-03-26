@@ -104,6 +104,7 @@ void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 void PS_ManageImbueItem(object oPC);
+void LevelUpGuiChoices(object oPC);
 
 /* WIP: Do we want to change epic spells so that they require a custom
  prereq feat since the engine recognizing favored soul having 9th lvl spells
@@ -174,6 +175,15 @@ void LevelUpGuiChoices(object oPC){
 			AddScriptParameterString("START");
 			AddScriptParameterString("");
 			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		} else if (nLastClassLevel >= 3){
+			if (GetHasFeat(3034, oPC)){ //path of strength
+				if (!GetHasFeat(28, oPC))// power attack
+					FeatAdd(oPC, 28, FALSE);
+			} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
+				GetHasFeat(3040, oPC)){// mental ability paths
+				if (!GetHasFeat(28, oPC))// combat casting
+					FeatAdd(oPC, 28, FALSE); 
+			}
 		//PATH 
 		} else if (nLastClassLevel >= 2){
 			// if they do not have a HalfOutsider path yet
