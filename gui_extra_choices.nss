@@ -296,6 +296,7 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 	else SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_PREV", FALSE);
 	string sICON;
 	string sNAME;
+	int nNameRef;
 	int nEPITETH;
 	int nCOUNT = 1;
 	while (nCOUNT <= 10)
@@ -315,11 +316,15 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 			break;
 		}
 		else SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_NEXT", FALSE);
+		
 		SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE_"+IntToString(nCOUNT), FALSE);
 		sICON = Get2DAString("feat", "ICON", nEPITETH) + ".tga";
-		sNAME = GetEpitethName(nEPITETH);
+		nNameRef = StringToInt(Get2DAString("feat", "FEAT", nEPITETH));
 		SetGUITexture(oPC, sSCREEN, "CHOICE_ICON_"+IntToString(nCOUNT), sICON);
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), -1, sNAME);
+		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), nNameRef, "");
+		// the below wasn't working for the first 2 feats in half outsider path selection
+		//sNAME = GetEpitethName(nEPITETH);
+		//SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), -1, sNAME);
 		SetLocalGUIVariable(oPC, sSCREEN, nCOUNT, IntToString(nEPITETH));
 		nCOUNT = nCOUNT + 1;
 	}
