@@ -5,6 +5,7 @@
 #include "ps_adjust_barbarian"
 #include "nwnx_sql"
 #include "aaa_racial_ability_inc"
+#include "ff_track_classes"
 
 
 void Finalize(object oPC)
@@ -88,4 +89,5 @@ void main()
 	//Launch the delayed commands
 	DelayCommand(0.0f, DelayedFixes(oPC, oItem, 0));
 	Finalize(oPC);
+	StoreClasses(oPC);
 }

@@ -1,6 +1,7 @@
 #include "aaa_constants"
 #include "ff_combat_mods"
 #include "ps_adjust_knight"
+#include "ff_track_classes"
 
 
 // constants to control optional epic precision qualifications
@@ -128,6 +129,58 @@ void ApplyEpicSpellPrereq(object oPC){
 			FeatAdd(oPC, FEAT_EPIC_SPELL_REQ_ARCANE, FALSE);
 }
 */
+
+void LevelUpGuiChoices(object oPC){
+
+	int nLastClass = GetLastClassLeveledUp(oPC);
+	if (nLastClass == -1 || nLastClass == -2){
+		string sMessage = "Error in function LevelUpGuiChoices in script ff_update_feats_inc.";
+		if (nLastClass == -1) sMessage += "\nEssence not found";
+		else if (nLastClass == -2) sMessage += "\nLast leveled up class not found";
+		sMessage += "\nPlease screenshot this entire message and send to an admin on our Discord.";
+		SendMessageToPC(oPC, sMessage);
+		return;
+	}
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	int nLastClassLevel = GetLevelByClass(nLastClass, oPC);
+	if (nLastClass == 62){ //half outsider rprc
+		//APOTHEOSIS
+		if (nLastClassLevel >= 6){
+			string sHeritage = GetLocalString(oEss, "Planar");
+			if (sHeritage == ""){	
+				SendMessageToPC(oPC, "Planar heritage not found. Please contact an administrator on our Discord");
+				return;	
+			}
+			int nType;
+			if (sHeritage == "HalfFiend") nType = 1;	
+			else if (sHeritage == "HalfCelestial") nType = 2;	
+			int nOrigin = GetRacialType(oPC);
+			int nOriSub = GetSubRace(oPC);
+			int iWings = GetLocalInt(oEss, "DarkFlight");
+			int iHasBonus = GetLocalInt(oEss, "HO1");
+	
+			if (GetRacialType(oPC) != RACIAL_TYPE_OUTSIDER){	
+				SetLocalString(oEss, "Template", "HalfOutsider");
+				SetLocalInt(oEss, "OldRace", nOrigin);
+				SetLocalInt(oEss, "OldSubrace", nOriSub);
+				SetLocalString(oEss, "RaceChange", "Outsider");
+				SetLocalInt(oEss, "TemplateFix", 0);
+				PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);
+				PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_OUTSIDER);	
+			}	
+			if (iHasBonus == 1) return;
+			SetLocalInt(oEss, "HO1", 1);
+			AddScriptParameterString("START");
+			AddScriptParameterString("");
+			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		//PATH (gui_extra_choices has a check to make sure we don't do anything if they have a path already)
+		} else if (nLastClassLevel >= 2){
+			AddScriptParameterString("HO_PATH");
+			AddScriptParameterString("");
+			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		}
+	}
+}
 
 //manually give creature weapon proficiency to any race or class that is meant to have it
 //but does not so they don't have to rebuild to get it from 2da. Only tanaari at the time 

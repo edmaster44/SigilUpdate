@@ -28,6 +28,7 @@
 #include "inc_tattoo"
 #include "ff_combat_mods"
 #include "_aaa_first_login"
+#include "ff_track_classes"
 
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
@@ -173,6 +174,18 @@ void GiveStartingGold( object oPC, int nAmount )
 	PS_GiveGoldToCreature(oPC, nAmount);
 }
 
+void SetStartingVariables(object oPC, string sLegal){
+	object oEss = PS_GetEssence(oPC);
+	// we need to track what classes and at what levels the character has so that 
+	// we can in future tell what class was just leveled up for purposes of 
+	// gui_extra_choices
+	StoreClasses(oPC);
+	// we need the original race stored at char creation, 
+	SetLocalString(oEss, "LEGAL", sLegal);
+	SetLocalInt(oEss, "OldSubrace", GetSubRace(oPC));			
+	SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));
+}
+
 void RemoveAllItems(object oPC)
 {
 	int nSLOT;
@@ -243,7 +256,7 @@ int prepChar(object oPC)
 	string sKey = GetPCPublicCDKey(oPC);
 	string sIP = GetPCIPAddress(oPC);
 		
-	if(oItem != oINVALID) {		
+	if(oItem != oINVALID) {	
 		
 		if (nID == 0) {	
 		
@@ -506,28 +519,13 @@ void main()
 			//SendMessageToPC(GetFirstPC(), Legal+ECL+IntToString(Template));
 		}
 		
-		// Give Newly created characters starting feats that they would have gotten
-		// from ps_levelup at level 1 if it were called on character creation
-		GiveStartingFeats(oPC);
-		PS_GiveXPReward(oPC, 1);
-		GiveStartingGold(oPC, 500);
-
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
 		oItem = CreateItemOnObject("ps_essence", oPC);
+		GiveStartingFeats(oPC);
+		GiveStartingGold(oPC, 500);
+		SetStartingVariables(oPC, Legal);
+		PS_GiveXPReward(oPC, 1);
 		
-		// we need the original race stored regardless at char creation, 
-		// and at char creation no one has a template
-		//if (Template == 1)
-		//{	
-			//SendMessageToPC(GetFirstPC(), "setting to essence");
-			//oItem = PS_GetEssence(oPC);
-			SetLocalString(oItem, "LEGAL", Legal);
-			//SetLocalString(oItem, "ECL", ECL);
-			SetLocalInt(oItem, "OldSubrace", GetSubRace(oPC));			
-			SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));			
-		//}
-		
-
 		Booted = prepChar(oPC);
 		ExportSingleCharacter(oPC);
 	}
@@ -659,5 +657,6 @@ void main()
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
 		LookForSharedRouters();
+		
 	}
 }

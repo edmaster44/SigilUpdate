@@ -24,6 +24,7 @@ July 3, 2024 FlattedFifth
 #include "ps_adjust_kensei"
 #include "ps_inc_bgspellfix"
 #include "class_mageslayer_utils"
+#include "ff_track_classes"
 
 
 // "level up" of creature weapons.
@@ -235,11 +236,13 @@ void main()
 	MageSlayerLevels(oPC);
 	// moved to ff_update_feats
 	//PS_ManageImbueItem(oPC);
-	// ff_update_feats should always come last after all 
-	// other leveling up operations. It matters less with the on login script.
+	// ff_update_feats should always come last after all other leveling up operations
+	// except tracking the classes. It matters less with the on login script.
 	// Sept 12, 2024, ff_update_feats also handling some other feat grants that need to
 	// happen at both login and level up. Should prob change name -FlattedFifth. 
 	ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
+	//last item
+	DelayCommand(1.0, StoreClasses(oPC));
 }
 
 

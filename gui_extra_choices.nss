@@ -93,6 +93,9 @@ int GetRelevantClass(object oPC) {
 	if ((GetLevelByClass(49, oPC) > 0) && (CheckEpiteth(49, oPC) == FALSE)) return 49; //Draconic Heritage
 	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend Wings/Eyes
 	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial Wings/Eyes, Magic
+	if ((GetLevelByClass(62, oPC) >= 2) && ((GetHasFeat(2537, oPC)) || GetHasFeat(2538, oPC)) && 
+		!GetHasFeat(3033, oPC) && !GetHasFeat(3034, oPC) && !GetHasFeat(3038, oPC) && !GetHasFeat(3039, oPC)
+		&& !GetHasFeat(3040, oPC)) return 622;//Half-Outsider Path
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend(magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial(Magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
@@ -205,7 +208,15 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 		{
 			case 1: return 2179; //Bright Flight
 			case 2: return 2556; //Supernatural Sight
-			case 3: return 3024; //New Celestial Wings
+			//case 3: return 3024; //New Celestial Wings
+		}	break;
+		case 622: switch(nCOUNT) //Half-Outsider Path
+		{
+			case 1: return 3034; //str
+			case 2: return 3033; //dex
+			case 3: return 3038; //wis
+			case 4: return 3040; //int
+			case 5: return 3039; //cha
 		}	break;
 		case 499: switch(nCOUNT) //Half-Dragon Wings
 		{
@@ -230,6 +241,7 @@ string GetClassSubtitle(int nCLASS)
 		case 110: return "You must Select Your Psychic Warrior Path";//Psychic Warrior
 		case 114: return "You must Select your Undead Heritage";//Half-Undead
 		case 621: return "You must select either celestial wings or supernatural sight."; //Half-Celestial
+		case 622: return "You must select your Half-Outsider path.";
 		case 499: return "Your draconic heritage allows you to select wings if you so choose. This choice is permanent."; //Half-Dragon Wings
 	}
 	return "";
@@ -249,6 +261,7 @@ int GetTitle(int nCLASS)
 		case 110: return 16781147; // Psychic warrior path
 		case 114: return 16781148;//Half-Undead Heritage
 		case 621: return 16780074; //Outsider Apotheosis
+		case 622: return 16780980; //Half-Outsider Path
 		case 499: return 16780036; //Half-Dragon Wings
 	}
 	return -1;
@@ -343,12 +356,13 @@ void main(string sCOMMAND, string sFEAT)
 {
 	object oPC = OBJECT_SELF;
 	int nCLASS = GetRelevantClass(oPC);
+	int nTITLE;
 	int nPAGE = GetLocalInt(oPC, "EXTRA_UI_PAGE");
 	if (nCLASS == -1) return;
 	string sSCREEN = "SCREEN_EXTRA_CHOICES";
 	if (sCOMMAND == "START") 
 	{
-		int nTITLE = GetTitle(nCLASS);
+		nTITLE = GetTitle(nCLASS);
 		DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");
 		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TITLE", nTITLE, "");
 		SetGUIObjectText(oPC, sSCREEN, "CHOICE_SUBTITLE", -1, GetClassSubtitle(nCLASS));
@@ -382,5 +396,14 @@ void main(string sCOMMAND, string sFEAT)
 		nPAGE = nPAGE + 1;
 		SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
 		DelayCommand(0.0f, PopulateList(oPC, nCLASS, nPAGE, sSCREEN));
+	}
+	else if (sCOMMAND == "HO_PATH"){
+		nTITLE = GetTitle(nCLASS);
+		DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");
+		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TITLE", nTITLE, "");
+		SetGUIObjectText(oPC, sSCREEN, "CHOICE_SUBTITLE", -1, GetClassSubtitle(nCLASS));
+		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", TRUE);
+		SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
+		PopulateList(oPC, nCLASS, 0, sSCREEN);	
 	}
 }

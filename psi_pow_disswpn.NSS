@@ -49,8 +49,7 @@ void main()
 	//NOTE: The local variable set and deleted in this script tells the on-hit script, dmg_disswpn.nss,
 	//whether or not the spell was augmented.
 
-    if (!PsiPrePowerCastCode())
-        return;
+    if (!PsiPrePowerCastCode()) return;
     
 
     object oManifester = OBJECT_SELF;

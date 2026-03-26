@@ -128,10 +128,11 @@ void PS_HO_DR(object oPC, int nSpell)
 	
 	if (PS_OutsiderLevels(oPC) >= 6){	
 		nReduct = 10;
-		if (PS_GetLevel(oPC) >= 15)
-			nDamagePower = DAMAGE_POWER_PLUS_TWO;
 		if (PS_GetLevel(oPC) >= 23)
 			nDamagePower = DAMAGE_POWER_PLUS_THREE;
+		else if (PS_GetLevel(oPC) >= 15)
+			nDamagePower = DAMAGE_POWER_PLUS_TWO;
+		
 	}
 	
 	effect eDR = EffectDamageReduction(nReduct, nDamagePower, 0, DR_TYPE_MAGICBONUS);

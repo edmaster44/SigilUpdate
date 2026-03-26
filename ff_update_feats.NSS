@@ -62,6 +62,8 @@ void ff_update_feats(object oPC){
 	}
 	
 	DelayCommand(3.0f, AdjustAbilityScores(oPC));
+	
+	LevelUpGuiChoices(oPC);
 
 	if (bSaveAfterThisScript)
 	{
@@ -183,18 +185,18 @@ void AdjustAbilityScores(object oPC){
 	if (nRace != RACIAL_SUBTYPE_HUMAN && nRace != RACIAL_SUBTYPE_HALFELF && 
 		nRace != RACIAL_SUBTYPE_HALFDROW)
 			return;
-	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
+			
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (GetLocalInt(oEss, "startability")){
-		SendMessageToPC(oPC, "You have already chosen your ability score adjustments");
+	if (GetLocalInt(oEss, "startability"))
 		return;
-	} else {
-		if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
-			AssignCommand(oPC, ClearAllActions(TRUE));
-			AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
-		}
+	
+	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
+	if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
+		AssignCommand(oPC, ClearAllActions(TRUE));
+		AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
+	} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
+		AssignCommand(oPC, ClearAllActions(TRUE));
+		AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
 	}
+
 }

@@ -2,6 +2,7 @@
 #include "ps_inc_functions"
 #include "nwnx_sql"
 #include "aaa_racial_ability_inc"
+#include "ff_track_classes"
 
 void DelayedFixes(object oPC, object oItem, int nSTEP)
 {
@@ -50,4 +51,5 @@ void main()
 	
 	//Launch the delayed commands
 	DelayCommand(0.0f, DelayedFixes(oPC, oItem, 0));
+	StoreClasses(oPC);
 }
