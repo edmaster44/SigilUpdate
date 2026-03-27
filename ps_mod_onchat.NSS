@@ -5,6 +5,7 @@
 #include "ServerExts"
 #include "ff_update_legacy_items"
 #include "ps_inc_advscript"
+#include "ps_inc_randomitems"
 
 
 int GetIsVamp(object oPC){
@@ -582,7 +583,33 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		RollSocialCheck(oSender, 255, nChannel);
 	} else if (sInput == "#showcl"){
 		bFFcommand = TRUE;
-		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, FALSE));
+		int nBard = PS_GetCasterLevel(oSender, CLASS_TYPE_BARD);
+		int nCleric = PS_GetCasterLevel(oSender, CLASS_TYPE_CLERIC);
+		int nDruid = PS_GetCasterLevel(oSender, CLASS_TYPE_DRUID);
+		int nFavoured = PS_GetCasterLevel(oSender, CLASS_TYPE_FAVORED_SOUL);
+		int nKnight = PS_GetCasterLevel(oSender, CLASS_TYPE_PALADIN);
+		int nPsion = PS_GetCasterLevel(oSender, CLASS_TYPE_PSION);
+		int nPsywar = PS_GetCasterLevel(oSender, CLASS_PSYCHIC_WARRIOR);
+		int nRanger = PS_GetCasterLevel(oSender, CLASS_TYPE_RANGER);
+		int nShaman = PS_GetCasterLevel(oSender, CLASS_TYPE_SPIRIT_SHAMAN);
+		int nSorc = PS_GetCasterLevel(oSender, CLASS_TYPE_SORCERER);
+		int nWarlock = PS_GetCasterLevel(oSender, CLASS_TYPE_WARLOCK);
+		int nWizard = PS_GetCasterLevel(oSender, CLASS_TYPE_WIZARD);
+		sFeedback = "";
+		if (nBard > 0) sFeedback += "\nBard: " + IntToString(nBard);
+		if (nCleric > 0) sFeedback += "\nCleric: " + IntToString(nCleric);
+		if (nDruid > 0) sFeedback += "\nDruid: " + IntToString(nDruid);
+		if (nFavoured > 0) sFeedback += "\nFavoured Soul: " + IntToString(nFavoured);
+		if (nKnight > 0) sFeedback += "\nKnight: " + IntToString(nKnight);
+		if (nPsion > 0) sFeedback += "\nPsion: " + IntToString(nPsion);
+		if (nPsywar > 0) sFeedback += "\nPsychic Warrior: " + IntToString(nPsywar);
+		if (nRanger > 0) sFeedback += "\nRanger: " + IntToString(nRanger);
+		if (nShaman > 0) sFeedback += "\nShaman: " + IntToString(nShaman);
+		if (nSorc > 0) sFeedback += "\nSorcerer: " + IntToString(nSorc);
+		if (nWarlock > 0) sFeedback += "\nWarlock: " + IntToString(nWarlock);
+		if (nWizard > 0) sFeedback += "\nWizard: " + IntToString(nWizard);
+		if (sFeedback == "") sFeedback = "You have no caster levels";
+		else sFeedback = "Caster Level(s):" + sFeedback;
 	// as above but including Alchemical Infusion caster lvl where applicable
 	} else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
 		bFFcommand = TRUE;
@@ -690,6 +717,21 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			if (nGas) sFeedback = "Turning off eye glow for gaseous form";
 			else sFeedback = "Turning on eye glow for gaseous form";
 		}
+	}
+	else if (GetStringLeft(sInput, 8) == "#trinket"){
+		bFFcommand = TRUE;
+		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			sFeedback = "Generating trinket";
+			int nRank;
+			if (sInput == "#trinket1") nRank = 1;
+			else if (sInput == "#trinket2") nRank = 2;
+			else if (sInput == "#trinket3") nRank = 3;
+			else if (sInput == "#trinket4") nRank = 4;
+			else if (sInput == "#trinket5") nRank = 5;
+			else if (sInput == "#trinket6") nRank = 6;
+			else nRank = d6();
+			CreateTrinketOnTarget(oSender, nRank);
+		} else sFeedback = "This command only works on the test server.";
 	}
 	else if (sInput == "#testcraftcost"){
 		bFFcommand = TRUE;

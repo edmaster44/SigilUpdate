@@ -87,11 +87,13 @@ void main () {
 		string can_enchant 	= Get2DAString("store_item_enchants", "Can_Enchant", n);
 		if (can_enchant == "")		can_enchant = "0";
 		
+		string can_generate = Get2DAString("store_item_enchants", "Can_Generate", n);
+		
 		string sQuery = "INSERT INTO recipes SET Recipe_Id='"+recipe_id+"', Label='"+label+"', Type='"+type+"', Subtype='"+subtype+"'";
 		sQuery += ", Numerical='"+numerical+"', Special='"+special+"', Points='"+points+"', Gold='"+gold+"', Gemstone='"+gemstone+"', Essence='"+essence+"', Melee='"+melee+"'";
 		sQuery += ", Ranged='"+ranged+"', Ammo='"+ammo+"', Thrown='"+thrown+"', Armor='"+armor+"', Glove='"+glove+"', Bracer='"+bracer+"'";
 		sQuery += ", Helm='"+helm+"', Amulet='"+amulet+"', Ring='"+ring+"', Boots='"+boots+"', Belt='"+belt+"', Cloak='"+cloak+"', Container='"+container+"', Instrument='"+instrument+"'";
-		sQuery += ", Misc='"+misc+"', Custom_Requirement='"+custom+"', Can_Enchant='"+can_enchant+"'";
+		sQuery += ", Misc='"+misc+"', Custom_Requirement='"+custom+"', Can_Enchant='"+can_enchant+"', Cursed=0, Can_Generate='"+can_generate+"'";
 		
 		SendMessageToPC(oPC, sQuery);
 		
