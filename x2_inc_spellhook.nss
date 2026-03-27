@@ -56,6 +56,7 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
+void DebugSpells();
 
 //------------------------------------------------------------------------------
 // PRIMARY FUNCTION
@@ -65,7 +66,10 @@ void X2DoBreakConcentrationCheck();
 //------------------------------------------------------------------------------
 int X2PreSpellCastCode()
 {
-   object oTarget = GetSpellTargetObject();
+	object oTarget = GetSpellTargetObject();
+	
+	// send spell debugging info to caster if they've used the #SpellInfo chat command
+	DebugSpells();
    
    int nContinue;
 
@@ -504,4 +508,27 @@ int GetSpellFailedBecauseMissChance(object oCaster){
 		return TRUE; // caster rolled lower than their miss chance % so they failed
 	}
 	return FALSE; //otherwise they do not fail
+}
+
+
+void DebugSpells(){
+	if (!GetLocalInt(OBJECT_SELF, "spelldebug")) return;
+	
+	string sDebug = "";
+	int nId = GetSpellId();
+	int nNameRef;
+	if (nId > -1){
+		sDebug += "\nSpell Id: " + IntToString(nId);
+		nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
+		sDebug += "\nSpell Name: " + GetStringByStrRef(nNameRef);
+	}
+	nId = GetSpellFeatId();
+	if (nId > -1){
+		sDebug += "\nSpell Feat Id: " + IntToString(nId);
+		nNameRef = StringToInt(Get2DAString("feat", "FEAT", nId));
+		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
+	}
+	sDebug += "\nCaster Level: " + IntToString(GetCasterLevel(OBJECT_SELF));
+	SendMessageToPC(OBJECT_SELF, sDebug);
+	
 }

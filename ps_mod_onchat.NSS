@@ -6,6 +6,7 @@
 #include "ff_update_legacy_items"
 #include "ps_inc_advscript"
 #include "ps_inc_randomitems"
+#include "x2_inc_itemprop"
 
 
 int GetIsVamp(object oPC){
@@ -487,14 +488,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			return FALSE;
 		}
 	}
-	int bFFcommand = FALSE; // return value, if TRUE then action will take place and text will not go to chat
 	string sFeedback = "";
 	string sInput = GetStringLowerCase(sMessage);
 	object oItem;
+	int nPos;
 	
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	if (sInput == "#scribemin"){
-		bFFcommand = TRUE;
 		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
 			SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
 			sFeedback = "ScribeMin OFF\n";
@@ -506,83 +506,64 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback += "You will now scribe scrolls at minimum caster level until next server reset ";
 			sFeedback += "or until ScribeMin turned off.";
 		}
-	//turn dm channel reporting of social roll chat commands on or off
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	//turn dm reporting of social roll chat commands on or off
 	} else if (sInput == "#togglesocial" && GetIsDM(oSender)){
-		bFFcommand = TRUE;
 		int nMuted = GetLocalInt(oSender, "MUTE_SOCIAL");
 		if (nMuted){
-			SendMessageToPC(oSender, "Turning on reporting of social skill chat commands");
+			sFeedback = "Turning on reporting of social skill chat commands";
 			SetLocalInt(oSender, "MUTE_SOCIAL", FALSE);
 		} else {
-			SendMessageToPC(oSender, "Turning off reporting of social skill chat commands");
+			sFeedback = "Turning off reporting of social skill chat commands";
 			SetLocalInt(oSender, "MUTE_SOCIAL", TRUE);
 		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// APPRAISE
-	} else if (sInput == "#appraise" || sInput == "#haggle"){ // command by itself
-		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel);
-	}else if (GetStringLeft(sInput, 9) == "#appraise"){  // as preface, ex "#appraise This item isn't worth what you ask"
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 9, GetStringLength(sMessage) - 9);
+	else if (GetStringLeft(sInput, 9) == "#appraise" || GetStringLeft(sInput, 7) == "#haggle"){ 
+		if (GetStringLeft(sInput, 9) == "#appraise") nPos = 9;
+		else nPos = 7;
+		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
 		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel, sMessage);
-	}else if (GetStringLeft(sInput, 7) == "#haggle"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 7, GetStringLength(sMessage) - 7);
-		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel, sMessage);
+		return TRUE;
+	}
 	//BLUFF
-	} else if (sInput == "#bluff" || sInput == "#lie"){
-		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_BLUFF, nChannel);
-	}else if (GetStringLeft(sInput, 6) == "#bluff"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 6, GetStringLength(sMessage) - 6);
+	else if (GetStringLeft(sInput, 6) == "#bluff" || GetStringLeft(sInput, 4) == "#lie"){
+		if (GetStringLeft(sInput, 6) == "#bluff") nPos = 6;
+		else nPos = 4;
+		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
 		RollSocialCheck(oSender, SKILL_BLUFF, nChannel, sMessage);
-	}else if (GetStringLeft(sInput, 4) == "#lie"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 4, GetStringLength(sMessage) - 4);
-		RollSocialCheck(oSender, SKILL_BLUFF, nChannel, sMessage);
+		return TRUE;
+	}
 	//DIPLOMACY
-	} else if (sInput == "#diplomacy" || sInput == "#persuade"){
-		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel);
-	}else if (GetStringLeft(sInput, 10) == "#diplomacy"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 10, GetStringLength(sMessage) - 10);
+	else if (GetStringLeft(sInput, 10) == "#diplomacy" || GetStringLeft(sInput, 9) == "#persuade"){
+		if (GetStringLeft(sInput, 10) == "#diplomacy") nPos = 10;
+		else nPos = 9;
+		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
 		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel, sMessage);
-	}else if (GetStringLeft(sInput, 9) == "#persuade"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 9, GetStringLength(sMessage) - 9);
-		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel, sMessage);	
+		return TRUE;
+	}
 	//INTIMIDATE
-	} else if (sInput == "#intimidate" || sInput == "#threat" || sInput == "threaten"){
-		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel);
-	} else if (GetStringLeft(sInput, 11) == "#intimidate"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 11, GetStringLength(sMessage) - 11);
+	else if (GetStringLeft(sInput, 11) == "#intimidate" || GetStringLeft(sInput, 7) == "#threat"){
+		if (GetStringLeft(sInput, 11) == "#intimidate") nPos = 11;
+		else nPos = 7;
+		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
 		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
-	} else if (GetStringLeft(sInput, 7) == "#threat"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 7, GetStringLength(sMessage) - 7);
-		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
-	} else if (GetStringLeft(sInput, 9) == "#threaten"){
-		bFFcommand = TRUE;
-		sMessage = GetSubString(sMessage, 9, GetStringLength(sMessage) - 9);
-		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
+		return TRUE;
+	}
 	//SLEIGHT_OF_HAND
-	} else if (sInput == "#sleight"){
-		bFFcommand = TRUE;
-		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND, nChannel);
-	} else if (GetStringLeft(sInput, 8) == "#sleight"){
-		bFFcommand = TRUE;
+	else if (GetStringLeft(sInput, 8) == "#sleight"){
 		sMessage = GetSubString(sMessage, 8, GetStringLength(sMessage) - 8);
 		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND, nChannel, sMessage);
-		
-	} else if (sInput == "#socialrollrules"){
-		bFFcommand = TRUE;
+		return TRUE;	
+	} 
+	else if (sInput == "#socialrollrules"){
 		RollSocialCheck(oSender, 255, nChannel);
-	} else if (sInput == "#showcl"){
-		bFFcommand = TRUE;
+		return TRUE;
+	} 
+	else if (sInput == "#showcl"){
 		int nBard = PS_GetCasterLevel(oSender, CLASS_TYPE_BARD);
 		int nCleric = PS_GetCasterLevel(oSender, CLASS_TYPE_CLERIC);
 		int nDruid = PS_GetCasterLevel(oSender, CLASS_TYPE_DRUID);
@@ -610,14 +591,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (nWizard > 0) sFeedback += "\nWizard: " + IntToString(nWizard);
 		if (sFeedback == "") sFeedback = "You have no caster levels";
 		else sFeedback = "Caster Level(s):" + sFeedback;
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// as above but including Alchemical Infusion caster lvl where applicable
-	} else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
-		bFFcommand = TRUE;
-		sFeedback = "Caster level: " + IntToString(GetRealCasterLevel(oSender, TRUE));
-		
+	else if (sInput == "#showcraftcl"){ // new chat command for showing crafting caster level
+		sFeedback = "Crafting Caster level: " + IntToString(GetRealCasterLevel(oSender, TRUE));
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// Shows ECL if allowing ECL characters to reach lvl 30, otherwise shows level adjustment
-	} else if (sInput == "#showecl"){
-		bFFcommand = TRUE;
+	else if (sInput == "#showecl"){
 		int nECL = 0;
 		if (ALLOW_ECL_LEVEL_30){
 			sFeedback = "Your ECL is ";
@@ -628,22 +612,36 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			nECL = PS_GetEssenceECL(oSender);
 		}
 		sFeedback += IntToString(nECL);
-		
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// toggles on and off a tick in cyan text sent to user every 6 seconds.
 	// note that this is NOT synced to combat rounds but is simply every 6 seconds.
-	} else if (sInput == "#tick"){
-		bFFcommand = TRUE;
+	else if (sInput == "#tick"){
 		if (!GetLocalInt(oSender, "6secondtick")){
 			SetLocalInt(oSender, "6secondtick", TRUE);
-			SendMessageToPC(oSender, "Starting Tick");
+			sFeedback = "Starting Tick";
 			SixSecondTick(oSender);
 		} else {
 			SetLocalInt(oSender, "6secondtick", FALSE);
-			SendMessageToPC(oSender, "Stopping Tick");	
+			sFeedback = "Stopping Tick";	
 		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
+	//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
+	// called there and in psi_spellhook
+	else if (sInput == "#spellinfo"){
+		oItem = PS_GetEssence(oSender);
+		int bSpellDebug = !GetLocalInt(oItem, "spelldebug");
+		SetLocalInt(oItem, "spelldebug", bSpellDebug);
+		if (bSpellDebug) sFeedback = "Turning on spell debugging messages";
+		else sFeedback = "Turning off spell debugging messages";
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	//debugging command that tells you the tag and resref of the targeted item
-	} else if (sInput == "#iteminfo"){
-		bFFcommand = TRUE;
+	else if (sInput == "#iteminfo"){
 		oItem = GetPlayerCurrentTarget(oSender);
 		if (!GetIsObjectValid(oItem))
 			sFeedback = "No object selected";
@@ -651,21 +649,20 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback = "The item Tag is " + GetTag(oItem);
 			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
 		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
 	else if (sInput == "#fixsetitems"){
-		bFFcommand = TRUE;
 		sFeedback = "Scanning inventory for set items and repairing their tags and variables.";
 		sFeedback += "\nThis should fix any set items broken by the appearance changer.";
 		sFeedback += "\nIf this does not work, contact a DM on our Discord server.";
 		SendMessageToPC(oSender, sFeedback);
 		FF_UpdateLegacyItems(oSender, TRUE);
 		sFeedback = "Finished repairing set items";
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
-	//DEBUGGING COMMANDS FOR SPECIFIC SYSTEMS, THESE CAN BE REMOVED WHEN WE NO LONGER NEED THEM
-	// toggles on and off force cost of crafting, cannot be used to craft for free on main
-	// but can be used to test costs on test server
 	else if (sInput == "#getcreatureappearance"){
-		bFFcommand = TRUE;
 		oItem = GetPlayerCurrentTarget(oSender);
 		if (GetObjectType(oItem) != OBJECT_TYPE_CREATURE){
 			oItem = oSender;
@@ -684,43 +681,39 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		sFeedback += "\nRace = " + IntToString(GetRacialType(oItem));
 		sFeedback += "\nSubRace = " + IntToString(GetSubRace(oItem));
 		sFeedback += "\n";
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
-	else if (sInput == "#vampeyesbat"){
-		bFFcommand = TRUE;
+	else if (GetStringLeft(sInput, 9) == "#vampeyes"){
 		if (!GetIsVamp(oSender)) sFeedback = "This command does nothing for non-vampires";
 		else {
-			object oEss = PS_GetEssence(oSender);
-			int nBat = !GetLocalInt(oEss, "vampeyesoffbat");
-			SetLocalInt(oEss, "vampeyesoffbat", nBat);
-			if (nBat) sFeedback = "Turning off eye glow for bat form";
-			else sFeedback = "Turning on eye glow for bat form";
+			oItem = PS_GetEssence(oSender);
+			if (sInput == "#vampeyesbat"){
+				int nBat = !GetLocalInt(oItem, "vampeyesoffbat");
+				SetLocalInt(oItem, "vampeyesoffbat", nBat);
+				if (nBat) sFeedback = "Turning off eye glow for bat form";
+				else sFeedback = "Turning on eye glow for bat form";
+			} else if (sInput == "#vampeyesbeast"){
+				int nBeast = !GetLocalInt(oItem, "vampeyesoffbeast");
+				SetLocalInt(oItem, "vampeyesoffbeast", nBeast);
+				if (nBeast) sFeedback = "Turning off eye glow for beast form";
+				else sFeedback = "Turning on eye glow for beast form";
+			} else if (sInput == "#vampeyesgas"){
+				int nGas = !GetLocalInt(oItem, "vampeyesoffgas");
+				SetLocalInt(oItem, "vampeyesoffgas", nGas);
+				if (nGas) sFeedback = "Turning off eye glow for gaseous form";
+				else sFeedback = "Turning on eye glow for gaseous form";
+			} else {
+				sFeedback = "Invalid command. Valid commands are #VampEyesBat, #VampEyesBeast, ";
+				sFeedback += "and #VampEyesGas";
 			}
-	}
-	else if (sInput == "#vampeyesbeast"){
-		bFFcommand = TRUE;
-		if (!GetIsVamp(oSender)) sFeedback = "This command does nothing for non-vampires";
-		else {
-			object oEss = PS_GetEssence(oSender);
-			int nBeast = !GetLocalInt(oEss, "vampeyesoffbeast");
-			SetLocalInt(oEss, "vampeyesoffbeast", nBeast);
-			if (nBeast) sFeedback = "Turning off eye glow for beast form";
-			else sFeedback = "Turning on eye glow for beast form";
 		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
-	else if (sInput == "#vampeyesgas"){
-		bFFcommand = TRUE;
-		if (!GetIsVamp(oSender)) sFeedback = "This command does nothing for non-vampires";
-		else {
-			object oEss = PS_GetEssence(oSender);
-			int nGas = !GetLocalInt(oEss, "vampeyesoffgas");
-			SetLocalInt(oEss, "vampeyesoffgas", nGas);
-			if (nGas) sFeedback = "Turning off eye glow for gaseous form";
-			else sFeedback = "Turning on eye glow for gaseous form";
-		}
-	}
-	else if (GetStringLeft(sInput, 8) == "#trinket"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
+	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
+		if (GetStringLeft(sInput, 8) == "#trinket"){
 			sFeedback = "Generating trinket";
 			int nRank;
 			if (sInput == "#trinket1") nRank = 1;
@@ -731,11 +724,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			else if (sInput == "#trinket6") nRank = 6;
 			else nRank = d6();
 			CreateTrinketOnTarget(oSender, nRank);
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#testcraftcost"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (sInput == "#testcraftcost"){
 			if (GetLocalInt(oSender, "TestCraftCost")){
 				SetLocalInt(oSender, "TestCraftCost", FALSE);
 				sFeedback = "Turning off craft costs.";
@@ -743,136 +735,69 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 				SetLocalInt(oSender, "TestCraftCost", TRUE);
 				sFeedback = "Turning on craft costs.";
 			}
-		} else sFeedback = "This command only works on the test server.";
-	//debugging command to give a black sapphire to test that quest's changes
-	// only works on test server
-	} else if (sInput == "#debug_sapphire"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			object oSapphire = CreateItemOnObject("ps_i_blacksapphire", oSender);
-			sFeedback = "Created sapphire";
-		} else sFeedback = "This command only works on the test server.";
-	//debugging command to give a treasure room key to test niflheim changes
-	// only works on test server
-	} else if (sInput == "#debug_niflheim"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			object oKey = CreateItemOnObject("ps_key_mystery", oSender);
-			sFeedback = "Created niflheim key";
-		} else sFeedback = "This command only works on the test server.";
-	//debugging command for testing timer on undersigil tombs
-	} else if (sInput == "#debug_tombs"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			object oEss = PS_GetEssence(oSender);
-			string sVarBase = "SkullLastSpawn";
-			string sVarName;
-			int i;
-			int nVar;
-			for (i = 0; i <= 2; i++){
-				sVarName = sVarBase + IntToString(i);
-				nVar = GetLocalInt(oEss, sVarName);
-				if (nVar != 0)
-					SetLocalInt(oEss, sVarName, nVar - 86401);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		// generate some random arrows. Will be used to test changes to arrow sellability.
+		// Note that we should also make a "quiver" on the test server while testing this
+		// so that we can make sure ammo generated by those still won't sell. I think THE
+		// tag for those is "returning" but I will have to use #iteminfo to be sure.
+		else if (sInput == "#gen_arrows"){
+			oItem = CreateItemOnObject("ps_arrow_acid", oSender, d10(2)); 
+			oItem = CreateItemOnObject("ps_arrow_alchemicalsilver", oSender, d10(2));
+			oItem = CreateItemOnObject("ps_arrow_mundane", oSender, d10(2));
+			return TRUE;
+		}
+		// add visual fx to a weapon. possible commands are #addvfxgood, #addvfxevil
+		// #addvfxacid, #addvfxcold, #addvfxelectric, #addvfxfire, #addvfxsonic, #removevfx
+		else if (GetStringLeft(sInput, 7) == "#addvfx" || sInput == "#removevfx"){
+			oItem = GetPlayerCurrentTarget(oSender);
+			if (!GetIsObjectValid(oItem)) oItem = oSender;
+			if (GetObjectType(oItem) == OBJECT_TYPE_CREATURE)
+				oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oItem);
+			if (!IPGetIsWeapon(oItem)){
+				sFeedback = "You must target a weapon or a creature holding a weapon in its right hand";
+				SendMessageToPC(oSender, sFeedback);
+				return TRUE;
 			}
-			sFeedback = "Reset tomb timers to 24 hours ago";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_neg_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_holy_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_acid_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ACID);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_cold_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_COLD);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_elec_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_ELECTRICAL);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_fire_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_FIRE);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#test_sonic_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_SONIC);
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oWeapon);
-				sFeedback = "VFX applied";
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
-	}
-	else if (sInput == "#remove_vfx"){
-		bFFcommand = TRUE;
-		if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-			object oWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oSender);
-			if (GetIsObjectValid(oWeapon)){
-				itemproperty ip = GetFirstItemProperty(oWeapon);
+			if (sInput == "removevfx"){
+				itemproperty ip = GetFirstItemProperty(oItem);
 				while (GetIsItemPropertyValid(ip)){
 					if (GetItemPropertyType(ip) == 83)
-						RemoveItemProperty(oWeapon, ip);
-					ip = GetNextItemProperty(oWeapon);
+						RemoveItemProperty(oItem, ip);
+					ip = GetNextItemProperty(oItem);
 				}
-			} else sFeedback = "No weapon in right hand";
-		} else sFeedback = "This command only works on the test server.";
+				sFeedback = "VFX removed. Note that it is not possible to remove vfx tied to damage ";
+				sFeedback += "properties of 1d6 or greater";
+				SendMessageToPC(oSender, sFeedback);
+				return TRUE;
+			}
+			int nVis = -1;
+			string sVis = GetStringRight(sInput, GetStringLength(sInput) - 7);
+			if (sVis == "evil") nVis = ITEM_VISUAL_EVIL;
+			else if (sVis == "good" ) nVis = ITEM_VISUAL_HOLY;
+			else if (sVis == "acid") nVis = ITEM_VISUAL_ACID;
+			else if (sVis == "cold") nVis = ITEM_VISUAL_COLD;
+			else if (sVis == "electric") nVis = ITEM_VISUAL_ELECTRICAL;
+			else if (sVis == "fire") nVis = ITEM_VISUAL_FIRE;
+			else if (sVis == "sonic") nVis = ITEM_VISUAL_SONIC;
+			else {	sFeedback = "Invalid command. Please use #AddVFXgood, #AddVFXevil, ";
+				sFeedback += "#AddVFXacid, #AddVFXcold, #AddVFXelectric, #AddVFXfire, #AddVFXsonic,";
+				sFeedback += " or #RemoveVFX";
+			}
+			if (nVis != -1){
+				itemproperty ipGlow = ItemPropertyVisualEffect(nVis);
+				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oItem);
+				sFeedback = sVis + " VFX applied";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
 	}
-	//END SPECIFIC SYSTEM DEBUGGING COMMANDS
+	//END DM OR TEST SERVER ONLY COMMANDS
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
-	return bFFcommand;
+	return FALSE;
 }
 
 int StartingConditional(object oSender, object oTarget, int nChannel, string sMessage)
