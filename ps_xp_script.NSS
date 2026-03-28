@@ -10,6 +10,7 @@ float fAvg;
 int nNum;
 };
 
+int GetPCtotalCR(object oPC);
 struct PartyData GetPartyData(object oPC);
 object GetKiller(object oDead);
 object PS_GetKiller();
@@ -32,7 +33,10 @@ void main(){
 		
 	object oArea = GetArea(oKiller);
     float fCR = GetChallengeRating(oDead);
+	fCR += IntToFloat(GetHitDice(oDead)); // apparently Challenge Rating does not include level
 	struct PartyData data = GetPartyData(oKiller);
+	
+	
 	
 	int iElite = StringToInt(GetLocalString(oDead,"ELITE"));
     if(iElite > 0){
@@ -67,15 +71,6 @@ void main(){
 	else if (data.nNum == 2) fFinalXP *= 0.5;
 	else if (data.nNum == 3) fFinalXP *= 0.75;
 		
-	// lets pad up the xp a tiny bit since we un-nerfed the ECL penalties, because we'd be getting 6xp for an epic
-	// boss otherwise. Still less generous that previous ECL
-	if (fFinalXP < BASEXP){
-		fFinalXP *= 1.5;
-		if (fFinalXP > BASEXP) 
-			fFinalXP = BASEXP;
-	} else if (fFinalXP > MAXMONSTERXP){
-		fFinalXP = MAXMONSTERXP;
-	}
     int nLevel = 0;
     int nFinalXP = 0;
     int rp_pool = 0;
@@ -99,7 +94,7 @@ void main(){
 			nLevel = data.nMax;
 		}
 		
-		fFinalXP *= fCR / IntToFloat(nLevel + nECL);
+		fFinalXP *= fCR / IntToFloat(GetPCtotalCR(oMember));
 		
 		if (fFinalXP > MAXMONSTERXP) fFinalXP = MAXMONSTERXP;
 		
@@ -128,6 +123,15 @@ void main(){
 	}
 }
 
+int GetPCtotalCR(object oPC){
+	int nLevel = PS_GetLevel(oPC);
+	int nECL = GetNewECL(oPC);
+	int nCR = PS_RoundToInt(GetChallengeRating(oPC));
+	if (nCR < 0) nCR = 0;
+	else if (nCR > 5) nCR = 5;
+	return nLevel + nECL + nCR;
+}
+
 
 struct PartyData GetPartyData(object oPC){
 	object oArea = GetArea(oPC);
@@ -141,7 +145,7 @@ struct PartyData GetPartyData(object oPC){
     while(GetIsObjectValid(oMember)){ 
 		if (GetArea(oMember) == oArea){
 			data.nNum++;
-			nLvl = PS_GetLevel(oMember);
+			nLvl = GetPCtotalCR(oMember);
 			if (nLvl > data.nMax)
 				data.nMax = nLvl;
 			nTotal += nLvl;
