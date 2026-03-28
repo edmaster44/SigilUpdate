@@ -514,21 +514,25 @@ int GetSpellFailedBecauseMissChance(object oCaster){
 void DebugSpells(){
 	if (!GetLocalInt(OBJECT_SELF, "spelldebug")) return;
 	
-	string sDebug = "";
-	int nId = GetSpellId();
 	int nNameRef;
-	if (nId > -1){
-		sDebug += "\nSpell Id: " + IntToString(nId);
-		nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
-		sDebug += "\nSpell Name: " + GetStringByStrRef(nNameRef);
+	string sDebug = "Class: ";
+	int nId = GetLastSpellCastClass();
+	if (nId == CLASS_TYPE_INVALID) sDebug += "Undefined";
+	else {
+		nNameRef = StringToInt(Get2DAString("classes", "Name", nId));
+		sDebug += GetStringByStrRef(nNameRef);
 	}
+	sDebug += "\nCaster Level: " + IntToString(GetCasterLevel(OBJECT_SELF));
+	nId = GetSpellId();
+	sDebug += "\nSpell Id: " + IntToString(nId);
+	nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
+	sDebug += "\nSpell Name: " + GetStringByStrRef(nNameRef);
+
 	nId = GetSpellFeatId();
-	if (nId > -1){
+	if (nId != 0){
 		sDebug += "\nSpell Feat Id: " + IntToString(nId);
 		nNameRef = StringToInt(Get2DAString("feat", "FEAT", nId));
 		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
 	}
-	sDebug += "\nCaster Level: " + IntToString(GetCasterLevel(OBJECT_SELF));
 	SendMessageToPC(OBJECT_SELF, sDebug);
-	
 }
