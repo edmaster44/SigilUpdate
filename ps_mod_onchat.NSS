@@ -606,12 +606,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (ALLOW_ECL_LEVEL_30){
 			sFeedback = "Your ECL is ";
 			nECL = GetNewECL(oSender);
+			
 		} else {
 			sFeedback = "Your Level Adjustment is ";
 			PS_CalculateECL(oSender);
 			nECL = PS_GetEssenceECL(oSender);
 		}
 		sFeedback += IntToString(nECL);
+		sFeedback += "\nYour Challenge Rating is " + FloatToString(GetChallengeRating(oSender));
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
