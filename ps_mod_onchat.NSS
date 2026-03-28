@@ -632,11 +632,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
 	// called there and in psi_spellhook
 	else if (sInput == "#spellinfo"){
-		oItem = PS_GetEssence(oSender);
-		int bSpellDebug = !GetLocalInt(oItem, "spelldebug");
-		SetLocalInt(oItem, "spelldebug", bSpellDebug);
+		int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
+		SetLocalInt(oSender, "spelldebug", bSpellDebug);
 		if (bSpellDebug) sFeedback = "Turning on spell debugging messages";
 		else sFeedback = "Turning off spell debugging messages";
+		sFeedback += "\nThis will remain in effect until you type #SpellInfo again or until server reset";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
@@ -760,7 +760,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 				SendMessageToPC(oSender, sFeedback);
 				return TRUE;
 			}
-			if (sInput == "removevfx"){
+			if (sInput == "#removevfx"){
 				itemproperty ip = GetFirstItemProperty(oItem);
 				while (GetIsItemPropertyValid(ip)){
 					if (GetItemPropertyType(ip) == 83)
