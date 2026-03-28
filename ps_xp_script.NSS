@@ -10,6 +10,178 @@ float fAvg;
 int nNum;
 };
 
+
+void GiveKillGold(object oPC, int nHD);
+struct PartyData GetPartyData(object oPC);
+object GetKiller(object oDead);
+object PS_GetKiller();
+
+void main(){
+	object oDead = OBJECT_SELF;
+	object oKiller = PS_GetKiller();
+	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF) return;
+	
+	
+	string sDeathScript = GetLocalString(oDead, "DeathScript");
+	if (sDeathScript != "")
+		ExecuteScript(sDeathScript, oDead);
+	
+	  // Call to allies to let them know we're dead
+    SpeakString("NW_I_AM_DEAD", TALKVOLUME_SILENT_TALK);
+
+    //Shout Attack my target, only works with the On Spawn In setup
+    SpeakString("NW_ATTACK_MY_TARGET", TALKVOLUME_SILENT_TALK);
+		
+	object oArea = GetArea(oKiller);
+    float fCR = GetChallengeRating(oDead);
+	struct PartyData data = GetPartyData(oKiller);
+	
+	int bGiveGold = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE
+		&& GetRacialType(oDead) != RACIAL_TYPE_ANIMAL
+		&& GetRacialType(oDead) != RACIAL_TYPE_BEAST
+		&& GetRacialType(oDead) != RACIAL_TYPE_CONSTRUCT
+		&& GetRacialType(oDead) != RACIAL_TYPE_ELEMENTAL
+		&& GetRacialType(oDead) != RACIAL_TYPE_VERMIN);
+		
+	int nDeadHD = GetHitDice(oDead);
+		
+	float fPartylevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
+	float fPartyXPB = 1.0 + log(IntToFloat(data.nNum)) / PARTYBONUS_XP_DIVIDER;
+	float fFinalXP = BASEXP;
+	
+	int nElite = StringToInt(GetLocalString(oDead,"ELITE"));
+	if (nElite > 0 || fCR >= fPartylevel * 3.0)
+		fFinalXP *= 1.2;
+	
+	if(fCR >= fPartylevel){
+		fFinalXP *= fPartyXPB;
+	} else { //For lower CR give xp penalty
+		fFinalXP = BASEXP * fPartyXPB / (fPartylevel - fCR + 1.0);
+	}
+
+	string sDebug;
+    int nLevel = 0;
+	int nRange = 0;
+	float fIndividualXP;
+    int nFinalXP = 0;
+    int rp_pool = 0;
+    string sID = "";
+	string sMetagaming = "You have surpassed the required XP to level up.";
+	sMetagaming += "\nYour XP is now being calculated as though you were level ";
+	
+	object oMember = GetFirstFactionMember(oKiller, TRUE);
+    while(GetIsObjectValid(oMember)){
+		if (oArea == GetArea(oMember)){
+		
+			if (bGiveGold) GiveKillGold(oMember, nDeadHD);
+			fIndividualXP = fFinalXP;	
+			nLevel = PS_GetLevelByXP(oMember);
+			if (nLevel > GetHitDice(oMember)){
+				SendMessageToPC(oMember, sMetagaming + IntToString(nLevel) + ".");
+			}
+			// if the player is below the party range (excluding highest ecl, including their own), 
+			// or they are above the party average, then treat them, xp wise, same as the highest 
+			// level party member
+			if (data.nMax - MAXPARTYRANGE > nLevel + GetNewECL(oMember) || IntToFloat(nLevel) > fPartylevel){
+				nLevel = data.nMax;
+			} 
+			
+			fIndividualXP *= fPartylevel / IntToFloat(nLevel);
+			
+			
+			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
+			
+			nFinalXP = PS_RoundToInt(fIndividualXP);
+			nRange = nLevel - MAXPARTYRANGE;
+			//if the monster is not more than 10 levels below the character then they should get 
+			// at least 1 xp
+			if (nFinalXP < 1 && (PS_RoundToInt(fCR) >= nRange || nDeadHD >= nRange))
+				nFinalXP = 1;
+				
+			if(nFinalXP > 0){
+				sID = PS_GetCharID(oMember);
+				//SendMessageToPC(oPartyMember,"id:" + sID);
+				SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
+				if (SQLFetch() != SQL_ERROR) { 
+					rp_pool = StringToInt(SQLGetData(1));
+					if (rp_pool > nFinalXP){
+						rp_pool -= nFinalXP;
+						nFinalXP += nFinalXP;
+					} else if (rp_pool > 0 ){
+						nFinalXP += rp_pool;
+						rp_pool = 0;
+					}
+					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
+				}
+				if (GetLocalInt(oMember, "xpdebug")){
+					sDebug = "The enemy HD is " + IntToString(nDeadHD);
+					sDebug += "\nThe enemy CR is " + FloatToString(fCR);
+					if (nElite) sDebug += "\nThe enemy is elite";
+					else sDebug += "\nThe enemy is not elite";
+					SendMessageToPC(oMember, sDebug);
+				}
+				PS_GiveXPReward(oMember, nFinalXP);
+			}
+		}
+		oMember = GetNextFactionMember(oKiller, TRUE);
+	}
+}
+
+void GiveKillGold(object oPC, int nHD){
+	int nGold;
+	if (nHD >= 30) nGold = d8(3);
+	else if (nHD < 30 && nHD >= 20) nGold = d12(2);
+	else if (nHD < 20 && nHD >= 10) nGold = d10(2);
+	else nGold = d20();
+	PS_GiveGoldToCreature(oPC, nGold);
+}
+
+struct PartyData GetPartyData(object oPC){
+	object oArea = GetArea(oPC);
+	struct PartyData data;
+	data.nMax = 0;
+	data.fAvg = 0.0;
+	data.nNum = 0;
+	int nLvl = 0;
+	int nTotal = 0;
+	object oMember = GetFirstFactionMember(oPC, TRUE);
+    while(GetIsObjectValid(oMember)){ 
+		if (GetArea(oMember) == oArea){
+			data.nNum++;
+			nLvl = PS_GetLevel(oMember);
+			if (nLvl > data.nMax)
+				data.nMax = nLvl;
+			nTotal += nLvl;
+		}
+        oMember = GetNextFactionMember(oPC, TRUE);     
+	}
+ 
+	data.fAvg = IntToFloat(nTotal) / IntToFloat(data.nNum);
+	return data;
+}
+
+object PS_GetKiller(){
+	object oKiller = GetLastKiller();
+    if (GetIsObjectValid(GetLocalObject(OBJECT_SELF, abilityCaster)))  {
+        oKiller = GetLocalObject(OBJECT_SELF, abilityCaster);
+    }
+    if (GetIsObjectValid(GetLocalObject(oKiller, abilityCaster)))  {
+        oKiller = GetLocalObject(oKiller, abilityCaster);
+    }
+    while (GetIsObjectValid(GetMaster(oKiller))){
+        oKiller=GetMaster(oKiller);
+    }
+	return oKiller;
+}
+
+
+/* Previous tries
+struct PartyData{
+int nMax;
+float fAvg;
+int nNum;
+};
+
 int GetPCtotalCR(object oPC);
 struct PartyData GetPartyData(object oPC);
 object GetKiller(object oDead);
@@ -33,7 +205,6 @@ void main(){
 		
 	object oArea = GetArea(oKiller);
     float fCR = GetChallengeRating(oDead);
-	fCR += IntToFloat(GetHitDice(oDead)); // apparently Challenge Rating does not include level
 	struct PartyData data = GetPartyData(oKiller);
 	
 	
@@ -52,17 +223,20 @@ void main(){
 		&& GetRacialType(oDead) != RACIAL_TYPE_VERMIN);
 	
 	int nGold;
-	if (fCR >= 30.0) nGold = d8(3);
-	else if (fCR < 30.0 && fCR >= 20.0) nGold = d12(2);
-	else if (fCR < 20.0 && fCR >= 10.0) nGold = d10(2);
+	int nHD = GetHitDice(oDead);
+	if (nHD >= 30) nGold = d8(3);
+	else if (nHD < 30 && nHD >= 20) nGold = d12(2);
+	else if (nHD < 20 && nHD >= 10) nGold = d10(2);
 	else nGold = d20();
 
 	
 	float fPartylevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fPartyXPB = 1.0 + log(IntToFloat(data.nNum)) / PARTYBONUS_XP_DIVIDER;
-	float fFinalXP = 0.0;
+	float fFinalXP = BASEXP;
+	if (iElite > 0) fFinalXP *= 1.5;
+	
 	if(fCR >= fPartylevel){
-		fFinalXP = (BASEXP + (BASEXP * (fCR - fPartylevel) * CRBONUS)) * fPartyXPB;
+		fFinalXP *= fPartyXPB;
 	} else { //For lower CR give xp penalty
 		fFinalXP = BASEXP * fPartyXPB / (fPartylevel - fCR + 1.0);
 	}
@@ -88,13 +262,14 @@ void main(){
 			SendMessageToPC(oMember, sMetagaming + IntToString(nLevel) + ".");
 		}
 		int nECL = GetNewECL(oMember);
-		// if the player is below the party range (excluding highest ecl, including their own, 
-		// then treat them, xp wise, same as the highest level party member
-		if (data.nMax - MAXPARTYRANGE > nLevel + nECL){
+		// if the player is below the party range (excluding highest ecl, including their own), 
+		// or they are above the party average, then treat them, xp wise, same as the highest 
+		// level party member
+		if (data.nMax - MAXPARTYRANGE > nLevel + nECL || FloatToInt(nLevel) > fPartylevel){
 			nLevel = data.nMax;
+		} else {
+			fFinalXP *= fPartylevel / IntToFloat(nLevel);
 		}
-		
-		fFinalXP *= fCR / IntToFloat(GetPCtotalCR(oMember));
 		
 		if (fFinalXP > MAXMONSTERXP) fFinalXP = MAXMONSTERXP;
 		
@@ -123,15 +298,6 @@ void main(){
 	}
 }
 
-int GetPCtotalCR(object oPC){
-	int nLevel = PS_GetLevel(oPC);
-	int nECL = GetNewECL(oPC);
-	int nCR = PS_RoundToInt(GetChallengeRating(oPC));
-	if (nCR < 0) nCR = 0;
-	else if (nCR > 5) nCR = 5;
-	return nLevel + nECL + nCR;
-}
-
 
 struct PartyData GetPartyData(object oPC){
 	object oArea = GetArea(oPC);
@@ -145,7 +311,7 @@ struct PartyData GetPartyData(object oPC){
     while(GetIsObjectValid(oMember)){ 
 		if (GetArea(oMember) == oArea){
 			data.nNum++;
-			nLvl = GetPCtotalCR(oMember);
+			nLvl = PS_GetLevel(oMember);
 			if (nLvl > data.nMax)
 				data.nMax = nLvl;
 			nTotal += nLvl;
@@ -170,7 +336,19 @@ object PS_GetKiller(){
     }
 	return oKiller;
 }
-/* original
+
+
+
+int GetPCtotalCR(object oPC){
+	int nLevel = PS_GetLevel(oPC);
+	//int nECL = GetNewECL(oPC);
+	//int nCR = PS_RoundToInt(GetChallengeRating(oPC));
+	//if (nCR < 0) nCR = 0;
+	//else if (nCR > 5) nCR = 5;
+	return nLevel //+ nECL + nCR;
+}
+
+
 void main()
 {
     object oKiller = GetLastKiller();
