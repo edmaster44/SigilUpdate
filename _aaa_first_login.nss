@@ -10,16 +10,21 @@
 
 void FirstLogin(){
 
+	if (GetLocalInt(GetModule(), "DoneDaeSetup")) return;
+	
 	// call Dae's plugin functions
 	EnableFinesse();
 	EnableCreatureFinesse();
 	EnableMonkNew();
 	SetFeatAC();
 	
+	SetLocalInt(GetModule(), "DoneDaeSetup", TRUE);
 	// now copy the variable set in the toolset to a local variable set on the 
 	// module with fully legal variable name. If we've already done this, bail
-	if (GetGlobalString("X2_S_UD_SPELLSCRIPT") == "antimagic_spell_cast") return;
-	SetGlobalString("X2_S_UD_SPELLSCRIPT", "antimagic_spell_cast");
+	//if (GetGlobalString("X2_S_UD_SPELLSCRIPT") == "antimagic_spell_cast") return;
+	//SetGlobalString("X2_S_UD_SPELLSCRIPT", "antimagic_spell_cast");
+	
+
 
 	
 }

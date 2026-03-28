@@ -630,13 +630,16 @@ int XPpoolAdjust(int nXP){
 // Called from PS_GiveXPReward().
 int GetECLXP(int nXP, object oPC){
    
-	int nLevel = PS_GetLevelByXP(oPC);
 	int nECL = GetNewECL(oPC);
 	if (nXP < 1) return 0;
     if (nECL < 0) nECL = 0;
-    if (nECL == 0) return nXP;
 	if (nECL > 20) nECL = 20;
 	
+	if (nECL == 0){
+		if (GetLocalInt(oPC, "xpdebug"))
+			SendMessageToPC(oPC, "You have no ECL, your XP therefore is not taxed");
+		return nXP;
+	}
 	// XP for effective level 30 + nECL
     float fEffectiveLevel = 30.0 + IntToFloat(nECL);
     float fECLXP = 1000.0 * fEffectiveLevel * (fEffectiveLevel - 1.0) / 2;
@@ -644,7 +647,18 @@ int GetECLXP(int nXP, object oPC){
     // Tax factor = base lvl 30 xp / xp to reach effective level of 30 + ecl
 	float fTax = 435000.0 / fECLXP;
 	int nAdjusted = PS_RoundToInt(IntToFloat(nXP) * fTax);
-	return (nAdjusted > 1) ? nAdjusted : 1; 
+	
+	if (nAdjusted < 1) nAdjusted = 1; // to get here nXP had to be at least 1, so should the adjusted
+	
+	if (GetLocalInt(oPC, "xpdebug")){
+		string sMessage = "Your ECL is " + IntToString(nECL);
+		sMessage += "\nYour XP before tax is " + IntToString(nXP);
+		float fPercent = (1.0 - fTax) * 10.0;
+		sMessage += "\nYour ECL XP tax is " + FloatToString(fPercent, 2, 2) + "%";
+		sMessage += "\nYour final XP is " + IntToString(nAdjusted);
+		SendMessageToPC(oPC, sMessage);
+	}
+	return nAdjusted; 
 }
 
 

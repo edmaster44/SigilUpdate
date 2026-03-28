@@ -498,13 +498,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
 			SetLocalInt(oSender, "bScribeAtMinLvl", FALSE);
 			sFeedback = "ScribeMin OFF\n";
-			sFeedback += "You will now scribe scrolls as normal until next server reset ";
-			sFeedback += "or until ScribeMin turned on.";
+			sFeedback += "You will now scribe scrolls as normal ";
+			sFeedback += "until you type #ScribeMin again.";
 		} else {
 			SetLocalInt(oSender, "bScribeAtMinLvl", TRUE);
 			sFeedback = "ScribeMin ON\n";
 			sFeedback += "You will now scribe scrolls at minimum caster level until next server reset ";
-			sFeedback += "or until ScribeMin turned off.";
+			sFeedback += "or until you type #ScribeMin again.";
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
@@ -634,9 +634,20 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	else if (sInput == "#spellinfo"){
 		int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
 		SetLocalInt(oSender, "spelldebug", bSpellDebug);
-		if (bSpellDebug) sFeedback = "Turning on spell debugging messages";
-		else sFeedback = "Turning off spell debugging messages";
-		sFeedback += "\nThis will remain in effect until you type #SpellInfo again or until server reset";
+		if (bSpellDebug){
+			sFeedback = "Turning on spell debugging messages\nThis will remain in ";
+			sFeedback += "effect until you type #SpellInfo again or until server resets.";
+		} else sFeedback = "Turning off spell debugging messages";
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
+	else if (sInput == "#xpinfo"){
+		int bXPDebug = !GetLocalInt(oSender, "xpdebug");
+		SetLocalInt(oSender, "xpdebug", bXPDebug);
+		if (bXPDebug){
+			sFeedback = "Turning on XP debugging messages\nThis will remain in ";
+			sFeedback += "effect until you type #XPInfo again or until server resets.";
+		} else sFeedback = "Turning off XP debugging messages";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
