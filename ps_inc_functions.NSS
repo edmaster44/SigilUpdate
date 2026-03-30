@@ -4682,7 +4682,19 @@ void DebugMessageToPC(object oPC, string sMessage)
     SendMessageToPC(oPC, sMessage);
 }
 
+int PS_GiveXPReward(object oPC, int nXP){
+	nXP = GetECLXP(nXP, oPC);
+    GiveXPToCreature(oPC, nXP);
+    return TRUE;
+}
 
+// The above doesn't always work in place of GiveXPToCreature() because GiveXPToCreature()
+// returns void, not int, so the above does not work as an arg for AssignCommand or DelayCommand
+void PS_GiveXPRewardNoReturn(object oPC, int nXP){
+    PS_GiveXPReward(oPC, nXP);
+}
+
+/* clean up: remove conditionals for outdated constants
 //wrapper for the standard exp script, makes sure you don't keep getting exp past level 30
 int PS_GiveXPReward(object oPC, int nXP) {
 
@@ -4704,13 +4716,7 @@ int PS_GiveXPReward(object oPC, int nXP) {
     return TRUE;
 
 }
-
-// The above doesn't always work in place of GiveXPToCreature() because GiveXPToCreature()
-// returns void, not int, so the above does not work as an arg for AssignCommand or DelayCommand
-void PS_GiveXPRewardNoReturn(object oPC, int nXP)
-{
-    PS_GiveXPReward(oPC, nXP);
-}
+*/
 
 struct CreatureCoreAppearance GetNewFormAppearance(string sResRef, object oPC = OBJECT_INVALID) {
 

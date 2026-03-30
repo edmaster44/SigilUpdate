@@ -10,8 +10,9 @@ float fAvg;
 int nNum;
 };
 
+float GetPartyXPBonus(float fAvgLevel, float fCR, int nNum);
 float GetBaseXP(float fLevel, float fCR, int nNum);
-void GiveKillGold(object oPC, float fCR);
+void GiveKillCopper(object oPC, float fCR);
 struct PartyData GetPartyData(object oPC);
 object PS_GetKiller();
 
@@ -29,16 +30,15 @@ void main(){
 
     //Shout Attack my target, only works with the On Spawn In setup
     SpeakString("NW_ATTACK_MY_TARGET", TALKVOLUME_SILENT_TALK);
-		
-	int bGiveGold = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE && 
-		GetRacialType(oDead) != RACIAL_TYPE_ANIMAL &&
-		GetRacialType(oDead) != RACIAL_TYPE_BEAST &&
-		GetRacialType(oDead) != RACIAL_TYPE_CONSTRUCT &&
-		GetRacialType(oDead) != RACIAL_TYPE_ELEMENTAL &&
-		GetRacialType(oDead) != RACIAL_TYPE_VERMIN);
+	
+	int nRaceDead = GetRacialType(oDead);
+	int bGiveCopper = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE && 
+		nRaceDead != RACIAL_TYPE_ANIMAL && nRaceDead != RACIAL_TYPE_BEAST &&
+		nRaceDead != RACIAL_TYPE_CONSTRUCT && nRaceDead != RACIAL_TYPE_ELEMENTAL &&
+		nRaceDead != RACIAL_TYPE_VERMIN);
 	
 	struct PartyData data = GetPartyData(oKiller);	
-		
+	
 	float fPartyLevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fCRoriginal = GetChallengeRating(oDead);
 	int nDeadHD = GetHitDice(oDead);
@@ -59,8 +59,10 @@ void main(){
 	object oArea = GetArea(oKiller);
 	object oMember = GetFirstFactionMember(oKiller, TRUE);
     while(GetIsObjectValid(oMember)){
-		if (oArea == GetArea(oMember)){
-			if (bGiveGold) GiveKillGold(oMember, fCR);
+		if (oArea == GetArea(oMember) && !GetIsDM(oMember)){
+		
+			if (bGiveCopper) GiveKillCopper(oMember, fCR);
+			rp_pool = 0;
 			fIndividualXP = fXP;
 			nLevel = PS_GetLevelByXP(oMember);
 			if (nLevel > GetHitDice(oMember)){
@@ -98,13 +100,6 @@ void main(){
 			
 				
 			if(nFinalXP > 0){
-				if (GetLocalInt(oMember, "xpdebug")){
-					sDebug = "The enemy HD is " + IntToString(nDeadHD);
-					sDebug += "\nThe enemy CR is " + FloatToString(fCRoriginal);
-					if (nElite > 0) sDebug += "\nThe enemy elite rating is :" + IntToString(nElite);
-					else sDebug += "\nThe enemy is not elite";
-					SendMessageToPC(oMember, sDebug);
-				}
 				sID = PS_GetCharID(oMember);
 				//SendMessageToPC(oPartyMember,"id:" + sID);
 				SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
@@ -115,9 +110,23 @@ void main(){
 						nFinalXP += nFinalXP;
 					} else if (rp_pool > 0 ){
 						nFinalXP += rp_pool;
-						rp_pool = 0;
 					}
 					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
+				}
+				if (GetLocalInt(oMember, "xpdebug")){
+					sDebug = "Max level in party: " + IntToString(data.nMax);
+					sDebug += "\nParty Size: " + IntToString(data.nNum);
+					sDebug = "\nThe enemy HD is " + IntToString(nDeadHD);
+					sDebug += "\nThe enemy CR is " + FloatToString(fCRoriginal);
+					if (nElite > 0) sDebug += "\nThe enemy elite rating is :" + IntToString(nElite);
+					else sDebug += "\nThe enemy is not elite";
+					sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
+					sDebug += "\nParty XP Bonus: ";
+					float fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 10.0;
+					sDebug += FloatToString(fVar, 2, 2);
+					sDebug += "%";
+					sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
+					SendMessageToPC(oMember, sDebug);
 				}
 				PS_GiveXPReward(oMember, nFinalXP);
 			}
@@ -126,7 +135,7 @@ void main(){
 	}
 }
 
-void GiveKillGold(object oPC, float fCR){
+void GiveKillCopper(object oPC, float fCR){
 	int nCopper;
 	if (fCR >= 90.0)  nCopper = d4(7) + d6(3);
 	else if (fCR < 90.0 && fCR >= 80.0) nCopper = d4(7) + d6(2);
@@ -151,7 +160,7 @@ struct PartyData GetPartyData(object oPC){
 	int nTotal = 0;
 	object oMember = GetFirstFactionMember(oPC, TRUE);
     while(GetIsObjectValid(oMember)){ 
-		if (GetArea(oMember) == oArea){
+		if (GetArea(oMember) == oArea && !GetIsDM(oMember)){
 			data.nNum++;
 			nLvl = PS_GetLevel(oMember);
 			if (nLvl > data.nMax)
@@ -179,6 +188,19 @@ object PS_GetKiller(){
 	return oKiller;
 }
 
+// add smalladditional xp bonus for group that scales based on party size
+float GetPartyXPBonus(float fAvgLevel, float fCR, int nNum){
+	if (nNum < 2) return 0.0;
+
+	float fPartyBoost;
+	if (fCR < fAvgLevel) fPartyBoost = 0.1;  
+	else fPartyBoost = (log(fCR) / fAvgLevel) * 0.5; 
+	if (fPartyBoost < 0.01) fPartyBoost = 0.01;
+	
+	float fPartySizeMult = 1.0 + (FloatToInt(nNum - 1.0) * 0.0625);
+	if (fPartySizeMult > 1.25) fPartySizeMult = 1.25;
+	return fPartyBoost * fPartySizeMult;
+}
 
 float GetBaseXP(float fLevel, float fCR, int nNum){
     float fXP = BASEXP;
@@ -186,7 +208,7 @@ float GetBaseXP(float fLevel, float fCR, int nNum){
 	if (fCR != fLevel){
 		if(fCR > fLevel){
 			// this calibrates for a lvl 30 to get BASEXP * 3 for a CR 99
-			fXP *= (1.0 + (3.77 * log(1.0 + fCR / fLevel) / 2.302));
+			fXP *= (1.0 + (3.15 * log(1.0 + fCR / fLevel) / 2.302));
 		} else { //For lower CR give xp penalty
 			// this calibrates, assuming BASEXP remains 65.0, as a lvl 30 gets < 0.5 XP
 			// for killing a CR 1 solo, but with the conditional below just over 0.5 XP 
@@ -196,16 +218,9 @@ float GetBaseXP(float fLevel, float fCR, int nNum){
 		}
 	}
 
-	// add smalladditional xp bonus for group that scales based on party size
-	if (nNum > 1){
-		float fPartyBoost;
-		if (fCR < fLevel) fPartyBoost = 0.1;  
-		else fPartyBoost = (log(fCR) / fLevel) * 0.5; 
-		if (fPartyBoost < 0.01) fPartyBoost = 0.01;
-		float fPartySizeMult = 1.0 + (FloatToInt(nNum - 1.0) * 0.0625);
-		if (fPartySizeMult > 1.25) fPartySizeMult = 1.25;
-		fXP *= (1.0 + fPartyBoost * fPartySizeMult);
-	}
+	if (nNum > 1)
+		fXP *= 1.0 + GetPartyXPBonus(fLevel, fCR, nNum);
+	
     return fXP;
 }
 

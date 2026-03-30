@@ -367,9 +367,9 @@ string GetDebugInfo(object oPC){
     string sDebug = "PLEASE SCREENSHOT THIS INFO & INCLUDE IN BUG REPORTS";
     sDebug += "\nName: " + GetName(oPC);
 	nVar = StringToInt(Get2DAString("racialtypes", "Name", GetRacialType(oPC)));
-	sDebug += "\nRace: " + GetStringByStrRef(nVar) + "(ID: " + IntToString(nVar) + ")";
+	sDebug += "\nRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", GetSubRace(oPC)));
-	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + "(ID: " + IntToString(nVar) + ")";
+	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
 	sDebug += "\nSize: ";
 	nVar = GetCreatureSize(oPC);
 	switch (nVar){
@@ -400,9 +400,12 @@ string GetDebugInfo(object oPC){
 
 string GetAreaInfo(object oArea, object oItem = OBJECT_INVALID){
 	string sInfo = "Area name: " + GetName(oArea);
-	sInfo += "\nArea tag: " + GetTag(oItem);
-	sInfo += "\nMap height: " + IntToString(GetAreaSize(AREA_HEIGHT, oItem));
-	sInfo += "\nMap width: " + IntToString(GetAreaSize(AREA_WIDTH, oItem));
+	string sVar = GetTag(oArea);
+	if (sVar != "") sInfo += "\nArea tag: " + GetTag(oArea);
+	sVar = GetResRef(oArea);
+	if (sVar != "") sInfo += "\nToolset name: " + sVar;
+	sInfo += "\nMap height: " + IntToString(GetAreaSize(AREA_HEIGHT, oArea));
+	sInfo += "\nMap width: " + IntToString(GetAreaSize(AREA_WIDTH, oArea));
 	if (oItem != OBJECT_INVALID){
 		vector vPos = GetPosition(oItem);
 		sInfo += "\nPos: X=" + FloatToString(vPos.x, 2) + " Y=" + FloatToString(vPos.y, 2) + 
@@ -462,13 +465,13 @@ string GetEffectInfo(object oPC){
 				if (FindSubString(sPermIdList, sId) == -1){
 					sPermIdList += sId;
 					nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-					sPermInfo += GetStringByStrRef(nNameRef) + "(ID: " + IntToString(nId) + ")\n";
+					sPermInfo += GetStringByStrRef(nNameRef) + " (ID: " + IntToString(nId) + ")\n";
 				} 
 			} else {
 				if (FindSubString(sTempIdList, sId) == -1){
 					sTempIdList += sId;
 					nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-					sTempInfo += GetStringByStrRef(nNameRef) + "(ID: " + IntToString(nId) + ")\n";
+					sTempInfo += GetStringByStrRef(nNameRef) + " (ID: " + IntToString(nId) + ")\n";
 				}
 			}
 		}
