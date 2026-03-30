@@ -58,6 +58,23 @@ void main()
 	object oChest = OBJECT_SELF;
 	object oPC = GetLastOpenedBy();
 	
+	if (!GetCanLootChest(oPC, oChest))
+		return;
+	
+	int nType = GetLocalInt(oChest,"TYPE");
+	if (nType == 0) nType = 1;
+
+	FillChestWithLimboCurrency(oChest);
+	FillChestWithItems(oChest);
+	GenerateTreasureItemOnTarget(oChest, nType);	
+	
+}
+/* original
+void main()
+{
+	object oChest = OBJECT_SELF;
+	object oPC = GetLastOpenedBy();
+	
 	int iChestWait = GetLocalInt(oChest,"RESPAWN");
 	if(iChestWait == 0)
 		iChestWait = cChestWait;
@@ -95,3 +112,4 @@ void main()
 		GenerateTreasureItemOnTarget(oChest, nType);	
 	}	
 }
+*/

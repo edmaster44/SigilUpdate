@@ -1,61 +1,15 @@
-const float LOOT_COOLDOWN_HOURS = 6.0; //set to 5.5 for 5 hours and 30 mins, 5.25 for 5 hours 15 mins, etc
+
 
 #include "ps_inc_chest"
 
-string GetLocationString(object oPlaceable){
-	location lLoc = GetLocation(oPlaceable);
-    vector vPos = GetPositionFromLocation(lLoc);
-    return GetTag(GetArea(oPlaceable)) + "_" + 
-		 FloatToString(vPos.x, 5, 2) + "_" + 
-		 FloatToString(vPos.y, 5, 2) + "_" + 
-		 FloatToString(vPos.z, 5, 2);
-}
 
-void main()
-{
+
+void main(){
 	object oChest = OBJECT_SELF;
 	object oPC = GetLastOpenedBy();
-	string sChestLoc = GetLocationString(oChest);
-	
-	// Per player loot: this will be the name of the local int that will store the time that
-	// this player looted this particular chest
-    string sLootedTime = "LOOTED_" + sChestLoc;
-	
-	int nTime = PS_GetTime();
-	int nTimeLooted = GetLocalInt(oPC, sLootedTime);
-	int nCooldown = FloatToInt(LOOT_COOLDOWN_HOURS * 3600.0); //convert cooldown to seconds
-	int nDiff = nTime - nTimeLooted; 
-	if (nDiff < nCooldown){
-		int nSeconds = nCooldown - nDiff;
-		int nHours = nSeconds / 3600;
-		int nMinutes = (nSeconds % 3600) / 60;
-		string sMessage = "You have already opened this chest within the last ";
-		sMessage += FloatToString(LOOT_COOLDOWN_HOURS, 2, 2) + " hour";
-		if (LOOT_COOLDOWN_HOURS != 1.0) sMessage += "s";
-		sMessage += ".\nYou must wait ";
-		if (nHours > 0){
-			sMessage += IntToString(nHours) + " hour";
-			if (nHours > 1) sMessage += "s";
-		}
-		if (nMinutes > 0){
-			if (nHours > 0) sMessage += " and ";
-			sMessage += IntToString(nMinutes) + " minute";
-			if (nMinutes > 1) sMessage += "s";
-		}
-		sMessage += " or until server reset before you can loot from this location again.";
-		SendMessageToPC(oPC, sMessage);
-        return;
-	}
-	
-		
-	if (CheckIfHostilesNearby(OBJECT_SELF, oPC)) {
-		SendMessageToPC(oPC, "You cannot loot while hostiles are near!");
-		AssignCommand(oChest, PlayAnimation(ANIMATION_PLACEABLE_CLOSE));
+	if (!GetCanLootChest(oPC, oChest))
 		return;
-	}
-	
-	// First time this PC opens this chest: mark as looted for this player at this time
-    SetLocalInt(oPC, sLootedTime, nTime);
+		
 	int nType = GetLocalInt(oChest,"TYPE");
 	if (nType == 0) nType = 1;
 

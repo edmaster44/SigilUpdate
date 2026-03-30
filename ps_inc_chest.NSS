@@ -3,7 +3,8 @@
 #include "ps_inc_treasuregeneration"
 #include "ps_inc_time"
 
-const int cChestWait = 915;
+const float LOOT_COOLDOWN_HOURS = 6.0; //set to 5.5 for 5 hours and 30 mins, 5.25 for 5 hours 15 mins, etc
+//const int cChestWait = 915;
 const float cChestDistance = 8.0f; //the distance monsters must be from chest for chest to spawn loot
 
 // creates a random craft material from a craft 2da.
@@ -11,10 +12,101 @@ const float cChestDistance = 8.0f; //the distance monsters must be from chest fo
 // and "SCOD_CRAFT_WOOD"
 void CreateCraftItemOnObjectFrom2da(string s2da, object oObject);
 
-//Creates gold on chest
-//details depend on variables
-//GOLDDICE, GOLDNR, GOLDCONS
-void FillChestWithGold(object oChest) {
+//generates a unique identifier for the placeable based on the tag of the area and
+// the location of the placeable within that area
+string GetLocationString(object oPlaceable);
+
+// checks if all conditions that allow a pc to loot a chest are met, ie, that the time
+// elapsed since the last time they opened this chest is >= LOOT_COOLDOWN_HOURS
+// and that no hostiles are nearby
+int GetCanLootChest(object oPC, object oChest);
+
+//fills chest with appropriate amount of coin based on local ints on the chest
+void FillChestWithGold(object oChest);
+
+// self explanatory
+int CheckIfHostilesNearby(object oChest, object oPC);
+
+//Create item of a particular type on the chest
+//Options: BOOK, JUNK, GEM, ARCANE, AMMO, EQUIPPABLE, KIT, POTION, RANDOM
+void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLevel = 1);
+
+//astral_quest_obj 70%
+//Fill the chest up with items!
+//Local variables:
+//TAG = special item blueprint which can appear in the chest
+//TAGCHANCE = chance the TAG item will appear; defaults to 100% if not set
+//TREASURE1 = type of treasure (takes FillChestWithSpecificItem options)
+//TREASURE1N = number of items of TREASURE1 to generate
+//TREASURE2 = type of treasure (takes FillChestWithSpecificItem options)
+//TREASURE2N = number of items of TREASURE2 to generate
+//TREASURE3 = type of treasure (takes FillChestWithSpecificItem options)
+//TREASURE3N = number of items of TREASURE3 to generate
+void FillChestWithItems(object oChest);
+
+//Deletes all items from the object
+void CleanChest(object oChest);
+
+
+
+string GetLocationString(object oPlaceable){
+	location lLoc = GetLocation(oPlaceable);
+    vector vPos = GetPositionFromLocation(lLoc);
+    return GetTag(GetArea(oPlaceable)) + "_" + 
+		 FloatToString(vPos.x, 5, 2) + "_" + 
+		 FloatToString(vPos.y, 5, 2) + "_" + 
+		 FloatToString(vPos.z, 5, 2);
+}
+
+int GetCanLootChest(object oPC, object oChest){
+	string sChestLoc = GetLocationString(oChest);
+	
+	// Per player loot: this will be the name of the local int that will store the time that
+	// this player looted this particular chest
+    string sLootedTime = sChestLoc + "_TIME_LOOTED";
+	
+	int nTime = PS_GetTime();
+	int nTimeLooted = GetLocalInt(oPC, sLootedTime);
+	int nCooldown = FloatToInt(LOOT_COOLDOWN_HOURS * 3600.0); //convert cooldown to seconds
+	int nDiff = nTime - nTimeLooted; 
+	if (nDiff < nCooldown){
+		int nSeconds = nCooldown - nDiff;
+		int nHours = nSeconds / 3600;
+		int nMinutes = (nSeconds % 3600) / 60;
+		string sMessage = "You have already opened this chest within the last ";
+		sMessage += FloatToString(LOOT_COOLDOWN_HOURS, 2, 2) + " hour";
+		if (LOOT_COOLDOWN_HOURS != 1.0) sMessage += "s";
+		sMessage += ".\nYou must wait ";
+		if (nHours > 0){
+			sMessage += IntToString(nHours) + " hour";
+			if (nHours > 1) sMessage += "s";
+		}
+		if (nMinutes > 0){
+			if (nHours > 0) sMessage += " and ";
+			sMessage += IntToString(nMinutes) + " minute";
+			if (nMinutes > 1) sMessage += "s";
+		}
+		sMessage += " or until server reset before you can loot from this location again.";
+		SendMessageToPC(oPC, sMessage);
+        return FALSE;
+	}
+	
+		
+	if (CheckIfHostilesNearby(OBJECT_SELF, oPC)) {
+		SendMessageToPC(oPC, "You cannot loot while hostiles are near!");
+		AssignCommand(oChest, PlayAnimation(ANIMATION_PLACEABLE_CLOSE));
+		return FALSE;
+	}
+	
+	// First time this PC opens this chest: mark as looted for this player at this time
+    SetLocalInt(oPC, sLootedTime, nTime);
+	int nType = GetLocalInt(oChest,"TYPE");
+	if (nType == 0) nType = 1;
+	return TRUE;
+
+}
+
+void FillChestWithGold(object oChest){
 
 	int iGolddice = GetLocalInt(oChest,"GOLDDICE");
 	int iGoldnr = GetLocalInt(oChest,"GOLDNR");
@@ -35,8 +127,7 @@ void FillChestWithGold(object oChest) {
 		
 }
 
-//Makes sure there are no monsters nearby before you can loot
-int CheckIfHostilesNearby(object oChest, object oPC) {
+int CheckIfHostilesNearby(object oChest, object oPC){
 
 	//GetIsEnemy
 	object oCreature = GetFirstObjectInShape(SHAPE_SPHERE, cChestDistance, GetLocation(oChest), TRUE, OBJECT_TYPE_CREATURE);
@@ -52,10 +143,7 @@ int CheckIfHostilesNearby(object oChest, object oPC) {
 
 }
 
-//Create item of a particular type on the chest
-//Options: BOOK, JUNK, GEM, ARCANE, AMMO, EQUIPPABLE, KIT, POTION, RANDOM
-void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLevel = 1)
-{
+void FillChestWithSpecificItem(object oChest, string sTreasure, int nTreasureLevel = 1){
 	string sResref = "";
 	if ( sTreasure == "BOOK" ) {
 		CreatePaperItemsOnTarget(oChest, nTreasureLevel);
@@ -158,18 +246,7 @@ void CreateCraftItemOnObjectFrom2da(string s2da, object oObject){
 	CreateTreasureItemOnTarget(sResref, oObject);
 }
 
-//astral_quest_obj 70%
-//Fill the chest up with items!
-//Local variables:
-//TAG = special item blueprint which can appear in the chest
-//TAGCHANCE = chance the TAG item will appear; defaults to 100% if not set
-//TREASURE1 = type of treasure (takes FillChestWithSpecificItem options)
-//TREASURE1N = number of items of TREASURE1 to generate
-//TREASURE2 = type of treasure (takes FillChestWithSpecificItem options)
-//TREASURE2N = number of items of TREASURE2 to generate
-//TREASURE3 = type of treasure (takes FillChestWithSpecificItem options)
-//TREASURE3N = number of items of TREASURE3 to generate
-void FillChestWithItems(object oChest) {
+void FillChestWithItems(object oChest){
 
 	int nAmount=0;
 	int i=0;
@@ -216,8 +293,7 @@ void FillChestWithItems(object oChest) {
 	}
 }
 
-//Deletes all items from the object
-void CleanChest(object oChest) {
+void CleanChest(object oChest){
 
 	object oItem = GetFirstItemInInventory(oChest);
     while(GetIsObjectValid(oItem)) {

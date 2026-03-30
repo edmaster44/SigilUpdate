@@ -10,17 +10,15 @@ float fAvg;
 int nNum;
 };
 
-
-void GiveKillGold(object oPC, int nHD);
+float GetBaseXP(float fLevel, float fCR, int nNum);
+void GiveKillGold(object oPC, float fCR);
 struct PartyData GetPartyData(object oPC);
-object GetKiller(object oDead);
 object PS_GetKiller();
 
 void main(){
 	object oDead = OBJECT_SELF;
 	object oKiller = PS_GetKiller();
 	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF) return;
-	
 	
 	string sDeathScript = GetLocalString(oDead, "DeathScript");
 	if (sDeathScript != "")
@@ -32,73 +30,81 @@ void main(){
     //Shout Attack my target, only works with the On Spawn In setup
     SpeakString("NW_ATTACK_MY_TARGET", TALKVOLUME_SILENT_TALK);
 		
-	object oArea = GetArea(oKiller);
-    float fCR = GetChallengeRating(oDead);
-	struct PartyData data = GetPartyData(oKiller);
+	int bGiveGold = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE && 
+		GetRacialType(oDead) != RACIAL_TYPE_ANIMAL &&
+		GetRacialType(oDead) != RACIAL_TYPE_BEAST &&
+		GetRacialType(oDead) != RACIAL_TYPE_CONSTRUCT &&
+		GetRacialType(oDead) != RACIAL_TYPE_ELEMENTAL &&
+		GetRacialType(oDead) != RACIAL_TYPE_VERMIN);
 	
-	int bGiveGold = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE
-		&& GetRacialType(oDead) != RACIAL_TYPE_ANIMAL
-		&& GetRacialType(oDead) != RACIAL_TYPE_BEAST
-		&& GetRacialType(oDead) != RACIAL_TYPE_CONSTRUCT
-		&& GetRacialType(oDead) != RACIAL_TYPE_ELEMENTAL
-		&& GetRacialType(oDead) != RACIAL_TYPE_VERMIN);
+	struct PartyData data = GetPartyData(oKiller);	
 		
+	float fPartyLevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
+	float fCRoriginal = GetChallengeRating(oDead);
 	int nDeadHD = GetHitDice(oDead);
-		
-	float fPartylevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
-	float fPartyXPB = 1.0 + log(IntToFloat(data.nNum)) / PARTYBONUS_XP_DIVIDER;
-	float fFinalXP = BASEXP;
-	
+	float fCR = (IntToFloat(nDeadHD) > fCRoriginal) ? IntToFloat(nDeadHD) : fCRoriginal;
 	int nElite = StringToInt(GetLocalString(oDead,"ELITE"));
-	if (nElite > 0 || fCR >= fPartylevel * 3.0)
-		fFinalXP *= 1.2;
-	
-	if(fCR >= fPartylevel){
-		fFinalXP *= fPartyXPB;
-	} else { //For lower CR give xp penalty
-		fFinalXP = BASEXP * fPartyXPB / (fPartylevel - fCR + 1.0);
-	}
+    if (nElite > 0){
+        if (fPartyLevel + 5.0 < 10.0 * nElite) fCR += 3.0;
+        else fCR += 2.0 - log(IntToFloat(data.nNum));
+    }
+	float fXP = GetBaseXP(fPartyLevel, fCR, data.nNum);
 
-	string sDebug;
-    int nLevel = 0;
-	int nRange = 0;
-	float fIndividualXP;
-    int nFinalXP = 0;
-    int rp_pool = 0;
-    string sID = "";
-	string sMetagaming = "You have surpassed the required XP to level up.";
-	sMetagaming += "\nYour XP is now being calculated as though you were level ";
+    int nLevel, nFinalXP, rp_pool;
+	float fLevel, fIndividualXP, fSoloXP;
+	string sID, sDebug;
+	string sXPbanking = "You have surpassed the required XP to level up.";
+	sXPbanking += "\nYour XP is being calculated as though you were level ";
 	
+	object oArea = GetArea(oKiller);
 	object oMember = GetFirstFactionMember(oKiller, TRUE);
     while(GetIsObjectValid(oMember)){
 		if (oArea == GetArea(oMember)){
-		
-			if (bGiveGold) GiveKillGold(oMember, nDeadHD);
-			fIndividualXP = fFinalXP;	
+			if (bGiveGold) GiveKillGold(oMember, fCR);
+			fIndividualXP = fXP;
 			nLevel = PS_GetLevelByXP(oMember);
 			if (nLevel > GetHitDice(oMember)){
-				SendMessageToPC(oMember, sMetagaming + IntToString(nLevel) + ".");
+				SendMessageToPC(oMember, sXPbanking + IntToString(nLevel) + ".");
 			}
-			// if the player is below the party range (excluding highest ecl, including their own), 
-			// or they are above the party average, then treat them, xp wise, same as the highest 
-			// level party member
-			if (data.nMax - MAXPARTYRANGE > nLevel + GetNewECL(oMember) || IntToFloat(nLevel) > fPartylevel){
-				nLevel = data.nMax;
-			} 
-			
-			fIndividualXP *= fPartylevel / IntToFloat(nLevel);
-			
-			
+			fLevel = IntToFloat(nLevel);
+
+			//if the monster is higher CR than the player's level
+			if (fCR > fLevel){
+				// then if the player is out of range (excluding the highest lvls ECL and including their own
+				if (data.nMax - MAXPARTYRANGE > nLevel + GetNewECL(oMember)){
+					// then they get xp as if the mob was the same level as them
+					fIndividualXP = GetBaseXP(fLevel, fLevel, data.nNum);
+				//otherwise if the player is IN range but below party average, give them a litttle boost
+				} else if (fLevel < fPartyLevel ){
+					fIndividualXP *= log(fCR / fLevel) * 0.75;
+				}
+				// note that players above party average are already getting a boost for the xp
+				// being calculated based on the lower party average, and all party members are
+				// getting a boost based upon number in party
+			}
+		
+			 // get how much xp the player would have gotten solo
+			fSoloXP = GetBaseXP(fLevel, fCR, 1);
+			// in the unlikely event that they would have gotten more solo, give them the solo xp
+			fIndividualXP = (fSoloXP > fIndividualXP) ? fSoloXP : fIndividualXP;
+			// in the unlikely event that they're getting more than max, give them max
 			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
 			
 			nFinalXP = PS_RoundToInt(fIndividualXP);
-			nRange = nLevel - MAXPARTYRANGE;
-			//if the monster is not more than 10 levels below the character then they should get 
+			//if the monster is not more than 10 levels below the player then the player should get 
 			// at least 1 xp
-			if (nFinalXP < 1 && (PS_RoundToInt(fCR) >= nRange || nDeadHD >= nRange))
+			if (nFinalXP < 1 && PS_RoundToInt(fCR) >= nLevel - MAXPARTYRANGE)
 				nFinalXP = 1;
+			
 				
 			if(nFinalXP > 0){
+				if (GetLocalInt(oMember, "xpdebug")){
+					sDebug = "The enemy HD is " + IntToString(nDeadHD);
+					sDebug += "\nThe enemy CR is " + FloatToString(fCRoriginal);
+					if (nElite > 0) sDebug += "\nThe enemy elite rating is :" + IntToString(nElite);
+					else sDebug += "\nThe enemy is not elite";
+					SendMessageToPC(oMember, sDebug);
+				}
 				sID = PS_GetCharID(oMember);
 				//SendMessageToPC(oPartyMember,"id:" + sID);
 				SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
@@ -113,13 +119,6 @@ void main(){
 					}
 					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
 				}
-				if (GetLocalInt(oMember, "xpdebug")){
-					sDebug = "The enemy HD is " + IntToString(nDeadHD);
-					sDebug += "\nThe enemy CR is " + FloatToString(fCR);
-					if (nElite) sDebug += "\nThe enemy is elite";
-					else sDebug += "\nThe enemy is not elite";
-					SendMessageToPC(oMember, sDebug);
-				}
 				PS_GiveXPReward(oMember, nFinalXP);
 			}
 		}
@@ -127,13 +126,19 @@ void main(){
 	}
 }
 
-void GiveKillGold(object oPC, int nHD){
-	int nGold;
-	if (nHD >= 30) nGold = d8(3);
-	else if (nHD < 30 && nHD >= 20) nGold = d12(2);
-	else if (nHD < 20 && nHD >= 10) nGold = d10(2);
-	else nGold = d20();
-	PS_GiveGoldToCreature(oPC, nGold);
+void GiveKillGold(object oPC, float fCR){
+	int nCopper;
+	if (fCR >= 90.0)  nCopper = d4(7) + d6(3);
+	else if (fCR < 90.0 && fCR >= 80.0) nCopper = d4(7) + d6(2);
+	else if (fCR < 80.0 && fCR >= 70.0) nCopper = d4(7) + d6();
+	else if (fCR < 70.0 && fCR >= 60.0) nCopper = d4(7);
+	else if (fCR < 60.0 && fCR >= 50.0) nCopper = d4(6);
+	else if (fCR < 50.0 && fCR >= 40.0) nCopper = d6(4);
+	else if (fCR < 40.0 && fCR >= 30.0) nCopper = d8(3);
+	else if (fCR < 30.0 && fCR >= 20.0) nCopper = d12(2);
+	else if (fCR < 20.0 && fCR >= 10.0) nCopper = d10(2);
+	else nCopper = d20();
+	PS_GiveGoldToCreature(oPC, nCopper);
 }
 
 struct PartyData GetPartyData(object oPC){
@@ -174,6 +179,35 @@ object PS_GetKiller(){
 	return oKiller;
 }
 
+
+float GetBaseXP(float fLevel, float fCR, int nNum){
+    float fXP = BASEXP;
+	
+	if (fCR != fLevel){
+		if(fCR > fLevel){
+			// this calibrates for a lvl 30 to get BASEXP * 3 for a CR 99
+			fXP *= (1.0 + (3.77 * log(1.0 + fCR / fLevel) / 2.302));
+		} else { //For lower CR give xp penalty
+			// this calibrates, assuming BASEXP remains 65.0, as a lvl 30 gets < 0.5 XP
+			// for killing a CR 1 solo, but with the conditional below just over 0.5 XP 
+			// for doing so with at leastone other party member, so that it rounds to 0 
+			// in the first case and 1 In the latter
+			fXP *= pow(0.843, fLevel - fCR);
+		}
+	}
+
+	// add smalladditional xp bonus for group that scales based on party size
+	if (nNum > 1){
+		float fPartyBoost;
+		if (fCR < fLevel) fPartyBoost = 0.1;  
+		else fPartyBoost = (log(fCR) / fLevel) * 0.5; 
+		if (fPartyBoost < 0.01) fPartyBoost = 0.01;
+		float fPartySizeMult = 1.0 + (FloatToInt(nNum - 1.0) * 0.0625);
+		if (fPartySizeMult > 1.25) fPartySizeMult = 1.25;
+		fXP *= (1.0 + fPartyBoost * fPartySizeMult);
+	}
+    return fXP;
+}
 
 /* Previous tries
 struct PartyData{
