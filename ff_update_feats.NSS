@@ -25,7 +25,7 @@
 #include "ff_update_feats_inc"
 
 
-void ff_update_feats(object oPC);
+void ff_update_feats(object oPC, int bOnLevelUp = FALSE);
 void fGrantSneakFeats(object oPC);
 void UpdateACFeats(object oPC);
 void fUpdateOtherFeats(object oPC);
@@ -36,7 +36,7 @@ void AdjustAbilityScores(object oPC);
 
 
 //main logic of this script
-void ff_update_feats(object oPC){
+void ff_update_feats(object oPC, int bOnLevelUp = FALSE){
 
 	SendMessageToPC(oPC, "Re-calculating Sneak Dice");
 	
@@ -63,7 +63,7 @@ void ff_update_feats(object oPC){
 	
 	DelayCommand(3.0f, AdjustAbilityScores(oPC));
 	
-	LevelUpGuiChoices(oPC);
+	if (bOnLevelUp) LevelUpGuiChoices(oPC);
 
 	if (bSaveAfterThisScript)
 	{

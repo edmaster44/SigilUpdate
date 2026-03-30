@@ -33,6 +33,9 @@ void DoPsionFeatProgression(object oPC);
 
 void ShutdownMetaPsionics(object oPC);
 
+
+int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE);
+
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
 
@@ -67,6 +70,11 @@ const int MAXPARTYRANGE = 10; //PC's that are less than this number from highest
 const float MAXMONSTERXP = 300.0; //The absolute maximum xp any monster can yield
 const float CRBONUS = 0.5; //decides what multiplier to use for when party faces
                             //CR > Avg level.  (CR - Avg) * CRBONUS = CR modified XP
+			
+// for use in PS_RoundDecimal and PS_RoundToInt			
+const int ROUND_DOWN = -1;
+const int ROUND_NEAREST = 0;
+const int ROUND_UP = 1;
                             
 const int SERVER_VERSION_ROW = 1;
 const int FACTION_VERSION_ROW = 2;
@@ -128,6 +136,10 @@ const string PS_PC_FLAGS_VAR = "PS_PC_FLAGS";
 // so best not to check for it.
 int IsImmuneToDamage(object oTarget, int nDmgType, int bShowFeedback = FALSE);
 
+// turns a float into a esthetically acceptable string without trailing zeros, or an unnecessary
+// decimal point when the decimals are all zeros
+string PS_PrettyFloatString(float fNum);
+
 // The following 4 are utils to clean up illegal chars in variable names,
 // useful for non-static variable names such as a character name.
 // To do this, call PS_ScrubVarName() and the other three are helper
@@ -144,7 +156,10 @@ float PS_GetDistanceBetween(object oObject1, object oObject2);
 
 // FloatToInt(), despite what the documentation says, does not round to nearest.
 // It tuncates. This will round. Choose "up", "down", or "nearest", not case sensitive
-int PS_RoundToInt(float fNum, string RoundTo = "nearest");
+int PS_RoundToInt(float fNum, int nRoundTo = ROUND_NEAREST);
+
+//rounds to nPlaces decimal places in nRoundTo manner
+float PS_RoundDecimal(float fNum, int nPlaces = 2, int nRoundTo = ROUND_NEAREST);
 
 // NWN2 has a cap of 528k xp, so if we set the races ecl in the 2da then we couldn't have
 // any ECL greater than 3 (A character with 0 ecl needs 435k xp to reach 30, a character 
@@ -154,10 +169,10 @@ int PS_RoundToInt(float fNum, string RoundTo = "nearest");
 // get only get 96.7% of the xp they earn applied to their character because 96.7% of 465k
 // is roughly 435k. In this way we can have any amount of ECL we need, not just up to 3 
 // (but for now I've capped it at ECL 20, which would be 36% of earned xp is applied)
-int GetECLXP(int nXP, object oPC);
+int GetECLXP(int nXP, object oPC, int bFromKill = FALSE);
 
 // The default GiveXPToCreature() has return type void, so int PS_GiveXPReward() doesn't always work in place of it.
-void PS_GiveXPRewardNoReturn(object oPC, int nXP);
+void PS_GiveXPRewardNoReturn(object oPC, int nXP, int bFromKill = FALSE);
 
 // Call this function to get the oPC's essence object.
 object PS_GetEssence(object oPC = OBJECT_SELF);
@@ -628,7 +643,7 @@ int XPpoolAdjust(int nXP){
 }
 
 // Called from PS_GiveXPReward().
-int GetECLXP(int nXP, object oPC){
+int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
    
 	int nECL = GetNewECL(oPC);
 	if (nXP < 1) return 0;
@@ -636,8 +651,10 @@ int GetECLXP(int nXP, object oPC){
 	if (nECL > 20) nECL = 20;
 	
 	if (nECL == 0){
-		if (GetLocalInt(oPC, "xpdebug"))
+		if (GetLocalInt(oPC, "xpdebug") && GetLocalInt(oPC, "xpfromkill")){
 			SendMessageToPC(oPC, "You have no ECL, your XP therefore is not taxed");
+			SetLocalInt(oPC, "xpfromkill", FALSE);
+		}
 		return nXP;
 	}
 	// XP for effective level 30 + nECL
@@ -650,23 +667,53 @@ int GetECLXP(int nXP, object oPC){
 	
 	if (nAdjusted < 1) nAdjusted = 1; // to get here nXP had to be at least 1, so should the adjusted
 	
-	if (GetLocalInt(oPC, "xpdebug")){
+	if (GetLocalInt(oPC, "xpdebug") && bFromKill){
 		string sMessage = "Your ECL is " + IntToString(nECL);
 		sMessage += "\nYour XP before tax is " + IntToString(nXP);
 		float fPercent = (1.0 - fTax) * 10.0;
-		sMessage += "\nYour ECL XP tax is " + FloatToString(fPercent, 2, 2) + "%";
+		fPercent = PS_RoundDecimal(fPercent);
+		sMessage += "\nYour ECL XP tax is " + PS_PrettyFloatString(fPercent) + "%";
 		sMessage += "\nYour final XP is " + IntToString(nAdjusted);
 		SendMessageToPC(oPC, sMessage);
 	}
 	return nAdjusted; 
 }
 
+float PS_RoundDecimal(float fNum, int nPlaces = 2, int nRoundTo = ROUND_NEAREST){
+	if (nRoundTo < -1) nRoundTo = -1;
+	else if (nRoundTo > 1) nRoundTo = 1;
+	if (nPlaces < 1){
+		return IntToFloat(PS_RoundToInt(fNum, nRoundTo));
+	} else nPlaces *= 10;
+	fNum *= nPlaces;
+	int nNum = PS_RoundToInt(fNum, nRoundTo);
+	return IntToFloat(nNum) / nPlaces;
+}
 
-int PS_RoundToInt(float fNum, string RoundTo = "nearest"){  
+string PS_PrettyFloatString(float fNum){
+    string sNum = FloatToString(fNum, 6, 6);  // Consistent precision
+    
+    // get where the decimal is
+    int nPos = FindSubString(sNum, ".");
+    
+    // strip trailing zeros
+    while(GetStringLength(sNum) > 0){
+        string sLast = GetStringRight(sNum, 1);
+        if(sLast == "0"){
+            sNum = GetStringLeft(sNum, GetStringLength(sNum) - 1);
+        } else {
+            break;
+        }
+    }
+    
+    // Remove decimal if no fractional digits left
+    if(GetStringRight(sNum, 1) == "."){
+        sNum = GetStringLeft(sNum, GetStringLength(sNum) - 1);
+    }
+    return sNum;
+}
 
-    if (GetStringLowerCase(RoundTo) == "up") RoundTo = "up";
-    else if (GetStringLowerCase(RoundTo) == "down") RoundTo = "down";
-    else RoundTo = "nearest";
+int PS_RoundToInt(float fNum, int nRoundTo = ROUND_NEAREST){  
 
     // the comment in nwscript.nss says that this rounds to nearest.
     // That is a lie. It truncates the decimal
@@ -679,8 +726,8 @@ int PS_RoundToInt(float fNum, string RoundTo = "nearest"){
     // now get the decimal portion of fNum
     float fDec = fNum - IntToFloat(nInt);
     if (fDec == 0.0f) return nInt;
-    else if (RoundTo == "down") return nInt;
-    else if (RoundTo == "up") return nInt + 1;
+    else if (nRoundTo == ROUND_DOWN) return nInt;
+    else if (nRoundTo == ROUND_UP) return nInt + 1;
     else {
         if (fDec >= 0.5f) return nInt + 1;
         else return nInt;
@@ -4682,15 +4729,15 @@ void DebugMessageToPC(object oPC, string sMessage)
     SendMessageToPC(oPC, sMessage);
 }
 
-int PS_GiveXPReward(object oPC, int nXP){
-	nXP = GetECLXP(nXP, oPC);
+int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE){
+	nXP = GetECLXP(nXP, oPC, bFromKill);
     GiveXPToCreature(oPC, nXP);
     return TRUE;
 }
 
 // The above doesn't always work in place of GiveXPToCreature() because GiveXPToCreature()
 // returns void, not int, so the above does not work as an arg for AssignCommand or DelayCommand
-void PS_GiveXPRewardNoReturn(object oPC, int nXP){
+void PS_GiveXPRewardNoReturn(object oPC, int nXP, int bFromKill = FALSE){
     PS_GiveXPReward(oPC, nXP);
 }
 

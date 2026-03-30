@@ -1,5 +1,5 @@
 NDB V1.0
-0000053 0000017 0003109 0000279 0000808
+0000053 0000017 0003116 0000279 0000808
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -1047,6 +1047,8 @@ f ffffffff ffffffff 000 i FEAT_GIANT_FINESSE
 f ffffffff ffffffff 000 i FEAT_UNNERVE
 f ffffffff ffffffff 000 i FEAT_SHARPSHOOTER
 f ffffffff ffffffff 000 i FEAT_ALCHEMICAL_INFUSION
+f ffffffff ffffffff 000 i FREEZE_SPELL_ID
+f ffffffff ffffffff 000 i SKILL_BONUS_FX
 f ffffffff ffffffff 000 i BASE_ITEM_CREQ_SLASH_M
 f ffffffff ffffffff 000 i BASE_ITEM_CREQ_PIERCE_M
 f ffffffff ffffffff 000 i BASE_ITEM_CREQ_BLUDGEON_M
@@ -2293,6 +2295,10 @@ f ffffffff ffffffff 001 v DoPsionFeatProgression
 fp o
 f ffffffff ffffffff 001 v ShutdownMetaPsionics
 fp o
+f ffffffff ffffffff 003 i PS_GiveXPReward
+fp o
+fp i
+fp i
 f ffffffff ffffffff 004 i PS_GetTargetInRange
 fp o
 fp o
@@ -2323,6 +2329,9 @@ f ffffffff ffffffff 000 f PARTYBONUS_XP_DIVIDER
 f ffffffff ffffffff 000 i MAXPARTYRANGE
 f ffffffff ffffffff 000 f MAXMONSTERXP
 f ffffffff ffffffff 000 f CRBONUS
+f ffffffff ffffffff 000 i ROUND_DOWN
+f ffffffff ffffffff 000 i ROUND_NEAREST
+f ffffffff ffffffff 000 i ROUND_UP
 f ffffffff ffffffff 000 i SERVER_VERSION_ROW
 f ffffffff ffffffff 000 i FACTION_VERSION_ROW
 f ffffffff ffffffff 000 i HOLIDAY_VERSION_ROW
@@ -2351,6 +2360,8 @@ f ffffffff ffffffff 003 i IsImmuneToDamage
 fp o
 fp i
 fp i
+f ffffffff ffffffff 001 s PS_PrettyFloatString
+fp f
 f ffffffff ffffffff 001 s PS_ScrubVarName
 fp s
 f ffffffff ffffffff 001 s PS_ValidChars
@@ -2364,12 +2375,18 @@ fp o
 fp o
 f ffffffff ffffffff 002 i PS_RoundToInt
 fp f
-fp s
-f ffffffff ffffffff 002 i GetECLXP
+fp i
+f ffffffff ffffffff 003 f PS_RoundDecimal
+fp f
+fp i
+fp i
+f ffffffff ffffffff 003 i GetECLXP
 fp i
 fp o
-f ffffffff ffffffff 002 v PS_GiveXPRewardNoReturn
+fp i
+f ffffffff ffffffff 003 v PS_GiveXPRewardNoReturn
 fp o
+fp i
 fp i
 f ffffffff ffffffff 001 o PS_GetEssence
 fp o
@@ -2743,9 +2760,6 @@ f ffffffff ffffffff 000 e0 EffectRandomNerf
 f ffffffff ffffffff 003 e0 EffectElementalPiercingDamage
 fp o
 fp i
-fp i
-f ffffffff ffffffff 002 i PS_GiveXPReward
-fp o
 fp i
 f ffffffff ffffffff 002 v FiendformBoni
 fp o
@@ -6102,7 +6116,7 @@ l01 0000076 0000002c 0000002c
 l01 0000077 0000002c 0000002c
 l01 0000078 0000002c 0000002c
 l01 0000080 0000002c 0000002c
-l02 0000347 0000002c 00000048
+l02 0000362 0000002c 00000048
 l03 0000077 00000048 00000048
 l03 0000078 00000048 00000048
 l03 0000079 00000048 00000048
@@ -6779,24 +6793,24 @@ l19 0000159 00004aeb 00004b22
 l19 0000160 00004b22 00004b2a
 l19 0000164 00004b2a 00004b69
 l19 0000165 00004b69 00004b71
-l02 0001053 00004b71 00004b8b
-l02 0001055 00004b8b 00004b8d
-l02 0001056 00004b8d 00004b9d
-l02 0001057 00004ba3 00004be7
-l02 0001058 00004bed 00004bef
-l02 0001059 00004c05 00004c49
-l02 0001060 00004c4f 00004c51
-l02 0001061 00004c67 00004cab
-l02 0001062 00004cb1 00004cb3
-l02 0001063 00004cc9 00004d0d
-l02 0001064 00004d13 00004d15
-l02 0001065 00004d2b 00004d6f
-l02 0001066 00004d75 00004d77
-l02 0001067 00004d8d 00004dd1
-l02 0001068 00004dd7 00004dd9
-l02 0001069 00004dd9 00004df3
-l02 0001071 00004df3 00004e0f
-l02 0001072 00004e15 00004e1d
+l02 0001100 00004b71 00004b8b
+l02 0001102 00004b8b 00004b8d
+l02 0001103 00004b8d 00004b9d
+l02 0001104 00004ba3 00004be7
+l02 0001105 00004bed 00004bef
+l02 0001106 00004c05 00004c49
+l02 0001107 00004c4f 00004c51
+l02 0001108 00004c67 00004cab
+l02 0001109 00004cb1 00004cb3
+l02 0001110 00004cc9 00004d0d
+l02 0001111 00004d13 00004d15
+l02 0001112 00004d2b 00004d6f
+l02 0001113 00004d75 00004d77
+l02 0001114 00004d8d 00004dd1
+l02 0001115 00004dd7 00004dd9
+l02 0001116 00004dd9 00004df3
+l02 0001118 00004df3 00004e0f
+l02 0001119 00004e15 00004e1d
 l51 0000146 00004e1d 00004e32
 l51 0000147 00004e32 00004e47
 l51 0000148 00004e47 00004e57

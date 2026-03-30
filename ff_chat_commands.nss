@@ -189,13 +189,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
-	else if (sInput == "#xpinfo"){
+	else if (sInput == "#killinfo"){
 		int bXPDebug = !GetLocalInt(oSender, "xpdebug");
 		SetLocalInt(oSender, "xpdebug", bXPDebug);
 		if (bXPDebug){
-			sFeedback = "Turning on XP debugging messages\nThis will remain in ";
-			sFeedback += "effect until you type #XPInfo again or until server resets.";
-		} else sFeedback = "Turning off XP debugging messages";
+			sFeedback = "Turning on combat kill debugging messages\nThis will remain in ";
+			sFeedback += "effect until you type #KillInfo again or until server resets.";
+		} else sFeedback = "Turning off combat kill debugging messages";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}

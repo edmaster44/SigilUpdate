@@ -240,7 +240,7 @@ void main()
 	// except tracking the classes. It matters less with the on login script.
 	// Sept 12, 2024, ff_update_feats also handling some other feat grants that need to
 	// happen at both login and level up. Should prob change name -FlattedFifth. 
-	ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
+	ff_update_feats(oPC, TRUE); // used to be ff_sneak_fix, now single source of all general feat updates
 	//last item
 	DelayCommand(1.0, StoreClasses(oPC));
 }

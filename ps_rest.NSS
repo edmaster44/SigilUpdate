@@ -4,7 +4,6 @@
 
 
 const int cSaveWait = 300;
-const int ASSS_FX 	= -5894;
 const int bSHOW_REST_STAGE_DEBUG_MESSAGES = FALSE;
 
 //debug function used in May 2025 by Flatted Fifth to diagnose at what stage
@@ -197,11 +196,11 @@ void AlternativeSkillStatScaling (object oPC)
 {
 
 	//Remove previous optimization effect
-	if ( GetHasSpellEffect(ASSS_FX, oPC) ) {
+	if ( GetHasSpellEffect(SKILL_BONUS_FX, oPC) ) {
 		effect eEffect = GetFirstEffect( oPC );
 		while ( GetIsEffectValid(eEffect) ) {
 		
-			if ( GetEffectSpellId(eEffect) == ASSS_FX){
+			if ( GetEffectSpellId(eEffect) == SKILL_BONUS_FX){
 				RemoveEffect( oPC, eEffect );
 			}
 				
@@ -240,7 +239,7 @@ void AlternativeSkillStatScaling (object oPC)
 	int nDUR = DURATION_TYPE_PERMANENT;
 	
 	eFX = SupernaturalEffect(eFX);
-	eFX = SetEffectSpellId(eFX, ASSS_FX);
+	eFX = SetEffectSpellId(eFX, SKILL_BONUS_FX);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 		 
 		 

@@ -9,8 +9,11 @@ creature non-living. Finally, a collision ball is placed in the location of
 the creature to prevent player movement through the object.
 */
 // RJH 11sep10
+
+#include "aaa_constants"
+
 const string COLLISION_BALL_TAG = "plc_collbox";
-const int FREEZE_SPELL_ID = -2999;
+
 void main()
 {
 	float fDelay = GetLocalFloat(OBJECT_SELF, "ANIMATION_DELAY");

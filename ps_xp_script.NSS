@@ -113,22 +113,25 @@ void main(){
 					}
 					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
 				}
+				// eclxp tax function reads following 2 local ints to know if the xp should be reported
+				// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
 				if (GetLocalInt(oMember, "xpdebug")){
 					sDebug = "Max level in party: " + IntToString(data.nMax);
 					sDebug += "\nParty Size: " + IntToString(data.nNum);
-					sDebug = "\nThe enemy HD is " + IntToString(nDeadHD);
-					sDebug += "\nThe enemy CR is " + FloatToString(fCRoriginal);
+					sDebug += "\nThe enemy HD is " + IntToString(nDeadHD);
+					float fVar = PS_RoundDecimal(fCRoriginal);
+					sDebug += "\nThe enemy CR is " + PS_PrettyFloatString(fVar);
 					if (nElite > 0) sDebug += "\nThe enemy elite rating is :" + IntToString(nElite);
 					else sDebug += "\nThe enemy is not elite";
 					sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
 					sDebug += "\nParty XP Bonus: ";
-					float fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 10.0;
-					sDebug += FloatToString(fVar, 2, 2);
+					fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 10.0;
+					sDebug += PS_PrettyFloatString(PS_RoundDecimal(fVar));
 					sDebug += "%";
 					sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
 					SendMessageToPC(oMember, sDebug);
 				}
-				PS_GiveXPReward(oMember, nFinalXP);
+				PS_GiveXPReward(oMember, nFinalXP, TRUE);
 			}
 		}
 		oMember = GetNextFactionMember(oKiller, TRUE);
@@ -137,14 +140,15 @@ void main(){
 
 void GiveKillCopper(object oPC, float fCR){
 	int nCopper;
-	if (fCR >= 90.0)  nCopper = d4(7) + d6(3);
-	else if (fCR < 90.0 && fCR >= 80.0) nCopper = d4(7) + d6(2);
-	else if (fCR < 80.0 && fCR >= 70.0) nCopper = d4(7) + d6();
-	else if (fCR < 70.0 && fCR >= 60.0) nCopper = d4(7);
-	else if (fCR < 60.0 && fCR >= 50.0) nCopper = d4(6);
-	else if (fCR < 50.0 && fCR >= 40.0) nCopper = d6(4);
-	else if (fCR < 40.0 && fCR >= 30.0) nCopper = d8(3);
-	else if (fCR < 30.0 && fCR >= 20.0) nCopper = d12(2);
+	// note that this is not d3(100) because that would be minimum 300. This is max 300, min 100
+	if (fCR >= 90.0)  nCopper =  d3() * 100 + d8() * 10 + d8(); 
+	else if (fCR < 90.0 && fCR >= 80.0) nCopper = d2() * 100 + d6() * 10 + d8();
+	else if (fCR < 80.0 && fCR >= 70.0) nCopper = d2() * 100 + d4() * 10 + d6();
+	else if (fCR < 70.0 && fCR >= 60.0) nCopper = d8() * 10 + d8();
+	else if (fCR < 60.0 && fCR >= 50.0) nCopper = d6() * 10 + d6();
+	else if (fCR < 50.0 && fCR >= 40.0) nCopper = d4() * 10 + d6();
+	else if (fCR < 40.0 && fCR >= 30.0) nCopper = d3() * 10 + d4();
+	else if (fCR < 30.0 && fCR >= 20.0) nCopper = d8(3);
 	else if (fCR < 20.0 && fCR >= 10.0) nCopper = d10(2);
 	else nCopper = d20();
 	PS_GiveGoldToCreature(oPC, nCopper);
@@ -203,6 +207,10 @@ float GetPartyXPBonus(float fAvgLevel, float fCR, int nNum){
 }
 
 float GetBaseXP(float fLevel, float fCR, int nNum){
+	// if the level (whether party average or solo) is more than 25 higher than CR, 
+	// then no xp
+	if (fLevel - fCR > 5.0 && nNum == 1) return 0.0;
+
     float fXP = BASEXP;
 	
 	if (fCR != fLevel){
@@ -210,10 +218,6 @@ float GetBaseXP(float fLevel, float fCR, int nNum){
 			// this calibrates for a lvl 30 to get BASEXP * 3 for a CR 99
 			fXP *= (1.0 + (3.15 * log(1.0 + fCR / fLevel) / 2.302));
 		} else { //For lower CR give xp penalty
-			// this calibrates, assuming BASEXP remains 65.0, as a lvl 30 gets < 0.5 XP
-			// for killing a CR 1 solo, but with the conditional below just over 0.5 XP 
-			// for doing so with at leastone other party member, so that it rounds to 0 
-			// in the first case and 1 In the latter
 			fXP *= pow(0.843, fLevel - fCR);
 		}
 	}
@@ -223,6 +227,7 @@ float GetBaseXP(float fLevel, float fCR, int nNum){
 	
     return fXP;
 }
+
 
 /* Previous tries
 struct PartyData{

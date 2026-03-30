@@ -30,8 +30,8 @@ void main()
 		eAllies			= EffectLinkEffects(EffectDamageResistance(DAMAGE_TYPE_COLD, 15), eAllies);
 		eAllies			= EffectLinkEffects(EffectDamageIncrease(DAMAGE_BONUS_1d6, DAMAGE_TYPE_COLD), eAllies);
 	effect eFoes		= EffectSpellFailure(20); 
-	effect eFoesDoTM 	= EffectDamageOverTime(PS_RoundToInt(fDamage, "down"), 6.0f, DAMAGE_TYPE_MAGICAL, TRUE);
-	effect eFoesDoTC 	= EffectDamageOverTime(PS_RoundToInt(fDamage, "up"), 6.0f, DAMAGE_TYPE_COLD);
+	effect eFoesDoTM 	= EffectDamageOverTime(PS_RoundToInt(fDamage, -1), 6.0f, DAMAGE_TYPE_MAGICAL, TRUE);
+	effect eFoesDoTC 	= EffectDamageOverTime(PS_RoundToInt(fDamage, 1), 6.0f, DAMAGE_TYPE_COLD);
 	effect eFoesDoT		= EffectLinkEffects(eFoesDoTC, eFoesDoTM);
 	effect eFoesVFX		= EffectNWN2SpecialEffectFile("fx_spell_creeping_cold");
 	

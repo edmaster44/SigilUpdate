@@ -334,8 +334,8 @@ const int COMBAT_MODS_FX = 2997;
 //used in equipment fx in ps_inc_equipment
 const int EQUIP_FX = 2998;
 
-// as above but specifically for armor optimization feats
-const int ARMOR_OPT_FX = 2999;
+// as above but specifically for armor optimization skill penalty reduction
+const int ARMOR_OPT_FX = 2995;
 
 // another in ps_inc_equipment, but for dodge ac for graceful bucklers, kenjutsu, and bojutsu.
 // (nature of these means you can only have one active so they will share
@@ -1179,6 +1179,8 @@ const int FEAT_GIANT_FINESSE = 21920;
 const int FEAT_UNNERVE = 21914;
 const int FEAT_SHARPSHOOTER = 21913;
 const int FEAT_ALCHEMICAL_INFUSION = 21919;
+const int FREEZE_SPELL_ID = 2996;
+const int SKILL_BONUS_FX = 2999;
 
 
 // New Base Items.

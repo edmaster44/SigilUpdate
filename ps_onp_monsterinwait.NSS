@@ -1,6 +1,8 @@
 
 
-const int FREEZE_SPELL_ID = -2999;
+#include "aaa_constants"
+
+
 void main() {
 
 	object oPC = GetLastPerceived();
