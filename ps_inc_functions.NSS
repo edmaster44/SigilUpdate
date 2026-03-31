@@ -651,9 +651,8 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 	if (nECL > 20) nECL = 20;
 	
 	if (nECL == 0){
-		if (GetLocalInt(oPC, "xpdebug") && GetLocalInt(oPC, "xpfromkill")){
-			SendMessageToPC(oPC, "You have no ECL, your XP therefore is not taxed");
-			SetLocalInt(oPC, "xpfromkill", FALSE);
+		if (GetLocalInt(oPC, "xpdebug") && bFromKill){
+			SendMessageToPC(oPC, "You have no ECL, therefore your XP is not taxed");
 		}
 		return nXP;
 	}
@@ -670,7 +669,7 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 	if (GetLocalInt(oPC, "xpdebug") && bFromKill){
 		string sMessage = "Your ECL is " + IntToString(nECL);
 		sMessage += "\nYour XP before tax is " + IntToString(nXP);
-		float fPercent = (1.0 - fTax) * 10.0;
+		float fPercent = (1.0 - fTax) * 100.0;
 		fPercent = PS_RoundDecimal(fPercent);
 		sMessage += "\nYour ECL XP tax is " + PS_PrettyFloatString(fPercent) + "%";
 		sMessage += "\nYour final XP is " + IntToString(nAdjusted);
