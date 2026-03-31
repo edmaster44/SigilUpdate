@@ -57,6 +57,7 @@ void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
 void DebugSpells();
+int AdjustCL(int bFromPsi);
 
 //------------------------------------------------------------------------------
 // PRIMARY FUNCTION
@@ -67,6 +68,8 @@ void DebugSpells();
 int X2PreSpellCastCode()
 {
 	object oTarget = GetSpellTargetObject();
+	
+	if (!AdjustCL(FALSE)) return FALSE;
 	
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
 	DebugSpells();
@@ -535,4 +538,49 @@ void DebugSpells(){
 		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
 	}
 	SendMessageToPC(OBJECT_SELF, sDebug);
+}
+
+// Psions, Psywars, rangers, and knights all have much lower caster levels in truth as far as the
+// game engine sees than what is used to set their durations, etc, because ofc the game engine
+// calculates knight and ranger CL much lower than we do and doesn't calculate psion and Psywars
+// CL beyond the base class from which they get their feats. So this will use ActionCastSpell's 
+// cheat argument to force the proper caster level.
+int AdjustCL(int bFromPsi){
+
+	if (GetItemActivated() != OBJECT_INVALID) return TRUE;
+	int nId = GetSpellId();
+	if (GetLocalInt(OBJECT_SELF, "PREPPED_" + IntToString(nId))){
+		DeleteLocalInt(OBJECT_SELF, "PREPPED_" + IntToString(nId));
+		return TRUE;
+	}
+	
+	int nClass = GetLastSpellCastClass();
+	if (!bFromPsi){
+		if (nClass != CLASS_TYPE_RANGER && nClass != CLASS_TYPE_PALADIN)
+			return TRUE;
+	}
+	int nCL;
+	if (bFromPsi){
+		nCL = PS_GetCasterLevel(OBJECT_SELF, CLASS_TYPE_PSION);
+		int nPsy = PS_GetCasterLevel(OBJECT_SELF, CLASS_PSYCHIC_WARRIOR);
+		if (nPsy > nCL) {
+			nCL = nPsy;
+			nClass = CLASS_PSYCHIC_WARRIOR;
+		} else {
+			nClass = CLASS_TYPE_PSION;
+		}
+	} else {
+		nCL = PS_GetCasterLevel(OBJECT_SELF, nClass);
+	}
+	
+	SetLocalInt(OBJECT_SELF, "PREPPED_" + IntToString(nId), TRUE);
+	
+	object oTarget = GetSpellTargetObject();
+	if (oTarget == OBJECT_INVALID){
+		AssignCommand(OBJECT_SELF, ActionCastSpellAtLocation(nId, GetSpellTargetLocation(), GetMetaMagicFeat(), TRUE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, nCL));
+	} else {
+		AssignCommand(OBJECT_SELF, ActionCastSpellAtObject(nId, oTarget, GetMetaMagicFeat(), TRUE, nCL, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	}
+	
+	return FALSE;
 }

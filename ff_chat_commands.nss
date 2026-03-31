@@ -464,8 +464,13 @@ string GetEffectInfo(object oPC){
 				nType == SUBTYPE_SUPERNATURAL || nType == SUBTYPE_EXTRAORDINARY){
 				if (FindSubString(sPermIdList, sId) == -1){
 					sPermIdList += sId;
-					nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-					sPermInfo += GetStringByStrRef(nNameRef) + " (ID: " + IntToString(nId) + ")\n";
+					if (nId == 34050){
+						sPermInfo += "Chat Bubble";
+					} else {
+						nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
+						sPermInfo += GetStringByStrRef(nNameRef);
+					}
+					sPermInfo += " (ID: " + IntToString(nId) + ")\n";
 				} 
 			} else {
 				if (FindSubString(sTempIdList, sId) == -1){
