@@ -37,17 +37,19 @@ const int nDailyXPlevel = 100;
 //so on login specific trusted players get a local integer set on them that will allow 
 //them to use those commands. For now, only me, admins, and dms, but when I come up with a way to deal
 //with the fact that caster level for resisting dispell is way, way lower than advertised for
-//psion, psywar, ranger, and knight, then I will add others. Like probably SwordSaintMusashiden
+//psion, psywar, ranger, and knight, then I will add others. See ff_chat_commands
 void SetTesterGroup(object oPC){
 	int bAdminLevelCommands = FALSE;
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
 	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
-		sName == "jelkia" || sName == "morrigan"){
+		sName == "jelkia" || sName == "morrigan" ||  sName == "swordsaintmusashiden" || sName == "snailin8r" || 
+		sName == "unseen_boredom" || GetIsDM(oPC)){
 			bAdminLevelCommands = TRUE;
-			SetLocalInt(oPC, "AllCommands", TRUE); //gives access to #SpellInfo, #KillInfo & #CreatureInfo commands
 	}
-	if (bAdminLevelCommands || sName == "swordsaintmusashiden")
-		SetLocalInt(oPC, "TesterCommands", TRUE); //gives access to #KillInfo and #CreatureInfo commands only
+	if (bAdminLevelCommands && !GetLocalInt(oPC, "AllCommands")){
+		SetLocalInt(oPC, "AllCommands", TRUE);
+	} else if (GetLocalInt(oPC, "AllCommands"))
+		DeleteLocalInt(oPC, "AllCommands");
 }
 
 // legacy characters may have actual multi-attack instead of 

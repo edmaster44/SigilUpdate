@@ -339,13 +339,12 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//given, particularly as it highlights the fact that caster level in terms of resisting dispells and
 	//and overcoming SR is much, much lower as far as the engine is concerned for psion, psywar, knight,
 	// and ranger
-	if (GetLocalInt(oSender, "AllCommands") || GetLocalInt(oSender, "TesterCommands")){
+	if (GetLocalInt(oSender, "AllCommands")){
 		//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
-		// called there and in psi_spellhook. For now this is for dms and myself (FlattedFifth) only because
-		// it reveals that the true CL of psion, psywar, ranger, and knight for purposes of resisting dispells
-		// is much, much lower than the number used for duration, etc. So until I figure out a way to fix it
-		// I would rather it not be general knowledge.
-		if (sInput == "#spellinfo" && GetLocalInt(oSender, "AllCommands")){
+		// called there and in psi_spellhook.This reveals that the true CL of psion, psywar, ranger, and 
+		// knight for purposes of resisting dispells  is much, much lower than the number used for duration,
+		// etc. So until I figure out a way to fix it I would rather it not be general knowledge.
+		if (sInput == "#spellinfo"){
 			int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
 			SetLocalInt(oSender, "spelldebug", bSpellDebug);
 			if (bSpellDebug){
