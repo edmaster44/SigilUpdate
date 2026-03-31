@@ -33,8 +33,6 @@ int PsiPrePowerCastCode();
 
 int PsiPrePowerCastCode()
 {
-
-	if (!AdjustCL(TRUE)) return FALSE;
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
 	DebugSpells();
 	
