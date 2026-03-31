@@ -9,6 +9,10 @@
 #include "x2_inc_itemprop"
 #include "nwnx_dae"
 
+
+
+int GetIsTester(object oPC);
+
 // a function that sends a tick message to the player every 6 seconds
 // to be used for debugging purposes. 
 void SixSecondTick(object oPC, int nRound = 1);
@@ -339,7 +343,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//given, particularly as it highlights the fact that caster level in terms of resisting dispells and
 	//and overcoming SR is much, much lower as far as the engine is concerned for psion, psywar, knight,
 	// and ranger
-	if (GetLocalInt(oSender, "AllCommands")){
+	if (GetIsTester(oSender)){
 		//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
 		// called there and in psi_spellhook.This reveals that the true CL of psion, psywar, ranger, and 
 		// knight for purposes of resisting dispells  is much, much lower than the number used for duration,
@@ -835,4 +839,21 @@ void SixSecondTick(object oPC, int nRound = 1){
 		// Schedule the next tick after 6 seconds
 		DelayCommand(6.0f, SixSecondTick(oPC, nRound));
 	}
+}
+
+//certain debugging chat commands give information that we don't want widely known, 
+//so on login specific trusted players get a local integer set on them that will allow 
+//them to use those commands. For now, only me, admins, and dms, but when I come up with a way to deal
+//with the fact that caster level for resisting dispell is way, way lower than advertised for
+//psion, psywar, ranger, and knight, then I will add others. See ff_chat_commands
+int GetIsTester(object oPC){
+	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
+	//debug
+	SendMessageToPC(oPC, "Your login name is " + sName);
+	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
+		sName == "jelkia" || sName == "morrigan" ||  sName == "swordsaintmusashiden" || sName == "snailin8r" || 
+		sName == "unseen_boredom" || GetIsDM(oPC)){
+			return TRUE;
+	}
+	return FALSE;
 }
