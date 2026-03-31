@@ -32,10 +32,14 @@ void main(){
     SpeakString("NW_ATTACK_MY_TARGET", TALKVOLUME_SILENT_TALK);
 	
 	int nRaceDead = GetRacialType(oDead);
+	int nSubDead = GetSubRace(oDead);
 	int bGiveCopper = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE && 
 		nRaceDead != RACIAL_TYPE_ANIMAL && nRaceDead != RACIAL_TYPE_BEAST &&
 		nRaceDead != RACIAL_TYPE_CONSTRUCT && nRaceDead != RACIAL_TYPE_ELEMENTAL &&
-		nRaceDead != RACIAL_TYPE_VERMIN);
+		nRaceDead != RACIAL_TYPE_VERMIN && nSubDead != 23 && nSubDead != 24 &&
+		nSubDead != 25 && nSubDead != 30 && nSubDead != 36 && nSubDead != 37 &&
+		nSubDead != 40 && nSubDead != 44 && nSubDead != 140 && nSubDead != 141 &&
+		nSubDead != 142);
 	
 	struct PartyData data = GetPartyData(oKiller);	
 	
@@ -118,11 +122,15 @@ void main(){
 				if (GetLocalInt(oMember, "xpdebug")){
 					sDebug = "Max level in party: " + IntToString(data.nMax);
 					sDebug += "\nParty Size: " + IntToString(data.nNum);
-					sDebug += "\nThe enemy HD is " + IntToString(nDeadHD);
+					sDebug += "\nEnemy resref: " + GetResRef(oDead);
+					int nVar = StringToInt(Get2DAString("racialtypes", "Name", nRaceDead));
+					sDebug += "\nEnemy Race: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRaceDead) + ")";
+					nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSubDead));
+					sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSubDead) + ")";
+					sDebug += "\nEnemy HD: " + IntToString(nDeadHD);
 					float fVar = PS_RoundDecimal(fCRoriginal);
-					sDebug += "\nThe enemy CR is " + PS_PrettyFloatString(fVar);
-					if (nElite > 0) sDebug += "\nThe enemy elite rating is :" + IntToString(nElite);
-					else sDebug += "\nThe enemy is not elite";
+					sDebug += "\nEnemy CR: " + PS_PrettyFloatString(fVar);
+					sDebug += "\nEnemy Elite Rating:" + IntToString(nElite);
 					sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
 					sDebug += "\nParty XP Bonus: ";
 					fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 10.0;
