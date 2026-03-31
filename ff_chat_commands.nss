@@ -7,6 +7,7 @@
 #include "ps_inc_advscript"
 #include "ps_inc_randomitems"
 #include "x2_inc_itemprop"
+#include "nwnx_dae"
 
 // a function that sends a tick message to the player every 6 seconds
 // to be used for debugging purposes. 
@@ -24,6 +25,9 @@ string GetEffectInfo(object oPC);
 
 //gets full pc information for bug reports
 string GetDebugInfo(object oPC);
+
+//gets all available information about a target non-pc creature
+string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID);
 
 //primary function
 int GetIsFFcommand(object oSender, int nChannel, string sMessage){
@@ -171,32 +175,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// debugging command that gets info of the sender's current area
 	else if (sInput == "#areainfo"){
 		SendMessageToPC(oSender, GetAreaInfo(GetArea(oSender), oSender));
-		return TRUE;
-	}
-	else if (sInput == "#effectinfo"){
-		SendMessageToPC(oSender, GetEffectInfo(oSender));
-		return TRUE;
-	}
-	//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
-	// called there and in psi_spellhook
-	else if (sInput == "#spellinfo"){
-		int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
-		SetLocalInt(oSender, "spelldebug", bSpellDebug);
-		if (bSpellDebug){
-			sFeedback = "Turning on spell debugging messages\nThis will remain in ";
-			sFeedback += "effect until you type #SpellInfo again or until server resets.";
-		} else sFeedback = "Turning off spell debugging messages";
-		SendMessageToPC(oSender, sFeedback);
-		return TRUE;
-	}
-	else if (sInput == "#killinfo"){
-		int bXPDebug = !GetLocalInt(oSender, "xpdebug");
-		SetLocalInt(oSender, "xpdebug", bXPDebug);
-		if (bXPDebug){
-			sFeedback = "Turning on combat kill debugging messages\nThis will remain in ";
-			sFeedback += "effect until you type #KillInfo again or until server resets.";
-		} else sFeedback = "Turning off combat kill debugging messages";
-		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
 	//debugging command that tells you the tag and resref of the targeted item
@@ -356,9 +334,79 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 	}
 	//END DM OR TEST SERVER ONLY COMMANDS
+	
+	//the following commands only work for specific, trusted players due to the nature of the information
+	//given, particularly as it highlights the fact that caster level in terms of resisting dispells and
+	//and overcoming SR is much, much lower as far as the engine is concerned for psion, psywar, knight,
+	// and ranger
+	if (GetLocalInt(oSender, "AllCommands") || GetLocalInt(oSender, "TesterCommands")){
+		//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
+		// called there and in psi_spellhook. For now this is for dms and myself (FlattedFifth) only because
+		// it reveals that the true CL of psion, psywar, ranger, and knight for purposes of resisting dispells
+		// is much, much lower than the number used for duration, etc. So until I figure out a way to fix it
+		// I would rather it not be general knowledge.
+		if (sInput == "#spellinfo" && GetLocalInt(oSender, "AllCommands")){
+			int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
+			SetLocalInt(oSender, "spelldebug", bSpellDebug);
+			if (bSpellDebug){
+				sFeedback = "Turning on spell debugging messages\nThis will remain in ";
+				sFeedback += "effect until you type #SpellInfo again or until server resets.";
+			} else sFeedback = "Turning off spell debugging messages";
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (sInput == "#killinfo"){
+			int bXPDebug = !GetLocalInt(oSender, "xpdebug");
+			SetLocalInt(oSender, "xpdebug", bXPDebug);
+			if (bXPDebug){
+				sFeedback = "Turning on combat kill debugging messages\nThis will remain in ";
+				sFeedback += "effect until you type #KillInfo again or until server resets.";
+			} else sFeedback = "Turning off combat kill debugging messages";
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (sInput == "#creatureinfo"){
+			oItem = GetPlayerCurrentTarget(oSender);
+			if (!GetIsObjectValid(oItem))
+				sFeedback = "No creature selected";
+			else sFeedback = GetCreatureInfo(oItem, oSender);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (sInput == "#effectinfo"){
+			SendMessageToPC(oSender, GetEffectInfo(oSender));
+			return TRUE;
+		}
+	}
+	//end trusted player only debug commands
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
 	return FALSE;
+}
+
+string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID){
+	if ((GetIsPC(oCreature) || GetIsDM(oCreature)) && !GetIsDM(oCaller))
+		return "Full information cannot be gathered on players except by DMs";
+		
+	//note that we don't actually check if the target is a creature because
+	//some of this information, such as hit dice or ac, can apply to placeables
+		
+	string sDebug = "Resref: " + GetResRef(oCreature);
+	int nVar = StringToInt(Get2DAString("racialtypes", "Name", GetRacialType(oCreature)));
+	sDebug += "\nRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
+	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", GetSubRace(oCreature)));
+	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
+	sDebug += "\nHD: " + IntToString(PS_GetLevel(oCreature));
+	float fVar = PS_RoundDecimal(GetChallengeRating(oCreature));
+	sDebug += "\nCR: " + PS_PrettyFloatString(fVar);
+	sDebug += "\nElite Rating:" + GetLocalString(oCreature,"ELITE");
+	sDebug += "\nMax HP: " + IntToString(GetMaxHitPoints(oCreature));
+	sDebug += "\nAC: " + IntToString(GetAC(oCreature));
+	nVar = GetBaseAttackBonus(oCreature);
+	sDebug += "\nBAB: " + IntToString(nVar);
+	sDebug += "\nTotal AB: " + IntToString(nVar + dae_GetOnHandAttackModifier(oCreature));
+	
+	return sDebug;
 }
 
 string GetDebugInfo(object oPC){

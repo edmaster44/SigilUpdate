@@ -2592,14 +2592,15 @@ void main() {
             playerToWP( oPC, sTag );
         }
 
-        // Loose invisability & stealth
-
-        if (GetLocalInt(OBJECT_SELF, "gdr_fail_strip") != 1) {
-
-            RemoveSpecificEffect(EFFECT_TYPE_INVISIBILITY, oPC);
-
-            SetActionMode(oPC, ACTION_MODE_STEALTH, FALSE);
-        }
+        // Loose invisibility & stealth 
+		// -unless it's just because you feel fucking cold, what the hell?!?! -FlattedFifth
+		if (GetLocalString(OBJECT_SELF, "gdr_fail_msg") != 
+			"<color=red><b>A bitter gust of wind chills you to the bone.</b></color>"){
+			if (GetLocalInt(OBJECT_SELF, "gdr_fail_strip") != 1) {
+				RemoveSpecificEffect(EFFECT_TYPE_INVISIBILITY, oPC);
+				SetActionMode(oPC, ACTION_MODE_STEALTH, FALSE);
+			}
+		}
 
         // Apply visual effect
 

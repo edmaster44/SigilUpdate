@@ -2802,10 +2802,10 @@ int PS_GetLevel(object oPC){
 //  ***New version by Clangeddin**  
   //  int iHD     = GetHitDice(oPC);
   // ***New version by FlattedFifth**
-	int iHD;
-	if (GetIsPC(oPC)) iHD = PS_GetLevelByXP(oPC);
+	//int iHD;
+	if (GetIsPC(oPC)) return PS_GetLevelByXP(oPC);
 	else return GetHitDice(oPC);
-	
+	/*
     if (ALLOW_ECL_LEVEL_30) return iHD;
     int iLA     = PS_GetEssenceECL(oPC);
     if (iHD <= iLA)
@@ -2816,6 +2816,7 @@ int PS_GetLevel(object oPC){
     {   iRet = 30;  } // failsafe for bugged characters
     //SendMessageToPC(oPC, "Debug: Adjusted level " + IntToString(iRet));
     return iRet;
+	*/
 }
 
 int PS_GetMaxPartylevel(object oPC) //finds highest level in party (with ECL)

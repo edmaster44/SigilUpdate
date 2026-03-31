@@ -33,6 +33,23 @@
 const int nDailyXP = 300;
 const int nDailyXPlevel = 100;
 
+//certain debugging chat commands give information that we don't want widely known, 
+//so on login specific trusted players get a local integer set on them that will allow 
+//them to use those commands. For now, only me, admins, and dms, but when I come up with a way to deal
+//with the fact that caster level for resisting dispell is way, way lower than advertised for
+//psion, psywar, ranger, and knight, then I will add others. Like probably SwordSaintMusashiden
+void SetTesterGroup(object oPC){
+	int bAdminLevelCommands = FALSE;
+	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
+	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
+		sName == "jelkia" || sName == "morrigan"){
+			bAdminLevelCommands = TRUE;
+			SetLocalInt(oPC, "AllCommands", TRUE); //gives access to #SpellInfo, #KillInfo & #CreatureInfo commands
+	}
+	if (bAdminLevelCommands || sName == "swordsaintmusashiden")
+		SetLocalInt(oPC, "TesterCommands", TRUE); //gives access to #KillInfo and #CreatureInfo commands only
+}
+
 // legacy characters may have actual multi-attack instead of 
 // natural multi-attack, so the absence of natural multi-attack
 // means that they get regular multi-attack removed in ps_inc_equipment
@@ -659,6 +676,7 @@ void main()
 		ff_update_feats(oPC); // used to be ff_sneak_fix, now single source of all general feat updates
 		DelayCommand(1.0f, GiveCreatureSkin(oPC));
 		LookForSharedRouters();
+		SetTesterGroup(oPC);
 		
 	}
 }

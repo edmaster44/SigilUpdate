@@ -1,8 +1,9 @@
 //V. 1.03
 
-#include "ps_inc_functions"
+
 #include "ps_inc_onhit"
 #include "nwnx_sql"
+#include "ff_chat_commands"
 
 struct PartyData{
 int nMax;
@@ -117,30 +118,21 @@ void main(){
 					}
 					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
 				}
-				// eclxp tax function reads following 2 local ints to know if the xp should be reported
-				// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
-				if (GetLocalInt(oMember, "xpdebug")){
-					sDebug = "Max level in party: " + IntToString(data.nMax);
-					sDebug += "\nParty Size: " + IntToString(data.nNum);
-					sDebug += "\nEnemy resref: " + GetResRef(oDead);
-					int nVar = StringToInt(Get2DAString("racialtypes", "Name", nRaceDead));
-					sDebug += "\nEnemy Race: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRaceDead) + ")";
-					nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSubDead));
-					sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSubDead) + ")";
-					sDebug += "\nEnemy HD: " + IntToString(nDeadHD);
-					float fVar = PS_RoundDecimal(fCRoriginal);
-					sDebug += "\nEnemy CR: " + PS_PrettyFloatString(fVar);
-					sDebug += "\nEnemy Elite Rating:" + IntToString(nElite);
-					sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
-					sDebug += "\nParty XP Bonus: ";
-					fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 10.0;
-					sDebug += PS_PrettyFloatString(PS_RoundDecimal(fVar));
-					sDebug += "%";
-					sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
-					SendMessageToPC(oMember, sDebug);
-				}
-				PS_GiveXPReward(oMember, nFinalXP, TRUE);
 			}
+			// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
+			if (GetLocalInt(oMember, "xpdebug")){
+				sDebug = "Max level in party: " + IntToString(data.nMax);
+				sDebug += "\nParty Size: " + IntToString(data.nNum);
+				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
+				sDebug += "\nParty XP Bonus: ";
+				float fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 100.0;
+				sDebug += PS_PrettyFloatString(PS_RoundDecimal(fVar)) + "%";
+				sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
+				sDebug += "\nEnemy Data:\n";
+				sDebug += GetCreatureInfo(oDead);
+				SendMessageToPC(oMember, sDebug);
+			}
+			if (nFinalXP > 0) PS_GiveXPReward(oMember, nFinalXP, TRUE);
 		}
 		oMember = GetNextFactionMember(oKiller, TRUE);
 	}
