@@ -515,8 +515,13 @@ string GetEffectInfo(object oPC){
 				nType == SUBTYPE_SUPERNATURAL || nType == SUBTYPE_EXTRAORDINARY){
 				if (FindSubString(sPermIdList, sId) == -1){
 					sPermIdList += sId;
-					nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-					sPermInfo += GetStringByStrRef(nNameRef) + " (ID: " + IntToString(nId) + ")\n";
+					if (nId == 34050){
+						sPermInfo += "Chat Bubbles";
+					} else {
+						nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
+						sPermInfo += GetStringByStrRef(nNameRef);
+					}
+					sPermInfo += " (ID: " + IntToString(nId) + ")\n";
 				} 
 			} else {
 				if (FindSubString(sTempIdList, sId) == -1){
@@ -849,7 +854,7 @@ void SixSecondTick(object oPC, int nRound = 1){
 int GetIsTester(object oPC){
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
 	//debug
-	SendMessageToPC(oPC, "Your login name is " + sName);
+	//SendMessageToPC(oPC, "Your login name is " + sName);
 	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
 		sName == "jelkia" || sName == "morrigan" ||  sName == "swordsaintmusashiden" || sName == "snailin8r" || 
 		sName == "unseen_boredom" || GetIsDM(oPC)){
