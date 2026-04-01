@@ -10,7 +10,7 @@
 #include "nwnx_dae"
 
 
-
+int GetHasAllAccess(object oPC);
 int GetIsTester(object oPC);
 
 // a function that sends a tick message to the player every 6 seconds
@@ -31,7 +31,7 @@ string GetEffectInfo(object oPC);
 string GetDebugInfo(object oPC);
 
 //gets all available information about a target non-pc creature
-string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID);
+string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bFromChat = FALSE);
 
 //primary function
 int GetIsFFcommand(object oSender, int nChannel, string sMessage){
@@ -344,21 +344,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//and overcoming SR is much, much lower as far as the engine is concerned for psion, psywar, knight,
 	// and ranger
 	if (GetIsTester(oSender)){
-		//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
-		// called there and in psi_spellhook.This reveals that the true CL of psion, psywar, ranger, and 
-		// knight for purposes of resisting dispells  is much, much lower than the number used for duration,
-		// etc. So until I figure out a way to fix it I would rather it not be general knowledge.
-		if (sInput == "#spellinfo"){
-			int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
-			SetLocalInt(oSender, "spelldebug", bSpellDebug);
-			if (bSpellDebug){
-				sFeedback = "Turning on spell debugging messages\nThis will remain in ";
-				sFeedback += "effect until you type #SpellInfo again or until server resets.";
-			} else sFeedback = "Turning off spell debugging messages";
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (sInput == "#killinfo"){
+		if (sInput == "#killinfo"){
 			int bXPDebug = !GetLocalInt(oSender, "xpdebug");
 			SetLocalInt(oSender, "xpdebug", bXPDebug);
 			if (bXPDebug){
@@ -368,16 +354,30 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
+		else if (sInput == "#effectinfo"){
+			oItem = GetPlayerCurrentTarget(oSender);
+			if (!GetIsObjectValid(oItem))
+				oItem = oSender;
+			SendMessageToPC(oSender, GetEffectInfo(oItem));
+			return TRUE;
+		}
+		//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
+		else if (sInput == "#spellinfo"){
+			int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
+			SetLocalInt(oSender, "spelldebug", bSpellDebug);
+			if (bSpellDebug){
+				sFeedback = "Turning on spell debugging messages\nThis will remain in ";
+				sFeedback += "effect until you type #SpellInfo again or until server resets.";
+			} else sFeedback = "Turning off spell debugging messages";
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
 		else if (sInput == "#creatureinfo"){
 			oItem = GetPlayerCurrentTarget(oSender);
 			if (!GetIsObjectValid(oItem))
 				sFeedback = "No creature selected";
-			else sFeedback = GetCreatureInfo(oItem, oSender);
+			else sFeedback = GetCreatureInfo(oItem, oSender, TRUE);
 			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (sInput == "#effectinfo"){
-			SendMessageToPC(oSender, GetEffectInfo(oSender));
 			return TRUE;
 		}
 	}
@@ -387,11 +387,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	return FALSE;
 }
 
-string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID){
+string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bFromChat = FALSE){
 	if ((GetIsPC(oCreature) || GetIsDM(oCreature)) && !GetIsDM(oCaller))
-		return "Full information cannot be gathered on players except by DMs";
+		return "This information cannot be gathered on players except by DMs";
 		
-	//note that we don't actually check if the target is a creature because
+	//note that we don't actually check if the target object type is creature because
 	//some of this information, such as hit dice or ac, can apply to placeables
 		
 	string sDebug = "Resref: " + GetResRef(oCreature);
@@ -403,11 +403,14 @@ string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID){
 	float fVar = PS_RoundDecimal(GetChallengeRating(oCreature));
 	sDebug += "\nCR: " + PS_PrettyFloatString(fVar);
 	sDebug += "\nElite Rating:" + GetLocalString(oCreature,"ELITE");
-	sDebug += "\nMax HP: " + IntToString(GetMaxHitPoints(oCreature));
-	sDebug += "\nAC: " + IntToString(GetAC(oCreature));
-	nVar = GetBaseAttackBonus(oCreature);
-	sDebug += "\nBAB: " + IntToString(nVar);
-	sDebug += "\nTotal AB: " + IntToString(nVar + dae_GetOnHandAttackModifier(oCreature));
+	if (GetHasAllAccess(oCaller)){
+		sDebug += "\nMax HP: " + IntToString(GetMaxHitPoints(oCreature));
+		sDebug += "\nAC: " + IntToString(GetAC(oCreature));
+		nVar = GetBaseAttackBonus(oCreature);
+		sDebug += "\nBAB: " + IntToString(nVar);
+		sDebug += "\nTotal AB: " + IntToString(nVar + dae_GetOnHandAttackModifier(oCreature));
+	}
+	if (bFromChat) sDebug += "\n" + GetEffectInfo(oCreature);
 	
 	return sDebug;
 }
@@ -850,15 +853,20 @@ void SixSecondTick(object oPC, int nRound = 1){
 //so on login specific trusted players get a local integer set on them that will allow 
 //them to use those commands. For now, only me, admins, and dms, but when I come up with a way to deal
 //with the fact that caster level for resisting dispell is way, way lower than advertised for
-//psion, psywar, ranger, and knight, then I will add others. See ff_chat_commands
+//psion, psywar, ranger, and knight, then I will add others.
+int GetHasAllAccess(object oPC){
+	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
+	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
+		sName == "jelkia" || sName == "morrigan" || GetIsDM(oPC)) 
+			return TRUE;
+	return FALSE;
+}
+
 int GetIsTester(object oPC){
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
-	//debug
-	//SendMessageToPC(oPC, "Your login name is " + sName);
-	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
-		sName == "jelkia" || sName == "morrigan" ||  sName == "swordsaintmusashiden" || sName == "snailin8r" || 
-		sName == "unseen_boredom" || GetIsDM(oPC)){
+	if (sName == "swordsaintmusashiden" || sName == "snailin8r" || sName == "unseen_boredom")
 			return TRUE;
-	}
+	if (GetHasAllAccess(oPC)) return TRUE;
+	
 	return FALSE;
 }

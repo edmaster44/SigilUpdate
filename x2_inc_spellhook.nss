@@ -527,6 +527,7 @@ void DebugSpells(){
 	sDebug += "\nSpell Id: " + IntToString(nId);
 	nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
 	sDebug += "\nSpell Name: " + GetStringByStrRef(nNameRef);
+	sDebug += "\nSpell Save DC: " + IntToString(GetSpellSaveDC());
 
 	nId = GetSpellFeatId();
 	if (nId != 0){

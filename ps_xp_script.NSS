@@ -129,7 +129,7 @@ void main(){
 				sDebug += PS_PrettyFloatString(PS_RoundDecimal(fVar)) + "%";
 				sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
 				sDebug += "\nEnemy Data:\n";
-				sDebug += GetCreatureInfo(oDead);
+				sDebug += GetCreatureInfo(oDead, oMember);
 				SendMessageToPC(oMember, sDebug);
 			}
 			if (nFinalXP > 0) PS_GiveXPReward(oMember, nFinalXP, TRUE);
