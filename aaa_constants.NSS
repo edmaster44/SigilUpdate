@@ -1180,7 +1180,11 @@ const int FEAT_UNNERVE = 21914;
 const int FEAT_SHARPSHOOTER = 21913;
 const int FEAT_ALCHEMICAL_INFUSION = 21919;
 const int FREEZE_SPELL_ID = 2996;
-const int SKILL_BONUS_FX = 2999;
+const int SKILL_BONUS_FX = 2999; // note that this is now the spell id of the single persistent feat 
+								//that replaces all others, though the individual previous persistent feats
+								//retain their previous spell ids. See ff_feat_refresh_fx for details
+								
+const int REFRESH_FX_FEAT = 21905; // the feat that calls the spell id above
 
 
 // New Base Items.

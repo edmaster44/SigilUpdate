@@ -192,6 +192,7 @@ void RestStart(object oPC)
 	IncrementalDebug(oPC, "start: bottom");
 }
 
+/* now handles in ff_feat_refresh_fx
 void AlternativeSkillStatScaling (object oPC)
 {
 
@@ -240,10 +241,9 @@ void AlternativeSkillStatScaling (object oPC)
 	
 	eFX = SupernaturalEffect(eFX);
 	eFX = SetEffectSpellId(eFX, SKILL_BONUS_FX);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
-		 
-		 
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);	 		 
 }
+*/
 
 void RestFinish(object oPC)
 {
@@ -270,7 +270,7 @@ void RestFinish(object oPC)
 	DoPsyPathFeatProgression(oPC);
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
-	AlternativeSkillStatScaling(oPC);
+	//AlternativeSkillStatScaling(oPC); // now handled in ff_feat_refresh_fx
 	
 	if (CheckTimeStamp(oPC, "REST") > cSaveWait)
 	{	
