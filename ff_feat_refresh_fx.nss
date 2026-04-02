@@ -27,11 +27,11 @@ void main(){
 	int nId;
 	for (i = 0; i <= nMax; i++){
 		if (i != REFRESH_FX_FEAT){
-			if (GetHasFeat(i, oPC, TRUE)){
+			if (GetHasFeat(i, oPC)){
 				if (StringToInt(Get2DAString("feat", "Auto_Refresh", i)) == 1){
 					nId = StringToInt(Get2DAString("feat", "SPELLID", i));
 					if (nId > 0){
-						AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_ANY, TRUE, 30,
+						AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_NONE, TRUE, 0,
 						PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 					}
 				}
