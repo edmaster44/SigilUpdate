@@ -107,12 +107,6 @@ void fGrantSneakFeats(object oPC){
 
 
 void fUpdateOtherFeats(object oPC){
-
-	//give new persistent feat manager
-	if (!GetHasFeat(REFRESH_FX_FEAT, oPC))
-		FeatAdd(oPC, REFRESH_FX_FEAT, FALSE);
-	
-	
 	// call to ps_inc_functions to grant Imbue Item to psi and to warlocks with warlock prcs.
 	PS_ManageImbueItem(oPC);
 	
