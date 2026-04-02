@@ -78,7 +78,7 @@ void main()
                 nHD = PS_GetLevel(oTarget);
                 if (nHD <= 8 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(nCasterLevel));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(nCasterLevel));
                 }
 
                 //Determine if 1 or 2 effects are going to be applied
@@ -100,13 +100,13 @@ void main()
                 {
                     eVisual = EffectVisualEffect(nVisual);
                     //Apply the visual effect
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget));
                 }
                 if(nVisual2 != 0)
                 {
                     eVisual = EffectVisualEffect(nVisual2);
                     //Apply the visual effect
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget));
                 }
             }
         }
@@ -115,7 +115,7 @@ void main()
 	}
 	// Apply Cone visual fx
 	fMaxDelay += 0.5f;
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 	            nVis = VFX_HIT_SPELL_FIRE;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_FIRE);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
 			}
         break;
 
@@ -161,7 +161,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 	            nVis = VFX_HIT_SPELL_ACID;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_ACID);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
 			}
         break;
 
@@ -171,7 +171,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
 	            nVis = VFX_HIT_SPELL_LIGHTNING;
 	            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_ELECTRICITY);
 	            ePrism = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
 			}
         break;
 
@@ -179,7 +179,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
             {
                 effect ePoison = EffectPoison(POISON_BEBILITH_VENOM);
 				nVis = VFX_HIT_SPELL_POISON;
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePoison, oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePoison, oTarget));
             }
         break;
 
@@ -193,7 +193,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
                     ePrism = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
                     eLink = EffectLinkEffects(eDur2, ePrism);
 //                    eLink = EffectLinkEffects(eLink, eDur2);
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));
                 }
             }
         break;
@@ -208,7 +208,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
                 if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay))
                 {
                     //nVis = VFX_HIT_SPELL_ENCHANTMENT;
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));
                 }
             }
         break;
@@ -219,7 +219,7 @@ int ApplyPrismaticEffect(int nEffect, object oTarget)
                 {
                     nVis = VFX_HIT_SPELL_NECROMANCY;
                     ePrism = EffectDeath();
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePrism, oTarget));
                 }
             }
         break;

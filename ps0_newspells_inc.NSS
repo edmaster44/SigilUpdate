@@ -29,11 +29,11 @@ void PS_Spell_DreadWord(object oPC, object oTarget, int nSpell)
 			
 	if (GetAlignmentGoodEvil(oPC) != ALIGNMENT_GOOD)
 	{	SendMessageToPC(oPC, "The Dread Word only effects good creatures.");
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);	}
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);	}
 	else
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC))
-		{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
+		{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
 	}
 }
 
@@ -60,19 +60,19 @@ void PS_Spell_Gutwrench(object oPC, object oTarget, int nSpell)
 		// Check for "no discernible anatomy"
 		if (PS_GetHasDiscernableAnatomy(oTarget) == FALSE)
 		{   SendMessageToPCByStrRef(oPC, 16780102);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
 			return;		}
 		
         if(!MyResistSpell(OBJECT_SELF, oTarget))
         {	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC))
-            {	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
+            {	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
 				DelayCommand(0.5f, ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, ePuddle, GetLocation(oTarget), 30.0f));
-				DelayCommand(0.6f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oPC, 3.0f));
-				DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eAbsorb, oPC));
-				DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbsHeal, oPC, HoursToSeconds(24)));	}
+				DelayCommand(0.6f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oPC, 3.0f));
+				DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eAbsorb, oPC));
+				DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbsHeal, oPC, HoursToSeconds(24)));	}
             else
             {	eDam = EffectLinkEffects(eDam, eSpurt);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);	}
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);	}
         }
     }
 }
@@ -171,7 +171,7 @@ object CreateIllusoryClone(object oCreature, string sTemplate, location lLocatio
 	{
 		if (GetEffectType(eEffect) == EFFECT_TYPE_VISUALEFFECT)
 		{
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oClone); 
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oClone); 
 		}
 		
 		eEffect = GetNextEffect(oCreature);
@@ -239,12 +239,12 @@ void GetAttentionOfHostiles(object oCaller, float fRadius, int nSpellID = -1, st
 						AssignCommand(oTarget, ClearActions());
 						AssignCommand(oTarget, ActionAttack(oCaller));
 						if (nSpellID >= 0) {
-							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 6.1f);
+							PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 6.1f);
 						}
 					}
 				} else {
 					if (nSpellID >= 0) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 6.1f);
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 6.1f);
 					}
 				}
 			}

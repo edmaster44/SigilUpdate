@@ -71,7 +71,7 @@ void main()
 			}
 		}
 	
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 		SetCreatureAppearanceType(oPC, iShape);
 		
 		if (GetIsObjectValid(oHide))
@@ -166,7 +166,7 @@ void main()
 	
 		ePoly = ExtraordinaryEffect(ePoly);
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(GetTotalLevels(oPC, TRUE)));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(GetTotalLevels(oPC, TRUE)));
 		
 		// Now get VFX that should really be applied
 		

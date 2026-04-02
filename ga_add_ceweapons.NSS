@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Ceremorph 1/17/2015
 // Creates equippable creature weapons
 

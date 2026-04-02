@@ -129,7 +129,7 @@ void main()
         for(; nRepeats > 0; nRepeats--)
         {
             // Loop over targets in the cone shape
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, OBJECT_SELF, 1.0);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, OBJECT_SELF, 1.0);
             oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, fWidth, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
             while(GetIsObjectValid(oTarget))
             {
@@ -166,8 +166,8 @@ void main()
                         {
                             fDelay = GetDistanceBetweenLocations(lManifester, GetLocation(oTarget)) / 20.0f;
                             eDamage = EffectDamage(nDamage, enAdj.nDamageType);
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                         }// end if - There was still damage remaining to be dealt after adjustments
                     }// end if - SR check
                 }// end if - Target validity check

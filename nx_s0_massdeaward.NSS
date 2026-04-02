@@ -76,7 +76,7 @@ void main()
 			{
 				//disease resistance and saves are handled by the EffectDisease function automatically
 				effect eHit = EffectVisualEffect( VFX_DUR_SPELL_DEATH_WARD );
-				ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+				PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 
 			}
 		}

@@ -61,7 +61,7 @@ void main()
 		if (!GetIsDead(oTarget) && GetIsEnemy(oTarget, oCaster)) {
 		
 			//SpeakString("nw_s2_auradespairA.ns: On Enter: target is enemy");
-	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavePenalty, oTarget);			
+	        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavePenalty, oTarget);			
 		}
 	}
 }

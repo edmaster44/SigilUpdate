@@ -67,13 +67,13 @@ void ResetFight(object oBOSS, int nCUTSCENE)
 		if ((sADD == "heraldannhi_add") || (sADD == "heraldannhi_font")) DestroyObject(oPC);
 		else 
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oPC, 5.0);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oPC, 5.0);
 			if (nCUTSCENE == FALSE)
 			{
 				if (GetIsOwnedByPlayer(oPC) == TRUE)
 				{
 					AssignCommand(oPC, JumpToObject(oENTRANCE));
-					if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
+					if (GetIsDead(oPC) == TRUE) PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 				}
 			}
 		}
@@ -93,7 +93,7 @@ void FinalChampions(object oBOSS)
 		else oPORTAL = GetObjectByTag("wp_herald_annhi_start");
 		oCHAMP = CreateObject(OBJECT_TYPE_CREATURE, "heraldannhi_add", GetLocation(oPORTAL), TRUE);
 		SetFirstName(oCHAMP, "Eternal Reaver");
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, OmegaChampion(3), oCHAMP);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, OmegaChampion(3), oCHAMP);
 		AssignCommand(oCHAMP, ActionMoveToObject(oCENTER));
 		nCOUNT = nCOUNT + 1;
 	}
@@ -106,7 +106,7 @@ void CallChampions(object oBOSS)
 	object oPORTAL = GetObjectByTag("wp_herald_annhi", nRANDOM);
 	object oCHAMP = CreateObject(OBJECT_TYPE_CREATURE, "heraldannhi_add", GetLocation(oPORTAL), TRUE);
 	object oCENTER = GetObjectByTag("wp_herald_center");
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, OmegaChampion(0), oCHAMP);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, OmegaChampion(0), oCHAMP);
 	AssignCommand(oCHAMP, ActionMoveToObject(oCENTER));
 	DestroyObject(oCHAMP, RoundsToSeconds(10)); //failsafe
 }
@@ -117,7 +117,7 @@ void ShockWave(object oBOSS)
 	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
 	location lBOSS = GetLocation(oBOSS);
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_AOE_ETHEREAL_PURGE), oBOSS);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_AOE_ETHEREAL_PURGE), oBOSS);
 	effect eKNOCK = EffectKnockdown();
 	effect eHIT = EffectVisualEffect(VFX_COM_HIT_SONIC);
 	effect eDMG;
@@ -130,8 +130,8 @@ void ShockWave(object oBOSS)
 			if (nDMG > 0)
 			{
 				eDMG = EffectLinkEffects(eHIT, EffectDamage(nDMG, DAMAGE_TYPE_SONIC, DAMAGE_POWER_NORMAL, TRUE));
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKNOCK, oTARGET, 3.0);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKNOCK, oTARGET, 3.0);
 			}
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
@@ -152,10 +152,10 @@ void SharePain(object oBOSS)
 		{
 			eFX = EffectShareDamage(oTARGET, 1, 99);
 			eFX = SupernaturalEffect(eFX);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oBOSS, fDUR);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oBOSS, fDUR);
 			eFX = EffectBeam(VFX_BEAM_EVIL, oBOSS, BODY_NODE_MONSTER_9);
 			eFX = SupernaturalEffect(eFX);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTARGET, fDUR);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTARGET, fDUR);
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
 	}
@@ -175,22 +175,22 @@ void SoulFire(object oBOSS, int nPHASE)
 	{
 		if ((GetIsEnemy(oTARGET, oBOSS) == TRUE)&&(GetIsDead(oTARGET) == FALSE))
 		{
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTARGET);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTARGET);
 			if (nPHASE == 3)
 			{
 				ForceRest(oTARGET);
 				nDMG = GetCurrentHitPoints(oTARGET) / 2;
-				if (WillSave(oTARGET, 40, SAVING_THROW_TYPE_FIRE) == SAVING_THROW_CHECK_FAILED) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSOUL, oTARGET);
+				if (WillSave(oTARGET, 40, SAVING_THROW_TYPE_FIRE) == SAVING_THROW_CHECK_FAILED) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSOUL, oTARGET);
 				else nDMG = nDMG / 2;
 			}
 			else
 			{
 				ResetFeatUses(oTARGET, FEAT_INVALID, TRUE, TRUE);
 				nDMG = GetCurrentHitPoints(oTARGET) / 4;
-				if (WillSave(oTARGET, 40, SAVING_THROW_TYPE_FIRE) == SAVING_THROW_CHECK_FAILED) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSOUL, oTARGET, RoundsToSeconds(1));
+				if (WillSave(oTARGET, 40, SAVING_THROW_TYPE_FIRE) == SAVING_THROW_CHECK_FAILED) PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSOUL, oTARGET, RoundsToSeconds(1));
 				else nDMG = nDMG / 2;
 			}
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDMG, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE), oTARGET);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDMG, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE), oTARGET);
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);;
 	}
@@ -214,9 +214,9 @@ void FontsOfLife(object oBOSS, int nPHASE)
 	{
 		oPORTAL = GetObjectByTag("wp_herald_font", nCOUNT);
 		oFONT = CreateObject(OBJECT_TYPE_CREATURE, "heraldannhi_font", GetLocation(oPORTAL), TRUE);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oFONT);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oFONT);
 		if (nPHASE == 3) SetFirstName(oFONT, "Eternal Font of Life");
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBEAM, oFONT, fDUR);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBEAM, oFONT, fDUR);
 		nCOUNT = nCOUNT + 1;
 	}
 }
@@ -225,7 +225,7 @@ void BurstLife(object oBOSS)
 {
 	if (GetLocalInt(oBOSS, "BOSS_PHASE_CUTSCENE") == 1) return;
 	location lBOSS = GetLocation(oBOSS);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_AOE_CONJURATION), oBOSS);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_AOE_CONJURATION), oBOSS);
 	effect eDIS = EffectSlow();
 	eDIS = EffectLinkEffects(eDIS, EffectSilence());
 	float fDUR = RoundsToSeconds(1);
@@ -235,7 +235,7 @@ void BurstLife(object oBOSS)
 		if (GetTag(oTARGET) == "heraldannhi_font") ForceRest(oTARGET);
 		else if ((GetIsEnemy(oTARGET, oBOSS) == TRUE)&&(GetIsDead(oTARGET) == FALSE))
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDIS, oTARGET, fDUR);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDIS, oTARGET, fDUR);
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
 	}
@@ -250,7 +250,7 @@ void AnnounceNova(object oBOSS)
 	object oFONT = GetObjectByTag("heraldannhi_font", nFONT);
 	while (oFONT != OBJECT_INVALID)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oFONT, fDUR);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oFONT, fDUR);
 		nFONT = nFONT + 1;
 		oFONT = GetObjectByTag("heraldannhi_font", nFONT);
 	}
@@ -278,8 +278,8 @@ void CleanseNova(object oBOSS, int nPHASE)
 	effect eDMG;
 	effect eNOVA = EffectVisualEffect(VFX_HIT_CLEANSING_NOVA);
 	effect eBLIND = EffectNewBlindness();
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eNOVA, oBOSS);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nDMG), oBOSS);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNOVA, oBOSS);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nDMG), oBOSS);
 	while (oTARGET != OBJECT_INVALID)
 	{
 		if ((nPHASE < 3) && (GetTag(oTARGET) == "heraldannhi_font")) DestroyObject(oTARGET);
@@ -288,11 +288,11 @@ void CleanseNova(object oBOSS, int nPHASE)
 			nSAVE = FortitudeSave(oTARGET, 20 + nDMG / 10, SAVING_THROW_TYPE_POSITIVE);
 			if (nSAVE == SAVING_THROW_CHECK_FAILED && !GetIsImmune(oTARGET, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
 			{
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBLIND, oTARGET, fDUR);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBLIND, oTARGET, fDUR);
 			}
 			else nDMG = nDMG / 2;
 			eDMG = EffectDamage(nDMG, DAMAGE_TYPE_POSITIVE, DAMAGE_POWER_NORMAL, TRUE);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
 	}
@@ -301,7 +301,7 @@ void CleanseNova(object oBOSS, int nPHASE)
 void TotalDarkness(object oBOSS)
 {
 	if (GetLocalInt(oBOSS, "BOSS_DEFEATED") == 1) return;
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_AOE_CRADLE_OF_RIME), oBOSS);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_AOE_CRADLE_OF_RIME), oBOSS);
 	float fDUR = RoundsToSeconds(1);
 	effect eDARK = EffectDarkness();
 	eDARK = EffectLinkEffects(eDARK, EffectVisualEffect(VFX_HIT_CRADLE_OF_RIME));
@@ -313,7 +313,7 @@ void TotalDarkness(object oBOSS)
 	{
 		if ((GetIsEnemy(oTARGET, oBOSS) == TRUE)&&(GetIsDead(oTARGET) == FALSE))
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDARK, oTARGET, fDUR);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDARK, oTARGET, fDUR);
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lBOSS, TRUE);
 	}
@@ -355,7 +355,7 @@ void CueWarning(object oBOSS, int nPHASE, int nTYPE)
 	{
 		effect eFX = EffectVisualEffect(nVFX);
 		eFX = SupernaturalEffect(eFX);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oBOSS, RoundsToSeconds(1));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oBOSS, RoundsToSeconds(1));
 	}
 }
 
@@ -392,7 +392,7 @@ void BeginPhase(object oBOSS, int nPHASE)
 {
 	SetLocalInt(oBOSS, "BOSS_SPECIAL", 0);
 	ResetFight(oBOSS, TRUE);
-	DelayCommand(3.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(1), oBOSS));
+	DelayCommand(3.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(1), oBOSS));
 	float fDELAY = RoundsToSeconds(1);
 	string sTEXT;
 	switch (nPHASE)
@@ -423,8 +423,8 @@ void main()
 		{
 			int nBHP = 12000;
 			effect eFX = BossFX(nBHP);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oBOSS);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nBHP), oBOSS);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oBOSS);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nBHP), oBOSS);
 		}
 		if ((nHP == nMAX)&&(GetLocalInt(oBOSS, "BOSS_PHASE_STARTED") == 0)) return;
 		ResetFight(oBOSS, FALSE);

@@ -107,9 +107,9 @@ void main()
                         if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
                         {
                         //Apply linked effects and VFX impact
-                        //ApplyEffectToObject(nDurType, eSave, oTarget, fDuration);
-                        ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
-						ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                        //PS_ApplyEffectToObject(nDurType, eSave, oTarget, fDuration);
+                        PS_ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
+						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
                         }
                     }
                 }

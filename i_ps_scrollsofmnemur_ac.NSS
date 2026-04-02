@@ -53,6 +53,6 @@ void main()
 
 	effect eVis = EffectVisualEffect(SPELLABILITY_KOS_DOT);
 	effect eDamage = EffectDamage(d6(nScrollCounter), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_ENERGY, TRUE); 
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC); 
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC); 
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oPC);
 }

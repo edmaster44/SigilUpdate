@@ -26,7 +26,7 @@ void main()
 	{
 		SetLocalInt(OBJECT_SELF, "METAPSI_EXTEND", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Extend Power");
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDur, OBJECT_SELF);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDur, OBJECT_SELF);
 	}
 	else
 	{

@@ -80,9 +80,9 @@ void main()
             {
                
                 //Apply the VFX impact and effects
-                //DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                //DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
             }
         }
     }
@@ -91,8 +91,8 @@ void main()
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_NEGATIVE_ENERGY_RAY, FALSE));
         eRay = EffectBeam(VFX_BEAM_EVIL, OBJECT_SELF, BODY_NODE_HAND);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
     }
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }

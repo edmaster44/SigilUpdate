@@ -80,12 +80,12 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-			//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF))
 			{	// Fail save, so go insane & get buffed, then die.
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-				DelayCommand(fDuration, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));	// You're already dead and you don't even know it!
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				DelayCommand(fDuration, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));	// You're already dead and you don't even know it!
 			}
 		}			
 	}	

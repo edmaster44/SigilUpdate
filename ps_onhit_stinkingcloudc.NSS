@@ -49,7 +49,7 @@ void main()
                    //Apply the VFX impact and linked effects
                    if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON) == FALSE)
                    {
-                     	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
+                     	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> dazes "+GetName(oTarget)+"</color>";
 						DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
                    }

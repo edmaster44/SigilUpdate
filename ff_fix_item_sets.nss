@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // This script reapplies the correct tag and local variables to items in item sets that had
 // this information corrupted by using the appearance changer
 // FlattedFifth, Jan 30, 2026

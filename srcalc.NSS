@@ -27,11 +27,11 @@ int DoWarlockMyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
            needsAnotherRoll = 1;
            break;
            case 2:
-           DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eGlobe, oTarget));
+           DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eGlobe, oTarget));
            Resisted = 2;
            break;
            case 3:
-           DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMantle, oTarget));
+           DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMantle, oTarget));
            Resisted = 3;
            break;		 
 		   
@@ -45,7 +45,7 @@ int DoWarlockMyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
 				FloatingTextStringOnCreature("CL: " + casterlevel + ",SR Roll: " + rollmsg, oCaster); */
 			if (roll < nTargetSR)
 			{
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSR, oTarget));  
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSR, oTarget));  
 				Resisted = 1; 
 			}
 			else

@@ -63,9 +63,9 @@ void main()
         if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nSave, SAVING_THROW_TYPE_NEGATIVE))
         {
             //Apply effects to target and caster
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eSlay, oTarget);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSlay, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
         }
    }
 

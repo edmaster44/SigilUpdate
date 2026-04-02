@@ -80,7 +80,7 @@ void main()
 			// visual!!!!
 			//effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 		    //effect eLink = EffectLinkEffects(eFireDamage, eVis);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 			
 			
 			

@@ -96,7 +96,7 @@ void main() {
 		SetLocalString(oSensate, "ANIMATION", "playflute");
 		
 		effect eFlute = EffectNWN2SpecialEffectFile("fx_hss_flutea");
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFlute, oSensate);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFlute, oSensate);
 		SetFirstName(oSensate, "Flute Player");
 	}
 	if (nSector == 5) {
@@ -121,7 +121,7 @@ void main() {
 		SetLocalString(oSensate, "ANIMATION", "playguitar");
 		
 		effect eFlute = EffectNWN2SpecialEffectFile("fx_hss_mandolina");
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFlute, oSensate);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFlute, oSensate);
 		SetFirstName(oSensate, "Lute Player");
 		
 		//Save that we did this
@@ -137,7 +137,7 @@ void main() {
 		SetLocalString(oSensate, "ANIMATION", "drinkbeerfidget");
 		
 		effect eDrink = EffectNWN2SpecialEffectFile("fx_handr_stein");
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrink, oSensate);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrink, oSensate);
 		
 		//Save that we did this
 		SetLocalObject(OBJECT_SELF, "ENCOUNTER_SPAWNED_7", oSensate);
@@ -214,7 +214,7 @@ object CreateRandomSensate(object oWP, object oPC = OBJECT_INVALID) {
 	SetLastName(oNPC, "");
 	SetDescription(oNPC, "A member of the Society of Sensation, enjoying themselves in the Festhall.");
 	//SetDescription(oNPC, "AppearanceType: "+IntToString(nRace)+"\nHead: "+IntToString(nHead)+"\nHair: "+IntToString(nHair));
-	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(100), oNPC));
+	DelayCommand(0.2f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(100), oNPC));
 
 	//give them animations and the conversation script
 	SetCreatureScriptsToSet(oNPC, 11);

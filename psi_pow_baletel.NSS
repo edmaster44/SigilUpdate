@@ -93,10 +93,10 @@ void main()
 
                     //Apply the damage and some VFX
                     effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_LOS_NORMAL_10), oTarget);
-                    DelayCommand(0.75f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_LOS_NORMAL_20), oTarget));
-                    DelayCommand(1.5f,  ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_LOS_NORMAL_30), oTarget));
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_LOS_NORMAL_10), oTarget);
+                    DelayCommand(0.75f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_LOS_NORMAL_20), oTarget));
+                    DelayCommand(1.5f,  PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_LOS_NORMAL_30), oTarget));
                 } // end if - the target can be teleported
 				else
 				{

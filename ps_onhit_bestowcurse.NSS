@@ -47,7 +47,7 @@ void main()
             if (!OnHitSavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oCaster))
             {
                 //Apply Effect and VFX
-                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> curses "+GetName(oTarget)+"</color>";
 				SendMessageToPC(oCaster, sReport);
             }

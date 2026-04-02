@@ -171,8 +171,8 @@ void DoPortal(location lLoc, int nMode)
    SetLocalObject(oMOD,"DMFI_PORTAL_B",oPortal);
    SetLocalInt(oPortal,"DMFI_DESTINATION",0);
    }
-  ApplyEffectToObject(2,ePortal2,oPortal);
-  ApplyEffectToObject(2,ePortal1,oPortal);
+  PS_ApplyEffectToObject(2,ePortal2,oPortal);
+  PS_ApplyEffectToObject(2,ePortal1,oPortal);
 }
 
 void DestroyPortals()

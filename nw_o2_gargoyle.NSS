@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: NW_O2_GARGOYLE.nss
 //:: Copyright (c) 2001 Bioware Corp.
@@ -21,7 +22,7 @@ void main()
     
     object oGargoyle = CreateObject(OBJECT_TYPE_CREATURE, "c_gargoyle_c", GetLocation(OBJECT_SELF));
 	effect eMind = EffectNWN2SpecialEffectFile("fx_global_earth_elemental_arise", oGargoyle);
-    ApplyEffectToObject(2, eMind, oGargoyle);
+    PS_ApplyEffectToObject(2, eMind, oGargoyle);
     SetPlotFlag(OBJECT_SELF, FALSE);
     DestroyObject(OBJECT_SELF, 0.5);
    }

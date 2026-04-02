@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 void RunTaunt(object oPC, object oTARGET, float fDUR, int nINTERRUPT = TRUE, int nPVP = TRUE, int nSTART = TRUE)
@@ -8,7 +9,7 @@ void RunTaunt(object oPC, object oTARGET, float fDUR, int nINTERRUPT = TRUE, int
 		if (GetLocalObject(oTARGET, "TAUNT_SOURCE") != OBJECT_INVALID) return;
 		if (nINTERRUPT == TRUE) AssignCommand(oTARGET, ClearAllActions());
 		effect eTAUNT = ExtraordinaryEffect(EffectVisualEffect(VFX_DUR_TAUNT));
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTAUNT, oTARGET, fDUR);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTAUNT, oTARGET, fDUR);
 		SetLocalObject(oTARGET, "TAUNT_SOURCE", oPC);	
 	}
 	if (fDUR <= 0.0f)
@@ -45,7 +46,7 @@ void main()
 	effect ePEN = EffectSkillDecrease(SKILL_HIDE, 50);	
 	ePEN = EffectLinkEffects(ePEN, EffectSkillDecrease(SKILL_MOVE_SILENTLY, 50));
 	ePEN = ExtraordinaryEffect(ePEN);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePEN, oPC, 18.0);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePEN, oPC, 18.0);
 	
 	object oTARGET = GetFirstObjectInShape(SHAPE_SPHERE, fRADIUS, lPC, TRUE);
 	while (oTARGET != OBJECT_INVALID)
@@ -59,7 +60,7 @@ void main()
 				
 			}	
 		}
-		else if (nDEFEND >= 3) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, 18.0);
+		else if (nDEFEND >= 3) PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, 18.0);
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, fRADIUS, lPC, TRUE);
 	}
 }

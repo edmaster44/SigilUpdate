@@ -69,6 +69,6 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SHADOW_SHIELD, FALSE));
     //Apply linked effect
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
 }

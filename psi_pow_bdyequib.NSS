@@ -65,7 +65,7 @@ void main()
 	float fDur = 600.0 * manif.nManifesterLevel;
 	if(manif.bExtend) fDur *= 2;
 
-	SignalAndApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+	SignalAndPS_ApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
 		oManifester, fDur);
     
 }

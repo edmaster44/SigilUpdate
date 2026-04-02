@@ -81,7 +81,7 @@ void main()
 	    RemoveEffectsFromSpell(oTarget, SPELL_GREATER_SPELL_MANTLE);
 	
 	    //Apply the VFX impact and effects
-		//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+		//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
     }// end if - Successfull manifestation
 }

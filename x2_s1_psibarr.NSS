@@ -69,7 +69,7 @@ void main()
     //Apply the VFX impact and effects
     if (!GetHasSpellEffect(GetSpellId(),OBJECT_SELF))
     {
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
     }
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
 }

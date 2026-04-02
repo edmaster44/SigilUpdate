@@ -40,9 +40,9 @@ void main()
 				eDam = EffectDamage(nDamage);
 				
 				//Apply the VFX impact and effects for Nausea
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, 6.0f);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, 6.0f);
             }
 		}
 		

@@ -87,7 +87,7 @@ void main() {
 		}
 		
 		AssumeGivenAppearance(oCaster, Appearance);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_HumForm_DragonUE(oCaster);
 	
 	} else if (nSpell == 1722) { //Devil
@@ -102,7 +102,7 @@ void main() {
 		}
 		
 		AssumeGivenAppearance(oCaster, Appearance);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_HumForm_DragonUE(oCaster);
 	
 	}  else if (nSpell == 1723) { //Abomination
@@ -111,7 +111,7 @@ void main() {
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockeldritch", oCaster);
 		
 		AssumeGivenAppearance(oCaster, Appearance);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_HumForm_DragonUE(oCaster);
 	
 	}  else if (nSpell == 1724) { //Fey
@@ -127,7 +127,7 @@ void main() {
 		}
 		
 		AssumeGivenAppearance(oCaster, Appearance);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_HumForm_DragonUE(oCaster);
 		
 	}  else if (nSpell == 1725) { //Unshift
@@ -135,7 +135,7 @@ void main() {
 		PS_RestoreOriginalAppearance(oCaster);
 		
 		//General useful things for shifting back
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		PS_DragForm_DragonUE(oCaster);
 	
 	} 
@@ -161,7 +161,7 @@ void AddPolymorphBoni(object oCaster, string sVFX = "") {
 	eBoost = SetEffectSpellId(eBoost, 843);
 	eBoost = SupernaturalEffect(eBoost);
 		
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
 }
 
 void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance) {

@@ -87,16 +87,16 @@ void main()
 					eDamage = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDamage);
 					eDamage = SetEffectSpellId(eDamage, -1); // set to invalid spell ID for stacking
 					eDamage = ExtraordinaryEffect(eDamage);
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
-					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
 				}
 				else if(nSaved == 0)
 				{
 					eDamage = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDamage);
 					eDamage = SetEffectSpellId(eDamage, -1); // set to invalid spell ID for stacking
 					eDamage = ExtraordinaryEffect(eDamage);
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
-					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
 				}
 				}
 				//Fire cast spell at event for the specified target

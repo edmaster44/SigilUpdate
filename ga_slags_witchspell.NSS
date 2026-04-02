@@ -18,17 +18,17 @@ void main() {
 	if (nRoll < 33) {
 		eEffect = EffectDamage(d6(2), DAMAGE_TYPE_FIRE);
 		if (ReflexSave(oPC, 15, SAVING_THROW_TYPE_NONE, oWitch) == FALSE) {
-			DelayCommand(0.85f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oPC));
+			DelayCommand(0.85f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oPC));
 		} 
 	} else if (nRoll < 66) {
 		eEffect = EffectDazed();
 		if (WillSave(oPC, 15, SAVING_THROW_TYPE_NONE, oWitch) == FALSE) {
-			DelayCommand(0.85f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
+			DelayCommand(0.85f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
 		} 
 	} else {
 		eEffect = EffectNewBlindness();
 		if (!FortitudeSave(oPC, 15, SAVING_THROW_TYPE_NONE, oWitch) && !GetIsImmune(oPC, IMMUNITY_TYPE_BLINDNESS, oWitch)) {
-			DelayCommand(0.85f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
+			DelayCommand(0.85f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.0f));
 		} 
 	}
 

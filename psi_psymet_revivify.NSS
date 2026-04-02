@@ -59,7 +59,7 @@ void main()
 	    {
 	        //Apply raise dead effect and VFX impact
 	        ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
-	        ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+	        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 	    }
 	}
 }

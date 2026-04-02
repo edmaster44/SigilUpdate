@@ -79,14 +79,14 @@ void main()
 	                     //Set the damage property
 	                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
 	                     //Apply the damage effect and VFX impact
-	                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-	                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+	                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
 	                }
 	                else
 	                {
 	                     //Apply the death effect and VFX impact
-	                     ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
-	                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+	                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	                }
 	            }
 			}
@@ -151,7 +151,7 @@ int MySavingThrow2(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVI
          nSpellID != SPELL_HORRID_WILTING)
         {
             eVis = EffectVisualEffect(VFX_IMP_DEATH);
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
     }
     if(bValid == 2)
@@ -170,7 +170,7 @@ int MySavingThrow2(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVI
 // This is the edit, so that a positive value can be return when resisted.
 //            bValid = FALSE;
         }
-        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
     return bValid;
 }

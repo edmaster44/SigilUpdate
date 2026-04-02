@@ -42,7 +42,7 @@ const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
-void SignalAndApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
+void SignalAndPS_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
 	object oTarget, float fDuration=0.0f);
 int GetMissChance(object oCaster);
 int GetSpellFailedBecauseMissChance(object oCaster);
@@ -56,7 +56,6 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-void RegisterSpell();
 void DebugSpells();
 
 //------------------------------------------------------------------------------
@@ -273,7 +272,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
         int nSID = GetSpellId()+1;
         SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
         SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
         FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
     }
     else
@@ -375,11 +374,11 @@ void X2DoBreakConcentrationCheck()
 }
 
 //got tired of having to write both signal event and apply effect, so made a wrapper that does both
-void SignalAndApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
+void SignalAndPS_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
 	object oTarget, float fDuration=0.0f){
 	
 	SignalEvent(oTarget, EventSpellCastAt(oCaster, nSpellId, bHostile));
-	ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
+	PS_ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
 }
 
 // More robust way to remove effects. Specify either the id, the type, the creator, or any combination
@@ -537,23 +536,4 @@ void DebugSpells(){
 		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
 	}
 	SendMessageToPC(OBJECT_SELF, sDebug);
-}
-
-// At the time of this writing I'm fairly convinced that the source of the dispell bug is that
-// numberous spell scripts and feat effects that apply effects to characters are missing the
-// typical SignalEvent(oTarget, EventSpellCastAt... etc that EVERY default nwn spell script has.
-// The fact that every OC spell script has it makes me suspect it's necessary for managing the 
-// effect stack, and that without it there are "orphan effects" that get wiped. So, lets just
-// insert RegisterSpell() into ever spell script, shall we? Much easier typing than the whole
-// thing. -FlattedFifth, April 1, 2026
-void RegisterSpell(){
-	object oTarget = GetSpellTargetObject();
-	if (!GetIsObjectValid(oTarget)) return;
-	
-	int nId = GetSpellId();
-	int bHarmful = FALSE;
-	if (StringToInt(Get2DAString("spells", "HostileSetting", nId)) == 1)
-		bHarmful = TRUE;
-		
-	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, bHarmful));
 }

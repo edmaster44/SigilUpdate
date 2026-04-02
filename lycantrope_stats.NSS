@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Deals with adding and removing penalties for lycantropes in human form. By Electrohydra.
 // Called in ps_srr_changes and ps_srr_humanfraily
 
@@ -13,7 +14,7 @@ void applyPenalties(object oPC)
 			effect CONpen = ExtraordinaryEffect(EffectAbilityDecrease(ABILITY_CONSTITUTION, 2));
 		
 			effect eLink = SetEffectSpellId(EffectLinkEffects(STRpen, EffectLinkEffects(DEXpen, CONpen)), 1332);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, 0.0f);
 		}
 		else // wererat
 		{
@@ -21,7 +22,7 @@ void applyPenalties(object oPC)
 			effect CONpen = ExtraordinaryEffect(EffectAbilityDecrease(ABILITY_CONSTITUTION, 2));
 		
 			effect eLink = SetEffectSpellId(EffectLinkEffects(DEXpen, CONpen), 1332);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, 0.0f);
 		}
 	}
 }

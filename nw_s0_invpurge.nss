@@ -52,6 +52,6 @@ void main()
 	   nDuration = nDuration *2;	//Duration is +100%
     }
     //Create an instance of the AOE Object using the Apply Effect function
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, TurnsToSeconds(nDuration));
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, OBJECT_SELF);	// handled by spells.2da
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, TurnsToSeconds(nDuration));
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, OBJECT_SELF);	// handled by spells.2da
 }

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 void RemoveCreatureEffects(object creature)
@@ -67,10 +68,10 @@ void DoAntimagic(object creature)
 	RemoveCreatureEffects(creature);
 	RemoveItemEffects(creature);
 	
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectSpellFailure(), creature);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectSpellFailure(), creature);
 	
 	// create a supernatural silence effect that is not removed by resting
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectSilence()), creature);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectSilence()), creature);
 	
 	SetLocalInt(creature, "ps_anti_magic_zone", 1);
 	

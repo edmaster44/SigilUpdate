@@ -14,10 +14,10 @@ void DesertWind1(object oCaller) // Applies a Haste effect to the caller for 2 r
 	
 	// Apply VFX
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COMPETENCE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
 	
 	// apply effect
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectHaste(), oCaller, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectHaste(), oCaller, 60.0f);
 	
 	// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -33,11 +33,11 @@ void DesertWind2(object oCaller) // Gives the equiped weapons or gloves fire dam
 
 	// adds damage to character (to make it irresistable)
 	effect fireDamage2 = EffectDamageIncrease(DAMAGE_BONUS_8, DAMAGE_TYPE_FIRE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fireDamage2, oCaller, 12.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fireDamage2, oCaller, 12.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
 	
 		// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -69,7 +69,7 @@ void DesertWind3(object oCaller, object oTarget) // Throws a ball of fire at the
 		}
 		int iDamage = d8(numberOfDice + ECL) + PS_AddSneakDmgToSpell(oCaller, oTarget, DAMAGE_TYPE_FIRE);
 		effect eDamage = EffectDamage(iDamage, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
 	}
 	else
 	{
@@ -83,7 +83,7 @@ void DesertWind3(object oCaller, object oTarget) // Throws a ball of fire at the
 		}
 		int iDamage = d8(numberOfDice + ECL) + PS_AddSneakDmgToSpell(oCaller, oTarget, DAMAGE_TYPE_FIRE);
 		effect eDamage = EffectDamage(iDamage, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, 0.0f);
 		}
 }
 
@@ -99,11 +99,11 @@ void DiamondMind1(object oCaller, object oTarget) // If concentration check succ
 			if (ACpen < 3)
 				ACpen = 3;
 			effect ACdecrease = EffectACDecrease(ACpen);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oTarget, 30.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oTarget, 30.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_REGENERATION);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 		}
 	}
 	
@@ -129,20 +129,20 @@ void DiamondMind2(object oCaller) // Increases all base saves to the value of th
 	
 	if ((concentration - reflex) > 0)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, reflexBoost, oCaller, 30.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, reflexBoost, oCaller, 30.0f);
 	}
 		if ((concentration - fortitude) > 0)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fortBoost, oCaller, 30.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, fortBoost, oCaller, 30.0f);
 	}
 		if ((concentration - will) > 0)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, willBoost, oCaller, 30.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, willBoost, oCaller, 30.0f);
 	}
 	
 		// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COMPETENCE);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
 			
 		// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -161,11 +161,11 @@ void DiamondMind3(object oCaller) // Increases damage by 1/5 of a concentration 
 		damageBonus = damageBonus + 10;
 	}
 	effect damageIncrease = EffectDamageIncrease(damageBonus, DAMAGE_TYPE_MAGICAL); // Set to magical so it will bypass DR
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 18.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, damageIncrease, oCaller, 18.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
 	
 		// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -181,12 +181,12 @@ void IronHeart1(object oCaller) // +4 AB, -1 AC for 2 rounds.
 	effect attackBonus = EffectAttackIncrease(4);
 	effect ACdecrease = EffectACDecrease(1);
 	
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, attackBonus, oCaller, 12.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oCaller, 12.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, attackBonus, oCaller, 12.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ACdecrease, oCaller, 12.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_COURAGE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);	
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);	
 	
 		// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -207,11 +207,11 @@ void IronHeart2(object oCaller, object oTarget) //  Give the target -4 damage an
 		{
 			effect damageReduced = EffectDamageDecrease(4, DAMAGE_TYPE_ALL);
 			effect ABdecrease = EffectAttackDecrease(4);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(ABdecrease, damageReduced), oTarget, 30.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(ABdecrease, damageReduced), oTarget, 30.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);	
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);	
 		}
 	}
 	
@@ -233,7 +233,7 @@ void IronHeart3(object oCaller) // Removes a debuff from the caller
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_DEFENSE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);	
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);	
 
 	
 	// Blind
@@ -497,8 +497,8 @@ void ShadowHand1(object oCaller, object oTarget) // on a touch attack, gives the
 		{
 			effect visualEffect = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);
 			effect missChance = EffectMissChance(50, MISS_CHANCE_TYPE_NORMAL);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, visualEffect, oTarget, 0.0f);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, missChance, oTarget, 18.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, visualEffect, oTarget, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, missChance, oTarget, 18.0f);
 		}
 	}
 	
@@ -516,8 +516,8 @@ void ShadowHand2(object oCaller) // User becomes invisible for 4 round
 	effect eVis = EffectVisualEffect( VFX_DUR_INVISIBILITY );
 	effect invisibility = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
 	effect conceal = EffectConcealment(50);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(invisibility, eVis), oCaller, 30.0f);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, conceal, oCaller, 30.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(invisibility, eVis), oCaller, 30.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, conceal, oCaller, 30.0f);
 	
 	
 		// Initiates an attack against current target
@@ -546,7 +546,7 @@ void ShadowHand3(object oCaller, object oTarget) // User shadow jumps to a hosti
 	// Applies the miss chance.
 	effect visual = EffectVisualEffect(VFX_DUR_PROT_SHADOW_ARMOR);
 	effect conceal = EffectConcealment(80);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(visual, conceal), oCaller, 6.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(visual, conceal), oCaller, 6.0f);
 	
 		// Initiates an attack against current target
 	object currentTarget = oTarget;
@@ -565,11 +565,11 @@ void StoneDragon1(object oCaller, object oTarget) // on a touch attack, opponent
 	
 		if (touchAttackResult)
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDamageReductionNegated(), oTarget, 24.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDamageReductionNegated(), oTarget, 24.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 		}
 	}
 	
@@ -585,11 +585,11 @@ void StoneDragon2(object oCaller) // DR 15/- for 3 rounds.
 {		
 	SendMessageToPC(oCaller, "Using <i>Stone Bones.</i>");
 	effect dr = EffectDamageReduction(15, DAMAGE_POWER_NORMAL, 0, DR_TYPE_NONE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, dr, oCaller, 24.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, dr, oCaller, 24.0f);
 	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_DEFENSE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);
 	
 		// Initiates an attack against current target
 	object currentTarget = GetPlayerCurrentTarget(oCaller);
@@ -608,11 +608,11 @@ void StoneDragon3(object oCaller, object oTarget) // on a touch attack, root and
 	
 		if (touchAttackResult)
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(EffectEntangle(), EffectSlow()), oTarget, 24.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectLinkEffects(EffectEntangle(), EffectSlow()), oTarget, 24.0f);
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 		}
 	}
 	
@@ -629,12 +629,12 @@ void DevotedSpirit1(object oCaller, object oTarget) // ennemy gets -4AB, you get
 	if (PS_GetTargetInRange(oCaller, oTarget, 2925))
 	{
 		SendMessageToPC(oCaller, "Using <i>Iron Guard's Glare.</i>");
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(1, ATTACK_BONUS_MISC), oCaller, 18.0f);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(6, ATTACK_BONUS_MISC), oTarget, 18.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(1, ATTACK_BONUS_MISC), oCaller, 18.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackDecrease(6, ATTACK_BONUS_MISC), oTarget, 18.0f);
 		
 		// Apply a vfx
 		effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_JARRING);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 	}
 	
 		// Initiates an attack against current target
@@ -656,7 +656,7 @@ void DevotedSpirit2(object oCaller) // All nearby allies get +X AC for two round
 	{
 		if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && GetIsFriend(oTarget, oCaller) && oTarget != oCaller)
 		{
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectACIncrease(shieldAC), oTarget, 30.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectACIncrease(shieldAC), oTarget, 30.0f);
 		
 			// Sends a message to the target to inform it.
 			string hisher = "his";
@@ -665,7 +665,7 @@ void DevotedSpirit2(object oCaller) // All nearby allies get +X AC for two round
 			
 			// Apply a vfx
 			effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_DEFENSE);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oTarget, 0.0f);
 		}
 		
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, 30.0f, GetLocation(oCaller));

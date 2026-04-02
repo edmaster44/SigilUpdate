@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Carrions Crawler Brain Juice
 //:: NW_S0_1Carrion
@@ -18,5 +19,5 @@ void main()
     effect eVis = EffectVisualEffect(VFX_DUR_PARALYZED);
     effect eLink = EffectLinkEffects(eParal, eVis);
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
 }

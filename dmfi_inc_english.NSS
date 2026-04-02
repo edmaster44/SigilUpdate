@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_english - DM Friendly Initiative -  Include file for English Translation
 // Original Scripter:  Demetrious      Design: DMFI Design Team

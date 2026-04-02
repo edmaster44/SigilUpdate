@@ -89,8 +89,8 @@ void main()
         float fDuration = 60.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         //ApplyAbilityDamage(oTarget, ABILITY_DEXTERITY, 6, DURATION_TYPE_TEMPORARY, FALSE, fDuration, TRUE, manif.nSpellID, manif.nManifesterLevel);
 
         // Apply ASF to hide

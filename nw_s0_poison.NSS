@@ -56,11 +56,11 @@ void main()
 				// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 				int nDamage = PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_NEGATIVE);
 				if (nDamage > 0)
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
           
                 //Apply the poison effect and VFX impact
-                ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoison, oTarget);
-				//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);//This is redundant, if the target receives poison the VFX will play anyway
+                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoison, oTarget);
+				//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);//This is redundant, if the target receives poison the VFX will play anyway
             }
         }
     }

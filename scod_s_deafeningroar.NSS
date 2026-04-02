@@ -55,17 +55,17 @@ void main() {
 	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 	            
 				//visual effect
-	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 				
 				int nDamage = GetEldritchBlastDmg(oCaster, oTarget, FALSE, FALSE, TRUE, 1);
 				effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
 				
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	
 	            if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SONIC)) {
 				
 					//Standard effect - Deafness
-	                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, RoundsToSeconds(nRounds));
+	                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, RoundsToSeconds(nRounds));
 					
 					//Secondary higher level effect - might knockdown
 					if (nCasterLvl > 15) {
@@ -75,8 +75,8 @@ void main() {
 		                // * DO a strength check vs. Strength 20
 		                if (d20() + GetAbilityScore(oTarget, ABILITY_STRENGTH) <= 20 + d20() ) {
 							//Knockdown!
-		                    DelayCommand(0.8f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 6.0));
-                    		DelayCommand(0.8f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		                    DelayCommand(0.8f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 6.0));
+                    		DelayCommand(0.8f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		                }
 		                else {
 							//Failure message
@@ -92,5 +92,5 @@ void main() {
 	}
 	
 	effect eVis2 = EffectVisualEffect(VFX_IMP_SONIC);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, OBJECT_SELF, 3.0);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, OBJECT_SELF, 3.0);
 }

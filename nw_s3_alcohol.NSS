@@ -81,13 +81,13 @@ void MakeDrunk(object oTarget, int nPoints)
 			eDumb = EffectLinkEffects(eDumb, EffectDamageIncrease(iBonus, DAMAGE_TYPE_BLUDGEONING)); 
 			eDumb = EffectLinkEffects(eDumb, EffectAttackIncrease(nPoints));
 			if (GetHasFeat(FEAT_FOR_MEDICINAL_PURPOSES, oTarget, TRUE)) 
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(iDMLevel * 5), oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(iDMLevel * 5), oTarget);
 		}
 	}
 	
 	eDumb = ExtraordinaryEffect(eDumb);
 	
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDumb, oTarget, 60.0 + RoundsToSeconds(iDMLevel));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDumb, oTarget, 60.0 + RoundsToSeconds(iDMLevel));
  //   AssignCommand(oTarget, SpeakString(IntToString(GetAbilityScore(oTarget,ABILITY_INTELLIGENCE))));
 }
 void main()

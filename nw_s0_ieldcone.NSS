@@ -62,7 +62,7 @@ void main()
 
 	effect eCone = EffectVisualEffect( nConeVFX );
 	if (IsHellfireBlastActive()) eCone = EffectVisualEffect( VFX_INVOCATION_BRIMSTONE_DOOM );
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 	
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 7.0, GetLocation(OBJECT_SELF), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

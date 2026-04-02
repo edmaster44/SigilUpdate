@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 ////////////////////////////////////////////////////////////////////////////////
 // dmfi_inc_const - DM Friendly Initiative -  Define True Constants
 // Original Scripter:  Demetrious      Design: DMFI Design Team

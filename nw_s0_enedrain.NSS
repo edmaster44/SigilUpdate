@@ -78,12 +78,12 @@ void main()
         {
             //if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NEGATIVE))
             {
-                ApplyEffectToObject( DURATION_TYPE_PERMANENT, eDrain, oTarget );
-                ApplyEffectToObject( DURATION_TYPE_INSTANT, eVis, oTarget );
-				//ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
+                PS_ApplyEffectToObject( DURATION_TYPE_PERMANENT, eDrain, oTarget );
+                PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eVis, oTarget );
+				//PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
             }
         }
         }
-        ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
+        PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
     }
 }

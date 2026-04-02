@@ -106,7 +106,7 @@ void main()
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(nProtection));
         effect eVis  = EffectVisualEffect(VFX_IMP_ELEMENTAL_PROTECTION);
 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

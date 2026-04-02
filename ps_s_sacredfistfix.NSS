@@ -32,7 +32,7 @@ void main()
 			effect eAB =  EffectAttackDecrease(8);
 			eAB = SetEffectSpellId(eAB,nSpellId);
 			eAB = SupernaturalEffect(eAB);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAB, OBJECT_SELF);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAB, OBJECT_SELF);
 		}
 	}
 	else

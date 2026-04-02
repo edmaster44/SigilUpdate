@@ -66,11 +66,11 @@ void main() {
 					eLink = EffectLinkEffects(eLink, EffectOnDispel(0.1f, DoMagicDamageOnWaking(oTarget))); //if dispelled, do magic damage
 					if (GetIsPC(oTarget)) {
 						nCount++;
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 						DelayCommand((fDuration-0.1f), CheckAndDoMagicDamage(oTarget, nAwakeDice)); //for PCs, just check when the duration runs out
 					} else {
 						nCount++;
-						ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+						PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 						SetLocalInt(OBJECT_SELF, "AWAKEN_DICE", nAwakeDice);
 						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_awaken"); //do the damage when we are woken up
 					}
@@ -108,12 +108,12 @@ void main() {
 						if (GetIsPC(oTarget)) {
 							if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) {
 								nCount++;
-					    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					    		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 							}
 						}
 						else { // No save for monsters.
 							nCount++;
-					        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+					        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 						}
 					
 					}
@@ -130,7 +130,7 @@ void main() {
 
 void DoMagicDamageOnWaking(object oTarget, int nAwake = 2) {
 	effect eDamage = EffectDamage(d6(nAwake));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	SetLocalString(oTarget, "DamagedScript", "");
 }
 

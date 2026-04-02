@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Summon Animal Companion
 //:: NW_S2_AnimalComp

@@ -4,7 +4,7 @@
 void main()
 {
 	effect spawn = EffectNWN2SpecialEffectFile("fx_wooden_explosion_big", OBJECT_SELF);
-	ApplyEffectToObject(0, spawn, OBJECT_SELF);
+	PS_ApplyEffectToObject(0, spawn, OBJECT_SELF);
 	
 	/*string sTrap = GetLocalString(OBJECT_SELF, "ASSOCIATED_TRAP");
 	if (sTrap != "") {

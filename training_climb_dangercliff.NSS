@@ -65,7 +65,7 @@ void main () {
 		sFlavor = "<i>A helpful looking root pulls away from the rocks beneath your weight. You tumble backwards down the cliff.</i>";
 		
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		
 	} else if (nDC-nTotal <= 6) {
 		
@@ -75,11 +75,11 @@ void main () {
 		sFlavor = "<i>The foothold you're standing on crumbles beneath you. You tumble down the cliff face.</i>";
 		
 		effect eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		effect eKnock = EffectKnockdown();
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
 		
 	} else if (nDC-nTotal <= 9) {
 		
@@ -89,13 +89,13 @@ void main () {
 		sFlavor = "<i>You loose your balance while negotiating a narrow ledge, and down the cliff face. Sharp rocks are waiting for you at the bottom.</i>";
 		
 		effect eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		effect eKnock = EffectKnockdown();
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 3.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 3.0f);
 		
 	} else {
 		
@@ -105,15 +105,15 @@ void main () {
 		sFlavor = "<i>You reach an almost sheer portion of the climb, and start sliding. You are unable to find anything to hold onto, and slide down the cliff face. Sharp rocks are waiting for you at the bottom.</i>";
 		
 		effect eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		eDam = EffectDamage((nDamage/2), DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, TRUE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 		effect eKnock = EffectKnockdown();
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 6.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 6.0f);
 		
 	}
 	

@@ -77,8 +77,8 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster)) 
 		{
 			
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oCaster);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oCaster);
 		
 			//Fire cast spell at event for the specified target
   			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), TRUE));

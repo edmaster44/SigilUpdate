@@ -85,7 +85,7 @@ void main()
 					
 			eDmg = EffectDamage(nDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE);
 			eLink = EffectLinkEffects(eHit, eDmg);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 			nTotal++;
 			
 					
@@ -99,7 +99,7 @@ void main()
 
 		int iDmg = nTotal * PS_GetLevel(oCaster) / 2; // 0.5HP / level is equal to 1 point of CON damage.
 		effect eDmg = EffectDamage(iDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE); // hopefully this will bypass resistances.
-		DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oCaster));
+		DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oCaster));
 		
 		//HellfireShieldFeedbackMsg(nTotal, STRREF_HELLFIRE_SHIELD_NAME, oCaster);
 	} 

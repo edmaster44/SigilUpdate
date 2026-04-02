@@ -103,10 +103,10 @@ void main()
 					//eLink = EffectLinkEffects( eFire, eHoly );
 					eLink = EffectLinkEffects( eHoly, eFire );
 					eLink = EffectLinkEffects( eLink, eVis );
-                    //DelayCommand(0.6, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
-                    //DelayCommand( 0.6, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHoly, oTarget) );
-                    //DelayCommand(0.6, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                    DelayCommand(0.6, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+                    //DelayCommand(0.6, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
+                    //DelayCommand( 0.6, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHoly, oTarget) );
+                    //DelayCommand(0.6, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(0.6, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
                 }
             }
         }

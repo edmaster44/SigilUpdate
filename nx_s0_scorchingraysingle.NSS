@@ -73,7 +73,7 @@ void main()
 		float fDelay = 0.75;
 		
 		effect eFire = EffectNWN2SpecialEffectFile("fx_ignition");
-		//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, fDelay+(nNumRays-1));
+		//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, fDelay+(nNumRays-1));
 		
 		effect eMantle = GetFirstEffect(oTarget);
 		while (GetIsEffectValid(eMantle) &&
@@ -100,7 +100,7 @@ void main()
 				    MyResistSpell(OBJECT_SELF, oTarget);
 				    bResisted = TRUE;
 				}
-			   	DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
+			   	DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
 
 				ni++;
 				fDelay = fDelay + 1.6f;
@@ -153,7 +153,7 @@ void main()
 					eRay = EffectBeam(VFX_BEAM_FIRE, OBJECT_SELF, BODY_NODE_HAND);
 	
 	                //Apply the ability damage effect and VFX impact
-	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+	                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 				}
 				eRay = EffectBeam(VFX_BEAM_FIRE, OBJECT_SELF, BODY_NODE_HAND); //FIX: show when spell is resisted too
 	        }
@@ -171,16 +171,16 @@ void main()
 		   		
 				///DelayCommand((fDelay-0.5), ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eRay, lMiss, 0.5));	// missed beam that doesn't work
 		   		
-				//DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));	// nails him in the chest
+				//DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));	// nails him in the chest
 				//object oMiss = CreateObject( OBJECT_TYPE_WAYPOINT, "nw_waypoint001", lMiss );
-				//DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oMiss, 0.5));
+				//DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oMiss, 0.5));
 			
 				
 				// Flaky dodge animation for misses.  Seems like it plays this animation only when it feels like it.
 				//DelayCommand((fDelay-0.5), AssignCommand(oTarget, PlayAnimation(ANIMATION_FIREFORGET_DODGE_SIDE)));
 				
 			}
-			DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
+			DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
 				
 			ni++;
 			//if (ni == 1)

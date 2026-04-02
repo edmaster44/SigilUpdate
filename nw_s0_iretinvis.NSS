@@ -77,8 +77,8 @@ void OnDispellCallback( object oCaster, int nSaveDC, float fDuration )
 
                 // Apply effects to the currently selected target.
 				fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) * fDistToDelay ;
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
             }
 			else if ( nSaveResult == SAVING_THROW_CHECK_SUCCEEDED )	// Saving throw successful
 			{
@@ -88,7 +88,7 @@ void OnDispellCallback( object oCaster, int nSaveDC, float fDuration )
 			
                 // Apply effects to the currently selected target.
 				fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) * fDistToDelay ;
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
 			}
             
 		}
@@ -134,5 +134,5 @@ void main()
 
  
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget,fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget,fDuration);
 }

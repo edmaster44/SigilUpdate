@@ -10,6 +10,8 @@
 //:: Created On: August 23, 2021
 //:://////////////////////////////////////////////
 
+#include "ff_applyeffect"
+
 int AOE_PER_TRAPVIS = 81;
 int AOE_PER_TRAPINVIS = 82;
 int AOE_PER_ATTRAP = 101;
@@ -118,6 +120,6 @@ void ApplyTrapInvisibility(object oCaster, int nDC) {
 	if (nHideSuccess + nMSSuccess == 2) {
 		effect eInvis = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
 		effect eLink = EffectLinkEffects(eInvis, EffectVisualEffect(VFX_DUR_INVISIBILITY));
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, 9.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, 9.0f);
 	}
 }

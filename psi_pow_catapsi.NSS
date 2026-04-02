@@ -78,7 +78,7 @@ void main()
 		int AOE_MOB_CATAPSI = 134;//vfx_persistent ID
 
         effect eAOE = EffectAreaOfEffect(AOE_MOB_CATAPSI, "psi_pow_catapsia", "", "psi_pow_catapsib"); 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
 
         // Get an object reference to the newly created AoE
         location lTarget = GetLocation(oTarget);

@@ -84,9 +84,9 @@ void main()
 				effect eThrow = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2);
 				effect eAttackDown = EffectAttackDecrease(2);
 				// not linking because I think immunity to one could limit all
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamageDown, oTarget, RoundsToSeconds(1));
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eThrow, oTarget, RoundsToSeconds(1));	
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAttackDown, oTarget, RoundsToSeconds(1));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamageDown, oTarget, RoundsToSeconds(1));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eThrow, oTarget, RoundsToSeconds(1));	
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAttackDown, oTarget, RoundsToSeconds(1));
 			}*/
 			
 			// If applicable adds any sneak damage to total to be inflicted and reports the damage.
@@ -96,7 +96,7 @@ void main()
 			// visual!!!!
 			//effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 		    //effect eLink = EffectLinkEffects(eFireDamage, eVis);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 			
 			
 			

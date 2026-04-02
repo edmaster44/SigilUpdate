@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //
 // New NWNX API.  Sends a fake position update to player ReceivingPCObject,
 // for object TargetObject, setting the object to a position of FakePosition.

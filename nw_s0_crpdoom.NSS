@@ -98,7 +98,7 @@ void main()
 			{
 				if ( !GetIsDead(oCaster) && GetArea(oTarget) == GetArea(oCaster) )
 				{
-					ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePedes, oTarget, fDuration );
+					PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePedes, oTarget, fDuration );
 					int i;
 					for ( i = 1; i <= nDuration; i++ )
 					{
@@ -142,8 +142,8 @@ void RunSwarmAttack( object oTarget, float fDuration )
 		//Determine and apply damage + poison, DC save against this poison is 11
 		nDam = d6(2);
 		effect eHurt = EffectDamage( nDam, DAMAGE_TYPE_PIERCING );
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eHurt, oTarget );
-		ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePoison, oTarget, 30.0f);
+		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHurt, oTarget );
+		PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePoison, oTarget, 30.0f);
 	}
 
 }

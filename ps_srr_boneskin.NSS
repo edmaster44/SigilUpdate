@@ -23,7 +23,7 @@ void main()
 			amount = 6;
 		effect eAC = EffectACIncrease(amount);
 		eAC = SupernaturalEffect(eAC);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oTarget);
 	}
 	
 }

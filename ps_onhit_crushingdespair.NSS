@@ -68,8 +68,8 @@ void main()
 
                         if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
                         {
-                       	 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
-							ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                       	 	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
+							PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
                         }
                     }
                 }

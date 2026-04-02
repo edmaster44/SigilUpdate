@@ -75,8 +75,8 @@ void main()
         {
             if (fDuration>0.0)
             {
-                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));
-                ApplyEffectToObject(nDurType, eDur, GetItemPossessor(oMyWeapon), fDuration);
+                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));
+                PS_ApplyEffectToObject(nDurType, eDur, GetItemPossessor(oMyWeapon), fDuration);
                 AddKeenEffectToWeapon(oMyWeapon, fDuration);
             }
             return;

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 ///////////////////////////////////////////////////////
@@ -202,11 +203,11 @@ void CutClearAllActions(float fDelay, object oObject, int nClearCombatState, int
 void CutApplyEffectAtLocation(float fDelay, object oObject, int iDur, int iEffect, location lLoc, float fDur = 0.0, int iShift = TRUE);
 
 // Applies visual effect iEffect to oObject.
-// If you want to apply non-visual effect use CutApplyEffectToObject2
-void CutApplyEffectToObject(float fDelay, int iDur, int iEffect, object oObject, float fDur = 0.0, int iShift = TRUE);
+// If you want to apply non-visual effect use CutPS_ApplyEffectToObject2
+void CutPS_ApplyEffectToObject(float fDelay, int iDur, int iEffect, object oObject, float fDur = 0.0, int iShift = TRUE);
 
 // Applies eEffect to Object.
-void CutApplyEffectToObject2(float fDelay, int iDur, effect eEffect, object oObject, float fDur = 0.0, int iShift = TRUE);
+void CutPS_ApplyEffectToObject2(float fDelay, int iDur, effect eEffect, object oObject, float fDur = 0.0, int iShift = TRUE);
 
 void CutKnockdown(float fDelay, object oObject, float fDur = 3.0, int iShift = TRUE);
 
@@ -690,9 +691,9 @@ object FreezeAssociate(object oPlayers, int bVanish)
     object oHench = GetHenchman(oPlayers, i);
     while(oHench != OBJECT_INVALID)
     {
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oHench);
+        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oHench);
         if(bVanish)
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oHench);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oHench);
         i++;
         oHench = GetHenchman(oPlayers, i);
     }
@@ -700,33 +701,33 @@ object FreezeAssociate(object oPlayers, int bVanish)
     object oCompanion = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPlayers);
     if (oCompanion != OBJECT_INVALID)
     {
-       ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oCompanion);
+       PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oCompanion);
        if(bVanish)
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oCompanion);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oCompanion);
     }
 
     object oFamiliar = GetAssociate(ASSOCIATE_TYPE_FAMILIAR, oPlayers);
     if (oFamiliar != OBJECT_INVALID)
     {
-       ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oFamiliar);
+       PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oFamiliar);
        if(bVanish)
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oFamiliar);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oFamiliar);
     }
 
     object oSummon = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oPlayers);
     if (oSummon != OBJECT_INVALID)
     {
-       ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oSummon);
+       PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oSummon);
        if(bVanish)
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oSummon);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oSummon);
     }
 
     object oDominated = GetAssociate(ASSOCIATE_TYPE_DOMINATED, oPlayers);
     if (oDominated != OBJECT_INVALID)
     {
-       ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oDominated);
+       PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAssociate, oDominated);
        if(bVanish)
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oDominated);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eInv, oDominated);
 
     }
     return oDominated;
@@ -792,7 +793,7 @@ void CallActionStartConversation(int nCutscene, object oNPC, object oPC, string 
             //SetCommandable(TRUE, oPC);
             AssignCommand(oNPC, ActionStartConversation(oPC, szConversationFile));
             //SetCommandable(FALSE, oPC);
-            //ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectCutsceneDominated(), oPC);
+            //PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectCutsceneDominated(), oPC);
         }
 
 }
@@ -1214,42 +1215,42 @@ void CutApplyEffectAtLocation(float fDelay, object oObject, int iDur, int iEffec
 }
 
 // Used to apply a visual effect to an object.
-/* EXAMPLE: CutApplyEffectToObject(98.3, oPC, DURATION_TYPE_TEMPORARY,
+/* EXAMPLE: CutPS_ApplyEffectToObject(98.3, oPC, DURATION_TYPE_TEMPORARY,
                                      VXF_DUR_PETRIFY, oPC, 4.0);
    would have a PETRIFY visual appear to the PC after a 98.3 second delay.
    The duration is temporary, lasting 4 seconds.
 */
-void CallApplyEffectToObject(int nCutscene, int iDur, int iEffect, object oObject, float fDur)
+void CallPS_ApplyEffectToObject(int nCutscene, int iDur, int iEffect, object oObject, float fDur)
 {
     if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         effect eEffect = EffectVisualEffect(iEffect);
-        ApplyEffectToObject(iDur, eEffect, oObject, fDur);
+        PS_ApplyEffectToObject(iDur, eEffect, oObject, fDur);
     }
 }
 
-void CutApplyEffectToObject(float fDelay, int iDur, int iEffect, object oObject, float fDur = 0.0, int iShift = TRUE)
+void CutPS_ApplyEffectToObject(float fDelay, int iDur, int iEffect, object oObject, float fDur = 0.0, int iShift = TRUE)
 {
     int nCutscene = GetActiveCutsceneNum();
     fDelay = CutCalculateCurrentDelay(fDelay, nCutscene);
-    DelayCommand(fDelay, DelayCommand(GetShift(oObject, iShift), CallApplyEffectToObject(nCutscene, iDur, iEffect, oObject, fDur)));
+    DelayCommand(fDelay, DelayCommand(GetShift(oObject, iShift), CallPS_ApplyEffectToObject(nCutscene, iDur, iEffect, oObject, fDur)));
 }
 
 //For all other effects (NOT VISUAL EFFECTS)
 //Used to apply a NON visual effect to an object.
-void CallApplyEffectToObject2(int nCutscene, int iDur, effect eEffect, object oObject, float fDur)
+void CallPS_ApplyEffectToObject2(int nCutscene, int iDur, effect eEffect, object oObject, float fDur)
 {
     if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
-        ApplyEffectToObject(iDur, eEffect, oObject, fDur);
+        PS_ApplyEffectToObject(iDur, eEffect, oObject, fDur);
     }
 }
 
-void CutApplyEffectToObject2(float fDelay, int iDur, effect eEffect, object oObject, float fDur = 0.0, int iShift = TRUE)
+void CutPS_ApplyEffectToObject2(float fDelay, int iDur, effect eEffect, object oObject, float fDur = 0.0, int iShift = TRUE)
 {
     int nCutscene = GetActiveCutsceneNum();
     fDelay = CutCalculateCurrentDelay(fDelay, nCutscene);
-    DelayCommand(fDelay, DelayCommand(GetShift(oObject, iShift), CallApplyEffectToObject2(nCutscene, iDur, eEffect, oObject, fDur)));
+    DelayCommand(fDelay, DelayCommand(GetShift(oObject, iShift), CallPS_ApplyEffectToObject2(nCutscene, iDur, eEffect, oObject, fDur)));
 }
 
 // Used to apply a knockdown effect to an object.
@@ -1268,7 +1269,7 @@ void CallKnockdown(int nCutscene, object oObject, float fDur)
             nTest = 1;
             SetPlotFlag(oObject, FALSE);
         }
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oObject, fDur);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oObject, fDur);
         if (nTest == 1)
             SetPlotFlag(oObject, TRUE);
     }
@@ -1308,7 +1309,7 @@ void CallDeath(int nCutscene, object oObject, int iSpec)
     if(nCutscene == GetLocalInt(oObject, "nCutsceneNumber"))
     {
         effect eEffect = EffectDeath(iSpec, TRUE);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oObject);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oObject);
     }
 
 }
@@ -1666,7 +1667,7 @@ void CutRestorePCAppearance(int nCutscene, object oPC)
 
         SetCreatureAppearanceType(oPC, nApp);
         // apply inv effect so the player won't see the old form
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY), oPC, 1.5);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY), oPC, 1.5);
     }*/
 }
 
@@ -1720,7 +1721,7 @@ void CallSetCutsceneMode(int nCutscene, object oPC, int iValue, int bInv, int bK
                     //SetLocalInt(oPC, "X2_CUT_CHANGE_APPEARANCE" + IntToString(nCutscene), 1); // flagging pc as changed appearance
                     //SetLocalInt(oPC, "X2_CUT_APPEARANCE", GetAppearanceType(oPC));
 
-                    DelayCommand(0.2, ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY),
+                    DelayCommand(0.2, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY),
                         oPC, 9999.0));
 
                     if(bInv == CUT_CAMERA_HEIGHT_VERY_LOW)

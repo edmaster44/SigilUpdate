@@ -62,8 +62,8 @@ void main()
 		if (manif.bEmpower) nHeal = FloatToInt(IntToFloat(nHeal)*1.5f);
 		
 		eHeal = EffectHeal(nHeal);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oManifester);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealVis, oManifester);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oManifester);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealVis, oManifester);
 	}
 
 }

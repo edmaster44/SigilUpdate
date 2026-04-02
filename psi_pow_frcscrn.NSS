@@ -38,6 +38,6 @@ void main()
 	if(manif.bExtend) nDur *= 2;
 
 	SignalEvent(oTarget, EventSpellCastAt(oManifester, nId, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDur));
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDur));
    
 }

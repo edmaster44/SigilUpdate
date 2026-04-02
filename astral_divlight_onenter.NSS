@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Created by Agony_Aunt/Loki_666
 // used for Astral Plane - Divinty Leech
 

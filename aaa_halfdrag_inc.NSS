@@ -324,7 +324,8 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 
 		effect eBreath = EffectNWN2SpecialEffectFile(sBreath);
    		effect eImpact = EffectNWN2SpecialEffectFile(sImpact);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0); 
+		
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0); 
 
 	    int nDamage, nDamStrike;
 	    float fDelay;
@@ -339,8 +340,9 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 				if (nHeritage == 2512){
 					if (!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_DEATH, oPC, 0.1, nSpell)){
 						eDamage = EffectAbilityDecrease(ABILITY_CONSTITUTION, (nDice / 2));
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, HoursToSeconds(24)));
+						
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, HoursToSeconds(24)));
 					} else {
 						FloatingTextStringOnCreature(sSaved, oTarget);
 					}
@@ -349,8 +351,9 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 					nDamStrike =  GetReflexAdjustedDamage(nDamage, oTarget, nDC);
 					if (nDamStrike > 0){
 						eDamage = EffectDamage(nDamStrike, nDamageType);
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+						
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 					} else {
 						FloatingTextStringOnCreature(sSaved, oTarget);
 					}
@@ -479,7 +482,8 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 		
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "halfDragonImmunities")){
 		SendMessageToPC(oPC, "Half-dragon - immunities applied.");
 		SetLocalInt(oPC, "halfDragonImmunities", TRUE);
@@ -590,7 +594,7 @@ void PS_HDM_SeeInvisibility(object oPC, int nSpell)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_SEE_INVISIBILITY, FALSE));
     RemovePermanencySpells(oPC);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_FreezingFog(object oPC, int nSpell)
@@ -619,7 +623,7 @@ void PS_HDM_ThornBody(object oPC, int nSpell)
     if (GetHasSpellEffect(nSpell, oPC))
     {	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eThorn, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eThorn, oPC, fDuration);
 }
 
 void PS_HDM_ResinousSkin(object oPC, int nSpell)
@@ -635,7 +639,7 @@ void PS_HDM_ResinousSkin(object oPC, int nSpell)
 	object oSkin			= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 	if (oSkin == OBJECT_INVALID)
 	{	SendMessageToPC(oPC, "The adhesive quality will not work if you wear no clothes.");	}
 	else
@@ -654,7 +658,7 @@ void PS_HDM_ResinSticky(int nSpell, object oTarget)
 	{	return;		}
 	else
 	{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, TRUE));
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStuck, oTarget, RoundsToSeconds(1));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStuck, oTarget, RoundsToSeconds(1));
 		
 		SendMessageToPC(oTarget, "Your weapon has become stuck to your opponent's skin!");	}
 }
@@ -674,7 +678,7 @@ void PS_HDM_SparkShield(object oPC, int nSpell)
     if (GetHasSpellEffect(nSpell, oPC))
     {	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_FlameShield(object oPC, int nSpell)
@@ -691,7 +695,7 @@ void PS_HDM_FlameShield(object oPC, int nSpell)
     if (GetHasSpellEffect(nSpell, oPC))
     {	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFlame, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFlame, oPC, fDuration);
 }
 
 void PS_HDM_AvoidPlanarEffects(object oPC, int nSpell)
@@ -715,7 +719,7 @@ void PS_HDM_AvoidPlanarEffects(object oPC, int nSpell)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     RemoveEffectsFromSpell(oPC, GetSpellId());
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_ScintillatingScales(object oPC, int nSpell)
@@ -732,7 +736,7 @@ void PS_HDM_ScintillatingScales(object oPC, int nSpell)
 	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_ObscuringMist(object oPC, location lTarget, int nSpell)
@@ -757,7 +761,7 @@ void PS_HDM_MagicCircleVsEvil(object oPC, int nSpell)
     float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
 }
 
 void PS_HDM_BahamutsPrayer(object oPC, int nSpell)
@@ -777,7 +781,7 @@ void PS_HDM_BahamutsPrayer(object oPC, int nSpell)
 	float fDuration		= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_ConcealingAmorpha(object oPC, int nSpell)
@@ -791,7 +795,7 @@ void PS_HDM_ConcealingAmorpha(object oPC, int nSpell)
     float fDuration	= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_InertialBarrier(object oPC, int nSpell)
@@ -805,7 +809,7 @@ void PS_HDM_InertialBarrier(object oPC, int nSpell)
     float fDuration	= RoundsToSeconds(PS_GetLevel(oPC) * 5);
 
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_DimensionDoor(object oPC, location lTarget)
@@ -851,8 +855,8 @@ void PS_HDM_EctoplasmicForm(object oPC, int nSpell)
 		eLink		= EffectLinkEffects(eLink, eACPen);
 		eLink 		= SetEffectSpellId(eLink, nSpell);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oPC, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oPC, fDuration);
 }
 
 void PS_HDM_MirrorImage(object oPC, int nSpell)
@@ -890,8 +894,8 @@ void PS_HDM_MirrorImage(object oPC, int nSpell)
 			eLink 		= EffectLinkEffects(eLink, eImg);
         effect eOnDisp	= EffectOnDispel(0.0f, RemoveEffectsFromSpell(oPC, nSpell));
         eLink = EffectLinkEffects(eLink, eOnDisp);
-
-        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration));
+		
+        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration));
 		fDelay += fSpin;	}
 }
 
@@ -910,7 +914,7 @@ void PS_HDM_ShieldGreater(object oPC, int nSpell)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     RemoveEffectsFromSpell(OBJECT_SELF, nSpell);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 void PS_HDM_EnergyAdaptation(object oPC, int nSpell)
@@ -943,7 +947,7 @@ void PS_HDM_EnergyAdaptation(object oPC, int nSpell)
 	itemproperty ipShn	= ItemPropertyOnHitCastSpell(128, 10);
 		
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 	if (oSkin == OBJECT_INVALID)
 	{	SendMessageToPC(oPC, "The glow effect will not work if you are not wearing clothing.");	}
 	else
@@ -977,7 +981,8 @@ void PS_HDM_EnergyAdaptGlow(object oPC, int nSpell)
 	}
 	effect eLight	= EffectVisualEffect(iLight, FALSE);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLight, oPC, TurnsToSeconds(1));
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLight, oPC, TurnsToSeconds(1));
 }
 
 void PS_DraconicBloodline(object oPC, int nSpell)
@@ -998,7 +1003,8 @@ void PS_DraconicBloodline(object oPC, int nSpell)
 		eEff			= EffectLinkEffects(eEff, eDiploBad);
 		eEff 			= SupernaturalEffect(eEff);
 		eEff = SetEffectSpellId(eEff, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+		
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_HD_Dragonflight(object oPC, object oItem)

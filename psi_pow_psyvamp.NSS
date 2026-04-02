@@ -72,13 +72,13 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
                     // No PP, do ability damage
                     else
                     {
-                         ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectAbilityDecrease(ABILITY_CHARISMA,2), oTarget);  
-                         ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectAbilityDecrease(ABILITY_WISDOM,2), oTarget);  
-                         ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectAbilityDecrease(ABILITY_INTELLIGENCE,2), oTarget);  
+                         PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectAbilityDecrease(ABILITY_CHARISMA,2), oTarget);  
+                         PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectAbilityDecrease(ABILITY_WISDOM,2), oTarget);  
+                         PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectAbilityDecrease(ABILITY_INTELLIGENCE,2), oTarget);  
                     }
 
                     // Do VFX
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 }// end if - Save
             }
         }

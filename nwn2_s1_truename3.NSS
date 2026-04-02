@@ -43,7 +43,7 @@ void main()
 
        effect eVisualDispel = EffectVisualEffect( VFX_HIT_SPELL_ABJURATION );	// Visual effect feedback
 	spellsDispelMagic( oTarget, PS_GetCasterLevel(OBJECT_SELF), eVisualDispel, eVisualDispel, TRUE );	// try to dispel all the target's spells!
-      	ApplyEffectToObject( DURATION_TYPE_INSTANT, eVisualDispel, oTarget );
+      	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eVisualDispel, oTarget );
        //SetPlotFlag( oTarget, FALSE );	// The meat and potatoes
        SetImmortal( oTarget, FALSE );	// The meat and potatoes
 	AssignCommand( oTarget, ClearAllActions(TRUE) );	// Disrupt the target's current action (simulating a concentration check failure)

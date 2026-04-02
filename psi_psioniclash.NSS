@@ -146,13 +146,13 @@ void main()
 			effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL);
 			//Defining the damage type and calling the damage amount for the lash.
 			
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, OBJECT_SELF, 1.7);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, OBJECT_SELF, 1.7);
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC))
 			{
 				if(!GetLevelByClass(90, oTarget))
 				{
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 					//Non-psions must save vs. being confused for 1d2 rounds.
 				}
 				else

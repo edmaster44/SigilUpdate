@@ -70,7 +70,7 @@ void main()
 //                if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
                 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2));
                 }
                 //Make meta magic checks
                 if (nMetaMagic == METAMAGIC_MAXIMIZE)
@@ -84,8 +84,8 @@ void main()
                 //Set the damage effect
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
                 //Apply the VFX impact and damage effect
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,oTarget);
-                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam,oTarget));
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,oTarget);
+                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam,oTarget));
             }
         }
         //Get the next target in the spell area

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // gb_comp_attack.nss
 /*
 	Companion OnAttacked handler

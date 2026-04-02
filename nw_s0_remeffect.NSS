@@ -164,8 +164,8 @@ void main()
     {
         RemoveSpecificEffect(nEffect3, oTarget);
     }
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	if (GetEffectType(eImmune) != EFFECT_TYPE_INVALIDEFFECT)
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, HoursToSeconds(nDur));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, HoursToSeconds(nDur));
 	
 }

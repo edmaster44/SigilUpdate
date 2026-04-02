@@ -78,7 +78,7 @@ void GivePayout(int nMult)
         SubHouse(nPayout);
     SendMessageToPC(oPC,"You win "+IntToString(nPayout)+" gold!");
     effect eVis = EffectVisualEffect(VFX_IMP_EVIL_HELP);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,OBJECT_SELF);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,OBJECT_SELF);
     DeleteLocalInt(OBJECT_SELF,"IN-USE");
     PS_GiveGoldToCreature(oPC, nPayout);
 }

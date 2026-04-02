@@ -14,6 +14,6 @@ void PS_WP_DeathDealer(object oKiller)
 
 	if(GetHasFeat(99999, oKiller))
 	{	
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oKiller, 0.3f)	;
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oKiller, 0.3f)	;
 	}
 }

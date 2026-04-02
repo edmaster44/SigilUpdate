@@ -116,7 +116,7 @@ void main()
                     // Check for Power Resistance
                    if(PRCMyResistPower(oManifester, oTarget, nPen))
                     {
-                        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
                     }// end if - SR check
                 }// end if - Target's HP is low enough
             }// end if - Single target
@@ -138,7 +138,7 @@ void main()
 		                    // Check for Power Resistance
 		                   if(PRCMyResistPower(oManifester, oTarget, nPen))
 		                   {
-		                       ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+		                       PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 		                   }// end if - SR check
                            nHPCounter -= nTestHP;
 		                }

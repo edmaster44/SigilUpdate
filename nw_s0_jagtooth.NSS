@@ -98,9 +98,9 @@ void main()
 			{
  	           if (fDuration>0.0)
  	           {
-	                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon)); //NWN1 VFX
+	                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon)); //NWN1 VFX
 	               
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oCWeapR), fDuration);
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oCWeapR), fDuration);
 	                AddKeenEffectToWeapon(oCWeapR, fDuration);
  	           }
 			}
@@ -109,8 +109,8 @@ void main()
 			{
  	           if (fDuration>0.0)
  	           {
-	                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon)); //NWN1 VFX
-	                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oCWeapL), fDuration);
+	                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon)); //NWN1 VFX
+	                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oCWeapL), fDuration);
 	                AddKeenEffectToWeapon(oCWeapL, fDuration);
  	           }
 			return;
@@ -128,7 +128,7 @@ void main()
 				DelayCommand(fDuration, DestroyObject(oHide,0.0f,FALSE));
 				AssignCommand(oTarget, ClearAllActions());
 				AssignCommand(oTarget, ActionEquipItem(oHide,INVENTORY_SLOT_CARMOUR));	
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
 			}
 
 		}

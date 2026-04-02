@@ -98,13 +98,13 @@ void main()
             //Apply damage to the first target and the VFX impact.
             if(nDamStrike > 0)
             {
-                ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
             }
         }
     }
     //Apply the lightning stream effect to the first target, connecting it with the caster
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
 
 
     //Reinitialize the lightning effect so that it travels from the first target to the next target
@@ -128,7 +128,7 @@ void main()
         if (oTarget != oFirstTarget && spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
         {
             //Connect the new lightning stream to the older target and the new target
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
 
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CHAIN_LIGHTNING));
@@ -152,8 +152,8 @@ void main()
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_ELECTRICAL);
                 if(nDamStrike > 0) //age > 0)
                 {
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
                 }
             }
             oHolder = oTarget;

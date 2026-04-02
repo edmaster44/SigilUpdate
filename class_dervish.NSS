@@ -36,7 +36,7 @@ return;}
 		eAC = SetEffectSpellId(eAC,nSpellId);
 		eAC = SupernaturalEffect(eAC);
 							
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, fDuration));
+		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, fDuration));
 	}
 	
 
@@ -66,7 +66,7 @@ if (!NoHeavyArmorOrShield(oPC))
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
 	eSlash = SetEffectSpellId(eSlash, nSpellId );	
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); 
+	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); 
 	
 		
 }	

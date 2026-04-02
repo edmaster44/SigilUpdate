@@ -20,7 +20,7 @@ void main()
 		effect eLINK = EffectLinkEffects(eKNOCK, eSTILL);
 		eLINK = EffectLinkEffects(eLINK, eSpellFail);
 		eLINK = ExtraordinaryEffect(eLINK);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLINK, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLINK, oPC);
 		FloatingTextStringOnCreature("*Defensive Stance ON*", oPC, FALSE);
 		ResetFeatUses(oPC, GetSpellFeatId(), TRUE, TRUE); //Cooldown triggers only on deactivation
 	}

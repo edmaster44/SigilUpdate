@@ -276,7 +276,7 @@ void ApplySetBootsAC(object oItem, int nBonus){
 	effect eDodge = EffectACIncrease(nBonus);
 	eDodge = SupernaturalEffect(eDodge);
 	eDodge = SetEffectSpellId(eDodge, SET_DODGE_EFFECT_ID); 
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oOwner);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oOwner);
 }
 
 //remove dodge ac from set boots

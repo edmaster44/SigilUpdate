@@ -198,7 +198,7 @@ void SetSummonAppearance(object oPC, object oSummon) {
 	WriteTimestampedLogEntry("Call of the beast appearance set to "+IntToString(nAppearance));
 		
 	SetCreatureAppearanceType(oSummon, nAppearance);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, oSummon);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, oSummon);
 }
 
 string GetCreatureResref(object oPC, int nHD) {

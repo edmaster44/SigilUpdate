@@ -28,7 +28,7 @@ void main()
 	effect eLink = EffectLinkEffects(EffectACIncrease(nBonus, AC_DEFLECTION_BONUS),
 										EffectVisualEffect(VFX_DUR_GLOBE_MINOR));
 
-	SignalAndApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+	SignalAndPS_ApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
 		oManifester, fDuration);
 
 

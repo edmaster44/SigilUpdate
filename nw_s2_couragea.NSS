@@ -67,6 +67,6 @@ void main()
 	eAOE = ExtraordinaryEffect(eAOE);
 	//Create an instance of the AOE Object using the Apply Effect function
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_AURA_OF_COURAGE, FALSE));
-	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
+	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
 	
 }

@@ -96,13 +96,13 @@ void main()
                     }
                     else
                     {
-                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(1));
+                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(1));
 		    		}
                     //Apply the VFX impact
                     effect eDamage = EffectAbilityDecrease(ABILITY_CHARISMA, nDamage);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, OBJECT_SELF, 1.7);
-                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
-                    DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, OBJECT_SELF, 1.7);
+                    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
+                    DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					
                     //ApplyAbilityDamage(oTarget, ABILITY_CHARISMA, nDamage, DURATION_TYPE_TEMPORARY, TRUE, -1.0f, TRUE, manif.nSpellID, manif.nManifesterLevel);
                 }// end if - SR check

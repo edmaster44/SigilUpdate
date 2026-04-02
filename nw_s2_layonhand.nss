@@ -79,8 +79,8 @@ void main()
                 }
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_LAY_ON_HANDS));
                 eDam = EffectDamage(nHeal, DAMAGE_TYPE_DIVINE);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
             }
         }
     }
@@ -88,8 +88,8 @@ void main()
     {
 
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_LAY_ON_HANDS, FALSE));
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 
 }

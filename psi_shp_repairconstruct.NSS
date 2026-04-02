@@ -84,7 +84,7 @@ void main()
 	                //Make a Will Save check
 	                
 	                    //Apply impact and linked effects
-	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 	                
 	            }
 	         

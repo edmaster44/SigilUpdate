@@ -28,11 +28,11 @@
 #include "ps_inc_casterlevel"
 #include "nwnx_dae"
 #include "ps_inc_financial"
+#include "ff_applyeffect"
 
 void DoPsionFeatProgression(object oPC);
 
 void ShutdownMetaPsionics(object oPC);
-
 
 int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE);
 
@@ -939,13 +939,13 @@ void PS_GrantTempItemPropertyToPCWithEffects(itemproperty ip, object oPC, effect
     if (nImpact != -1)
     {
         effect eVis = EffectVisualEffect(nImpact);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
     }
     // Effect LowLightVision() doesn't actually do anything, so it's a handy placeholder to mean "do nothing"
     // since there's no intentional effect_invalid sort of thing we could use.
     if (eEffect != EffectLowLightVision())
     {
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
     }
 }
 
@@ -3349,7 +3349,7 @@ int PS_CalcSneakDamage(object oPC, object oTarget, int iDamageType)
                                 effect eParal = EffectParalyze(iDC, SAVING_THROW_FORT);
                                 effect eHit = EffectVisualEffect( VFX_DUR_SPELL_HOLD_MONSTER );
                                 eParal = EffectLinkEffects( eParal, eHit );
-                                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, RoundsToSeconds(d6(1) + iLevelsAss));
+                                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, RoundsToSeconds(d6(1) + iLevelsAss));
                             }
                             /*else
                             {
@@ -3629,7 +3629,7 @@ void PS_ManageItemImmunities(object oItem, object EquippedTo, int Equipping)
 }
 
 
-void SAFE_ApplyEffectToObject(int nSpellId, int nDurationType, effect eEffect, object oTarget, float fDuration=0.0f) 
+void SAFE_PS_ApplyEffectToObject(int nSpellId, int nDurationType, effect eEffect, object oTarget, float fDuration=0.0f) 
 {
     if (GetHasSpellEffect(nSpellId,oTarget))
     {
@@ -3637,7 +3637,7 @@ void SAFE_ApplyEffectToObject(int nSpellId, int nDurationType, effect eEffect, o
     }   
     else
     {
-        ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
+        PS_ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
     }
 }
 
@@ -4816,7 +4816,7 @@ void FiendformBoni(object oPC, string sVFX = "") {
     eBoost = SetEffectSpellId(eBoost, 1657);
     eBoost = SupernaturalEffect(eBoost);
         
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oPC);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oPC);
 }   
 
 //Saves the PC's name + CD key under the variable given

@@ -142,8 +142,8 @@ void respawn(object xPC)
 	{	ApplyRespawnPenalties(xPC);  }
   
    //Resurrect at start location
-   ApplyEffectToObject(DURATION_TYPE_INSTANT,xRez,xPC,0.0f);
-   ApplyEffectToObject(DURATION_TYPE_INSTANT,xHeal,xPC,0.0f);
+   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,xRez,xPC,0.0f);
+   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,xHeal,xPC,0.0f);
    RemoveEffects(xPC); //Removes Negative effects. Is defined in nw_i0_plot.
    
    // re-equip left and right hand equip

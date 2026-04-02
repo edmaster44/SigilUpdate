@@ -30,7 +30,7 @@ void main () {
 	if (nType == EXPERIMENTAL_SPELLTYPE_SINGLE) {
 		string sEffect = "sp_magic_hit";
 		effect eVFX = EffectNWN2SpecialEffectFile(sEffect);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
 		
 		ApplyExperimentalSpellEffectGood(oTarget, nLevel, nHelpful);
 		ApplyExperimentalSpellEffectBad(oTarget, nLevel, nHarmful);
@@ -43,7 +43,7 @@ void main () {
 		while (GetIsObjectValid(oCreature)) {
 			string sEffect = "sp_magic_hit";
 			effect eVFX = EffectNWN2SpecialEffectFile(sEffect);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
 		
 			ApplyExperimentalSpellEffectGood(oCreature, nLevel, nHelpful);
 			ApplyExperimentalSpellEffectBad(oCreature, nLevel, nHarmful);
@@ -57,15 +57,15 @@ void main () {
 	
 		string sEffect = "sp_magic_hit";
 		effect eVFX = EffectNWN2SpecialEffectFile(sEffect);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		
 		ApplyExperimentalSpellEffectGood(oTarget, nLevel, nHelpful);
 		ApplyExperimentalSpellEffectBad(oPC, nLevel, nHarmful);
 		
 		float fDuration = 6.0f*(d3(nLevel));
 		effect eEffect = EffectShareDamage(oPC);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fDuration);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fDuration);
 	} else if (nType == EXPERIMENTAL_SPELLTYPE_SINISTER_LINKED) {
 		if (oTarget == oPC) {
 			SendMessageToPC(oPC, "Target must be different from the caster.");
@@ -74,14 +74,14 @@ void main () {
 	
 		string sEffect = "sp_magic_hit";
 		effect eVFX = EffectNWN2SpecialEffectFile(sEffect);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		
 		ApplyExperimentalSpellEffectGood(oPC, nLevel, nHelpful);
 		ApplyExperimentalSpellEffectBad(oTarget, nLevel, nHarmful);
 		
 		float fDuration = 6.0f*(nLevel*3);
 		effect eEffect = EffectShareDamage(oTarget);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
 	}
 }

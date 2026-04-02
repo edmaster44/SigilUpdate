@@ -67,13 +67,13 @@ void main()
 				else
 					{
 						effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL);
-						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 					}	
 			}
 			else
 			{
 				effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 			}
 		
 			

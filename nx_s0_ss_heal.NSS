@@ -86,12 +86,12 @@ void CastSpell()
         //Apply the VFX impact and effects
         int nHeal = GetMaxHitPoints(oTarget) - GetCurrentHitPoints(oTarget);
         effect eHeal = EffectHeal(nHeal);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
     }
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_GREATER_RESTORATION, FALSE));
 
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
 	
     int nRegenAmt = GetMaxHitPoints(oTarget) / 10;
     if ( nRegenAmt < 1 )
@@ -109,8 +109,8 @@ void CastSpell()
 
  //   SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
     //Apply effects and VFX
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }
 
 int GetIsSupernaturalCurse(effect eEff)
@@ -134,7 +134,7 @@ void main()
 void Meditate1(object oPC)
 {
 	effect eEffect = EffectNWN2SpecialEffectFile("fx_shard_rip.sef");
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
 	PlayCustomLoopingAnimation(oPC, "%", 1.0f);
 	PlayCustomOneShotAnimation(oPC, "kneeldown", 1.0f);
 	DelayCommand(0.8f, PlayCustomLoopingAnimation(oPC, "kneelbow", 0.5f));
@@ -145,9 +145,9 @@ void Meditate2(object oPC)
 {		
 	effect eEffect = EffectNWN2SpecialEffectFile("fx_shard_rip.sef");
 	effect eEffect2 = EffectNWN2SpecialEffectFile("sp_divination_cast.sef");
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
-	DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC));
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
+	DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC));
 	DelayCommand(1.0f, Meditate3(oPC));
 }
 
@@ -156,7 +156,7 @@ void Meditate3(object oPC)
 {
 	effect eEffect2 = EffectNWN2SpecialEffectFile("sp_divination_cast.sef");
 		
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
 		
 	DelayCommand(1.0f, RestoreCharges(oPC));
 }
@@ -165,7 +165,7 @@ void Meditate3(object oPC)
 void RestoreCharges(object oPC)
 {
 	effect eVis = EffectNWN2SpecialEffectFile("fx_shard_attack_reform.sef");
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 	PlayCustomLoopingAnimation(oPC, "%", 1.0f);
 	PlayCustomOneShotAnimation(oPC, "kneelup", 1.0f);
 		

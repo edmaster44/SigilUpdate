@@ -69,7 +69,7 @@ void main()
 	    effect 	eDur        = ExtraordinaryEffect( EffectVisualEffect( VFX_HIT_BARD_COUNTERSONG ) );
 	    effect 	eLink       = ExtraordinaryEffect( EffectLinkEffects( eResist, eDur ) );
 
-		ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration );
+		PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration );
     }
 
     DecrementRemainingFeatUses(OBJECT_SELF, FEAT_BARD_SONGS);

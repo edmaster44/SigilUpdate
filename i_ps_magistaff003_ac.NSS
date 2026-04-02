@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // OnActivate Script for Staff of the Magi
 // Creates Retributive Strike.
 // CGaw OEI 8/2/06
@@ -50,10 +51,10 @@ void main()
 	        if(nDamage > 0)
 	        {
 	            // Apply effects to the currently selected target.
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 	            //This visual effect is applied to the target object not the location as above.  This visual effect
 	            //represents the flame that erupts on the target not on the ground.
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 	        }
 //		}
     //Select the next target within the spell shape.

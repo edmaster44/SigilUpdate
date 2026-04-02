@@ -163,7 +163,7 @@ void DoDrunkMasterImprovised(object oPC)
 		eEffect = EffectLinkEffects(eEffect, EffectDamageIncrease(iDBonus));
 		eEffect = EffectLinkEffects(eEffect, EffectACIncrease(iSBonus, AC_DEFLECTION_BONUS));
 		eEffect = SupernaturalEffect(eEffect);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 	else if (iApply == FALSE && iHasEffect == TRUE)
 	{
@@ -183,7 +183,7 @@ void DoShieldBonus(object oPC, int iBaseItemType)
 		effect eDeflect =  EffectConcealment(iMissChance, MISS_CHANCE_TYPE_VS_RANGED);
 		eDeflect = SupernaturalEffect(eDeflect);
 		eDeflect = SetEffectSpellId(eDeflect, SPELL_ID_SHIELD_DEFLECT);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDeflect, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDeflect, oPC);
 	}
 }
 
@@ -229,7 +229,7 @@ void ApplyTSAOBonus(object oPC)
 		eBonus = SupernaturalEffect(eBonus);
 		eBonus = SetEffectSpellId(eBonus,SPELL_ID_TSAO);
 		
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBonus, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBonus, oPC);
 	}
 }
 
@@ -281,7 +281,7 @@ void ApplyIajutsuMasterEffect(object oPC)
 	effect eBonus =  EffectAttackIncrease(iCHA);
 	eBonus = EffectLinkEffects(eBonus, EffectModifyAttacks(1));
 	eBonus = SupernaturalEffect(eBonus);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 6.5); // just a little extra to be sure we catch end of round;
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 6.5); // just a little extra to be sure we catch end of round;
 }
 
 // When draws weapon - enemies must make a Will save (DC 20 + samurai’s Cha modifier) or become panicked for 4d6 rounds 
@@ -310,7 +310,7 @@ void ApplyFrightfulPresence(object oPC)
 					eEffect = EffectLinkEffects(EffectFrightened(), EffectVisualEffect(VFX_DUR_SPELL_FEAR));
 				else eEffect = EffectLinkEffects(EffectLinkEffects(EffectACDecrease(2), EffectAttackDecrease(2)), EffectVisualEffect(VFX_DUR_SPELL_DOOM));
 				
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, RoundsToSeconds(iCHA));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, RoundsToSeconds(iCHA));
 			}
 		}
 	

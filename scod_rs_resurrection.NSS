@@ -58,8 +58,8 @@ void main()
             effect eHeal = EffectHeal(nHealed + 10);
             effect eVis = EffectVisualEffect(VFX_IMP_HEALING_G);
             //Apply the heal, raise dead and VFX impact effect
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eRaise, oTarget);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRaise, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
             ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
         }
         else

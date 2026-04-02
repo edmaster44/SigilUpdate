@@ -74,8 +74,8 @@ void main()
         //nResult = (nResult || MyResistSpell(OBJECT_SELF, oTarget));
         if (!nResult)
         {
-            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget, TurnsToSeconds(nLevel));
+            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget, TurnsToSeconds(nLevel));
         }
         }
     }

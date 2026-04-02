@@ -40,5 +40,5 @@ void main()
     eLink = EffectLinkEffects(eLink, eImmuneSA);
 
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
 }

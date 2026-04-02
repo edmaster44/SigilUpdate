@@ -94,7 +94,7 @@ void main()
 		fDuration += 360.0f; //last five extra minutes
 	if(manif.bExtend) fDuration *= 2;
 	
-	SignalAndApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+	SignalAndPS_ApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
 		oManifester, fDuration);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
 }

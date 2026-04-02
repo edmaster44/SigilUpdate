@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Inflame
 //:: NW_S2_Inflame
@@ -40,7 +41,7 @@ void main()
 		if (GetIsEnemy(oTARGET, oPC) == FALSE)
 		{
 			SignalEvent(oTARGET, EventSpellCastAt(oPC, SPELLABILITY_INFLAME, FALSE));
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTARGET, fDUR);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTARGET, fDUR);
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, lPC);
 	}

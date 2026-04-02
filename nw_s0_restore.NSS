@@ -99,7 +99,7 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_RESTORATION, FALSE));
 
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
 }
 
 int GetIsSupernaturalCurse(effect eEff)

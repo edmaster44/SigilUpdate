@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void RearmChest()
 {
 	// Use custom traps 65-119

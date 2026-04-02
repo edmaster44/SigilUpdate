@@ -91,14 +91,14 @@ void main()
                )
             {
                 // Apply VFX
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 				
 				nDamage = d6(nNumberOfDice);
 				
                 // Save - Will partial. On fail stun and HP set to 1
                 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, 6.0f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, 6.0f);
                     nDamage = GetCurrentHitPoints(oTarget) - 1;
                 }
                 // Apply damage
@@ -117,7 +117,7 @@ void AvoidDR(object oTarget, int nDamage)
 
     // Try magical damage
     eDamage = EffectDamage(nDamageToApply, DAMAGE_TYPE_MAGICAL);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 
     // Check if the target's HP dropped enough. Skip if the target died on the way
     if(GetCurrentHitPoints(oTarget) > nTargetHP && !GetIsDead(oTarget))
@@ -126,7 +126,7 @@ void AvoidDR(object oTarget, int nDamage)
         nDamageToApply = GetCurrentHitPoints(oTarget) - nTargetHP;
 
         eDamage = EffectDamage(nDamageToApply, DAMAGE_TYPE_DIVINE);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 
         // Check if the target's HP dropped enough. Skip if the target died on the way
         if(GetCurrentHitPoints(oTarget) > nTargetHP && !GetIsDead(oTarget))
@@ -135,7 +135,7 @@ void AvoidDR(object oTarget, int nDamage)
             nDamageToApply = GetCurrentHitPoints(oTarget) - nTargetHP;
 
             eDamage = EffectDamage(nDamageToApply, DAMAGE_TYPE_POSITIVE);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 
             // If it still didn't work, just give up. The blighter probably has immunities to everything else, too, anyway
             return;

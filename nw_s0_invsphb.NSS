@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Invisibility Sphere: On Exit
 //:: NW_S0_InvSphA.nss

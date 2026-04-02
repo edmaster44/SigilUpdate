@@ -48,5 +48,5 @@ void main()
 	
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_MERGE_WITH_STONE, FALSE));
 	RemoveEffectsFromSpell(oTarget, SPELLABILITY_MERGE_WITH_STONE);
-    ApplyEffectToObject(nDurType, eStone, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eStone, oTarget, fDuration);
 }

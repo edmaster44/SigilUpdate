@@ -71,8 +71,8 @@ void main()
                     nDuration = nDuration * 2;
                 }
                 //Apply the paralyze effect and the VFX impact
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, RoundsToSeconds(nDuration));
-				//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, RoundsToSeconds(nDuration));
+				//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
             }
         }
     }

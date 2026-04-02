@@ -47,7 +47,7 @@ void main()
 	eOpen = SetEffectSpellId(eOpen, SPELL_KNOCK);
 	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_KNOCK, FALSE));
 	PS_RemoveEffects(OBJECT_SELF, SPELL_KNOCK);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eOpen, OBJECT_SELF, TurnsToSeconds(nDuration)); 
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eOpen, OBJECT_SELF, TurnsToSeconds(nDuration)); 
 
     object oTarget;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);
@@ -66,7 +66,7 @@ void main()
             nResist =  GetDoorFlag(oTarget,DOOR_FLAG_RESIST_KNOCK);
             if (nResist == 0)
             {
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 AssignCommand(oTarget, ActionUnlockObject(oTarget));
             }
             else if  (nResist == 1)

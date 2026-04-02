@@ -91,6 +91,6 @@ void main()
     SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_I_HIDEOUS_BLOW, FALSE));
 
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
 	ActionAttack( oTarget );
 }

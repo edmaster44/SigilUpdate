@@ -29,8 +29,9 @@ void HalfUndeadImmunity(object oPC, int nSpell)
 				eLink    =EffectLinkEffects(eLink,eVul1);
 				eLink = SupernaturalEffect(eLink);
 				eLink = SetEffectSpellId(eLink, nSpell);
-		RemoveEffectsFromSpell(oPC, nSpell);		
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+		RemoveEffectsFromSpell(oPC, nSpell);	
+				
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		if (!GetLocalInt(oPC, "halfUndeadDR")){
 			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 			SetLocalInt(oPC, "halfUndeadDR", TRUE);
@@ -56,7 +57,7 @@ eLink = SupernaturalEffect(eLink);
 eLink = SetEffectSpellId(eLink, nSpell);
 RemoveEffectsFromSpell(oPC, nSpell);
 
-ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 
@@ -93,7 +94,8 @@ if 	(GetHasFeat(FEAT_GHUL,oPC))
 		   eLink	=	SupernaturalEffect(eLink);	
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
 
 	
 }
@@ -126,7 +128,8 @@ void HalfUndeadPower(object oPC, int nSpell)
 		
 		eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("fx_wraith_aura.sef",oPC));
 		eLink = SupernaturalEffect(eLink);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
+		
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
 }
 
 

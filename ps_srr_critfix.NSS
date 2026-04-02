@@ -12,6 +12,6 @@ void main()
 	eCritImmune = SetEffectSpellId(eCritImmune, deathlessMasteryId);
 	
 	PS_RemoveEffects(oTarget, deathlessMasteryId);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCritImmune, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCritImmune, oTarget);
 	
 }

@@ -49,8 +49,8 @@ void main()
 					SendMessageToPC(oCaster, report);
 	
 	                //Apply damage and visuals
-	                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+	                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 	                SetLocalInt(oTarget, "X0_L_LASTPENALTY", nGetLastPenalty);
 	            }
 	

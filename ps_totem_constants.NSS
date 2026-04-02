@@ -188,7 +188,7 @@ int TotemRemoveProtections(int nSpell_ID, object oTarget, object oCreator)
 	if(found) {
 		SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_ID_TOTEM_BREACHING));
 		effect eVis = EffectVisualEffect(VFX_DUR_SPELL_LESSER_SPELL_BREACH);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	}
 	
 	return found;
@@ -243,9 +243,9 @@ void ApplyTotemSpell(
 				healAmount = LimitToWisBonus(oCreator, healAmount);
 				effect eHeal = EffectHeal(healAmount);
 				RemoveEffectOfType(oTarget, EFFECT_TYPE_WOUNDING);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
 				effect eVis = EffectVisualEffect((nAoeSpellId == SPELL_ID_TOTEM_HEALING) ? VFX_IMP_HEALING_S : VFX_HIT_SPELL_INFLICT_1);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			}
 		}
 		break;
@@ -256,7 +256,7 @@ void ApplyTotemSpell(
 		    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_RESISTANCE);
 			effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, nBonus);
 			effect eLinked = EffectLinkEffects(eSave, eVis);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 		}
 		break;
 	case SPELL_ID_TOTEM_BLINDING:
@@ -270,7 +270,7 @@ void ApplyTotemSpell(
 				eLink = EffectLinkEffects(eLink, eVis);
 				if (!MyResistSpell(oCreator, oTarget)) {
 					if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC)) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 					}
 				}
 			}
@@ -292,7 +292,7 @@ void ApplyTotemSpell(
 				eLink = EffectLinkEffects(eLink, eVis);
 				if (!MyResistSpell(oCreator, oTarget)) {
 					if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC)) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 					}
 				}
 			}
@@ -315,7 +315,7 @@ void ApplyTotemSpell(
 			eLinked = EffectLinkEffects(eLinked, eSonic);
 			eLinked = EffectLinkEffects(eLinked, eElec);
 			eLinked = EffectLinkEffects(eLinked, eVis);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 		}
 		break;
 	case SPELL_ID_TOTEM_HARDINESS:
@@ -327,7 +327,7 @@ void ApplyTotemSpell(
 			effect eStone = EffectDamageReduction(nResistance, GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL);
 		    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_STONEBODY);
 			effect eLinked = EffectLinkEffects(eStone, eVis);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 		}
 		break;
 	case SPELL_ID_TOTEM_SLOWING:
@@ -339,7 +339,7 @@ void ApplyTotemSpell(
 				effect eLink = EffectLinkEffects(eSlow, eVis);
 				if (!MyResistSpell(oCreator, oTarget)) {
 					if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC)) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 					}
 				}
 			}
@@ -354,7 +354,7 @@ void ApplyTotemSpell(
 				effect eLink = EffectLinkEffects(eStink, eVis);
 				if (!MyResistSpell(oCreator, oTarget)) {
 					if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_POISON)) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 					}
 				}
 			}
@@ -366,7 +366,7 @@ void ApplyTotemSpell(
 			effect eHaste = EffectHaste();
 		    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_HASTE);
 			effect eLinked = EffectLinkEffects(eHaste, eVis);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 		}
 		break;
 	case SPELL_ID_TOTEM_SERENITY:
@@ -401,7 +401,7 @@ void ApplyTotemSpell(
 			effect eImm1 = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
 			effect eVis = EffectVisualEffect(VFX_DUR_SPELL_LESSER_MIND_BLANK);
 			effect eLinked = EffectLinkEffects(eImm1, eVis);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinked, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 		}
 		break;
 	case SPELL_ID_TOTEM_CLEANSING:
@@ -445,7 +445,7 @@ void ApplyTotemSpell(
 
 					SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_ID_TOTEM_CLEANSING, FALSE));
 					effect eVis = EffectVisualEffect(VFX_IMP_RESTORATION_LESSER);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					break;
 				}
 				else
@@ -544,7 +544,7 @@ void ApplyTotemSpell(
 				effect eLink = EffectLinkEffects( eParal, eHit );
 				if (!MyResistSpell(oCreator, oTarget)) {
 					if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC)) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 					}
 				}
 			}
@@ -558,7 +558,7 @@ void ApplyTotemSpell(
 			effect eLink = EffectLinkEffects(ePetrify, eVis);
 			if (!MyResistSpell(oCreator, oTarget)) {
 				if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC)) {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(TOTEM_EXT_DURATION_ROUNDS));
 				}
 			}
 		}

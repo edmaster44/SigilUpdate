@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //real power spell constants
 
 // Level 1 Powers

@@ -76,6 +76,6 @@ void main()
     RemovePermanencySpells(oTarget);
 
     //Apply the VFX impact and effects
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// no longer using NWN1 VFX
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// no longer using NWN1 VFX
 }

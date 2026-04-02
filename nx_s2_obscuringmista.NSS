@@ -23,5 +23,5 @@ void main()
 
     if(GetIsObjectValid(oTarget))
     {	SignalEvent(oTarget, EventSpellCastAt(oCreator, 1248, FALSE));
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);	}
+        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);	}
 }

@@ -69,5 +69,5 @@ void main()
     //RemovePermanencySpells(oTarget);
 
     //Apply the armor bonuses and the VFX impact
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

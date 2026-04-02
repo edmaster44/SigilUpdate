@@ -114,7 +114,7 @@ void HandleCastOnSelf( object oSelf, int nDurType, float fDuration )
 	
 	nImages /= 5;
 	
-	ApplyEffectToObject(nDurType, eLink, OBJECT_SELF, fDuration);
+	PS_ApplyEffectToObject(nDurType, eLink, OBJECT_SELF, fDuration);
 	
 	int i;
     for ( i = 0; i < nImages; i++ )
@@ -126,7 +126,7 @@ void HandleCastOnSelf( object oSelf, int nDurType, float fDuration )
 		eLink2 = EffectLinkEffects(eLink2, eImg);
 
         //Apply the VFX impact and effects
-        DelayCommand( fDelay, ApplyEffectToObject(nDurType, eLink2, oSelf, fDuration) );
+        DelayCommand( fDelay, PS_ApplyEffectToObject(nDurType, eLink2, oSelf, fDuration) );
 		fDelay += fSpin;		
     }
 }
@@ -163,12 +163,12 @@ void HandleCastOnTarget( object oTarget, int nDurType, float fDuration )
 	            nDamage = nDamage/2;
 	        }
 	        effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
-	        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
-	        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+	        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 	    }
 	}
 	fDelay += 0.5f;
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, fDelay);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, fDelay);
 }
 
 

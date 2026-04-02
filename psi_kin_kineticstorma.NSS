@@ -61,15 +61,15 @@ void main()
             //Set Damage Effect with the modified damage
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
             //Apply damage and visuals
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 			
 			if(nDamage > 0 && !MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_SPELL, GetAreaOfEffectCreator(), fDelay))
             {
                 //slowing effect
 				effect eParalyze = EffectParalyze(nDC, SAVING_THROW_FORT, TRUE);
 				int nDurationP = d4(1);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParalyze, oTarget, RoundsToSeconds(nDurationP));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParalyze, oTarget, RoundsToSeconds(nDurationP));
                
                 // * BK: Removed this because it reduced damage, didn't make sense nDamage = d6();
             }

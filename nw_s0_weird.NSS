@@ -96,8 +96,8 @@ void main()
                                     //Set damage effect
                                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
                                     //Apply VFX Impact and damage effect
-                                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                                 }
                                 else
                                 {
@@ -105,8 +105,8 @@ void main()
 
 
                                     //Apply VFX impact and death effect
-                                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
-                                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
+                                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+                                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
                                 }
                             } // Will save
                         }
@@ -115,9 +115,9 @@ void main()
                             // * I have less than 4HD, I die.
 
                             //Apply VFX impact and death effect
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget));
                             //effect eDeath = EffectDeath();
-                            //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                            //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
                         }
                     }
                }

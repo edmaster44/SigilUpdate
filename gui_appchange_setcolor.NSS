@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*
 Like seriously this is pain in ass...
 I will be just using StackOverflow's HSL to RGB solution from there (http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion)

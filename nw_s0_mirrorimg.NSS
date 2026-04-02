@@ -120,8 +120,8 @@ void main()
 		if(i > 0 ) eLink = SetEffectSpellId(eLink,nSpellIdOffset+nID+i);
 		else eLink = SetEffectSpellId(eLink,nID);
         //Apply the VFX impact and effects
-        // ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        DelayCommand( fDelay, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration) );
+        // PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        DelayCommand( fDelay, PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration) );
 		fDelay += fSpin;		
     }
 	

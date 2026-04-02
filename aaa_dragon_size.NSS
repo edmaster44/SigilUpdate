@@ -16,7 +16,7 @@ void PS_Dragon_Medium(object oPC)
 	{	
 		//SendMessageToPC(oPC, "You are a dragon.");
 		effect eDragon 	= EffectNWN2SpecialEffectFile("fx_ritual_purification", oPC);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
 
 		int nSubRace = GetSubRace(oPC);
 		int nAppearance;
@@ -85,7 +85,7 @@ void PS_Dragon_Large(object oPC)
 	{	
 		//SendMessageToPC(oPC, "You are a dragon.");
 		effect eDragon 	= EffectNWN2SpecialEffectFile("fx_ritual_purification", oPC);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
 
 		int nSubRace = GetSubRace(oPC);
 		int nAppearance;
@@ -154,7 +154,7 @@ void PS_Dragon_Huge(object oPC)
 	{	
 		SendMessageToPC(oPC, "You are a dragon.");
 		effect eDragon 	= EffectNWN2SpecialEffectFile("fx_ritual_purification", oPC);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
 
 		int nSubRace = GetSubRace(oPC);
 		int nAppearance;

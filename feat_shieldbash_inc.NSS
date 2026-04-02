@@ -69,14 +69,14 @@ void DoBash(object oPC, object oTarget, int nSpell, int nBash){
 	if(iHit > 0){
 		if (iHit == 2) nDam *= 2;
 		effect eHurt = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eHurt,oTarget);
 		
 		int nSavingThrow;
 		if (nBash == BASH_AGILE) nSavingThrow = SAVING_THROW_REFLEX;
 		else nSavingThrow = SAVING_THROW_FORT;
 		
 		if (!MySavingThrow(nSavingThrow, oTarget, nSaveDC, SAVING_THROW_TYPE_NONE, oPC, 0.1, nSpell))
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTarget, fDur);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTarget, fDur);
 		
 		if (GetLocalInt(oPC, "ArcaneBashOn") == 1)
 			DoWildMagic(oPC, oTarget, nSpell);
@@ -130,7 +130,7 @@ RemoveAnySpellEffects(SPELLFEAT_ARCANEBASH, oPC);
 
 	if (nSpell == SPELLFEAT_ARCANEBASH)
 		FloatingTextStringOnCreature("*Arcane Bash Activated!*", oPC, TRUE, 3.0f);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVfx, oPC, 45.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVfx, oPC, 45.0f);
 
 	int id = Random(1000);
 

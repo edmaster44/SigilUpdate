@@ -73,6 +73,6 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_MAGE_ARMOR);	// 10/16/06 - BDF
 
     //Apply the armor bonuses and the VFX impact
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }

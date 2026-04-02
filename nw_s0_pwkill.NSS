@@ -83,8 +83,8 @@ void main()
                       if(!MyResistSpell(OBJECT_SELF, oTarget))
                       {
                           //Apply the death effect and the VFX impact
-                          ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
-                          ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                          PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+                          PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                       }
             	}
 				else
@@ -137,10 +137,10 @@ void main()
                         if(!MyResistSpell(OBJECT_SELF, oWeakest, fDelay))
                         {
                             //Apply the VFX impact and death effect
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oWeakest));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oWeakest));
                             if(!GetIsImmune(oWeakest, IMMUNITY_TYPE_DEATH))
                             {
-                                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oWeakest));
+                                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oWeakest));
                             }
                             //Add the creatures HP to the total
                             nDamageDealt = nDamageDealt + nMin;

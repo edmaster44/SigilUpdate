@@ -62,8 +62,8 @@ void main()
         {
 
             location lLoc = GetLocation(GetSpellTargetObject());
-            //DelayCommand(1.3f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyArmor)));
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, GetItemPossessor(oArmor), HoursToSeconds(nDuration));
+            //DelayCommand(1.3f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyArmor)));
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, GetItemPossessor(oArmor), HoursToSeconds(nDuration));
             AddACBonusToArmor(oArmor, HoursToSeconds(nDuration),nAmount);
     }
         return;
@@ -130,8 +130,8 @@ void main()
         {
 
             location lLoc = GetLocation(GetSpellTargetObject());
-            //DelayCommand(1.3f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyArmor)));
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, GetItemPossessor(oMyArmor), HoursToSeconds(nDuration));
+            //DelayCommand(1.3f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyArmor)));
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, GetItemPossessor(oMyArmor), HoursToSeconds(nDuration));
             AddACBonusToArmor(oMyArmor, HoursToSeconds(nDuration),nAmount);
     }
         return;

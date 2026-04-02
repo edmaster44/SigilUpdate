@@ -112,8 +112,8 @@ void main()
             if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))
             {
                 //Apply Effect and VFX
-                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
             }
         }
     }

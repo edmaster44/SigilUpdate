@@ -64,7 +64,7 @@ void main()
             effect eVis = EffectVisualEffect(VFX_IMP_SLEEP);
             if(d10() > 6)
             {
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
             }
         }
     }

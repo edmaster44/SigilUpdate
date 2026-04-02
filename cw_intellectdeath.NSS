@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //Remove insanity

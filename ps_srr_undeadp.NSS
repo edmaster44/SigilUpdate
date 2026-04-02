@@ -8,7 +8,7 @@ Racial feat that sets up undead state */
 // if (!X2PreSpellCastCode && GetSpellFeatId() != 2344) return;
 
 //#include "nw_i0_spells"
-//#include "x2_inc_spellhook"
+#include "x2_inc_spellhook"
 
 void main()
 {
@@ -49,6 +49,6 @@ void main()
 		eLink = EffectLinkEffects(eDisease, eLink);
 		
 		eLink = SupernaturalEffect(eLink);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 	}	
 }

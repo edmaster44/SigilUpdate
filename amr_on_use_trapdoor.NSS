@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 void C_PlayCustomAnimation(object oObject, string sAnimationName, int nLooping, float fSpeed = 1.0f)

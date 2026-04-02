@@ -55,8 +55,8 @@ void main() {
         	    {
 
                     effect eKnockdown = EffectKnockdown();
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(3));
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(3));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> knocks down "+GetName(oTarget)+"</color>";
 					DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
                     

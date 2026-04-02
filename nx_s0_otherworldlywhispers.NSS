@@ -45,5 +45,5 @@ void main()
 	//Fire cast spell at event for the specified target
     SignalEvent(oCaster, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }

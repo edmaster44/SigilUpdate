@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //Plays a nwn2 vfx at the location of the target
 //whose tag is specified
 //If sTarg is blank, use pc speaker

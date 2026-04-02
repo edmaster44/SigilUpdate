@@ -41,7 +41,7 @@ void DieMaggot(int nSpellID, object oManifester, object oTarget)
         effect eDeath = EffectDeath();
         effect eLink2 = EffectLinkEffects(eVis, eVis2);
         eLink2 = EffectLinkEffects(eLink2, eDeath);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget);
     }
 }
 
@@ -109,8 +109,8 @@ void main()
                     // Fort negates
                     if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                     {
-                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(1));
-						ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(1));
+						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                         DelayCommand((HoursToSeconds(1) + 1.0), DieMaggot(manif.nSpellID, oManifester, oTarget));
                     }// end if - Failed save
                 }// end if - Has a brain, and can be teleported

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //**********************************************************************
 //This is an informational file detailing the db tables currently
 //active; otherwise, its a pain to look them up

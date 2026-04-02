@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void fCloseLock()
     {
     ActionCloseDoor(OBJECT_SELF);

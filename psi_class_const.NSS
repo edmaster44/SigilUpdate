@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*const int CLASS_TYPE_PSION                   = 238;
 const int CLASS_TYPE_PSYWAR                  = 239;
 const int CLASS_TYPE_WILDER                  = 241;

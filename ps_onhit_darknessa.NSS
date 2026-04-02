@@ -53,8 +53,8 @@ void main()
         if ( !OnHitResistSpell(oCaster,oTarget) )
         {
             //Fire cast spell at event for the specified target
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(20));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(20));
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
         }
     }
 }

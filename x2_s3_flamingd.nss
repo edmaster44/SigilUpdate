@@ -48,6 +48,6 @@ void main()
 
   if (GetIsObjectValid(oTarget))
   {
-      ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget);
+      PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget);
   }
 }

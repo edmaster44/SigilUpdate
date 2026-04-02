@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main()
 {
 	//object oSPAWN = OBJECT_SELF;
@@ -6,6 +7,6 @@ void main()
 	eFX = EffectLinkEffects(eFX, EffectCutsceneParalyze());
 	eFX = EffectLinkEffects(eFX, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY));
 	eFX = SupernaturalEffect(eFX);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oSPAWN);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oSPAWN);
 	SetCollision(oSPAWN, FALSE);*/
 }

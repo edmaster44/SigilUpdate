@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Holy Sword
 //:: NW_S0_HolySwrd.nss

@@ -56,7 +56,7 @@ void main() {
 		
 	// AFW-OEI 06/27/2007: Add a "cast" effect.
 	effect eCast = EffectVisualEffect(VFX_SPELL_HIT_CALL_LIGHTNING);
-	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, OBJECT_SELF);
+	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, OBJECT_SELF);
 	SetLocalInt(oItem, "elemental", 1);
 	
 	object rangedWeapon = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oCaster);

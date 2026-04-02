@@ -74,10 +74,10 @@ void main()
 				
 	            eHeal = EffectHeal(nHeal);
 				eHeal = EffectLinkEffects(eHeal, EffectVisualEffect(VFX_HIT_SPELL_HOLY));
-	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
 				eDam = EffectDamage(nHeal/2, DAMAGE_TYPE_POSITIVE, DAMAGE_POWER_ENERGY, TRUE);
 				eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_HOLY));
-	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oManifester);
+	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oManifester);
 	        }
 	    }
 	}

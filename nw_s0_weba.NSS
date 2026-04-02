@@ -57,10 +57,10 @@ void main()
                 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC))
                 {
                     //Entangle effect and Web VFX impact
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
                 }
                 //Slow down the creature within the Web
-                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
             }
        // }
     }

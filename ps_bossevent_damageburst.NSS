@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //*********************************************
@@ -62,12 +63,12 @@ void main () {
 			int nDamage = d6(nDice);
 			if (ReflexSave(oObj, nDC, SAVING_THROW_TYPE_NONE, OBJECT_SELF)) {
 				effect eDam = EffectDamage(nDamage/2, nDamType);
-				DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
+				DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
 				AssignCommand(oObj, ActionSpeakString("You succeed on your reflex save against "+GetName(OBJECT_SELF)+"'s attack, taking half damage."));
 				SendMessageToPC(oObj, "You succeed on your reflex save against "+GetName(OBJECT_SELF)+"'s attack, taking half damage.");
 			} else {
 				effect eDam = EffectDamage(nDamage, nDamType);
-				DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
+				DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
 				AssignCommand(oObj, ActionSpeakString("You fail your reflex save against "+GetName(OBJECT_SELF)+"'s attack, taking full damage."));
 				SendMessageToPC(oObj, "You fail your reflex save against "+GetName(OBJECT_SELF)+"'s attack, taking full damage.");
 			}

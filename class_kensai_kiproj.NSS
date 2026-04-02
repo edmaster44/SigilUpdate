@@ -20,7 +20,7 @@ void main()
 		eSkill = EffectLinkEffects(eSkill, EffectSkillIncrease(SKILL_TAUNT, iInc));
 		eSkill = ExtraordinaryEffect(eSkill);
 		
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkill, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkill, oPC);
 		SendMessageToPC(OBJECT_SELF, "Activated successfully");
 	}
 	else

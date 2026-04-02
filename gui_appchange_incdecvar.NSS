@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 int jumpID(int newValue, int nFrom, int nTo)

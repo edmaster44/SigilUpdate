@@ -84,7 +84,7 @@ void main()
             if (GetObjectSeen(oTarget,OBJECT_SELF))
             {
                 nEnemies++;
-				//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, 2.5+(nNumRays-1));
+				//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, 2.5+(nNumRays-1));
             }
         }
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -116,7 +116,7 @@ void main()
 			int ni=0;
 			float fDelay = 0.75;
 			
-			//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, fDelay+(nRays-1));
+			//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, fDelay+(nRays-1));
 			
 			effect eMantle = GetFirstEffect(oTarget);
 			while (GetIsEffectValid(eMantle) &&
@@ -142,7 +142,7 @@ void main()
 					    MyResistSpell(OBJECT_SELF, oTarget);
 					    bResisted = TRUE;
 					}
-				   	DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
+				   	DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
 
 					ni++;
 					fDelay = fDelay + 1.6f;
@@ -198,10 +198,10 @@ void main()
 			                effect eLink = EffectLinkEffects(eFireDamage, eVis);
 			
 			                //Apply the ability damage effect and VFX impact
-			                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+			                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 						}
 			        }
-			   	DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
+			   	DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
 				
 				ni++;
 				fDelay = fDelay + 1.6f;

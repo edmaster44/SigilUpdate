@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // Rod of Seven Parts activation script
@@ -23,7 +24,7 @@ void main()
 		{
 			if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && oTarget != oPC)
 			{
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eTimeStop, oTarget, fDur);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eTimeStop, oTarget, fDur);
 			}
 			
 			oTarget = GetNextObjectInArea(area);

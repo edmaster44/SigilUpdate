@@ -66,7 +66,7 @@ void main()
         }
         // Attempt freeze damage if still unconscious
         else if(FortitudeSave(OBJECT_SELF, 15 + pastThrows, SAVING_THROW_TYPE_COLD) == 0)
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d6( ), DAMAGE_TYPE_COLD, DAMAGE_POWER_NORMAL), OBJECT_SELF);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d6( ), DAMAGE_TYPE_COLD, DAMAGE_POWER_NORMAL), OBJECT_SELF);
 
         // If dead now, remove freezing effects incase resurected later.
         // The number of throws, however, is not reduced.  Body has not gotten warmer yet.
@@ -83,9 +83,9 @@ void main()
         // Determine new freeze damage and apply it to character
         newFreezeDamage = d6( );
         eff = EffectTemporaryHitpoints(newFreezeDamage);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eff, OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eff, OBJECT_SELF);
         beforeHP = GetCurrentHitPoints( );
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(newFreezeDamage, DAMAGE_TYPE_COLD), OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(newFreezeDamage, DAMAGE_TYPE_COLD), OBJECT_SELF);
         afterHP = GetCurrentHitPoints( );
         newFreezeDamage = beforeHP - afterHP;
         RemoveEffect(OBJECT_SELF, eff);
@@ -109,7 +109,7 @@ void main()
 
             // Apply unconscious effects
 			
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIceSlow, OBJECT_SELF);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIceSlow, OBJECT_SELF);
 			
         }
     }
@@ -117,17 +117,17 @@ void main()
     // Apply fatigue to character
     if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > 0)
     {
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, freezeTime);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, freezeTime);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, freezeTime);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, freezeTime);
     }
 
     // Apply frozen special affect if frozen
     if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") > GetCurrentHitPoints( ))
-        DelayCommand(5.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ICESKIN), OBJECT_SELF, freezeTime));
+        DelayCommand(5.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ICESKIN), OBJECT_SELF, freezeTime));
 
     // If the character is just barely conscious apply dazing effects for an hour
     if(GetLocalInt(OBJECT_SELF, "FREEZE_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, freezeTime);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, freezeTime);
 
     // Increase the number of throws done
     SetLocalInt(OBJECT_SELF, "FREEZE_THROWS", pastThrows + 1);

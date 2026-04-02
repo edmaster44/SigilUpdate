@@ -43,8 +43,8 @@ void main()
         {
             if (!GetIsImmune(oTarget, IMMUNITY_TYPE_POISON))
             {
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2+d6()));
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2+d6()));
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
         }
     }

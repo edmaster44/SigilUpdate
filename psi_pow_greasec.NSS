@@ -50,7 +50,7 @@ void main()
                 fDelay = GetRandomDelay(0.0, 2.0);
                 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NONE, oCreator, fDelay))
                 {
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFall, oTarget, 4.0f));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFall, oTarget, 4.0f));
                 }// end if - Reflex to not fall down
             }// end if - Difficulty limitations
         }// end if - Immunity check

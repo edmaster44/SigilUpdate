@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*////////////////////////////////////////////////////////////
 //A script for frightened townsfolk
 //It makes them run away when they see a PC

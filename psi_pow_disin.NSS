@@ -89,7 +89,7 @@ void main()
 		
 		    // Shoot the ray
 		    effect eRay = EffectBeam(VFX_BEAM_ENCHANTMENT, manif.oManifester, BODY_NODE_HAND, !(nTouchAttack > 0));
-		    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+		    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 			effect eDust = EffectVisualEffect(VFX_HIT_SPELL_DISINTEGRATE);
 		    if(nTouchAttack > 0)
 		    {
@@ -110,8 +110,8 @@ void main()
 						nDamage = 6*nNumberOfDice;
 						
 					effect eDisin = EffectDamage(nDamage);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDisin, oTarget);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDust, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDisin, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDust, oTarget);
 		        }// end if - SR check
 		    }// end if - Touch attack hit
         }// end for - Twin Power

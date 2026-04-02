@@ -86,12 +86,12 @@ void main()
     			//effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
 
                 //Apply the ability damage effect and VFX impact
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
 			}
         }
 	
  	    effect eRay = EffectBeam(VFX_BEAM_NECROMANCY, OBJECT_SELF, BODY_NODE_HAND);
-    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
+    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
     }
 }

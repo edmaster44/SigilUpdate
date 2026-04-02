@@ -70,8 +70,8 @@ void main()
                 {
                     // Apply effects to the currently selected target.
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 }
             }
         }

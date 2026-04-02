@@ -42,12 +42,12 @@ void DoDiscorporation(object oPC) {
 	eBuff = EffectLinkEffects(EffectNWN2SpecialEffectFile("fx_dark_discorporation"), eBuff);
 	
 	SetEffectSpellId(eBuff, SPELL_I_DARK_DISCORPORATION);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, fDiscorpDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, fDiscorpDuration);
 	
 	
 	effect eAOE = EffectAreaOfEffect(97);
 	SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_I_DARK_DISCORPORATION, FALSE));
-	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oCaster, fDiscorpDuration));
+	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oCaster, fDiscorpDuration));
 
 }
 

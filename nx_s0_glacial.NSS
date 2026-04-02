@@ -136,29 +136,29 @@ void main()
 				//	NOTE: THIS DOESN'T WORK IF THE TARGET ABSORBS DAMAGE!  I'M STUMPED (ryan young)
 					nDam = nHP-1;
 					eDam = EffectDamage(nDam, DAMAGE_TYPE_COLD);
-					DelayCommand(fDist, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration));
+					DelayCommand(fDist, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration));
 				
 				//	effect eRevive 	= EffectHealOnZeroHP(oTarget, 200);
-				//	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRevive, oTarget, TurnsToSeconds(50));
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+				//	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRevive, oTarget, TurnsToSeconds(50));
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 				//	RemoveEffect(oTarget, eRevive);
 				}
 				else {
 					eDam = EffectDamage(nDam, DAMAGE_TYPE_COLD);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-					DelayCommand(fDist, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					DelayCommand(fDist, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration));
 				}
 									
 				//check HP of target, if HP < 10 deal freeze(link) effect	
 				nHP		=	GetCurrentHitPoints(oTarget);
 				if	(nHP <= 10)
 				{			
-					DelayCommand(fDist, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+					DelayCommand(fDist, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
 				}*/
 			}
 			
 		}
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 3.0);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 3.0);
 		//cycle back to the next target
 		oTarget		=	GetNextObjectInShape(SHAPE_SPELLCONE, 15.0, lLocation, FALSE);
 	}
@@ -172,8 +172,8 @@ void FreezeDamage(int nDam, effect eFreeze, object oTarget, float fDuration)
 
     SetImmortal(oTarget, TRUE); //spell should never kill creatures
 
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
 
     if (!bPlotImmortal) //remove immortality only from targets that were not immortal before spell is cast
     {
@@ -184,6 +184,6 @@ void FreezeDamage(int nDam, effect eFreeze, object oTarget, float fDuration)
     int nHP = GetCurrentHitPoints(oTarget);
     if (nHP <= 10)
     {
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFreeze, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFreeze, oTarget, fDuration);
     }
 }

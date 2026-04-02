@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // ps_gh_electrocution
@@ -26,8 +27,8 @@ void main()
 			while (GetIsObjectValid(oTarget))
 		{
 			// Effects go here.
-			DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam1,oTarget,3.0f));
-			DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam2,oTarget,3.0f));
+			DelayCommand(1.0f,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam1,oTarget,3.0f));
+			DelayCommand(1.0f,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam2,oTarget,3.0f));
 			PlaySound("al_mg_jacobs1");
 			oTarget = GetNextObjectInShape(SHAPE_CUBE, 5.0, lLoc, FALSE, OBJECT_TYPE_CREATURE);
 		}

@@ -64,7 +64,7 @@ void main()
 //    }
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oCaster, 1.75);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oCaster, 1.75);
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget))
     {
@@ -98,10 +98,10 @@ void main()
                 if(nDamage > 0)
                 {
                     // Apply effects to the currently selected target.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the flame that erupts on the target not on the ground.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
                 }
              }
         }

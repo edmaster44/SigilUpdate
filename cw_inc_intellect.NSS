@@ -54,10 +54,10 @@ void CW_SpawnIntellect(object killer, object self, int comp)
  
  if(comp==FALSE)//Not a companion
   {
-   ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), self);
-   ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(self)), self);
-   ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_GLOW_PURPLE), self);
-   ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_GLOW_PURPLE), self);//Makes a better effect
+   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), self);
+   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(self)), self);
+   PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_GLOW_PURPLE), self);
+   PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_GLOW_PURPLE), self);//Makes a better effect
    ChangeFaction(self, killer);
    AssignCommand(self, DetermineCombatRound());
    DestroyObject(killer);
@@ -75,9 +75,9 @@ void CW_SpawnIntellect(object killer, object self, int comp)
   }
  else
   { 
-   ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInsane(), self, 60.0f);
-   ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), self);
-   ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(self)), self);
+   PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectInsane(), self, 60.0f);
+   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), self);
+   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(self)), self);
    SetLocalObject(killer, "CW_INSANE", self);
   }
 }

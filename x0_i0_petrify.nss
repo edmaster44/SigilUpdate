@@ -8,7 +8,7 @@ Small library for petrification-related functions.
 //:: Created By: Naomi Novik
 //:: Created On: 11/09/2002
 //:://////////////////////////////////////////////////
- 
+ #include "ff_applyeffect"
 /**********************************************************************
  * CONSTANTS
  **********************************************************************/
@@ -17,7 +17,6 @@ Small library for petrification-related functions.
 /**********************************************************************
  * FUNCTION PROTOTYPES
  **********************************************************************/
-
 
 // Petrifies someone permanently (until depetrified)
 // using the standard EffectPetrify effect. 
@@ -44,7 +43,7 @@ void RemoveEffectOfType(object oTarget, int nEffectType);
 void Petrify(object oTarget)
 {
     effect ePetrify = EffectPetrify();
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePetrify, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePetrify, oTarget);
 }
     
 
@@ -59,8 +58,8 @@ void PetrifyWood(object oTarget)
 {
     effect eFreeze = EffectCutsceneParalyze();
     effect eBark = EffectVisualEffect(VFX_DUR_PROT_BARKSKIN);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFreeze, oTarget);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBark, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFreeze, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBark, oTarget);
 }
 
 // Depetrify something turned to wood

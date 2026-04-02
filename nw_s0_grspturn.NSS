@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Greater Spell Turning
 //:: NW_S0_GrSpTurn.nss
@@ -15,7 +16,7 @@ void main()
 	object oTarget = GetSpellTargetObject();
 	effect eVis = EffectVisualEffect(VFX_DUR_SPELLTURNING);
 
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
 }
 

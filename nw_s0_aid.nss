@@ -91,6 +91,6 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
-    ApplyEffectToObject(nDurType, eHP, oTarget, fDuration);
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eHP, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

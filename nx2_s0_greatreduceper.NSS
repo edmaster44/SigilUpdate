@@ -12,7 +12,7 @@
 //:: Created On: 09/05/2008
 //:://////////////////////////////////////////////
 //:: RPGplayer1 11/22/08 - Won't stack with other Reduce spells anymore
-//:: RPGplayer1 02/23/09 - RemoveEffectsFromSpell() synched with ApplyEffectToObject()
+//:: RPGplayer1 02/23/09 - RemoveEffectsFromSpell() synched with PS_ApplyEffectToObject()
 
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
@@ -78,7 +78,7 @@ void main()
 	
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 	
-	DelayCommand(1.5, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
+	DelayCommand(1.5, PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
 	
 
 }

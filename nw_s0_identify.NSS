@@ -64,8 +64,8 @@ void main()
         SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_IDENTIFY, FALSE));
 
          //Apply linked and VFX effects
-         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
-         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+         PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
+         PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
     }
 */
 
@@ -74,7 +74,7 @@ void main()
 	effect eDur = EffectVisualEffect( VFX_DUR_SPELL_IDENTIFY );
     int nDuration = 1;
 	
-	ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eDur, OBJECT_SELF, RoundsToSeconds(nDuration) );
+	PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eDur, OBJECT_SELF, RoundsToSeconds(nDuration) );
     
     if ( GetObjectType( oTarget ) == OBJECT_TYPE_ITEM )
     {

@@ -27,6 +27,6 @@ void main()
 		
 		eSR = ExtraordinaryEffect(eSR);
 		
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oTarget);
 	}	
 }

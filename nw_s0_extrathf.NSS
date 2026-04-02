@@ -59,6 +59,6 @@ void main()
 
     effect eVis = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);
     //Apply the VFX impact and effects
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDur));
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDur));
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }

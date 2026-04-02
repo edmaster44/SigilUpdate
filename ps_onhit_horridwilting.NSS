@@ -64,10 +64,10 @@ void main()
                     //Set the damage effect
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
                     // Apply effects to the currently selected target.
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the flame that erupts on the target not on the ground.
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 					SendMessageToPC(oCaster, sReport);
                 }

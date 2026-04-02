@@ -88,10 +88,10 @@ void main()
 				effect eLink = EffectLinkEffects( eDam, eVis );
                 //Apply damage and VFX
 				SpawnBloodHit(oTarget, TRUE, OBJECT_INVALID);
-				ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
+				PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
 				
-                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-            	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+            	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
             }
 		}

@@ -639,7 +639,7 @@ void RestorePlayerMapLocation(object oPC)
 				if(GetEffectInteger(eEffect, 0) != TRUE)
 				{
 					effect eDeath = EffectDeath(FALSE,FALSE,TRUE,TRUE);
-					DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oFM));
+					DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oFM));
 				}
 			}
 			
@@ -703,7 +703,7 @@ void ApplyDialogSkillEffect(object oEncCreature, int nDialogSkill, int nSkillMar
 			
 			float fSecondsOffGuard = IntToFloat(nRoundsOffGuard) * 6.0f;
 			PrettyDebug("Applying Offguard Effect for " + FloatToString(fSecondsOffGuard) + " seconds to" + GetName(oEncCreature));
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectOffGuard(), oEncCreature, fSecondsOffGuard);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectOffGuard(), oEncCreature, fSecondsOffGuard);
 		}
 		break;
 						
@@ -720,13 +720,13 @@ void ApplyDialogSkillEffect(object oEncCreature, int nDialogSkill, int nSkillMar
 			{
 				PrettyDebug("Applying Frightened Effect");
 				nSkillMargin -= 5;
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectFrightened(), oEncCreature, fSecondsFrightened);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectFrightened(), oEncCreature, fSecondsFrightened);
 			}
 						
 			
 			float fSecondsShaken = IntToFloat(nSkillMargin) * 6.0f;
 			PrettyDebug("Applying Shaken Effect for " + FloatToString(fSecondsShaken) + " seconds.");
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectShaken(), oEncCreature, fSecondsShaken);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectShaken(), oEncCreature, fSecondsShaken);
 		}			
 		break;
 
@@ -966,8 +966,8 @@ int InitializeEncounter(object oPC)
 		effect eHostile = EffectNWN2SpecialEffectFile(VFX_HOSTILE_ENC);
 		SetLocalInt(oEncounter, "bHostile", TRUE);
 		SetCustomHeartbeat(oEncounter, 6000);		//Initialize the custom heartbeat system... this could cause a weird problem if it failed for whatever reasons...
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSpawn, oEncounter));
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHostile, oEncounter));
+		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSpawn, oEncounter));
+		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHostile, oEncounter));
 		DelayCommand(0.1f, BeginRandomWalk());
 		string sFeedback = GetStringByStrRef(233947) + " ";
 		sFeedback += GetName(oEncounter);

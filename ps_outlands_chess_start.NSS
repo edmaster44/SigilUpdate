@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // This script will cycle through all non-PC creatures in the area which start with ps_monster_chess_

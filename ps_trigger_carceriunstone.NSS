@@ -70,7 +70,7 @@ void UnstoneWarriors(object oPC) {
 		effect eVFX = EffectNWN2SpecialEffectFile("fx_wooden_explosion");
 		if (GetLocalString(oObj, "SpawnScript") == "statue_from_creature") {
 			DelayCommand(fDelay, RemoveEffects(oObj));
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oObj));
+			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oObj));
 			DelayCommand(fDelay, SetPlotFlag(oObj, FALSE));
 			nCreaturesFound++;
 		}

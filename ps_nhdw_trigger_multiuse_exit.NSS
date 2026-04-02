@@ -80,7 +80,7 @@ void main()
 		SendMessageToPC(oPC, "You hear a door closing.");
 	}
 //Visual effect section
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX2), oPC2);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX2), oPC2);
 //Floaty Text section
 	FloatingTextStringOnCreature(sFloaty2,oPC2);
 //Beam section
@@ -88,25 +88,25 @@ void main()
 	if (nBeam1 != 0){	
 		oTarget1 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource1);
 		eRay = EffectBeam(nBeam1, oSource1, BODY_NODE_HAND);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget1);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget1, RoundsToSeconds(d6()));
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget1);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget1, RoundsToSeconds(d6()));
 	}
 	if (nBeam2 != 0){
 		oTarget2 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
 		eRay = EffectBeam(nBeam2, oSource2, BODY_NODE_HAND);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget2);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget2, RoundsToSeconds(d6()));
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget2);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget2, RoundsToSeconds(d6()));
 	}
 	if (nBeam3 != 0){
 		oTarget3 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
 		eRay = EffectBeam(nBeam3, oSource3, BODY_NODE_HAND);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget3);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget3, RoundsToSeconds(d6()));
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget3);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget3, RoundsToSeconds(d6()));
 	}
 	if (nBeam4 != 0){
 		oTarget4 = GetNearestCreature(CREATURE_TYPE_IS_ALIVE, TRUE, oSource2);
 		eRay = EffectBeam(nBeam4, oSource4, BODY_NODE_HAND);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget4);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget4, RoundsToSeconds(d6()));
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRay, oTarget4);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectRandomNerf(), oTarget4, RoundsToSeconds(d6()));
 	}
 }

@@ -70,6 +70,6 @@ void main()
         float fDuration = 6.0f * manif.nManifesterLevel;
         if(manif.bExtend) fDuration *= 2;
 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
     }
 }

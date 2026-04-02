@@ -109,8 +109,8 @@ void main()
 
                         // Apply effects
                         fDelay = GetDistanceBetween(oManifester, oTarget) / 20.0f;
-                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-                      DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0));
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+                      DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0));
                     }// end if - Save
                 }// end if - Targeting check
 

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //checks if the object with the tag sTag is valid or not
 int StartingConditional(string sTag)
 {

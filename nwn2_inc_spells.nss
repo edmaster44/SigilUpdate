@@ -206,7 +206,7 @@ void DevourDispelCallback( object oCaster )
 	float	fDuration 	= 1.0f * 60.0f; // 1 minute
 	RemoveTempHitPoints();
 	eHitPoints = SupernaturalEffect(eHitPoints); //FIX: prevents Devour Magic from canceling its own effects
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHitPoints, oCaster, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHitPoints, oCaster, fDuration);
 }
 
 
@@ -216,7 +216,7 @@ void VoraciousDispelCallback( object oTarget, object oCaster )
 {
 	int		nDamage	= PS_GetCasterLevel( oCaster ) / 2;
 	effect	eDmg	= EffectDamage( nDamage );
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget);
 }
 
 void NullDispelCallback()
@@ -237,7 +237,7 @@ void PilferMagicCallback( object oCaster )
 	effect eSaveBonus   = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2);
 	effect eLink	    = EffectLinkEffects(eAttackBonus, eSaveBonus);
 	float  fDuration 	= RoundsToSeconds(10); // 10 rounds
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -307,8 +307,8 @@ void DispelMagicWithCallback( object oTarget, object oCaster, int nCasterLevel, 
 
     
 
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDispel, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDispel, oTarget);
 }
 
 
@@ -497,7 +497,7 @@ int AttemptNewSong( object oCaster, int bIsPersistent = FALSE )
         {
             // Now add new singing Effect
             effect eBardSong = EffectBardSongSinging(GetSpellId());
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBardSong, oCaster);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBardSong, oCaster);
             return TRUE;
         }
         return FALSE;
@@ -557,7 +557,7 @@ void ApplyFriendlySongEffectsToArea( object oCaster, int nSpellId, float fDurati
 	                //Fire cast spell at event for the specified target
 	                SignalEvent(oTarget, EventSpellCastAt(oCaster, nSpellId, FALSE));
                     eLink = SetEffectSpellId( eLink, nSpellId );
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
                 }
 	        }
 	        else
@@ -601,7 +601,7 @@ void ApplyFriendlySongEffectsToParty( object oCaster, int nSpellId, float fDurat
 	
 	                //Apply the VFX impact and effects
 	                eLink            = SetEffectSpellId( eLink, nSpellId );
-	                ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration );
+	                PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration );
 	            }
 	            else
 	            {
@@ -651,15 +651,15 @@ void ApplyFriendlySongEffectsToTarget( object oCaster, int nSpellId, float fDura
 	                {
 	                    effect eLinkBard = ExtraordinaryEffect( EffectLinkEffects(eLink, eVis) );
 	                    eLinkBard        = SetEffectSpellId( eLinkBard, nSpellId );
-	                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkBard, oTarget, fDuration);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkBard, oTarget, fDuration);
 	                }
 	                //else if(GetIsFriend(oTarget) || GetFactionEqual(oTarget))
 					else if ( spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster) )
 	                {
 	                    eLink            = SetEffectSpellId( eLink, nSpellId );
 	                    eImpact          = SetEffectSpellId( eImpact, nSpellId );
-	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
-	                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 	                }
 	            //}
 	        }
@@ -710,7 +710,7 @@ void ApplyHostileSongEffectsToArea( object oCaster, int nSpellId, float fDuratio
 	                    if ((nSaveType == -1) || !MySavingThrow(nSaveType, oTarget, nSaveDC ))
 	                    {
 	                        eLink            = SetEffectSpellId( eLink, nSpellId );
-	                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 	                    }
 	                }
 	            //}
@@ -978,7 +978,7 @@ void ApplyFatigue(object oTarget, int nFatigueDuration, float fDelay = 0.0f)
 	
 		float fFatigueDuration = RoundsToSeconds(nFatigueDuration);
 		
-		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, oTarget, fFatigueDuration));
+		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, oTarget, fFatigueDuration));
 	}
 }
 

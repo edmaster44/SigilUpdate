@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // The error code 5 prevention entry. Comment out or uncomment as necessary
 // const int COMPILER_BREAKS_ON_ME_OR_NOT = 0xffffffff;
 

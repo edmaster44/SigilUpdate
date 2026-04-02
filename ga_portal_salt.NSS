@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main()
 {
 	float fDur = 30.0;

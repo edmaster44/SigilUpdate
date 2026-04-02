@@ -62,7 +62,7 @@ void main() {
 		//Make SR check
         if (!MyResistSpell(OBJECT_SELF, oTarget)) {
 			//Apply the effects
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFinal, oTarget, RoundsToSeconds(nDuration));		
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFinal, oTarget, RoundsToSeconds(nDuration));		
 			//Apply the animations
 			PS_Spell_IrresistibleDance(oTarget);
 		}

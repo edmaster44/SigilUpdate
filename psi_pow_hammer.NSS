@@ -65,8 +65,8 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
             		eDamage = EffectDamage(nDamage,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL,TRUE);
 
                     // Do VFX
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
                 }// end if - Save
             
         }

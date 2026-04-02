@@ -54,10 +54,10 @@ void CatchAnimal(object oPC, object oTrap, object oTarget) {
 		SetLocalInt(oTarget, "nowHostile", 1);
 	} else {
 		effect eParalyze = EffectCutsceneParalyze();
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eParalyze, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eParalyze, oTarget);
 		SendMessageToPC(oPC, "<Color=DarkOliveGreen>A "+GetName(oTarget)+" is caught in your trap!");
 		effect eVis = EffectNWN2SpecialEffectFile("sp_entangle_hit", oTarget);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
 		SetLocalInt(oTrap, "caughtThing", 1);
 		
 		if (GetTag(oTarget) == "ps_trap_whitestag") {

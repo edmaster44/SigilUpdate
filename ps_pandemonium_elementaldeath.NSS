@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main () {
 
 	//DeathScript
@@ -10,7 +11,7 @@ void main () {
 		}
 		
 		effect eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
-		ApplyEffectToObject(0, eDam, oPC);
+		PS_ApplyEffectToObject(0, eDam, oPC);
 	
 		oPC = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, GetLocation(OBJECT_SELF));
 	}

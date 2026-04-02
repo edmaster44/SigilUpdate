@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 int StartingConditional(int iSubRace)
 {
     object oPC = GetPCSpeaker();

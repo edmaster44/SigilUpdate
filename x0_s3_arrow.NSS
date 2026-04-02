@@ -29,7 +29,7 @@ void DoAttack( object oTarget, int nDamageBonus, int nAttackBonus )
 	    // Apply the attack bonus if we should have one
 	    if (nAttackBonus > 0) 
 		{
-	        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackIncrease(nAttackBonus), OBJECT_SELF, 5.0f);
+	        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackIncrease(nAttackBonus), OBJECT_SELF, 5.0f);
 	    }
     	// Don't display feedback
 		int nResult = TouchAttackRanged( oTarget, FALSE );
@@ -38,14 +38,14 @@ void DoAttack( object oTarget, int nDamageBonus, int nAttackBonus )
 			// a 2 means the attack scored a crit
 			if ( nResult == 2 )	nDamage *= 2;
 			eDamage = EffectDamage( nDamage, DAMAGE_TYPE_PIERCING );
-	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
+	        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);
 	    }
 	}
 	else	// ...but for non-creatures, we can't apply the attack bonus so we determine "to hit" 
 	{		// using a reflex saving throw, which is more consistent with most other traps.
 		if ( !ReflexSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP) )
 		{
-	        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);		
+	        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDamage, oTarget);		
 		}
 	}
 }

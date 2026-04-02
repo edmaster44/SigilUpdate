@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // Tag Tean on hit script. Marks the target, then if the target has
@@ -19,6 +20,6 @@ void main()
 	{
 		SetLocalInt(oTarget, linkedMarkString, FALSE);
 		effect dmg = EffectDamage(d6(3)); 
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, dmg, oTarget, 0.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, dmg, oTarget, 0.0f);
 	}
 }

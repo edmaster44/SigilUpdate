@@ -14,7 +14,7 @@ void DarkForesight(object oPC)
    
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_PREMONITION, FALSE));
     
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oPC, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oPC, RoundsToSeconds(nDuration));
 }
 
 void RefreshDarkForesight(object oPC)

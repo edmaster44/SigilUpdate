@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 const int CLASS_TYPE_MAGE_SLAYER = 70;
 
 void main()
@@ -10,5 +11,5 @@ void main()
 	effect eLink = EffectLinkEffects(eSR, eMS);
 	eLink = SupernaturalEffect(eLink);
 	
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
 }

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main() {
 
 	SetPlotFlag(OBJECT_SELF, FALSE);

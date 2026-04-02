@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // This script controls the effects of the Keeper sword
@@ -131,7 +132,7 @@ void main()
 	{
 		DisplayString("<b>NO! I WON'T GO BACK. NOOOOOOOO!", oTarget);
 		AdjustAlignment(oPC, ALIGNMENT_GOOD, 10);
-		DelayCommand(6.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, FALSE, TRUE, TRUE), oTarget, 0.0f));
+		DelayCommand(6.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, FALSE, TRUE, TRUE), oTarget, 0.0f));
 	}	
 	
 	

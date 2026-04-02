@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main(int nEffect, int nLandingEffect, string sSource, string sTarget) {
 
 	object oTarget = GetNearestObjectByTag(sTarget);

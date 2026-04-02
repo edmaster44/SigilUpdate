@@ -69,7 +69,7 @@ void main()
 				// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 				int nDamage = PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_NEGATIVE);
 				if (nDamage > 0)
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
 				
                 //Check for metamagic
 				int nWisDmg = d6();
@@ -113,10 +113,10 @@ void main()
 				
                 //Apply the VFX impact and effects
     			RemoveEffectsFromSpell(oTarget, GetSpellId());
-				ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+				PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
            }
         }
     }
 	effect eRay = EffectBeam(VFX_BEAM_ENCHANTMENT, OBJECT_SELF, BODY_NODE_HAND);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
 }

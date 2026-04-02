@@ -65,13 +65,13 @@ void main()
 		            //Set up the damage effect
 		            eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
 					//Trigger visual regardless of if damage is done
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget, oTarget);            
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget, oTarget);            
 		            if(nDamage > 0)
 		            {
 		                //Apply damage effect
-		                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+		                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 						if (GetReflexFailed(oTarget, nOrgDamage, nDamage) && !GetIsImmune(oTarget, IMMUNITY_TYPE_KNOCKDOWN)) {
-							DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(nKDDur)));
+							DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(nKDDur)));
 						}
 		            }
 				}

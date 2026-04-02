@@ -29,9 +29,9 @@ void main()
 		//Make a saving throw check
 		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR)){
 			//Apply the VFX impact and effects
-			SignalAndApplyEffectToObject(oManifester, nId, TRUE, DURATION_TYPE_TEMPORARY, eLink, 
+			SignalAndPS_ApplyEffectToObject(oManifester, nId, TRUE, DURATION_TYPE_TEMPORARY, eLink, 
 				oTarget, RoundsToSeconds(d6(5)));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		} else {
 			SetLocalInt(oTarget, "immunedoom", TRUE); //immune till next reset if passed save
 		}

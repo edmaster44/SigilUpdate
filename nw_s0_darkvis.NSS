@@ -58,6 +58,6 @@ void main()
 
     RemovePermanencySpells(oTarget);
 
-    //ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 	PS_GrantFeatBySpellWithEffect(228, oTarget, eLink, fDuration);
 }

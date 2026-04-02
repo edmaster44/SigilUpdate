@@ -46,8 +46,8 @@ void main(){
                //Apply the VFX impact and linked effects
 			   //MySavingThrow now automatically succeeds if immune, so no need to check immunity
                //if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON) == FALSE){
-                   //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
+                   //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                   DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
                //}
             }
         }

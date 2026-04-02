@@ -188,7 +188,7 @@ int DoDistillationSkillCheck(int iSkillReq, object oPC=OBJECT_SELF)
 		return FALSE;
 	}
 
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), oPC);	
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), oPC);	
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), GetLocation(oPC));
 	SuccessNotify(oPC);
     return TRUE;

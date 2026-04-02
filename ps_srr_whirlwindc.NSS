@@ -40,7 +40,7 @@ void main()
 			int iPush = nCasterLevel + d20();
 			if (iPush > iResist)
 			{
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0);
 			}		
 			
 			if (ReflexSave(oTarget, 10 + nCasterLevel/3, SAVING_THROW_TYPE_ELECTRICITY, GetAreaOfEffectCreator()) == 0)
@@ -54,8 +54,8 @@ void main()
 				if (nDam > 0)
 				{
 					effect eDam = EffectDamage(nDam, DAMAGE_TYPE_ELECTRICAL);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0);
 				}
 			}
 		}

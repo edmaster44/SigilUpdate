@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Defensive Edge Script for NX1 Silver Sword of Gith
 // Adds deflection bonus to sword.
 // CGaw OEI 6/19/07
@@ -23,7 +24,7 @@ void main()
 	
 	effect eVis = EffectNWN2SpecialEffectFile("sp_magic_cast.sef");
 	
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 2.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 2.0f);
 	
 	PlayCustomAnimationWrapper(oCaster, "liftswordup", 0, 0.75f);
 	DelayCommand(1.0f, PlayCustomAnimationWrapper(oCaster, "liftswordloop", 0, 1.0f));

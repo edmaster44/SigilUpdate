@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Sphere of Chaos
 //:: NW_S0_SphChaos.nss

@@ -62,10 +62,10 @@ void main()
 		            if(nDamage > 0)
 		            {
 		                //Apply damage effect
-		                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-						DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eACDown, oTarget));
+		                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+						DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eACDown, oTarget));
 						if (!GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS) && FortitudeSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP, oCaster) == SAVING_THROW_CHECK_FAILED)  {
-							 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nParaDur)));
+							 DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nParaDur)));
 						}
 		            }
 				}

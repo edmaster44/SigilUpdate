@@ -46,16 +46,16 @@ void main()
 	    //if ( !MyResistSpell(oCaster,oTarget) )
     	{   
         	//Fire cast spell at event for the specified target
-        	ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
-			//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+        	PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
+			//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
        	}
     }
 	else
 	{
 	    //Fire cast spell at event for the specified target
-        ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
+        PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
         SignalEvent( oTarget, EventSpellCastAt(oCaster, SPELL_SILENCE, FALSE) );
-		//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 	}
 	if(!GetLocalInt(oTarget, EVENFLW_SILENCE))
 		SetLocalObject(oTarget, EVENFLW_SILENCE, OBJECT_SELF);

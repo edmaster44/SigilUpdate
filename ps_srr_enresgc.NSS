@@ -27,6 +27,6 @@ void main()
 	{
 		effect eRes = EffectDamageResistance(iType, 10);
 		eRes = ExtraordinaryEffect(eRes);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
 	}	
 }

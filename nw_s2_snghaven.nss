@@ -73,7 +73,7 @@ void main()
 		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SANCTUARY, FALSE));
 		
 		//Apply the VFX impact and effects
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
     }
 
 	DecrementRemainingFeatUses(OBJECT_SELF, FEAT_BARD_SONGS);

@@ -75,8 +75,8 @@ void main()
 				effect eLink			= EffectLinkEffects(eVisual, eDamage);
 				effect eLink2			= EffectLinkEffects(eVisual2, eHeal);
 				
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oCaster);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oCaster);
 			}
 			//Fire cast spell at event for the specified target
   			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), TRUE));

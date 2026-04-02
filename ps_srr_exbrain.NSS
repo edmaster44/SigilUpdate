@@ -23,8 +23,8 @@ void AttachTentacle(object oPC, object oTarget)
 	        if(nEffectType == EFFECT_TYPE_STUNNED && (GetEffectSpellId(eIsStunned) != GetSpellId()))
 	        {
 	            	SendMessageToPC(oPC, "Automatic hit! All 4 tentacles attached, time to feed!");
-					//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneImmobilize(), oPC, 6.0); // cant have the flayer walking away while munching on brains
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
+					//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneImmobilize(), oPC, 6.0); // cant have the flayer walking away while munching on brains
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
 					int iIntel = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
 					if (iIntel > 0)
 					{
@@ -35,7 +35,7 @@ void AttachTentacle(object oPC, object oTarget)
 						   SetGUIObjectText(oPC, "powerpointscreen", "PPRatioTXT", -1, IntToString(finalPP));
 	                    
 					}
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(TRUE, TRUE, TRUE, TRUE), oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(TRUE, TRUE, TRUE, TRUE), oTarget);
 					return;
 					
 	        }
@@ -68,8 +68,8 @@ void AttachTentacle(object oPC, object oTarget)
 			if (iTentacles > 3) // extract brainsssss
 			{
 				SendMessageToPC(oPC, "HIT! All 4 tentacles attached, time to feed!");
-				//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneImmobilize(), oPC, 6.0); // cant have the flayer walking away while munching on brains
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
+				//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneImmobilize(), oPC, 6.0); // cant have the flayer walking away while munching on brains
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
 				int iIntel = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
 				if (iIntel > 0)
 				{
@@ -79,7 +79,7 @@ void AttachTentacle(object oPC, object oTarget)
 	                SetLocalInt(oPC, "PSI_PP", currentPP+(2 * iIntel));
 					SetGUIObjectText(oPC, "powerpointscreen", "PPRatioTXT", -1, IntToString(finalPP));
 				}
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(TRUE, TRUE, TRUE, TRUE), oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(TRUE, TRUE, TRUE, TRUE), oTarget);
 				
 				
 			}
@@ -88,10 +88,10 @@ void AttachTentacle(object oPC, object oTarget)
 				if (iHit == 2) SendMessageToPC(oPC, "CRITCAL HIT! You attached two tentacles!!");
 				else SendMessageToPC(oPC, "HIT! You attached a tentacle!");
 				
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_STUN), oTarget, 6.0);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectStunned(), oTarget, 6.0);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer walking away while extracting brainssssss
-				//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_STUN), oTarget, 6.0);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectStunned(), oTarget, 6.0);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCutsceneParalyze(), oPC, 6.0); // cant have the flayer walking away while extracting brainssssss
+				//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed(), oPC, 6.0); // cant have the flayer casting spells or fighting either!
 				
 				SetLocalInt(oTarget, EXBRAIN, iTentacles);
 				DelayCommand(6.0, AttachTentacle(oPC, oTarget));

@@ -115,10 +115,10 @@ void main()
                     //Set the damage effect
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
                     // Apply effects to the currently selected target.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the impact that erupts on the target not on the ground.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 } 
                 /*//Roll damage for each target
                 nDamage = d8(nMaxLvl);
@@ -132,10 +132,10 @@ void main()
                     //Set the damage effect
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
                     // Apply effects to the currently selected target.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the impact that erupts on the target not on the ground.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 } */
             }
         }

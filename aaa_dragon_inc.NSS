@@ -27,8 +27,9 @@ void ApplyDraconicImmunities(object oPC, int nSpell, effect eFX){
 		SendMessageToPC(oPC, "Applying Draconic Immunities");
 	eFX = SupernaturalEffect(eFX);
 	eFX = SetEffectSpellId(eFX, nSpell);
-	PS_RemoveEffects(oPC, nSpell);	
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	PS_RemoveEffects(oPC, nSpell);
+	
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -79,7 +80,8 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell){
 	eDR = SupernaturalEffect(eDR);
 	eDR = SetEffectSpellId(eDR, nSpell);
 	PS_RemoveEffects(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);		
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);		
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -313,8 +315,9 @@ void PS_Dragon_Shadow_Blend(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(oPC, GetSpellId(), FALSE));
     int nDuration = 6;
 	
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDuration));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oPC, RoundsToSeconds(nDuration));
+	
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oPC, RoundsToSeconds(nDuration));
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -326,7 +329,7 @@ void PS_Dragon_Black_Darkness(object oPC, int nSpell)
     effect eAOE 	 = EffectAreaOfEffect(AOE_PER_DARKNESS);
     location lTarget = GetSpellTargetLocation();
     int nDuration    = GetTotalLevels(oPC, TRUE);
-
+	
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }
 
@@ -348,6 +351,7 @@ void PS_Dragon_Blue_Sound_Imitation(object oPC, int nSpell)
     effect eDam;
 	
 	effect eBurst = EffectVisualEffect(VFX_FNF_SOUND_BURST);
+	
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eBurst, lLoc, 0.2); 
 	
 	
@@ -362,13 +366,15 @@ void PS_Dragon_Blue_Sound_Imitation(object oPC, int nSpell)
                 //Make a Fort roll to avoid being stunned
                 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
+					
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
                 }
                 //Set the damage effect
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
                 //Apply the VFX impact and damage effect
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,oTarget);
-                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam,oTarget));
+				
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,oTarget);
+                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam,oTarget));
             
         }
         //Get the next target in the spell area
@@ -392,6 +398,7 @@ void PS_Dragon_Copper_Stone_Mud(object oPC, int nSpell)
 	
 	
     //Create an instance of the AOE Object using the Apply Effect function
+	
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lTarget, RoundsToSeconds(nDuration));
 }
 
@@ -503,7 +510,8 @@ void PS_Hardening_Scales(object oPC, int nSpell){
 	eAC = SupernaturalEffect(eAC);
 	eAC	= SetEffectSpellId(eAC, nSpell);
 	PS_RemoveEffects(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);					
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);					
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -610,8 +618,9 @@ void PS_Dragon_Senses(object oPC, int nSpell){
 	
 	if (!GetHasSpellEffect(nSpell,oPC) && sMessage != "")
 		SendMessageToPC(oPC, sMessage);	
-	PS_RemoveEffects(oPC, nSpell);		
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSense, oPC);	
+	PS_RemoveEffects(oPC, nSpell);	
+		
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSense, oPC);	
 }
 
 
@@ -666,14 +675,14 @@ void PS_Dragon_Roar(object oPC, int nSpell){
 			fDelay = GetRandomDelay(0.8, 2.0);
 			SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 			DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlly, oTarget, RoundsToSeconds(nDuration)));
+			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlly, oTarget, RoundsToSeconds(nDuration)));
 		} else if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)){
 			if (PS_GetLevel(oTarget) < iHD)	{	
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)){		
 					fDelay = GetRandomDelay(0.8, 2.0);
 					SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 					DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEnemy, oTarget, RoundsToSeconds(nDuration)));				
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEnemy, oTarget, RoundsToSeconds(nDuration)));				
 				}
 			}
 		}		
@@ -697,7 +706,7 @@ void PS_Dragon_Presence(object oPC, int nSpell){
 	eAOE = SupernaturalEffect(eAOE);
 	
 	SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));	
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, HoursToSeconds(100));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, HoursToSeconds(100));
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -742,9 +751,10 @@ void PS_Dragon_Swipe(object oPC, int nSpell){
 				fRandomDuration = RandomFloatBetween(6.0, 12.0);
 				if (nDamage > 0){
 					eDamage = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f));
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fRandomDuration));
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+					
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fRandomDuration));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				}
 			} else SendMessageToPC(oPC, "<c=yellow>Your target is too large to be affected.");				
 		}				
@@ -923,7 +933,8 @@ void DoBreathWeapon(object oPC, int nSpell){
 	}
 	
 	PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
-	DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+	
+	DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 	
 	int nRace;
 	int nDamage = 0;
@@ -968,8 +979,9 @@ void DoBreathWeapon(object oPC, int nSpell){
 						if (nDamage < 1) nDamage = 1;
 					}
 					eDamage = EffectDamage(nDamage, nAdjustedDmgType);
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+					
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 					if (nDamageType2 != NULL){
 						if (nDieType2 == NULL) nDieType2 = nDieType;
 						if (nDieType2 == 10) nDamage = d10(nDice);
@@ -986,7 +998,8 @@ void DoBreathWeapon(object oPC, int nSpell){
 						if (nDamage < 1) nDamage = 1;
 					} else nAdjustedDmgType = nDamageType2;
 					eDamage2 = EffectDamage(nDamage, nAdjustedDmgType);
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+					
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
 				}
 			}
 			
@@ -1017,12 +1030,13 @@ void DoBreathWeapon(object oPC, int nSpell){
 					bImmuneSecondary = GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS);
 				}
 				if(!bImmuneSecondary && !MySavingThrow(nSave, oTarget, nDC, nSaveType, OBJECT_SELF, fDelay)){
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDur));
+					
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDur));
 					// tag the target with the spell id if it's a con drain from shadow or topaz
 					// so that the same target cannot suffer multiple con drains from the same breath weapon
 					if (bSecondaryIsDrain) SetLocalInt(oTarget, sDrainTag, TRUE);
 					// only apply the impact effect if it hasn't already been applied in damage part
-					if (nDamage <= 0) DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					if (nDamage <= 0) DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
        		    }
 			}
 		}
@@ -1080,7 +1094,7 @@ void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
  
 						
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
 		    int nDamage;
 		    int nDamStrike;
@@ -1105,8 +1119,8 @@ void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+		 			   	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				 	}
 				}
 				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
@@ -1164,7 +1178,7 @@ void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
  //	 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); 
 						
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f); 
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
 		    int nDamage;
 		    int nDamStrike;
@@ -1191,9 +1205,9 @@ void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
 					{
 					    eDamage = EffectDamage(nDamStrike, nDamageType);
 						eDamage2 = EffectDamage(nDamStrike, nDamageType2);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+		 			   	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
 				 	}
 				}
 				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
@@ -1249,7 +1263,7 @@ void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
 	else 
 		{
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
    	
 	//--------------------------------------------------------------------------
 	//Loop through all targets and add effect.
@@ -1268,8 +1282,8 @@ void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
    					 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay))
        			     {
                 
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
        		         }
 				}	 
 			         
@@ -1328,7 +1342,7 @@ void PS_Dragon_Breath_Black(object oPC, int nSpell)
 	//		effect eBreath = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_CHEST); 
 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
 		    int nDamage;
 		    int nDamStrike;
@@ -1353,8 +1367,8 @@ void PS_Dragon_Breath_Black(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+		 			   	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				 	}
 				}
 				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
@@ -1409,7 +1423,7 @@ void PS_Dragon_Breath_Red(object oPC, int nSpell)
 	else 
 		{ 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
    	
 	//--------------------------------------------------------------------------
@@ -1430,8 +1444,8 @@ void PS_Dragon_Breath_Red(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		   		 		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		 			}
 			
 				}	 
@@ -1491,7 +1505,7 @@ void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
 	else 
 		{ 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
    	
 	//--------------------------------------------------------------------------
@@ -1512,13 +1526,13 @@ void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		   		 		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		 			}
 					if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nType, OBJECT_SELF, fDelay))
        			     {
                 
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDeaf(), oTarget, RoundsToSeconds(nDuration)));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDeaf(), oTarget, RoundsToSeconds(nDuration)));
       		            
        		         }
 			
@@ -1582,7 +1596,7 @@ void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
 	else 
 		{ 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
    	
 	//--------------------------------------------------------------------------
@@ -1603,8 +1617,8 @@ void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		   		 		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		 			}
 					if(!GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT && !GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && !GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL)
 					{
@@ -1616,7 +1630,7 @@ void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
 								nDrainDice = nDrainDice * 2;
 							}
 	                		eDrain = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDrainDice);
-							DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(nDuration)));
+							DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(nDuration)));
 	      		            
 	       		         }
 					}
@@ -1679,7 +1693,7 @@ void PS_Dragon_Breath_White(object oPC, int nSpell)
 	else 
 		{ 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
    	
 	//--------------------------------------------------------------------------
@@ -1700,8 +1714,8 @@ void PS_Dragon_Breath_White(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		   		 		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			    		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		 			}
 					
 				}	 
@@ -1761,7 +1775,7 @@ void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
 	else 
 		{
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f)); 
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f)); 
    	
 	//--------------------------------------------------------------------------
 	//Loop through all targets and add effect.
@@ -1780,13 +1794,13 @@ void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
    					 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NEGATIVE, OBJECT_SELF, fDelay))
        			     {
                 
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
        		         }
 					 else 
 					 {
-					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, HoursToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));      		 
+					 	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, HoursToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));      		 
 					 }
 			
 				}	 
@@ -1845,7 +1859,7 @@ void PS_Dragon_Breath_Blue(object oPC, int nSpell)
  	//	 	effect eBreath = EffectBeam(VFX_BEAM_LIGHTNING, oPC, BODY_NODE_CHEST); 
 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
 		    int nDamage;
 		    int nDamStrike;
@@ -1870,8 +1884,8 @@ void PS_Dragon_Breath_Blue(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+		 			   	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				 	}
 				}
 				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
@@ -1926,7 +1940,7 @@ void PS_Dragon_Breath_Copper(object oPC, int nSpell)
 			effect eBreath = EffectNWN2SpecialEffectFile("fx_dragonacidbreath");	
 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
 		    int nDamage;
 		    int nDamStrike;
@@ -1951,8 +1965,8 @@ void PS_Dragon_Breath_Copper(object oPC, int nSpell)
 					if (nDamStrike > 0)
 					{
 					    eDamage = EffectDamage(nDamStrike, nDamageType);
-		 			   	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+		 			   	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				 	}
 				}
 				oTarget = GetNextObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
@@ -2008,7 +2022,7 @@ void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
 	else 
 		{
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
    	
 	//--------------------------------------------------------------------------
 	//Loop through all targets and add effect.
@@ -2026,8 +2040,8 @@ void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
 					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
    					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
        			     {                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
        		         }
 				}	 
 			         
@@ -2088,7 +2102,7 @@ void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 	else 
 		{
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
    	
 	//--------------------------------------------------------------------------
 	//Loop through all targets and add effect.
@@ -2106,7 +2120,7 @@ void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
    					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
        			     {                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
        		         }
 					 //Divine Damage ---------------------------------------------------------------
 					 int	 nDamage = d6(1);
@@ -2116,13 +2130,13 @@ void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 	
 					 if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 					 {
-					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamageUndead, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					 	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamageUndead, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					 }
 					 if(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
 					 {
-					 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					 	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDamage, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					 }
 		
 				}	 
@@ -2185,7 +2199,7 @@ void PS_Dragon_Breath_Iron(object oPC, int nSpell)
 	else 
 		{ 
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
 
    	
 	//--------------------------------------------------------------------------
@@ -2210,8 +2224,8 @@ void PS_Dragon_Breath_Iron(object oPC, int nSpell)
 			 	   		eDamage = EffectDamage(nDamStrike, nDamageType);
 			 	   		eDamage2 = EffectDamage(nDamStrike, nDamageType2);
 						effect eDam = EffectLinkEffects(eDamage, eDamage2);				
-		   		 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-			    		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		   		 		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+			    		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		 			}
 			
 				}	 
@@ -2271,7 +2285,7 @@ void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
 	else 
 		{
 			PlayCustomAnimation(oPC, "Una_breathattack01", 0, 0.3f);
-			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
+			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0f));
    	
 	//--------------------------------------------------------------------------
 	//Loop through all targets and add effect.
@@ -2287,8 +2301,8 @@ void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
 					 fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
    					 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay))
        			     {                
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-      		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+      		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
        		         }
 	
 				}	 

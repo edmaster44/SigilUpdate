@@ -84,7 +84,7 @@ void main()
                 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
                 {
                     //Apply linked effects and VFX impact
-                    ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
+                    PS_ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
                 }
             }
         }

@@ -8,7 +8,6 @@
    ----------------
 
    6/10/05 by Stratovarius
-*/ /** @file
 
     Null Psionics Field - OnEnter
 
@@ -40,8 +39,8 @@
                          the power is active, that will end it instead of 
                          manifesting it.
 */
+#include "psi_spellhook"
 
-//#include "prc_alterations"
 
 void RemoveEffectsNPF(object oObject)
 {
@@ -114,8 +113,8 @@ void main()
         // Apply absolute spell failure
         effect eSpellFailure = EffectSpellFailure(100);
 		effect eSpellInvul = EffectSpellImmunity(SPELL_ALL_SPELLS);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellFailure, oEnter);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellInvul, oEnter);
+        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellFailure, oEnter);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellInvul, oEnter);
 		
     }
 }

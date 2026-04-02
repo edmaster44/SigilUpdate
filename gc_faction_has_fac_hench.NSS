@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /**********************************************************
 * Function created for SCOD server by Agony_Aunt/Loki_666 *
 **********************************************************/

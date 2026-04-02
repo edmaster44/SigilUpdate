@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //Script by Dedic8ed
@@ -85,8 +86,8 @@ void main()
 	AssignCommand(oDoorClose2, ActionCloseDoor(oDoorClose2));
 	SetLocked(oDoorClose2, TRUE);
 //Visual effect section
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX), oPC);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFXRemote), oWaypoint);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX), oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFXRemote), oWaypoint);
 //Destroy section
 	DestroyObject(oDestroy,1.0);
 //Floaty Text section

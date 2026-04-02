@@ -115,8 +115,8 @@ void main()
                     {
                         if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS) && !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS))
                         {
-                            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDur);
+                            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDur);
                             RunImpact(oTarget, GetLocation(oTarget), oManifester, manif.nSpellID, nDC, 0, FALSE, fDur);
 
                             // Set a marker on the target for next iteration, so the heartbeat won't get run twice
@@ -126,7 +126,7 @@ void main()
                     else
                     {
                         effect eSmoke = EffectVisualEffect(VFX_IMP_WILL_SAVING_THROW_USE);
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eSmoke, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSmoke, oTarget);
                     }
                 }// end if - Target is of an affectable type
             }// end if - Target has no been affected yet
@@ -188,7 +188,7 @@ void RunImpact(object oTarget, location lTarget, object oManifester, int nSpellI
             // chance of survival depending on how well a module follows PnP dying rules
             int nCurHP = GetCurrentHitPoints(oTarget);
             effect eDam = EffectDamage(nCurHP + 1);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
             return;
         }
         // Has the target moved?
@@ -203,7 +203,7 @@ void RunImpact(object oTarget, location lTarget, object oManifester, int nSpellI
             {
                 int nCurHP = GetCurrentHitPoints(oTarget);
                 effect eDam = EffectDamage(nCurHP - 1);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                 bGoingToDie = TRUE;
             }
         }

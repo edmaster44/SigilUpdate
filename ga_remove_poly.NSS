@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Script to remove polymorph for when talking to an appearance changer.
 
 void main()

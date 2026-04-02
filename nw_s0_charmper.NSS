@@ -87,7 +87,7 @@ void main()
 		eSkill = SetEffectSpellId( eSkill, SPELL_CHARM_PERSON);
 		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_CHARM_PERSON, FALSE));
 		PS_RemoveEffects(OBJECT_SELF, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, OBJECT_SELF);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, OBJECT_SELF, TurnsToSeconds(nSelfDuration));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, OBJECT_SELF, TurnsToSeconds(nSelfDuration));
 	} else if (GetIsPC(oTarget)){
 		if (!ResistCheck(oTarget, nDC, OBJECT_SELF)){
 			sMessage = sName + " has cast Charm Person on you but you are not IC aware of it.";
@@ -112,7 +112,7 @@ void main()
 			(nRacial == RACIAL_TYPE_HUMANOID_REPTILIAN))
 		{
 			if (!ResistCheck(oTarget, nDC, OBJECT_SELF))
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 		}
     } else SendMessageToPC(OBJECT_SELF, "Invalid target");
 }

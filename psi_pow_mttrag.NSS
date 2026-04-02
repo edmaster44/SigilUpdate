@@ -83,10 +83,10 @@ void main()
         if(PRCMyResistPower(oManifester, oTarget, nPen))
         {
             // Apply impact VFX
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
             // Apply an effect for the heartbeat to track
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
 
             // Start impact heartbeat
             RunImpact(oManifester, oTarget, manif.nSpellID, nBeats);
@@ -115,11 +115,11 @@ void RunImpact(object oManifester, object oTarget, int nSpellID, int nLastBeat, 
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
 
         // Apply VFX
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eFlame, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, oTarget, 6.0f);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFlame, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, oTarget, 6.0f);
 
         // Apply damage
-        ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
+        PS_ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
 
         // Schedule next impact
         DelayCommand(6.0f, RunImpact(oManifester, oTarget, nSpellID, nLastBeat, nCurrentBeat));

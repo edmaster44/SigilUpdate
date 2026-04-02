@@ -67,7 +67,7 @@ void main()
         // Check ability to move extra-dimensionally
         if(!GetCanTeleport(oManifester, GetArea(oManifester)))
         {
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
         }// end if - Manifester can move extra-dimensionally
     }// end if - Successfull manifestation
 }

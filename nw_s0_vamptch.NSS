@@ -151,11 +151,11 @@ void main()
     				effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
     				effect eVisHeal = EffectVisualEffect(VFX_IMP_HEALING_S);
 				 
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, OBJECT_SELF);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, OBJECT_SELF);
                     RemoveTempHitPoints();
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, OBJECT_SELF, HoursToSeconds(nDuration));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, OBJECT_SELF, HoursToSeconds(nDuration));
                  }
             }
         }

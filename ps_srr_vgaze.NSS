@@ -60,8 +60,8 @@ void main()
 				
 				if (iResult == TRUE)
 				{
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDom, oTarget, fDur);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDom, oTarget, fDur);
 				}
 			} 
 		}

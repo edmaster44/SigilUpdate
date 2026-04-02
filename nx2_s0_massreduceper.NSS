@@ -13,7 +13,7 @@
 //:://////////////////////////////////////////////
 //:: RPGplayer1 11/22/08 - Won't stack with other Reduce spells anymore
 //:: RPGplayer1 12/22/08 - Won't exit spell script if one target is invalid
-//:: RPGplayer1 02/23/09 - RemoveEffectsFromSpell() synched with ApplyEffectToObject()
+//:: RPGplayer1 02/23/09 - RemoveEffectsFromSpell() synched with PS_ApplyEffectToObject()
 //:: RPGplayer1 02/28/09 - Won't affect enemies anymore
 
 #include "nw_i0_spells"
@@ -85,7 +85,7 @@ void main()
 	
 	  SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 	
-	  DelayCommand(1.5, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
+	  DelayCommand(1.5, PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
 			} //end else
 	  }
 	  oTarget = GetNextObjectInShape( SHAPE_SPHERE, fSize, lMyLocation, TRUE );

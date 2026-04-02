@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //kinc_trade_constants 
 //trading system constants
 //nchapman 1/21/08

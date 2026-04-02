@@ -19,6 +19,6 @@ void main()
 	{
 		effect eDmg = EffectDamageIncrease(DAMAGE_BONUS_1d6, DAMAGE_TYPE_FIRE);
 		eDmg = SupernaturalEffect(eDmg);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDmg, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDmg, oTarget);
 	}	
 }

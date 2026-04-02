@@ -61,7 +61,7 @@ void main(){
 		
 		if (bApply){
 				eLink = EffectLinkEffects(eAmount, eVis);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 		}
 		
 		oTarget = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_VAST, lLoc, TRUE);

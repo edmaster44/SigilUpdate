@@ -99,7 +99,7 @@ void main()
 				}
 				else
 				{
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 				}
 			}
 		}

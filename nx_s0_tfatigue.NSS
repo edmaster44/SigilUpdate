@@ -76,9 +76,9 @@ void main()
 						// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 						int nDamage = PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_NEGATIVE);
 						if (nDamage > 0)
-							ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
+							PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
 
-						ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 						ApplyFatigue(oTarget, nFatigueRds);
 					}
 				}

@@ -83,8 +83,8 @@ void main()
                         if(nDamage > 0)
                         {
                             //Apply VFX impact and damage effect
-                            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                            DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                            DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                         }
                     }
                 }

@@ -73,8 +73,8 @@ void main()
 						effect eDamage = EffectDamage(nDamage);
 	
 	                    // Apply VFX and damage
-	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	                }
 				}
             }

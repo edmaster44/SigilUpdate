@@ -81,7 +81,7 @@ void main()
 			{
 				// failed saving throw, uh oh! Deaf!!
 				effect eDeaf = EffectDeaf();
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, RoundsToSeconds(1));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, RoundsToSeconds(1));
 			}
 			
 			// If applicable adds any sneak damage to total to be inflicted and reports the damage.
@@ -91,7 +91,7 @@ void main()
 			// visual!!!!
 			//effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 		    //effect eLink = EffectLinkEffects(eFireDamage, eVis);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 			
 			
 			

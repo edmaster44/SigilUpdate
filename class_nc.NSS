@@ -72,7 +72,7 @@ void Armor_of_the_crocodile(object oPC, int nSpell){
 		else nBonus = 1;
 		
 	effect eArmor = EffectACIncrease(nBonus,AC_DODGE_BONUS);
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC));
+	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC));
 	*/
 }
 
@@ -84,7 +84,7 @@ void Claws_of_the_grizzly(object oPC, int nSpell)
 	int nDamage = DAMAGE_BONUS_3;
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
 	effect eSlashing = EffectDamageIncrease(nDamage,DAMAGE_TYPE_SLASHING);
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlashing, oPC));
+	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlashing, oPC));
 }
 
 
@@ -104,7 +104,7 @@ void Earth_Resilience(object oPC, int nSpell)
 	
 		if(iNaturesWarrior == 5) eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN),eLink);
 		
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
+	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
 
 }
 void Nature_Weapon(object oPC, int nSpell)
@@ -116,7 +116,7 @@ if(iNaturesWarrior == 5) nBonus = 3;
 else if (iNaturesWarrior == 3) nBonus = 2;
 else nBonus = 1;
 eLink = EffectLinkEffects(EffectAttackIncrease(nBonus),eLink);
-DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
+DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
 
 }
 
@@ -130,6 +130,6 @@ if (iNaturesWarrior = 5) nBonus =3;
 else nBonus = 1;
 effect eRegenerate = EffectRegenerate(nBonus,6.0f);
 SupernaturalEffect(eRegenerate);
- ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC);
+ PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC);
 
 }

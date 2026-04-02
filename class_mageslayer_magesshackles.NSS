@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void applyShackle(object oTarget, int FailureAmount);
 
 void main()
@@ -18,7 +19,7 @@ void main()
 void applyShackle(object oTarget, int FailureAmount)
 {
 	effect spellFail = SupernaturalEffect(EffectSpellFailure(FailureAmount));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, spellFail, oTarget, 6.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, spellFail, oTarget, 6.0f);
 	if (FailureAmount > 10)
 	{
 		DelayCommand(6.0f, applyShackle(oTarget, FailureAmount - 10));

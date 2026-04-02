@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //Roulette modified by Stephen Spann  (sspann@worldnet.att.net)
 //originally from Charles Adam's 'Casino Bertix' module
 //now includes the 00 slot, Five-Number bets, Corner Bets, and Split Bets.

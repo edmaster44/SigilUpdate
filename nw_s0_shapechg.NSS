@@ -81,5 +81,5 @@ void main()
     //Apply the VFX impact and effects
     //ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
     DelayCommand(0.4, AssignCommand(oTarget, ClearAllActions())); // prevents an exploit
-    DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration)));
+    DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration)));
 }

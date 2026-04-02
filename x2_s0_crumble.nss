@@ -56,7 +56,7 @@ void main()
 
     SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
     effect eCrumb = EffectVisualEffect(VFX_HIT_SPELL_MAGIC);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eCrumb, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCrumb, oTarget);
 
     if (nType != OBJECT_TYPE_CREATURE && nType !=  OBJECT_TYPE_PLACEABLE && nType != OBJECT_TYPE_DOOR )
     {
@@ -108,7 +108,7 @@ void DoCrumble (int nDam, object oCaster, object oTarget)
     effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);
     //effect eMissile = EffectVisualEffect(477);	// NWN1 VFX
     effect eCrumb = EffectVisualEffect(VFX_FNF_SCREEN_SHAKE);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eCrumb, oTarget);
-    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-    //DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget));	// NWN1 VFX
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCrumb, oTarget);
+    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+    //DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget));	// NWN1 VFX
 }

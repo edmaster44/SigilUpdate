@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 const int CLASS_TYPE_MAGE_SLAYER = 70;
 
 void applyCurseGuard(object oTarget, object oPC, int SpellResist, int tooFar);
@@ -19,7 +20,7 @@ void applyCurseGuard(object oTarget, object oPC, int SR, int tooFar)
 	if (GetDistanceBetween(oTarget, oPC) != 0.0f  && GetDistanceBetween(oTarget, oPC) < 20.0f)
 	{
 		effect eSpellResist = SupernaturalEffect(EffectSpellResistanceIncrease(SR, -1));
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpellResist, oTarget, 66.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpellResist, oTarget, 66.0f);
 		DelayCommand(60.0f, applyCurseGuard(oTarget, oPC, SR, FALSE));
 	}
 	else if (!tooFar)

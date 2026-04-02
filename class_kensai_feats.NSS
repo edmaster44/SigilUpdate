@@ -49,7 +49,7 @@ void ApplyKenseiWithstand(object oPC, int iSpell, int iCon, float fDur){
 	eDR = ExtraordinaryEffect(eDR);
 	eDR = SetEffectSpellId(eDR, iSpell);
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDR, oPC, fDur);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDR, oPC, fDur);
 	MonitorSignatureWeapon(oPC, iSpell);
 }
 
@@ -63,7 +63,7 @@ void ApplyKenseiSurge(object oPC, int iSpell, int iCon, float fDur){
 	eSurge = ExtraordinaryEffect(eSurge);
 	eSurge = SetEffectSpellId(eSurge, iSpell);
 	
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSurge, oPC, fDur);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSurge, oPC, fDur);
 	MonitorSignatureWeapon(oPC, iSpell);
 }
 
@@ -138,7 +138,7 @@ void main()
 		effect eSTR = ExtraordinaryEffect(EffectAbilityIncrease(ABILITY_STRENGTH, 8));
 		int iDur = GetLevelByClass(CLASS_TYPE_KENSAI, oPC);
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSTR, oPC, RoundsToSeconds(iDur));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSTR, oPC, RoundsToSeconds(iDur));
 	}
 	else
 	{

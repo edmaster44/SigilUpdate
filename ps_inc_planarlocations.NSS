@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 const int STRONG_EVIL = 0;

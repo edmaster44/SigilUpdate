@@ -18,7 +18,7 @@ void ApplyCraftsmanship(object oPC, object oGolem)
 	effect eFX = EffectACIncrease(2, AC_NATURAL_BONUS);
 	eFX = EffectLinkEffects(eFX, EffectBonusHitpoints(25));
 	eFX = SupernaturalEffect(eFX);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oGolem);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oGolem);
 }
 
 // Abiding Masterwork feat by Ceremorph
@@ -32,7 +32,7 @@ void ApplyAbidingMasterwork(object oPC, object oGolem)
 
 	effect eFX = EffectRegenerate(2, 6.0);
 	eFX = SupernaturalEffect(eFX);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oGolem);	
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oGolem);	
 }
 
 // Master Craftsmanship feat by Ceremorph
@@ -45,7 +45,7 @@ void ApplyMastercraft(object oPC, object oGolem)
 	eFX = EffectLinkEffects(eFX, EffectAbilityIncrease(ABILITY_DEXTERITY, 4));
 	eFX = EffectLinkEffects(eFX, EffectAbilityIncrease(ABILITY_STRENGTH, 4));
 	eFX = SupernaturalEffect(eFX); 
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oGolem);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oGolem);
 }
 
 // Script by AstralEclipse

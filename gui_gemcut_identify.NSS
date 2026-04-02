@@ -25,7 +25,7 @@ void main () {
 	PlayCustomAnimation(oPC, "liftswordloop", FALSE, 1.0f);
 	
 	if (sEffect != "")
-		DelayCommand(0.75f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sEffect), oPC));
+		DelayCommand(0.75f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sEffect), oPC));
 	
 	int nSize = GetCaratWeight(oGem);
 	int nQuality = GetGemQuality(oGem);

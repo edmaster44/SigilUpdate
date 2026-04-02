@@ -27,11 +27,11 @@ void main()
 		object oTARGET = GetSpellTargetObject();
         SignalEvent(oWEAPON, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 		effect eVFX = EffectVisualEffect(VFX_DUR_SPELL_EVIL_AURA);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, GetItemPossessor(oWEAPON), fDUR);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, GetItemPossessor(oWEAPON), fDUR);
 		IPSafeAddItemProperty(oWEAPON, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_FEAR, nLVL), fDUR);
 		IPSafeAddItemProperty(oWEAPON, ItemPropertyVisualEffect(ITEM_VISUAL_EVIL), fDUR);
         TLVFXPillar(VFX_IMP_EVIL_HELP, GetLocation(oTARGET), 4, 0.0f, 6.0f);
-	//	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHarm, oPC, 1.0f);
+	//	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHarm, oPC, 1.0f);
         DelayCommand(1.0f, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_SUNSTRIKE), GetLocation(oTARGET)));
     }
 }

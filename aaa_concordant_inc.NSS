@@ -9,6 +9,76 @@
 #include "nwn2_inc_spells"
 #include "x2_inc_itemprop"
 
+effect ConcordantAbilityEffect(object oPC, int nSpell, int nAbility){
+
+	int nMod = GetAbilityModifier(nAbility, oPC);
+	int nCup = GetLevelByClass(116, oPC);
+	if (nAbility > nCup) nMod = nCup;
+
+	int nDmg;
+	switch (nMod){
+		case 1: nDmg = DAMAGE_BONUS_1; break;
+		case 2: nDmg = DAMAGE_BONUS_2; break;
+		case 3: nDmg = DAMAGE_BONUS_3; break;
+		case 4: nDmg = DAMAGE_BONUS_4; break;
+		case 5: nDmg = DAMAGE_BONUS_5; break;
+		case 6: nDmg = DAMAGE_BONUS_6; break;
+		default: nDmg = DAMAGE_BONUS_6; break;
+	}
+	
+	effect eSacred = EffectSkillIncrease(SKILL_TUMBLE, 0);
+	effect eTemp = EffectSkillIncrease(SKILL_TUMBLE, 0);
+	int nAlignGE = GetAlignmentGoodEvil(oPC);
+	int nAlignLC = GetAlignmentLawChaos(oPC);
+	
+	if (nAlignGE != ALIGNMENT_GOOD){
+		eTemp = EffectDamageIncrease(nDmg, DAMAGE_TYPE_DIVINE);
+		eTemp = VersusAlignmentEffect(eTemp, ALIGNMENT_ALL, ALIGNMENT_GOOD);
+		eSacred = EffectLinkEffects(eTemp, eSacred);
+	}
+	if (nAlignGE != ALIGNMENT_EVIL){
+		eTemp = EffectDamageIncrease(nDmg, DAMAGE_TYPE_DIVINE);
+		eTemp = VersusAlignmentEffect(eTemp, ALIGNMENT_ALL, ALIGNMENT_EVIL);
+		eSacred = EffectLinkEffects(eTemp, eSacred);
+	}
+	if (nAlignLC != ALIGNMENT_LAWFUL){
+		eTemp = EffectDamageIncrease(nDmg, DAMAGE_TYPE_DIVINE);
+		eTemp =	VersusAlignmentEffect(eTemp, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
+		eSacred = EffectLinkEffects(eTemp, eSacred);
+	
+	}
+	if (nAlignLC != ALIGNMENT_CHAOTIC){
+		eTemp = EffectDamageIncrease(nDmg, DAMAGE_TYPE_DIVINE);
+		eTemp =	VersusAlignmentEffect(eTemp, ALIGNMENT_CHAOTIC, ALIGNMENT_ALL);
+		eSacred = EffectLinkEffects(eTemp, eSacred);
+	}
+	
+	eSacred = SetEffectSpellId(eSacred, nSpell);
+	eSacred = SupernaturalEffect(eSacred);
+	
+	return eSacred;
+}
+
+
+// reworked by FlattedFifth, April 1, 2026
+void PS_ConcordantPrecision(object oPC, int nSpell){
+
+	effect eSacred = ConcordantAbilityEffect(oPC, nSpell, ABILITY_DEXTERITY);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+}
+
+void PS_ConcordantProwess(object oPC, int nSpell){
+
+	effect eSacred = ConcordantAbilityEffect(oPC, nSpell, ABILITY_STRENGTH);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+}
+
+
+/* original
 void PS_ConcordantPrecision(object oPC, int nSpell)
 {
 	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
@@ -20,13 +90,12 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 	int nAlignGE = GetAlignmentGoodEvil(oPC);
 	int nAlignLC = GetAlignmentLawChaos(oPC);
 	
-	effect eSacredG;
-	effect eSacredE;
-	effect eSacredL;
-	effect eSacredC;
+	effect eSacredG = EffectSkillIncrease(SKILL_TUMBLE, 0);
+	effect eSacredE = EffectSkillIncrease(SKILL_TUMBLE, 0);
+	effect eSacredL = EffectSkillIncrease(SKILL_TUMBLE, 0);
+	effect eSacredC = EffectSkillIncrease(SKILL_TUMBLE, 0);
 	
-	switch (nDex)
-	{
+	switch (nDex){
 		case 1:
 		{ 
 			if (nAlignGE != ALIGNMENT_GOOD)
@@ -157,7 +226,7 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 			{
 				eSacredL		= EffectDamageIncrease(DAMAGE_BONUS_5, DAMAGE_TYPE_DIVINE);
 				eSacredL			= VersusAlignmentEffect(eSacredL, ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
-				eSacredL			= SupernaturalEffect(eSacredL);
+				//eSacredL			= SupernaturalEffect(eSacredL);
 			}
 			if (nAlignLC != ALIGNMENT_CHAOTIC)
 			{
@@ -197,13 +266,17 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 		}
 	}
 	
-	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	
+	
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
+	
 }
+
 void PS_ConcordantProwess(object oPC, int nSpell)
 {
 	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oPC);
@@ -382,8 +455,9 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 	eSacredG = SetEffectSpellId(eSacredG, nSpell);
 	eSacredL = SetEffectSpellId(eSacredL, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
 }
+*/

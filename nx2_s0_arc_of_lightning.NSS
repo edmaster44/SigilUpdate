@@ -87,15 +87,15 @@ void main()
 		}
 		nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster); 
 		eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
 	}
 
 	// if we have a valid second object
 	if(GetIsObjectValid(oTarget2))
 	{
 		// create a lightning bolt between the two target
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 5.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 5.0f);
 		// in order to get all object in a line between the two target, create a cone starting
 		// at one and ending at the other with a small width, creating a line
 		oTarget = GetFirstObjectInShape(SHAPE_CONE, 0.1, lTarget2, FALSE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_ITEM | OBJECT_TYPE_PLACEABLE, vTarget); 
@@ -109,8 +109,8 @@ void main()
 				nDamage = d4(nCasterLevel);
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster);
 				eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
 				
 				//Fire cast spell at event for the specified target
 	    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), TRUE));

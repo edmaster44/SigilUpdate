@@ -39,7 +39,7 @@ void DecreaseSavingThrow(object oPC, int nStage) {
 	
 	effect eSave = EffectSavingThrowDecrease(SAVING_THROW_ALL, nDecrease);
 	eSave = ExtraordinaryEffect(eSave);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
 	
 }
 
@@ -53,7 +53,7 @@ void DoSonicDamage(object oPC) {
 	}
 	
 	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);
-	ApplyEffectToObject(0, eDam, oPC);
+	PS_ApplyEffectToObject(0, eDam, oPC);
 	
 	int nTimes = GetLocalInt(oPC, "pandemonium_time");
 	DecreaseSavingThrow(oPC, nTimes);
@@ -72,10 +72,10 @@ void DoWindEffect(object oPC) {
 	
 	SendMessageToPC(oPC, "<i>The winds suddenly pick you up and dash you against the wall.</i>");
 	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
 	effect eKnock = EffectKnockdown();
 	eKnock = ExtraordinaryEffect(eKnock);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
 	
 	int nTimes = GetLocalInt(oPC, "pandemonium_time");
 	DecreaseSavingThrow(oPC, nTimes);
@@ -115,7 +115,7 @@ void DoConfusionEffect(object oPC) {
 	
 	effect eConfus = EffectConfused();
 	eConfus = ExtraordinaryEffect(eConfus);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfus, oPC, 6.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfus, oPC, 6.0f);
 	
 	DecreaseSavingThrow(oPC, nTimes);
 	SetLocalInt(oPC, "pandemonium_time", nTimes+1);

@@ -117,7 +117,7 @@ void main()
             eLink = EffectLinkEffects(eVis, eLink);
 
             //Apply effects.
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 
             //Beam
             eBeam = eBeam_Disintegrate;
@@ -132,7 +132,7 @@ void main()
             if(MySavingThrow(nSave, oTarget, nDC, nType) == 0)
             {
                 //Apply effects.
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
             }
 
             //Beam
@@ -140,7 +140,7 @@ void main()
         }
     }
     //Apply effects.
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7f);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7f);
 
     //Additonal eye rays.
 

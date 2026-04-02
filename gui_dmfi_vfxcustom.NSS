@@ -91,9 +91,9 @@ void DMFI_CreateCustomVFX(object oTool, object oSpeaker, string sText, location 
         eVFX = EffectNWN2SpecialEffectFile(sText);
     
     if (FindSubString(sText, "ray")!=-1)
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSpeaker, fDur);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSpeaker, fDur);
     else
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, fDur);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, fDur);
 }
 
 void DestroyPlaceablesInRadius(location lCenter, float fRadius)

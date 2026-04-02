@@ -35,13 +35,13 @@ void ApplyShatteringBlows(object oPC, object oTarget)
 			effect eFirstBlow = ExtraordinaryEffect(EffectVisualEffect(-1, FALSE));
 			eFirstBlow = SetEffectSpellId(eFirstBlow, SPELL_SHATTERING_BLOWS);
 		
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFirstBlow, oTarget, 6.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFirstBlow, oTarget, 6.0f);
 		}
 		else
 		{
 			effect eDRNegation = ExtraordinaryEffect(EffectDamageReductionNegated());
 			
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDRNegation, oTarget, 18.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDRNegation, oTarget, 18.0f);
 		}
 	}
 }

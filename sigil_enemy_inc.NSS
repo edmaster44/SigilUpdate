@@ -17,7 +17,7 @@ void InflictDamage(object oTARGET, int nDAMAGE, int nTYPE = DAMAGE_TYPE_MAGICAL,
 	while (nDMG > 0)
 	{
 		if (nDMG < NWN2_MAXDAMAGE) eFX = EffectDamage(nDMG, nTYPE, nPOWER);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTARGET);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTARGET);
 		nDMG = nDMG - NWN2_MAXDAMAGE;
 	}
 	
@@ -25,7 +25,7 @@ void InflictDamage(object oTARGET, int nDAMAGE, int nTYPE = DAMAGE_TYPE_MAGICAL,
 	while (nIGN > 0)
 	{
 		if (nIGN < NWN2_MAXDAMAGE) eFX = EffectDamage(nIGN, nTYPE, nPOWER, TRUE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTARGET);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTARGET);
 		nIGN = nIGN - NWN2_MAXDAMAGE;
 	}
 }
@@ -45,7 +45,7 @@ void EncounterReset(object oENEMY)
 			if (GetIsOwnedByPlayer(oPC) == TRUE)
 			{
 				AssignCommand(oPC, JumpToObject(oRESPAWN));
-				if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, eRES, oPC);
+				if (GetIsDead(oPC) == TRUE) PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRES, oPC);
 			}
 			else if (oPC != oSTARTER)
 			{
@@ -68,7 +68,7 @@ void EnemyCutscene(object oENEMY, float fDUR)
 	object oANY = GetFirstObjectInShape(SHAPE_SPHERE, 100.0, lENEMY, TRUE);
 	while (oANY != oINVALID)
 	{
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oANY, fDUR);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oANY, fDUR);
 		oANY = GetNextObjectInShape(SHAPE_SPHERE, 100.0, lENEMY, TRUE);
 	}
 	DelayCommand(fDUR, DeleteLocalInt(oENEMY, "ENEMY_CUTSCENE"));

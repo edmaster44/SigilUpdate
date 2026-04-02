@@ -62,6 +62,6 @@ void main()
 	
 		effect eRes = EffectDamageReduction(iAmount, iSpecific, 0, iType);
 		eRes = ExtraordinaryEffect(eRes);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
 	}	
 }

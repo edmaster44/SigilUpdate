@@ -105,12 +105,12 @@ void main()
 					//Apply half damage, linked effects must be re-linked.
 					eDam	=	EffectDamage(nDam/2, DAMAGE_TYPE_COLD);
 					//eLink	=	EffectLinkEffects(eDam, eVis);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 				}
 				else
 				{
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFatigue, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFatigue, oTarget);
 				}
 			}
 		}

@@ -44,8 +44,8 @@ void main() {
 	        {
 	    		effect eVisHeal = EffectVisualEffect(VFX_IMP_HEALING_S);
 	            RemoveTempHitPoints();
-	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, OBJECT_SELF);
-	            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHeal, OBJECT_SELF);
+	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, OBJECT_SELF);
+	            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHeal, OBJECT_SELF);
 	        }
 	    }
 	}

@@ -31,8 +31,8 @@ void main()
 	effect eLink = EffectLinkEffects(eStr, eCon);
 	eLink = SupernaturalEffect(eLink);
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, HoursToSeconds(24));
-//ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oPC,60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, HoursToSeconds(24));
+//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oPC,60.0f);
 /*EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_CON, nLevel), 0);
 EnchantItem(oArmor,ItemPropertyAbilityBonus(IP_CONST_ABILITY_STR, nLevel), 0); Disabled for now */
 

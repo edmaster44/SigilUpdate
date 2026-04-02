@@ -73,12 +73,12 @@ void main()
 	   	 		effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
 	
 	            //Apply the VFX impact and damage effect
-	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	        }
 		}
     }
 	
     effect eRay = EffectBeam(VFX_BEAM_ICE, OBJECT_SELF, BODY_NODE_HAND);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }

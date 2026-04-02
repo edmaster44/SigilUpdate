@@ -90,8 +90,8 @@ void main()
         {
            SignalEvent(GetItemPossessor(oTarget), EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
            IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(123,1), RoundsToSeconds(nDuration), X2_IP_ADDPROP_POLICY_KEEP_EXISTING );
-           //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));	// NWN1 VFX
-           ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oTarget), RoundsToSeconds(nDuration));
+           //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));	// NWN1 VFX
+           PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oTarget), RoundsToSeconds(nDuration));
            return;
         }
     }
@@ -104,8 +104,8 @@ void main()
         if (nDuration>0)
         {
            AddBlessEffectToWeapon(oMyWeapon, TurnsToSeconds(nDuration));
-           //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));	// NWN1 VFX
-           ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oMyWeapon), TurnsToSeconds(nDuration));
+           //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));	// NWN1 VFX
+           PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oMyWeapon), TurnsToSeconds(nDuration));
         }
         return;
     }

@@ -43,8 +43,8 @@ void main()
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 474, FALSE));
 
         //Apply Link and VFX effects to the target
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCharismaBonus));
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCharismaBonus));
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
         DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
     }

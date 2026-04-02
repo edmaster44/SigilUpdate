@@ -47,7 +47,7 @@ void main()
     if(manif.bCanManifest)
     {
 	
-	    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-	    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

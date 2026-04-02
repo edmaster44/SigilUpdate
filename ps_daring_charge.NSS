@@ -85,7 +85,7 @@ void main()
 	
     location locSpellTarget = GetLocation(OBJECT_SELF);
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile("lcda_movement_trail"), oCaster, 1.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile("lcda_movement_trail"), oCaster, 1.0f);
 	
 	SetLocalObject(oCaster, "DARING_CHARGE_TARGET_OBJ", oTarget);
 	DelayCommand(0.2f, ExecuteScript("ps_daring_charge_cb", oCaster));

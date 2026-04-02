@@ -80,10 +80,10 @@ void main(string sInput)
 	SetLocalInt(oTarget, DMFI_CON_EFFECT, nConEffect);
 	SetLocalInt(oTarget, DMFI_SR_EFFECT, nSREffect);
 		
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eStrEffect, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDexEffect, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConEffect, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSREffect, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eStrEffect, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDexEffect, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConEffect, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSREffect, oTarget);
 	
 	if (GetIsPC(oTarget))
 		SendText(oSpeaker,TXT_IS_A_PC + GetName(oTarget),FALSE,COLOR_BLUE);

@@ -91,8 +91,8 @@ void main()
                 // Magic damage is just applied regardless of resistance
                 eDam = EffectDamage(nFireDamage, DAMAGE_TYPE_FIRE);
 				effect eDam2 = EffectDamage(nMagicDamage, DAMAGE_TYPE_MAGICAL);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget);
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisMagic, oTarget, 1.0);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisMagic, oTarget, 1.0);
 
 				// Fire damage gets a saving throw
                 nFireDamage = GetReflexAdjustedDamage(nFireDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
@@ -100,8 +100,8 @@ void main()
                 {
                     // Apply effects to the currently selected target.
                     eDam = EffectDamage(nFireDamage, DAMAGE_TYPE_FIRE);
-                    DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
-                    DelayCommand( fFireDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisFire, oTarget, 1.0) );
+                    DelayCommand( fFireDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
+                    DelayCommand( fFireDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisFire, oTarget, 1.0) );
 				
 					if (GetLocalInt(oTarget, "WALL_FIRE") <= 0) {//We don't want to catch fire multiple times!
 						SetLocalInt(oTarget, "WALL_FIRE", 1);
@@ -122,13 +122,13 @@ void DoBurningDamage(object oTarget, int nCounter)
 		return;
 	
   	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
-  	ApplyEffectToObject (DURATION_TYPE_INSTANT, eVis, oTarget);
+  	PS_ApplyEffectToObject (DURATION_TYPE_INSTANT, eVis, oTarget);
  
   	int nDamage = d6();
     effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
 	eDam = EffectLinkEffects(eDam, EffectDamage(nDamage));
 	
-  	ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
+  	PS_ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
  
   	// do damage in next round
   	if (nCounter > 1)

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void CreateGear(string sGear, location lLoc) {
 	object newGear = CreateObject(OBJECT_TYPE_PLACEABLE, sGear, lLoc, FALSE);
 }

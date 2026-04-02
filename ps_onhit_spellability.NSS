@@ -68,7 +68,7 @@ void main()
 	string sVFX = Get2DAString("iprp_onhit_abilities", "WeaponEffect", aID);
 	effect eVis = EffectNWN2SpecialEffectFile(sVFX);
 	SetEffectSpellId(eVis, nID);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 60.0f);
 		
 	SetTempOnHitProperty(oItem, OBJECT_SELF, aID, nDC, 60.0f);
 	

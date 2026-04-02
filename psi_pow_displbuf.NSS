@@ -76,7 +76,7 @@ void main()
         if(manif.bExtend) fDuration *= 2;
 
         // Set a VFX for the monitor to watch
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, elink, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, elink, oTarget, fDuration);
         // Start the monitor
  }
  }

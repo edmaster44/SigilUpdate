@@ -50,15 +50,15 @@ void main()
 //                if(!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
                 if(!OnHitSavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_SONIC, oCaster))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> stuns "+GetName(oTarget)+"</color>";
 					SendMessageToPC(oCaster, sReport);
                 }
                 //Set the damage effect
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
                 //Apply the VFX impact and damage effect
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,oTarget);
-                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam,oTarget));
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,oTarget);
+                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam,oTarget));
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 				SendMessageToPC(oCaster, sReport);
             }

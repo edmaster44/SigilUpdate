@@ -74,8 +74,8 @@ void main()
                  if (!MySavingThrow(SAVING_THROW_FORT, oTarget, DC, SAVING_THROW_TYPE_DEATH))
                  {
                     //Apply the death effect and VFX impact
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
-                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                  }
                  else
                  {
@@ -96,10 +96,10 @@ void main()
                     //Set damage effect
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
                     //Apply damage effect and VFX impact
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 }
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);		// play the impact effect regardless of save
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);		// play the impact effect regardless of save
             }
         }
     }

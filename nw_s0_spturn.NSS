@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Spell Turning
 //:: NW_S0_SpTurn.nss
@@ -15,6 +16,6 @@ void main()
 	object oTarget = GetSpellTargetObject();
 	effect eVis = EffectVisualEffect(VFX_DUR_SPELLTURNING);
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(2));
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(2));
 }
 

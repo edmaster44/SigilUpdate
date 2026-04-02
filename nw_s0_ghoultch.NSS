@@ -96,11 +96,11 @@ void main()
 				// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 				int nDamage = PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_NEGATIVE);
 				if (nDamage > 0)
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
 					
                 //Create an instance of the AOE Object using the Apply Effect function
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
                 //ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, GetLocation(oTarget), RoundsToSeconds(nDuration));
             }
         }

@@ -85,7 +85,7 @@ void main()
         for(; nRepeats > 0; nRepeats--)
         {
             // Apply impact VFX
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oManifester);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oManifester);
 
             oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, lTarget, FALSE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
@@ -104,8 +104,8 @@ void main()
                         if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
                         {
                             // Apply effect & VFX
-                            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f);
-                            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f);
+                            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                         }// end if - Save
                     }// end if - SR check
                 }// end if - Target validity check

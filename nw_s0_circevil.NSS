@@ -60,6 +60,6 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MAGIC_CIRCLE_AGAINST_EVIL, FALSE));
 
     //Create an instance of the AOE Object using the Apply Effect function
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, HoursToSeconds(nDuration));
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, HoursToSeconds(nDuration));
 }

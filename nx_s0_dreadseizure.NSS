@@ -103,9 +103,9 @@ void main()
 					// Fortitude Save for PCs.
 				    if (GetIsPC(oTarget)) {
 						if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
-				    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				    		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 					} else { // No save for monsters.
-				        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 					}
 				}
 			}
@@ -119,9 +119,9 @@ void main()
 			// Fortitude Save for PCs.
 		    if (GetIsPC(oTarget)) {
 				if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) 
-		    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+		    		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			} else { // No save for monsters.
-		        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+		        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			}
 		}
 		

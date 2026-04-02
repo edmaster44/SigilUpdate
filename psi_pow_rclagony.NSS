@@ -95,8 +95,8 @@ void main()
 
                 //Apply the VFX impact and effects
                 eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
             }// end if - SR check
         }// end for - Twin Power
     }// end if - Successfull manifestation

@@ -6,7 +6,7 @@ void UnsummonSpawn(object oPC, object oTarget)
 {
 	SendMessageToPC(oPC, "Your spawn has decayed.");
 	effect eVis = EffectVisualEffect(VFX_IMP_UNSUMMON);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	DestroyObject(oTarget, 0.1);
 }
 
@@ -22,14 +22,14 @@ void CreateMyconid(object oPC, object oTarget, int iDC, int iSpellID)
 		{
 			SendMessageToPC(oPC, GetName(oTarget) + " has been taken over by your spores.");
 			effect eDeath = EffectDeath(TRUE, FALSE, TRUE, TRUE);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
 			object oNew = CreateObject(OBJECT_TYPE_CREATURE, "ps_srr_myspore" + IntToString(Random(3)+1), lLoc); // 3 different coloured spawns possible with different packages
 			
 			float fScale = 0.5 + (IntToFloat(iLevel) / 10.0);
 			SetScale(oNew, fScale, fScale, fScale);
 			 
 			effect eDom = EffectCutsceneDominated();
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDom, oNew);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDom, oNew);
 			
 			if (iLevel > 20) iFeat = 2261 + 20; // natural AC increase feats
 			else iFeat = 2261 + iLevel;
@@ -82,11 +82,11 @@ void main()
 			else
 			{
 				eVis = EffectVisualEffect(VFX_IMP_DISEASE_S);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 				
 				// now to determine what actual effect takes place
 				eDisease = EffectDisease(DISEASE_DREAD_BLISTERS);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDisease, oTarget, 66.0);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDisease, oTarget, 66.0);
 				SendMessageToPC(oPC, GetName(oTarget) + " is infected with spores.");
 				DelayCommand(50.0 + Random(10), CreateMyconid(oPC, oTarget, iDC, GetSpellId()));
 			}

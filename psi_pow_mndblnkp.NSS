@@ -69,7 +69,7 @@ void main()
         float fDuration = HoursToSeconds(24);
         if(manif.bExtend) fDuration *= 2;
 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }// end if - Successfull manifestation
 }

@@ -80,7 +80,7 @@ void main()
 			nWeaponType == WEAPON_TYPE_PIERCING_AND_SLASHING
            )
         {
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));
            	AddKeenEffectToWeapon(oMyWeapon, fDuration);
         }
     }

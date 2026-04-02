@@ -36,7 +36,7 @@ void main()
 			nDamage = d6(3);
 			
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-		ApplyEffectToObject(0, eDam, OBJECT_SELF);	
+		PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 	} else {
         SetLocalInt(OBJECT_SELF, "HEAT_THROWS", 0);		
 	}

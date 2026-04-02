@@ -74,8 +74,8 @@ void main()
 	            if ( !MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()) )
 	            {	
 	                //Create an instance of the AOE Object using the Apply Effect function
-	                ApplyEffectToObject( nDurType, eAOE, oTarget, fDuration );
-					ApplyEffectToObject( DURATION_TYPE_INSTANT, eHit, oTarget );
+	                PS_ApplyEffectToObject( nDurType, eAOE, oTarget, fDuration );
+					PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHit, oTarget );
 					SetLocalInt(oTarget, EVENFLW_SILENCE, TRUE);
 	            }
 	        }
@@ -87,9 +87,9 @@ void main()
 			int nObjectType = GetObjectType( oTarget );
 			if ( nObjectType == OBJECT_TYPE_CREATURE )
 			{
-				ApplyEffectToObject( nDurType, eHit, oTarget, fDuration );
+				PS_ApplyEffectToObject( nDurType, eHit, oTarget, fDuration );
 				//Create an instance of the AOE Object using the Apply Effect function
-	        	ApplyEffectToObject( nDurType, eAOE, oTarget, fDuration );
+	        	PS_ApplyEffectToObject( nDurType, eAOE, oTarget, fDuration );
 				SetLocalInt(oTarget, EVENFLW_SILENCE, TRUE);
 	        	//Fire cast spell at event for the specified target
 	        	SignalEvent( oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SILENCE, FALSE) );

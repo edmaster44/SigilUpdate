@@ -93,8 +93,8 @@ void main()
 						eHeal = EffectLinkEffects(eHeal, EffectVisualEffect(VFX_HIT_SPELL_EVIL));
    	    				effect eDamage = EffectDamage(nMaxTran, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
 						eDamage = EffectLinkEffects(eDamage, EffectVisualEffect(VFX_HIT_SPELL_EVIL));
-	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oManifester);
-	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oManifester);
+	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	                }// end if - SR check
 	            
 	        }// end if - Hit with a touch attack

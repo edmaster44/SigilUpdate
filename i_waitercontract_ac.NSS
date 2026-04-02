@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 /* Script Created by Agony_Aunt/Loki for SCoD PW. Waiter who can be summoned to provide refreshments for a party*/

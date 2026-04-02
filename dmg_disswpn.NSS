@@ -49,7 +49,7 @@ void main(){
 	effect eDam = EffectDamageOverTime(nDoT, 6.0, DAMAGE_TYPE_ACID, TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
 	eDam = SetEffectSpellId(eDam, nId);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget, fDur);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget, fDur);
 
 }
 /* old
@@ -94,7 +94,7 @@ float fDur = TurnsToSeconds(nPsywar(oManifester));
 	
 	effect eDam = EffectDamageOverTime(d6(nNumberOfDice),6.0,DAMAGE_TYPE_ACID,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_ACID));
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget,fDur);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDam, oTarget,fDur);
 }
 */
  

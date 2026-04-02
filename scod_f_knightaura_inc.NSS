@@ -28,7 +28,7 @@ void ApplyAura(object oTarget, object oCaster){
 		effect	eBuffs = EffectLinkEffects(eSaves, eAB);
 		eBuffs = SupernaturalEffect(eBuffs);
 		eBuffs = SetEffectSpellId(eBuffs, SPELLABILITY_KNIGHT_AURA); 
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBuffs, oTarget);
 	}
 
 	

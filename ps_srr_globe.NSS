@@ -23,5 +23,5 @@ void main()
 		effect eVis = EffectNWN2SpecialEffectFile(Get2DAString("polymorph", "VFX", GLOBE_POLY));
 		effect eLink = ExtraordinaryEffect(EffectLinkEffects(ePoly, eVis));
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }

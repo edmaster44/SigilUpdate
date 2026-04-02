@@ -65,6 +65,6 @@ void main()
     eAOE = EffectLinkEffects(eAOE, eHold);
 
     //Create an instance of the AOE Object using the Apply Effect function
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration));
-	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, OBJECT_SELF, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration));
+	//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, OBJECT_SELF, RoundsToSeconds(nDuration));
 }

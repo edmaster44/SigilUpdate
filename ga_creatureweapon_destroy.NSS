@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*
 ga_creatureweapon_upgrade by Ceremorph for the Sigil: City of Doors PW
 	For use with "equippable" creature weapons	

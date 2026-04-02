@@ -39,14 +39,14 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 			
 			//If you're an enemy, you get blinded!
-		    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, RoundsToSeconds(20));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, RoundsToSeconds(20));
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
         } else {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 			
 			//If you're a friendly, you get concealment!
-		    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(20));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(20));
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
         }
 		
     }

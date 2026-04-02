@@ -24,7 +24,7 @@ void RemoveExtraHitPoints(object oPC)
 	if (totalHP > maxHP)
 	{
  		effect damage = EffectDamage((totalHP - maxHP), IP_CONST_DAMAGETYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
- 		ApplyEffectToObject(DURATION_TYPE_INSTANT, damage, oPC);
+ 		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, damage, oPC);
 	}
 }
 
@@ -67,13 +67,13 @@ void main()
 		{
 			
 			effect ePoly	= EffectPolymorph(244, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(243, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -86,13 +86,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(259, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(258, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -105,13 +105,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(234, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(233, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -124,13 +124,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(236, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(235, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -143,13 +143,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(238, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(237, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -162,13 +162,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(60, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(59, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -181,13 +181,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(261, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(260, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -200,13 +200,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(250, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(249, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -219,13 +219,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(252, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(251, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -238,13 +238,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(232, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(231, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -257,13 +257,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(245, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(217, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -276,13 +276,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(248, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(216, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -295,13 +295,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(247, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(246, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -314,13 +314,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(254, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(253, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -333,13 +333,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(215, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(214, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -352,13 +352,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(257, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(213, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -371,13 +371,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(263, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(262, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -390,13 +390,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(265, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(264, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -409,13 +409,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(267, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(266, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;
@@ -428,13 +428,13 @@ void main()
 		if (GetGender(oPC) == 1)
 		{
 			effect ePoly	= EffectPolymorph(269, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		else
 		{
 			effect ePoly	= EffectPolymorph(268, 0, 0);
-			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
+			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oPC));
 			
 		}
 		break;

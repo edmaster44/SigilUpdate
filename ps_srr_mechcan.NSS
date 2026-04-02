@@ -71,8 +71,8 @@ void main()
             {
                 fDelay = GetSpellEffectDelay(GetLocation(oTarget), oTarget);
                 //Apply VFX impcat, damage effect and lightning effect
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDam,oTarget));
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDam,oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
             }
 		}
        //Select the next target within the spell shape.

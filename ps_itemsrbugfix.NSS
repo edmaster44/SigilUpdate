@@ -12,7 +12,7 @@ if (GetHasSpellEffect(SR_FIX,oPC))
 {
  RemoveSpellEffects(SR_FIX, oPC, oPC);
 }
-ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 }
 
 //------------------------------------------------

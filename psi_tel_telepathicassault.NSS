@@ -91,16 +91,16 @@ void main()
             if(PRCMyResistPower(oManifester, oTarget, nPen))
             {
                 // Apply impact VFX
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
                 // Will partial
                 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
                 }// end if - Save for lesser effect
 				else
 				{
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
 				}
             }// end if - SR check
         }// end for - Twin Power

@@ -69,7 +69,7 @@ void main()
                         nDuration = nDuration * 2;
                     }
                     //Apply linked effects and VFX Impact
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
                 }
            }
      }

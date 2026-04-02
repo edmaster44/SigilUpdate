@@ -77,7 +77,7 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
     }// end while - Effect loop
 
     // Apply visuals
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
     return TRUE;    //Held charge is used if at least 1 touch from twinned power hits
 }

@@ -18,7 +18,7 @@ void main()
     int nHitDice = PS_GetLevel(OBJECT_SELF);
 
 	effect eVis = EffectNWN2SpecialEffectFile("sp_noxious_cone.sef");
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, 2.0);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, 2.0);
 
     location lTargetLocation = GetSpellTargetLocation();
 
@@ -96,18 +96,18 @@ void DoPetrificationNew(int nPower, object oSource, object oTarget, int nSpellID
                     if (bShowPopup == TRUE)
                     {
                         // * under hardcore rules or higher, this is an instant death
-                        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 //					   DisplayGuiScreen( oTarget, "SCREEN_DEATH_DEFAULT", FALSE );
                         // if in hardcore, treat the player as an NPC
                         bIsPC = FALSE;
                         //fDifficulty = TurnsToSeconds(nPower); // One turn per hit-die
                     }
                     else
-                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDifficulty);
+                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDifficulty);
                 }
                 else
                 {
-                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 
                     //----------------------------------------------------------
                     // GZ: Fix for henchmen statues haunting you when changing

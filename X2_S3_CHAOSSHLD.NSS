@@ -86,26 +86,26 @@ void main()
                     eDur = EffectBeam(VFX_BEAM_CHAIN,OBJECT_SELF, BODY_NODE_CHEST);
                     eVis = EffectVisualEffect(VFX_COM_SPARKS_PARRY);
                     eDur = EffectLinkEffects(eEffect,eDur);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d2()));
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d2()));
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
                     break;
 
             case 1:
                     eEffect = EffectDamage(d6()+1, DAMAGE_TYPE_FIRE);
                     eVis = EffectBeam(444,OBJECT_SELF, BODY_NODE_CHEST);
                     eDur = EffectVisualEffect(VFX_DUR_INFERNO);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eVis,oSpellTarget,4.0f);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eEffect,oSpellTarget);
-                    DelayCommand(0.3f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,4.0f));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eVis,oSpellTarget,4.0f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eEffect,oSpellTarget);
+                    DelayCommand(0.3f,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,4.0f));
                     break;
 
             case 2:
                     eEffect = EffectDamage(d8()+1, DAMAGE_TYPE_ELECTRICAL);
                     eVis = EffectBeam(VFX_BEAM_LIGHTNING,OBJECT_SELF, BODY_NODE_CHEST);
                     eDur = EffectVisualEffect(VFX_IMP_LIGHTNING_S);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eVis,oSpellTarget,4.0f);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eEffect,oSpellTarget);
-                    DelayCommand(0.3f,ApplyEffectToObject(DURATION_TYPE_INSTANT,eDur,oSpellTarget));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eVis,oSpellTarget,4.0f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eEffect,oSpellTarget);
+                    DelayCommand(0.3f,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDur,oSpellTarget));
                     break;
 
             case 3:
@@ -116,8 +116,8 @@ void main()
 						eVis = EffectVisualEffect(VFX_IMP_BLIND_DEAF_M);
 						eDur = EffectLinkEffects(eEffect,eDur);
 						eDur = EffectLinkEffects(eDur2,eDur);
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d2()));
-						ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d2()));
+						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
 					}
                              break;
 
@@ -129,23 +129,23 @@ void main()
                     eVis = EffectVisualEffect(VFX_IMP_SLOW);
                     eDur = EffectVisualEffect(VFX_DUR_ICESKIN);
                     eDur = EffectLinkEffects (eEffect,eDur);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d4()));
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d4()));
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
                     break;
 
             case 5: eEffect = EffectKnockdown();
                     eVis = EffectVisualEffect(VFX_IMP_STUN);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eEffect,oSpellTarget,6.0f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eEffect,oSpellTarget,6.0f);
                     break;
 
             case 6:
                     eEffect = EffectDamage(d4(2),DAMAGE_TYPE_FIRE);
                     eDur = EffectVisualEffect(VFX_DUR_ELEMENTAL_SHIELD);
                     eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eEffect,oSpellTarget,6.0f);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellOrigin,4.0f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eEffect,oSpellTarget,6.0f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellOrigin,4.0f);
                     break;
 
             case 7:
@@ -153,8 +153,8 @@ void main()
                      eDur = EffectVisualEffect(VFX_DUR_STONEHOLD);
                     eDur = EffectLinkEffects(eDur,eEffect);
                     eDur = EffectLinkEffects(EffectCutsceneImmobilize(),eDur);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d3()));
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oSpellTarget,RoundsToSeconds(d3()));
                     break;
 
         }

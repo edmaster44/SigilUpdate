@@ -89,9 +89,9 @@ void main()
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_RESTORATION, FALSE));
 
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
         
         //Apply Damage Effect to the Caster
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(5), OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(5), OBJECT_SELF);
     }
 }

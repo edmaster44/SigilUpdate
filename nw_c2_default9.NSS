@@ -146,7 +146,7 @@ void main()
 		eGHOST = EffectLinkEffects(eGHOST, EffectDamageReduction(1000, DAMAGE_POWER_PLUS_ONE));
 		eGHOST = EffectLinkEffects(eGHOST, EffectCutsceneGhost());
 		eGHOST = SupernaturalEffect(eGHOST);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGHOST, oSPAWN);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGHOST, oSPAWN);
 	}
     
 	//SR fix

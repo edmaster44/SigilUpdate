@@ -7,7 +7,7 @@ int nLevel=GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oPC);
 int nDuration = (nLevel-1)*10;
 int nShieldDamage = DAMAGE_BONUS_1d6 * nLevel;
 eLink = EffectDamageShield(0,nShieldDamage,DAMAGE_TYPE_FIRE);
-ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oPC, RoundsToSeconds(nDuration));
+PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oPC, RoundsToSeconds(nDuration));
 }
 
 void Robe_Of_Clouds(object oPC , int nSpell)
@@ -22,7 +22,7 @@ effect eDur   = EffectVisualEffect(VFX_DUR_SPELL_SHROUDING_FOG);
 eConceal = EffectLinkEffects(eDur, eConceal);
 SupernaturalEffect(eConceal);
 
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, OBJECT_SELF, RoundsToSeconds(nDuration)));
+	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, OBJECT_SELF, RoundsToSeconds(nDuration)));
 }
 
 
@@ -59,15 +59,15 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
                     effect eLink    = EffectLinkEffects(eRoped, eVis);
                      eLink    = EffectLinkEffects(eLink, eHidePen);
                      eLink    = EffectLinkEffects(eLink, eMovePen);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
                     SpeakString(GetFirstName(oPC) + " flings their rope at " + GetFirstName(oTarget) + " and entangles them!");    }    
                     
                 else 
                 {   effect eFail = EffectMovementSpeedDecrease (50);
                     SendMessageToPC(oPC, "Your rope has failed to ensare!"); // here you log failure
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
                     SpeakString(GetFirstName(oTarget) + " broke free of the attempted ensnarement!"); }
         
     effect eRay = EffectBeam(VFX_BEAM_GREEN_DRAGON_ACID, OBJECT_SELF, BODY_NODE_HAND);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }  

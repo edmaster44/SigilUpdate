@@ -77,8 +77,8 @@ void main()
 			eDam = EffectDamage(d6(iTrapDiceNumber), DAMAGE_TYPE_DIVINE);
 		}
 		effect eVis = EffectVisualEffect(VFX_IMP_SUNSTRIKE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	}
 	else if (iBaseTrap >= 75 && iBaseTrap <= 79)
 	{
@@ -127,8 +127,8 @@ void main()
         	if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, iTrapDC, SAVING_THROW_TYPE_TRAP))
         	{
             	//Apply slow effect and slow effect
-            	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-            	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, RoundsToSeconds(iTrapDuration));
+            	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, RoundsToSeconds(iTrapDuration));
         	}
         	//Get next target in the shape.
         	oTarget = GetNextObjectInShape(SHAPE_SPHERE, fTrapRadius, lTarget);
@@ -179,10 +179,10 @@ void main()
 		
 		if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, iTrapDC, SAVING_THROW_TYPE_TRAP))
     	{
-        	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iTrapDuration));
+        	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iTrapDuration));
     	}
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	}
 	else if (iBaseTrap >= 85 && iBaseTrap <= 89)
 	{
@@ -248,8 +248,8 @@ void main()
             {
 				effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
 				effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                DelayCommand(0.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 			}
 			//Get next target in shape
         	oTarget = GetNextObjectInShape(SHAPE_SPHERE, fTrapRadius, lTarget);
@@ -336,7 +336,7 @@ void main()
 		oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fTrapRadius, lTarget);
 		while(GetIsObjectValid(oTarget))
     	{
-	        ApplyEffectToObject(DURATION_TYPE_INSTANT, ePoison, oTarget);
+	        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePoison, oTarget);
 			oTarget = GetNextObjectInShape(SHAPE_SPHERE, fTrapRadius, lTarget);
      	}
 	}
@@ -384,10 +384,10 @@ void main()
     
     	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, iTrapDC, SAVING_THROW_TYPE_TRAP))
     	{
-        	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iTrapDuration));
+        	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iTrapDuration));
     	} 
-    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	}
 	else if (iBaseTrap >= 105 && iBaseTrap <= 109)
 	{
@@ -435,8 +435,8 @@ void main()
 	    {
 			nDamage = GetReflexAdjustedDamage(d8(iTrapDiceNumber), oTarget, iTrapDC, SAVING_THROW_TYPE_TRAP);
     		eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-    		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-    		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+    		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         
         	oTarget = GetNextObjectInShape(SHAPE_SPHERE, fTrapRadius, lTarget);
 		}
@@ -495,11 +495,11 @@ void main()
     	while (GetIsObjectValid(oTarget))
     	{
 			eDam = EffectDamage(d4(iTrapDiceNumber), DAMAGE_TYPE_SONIC);
-        	DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+        	DelayCommand(0.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
         
         	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, iTrapDC, SAVING_THROW_TYPE_TRAP))
         	{
-            	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iTrapDuration));
+            	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iTrapDuration));
         	}
         	oTarget = GetNextObjectInShape(SHAPE_SPHERE, fTrapRadius, lTarget);
 		}
@@ -550,10 +550,10 @@ void main()
 		
     	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, iTrapDC, SAVING_THROW_TYPE_TRAP))
     	{
-        	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eNeg, oTarget);
+        	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eNeg, oTarget);
     	}
-    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		
 	}
 	else

@@ -364,7 +364,7 @@ void DoTrapSpike(int nDamage)
         effect eDam = EffectDamage(nRealDamage, DAMAGE_TYPE_PIERCING);
         effect eVis = EffectVisualEffect(253);
         ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget));
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
     }
 }
 //::///////////////////////////////////////////////
@@ -474,21 +474,21 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
         // * must be the correct racial type (only used with Holy Water)
             if ((nRacialType != RACIAL_TYPE_ALL) && (nRacialType == GetRacialType(oTarget)))
             {
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget); VISUALS outrace the grenade, looks bad
+                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget); VISUALS outrace the grenade, looks bad
             }
             else
             if ((nRacialType == RACIAL_TYPE_ALL) )
             {
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget); VISUALS outrace the grenade, looks bad
+                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget); VISUALS outrace the grenade, looks bad
             }
 
         }
 
-    //    ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
+    //    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
     }
 
 // *
@@ -526,17 +526,17 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
                 {
                     // Apply effects to the currently selected target.
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the flame that erupts on the target not on the ground.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 }
                 else
                 if ((nRacialType == RACIAL_TYPE_ALL) )
                 {
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 }
 
             }
@@ -649,8 +649,8 @@ void DoDirgeEffect(object oTarget)
                 effect eLink = EffectLinkEffects(eDex, eStr);
 
                 //Apply damage and visuals
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
                 SetLocalInt(oTarget, "X0_L_LASTPENALTY", nGetLastPenalty);
             }
 
@@ -709,8 +709,8 @@ void DoCamoflage(object oTarget, int nSpellId)
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellId, FALSE));
 
     //Apply VFX impact and bonus effects
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
 //::///////////////////////////////////////////////
 //:: DoSpikeGrowthEffect
@@ -746,8 +746,8 @@ void DoSpikeGrowthEffect(object oTarget)
             //effect eVis = EffectVisualEffect( VFX_COM_BLOOD_REG_RED );	// NWN2 VFX
             //effect eLink = eDam;
             //Apply damage and visuals
-            //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam/*eLink*/, oTarget));
+            //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam/*eLink*/, oTarget));
 
            // * only apply a slow effect from this spell once
            if (GetHasSpellEffect(SPELL_SPIKE_GROWTH, oTarget) == FALSE)
@@ -758,7 +758,7 @@ void DoSpikeGrowthEffect(object oTarget)
                     effect eSpeed = EffectMovementSpeedDecrease(30);
 					effect eVisSlow = EffectVisualEffect( VFX_DUR_SPELL_SLOW );
 					effect eLink = EffectLinkEffects( eSpeed, eVisSlow );
-                    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+                    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
                 }
            }
         }
@@ -822,8 +822,8 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
         //Set the heal effect
         effect eHeal = EffectHeal(nDamage + nExtraDamage);
         //Apply heal effect and VFX impact
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellID, FALSE));
     }
@@ -848,8 +848,8 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
                 effect eVis = EffectVisualEffect(vfx_impactHurt);
                 effect eDam = EffectDamage(nDamageTotal,DAMAGE_TYPE_NEGATIVE);
                 //Apply the VFX impact and effects
-                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
             }
         }
@@ -945,7 +945,7 @@ void ShootMissilesAtTarget(object oTarget, location lSourceLoc, location lTarget
 			//Set damage effect
 			eDam = EffectDamage(nDam, nDamageType);
 			eDam = EffectLinkEffects( eDam, eVis );
-			DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+			DelayCommand(fTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 		}
 		// always show the attempted effect visually
 		DelayCommand( fTime2, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTargetLoc, nSpell, nPathType) );
@@ -1150,8 +1150,8 @@ break;
     			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
 //Apply VFX impact and bonus effects
-//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
-    			ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);	
+//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+    			PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);	
 			}
 			else
 			{
@@ -1195,7 +1195,7 @@ void DoCaltropEffect(object oTarget)
             float fDelay = GetRandomDelay(1.0, 2.2);
             //Apply damage and visuals
             //DelayCommand(fDelay, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oTarget)));
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
             int nDamageDone = GetLocalInt(OBJECT_SELF, "NW_L_TOTAL_DAMAGE");
             nDamageDone++;
 
@@ -1391,18 +1391,18 @@ void DoPetrification(int nPower, object oSource, object oTarget, int nSpellID, i
                     if (bShowPopup == TRUE)
                     {
                         // * under hardcore rules or higher, this is an instant death
-                        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
                         DelayCommand(2.75, PopUpDeathGUIPanel(oTarget, FALSE , TRUE, 40579));
                         // if in hardcore, treat the player as an NPC
                         bIsPC = FALSE;
                         //fDifficulty = TurnsToSeconds(nPower); // One turn per hit-die
                     }
                     else
-                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDifficulty);
+                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDifficulty);
                 }
                 else
                 {
-                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 
                     //----------------------------------------------------------
                     // GZ: Fix for henchmen statues haunting you when changing
@@ -1481,7 +1481,7 @@ void spellsGenericAreaOfEffect(
                     //Apply VFX impact
                     if (GetEffectType(eVis) != 0)
                     {
-                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                     }
 
                     // * Apply effects
@@ -1489,7 +1489,7 @@ void spellsGenericAreaOfEffect(
                    // * Had to remove this test because LINKED effects have no valid type.
                     {
 
-                        DelayCommand(fDelay, ApplyEffectToObject(nDurationType, eLink, oTarget, fDuration));
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(nDurationType, eLink, oTarget, fDuration));
                     }
 
                     // * If this is a removal spell then perform the appropriate removals
@@ -1605,8 +1605,8 @@ void spellApplyMindBlank(object oTarget, int nSpellId, float fDelay=0.0)
     }
 
     //After effects are removed we apply the immunity to mind spells to the target
-    DelayCommand(fDelay, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
-    //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	// NWN1 VFX
+    DelayCommand(fDelay, PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
+    //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	// NWN1 VFX
 }
 //::///////////////////////////////////////////////
 //:: doAura
@@ -1665,8 +1665,8 @@ void doAura(int nAlign, int nVis1, int nVis2, int nDamageType)
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
 	
 void DoStinkingCloud(object oTarget, object oSource, int nSaveDC, effect eVis, effect eStink)
@@ -1680,8 +1680,8 @@ void DoStinkingCloud(object oTarget, object oSource, int nSaveDC, effect eVis, e
             {
 				float fDelay = GetRandomDelay(0.75, 1.75);
         		//Apply the VFX impact and linked effects
-        		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-        		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStink, oTarget, RoundsToSeconds(2)));
+        		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStink, oTarget, RoundsToSeconds(2)));
             }
 		}
 	}	
@@ -2035,8 +2035,8 @@ void spellsDispelMagic(object oTarget, int nCasterLevel, effect eVis, effect eIm
         }
     }
 
-    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDispel, oTarget));
+    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDispel, oTarget));
 }
 
 //------------------------------------------------------------------------------

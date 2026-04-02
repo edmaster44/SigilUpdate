@@ -46,7 +46,7 @@ void DoExpeditiousRetreatEffects( object oCaster, object oTarget, int nMetaMagic
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
 	//Apply the VFX impact and effects
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
 
 
@@ -66,8 +66,8 @@ void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic )
     effect eLink    = EffectLinkEffects(eHaste, eDur);
 
     // Apply effects to the currently selected target.
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }
 
 

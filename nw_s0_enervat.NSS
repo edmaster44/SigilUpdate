@@ -88,11 +88,11 @@ void main()
 	            //if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NEGATIVE))
 	            {
 	                //Apply the VFX impact and effects
-	                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(nDuration));
-	                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(nDuration));
+	                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	            }
 	        }
 		}
-		ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
+		PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
     }
 }

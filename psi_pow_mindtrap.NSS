@@ -78,7 +78,7 @@ void main()
         SetLocalInt(oTarget, "PRC_Power_MindTrap_Active", TRUE);
 
         // Set a VFX for the monitor to watch
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
 
         // Start the monitor
         DelayCommand(6.0f, DispelMonitor(oManifester, oTarget, manif.nSpellID, FloatToInt(fDuration) / 6));

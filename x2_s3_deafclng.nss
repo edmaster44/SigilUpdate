@@ -46,8 +46,8 @@ void main()
                       int nRounds = PS_GetCasterLevel(oSpellOrigin);
                       effect eDeaf = EffectDeaf();
                       effect eVis = EffectVisualEffect(VFX_IMP_BLIND_DEAF_M);
-                      ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDeaf,oSpellTarget,RoundsToSeconds(nRounds));
-                      ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                      PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDeaf,oSpellTarget,RoundsToSeconds(nRounds));
+                      PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
                       FloatingTextStrRefOnCreature(85388,oSpellTarget,FALSE);
                 }
            }

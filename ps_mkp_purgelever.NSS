@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // ps_mkp_purgelever
@@ -25,7 +26,7 @@ void main()
 		while (GetIsObjectValid(oTarget))
 		{
 			SendMessageToPC(oPC, "*Purging spell wards...*");	
-			DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,ePurge,oTarget,3.0f));
+			DelayCommand(1.0f,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,ePurge,oTarget,3.0f));
 			effect eBad = GetFirstEffect(oTarget);
 			while(GetIsEffectValid(eBad))
 			{

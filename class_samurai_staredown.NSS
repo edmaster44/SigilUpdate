@@ -18,7 +18,7 @@ void DoStaredownOnTarget(object oTarget, object oPC, int iIntimidate, int iCHA)
 			eEffect = EffectLinkEffects(eEffect, EffectVisualEffect(VFX_DUR_SPELL_DOOM));
 			eEffect = SupernaturalEffect(eEffect);
 			
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, RoundsToSeconds(iCHA));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, RoundsToSeconds(iCHA));
 		}
 	
 		SetLocalInt(oTarget, "SAMURAISTAREDOWN", 1);

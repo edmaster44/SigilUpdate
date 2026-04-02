@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // bdoor_oopen
 /*
 	Description: This pretty much heals then closes the door after x amount 
@@ -12,7 +13,7 @@ void main() {
     object oDoor = OBJECT_SELF;
     ClearAllActions();
 	effect eHeal = EffectHeal(GetMaxHitPoints()-GetCurrentHitPoints());
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDoor);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDoor);
     ActionWait(360.0);
     ActionCloseDoor(OBJECT_SELF);
 

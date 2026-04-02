@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 	int StartingConditional(int selection)
 	{
 	object oPC = GetPCSpeaker();

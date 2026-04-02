@@ -227,7 +227,7 @@ int StartingConditional(object oSender, object oTarget, int nChannel, string sMe
 				SendMessageToPC(oSender, "<c=red>Through early morning fog I see, visions of the things to be, the pains that are withheld for me, I realize and I can see...");
 				SendMessageToPC(oSender, "<c=red>That suicide is painless, It brings on many changes, and I can take or leave it if I please.");
 				effect eDeath = EffectDeath(TRUE, TRUE, TRUE, TRUE);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oSender);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oSender);
 			}
 			else if (GetStringLeft(sMessage, 8) == "autosave")
 			{

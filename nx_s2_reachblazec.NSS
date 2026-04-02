@@ -80,8 +80,8 @@ void main()
 				if (nDamValue > 0)
 				{
 				eFireDamage	=	EffectDamage(nDamValue, DAMAGE_TYPE_FIRE);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eFireDamage, oTarget);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eFireHit, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFireDamage, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFireHit, oTarget);
 				}
 			//}
 		}

@@ -42,9 +42,9 @@ void main()
             //Set Damage Effect with the modified damage
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
             //Apply damage and visuals
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
         }
     }
 }

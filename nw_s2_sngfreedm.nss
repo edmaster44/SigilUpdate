@@ -112,13 +112,13 @@ void main()
              {
                 if(oTarget == OBJECT_SELF)
                 {
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkOther, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkOther, oTarget);
                 }
                 else if(spellsIsTarget( oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF))
                 {
                     float fDist = GetDistanceBetween( OBJECT_SELF, oTarget );
                     float fDelay = fDist * 0.15;
-                    DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkOther, oTarget) );
+                    DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkOther, oTarget) );
                 }
             }
         }

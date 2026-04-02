@@ -123,9 +123,9 @@ void HandleCastOnSelf( object oSelf, int nDuration )
 	eLink = EffectLinkEffects(eMA_Dur, eLink);	// no longer using the NWN1 VFX
 
     //Apply the armor bonuses and the VFX impact
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oSelf, HoursToSeconds(nDuration));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePfS_Vis, oSelf);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eMA_Vis, oSelf);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oSelf, HoursToSeconds(nDuration));
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePfS_Vis, oSelf);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMA_Vis, oSelf);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -74,19 +74,19 @@ void DoSandstorm(float fDis) {
 			eDam = EffectLinkEffects(EffectDamage(nDamage), eDam);
 			
 			SendMessageToPC(oObj, "The windstorm whips up the sand, throwing it into your face, almost blinding you.");
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
 		} else if (nRand == 2) {
 			int nDamage = d6(2);
 			effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
 			if (!ReflexSave(oObj, 25, SAVING_THROW_TYPE_TRAP, OBJECT_SELF)) {
 				effect eKnock = EffectKnockdown();
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oObj, 2.0f);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oObj, 2.0f);
 				SendMessageToPC(oObj, "A piece of flying debris hits you, propelled by the windstorm. You are knocked down.");
 			} else {
 				SendMessageToPC(oObj, "You barely dodge a piece of flying debris, picked up by the windstorm. It grazes you.");
 			}
 			
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
 		} else if (nRand == 3) {
 			location lTarget = GetRandomLocation(GetArea(OBJECT_SELF), OBJECT_SELF, 20.0f);
 			int nDamage = d6();
@@ -99,7 +99,7 @@ void DoSandstorm(float fDis) {
 			}
 			
 			effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
 		}
 		
 		oObj = GetNextObjectInShape(SHAPE_SPHERE, fDis, GetLocation(OBJECT_SELF), TRUE, OBJECT_TYPE_CREATURE);

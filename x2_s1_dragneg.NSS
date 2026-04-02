@@ -101,7 +101,7 @@ void main()
     PlayDragonBattleCry();
     effect eBreath = EffectNWN2SpecialEffectFile("fx_neg_breath.sef");
     PlayCustomAnimation(OBJECT_SELF, "Una_breathattack01", 0, 0.7f);
-    DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, OBJECT_SELF, 3.0f));
+    DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, OBJECT_SELF, 3.0f));
     DelayCommand(0.7f, NegativeFire(nDamage, nDamage2, nDC));
 }
 
@@ -140,9 +140,9 @@ void NegativeFire(int nDamage, int nDamage2, int nDC)
                 //Determine effect delay
                 //fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
                 //Apply the VFX impact and effects
-                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f));
-                DelayCommand(1.1, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrain, oTarget));
-                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eBreath, oTarget));
+                DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f));
+                DelayCommand(1.1, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrain, oTarget));
+                DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBreath, oTarget));
              }
         }
         //Get next target in spell area

@@ -5,6 +5,7 @@
 // CGaw OEI 6/19/07
 
 #include "ginc_math"
+#include "ff_applyeffect"
 
 void PlayCustomAnimationWrapper(object oObject, string sAnimationName, int nLoop, float fSpeed)
 {
@@ -22,7 +23,7 @@ void ApplyEdge()
 	SetLocalInt(oItem, "Effect_ID", nRandomInt);
 	effect eID = SetEffectSpellId(eMaxDamage, nRandomInt);
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eID, oCaster, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eID, oCaster, 60.0f);
 }
 
 void main()
@@ -31,7 +32,7 @@ void main()
 	
 	effect eVis = EffectNWN2SpecialEffectFile("sp_magic_cast.sef");
 	
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 2.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 2.0f);
 	
 	PlayCustomAnimationWrapper(oCaster, "liftswordup", 0, 0.75f);
 	DelayCommand(1.0f, PlayCustomAnimationWrapper(oCaster, "liftswordloop", 0, 1.0f));

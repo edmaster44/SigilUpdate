@@ -90,11 +90,11 @@ void main()
                 
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
                 // Apply effects to the currently selected target.
-                DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget));
+                DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget));
                 //This visual effect is applied to the target object not the location as above.  This visual effect
                 //represents the impact that erupts on the target not on the ground.
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
              }
         }
        //Select the next target within the spell shape.

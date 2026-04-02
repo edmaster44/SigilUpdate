@@ -148,8 +148,8 @@ void main()
        
             //Apply the VFX impact and effects
 	 		float fRageDuration = RoundsToSeconds(nRageDuration);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fRageDuration);
-            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF) ;
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fRageDuration);
+            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF) ;
 
 	        // 2003-07-08, Georg: Rage Epic Feat Handling
 			CheckAndApplyRageFeats(nRageDuration);
@@ -188,6 +188,6 @@ void ApplyFatigue3(object oTarget, int nFatigueDuration)
 	
 		float fFatigueDuration = RoundsToSeconds(nFatigueDuration);
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, oTarget, fFatigueDuration);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, oTarget, fFatigueDuration);
 	}
 }

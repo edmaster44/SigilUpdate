@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //Weapon Proficiency fixes for Favored Souls

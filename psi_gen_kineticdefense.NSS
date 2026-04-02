@@ -26,7 +26,7 @@ void main()
     if (!GetHasSpellEffect(GetSpellId(), oTarget))
 	{
 			
-			DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget));
+			DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget));
 			SendMessageToPC(OBJECT_SELF, "Kinetic Defense: Activated");
 		
 			

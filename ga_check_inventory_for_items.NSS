@@ -50,7 +50,7 @@ void main() {
 			ExecuteSuccessActions(oChest);
 			if (sVFX != "") {
 				effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oChest);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oChest);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oChest);
 			}
 		} else {
 			SendMessageToPC(oPC, failString);

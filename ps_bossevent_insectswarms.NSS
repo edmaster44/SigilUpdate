@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //*********************************************
@@ -61,11 +62,11 @@ void main () {
 	
 		if (GetIsEnemy(oObj, OBJECT_SELF)) {
 			
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oObj, 18.0f);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oObj, 18.0f);
 			
 			effect eDaze = EffectDazed();
 			if (!FortitudeSave(oObj, nDC, SAVING_THROW_TYPE_DISEASE)) {
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oObj, 6.0f);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oObj, 6.0f);
 			}
 			
 			SwarmAttack(oObj, nDice);
@@ -87,7 +88,7 @@ void SwarmAttack(object oTarget, int nDice) {
 	if (TouchAttackMelee(oTarget, FALSE)) {
 		SendMessageToPC(oTarget, "<i>The swarm of biting insects gets past your defenses.</i>");
 		effect eDam = EffectDamage(nDamage, nDamType);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	} else {
 		SendMessageToPC(oTarget, "<i>You manage to fend off the swarm of biting insects for the moment.</i>");
 	}

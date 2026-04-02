@@ -18,7 +18,7 @@
 {
 	effect eImm = EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE, nImm);
 	effect eLink = ExtraordinaryEffect(eImm);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Fire immunity of " + IntToString(nImm) + "% applied.");
 }
 
@@ -28,7 +28,7 @@ void ApplyFireGiantPRCImmunities(object oPC, int nImm, int nVul)
 	effect eVul = EffectDamageImmunityDecrease(DAMAGE_TYPE_COLD, nVul);
 	effect eLink = EffectLinkEffects(eImm, eVul);
 	eLink = ExtraordinaryEffect(eLink);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Fire immunity of " + IntToString(nImm) + "% applied.");
 	SendMessageToPC(oPC, "Cold vulnerability of " + IntToString(nVul) + "% applied.");
 }
@@ -37,7 +37,7 @@ void ApplyFrostGiantImmunities(object oPC, int nImm)
 {
 	effect eImm = EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, nImm);
 	effect eLink = ExtraordinaryEffect(eImm);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Cold immunity of " + IntToString(nImm) + "% applied.");
 }
 
@@ -47,7 +47,7 @@ void ApplyFrostGiantPRCImmunities(object oPC, int nImm, int nVul)
 	effect eVul = EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, nVul);
 	effect eLink = EffectLinkEffects(eImm, eVul);
 		eLink = ExtraordinaryEffect(eLink);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Cold immunity of " + IntToString(nImm) + "% applied.");
 	SendMessageToPC(oPC, "Fire vulnerability of " + IntToString(nVul) + "% applied.");
 }*/
@@ -77,7 +77,7 @@ void ApplyCoreDevaImmunities(object oPC, int iImmCore, int nSpell)
 	eCore = SupernaturalEffect(eCore);
 	eCore = SetEffectSpellId(eCore, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCore, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCore, oPC);
 	if (!GetLocalInt(oPC, "devaImmune")){
 		SendMessageToPC(oPC, "Immunity to petrification and " + IntToString(iImmCore) + "% core immunities applied.");
 		SetLocalInt(oPC, "devaImmune", TRUE);
@@ -94,7 +94,7 @@ void ApplyMonadicImmunities(object oPC, int iImmFire, int nSpell)
 		eFire = SupernaturalEffect(eFire);
 		eFire = SetEffectSpellId(eFire, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFire, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFire, oPC);
 		if (!GetLocalInt(oPC, "monadicImmune")){
 			SendMessageToPC(oPC, "Monadic Deva - " + IntToString(iImmFire) + "% fire immunity applied");
 			SetLocalInt(oPC, "monadicImmune", TRUE);
@@ -117,7 +117,7 @@ void ApplyMovanicImmunities(object oPC, int iImmPoNe, int nSpell)
 		ePoNe = SupernaturalEffect(ePoNe);
 		ePoNe = SetEffectSpellId(ePoNe, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoNe, oPC);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoNe, oPC);
 		if (!GetLocalInt(oPC, "movanicImmune")){
 			SendMessageToPC(oPC, "Movanic Deva - " + IntToString(iImmPoNe) + "% positive/negative immunity applied");
 			SetLocalInt(oPC, "movanicImmune", TRUE);
@@ -176,7 +176,7 @@ void PS_Immunity_Giant(object oPC, int nSpell)
 	eFX = SetEffectSpellId(eFX, nSpell);
 	//Now we finally apply all the appropriate bonuses
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 	if (!GetLocalInt(oPC, "giantProps")){
 		SendMessageToPC(oPC, sTXT);
 		SetLocalInt(oPC, "giantProps", TRUE);
@@ -193,7 +193,7 @@ void PS_Immunity_Rakshasa(object oPC, int nSpell)
 	
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void PS_Immunity_Khayal(object oPC, int nSpell)
@@ -203,7 +203,7 @@ void PS_Immunity_Khayal(object oPC, int nSpell)
 	
 	effect eLink = SupernaturalEffect(eImm);
 	eLink = SetEffectSpellId(eLink, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void PS_Immunity_Deva(object oPC, int nSpell)
@@ -276,7 +276,7 @@ void PS_Immunity_Baatezu(object oPC, int nSpell)
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	//Now we finally apply all the appropriate bonuses
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "BaatezuProps")){
 		SendMessageToPC(oPC, "Baatezu - " + IntToString(iImmFire) + "% fire immunity and poison immunity applied");
 		SetLocalInt(oPC, "BaatezuProps", TRUE);
@@ -318,7 +318,7 @@ void PS_Immunity_Tanarri(object oPC, int nSpell)
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	//Now we finally apply all the appropriate bonuses
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "TanariProps")){
 		SendMessageToPC(oPC, "Tanar'ri - " + IntToString(iImmElec) + "% electrical immunity and poison immunity applied");
 		SetLocalInt(oPC, "TanariProps", TRUE);
@@ -358,7 +358,7 @@ void PS_Immunity_Archon(object oPC, int nSpell)
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	//Now we finally apply all the appropriate bonuses
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "archonProps")){
 		SendMessageToPC(oPC, "Archon - " + IntToString(iImmElec) + "% electrical immunity and paralysis immunity applied");
 		SetLocalInt(oPC, "archonProps", TRUE);
@@ -400,7 +400,7 @@ void PS_Immunity_Eladrin(object oPC, int nSpell)
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	//Now we finally apply all the appropriate bonuses
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "eladrinProps")){
 		SendMessageToPC(oPC, "Eladrin - " + IntToString(iImmElec) + "% electrical immunity and paralysis immunity applied");
 		SetLocalInt(oPC, "eladrinProps", TRUE);
@@ -421,7 +421,7 @@ void PS_Immunity_NightHag(object oPC, int nSpell)
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "nightHagImmune")){
 		SendMessageToPC(oPC, "Night Hag - immunity to charm, sleep, fear, and DR " + IntToString(nDR) + "/Cold Iron applied");
 		SetLocalInt(oPC, "nightHagImmune", TRUE);
@@ -445,7 +445,7 @@ void PS_Immunity_NightHag_MOTC(object oPC, int nSpell)
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	if (!GetLocalInt(oPC, "nightHagProps")){
 		SendMessageToPC(oPC, "Night Hag - " + IntToString(iResist) + "% resistance to fire and cold applied");
 		SetLocalInt(oPC, "nightHagProps", TRUE);
@@ -482,7 +482,7 @@ void PS_Immunity_Rilmani(object oPC, int nSpell)
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	//Now we finally apply all the appropriate bonuses
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	
 	if (!GetLocalInt(oPC, "rilmaniProp")){
 		SendMessageToPC(oPC, "Rilmani - " + IntToString(iImmElec) + "% electrical immunity, mind-effecting, and poison immunity applied");

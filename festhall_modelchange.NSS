@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //Swap out the model's clothes every time she goes to the back

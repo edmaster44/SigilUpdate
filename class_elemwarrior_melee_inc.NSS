@@ -74,16 +74,16 @@ void ElementalStrike(object oPC, object oTarget, int nSpell )
 	int flatfoot = FlatFooted(oPC,oTarget);
 	if(flatfoot) FloatingTextStringOnCreature("*Double Attack (sneak attack)*", oPC, TRUE, 3.0f);
 	effect		eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, FALSE);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 	
-	DelayCommand(1.0f,ApplyEffectToObject(DURATION_TYPE_INSTANT, nVFXHit, oTarget));
+	DelayCommand(1.0f,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, nVFXHit, oTarget));
 
 	int nDC = 15 + nElemWar+GetAbilityModifier(ABILITY_CONSTITUTION) ;
 	if  (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, nSaveType))
 	{	if (nDamageType != DAMAGE_TYPE_FIRE)
-	DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStatusEffect, oTarget, 6.0f));
+	DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStatusEffect, oTarget, 6.0f));
 		else 
-		DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStatusEffect, oTarget));
+		DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eStatusEffect, oTarget));
 	 }
 	 }	
 }

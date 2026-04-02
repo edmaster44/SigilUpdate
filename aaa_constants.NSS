@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*	***********************************************************************************
 	*** aaa_constants by Ceremorph for the Sigil: City of Doors persistant world.	***
 	*** This script lists all constants used for our custom feats/spells/classes	***

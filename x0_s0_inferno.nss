@@ -85,14 +85,14 @@ void main()
         	//----------------------------------------------------------------------
        		// Engulf the target in flame
         	//----------------------------------------------------------------------
-        	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 3.0f);
+        	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 3.0f);
 
 
         	//----------------------------------------------------------------------
         	// Apply the VFX that is used to track the spells duration
         	//----------------------------------------------------------------------
         	object oSelf = OBJECT_SELF; // because OBJECT_SELF is a function
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBurn, oTarget, RoundsToSeconds(nDuration));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBurn, oTarget, RoundsToSeconds(nDuration));
         	DelayCommand(fDelay+0.1f,RunImpact(oTarget, oSelf, nMetaMagic));
 		}    
 	}
@@ -101,7 +101,7 @@ void main()
         //----------------------------------------------------------------------
         // Indicate Failure
         //----------------------------------------------------------------------
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 2.0f);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 2.0f);
     }
 
 }
@@ -132,7 +132,7 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
         eDam = EffectLinkEffects(eVis,eDam); // flare up
-        ApplyEffectToObject (DURATION_TYPE_INSTANT,eDam,oTarget);
+        PS_ApplyEffectToObject (DURATION_TYPE_INSTANT,eDam,oTarget);
         DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic));
     }
 }

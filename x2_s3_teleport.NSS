@@ -43,7 +43,7 @@ void main()
         {
             AssignCommand(oTarget, ClearAllActions(TRUE));
             AssignCommand(oTarget, JumpToObject(oHitter));
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         }
     }
 

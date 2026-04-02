@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 /* v1.00 Checks faction on the Essence object

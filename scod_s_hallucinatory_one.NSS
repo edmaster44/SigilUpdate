@@ -32,12 +32,12 @@ void main() {
 		effect eVis = EffectVisualEffect(VFX_IMP_SLOW);
 		eSlow = EffectLinkEffects(eVis, eSlow);
 		SetEffectSpellId(eSlow, nSpellID);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
 	} else {
 		effect eProtection = EffectConcealment(50, MISS_CHANCE_TYPE_NORMAL);
 		effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SHIELD);
 		eProtection = EffectLinkEffects(eVis, eProtection);
 		SetEffectSpellId(eProtection, nSpellID);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProtection, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProtection, oTarget);
 	}
 }

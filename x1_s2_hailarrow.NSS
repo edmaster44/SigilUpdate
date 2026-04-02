@@ -33,7 +33,7 @@ void DoAttack(object oTarget)
         {
             // * GZ: Added correct damage power
             effect ePhysical = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget);
 			DoElementalDamage(OBJECT_SELF, oTarget, bCrit);
 			DoAlignedDamage(OBJECT_SELF, oTarget);
         }

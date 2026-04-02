@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //////////////////////////////////////////
 // On Exit script for Freezing Fog AOE	//
 // Ceremorph 4/26/16					//

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //Script by Dedic8ed
@@ -60,11 +61,11 @@ void main()
 		SendMessageToPC(oPC, "You hear a door closing.");
 	}
 //Visual effect section
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX1), oPC1);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo1), oObj1, 60.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo2), oObj2, 60.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo3), oObj3, 60.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo4), oObj4, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile(sVFX1), oPC1);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo1), oObj1, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo2), oObj2, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo3), oObj3, 60.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFXo4), oObj4, 60.0f);
 	
 //Floaty Text section
 	FloatingTextStringOnCreature(sFloaty1,oPC1);

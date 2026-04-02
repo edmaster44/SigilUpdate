@@ -50,7 +50,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_GREASE));
 
             //Apply reduced movement effect and VFX_Impact
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget, 0.0f);
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget, 0.0f);
         }// end if - Immunity check
     }// end if - Difficulty check
 }

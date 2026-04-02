@@ -43,7 +43,7 @@ void UnnerveTarget(object oTarget, object oPC, int nRoll){
 		eAt = SetEffectSpellId(eAt, UNNERVE_SPELL_ID);
 		float fDur = IntToFloat(6 * nPenalty);
 		RemoveEffectsFromSpell(oPC, UNNERVE_SPELL_ID);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAt, oTarget, fDur);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAt, oTarget, fDur);
 	}
 }
 

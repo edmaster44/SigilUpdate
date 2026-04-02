@@ -61,7 +61,7 @@ void main()
 		object oTARGET = GetSpellTargetObject();
         SignalEvent(oWEAPON, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 		effect eVFX = EffectVisualEffect(VFX_DUR_SPELL_HOLY_SWORD);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, GetItemPossessor(oWEAPON), fDUR);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, GetItemPossessor(oWEAPON), fDUR);
 		if (CanBeEnhanced(oWEAPON, 5) == TRUE) IPSafeAddItemProperty(oWEAPON, ItemPropertyEnhancementBonus(5), fDUR);
 		IPSafeAddItemProperty(oWEAPON, ItemPropertyOnHitCastSpell(IP_CONST_ONHIT_CASTSPELL_HOLYSWORD, nLVL), fDUR);
 		IPSafeAddItemProperty(oWEAPON, ItemPropertyVisualEffect(ITEM_VISUAL_HOLY), fDUR);

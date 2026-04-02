@@ -74,7 +74,7 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_STONESKIN);
 
     //Apply the linked effects.
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
-    //ApplyEffectToObject(nDurType, eVis1, oTarget, fDuration);
-    ApplyEffectToObject(nDurType, eStone, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+    //PS_ApplyEffectToObject(nDurType, eVis1, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eStone, oTarget, fDuration);
 }

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // bdoorw_odamage
@@ -83,7 +84,7 @@ if (iDamage>=iMaxHP || GetLocked(oDoor)==0)
         SetLocked(oDoor, FALSE);
         PlaySound("as_cv_woodbreak1");
 		effect eDoorExplode = EffectNWN2SpecialEffectFile( "fx_wooden_explosion_big");
-	    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDoorExplode, OBJECT_SELF);
+	    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDoorExplode, OBJECT_SELF);
         ActionOpenDoor(oDoor);
         DelayCommand(60.0, fResetDoor());
         }

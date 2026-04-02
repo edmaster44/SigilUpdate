@@ -25,7 +25,7 @@ void main() {
         if (GetIsEnemy(oTarget, oCaster)) {
 		
 			effect eDamage = EffectDamage(d6(2));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		
 		}
 		

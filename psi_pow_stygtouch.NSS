@@ -44,13 +44,13 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
                 if(!MySavingThrow(SAVING_THROW_TYPE_NONE, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                 {
                   
-                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, fDuration);  
-						 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oManifester, fDuration);  
+                         PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, fDuration);  
+						 PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oManifester, fDuration);  
                        
                 
 
                     // Do VFX
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 }// end if - Save
             }
         }

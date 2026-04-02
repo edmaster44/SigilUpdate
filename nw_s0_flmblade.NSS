@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Flame Blade
 //:: NW_S0_FlmBlade.nss

@@ -42,7 +42,8 @@ void WinterWolfColdImmunity(int nColdRes, int nFireVul)
 	effect eLink = EffectLinkEffects(eColdImmunity, eFireVulnerability);
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, GetSpellId());
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));	
+	
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));	
 }
 
 void StripSpellEffect(int SpellID1 = -1, int SpellID2 = -1)
@@ -77,7 +78,8 @@ void DoBattleHowl()
     effect eLink = EffectLinkEffects(eAttack, eSavingThrows);
 	eLink = EffectLinkEffects(eLink, eBuf);
 	eFear = EffectLinkEffects (eFear, eVisFear);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eLOS, oPC);
+	
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLOS, oPC);
 	int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nSpellSaveDC = 10 + PS_GetLevel(oPC) + nCHA;
 	if (nCHA < 1) nCHA = 1; //Let's set a minimum duration to make sure it does something no matter how low CHA is.
@@ -91,13 +93,14 @@ void DoBattleHowl()
            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nSpellSaveDC, SAVING_THROW_TYPE_FEAR))
             {
 				SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_FEAR));
-                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nCHA +3)));
+                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(nCHA +3)));
             }
         }
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
 		{
 			RemoveSpellEffects(GetSpellId(), oPC, oTarget); ///remove effect before apply new one
-			DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCHA +3)));
+			
+			DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCHA +3)));
 		}
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oPC));
     }
@@ -109,7 +112,8 @@ void FeralHeart()
     effect eSavingThrows = EffectSavingThrowIncrease(SAVING_THROW_WILL, 4, SAVING_THROW_TYPE_MIND_SPELLS);
 	effect eLink = EffectLinkEffects(eSavingThrows, eFearImmunity);
 	eLink = SupernaturalEffect(eLink);
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));			
+	
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));			
 }
 
 void Blink()
@@ -129,9 +133,10 @@ void Blink()
 //	location lDestination = Location(GetAreaFromLocation(lStart), Vector(fx, fy, fz), fOrient);
 //	effect eVis = EffectVisualEffect(VFX_DUR_SPELL_BLINK);
 //	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lDestination, TRUE, OBJECT_TYPE_CREATURE);
-//	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oSelf);
+//	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oSelf);
 //	DelayCommand(0.1f, ActionJumpToLocation(lDestination));
-	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDisplace, oSelf, RoundsToSeconds(2)));
+	
+	DelayCommand(0.2f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDisplace, oSelf, RoundsToSeconds(2)));
 //	while (GetIsObjectValid(oTarget))
 //	{	if (GetIsEnemy(oTarget, oSelf))
 //		{	DelayCommand(0.3f, ActionAttack(oTarget));	}
@@ -222,15 +227,17 @@ void CastConeCold()
 				}
                 eCold = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
                 //Apply delayed effects
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCold, oTarget));
+				
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCold, oTarget));
         }
 		
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     }
 	fMaxDelay += 1.5f;
 	effect eCone = EffectVisualEffect(VFX_DUR_WINTER_WOLF_BREATH);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oPC, fMaxDelay);
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oPC, fMaxDelay);
 }
 
 void ApplyRegeneration() //Eternal Leader
@@ -247,7 +254,8 @@ void ApplyRegeneration() //Eternal Leader
 		}
 		eEffect = GetNextEffect(oSelf);
 	}
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oSelf);
+		
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oSelf);
 }
 
 void TearingBite()
@@ -258,7 +266,8 @@ void TearingBite()
 	if (nDamage<1) nDamage = 1;
 	if (fDuration<1.0) fDuration = 6.0;
 	effect eBleeding = EffectDamageOverTime(nDamage, 6.0, DAMAGE_TYPE_ALL, TRUE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBleeding, oTarget, fDuration);
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBleeding, oTarget, fDuration);
 	ActionAttack(oTarget);
 //	SendMessageToPC(oSelf, "Duration/Damage: "+FloatToString(fDuration)+"/"+IntToString(nDamage));
 }
@@ -270,7 +279,8 @@ void Genesis()
 	int nSpell = GetSpellId();
 	eMindImmunity = SetEffectSpellId(eMindImmunity, nSpell);
 	RemoveEffectsFromSpell(oSelf, nSpell);
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eMindImmunity, oSelf));			
+	
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eMindImmunity, oSelf));			
 }
 
 void ArmorOfNature()
@@ -282,7 +292,8 @@ void ArmorOfNature()
 	int nSpell = GetSpellId();
 	eDodge = SetEffectSpellId(eDodge, nSpell);
 	RemoveEffectsFromSpell(oSelf, nSpell);
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oSelf));			
+	
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oSelf));			
 }
 
 void Overgrowth()
@@ -297,7 +308,8 @@ void Overgrowth()
 	int nSpell = GetSpellId();
 	eLink2 = SetEffectSpellId(eLink2, nSpell);
 	RemoveEffectsFromSpell(oSelf, nSpell);
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink2, oSelf));			
+	
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink2, oSelf));			
 }
 
 void ToughRoots()
@@ -307,7 +319,8 @@ void ToughRoots()
 	int nSpell = GetSpellId();
 	eCritImmune = SetEffectSpellId(eCritImmune, nSpell);
 	RemoveEffectsFromSpell(oSelf, nSpell);
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCritImmune, oSelf));			
+	
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCritImmune, oSelf));			
 }
 
 void TreantResist()
@@ -322,7 +335,7 @@ void TreantResist()
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oSelf, nSpell);
 	
-	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));
+	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oSelf));
 //	SendMessageToPC(oSelf, "Applying Treant Resistance!");
 }
 
@@ -343,7 +356,8 @@ void HuntingLope(object oPC, int nIncrease, int nSpell)
 	eSpeed = SupernaturalEffect(eSpeed);
 	eSpeed = SetEffectSpellId(eSpeed, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
 	if (!GetLocalInt(oPC, "HuntingLope")){
 		SendMessageToPC(oPC, "Speed increased by " + IntToString(nIncrease) + "%.");
 		SetLocalInt(oPC, "HuntingLope", TRUE);

@@ -25,8 +25,8 @@ void main()
             {
 				float fDelay = GetRandomDelay(0.75, 1.75);
         		//Apply the VFX impact and linked effects
-        		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-        		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(CHOKING_BOMB_EFFECT_DURATION)));
+        		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(CHOKING_BOMB_EFFECT_DURATION)));
             }
 		}
 	}

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 int iCheckitem(object oItem)
 {
 int oImmun = 0;

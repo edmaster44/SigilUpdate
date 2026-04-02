@@ -101,8 +101,8 @@ void main()
                         if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
                         {
                             // Apply effect and visuals
-                            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDoom, oTarget, fDuration);
-                            ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+                            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDoom, oTarget, fDuration);
+                            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
                         }// end if - Failed save
                     }// end if - SR check
                 }// end if - Target is someone we don't want to skip

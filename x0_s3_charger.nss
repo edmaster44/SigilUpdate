@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //::///////////////////////////////////////////////
@@ -72,7 +73,7 @@ void main()
                 int nPreviousValue = GetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER");
                 SetLocalInt(OBJECT_SELF, "X0_L_CHARGES_ELECTRIFIER", nPreviousValue + nValue);
                 effect eVis = EffectVisualEffect(VFX_IMP_DISPEL);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
                 //SpeakString(IntToString(nPreviousValue + nValue));
 
                 // Added by Lawjoskar Jan 4th, 2004 --

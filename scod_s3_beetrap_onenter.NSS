@@ -61,10 +61,10 @@ void main()
             while(GetIsObjectValid(oTarget))
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) && GetBeeVulnerable(oTarget)){
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, RoundsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, RoundsToSeconds(nDuration));
 					ApplyTrapDOT(oTarget, nDice, oCaster);
 					if (WillSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP, oCaster) == SAVING_THROW_CHECK_FAILED) {
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));	
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));	
 					}
 				}
 				//Get next target in the sequence
@@ -78,7 +78,7 @@ void ApplyTrapDOT(object oTarget, int nDice, object oCaster) {
 	if (GetIsDead(oTarget) == FALSE) {
 		int nDamage = d6(nDice);
 		effect eDamage = EffectDamage(nDamage, IP_CONST_DAMAGETYPE_PIERCING);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		DelayCommand(6.0f,ApplyTrapDOT(oTarget, nDice, oCaster)); 
 	}
 }

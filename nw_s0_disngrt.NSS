@@ -147,14 +147,14 @@ void main()
 					}
 					
 					effect eHit = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL), oTarget);	
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL), oTarget);	
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 					int nHP = GetCurrentHitPoints( oTarget );
 					
 					if (nHP <= 0  )
 					{
 					    // If they are at or below 0 hit points, disintegrate them!
-						ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDisintegrate( oTarget ), oTarget);
+						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDisintegrate( oTarget ), oTarget);
 					}
 					else if (sEventHandler == "gb_troll_dmg")
 					{	// AFW-OEI 08/23/2007: Still alive and had the troll on-damage script, so put that stuff back on.
@@ -163,9 +163,9 @@ void main()
 					}
                 }
 				
-				//ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
+				//PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
             }
         }
-        ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
-    } //else ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
+        PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
+    } //else PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.7 );
 }

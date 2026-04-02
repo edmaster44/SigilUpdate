@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 void main()
@@ -16,7 +17,7 @@ if(GetLocalInt(OBJECT_SELF, "TurnedOn") == 1) // If the light is already "on"
 else // The light is not already "on"
    {
    // Do whatever and apply the VFX since the light is "off"
-   ApplyEffectToObject(DURATION_TYPE_PERMANENT,eBeam,oSpotlight,3.0f);
+   PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eBeam,oSpotlight,3.0f);
    SetLocalInt(OBJECT_SELF, "TurnedOn", 1); // Set local int so script knows light is now "on"
    }
 }

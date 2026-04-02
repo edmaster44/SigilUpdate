@@ -114,7 +114,7 @@ PRCShowPowerResist(object oCaster, object oTarget, int nResist, float fDelay = 0
 	if (nResist == POWER_RESIST_FAIL)
 	{
 		effect eVis = EffectVisualEffect(VFX_IMP_GLOBE_USE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	}
 }
 

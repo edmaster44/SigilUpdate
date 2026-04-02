@@ -31,5 +31,5 @@ void main()
     effect eVis = EffectVisualEffect(902);
 
     int nDuration = 5;
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, TurnsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, TurnsToSeconds(nDuration));
 }

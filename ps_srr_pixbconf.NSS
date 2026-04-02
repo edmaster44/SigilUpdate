@@ -36,8 +36,8 @@ void main()
        //Apply the VFX impact and effects
 	   if (!WillSave(oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF))
 	   {
-	       ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCount));
-	       ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+	       PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCount));
+	       PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
 		}
     }
 }

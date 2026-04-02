@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // i_ps_creatureeffect_ac
@@ -17,6 +18,6 @@ void main()
 
  	//Your code goes here
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 300.f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 300.f);
 	SendMessageToPC(oPC,"Visual effect *" + sEffect + "* applied. To remove, use the Release Spells button in PC Tools.");	
 }

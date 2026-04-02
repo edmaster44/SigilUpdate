@@ -127,8 +127,8 @@ void Raise(object oPlayer)
 	effect eVisual = EffectVisualEffect(VFX_IMP_RESTORATION);
 	
 	effect eBad = GetFirstEffect(oPlayer);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectResurrection(),oPlayer);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPlayer)), oPlayer);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectResurrection(),oPlayer);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPlayer)), oPlayer);
 	
 	//Search for negative effects
 	while(GetIsEffectValid(eBad))
@@ -155,7 +155,7 @@ void Raise(object oPlayer)
 	}
 	//Fire cast spell at event for the specified target
 	SignalEvent(oPlayer, EventSpellCastAt(OBJECT_SELF, SPELL_RESTORATION, FALSE));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oPlayer);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oPlayer);
 }
 
 // Display death pop-up to oPlayer

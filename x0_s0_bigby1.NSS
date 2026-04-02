@@ -60,7 +60,7 @@ void main()
         	effect eLink = EffectLinkEffects(eAC1, eVis);
 
        		//Apply the TO HIT PENALTIES bonuses and the VFX impact
-        	ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration) );
+        	PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration) );
         }
     }
 }

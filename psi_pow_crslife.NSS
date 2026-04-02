@@ -76,7 +76,7 @@ void main()
         effect eVis       = EffectVisualEffect(VFX_FNF_HOWL_MIND);
         effect eDamage;
     
-   	 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+   	 	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         // Check immunities
         if(!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH,       oManifester) &&
            !GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oManifester)
@@ -92,8 +92,8 @@ void main()
                     // Can the target die outright and if it can, does it fail the save?
                     if(nTargetHD <= nMaxHD && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
                     {
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisDeath, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisDeath, oTarget);
                         
                     }
                     else
@@ -109,8 +109,8 @@ void main()
                         eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
 
                         //Apply the VFX impact and effects
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisDamage, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisDamage, oTarget);
                     }// end if - Too much HD or succeeded at save
                 }// end if - SR check
             }// end if - Twin Power

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // script called from ps_srr_conv_dbreath - sets dragonman race breath weapon

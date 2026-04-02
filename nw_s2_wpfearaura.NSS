@@ -37,11 +37,11 @@ void main()
 		nLevel = GetTotalLevels(OBJECT_SELF, TRUE);
 		
     int nDC = 10 + nLevel + GetAbilityModifier(ABILITY_CHARISMA);
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);
 
     //Get first target in spell area
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(OBJECT_SELF));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
     while(GetIsObjectValid(oTarget))
     {
     	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
@@ -56,8 +56,8 @@ void main()
 					if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
 					{
 						//Apply the VFX impact and effects
-						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nLevel)));
-						//DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+						DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nLevel)));
+						//DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					}
 				}
 			

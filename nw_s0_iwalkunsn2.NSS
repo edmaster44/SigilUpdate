@@ -51,8 +51,8 @@ void OnDispellCallback( object oCaster, int nSaveDC, float fDuration )
 
                 // Apply effects to the currently selected target.
 				fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) * fDistToDelay ;
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
             }
 			else if ( nSaveResult == SAVING_THROW_CHECK_SUCCEEDED )	// Saving throw successful
 			{
@@ -62,7 +62,7 @@ void OnDispellCallback( object oCaster, int nSaveDC, float fDuration )
 			
                 // Apply effects to the currently selected target.
 				fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) * fDistToDelay ;
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, oTarget));
 			}
             
 		}
@@ -91,7 +91,7 @@ void RetribInvis(object oPC)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_GREATER_INVISIBILITY, FALSE));
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oPC, RoundsToSeconds(3));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oPC, RoundsToSeconds(3));
 }
 
 
@@ -116,7 +116,7 @@ void WalkUnseen(object oTarget)
     RemoveEffectsFromSpell(oTarget, SPELL_I_WALK_UNSEEN);
 
 	//Apply the VFX impact and effects
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
 
 void StayUnseen(object oPC)

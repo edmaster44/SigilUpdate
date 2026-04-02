@@ -74,8 +74,8 @@ void main()
                         {
 							eCharm = GetScaledEffect( EffectCharmed(), oTarget );	// 11/09/06 - BDF(OEI): this line was missing, causing PCs to get charmed
                             //Apply the linked effects and the VFX impact
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCharm, oTarget, RoundsToSeconds(nDuration)));
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCharm, oTarget, RoundsToSeconds(nDuration)));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                         }
                     }
                     //Add the creatures HD to the count of affected creatures

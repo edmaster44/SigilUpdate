@@ -57,7 +57,7 @@ void main()
     {
          SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LEGEND_LORE, FALSE));
          //Apply linked and VFX effects
-         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nLevel));
-         //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+         PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nLevel));
+         //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

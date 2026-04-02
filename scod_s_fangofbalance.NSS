@@ -88,7 +88,7 @@ void DoFangOfBalance(int nVFX)
 		//End Ceremorph edits	
 							
 			if (bApplied != FALSE){
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
 			} else {
 				FloatingTextStringOnCreature("No valid creature weapons found", oCaster);
 			}

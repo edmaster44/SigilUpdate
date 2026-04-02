@@ -131,7 +131,7 @@ void main()
         }// end while - Effect loop
 
         // Apply visuals
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
         // Set a marker local and schedule it's removal
         SetLocalInt(oTarget, "WasRestored", TRUE);

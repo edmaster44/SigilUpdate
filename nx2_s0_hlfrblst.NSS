@@ -58,7 +58,7 @@ void main()
 			FloatingTextStringOnCreature("NEEDS VISUAL EFFECT", oTarget);
 			//	effect eLink = EffectLinkEffects(evfx, e);
 			e = SetEffectSpellId(e, SPELLABILITY_HELLFIRE_BLAST);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, e , oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, e , oTarget);
 			HellfirePowersGo(STRREF_HELLFIRE_GO);
 			
 		}

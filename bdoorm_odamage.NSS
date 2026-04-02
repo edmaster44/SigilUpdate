@@ -81,7 +81,7 @@ if (iDamage>=iMaxHP || GetLocked(oDoor)==0) {
         SetLocked(oDoor, FALSE);
         PlaySound("as_dr_metlmedcl2");
 		effect eDoorExplode = EffectNWN2SpecialEffectFile( "fx_sparks");
-	    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDoorExplode, OBJECT_SELF);
+	    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDoorExplode, OBJECT_SELF);
         ActionOpenDoor(oDoor);
         DelayCommand(120.0, fResetDoor());
     }

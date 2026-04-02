@@ -69,11 +69,11 @@ void main()
 				eLink = EffectLinkEffects(eLink, eConceal);
 				
 		    	// Apply effects to the currently selected target.
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
 	              
 	            //This visual effect is applied to the target object not the location as above.  This visual effect
 	            //represents the impact that erupts on the target not on the ground.
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 			}
         }
         

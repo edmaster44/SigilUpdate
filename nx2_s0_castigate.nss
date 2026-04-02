@@ -107,7 +107,7 @@ void main()
 				nDamage = nDamage/2;
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
 				eLink = EffectLinkEffects(eHit, eDamage);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 				//Fire cast spell at event for the specified target
 		    	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), TRUE));
 			}
@@ -116,7 +116,7 @@ void main()
 			{
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_SONIC);
 				eLink = EffectLinkEffects(eHit, eDamage);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 				//Fire cast spell at event for the specified target
 		    	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), TRUE));
 			}

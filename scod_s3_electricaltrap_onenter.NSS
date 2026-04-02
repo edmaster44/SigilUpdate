@@ -76,15 +76,15 @@ void main()
 		            eDamShock = EffectDamage(nElecDamage, DAMAGE_TYPE_ELECTRICAL);
 					eDamDiv = EffectDamage(nDivineDamage, DAMAGE_TYPE_DIVINE);
 					//Trigger visual regardless of if damage is done
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget2, oTarget);
-					DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget, oTarget));       
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget2, oTarget);
+					DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget, oTarget));       
 		            if(nDamage > 0)
 		            {
 		                //Apply damage effect
 						eShockLink = EffectLinkEffects(eVisTarget, eDamShock);
 						eDivLink = EffectLinkEffects(eVisTargetDiv, eDamDiv);
-		                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eShockLink, oTarget));
-						DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDivLink, oTarget));
+		                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eShockLink, oTarget));
+						DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDivLink, oTarget));
 		            }
 				}
 				//Get next target in the sequence

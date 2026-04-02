@@ -99,7 +99,7 @@ void main()
 				}
 				else
 				{
-					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 					SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 				}
 			}

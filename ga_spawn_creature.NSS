@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main (string resRef, string sWP) {
 	
 	object oWP = GetWaypointByTag(sWP);

@@ -83,7 +83,7 @@ void main()
 		int DamageType = IP_CONST_DAMAGETYPE_NEGATIVE;
 		itemproperty ipNegative = ItemPropertyDamageBonus(DamageType,nDamage);  
         
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
 		
         AddItemProperty(DURATION_TYPE_TEMPORARY, ipNegative, oTarget, fDuration);
 		AddItemProperty(DURATION_TYPE_TEMPORARY, ipGlow, oTarget, fDuration);

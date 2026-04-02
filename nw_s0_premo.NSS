@@ -61,5 +61,5 @@ void main()
 	
     RemoveEffectsFromSpell(oTarget, SPELL_PREMONITION);
     //Apply the linked effect
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, fSpellDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, fSpellDuration);
 }

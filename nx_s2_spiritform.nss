@@ -51,6 +51,6 @@ void main()
 		// lvl 25: 8 rounds
 		// lvl 30: 9 rounds
 		// SendMessageToPC(oTarget, "DO SPIRIT FORM lvl " + IntToString(nLvl) + " = rounds " + IntToString(nRounds) );
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nRounds));
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nRounds));
     }
 }

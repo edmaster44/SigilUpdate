@@ -91,5 +91,5 @@ void main() {
 			eCast	= EffectVisualEffect(VFX_HIT_SPELL_MAGIC);
 		}
 	}
-	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, OBJECT_SELF);
+	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, OBJECT_SELF);
 }

@@ -35,17 +35,17 @@ void ApplyCloudKill(object oTarget, object oCaster, int nId, int nDC){
 		//Determine spell effect based on the targets HD
 		if (nHD <= 3){
 			if(!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)){
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
 			}
 		} else if (nHD >= 4 && nHD <= 6){
 			//Make a save or die
 			if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_DEATH, oCaster, fDelay)){
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 			} else {
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
 			}
 		} else {
 			if (FortitudeSave(oTarget, nDC, SAVING_THROW_TYPE_POISON, oCaster)){
@@ -53,12 +53,12 @@ void ApplyCloudKill(object oTarget, object oCaster, int nId, int nDC){
 				eDam = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDam);
 				eDam = SetEffectSpellId(eDam, nId);
 				eDam = ExtraordinaryEffect(eDam);
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
 
 			} else {	
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
 			}
 		}
 	}	

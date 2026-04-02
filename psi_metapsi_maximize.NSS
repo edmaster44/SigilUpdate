@@ -27,7 +27,7 @@ void main()
 	{
 		SetLocalInt(OBJECT_SELF, "METAPSI_MAXIMIZE", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Maximize Power");
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDur, OBJECT_SELF);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDur, OBJECT_SELF);
 	}
 	else
 	{

@@ -14,7 +14,7 @@ void ApplyBulwark(object oCASTER, object oTARGET, object oAURA)
 	effect eFX = EffectLinkEffects(eSHARE, eVFX);
 	eFX = ExtraordinaryEffect(eFX);
 	eFX = SetEffectSpellId(eFX, N_BULWARK);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oTARGET);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oTARGET);
 }
 
 void ApplyAura(object oPC)
@@ -22,5 +22,5 @@ void ApplyAura(object oPC)
 	effect eAURA = EffectAreaOfEffect(180);
 	eAURA = ExtraordinaryEffect(eAURA);
 	eAURA = SetEffectSpellId(eAURA, N_BULWARK);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAURA, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAURA, oPC);
 }

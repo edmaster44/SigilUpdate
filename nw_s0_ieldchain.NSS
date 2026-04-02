@@ -143,11 +143,11 @@ void main() {
     //Apply effect to the first target and the VFX impact.
     if(DoChainEffect(nID, oFirstTarget))
     {
-        ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
     }
 	
     //Apply the lightning stream effect to the first target, connecting it with the caster
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
 
     //Reinitialize the lightning effect so that it travels from the first target to the next target
     eLightning = EffectBeam(nChain2VFX, oFirstTarget, BODY_NODE_CHEST);
@@ -190,11 +190,11 @@ void main() {
         {
 		    nTouch = TouchAttackRanged( oTarget, TRUE, nBonus );
 		    if ( nTouch == TOUCH_ATTACK_RESULT_MISS ) {
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
     			return;
     		}
             //Connect the new lightning stream to the older target and the new target
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
             {
                 if ( nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT) )
                 {
@@ -204,7 +204,7 @@ void main() {
                 {
                     DelayCommand(fDelay, DoChainEffectWrapper(nID, oTarget,FALSE,TRUE));
                 }
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
             }
             oHolder = oTarget;
 

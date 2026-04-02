@@ -88,7 +88,7 @@ void main() {
 		 	// Make a Fort Save
             if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, nDC)) {
 			
-    			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration));
+    			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oTarget, TurnsToSeconds(nDuration));
 				
 				if (GetHasFeat(FEAT_HEXEN_BALEFUL_POLYMORPH, oCaster)) {
 					ChangeToStandardFaction(oTarget, STANDARD_FACTION_DEFENDER);
@@ -96,19 +96,19 @@ void main() {
 					SetLocalObject(oTarget, "FOLLOW_MASTER", oCaster);
 					SetLocalInt(oTarget, "IS_SUMMONED", 1);
 				} else {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfuse, oTarget, TurnsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConfuse, oTarget, TurnsToSeconds(nDuration));
 				}
 				
 				if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, oCaster)) {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectHaste(), oTarget, TurnsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectHaste(), oTarget, TurnsToSeconds(nDuration));
 				}
 				
 				if (GetHasFeat(FEAT_HEXEN_HEXER_3, oCaster)) {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_DEXTERITY, 6), oTarget, TurnsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_DEXTERITY, 6), oTarget, TurnsToSeconds(nDuration));
 				} else if (GetHasFeat(FEAT_HEXEN_HEXER_2, oCaster)) {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_DEXTERITY, 4), oTarget, TurnsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_DEXTERITY, 4), oTarget, TurnsToSeconds(nDuration));
 				} else if (GetHasFeat(FEAT_HEXEN_HEXER_1, oCaster)) {
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_DEXTERITY, 2), oTarget, TurnsToSeconds(nDuration));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityIncrease(ABILITY_DEXTERITY, 2), oTarget, TurnsToSeconds(nDuration));
 				}
 				
 			}

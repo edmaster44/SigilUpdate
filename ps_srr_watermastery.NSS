@@ -35,6 +35,6 @@ void main()
 		eLink = EffectLinkEffects(eMassDrownMarid, eLink);
 		
 		eLink = SupernaturalEffect(eLink);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 	}	
 }

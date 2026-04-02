@@ -374,7 +374,7 @@ void CheckAndApplyTerrifyingRage(int nRounds)
         effect eAOE = EffectAreaOfEffect(AOE_MOB_FEAR,"x2_s2_terrage_A", "","");
         eAOE = ExtraordinaryEffect(eAOE);
 		SendMessageToPC(OBJECT_SELF,"Applying Terrifying rage");
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eAOE,OBJECT_SELF,RoundsToSeconds(nRounds));
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eAOE,OBJECT_SELF,RoundsToSeconds(nRounds));
     }
 }
 
@@ -421,7 +421,7 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
             if (GetHasSpellEffect(GetSpellId(),oTarget))
             {
                  // only affects the targeted object
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_STUN), oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_STUN), oTarget);
                 int nDamage;
                 if (GetLevelByClass(CLASS_TYPE_SHIFTER,OBJECT_SELF)>0)
                 {
@@ -431,8 +431,8 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
                 {
                     nDamage = d6(PS_GetLevel(OBJECT_SELF)/2);
                 }
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage), oTarget);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND), oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage), oTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND), oTarget);
             }
             else if (WillSave(oTarget, nDC) < 1)
             {
@@ -441,8 +441,8 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
                 //Set stunned effect
                 eCone = EffectStunned();
                 //Apply the VFX impact and effects
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oTarget, RoundsToSeconds(nStunTime)));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oTarget, RoundsToSeconds(nStunTime)));
             }
         }
         //Get next target in spell area
@@ -465,13 +465,13 @@ int  DoCubeParalyze(object oTarget, object oSource, int nSaveDC = 16)
       effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
       ePara = EffectLinkEffects(eDur,ePara);
       ePara = EffectLinkEffects(EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION),ePara);
-      ApplyEffectToObject(DURATION_TYPE_TEMPORARY,ePara,oTarget,RoundsToSeconds(3+d3())); // not 3 d6, thats not fun
+      PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,ePara,oTarget,RoundsToSeconds(3+d3())); // not 3 d6, thats not fun
       return TRUE;
     }
     else
     {
      effect eSave = EffectVisualEffect(VFX_IMP_FORTITUDE_SAVING_THROW_USE);
-      ApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
+      PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
     }
     return FALSE;
 }
@@ -491,8 +491,8 @@ void EngulfAndDamage(object oTarget, object oSource)
 
       effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
       effect eVis = EffectVisualEffect(VFX_IMP_ACID_S);
-      ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget);
-      ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+      PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget);
+      PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
       if (!GetIsImmune(oTarget,IMMUNITY_TYPE_PARALYSIS) )
       {
           if (DoCubeParalyze(oTarget,oSource,16))
@@ -504,7 +504,7 @@ void EngulfAndDamage(object oTarget, object oSource)
   } else
   {
       effect eSave = EffectVisualEffect(VFX_IMP_REFLEX_SAVE_THROW_USE);
-      ApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
+      PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
   }
 }
 

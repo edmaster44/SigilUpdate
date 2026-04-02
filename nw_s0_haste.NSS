@@ -95,8 +95,8 @@ void main()
     	if (spellsIsTarget( oTarget2, SPELL_TARGET_ALLALLIES, OBJECT_SELF ))
     		{
         		SignalEvent( oTarget2, EventSpellCastAt( OBJECT_SELF, SPELL_HASTE, FALSE ));
-				//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget2, RoundsToSeconds(nDuration));
-				ApplyEffectToObject(nDurType, eLink, oTarget2, fDuration);
+				//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget2, RoundsToSeconds(nDuration));
+				PS_ApplyEffectToObject(nDurType, eLink, oTarget2, fDuration);
     			nNumTargets--; //FIX: only count allies
     		}        	
      	//Get the next target in the specified area around the caster
@@ -123,8 +123,8 @@ PKM-OEI 07.25.06 - This is the previous spell code stuff, left it in in case som
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HASTE, FALSE));
 
             // Apply effects to the currently selected target.
-            ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
 			// This is... anyways, this doesn't work in NWN2
 			/*
@@ -156,8 +156,8 @@ PKM-OEI 07.25.06 - This is the previous spell code stuff, left it in in case som
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HASTE, FALSE));
 
             // Apply effects to the currently selected target.
-            ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         }
 
 
@@ -174,8 +174,8 @@ PKM-OEI 07.25.06 - This is the previous spell code stuff, left it in in case som
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HASTE, FALSE));
 
                     // Apply effects to the currently selected target.
-                    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 }
             }
 

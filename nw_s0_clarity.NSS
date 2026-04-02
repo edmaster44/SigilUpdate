@@ -77,8 +77,8 @@ void main()
         //Apply damage and remove effect if the effect is a match
         if (bValid == TRUE)
         {
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
             RemoveEffect(oTarget, eSearch);
             bVisual = TRUE;
         }
@@ -86,5 +86,5 @@ void main()
     }
     float fTime = 30.0  + fDuration;
     //After effects are removed we apply the immunity to mind spells to the target
-    ApplyEffectToObject(nDurType, eLink, oTarget, fTime);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fTime);
 }

@@ -56,5 +56,5 @@ void main()
     //Set the summoning effect
     eSummon = EffectSwarm(FALSE, "c_elmairgreater", "c_elmearthgreater","c_elmwatergreater","c_elmfiregreater");
     //Apply the summon effect
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSummon, OBJECT_SELF, fDuration);
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSummon, OBJECT_SELF, fDuration);
 }

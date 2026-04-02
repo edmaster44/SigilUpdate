@@ -74,7 +74,7 @@ void main()
 		
 		if (!GetHasSpellEffect(GetSpellId(), oTarget))
 		{
-        	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+        	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
 		}
     }
 }

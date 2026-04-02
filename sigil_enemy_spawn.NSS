@@ -124,7 +124,7 @@ void main()
 	}
 	SetFirstName(oENEMY, sCOLOR + GetFirstName(oENEMY) + "</c>");
 	SetLastName(oENEMY, sCOLOR + GetLastName(oENEMY) + "</c>");
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectDifficulty(nLVL, nDIFF, nRANK, nHP, nSLOW, nDESTR, nBOSS), oENEMY);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectDifficulty(nLVL, nDIFF, nRANK, nHP, nSLOW, nDESTR, nBOSS), oENEMY);
 	DelayCommand(0.0f, ForceRest(oENEMY));
 	DelayCommand(0.5, BossStartup(oENEMY));
 }

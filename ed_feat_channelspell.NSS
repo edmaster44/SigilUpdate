@@ -41,7 +41,7 @@ void main()
         }
         DeleteLocalInt(oItem, "X2_L_NUMTRIGGERS");
         effect eClear = EffectVisualEffect(VFX_IMP_BREACH);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT,eClear,OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eClear,OBJECT_SELF);
         FloatingTextStrRefOnCreature(83882,OBJECT_SELF); // sequencer cleared
     }
     else

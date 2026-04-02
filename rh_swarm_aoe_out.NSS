@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*Created by Shaughn
 for the Risen Hero Campaign
 http://neverwinter.nexusmods.com/mods/10

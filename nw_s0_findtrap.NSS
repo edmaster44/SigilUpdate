@@ -46,7 +46,7 @@ void main()
 	eSearch = SetEffectSpellId(eSearch, SPELL_FIND_TRAPS);
 	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_FIND_TRAPS, FALSE));
 	PS_RemoveEffects(OBJECT_SELF, SPELL_FIND_TRAPS);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, OBJECT_SELF, TurnsToSeconds(nDuration)); 
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, OBJECT_SELF, TurnsToSeconds(nDuration)); 
 	
     //effect eVis = EffectVisualEffect(VFX_IMP_KNOCK);	// NWN1 VFX
     effect eVis = EffectVisualEffect( VFX_DUR_SPELL_FIND_TRAPS );	// NWN2 VFX

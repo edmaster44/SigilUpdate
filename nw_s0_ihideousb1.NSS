@@ -77,9 +77,9 @@ void DoHideousBlow(object oPC)
 
     //Apply the VFX impact and effects
 	if (GetHasFeat(FEAT_FELLBLADE_THIRSTING_BLADE, oPC, TRUE)) {
-    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, THIRSTING_DELAY+0.1f); // Added 0.1 seconds so that the effect can be checked for later -Electrohydra
+    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, THIRSTING_DELAY+0.1f); // Added 0.1 seconds so that the effect can be checked for later -Electrohydra
 	} else {
-    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, HIDEOUS_DELAY+0.1f);
+    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, HIDEOUS_DELAY+0.1f);
 	}
 }
 

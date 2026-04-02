@@ -45,7 +45,7 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster)) 
 		{
 			// apply linked effect to target
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			//Fire cast spell at event for the specified target
     		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 		}

@@ -29,7 +29,7 @@ void main()
 		if (GetIsDead(oTarget) == FALSE)
 		{ 	       	
 			SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_INVISIBILITY_SPHERE, FALSE));
-      		ApplyEffectToObject( DURATION_TYPE_PERMANENT, eLink, oTarget );
+      		PS_ApplyEffectToObject( DURATION_TYPE_PERMANENT, eLink, oTarget );
 		}
 	}			
 }

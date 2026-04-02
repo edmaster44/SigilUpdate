@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // i_temp_ac
@@ -42,7 +43,7 @@ void main()
     location lTarget = GetItemActivatedTargetLocation();
 
 	effect eBeam = EffectBeam(VFX_BEAM_WEB_OF_PURITY, oPC, BODY_NODE_HAND);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.5);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.5);
 
 	string targetTag = GetTag(oTarget);
 	if(checkIsLarvaTag(targetTag)) {
@@ -55,22 +56,22 @@ void main()
 			SetFirstName(oTarget, "Flux-shunted Larva");
 			// Flux shunt visual
 			effect eVisFluxshunt = EffectVisualEffect(VFX_DUR_BLUR);
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVisFluxshunt, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVisFluxshunt, oTarget);
 			// Random effects
 			int r = Random(100);
 			if(r <= 33) {
 				SendMessageToPC(oPC, "You activate the flux shunt. The larva seems to move faster suddenly!");
 				effect eHaste = EffectHaste();
-				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHaste, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHaste, oTarget);
 				effect eVisHaste = EffectVisualEffect(VFX_DUR_SPELL_HASTE);
-				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVisHaste, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVisHaste, oTarget);
 			}
 			else if (r <= 66) {
 				SendMessageToPC(oPC, "You activate the flux shunt. The larva seems to move slower suddenly!");
 				effect eSlow = EffectSlow();
-				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
 				effect eVisSlow = EffectVisualEffect(VFX_DUR_SPELL_SLOW);
-				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVisSlow, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVisSlow, oTarget);
 			}
 			else {
 				SendMessageToPC(oPC, "You activate the flux shunt. The larva shows no change apart from a slight glow.");

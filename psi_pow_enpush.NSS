@@ -122,9 +122,9 @@ void main()
                 {
                     // Apply damage
                     eDamage = EffectDamage(nDamage, enAdj.nDamageType);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7f);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7f);
                     // Do the push effect on the target
                     DoPush(oTarget, oManifester, nDC, nNumberOfDice, nDamage);
                 }// end if - There was still damage remaining to be dealt after adjustments
@@ -181,7 +181,7 @@ void DoPush(object oTarget, object oManifester, int nDC, int nNumberOfDice, int 
             // Determine damage and apply it
             int nDamage = d6(nNumberOfDice); // Assume the die size stays static
             effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_ENERGY); // Slamming into a solid object
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 
             // Move the target
             location lTargetDestination = Location(GetArea(oTarget), vTarget, GetFacing(oTarget));

@@ -71,10 +71,10 @@ int DamageShroudTarget( object oTarget, object oCaster, int nSpellSaveDC, int nM
         }
 
         effect eVisual = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
-        ApplyEffectToObject( DURATION_TYPE_INSTANT, eVisual, oTarget );        
+        PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eVisual, oTarget );        
 
         effect eDamage  = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-        ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamage, oTarget );
+        PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamage, oTarget );
 
 		nDidDamage = TRUE;
     }
@@ -105,11 +105,11 @@ void DamageOther( object oOther, object oCaster, int nSpellSaveDC, int nMetaMagi
         }
 
         effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-        ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamage, oOther );
+        PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamage, oOther );
 
         effect eVisual  = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 		float fDuration = 0.75 + (nDamage*0.25);
-        ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eVisual, oOther, fDuration );        
+        PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eVisual, oOther, fDuration );        
     }
 
 
@@ -213,11 +213,11 @@ void main()
 		int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
         //effect eHand = EffectVisualEffect(VFX_DUR_GLOW_PURPLE);
-        //ApplyEffectToObject(nDurType, eHand, oTarget, fDuration);
+        //PS_ApplyEffectToObject(nDurType, eHand, oTarget, fDuration);
 
         //  Immediately damage the target, and any nearby enemies. 
 		//	This will que the effect to run again if nessisary
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
         RunRecurringEffects( oTarget, oCaster, fDuration, nMetaMagic );
     }
 

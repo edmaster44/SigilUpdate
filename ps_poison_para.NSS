@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Poison paralysis effect for the low level spider venom.
 // Relatively low DC as its a nasty effect and designed for low level poison users.
 
@@ -11,6 +12,6 @@ void main()
 		effect eParal = EffectParalyze(15, SAVING_THROW_FORT, TRUE);
     	effect eVis = EffectVisualEffect(VFX_DUR_PARALYZED);
     	effect eLink = EffectLinkEffects(eParal, eVis);
-    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
+    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
 	}
 }

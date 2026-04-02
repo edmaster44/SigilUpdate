@@ -68,5 +68,5 @@ void main()
     RemovePermanencySpells(oTarget);
 
     //Apply the linked effects.
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

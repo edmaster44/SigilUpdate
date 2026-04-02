@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Remove Disease
 //:: NW_S0_RmvDiseas.nss
@@ -38,7 +39,7 @@ void main()
     if (bValid)
     {
         //Apply VFX Impact
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }
 

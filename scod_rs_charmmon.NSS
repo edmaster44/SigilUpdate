@@ -67,7 +67,7 @@ void main()
             if (!/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nSave, SAVING_THROW_TYPE_MIND_SPELLS))
             {
                 //Apply impact and linked effect
-                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
             }
         }
     }

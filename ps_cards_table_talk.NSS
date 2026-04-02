@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 /*********************************************************
 * Script for Triple Triad like card game for SCoD        *
 * by Agony_Aunt/Loki_999                                 *

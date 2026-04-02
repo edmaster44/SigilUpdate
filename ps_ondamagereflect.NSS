@@ -53,7 +53,7 @@ object oDamager = GetLastAttacker();
     int damagePower = GetLocalInt(OBJECT_SELF, "REFLECT_POWER");
 
     // apply damage
-    ApplyEffectToObject (DURATION_TYPE_INSTANT,
+    PS_ApplyEffectToObject (DURATION_TYPE_INSTANT,
      EffectDamage (totalDamage, damageType, damagePower),
      oDamager);
    }

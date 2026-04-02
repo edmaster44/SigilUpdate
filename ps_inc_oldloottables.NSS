@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //Max 96
 string GetFromRuneList(int nRandom) {
 	int nRandom = Random(96) + 1;

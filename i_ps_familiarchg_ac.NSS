@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // i_ps_familiarchg_ac
@@ -27,8 +28,8 @@ void main()
     effect eVis = EffectNWN2SpecialEffectFile("sp_enlarge_person_hit");
 
 	AssignCommand(oTarget, ActionPlayAnimation(ANIMATION_FIREFORGET_USEITEM,1.0));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oFamiliar);
-	DelayCommand(0.5,ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oFamiliar));
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oFamiliar);
+	DelayCommand(0.5,PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oFamiliar));
 
 	AssignCommand(oTarget, ClearAllActions()); // prevents an exploit
 

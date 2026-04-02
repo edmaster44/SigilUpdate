@@ -102,17 +102,17 @@ void SHManticoreAttack(int nMissiles, int nCap, int nSpell, int nMIRV = VFX_IMP_
                         //Set damage effect
                         effect eDam = EffectDamage(nDam, nDAMAGETYPE);
                         //Apply the MIRV and damage effect
-                        DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget));
-                        DelayCommand(fDelay2, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget));
+                        DelayCommand(fTime, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget));
+                        DelayCommand(fDelay2, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget));
 
-                        DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                        DelayCommand(fTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                         // Play the sound of a dart hitting
                         DelayCommand(fTime, PlaySound("cb_ht_dart1"));
 
                     }
                     else
                     {  // * apply a dummy visual effect
-                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
+                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
                     }
                 } // for
                 nCnt++;// * increment count of missiles fired

@@ -50,10 +50,10 @@ void main (int nFunction) {
 			}
 			if (GetTag(oCaught) == "ps_trap_rabbit2") { //lucky rabbit
 				effect eCurse = SupernaturalEffect(EffectCurse(-4, -4, -4, -4, -4, -4));
-				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCurse, oPC, 6000000.0f);
+				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCurse, oPC, 6000000.0f);
 			}
 			effect eBlood = EffectNWN2SpecialEffectFile("fx_blood_red1_l", oCaught);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlood, oCaught);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlood, oCaught);
 			DestroyObject(oCaught, 0.1f);
 			break;
 		}

@@ -73,7 +73,7 @@ void main()
         while (GetIsObjectValid(oTarget))
 		
         {	
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, OBJECT_SELF);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, OBJECT_SELF);
             //Make a faction check
             if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF)&& (GetAlignmentGoodEvil(oTarget) != ALIGNMENT_GOOD))
             {
@@ -83,15 +83,15 @@ void main()
                 //Make SR check
                 if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
                 {
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     //----------------------------------------------------------
                     //Check if the target is an outsider
                     //GZ: And do nothing anymore. This was not supposed to happen
                     //----------------------------------------------------------
                     /*if (GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER || GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL)
                     {
-                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eUnsummon, oTarget));
-                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eUnsummon, oTarget));
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
                     }*/
 
                     ///----------------------------------------------------------
@@ -105,12 +105,12 @@ void main()
                     {
                         if(!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH))
                         {
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
                         }
                         else
                         {
                             eKill  = EffectDamage(GetCurrentHitPoints(oTarget)+10);
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
                         }
                     }
                     else
@@ -120,7 +120,7 @@ void main()
                         //Apply the appropriate effects based on HD
                         if (nHD >= 12 && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                         {
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration)));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else if (nHD >= 8 && nHD < 12)
                         {
@@ -128,7 +128,7 @@ void main()
 								eLink = EffectLinkEffects(eStun, eBlind);
 							else eLink = eStun;
 
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else if (nHD > 4 && nHD < 8)
                         {
@@ -136,15 +136,15 @@ void main()
 							if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
 								eLink = EffectLinkEffects(eBlind, eLink);
 
-                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
                         }
                         else
                         {
                            if(!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH))
                            {
-                                //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                                //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                            }
-                           DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                           DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
                         }
                     }
                 }

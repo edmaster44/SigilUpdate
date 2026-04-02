@@ -55,6 +55,6 @@ void main()
 	  int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 	  
 	  
-	  ApplyEffectToObject(nDurType, eLink, oPC, fDuration);
+	  PS_ApplyEffectToObject(nDurType, eLink, oPC, fDuration);
 	  
 }

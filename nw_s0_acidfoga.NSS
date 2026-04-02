@@ -42,7 +42,7 @@ void main(){
 		//Make a Fortitude Save to avoid the effects of the movement hit.
 		if(!MySavingThrow(SAVING_THROW_FORT, oTarget, data.nDC, SAVING_THROW_TYPE_ACID, oCaster, fDelay)){
 			//slowing effect
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlow, oTarget);
 		} else {
 			nDamage = nDamage / 2;
 		}
@@ -50,6 +50,6 @@ void main(){
 		eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
 		eDam = EffectLinkEffects(eVis, eDam);
 		
-		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
     }
 }

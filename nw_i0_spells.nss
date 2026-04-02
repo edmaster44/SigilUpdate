@@ -533,9 +533,9 @@ void DoHealing(object oTarget, int nDamageTotal, int vfx_impactHeal)
 	effect eHeal = EffectHeal(nDamageTotal);
 	RemoveEffectOfType(oTarget, EFFECT_TYPE_WOUNDING);
 	//Apply heal effect and VFX impact
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
 	effect eVis2 = EffectVisualEffect(vfx_impactHeal);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
 }
 
 // this could be a harm spell cast on non-undead or a heal spell cast on undead
@@ -563,9 +563,9 @@ void DoHarming (object oTarget, int nDamageTotal, int nDamageType, int vfx_impac
 				
 				effect eDam = EffectDamage(nDamageTotal, nDamageType);
 				//Apply the VFX impact and effects
-				DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+				DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 				effect eVis = EffectVisualEffect(vfx_impactHurt);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			}						
 		}
 	}
@@ -651,9 +651,9 @@ void DoSpellBreach(object oTarget, int nTotal, int nSR, int nSpellId = -1)
         // This can not be dispelled
         //--------------------------------------------------------------------------
         eLink = ExtraordinaryEffect(eLink);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
     }
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }
 
 //::///////////////////////////////////////////////
@@ -825,11 +825,11 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
 	
     if(nResist == 1) //Spell Resistance
     {
-        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSR, oTarget));
+        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSR, oTarget));
     }
     else if(nResist == 2) //Globe
     {
-        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eGlobe, oTarget));
+        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eGlobe, oTarget));
     }
     else if(nResist == 3) //Spell Mantle
     {
@@ -837,7 +837,7 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
         {
             fDelay = fDelay - 0.1;
         }
-        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMantle, oTarget));
+        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMantle, oTarget));
     }
     return nResist;
 }
@@ -924,11 +924,11 @@ void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType =
 	
 	if (nResult == SAVING_THROW_CHECK_IMMUNE){
 		effect eVis = EffectVisualEffect(VFX_IMP_MAGIC_PROTECTION);
-		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 	} else if (nResult == SAVING_THROW_CHECK_FAILED){
 		if (nSaveType == SAVING_THROW_TYPE_DEATH || nId == SPELL_WEIRD || nId == SPELL_FINGER_OF_DEATH){ 
             effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
 	}
 	SendMessageToPC(oTarget, sMessage);
@@ -989,7 +989,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
          nSpellID != SPELL_HORRID_WILTING)
         {
             eVis = EffectVisualEffect(VFX_IMP_DEATH);
-            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
     }
 
@@ -1006,7 +1006,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
             //
             bValid = FALSE;
         }
-        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
     return bValid;
 }
@@ -1348,8 +1348,8 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary)
     if (nDamage > 0)
     {
         eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-        DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        DelayCommand(0.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 
     object oCreator = GetTrapCreator(OBJECT_SELF);
@@ -1389,10 +1389,10 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary)
                     //Set the damage effect
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
                     //Apply the VFX impact and damage effect
-                    DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, o2ndTarget));
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, o2ndTarget);
+                    DelayCommand(0.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, o2ndTarget));
+                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, o2ndTarget);
                     //Connect the lightning stream from one target to another.
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, o2ndTarget, 0.75);
+                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, o2ndTarget, 0.75);
                     //Set the last target as the new start for the lightning stream
                     eLightning = EffectBeam(VFX_BEAM_LIGHTNING, o2ndTarget, BODY_NODE_CHEST);	// no longer using NWN1 VFX; does this still work?
                     //eLightning = EffectVisualEffect( VFX_BEAM_LIGHTNING );	// makes use of NWN2 VFX

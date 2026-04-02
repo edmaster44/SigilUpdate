@@ -33,9 +33,9 @@ void main()
 		{
 			SendMessageToPC(oPC, "<c=red>Your teeth sink into the target's veins, draining them and restoring your health.");
 			effect eDam = ExtraordinaryEffect(EffectAbilityDecrease(ABILITY_CONSTITUTION, iAmount));
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget);
 			effect eHeal = EffectHeal(d20(iAmount));
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oPC);
+			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oPC);
 		}
 		else
 		{

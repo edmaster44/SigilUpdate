@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 // Pixies can magically create darts which have sleep enchantment on them.

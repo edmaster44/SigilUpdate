@@ -41,6 +41,6 @@ void main()
     {
        	DoPetrification(nCasterLvl, OBJECT_SELF, oTarget, GetSpellId(), GetSpellSaveDC());
 		//effect eHit = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);	// VFX are handled in DoPetrification()
-		//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
      }
 }

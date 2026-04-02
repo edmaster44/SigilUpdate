@@ -63,6 +63,6 @@ void main()
         if(manif.bExtend) fDur *= 2;
 
         // Apply effect
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
     }
 }

@@ -54,7 +54,7 @@ void main()
     int nDuration = PS_GetCasterLevel(OBJECT_SELF);	// AFW-OEI 05/20/2006: main difference from Battletide
 
 	// Apply the haste effect
-	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, OBJECT_SELF, RoundsToSeconds(nDuration));
+	//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, OBJECT_SELF, RoundsToSeconds(nDuration));
 	effect eLink = CreateGoodTideEffectsLink();
 	eLink = EffectLinkEffects(eLink, eHaste);
 	eAOE = EffectLinkEffects(eAOE, eLink);
@@ -64,6 +64,6 @@ void main()
 	RemoveEffectsFromSpell(OBJECT_SELF, 963);
 
     //Create the AOE object at the selected location
-    DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration)));
-	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);	// handled in vfx_persistent.2da
+    DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration)));
+	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);	// handled in vfx_persistent.2da
 }

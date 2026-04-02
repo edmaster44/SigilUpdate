@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: NW_C2_GARGOYLE.nss
 //:: Copyright (c) 2001 Bioware Corp.
@@ -26,10 +27,10 @@ void main()
    {
     //effect eMind = EffectVisualEffect( VFX_DUR_SPELL_AID );
     DelayCommand(0.1, CreateGargoyle(oCreature));
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eMind, oGargoyle);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eMind, oGargoyle);
     SetPlotFlag(OBJECT_SELF, FALSE);
     //effect eDam = EffectDamage(500);
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, OBJECT_SELF);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, OBJECT_SELF);
 	DestroyObject(OBJECT_SELF,1.9);
    }
 }

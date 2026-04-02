@@ -63,8 +63,8 @@ void main() {
 	                        effect eKill = EffectDamage(GetCurrentHitPoints(oTarget));
 	                        //just to be extra-sure... :)
 	                        effect eDeath = EffectDeath(FALSE, FALSE);
-	                        DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
-	                        DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+	                        DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
+	                        DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
 							string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 							DelayCommand(0.25, SendMessageToPC(oCaster, report));
 	                    }
@@ -108,7 +108,7 @@ void main() {
 	                {
 	                     //Apply the VFX and delay the destruction of the summoned monster so
 	                     //that the script and VFX can play.
-	                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+	                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 						 string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 						 SendMessageToPC(oCaster, report);
 	                }

@@ -113,7 +113,7 @@ void main()
 	                if (!GetIsImmune(oTarget,IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF )) {
 						
 						effect eFasc = EffectFascinate();
-						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
+						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
 						SetEffectSpellId(eFasc, SPELL_RAINBOW_DWEOMER);
 						
 						if (GetDistanceBetween(OBJECT_SELF, oTarget) > dweomer_closeness)
@@ -143,7 +143,7 @@ void main()
                 if ( GetIsGroupDominated(sGroupName) == TRUE )
                 {
                     RemoveEffectsByType( OBJECT_SELF, EFFECT_TYPE_DOMINATED );
-                    ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectDeath(), OBJECT_SELF );
+                    PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectDeath(), OBJECT_SELF );
                 }
             }
         }

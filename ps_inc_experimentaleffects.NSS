@@ -292,7 +292,7 @@ void ApplyExperimentalSpellEffectGood(object oTarget, int nLevel = 1, int nIndex
 		default: eEffect = GetHelpfulEffect(oTarget, nLevel, nIndex); nDurationType = DURATION_TYPE_TEMPORARY; break; 
 	}
 	
-	ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
+	PS_ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
 }		
 		
 //Uses GetHarmfulEffect + a few extra bad effects, and applies them to the target
@@ -352,5 +352,5 @@ void ApplyExperimentalSpellEffectBad(object oTarget, int nLevel = 1, int nIndex 
 		default: eEffect = GetHarmfulEffect(oTarget, nLevel, nIndex); nDurationType = DURATION_TYPE_TEMPORARY; break; 
 	}
 	
-	ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
+	PS_ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
 }

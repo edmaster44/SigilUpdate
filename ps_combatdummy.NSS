@@ -22,7 +22,7 @@ void main()
 	object oPC = GetLastDamager();
 
 	// heal the dummy
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(9999), OBJECT_SELF);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(9999), OBJECT_SELF);
 
 	// already exceeded xp for the day? if yes, exit
 	int currentXp = GetOrCreateCurrentXp(oPC);

@@ -50,20 +50,20 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && oTarget != oPC)
 		{	
 			SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_WC_SNOWSONG));
-			DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFoesDoT, oTarget, RoundsToSeconds(nDuration)));
+			DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFoesDoT, oTarget, RoundsToSeconds(nDuration)));
 				
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDuration + nChaBonus, SAVING_THROW_TYPE_COLD, oPC))
 			{	
-				DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFoes, oTarget, RoundsToSeconds(nDuration)));
+				DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFoes, oTarget, RoundsToSeconds(nDuration)));
 				//added separate application of impact vfx as intant as per standard practice
-				DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFoesVFX, oTarget));
+				DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFoesVFX, oTarget));
 			}
 			
 		}
 		else if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC) || oTarget == oPC)
 		{	
 			SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_WC_SNOWSONG, FALSE));
-			DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAllies, oTarget, RoundsToSeconds(nDuration)));
+			DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAllies, oTarget, RoundsToSeconds(nDuration)));
 		}
 	}
 }

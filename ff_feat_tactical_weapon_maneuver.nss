@@ -417,11 +417,12 @@ void DoDisablingStrike(object oPC, object oTarget, struct DamageStats data){
 }
 
 void ApplyManeuverEffect(object oTarget, effect eFX, float fDuration = 0.0f){
-	if (fDuration == 0.0f) ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTarget);
-    else	{
+	if (fDuration == 0.0f){
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTarget, fDuration, TAC_SPELL_ID);
+    }else	{
 		eFX = SupernaturalEffect(eFX);
 		eFX = SetEffectSpellId(eFX, TAC_SPELL_ID);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTarget, fDuration);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTarget, fDuration, TAC_SPELL_ID);
 	}
 }
 

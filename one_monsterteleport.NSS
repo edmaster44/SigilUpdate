@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 object GetNearestEncounterMonsterNotTeleported(string sTag);
@@ -27,7 +28,7 @@ void main() {
 		
 		//SendMessageToPC(oPC, "Moving "+GetTag(oMonster)+" to "+sWP);
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oMonster, 3.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oMonster, 3.0f);
 		AssignCommand(oMonster, JumpToLocation(lWP));
 		SetLocalInt(oMonster, "Teleported", 1);
 		return;

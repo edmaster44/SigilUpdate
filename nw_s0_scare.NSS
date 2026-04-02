@@ -83,8 +83,8 @@ void main()
                         eLink2 = EffectLinkEffects(eLink2, eScare);
 
                         //Apply linked effects and VFX impact
-                        //ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-                        ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
+                        //PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+                        PS_ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
                     }
                 }
             }
@@ -126,8 +126,8 @@ void main()
                         eLink2 = EffectLinkEffects(eLink2, eLink);
 
                         //Apply linked effects and VFX impact
-                        //ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-                        ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
+                        //PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+                        PS_ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
                     }
                 }
             }

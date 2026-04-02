@@ -173,8 +173,8 @@ if (!X2PreSpellCastCode())
     effect eVis = EffectNWN2SpecialEffectFile("sp_skin_6.sef", OBJECT_SELF);
     //Signal Spell Event
     SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_TENSERS_TRANSFORMATION, FALSE));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, RoundsToSeconds(nDuration));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, OBJECT_SELF, RoundsToSeconds(nDuration));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, OBJECT_SELF, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
 
 }

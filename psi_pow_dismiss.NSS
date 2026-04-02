@@ -77,8 +77,8 @@ void main()
                     // Will negates
                     if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                     {
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
-                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     }// end if - Failed save
                 }// end if - SR check
             }// end for - Twin Power

@@ -69,6 +69,6 @@ void main()
     	       eLink = EffectLinkEffects(eLink, EffectDamageResistance(DAMAGE_TYPE_PIERCING,    nDamageReduction));
     	       eLink = EffectLinkEffects(eLink, EffectNWN2SpecialEffectFile("psi_inertialbarrier.sef"));
 
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
     }
 }

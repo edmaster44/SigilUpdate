@@ -42,7 +42,7 @@ void main()
              else
              {
                 effect eSave = EffectVisualEffect(VFX_IMP_FORTITUDE_SAVING_THROW_USE);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oSpellTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oSpellTarget);
               }
              return;
          }

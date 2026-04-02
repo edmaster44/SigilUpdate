@@ -19,6 +19,6 @@ void main()
 	{
 		effect eVuln = EffectDamageImmunityDecrease(DAMAGE_TYPE_FIRE, 50);
 		eVuln = SupernaturalEffect(eVuln);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVuln, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVuln, oTarget);
 	}	
 }

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // Used by nx_s2_chastisespirits and nx_s2_weakenspirits
 
 int IsValidChastiseTarget(object oTarget)

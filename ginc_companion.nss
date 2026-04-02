@@ -553,7 +553,7 @@ void ApplyHenchmanModifier(object oHenchman = OBJECT_SELF)
 		eAttack = EffectAttackDecrease(abs(iModifier));
 
 	if (iModifier != 0)
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAttack, oHenchman);
+		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAttack, oHenchman);
 }
 
 // Remove the effect applied with ApplyHenchmanModifier().  Note that all effects of given types are removed 

@@ -71,6 +71,6 @@ void main()
     RemovePermanencySpells(oTarget);
 
     //Apply the bonus effect and VFX impact
-    ApplyEffectToObject(nDurType, eSave, oTarget, fDuration);
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    PS_ApplyEffectToObject(nDurType, eSave, oTarget, fDuration);
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }

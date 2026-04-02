@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // From entering the light to return from chess game.
 
 void JumpGroupToLocation(object oTarget, location lDestination)

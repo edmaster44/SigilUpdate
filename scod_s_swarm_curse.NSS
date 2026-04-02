@@ -104,7 +104,7 @@ void main()
 				{
 					if (!GetHasSpellEffect(1225, oTarget))
 					{
-					DelayCommand(0.0f, ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePedes, oTarget, fDuration ));
+					DelayCommand(0.0f, PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePedes, oTarget, fDuration ));
 					int i;
 					for ( i = 1; i <= nDuration; i++ )
 					{
@@ -173,9 +173,9 @@ void RunSwarmAttack( object oTarget, float fDuration )
 		nValue = nDam;
 		effect eHurt = EffectDamage( nDam, DAMAGE_TYPE_MAGICAL );
 		effect eBugs = EffectSkillDecrease(nSkill, nValue);
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eHurt, oTarget );
-		ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBugs, oTarget, fDuration);
-		//ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePoison, oTarget, 30.0f);
+		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHurt, oTarget );
+		PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBugs, oTarget, fDuration);
+		//PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePoison, oTarget, 30.0f);
 	}
 
 }

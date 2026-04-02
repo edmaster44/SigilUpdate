@@ -101,7 +101,7 @@ void DoCombustEffect(object oTarget)
 		
 	if (nDamage > 0) {
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	}
 }
 
@@ -143,17 +143,17 @@ void DoLowFireBomb()
 	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 				
 				// Damage effect
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 				
 				// Hit visual
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));				
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));				
              }  
 			 
 			 // Chance to catch on fire
 			 fCatchOnFire = IntToFloat(Random(100) + 1);
 			 if (fCatchOnFire <= LOW_FIRE_COMBUST_CHANCE * 100) {			 	
 			 	// Visual - catch on fire
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCombust, oTarget, RoundsToSeconds(LOW_FIRE_COMBUST_ROUNDS) + 1.0);
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCombust, oTarget, RoundsToSeconds(LOW_FIRE_COMBUST_ROUNDS) + 1.0);
 				
 				// Damage each round
 				for (i = 1; i <= LOW_FIRE_COMBUST_ROUNDS; i++) {
@@ -177,8 +177,8 @@ void DoStickyAcidEffect(object oTarget)
 	if (nDamage > 0) {
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
 		effect eHit = EffectVisualEffect(VFX_IMP_ACID_L);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 	}
 }
 
@@ -220,10 +220,10 @@ void DoMediumAcidBomb()
 	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 				
 				// Damage effect
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 				
 				// Hit visual
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));				
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));				
              }  
 			 
 			 // Chance for acid to stick
@@ -241,7 +241,7 @@ void DoMediumAcidBomb()
 			// Blindness chance
 			if (IntToFloat(Random(100) + 1) <= MED_ACID_BLIND_CHANCE * 100) {
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(MED_ACID_BLIND_DURATION));
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), oTarget, RoundsToSeconds(MED_ACID_BLIND_DURATION));
 			}		 
         }
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, MED_ACID_RADIUS, lTarget, TRUE,  OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
@@ -318,10 +318,10 @@ void DoStrongShrapnelBomb()
 	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 				
 				// Damage effect
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkDamage, oTarget));
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkDamage, oTarget));
 				
 				// Hit visual
-	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));				
+	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));				
              }  			 
         }
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, STRONG_SHRAPNEL_RADIUS, lTarget, TRUE,  OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
@@ -376,7 +376,7 @@ void DoCaltropsEffects(object oTarget)
 		
 		// Apply slow effect if not already applied
 		if (!GetHasSpellEffect(1236, oTarget))
-			DelayCommand(GetRandomDelay(0.2, 0.8), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(CALTROPS_SLOW_DURATION)));
+			DelayCommand(GetRandomDelay(0.2, 0.8), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(CALTROPS_SLOW_DURATION)));
 		
 		// How many caltrops did we step on?
 		int nCaltrops = Random(CALTROPS_MAX + 1) + CALTROPS_MIN;
@@ -407,7 +407,7 @@ void DoCaltropsEffects(object oTarget)
 			nDamage = RollDice(CALTROPS_DAMAGE_DIE, CALTROPS_DAMAGE_DICE_NUM);			
 			eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
 		
-			if (nDamage > 0) DelayCommand(GetRandomDelay(0.5, 1.0), ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+			if (nDamage > 0) DelayCommand(GetRandomDelay(0.5, 1.0), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 		}
 	}
 }

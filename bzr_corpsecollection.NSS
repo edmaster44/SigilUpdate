@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 void Respawn(string sTag, location lLoc) {

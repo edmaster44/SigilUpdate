@@ -69,8 +69,8 @@ void CastSpell()
 					
 					fDuration = fDuration/2;
 					
-					DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-					DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration));
+					DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+					DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration));
 					
 				}
 				else
@@ -79,9 +79,9 @@ void CastSpell()
 					
 					eLink	=	EffectLinkEffects(eDam, eImpact);
 					
-					DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-					DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration));
-					DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fDuration2));
+					DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+					DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration));
+					DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fDuration2));
 				}
 			}
 		}
@@ -89,7 +89,7 @@ void CastSpell()
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_VAST, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	}
 	
-	DelayCommand(0.25f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, oCaster, 0.25f));
+	DelayCommand(0.25f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, oCaster, 0.25f));
 }
 
 
@@ -103,10 +103,10 @@ void main()
 				
 	PlayCustomOneShotAnimation(oPC, "1hS_whirlwind", 0.75);
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 2.0f);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oPC, 2.0);	
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 2.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oPC, 2.0);	
 	DelayCommand(1.0f, PlaySound("cb_whirlwind"));
-	DelayCommand(1.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWave, oPC, 4.0));	
+	DelayCommand(1.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWave, oPC, 4.0));	
 	DelayCommand(1.0f, CastSpell());
 }
 			

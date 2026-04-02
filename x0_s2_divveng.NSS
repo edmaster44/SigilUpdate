@@ -56,8 +56,8 @@ void main(){
 	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_VENGEANCE, FALSE));
 
 	//Apply Link and VFX effects to the target
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration));
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
 
 	DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
 }
@@ -103,8 +103,8 @@ void main()
         SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_VENGEANCE, FALSE));
 
         //Apply Link and VFX effects to the target
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nCharismaBonus+1));
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nCharismaBonus+1));
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
        
         DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
     }

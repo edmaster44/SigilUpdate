@@ -80,7 +80,7 @@ void main()
             {			
 				effect eHold = EffectVisualEffect( VFX_DUR_PARALYZED );	
 				float fDuration = RoundsToSeconds( nDuration );
-        		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, oTarget, fDuration);
+        		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, oTarget, fDuration);
                 //RunGrappleHold( oTarget, nDuration );
 				int i;
 				for ( i = 0; i <= nDuration; i++ )
@@ -160,8 +160,8 @@ void RunGrappleHold( object oTarget, int nDuration )
         }*/
 
         effect eHand = EffectVisualEffect(VFX_DUR_BIGBYS_GRASPING_HAND);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0 );
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eHand, oTarget );
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0 );
+		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHand, oTarget );
 
         object oSelf = OBJECT_SELF;
 		FloatingTextStrRefOnCreature(2478, OBJECT_SELF);
@@ -267,9 +267,9 @@ void main()
 					effect eLink = EffectLinkEffects( eKnockdown, eHand );
 					eLink = EffectLinkEffects( eLink, eVis );
 
-                    ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds( nDuration ) );
+                    PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds( nDuration ) );
 
-//                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
+//                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
 //                                        eVis, oTarget,RoundsToSeconds(nDuration));
                     FloatingTextStrRefOnCreature(2478, OBJECT_SELF);
                 }

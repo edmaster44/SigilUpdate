@@ -35,7 +35,7 @@ void main()
 			string	sEffect	=	GetLocalString(oCaster,"swarm_enter");
 			effect	eEffect = 	SupernaturalEffect(EffectNWN2SpecialEffectFile(sEffect));
 			
-			ApplyEffectToObject(DURATION_TYPE_PERMANENT,eEffect,oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eEffect,oTarget);
 			
 			int nHD	=	PS_GetLevel(oCaster);
 			int nCN	=	GetAbilityModifier(ABILITY_CONSTITUTION,oCaster);	
@@ -50,7 +50,7 @@ void main()
 		    	effect eLink = EffectLinkEffects(eMind, eStink);	
 				
 				FloatingTextStringOnCreature(""+GetName(oTarget)+" is DISTRACTED by the swarm",oTarget);
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oTarget,RoundsToSeconds(1));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oTarget,RoundsToSeconds(1));
 			}
 		}	
 }

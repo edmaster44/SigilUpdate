@@ -86,7 +86,7 @@ void main()
 		{
 			RemoveEffectOfType(oTarget, EFFECT_TYPE_POISON);
 			RemoveEffectOfType(oTarget, EFFECT_TYPE_DISEASE);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDuration, oTarget, fDuration);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDuration, oTarget, fDuration);
 		}
 	}
 }

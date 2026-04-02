@@ -58,7 +58,7 @@ void main()
 	{
 		//SpeakString("Object is Valid, Apparently");
 		IPSafeAddItemProperty(oWeapon, ipDaze, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, FALSE);	
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
 		//Fire cast spell at event for the specified target
    		SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 	}

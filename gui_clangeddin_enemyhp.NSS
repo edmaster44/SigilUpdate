@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //--------------------------------//
 // Shows HP of Target    		  //
 // Clangeddin 2015				  //

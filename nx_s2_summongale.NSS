@@ -105,8 +105,8 @@ void main()
 			 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
 	 	     {
 				 // Duration set to 3 (original) + Random value between 1 and the caster's HD / 5.
-	             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(3 + Random(FloatToInt(IntToFloat(iCasterLevel)/5))) + 1);
-	             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	             PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(3 + Random(FloatToInt(IntToFloat(iCasterLevel)/5))) + 1);
+	             DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 	          }
         }
         //Select the next target within the spell shape.

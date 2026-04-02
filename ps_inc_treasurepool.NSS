@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //Contains the epic quest pools for the moment
 //Should move to database later; purely here for ease of access
 //

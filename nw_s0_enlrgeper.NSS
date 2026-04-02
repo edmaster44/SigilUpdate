@@ -99,8 +99,8 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// VFX_HIT_SPELL_ENLARGE_PERSON contains a cessation effect, so it must be applied temporarily
+    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// VFX_HIT_SPELL_ENLARGE_PERSON contains a cessation effect, so it must be applied temporarily
 	// Delay increasing size for 2 seconds to let enough particles spawn from the
 	//	hit fx to obscure the pop in size.
-    DelayCommand(1.5, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
+    DelayCommand(1.5, PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
 }

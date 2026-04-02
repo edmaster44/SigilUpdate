@@ -61,6 +61,6 @@ void main()
 		
 	
 		
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nHD));
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nHD));
 	}	
 }

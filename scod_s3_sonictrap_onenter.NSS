@@ -60,9 +60,9 @@ void main()
 		            if(nDamage > 0)
 		            {
 		                //Apply damage effect
-		                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+		                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 						if (WillSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP, oCaster) == SAVING_THROW_CHECK_FAILED && !GetIsImmune(oTarget, IMMUNITY_TYPE_STUN))  {
-							 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nStunDur)));
+							 DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nStunDur)));
 						}
 		            }
 				}

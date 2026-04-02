@@ -54,7 +54,7 @@ void main()
 	/// Okay, now we apply the VFX's for item activation and explosion to the user
 
 	effect eCasting =  EffectNWN2SpecialEffectFile("fx_kos_slow_cast", oPC);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCasting, oPC, 2.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCasting, oPC, 2.0f);
 	
 	FloatingTextStringOnCreature("<b><i><COLOR=RED>"+GetName(oPC)+"'s gloves begin to glow!", oPC, TRUE, 2.5f); 
 
@@ -96,10 +96,10 @@ void main()
             if(nDamage > 0)
             {
             	// Apply effects to the currently selected target.
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 //This visual effect is applied to the target object not the location as above.  This visual effect
                 //represents the flame that erupts on the target not on the ground.
-                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis3, oTarget));
+                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis3, oTarget));
             }
 
 		//Select the next target within the spell shape.

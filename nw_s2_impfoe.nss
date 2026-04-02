@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Implacable Foe
 //:: NW_S2_ImpFoe
@@ -39,8 +40,8 @@ void main()
 				SignalEvent(oTARGET, EventSpellCastAt(oPC, SPELLABILITY_IMPLACABLE_FOE, FALSE));
 				
 				//Apply the VFX impact and effects and extra damage
-				DelayCommand(fDEL, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTARGET, fDUR));
-				DelayCommand(fDEL, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTARGET));
+				DelayCommand(fDEL, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTARGET, fDUR));
+				DelayCommand(fDEL, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTARGET));
 			}
 		}
 		oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, lPC);

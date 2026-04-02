@@ -137,7 +137,7 @@ void main()
 
             // Shoot the ray
             eRay = EffectBeam(nBeam, oManifester, BODY_NODE_HAND);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oFirstTarget, 1.7f);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oFirstTarget, 1.7f);
 
             if (spellsIsTarget(oFirstTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF))
             {
@@ -170,7 +170,7 @@ void main()
 		            }
 
 					effect eDamage = EffectDamage(nDamStrike, nDamageType);
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
                 }// end if - SR check
             }
 			
@@ -186,7 +186,7 @@ void main()
 		        if (oTarget != oFirstTarget && spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
 		        {
 		            //Connect the new lightning stream to the older target and the new target
-		            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eRay,oTarget,0.5));
+		            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eRay,oTarget,0.5));
 		
 		            //Fire cast spell at event for the specified target
 		            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CHAIN_LIGHTNING));
@@ -221,8 +221,8 @@ void main()
 		                eDamage = EffectDamage(nDamStrike /2, nDamageType);
 		                if(nDamStrike > 0) //age > 0)
 		                {
-		                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
-		                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+		                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+		                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
 		                }
 		            }
 		            oHolder = oTarget;

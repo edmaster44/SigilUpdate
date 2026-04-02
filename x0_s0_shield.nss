@@ -82,7 +82,7 @@ void main()
 	RemoveEffectsFromSpell(oTarget, nID);
     
     //Apply VFX impact and bonus effects
-	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    //ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
-	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    //PS_ApplyEffectToObject(nDurType, eDur, oTarget, fDuration);
+	PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

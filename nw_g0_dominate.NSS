@@ -60,7 +60,7 @@ void main()
             if ( GetIsGroupDominated(sGroupName) == TRUE )
             {
                 RemoveEffectsByType( OBJECT_SELF, EFFECT_TYPE_DOMINATED );
-                ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectDeath(), OBJECT_SELF );
+                PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectDeath(), OBJECT_SELF );
             }
         }
     }

@@ -85,7 +85,7 @@ void main()
 		
 		    // Shoot the ray
 		    effect eRay = EffectBeam(VFX_BEAM_ENCHANTMENT, manif.oManifester, BODY_NODE_HAND, !(nTouchAttack > 0));
-		    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+		    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 			if(oTarget == oPortal)
 			{
 				DestroyObject(oPortal);
@@ -98,7 +98,7 @@ void main()
 		        {
 		            if(!GetLocalInt(oTarget, "DIMENSIONAL_ACHORED"))
 		            {
-		                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDur);
+		                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDur);
 		                SetLocalInt(oTarget, "DIMENSIONAL_ACHORED", TRUE);
 						FloatingTextStringOnCreature("Dimensional Anchor Successful",oManifester, FALSE);
 		                // Start the monitor

@@ -57,5 +57,5 @@ void main()
     //eLink = EffectLinkEffects(eLink, eDur);
 
     //Apply the VFX impact and effects
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

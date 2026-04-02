@@ -132,7 +132,7 @@ void main()
 		ACBonus = 0;
 	}
 	SetLocalInt(oPC, VAR_MIND_SHIELD, ACBonus);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectACIncrease(ACBonus, AC_SHIELD_ENCHANTMENT_BONUS)), oPC, 0.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectACIncrease(ACBonus, AC_SHIELD_ENCHANTMENT_BONUS)), oPC, 0.0f);
 	
 	// Debug psy strike
 	DebugPsychicStrike(GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_ON), GetLocalInt(oPC, VAR_PSYCHIC_STRIKE_DC));

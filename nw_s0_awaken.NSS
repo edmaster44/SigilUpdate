@@ -82,8 +82,8 @@ void main()
 			eLink = EffectLinkEffects(eLink, eVis);	// NWN2 VFX
             eLink = SupernaturalEffect(eLink);
             //Apply the VFX impact and effects
-            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
-            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
         }
     }
 }

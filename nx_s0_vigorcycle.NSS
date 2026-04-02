@@ -77,7 +77,7 @@ void main()
     		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1023, FALSE));
 
 			//Apply the bonus effect and VFX impact
-    		ApplyEffectToObject(nDurType, eRegen, oTarget, fDuration);
+    		PS_ApplyEffectToObject(nDurType, eRegen, oTarget, fDuration);
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}

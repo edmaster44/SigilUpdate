@@ -37,19 +37,19 @@ void main()
 				nHitDice	= PS_GetLevel(oTarget);
 				if (nHitDice >= 17)
 				{	nDieRoll1 = d4(1);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll1));	}
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll1));	}
 				else if (nHitDice >= 7) 
 				{	nDieRoll1 = d4(1);
 					nDieRoll2 = d4(1);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStunned, oTarget, RoundsToSeconds(nDieRoll1));
-					DelayCommand(RoundsToSeconds(nDieRoll1), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll2)));	}
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStunned, oTarget, RoundsToSeconds(nDieRoll1));
+					DelayCommand(RoundsToSeconds(nDieRoll1), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll2)));	}
 				else
 				{	nDieRoll1 = d4(1);
 					nDieRoll2 = d4(1);
 					nDieRoll3 = d4(1);
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUnconsc, oTarget, RoundsToSeconds(nDieRoll1));
-					DelayCommand(RoundsToSeconds(nDieRoll1), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStunned, oTarget, RoundsToSeconds(nDieRoll2)));
-					DelayCommand(RoundsToSeconds(nDieRoll1 + nDieRoll2), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll3)));	}
+					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUnconsc, oTarget, RoundsToSeconds(nDieRoll1));
+					DelayCommand(RoundsToSeconds(nDieRoll1), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStunned, oTarget, RoundsToSeconds(nDieRoll2)));
+					DelayCommand(RoundsToSeconds(nDieRoll1 + nDieRoll2), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDieRoll3)));	}
 			}	
 		}
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

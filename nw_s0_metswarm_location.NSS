@@ -153,8 +153,8 @@ void HandleTargetLocation( location lSpellTargetLocation )
 					if ( nDamage > 0 )
 					{																	
 				 	    //Apply damage effect and VFX impact.
-					    DelayCommand( fDelay2 + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );
-					    DelayCommand( fDelay2 + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );
+					    DelayCommand( fDelay2 + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );
+					    DelayCommand( fDelay2 + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );
 					    DelayCommand( fDelay2 + fTravelTime, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eBump, lTargetLoc) );
 					}
 				

@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 void SpawnOrbsForGroup(object oHolder, string sButton) {

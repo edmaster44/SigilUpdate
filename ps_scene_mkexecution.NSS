@@ -475,7 +475,7 @@ void CrowdAnimations() {
 	
 	if (sAnim == "drinkbeeridle") {
 		effect eVFX = EffectNWN2SpecialEffectFile("fx_handr_stein");
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oCreature, 18.0f);
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oCreature, 18.0f);
 		
 		DelayCommand(8.0f, AssignCommand(oCreature, ActionPlayAnimation(ANIMATION_FIREFORGET_DRINK)));
 	}

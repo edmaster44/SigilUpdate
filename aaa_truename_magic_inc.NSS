@@ -35,8 +35,8 @@ void PS_Ability_WordOfNurturing_Ally(object oPC, object oTarget, int nSpell)
 	effect eDur		= EffectVisualEffect(VFX_DUR_SPELL_VIGOR);
 	effect eLink	= EffectLinkEffects(eRegen, eDur);
 	
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDur));
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDur));
 }
 
 //Helper function for PS_Ability_WordOfNurturing_Enemy below
@@ -48,7 +48,7 @@ void RunNurtureDamage(object oTarget, int nDur)
 	if (nDur == 0)
 	{	return;	}
 	else
-	{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+	{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 			nDur = (nDur - 1);
 		DelayCommand(6.0f, RunNurtureDamage(oTarget, nDur));
 	}
@@ -106,7 +106,7 @@ void PS_Ability_WordOfShockwave(object oPC, int nSpell)
 	effect eVis		= EffectNWN2SpecialEffectFile("fx_shockwave");
 	float fDelay;
   
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 	 
 	oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, GetLocation(oPC));
     while (GetIsObjectValid(oTarget))
@@ -114,7 +114,7 @@ void PS_Ability_WordOfShockwave(object oPC, int nSpell)
 	    {	fDelay = GetDistanceBetweenLocations(GetLocation(oPC), GetLocation(oTarget))/20;
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 592));
 			if (FortitudeSave(oTarget, nDC) == 0)
-            {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+            {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
             }
 		}
 	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation());
@@ -134,7 +134,7 @@ void PS_Ability_WordOfPeace_Ally(object oPC, object oTarget, int nSpell)
     int nDuration	= 10;
 	
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 594, FALSE));
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 
 }
 
@@ -187,13 +187,13 @@ void PS_Ability_WordOfPeace_Enemy(object oPC, object oTarget, int nSpell)
 			DelayCommand(30.1f, DeleteLocalLocation(oEss, "ExtraDim"));
 			AssignCommand(oTarget, ClearAllActions());
 			AssignCommand(oTarget, ActionJumpToLocation(lWP));
-			AssignCommand(oTarget, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-			AssignCommand(oTarget, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, oTarget, 30.0f));
+			AssignCommand(oTarget, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+			AssignCommand(oTarget, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, oTarget, 30.0f));
 			SendMessageToPC(oPC, "Action assigned to target.");
 			DelayCommand(30.0f, AssignCommand(oTarget, ClearAllActions()));
 			DelayCommand(30.0f, AssignCommand(oTarget, ActionJumpToLocation(lTarg)));	}
 		else
-		{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			SendCreatureToLimbo(oTarget);
 			SendMessageToPC(oPC, "Target sent elsewhere.");
 			DelayCommand(30.0f, RecallCreatureFromLimboToLocation(oTarget, lTarg));

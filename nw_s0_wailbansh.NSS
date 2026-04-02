@@ -89,9 +89,9 @@ void main()
                     if(!MySavingThrow(SAVING_THROW_FORT, oTarget, DC, SAVING_THROW_TYPE_DEATH)) //, OBJECT_SELF, 3.0))
                     {
                         //Apply the delay VFX impact and death effect
-                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                         effect eDeath = EffectDeath();
-                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget)); // no delay
+                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget)); // no delay
                     }
                 }
             }

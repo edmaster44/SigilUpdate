@@ -21,13 +21,13 @@ void main () {
 		SendMessageToPC(oPC, sSuccessMessage);
 		nDam /= 2;
 		effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
+		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
 		
 	} else {
 	
 		SendMessageToPC(oPC, sFailMessage);
 		effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
-		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
+		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
 		
 	}
 		

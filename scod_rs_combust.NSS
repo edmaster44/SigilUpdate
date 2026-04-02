@@ -116,8 +116,8 @@ void main()
            //-------------------------------------------------------------------
            // Apply VFX
            //-------------------------------------------------------------------
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, RoundsToSeconds(nDuration));
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, RoundsToSeconds(nDuration));
             TLVFXPillar(VFX_HIT_SPELL_EVOCATION, GetLocation(oTarget), 5, 0.1f,0.0f, 2.0f);
 
 
@@ -176,8 +176,8 @@ void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic
             effect eDmg = EffectDamage(nDamage,DAMAGE_TYPE_FIRE);
             effect eVFX = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
 
-            ApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT,eVFX,oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVFX,oTarget);
 
             //------------------------------------------------------------------
             // After six seconds (1 round), check damage again

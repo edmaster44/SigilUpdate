@@ -61,7 +61,7 @@ void main()
                 SendMessageToPC(oPC,"Your "+sWeapon+" damages the monster, but is destroyed in the process!");
               }
               DestroyObject(oWeapon);
-              ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_IMP_ACID_L),oPC);
+              PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_IMP_ACID_L),oPC);
             }
           }
         }
@@ -87,7 +87,7 @@ void main()
                   SendMessageToPC(oPC,"Your "+sWeapon+" damages the monster, but is destroyed in the process!");
                 }
                 DestroyObject(oWeapon);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_IMP_ACID_L),oPC);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_IMP_ACID_L),oPC);
               }
             }
           }

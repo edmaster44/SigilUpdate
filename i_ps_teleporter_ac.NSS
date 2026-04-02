@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 /*Script by Ceremorph
@@ -26,7 +27,7 @@ void main()
 			}
 		
 		AssignCommand(oPC, ClearAllActions());
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		AssignCommand(oPC, ActionJumpToLocation(lWaypoint));	
 		}
 	else

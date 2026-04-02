@@ -54,8 +54,8 @@ void main()
                 {
                     eVis =EffectVisualEffect(VFX_IMP_FLAME_M);
                 }
-                ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
-                ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oSpellTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget);
+                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oSpellTarget);
            }
         }
    }

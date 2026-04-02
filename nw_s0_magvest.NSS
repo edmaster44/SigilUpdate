@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Magic Vestment
 //:: NW_S0_MagVest.nss
@@ -18,6 +19,6 @@ void main()
 	//Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 	
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
 }

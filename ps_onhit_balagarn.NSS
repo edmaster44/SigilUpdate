@@ -38,7 +38,7 @@ void main()
         nCasterLvl = 20;
     }
 	
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, OBJECT_SELF, RoundsToSeconds(d3()));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, OBJECT_SELF, RoundsToSeconds(d3()));
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, nSize, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
     {
@@ -65,10 +65,10 @@ void main()
 					string report = "<Color="+enemyColor+">"+GetName(oTarget)+"</color><Color="+saveColor+"> : Strength Check: *success* :("+IntToString(nRoll)+" + "+IntToString(GetAbilityScore(oTarget, ABILITY_STRENGTH))+" = "+IntToString(nRoll+GetAbilityScore(oTarget, ABILITY_STRENGTH))+")</color>";
 					SendMessageToPC(oCaster, report);
                     // Apply effects to the currently selected target.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 6.0));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 6.0));
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the flame that erupts on the target not on the ground.
-                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> knocks down "+GetName(oTarget)+"</color>";
 					SendMessageToPC(oCaster, report);
                 }
@@ -84,6 +84,6 @@ void main()
 	
 	fMaxDelay += 0.5f;
 	effect eCone = EffectVisualEffect( VFX_FNF_MYSTICAL_EXPLOSION );
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 	DelayCommand(0.5f, ClearOnHitInfo(OBJECT_SELF));
 }

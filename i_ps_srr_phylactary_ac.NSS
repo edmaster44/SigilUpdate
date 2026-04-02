@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 // lich phylactary gives contingecy effect on death.
 
 void main()
@@ -6,5 +7,5 @@ void main()
 	int iHeal = GetMaxHitPoints(oPC);
 	effect eRes = EffectHealOnZeroHP(oPC, iHeal);
 	eRes = ExtraordinaryEffect(eRes);
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
 }

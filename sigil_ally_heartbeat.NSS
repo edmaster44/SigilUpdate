@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 void main()
 {
 	object oNPC = OBJECT_SELF;

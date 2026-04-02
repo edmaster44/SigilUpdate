@@ -98,7 +98,7 @@ void main()
 					nSave	=	1;
 				}
 				
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, RoundsToSeconds(nNumStage));
+				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, RoundsToSeconds(nNumStage));
 				
 				//determine how many rounds of damage need to be applied. while loop
 				while (nCounter < nNumStage)

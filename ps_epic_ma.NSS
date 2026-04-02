@@ -39,5 +39,5 @@ void main()
     eLink = EffectLinkEffects(eLink, ePromo);
     eLink = EffectLinkEffects(eLink, eDisplace);
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
+    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
 }

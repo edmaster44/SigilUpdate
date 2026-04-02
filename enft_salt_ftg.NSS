@@ -66,7 +66,7 @@ void main()
         }
         // Attempt heat damage if still unconscious
         else if(FortitudeSave(OBJECT_SELF, 15 + pastThrows, SAVING_THROW_TYPE_NEGATIVE) == 0)
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d8(2), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL), OBJECT_SELF);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d8(2), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL), OBJECT_SELF);
 
         // If dead now, remove unconscious effects incase resurected later.
         // The number of throws, however, is not reduced.  Body has not gotten cooler yet.
@@ -106,9 +106,9 @@ void main()
 				newsaltDamage = d8(2);
 			}
         eff = EffectTemporaryHitpoints(newsaltDamage);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eff, OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eff, OBJECT_SELF);
         beforeHP = GetCurrentHitPoints( );
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(newsaltDamage, DAMAGE_TYPE_MAGICAL), OBJECT_SELF);
+        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(newsaltDamage, DAMAGE_TYPE_MAGICAL), OBJECT_SELF);
         afterHP = GetCurrentHitPoints( );
         newsaltDamage = beforeHP - afterHP;
         RemoveEffect(OBJECT_SELF, eff);
@@ -131,9 +131,9 @@ void main()
             SendMessageToPC(OBJECT_SELF, "You can take no more of this exposure and are now unconscious, dying of thirst.");
 
             // Apply unconscious effects
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectKnockdown( ), OBJECT_SELF, 10.0f);
+            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectKnockdown( ), OBJECT_SELF, 10.0f);
             
-            DelayCommand(5.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectPetrify(), OBJECT_SELF));
+            DelayCommand(5.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectPetrify(), OBJECT_SELF));
         }
     }
 
@@ -141,15 +141,15 @@ void main()
     if(GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") > 0)
     {
 		int nBlindDur = 3;
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, saltTime);
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, saltTime);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, saltTime);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, saltTime);
 		if (!GetIsImmune(OBJECT_SELF, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), OBJECT_SELF, RoundsToSeconds(nBlindDur));
+			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNewBlindness(), OBJECT_SELF, RoundsToSeconds(nBlindDur));
     }
 
     // If the character is just barely conscious apply dazing effects for an hour
     if(GetLocalInt(OBJECT_SELF, "SALT_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, saltTime);
+        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, saltTime);
 
     // Increase the number of throws done
     SetLocalInt(OBJECT_SELF, "SALT_THROWS", pastThrows + 1);

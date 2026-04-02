@@ -16,6 +16,6 @@ void main(){
 	eAOE = SupernaturalEffect(eAOE);
  
 	
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oCaster);
+	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oCaster);
 
 }

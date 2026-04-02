@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 //::///////////////////////////////////////////////
 //:: Magic Circle Against Chaos
 //:: NW_S0_CircChaos.nss

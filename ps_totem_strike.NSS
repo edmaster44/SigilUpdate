@@ -104,7 +104,7 @@ void TotemStrikeAttack( object oTarget, int nShamanLvl, int nElemDmgType, float 
 			eLink = EffectLinkEffects(eLink, eElem);
 		}
 
-		ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget );
+		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget );
 	}
 }
 

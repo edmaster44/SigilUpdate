@@ -64,17 +64,17 @@ void main()
 	
 		if ( nAlign == ALIGNMENT_GOOD)
 		{
-			ApplyEffectToObject( DURATION_TYPE_INSTANT, eGoodLink, oTarget );
+			PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eGoodLink, oTarget );
 		}
 		
 		else if ( nAlign == ALIGNMENT_EVIL )
 		{
-			ApplyEffectToObject( DURATION_TYPE_INSTANT, eEvilLink, oTarget );
+			PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eEvilLink, oTarget );
 		}
 		
 		else
 		{
-			ApplyEffectToObject( DURATION_TYPE_INSTANT, eNeutLink, oTarget );
+			PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eNeutLink, oTarget );
 		}
 	} //still fires off glyph for resisted targets
 		DestroyObject( OBJECT_SELF, 0.3 );

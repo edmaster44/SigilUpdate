@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 //Put this script OnEnter

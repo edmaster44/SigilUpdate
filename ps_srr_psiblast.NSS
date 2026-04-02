@@ -44,7 +44,7 @@ void main()
 	effect eMindblast	= EffectLinkEffects(eStun, eVis);
 	effect eDamage;
 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConeBlast, OBJECT_SELF, 1.0f);
+	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConeBlast, OBJECT_SELF, 1.0f);
 	
 	oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 20.0f, lTargetLocation, TRUE);
 
@@ -111,12 +111,12 @@ void main()
             {
 				if (GetHasFeat(21420, OBJECT_SELF))
 				{
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				}
 				if (!GetHasSpellEffect(GetSpellId(), oTarget))
 				{
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eMindblast, oTarget, RoundsToSeconds(nStunDuration)));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eMindblast, oTarget, RoundsToSeconds(nStunDuration)));
 				}
 			}
 			else
@@ -125,7 +125,7 @@ void main()
 				{
 					effect eDamage2 = EffectDamage(nDamageAmount/2);
 					eDamage2	= EffectLinkEffects(eDamage2, eDamageHit);
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
 				}
 			}
 			

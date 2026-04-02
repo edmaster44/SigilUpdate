@@ -1,3 +1,4 @@
+#include "ff_applyeffect" 
 
 
 const string MSGBOARD_XML = "bboard.xml";
