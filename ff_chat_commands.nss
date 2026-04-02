@@ -380,6 +380,48 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
+		else if (sInput == "#GetPersistentFeats"){
+			string sLog = "List of persistent feat info:";
+			sFeedback = "Writing persistent feat info to log file";
+			int nMax = GetNum2DARows("feat");
+			int i, nId, nPers, nAuto, nNameRef;
+			string sScript;
+			for (i = 0; i <= nMax; i++){
+				nPers = StringToInt(Get2DAString("feat", "IsPersistent", i));
+				nAuto = StringToInt(Get2DAString("feat", "Auto_Refresh", i));
+				if (nAuto == 1 || nPers == 1){
+					nId = StringToInt(Get2DAString("feat", "SPELLID", i));
+					nNameRef = StringToInt(Get2DAString("feat", "Name", i));
+					sScript = Get2DAString("spells", "ImpactScript", nId);
+					sLog += "\nFeat ID: " + IntToString(i) + ", Name: " + GetStringByStrRef(nNameRef);
+					sLog += ", Spell ID: " + IntToString(nId) + ", Script: " + sScript;
+				}
+			}
+			WriteTimestampedLogEntry(sLog);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (sInput == "#GetAllSpellScripts"){
+			string sList = "";
+			string sScript, sInstance;
+			string sLog = "List of all spell scripts:";
+			sFeedback = "Writing list of spell scripts to log";
+			int nMax = GetNum2DARows("spells");
+			int i;
+			for (i = 1; i <= nMax; i++){
+				sScript = GetStringLowerCase(Get2DAString("spells", "ImpactScript", i));
+				if (sScript != "****"){
+					sInstance = "|" + sScript + "|";
+					if (FindSubString(sList, sInstance) == -1){
+						sList += sInstance;
+						sLog += "\n" + sScript;
+					}
+				}
+			}
+			WriteTimestampedLogEntry(sLog);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
 	}
 	//end trusted player only debug commands
 

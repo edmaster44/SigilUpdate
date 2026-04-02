@@ -56,6 +56,7 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
+void RegisterSpell();
 void DebugSpells();
 
 //------------------------------------------------------------------------------
@@ -536,4 +537,23 @@ void DebugSpells(){
 		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
 	}
 	SendMessageToPC(OBJECT_SELF, sDebug);
+}
+
+// At the time of this writing I'm fairly convinced that the source of the dispell bug is that
+// numberous spell scripts and feat effects that apply effects to characters are missing the
+// typical SignalEvent(oTarget, EventSpellCastAt... etc that EVERY default nwn spell script has.
+// The fact that every OC spell script has it makes me suspect it's necessary for managing the 
+// effect stack, and that without it there are "orphan effects" that get wiped. So, lets just
+// insert RegisterSpell() into ever spell script, shall we? Much easier typing than the whole
+// thing. -FlattedFifth, April 1, 2026
+void RegisterSpell(){
+	object oTarget = GetSpellTargetObject();
+	if (!GetIsObjectValid(oTarget)) return;
+	
+	int nId = GetSpellId();
+	int bHarmful = FALSE;
+	if (StringToInt(Get2DAString("spells", "HostileSetting", nId)) == 1)
+		bHarmful = TRUE;
+		
+	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, bHarmful));
 }
