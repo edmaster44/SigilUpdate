@@ -173,6 +173,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//gets a great deal of info in a server message that user can screenshot to send in a bug report
 	else if (sInput == "#debuginfo"){
 		sFeedback = GetDebugInfo(oSender);
+		dae_LogEffects(oSender);
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
