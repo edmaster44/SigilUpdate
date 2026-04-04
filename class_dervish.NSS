@@ -2,71 +2,65 @@
 #include "aaa_constants"
 #include "ps_inc_equipment"
 
-//Made by edmaster44(DM_Odin) for the Dervish Class PRC
 
-//Armor Bonus for Dervish
+//Made by edmaster44(DM_Odin) for the Dervish Class PRC
+// edited by FlattedFifth, made helper function, bailed on effect already existing
+
+//helper function to qualify for dervish fx
+int GetQualifiesDervishFX(object oPC, int nSpellId){
+	
+	if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 ){
+		SendMessageToPC(oPC, "Dervish abilities will not stack with Stalwart Defender");
+		return FALSE;
+	}
+
+	if (!NoHeavyArmorOrShield(oPC)){ 
+		SendMessageToPC(oPC,"Dervish abilities only work when wearing no armor or light armor.");
+		return FALSE;
+	}
+	return TRUE;
+}
+
 void Dervish_AC_Bonus(object oPC, int nSpell)
 {
-object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
-
-
-if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
-{ SendMessageToPC(oPC, "Your Armor Bonus will not stack with Stalwart Defender");
-	return;}
-
-
-if (!NoHeavyArmorOrShield(oPC))
-{ SendMessageToPC(oPC,"Your Dervish AC Bonus will not function in Armor Heavier than Light");
-return;}
-	
-		int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
+	int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
+	//bail if they had the effect to begin with, also remove if they shouldn't have
+	if (GetHasSpellEffect(nSpellId, oPC)){
+		if (!GetQualifiesDervishFX(oPC, nSpellId))
+			PS_RemoveEffects(oPC, nSpellId);
 		
-		if (GetHasSpellEffect(nSpellId,oPC))
-			RemoveSpellEffects(nSpellId, oPC, oPC);	
-				
-//Ac bonus
-	int nAmount = 1;			
-		int nLevel = GetLevelByClass(CLASS_DERVISH, oPC);
-		if (nLevel >= 9 ) 
-        {   nAmount = 2; }
-		
-	
-		float fDuration = 9999.99f;
-		effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
-		eAC = SetEffectSpellId(eAC,nSpellId);
-		eAC = SupernaturalEffect(eAC);
-							
-		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAC, oPC, fDuration));
+		return; 
 	}
+				
+	//Ac bonus
+	int nAmount = 1;			
+	if (GetLevelByClass(CLASS_DERVISH, oPC) >= 9 ) nAmount = 2;
+		
+	effect eAC = EffectACIncrease(nAmount,AC_DODGE_BONUS);		
+	eAC = SetEffectSpellId(eAC,nSpellId);
+	eAC = SupernaturalEffect(eAC);
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpellId, FALSE));						
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC));
+}
 	
 
 
 
 //A thousand cuts Feat for Dervish
 void A_Thousand_Cuts(object oPC, int nSpell)
-{	
-
-
-
-if (GetLevelByClass(CLASS_STALWART_DEFENDER,oPC) >0 )
-{ SendMessageToPC(oPC, "A thousand Cuts will not stack with Stalwart Defender");
-	return;}
-	
-
-
-object oArmor = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
-
-if (!NoHeavyArmorOrShield(oPC))
-{ SendMessageToPC(oPC,"A Thousand Cuts only works when wearing no armor or light armor.");}
-	
-	
+{
 	int nSpellId = SPELLABILITY_THOUSAND_CUTS;
+	//bail if they had the effect to begin with, also remove if they shouldn't have
+	if (GetHasSpellEffect(nSpellId, oPC)){
+		if (!GetQualifiesDervishFX(oPC, nSpellId))
+			PS_RemoveEffects(oPC, nSpellId);
+		
+		return;
+	}
 	
-	float fDuration = 9999.99f;
 	effect eSlash = EffectDamageIncrease(DAMAGE_BONUS_2d6, DAMAGE_TYPE_SLASHING);
 	eSlash = SupernaturalEffect(eSlash);
-	eSlash = SetEffectSpellId(eSlash, nSpellId );	
-	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC,fDuration)); 
-	
-		
+	eSlash = SetEffectSpellId(eSlash, nSpellId);
+	SignalEvent(oPC, EventSpellCastAt(oPC, nSpellId, FALSE));
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlash, oPC)); 
 }	
