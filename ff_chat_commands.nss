@@ -139,20 +139,12 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
-	// Shows ECL if allowing ECL characters to reach lvl 30, otherwise shows level adjustment
+	// Shows ECL and percentage of combat xp deducted due to ecl
 	else if (sInput == "#showecl"){
-		int nECL = 0;
-		if (ALLOW_ECL_LEVEL_30){
-			sFeedback = "Your ECL is ";
-			nECL = GetNewECL(oSender);
-			
-		} else {
-			sFeedback = "Your Level Adjustment is ";
-			PS_CalculateECL(oSender);
-			nECL = PS_GetEssenceECL(oSender);
-		}
-		sFeedback += IntToString(nECL);
-		sFeedback += "\nYour Challenge Rating is " + FloatToString(GetChallengeRating(oSender));
+		int nECL = GetNewECL(oSender);
+		sFeedback = "Your ECL is " + IntToString(nECL);
+		if (nECL > 0)
+			sFeedback = "\nECL combat XP tax: -" + PS_PrettyFloatString(GetECLXPTax(nECL, TRUE)) + "%";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
@@ -378,7 +370,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			if (!GetIsPC(oItem))
 				oItem = oSender;
 			dae_LogEffects(oItem);
-			sFeedback = "EFFECT INFO FOR " + GetName(oItem);
+			sFeedback = "EFFECT INFO FOR " + GetName(oItem) + "\n";
 			sFeedback += GetEffectInfo(oItem);
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;

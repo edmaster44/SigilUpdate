@@ -517,7 +517,7 @@ void DebugSpells(){
 	int nId = GetSpellId();
 	int nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
 	string sDebug = GetStringByStrRef(nNameRef);
-	sDebug += "(" + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")";
+	sDebug += " (" + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")";
 	sDebug += "\nClass: ";
 	nId = GetLastSpellCastClass();
 	if (nId == CLASS_TYPE_INVALID) sDebug += "Undefined";

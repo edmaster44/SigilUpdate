@@ -642,6 +642,23 @@ int XPpoolAdjust(int nXP){
     else return PS_RoundToInt(nXP * 0.25);
 }
 
+// for display arg set true returns a percentile rounded to 2 decimals consisting of the percent deducted
+float GetECLXPTax(int nECL, int bForDisplay = FALSE){
+	float fTax;
+	if (nECL < 0) nECL = 0;
+	else if (nECL > 20) nECL = 20;
+	if (nECL == 0) return 0.0;
+	
+	float fEffectiveLevel = 30.0 + IntToFloat(nECL);
+	float fECLXP = 1000.0 * fEffectiveLevel * (fEffectiveLevel - 1.0) / 2;
+	fTax = 435000.0 / fECLXP;
+	if (!bForDisplay) return fTax;
+	
+	float fPercent = (1.00 - fTax) * 100.0;
+	return PS_RoundDecimal(fPercent);
+	
+}
+
 // Called from PS_GiveXPReward().
 int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
    
@@ -656,12 +673,8 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 		}
 		return nXP;
 	}
-	// XP for effective level 30 + nECL
-    float fEffectiveLevel = 30.0 + IntToFloat(nECL);
-    float fECLXP = 1000.0 * fEffectiveLevel * (fEffectiveLevel - 1.0) / 2;
-    
-    // Tax factor = base lvl 30 xp / xp to reach effective level of 30 + ecl
-	float fTax = 435000.0 / fECLXP;
+
+	float fTax = GetECLXPTax(nECL);
 	int nAdjusted = PS_RoundToInt(IntToFloat(nXP) * fTax);
 	
 	if (nAdjusted < 1) nAdjusted = 1; // to get here nXP had to be at least 1, so should the adjusted
