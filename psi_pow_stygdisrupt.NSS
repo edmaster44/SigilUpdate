@@ -67,14 +67,17 @@ void main()
     	return;
     }
 
-    if(manif.bCanManifest)
-{
-        float fDuration = 60.0f * manif.nManifesterLevel;
-        if(manif.bExtend){ fDuration *= 2;}
-		itemproperty iRuin		= 	ItemPropertyBonusFeat(IP_CONST_FEAT_UNDEAD_RUIN);
-		{IPSafeAddItemProperty(oTarget,iRuin, fDuration);
-		IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_HOLY), fDuration);}
+    if (!manif.bCanManifest) return;
+
+	float fDuration = 60.0f * manif.nManifesterLevel;
+	if(manif.bExtend){ fDuration *= 2;}
+	itemproperty iRuin		= 	ItemPropertyBonusFeat(IP_CONST_FEAT_UNDEAD_RUIN);
+
+	SignalEvent(oTarget, EventSpellCastAt(oManifester, GetSpellId(), FALSE));
+	IPSafeAddItemProperty(oTarget,iRuin, fDuration);
+	IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_HOLY), fDuration);
+		
         
         
-    }
+    
 }

@@ -27,9 +27,10 @@ void PS_OutsiderBloodlineFiendish(object oPC, int nSpell)
 	effect eProfane		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 		eProfane		= VersusAlignmentEffect(eProfane, ALIGNMENT_ALL, ALIGNMENT_GOOD);
 		eProfane		= SupernaturalEffect(eProfane);
+		eProfane 		= SetEffectSpellId(eProfane, nSpell);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProfane, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProfane, oPC);
 }
 
 void PS_OutsiderBloodlineCelestial(object oPC, int nSpell)
@@ -37,8 +38,8 @@ void PS_OutsiderBloodlineCelestial(object oPC, int nSpell)
 	effect eSacred		= EffectDamageIncrease(DAMAGE_BONUS_1, DAMAGE_TYPE_DIVINE);
 		eSacred			= VersusAlignmentEffect(eSacred, ALIGNMENT_ALL, ALIGNMENT_EVIL);
 		eSacred			= SupernaturalEffect(eSacred);
+		eSacred 		= SetEffectSpellId(eSacred, nSpell);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	eSacred = SetEffectSpellId(eSacred, nSpell);
     RemoveEffectsFromSpell(oPC, nSpell);
 	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
 }

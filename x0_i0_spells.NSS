@@ -1967,9 +1967,10 @@ void RemoveAnySpellEffects(int nSpell_ID, object oTarget)
             if(GetEffectSpellId(eAOE) == nSpell_ID)
             {
                 RemoveEffect(oTarget, eAOE);
-            }
+				eAOE = GetFirstEffect(oTarget);
+            } else 
             //Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
+				eAOE = GetNextEffect(oTarget);
         }
     }
 }

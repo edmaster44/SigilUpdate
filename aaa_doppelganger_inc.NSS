@@ -27,8 +27,9 @@ void StripSpellEffect(int SpellID1 = -1, int SpellID2 = -1)
 		if (GetEffectSpellId(eEffect) == SpellID1 | GetEffectSpellId(eEffect) == SpellID2)
 		{
 			RemoveEffect(oSelf, eEffect);
-		}
-		eEffect = GetNextEffect(oSelf);
+			eEffect = GetFirstEffect(oSelf);
+		} else 
+			eEffect = GetNextEffect(oSelf);
 	}
 }
 

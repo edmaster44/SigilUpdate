@@ -185,9 +185,13 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	//debugging command that tells you the tag and resref of the targeted item
 	else if (sInput == "#iteminfo"){
 		oItem = GetPlayerCurrentTarget(oSender);
-		if (!GetIsObjectValid(oItem))
+		int nItem = GetObjectType(oItem);
+		if (!GetIsObjectValid(oItem)){
 			sFeedback = "No object selected";
-		else {
+		} else if (nItem != OBJECT_TYPE_ITEM && nItem != OBJECT_TYPE_DOOR && 
+			nItem != OBJECT_TYPE_PLACEABLE){
+				sFeedback = "Invalid item";
+		} else {
 			sFeedback = "The item Tag is " + GetTag(oItem);
 			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
 		}
@@ -252,6 +256,20 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback = "Invalid command. Valid commands are #VampEyesBat, #VampEyesBeast, ";
 			sFeedback += "and #VampEyesGas";
 		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
+	//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
+	else if (sInput == "#spellinfo"){
+		int bIsTester = GetIsTester(oSender); // performing this check will add IsTester local int used in spellhook
+		int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
+		SetLocalInt(oSender, "spelldebug", bSpellDebug);
+		if (bSpellDebug){
+			sFeedback = "Turning on spell debugging messages";
+			if (bIsTester) sFeedback += ", including engine level caster level.";
+			else sFeedback += ".";
+			sFeedback += "\nThis will remain in effect until you type #SpellInfo again or until server resets.";
+		} else sFeedback = "Turning off spell debugging messages";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
@@ -357,19 +375,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (sInput == "#effectinfo"){
 			oItem = GetPlayerCurrentTarget(oSender);
-			if (!GetIsObjectValid(oItem))
+			if (!GetIsPC(oItem))
 				oItem = oSender;
-			SendMessageToPC(oSender, GetEffectInfo(oItem));
-			return TRUE;
-		}
-		//debugging command that gets spell info during casting, see implementation in x2_inc_spellhook
-		else if (sInput == "#spellinfo"){
-			int bSpellDebug = !GetLocalInt(oSender, "spelldebug");
-			SetLocalInt(oSender, "spelldebug", bSpellDebug);
-			if (bSpellDebug){
-				sFeedback = "Turning on spell debugging messages\nThis will remain in ";
-				sFeedback += "effect until you type #SpellInfo again or until server resets.";
-			} else sFeedback = "Turning off spell debugging messages";
+			dae_LogEffects(oItem);
+			sFeedback = "EFFECT INFO FOR " + GetName(oItem);
+			sFeedback += GetEffectInfo(oItem);
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
@@ -498,7 +508,7 @@ string GetDebugInfo(object oPC){
 string GetAreaInfo(object oArea, object oItem = OBJECT_INVALID){
 	string sInfo = "Area name: " + GetName(oArea);
 	string sVar = GetTag(oArea);
-	if (sVar != "") sInfo += "\nArea tag: " + GetTag(oArea);
+	if (sVar != "") sInfo += "\nArea tag: " + sVar;
 	sVar = GetResRef(oArea);
 	if (sVar != "") sInfo += "\nToolset name: " + sVar;
 	sInfo += "\nMap height: " + IntToString(GetAreaSize(AREA_HEIGHT, oArea));
@@ -514,30 +524,30 @@ string GetAreaInfo(object oArea, object oItem = OBJECT_INVALID){
 
 string GetCasterInfo(object oSender){
 	string sInfo = "";
-	int nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_BARD);
-	if (nClass > 0) sInfo += "Bard: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_CLERIC);
-	if (nClass > 0) sInfo += "Cleric: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_DRUID);
-	if (nClass > 0) sInfo += "Druid: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_FAVORED_SOUL);
-	if (nClass > 0) sInfo += "Favoured Soul: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_PALADIN);
-	if (nClass > 0) sInfo += "Knight: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_PSION);
-	if (nClass > 0) sInfo += "Psion: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_PSYCHIC_WARRIOR);
-	if (nClass > 0) sInfo += "Psychic Warrior: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_RANGER);
-	if (nClass > 0) sInfo += "Ranger: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_SPIRIT_SHAMAN);
-	if (nClass > 0) sInfo += "Shaman: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_SORCERER);
-	if (nClass > 0) sInfo += "Sorcerer: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_WARLOCK);
-	if (nClass > 0) sInfo += "Warlock: " + IntToString(nClass) + "\n";
-	nClass = PS_GetCasterLevel(oSender, CLASS_TYPE_WIZARD);
-	if (nClass > 0) sInfo += "Wizard: " + IntToString(nClass) + "\n";
+	int nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_BARD);
+	if (nCL > 0) sInfo += "Bard: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_CLERIC);
+	if (nCL > 0) sInfo += "Cleric: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_DRUID);
+	if (nCL > 0) sInfo += "Druid: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_FAVORED_SOUL);
+	if (nCL > 0) sInfo += "Favoured Soul: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_PALADIN);
+	if (nCL > 0) sInfo += "Knight: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_PSION);
+	if (nCL > 0) sInfo += "Psion: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_PSYCHIC_WARRIOR);
+	if (nCL > 0) sInfo += "Psychic Warrior: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_RANGER);
+	if (nCL > 0) sInfo += "Ranger: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_SPIRIT_SHAMAN);
+	if (nCL > 0) sInfo += "Shaman: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_SORCERER);
+	if (nCL > 0) sInfo += "Sorcerer: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_WARLOCK);
+	if (nCL > 0) sInfo += "Warlock: " + IntToString(nCL) + "\n";
+	nCL = PS_GetCasterLevel(oSender, CLASS_TYPE_WIZARD);
+	if (nCL > 0) sInfo += "Wizard: " + IntToString(nCL) + "\n";
 	if (sInfo == "") sInfo = "No caster levels";
 	return sInfo;
 }
@@ -551,6 +561,8 @@ string GetEffectInfo(object oPC){
 	string sPermInfo = "";
 	string sTempInfo = "";
 	int nNameRef;
+	string sInfo;
+	string sCurrent = "none";
 	effect eFX = GetFirstEffect(oPC);
 	while (GetIsEffectValid(eFX)){
 		nId = GetEffectSpellId(eFX);
@@ -561,25 +573,29 @@ string GetEffectInfo(object oPC){
 				nType == SUBTYPE_SUPERNATURAL || nType == SUBTYPE_EXTRAORDINARY){
 				if (FindSubString(sPermIdList, sId) == -1){
 					sPermIdList += sId;
-					if (nId == 34050){
-						sPermInfo += "Chat Bubbles";
-					} else {
-						nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-						sPermInfo += GetStringByStrRef(nNameRef);
-					}
-					sPermInfo += " (ID: " + IntToString(nId) + ")\n";
-				} 
+					sCurrent = "perm";
+				} else sCurrent = "none";
 			} else {
 				if (FindSubString(sTempIdList, sId) == -1){
 					sTempIdList += sId;
+					sCurrent = "temp";
+				} else sCurrent = "none";
+			} 
+			if (sCurrent != "none"){
+				if (nId == 34050){
+					sInfo = "Chat Bubbles";
+				} else {
 					nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-					sTempInfo += GetStringByStrRef(nNameRef) + " (ID: " + IntToString(nId) + ")\n";
+					sInfo = GetStringByStrRef(nNameRef);
 				}
-			}
+				sInfo += " (ID: " + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")\n";
+				if 	(sCurrent == "perm") sPermInfo += sInfo;
+				else if (sCurrent == "temp") sTempInfo += sInfo;
+			}	
 		}
 		eFX = GetNextEffect(oPC);
 	}
-	string sInfo = "CONTINUOUS EFFECTS:\n";
+	sInfo = "CONTINUOUS EFFECTS:\n";
 	if (sPermInfo == "") sInfo += "none\n";
 	else sInfo += sPermInfo;
 	sInfo += "TEMPORARY EFFECTS\n";
@@ -893,10 +909,11 @@ void SixSecondTick(object oPC, int nRound = 1){
 }
 
 //certain debugging chat commands give information that we don't want widely known, 
-//so on login specific trusted players get a local integer set on them that will allow 
-//them to use those commands. For now, only me, admins, and dms, but when I come up with a way to deal
-//with the fact that caster level for resisting dispell is way, way lower than advertised for
-//psion, psywar, ranger, and knight, then I will add others.
+//so some chat commands check the following two functions to see if the player is allowed to use them.
+// Currently the only difference between "all access" group below and other testers is that the all access
+// group can see a target's AC, HP, AB, and other combat stats that we could look up in the toolset if we
+// wanted to.
+// me (FlattedFifth and a small green monster), Ed, Jelkia, Morrigan, and anyone who is on as a dm
 int GetHasAllAccess(object oPC){
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
 	if (sName == "flattedfifth" || sName == "a small green monster" || sName == "edmaster44" ||
@@ -905,11 +922,22 @@ int GetHasAllAccess(object oPC){
 	return FALSE;
 }
 
+
 int GetIsTester(object oPC){
+	int bIsTester = FALSE;
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
 	if (sName == "swordsaintmusashiden" || sName == "snailin8r" || sName == "unseen_boredom")
-			return TRUE;
-	if (GetHasAllAccess(oPC)) return TRUE;
+			bIsTester = TRUE;
+	if (GetHasAllAccess(oPC)) bIsTester = TRUE;
 	
-	return FALSE;
+	//set a local int to tell functions in other scripts how much to reveal
+	if (bIsTester){
+		if (!GetLocalInt(oPC, "IsTester"))
+			SetLocalInt(oPC, "IsTester", TRUE);
+	} else {
+		if (GetLocalInt(oPC, "IsTester"))
+			DeleteLocalInt(oPC, "IsTester");
+	}
+	
+	return bIsTester;
 }

@@ -56,9 +56,9 @@ void main()
 			GetEffectSpellId(eEffect) == 2220 ||
 			GetEffectSpellId(eEffect) == 2221) {
 				RemoveEffect( oCaster, eEffect );
-			}
-				
-		eEffect = GetNextEffect( oCaster );
+				eEffect = GetFirstEffect( oCaster );
+			} else 
+				eEffect = GetNextEffect( oCaster );
 	}
 	
 	int nMetaMagic;
@@ -91,6 +91,6 @@ void main()
     SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_I_HIDEOUS_BLOW, FALSE));
 
     //Apply the VFX impact and effects
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
 	ActionAttack( oTarget );
 }

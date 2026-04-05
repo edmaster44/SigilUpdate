@@ -514,20 +514,21 @@ int GetSpellFailedBecauseMissChance(object oCaster){
 void DebugSpells(){
 	if (!GetLocalInt(OBJECT_SELF, "spelldebug")) return;
 	
-	int nNameRef;
-	string sDebug = "Class: ";
-	int nId = GetLastSpellCastClass();
+	int nId = GetSpellId();
+	int nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
+	string sDebug = GetStringByStrRef(nNameRef);
+	sDebug += "(" + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")";
+	sDebug += "\nClass: ";
+	nId = GetLastSpellCastClass();
 	if (nId == CLASS_TYPE_INVALID) sDebug += "Undefined";
 	else {
 		nNameRef = StringToInt(Get2DAString("classes", "Name", nId));
 		sDebug += GetStringByStrRef(nNameRef);
+		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF, nId));
 	}
-	sDebug += "\nCaster Level: " + IntToString(GetCasterLevel(OBJECT_SELF));
-	nId = GetSpellId();
-	sDebug += "\nSpell Id: " + IntToString(nId);
-	nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
-	sDebug += "\nSpell Name: " + GetStringByStrRef(nNameRef);
-	sDebug += "\nSpell Save DC: " + IntToString(GetSpellSaveDC());
+	if (GetLocalInt(OBJECT_SELF, "IsTester"))
+		sDebug += "\nCL for Engine: " + IntToString(GetCasterLevel(OBJECT_SELF));
+	sDebug += "\nSave DC: " + IntToString(GetSpellSaveDC());
 
 	nId = GetSpellFeatId();
 	if (nId != 0){

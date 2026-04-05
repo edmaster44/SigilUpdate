@@ -34,12 +34,12 @@ void ApplyAura(object oTarget, object oCaster){{
 		while(GetIsEffectValid(eFX)){
 			if(GetEffectSpellId(eFX) == SPELLABILITY_KNIGHT_AURA && 
 				   GetEffectType(eFX) == EFFECT_TYPE_SAVING_THROW_INCREASE){
-					nBonus = GetEffectInteger(eFX, 1);
+					nBonus = GetEffectInteger(eFX, 1); // find out what the current sentinel aura bonus is
 					break;
 			}
 			eFX = GetNextEffect(oTarget);
 		}
-		if (nBonus >= cScale) return;
+		if (nBonus >= cScale) return; //if our bonus wont be better than existing, just bail
 		PS_RemoveEffects(oTarget, SPELLABILITY_KNIGHT_AURA);
 	}
 	

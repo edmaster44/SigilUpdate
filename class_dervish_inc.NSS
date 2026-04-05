@@ -9,7 +9,9 @@ void main()
 	if (!X2PreSpellCastCode()) return;
     object oPC = OBJECT_SELF;
 	int nSpell = GetSpellId();
-	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell); //It has to be done in any case
+	//actually, lets not remove it here. Lets let the sub functions handle whether to remove or not so there
+	//will be less shuffling around of the effects stack. -FlattedFifth, April 4, 2026
+	//if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell); //It has to be done in any case
 	//Commands are delayed to make sure the spell effect is removed before it's reapplied.
 	//Spell ID is reapplied within the commands to make sure it's not lost by the delay.
 	
@@ -18,15 +20,15 @@ void main()
 	switch (nSpell)
 	{
 		
-	case 1926 :		//AC Bonus	
+		case 1926 :		//AC Bonus	
 			DelayCommand(0.0f, Dervish_AC_Bonus(oPC, nSpell));
-		break;
+			break;
 
-			case 1928:		//A Thousand Cuts Ability(2d6 Slash bonus on attacks)
+		case 1928:		//A Thousand Cuts Ability(2d6 Slash bonus on attacks)
 			DelayCommand(0.0f, A_Thousand_Cuts(oPC, nSpell));
-		break;
+			break;
 		
 		
-		}
-		}
+	}
+}
 			
