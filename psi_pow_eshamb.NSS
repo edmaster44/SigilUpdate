@@ -59,9 +59,8 @@ void main()
                )
             {
                 RemoveEffect(oTarget, eTest);
-            }
-            //Get next effect on the target
-            eTest = GetNextEffect(oTarget);
+				eTest = GetFirstEffect(oTarget);
+            } else eTest = GetNextEffect(oTarget);
         }
     }
 

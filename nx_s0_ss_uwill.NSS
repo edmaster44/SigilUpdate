@@ -134,9 +134,8 @@ void CastSpell()
                 if ( bValid == TRUE )
                 {
                     RemoveEffect( oTarget, eSearch );
-                }
-		
-                eSearch = GetNextEffect( oTarget );
+					eSearch = GetFirstEffect( oTarget );
+                } else eSearch = GetNextEffect( oTarget );
             }
 
             RemoveEffectsFromSpell( oTarget, GetSpellId() );

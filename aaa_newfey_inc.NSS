@@ -342,15 +342,7 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 
 	//Remove Effects
-	effect currentEffect = GetFirstEffect(oPC);
-	while (GetIsEffectValid(currentEffect))
-	{
-		if (GetEffectSpellId(currentEffect) == GetSpellId())
-		{
-			RemoveEffect(oPC, currentEffect);
-		}
-		currentEffect = GetNextEffect(oPC);
-	}
+	PS_RemoveEffects(oPC, GetSpellId());
 	
 	if (GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) < 3)
 	{

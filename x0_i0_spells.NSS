@@ -1600,8 +1600,8 @@ void spellApplyMindBlank(object oTarget, int nSpellId, float fDelay=0.0)
         if (bValid == TRUE)
         {
             RemoveEffect(oTarget, eSearch);
-        }
-        eSearch = GetNextEffect(oTarget);
+			eSearch = GetFirstEffect(oTarget);
+        } else eSearch = GetNextEffect(oTarget);
     }
 
     //After effects are removed we apply the immunity to mind spells to the target

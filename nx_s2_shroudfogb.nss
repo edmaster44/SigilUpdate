@@ -26,15 +26,9 @@ void main()
 	effect eAOE = GetFirstEffect(oTarget);
     while (GetIsEffectValid(eAOE))
     {
-        if (GetEffectCreator(eAOE) == oCreator)
-        {	//If the effect was created by the spell then remove it
-            int nID = GetEffectSpellId(eAOE);
-            if( nID == SPELLABILITY_SHROUDING_FOG )
-            {
-				RemoveEffect(oTarget, eAOE);
-            }
-        }
-		
-        eAOE = GetNextEffect(oTarget);	//Get next effect on the target
+        if (GetEffectCreator(eAOE) == oCreator && GetEffectSpellId(eAOE) == SPELLABILITY_SHROUDING_FOG ){
+			RemoveEffect(oTarget, eAOE);
+			eAOE = GetFirstEffect(oTarget);
+		} else eAOE = GetNextEffect(oTarget);	//Get next effect on the target
     }
 }

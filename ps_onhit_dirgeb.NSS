@@ -32,17 +32,11 @@ void main()
 
         while (GetIsEffectValid(eAOE) )
         {
-            if (GetEffectCreator(eAOE) == oCaster)
-            {
-                //If the effect was created by the Dirge spell then remove it
-                if(nID == SPELL_DIRGE)
+            if (GetEffectCreator(eAOE) == oCaster && nID == SPELL_DIRGE)
                 {
                     RemoveEffect(oTarget, eAOE);
-                    //bValid = TRUE;
-                }
-            }
-            //Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
+                    eAOE = GetFirstEffect(oTarget);
+                } else eAOE = GetNextEffect(oTarget);
         }
     }
 }

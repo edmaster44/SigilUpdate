@@ -58,10 +58,8 @@ void main()
 				 oEffectCreator == oTarget )
 			{
 				RemoveEffect( oTarget, eImmortalEffects );
-				break;
-			}
-			
-			eImmortalEffects = GetNextEffect( oTarget );
+				eImmortalEffects = GetFirstEffect( oTarget );
+			} else eImmortalEffects = GetNextEffect( oTarget );
 		}
 		
 

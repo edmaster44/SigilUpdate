@@ -20,6 +20,8 @@
 
 void main()
 {
+	if (GetLocalInt(OBJECT_SELF, "ReportEffectSpam"))
+		SendMessageToPC(OBJECT_SELF, "Spell Cast Event: " + IntToString(GetSpellId()));
 
     int iFocused = GetIsFocused();
 

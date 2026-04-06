@@ -429,16 +429,15 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
 		return; 
 	}
-	
-	if ( GetHasSpellEffect(843, oPC) || GetHasSpellEffect(1657, oPC) ) {
-		effect eEffect = GetFirstEffect( oPC );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == 843 || GetEffectSpellId(eEffect) == 1657 ){
+	int eId;
+	if (GetHasSpellEffect(843, oPC) || GetHasSpellEffect(1657, oPC)) {
+		effect eEffect = GetFirstEffect(oPC);
+		while (GetIsEffectValid(eEffect)) {
+			eId = GetEffectSpellId(eEffect);
+			if (eId == 843 || eId == 1657 ){
 				RemoveEffect( oPC, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oPC );
+				eEffect = GetFirstEffect(oPC);
+			} else eEffect = GetNextEffect( oPC );
 		}
 	}
 	
@@ -546,23 +545,16 @@ void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 	{
 	
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
-		{PS_RestoreOriginalAppearance(oPC);
+	PS_RestoreOriginalAppearance(oPC);
+	
+	//General useful things for shifting back
+	
+	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+	PS_DragForm_DragonUE(oPC);
+	if ( GetHasSpellEffect(1657, oPC) ) 
+		PS_RemoveEffects(oPC, 1657);
 		
-		//General useful things for shifting back
-		
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-		PS_DragForm_DragonUE(oPC);}
-			if ( GetHasSpellEffect(1657, oPC) ) {
-		effect eEffect = GetFirstEffect( oPC );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == 1657){
-				RemoveEffect( oPC, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oPC );
-		}
-	}
+	
 }
 
 

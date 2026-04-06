@@ -32,8 +32,8 @@ void RemoveBestowCurseEffect(object oTarget)
         {
             //If the effect was created by the spell then remove it
             RemoveEffect(oTarget, eAOE);
-        }
-		eAOE = GetNextEffect(oTarget);
+			eAOE = GetFirstEffect(oTarget);
+        } else eAOE = GetNextEffect(oTarget);
     }
 }
 

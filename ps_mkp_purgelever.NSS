@@ -67,8 +67,9 @@ void main()
 				{
 					//Remove effect if it isn't negative
 					RemoveEffect(oPC, eBad);
-				}	
-				eBad = GetNextEffect(oPC);
+					eBad = GetFirstEffect(oTarget);
+					
+				} else eBad = GetNextEffect(oPC);
 				
 			}
 			oTarget = GetNextObjectInShape(SHAPE_CUBE, 5.0, lLoc, FALSE, OBJECT_TYPE_CREATURE);

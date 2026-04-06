@@ -35,8 +35,8 @@ void main()
 	{
 	    if (GetEffectSpellId(eEffect) == 1201){
 	        RemoveEffect(oPC, eEffect);
-	    }
-	    eEffect = GetNextEffect(oPC);
+			eEffect = GetFirstEffect(oPC);
+	    } else eEffect = GetNextEffect(oPC);
 	}
 	
 	

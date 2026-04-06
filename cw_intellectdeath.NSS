@@ -1,13 +1,14 @@
-#include "ff_applyeffect" 
+#include "x2_inc_spellhook" 
 
 
 //Remove insanity
-void main()
-{
+void main(){
  object o=GetLocalObject(OBJECT_SELF, "CW_INSANE");
  
- if(GetIsObjectValid(o))
-  {
+ if(GetIsObjectValid(o)) PS_RemoveEffects(o, NULL, EFFECT_TYPE_INSANE);
+ 
+ /*
+ {
    effect e=GetFirstEffect(o);
    
    while(GetIsEffectValid(e))
@@ -19,5 +20,5 @@ void main()
 	  }
 	 e=GetNextEffect(o);
 	}
-  }
+  }*/
 }

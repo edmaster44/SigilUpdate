@@ -300,7 +300,7 @@ void DoReleaseSpells(object oPC)
 		}
 		else {
 			RemoveEffect(oPC, eBad);
-			eBad = GetNextEffect(oPC);
+			eBad = GetFirstEffect(oPC);
 		}
 	}
 }

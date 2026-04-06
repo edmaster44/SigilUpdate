@@ -60,8 +60,8 @@ void main()
 			if ( nSpellEffectId == nID || (nSpellEffectId > nMinId && nSpellEffectId < nMaxId) )
 			{
 				RemoveEffect( oTarget, eEffect );
-			}
-			eEffect = GetNextEffect( oTarget );
+				eEffect = GetFirstEffect( oTarget );
+			} else eEffect = GetNextEffect( oTarget );
 		}
 	}
 

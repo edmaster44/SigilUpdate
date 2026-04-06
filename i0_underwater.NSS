@@ -96,9 +96,10 @@ void DoUnderwaterCheck(object oPC)
         while(GetIsEffectValid(eLoop))
         {
             if(GetEffectType(eLoop) == EFFECT_TYPE_SLOW ||
-            GetEffectType(eLoop) == EFFECT_TYPE_VISUALEFFECT)
+            GetEffectType(eLoop) == EFFECT_TYPE_VISUALEFFECT){
                 RemoveEffect(oPC, eLoop);
-            eLoop = GetNextEffect(oPC);
+				eLoop=GetFirstEffect(oPC);
+			}else  eLoop = GetNextEffect(oPC);
         }
         return;
     }

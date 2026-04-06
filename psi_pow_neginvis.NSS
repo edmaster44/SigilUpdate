@@ -102,10 +102,10 @@ void main()
                         {
                             if(GetEffectType(eTest) == EFFECT_TYPE_INVISIBILITY         ||
                                GetEffectType(eTest) == EFFECT_TYPE_GREATERINVISIBILITY
-                               )
+                               ){
                                 RemoveEffect(oTarget, eTest);
-
-                            eTest = GetNextEffect(oTarget);
+								 eTest = GetFirstEffect(oTarget);
+								} else eTest = GetNextEffect(oTarget);
                         }// end while - Effect loop
                     }// end if - Save
                 }// end if - Targeting limitations

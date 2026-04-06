@@ -223,266 +223,49 @@ void IronHeart2(object oCaller, object oTarget) //  Give the target -4 damage an
 	}
 }
 
+int FF_RemoveOneEffectType(object oCaller, int nType){
+	effect penalty = GetFirstEffect(oCaller);
+	int bFound = FALSE;
+	while (GetIsEffectValid(penalty)){
+		if (GetEffectType(penalty) == nType) 
+		{
+			RemoveEffect(oCaller, penalty);
+			penalty = GetFirstEffect(oCaller);
+			bFound = TRUE;
+		} else penalty = GetNextEffect(oCaller);
+	}
+	return bFound;
+}
+
 void IronHeart3(object oCaller) // Removes a debuff from the caller
 {
 	SendMessageToPC(oCaller, "Using <i>Iron Heart Surge.</i>");
 	// Cycles through all the effects on the caller for the worst kind of effect, removing it if it
 	// finds it. If not, moves on to the next worst kind of effect, etc etc.
 	
-	int found = FALSE; //Used to see if an effect of the type was found.
-	
 	// Apply a vfx
 	effect vfx = EffectVisualEffect(VFX_HIT_BARD_INS_DEFENSE);
 	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, vfx, oCaller, 0.0f);	
 
-	
-	// Blind
-	effect penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_BLINDNESS) 
-		{
-			RemoveEffect(oCaller, penalty);
-			found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Slow
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_SLOW)
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-	// Entangle
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_ENTANGLE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Damage over time
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_DAMAGEOVERTIME) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-	// Wounding
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_WOUNDING) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Negative Level
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_NEGATIVELEVEL) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// AC decrease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_AC_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-	
-		// Saving throw decrease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_SAVING_THROW_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Curse
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_CURSE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Silence
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_SILENCE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Ability decrease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_ABILITY_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Miss Chance
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_MISS_CHANCE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Attack decrease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_ATTACK_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Damage decrease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_DAMAGE_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Spell resistance decreased
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// deaf
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_DEAF) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Poison
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_POISON) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Disease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_DISEASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
-	
-		// Skill Decrease
-	penalty = GetFirstEffect(oCaller);
-	while (GetIsEffectValid(penalty))
-	{
-		if (GetEffectType(penalty) == EFFECT_TYPE_SKILL_DECREASE) 
-		{
-			RemoveEffect(oCaller, penalty);
-						found = TRUE;
-		}
-		penalty = GetNextEffect(oCaller);
-	}
-	if (found) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_BLINDNESS)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_SLOW)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_ENTANGLE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_DAMAGEOVERTIME)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_WOUNDING)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_NEGATIVELEVEL)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_AC_DECREASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_SAVING_THROW_DECREASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_CURSE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_SILENCE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_ABILITY_DECREASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_MISS_CHANCE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_ATTACK_DECREASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_DAMAGE_DECREASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_SPELL_RESISTANCE_DECREASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_DEAF)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_POISON)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_DISEASE)) return;
+	if (FF_RemoveOneEffectType(oCaller, EFFECT_TYPE_SKILL_DECREASE)) return;
 
 }
 

@@ -20,8 +20,8 @@ void main() {
 	while ( GetIsEffectValid(eEffect) ) {
 		if (GetEffectSpellId(eEffect) == FREEZE_SPELL_ID) {
 			RemoveEffect( OBJECT_SELF, eEffect );
-		}
-		eEffect = GetNextEffect( OBJECT_SELF );
+			eEffect = GetFirstEffect( OBJECT_SELF );
+		} else eEffect = GetNextEffect( OBJECT_SELF );
 	}
 	
 	//re-applying vfx, just in case

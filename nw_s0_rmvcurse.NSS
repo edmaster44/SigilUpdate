@@ -32,8 +32,7 @@ void main()
             //Remove the effect and apply VFX impact
             RemoveEffect(oTarget, eRemove);
             PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        }
-        //Get the next effect on the target
-        GetNextEffect(oTarget);
+			eRemove = GetFirstEffect(oTarget);
+        } else GetNextEffect(oTarget);
     }
 }

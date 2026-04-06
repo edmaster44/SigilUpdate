@@ -127,8 +127,10 @@ void RemovePolymorph(object oPC)
 	effect eEffect = GetFirstEffect(oPC);
 	while (GetIsEffectValid(eEffect))
 	{
-		if (GetEffectType(eEffect) == EFFECT_TYPE_POLYMORPH) RemoveEffect(oPC, eEffect);
-	    eEffect = GetNextEffect(oPC);
+		if (GetEffectType(eEffect) == EFFECT_TYPE_POLYMORPH){
+			RemoveEffect(oPC, eEffect);
+			eEffect = GetFirstEffect(oPC);
+		} else eEffect = GetNextEffect(oPC);
 	}
 }
 

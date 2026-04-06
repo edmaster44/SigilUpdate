@@ -865,12 +865,8 @@ void PS_HDM_MirrorImage(object oPC, int nSpell)
     {	return;	}
 	
 	if (GetHasSpellEffect(nSpell))
-	{	effect eEffect = GetFirstEffect(oPC);
-		while (GetIsEffectValid(eEffect))
-		{	if (GetEffectSpellId(eEffect) == nSpell)
-			{	RemoveEffect( OBJECT_SELF, eEffect );	}
-			eEffect = GetNextEffect( OBJECT_SELF );		}
-	}
+		PS_RemoveEffects(oPC, nSpell);
+	
 
     int nCasterLvl 		= PS_GetLevel(oPC) / 2;
     float fDuration		= RoundsToSeconds(nCasterLvl * 5);	
@@ -887,13 +883,14 @@ void PS_HDM_MirrorImage(object oPC, int nSpell)
 
     int i;
     for ( i = 0; i < nImages; i++ )
-    {	effect eAbsorb	= EffectAbsorbDamage(nACBonus);
+    {	
+		effect eOnDisp	= EffectOnDispel(0.0f, RemoveEffectsFromSpell(oPC, nSpell));
+		effect eAbsorb	= EffectAbsorbDamage(nACBonus);
         effect eDur		= EffectVisualEffect(876);
 		effect eImg 	= EffectNWN2SpecialEffectFile("sp_mirror_image_1", oPC);
-        effect eLink 	= EffectLinkEffects(eAbsorb, eDur);
-			eLink 		= EffectLinkEffects(eLink, eImg);
-        effect eOnDisp	= EffectOnDispel(0.0f, RemoveEffectsFromSpell(oPC, nSpell));
-        eLink = EffectLinkEffects(eLink, eOnDisp);
+		effect eLink 	= EffectLinkEffects(eAbsorb, eOnDisp);
+		eLink 			= EffectLinkEffects(eDur, eLink);
+		eLink 			= EffectLinkEffects(eImg, eLink);
 		
         DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration));
 		fDelay += fSpin;	}

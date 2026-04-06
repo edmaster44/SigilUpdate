@@ -69,8 +69,8 @@ void main()
             GetEffectSpellId(eLook) != SPELL_IRON_BODY)
         {
             RemoveEffect(oTarget, eLook);
-        }
-        eLook = GetNextEffect(oTarget);
+			eLook = GetFirstEffect(oTarget);
+        } else eLook = GetNextEffect(oTarget);
     }
     //Meta-Magic Checks
     if(nMetaMagic == METAMAGIC_EXTEND)

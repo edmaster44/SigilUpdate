@@ -81,8 +81,8 @@ void main()
 			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
             RemoveEffect(oTarget, eSearch);
             bVisual = TRUE;
-        }
-        eSearch = GetNextEffect(oTarget);
+			effect eSearch = GetFirstEffect(oTarget);
+        } else eSearch = GetNextEffect(oTarget);
     }
     float fTime = 30.0  + fDuration;
     //After effects are removed we apply the immunity to mind spells to the target

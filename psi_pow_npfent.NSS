@@ -90,10 +90,10 @@ void RemoveEffectsNPF(object oObject)
             nType == EFFECT_TYPE_ULTRAVISION               ||
             nType == EFFECT_TYPE_INVULNERABLE
             )
-           )
+           ){
             RemoveEffect(oObject, eEff);
-        
-        eEff = GetNextEffect(oObject);
+			eEff = GetFirstEffect(oObject);
+			} else eEff = GetNextEffect(oObject);
     }
 }
 

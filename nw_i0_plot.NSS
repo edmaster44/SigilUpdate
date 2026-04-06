@@ -1379,8 +1379,8 @@ void RemoveEffects(object oDead)
             {
                 //Remove effect if it is negative.
                 RemoveEffect(oTarget, eBad);
-            }
-        eBad = GetNextEffect(oTarget);
+				eBad = GetFirstEffect(oTarget);
+            } else eBad = GetNextEffect(oTarget);
     }
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_RESTORATION, FALSE));

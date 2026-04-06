@@ -8,7 +8,7 @@ void RemoveEffects(object oObj) {
 	effect eVFX = GetFirstEffect(oObj);
 	while (GetIsEffectValid(eVFX)) {
 		RemoveEffect(oObj, eVFX);
-		eVFX = GetNextEffect(oObj);
+		eVFX = GetFirstEffect(oObj);
 	}
 	
     SetEventHandler(oObj, CREATURE_SCRIPT_ON_BLOCKED_BY_DOOR, "nw_c2_defaulte");

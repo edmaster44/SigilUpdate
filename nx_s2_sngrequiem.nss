@@ -37,17 +37,18 @@ void DoDamage(object oCaster, int nSpellId)
     int nNumEnemies   = 0;
    
     /* Fix current exploit with stealth and invisibility */
+	int iType;
     effect eBad = GetFirstEffect(oCaster);
     while (GetIsEffectValid(eBad))
     {
-    	int iType = GetEffectType(eBad);
+    	iType = GetEffectType(eBad);
         if (iType == EFFECT_TYPE_SANCTUARY 
 		|| iType == EFFECT_TYPE_INVISIBILITY
 		|| iType == EFFECT_TYPE_ETHEREAL)
         {
         	RemoveEffect(oCaster, eBad);
-        }
-        eBad = GetNextEffect(oCaster);
+			eBad = GetFirstEffect(oCaster);
+        } else eBad = GetNextEffect(oCaster);
 		nNumEnemies++; // this use of nNumEnemies is just to prevent stack overflow
 		if(nNumEnemies>75)  
 			break;

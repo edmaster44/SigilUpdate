@@ -52,8 +52,8 @@ void DoExpeditiousRetreatEffects( object oCaster, object oTarget, int nMetaMagic
 
 void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic )
 {
-    int nCasterLvl  = GetCasterLevel(oCaster);
-    float fDuration   = RoundsToSeconds(5); // Rounds
+    int nCasterLvl  = PS_GetCasterLevel(oCaster);
+    float fDuration   = RoundsToSeconds(nCasterLvl); // Rounds
 
     //Check for metamagic extension
     fDuration = ApplyMetamagicDurationMods(fDuration);

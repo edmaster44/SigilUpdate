@@ -13,7 +13,7 @@ void ClearEffects(object oTarget) {
 	effect eEffect = GetFirstEffect(oTarget);
 	while (GetIsEffectValid(eEffect)) {
 		RemoveEffect(oTarget, eEffect);
-		eEffect = GetNextEffect(oTarget);
+		eEffect = GetFirstEffect(oTarget);
 	}
 }
 

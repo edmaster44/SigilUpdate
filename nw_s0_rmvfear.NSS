@@ -81,9 +81,8 @@ void main()
                     //Remove any fear effects and apply the VFX impact
                     RemoveEffect(oTarget, eFear);
                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                }
-                //Get the next effect on the target
-                eFear = GetNextEffect(oTarget);
+					eFear = GetFirstEffect(oTarget);
+                } else eFear = GetNextEffect(oTarget);
             }
             //Apply the linked effects
             //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));

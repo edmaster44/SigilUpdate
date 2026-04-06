@@ -31,16 +31,11 @@ void main()
         eAOE = GetFirstEffect(oTarget);
         while (GetIsEffectValid(eAOE))
         {
-            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator())
-            {
-                //If the effect was created by the AOE then remove it
-                if(GetEffectSpellId(eAOE) == 1383)
+            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator() && GetEffectSpellId(eAOE) == 1383)
                 {
                     RemoveEffect(oTarget, eAOE);
-                }
-            }
-            //Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
+					eAOE = GetFirstEffect(oTarget);
+                } else eAOE = GetNextEffect(oTarget);
         }
     }
 }

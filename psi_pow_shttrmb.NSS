@@ -113,14 +113,10 @@ void main()
                             }
 
                             // Check if the effect is of a removable type
-                            if(nRemoveDC)
-                            {
-                                if((d20() + nDispelLevel) >= nRemoveDC)
+                            if(nRemoveDC && d20() + nDispelLevel >= nRemoveDC){
                                     RemoveEffect(oTarget, eTest);
-                            }
-
-                            // Get next effect
-                            eTest = GetNextEffect(oTarget);
+									eTest = GetFirstEffect(oTarget);
+                            } else eTest = GetNextEffect(oTarget);
                         }// end while - Effect loop
                     }// end if - Save
                 }// end if - SR check

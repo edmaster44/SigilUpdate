@@ -59,6 +59,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	else if (sInput == "#showcastevent"){
+		int bEvent = !GetLocalInt(oSender, "ReportEffectSpam");
+		SetLocalInt(oSender, "ReportEffectSpam", bEvent);
+		if (bEvent)	sFeedback = "Turning on reporting of SpellCastAt event";
+		else sFeedback = "Turning off reporting of SpellCastAt event";
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	else if (sInput == "#scribemin"){
 		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
@@ -554,6 +562,7 @@ string GetEffectInfo(object oPC){
 	string sTempInfo = "";
 	int nNameRef;
 	string sInfo;
+	string sScript;
 	string sCurrent = "none";
 	effect eFX = GetFirstEffect(oPC);
 	while (GetIsEffectValid(eFX)){
@@ -576,11 +585,18 @@ string GetEffectInfo(object oPC){
 			if (sCurrent != "none"){
 				if (nId == 34050){
 					sInfo = "Chat Bubbles";
+				} else if (nId == 8675309){
+					sInfo = "Item Set Boots AC";
 				} else {
 					nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
 					sInfo = GetStringByStrRef(nNameRef);
 				}
-				sInfo += " (ID: " + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")\n";
+				sInfo += " (ID: " + IntToString(nId);
+				sScript = Get2DAString("spells", "ImpactScript", nId);
+				if (sScript == "Bad Strrf" || sScript == "****")
+					sScript = "NA";
+				
+				sInfo += ", " + sScript + ")\n";
 				if 	(sCurrent == "perm") sPermInfo += sInfo;
 				else if (sCurrent == "temp") sTempInfo += sInfo;
 			}	

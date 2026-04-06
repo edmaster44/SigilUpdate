@@ -64,9 +64,8 @@ void main() {
 		
 			if ( GetEffectSpellId(eEffect) == 843){
 				RemoveEffect( oCaster, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oCaster );
+				eEffect = GetFirstEffect( oCaster );
+			} else eEffect = GetNextEffect( oCaster );
 		}
 	}
 	

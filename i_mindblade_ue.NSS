@@ -32,8 +32,8 @@ void main()
 				|| SpellID == FORM_MINDBLADE_TWIN)
 			{
 				RemoveEffect(oPC, mindShield);
-			}
-			mindShield = GetNextEffect(oPC);
+				mindShield = GetFirstEffect(oPC);
+			} else mindShield = GetNextEffect(oPC);
 		}
 	}
 }

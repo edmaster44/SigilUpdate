@@ -44,9 +44,8 @@ void main()
                     RemoveEffect(oTarget, eBlindDeaf);
                     //Apply the visual
                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                }
-                //Get the next effect
-                GetNextEffect(oTarget);
+					eBlindDeaf = GetFirstEffect(oTarget);
+                } else GetNextEffect(oTarget);
             }
         }
         //Select the next target within the spell shape.

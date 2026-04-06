@@ -63,9 +63,8 @@ void main()
 			if ( GetEffectSpellId(eEffect) == 857 )
 			{
 				RemoveEffect( oTarget, eEffect );
-			}
-			
-			eEffect = GetNextEffect( oTarget );
+				eEffect = GetFirstEffect( oTarget );
+			} else eEffect = GetNextEffect( oTarget );
 		}
 	}
 	

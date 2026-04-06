@@ -38,8 +38,8 @@ void main()
 		if (GetEffectType(eTest) == EFFECT_TYPE_AREA_OF_EFFECT && GetEffectSpellId(eTest) == SPELLABILITY_HELLFIRE_SHIELD)
 		{
 			RemoveEffect(oTarget, eTest);
-		}
-		eTest = GetNextEffect(oTarget);
+			eTest = GetFirstEffect(oTarget);
+		} else eTest = GetNextEffect(oTarget);
 	}
 	
 	// strip any extra hellfire auras, but not from other warlocks

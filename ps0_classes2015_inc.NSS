@@ -522,8 +522,9 @@ void PS_Feat_CE_InspiredCalling(object oPC, location lTarget, int nSpell)
 		{	effect eEffect = GetFirstEffect( oTarget );
 			while ( GetIsEffectValid(eEffect) )
 			{	if ( GetEffectSpellId(eEffect) == 857 )
-				{	RemoveEffect( oTarget, eEffect );	}
-				eEffect = GetNextEffect( oTarget );		}
+				{	RemoveEffect( oTarget, eEffect );	
+					eEffect = GetFirstEffect( oTarget );
+				} else eEffect = GetNextEffect( oTarget );		}
 	}
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
 		{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE));
@@ -559,8 +560,9 @@ void PS_Feat_CE_HeroicValor(object oPC, location lTarget, int nSpell)
 		{	effect eEffect = GetFirstEffect( oTarget );
 			while ( GetIsEffectValid(eEffect) )
 			{	if ( GetEffectSpellId(eEffect) == nSpell )
-				{	RemoveEffect( oTarget, eEffect );	}
-				eEffect = GetNextEffect( oTarget );		}
+				{	RemoveEffect( oTarget, eEffect );	
+					eEffect = GetFirstEffect( oTarget );
+				} else eEffect = GetNextEffect( oTarget );		}
 		}
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
 		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1630, FALSE));

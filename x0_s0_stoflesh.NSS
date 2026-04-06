@@ -58,8 +58,8 @@ void main()
 				bPetrifyFound = TRUE;
                 SetCommandable(TRUE, oTarget);
                 RemoveEffect(oTarget, eLook);
-            }
-            eLook = GetNextEffect(oTarget);
+				eLook = GetFirstEffect(oTarget);
+            } else eLook = GetNextEffect(oTarget);
         }
 		
 		if (!bPetrifyFound){

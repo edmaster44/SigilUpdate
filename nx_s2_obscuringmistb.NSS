@@ -13,11 +13,11 @@ void main()
 	effect eAOE = GetFirstEffect(oTarget);
     
 	while (GetIsEffectValid(eAOE))
-    {	if (GetEffectCreator(eAOE) == oCreator)
-        {	int nID = GetEffectSpellId(eAOE);
-            if (nID == 1248)
-            {	RemoveEffect(oTarget, eAOE);	}
-        }
-        eAOE = GetNextEffect(oTarget);
+    {	
+		if (GetEffectCreator(eAOE) == oCreator && GetEffectSpellId(eAOE) == 1248)
+        {	
+			RemoveEffect(oTarget, eAOE);
+			eAOE = GetFirstEffect(oTarget);
+        } else eAOE = GetNextEffect(oTarget);
     }
 }

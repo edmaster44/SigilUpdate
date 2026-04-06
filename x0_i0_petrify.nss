@@ -77,8 +77,8 @@ void RemoveEffectOfType(object oTarget, int nEffectType)
     while (GetIsEffectValid(eEff)) {
         if ( GetEffectType(eEff) == nEffectType) { 
             RemoveEffect(oTarget, eEff);
-        }
-        eEff = GetNextEffect(oTarget);
+			eEff = GetFirstEffect(oTarget);
+        } else eEff = GetNextEffect(oTarget);
     }
 }
 

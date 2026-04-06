@@ -60,15 +60,11 @@ void main()
                     eFind = GetFirstEffect(oTarget);
                     while (GetIsEffectValid(eFind))
                     {
-                        if(eFind == EffectDazed())
-                        {
-                            oCreator = GetEffectCreator(eFind);
-                            if(oCreator == oCaster)
+                        if(eFind == EffectDazed() && GetEffectCreator(eFind) == oCaster)
                             {
                                 RemoveEffect(oTarget, eFind);
-                            }
-                        }
-                        eFind = GetNextEffect(oTarget);
+								 eFind = GetFirstEffect(oTarget);
+                            } else eFind = GetNextEffect(oTarget);
                     }
                 }
             }

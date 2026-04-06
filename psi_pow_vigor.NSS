@@ -73,10 +73,10 @@ void main()
         effect eTest = GetFirstEffect(oTarget);
         while(GetIsEffectValid(eTest))
         {
-            if(GetEffectSpellId(eTest) == POWER_VIGOR)
+            if(GetEffectSpellId(eTest) == POWER_VIGOR){
                 RemoveEffect(oTarget, eTest);
-
-            eTest = GetNextEffect(oTarget);
+				eTest = GetFirstEffect(oTarget);
+            } else eTest = GetNextEffect(oTarget);
         }
 
         // Apply effects

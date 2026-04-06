@@ -24,9 +24,8 @@ void main () {
 		if (GetEffectType(eEffect) == EFFECT_TYPE_SLEEP && 
 		GetEffectSpellId(eEffect) == SPELL_SLEEP_OF_AGES) {
 			RemoveEffect(OBJECT_SELF, eEffect);
-		}
-			
-		eEffect = GetNextEffect(OBJECT_SELF);
+			eEffect = GetFirstEffect(OBJECT_SELF);
+		} else eEffect = GetNextEffect(OBJECT_SELF);
 	}
 	
 	//Do the damage

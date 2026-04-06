@@ -23,9 +23,8 @@ void main () {
 		GetEffectSpellId(eEffect) == SPELL_HYPNOTISM || 
 		GetEffectSpellId(eEffect) == SPELL_GLAMER) {
 			RemoveEffect(OBJECT_SELF, eEffect);
-		}
-			
-		eEffect = GetNextEffect(OBJECT_SELF);
+			eEffect = GetFirstEffect(OBJECT_SELF);
+		} else eEffect = GetNextEffect(OBJECT_SELF);
 	}
 
 	//Remove me after I've been called

@@ -494,9 +494,10 @@ void CallRemoveEffects(int nCutscene, object oObject)
         effect eEff = GetFirstEffect(oObject);
         while(GetIsEffectValid(eEff))
         {
-            if( GetEffectCreator(eEff) == oCreator)
+            if( GetEffectCreator(eEff) == oCreator){
                 RemoveEffect(oObject, eEff);
-            eEff = GetNextEffect(oObject);
+				eEff = GetFirstEffect(oObject);
+			} else eEff = GetNextEffect(oObject);
         }
     }
 }
@@ -677,8 +678,8 @@ void RemoveAssociateEffects(object oCreature)
         if (GetEffectCreator(eEff1) == oCreator)
         {
             RemoveEffect(oCreature, eEff1);
-        }
-        eEff1 = GetNextEffect(oCreature);
+			eEff1 = GetFirstEffect(oCreature);
+        } else eEff1 = GetNextEffect(oCreature);
     }
 }
 

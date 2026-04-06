@@ -11,9 +11,8 @@ void RemoveCreatureEffects(object creature)
 		if(effectDur == DURATION_TYPE_TEMPORARY)
 		{
 				RemoveEffect(creature, eEffect);
-		}
-	
-		eEffect = GetNextEffect(creature);
+				eEffect = GetFirstEffect(creature);
+		} else eEffect = GetNextEffect(creature);
 	}
 }
 

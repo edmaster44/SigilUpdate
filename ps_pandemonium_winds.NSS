@@ -31,9 +31,8 @@ void DecreaseSavingThrow(object oPC, int nStage) {
 	
 		if (GetEffectType(eEffect) == EFFECT_TYPE_SAVING_THROW_DECREASE && GetEffectCreator(eEffect) == OBJECT_SELF) {
 			RemoveEffect(oPC, eEffect);
-		}
-			
-		eEffect = GetNextEffect(oPC);
+			eEffect = GetFirstEffect(oPC);
+		} else eEffect = GetNextEffect(oPC);
 		
 	}
 	

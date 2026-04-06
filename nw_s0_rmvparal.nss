@@ -67,9 +67,8 @@ void main()
                     RemoveEffect(oTarget, eParal);
                     DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                     nCnt++;
-                }
-                //Get the next effect on the target
-                eParal = GetNextEffect(oTarget);
+					eParal = GetFirstEffect(oTarget);
+                } else eParal = GetNextEffect(oTarget);
             }
         }
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetSpellTargetLocation());

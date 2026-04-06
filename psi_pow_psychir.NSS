@@ -125,9 +125,8 @@ void main()
                )
             {
                     RemoveEffect(oTarget, eTest);
-            }
-
-            eTest = GetNextEffect(oTarget);
+					 eTest = GetFirstEffect(oTarget);
+            } else eTest = GetNextEffect(oTarget);
         }// end while - Effect loop
 
         // Apply visuals

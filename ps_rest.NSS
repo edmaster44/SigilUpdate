@@ -202,9 +202,8 @@ void AlternativeSkillStatScaling (object oPC)
 		
 			if ( GetEffectSpellId(eEffect) == SKILL_BONUS_FX){
 				RemoveEffect( oPC, eEffect );
-			}
-				
-			eEffect = GetNextEffect( oPC );
+				eEffect = GetFirstEffect( oPC );
+			} else eEffect = GetNextEffect( oPC );
 		}
 	}
 	

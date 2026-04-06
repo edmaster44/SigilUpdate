@@ -1,6 +1,7 @@
 #include "nw_i0_spells"
 #include "aaa_constants"
 #include "nwn2_inc_spells"
+#include "x2_inc_spellhook"
 void main()
 {
 object oPC = OBJECT_SELF;
@@ -9,17 +10,8 @@ effect eDefParry = EffectACIncrease(4);
 eDefParry = SetEffectSpellId(eDefParry, eDefParryID);
 eDefParry = SupernaturalEffect(eDefParry);
 
-effect eEffect = GetFirstEffect(oPC);
+PS_RemoveEffects(oPC, eDefParryID);
 
-while(GetIsEffectValid(eEffect))
-{
-if(GetEffectSpellId(eEffect) == eDefParryID)
-{
-RemoveEffect(oPC, eEffect);
-break;
-}
-eEffect = GetNextEffect(oPC);
-}
 if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTION_MODE_IMPROVED_COMBAT_EXPERTISE)  )
 			{
 				if (!GetHasSpellEffect(eDefParryID,oPC))

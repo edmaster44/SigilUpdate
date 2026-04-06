@@ -72,18 +72,12 @@ void RemoveSpellEffectsFromCaster( int nSpellID, object oTarget, object oCaster,
     effect eEff = GetFirstEffect(oTarget);
     while (GetIsEffectValid(eEff))
     {
-        if (GetEffectSpellId(eEff) == nSpellID)
-        {
-            if (GetEffectSubType(eEff) != SUBTYPE_MAGICAL && bMagicalEffectsOnly)
-            {
-                // ignore
-            }
-            else
+        if (GetEffectSpellId(eEff) == nSpellID && GetEffectCreator(eEff) == oCaster &&
+			(GetEffectSubType(eEff) == SUBTYPE_MAGICAL || !bMagicalEffectsOnly))
             {
                 RemoveEffect(oTarget,eEff);
-            }
-        }
-        eEff = GetNextEffect(oTarget);
+				eEff = GetFirstEffect(oTarget);
+        } else eEff = GetNextEffect(oTarget);
     }
 }
 
@@ -459,15 +453,11 @@ void RemoveBardSongSingingEffect( object oTarget, int nSpellId )
     effect eCheck = GetFirstEffect(oTarget);
     while(GetIsEffectValid(eCheck))
     {
-        if(GetEffectType(eCheck) == EFFECT_TYPE_BARDSONG_SINGING)
-        {
-             if(GetEffectInteger(eCheck, 0) == nSpellId)
-             {
+        if(GetEffectType(eCheck) == EFFECT_TYPE_BARDSONG_SINGING &&
+			GetEffectInteger(eCheck, 0) == nSpellId){
                  RemoveEffect(oTarget, eCheck);
-                 return;
-             }
-        }
-        eCheck = GetNextEffect(oTarget);
+                 eCheck = GetFirstEffect(oTarget);
+        } else eCheck = GetNextEffect(oTarget);
     }
 }
 

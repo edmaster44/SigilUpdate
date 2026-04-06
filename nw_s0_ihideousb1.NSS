@@ -48,9 +48,8 @@ void DoHideousBlow(object oPC)
 			GetEffectSpellId(eEffect) == 2220 ||
 			GetEffectSpellId(eEffect) == 2221) {
 				RemoveEffect( oPC, eEffect );
-			}
-				
-		eEffect = GetNextEffect( oPC );
+				eEffect = GetFirstEffect( oPC );
+			} else eEffect = GetNextEffect( oPC );
 	}
 	
     effect eHidBlow = EffectHideousBlow( nMetaMagic );

@@ -29,19 +29,13 @@ void main()
         eAOE = GetFirstEffect(oTarget);
         while (GetIsEffectValid(eAOE))
         {
-            if (GetEffectCreator(eAOE) == oCaster)
-            {
-                if(GetEffectType(eAOE) == EFFECT_TYPE_ENTANGLE)
+            if (GetEffectCreator(eAOE) == oCaster && 
+				GetEffectType(eAOE) == EFFECT_TYPE_ENTANGLE &&
+				GetEffectSpellId(eAOE) == SPELL_ENTANGLE)
                 {
-                    //If the effect was created by the Acid_Fog then remove it
-                    if(GetEffectSpellId(eAOE) == SPELL_ENTANGLE)
-                    {
-                        RemoveEffect(oTarget, eAOE);
-                    }
-                }
-            }
-            //Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
+                    RemoveEffect(oTarget, eAOE);
+					 eAOE = GetFirstEffect(oTarget);
+                } else eAOE = GetNextEffect(oTarget);
         }
     }
 }

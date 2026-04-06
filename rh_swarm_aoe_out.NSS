@@ -19,7 +19,7 @@ void main()
 		if(GetEffectCreator(eRemove) == oCaster)
 		{
 			RemoveEffect(oTarget,eRemove);
-		}
-		eRemove	=	GetNextEffect(oTarget);
+			eRemove	=	GetFirstEffect(oTarget);
+		} else eRemove	=	GetNextEffect(oTarget);
 	}
 }

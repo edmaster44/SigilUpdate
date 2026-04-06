@@ -26,8 +26,8 @@ void removeCurrentEffects(object oPC)
 		if (GetEffectSpellId(currentEffect) == GetSpellId())
 		{
 			RemoveEffect(oPC, currentEffect);
-		}
-		currentEffect = GetNextEffect(oPC);
+			currentEffect = GetFirstEffect(oPC);
+		} else currentEffect = GetNextEffect(oPC);
 	}
 	
 	if (GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) < 3)

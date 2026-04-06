@@ -12,9 +12,8 @@ void main()
 		if (GetEffectType(eEffect) == EFFECT_TYPE_POLYMORPH)
 		{
 			RemoveEffect(oPC, eEffect);
-		}
-	    
-	    eEffect = GetNextEffect(oPC);
+			eEffect = GetFirstEffect(oPC);
+		} else eEffect = GetNextEffect(oPC);
 	}
 	
 

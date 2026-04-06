@@ -43,9 +43,8 @@ int ToggleRescue ( object oRescuer )
             if (GetEffectType(eCheck) == EFFECT_TYPE_RESCUE)
             {
                 RemoveEffect(oRescuer, eCheck);
-            }
-            
-            eCheck = GetNextEffect(oRescuer);
+				eCheck = GetFirstEffect(oRescuer);
+            } else eCheck = GetNextEffect(oRescuer);
         }
         return FALSE;
     }

@@ -585,18 +585,12 @@ void GZRemoveSpellEffects(int nID,object oTarget, int bMagicalEffectsOnly = TRUE
     effect eEff = GetFirstEffect(oTarget);
     while (GetIsEffectValid(eEff))
     {
-        if (GetEffectSpellId(eEff) == nID)
-        {
-            if (GetEffectSubType(eEff) != SUBTYPE_MAGICAL && bMagicalEffectsOnly)
-            {
-                // ignore
-            }
-            else
+        if (GetEffectSpellId(eEff) == nID && (GetEffectSubType(eEff) == SUBTYPE_MAGICAL || !bMagicalEffectsOnly))
+           
             {
                 RemoveEffect(oTarget,eEff);
-            }
-        }
-        eEff = GetNextEffect(oTarget);
+				eEff = GetFirstEffect(oTarget);
+            } else eEff = GetNextEffect(oTarget);
     }
 }
 

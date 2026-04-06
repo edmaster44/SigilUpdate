@@ -74,8 +74,8 @@ void main()
                )
             {
                 RemoveEffect(oTarget, eLook);
-            }
-            eLook = GetNextEffect(oTarget);
+				eLook = GetFirstEffect(oTarget);
+            } else eLook = GetNextEffect(oTarget);
         }
 
         // Apply the effects

@@ -31,8 +31,7 @@ void main()
             //Remove poison effect and apply VFX constant
             RemoveEffect(oTarget, ePoison);
             PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        }
-        //Get next effect on target
-        GetNextEffect(oTarget);
+			ePoison = GetFirstEffect(oTarget);
+        } else  GetNextEffect(oTarget);
     }
 }

@@ -388,11 +388,9 @@ void PS_Cast_MQ_MirrorImage(object oPC, int iLevel, int nSpell)
     if (!X2PreSpellCastCode())
 	{	return;		}
 	if ( GetHasSpellEffect(nSpell) )
-	{	effect eEffect = GetFirstEffect( OBJECT_SELF );
-		while ( GetIsEffectValid(eEffect) )
-		{	if ( GetEffectSpellId(eEffect) == nSpell )
-			{	RemoveEffect( OBJECT_SELF, eEffect );	}
-			eEffect = GetNextEffect( OBJECT_SELF );		}	}
+		PS_RemoveEffects(oPC, nSpell);
+	
+		
 
 	int iDurBase = iLevel * 5;
 	float fDuration = RoundsToSeconds(iDurBase);	
@@ -940,6 +938,7 @@ void PS_Cast_YTHBNeutralizePoison(object oPC, object oTarget, int nSpell)
         {	
         	RemoveEffect(oTarget, ePoison);
             PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			ePoison = GetFirstEffect(oTarget);
         }
         ePoison = GetNextEffect(oTarget);	
     }

@@ -395,8 +395,8 @@ void ApplyTotemSpell(
 				}
 				if (bValid == TRUE) {
 					RemoveEffect(oTarget, eSearch);
-				}
-				eSearch = GetNextEffect(oTarget);
+					eSearch = GetFirstEffect(oTarget);
+				} else eSearch = GetNextEffect(oTarget);
 			}
 			effect eImm1 = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
 			effect eVis = EffectVisualEffect(VFX_DUR_SPELL_LESSER_MIND_BLANK);

@@ -50,16 +50,13 @@ void RemoveEffectsNPF(object oObject)
     int nEffID;
     while(GetIsEffectValid(eEff))
     {
-        if(GetEffectCreator(eEff) == oCaster)
-        {
-            nEffID = GetEffectSpellId(eEff);
-            if(nEffID == EFFECT_TYPE_SPELL_FAILURE 
-            || nEffID == EFFECT_TYPE_SPELL_IMMUNITY)
+		nEffID = GetEffectSpellId(eEff);
+        if(GetEffectCreator(eEff) == oCaster &&
+        (nEffID == EFFECT_TYPE_SPELL_FAILURE || nEffID == EFFECT_TYPE_SPELL_IMMUNITY))
             {
                 RemoveEffect(oObject, eEff);
-            }
-        }
-        eEff = GetNextEffect(oObject);
+				eEff = GetFirstEffect(oObject);
+            } else eEff = GetNextEffect(oObject);
     }
 }
 void main()

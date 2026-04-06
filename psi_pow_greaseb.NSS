@@ -47,9 +47,8 @@ void main()
                )
             {
                 RemoveEffect(oTarget, eAOE);
-            }
-            // Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
+				eAOE = GetFirstEffect(oTarget);
+            } else eAOE = GetNextEffect(oTarget);
         }// end while - Effect loop
     }// end if - Target has been affected at all
 }

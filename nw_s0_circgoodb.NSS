@@ -31,16 +31,12 @@ void main()
         eAOE = GetFirstEffect(oTarget);
         while (GetIsEffectValid(eAOE))
         {
-            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator())
-            {
-                //If the effect was created by the AOE then remove it
-                if(GetEffectSpellId(eAOE) == SPELL_MAGIC_CIRCLE_AGAINST_GOOD)
+            if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator() &&
+				GetEffectSpellId(eAOE) == SPELL_MAGIC_CIRCLE_AGAINST_GOOD)
                 {
                     RemoveEffect(oTarget, eAOE);
-                }
-            }
-            //Get next effect on the target
-            eAOE = GetNextEffect(oTarget);
+					eAOE = GetFirstEffect(oTarget);
+                }else  eAOE = GetNextEffect(oTarget);
         }
     }
 }

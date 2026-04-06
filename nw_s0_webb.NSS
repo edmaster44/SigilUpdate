@@ -27,16 +27,16 @@ void main()
     //int bValid = FALSE;
     //Search through the valid effects on the target.
     effect eAOE = GetFirstEffect(oTarget);
+	int eId;
     while (GetIsEffectValid(eAOE))// && bValid == FALSE)
     {
+		eId = GetEffectSpellId(eAOE);
         //If the effect was created by the Web then remove it
-        if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator())
-        {
-            if(GetEffectSpellId(eAOE) == SPELL_WEB || GetEffectSpellId(eAOE) == SPELL_GREATER_SHADOW_CONJURATION_WEB)
-            {
-                RemoveEffect(oTarget, eAOE);
-            }
-        }
-        eAOE = GetNextEffect(oTarget);
+        if (GetEffectCreator(eAOE) == GetAreaOfEffectCreator() &&
+			(eId == SPELL_WEB || eId == SPELL_GREATER_SHADOW_CONJURATION_WEB))
+		{
+			RemoveEffect(oTarget, eAOE);
+			eAOE = GetFirstEffect(oTarget);
+		} else  eAOE = GetNextEffect(oTarget);
     }
 }

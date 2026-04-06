@@ -40,8 +40,8 @@ void main()
 		if (GetEffectType(eTest) == EFFECT_TYPE_AREA_OF_EFFECT && GetEffectSpellId(eTest) == SPELLABILITY_AURA_OF_COURAGE)
 		{
 			RemoveEffect(oTarget, eTest);
-		}
-		eTest = GetNextEffect(oTarget);
+			eTest = GetFirstEffect(oTarget);
+		} else eTest = GetNextEffect(oTarget);
 	}
 	
 	// strip any extra aura objects, but not from other paladins

@@ -48,14 +48,16 @@ void WinterWolfColdImmunity(int nColdRes, int nFireVul)
 
 void StripSpellEffect(int SpellID1 = -1, int SpellID2 = -1)
 {
+	int nId;
 	effect eEffect = GetFirstEffect(oSelf);
 	while(GetIsEffectValid(eEffect))
 	{
-		if (GetEffectSpellId(eEffect) == SpellID1 | GetEffectSpellId(eEffect) == SpellID2)
+		nId = GetEffectSpellId(eEffect);
+		if (nId == SpellID1 | nId == SpellID2)
 		{
 			RemoveEffect(oSelf, eEffect);
-		}
-		eEffect = GetNextEffect(oSelf);
+			eEffect = GetFirstEffect(oSelf);
+		} else eEffect = GetNextEffect(oSelf);
 	}
 }
 

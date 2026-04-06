@@ -293,12 +293,15 @@ void main()
 		
 			DelayCommand(0.9,RecomputeStaticLighting(GetArea(oSelf)));
 		  	effect eEffect = GetFirstEffect(oSelf);
-			while (GetIsEffectValid(eEffect) == TRUE)
-				{
-	   	     	if (GetEffectType(eEffect) == EFFECT_TYPE_VISUALEFFECT) RemoveEffect(oSelf, eEffect);
-	        	eEffect = GetNextEffect(oSelf);
+			while (GetIsEffectValid(eEffect) == TRUE){
+	   	     	if (GetEffectType(eEffect) == EFFECT_TYPE_VISUALEFFECT){
+					RemoveEffect(oSelf, eEffect);
+					eEffect = GetFirstEffect(oSelf);
+				} else {
+					eEffect = GetNextEffect(oSelf);
 				}
 		}
+	}
 }
 		
 				

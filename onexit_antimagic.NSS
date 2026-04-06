@@ -4,21 +4,16 @@
 void RemoveAntimagic(object creature)
 {
 	effect eEffect = GetFirstEffect(creature);
+	int nType;
 	while(GetIsEffectValid(eEffect))
 	{
-		int nType = GetEffectType(eEffect);
+		nType = GetEffectType(eEffect);
 
-		if(nType == EFFECT_TYPE_SPELL_FAILURE)
+		if(nType == EFFECT_TYPE_SPELL_FAILURE || nType == EFFECT_TYPE_SILENCE)
 		{
 			RemoveEffect(creature, eEffect);
-		}
-		
-		if(nType == EFFECT_TYPE_SILENCE)
-		{
-			RemoveEffect(creature, eEffect);
-		}
-		
-		eEffect = GetNextEffect(creature);
+			eEffect = GetFirstEffect(creature);
+		} else eEffect = GetNextEffect(creature);
 	}
 	
 	SetLocalInt(creature, "ps_anti_magic_zone", 0);

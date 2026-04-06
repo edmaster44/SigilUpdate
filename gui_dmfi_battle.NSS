@@ -37,9 +37,10 @@ void main(string sInput)
 	eEffect = GetFirstEffect(oTarget);
 	while (GetIsEffectValid(eEffect))
 	{
-		if ((GetEffectType(eEffect)==EFFECT_TYPE_ABILITY_INCREASE) || (GetEffectType(eEffect)==EFFECT_TYPE_ABILITY_DECREASE) || (GetEffectType(eEffect)==EFFECT_TYPE_SPELL_RESISTANCE_DECREASE) || (GetEffectType(eEffect)==EFFECT_TYPE_SPELL_RESISTANCE_INCREASE))
+		if ((GetEffectType(eEffect)==EFFECT_TYPE_ABILITY_INCREASE) || (GetEffectType(eEffect)==EFFECT_TYPE_ABILITY_DECREASE) || (GetEffectType(eEffect)==EFFECT_TYPE_SPELL_RESISTANCE_DECREASE) || (GetEffectType(eEffect)==EFFECT_TYPE_SPELL_RESISTANCE_INCREASE)){
 			RemoveEffect(oTarget, eEffect);
-		eEffect = GetNextEffect(oTarget);
+			eEffect = GetFirstEffect(oTarget);
+		} else eEffect = GetNextEffect(oTarget);
 	}			
 			
  	if (FindSubString(sInput, "R_")!=-1)		n=-4;

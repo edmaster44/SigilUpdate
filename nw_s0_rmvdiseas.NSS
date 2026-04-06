@@ -18,7 +18,6 @@ void main()
     //Declare major variables
     object oTarget = GetSpellTargetObject();
     int nType;
-    int bValid = FALSE;
     effect eParal = GetFirstEffect(oTarget);
     effect eVis = EffectVisualEffect(VFX_IMP_REMOVE_CONDITION);
     //Fire cast spell at event for the specified target
@@ -31,15 +30,9 @@ void main()
         {
             //Remove the effect
             RemoveEffect(oTarget, eParal);
-            bValid = TRUE;
-        }
-        //Get the next effect on the target
-        GetNextEffect(oTarget);
-    }
-    if (bValid)
-    {
-        //Apply VFX Impact
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			eParal = GetFirstEffect(oTarget);
+        } else eParal = GetNextEffect(oTarget);
     }
 }
 
