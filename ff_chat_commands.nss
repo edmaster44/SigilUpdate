@@ -144,7 +144,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		int nECL = GetNewECL(oSender);
 		sFeedback = "Your ECL is " + IntToString(nECL);
 		if (nECL > 0)
-			sFeedback = "\nECL combat XP tax: -" + PS_PrettyFloatString(GetECLXPTax(nECL, TRUE)) + "%";
+			sFeedback += "\nECL combat XP tax: - " + PS_PrettyFloatString(GetECLXPTax(nECL, TRUE)) + "%";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}

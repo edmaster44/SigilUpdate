@@ -1030,6 +1030,7 @@ void PS_HD_Dragonflight(object oPC, object oItem)
 		case 6: iWingF = 56; iWingM = 55; break; // Human
 		case 10: if (iSub == 61) iWingF= 56; iWingM = 55; break; //Khaasta
 		case 14: iWingF = 48; iWingM = 47; break; // Orc
+		case 15: iWingF = 55; iWingM = 55; break; // rept humanoid
 		case 21: iWingF = 56; iWingM = 55; break; // Planetouched
 		case 31: if (iSub == 47) iWingF = 56; iWingM = 55; break; //Yuan-ti Pureblood
 		case 32: iWingF = 48; iWingM = 47; break; // Grey Orc

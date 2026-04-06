@@ -28,17 +28,9 @@ int GetQualifiesDervishFX(object oPC, int nSpellId){
 void Dervish_AC_Bonus(object oPC, int nSpell)
 {
 	int nSpellId = SPELLABILITY_DERVISH_AC_BONUS;
-	int bHasEffect = GetHasSpellEffect(nSpellId, oPC);
-	int bQualifies = GetQualifiesDervishFX(oPC, nSpellId);
-	//bail if they had the effect to begin with, also remove if they shouldn't have
-	if (bHasEffect){
-		if (!bQualifies)
-			PS_RemoveEffects(oPC, nSpellId);
-		
-		return; 
-	}
-	if (!bQualifies)
-		return;
+	PS_RemoveEffects(oPC, nSpellId);
+	if (!GetQualifiesDervishFX(oPC, nSpellId)) return;
+	
 				
 	//Ac bonus
 	int nAmount = 1;			

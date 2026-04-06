@@ -295,8 +295,8 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 	for (i = 0; i < nMax; i++){
 		nType = StringToInt(Get2DAString(s2da, "Type", i));
 		nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
-		bItemOk = (Get2DAString(s2da, sColumn, i) == "1");
-		bCanEnchant = (Get2DAString(s2da, "Can_Enchant", i) == "1");
+		bItemOk = (StringToInt(Get2DAString(s2da, sColumn, i)) == 1);
+		bCanEnchant = (StringToInt(Get2DAString(s2da, "Can_Enchant", i)) == 1);
 		if ((nType == enchant.type && bItemOk && bCanEnchant) &&
 			(nType == 12 || nType == 15 || nType == 99 || nSub == enchant.subtype)){
 			if (nType == 12 || nType == 15 || nType == 99){

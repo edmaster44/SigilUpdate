@@ -148,7 +148,37 @@ void PS_Undead_TouchOfEvil(object oPC)
 // Changes the character's racial type to Undead, and applies an evil little effect.
 void PS_UndeadRacialType(object oPC)
 {
+	int nAppVar;
 	object oEssence = PS_GetEssence(oPC);
+	
+	if (GetRacialType(oPC) == RACIAL_TYPE_UNDEAD &&
+		GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0 &&
+		GetLocalInt(oEssence, "TempChange") == 0){
+		
+		switch (GetLocalInt(oEssence, VAR_OLD_RACE)){
+			case RACIAL_TYPE_DWARF:
+				nAppVar = 991; break;
+			case RACIAL_TYPE_ELF:
+				nAppVar = 992; break;
+			case RACIAL_TYPE_GNOME:
+				nAppVar = 993; break;
+			case RACIAL_TYPE_HALFLING:
+				nAppVar = 989; break;
+			case RACIAL_TYPE_HUMANOID_ORC:
+			case RACIAL_TYPE_HALFORC:
+			case RACIAL_TYPE_GRAYORC:
+				nAppVar = 994; break;
+			default:
+				nAppVar = 1008; break;
+		}
+		
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		app.AppearanceType = nAppVar;
+		PS_SetCreatureCoreAppearance(oPC, app);
+		PS_RefreshAppearance(oPC);
+		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
+		
+	}
 
 	if(GetRacialType(oPC) != RACIAL_TYPE_UNDEAD)
 	{
@@ -193,6 +223,7 @@ void PS_UndeadRacialType(object oPC)
 			PS_SetCreatureCoreAppearance(oPC, app);
 			PS_RefreshAppearance(oPC);
 			DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
+			SetLocalInt(oEssence, "DeathKnightApp", TRUE);
 		}
 
 		PS_SetRacialType(oPC, RACIAL_TYPE_UNDEAD);
