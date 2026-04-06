@@ -42,7 +42,7 @@ const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
-void SignalAndPS_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
+void ED_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
 	object oTarget, float fDuration=0.0f);
 int GetMissChance(object oCaster);
 int GetSpellFailedBecauseMissChance(object oCaster);
@@ -374,7 +374,7 @@ void X2DoBreakConcentrationCheck()
 }
 
 //got tired of having to write both signal event and apply effect, so made a wrapper that does both
-void SignalAndPS_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
+void ED_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
 	object oTarget, float fDuration=0.0f){
 	
 	SignalEvent(oTarget, EventSpellCastAt(oCaster, nSpellId, bHostile));

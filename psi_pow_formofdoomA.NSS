@@ -29,7 +29,7 @@ void main()
 		//Make a saving throw check
 		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR)){
 			//Apply the VFX impact and effects
-			SignalAndPS_ApplyEffectToObject(oManifester, nId, TRUE, DURATION_TYPE_TEMPORARY, eLink, 
+			ED_ApplyEffectToObject(oManifester, nId, TRUE, DURATION_TYPE_TEMPORARY, eLink, 
 				oTarget, RoundsToSeconds(d6(5)));
 			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		} else {

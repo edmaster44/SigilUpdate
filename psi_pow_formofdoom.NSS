@@ -111,6 +111,6 @@ void main()
 	}
 	
 	// Apply the effects
-	SignalAndPS_ApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
+	ED_ApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
 		oManifester, fDuration);
 }
