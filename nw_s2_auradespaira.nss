@@ -28,6 +28,8 @@ void main()
 
 	effect eSavePenalty = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2);
 	eSavePenalty		= SupernaturalEffect(eSavePenalty);
+	eSavePenalty 		= SetEffectSpellId(eSavePenalty, SPELLABLILITY_AURA_OF_DESPAIR);
+	PS_RemoveEffects(oTarget, SPELLABLILITY_AURA_OF_DESPAIR, NULL, oCaster);
 	SignalEvent (oTarget, EventSpellCastAt(oCaster, SPELLABLILITY_AURA_OF_DESPAIR, FALSE));		
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavePenalty, oTarget);			
 

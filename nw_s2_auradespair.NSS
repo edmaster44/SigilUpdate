@@ -32,31 +32,22 @@ void main()
     object oTarget = GetSpellTargetObject();
 
 	// Strip any Auras first
-	effect eTest = GetFirstEffect(oTarget);
-	while(GetIsEffectValid(eTest))
-	{
-		if (GetEffectType(eTest) == EFFECT_TYPE_AREA_OF_EFFECT && GetEffectSpellId(eTest) == SPELLABLILITY_AURA_OF_DESPAIR)
-		{
-			RemoveEffect(oTarget, eTest);
-			eTest = GetFirstEffect(oTarget);
-		} else 
-			eTest = GetNextEffect(oTarget);
-	}
+	PS_RemoveEffects(oTarget, SPELLABLILITY_AURA_OF_DESPAIR, EFFECT_TYPE_AREA_OF_EFFECT);
 	
 	// strip any extra aura objects, but not from other blackguards
-	
-	object o = GetFirstObjectInArea(GetArea(oTarget));
-	while(GetIsObjectValid(o))
+	object oArea = GetArea(oTarget);
+	object oAoE = GetFirstObjectInArea(oArea);
+	while(GetIsObjectValid(oAoE))
 	{
-		if (GetObjectType(o)==OBJECT_TYPE_AREA_OF_EFFECT && 
-			GetAreaOfEffectSpellId(o)==SPELLABLILITY_AURA_OF_DESPAIR &&
-			GetAreaOfEffectCreator(o) == oTarget)
+		if (GetObjectType(oAoE)==OBJECT_TYPE_AREA_OF_EFFECT && 
+			GetAreaOfEffectSpellId(oAoE)==SPELLABLILITY_AURA_OF_DESPAIR &&
+			GetAreaOfEffectCreator(oAoE) == oTarget)
 			{
 				//SpeakString("FOUND/DESTROY OLD AOE OBJECT");
-				DestroyObject(o);
-				GetFirstObjectInArea(GetArea(oTarget));
+				DestroyObject(oAoE);
+				oAoE = GetFirstObjectInArea(oArea);
 			}else 
-				o = GetNextObjectInArea(GetArea(oTarget));
+				oAoE = GetNextObjectInArea(oArea);
 	}
 	
 	

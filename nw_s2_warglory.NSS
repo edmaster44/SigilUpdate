@@ -40,30 +40,22 @@ void main()
 	}*/
 
 	// Strip any Auras first
-	effect eTest = GetFirstEffect(oTarget);
-	while(GetIsEffectValid(eTest))
-	{
-		if (GetEffectType(eTest) == EFFECT_TYPE_AREA_OF_EFFECT && GetEffectSpellId(eTest) == SPELLABILITY_WAR_GLORY)
-		{
-			RemoveEffect(oTarget, eTest);
-			eTest = GetFirstEffect(oTarget);
-		} else 
-			eTest = GetNextEffect(oTarget);
-	}
+	PS_RemoveEffects(oTarget, SPELLABILITY_WAR_GLORY, EFFECT_TYPE_AREA_OF_EFFECT);
+	
 	
 	// strip any extra aura objects, but not from other warpriests
-	
-	object o = GetFirstObjectInArea(GetArea(oTarget));
-	while(GetIsObjectValid(o))
+	object oArea = GetArea(oTarget);
+	object oAoE = GetFirstObjectInArea(oArea);
+	while(GetIsObjectValid(oAoE))
 	{
-		if (GetObjectType(o)==OBJECT_TYPE_AREA_OF_EFFECT && GetAreaOfEffectSpellId(o)==SPELLABILITY_WAR_GLORY && 
-			GetAreaOfEffectCreator(o) == oTarget )
+		if (GetObjectType(oAoE)==OBJECT_TYPE_AREA_OF_EFFECT && GetAreaOfEffectSpellId(oAoE)==SPELLABILITY_WAR_GLORY && 
+			GetAreaOfEffectCreator(oAoE) == oTarget )
 		{
 			//SpeakString("FOUND/DESTROY OLD AOE OBJECT");
-			DestroyObject(o);
-			o = GetFirstObjectInArea(GetArea(oTarget));
+			DestroyObject(oAoE);
+			oAoE = GetFirstObjectInArea(oArea);
 		} else
-			o = GetNextObjectInArea(GetArea(oTarget));
+			oAoE = GetNextObjectInArea(oArea);
 	}
 	
 	
