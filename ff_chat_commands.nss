@@ -59,14 +59,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
-	else if (sInput == "#showcastevent"){
-		int bEvent = !GetLocalInt(oSender, "ReportEffectSpam");
-		SetLocalInt(oSender, "ReportEffectSpam", bEvent);
-		if (bEvent)	sFeedback = "Turning on reporting of SpellCastAt event";
-		else sFeedback = "Turning off reporting of SpellCastAt event";
-		SendMessageToPC(oSender, sFeedback);
-		return TRUE;
-	}
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	else if (sInput == "#scribemin"){
 		if (GetLocalInt(oSender, "bScribeAtMinLvl")){
