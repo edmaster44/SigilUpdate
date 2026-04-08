@@ -1038,10 +1038,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 {
     if (!X2PreSpellCastCode())
     {	return;	}
-	if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC)){
-		SendMessageToPC(oPC, "Target is immune to mind spells.");
-		return;
-	}
+	
     effect eDom 		= EffectDominated();
     	eDom = GetScaledEffect(eDom, oTarget);
     effect eVis 		= EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
@@ -1057,7 +1054,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 	if (iPRCLvl_Mal > 0) iChaBonus += d6(1);
 	int nDC 			= 10 + (nCharLevel / 2) + iChaBonus;
     nDuration = GetScaledDuration(nDuration, oTarget);
-    SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, FALSE));
+    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
 	if (oTarget == oPC){
 		int nBonus = nCasterLevel;
@@ -1069,8 +1066,8 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 		PS_RemoveEffects(oPC, nSpell, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
-	} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
-		SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, TRUE));
+	}else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
+		SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
 			SendMessageToPC(oPC, "Target Immune");
 		else if (!MyResistSpell(oPC, oTarget)){
@@ -1092,7 +1089,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 			sCasterMessage += " has resisted your domination effect!";
 			sTargetMessage += " tried to use a domination effect upon you but you resisted.";
 		} else {
-			SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, TRUE));
+			SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
 			sCasterMessage += " has succumbed to your dominating gaze!";
 			sTargetMessage += " has dominated you!";
 		}
