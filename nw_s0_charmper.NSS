@@ -44,7 +44,6 @@ void main()
 
     //Declare major variables
 	object oCaster = OBJECT_SELF;
-	if (GetIsObjectValid(GetSpellCastItem())) oCaster = GetItemActivator();
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_CHARM_PERSON);
     effect eCharm = EffectCharmed();
@@ -85,7 +84,7 @@ void main()
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, FALSE));
 		PS_RemoveEffects(oCaster, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oCaster);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oCaster, HoursToSeconds(nCasterLevel));
-	} else if (GetIsPC(oTarget) && GetIsPC(oCaster)){
+	} else if (GetIsPC(oTarget) && GetIsPC(oCaster) && oTarget != oCaster){
 		string sCasterMessage = "<c=red>";
 		string sTargetMessage = "<c=red>";
 		string sName = GetFirstName(oCaster);
