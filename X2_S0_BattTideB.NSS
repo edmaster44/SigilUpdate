@@ -29,11 +29,15 @@ void main()
 
     //Declare major variables
     //Get the object that is exiting the AOE
+	int nId = GetSpellId();
     object oTarget = GetExitingObject();
-	object oCaster = GetAreaOfEffectCreator();
+	object oCreator = GetAreaOfEffectCreator();
 	
-	PS_RemoveEffects(oTarget, 517, NULL, oCaster);
-	PS_RemoveEffects(oTarget, 963, NULL, oCaster);
+	PS_RemoveEffects(oTarget, 517, NULL, oCreator); // cleric spell
+	PS_RemoveEffects(oTarget, 963, NULL, oCreator); //warpriest
+	//just in case any other racial/prcs grant this in the future
+	if (GetHasSpellEffect(nId, oTarget))
+		PS_RemoveEffects(oTarget, nId, NULL, oCreator); 
 	
 	
 	// all this seems a little unnecessary, just remove the effects with the right id and creator

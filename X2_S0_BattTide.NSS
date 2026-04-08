@@ -29,33 +29,21 @@
 #include "x2_inc_spellhook"
 
 void main()
-{
-
-/*
-  Spellcast Hook Code
-  Added 2003-07-07 by Georg Zoeller
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-
-*/
-
-    if (!X2PreSpellCastCode())
-    {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
+{ 
+	if (!X2PreSpellCastCode()) return;
+  
 
 // End of Spell Cast Hook
 
 	//DebugPostString( OBJECT_SELF, "x2_so_batttide main()", 100, 100, 1.0 );
-
+	int nId = GetSpellId();
     // Create the Effects
     effect eAOE   = EffectAreaOfEffect(AOE_MOB_TIDE_OF_BATTLE);
     effect eHaste = EffectHaste();
 	//effect eImpact = EffectVisualEffect(VFX_HIT_AOE_TRANSMUTATION);	// NWN1 VFX
 
 	
-    int nDuration = GetCasterLevel(OBJECT_SELF);
+    int nDuration = PS_GetCasterLevel(OBJECT_SELF);
     //Make nDuration at least 1 round.
     if (nDuration < 1)
     {
@@ -71,15 +59,21 @@ void main()
 	// Apply the haste effect
 	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, OBJECT_SELF, RoundsToSeconds(nDuration));
 	effect eLink = CreateGoodTideEffectsLink();
-	eLink = EffectLinkEffects(eLink, eHaste);
-	eAOE = EffectLinkEffects(eAOE, eLink);
+	eLink = EffectLinkEffects(eHaste, eLink);
+	eLink = EffectLinkEffects(eAOE, eLink);
+	eLink = SetEffectSpellId(eLink, nId);
+	
 
 	// remove any previous effects of this spell
 	RemoveEffectsFromSpell(OBJECT_SELF, SPELL_BATTLETIDE);
 	RemoveEffectsFromSpell(OBJECT_SELF, 963);
+	//just in case any other racial/prcs grant this in the future
+	if (GetHasSpellEffect(nId, OBJECT_SELF))
+		PS_RemoveEffects(OBJECT_SELF, nId); 
 
+	SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
     //Create the AOE object at the selected location
-    DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration)));
+    DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, RoundsToSeconds(nDuration)));
 	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, OBJECT_SELF);	// NWN1 VFX
 
 

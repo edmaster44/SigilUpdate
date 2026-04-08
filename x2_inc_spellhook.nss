@@ -36,6 +36,7 @@
 #include "x2_inc_craft"
 #include "ginc_crafting"
 #include "x0_i0_spells"
+#include "x2_i0_spells"
 #include "class_mageslayer_utils"
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
@@ -520,8 +521,10 @@ void DebugSpells(){
 	sDebug += " (" + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")";
 	sDebug += "\nClass: ";
 	nId = GetLastSpellCastClass();
-	if (nId == CLASS_TYPE_INVALID) sDebug += "Undefined";
-	else {
+	if (nId == CLASS_TYPE_INVALID){
+		sDebug += "Undefined";
+		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF));
+	} else {
 		nNameRef = StringToInt(Get2DAString("classes", "Name", nId));
 		sDebug += GetStringByStrRef(nNameRef);
 		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF, nId));

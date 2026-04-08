@@ -25,27 +25,39 @@
 
 void main()
 {
-
+	
     //Declare major variables
-    effect eLink = CreateBadTideEffectsLink();
-    effect eLink2 = CreateGoodTideEffectsLink();
-    //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);	// handled by CreateBadTideEffectsLink() and CreateGoodTideEffectsLink()
-    effect eFind;
-    object oTarget = GetEnteringObject();
+	int nId = GetSpellId();
+	object oTarget = GetEnteringObject();
     object oCreator = GetAreaOfEffectCreator();
+	
+	if (oTarget == oCreator) return;
+	
+    effect eBad = CreateBadTideEffectsLink();
+	eBad = SetEffectSpellId(eBad, nId);
+   // effect eGood = CreateGoodTideEffectsLink();
+	//eGood = SetEffectSpellId(eGood, nId);
+	
+    //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);	// handled by CreateBadTideEffectsLink() and CreateGoodTideEffectsLink()
     float fDelay;
 	
-	PS_RemoveEffects(oTarget, 517, NULL, oCreator);
-	PS_RemoveEffects(oTarget, 963, NULL, oCreator);
+
+	PS_RemoveEffects(oTarget, 517, NULL, oCreator); // cleric spell
+	PS_RemoveEffects(oTarget, 963, NULL, oCreator); //warpriest
+	//just in case any other racial/prcs grant this in the future
+	if (GetHasSpellEffect(nId, oTarget))
+		PS_RemoveEffects(oTarget, nId, NULL, oCreator); 
+	
+	
 	
 
     //Check faction of spell targets.
     if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCreator))
     {
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
+        SignalEvent(oTarget, EventSpellCastAt(oCreator, nId));
         //Make a SR check
-        if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget))
+        if(!MyResistSpell(oCreator, oTarget))
         {
             //Make a Fort Save
             if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NEGATIVE))
@@ -53,15 +65,18 @@ void main()
                fDelay = GetRandomDelay(0.75, 1.75);
                //Apply the VFX impact and linked effects
                //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	// handled by CreateBadTideEffectsLink() and CreateGoodTideEffectsLink()
-               DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget));
+               DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBad, oTarget));
             }
         }
     }
+	// this is unneccessary. The good effects were applied to caster on intial cast
+	/*
     else if(oTarget == oCreator)
     {
         //Apply the VFX impact and linked effects
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+        SignalEvent(oTarget, EventSpellCastAt(oCreator, GetSpellId(), FALSE));
         //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by CreateBadTideEffectsLink() and CreateGoodTideEffectsLink()
-        //ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink2, oTarget);
+        //ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBad, oTarget);
     }
+	*/
 }
