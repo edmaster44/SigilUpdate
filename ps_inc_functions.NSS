@@ -692,14 +692,23 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 }
 
 float PS_RoundDecimal(float fNum, int nPlaces = 2, int nRoundTo = ROUND_NEAREST){
+	int nMulti = 1;
 	if (nRoundTo < -1) nRoundTo = -1;
 	else if (nRoundTo > 1) nRoundTo = 1;
-	if (nPlaces < 1){
-		return IntToFloat(PS_RoundToInt(fNum, nRoundTo));
-	} else nPlaces *= 10;
-	fNum *= nPlaces;
-	int nNum = PS_RoundToInt(fNum, nRoundTo);
-	return IntToFloat(nNum) / nPlaces;
+	
+	// if fewer than 1 place, return round to int
+	if (nPlaces <= 0){
+		return IntToFloat(PS_RoundToInt(fNum, nRoundTo)); 
+	} else { //otherwise build a multiplier of 10 to the power of nPlaces
+		int i;
+		for (i = 0; i < nPlaces; i++){
+			nMulti *= 10;
+		}
+	}
+	fNum *= IntToFloat(nMulti); // multiply by 10 to the power of n places
+	int nNum = PS_RoundToInt(fNum, nRoundTo); // then round that to integer
+	// then convert back to float and divide by 10 to the power of nPlaces
+	return IntToFloat(nNum) / IntToFloat(nMulti); 
 }
 
 string PS_PrettyFloatString(float fNum){

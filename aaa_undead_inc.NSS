@@ -1076,8 +1076,8 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 			}
 		}
 	} else if (GetIsPC(oTarget)){
-		string sCasterMessage = "<c=red>" + GetName(oTarget);
-		string sTargetMessage = "<c=red>" + GetName(oPC);
+		string sCasterMessage = "<c=orange>" + GetName(oTarget);
+		string sTargetMessage = "<c=orange>" + GetName(oPC);
 		int bImmune = FALSE;
 		int bResist = FALSE;
 		int bSave = FALSE;

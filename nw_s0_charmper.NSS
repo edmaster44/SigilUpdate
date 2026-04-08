@@ -85,8 +85,8 @@ void main()
 		PS_RemoveEffects(oCaster, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oCaster);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oCaster, HoursToSeconds(nCasterLevel));
 	} else if (GetIsPC(oTarget) && GetIsPC(oCaster) && oTarget != oCaster){
-		string sCasterMessage = "<c=red>";
-		string sTargetMessage = "<c=red>";
+		string sCasterMessage = "<c=orange>";
+		string sTargetMessage = "<c=orange>";
 		string sName = GetFirstName(oCaster);
 		string sLast = GetLastName(oCaster);
 		if (sLast != "") sName += " " + sLast;
