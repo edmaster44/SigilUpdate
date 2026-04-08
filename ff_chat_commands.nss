@@ -144,7 +144,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		int nECL = GetNewECL(oSender);
 		sFeedback = "Your ECL is " + IntToString(nECL);
 		if (nECL > 0)
-			sFeedback += "\nECL combat XP tax: - " + PS_PrettyFloatString(GetECLXPTax(nECL, TRUE)) + "%";
+			sFeedback += "\nECL combat XP tax: - " + PS_PrettyFloatString(GetECLXPTax(nECL, TRUE), 2) + "%";
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
@@ -446,7 +446,7 @@ string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bF
 	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
 	sDebug += "\nHD: " + IntToString(PS_GetLevel(oCreature));
 	float fVar = PS_RoundDecimal(GetChallengeRating(oCreature));
-	sDebug += "\nCR: " + PS_PrettyFloatString(fVar);
+	sDebug += "\nCR: " + PS_PrettyFloatString(fVar, 2);
 	sDebug += "\nElite Rating:" + GetLocalString(oCreature,"ELITE");
 	if (GetHasAllAccess(oCaller)){
 		sDebug += "\nMax HP: " + IntToString(GetMaxHitPoints(oCreature));

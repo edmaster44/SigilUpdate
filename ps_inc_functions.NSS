@@ -138,7 +138,7 @@ int IsImmuneToDamage(object oTarget, int nDmgType, int bShowFeedback = FALSE);
 
 // turns a float into a esthetically acceptable string without trailing zeros, or an unnecessary
 // decimal point when the decimals are all zeros
-string PS_PrettyFloatString(float fNum);
+string PS_PrettyFloatString(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST);
 
 // The following 4 are utils to clean up illegal chars in variable names,
 // useful for non-static variable names such as a character name.
@@ -159,7 +159,7 @@ float PS_GetDistanceBetween(object oObject1, object oObject2);
 int PS_RoundToInt(float fNum, int nRoundTo = ROUND_NEAREST);
 
 //rounds to nPlaces decimal places in nRoundTo manner
-float PS_RoundDecimal(float fNum, int nPlaces = 2, int nRoundTo = ROUND_NEAREST);
+float PS_RoundDecimal(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST);
 
 // NWN2 has a cap of 528k xp, so if we set the races ecl in the 2da then we couldn't have
 // any ECL greater than 3 (A character with 0 ecl needs 435k xp to reach 30, a character 
@@ -652,11 +652,9 @@ float GetECLXPTax(int nECL, int bForDisplay = FALSE){
 	float fEffectiveLevel = 30.0 + IntToFloat(nECL);
 	float fECLXP = 1000.0 * fEffectiveLevel * (fEffectiveLevel - 1.0) / 2;
 	fTax = 435000.0 / fECLXP;
-	if (!bForDisplay) return fTax;
+	if (bForDisplay) return (1.00 - fTax) * 100.0;
 	
-	float fPercent = (1.00 - fTax) * 100.0;
-	return PS_RoundDecimal(fPercent);
-	
+	return fTax;
 }
 
 // Called from PS_GiveXPReward().
@@ -683,21 +681,22 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 		string sMessage = "Your ECL is " + IntToString(nECL);
 		sMessage += "\nYour XP before tax is " + IntToString(nXP);
 		float fPercent = (1.0 - fTax) * 100.0;
-		fPercent = PS_RoundDecimal(fPercent);
-		sMessage += "\nYour ECL XP tax is " + PS_PrettyFloatString(fPercent) + "%";
+		sMessage += "\nYour ECL XP tax is " + PS_PrettyFloatString(fPercent, 2) + "%";
 		sMessage += "\nYour final XP is " + IntToString(nAdjusted);
 		SendMessageToPC(oPC, sMessage);
 	}
 	return nAdjusted; 
 }
 
-float PS_RoundDecimal(float fNum, int nPlaces = 2, int nRoundTo = ROUND_NEAREST){
+float PS_RoundDecimal(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST){
+	if (nPlaces < 0) nPlaces = 0;
+	else if (nPlaces > 9) nPlaces = 9;
 	int nMulti = 1;
 	if (nRoundTo < -1) nRoundTo = -1;
 	else if (nRoundTo > 1) nRoundTo = 1;
 	
-	// if fewer than 1 place, return round to int
-	if (nPlaces <= 0){
+	// if fewer no decimal place, return round to int
+	if (nPlaces == 0){
 		return IntToFloat(PS_RoundToInt(fNum, nRoundTo)); 
 	} else { //otherwise build a multiplier of 10 to the power of nPlaces
 		int i;
@@ -711,31 +710,33 @@ float PS_RoundDecimal(float fNum, int nPlaces = 2, int nRoundTo = ROUND_NEAREST)
 	return IntToFloat(nNum) / IntToFloat(nMulti); 
 }
 
-string PS_PrettyFloatString(float fNum){
-    string sNum = FloatToString(fNum, 6, 6);  // Consistent precision
+string PS_PrettyFloatString(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST){
+	fNum = PS_RoundDecimal(fNum, nPlaces, nRoundTo);
+    string sNum = FloatToString(fNum, 18, nPlaces); 
     
-    // get where the decimal is
-    int nPos = FindSubString(sNum, ".");
+	//if no decimal point, just return it
+	if (FindSubString(sNum, ".") == -1) return sNum;
     
-    // strip trailing zeros
-    while(GetStringLength(sNum) > 0){
-        string sLast = GetStringRight(sNum, 1);
-        if(sLast == "0"){
-            sNum = GetStringLeft(sNum, GetStringLength(sNum) - 1);
-        } else {
-            break;
-        }
+	// strip trailing zeros
+	string sLast = GetStringRight(sNum, 1);
+    while(GetStringLength(sNum) > 0 && sLast == "0"){
+		sNum = GetStringLeft(sNum, GetStringLength(sNum) - 1);
+		sLast = GetStringRight(sNum, 1);
     }
-    
-    // Remove decimal if no fractional digits left
+    // Remove decimal point if no decimal places left
     if(GetStringRight(sNum, 1) == "."){
         sNum = GetStringLeft(sNum, GetStringLength(sNum) - 1);
     }
+	//unlikely to produce empty string, but just in case
+	if (sNum == "") sNum = "0";
     return sNum;
 }
 
 int PS_RoundToInt(float fNum, int nRoundTo = ROUND_NEAREST){  
 
+	if (nRoundTo < -1) nRoundTo = -1;
+	else if (nRoundTo > 1) nRoundTo = 1;
+	
     // the comment in nwscript.nss says that this rounds to nearest.
     // That is a lie. It truncates the decimal
     int nInt = FloatToInt(fNum);
@@ -749,11 +750,9 @@ int PS_RoundToInt(float fNum, int nRoundTo = ROUND_NEAREST){
     if (fDec == 0.0f) return nInt;
     else if (nRoundTo == ROUND_DOWN) return nInt;
     else if (nRoundTo == ROUND_UP) return nInt + 1;
-    else {
-        if (fDec >= 0.5f) return nInt + 1;
-        else return nInt;
-    }
-    return nInt;
+	// if we're not roundind down or up we must be rounding nearest
+	if (fDec >= 0.5f) return nInt + 1;
+	return nInt;
 }
 
 
