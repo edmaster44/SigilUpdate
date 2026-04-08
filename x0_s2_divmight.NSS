@@ -31,43 +31,54 @@ void main()
    if (!GetHasFeat(FEAT_TURN_UNDEAD, OBJECT_SELF))
    {
         SpeakStringByStrRef(STR_REF_FEEDBACK_NO_MORE_TURN_ATTEMPTS);
+		return;
    }
-   else
-   if(GetHasFeatEffect(413) == FALSE)
-   {
+   // this is an unnecessary condition because DM is made not to stack by removing fx b4
+   // applying new, so all this was doing was preventing re-upping duration
+   //else
+  // if(GetHasFeatEffect(413) == FALSE) 
+   //{
         //Declare major variables
-        object oTarget = GetSpellTargetObject();
-        int nLevel = PS_GetCasterLevel(OBJECT_SELF);
+        //object oTarget = GetSpellTargetObject(); //self only spell, we dont need to get the target
+        //int nLevel = PS_GetCasterLevel(OBJECT_SELF); // caster lvl not used
 
         effect eVis = EffectVisualEffect( VFX_HIT_SPELL_EVOCATION );
         effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
 
         int nCharismaBonus = GetAbilityModifier(ABILITY_CHARISMA);
-        if (nCharismaBonus>0)
+        if (nCharismaBonus < 1)
         {
-            // AFW-OEI 02/08/2007: If you have Epic Divine Might, your CHA bonus is doubled.
-            if (GetHasFeat(FEAT_EPIC_DIVINE_MIGHT, OBJECT_SELF, TRUE))
-            {
-                nCharismaBonus = 2 * nCharismaBonus;
-            }
+			FloatingTextStringOnCreature("You must have at least 12 Charisma to use this ability.", OBJECT_SELF, FALSE);
+			return;
+		}
+
+
+	   // AFW-OEI 02/08/2007: If you have Epic Divine Might, your CHA bonus is doubled.
+		if (GetHasFeat(FEAT_EPIC_DIVINE_MIGHT, OBJECT_SELF, TRUE))
+		{
+			nCharismaBonus *= 2;
+		}
+		float fDur = RoundsToSeconds(nCharismaBonus+1);
+		int nDamage1 = IPGetDamageBonusConstantFromNumber(nCharismaBonus);
+
+		effect eDamage1 = EffectDamageIncrease(nDamage1,DAMAGE_TYPE_DIVINE);
+		effect eLink = EffectLinkEffects(eDamage1, eDur);
+		eLink = SupernaturalEffect(eLink);
+
+		// * Do not allow this to stack
+		RemoveEffectsFromSpell(OBJECT_SELF, GetSpellId());
+
+		//Fire cast spell at event for the specified target
+		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_MIGHT, FALSE));
+
+		//Apply Link and VFX effects to the target
+		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDur);
+		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+		DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
+		
+		//let the player know when divine might ends
+		DelayCommand(fDur, FloatingTextStringOnCreature("Divine Might fades", OBJECT_SELF, FALSE));
+			
         
-            int nDamage1 = IPGetDamageBonusConstantFromNumber(nCharismaBonus);
-
-            effect eDamage1 = EffectDamageIncrease(nDamage1,DAMAGE_TYPE_DIVINE);
-            effect eLink = EffectLinkEffects(eDamage1, eDur);
-            eLink = SupernaturalEffect(eLink);
-
-            // * Do not allow this to stack
-            RemoveEffectsFromSpell(oTarget, GetSpellId());
-
-            //Fire cast spell at event for the specified target
-            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_MIGHT, FALSE));
-
-            //Apply Link and VFX effects to the target
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCharismaBonus+1));
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        }
-
-        DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
-    }
+   // }
 }

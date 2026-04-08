@@ -43,6 +43,8 @@ void main()
 
 
     //Declare major variables
+	object oCaster = OBJECT_SELF;
+	if (GetIsObjectValid(GetSpellCastItem())) oCaster = GetItemActivator();
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect(VFX_DUR_SPELL_CHARM_PERSON);
     effect eCharm = EffectCharmed();
@@ -52,32 +54,27 @@ void main()
     effect eLink = EffectLinkEffects(eVis, eCharm);
 
     int nMetaMagic = GetMetaMagicFeat();
-    int nCasterLevel = PS_GetCasterLevel(OBJECT_SELF);
+    int nCasterLevel = PS_GetCasterLevel(oCaster);
     int nDC = GetSpellSaveDC();
 
 	//Has same SpellId as Charm Person, not an item, but returns no valid class -> it's racial ability
 	if (GetSpellId() == SPELL_CHARM_PERSON && !GetIsObjectValid(GetSpellCastItem()) && GetLastSpellCastClass() == CLASS_TYPE_INVALID)
 	{
-		nCasterLevel = PS_GetLevel(OBJECT_SELF);
+		nCasterLevel = PS_GetLevel(oCaster);
 		nDC = 10 + GetSpellLevel(SPELL_CHARM_PERSON) + GetAbilityModifier(ABILITY_CHARISMA);
 	}
 
     int nDuration = 2 + nCasterLevel/3;
-	int nSelfDuration = 15 + nCasterLevel;
     nDuration = GetScaledDuration(nDuration, oTarget);
     int nRacial = GetRacialType(oTarget);
     //Make Metamagic check for extend
     if (nMetaMagic == METAMAGIC_EXTEND)
     {
         nDuration *= 2;
-		nSelfDuration *= 2;
+		nCasterLevel *= 2;
     }
 	
-	string sName = GetFirstName(OBJECT_SELF);
-	string sLast = GetLastName(OBJECT_SELF);
-	if (sLast != "") sName += " " + sLast;
-	string sMessage = "";
-	if (oTarget == OBJECT_SELF){
+	if (oTarget == oCaster){
 		int nBonus = nCasterLevel;
 		if (nBonus > 10) nBonus = 10;
 		if (nMetaMagic == METAMAGIC_EMPOWER) nBonus += nBonus / 2;
@@ -85,25 +82,48 @@ void main()
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
 		eSkill = SetEffectSpellId( eSkill, SPELL_CHARM_PERSON);
-		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_CHARM_PERSON, FALSE));
-		PS_RemoveEffects(OBJECT_SELF, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, OBJECT_SELF);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, OBJECT_SELF, TurnsToSeconds(nSelfDuration));
-	} else if (GetIsPC(oTarget)){
-		if (!ResistCheck(oTarget, nDC, OBJECT_SELF)){
-			sMessage = sName + " has cast Charm Person on you but you are not IC aware of it.";
-			sMessage += "\nNote that this is NOT domination. It ONLY makes your character like" + sName + ".";
-			sMessage += "\nIf " +sName+ " does anything that would normally make someone dislike them, ";
-			sMessage += "you will dislike them. Your free will is unaffected.";
+		SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, FALSE));
+		PS_RemoveEffects(oCaster, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oCaster);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oCaster, HoursToSeconds(nCasterLevel));
+	} else if (GetIsPC(oTarget) && GetIsPC(oCaster)){
+		string sCasterMessage = "<c=red>";
+		string sTargetMessage = "<c=red>";
+		string sName = GetFirstName(oCaster);
+		string sLast = GetLastName(oCaster);
+		if (sLast != "") sName += " " + sLast;
+		string sTargetName = GetFirstName(oTarget);
+		string sTargetLast = GetLastName(oTarget);
+		if (sTargetLast != "") sTargetName += " " + sTargetLast;
+		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oCaster)){
+			sCasterMessage += sTargetName + " is immune to mind spells!";
+			sTargetMessage += sName + " tried to dominate you but you're immune.";
+		} else if (!ResistCheck(oTarget, nDC, oCaster) && 
+				MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oCaster, 1.0) < 1){
+			sCasterMessage += "You have succeeded in casting Charm Person on " + sTargetName + ".";
+			sCasterMessage += "\nNote that this is NOT domination. It ONLY makes " + sTargetName + " like you.";
+			sCasterMessage += "\nIf you do anything that would normally make someone dislike you, the effect will end.";
+			sCasterMessage += "\nTheir free will is unaffected.";
+			sTargetMessage += sName + " has cast Charm Person on you but you are not IC aware of it.";
+			sTargetMessage += "\nNote that this is NOT domination. It ONLY makes your character like" + sName + ".";
+			sTargetMessage += "\nIf " +sName+ " does anything that would normally make someone dislike them, ";
+			sTargetMessage += "you will dislike them. Your free will is unaffected.";
 		} else {
-			sMessage = sName + " has attempted to cast Charm Person on you but failed.";
-			sMessage += "\nNote that the spell would have made you like " +sName;
-			sMessage += " but not otherwise affected your free will, had it succeeded.";
-			sMessage += "\nThis information may guide roleplaying your reaction to the failed attempt.";
+			sTargetMessage += sName + " has attempted to cast Charm Person on you but failed.";
+			sTargetMessage += "\nNote that the spell would have made you like " +sName;
+			sTargetMessage += " but not otherwise affected your free will, had it succeeded.";
+			sTargetMessage += "\nThis information may guide roleplaying your reaction to the failed attempt.";
 		}
-		SendMessageToPC(oTarget, sMessage);
-	} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)){
+		sCasterMessage += "\n(Note that you cannot force RP upon another player. If they tell you they do not wish";
+		sCasterMessage += " to engage in RP related to your actions, you MUST retcon this use of domination and RP ";
+		sCasterMessage += "as if nothing happened, and you must not attempt it again.</c>";
+		sTargetMessage += "\nNote also that no one can force RP upon you. If you do not wish to RP this ";
+		sTargetMessage += "then tell " + sName + " that you do not wish to RP this and they MUST retcon ";
+		sTargetMessage += "their actions and you both must RP as if nothing happened.</c>";
+		SendMessageToPC(oCaster, sCasterMessage);
+		SendMessageToPC(oTarget, sTargetMessage);
+	} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CHARM_PERSON, FALSE));
+        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, TRUE));
 		//Verify that the Racial Type is humanoid
 		if  (GetIsPlayableRacialType(oTarget) ||
 			(nRacial == RACIAL_TYPE_HUMANOID_GOBLINOID) ||
@@ -111,10 +131,10 @@ void main()
 			(nRacial == RACIAL_TYPE_HUMANOID_ORC) ||
 			(nRacial == RACIAL_TYPE_HUMANOID_REPTILIAN))
 		{
-			if (!ResistCheck(oTarget, nDC, OBJECT_SELF))
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+			if (!ResistCheck(oTarget, nDC, oCaster))
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 		}
-    } else SendMessageToPC(OBJECT_SELF, "Invalid target");
+    } else SendMessageToPC(oCaster, "Invalid target");
 }
 
 int ResistCheck(object oTarget, int nDC, object oCaster){
@@ -132,4 +152,3 @@ int ResistCheck(object oTarget, int nDC, object oCaster){
 	return bResisted;
 }		
 	
-

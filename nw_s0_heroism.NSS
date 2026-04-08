@@ -39,8 +39,8 @@ void main()
 
 
     //Declare major variables
-    int nCasterLvl = GetCasterLevel(OBJECT_SELF);
-    float fDuration = TurnsToSeconds(nCasterLvl * 10);
+    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+    float fDuration = HoursToSeconds(nCasterLvl);
 
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);

@@ -1057,19 +1057,30 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 	if (iPRCLvl_Mal > 0) iChaBonus += d6(1);
 	int nDC 			= 10 + (nCharLevel / 2) + iChaBonus;
     nDuration = GetScaledDuration(nDuration, oTarget);
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DOMINATE_PERSON, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)){
+    SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, FALSE));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
+	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
+		SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, TRUE));
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
 			SendMessageToPC(oPC, "Target Immune");
-		else if (!MyResistSpell(OBJECT_SELF, oTarget)){
-			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, 1.0)){
+		else if (!MyResistSpell(oPC, oTarget)){
+			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oPC, 1.0)){
 				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));
 			}
-		}	
+		}
+	} else if (oTarget == oPC){
+		int nBonus = nCasterLevel;
+		if (nBonus > 10) nBonus = 10;
+		effect eSkill = EffectSkillIncrease(SKILL_BLUFF, nBonus);
+		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
+		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
+		eSkill = SetEffectSpellId( eSkill, SPELL_CHARM_PERSON);
+		SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_CHARM_PERSON, FALSE));
+		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
 	} else if (GetIsPC(oTarget)){
-		string sCasterMessage = "<c=red>" + GetFirstName(oTarget);
-		string sTargetMessage = "<c=red>" + GetFirstName(oPC);
+		string sCasterMessage = "<c=red>" + GetName(oTarget);
+		string sTargetMessage = "<c=red>" + GetName(oPC);
 		int bImmune = FALSE;
 		int bResist = FALSE;
 		int bSave = FALSE;
@@ -1079,11 +1090,18 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		} else if (MyResistSpell(oPC, oTarget) > 0 || 
 				MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oPC, 1.0) > 0){
 			sCasterMessage += " has resisted your domination effect!";
-			sTargetMessage += " tried to use a charm effect upon you but you resisted.";
+			sTargetMessage += " tried to use a domination effect upon you but you resisted.";
 		} else {
+			SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, TRUE));
 			sCasterMessage += " has succumbed to your dominating gaze!";
 			sTargetMessage += " has dominated you!";
 		}
+		sCasterMessage += "\n(Note that you cannot force RP upon another player. If they tell you they do not wish";
+		sCasterMessage += " to engage in RP related to your actions, you MUST retcon this use of domination and RP ";
+		sCasterMessage += "as if nothing happened, and you must not attempt it again.";
+		sTargetMessage += "\n(Note that you have the right to refuse to engage in RP of this kind. If you tell the ";
+		sTargetMessage += "player who cast Dominate upon you that you don't wish to RP this situation, they MUST retcon ";
+		sTargetMessage += "the attempt and both of you RP as if nothing happened.)";
 		SendMessageToPC(oPC, sCasterMessage + "</c>");
 		SendMessageToPC(oTarget, sTargetMessage + "</c>");
 	}
