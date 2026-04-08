@@ -1059,7 +1059,17 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
     nDuration = GetScaledDuration(nDuration, oTarget);
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
+	if (oTarget == oPC){
+		int nBonus = nCasterLevel;
+		if (nBonus > 10) nBonus = 10;
+		effect eSkill = EffectSkillIncrease(SKILL_BLUFF, nBonus);
+		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
+		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
+		eSkill = SetEffectSpellId( eSkill, nSpell);
+		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
+		PS_RemoveEffects(oPC, nSpell, EFFECT_TYPE_SKILL_INCREASE, oPC);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
+	} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
 		SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_DOMINATE_PERSON, TRUE));
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
 			SendMessageToPC(oPC, "Target Immune");
@@ -1068,16 +1078,6 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));
 			}
 		}
-	} else if (oTarget == oPC){
-		int nBonus = nCasterLevel;
-		if (nBonus > 10) nBonus = 10;
-		effect eSkill = EffectSkillIncrease(SKILL_BLUFF, nBonus);
-		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
-		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
-		eSkill = SetEffectSpellId( eSkill, SPELL_CHARM_PERSON);
-		SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_CHARM_PERSON, FALSE));
-		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
 	} else if (GetIsPC(oTarget)){
 		string sCasterMessage = "<c=red>" + GetName(oTarget);
 		string sTargetMessage = "<c=red>" + GetName(oPC);
