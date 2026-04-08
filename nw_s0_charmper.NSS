@@ -103,10 +103,12 @@ void main()
 			sCasterMessage += "\nIf you do anything that would normally make someone dislike you, the effect will end.";
 			sCasterMessage += "\nTheir free will is unaffected.";
 			sTargetMessage += sName + " has cast Charm Person on you but you are not IC aware of it.";
-			sTargetMessage += "\nNote that this is NOT domination. It ONLY makes your character like" + sName + ".";
+			sTargetMessage += "\nThis is NOT domination. It ONLY makes your character like" + sName + ".";
 			sTargetMessage += "\nIf " +sName+ " does anything that would normally make someone dislike them, ";
 			sTargetMessage += "you will dislike them. Your free will is unaffected.";
 		} else {
+			sCasterMessage += sTargetName + " has resisted your attempt to charm them.";
+			sCasterMessage += "\nThey are IC aware of the attempt.";
 			sTargetMessage += sName + " has attempted to cast Charm Person on you but failed.";
 			sTargetMessage += "\nNote that the spell would have made you like " +sName;
 			sTargetMessage += " but not otherwise affected your free will, had it succeeded.";
@@ -115,7 +117,7 @@ void main()
 		sCasterMessage += "\n(Note that you cannot force RP upon another player. If they tell you they do not wish";
 		sCasterMessage += " to engage in RP related to your actions, you MUST retcon this use of domination and RP ";
 		sCasterMessage += "as if nothing happened, and you must not attempt it again.</c>";
-		sTargetMessage += "\nNote also that no one can force RP upon you. If you do not wish to RP this ";
+		sTargetMessage += "\n(Note that no one can force RP upon you. If you do not wish to RP this effect ";
 		sTargetMessage += "then tell " + sName + " that you do not wish to RP this and they MUST retcon ";
 		sTargetMessage += "their actions and you both must RP as if nothing happened.</c>";
 		SendMessageToPC(oCaster, sCasterMessage);
