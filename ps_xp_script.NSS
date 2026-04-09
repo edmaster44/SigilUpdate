@@ -126,7 +126,7 @@ void main(){
 				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
 				sDebug += "\nParty XP Bonus: ";
 				float fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 100.0;
-				sDebug += PS_PrettyFloatString(PS_RoundDecimal(fVar)) + "%";
+				sDebug += PS_PrettyFloatString(fVar, 2) + "%";
 				sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
 				sDebug += "\nEnemy Data:\n";
 				sDebug += GetCreatureInfo(oDead, oMember);
