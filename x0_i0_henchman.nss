@@ -857,13 +857,13 @@ void RespawnHenchman(object oHench=OBJECT_SELF)
 
     // Resurrect
     DelayCommand(0.2,
-                 PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,
+                 ApplyEffectToObject(DURATION_TYPE_PERMANENT,
                                      EffectResurrection(),
                                      oHench));
 
     // Heal back to full hp
     DelayCommand(0.3,
-                 PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,
+                 ApplyEffectToObject(DURATION_TYPE_PERMANENT,
                                      EffectHeal(GetMaxHitPoints(oHench)),
                                      oHench));
 
@@ -916,7 +916,7 @@ void StopKeepingDead(object oHench=OBJECT_SELF)
 void PartialRes(object oHench)
 {
     RemoveEffects(oHench);
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oHench);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oHench);
 }
 
 // Raise and freeze henchman to 1 hp so s/he can be stabilized

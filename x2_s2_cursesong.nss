@@ -373,7 +373,7 @@ void main()
 
     //if(!GetHasFeatEffect(871, oTarget)&& !GetHasSpellEffect(GetSpellId(),oTarget))
     //{
-    //    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur2, OBJECT_SELF, RoundsToSeconds(nDuration));
+    //    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur2, OBJECT_SELF, RoundsToSeconds(nDuration));
     //}
     float fDelay;
     while(GetIsObjectValid(oTarget))
@@ -387,20 +387,20 @@ void main()
                 {
                     if (nHP > 0)
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_SPELL_SONIC), oTarget);
-                        DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHP, oTarget));
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_SPELL_SONIC), oTarget);
+                        DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHP, oTarget));
                     }
 
                     if (!GetIsDead(oTarget))
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-                        //DelayCommand(GetRandomDelay(0.1,0.5),PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                        //DelayCommand(GetRandomDelay(0.1,0.5),ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                    }
                 }
             }
             else
             {
-                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT), oTarget);
+                   ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT), oTarget);
             }
         }
 

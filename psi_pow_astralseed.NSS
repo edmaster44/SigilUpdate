@@ -64,7 +64,7 @@ void main()
         if(manif.bExtend) fDuration *= 2;
 
 
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSeed, oTarget, fDuration);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSeed, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

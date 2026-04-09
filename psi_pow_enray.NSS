@@ -126,7 +126,7 @@ void main()
 
             // Shoot the ray
             eRay = EffectBeam(nBeam, oManifester, BODY_NODE_HAND, !(nTouchAttack > 0));
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7f);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7f);
 
             if(nTouchAttack > 0)
             {
@@ -146,7 +146,7 @@ void main()
 		                nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
 		            }
 					effect eDamage = EffectDamage(nDamage, nDamageType);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
                 }// end if - SR check
             }// end if - Touch attack hit
         }// end for - Twin Power

@@ -35,7 +35,7 @@ void PS_Balance_InsightfulDefense(object oPC, int nSpell)
 	{
    		RemoveEffectsFromSpell(oPC, GetSpellId());
 		RemoveEffectsFromSpell(oPC, 2502);
-   		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+   		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
    	}
  	else
 	{
@@ -67,7 +67,7 @@ void PS_Spell_NegateConcealment(object oPC, location lTarget, int nSpell)
 		{	if(!MyResistSpell(OBJECT_SELF, oTarget))
 			{	RemoveEffectsFromSpell(oTarget, nSpell);
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-				PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+				ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 			}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lTarget, FALSE, OBJECT_TYPE_CREATURE);
@@ -104,8 +104,8 @@ void PS_Spell_MassSanctuary(object oPC, int nSpell)
    			RemoveEffectsFromSpell(oTarget, SPELL_SANCTUARY);
    			RemoveEffectsFromSpell(oTarget, nSpell);
 
-    		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+    		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			nCount --;
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -152,25 +152,25 @@ void PS_Spell_WeighedInTheBalance(object oPC, int nSpell)
 				eHealCenter	= EffectHeal(nHealCenter);
 			
 				if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamUndead, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamUndead, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_GOOD && nLawChaos == ALIGNMENT_LAWFUL)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_GOOD && nLawChaos == ALIGNMENT_CHAOTIC)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_EVIL && nLawChaos == ALIGNMENT_LAWFUL)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_EVIL && nLawChaos == ALIGNMENT_CHAOTIC)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCorner, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_GOOD && nLawChaos == ALIGNMENT_NEUTRAL)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_EVIL && nLawChaos == ALIGNMENT_NEUTRAL)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_NEUTRAL && nLawChaos == ALIGNMENT_LAWFUL)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
 				else if (nGoodEvil == ALIGNMENT_NEUTRAL && nLawChaos == ALIGNMENT_CHAOTIC)
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamEdge, oTarget);	}
 				else
-				{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealCenter, oTarget);	}
+				{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealCenter, oTarget);	}
 			}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -209,7 +209,7 @@ void PS_Spell_Demonflesh(object oPC, object oTarget, int nSpell)
 	if ((GetRacialType(oTarget) == RACIAL_TYPE_OUTSIDER) && (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL))
 	{	SendMessageToPC(oTarget,"This spell has no effect upon evil Outsiders.");	}
 	else
-	{	PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);	}
+	{	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);	}
 }
 
 void PS_Spell_Hellfire(object oPC, location lTarget, int nSpell)
@@ -241,9 +241,9 @@ void PS_Spell_Hellfire(object oPC, location lTarget, int nSpell)
                     {	nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
                     if(nDamage > 0)
-                    {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDark, oTarget));	}
+                    {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDark, oTarget));	}
                  }
              }
         }
@@ -280,9 +280,9 @@ void PS_Spell_HellfireStorm(object oPC, location lTarget, int nSpell)
                     {	 nDamage = nDamage + nDamage / 2;	}
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
                     if(nDamage > 0)
-                    {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDark, oTarget));	}
+                    {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDark, oTarget));	}
                  }
              }
         }
@@ -356,7 +356,7 @@ void PS_Celestial_CelestialGlory(object oPC, int nSpell)
 		eLink		= EffectLinkEffects(eLink, eDur);
     eLink = SupernaturalEffect(eLink);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
+   	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
 }
 
 void PS_Arboreal_WhirlingFury(object oPC, int nSpell)
@@ -372,7 +372,7 @@ void PS_Arboreal_WhirlingFury(object oPC, int nSpell)
 		eLink 		= EffectLinkEffects(eLink, eDur);
 	    eLink 		= SupernaturalEffect(eLink);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
+   	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
 }
 
 void PS_Demonic_AbyssalFrenzy(object oPC, int nSpell)
@@ -392,7 +392,7 @@ void PS_Demonic_AbyssalFrenzy(object oPC, int nSpell)
 		eLink 		= EffectLinkEffects(eLink, eDur);
 	    eLink = SupernaturalEffect(eLink);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
+   	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
 }
 
 void PS_Diabolic_InfernalDeceit(object oPC, int nSpell)
@@ -412,7 +412,7 @@ void PS_Diabolic_InfernalDeceit(object oPC, int nSpell)
 		eLink		= EffectLinkEffects(eLink, eDur);
 	    eLink		= SupernaturalEffect(eLink);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
+   	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds (nDuration));
 }
 
 void PS_Spell_WretchedBlight(object oPC, location lTarget, int nSpell)
@@ -449,18 +449,18 @@ void PS_Spell_WretchedBlight(object oPC, location lTarget, int nSpell)
 				if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_GOOD)	
                 {	int nSave = FortitudeSave( oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC);                
 					if ( nSave == 0 ) // Saving Throw failed
-					{	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                		DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, fDur));
-                		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	}
+					{	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                		DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, fDur));
+                		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	}
 					else if ( nSave == 1 )
-					{	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	}
+					{	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	}
 				}
              	else if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_NEUTRAL)	
                 {	int nSave = FortitudeSave( oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC );                
 					eDam = EffectDamage(nDamage/2, DAMAGE_TYPE_DIVINE);
-                	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 				}
 			}
         }
@@ -522,13 +522,13 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 	
 	            effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
     			effect eVis = EffectVisualEffect( VFX_HIT_SPELL_SEARING_LIGHT );
-	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-	            DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	            DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 	        }
 		}
     }
     effect eRay = EffectBeam(VFX_BEAM_HOLY, OBJECT_SELF, BODY_NODE_HAND);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }
 
 void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
@@ -559,11 +559,11 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
 				if (GetAlignmentGoodEvil(oTarget) == ALIGNMENT_EVIL)	
                 {	
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-					DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 					if (!FortitudeSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oPC) &&
 						!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oPC))
-							DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget));
+							DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlind, oTarget));
 				}
              }
         }
@@ -597,11 +597,11 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
         if (!MyResistSpell(oPC, oFirstTarget))
         {	eDamage = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
             if(nDamStrike > 0)
-            {   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);	}
+            {   ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);	}
         }
     }
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
     eLightning = EffectBeam(VFX_BEAM_LIGHTNING, oFirstTarget, BODY_NODE_CHEST);
     float fDelay = 0.2;
     int nCnt = 0;
@@ -609,7 +609,7 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, GetLocation(oFirstTarget), TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget) && nCnt < (nCasterLevel)/2)
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && oTarget != oPC)
-        {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+        {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
             SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
@@ -621,8 +621,8 @@ void PS_Spell_HeavenlyLightning(object oPC, object oFirstTarget, int nSpell)
                 nDamStrike = nDamage;
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_DIVINE);
                 if(nDamStrike > 0) //age > 0)
-                {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));	}
+                {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));	}
             }
             oHolder = oTarget;
             if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
@@ -667,11 +667,11 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
         if (!MyResistSpell(OBJECT_SELF, oFirstTarget))
         {	eDamage = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
             if(nDamStrike > 0)
-            {	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);	}
+            {	ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);	}
         }
     }
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
     eLightning = EffectBeam(VFX_BEAM_LIGHTNING, oFirstTarget, BODY_NODE_CHEST);
     float fDelay = 0.2;
     int nCnt = 0;
@@ -679,7 +679,7 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oFirstTarget), TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget) && nCnt < (nCasterLevel))
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC) && oTarget != oPC)
-        {   DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+        {   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_CHAIN_LIGHTNING));
             //Do an SR check
             if (!MyResistSpell(oPC, oTarget, fDelay))
@@ -691,8 +691,8 @@ void PS_Spell_HeavenlyLightningStorm(object oPC, object oFirstTarget, int nSpell
                 nDamStrike = nDamage;
                 eDamage = EffectDamage(nDamStrike, DAMAGE_TYPE_DIVINE);
                 if(nDamStrike > 0) //age > 0)
-                {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));	}
+                {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));	}
             }
             oHolder = oTarget;
             if (GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
@@ -751,7 +751,7 @@ void PS_Wrath_RetributiveStrike(object oPC, int nSpell)
 	effect eVis			= EffectNWN2SpecialEffectFile("sp_frightful_hit", oTarget);
 	effect eLink		= EffectLinkEffects(eDamage, eVis);
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 	DecrementRemainingFeatUses(oPC, FEAT_TURN_UNDEAD);
 }
 
@@ -780,17 +780,17 @@ void PS_Entropy_EntropicBolt(object oPC, object oTarget, int nSpell)
 		{	int iSave = MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC());
 			if(iSave = 2)
 			{	eLink = EffectLinkEffects(eUnresi, eVFX);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
 			else if (iSave = 1)
 			{	eNormal = EffectDamage(nDamage / 2, DAMAGE_TYPE_SONIC, DAMAGE_POWER_NORMAL);
 				eLink = EffectLinkEffects(eNormal, eUnresi);
 				eLink = EffectLinkEffects(eLink, eVFX);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
 			else
 			{	eNormal = EffectDamage(nDamage, DAMAGE_TYPE_SONIC, DAMAGE_POWER_NORMAL);
 				eLink = EffectLinkEffects(eNormal, eUnresi);
 				eLink = EffectLinkEffects(eLink, eVFX);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	}
 		}
 	}
 }
@@ -813,7 +813,7 @@ void PS_Spell_RadiantShield(object oPC, int nSpell)
     if (GetHasSpellEffect(nSpell, oPC))
     {	RemoveSpellEffects(nSpell, oPC, oPC);	}
 
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 }
 
 // Helper function for PS_Spell_VengeanceHalo
@@ -830,15 +830,15 @@ void PS_VengeanceHaloContingency(object oTarget, int nDuration, int nLevel, int 
 	{	if (GetIsDead (oTarget))
 		{	DeleteLocalInt(oTarget, "HaloVeng");
 			if (!MyResistSpell(oTarget, oKiller))
-			{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBeam, oTarget);
+			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eBeam, oTarget);
 				if (MySavingThrow(SAVING_THROW_REFLEX, oKiller, nSaveDC) == 1)
 				{	eVengeance	= EffectDamage(nDam/2, DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL);
 					eVengeance	= EffectLinkEffects(eVengeance, eImpact);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVengeance, oKiller);	}
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVengeance, oKiller);	}
 				else
 				{	eVengeance	= EffectDamage(nDam, DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL);
 					eVengeance	= EffectLinkEffects(eVengeance, eImpact);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVengeance, oKiller);	}
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVengeance, oKiller);	}
 			}
 		}
 	}
@@ -862,7 +862,7 @@ void PS_Spell_VengeanceHalo(object oPC, object oTarget, int nSpell)
 	{	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 		PS_Timestamp_UNIX(oTarget, "HaloVeng");
 		
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHalo, oTarget, fDuration);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHalo, oTarget, fDuration);
 		AssignCommand(oTarget, PS_VengeanceHaloContingency(oTarget, nDuration, nLevel, nSaveDC));
 	}	
 }
@@ -912,17 +912,17 @@ void PS_Spell_LastJudgment(object oPC, object oTarget, int nSpell)
 	
 	if (!PS_GetIsLastJudgmentTarget(oPC))
 	{	SendMessageToPC(oPC, "Last Judgment only effects evil humanoids, monstrous humanoids, and giants.");
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
 		return;	}	
 	
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		if (!MyResistSpell(oPC, oTarget))
-		{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+		{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
 			if (!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DEATH))
-			{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);	}
+			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);	}
 			else
-			{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDrain, oTarget);	}
+			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDrain, oTarget);	}
 		}
 	}
 }
@@ -945,15 +945,15 @@ void PS_Spell_RayOfExhaustion(object oPC, object oTarget, int nSpell)
     			int nMetaMagic = GetMetaMagicFeat();
                 if (nMetaMagic == METAMAGIC_EXTEND)
                 {	nDuration = nDuration * 2;	}
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
 				if (!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NEGATIVE))
-				{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eExhaust, oTarget, TurnsToSeconds(nDuration));	}
+				{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eExhaust, oTarget, TurnsToSeconds(nDuration));	}
 				else
-				{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, oTarget, TurnsToSeconds(nDuration));	}
+				{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFatigue, oTarget, TurnsToSeconds(nDuration));	}
 			}
         }
  	    effect eRay = EffectBeam(VFX_BEAM_NECROMANCY, oPC, BODY_NODE_HAND);
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
     }
 }
 

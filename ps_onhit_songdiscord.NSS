@@ -73,10 +73,10 @@ void main()
                    //Apply linked effect and VFX Impact
                    nDuration = GetScaledDuration( nCasterLevel, oTarget );
 
-                   DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds( nDuration ) ));
+                   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds( nDuration ) ));
 				   string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> enchants "+GetName(oTarget)+"</color>";
 				   DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
-                   //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                   //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 }
             }
         }

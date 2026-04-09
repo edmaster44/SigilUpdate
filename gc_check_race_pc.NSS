@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // gc_check_race_pc
 //
 // returns TRUE if the PC speaker's race corresponds with the race specified.

@@ -144,9 +144,9 @@ if (!GetIsImmune(oTarget, IMMUNITY_TYPE_DEAFNESS))
 	eCharge = EffectLinkEffects(EffectDeaf(), eCharge);
 eCharge = SetEffectSpellId(eCharge, 100);
 AssignCommand(OBJECT_SELF, PlaySound("c_dragred_bat1"));
-AssignCommand(OBJECT_SELF, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCharge, OBJECT_SELF, 12.0));
+AssignCommand(OBJECT_SELF, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCharge, OBJECT_SELF, 12.0));
 effect eDust = EffectNWN2SpecialEffectFile("fx_dirt_puff.sef");
-PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDust, OBJECT_SELF, 6.0);
+ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDust, OBJECT_SELF, 6.0);
 SetLocalObject(OBJECT_SELF, "Charge", oTarget);
 DelayCommand(0.1, ActionForceFollowObject(oTarget, 1.0));
 DelayCommand(12.0, SetCollision(OBJECT_SELF, 1));

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*This Function was provided by Skywing in an attempt to Fix the crashing by conversation*/
 
 void ActionStartConversationSafe(object oObjectToConverseWith, string sDialogResRef="", int bPrivateConversation=FALSE, int bPlayHello=TRUE, int bIgnoreStartDistance=FALSE, int bDisableCutsceneBars=FALSE)

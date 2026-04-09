@@ -33,14 +33,14 @@ return;}
 		{	nDmg = nKnight * iChaBonus* 2;
 			
 			eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, TRUE);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
-			DelayCommand(0.1,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
+			DelayCommand(0.1,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 		}
 		else if (nAttack == 1)
 		{	nDmg = nKnight * iChaBonus;	
 			eDamage = EffectDamage(nDmg, nType, DAMAGE_POWER_NORMAL, TRUE);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
-			DelayCommand(0.1,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
+			DelayCommand(0.1,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 		}
 		else 
 		{	SendMessageToPC(oPC, "Your attack missed!");

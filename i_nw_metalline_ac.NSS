@@ -50,7 +50,7 @@ break;
 }//end switch
 string sDesc = "The wielder can alter the composition of a metalline weapon from one kind of metal to another once per round. The weapon transmutes in turn into adamantine, cold iron, steel and alchemical silver, cycling back to adamantine again. It is currently comprised of "+sSuffix+".";
 
-PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile("sp_transmutation_conjure.sef"), oUser);
+ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile("sp_transmutation_conjure.sef"), oUser);
 SendMessageToPC(oUser, "<i>Transmuting into "+sSuffix);
 SetDescription(oItem, sDesc);
 SetLocalInt(oItem, "Mat", iNewMat);

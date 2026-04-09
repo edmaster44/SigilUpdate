@@ -59,5 +59,5 @@ void main()
     
 
     //Apply the VFX impact and effects
-	PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

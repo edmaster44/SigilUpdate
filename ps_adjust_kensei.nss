@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Script to give Kensei feats associated with their signature weapon without having
 // to check for normal qualifications (ex: fighter levels for Greater Weap Focus
 // -FlattedFifth, Jan 30, 2026

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //Makes the named target come running to the box

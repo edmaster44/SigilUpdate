@@ -61,18 +61,18 @@ void main()
             //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.
             nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_COLD);
 
-            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
             if(nDamage > 0)
             {
             	//Set damage effect
             	eDam = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
                 //Apply the VFX impact and effects
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
             }
         }
         //Get next target in spell area
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE);
     }
 	fMaxDelay += 0.5;
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 }

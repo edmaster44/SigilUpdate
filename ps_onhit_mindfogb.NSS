@@ -55,6 +55,6 @@ void main()
     if(bValid == TRUE)
     {
         //Apply the new temporary version of the effect
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
     }
 }

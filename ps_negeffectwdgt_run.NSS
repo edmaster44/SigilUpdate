@@ -69,7 +69,7 @@ void  main (int effectid, int duration)
 	}
 
 	effect eLinkedEffect = ExtraordinaryEffect(theEffect);
-	PS_ApplyEffectToObject (durType, eLinkedEffect, oPC, theDuration);
+	ApplyEffectToObject (durType, eLinkedEffect, oPC, theDuration);
 }
 
 

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: x0_s2_fiend
 //:: Copyright (c) 2001 Bioware Corp.

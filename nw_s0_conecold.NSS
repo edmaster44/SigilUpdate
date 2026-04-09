@@ -102,8 +102,8 @@ void main()
                     if(nDamage > 0)
                     {
                         //Apply delayed effects
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCold, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCold, oTarget));
                     }
                 }
             }
@@ -113,5 +113,5 @@ void main()
     }
 	fMaxDelay += 0.5f;
 	effect eCone = EffectVisualEffect(VFX_DUR_CONE_ICE);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 }

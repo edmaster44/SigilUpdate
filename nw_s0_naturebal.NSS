@@ -81,8 +81,8 @@ void main()
               }
               eHeal = EffectHeal(nRand);
               //Apply heal effects
-              DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
-              DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+              DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
+              DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
         else
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
@@ -112,8 +112,8 @@ void main()
                       eSR = EffectSpellResistanceDecrease(nRand);
                       effect eLink = EffectLinkEffects(eSR, eDur);
                       //Apply reduce SR effects
-                      DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-                      DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+                      DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+                      DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
                 }
             }
         }

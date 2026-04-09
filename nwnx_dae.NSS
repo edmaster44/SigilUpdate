@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //  Constants
 const string XP_DAE_PLUGIN_NAME	= "DAE";
 

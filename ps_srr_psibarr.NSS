@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Psionic Inertial Barrier
 //:: x2_s1_psibarr.nss
@@ -45,7 +45,7 @@ void main()
     //Apply the VFX impact and effects
     if (!GetHasSpellEffect(GetSpellId(),OBJECT_SELF))
     {
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(GetTotalLevels(oPC, TRUE)));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(GetTotalLevels(oPC, TRUE)));
     }
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
 }

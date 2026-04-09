@@ -60,7 +60,7 @@ void main()
     }
     effect eVis = EffectVisualEffect(VFX_IMP_FLAME_S);
     effect eRay = EffectBeam(VFX_BEAM_FIRE_LASH, OBJECT_SELF, BODY_NODE_HAND);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
     {
@@ -73,8 +73,8 @@ void main()
             if(nDamage > 0)
             {
                 //Apply the VFX impact and effects
-                DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
             }
         }
     }

@@ -191,7 +191,7 @@ void ApplyCombatMods(object oPC, int nAPR, int nAB){
 		else if (nAPR < -5) nAPR = -5;
 		effect eAPR = EffectModifyAttacks(nAPR);
 		eAPR = SetEffectSpellId(eAPR, COMBAT_MODS_FX);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAPR, oPC, 0.0, COMBAT_MODS_FX);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAPR, oPC);
 
 	}
 	if (nAB != 0){
@@ -199,7 +199,7 @@ void ApplyCombatMods(object oPC, int nAPR, int nAB){
 		if (nAB > 0) eAB = EffectAttackIncrease(nAB);
 		else eAB = EffectAttackDecrease(nAB * -1); // accepts a positive integer for the nerf
 		eAB = SetEffectSpellId(eAB, COMBAT_MODS_FX);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAB, oPC, 0.0, COMBAT_MODS_FX);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAB, oPC);
 	}
 }
 

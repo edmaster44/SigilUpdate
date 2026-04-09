@@ -67,13 +67,13 @@ void main()
 		            //Set up the damage effect
 		            eDam = EffectDamage(nDamage, DAMAGE_TYPE_COLD);
 					//Trigger visual regardless of if damage is done
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget, oTarget);            
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisTarget, oTarget);            
 		            if(nDamage > 0)
 		            {
 		                //Apply damage effect
-		                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+		                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 						if (!GetIsImmune(oTarget, IMMUNITY_TYPE_NEGATIVE_LEVEL) && FortitudeSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP, oCaster) == SAVING_THROW_CHECK_FAILED) {
-							DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrainLink, oTarget));
+							DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrainLink, oTarget));
 						}
 		            }
 				}

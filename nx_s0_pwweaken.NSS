@@ -124,22 +124,22 @@ void main()
 				{
 					fDuration	=	ApplyMetamagicDurationMods(RoundsToSeconds(d4()));
 					
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 				}
 				else if (nTargetHP > iTargetHPLow)
 				{
 					fDuration	=	ApplyMetamagicDurationMods(TurnsToSeconds(d4()));
 					
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 				}
 				else
 				{
-					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 				}
 			}

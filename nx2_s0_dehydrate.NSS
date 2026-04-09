@@ -87,7 +87,7 @@ void main()
 		{
 			if (!MyResistSpell(oCaster, oTarget) && !FortitudeSave(oTarget, GetSpellSaveDC()))
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 			}
 				//Fire cast spell at event for the specified target
 	    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), TRUE));

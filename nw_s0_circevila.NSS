@@ -34,6 +34,6 @@ void main()
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MAGIC_CIRCLE_AGAINST_EVIL, FALSE));
 
         //Apply the VFX impact and effects
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
      }
 }

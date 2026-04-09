@@ -37,15 +37,15 @@ void main()
 		nSave		= ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD, GetAreaOfEffectCreator() );
 		
 		if (oTarget == GetAreaOfEffectCreator())
-		{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	}
+		{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	}
 		else
 		{	if (nSave == 2)
 			{	return;	}
 			else if (nSave == 1)
-			{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget));	}
+			{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget));	}
 			else
-        	{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-            	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, TurnsToSeconds(1)));	}
+        	{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+            	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, TurnsToSeconds(1)));	}
 		}
     }
 }

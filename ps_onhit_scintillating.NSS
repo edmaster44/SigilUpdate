@@ -80,10 +80,10 @@ void main()
                 if(nDamage > 0)
                 {
                     // Apply effects to the currently selected target.
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                     //This visual effect is applied to the target object not the location as above.  This visual effect
                     //represents the flame that erupts on the target not on the ground.
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 					DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
                 }

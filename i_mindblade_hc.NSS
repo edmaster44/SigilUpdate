@@ -48,11 +48,11 @@ void main()
 			effect entangle = EffectEntangle();
 			effect vfx = EffectVisualEffect(VFX_DUR_ENTANGLE);
 			effect link = ExtraordinaryEffect(EffectLinkEffects(entangle, vfx));
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, link, oTarget, RoundsToSeconds(2)); 
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, link, oTarget, RoundsToSeconds(2)); 
 		}
 		else
 		{
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectMovementSpeedDecrease(50)), oTarget, RoundsToSeconds(1));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectMovementSpeedDecrease(50)), oTarget, RoundsToSeconds(1));
 		}
 		
 		SetLocalInt(oPC, VAR_WINGCLIP, FALSE);
@@ -78,14 +78,14 @@ void main()
 			STR = 5;
 			
 		effect bonus = ExtraordinaryEffect(EffectAbilityIncrease(ABILITY_STRENGTH, STR));
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, bonus, oPC, RoundsToSeconds(10));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, bonus, oPC, RoundsToSeconds(10));
 	}
 	
 	// Apply One Thousand Cuts
 	if (GetHasFeat(FEAT_ONE_THOUSAND_CUTS, oPC))
 	{
 		int cuts = GetLocalInt(oTarget, VAR_CUT_COUNT) + 1;
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(cuts / 2, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE), oTarget, 0.0f);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(cuts / 2, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE), oTarget, 0.0f);
 		SetLocalInt(oTarget, VAR_CUT_COUNT, cuts);
 	}
 	
@@ -99,7 +99,7 @@ void main()
 			// DEBUG
 			// SendMessageToPC(oPC, "Delerium Strikes applied : " + IntToString(missChance) + "%");
 			effect penalty = ExtraordinaryEffect(EffectMissChance(missChance));
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, penalty, oTarget, RoundsToSeconds(3));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, penalty, oTarget, RoundsToSeconds(3));
 		}
 	}
 	
@@ -113,7 +113,7 @@ void main()
 		if (!ReflexSave(oTarget, DC))
 		{
 			effect knockdown = EffectKnockdown();
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, knockdown, oTarget, RoundsToSeconds(1));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, knockdown, oTarget, RoundsToSeconds(1));
 		}
 			
 		SetLocalInt(oTarget, VAR_MIND_CRUSH, TRUE);

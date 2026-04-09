@@ -61,7 +61,7 @@ void main()
         //if ( ResistSpell(oCreator ,oTarget) != 2 )
         {
             //Fire cast spell at event for the specified target
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
         }
     }
 

@@ -47,7 +47,7 @@ void main()
 				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 54))
                 {
                     //Apply the linked effects and the VFX impact
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));
 					string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> frightens "+GetName(oTarget)+"</color>";
 					DelayCommand(fDelay, SendMessageToPC(oCaster, report));
                 }

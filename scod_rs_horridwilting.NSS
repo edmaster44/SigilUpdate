@@ -91,10 +91,10 @@ void main()
 	                    //Set the damage effect
 	                    eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
 	                    // Apply effects to the currently selected target.
-	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	                    //This visual effect is applied to the target object not the location as above.  This visual effect
 	                    //represents the flame that erupts on the target not on the ground.
-	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	                }
 	             }
 	        }

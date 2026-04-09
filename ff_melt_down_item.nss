@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // This script destroys a selected craftable item and gives a metal ingot. It is called in the

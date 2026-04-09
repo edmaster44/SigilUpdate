@@ -113,7 +113,7 @@ void main()
 		//cycle back to the next target
 		oTarget		=	GetNextObjectInShape(SHAPE_SPHERE, 15.0, lLocation, FALSE);
 	}
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, 3.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, 3.0);
 }
 
 void FreezeDamage(int nDam, effect eFreeze, object oTarget, float fDuration)
@@ -124,8 +124,8 @@ void FreezeDamage(int nDam, effect eFreeze, object oTarget, float fDuration)
 
     SetImmortal(oTarget, TRUE); //spell should never kill creatures
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fDuration);
 
     if (!bPlotImmortal) //remove immortality only from targets that were not immortal before spell is cast
     {
@@ -136,6 +136,6 @@ void FreezeDamage(int nDam, effect eFreeze, object oTarget, float fDuration)
     int nHP = GetCurrentHitPoints(oTarget);
     if (nHP <= 10)
     {
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFreeze, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFreeze, oTarget, fDuration);
     }
 }

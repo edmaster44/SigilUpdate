@@ -48,7 +48,7 @@ void PS_Ability_GiantStride(object oPC, int iLevel, int iClass, int nSpell)
 	if (!GetHasSpellEffect(nSpell, oPC))
 	{	effect eSpeed = EffectMovementSpeedIncrease(iSpeed);
 			eSpeed = ExtraordinaryEffect(eSpeed);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpeed, oPC);
 		SendMessageToPC(oPC, "Speed increased by " + IntToString(iSpeed) + "%.");	}
 }
 
@@ -62,7 +62,7 @@ void PS_Ability_DevaAura(object oPC, int nSpell)
 		effect eSpell 	= EffectSpellLevelAbsorption(3, 0);
 		effect eLink 	= EffectLinkEffects(eAOE, eSpell);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, 1446, FALSE));
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	}
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	}
 }
 
 void PS_Ability_AstralDevaWeapon(object oPC, int nSpell)
@@ -132,13 +132,13 @@ void PS_Ability_DeliveranceFromDeath(object oPC)
 		effect eAbil 	= EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE);
 		effect eLink	= EffectLinkEffects(eDeath,eAbil);
 			eLink = SupernaturalEffect(eLink);		
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}	}
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}	}
 		
 void PS_Ability_HeavenlyDeflection(object oPC)
 {
     effect eShield =  EffectConcealment(30, MISS_CHANCE_TYPE_VS_RANGED);
 		eShield = SupernaturalEffect(eShield);		
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShield, oPC);		}
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShield, oPC);		}
 	
 void PS_Ability_TroglodyteHide(object oPC, int nSpell)
 {
@@ -147,7 +147,7 @@ void PS_Ability_TroglodyteHide(object oPC, int nSpell)
 		effect eSelf = EffectSpellImmunity(1662);
 			eHide = EffectLinkEffects(eHide, eSelf);
 			eHide = ExtraordinaryEffect(eHide);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHide, oPC);	}
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHide, oPC);	}
 }
 	
 void PS_Ability_TroglodyteStench(object oPC, int nSpell)
@@ -165,14 +165,14 @@ void PS_Ability_TroglodyteStench(object oPC, int nSpell)
 	int nDC 		= 12 + (iLevel / 3);
 
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oPC));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCloud, oPC, 10.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCloud, oPC, 10.0f);
     while(GetIsObjectValid(oTarget))
     {  	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_GHAST_STENCH));
  			if(!MyResistSpell(oPC, oTarget, fDelay))
             {	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_POISON) && GetSubRace(oTarget) != RACIAL_SUBTYPE_TROGLODYTE)
-				{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));	}
+				{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));	}
 	}	}	
 	//Get next target in spell area
 	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oPC));	}
@@ -186,7 +186,7 @@ void PS_Ability_TrollRegeneration(object oPC, int nSpell)
 			iBonus		= iBonus + 2;
 		effect eRegen	= EffectRegenerate(iBonus, 6.0f);
 			eRegen		= ExtraordinaryEffect(eRegen);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
 }
 
 void PS_Ability_BaatezuBlindsight(object oPC, int nSpell)
@@ -203,12 +203,12 @@ void PS_Ability_BaatezuBlindsight(object oPC, int nSpell)
 	eSightInvis = SupernaturalEffect(eSightInvis);
 	eSightInvis = SetEffectSpellId(eSightInvis, nSpell);
 	PS_RemoveEffects(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSightInvis, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSightInvis, oPC);
 	// It's permanent AND has a duration? 
 	//SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_BLINDSIGHT, FALSE));
 	//float fDuration = TurnsToSeconds(GetCasterLevel(OBJECT_SELF));
 	//RemovePermanencySpells(oTarget);
-	//PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, fDuration);	
+	//ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC, fDuration);	
 }
 
 void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
@@ -237,7 +237,7 @@ void PS_Ability_AvarielMindOverBody(object oPC, int nSpell)
 			// input is not greater than 0.
 			effect eHP = EffectBonusHitpoints(iBonus);
 			eHP = ExtraordinaryEffect(eHP);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHP, oPC);		
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHP, oPC);		
 		}
 	}
 }
@@ -336,17 +336,17 @@ int iDefenderCheck = iDefenderStr > iDefenderDex ? iDefenderStr : iDefenderDex;
                     effect eLink    = EffectLinkEffects(eRoped, eVis);
                      eLink    = EffectLinkEffects(eLink, eHidePen);
                      eLink    = EffectLinkEffects(eLink, eMovePen);
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(4));
                     SpeakString(GetFirstName(oPC) + " flings their rope at " + GetFirstName(oTarget) + " and entangles them!");    }    
                     
                 else 
                 {   effect eFail = EffectMovementSpeedDecrease (50);
                     SendMessageToPC(oPC, "FAILURE!"); // here you log failure
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFail, oTarget, RoundsToSeconds(2));
                     SpeakString(GetFirstName(oTarget) + " broke free of the attempted ensnarement!"); }
         
     effect eRay = EffectBeam(VFX_BEAM_ABJURATION, OBJECT_SELF, BODY_NODE_HAND);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }  
 
 
@@ -361,7 +361,7 @@ void PS_Ability_ErinyesDR(object oPC, int nSpell)
 	effect eDR		= EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
 		eDR		= ExtraordinaryEffect(eDR);
 		
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
 }
 
@@ -378,7 +378,7 @@ void PS_Ability_BrachinaRegeneration(object oPC, int nSpell)
 		{	iBonus = 1;	}
 		effect eRegen	= EffectRegenerate(iBonus, 6.0f);
 			eRegen		= ExtraordinaryEffect(eRegen);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}
 
 }
 
@@ -395,11 +395,11 @@ void PS_Ability_BrachinaDR(object oPC, int nSpell)
 
 	if (iLevel >= 10)		
 	{	eGood = ExtraordinaryEffect(eGood);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good and " + IntToString(iDR) + "/silver applied.");	}
 	else
 	{	eSilver = ExtraordinaryEffect(eSilver);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSilver, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSilver, oPC);
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/silver applied.");	}
 }
 
@@ -426,9 +426,9 @@ void PS_Ability_SuccubusDrainingKiss(object oPC, object oTarget, int nSpell)
 		
     if (iTouch > 0)
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
-    	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrain, oTarget);	
+    	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDrain, oTarget);	
 		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, iSave, SAVING_THROW_TYPE_MIND_SPELLS) && AmIAHumanoid(oTarget) == TRUE)
-		{	DelayCommand(0.2f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDom, oTarget, fDur));	}
+		{	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDom, oTarget, fDur));	}
 }	}
 
 void PS_Ability_SuccubusDR(object oPC, int nSpell)
@@ -440,7 +440,7 @@ void PS_Ability_SuccubusDR(object oPC, int nSpell)
 	effect eDR		= EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
 		eDR		= ExtraordinaryEffect(eDR);
 		
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
 }
 
@@ -526,7 +526,7 @@ void PS_Ability_DriderAffinities(object oPC, int nSpell)
 		effect eMove = EffectSkillIncrease(SKILL_MOVE_SILENTLY, 4);
 		effect eAff = EffectLinkEffects(eHide, eMove);
 			eAff = ExtraordinaryEffect(eAff);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAff, oPC);	}
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAff, oPC);	}
 }
 
 void PS_Ability_HezrouStench(object oPC, int nSpell)       
@@ -535,7 +535,7 @@ void PS_Ability_HezrouStench(object oPC, int nSpell)
 	float fDur = RoundsToSeconds(GetTotalLevels(OBJECT_SELF, TRUE));
 	
     effect eAOE = ExtraordinaryEffect(EffectAreaOfEffect( 72 ));
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, fDur );	
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, fDur );	
 }
 
 void PS_Ability_HezrouAlignedStrike(object oPC, int nSpell)
@@ -566,7 +566,7 @@ void PS_Ability_FamiliarRegeneration(object oPC, int nSpell)
 			iBonus		= iBonus + 1;
 		effect eRegen	= EffectRegenerate(iBonus, 6.0f);
 			eRegen		= ExtraordinaryEffect(eRegen);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}		
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	}		
 }
 
 void PS_Ability_FamiliarDR(object oPC, int nSpell)
@@ -578,7 +578,7 @@ void PS_Ability_FamiliarDR(object oPC, int nSpell)
 	effect eDR		= EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_GOOD);
 		eDR		= ExtraordinaryEffect(eDR);
 		
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
 }
 
@@ -605,9 +605,9 @@ void PS_FamiliarForm_Bat(object oPC)
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "")
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_FamiliarForm_Cat(object oPC)
@@ -633,9 +633,9 @@ void PS_FamiliarForm_Cat(object oPC)
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "")
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_FamiliarForm_Rat(object oPC)
@@ -661,9 +661,9 @@ void PS_FamiliarForm_Rat(object oPC)
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "")
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_FamiliarForm_Spider(object oPC)
@@ -691,9 +691,9 @@ void PS_FamiliarForm_Spider(object oPC)
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "")
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_FamiliarForm_Weasel(object oPC)
@@ -719,9 +719,9 @@ void PS_FamiliarForm_Weasel(object oPC)
 		
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "")
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_Ability_CanineForm(object oPC)
@@ -733,8 +733,8 @@ void PS_Ability_CanineForm(object oPC)
 		eDog 		= ExtraordinaryEffect(eDog);
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDog, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDog, oPC, HoursToSeconds(24));
 }
 
 void PS_Ability_CanineForm2(object oPC)
@@ -746,8 +746,8 @@ void PS_Ability_CanineForm2(object oPC)
 		eDog 		= ExtraordinaryEffect(eDog);
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDog, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDog, oPC, HoursToSeconds(24));
 }
 
 void PS_Ability_HoundDR(object oPC, int nSpell)
@@ -777,7 +777,7 @@ void PS_Ability_HoundDR(object oPC, int nSpell)
 	effect eDR		= EffectDamageReduction(iDR, DR_TYPE_ALIGNMENT, 0, ALIGNMENT_EVIL);
 		eDR		= ExtraordinaryEffect(eDR);
 		
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/evil applied.");
 }
 
@@ -810,8 +810,8 @@ void PS_Ability_ArchonAura(object oPC, int nSpell)
 	{	effect eAOE 	= EffectAreaOfEffect(VFX_MOB_ARCHON_MENACE);
 		effect eHoly	= EffectVisualEffect(VFX_HIT_AOE_HOLY);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, 582, FALSE));
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHoly, oPC);
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDur);	}
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHoly, oPC);
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDur);	}
 }
 
 void PS_Ability_EladrinForm(object oPC)
@@ -836,8 +836,8 @@ void PS_Ability_EladrinForm(object oPC)
 	StoreSpellDataForAoE("Light", 1246, PS_GetLevel(oPC));
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 }
 
 void PS_Ability_BralaniWhirlBlast(object oPC, object oTarget, int nSpell)
@@ -877,7 +877,7 @@ void PS_Ability_BralaniWhirlBlast(object oPC, object oTarget, int nSpell)
 			effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL);
 			effect eVis = EffectNWN2SpecialEffectFile("fx_air_elemental_atk1", oTarget);
 		    effect eLink = EffectLinkEffects(eDam, eVis);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);		}
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);		}
 		}
 	}
 }
@@ -921,7 +921,7 @@ void PS_Ability_EladrinDR(object oPC, int nSpell)
 	effect eDR	= 	EffectLinkEffects(eDRevil, eDRiron);
 		eDR		= ExtraordinaryEffect(eDR);
 		
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 	SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/evil or cold iron applied.");
 }
 
@@ -1001,8 +1001,8 @@ void PS_Ability_FirreFlamingSlam(object oPC, object oTarget, int nSpell)
 			effect eDur = EffectVisualEffect(VFX_DUR_FIRE);
 		    effect eLink = EffectLinkEffects(eFire, eBlud);
 				eLink = EffectLinkEffects(eLink, eVis);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, 6.0);		}
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, 6.0);		}
 }	}	}
 
 void PS_Ability_GhaeleLightRay(object oPC, object oTarget, int nSpell)
@@ -1041,9 +1041,9 @@ void PS_Ability_GhaeleLightRay(object oPC, object oTarget, int nSpell)
 			effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL);
 			effect eVis = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
 		    effect eLink = EffectLinkEffects(eDam, eVis);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);		}
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);		}
 	}
-	PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.9 );
+	ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.9 );
 }
 
 void PS_Ability_GhaeleBonusDomain(object oPC)
@@ -1064,7 +1064,7 @@ void PS_Ability_GhaeleAura(object oPC, int nSpell)
 		effect eSpell 	= EffectSpellLevelAbsorption(3, 0);
 		effect eLink 	= EffectLinkEffects(eAOE, eSpell);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, 1446, FALSE));
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	}
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);	}
 }
 
 void PS_Ability_GhaeleGlow(object oPC, int nSpell)
@@ -1074,7 +1074,7 @@ void PS_Ability_GhaeleGlow(object oPC, int nSpell)
 	if (!GetHasSpellEffect(nSpell, OBJECT_SELF))
 	{	effect eGlow	= EffectVisualEffect(VFX_DUR_LIGHT_WHITE_5);
 			eGlow = ExtraordinaryEffect(eGlow);
-    	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGlow, oPC);	}
+    	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGlow, oPC);	}
 }
 
 void PS_Ability_TArchonTrumpet(object oPC)
@@ -1160,7 +1160,7 @@ void PS_Ability_YTHBChameleonPower(object oPC, int nSpell)
 		eLink			= ExtraordinaryEffect(eLink);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);
 }
 
 void PS_Ability_YTHBSnakeBloodBonus(object oPC, int nSpell)
@@ -1177,7 +1177,7 @@ void PS_Ability_YTHBSnakeBloodBonus(object oPC, int nSpell)
 			eSave			= ExtraordinaryEffect(eSave);
 		
 		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);	}
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);	}
 }
 
 void PS_Ability_XephInnateResistance(object oPC, int nSpell)
@@ -1186,7 +1186,7 @@ void PS_Ability_XephInnateResistance(object oPC, int nSpell)
 		eBonus				= ExtraordinaryEffect(eBonus);
 		
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBonus, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBonus, oPC);
 }
 
 void PS_Ability_NHDeceitful(object oPC, int nSpell)
@@ -1201,7 +1201,7 @@ void PS_Ability_NHDeceitful(object oPC, int nSpell)
 		eBluff				= ExtraordinaryEffect(eBluff);
 	
 	if (!GetHasSpellEffect(nSpell, oPC))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBluff, oPC);	}
+	{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBluff, oPC);	}
 }
 
 void PS_Ability_NHIneffablyEvil(object oPC, int nSpell)
@@ -1243,8 +1243,8 @@ void PS_Ability_Austerities(object oPC)
 			eRes = SupernaturalEffect(eRes);
 			eSave = SupernaturalEffect(eSave);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
 		}
 		if(GetHasFeat(3206, oPC))
 		{
@@ -1253,8 +1253,8 @@ void PS_Ability_Austerities(object oPC)
 			eRes = SupernaturalEffect(eRes);
 			eSave = SupernaturalEffect(eSave);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
 		}
 		if(GetHasFeat(3207, oPC))
 		{
@@ -1263,8 +1263,8 @@ void PS_Ability_Austerities(object oPC)
 			eRes = SupernaturalEffect(eRes);
 			eSave = SupernaturalEffect(eSave);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
 		}
 	}
 }
@@ -1276,7 +1276,7 @@ void PS_Ability_Austerity_Truth(object oPC)
 		effect eTruth			= EffectSeeInvisible();
 			eTruth				= SupernaturalEffect(eTruth);
 			
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTruth, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTruth, oPC);
 	}
 }
 
@@ -1292,7 +1292,7 @@ void PS_Ability_Rakshasa_SR(object oPC)
 			
 		effect eSR = EffectSpellResistanceIncrease(nSR, -1);
 		eSR = SupernaturalEffect(eSR);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oPC);
 }
 
 void PS_Ability_Reincarnate(object oPC)
@@ -1319,7 +1319,7 @@ void PS_Ability_Austere_AC(object oPC, int nSpell)
 	
 	effect eAC = EffectACIncrease(nAC, AC_DODGE_BONUS);
 	eAC = ExtraordinaryEffect(eAC);			 
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
 }
 
 // Elan Resilience created by SyntheticRose
@@ -1342,7 +1342,7 @@ void PS_Ability_ElanResilience(object oPC, int nSpell)
     }
 	
 	//After all copies of eResilience have been removed, reapply it.
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eResilience, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eResilience, oPC);
 }
 
 // Helper method to apply the Weapon Properties for
@@ -1353,7 +1353,7 @@ void PS_ApplyEvilWeaponProperties(object oWeapon, object oPC, int nSpell, float 
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
 		
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_GOOD, IP_CONST_DAMAGETYPE_MAGICAL, 
 		IP_CONST_DAMAGEBONUS_1d4);
@@ -1375,7 +1375,7 @@ void PS_ApplyEladrinWeaponProperties(object oWeapon, object oPC, int nSpell, flo
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectNWN2SpecialEffectFile("fx_feat_rescue_hit01", oPC);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 		
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
 		IP_CONST_DAMAGEBONUS_1d4);
@@ -1402,7 +1402,7 @@ void PS_ApplyExaltedWeaponProperties(object oWeapon, object oPC, int nSpell, flo
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectNWN2SpecialEffectFile("sp_divination_hit", oPC);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
 		IP_CONST_DAMAGEBONUS_1d4);
@@ -1427,7 +1427,7 @@ void PS_ApplyHoundWeaponProperties(object oWeapon, object oPC, int nSpell, float
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL, 
 		IP_CONST_DAMAGEBONUS_1d4);
@@ -1452,7 +1452,7 @@ void PS_ApplyMovanicWeaponProperties(object oWeapon, object oPC, int nSpell, flo
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_FIRE, IP_CONST_DAMAGEBONUS_1d4);
 	itemproperty ipEff2 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_POSITIVE, IP_CONST_DAMAGEBONUS_1d4);
@@ -1473,7 +1473,7 @@ void PS_ApplyMonadicWeaponProperties(object oWeapon, object oPC, int nSpell, flo
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_DIVINE, IP_CONST_DAMAGEBONUS_1d4);
 	itemproperty ipEff2 = ItemPropertyKeen();
@@ -1494,7 +1494,7 @@ void PS_ApplyAstralDevaWeaponProperties(object oWeapon, object oPC, int nSpell, 
 {
 	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 	effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 	
 	itemproperty ipEff1 = ItemPropertyDamageBonusVsAlign(IP_CONST_ALIGNMENTGROUP_EVIL, IP_CONST_DAMAGETYPE_MAGICAL,
 		IP_CONST_DAMAGEBONUS_1d4);

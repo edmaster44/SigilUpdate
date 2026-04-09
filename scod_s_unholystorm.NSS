@@ -71,9 +71,9 @@ void main()
 
 			fDelay = GetRandomDelay(0.5, 2.0);
 			//This fires a cast spell event for the specified target
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget, fDuration));
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, fDuration));
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinks, oTarget, fDuration));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget, fDuration));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElec, oTarget));
 		}
 
 		//Select the next target within the spell shape.

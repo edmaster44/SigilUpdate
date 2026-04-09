@@ -40,7 +40,7 @@ void RespawnBoss(object oBOSS)
 	{
 		if (GetIsOwnedByPlayer(oPC) == TRUE)
 		{
-			if (GetIsDead(oPC) == TRUE)	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
+			if (GetIsDead(oPC) == TRUE)	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 			AssignCommand(oPC, JumpToObject(oWAY));
 		}
 		oPC = GetNextObjectInArea(oAREA);
@@ -51,8 +51,8 @@ void RespawnBoss(object oBOSS)
 	{
 		int nBHP = 12000;
 		effect eFX = BossFX(nBHP);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oBOSS);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nBHP), oBOSS);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oBOSS);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nBHP), oBOSS);
 	}
 	DeleteLocalInt(oBOSS, "BOSS_DEFEATED");
 	object oPLAYER = GetFirstPC();
@@ -84,7 +84,7 @@ void main()
 		if ((sADD == "heraldannhi_add") || (sADD == "heraldannhi_font")) DestroyObject(oPC);
 		else if (GetIsOwnedByPlayer(oPC) == TRUE)
 		{
-			if (GetIsDead(oPC) == TRUE) PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
+			if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 			ForceRest(oPC);
 			DisplayMessageBox(oPC, 0, "Congratulations on defeating the Herald of Annihilation! You have received a token for you deeds. If your inventory was full, the token should be at your feet.");
 			oITEM = CreateItemOnObject("heraldannhi_token", oPC);
@@ -94,6 +94,6 @@ void main()
 	}
 	float fDELAY = 60.0;
 	effect eDEAD = ExtraordinaryEffect(EffectKnockdown());
-	DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDEAD, oBOSS, fDELAY - 1.0));
+	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDEAD, oBOSS, fDELAY - 1.0));
 	DelayCommand(fDELAY, RespawnBoss(oBOSS));
 }

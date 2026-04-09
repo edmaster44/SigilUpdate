@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Agony_Aunt: Replaces old speak trigger with a script handling the respawn event.
 // handles the speech event.  Depending on whether respawned from a different area
 // checks "PC_DEATH_AREA" to see if different gives different message

@@ -72,7 +72,7 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 	if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 0)
 	{
 		effect eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 
 		
 		PS_ChangeSelf_AppearanceType(oPC, nAppearanceID);
@@ -135,13 +135,13 @@ void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWings
 	/* Not working, they are stacking over and over again
 	effect eScale = EffectSetScale(fScaleX, fScaleY, fScaleZ);
 	RemoveEffect(OBJECT_SELF, eScale);	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, SupernaturalEffect(eScale), OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, SupernaturalEffect(eScale), OBJECT_SELF);
 	*/
 	SetScale(OBJECT_SELF, fScaleX, fScaleY, fScaleZ);
 	if (GetLocalInt(OBJECT_SELF, "CharacterAppearanceChangeGUIType") == 2)
 	{
 		effect eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 
 		
 		PS_ChangeSelf_AppearanceType(oPC, nAppearanceID);

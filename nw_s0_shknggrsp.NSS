@@ -83,10 +83,10 @@ void main()
                 eDam = EffectDamage(nDamage,DAMAGE_TYPE_ELECTRICAL);
 				
                 //Apply the VFX impact and effects
-                DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
         }
     }
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.0);
 }

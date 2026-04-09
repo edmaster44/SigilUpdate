@@ -61,7 +61,7 @@ void main()
     {
         // Apply the impact effect
         effect eImpact = EffectNWN2SpecialEffectFile("psi_telekineticman.sef", oTarget);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImpact, OBJECT_SELF, 2.0);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImpact, OBJECT_SELF, 2.0);
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 460, TRUE));
         if(PRCMyResistPower(oManifester, oTarget, nPen))
@@ -83,8 +83,8 @@ void main()
                 effect eLink = EffectLinkEffects(eKnockdown, eVis);
                 eLink = EffectLinkEffects(eLink, eKnockdown2);
                 //Apply the penalty
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration));
                 // * Bull Rush succesful
                 FloatingTextStringOnCreature("Trip successful",OBJECT_SELF, FALSE);
             }

@@ -19,6 +19,6 @@ void main()
 	{
 		effect eVuln = EffectDamageImmunityDecrease(DAMAGE_TYPE_ACID, 50);
 		eVuln = SupernaturalEffect(eVuln);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVuln, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVuln, oTarget);
 	}	
 }

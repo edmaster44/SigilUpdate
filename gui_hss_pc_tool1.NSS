@@ -1963,7 +1963,7 @@ void HSS_PCTools_ToggleAFK(object oPC)
 	   eFirst = GetNextEffect(oPC);	  
 	   }
    
-   PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAFK, oPC);   
+   ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAFK, oPC);   
 }
 
 void HSS_PCToools_RollDie(object oPC)
@@ -2525,7 +2525,7 @@ void HSS_PCTools_ApplyVFX(object oPC, string sVFX)
 	  return;	     	  
 	  }
 	     
-   PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProp, oPC);
+   ApplyEffectToObject(DURATION_TYPE_PERMANENT, eProp, oPC);
    
 }
 

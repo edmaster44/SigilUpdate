@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 struct TimeFields {
 	int Year;
 	int Month;

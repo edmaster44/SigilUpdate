@@ -99,10 +99,10 @@ void main (int nAction) {
 			SendMessageToPC(oPartyMember, "<i>Well done, "+GetName(oPartyMember)+", your death will not come this day.</i>");
 			effect eHeal = EffectHeal(GetMaxHitPoints(oPartyMember));
 			eHeal = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_healingsting_heal01"), eHeal);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oPartyMember);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oPartyMember);
 			
 			effect eRegen = EffectRegenerate(6, 6.0f);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPartyMember);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPartyMember);
 			
         	oPartyMember = GetNextFactionMember(oPC, TRUE);	    
 		}
@@ -112,10 +112,10 @@ void main (int nAction) {
 		
 			SendMessageToPC(oPartyMember, "<i>Well done, "+GetName(oPartyMember)+". You have honored my shrine, and in return I will give you the gift of the flame. Use it well.</i>");
 			effect eVFX =  EffectNWN2SpecialEffectFile("sp_fire_aoe");
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPartyMember);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPartyMember);
 			
 			effect eShield = EffectDamageShield(5, DAMAGE_BONUS_1d6, DAMAGE_TYPE_FIRE);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShield, oPartyMember);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShield, oPartyMember);
 			
 			if (GetLocalInt(oPartyMember, "Hyperions_Reward") == 0) {
 				GenerateQuestRewardOnTarget(oPartyMember, TREASURE_EPIC, TRUE);

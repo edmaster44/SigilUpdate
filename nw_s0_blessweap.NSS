@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Bless Weapon
 //:: NW_S0_BlessWeap.nss

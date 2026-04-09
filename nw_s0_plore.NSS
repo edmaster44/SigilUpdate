@@ -48,6 +48,6 @@ void main()
     if(!GetHasSpellEffect( 983, oTarget ) || !GetHasSpellEffect( SPELL_LEGEND_LORE, oTarget ))
     {
          SignalEvent( oTarget, EventSpellCastAt(OBJECT_SELF, 983 , FALSE));
-         PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds( 50 ));
+         ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds( 50 ));
     }
 }

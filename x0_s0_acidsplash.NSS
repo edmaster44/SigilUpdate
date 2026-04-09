@@ -64,10 +64,10 @@ void main()
 				
 	            effect eBad = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
 	            //Apply the VFX impact and damage effect
-	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBad, oTarget);
+	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eBad, oTarget);
 	        }
 		}
     }
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }

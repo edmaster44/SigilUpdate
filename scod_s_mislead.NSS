@@ -18,7 +18,7 @@ void CreateGlamer(object oCaster, location lLoc) {
 
 	object oClone = CreateIllusoryClone(oCaster, GLAMER_TEMPLATE, lLoc);
 	effect eShadow = EffectNWN2SpecialEffectFile("fx_shadowfiend_2");
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
 	AssignCommand(oClone, ActionMoveAwayFromObject(oCaster, TRUE, 100.0f));
 	
@@ -71,9 +71,9 @@ void main() {
     eInvis = EffectLinkEffects(eInvis, eOnDispell);
 	
     SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_MISLEAD, FALSE));
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oCaster);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, RoundsToSeconds(nDuration));
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oCaster, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oCaster);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oCaster, RoundsToSeconds(nDuration));
 	
 	//Teleportation Effect
 	effect eVis2 = EffectNWN2SpecialEffectFile("fx_shadowjump");

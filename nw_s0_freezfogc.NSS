@@ -44,20 +44,20 @@ void main()
 			nSave		= ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD, GetAreaOfEffectCreator() );
 
 			if (oTarget == GetAreaOfEffectCreator())
-			{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	}
+			{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));	}
 			else
 			{	if (nSave == 2)
 				{	return;	}
 				else if (nSave == 1)
-				{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget));	}
+				{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink2, oTarget));	}
 				else
-  	      		{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-  	        		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, TurnsToSeconds(1)));	}
+  	      		{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+  	        		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, TurnsToSeconds(1)));	}
 			}
 			
 			if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF, fDelay))
             {
-            	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFall, oTarget, 4.0));
+            	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFall, oTarget, 4.0));
             }
         }
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

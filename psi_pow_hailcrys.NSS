@@ -102,7 +102,7 @@ void main()
 					eImpact = EffectLinkEffects(eImpact, EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING));
                     // Apply the damage and VFX. No Reflex save here, they got hit by a touch attack
                     //ApplyTouchAttackDamage(oManifester, oBallTarget, nTouchAttack, nDamage, DAMAGE_TYPE_BLUDGEONING);
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
                 }// end if - Touch attack hit
             }// end if - A creature was targeted with the ball
 
@@ -128,8 +128,8 @@ void main()
                     if(nDamage > 0)
                     {
                         eDamage = EffectDamage(nDamage, DAMAGE_TYPE_SLASHING);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oExplodeTarget);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oExplodeTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oExplodeTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oExplodeTarget);
                     }// end if - There was still damage remaining to be dealt after adjustments
                 }// end if - Difficulty check
 

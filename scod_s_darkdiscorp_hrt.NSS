@@ -40,7 +40,7 @@ void main() {
 		if (GetIsEnemy(oTarget, oCaster) && oTarget != oCaster) {
 		
 			effect eDamage = EffectDamage(d6(2)+GetAbilityModifier(ABILITY_CHARISMA, oCaster));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		
 		}
 		

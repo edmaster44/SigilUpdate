@@ -67,5 +67,5 @@ void main()
     RemoveEffectsFromSpell(oTarget, GetSpellId());
 
     //Apply the VFX impact and effects
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 }

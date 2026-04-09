@@ -55,6 +55,6 @@ void main()
 		nLevel = nLevel *2;	//Duration is +100%
     }
     //Apply VFX impact and SR bonus effect
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nLevel));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nLevel));
 }

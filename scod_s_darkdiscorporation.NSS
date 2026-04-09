@@ -68,12 +68,12 @@ void main() {
 	
 	SetEffectSpellId(eBuff, nID);
 	//Add vfx here
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, fDuration);
 	
 	
 	effect eAOE = EffectAreaOfEffect(97);
 	SignalEvent(oCaster, EventSpellCastAt(oCaster, nID, FALSE));
-	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oCaster, fDuration));
+	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oCaster, fDuration));
 }
 	
 	

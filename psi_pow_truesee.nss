@@ -101,6 +101,6 @@ void main()
 
           eLink = EffectLinkEffects(eLink, eTrueSee);
 
-          PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget,fDuration);
+          ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget,fDuration);
       }
       }

@@ -69,7 +69,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));
 
 			SpawnItemProjectile( OBJECT_SELF, oTarget, lSource, lTarget, nLauncherBaseItemType, nPathType, OVERRIDE_ATTACK_RESULT_HIT_SUCCESSFUL, 0 );
-            DelayCommand( fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget) );
+            DelayCommand( fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget) );
 			DelayCommand( fTravelTime, DoElementalDamage(OBJECT_SELF, oTarget, TRUE));
 			DelayCommand( fTravelTime, 	DoAlignedDamage(OBJECT_SELF, oTarget));
         }

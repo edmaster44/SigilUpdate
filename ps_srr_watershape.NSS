@@ -90,8 +90,8 @@ void main()
 
     //Apply the VFX impact and effects
     ClearAllActions(); // prevents an exploit
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, OBJECT_SELF, HoursToSeconds(nDuration));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, OBJECT_SELF, HoursToSeconds(nDuration));
 
     object oWeaponNew = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,OBJECT_SELF);
     object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CARMOUR,OBJECT_SELF);

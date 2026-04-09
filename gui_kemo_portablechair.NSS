@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // KEMO 11/08
 // called by kemo_sitting_conv
 // destroys an existing portable stool and "puts" that stool into the PC's inventory

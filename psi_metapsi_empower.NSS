@@ -27,7 +27,7 @@ void main()
 	{
 		SetLocalInt(OBJECT_SELF, "METAPSI_EMPOWER", 1);
 		SendMessageToPC(OBJECT_SELF, "Metapsionics Activated: Empower Power");
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, OBJECT_SELF);
 	}
 	else
 	{

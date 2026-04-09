@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Remove Curse
 //:: NW_S0_RmvCurse.nss
@@ -31,7 +31,7 @@ void main()
         {
             //Remove the effect and apply VFX impact
             RemoveEffect(oTarget, eRemove);
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			eRemove = GetFirstEffect(oTarget);
         } else GetNextEffect(oTarget);
     }

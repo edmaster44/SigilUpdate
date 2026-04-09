@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Neutralize Poison
 //:: NW_S0_NeutPois.nss
@@ -30,7 +30,7 @@ void main()
         {
             //Remove poison effect and apply VFX constant
             RemoveEffect(oTarget, ePoison);
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			ePoison = GetFirstEffect(oTarget);
         } else  GetNextEffect(oTarget);
     }

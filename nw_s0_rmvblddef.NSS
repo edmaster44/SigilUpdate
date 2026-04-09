@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Remove Blindness / Deafness
 //:: NW_S0_RmvBldDef.nss
@@ -43,7 +43,7 @@ void main()
                     //Remove the effect if it matches the stated values
                     RemoveEffect(oTarget, eBlindDeaf);
                     //Apply the visual
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					eBlindDeaf = GetFirstEffect(oTarget);
                 } else GetNextEffect(oTarget);
             }

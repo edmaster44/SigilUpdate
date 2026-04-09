@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*
 gc_invslot_equipped by Dedic8ed for the Sigil: City of Doors PW
 

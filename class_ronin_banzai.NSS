@@ -36,13 +36,13 @@ void main()
 	
 	eBoost = ExtraordinaryEffect(EffectLinkEffects(eVisDur, eBoost));
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBoost, oPC, RoundsToSeconds(2));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAttack, oPC, RoundsToSeconds(2));
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBoost, oPC, RoundsToSeconds(2));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAttack, oPC, RoundsToSeconds(2));
 	
 	if (iFeat == FEAT_BANZAI_CHARGE)
 	{
-		DelayCommand(RoundsToSeconds(2), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePenalty, oPC, RoundsToSeconds(1)));
-		DelayCommand(RoundsToSeconds(2), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_SLOW), oPC));
+		DelayCommand(RoundsToSeconds(2), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePenalty, oPC, RoundsToSeconds(1)));
+		DelayCommand(RoundsToSeconds(2), ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_SLOW), oPC));
 	}
 }

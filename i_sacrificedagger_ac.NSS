@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // Sacrificial dagger on activate script script. Deals 10d10 negative energy damage
@@ -22,7 +22,7 @@ void main()
 	effect visualEffect = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);
 	effect link = EffectLinkEffects(damage, visualEffect);
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, link, oTarget, 0.0f);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, link, oTarget, 0.0f);
 	
 	if (GetIsDead(oTarget))
 	{

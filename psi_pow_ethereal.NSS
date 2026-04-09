@@ -73,7 +73,7 @@ void main()
         if(!GetCanTeleport(oManifester, GetArea(oManifester)))
 		{
             // Apply effect to self
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oManifester, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oManifester, fDuration);
 
             // Determine willing friends in touch range and affect them.
             object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_SMALL, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -84,7 +84,7 @@ void main()
                     // Make sure the target is not prevented from extra-dimensional movement
                     if(!GetCanTeleport(oTarget, GetArea(oTarget)))
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
                     }
 
                     // Use up a target slot only if we actually did something to it

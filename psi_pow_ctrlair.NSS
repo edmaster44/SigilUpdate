@@ -90,8 +90,8 @@ void main()
                         // Fortitude negates
                         if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                         {
-                            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(3));
-                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eWind, oTarget));
+                            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, RoundsToSeconds(3));
+                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eWind, oTarget));
                         }
                     }
                 }

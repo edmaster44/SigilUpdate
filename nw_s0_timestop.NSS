@@ -44,7 +44,7 @@ void main()
     SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_TIME_STOP, FALSE));
 
     //Apply the VFX impact and effects
-    DelayCommand(0.75, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTime, OBJECT_SELF, 9.0));
+    DelayCommand(0.75, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTime, OBJECT_SELF, 9.0));
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lTarget);
 }
 

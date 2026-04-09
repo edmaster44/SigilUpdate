@@ -583,7 +583,7 @@ void ApplySummonMastery(object oCaster = OBJECT_SELF)
 	if (GetHasFeat(2614, oCaster, TRUE) && GetHasFeat(3616, oCaster, TRUE))
 	{
 		eSumMast = ExtraordinaryEffect(EffectDamageIncrease(2, DAMAGE_TYPE_NEGATIVE));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSumMast, oSummon);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eSumMast, oSummon);
 	}
 	// Two Levels and 1 damage.
 	else if (GetHasFeat(2614, oCaster, TRUE))
@@ -592,7 +592,7 @@ void ApplySummonMastery(object oCaster = OBJECT_SELF)
 		
 			LevelUpHenchman(oSummon,CLASS_TYPE_OUTSIDER,0,PACKAGE_OUTSIDER);
 			LevelUpHenchman(oSummon,CLASS_TYPE_OUTSIDER,0,PACKAGE_OUTSIDER);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSumMast, oSummon);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eSumMast, oSummon);
 	}
 }
 

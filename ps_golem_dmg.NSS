@@ -59,14 +59,14 @@ void main()
 	else if (GetCurrentHitPoints()<=1)//If I've been beaten down, but am not in a knocked down state, put me in one.
 	{	
 		int nDuration = 1;		
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectKnockdown(),OBJECT_SELF,IntToFloat(nDuration));		
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectKnockdown(),OBJECT_SELF,IntToFloat(nDuration));		
 		SetLocalInt(OBJECT_SELF,"gb_troll_dmg_down",1);
 		DelayCommand(IntToFloat(nDuration+1),GolemDeath());
-		DelayCommand(IntToFloat(nDuration+2), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDeath(),OBJECT_SELF));
+		DelayCommand(IntToFloat(nDuration+2), ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDeath(),OBJECT_SELF));
 		return;
 	}
 	//otherwise, heal 1HP so that the onDamageevent does fire again.
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(1),OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(1),OBJECT_SELF);
 	
 	ExecuteScript("nw_c2_default6",OBJECT_SELF);
 }

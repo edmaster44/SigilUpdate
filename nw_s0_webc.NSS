@@ -52,8 +52,8 @@ void main()
                     if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC))
                     {
                         //Entangle effect and Web VFX impact
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWeb, oTarget, RoundsToSeconds(1));
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(1));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWeb, oTarget, RoundsToSeconds(1));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(1));
                     }
                // }
             }

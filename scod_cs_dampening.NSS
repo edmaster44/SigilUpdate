@@ -59,9 +59,9 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1383, FALSE));
     //Create an instance of the AOE Object using the Apply Effect function
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eExtraordinary, oTarget);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVfx, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eExtraordinary, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVfx, oTarget);
 	DelayCommand(TurnsToSeconds(nDuration), RemoveEffect(oTarget, eExtraordinary));
 	DelayCommand(TurnsToSeconds(nDuration), RemoveEffect(oTarget, eVfx));
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEvil, oTarget);	// handled by CreateProtectionFromAlignmentLink(); see nw_i0_spells.nss
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eEvil, oTarget);	// handled by CreateProtectionFromAlignmentLink(); see nw_i0_spells.nss
 }

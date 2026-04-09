@@ -76,7 +76,7 @@ void main()
     		RemoveEffectsFromSpell(oTarget, GetSpellId());
 
 			//Apply the bonus effect and VFX impact
-    		PS_ApplyEffectToObject(nDurType, eBuff, oTarget, fDuration);
+    		ApplyEffectToObject(nDurType, eBuff, oTarget, fDuration);
 		}
 	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}

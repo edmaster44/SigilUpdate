@@ -85,6 +85,6 @@ void main()
     effect eLink = EffectLinkEffects(eVis, eAC);
     //eLink = EffectLinkEffects(eLink, eDur);	// NWN1 VFX
 
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHead, oTarget);	// BDF - 6/20/06: effect eHead is no longer valid
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eHead, oTarget);	// BDF - 6/20/06: effect eHead is no longer valid
 }

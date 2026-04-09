@@ -100,8 +100,8 @@ void main()
     			RemoveEffectsFromSpell(oTarget, GetSpellId());
 
     			//Apply the VFX impact and effects
-    			PS_ApplyEffectToObject(nDurType, eTotal, oTarget, fDuration);
-    			PS_ApplyEffectToObject(nDurType, eHP, oTarget, fDuration);
+    			ApplyEffectToObject(nDurType, eTotal, oTarget, fDuration);
+    			ApplyEffectToObject(nDurType, eHP, oTarget, fDuration);
 			//}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE, OBJECT_TYPE_CREATURE);

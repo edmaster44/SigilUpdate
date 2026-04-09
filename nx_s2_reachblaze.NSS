@@ -55,5 +55,5 @@ void main()
 			fDuration	=	ApplyMetamagicDurationMods(fDuration);
 
 //Generate the object
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }

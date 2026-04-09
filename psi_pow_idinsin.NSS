@@ -98,18 +98,18 @@ void main()
 	                {
 	                    // Apply effects
 						nLoss = d2(1);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFeeb, oTarget, fDuration);
-	                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, OBJECT_SELF, 2.0);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFeeb, oTarget, fDuration);
+	                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, OBJECT_SELF, 2.0);
 	                }// end if - Save to negate
 					else
 					{
 						nLoss = 1;
 						effect eSapVis = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
 						RemoveEffectsFromSpell(oTarget, 14440);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFeeb, oTarget, fDuration);
-						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSapVis, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFeeb, oTarget, fDuration);
+						ApplyEffectToObject(DURATION_TYPE_INSTANT, eSapVis, oTarget);
 					}
 	            }// end if - SR check
 			}

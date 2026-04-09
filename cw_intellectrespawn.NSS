@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*
 9-24-10
 Intellect Devourer

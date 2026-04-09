@@ -65,7 +65,7 @@ void main()
 
                     //Remove the effect and apply VFX impact
                     RemoveEffect(oTarget, eParal);
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                     nCnt++;
 					eParal = GetFirstEffect(oTarget);
                 } else eParal = GetNextEffect(oTarget);

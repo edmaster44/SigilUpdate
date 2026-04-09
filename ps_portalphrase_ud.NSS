@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //:://////////////////////////////////////////////
 /*
     On User Defined script that executes the portal spawning

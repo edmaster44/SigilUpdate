@@ -16,5 +16,5 @@ void main()
 
 	effect eDMG = EffectDamage(d6(2), nType,DAMAGE_POWER_NORMAL,TRUE);
 	eDMG = EffectLinkEffects(eDMG, EffectVisualEffect(VFX_HIT_SPELL_HOLY));
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDMG, oTARGET);
 }

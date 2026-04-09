@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //This will check if sQUEST's progress ID of oPC is equal to nSTEP.
 //nHIGHER: if TRUE it will also check if the progress if higher than nSTEP.
 int StartingConditional(string sQUEST, int nSTEP, int nHIGHER)

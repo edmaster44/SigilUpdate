@@ -52,7 +52,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_WARDING_OF_THE_SPIRITS, FALSE));
         
             //Apply the VFX impact and effects
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
         }
         
         oTarget = GetNextFactionMember(oLeader, bPCOnly);

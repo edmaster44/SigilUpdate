@@ -51,7 +51,7 @@ void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDurat
         }
 
         if (bTargetValid){
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
         }
         oTarget = GetNextFactionMember(oCaster, FALSE);
     }

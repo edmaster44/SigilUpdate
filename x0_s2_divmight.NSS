@@ -72,8 +72,8 @@ void main()
 		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_MIGHT, FALSE));
 
 		//Apply Link and VFX effects to the target
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDur);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDur);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
 		DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
 		
 		//let the player know when divine might ends

@@ -23,5 +23,5 @@ void main()
 	
 	effect eDam = EffectDamageOverTime(nAmount,6.0,DAMAGE_TYPE_MAGICAL,TRUE);  
 	eDam = EffectLinkEffects(eDam, EffectVisualEffect(VFX_HIT_SPELL_BLADEWEAVE));
-	DelayCommand(6.0,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur));
+	DelayCommand(6.0,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget,fDur));
 }

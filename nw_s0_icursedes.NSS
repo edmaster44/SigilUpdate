@@ -71,5 +71,5 @@ void main()
 	
 	//Create an instance of the AOE Object using the Apply Effect function
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABLILITY_AURA_OF_DESPAIR, FALSE));
-	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
+	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
 }

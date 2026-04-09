@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*   ps_scr_soundgong    */
 
 // Put this script in the On Melee Attacked property of a gong placeable.

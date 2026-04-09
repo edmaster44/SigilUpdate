@@ -43,7 +43,7 @@ void main(){
 		eLink = EffectLinkEffects(EffectAttackIncrease(nScale,ATTACK_BONUS_MISC), eLink);
 		eLink = SupernaturalEffect(eLink);
 		  
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration);
 	}
 	  
 }

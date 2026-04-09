@@ -102,8 +102,8 @@ void HandleTargetLocation( location lSpellTargetLocation, object oCaster )
 					if ( nDamage > 0 )
 					{																	
 				 	    //Apply damage effect and VFX impact.
-					    DelayCommand( fDelay2 + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );
-					    DelayCommand( fDelay2 + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );
+					    DelayCommand( fDelay2 + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );
+					    DelayCommand( fDelay2 + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );
 					    DelayCommand( fDelay2 + fTravelTime, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eBump, lTargetLoc) );
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 						DelayCommand(fDelay2 + fTravelTime, SendMessageToPC(oCaster, sReport));

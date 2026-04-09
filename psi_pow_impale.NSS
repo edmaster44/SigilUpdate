@@ -75,8 +75,8 @@ void main()
 						
                         //Apply the VFX impact and effects
                         eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamageVis, oTarget);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamageVis, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		   				
 						return;
 		   }	
@@ -104,12 +104,12 @@ void main()
 						
                         //Apply the VFX impact and effects
                         eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamageVis, oTarget);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamageVis, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
                     }// end if - Save success
                     else
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeathLink, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeathLink, oTarget);
                     }// end else - Save failure
                 
             }// end for - Twin Power

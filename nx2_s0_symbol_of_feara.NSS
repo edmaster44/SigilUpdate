@@ -46,7 +46,7 @@ void main()
 	    if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
 	    {
 			// now that a valid target has triggered symbol get all valid targets in a 60ft radius and apply symbol effect
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eActivated, OBJECT_SELF);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eActivated, OBJECT_SELF);
 			location lTarget = GetLocation(oTarget);
 			oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_VAST, lTarget);
 			
@@ -70,8 +70,8 @@ void main()
 					}
 					else if(nSaved == 0)
 					{
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration);
-						DelayCommand(fDelay,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisual, oTarget, fDuration));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration);
+						DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVisual, oTarget, fDuration));
 					}		
 		    	}
 				oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_VAST, lTarget);

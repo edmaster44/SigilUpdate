@@ -46,8 +46,8 @@ void main()
 				if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_NONE, oCaster))
 				{
                 	//Apply reduced movement effect and VFX_Impact
-                	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-                	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 				}
             //}
         }

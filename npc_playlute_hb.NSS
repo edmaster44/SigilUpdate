@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // f100_bard_hb
 /*
 	Bards play the lute indefinitely

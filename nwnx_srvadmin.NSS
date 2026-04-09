@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Name     : NWNX Srvadmin include
 // Purpose  : Various functions for performing server admin functions from nwscript
 // Authors  : Skywing

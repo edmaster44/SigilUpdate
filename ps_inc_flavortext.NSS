@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //******************************************************************//
 //ps_inc_flavortext
 //A script devoted to flavor text, and silly story generation

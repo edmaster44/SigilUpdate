@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main (string newname)
 {
 	object oPC = OBJECT_SELF;

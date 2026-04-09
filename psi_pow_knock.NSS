@@ -63,7 +63,7 @@ void main()
 		eOpen = SetEffectSpellId(eOpen, manif.nSpellID);
 		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, manif.nSpellID, FALSE));
 		PS_RemoveEffects(OBJECT_SELF, manif.nSpellID);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eOpen, OBJECT_SELF, TurnsToSeconds(nDuration)); 
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eOpen, OBJECT_SELF, TurnsToSeconds(nDuration)); 
 		
         int nResistFlag;
         effect eVis      = EffectVisualEffect(VFX_IMP_KNOCK);
@@ -82,7 +82,7 @@ void main()
 
             if(!GetPlotFlag(oTarget) && GetLocked(oTarget))
     	    {
-    	        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+    	        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     	        AssignCommand(oTarget, ActionUnlockObject(oTarget));
     	    }// end if - Target is locked and not plot
     	    oTarget = GetNextObjectInShape(SHAPE_SPHERE,fRadius, lTarget, FALSE, OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

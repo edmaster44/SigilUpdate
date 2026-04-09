@@ -169,8 +169,8 @@ void main()
 					
 					
 	                //Apply the MIRV and damage effect
-	                DelayCommand(fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-	                DelayCommand(fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget));
+	                DelayCommand(fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	                DelayCommand(fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget));
 				}
 				DelayCommand( fDelay, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTarget, nSpell, nPathType) );
 	       	}

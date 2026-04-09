@@ -67,8 +67,8 @@ void main()
                     nDam = FloatToInt(nDam * 0.9);
                     eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL, TRUE);
                     //Apply the VFX impact and damage effect
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 
                 }
             }

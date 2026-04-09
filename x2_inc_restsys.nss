@@ -791,7 +791,7 @@ int WMStartPlayerRest(object oPC)
         return FALSE;
     }
     effect eSleep = EffectVisualEffect(VFX_IMP_SLEEP);
-     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eSleep, oPC);
+     ApplyEffectToObject(DURATION_TYPE_INSTANT,eSleep, oPC);
     DelayCommand(0.1,FadeToBlack(oPC,FADE_SPEED_FAST));
     DelayCommand(2.6, FadeFromBlack(oPC, FADE_SPEED_MEDIUM));
     return TRUE;

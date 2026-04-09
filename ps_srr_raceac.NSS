@@ -20,6 +20,6 @@ void main()
 		int iAC = GetSpellId() - 1261; // 1262 is the first of the 10 entries in spells.2da that grant the AC bonus
 		effect eAC = EffectACIncrease(iAC, AC_NATURAL_BONUS);
 		eAC = ExtraordinaryEffect(eAC);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oTarget); // check to see if AC bug is caused by permanent and supernatural effect was causing problem after polymorph.
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oTarget); // check to see if AC bug is caused by permanent and supernatural effect was causing problem after polymorph.
 	}	
 }

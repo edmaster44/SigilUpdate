@@ -86,7 +86,7 @@ void main()
 			{
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 			    //RemovePermanencySpells(oTarget);
-				PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+				ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 			}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lLocation, FALSE, OBJECT_TYPE_CREATURE);

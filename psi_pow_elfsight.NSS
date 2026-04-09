@@ -68,7 +68,7 @@ void main()
 		//AddItemProperty(DURATION_TYPE_TEMPORARY,iKeenSight,oChest,fDuration);
 		PS_GrantFeatBySpell(800, oTarget, fDuration, FALSE); // keen senses
 		PS_GrantFeatBySpell(801, oTarget, fDuration, FALSE); // low light vision
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

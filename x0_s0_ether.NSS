@@ -75,14 +75,14 @@ void main()
 			}
 			
 			DelayCommand( fDelay, SignalEvent( oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ETHEREALNESS, FALSE) ) );
-			//DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );	// NWN1 VFX
+			//DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );	// NWN1 VFX
 
 		    //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
 		    effect eDur = EffectVisualEffect( VFX_DUR_SPELL_ETHEREALNESS );	// NWN2 VFX
 		    effect eSanc = EffectEthereal();
 		    effect eLink = EffectLinkEffects(eDur, eSanc);
 
-			DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration ) );
+			DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration ) );
 
 			nTargets++;
 		}

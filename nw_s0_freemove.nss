@@ -78,6 +78,6 @@ void main()
         nDuration *= 2;
     }
     //Apply Linked Effect
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
-	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 }

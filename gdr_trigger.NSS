@@ -1556,9 +1556,9 @@ void Enchant(object oPC, int spell, int power, float duration)
 
     if (valid) {
         if (durType = DURATION_TYPE_PERMANENT) {
-            PS_ApplyEffectToObject(durType, eEffect, oPC);
+            ApplyEffectToObject(durType, eEffect, oPC);
         } else {
-            PS_ApplyEffectToObject(durType, eEffect, oPC, duration);
+            ApplyEffectToObject(durType, eEffect, oPC, duration);
         }
     }
 
@@ -2607,7 +2607,7 @@ void main() {
         iVal1 = GetLocalInt(OBJECT_SELF, "gdr_fail_effect");
 
         if (iVal1 != 0) {
-            DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(iVal1), oPC));
+            DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(iVal1), oPC));
         }
 
         // Sound effects?
@@ -2707,7 +2707,7 @@ void main() {
 
             effect eEffect = EffectDamage(d6(fDice), dType, dPower);
 
-            DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oPC));
+            DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oPC));
 
         }
 
@@ -2872,7 +2872,7 @@ void main() {
         iVal1 = GetLocalInt(OBJECT_SELF, "gdr_pass_effect");
 
         if (iVal1 != 0) {
-            DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(iVal1), oPC));
+            DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(iVal1), oPC));
         }
 
         // Sound effects?

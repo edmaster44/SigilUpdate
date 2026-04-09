@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*
 
     Companion and Monster AI

@@ -66,7 +66,7 @@ void PS_ConcordantPrecision(object oPC, int nSpell){
 	effect eSacred = ConcordantAbilityEffect(oPC, nSpell, ABILITY_DEXTERITY);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
 }
 
 void PS_ConcordantProwess(object oPC, int nSpell){
@@ -74,7 +74,7 @@ void PS_ConcordantProwess(object oPC, int nSpell){
 	effect eSacred = ConcordantAbilityEffect(oPC, nSpell, ABILITY_STRENGTH);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
 }
 
 
@@ -270,10 +270,10 @@ void PS_ConcordantPrecision(object oPC, int nSpell)
 	
 	RemoveEffectsFromSpell(oPC, nSpell);
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
 	
 }
 
@@ -455,9 +455,9 @@ void PS_ConcordantProwess(object oPC, int nSpell)
 	eSacredG = SetEffectSpellId(eSacredG, nSpell);
 	eSacredL = SetEffectSpellId(eSacredL, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredG, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredE, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredL, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacredC, oPC);
 }
 */

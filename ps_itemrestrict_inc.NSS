@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /***********************************************************
 * Created by Loki_999/Agony_Aunt for SCoD persistent world *
 *                                                          *

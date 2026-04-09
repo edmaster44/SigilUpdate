@@ -80,7 +80,7 @@ void PS_Fey_FeyHypnotism(object oPC) {
 					
 						effect eFasc = EffectFascinate();
 						SetEffectSpellId(eFasc, SPELL_HYPNOTISM);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
 					
 						//Make sure being damaged breaks the spell
 						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");
@@ -120,7 +120,7 @@ void PS_Fey_FeySleep(object oPC, location lTarget) {
 				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oCaster))
 				{
 	            	SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), TRUE));
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 				}
 	        }
 		}
@@ -161,7 +161,7 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
 						//Fire cast spell at event for the specified target
 						SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_FEAR));
 	                    //Apply the linked effects and the VFX impact
-	                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));
+	                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));
 						
 	                }
 	            }
@@ -195,7 +195,7 @@ void PS_Fey_FeyInvisbility(object oPC) {
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
 	//Apply the VFX impact and effects
-    PS_ApplyEffectToObject(nDurType, eLink, oPC, fDuration);
+    ApplyEffectToObject(nDurType, eLink, oPC, fDuration);
 }
 
 //Fey Glamer spell
@@ -211,7 +211,7 @@ void PS_Fey_FeyGlamer(object oPC, location lTarget) {
 	
 	object oClone = CreateIllusoryClone(oPC, "ps_summon_glamer", lTarget);
 	effect eShadow = EffectNWN2SpecialEffectFile("fx_shadowfiend_2");
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
 	string sImmune = "Immunity_"+IntToString(Random(10000));
 	SetLocalString(oClone, "Immunity_String", sImmune);
@@ -284,7 +284,7 @@ void PS_Fey_Kiss(object oPC, object oTarget) {
 			iDC = 10 + iLevels + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 			iTouchBonus = 4;
 			// adds +4 to AB for one second (for the touch attack)
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackIncrease(iTouchBonus, ATTACK_BONUS_MISC), oPC, 1.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackIncrease(iTouchBonus, ATTACK_BONUS_MISC), oPC, 1.0f);
 		}
 		else 
 		{
@@ -303,13 +303,13 @@ void PS_Fey_Kiss(object oPC, object oTarget) {
 				if (iLevels > PS_GetLevel(oTarget))
 				{
 					// dominate
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(d6(iLevels)));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(d6(iLevels)));
 					SendMessageToPC(oPC, "The target falls under your complete control");
 				}
 				else
 				{
 					// charm
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCharmed(), oTarget, RoundsToSeconds(d6(iLevels)));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCharmed(), oTarget, RoundsToSeconds(d6(iLevels)));
 					SendMessageToPC(oPC, "The target is too strong for you to control, but it now no longer wants to hurt you as long as you take no action against it.");
 				}
 			}
@@ -336,7 +336,7 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	int currentSeason = GetLocalInt(oPC, "currentSeason") + 1;
 	if (currentSeason == 4) currentSeason = 0;
 	SetLocalInt(oPC, "currentSeason", currentSeason);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ENTANGLE), oPC, 1.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ENTANGLE), oPC, 1.0f);
 	
 	//temporary
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
@@ -360,7 +360,7 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	{
 		SendMessageToPC(oPC, "You call upon the power of Summer.");
 		effect summer = SupernaturalEffect(EffectAttackIncrease(1));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, summer, oPC, 0.0f);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, summer, oPC, 0.0f);
 	}
 	else if (currentSeason == SEASON_FALL)
 	{
@@ -371,7 +371,7 @@ void PS_Fey_SeasonalAspect(object oPC) {
 	{
 		SendMessageToPC(oPC, "You call upon the power of Winter.");
 		effect winter = SupernaturalEffect(EffectACIncrease(1));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, winter, oPC, 0.0f);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, winter, oPC, 0.0f);
 	}
 	else if (currentSeason == SEASON_SPRING)
 	{

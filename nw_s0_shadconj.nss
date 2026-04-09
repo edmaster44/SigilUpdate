@@ -65,7 +65,7 @@ void main()
 	            effect eMirror = EffectVisualEffect(VFX_DUR_SPELL_MAGE_ARMOR);
 	            effect eLink = EffectLinkEffects(eAC, eMirror);
 	            //eLink = EffectLinkEffects(eLink, eVis);
-	            PS_ApplyEffectToObject(nDurType, eLink, OBJECT_SELF, fDuration);
+	            ApplyEffectToObject(nDurType, eLink, OBJECT_SELF, fDuration);
 			}
             break;
         case 2:
@@ -106,8 +106,8 @@ void ShadowBolt (object oTarget, int nMetaMagic)
             nDamage = nDamage/2;
         }
         eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
-        DelayCommand(IntToFloat(nCnt), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
-        DelayCommand(IntToFloat(nCnt), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+        DelayCommand(IntToFloat(nCnt), ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+        DelayCommand(IntToFloat(nCnt), ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
     }
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 3.5);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 3.5);
 }

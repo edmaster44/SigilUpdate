@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main(string ownerchar, string owneraccount)
 {
 	object oPC = OBJECT_SELF;

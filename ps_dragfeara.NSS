@@ -54,11 +54,11 @@ void main()
       		  		if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, oCreator, 0.1f, 2647))
 	  				{
 						// Fear
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 						
 					} else {
 						// Shaken
-		    			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
+		    			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(nDuration));
 					}
 					SetLocalInt(oTarget, "DRAGONFEAR", 1);
 				}

@@ -155,7 +155,7 @@ void MageSlayerLevels(object oPC)
 		effect eDam	= EffectDamageIncrease(nDamageBonus, nDamageType);
 		eDam = SupernaturalEffect(eDam);
 		eDam = SetEffectSpellId(eDam, SPELL_ID_MAGE_SLAYER_TYPE);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oPC);
 	}
 }
 
@@ -299,7 +299,7 @@ int GetBypassMageSlayerRestriction(object oTarget, object oCaster, object oItem,
 			{
 				AssignCommand(oCaster, ActionCastFakeSpellAtObject(nSpellId, oTarget, PROJECTILE_PATH_TYPE_DEFAULT));
 				effect eVis = EffectVisualEffect(VFX_DUR_SPELL_SPELL_RESISTANCE);
-				DelayCommand(1.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				DelayCommand(1.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 				SetLocalInt(oTarget, sAlreadyCast, TRUE);
 			}
 		}

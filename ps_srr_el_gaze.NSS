@@ -26,7 +26,7 @@ void main()
 				
 				if (PS_GetLevel(oTarget) < 6)
 				{
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
 				}
 				else
 				{
@@ -34,8 +34,8 @@ void main()
 	                //Spell Resistance and Saving throw
 	                if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR, OBJECT_SELF))
 	                {
-	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget, RoundsToSeconds(nDuration));
+	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink , oTarget, RoundsToSeconds(nDuration));
 	                }
 				}
             }

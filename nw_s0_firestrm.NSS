@@ -86,9 +86,9 @@ void main()
                           //both Divine and Fire damage.
                           effect eDivine = EffectDamage(nDamage2, DAMAGE_TYPE_DIVINE);
                           effect eFire = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-                          DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
-                          DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDivine, oTarget));
-                          DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                          DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
+                          DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDivine, oTarget));
+                          DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                     }
                 }
             //}

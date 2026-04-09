@@ -89,8 +89,8 @@ void main()
                   eLink = EffectLinkEffects(eLink, eFeeb2);
 
                   //Apply the VFX impact and ability damage effect.
-                  PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-                  //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                  ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                  //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
             else
             // * target was immune

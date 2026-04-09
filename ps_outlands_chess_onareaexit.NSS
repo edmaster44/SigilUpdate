@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // Cleanup on area exit if there are no other PCs in the area

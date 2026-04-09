@@ -64,5 +64,5 @@ RemoveAnySpellEffects(100, oTarget);
 if (iHeadsGone == 0) return;
 string sEffect = "fx_hydra_blood"+IntToString(iHeadsGone)+".sef";
 eBlood = SetEffectSpellId(EffectNWN2SpecialEffectFile(sEffect),100);
-DelayCommand(0.1, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlood, oTarget));
+DelayCommand(0.1, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlood, oTarget));
 }

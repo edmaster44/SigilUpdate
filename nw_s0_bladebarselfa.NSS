@@ -68,10 +68,10 @@ void main()
 			
             	//Apply damage and VFX
 				SpawnBloodHit(oTarget, TRUE, OBJECT_INVALID);
-				PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
+				ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
 			
-            	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-            	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+            	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
         }
     }

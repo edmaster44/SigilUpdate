@@ -34,7 +34,7 @@ void main()
 	
     //Create an instance of the AOE Object using the Apply Effect function
 
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(nDuration));
     
 
 

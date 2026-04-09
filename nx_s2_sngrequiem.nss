@@ -95,8 +95,8 @@ void DoDamage(object oCaster, int nSpellId)
             effect eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
             float fDelay = 0.15 * GetDistanceToObject( oTarget );
 
-            DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget ) );
-            DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eVis, oTarget ) ); 
+            DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget ) );
+            DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_INSTANT, eVis, oTarget ) ); 
         }
 
     	oTarget = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_HUGE, locCaster );
@@ -147,8 +147,8 @@ void DoPartyHealing(object oCaster, int nSpellId)
         effect eVis = EffectVisualEffect(VFX_IMP_HEALING_M);
         float fDelay = 0.15 * GetDistanceToObject( oTarget );
 
-        DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHeal, oTarget ) );
-        DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eVis, oTarget ) ); 
+        DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_INSTANT, eHeal, oTarget ) );
+        DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_INSTANT, eVis, oTarget ) ); 
         }
         
         oTarget = GetNextFactionMember( oLeader, bPCOnly );
@@ -180,7 +180,7 @@ void RunSongEffects(int nCallCount, object oCaster, int nSpellId)
     //if(nSingingSpellId == nSpellId)
     //{
 		effect ePulse = EffectVisualEffect(VFX_HIT_BARD_REQUIEM);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oCaster);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oCaster);
 
 			
 		DoDamage(oCaster, nSpellId);

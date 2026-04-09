@@ -87,7 +87,7 @@ void main()
 				{
 					if (!GetHasSpellEffect(SPELL_I_TENACIOUS_PLAGUE, oTarget))
 					{
-					DelayCommand(0.0f, PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePedes, oTarget, fDuration ));
+					DelayCommand(0.0f, ApplyEffectToObject( DURATION_TYPE_TEMPORARY, ePedes, oTarget, fDuration ));
 					int i;
 					for ( i = 1; i <= nDuration; i++ )
 					{
@@ -139,7 +139,7 @@ void RunSwarmAttack( object oTarget, float fDuration )
 			nDam = d6(3);
 		nDam += GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
 		effect eHurt = EffectDamage( nDam, DAMAGE_TYPE_MAGICAL );
-		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHurt, oTarget );
+		ApplyEffectToObject( DURATION_TYPE_INSTANT, eHurt, oTarget );
 	}
 
 }

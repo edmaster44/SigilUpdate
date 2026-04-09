@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // i_ps_polymorpher_ac
@@ -27,5 +27,5 @@ void main()
 
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oPC));
 	DelayCommand(0.4, AssignCommand(oPC, ClearAllActions())); // prevents an exploit
-	DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePolym,oPC, fDuration));
+	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePolym,oPC, fDuration));
 }

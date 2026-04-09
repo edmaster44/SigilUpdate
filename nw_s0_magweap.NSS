@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Magic Weapon
 //:: NW_S0_MagWeap.nss

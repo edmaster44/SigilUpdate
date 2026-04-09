@@ -48,8 +48,8 @@ void main()
             if (!OnHitResistSpell(oCaster, oTarget) && !/*Will Save*/ MySavingThrow(SAVING_THROW_WILL, oTarget, nDC))
             {
                 //Apply the slow effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, RoundsToSeconds(nDuration));
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, RoundsToSeconds(nDuration));
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 //Count the number of creatures affected
                 nCount++;
             }

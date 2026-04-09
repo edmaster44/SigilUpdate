@@ -63,15 +63,15 @@ void main()
             if(nDamage > 0)
             {
                 // Apply effects to the currently selected target.
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 //This visual effect is applied to the target object not the location as above.  This visual effect
                 //represents the flame that erupts on the target not on the ground.
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
              }
             if (!MySavingThrow(SAVING_THROW_WILL,oTarget,nDC, SAVING_THROW_TYPE_MIND_SPELLS))
             {
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eKnockdown,oTarget,4.0f);
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oTarget,RoundsToSeconds(d6()+3));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eKnockdown,oTarget,4.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oTarget,RoundsToSeconds(d6()+3));
             }
 
         }

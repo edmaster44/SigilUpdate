@@ -63,7 +63,7 @@ void main()
                 if  (!/*Fort Save*/ MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DEATH))
                 {
                     //Apply the death effect and VFX impact
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
                 }
                 else
                 {
@@ -84,9 +84,9 @@ void main()
 				
                     //Apply damage effect and VFX impact
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                 }
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
         }
     }

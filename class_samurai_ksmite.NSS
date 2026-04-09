@@ -15,5 +15,5 @@ void main()
 	if (dBonus > 5) dBonus += 10;
 	eBonus = EffectLinkEffects(eBonus, EffectDamageIncrease(dBonus, DAMAGE_TYPE_DIVINE));
 	eBonus = SupernaturalEffect(eBonus);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 6.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 6.0);
 }

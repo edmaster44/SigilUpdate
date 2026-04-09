@@ -53,6 +53,6 @@ void main()
 			eLink = EffectLinkEffects(eCraft4, eLink);
 		}
 		eLink = SupernaturalEffect(eLink);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 	}	
 }

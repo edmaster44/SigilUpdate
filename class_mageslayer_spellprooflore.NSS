@@ -37,5 +37,5 @@ void main()
 	int spellID = Get2DAInt("iprp_spells", "SpellIndex", spellProperty);
 	
 	effect spellImmunity = SupernaturalEffect(EffectSpellImmunity(spellID));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, spellImmunity, OBJECT_SELF, HoursToSeconds(24));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, spellImmunity, OBJECT_SELF, HoursToSeconds(24));
 }

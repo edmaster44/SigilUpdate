@@ -26,9 +26,9 @@ void PS_RemovePolymorphBonus(object oPC, object oEssence)
 		eChaRemove		= ExtraordinaryEffect(eChaRemove);
 	
 	if(!GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC))
-    {	DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWisRemove, oPC));
-        DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIntRemove, oPC));
-        DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eChaRemove, oPC));
+    {	DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWisRemove, oPC));
+        DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIntRemove, oPC));
+        DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eChaRemove, oPC));
 		SetLocalInt(oEssence, "WildWis", 0);
 		SetLocalInt(oEssence, "WildInt", 0);
 		SetLocalInt(oEssence, "WildCha", 0);
@@ -46,21 +46,21 @@ void PS_ApplyPolymorphBonus(object oPC, object oEssence)
 	if(iWisBonus > 0)
 	{	effect eWisRacial	= EffectAbilityIncrease(ABILITY_WISDOM, iWisBonus);
 			eWisRacial		= ExtraordinaryEffect(eWisRacial);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWisRacial, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWisRacial, oPC);
 		SendMessageToPC(oPC, "WIS bonus to polymorph: +" + IntToString(iWisBonus));
 		SetLocalInt(oEssence, "WildWis", iWisBonus);
 		SendMessageToPC(oPC, "WIS bonus applied.");	}
 	if(iIntBonus > 0)
 	{	effect eIntRacial	= EffectAbilityIncrease(ABILITY_INTELLIGENCE, iIntBonus);
 			eIntRacial		= ExtraordinaryEffect(eIntRacial);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIntRacial, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eIntRacial, oPC);
 		SendMessageToPC(oPC, "INT bonus to polymorph: +" + IntToString(iIntBonus));
 		SetLocalInt(oEssence, "WildInt", iIntBonus);
 		SendMessageToPC(oPC, "INT bonus applied.");	}
 	if(iChaBonus > 0)
 	{	effect eChaRacial	= EffectAbilityIncrease(ABILITY_CHARISMA, iChaBonus);
 			eChaRacial		= ExtraordinaryEffect(eChaRacial);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eChaRacial, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eChaRacial, oPC);
 		SendMessageToPC(oPC, "CHA bonus to polymorph: +" + IntToString(iChaBonus));
 		SetLocalInt(oEssence, "WildCha", iChaBonus);
 		SendMessageToPC(oPC, "CHA bonus applied.");	}

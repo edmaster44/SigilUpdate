@@ -1,11 +1,11 @@
-#include "ff_applyeffect"
+
 
 void main () {
 
 	if (GetLocalInt(OBJECT_SELF, "initialized") == 0)
 	{
 		effect spawn = EffectNWN2SpecialEffectFile("fx_magical_explosion", OBJECT_SELF);
-		PS_ApplyEffectToObject(0, spawn, OBJECT_SELF);
+		ApplyEffectToObject(0, spawn, OBJECT_SELF);
 		SetLocalInt(OBJECT_SELF, "initialized", 1);
 		return;
 	}
@@ -27,7 +27,7 @@ void main () {
 		{
 			SendMessageToPC(potentialHostile, "Attack: "+IntToString(attackBonus)+" + "+IntToString(nRoll)+" = "+IntToString((attackBonus+nRoll))+" \n The ray hits!");
 			effect damage = EffectDamage(d6(damageDice));
-			PS_ApplyEffectToObject(0, damage, potentialHostile);
+			ApplyEffectToObject(0, damage, potentialHostile);
 		}
 		break;
 		

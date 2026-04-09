@@ -99,13 +99,13 @@ void main()
                 {
                     //effect eLinkBard = EffectLinkEffects(eLink, eVis);
                     //eLinkBard = ExtraordinaryEffect(eLinkBard);
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
                 }
 //                else if(GetIsFriend(oTarget))
                 else if(spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF))
                 {
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
                 }
             }
         }

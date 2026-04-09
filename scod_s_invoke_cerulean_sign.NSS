@@ -98,19 +98,19 @@ void main()
 					   } 
 					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF) - 10))
 					   {
-					  	   DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink1, oTarget, RoundsToSeconds(nDuration)));
+					  	   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink1, oTarget, RoundsToSeconds(nDuration)));
 					   }
 					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF) - 5))
 					   {
-					       DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, (RoundsToSeconds(nDuration) * 2)));
+					       DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, (RoundsToSeconds(nDuration) * 2)));
 					   }
 					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF) + 5))
 					   {
-					   	   DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink4, oTarget, (RoundsToSeconds(nDuration) + (RoundsToSeconds(3)))));	
+					   	   DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink4, oTarget, (RoundsToSeconds(nDuration) + (RoundsToSeconds(3)))));	
 					   }
 					   if (PS_GetLevel(oTarget) < (GetCasterLevel(OBJECT_SELF)))
 					   {
-					   		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink3, oTarget, (RoundsToSeconds(nDuration) + (RoundsToSeconds(2)))));
+					   		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink3, oTarget, (RoundsToSeconds(nDuration) + (RoundsToSeconds(2)))));
 					   }	
 	                  
 	                }

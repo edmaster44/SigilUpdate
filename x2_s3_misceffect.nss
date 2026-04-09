@@ -48,7 +48,7 @@ void main()
                      if  (GetIsSkillSuccessful(oSpellTarget,SKILL_DISCIPLINE,nDC) == 0)
                      {
                          effect eKnock = EffectKnockdown();
-                         PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eKnock,oSpellTarget,RoundsToSeconds(1));
+                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eKnock,oSpellTarget,RoundsToSeconds(1));
                      }
                   }
                  return;
@@ -62,8 +62,8 @@ void main()
                      effect eVis = EffectVisualEffect(VFX_IMP_FROST_S);
                      effect eSlow = EffectSlow();
                      effect eLink = EffectLinkEffects(eDur,eSlow);
-                     PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oSpellTarget,RoundsToSeconds(d3()));
-                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget,RoundsToSeconds(d3()));
+                     ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oSpellTarget,RoundsToSeconds(d3()));
+                     ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oSpellTarget,RoundsToSeconds(d3()));
                  }
                  return;
             }

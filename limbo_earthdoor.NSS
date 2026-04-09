@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main ()
 {
 	AssignCommand(OBJECT_SELF, ActionSpeakString("<C=yellow><i>The rock walls shift and mend any attempts to break through them.</i>"));

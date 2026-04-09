@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // restores creature weapons that may have been removed
 // checks first they should have
 // does not reapply higher level weapons until next threshold

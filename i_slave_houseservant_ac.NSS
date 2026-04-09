@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 /*variation on i_waitercontract_ac to handle slaves of a non-combat nature*/

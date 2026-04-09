@@ -108,7 +108,7 @@ void DoAcidGlobeEffect(object oSelf, object oTarget) {
 	
 	if (nHit == 0) {
 		effect eVis = EffectVisualEffect(VFX_IMP_ACID_S, TRUE);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		return;
 	}
 
@@ -119,13 +119,13 @@ void DoAcidGlobeEffect(object oSelf, object oTarget) {
 	
 	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
 	eDam = EffectLinkEffects(EffectVisualEffect(VFX_IMP_ACID_L), eDam);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	
 	eDam = EffectDamage(nDamage/2, DAMAGE_TYPE_ACID);
 	eDam = EffectLinkEffects(EffectVisualEffect(VFX_IMP_ACID_S), eDam);
-	DelayCommand(6.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	DelayCommand(6.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 	DelayCommand(6.0f, SendMessageToPC(oTarget, "Secondary acid damage applied."));
-	DelayCommand(12.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+	DelayCommand(12.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 	DelayCommand(12.0f, SendMessageToPC(oTarget, "Secondary acid damage applied."));
 
 }

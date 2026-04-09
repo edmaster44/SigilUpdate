@@ -61,7 +61,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SUNBURST));
             //This visual effect is applied to the target object not the location as above.  This visual effect
             //represents the flame that erupts on the target not on the ground.
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVis, oTarget);
 
             if (!OnHitResistSpell(oCaster, oTarget))
             {
@@ -88,12 +88,12 @@ void main()
                     if (nDamage == nOrgDam || ( nDamage > 0 && GetHasFeat(FEAT_IMPROVED_EVASION, oTarget) ))
                     {
                         effect eDead = EffectDamage(GetCurrentHitPoints(oTarget));
-                        //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_FLAME_M), oTarget);
+                        //ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_FLAME_M), oTarget);
 
                         //Apply epicenter explosion on caster
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eExplode, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eExplode, oTarget);
 
-                        DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDead, oTarget));
+                        DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDead, oTarget));
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 						DelayCommand(0.5, SendMessageToPC(oCaster, sReport));
                         bDoNotDoDamage = TRUE;
@@ -110,7 +110,7 @@ void main()
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
 
                     // Apply effects to the currently selected target.
-                    DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 					SendMessageToPC(oCaster, sReport);
 
@@ -119,7 +119,7 @@ void main()
                     if (nDamage == nOrgDam && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
                     {
                         effect eBlindness = EffectNewBlindness();
-                        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlindness, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlindness, oTarget);
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> blinds "+GetName(oTarget)+"</color>";
 						DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
                     }

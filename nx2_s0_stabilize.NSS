@@ -41,7 +41,7 @@ void main()
 				if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()))
 				{
 					effect eDam = EffectDamage(1, DAMAGE_TYPE_POSITIVE);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 				}
 			}
 			else // we're alive and NOT undead...
@@ -49,7 +49,7 @@ void main()
 				effect eHeal = EffectHeal(1);
 				effect eVFX   = EffectVisualEffect(VFX_IMP_HEALING_S);
 				effect eLink = EffectLinkEffects(eHeal, eVFX);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 			}
 		}
 		

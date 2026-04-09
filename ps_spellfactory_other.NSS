@@ -350,9 +350,9 @@ int TargetHasMantle(object oTarget)
 void ApplyTempOrInstantEffect(object oTarget, effect eEffect, float fDelay, float fDuration=0.0f)
 {
     if(fDuration <= 0.0f)
-        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oTarget));
+        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect, oTarget));
     else
-        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fDuration));
+        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fDuration));
 }
 
 // Creates a damage effect

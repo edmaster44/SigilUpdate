@@ -239,7 +239,7 @@ void AlternativeSkillStatScaling (object oPC)
 	
 	eFX = SupernaturalEffect(eFX);
 	eFX = SetEffectSpellId(eFX, SKILL_BONUS_FX);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC, 0.0, SKILL_BONUS_FX);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 		 
 		 
 }
@@ -327,7 +327,7 @@ void main()
 	
 	
 	//Raise if DM rests you???
-	if (GetIsDead(oPC) == TRUE) PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
+	if (GetIsDead(oPC) == TRUE) ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
 	
 
 	//If this is a limited rest area and you're not in a safe trigger. . don't let you rest

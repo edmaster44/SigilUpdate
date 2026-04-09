@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*
 	rh_giant_boulder_throw
 
@@ -42,7 +42,7 @@ void BoulderThrow (location lImpact)
 	
 	//Animation and sounds for attack
 	//PlayCustomAnimation(OBJECT_SELF,"taunt",0,1.0);
-	//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eRock,OBJECT_SELF,1.5);
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eRock,OBJECT_SELF,1.5);
 	DelayCommand(0.5,PlaySound("c_giantfire_atk2"));
 	AssignCommand(OBJECT_SELF,ActionCastFakeSpellAtLocation(9300,lImpact,PROJECTILE_PATH_TYPE_DEFAULT));
 	
@@ -101,10 +101,10 @@ void RockThrow (location lLocation)
 		
 		if (iTarget == OBJECT_TYPE_PLACEABLE || iTarget == OBJECT_TYPE_DOOR) 
 		{
-			DelayCommand(1.5+fTravelT,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+			DelayCommand(1.5+fTravelT,ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
 			if (iDamageBonus == TRUE)
 			{
-				DelayCommand(1.5+fTravelT,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eBonusDamage,oTarget));
+				DelayCommand(1.5+fTravelT,ApplyEffectToObject(DURATION_TYPE_INSTANT,eBonusDamage,oTarget));
 			}	
 		}
 		
@@ -123,10 +123,10 @@ void RockThrow (location lLocation)
 				int iDamage = GetReflexAdjustedDamage(iDamageAmount,oTarget,18,SAVING_THROW_TYPE_NONE,OBJECT_SELF);
 				eDamage = EffectDamage(iDamage,DAMAGE_TYPE_BLUDGEONING,DAMAGE_POWER_NORMAL);
 				
-				DelayCommand(1.5+fTravelT,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+				DelayCommand(1.5+fTravelT,ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
 				if (iDamageBonus == TRUE)
 				{
-					DelayCommand(1.5+fTravelT,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eBonusDamage,oTarget));
+					DelayCommand(1.5+fTravelT,ApplyEffectToObject(DURATION_TYPE_INSTANT,eBonusDamage,oTarget));
 				}
 				DelayCommand(1.5+fTravelT,DamageAnimation(oTarget));
 			}

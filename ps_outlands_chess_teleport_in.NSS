@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // From conversation with chess master to teleport into the chessboard.
 
 void JumpGroupToLocation(object oTarget, location lDestination)

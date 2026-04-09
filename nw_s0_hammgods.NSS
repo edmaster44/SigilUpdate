@@ -91,13 +91,13 @@ void main()
                 else
                 {
                     //Apply daze effect
-                    DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(nDuration)));
+                    DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(nDuration)));
                 }
                 //Set damage effect
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE );
                 //Apply the VFX impact and damage effect
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
              }
         }
         //Get next target in shape

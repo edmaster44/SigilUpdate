@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //A script for creating objects on death. . for instance, chests

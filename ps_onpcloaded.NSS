@@ -586,9 +586,9 @@ void main()
 			if (iSinceDied < 4 && iSinceDied >= iSinceBoot)
 			{	
 				//SendMessageToPC(oPC, "You should be jumping to where you died!");
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRez, oPC);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRez, oPC);
 				AssignCommand(oPC, JumpToLocation(lDied));
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oPC);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oPC);
 				DelayCommand(3.0f, SetLocalLocation(oCheck, "Deathsite", lDied));
 				DelayCommand(3.0f, SetLocalString(oCheck, "PC_DEATH_AREA", sAreaDied));	
 			}
@@ -598,9 +598,9 @@ void main()
 			if (iSinceDied >= 4)
 			{	
 				SendMessageToPC(oPC, "You should be jumping to the oarsman!");
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRez, oPC);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRez, oPC);
 				AssignCommand(oPC, JumpToLocation(lReturn));
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oPC, 6.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oPC, 6.0f);
 			}
 		}
 	}
@@ -621,7 +621,7 @@ void main()
 
 		
 	// Remove possible exploit from casting Divine Power or other BABMinimum effects prior to reset or crash
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBABMinimum(1), oPC, 0.5f);
 	
     DMFI_ClientEnter(oPC);
 

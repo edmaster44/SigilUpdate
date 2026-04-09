@@ -1,10 +1,10 @@
-#include "ff_applyeffect" 
+ 
 void main()
 {
 object oPC = GetEnteringObject();
 object oStatue = GetNearestObjectByTag("BeamStatue3");
 effect eBeam = EffectBeam(VFX_BEAM_COLD,oStatue,BODY_NODE_HAND,FALSE);
 effect eDMG = EffectDamage( d6(5) ,DAMAGE_TYPE_COLD);
-PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oPC,1.0);
-PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDMG,oPC,0.0);
+ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oPC,1.0);
+ApplyEffectToObject(DURATION_TYPE_INSTANT,eDMG,oPC,0.0);
 }

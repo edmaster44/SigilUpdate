@@ -119,8 +119,8 @@ void main()
                 //Set damage effect
                 effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
                 //Apply the damage effect
-                DelayCommand(fTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-				DelayCommand(fTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+                DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+				DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
             }
             // * May 2003: Make it so the arrow always appears, even if resisted
 			DelayCommand(fTime2, SpawnSpellProjectile(OBJECT_SELF,oTarget,lSourceLoc,lTargetLoc,SPELL_FLAME_ARROW,nPathType));

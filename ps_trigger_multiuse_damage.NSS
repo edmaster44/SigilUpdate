@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //Script by Dedic8ed
@@ -40,10 +40,10 @@ void main()
 	string sFloaty = GetLocalString(OBJECT_SELF,"floaty");
 //the "floaty" variable will be generated as floaty text over the head of the character pulling the lever
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), oPC, 15.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), oPC, 15.0f);
 	FloatingTextStringOnCreature(sFloaty,oPC);
-	DelayCommand(3.0,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oPC));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAgony, oPC, 6.0f);
+	DelayCommand(3.0,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oPC));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAgony, oPC, 6.0f);
 	
 
 }

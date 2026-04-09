@@ -85,8 +85,8 @@ void main()
 
         // Do VFX
         effect eVis = EffectVisualEffect(VFX_DUR_MIND_AFFECTING_POSITIVE);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         if(manif.bTwin)
-            DelayCommand(0.2f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 2.5f));
+            DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 2.5f));
     }
 }

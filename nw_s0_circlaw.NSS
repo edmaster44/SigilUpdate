@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Magic Circle Against Law
 //:: NW_S0_CircLaw.nss

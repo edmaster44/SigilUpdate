@@ -92,8 +92,8 @@ void CureObject( object oTarget, effect eVis, effect eVis2, object oCaster)
 	            //Set damage effect
 	            eKill = EffectDamage(nHurt, DAMAGE_TYPE_POSITIVE);
 	            //Apply damage effect and VFX impact
-	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
-	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
+	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 	        }
 	    }
 	}
@@ -112,8 +112,8 @@ void CureObject( object oTarget, effect eVis, effect eVis2, object oCaster)
 	        nModify = nModify + nCasterLvl;
 	        eHeal = EffectHeal(nModify);
 	        //Apply heal effect and VFX impact
-	        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
-	        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+	        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
+	        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
 	    }
 	}
 	

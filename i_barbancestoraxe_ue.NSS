@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Stops the Barbarian from unequipping the ancestor axe while raging
 
 void main()

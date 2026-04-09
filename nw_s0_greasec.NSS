@@ -39,7 +39,7 @@ void main()
                 fDelay = GetRandomDelay(0.0, 2.0);
                 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_NONE, oCaster, fDelay))
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 4.0));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 4.0));
                 }
             }
         }

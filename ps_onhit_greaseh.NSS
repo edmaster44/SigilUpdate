@@ -40,7 +40,7 @@ void main()
                 fDelay = GetRandomDelay(0.0, 2.0);
                 if(!OnHitSavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oCaster, fDelay))
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 4.0));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 4.0));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> slows "+GetName(oTarget)+"</color>";
 					DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
                 }

@@ -110,7 +110,7 @@ void main()
     }
 
 	effect eRay = EffectBeam(iBeam, OBJECT_SELF, iPart, FALSE);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 2.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 2.0);
 	
 	
     if (!bSave)
@@ -121,18 +121,18 @@ void main()
          case 1357:                 e1 = EffectDeath(TRUE);
                                    eVis = EffectVisualEffect(VFX_IMP_DEATH);
                                    eLink = EffectLinkEffects(e1,eVis);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oTarget);
                                    break;
 
           case 1358:                e1 = ExtraordinaryEffect(EffectKnockdown());
                                    eVis = EffectVisualEffect(VFX_IMP_STUN);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,6.0f);
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,6.0f);
                                    break;
 
           // Petrify for one round per SaveDC
           case 1359:                eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
                                    DoBeholderPetrify(nSaveDC,OBJECT_SELF,oTarget,GetSpellId());
                                    break;
 
@@ -141,8 +141,8 @@ void main()
                                    eVis = EffectVisualEffect(VFX_IMP_DOMINATE_S);
 								   if (!GetIsImmune(oTarget,IMMUNITY_TYPE_DOMINATE, OBJECT_SELF) && !GetIsImmune(oTarget,IMMUNITY_TYPE_MIND_SPELLS, OBJECT_SELF))
 								   {
-                                  	 PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
-                                  	 PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,RoundsToSeconds(iLevels));
+                                  	 ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+                                  	 ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,RoundsToSeconds(iLevels));
 								   }
 								   else
 								   {
@@ -153,14 +153,14 @@ void main()
 
           case 1361:                e1 = EffectSlow();
                                    eVis = EffectVisualEffect(VFX_IMP_SLOW);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,RoundsToSeconds(iLevels));
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,RoundsToSeconds(iLevels));
                                    break;
 
           case 1362:                e1 = EffectDamage(d8(iLevels)+iLevels);
                                    eVis = EffectVisualEffect(VFX_COM_BLOOD_REG_RED);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,e1,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,e1,oTarget);
                                    break;
 
 
@@ -169,8 +169,8 @@ void main()
                                    eVis = EffectVisualEffect(VFX_IMP_FEAR_S);
                                    eDur = EffectVisualEffect(VFX_DUR_MIND_AFFECTING_FEAR);
                                    e1 = EffectLinkEffects(eDur,e1);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
-                                   PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,RoundsToSeconds(1+d4()));
+                                   ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+                                   ApplyEffectToObject(DURATION_TYPE_TEMPORARY,e1,oTarget,RoundsToSeconds(1+d4()));
                                    break;
 
 
@@ -184,7 +184,7 @@ void main()
                case 1357:         e1 = EffectDamage((d8(iLevels)+iLevels)/2);
                                  eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
                                  eLink = EffectLinkEffects(e1,eVis);
-                                 PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oTarget);
+                                 ApplyEffectToObject(DURATION_TYPE_INSTANT,eLink,oTarget);
         }
     }
 }
@@ -215,14 +215,14 @@ void DoBeholderPetrify(int nDuration,object oSource, object oTarget, int nSpellI
         /// * The duration is permanent against NPCs but only temporary against PCs
         if (bIsPC == TRUE || GetPlotFlag(oTarget) == TRUE)
         {
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(GetTotalLevels(oSource, TRUE)));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(GetTotalLevels(oSource, TRUE)));
         }
         else
         {
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 		// kill after 30 seconds so that XP is granted
 		DelayCommand(30.0, SendMessageToPC(oSource, "The petrified " + GetName(oTarget) + " has crumbled and died."));
-		DelayCommand(30.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, TRUE, TRUE, TRUE), oTarget));
+		DelayCommand(30.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, TRUE, TRUE, TRUE), oTarget));
     	}
 	}
 }

@@ -876,7 +876,7 @@ void PlayMobileAmbientAnimations_Avian()
             AnimActionRandomMoveAway(oFriend, 100.0);
         } else {
             effect eBird = EffectDisappearAppear(GetLocation(oFriend));
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBird, OBJECT_SELF, 4.0);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBird, OBJECT_SELF, 4.0);
             AnimActionRandomMoveAway(oFriend, 100.0);
         }
     } else {

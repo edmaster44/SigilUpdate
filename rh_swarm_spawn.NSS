@@ -29,8 +29,8 @@ void main()
 	
 	//effect eLink	=	EffectLinkEffects(eVisual,eAura);
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eVisual,OBJECT_SELF);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eAura,OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT,eVisual,OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT,eAura,OBJECT_SELF);
 	
 	ExecuteScript(SCRIPT_DEFAULT_SPAWN, OBJECT_SELF);
 }

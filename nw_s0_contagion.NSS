@@ -81,8 +81,8 @@ void main()
 			//effect eHit = EffectVisualEffect(VFX_HIT_SPELL_POISON);	// NWN1 VFX
 			effect eHit = EffectVisualEffect( VFX_HIT_SPELL_NECROMANCY );	// NWN2 VFX
 			//eDisease = EffectLinkEffects( eDisease, eHit );
-            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDisease, oTarget);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget );	// NWN2 VFX
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDisease, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget );	// NWN2 VFX
         }
     }
 }

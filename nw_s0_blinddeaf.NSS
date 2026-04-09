@@ -73,7 +73,7 @@ void main()
                     nDuration = nDuration * 2;
                 }
                 //Apply visual and effects
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
             }
         }
     }

@@ -80,7 +80,7 @@ int creatureReflex(object oWP)
 		AssignCommand(oTarget, ActionJumpToObject(oWP, FALSE));
 		PlayCustomAnimation(oTarget, "laydownB", TRUE, 1.0f);
 		if (ReflexSave(oTarget, 20, 14) == 0)
-			PS_ApplyEffectToObject(0, EffectDamage(d6(12), 1, 0, TRUE), oTarget);
+			ApplyEffectToObject(0, EffectDamage(d6(12), 1, 0, TRUE), oTarget);
 		
 		if (sanityCheck > 20) return;
 		sanityCheck++;*/

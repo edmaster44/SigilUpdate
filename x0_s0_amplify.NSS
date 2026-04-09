@@ -56,8 +56,8 @@ void main()
     //Fire spell cast at event for target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
     //Apply VFX impact and bonus effects
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// no longer using NWN1 VFX
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// no longer using NWN1 VFX
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 
 }
 

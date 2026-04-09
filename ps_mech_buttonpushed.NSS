@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 void ProgressButtons(object oHolder, int nStage, int nButtonsPressed) {

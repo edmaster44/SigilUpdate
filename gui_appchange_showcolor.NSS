@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main(int nFieldID)
 {
 	object oPlayer = OBJECT_SELF;

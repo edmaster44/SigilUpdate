@@ -30,7 +30,7 @@ void ToggleGodMode(object oPC)
 	eFX = EffectLinkEffects(eFX, EffectTrueSeeing());
 	eFX = SupernaturalEffect(eFX);
 	eFX = SetEffectSpellId(eFX, GOD_MODE);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
 void SuperDamage(object oPC)
@@ -48,7 +48,7 @@ void SuperDamage(object oPC)
 	eFX = EffectLinkEffects(eFX, EffectDamageIncrease(DAMAGE_BONUS_40, DAMAGE_TYPE_SONIC));
 	eFX = SupernaturalEffect(eFX);
 	eFX = SetEffectSpellId(eFX, SUPER_DAMAGE);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
 void OpenShop(object oPC)

@@ -87,7 +87,7 @@ void main()
             {			
 				effect eHold = EffectVisualEffect( VFX_DUR_PARALYZED );	
 				float fDuration = RoundsToSeconds( nDuration );
-        		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, oTarget, fDuration);
+        		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHold, oTarget, fDuration);
                 //RunGrappleHold( oTarget, nDuration );
 				int i;
 				for ( i = 0; i <= nDuration; i++ )
@@ -166,8 +166,8 @@ void RunGrappleHold( object oTarget, int nDuration, int nMetaMagic )
 		*/
 
         effect eHand = EffectVisualEffect(VFX_DUR_BIGBYS_CRUSHING_HAND);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0 );
-		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eHand, oTarget );
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0 );
+		ApplyEffectToObject( DURATION_TYPE_INSTANT, eHand, oTarget );
 
         object oSelf = OBJECT_SELF;
 		DelayCommand( 0.8, RunHandImpact(oTarget, oSelf, nDuration, nMetaMagic));
@@ -185,8 +185,8 @@ void RunHandImpact(object oTarget, object oCaster, int nDuration, int nMetaMagic
    	int nDam = MaximizeOrEmpower(6,2,nMetaMagic, 12);
    	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
    	effect eVis = EffectVisualEffect( VFX_HIT_SPELL_EVOCATION );
-   	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-   	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+   	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+   	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
  //	DelayCommand(6.0f,RunHandImpact(oTarget,oCaster, nDuration));
 
 }

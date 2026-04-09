@@ -71,7 +71,7 @@ void main()
 				eVFX = EffectVisualEffect(VFX_HIT_TURN_UNDEAD);
 				eLink = EffectLinkEffects(eVFX, eMes); 
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration /*RoundsToSeconds(nDur)*/);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration /*RoundsToSeconds(nDur)*/);
 				}
 				nCurrHD += nHD;
 			}

@@ -94,14 +94,14 @@ void main()
                 {
 					if (GetIsPC(oTarget))
 					{
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					}
                     // Apply effects
 					else
 					{
-	                    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget, 0.0f);
-	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget, 0.0f);
+	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					}
                 }// end if - Save to negate
             }// end if - SR check
@@ -128,14 +128,14 @@ void main()
                                 // Apply effects
                                 if (GetIsPC(oTarget))
 								{
-									PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-			                    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+									ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+			                    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 								}
 			                    // Apply effects
 								else
 								{
-				                    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget, 0.0f);
-				                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget, 0.0f);
+				                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 								}
                             }// end if - Save to negate
                         }// end if - SR check

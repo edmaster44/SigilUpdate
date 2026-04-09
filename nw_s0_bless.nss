@@ -65,8 +65,8 @@ void main()
         {
            SignalEvent(GetItemPossessor(oTarget), EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
            IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(123,1), fDuration, X2_IP_ADDPROP_POLICY_KEEP_EXISTING );
-           //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
-           PS_ApplyEffectToObject(nDurType, eVis, GetItemPossessor(oTarget), fDuration);
+           //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
+           ApplyEffectToObject(nDurType, eVis, GetItemPossessor(oTarget), fDuration);
            return;
         }
     }
@@ -98,8 +98,8 @@ void main()
             //Fire spell cast at event for target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLESS, FALSE));
             //Apply VFX impact and bonus effects
-            //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-            DelayCommand(fDelay, PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
+            //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, ApplyEffectToObject(nDurType, eLink, oTarget, fDuration));
 			//SpeakString("Attempting to bless " + GetName(oTarget) + ". Duration Type: " + IntToString(nDurType) + " Duration:" + FloatToString(fDuration));
         }
         //Get the next target in the specified area around the caster

@@ -96,10 +96,10 @@ void DamageVictim(int nDice, object oVictim, object oCaster, int nSpellSaveDC, i
         if (nDamage > 0)
         {
         effect eVisual = EffectVisualEffect(VFX_HIT_SPELL_ACID);
-        PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eVisual, oVictim );        
+        ApplyEffectToObject( DURATION_TYPE_INSTANT, eVisual, oVictim );        
 
         effect eDamage  = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-        DelayCommand(0.0f, PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamage, oVictim )); //FIX: if not delayed bad things happen
+        DelayCommand(0.0f, ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamage, oVictim )); //FIX: if not delayed bad things happen
         }
     }
     if ((nSave == 0) && (nDice > 6))

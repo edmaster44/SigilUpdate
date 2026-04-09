@@ -113,22 +113,22 @@ void main()
 			if(nTotalDamage > 0)
 			{
 			    // Apply effects to the currently selected target.
-			    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamAcid, 		oTarget));
-			    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamElectrical, oTarget));
-			    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamFire, 		oTarget));
-			    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamSonic, 		oTarget));
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCold, 		oTarget));
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamMagical, 	oTarget));
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamNegative, 	oTarget));
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamPositive, 	oTarget));
+			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamAcid, 		oTarget));
+			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamElectrical, oTarget));
+			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamFire, 		oTarget));
+			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamSonic, 		oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamCold, 		oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamMagical, 	oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamNegative, 	oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamPositive, 	oTarget));
 				
 			
 			    //These visual effects are applied to the target object, not the location as above.
-			    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVFX, oTarget));
-			    //DelayCommand(fDelay, 		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisAcid, 	   oTarget));
-			    //DelayCommand(fDelay + 0.2f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElectrical, oTarget));
-			    //DelayCommand(fDelay + 0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisFire, 	   oTarget));
-			    //DelayCommand(fDelay + 0.7f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisSonic, 	   oTarget));
+			    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVFX, oTarget));
+			    //DelayCommand(fDelay, 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisAcid, 	   oTarget));
+			    //DelayCommand(fDelay + 0.2f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisElectrical, oTarget));
+			    //DelayCommand(fDelay + 0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisFire, 	   oTarget));
+			    //DelayCommand(fDelay + 0.7f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisSonic, 	   oTarget));
 			}
         }
 		

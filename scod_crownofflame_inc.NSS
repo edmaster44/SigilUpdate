@@ -48,7 +48,7 @@ void ApplyCoF(object oTarget, object oCaster, int nId, int nDuration)
 	
 	eDam = EffectDamage(d8(nNumDice), DAMAGE_TYPE_DIVINE, DAMAGE_POWER_NORMAL, TRUE);
 	eLink = EffectLinkEffects(eImpact, eDam);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);	
 	if (bIsBlinded)
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration));	
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration));	
 }

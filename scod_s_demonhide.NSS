@@ -53,5 +53,5 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_DEMONHIDE);
 
     //Apply the linked effects.
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

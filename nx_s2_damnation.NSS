@@ -64,15 +64,15 @@ void main()
 			
 			if (!MyResistSpell(OBJECT_SELF, oTarget))
 			{
-				//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
 				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF))
 				{	// Fail save and die.
-					DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+					DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
 				}
 				else
 				{	// Make save, so be dazed.
-					DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(nDazeDuration)));
+					DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(nDazeDuration)));
 				}
 				
 			}

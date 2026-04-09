@@ -60,15 +60,15 @@ void RunHandImpact(object oTarget, object oCaster, int nMetaMagic)
        	//effect eVis = EffectVisualEffect(VFX_IMP_ACID_L);	// NWN1 VFX
        	effect eVis = EffectVisualEffect( 837 );	// NWN2 VFX: VFX_HIT_BIGBYS_CLENCHED_FIST
 
-       	DelayCommand( 0.8f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
-       	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+       	DelayCommand( 0.8f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
+       	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
        	if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC))
        	{
 			effect eStun = EffectStunned();
 			effect eDur = EffectVisualEffect( VFX_DUR_STUN );
 			eStun = EffectLinkEffects( eStun, eDur );
-           	DelayCommand( 0.8f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(1)) );
+           	DelayCommand( 0.8f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(1)) );
        	}
 
       	DelayCommand(6.0f,RunHandImpact(oTarget,oCaster, nMetaMagic));
@@ -124,7 +124,7 @@ void main()
         {
 			int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
             effect eHand = EffectVisualEffect(VFX_DUR_BIGBYS_CLENCHED_FIST);
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHand, oTarget, RoundsToSeconds(nDuration));
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHand, oTarget, RoundsToSeconds(nDuration));
 
             //----------------------------------------------------------
             // GZ: 2003-Oct-15

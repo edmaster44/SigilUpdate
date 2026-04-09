@@ -60,5 +60,5 @@ void main()
     }
 
     //Apply the VFX impact and effects
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF, fDuration);	// Lasts 10 rounds = 1 minute.
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF, fDuration);	// Lasts 10 rounds = 1 minute.
 }

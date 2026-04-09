@@ -42,7 +42,7 @@ void ExplodeDamage(object oTarget)
 				    	eDamage = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);	
 					}
 					
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);				
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);				
                 }			
             }
         }
@@ -98,8 +98,8 @@ void CastSpell(float fDuration, int nEffect, int nTimesCast, int nTimesHit)
 	   	 		effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
 	
 	            //Apply the VFX impact and damage effect
-	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 				
 				nTimesHit = nTimesHit + 1;
 	        }
@@ -107,7 +107,7 @@ void CastSpell(float fDuration, int nEffect, int nTimesCast, int nTimesHit)
     }
 	
     effect eRay = EffectBeam(nEffect, OBJECT_SELF, BODY_NODE_HAND);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, fDuration);
 	
 	if (nTimesCast == 1)
 	{
@@ -128,12 +128,12 @@ void CastSpell(float fDuration, int nEffect, int nTimesCast, int nTimesHit)
 			
 			if (!MySavingThrow(SAVING_THROW_FORT, oTarget, 34))
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0f);
 			}
 
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eShake, oTarget);
-			DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis3, oTarget));
-			DelayCommand(1.05f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eShake, oTarget);
+			DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis3, oTarget));
+			DelayCommand(1.05f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
 			DelayCommand(1.05f, ExplodeDamage(oTarget));
 		}
 	}
@@ -148,7 +148,7 @@ void main()
 				
 	DelayCommand(0.25, PlayCustomAnimationWrapper(oPC, "1hs_multiattack01", 0, 1.0));
 
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.5f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 3.5f);
 	DelayCommand(0.75f, CastSpell(2.25, 0, 0, 0));
 
 }

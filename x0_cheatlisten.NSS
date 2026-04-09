@@ -100,7 +100,7 @@ void main()
         }
         case 1029:
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectSkillIncrease(SKILL_ALL_SKILLS, 20), oPC);
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectSkillIncrease(SKILL_ALL_SKILLS, 20), oPC);
             break;
         }
         case 1030:

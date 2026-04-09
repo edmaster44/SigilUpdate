@@ -66,11 +66,11 @@ void main()
                 eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
                 eDam2 = EffectDamage(nDamage2, DAMAGE_TYPE_COLD);
                 // Apply effects to the currently selected target.
-                DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget));
+                DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam2, oTarget));
                 //This visual effect is applied to the target object not the location as above.  This visual effect
                 //represents the impact that erupts on the target not on the ground.
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 				SendMessageToPC(oCaster, sReport);
 				sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage2)+"</color>";

@@ -24,6 +24,6 @@ void main () {
 	
 	float fDuration = nLevel*1800.0f;
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, fDuration);
 
 }

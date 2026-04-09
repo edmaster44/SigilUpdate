@@ -51,7 +51,7 @@ void main()
             {
 				if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS)){
 					if (FortitudeSave(oTarget, nDC, SAVING_THROW_TYPE_TRAP, oCaster) == SAVING_THROW_CHECK_FAILED)  {
-						 DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindDur)));
+						 DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindDur)));
 					}
 				}
 				//Get next target in the sequence

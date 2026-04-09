@@ -106,7 +106,7 @@ void main()
                 //Check that a reflex save was made.
                 /*if(MySavingThrow(SAVING_THROW_REFLEX, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE, OBJECT_SELF, 1.0) == 0)
                 {
-                    DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindLength)));
+                    DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindLength)));
                     if (GetHasFeat(FEAT_IMPROVED_EVASION, oTarget))
                         nDamage = nDamage / 2;
                 }
@@ -126,11 +126,11 @@ void main()
                 if(nDamage > 0)
                 {
                     if (nDamage == nOrgDam && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
-                        DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindLength)));
+                        DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nBlindLength)));
 
                     //Apply the damage effect and VFX impact
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 }
             }
         }

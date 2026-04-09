@@ -371,7 +371,7 @@ object ProcessSpellCommonVis(struct CombatSpellData spell, float fDelay=0.0f)
         SetScriptHidden(oSpellNode, TRUE);
         ProcessSpellImpactVis(spell, oSpellNode, 0.0f);
         if(spell.Beam)
-	        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBeam(spell.BeamVis, spell.Caster, spell.BeamOriginBodyPart), oSpellNode, spell.BeamDuration);
+	        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectBeam(spell.BeamVis, spell.Caster, spell.BeamOriginBodyPart), oSpellNode, spell.BeamDuration);
         DestroyObject(oSpellNode, 2.0);
     }
     return oSpellNode;
@@ -566,7 +566,7 @@ int ProcessSpellTarget(struct CombatSpellData spell, struct CombatSpellData impa
                 // Apply Damage
                 if(nDamage > 0)
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget)); 
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget)); 
                 }
 
                 // Additional Effects (if saving throw was failed or no saving throw was required)
@@ -633,8 +633,8 @@ int ProcessSpellTarget(struct CombatSpellData spell, struct CombatSpellData impa
                 if(nHalf)
                     nDamage = nDamage / 2;
                 effect eHeal = EffectHeal(nDamage);
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, spell.HealVisEffect, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, spell.HealVisEffect, oTarget));
             }
 
             /*if(spell.InfiniteSpell)
@@ -652,7 +652,7 @@ int ProcessSpellTarget(struct CombatSpellData spell, struct CombatSpellData impa
     {
         if(spell.Beam)
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, spell.BeamDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, spell.BeamDuration);
             if(spell.BeamChain)
                 eBeam = EffectBeam(spell.BeamVis, oTarget, spell.BeamChainBodyPart);
         }
@@ -702,7 +702,7 @@ void ProcessSpellArea(struct CombatSpellData spell, struct CombatSpellData impac
             // Beam drawing is done here instead of in ProcessSpellTarget so that chaining can work
             if(spell.Beam)
             {
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, spell.BeamDuration));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, spell.BeamDuration));
                 if(spell.BeamChain)
                     eBeam = EffectBeam(spell.BeamVis, oTarget, spell.BeamChainBodyPart);
             }
@@ -735,7 +735,7 @@ void ProcessFakeMissiles(struct CombatSpellData spell, struct CombatSpellData im
         if(spell.SpellProjectile)
             DelayCommand(fDelay, SpawnSpellProjectile(spell.Caster, oTarget, GetLocation(spell.Caster), GetLocation(oTarget), spell.SpellProjectileSpellId, spell.SpellProjectilePathType));
         if(spell.Beam)
-            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, spell.BeamDuration));
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, spell.BeamDuration));
     }
 }
 

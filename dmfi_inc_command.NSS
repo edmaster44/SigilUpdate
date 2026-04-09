@@ -933,7 +933,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
                 else
                     fTime = 30.0;
 
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fTime);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fTime);
                 SendText(oPC, TXT_EFFECT_APPLIED + sCommand, TRUE, COLOR_GREEN);
             }
             else
@@ -954,7 +954,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
                         fTime = StringToFloat(sParam1);
                     else
                         fTime = 30.0;
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fTime);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fTime);
                     SendText(oPC, TXT_EFFECT_APPLIED + sCommand, TRUE, COLOR_GREEN);
                 }
                 else
@@ -973,7 +973,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             eEffect = EffectDisease(StringToInt(sCommand));
             if (GetIsEffectValid(eEffect))
             {
-                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oTarget);
                 SendText(oPC, TXT_EFFECT_APPLIED + sLabel, TRUE, COLOR_GREEN);
             }
             else
@@ -995,7 +995,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
             eEffect = EffectPoison(StringToInt(sCommand));
             if (GetIsEffectValid(eEffect))
             {
-                PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oTarget);
                 SendText(oPC, TXT_EFFECT_APPLIED + sLabel, TRUE, COLOR_GREEN);
             }
             else
@@ -1033,9 +1033,9 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 		if ((GetObjectType(oTarget)==OBJECT_TYPE_CREATURE) && (!DMFI_GetIsDM(oTarget)))
 		{	
 			eEffect = EffectCutsceneImmobilize();
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, 60.0);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, 60.0);
 			eEffect = EffectVisualEffect(VFX_DUR_GHOSTLY_VISAGE_NO_SOUND);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, 60.0);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, 60.0);
 			SendText(oTarget, TXT_DM_FROZEN, TRUE, COLOR_RED);
 			SendText(oPC, TXT_FROZEN, TRUE, COLOR_GREEN);
 		}
@@ -1054,7 +1054,7 @@ int DMFI_RunCommandCode(object oTool, object oPC, string sOriginal)
 			fNum = StringToFloat(sCommand);
 			fNum = fNum/100.0;
 			eEffect = EffectSetScale(fNum);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oTarget);
 			SendText(oPC, TXT_SCALE + sCommand, TRUE, COLOR_GREEN);
 		}				 
 	 }

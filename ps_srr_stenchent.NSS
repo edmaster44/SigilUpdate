@@ -63,8 +63,8 @@ void main()
                 {
                     int nDuration = d4(1) + iDur;
                     //Apply the VFX impact and effects for Nausea
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink1, oTarget, RoundsToSeconds( nDuration ));
-					PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds( nDuration ));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink1, oTarget, RoundsToSeconds( nDuration ));
+					ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds( nDuration ));
                 }
             }
         

@@ -143,8 +143,8 @@ void main()
 			eGood	=	EffectLinkEffects(eGood, eAC);
 			
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eGood, oCaster, fDuration);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eGoodVis, oCaster);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eGood, oCaster, fDuration);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eGoodVis, oCaster);
 		}
 		else if (GetAlignmentGoodEvil(oCaster) == ALIGNMENT_EVIL)
 		{
@@ -176,8 +176,8 @@ void main()
 			eEvil	=	EffectLinkEffects(eEvil, eAC);
 			eEvil	=	EffectLinkEffects(eEvil, eEvilAura);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEvil, oCaster, fDuration);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEvilVis, oCaster);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEvil, oCaster, fDuration);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eEvilVis, oCaster);
 		}
 		else
 		{
@@ -204,8 +204,8 @@ void main()
 			eNeut	=	EffectLinkEffects(eNeut, eDR);
 			eNeut	=	EffectLinkEffects(eNeut, eAC);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eNeut, oCaster, fDuration);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeutVis, oCaster);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eNeut, oCaster, fDuration);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeutVis, oCaster);
 		}
 	}
 }

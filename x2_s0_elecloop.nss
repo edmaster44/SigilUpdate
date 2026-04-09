@@ -100,7 +100,7 @@ void main()
             if (GetIsObjectValid(oLastValid))
             {
                  eBeam = EffectBeam(VFX_BEAM_LIGHTNING, oLastValid, BODY_NODE_CHEST);
-                 DelayCommand(fDelay,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam,oTarget,1.5f));
+                 DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam,oTarget,1.5f));
             }
 
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
@@ -127,7 +127,7 @@ void main()
                 {
                     if(!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, fDelay))
                     {
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eStun,oTarget, RoundsToSeconds(1)));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eStun,oTarget, RoundsToSeconds(1)));
                     }
 
                 }
@@ -136,8 +136,8 @@ void main()
                 if (nDamage >0)
                 {
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eStrike, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStrike, oTarget));
                  }
             }
 

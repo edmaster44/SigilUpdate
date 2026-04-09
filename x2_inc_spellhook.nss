@@ -273,7 +273,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
         int nSID = GetSpellId()+1;
         SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
         SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
         FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
     }
     else
@@ -379,7 +379,7 @@ void ED_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDur
 	object oTarget, float fDuration=0.0f){
 	
 	SignalEvent(oTarget, EventSpellCastAt(oCaster, nSpellId, bHostile));
-	PS_ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
+	ApplyEffectToObject(nDurationType, eEffect, oTarget, fDuration);
 }
 
 // More robust way to remove effects. Specify either the id, the type, the creator, or any combination

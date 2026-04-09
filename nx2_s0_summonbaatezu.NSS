@@ -108,7 +108,7 @@ void UhOh(string sTag, object oDevil, int nDamage)
 	FloatingTextStringOnCreature(sDisp, OBJECT_SELF); // turns on the party.
 	object oBadDevil = CreateObject(OBJECT_TYPE_CREATURE, sTag, lLocation, TRUE, sNewTag);	
 	effect eDam = EffectDamage(nDamage);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oBadDevil);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oBadDevil);
 	
 }
 

@@ -169,11 +169,11 @@ void main()
     			effect eVis = EffectVisualEffect( VFX_HIT_SPELL_SEARING_LIGHT );
 
 	            //Apply the damage effect and VFX impact
-	            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-	            DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+	            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	            DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 	        }
 		}
     }
     effect eRay = EffectBeam(VFX_BEAM_HOLY, OBJECT_SELF, BODY_NODE_HAND);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 1.7);
 }

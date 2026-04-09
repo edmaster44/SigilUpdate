@@ -69,10 +69,10 @@ void main()
                         return;
 					//effect eHit = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
                     //Apply VFX impact and lowered save effect
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> fogs the mind of "+GetName(oTarget)+"</color>";
 					DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
-					//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+					//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
                 }
             }
         }
@@ -80,8 +80,8 @@ void main()
         {
 			//effect eHit = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
             //Apply VFX impact and lowered save effect
-            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-			//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+			//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
         }
     }
 }

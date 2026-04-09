@@ -90,13 +90,13 @@ void main()
 
     //Apply the VFX impact and effects
     ClearAllActions(); // prevents an exploit
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, OBJECT_SELF, HoursToSeconds(nDuration));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, OBJECT_SELF, HoursToSeconds(nDuration));
 	
 	// Now get VFX that should really be applied
 	string sVFX = Get2DAString("polymorph", "VFX", nPoly);
 	if (sVFX != "")
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), OBJECT_SELF, HoursToSeconds(nDuration));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), OBJECT_SELF, HoursToSeconds(nDuration));
 
     object oWeaponNew = GetItemInSlot(INVENTORY_SLOT_CWEAPON_L,OBJECT_SELF);
 	object oWeaponNew1 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_R,OBJECT_SELF);

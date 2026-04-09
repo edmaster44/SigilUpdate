@@ -100,8 +100,8 @@ void main() {
 		// Make a Will save, for balance.
    		if (!GetIsPC(oTarget) && !MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
 		{                    
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAbilityChange, oTarget);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAbilityChange, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
 			
 			//Set the explosion for on death
 			if (GetHasFeat(FEAT_HEXEN_BALEFUL_GEAS, OBJECT_SELF)) {
@@ -120,7 +120,7 @@ void main() {
 		/*else if (GetHasFeat(FEAT_HEXEN_BALEFUL_GEAS, OBJECT_SELF)) {
 		
 			int nDamage = GetEldritchBlastDmg(OBJECT_SELF, oTarget);
-			DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage), oTarget));
+			DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage), oTarget));
 		
 		}*/
 	}	

@@ -213,13 +213,13 @@ void DoHellfireDamage()
 		
 		//_________________________________________________________________
 		// pelhikano fix: apply a little later for death ward removal to work
-		//DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConst, oCaster));
+		//DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConst, oCaster));
 		//_________________________________________________________________
 		
 		// replacement damage effect instead of CON damage
 		int iDmg = PS_GetLevel(OBJECT_SELF) / 2; // 0.5HP / level is equal to 1 point of CON damage.
 		effect eDmg = EffectDamage(iDmg, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL, TRUE); // hopefully this will bypass resistances.
-		DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, OBJECT_SELF));
+		DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, OBJECT_SELF));
 	}	
 }
 
@@ -398,7 +398,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
             // We only want to display the beam visual effect if the blast was NOT called from any of the Shape spells; otherwise, the shape will already have been displayed.
             if ( !bCalledFromShape )
             {
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
             }
             // Failed
             SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), TRUE));
@@ -451,7 +451,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 						int nDur = (GetWarlockCasterLevel(oCaster)/5);
 						if (nDur <= 0) nDur = 1;
 						float fDur = RoundsToSeconds(nDur);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget);
 					}
 				}
 			}
@@ -467,13 +467,13 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 			effect eLinkDam = EffectLinkEffects(eDam, eDamageHellfire);
 			
             //Apply the damage effect
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
-            DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkDam, oTarget) );
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
+            DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLinkDam, oTarget) );
 
 			// We only want to display the beam visual effect if the blast was NOT called from any of the Shape spells; otherwise, the shape will already have been displayed.
 			if ( !bCalledFromShape )
 			{
-            	DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0) );
+            	DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0) );
 			}
 			
             return TRUE;
@@ -491,13 +491,13 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 			eBeam = EffectBeam(VFX_INVOCATION_BRIMSTONE_RAY, oCaster, BODY_NODE_HAND);
 			
 			//Apply the damage effect
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
-            DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamageHellfire, oTarget) );
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
+            DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamageHellfire, oTarget) );
 				
 			// We only want to display the beam visual effect if the blast was NOT called from any of the Shape spells; otherwise, the shape will already have been displayed.
 			if ( !bCalledFromShape )
 			{
-            	DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0) );
+            	DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0) );
 			}
 			
 			return TRUE;		
@@ -505,7 +505,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
 		
         if ( !bCalledFromShape )
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
         }
     }
     return FALSE;
@@ -576,8 +576,8 @@ int DoEssenceDrainingBlast(object oCaster, object oTarget, int bCalledFromShape,
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply the slow effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -619,7 +619,7 @@ int DoEssenceFrightfulBlast(object oCaster, object oTarget, int bCalledFromShape
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply linked effects and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
                 return TRUE;
             }
         }
@@ -665,14 +665,14 @@ int DoEssenceBeshadowedBlast(object oCaster, object oTarget, int bCalledFromShap
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply the effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 				
 				if (nDex > 10)
 				{
 					int nDecr = (nDex-10);
 					effect eDex = EffectAbilityDecrease( ABILITY_DEXTERITY, nDecr);
 					
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
 				}
                 return TRUE;
             }
@@ -704,8 +704,8 @@ void RunEssenceBrimstoneBlastImpact(object oTarget, object oCaster, int nRoundsL
             effect eDmg = EffectDamage(nDmg,DAMAGE_TYPE_FIRE);
             
 
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
-            //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, 6.0);	// handled by DoEldritchBlast()
+            ApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
+            //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, 6.0);	// handled by DoEldritchBlast()
 
             nRoundsLeft = nRoundsLeft - 1;
             DelayCommand(RoundsToSeconds(1), RunEssenceBrimstoneBlastImpact(oTarget, oCaster, nRoundsLeft));	// Delay for one more round
@@ -749,7 +749,7 @@ int DoEssenceBrimstoneBlast(object oCaster, object oTarget, int bCalledFromShape
 
             SaveDelayedSpellInfo(SPELL_I_BRIMSTONE_BLAST, oTarget, oCaster, nDC);
 			effect eVFX = ExtraordinaryEffect(EffectVisualEffect(894));
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, RoundsToSeconds(nRoundsLeft));	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, RoundsToSeconds(nRoundsLeft));	
 			DelayCommand(RoundsToSeconds(1), RunEssenceBrimstoneBlastImpact(oTarget, oCaster, nRoundsLeft));	// First check should be one round after the blast hit
 				
 	        return TRUE;
@@ -781,8 +781,8 @@ int DoEssenceHellrimeBlast(object oCaster, object oTarget, int bCalledFromShape,
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply the effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -826,8 +826,8 @@ int DoEssenceBewitchingBlast(object oCaster, object oTarget, int bCalledFromShap
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply linked effect and VFX Impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -870,8 +870,8 @@ int DoEssenceNoxiousBlast(object oCaster, object oTarget, int bCalledFromShape, 
                 RemoveEffectsFromSpell(oTarget, GetSpellId());
 
                 //Apply the effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -900,8 +900,8 @@ void RunEssenceVitriolicBlastImpact(object oTarget, object oCaster, int nRoundsL
             effect eDmg = EffectDamage(nDmg,DAMAGE_TYPE_ACID);
             //effect eVFX = EffectVisualEffect( VFX_IMP_ACID_S );	// handled by DoEldritchBlast()
 
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
-            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVFX,oTarget);	// handled by DoEldritchBlast()
+            ApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
+            //ApplyEffectToObject(DURATION_TYPE_INSTANT,eVFX,oTarget);	// handled by DoEldritchBlast()
 
             nRoundsLeft = nRoundsLeft - 1;
             DelayCommand(RoundsToSeconds(1), RunEssenceVitriolicBlastImpact(oTarget, oCaster, nRoundsLeft));	// Delay for one more round
@@ -952,7 +952,7 @@ int DoEssenceVitriolicBlast(object oCaster, object oTarget, int bCalledFromShape
                 DelayCommand(RoundsToSeconds(1), RunEssenceVitriolicBlastImpact(oTarget, oCaster, nRoundsLeft)); // First check should be one round after the blast hit
 
                 //Apply the effect and VFX impact
-//                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+//                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 return TRUE;
             }
         }
@@ -1045,9 +1045,9 @@ int DoEssenceUtterdarkBlast(object oCaster, object oTarget, int bCalledFromShape
             // Spell Effects not allowed to stack...
             RemoveEffectsFromSpell(oTarget, GetSpellId());
 
-            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
-            //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(1));
-            //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+            //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(1));
+            //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             return TRUE;
         }
     }
@@ -1063,7 +1063,7 @@ int DoEssenceHinderingBlast(object oCaster, object oTarget, int bCalledFromShape
         int nChance = d100();
 		if (nChance < 20) { //20% chance of knockdown
 			effect eFX = EffectKnockdown();
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTarget, 6.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oTarget, 6.0f);
 		}
     }
     return FALSE;
@@ -1096,7 +1096,7 @@ int DoEssenceBindingBlast(object oCaster, object oTarget, int bCalledFromShape, 
             // Spell Effects not allowed to stack...
             RemoveEffectsFromSpell(oTarget, GetSpellId());
 
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
             return TRUE;
         }
     }
@@ -1264,10 +1264,10 @@ int DoShapeEldritchChain()
     //Apply effect to the first target and the VFX impact.
     if(DoEldritchCombinedEffects(oFirstTarget))
     {
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
     }
     //Apply the lightning stream effect to the first target, connecting it with the caster
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
 
 
     //Reinitialize the lightning effect so that it travels from the first target to the next target
@@ -1317,12 +1317,12 @@ int DoShapeEldritchChain()
 		    nTouch = TouchAttackRanged( oTarget, TRUE, nBonus );
 		    if ( nTouch == TOUCH_ATTACK_RESULT_MISS )
             {
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
     			    // Failed
     				return FALSE;
     		}
             //Connect the new lightning stream to the older target and the new target
-            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
             {
                 if ( nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT) )
                 {
@@ -1332,7 +1332,7 @@ int DoShapeEldritchChain()
                 {
                     DelayCommand(fDelay, DoEldritchCombinedEffectsWrapper(oTarget,FALSE,TRUE));
                 }
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
             }
             oHolder = oTarget;
 
@@ -1397,7 +1397,7 @@ int DoShapeEldritchCone()
 
 	effect eCone = EffectVisualEffect( nConeVFX );
 	if (IsHellfireBlastActive()) eCone = EffectVisualEffect( VFX_INVOCATION_BRIMSTONE_DOOM );
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 	
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, 7.0, GetLocation(OBJECT_SELF), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

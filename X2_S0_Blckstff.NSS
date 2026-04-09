@@ -70,8 +70,8 @@ void main()
         {
             if (nDuration>0)
             {
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));	// NWN1 VFX
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oMyWeapon), RoundsToSeconds(nDuration));
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oMyWeapon));	// NWN1 VFX
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oMyWeapon), RoundsToSeconds(nDuration));
                 AddBlackStaffEffectOnWeapon(oMyWeapon, RoundsToSeconds(nDuration));
             }
             return;

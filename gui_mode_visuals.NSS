@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void RemoveVisualEffect(object oTarget, int nVisualID)
 {
 	effect	eRemove = GetFirstEffect(oTarget);
@@ -24,7 +24,7 @@ void main()
 		if (GetActionMode(OBJECT_SELF, ACTION_MODE_HELLFIRE_SHIELD))
 			{
 				RemoveVisualEffect(OBJECT_SELF, 1104);
-				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHellfireVisual, OBJECT_SELF);	
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHellfireVisual, OBJECT_SELF);	
 			}	
 		else
 			RemoveVisualEffect(OBJECT_SELF, 1104);	
@@ -33,7 +33,7 @@ void main()
 		if (GetActionMode(OBJECT_SELF, ACTION_MODE_HELLFIRE_BLAST))
 		{
 			RemoveVisualEffect(OBJECT_SELF, 1105);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHellfireVisual, OBJECT_SELF);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eHellfireVisual, OBJECT_SELF);
 		}
 		else
 			RemoveVisualEffect(OBJECT_SELF, 1105);

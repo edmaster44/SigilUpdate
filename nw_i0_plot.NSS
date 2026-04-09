@@ -554,7 +554,7 @@ void DimensionHop(object oTarget)
     if (GetDistanceToObject(oTarget) > 2.5)
     {
         effect eVis = EffectVisualEffect(VFX_IMP_UNSUMMON);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
         ActionJumpToObject(oTarget);
     }
 }
@@ -1385,7 +1385,7 @@ void RemoveEffects(object oDead)
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_RESTORATION, FALSE));
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
 
     // * May 2002: Removed this because ActionRest is no longer an instant.
     // * rest the player

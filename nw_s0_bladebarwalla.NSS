@@ -44,7 +44,7 @@ void main(){
 				eDam = EffectDamage(nDamage, DAMAGE_TYPE_SLASHING);
 				
 				SpawnBloodHit(oTarget, TRUE, OBJECT_INVALID);
-				PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget);
+				ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget);
 			}
         }
     }

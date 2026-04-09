@@ -64,6 +64,6 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);	// NWN1 VFX
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);	// NWN1 VFX
 }

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //
@@ -71,7 +71,7 @@ void main(){
 			
 		//apply lighting
 		effect eLight=EffectVisualEffect(iLightEffect);
-      	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLight, oSelf);
+      	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLight, oSelf);
 	  	
 		//define flame effect
 		effect eFX = EffectNWN2SpecialEffectFile(FX_SEF);
@@ -85,7 +85,7 @@ void main(){
 		int i;
 		for (i=1;i<=iNumberOfFlames;i++){
 			oNearest = GetNearestObjectByTag("light_object", oSelf, i);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oNearest);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oNearest);
 		}
 			
 		ActionStartConversation(oCaller, "", TRUE);

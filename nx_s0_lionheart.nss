@@ -66,6 +66,6 @@ void main()
 	eLink = EffectLinkEffects( eFear, eVis );
 
     //Apply the bonus effect and VFX impact
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 
 }

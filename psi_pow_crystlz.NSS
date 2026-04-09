@@ -77,7 +77,7 @@ void main()
                 
                 if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_DEATH))
                 {
-                    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 					
                 }
                 

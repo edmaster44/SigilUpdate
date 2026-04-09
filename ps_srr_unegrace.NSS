@@ -31,6 +31,6 @@ void main()
 		effect eAC = EffectACIncrease(iBonus, AC_DEFLECTION_BONUS);
 		effect eLink = EffectLinkEffects(eSaves, eAC);
 		eLink = SupernaturalEffect(eLink);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 	}	
 }

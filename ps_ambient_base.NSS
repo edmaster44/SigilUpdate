@@ -108,9 +108,9 @@ void main()
         effect eImmuneToNonMagicWeapons = EffectDamageReduction(1000, DAMAGE_POWER_PLUS_ONE, 0, DR_TYPE_MAGICBONUS);
         eImmuneToNonMagicWeapons = ExtraordinaryEffect(eImmuneToNonMagicWeapons);
 		
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConceal, OBJECT_SELF);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGhost, OBJECT_SELF);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eImmuneToNonMagicWeapons, OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eConceal, OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGhost, OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eImmuneToNonMagicWeapons, OBJECT_SELF);
     }
     
 	//SR fix

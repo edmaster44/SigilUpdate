@@ -92,7 +92,7 @@ void main()
                 {
                      //Apply the VFX and delay the destruction of the summoned monster so
                      //that the script and VFX can play.
-                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
                 }
             }
         }

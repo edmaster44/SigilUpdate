@@ -39,7 +39,7 @@ void main(){
 	
 	if (nTargetType == OBJECT_TYPE_CREATURE || nTargetType == OBJECT_TYPE_DOOR ||
 		nTargetType == OBJECT_TYPE_PLACEABLE || nTargetType == OBJECT_TYPE_ITEM){
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDur);
 	} else {
 		location lLocation = GetSpellTargetLocation();
 		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eAOE, lLocation, fDur);

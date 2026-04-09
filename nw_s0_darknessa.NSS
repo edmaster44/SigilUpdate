@@ -87,8 +87,8 @@ void main(){
 			}
 		} 
 		
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, fDur);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConceal, oTarget, fDur);
 	
 	}
 }
@@ -132,12 +132,12 @@ void main()
 	        if ( ResistSpell(OBJECT_SELF,oTarget) != 2 )
 	        {
 	            //Fire cast spell at event for the specified target
-	            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, RoundsToSeconds(20));
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+	            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlindness, oTarget, RoundsToSeconds(20));
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 	        }
 		} else {
-	     	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(20));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+	     	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, RoundsToSeconds(20));
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 		}
     }
 }

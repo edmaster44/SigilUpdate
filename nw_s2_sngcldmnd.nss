@@ -76,8 +76,8 @@ void main()
                 int nSave = WillSave( oTarget, nSpellDC, SAVING_THROW_TYPE_MIND_SPELLS , OBJECT_SELF );
                 if ( nSave == 0 )
                 {
-                    //PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eImpact, oTarget );
-                    PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration ); 
+                    //ApplyEffectToObject( DURATION_TYPE_INSTANT, eImpact, oTarget );
+                    ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration ); 
                 }
 			}
 		}

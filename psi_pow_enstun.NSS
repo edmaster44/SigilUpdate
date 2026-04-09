@@ -153,10 +153,10 @@ void main()
                         {
                             eDamage = EffectDamage(nDamage, enAdj.nDamageType);
                             fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) / 20.0f;
-                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                             if(bStun)
-                                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f));
+                                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f));
                         }// end if - There was still damage remaining to be dealt after adjustments
                     }// end if - SR check
                 }// end if - Target validity check

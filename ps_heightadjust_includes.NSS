@@ -117,7 +117,7 @@ float RacialAdjust(object oPC, float adjust)
 
 void RemoveSizeEffects(object oPC)
 {
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectSetScale(1.0, 1.0, 1.0), oPC, 0.5f);	
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectSetScale(1.0, 1.0, 1.0), oPC, 0.5f);	
 }
 
 void SaveOriginalHeight(object oPC)

@@ -98,9 +98,9 @@ void main()
 			// apply linked effect to target
 			//_________________
 			// pelhikano fix: Delay the command so the FoM and DW removal works
-			DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+			DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
 			//Fire cast spell at event for the specified target
     		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 			

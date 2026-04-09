@@ -17,7 +17,7 @@ const string GLAMER_TEMPLATE = "ps_summon_glamer";
 void CreateGlamer(object oCaster, location lLoc, float fDur) {
 	object oClone = CreateIllusoryClone(oCaster, GLAMER_TEMPLATE, lLoc);
 	effect eShadow = EffectNWN2SpecialEffectFile("fx_shadowfiend_2");
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadow, oClone);
 	
 	string sImmune = "Immunity_"+IntToString(Random(10000));
 	SetLocalString(oClone, "Immunity_String", sImmune);

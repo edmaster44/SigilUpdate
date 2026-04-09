@@ -97,6 +97,6 @@ void main()
         }
 
         // Apply effects
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
     }// end if - Successfull manifestation
 }

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Poison daze effect for distilled wyvern poison
 
 void main()
@@ -10,6 +10,6 @@ void main()
 		effect eDaze = EffectDazed();
     	effect eVis = EffectVisualEffect(EFFECT_TYPE_DAZED);
     	effect eLink = EffectLinkEffects(eDaze, eVis);
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(3));
 	}
 }

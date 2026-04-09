@@ -100,10 +100,10 @@ void Ray_Mind(object oTarget, int nDC, int nPlayer, effect eEye, int Dur_VFX, in
                         eLink = EffectLinkEffects(eVis, eLink);
 
                         //Apply effects.
-                        DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+                        DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
                     }
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Mind, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Mind, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -158,10 +158,10 @@ void Ray_Disintegrate(object oTarget, int nDC, int nPlayer)
                     eLink = EffectLinkEffects(eDamage, eVis);
 
                     //Apply effects.
-                    DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+                    DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Disintegrate, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Disintegrate, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -206,7 +206,7 @@ void Ray_Death(object oTarget, int nDC, int nPlayer)
                     {
                         //Apply effects.
 						if (!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH))
-						{	DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));	}
+						{	DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));	}
                     }
                     else
                     {
@@ -221,10 +221,10 @@ void Ray_Death(object oTarget, int nDC, int nPlayer)
 
                         //Apply effects.
                         if (!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH))
-						{	DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));	}
+						{	DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));	}
                     }
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Death, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Death, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -262,15 +262,15 @@ void Ray_Stone(object oTarget, int nDC, int nPlayer)
                     { 
 						if (nIsPC == TRUE || GetPlotFlag(oTarget) == TRUE)
       					  {  //Apply effect to PC
-          				     PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, TurnsToSeconds(13));
+          				     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, TurnsToSeconds(13));
      					  }
     				    else
                              //Apply effect to KI
-                       		 DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, TurnsToSeconds(13)));
-							 DelayCommand(6.0, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, TRUE, TRUE, TRUE), oTarget));
+                       		 DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, TurnsToSeconds(13)));
+							 DelayCommand(6.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, TRUE, TRUE, TRUE), oTarget));
                     }
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Stone, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Stone, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -327,9 +327,9 @@ void Ray_Inflict(object oTarget, int nDC, int nPlayer)
                     eLink = EffectLinkEffects(eDamage, eVis);
 
                     //Apply effects.
-                    DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+                    DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Inflict, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Inflict, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -371,10 +371,10 @@ void Ray_Slow(object oTarget, int nDC, int nPlayer)
                         eLink = EffectLinkEffects(eSlow, eVis);
 
                         //Apply effects.
-                        DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(13)));
+                        DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(13)));
                     }
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Slow, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Slow, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -416,10 +416,10 @@ void Ray_Telekensis(object oTarget, int nDC, int nPlayer)
                         eLink = EffectLinkEffects(eTelekensis, eVis);
 
                         //Apply effects.
-                        DelayCommand(0.3f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(6)));
+                        DelayCommand(0.3f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(6)));
                     }
                 }
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Telekensis, oTarget, 1.0f);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam_Telekensis, oTarget, 1.0f);
             }
         }
         oTarget = GetNextObjectInShape(BEHOLDER_TARGET_SHAPE, BEHOLDER_TARGET_SIZE, lTarget, TRUE, OBJECT_TYPE_CREATURE);

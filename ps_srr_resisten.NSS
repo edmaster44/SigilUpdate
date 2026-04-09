@@ -30,5 +30,5 @@ void main()
 	effect eRes = EffectDamageResistance(iType, 10);
 	eRes = SupernaturalEffect(eRes);
 	eRes = SetEffectSpellId(eRes, nId);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);	
 }

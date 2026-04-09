@@ -70,7 +70,7 @@ void main()
 						effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL);
 						effect eDam2 = EffectDamage(nDamageFire, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL);
 						effect eLink = EffectLinkEffects(eDam, eDam2);
-						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 					}	
 			}
 			else
@@ -78,7 +78,7 @@ void main()
 				effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING, DAMAGE_POWER_NORMAL);
 				effect eDam2 = EffectDamage(nDamageFire, DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL);
 				effect eLink = EffectLinkEffects(eDam, eDam2);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 			}
 		
 			

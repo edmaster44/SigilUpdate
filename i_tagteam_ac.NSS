@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // Tag Team on activate script script. Links with a nearby Tag Team.

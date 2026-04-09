@@ -195,7 +195,7 @@ void DMFI_CreateEffect(string sCommand, string sParam1, object oPC, object oTarg
         else
             fTime = 30.0;
 		
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fTime);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oTarget, fTime);
         SendText(oPC, TXT_EFFECT_APPLIED + sCommand, TRUE, COLOR_GREEN);
     }
     SendText(oPC, TXT_EFFECT_ERROR, FALSE, COLOR_RED);
@@ -278,9 +278,9 @@ void DMFI_CreateVFX(object oTool, object oSpeaker, string sText, string sParam)
         eVFX = EffectVisualEffect(StringToInt(sParam));
     
     if (FindSubString(sText, "_BEAM_")!=-1)
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSpeaker, fDur);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSpeaker, fDur);
     else
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, fDur);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, fDur);
 }
 
 void DMFI_DefineStructure(object oPC, string sOriginal)

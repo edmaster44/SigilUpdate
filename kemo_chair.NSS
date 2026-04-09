@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //Causes the PC to sit in the selected chair with a pose based on race and chair type. -KEMO

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // SIGIS gui function called from sigiswrite.xml when text is accepted - SIGIS News Submission and Reader - by Agony_Aunt/Loki

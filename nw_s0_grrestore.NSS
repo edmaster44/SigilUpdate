@@ -115,14 +115,14 @@ void main()
         //Apply the VFX impact and effects
         int nHeal = GetMaxHitPoints(oTarget) - GetCurrentHitPoints(oTarget);
         effect eHeal = EffectHeal(nHeal);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
     } else {
 		HealHarmTarget(oTarget, 30, SPELL_HARM, FALSE, FALSE);
 	}
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_GREATER_RESTORATION, FALSE));
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oTarget);
 }
 
 int GetIsSupernaturalCurse(effect eEff)

@@ -65,13 +65,13 @@ void main()
 		if (!bPetrifyFound){
 			int nDuration = PS_GetCasterLevel(OBJECT_SELF) * 600; // 10 mins per level
 			effect eImmune =  EffectSpellImmunity(EFFECT_TYPE_PETRIFY);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, IntToFloat(nDuration));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, IntToFloat(nDuration));
 		
 		}
 
         //Apply Linked Effect
 		effect eHit = EffectVisualEffect(VFX_HIT_SPELL_TRANSMUTATION);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
     }
 }
 

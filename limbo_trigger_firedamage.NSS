@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 void main ()
@@ -9,6 +9,6 @@ void main ()
 		
 	int nDam = d6(6);
 	effect damage = EffectDamage(nDam, DAMAGE_TYPE_FIRE, DAMAGE_POWER_ENERGY);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, damage, oObject);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, damage, oObject);
 
 }

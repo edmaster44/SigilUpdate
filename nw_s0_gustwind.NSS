@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Gust of Wind
 //:: NW_S0_GustWind.nss

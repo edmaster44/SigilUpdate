@@ -68,11 +68,11 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
             {
                 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                 {
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePrimary, oTarget, fDuration);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePrimary, oTarget, fDuration);
 
                     if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDuration);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDuration);
                     }// end if - Save vs secondary effect
                 }// end if - Save vs primary effect
             }
@@ -130,11 +130,11 @@ void main()
 	            {
 	                if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
 	                {
-	                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePrimary, oTarget, fDuration);
+	                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePrimary, oTarget, fDuration);
 	
 	                    if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NONE))
 	                    {
-	                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDuration);
+	                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSecondary, oTarget, fDuration);
 	                    }// end if - Save vs secondary effect
 	                }// end if - Save vs primary effect
 	            }

@@ -60,13 +60,13 @@ void main()
 	// If you target a location, this will spawn in an invisible creature to act as the endpoint on the beam, then delete itself
 	object oPoint = CreateObject(OBJECT_TYPE_CREATURE, "c_attachspellnode" , lTarget2);
 	SetScriptHidden(oPoint, TRUE);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, oPoint, 1.0);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPoint);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, oPoint, 1.0);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPoint);
 	DestroyObject(oPoint, 2.0);
 	
 	//CreateObject(OBJECT_TYPE_WAYPOINT, sTarget2, lTarget2);
 	//object oPoint = GetObjectByTag(sTarget2);
-	//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, oPoint, 1.0);
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, oPoint, 1.0);
 	//PrettyDebug("Lightning bolt!  Woo Hoo!");
     oTarget2 = GetNearestObject(OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, OBJECT_SELF, nCnt);
     while(GetIsObjectValid(oTarget2) && GetDistanceToObject(oTarget2) <= 30.0)
@@ -109,11 +109,11 @@ void main()
                         {
                             fDelay = GetSpellEffectDelay(GetLocation(oTarget), oTarget);
                             //Apply VFX impcat, damage effect and lightning effect
-                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
-                            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+                            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
                         }
                     }
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,1.0);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,1.0);
                     //Set the currect target as the holder of the lightning effect
                     oNextTarget = oTarget;
                     eLightning = EffectBeam(VFX_BEAM_LIGHTNING, oNextTarget, BODY_NODE_CHEST);

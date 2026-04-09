@@ -65,15 +65,15 @@ void main()
                 {
                     //Apply death effect and the VFX impact
 					effect eParal = EffectCutsceneParalyze();
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, RoundsToSeconds(2));
-                    DelayCommand(RoundsToSeconds(2), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
-					DelayCommand(RoundsToSeconds(2), PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, RoundsToSeconds(2));
+                    DelayCommand(RoundsToSeconds(2), ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+					DelayCommand(RoundsToSeconds(2), ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
                 }
 				else
 				{
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, RoundsToSeconds(2)));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSlow, oTarget, RoundsToSeconds(2)));
 					
 				}
            

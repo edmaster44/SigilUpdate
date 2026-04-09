@@ -105,8 +105,8 @@ void main()
                             effect eKill = EffectDamage(GetCurrentHitPoints(oTarget));
                             //just to be extra-sure... :)
                             effect eDeath = EffectDeath(FALSE, FALSE);
-                            DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
-                            DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                            DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
+                            DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
 
                             //DestroyObject(oTarget, 0.3);
                          }

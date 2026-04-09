@@ -25,6 +25,6 @@ void main()
 	eBonus = EffectLinkEffects(eBonus, EffectAttackIncrease(iBonus));
 	eBonus = ExtraordinaryEffect(eBonus);
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisImp, oTarget);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oTarget, RoundsToSeconds(iDur));
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisImp, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oTarget, RoundsToSeconds(iDur));
 }

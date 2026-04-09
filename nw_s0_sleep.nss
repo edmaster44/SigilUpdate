@@ -133,17 +133,17 @@ void main()
                 //Make Fort save
                 if(!MySavingThrow(SAVING_THROW_WILL, oLowest, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
                 {
-                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest);
+                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest);
                     if (GetIsImmune(oLowest, IMMUNITY_TYPE_SLEEP) == FALSE)
                     {
                         //effect eLink2 = EffectLinkEffects(eLink, eVis);
-                        //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oLowest, RoundsToSeconds(nDuration));
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oLowest, RoundsToSeconds(nDuration));
+                        //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oLowest, RoundsToSeconds(nDuration));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oLowest, RoundsToSeconds(nDuration));
                     }
                     else
                     // * even though I am immune apply just the sleep effect for the immunity message
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSleep, oLowest, RoundsToSeconds(nDuration));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSleep, oLowest, RoundsToSeconds(nDuration));
                     }
 
                 }

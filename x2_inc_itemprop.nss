@@ -33,7 +33,7 @@
 
 
 #include "aaa_constants"
-#include "ff_applyeffect"
+
 
 
 const string  X2_IP_WORK_CONTAINER_TAG = "x2_plc_ipbox";
@@ -483,7 +483,7 @@ object IPGetIPWorkContainer(object oCaller = OBJECT_SELF)
         oRet = CreateObject(OBJECT_TYPE_PLACEABLE,X2_IP_WORK_CONTAINER_TAG,GetLocation(oCaller));
         effect eInvis =  EffectVisualEffect( VFX_DUR_CUTSCENE_INVISIBILITY);
         eInvis = ExtraordinaryEffect(eInvis);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eInvis,oRet);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT,eInvis,oRet);
         if (oRet == OBJECT_INVALID)
         {
             WriteTimestampedLogEntry("x2_inc_itemprop - critical: Missing container with tag " +X2_IP_WORK_CONTAINER_TAG + "!!");

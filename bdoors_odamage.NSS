@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // bdoorw_odamage
@@ -84,7 +84,7 @@ if (iDamage>=iMaxHP || GetLocked(oDoor)==0)
         SetLocked(oDoor, FALSE);
         PlaySound("c_stonegolembatt_01");
 		effect eDoorExplode = EffectNWN2SpecialEffectFile( "fx_rockslide");
-	    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDoorExplode, OBJECT_SELF);
+	    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDoorExplode, OBJECT_SELF);
         ActionOpenDoor(oDoor);
         DelayCommand(60.0, fResetDoor());
         }

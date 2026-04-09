@@ -69,15 +69,15 @@ void main()
             //Apply damage to the first target and the VFX impact.
             if(nDamStrike > 0)
             {
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oFirstTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oFirstTarget);
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamStrike)+"</color>";
 				SendMessageToPC(oCaster, sReport);
             }
         }
     }
     //Apply the lightning stream effect to the first target, connecting it with the caster
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oFirstTarget,0.5);
 
 
     //Reinitialize the lightning effect so that it travels from the first target to the next target
@@ -101,7 +101,7 @@ void main()
         if (oTarget != oFirstTarget && spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster) && oTarget != OBJECT_SELF)
         {
             //Connect the new lightning stream to the older target and the new target
-            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLightning,oTarget,0.5));
 
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CHAIN_LIGHTNING));
@@ -117,8 +117,8 @@ void main()
                 eDamage = EffectDamage(nDamStrike /2, DAMAGE_TYPE_ELECTRICAL);
                 if(nDamStrike > 0) //age > 0)
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamStrike)+"</color>";
 					SendMessageToPC(oCaster, sReport);
                 }

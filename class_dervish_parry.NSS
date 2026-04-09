@@ -19,7 +19,7 @@ if (GetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE) || GetActionMode(oPC, ACTIO
 						effect eDefParry = EffectACIncrease(4);
 						eDefParry = SetEffectSpellId(eDefParry, eDefParryID);
 						eDefParry = SupernaturalEffect(eDefParry);
-						DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
+						DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDefParry, oPC, HoursToSeconds(24)));			
 						SendMessageToPC(oPC, "Defensive Parry enabled.");						
 				}
 			}

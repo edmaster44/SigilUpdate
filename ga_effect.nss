@@ -146,7 +146,7 @@ void DoEffect(string sEffect, string sParams, string sDuration, int iVisualEffec
     	// Apply the visual effect to the target
 		if (iVisType == DURATION_TYPE_INSTANT)
 		{
-    		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		}			
 		else if (iVisType == DURATION_TYPE_TEMPORARY)
 		{
@@ -160,7 +160,7 @@ void DoEffect(string sEffect, string sParams, string sDuration, int iVisualEffec
 		bImmune = TRUE;
 		
 	if (!bImmune){			
-		PS_ApplyEffectToObject(iDurationType, eEffect, oTarget, fDuration);
+		ApplyEffectToObject(iDurationType, eEffect, oTarget, fDuration);
 		PrintString ("Applied " + sEffect + " effect to " + GetName(oTarget) + " with Duration " + IntToString(iDurationType) + " " + FloatToString(fDuration));
 	}
 }

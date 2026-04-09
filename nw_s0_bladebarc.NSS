@@ -81,10 +81,10 @@ void main()
 				//Link Effects
 				effect eLink = EffectLinkEffects( eDam, eVis );
                 //Apply damage and VFX
-				PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
+				ApplyEffectToObject( DURATION_TYPE_INSTANT, eLink, oTarget);
 				
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-            	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+            	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             }
 		}
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE | OBJECT_TYPE_DOOR);

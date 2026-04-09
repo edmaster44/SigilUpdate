@@ -50,6 +50,6 @@ void SpawnVine(object oPC) {
 		SpawnEncounterCreature(OBJECT_SELF, oPC, GetLocation(oWP), "c_colothys_greenvise");
 		
 	effect eEffect = EffectKnockdown();
-	DelayCommand(0.2f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 1.0f));
+	DelayCommand(0.2f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 1.0f));
 
 }

@@ -77,8 +77,8 @@ void main()
                     	nDam = FloatToInt(GetCurrentHitPoints(oTarget) * 0.9);
                     	eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING, TRUE);
                     	//Apply the VFX impact and damage effect
-                    	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                    	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 					}
 				}
 			}

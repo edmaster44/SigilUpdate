@@ -36,7 +36,7 @@ void main()
 	{
 		effect eAOE = EffectAreaOfEffect(AOE_PER_WAR_GLORY);
 		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_WAR_GLORY, FALSE));
-	    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget);
+	    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget);
 	}*/
 
 	// Strip any Auras first
@@ -64,6 +64,6 @@ void main()
 	eAOE = ExtraordinaryEffect(eAOE);
 	//Create an instance of the AOE Object using the Apply Effect function
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_WAR_GLORY, FALSE));
-	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
+	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
 	
 }

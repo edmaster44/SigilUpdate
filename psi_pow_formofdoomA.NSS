@@ -31,7 +31,7 @@ void main()
 			//Apply the VFX impact and effects
 			ED_ApplyEffectToObject(oManifester, nId, TRUE, DURATION_TYPE_TEMPORARY, eLink, 
 				oTarget, RoundsToSeconds(d6(5)));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		} else {
 			SetLocalInt(oTarget, "immunedoom", TRUE); //immune till next reset if passed save
 		}

@@ -28,7 +28,7 @@ void main()
 
 	effect eVis = EffectVisualEffect(nVfx);
   	effect eBreath = EffectVisualEffect(nBreath);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0); 
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBreath, oPC, 2.0); 
 
     int nDamage;
     int nDamStrike;
@@ -52,8 +52,8 @@ void main()
 			if (nDamStrike > 0)
 			{
 			    eDamage = EffectDamage(nDamStrike, nDamageType);
-		    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		    	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+		    	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 		 	}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation(), TRUE);

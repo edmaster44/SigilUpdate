@@ -77,6 +77,6 @@ void main()
 	if(manif.bExtend) fDuration *= 2;
 	
 	SignalEvent(oTarget, EventSpellCastAt(oManifester, nId, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
     
 }

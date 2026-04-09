@@ -44,7 +44,7 @@ void main(){
 
 			fDelay = GetRandomDelay(0.4, 1.2);
 			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_ACID_FOG));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 
         }
         oTarget = GetNextInPersistentObject(OBJECT_SELF);

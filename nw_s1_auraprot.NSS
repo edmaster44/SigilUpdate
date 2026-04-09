@@ -29,5 +29,5 @@ void main()
         nDuration = 1;
     }
     //Create an instance of the AOE Object using the Apply Effect function
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, TurnsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, TurnsToSeconds(nDuration));
 }

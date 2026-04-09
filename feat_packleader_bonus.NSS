@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //This script will grant the proper bonus feats for the racial PRC Pack leader
 void main()
 {

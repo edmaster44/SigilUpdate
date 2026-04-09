@@ -83,7 +83,7 @@ void main()
                 if(TouchAttackRanged(oTarget) > 0)
                 {
                     //Apply VFX Impact and daze effect
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
                    
                 }// end if - Successfull touch attack
             }// end for - Twin Power

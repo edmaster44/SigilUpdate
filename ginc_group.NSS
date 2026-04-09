@@ -63,7 +63,7 @@
 //				modified GroupActionForceFollowObject(); removed GroupFollowLeader()
 // ChazM 9/15/05 added GroupMoveToObject(), GroupActionCastFakeSpellAtObject(), SendDebugMessage();
 //				changed GroupJumpToObject() to GroupJumpToWP; modified AddToGroup(), FactionToGroup(), EncounterToGroup(), AddNearestWithTagToGroup()
-// ChazM 9/15/05 added GroupPS_ApplyEffectToObject() and GroupRemoveEffectOfType()
+// ChazM 9/15/05 added GroupApplyEffectToObject() and GroupRemoveEffectOfType()
 // ChazM 9/29/05 added 3 new includes, removed SendDebugMessage, moved out GetGlobalObject( ), SetGlobalObject(), DeleteGlobalObject() to ginc_vars;
 //				RandomDelta(), RandomFloat(), GetNearbyLocation() to ginc_math
 // BMA-OEI 10/26/05 added GroupSetLineFormation(), GetLineLocation(), modified GroupForceMoveToLocation(), GroupSpawnAtLocation(), GroupMoveToFormationLocation()
@@ -1625,7 +1625,7 @@ void GroupResurrect(string sGroupName, int bIgnoreWait=FALSE)
 			fDelay = RandomFloat(fStartNoise);
 		}
 		
-		AssignCommand(oMember, DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oMember)));
+		AssignCommand(oMember, DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oMember)));
 		oMember = GetNextInGroup(sGroupName);
 	}
 }
@@ -1923,12 +1923,12 @@ void GroupActionCastFakeSpellAtObject(string sGroupName, int nSpell, object oTar
 	}
 }
 
-void GroupPS_ApplyEffectToObject(string sGroupName, int nDurationType, effect eEffect, float fDuration = 0.0f)
+void GroupApplyEffectToObject(string sGroupName, int nDurationType, effect eEffect, float fDuration = 0.0f)
 {
 	object oMember = GetFirstInGroup(sGroupName);
 	while (GetIsObjectValid(oMember) == TRUE)
 	{
-		PS_ApplyEffectToObject(nDurationType, eEffect, oMember, fDuration);
+		ApplyEffectToObject(nDurationType, eEffect, oMember, fDuration);
 		oMember = GetNextInGroup(sGroupName);
 	}
 }

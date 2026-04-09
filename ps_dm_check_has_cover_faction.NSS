@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // This script is used by the DM faction tool to see if conversation options should be given

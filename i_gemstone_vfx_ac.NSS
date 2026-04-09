@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 void main () {
@@ -22,7 +22,7 @@ void main () {
 	effect eEffect = EffectNWN2SpecialEffectFile(sEffect);
 	
 	if (GetIsObjectValid(oTarget)) {
-		PS_ApplyEffectToObject(nDuration, eEffect, oTarget, fDur);
+		ApplyEffectToObject(nDuration, eEffect, oTarget, fDur);
 	} else if (GetIsLocationValid(lLoc)) {
 		ApplyEffectAtLocation(nDuration, eEffect, lLoc, fDur);
 	}

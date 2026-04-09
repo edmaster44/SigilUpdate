@@ -77,8 +77,8 @@ void doKnockdown(object oCaster, object oTarget, int hasHeavyCharge)
 					+ IntToString(nTargetRoll));
 				if(nCasterRoll >= nTargetRoll) {
 					effect eVis = EffectVisualEffect(VFX_IMP_PULSE_WIND);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
 						EffectKnockdown(),
 						oTarget,
 						6.0f);
@@ -106,7 +106,7 @@ void main()
 	
 	// TEMP HP
 	int nTempHp = (nSbLevels == 1 ? 1 : (nSbLevels / 2)) + (nIntBonus > 0 ? nIntBonus : 0);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
 		ExtraordinaryEffect(EffectTemporaryHitpoints(nTempHp)),
 		oCaster,
 		durSeconds);
@@ -133,7 +133,7 @@ void main()
 		break;
 	}
 
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY,
 		ExtraordinaryEffect(EffectDamageIncrease(GetDamageBonusConstant(nDmgBonus), nDmgType)),
 		oCaster,
 		durSeconds);
@@ -146,32 +146,32 @@ void main()
 	if(GetHasFeat(FEAT_RECKLESS_CHARGE, oCaster, TRUE)) {
 		int nABBonus = nSbLevels / 6;
 		strReport += ", +" + IntToString(nABBonus) + " attack bonus";
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectAttackIncrease(nABBonus, ATTACK_BONUS_MISC)),
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectAttackIncrease(nABBonus, ATTACK_BONUS_MISC)),
 			oCaster, durSeconds);
 	}
 	
 	if(GetHasFeat(FEAT_WATCHFUL_CHARGE, oCaster, TRUE)) {
 		int nACBonus = nSbLevels / 6;
 		strReport += ", +" + IntToString(nACBonus) + " AC bonus";
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectACIncrease(nACBonus)),
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectACIncrease(nACBonus)),
 			oCaster, durSeconds);
 	}
 	
 	if(GetHasFeat(FEAT_SWIFT_CHARGE, oCaster, TRUE)) {
 		strReport += ", hasted";
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectHaste()),
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectHaste()),
 			oCaster, durSeconds);
 	}
 
 	if(GetHasFeat(FEAT_SHADOWED_CHARGE, oCaster, TRUE)) {
 		strReport += ", 50% concealment";
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectConcealment(50)),
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectConcealment(50)),
 			oCaster, durSeconds);
 	}
 
 	if(GetHasFeat(FEAT_FRENZIED_CHARGE, oCaster, TRUE)) {
 		strReport += ", 1 extra attack";
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectModifyAttacks(1)),
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ExtraordinaryEffect(EffectModifyAttacks(1)),
 			oCaster, durSeconds);
 	}
 

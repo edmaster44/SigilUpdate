@@ -73,6 +73,6 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_LESSER_SPELL_MANTLE);
     RemoveEffectsFromSpell(oTarget, SPELL_SPELL_MANTLE);
     //Apply the VFX impact and effects
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, IntToFloat(nDuration));
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, IntToFloat(nDuration));
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 }

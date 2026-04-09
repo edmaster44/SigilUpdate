@@ -247,9 +247,9 @@ void HandleTargetCreature( object oTarget )
 		eFire = DetermineFireEffect(oTarget, nTouchAttack);
 		eBlunt = DetermineBluntEffect(oTarget, nTouchAttack);			
 
-		DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );						
-		DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt, oTarget) );	
-		DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
+		DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );						
+		DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt, oTarget) );	
+		DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
 		DelayCommand( fDelay + fTravelTime, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eShake, lTargetLoc) );						
 		DelayCommand( fDelay, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTargetLoc, SPELL_METEOR_SWARM_TARGET_CREATURE, nPathType) );	
 		
@@ -257,9 +257,9 @@ void HandleTargetCreature( object oTarget )
 		eFire2 = DetermineFireEffect(oTarget, nTouchAttack);
 		eBlunt2 = DetermineBluntEffect(oTarget, nTouchAttack);
 			
-		DelayCommand( (fDelay * 2) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire2, oTarget) );						
-		DelayCommand( (fDelay * 2) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt2, oTarget) );	
-		DelayCommand( (fDelay * 2) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
+		DelayCommand( (fDelay * 2) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire2, oTarget) );						
+		DelayCommand( (fDelay * 2) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt2, oTarget) );	
+		DelayCommand( (fDelay * 2) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
 		DelayCommand( (fDelay * 2) + fTravelTime, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eShake, lTargetLoc) );						
 		DelayCommand( fDelay * 2, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTargetLoc, SPELL_METEOR_SWARM_TARGET_CREATURE, nPathType) );	
 
@@ -267,9 +267,9 @@ void HandleTargetCreature( object oTarget )
 		eFire3 = DetermineFireEffect(oTarget, nTouchAttack);
 		eBlunt3 = DetermineBluntEffect(oTarget, nTouchAttack);
 							
-		DelayCommand( (fDelay * 3) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire3, oTarget) );						
-		DelayCommand( (fDelay * 3) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt3, oTarget) );	
-		DelayCommand( (fDelay * 3) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
+		DelayCommand( (fDelay * 3) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire3, oTarget) );						
+		DelayCommand( (fDelay * 3) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt3, oTarget) );	
+		DelayCommand( (fDelay * 3) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
 		DelayCommand( (fDelay * 3) + fTravelTime, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eShake, lTargetLoc) );						
 		DelayCommand( fDelay * 3, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTargetLoc, SPELL_METEOR_SWARM_TARGET_CREATURE, nPathType) );	
 
@@ -277,9 +277,9 @@ void HandleTargetCreature( object oTarget )
 		eFire4 = DetermineFireEffect(oTarget, nTouchAttack);	
 		eBlunt4 = DetermineBluntEffect(oTarget, nTouchAttack);
 				
-		DelayCommand( (fDelay * 4) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire4, oTarget) );						
-		DelayCommand( (fDelay * 4) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt4, oTarget) );	
-		DelayCommand( (fDelay * 4) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
+		DelayCommand( (fDelay * 4) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire4, oTarget) );						
+		DelayCommand( (fDelay * 4) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eBlunt4, oTarget) );	
+		DelayCommand( (fDelay * 4) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget) );	
 		DelayCommand( (fDelay * 4) + fTravelTime, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eShake, lTargetLoc) );						
 		DelayCommand( fDelay * 4, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTargetLoc, SPELL_METEOR_SWARM_TARGET_CREATURE, nPathType) );		
 	}	
@@ -303,23 +303,23 @@ void HandleTargetCreature( object oTarget )
 					eFire = DetermineFireEffectNonTouch(oTarget2);
 					
 				    //Apply damage effect and VFX impact.
-				    DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget2) );
-				    DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );	
+				    DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget2) );
+				    DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );	
 
 					eFire2 = DetermineFireEffectNonTouch(oTarget2);					
 													
-				    DelayCommand( (fDelay * 2) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire2, oTarget2) );
-				    DelayCommand( (fDelay * 2) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );
+				    DelayCommand( (fDelay * 2) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire2, oTarget2) );
+				    DelayCommand( (fDelay * 2) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );
 
 					eFire3 = DetermineFireEffectNonTouch(oTarget2);					
 																			
-				    DelayCommand( (fDelay * 3) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire3, oTarget2) );
-				    DelayCommand( (fDelay * 3) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );							
+				    DelayCommand( (fDelay * 3) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire3, oTarget2) );
+				    DelayCommand( (fDelay * 3) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );							
 
 					eFire4 = DetermineFireEffectNonTouch(oTarget2);					
 																
-				    DelayCommand( (fDelay * 4) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire4, oTarget2) );
-				    DelayCommand( (fDelay * 4) + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );
+				    DelayCommand( (fDelay * 4) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire4, oTarget2) );
+				    DelayCommand( (fDelay * 4) + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget2) );
 				}						
 	        }
 		}

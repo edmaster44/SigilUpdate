@@ -34,10 +34,10 @@ void PS_StunningCroak(object oPC, int nSpell)
     {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (GetSubRace(oTarget) != 168)
-			{	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget,fDuration);
+			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget,fDuration);
 				nSave = MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_CHAOS, oPC);
 				if (nSave == 0)
-				{	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun, oTarget,fDuration));
+				{	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eStun, oTarget,fDuration));
                 } 
              }
         }
@@ -60,7 +60,7 @@ void PS_SlaadImmune(object oPC, int nSpell)
 		eLink 		= SupernaturalEffect(eLink);
 		eLink 		= SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void PS_SlaadCompletelyChaotic(object oPC, int nSpell)
@@ -82,7 +82,7 @@ void PS_SlaadRegen_Gray(object oPC, int nSpell)
 			eRegen		= SupernaturalEffect(eRegen);
 			eRegen		= SetEffectSpellId(eRegen, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
 	}
 	
 }
@@ -98,7 +98,7 @@ void PS_SlaadRegen_CoC(object oPC, int nSpell)
 			eRegen		= SupernaturalEffect(eRegen);
 			eRegen		= SetEffectSpellId(eRegen, nSpell);
 			RemoveEffectsFromSpell(oPC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);
 	}		
 
 }
@@ -126,7 +126,7 @@ void PS_OnHit_ChaosDamage(int nSpell, int nRank)
 	eDamage = EffectDamage(nDamage, nType, DAMAGE_POWER_NORMAL, FALSE);
 	eVFX = EffectVisualEffect(nVFX);
 	eDamage = EffectLinkEffects(eDamage, eVFX);
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 }
 
 void PS_SlaadClawsOfChaos(object oPC, int nSpell)
@@ -146,7 +146,7 @@ void PS_SlaadClawsOfChaos(object oPC, int nSpell)
 	
 	SignalEvent(GetItemPossessor(oRight), EventSpellCastAt(oPC, GetSpellId(), FALSE));
 	if (GetIsObjectValid(oRight) && GetWeaponType(oRight) != WEAPON_TYPE_NONE)
-    {	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+    {	ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
 		IPSafeAddItemProperty(oRight, ipEff, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);
 		if (GetIsObjectValid(oLeft) && GetWeaponType(oLeft) != WEAPON_TYPE_NONE)
 		{	IPSafeAddItemProperty(oLeft, ipEff, fDuration, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING);	
@@ -168,7 +168,7 @@ void PS_SlaadDR(object oPC, int nSpell)
 			eDR			= SupernaturalEffect(eDR);
 			eDR			= SetEffectSpellId(eDR, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);	
 }
 
 void PS_SlaadChaosHammer(object oPC, int nSpell, location lTarget)
@@ -219,7 +219,7 @@ void PS_SlaadChaosHammer(object oPC, int nSpell, location lTarget)
 						eDam = EffectLinkEffects(eDam, eDam2);	}
 						
 					eDam = EffectLinkEffects(eDam, eVis);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                 } 
              }
         }
@@ -357,8 +357,8 @@ void PS_SlaadCircleOfDeath(object oPC, int nSpell)
             fDelay = GetRandomDelay();
             if(!MyResistSpell(OBJECT_SELF, oLowest, fDelay))
             {	if(!MySavingThrow(SAVING_THROW_FORT, oLowest, GetSpellSaveDC(), SAVING_THROW_TYPE_DEATH, OBJECT_SELF, fDelay))
-                {	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oLowest));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest));
+                {	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oLowest));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest));
                 }
             }
             SetLocalInt(oLowest, "bDEATH" + sIdentifier, TRUE);
@@ -400,7 +400,7 @@ void PS_SlaadCloakOfChaos(object oPC, int nSpell)
     SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
     if (GetHasSpellEffect(nSpell, oPC))
     {	RemoveSpellEffects(nSpell, oPC, oPC);	}
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, fDur);
 		nTargets		= nTargets - 1;
 
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lPC, TRUE, OBJECT_TYPE_CREATURE);
@@ -413,7 +413,7 @@ void PS_SlaadCloakOfChaos(object oPC, int nSpell)
 				nSRBonusOther 	= (25 - nSROther);
 				eSROther		= VersusAlignmentEffect(EffectSpellResistanceIncrease(nSRBonusOther), ALIGNMENT_LAWFUL, ALIGNMENT_ALL);
 				eLinkOther		= EffectLinkEffects(eLink, eSROther);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkOther, oTarget, fDur);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkOther, oTarget, fDur);
 				nTargets		= nTargets - 1;
 		}
 		if (nTargets <= 0)	return;
@@ -448,7 +448,7 @@ void PS_SlaadPWBlind(object oPC, int nSpell)
 	
 				if	(nTargetHP > iTargetHPHigh)
 				{	SendMessageToPC(oPC, "<COLOR=red>Target has too many HPs to be affected.");
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oTarget);
 					return;
 				}
 				
@@ -459,11 +459,11 @@ void PS_SlaadPWBlind(object oPC, int nSpell)
 				else fDuration = 0.0f;
 
 				SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEyes, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eEyes, oTarget);
 				if (fDuration == 0.0f)
-					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 				else 
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			}
 		}
 	}

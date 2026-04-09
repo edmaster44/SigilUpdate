@@ -76,7 +76,7 @@ void main()
 		eStone = EffectLinkEffects(eStone, eOnDispell);
 		
 		//Apply the armor bonuses and the VFX impact
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, HoursToSeconds(nDuration));
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, HoursToSeconds(nDuration));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(nDuration));
     }
 }

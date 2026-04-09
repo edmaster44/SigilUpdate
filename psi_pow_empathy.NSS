@@ -64,7 +64,7 @@ void main()
         float fDuration = RoundsToSeconds(manif.nManifesterLevel);
         if(manif.bExtend) fDuration *= 2;
 
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

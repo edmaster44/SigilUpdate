@@ -94,7 +94,7 @@ void main()
 					
 					eLink	=	EffectLinkEffects(eDam, eImpact);
 					
-					DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+					DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 				}
 				else
 				{
@@ -102,14 +102,14 @@ void main()
 					
 					eLink	=	EffectLinkEffects(eDam, eImpact);
 					
-					DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
+					DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
 				}
 			}
 		}
 		
 		oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 	}
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
 }
 			

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 
@@ -37,7 +37,7 @@ void main()
 
 	   // Stop the creature animating
   effect eFreeze = EffectVisualEffect( VFX_DUR_FREEZE_ANIMATION );
-  PS_ApplyEffectToObject( DURATION_TYPE_PERMANENT,
+  ApplyEffectToObject( DURATION_TYPE_PERMANENT,
   SupernaturalEffect( eFreeze ), oSpawn );
 
   // Avoid fadeout on death and make it generally inert

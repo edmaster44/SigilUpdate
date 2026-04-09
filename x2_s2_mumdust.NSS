@@ -15,5 +15,5 @@ void main()
 	//Apply the VFX impact and summon effect
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eDur, lSpellTargetLocation, 5.0);
 	DelayCommand(1.0, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lSpellTargetLocation));
-	DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSummon, OBJECT_SELF, fDuration));
+	DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSummon, OBJECT_SELF, fDuration));
 }

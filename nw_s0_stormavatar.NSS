@@ -112,6 +112,6 @@ void main()
 //Apply linked effects to caster
 	if (GetIsObjectValid(oCaster))
 	{
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 	}
 }

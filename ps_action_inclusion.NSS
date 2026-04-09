@@ -1,5 +1,5 @@
 
-#include "ff_applyeffect"
+
 #include "nwnx_sql"
 
 int IsEthereal(object oTarget)
@@ -39,7 +39,7 @@ void ToggleRooted(object oUser)
 	{
 		effect eRoot = EffectCutsceneImmobilize();
 		SetLocalInt(oUser, "set_root", 1);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRoot, oUser, 10000.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRoot, oUser, 10000.0f);
 		SendMessageToPC(oUser, "You are now rooted in place.");
 	}
 }
@@ -90,7 +90,7 @@ void ToggleFreeze(object oUser)
 	{
 		SetLocalInt(oUser, "set_freeze", 1);
 		effect eFreeze = SupernaturalEffect(SetEffectSpellId(EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION), 3000));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFreeze, oUser);  
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFreeze, oUser);  
 		SendMessageToPC(oUser, "Your animation is now frozen.");
 	}
 }

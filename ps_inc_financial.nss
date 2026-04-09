@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // A NOTE ABOUT CURRENCY: In order to keep consistent server messages for players when 
 // they pick up coins, please use PS_GiveGoldToCreature() function below in scripts awarding 
 // coin and use the item ps_it_copper001 when adding coinage to chests, loot piles, etc.

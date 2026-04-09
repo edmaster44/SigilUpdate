@@ -101,16 +101,16 @@ void main()
 					}
 					if (MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DEATH, oCaster))
 					{
-						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 					}
 					else
 					{	
-						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkStun, oTarget, fDur);
+						ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkStun, oTarget, fDur);
 					}
 				}
 			}
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		}
 	}
 }

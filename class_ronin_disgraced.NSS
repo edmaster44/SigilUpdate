@@ -9,6 +9,6 @@ void main()
 	if (!GetHasSpellEffect(SPELL_ID_DISGRACED, oPC))
 	{
 		effect eDip = SupernaturalEffect(EffectSkillDecrease(SKILL_DIPLOMACY, 5));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDip, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDip, oPC);
 	}
 }

@@ -92,8 +92,8 @@ void main()
 				}
 				
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE, DAMAGE_POWER_NORMAL, TRUE);	// Last flag is to ignore all resistances & immunities.
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
 				
 				nTotalDamage += nDamage;	// Accumulate total damage done for healing later.
 			}		
@@ -105,12 +105,12 @@ void main()
 	if (nTotalDamage > 0)	// We drained some life.
 	{
 		effect eHeal = EffectHeal(nTotalDamage);
-		DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, OBJECT_SELF));
+		DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, OBJECT_SELF));
 	}
 	
 //	if (bSummonShadow)	// Somone got killed, so summon a Greater Shadow.
 //	{
 //		float fDuration = RoundsToSeconds(GetTotalLevels(OBJECT_SELF, TRUE));
-//		DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShadow, OBJECT_SELF, fDuration));
+//		DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShadow, OBJECT_SELF, fDuration));
 //	}
 }

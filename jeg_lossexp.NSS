@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main()
 {
     object oPC = (GetPCSpeaker()==OBJECT_INVALID?OBJECT_SELF:GetPCSpeaker());

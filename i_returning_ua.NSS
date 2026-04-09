@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // Script for the thrown weapon sets

@@ -202,8 +202,8 @@ void main()
     ePoly = EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 06/06/2007: Use 3rd boolean to say this is a wildshape polymorph.
     ePoly = ExtraordinaryEffect(ePoly);
     ClearAllActions(); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, OBJECT_SELF);
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //--------------------------------------------------------------------------

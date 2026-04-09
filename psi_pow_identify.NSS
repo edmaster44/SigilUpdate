@@ -58,6 +58,6 @@ void main()
 
         SetIdentified(oTarget, TRUE);
 
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oManifester, 4.5f);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oManifester, 4.5f);
     }
 }

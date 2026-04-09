@@ -32,7 +32,7 @@ void main(int nAmount)
 		CreateItemOnObject("mortar", oPC, 1,"mortar",FALSE);
 		
 		effect eAlchemy = EffectSkillIncrease(27,15);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlchemy, oPC, 10.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlchemy, oPC, 10.0f);
 		PS_TakeGoldFromCreature(nAmount, oPC);
 		DoDistillation(oItem, oPC);
 		TakeNumItems(oPC, "mortar", 1);

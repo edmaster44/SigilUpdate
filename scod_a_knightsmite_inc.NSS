@@ -41,14 +41,14 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 		{	nDmg = nKnight * iChaBonus;
 			
 			eDamage = EffectDamage(nDmg, nDamageType, DAMAGE_POWER_NORMAL, TRUE);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonus, oPC, 12.0);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else if (nAttack == 1)
 		{	nDmg = nKnight + iChaBonus;	
 			eDamage = EffectDamage(nDmg, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, TRUE);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eBonus, oPC, 6.0);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else 
 		{	SendMessageToPC(oPC, "Your attack missed!");

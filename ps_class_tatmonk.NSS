@@ -130,7 +130,7 @@ void main()
 			int iDurationType = GetTattooDurationType(iFeat);
 			float fDuration = GetTattooDuration(iFeat);
 			
-			PS_ApplyEffectToObject(iDurationType, eEffect, oPC, fDuration);
+			ApplyEffectToObject(iDurationType, eEffect, oPC, fDuration);
 		}
 	}
 }

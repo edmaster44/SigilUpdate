@@ -70,7 +70,7 @@ void main()
 		eSkill = SetEffectSpellId(eSkill, SPELL_CHARM_PERSON);
 		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_CHARM_PERSON, FALSE));
 		PS_RemoveEffects(OBJECT_SELF, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, OBJECT_SELF);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, OBJECT_SELF, TurnsToSeconds(nSelfDuration));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, OBJECT_SELF, TurnsToSeconds(nSelfDuration));
 	} else if (GetIsPC(oTarget)){
 		if (!ResistCheck(oTarget, nDC, OBJECT_SELF)){
 			sMessage = sName + " has cast Charm Person or Animal on you but you are not IC aware of it.";
@@ -121,7 +121,7 @@ void main()
 			if (!ResistCheck(oTarget, GetSpellSaveDC(), OBJECT_SELF))
 			{
 				//Apply impact effects and linked duration and charm effect
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 			}
 		}
         

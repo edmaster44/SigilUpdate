@@ -104,8 +104,8 @@ void main()
 	                effect eLink = EffectLinkEffects(eKnockdown, eVis);
 	                
 	                //Apply the penalty
-	                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
-	                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration));
+	                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+	                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration));
 	                // * Bull Rush succesful
 	                FloatingTextStrRefOnCreature(8966,OBJECT_SELF, FALSE);
 	            }
@@ -122,8 +122,8 @@ void main()
 		        eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
 		
 		        // Apply damage
-		        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-		        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+		        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		    }
 		}
     }// end if - Successfull manifestation

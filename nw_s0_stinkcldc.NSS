@@ -49,7 +49,7 @@ void main(){
                    //Apply the VFX impact and linked effects
 				   // MySavingThrow now checks for immunity, so no need to do it here
                   //if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON) == FALSE){
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2)));
                    //}
                 } else {
                     //If the Fort save was successful remove the Dazed effect

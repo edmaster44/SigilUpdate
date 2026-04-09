@@ -10,5 +10,5 @@ void main(){
 	eAlert = SetEffectSpellId(eAlert, nId);
 	
 	PS_RemoveEffects(oPC, nId);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAlert, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAlert, oPC);
 }

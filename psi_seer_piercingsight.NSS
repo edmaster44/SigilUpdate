@@ -53,6 +53,6 @@ void main()
 		
 		if(manif.bExtend) nDuration *= 2;
 		
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));
 	}
 }

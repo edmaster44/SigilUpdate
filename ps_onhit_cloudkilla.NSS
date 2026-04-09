@@ -56,8 +56,8 @@ void main()
             {
                 if(!GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH))
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
 					string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 					SendMessageToPC(oCaster, report);
                 }
@@ -67,15 +67,15 @@ void main()
                 //Make a save or die
                 if(!OnHitSavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DEATH, oCaster, fDelay))
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 					SendMessageToPC(oCaster, report);
                 }
                 else
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDam)+"</color>";
 					SendMessageToPC(oCaster, sReport);
                 }
@@ -88,16 +88,16 @@ void main()
 					eDam = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDam);
 					eDam = SetEffectSpellId(eDam, -1);
 					eDam = ExtraordinaryEffect(eDam);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-                	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+                	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDam)+"</color>";
 					SendMessageToPC(oCaster, sReport);
 
 				}
 				else
 				{	
-                	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-                	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
+                	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+                	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eNeg, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDam)+"</color>";
 					SendMessageToPC(oCaster, sReport);
 				}

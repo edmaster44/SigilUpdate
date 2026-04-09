@@ -138,7 +138,7 @@ void main()
 		eLink = EffectLinkEffects(eCritI, eLink);
 	}
 
-	PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 
 	
 

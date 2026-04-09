@@ -123,7 +123,7 @@ void PS_Feat_ControlUndead(object oPC, object oTarget, int nSpell)
 			{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
         		{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
            			//if (!MyResistSpell(oPC, oTarget))		{	
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eControl, oTarget, HoursToSeconds(nDuration));	//}
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eControl, oTarget, HoursToSeconds(nDuration));	//}
         		}
     		}
 		}
@@ -157,8 +157,8 @@ void PS_Feat_BolsterUndead(object oPC, object oTarget, int nSpell)
 	{	if(GetIsFriend(oTarget) && !GetIsPC(oTarget) && GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 		{	fDelay = GetRandomDelay();
 			SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE));
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));	}
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10)));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget));	}
 		oTarget 	= GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oPC));
 	}
 	DecrementRemainingFeatUses(oPC, FEAT_TURN_UNDEAD);
@@ -173,7 +173,7 @@ void PS_Feat_PsionicThrust(object oPC, object oTarget, int nSpell)
     
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
     {   effect eImpact 				= EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
         SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
         if(!MyResistSpell(oPC, oTarget))
         {	int nCasterRoll 		= GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) + 12;
@@ -187,14 +187,14 @@ void PS_Feat_PsionicThrust(object oPC, object oTarget, int nSpell)
                 effect eLink 		= EffectLinkEffects(eKnockdown, eVis);
                 	eLink 			= EffectLinkEffects(eLink, eKnockdown2);
 
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
                 FloatingTextStrRefOnCreature(8966,oPC, FALSE);	}
             else
             {	FloatingTextStrRefOnCreature(8967, oPC, FALSE);	}
 			int nDamage = d6(2) + GetTotalLevels(oPC, 1);
 			effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);	}
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);	}
     }
 }
 
@@ -232,7 +232,7 @@ void PS_Feat_PsionicDominate(object oPC, object oTarget, int nSpell)
 	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
 	{	if (!MyResistSpell(oPC, oTarget))
     	{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
-    		{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));	}
+    		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));	}
         }
 	}
 }
@@ -245,8 +245,8 @@ void PS_Feat_PsionicBodyAdjustment(object oPC, int nSpell)
     effect eVis 		= EffectVisualEffect(VFX_IMP_HEALING_M);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oPC);
 }
 
 void PS_Feat_PsionicallyGifted(object oPC, int nSpell)
@@ -260,7 +260,7 @@ void PS_Feat_PsionicallyGifted(object oPC, int nSpell)
 		if (GetSubRace(oPC) == RACIAL_SUBTYPE_GRAY_DWARF || GetSubRace(oPC) == 146 || GetSubRace(oPC) == 173 || GetSubRace(oPC) == 175)
 		{	effect eRes = EffectSavingThrowIncrease(SAVING_THROW_WILL, 8, SAVING_THROW_TYPE_MIND_SPELLS, FALSE);
 				eRes 	= ExtraordinaryEffect(eRes);	}
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oPC);
 	}	
 }
 
@@ -272,8 +272,8 @@ void PS_Feat_PsionicOvercharge(object oPC, int nSpell)
     effect eVis 		= EffectVisualEffect(VFX_HIT_AOE_MAGIC);
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oPC);
 	IncrementRemainingFeatUses(oPC, 2863);
 	IncrementRemainingFeatUses(oPC, 2864);
 	IncrementRemainingFeatUses(oPC, 2865);
@@ -314,7 +314,7 @@ void PS_Feat_ServantOfTheHeavens(object oPC, int nSpell)
         effect eACvsBonus	= VersusAlignmentEffect(eACBonus,ALIGNMENT_ALL,ALIGNMENT_EVIL);
         	eACvsBonus 		= SupernaturalEffect(eACvsBonus);
         if (nAlign >69)
-		{	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eACvsBonus, oPC);	}
+		{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eACvsBonus, oPC);	}
 		else 
 		{	string sError = "You are no longer Good. Until you have redeemed yourself, your Servant of Heaven ability will not be available to you.";
 			SendMessageToPC(oPC,sError);	}
@@ -346,7 +346,7 @@ void PS_Feat_DiscipleOfDarkness(object oPC, int nSpell)
         	eACvsBonus 		= SupernaturalEffect(eACvsBonus);
 
         if (nAlign <31)
-		{	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eACvsBonus, oPC);	}
+		{	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eACvsBonus, oPC);	}
 		else 
 		{	string sError = "You are no longer Evil. Until you have properly debased yourself, your Disciple of Darkness ability will not be available to you.";
 			SendMessageToPC(oPC,sError);	}
@@ -363,7 +363,7 @@ void PS_Feat_SacredVow(object oPC, int nSpell)
 		EffectSavingThrowIncrease(SAVING_THROW_WILL, 1));
 		
 		eEff = SupernaturalEffect(eEff);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_Feat_Unhallowed(object oPC, int nSpell)
@@ -376,7 +376,7 @@ void PS_Feat_Unhallowed(object oPC, int nSpell)
 		EffectSavingThrowIncrease(SAVING_THROW_FORT, 1));
 
    	eEff = SupernaturalEffect(eEff);
-   	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_Feat_Amicable(object oPC, int nSpell)
@@ -394,7 +394,7 @@ void PS_Feat_Amicable(object oPC, int nSpell)
 		eEff = SetEffectSpellId(eEff, nSpell);
 
 		
-   	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_Feat_Stern(object oPC, int nSpell)
@@ -411,7 +411,7 @@ void PS_Feat_Stern(object oPC, int nSpell)
    	eEff = SupernaturalEffect(eEff);
 	eEff = SetEffectSpellId(eEff, nSpell);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_Feat_Misdirector(object oPC, int nSpell)
@@ -428,7 +428,7 @@ void PS_Feat_Misdirector(object oPC, int nSpell)
    	eEff = SupernaturalEffect(eEff);
 	eEff = SetEffectSpellId(eEff, nSpell);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_Feat_Tinker(object oPC, int nSpell)
@@ -465,7 +465,7 @@ void PS_Feat_Tinker(object oPC, int nSpell)
    	eEff = SupernaturalEffect(eEff);
 	eEff = SetEffectSpellId(eEff, nSpell);
 
-   	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
 
 void PS_Feat_Naturalist(object oPC, int nSpell)
@@ -480,5 +480,5 @@ void PS_Feat_Naturalist(object oPC, int nSpell)
 		eEff = EffectLinkEffects (eEff, Stat3);
 		eEff = SupernaturalEffect(eEff);
 		eEff = SetEffectSpellId(eEff, nSpell);
-   	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
+   	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }

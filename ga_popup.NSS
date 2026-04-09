@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 void main (string sMessage, string sOk, string sCancel) {

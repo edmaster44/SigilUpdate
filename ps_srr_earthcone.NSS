@@ -38,7 +38,7 @@ void main()
 	effect eSpray = EffectNWN2SpecialEffectFile("sp_earthmephit_cone.sef");
 
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 10.0, lTargetLocation, TRUE);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpray, OBJECT_SELF, 2.0);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpray, OBJECT_SELF, 2.0);
     //Get first target in spell area
     while(GetIsObjectValid(oTarget))
     {
@@ -57,9 +57,9 @@ void main()
             if(nDamage > 0)
             {
                 //Apply the VFX impact and effects
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCone, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCone, oTarget));
             }
-            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
         //Get next target in spell area
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 10.0, lTargetLocation, TRUE);

@@ -70,9 +70,9 @@ void ShardShield(object oTarget, object oPC, object oItem)
 	
 	HideWeapon(oPC);
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplosion, lTarget);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eProtection, oPC, 30.0f);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oPC, 6.0f);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, 30.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eProtection, oPC, 30.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oPC, 6.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, 30.0f);
 	ContinueEffect(oPC, oItem, i, sAOETag);
 }
 
@@ -128,14 +128,14 @@ void ContinueEffect(object oPC, object oItem, int i, string sAOETag)
 		
 		else
 		{
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield2, oPC, 6.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield2, oPC, 6.0f);
 			DelayCommand(1.0f, ContinueEffect(oPC, oItem, i, sAOETag));
 		}		
 	}
 		
 	else
 	{			
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield2, oPC, 6.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield2, oPC, 6.0f);
 		DelayCommand(1.0f, ContinueEffect(oPC, oItem, i, sAOETag));
 	}
 }
@@ -220,14 +220,14 @@ void RevealWeapon(object oPC, object oItem)
 	{
 		eSwordStandIn = EffectNWN2SpecialEffectFile("fx_ssword_fake_anim.sef");
 		eEffect = SetEffectSpellId(eSwordStandIn, nUniqueID);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 	
 	else if (GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC) == oItem)
 	{
 		eSwordStandIn = EffectNWN2SpecialEffectFile("fx_ssword_fake_anim_offh.sef");
 		eEffect = SetEffectSpellId(eSwordStandIn, nUniqueID);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 }
 

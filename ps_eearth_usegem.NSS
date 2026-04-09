@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //Script by Dedic8ed
 //Put this script OnUsed
 void main()

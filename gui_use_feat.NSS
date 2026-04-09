@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main(string nFeatID)
 {
 	//SendMessageToPC(OBJECT_SELF, "Trying to use feat ID "+nFeatID);

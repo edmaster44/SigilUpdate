@@ -87,7 +87,7 @@ void main()
             // Loop over targets
             oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, fWidth, lTarget, TRUE,
                                            OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpikes, OBJECT_SELF, 0.5);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpikes, OBJECT_SELF, 0.5);
             while(GetIsObjectValid(oTarget))
             {
                 if(oTarget != oManifester &&                                          // No hurting self
@@ -104,11 +104,11 @@ void main()
                     eDamage = EffectDamage(nDamage, DAMAGE_TYPE_SLASHING);
 					
 
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
     	            
     	            if(GetObjectType(oTarget) != OBJECT_TYPE_PLACEABLE) {// Placeables do not like the VFX, either
         	            for(i = 0; i < 15; i++) {
-        	                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDart, oTarget);
+        	                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDart, oTarget);
 						}
 					}
     	        }// end if - Targeting check

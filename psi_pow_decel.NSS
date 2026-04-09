@@ -86,8 +86,8 @@ void main()
                     if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NONE))
                     {
                         //Apply VFX Impact and daze effect
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     }
                 }
             }

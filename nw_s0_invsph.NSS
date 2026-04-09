@@ -57,7 +57,7 @@ void main()
 	effect eLink2 = EffectLinkEffects( eInvis, eVis );
 	eLink = EffectLinkEffects( eLink, eVis );
     //Create an instance of the AOE Object using the Apply Effect function
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, TurnsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, TurnsToSeconds(nDuration));
 	
 	//Declare major variables
 	location lCenter = GetLocation(OBJECT_SELF);
@@ -73,7 +73,7 @@ void main()
 		if ( spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster) && oTarget != oCaster )
 		{ 	
       		SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_INVISIBILITY_SPHERE, FALSE));
-      		PS_ApplyEffectToObject( DURATION_TYPE_PERMANENT, eLink2, oTarget );		
+      		ApplyEffectToObject( DURATION_TYPE_PERMANENT, eLink2, oTarget );		
 		}
 		oTarget = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_LARGE, lCenter );
 	}

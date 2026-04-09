@@ -77,7 +77,7 @@ void main()
             	SignalEvent(oAlly, EventSpellCastAt(OBJECT_SELF, SPELL_RAGE, FALSE));
 
             	// Apply effects to the currently selected target.
-            	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oAlly, RoundsToSeconds (nDuration));
+            	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oAlly, RoundsToSeconds (nDuration));
 			}
 			
 			oAlly = GetNextObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget );

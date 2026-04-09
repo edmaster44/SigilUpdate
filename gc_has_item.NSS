@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 int StartingConditional(string sTag)
 {
    object oPC = GetPCSpeaker();

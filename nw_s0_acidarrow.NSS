@@ -121,10 +121,10 @@ void main()
 				
 	            effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
 
-				//DelayCommand(fDelay,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	            //DelayCommand(fDelay,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+				//DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	            //DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 
 	            //--------------------------------------------------------------------------
 	            // This spell no longer stacks. If there is one of that type, thats ok
@@ -132,15 +132,15 @@ void main()
 	            if (GetHasSpellEffect(GetSpellId(),oTarget))
 	            {
 	                //RemoveSpellEffects(GetSpellId(), OBJECT_SELF, oTarget);
-	                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)+0.1);
+	                ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)+0.1);
 	                return;
 	            }
 	
 	            //----------------------------------------------------------------------
 	            // Apply the VFX that is used to track the spells duration
 	            //----------------------------------------------------------------------
-	            //DelayCommand(fDelay,PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)));
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)+0.1);
+	            //DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)+0.1);
 	            object oSelf = OBJECT_SELF; // because OBJECT_SELF is a function
 	            DelayCommand(6.0f,RunImpact(oTarget, oSelf,nMetaMagic));
 	        }
@@ -151,12 +151,12 @@ void main()
 	            // Indicate Failure
 	            //----------------------------------------------------------------------
 	            effect eSmoke = EffectVisualEffect(VFX_IMP_REFLEX_SAVE_THROW_USE);
-	            DelayCommand(fDelay+0.1f,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eSmoke,oTarget));
+	            DelayCommand(fDelay+0.1f,ApplyEffectToObject(DURATION_TYPE_INSTANT,eSmoke,oTarget));
 	        }
 			*/
 		}
     }
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eArrow, oTarget);
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eArrow, oTarget);
 
 }
 
@@ -191,7 +191,7 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
         effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
         eDam = EffectLinkEffects(eVis,eDam); // flare up
-        PS_ApplyEffectToObject (DURATION_TYPE_INSTANT,eDam,oTarget);
+        ApplyEffectToObject (DURATION_TYPE_INSTANT,eDam,oTarget);
         DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic));
     }
 }

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //	g100_b_dancer_hb
 /*
 	Heartbeat script for generic dancers. Makes 'em dance.

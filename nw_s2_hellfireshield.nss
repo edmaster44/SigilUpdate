@@ -64,6 +64,6 @@ void main()
 	effect eAOE = EffectAreaOfEffect(AOE_PER_HELLFIRE_SHIELD);
 	//Create an instance of the AOE Object using the Apply Effect function
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_HELLFIRE_SHIELD, FALSE));
-	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
+	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oTarget));
 	
 }

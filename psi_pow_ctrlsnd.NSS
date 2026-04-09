@@ -66,7 +66,7 @@ void main()
         // Friendly targets are considered willing. They do not get SR / save and the power is not considered hostile towards them
         if(GetIsFriend(oTarget))
         {	SignalEvent(oTarget,EventSpellCastAt(oTarget,AOE_MOB_SILENCE,FALSE));
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDuration);
         }
         else
         {
@@ -75,7 +75,7 @@ void main()
             {
                 if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_SONIC))
                 {
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDuration);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oTarget, fDuration);
                 }
             }
 

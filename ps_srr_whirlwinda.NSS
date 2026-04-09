@@ -30,7 +30,7 @@ void main()
 		int iPush = nCasterLevel + d20();
 		if (iPush > iResist)
 		{
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 6.0);
 		}
 	}
 }

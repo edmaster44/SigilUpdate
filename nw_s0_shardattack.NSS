@@ -23,7 +23,7 @@ void main()
 	object oItem = GetSilverSwordOwnedByPC(oPC);
 			
 	PlayCustomOneShotAnimation(oPC, "1hS_cleave", 1.3);
-	DelayCommand(0.20f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 6.0f));
+	DelayCommand(0.20f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 6.0f));
 	DelayCommand(0.3f, ShardAttack(oTarget, oPC, oItem));
 	DelayCommand(0.6f, HideWeapon(oPC));
 }
@@ -92,7 +92,7 @@ void ShardAttack(object oTarget, object oPC, object oItem)
 	
 	DelayCommand(fDelay + fTravelTime + fTravelTime - 0.15f, PlaySound("it_bladelg_draw01"));
 	DelayCommand(fDelay + fTravelTime + fTravelTime - 0.15f,
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 6.0f));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 6.0f));
 	DelayCommand(fDelay + fTravelTime + fTravelTime - 0.15f, RevealWeapon(OBJECT_SELF, oItem));
 	DelayCommand(fDelay + fTravelTime + fTravelTime - 0.15f, RestoreItemAbilities(oItem));
 }
@@ -101,9 +101,9 @@ void AttackResults(object oTarget, effect eDam, effect eVis)
 {
 	if (TouchAttackRanged(oTarget) == TRUE)
 	{
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, 
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, 
 			eDam, oTarget);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, 
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, 
 			eVis, oTarget, 6.0f);	
 	}
 }	
@@ -132,14 +132,14 @@ void RevealWeapon(object oPC, object oItem)
 	{
 		eSwordStandIn = EffectNWN2SpecialEffectFile("fx_ssword_fake.sef");
 		eEffect = SetEffectSpellId(eSwordStandIn, nUniqueID);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 	
 	else if (GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC) == oItem)
 	{
 		eSwordStandIn = EffectNWN2SpecialEffectFile("fx_ssword_fake_offh.sef");
 		eEffect = SetEffectSpellId(eSwordStandIn, nUniqueID);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 }
 

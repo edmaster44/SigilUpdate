@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // i_ps_polymorph_ac
 
 /* Created by Dedic8ed 5/24/2010
@@ -20,5 +20,5 @@ object oPC = GetItemActivator();
 int iACBoost = GetAbilityModifier(ABILITY_CHARISMA, oPC);
 effect eACIncrease = EffectACIncrease(iACBoost, AC_DEFLECTION_BONUS,AC_VS_DAMAGE_TYPE_ALL, FALSE);
 effect eSuperACInc = SupernaturalEffect(eACIncrease);
-PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSuperACInc, oPC);
+ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSuperACInc, oPC);
 }

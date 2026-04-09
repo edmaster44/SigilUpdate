@@ -70,7 +70,7 @@ void main()
 			}
 			else if(nSaved == 0)
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
 				if(MatchHumanoidRacialType(GetRacialType(oTarget)))
 				{
 					ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eSummon, lTarget, fDuration);

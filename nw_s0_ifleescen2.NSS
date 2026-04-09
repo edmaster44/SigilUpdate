@@ -12,7 +12,7 @@ void DoHasteEffects( object oCaster, object oTarget )
 	
     //RemoveEffectsFromSpell(oTarget, SPELL_I_FLEE_THE_SCENE);
 	
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, oTarget, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, oTarget, fDuration);
     
 }
 

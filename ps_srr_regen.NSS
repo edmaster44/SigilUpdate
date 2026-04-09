@@ -20,6 +20,6 @@ void main()
 	{
 		effect eRegen = EffectRegenerate(iAmount, 6.0);
 		eRegen = SupernaturalEffect(eRegen);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oTarget);
 	}	
 }

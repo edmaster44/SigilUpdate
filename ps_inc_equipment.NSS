@@ -287,7 +287,7 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 		eFX_4 = EffectLinkEffects(EffectAttackIncrease(nBonus, ATTACK_BONUS_ONHAND), eFX_4);
 	}
 	eFX_4 = SetEffectSpellId(eFX_4, 1839);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_4, oPC, fDUR, 1839);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_4, oPC, fDUR);
     DelayCommand(0.01f, FrightfulPresence(oPC, nCHA));
 	// set the int that shows we've done this recently to false
 	DelayCommand(30.0f, SetLocalInt(oPC, "Iajaitsu", FALSE));
@@ -313,9 +313,9 @@ void FrightfulPresence(object oPC, int nCHA){
         if (GetIsEnemy(oTARGET, oPC)){
 			if (!MySavingThrow(SAVING_THROW_WILL, oTARGET, nDC, SAVING_THROW_TYPE_FEAR, oPC, 0.1f, 1407)){
                 nHD = PS_GetLevel(oTARGET);
-                if (nHD >= 20) PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_3, oTARGET, fDUR, 1407);
-                else if (nHD >= 5) PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_2, oTARGET, fDUR, 1407);
-                else PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_1, oTARGET, fDUR, 1407);    
+                if (nHD >= 20) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_3, oTARGET, fDUR);
+                else if (nHD >= 5) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_2, oTARGET, fDUR);
+                else ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX_1, oTARGET, fDUR);    
             }
         }
         oTARGET = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lPC, TRUE, OBJECT_TYPE_CREATURE);
@@ -404,7 +404,7 @@ void BucklerFinesse(object oPC, object oLHAND){
 	effect eFX = EffectACIncrease(1);
 	eFX = SupernaturalEffect(eFX);
     eFX = SetEffectSpellId(eFX, FF_AC_FX);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC, 0.0, FF_AC_FX);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 }
 
 // had to give this its own spell id for ac for the same reason as buckler
@@ -476,7 +476,7 @@ void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
 			effect eFX = EffectACIncrease(1);
 			eFX = SupernaturalEffect(eFX);
 			eFX = SetEffectSpellId(eFX, FF_AC_FX);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC, 0.0, FF_AC_FX);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 		}
 	}
 }
@@ -831,7 +831,7 @@ void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMA
 {
     eFX = SupernaturalEffect(eFX);
     eFX = SetEffectSpellId(eFX, EQUIP_FX);
-    PS_ApplyEffectToObject(nDUR, eFX, oPC, 0.0, EQUIP_FX);
+    ApplyEffectToObject(nDUR, eFX, oPC);
 }
 
 //Removes Shield if you don't have the feat required for it. To prevent exploit.
@@ -1136,7 +1136,7 @@ void ArmorOptimizations(object oPC, object oARMOR){
 		
 		eFX = SupernaturalEffect(eFX);
 		eFX = SetEffectSpellId(eFX, ARMOR_OPT_FX);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC, 0.0, ARMOR_OPT_FX);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC);
 	}
 }
 /* race removed

@@ -99,8 +99,8 @@ void main()
 		effect eStun = EffectCutsceneParalyze();
 		
     	effect eBeam = EffectNWN2SpecialEffectFile("psi_forcebeam.sef", oManifester);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBeam, oManifester);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oManifester, 4.0f);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eBeam, oManifester);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oManifester, 4.0f);
 		
 		
 		
@@ -137,8 +137,8 @@ void main()
                         {
                             fDelay = GetDistanceBetweenLocations(lManifester, GetLocation(oTarget)) / 20.0f;
                             eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
-                            DelayCommand(1.0f + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-                            DelayCommand(1.0f + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                            DelayCommand(1.0f + fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+                            DelayCommand(1.0f + fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                         }// end if - There was still damage remaining to be dealt after adjustments
                     }// end if - SR check
                 }// end if - Target validity check

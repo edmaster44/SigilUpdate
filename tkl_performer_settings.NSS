@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /*
 Author: brockfanning
 Date: Early 2008...

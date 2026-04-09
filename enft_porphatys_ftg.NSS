@@ -36,15 +36,15 @@ void main() {
 			
 		SendMessageToPC(OBJECT_SELF, "<i>The acid snow of Carceri burns your skin.");
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-		PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);	
+		ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 		if (nAcidThrows > 10) {
 			SendMessageToPC(OBJECT_SELF, "<i>The acid snow of Carceri eats through your resistances.");
 			eDam = EffectDamage(nDamage/2, DAMAGE_TYPE_ACID, DAMAGE_POWER_NORMAL, TRUE);
-			PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);	
+			ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 		} else if (nAcidThrows > 5) {
 			SendMessageToPC(OBJECT_SELF, "<i>The acid snow of Carceri starts to eat through your resistances.");
 			eDam = EffectDamage(nDamage/3, DAMAGE_TYPE_ACID, DAMAGE_POWER_NORMAL, TRUE);
-			PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);	
+			ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 		}
 		
 		nAcidThrows++;

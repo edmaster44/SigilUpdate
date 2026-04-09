@@ -64,14 +64,14 @@ void main()
 	    if (GetLocalInt(OBJECT_SELF, "METAPSI_EXTEND") == 1)
 		{
 			nDuration = nDuration * 2;
-			DelayCommand(12.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration)));
+			DelayCommand(12.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration)));
 		}
 	
 	    //Fire cast spell at event for the specified target
 	    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 14321, FALSE));
 	
 	    //Apply the VFX impact and effects
-	    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-	    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+	    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+	    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
 	}
 }

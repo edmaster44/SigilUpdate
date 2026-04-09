@@ -29,7 +29,7 @@ void main() {
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS, oCaster))
 			{
             	SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), TRUE));
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			}
         }
        //Select the next target within the spell shape.

@@ -50,7 +50,7 @@ if (GetHasSpellEffect(14306, oTarget))
 	   }
 	   else
 	   {
-	   		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oTarget, fDuration);
+	   		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oTarget, fDuration);
 	   }				
 
 }

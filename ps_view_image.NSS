@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // script to view a TGA in a GUI when a placeable is clicked on.

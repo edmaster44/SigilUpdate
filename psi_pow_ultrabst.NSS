@@ -84,7 +84,7 @@ void main()
         for(; nRepeats > 0; nRepeats--)
         {
             // Apply area VFX
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFNF, OBJECT_SELF);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eFNF, OBJECT_SELF);
 
             // Loop over targets
             oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, lTarget, TRUE, OBJECT_TYPE_CREATURE);
@@ -123,8 +123,8 @@ void main()
                         // Create effect, calculate delay and apply
                         eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
                         fDelay  = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) / 20.0f;
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                     }// end if - SR check
                 }// end if - Targeting check
 

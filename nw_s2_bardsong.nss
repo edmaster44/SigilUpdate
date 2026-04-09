@@ -407,19 +407,19 @@ void main()
                 {
                     effect eLinkBard = EffectLinkEffects(eLink, eVis);
                     eLinkBard = ExtraordinaryEffect(eLinkBard);
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkBard, oTarget, RoundsToSeconds(nDuration));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLinkBard, oTarget, RoundsToSeconds(nDuration));
                     if (nHP > 0)
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTarget, RoundsToSeconds(nDuration));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTarget, RoundsToSeconds(nDuration));
                     }
                 }
                 else if(GetIsFriend(oTarget))
                 {
-                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget); //NWN1 VFX
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget); //NWN1 VFX
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
                     if (nHP > 0)
                     {
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTarget, RoundsToSeconds(nDuration));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTarget, RoundsToSeconds(nDuration));
                     }
                 }
             }

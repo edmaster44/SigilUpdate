@@ -96,8 +96,8 @@ void main()
                     {
                         //Apply damage effect and VFX impact.
 						DelayCommand( fDelay, SpawnSpellProjectile(OBJECT_SELF, oTarget, lSourceLoc, lTargetLoc, SPELL_METEOR_SWARM, nPathType) );
-                        DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );
-                        DelayCommand( fDelay + fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );
+                        DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget) );
+                        DelayCommand( fDelay + fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget) );
                     }
 				}
             }

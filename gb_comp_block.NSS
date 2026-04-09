@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // gb_comp_block
 /*
 	companion On Block

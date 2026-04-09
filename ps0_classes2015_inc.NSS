@@ -39,7 +39,7 @@ void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell)
     if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
 	{	if (!MyResistSpell(oPC, oTarget))
 		{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()+10, SAVING_THROW_TYPE_MIND_SPELLS))
-            {	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));		}
+            {	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));		}
         }
     }
 }
@@ -114,8 +114,8 @@ void PS_Feat_SHD_ShadowEvade(object oPC, int nSpell)
     effect eVis 	= EffectVisualEffect(VFX_HIT_SPELL_EVIL);
 
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDuration));
 }
 
 void PS_Feat_BG_CreateUndead(object oPC, int nSpell)
@@ -210,7 +210,7 @@ void PS_Feat_SHD_ShadowJump(object oPC, location lTarget, int nSpell)
         return;        }
     AssignCommand(oPC, ActionJumpToLocation(lTarget));
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis2, lTarget, RoundsToSeconds(6));
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,  eConceal, oPC, 6.0f);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY,  eConceal, oPC, 6.0f);
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVis, lCaster, RoundsToSeconds(4));
 }
 
@@ -249,7 +249,7 @@ void PS_Feat_GC_DODGE_AC(object oPC, int nSpell){
 		effect eAC = EffectACIncrease(nGatecrasherAC);
 		eAC = SupernaturalEffect(eAC);
 		eAC = SetEffectSpellId(eAC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
 	}
 }
 
@@ -286,7 +286,7 @@ void PS_Feat_GC_FindPortal(object oPC, int nSpell)
 	}
     
 	DelayCommand(fDelay, SetPlotFlag(oPortal, FALSE));
-	DelayCommand(fDelay+0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDestroy, oPortal)); 
+	DelayCommand(fDelay+0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDestroy, oPortal)); 
 }
 	
 void PS_Feat_DMN_BinderOfFiends(object oPC, int nSpell)
@@ -352,7 +352,7 @@ void PS_Feat_DMN_FiendishMantle(object oPC, int nSpell)
 			eLink 		= EffectLinkEffects(eLink, eCold);
 			eLink 		= EffectLinkEffects(eLink, eAcid);
 			eLink 		= SupernaturalEffect(eLink);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}	
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}	
 }
 
 void PS_Feat_DMN_FortificationVsFiends(object oPC, int nSpell)
@@ -369,7 +369,7 @@ void PS_Feat_DMN_FortificationVsFiends(object oPC, int nSpell)
 
 		effect eLink 		= EffectLinkEffects(eACvsBonus,eSvvsBonus);
 			eLink 			= SupernaturalEffect(eLink);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}	
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	}	
 }
 
 void PS_Feat_DMN_ReleaseBinding(object oPC, int nSpell)
@@ -405,8 +405,8 @@ void PS_Feat_SOD_DeathTouch(object oPC, object oTarget, int nSpell)
             {	if(MyResistSpell(OBJECT_SELF, oTarget) == 0)
         		{	effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);
     				effect eVis = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-				 	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);	}
+				 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);	}
             }
         }
     }
@@ -434,7 +434,7 @@ void PS_Feat_SOD_BlessWeapon(object oPC, object oTarget, int nSpell)
     {	if (GetBaseItemType(oTarget) ==  BASE_ITEM_BOLT)
         {	SignalEvent(GetItemPossessor(oTarget), EventSpellCastAt(oPC, nSpell, FALSE));
 			IPSafeAddItemProperty(oTarget, ItemPropertyOnHitCastSpell(123,1), RoundsToSeconds(nDuration), X2_IP_ADDPROP_POLICY_KEEP_EXISTING );
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oTarget), RoundsToSeconds(nDuration));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oTarget), RoundsToSeconds(nDuration));
 			return;		}
     }
  
@@ -443,7 +443,7 @@ void PS_Feat_SOD_BlessWeapon(object oPC, object oTarget, int nSpell)
    {	SignalEvent(GetItemPossessor(oMyWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
         if (nDuration > 0)
         {	PS_AddBlessEffectToWeapon(oMyWeapon, TurnsToSeconds(nDuration));
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oMyWeapon), TurnsToSeconds(nDuration));
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, GetItemPossessor(oMyWeapon), TurnsToSeconds(nDuration));
         }
         return;
     }
@@ -471,7 +471,7 @@ void PS_Feat_SOD_DeathWard(object oPC, object oTarget, int nSpell)
     float fDuration 	= HoursToSeconds(nDuration);
 
     SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE));
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 }
 
 void PS_Feat_CE_HolyAura(object oPC, int nSpell)
@@ -484,7 +484,7 @@ void PS_Feat_CE_HolyAura(object oPC, int nSpell)
     	int nDuration 	= GetCasterLevel(oPC);
 
     	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-    	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oPC);
+    	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAOE, oPC);
 	}
 }
 
@@ -498,7 +498,7 @@ void PS_Feat_CE_GreaterHolyAura(object oPC, int nSpell)
     if (!GetHasSpellEffect(nSpell, oPC))
 	{	effect eAOE 	= EffectAreaOfEffect(AOE_MOB_PROTECTION);
 		SignalEvent(oPC, EventSpellCastAt(oPC, 1627, FALSE));
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDur);
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDur);
 	}
 }
 
@@ -528,7 +528,7 @@ void PS_Feat_CE_InspiredCalling(object oPC, location lTarget, int nSpell)
 	}
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
 		{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE));
-			{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);	}
+			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);	}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}
@@ -566,7 +566,7 @@ void PS_Feat_CE_HeroicValor(object oPC, location lTarget, int nSpell)
 		}
 		if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oPC))
 		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1630, FALSE));
-			{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);	}
+			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);	}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}
@@ -590,7 +590,7 @@ void PS_Feat_CE_HallowedWeapon(object oPC, object oTarget, int nSpell)
     if(GetIsObjectValid(oWeapon) )
     {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, nSpell, FALSE));
 		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_HOLY);
-		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
+		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);
 		if (GetHasFeat(2644, oPC, TRUE))
 		{	itemproperty ipHallow = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_SONIC, IP_CONST_DAMAGEBONUS_1d4);
 			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_HOLY);
@@ -634,7 +634,7 @@ void PS_Feat_CE_FistOfTheHeavens(object oPC, int nSpell)
 		eLink = SupernaturalEffect(eLink);
 		
 		if (!iHasFotH)	
-		DelayCommand(0.1f, SAFE_PS_ApplyEffectToObject(nSpell, DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration));			
+		DelayCommand(0.1f, SAFE_ApplyEffectToObject(nSpell, DURATION_TYPE_TEMPORARY, eLink, oPC, fDuration));			
 	}
 	else
 	{	if (iHasFotH)
@@ -653,7 +653,7 @@ void PS_Feat_CE_ArmorOfTheTome(object oPC, int nSpell)
 	{	iArmor = 4;	}
     effect eArmor = EffectACIncrease(iArmor, AC_SHIELD_ENCHANTMENT_BONUS);
 		eArmor = SupernaturalEffect(eArmor);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC);
 }
 
 void PS_Feat_CE_SanctifiedSoul(object oPC, int nSpell)
@@ -663,7 +663,7 @@ void PS_Feat_CE_SanctifiedSoul(object oPC, int nSpell)
 
     effect eReduct = EffectDamageReduction(10, ALIGNMENT_EVIL, 0, DR_TYPE_ALIGNMENT);
 		eReduct = SupernaturalEffect(eReduct);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eReduct, oPC);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eReduct, oPC);
 }
 
 void PS_Feat_CE_DivineEndurance(object oPC, int nSpell)
@@ -690,7 +690,7 @@ void PS_Feat_CE_DivineEndurance(object oPC, int nSpell)
     effect eConst = EffectAbilityIncrease(ABILITY_CONSTITUTION,iBonus);
 		eConst = SupernaturalEffect(eConst);
 	
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConst, oPC, fDur);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConst, oPC, fDur);
 }
 
 void PS_Feat_CE_ArchonicPath(object oPC)

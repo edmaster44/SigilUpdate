@@ -95,8 +95,8 @@ void main()
                         // Add a small delay based on the distance from the caster. 
                         float fDelay = 0.15 * GetDistanceToObject( oTarget );
 
-                        DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eImpact, oTarget ) );
-                        DelayCommand( fDelay, PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eMesmerized, oTarget, fDuration ) ); 
+                        DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_INSTANT, eImpact, oTarget ) );
+                        DelayCommand( fDelay, ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eMesmerized, oTarget, fDuration ) ); 
 
                         nAffectedCreature = nAffectedCreature + 1;
 

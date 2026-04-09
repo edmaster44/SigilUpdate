@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // i_ps_bt_quickling_ac
@@ -16,5 +16,5 @@ void main()
 
 	ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, GetLocation(oPC));
 	DelayCommand(0.2, AssignCommand(oPC, ClearAllActions())); // prevents an exploit
-	DelayCommand(0.3, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eQuick,oPC, fDuration));
+	DelayCommand(0.3, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eQuick,oPC, fDuration));
 }

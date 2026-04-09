@@ -54,7 +54,7 @@ int ToggleRescue ( object oRescuer )
         effect eRescue = EffectRescue(GetSpellId());
 		effect eDur    = EffectVisualEffect(VFX_DUR_RESCUER);
 		eRescue = EffectLinkEffects(eRescue, eDur);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRescue, oRescuer);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRescue, oRescuer);
         return TRUE;
     }
 }
@@ -111,12 +111,12 @@ void RunRescue(object oRescuer, int nSpellId)
             {   // Target either has no Rescue effects yet, or is the Rescuer who has no real Rescue effects yet.
                 if (oTarget == oRescuer)
                 {   // Rescuer gets DR
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDR, oTarget, fDuration);
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDR, oTarget, fDuration);
                 }
                 else if (spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oRescuer))
                 {   // Everyone else gets a Share Damage effect
                     SignalEvent(oTarget, EventSpellCastAt(oRescuer, nSpellId, FALSE));
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);    // Share damage & VFX
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);    // Share damage & VFX
                 }
             }
             else

@@ -27,7 +27,7 @@ void DoTentacleAttack(object oEnemy, int nAB, int nPhysicalBonus, int nMagicalBo
 	effect eVis = EffectVisualEffect(VFX_IMP_DESTRUCTION);
 	effect eLink = EffectLinkEffects(eVis, eDam);
 	eLink = EffectLinkEffects(eMagicDam, eDam);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oEnemy);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oEnemy);
 }
 
 void main()

@@ -25,7 +25,7 @@ void CreateExplosion(object oPC) {
 		}
 		
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj);
 		
 		oObj = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lLoc);
 	}
@@ -49,7 +49,7 @@ void CreateFinalExplosion(object oPC) {
 		}
 		
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPartyMember);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPartyMember);
 		
 		SendMessageToPC(oPC, "You flee out of the treasure room. . ");
 		//Teleport here!

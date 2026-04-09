@@ -15,7 +15,7 @@ void main() {
 		if (GetIsEnemy(oObj, oCaster)) {
 			int thisDamage = GetReflexAdjustedDamage(nDamage, oObj, nDC, SAVING_THROW_TYPE_NONE, OBJECT_SELF);
 			effect eDam = EffectDamage(thisDamage, DAMAGE_TYPE_MAGICAL);
-			DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
+			DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
 		}
 	
 		oObj = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, GetLocation(OBJECT_SELF));

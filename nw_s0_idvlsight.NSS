@@ -179,6 +179,6 @@ void main() {
 	
 	SetEffectSpellId(eShield, 811);
 	
-	DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oCaster, fDuration));
+	DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oCaster, fDuration));
 	
 }

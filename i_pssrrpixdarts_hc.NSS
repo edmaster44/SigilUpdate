@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main()
 {
 	object oItemHit = GetSpellCastItem();
@@ -21,7 +21,7 @@ void main()
 			int iDur = GetTotalLevels(oPC, TRUE) / 3;
 			if (iDur < 1) iDur = 1;
 			
-			DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSleep, oTarget, RoundsToSeconds(iDur)));
+			DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSleep, oTarget, RoundsToSeconds(iDur)));
 		}
 		else if (iRes == 1)
 			SendMessageToPC(oPC, "<c=lightgreen>Failed to put target to sleep!");

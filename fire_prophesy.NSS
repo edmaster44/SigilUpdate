@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //*********************************************************************
 //Randomly generates a prophesy for the fire weird in the City of Brass
 //*********************************************************************

@@ -65,8 +65,8 @@ void main() {
 						
 						fDuration	=	fDuration/2;
 						
-						DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
+						DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> stuns and deafens "+GetName(oTarget)+"</color>";
 						SendMessageToPC(oCaster, sReport);
 						sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDam)+"</color>";
@@ -79,9 +79,9 @@ void main() {
 						
 						eLink	=	EffectLinkEffects(eDam, eImpact);
 						
-						DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, fDuration);
+						DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, fDuration);
 						string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> stuns and deafens "+GetName(oTarget)+"</color>";
 						SendMessageToPC(oCaster, sReport);
 						sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDam)+"</color>";
@@ -92,7 +92,7 @@ void main() {
 			
 			oTarget = GetNextObjectInShape(SHAPE_SPHERE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 		}
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
 	}
 	else if (GetHasSpell(SPELL_SHOUT, oCaster)) {
 		while(GetIsObjectValid(oTarget))
@@ -117,7 +117,7 @@ void main() {
 						
 						eLink	=	EffectLinkEffects(eDam, eImpact);
 						
-						DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+						DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 					}
 					else
 					{
@@ -125,14 +125,14 @@ void main() {
 						
 						eLink	=	EffectLinkEffects(eDam, eImpact);
 						
-						DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
+						DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeaf, oTarget, fDuration);
 					}
 				}
 			}
 			
 			oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 		}
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, oCaster, 2.0);
 	}
 }

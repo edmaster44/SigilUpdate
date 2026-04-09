@@ -93,8 +93,8 @@ void main()
 		            //Make a saving throw check
 		            if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_NONE))
 		            {
-		                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
-		                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+		                ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oTarget);
+		                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		            }
 		        }
 	    	}
@@ -165,8 +165,8 @@ void main()
 		                            effect eKill = EffectDamage(GetCurrentHitPoints(oTarget));
 		                            //just to be extra-sure... :)
 		                            effect eDeath = EffectDeath(FALSE, FALSE);
-		                            DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
-		                            DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+		                            DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eKill, oTarget));
+		                            DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
 		                            //DeathlessFrenzyCheck(oTarget);
 		                        }
 		                    }

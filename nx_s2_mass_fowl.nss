@@ -74,9 +74,9 @@ void main()
 				 !MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF, fDelay) )
 			{
 				//Apply the VFX impact and effects
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 				AssignCommand(oTarget, ClearAllActions()); // prevents an exploit	
-				DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oTarget));
+				DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, ePoly, oTarget));
 				
 				// Reduce mental stats to 9.
 				int nINT = GetAbilityScore(oTarget, ABILITY_INTELLIGENCE);
@@ -86,17 +86,17 @@ void main()
 				if (nINT > 9)
 				{
 					effect eINT = EffectAbilityDecrease(ABILITY_INTELLIGENCE, nINT - 9);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eINT, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eINT, oTarget));
 				}
 				if (nWIS > 9)
 				{
 					effect eWIS = EffectAbilityDecrease(ABILITY_WISDOM, nWIS - 9);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWIS, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWIS, oTarget));
 				}
 				if (nCHA > 9)
 				{
 					effect eCHA = EffectAbilityDecrease(ABILITY_CHARISMA, nCHA - 9);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCHA, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCHA, oTarget));
 				}
 			}
 		}

@@ -55,7 +55,7 @@ void main()
             if (nDamage > 0)
             {
                 effect ePhysical = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING,IPGetDamagePowerConstantFromNumber(nBonus));
-                DelayCommand( fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget) );
+                DelayCommand( fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget) );
 				DelayCommand( fTravelTime, DoElementalDamage(OBJECT_SELF, oTarget, bCrit));
 				DelayCommand( fTravelTime, 	DoAlignedDamage(OBJECT_SELF, oTarget));
 
@@ -67,7 +67,7 @@ void main()
                 if (MySavingThrow(SAVING_THROW_FORT, oTarget, nDC) == 0)
                 {
                     effect eDeath = EffectDeath();
-                    DelayCommand( fTravelTime, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget) );
+                    DelayCommand( fTravelTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget) );
                 }
             }
         }

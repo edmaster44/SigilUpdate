@@ -54,7 +54,7 @@ void main()
 	eLink = ExtraordinaryEffect(eLink);
 	
 	//Apply the effects
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);	// Permanent duration is OK, since simulacrum will expire...
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);	// Permanent duration is OK, since simulacrum will expire...
 
 	PS_TakeGoldFromCreature(GetGold(OBJECT_SELF), OBJECT_SELF, TRUE);
 }

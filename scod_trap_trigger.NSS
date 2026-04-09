@@ -164,11 +164,11 @@ void TriggerTrapOn(object oTrap, object oVic) {
 	
 	if (ReflexSave(oVic, nDC, SAVING_THROW_TYPE_TRAP, oTrap)) {
 		effect eDam = EffectDamage(nDamage/2, nDamType);
-		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
+		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
 		//TransportToWaypoint(oVic, oEscape);
 	} else {
 		effect eDam = EffectDamage(nDamage, nDamType);
-		DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
+		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oVic));
 	}
 }
 

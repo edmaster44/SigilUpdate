@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // Does a check for local vars with DC values on the trigger and reports the lore known.

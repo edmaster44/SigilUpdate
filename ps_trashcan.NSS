@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //  Trash Can Script
 void main()
 {

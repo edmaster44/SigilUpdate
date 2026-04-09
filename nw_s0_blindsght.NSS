@@ -56,7 +56,7 @@ void main()
    //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BLINDSIGHT, FALSE));
     //Apply the VFX impact and effects
-	//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 	PS_RemoveEffects(oTarget, SPELL_BLINDSIGHT);
 	RemoveEffect(oTarget, EffectNewBlindness());
 	RemoveEffect(oTarget, EffectBlindness());

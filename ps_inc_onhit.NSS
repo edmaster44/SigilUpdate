@@ -139,7 +139,7 @@ int OnHitSavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SA
 			eVis = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );	// makes use of NWN2 VFX
             bValid = FALSE;
         }
-        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
     return bValid;
 }
@@ -283,7 +283,7 @@ void DoElementalDamage(object oPC, object oTarget, int critical) {
 	int nArcherLevel = GetLevelByClass(81, oPC);
 	if (nArcherLevel >= 7 && critical) {
 		effect ePhysical = EffectDamage(d10(2), DAMAGE_TYPE_PIERCING, DAMAGE_POWER_ENERGY);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, ePhysical, oTarget);
 	}
 	if (nArcherLevel >= 3) {
 		effect eEnergy;
@@ -293,7 +293,7 @@ void DoElementalDamage(object oPC, object oTarget, int critical) {
 			eEnergy = EffectDamage(d6(), DAMAGE_TYPE_COLD, DAMAGE_POWER_ENERGY);
 		else if (GetLocalInt(oPC, "aa_elemental_shock"))
 			eEnergy = EffectDamage(d6(), DAMAGE_TYPE_ELECTRICAL, DAMAGE_POWER_ENERGY);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEnergy, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eEnergy, oTarget);
 	}
 }
 
@@ -325,7 +325,7 @@ void DoAlignedDamage(object oCaster, object oTarget) {
 			 GetAlignmentLawChaos(oCaster) != GetAlignmentLawChaos(oTarget))
 				eEnergy = EffectDamage(4, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_ENERGY, TRUE);
 	}
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEnergy, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eEnergy, oTarget);
 }
 
 //1411-1419 1-9
@@ -384,8 +384,8 @@ int DoEldritchOnHitBlast(object oCaster, object oTarget, int nDmgType, int nVFX,
             
         //Apply the damage effect
 		int hp = GetCurrentHitPoints(oTarget);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 		string damageDone = IntToString(hp-GetCurrentHitPoints(oTarget));
 		string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+damageDone+"</color>";
 		SendMessageToPC(oCaster, report);
@@ -420,14 +420,14 @@ int DoEssenceOnHitBeshadowedBlast(object oCaster, object oTarget, int nDC, int n
 
                 //Apply the effect and VFX impact
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 				
 				if (nDex > 10)
 				{
 					int nDecr = (nDex-10);
 					effect eDex = EffectAbilityDecrease( ABILITY_DEXTERITY, nDecr);
 					
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
 				}
                 return TRUE;
             }
@@ -453,7 +453,7 @@ int DoEssenceOnHitBewitchingBlast(object oCaster, object oTarget, int nDC, int n
 				
                 RemoveEffectsFromSpell(oTarget, nID);
 
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
                 return TRUE;
             }
         }
@@ -475,7 +475,7 @@ int DoEssenceOnHitBindingBlast(object oCaster, object oTarget, int nDC, int nID)
             // Spell Effects not allowed to stack...
             RemoveEffectsFromSpell(oTarget, nID);
 
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
             return TRUE;
         }
     }
@@ -508,7 +508,7 @@ int DoEssenceOnHitBrimstoneBlast(object oCaster, object oTarget, int nDC, int nI
 
             SaveDelayedSpellInfo(SPELL_I_BRIMSTONE_BLAST, oTarget, oCaster, nDC);
 			effect eVFX = ExtraordinaryEffect(EffectVisualEffect(894));
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, RoundsToSeconds(nRoundsLeft));	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, RoundsToSeconds(nRoundsLeft));	
 			DelayCommand(RoundsToSeconds(1), RunEssenceBrimstoneBlastImpact(oTarget, oCaster, nRoundsLeft));	// First check should be one round after the blast hit
 				
 	        return TRUE;
@@ -536,8 +536,8 @@ int DoEssenceOnHitDrainingBlast(object oCaster, object oTarget, int nDC, int nID
                 RemoveEffectsFromSpell(oTarget, nID);
 
                 //Apply the slow effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -569,8 +569,8 @@ int DoEssenceOnHitFrightfulBlast(object oCaster, object oTarget, int nDC, int nI
                 RemoveEffectsFromSpell(oTarget, nID);
 
                 //Apply linked effects and VFX impact
-                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink2, oTarget, fDuration);
                 return TRUE;
             }
         }
@@ -594,8 +594,8 @@ int DoEssenceOnHitHellrimeBlast(object oCaster, object oTarget, int nDC, int nID
                 RemoveEffectsFromSpell(oTarget, nID);
 
                 //Apply the effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDex, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -616,7 +616,7 @@ int DoEssenceOnHitHinderingBlast(object oCaster, object oTarget, int nDC, int nI
             // Spell Effects not allowed to stack...
             RemoveEffectsFromSpell(oTarget, nID);
 
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
             return TRUE;
         }
 	}
@@ -645,8 +645,8 @@ int DoEssenceOnHitNoxiousBlast(object oCaster, object oTarget, int nDC, int nID)
                 RemoveEffectsFromSpell(oTarget, nID);
 
                 //Apply the effect and VFX impact
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-                //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+                //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by DoEldritchBlast()
                 return TRUE;
             }
         }
@@ -667,7 +667,7 @@ int DoEssenceOnHitUtterdarkBlast(object oCaster, object oTarget, int nDC, int nI
             // Spell Effects not allowed to stack...
             RemoveEffectsFromSpell(oTarget, nID);
 
-            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
             return TRUE;
         }
 	}

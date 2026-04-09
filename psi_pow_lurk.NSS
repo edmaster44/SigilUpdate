@@ -63,8 +63,8 @@ void main()
        // Make sure the target is not prevented from extra-dimensional movement
        if(!GetCanTeleport(oTarget, GetArea(oTarget)))
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             //GoInvis(manif, oTarget);
         }// end if - The target can move extradimensionally
     }// end if - Successfull manifestation

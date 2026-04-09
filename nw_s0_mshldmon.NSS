@@ -99,8 +99,8 @@ void HoldTarget( object oTarget, float fDuration, int nSaveDC)
 		{
 			//Apply paralyze effect and VFX impact
 
-			DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, fDuration ) );
-			//DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+			DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, fDuration ) );
+			//DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 		}
 	}
 

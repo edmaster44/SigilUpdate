@@ -47,7 +47,7 @@ void MentalAcuity()
 {
 	effect eSavingThrowInc = EffectSavingThrowIncrease(SAVING_THROW_ALL, 4, SAVING_THROW_TYPE_MIND_SPELLS);
 	eSavingThrowInc = SupernaturalEffect(eSavingThrowInc);
-	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavingThrowInc, oSelf));
+	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavingThrowInc, oSelf));
 }
 
 void MentalAcuityImp()
@@ -58,14 +58,14 @@ void MentalAcuityImp()
 	effect eLink = EffectLinkEffects(eImmunity1, eImmunity2);
 	effect eLink2 = EffectLinkEffects(eLink, eSavingThrowInc);
 	eLink2 = SupernaturalEffect(eLink2);
-	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink2, oSelf));
+	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink2, oSelf));
 }
 
 void DPBluff()
 {
 	effect eSkillInc = EffectSkillIncrease(SKILL_BLUFF, 4);
 	eSkillInc = SupernaturalEffect(eSkillInc);
-	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkillInc, oSelf));
+	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSkillInc, oSelf));
 }
 
 void InfiltratorArmor()
@@ -77,5 +77,5 @@ void InfiltratorArmor()
     effect eDodge = EffectACIncrease(nAC, AC_DODGE_BONUS);
 	eDodge = SupernaturalEffect(eDodge);
 //	SendMessageToPC(oSelf, "ExpectedACBonus: "+IntToString(nAC));
-	DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oSelf));			
+	DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDodge, oSelf));			
 }

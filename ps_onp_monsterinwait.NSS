@@ -29,7 +29,7 @@ void main() {
 	if (sVFX != "") {
 		effect eVFX = EffectNWN2SpecialEffectFile(sVFX);
 		eVFX = SupernaturalEffect(eVFX);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVFX, OBJECT_SELF);
 	}
 		
 	//SendMessageToPC(oPC, "On percieved fired for "+GetName(OBJECT_SELF));

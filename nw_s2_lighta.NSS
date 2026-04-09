@@ -41,6 +41,6 @@ void main(){
 			RemoveSpecificEffect(EFFECT_TYPE_BLINDNESS, oTarget);
 			RemoveSpecificEffect(EFFECT_TYPE_MISS_CHANCE, oTarget);
 		}
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, oTarget, HoursToSeconds(nDur));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSearch, oTarget, HoursToSeconds(nDur));
 	}	
 }

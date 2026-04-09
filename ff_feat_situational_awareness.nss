@@ -26,7 +26,7 @@ void main(){
         effect eAC = EffectACIncrease(nAC, AC_DODGE_BONUS, AC_VS_DAMAGE_TYPE_ALL);
         eAC = SupernaturalEffect(eAC);
         eAC = SetEffectSpellId(eAC, nId);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
     }
 	
 }

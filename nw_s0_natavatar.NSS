@@ -92,8 +92,8 @@ void main()
 				&& (!GetHasEffect(EFFECT_TYPE_POLYMORPH, oTarget)))
 			{
 				RemoveEffectsFromSpell(oTarget, GetSpellId());
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonusHP, oTarget, fDuration);
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonusHP, oTarget, fDuration);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
 			}
 			else
 			{

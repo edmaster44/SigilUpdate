@@ -65,9 +65,9 @@ else if(GetHasFeat(FEAT_IMPROVED_EVASION, oTarget))
 	}
 if (nDmg > 0)//Knock down & damage target
 	{
-	DelayCommand(0.1, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0));
-	DelayCommand(0.3, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 6.0));
-	DelayCommand(0.25, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eBludgeon, oTarget));
+	DelayCommand(0.1, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0));
+	DelayCommand(0.3, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oTarget, 6.0));
+	DelayCommand(0.25, ApplyEffectToObject(DURATION_TYPE_INSTANT, eBludgeon, oTarget));
 	}
 else//Dodge if uninjured
 	{

@@ -146,7 +146,7 @@ void CastSpell()
 
             //Apply the VFX impact and effects
 			
-            PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration );
+            ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration );
 			
 		}
 		
@@ -166,15 +166,15 @@ void CastSpell()
                     if(!MySavingThrow(SAVING_THROW_WILL, oTarget, 32, SAVING_THROW_TYPE_MIND_SPELLS))
                     {
                         //Apply linked effects and VFX impact
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSavePen, oTarget, fDurationPen);
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePenLink2, oTarget, fDurationPen);
-						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisPen2, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSavePen, oTarget, fDurationPen);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePenLink2, oTarget, fDurationPen);
+						ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisPen2, oTarget);
                     }
 					
 					if(!MySavingThrow(SAVING_THROW_WILL, oTarget, 26, SAVING_THROW_TYPE_FEAR))
 	                {
 	                    //Apply the linked effects and the VFX impact
-	                    DelayCommand(1.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFearPen, oTarget, fDurationPen));
+	                    DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFearPen, oTarget, fDurationPen));
 	                }
 				
                 }
@@ -194,7 +194,7 @@ void main()
 	
 	effect eVis = EffectNWN2SpecialEffectFile("sp_magic_cast.sef");
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 2.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oCaster, 2.0f);
 	
 	PlayCustomAnimationWrapper(oCaster, "liftswordup", 0, 0.75f);
 	DelayCommand(1.0f, PlayCustomAnimationWrapper(oCaster, "liftswordloop", 0, 1.0f));

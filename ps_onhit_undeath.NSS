@@ -33,8 +33,8 @@ void DoUndeadToDeath(object oCreature, object oCaster, int nDC)
        {
             effect eDeath = EffectDamage(GetCurrentHitPoints(oCreature),DAMAGE_TYPE_DIVINE,DAMAGE_POWER_ENERGY);
             effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);
-            DelayCommand(fDelay+0.5f,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDeath,oCreature));
-            DelayCommand(fDelay,PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oCreature));
+            DelayCommand(fDelay+0.5f,ApplyEffectToObject(DURATION_TYPE_INSTANT,eDeath,oCreature));
+            DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oCreature));
 			string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oCreature)+"</color>";
 			DelayCommand(0.5, SendMessageToPC(oCaster, sReport));
        }

@@ -86,8 +86,8 @@ void main()
                 //Make a Fort Save versus death effects
                 if(!OnHitSavingThrow(SAVING_THROW_FORT, oLowest, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_DEATH, oCaster, fDelay))
                 {
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oLowest));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oLowest));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest));
 					string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 					SendMessageToPC(oCaster, report);
                 }

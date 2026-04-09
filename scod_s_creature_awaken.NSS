@@ -30,7 +30,7 @@ void main () {
 	
 	//Do the damage
 	effect eDamage = EffectDamage(d6(nAwake));
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, OBJECT_SELF);
 
 	//Remove me after I've been called
 	SetLocalString(OBJECT_SELF, "DamagedScript", "");

@@ -67,7 +67,7 @@ void main()
         effect eVis = EffectVisualEffect(VFX_DUR_MIND_AFFECTING_POSITIVE);
 
         // Apply effects
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
     }
 }

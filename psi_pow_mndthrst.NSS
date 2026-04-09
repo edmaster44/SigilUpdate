@@ -89,7 +89,7 @@ void main()
                     // Generate damage effect
                     eLink = EffectLinkEffects(eVis, EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL));
                     // Apply effect
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget);
                 }// end if - Save
             }// end if - SR check
         }// end for - Twin Power

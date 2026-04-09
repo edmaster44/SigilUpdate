@@ -80,7 +80,7 @@ void main()
         for(; nRepeats > 0; nRepeats--)
         {
             // Cone, all damageable objects
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpray, OBJECT_SELF, 2.0);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpray, OBJECT_SELF, 2.0);
             oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, fWidth, lTargetLocation, TRUE,
                                            OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE
                                            );
@@ -117,8 +117,8 @@ void main()
                 	        {
                         	    // Apply effects to the currently selected target.
 	                            eAcid = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-                	            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,  oTarget));
-	                       	    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eAcid, oTarget));
+                	            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis,  oTarget));
+	                       	    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eAcid, oTarget));
         	                }
                 	    }// end if - SR check
 			

@@ -87,6 +87,6 @@ void main()
    		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1020, FALSE));
 
 		//Apply the bonus effect and VFX impact
-   		PS_ApplyEffectToObject(nDurType, eRegen, oTarget, fDuration);
+   		ApplyEffectToObject(nDurType, eRegen, oTarget, fDuration);
 	}
 }

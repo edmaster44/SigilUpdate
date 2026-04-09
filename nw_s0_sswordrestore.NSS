@@ -79,7 +79,7 @@ void Meditate(object oPC, object oItem)
 	}
 
 	effect eEffect = EffectNWN2SpecialEffectFile("fx_shard_rip.sef");
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
 	PlayCustomLoopingAnimation(oPC, "%", 1.0f);
 	PlayCustomOneShotAnimation(oPC, "kneeldown", 1.0f);
 	DelayCommand(0.8f, PlayCustomLoopingAnimation(oPC, "kneelbow", 0.5f));
@@ -129,9 +129,9 @@ void Meditate5(object oPC, object oItem)
 		
 	effect eEffect = EffectNWN2SpecialEffectFile("fx_shard_rip.sef");
 	effect eEffect2 = EffectNWN2SpecialEffectFile("sp_divination_cast.sef");
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
-	DelayCommand(2.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect, oPC, 4.0f);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
+	DelayCommand(2.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC));
 	DelayCommand(1.0f, AssignCommand(oPC, Meditate6(oPC, oItem)));
 }
 
@@ -156,7 +156,7 @@ void Meditate7(object oPC, object oItem)
 		return;
 	}
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eEffect2, oPC);
 		
 	DelayCommand(1.0f, AssignCommand(oPC, Meditate8(oPC, oItem)));
 }
@@ -184,7 +184,7 @@ void RestoreCharges(object oPC, object oItem)
 	}
 	
 	effect eVis = EffectNWN2SpecialEffectFile("fx_shard_attack_reform.sef");
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 	PlayCustomLoopingAnimation(oPC, "%", 1.0f);
 	PlayCustomOneShotAnimation(oPC, "kneelup", 1.0f);
 	

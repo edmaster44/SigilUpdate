@@ -65,11 +65,11 @@ void main()
 		location lSword = GetLocation(oSword);
 		AssignCommand(oSword, ClearAllActions(TRUE));
 		PlayCustomOneShotAnimation(oPC, "Thrw_1attack02", 1.0);
-		DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStart, oPC, 3.0f));
+		DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStart, oPC, 3.0f));
 		DelayCommand(0.25f, HideWeapon(oPC));
 		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eReforming, lSword, 3.0f);
 		DelayCommand(2.8f, ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eExplosion, lSword, 6.0f));
-		DelayCommand(2.8f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSword, oSword));
+		DelayCommand(2.8f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSword, oSword));
 		DelayCommand(3.0f, UnhideSwordCreature(oSword));
 		DelayCommand(4.0f, PlayCustomLoopingAnimation(oSword, "1hS_1attack0" + IntToString(nRandom), 1.0f));
 		DelayCommand(4.0f, AssignCommand(oSword, PlaySound("it_bladelg_draw01")));		
@@ -83,11 +83,11 @@ void main()
 		location lSword = GetLocation(oSword);
 		AssignCommand(oSword, ClearAllActions(TRUE));
 		PlayCustomOneShotAnimation(oPC, "Thrw_1attack02", 1.0);
-		DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStart, oPC, 3.0f));
+		DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStart, oPC, 3.0f));
 		DelayCommand(0.25f, HideWeapon(oPC));
 		ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eReforming, lSword, 3.0f);
 		DelayCommand(2.8f, ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eExplosion, lSword, 6.0f));
-		DelayCommand(2.8f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSword, oSword));
+		DelayCommand(2.8f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSword, oSword));
 		DelayCommand(3.0f, UnhideSwordCreature(oSword));
 		DelayCommand(4.5f, SwordAttacks(lTargetLocation, oPC, oItem, oSword));	
 	}
@@ -248,19 +248,19 @@ void AttackSingleTarget(object oTarget, object oPC, object oItem, object oSword)
 			AssignCommand(oSword, JumpToLocation(lJumpLocation));
 			AssignCommand(oSword, ActionDoCommand(PlayCustomOneShotAnimation(oSword, 
 					sAttackAnimation, 1.0f)));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 			
 			if (nTimesHit == 1 || nTimesHit == 5 || nTimesHit == 9 || nTimesHit == 13 || 
 				nTimesHit == 17 || nTimesHit == 21 || nTimesHit == 25 || nTimesHit == 29)
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f);
 			}
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, 3.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, 3.0f);
 			
 		    if (MySavingThrow(SAVING_THROW_FORT, oTarget, 22) == FALSE)
             {
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 3.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 3.0f);
             }
 			
 			nRandom = RandomIntBetween(1, 4);
@@ -416,19 +416,19 @@ void JumpAndAttack(object oTarget, location lTarget, object oPC, object oItem, o
 			AssignCommand(oSword, JumpToLocation(lJumpLocation));
 			AssignCommand(oSword, ActionDoCommand(PlayCustomOneShotAnimation(oSword, 
 					sAttackAnimation, 1.0f)));
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 			
 			if (nTimesHit == 1 || nTimesHit == 5 || nTimesHit == 9 || nTimesHit == 13 || 
 				nTimesHit == 17 || nTimesHit == 21 || nTimesHit == 25 || nTimesHit == 29)
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f);
 			}
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, 3.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oTarget, 3.0f);
 			
 		    if (MySavingThrow(SAVING_THROW_FORT, oTarget, 20) == FALSE)
             {
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 3.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, 3.0f);
             }
 			
 			nRandom = RandomIntBetween(1, 4);
@@ -565,14 +565,14 @@ void RevealWeapon(object oPC, object oItem)
 	{
 		eSwordStandIn = EffectNWN2SpecialEffectFile("fx_ssword_fake_anim.sef");
 		eEffect = SetEffectSpellId(eSwordStandIn, nUniqueID);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 	
 	else if (GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC) == oItem)
 	{
 		eSwordStandIn = EffectNWN2SpecialEffectFile("fx_ssword_fake_anim_offh.sef");
 		eEffect = SetEffectSpellId(eSwordStandIn, nUniqueID);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oPC);
 	}
 }
 

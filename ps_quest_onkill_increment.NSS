@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //A script for incrementing journal entries on kill

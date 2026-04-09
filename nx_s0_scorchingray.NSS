@@ -66,7 +66,7 @@ void main()
 		float fDelay = 2.5;
 		
 		effect eFire = EffectNWN2SpecialEffectFile("fx_ignition");
-		//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, fDelay+(nNumRays-1));
+		//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFire, oTarget, fDelay+(nNumRays-1));
 		
 		while (ni<nNumRays) {
 			
@@ -99,7 +99,7 @@ void main()
 					eRay = EffectBeam(VFX_BEAM_FIRE, OBJECT_SELF, BODY_NODE_HAND);
 	
 	                //Apply the ability damage effect and VFX impact
-	                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
+	                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, oTarget));
 				}
 	        }
 			else {
@@ -110,11 +110,11 @@ void main()
 				location lMiss = Location(GetArea(oTarget), GetPosition(oTarget)+Vector(0.0, 0.0, 5.0), 0.0);	// above head
 		        DelayCommand(fDelay, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lMiss));				// explosion
 		   		DelayCommand((fDelay-0.5), ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eRay, lMiss, 0.5));	// missed beam that doesn't work
-		   		DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));	// nails him in the chest
+		   		DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));	// nails him in the chest
 				object oMiss = CreateObject(OBJECT_TYPE_WAYPOINT, "nw_waypoint001", lMiss);
-				DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oMiss, 0.5));
+				DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oMiss, 0.5));
 			}
-			DelayCommand((fDelay-0.5), PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
+			DelayCommand((fDelay-0.5), ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRay, oTarget, 0.5));
 						
 			ni++;
 			fDelay = fDelay + 1.0;

@@ -112,7 +112,7 @@ void DamageReport(int nDmg) {
 
 void KillThisCreature(string strDeathMsg) {
 	effect eDeath = EffectDeath();
-	DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, OBJECT_SELF));
+	DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, OBJECT_SELF));
 }
 
 void TimedDamage(object oTarget, int nCounter) {
@@ -124,10 +124,10 @@ void TimedDamage(object oTarget, int nCounter) {
  			KillThisCreature(GetName(OBJECT_SELF) + " burns to death.");
   		} else {
   			effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
-  			PS_ApplyEffectToObject (DURATION_TYPE_INSTANT, eVis, oTarget);
+  			ApplyEffectToObject (DURATION_TYPE_INSTANT, eVis, oTarget);
  
         	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-  			PS_ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
+  			ApplyEffectToObject (DURATION_TYPE_INSTANT, eDam, oTarget);
   			DamageReport(nDamage);
  
   			// do damage in next round
@@ -165,7 +165,7 @@ void ApplySpecialElementalEffects() {
   			eVis1 = EffectLinkEffects(eVis2, eVis1);
   			effect eEffect = EffectDazed();
   			eVis1 = EffectLinkEffects(eEffect, eVis1);
-  			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis1, OBJECT_SELF, fDazeRounds);
+  			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis1, OBJECT_SELF, fDazeRounds);
   		}
 	}
 
@@ -181,7 +181,7 @@ void ApplySpecialElementalEffects() {
   			eVis1 = EffectLinkEffects(eVis2, eVis1);
   			effect eEffect = EffectSlow();
   			eVis1 = EffectLinkEffects(eEffect, eVis1);
-  			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis1, OBJECT_SELF, fRounds);
+  			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis1, OBJECT_SELF, fRounds);
   		}
 	}
 
@@ -195,17 +195,17 @@ void ApplySpecialElementalEffects() {
 	  		float fRounds = IntToFloat(nElectricalDmg / 10 + 1) * 6.0;
 	 
 	  		effect eEffect1 = EffectKnockdown();
-	  		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect1, OBJECT_SELF, 6.0);
+	  		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect1, OBJECT_SELF, 6.0);
 	
 	  		//
 	  		effect eEffect2 = EffectStunned();
-	  		DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect2, OBJECT_SELF, fRounds));
+	  		DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect2, OBJECT_SELF, fRounds));
 	
 	 		effect eVis1 = EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION);
-	  		DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis1, OBJECT_SELF, fRounds));
+	  		DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis1, OBJECT_SELF, fRounds));
 	 
 	  		effect eEffect3 = EffectVisualEffect(VFX_DUR_PARALYZED);
-	  		DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect3, OBJECT_SELF, fRounds));
+	  		DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEffect3, OBJECT_SELF, fRounds));
 	  	}
 	 
 	  	// "living" creature? possibly kill it
@@ -241,17 +241,17 @@ void ApplySpecialElementalEffects() {
 			|| WillSave(OBJECT_SELF, nSaveDC, SAVING_THROW_TYPE_FIRE) == 1
 	    	|| FortitudeSave(OBJECT_SELF, nSaveDC, SAVING_THROW_TYPE_FIRE) == 1) {
 	    		// immune to fear or at least one save succeded then no fear, only burning visual
-	    		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, fBurnRounds);
+	    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, fBurnRounds);
 	  	  	} else {
 	    		// apply fear as well
 	    		effect eFear = EffectFrightened();
 	    		eVis = EffectLinkEffects(eFear,eVis);
-	    		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, fBurnRounds);
+	    		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, OBJECT_SELF, fBurnRounds);
 	  	  	}
 	 
 	  		// delayed smoke effect
 	  		effect eSmoke = EffectVisualEffect(868);
-	  		DelayCommand(fBurnRounds + 0.0 * 6.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, OBJECT_SELF, 6.0));
+	  		DelayCommand(fBurnRounds + 0.0 * 6.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSmoke, OBJECT_SELF, 6.0));
 	 
 	  		// mark this creature as burning already, dont burn again while this runs
 	  		SetLocalInt(OBJECT_SELF, strVarnameBurning, TRUE);

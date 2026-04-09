@@ -68,7 +68,7 @@ void main()
                eLink = EffectLinkEffects(eLink, EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE));
         effect eVis  = EffectVisualEffect(VFX_IMP_MAGICAL_VISION);
 
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     }
 }

@@ -80,16 +80,16 @@ if (skillType > 0)
  	SendMessageToPC(oPC, failMessage);
 	// Dish out unresistible magic damage incase you fail a skill roll.
 	int damage = GetLocalInt(oTrigger,"DAMAGE");
-	if (damage > 0) PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDamage(damage,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,TRUE),oPC,0.0);
+	if (damage > 0) ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectDamage(damage,DAMAGE_TYPE_MAGICAL,DAMAGE_POWER_NORMAL,TRUE),oPC,0.0);
 	// cause ability damage to defined ability.
 	// 0 = strength		| 1 = Dexterity	| 2 = Constitution
 	// 3 = Intelligence	| 4 = Wisdom	| 5 = Charisma
 	int abiDamageType = GetLocalInt(oTrigger,"ABIDAMTYPE");
 	int abilityDamage = GetLocalInt(oTrigger,"ABIDAMAGE");
-	if (abilityDamage > 0) PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectAbilityDecrease( abiDamageType,abilityDamage ),oPC,900.0);
+	if (abilityDamage > 0) ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectAbilityDecrease( abiDamageType,abilityDamage ),oPC,900.0);
 	// cause negative levels to the person.
 	int negLevel = GetLocalInt(oTrigger,"NEGATIVELEVEL");
-	if ( negLevel > 0 ) PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectNegativeLevel( negLevel ),oPC,900.0);	
+	if ( negLevel > 0 ) ApplyEffectToObject(DURATION_TYPE_TEMPORARY,EffectNegativeLevel( negLevel ),oPC,900.0);	
  	return;
  }
 }

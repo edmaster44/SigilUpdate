@@ -29,7 +29,7 @@ void CastFleshToStone(object oSelf, object oPC)
 	 		&& GetDistanceBetweenLocations(lSelf, lTarget) <= 20.0
 			&& GetObjectSeen(oPC, oSelf) == 1)
 			{
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, 180.0));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, 180.0));
 			}	
 		}
 		oPC = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, FALSE, OBJECT_TYPE_CREATURE);

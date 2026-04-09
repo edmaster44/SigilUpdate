@@ -46,9 +46,9 @@ void main()
 		effect eSaves = ExtraordinaryEffect(EffectSavingThrowIncrease(SAVING_THROW_ALL, nSaveBonus));
 		effect eHp = ExtraordinaryEffect(EffectBonusHitpoints(nHpBonus));
 		effect eLink = EffectLinkEffects(eSaves, eHp);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, ExtraordinaryEffect(eLink), OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, ExtraordinaryEffect(eLink), OBJECT_SELF);
 	}
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nHpBonus), OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nHpBonus), OBJECT_SELF);
 	*/
 	
 	effect eSaves = EffectSavingThrowIncrease(SAVING_THROW_ALL, nSaveBonus);
@@ -61,9 +61,9 @@ void main()
 	// we remove and reapply the hp bonus, lest we kill the character -FlattedFifth
 	int nHp = GetCurrentHitPoints();
 	if (nHp < nHpBonus)
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nHpBonus - nHp + 1), OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(nHpBonus - nHp + 1), OBJECT_SELF);
 		
 	PS_RemoveEffects(OBJECT_SELF, nId);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSaves, OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSaves, OBJECT_SELF);
 
 }

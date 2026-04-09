@@ -69,6 +69,6 @@ void main()
 
 
     //Apply VFX impact and death immunity effect
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
 }

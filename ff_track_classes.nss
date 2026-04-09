@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 //This is called on pc load for new characters (and for characters who have not had this done yet), 
 // and then at the end of ps_levelup and also in the mimic deleveling scripts. It stores the classes 

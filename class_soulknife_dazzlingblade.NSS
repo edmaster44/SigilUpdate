@@ -31,11 +31,11 @@ void main()
 		{
 			if (!FortitudeSave(oTarget, DC))
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, blindlink, oTarget, RoundsToSeconds(CHA));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, blindlink, oTarget, RoundsToSeconds(CHA));
 			}
 			else
 			{
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,attackPenalty, oTarget, RoundsToSeconds(CHA));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY,attackPenalty, oTarget, RoundsToSeconds(CHA));
 			}
 		}
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation());

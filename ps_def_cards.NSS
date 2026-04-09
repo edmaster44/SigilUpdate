@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 /******************************************************************
 * Definition/Const file for Triple Triad like card game for SCoD  *
 * by Agony_Aunt/Loki_999                                          *

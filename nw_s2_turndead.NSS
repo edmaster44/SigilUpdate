@@ -296,8 +296,8 @@ void main()
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_TURN_UNDEAD));
                     nDamage = d3(nTurnLevel);
                     eDamage = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-                    DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget));
                     nHDCount += nHD;
                 }
                 //FIX: turned outsiders should not count against HD limit either
@@ -321,12 +321,12 @@ void main()
                 //Apply results of the turn
                 if( bValid == TRUE)
                 {
-                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
                     if ( /*nPlanar>0 &&*/ nRacial == RACIAL_TYPE_OUTSIDER)
                     {
                         effect ePlane = EffectVisualEffect( VFX_HIT_SPELL_HOLY );
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePlane, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, ePlane, oTarget);
                     }
                     //if(IntToFloat(nClassLevel)/2.0 >= IntToFloat(nHD))
                     //{
@@ -336,7 +336,7 @@ void main()
                         if ( /*nPlanar>0 &&*/ nRacial == RACIAL_TYPE_OUTSIDER)
                         {
                             effect ePlane2 = EffectVisualEffect( VFX_IMP_UNSUMMON );
-							PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePlane2, oTarget);
+							ApplyEffectToObject(DURATION_TYPE_INSTANT, ePlane2, oTarget);
                         }
 
                         //effect ePlane2 = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);	// no longer using NWN1 VFX
@@ -346,7 +346,7 @@ void main()
                         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_TURN_UNDEAD));
 						PrintTurningResult( oTarget, nClassLevel, nTurnLevel, (nTurnHD - nHDCount), TURN_RESULT_DESTROYED );
                         //Destroy the target
-                        DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
+                        DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget));
                     }
                     else
                     {
@@ -354,7 +354,7 @@ void main()
                         //Fire cast spell at event for the specified target
                         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_TURN_UNDEAD));
                         AssignCommand(oTarget, ActionMoveAwayFromObject(OBJECT_SELF, TRUE));
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
 						PrintTurningResult( oTarget, nClassLevel, nTurnLevel, (nTurnHD - nHDCount), TURN_RESULT_SUCCESS );
 						
 						//Rebuke behavior.  If the target has Dex greater than 10, this logic reduces it to 10, everyone else is left alone.
@@ -362,7 +362,7 @@ void main()
 						{
 							int nDecrease = (nDex - 10);
 							effect eDec = EffectAbilityDecrease( ABILITY_DEXTERITY, nDecrease);
-							PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDec, oTarget, RoundsToSeconds(10));
+							ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDec, oTarget, RoundsToSeconds(10));
 						}
                     }
                     nHDCount = nHDCount + nHD;

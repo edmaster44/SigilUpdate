@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main () {
 
 	float hpPercen = IntToFloat(GetCurrentHitPoints(OBJECT_SELF))/IntToFloat(GetMaxHitPoints(OBJECT_SELF));

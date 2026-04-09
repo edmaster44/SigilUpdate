@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // Created by Agony_Aunt/Loki_666
@@ -23,14 +23,14 @@ void main()
 			SetLocalInt(oPC, "ASTRAL_LIGHT", iBonus);
 
 			eHP = EffectTemporaryHitpoints(iBonus);
-	 		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oPC, RoundsToSeconds(iBonus));
+	 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oPC, RoundsToSeconds(iBonus));
 			
 			if (iCurrentHP > (iMaxHP+iMaxHP))
 			{
 				effect eDeath = EffectDeath(TRUE, TRUE, TRUE, TRUE);
 				effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
-   				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oPC);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+   				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oPC);
 			}
 			else if (iCurrentHP > (iMaxHP+iMaxHP-iBonus))
 			{

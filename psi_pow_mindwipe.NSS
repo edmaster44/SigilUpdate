@@ -91,7 +91,7 @@ void main()
                 if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_NEGATIVE))
                 {
                     // Delayed to make sure the negative levels stack
-                    DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(1)));
+                    DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, HoursToSeconds(1)));
                 }// end if - Save
             }// end if - SR
         }// end for - Twin Power

@@ -91,8 +91,8 @@ void main()
 				//disease resistance and saves are handled by the EffectDisease function automatically
 				effect eHit = EffectVisualEffect( VFX_HIT_SPELL_NECROMANCY );
 				//eDisease = EffectLinkEffects( eDisease, eHit );
-				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDisease, oTarget);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDisease, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 
 			}
 		}

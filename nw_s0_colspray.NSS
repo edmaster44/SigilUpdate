@@ -87,12 +87,12 @@ void main()
     			         nDuration = nDuration *2;	//Duration is +100%
     		          }
 					
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
                     nHD = PS_GetLevel(oTarget);
                     if(nHD <= 2)
                     {
                          //Apply the VFX impact and effects
-                         DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSleep, oTarget, RoundsToSeconds(nDuration)));
+                         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSleep, oTarget, RoundsToSeconds(nDuration)));
                     }
                     //FIX: prevents blindness from being applied if immune to mind effects
                     // in that case, it's ok to apply stun in order to show immunity message
@@ -100,13 +100,13 @@ void main()
                     {
                          nDuration = nDuration - 1;
                          //Apply the VFX impact and effects
-                         DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration)));
+                         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nDuration)));
                     }
                     else
                     {
                          nDuration = nDuration - 2;
                          //Apply the VFX impact and effects
-                         DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(nDuration)));
+                         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(nDuration)));
                     }
                 }
             }
@@ -115,5 +115,5 @@ void main()
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 10.0, GetSpellTargetLocation(), TRUE);
     }
 	fMaxDelay += 0.5f;
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 }

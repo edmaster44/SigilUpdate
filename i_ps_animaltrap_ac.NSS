@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 void CreateTrap(object oPC, string sPlaceable, location lLoc, string sScript) {

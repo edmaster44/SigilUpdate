@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main()
 {
 	// Really redundant as additional code for this wrapper moved directly into ps_chest to avoid exploit

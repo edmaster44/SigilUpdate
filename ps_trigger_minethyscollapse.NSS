@@ -29,7 +29,7 @@ void main () {
 			
 			int nDam = d6(6);
 			effect eDam = EffectDamage(nDam, DAMAGE_TYPE_BLUDGEONING);
-			DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
+			DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
 		}
 	
 	}

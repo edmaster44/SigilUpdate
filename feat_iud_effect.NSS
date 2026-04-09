@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 const int IUD_ID = -14000;
 
 int FailSafeIUD(object oPC)
@@ -38,5 +38,5 @@ void ApplyIUD(object oPC)
 	effect eFX = EffectImmunity(IMMUNITY_TYPE_SNEAK_ATTACK);
 	eFX = ExtraordinaryEffect(eFX);
 	eFX = SetEffectSpellId(eFX, IUD_ID);
-	DelayCommand(0.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC));
+	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFX, oPC));
 }

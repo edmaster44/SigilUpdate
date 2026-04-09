@@ -91,13 +91,13 @@ void main()
 				// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 				int nDamage = PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_NEGATIVE);
 				if (nDamage > 0)
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE), oTarget);
 			
 			
            		//---------------------------------------------------------------
            		// Apply Effects, Schedule damage ticks
            		//---------------------------------------------------------------
-            	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget,RoundsToSeconds(nDuration)));
+            	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget,RoundsToSeconds(nDuration)));
             	SetLocalInt(oTarget,"XP2_L_SPELL_SAVE_DC_" + IntToString(SPELL_INFESTATION_OF_MAGGOTS), nDC);
             	DelayCommand(fDelay+0.1f, RunInfestImpact(oTarget,oCaster,nDC, nMetaMagic));
         	}
@@ -156,23 +156,23 @@ void RunInfestImpact(object oTarget, object oCaster, int nSaveDC, int nMetaMagic
             // and the SpellId
             //------------------------------------------------------------------
 
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
 
             //------------------------------------------------------------------
             // If the target already is down to 0 points of constitution,
             // kill him. For immortal creatures, end the spell
             // This only kicks in in Hardcore+ difficulty
             //------------------------------------------------------------------
-            PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget);
             if (GetAbilityScore(oTarget,ABILITY_CONSTITUTION)==0 && GetGameDifficulty() >= GAME_DIFFICULTY_CORE_RULES)
             {
                   if (!GetImmortal(oTarget))
                  {
                      FloatingTextStrRefOnCreature(100932,oTarget);
                      effect eKill = EffectDamage(GetCurrentHitPoints(oTarget)+1);
-                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eKill,oTarget);
+                     ApplyEffectToObject(DURATION_TYPE_INSTANT,eKill,oTarget);
                      effect eVfx = EffectVisualEffect( VFX_IMP_DEATH );
-                     PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eVfx,oTarget);
+                     ApplyEffectToObject(DURATION_TYPE_INSTANT,eVfx,oTarget);
                  }
             }
             else

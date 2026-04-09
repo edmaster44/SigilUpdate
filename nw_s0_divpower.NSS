@@ -39,8 +39,8 @@ void ApplyDivinePowerProperly(object oPC, object oTARGET, int nID, int nMETA)
     if (nMETA == METAMAGIC_EXTEND) nSPL = nSPL * 2;
 
     //Apply Link and VFX effects to the target
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLINK, oTARGET, TurnsToSeconds(nSPL));
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, TurnsToSeconds(nSPL));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLINK, oTARGET, TurnsToSeconds(nSPL));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHP, oTARGET, TurnsToSeconds(nSPL));
 }
 
 void main()

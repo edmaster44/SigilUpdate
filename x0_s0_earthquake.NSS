@@ -64,7 +64,7 @@ void main()
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
 
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, OBJECT_SELF, RoundsToSeconds(6));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShake, OBJECT_SELF, RoundsToSeconds(6));
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eLink, lTarget, RoundsToSeconds(6));
 	
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
@@ -125,7 +125,7 @@ void main()
 			 if(nKnockdownSave == SAVING_THROW_CHECK_FAILED)
 			 {
 			 	float fKnockdownDelayOffset = RandomFloat(0.3);
-			 	DelayCommand(fDelay + fKnockdownDelayOffset, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectKnockdown(), oTarget, RoundsToSeconds(1)));
+			 	DelayCommand(fDelay + fKnockdownDelayOffset, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectKnockdown(), oTarget, RoundsToSeconds(1)));
 			 }
 			 
 			 // concentration check for casters - they lose spells if they miss this
@@ -135,7 +135,7 @@ void main()
 				
 				if(!GetIsSkillSuccessful(oTarget,SKILL_CONCENTRATION, nConcentrationDC))
 				{
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectSpellFailure(100), oTarget, RoundsToSeconds(1)));	
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectSpellFailure(100), oTarget, RoundsToSeconds(1)));	
 				}
 			 }
 		}
@@ -144,10 +144,10 @@ void main()
              {
 
                  // Apply effects to the currently selected target.
-                 DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                  //This visual effect is applied to the target object not the location as above.  This visual effect
                  //represents the flame that erupts on the target not on the ground.
-                 DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
              }
             
         }

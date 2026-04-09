@@ -54,7 +54,7 @@ void main()
     {
         // Apply the impact effect
         effect eImpact = EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 460, TRUE));
         if(!MyResistSpell(OBJECT_SELF, oTarget))
@@ -77,8 +77,8 @@ void main()
                 effect eLink = EffectLinkEffects(eKnockdown, eVis);
                 eLink = EffectLinkEffects(eLink, eKnockdown2);
                 //Apply the penalty
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
-                //PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+                //ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(nDuration));
                 // * Bull Rush succesful
                 FloatingTextStrRefOnCreature(8966,OBJECT_SELF, FALSE);
             }

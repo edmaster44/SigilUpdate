@@ -54,7 +54,7 @@ void main()
 			//Fortitude save DC 10 + 1/2HD + Con modifier. Failed dazed x1 round
 			RunDistraction(oCaster,oTarget);
 		
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget);
 		
 			if(nPoison != 0)
 			{
@@ -64,7 +64,7 @@ void main()
 				
 				if(FortitudeSave(oTarget,nDC,SAVING_THROW_TYPE_NONE,oCaster) == SAVING_THROW_CHECK_FAILED)
 				{
-					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,ePoison,oTarget);
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT,ePoison,oTarget);
 				}
 			}
 			
@@ -76,7 +76,7 @@ void main()
 				 
 				if(FortitudeSave(oTarget,nDC,SAVING_THROW_TYPE_NONE,oCaster) == SAVING_THROW_CHECK_FAILED)
 				{
-					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eDisease,oTarget);
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT,eDisease,oTarget);
 				}
 			}
 			
@@ -100,7 +100,7 @@ void main()
 				if(FortitudeSave(oTarget,nDC,SAVING_THROW_TYPE_NONE,oCaster) == SAVING_THROW_CHECK_FAILED)
 				{
 					SetLocalInt(oCaster,""+GetFirstName(oTarget)+""+GetLastName(oTarget)+"",1);
-					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT,eWound,oTarget);
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT,eWound,oTarget);
 				}
 					
 			}
@@ -109,7 +109,7 @@ void main()
 			{
 				effect eBonus = EffectDamage(d8(nHD/2),nBonus);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eBonus,oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT,eBonus,oTarget);
 			}
 		}
 		
@@ -133,6 +133,6 @@ void RunDistraction(object oCaster,object oTarget)
     	effect eLink = EffectLinkEffects(eMind, eStink);	
 		
 		FloatingTextStringOnCreature(""+GetName(oTarget)+" is DISTRACTED by the swarm",oTarget);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oTarget,RoundsToSeconds(1));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eLink,oTarget,RoundsToSeconds(1));
 	}
 }

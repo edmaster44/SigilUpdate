@@ -80,8 +80,8 @@ void main()
         }
         else
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         }
       
 		

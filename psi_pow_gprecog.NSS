@@ -98,7 +98,7 @@ void main()
 			   
 		if (!GetHasSpellEffect(GetSpellId(), oTarget))
 		{	   
-	    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEdge, oTarget, fDuration);
+	    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEdge, oTarget, fDuration);
 		}
     }
 }

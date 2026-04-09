@@ -8,7 +8,7 @@ void WarChanter_SingingShout(object oPC, int nSpellID)
 {
 	if (!GetCanBardSing(oPC)) return;
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile("ajoc_fx_sop_explode"), oPC);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectNWN2SpecialEffectFile("ajoc_fx_sop_explode"), oPC);
 
 	int nDuration = GetBardicClassLevelForUses(oPC);
 	if (GetHasFeat(FEAT_LINGERING_SONG, oPC)) nDuration += 5;
@@ -81,7 +81,7 @@ void WarChanter_SnowSong(object oPC, int nSpellID)
 	//effect eSnow = EffectNWN2SpecialEffectFile("fx_enviro_snowmedium"); // moved to vfx_persistent.2da
 	effect eAOE = EffectAreaOfEffect(84); // enter and exit scripts are named in 2da, no need to put them here
 	//eAOE = EffectLinkEffects(eSnow, eAOE);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, RoundsToSeconds(nDuration));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, RoundsToSeconds(nDuration));
 	
 	DecrementRemainingFeatUses(oPC, FEAT_BARD_SONGS);
 	
@@ -91,7 +91,7 @@ void WarChanter_SnowSong(object oPC, int nSpellID)
 	effect eAOE = EffectAreaOfEffect(84, "ed_snowsong_a", "", "ed_snowsong_c");
 	eAOE = EffectLinkEffects(eSnow, eAOE);
 	float fDuration = RoundsToSeconds(nDuration);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oPC, fDuration);
 	*/
 
 }

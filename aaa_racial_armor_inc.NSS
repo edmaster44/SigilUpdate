@@ -44,7 +44,7 @@ void PS_NatArmor_Giant(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
 	
 }
 
@@ -76,7 +76,7 @@ void PS_NatArmor_Deva(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -106,7 +106,7 @@ void PS_NatArmor_Erinyes(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -136,7 +136,7 @@ void PS_NatArmor_Brachina(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -166,7 +166,7 @@ void PS_NatArmor_Succubus(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -198,7 +198,7 @@ void PS_NatArmor_MarqCamb(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -228,7 +228,7 @@ void PS_NatArmor_Hezrou(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -258,7 +258,7 @@ void PS_NatArmor_Archon(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -282,7 +282,7 @@ void PS_NatArmor_ArchonPRC(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }
 
@@ -314,6 +314,6 @@ void PS_NatArmor_Eladrin(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);	
 	
 }

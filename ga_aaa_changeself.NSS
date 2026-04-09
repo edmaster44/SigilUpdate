@@ -45,7 +45,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 	switch(iParam)
 	{	case 0:
 			PS_RestoreOriginalAppearance(oPC);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 			PS_DragForm_DragonUE(oPC);
 			SetLocalInt(oItem, "TempChange", 0);
 			//DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
@@ -111,7 +111,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 		case 15:
 			PS_AltForm_Assume(oPC);
 			PS_HumForm_DragonUE(oPC);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		break;	
 	}
 }

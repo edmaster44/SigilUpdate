@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //Checks if you have a rough gemstone, and set a local int if so

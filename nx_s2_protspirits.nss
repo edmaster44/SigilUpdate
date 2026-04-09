@@ -43,5 +43,5 @@ void main()
 	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
 
 	//Apply the effects
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 }

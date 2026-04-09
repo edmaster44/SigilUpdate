@@ -80,9 +80,9 @@ void main()
         AddItemProperty(DURATION_TYPE_TEMPORARY, ipVReg, oTarget, fDuration);
 
         // Do some VFX
-                           PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-        DelayCommand(2.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
+                           ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        DelayCommand(2.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oTarget, fDuration);
     }
 }

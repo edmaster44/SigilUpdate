@@ -103,8 +103,8 @@ void main()
 		SetImmortal(OBJECT_SELF, FALSE);
 		effect eDeath = EffectDeath();
 		effect eDamage = EffectDamage(nDamage+1);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, OBJECT_SELF);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, OBJECT_SELF);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, OBJECT_SELF);
 		SpawnBloodHit(OBJECT_SELF, TRUE, GetLastDamager());
 	}
 	SetLocalInt(OBJECT_SELF, "total_damage", nDamage);

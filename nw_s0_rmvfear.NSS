@@ -80,13 +80,13 @@ void main()
                 {
                     //Remove any fear effects and apply the VFX impact
                     RemoveEffect(oTarget, eFear);
-                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					eFear = GetFirstEffect(oTarget);
                 } else eFear = GetNextEffect(oTarget);
             }
             //Apply the linked effects
-            //DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
-			DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSave, oTarget, RoundsToSeconds(nDuration)));
+            //DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration)));
+			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSave, oTarget, RoundsToSeconds(nDuration)));
         }
         //Get the next target in the spell area.
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, GetSpellTargetLocation());

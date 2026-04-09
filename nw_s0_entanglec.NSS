@@ -51,7 +51,7 @@ void main()
                         if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC))
                         {
                            //Apply linked effects
-                           PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2));
+                           ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(2));
                         }
                     }
                 }

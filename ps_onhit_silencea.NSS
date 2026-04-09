@@ -47,7 +47,7 @@ void main()
 			SignalEvent( oTarget, EventSpellCastAt(oCaster, SPELL_SILENCE) );
 	    if ( !OnHitResistSpell(oCaster,oTarget) )
     	{   
-        	PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
+        	ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
 			string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> silences "+GetName(oTarget)+"</color>";
 			SendMessageToPC(oCaster, sReport);
        	}
@@ -55,11 +55,11 @@ void main()
 	else
 	{
 	    //Fire cast spell at event for the specified target
-        PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
+        ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
 		string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> silences "+GetName(oTarget)+"</color>";
 		SendMessageToPC(oCaster, sReport);
         SignalEvent( oTarget, EventSpellCastAt(oCaster, SPELL_SILENCE, FALSE) );
-		//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+		//ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 	}
 	if(!GetLocalInt(oTarget, EVENFLW_SILENCE))
 		SetLocalObject(oTarget, EVENFLW_SILENCE, OBJECT_SELF);

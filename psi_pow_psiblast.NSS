@@ -82,7 +82,7 @@ void main()
         int nRepeats = manif.bTwin ? 2 : 1;
         for(; nRepeats > 0; nRepeats--)
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConeBlast, OBJECT_SELF, 1.0f);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConeBlast, OBJECT_SELF, 1.0f);
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, fWidth, lTarget, TRUE, OBJECT_TYPE_CREATURE);
             while(GetIsObjectValid(oTarget))
             {
@@ -102,7 +102,7 @@ void main()
     	                {
     	                    // Apply effect, delayed according to distance from manifester
     	                    fDelay = GetDistanceBetween(oManifester, oTarget) / 20.0f;
-    	                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
+    	                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration));
     	                }// end if - Save
                     }// end if - SR check
                 }// end if - Target is valid

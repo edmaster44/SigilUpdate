@@ -76,5 +76,5 @@ void main()
 //    RemoveEffectsFromSpell(oTarget, GetSpellId());
 
     //Apply the armor bonuses and the VFX impact
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

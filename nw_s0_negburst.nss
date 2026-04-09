@@ -105,11 +105,11 @@ void main()
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_NEGATIVE_ENERGY_BURST, FALSE));
                 //Set the heal effect
                 eHeal = EffectHeal(nDamage);
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
                 //This visual effect is applied to the target object not the location as above.  This visual effect
                 //represents the flame that erupts on the target not on the ground.
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oTarget));
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oTarget));
             }
 			else
           	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
@@ -123,11 +123,11 @@ void main()
                         //Set the damage effect
                         eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
                         // Apply effects to the currently selected target.
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
                         //This visual effect is applied to the target object not the location as above.  This visual effect
                         //represents the flame that erupts on the target not on the ground.
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBad, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBad, oTarget));
                     }
                 }
             }

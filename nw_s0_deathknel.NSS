@@ -125,11 +125,11 @@ void main()
 			    		RemoveEffectsFromSpell(OBJECT_SELF, SPELL_DEATH_KNELL);
 
 			    		//Apply the VFX impact and effects
-			    		PS_ApplyEffectToObject(nDurType, eHP, OBJECT_SELF, fDuration);
-			    		PS_ApplyEffectToObject(nDurType, eLink, OBJECT_SELF, fDuration);
+			    		ApplyEffectToObject(nDurType, eHP, OBJECT_SELF, fDuration);
+			    		ApplyEffectToObject(nDurType, eLink, OBJECT_SELF, fDuration);
 					}
 					
-					PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamageLink, oTarget );
+					ApplyEffectToObject( DURATION_TYPE_INSTANT, eDamageLink, oTarget );
 				}
 			}
 		}

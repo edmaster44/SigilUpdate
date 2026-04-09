@@ -17,7 +17,7 @@
 /*void FakeHB()
 {
 	/*effect eFlame = EffectVisualEffect(VFX_IMP_FLAME_M);
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFlame, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eFlame, OBJECT_SELF);
     int nExplode = GetLocalInt(OBJECT_SELF, "X0_L_MYTIMERTOEXPLODE");
     object oMaster = GetLocalObject(OBJECT_SELF, "X0_L_MYMASTER");
     if (nExplode == 6)
@@ -26,7 +26,7 @@
         ClearAllActions();
         PlayVoiceChat(VOICE_CHAT_GOODBYE);
         effect eFirePro = EffectDamageResistance(DAMAGE_TYPE_FIRE, 100, 0);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFirePro, oMaster, 3.5);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFirePro, oMaster, 3.5);
         ActionCastSpellAtLocation(SPELL_FIREBALL, GetLocation(OBJECT_SELF), METAMAGIC_ANY, TRUE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
 
         DestroyObject(OBJECT_SELF, 0.5);
@@ -63,7 +63,7 @@ void main()
     DelayCommand(0.5, SetPlotFlag(oFireGuy, TRUE)); // * so items don't drop, I can destroy myself.
     AssignCommand(oFireGuy, FakeHB());
     effect eVis = EffectVisualEffect(VFX_DUR_ELEMENTAL_SHIELD);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oFireGuy);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oFireGuy);
     */
 }
     

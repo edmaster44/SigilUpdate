@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 void main(int iSwitch)
 {
 	object oPC = OBJECT_SELF;

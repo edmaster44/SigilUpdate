@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // The Chaosman's Blade on-hit script. Changes it's properties on every hit
 
 // By Electrohydra

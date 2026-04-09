@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Mind Fog: On Exit
 //:: NW_S0_MindFogB.nss
@@ -65,6 +65,6 @@ void main()
             nDuration = nDuration * 2; 
         }
         //Apply the new temporary version of the effect
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
     }
 }

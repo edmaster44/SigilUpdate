@@ -93,7 +93,7 @@ void main()
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.0);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.0);
 			
 			if (GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT)
 			{
@@ -104,8 +104,8 @@ void main()
 			{
 				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, oCaster))
 				{
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndeadLink, oTarget, fDuration);
-					DelayCommand(fDuration, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCurseLink, oTarget, fDuration2));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndeadLink, oTarget, fDuration);
+					DelayCommand(fDuration, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCurseLink, oTarget, fDuration2));
 				}
 			}
 			else
@@ -116,7 +116,7 @@ void main()
 				}
 				eStrDam				=	EffectAbilityDecrease(ABILITY_STRENGTH, nDam);
 				effect	eLivingLink	=	EffectLinkEffects(eStrDam, eVis);
-				PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLivingLink, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLivingLink, oTarget);
 			}
 		}
 	}

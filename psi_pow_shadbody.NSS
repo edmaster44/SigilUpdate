@@ -49,7 +49,7 @@ void GoInvis(struct manifestation manif, object oTarget)
         effect eInvis   = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
         effect eConceal = EffectConcealment(50);
         effect eLink    = EffectLinkEffects(eInvis, eConceal);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, 6.0f);
         DelayCommand(6.0f, GoInvis(manif, oTarget));
     }
 }
@@ -98,8 +98,8 @@ void main()
        // Make sure the target is not prevented from extra-dimensional movement
        if(!GetCanTeleport(oTarget, GetArea(oTarget)))
         {
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             GoInvis(manif, oTarget);
         }// end if - The target can move extradimensionally
     }// end if - Successfull manifestation

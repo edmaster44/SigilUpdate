@@ -1,7 +1,7 @@
 
 
 #include "ps_inc_advscript"
-#include "ff_applyeffect"
+
 
 const int FEAT_AURA_DESPAIR = 1832;
 const int SEASON_SUMMER = 0;
@@ -46,7 +46,7 @@ void addEffects(object oPC, int currentSeason)
 	if (currentSeason == SEASON_SUMMER)
 	{
 		effect summer = SupernaturalEffect(EffectAttackIncrease(1));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, summer, oPC, 0.0f);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, summer, oPC, 0.0f);
 	}
 	else if (currentSeason == SEASON_FALL)
 	{
@@ -55,7 +55,7 @@ void addEffects(object oPC, int currentSeason)
 	else if (currentSeason == SEASON_WINTER)
 	{
 		effect winter = SupernaturalEffect(EffectACIncrease(1));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, winter, oPC, 0.0f);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, winter, oPC, 0.0f);
 	}
 	else if (currentSeason == SEASON_SPRING)
 	{
@@ -123,7 +123,7 @@ void main()
 	int currentSeason = GetLocalInt(oPC, "currentSeason") + 1;
 	if (currentSeason == 4) currentSeason = 0;
 	SetLocalInt(oPC, "currentSeason", currentSeason);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ENTANGLE), oPC, 1.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectVisualEffect(VFX_DUR_ENTANGLE), oPC, 1.0f);
 	
 	//temporary
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);

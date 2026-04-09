@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 // gc_is_legal v1.02

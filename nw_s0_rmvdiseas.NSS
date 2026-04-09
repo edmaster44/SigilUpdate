@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Remove Disease
 //:: NW_S0_RmvDiseas.nss
@@ -30,7 +30,7 @@ void main()
         {
             //Remove the effect
             RemoveEffect(oTarget, eParal);
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			eParal = GetFirstEffect(oTarget);
         } else eParal = GetNextEffect(oTarget);
     }

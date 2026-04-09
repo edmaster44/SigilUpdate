@@ -40,6 +40,6 @@ void main()
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oTarget, nSpell);
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 		
 }

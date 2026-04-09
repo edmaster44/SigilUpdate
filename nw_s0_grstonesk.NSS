@@ -74,6 +74,6 @@ void main()
     RemoveEffectsFromSpell(oTarget, SPELL_GREATER_STONESKIN);
 
     //Apply the linked effect
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, HoursToSeconds(nDuration));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, HoursToSeconds(nDuration));
 }

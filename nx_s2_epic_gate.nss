@@ -102,5 +102,5 @@ void main()
 	effect eSummon = EffectSwarm(FALSE, sTemplate1, sTemplate2);
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eDur, lSpellTargetLocation, 5.0);
 	DelayCommand(3.0, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eVis, lSpellTargetLocation));
-    DelayCommand(3.0, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSummon, OBJECT_SELF, fDuration));
+    DelayCommand(3.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSummon, OBJECT_SELF, fDuration));
 }

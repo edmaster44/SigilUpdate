@@ -4,7 +4,7 @@
 void main()
 {
 	effect spawn = EffectNWN2SpecialEffectFile("fx_magical_explosion", OBJECT_SELF);
-	PS_ApplyEffectToObject(0, spawn, OBJECT_SELF);
+	ApplyEffectToObject(0, spawn, OBJECT_SELF);
 		
 	object oKiller = GetLastKiller();
 	if(GetIsDM(oKiller) || oKiller == OBJECT_SELF)

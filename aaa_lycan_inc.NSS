@@ -195,7 +195,7 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     PS_RestoreOriginalAppearance(oPC);
 	PS_RefreshAppearance(oPC);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	PS_Wererat_AnimalSneakApply(oPC);
 	PS_Lycan_Multiattack(oPC, TRUE);
 	PS_Lycan_ScaledWeapons(oPC);
@@ -214,7 +214,7 @@ void PS_Lycan_DR(object oPC, int nSpell)
 		eDR			= SetEffectSpellId(eDR, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
 	if (GetLocalInt(oPC, "lycanDR") != nAmount){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 		SetLocalInt(oPC, "lycanDR", nAmount);
@@ -284,7 +284,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		SetLocalInt(oItem, "TempChange", 1);
 		PS_RefreshAppearance(oPC);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		SetLocalInt(oItem, "Hybrid", 1);
 		PS_Wererat_SneakAdd(oPC);
 	}
@@ -323,13 +323,13 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 			{	nDamage = nDamage + d6(1);	}
 			eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else if (nAttack == 1)
 		{	nDamage = d10(1);	
 			eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else 
 		{	SendMessageToPC(oPC, "Your attack missed!");
@@ -340,7 +340,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 		nRollTarget = d20(1) + nTargetMod;
 		if (nRollPC > nRollTarget)
 		{	
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 12.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 12.0f);
 			SendMessageToPC(oPC, "Success! You have tripped " + GetName(oTarget));
 			SendMessageToPC(oPC, "You have been tripped by " + GetName(oPC));
 		}
@@ -363,7 +363,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 				{	nDamage = nDamage + d6(1);	}
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 			}
 			else if (nAttack == 1)
 			{	if (nLevel >= 24) nDamage = d10(2);
@@ -372,7 +372,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 				else nDamage = d10(1);
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 			}
 			else 
 			{	SendMessageToPC(oPC, "Your attack missed!");
@@ -383,7 +383,7 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 			nRollTarget = d20(1) + nTargetMod;
 			if (nRollPC > nRollTarget)
 			{	
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 12.0f);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTrip, oTarget, 12.0f);
 				SendMessageToPC(oPC, "Success! You have tripped " + GetName(oTarget));
 				SendMessageToPC(oPC, "You have been tripped by " + GetName(oPC));
 			}
@@ -418,7 +418,7 @@ void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 	{	oWeapR = GetItemInSlot(INVENTORY_SLOT_CWEAPON_R, oPC);
 		oWeapL = GetItemInSlot(INVENTORY_SLOT_CWEAPON_L, oPC);
 		
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
 		IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 		IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 	}
@@ -431,12 +431,12 @@ void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)
 			sWeapR	= GetStringLeft(sWeapR, 4);
 		if (!IPGetIsCreatureEquippedWeapon(oItem))
 		{	
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
 			SendMessageToPC(oPC, "Damage bonus not applied unless creature weapon(s) are equipped!");
 		}
 		else
 		{	
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, oPC, 60.0f);
 			if (IPGetIsCreatureEquippedWeapon(oItem))
 			{	IPSafeAddItemProperty(oItem, ipDam, 60.0f);
 				SendMessageToPC(oPC, "Damage bonus applied to right tusk!");	}
@@ -481,14 +481,14 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 			{	nDamage = nDamage + d6(1);	}
 			eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else if (nAttack == 1)
 		{	nDamage = d8(2);
 			nDamage = (nDamage + nStr);
 			eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		}
 		else 
 		{	SendMessageToPC(oPC, "Your attack missed!");
@@ -499,12 +499,12 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 			nRake = (nRake = nStr);
 			eRake = EffectDamage(nRake, DAMAGE_TYPE_SLASHING, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake, oTarget);
 			SendMessageToPC(oPC, "You rake your opponent with your back claws!");
 			SendMessageToPC(oTarget, GetName(oPC) + " bites down and rakes you with their rear claws!");
 			eRake2 = EffectDamage(nRake, DAMAGE_TYPE_SLASHING, DAMAGE_POWER_NORMAL, FALSE);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake2, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake2, oTarget);
 			SendMessageToPC(oTarget, GetName(oPC) + " bites down and rakes you with their rear claws!");
 		}
 	}
@@ -530,7 +530,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 				{	nDamage = nDamage + d6(1);	}
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 			}
 			else if (nAttack == 1)
 			{	if (nLevel >= 24)
@@ -547,7 +547,7 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 					nRake = d10(1);	}
 				eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 			}
 			else 
 			{	SendMessageToPC(oPC, "Your attack missed!");
@@ -557,12 +557,12 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 			{	nRake = d4(4);
 				eRake = EffectDamage(nRake, DAMAGE_TYPE_SLASHING, DAMAGE_POWER_NORMAL, FALSE);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake, oTarget);
 				SendMessageToPC(oPC, "You rake your opponent with your back claws!");
 				SendMessageToPC(oTarget, GetName(oPC) + " bites down and rakes you with their rear claws!");
 				eRake2 = EffectDamage(nRake, DAMAGE_TYPE_SLASHING, DAMAGE_POWER_NORMAL, FALSE);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake2, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRake2, oTarget);
 				SendMessageToPC(oTarget, GetName(oPC) + " bites down and rakes you with their rear claws!");
 			}
 		}	

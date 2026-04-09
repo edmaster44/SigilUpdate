@@ -20,7 +20,7 @@ void DoBeguilingInfluence(object oPC)
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_BEGUILING_INFLUENCE, FALSE));
 
-    if (!GetIsInCombat(oPC)) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void DoDarkOnesLuck(object oPC)
@@ -33,7 +33,7 @@ void DoDarkOnesLuck(object oPC)
 		
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_DARK_ONES_OWN_LUCK, FALSE));
 
-    if (!GetIsInCombat(oPC)) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
+    if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
 }
 
 void DoEntropicWarding(object oPC)
@@ -55,7 +55,7 @@ void DoEntropicWarding(object oPC)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_ENTROPIC_WARDING, FALSE));
 
-    if (!GetIsInCombat(oPC)) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void DoLeapsAndBounds(object oPC)
@@ -76,7 +76,7 @@ void DoLeapsAndBounds(object oPC)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_LEAPS_AND_BOUNDS, FALSE));
 
-    if (!GetIsInCombat(oPC)) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void DoOtherworldlyWhispers(object oPC)
@@ -95,7 +95,7 @@ void DoOtherworldlyWhispers(object oPC)
 
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_OTHERWORLDLY_WHISPERS, FALSE));
 
-	if (!GetIsInCombat(oPC)) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void DoSeeTheUnseen(object oPC)
@@ -109,7 +109,7 @@ void DoSeeTheUnseen(object oPC)
 
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_SEE_THE_UNSEEN, FALSE));
 
-    if (!GetIsInCombat(oPC)) PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+    if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
 void TwentyFour(object oPC)

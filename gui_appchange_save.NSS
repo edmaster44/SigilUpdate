@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 void main(int nAppearanceID, int nGenderID, int nHeadID, int nTailID, int nWingsID, int nHairID, int nFacialHairID, string sAccessory, string sHairColor, string sHairHighlight, string sSkinColor, string sEyeColor, string sEyebrowColor, string nSlot, string sScaleX, string sScaleY, string sScaleZ)

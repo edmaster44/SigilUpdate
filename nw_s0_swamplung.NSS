@@ -90,9 +90,9 @@ void main()
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 				if (!FortitudeSave(oTarget, nSave, SAVING_THROW_TYPE_SPELL, oCaster))
 				{
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fDuration);
-					PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDisease, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fDuration);
+					ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDisease, oTarget);
 				}
 			}
 		}

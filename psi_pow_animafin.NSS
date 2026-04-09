@@ -97,9 +97,9 @@ void main()
 				eAbilitySecondary = EffectAbilityIncrease(2, nAmount);
 		}
 		
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbility, oTarget, fDuration);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbility, oTarget, fDuration);
 		if (manif.bAugment)
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbilitySecondary, oTarget, fDuration);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbilitySecondary, oTarget, fDuration);
 		
     }
 }

@@ -96,7 +96,7 @@ void main()
           SendMessageToPC(oPC,"And destroys your "+sItem+"!");
           DestroyObject(oItem);
           //El Magnifico Uno - Changed Effect
-          // PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_IMP_ACID_L),oPC);
+          // ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_IMP_ACID_L),oPC);
           ApplyEffectAtLocation(DURATION_TYPE_INSTANT,EffectVisualEffect(VFX_FNF_GAS_EXPLOSION_ACID),GetLocation(oPC));
         }
       }

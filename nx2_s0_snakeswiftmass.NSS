@@ -35,7 +35,7 @@ void main()
 		effect eHaste = EffectHaste();
    		effect eDur = EffectVisualEffect( VFX_HIT_SPELL_SNAKESSWIFTNESS );
     	effect eLink = EffectLinkEffects(eHaste, eDur);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
 	}
 		oTarget = GetNextObjectInShape( SHAPE_SPHERE, fSize, lMyLocation, TRUE );
 

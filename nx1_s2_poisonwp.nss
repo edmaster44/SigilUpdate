@@ -114,7 +114,7 @@ void main()
 	   	effect eVis = EffectVisualEffect(VFX_IMP_PULSE_NATURE);
     	FloatingTextStrRefOnCreature(83361,oPC);         //"Weapon is coated with poison"
         IPSafeAddItemProperty(oTarget, ItemPropertyVisualEffect(ITEM_VISUAL_ACID), fDur, X2_IP_ADDPROP_POLICY_KEEP_EXISTING,TRUE,FALSE);
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, GetItemPossessor(oTarget));
     }
     else
     {

@@ -189,9 +189,9 @@ void PS_UndeadRacialType(object oPC)
 		SetLocalInt(oEssence, "OldSubrace", nOriSub);
 		SetLocalInt(oEssence, "TemplateFix", 0);
 		effect eUndead 	= EffectNWN2SpecialEffectFile("fx_coven_murder", oPC);
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);
 		effect eUndead2 = EffectNWN2SpecialEffectFile("fx_black_cloud", oPC);
-		DelayCommand(1.0f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead2, oPC, 4.0f));
+		DelayCommand(1.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead2, oPC, 4.0f));
 
 		// Set Death Knight appearance if needed.
 		if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
@@ -286,15 +286,15 @@ void PS_UndeadProperties(object oPC, int nSpell)
 		if(iLevel >= 10 || iLevelV >= 7){
 			eTenGo = SetEffectSpellId(eTenGo, nSpell);
 			RemoveEffectsFromSpell(oPC, nSpell);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTenGo, oPC);	
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTenGo, oPC);	
 		} else if(iLevel >= 5 || iLevelV >= 4){
 			eFiveGo = SetEffectSpellId(eFiveGo, nSpell);
 			RemoveEffectsFromSpell(oPC, nSpell);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFiveGo, oPC);	
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFiveGo, oPC);	
 		} else {
 			eOneGo = SetEffectSpellId(eOneGo, nSpell);
 			RemoveEffectsFromSpell(oPC, nSpell);
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eOneGo, oPC);	
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eOneGo, oPC);	
 		}
 }		
 
@@ -333,7 +333,7 @@ void PS_RottingVisage(object oPC, int nSpell)
 	effect eVis 	= EffectNWN2SpecialEffectFile("fx_shadowjump", oPC);
 	effect eScale;
 	
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
 
 	if (nTemp == 1)
 	{	PS_RestoreOriginalAppearance(oPC);
@@ -346,10 +346,10 @@ void PS_RottingVisage(object oPC, int nSpell)
 		SetLocalInt(oItem, "TempChange", 1);
 		if (GetIsShortRace(oPC))
 		{	eScale = EffectSetScale(0.68f, 0.68f, 0.68f);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eScale, oPC, HoursToSeconds(24));	}
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eScale, oPC, HoursToSeconds(24));	}
 		if (GetIsElf(oPC))
 		{	eScale = EffectSetScale(0.88f, 0.88f, 0.88f);
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eScale, oPC, HoursToSeconds(24));	}
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eScale, oPC, HoursToSeconds(24));	}
 	}
 }
 
@@ -380,7 +380,7 @@ void PS_NatArmor_Lich(object oPC, int nSpell)
 		eAC = SupernaturalEffect(eAC);
 		eAC = SetEffectSpellId(eAC, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
 	}
 }
 
@@ -429,10 +429,10 @@ void PS_LichParalyzingTouch(object oPC, object oTarget, int nSpell)
     if (iTouch > 0)
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
         if(!MySavingThrow(SAVING_THROW_WILL, oTarget, iSave, SAVING_THROW_TYPE_NEGATIVE))
-        {   PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);	}	
+        {   ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);	}	
 		if(!GetIsDead(oTarget))
 		{	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, iSave, SAVING_THROW_TYPE_NEGATIVE))
-			{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePara, oTarget, fDur);	}
+			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePara, oTarget, fDur);	}
 }	}	}
 
 // Do not use this as a stand-alone command. It is bundled inside PS_LichImmunity.
@@ -443,7 +443,7 @@ void ApplyLichImmunities(object oPC, int nImm, int nSpell)
 	effect eLink	= EffectLinkEffects(eCold, eElec);
 	eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Cold and Electrical immunity of " + IntToString(nImm) + "% applied.");
 }
 
@@ -455,7 +455,7 @@ void ApplyLichFullImmunities(object oPC, int nImm, int nSpell)
 	effect eLink 	= EffectLinkEffects(eColdF, eElecF);
 		eLink = SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SendMessageToPC(oPC, "Cold and Electrical immunity of " + IntToString(nImm) + "% applied.");
 }
 
@@ -505,7 +505,7 @@ void PS_LichDR(object oPC, int nSpell)
 	eGood = SupernaturalEffect(eGood);
 	eGood = SetEffectSpellId(eGood, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
 	if (GetLocalInt(oPC, "drGood") != iDR){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
 		SetLocalInt(oPC, "drGood", iDR);
@@ -535,7 +535,7 @@ void PS_LichFearAura(object oPC, int nSpell)
 
     //Get first target in spell area
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC));
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
     while(GetIsObjectValid(oTarget))
     {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
@@ -545,7 +545,7 @@ void PS_LichFearAura(object oPC, int nSpell)
 			{	if(!MyResistSpell(oPC, oTarget, fDelay))
             	{	//Make a saving throw check
 	            	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
-	            	{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iLevel)));	}
+	            	{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iLevel)));	}
 		}	}	}
 	//Get next target in spell area
 	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(OBJECT_SELF));	}
@@ -575,11 +575,11 @@ void PS_DKAbyssalBlast(object oPC, int iLevel, int nSpell)
 				if (nFDam > 0)
                 {	eFDam 	= EffectDamage(nFDam, DAMAGE_TYPE_FIRE);
 					eFDam	= EffectLinkEffects(eFDam, eVisF);
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFDam, oTarget));	}
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFDam, oTarget));	}
 				if (nDDam > 0)
 				{	eDDam	= EffectDamage(nDDam, DAMAGE_TYPE_DIVINE);
 					eDDam	= EffectLinkEffects(eDDam, eVisE);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDDam, oTarget));	}
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDDam, oTarget));	}
        	}	}
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     }
@@ -616,7 +616,7 @@ void PS_DKNegativeWeapon(object oPC, int nSpell)
 	if (GetIsObjectValid(oWeapon))
     {	SignalEvent(GetItemPossessor(oWeapon), EventSpellCastAt(oPC, GetSpellId(), FALSE));
 		effect eCast = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
-		PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
+		ApplyEffectToObject( DURATION_TYPE_INSTANT, eCast, oPC);	
 			itemproperty ipEff1 = ItemPropertyDamageBonus(IP_CONST_DAMAGETYPE_NEGATIVE, IP_CONST_DAMAGEBONUS_1d8);
 			itemproperty ipEff2 = ItemPropertyOnHitProps(IP_CONST_ONHIT_ABILITYDRAIN, iSaveDC, IP_CONST_ABILITY_CON);
 			itemproperty ipGlow = ItemPropertyVisualEffect(ITEM_VISUAL_EVIL);
@@ -648,7 +648,7 @@ void PS_DKDamageReduction(object oPC, int nSpell)
 	eGood = SupernaturalEffect(eGood);
 	eGood = SetEffectSpellId(eGood, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
 	if (GetLocalInt(oPC, "drGood") != iDR){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
 		SetLocalInt(oPC, "drGood", iDR);
@@ -672,14 +672,14 @@ void PS_DKSymbolOfPain(object oPC, int nSpell)
 	int nDC			= 10 + (GetTotalLevels(oPC, FALSE)/2) + GetAbilityModifier(ABILITY_CHARISMA);
 	object oTarget	= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oPC));
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eSymbol, oPC);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eSymbol, oPC);
 	while(GetIsObjectValid(oTarget))
 	{	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
 		{	fDelay = GetDistanceToObject(oTarget)/10;
 			SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 			if(!MyResistSpell(oPC, oTarget, fDelay))
 			{	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
-				{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget,HoursToSeconds(1)));
+				{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget,HoursToSeconds(1)));
 		}	}	} 
 	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation (oPC));	}
 }
@@ -698,7 +698,7 @@ void PS_DKFearAura(object oPC, int nSpell)
 
     //Get first target in spell area
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC));
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, ePulse, oPC);
     while(GetIsObjectValid(oTarget))
     {  	if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
@@ -707,7 +707,7 @@ void PS_DKFearAura(object oPC, int nSpell)
 			{	if(!MyResistSpell(oPC, oTarget, fDelay))
             	{	//Make a saving throw check
 	            	if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_FEAR))
-	            	{	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iLevel)));	}
+	            	{	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(iLevel)));	}
 		}	}	}
 	//Get next target in spell area
 	oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(OBJECT_SELF));	}
@@ -736,7 +736,7 @@ void PS_VampArmor(object oPC)
 	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
 }
 
 void PS_VampSlam(object oPC, object oTarget, int nSpell)
@@ -788,10 +788,10 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 				}
 				eDamage	= EffectLinkEffects(eDamage, eVis);
 				 
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 				if (!bImmuneBlood){
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oPC);
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));	}
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oPC);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));	}
 			}
 }	}	}
 
@@ -856,7 +856,7 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 					
 					// now get the amount of hp gained based on how much got past target resistance
 					int nHpBefore = GetCurrentHitPoints(oTarget);
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 					int nHpAfter = 0;
 					if (oTarget != OBJECT_INVALID) nHpAfter = GetCurrentHitPoints(oTarget);
 					iHeal = nHpBefore - nHpAfter;
@@ -865,9 +865,9 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 					effect eHeal	= EffectTemporaryHitpoints(iHeal);
 						eHeal		= SupernaturalEffect(eHeal);
 						
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(24));
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(1));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDrain, oTarget, HoursToSeconds(24));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, RoundsToSeconds(180));
 					SpeakString(GetFirstName(oPC) + "'s fangs pierce their victim's throat, draining " + sGend + " blood!");	}
 	}	}
 }
@@ -886,9 +886,9 @@ void PS_VampAltForm_Bat(object oPC, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbat"))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_VampAltForm_Wolf(object oPC, int nSpell)
@@ -903,12 +903,12 @@ void PS_VampAltForm_Wolf(object oPC, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 	/*
 	if (sVFX != "")
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 	*/
 }
 
@@ -930,9 +930,9 @@ void PS_VampAltForm_Gas(object oPC, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffgas"))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_VampAltForm_DireWolf(object oPC, int nSpell)
@@ -947,9 +947,9 @@ void PS_VampAltForm_DireWolf(object oPC, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_VampResistance(object oPC, int nSpell)
@@ -973,7 +973,7 @@ void PS_VampResistance(object oPC, int nSpell)
 	eLink		= SupernaturalEffect(eLink);
 	eLink = SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);	
 }
 
 void PS_VampFastHealing(object oPC, int nSpell)
@@ -998,7 +998,7 @@ void PS_VampFastHealing(object oPC, int nSpell)
 		eRegen		= SupernaturalEffect(eRegen);
 		eRegen = SetEffectSpellId(eRegen, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
 	}
 }
 
@@ -1026,7 +1026,7 @@ void PS_VampDR(object oPC, int nSpell)
 
 		eLink = SetEffectSpellId(eLink, nSpell);
 		RemoveEffectsFromSpell(oPC, nSpell);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		if (GetLocalInt(oPC, "vampDr") != iBonus){
 			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iBonus) + "/alchemical silver and resistance of " + IntToString(iBonus) + " to cold and electricity applied.");
 			SetLocalInt(oPC, "vampDr", iBonus);
@@ -1072,7 +1072,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 			SendMessageToPC(oPC, "Target Immune");
 		else if (!MyResistSpell(oPC, oTarget)){
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oPC, 1.0)){
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));
 			}
 		}
 	} else if (GetIsPC(oTarget)){
@@ -1116,9 +1116,9 @@ void PS_Vamp_AltForm_Wyvern(object oPC, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_Vamp_AltForm_TerrorWolf(object oPC, int nSpell)
@@ -1133,9 +1133,9 @@ void PS_Vamp_AltForm_TerrorWolf(object oPC, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile(sVFX, oPC);	
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	if (sVFX != "" && !GetLocalInt(PS_GetEssence(oPC), "vampeyesoffbeast"))
-	{	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
+	{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oPC, HoursToSeconds(24));	}
 }
 
 void PS_Vamp_BloodFrenzy(object oPC, int iLevel, int nSpell)	
@@ -1156,7 +1156,7 @@ void PS_Vamp_BloodFrenzy(object oPC, int iLevel, int nSpell)
 		eLink		= EffectLinkEffects(eLink, eVFX);
 	
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDur));
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDur));
 }
 
 void PS_VampMal_BonusFeat(object oPC, object oItem, int nSpell)

@@ -87,8 +87,8 @@ void main()
     			RemoveEffectsFromSpell(oTarget, SPELL_GREATER_CURSE_OF_BLADES);
 
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1035));
-				PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+				ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 			}
 		}
 	}

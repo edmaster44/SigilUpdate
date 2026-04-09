@@ -42,8 +42,8 @@ void main()
 				if(!OnHitSavingThrow(SAVING_THROW_REFLEX, oTarget, GetOnHitAbilityDC(GetAreaOfEffectCreator()), SAVING_THROW_TYPE_NONE, oCaster))
 				{
                 	//Apply reduced movement effect and VFX_Impact
-                	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(GetCasterLevel(oCaster)));
-                	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
+                	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(GetCasterLevel(oCaster)));
+                	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> slows "+GetName(oTarget)+"</color>";
 					SendMessageToPC(oCaster, sReport);
 				}

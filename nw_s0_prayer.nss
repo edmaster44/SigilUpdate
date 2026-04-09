@@ -87,7 +87,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PRAYER, FALSE));
 
             //Apply VFX impact and bonus effects
-            PS_ApplyEffectToObject(nDurType, ePosLink, oTarget, fDuration);
+            ApplyEffectToObject(nDurType, ePosLink, oTarget, fDuration);
         }
         else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
         {
@@ -97,7 +97,7 @@ void main()
             if(!MyResistSpell(OBJECT_SELF, oTarget))
             {
                 //Apply VFX impact and bonus effects
-                PS_ApplyEffectToObject(nDurType, eNegLink, oTarget, fDuration);
+                ApplyEffectToObject(nDurType, eNegLink, oTarget, fDuration);
             }
         }
         //Get the next target in the specified area around the caster

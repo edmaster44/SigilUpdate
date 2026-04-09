@@ -84,18 +84,18 @@ int DoPower(object oManifester, object oTarget, struct manifestation manif)
                 // Apply damage and the accompanying VFX
                 //ApplyTouchAttackDamage(manif.oManifester, oTarget, nTouchAttack, nDamage, DAMAGE_TYPE_MAGICAL);
 				
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                 // Give the temp HP, and if the target was dead, the stat boosts
                 effect eTempHP;
                 if(GetIsDead(oTarget))
                 {
                     eTempHP = EffectTemporaryHitpoints(nDamage);
-                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, manif.oManifester, HoursToSeconds(1));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, manif.oManifester, HoursToSeconds(1));
                 }
                 else
                     eTempHP = EffectTemporaryHitpoints(nDamage / 2);
 
-                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, manif.oManifester, HoursToSeconds(1));
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, manif.oManifester, HoursToSeconds(1));
             }
         }
     }
@@ -170,22 +170,22 @@ void main()
 					
 	                effect eDamage = EffectDamage(FloatToInt(nDamage));
 					
-					PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-	                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+					ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+	                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 					
 	                // Give the temp HP, and if the target was dead, the stat boosts
 	                effect eTempHP;
 	                if(GetIsDead(oTarget))
 	                {
 						eTempHP = EffectHeal(FloatToInt(nDamage));
-	                    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, manif.oManifester, HoursToSeconds(1));
+	                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, manif.oManifester, HoursToSeconds(1));
 	                }
 	                else
 	                    eTempHP = EffectHeal(FloatToInt(nDamage) / 2);
 						
 					if (!GetHasSpellEffect(GetSpellId(), manif.oManifester))
 					{
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, manif.oManifester, HoursToSeconds(1));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHP, manif.oManifester, HoursToSeconds(1));
 					}
 	            }
 	        }

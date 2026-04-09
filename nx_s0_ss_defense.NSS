@@ -53,13 +53,13 @@ void CastSpell()
     RemoveEffectsFromSpell(oTarget, SPELL_GREATER_SPELL_MANTLE);
 
     //Apply the VFX impact and effects
-	//PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbsob, oTarget, RoundsToSeconds(nDuration));
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAbsob, oTarget, RoundsToSeconds(nDuration));
 
 	
     RemoveEffectsFromSpell(oTarget, SPELL_PREMONITION);
     //Apply the linked effect
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, fSpellDuration);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStone, oTarget, fSpellDuration);
 }
 
 void main()
@@ -71,10 +71,10 @@ void main()
 	effect eCastVis3 = EffectNWN2SpecialEffectFile("sp_transmutation_aoe_2.sef");
 	effect eCastVis4 = EffectNWN2SpecialEffectFile("sp_sanctuary_hit.sef");
 	
-	DelayCommand(0.75f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis1, oCaster));
-	DelayCommand(1.75f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis2, oCaster));
-	DelayCommand(2.75f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis3, oCaster));
-	DelayCommand(3.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis4, oCaster));
+	DelayCommand(0.75f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis1, oCaster));
+	DelayCommand(1.75f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis2, oCaster));
+	DelayCommand(2.75f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis3, oCaster));
+	DelayCommand(3.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCastVis4, oCaster));
 	
 	PlayCustomAnimationWrapper(oCaster, "1hs_2attack02", 0, 0.75f);
 	DelayCommand(1.0f, PlayCustomAnimationWrapper(oCaster, "throwarmsloop", 0, 1.0f));

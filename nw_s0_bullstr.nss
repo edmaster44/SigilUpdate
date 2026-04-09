@@ -62,7 +62,7 @@ void main()
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
     // This code was there to prevent stacking issues, but programming says thats handled in code...
 /*    if (GetHasSpellEffect(SPELL_GREATER_BULLS_STRENGTH))
     {
@@ -75,5 +75,5 @@ void main()
 */
     eStr = EffectAbilityIncrease(ABILITY_STRENGTH,nModify);
     effect eLink = EffectLinkEffects(eStr, eVis);
-    PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

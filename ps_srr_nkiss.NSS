@@ -58,7 +58,7 @@ void main()
 			iDC = 10 + iLevels + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 			iTouchBonus = 4;
 			// adds +4 to AB for one second (for the touch attack)
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackIncrease(iTouchBonus, ATTACK_BONUS_MISC), oPC, 1.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAttackIncrease(iTouchBonus, ATTACK_BONUS_MISC), oPC, 1.0f);
 		}
 		else 
 		{
@@ -78,13 +78,13 @@ void main()
 					if (iLevels + 10 >= PS_GetLevel(oTarget) && !GetIsPC(oTarget))
 					{
 						// long duration dominate
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, HoursToSeconds(iLevels));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, HoursToSeconds(iLevels));
 						SendMessageToPC(oPC, "The target falls deeply under your influence.");
 					}
 					else // short duration dominate
 					{
 						// dominate
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(iLevels));
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(iLevels));
 						SendMessageToPC(oPC, "The target falls under your control, but it's too strong to remain under for long.");
 					}
 				}
@@ -93,13 +93,13 @@ void main()
 				else if (iLevels > PS_GetLevel(oTarget))
 				{
 					// dominate
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(d6(iLevels)));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDominated(), oTarget, RoundsToSeconds(d6(iLevels)));
 					SendMessageToPC(oPC, "The target falls under your complete control");
 				}
 				else
 				{
 					// charm
-					PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCharmed(), oTarget, RoundsToSeconds(d6(iLevels)));
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectCharmed(), oTarget, RoundsToSeconds(d6(iLevels)));
 					SendMessageToPC(oPC, "The target is too strong for you to control, but it now no longer wants to hurt you as long as you take no action against it.");
 				}
 			}

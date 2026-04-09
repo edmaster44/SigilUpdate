@@ -72,7 +72,7 @@ void main() {
 					
 						effect eFasc = EffectFascinate();
 						SetEffectSpellId(eFasc, SPELL_HYPNOTISM);
-						PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
+						ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFasc, oTarget, fDur);
 					
 						//Make sure being damaged breaks the spell
 						SetLocalString(oTarget, "DamagedScript", "scod_s_creature_distracted");

@@ -78,7 +78,7 @@ void main()
     		ePosLink = EffectLinkEffects(ePosLink, eBonSkill);
 			ePosLink = EffectLinkEffects(ePosLink, ePosVis);
 			//Apply VFX impact and bonus effects
-            PS_ApplyEffectToObject(nDurType, ePosLink, oTarget, fDuration);
+            ApplyEffectToObject(nDurType, ePosLink, oTarget, fDuration);
         }
         else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
         {
@@ -98,7 +98,7 @@ void main()
     			eNegLink = EffectLinkEffects(eNegLink, eNegSkill);
 				eNegLink = EffectLinkEffects(eNegLink, eNegVis);
 				//Apply VFX impact and bonus effects
-				PS_ApplyEffectToObject(nDurType, eNegLink, oTarget, fDuration);
+				ApplyEffectToObject(nDurType, eNegLink, oTarget, fDuration);
             }
         }
         //Get the next target in the specified area around the caster

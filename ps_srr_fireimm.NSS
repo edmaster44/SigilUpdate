@@ -21,6 +21,6 @@ void main()
 	{
 		effect eRes = EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE, 100);
 		eRes = ExtraordinaryEffect(eRes);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
 	}	
 }

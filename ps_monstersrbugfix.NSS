@@ -33,7 +33,7 @@ void DelayedSRFixApplication(object oPC, int nSR)
 	effect eSR = EffectSpellResistanceIncrease(nSR);
 	eSR = SupernaturalEffect(eSR);
 	eSR = SetEffectSpellId(eSR, SR_FIX);
-	PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oPC);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSR, oPC);
 }
 
 void ApplySRFix(object oPC)

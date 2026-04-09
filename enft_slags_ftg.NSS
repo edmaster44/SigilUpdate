@@ -50,7 +50,7 @@ void KadyxEats(object oPC) {
 
 	object oWP = GetWaypointByTag("ps_death_respawn_wp");
 	//effect eKnock = EffectKnockdown();
-	//PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 2.0f);
+	//ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 2.0f);
 	int nDam = FloatToInt(IntToFloat(GetCurrentHitPoints(oPC))*0.8f);
 	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
 	
@@ -58,7 +58,7 @@ void KadyxEats(object oPC) {
 	SetFirstName(obj, "Pool of "+GetName(oPC)+"'s Blood");
 	
 	DelayCommand(0.6f, SendMessageToPC(oPC, "<C=Gray>Your senses are suddenly overwhelmed with the scent of cinnamon and sulphur. Then you feel a sharp pain as something attacks you from behind. . ."));
-	DelayCommand(0.8f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
+	DelayCommand(0.8f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC));
 	DelayCommand(1.0f, SendMessageToPC(oPC, "<C=Gray>You wake up in the Mortuary, with grevious wounds."));
 	DelayCommand(1.1f, TransportToWaypoint(oPC, oWP));
 		
@@ -94,7 +94,7 @@ void Earthquake(object oPC) {
 		effect eDam = EffectDamage(d4(2), DAMAGE_TYPE_BLUDGEONING);
 		if (!ReflexSave(oCreature, 15, SAVING_THROW_TYPE_TRAP)) {
 			effect eKnock = EffectKnockdown();
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oPC, 1.0f);
 		}
 		oCreature = GetNextObjectInShape(SHAPE_SPHERE, 10.0f, lLoc, TRUE);
 	}

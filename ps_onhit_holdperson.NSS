@@ -84,8 +84,8 @@ void HoldTarget( object oTarget, float fDuration, int nSaveDC, object oCaster )
 		if (!OnHitSavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_NONE, oCaster, fDelay))
 		{
 			//Apply paralyze effect and VFX impact
-			//DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
-			DelayCommand( fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, fDuration ) );
+			//DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget));
+			DelayCommand( fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eParal, oTarget, fDuration ) );
 			string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> paralyzes "+GetName(oTarget)+"</color>";
 			DelayCommand(fDelay, SendMessageToPC(oCaster, sReport));
 		}

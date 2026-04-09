@@ -63,5 +63,5 @@ void main()
 	eLink = ExtraordinaryEffect(eLink);
 	
     // Apply effects to the currently selected target.
-    PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration );
+    ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration );
 }

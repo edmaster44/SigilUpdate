@@ -40,6 +40,6 @@ void main()
 	
 		
 		eLink = SupernaturalEffect(eLink);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
 	}	
 }

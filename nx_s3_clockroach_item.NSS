@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //	nx_s3_clockroach_item
 /*
 	Summons a collapsible clockroach to fight for the party.

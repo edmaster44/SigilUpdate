@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // These are dummy functions, to allow the TKL Performer scripts to run.
 // To get the real versions of these functions, go to nwnx.org
 

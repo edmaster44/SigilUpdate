@@ -56,11 +56,11 @@ void main()
             nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC, SAVING_THROW_TYPE_FIRE);
             //Set damage effect
             eCone = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
-            DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+            DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
             if(nDamage > 0)
             {
                 //Apply the VFX impact and effects
-                DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eCone, oTarget));
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eCone, oTarget));
             }
         }
         //Get next target in spell area

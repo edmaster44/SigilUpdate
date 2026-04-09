@@ -4,7 +4,7 @@
 // Blade class. All scripts for the class should include this file
 // By Electrohydra
 // Last Edited : 14/05/16
-#include "ff_applyeffect"
+
 
 const string MINDBLADE_LONGSWORD_TEMPLATE = "mindblade_longsword10";
 const string MINDBLADE_SHORTSWORD_TEMPLATE = "mindblade_shortsword10";
@@ -132,9 +132,9 @@ int ApplyKTTS(object oPC, object oTarget, int dice)
 			return FALSE;
 	}
 	
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectAbilityDecrease(ability, ((dice + 1) / 2) + (GetAbilityScore(oTarget, ability, TRUE) - GetAbilityScore(oTarget, ability, FALSE))), oTarget);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectAbilityDecrease(ability, ((dice + 1) / 2) + (GetAbilityScore(oTarget, ability, TRUE) - GetAbilityScore(oTarget, ability, FALSE))), oTarget);
 	if (GetAbilityScore(oTarget, ability, FALSE) <= 0) // Kills the target if it brings a score to 0
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, TRUE, TRUE, TRUE), oTarget);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, TRUE, TRUE, TRUE), oTarget);
 		
 	return TRUE;
 }
@@ -154,7 +154,7 @@ void DoPsychicStrikeEffects(object oPC, object oTarget, int dice)
 		dice = dice / 2; // Half the damage was converted to KKTS damage
 		
 	// Do the actual magical damage
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d8(dice), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE), oTarget, 0.0f);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d8(dice), DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE), oTarget, 0.0f);
 }
 
 // Applies Psychic Strike on the target. Returns FALSE if psychic strike was not applied

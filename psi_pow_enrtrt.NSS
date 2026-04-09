@@ -122,7 +122,7 @@ void main()
 	   }
 	   else
 	   {
-	   		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oTarget, fDuration);
+	   		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oTarget, fDuration);
 	   }
 	   
     }// end else - Running OnHit event

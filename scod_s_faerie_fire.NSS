@@ -44,7 +44,7 @@ void main() {
 	
 	   	//Fire cast spell at event for the specified target
 	   	SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_FAERIE_FIRE));
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFaerie, oTarget, fDuration);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFaerie, oTarget, fDuration);
 		
 		oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_SMALL, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	}

@@ -14,7 +14,7 @@
 //:: Created By: Brent Knowles
 //:: Created On: November 6, 2001
 //:://////////////////////////////////////////////
-#include "ff_applyeffect"
+
 
 void main()
 {
@@ -32,16 +32,16 @@ if (nContingency == 1)
  eHeal = EffectHeal(nHPHeal);
  eVis1 = EffectNWN2SpecialEffectFile("fx_teleport_new.sef", oDying);
  eVis2 = EffectNWN2SpecialEffectFile("fx_telthor_m.sef", oDying);
- 	DelayCommand(12.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eRestore, oDying));
-	DelayCommand(12.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis1, oDying));
-	DelayCommand(12.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDying));
-	DelayCommand(12.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSafety, oDying, 6.0f));
-	DelayCommand(12.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oDying, 6.0f));
+ 	DelayCommand(12.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eRestore, oDying));
+	DelayCommand(12.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis1, oDying));
+	DelayCommand(12.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDying));
+	DelayCommand(12.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSafety, oDying, 6.0f));
+	DelayCommand(12.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis2, oDying, 6.0f));
  	SetLocalInt(oDying, "Contingency", 0);
  	return;  }
 
 
 // * April 14 2002: Hiding the death part from player
   effect eDeath = EffectDeath(FALSE, FALSE);
-  PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, GetLastPlayerDying());
+  ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, GetLastPlayerDying());
 }

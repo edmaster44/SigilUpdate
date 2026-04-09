@@ -113,8 +113,8 @@ void main()
         // Apply absolute spell failure
         effect eSpellFailure = EffectSpellFailure(100);
 		effect eSpellInvul = EffectSpellImmunity(SPELL_ALL_SPELLS);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellFailure, oEnter);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellInvul, oEnter);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellFailure, oEnter);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSpellInvul, oEnter);
 		
     }
 }

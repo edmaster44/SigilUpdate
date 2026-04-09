@@ -445,7 +445,7 @@ string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bF
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", GetSubRace(oCreature)));
 	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
 	sDebug += "\nHD: " + IntToString(PS_GetLevel(oCreature));
-	float fVar = PS_RoundDecimal(GetChallengeRating(oCreature));
+	float fVar = GetChallengeRating(oCreature);
 	sDebug += "\nCR: " + PS_PrettyFloatString(fVar, 2);
 	sDebug += "\nElite Rating:" + GetLocalString(oCreature,"ELITE");
 	if (GetHasAllAccess(oCaller)){

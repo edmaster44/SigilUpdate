@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //*********************************************
@@ -59,12 +59,12 @@ void main () {
 			if (TouchAttackMelee(oObj)) {
 				effect eDam = EffectDamage(d6(nDice), nDamType);
 				if (FortitudeSave(oObj, nDC, SAVING_THROW_TYPE_NONE, OBJECT_SELF)) {
-					DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
+					DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
 					SendMessageToPC(oObj, "You manage to avoid "+GetName(OBJECT_SELF)+"'s attempt to knock you down.");
 				} else {
 					effect eKnock = EffectKnockdown();
-					DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
-					DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oObj, fDur));
+					DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oObj));
+					DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnock, oObj, fDur));
 					SendMessageToPC(oObj, GetName(OBJECT_SELF)+"'s attack knocks you down.");
 				}
 			}

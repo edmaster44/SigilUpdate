@@ -15,7 +15,7 @@ void main()
 	effect eInvisible = ExtraordinaryEffect(EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY));
 	location lLocation = GetLocation(OBJECT_SELF);
 
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvisible, OBJECT_SELF, 1.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvisible, OBJECT_SELF, 1.0f);
 	
 	int i;
 	for (i = 1; i <= 4; ++i)
@@ -24,9 +24,9 @@ void main()
 		DelayCommand(0.2f, SetCommandable(TRUE, oClone));
 		DelayCommand(0.2f + (IntToFloat(d10(1)) / 10), AssignCommand(oClone, ActionMoveAwayFromLocation(lLocation, TRUE, 500.0f)));
 		
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvisible, oClone, 1.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvisible, oClone, 1.0f);
 
-		DelayCommand(18.0f, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, FALSE, TRUE,TRUE), oClone, 2.0f));
+		DelayCommand(18.0f, ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(FALSE, FALSE, TRUE,TRUE), oClone, 2.0f));
 	}
 
 	return;
@@ -47,7 +47,7 @@ object CreateClone(object oCreature, location lLocation)
 	{
 		if (GetEffectType(eEffect) == EFFECT_TYPE_VISUALEFFECT)
 		{
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oClone); 
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEffect, oClone); 
 		}
 		
 		eEffect = GetNextEffect(oCreature);
@@ -85,13 +85,13 @@ object CreateClone(object oCreature, location lLocation)
 	
 	// Cutscene Dominate lets you have multiple clones at once unlike summoning. Delayed so that it won't interrupt actions
 	effect eClone = ExtraordinaryEffect(EffectLinkEffects(EffectBlindness(), EffectCutsceneDominated()));
-	DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eClone, oClone));
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eClone, oClone));
 	
 	// Adds some hit points to the clone so they aren't made of paper
 	effect eBonusHP = ExtraordinaryEffect(EffectBonusHitpoints(GetCurrentHitPoints(oCreature)));
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonusHP, oClone, 20.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBonusHP, oClone, 20.0f);
 	effect eHealing = EffectHeal(1000);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealing, oClone, 0.0f);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHealing, oClone, 0.0f);
 	
 	return oClone;
 }

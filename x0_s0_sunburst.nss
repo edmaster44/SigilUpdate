@@ -63,7 +63,7 @@ void main()
     location lTarget = GetSpellTargetLocation();
     //Limit Caster level for the purposes of damage
 
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eLOS, GetSpellTargetLocation());
     int bDoNotDoDamage = FALSE;
 
@@ -79,7 +79,7 @@ void main()
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_SUNBURST));
             //This visual effect is applied to the target object not the location as above.  This visual effect
             //represents the flame that erupts on the target not on the ground.
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVis, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eHitVis, oTarget);
 
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
             {
@@ -106,12 +106,12 @@ void main()
                     if (nDamage == nOrgDam || ( nDamage > 0 && GetHasFeat(FEAT_IMPROVED_EVASION, oTarget) ))
                     {
                         effect eDead = EffectDamage(GetCurrentHitPoints(oTarget));
-                        //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_FLAME_M), oTarget);
+                        //ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_FLAME_M), oTarget);
 
                         //Apply epicenter explosion on caster
-                        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eExplode, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eExplode, oTarget);
 
-                        DelayCommand(0.5, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDead, oTarget));
+                        DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDead, oTarget));
                         bDoNotDoDamage = TRUE;
                     }
                 }
@@ -126,14 +126,14 @@ void main()
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);
 
                     // Apply effects to the currently selected target.
-                    DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 
                      // * if reflex saving throw fails apply blindness
                     //if (!ReflexSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_SPELL))
                     if (nDamage == nOrgDam && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, OBJECT_SELF))
                     {
                         effect eBlindness = EffectNewBlindness();
-                        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlindness, oTarget);
+                        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBlindness, oTarget);
                     }
                 } // nDamage > 0
              }

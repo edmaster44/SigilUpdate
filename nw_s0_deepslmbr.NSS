@@ -118,16 +118,16 @@ void main()
                 //Make Will save
                 if(!MySavingThrow(SAVING_THROW_WILL, oLowest, GetSpellSaveDC(), SAVING_THROW_TYPE_MIND_SPELLS))
                 {
-                    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest);
+                    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest);
                     if (GetIsImmune(oLowest, IMMUNITY_TYPE_SLEEP) == FALSE)
                     {
-                        PS_ApplyEffectToObject(nDurType, eSleep, oLowest, fDuration);
-						PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest);
+                        ApplyEffectToObject(nDurType, eSleep, oLowest, fDuration);
+						ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oLowest);
                     }
                     else
                     // * even though I am immune apply just the sleep effect for the immunity message
                     {
-                        PS_ApplyEffectToObject(nDurType, eSleep, oLowest, fDuration);
+                        ApplyEffectToObject(nDurType, eSleep, oLowest, fDuration);
                     }
 
                 }

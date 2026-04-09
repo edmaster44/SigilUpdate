@@ -74,8 +74,8 @@ void main()
 		nDamage = d6(nCasterLevel);
 		nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY, oCaster); 
 		eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
 		string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 		SendMessageToPC(oCaster, sReport);
 	}
@@ -84,7 +84,7 @@ void main()
 	if(GetIsObjectValid(oTarget2))
 	{
 		// create a lightning bolt between the two target
-		PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 5.0f);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 5.0f);
 		// in order to get all object in a line between the two target, create a cone starting
 		// at one and ending at the other with a small width, creating a line
 		oTarget = GetFirstObjectInShape(SHAPE_CONE, 0.1, lTarget2, FALSE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_ITEM | OBJECT_TYPE_PLACEABLE, vTarget); 
@@ -98,8 +98,8 @@ void main()
 				nDamage = d6(nCasterLevel);
 				nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_ELECTRICITY, oCaster);
 				eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-				PS_ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				ApplyEffectToObject(DURATION_TYPE_INSTANT,eHit,oTarget);
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 				SendMessageToPC(oCaster, sReport);
 				

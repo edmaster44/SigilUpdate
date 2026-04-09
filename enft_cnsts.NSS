@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 float freezeTime = TurnsToSeconds(1);  // One game hour

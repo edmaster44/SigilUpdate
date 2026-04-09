@@ -102,8 +102,8 @@ void main()
                 if(nDamage > 0)
                 {
                     // Apply effects to the currently selected target.
-                    DelayCommand(fDist, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
-                    DelayCommand(fDist, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDist, ApplyEffectToObject(DURATION_TYPE_INSTANT, eFire, oTarget));
+                    DelayCommand(fDist, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 }
             }
         }
@@ -112,5 +112,5 @@ void main()
 									   OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     }
 	fMaxDelay += 0.5f;
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCone, OBJECT_SELF, fMaxDelay);
 }

@@ -72,8 +72,8 @@ void main()
             	//Set the heal effect
             	eHeal = EffectHeal(nDamage);
             	//Apply the impact VFX and healing effect
-            	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
-            	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
+            	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget));
+            	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget));
         	}
 			else
 			{
@@ -97,8 +97,8 @@ void main()
                     //Set Damage
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
                     //Apply impact VFX and damage
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                    DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                    DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 }
             }
         }

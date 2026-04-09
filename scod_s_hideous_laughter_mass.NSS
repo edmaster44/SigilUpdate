@@ -56,7 +56,7 @@ void main() {
 	                {
 	                    effect eDur = EffectVisualEffect( VFX_DUR_SPELL_TASHA_LAUGHTER );
 	                    float fDur = RoundsToSeconds(nDuration);
-	                    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 						
 	                    AssignCommand(oTarget, ClearAllActions());
 	                    //AssignCommand(oTarget, PlayVoiceChat(VOICE_CHAT_LAUGH));
@@ -67,7 +67,7 @@ void main() {
 	                    AssignCommand(oTarget, ActionPlayAnimation(ANIMATION_LOOPING_TALK_LAUGHING));
 	                    effect eLaugh = EffectKnockdown();
 	                    eLaugh = EffectLinkEffects(eLaugh, eDur);
-	                    DelayCommand(0.3, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLaugh, oTarget, fDur));
+	                    DelayCommand(0.3, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLaugh, oTarget, fDur));
 	                }
 	            }
 	        }

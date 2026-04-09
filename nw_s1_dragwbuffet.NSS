@@ -79,7 +79,7 @@ void main()
 	
     PlayDragonBattleCry();
 	PlayCustomAnimation(OBJECT_SELF, "*specialattack01", 0, 1.0f);
-	DelayCommand(0.5f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWingBuffet, OBJECT_SELF, 3.0f));
+	DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eWingBuffet, OBJECT_SELF, 3.0f));
 	DelayCommand(1.0f, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eShake, lSelf));
     //Get first target in spell area
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GINORMOUS, GetSpellTargetLocation(), TRUE);
@@ -104,11 +104,11 @@ void main()
 				fRandomDuration = RandomFloatBetween(3.0, 10.0);
                 //Apply the VFX impact and effects
 							
-               	DelayCommand(0.5 + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fRandomDuration));			
-				DelayCommand(0.5 + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 1.0f));
-				//DelayCommand(0.5 + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                DelayCommand(1.5 + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 1.0f));
-				//DelayCommand(1.5 + fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+               	DelayCommand(0.5 + fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockdown, oTarget, fRandomDuration));			
+				DelayCommand(0.5 + fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 1.0f));
+				//DelayCommand(0.5 + fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                DelayCommand(1.5 + fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, 1.0f));
+				//DelayCommand(1.5 + fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
              }
         }
         //Get next target in spell area
@@ -148,7 +148,7 @@ void main()
     nDamage = Random(nDamage) + 11;
     effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_BLUDGEONING);
     effect eVis = EffectVisualEffect(VFX_IMP_PULSE_WIND);
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
     //Get first target in spell area
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, GetLocation(OBJECT_SELF));
     while(GetIsObjectValid(oTarget))
@@ -159,8 +159,8 @@ void main()
                 {
                     if(!ReflexSave(oTarget, nDC))
                     {
-                        DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-                        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockDown, oTarget, 6.0);
+                        DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eKnockDown, oTarget, 6.0);
                     }
                 }
             //Get next target in spell area
@@ -171,6 +171,6 @@ void main()
     lLocal = GetLocation(OBJECT_SELF);
     //Apply the VFX impact and effects
     eAppear = EffectDisappearAppear(lLocal);
-    PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAppear, OBJECT_SELF, 6.0);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAppear, OBJECT_SELF, 6.0);
 
 }*/

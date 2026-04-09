@@ -19,6 +19,6 @@ void main()
 	{
 		effect eRes = EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, 100);
 		eRes = SupernaturalEffect(eRes);
-		PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRes, oTarget);
 	}	
 }

@@ -66,9 +66,9 @@ void main()
                     if(!OnHitSavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_DEATH, oCaster)) //, OBJECT_SELF, 3.0))
                     {
                         //Apply the delay VFX impact and death effect
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                         effect eDeath = EffectDeath();
-                        DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget)); // no delay
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget)); // no delay
 						string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> kills "+GetName(oTarget)+"</color>";
 						SendMessageToPC(oCaster, report);
                     } 

@@ -24,7 +24,7 @@ int DervishLevel = GetLevelByClass(CLASS_DERVISH, oPC);
 		
 	effect eLink = EffectLinkEffects(eAttack,MoveDecrease);
 	eLink = ExtraordinaryEffect(eLink);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, 60.0f);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, 60.0f);
 }
 
 
@@ -62,7 +62,7 @@ void Dervish_Dance(object oPC,int nSpell)
 		}
 
 		// Apply the dance bonuses.
-		DelayCommand(0.1f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));
+		DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration));
 
 		if (nLevel < 9 && !GetHasFeat(FEAT_DERVISH_TIRELESS_DANCE,oPC))
 		{
@@ -79,5 +79,5 @@ int nPercentage = GetSkillRank( SKILL_PARRY, oPC,FALSE);
 float fDuration = 60.0f;
 if (nPercentage > 50) nPercentage = 50;
 effect econceal = EffectConcealment(nPercentage,MISS_CHANCE_TYPE_NORMAL);
-PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, econceal, oPC, fDuration);
+ApplyEffectToObject(DURATION_TYPE_TEMPORARY, econceal, oPC, fDuration);
 }

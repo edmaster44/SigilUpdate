@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 //Description: Underwater functions
@@ -36,12 +36,12 @@ void DrownCheck(object oPC)
         if(GetCurrentHitPoints(oPC) == 0)
         {
             SendMessageToPC(oPC, "You are drowning and loosing consciousness.");
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(1), oPC);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(1), oPC);
         }
         else if(GetCurrentHitPoints(oPC) <= -1)
         {
             SendMessageToPC(oPC, "You drown!");
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oPC);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oPC);
         }
         else
         {
@@ -62,7 +62,7 @@ void DrownCheck(object oPC)
                 SendMessageToPC(oPC, sSave);
                 int iHPs = GetCurrentHitPoints(oPC);
                 effect eDam = EffectDamage(iHPs);
-                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oPC);
             }
         }
     }
@@ -75,8 +75,8 @@ void DoUnderwaterCheck(object oPC)
         effect eSlow = SupernaturalEffect(EffectSlow());
         effect eBubbles = SupernaturalEffect(EffectVisualEffect(VFX_DUR_PROTECTION_GOOD_MINOR));
 
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectSlow()), oPC);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectVisualEffect(VFX_DUR_PROTECTION_GOOD_MINOR)), oPC);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectSlow()), oPC);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, SupernaturalEffect(EffectVisualEffect(VFX_DUR_PROTECTION_GOOD_MINOR)), oPC);
 
         /*if(!GetCanBreathUnderwater(oPC))
         {

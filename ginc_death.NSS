@@ -274,8 +274,8 @@ int GetIsSafeToWakeUp( object oCreature=OBJECT_SELF )
 // Full resurrection, no penalty
 void ResurrectCreature( object oCreature )
 {
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectResurrection(), oCreature );
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_HEALING_G), oCreature );
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectResurrection(), oCreature );
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_HEALING_G), oCreature );
 	AssignCommand( oCreature, ForceRest(oCreature) );
 }
 
@@ -366,8 +366,8 @@ void AttemptToWakeUpCreature( object oCreature )
 void WakeUpCreature( object oCreature )
 {
 	//RemoveEffects( oCreature );
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectResurrection(), oCreature );
-	PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_HEALING_S), oCreature );
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectResurrection(), oCreature );
+	ApplyEffectToObject( DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_HEALING_S), oCreature );
 	
 	event eRes = EventSpellCastAt( oCreature, SPELL_RESURRECTION, FALSE );
 	SignalEvent( oCreature, eRes );

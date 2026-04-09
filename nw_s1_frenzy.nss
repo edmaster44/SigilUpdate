@@ -57,7 +57,7 @@ void main()
 				eLink = EffectLinkEffects(eLink, eHaste);
 			}
 			
- PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eMove, OBJECT_SELF, RoundsToSeconds(nCon + 1));
+ ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eMove, OBJECT_SELF, RoundsToSeconds(nCon + 1));
  eMove = ExtraordinaryEffect(eMove);
 			
         SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
@@ -70,10 +70,10 @@ void main()
 			fDuration		=	fDuration + 2.0;
 		
             //Apply the VFX impact and effects
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration);
 			
 			if (GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER) >= 6) {
-  PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCritImm, OBJECT_SELF, RoundsToSeconds(4));
+  ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCritImm, OBJECT_SELF, RoundsToSeconds(4));
   eCritImm = ExtraordinaryEffect(eCritImm);
 }
 			
@@ -89,7 +89,7 @@ void main()
     			eDeathless = EffectLinkEffects(eDeathless, eLevel);
     			eDeathless = EffectLinkEffects(eDeathless, eAbil);
 				
-				PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeathless, OBJECT_SELF, fDuration);
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDeathless, OBJECT_SELF, fDuration);
 			}
 			
 			// Start the fatigue logic half a second before the frenzy ends

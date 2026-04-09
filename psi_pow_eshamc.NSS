@@ -62,7 +62,7 @@ void main()
     	{
 			// Let the AI know
         	//SPRaiseSpellCastAt(oTarget, TRUE, POWER_ECTOSHAMBLER, oCreator);
-        	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
         }
 
         //Select the next target within the spell shape.

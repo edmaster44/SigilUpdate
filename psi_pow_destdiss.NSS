@@ -69,8 +69,8 @@ void main()
 	            if(PRCMyResistPower(oManifester, oTarget, nPen) == POWER_RESIST_FAIL)
 	            {
 	                //Apply VFX Impact and shaken effect
-	                PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSickened, oTarget, fDuration);
-	                PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
+	                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSickened, oTarget, fDuration);
+	                ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
 	            }
 	        }
 		}

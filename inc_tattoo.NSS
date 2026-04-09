@@ -220,7 +220,7 @@ void ApplyTattooFX(object oPC, object oItem){
 		}
 	eTat = SupernaturalEffect(eTat);
     eTat = SetEffectSpellId(eTat, TATTOO_SPELL_ID);
-    PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTat, oPC);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTat, oPC);
 	}
 }
 

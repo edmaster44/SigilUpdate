@@ -73,7 +73,7 @@ void main()
         for(; nRepeats > 0; nRepeats--)
         {
             // Shoot the visual effect
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eShard, oTarget);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eShard, oTarget);
 
             // Do touch attack
             int nTouchAttack = TouchAttackRanged(oTarget);
@@ -86,7 +86,7 @@ void main()
 				 if (manif.bEmpower)
 						nDamage = nDamage + (nDamage/2);
 				 eDamage = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
-				 PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+				 ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
             }
         }// end for - Twin Power
     }// end if - Successfull manifestation

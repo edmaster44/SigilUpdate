@@ -37,7 +37,7 @@ void main()
 	eLink = EffectLinkEffects(eLink, eBuf);
 	eFear = EffectLinkEffects (eFear, eVisFear);
 	
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eLOS, OBJECT_SELF);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eLOS, OBJECT_SELF);
     //Determine enemies in the radius around the bard
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));
     while (GetIsObjectValid(oTarget))
@@ -48,7 +48,7 @@ void main()
            //Make SR and Will saves
            if(!OnHitResistSpell(oCaster, oTarget)  && !MySavingThrow(SAVING_THROW_WILL, oTarget, GetOnHitAbilityDC(OBJECT_SELF), SAVING_THROW_TYPE_FEAR, oCaster, 0.1f, 54))
             {
-                DelayCommand(0.01, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(4)));
+                DelayCommand(0.01, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, RoundsToSeconds(4)));
 				string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> frightens "+GetName(oTarget)+"</color>";
 				DelayCommand(0.01, SendMessageToPC(oCaster, sReport));
             }
@@ -57,7 +57,7 @@ void main()
     }
     //Apply bonus and VFX effects to bard.
     RemoveSpellEffects(nID,oCaster,oCaster);
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF); //PMils OEI 07.08.06- NWN1 stuff, in NWN2 we're trying to not use the hit fx for buffs
-	DelayCommand(0.01f, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, RoundsToSeconds(nLevel)));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF); //PMils OEI 07.08.06- NWN1 stuff, in NWN2 we're trying to not use the hit fx for buffs
+	DelayCommand(0.01f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, RoundsToSeconds(nLevel)));
     SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_WAR_CRY, FALSE));
 }

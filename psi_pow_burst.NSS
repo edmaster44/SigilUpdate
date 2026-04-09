@@ -65,6 +65,6 @@ void main()
         effect eVis  = EffectNWN2SpecialEffectFile("psi_time_fast_dur.sef");
         effect eLink = EffectLinkEffects(eFast, eVis);
 
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDur);
     }
 }

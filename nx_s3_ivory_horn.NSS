@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //	nx_s3_ivory_horn
 /*
 	Summons an ivory shieldmaiden to fight for the party.

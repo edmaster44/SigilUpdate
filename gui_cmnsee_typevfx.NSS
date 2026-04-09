@@ -34,7 +34,7 @@ void main(string mode, string text)
 			eVFX = SetEffectSpellId(eVFX,34050);
 			eVFX = ExtraordinaryEffect(eVFX);
 			
-			PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eVFX,oPC,fDuration);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eVFX,oPC,fDuration);
 		}
 	}
 	else if(mode == "clear") RemoveAnySpellEffects(34050,oPC);

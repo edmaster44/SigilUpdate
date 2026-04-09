@@ -77,6 +77,6 @@ void main()
 	
     RemoveEffectsFromSpell(oTarget, nSpellId);
 	
-	PS_ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 	
 	}

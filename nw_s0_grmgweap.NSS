@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 //::///////////////////////////////////////////////
 //:: Greater Magic Weapon
 //:: NW_S0_GrMgWeap.nss

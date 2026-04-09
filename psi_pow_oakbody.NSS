@@ -96,5 +96,5 @@ void main()
 	
 	ED_ApplyEffectToObject(oManifester, nId, FALSE, DURATION_TYPE_TEMPORARY, eLink, 
 		oManifester, fDuration);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
 }

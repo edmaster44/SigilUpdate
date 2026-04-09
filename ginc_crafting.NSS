@@ -1531,7 +1531,7 @@ void DoMagicCrafting(int iSpellID, object oPC)
 		ApplyEncodedEffectsToItem(oItem, sEncodedEffects);
 	}
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_MAGIC), OBJECT_SELF); // was GetLastSpellCaster()	
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_MAGIC), OBJECT_SELF); // was GetLastSpellCaster()	
 	SuccessNotify(oPC);
 	
 	// masterwork weapons can be renamed on each enchanting
@@ -1595,7 +1595,7 @@ void DoMundaneCrafting(object oPC)
 	string sItemTemplateList = GetCraftingStringData(MUNDANE_RECIPE_PREFIX, sIndexTag, COL_CRAFTING_OUTPUT, iRecipeMatch);
 	CreateListOfItemsInInventory(sItemTemplateList, OBJECT_SELF);
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_BLACKSMITH), OBJECT_SELF);	// Charles, the parameter passed to EffectVisualEffect needs to be changed at your leisure
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_BLACKSMITH), OBJECT_SELF);	// Charles, the parameter passed to EffectVisualEffect needs to be changed at your leisure
 	SuccessNotify(oPC);
 }
 
@@ -1632,7 +1632,7 @@ void DoAlchemyCrafting(object oPC)
 	string sItemTemplateList = GetCraftingStringData(ALCHEMY_RECIPE_PREFIX, sIndexTag, COL_CRAFTING_OUTPUT, iRecipeMatch);
 	CreateListOfItemsInInventory(sItemTemplateList, OBJECT_SELF);
 
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_ALCHEMY), OBJECT_SELF);	// Charles, the parameter passed to EffectVisualEffect needs to be changed at your leisure
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_ALCHEMY), OBJECT_SELF);	// Charles, the parameter passed to EffectVisualEffect needs to be changed at your leisure
 	SuccessNotify(oPC);
 }
 
@@ -1682,7 +1682,7 @@ void ExecuteDistillation(int iSkillReq, object oItem, object oPC, string sItemTe
 		GenerateDeathEssenceForUndeadReagents(sTag, oPC);
 	}
 			
-    //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), oPC);	
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), oPC);	
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_CRAFT_SELF), GetLocation(oPC));
 	SuccessNotify(oPC);
 }	

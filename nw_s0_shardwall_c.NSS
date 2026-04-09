@@ -53,16 +53,16 @@ void IntruderCheck()
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_ENERGY);
 			
 			//Apply damage and VFX
-			PS_ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget);
-			PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f);
+			ApplyEffectToObject( DURATION_TYPE_INSTANT, eDam, oTarget);
+			ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eVis, oTarget, 3.0f);
 			
 			if (MySavingThrow(SAVING_THROW_REFLEX, oTarget, 28) == FALSE)
             {
-				PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eSlow, oTarget, 3.0f);
+				ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eSlow, oTarget, 3.0f);
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCreator))
-					PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBlindness, oTarget, 3.0f);
+					ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eBlindness, oTarget, 3.0f);
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_DEAFNESS, oCreator))
-					PS_ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eDeaf, oTarget, 3.0f);	
+					ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eDeaf, oTarget, 3.0f);	
             }
 		}
         oTarget = GetNextInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);

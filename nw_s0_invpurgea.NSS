@@ -75,6 +75,6 @@ void main()
 	if (bRemovedEffect == TRUE)
 	{
 		effect bHit = EffectVisualEffect(VFX_DUR_SPELL_INVISIBILITY_PURGE);
-		PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, bHit, oTarget);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, bHit, oTarget);
 	}
 }

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 
 
 string Harmonium = "faction_1"; //lawful

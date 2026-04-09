@@ -102,7 +102,7 @@ void main()
             effect eDamage = EffectDamage(nDamage);
  			//effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);	// replace with dehydration effect
             //effect eLink = EffectLinkEffects(eDamage, eVis);
-			PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);		// deal some damage
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);		// deal some damage
 			
 			// If target was killed, summon an appropriately-sized water elemental
 			if (GetIsDead(oTarget))

@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Poison sleep effect for distilled black lotus poison
 
 void main()
@@ -10,6 +10,6 @@ void main()
 		effect eSleep = EffectSleep();
     	effect eVis = EffectVisualEffect(VFX_DUR_SLEEP);
     	effect eLink = EffectLinkEffects(eSleep, eVis);
-    	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
+    	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(10));
 	}
 }

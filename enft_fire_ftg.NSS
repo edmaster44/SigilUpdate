@@ -71,7 +71,7 @@ void main()
         }
         // Attempt heat damage if still unconscious
         else if(FortitudeSave(OBJECT_SELF, 15 + pastThrows, SAVING_THROW_TYPE_FIRE) == 0)
-            PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d4( ), DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL), OBJECT_SELF);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(d4( ), DAMAGE_TYPE_FIRE, DAMAGE_POWER_NORMAL), OBJECT_SELF);
 
         // If dead now, remove unconscious effects incase resurected later.
         // The number of throws, however, is not reduced.  Body has not gotten cooler yet.
@@ -88,9 +88,9 @@ void main()
         // Determine new heat damage and apply it to character
         newHeatDamage = d4( );
         eff = EffectTemporaryHitpoints(newHeatDamage);
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eff, OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eff, OBJECT_SELF);
         beforeHP = GetCurrentHitPoints( );
-        PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(newHeatDamage, DAMAGE_TYPE_FIRE), OBJECT_SELF);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDamage(newHeatDamage, DAMAGE_TYPE_FIRE), OBJECT_SELF);
         afterHP = GetCurrentHitPoints( );
         newHeatDamage = beforeHP - afterHP;
         RemoveEffect(OBJECT_SELF, eff);
@@ -113,22 +113,22 @@ void main()
             SendMessageToPC(OBJECT_SELF, "You can take no more of this exposure and are now unconscious.");
 
             // Apply unconscious effects
-            PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectKnockdown( ), OBJECT_SELF, 3.0f);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectKnockdown( ), OBJECT_SELF, 3.0f);
             DelayCommand(3.1f, AssignCommand(OBJECT_SELF, PlayAnimation(ANIMATION_LOOPING_DEAD_FRONT, 0.1f, 10.0f)));
-            DelayCommand(5.0f, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectCutsceneParalyze( ), OBJECT_SELF));
+            DelayCommand(5.0f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectCutsceneParalyze( ), OBJECT_SELF));
         }
     }
 
     // Apply fatigue to character
     if(GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") > 0)
     {
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, heatTime);
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, heatTime);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_STRENGTH, 2), OBJECT_SELF, heatTime);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectAbilityDecrease(ABILITY_DEXTERITY, 2), OBJECT_SELF, heatTime);
     }
 
     // If the character is just barely conscious apply dazing effects for an hour
     if(GetLocalInt(OBJECT_SELF, "HEAT_SUBDUAL_DAMAGE") == GetCurrentHitPoints( ))
-        PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, heatTime);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectDazed( ), OBJECT_SELF, heatTime);
 
     // Increase the number of throws done
     SetLocalInt(OBJECT_SELF, "HEAT_THROWS", pastThrows + 1);

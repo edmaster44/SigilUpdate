@@ -84,7 +84,7 @@ void ApplyVigorousRage()
 	if (iHeal < 1) iHeal = 1;
 	iHeal *= 2;
 	effect eHeal = EffectHeal(iHeal);
-	PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, OBJECT_SELF);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, OBJECT_SELF);
 }
 
 effect ApplyScentRage()
@@ -335,5 +335,5 @@ void CheckAndApplyRageFeats(int iDuration)
 	
 	eLink = ExtraordinaryEffect(eLink);
 	float fDuration = RoundsToSeconds(iDuration);
-	PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDuration);
 }

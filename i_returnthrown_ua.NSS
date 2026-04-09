@@ -1,4 +1,4 @@
-#include "ff_applyeffect" 
+ 
 // Script for the thrown weapons created by returning sets.
 // Destroys the items if they are ever lost.
 // By Electrohydra

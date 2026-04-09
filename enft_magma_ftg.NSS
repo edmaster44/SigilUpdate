@@ -83,7 +83,7 @@ void main()
 			nDamage = d6(3);
 			
 		effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-		PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);	
+		ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 	} else {
         SetLocalInt(OBJECT_SELF, "MAGMA_THROWS", 0);		
 	}
@@ -96,13 +96,13 @@ void main()
 		int nGoutDamage = d6(6);
 		if (fireGoutReflexSave(OBJECT_SELF)) {
 			effect eDam = EffectDamage(nGoutDamage, DAMAGE_TYPE_FIRE);
-			PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);	
+			ApplyEffectToObject(0, eDam, OBJECT_SELF);	
 		} else {
 			effect eDam = EffectDamage(nGoutDamage/2, DAMAGE_TYPE_FIRE);
-			PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);
+			ApplyEffectToObject(0, eDam, OBJECT_SELF);
 			//half of the damage will punch through resistance here
 			eDam = EffectDamage(nGoutDamage/2, DAMAGE_TYPE_FIRE, DAMAGE_POWER_ENERGY, TRUE);
-			PS_ApplyEffectToObject(0, eDam, OBJECT_SELF);		
+			ApplyEffectToObject(0, eDam, OBJECT_SELF);		
 		}
 	}
 

@@ -49,7 +49,7 @@ void main()
         	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1383, FALSE));
 
         //Apply the VFX impact and effects
-        //PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by CreateProtectionFromAlignmentLink()
+        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// handled by CreateProtectionFromAlignmentLink()
         	
 			
 			
@@ -57,7 +57,7 @@ void main()
 		if((GetAssociate(ASSOCIATE_TYPE_SUMMONED, oMaster) == oTarget || GetAssociate(ASSOCIATE_TYPE_FAMILIAR, oMaster) == oTarget || GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oMaster) == oTarget || GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) == TRUE ))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1383, FALSE));
-			PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSummonWinking, oTarget);
+			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSummonWinking, oTarget);
 			
 			
 			

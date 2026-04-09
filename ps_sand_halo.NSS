@@ -51,7 +51,7 @@ void main()
     //Fire spell cast at event for target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId, FALSE));
     //Apply VFX impact and bonus effects
-    PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-    PS_ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    ApplyEffectToObject(nDurType, eLink2, oTarget, fDuration);
 
 }

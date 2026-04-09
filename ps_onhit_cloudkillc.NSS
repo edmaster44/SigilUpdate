@@ -70,8 +70,8 @@ void main()
 					eDam = EffectAbilityDecrease(ABILITY_CONSTITUTION, nDamage);
 					eDam = SetEffectSpellId(eDam, -1);
 					eDam = ExtraordinaryEffect(eDam);
-					DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-                	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+                	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 					SendMessageToPC(oCaster, sReport);
 				}
@@ -81,8 +81,8 @@ void main()
 					eDam = SetEffectSpellId(eDam, -1);
 					eDam = ExtraordinaryEffect(eDam);
                 	//Apply VFX impact and damage
-                	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
-                	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDam, oTarget));
+                	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
 					string sReport = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> damages "+GetName(oTarget)+": "+IntToString(nDamage)+"</color>";
 					SendMessageToPC(oCaster, sReport);
 				}

@@ -70,10 +70,10 @@ void main()
                        	nRounds = ApplyMetamagicVariableMods(d6(1), 6);
                        	fDelay = GetRandomDelay(0.75, 1.75);
                        	//Apply the VFX impact and linked effects
-                       	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-                       	DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(nRounds)));
+                       	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                       	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eStun, oTarget, RoundsToSeconds(nRounds)));
 						if (!GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaster))
-							DelayCommand(fDelay, PS_ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nRounds)));
+							DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, RoundsToSeconds(nRounds)));
 						string report = "<Color="+casterColor+">"+GetName(oCaster)+"</color><Color="+reportColor+"> stuns "+GetName(oTarget)+"</color>";
 						SendMessageToPC(oCaster, report);
                        }

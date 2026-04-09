@@ -35,6 +35,6 @@ void main()
     if(spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster))
     {
         //Apply the VFX impact and effects
-        PS_ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oTarget);
     }
 }
