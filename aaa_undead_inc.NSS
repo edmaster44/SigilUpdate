@@ -1065,6 +1065,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		eSkill = SetEffectSpellId( eSkill, nSpell);
 		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 		PS_RemoveEffects(oPC, nSpell, EFFECT_TYPE_SKILL_INCREASE, oPC);
+		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
 	}else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
 		SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));

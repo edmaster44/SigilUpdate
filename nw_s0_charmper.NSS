@@ -83,6 +83,7 @@ void main()
 		eSkill = SetEffectSpellId( eSkill, SPELL_CHARM_PERSON);
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, FALSE));
 		PS_RemoveEffects(oCaster, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oCaster);
+		PS_RemoveEffects(oCaster, 1320, EFFECT_TYPE_SKILL_INCREASE, oCaster); // vampire gaze to boost skills
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oCaster, HoursToSeconds(nCasterLevel));
 	} else if (GetIsPC(oTarget) && GetIsPC(oCaster) && oTarget != oCaster){
 		string sCasterMessage = "<c=orange>";
