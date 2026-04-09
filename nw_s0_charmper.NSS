@@ -115,7 +115,7 @@ void main()
 			sTargetMessage += "\nThis information may guide roleplaying your reaction to the failed attempt.";
 		}
 		sCasterMessage += "\n(Note that you cannot force RP upon another player. If they tell you they do not wish";
-		sCasterMessage += " to engage in RP related to your actions, you MUST retcon this use of domination and RP ";
+		sCasterMessage += " to engage in RP related to your actions, you MUST retcon this use of charm person and RP ";
 		sCasterMessage += "as if nothing happened, and you must not attempt it again.</c>";
 		sTargetMessage += "\n(Note that no one can force RP upon you. If you do not wish to RP this effect ";
 		sTargetMessage += "then tell " + sName + " that you do not wish to RP this and they MUST retcon ";
