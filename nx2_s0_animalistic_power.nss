@@ -27,6 +27,51 @@
 
 void main()
 {
+    if (!X2PreSpellCastCode()) return;
+
+
+	// Get necessary objects
+	object oTarget			= GetSpellTargetObject();
+	object oCaster			= OBJECT_SELF;
+	
+	if (!GetIsObjectValid(oTarget) || GetHasSpellEffect(SPELL_GREATER_HEROISM, oTarget) ||
+		!spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster))
+		return;
+	
+	int nCasterLevel		= PS_GetCasterLevel(oCaster);
+	float fDuration			= TurnsToSeconds(nCasterLevel * 10);
+	fDuration				= ApplyMetamagicDurationMods(fDuration);
+	
+	// Effects
+	effect eAB = EffectAttackIncrease(3);
+	effect eFort = EffectSavingThrowIncrease(SAVING_THROW_FORT, 3);
+	effect eReflex = EffectSavingThrowIncrease(SAVING_THROW_REFLEX, 3);
+	effect eSkill = EffectSkillIncrease(SKILL_SURVIVAL, 3);
+	effect eVisual = EffectVisualEffect(VFX_DUR_SPELL_ANIMALISTIC_POWER);
+	effect eLink = EffectLinkEffects(eFort, eAB);
+	eLink =  EffectLinkEffects(eReflex, eLink);
+	eLink =  EffectLinkEffects(eSkill, eLink);
+	eLink = EffectLinkEffects(eVisual, eLink);
+	eLink = SetEffectSpellId(eLink, SPELL_ANIMALISTIC_POWER);
+	// check to see if ally
+	if (!spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster)) return;
+	
+	// remove previous usages of this spell and heroism
+	RemoveEffectsFromSpell(oTarget, SPELL_ANIMALISTIC_POWER);	
+	RemoveEffectsFromSpell(oTarget, SPELL_HEROISM); //857
+	
+	//Fire cast spell at event for the specified target
+	SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ANIMALISTIC_POWER, FALSE));
+	// apply linked effect to target
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, fDuration);
+		
+	
+		
+	
+}
+/* original
+void main()
+{
     if (!X2PreSpellCastCode())
     {
 	    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
@@ -65,3 +110,4 @@ void main()
 		
 	}
 }
+*/

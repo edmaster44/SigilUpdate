@@ -29,51 +29,42 @@ void main()
   
 */
 
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
+    if (!X2PreSpellCastCode()) return;
+	
+	object oTarget	= GetSpellTargetObject();
+	object oCaster	= OBJECT_SELF;
+	
+	if (GetHasSpellEffect(SPELL_GREATER_HEROISM, oTarget) || 
+		!GetIsObjectValid(oTarget) ||
+		!spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, oCaster)) 
+			return;
 
 
     //Declare major variables
     int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
-    float fDuration = HoursToSeconds(nCasterLvl);
-
+    float fDuration = TurnsToSeconds(nCasterLvl * 10);
+	
     //Enter Metamagic conditions
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
-    // Find the Familiar!
-    object oTarget = GetSpellTargetObject();
-	
-//Prevent stacking with Greater Heroism.  This spell will not fail is greater heroism is in place//pkm oei 10.20.06	
-	if (GetHasSpellEffect(876, oTarget))
-	{
-		return;
-	}
-	
-	
-    if( oTarget != OBJECT_INVALID )
-    {
-        effect eAttack = EffectAttackIncrease(2);
-        effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
-        effect eSkill = EffectSkillIncrease(SKILL_ALL_SKILLS, 2);
-        effect eDur = EffectVisualEffect( VFX_DUR_SPELL_HEROISM );
+	effect eAttack = EffectAttackIncrease(2);
+	effect eSave = EffectSavingThrowIncrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
+	effect eSkill = EffectSkillIncrease(SKILL_ALL_SKILLS, 2);
+	effect eDur = EffectVisualEffect( VFX_DUR_SPELL_HEROISM );
+	effect eLink = EffectLinkEffects(eAttack, eSave);
+	eLink = EffectLinkEffects(eSkill, eLink);
+	eLink = EffectLinkEffects(eDur, eLink);
+	eLink = SetEffectSpellId(eLink, SPELL_HEROISM);
 
-        effect eLink = EffectLinkEffects(eAttack, eSave);
-        eLink = EffectLinkEffects(eLink, eSkill);
-        eLink = EffectLinkEffects(eLink, eDur);
+	RemoveEffectsFromSpell(oTarget, SPELL_ANIMALISTIC_POWER);	
+	RemoveEffectsFromSpell(oTarget, SPELL_HEROISM); //857
 
-        //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ENCHANTMENT);
+	//Fire cast spell at event for the specified target
+	SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_HEROISM, FALSE));
 
-        //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-
-        //Apply the VFX impact and effects
-        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-    }
+	//Apply the VFX impact and effects
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
+    
 }
