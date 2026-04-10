@@ -92,5 +92,5 @@ void main()
 
     //Apply the VFX impact and effects
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
-	ActionAttack( oTarget );
+	//ActionAttack( oTarget ); // oTarget is yourself, this spell has a target type of 0x01, ie, self only
 }

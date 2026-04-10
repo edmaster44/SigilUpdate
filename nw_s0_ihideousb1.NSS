@@ -17,6 +17,62 @@
 #include "x2_inc_spellhook"   
 
 const float HIDEOUS_DELAY = 6.0f;
+const float THIRSTING_DELAY = 3.0f;
+
+
+void DoHideousBlow(object oPC){
+
+	if (!GetLocalInt(oPC,"HideousBlow")) return;
+	
+	int nMetaMagic = GetLocalInt(oPC,"HideousMeta");
+	int nId = SPELL_I_HIDEOUS_BLOW;
+	
+	switch (nMetaMagic){
+		case METAMAGIC_INVOC_DRAINING_BLAST: nId = 2211; break;
+		case METAMAGIC_INVOC_FRIGHTFUL_BLAST: nId = 2212; break;
+		case METAMAGIC_INVOC_BESHADOWED_BLAST: nId = 2213; break;
+		case METAMAGIC_INVOC_BRIMSTONE_BLAST: nId = 2214; break;
+		case METAMAGIC_INVOC_HELLRIME_BLAST: nId = 2215; break;
+		case METAMAGIC_INVOC_BEWITCHING_BLAST: nId = 2216; break;
+		case METAMAGIC_INVOC_NOXIOUS_BLAST: nId = 2217; break;
+		case METAMAGIC_INVOC_VITRIOLIC_BLAST: nId = 2218; break;
+		case METAMAGIC_INVOC_UTTERDARK_BLAST: nId = 2219; break;
+		case METAMAGIC_INVOC_BINDING_BLAST: nId = 2220; break;
+		case METAMAGIC_INVOC_HINDERING_BLAST: nId = 2221; break;
+		default: nId = SPELL_I_HIDEOUS_BLOW; break;
+	}
+	
+	AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+}
+
+void RedoHideousBlow(object oPC)
+{
+	if (!GetLocalInt(oPC,"HideousBlow")) return;
+	if (GetLocalInt(oPC,"AllreadyRunning")) return;
+	else SetLocalInt(oPC,"AllreadyRunning",TRUE);
+	
+	DoHideousBlow(oPC);
+	
+	if (GetHasFeat(FEAT_FELLBLADE_THIRSTING_BLADE, oPC, TRUE)) {
+		DelayCommand(THIRSTING_DELAY-0.1f, SetLocalInt(oPC,"AllreadyRunning",FALSE));
+		DelayCommand(THIRSTING_DELAY, RedoHideousBlow(oPC));
+	} else {
+		DelayCommand(HIDEOUS_DELAY-0.1f, SetLocalInt(oPC,"AllreadyRunning",FALSE));
+		DelayCommand(HIDEOUS_DELAY, RedoHideousBlow(oPC));
+	}
+}
+
+void main()
+{
+	object oPC = OBJECT_SELF;
+	if (!GetIsInCombat(oPC)) DoHideousBlow(oPC);
+	else if (GetHasSpellEffect(SPELL_I_HIDEOUS_BLOW)) DoHideousBlow(oPC);
+	if (GetLocalInt(oPC,"AllreadyRunning")==FALSE) RedoHideousBlow(oPC);
+}
+
+/* original
+
+const float HIDEOUS_DELAY = 6.0f;
 const float THIRSTING_DELAY = 3.0f;                                          
 
 void DoHideousBlow(object oPC)
@@ -102,13 +158,7 @@ void RedoHideousBlow(object oPC)
 void main()
 {
 	object oPC = OBJECT_SELF;
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
+
 
     if (!X2PreSpellCastCode())
     {
@@ -121,3 +171,4 @@ void main()
 	else if (GetHasSpellEffect(SPELL_I_HIDEOUS_BLOW)) DoHideousBlow(oPC);
 	if (GetLocalInt(oPC,"AllreadyRunning")==FALSE) RedoHideousBlow(oPC);
 }
+*/
