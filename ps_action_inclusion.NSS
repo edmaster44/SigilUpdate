@@ -303,23 +303,6 @@ void DoReleaseSpells(object oPC)
 			eBad = GetFirstEffect(oPC);
 		}
 	}
-	// turn off warlock buddy buttons EXPERIMENTAL FEATURE
-	if (GetLocalInt(oPC,"HideousBlow")==TRUE)
-		SetLocalInt(oPC,"HideousBlow",FALSE);
-
-	if (GetLocalInt(oPC,"TwentyFour")==TRUE)
-		SetLocalInt(oPC,"TwentyFour",FALSE);
-
-	if (GetLocalInt(oPC,"Invisibility")==TRUE)
-		SetLocalInt(oPC,"Invisibility",FALSE);
-
-	if (GetLocalInt(oPC,"FleeTheScene")==TRUE)
-		SetLocalInt(oPC,"FleeTheScene",FALSE);
-					
-	if (GetLocalInt(oPC,"DarkForesight")==TRUE)
-		SetLocalInt(oPC,"DarkForesight",FALSE);
-			
-	SetLocalInt(oPC,"AllreadyRunning",FALSE);
 }
 
 /*=========================================================================*/
