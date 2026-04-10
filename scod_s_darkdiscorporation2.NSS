@@ -14,26 +14,6 @@
 
 const float fDiscorpDuration = 6.0f;
 
-
-void DiscorporationRefresh(object oPC)
-{
-	if (!GetLocalInt(oPC,"DarkDiscorporation")) return;
-	
-	if (!GetIsInCombat())
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_DARK_DISCORPORATION, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-	
-	DelayCommand(6.0, DiscorporationRefresh(oPC));
-}
-
-void main() {
-	object oPC = OBJECT_SELF;
-	DiscorporationRefresh(oPC);
-}
-
-/* original
-
-const float fDiscorpDuration = 6.0f;
-
 void DoDiscorporation(object oPC) {
 
 	if (GetHasSpellEffect(843)) { 
@@ -90,6 +70,5 @@ void main() {
 		
 	DiscorporationRefresh(oPC);
 }
-*/
 	
 	

@@ -56,8 +56,8 @@ void main() {
     int nMetaMagic = GetMetaMagicFeat();
 	
     //Enter Metamagic conditions
-	float fDuration = TurnsToSeconds(nCasterLvl);
-    fDuration = ApplyMetamagicDurationMods(fDuration);
+	float fDuration = TurnsToSeconds( GetCasterLevel(OBJECT_SELF ) );
+    fDuration = ApplyMetamagicDurationMods( fDuration );
 	
 	effect eBuff = EffectMovementSpeedIncrease(99); //x2 speed
 	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_SNEAK_ATTACK), eBuff); //being discorporated means undead like immunities

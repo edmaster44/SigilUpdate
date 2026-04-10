@@ -32,60 +32,6 @@
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook" 
 
-
-void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic )
-{
-    int nCasterLvl  = PS_GetCasterLevel(oCaster);
-    float fDuration   = RoundsToSeconds(nCasterLvl); 
-
-    //Check for metamagic extension
-    fDuration = ApplyMetamagicDurationMods(fDuration);
-    int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
-
-    // Create the Effects
-    effect eHaste   = EffectHaste();
-    effect eDur     = EffectVisualEffect( VFX_DUR_SPELL_HASTE );
-    effect eLink    = EffectLinkEffects(eHaste, eDur);
-		 // Remove any spells that share effects with this spell and were cast by caster
-    if (GetHasSpellEffect(SPELL_HASTE, oTarget))
-        PS_RemoveEffects(oTarget, SPELL_HASTE, NULL, oCaster);
-    if (GetHasSpellEffect(SPELL_EXPEDITIOUS_RETREAT, oTarget))
-        PS_RemoveEffects(oTarget, SPELL_EXPEDITIOUS_RETREAT, NULL, oCaster);
-	if (GetHasSpellEffect(SPELL_I_FLEE_THE_SCENE, oTarget))
-        PS_RemoveEffects(oTarget, SPELL_I_FLEE_THE_SCENE, NULL, oTarget);
-		
-    ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-   
-}
-
-
-void main()
-{
-
-    if (!X2PreSpellCastCode()) return;
-
-	//Declare major variables
-    int nMetaMagic = GetMetaMagicFeat();
-    object oCaster = OBJECT_SELF;
-
-    //Fire cast spell at event for the specified target
-    SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_I_FLEE_THE_SCENE, FALSE));
-
-    DoHasteEffects(oCaster, oCaster, nMetaMagic );
-	
-	//Apply haste to party members
-	object oArea = GetArea(oCaster);
-	object oTarget = GetFirstFactionMember(oCaster, FALSE); 
-	while (GetIsObjectValid(oTarget)) 
-	{
-		if (GetArea(oTarget) == oArea && oTarget != oCaster)
-			DoHasteEffects(oCaster, oTarget, nMetaMagic );
-	
-		oTarget = GetNextFactionMember(OBJECT_SELF, FALSE);
-	}
-
-}
-/*
 void DoExpeditiousRetreatEffects( object oCaster, object oTarget, int nMetaMagic )
 {
     effect eDur     = EffectVisualEffect( VFX_DUR_SPELL_EXPEDITIOUS_RETREAT );
@@ -171,4 +117,3 @@ void main()
 	}
 
 }
-*/

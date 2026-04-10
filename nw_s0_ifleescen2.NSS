@@ -3,24 +3,6 @@
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
 
-
-
-void FleeRefresh(object oPC)
-{
-	if (!GetLocalInt(oPC,"FleeTheScene")) return;
-	
-	if (!GetIsInCombat(oPC))
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_WALK_UNSEEN, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-		
-	DelayCommand(6.0, FleeRefresh(oPC));
-}
-	
-void main()
-{
-	object oPC = OBJECT_SELF;	
-	FleeRefresh(oPC);
-}
-/* original
 void DoHasteEffects( object oCaster, object oTarget )
 {
     //int nCasterLvl  = GetWarlockCasterLevel(oCaster);
@@ -79,4 +61,3 @@ void main()
 		
 	FleeRefresh(oPC);
 }
-*/

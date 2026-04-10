@@ -3,36 +3,6 @@
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 
-
-
-void StayUnseen(object oPC)
-{
-	if (!GetLocalInt(oPC,"Invisibility")) return;
-	if (GetIsInCombat(oPC)){
-		DelayCommand(6.0, StayUnseen(oPC));
-		return;
-	}
-	AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_WALK_UNSEEN, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-	
-	if (GetHasSpell(SPELL_I_WALK_UNSEEN,oPC))    
-		if (!GetHasSpellEffect(SPELL_I_WALK_UNSEEN,oPC))	
-			AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_WALK_UNSEEN, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-			
-	if (GetHasSpell(SPELL_I_RETRIBUTIVE_INVISIBILITY,oPC)) 
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_RETRIBUTIVE_INVISIBILITY, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-				
-	DelayCommand(6.0, StayUnseen(oPC));
-}
-
-void main()
-{
-	object oPC = OBJECT_SELF;
-
-	StayUnseen(oPC);
-}
-
-
-/* original
 void OnDispellCallback( object oCaster, int nSaveDC, float fDuration )
 {
 	//SpawnScriptDebugger();
@@ -171,5 +141,3 @@ void main()
 
 	StayUnseen(oPC);
 }
-
-*/

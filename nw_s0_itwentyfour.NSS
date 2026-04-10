@@ -4,50 +4,8 @@
 
 const int SPELL_I_OTHERWORLDLY_WHISPERS = 1059;
 
-
-void DoWarlockBuff(object oPC, int nSpell){
-
-	AssignCommand(oPC, ActionCastSpellAtObject(nSpell, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-
-}
-
-
-void TwentyFour(object oPC)
-{
-	if (!GetLocalInt(oPC,"TwentyFour")){
-		return;
-	}
-	if (GetIsInCombat(oPC)){
-		DelayCommand(6.0, TwentyFour(oPC));
-		return;
-	}
-	if ((GetHasSpell(SPELL_I_BEGUILING_INFLUENCE,oPC))&&(!GetHasSpellEffect(SPELL_I_BEGUILING_INFLUENCE,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_BEGUILING_INFLUENCE);
-	if ((GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK,oPC))&&(!GetHasSpellEffect(SPELL_I_DARK_ONES_OWN_LUCK,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
-	if ((GetHasSpell(SPELL_I_ENTROPIC_WARDING,oPC))&&(!GetHasSpellEffect(SPELL_I_ENTROPIC_WARDING,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_ENTROPIC_WARDING);
-	if ((GetHasSpell(SPELL_I_OTHERWORLDLY_WHISPERS,oPC))&&(!GetHasSpellEffect(SPELL_I_OTHERWORLDLY_WHISPERS,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);
-	if ((GetHasSpell(SPELL_I_LEAPS_AND_BOUNDS,oPC))&&(!GetHasSpellEffect(SPELL_I_LEAPS_AND_BOUNDS,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_LEAPS_AND_BOUNDS);
-	if ((GetHasSpell(SPELL_I_SEE_THE_UNSEEN,oPC))&&(!GetHasSpellEffect(SPELL_I_SEE_THE_UNSEEN,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_SEE_THE_UNSEEN);
-	DelayCommand(6.0, TwentyFour(oPC));
-}
-
-void main()
-{
-	object oPC = OBJECT_SELF;
-
-	TwentyFour(oPC);
-}
-
-/*
-
 void DoBeguilingInfluence(object oPC)
 {
-
     RemoveEffectsFromSpell(oPC, SPELL_I_BEGUILING_INFLUENCE);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
@@ -63,12 +21,10 @@ void DoBeguilingInfluence(object oPC)
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_BEGUILING_INFLUENCE, FALSE));
 
     if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-
 }
 
 void DoDarkOnesLuck(object oPC)
 {
-
     RemoveEffectsFromSpell(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
 
 	int nBonus = GetAbilityModifier(ABILITY_CHARISMA, oPC);
@@ -78,12 +34,10 @@ void DoDarkOnesLuck(object oPC)
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_DARK_ONES_OWN_LUCK, FALSE));
 
     if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSave, oPC);
-
 }
 
 void DoEntropicWarding(object oPC)
 {
-
 	RemoveEffectsFromSpell(oPC, SPELL_I_ENTROPIC_WARDING);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
@@ -102,12 +56,10 @@ void DoEntropicWarding(object oPC)
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_ENTROPIC_WARDING, FALSE));
 
     if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-
 }
 
 void DoLeapsAndBounds(object oPC)
 {
-
 	RemoveEffectsFromSpell(oPC, SPELL_I_LEAPS_AND_BOUNDS);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
@@ -125,12 +77,10 @@ void DoLeapsAndBounds(object oPC)
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_LEAPS_AND_BOUNDS, FALSE));
 
     if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-	
 }
 
 void DoOtherworldlyWhispers(object oPC)
 {
-	
 	RemoveEffectsFromSpell(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);
 	
 	int nCasterLevel = GetWarlockCasterLevel(oPC);
@@ -146,12 +96,10 @@ void DoOtherworldlyWhispers(object oPC)
 	SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_OTHERWORLDLY_WHISPERS, FALSE));
 
 	if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-	
 }
 
 void DoSeeTheUnseen(object oPC)
-{	
-
+{
 	RemoveEffectsFromSpell(oPC, SPELL_I_SEE_THE_UNSEEN);
 
     effect eSight = EffectSeeInvisible();
@@ -162,6 +110,30 @@ void DoSeeTheUnseen(object oPC)
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_I_SEE_THE_UNSEEN, FALSE));
 
     if (!GetIsInCombat(oPC)) ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-
 }
-*/
+
+void TwentyFour(object oPC)
+{
+	if (GetLocalInt(oPC,"TwentyFour")==FALSE) return;
+	
+	if ((GetHasSpell(SPELL_I_BEGUILING_INFLUENCE,oPC))&&(!GetHasSpellEffect(SPELL_I_BEGUILING_INFLUENCE,oPC)))
+		DoBeguilingInfluence(oPC);
+	if ((GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK,oPC))&&(!GetHasSpellEffect(SPELL_I_DARK_ONES_OWN_LUCK,oPC)))
+		DoDarkOnesLuck(oPC);
+	if ((GetHasSpell(SPELL_I_ENTROPIC_WARDING,oPC))&&(!GetHasSpellEffect(SPELL_I_ENTROPIC_WARDING,oPC)))
+		DoEntropicWarding(oPC);
+	if ((GetHasSpell(SPELL_I_OTHERWORLDLY_WHISPERS,oPC))&&(!GetHasSpellEffect(SPELL_I_OTHERWORLDLY_WHISPERS,oPC)))
+		DoOtherworldlyWhispers(oPC);
+	if ((GetHasSpell(SPELL_I_LEAPS_AND_BOUNDS,oPC))&&(!GetHasSpellEffect(SPELL_I_LEAPS_AND_BOUNDS,oPC)))
+		DoLeapsAndBounds(oPC);
+	if ((GetHasSpell(SPELL_I_SEE_THE_UNSEEN,oPC))&&(!GetHasSpellEffect(SPELL_I_SEE_THE_UNSEEN,oPC)))
+		DoSeeTheUnseen(oPC);
+	DelayCommand(6.0, TwentyFour(oPC));
+}
+
+void main()
+{
+	object oPC = OBJECT_SELF;
+
+	TwentyFour(oPC);
+}
