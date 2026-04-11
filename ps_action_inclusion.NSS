@@ -262,6 +262,25 @@ void DoReleaseSpells(object oPC)
 		return;
 	}	
 	
+	// turn off all warlock buddy toggles once we figure out how to set the buttons
+	// to not activated from here
+	/*
+	if (GetLocalInt(oPC, "HideousBlow"))
+		SetLocalInt(oPC, "HideousBlow", FALSE);
+	if (GetLocalInt(oPC,"AllreadyRunning"))
+		SetLocalInt(oPC, "AllreadyRunning", FALSE);
+	if (GetLocalInt(oPC,"TwentyFour"))
+		SetLocalInt(oPC,"TwentyFour",FALSE);
+	if (GetLocalInt(oPC,"Invisibility"))
+		SetLocalInt(oPC,"Invisibility",FALSE);	
+	if (GetLocalInt(oPC,"FleeTheScene"))
+		SetLocalInt(oPC,"FleeTheScene",FALSE);
+	if (GetLocalInt(oPC,"DarkForesight"))
+		SetLocalInt(oPC,"DarkForesight",FALSE);
+	if (GetLocalInt(oPC,"DarkDiscorporation"))
+		SetLocalInt(oPC,"DarkDiscorporation",FALSE);
+	*/
+	
 	//ReleaseCalledCreatures(oPC);
 	
 	effect eBad = GetFirstEffect(oPC);

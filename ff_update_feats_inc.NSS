@@ -181,8 +181,8 @@ void LevelUpGuiChoices(object oPC){
 					FeatAdd(oPC, 28, FALSE);
 			} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
 				GetHasFeat(3040, oPC)){// mental ability paths
-				if (!GetHasFeat(28, oPC))// combat casting
-					FeatAdd(oPC, 28, FALSE); 
+				if (!GetHasFeat(7, oPC))// combat casting
+					FeatAdd(oPC, 7, FALSE); 
 			}
 		//PATH 
 		} else if (nLastClassLevel >= 2){

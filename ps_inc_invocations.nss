@@ -446,17 +446,22 @@ void DoSelfOnlyInvocation(int nId, int bFromBuddy = FALSE){
 	
 	if (!X2PreSpellCastCode()) return;
 	
-	//prevent unnecessary processing with warlock buddy
+	object oCaster = OBJECT_SELF;
+	
 	if (bFromBuddy){
-		// except for hideous blow, which needs to refresh to change flavour
+		//prevent people from using WB to get around mage slayer restriction
+		if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oCaster)){
+			SendMessageToPC(oCaster, "Mage Slayers cannot cast spells.");
+			return;
+		}
+		// prevent unnecessary processing with warlock buddy except for
+		// hideous blow, which needs to refresh to change flavour
 		if (nId != SPELL_I_HIDEOUS_BLOW){ 
 			if (GetHasSpellEffect(nId))
 				return;
 		}
 	}
 		
-	object oCaster = OBJECT_SELF;
-	
 	switch (nId){
 		case SPELL_I_BEGUILING_INFLUENCE: DoBeguilingInfluence(oCaster, nId, bFromBuddy); break;
 		case SPELL_I_DARK_ONES_OWN_LUCK: DoDarkOnesOwnLuck(oCaster, nId, bFromBuddy); break;
