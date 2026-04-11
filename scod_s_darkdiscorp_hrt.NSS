@@ -33,12 +33,16 @@ void main() {
 		return;
 	}
 	
+	effect eDamage;
+	effect eVis = EffectVisualEffect(VFX_IMP_DOOM);
+	int nCha = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
 	object oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget)) {	
 	
 		//Should not do damage to friends
 		if (GetIsEnemy(oTarget, oCaster) && oTarget != oCaster) {
-			effect eDamage = EffectDamage(d6(2)+GetAbilityModifier(ABILITY_CHARISMA, oCaster));
+			eDamage = EffectDamage(d6(2) + nCha, DAMAGE_TYPE_NEGATIVE);
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		
 		}

@@ -18,8 +18,23 @@
 
 
 void main(){
-	// store the spell id so we will know what flavour of hideousness to use
-	SetLocalInt(OBJECT_SELF, "HideousMeta", GetSpellId());
+
+	int nMetaMagic = 0;
+	switch (GetSpellId()) {
+		case 2211: nMetaMagic = METAMAGIC_INVOC_DRAINING_BLAST; break; //draining spear
+		case 2212: nMetaMagic = METAMAGIC_INVOC_FRIGHTFUL_BLAST; break; //frightful spear
+		case 2213: nMetaMagic = METAMAGIC_INVOC_BESHADOWED_BLAST; break; //beshadowed spear
+		case 2214: nMetaMagic = METAMAGIC_INVOC_BRIMSTONE_BLAST; break; //brimstone spear
+		case 2215: nMetaMagic = METAMAGIC_INVOC_HELLRIME_BLAST; break; //hellrime spear
+		case 2216: nMetaMagic = METAMAGIC_INVOC_BEWITCHING_BLAST; break; //bewitching spear
+		case 2217: nMetaMagic = METAMAGIC_INVOC_NOXIOUS_BLAST; break; //noxious spear
+		case 2218: nMetaMagic = METAMAGIC_INVOC_VITRIOLIC_BLAST; break; //vitriolic spear
+		case 2219: nMetaMagic = METAMAGIC_INVOC_UTTERDARK_BLAST; break; //utterdark spear
+		case 2220: nMetaMagic = METAMAGIC_INVOC_HINDERING_BLAST; break; //hindering spear
+		case 2221: nMetaMagic = METAMAGIC_INVOC_BINDING_BLAST; break; //binding spear
+	}
+	// store the metamagic so we will know what flavour of hideousness to use
+	SetLocalInt(OBJECT_SELF, "HideousMeta", nMetaMagic);
 	DoSelfOnlyInvocation(SPELL_I_HIDEOUS_BLOW);
 }
 

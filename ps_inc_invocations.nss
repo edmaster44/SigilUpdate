@@ -42,23 +42,20 @@ void DoHideousBlowEffect(object oCaster, int nId, int bFromBuddy){
 				eEffect = GetNextEffect( oCaster );
 	}
 	
-	nId = GetLocalInt(oCaster, "HideousMeta");
-	if (nId == 0) nId = SPELL_I_HIDEOUS_BLOW;
-	
-	int nMetaMagic = METAMAGIC_ANY;
+	int nMetaMagic = GetLocalInt(oCaster, "HideousMeta");
 	int nDurVFX = VFX_INVOCATION_HIDEOUS_BLOW;
-	switch (nId) {
-		case 2211: nMetaMagic = METAMAGIC_INVOC_DRAINING_BLAST; nDurVFX = VFX_INVOCATION_DRAINING_BLOW; break; //draining spear
-		case 2212: nMetaMagic = METAMAGIC_INVOC_FRIGHTFUL_BLAST; nDurVFX = VFX_INVOCATION_FRIGHTFUL_BLOW; break; //frightful spear
-		case 2213: nMetaMagic = METAMAGIC_INVOC_BESHADOWED_BLAST; nDurVFX = VFX_INVOCATION_BESHADOWED_BLOW; break; //beshadowed spear
-		case 2214: nMetaMagic = METAMAGIC_INVOC_BRIMSTONE_BLAST; nDurVFX = VFX_INVOCATION_BRIMSTONE_BLOW; break; //brimstone spear
-		case 2215: nMetaMagic = METAMAGIC_INVOC_HELLRIME_BLAST; nDurVFX = VFX_INVOCATION_HELLRIME_BLOW; break; //hellrime spear
-		case 2216: nMetaMagic = METAMAGIC_INVOC_BEWITCHING_BLAST; nDurVFX = VFX_INVOCATION_BEWITCHING_BLOW; break; //bewitching spear
-		case 2217: nMetaMagic = METAMAGIC_INVOC_NOXIOUS_BLAST; nDurVFX = VFX_INVOCATION_NOXIOUS_BLOW; break; //noxious spear
-		case 2218: nMetaMagic = METAMAGIC_INVOC_VITRIOLIC_BLAST; nDurVFX = VFX_INVOCATION_VITRIOLIC_BLOW; break; //vitriolic spear
-		case 2219: nMetaMagic = METAMAGIC_INVOC_UTTERDARK_BLAST; nDurVFX = VFX_INVOCATION_UTTERDARK_BLOW; break; //utterdark spear
-		case 2220: nMetaMagic = METAMAGIC_INVOC_HINDERING_BLAST; nDurVFX = VFX_INVOCATION_HINDERING_BLOW; break; //hindering spear
-		case 2221: nMetaMagic = METAMAGIC_INVOC_BINDING_BLAST; nDurVFX = VFX_INVOCATION_BINDING_BLOW; break; //binding spear
+	switch (nMetaMagic) {
+		case METAMAGIC_INVOC_DRAINING_BLAST: nDurVFX = VFX_INVOCATION_DRAINING_BLOW; break; //draining spear
+		case METAMAGIC_INVOC_FRIGHTFUL_BLAST: nDurVFX = VFX_INVOCATION_FRIGHTFUL_BLOW; break; //frightful spear
+		case METAMAGIC_INVOC_BESHADOWED_BLAST: nDurVFX = VFX_INVOCATION_BESHADOWED_BLOW; break; //beshadowed spear
+		case METAMAGIC_INVOC_BRIMSTONE_BLAST: nDurVFX = VFX_INVOCATION_BRIMSTONE_BLOW; break; //brimstone spear
+		case METAMAGIC_INVOC_HELLRIME_BLAST: nDurVFX = VFX_INVOCATION_HELLRIME_BLOW; break; //hellrime spear
+		case METAMAGIC_INVOC_BEWITCHING_BLAST: nDurVFX = VFX_INVOCATION_BEWITCHING_BLOW; break; //bewitching spear
+		case METAMAGIC_INVOC_NOXIOUS_BLAST: nDurVFX = VFX_INVOCATION_NOXIOUS_BLOW; break; //noxious spear
+		case METAMAGIC_INVOC_VITRIOLIC_BLAST: nDurVFX = VFX_INVOCATION_VITRIOLIC_BLOW; break; //vitriolic spear
+		case METAMAGIC_INVOC_UTTERDARK_BLAST: nDurVFX = VFX_INVOCATION_UTTERDARK_BLOW; break; //utterdark spear
+		case METAMAGIC_INVOC_HINDERING_BLAST: nDurVFX = VFX_INVOCATION_HINDERING_BLOW; break; //hindering spear
+		case METAMAGIC_INVOC_BINDING_BLAST: nDurVFX = VFX_INVOCATION_BINDING_BLOW; break; //binding spear
 	}
 
     effect eHidBlow = EffectHideousBlow(nMetaMagic);
@@ -449,6 +446,12 @@ void DoSelfOnlyInvocation(int nId, int bFromBuddy = FALSE){
 	
 	if (!X2PreSpellCastCode()) return;
 	
+	//prevent unnecessary processing with warlock buddy
+	if (bFromBuddy){ 
+		if (GetHasSpellEffect(nId))
+			return;
+	}
+		
 	object oCaster = OBJECT_SELF;
 	
 	switch (nId){
