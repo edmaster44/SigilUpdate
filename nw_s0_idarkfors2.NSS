@@ -2,6 +2,25 @@
 #include "x2_inc_spellhook" 
 #include "ps_inc_functions"
 
+
+
+void RefreshDarkForesight(object oPC)
+{
+	if (!GetLocalInt(oPC,"DarkForesight")) return;
+	
+	if (!GetIsInCombat())
+		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_DARK_FORESIGHT, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	
+	DelayCommand(6.0, RefreshDarkForesight(oPC));
+}
+
+void main()
+{
+	object oPC = OBJECT_SELF;
+	RefreshDarkForesight(oPC);
+}
+
+/* original
 void DarkForesight(object oPC)
 {
     //RemoveEffectsFromSpell(oPC, SPELL_I_DARK_FORESIGHT);
@@ -28,11 +47,6 @@ void RefreshDarkForesight(object oPC)
 void main()
 {
 	object oPC = OBJECT_SELF;
-
-    if (!X2PreSpellCastCode())
-    {
-	    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
 	RefreshDarkForesight(oPC);
 }
+*/

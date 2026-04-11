@@ -695,7 +695,7 @@ float PS_RoundDecimal(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST)
 	if (nRoundTo < -1) nRoundTo = -1;
 	else if (nRoundTo > 1) nRoundTo = 1;
 	
-	// if fewer no decimal place, return round to int
+	// if no decimal place, return round to int
 	if (nPlaces == 0){
 		return IntToFloat(PS_RoundToInt(fNum, nRoundTo)); 
 	} else { //otherwise build a multiplier of 10 to the power of nPlaces
@@ -1551,7 +1551,6 @@ int GetWarlockCasterLevelBase(object oPC) {
         else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    int nHD = PS_GetLevel(oPC);
     if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
